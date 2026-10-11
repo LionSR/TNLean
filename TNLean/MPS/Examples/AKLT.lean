@@ -142,9 +142,7 @@ private lemma single_00_in_wordSpan :
       simp [akltTensor, Matrix.mul_apply, Fin.sum_univ_two, smul_eq_mul, Matrix.single]
   have hmem := product_in_wordSpan 1 2
   rw [h] at hmem
-  have hmem' := Submodule.smul_mem (Kraus.wordSpan akltTensor 2)
-    (-(↑(Real.sqrt 2 / Real.sqrt 3) * ↑(Real.sqrt 2 / Real.sqrt 3) : ℂ))⁻¹ hmem
-  rwa [smul_smul, inv_mul_cancel₀ (neg_ne_zero.mpr hne), one_smul] at hmem'
+  exact (Submodule.smul_mem_iff _ (neg_ne_zero.mpr hne)).mp hmem
 
 private lemma single_11_in_wordSpan :
     Matrix.single (1 : Fin 2) (1 : Fin 2) (1 : ℂ) ∈ Kraus.wordSpan akltTensor 2 := by
@@ -159,9 +157,7 @@ private lemma single_11_in_wordSpan :
       simp [akltTensor, Matrix.mul_apply, Fin.sum_univ_two, smul_eq_mul, Matrix.single]
   have hmem := product_in_wordSpan 2 1
   rw [h] at hmem
-  have hmem' := Submodule.smul_mem (Kraus.wordSpan akltTensor 2)
-    (-(↑(Real.sqrt 2 / Real.sqrt 3) * ↑(Real.sqrt 2 / Real.sqrt 3) : ℂ))⁻¹ hmem
-  rwa [smul_smul, inv_mul_cancel₀ (neg_ne_zero.mpr hne), one_smul] at hmem'
+  exact (Submodule.smul_mem_iff _ (neg_ne_zero.mpr hne)).mp hmem
 
 private lemma single_01_in_wordSpan :
     Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ) ∈ Kraus.wordSpan akltTensor 2 := by

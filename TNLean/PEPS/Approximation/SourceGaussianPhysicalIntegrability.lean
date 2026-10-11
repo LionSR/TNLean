@@ -23,19 +23,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-total-error.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-physical-sourcegaussianphysicalintegrability-01
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.exists_sampledSourceMatrix_error_le_sum_integral
-
-Provenance-ID: 8769-physical-sourcegaussianphysicalintegrability-02
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_map_correctedSourceTerm_gaussian
-
-Provenance-ID: 8769-physical-sourcegaussianphysicalintegrability-03
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_physicalCorrectedSourceTerm_gaussian
-
 -/
 
 

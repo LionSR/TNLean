@@ -72,3 +72,48 @@ These are the directions from a cell center in the fan construction of
     representatives have the same direction. The endpoint-direction
     equivalence then gives equality of their indices.
 \end{proof}
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 333--370,
+% and prop:two-families, lines 299--323;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Manuscript: preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/
+% build/sections/10-geometry.tex.
+
+\begin{theorem}[Restriction of a directed ray to the fan radius]
+    \label{thm:area_law_cell_fan_radial_ray_restriction}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_mem_radial_iff_sameRay_of_mem_closedBall}
+    \leanok
+    \uses{def:area_law_cell_fan}
+    Let $o\in\R^2$, $\ell\in\N$ and $z\in\Z^2$ be arbitrary.
+    Let $c$ be the center of the closed dyadic square
+    $Q=o+2^\ell(z+[0,1]^2)$, and choose independently on each side
+    either the whole side or its two midpoint halves.
+    For an elementary base $[a_s,b_s]$, put $r=2^\ell/2$ and
+    $R_s=\{c+\lambda(b_s-c):\lambda\ge0\}$.
+    Then
+    \begin{align}
+        [c,b_s]\cap\overline B_\infty(c,r)
+         & =R_s\cap\overline B_\infty(c,r).
+    \end{align}
+    Here the full ray $R_s$ includes its center $c$, and the assertion
+    also holds when $\ell=0$. This is the local restriction of a radial
+    direction used in the initial-star construction of
+    \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_cell_fan_base_radius}
+    Every point of $[c,b_s]$ belongs to $R_s$.
+    Conversely, let $x\in R_s$ satisfy $\|x-c\|_\infty\le r$.
+    The points lie on the same directed line from $c$, so either
+    $x\in[c,b_s]$ or $b_s\in[c,x]$.
+    In the second case, distance addition along the segment gives
+    \begin{align}
+        \|x-c\|_\infty
+         & =\|b_s-c\|_\infty+\|x-b_s\|_\infty
+        =r+\|x-b_s\|_\infty.
+    \end{align}
+    The radius bound forces $\|x-b_s\|_\infty=0$, hence $x=b_s$.
+    This proves the reverse inclusion. Distance addition along a
+    segment is valid in the maximum norm and requires no strict
+    convexity.
+\end{proof}

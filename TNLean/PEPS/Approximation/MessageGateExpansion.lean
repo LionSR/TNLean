@@ -22,27 +22,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 thm:compression; Theorem 5.2 and its proof.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-message-resources-messagegateexpansion-01
-TNLean.PEPS.PairEffect.MessageGate
-Provenance-ID: 8769-message-resources-messagegateexpansion-02
-TNLean.PEPS.PairEffect.MessageGate.effectCount_expand_le
-Provenance-ID: 8769-message-resources-messagegateexpansion-03
-TNLean.PEPS.PairEffect.MessageGate.eval
-Provenance-ID: 8769-message-resources-messagegateexpansion-04
-TNLean.PEPS.PairEffect.MessageGate.eval_expand
-Provenance-ID: 8769-message-resources-messagegateexpansion-05
-TNLean.PEPS.PairEffect.MessageGate.expand
-Provenance-ID: 8769-message-resources-messagegateexpansion-06
-TNLean.PEPS.PairEffect.MessageGate.expansion_size
-Provenance-ID: 8769-message-resources-messagegateexpansion-07
-TNLean.PEPS.PairEffect.MessageGate.expansion_size_le
-Provenance-ID: 8769-message-resources-messagegateexpansion-08
-TNLean.PEPS.PairEffect.MessageGate.expansion_size_le_of_coeff_le
-Provenance-ID: 8769-message-resources-messagegateexpansion-09
-TNLean.PEPS.PairEffect.MessageGate.isAllowed_expand
-Provenance-ID: 8769-message-resources-messagegateexpansion-10
-TNLean.PEPS.PairEffect.MessageGate.mem_expand
 -/
 
 

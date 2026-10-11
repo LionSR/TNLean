@@ -22,21 +22,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 thm:compression; Theorem 5.2 and its proof.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-message-resources-partygatecomposition-01
-TNLean.PEPS.PairEffect.PartyGate.comp
-Provenance-ID: 8769-message-resources-partygatecomposition-02
-TNLean.PEPS.PairEffect.PartyGate.effectCount_comp_le
-Provenance-ID: 8769-message-resources-partygatecomposition-03
-TNLean.PEPS.PairEffect.PartyGate.gate_comp
-Provenance-ID: 8769-message-resources-partygatecomposition-04
-TNLean.PEPS.PairEffect.PartyGate.isAllowed_comp
-Provenance-ID: 8769-message-resources-partygatecomposition-05
-TNLean.PEPS.PairEffect.PartyGate.length_comp
-Provenance-ID: 8769-message-resources-partygatecomposition-06
-TNLean.PEPS.PairEffect.PartyGate.mem_comp
-Provenance-ID: 8769-message-resources-partygatecomposition-07
-TNLean.PEPS.PairEffect.PartyGate.sum_norm_comp
 -/
 
 

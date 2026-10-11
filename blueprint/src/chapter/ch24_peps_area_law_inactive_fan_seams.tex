@@ -1,0 +1,77 @@
+The connected elementary pieces of
+Theorem~\ref{thm:area_law_fan_cut_piece_connected} arise from fan triangles
+whose base and radial directions are prescribed by
+Theorem~\ref{thm:area_law_fan_base_radial_directions}.
+The following assertion concerns the radial contacts described in
+Theorem~\ref{thm:area_law_fan_triangle_contact}.
+
+\begin{definition}[Retained fan pieces]
+    \label{def:area_law_fan_cut_piece}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanCutPiece}
+    \leanok
+    \uses{def:area_law_cell_fan,def:area_law_cell_fan_successor}
+    Let $o\in\R^2$, $\ell\in\N$ and $z\in\Z^2$ be arbitrary, and let
+    $Q=o+2^\ell(z+[0,1]^2)$ be the corresponding closed dyadic square.
+    Write $c$ for its center and $r=2^\ell/2>0$ for its half-side.
+    Subdivide each side at its midpoint and write
+    $P_i=\operatorname{conv}\{c,a_i,b_i\}$ for the eight fan triangles,
+    indexed in perimeter order by $\mathcal J$.
+    Let $\tau$ be the cyclic successor and assign arbitrary colors
+    $f_i\in\{0,1\}$. Define
+    \begin{align}
+        A   & =\{t\in\mathcal J:f_t\ne f_{\tau(t)}\}, \\
+        L   & =\bigcup_{t\in A}[c,b_t],               \\
+        S_i & =(P_i\setminus L)\cap B_\infty(c,r).
+    \end{align}
+    Here $B_\infty(c,r)$ is the open maximum-norm ball.
+    The sets $S_i$ are the retained fan pieces. The change set $A$
+    may be empty. This is the local radial deletion used in the
+    initial-star construction of \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{definition}
+
+\begin{theorem}[Intersection across an inactive radial]
+    \label{thm:area_law_fan_inactive_radial_intersection}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_cut_inter_nonempty_of_adj}
+    \leanok
+    \uses{def:area_law_fan_cut_piece,def:area_law_fan_runs}
+    Let $S_i$ be the retained pieces of
+    Definition~\ref{def:area_law_fan_cut_piece}.
+    If $i,j$ are consecutive perimeter positions and $f_i=f_j$, then
+    $S_i\cap S_j$ is nonempty. Here either $j=\tau(i)$ or
+    $i=\tau(j)$ is permitted. The change set $A$ may be empty.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:area_law_fan_cut_piece,
+        thm:area_law_cell_fan_successor_iff,
+        thm:area_law_cell_fan_base_radius,
+        thm:area_law_cell_fan_end_same_ray,
+        thm:area_law_fan_noncentral_radial_incidence}
+    First suppose that $j=\tau(i)$, so $b_i=a_j$.
+    Set
+    \begin{align}
+        m & =\frac{c+b_i}{2}.
+    \end{align}
+    The base-radius identity gives $\|b_i-c\|_\infty=r$, and therefore
+    \begin{align}
+        \|m-c\|_\infty & =\frac r2<r.
+    \end{align}
+    Thus $m\in B_\infty(c,r)$ and $m\ne c$.
+    The noncentral radial-incidence characterization of
+    Theorem~\ref{thm:area_law_fan_noncentral_radial_incidence}, applied to
+    $m\in[c,b_i]$ and $b_i=a_j$, places $m$ in both triangles.
+
+    If $m\in[c,b_t]$ for another fan index $t$, then $m-c$ is a
+    positive multiple of $b_t-c$. It is also the positive multiple
+    $(b_i-c)/2$. Equality of endpoint directions forces $t=i$.
+    Since $f_i=f_j=f_{\tau(i)}$, the index $i$ does not belong to $A$.
+    Hence $m$ lies on none of the deleted radials and
+    $m\in S_i\cap S_j$.
+
+    If $i=\tau(j)$, interchange $i$ and $j$ and use the midpoint of
+    $[c,b_j]$. Symmetry of intersection gives the same conclusion.
+    When $A$ is empty, the same midpoint witnesses the intersection;
+    the center is retained in every $S_i$ as well.
+    This is an auxiliary to the initial-star construction in
+    \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{proof}

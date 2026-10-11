@@ -204,17 +204,6 @@ theorem polarDeformation_covariance {A : MPSTensor d D} (hA : Kraus.IsInjective 
   simp only [polarDeformationPos, Matrix.mul_add, Matrix.add_mul,
     Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_one, Matrix.one_mul, hP.eq]
 
-/-- Conjugation of the bond matrices acts on the virtual pair index by
-`Xᵀ ⊗ Y`. Source: arXiv:1010.3732, Section II.C, virtual gauge action. -/
-theorem physicalMatrix_mul_left_right (A : MPSTensor d D)
-    (X Y : Matrix (Fin D) (Fin D) ℂ) :
-    physicalMatrix (fun i => X * A i * Y) = physicalMatrix A * (Xᵀ ⊗ₖ Y) := by
-  ext i ⟨a, b⟩
-  simp only [physicalMatrix, Matrix.mul_apply, Matrix.kroneckerMap_apply,
-    Matrix.transpose_apply, Fintype.sum_prod_type, Finset.sum_mul]
-  rw [Finset.sum_comm]
-  simp only [mul_comm, mul_left_comm]
-
 /-- Physical covariance of the tensor letters gives the
 corresponding physical-matrix intertwiner. Source context: arXiv:1010.3732,
 Section II.F.2, equation eq:1d-sym:jointsym. -/

@@ -19,8 +19,10 @@ injectivity, and primitivity are unnecessary; the interval may have length zero.
 **Scope restriction (supplied faithful generators):** This finite-dimensional
 support characterization applies to the faithful minimal generators in
 Nachtergaele, arXiv:cond-mat/9410110, lines 1724--1738, when they are
-supplied. It does not construct these generators from an arbitrary GVBS
-presentation; that passage is recorded in
+supplied. Nonzero positive stationary data that are not faithful reduce to
+this case by compression to the support of the stationary matrix. The
+passage from an arbitrary GVBS boundary limit to normalized stationary data
+is not formalized; it is recorded in
 docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex.
 -/
 

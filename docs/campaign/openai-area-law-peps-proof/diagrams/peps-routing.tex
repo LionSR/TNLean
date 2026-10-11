@@ -1,0 +1,15 @@
+% PEPS manuscript, lem:routing (07-assembly.tex, eq:anchors): parties sit at
+% their dyadic anchors (the parent Q at the scale-2 anchor, its children P at
+% the scale-1 anchors); each link runs along a row and then a column, through
+% identity tensors at the sites it passes, and the indices crossing each grid
+% edge are grouped into one bond.
+\begin{tenkz}[lattice={5x5}, frame=plane, physical=up]
+  \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+  \tn{} & \tn[skin=box]{P} & \tn{} & \tn[skin=box]{P} & \tn{} \\
+  \tn{} & \tn{} & \tn[skin=box]{Q} & \tn{} & \tn{} \\
+  \tn{} & \tn[skin=box]{P} & \tn{} & \tn[skin=box]{P} & \tn{} \\
+  \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
+  \tnwire[species=selected]{(3,3)}{(3,2)} \tnwire[species=selected]{(3,2)}{(2,2)}
+  \tnwire[species=selected]{(3,3)}{(3,4)} \tnwire[species=selected]{(3,4)}{(2,4)}
+  \tnwire[species=selected]{(3,2)}{(4,2)} \tnwire[species=selected]{(3,4)}{(4,4)}
+\end{tenkz}

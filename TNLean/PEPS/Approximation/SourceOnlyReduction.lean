@@ -23,25 +23,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-effect-circuit-error; Theorem 5.2, lines 137–151 and 199–251.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-sourceonlyreduction-01
-TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le
-Provenance-ID: 8769-source-resource-sourceonlyreduction-02
-TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half
-Provenance-ID: 8769-source-resource-sourceonlyreduction-03
-https://lionsr.github.io/TNLean/docs/TNLean/PEPS/Approximation/SourceOnlyReduction.html#TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_density_sub_le_half_of_count_le
-Provenance-ID: 8769-source-resource-sourceonlyreduction-04
-TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_regional_density_sub_le_half
-Provenance-ID: 8769-source-resource-sourceonlyreduction-05
-https://lionsr.github.io/TNLean/docs/TNLean/PEPS/Approximation/SourceOnlyReduction.html#TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_wholeParty_density_sub_le_half
-Provenance-ID: 8769-source-resource-sourceonlyreduction-06
-TNLean.PEPS.PairEffect.sourceGateBudget
-Provenance-ID: 8769-source-resource-sourceonlyreduction-07
-TNLean.PEPS.PairEffect.sourceGateBudget_eq_of_pos
-Provenance-ID: 8769-source-resource-sourceonlyreduction-08
-TNLean.PEPS.PairEffect.sourceGateBudget_pos
-Provenance-ID: 8769-source-resource-sourceonlyreduction-09
-TNLean.PEPS.PairEffect.sourceGateBudget_spec
 -/
 
 noncomputable section

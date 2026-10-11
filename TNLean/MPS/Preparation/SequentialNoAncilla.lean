@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.Algebra.FinOrderedProduct
 import TNLean.Algebra.IsometryUnitaryExtension
+import TNLean.Circuit.SiteEmbedding
 import TNLean.MPS.Preparation.Sequential
 import Mathlib.LinearAlgebra.Matrix.Kronecker
 
@@ -40,7 +41,9 @@ in `|0⟩`, and after it site `k` is never touched again. Hence the chain state
 after `U^{[k]}` is `|χ_k⟩ ⊗ |0⟩^{⊗(N-k-1)}`, where `χ_k` is a vector on sites
 `1, …, k + 1`, `χ_1 = U^{[1]}|0,0⟩` and
 `χ_k(…, i, β) = ∑_α ⟨i, β| U^{[k]} |α, 0⟩ χ_{k-1}(…, α)`. The definition
-`MPSPreparation.noAncillaState` is this recursion.
+`MPSPreparation.noAncillaState` is this recursion, and
+`MPSPreparation.noAncillaChainOp_mulVec_single_apply` proves that it describes the operations
+acting on the whole chain.
 
 ## Main results
 
@@ -52,6 +55,12 @@ after `U^{[k]}` is `|χ_k⟩ ⊗ |0⟩^{⊗(N-k-1)}`, where `χ_k` is a vector o
   `A^{[k]}_{i,βα} = ⟨i, β| U^{[k]} |α, 0⟩` of the proof in the source
   (lines 1597--1603); the source writes this entry as `A^{[k]}_{i,α,β}`, with the
   received index `α` first.
+* `MPSPreparation.noAncillaChainOp_mulVec_single_apply`,
+  `MPSPreparation.noAncillaChainOp_mulVec_single` — the recursion is the scheme acting on the
+  whole chain: the operations `U^{[1]}, …, U^{[k]}`, each acting on two neighboring sites of the
+  chain of `N` sites and as the identity elsewhere (`MPSPreparation.pairOp`), send
+  `|0⟩^{⊗N}` to `|χ_k⟩ ⊗ |0⟩^{⊗(N-k-1)}`, and after all `N - 1` operations to the state
+  `MPSPreparation.noAncillaState`.
 * `MPSPreparation.hasOBCRep_iff_exists_eq_jointState`,
   `MPSPreparation.hasOBCRep_and_norm_iff_exists_unitary_eq_jointState` — the
   states read out from the scheme with a `d`-dimensional ancilla in this way are
@@ -163,6 +172,164 @@ theorem noAncillaState_eq_jointState :
     simp only [Fin.rev_zero, Fin.rev_succ]
     rw [Matrix.mulVec, dotProduct]
     rfl
+
+/-! ### The operations acting on the whole chain -/
+
+omit [NeZero d] in
+/-- The operation `V` on `ℂ^d ⊗ ℂ^d` acting on the chain of `n + 2` sites: its first tensor factor
+is the site at position `p + 1`, its second the site at position `p`, and the identity acts on the
+other sites. The operation `U^{[k]}` of arXiv:quant-ph/0608197, lines 1580--1586, on the source
+sites `k` and `k + 1` is `pairOp (Fin.rev k') (U k')` with `k = k' + 1`. -/
+noncomputable def pairOp {n : ℕ} (p : Fin (n + 1)) (V : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
+    Matrix (Fin (n + 2) → Fin d) (Fin (n + 2) → Fin d) ℂ :=
+  QuantumCircuit.embedOp ![p.succ, p.castSucc] (Matrix.of fun x y => V (x 0, x 1) (y 0, y 1))
+
+omit [NeZero d] in
+/-- The components of `pairOp p V *ᵥ v`: `V` acts on the values at the positions `p + 1` and
+`p`. -/
+theorem pairOp_mulVec_apply {n : ℕ} (p : Fin (n + 1))
+    (V : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) (v : (Fin (n + 2) → Fin d) → ℂ)
+    (τ : Fin (n + 2) → Fin d) :
+    (pairOp p V *ᵥ v) τ = ∑ a, ∑ b, V (τ p.succ, τ p.castSucc) (a, b) *
+      v (Function.update (Function.update τ p.succ a) p.castSucc b) := by
+  have hne : p.succ ≠ p.castSucc := (Fin.castSucc_lt_succ (i := p)).ne'
+  have he : Function.Injective ![p.succ, p.castSucc] := Matrix.injective_pair_iff_ne.mpr hne
+  rw [pairOp, QuantumCircuit.embedOp_mulVec_apply he, ← (finTwoArrowEquiv (Fin d)).symm.sum_comp,
+    Fintype.sum_prod_type]
+  refine Finset.sum_congr rfl fun a _ => Finset.sum_congr rfl fun b _ => ?_
+  congr 2
+  funext q
+  by_cases hq : q = p.castSucc
+  · subst hq
+    simpa using he.extend_apply ![a, b] τ 1
+  by_cases hq' : q = p.succ
+  · subst hq'
+    simpa [hq] using he.extend_apply ![a, b] τ 0
+  · rw [Function.extend_apply' _ _ _ fun ⟨j, hj⟩ => by fin_cases j <;> simp_all [eq_comm]]
+    simp [hq, hq']
+
+/-- The positions below `p + 1` of a configuration updated at `p + 1` and `p` carry `0` iff the
+new value at `p` is `0` and the positions below `p` carry `0`. -/
+private theorem forall_lt_update_update_eq_zero_iff {n : ℕ} (τ : Fin (n + 2) → Fin d)
+    (p : Fin (n + 1)) (a b : Fin d) :
+    (∀ q : Fin (n + 2), q.val < p.val + 1 →
+        Function.update (Function.update τ p.succ a) p.castSucc b q = 0) ↔
+      b = 0 ∧ ∀ q : Fin (n + 2), q.val < p.val → τ q = 0 := by
+  constructor
+  · intro h
+    refine ⟨by simpa using h p.castSucc (by simp), fun q hq => ?_⟩
+    have := h q (by omega)
+    rwa [Function.update_of_ne (Fin.ne_of_val_ne (by simp; omega)),
+      Function.update_of_ne (Fin.ne_of_val_ne (by simp; omega))] at this
+  · rintro ⟨rfl, h⟩ q hq
+    by_cases hc : q = p.castSucc
+    · subst hc; simp
+    have hc' := Fin.val_ne_of_ne hc
+    simp only [Fin.val_castSucc] at hc'
+    rw [Function.update_of_ne hc, Function.update_of_ne (Fin.ne_of_val_ne (by simp; omega))]
+    exact h q (by omega)
+
+omit [NeZero d] in
+/-- The product `U^{[k+1]} ⋯ U^{[1]}` of the first `k + 1` operations acting on the whole chain of
+`n + 2` sites (arXiv:quant-ph/0608197, lines 1580--1586), the first operation acting first. -/
+noncomputable def noAncillaChainOp {n : ℕ}
+    (U : Fin (n + 1) → Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
+    ∀ k : ℕ, k ≤ n → Matrix (Fin (n + 2) → Fin d) (Fin (n + 2) → Fin d) ℂ
+  | 0, _ => pairOp (Fin.rev 0) (U 0)
+  | k + 1, hk =>
+    pairOp (Fin.rev ⟨k + 1, by omega⟩) (U ⟨k + 1, by omega⟩) * noAncillaChainOp U k (by omega)
+
+/-- **The intermediate chain states.** After the operations `U^{[1]}, …, U^{[k+1]}` act on
+`|0⟩^{⊗(n+2)}`, the chain is in the state `|χ_{k+1}⟩ ⊗ |0⟩^{⊗(n-k)}`: the sites at the positions
+`< n - k`, not yet touched, are in `|0⟩`, and the sites at the positions `≥ n - k` carry the state
+`noAncillaState k` of the first `k + 1` operations (arXiv:quant-ph/0608197, lines 1580--1586). -/
+theorem noAncillaChainOp_mulVec_single_apply {n : ℕ}
+    (U : Fin (n + 1) → Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
+    ∀ (k : ℕ) (hk : k ≤ n) (τ : Fin (n + 2) → Fin d),
+      (noAncillaChainOp U k hk *ᵥ Pi.single 0 1) τ =
+        if ∀ q : Fin (n + 2), q.val < n - k → τ q = 0 then
+          noAncillaState k (fun i => U (i.castLE (by omega)))
+            (fun j => τ ⟨j.val + (n - k), by omega⟩)
+        else 0
+  | 0, hk, τ => by
+    rw [noAncillaChainOp, pairOp_mulVec_apply]
+    set p : Fin (n + 1) := Fin.rev 0
+    have hp : p.val = n := by simp [p]
+    have hcond : ∀ a b, Function.update (Function.update τ p.succ a) p.castSucc b = 0 ↔
+        a = 0 ∧ b = 0 ∧ ∀ q : Fin (n + 2), q.val < n - 0 → τ q = 0 := by
+      intro a b
+      have key := forall_lt_update_update_eq_zero_iff τ p a b
+      rw [hp] at key
+      rw [Nat.sub_zero, ← key, funext_iff]
+      constructor
+      · intro h
+        refine ⟨?_, fun q _ => h q⟩
+        simpa [Function.update_of_ne (Fin.castSucc_lt_succ (i := p)).ne'] using h p.succ
+      · rintro ⟨rfl, h⟩ q
+        by_cases hs : q = p.succ
+        · subst hs; simp [Function.update_of_ne (Fin.castSucc_lt_succ (i := p)).ne']
+        · refine h q ?_
+          have h1 := Fin.val_ne_of_ne hs
+          have h2 := q.isLt
+          simp only [Fin.val_succ] at h1
+          omega
+    simp only [Pi.single_apply, mul_ite, mul_one, mul_zero, hcond]
+    by_cases hP : ∀ q : Fin (n + 2), q.val < n - 0 → τ q = 0
+    · rw [ite_eq_left hP]
+      simp only [eq_true hP, and_true]
+      rw [Finset.sum_eq_single (0 : Fin d) (fun a _ ha => by simp [ha]) (by simp),
+        Finset.sum_eq_single (0 : Fin d) (fun b _ hb => by simp [hb]) (by simp)]
+      simp only [and_self, ite_true, noAncillaState]
+      congr 2 <;> congr 1 <;> ext <;> (simp [p]; try omega)
+    · rw [ite_eq_right hP]
+      refine Finset.sum_eq_zero fun a _ => Finset.sum_eq_zero fun b _ => ?_
+      rw [ite_eq_right fun h => hP h.2.2]
+  | k + 1, hk, τ => by
+    rw [noAncillaChainOp, ← Matrix.mulVec_mulVec, pairOp_mulVec_apply]
+    set p : Fin (n + 1) := Fin.rev ⟨k + 1, by omega⟩
+    have hp : p.val = n - (k + 1) := by simp [p]
+    have hcond : ∀ a b, (∀ q : Fin (n + 2), q.val < n - k →
+        Function.update (Function.update τ p.succ a) p.castSucc b q = 0) ↔
+          b = 0 ∧ ∀ q : Fin (n + 2), q.val < n - (k + 1) → τ q = 0 := by
+      intro a b
+      rw [show n - k = p.val + 1 by omega, forall_lt_update_update_eq_zero_iff, hp]
+    simp only [noAncillaChainOp_mulVec_single_apply U k (by omega), mul_ite, mul_zero, hcond]
+    by_cases hP : ∀ q : Fin (n + 2), q.val < n - (k + 1) → τ q = 0
+    · rw [ite_eq_left hP, noAncillaState]
+      simp only [eq_true hP, and_true, Finset.sum_ite_eq', Finset.mem_univ, ite_true]
+      refine Finset.sum_congr rfl fun a _ => ?_
+      congr 1
+      · congr 2 <;> congr 1 <;> ext <;> (simp [p]; try omega)
+      · congr 1
+        funext j
+        refine Fin.cases ?_ (fun j => ?_) j
+        · rw [Fin.cons_zero, Function.update_of_ne (Fin.ne_of_val_ne (by simp; omega)),
+            show (⟨(0 : Fin (k + 2)).val + (n - k), by omega⟩ : Fin (n + 2)) = p.succ by
+              ext; simp; omega, Function.update_self]
+        · rw [Fin.cons_succ, Function.update_of_ne (Fin.ne_of_val_ne (by simp; omega)),
+            Function.update_of_ne (Fin.ne_of_val_ne (by simp; omega))]
+          congr 1
+          ext
+          simp
+          omega
+    · rw [ite_eq_right hP]
+      refine Finset.sum_eq_zero fun a _ => Finset.sum_eq_zero fun b _ => ?_
+      rw [ite_eq_right fun h => hP h.2]
+
+/-- **The recursion is the scheme acting on the whole chain.** The operations
+`U^{[1]}, …, U^{[N-1]}`, with `U^{[k]}` acting on the sites `k` and `k + 1` of the whole chain
+of `N = n + 2` sites and as the identity on the other sites, send `|0⟩^{⊗N}` to the state
+`noAncillaState n U` (arXiv:quant-ph/0608197, lines 1580--1586). -/
+theorem noAncillaChainOp_mulVec_single {n : ℕ}
+    (U : Fin (n + 1) → Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ) :
+    noAncillaChainOp U n le_rfl *ᵥ Pi.single 0 1 = noAncillaState n U := by
+  funext τ
+  rw [noAncillaChainOp_mulVec_single_apply, ite_eq_left fun q hq => absurd hq (by omega)]
+  congr 1
+  funext j
+  congr 1
+  ext
+  simp
 
 /-! ### The scheme with a `d`-dimensional ancilla read out as a site -/
 

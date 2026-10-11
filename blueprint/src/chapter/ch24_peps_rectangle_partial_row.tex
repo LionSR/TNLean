@@ -1,0 +1,45 @@
+\section{Entropy cost of a partial rectangle layer}
+
+% Derived rectangle auxiliary for the partial-row argument of Lemma 9.4.
+\begin{theorem}[Entropy cost of a partial rectangle row]
+    \label{thm:area_law_rectangle_partial_row}
+    \lean{TNLean.PEPS.AreaLaw.IntRect.partial_row_entropy_le}
+    \leanok
+    \uses{def:area_law_ground_entropy,def:area_law_safe_rectangle}
+    Let $\Lambda\subseteq\mathbb Z^2$ be finite, let $q\in\mathbb N$ with
+    $q\ge1$, and let $\Omega$ be a unit vector on the domain with local
+    dimension $q$. Let $A\subseteq\Lambda$ be arbitrary, let $Q$ be a
+    nonempty integer rectangle, and put $s=\operatorname{size}(Q)$.
+    Let $j\in\mathbb N$ satisfy $1\le j\le s$, and let
+    $Y\subseteq Q^{+j}\setminus Q^{+(j-1)}$ be arbitrary. Define
+    $R=A\cap(Q^{+(j-1)}\setminus Q)$ and
+    $R_Y=A\cap((Q^{+(j-1)}\setminus Q)\cup Y)$.
+    Then
+    \begin{align}
+        |S_\Omega(R_Y)-S_\Omega(R)|\le12s\log q.
+    \end{align}
+    This rectangle estimate follows from the partial-row argument of
+    \cite[Lemma~9.4, lines~666--667]{OpenAI2026AreaLaw} and is used in the
+    rectangle covering argument in the proof of Proposition~9.5,
+    lines~717--729. It includes an empty $Y$, thin rectangles and missing
+    lattice sites in the domain.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_buffer_contours,thm:area_partial_row_increment,
+        thm:area_law_entropy_dimension}
+    Put $B=A\cap Y$. Then $R$ and $B$ are disjoint and $R_Y=R\cup B$.
+    The boundary-layer count recorded in the proof of
+    Theorem~\ref{thm:area_law_buffer_contours} gives
+    \begin{align}
+        |B|\le|Y|\le|Q^{+j}\setminus Q^{+(j-1)}|
+        \le4(s+2j)\le12s.
+    \end{align}
+    The first inequality uses the injective inclusion of physical sites
+    into the ambient lattice. By the regional increment and dimension bounds,
+    \begin{align}
+        |S_\Omega(R_Y)-S_\Omega(R)|
+         & \le S_\Omega(B)\le|B|\log q\le12s\log q,
+    \end{align}
+    where $\log q\ge0$ because $q\ge1$.
+\end{proof}

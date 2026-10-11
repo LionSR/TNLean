@@ -22,27 +22,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-subset-expansion.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-gaussian-sourcegaussiandensity-01
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.sourceGaussianCorrection
-
-Provenance-ID: 8769-source-gaussian-sourcegaussiandensity-02
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.integral_sourceGaussianCorrection
-
-Provenance-ID: 8769-source-gaussian-sourcegaussiandensity-03
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.sourceGaussianCorrection_eq_transport
-
-Provenance-ID: 8769-source-gaussian-sourcegaussiandensity-04
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.physical_sampledSourceMatrix_sub_eq_sum
-
-Provenance-ID: 8769-source-gaussian-sourcegaussiandensity-05
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.rectangularTraceNorm_physical_sampledSourceMatrix_sub_le
-
 -/
 
 noncomputable section

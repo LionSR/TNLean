@@ -1,4 +1,9 @@
-The blueprint compilation (`leanblueprint web`) failed. Your task is to fix the blueprint errors.
+A blueprint compilation job failed. Your task is to fix the blueprint errors.
+
+Two PR CI jobs build the blueprint. Check which one failed:
+
+- "Check blueprint compiles without errors" builds the web pages with `texra-blueprint web` (plasTeX).
+- "Check blueprint PDF compiles" builds the two XeLaTeX print volumes: `leanblueprint pdf`, then `./scripts/build_blueprint_ch01_12.sh` for the FT-MPS volume. XeLaTeX rejects constructs that plasTeX accepts. Typical examples are a bare `_` in text mode, such as a file path inside `\texttt{...}` (write `\_`), and an unbraced subscript after a macro, such as `\spn_\C` (write `\spn_{\C}`). The FT-MPS volume also compiles the `\ifftmpsvolume` branches.
 
 Instructions:
 
@@ -20,6 +25,9 @@ Instructions:
 
    Require the command to succeed; it rejects unresolved `ERROR` lines and
    renderer warnings that the Blueprint CI gate treats as failures.
+   When the PDF job failed, also run `cd blueprint && leanblueprint pdf`, and
+   `./scripts/build_blueprint_ch01_12.sh` if the FT-MPS step failed. Require
+   both to succeed.
 5. Make minimal, targeted fixes. Do not refactor unrelated LaTeX.
 6. Commit and push your fix to the current branch. Prefix commit messages with `[claude-auto-fix]`.
 7. After pushing, use the GitHub MCP tools to post a comment on the PR summarizing what was fixed.

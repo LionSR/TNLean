@@ -21,15 +21,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-exterior-input; Theorem 5.2, lines 409–480.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-correctedinputvectors-01
-TNLean.PEPS.PairEffect.SourceCircuit.correctedInputPreparation
-Provenance-ID: 8769-source-resource-correctedinputvectors-02
-TNLean.PEPS.PairEffect.SourceCircuit.correctedInputVector
-Provenance-ID: 8769-source-resource-correctedinputvectors-03
-TNLean.PEPS.PairEffect.SourceCircuit.correctedInputVector_identity_of_reordering
-Provenance-ID: 8769-source-resource-correctedinputvectors-04
-TNLean.PEPS.PairEffect.SourceCircuit.correctedPreparedWord
 -/
 
 

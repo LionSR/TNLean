@@ -75,23 +75,23 @@ theorem observableInsertionExpectation_eq_of_isometric_intertwine
   rw [Matrix.trace_mul_cycle, hV, Matrix.one_mul,
     Matrix.trace_mul_cycle, hV, Matrix.one_mul]
 
-/-- Compression to the support of a nonzero positive stationary matrix yields
-faithful stationary normalized generators and preserves all finite insertion
-expectations. Only the state associated with this virtual matrix is retained;
-no equality of the original and compressed full boundary spaces is asserted.
-Source context: Nachtergaele, arXiv:cond-mat/9410110, Section 3,
-lines 1394--1467, and Section 4, lines 1724--1738; Wolf, restriction to full-rank
-fixed points, equations (6.51)--(6.52). -/
-theorem exists_faithful_stationary_supportCompression_of_leftCanonical
-    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+/-- Compression to the support of a nonzero positive stationary matrix yields a
+faithful stationary matrix for the compressed generators and preserves all finite
+insertion expectations. No normalization of the tensor is needed. Only the state
+associated with this virtual matrix is retained; no equality of the original and
+compressed full boundary spaces is asserted.
+Source context: Nachtergaele, arXiv:cond-mat/9410110, Section 4,
+lines 1724--1738; Wolf, restriction to full-rank fixed points,
+equations (6.51)--(6.52). -/
+theorem exists_faithful_stationary_supportCompression
+    (A : MPSTensor d D)
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef)
     (htr : Matrix.trace ρ ≠ 0) (hFix : Kraus.map A ρ = ρ) :
     ∃ E : ℕ, 0 < E ∧ ∃ (V : Matrix (Fin D) (Fin E) ℂ)
       (B : MPSTensor d E) (σ : Matrix (Fin E) (Fin E) ℂ),
       Vᴴ * V = 1 ∧ V * Vᴴ = hρ.supportProj ∧
       (∀ i, B i = Vᴴ * A i * V) ∧ σ = Vᴴ * ρ * V ∧
-      σ.PosDef ∧ IsLeftCanonical B ∧
-      (∀ i, A i * V = V * B i) ∧ Kraus.map B σ = σ ∧
+      σ.PosDef ∧ (∀ i, A i * V = V * B i) ∧ Kraus.map B σ = σ ∧
       Matrix.trace σ = Matrix.trace ρ ∧
       ∀ (k : ℕ) (X : Matrix (Cfg d k) (Cfg d k) ℂ),
         observableInsertionExpectation A ρ X = observableInsertionExpectation B σ X := by
@@ -130,9 +130,33 @@ theorem exists_faithful_stationary_supportCompression_of_leftCanonical
     Kraus.map_compressed_fixedPoint A B V (Kraus.stationaryProj hρ) ρ
       (fun _ => rfl) hVrange
       (by rw [Kraus.stationaryProj_mul hρ, Kraus.mul_stationaryProj hρ]) hFix
-  refine ⟨E, hE, V, B, σ, hV, hVrange, (fun _ => rfl), rfl, hσ,
-    hA.of_isometry_intertwine B V hV hInt, hInt, hσFix, hTrace, ?_⟩
+  refine ⟨E, hE, V, B, σ, hV, hVrange, (fun _ => rfl), rfl, hσ, hInt, hσFix, hTrace, ?_⟩
   exact fun _ X => observableInsertionExpectation_eq_of_isometric_intertwine
     A B V hV hInt ρ σ hExpand.symm X
+
+/-- Compression to the support of a nonzero positive stationary matrix yields
+faithful stationary normalized generators and preserves all finite insertion
+expectations. Only the state associated with this virtual matrix is retained;
+no equality of the original and compressed full boundary spaces is asserted.
+Source context: Nachtergaele, arXiv:cond-mat/9410110, Section 3,
+lines 1394--1467, and Section 4, lines 1724--1738; Wolf, restriction to full-rank
+fixed points, equations (6.51)--(6.52). -/
+theorem exists_faithful_stationary_supportCompression_of_leftCanonical
+    (A : MPSTensor d D) (hA : IsLeftCanonical A)
+    {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosSemidef)
+    (htr : Matrix.trace ρ ≠ 0) (hFix : Kraus.map A ρ = ρ) :
+    ∃ E : ℕ, 0 < E ∧ ∃ (V : Matrix (Fin D) (Fin E) ℂ)
+      (B : MPSTensor d E) (σ : Matrix (Fin E) (Fin E) ℂ),
+      Vᴴ * V = 1 ∧ V * Vᴴ = hρ.supportProj ∧
+      (∀ i, B i = Vᴴ * A i * V) ∧ σ = Vᴴ * ρ * V ∧
+      σ.PosDef ∧ IsLeftCanonical B ∧
+      (∀ i, A i * V = V * B i) ∧ Kraus.map B σ = σ ∧
+      Matrix.trace σ = Matrix.trace ρ ∧
+      ∀ (k : ℕ) (X : Matrix (Cfg d k) (Cfg d k) ℂ),
+        observableInsertionExpectation A ρ X = observableInsertionExpectation B σ X := by
+  obtain ⟨E, hE, V, B, σ, hV, hVrange, hB, hσdef, hσ, hInt, hσFix, hTrace, hObs⟩ :=
+    exists_faithful_stationary_supportCompression A hρ htr hFix
+  exact ⟨E, hE, V, B, σ, hV, hVrange, hB, hσdef, hσ,
+    hA.of_isometry_intertwine B V hV hInt, hInt, hσFix, hTrace, hObs⟩
 
 end MPSTensor

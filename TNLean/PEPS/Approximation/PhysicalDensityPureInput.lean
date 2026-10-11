@@ -20,9 +20,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-effect-circuit-error; Theorem 5.2 and its proof.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-approximate-physical-physicaldensitypureinput-01
-TNLean.PEPS.PairEffect.SourceCircuit.physicalDensity_pure_input
 -/
 
 

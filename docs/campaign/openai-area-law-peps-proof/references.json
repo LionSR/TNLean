@@ -1,0 +1,177 @@
+{
+  "Schur1901": {
+    "authors": "I. Schur",
+    "title": "Über eine Klasse von Matrizen, die sich einer gegebenen Matrix zuordnen lassen",
+    "year": 1901,
+    "venue": "Dissertation, Berlin",
+    "url": "https://zbmath.org/?q=an:32.0165.04",
+    "manuscript": false
+  },
+  "Autonne1902": {
+    "authors": "L. Autonne",
+    "title": "Sur les groupes linéaires, réels et orthogonaux",
+    "year": 1902,
+    "venue": "Bull. Soc. Math. France 30, 121-134",
+    "url": "https://doi.org/10.24033/bsmf.665",
+    "manuscript": false
+  },
+  "Schmidt1907": {
+    "authors": "E. Schmidt",
+    "title": "Zur Theorie der linearen und nichtlinearen Integralgleichungen",
+    "year": 1907,
+    "venue": "Math. Ann. 63, 433-476",
+    "url": "https://doi.org/10.1007/BF01449770",
+    "manuscript": false
+  },
+  "Gevrey1918": {
+    "authors": "M. Gevrey",
+    "title": "Sur la nature analytique des solutions des équations aux dérivées partielles. Premier mémoire",
+    "year": 1918,
+    "venue": "Ann. Sci. École Norm. Sup. 35, 129-190",
+    "url": "https://doi.org/10.24033/asens.706",
+    "manuscript": false
+  },
+  "Isserlis1918": {
+    "authors": "L. Isserlis",
+    "title": "On a Formula for the Product-Moment Coefficient of Any Order of a Normal Frequency Distribution in Any Number of Variables",
+    "year": 1918,
+    "venue": "Biometrika 12, 134-139",
+    "url": "https://doi.org/10.1093/biomet/12.1-2.134",
+    "manuscript": true
+  },
+  "Hirschman1952": {
+    "authors": "I. I. Hirschman Jr.",
+    "title": "A convexity theorem for certain groups of transformations",
+    "year": 1952,
+    "venue": "J. Analyse Math. 2, 209-218",
+    "url": "https://doi.org/10.1007/BF02825637",
+    "manuscript": false
+  },
+  "Reed1962": {
+    "authors": "I. S. Reed",
+    "title": "On a moment theorem for complex Gaussian processes",
+    "year": 1962,
+    "venue": "IEEE Trans. Inf. Theory 8(3), 194-195",
+    "url": "https://doi.org/10.1109/TIT.1962.1057719",
+    "manuscript": false
+  },
+  "Lieb1972": {
+    "authors": "E. H. Lieb, D. W. Robinson",
+    "title": "The finite group velocity of quantum spin systems",
+    "year": 1972,
+    "venue": "Commun. Math. Phys. 28, 251–257",
+    "url": "https://doi.org/10.1007/BF01645779",
+    "manuscript": true
+  },
+  "Lieb1973": {
+    "authors": "E. H. Lieb, M. B. Ruskai",
+    "title": "Proof of the strong subadditivity of quantum-mechanical entropy",
+    "year": 1973,
+    "venue": "J. Math. Phys. 14, 1938-1941",
+    "url": "https://doi.org/10.1063/1.1666274",
+    "manuscript": true
+  },
+  "Uhlmann1976": {
+    "authors": "A. Uhlmann",
+    "title": "The \"transition probability\" in the state space of a *-algebra",
+    "year": 1976,
+    "venue": "Rep. Math. Phys. 9, 273-279",
+    "url": "https://doi.org/10.1016/0034-4877(76)90060-4",
+    "manuscript": true
+  },
+  "Kubo1980": {
+    "authors": "F. Kubo, T. Ando",
+    "title": "Means of positive linear operators",
+    "year": 1980,
+    "venue": "Math. Ann. 246, 205-224",
+    "url": "https://doi.org/10.1007/BF01371042",
+    "manuscript": true
+  },
+  "Bennett1993": {
+    "authors": "C. H. Bennett et al.",
+    "title": "Teleporting an unknown quantum state via dual classical and Einstein-Podolsky-Rosen channels",
+    "year": 1993,
+    "venue": "Phys. Rev. Lett. 70, 1895-1899",
+    "url": "https://doi.org/10.1103/PhysRevLett.70.1895",
+    "manuscript": false
+  },
+  "Schumacher1995": {
+    "authors": "B. Schumacher",
+    "title": "Quantum coding",
+    "year": 1995,
+    "venue": "Phys. Rev. A 51, 2738",
+    "url": "https://doi.org/10.1103/PhysRevA.51.2738",
+    "manuscript": false
+  },
+  "Verstraete2004": {
+    "authors": "F. Verstraete, J. I. Cirac",
+    "title": "Renormalization algorithms for Quantum-Many Body Systems in two and higher dimensions",
+    "year": 2004,
+    "url": "https://arxiv.org/abs/cond-mat/0407066",
+    "manuscript": true
+  },
+  "Renner2005": {
+    "authors": "R. Renner",
+    "title": "Security of Quantum Key Distribution",
+    "year": 2005,
+    "venue": "PhD thesis, ETH Zurich",
+    "url": "https://arxiv.org/abs/quant-ph/0512258",
+    "manuscript": true
+  },
+  "Bravyi2006": {
+    "authors": "S. Bravyi, M. B. Hastings, F. Verstraete",
+    "title": "Lieb-Robinson bounds and the generation of correlations and topological quantum order",
+    "year": 2006,
+    "venue": "Phys. Rev. Lett. 97, 050401",
+    "url": "https://arxiv.org/abs/quant-ph/0603121",
+    "manuscript": false
+  },
+  "Hastings2006": {
+    "authors": "M. B. Hastings",
+    "title": "Solving Gapped Hamiltonians Locally",
+    "year": 2006,
+    "venue": "Phys. Rev. B 73, 085115",
+    "url": "https://arxiv.org/abs/cond-mat/0508554",
+    "manuscript": true
+  },
+  "Kitaev2006": {
+    "authors": "A. Kitaev",
+    "title": "Anyons in an exactly solved model and beyond",
+    "year": 2006,
+    "venue": "Ann. Phys. 321, 2–111",
+    "url": "https://arxiv.org/abs/cond-mat/0506438",
+    "manuscript": true
+  },
+  "Nachtergaele2006": {
+    "authors": "B. Nachtergaele, Y. Ogata, R. Sims",
+    "title": "Propagation of Correlations in Quantum Lattice Systems",
+    "year": 2006,
+    "venue": "J. Stat. Phys. 124, 1–13",
+    "url": "https://arxiv.org/abs/math-ph/0603064",
+    "manuscript": true
+  },
+  "Hastings2007": {
+    "authors": "M. B. Hastings",
+    "title": "Entropy and Entanglement in Quantum Ground States",
+    "year": 2007,
+    "venue": "Phys. Rev. B 76, 035114",
+    "url": "https://arxiv.org/abs/cond-mat/0701055",
+    "manuscript": false
+  },
+  "Barthel2010": {
+    "authors": "T. Barthel, M. Kliesch, J. Eisert",
+    "title": "Real-space renormalization yields finite correlations",
+    "year": 2010,
+    "venue": "Phys. Rev. Lett. 105, 010502",
+    "url": "https://arxiv.org/abs/1003.2319",
+    "manuscript": true
+  },
+  "Carlen2014": {
+    "authors": "E. A. Carlen, E. H. Lieb",
+    "title": "Remainder Terms for Some Quantum Entropy Inequalities",
+    "year": 2014,
+    "venue": "J. Math. Phys. 55, 042201",
+    "url": "https://arxiv.org/abs/1402.3840",
+    "manuscript": true
+  }
+}

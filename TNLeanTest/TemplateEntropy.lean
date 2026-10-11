@@ -1,4 +1,5 @@
 import TNLean.PEPS.AreaLaw.Geometry.TemplateEntropy
+import TNLean.PEPS.AreaLaw.InitialSafeRectangleEntropy
 
 /-!
 # Actual-state partial-row entropy regressions
@@ -70,3 +71,10 @@ depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.template_partial_row_entropy_le
+
+/--
+info: 'TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_rpow'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_rpow

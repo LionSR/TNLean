@@ -21,9 +21,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-effect-circuit-error; Theorem 5.2, lines 137–151 and 199–251.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-familysourceonlyreduction-01
-https://lionsr.github.io/TNLean/docs/TNLean/PEPS/Approximation/FamilySourceOnlyReduction.html#TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_family_regional_density_sub_le_half
 -/
 
 noncomputable section

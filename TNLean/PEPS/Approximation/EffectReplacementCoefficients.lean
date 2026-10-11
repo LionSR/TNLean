@@ -19,23 +19,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-effect-circuit-error; Theorem 5.2, lines 137–151 and 199–251.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-effectreplacementcoefficients-01
-TNLean.PEPS.PairEffect.card_replacementLabels_le
-Provenance-ID: 8769-source-resource-effectreplacementcoefficients-02
-TNLean.PEPS.PairEffect.card_replacementLabels_stackLength_le
-Provenance-ID: 8769-source-resource-effectreplacementcoefficients-03
-TNLean.PEPS.PairEffect.exists_prepared_effectReplacement_uniform_resources
-Provenance-ID: 8769-source-resource-effectreplacementcoefficients-04
-TNLean.PEPS.PairEffect.length_wordList_le
-Provenance-ID: 8769-source-resource-effectreplacementcoefficients-05
-TNLean.PEPS.PairEffect.stackLength_le
-Provenance-ID: 8769-source-resource-effectreplacementcoefficients-06
-TNLean.PEPS.PairEffect.sum_norm_coeff_wordList
-Provenance-ID: 8769-source-resource-effectreplacementcoefficients-07
-TNLean.PEPS.PairEffect.sum_norm_replacementCoefficients
-Provenance-ID: 8769-source-resource-effectreplacementcoefficients-08
-TNLean.PEPS.PairEffect.sum_norm_replacementCoefficients_le
 -/
 
 noncomputable section

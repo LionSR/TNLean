@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.AreaLaw.Geometry.CellFanSlopes
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegions
 import TNLean.PEPS.AreaLaw.Geometry.DyadicOrigin
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryFineCellCover
@@ -113,23 +114,6 @@ private theorem mark_mem_unitMesh (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
   have hmesh := beltMarks_subset_affineMesh o 2 ℓ {z} (by omega) hxmarks
   simpa only [show (2 : ℝ) ^ 2 / 4 = 1 by norm_num] using hmesh
 
-/-- Extract the last edge slope carried by a triangle constructor.
-Auxiliary to area-law Section 11, `prop:two-families`, lines 308–310 and 545–556. -/
-private theorem polygon_last_slope (P : TemplatePolygon) :
-    match P with
-    | .triangle a _ c _ _ _ _ => IsAllowedSlope (a - c)
-    | .rectangle _ _ _ _ _ _ _ _ => True := by
-  cases P with
-  | triangle _ _ _ _ _ _ h => exact h
-  | rectangle => trivial
-
-/-- The radial direction is the last allowed edge of the actual fan triangle.
-Auxiliary to area-law Section 11, `prop:two-families`, lines 308–310 and 545–556. -/
-private theorem fan_radial_slope (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
-    (split : Fin 4 → Bool) (i : CellFanSlot split) :
-    IsAllowedSlope (cellFanCenter o ℓ z - cellFanEnd o ℓ z split i) := by
-  exact polygon_last_slope (cellFanPolygon o ℓ z split i)
-
 /-- Actual fan-triangle frontiers lie on the prescribed supporting lines.
 Auxiliary to area-law Section 11, `prop:two-families`, lines 308–323 and 545–559. -/
 private theorem fan_frontier_onSupportingLine (o : ℝ × ℝ) (ℓ : ℕ)
@@ -144,7 +128,8 @@ private theorem fan_frontier_onSupportingLine (o : ℝ × ℝ) (ℓ : ℕ)
   · exact cell_frontier_onSupportingLine o ℓ z hxcell
   · obtain ⟨j, hxseg⟩ := Set.mem_iUnion.mp hxradial
     rw [segment_symm] at hxseg
-    exact segment_onSupportingLine o (hemesh j) (fan_radial_slope o ℓ z split j) hxseg
+    exact segment_onSupportingLine o (hemesh j)
+      (cellFanPolygon_base_and_radial_isAllowedSlope o ℓ z split j).2 hxseg
 
 /-- A run boundary is contained in the finite union of its triangle boundaries.
 Auxiliary to area-law Section 11, `prop:two-families`, lines 313–323 and 545–559. -/

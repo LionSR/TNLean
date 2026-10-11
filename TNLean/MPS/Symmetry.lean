@@ -132,6 +132,7 @@ import TNLean.MPS.Symmetry.SPTFixedPointEmbedding
 import TNLean.MPS.Symmetry.ScalarIdentityAmbientObstruction
 import TNLean.MPS.Symmetry.SpinHalfObstruction
 import TNLean.MPS.Symmetry.StationaryDensitySymmetry
+import TNLean.MPS.Symmetry.StationaryPhysicalSymmetry
 import TNLean.MPS.Symmetry.StationarySupportLimitIdentification
 import TNLean.MPS.Symmetry.StationarySupportPreparation
 import TNLean.MPS.Symmetry.StationarySupportedDensityPhaseInvariance

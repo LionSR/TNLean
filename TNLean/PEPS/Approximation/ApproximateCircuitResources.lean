@@ -22,21 +22,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 thm:compression; Theorem 5.2 and its proof.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-approximate-physical-approximatecircuitresources-01
-TNLean.PEPS.PairEffect.EffectCircuit.isExpansionBounded_rescaledOriginal
-Provenance-ID: 8769-approximate-physical-approximatecircuitresources-02
-TNLean.PEPS.PairEffect.EffectCircuit.isMonomialBounded_rescaledOriginal
-Provenance-ID: 8769-approximate-physical-approximatecircuitresources-03
-TNLean.PEPS.PairEffect.EffectCircuit.monomialCount
-Provenance-ID: 8769-approximate-physical-approximatecircuitresources-04
-TNLean.PEPS.PairEffect.EffectCircuit.nonprivateCount_rescaledOriginal
-Provenance-ID: 8769-approximate-physical-approximatecircuitresources-05
-TNLean.PEPS.PairEffect.EffectCircuit.participants_rescaledOriginal
-Provenance-ID: 8769-approximate-physical-approximatecircuitresources-06
-TNLean.PEPS.PairEffect.EffectCircuit.participationCount_rescaledOriginal
-Provenance-ID: 8769-approximate-physical-approximatecircuitresources-07
-TNLean.PEPS.PairEffect.EffectCircuit.rescaledLocationsEquiv
 -/
 
 

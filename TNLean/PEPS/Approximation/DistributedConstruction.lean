@@ -32,17 +32,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 thm:compression; Theorem 5.2 and its proof.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-original-sampling-distributedconstruction-01
-TNLean.PEPS.PairEffect.DistributedConstruction
-Provenance-ID: 8769-original-sampling-distributedconstruction-02
-TNLean.PEPS.PairEffect.DistributedConstruction.input
-Provenance-ID: 8769-original-sampling-distributedconstruction-03
-TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity
-Provenance-ID: 8769-original-sampling-distributedconstruction-04
-TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_posSemidef
-Provenance-ID: 8769-original-sampling-distributedconstruction-05
-TNLean.PEPS.PairEffect.DistributedConstruction.trace_physicalDensity_le_one
 -/
 
 

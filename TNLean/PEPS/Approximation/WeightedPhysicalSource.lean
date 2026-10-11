@@ -28,59 +28,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-exterior-contraction.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-physical-weightedphysicalsource-01
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.integral_rectangularTraceNorm_weightedPhysicalSource_le
-
-Provenance-ID: 8769-physical-weightedphysicalsource-02
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.norm_physicalComponentFrameMatrix_le_one
-
-Provenance-ID: 8769-physical-weightedphysicalsource-03
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.norm_physicalFrameGramMatrix_le_one
-
-Provenance-ID: 8769-physical-weightedphysicalsource-04
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.norm_physicalOutputFrameMatrix_le_one
-
-Provenance-ID: 8769-physical-weightedphysicalsource-05
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.physicalComponentFrameMatrix
-
-Provenance-ID: 8769-physical-weightedphysicalsource-06
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.physicalComponentFrameMatrix_apply
-
-Provenance-ID: 8769-physical-weightedphysicalsource-07
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.physicalFrameGramMatrix
-
-Provenance-ID: 8769-physical-weightedphysicalsource-08
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.physicalFrameGramMatrix_apply
-
-Provenance-ID: 8769-physical-weightedphysicalsource-09
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.physicalOutputFrameMatrix
-
-Provenance-ID: 8769-physical-weightedphysicalsource-10
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.rectangularTraceNorm_partialTrace_physicalOutputFrameMatrix_le
-
-Provenance-ID: 8769-physical-weightedphysicalsource-11
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.schmidtPhysicalVector
-
-Provenance-ID: 8769-physical-weightedphysicalsource-12
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.schmidtPhysicalVector_repr
-
-Provenance-ID: 8769-physical-weightedphysicalsource-13
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.sum_schmidtPhysicalVector_outer_eq_weightedSourceError
-
 -/
 
 

@@ -1,0 +1,86 @@
+% Auxiliary to OpenAI, A two-dimensional area law from a global spectral gap,
+% Section 11, geometry:initial-stars, lines 352--370, and
+% prop:two-families, lines 308--323;
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\section{Connected components after radial deletion}
+\label{sec:area_law_fan_cut_components}
+
+The retained fan pieces of Definition~\ref{def:area_law_fan_cut_piece}
+combine along each run to form a connected component of the cut square.
+The following correspondence is an auxiliary to the initial-star
+construction of \cite[Section~11]{OpenAI2026AreaLaw}.
+
+\begin{theorem}[Connected components of a cut fan square]
+    \label{thm:area_law_fan_cut_component_correspondence}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRun_connectedComponents_equiv}
+    \leanok
+    \uses{def:area_law_fan_cut_piece,def:area_law_fan_runs}
+    Consider the arbitrary dyadic square $Q$, all-midpoint fan, coloring
+    and radial union $L$ of Definition~\ref{def:area_law_fan_cut_piece}.
+    Retain an adjacency between consecutive triangles precisely when
+    their colors agree, and write $\mathcal R$ for the connected
+    components of this finite graph. Put
+    $\Omega=B_\infty(c,r)\setminus L$. For each $R\in\mathcal R$, set
+    \begin{align}
+        T_R & =\bigcup_{i\in R}P_i, \\
+        U_R & =T_R\cap\Omega.
+    \end{align}
+    Write $\mathcal C(\Omega)$ for the connected components of $\Omega$
+    in its relative topology, and $C_\Omega(x)$ for the component
+    containing $x\in\Omega$.
+    There is a unique bijection
+    $\Phi:\mathcal C(\Omega)\longrightarrow\mathcal R$ such that, for
+    every $x\in\Omega$ and $R\in\mathcal R$,
+    \begin{align}
+        \Phi(C_\Omega(x))=R & \quad\Longleftrightarrow\quad x\in T_R.
+        \label{eq:area_law_fan_cut_component_membership}
+    \end{align}
+    Equivalently, every connected component of $\Omega$ is $U_R$ for
+    exactly one run $R$, and every $U_R$ is a connected component.
+    The assertion includes $\ell=0$ and an empty change set $A$.
+    Distinct runs with the same color correspond to distinct components.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:area_law_fan_runs,
+        thm:area_law_sample_rows,
+        thm:area_law_cell_fan_closed_ball,
+        thm:area_law_fan_run_cover,
+        thm:area_law_fan_cut_runs_disjoint,
+        thm:area_law_fan_cut_run_connected}
+    Theorem~\ref{thm:area_law_cell_fan_closed_ball} gives
+    $Q=\overline B_\infty(c,r)$, so $\Omega\subset Q$.
+    By Theorem~\ref{thm:area_law_fan_run_cover}, the run regions cover
+    $Q$. Hence the sets $U_R$ cover $\Omega$.
+    Theorem~\ref{thm:area_law_fan_cut_runs_disjoint} makes this cover
+    pairwise disjoint. Since $U_R=(T_R\setminus L)\cap B_\infty(c,r)$,
+    Theorem~\ref{thm:area_law_fan_cut_run_connected} shows that every
+    $U_R$ is nonempty and connected. Passing from the ambient plane
+    to the relative topology of $\Omega$ preserves this connectedness.
+
+    Each triangle $P_i$ is the convex hull of a finite set of vertices,
+    so it is compact and closed. Since each run has finitely many
+    triangles, $T_R$ is closed, and $U_R$ is relatively closed in
+    $\Omega$. There are finitely many runs. The disjoint cover gives
+    $\Omega\setminus U_R=\bigcup_{T\in\mathcal R,\ T\ne R}U_T$.
+    This finite union is relatively closed, so $U_R$ is also relatively
+    open.
+
+    A connected component meeting the nonempty connected set $U_R$
+    contains it: their union is connected, and the component is maximal.
+    It cannot meet the complement of the relatively open and closed
+    set $U_R$, since that would separate the component. Consequently
+    that component is exactly $U_R$.
+    The sets $U_R$ thus give all the connected components of $\Omega$,
+    each exactly once, and determine the required bijection.
+    For $x\in\Omega$, membership in $U_R$ is precisely membership in
+    $T_R$, which gives (\ref{eq:area_law_fan_cut_component_membership}).
+    Every component contains a point, so this characterization also
+    proves uniqueness of the bijection.
+
+    If $A$ is empty, then $L$ is empty and every perimeter adjacency
+    is retained. There is a single run, and $\Omega=B_\infty(c,r)$
+    has a single connected component. The same argument therefore
+    includes this case.
+\end{proof}

@@ -22,49 +22,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-effect-circuit-error; Theorem 5.2 and its proof.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-01
-TNLean.PEPS.PairEffect.SourceCircuit.branchCoefficient_physicalFirstLocationsEquiv
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-02
-TNLean.PEPS.PairEffect.SourceCircuit.branchLabels_physicalFirstLocationsEquiv
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-03
-TNLean.PEPS.PairEffect.SourceCircuit.card_gateLocations_physicalFirstOutput
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-04
-TNLean.PEPS.PairEffect.SourceCircuit.card_sourceLocations_physicalFirstOutput
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-05
-TNLean.PEPS.PairEffect.SourceCircuit.endpoints_physicalFirstSourcesEquiv
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-06
-TNLean.PEPS.PairEffect.SourceCircuit.eval_exchangeBlocks_operator
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-07
-TNLean.PEPS.PairEffect.SourceCircuit.eval_exchangeBlocks_threeFactors
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-08
-TNLean.PEPS.PairEffect.SourceCircuit.eval_exchangeBlocks_triple_tmul
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-09
-TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_physicalFirstOutput
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-10
-TNLean.PEPS.PairEffect.SourceCircuit.isExpansionBounded_physicalFirstOutput
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-11
-TNLean.PEPS.PairEffect.SourceCircuit.participants_physicalFirstLocationsEquiv
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-12
-TNLean.PEPS.PairEffect.SourceCircuit.participationCount_physicalFirstOutput
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-13
-TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstLocationsEquiv
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-14
-TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstOutput
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-15
-TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstParticipationEquiv
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-16
-TNLean.PEPS.PairEffect.SourceCircuit.physicalFirstSourcesEquiv
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-17
-TNLean.PEPS.PairEffect.SourceCircuit.slotCount_physicalFirstLocationsEquiv
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-18
-TNLean.PEPS.PairEffect.SourceCircuit.sourceDims_physicalFirstSourcesEquiv
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-19
-TNLean.PEPS.PairEffect.SourceCircuit.sourceOrder_exchangeBlocks
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-20
-TNLean.PEPS.PairEffect.SourceCircuit.sourceOrder_physicalFirstOutput
-Provenance-ID: 8769-approximate-physical-physicalfirstexchange-21
-TNLean.PEPS.PairEffect.SourceCircuit.sourceVectorAt_physicalFirstSourcesEquiv
 -/
 
 

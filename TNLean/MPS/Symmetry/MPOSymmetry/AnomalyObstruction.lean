@@ -164,7 +164,6 @@ namespace ActionData
 
 variable (fd : FusionData F) (ad : ActionData F A)
 
-open Classical in
 /-- **The L-symbol of a single invariant block**: the nonzero scalar `L(g,h)` with
 `actV g h ~ L(g,h) · fuseV g h` against long words of `(O_g O_h) · A`
 (`MPOTensor.GroupFamily.ActionData.isDressedProportional_lSymbol`). It is set to one if no
@@ -173,9 +172,8 @@ such scalar exists, which does not happen for a normal invariant state.
 Source: arXiv:2502.20257, `eq:defL`, `main.tex` lines 1905--1913; arXiv:2203.12563,
 `sec:PBC`, line 1091. -/
 noncomputable def lSymbol : LSymbol G Unit := fun _ g h ↦
-  if hz : ∃ z : ℂ, z ≠ 0 ∧ MPSTensor.IsDressedProportional
-      (actTensor (mulTensor (F.tensor g) (F.tensor h)) A) (ad.actV g h) (ad.fuseV fd g h) z
-  then Units.mk0 hz.choose hz.choose_spec.1 else 1
+  MPSTensor.dressedScalar (actTensor (mulTensor (F.tensor g) (F.tensor h)) A) (ad.actV g h)
+    (ad.fuseV fd g h)
 
 variable {fd ad}
 
@@ -195,8 +193,7 @@ theorem isDressedProportional_lSymbol (hA : Kraus.IsNormal A)
     obtain ⟨W', hW'⟩ := ad.exists_isReduction_fuseV fd g h
     exact hW.exists_isDressedProportional hW' hA
       (((hinv g).mulTensor (hinv h)).sameMPV₂Pos_actTensor (MPSTensor.SameMPV₂Pos.refl A))
-  simp only [lSymbol, hex, ↓reduceDIte, Units.val_mk0]
-  exact hex.choose_spec.2
+  exact MPSTensor.isDressedProportional_dressedScalar hex
 
 /-! ### The five reductions of the triple action -/
 

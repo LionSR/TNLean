@@ -8,8 +8,8 @@ import TNLean.PEPS.Approximation.HoleEncoder
 /-!
 # Axiom guards for the exact one-hole encoder
 
-The expected sets were copied from the actual raw reports for all twenty-two
-public declarations after the production module passed its kernel checks.
+These guards import the production encoder and require its public declarations
+to use only the three standard logical axioms.
 -/
 
 set_option linter.hashCommand false
@@ -89,6 +89,10 @@ set_option linter.hashCommand false
 /-- info: 'TNLean.PEPS.holeEncoder_norm_eq_projector' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in
 #print axioms TNLean.PEPS.holeEncoder_norm_eq_projector
+
+/-- info: 'TNLean.PEPS.holeEncoder_norm_eq_of_mem' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs in
+#print axioms TNLean.PEPS.holeEncoder_norm_eq_of_mem
 
 /-- info: 'TNLean.PEPS.holeEncoder_norm_le' depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs in

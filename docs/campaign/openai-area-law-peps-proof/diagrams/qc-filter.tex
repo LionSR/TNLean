@@ -1,0 +1,11 @@
+% Area law, eq:quasilocal-centered-filter (03-quasilocal.tex, lines 250-253):
+% M_i = int f(t) tau_t(h_i) dt - <Omega, h_i Omega> I, tau_t(B) = e^{itH} B e^{-itH}.
+% Read left to right: the first gate acts first.
+\[
+  M_i=\int_{\mathbb R}f(t)\,dt\;
+  \begin{quantikz}
+    \lstick{$X_i$} & \gate[2]{e^{-itH}} & \gate{h_i} & \gate[2]{e^{itH}} & \\
+    \lstick{$\Lambda\setminus X_i$} & & & &
+  \end{quantikz}
+  \;-\;\langle\Omega,h_i\Omega\rangle\,I
+\]

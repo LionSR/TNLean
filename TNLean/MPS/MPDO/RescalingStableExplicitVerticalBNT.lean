@@ -123,18 +123,9 @@ theorem exists_verticalComponent_eq_smul_single (p q : Fin 4) :
 
 /-- The normalized vertical component is injective at one site. -/
 theorem verticalComponent_isInjective : Kraus.IsInjective verticalComponent := by
-  unfold Kraus.IsInjective
-  apply le_antisymm le_top
-  rw [← (Matrix.stdBasis ℂ (Fin 4) (Fin 4)).span_eq]
-  apply Submodule.span_le.mpr
-  rintro M ⟨⟨p, q⟩, rfl⟩
-  rw [Matrix.stdBasis_eq_single]
+  refine Submodule.eq_top_of_forall_single_mem _ fun p q => ?_
   obtain ⟨v, c, hc, hv⟩ := exists_verticalComponent_eq_smul_single p q
-  have hmem : verticalComponent v ∈ Submodule.span ℂ (Set.range verticalComponent) :=
-    Submodule.subset_span ⟨v, rfl⟩
-  rw [hv] at hmem
-  have hscaled := Submodule.smul_mem (Submodule.span ℂ (Set.range verticalComponent)) c⁻¹ hmem
-  rwa [smul_smul, inv_mul_cancel₀ hc, one_smul] at hscaled
+  exact (Submodule.smul_mem_iff _ hc).mp (hv ▸ Submodule.subset_span ⟨v, rfl⟩)
 
 /-- The four matrices `A` are left-canonical. -/
 theorem A_isLeftCanonical : MPSTensor.IsLeftCanonical A := by

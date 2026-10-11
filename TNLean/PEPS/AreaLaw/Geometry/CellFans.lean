@@ -343,6 +343,20 @@ private theorem cell_norm_ball (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ) :
   constructor <;> intro h <;> constructor <;> constructor <;>
     nlinarith [h.1.1, h.1.2, h.2.1, h.2.2]
 
+/-- The closed maximum-norm ball about a dyadic cell center is its closure.
+The maximum norm is the usual product norm on `ℝ × ℝ`.
+
+Auxiliary to OpenAI, *A two-dimensional area law from a global spectral gap*,
+Section 11, `prop:two-families`, lines 299–310, and `geometry:initial-stars`,
+lines 333–370, at
+`openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+This is the coordinate description already used in the cell-fan cover. -/
+theorem closedBall_cellFanCenter_eq_closure_dyadicCell
+    (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ) :
+    Metric.closedBall (cellFanCenter o ℓ z) ((2 : ℝ) ^ ℓ / 2) =
+      closure (dyadicCell o ℓ z) := by
+  simpa only [Metric.closedBall, dist_eq_norm] using cell_norm_ball o ℓ z
+
 /-- A cell fan has at least four and at most eight triangles.
 Source: area-law Section 11, lines 299–310. -/
 theorem card_cellFanSlot_bounds (split : Fin 4 → Bool) :

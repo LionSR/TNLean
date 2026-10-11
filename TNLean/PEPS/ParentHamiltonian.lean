@@ -15,6 +15,7 @@ import TNLean.PEPS.ParentHamiltonian.CopyCanonicalLocalTransport
 import TNLean.PEPS.ParentHamiltonian.CopyCanonicalParentTransport
 import TNLean.PEPS.ParentHamiltonian.CopyWeightPhysicalTransport
 import TNLean.PEPS.ParentHamiltonian.CycleGroundSpace
+import TNLean.PEPS.ParentHamiltonian.DependentRegionCoordinates
 import TNLean.PEPS.ParentHamiltonian.DependentRegionOperatorLift
 import TNLean.PEPS.ParentHamiltonian.GInjectiveParentTransport
 import TNLean.PEPS.ParentHamiltonian.GIsometricRegionParentHamiltonian

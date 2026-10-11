@@ -287,37 +287,6 @@ dimensions.
     and the error is zero.
 \end{proof}
 
-\begin{definition}[Original local physical dimensions]
-    \label{def:peps_family_physical_output}
-    \lean{TNLean.PEPS.PairEffect.familyPhysicalLayout}
-    \lean{TNLean.PEPS.PairEffect.familyPhysicalOutputLayout}
-    \lean{TNLean.PEPS.PairEffect.familyPhysicalListBasis}
-    \lean{TNLean.PEPS.PairEffect.familyLabelledPhysicalBasis}
-    \lean{TNLean.PEPS.PairEffect.familyRestrictedPhysicalBasis}
-    \lean{TNLean.PEPS.PairEffect.familyRegionalPhysicalReadout}
-    \leanok
-    \uses{def:peps_party_layout}
-    Let the original physical space at party $p$ be $H_p=\C^{d_p}$,
-    where $d_p$ is a nonnegative integer, and let
-    $\mathbf p=(p_1,\ldots,p_m)$ be an ordered list of parties.
-    The physical register in position $i$ is $H_{p_i}$, owned by $p_i$.
-    Its standard tensor basis has column
-    $e_{p_1,z_1}\otimes\cdots\otimes e_{p_m,z_m}\otimes1$
-    for position coordinates $z_i\in\{0,\ldots,d_{p_i}-1\}$.
-    For an ordering containing each party exactly once, reindex these
-    coordinates by assignments $x_p\in\{0,\ldots,d_p-1\}$
-    labelled by the original parties, with $z_i=x_{p_i}$.
-    Selecting register owners in a region $A$ gives the corresponding
-    dependent assignments on $A$.
-
-    Append the actual private registers after the physical registers.
-    When their memory is finite-dimensional, with no numerical dimension
-    bound, its orthonormal basis and the standard physical tensor basis
-    give exact physical-private coordinates. The regional readout retains
-    $x|_A$ and discards both $x|_{P\setminus A}$ and these private coordinates.
-    All tensor memories retain their terminal scalar factor $\C$.
-\end{definition}
-
 \begin{theorem}[Regional dimensions without padding]
     \label{thm:peps_family_regional_dimensions}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_family_regional_density_sub_le_half}

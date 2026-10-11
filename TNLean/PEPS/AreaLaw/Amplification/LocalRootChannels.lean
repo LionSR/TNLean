@@ -116,15 +116,6 @@ theorem norm_spectatorRootChannel_sub_localRootChannel_le [NeZero q] (K : Finset
     mul_le_mul (by linarith) htK (norm_nonneg _) (by norm_num)
   exact mul_le_mul_of_nonneg_right (by linarith) (norm_nonneg B)
 
-omit [Fintype Aux] [DecidableEq Aux] in
-private theorem sqrt_mem_supportedOperators [NeZero q] (K : Finset ι)
-    {a : Matrix (ι → Fin q) (ι → Fin q) ℂ} (ha : 0 ≤ a)
-    (hK : a ∈ supportedOperators q (K : Set ι)) :
-    CFC.sqrt a ∈ supportedOperators q (K : Set ι) := by
-  refine mem_supportedOperators_of_forall_commute K fun B hB => ?_
-  rw [CFC.sqrt_eq_real_sqrt _ ha, cfcₙ_eq_cfc]
-  exact (commute_of_mem_supportedOperators disjoint_compl_right hK hB).cfc_real _
-
 /-- The local channel fixes the commutant of all physical operators on `K`, also for
 observables acting on spectators (`09-amplification.tex`, lines 107–110 and 120). -/
 theorem localRootChannel_eq_self_of_forall_commute [NeZero q] (K : Finset ι)

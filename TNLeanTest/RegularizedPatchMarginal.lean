@@ -1,5 +1,6 @@
 import TNLean.PEPS.AreaLaw.RegularizedPatchMarginal
 import TNLeanTest.Support.SingleQubitConfig
+import Mathlib.Data.Fin.Rev
 
 /-! Heterogeneous dimensions, empty regions, and complex-conjugation regressions
 for the canonical reduced states of the actual regularized output. -/
@@ -10,6 +11,8 @@ open Matrix TNLean.PEPS TNLeanTest.SingleQubitConfig
 section Heterogeneous
 
 private abbrev LocalBasis (v : Fin 2) := Fin (v.val + 2)
+
+private def localBasisReversal (v : Fin 2) : LocalBasis v ≃ Fin (v.val + 2) := Fin.revPerm
 
 example : Fintype.card (LocalBasis 0) = 2 ∧ Fintype.card (LocalBasis 1) = 3 := by
   norm_num [LocalBasis]
@@ -44,9 +47,25 @@ example
   trace_normalizedRegularizedPatchMarginal _ _ (fun j ↦ Fin.elim0 j)
     zero_lt_one Ω hΩ (fun j ↦ Fin.elim0 j) ∅
 
+/-- The transport uses the exact normalized output even with heterogeneous
+site dimensions and a nontrivial basis reversal. -/
+example {m : ℕ} (regions : Fin m → Finset (Fin 2)) (a : Fin m → ℝ) (b : ℝ)
+    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset (Fin 2))) → LocalBasis v.1))
+    (x : ∀ j, Matrix ((v : regions j) → LocalBasis v.1)
+      ((v : regions j) → LocalBasis v.1) ℂ) (R : Finset (Fin 2)) :
+    Matrix.reindex (dependentRegionFinEquiv localBasisReversal R)
+        (dependentRegionFinEquiv localBasisReversal R)
+        (normalizedRegularizedPatchMarginal regions a b Ω x R) =
+      Entropy.regionState R (dependentGlobalFinIsometry localBasisReversal
+        (normalizedRegularizedPatchOutput regions a b Ω x)) :=
+  reindex_normalizedRegularizedPatchMarginal regions localBasisReversal a b Ω x R
+
 end Heterogeneous
 
 section ComplexOrientation
+
+private instance : IsEmpty {v : Unit // v ∉ (Finset.univ : Finset Unit)} :=
+  ⟨fun v ↦ v.2 (Finset.mem_univ _)⟩
 
 private noncomputable def complexState : EuclideanSpace ℂ Config :=
   WithLp.toLp 2 fun σ ↦ ![1, Complex.I] (configEquiv.symm σ)
@@ -84,5 +103,28 @@ example :
   (inner_dependentRegionOperatorLift_eq_trace_reducedPure (Out := fun _ : Unit ↦ Fin 2)
     Finset.univ pauliY
     complexState).symm.trans complexState_expectation
+
+/-- Reversing the qubit basis sends the vector `(1, i)` to `(i, 1)`.
+The resulting `(0, 1)` marginal entry is `i`, not its conjugate. -/
+example :
+    Entropy.regionState Finset.univ
+      (dependentGlobalFinIsometry (fun _ : Unit ↦ Fin.revPerm) complexState)
+      (fun _ ↦ 0) (fun _ ↦ 1) = Complex.I := by
+  simp [Entropy.regionState, Matrix.partialTraceRight_apply,
+    dependentGlobalFinIsometry_apply, complexState, configEquiv,
+    Matrix.vecMulVec_apply]
+
+/-- The same complex Pauli-Y matrix acquires the opposite off-diagonal sign
+under the nontrivial basis permutation. -/
+example :
+    Entropy.localLift Finset.univ
+      (Matrix.reindex (dependentRegionFinEquiv (fun _ : Unit ↦ Fin.revPerm) Finset.univ)
+        (dependentRegionFinEquiv (fun _ : Unit ↦ Fin.revPerm) Finset.univ) pauliY)
+      (fun _ ↦ 0) (fun _ ↦ 1) = Complex.I := by
+  classical
+  have h : (fun _ : {v : Unit // v ∉ (Finset.univ : Finset Unit)} ↦ (0 : Fin 2)) =
+      (fun _ ↦ (1 : Fin 2)) := Subsingleton.elim _ _
+  simp [Entropy.localLift, dependentRegionFinEquiv, pauliY, configEquiv,
+    Entropy.cutEquiv, Equiv.piEquivPiSubtypeProd, Matrix.kroneckerMap_apply, h]
 
 end ComplexOrientation

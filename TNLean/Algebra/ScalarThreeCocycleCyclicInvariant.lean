@@ -29,7 +29,6 @@ No tensor, action tensor, or fusion tensor is constructed here.
 ## Main definitions
 
 * `ScalarThreeCochain.cyclicInvariant`: the product `∏_{k < n} ω(g, g^k, g)`.
-* `ScalarThreeCochain.comap`: restriction of a scalar three-cochain along a homomorphism.
 
 ## Main results
 
@@ -95,44 +94,6 @@ theorem cyclicInvariant_eq_one_of_isTrivialGaugeClass {ω : ScalarThreeCochain G
 theorem not_isTrivialGaugeClass_of_cyclicInvariant_ne_one {ω : ScalarThreeCochain G} {g : G}
     {n : ℕ} (hg : g ^ n = 1) (hne : cyclicInvariant ω g n ≠ 1) : ¬ IsTrivialGaugeClass ω :=
   fun h ↦ hne (cyclicInvariant_eq_one_of_isTrivialGaugeClass h hg)
-
-/-! ### Restriction along a homomorphism -/
-
-variable {H : Type} [Group H]
-
-/-- Restriction of a scalar three-cochain along a group homomorphism `f : H →* G`. -/
-def comap (f : H →* G) (ω : ScalarThreeCochain G) : ScalarThreeCochain H :=
-  fun a b c ↦ ω (f a) (f b) (f c)
-
-@[simp]
-theorem comap_apply (f : H →* G) (ω : ScalarThreeCochain G) (a b c : H) :
-    comap f ω a b c = ω (f a) (f b) (f c) := rfl
-
-/-- Restriction preserves the three-cocycle equation. -/
-theorem IsCocycle.comap {ω : ScalarThreeCochain G} (hω : IsCocycle ω) (f : H →* G) :
-    IsCocycle (comap f ω) := by
-  intro a b c e
-  simpa only [comap_apply, map_mul] using hω (f a) (f b) (f c) (f e)
-
-/-- Restriction commutes with fusion gauges: the gauge of the restriction by the restricted
-two-cochain is the restriction of the gauge. -/
-theorem comap_fusionGauge (f : H →* G) (β : ScalarCocycle G) (ω : ScalarThreeCochain G) :
-    comap f (fusionGauge β ω) = fusionGauge (fun a b ↦ β (f a) (f b)) (comap f ω) := by
-  funext a b c
-  simp [fusionGauge, coboundary, map_mul]
-
-/-- Restriction preserves cohomologous pairs. -/
-theorem CohomologousTo.comap {ω η : ScalarThreeCochain G} (h : CohomologousTo ω η)
-    (f : H →* G) : CohomologousTo (comap f ω) (comap f η) := by
-  obtain ⟨β, rfl⟩ := h
-  exact ⟨fun a b ↦ β (f a) (f b), (comap_fusionGauge f β η).symm⟩
-
-/-- Restriction preserves trivial gauge classes. Contrapositively, a nontrivial restriction to
-any subgroup, for instance a cyclic one detected by `cyclicInvariant`, certifies a nontrivial
-class on the ambient group. -/
-theorem IsTrivialGaugeClass.comap {ω : ScalarThreeCochain G} (h : IsTrivialGaugeClass ω)
-    (f : H →* G) : IsTrivialGaugeClass (comap f ω) :=
-  CohomologousTo.comap h f
 
 end ScalarThreeCochain
 

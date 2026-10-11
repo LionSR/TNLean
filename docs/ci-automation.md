@@ -101,6 +101,10 @@ When you push to a PR branch, several things happen in parallel:
   ├──┤                                                              │
   │  │  PR CI — blueprint job                                       │
   │  │  Runs `leanblueprint web` to check blueprint compilation.    │
+  │  │  PR CI — blueprint-pdf job, when blueprint TeX changed:      │
+  │  │  runs `leanblueprint pdf` on the print volume, seeded from   │
+  │  │  the auxiliary files of the last main build, and the FT-MPS  │
+  │  │  volume build.                                               │
   │  │                                                              │
   │  └───────────┬──────────────────────────────────────────────────┘
   │              │

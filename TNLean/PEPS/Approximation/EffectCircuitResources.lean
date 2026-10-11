@@ -15,23 +15,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-effect-circuit-error; Theorem 5.2, lines 137–151 and 199–251.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-effectcircuitresources-01
-TNLean.PEPS.PairEffect.OriginalCircuit.card_nonprivateLocations
-Provenance-ID: 8769-source-resource-effectcircuitresources-02
-TNLean.PEPS.PairEffect.OriginalCircuit.natCard_nonprivateLocations
-Provenance-ID: 8769-source-resource-effectcircuitresources-03
-TNLean.PEPS.PairEffect.OriginalCircuit.nonprivateLocationsFintype
-Provenance-ID: 8769-source-resource-effectcircuitresources-04
-TNLean.PEPS.PairEffect.OriginalCircuit.participationCount
-Provenance-ID: 8769-source-resource-effectcircuitresources-05
-TNLean.PEPS.PairEffect.OriginalCircuit.participationCount_replacement
-Provenance-ID: 8769-source-resource-effectcircuitresources-06
-TNLean.PEPS.PairEffect.OriginalCircuit.participationCount_replacement_le
-Provenance-ID: 8769-source-resource-effectcircuitresources-07
-TNLean.PEPS.PairEffect.OriginalCircuit.participationLocationsEquiv
-Provenance-ID: 8769-source-resource-effectcircuitresources-08
-TNLean.PEPS.PairEffect.SourceCircuit.participationCount
 -/
 
 noncomputable section

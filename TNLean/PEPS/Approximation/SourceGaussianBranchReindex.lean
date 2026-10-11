@@ -21,11 +21,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-exterior-contraction.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-physical-sourcegaussianbranchreindex-01
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.gaussianSchmidtBranchDensity_eq_sum_original
-
 -/
 
 

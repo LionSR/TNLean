@@ -20,43 +20,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-subset-expansion.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized from the manuscript; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-corrections-sourceresidualcoordinates-01
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.residualInSlots
-
-Provenance-ID: 8769-source-corrections-sourceresidualcoordinates-02
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.sources_residualInSlots
-
-Provenance-ID: 8769-source-corrections-sourceresidualcoordinates-03
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.isAllowed_residualInSlots
-
-Provenance-ID: 8769-source-corrections-sourceresidualcoordinates-04
-Downstream declaration:
-TNLean.PEPS.PairEffect.Word.eval_residualInSlots_prepare
-
-Provenance-ID: 8769-source-corrections-sourceresidualcoordinates-05
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.slotLayout_partialSlots_eq
-
-Provenance-ID: 8769-source-corrections-sourceresidualcoordinates-06
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.partialResidual
-
-Provenance-ID: 8769-source-corrections-sourceresidualcoordinates-07
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.sources_partialResidual
-
-Provenance-ID: 8769-source-corrections-sourceresidualcoordinates-08
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_partialResidual
-
-Provenance-ID: 8769-source-corrections-sourceresidualcoordinates-09
-Downstream declaration:
-TNLean.PEPS.PairEffect.SourceCircuit.eval_partialResidual_prepare
-
 -/
 
 noncomputable section

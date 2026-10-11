@@ -14,6 +14,13 @@ engine: copilot
 strict: true
 timeout-minutes: 25
 
+# This repository configures no OTLP collector. Defining these keys stops the
+# compiler from injecting its default OTLP header secret, which the detection
+# job would otherwise forward unmasked through `awf --env-all`.
+env:
+  OTEL_EXPORTER_OTLP_HEADERS: ""
+  GH_AW_OTLP_ENDPOINTS: "[]"
+
 network:
   allowed:
     - defaults

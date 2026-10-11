@@ -1,0 +1,8 @@
+% alt: The reduced state of the target X and the far region: Omega over its conjugate with the collar Y traced out.
+% Area law, prop:collar (08-scanner.tex): the state of X and the region
+% beyond the collar, with the collar Y traced out.
+\begin{tenkz}[size=l, rows={wire,wire}, cols=3, bonds=none]
+  \tn[at=(1,1), skin=box, wide=3, name=k, ports={90@1:physical:$X$, 270@2:physical, 90@3:physical}]{\Omega}
+  \tn[at=(2,1), skin=box, wide=3, name=b, ports={270@1:physical, 90@2:physical, 270@3:physical}]{\overline{\Omega}}
+  \tnwire{k.270@2}{b.90@2}
+\end{tenkz}

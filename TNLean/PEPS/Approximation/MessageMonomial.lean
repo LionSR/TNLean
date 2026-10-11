@@ -24,29 +24,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 thm:compression; Theorem 5.2 and its proof.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-message-resources-messagemonomial-01
-TNLean.PEPS.PairEffect.MessageMonomial
-Provenance-ID: 8769-message-resources-messagemonomial-02
-TNLean.PEPS.PairEffect.MessageMonomial.IsAllowed
-Provenance-ID: 8769-message-resources-messagemonomial-03
-TNLean.PEPS.PairEffect.MessageMonomial.effectCount
-Provenance-ID: 8769-message-resources-messagemonomial-04
-TNLean.PEPS.PairEffect.MessageMonomial.eval
-Provenance-ID: 8769-message-resources-messagemonomial-05
-TNLean.PEPS.PairEffect.MessageMonomial.eval_expand
-Provenance-ID: 8769-message-resources-messagemonomial-06
-TNLean.PEPS.PairEffect.MessageMonomial.expand
-Provenance-ID: 8769-message-resources-messagemonomial-07
-TNLean.PEPS.PairEffect.MessageMonomial.expansion_size
-Provenance-ID: 8769-message-resources-messagemonomial-08
-TNLean.PEPS.PairEffect.MessageMonomial.expansion_size_le
-Provenance-ID: 8769-message-resources-messagemonomial-09
-TNLean.PEPS.PairEffect.MessageMonomial.expansion_size_le_of_power_bounds
-Provenance-ID: 8769-message-resources-messagemonomial-10
-TNLean.PEPS.PairEffect.MessageMonomial.isAllowed_effectCount_expand
-Provenance-ID: 8769-message-resources-messagemonomial-11
-TNLean.PEPS.PairEffect.MessageMonomial.messageDimensions
 -/
 
 

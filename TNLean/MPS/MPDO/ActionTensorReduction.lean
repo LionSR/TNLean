@@ -60,12 +60,9 @@ theorem _root_.MPSTensor.IsReduction.actTensor_idKron (T : MPOTensor d D₃)
   rw [MPSTensor.IsReduction.iff_forall_evalWord]
   intro w
   obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w
-  rw [evalWord_actTensor, evalWord_actTensor, idKron, idKron, Matrix.submatrix_mul_equiv,
-    Matrix.submatrix_mul_equiv, Matrix.mul_sum, Matrix.sum_mul]
-  congr 1
-  refine Finset.sum_congr rfl fun τ _ ↦ ?_
-  rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul, h.evalWord,
-    Matrix.one_mul, Matrix.mul_one]
+  rw [evalWord_actTensor, evalWord_actTensor, idKron_mul_submatrix_sum,
+    submatrix_sum_mul_idKron]
+  simp only [h.evalWord]
 
 /-- **Reducing the operator inside an action tensor.** If `(V, W)` reduces the pair-alphabet
 view of `X` onto that of `Y`, then `(V ⊗ 1, W ⊗ 1)` reduces the action tensor `X · B` onto
@@ -81,14 +78,11 @@ theorem _root_.MPSTensor.IsReduction.actTensor_kronId {X : MPOTensor d D₂}
   rw [MPSTensor.IsReduction.iff_forall_evalWord]
   intro w
   obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w
-  rw [evalWord_actTensor, evalWord_actTensor, kronId, kronId, Matrix.submatrix_mul_equiv,
-    Matrix.submatrix_mul_equiv, Matrix.mul_sum, Matrix.sum_mul]
-  congr 1
-  refine Finset.sum_congr rfl fun τ _ ↦ ?_
-  have hw := h.evalWord (List.ofFn fun k ↦ finProdFinEquiv (σ k, τ k))
+  rw [evalWord_actTensor, evalWord_actTensor, kronId_mul_submatrix_sum,
+    submatrix_sum_mul_kronId]
+  have hw (τ : Fin L → Fin d) := h.evalWord (List.ofFn fun k ↦ finProdFinEquiv (σ k, τ k))
   simp only [evalWord_toMPSTensor_pairConfig] at hw
-  rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul, hw, Matrix.one_mul,
-    Matrix.mul_one]
+  simp only [hw]
 
 /-! ### Reassociation -/
 
@@ -183,12 +177,8 @@ theorem actTensor_mul_kronId_of_intertwine {X' : MPOTensor d D₁} {X : MPOTenso
     (B : MPSTensor d D₃) {P : Matrix (Fin D₁) (Fin D₂) ℂ}
     (hX : ∀ i l, X' i l * P = P * X i l) (i : Fin d) :
     actTensor X' B i * kronId P D₃ = kronId P D₃ * actTensor X B i := by
-  rw [actTensor_apply, actTensor_apply, kronId, Matrix.submatrix_mul_equiv,
-    Matrix.submatrix_mul_equiv, Matrix.sum_mul, Matrix.mul_sum]
-  congr 1
-  refine Finset.sum_congr rfl fun j _ ↦ ?_
-  rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul, hX, Matrix.mul_one,
-    Matrix.one_mul]
+  rw [actTensor_apply, actTensor_apply, submatrix_sum_mul_kronId, kronId_mul_submatrix_sum]
+  simp only [hX]
 
 /-! ### Lifting dressed proportionality -/
 
@@ -207,18 +197,9 @@ theorem _root_.MPSTensor.IsDressedProportional.actTensor_idKron (T : MPOTensor d
   refine ⟨N, fun w hw ↦ ?_⟩
   obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w
   rw [List.length_ofFn] at hw
-  rw [evalWord_actTensor, idKron, idKron, Matrix.submatrix_mul_equiv,
-    Matrix.submatrix_mul_equiv]
-  rw [Matrix.mul_sum, Matrix.mul_sum]
-  have key : ∀ τ : Fin L → Fin d,
-      ((1 : Matrix (Fin D₃) (Fin D₃) ℂ) ⊗ₖ V) *
-          (evalWord T (List.ofFn σ) (List.ofFn τ) ⊗ₖ Kraus.evalWord B (List.ofFn τ)) =
-        z • (((1 : Matrix (Fin D₃) (Fin D₃) ℂ) ⊗ₖ V') *
-          (evalWord T (List.ofFn σ) (List.ofFn τ) ⊗ₖ Kraus.evalWord B (List.ofFn τ))) := by
-    intro τ
-    rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul,
-      h _ (by rw [List.length_ofFn]; exact hw), Matrix.kronecker_smul]
-  simp only [key, ← Finset.smul_sum]
+  rw [evalWord_actTensor, idKron_mul_submatrix_sum, idKron_mul_submatrix_sum]
+  have h' (τ : Fin L → Fin d) := h (List.ofFn τ) (by rw [List.length_ofFn]; exact hw)
+  simp only [h', Matrix.kronecker_smul, ← Finset.smul_sum]
   rfl
 
 /-- **Lifting a dressed proportionality through the state bond.** If the pair-alphabet view
@@ -236,20 +217,11 @@ theorem _root_.MPSTensor.IsDressedProportional.actTensor_kronId {X : MPOTensor d
   refine ⟨N, fun w hw ↦ ?_⟩
   obtain ⟨L, σ, rfl⟩ := List.exists_eq_ofFn w
   rw [List.length_ofFn] at hw
-  rw [evalWord_actTensor, kronId, kronId, Matrix.submatrix_mul_equiv,
-    Matrix.submatrix_mul_equiv]
-  rw [Matrix.mul_sum, Matrix.mul_sum]
-  have key : ∀ τ : Fin L → Fin d,
-      (V ⊗ₖ (1 : Matrix (Fin D₃) (Fin D₃) ℂ)) *
-          (evalWord X (List.ofFn σ) (List.ofFn τ) ⊗ₖ Kraus.evalWord B (List.ofFn τ)) =
-        z • ((V' ⊗ₖ (1 : Matrix (Fin D₃) (Fin D₃) ℂ)) *
-          (evalWord X (List.ofFn σ) (List.ofFn τ) ⊗ₖ Kraus.evalWord B (List.ofFn τ))) := by
-    intro τ
-    have hu := h (List.ofFn fun k ↦ finProdFinEquiv (σ k, τ k))
-      (by rw [List.length_ofFn]; exact hw)
-    simp only [evalWord_toMPSTensor_pairConfig] at hu
-    rw [← Matrix.mul_kronecker_mul, ← Matrix.mul_kronecker_mul, hu, Matrix.smul_kronecker]
-  simp only [key, ← Finset.smul_sum]
+  rw [evalWord_actTensor, kronId_mul_submatrix_sum, kronId_mul_submatrix_sum]
+  have hu (τ : Fin L → Fin d) := h (List.ofFn fun k ↦ finProdFinEquiv (σ k, τ k))
+    (by rw [List.length_ofFn]; exact hw)
+  simp only [evalWord_toMPSTensor_pairConfig] at hu
+  simp only [hu, Matrix.smul_kronecker, ← Finset.smul_sum]
   rfl
 
 end MPOTensor

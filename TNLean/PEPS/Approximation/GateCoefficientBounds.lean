@@ -23,17 +23,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 thm:compression; Theorem 5.2 and its proof.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-approximate-physical-gatecoefficientbounds-01
-TNLean.PEPS.PairEffect.OriginalCircuit.IsTermwiseBounded
-Provenance-ID: 8769-approximate-physical-gatecoefficientbounds-02
-TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_of_isTermwiseBounded
-Provenance-ID: 8769-approximate-physical-gatecoefficientbounds-03
-TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_of_termwise_power_bounds
-Provenance-ID: 8769-approximate-physical-gatecoefficientbounds-04
-TNLean.PEPS.PairEffect.PartyGate.sum_norm_coefficients_le
-Provenance-ID: 8769-approximate-physical-gatecoefficientbounds-05
-TNLean.PEPS.PairEffect.PartyGate.sum_norm_coefficients_le_of_power_bounds
 -/
 
 

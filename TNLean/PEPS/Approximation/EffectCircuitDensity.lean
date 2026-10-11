@@ -21,47 +21,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-effect-circuit-error; Theorem 5.2, lines 137–151 and 199–251.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-effectcircuitdensity-01
-Matrix.appendAuxiliaryVector
-Provenance-ID: 8769-source-resource-effectcircuitdensity-02
-Matrix.norm_appendAuxiliaryVector
-Provenance-ID: 8769-source-resource-effectcircuitdensity-03
-Matrix.partialTraceRight_appendAuxiliaryVector
-Provenance-ID: 8769-source-resource-effectcircuitdensity-04
-Matrix.rectangularTraceNorm_appendAuxiliaryVector_error_le_two
-Provenance-ID: 8769-source-resource-effectcircuitdensity-05
-TNLean.PEPS.PairEffect.EffectCircuit.finiteDimensional_auxiliary
-Provenance-ID: 8769-source-resource-effectcircuitdensity-06
-TNLean.PEPS.PairEffect.EffectCircuit.originalPhysicalDensity
-Provenance-ID: 8769-source-resource-effectcircuitdensity-07
-TNLean.PEPS.PairEffect.EffectCircuit.rectangularTraceNorm_replacement_density_sub_le
-Provenance-ID: 8769-source-resource-effectcircuitdensity-08
-TNLean.PEPS.PairEffect.EffectCircuit.replacementPhysicalDensity
-Provenance-ID: 8769-source-resource-effectcircuitdensity-09
-TNLean.PEPS.PairEffect.PartyChain.finiteDimensional_sources_prepStack
-Provenance-ID: 8769-source-resource-effectcircuitdensity-10
-TNLean.PEPS.PairEffect.auxiliaryCoordinateIso
-Provenance-ID: 8769-source-resource-effectcircuitdensity-11
-TNLean.PEPS.PairEffect.auxiliaryCoordinateIso_tmul
-Provenance-ID: 8769-source-resource-effectcircuitdensity-12
-TNLean.PEPS.PairEffect.auxiliaryCoordinates
-Provenance-ID: 8769-source-resource-effectcircuitdensity-13
-TNLean.PEPS.PairEffect.extendedPhysicalReadout
-Provenance-ID: 8769-source-resource-effectcircuitdensity-14
-TNLean.PEPS.PairEffect.extendedPhysicalReadout_append_tmul
-Provenance-ID: 8769-source-resource-effectcircuitdensity-15
-TNLean.PEPS.PairEffect.finiteDimensional_mem_append
-Provenance-ID: 8769-source-resource-effectcircuitdensity-16
-TNLean.PEPS.PairEffect.finiteDimensional_sources_comp
-Provenance-ID: 8769-source-resource-effectcircuitdensity-17
-TNLean.PEPS.PairEffect.finiteDimensional_sources_prepGate
-Provenance-ID: 8769-source-resource-effectcircuitdensity-18
-TNLean.PEPS.PairEffect.finiteDimensional_sources_prepWord
-Provenance-ID: 8769-source-resource-effectcircuitdensity-19
-TNLean.PEPS.PairEffect.norm_extendedPhysicalReadout_le_one
-Provenance-ID: 8769-source-resource-effectcircuitdensity-20
-TNLean.PEPS.PairEffect.rectangularTraceNorm_extendedPhysicalReadout_error_le
 -/
 
 noncomputable section

@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Data.Matrix.PEquiv
+import TNLean.Algebra.MatrixSingleSpan
 import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.CanonicalForm.NormalTensorGauge
 import TNLean.MPS.MPDO.TwistedDimer
@@ -85,12 +86,7 @@ matrix unit at the bond pair $((p,p'),(q,q'))$ is a nonzero multiple of the
 letter at the physical pair $((p,q,0),(p',q',0))$. -/
 theorem block_toMPSTensor_isInjective (k : Fin 2) :
     Kraus.IsInjective (block k).toMPSTensor := by
-  unfold Kraus.IsInjective
-  apply le_antisymm le_top
-  rw [← (Matrix.stdBasis ℂ (Fin 4) (Fin 4)).span_eq]
-  apply Submodule.span_le.mpr
-  rintro M ⟨⟨a, b⟩, rfl⟩
-  rw [Matrix.stdBasis_eq_single]
+  refine Submodule.eq_top_of_forall_single_mem _ fun a b => ?_
   obtain ⟨p, p', rfl⟩ : ∃ p p', a = finProdFinEquiv (p, p') :=
     ⟨((finProdFinEquiv (m := 2) (n := 2)).symm a).1,
       ((finProdFinEquiv (m := 2) (n := 2)).symm a).2, by simp⟩
@@ -106,8 +102,7 @@ theorem block_toMPSTensor_isInjective (k : Fin 2) :
         Matrix.single (finProdFinEquiv (p, p')) (finProdFinEquiv (q, q')) (1 : ℂ) := by
     simp [block]
   rw [hblock] at hmem
-  have hscaled := Submodule.smul_mem _ (coef k (physIdx p q 0) (physIdx p' q' 0))⁻¹ hmem
-  rwa [smul_smul, inv_mul_cancel₀ (coef_flag_zero_ne_zero k p q p' q'), one_smul] at hscaled
+  exact (Submodule.smul_mem_iff _ (coef_flag_zero_ne_zero k p q p' q')).mp hmem
 
 /-- The letters of a rescaled block span the bond matrix algebra. -/
 theorem normalizedBlock_toMPSTensor_isInjective (k : Fin 2) :

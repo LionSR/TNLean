@@ -23,21 +23,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-exterior-input; Theorem 5.2, lines 409–480.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-sourceinputframes-01
-TNLean.PEPS.PairEffect.SourceInventory.matrixFrame
-Provenance-ID: 8769-source-resource-sourceinputframes-02
-TNLean.PEPS.PairEffect.SourceInventory.matrixFrame_basis
-Provenance-ID: 8769-source-resource-sourceinputframes-03
-TNLean.PEPS.PairEffect.SourceInventory.selectedSourceFrame
-Provenance-ID: 8769-source-resource-sourceinputframes-04
-TNLean.PEPS.PairEffect.SourceInventory.selectedSourceFrame_basis
-Provenance-ID: 8769-source-resource-sourceinputframes-05
-TNLean.PEPS.PairEffect.SourceInventory.selectedSourceFrame_basis_prepare
-Provenance-ID: 8769-source-resource-sourceinputframes-06
-TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsFrame
-Provenance-ID: 8769-source-resource-sourceinputframes-07
-TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsFrame_basis_prepare
 -/
 
 

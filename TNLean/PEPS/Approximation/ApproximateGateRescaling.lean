@@ -21,19 +21,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 thm:compression; Theorem 5.2 and its proof.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-approximate-physical-approximategaterescaling-01
-TNLean.PEPS.PairEffect.EffectCircuit.rescaledOriginal
-Provenance-ID: 8769-approximate-physical-approximategaterescaling-02
-TNLean.PEPS.PairEffect.gate_rescalePartyGate
-Provenance-ID: 8769-approximate-physical-approximategaterescaling-03
-TNLean.PEPS.PairEffect.isAllowed_rescalePartyGate
-Provenance-ID: 8769-approximate-physical-approximategaterescaling-04
-TNLean.PEPS.PairEffect.monomials_rescalePartyGate
-Provenance-ID: 8769-approximate-physical-approximategaterescaling-05
-TNLean.PEPS.PairEffect.rescalePartyGate
-Provenance-ID: 8769-approximate-physical-approximategaterescaling-06
-TNLean.PEPS.PairEffect.sum_norm_rescalePartyGate_le
 -/
 
 

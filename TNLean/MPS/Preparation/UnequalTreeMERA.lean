@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Preparation.UnequalMERA
 import TNLean.MPS.Preparation.PolarIsometryTree
 import TNLean.MPS.Preparation.LogDepthPreparation
+import TNLean.MPS.Preparation.RemainderBlocks
 
 /-!
 # Finite-range MERA approximations at every positive chain length
@@ -187,20 +188,7 @@ theorem exists_unequalMERA_every_length {d D : ℕ} (A : MPSTensor d D)
     exact_mod_cast this
   by_cases hqN : q ≤ N
   · have hq0 : 0 < q := hs0.trans_le hsq
-    obtain ⟨m, hm⟩ : ∃ m, N / q = m + 1 :=
-      ⟨N / q - 1, (Nat.succ_pred_eq_of_pos (Nat.div_pos hqN hq0)).symm⟩
-    set ℓ : Fin (m + 1) → ℕ := fun k => if k = Fin.last m then q + N % q else q
-    have hsum : ∑ k, ℓ k = N := by
-      rw [Fin.sum_univ_castSucc]
-      simp only [ℓ, Fin.castSucc_ne_last, ite_false, Finset.sum_const, Finset.card_univ,
-        Fintype.card_fin, smul_eq_mul, ite_true]
-      have := Nat.div_add_mod N q
-      rw [hm] at this
-      linarith
-    have hℓq : ∀ k, q ≤ ℓ k := fun k => by simp only [ℓ]; split_ifs <;> omega
-    have hℓ2 : ∀ k, ℓ k ≤ 2 * q := fun k => by
-      have := Nat.mod_lt N hq0
-      simp only [ℓ]; split_ifs <;> omega
+    obtain ⟨m, ℓ, hm, hsum, hℓq, hℓ2⟩ := exists_remainderBlocks hq0 hqN
     have hinjℓ : ∀ k, Kraus.IsInjective (blockTensor B (ℓ k)) := fun k =>
       hinjs _ (hsq.trans (hℓq k))
     have hω : ∑ p, star (fixedPointPair σ p) * fixedPointPair σ p = 1 := by

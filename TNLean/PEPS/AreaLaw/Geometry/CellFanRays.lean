@@ -4,12 +4,17 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.CellFanCycle
+import Mathlib.Analysis.Normed.Affine.Convex
 import Mathlib.Analysis.Normed.Module.Ray
 
 /-!
-# Distinct directed rays of actual cell fans
+# Directed rays and radial restrictions of actual cell fans
 
 Every actual fan endpoint is at the positive half-side distance from its center.
+Inside the closed square of that radius, its full directed ray agrees with the
+radial segment from the center to the endpoint. This includes the center and
+exponent zero, and uses only distance addition along a segment in the maximum norm.
+
 Two endpoint directions are on the same directed ray precisely when their slots
 agree. Thus the rays defined by the actual endpoints are distinct, for every
 optional midpoint subdivision. The statements do not require an initial-region
@@ -37,6 +42,45 @@ private theorem end_norm (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     ‖cellFanEnd o ℓ z split s - cellFanCenter o ℓ z‖ = (2 : ℝ) ^ ℓ / 2 := by
   exact norm_sub_cellFanCenter_of_mem_base o ℓ z split s
     (right_mem_segment ℝ _ _)
+
+/-- Within the endpoint radius, a directed ray agrees with its radial segment.
+Auxiliary to OpenAI, Section 11, `geometry:initial-stars`, lines 352--370,
+at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+private theorem mem_segment_iff_sameRay_of_dist_le
+    {c e x : ℝ × ℝ} (hx : dist x c ≤ dist e c) :
+    x ∈ segment ℝ c e ↔ SameRay ℝ (x - c) (e - c) := by
+  constructor
+  case mpr =>
+    intro hray
+    rcases wbtw_total_of_sameRay_vsub_left (R := ℝ) (x := c) (y := x) (z := e)
+      hray with hbetween | hbeyond
+    case inr =>
+      have hdist := hbeyond.dist_add_dist
+      rw [dist_comm c e, dist_comm c x] at hdist
+      have hz : dist e x ≤ 0 := by linarith only [hx, hdist]
+      have hxe : x = e := (dist_le_zero.mp hz).symm
+      simpa only [hxe] using (right_mem_segment ℝ c e)
+    case inl => exact hbetween.mem_segment
+  case mp =>
+    exact fun hxseg ↦ (mem_segment_iff_wbtw.mp hxseg).sameRay_vsub_left
+
+/-- Within the closed square of the fan radius, a point lies on an endpoint
+radial segment precisely when its displacement has the same directed ray as
+that endpoint. The center is included, and exponent zero is permitted.
+Source: OpenAI, Section 11, `geometry:initial-stars`, lines 333–370,
+especially 352–370, and `prop:two-families`, lines 299–323, at
+`openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+theorem cellFan_mem_radial_iff_sameRay_of_mem_closedBall
+    (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
+    (split : Fin 4 → Bool) (s : CellFanSlot split) (x : ℝ × ℝ)
+    (hx : x ∈ Metric.closedBall (cellFanCenter o ℓ z) ((2 : ℝ) ^ ℓ / 2)) :
+    x ∈ segment ℝ (cellFanCenter o ℓ z) (cellFanEnd o ℓ z split s) ↔
+      SameRay ℝ (x - cellFanCenter o ℓ z)
+        (cellFanEnd o ℓ z split s - cellFanCenter o ℓ z) := by
+  exact mem_segment_iff_sameRay_of_dist_le (by
+    simpa only [dist_eq_norm,
+      end_norm o ℓ z split s]
+      using Metric.mem_closedBall.mp hx)
 
 /-- Two actual endpoint directions coincide precisely when their slots agree.
 Source: Section 11, `prop:two-families`, lines 299–323, and
