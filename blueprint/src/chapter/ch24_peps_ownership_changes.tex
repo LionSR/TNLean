@@ -806,11 +806,16 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}\leanok
-    At a site outside $R$, the permutation fixes the paired coordinate.
-    At a site in $R$, it exchanges the two entries of that coordinate.
-    Thus the permutation fixes the complement and its action on $R$ depends
-    only on the coordinates in $R$. Its permutation matrix is therefore
-    supported on $R$.
+    \uses{lem:qc_permutation_layers}
+    In paired coordinates the swap is the permutation $\sigma$ of
+    configurations $x=(x_i)_{i\in\Lambda}$, $x_i=(a_i,b_i)$, given by
+    \begin{align*}
+        \sigma(x)_i=\begin{cases}(b_i,a_i),& i\in R,\\
+            (a_i,b_i),& i\notin R.\end{cases}
+    \end{align*}
+    Thus $\sigma$ fixes every coordinate outside $R$, and its coordinates in
+    $R$ depend only on the coordinates of $x$ in $R$. The permutation matrix
+    of such a permutation is supported on $R$.
 \end{proof}
 
 \begin{definition}[Exchange data]
