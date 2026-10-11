@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SourceGateDensity
-import Mathlib.Analysis.CStarAlgebra.Matrix
+import QICLean.Analysis.OrthonormalMatrixNorm
 
 /-!
 # Operator norms of prepared branches
@@ -40,31 +40,17 @@ theorem norm_preparedMatrix_le_one {P m n : Type} [Fintype m] [Fintype n] [Decid
     (bIn : OrthonormalBasis n ℂ (Mem ℓ)) (bOut : OrthonormalBasis m ℂ (Mem ℓ')) :
     ‖v.preparedMatrix R U V η ℓ bIn bOut‖ ≤ 1 := by
   classical
+  let : DecidableEq n := Classical.decEq n
   have hp : (SourceInventory.prepareSlots R U V η ℓ).IsAllowed :=
     (isAllowed_castLayouts _ _ _).mpr
       ((SourceInventory.isAllowed_prepare_iff _ _).mpr
         (SourceInventory.isNormalized_ofSlots R U V η hη))
-  rw [Matrix.l2_opNorm_def]
-  apply opNorm_le_bound _ zero_le_one
-  intro x
-  have hcoord : ((Matrix.toEuclideanLin.trans LinearMap.toContinuousLinearMap)
-      (v.preparedMatrix R U V η ℓ bIn bOut)) x =
-      bOut.repr (v.eval ((SourceInventory.prepareSlots R U V η ℓ).eval (bIn.repr.symm x))) := by
-    let : DecidableEq n := Classical.decEq n
-    ext j
-    have hx : ⇑(bIn.toBasis.repr (bIn.repr.symm x)) = x.ofLp := by
-      funext i
-      exact congrArg (fun y : EuclideanSpace ℂ n ↦ y i) (bIn.repr.apply_symm_apply x)
-    have h := congrFun (LinearMap.toMatrix_mulVec_repr bIn.toBasis bOut.toBasis
-      (v.eval.comp (SourceInventory.prepareSlots R U V η ℓ).eval).toLinearMap
-      (bIn.repr.symm x)) j
-    simpa [preparedMatrix, hx] using h
-  rw [hcoord, bOut.repr.norm_map]
-  simpa only [ContinuousLinearMap.comp_apply, LinearIsometryEquiv.norm_map] using
-    (v.eval.comp (SourceInventory.prepareSlots R U V η ℓ).eval).le_of_opNorm_le
+  change ‖LinearMap.toMatrix bIn.toBasis bOut.toBasis
+    (v.eval.comp (SourceInventory.prepareSlots R U V η ℓ).eval).toLinearMap‖ ≤ 1
+  exact (ContinuousLinearMap.norm_toMatrix_orthonormal
+    (v.eval.comp (SourceInventory.prepareSlots R U V η ℓ).eval) bIn bOut).le.trans
       (norm_comp_le_one (v.norm_eval_le_one hv)
         ((SourceInventory.prepareSlots R U V η ℓ).norm_eval_le_one hp))
-      (bIn.repr.symm x)
 
 /-- Assigning a unit vector to each source half gives a contraction. This applies
 both to orthonormal bases and to orthonormal families spanning proper subspaces.

@@ -23,6 +23,7 @@ import TNLean.PEPS.Approximation.CommonSourcePreparation
 import TNLean.PEPS.Approximation.CompletePartyMaps
 import TNLean.PEPS.Approximation.ConditionalTwoFamilies
 import TNLean.PEPS.Approximation.CorrectedPositionCost
+import TNLean.PEPS.Approximation.CorrectedSourcePartition
 import TNLean.PEPS.Approximation.DistributedLifetime
 import TNLean.PEPS.Approximation.DistributedLinks
 import TNLean.PEPS.Approximation.DistributedOperatorContraction
@@ -55,6 +56,7 @@ import TNLean.PEPS.Approximation.ExactFiniteException
 import TNLean.PEPS.Approximation.ExactSmallSizeApproximation
 import TNLean.PEPS.Approximation.ExactSquareRepresentation
 import TNLean.PEPS.Approximation.ExactTreeRepresentation
+import TNLean.PEPS.Approximation.ExteriorSourceContraction
 import TNLean.PEPS.Approximation.FamilyPhysicalReadout
 import TNLean.PEPS.Approximation.FinitePairSources
 import TNLean.PEPS.Approximation.FiniteSourceGate
@@ -63,6 +65,9 @@ import TNLean.PEPS.Approximation.FrameBoundedChanges
 import TNLean.PEPS.Approximation.FrameListRestriction
 import TNLean.PEPS.Approximation.FrameRegisters
 import TNLean.PEPS.Approximation.FrontRegisters
+import TNLean.PEPS.Approximation.GaussianPhysicalSource
+import TNLean.PEPS.Approximation.GaussianSeparatedPhysicalDensity
+import TNLean.PEPS.Approximation.GaussianSourceIntegrability
 import TNLean.PEPS.Approximation.GroupTruncation
 import TNLean.PEPS.Approximation.GroupedBlockMap
 import TNLean.PEPS.Approximation.HoleEncoder
@@ -106,6 +111,7 @@ import TNLean.PEPS.Approximation.PatchRewrite
 import TNLean.PEPS.Approximation.PatchRewriteExpansion
 import TNLean.PEPS.Approximation.PatchRewriteMonomials
 import TNLean.PEPS.Approximation.PatchRewriteTruncation
+import TNLean.PEPS.Approximation.PhysicalOutputContraction
 import TNLean.PEPS.Approximation.PinnedRegionalState
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.PreparedPartyMaps
@@ -113,6 +119,7 @@ import TNLean.PEPS.Approximation.PreparedSourceContraction
 import TNLean.PEPS.Approximation.PreparedSourceCorrections
 import TNLean.PEPS.Approximation.PreparedSourceGate
 import TNLean.PEPS.Approximation.PreparedSourceTransport
+import TNLean.PEPS.Approximation.PreparedSourceVectorDensity
 import TNLean.PEPS.Approximation.RankOneBlocks
 import TNLean.PEPS.Approximation.RegionalStates
 import TNLean.PEPS.Approximation.RegisterReordering
@@ -120,6 +127,8 @@ import TNLean.PEPS.Approximation.RoutedContraction
 import TNLean.PEPS.Approximation.SelectedSourceContraction
 import TNLean.PEPS.Approximation.SelectiveSourceFactorization
 import TNLean.PEPS.Approximation.SelectiveSourcePreparation
+import TNLean.PEPS.Approximation.SeparatedPhysicalDensity
+import TNLean.PEPS.Approximation.SeparatedSchmidtOutput
 import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.PEPS.Approximation.SheetSwapCorrection
 import TNLean.PEPS.Approximation.SiteChainMonomials
@@ -131,6 +140,7 @@ import TNLean.PEPS.Approximation.SourceBlockMatrix
 import TNLean.PEPS.Approximation.SourceChoiceCost
 import TNLean.PEPS.Approximation.SourceCircuitChoiceAt
 import TNLean.PEPS.Approximation.SourceCircuitChoiceProduct
+import TNLean.PEPS.Approximation.SourceCircuitLifetime
 import TNLean.PEPS.Approximation.SourceCircuitLocations
 import TNLean.PEPS.Approximation.SourceCircuitSchmidtSources
 import TNLean.PEPS.Approximation.SourceCircuitSourceOrder
@@ -142,18 +152,25 @@ import TNLean.PEPS.Approximation.SourceCorrectedSlots
 import TNLean.PEPS.Approximation.SourceCorrectedTerm
 import TNLean.PEPS.Approximation.SourceFrameMatrix
 import TNLean.PEPS.Approximation.SourceGateDensity
+import TNLean.PEPS.Approximation.SourceGaussianBranchDensity
+import TNLean.PEPS.Approximation.SourceGaussianBranchReindex
 import TNLean.PEPS.Approximation.SourceGaussianCoefficients
 import TNLean.PEPS.Approximation.SourceGaussianContraction
 import TNLean.PEPS.Approximation.SourceGaussianDensity
 import TNLean.PEPS.Approximation.SourceGaussianLaw
+import TNLean.PEPS.Approximation.SourceGaussianMoments
+import TNLean.PEPS.Approximation.SourceGaussianPhysicalIntegrability
+import TNLean.PEPS.Approximation.SourceGaussianVectorDensity
 import TNLean.PEPS.Approximation.SourceOwnerMap
 import TNLean.PEPS.Approximation.SourceOwnerSupport
 import TNLean.PEPS.Approximation.SourcePairIndex
 import TNLean.PEPS.Approximation.SourcePairMaps
+import TNLean.PEPS.Approximation.SourcePhysicalBasisInvariance
 import TNLean.PEPS.Approximation.SourcePhysicalDensity
 import TNLean.PEPS.Approximation.SourcePreparation
 import TNLean.PEPS.Approximation.SourcePreparationCoordinates
 import TNLean.PEPS.Approximation.SourceResidualCoordinates
+import TNLean.PEPS.Approximation.SourceSamplingCount
 import TNLean.PEPS.Approximation.SourceSlotBasis
 import TNLean.PEPS.Approximation.SourceSlotMaps
 import TNLean.PEPS.Approximation.SourceSubstitutionInventory
@@ -168,6 +185,7 @@ import TNLean.PEPS.Approximation.TwoSheetRegisters
 import TNLean.PEPS.Approximation.UnitMemoryCoordinates
 import TNLean.PEPS.Approximation.UnitPairSource
 import TNLean.PEPS.Approximation.VectorColumn
+import TNLean.PEPS.Approximation.WeightedPhysicalSource
 import TNLean.PEPS.Approximation.WholeGroupContraction
 import TNLean.PEPS.Approximation.WholeGroupNetwork
 import TNLean.PEPS.Approximation.WordAppendTail

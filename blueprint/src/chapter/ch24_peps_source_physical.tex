@@ -1,0 +1,704 @@
+\section{Physical contractions and Gaussian source estimates}
+
+We retain the original source positions, local branch labels, and common
+Gaussian law of Definition~\ref{def:peps_source_gaussian_law}.
+The estimates below concern actual allowed words and specified isometric
+input frames. They allow different ket and bra input spaces.
+Finite orthonormal coordinates are chosen whenever matrices or partial
+traces are used; their dimensions are unrestricted. This follows the
+finite-space convention in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 5--19 and 383--558.
+The intrinsic component and Gram maps also make sense for arbitrary
+inner-product discard spaces.
+
+\begin{definition}[Physical components of an actual word]
+    \label{def:peps_physical_component}
+    \lean{TNLean.PEPS.PairEffect.Word.physicalComponent}
+    \lean{TNLean.PEPS.PairEffect.Word.physicalComponentCoordinates}
+    \lean{TNLean.PEPS.PairEffect.Layout.physicalDiscardIso}
+    \lean{TNLean.PEPS.PairEffect.Layout.physicalDiscardIso_tmul}
+    \leanok
+    Let $V:H\to K$ be the evaluation of a word and let
+    $J:K\simeq\C^X\otimes D$ be a linear isometric equivalence. For $x\in X$, put
+    \begin{align}
+        C_{x,V}=(\langle x|\otimes I_D)JV:H\longrightarrow D.
+    \end{align}
+    After choosing finite orthonormal bases of $H$ and $D$, let $A_{x,V}$
+    be its matrix. For an output layout consisting of physical registers
+    followed by discarded registers, the canonical choice of $J$ is the
+    concatenation isometry followed by the physical coordinate isometry.
+    It sends a concatenated elementary tensor $s\otimes t$ to
+    $[s]_{\rm phys}\otimes t$.
+\end{definition}
+
+\begin{theorem}[Component contraction]
+    \label{thm:peps_physical_component_contraction}
+    \lean{TNLean.PEPS.PairEffect.Word.norm_physicalComponent_le_one}
+    \lean{TNLean.PEPS.PairEffect.Word.norm_physicalComponentCoordinates_le_one}
+    \leanok
+    \uses{def:peps_physical_component}
+    If $V$ is allowed, then $\|C_{x,V}\|\leq1$ and $\|A_{x,V}\|\leq1$.
+    The first bound requires neither completeness nor finite dimension of $D$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_physical_component}
+    Since $C_{x,V}=(\langle x|\otimes I_D)JV$, the coordinate
+    functional, the isometry $J$ and the allowed word give
+    $\|C_{x,V}\|\leq\|\langle x|\otimes I_D\|\,\|J\|\,\|V\|\leq1$.
+    Orthonormal coordinates preserve this bound.
+\end{proof}
+
+\begin{definition}[Mixed physical Gram operator]
+    \label{def:peps_physical_gram}
+    \lean{TNLean.PEPS.PairEffect.Word.physicalGramMap}
+    \lean{TNLean.PEPS.PairEffect.Word.physicalGramMap_inner}
+    \lean{TNLean.PEPS.PairEffect.Word.physicalGramMatrix}
+    \lean{TNLean.PEPS.PairEffect.Word.physicalGramMatrix_apply}
+    \leanok
+    Let $W:H'\to K$ be another word with the same output identification $J$.
+    Assume that $H,H'$ have finite orthonormal bases. Define $O:H\to H'$ by
+    \begin{align}
+        \langle t,Os\rangle=\langle C_{y,W}t,C_{x,V}s\rangle.
+    \end{align}
+    Its matrix has bra rows and ket columns:
+    \begin{align}
+        O_{ji}=\langle C_{y,W}e'_j,C_{x,V}e_i\rangle.
+    \end{align}
+    Only the finite-dimensional domain of the Riesz representation is needed;
+    the discard space $D$ may be incomplete.
+\end{definition}
+
+\begin{theorem}[Gram contraction]
+    \label{thm:peps_physical_gram_contraction}
+    \lean{TNLean.PEPS.PairEffect.Word.norm_physicalGramMap_le_one}
+    \lean{TNLean.PEPS.PairEffect.Word.norm_physicalGramMatrix_le_one}
+    \leanok
+    \uses{def:peps_physical_gram,thm:peps_physical_component_contraction}
+    For allowed $V,W$, both the mixed Gram operator and its matrix satisfy
+    $\|O\|\leq1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_physical_component_contraction}
+    By Cauchy--Schwarz and
+    Theorem~\ref{thm:peps_physical_component_contraction},
+    $|\langle t,Os\rangle|
+        =|\langle C_{y,W}t,C_{x,V}s\rangle|
+        \leq\|C_{y,W}t\|\,\|C_{x,V}s\|
+        \leq\|t\|\,\|s\|$.
+    Passing to orthonormal coordinates preserves this estimate.
+\end{proof}
+
+\begin{definition}[Joint physical and discarded output coordinates]
+    \label{def:peps_physical_output_matrix}
+    \lean{TNLean.PEPS.PairEffect.Word.physicalOutputMatrix}
+    \leanok
+    \uses{def:peps_physical_component}
+    Choose a finite orthonormal basis of $D$. Write $K_V$ for the matrix of $JV$
+    in the resulting product output basis and the chosen input basis.
+    Its rows are indexed by a physical coordinate and a discard coordinate.
+\end{definition}
+
+\begin{theorem}[Actual partial trace and exterior contraction]
+    \label{thm:peps_exterior_contraction}
+    \lean{TNLean.PEPS.PairEffect.Word.partialTrace_physicalOutputMatrix_mul_conjTranspose}
+    \lean{TNLean.PEPS.PairEffect.Word.norm_physicalOutputMatrix_le_one}
+    \lean{TNLean.PEPS.PairEffect.Word.rectangularTraceNorm_partialTrace_physicalOutputMatrix_le}
+    \leanok
+    \uses{def:peps_physical_output_matrix,def:peps_physical_gram}
+    For an arbitrary rectangular matrix $\rho:H'\to H$,
+    \begin{align}
+        \bigl[\operatorname{tr}_{D}(K_V\rho K_W^\dagger)\bigr]_{xy}
+         & =\sum_{i,j}\rho_{ij}O_{ji}.
+    \end{align}
+    If $V,W$ are allowed, then $\|K_V\|,\|K_W\|\leq1$ and
+    \begin{align}
+        \|\operatorname{tr}_{D}(K_V\rho K_W^\dagger)\|_1\leq\|\rho\|_1.
+    \end{align}
+    No positivity or self-adjointness is required of $\rho$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the partial trace in the discard basis and use the Gram
+    entry formula. The output matrices are contractions in orthonormal
+    coordinates. The rectangular trace-norm contraction estimate for their
+    mixed partial trace gives the last assertion.
+\end{proof}
+
+\begin{definition}[Proper input frames]
+    \label{def:peps_physical_frames}
+    \lean{TNLean.PEPS.PairEffect.Word.physicalComponentFrameMatrix}
+    \lean{TNLean.PEPS.PairEffect.Word.physicalComponentFrameMatrix_apply}
+    \lean{TNLean.PEPS.PairEffect.Word.physicalFrameGramMatrix}
+    \lean{TNLean.PEPS.PairEffect.Word.physicalFrameGramMatrix_apply}
+    \lean{TNLean.PEPS.PairEffect.Word.physicalOutputFrameMatrix}
+    \leanok
+    \uses{def:peps_physical_component,def:peps_physical_gram}
+    Let $F:\C^n\to H$ and $F':\C^{n'}\to H'$ be linear isometries.
+    Replace the orthonormal input coordinate maps of
+    Definitions~\ref{def:peps_physical_component} and~\ref{def:peps_physical_gram}
+    by $F,F'$, respectively. Thus
+    \begin{align}
+        A_{x,V,F} & =[C_{x,V}F],                               &
+        O_{ji}    & =\langle C_{y,W}F'e'_j,C_{x,V}Fe_i\rangle, &
+        K_{V,F}   & =[JVF].
+    \end{align}
+    These frames need not span either input space.
+\end{definition}
+
+\begin{theorem}[Contraction in proper frames]
+    \label{thm:peps_physical_frame_contraction}
+    \lean{TNLean.PEPS.PairEffect.Word.norm_physicalComponentFrameMatrix_le_one}
+    \lean{TNLean.PEPS.PairEffect.Word.norm_physicalFrameGramMatrix_le_one}
+    \lean{TNLean.PEPS.PairEffect.Word.norm_physicalOutputFrameMatrix_le_one}
+    \lean{TNLean.PEPS.PairEffect.Word.rectangularTraceNorm_partialTrace_physicalOutputFrameMatrix_le}
+    \leanok
+    \uses{def:peps_physical_frames,thm:peps_physical_component_contraction}
+    For allowed words, the three matrices in
+    Definition~\ref{def:peps_physical_frames} have operator norm at most one.
+    For every rectangular $Z$,
+    \begin{align}
+        \|\operatorname{tr}_{D}(K_{V,F}ZK_{W,F'}^\dagger)\|_1\leq\|Z\|_1.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Compose the actual word with the given isometric input frame.
+    The component and mixed Gram estimates, followed by the rectangular
+    partial-trace inequality, apply without a spanning condition.
+\end{proof}
+
+\begin{definition}[Schmidt-weighted physical vectors]
+    \label{def:peps_schmidt_physical_vector}
+    \lean{TNLean.PEPS.PairEffect.Word.schmidtPhysicalVector}
+    \lean{TNLean.PEPS.PairEffect.Word.schmidtPhysicalVector_repr}
+    \leanok
+    \uses{def:peps_physical_frames}
+    Let $F:\C^{I\times T}\to H$ be an isometry and let $\tau_t\in\R$.
+    For fixed physical coordinate $x$, set
+    \begin{align}
+        \psi_i=\sum_{t\in T}\sqrt{\tau_t}\,|t\rangle\otimes C_{x,V}F|i,t\rangle.
+    \end{align}
+    In the product basis its $(t,d)$ coordinate is
+    $\sqrt{\tau_t}(A_{x,V,F})_{d,(i,t)}$.
+    A bra word, independent index sets $L,U$, frame $F'$, and weights $\tau'$
+    define vectors $\phi_l$ in the same manner.
+\end{definition}
+
+\begin{theorem}[Weighted source matrix from actual vectors]
+    \label{thm:peps_weighted_physical_source_identity}
+    \lean{TNLean.PEPS.PairEffect.Word.sum_schmidtPhysicalVector_outer_eq_weightedSourceError}
+    \leanok
+    \uses{def:peps_schmidt_physical_vector}
+    For arbitrary complex coefficients $z_{il}$, tracing the common discard
+    factor in $\sum_{i,l}z_{il}|\psi_i\rangle\langle\phi_l|$ gives the
+    rectangular matrix $W:T\leftarrow U$ with entries
+    \begin{align}
+        W_{tu}=\sqrt{\tau_t\tau'_u}\sum_{i,l}z_{il}O_{(l,u),(i,t)}
+    \end{align}
+    when both weight families are nonnegative. For arbitrary real weights,
+    the factor is $\sqrt{\tau_t}\sqrt{\tau'_u}$.
+    The coefficient $z_{il}$ is not conjugated. The bra coordinates in the
+    outer product supply the conjugation in $O$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand both actual vectors in their product bases and sum over the
+    common discard coordinate. This gives precisely the weighted source matrix
+    with the ordinary transpose of the bra-row, ket-column Gram matrix.
+\end{proof}
+
+\begin{definition}[Separated output and its physical operator]
+    \label{def:peps_separated_physical_density}
+    \lean{TNLean.PEPS.PairEffect.Word.separatedSchmidtOutput}
+    \lean{TNLean.PEPS.PairEffect.Word.separatedSchmidtOutput_repr}
+    \lean{TNLean.PEPS.PairEffect.Word.separatedPhysicalCoordinates}
+    \lean{TNLean.PEPS.PairEffect.Word.separatedPhysicalDensity}
+    \leanok
+    \uses{def:peps_schmidt_physical_vector}
+    Let $V':H_E\to K_E$ be an exterior word, let
+    $J':K_E\simeq\C^Y\otimes D'$ be its output identification, and let
+    $G:\C^T\to H_E$ be an isometry.
+    The joint output at coordinate $i$ is
+    \begin{align}
+        \Psi_i=\sum_t\sqrt{\tau_t}\,(JVF|i,t\rangle)\otimes(J'V'G|t\rangle).
+    \end{align}
+    A separate bra word and its own frame and weights define $\Phi_l$.
+    Reorder the four coordinate indices so that physical coordinates precede
+    discarded coordinates, and put
+    \begin{align}
+        M(z)=\operatorname{tr}_{D\otimes D'}
+        \sum_{i,l}z_{il}|\Psi_i\rangle\langle\Phi_l|.
+    \end{align}
+    At fixed affected physical coordinates $x,y$, the vectors used in this
+    formula are those of Definition~\ref{def:peps_schmidt_physical_vector}
+    tensored with the corresponding exterior outputs.
+\end{definition}
+
+\begin{theorem}[Tracing both discarded factors]
+    \label{thm:peps_separated_physical_density_blocks}
+    \lean{TNLean.PEPS.PairEffect.Word.partialTrace_separatedSchmidtOutput_eq_weightedSourceError}
+    \lean{TNLean.PEPS.PairEffect.Word.separatedPhysicalDensity_submatrix}
+    \leanok
+    \uses{def:peps_separated_physical_density,thm:peps_weighted_physical_source_identity}
+    For each pair $x,y$ of affected physical coordinates, the corresponding
+    $Y\times Y$ block of $M(z)$ equals
+    \begin{align}
+        M(z)_{xy}=\operatorname{tr}_{D'}(K_{V',G}W_{xy}(z)K_{W',G'}^\dagger).
+        \label{eq:peps_separated_physical_density_block}
+    \end{align}
+    This equality requires no allowedness assumption on the words and no
+    normalization of the real weight families.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the finite Schmidt sums and both discard traces. The trace
+    over $D$ is the weighted source matrix from
+    Theorem~\ref{thm:peps_weighted_physical_source_identity}; the remaining
+    trace gives~(\ref{eq:peps_separated_physical_density_block}).
+\end{proof}
+
+\begin{theorem}[Expected exterior trace norm under diagonal covariance]
+    \label{thm:peps_weighted_physical_source_bound}
+    \lean{TNLean.PEPS.PairEffect.Word.integral_rectangularTraceNorm_weightedPhysicalSource_le}
+    \leanok
+    \uses{thm:peps_physical_frame_contraction,def:peps_separated_physical_density}
+    Assume all four words are allowed. Let $p_i,p'_l,\tau_t,\tau'_u$ be
+    nonnegative probability weights and let $\kappa\geq0$. On a probability
+    space, suppose every $z_{il}\overline{z_{i'l'}}$ is integrable and
+    \begin{align}
+        \mathbb E[z_{il}\overline{z_{i'l'}}]
+        =\mathbf1_{i=i'}\mathbf1_{l=l'}\,
+        \kappa\sqrt{p_i p'_l}.
+    \end{align}
+    Then, for each $x,y$, the exterior block satisfies
+    \begin{align}
+        \mathbb E\|M(z)_{xy}\|_1\leq\sqrt\kappa.
+    \end{align}
+    The input frames are only required to be isometries. The Gram contraction
+    in this estimate follows from the actual allowed words.
+\end{theorem}
+
+\begin{proof}\leanok
+    Use the Gram norm bound and the weighted-source second-moment
+    estimate. The exterior partial trace is a trace-norm contraction.
+    The pair-product integrability supplies the integrability needed to
+    integrate this pointwise inequality.
+\end{proof}
+
+\begin{definition}[Original corrected Schmidt coordinates]
+    \label{def:peps_original_schmidt_coordinates}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.CorrectedSchmidtCoordinates}
+    \leanok
+    \uses{def:peps_source_coordinates}
+    For $S\subseteq\mathcal E$, write
+    $\mathcal I_S=\prod_{e\in S}\{0,\ldots,r_e-1\}^2$.
+    Each original position contributes two independent endpoint indices.
+    The two local labels at each position are fixed before sampling.
+\end{definition}
+
+\begin{theorem}[Gaussian estimates for separated actual words]
+    \label{thm:peps_gaussian_separated_physical_bound}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integral_rectangularTraceNorm_gaussianPhysicalSource_le}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integrable_gaussianSeparatedPhysicalDensity_and_integral_le}
+    \leanok
+    \uses{def:peps_original_schmidt_coordinates,thm:peps_actual_gaussian_covariance,thm:peps_weighted_physical_source_bound}
+    Use the actual Gaussian coefficient product $Z_{u,v}$ at original positions
+    $S$ and fixed local ket and bra labels. Assume $k>0$ and that the local
+    Schmidt weights and the two crossing weight families are probability
+    weights. Let the specified input frames be isometries and all four
+    separated words be allowed. Then
+    \begin{align}
+        \mathbb E_k\|M(Z)_{xy}\|_1 & \leq k^{-|S|/2},       \\
+        \mathbb E_k\|M(Z)\|_1      & \leq |X|^2 k^{-|S|/2}.
+    \end{align}
+    The full trace norm is integrable.
+    Neither estimate depends on the exterior physical dimension or either
+    discard dimension.
+\end{theorem}
+
+\begin{proof}\leanok
+    The original-source law gives diagonal covariance with
+    $\kappa=k^{-|S|}$ and product probabilities of total mass one.
+    Apply Theorem~\ref{thm:peps_weighted_physical_source_bound} to each block.
+    The trace norm of the full matrix is at most the sum of the block trace
+    norms; sum over the $|X|^2$ affected coordinate pairs. Integrability follows
+    from the finite Gaussian coefficient expansion.
+\end{proof}
+
+\begin{theorem}[Prepared matrices on mixed pure inputs]
+    \label{thm:peps_prepared_vector_density}
+    \lean{TNLean.PEPS.PairEffect.Word.preparedMatrix_mulVec_repr}
+    \lean{TNLean.PEPS.PairEffect.Word.preparedMatrix_mul_vecMulVec}
+    \lean{TNLean.PEPS.PairEffect.Word.preparedMatrix_mul_vecMulVec_preparedInput}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceBasisMatrix_mul_vecMulVec}
+    \leanok
+    For the actual preparation followed by a word, let $T$ denote its linear
+    map and $K_T$ its matrix in finite orthonormal bases. Then
+    \begin{align}
+        K_T[\psi] & =[T\psi],                      &
+        K_T|\psi\rangle\langle\phi|K_{T'}^\dagger
+                  & =|T\psi\rangle\langle T'\phi|.
+    \end{align}
+    These identities hold for arbitrary prepared source vectors, including
+    the canonical source-basis substitutions in the original circuit. They
+    also hold with preparation written explicitly on the input side of the
+    residual word. No normalization or allowedness is required.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the defining matrix action to each input vector. Matrix
+    multiplication of a mixed rank-one operator gives the two resulting
+    output vectors, with complex conjugation on the bra side.
+\end{proof}
+
+\begin{theorem}[Independence of physical output coordinates]
+    \label{thm:peps_physical_corrected_basis_invariance}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.rectangularTraceNorm_physicalCorrectedSourceTerm_basis_eq}
+    \leanok
+    \uses{thm:peps_prepared_vector_density}
+    For a mixed pure input $|\psi\rangle\langle\phi|$, the trace norm of the
+    actual physical corrected term is unchanged by replacing either the
+    physical or the discard orthonormal basis. The input basis, original
+    corrected positions, and arbitrary local correction matrices are fixed.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the actual corrected term in source-basis substitutions.
+    Theorem~\ref{thm:peps_prepared_vector_density} expresses every summand as
+    the outer product of its actual output vectors. Independence of the
+    finite partial trace and trace norm from orthonormal output coordinates
+    then applies to their finite sum.
+\end{proof}
+
+\begin{definition}[Actual partial Schmidt output]
+    \label{def:peps_partial_schmidt_output}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSchmidtOutput}
+    \leanok
+    \uses{def:peps_partial_schmidt_assignments}
+    For a partial branch $\xi$ and selected endpoint assignment $u$, let
+    $\Psi_{\xi,u}(\psi)$ be the vector obtained by preparing the selected
+    Schmidt frame columns and the original unselected sources, adjoining the
+    owner-relabeled input $\psi$, and applying the canonical partial residual.
+    It belongs to the original output memory after the inverse owner
+    identification. These are the actual prepared vectors of
+    Theorem~\ref{thm:peps_corrected_gaussian_sum}.
+\end{definition}
+
+\begin{theorem}[Actual corrected operator on mixed pure inputs]
+    \label{thm:peps_gaussian_vector_density}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_gaussian_vecMulVec_eq_sum}
+    \leanok
+    \uses{def:peps_partial_schmidt_output,thm:peps_corrected_gaussian_sum,thm:peps_prepared_vector_density}
+    Suppose the affected set meets every corrected source and the weights and
+    frames represent every original source vector. For arbitrary $\psi,\phi$,
+    \begin{align}
+        F_S(\Delta(\omega))(|\psi\rangle\langle\phi|)
+        =\sum_{\xi,\zeta}c_{\mathcal A,\xi}\overline{c_{\mathcal A,\zeta}}
+        \sum_{u,v}Z^{\xi,\zeta}_{u,v}(\omega)
+        |\Psi_{\xi,u}(\psi)\rangle\langle\Psi_{\zeta,v}(\phi)|.
+    \end{align}
+    The two endpoint assignments are independent, and each partial gate
+    coefficient occurs exactly once on each side.
+\end{theorem}
+
+\begin{proof}\leanok
+    Apply the actual corrected-term matrix expansion and then the
+    mixed-vector identity of Theorem~\ref{thm:peps_prepared_vector_density}.
+\end{proof}
+
+\begin{theorem}[Square integrability of the actual coefficient products]
+    \label{thm:peps_gaussian_products_integrable}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceCorrection_product_memLp_two}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceCorrection_product_memLp_two}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_sourceCorrectionSum}
+    \leanok
+    \uses{thm:peps_actual_gaussian_covariance}
+    For $k>0$ and nonnegative local weights, every original-position Gaussian
+    coefficient product is square integrable. The same holds after reading
+    the local labels from partial branches, provided every selected source
+    meets the affected set. Consequently, the trace norm of any finite
+    linear combination of these products with fixed rectangular matrix
+    coefficients is integrable. Normalization of the weights is unnecessary.
+\end{theorem}
+
+\begin{proof}\leanok
+    Use the diagonal second moment of the original coefficient
+    products. Reindex the retained positions by the original positions.
+    Square integrability on the probability space, followed by the finite
+    matrix-sum integrability theorem, gives the conclusion.
+\end{proof}
+
+\begin{theorem}[Integrability of actual corrected physical operators]
+    \label{thm:peps_actual_physical_integrability}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_map_correctedSourceTerm_gaussian}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_physicalCorrectedSourceTerm_gaussian}
+    \leanok
+    \uses{thm:peps_gaussian_products_integrable,thm:peps_corrected_gaussian_sum}
+    Let $k>0$, let the weights be nonnegative, and suppose the fixed weights
+    and endpoint matrices represent the original source vectors. For any
+    fixed complex-linear map $L$ between finite matrix spaces and any input
+    matrix $\rho$, the function
+    \begin{align}
+        \omega\longmapsto\|L(F_S(\Delta(\omega))(\rho))\|_1
+    \end{align}
+    is integrable whenever the affected set meets $S$. In particular, the
+    actual physical corrected term obtained by tracing the final discarded
+    registers has integrable trace norm.
+\end{theorem}
+
+\begin{proof}\leanok
+    The corrected operator is a finite sum of actual coefficient
+    products times fixed matrices. Apply
+    Theorem~\ref{thm:peps_gaussian_products_integrable}; a fixed linear map
+    changes only the matrix coefficients.
+\end{proof}
+
+\begin{definition}[A single actual Gaussian branch pair]
+    \label{def:peps_gaussian_branch_density}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.gaussianSchmidtBranchDensity}
+    \leanok
+    \uses{def:peps_partial_schmidt_output}
+    Before multiplying by the outer gate coefficients, define
+    \begin{align}
+        B_{\xi\zeta}(\omega;\psi,\phi)
+        =\sum_{u,v}Z^{\xi,\zeta}_{u,v}(\omega)
+        |\Psi_{\xi,u}(\psi)\rangle\langle\Psi_{\zeta,v}(\phi)|.
+    \end{align}
+    Use finite orthonormal output coordinates for this matrix.
+\end{definition}
+
+\begin{theorem}[Original-position expression and branch expectation bound]
+    \label{thm:peps_gaussian_branch_density_bound}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.gaussianSchmidtBranchDensity_eq_sum_original}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integrable_rectangularTraceNorm_map_gaussianSchmidtBranchDensity}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.integral_rectangularTraceNorm_map_correctedSourceTerm_gaussian_le_sum}
+    \leanok
+    \uses{def:peps_gaussian_branch_density,thm:peps_gaussian_products_integrable,thm:peps_gaussian_vector_density,thm:peps_actual_physical_integrability}
+    If the affected set meets $S$, the two sums defining $B_{\xi\zeta}$ may
+    be indexed by $\mathcal I_S$ using the actual retained-slot bijection.
+    At $e\in S$ the coefficient reads exactly the original local labels
+    selected by $\xi,\zeta$; the output vectors are transported by the same
+    coordinate bijection.
+    For $k>0$ and nonnegative local weights, every
+    $\|L(B_{\xi\zeta})\|_1$ is integrable. If the weights and frames also
+    represent the original vectors, then
+    \begin{align}
+        \mathbb E_k\|L(F_S(\Delta)(|\psi\rangle\langle\phi|))\|_1
+        \leq\sum_{\xi,\zeta}|c_{\mathcal A,\xi}\overline{c_{\mathcal A,\zeta}}|
+        \mathbb E_k\|L(B_{\xi\zeta})\|_1.
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    Reindex both finite sums and each source product by the retained
+    original positions. Their coefficient products are square integrable.
+    Finally use the actual mixed-vector expansion, the trace-norm triangle
+    inequality, and linearity of the integral for the resulting finite sum.
+\end{proof}
+
+\begin{theorem}[An actual sample bounded by the average error sum]
+    \label{thm:peps_sampled_error_integral_bound}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_sampledSourceMatrix_error_le_sum_integral}
+    \leanok
+    \uses{thm:peps_actual_physical_integrability,thm:peps_sampled_physical_error}
+    Fix $k>0$, nonnegative representing source weights and matrices, finite
+    orthonormal input and physical/discard output bases, and an arbitrary
+    input matrix. There exists one sample $\omega$ such that
+    \begin{align}
+        \|\widehat\rho_{\rm phys}(\omega)-\rho_{\rm phys}\|_1
+        \leq\sum_{\varnothing\ne S\subseteq\mathcal E}
+        \mathbb E_k\|\operatorname{tr}_{\rm disc}F_S(\Delta)\|_1.
+    \end{align}
+    Here the sampled operator is defined by the actual local source
+    replacements, independently of the error expansion.
+\end{theorem}
+
+\begin{proof}\leanok
+    All summands are nonnegative and integrable. On the probability
+    space, their finite sum takes a value no larger than its integral.
+    At that sample, apply the established pointwise physical error bound.
+\end{proof}
+
+\begin{definition}[Affected parties and retained free sources]
+    \label{def:peps_corrected_free_sources}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedMask}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedFreeSlots}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedFreeSlots_eq_true_iff}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_correctedFreeSlot}
+    \leanok
+    For $S\subseteq\mathcal E$, let $\mathcal A_S$ be the set of all endpoints
+    of sources in $S$. A retained source is free precisely when its original
+    position lies in $S$ or its endpoints lie on opposite sides of
+    $\mathcal A_S$. Every position in $S$ has its corresponding free retained
+    slot. The other retained sources are prepared with their original vectors.
+\end{definition}
+
+\begin{theorem}[Actual lifetime and coefficient costs]
+    \label{thm:peps_actual_source_lifetime_cost}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isTouched_correctedMask_iff}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.corrected_slot_isTouched}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_touched_correctedMask_le}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.coefficient_physical_cost_eq}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.coefficient_physical_cost_le}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_norm_coefficient_mul_conj_le_lifetime}
+    \leanok
+    \uses{def:peps_corrected_free_sources}
+    A gate occurrence is touched exactly when one of its participating parties
+    belongs to $\mathcal A_S$. In particular, the gate containing each source
+    in $S$ is touched. Suppose every party in $\mathcal A_S$ participates in
+    at most $b$ gate occurrences. Then the number of touched occurrences is
+    at most $2b|S|$.
+    If each touched gate has coefficient sum at most $B\geq1$, then
+    \begin{align}
+        \sum_{\xi,\zeta}|c_{\mathcal A_S,\xi}\overline{c_{\mathcal A_S,\zeta}}|
+         & \leq B^{4b|S|}.
+    \end{align}
+    More precisely, this sum times $\prod_{p\in\mathcal A_S}d_p^2$ is the
+    corrected-position choice cost for the actual occurrences and their
+    branch coefficients. If the prescribed numbers $d_p$ satisfy
+    $d_p\leq d$ on $\mathcal A_S$, with $d\geq1$, then
+    \begin{align}
+        \left(\sum_{\xi,\zeta}|c_{\mathcal A_S,\xi}
+        \overline{c_{\mathcal A_S,\zeta}}|\right)
+        \prod_{p\in\mathcal A_S}d_p^2
+         & \leq (B^{4b}d^4)^{|S|}.
+    \end{align}
+    The numbers $d_p$ are supplied physical dimensions; no bound on private
+    memory is inferred from this assertion.
+\end{theorem}
+
+\begin{proof}\leanok
+    Every source endpoint participates in its gate. Count touched
+    occurrences by summing the lifetime bound over the at most $2|S|$
+    affected parties. The exact product formula for partial coefficient
+    norms gives the ket and bra factors. Apply the existing corrected-position
+    cost estimate, retaining repeated gate occurrences separately.
+\end{proof}
+
+\begin{definition}[Two actual contraction factors]
+    \label{def:peps_actual_tensor_partition}
+    \lean{TNLean.PEPS.PairEffect.Word.HasTensorPartition}
+    \leanok
+    A word admits a tensor partition for a Boolean owner map when there are
+    two allowed source-free words $C,D$, on the respective restricted input
+    and output layouts, with $\|C\|,\|D\|\leq1$, such that
+    \begin{align}
+        P_{\rm out}W=(C\otimes D)P_{\rm in}.
+    \end{align}
+    The maps $P$ are the canonical owner relabelings followed by the ordered
+    register partitions. The equality holds on every input vector.
+\end{definition}
+
+\begin{theorem}[Selective preparation gives actual two-side factors]
+    \label{thm:peps_corrected_source_partition}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_corrected_source_partition}
+    \leanok
+    \uses{def:peps_corrected_free_sources,def:peps_actual_tensor_partition}
+    For every allowed chronological composition, every corrected set $S$,
+    and every partial branch for $\mathcal A_S$, prepare precisely the
+    nonfree sources of Definition~\ref{def:peps_corrected_free_sources} and
+    then apply the canonical partial residual. This actual word admits a
+    tensor partition into the affected and exterior sides.
+    Its free input spaces are fixed across branches. The two factors are
+    chosen before any vectors in these free spaces are supplied.
+\end{theorem}
+
+\begin{proof}\leanok
+    The nonfree source vectors are normalized and both endpoints lie
+    on one side. The canonical residual is allowed and source-free.
+    The selective-preparation factorization therefore applies on the entire
+    free-source memory, with the exterior owners kept together.
+\end{proof}
+
+\begin{definition}[Concatenating two partitioned layouts]
+    \label{def:peps_append_partition}
+    \lean{TNLean.PEPS.PairEffect.Layout.appendPartitionIso}
+    \lean{TNLean.PEPS.PairEffect.Layout.appendPartitionIso_tmul}
+    \leanok
+    Given four ordered layouts $a_+,a_-,b_+,b_-$, canonically regroup
+    \begin{align}
+        (H_{a_+}\otimes H_{a_-})\otimes(H_{b_+}\otimes H_{b_-})
+        \simeq H_{a_+b_+}\otimes H_{a_-b_-}.
+    \end{align}
+    This isometry sends $(x_+\otimes x_-)\otimes(y_+\otimes y_-)$ to
+    $(x_+\otimes y_+)\otimes(x_-\otimes y_-)$, with concatenations
+    interpreted by their canonical memory isometries.
+\end{definition}
+
+\begin{theorem}[Partition commutes with concatenation]
+    \label{thm:peps_partition_append}
+    \lean{TNLean.PEPS.PairEffect.Layout.partitionIso_append_tmul}
+    \leanok
+    \uses{def:peps_append_partition}
+    Let a Boolean owner map partition two layouts $a,b$. Concatenating their
+    memory vectors and then partitioning the resulting layout gives the
+    same vector as partitioning each layout first and applying
+    Definition~\ref{def:peps_append_partition}. This identity holds for all
+    vectors in $H_a$ and $H_b$ and arbitrary owner sets.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_basis_head_memory_equalities}
+    Induct on the first layout. For a head register on either side,
+    use the defining partition isometry and the four-factor regrouping.
+    The empty layout contributes its scalar factor.
+\end{proof}
+
+\begin{definition}[An explicit positive sample count]
+    \label{def:peps_source_sample_count}
+    \lean{TNLean.PEPS.Approximation.sourceSamplingCount}
+    \lean{TNLean.PEPS.Approximation.sourceSamplingCount_pos}
+    \lean{TNLean.PEPS.Approximation.sourceSamplingCount_lt}
+    \leanok
+    For $N\geq0$, real $Q$, and $\epsilon>0$, put
+    \begin{align}
+        k(N,Q,\epsilon)=
+        \left\lceil\left(\frac{8\max(1,N)Q}{\epsilon}\right)^2\right\rceil+1.
+    \end{align}
+    Then $k>0$ and
+    $k<(8\max(1,N)Q/\epsilon)^2+2$.
+    The ceiling is a nonnegative integer ceiling.
+\end{definition}
+
+\begin{theorem}[Finite subset summation and the sample-count estimate]
+    \label{thm:peps_source_sample_count_bound}
+    \lean{TNLean.PEPS.Approximation.sum_nonemptyFinsets_pow_card}
+    \lean{TNLean.PEPS.Approximation.sum_sourceErrorWeights}
+    \lean{TNLean.PEPS.Approximation.div_sqrt_sourceSamplingCount_le}
+    \lean{TNLean.PEPS.Approximation.sum_sourceErrorWeights_sourceSamplingCount_le}
+    \leanok
+    \uses{def:peps_source_sample_count}
+    For a finite set $\mathcal E$ of cardinality $N$,
+    \begin{align}
+        \sum_{\varnothing\ne S\subseteq\mathcal E}q^{|S|}
+         & =(1+q)^N-1,                            \\
+        \sum_{\varnothing\ne S\subseteq\mathcal E}Q^{|S|}k^{-|S|/2}
+         & =\left(1+\frac{Q}{\sqrt k}\right)^N-1.
+    \end{align}
+    The second formula uses $k>0$. If $Q\geq0$ and $\epsilon>0$, the count
+    in Definition~\ref{def:peps_source_sample_count} satisfies
+    \begin{align}
+        \frac{Q}{\sqrt{k(N,Q,\epsilon)}}
+         & \leq\frac{\epsilon}{8\max(1,N)}.
+    \end{align}
+    For $0<\epsilon\leq1$, its finite subset sum is therefore at most
+    $\epsilon/4$. These are numerical inequalities; applying them to the
+    actual corrected physical terms also requires the corresponding
+    individual term estimates.
+\end{theorem}
+
+\begin{proof}\leanok
+    Expand the product $\prod_{e\in\mathcal E}(1+q)$ and remove the
+    empty subset. Substitute $q=Q/\sqrt k$. The ceiling bounds its defining
+    square, giving the inverse-square-root estimate. Finally,
+    $(1+q)^N\leq\exp(Nq)$ and $Nq\leq\epsilon/8$ imply the stated bound.
+    The empty source set gives zero throughout.
+\end{proof}
+
+The estimates for specified separated words and the identities for actual
+corrected circuit terms have been stated separately. To obtain the full
+compression estimate, one must identify the actual free-source input and
+physical/discard output registers with the separated words and frames,
+then combine the branch, lifetime, and finite-subset estimates.
