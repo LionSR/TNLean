@@ -79,6 +79,8 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
     simp only [Matrix.IsHermitian, Matrix.doubledHamiltonian, Matrix.conjTranspose_add,
       Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one,
       (h.hermitianTerm_isHermitian i).eq]
+  have hBH (i : SquareInteraction L) : (B i).IsHermitian :=
+    Matrix.isHermitian_mul_mul_conjTranspose F ((hDH i).reindex p)
   done
 
 end TNLean.PEPS.Approximation
