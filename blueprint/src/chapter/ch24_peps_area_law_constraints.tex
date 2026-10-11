@@ -403,7 +403,7 @@ histories (Lemma~9.1), of transport (Proposition~7.4), of the comparators
 therefore Proposition~9.2 restricted to those conclusions, not the source
 proposition itself, which remains open until the scan data are constructed.
 
-% The fixed-coefficient estimate is under construction; no verification marks.
+% Verification marks await the exact-name axiom check.
 \begin{lemma}[Continuity cost with a fixed distance coefficient]
     \label{lem:al_continuity_fixed_coefficient}
     \lean{TNLean.PEPS.AreaLaw.Scan.eventually_continuityCost_le_of_fixed_coefficient}
@@ -417,6 +417,23 @@ proposition itself, which remains open until the scan data are constructed.
     This is the scalar estimate used in the entropy transfer of
     \cite[Proposition~9.2, proof]{OpenAI2026AreaLaw}.
 \end{lemma}
+
+\begin{proof}
+    Put $B=1+A$ and $\overline C=C\sqrt B$.
+    For all sufficiently large $n$, the coefficient-one estimate gives
+    \begin{align}
+        \overline C\sqrt u\bigl(1+\overline Cn^2\lambda\bigr)
+        \le n^{-247}\qquad(u\le n^{-500}).
+    \end{align}
+    Indeed, for $n\ge1$ the left-hand side is at most
+    $\overline C(1+\overline C\lambda)n^{-248}$, so it suffices to take
+    $n\ge\overline C(1+\overline C\lambda)$.
+    If $t\le An^{-500}$, then $u=t/B\le n^{-500}$.
+    Since $B>0$, the identity $\sqrt t=\sqrt B\sqrt{t/B}$ holds for every real
+    $t$, including negative $t$.
+    Finally, $C\le\overline C$ and all factors in the parentheses are nonnegative,
+    so increasing the coefficient there proves the claimed bound.
+\end{proof}
 
 \begin{theorem}[Scanner estimate from the conclusions of its inputs]
     \label{thm:al_scanner_from_inputs}
