@@ -158,16 +158,13 @@ def closure(graph: dict[str, set[str]], start: str) -> set[str]:
 
 
 def changed_paths(base: str | None) -> list[str] | None:
-    """Changed paths against `base`, or None when every test must run."""
+    """Changed paths against `base`, or None without a base revision."""
     if not base:
         return None
-    out = [p for p in subprocess.run(
+    return [p for p in subprocess.run(
         ["git", "diff", "-z", "--name-only", "--no-renames", "--diff-filter=ACDM", base, "HEAD"],
         check=True, capture_output=True, text=True,
     ).stdout.split("\0") if p]
-    if any(p in FULL_RUN_PATHS for p in out):
-        return None
-    return out
 
 
 def select(
@@ -178,16 +175,16 @@ def select(
     graph = import_graph(root, files)
     tests = [f for f in files if is_test(f)]
     changed = changed_paths(base)
-    if changed is None:
+    # Changed production files are built early and checked strictly even when
+    # a pin, toolchain, workflow or script change also requests every test.
+    changed_lean = [p for p in changed or [] if p.endswith(".lean")]
+    existing = set(files)
+    sources = sorted(p for p in changed_lean if is_production(p) and p in existing)
+    early = [module_of(p) for p in sources]
+    if changed is None or any(p in FULL_RUN_PATHS for p in changed):
         selected_tests = set(tests)
-        early: list[str] = []
-        sources: list[str] = []
     else:
-        existing = set(files)
-        changed_lean = [p for p in changed if p.endswith(".lean")]
         changed_modules = {module_of(p) for p in changed_lean}
-        sources = sorted(p for p in changed_lean if is_production(p) and p in existing)
-        early = [module_of(p) for p in sources]
         selected_tests = {
             t for t in tests
             if t in changed_lean or closure(graph, module_of(t)) & changed_modules

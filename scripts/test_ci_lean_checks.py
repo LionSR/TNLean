@@ -148,6 +148,13 @@ class SelectTest(unittest.TestCase):
         self.assertLess(tests.index("TNLeanTest/Support/Fixture.lean"),
                         tests.index("TNLeanTest/FixtureTest.lean"))
 
+    def test_pin_change_keeps_changed_sources_strict(self) -> None:
+        (self.root / "lake-manifest.json").write_text("{}\n")
+        self.change("TNLean/Core.lean", "import Mathlib\n-- edit\n")
+        early, sources, tests = self.select(self.base)
+        self.assertEqual((early, sources), (["TNLean.Core"], ["TNLean/Core.lean"]))
+        self.assertEqual(len(tests), 5)
+
     def test_no_base_runs_every_test(self) -> None:
         _, _, tests = self.select(None)
         self.assertEqual(len(tests), 5)
