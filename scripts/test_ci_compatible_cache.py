@@ -675,58 +675,7 @@ class WorkflowTests(unittest.TestCase):
         self.assertNotIn('always()', self.steps[build].get('if', ''))
         for i, step in enumerate(self.steps):
             if 'lake env lean' in step.get('run', ''):
-                if step.get('name') == 'Check finite rectangular dual geometry early':
-                    # One explicit early regression is safe after its complete
-                    # import closure is rebuilt by Lake. No generic exemption.
-                    self.assertLess(prune, i)
-                    self.assertLess(i, build)
-                    self.assertNotIn('continue-on-error', step)
-                    run = step['run']
-                    cache_guard = 'test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean'
-                    target = 'lake --fail-fast build +TNLean.PEPS.TorusDualRectangleFlux:olean'
-                    self.assertLess(run.index(cache_guard), run.index(target))
-                    self.assertLess(run.index(target), run.index('lake env lean'))
-                    self.assertIn('+TNLean.PEPS.TorusDualWinding:olean', run)
-                    self.assertIn('set -eo pipefail', run)
-                    self.assertIn('-DwarningAsError=true', run)
-                    self.assertIn('-DautoImplicit=false -DrelaxedAutoImplicit=false', run)
-                    self.assertEqual(run.count('lake env lean'), 1)
-                    checked = run.split('for source in ', 1)[1].split('; do', 1)[0]
-                    self.assertEqual(checked.replace('\\', '').split(), [
-                        'TNLean/PEPS/TorusDualRectangle.lean',
-                        'TNLean/PEPS/TorusDualRectangleFlux.lean',
-                        'TNLeanTest/TorusDualRectangle.lean',
-                    ])
-                    self.assertEqual(run.strip().splitlines()[-2].strip(), '"$source"')
-                    self.assertEqual(run.strip().splitlines()[-1].strip(), 'done')
-                    imports = (ROOT / 'TNLeanTest/TorusDualRectangle.lean').read_text().splitlines()
-                    self.assertEqual([line for line in imports if line.startswith('import ')], [
-                        'import TNLean.PEPS.TorusDualRectangleFlux',
-                        'import TNLean.PEPS.TorusDualWinding',
-                    ])
-                elif step.get('name') == 'Check finite weighted dyadic sum early':
-                    # Exact one-import fixture, checked only after Lake rebuilds
-                    # its complete production closure. No generic exemption.
-                    self.assertLess(prune, i)
-                    self.assertLess(i, build)
-                    self.assertNotIn('continue-on-error', step)
-                    run = step['run']
-                    cache_guard = 'test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean'
-                    target = 'lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.DyadicWeightedSum'
-                    self.assertLess(run.index(cache_guard), run.index(target))
-                    self.assertLess(run.index(target), run.index('lake env lean'))
-                    self.assertEqual(run.count('lake env lean'), 1)
-                    for flag in ['set -eo pipefail', '-DwarningAsError=true',
-                                 '-DautoImplicit=false', '-DrelaxedAutoImplicit=false',
-                                 '-DmaxSynthPendingDepth=3', '-Dlinter.mathlibStandardSet=true',
-                                 'timeout --signal=INT --kill-after=5s 90s']:
-                        self.assertIn(flag, run)
-                    self.assertEqual(run.strip().splitlines()[-1].strip(),
-                                     'TNLeanTest/DyadicWeightedSum.lean')
-                    imports = (ROOT / 'TNLeanTest/DyadicWeightedSum.lean').read_text().splitlines()
-                    self.assertEqual([line for line in imports if line.startswith('import ')],
-                                     ['import TNLean.PEPS.AreaLaw.Geometry.DyadicWeightedSum'])
-                elif step.get('name') == 'Check labelled open coefficients early':
+                if step.get('name') == 'Check labelled open coefficients early':
                     self.assertLess(prune, i)
                     self.assertLess(i, build)
                     self.assertNotIn('continue-on-error', step)

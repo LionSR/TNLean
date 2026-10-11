@@ -203,16 +203,16 @@ reuse, upstream/dependent invalidation, independent reuse, missing traces, broke
 source rejection, and refusal of removed modules with surviving artifacts. It
 never builds or edits TNLean, QICLean, Gametheory, or Mathlib caches.
 
-### Focused rectangular PEPS regression before the root build
+### Early builds and strict checks of changed files
 
-The finite rectangular dual-path CI check runs after cache setup and provenance
-pruning. It first requires the prebuilt `Mathlib.olean`, then runs Lake's
-fail-fast build on `TorusDualRectangleFlux` and `TorusDualWinding`, which are
-exactly the regression file's imports. Only after these complete import
-closures are rebuilt does it elaborate `TNLeanTest/TorusDualRectangle.lean`
-with strict options and warnings as errors. The workflow guard tests check
-this narrow exception's order, module targets, regression path, imports, and
-failure behavior.
+After cache setup and provenance pruning, the `build` job runs
+`scripts/ci_lean_checks.py early`, a fail-fast Lake build of the production
+modules changed by the pull request, so their failures surface before the root
+build. After the root build, `scripts/ci_lean_checks.py strict` elaborates the
+changed production files and every affected `TNLeanTest` file with warnings as
+errors. Test objects go to a fresh overlay that precedes every Lake package path,
+so a test may import another test without reading a stale production artifact.
+See `docs/ci-automation.md` for the selection rule.
 
 The collared open-boundary check follows the same provenance pruning and
 explicit Mathlib cache guard. Its fail-fast Lake target is
