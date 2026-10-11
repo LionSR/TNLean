@@ -197,7 +197,8 @@ def check_render(units: dict[str, str], output: Path) -> None:
         assert not hard, [(f.rule, f.msg) for f in hard]
         events = list(audit.events())
         signatures = [e.attrs["signature"] for e in events if e.kind == "kernel-boundary"]
-        assert all(not s for s in signatures), ("geometry pictures have no open indices", signatures)
+        assert len(signatures) == 1 and not signatures[0], (
+            "each geometry picture has exactly one boundary, with no open indices", signatures)
         print(f"PASS: {name}, audited SVG {svg}")
 
 
