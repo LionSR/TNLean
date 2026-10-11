@@ -1,0 +1,62 @@
+\section{Rounded scales in a safe rectangle}
+
+\begin{theorem}[Eventual rounded clearance]
+    \label{thm:area_law_rounded_clearance}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_rounded_clearance_threshold,
+        TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_rounded_clearance_threshold}
+    \leanok
+    Fix $C_2>0$, $C_r\ge0$, and $0<\ell<1$. There is an integer $S\ge1$
+    such that, for every integer $s\ge S$, setting
+    $n=\lceil C_2s\rceil$, $L=\lfloor n^{1-\ell}\rfloor$, and
+    $r_0=\lceil C_r\log^2n\rceil$ gives $1\le L\le s$ and, for every
+    integer $D_0\ge1$,
+    \begin{align}
+        (D_0+1)L & \le D_0s, \\
+        2L+10r_0 & \le D_0s.
+    \end{align}
+    The threshold depends only on $C_2,C_r,\ell$.
+    These are the rounded clearance estimates used in
+    \cite[proof of Proposition~9.5, lines~707--729]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    Since $\ell>0$, $n^{-\ell}\to0$, and $(\log n)^2/n\to0$.
+    Consequently
+    \begin{align}
+        \frac{4n^{1-\ell}+20(C_r\log^2n+1)}{n} & \longrightarrow0.
+    \end{align}
+    For $s\ge1$, rounding gives $C_2s\le n\le(C_2+1)s$.
+    Choose the threshold so that the ratio is less than $1/(C_2+1)$.
+    The floor and ceiling estimates then give $4L+20r_0<s$.
+    Also $n\ge1$ and $1-\ell>0$ imply $L\ge1$.
+    Since $D_0\ge1$, these inequalities imply both stated budgets.
+\end{proof}
+
+\begin{theorem}[Safe selected shell cells]
+    \label{thm:area_law_rounded_safe_shell_cells}
+    \lean{TNLean.PEPS.AreaLaw.IsSafe.cappedDyadicPartition_shell,
+        TNLean.PEPS.AreaLaw.Scan.exists_safe_shell_cells_of_rounded_scales}
+    \leanok
+    \uses{def:area_law_safe_rectangle,def:area_law_capped_dyadic_partition,
+        def:area_template_dyadic_rectangle}
+    Let $Q$ be a safe integer rectangle of size $s$. Whenever $j\le L$,
+    $2^{K_{\rm cap}}\le L$ and $(D_0+1)L\le D_0s$, every square selected
+    by the capped dyadic partition of $Q^{+j}\setminus Q$ is safe.
+    In particular, for the rounded scales of
+    Theorem~\ref{thm:area_law_rounded_clearance}, one threshold precedes
+    every finite physical domain, cut, integer $D_0\ge1$ and safe parent
+    rectangle. For all parent sizes beyond that threshold, the selected
+    shell cells are safe and every parent site has sup-norm distance
+    strictly greater than $2L+10r_0$ from every crossing-edge endpoint.
+    The dyadic cap exponent $K_{\rm cap}$ is independent of the scanner band count.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_rounded_clearance,thm:area_law_safe_rectangle_dilation,
+        thm:area_template_dyadic_rectangle,thm:area_law_capped_dyadic_partition}
+    A selected square of scale $k\le K_{\rm cap}$ is a rectangle $Q'$ in
+    $Q^{+j}$ of size $2^k\le L$. Thus
+    \begin{align}
+        D_0\operatorname{size}(Q')+j & \le(D_0+1)L\le D_0s.
+    \end{align}
+    The safety inheritance theorem applies. Native parent safety is strict,
+    so the second rounded budget gives the asserted strict endpoint clearance.
+\end{proof}
