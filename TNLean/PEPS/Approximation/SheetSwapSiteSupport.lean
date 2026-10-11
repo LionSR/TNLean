@@ -46,5 +46,6 @@ theorem reindex_sheetSwapOp_mem_supportedOperators
     intro x i hi
     change i ∉ R at hi
     simp [sitePairConfigurationEquiv, sheetSwap, hi]
+    exact finProdFinEquiv.apply_symm_apply (x i)
 
 end TNLean.PEPS.EncodedFrame
