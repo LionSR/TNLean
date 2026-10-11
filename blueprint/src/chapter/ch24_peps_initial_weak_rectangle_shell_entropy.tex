@@ -1,0 +1,52 @@
+\section{Initial-exponent entropy of safe rectangle shells}
+
+\begin{theorem}[Uniform physical shell entropy at the initial exponent]
+    \label{thm:area_law_initial_rectangle_shell_entropy}
+    \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_weak_rectangle_shell_le_rpow}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:area_law_ground_entropy,
+        def:area_law_safe_rectangle}
+    Fix a local dimension $q\in\mathbb N$ with $q\ge1$, an interaction
+    range $R\in\mathbb N$, a term norm bound $J\ge0$, and a gap
+    $\Delta>0$. There exist constants $C\ge0$ and $e_0\in(0,1)$,
+    depending only on $q,R,J,\Delta$, with the following property
+    simultaneously for every integer safety parameter $D_0>2R+10$.
+    Let $\Lambda$ be any finite induced square-lattice domain, let $H$
+    be an admissible Hamiltonian on $\Lambda$ with range $R$ and term
+    norm bound $J$, and let $\Omega$ be its normalized ground vector
+    at energy $E_0$ with full-system projector gap $\Delta$.
+    Let $A\subseteq\Lambda$ be any cut, let $Q$ be any safe integer
+    rectangle, and put $s=\operatorname{size}(Q)$. For all
+    $j,L\in\mathbb N$ satisfying $j\le L\le s$ and
+    $D_0L+L\le D_0s$, one has
+    \begin{align}
+        S_\Omega\bigl(A\cap(Q^{+j}\setminus Q)\bigr)
+         & \le C\left(24+\frac{64}{2^{e_0}-1}\right)sL^{e_0}.
+    \end{align}
+    The constant and exponent are chosen before the safety parameter,
+    domain, Hamiltonian, energy, original ground vector, cut, parent
+    rectangle and all shell scales. This is the initial-exponent
+    consequence of \cite[Proposition~3.3, lines~590--604]{OpenAI2026AreaLaw}
+    for the rectangle-shell entropy input in the proof of
+    Proposition~9.5, lines~717--729.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_initial_safe_rectangle_entropy,
+        thm:area_law_rectangle_shell_entropy,thm:area_law_regional_state_identities}
+    Choose $C\ge0$ and $e_0\in(0,1)$ from
+    Theorem~\ref{thm:area_law_initial_safe_rectangle_entropy}.
+    For every safety parameter and physical instance in the statement,
+    that same ground vector satisfies, for every safe integer rectangle $P$,
+    \begin{align}
+        S_\Omega(A\cap P)
+         & \le C\operatorname{size}(P)^{1+e_0}.
+    \end{align}
+    If $L=0$, then $j=0$, the shell is empty, and both sides of the
+    desired inequality vanish. If $L>0$, choose
+    $K=\lfloor\log_2L\rfloor$, so that $2^K\le L<2^{K+1}$.
+    Apply Theorem~\ref{thm:area_law_rectangle_shell_entropy} with this
+    dyadic cap, the pointwise estimate, the normalization of $\Omega$,
+    and the stated clearance conditions. It gives the asserted bound with
+    the same $C$ and $e_0$.
+\end{proof}

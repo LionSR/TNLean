@@ -47,7 +47,8 @@ private theorem end_norm (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
 Auxiliary to OpenAI, Section 11, `geometry:initial-stars`, lines 352--370,
 at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
 private theorem mem_segment_iff_sameRay_of_dist_le
-    {c e x : ℝ × ℝ} (hx : dist x c ≤ dist e c) :
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    {c e x : E} (hx : dist x c ≤ dist e c) :
     x ∈ segment ℝ c e ↔ SameRay ℝ (x - c) (e - c) := by
   constructor
   case mpr =>
