@@ -6221,6 +6221,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   matrix-unit consumer retains only the entrywise reconstruction of each matrix.
   The transported-source consumer uses the QICLean rank-one transport expansion.
   No additional tactic or simplifier rule is needed.
+
 ### Dyadic refinement cardinality bounds — candidate (2026-10-07)
 
 - **Pattern:** Rewrite an exact refined-cell cardinality as the coarse count
