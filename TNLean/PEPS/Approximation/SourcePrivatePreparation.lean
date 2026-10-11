@@ -25,6 +25,8 @@ open scoped TensorProduct
 namespace TNLean.PEPS.PairEffect.SourceCircuit
 variable {P : Type}
 
+set_option trace.profiler.threshold 1000 in
+set_option trace.profiler true in
 /-- Prepare the original private product input, leaving the fixed source
 registers as arbitrary spectators. Source: polynomial-PEPS 04-compression.tex,
 lines 137–139 and 253–267. -/
@@ -34,6 +36,8 @@ def sourcePrivatePreparation {a b : Layout P} (w : SourceCircuit a b) (ψ : Prod
   Word.frameList w.allResidualSourceLayout
     (ψ.prepare.mapOwner (affectedOwner (fun _ => true)))
 
+set_option trace.profiler.threshold 1000 in
+set_option trace.profiler true in
 /-- The original private preparation introduces no pair source.
 Source: polynomial-PEPS 04-compression.tex, lines 137–139. -/
 theorem sources_sourcePrivatePreparation {a b : Layout P}
@@ -44,6 +48,8 @@ theorem sources_sourcePrivatePreparation {a b : Layout P}
       (congrArg (SourceInventory.mapOwner _) ψ.sources_prepare).trans
         (SourceInventory.mapOwner_nil _)
 
+set_option trace.profiler.threshold 1000 in
+set_option trace.profiler true in
 /-- The actual source-free composition after the recorded private input has
 been prepared. Source: polynomial-PEPS 04-compression.tex, lines 137–139,
 246–251 and 351–381. -/
@@ -53,6 +59,8 @@ def partialSourceWord {a b : Layout P} (w : SourceCircuit a b) (ψ : ProductInpu
       (Layout.mapOwner (affectedOwner (fun _ => true)) b) :=
   .comp (w.sourcePrivatePreparation ψ) (partialResidual (fun _ => true) w ξ)
 
+set_option trace.profiler.threshold 1000 in
+set_option trace.profiler true in
 /-- The actual pure-input residual contains no source preparations.
 Source: polynomial-PEPS 04-compression.tex, lines 246–251. -/
 theorem sources_partialSourceWord {a b : Layout P} (w : SourceCircuit a b)
@@ -61,6 +69,8 @@ theorem sources_partialSourceWord {a b : Layout P} (w : SourceCircuit a b)
   exact (congrArg₂ (fun S T : SourceInventory _ => S ++ T)
     (sources_partialResidual _ _ _) (sources_sourcePrivatePreparation w ψ)).trans rfl
 
+set_option trace.profiler.threshold 1000 in
+set_option trace.profiler true in
 /-- The literal private preparation inserts the original private product
 vector, leaving all actual source registers arbitrary.
 Source: polynomial-PEPS 04-compression.tex, lines 137–139 and 246–267. -/
@@ -77,6 +87,8 @@ theorem eval_sourcePrivatePreparation_tmul {a b : Layout P}
         ((Word.eval_mapOwner (affectedOwner (fun _ => true)) ψ.prepare (1 : ℂ)).trans
           (congrArg (Layout.mapOwnerIso (affectedOwner (fun _ => true)) a) ψ.eval_prepare))
 
+set_option trace.profiler.threshold 1000 in
+set_option trace.profiler true in
 set_option maxHeartbeats 800000 in
 -- The actual fixed-source word carries dependent source and owner transports.
 /-- The actual pure-input source word applies the actual residual to the
