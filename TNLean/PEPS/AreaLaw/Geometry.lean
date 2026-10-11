@@ -99,8 +99,10 @@ import TNLean.PEPS.AreaLaw.Geometry.SideSubdivision
 import TNLean.PEPS.AreaLaw.Geometry.SideSubdivisionMask
 import TNLean.PEPS.AreaLaw.Geometry.SparseBelts
 import TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary
+import TNLean.PEPS.AreaLaw.Geometry.TemplateBoxEntropy
 import TNLean.PEPS.AreaLaw.Geometry.TemplateClearance
 import TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCounts
+import TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCover
 import TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary
 import TNLean.PEPS.AreaLaw.Geometry.TemplateDyadicRows
 import TNLean.PEPS.AreaLaw.Geometry.TemplateEntropy

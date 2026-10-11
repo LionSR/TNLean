@@ -113,6 +113,30 @@
     satisfy $2^k\le2^K\le s_0$.
 \end{proof}
 
+
+\begin{theorem}[Weighted covering of the template core]
+    \label{thm:area_law_template_weighted_core_cover}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_core_le}
+    \leanok
+    \uses{def:area_law_template,def:area_law_capped_dyadic_partition}
+    Let $T$ be a template with $C_{\rm tpl}\ge24$, let $e>0$, and choose
+    $K\ge0$ with $2^K\le s_0<2^{K+1}$. For the actual capped dyadic
+    partition $\mathcal P$ of $T$,
+    \begin{align}
+        \sum_{Q\in\mathcal P}\operatorname{side}(Q)^{1+e}
+        \le \left(18+\frac{4}{2^e-1}\right)n s_0^e.
+    \end{align}
+    This is the core-covering moment estimate in
+    \cite[Lemma~9.4]{OpenAI2026AreaLaw}. It requires neither separation
+    from a physical cut nor an entropy hypothesis.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_template_core_selected_count,thm:area_law_weighted_dyadic_sum,thm:area_law_capped_sum_by_scale}
+    Group the selected squares by scale. Their side budgets are $18n$ at
+    scale $K$ and $4n$ below it. Apply the finite weighted dyadic-sum
+    estimate, factor out $n$, and use $(2^K)^e\le s_0^e$.
+\end{proof}
+
 \section{Weighted coverings of template shells}
 
 \begin{theorem}[Shell area and cap count]
@@ -148,7 +172,7 @@
     \cite[Lemma~9.4]{OpenAI2026AreaLaw}; safety and the entropy estimate remain separate.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:area_template_shell_cap,thm:area_law_template_shell_selected_count,thm:area_law_capped_dyadic_partition}
+    \uses{thm:area_template_shell_cap,thm:area_law_template_shell_selected_count,thm:area_law_capped_sum_by_scale,thm:area_law_weighted_dyadic_sum}
     Write $a_k$ for the number of selected squares of side $2^k$.
     The mixed-square bound gives $2^k a_k\le14n$ for $k<K$.
     The cap bound gives $2^K a_K\le2n$. Hence
@@ -158,4 +182,56 @@
         \le\left(2+\frac{14}{2^e-1}\right)nL^e,
     \end{align}
     using $2^e>1$ and $2^K\le L$.
+\end{proof}
+
+\section{Entropy from a uniform safe-box estimate}
+
+\begin{theorem}[Conditional template and shell entropy bounds]
+    \label{thm:area_template_safe_box_entropy}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.regionalEntropy_core_le_of_safe_box,
+        TNLean.PEPS.AreaLaw.Geometry.Template.regionalEntropy_shell_le_of_safe_box,
+        TNLean.PEPS.AreaLaw.Geometry.Template.regionalEntropy_prefix_le_of_safe_box,
+        TNLean.PEPS.AreaLaw.Geometry.exists_template_entropy_bounds_of_arbitrary_safe_box}
+    \leanok
+    \uses{def:area_law_template,def:area_law_safe_rectangle,def:area_law_ground_entropy}
+    Fix a finite physical domain, a cut $A$, a normalized vector $\Omega$,
+    local dimension $q\ge1$, and a native safety parameter $D_0\ge1$.
+    Assume explicitly that for every $\varepsilon\in(0,1)$ there is
+    $C_\varepsilon\ge0$ such that every safe native rectangle satisfies
+    \begin{align}
+        S_\Omega(A\cap Q)\le C_\varepsilon
+        \operatorname{size}(Q)^{1+\varepsilon}.
+    \end{align}
+    Fix $e\in(0,1)$. The same constant $C_e$, independent of the template,
+    works for all separated templates with $C_{\rm tpl}\ge24$.
+    For every $1\le L\le s_0$ and $0\le j\le L$, one has
+    \begin{align*}
+        S_\Omega(A\cap T)
+         & \le C_e\left(18+\frac{4}{2^e-1}\right)ns_0^e, \\
+        S_\Omega(A\cap(T_j\setminus T))
+         & \le C_e\left(2+\frac{14}{2^e-1}\right)nL^e.
+    \end{align*}
+    If $1\le j\le L$ and $Y\subseteq T_j\setminus T_{j-1}$ is arbitrary,
+    the entropy of $A\cap((T_{j-1}\setminus T)\cup Y)$ is at most the
+    displayed shell bound plus $n\log q$.
+    The fixed-exponent statements require only the safe-box estimate at that
+    exponent and $e>0$. The quantified statement retains the source range
+    $0<e<1$ and the uniform choice of $C_e$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_template_physical_dyadic_entropy,thm:area_template_safe_rectangles,
+        thm:area_law_template_weighted_core_cover,thm:area_template_weighted_shell,
+        thm:area_template_partial_row}
+    Every selected square is safe by separation and the scale bounds.
+    Apply the safe-box estimate to its physical rectangle region, sum by
+    subadditivity, and use the actual weighted core and shell estimates.
+    For a prefix, first use the shell estimate at depth $j-1$, then add
+    the proved partial-row cost $n\log q$.
+    The uniform constant is chosen from the safe-box hypothesis before any
+    template or scale is selected. The quantified theorem chooses the caps
+    as $\lfloor\log_2 s_0\rfloor$ and $\lfloor\log_2 L\rfloor$; the
+    integer logarithm inequalities give the required comparable powers of two.
+    This composes the conditional entropy
+    step of \cite[Lemma~9.4]{OpenAI2026AreaLaw}; it does not derive the
+    safe-box hypothesis from an initial existential exponent.
 \end{proof}
