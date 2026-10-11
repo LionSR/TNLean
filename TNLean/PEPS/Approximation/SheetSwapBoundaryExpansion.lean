@@ -62,6 +62,8 @@ theorem SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
   have hedge (e : Edge (squareLatticeGraph L L)) (he : ¬ IsRegionBoundaryEdge R e) :
       δ (h.edgeTerm e) = 0 := by
     apply hcancel (h.edge_supported e)
+    simp only [IsRegionBoundaryEdge, Set.insert_subset_iff, Set.singleton_subset_iff,
+      Set.disjoint_insert_left, Set.disjoint_singleton_left, Finset.mem_coe] at he ⊢
     done
   done
 
