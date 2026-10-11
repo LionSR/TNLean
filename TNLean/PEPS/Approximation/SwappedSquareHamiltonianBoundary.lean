@@ -111,7 +111,7 @@ theorem SquareHamiltonian.swapped_doubled_boundary_bound
       (h.site_norm_le _)
   exact ⟨hsupport, if hL : L = 0 then
     hbound.trans_eq (by
-      simp [hL, Nat.eq_zero_of_le_zero (by simpa [hL] using hbcard)])
+      simp [hL, Nat.eq_zero_of_le_zero (n := boundary.card) (by simpa [hL] using hbcard)])
     else hbound.trans (calc
       (boundary.card : ℝ) * (4 * J) ≤ (2 * (L : ℝ) ^ 2) * (4 * J) :=
         mul_le_mul_of_nonneg_right (by exact_mod_cast hbcard)
