@@ -10,6 +10,7 @@ their physical derivation remains separate.
 \begin{theorem}[Absorption after the fixed-scale replica limit]
     \label{thm:area_law_bootstrap_replica_absorption}
     \lean{TNLean.PEPS.AreaLaw.Scan.entropy_le_of_replica_comparisons}
+    \leanok
     Let $S,C,\tau,E,B_u,B_l\in\mathbb R$ satisfy $S\ge0$, $C\ge0$,
     $\tau>0$ and
     \begin{align}
@@ -32,6 +33,7 @@ their physical derivation remains separate.
     and auxiliary dimension made before these scalar comparisons.
 \end{theorem}
 \begin{proof}
+    \leanok
     Since $C,S\ge0$ and $\tau>0$, the defect bound gives
     \begin{align}
         C(\tau+d(k)/\tau)S
@@ -51,6 +53,7 @@ their physical derivation remains separate.
 \begin{theorem}[One threshold for the bootstrap coefficient loss]
     \label{thm:area_law_bootstrap_comparison_loss_threshold}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_comparison_loss_threshold}
+    \leanok
     \uses{def:area_law_bootstrap_parameters}
     Fix $e_0\in(0,1)$ and $C,C_E\in\mathbb R$, and let
     $\nu=(1-e_0)/2000$. There is an integer $N\ge1$, depending
@@ -68,6 +71,7 @@ their physical derivation remains separate.
     uniform in $n$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:area_law_bootstrap_margins}
     The fixed parameter bounds give $\nu>0$. At positive integer
     scales, the quotient of powers gives
