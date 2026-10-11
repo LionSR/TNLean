@@ -72,9 +72,7 @@ theorem abs_log_card_and_selectedSchmidtEntropy_sub_le
     (fun i hi => (Real.exp_pos _).trans_le (hE i hi).1)] at hbounds
   rw [abs_of_nonpos (Real.log_nonpos hz.le hz1)] at hbounds
   simp only [← hρ] at hselected
-  have hσ : (reducedState_isHermitian Λ q Ωt X).normalizedSpectralRestriction E =
-      Matrix.IsHermitian.normalizedSpectralRestriction
-        (Matrix.posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E :=
+  have hσ :=
     congrArg (fun A : {A : Matrix (FiniteProduct.Configuration β X)
         (FiniteProduct.Configuration β X) ℂ // A.IsHermitian} =>
       A.2.normalizedSpectralRestriction E)
