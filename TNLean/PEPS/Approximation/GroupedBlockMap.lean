@@ -60,11 +60,6 @@ theorem groupedBlockMap_spec (f : P → Q) (q : Q) (a b : Layout P)
       (norm_comp_le_one hA (LinearIsometry.norm_toContinuousLinearMap_le _))
   · simp only [groupedBlockMap, sources_castLayouts, sources]
 
-private theorem memCongr_symm {a b : Layout Q} (h : a = b) :
-    Layout.memCongr h.symm = (Layout.memCongr h).symm := by
-  cases h
-  rfl
-
 /-- The grouped local map is exactly the original operation tensored with the
 identity on the spectator memory, in the canonical grouped coordinates.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–417. -/
@@ -82,8 +77,8 @@ theorem eval_groupedBlockMap (f : P → Q) (q : Q) (a b : Layout P)
     apply clm_ext_tmul
     intro u z
     simp only [groupedBlockMap, eval_castLayouts,
-      memCongr_symm (Layout.mapOwner_append f a ℓ),
-      memCongr_symm (Layout.mapOwner_append f b ℓ), LinearIsometryEquiv.symm_symm,
+      Layout.memCongr_symm (Layout.mapOwner_append f a ℓ),
+      Layout.memCongr_symm (Layout.mapOwner_append f b ℓ), LinearIsometryEquiv.symm_symm,
       eval, comp_apply, isoL_apply]
     rw [Layout.mapOwnerIso_append_tmul]
     simp only [LinearIsometryEquiv.apply_symm_apply, rTensor_tmul, comp_apply,

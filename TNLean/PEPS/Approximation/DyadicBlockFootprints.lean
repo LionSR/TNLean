@@ -55,10 +55,7 @@ theorem exists_blockGuide_footprintRatio {ρ r₀ r₁ : ℝ} (hr₀ : 0 < r₀)
         {c | c ∈ closedBall (blockCorner s Q) (s * (ρ + 1)) ∧ IsTrueVertex (blockGuide s lab) c}
         r (ν * s) := by
   set M : ℕ := ⌈ρ⌉₊ + 2
-  have hM : ρ + 2 ≤ M := by
-    have := Nat.le_ceil ρ
-    simp only [M, Nat.cast_add, Nat.cast_ofNat]
-    linarith
+  have hM : ρ + 2 ≤ M := by push_cast [M]; linarith [Nat.le_ceil ρ]
   let T : (BlockSlot M → BlockSlot M) → ℝ × ℝ → BlockSlot M := fun π u =>
     π (blockGuide 1 (blockSlot M) u)
   obtain ⟨ν, hν, H⟩ := exists_footprintRatio.{0, 0, u} (I := BlockSlot M → BlockSlot M) (g := T)
@@ -71,16 +68,8 @@ theorem exists_blockGuide_footprintRatio {ρ r₀ r₁ : ℝ} (hr₀ : 0 < r₀)
   have hinj : InjOn σ (range (T (classRep σ))) :=
     (injOn_range_classRep σ).mono (by rintro _ ⟨w, rfl⟩; exact mem_range_self _)
   have hf (q : ℝ × ℝ) (hq : q ∈ ball (blockCorner s Q) (s * (ρ + 2))) :
-      blockGuide s lab q = σ (T (classRep σ) (s⁻¹ • (q - blockCorner s Q))) := by
-    have hu : ‖s⁻¹ • (q - blockCorner s Q)‖ < M := by
-      rw [mem_ball, dist_eq_norm] at hq
-      rw [norm_smul, Real.norm_eq_abs, abs_inv, abs_of_pos hs, inv_mul_lt_iff₀ hs]
-      nlinarith
-    have hq' : q = blockCorner s Q + s • (s⁻¹ • (q - blockCorner s Q)) := by
-      rw [smul_smul, mul_inv_cancel₀ hs.ne', one_smul, add_sub_cancel]
-    conv_lhs => rw [hq']
-    rw [blockGuide_eq_blockSlot hs lab Q M hu]
-    simp only [T, σ, classRep_spec]
+      blockGuide s lab q = σ (T (classRep σ) (s⁻¹ • (q - blockCorner s Q))) :=
+    blockGuide_eq_classRep hs lab Q M (ball_subset_ball (mul_le_mul_of_nonneg_left hM hs.le) hq)
   have hrs : r / s ∈ Icc r₀ r₁ := ⟨(le_div_iff₀ hs).2 hr.1, (div_le_iff₀ hs).2 hr.2⟩
   have key := HasTwoOwnerFootprints.of_template (ρ₁ := ρ) (ρ₂ := ρ + 1) (ρ₃ := ρ + 2) hinj hs
     (by linarith) (by linarith) hf (H (classRep σ) σ (blockCorner s Q) hs (r / s) hrs)
@@ -106,6 +95,23 @@ theorem exists_directRepainting_footprintRatio {ε₀ K₀ : ℝ} (hε : 0 < ε�
   have h := holeRadius_div_mem_Icc hε.le hn ht hK
   exact ⟨(le_div_iff₀ hn).1 h.1, (div_le_iff₀ hn).1 h.2⟩
 
+/-- For `0 < n < t`, both hole radii `h_n = ε₀ min(n, t)` and `h_{2n} = ε₀ min(2n, t)` lie
+between `ε₀ n` and `2 ε₀ n`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:371, 529–541`. -/
+theorem mem_Icc_of_mem_holeRadius_pair {ε₀ n t r : ℝ} (hε : 0 < ε₀) (hn : 0 < n) (hnt : n < t)
+    (hr : r ∈ ({holeRadius ε₀ n t, holeRadius ε₀ (2 * n) t} : Set ℝ)) :
+    r ∈ Icc (ε₀ / 2 * (2 * n)) (ε₀ * (2 * n)) := by
+  rcases hr with rfl | rfl
+  · rw [holeRadius, min_eq_left hnt.le]
+    exact ⟨by linarith, by nlinarith⟩
+  · rw [holeRadius]
+    refine ⟨?_, ?_⟩
+    · have : n ≤ min (2 * n) t := le_min (by linarith) hnt.le
+      nlinarith
+    · have : min (2 * n) t ≤ 2 * n := min_le_left _ _
+      nlinarith
+
 /-- **One footprint ratio for the resizings.** Fix `ε₀ > 0`. There is a ratio `ν > 0` such that,
 whenever `0 < n < t` (the only case in which the radii `h_{2n}` and `h_n` differ), every guide
 uniform on the `2n`-blocks has, about every grid corner of side `2n`, for both inner radii
@@ -123,16 +129,8 @@ theorem exists_resizing_footprintRatio {ε₀ : ℝ} (hε : 0 < ε₀) :
           IsTrueVertex (blockGuide (2 * n) lab) c} r (ν * (2 * n)) := by
   obtain ⟨ν, hν, H⟩ := exists_blockGuide_footprintRatio.{u} (ρ := 1) (r₀ := ε₀ / 2) (r₁ := ε₀)
     (by positivity)
-  refine ⟨ν, hν, fun {ι n t} hn hnt lab Q r hr => H (by positivity) lab Q r ?_⟩
-  rcases hr with rfl | rfl
-  · rw [holeRadius, min_eq_left hnt.le]
-    exact ⟨by linarith, by nlinarith⟩
-  · rw [holeRadius]
-    refine ⟨?_, ?_⟩
-    · have : n ≤ min (2 * n) t := le_min (by linarith) hnt.le
-      nlinarith
-    · have : min (2 * n) t ≤ 2 * n := min_le_left _ _
-      nlinarith
+  exact ⟨ν, hν, fun {ι n t} hn hnt lab Q r hr =>
+    H (by positivity) lab Q r (mem_Icc_of_mem_holeRadius_pair hε hn hnt hr)⟩
 
 /-- **Intermediate configurations of a resizing.** With one ratio `ν > 0`, whenever `0 < n < t`,
 every guide uniform on the `2n`-blocks satisfies the two-owner condition about every grid corner of

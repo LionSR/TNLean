@@ -103,11 +103,6 @@ theorem sources_mapOwner (f : P → Q) {ℓ ℓ' : Layout P} (w : Word ℓ ℓ')
   | swap => rfl
   | frame r w ih => exact ih
 
-private theorem memCongr_symm {a b : Layout Q} (h : a = b) :
-    Layout.memCongr h.symm = (Layout.memCongr h).symm := by
-  cases h
-  rfl
-
 private theorem localMap_owner_naturality (f : P → Q) (p : P) (a b ℓ : Layout P)
     (ha : ∀ r ∈ a, r.owner = p) (hb : ∀ r ∈ b, r.owner = p)
     (hfa : ∀ r ∈ Layout.mapOwner f a, r.owner = f p)
@@ -129,8 +124,8 @@ private theorem localMap_owner_naturality (f : P → Q) (p : P) (a b ℓ : Layou
           isoL (appendIso a ℓ).symm := by
     apply clm_ext_tmul
     intro u z
-    simp only [eval_castLayouts, memCongr_symm (Layout.mapOwner_append f a ℓ),
-      memCongr_symm (Layout.mapOwner_append f b ℓ), LinearIsometryEquiv.symm_symm,
+    simp only [eval_castLayouts, Layout.memCongr_symm (Layout.mapOwner_append f a ℓ),
+      Layout.memCongr_symm (Layout.mapOwner_append f b ℓ), LinearIsometryEquiv.symm_symm,
       eval, comp_apply, isoL_apply]
     rw [Layout.mapOwnerIso_append_tmul]
     simp only [LinearIsometryEquiv.apply_symm_apply, rTensor_tmul, comp_apply,

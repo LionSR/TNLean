@@ -129,40 +129,10 @@ theorem eventually_bandUpdate_eq {ι : Type*} {n : ℝ} (hn : 0 < n) {e : Square
     rw [bandUpdate_of_mem hq, bandUpdate_of_mem hb]
     exact hq'
   by_cases hcb : p ∈ closedEdgeBand n e (-8) 2
-  · have hs0 : 0 < e.par p :=
-      lt_of_le_of_ne hcb.1 fun h => h0 (eq_point_zero_of_mem_closedEdgeBand hn.le hcb h.symm)
-    have hsn : e.par p < n :=
-      lt_of_le_of_ne hcb.2.1 fun h => h1 (eq_point_end_of_mem_closedEdgeBand hn.le hcb h)
-    have hw := bandWidth_pos hs0 hsn
-    have hct := continuousAt_bandCoord hs0 hsn
-    have hd : e.nor n p = -8 * bandWidth n (e.par p) ∨ e.nor n p = 2 * bandWidth n (e.par p) := by
-      by_contra h
-      push Not at h
-      exact hb ⟨hs0, hsn, lt_of_le_of_ne hcb.2.2.1 (Ne.symm h.1), lt_of_le_of_ne hcb.2.2.2 h.2⟩
-    rw [bandUpdate_of_notMem hb]
-    rcases hd with hd | hd
-    · have hx : bandCoord n e p < -7 := by
-        rw [bandCoord, hd, mul_div_assoc, div_self hw.ne']
-        norm_num
-      have hgc := hlow hs0 hsn hd
-      rw [hgc.self_of_nhds]
-      filter_upwards [hgc, hct.eventually (Iio_mem_nhds hx)] with q hq (hq' : _ < _)
-      by_cases hqb : q ∈ edgeBand n e (-8) 2
-      · rw [bandUpdate_of_mem hqb]
-        exact hlo _ ⟨(mem_edgeBand_iff_bandCoord.1 hqb).2.2.1, hq'⟩
-      · rw [bandUpdate_of_notMem hqb]
-        exact hq
-    · have hx : 1 < bandCoord n e p := by
-        rw [bandCoord, hd, mul_div_assoc, div_self hw.ne']
-        norm_num
-      have hgc := hup hs0 hsn hd
-      rw [hgc.self_of_nhds]
-      filter_upwards [hgc, hct.eventually (Ioi_mem_nhds hx)] with q hq (hq' : _ < _)
-      by_cases hqb : q ∈ edgeBand n e (-8) 2
-      · rw [bandUpdate_of_mem hqb]
-        exact hhi _ ⟨hq', (mem_edgeBand_iff_bandCoord.1 hqb).2.2.2⟩
-      · rw [bandUpdate_of_notMem hqb]
-        exact hq
+  · obtain ⟨c, hgc, hc⟩ :=
+      exists_eventuallyEq_bandUpdate_of_mem_closedEdgeBand hn hlo hhi h0 h1 hcb hb hlow hup
+    rw [bandUpdate_of_notMem hb, hgc.self_of_nhds]
+    exact hc
   · rw [bandUpdate_of_notMem hb]
     filter_upwards [(isClosed_closedEdgeBand n e _ _).isOpen_compl.mem_nhds hcb, hg] with q hq hq'
     rw [bandUpdate_of_notMem fun h => hq (edgeBand_subset_closedEdgeBand _ _ _ _ h), hq']
