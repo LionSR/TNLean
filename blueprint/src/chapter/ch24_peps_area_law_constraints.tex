@@ -229,8 +229,8 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
     for $i\in\mathcal C_X$, and $\mathcal B_X\le C(1+b_X)(r_0+1)^6$. If moreover
     $r_0=\lceil C_1(\log n)^2\rceil$, $n\ge2$, $D\ge1$ and $b_X\le C_2nD$, then
     $\mathcal B_X\le C'nD(\log n)^{12}$. If $S_0$ is empty every constraint is
-    retained and no label crosses a cut; constraints whose anchors cannot reach
-    $S_0$ are always retained exactly.
+    retained and no label crosses a cut contained in $S_0$; constraints whose
+    anchors cannot reach $S_0$ are always retained exactly.
 \end{theorem}
 \begin{proof}\leanok
     A support meeting $X\subseteq S_0$ has an anchor at finite distance; if
@@ -240,6 +240,46 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
     within $r_0$ of one of the at most $2b_X$ endpoints of cut edges. Each such
     ball has at most $K_b(r_0+1)^2$ sites and each anchor carries at most $\mu$
     labels.
+\end{proof}
+
+% Exact-budget identities preserve the original finite label family.
+% These identities do not assert the lattice-specialized budget producer.
+\begin{theorem}[Exact cut budget and complementary cuts]
+    \label{thm:al_exact_cut_budget}
+    \lean{TNLean.PEPS.AreaLaw.cutBudget_eq_cutLogBudget,
+        TNLean.PEPS.AreaLaw.crossingLabels_compl,
+        TNLean.PEPS.AreaLaw.cutBudget_compl,
+        TNLean.PEPS.AreaLaw.one_le_cutBudget,
+        TNLean.PEPS.AreaLaw.crossingLabels_univ,
+        TNLean.PEPS.AreaLaw.cutBudget_empty,
+        TNLean.PEPS.AreaLaw.cutBudget_univ}
+    \leanok
+    \uses{thm:al_crossing_budget}
+    Let $V$ be the vertex set of a finite graph, let $I$ be a finite label
+    set with anchors $a_i\in V$, and let $q,r_0\in\mathbb N$ and
+    $S_0\subseteq V$. Use the designated supports $\widetilde X_i$ of
+    Theorem~\ref{thm:al_crossing_budget}. For every cut $X\subseteq V$, let
+    $\mathcal C_X$ consist of the original labels whose designated support
+    meets both $X$ and $V\setminus X$. Then the geometric budget is exactly
+    the supported-family budget in \cite[Lemma~3.1]{OpenAI2026AreaLaw}:
+    \begin{align}
+        \mathcal B_X
+         & =1+\sum_{i\in\mathcal C_X}
+        \log^2\Bigl(\mathrm e\prod_{v\in\widetilde X_i}q\Bigr)
+        =1+\sum_{i\in\mathcal C_X}\log^2(\mathrm e\,q^{|\widetilde X_i|}).
+    \end{align}
+    Here $\log0=0$ when $q=0$. Also,
+    $\mathcal C_{V\setminus X}=\mathcal C_X$,
+    $\mathcal B_{V\setminus X}=\mathcal B_X\ge1$, and
+    $\mathcal B_\varnothing=\mathcal B_V=1$.
+    No containment $X\subseteq S_0$ is required. Repeated designated
+    supports and zero terms keep their original labels.
+\end{theorem}
+\begin{proof}\leanok
+    The crossing conditions on each original label agree, and
+    $\prod_{v\in\widetilde X_i}q=q^{|\widetilde X_i|}$. Exchanging the two
+    sides of the cut exchanges the two witnesses of crossing. Every
+    summand is a square, and the empty and full cuts have no crossing labels.
 \end{proof}
 
 \section{The induced lattice instance}

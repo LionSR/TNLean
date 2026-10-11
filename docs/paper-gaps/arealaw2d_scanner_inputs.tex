@@ -297,6 +297,55 @@ replica Hamiltonian. The initial physical prevector, typical sectors,
 comparator estimates, the scanner's measure-valued fields and the
 complete scanner data construction remain open.
 
+\section{Truncated physical marginal estimates}
+
+The moment and tail estimates of \cite[Lemma~3.1]{OpenAI2026AreaLaw} are established in
+\path{TNLean/PEPS/AreaLaw/Scan/ActualMarginalTails.lean}
+for every actual regional state of one supplied truncated ground vector.
+The terms are the actual positive constraints centered at the original
+unit vector $\Omega$, truncated near the scanner's compact set.
+Writing $\widetilde H=\sum_i\widetilde h_i$, the explicit hypothesis is
+\begin{align}
+    \|\widetilde\Omega\|         & =1,                 \\
+    \widetilde H\widetilde\Omega & =e\widetilde\Omega, \\
+    \widetilde H-eI              & \ge(g/2)
+    (I-|\widetilde\Omega\rangle\langle\widetilde\Omega|),
+    \label{eq:arealaw2d_scanner_inputs_marginal_gap}
+\end{align}
+where $g=\Delta/\max\{1,J(\|f_{1,\Delta/2}\|_1+1)\}$. Here $\Delta$ is the
+spectral gap of the original Hamiltonian, $J$ bounds the operator norms of its
+terms, and $f_{1,\Delta/2}$ is the time kernel of the quasi-local spectral
+filter of \cite[Lemma~4.2]{OpenAI2026AreaLaw} with exponent $1$ and frequency
+cutoff $\Delta/2$; $\|f_{1,\Delta/2}\|_1=\int_{\mathbb R}|f_{1,\Delta/2}(t)|\,dt$
+is its $L^1$ norm, and $\max\{1,J(\|f_{1,\Delta/2}\|_1+1)\}$ is the normalization
+of the positive constraints in \cite[Section~4]{OpenAI2026AreaLaw}.
+The resulting tail parameter is $2/g$, and the entropy center is the
+entropy of the actual marginal of this same $\widetilde\Omega$ for every cut.
+The exact budget preserves every original label, including repeated
+supports and zero terms; complementary cuts have the same budget, and
+the empty and full cuts have budget one.
+
+The application of Lemma~3.1 preserves its unit-norm, eigenvector and gap
+hypotheses exactly as in (\ref{eq:arealaw2d_scanner_inputs_marginal_gap}).
+Constructing a witness $(e,\widetilde\Omega)$ of these hypotheses for the
+scanner's truncated physical Hamiltonian remains part of the
+Proposition~9.2 construction. No kernel equation for each individual term
+is asserted. The gap hypothesis concerns the physical sum, before either
+auxiliary identity extension. Empty truncation sets and retained disconnected
+components are allowed; an arbitrary cut inside a retained component can still
+have crossing labels.
+
+The remaining source-facing construction must obtain one $e$ and
+$\widetilde\Omega$ from the physical truncation theorem, identify that
+same physical sum, and derive uniform cut budgets from the actual geometry.
+For the target typical spectrum, the bound is $C n(\log n)^{12}$ rather
+than the status bound $C nD(\log n)^{12}$ used elsewhere in the scan
+(\path{08-scanner.tex}, lines~400--414). The canonical target typical set,
+its positive mass and dimension, the initial prevector, the comparator
+estimates, and the scanner's measure-valued fields still have to be supplied.
+Neither this addition nor its budget identities construct the complete
+scanner data package or remove the restriction on Proposition~9.2.
+
 \section{Elimination}
 
 The restriction disappears once the data package is constructed from the
