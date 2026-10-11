@@ -56,6 +56,45 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
     followed by any specified list of private registers.
 \end{definition}
 
+
+\begin{theorem}[Prescribed physical columns under an owner map]
+    \label{thm:peps_physical_owner_columns}
+    \lean{TNLean.PEPS.PairEffect.mapOwnerIso_familyPhysicalListBasis_apply_heq}
+    \leanok
+    \uses{def:peps_family_physical_output}
+    Let $P,Q$ be arbitrary sets, let $f:P\to Q$, and let
+    $\delta_q$ be nonnegative integers. Let
+    $\mathbf p=(p_0,\ldots,p_{m-1})$ be any ordered list in $P$,
+    with repetitions permitted. Fix a prescribed configuration
+    $y_q\in\{0,\ldots,\delta_q-1\}$ for every $q\in Q$.
+    At position $j$, take the physical space $\C^{\delta_{f(p_j)}}$.
+    Changing its owner from $p_j$ to $f(p_j)$ preserves its space
+    and its position. Write $U_f$ for the resulting canonical
+    memory isometry. Then
+    \begin{align}
+        U_f\bigl(e_{f(p_0),y_{f(p_0)}}\otimes\cdots
+        \otimes e_{f(p_{m-1}),y_{f(p_{m-1})}}\otimes1\bigr)
+        = e_{f(p_0),y_{f(p_0)}}\otimes\cdots
+        \otimes e_{f(p_{m-1}),y_{f(p_{m-1})}}\otimes1.
+        \label{eq:peps_physical_owner_columns}
+    \end{align}
+    Here the column on the right belongs to the register list
+    $(f(p_0),\ldots,f(p_{m-1}))$. No injectivity of $f$,
+    distinctness of the listed owners, or coverage of $P$ or $Q$
+    is required. The empty list has column $1\in\C$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_basis_owner_memory}
+    By Theorem~\ref{thm:peps_basis_owner_memory}, changing owners
+    leaves each tensor factor unchanged, and $U_f$ is the tensor
+    product of the identities on these factors.
+    The prescribed basis column is the ordered tensor product
+    of its local standard basis vectors. Induction on the list
+    therefore gives (\ref{eq:peps_physical_owner_columns});
+    the empty tensor product is the scalar $1$.
+\end{proof}
+
 \begin{theorem}[Singleton physical memory of each party]
     \label{thm:peps_singleton_physical_memory}
     \lean{TNLean.PEPS.PairEffect.atParty_familyPhysicalLayout_of_mem}

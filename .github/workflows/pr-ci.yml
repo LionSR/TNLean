@@ -538,6 +538,11 @@ jobs:
           set -eo pipefail
           test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
           lake --fail-fast build TNLean.PEPS.Approximation.PureSourceMatrix \
+      - name: Check prescribed physical owner columns before the full build
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build TNLean.PEPS.Approximation.FamilyPhysicalOwnerColumns \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
       - name: Build template mixed-square and weighted covering estimates early
@@ -709,11 +714,13 @@ jobs:
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
       - name: Check pure prepared source coefficient axioms strictly
+      - name: Check prescribed physical owner column axioms strictly
         run: >
           LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/PureSourceMatrixAxioms.lean
+          TNLeanTest/FamilyPhysicalOwnerColumnsAxioms.lean
 
       - name: Check physical-column composition axioms strictly
         run: >
