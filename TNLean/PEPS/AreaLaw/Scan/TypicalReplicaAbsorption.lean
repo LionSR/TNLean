@@ -103,6 +103,12 @@ theorem regionalEntropy_le_of_rough_typical_comparisons
         (2 * Real.log (E.card : ℝ) - 2 * S' - Real.log z +
           4 * Bsh / z + 4 * Bexc) + rᵤ k :=
     hupper.mono fun k hk ↦ by linarith only [hk]
+  have hlower_nonmax : ∀ᶠ k in atTop,
+      4 * S' - 2 * C * (τ * Real.log (E.card : ℝ) + Real.binEntropy τ / a) -
+        C * (d k / τ) * (2 * S') - rₗ k ≤ F k :=
+    hlower.mono fun k hk ↦ by
+      simpa only [max_eq_right
+        (mul_nonneg (by norm_num : (0 : ℝ) ≤ 2) hS')] using hk
   done
 
 end TNLean.PEPS.AreaLaw.Scan
