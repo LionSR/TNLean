@@ -63,6 +63,11 @@ theorem exists_supported_projected_relative_evolution (q : ℕ) [NeZero q]
       (norm_siteExpectation_le K) hH' hH
   refine ⟨U, hU0, hU, hunit, ?_, huniq, hcompare⟩
   refine fun t ↦ mem_supportedOperators_of_forall_commute K (fun B hB ↦ ?_)
-  done
+  exact (MatrixEvolution.commute_of_commute_generator B
+    (MatrixEvolution.isHermitian_projectedGenerator
+      (siteExpectationLM q K) (fun _ hA ↦ isHermitian_siteExpectation K hA)
+      hH' (hH'.sub hH)) hU0 hU
+    (fun _ ↦ commute_of_mem_supportedOperators disjoint_compl_left hB
+      (siteExpectation_mem_supportedOperators K _)) t).symm
 
 end QuantumCircuit
