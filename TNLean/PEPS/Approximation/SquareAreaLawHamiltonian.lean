@@ -137,7 +137,9 @@ theorem norm_squareAreaLawState {L q : ℕ} (Ω : StateSpace L q) :
   (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
     (AreaLaw.rectangleConfigurationEquiv L L q)).norm_map Ω
 
-private theorem embedOp_rectangle_eq_reindex {L q : ℕ}
+/-- Embedding an operator along the rectangle site identification is the same as
+reindexing its configuration coordinates. Source: area-law Corollary 1.2. -/
+theorem embedOp_rectangle_eq_reindex {L q : ℕ}
     (A : Matrix (Configuration L q) (Configuration L q) ℂ) :
     QuantumCircuit.embedOp (AreaLaw.rectangleSiteEquiv L L) A =
       Matrix.reindex (AreaLaw.rectangleConfigurationEquiv L L q)

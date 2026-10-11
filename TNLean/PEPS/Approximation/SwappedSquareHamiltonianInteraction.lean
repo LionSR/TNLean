@@ -81,15 +81,75 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
       (h.hermitianTerm_isHermitian i).eq]
   have hBH (i : SquareInteraction L) : (B i).IsHermitian :=
     Matrix.isHermitian_mul_mul_conjTranspose F ((hDH i).reindex p)
-  have hBedge (a : Edge (squareLatticeGraph L L)) :
-      B (.inr ((forwardSquareEdgeEquiv L).symm a)) ∈
-        QuantumCircuit.supportedOperators (q * q) {a.1.1, a.1.2} := by
-    simpa only [squareInteractionSupport, Finset.coe_insert, Finset.coe_singleton,
-      forwardSquareEdgeEquiv_symm_val] using
-        hBsupport (.inr ((forwardSquareEdgeEquiv L).symm a))
-  have hBsite (v : Vertex L) :
-      B (.inl v) ∈ QuantumCircuit.supportedOperators (q * q) {v} := by
-    simpa only [squareInteractionSupport, Finset.coe_singleton] using hBsupport (.inl v)
-  done
+  -- The doubled map is additive in its argument, so summing the doubled Hermitian
+  -- parts recovers the doubled total.
+  let D : Matrix (Configuration L q) (Configuration L q) ℂ →ₗ[ℂ]
+      Matrix (Configuration L q × Configuration L q)
+        (Configuration L q × Configuration L q) ℂ :=
+    (Matrix.kroneckerBilinear (R := ℂ)).flip
+        (1 : Matrix (Configuration L q) (Configuration L q) ℂ) +
+      Matrix.kroneckerBilinear (R := ℂ)
+        (1 : Matrix (Configuration L q) (Configuration L q) ℂ)
+  have hDsum : (∑ i : SquareInteraction L,
+      Matrix.doubledHamiltonian (h.hermitianTerm i)) =
+      Matrix.doubledHamiltonian h.operator := by
+    change (∑ i : SquareInteraction L, D (h.hermitianTerm i)) = D h.operator
+    rw [← map_sum D, h.sum_hermitianTerm]
+  -- The actual interaction family sums exactly to the swapped doubled total, since
+  -- the conjugation and the bond reindexing are additive.
+  have key : (∑ i : SquareInteraction L, B i) = F * K * Fᴴ := by
+    have hreindex : (∑ i : SquareInteraction L,
+        Matrix.reindex p p (Matrix.doubledHamiltonian (h.hermitianTerm i))) = K := by
+      change (∑ i : SquareInteraction L,
+        (Matrix.reindexAlgEquiv ℂ ℂ p) (Matrix.doubledHamiltonian (h.hermitianTerm i))) = K
+      rw [← map_sum (Matrix.reindexAlgEquiv ℂ ℂ p), hDsum]
+    calc (∑ i : SquareInteraction L, B i)
+        = F * (∑ i : SquareInteraction L,
+            Matrix.reindex p p (Matrix.doubledHamiltonian (h.hermitianTerm i))) * Fᴴ := by
+          simp only [B, Finset.mul_sum, Finset.sum_mul]
+      _ = F * K * Fᴴ := by rw [hreindex]
+  refine ⟨{ term := Function.extend (squareAreaLawSupport L)
+              (fun i : SquareInteraction L => Matrix.reindex e e (B i)) 0
+            supported := ?_
+            hermitian := ?_
+            norm_le := ?_ }, rfl, ?_⟩
+  · intro X
+    by_cases hx : ∃ i, squareAreaLawSupport L i = X
+    · obtain ⟨i, rfl⟩ := hx
+      rw [(squareAreaLawSupport_injective L).extend_apply]
+      have hs := QuantumCircuit.embedOp_mem_supportedOperators_image
+        (AreaLaw.rectangleSiteEquiv L L).injective (hBsupport i)
+      rw [embedOp_rectangle_eq_reindex] at hs
+      simpa only [squareAreaLawSupport, Finset.coe_image] using hs
+    · rw [Function.extend_apply' _ _ _ hx]
+      exact Submodule.zero_mem _
+  · intro X
+    by_cases hx : ∃ i, squareAreaLawSupport L i = X
+    · obtain ⟨i, rfl⟩ := hx
+      rw [(squareAreaLawSupport_injective L).extend_apply]
+      exact (hBH i).submatrix e.symm
+    · rw [Function.extend_apply' _ _ _ hx]
+      exact Matrix.isHermitian_zero
+  · intro X
+    by_cases hx : ∃ i, squareAreaLawSupport L i = X
+    · obtain ⟨i, rfl⟩ := hx
+      rw [(squareAreaLawSupport_injective L).extend_apply]
+      exact (Matrix.l2_opNorm_reindex_equiv e (B i)).le.trans (hBn i)
+    · rw [Function.extend_apply' _ _ _ hx]
+      simpa only [Pi.zero_apply, norm_zero] using mul_nonneg (by norm_num : (0 : ℝ) ≤ 2) hJ
+  · let T := fun i : SquareInteraction L => Matrix.reindex e e (B i)
+    have hsum : (∑ i : SquareInteraction L, T i) =
+        ∑ X : AreaLaw.AdmissibleSupport (AreaLaw.rectangularDomain L L) 1,
+          Function.extend (squareAreaLawSupport L) T 0 X := by
+      apply Finset.sum_of_injOn (squareAreaLawSupport L)
+        (squareAreaLawSupport_injective L).injOn (fun _ _ => Finset.mem_univ _)
+      · intro X _ hX
+        exact Function.extend_apply' _ _ _ (by simpa using hX)
+      · intro i _
+        exact ((squareAreaLawSupport_injective L).extend_apply T 0 i).symm
+    change (∑ X, Function.extend (squareAreaLawSupport L) T 0 X) = _
+    rw [← hsum]
+    change (∑ i : SquareInteraction L, (Matrix.reindexAlgEquiv ℂ ℂ e) (B i)) = _
+    rw [← map_sum (Matrix.reindexAlgEquiv ℂ ℂ e), key]
 
 end TNLean.PEPS.Approximation
