@@ -25,7 +25,6 @@ open scoped Matrix ComplexOrder
 
 namespace TNLean.PEPS.AreaLaw
 
-set_option diagnostics true in
 open Classical in
 /-- For a unit physical state and a supplied positive-mass spectral set in an
 exponential window, both the logarithmic selected dimension and the entropy of
@@ -71,7 +70,7 @@ theorem abs_log_card_and_selectedSchmidtEntropy_sub_le
   rw [(reducedState_isHermitian Λ q Ωt X).rank_normalizedSpectralRestriction E hz.ne'
     (fun i hi => (Real.exp_pos _).trans_le (hE i hi).1)] at hbounds
   rw [abs_of_nonpos (Real.log_nonpos hz.le hz1)] at hbounds
-  simp only [← hρ] at hselected
+  simp only at hselected
   have hσ :=
     congrArg (fun A : {A : Matrix (FiniteProduct.Configuration β X)
         (FiniteProduct.Configuration β X) ℂ // A.IsHermitian} =>
