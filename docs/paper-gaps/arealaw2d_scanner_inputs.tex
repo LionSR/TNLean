@@ -13,7 +13,7 @@
 
 \title{The Scanner Estimate from the Conclusions of Its Inputs}
 \author{}
-\date{2026-10-09}
+\date{2026-10-11}
 
 \begin{document}
 \maketitle
@@ -49,7 +49,9 @@ parameter with $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$, the H\"older
 accounting of the defect energy at the selected point, and the three
 comparator budgets.\footnote{The packaged statement is
     \leanid{TNLean.PEPS.AreaLaw.Scan.scanner_estimate}.} Each field transcribes
-the relevant input conclusion and cites its source passage. In particular,
+the relevant input conclusion and cites its source passage, except that the
+charge-defect continuity requirement is weakened to the almost-everywhere
+strong measurability sufficient for the two integral arguments. In particular,
 the transported-measure mass equality is required only for interior
 interpolation parameters. The constants depend only on the fixed exponents
 and on the constants of the inputs, as in the source.
@@ -78,12 +80,57 @@ remain defined at every parameter; no replacement probability measure is
 assigned to an inactive leaf. The charge-defect bound and the old- and
 new-leaf energy estimates use the mass hypothesis only in the interior.
 The integral over
-$[0,1]$ uses the interior bounds and interior continuity of the charge defect,
-since the two boundary points have Lebesgue measure zero. The logarithmic
+$[0,1]$ uses the interior bounds and almost-everywhere strong measurability
+of the charge defect, since the two boundary points have Lebesgue measure zero. The logarithmic
 norm remains continuous on $[0,1]$, and its matching boundary values,
 initial and final comparisons, and integrated entropy conclusions are
 unchanged. This domain correction does not construct the transported
 measures or remove the remaining scanner-input restriction.
+
+\section{Parameter regularity from actual transported expectations}
+
+Parameter integrability of the exact
+old-state Fourier--coherent scalar integral follows from the transported
+expectation theorem. For a continuous real coherent symbol $F$, let $A_F$
+be its coherent average and $Q_F=(A_F+A_F^\dagger)/2$. Positivity of the
+actual state gives Hermiticity, hence
+\begin{align}
+    \operatorname{Re}\operatorname{Tr}(\rho Q_F)
+    =\operatorname{Re}\operatorname{Tr}(\rho A_F)
+    =\mathcal H_\rho(F).
+\end{align}
+For a nonzero supplied prevector the accepted parameter-measurability result
+and bound $|J_h(F)|\le\|Q_F\|/2$ give integrability on $(0,1)$ and $[0,1]$.
+For a zero prevector the actual filtered vector and trace-adjoint state are
+zero. This argument includes zero copies and does not assume symmetry.
+Finite sums with the original fixed good-history predicate and weights give
+the regularity of the actual charge defect.\footnote{The source declarations are
+    \leanid{TensorPower.ReplicaTransport.TransportData.intervalIntegrable_oldFourierCoherentIntegral},
+    \leanid{TensorPower.ReplicaTransport.TransportData.intervalIntegrable_sum_oldFourierCoherentIntegral},
+    and \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.intervalIntegrable_actualChargeEntropyDefect}.}
+
+The scanner package now asks only for almost-everywhere strong measurability
+of its scalar charge defect. Its existing nonnegativity and upper bound derive
+interval integrability. The derivative telescope retains closed-interval
+continuity of the logarithmic norm, differentiation at every interior point,
+and the pointwise lower bound; its integral comparison requires only an
+integrable lower bound. No absolute continuity assumption is added.
+For exact selection, finite averaging chooses a round whose integral is at
+most the threshold times interval length. If the original pointwise defect
+were strictly above that threshold everywhere, the integral of their
+integrable difference would be strictly positive, a contradiction. Thus
+selection preserves the exact non-strict inequality, the same round and
+parameter, all constants, and the existing remainder.
+
+This derives integrability rather than the manuscript's asserted parameter
+continuity. The
+finite-sum theorem is connected below to literal fill and charge rounds by
+their exact scalar identities. The scalar expectation argument uses the
+accepted dependency. The literal-measure construction and its specializations
+now use the accepted canonical measure theorem at the updated dependency
+revision.
+The full scanner package, common physical prevector and comparators, and
+lattice ground-state construction remain separate obligations.
 
 \section{Finite history construction now available}
 
@@ -236,10 +283,10 @@ terminal old-edge factor $1-p$. For a nonzero symmetric common prevector and
 an interior interpolation parameter, the combined integral has mass $1/2$.
 \footnote{The integrated inequality is
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_le_entropyGain_domainGraph}.}
-Constructing the scanner's measure-valued fields, an initial prevector,
-typical sectors and comparator budgets, and the complete scanner data package
-remain open. A direct inequality for the canonical integrals does not alone
-construct those measure-valued fields.
+A direct inequality for the canonical integrals does not alone construct
+the scanner's measure-valued fields. The construction below
+uses the canonical measure result. An initial prevector,
+typical sectors, comparator budgets and the complete scanner data remain open.
 
 The missing direct near--far case is now excluded from the actual geometry.
 The near side lies in the truncation set, so a designated support meeting
@@ -296,6 +343,102 @@ that prevector to be an eigenvector of the actual augmented truncated
 replica Hamiltonian. The initial physical prevector, typical sectors,
 comparator estimates, the scanner's measure-valued fields and the
 complete scanner data construction remain open.
+
+\section{Literal measure, scalar identities and parameter regularity}
+
+The canonical measure theorem
+sets the one-copy domain to its actual unit sphere and takes the old and new
+measures from the very same terminal transport states, supplied replica vector,
+and root path. No classical history or conditional-choice weight is inserted
+inside a measure. For $a\ge0$, the source identifies integrals of continuous
+ambient symbols restricted to the sphere with the existing Fourier--coherent
+integrals. Fixed-parameter finiteness needs no analytic certificate or sign
+assumption on $a$. For $a\ge0$ and a supplied nonzero symmetric vector,
+the interior mass is $1/2$; this includes zero copies with a nonzero scalar
+vector. Inactive old and new leaves at $p=1$ and $p=0$ retain zero measure
+without any vector or sign assumption. For $a\ge0$ and a nonzero symmetric
+vector, the complementary active leaves have mass $1/2$. No endpoint measure
+is replaced by an arbitrary probability.
+
+For $a\ge0$, the same source identifies the round's choice gain and charge
+defect with the existing entropy gain and actual good-history defect for every
+real $p$. Under $a\ge0$, the energy identity retains both split-probability
+factors and is restricted
+to $p\in[0,1]$: outside that interval the transport tree clamps $p$, whereas
+the round's displayed weights use $1-p$ and $p$ directly. The actual augmented
+replica-energy operator is retained with the same filtered vector.
+\footnote{The declarations are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.transportScanRound},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillScanRound},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_chargeDefect}.}
+
+For $a\ge0$ and each fixed natural replica count, the literal fill and charge defects
+are almost-everywhere strongly measurable on $(0,1)$ and interval integrable
+on $[0,1]$. Their pointwise equality with the finite old-state sum transfers
+the preceding regularity theorem without any probability normalization of
+the leaf measures. The coherent symbol is
+\begin{align}
+    F_h(\theta)     & =\sum_i\eta_{i,(h,\mathrm{old})}(\theta), &
+    \mathcal Q_k(p) & =\sum_{h\text{ good}}w_hJ_{h,k,p}(F_h).
+\end{align}
+An unsplit term vanishes by its defining entropy sum. Both the generic round
+and the actual fill and charge specializations retain the same supplied
+family $\psi_k$; they require neither a nonzero vector nor symmetry nor
+positive replica count. The two original endpoint values are retained by
+closed-interval integrability. No parameter continuity or absolute
+continuity statement follows, and no measurability assumption on a
+measure-valued family is inserted.
+\footnote{The literal-round regularity declarations are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.aestronglyMeasurable_transportScanRound_chargeDefect},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.intervalIntegrable_transportScanRound_chargeDefect},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_actualFillScanRound_chargeDefect},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.intervalIntegrable_actualFillScanRound_chargeDefect},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_actualChargeScanRound_chargeDefect}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.intervalIntegrable_actualChargeScanRound_chargeDefect}.}
+
+This is not a construction of the complete scanner data. The canonical measure
+theorem is accepted in QICLean at revision
+\path{acfb5c685e732f987a5a96a5c079ba7f821c4715}; the declared dependency and
+matching manifest revision now select that commit. The toolchain, Mathlib and
+all other dependency pins are unchanged. Fixed-parameter finiteness is not
+parameter continuity.
+% These literal-measure and regularity statements passed the complete checks
+% on c698f6ab and the strict scanner stages of 56ed4b19. The new integrated
+% charge theorem below has not yet been compiled.
+The endpoint norm and integrated entropy conclusions are unchanged. The
+physical prevector, Bell or typical sector and comparator remain separate
+(the prevector/comparator task is issue 8753); the lattice ground-state task
+is issue 8979. In particular, no zero-copy energy equation with a nonzero
+supplied vector implies an arbitrary prescribed ground energy.
+
+\section{One-round integrated charge defect}
+
+Under the actual charge sampling and transport hypotheses, set
+$\alpha=[2(C_1+1)nD]^{-1}$ and
+$\ell=1+(2r_0+1)^2\log q$. The pointwise inequality
+$\alpha\mathcal Q(p)\le\mathcal G(p)$ combines with the integral conclusion
+of Proposition~7.4. For a supplied nonzero symmetric vector, $a>0$,
+$a\ell\le c_0$, every natural replica count $r$, and
+$0\le p_0\le p_1\le1$, the resulting bound is
+\begin{align}
+    ra\alpha\int_{p_0}^{p_1}\mathcal Q(p)\,dp
+    & \le \log N^2(p_0)-\log N^2(p_1)
+    +(p_1-p_0)\bigl(C_{\mathrm{ent}}raKa^{1/4}\ell^{e_{\mathrm{ent}}}+\beta_r\bigr).
+\end{align}
+Here the universal constants precede the geometric and Hamiltonian choices,
+and $\beta_r=O(\log(r+1))$ is chosen before the replica count and vector.
+The charge defect and entropy gain are interval integrable; continuity of
+either scalar is not required. The two error terms retain their signs and
+the interval-length factor. Equal endpoints give equality, and zero
+replicas require no separate positive-count assumption.
+\footnote{The one-round consequence is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_integral_bound_domainGraph}.}
+% The new one-round theorem is source-only pending hosted compilation.
+This removes an assumed one-round charge integral bound from the construction.
+It does not identify consecutive rounds at a common physical prevector or
+sum their logarithmic terms. The physical prevector, initial and final
+comparisons, and the remaining scanner conclusions are still required.
 
 \section{Elimination}
 

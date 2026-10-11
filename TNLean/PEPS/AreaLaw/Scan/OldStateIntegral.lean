@@ -13,8 +13,10 @@ import TNLean.PEPS.AreaLaw.Scan.RegionalMoveEntropy
 For each history, all conditional-choice symbols are integrated against its
 one old leaf state. The coherent integral and the Fourier integral retain
 their actual definitions; classical history and choice weights are not
-substituted for either measure. Continuity gives integrability through the
-coherent-average trace identity and the existing transported trace estimate.
+substituted for either measure. Continuity of the coherent symbol gives
+coherent and Fourier-variable integrability through the coherent-average
+trace identity and the existing transported trace estimate. Integrability
+in the interpolation parameter is derived in `OldStateParameterIntegral`.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `06-transport.tex`, displays `transport:states` and `transport:entropy-gain`,

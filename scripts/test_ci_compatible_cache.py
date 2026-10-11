@@ -33,6 +33,193 @@ supportInterpreter = true
 '''
 
 
+# These four exact steps are the only additional pre-root direct-Lean
+# exceptions. Keep their original commands, options, timeouts, and overlays.
+SCANNER_STRICT_STEPS = yaml.safe_load(r"""
+      - name: Check parameter integrability sources strictly
+        timeout-minutes: 8
+        run: |
+          set -e
+          for source in TNLean/PEPS/AreaLaw/Scan/OldStateParameterIntegral.lean \
+              TNLean/PEPS/AreaLaw/Scan/ActualParameterIntegral.lean \
+              TNLean/PEPS/AreaLaw/Scan/Defs.lean \
+              TNLean/PEPS/AreaLaw/Scan/EntropyBalance.lean \
+              TNLean/PEPS/AreaLaw/Scan/Selection.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
+      - name: Test actual parameter integrability and discontinuous selection
+        timeout-minutes: 5
+        run: |
+          set -e
+          test_root="$(mktemp -d)"
+          trap 'rm -rf "$test_root"' EXIT
+          mkdir -p "$test_root/TNLeanTest"
+          for example in ActualParameterIntegral ScanIntegrableSelection ScanParameterIntegralAxioms; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env bash -c \
+              'export LEAN_PATH="$1${LEAN_PATH:+:$LEAN_PATH}"; shift; exec lean "$@"' \
+              -- "$test_root" -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              -o "$test_root/TNLeanTest/$example.olean" "TNLeanTest/$example.lean"
+          done
+
+      - name: Check literal round measure and regularity sources strictly
+        timeout-minutes: 8
+        run: |
+          set -e
+          for source in TNLean/PEPS/AreaLaw/Scan/TransportRound.lean \
+              TNLean/PEPS/AreaLaw/Scan/TransportRoundEnergy.lean \
+              TNLean/PEPS/AreaLaw/Scan/ActualScanMeasures.lean \
+              TNLean/PEPS/AreaLaw/Scan/TransportRoundParameterIntegral.lean \
+              TNLean/PEPS/AreaLaw/Scan/ActualRoundParameterIntegral.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
+      - name: Test literal round measures and parameter integrability
+        timeout-minutes: 7
+        run: |
+          set -e
+          test_root="$(mktemp -d)"
+          trap 'rm -rf "$test_root"' EXIT
+          mkdir -p "$test_root/TNLeanTest"
+          for example in ActualScanMeasures ActualScanMeasuresAxioms \
+              ActualRoundParameterIntegral ActualRoundParameterIntegralAxioms; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env bash -c \
+              'export LEAN_PATH="$1${LEAN_PATH:+:$LEAN_PATH}"; shift; exec lean "$@"' \
+              -- "$test_root" -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              -o "$test_root/TNLeanTest/$example.olean" "TNLeanTest/$example.lean"
+          done
+""")
+SCANNER_STRICT_NAMES = tuple(step['name'] for step in SCANNER_STRICT_STEPS)
+SCANNER_BUILD_NAME = 'Build scanner integrability targets early'
+FULL_BUILD_NAME = 'Build Lean project and capture timings'
+EXPECTED_SCANNER_BUILD = yaml.safe_load(r"""
+      - name: Build scanner integrability targets early
+        env:
+          LEAN_NUM_THREADS: '1'
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build \
+            +TNLean.PEPS.AreaLaw.Scan.ActualRoundParameterIntegral:olean \
+            +TNLean.PEPS.AreaLaw.Scan.Selection:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+""")[0]
+EXPECTED_FULL_BUILD = yaml.safe_load(r"""
+      - name: Build Lean project and capture timings
+        run: |
+          set -eo pipefail
+          # Check the String Order capstones before unrelated library targets.
+          lake build TNLean.MPS.Symmetry.PhysicalStringBlockOrder \
+            TNLean.MPS.Examples.StringOrderScalarPhase \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+          {
+            lake build
+            lake build lint_style
+          } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+""")[0]
+
+# This reordering must retain the existing post-root checks in their order.
+# New checks may be added without dropping or weakening this required set.
+REQUIRED_POST_ROOT_CHECKS = """
+Check physical cross-band production modules strictly
+Test physical cross-band commutation strictly
+Audit physical cross-band commutation axioms
+Check actual charge entropy production modules strictly
+Test actual charge entropy strictly
+Audit actual charge entropy axioms
+Check actual old-state entropy production modules strictly
+Test actual old-state entropy integration
+Audit actual old-state entropy integration axioms
+Check actual deterministic fill production modules strictly
+Audit actual deterministic fill axioms
+Check actual physical dimension modules strictly
+Audit actual physical and transport dimension axioms
+Check actual energy and transport production modules strictly
+Test actual energy and transport signatures and axioms strictly
+Test capped dyadic partition strictly
+Test template mixed-square counts strictly
+Test exact nearest-neighbor crossing budget strictly
+Test crossing-budget standard axioms strictly
+Test concrete one-edge crossing regression strictly
+Test template clearance strictly
+Test concrete hole encoder and standard axioms strictly
+Test exact square-grid PEPS contraction and audit axioms
+Test partial-row entropy strictly
+Test square-grid vector, regional and approximation transport
+Test lattice vertex-boundary conventions strictly
+Test physical template boundaries strictly and audit axioms
+Test nested-cylinder orthogonalization edge cases strictly
+Test projected-image cylinder counterexamples strictly
+Check conditional two-family entropy integration strictly
+Check two-family entropy integration strictly
+Test regularized patch minimum and coordinate first variation strictly
+Check QICLean import compatibility strictly
+Test uniform angular reset width and standard axioms strictly
+Test actual rectangular local-window regression strictly
+Test template rows strictly and audit axioms
+Test template boundary strictly and audit axioms
+Check recursive physical history mean trees
+Test actual scan histories strictly and audit axioms
+Test physical sampling and transported entropy on shared geometry
+Test shared physical scan geometry, supports and deterministic fills
+Audit actual band geometry axioms
+Test full and positive depth-prefix boundaries
+Audit actual prefix comparisons and physical cut axioms
+Audit actual support classification
+Audit augmented physical support compatibility
+Test actual offset counts and history marginals
+Audit actual designated dilution axioms
+Test actual charge ancestry and lead windows
+Test selected chain probabilities and finite covers
+Test spatial charge path counting
+Test binomial factorial cancellation
+Test exact finite history prefix marginals
+Test finite all-time bad-history bounds
+Test physical three-charge bad-history witness
+Test rounded logarithmic scan radius
+Test actual inverse-power bad-history probability
+Test GHZ sector-probability obstruction
+Test equal GHZ parents with unequal periodic probabilities
+Test compatible coherent seed conversion
+Test supported trees and coherent measurement branches
+Test physical string phases and finite endpoints
+Test periodic string expectations and proof dependencies
+Test finite-size bounds and periodic AKLT-cluster examples
+Test reciprocal scalar cancellation
+Test unblocked power-sum coefficients
+Test operator-closure power-sum coefficients
+Test canonical fixed-point pairs
+Test structure coefficients, cocycles, and boundary examples
+Build continuous physical string-order targets
+Test continuous physical string order strictly
+Test example physical states and operators
+Test PEPS closure, intersection and renormalization
+Test PEPS dual flux paths and quantum-double local terms
+Test physical-port channel compilation
+Test boundary transport and fusion actions
+Test exact square-grid PEPS representations and finite exceptions
+Test algebraic preparation import boundary
+Test area-law foundations and physical oscillations
+Check changed Lean compilation times
+Run text-based style linter
+Generate Blueprint Lean declaration list
+Check Blueprint Lean declarations
+Generate paper-gap Lean declaration list
+Check paper-gap Lean declarations
+Save Lean build cache (main only)
+""".strip().splitlines()
+
+
 def pinned_inputs():
     data = {p: (ROOT / p).read_bytes() for p in guard.INPUTS}
     manifest = json.loads(data['lake-manifest.json'])
@@ -674,7 +861,8 @@ class WorkflowTests(unittest.TestCase):
                         self.steps[prune]['run'].index(' prune'))
         self.assertNotIn('always()', self.steps[build].get('if', ''))
         for i, step in enumerate(self.steps):
-            if 'lake env lean' in step.get('run', ''):
+            if ('lake env lean' in step.get('run', '')
+                    or 'lake env bash -c' in step.get('run', '')):
                 if step.get('name') == 'Check finite rectangular dual geometry early':
                     # One explicit early regression is safe after its complete
                     # import closure is rebuilt by Lake. No generic exemption.
@@ -728,11 +916,214 @@ class WorkflowTests(unittest.TestCase):
                     imports = (ROOT / 'TNLeanTest/LabelledOpenCoefficient.lean').read_text().splitlines()
                     self.assertEqual([line for line in imports if line.startswith('import ')],
                                      ['import TNLean.PEPS.TorusDualOpenDeformation'])
+                elif step.get('name') in SCANNER_STRICT_NAMES:
+                    # Exact step equality below also covers both bash overlays.
+                    focused = next(j for j, s in enumerate(self.steps)
+                                   if s.get('name') == SCANNER_BUILD_NAME)
+                    self.assertLess(prune, focused)
+                    self.assertLess(focused, i)
+                    self.assertLess(i, build)
+                    self.assertEqual(step, SCANNER_STRICT_STEPS[
+                        SCANNER_STRICT_NAMES.index(step['name'])])
                 else:
                     self.assertLess(build, i)
         setup = next(s for s in self.steps if s.get('uses') == 'leanprover/lean-action@v1')
         self.assertIs(setup['with']['build'], False)
         self.assertIs(setup['with']['use-github-cache'], False)
+
+    def assert_scanner_early_checks(self):
+        names = [step.get('name') for step in self.steps]
+        prune = names.index('Discard unvalidated cross-commit artifacts')
+        setup = next(i for i, step in enumerate(self.steps)
+                     if step.get('uses') == 'leanprover/lean-action@v1')
+        focused = names.index(SCANNER_BUILD_NAME)
+        build = names.index(FULL_BUILD_NAME)
+        self.assertLess(setup, prune)
+        self.assertEqual(focused, prune + 1)
+        self.assertEqual(self.steps[focused], EXPECTED_SCANNER_BUILD)
+        self.assertEqual(self.steps[focused + 1:focused + 5], SCANNER_STRICT_STEPS)
+        self.assertLess(focused + 4, build)
+        self.assertEqual(self.steps[build], EXPECTED_FULL_BUILD)
+        for name in (SCANNER_BUILD_NAME, FULL_BUILD_NAME, *SCANNER_STRICT_NAMES):
+            self.assertEqual(names.count(name), 1, name)
+
+    def test_actual_charge_integral_checks_after_root(self):
+        names = [step.get('name') for step in self.steps]
+        root = names.index(FULL_BUILD_NAME)
+        timing = names.index('Check changed Lean compilation times')
+        production = 'Check actual charge integral bound strictly'
+        fixtures = 'Test actual charge integral endpoints and axioms strictly'
+        for name, minutes in ((production, 2), (fixtures, 4)):
+            self.assertEqual(names.count(name), 1)
+            index = names.index(name)
+            self.assertLess(root, index)
+            self.assertLess(index, timing)
+            step = self.steps[index]
+            self.assertEqual(step['timeout-minutes'], minutes)
+            self.assertNotIn('if', step)
+            self.assertNotIn('continue-on-error', step)
+            for token in ('set -eo pipefail', 'LEAN_NUM_THREADS=1',
+                          'timeout --signal=INT --kill-after=5s 90s', '-j1',
+                          '-DautoImplicit=false', '-DrelaxedAutoImplicit=false',
+                          '-DmaxSynthPendingDepth=3', '-Dlinter.mathlibStandardSet=true',
+                          '-DwarningAsError=true',
+                          '2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"'):
+                self.assertIn(token, step['run'])
+        self.assertLess(names.index(production), names.index(fixtures))
+        self.assertIn('TNLean/PEPS/AreaLaw/Scan/ActualChargeParameterBound.lean',
+                      self.steps[names.index(production)]['run'])
+        run = self.steps[names.index(fixtures)]['run']
+        examples = run.split('for example in ', 1)[1].split('; do', 1)[0].split()
+        self.assertEqual(examples, ['ActualChargeParameterBound',
+                                    'ActualChargeParameterBoundAxioms'])
+        self.assertIn('lake env lean -j1', run)
+        for forbidden in ('LEAN_PATH', 'mktemp', ' -o ', 'lake env bash'):
+            self.assertNotIn(forbidden, run)
+
+    def test_scanner_targets_then_exact_strict_blocks_then_unchanged_root(self):
+        self.assert_scanner_early_checks()
+
+    def test_scanner_targets_cover_production_and_fixture_imports(self):
+        # Only source reads: no Lake invocation, artifacts, or dependency fetch.
+        def imports(module):
+            path = ROOT / (module.replace('.', '/') + '.lean')
+            return [name for line in path.read_text().splitlines()
+                    if line.startswith('import ') for name in line.split()[1:]]
+
+        closure = set()
+        pending = ['TNLean.PEPS.AreaLaw.Scan.ActualRoundParameterIntegral',
+                   'TNLean.PEPS.AreaLaw.Scan.Selection']
+        while pending:
+            module = pending.pop()
+            if module in closure:
+                continue
+            closure.add(module)
+            pending.extend(name for name in imports(module) if name.startswith('TNLean.'))
+        for step in SCANNER_STRICT_STEPS:
+            run = step['run'].replace('\\\n', ' ')
+            if 'for source in ' in run:
+                sources = run.split('for source in ', 1)[1].split('; do', 1)[0].split()
+                for source in sources:
+                    self.assertIn(source.removesuffix('.lean').replace('/', '.'), closure)
+            else:
+                examples = run.split('for example in ', 1)[1].split('; do', 1)[0].split()
+                built_fixtures = set()
+                for example in examples:
+                    fixture = 'TNLeanTest.' + example
+                    for dependency in imports(fixture):
+                        self.assertIn(dependency, closure | built_fixtures, fixture)
+                    built_fixtures.add(fixture)
+
+    def test_early_scanner_exception_rejects_weakened_or_reordered_steps(self):
+        original = copy.deepcopy(self.steps)
+        focused = next(i for i, step in enumerate(original)
+                       if step.get('name') == SCANNER_BUILD_NAME)
+        replacements = (
+            ('Mathlib.olean', 'Unrelated.olean'),
+            ('--fail-fast ', ''),
+            ('set -eo pipefail', 'set -e'),
+            ('ActualRoundParameterIntegral:olean', 'ActualParameterIntegral:olean'),
+            ('+TNLean.PEPS.AreaLaw.Scan.Selection:olean', ''),
+            ('tee -a', 'tee'),
+            ('lake-build.log', 'uncollected.log'),
+        )
+        for before, after in replacements:
+            with self.subTest(before=before):
+                self.steps = copy.deepcopy(original)
+                self.steps[focused]['run'] = self.steps[focused]['run'].replace(before, after)
+                with self.assertRaises(AssertionError):
+                    self.assert_scanner_early_checks()
+        for offset in range(5):
+            for key, value in (('if', 'always()'), ('continue-on-error', True)):
+                with self.subTest(offset=offset, key=key):
+                    self.steps = copy.deepcopy(original)
+                    self.steps[focused + offset][key] = value
+                    with self.assertRaises(AssertionError):
+                        self.assert_scanner_early_checks()
+        for before, after in (
+            ('LEAN_NUM_THREADS=1', 'LEAN_NUM_THREADS=2'),
+            ('90s', '180s'), ('-j1', '-j2'),
+            ('-DwarningAsError=true', '-DwarningAsError=false'),
+            ('trap ', '# trap '), ('export LEAN_PATH=', 'export UNUSED_PATH='),
+            ('-- "$test_root"', '-- .lake/build/lib/lean'),
+        ):
+            with self.subTest(strict=before):
+                self.steps = copy.deepcopy(original)
+                overlay = self.steps[focused + 2]
+                self.assertIn(before, overlay['run'])
+                overlay['run'] = overlay['run'].replace(before, after)
+                with self.assertRaises(AssertionError):
+                    self.assert_scanner_early_checks()
+        self.steps = copy.deepcopy(original)
+        self.steps[focused]['env']['LEAN_NUM_THREADS'] = '2'
+        with self.assertRaises(AssertionError):
+            self.assert_scanner_early_checks()
+        self.steps = copy.deepcopy(original)
+        self.steps[focused - 1], self.steps[focused] = (
+            self.steps[focused], self.steps[focused - 1])
+        with self.assertRaises(AssertionError):
+            self.assert_scanner_early_checks()
+        self.steps = original
+
+    def test_no_unnamed_direct_lean_or_overlay_exception(self):
+        for command in ('lake env lean Unreviewed.lean',
+                        "lake env bash -c 'exec lean Unreviewed.lean'"):
+            with self.subTest(command=command):
+                original = self.steps
+                self.steps = copy.deepcopy(original)
+                focused = next(i for i, step in enumerate(self.steps)
+                               if step.get('name') == SCANNER_BUILD_NAME)
+                self.steps.insert(focused, {'name': 'Unreviewed early check', 'run': command})
+                with self.assertRaises(AssertionError):
+                    self.test_lookup_then_validation_then_exact_restore_then_prune_then_build()
+                self.steps = original
+
+    def test_all_post_root_checks_remain_ordered_and_fail_closed(self):
+        build = next(i for i, step in enumerate(self.steps)
+                     if step.get('name') == FULL_BUILD_NAME)
+        remaining = self.steps[build + 1:]
+        selected = [step['name'] for step in remaining
+                    if step.get('name') in REQUIRED_POST_ROOT_CHECKS]
+        self.assertEqual(selected, REQUIRED_POST_ROOT_CHECKS)
+        conditions = {
+            'Check changed Lean compilation times': "github.event_name == 'pull_request'",
+            'Save Lean build cache (main only)': "success() && github.ref == 'refs/heads/main'",
+        }
+        for step in remaining:
+            if step.get('name') not in REQUIRED_POST_ROOT_CHECKS:
+                continue
+            self.assertNotIn('continue-on-error', step)
+            self.assertEqual(step.get('if'), conditions.get(step['name']))
+            self.assertTrue(step.get('run', step.get('uses')), step['name'])
+
+    def test_build_timing_log_is_append_only_and_is_the_final_gate_input(self):
+        reader_count = 0
+        for step in self.steps:
+            for line in step.get('run', '').splitlines():
+                if '$RUNNER_TEMP/lake-build.log' not in line:
+                    continue
+                if line.strip() == '"$RUNNER_TEMP/lake-build.log" \\':
+                    self.assertEqual(step.get('id'), 'compilation-time')
+                    reader_count += 1
+                else:
+                    self.assertRegex(line, r'^\s*(?:}\s+)?(?:2>&1\s+)?\| tee -a '
+                                     r'"\$RUNNER_TEMP/lake-build\.log"(?:\s+\\)?$')
+        self.assertEqual(reader_count, 1)
+        timing = self.ids['compilation-time']['run']
+        self.assertIn('python3 scripts/lake_build_hotspots.py \\', timing)
+        self.assertIn('--changed-files-from "$RUNNER_TEMP/changed-lean-files.txt"', timing)
+        self.assertNotIn('--error-threshold', timing)
+        self.assertNotIn('--warn-threshold', timing)
+        self.assertIn('50) result=limit ;;', timing)
+        gate = self.workflow['jobs']['compile-time']
+        self.assertEqual(gate['needs'], ['changes', 'build'])
+        self.assertIn("needs.build.result == 'success'", gate['if'])
+        enforce = gate['steps'][0]
+        self.assertEqual(enforce['env']['TIMING_RESULT'],
+                         '${{ needs.build.outputs.compilation-time-result }}')
+        self.assertIn('limit)\n', enforce['run'])
+        self.assertIn('exit 1', enforce['run'])
+        self.assertNotIn('continue-on-error', enforce)
 
     def test_postrestore_shell_stops_before_prune_or_build(self):
         step = next(s for s in self.steps if s.get('name') == 'Discard unvalidated cross-commit artifacts')

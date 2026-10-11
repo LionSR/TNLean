@@ -1237,6 +1237,48 @@ The following finite construction follows
     to one half.
 \end{proof}
 
+\begin{theorem}[Parameter integrability of the old-state entropy integral]
+    \label{thm:al_scan_old_parameter_integral}
+    \lean{TensorPower.ReplicaTransport.TransportData.oldFourierCoherentIntegral_zero_pre,
+        TensorPower.ReplicaTransport.TransportData.oldFourierCoherentIntegral_eq_integral_hermPart,
+        TensorPower.ReplicaTransport.TransportData.aestronglyMeasurable_oldFourierCoherentIntegral,
+        TensorPower.ReplicaTransport.TransportData.abs_oldFourierCoherentIntegral_le,
+        TensorPower.ReplicaTransport.TransportData.integrableOn_Ioo_oldFourierCoherentIntegral,
+        TensorPower.ReplicaTransport.TransportData.intervalIntegrable_oldFourierCoherentIntegral,
+        TensorPower.ReplicaTransport.TransportData.integrableOn_Icc_oldFourierCoherentIntegral,
+        TensorPower.ReplicaTransport.TransportData.aestronglyMeasurable_Icc_oldFourierCoherentIntegral,
+        TensorPower.ReplicaTransport.TransportData.aestronglyMeasurable_sum_oldFourierCoherentIntegral,
+        TensorPower.ReplicaTransport.TransportData.intervalIntegrable_sum_oldFourierCoherentIntegral,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_actualChargeEntropyDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.intervalIntegrable_actualChargeEntropyDefect}
+    \leanok
+    \uses{def:al_scan_old_entropy_integral,def:al_scan_actual_charge_data}
+    For admissible transport data with positive factor dimensions,
+    nonnegative metric parameter and cross-band commutation, fix a continuous
+    real symbol $F$, a history $h$, a replica count $k\ge0$ and a supplied
+    prevector. The function $p\mapsto J_h(F)$ is almost everywhere
+    measurable and integrable on both $(0,1)$ and $[0,1]$.
+    Writing $Q_F=(A_F+A_F^\dagger)/2$ for the Hermitian part of the coherent
+    average $A_F$, one has $|J_h(F)|\le\|Q_F\|/2$ in the interior.
+    Fixed finite weighted sums selected by a fixed history predicate retain
+    this regularity, including the actual good-history charge defect.
+    No symmetry or nonzero-prevector hypothesis is needed for these assertions.
+\end{theorem}
+\begin{proof}\leanok
+    For a zero prevector the filtered vector, its rank-one matrix and the
+    trace-adjoint transported state are zero, so $J_h(F)=0$.
+    Otherwise the Hermitian transported state satisfies
+    $\operatorname{Re}\operatorname{Tr}(\rho Q_F)
+        =\operatorname{Re}\operatorname{Tr}(\rho A_F)=\mathcal H_\rho(F)$.
+    The parameter measurability and absolute-value estimate for transported
+    Hermitian expectations therefore apply to precisely $J_h(F)$.
+    The uniform bound on the finite-measure interior gives integrability;
+    the endpoints are null. Finite sums and fixed scalar weights preserve
+    regularity. For the actual charge defect the finite split-entropy symbol
+    is continuous in the coherent vector, and the actual admissibility and
+    commutation statements supply the structural hypotheses.
+\end{proof}
+
 \begin{theorem}[Actual old-state entropy sampling]
     \label{thm:al_scan_actual_old_entropy_sampling}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_le_entropyGain_domainGraph,
@@ -1748,4 +1790,193 @@ The following finite construction follows
     Substitute this identity in the eigenvector hypothesis and energy
     conclusion; the derivative, entropy, and integral conclusions are
     unchanged.
+\end{proof}
+
+% Completion tags await compilation of the integrated charge bound.
+\begin{theorem}[Integrated charge defect in one round]
+    \label{thm:al_scan_actual_charge_integral_bound}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_integral_bound_domainGraph}
+    \uses{thm:al_scan_actual_old_entropy_sampling,thm:al_scan_actual_transport_estimates}
+    This is a one-round consequence of the sampling estimate and
+    \cite[Proposition~7.4]{OpenAI2026AreaLaw}.
+    Under the joint geometric and Hamiltonian hypotheses of
+    Theorems~\ref{thm:al_scan_actual_old_entropy_sampling}
+    and~\ref{thm:al_scan_actual_transport_estimates}, consider one actual charge
+    round and its literal good-history defect $\mathcal Q(p)$.
+    There are universal real constants $c_0,C_{\mathrm{ent}},e_{\mathrm{ent}}$,
+    with $c_0>0$, such that for $a>0$ and $a\ell\le c_0$ there is a sequence
+    $\beta_r=O(\log(r+1))$ satisfying the following assertion.
+    The constants are chosen before the geometry and Hamiltonian; the error
+    sequence is chosen before the replica count and supplied vector.
+    For every $r\ge0$, every nonzero symmetric supplied vector, and every
+    $0\le p_0\le p_1\le1$, put $\alpha=1/(2(C_1+1)nD)$.
+    Here $N$ and $\ell$ are as in Theorem~\ref{thm:al_scan_actual_transport_estimates}.
+    Then
+    \begin{align}
+        ra\alpha\int_{p_0}^{p_1}\mathcal Q(p)\,dp
+        & \le \log N^2(p_0)-\log N^2(p_1)
+        +(p_1-p_0)\bigl(C_{\mathrm{ent}}raKa^{1/4}\ell^{e_{\mathrm{ent}}}+\beta_r\bigr).
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \uses{thm:al_scan_actual_old_entropy_sampling,thm:al_scan_actual_transport_estimates,
+        thm:al_scan_old_parameter_integral}
+    Both $\mathcal Q$ and the entropy gain $G$ are interval integrable on
+    $[0,1]$. Integrating $\alpha\mathcal Q(p)\le G(p)$ and multiplying by
+    $ra\ge0$ gives $ra\alpha\int_{p_0}^{p_1}\mathcal Q\le
+    ra\int_{p_0}^{p_1}G$. Apply the integrated entropy estimate and move
+    its two constant error terms to the right. Each contributes its value
+    times $p_1-p_0$. If $p_0=p_1$, both sides of the resulting inequality
+    vanish.
+\end{proof}
+
+\begin{definition}[Literal transported measures of a scan round]
+    \label{def:al_scan_literal_measures}
+    \lean{TNLean.PEPS.AreaLaw.Scan.transportScanRound,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillScanRound,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound}
+    \leanok
+    \uses{def:al_scan_actual_fill_transport,def:al_scan_actual_charge_data}
+    Fix one actual fill or charge round, its recursive history and choice trees,
+    dimensions, and a supplied family of replica vectors $\psi_k$.
+    Let $\Theta$ be the unit sphere of the one-copy space and set $t=a/2$.
+    For each terminal leaf $j$, let $\mu_{k,p,j}$ be the image on $\Theta$ of
+    \begin{align}
+        \max\{0,m_{1/4}(u)D_k\operatorname{Re}\operatorname{tr}
+        (\sigma_{k,p,j,u}P_{Ue,k})\}\,du\,dU,
+        \label{eq:al_scan_leaf_density}
+    \end{align}
+    where $dU$ is normalized Haar measure and $\sigma_{k,p,j,u}$ is the
+    transported state of the filtered vector obtained from this same $\psi_k$.
+    For $a\ge0$ the real density is nonnegative, so the maximum leaves it unchanged.
+    The old and new measures are $\mu_{k,p,(h,\mathrm{old})}$ and
+    $\mu_{k,p,(h,c,\mathrm{new})}$. History and choice weights are not part of
+    these measures. The round uses the corresponding split entropies, choice
+    entropy, logarithmic root norm and replica-energy expectation.
+\end{definition}
+
+\begin{theorem}[Sphere integral and mass identities]
+    \label{thm:al_scan_literal_integrals}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.integral_actualFillScanRound_old,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.integral_actualFillScanRound_new,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.integral_actualChargeScanRound_old,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.integral_actualChargeScanRound_new,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillScanRound_mass,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_mass,
+        TNLean.PEPS.AreaLaw.Scan.transportScanRound_inactive,
+        TNLean.PEPS.AreaLaw.Scan.transportScanRound_active,
+        TNLean.PEPS.AreaLaw.Scan.integral_transportScanRound_old,
+        TNLean.PEPS.AreaLaw.Scan.integral_transportScanRound_new,
+        TNLean.PEPS.AreaLaw.Scan.transportScanRound_mass,
+        TNLean.PEPS.AreaLaw.Scan.isFiniteMeasure_transportScanRound_old,
+        TNLean.PEPS.AreaLaw.Scan.isFiniteMeasure_transportScanRound_new}
+    \leanok
+    \uses{def:al_scan_literal_measures}
+    Each measure is finite for every fixed real $p$, every replica count,
+    and every supplied vector. If $a\ge0$, every continuous real function
+    $f$ on the ambient one-copy vector space satisfies
+    \begin{align}
+        \int_\Theta f(\theta)\,d\mu_{k,p,j}(\theta)
+         & =\int_{\mathbb R}m_{1/4}(u)
+        \int_\Theta f(\theta)\,d\mu_{\sigma_{k,p,j,u}}(\theta)\,du.
+        \label{eq:al_scan_leaf_integral}
+    \end{align}
+    If $a\ge0$ and $\psi_k$ is nonzero and symmetric, each interior leaf has mass $1/2$.
+    The old leaf has zero measure at $p=1$, and the new leaf has zero measure
+    at $p=0$. Under $a\ge0$ and the same nonzero symmetric-vector hypothesis, the
+    complementary old and new leaves at $p=0$ and $p=1$ have mass $1/2$.
+    These statements include $k=0$ for a supplied nonzero scalar vector.
+\end{theorem}
+\begin{proof}\leanok
+    The actual partitions and moves give admissibility and cross-band
+    commutation. Apply the canonical Fourier-weighted coherent measure
+    identity to each old or new terminal state. Its fixed-parameter compact
+    unitary bound gives finiteness. A positive terminal weight gives trace one,
+    so integrating the constant symbol gives $\int m_{1/4}=1/2$.
+    A zero terminal weight gives zero normalized derivative, state and measure.
+\end{proof}
+
+\begin{theorem}[Scalar identities for the literal round]
+    \label{thm:al_scan_literal_scalars}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillScanRound_choiceGainSum,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_choiceGainSum,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillScanRound_energySum,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_energySum,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillScanRound_meanEnergy,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_meanEnergy,
+        TNLean.PEPS.AreaLaw.Scan.transportScanRound_choiceGainSum,
+        TNLean.PEPS.AreaLaw.Scan.transportScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.transportScanRound_splitWeight,
+        TNLean.PEPS.AreaLaw.Scan.transportScanRound_termEnergy,
+        TNLean.PEPS.AreaLaw.Scan.transportScanRound_energySum,
+        TensorPower.ReplicaTransport.TransportData.splitEta_eq_zero_of_not_mem_splitLeaves}
+    \leanok
+    \uses{def:al_scan_literal_measures,thm:al_scan_literal_integrals}
+    For $a\ge0$ and every real $p$, the choice gain is the transport entropy
+    gain, with history factor $w_h$, and the charge defect is the actual
+    good-history old-state split-entropy defect. On $0\le p\le1$, the round's
+    energy sum is exactly
+    \begin{align}
+        \sum_i\left(\sum_{j\in\mathcal J_i}\pi_j\right)
+        \sum_{j\in\mathcal J_i}\pi_j
+        \int_\Theta\eta_{i,j}(\theta)^{1/8}\,d\mu_{k,p,j}(\theta),
+        \label{eq:al_scan_literal_energy}
+    \end{align}
+    with $\pi_{h,\mathrm{old}}=(1-p)w_h$ and
+    $\pi_{h,c,\mathrm{new}}=pw_hq_{c\mid h}$. For the actual augmented
+    truncated terms, the mean energy is the expectation of their actual
+    replica Hamiltonian in the same filtered vector.
+\end{theorem}
+\begin{proof}\leanok
+    Apply~(\ref{eq:al_scan_leaf_integral}) to the continuous choice entropy,
+    split entropy and one-eighth-power split-entropy symbols. Finite sums pass
+    through the common old-state integral. Unsplit leaves have zero split
+    entropy. Separate each terminal sum into old and new leaves and substitute
+    their weights; the clamp is the identity on $[0,1]$. Linearity of the copy
+    mean identifies the actual replica Hamiltonian.
+\end{proof}
+
+\begin{theorem}[Parameter integrability of literal round defects]
+    \label{thm:al_scan_literal_parameter_integral}
+    \lean{TNLean.PEPS.AreaLaw.Scan.aestronglyMeasurable_transportScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.intervalIntegrable_transportScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.integrableOn_Icc_transportScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.aestronglyMeasurable_Icc_transportScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_actualFillScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.intervalIntegrable_actualFillScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.integrableOn_Icc_actualFillScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_Icc_actualFillScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_actualChargeScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.intervalIntegrable_actualChargeScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.integrableOn_Icc_actualChargeScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_Icc_actualChargeScanRound_chargeDefect}
+    \leanok
+    \uses{def:al_scan_literal_measures,thm:al_scan_literal_scalars,
+        thm:al_scan_old_parameter_integral}
+    Fix admissible finite transport data, a nonnegative metric parameter $t$,
+    a natural replica count $k$ with cross-band commutation, and the supplied
+    vector $\psi_k$. For a fixed good-history predicate and the original
+    history weights, the literal round's defect $\mathcal Q_k$ is
+    almost-everywhere measurable on $(0,1)$ and $[0,1]$, and
+    integrable on $[0,1]$. This applies to both actual fill and charge rounds
+    with $t=a/2$ and $a\ge0$, for the same supplied family of vectors.
+    No symmetry, nonzero-vector or positive-copy hypothesis is needed.
+\end{theorem}
+\begin{proof}\leanok
+    The finite split-entropy symbol
+    $F_h(\theta)=\sum_i\eta_{i,(h,\mathrm{old})}(\theta)$ is continuous in
+    the coherent vector. The exact scalar identity is
+    \begin{align}
+        \mathcal Q_k(p)=\sum_{h\text{ good}}w_hJ_{h,k,p}(F_h).
+        \label{eq:al_scan_literal_defect_integral}
+    \end{align}
+    An unsplit term is zero by its defining entropy sum. Apply parameter
+    integrability of the old-state integral to the finite weighted sum in
+    (\ref{eq:al_scan_literal_defect_integral}); pointwise equality transfers
+    the two regularity conclusions. Null endpoints preserve the original
+    endpoint values. Actual admissibility and cross-band commutation provide
+    the hypotheses for each kind of round. For charge rounds, the identity
+    with the actual good-history entropy defect gives the same
+    closed-interval conclusion directly.
 \end{proof}

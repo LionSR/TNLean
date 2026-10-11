@@ -18,6 +18,8 @@ Proposition 8.1 (`prop:comparators`). Following the source, Proposition 9.2 *use
 results. Here their conclusions are recorded as explicit fields of `ScanRound` and `ScanData`;
 each field cites the relevant source passage. The mass-`1/2` hypotheses on transported measures
 are restricted to interior parameters; the norm comparisons retain their endpoint values.
+The charge defect needs only AE strong measurability in the interior: its existing bound
+then gives interval integrability, which suffices for the telescope and exact averaging.
 
 **Scope restriction (inputs as hypotheses):** `ScanData` takes the conclusions of Lemma 9.1,
 Propositions 7.4 and 8.1, and Lemmas 2.1 and 2.3 for one scan as fields instead of deriving them
@@ -381,8 +383,10 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   (`06-transport.tex`, lines 393–400; `08-scanner.tex`, line 440). -/
   μNew_real_univ : ∀ r k, ∀ p ∈ Set.Ioo (0 : ℝ) 1, ∀ h c,
     ((round r).μNew k p h c).real Set.univ = 1 / 2
-  /-- The old-leaf integrands are continuous in the interior parameter (lines 488–490). -/
-  continuousOn_chargeDefect : ∀ r k, ContinuousOn ((round r).chargeDefect k) (Set.Ioo 0 1)
+  /-- AE strong measurability of the charge defect in the interior parameter, sufficient for
+  bounded integration and exact averaging (`08-scanner.tex`, lines 457–490). -/
+  aestronglyMeasurable_chargeDefect : ∀ r k,
+    AEStronglyMeasurable ((round r).chargeDefect k) (volume.restrict (Set.Ioo 0 1))
   /- Proposition 7.4 (`prop:transport`, `06-transport.tex`, lines 377–433). -/
   continuousOn_logNormSq : ∀ r k, ContinuousOn ((round r).logNormSq k) (Set.Icc 0 1)
   differentiableOn_logNormSq : ∀ r k, DifferentiableOn ℝ ((round r).logNormSq k) (Set.Ioo 0 1)
