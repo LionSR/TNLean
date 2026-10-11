@@ -58,6 +58,10 @@ theorem abs_log_card_and_selectedSchmidtEntropy_sub_le
   have hbounds := (reducedState_posSemidef Λ q Ωt X).typicalSpectralRestriction_entropy_bounds
     E w hz hE
   intro β split ΩX z ψ η
+  have hρ : reducedState Λ q Ωt X = Matrix.partialTraceRight
+      (Matrix.vecMulVec ΩX (star ΩX)) :=
+    (reducedState_eq_finiteProduct Λ q Ωt X).trans
+      (FiniteProduct.reducedPure_eq_partialTrace β Ωt X)
   done
 
 end TNLean.PEPS.AreaLaw
