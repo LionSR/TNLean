@@ -20,13 +20,6 @@ open scoped TensorProduct
 namespace TNLean.PEPS.PairEffect
 variable {P : Type}
 namespace Layout
-/-- Reversing a layout equality gives the inverse memory identification.
-Source: polynomial-PEPS, `04-compression.tex`, lines 246–267. -/
-theorem memCongr_symm {a b : Layout P} (h : a = b) :
-    memCongr h.symm = (memCongr h).symm := by
-  cases h
-  rfl
-
 /-- Appending the scalar unit is the literal identification with an empty final
 memory. Source: polynomial-PEPS, `04-compression.tex`, lines 246–267. -/
 theorem memCongr_append_nil_appendIso_symm_tmul (a : Layout P) (x : Mem a) (z : ℂ) :

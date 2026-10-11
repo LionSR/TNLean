@@ -297,6 +297,20 @@ theorem similarityInv_apply (v : ℝ × ℝ) {t : ℝ} (ht : t ≠ 0) (q : ℝ �
     similarityInv v ht q = t⁻¹ • (q - v) := by
   simp [similarityInv, sub_eq_add_neg]
 
+/-- The offset `t⁻¹ (q - v)` has norm less than `ρ` exactly when `q` lies in the open square of
+radius `t ρ` about `v`. -/
+theorem norm_smul_inv_sub_lt_iff (v q : ℝ × ℝ) {t : ℝ} (ht : 0 < t) (ρ : ℝ) :
+    ‖t⁻¹ • (q - v)‖ < ρ ↔ q ∈ ball v (t * ρ) := by
+  rw [norm_smul, Real.norm_eq_abs, abs_inv, abs_of_pos ht, ← dist_eq_norm, inv_mul_lt_iff₀ ht,
+    mem_ball]
+
+/-- The offset `t⁻¹ (q - v)` has norm at most `ρ` exactly when `q` lies in the closed square of
+radius `t ρ` about `v`. -/
+theorem norm_smul_inv_sub_le_iff (v q : ℝ × ℝ) {t : ℝ} (ht : 0 < t) (ρ : ℝ) :
+    ‖t⁻¹ • (q - v)‖ ≤ ρ ↔ q ∈ closedBall v (t * ρ) := by
+  rw [norm_smul, Real.norm_eq_abs, abs_inv, abs_of_pos ht, ← dist_eq_norm, inv_mul_le_iff₀ ht,
+    mem_closedBall]
+
 /-- A similarity of ratio `t > 0` carries the closed square of radius `ρ` about the origin onto
 the closed square of radius `t ρ` about `v`. -/
 theorem image_similarity_closedBall (v : ℝ × ℝ) {t : ℝ} (ht : 0 < t) (ρ : ℝ) :
@@ -311,11 +325,8 @@ theorem image_similarity_closedBall (v : ℝ × ℝ) {t : ℝ} (ht : 0 < t) (ρ 
     exact mul_le_mul_of_nonneg_left (mem_closedBall.1 hu) ht.le
   · intro hq
     refine ⟨t⁻¹ • (q - v), ?_, similarity_inv v ht.ne' q⟩
-    rw [mem_closedBall, dist_zero_right, norm_smul, Real.norm_eq_abs, abs_inv, abs_of_pos ht,
-      ← dist_eq_norm]
-    rw [mem_closedBall] at hq
-    rw [inv_mul_le_iff₀ ht]
-    exact hq
+    rw [mem_closedBall, dist_zero_right]
+    exact (norm_smul_inv_sub_le_iff v q ht ρ).2 hq
 
 /-- The two-owner condition depends only on the values of the guide on the working set. -/
 theorem HasTwoOwnerFootprints.congr {ι : Type*} {f g : ℝ × ℝ → ι} {W H : Set (ℝ × ℝ)} {r δ : ℝ}
@@ -363,9 +374,8 @@ theorem HasTwoOwnerFootprints.of_template {ι κ : Type*} {f : ℝ × ℝ → ι
       rwa [similarity, add_sub_cancel_left, smul_smul, inv_mul_cancel₀ hs.ne', one_smul]
     · rintro ⟨hq, hqt⟩
       refine ⟨s⁻¹ • (q - v), ⟨?_, (htv q hq).1 hqt⟩, similarity_inv v hs.ne' q⟩
-      rw [mem_closedBall, dist_zero_right, norm_smul, Real.norm_eq_abs, abs_inv, abs_of_pos hs,
-        ← dist_eq_norm, inv_mul_le_iff₀ hs]
-      exact mem_closedBall.1 hq
+      rw [mem_closedBall, dist_zero_right]
+      exact (norm_smul_inv_sub_le_iff v q hs ρ₂).2 hq
   rw [image_similarity_closedBall v hs, hH] at hT
   exact hT.congr fun q hq =>
     (hf q (closedBall_subset_ball ((mul_le_mul_of_nonneg_left h12 hs.le).trans_lt
@@ -441,5 +451,20 @@ theorem blockGuide_eq_blockSlot {ι : Type*} {s : ℝ} (hs : 0 < s) (lab : ℤ �
     dite_true, blockSlotLabel]
   congr 1
   exact Prod.ext (add_comm _ _) (add_comm _ _)
+
+/-- On the open square of radius `s M` about a block corner, a block guide of side `s` is the
+block guide of side one labelled by the slots of the window of radius `M`, read through the
+similarity and relabelled first by the class representatives and then by the labels of the
+blocks around the corner.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:464–471, 515–520`. -/
+theorem blockGuide_eq_classRep {ι : Type*} {s : ℝ} (hs : 0 < s) (lab : ℤ × ℤ → ι)
+    (Q : ℤ × ℤ) (M : ℕ) {q : ℝ × ℝ} (hq : q ∈ ball (blockCorner s Q) (s * M)) :
+    blockGuide s lab q = blockSlotLabel (fun R => lab (Q + R)) (lab Q)
+      (classRep (blockSlotLabel (fun R => lab (Q + R)) (lab Q))
+        (blockGuide 1 (blockSlot M) (s⁻¹ • (q - blockCorner s Q)))) := by
+  rw [classRep_spec (blockSlotLabel (fun R => lab (Q + R)) (lab Q)),
+    ← blockGuide_eq_blockSlot hs lab Q M ((norm_smul_inv_sub_lt_iff _ q hs _).2 hq)]
+  exact congrArg _ (similarity_inv _ hs.ne' q).symm
 
 end TNLean.PEPS.Approximation

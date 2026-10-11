@@ -336,20 +336,8 @@ theorem exists_pointTreatment_footprintRatio_reading {ε₀ : ℝ} (hε : 0 < ε
         {c | c ∈ closedBall (blockCorner n Q) (3 * t) ∧ IsTrueVertex g' c} (ε₀ * t) (ν * t) := by
   obtain ⟨ν, hν, H⟩ := exists_template_footprintRatio_reading.{u} hε
   refine ⟨ν, hν, fun {v} hv {ι n t} hn ht htn {lab S B g} hg {Q} hQ P hP g' hg' => ?_⟩
-  set σ := blockSlotLabel (fun R => lab (R + S)) B
-  obtain ⟨Pκ, rfl⟩ : ∃ Pκ : Option (BlockSlot 1), P = Pκ.map σ := by
-    cases P with
-    | none => exact ⟨none, rfl⟩
-    | some x =>
-      rcases hP x rfl with rfl | ⟨R, hR, rfl⟩
-      · exact ⟨some none, rfl⟩
-      · exact ⟨some (some ⟨R, hR⟩), rfl⟩
-  obtain ⟨i, -, -, hπ, heq⟩ := exists_template_eq hn hg hQ ht htn Pκ
-  have hinj : InjOn σ (range (footprintTemplate i)) := (injOn_range_classRep σ).mono (by
-    rintro _ ⟨w, rfl⟩
-    simp only [footprintTemplate, hπ]
-    exact mem_range_self _)
-  exact H hv ht i σ hinj _ _ g' heq hg'
+  obtain ⟨i, hinj, heq⟩ := exists_template_injOn hn hg hQ ht htn P hP
+  exact H hv ht i _ hinj _ _ g' heq hg'
 
 /-- **One footprint ratio for the readings of the simultaneous point treatment.** With one ratio
 `ν > 0` for all generic displacements `v`, the conclusion of
@@ -371,21 +359,11 @@ theorem exists_pointTreatment_footprintRatio_iUnion_reading {ε₀ : ℝ} (hε :
         {c | c ∈ closedBall (blockCorner n Q) (3 * t) ∧ IsTrueVertex g' c} (ε₀ * t) (ν * t) := by
   obtain ⟨ν, hν, H⟩ := exists_template_footprintRatio_reading.{u} hε
   refine ⟨ν, hν, fun {v} hv {ι n t} hn ht htn {lab S B g} hg M {Q} hQM hQ P hP g' hg' => ?_⟩
-  set σ := blockSlotLabel (fun R => lab (R + S)) B
-  obtain ⟨Pκ, hPκ⟩ : ∃ Pκ : Option (BlockSlot 1), some P = Pκ.map σ := by
-    rcases hP with rfl | ⟨R, hR, rfl⟩
-    · exact ⟨some none, rfl⟩
-    · exact ⟨some (some ⟨R, hR⟩), rfl⟩
-  obtain ⟨i, -, -, hπ, heq⟩ := exists_template_eq hn hg hQ ht htn Pκ
-  have hinj : InjOn σ (range (footprintTemplate i)) := (injOn_range_classRep σ).mono (by
-    rintro _ ⟨w, rfl⟩
-    simp only [footprintTemplate, hπ]
-    exact mem_range_self _)
-  refine H hv ht i σ hinj _ _ g' (fun q hq => ?_) hg'
-  have h := heq q hq
-  rw [← hPκ] at h
+  obtain ⟨i, hinj, heq⟩ :=
+    exists_template_injOn hn hg hQ ht htn (some P) fun x hx => Option.mem_some_iff.1 hx ▸ hP
+  refine H hv ht i _ hinj _ _ g' (fun q hq => ?_) hg'
   rw [homogenize_iUnion_eq_of_mem_ball hn htn M hQM P _ hq]
-  exact h
+  exact heq q hq
 
 /-! ### Block guides -/
 
@@ -403,10 +381,7 @@ theorem exists_blockGuide_footprintRatio_reading {ρ r₀ r₁ : ℝ} (hr₀ : 0
       HasTwoOwnerFootprints g' (closedBall (blockCorner s Q) (s * ρ))
         {c | c ∈ closedBall (blockCorner s Q) (s * (ρ + 1)) ∧ IsTrueVertex g' c} r (ν * s) := by
   set M : ℕ := ⌈ρ⌉₊ + 2
-  have hM : ρ + 2 ≤ M := by
-    have := Nat.le_ceil ρ
-    simp only [M, Nat.cast_add, Nat.cast_ofNat]
-    linarith
+  have hM : ρ + 2 ≤ M := by push_cast [M]; linarith [Nat.le_ceil ρ]
   let T : (BlockSlot M → BlockSlot M) → ℝ × ℝ → BlockSlot M := fun π u =>
     π (blockGuide 1 (blockSlot M) u)
   let R (π : BlockSlot M → BlockSlot M) : Set (ℝ × ℝ → BlockSlot M) :=
@@ -426,16 +401,8 @@ theorem exists_blockGuide_footprintRatio_reading {ρ r₀ r₁ : ℝ} (hr₀ : 0
     (injOn_range_classRep σ).mono (hT'.range_subset.trans
       (by rintro _ ⟨w, rfl⟩; exact mem_range_self _))
   have hf (q : ℝ × ℝ) (hq : q ∈ ball (blockCorner s Q) (s * (ρ + 2))) :
-      blockGuide s lab q = σ (T (classRep σ) (s⁻¹ • (q - blockCorner s Q))) := by
-    have hu : ‖s⁻¹ • (q - blockCorner s Q)‖ < M := by
-      rw [mem_ball, dist_eq_norm] at hq
-      rw [norm_smul, Real.norm_eq_abs, abs_inv, abs_of_pos hs, inv_mul_lt_iff₀ hs]
-      nlinarith
-    have hq' : q = blockCorner s Q + s • (s⁻¹ • (q - blockCorner s Q)) := by
-      rw [smul_smul, mul_inv_cancel₀ hs.ne', one_smul, add_sub_cancel]
-    conv_lhs => rw [hq']
-    rw [blockGuide_eq_blockSlot hs lab Q M hu]
-    simp only [T, σ, classRep_spec]
+      blockGuide s lab q = σ (T (classRep σ) (s⁻¹ • (q - blockCorner s Q))) :=
+    blockGuide_eq_classRep hs lab Q M (ball_subset_ball (mul_le_mul_of_nonneg_left hM hs.le) hq)
   have hrs : r / s ∈ Icc r₀ r₁ := ⟨(le_div_iff₀ hs).2 hr.1, (div_le_iff₀ hs).2 hr.2⟩
   have key := HasTwoOwnerFootprints.of_template (ρ₁ := ρ) (ρ₂ := ρ + 1) (ρ₃ := ρ + 2) hinj hs
     (by linarith) (by linarith) (hT'.eq_on_ball hs hf hg')
@@ -478,17 +445,8 @@ theorem exists_resizing_footprintRatio_reading {ε₀ : ℝ} (hε : 0 < ε₀) :
         (ν * (2 * n)) := by
   obtain ⟨ν, hν, H⟩ := exists_blockGuide_footprintRatio_reading.{u} (ρ := 1) (r₀ := ε₀ / 2)
     (r₁ := ε₀) (by positivity)
-  refine ⟨ν, hν, fun {v} hv {ι n t} hn hnt lab Q r hr g' hg' =>
-    H hv (by positivity) lab Q r ?_ g' hg'⟩
-  rcases hr with rfl | rfl
-  · rw [holeRadius, min_eq_left hnt.le]
-    exact ⟨by linarith, by nlinarith⟩
-  · rw [holeRadius]
-    refine ⟨?_, ?_⟩
-    · have : n ≤ min (2 * n) t := le_min (by linarith) hnt.le
-      nlinarith
-    · have : min (2 * n) t ≤ 2 * n := min_le_left _ _
-      nlinarith
+  exact ⟨ν, hν, fun {v} hv {ι n t} hn hnt lab Q r hr g' hg' =>
+    H hv (by positivity) lab Q r (mem_Icc_of_mem_holeRadius_pair hε hn hnt hr) g' hg'⟩
 
 /-- **Intermediate configurations of a resizing, for the readings.** With one ratio `ν > 0` for
 all generic displacements `v`, the conclusion of `exists_resizing_footprintRatio_mixed` holds for
