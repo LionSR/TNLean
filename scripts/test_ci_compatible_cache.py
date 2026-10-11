@@ -728,6 +728,44 @@ class WorkflowTests(unittest.TestCase):
                     imports = (ROOT / 'TNLeanTest/LabelledOpenCoefficient.lean').read_text().splitlines()
                     self.assertEqual([line for line in imports if line.startswith('import ')],
                                      ['import TNLean.PEPS.TorusDualOpenDeformation'])
+                elif step.get('name') == 'Check the comparison budget and exact-name axioms strictly':
+                    # This exact source and fixture follow their bounded Lake
+                    # build, after the validated cache has been pruned.
+                    production = self.steps[i - 1]
+                    self.assertEqual(production.get('name'),
+                                     'Build the fixed bootstrap comparison budget early')
+                    self.assertLess(prune, i - 1)
+                    self.assertLess(i, build)
+                    for checked_step in [production, step]:
+                        self.assertNotIn('continue-on-error', checked_step)
+                        self.assertNotIn('always()', checked_step.get('if', ''))
+                        self.assertEqual(checked_step['env']['LEAN_NUM_THREADS'], 1)
+                        self.assertIn('set -eo pipefail', checked_step['run'])
+                    self.assertEqual(production['timeout-minutes'], 5)
+                    self.assertEqual(step['timeout-minutes'], 4)
+                    production_run = production['run']
+                    cache_guard = 'test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean'
+                    target = 'lake --fail-fast build TNLean.PEPS.AreaLaw.Scan.BootstrapComparisonBudget'
+                    self.assertLess(production_run.index(cache_guard),
+                                    production_run.index(target))
+                    self.assertIn('timeout --signal=INT --kill-after=5s 240s', production_run)
+                    run = step['run']
+                    self.assertEqual(run.count('lake env lean'), 1)
+                    self.assertIn('timeout --signal=INT --kill-after=5s 90s lake env lean -j1', run)
+                    for flag in ['-DwarningAsError=true', '-DautoImplicit=false',
+                                 '-DrelaxedAutoImplicit=false', '-Dpp.unicode.fun=true',
+                                 '-DmaxSynthPendingDepth=3', '-Dlinter.mathlibStandardSet=true']:
+                        self.assertIn(flag, run)
+                    checked = run.split('for source in ', 1)[1].split('; do', 1)[0]
+                    self.assertEqual(checked.replace('\\', '').split(), [
+                        'TNLean/PEPS/AreaLaw/Scan/BootstrapComparisonBudget.lean',
+                        'TNLeanTest/BootstrapComparisonBudgetAxioms.lean',
+                    ])
+                    imports = (ROOT / 'TNLeanTest/BootstrapComparisonBudgetAxioms.lean').read_text().splitlines()
+                    self.assertEqual([line for line in imports if line.startswith('import ')],
+                                     ['import TNLean.PEPS.AreaLaw.Scan.BootstrapComparisonBudget',
+                                      'import Lean.Elab.Command',
+                                      'import Lean.Util.CollectAxioms'])
                 else:
                     self.assertLess(build, i)
         setup = next(s for s in self.steps if s.get('uses') == 'leanprover/lean-action@v1')
