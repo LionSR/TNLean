@@ -1,0 +1,38 @@
+\section{Entropy and dimension of a selected Schmidt spectrum}
+
+\begin{theorem}[Selected Schmidt entropy and dimension]
+    \label{thm:area_law_selected_schmidt_entropy_bounds}
+    \lean{TNLean.PEPS.AreaLaw.abs_log_card_and_selectedSchmidtEntropy_sub_le}
+    \uses{def:area_law_ground_entropy}
+    Let $\Lambda\subset\mathbb Z^2$ be finite, let $q\in\mathbb N$, and let
+    $\Omega_t\in\bigotimes_{v\in\Lambda}\mathbb C^q$ be a unit vector.
+    Fix $X\subseteq\Lambda$ and write $S_X=S_{\Omega_t}(X)$.
+    Let $(p_i)$ be the eigenvalues of its reduced state on $X$, and let $E$
+    be a set of spectral indices with mass $z=\sum_{i\in E}p_i>0$.
+    Suppose that $w\in\mathbb R$ and that every $i\in E$ satisfies
+    $e^{-S_X-w}\le p_i\le e^{-S_X+w}$.
+    In the corresponding Schmidt decomposition, write $v_i$ for the
+    complementary Schmidt vectors, and let $r:E\to\{0,\ldots,|E|-1\}$ be
+    the fixed enumeration of the selected indices. Define
+    \begin{align*}
+        \psi&=z^{-1/2}\sum_{i\in E}\sqrt{p_i}\,v_i\otimes\ket{r(i)},
+        & S'&=S\bigl(\operatorname{Tr}_{X^c}\ketbra{\psi}{\psi}\bigr).
+    \end{align*}
+    Then
+    \begin{align*}
+        |\log|E|-S_X|&\le w-\log z,\\
+        |S'-S_X|&\le w-\log z.
+    \end{align*}
+    These are the selected-spectrum entropy estimates used in
+    \cite[Section~8]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    Every selected eigenvalue is positive. The normalized restriction
+    $\rho_E=z^{-1}\sum_{i\in E}p_i\ketbra{i}{i}$ therefore has rank $|E|$.
+    The exponential window bounds both
+    $|\log\operatorname{rank}\rho_E-S_X|$ and $|S(\rho_E)-S_X|$ by
+    $w+|\log z|$. The auxiliary marginal of $\psi$ is diagonal with entries
+    $p_i/z$ in the fixed enumeration, so $S'=S(\rho_E)$.
+    Finally, normalization of $\Omega_t$ gives $z\le1$, whence
+    $|\log z|=-\log z$.
+\end{proof}
