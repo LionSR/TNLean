@@ -47,6 +47,7 @@ import TNLean.PEPS.AreaLaw.Geometry.FanInactiveSeams
 import TNLean.PEPS.AreaLaw.Geometry.FanRadialConvexity
 import TNLean.PEPS.AreaLaw.Geometry.FanRadialPieces
 import TNLean.PEPS.AreaLaw.Geometry.FanRegularity
+import TNLean.PEPS.AreaLaw.Geometry.FanRunComponents
 import TNLean.PEPS.AreaLaw.Geometry.FanRunConnectedness
 import TNLean.PEPS.AreaLaw.Geometry.FanRunContacts
 import TNLean.PEPS.AreaLaw.Geometry.FanRunDisjointness
@@ -82,6 +83,8 @@ import TNLean.PEPS.AreaLaw.Geometry.PrimaryCounting
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryFineCellCover
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryFragments
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryRegions
+import TNLean.PEPS.AreaLaw.Geometry.QuotientIntervals
+import TNLean.PEPS.AreaLaw.Geometry.RectangleMixedSquares
 import TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation
 import TNLean.PEPS.AreaLaw.Geometry.SegmentBallClipping
 import TNLean.PEPS.AreaLaw.Geometry.SideEndpoints
