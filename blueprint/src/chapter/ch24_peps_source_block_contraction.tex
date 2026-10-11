@@ -525,6 +525,7 @@ This gives the contractions used in
 
 \begin{theorem}[Contraction through the actual source columns]
     \label{thm:peps_actual_pure_source_contraction}
+    \leanok
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
     \uses{def:peps_actual_source_column_matrix,def:peps_product_source_matrix,
         thm:peps_pure_source_density_coefficient}
@@ -547,7 +548,7 @@ This gives the contractions used in
     \texttt{04-compression.tex}, lines 137--139, 279--355 and 409--434.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_actual_private_preparation,
         thm:peps_pure_source_density_coefficient,thm:peps_source_column_contraction}
     The action of the recorded preparation identifies the column indexed by
