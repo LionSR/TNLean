@@ -193,9 +193,7 @@
         TNLean.PEPS.AreaLaw.Geometry.Template.regionalEntropy_prefix_le_of_safe_box,
         TNLean.PEPS.AreaLaw.Geometry.exists_template_entropy_bounds_of_arbitrary_safe_box}
     \leanok
-    \uses{thm:area_template_physical_dyadic_entropy,thm:area_template_safe_rectangles,
-        thm:area_law_template_weighted_core_cover,thm:area_template_weighted_shell,
-        thm:area_template_partial_row}
+    \uses{def:area_law_template,def:area_law_safe_rectangle,def:area_law_ground_entropy}
     Fix a finite physical domain, a cut $A$, a normalized vector $\Omega$,
     local dimension $q\ge1$, and a native safety parameter $D_0\ge1$.
     Assume explicitly that for every $\varepsilon\in(0,1)$ there is
@@ -221,6 +219,9 @@
     $0<e<1$ and the uniform choice of $C_e$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:area_template_physical_dyadic_entropy,thm:area_template_safe_rectangles,
+        thm:area_law_template_weighted_core_cover,thm:area_template_weighted_shell,
+        thm:area_template_partial_row}
     Every selected square is safe by separation and the scale bounds.
     Apply the safe-box estimate to its physical rectangle region, sum by
     subadditivity, and use the actual weighted core and shell estimates.
