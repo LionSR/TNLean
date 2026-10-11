@@ -40,6 +40,10 @@ theorem abs_regionalEntropy_sub_le_sqrt_traceDistance
         (1 + (A.card : ℝ) * Real.log q) := by
   have h := FiniteProduct.abs_entropy_sub_le_sqrt_traceDistance
     (fun _ : Site Λ ↦ Fin q) Ω Φ hΩ hΦ A
+  have hdim : (Fintype.card (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q) A) : ℝ) ≠ 0 :=
+    (Nat.cast_pos.mpr (Fintype.card_pos_iff.mpr
+      (Entropy.Matrix.PosSemidef.nonempty_of_trace_eq_one
+        (FiniteProduct.trace_reducedPure (fun _ : Site Λ ↦ Fin q) Ω hΩ A)))).ne'
   done
 
 end TNLean.PEPS.AreaLaw
