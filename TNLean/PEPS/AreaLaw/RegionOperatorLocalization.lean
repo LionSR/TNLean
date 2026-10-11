@@ -125,6 +125,7 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
         (add_le_add_left
           (norm_siteExpectation_le (graphNeighborhood Λ l S)
             (heisenbergEvolution h.operator t A)) ‖heisenbergEvolution h.operator t A‖)
-  done
+  rw [mul_min_of_nonneg _ _ (norm_nonneg A)]
+  exact le_min hTwo hExp
 
 end TNLean.PEPS.AreaLaw
