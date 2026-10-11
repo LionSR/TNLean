@@ -474,14 +474,14 @@ def encoder [NeZero q] : Matrix (p.Tag × (ι → Fin q)) (ι → Fin q) ℂ := 
 
 /-- **`eq:encoder-contraction`.** `K_{c,h}ᴴ K_{c,h} = P_{c,h}`.
 
-Polynomial-PEPS manuscript, `05-frames.tex`, lines 61–63. -/
+Polynomial-PEPS manuscript, `05-frames.tex`, lines 62–64. -/
 theorem encoder_conjTranspose_mul_self [NeZero q] : p.encoderᴴ * p.encoder = p.proj := by
   rw [encoder, stack_conjTranspose_mul_stack, proj]
   exact Finset.sum_congr rfl fun s _ => p.branch_conjTranspose_mul_self s
 
 /-- **`eq:encoder-contraction`.** `‖K_{c,h}‖ ≤ 1`.
 
-Polynomial-PEPS manuscript, `05-frames.tex`, lines 61–63. -/
+Polynomial-PEPS manuscript, `05-frames.tex`, lines 62–64. -/
 theorem norm_encoder_le_one [NeZero q] : ‖p.encoder‖ ≤ 1 :=
   l2_opNorm_le_one_of_conjTranspose_mul_self_le_one
     (by rw [encoder_conjTranspose_mul_self]; exact p.norm_proj_le_one)
