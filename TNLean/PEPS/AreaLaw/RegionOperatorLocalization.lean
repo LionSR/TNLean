@@ -84,6 +84,20 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
         (heisenbergEvolution h.operator (-t) U)) :=
     commute_of_mem_supportedOperators (hdisj y hy) hA
       (siteExpectation_mem_supportedOperators _ _)
+  have hε (y : Site Λ) (hy : y ∉ graphNeighborhood Λ l S)
+      (U : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
+      (hU : U ∈ supportedOperators q ({y} : Set (Site Λ)))
+      (hUu : U ∈ unitary (Matrix (Configuration Λ q) (Configuration Λ q) ℂ)) :
+      ‖heisenbergEvolution h.operator t A * U -
+        U * heisenbergEvolution h.operator t A‖ ≤
+        2 * (C * Real.exp (v * |t| - c * l)) * ‖A‖ := by
+    simpa only [Matrix.mul_sub, Matrix.sub_mul, (hcommute y hy U).eq,
+      sub_sub_sub_cancel_right, hreverse U] using
+      (norm_commutator_le A (heisenbergEvolution h.operator (-t) U -
+        siteExpectation q (graphBall (domainGraph Λ) y l)
+          (heisenbergEvolution h.operator (-t) U))).trans
+        (mul_le_mul_of_nonneg_right
+          (mul_le_mul_of_nonneg_left (hnear y U hU hUu) zero_le_two) (norm_nonneg A))
   done
 
 end TNLean.PEPS.AreaLaw
