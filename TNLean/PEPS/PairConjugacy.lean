@@ -7,6 +7,7 @@ import Mathlib.Algebra.Group.Commute.Hom
 import Mathlib.Algebra.Group.Action.Prod
 import Mathlib.GroupTheory.GroupAction.ConjAct
 import Mathlib.Data.Fintype.Quotient
+import Mathlib.LinearAlgebra.LinearIndependent.Lemmas
 import Mathlib.SetTheory.Cardinal.Finite
 
 /-!
@@ -22,7 +23,9 @@ The equivalence relation is Mathlib's orbit relation for the diagonal conjugatio
 action. Commutation is constant on each orbit. For an abelian group, every orbit
 is a singleton, so the number of commuting pair-conjugacy classes is `|G|²`.
 These assertions concern the group elements labelling closures; they do not assert
-the ground-space theorem.
+the ground-space theorem. The last general statement is the separation argument of
+the independence proof: a family indexed by pair classes is linearly independent once
+each pair has a functional that vanishes on every other class and not on its own.
 
 ## References
 
@@ -74,6 +77,23 @@ def IsCommuting (C : PairConjugacyClass G) : Prop :=
 @[simp]
 theorem isCommuting_pairConjugacyClass (p : G × G) :
     (pairConjugacyClass G p).IsCommuting ↔ Commute p.1 p.2 := Iff.rfl
+
+/-- A family indexed by pair-conjugacy classes is linearly independent when every pair `p`
+has a linear functional that vanishes on the members of all classes other than that of `p`
+and does not vanish on the member of its own class. This is the separation argument in the
+independence part of arXiv:1001.3807, Theorem 5.9, lines 1595–1610. -/
+theorem linearIndependent_of_extraction {K M : Type*} [Field K] [AddCommGroup M]
+    [Module K M] (F : PairConjugacyClass G → M) (E : G × G → M →ₗ[K] K)
+    (hzero : ∀ p r, pairConjugacyClass G p ≠ pairConjugacyClass G r →
+      E p (F (pairConjugacyClass G r)) = 0)
+    (hself : ∀ p, E p (F (pairConjugacyClass G p)) ≠ 0) :
+    LinearIndependent K F := by
+  have hout (C : PairConjugacyClass G) : pairConjugacyClass G C.out = C := Quotient.out_eq C
+  refine LinearIndependent.of_pairwise_dual_eq_zero_one F
+    (fun C => (E C.out (F C))⁻¹ • E C.out) (fun C C' hCC' => ?_) (fun C => ?_)
+  · rw [LinearMap.smul_apply, ← hout C', hzero _ _ (by rwa [hout, hout]), smul_zero]
+  · rw [LinearMap.smul_apply, smul_eq_mul, inv_mul_cancel₀]
+    simpa only [hout] using hself C.out
 
 end PairConjugacyClass
 

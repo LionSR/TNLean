@@ -264,35 +264,12 @@ theorem linearIndependent_closureClass_canonical [Fintype G]
     (U : (e : Bond) → G →* Matrix (D e) (D e) ℂ)
     (hU : ∀ e, Representation.IsSemiRegular (Matrix.toLinAlgEquiv'.toMonoidHom.comp (U e))) :
     LinearIndependent ℂ (closureClass D U (canonicalSites D U)
-      (fun v => (DependentBondNetwork.isGInjective_averagingSite tail head D U v).invariant)) := by
-  classical
-  rw [Fintype.linearIndependent_iff]
-  intro μ hμ C₀
-  let p : G × G := C₀.out
-  have hp : pairConjugacyClass G p = C₀ := Quotient.out_eq C₀
-  let E := DependentBondNetwork.bondCoefficientExtraction tail head D U
-    (torusClosureEdgeAssignment p.1 p.2)
-  have hinv := fun v =>
-    (DependentBondNetwork.isGInjective_averagingSite tail head D U v).invariant
-  have hrep (C : PairConjugacyClass G) :
-      closureClass D U (canonicalSites D U) hinv C =
-        closure D U (canonicalSites D U) C.out.1 C.out.2 := by
-    have hout : pairConjugacyClass G C.out = C := Quotient.out_eq C
-    exact (congrArg (closureClass D U (canonicalSites D U) hinv) hout).symm
-  have hzero (C : PairConjugacyClass G) (hC : C ≠ C₀) :
-      E (closureClass D U (canonicalSites D U) hinv C) = 0 := by
-    rw [hrep]
-    apply bondCoefficientExtraction_closure_eq_zero_of_class_ne D U hU
-    rw [hp, show pairConjugacyClass G C.out = C from Quotient.out_eq C]
-    exact Ne.symm hC
-  have h := congrArg E hμ
-  simp only [map_sum, map_smul, smul_eq_mul, map_zero] at h
-  rw [Finset.sum_eq_single C₀ (fun C _ hC => by rw [hzero C hC, mul_zero])
-    (fun hC => absurd (Finset.mem_univ C₀) hC)] at h
-  have hn : E (closureClass D U (canonicalSites D U) hinv C₀) ≠ 0 := by
-    rw [← hp, closureClass_pairConjugacyClass]
-    exact bondCoefficientExtraction_closure_self_ne_zero D U hU p
-  exact (mul_eq_zero.mp h).resolve_right hn
+      (fun v => (DependentBondNetwork.isGInjective_averagingSite tail head D U v).invariant)) :=
+  PairConjugacyClass.linearIndependent_of_extraction _
+    (fun p => DependentBondNetwork.bondCoefficientExtraction tail head D U
+      (torusClosureEdgeAssignment p.1 p.2))
+    (fun _ _ ↦ bondCoefficientExtraction_closure_eq_zero_of_class_ne D U hU)
+    (bondCoefficientExtraction_closure_self_ne_zero D U hU)
 
 /-- One product of genuine local G-injective inverses transfers independence
 from the canonical closures to independently chosen physical tensors at all vertices.
