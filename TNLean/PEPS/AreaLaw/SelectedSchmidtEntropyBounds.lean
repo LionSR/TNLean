@@ -84,9 +84,9 @@ theorem abs_log_card_and_selectedSchmidtEntropy_sub_le
     (vonNeumannEntropy_congr hσ
       ((reducedState_posSemidef Λ q Ωt X).normalizedSpectralRestriction_posSemidef
         E hz).isHermitian
-      ((Matrix.posSemidef_vecMulVec_self_star ΩX).partialTraceRight
-        .normalizedSpectralRestriction_posSemidef E
-          (by simpa only [← hρ] using hz)).isHermitian).symm
+      (Matrix.PosSemidef.normalizedSpectralRestriction_posSemidef
+        (Matrix.posSemidef_vecMulVec_self_star ΩX).partialTraceRight E
+        (by simpa only [← hρ] using hz)).isHermitian).symm
   done
 
 end TNLean.PEPS.AreaLaw
