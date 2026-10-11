@@ -545,20 +545,6 @@ jobs:
             +TNLean.PEPS.Approximation.SquareHamiltonianHermitianTerms:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
-      - name: Check original square Hermitian terms and standard axioms strictly
-        timeout-minutes: 4
-        env:
-          LEAN_NUM_THREADS: 1
-        run: |
-          set -eo pipefail
-          for source in TNLean/PEPS/Approximation/SquareHamiltonianHermitianTerms.lean \
-              TNLeanTest/SquareHamiltonianHermitianTermsAxioms.lean; do
-            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
-              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
-              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
-              "$source"
-          done
-
       - name: Check doubled square-Hamiltonian boundary estimate early
         timeout-minutes: 6
         env:
@@ -823,6 +809,20 @@ jobs:
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check original square Hermitian terms and standard axioms strictly
+        timeout-minutes: 4
+        env:
+          LEAN_NUM_THREADS: 1
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/Approximation/SquareHamiltonianHermitianTerms.lean \
+              TNLeanTest/SquareHamiltonianHermitianTermsAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
 
       - name: Check native square-edge count and standard axioms strictly
         timeout-minutes: 4
