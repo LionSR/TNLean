@@ -332,6 +332,7 @@ dimensions.
 \begin{theorem}[Constant-dimensional regional density estimate]
     \label{thm:peps_constant_family_regional_density}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_regional_density_sub_le_half}
+    \leanok
     \uses{def:peps_family_physical_output,thm:peps_source_only_density_error}
     Suppose $d_p=d$ at every party and the actual discarded private memory
     is finite-dimensional. For the original whole-party product input,
@@ -342,8 +343,8 @@ dimensions.
     is bounded by $M$, the resulting source-only replacement density has
     trace-norm error at most $\varepsilon/2$.
 \end{theorem}
-\begin{proof}
-    \uses{thm:peps_source_only_density_error}
+\begin{proof}\leanok
+    \uses{thm:peps_source_only_density_error,def:peps_family_physical_output}
     Specialize the physical dimension family to $d_p=d$, using the same
     complete party ordering and its coverage. Apply the density-error
     estimate to the resulting regional isometry and the original normalized

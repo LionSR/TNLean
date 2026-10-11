@@ -26,7 +26,7 @@ Independently formalized from the manuscript; no upstream Lean proof text reused
 -/
 
 noncomputable section
-open scoped TensorProduct Matrix ComplexConjugate Kronecker
+open scoped TensorProduct Matrix ComplexConjugate
 
 namespace TNLean.PEPS.PairEffect
 
