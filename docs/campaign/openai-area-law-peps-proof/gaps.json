@@ -7,7 +7,7 @@
       "kind": "narrower",
       "status": "open",
       "paper": "peps",
-      "result": "Proposition 4.1, adaptive patch constraint",
+      "result": "Proposition 4.1, first-order conditions of the patch optimization",
       "issue": 8767,
       "prs": {
         "QICLean": [
@@ -66,7 +66,7 @@
       "summary": "No problem with the paper has been found; Lean proves the lemma as stated, including the form and number of the terms.",
       "context": "During the construction some small squares are stored compressed, as a short label naming a vector of a small subspace. Lemma 6.3 changes ownership near such squares, using only operations the later compression step accepts.",
       "claims": "The rewrite is the map {{tn:peps-rewrite}}. <i>K</i> undoes or writes the encoding of a small square <i>Q</i><sup>+</sup>, with tag register 𝒥. <i>P</i><sub>1</sub>, …, <i>P<sub>m</sub></i> project onto low-rank subspaces of <i>m</i> nearby patches. <i>M</i> is a contraction. Its error is ‖<i>M</i>Ω<sub>old</sub> − Ω<sub>new</sub>‖ ≤ (<i>m</i> + <i>r</i><sub>old</sub>)ε. Here Ω<sub>old</sub> and Ω<sub>new</sub> are the target states before and after, <i>r</i><sub>old</sub> counts changed old squares, and ε = <i>L</i><sup>−60</sup>. For every <i>a</i> &gt; 0, <i>M</i> is within <i>L</i><sup>−<i>a</i></sup> of a polynomial sum of terms. Each term uses private maps and normalized states or projections shared by at most two parties.",
-      "found": "The first part is proved with exactly the paper's hypotheses. For the second, Lean writes the map as a sum of explicit product terms, truncates each piece to rank <i>k</i> with error at most <i>g</i>/√<i>k</i> (<i>g</i> ≤ 2<i>m</i>, independent of the site dimensions), and reads every term as an allowed operation of Theorem 5.2 on the registers of the frames, one per site and per tag, using only parties of the specified list. With the paper's standing bound on the number of cylinder terms of each projector (one fixed power of <i>L</i>), boundedly many patches and affected holes, and a bounded specified list of parties, the number of terms is polynomial in <i>L</i>, and the choice <i>a</i> = 30 gives reference error at most (2<i>b</i> + 1)<i>L</i><sup>−20</sup>. No hypotheses were added.",
+      "found": "The first part is proved with exactly the paper's hypotheses. For the second, Lean writes the map as a sum of explicit product terms, truncates each piece to rank <i>k</i> with error at most <i>g</i>/√<i>k</i>, where <i>g</i> counts the groups of open tensor legs (at most two per patch, so <i>g</i> ≤ 2<i>m</i> independently of the site dimensions), and reads every term as an allowed operation of Theorem 5.2 on the registers of the frames, one per site and per tag, using only parties of the specified list. With the paper's standing bound on the number of cylinder terms of each projector (one fixed power of <i>L</i>), boundedly many patches and affected holes, and a bounded specified list of parties, the number of terms is polynomial in <i>L</i>, and the choice <i>a</i> = 30 gives reference error at most (2<i>b</i> + 1)<i>L</i><sup>−20</sup>. No hypotheses were added.",
       "impact": "No.",
       "plan": "Nothing remains."
     },
