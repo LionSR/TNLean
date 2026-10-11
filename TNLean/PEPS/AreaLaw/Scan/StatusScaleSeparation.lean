@@ -78,7 +78,7 @@ theorem eventually_one_le_source_bandCount {ell mu : ℝ}
   have hnR : (1 : ℝ) ≤ n := by exact_mod_cast hn
   have hnpos : (0 : ℝ) < n := zero_lt_one.trans_le hnR
   have hm : 1 ≤ ⌊(n : ℝ) ^ mu⌋₊ :=
-    Nat.le_floor (Real.one_le_rpow hnR hmu.le)
+    Nat.le_floor (by simpa only [Nat.cast_one] using Real.one_le_rpow hnR hmu.le)
   have hband : 8 * ⌊(n : ℝ) ^ mu⌋₊ ≤ ⌊(n : ℝ) ^ (1 - ell)⌋₊ := by
     apply Nat.le_floor
     push_cast
