@@ -9,34 +9,31 @@ import Mathlib.Analysis.Normed.Affine.Convex
 /-!
 # Unique initial regions on closed-half components
 
-The target assigns one unique actual initial open region to each connected
-component of the closed square of half-radius after deleting the actual
-identifier-change radial segments. The origin, valid pitch residues, fine
-cell, and mark are arbitrary under the initial-region hypotheses. Different
-components may carry the same initial identifier, and the change set may be
-empty.
+Each connected component of the closed square of half-radius, after deleting
+its actual identifier-change radial segments, lies in a unique actual initial
+open region. The origin, valid pitch residues, fine cell and mark are arbitrary
+under the initial-region hypotheses. Different components may carry the same
+initial identifier, and the change set may be empty.
 
-This is an unfinished draft target. The proof remains incomplete.
-It does not establish the full isolated-star or
-recursive two-family assertion.
+This local component statement is an auxiliary to the initial-star construction.
+Isolated stars and the recursive two-family construction require further
+geometric arguments.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 Section 11, `geometry:initial-stars`, lines 333–370, especially 361–370,
 and `prop:two-families`, lines 299–323, at
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
-Independently stated from the manuscript; no upstream Lean proof text is reused.
 -/
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-/-- Unproved draft target: every connected component of the actual cut closed
-square of half-radius lies in a unique initial open region. Distinct
-components may have the same initial identifier.
+/-- Every connected component of the actual cut closed square of half-radius
+lies in a unique initial open region. Distinct components may carry the same
+initial identifier, and the change set may be empty.
 
 Local auxiliary to OpenAI, Section 11, `geometry:initial-stars`, lines
 333–370, especially 361–370, and `prop:two-families`, lines 299–323, at
-`openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
-The proof remains incomplete. -/
+`openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
 theorem exists_unique_initialRegion_of_closedHalf_component
     (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
     (a b : (h : ℕ) → Fin (2 ^ (pitchScaleIndex h - fineScaleIndex h)))
@@ -62,7 +59,7 @@ theorem exists_unique_initialRegion_of_closedHalf_component
   intro ℓ r oSmall J I σ L Ω q
   -- The half-radius closed square lies inside the open square of radius `r`.
   have hr : (0 : ℝ) < r := by
-    show (0 : ℝ) < (2 : ℝ) ^ ℓ / 2
+    change (0 : ℝ) < (2 : ℝ) ^ ℓ / 2
     positivity
   have hhalf : r / 2 < r := by linarith
   have hsub : ∀ x : Ω, x.val ∈ Metric.ball v r \ L := by
