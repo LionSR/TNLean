@@ -540,13 +540,6 @@ jobs:
           lake --fail-fast build TNLean.PEPS.Approximation.PureSourceMatrix \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
-      - name: Check pure prepared source coefficient axioms strictly
-        run: >
-          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
-          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
-          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
-          TNLeanTest/PureSourceMatrixAxioms.lean
-
       - name: Check finite prepared source contractions before the full build
         timeout-minutes: 5
         run: |
@@ -558,13 +551,6 @@ jobs:
             TNLean.PEPS.Approximation.PurePhysicalCoefficient \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
-      - name: Check finite prepared source contraction axioms strictly
-        run: >
-          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
-          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
-          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
-          TNLeanTest/PureSourceContractionAxioms.lean
-
       - name: Check party products and private traces before the full build
         timeout-minutes: 5
         run: |
@@ -575,13 +561,6 @@ jobs:
           lake --fail-fast build TNLean.PEPS.Approximation.PartyProductConjugation \
             TNLean.PEPS.Approximation.PartyProductScalar \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
-
-      - name: Check party product axioms strictly
-        run: >
-          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
-          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
-          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
-          TNLeanTest/PartyProductAxioms.lean
 
       - name: Build template mixed-square and weighted covering estimates early
         timeout-minutes: 5
@@ -750,6 +729,27 @@ jobs:
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check pure prepared source coefficient axioms strictly
+        run: >
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/PureSourceMatrixAxioms.lean
+
+      - name: Check finite prepared source contraction axioms strictly
+        run: >
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/PureSourceContractionAxioms.lean
+
+      - name: Check party product axioms strictly
+        run: >
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/PartyProductAxioms.lean
 
       - name: Check physical-column composition axioms strictly
         run: >
