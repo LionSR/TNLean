@@ -40,6 +40,7 @@ on:
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_tenkz_mixed_action.py'
       - 'scripts/test_tenkz_isometric_gap_transport.py'
+      - 'scripts/test_tenkz_scan_ancestry.py'
       - 'scripts/test_tenkz_quantum_double_source_construction.py'
       - 'scripts/test_sector_encoder_diagram.py'
       - 'scripts/test_tenkz_mixed_fusion.py'
@@ -114,6 +115,7 @@ jobs:
           python3 scripts/test_tenkz_ordered_mixing.py
           python3 scripts/test_tenkz_mixed_action.py
           python3 scripts/test_tenkz_isometric_gap_transport.py
+          python3 scripts/test_tenkz_scan_ancestry.py
           python3 scripts/test_tenkz_quantum_double_source_construction.py
           python3 scripts/test_sector_encoder_diagram.py
           python3 scripts/test_tenkz_mixed_fusion.py

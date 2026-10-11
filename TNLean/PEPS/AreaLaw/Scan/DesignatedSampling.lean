@@ -44,6 +44,31 @@ theorem middle_subset_truncationSet {k L : ℕ} (h : History S.K S.m S.M k)
   exact Finset.mem_filter.mpr ⟨hA,
     (Finset.mem_Icc.mp (S.oldChargeState_depth_bounds h g hL x hn)).2⟩
 
+omit [Fintype I] [LinearOrder I] in
+/-- A designated support meeting a receiving side and the middle of a partition
+whose middle lies in the truncation set is the actual base-radius ball, including
+the variable-radius truncation case. Source: `08-scanner.tex`, lines 225–233. -/
+theorem designatedSupport_eq_ball_of_incidence [Finite I] (σ : PhysicalPartition V) {L : ℕ}
+    (side : Bool) (i : I) (hsub : middle σ ⊆ S.truncationSet L)
+    (hsplit :
+      (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i) ∩
+        receiving σ side).Nonempty ∧
+      (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i) ∩
+        middle σ).Nonempty) :
+    designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i) = S.ball i := by
+  classical
+  cases nonempty_fintype I
+  have hcross : i ∈ crossingLabels S.graph (S.truncationSet L) S.r₀ S.anchor (middle σ) := by
+    obtain ⟨x, hx⟩ := hsplit.2
+    obtain ⟨y, hy⟩ := hsplit.1
+    apply Finset.mem_filter.mpr
+    refine ⟨Finset.mem_univ _, ⟨x, (Finset.mem_inter.mp hx).1, (Finset.mem_inter.mp hx).2⟩,
+      y, (Finset.mem_inter.mp hy).1, ?_⟩
+    have hs := (Finset.mem_filter.mp (Finset.mem_inter.mp hy).2).2
+    simp [middle, hs]
+  simpa only [QuantumCircuit.graphBall, ball] using
+    (truncationRadius_eq_of_mem_crossingLabels hsub hcross).2.2
+
 /-- Splitting designated supports, including the variable-radius truncation case,
 are exactly the base-radius balls that the actual charge lottery selects. -/
 theorem designatedSupport_eq_ball_of_split {k L : ℕ} (h : History S.K S.m S.M k)
@@ -53,20 +78,8 @@ theorem designatedSupport_eq_ball_of_split {k L : ℕ} (h : History S.K S.m S.M 
         receiving (S.oldChargeState h g) side).Nonempty ∧
       (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i) ∩
         middle (S.oldChargeState h g)).Nonempty) :
-    designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i) = S.ball i := by
-  classical
-  have hcross : i ∈ crossingLabels S.graph (S.truncationSet L) S.r₀ S.anchor
-      (middle (S.oldChargeState h g)) := by
-    obtain ⟨x, hx⟩ := hsplit.2
-    obtain ⟨y, hy⟩ := hsplit.1
-    apply Finset.mem_filter.mpr
-    refine ⟨Finset.mem_univ _, ⟨x, (Finset.mem_inter.mp hx).1, (Finset.mem_inter.mp hx).2⟩,
-      y, (Finset.mem_inter.mp hy).1, ?_⟩
-    have hs := (Finset.mem_filter.mp (Finset.mem_inter.mp hy).2).2
-    simp [middle, hs]
-  have heq := (truncationRadius_eq_of_mem_crossingLabels
-    (S.middle_subset_truncationSet h g hL) hcross).2.2
-  simpa only [QuantumCircuit.graphBall, ball] using heq
+    designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i) = S.ball i :=
+  S.designatedSupport_eq_ball_of_incidence _ side i (S.middle_subset_truncationSet h g hL) hsplit
 
 /-- Each splitting truncated designated support is sampled by the actual finite
 history with probability `1/(2M) ≥ c/(nD)`, and the extended history removes its

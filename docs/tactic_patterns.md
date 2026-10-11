@@ -24,6 +24,40 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Canonical initial sector assignment — promoted (2026-10-09)
+
+- **Pattern:** name the same unique assignment of the eight working sectors
+  to actual initial identifiers in a theorem statement and its proof.
+- **Seen:** twenty-one bindings in theorem statements and proofs:
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorColors.lean`: two bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorRuns.lean`: four bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorComponents.lean`: six bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialActiveRayCount.lean`: three bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorCycle.lean`: two bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialActiveRays.lean`: four bindings.
+- **Abstraction:** `initialSectorAssignment` in
+  `TNLean/PEPS/AreaLaw/Geometry/InitialSectorAssignment.lean` is exactly the
+  choice from `exists_unique_initialRegion_sector_assignment`, with the
+  original parameters and cell/mark hypotheses.
+- **Refactor:** the sector-color, run-assignment and no-active-sector
+  statements and proofs, together with the sector-cycle, active-ray,
+  ray-count and both initial-component declarations, use the same definition
+  for their local assignment. The existing
+  `Classical.choose_spec` arguments are unchanged.
+- **Notes:** this names an existing assignment and introduces no new
+  geometric premise, identifier family or quotient of separated runs.
+
+### Ambient depth variation in an actual charge ball — promoted (2026-10-09)
+
+- **Pattern:** unfold charge-ball membership, identify the induced domain graph,
+  apply the ambient-depth variation bound, and reverse the absolute difference.
+- **Seen:** Four copies in `Scan/GoodSampling.lean`, `Scan/SplitIntervals.lean`,
+  `Scan/PhysicalChargeAncestry.lean`, and `Scan/BadHistoryProbability.lean`.
+- **Abstraction:** `CollarScan.abs_depth_sub_anchor_le_domainGraph_of_mem_ball`
+  in `TNLean/PEPS/AreaLaw/Scan/GoodSampling.lean`.
+- **Refactor:** All five callers use the shared lemma; the private copy in
+  `SplitIntervals.lean` is removed. No import edge or theorem hypothesis changes.
+
 ### Uniform norm lower bound on a tail over a compact parameter set — promoted (2026-10-10)
 
 - **Pattern:** `apply hS.exists_uniform_pos_nat_bounds` with the predicate
@@ -3839,6 +3873,18 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Connected retained pieces along a fan run — candidate (2026-10-09)
+
+- **Pattern:** use the connected-component paths to join connected retained
+  triangles whose intersections survive along each retained edge.
+- **Seen:** the open-radius and closed-half-radius run proofs in
+  `TNLean/PEPS/AreaLaw/Geometry/FanRunConnectedness.lean`.
+- **Abstraction:** both already use Mathlib's
+  `IsConnected.iUnion_of_reflTransGen`; a further application would justify
+  naming the common passage from component paths to intersection chains.
+- **Notes:** two occurrences in one file do not meet the promotion threshold.
+  Nonemptiness of each piece and of the component are derived from the fan.
+
 ### Unique radial through a noncentral fan point — candidate (2026-10-09)
 
 - **Pattern:** turn membership in two center-to-endpoint segments into a common
@@ -6379,6 +6425,22 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** the nonnegativity argument also covers an empty collection; an additional
   nonemptiness hypothesis would unnecessarily restrict these statements.
 
+
+### Ambient depth variation on a scan ball — refactored (2026-10-11)
+
+- **Pattern:** convert filtered-ball membership to an induced-graph distance bound,
+  then apply `abs_ambientDepth_sub_le_domainGraph` and reverse the absolute difference.
+- **Seen:** `Scan/TerminalSplits.lean` has two occurrences; the private helper in
+  `Scan/SideSeparation.lean` uses the same conversion.
+- **Abstraction:** the new side-separation proofs share one private helper, so their
+  three applications do not repeat this conversion. The mathematical estimate is
+  already supplied by `abs_ambientDepth_sub_le_domainGraph`.
+- **Disposition:** `CollarScan.abs_depth_sub_anchor_le_domainGraph_of_mem_ball`
+  is now available in `Scan/GoodSampling.lean`, and the sampling, ancestry,
+  probability, `SplitIntervals`, `PrefixApproximation`, `SideSeparation`, and
+  `TerminalSplits` callers use it; the private copies are removed. No new tactic
+  or geometric estimate is needed.
+
 ### Physical cardinality of a partial ambient layer — candidate (2026-10-09)
 
 - **Pattern:** Project a physical region injectively to its ambient lattice subset,
@@ -6429,6 +6491,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   wrapper are removed. Existing callers select the required component of
   the shared theorem. No new tactic or geometric hypothesis is introduced.
 
+### Initial-sector cut-set transport — candidate (2026-10-09)
+
+- **Pattern:** Identify the center of a translated fan and equate its
+  color-change radial union with the radial union at changes of the canonical
+  initial identifier.
+- **Seen:** The open-square and closed-half-square component correspondences
+  in `PEPS/AreaLaw/Geometry/InitialSectorComponents.lean`.
+- **Abstraction:** Both use the canonical sector assignment and the existing
+  adjacent-color equivalence. The common connected-partition proof is already
+  shared by a private arbitrary-subset lemma in `FanRunComponents.lean`.
+- **Notes:** The cut-set calculation occurs twice in one file, below the
+  promotion threshold. If another consumer repeats it, prefer a lemma for
+  the equality of the two radial unions.
+
 ### Unordered lattice-edge endpoint equality — candidate (2026-10-07)
 
 - **Pattern:** Prove equality of unordered coordinate pairs by choosing the
@@ -6470,3 +6546,62 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The coefficient weights use the final state bond for L and
   the final operator bond for F. Equal coefficients are inherited; unequal
   coefficients are dimension-weighted, not averaged without weights.
+### Integer quotient-interval cardinality — promoted (2026-10-09)
+- **Pattern:** bound the cardinality of an integer quotient interval by
+  monotonicity of division and the two endpoint remainder inequalities.
+- **Seen:** two coordinate estimates in each of
+  `Geometry/TemplateDyadicRows.lean` and `Geometry/RectangleMixedSquares.lean`.
+- **Abstraction:** `TNLean.PEPS.AreaLaw.Geometry.quotient_interval_card` in
+  `TNLean/PEPS/AreaLaw/Geometry/QuotientIntervals.lean`.
+- **Notes:** the divisor is positive and the endpoints are ordered; negative
+  endpoints are allowed. The existing statement and proof are unchanged,
+  and both counting modules use the shared theorem.
+### Capped dyadic summation by scale — candidate (2026-10-09)
+- **Pattern:** group a finite sum over the actual capped dyadic partition
+  by its scale coordinate; replace each fibre's constant sum by its
+  cardinality times the scale weight.
+- **Seen:** the rectangle-shell weighted covering and the two template
+  covering proofs in [PR #9000](https://github.com/LionSR/TNLean/pull/9000).
+- **Abstraction:** Geometry.sum_cappedDyadicPartition_by_scale in
+  TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartitionByScale.lean.
+- **Notes:** the rectangle argument uses the shared identity. The existing
+  template arguments still need the corresponding refactoring in their
+  owning PR. The identity is valid for signed real weights, empty
+  partitions and cap zero; no positivity premise is necessary.
+### Entropy summation over selected dyadic rectangles — candidate (2026-10-09)
+- **Pattern:** intersect a disjoint lattice partition with the same physical
+  region, apply entropy subadditivity for the same unit vector, and sum a
+  pointwise rectangle estimate using the exact side length of each cell.
+- **Seen:** the template core and shell estimates in
+  `Geometry/TemplateBoxEntropy.lean` (the separately developed template
+  argument), and `WeakRectangleShellEntropy.lean`.
+- **Abstraction:** the shared public theorem
+  `Geometry.regionalEntropy_filter_le_weighted_cover` in
+  `Geometry/CappedDyadicEntropyCover.lean`.
+- **Notes:** the rectangle shell uses the shared theorem. The template
+  consumers retain the same proof terms when their four physical-cover
+  declarations move to this module; that extraction is coordinated with
+  the template development. No sign condition on C or e is needed for
+  the entropy summation itself.
+### Homogeneous bound for a rounded sublinear scale — candidate (2026-10-09)
+- **Pattern:** bound `ceil(C₂*s)` by `(C₂+1)*s` for `s>=1`, then use
+  monotonicity of nonnegative real powers and `Real.mul_rpow`.
+- **Seen:** `Scan/BootstrapRoundedClearance.lean` and
+  `Scan/RoundedScalePower.lean`.
+- **Abstraction:** `floor_rpow_ceil_mul_rpow_le` exposes the complete
+  homogeneous bound, including a further nonnegative power of the scale.
+- **Notes:** the clearance argument and physical entropy argument use
+  different final comparisons. There are two copies of the elementary
+  ceiling estimate; a third use should share that estimate rather than
+  copy it again. No custom tactic is needed.
+### Fixed rounded-collar threshold — promoted (2026-10-09)
+- **Pattern:** obtain the fixed collar exponent bounds, choose one threshold
+  for the rounded half-side estimate, enlarge it to at least one, and derive
+  positivity and clearance for all safety parameters.
+- **Abstraction:** `Scan.exists_bootstrap_collar_clearance` now records
+  threshold positivity, collar positivity, the half-side bound and clearance
+  in one statement.
+- **Consumers:** `InitialRoundedCollarEntropy.lean` and
+  `RoundedShellEntropy.lean` reuse this statement. Its defining proof handles
+  the numerical argument once; no separate predicate or compatibility alias
+  is introduced.
