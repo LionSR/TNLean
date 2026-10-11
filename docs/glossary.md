@@ -3428,3 +3428,24 @@ These patches use `AreaLaw.domainGraph` and the unordered `AreaLaw.edgeBoundary`
 they are not graph-distance balls. The crossing-edge and two-site-support
 results are geometric statements, not an energy estimate or a proof of the
 source's Proposition 4.1.
+
+## Fixed-scale replica limit in the entropy bootstrap
+
+- **Declarations:** `TNLean.PEPS.AreaLaw.Scan.entropy_le_of_replica_comparisons`
+  and `TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_comparison_loss_threshold`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Scan/BootstrapReplicaAbsorption.lean`.
+- **Meaning:** two eventual rough scalar comparisons share one nonnegative
+  entropy independent of the replica count. Three vanishing remainders can be
+  removed at the fixed physical scale, then the coefficient margin gives the
+  bound by the sum of the two additive budgets. The comparison value and defect
+  sequence need not converge.
+- **Scale threshold:** the fixed bootstrap error exponent gives one threshold
+  with `0 < τ < 1/2` and coefficient loss at most one for
+  `τ = n^(-nu(e₀)/4)` and `E = Cₑ*n^(-nu(e₀)/2)`.
+- **Source:** the fixed-scale limit and coefficient absorption in
+  [the proof of Proposition 9.5, lines 744–769](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L744-L769).
+- **Scope:** a conditional scalar implication and a numerical threshold.
+  Actual norm comparisons, their common physical vector, and substitutions of
+  typical entropy and auxiliary dimension remain separate proof obligations.
+  Those substitutions must already occur in the additive budgets; no uniform
+  replica convergence rate over physical scales is supplied or needed.
