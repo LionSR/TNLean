@@ -26,7 +26,7 @@ gap*, `06-transport.tex`, lines 377–434, at `openai/math@adc7f124`.
 -/
 
 open scoped BigOperators
-open Set Filter Topology MeasureTheory PermutationRepresentation Entropy
+open Matrix Set Filter Topology MeasureTheory PermutationRepresentation Entropy
 
 noncomputable section
 

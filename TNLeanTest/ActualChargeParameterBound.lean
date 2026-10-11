@@ -16,7 +16,7 @@ hypothesis.
 
 set_option autoImplicit false
 
-open TensorPower TensorPower.ReplicaTransport MeasureTheory
+open Matrix TensorPower TensorPower.ReplicaTransport MeasureTheory
 open TNLean.PEPS.AreaLaw.Scan
 
 noncomputable section
