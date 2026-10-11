@@ -59,6 +59,10 @@ theorem SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
       (hS : S ⊆ (R : Set _) ∨ Disjoint S (R : Set _)) : δ A = 0 :=
     sub_eq_zero.mpr
       (EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators hA hS)
+  have hedge (e : Edge (squareLatticeGraph L L)) (he : ¬ IsRegionBoundaryEdge R e) :
+      δ (h.edgeTerm e) = 0 := by
+    apply hcancel (h.edge_supported e)
+    done
   done
 
 end TNLean.PEPS.Approximation
