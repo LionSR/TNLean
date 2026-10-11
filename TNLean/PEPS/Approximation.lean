@@ -246,6 +246,7 @@ import TNLean.PEPS.Approximation.SourcePreparation
 import TNLean.PEPS.Approximation.SourcePreparationCoordinates
 import TNLean.PEPS.Approximation.SourcePreparationVectors
 import TNLean.PEPS.Approximation.SourcePrivatePreparation
+import TNLean.PEPS.Approximation.SourcePrivatePreparationRestriction
 import TNLean.PEPS.Approximation.SourceRegisterPermutation
 import TNLean.PEPS.Approximation.SourceResidualCoordinates
 import TNLean.PEPS.Approximation.SourceSampleChoice

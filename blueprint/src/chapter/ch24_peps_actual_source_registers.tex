@@ -155,3 +155,28 @@ operations on an empty memory.
     coefficient-sum bound. Induction on the composition, using
     $|\lambda_1\lambda_2|\le|\lambda_1||\lambda_2|$, proves the final bound.
 \end{proof}
+
+
+\begin{theorem}[Exterior restriction of the private preparation]
+    \label{thm:peps_actual_private_preparation_exterior}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_sourcePrivatePreparation_none_eval_heq_id}
+    \uses{def:peps_actual_private_preparation,
+        thm:peps_all_party_source_exterior_empty}
+    Select all original parties. The restriction of the actual private
+    preparation to the exterior owner is the identity on the empty memory
+    $\mathbb C$. This identity holds before any choice of gate monomials.
+    It is the private-preparation part of the local contraction in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 137--139, 246--267 and 409--434.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_all_party_source_exterior_empty,
+        thm:peps_excluded_spectator_restriction,
+        thm:peps_owner_disjoint_restriction,def:peps_actual_private_preparation}
+    Every source register belongs to an original party, so none survives
+    the exterior restriction. Removing these spectator registers leaves
+    the private preparation with relabelled owners. Every relabelled
+    owner is an original selected party, hence its exterior restriction
+    is the identity on the empty memory.
+\end{proof}
