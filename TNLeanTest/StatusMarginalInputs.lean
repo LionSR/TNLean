@@ -29,7 +29,9 @@ example (depth : Fin 0 → ℤ) (σ : PhysicalPartition (Fin 0)) :
 
 -- A full far side need not lie in the compact truncation set.
 example : ¬ receiving (fun _ : Fin 2 ↦ some true) true ⊆ (∅ : Finset (Fin 2)) := by
-  simp [receiving]
+  have h : receiving (fun _ : Fin 2 ↦ some true) true = Finset.univ :=
+    Finset.filter_true_of_mem fun _ _ ↦ rfl
+  rw [h, Finset.subset_empty]
   exact Finset.univ_nonempty.ne_empty
 
 example : (receiving (fun _ : Fin 2 ↦ some true) true)ᶜ ⊆ (∅ : Finset (Fin 2)) := by
@@ -38,8 +40,30 @@ example : (receiving (fun _ : Fin 2 ↦ some true) true)ᶜ ⊆ (∅ : Finset (F
 -- These five named regions have only two distinct values at this status.
 example : statusMarginalRegions (fun _ : Fin 2 ↦ (0 : ℤ)) (fun _ ↦ some true) =
     {∅, Finset.univ} := by
-  simp [statusMarginalRegions, receiving, middle, positiveNear, positiveNearMiddle]
-  exact Finset.pair_comm _ _
+  have hf : receiving (fun _ : Fin 2 ↦ some true) false = ∅ := by
+    apply Finset.filter_false_of_mem
+    intro x _
+    decide
+  have ht : receiving (fun _ : Fin 2 ↦ some true) true = Finset.univ := by
+    apply Finset.filter_true_of_mem
+    intro x _
+    rfl
+  have hm : middle (fun _ : Fin 2 ↦ some true) = ∅ := by
+    apply Finset.filter_false_of_mem
+    intro x _
+    decide
+  have hpn : positiveNear (fun _ : Fin 2 ↦ (0 : ℤ)) (fun _ ↦ some true) = ∅ := by
+    apply Finset.filter_false_of_mem
+    intro x _
+    exact lt_irrefl _
+  have hpnm : positiveNearMiddle (fun _ : Fin 2 ↦ (0 : ℤ)) (fun _ ↦ some true) = ∅ := by
+    apply Finset.filter_false_of_mem
+    intro x _
+    exact lt_irrefl _
+  ext Q
+  simp only [statusMarginalRegions, Finset.mem_insert, Finset.mem_singleton,
+    hf, ht, hm, hpn, hpnm]
+  tauto
 
 example {V : Type*} [Fintype V] [DecidableEq V]
     (depth : V → ℤ) (σ : PhysicalPartition V) :
