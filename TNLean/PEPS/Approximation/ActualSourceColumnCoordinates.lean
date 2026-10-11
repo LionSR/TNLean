@@ -60,6 +60,7 @@ theorem actualSourceInputBasis_apply (w : SourceCircuit a b) (x : w.allSourceLab
         (w.allSourceBasis x ⊗ₜ[ℂ] (1 : ℂ)) := by
   rw [actualSourceInputBasis, OrthonormalBasis.map_apply, Layout.memCongr_symm,
     ← Layout.appendIso_symm_tmul_one_eq_memCongr_symm]
+  exact List.append_nil _
 
 /-- The literal columns are the coordinates of the actual chronological word
 on its actual source input. No basis identity is assumed.
