@@ -45,38 +45,12 @@ theorem IntRect.partial_row_entropy_le
       ((Q.dilate j).toFinset \ (Q.dilate (j - 1)).toFinset).card ≤
         12 * Q.size := by
     omega
-  classical
-  let R := A.filter fun x ↦ x.1 ∈ (Q.dilate (j - 1)).toFinset \ Q.toFinset
-  let B := A.filter fun x ↦ x.1 ∈ Y
-  have hd : Disjoint R B := by
-    apply Finset.disjoint_left.mpr
-    intro x hx hb
-    have hx' := (Finset.mem_sdiff.mp (Finset.mem_filter.mp hx).2).1
-    exact (Finset.mem_sdiff.mp (hY (Finset.mem_filter.mp hb).2)).2 hx'
-  have he : (A.filter fun x ↦
-      x.1 ∈ ((Q.dilate (j - 1)).toFinset \ Q.toFinset) ∪ Y) = R ∪ B := by
-    simp only [R, B, Finset.mem_union, Finset.filter_or]
-  have hBY : B.image Subtype.val ⊆ Y := by
-    intro x hx
-    obtain ⟨z, hz, rfl⟩ := Finset.mem_image.mp hx
-    exact (Finset.mem_filter.mp hz).2
-  have hcard : B.card ≤ 12 * Q.size := by
-    calc
-      B.card = (B.image Subtype.val).card :=
-        (Finset.card_image_of_injective B Subtype.val_injective).symm
-      _ ≤ Y.card := Finset.card_le_card hBY
-      _ ≤ ((Q.dilate j).toFinset \ (Q.dilate (j - 1)).toFinset).card :=
-        Finset.card_le_card hY
-      _ ≤ 12 * Q.size := hcardLayer
-  rw [he]
-  calc
-    |regionalEntropy Λ q Ω (R ∪ B) - regionalEntropy Λ q Ω R| ≤
-        regionalEntropy Λ q Ω B :=
-      abs_regionalEntropy_union_sub_le Λ q Ω hΩ R B hd
-    _ ≤ (B.card : ℝ) * Real.log q :=
-      regionalEntropy_le_card_mul_log Λ q Ω hΩ B
-    _ ≤ 12 * (Q.size : ℝ) * Real.log q :=
-      mul_le_mul_of_nonneg_right (by exact_mod_cast hcard)
-        (Real.log_nonneg (by exact_mod_cast hq))
+  have hXY : Disjoint ((Q.dilate (j - 1)).toFinset \ Q.toFinset) Y :=
+    Finset.disjoint_left.mpr fun x hx hy ↦
+      (Finset.mem_sdiff.mp (hY hy)).2 (Finset.mem_sdiff.mp hx).1
+  refine (abs_regionalEntropy_filter_union_sub_le Λ q hq Ω hΩ A _ Y hXY).trans ?_
+  have hcard := (Finset.card_le_card hY).trans hcardLayer
+  exact mul_le_mul_of_nonneg_right (by exact_mod_cast hcard)
+    (Real.log_nonneg (by exact_mod_cast hq))
 
 end TNLean.PEPS.AreaLaw
