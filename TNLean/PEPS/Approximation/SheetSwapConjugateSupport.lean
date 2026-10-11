@@ -37,6 +37,10 @@ theorem reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators
   classical
   simp only [Matrix.conjTranspose_submatrix, Matrix.reindex_apply, Matrix.submatrix_mul_equiv]
   rw [sheetSwapOp_conj_doubledHamiltonian_eq_inter R S hA]
+  have hF := supportedOperators_mono
+    (show (↑(R ∩ S) : Set ι) ⊆ (S : Set ι) from
+      Finset.coe_subset.mpr Finset.inter_subset_right)
+    (reindex_sheetSwapOp_mem_supportedOperators q (R ∩ S))
   done
 
 end TNLean.PEPS.EncodedFrame
