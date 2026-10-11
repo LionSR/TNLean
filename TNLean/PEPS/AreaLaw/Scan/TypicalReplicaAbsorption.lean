@@ -132,6 +132,6 @@ theorem regionalEntropy_le_of_rough_typical_comparisons
       _ ≤ 3 * (2 * η) :=
         mul_le_mul_of_nonneg_right (by linarith only [hτloss]) (by positivity)
       _ = 6 * η := by ring
-  done
+  nlinarith only [hscalar, hcost, (abs_le.mp hbounds.2).1]
 
 end TNLean.PEPS.AreaLaw.Scan
