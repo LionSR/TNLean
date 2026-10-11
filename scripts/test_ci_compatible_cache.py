@@ -947,6 +947,39 @@ class WorkflowTests(unittest.TestCase):
         for name in (SCANNER_BUILD_NAME, FULL_BUILD_NAME, *SCANNER_STRICT_NAMES):
             self.assertEqual(names.count(name), 1, name)
 
+    def test_actual_charge_integral_checks_after_root(self):
+        names = [step.get('name') for step in self.steps]
+        root = names.index(FULL_BUILD_NAME)
+        timing = names.index('Check changed Lean compilation times')
+        production = 'Check actual charge integral bound strictly'
+        fixtures = 'Test actual charge integral endpoints and axioms strictly'
+        for name, minutes in ((production, 2), (fixtures, 4)):
+            self.assertEqual(names.count(name), 1)
+            index = names.index(name)
+            self.assertLess(root, index)
+            self.assertLess(index, timing)
+            step = self.steps[index]
+            self.assertEqual(step['timeout-minutes'], minutes)
+            self.assertNotIn('if', step)
+            self.assertNotIn('continue-on-error', step)
+            for token in ('set -eo pipefail', 'LEAN_NUM_THREADS=1',
+                          'timeout --signal=INT --kill-after=5s 90s', '-j1',
+                          '-DautoImplicit=false', '-DrelaxedAutoImplicit=false',
+                          '-DmaxSynthPendingDepth=3', '-Dlinter.mathlibStandardSet=true',
+                          '-DwarningAsError=true',
+                          '2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"'):
+                self.assertIn(token, step['run'])
+        self.assertLess(names.index(production), names.index(fixtures))
+        self.assertIn('TNLean/PEPS/AreaLaw/Scan/ActualChargeParameterBound.lean',
+                      self.steps[names.index(production)]['run'])
+        run = self.steps[names.index(fixtures)]['run']
+        examples = run.split('for example in ', 1)[1].split('; do', 1)[0].split()
+        self.assertEqual(examples, ['ActualChargeParameterBound',
+                                    'ActualChargeParameterBoundAxioms'])
+        self.assertIn('lake env lean -j1', run)
+        for forbidden in ('LEAN_PATH', 'mktemp', ' -o ', 'lake env bash'):
+            self.assertNotIn(forbidden, run)
+
     def test_scanner_targets_then_exact_strict_blocks_then_unchanged_root(self):
         self.assert_scanner_early_checks()
 

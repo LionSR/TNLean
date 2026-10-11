@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Scan
 
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeData
+import TNLean.PEPS.AreaLaw.Scan.ActualChargeParameterBound
 import TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms
 import TNLean.PEPS.AreaLaw.Scan.ActualEntropySampling
 import TNLean.PEPS.AreaLaw.Scan.ActualHistory

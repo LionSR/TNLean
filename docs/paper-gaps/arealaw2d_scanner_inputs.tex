@@ -13,7 +13,7 @@
 
 \title{The Scanner Estimate from the Conclusions of Its Inputs}
 \author{}
-\date{2026-10-09}
+\date{2026-10-11}
 
 \begin{document}
 \maketitle
@@ -89,8 +89,8 @@ measures or remove the remaining scanner-input restriction.
 
 \section{Parameter regularity from actual transported expectations}
 
-The present source candidate derives parameter integrability of the exact
-old-state Fourier--coherent scalar integral from the accepted transported
+Parameter integrability of the exact
+old-state Fourier--coherent scalar integral follows from the transported
 expectation theorem. For a continuous real coherent symbol $F$, let $A_F$
 be its coherent average and $Q_F=(A_F+A_F^\dagger)/2$. Positivity of the
 actual state gives Hermiticity, hence
@@ -123,13 +123,12 @@ selection preserves the exact non-strict inequality, the same round and
 parameter, all constants, and the existing remainder.
 
 This derives integrability rather than the manuscript's asserted parameter
-continuity. The present combined source changes are not yet compiled. The
+continuity. The
 finite-sum theorem is connected below to literal fill and charge rounds by
 their exact scalar identities. The scalar expectation argument uses the
 accepted dependency. The literal-measure construction and its specializations
 now use the accepted canonical measure theorem at the updated dependency
-revision. This dependency integration does not validate the uncompiled
-combined source.
+revision.
 The full scanner package, common physical prevector and comparators, and
 lattice ground-state construction remain separate obligations.
 
@@ -285,8 +284,8 @@ an interior interpolation parameter, the combined integral has mass $1/2$.
 \footnote{The integrated inequality is
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_le_entropyGain_domainGraph}.}
 A direct inequality for the canonical integrals does not alone construct
-the scanner's measure-valued fields. The combined source-only candidate below
-constructs them using the accepted canonical measure result. An initial prevector,
+the scanner's measure-valued fields. The construction below
+uses the canonical measure result. An initial prevector,
 typical sectors, comparator budgets and the complete scanner data remain open.
 
 The missing direct near--far case is now excluded from the actual geometry.
@@ -347,7 +346,7 @@ complete scanner data construction remain open.
 
 \section{Literal measure, scalar identities and parameter regularity}
 
-A private, uncompiled consumer of the accepted canonical measure theorem now
+The canonical measure theorem
 sets the one-copy domain to its actual unit sphere and takes the old and new
 measures from the very same terminal transport states, supplied replica vector,
 and root path. No classical history or conditional-choice weight is inserted
@@ -368,7 +367,7 @@ factors and is restricted
 to $p\in[0,1]$: outside that interval the transport tree clamps $p$, whereas
 the round's displayed weights use $1-p$ and $p$ directly. The actual augmented
 replica-energy operator is retained with the same filtered vector.
-\footnote{The candidate declarations are
+\footnote{The declarations are
     \leanid{TNLean.PEPS.AreaLaw.Scan.transportScanRound},
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillScanRound},
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound}, and
@@ -402,15 +401,44 @@ This is not a construction of the complete scanner data. The canonical measure
 theorem is accepted in QICLean at revision
 \path{acfb5c685e732f987a5a96a5c079ba7f821c4715}; the declared dependency and
 matching manifest revision now select that commit. The toolchain, Mathlib and
-all other dependency pins are unchanged. The combined consumer must still be
-compiled before these source statements are validated.
-Strict source and regression checks are registered for later validation;
-existing checks are retained, and no build or fixture overlay has been run. Fixed-parameter finiteness is not parameter continuity.
+all other dependency pins are unchanged. Fixed-parameter finiteness is not
+parameter continuity.
+% These literal-measure and regularity statements passed the complete checks
+% on c698f6ab and the strict scanner stages of 56ed4b19. The new integrated
+% charge theorem below has not yet been compiled.
 The endpoint norm and integrated entropy conclusions are unchanged. The
 physical prevector, Bell or typical sector and comparator remain separate
 (the prevector/comparator task is issue 8753); the lattice ground-state task
 is issue 8979. In particular, no zero-copy energy equation with a nonzero
 supplied vector implies an arbitrary prescribed ground energy.
+
+\section{One-round integrated charge defect}
+
+Under the actual charge sampling and transport hypotheses, set
+$\alpha=[2(C_1+1)nD]^{-1}$ and
+$\ell=1+(2r_0+1)^2\log q$. The pointwise inequality
+$\alpha\mathcal Q(p)\le\mathcal G(p)$ combines with the integral conclusion
+of Proposition~7.4. For a supplied nonzero symmetric vector, $a>0$,
+$a\ell\le c_0$, every natural replica count $r$, and
+$0\le p_0\le p_1\le1$, the resulting bound is
+\begin{align}
+    ra\alpha\int_{p_0}^{p_1}\mathcal Q(p)\,dp
+    & \le \log N^2(p_0)-\log N^2(p_1)
+    +(p_1-p_0)\bigl(C_{\mathrm{ent}}raKa^{1/4}\ell^{e_{\mathrm{ent}}}+\beta_r\bigr).
+\end{align}
+Here the universal constants precede the geometric and Hamiltonian choices,
+and $\beta_r=O(\log(r+1))$ is chosen before the replica count and vector.
+The charge defect and entropy gain are interval integrable; continuity of
+either scalar is not required. The two error terms retain their signs and
+the interval-length factor. Equal endpoints give equality, and zero
+replicas require no separate positive-count assumption.
+\footnote{The one-round consequence is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_integral_bound_domainGraph}.}
+% The new one-round theorem is source-only pending hosted compilation.
+This removes an assumed one-round charge integral bound from the construction.
+It does not identify consecutive rounds at a common physical prevector or
+sum their logarithmic terms. The physical prevector, initial and final
+comparisons, and the remaining scanner conclusions are still required.
 
 \section{Elimination}
 
