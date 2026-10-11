@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.FinSum
 import TNLean.Algebra.FinOrderedProduct
 import TNLean.Algebra.FinSumPermutation
+import TNLean.Algebra.IsometryUnitaryExtension
 import TNLean.MPS.Chain.VaryingBondOBC
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.LinearAlgebra.UnitaryGroup
@@ -450,43 +451,24 @@ ancilla ⊗ site, `ℂ^D ⊗ ℂ^d`, whose columns `|β, 0⟩` with `β < b` are
 isometry columns. This is the step "every `V'_{[k]}` could be embedded into an
 isometry `V_{[k]}`" of arXiv:quant-ph/0501096 (after eq. `induction`), together
 with the identification `A_{i,αβ} = ⟨α, i| U |β, 0⟩` of arXiv:quant-ph/0608197,
-lines 1530--1537. -/
+lines 1530--1537. It is `Matrix.exists_mem_unitaryGroup_apply_embedding_eq` at the
+placement `β ↦ (β, 0)` of the used bond levels. -/
 theorem exists_unitary_extension [NeZero d] {b : ℕ} {Q : Fin d → Matrix (Fin D) (Fin D) ℂ}
     (hQ : IsIsometryOn b Q) :
     ∃ U ∈ Matrix.unitaryGroup (Fin D × Fin d) ℂ,
       ∀ i α β, β.val < b → U (α, i) (β, 0) = Q i α β := by
   classical
-  let E := EuclideanSpace ℂ (Fin D × Fin d)
-  let v : Fin D × Fin d → E := fun y => WithLp.toLp 2 (fun x => Q x.2 x.1 y.1)
-  let s : Set (Fin D × Fin d) := {y | y.1.val < b ∧ y.2 = 0}
-  have hv : Orthonormal ℂ (s.domRestrict v) := by
-    rw [orthonormal_iff_ite]
-    intro y z
-    have h := hQ y.1.1 z.1.1 y.2.1 z.2.1
-    have hiff : y.1.1 = z.1.1 ↔ y = z := by
-      constructor
-      · intro h'; ext1; exact Prod.ext h' (y.2.2.trans z.2.2.symm)
-      · rintro rfl; rfl
-    rw [if_congr hiff rfl rfl] at h
-    rw [← h, PiLp.inner_apply, Finset.sum_comm, ← Fintype.sum_prod_type']
-    refine Finset.sum_congr rfl fun x _ => ?_
-    simp only [Set.domRestrict_apply, v, RCLike.inner_apply]
-    rw [mul_comm]
-    rfl
-  obtain ⟨bb, hbb⟩ := hv.exists_orthonormalBasis_extension_of_card_eq
-    (by simp [E, finrank_euclideanSpace])
-  refine ⟨Matrix.of fun x y => (bb y : E) x, ?_, ?_⟩
-  · rw [Matrix.mem_unitaryGroup_iff']
-    ext y z
-    have h := (orthonormal_iff_ite.mp bb.orthonormal) y z
-    rw [PiLp.inner_apply] at h
-    simp only [Matrix.mul_apply, Matrix.star_apply, Matrix.of_apply, Matrix.one_apply]
-    rw [← h]
-    refine Finset.sum_congr rfl fun x _ => ?_
-    simp [RCLike.inner_apply, mul_comm]
-  · intro i α β hβ
-    have := hbb (β, 0) ⟨hβ, rfl⟩
-    simp [this, v]
+  let V : Matrix (Fin D × Fin d) {β : Fin D // β.val < b} ℂ := Matrix.of fun x β => Q x.2 x.1 β
+  have hV : V.IsIsometry := by
+    ext β β'
+    rw [Matrix.mul_apply, Matrix.one_apply, Fintype.sum_prod_type_right]
+    convert hQ β β' β.2 β'.2 using 1
+    · simp [V, Matrix.conjTranspose_apply]
+    · simp [Subtype.ext_iff]
+  let e : {β : Fin D // β.val < b} ↪ Fin D × Fin d :=
+    ⟨fun β => (β.1, 0), fun β β' h => Subtype.ext (Prod.ext_iff.mp h).1⟩
+  obtain ⟨U, hU, hUV⟩ := Matrix.exists_mem_unitaryGroup_apply_embedding_eq hV e
+  exact ⟨U, hU, fun i α β hβ => hUV (α, i) ⟨β, hβ⟩⟩
 
 /-- The ancilla basis vector `|0⟩`. -/
 def basisVecZero (hD : 0 < D) : Fin D → ℂ := Pi.single ⟨0, hD⟩ 1
