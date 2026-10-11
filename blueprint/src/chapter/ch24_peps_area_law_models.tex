@@ -395,6 +395,73 @@ original open square. We state the two models separately, following
     for fixed $q\ge2$, $J,\Delta>0$ before all $L\ge2$, Hamiltonians, and ground vectors.
 \end{definition}
 
+\begin{definition}[Original interaction labels]
+    \label{def:square_interaction_labels}
+    \lean{TNLean.PEPS.Approximation.SquareInteraction}
+    \uses{def:polynomial_peps_model}
+    Let $\mathcal I_L$ be the disjoint union of the vertices of the open
+    square and its forward nearest-neighbor edges. Every undirected edge
+    has exactly one such orientation. The original term indexed by a
+    vertex is its site term, and the term indexed by a forward edge is
+    the term on the corresponding undirected edge.
+\end{definition}
+
+\begin{definition}[Designated interaction supports]
+    \label{def:square_interaction_support}
+    \lean{TNLean.PEPS.Approximation.squareInteractionSupport}
+    \uses{def:square_interaction_labels}
+    The support $S_i$ is $\{v\}$ for the vertex label $i=v$, and
+    $\{v,w\}$ for the forward edge label $i=(v,w)$.
+\end{definition}
+
+\begin{definition}[Hermitian local terms]
+    \label{def:square_hermitian_term}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.hermitianTerm}
+    \uses{def:square_interaction_labels}
+    For each original term $A_i$, put
+    \begin{align*}
+        A_i^{\mathrm h} & =\frac{A_i+A_i^*}{2}.
+    \end{align*}
+    This is the Hermitian replacement of the local terms in
+    \cite[Theorem~1.1]{OpenAI2026PolynomialPEPS}. Only the original total
+    Hamiltonian is assumed Hermitian.
+\end{definition}
+
+\begin{lemma}[Support and norm of the Hermitian terms]
+    \label{lem:square_hermitian_term_properties}
+    \lean{
+        TNLean.PEPS.Approximation.SquareHamiltonian.hermitianTerm_supported,
+        TNLean.PEPS.Approximation.SquareHamiltonian.hermitianTerm_isHermitian,
+        TNLean.PEPS.Approximation.SquareHamiltonian.hermitianTerm_norm_le
+    }
+    \uses{def:square_interaction_support,def:square_hermitian_term}
+    Each $A_i^{\mathrm h}$ is supported on $S_i$, is Hermitian, and
+    satisfies $\|A_i^{\mathrm h}\|\le J$. These conclusions hold for
+    every $L,q\ge0$ and every real interaction bound allowed by the
+    original model, including empty grids and zero local dimension.
+\end{lemma}
+\begin{proof}
+    The supported operators form an algebra closed under adjoints, and
+    hence under real linear combinations. Thus the Hermitian part has
+    the same support. Its adjoint equals itself, and
+    $\|A_i^{\mathrm h}\|\le\|A_i\|\le J$.
+\end{proof}
+
+\begin{theorem}[The sum of the Hermitian terms]
+    \label{thm:square_hermitian_term_sum}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.sum_hermitianTerm}
+    \uses{def:square_hermitian_term}
+    For the original Hermitian Hamiltonian $H$,
+    \begin{align*}
+        \sum_{i\in\mathcal I_L} A_i^{\mathrm h} & =H.
+    \end{align*}
+\end{theorem}
+\begin{proof}
+    The bijection from forward edges to undirected edges gives
+    $\sum_i A_i=H$. Taking Hermitian parts commutes with this finite
+    sum, and the Hermitian part of $H$ is $H$ itself.
+\end{proof}
+
 \begin{theorem}[Polynomial PEPS approximation]
     \label{thm:openai_polynomial_peps}
     \uses{def:polynomial_peps_model}
