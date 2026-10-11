@@ -24,6 +24,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Telescoping two contraction compositions — promoted (2026-10-08)
+
+- **Pattern:** Expand `B ∘ A - D ∘ C` as `B ∘ (A - C) + (B - D) ∘ C`,
+  then apply the triangle inequality and operator-norm submultiplicativity.
+- **Seen:** The identical 17-line proof in `EffectCircuitError` and the
+  approximate-gate error development; both chronological induction proofs use it.
+- **Abstraction:** The existing `TNLean.PEPS.PairEffect.norm_comp_sub_comp_le_one`
+  is public in `EffectCircuitError`; `ApproximateCircuitError` imports it.
+- **Refactor:** Removed the second proof. The original signature and proof are
+  unchanged. The related three-factor estimate in the symmetry development has
+  different hypotheses and is outside this two-factor statement.
+
 ### Uniform norm lower bound on a tail over a compact parameter set — promoted (2026-10-10)
 
 - **Pattern:** `apply hS.exists_uniform_pos_nat_bounds` with the predicate

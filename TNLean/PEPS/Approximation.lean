@@ -20,6 +20,14 @@ import TNLean.PEPS.Approximation.AffectedOwners
 import TNLean.PEPS.Approximation.AffectedPhysicalDimension
 import TNLean.PEPS.Approximation.AllSourceSlots
 import TNLean.PEPS.Approximation.AngularResetWidth
+import TNLean.PEPS.Approximation.ApproximateCircuitDensity
+import TNLean.PEPS.Approximation.ApproximateCircuitError
+import TNLean.PEPS.Approximation.ApproximateCircuitPolynomial
+import TNLean.PEPS.Approximation.ApproximateCircuitRealAccuracy
+import TNLean.PEPS.Approximation.ApproximateCircuitResources
+import TNLean.PEPS.Approximation.ApproximateGateEvaluation
+import TNLean.PEPS.Approximation.ApproximateGateRescaling
+import TNLean.PEPS.Approximation.AuxiliaryRegisterFiniteness
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.ColumnSelection
 import TNLean.PEPS.Approximation.CommonPairSources
@@ -90,6 +98,7 @@ import TNLean.PEPS.Approximation.FrameBoundedChanges
 import TNLean.PEPS.Approximation.FrameListRestriction
 import TNLean.PEPS.Approximation.FrameRegisters
 import TNLean.PEPS.Approximation.FrontRegisters
+import TNLean.PEPS.Approximation.GateCoefficientBounds
 import TNLean.PEPS.Approximation.GaussianPhysicalSource
 import TNLean.PEPS.Approximation.GaussianSeparatedPhysicalDensity
 import TNLean.PEPS.Approximation.GaussianSourceIntegrability
@@ -139,6 +148,9 @@ import TNLean.PEPS.Approximation.PatchRewrite
 import TNLean.PEPS.Approximation.PatchRewriteExpansion
 import TNLean.PEPS.Approximation.PatchRewriteMonomials
 import TNLean.PEPS.Approximation.PatchRewriteTruncation
+import TNLean.PEPS.Approximation.PhysicalDensityPureInput
+import TNLean.PEPS.Approximation.PhysicalFirstExchange
+import TNLean.PEPS.Approximation.PhysicalFirstReadout
 import TNLean.PEPS.Approximation.PhysicalOutputContraction
 import TNLean.PEPS.Approximation.PhysicalReadout
 import TNLean.PEPS.Approximation.PinnedRegionalState

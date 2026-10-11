@@ -192,7 +192,9 @@ theorem gateMemoryMap_auxiliary_identity {C : Type} [Fintype C]
   simpa only [comp_apply, isoL_apply, LinearIsometryEquiv.symm_apply_apply] using
     DFunLike.congr_fun he (appendIso (Layout.mapOwner owner a) tail z)
 
-private theorem norm_comp_sub_comp_le_one (E F G : HSpace)
+/-- The two-factor telescoping inequality for contractions.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 590–600. -/
+theorem norm_comp_sub_comp_le_one (E F G : HSpace)
     (A C : E →L[ℂ] F) (B D : F →L[ℂ] G) (hB : ‖B‖ ≤ 1) (hC : ‖C‖ ≤ 1) :
     ‖B ∘L A - D ∘L C‖ ≤ ‖A - C‖ + ‖B - D‖ := by
   have he : B ∘L A - D ∘L C = B ∘L (A - C) + (B - D) ∘L C := by
