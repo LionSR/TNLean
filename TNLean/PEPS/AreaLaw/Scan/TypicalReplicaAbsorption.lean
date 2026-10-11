@@ -118,6 +118,20 @@ theorem regionalEntropy_le_of_rough_typical_comparisons
   have hscalar := entropy_le_of_replica_comparisons
     hS' (mul_nonneg (by norm_num : (0 : ℝ) ≤ 2) hC)
     hτ hsmall hrᵤ hrₗ hrₑ hdefect hupper' hlower'
+  have hcost : (2 + 2 * C * τ) * (Real.log (E.card : ℝ) - S') ≤ 6 * η := by
+    have hη0 : 0 ≤ η :=
+      (abs_nonneg (Real.log (E.card : ℝ) - S)).trans hbounds.1
+    have hτloss : 2 * C * τ ≤ 1 := by
+      nlinarith only [hsmall, mul_nonneg hC (div_nonneg hEdef hτ.le)]
+    have hdiff : Real.log (E.card : ℝ) - S' ≤ 2 * η := by
+      linarith only [(abs_le.mp hbounds.1).2, (abs_le.mp hbounds.2).1]
+    calc
+      (2 + 2 * C * τ) * (Real.log (E.card : ℝ) - S') ≤
+          (2 + 2 * C * τ) * (2 * η) :=
+        mul_le_mul_of_nonneg_left hdiff (by positivity)
+      _ ≤ 3 * (2 * η) :=
+        mul_le_mul_of_nonneg_right (by linarith only [hτloss]) (by positivity)
+      _ = 6 * η := by ring
   done
 
 end TNLean.PEPS.AreaLaw.Scan
