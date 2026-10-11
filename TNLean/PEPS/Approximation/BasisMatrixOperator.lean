@@ -45,7 +45,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434 and 5
 theorem matrix_repr_eval_eq_toMatrix
     {E F : Type} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F]
-    {I J : Type} [Fintype I] [Fintype J]
+    {I J : Type} [Fintype I] [Fintype J] [DecidableEq I]
     (b : OrthonormalBasis I ℂ E) (c : OrthonormalBasis J ℂ F) (A : E →L[ℂ] F) :
     Matrix.of (fun i j ↦ c.repr (A (b j)) i) =
       LinearMap.toMatrix b.toBasis c.toBasis A.toLinearMap := by

@@ -27,6 +27,7 @@ private theorem mixed_toMatrix_basis_independent
     [NormedAddCommGroup F] [InnerProductSpace ℂ F]
     [FiniteDimensional ℂ E] [FiniteDimensional ℂ F]
     {I J K : Type} [Fintype I] [Fintype J] [Fintype K]
+    [DecidableEq I] [DecidableEq J] [DecidableEq K]
     (b : OrthonormalBasis I ℂ E) (c : OrthonormalBasis J ℂ E)
     (d : OrthonormalBasis K ℂ F) (A B : E →ₗ[ℂ] F) (U : E →ₗ[ℂ] E) :
     LinearMap.toMatrix b.toBasis d.toBasis A *
