@@ -144,6 +144,7 @@ import TNLean.PEPS.Approximation.SourcePreparation
 import TNLean.PEPS.Approximation.SourcePreparationCoordinates
 import TNLean.PEPS.Approximation.SourceSlotBasis
 import TNLean.PEPS.Approximation.SourceSlotMaps
+import TNLean.PEPS.Approximation.SquareAreaLawHamiltonian
 import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
