@@ -555,6 +555,26 @@ jobs:
               "$source"
           done
 
+      - name: Check native square-edge count early
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.PEPS.SquareLatticeEdgeCount:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check native square-edge count and standard axioms strictly
+        timeout-minutes: 4
+        env:
+          LEAN_NUM_THREADS: 1
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/SquareLatticeEdgeCount.lean \
+              TNLeanTest/SquareLatticeEdgeCountAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
       - name: Check original crossing-edge expansion early
         run: |
           set -eo pipefail
