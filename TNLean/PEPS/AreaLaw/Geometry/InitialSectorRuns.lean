@@ -66,9 +66,8 @@ theorem exists_unique_initialRegion_sector_run_assignment
     let oSmall := (v.1 - r, v.2 - r)
     let J := CellFanSlot (fun _ : Fin 4 ↦ true)
     let I := InitialRegionIndex o k₀ Z C a b hC h₀
-    let σ : J → I := Classical.choose
-      (exists_unique_initialRegion_sector_assignment
-        o k₀ Z C a b hC h₀ k z v hk₀ hz hv)
+    let σ : J → I :=
+      initialSectorAssignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv
     let family : J → Fin 2 := fun s ↦ initialRegionColor o k₀ Z C a b hC h₀ (σ s)
     let G := cellFanRunGraph oSmall ℓ (0, 0) (fun _ ↦ true) family
     ∃! runLabel : G.ConnectedComponent → I,
@@ -84,8 +83,8 @@ theorem exists_unique_initialRegion_sector_run_assignment
   let oSmall := (v.1 - r, v.2 - r)
   let J := CellFanSlot (fun _ : Fin 4 ↦ true)
   let I := InitialRegionIndex o k₀ Z C a b hC h₀
-  let σ : J → I := Classical.choose
-    (exists_unique_initialRegion_sector_assignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv)
+  let σ : J → I :=
+    initialSectorAssignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv
   let family : J → Fin 2 := fun s ↦ initialRegionColor o k₀ Z C a b hC h₀ (σ s)
   let G := cellFanRunGraph oSmall ℓ (0, 0) (fun _ ↦ true) family
   change ∃! runLabel : G.ConnectedComponent → I,
@@ -155,9 +154,8 @@ theorem exists_unique_initialRegion_of_no_active_sector
     let oSmall := (v.1 - r, v.2 - r)
     let J := CellFanSlot (fun _ : Fin 4 ↦ true)
     let I := InitialRegionIndex o k₀ Z C a b hC h₀
-    let σ : J → I := Classical.choose
-      (exists_unique_initialRegion_sector_assignment
-        o k₀ Z C a b hC h₀ k z v hk₀ hz hv)
+    let σ : J → I :=
+      initialSectorAssignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv
     (∀ s t : J,
       (cellFanEnd oSmall ℓ (0, 0) (fun _ ↦ true) s =
           cellFanStart oSmall ℓ (0, 0) (fun _ ↦ true) t ∨
@@ -172,8 +170,8 @@ theorem exists_unique_initialRegion_of_no_active_sector
   let oLarge := (v.1 - 2 * r, v.2 - 2 * r)
   let J := CellFanSlot (fun _ : Fin 4 ↦ true)
   let I := InitialRegionIndex o k₀ Z C a b hC h₀
-  let σ : J → I := Classical.choose
-    (exists_unique_initialRegion_sector_assignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv)
+  let σ : J → I :=
+    initialSectorAssignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv
   let family : J → Fin 2 := fun s ↦ initialRegionColor o k₀ Z C a b hC h₀ (σ s)
   let G := cellFanRunGraph oSmall ℓ (0, 0) (fun _ ↦ true) family
   let G₀ := cellFanRunGraph oSmall ℓ (0, 0) (fun _ ↦ true) (fun _ ↦ (0 : Fin 2))

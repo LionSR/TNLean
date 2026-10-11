@@ -48,18 +48,14 @@ theorem initialRegion_active_rays_card_even_and_le_eight
     let r := (2 : ℝ) ^ ℓ / 2
     let oSmall := (v.1 - r, v.2 - r)
     let J := CellFanSlot (fun _ : Fin 4 ↦ true)
-    let σ := Classical.choose
-      (exists_unique_initialRegion_sector_assignment
-        o k₀ Z C a b hC h₀ k z v hk₀ hz hv)
+    let σ := initialSectorAssignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv
     let A : Set J := {s | σ s ≠ σ (cellFanNext s)}
     let D := cellFanRay oSmall ℓ (0, 0) (fun _ : Fin 4 ↦ true) '' A
     Even (Nat.card D) ∧ Nat.card D ≤ 8 := by
   classical
   dsimp only
   let J := CellFanSlot (fun _ : Fin 4 ↦ true)
-  let σ := Classical.choose
-    (exists_unique_initialRegion_sector_assignment
-      o k₀ Z C a b hC h₀ k z v hk₀ hz hv)
+  let σ := initialSectorAssignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv
   let A : Set J := {s | σ s ≠ σ (cellFanNext s)}
   rw [Nat.card_image_of_injective (cellFanRay_injective _ _ _ _) A]
   refine ⟨initialRegion_sector_assignment_changes_even
@@ -88,9 +84,8 @@ theorem initialRegion_frontier_near_mark_iff_active_successor
     let oSmall := (v.1 - r, v.2 - r)
     let J := CellFanSlot (fun _ : Fin 4 ↦ true)
     let I := InitialRegionIndex o k₀ Z C a b hC h₀
-    let σ : J → I := Classical.choose
-      (exists_unique_initialRegion_sector_assignment
-        o k₀ Z C a b hC h₀ k z v hk₀ hz hv)
+    let σ : J → I :=
+      initialSectorAssignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv
     ∀ x ∈ Metric.ball v r,
       (∃ i : I, x ∈ frontier (initialBirthRegion o k₀ Z C a b hC h₀ i)) ↔
       ∃ s : J, σ s ≠ σ (cellFanNext s) ∧

@@ -295,4 +295,25 @@ theorem exists_unique_initialRegion_sector_assignment
     funext s
     exact (Classical.choose_spec (hassign s)).2 (τ s) (hτ.1 s)
 
+/-- The canonical assignment of the eight working sectors about an actual
+fine-cell mark to the initial region identifiers. It is characterized by
+containment of each working open triangle in its assigned initial open region
+and by the smaller closed-square decomposition.
+
+Auxiliary to OpenAI, *A two-dimensional area law from a global spectral gap*,
+Section 11, `geometry:initial-stars`, lines 333–370, especially 352–370,
+and `prop:two-families`, lines 299–323, at
+`openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+noncomputable def initialSectorAssignment
+    (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
+    (a b : (h : ℕ) → Fin (2 ^ (pitchScaleIndex h - fineScaleIndex h)))
+    (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
+    (k : ℕ) (z : ℤ × ℤ) (v : ℝ × ℝ) (hk₀ : k₀ ≤ k)
+    (hz : z ∈ fineLayerIndices o k (fineScaleIndex k) Z C)
+    (hv : v ∈ beltCellMarks o (fineScaleIndex k) z) :
+    CellFanSlot (fun _ : Fin 4 ↦ true) → InitialRegionIndex o k₀ Z C a b hC h₀ :=
+  Classical.choose
+    (exists_unique_initialRegion_sector_assignment
+      o k₀ Z C a b hC h₀ k z v hk₀ hz hv)
+
 end TNLean.PEPS.AreaLaw.Geometry

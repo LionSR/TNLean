@@ -751,6 +751,19 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/TemplateMixedSquares.lean
 
+      - name: Test fan and initial frontier rays strictly and audit axioms
+        timeout-minutes: 5
+        run: |
+          set -e
+          for file in TNLean/PEPS/AreaLaw/Geometry/CellFanRays.lean \
+              TNLean/PEPS/AreaLaw/Geometry/InitialActiveRays.lean \
+              TNLeanTest/PEPS/AreaLaw/Geometry/InitialActiveRaysAxioms.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
+          done
+
       - name: Test exact nearest-neighbor crossing budget strictly
         run: >
           timeout --signal=INT --kill-after=5s 90s lake env lean -j1
