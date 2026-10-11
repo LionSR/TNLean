@@ -12,6 +12,8 @@ import TNLean.PEPS.AreaLaw.Scan.ActualChargeData
 import TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms
 import TNLean.PEPS.AreaLaw.Scan.ActualEntropySampling
 import TNLean.PEPS.AreaLaw.Scan.ActualHistory
+import TNLean.PEPS.AreaLaw.Scan.ActualRoundEntropy
+import TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport
 import TNLean.PEPS.AreaLaw.Scan.ActualTransportEstimates
 import TNLean.PEPS.AreaLaw.Scan.AmbientDepth
 import TNLean.PEPS.AreaLaw.Scan.AncestryCover

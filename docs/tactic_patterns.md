@@ -6424,3 +6424,19 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The current occurrences are all in one proof, below the
   multiple-file promotion threshold. Crossing membership itself is already
   expressed by `mem_edgeBoundary_pair_iff`; no new tactic macro is needed.
+
+### Actual-round cross-band commutation — candidate (2026-10-11)
+
+- **Pattern:** Apply `actualRoundData_induction` to a choice-independent property,
+  then use the actual charge and fill commutation theorems at history length
+  `j.val / 2`.
+- **Seen:** The local common-error proof in `Scan/ActualRoundTransport.lean`
+  and `actualRoundData_crossBandCommute` in `Scan/ActualRoundEntropy.lean`.
+- **Abstraction:** The latter now supplies the named assertion to the entropy
+  integrability proof and its regression fixture. The independent parent module
+  remains unchanged; moving this declaration into a common earlier module would
+  be appropriate if a third production consumer appears.
+- **Notes:** Two production occurrences, with no new tactic or additional
+  geometric hypothesis. Exact root telescoping reuses Mathlib's
+  `Fin.sum_univ_eq_sum_range` and `Finset.sum_range_sub'` rather than proving a
+  second finite-sum cancellation theorem.

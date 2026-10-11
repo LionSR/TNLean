@@ -1749,3 +1749,275 @@ The following finite construction follows
     conclusion; the derivative, entropy, and integral conclusions are
     unchanged.
 \end{proof}
+
+\begin{definition}[The finite family of actual scan rounds]
+    \label{def:al_scan_actual_round_family}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundHistory,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundChoice,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_induction}
+    \leanok
+    \uses{def:al_scan_actual_fill_transport,def:al_scan_actual_charge_data}
+    For a fixed scanner with $m,M>0$, index its rounds by integers
+    $0\le j<2nm$ and put $s_j=\lfloor j/2\rfloor$.
+    Write $\mathcal Q=(\{0,1\}\times\{0,\ldots,M-1\})^K$ for the
+    charge choices. The history and conditional-choice sets are
+    \begin{align}
+        \mathcal H_j     & =\{0,\ldots,m-1\}^K\times\mathcal Q^{s_j}, \\
+        \mathcal C_{j,h} & =
+        \begin{cases}
+            \{\ast\},   & j\text{ even}, \\
+            \mathcal Q, & j\text{ odd}.
+        \end{cases}
+    \end{align}
+    The transport data $\mathscr D_j$ are the actual fill data at stage
+    $s_j$ for even $j$ and the actual charge data at stage $s_j$ for odd
+    $j$. Thus round zero is a fill, rounds zero and one both have empty
+    charge history, and rounds two and three both have one completed
+    charge. Every round has exactly $K$ bands. Empty physical moves
+    remain among these rounds. A property depending on the conditional-choice
+    sets and transport data can be proved separately for the fill and charge
+    cases, identifying their conditional-choice sets with $\mathcal C_{j,h}$.
+\end{definition}
+
+\begin{theorem}[Common transport errors for all actual scan rounds]
+    \label{thm:al_scan_actual_round_transport}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_transport_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundHistory_length_add_one_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_isAdmissible}
+    \leanok
+    \uses{def:al_scan_actual_round_family,def:al_scan_actual_energy_terms,
+        def:al_scan_physical_dimension_cap}
+    There exist universal real constants
+    $c_0,C_{\mathrm{ent}},e_{\mathrm{ent}},C_{\mathrm{en}},e_{\mathrm{en}}$,
+    with $c_0>0$, chosen before all the following data.
+
+    Let $\Lambda,T\subset\mathbb Z^2$ be finite with $T\ne\varnothing$,
+    $q,R_{\mathrm{int}}\in\mathbb N$ with $q\ge1$, and $J\in\mathbb R$.
+    Let $H=\sum_i h_i$ be a local Hamiltonian of range
+    $R_{\mathrm{int}}$ and term norm bound $J$ on
+    $(\mathbb C^q)^{\otimes\Lambda}$, with its admissible support labels
+    in a fixed linear order. Fix $\|\Omega\|=1$ and $\Delta>0$.
+    Take a scanner of color $A\subseteq\Lambda$, with parameters
+    $n,m,K,D,r_0\in\mathbb N$ and $C_1\in\mathbb R$, the induced
+    nearest-neighbor graph on $\Lambda$, depth
+    $d(x)=\min_{t\in T}\|x-t\|_\infty$, and anchors $x_i\in i$.
+    For a truncation depth $L\in\mathbb N$, assume
+    \begin{align}
+        0<n,\qquad r_0\le D,\qquad 1\le D,
+        \qquad 4D\le m,\qquad 8Km\le L,\qquad 0<C_1.
+        \label{eq:al_scan_family_scales}
+    \end{align}
+    Put $T_d=T+[-d,d]^2_{\mathbb Z}$ and let $Z$ contain both endpoints
+    of every edge crossing $A$ in $\Lambda$. Assume
+    $|T_d\setminus T_{d-1}|\le n$ for every integer $1\le d\le L$, and
+    $2L+10r_0<\|t-z\|_\infty$ for every $t\in T$ and $z\in Z$.
+    Fix arbitrary auxiliary dimensions $d_C,d_R\ge1$ and put
+    \begin{align}
+        \mathcal V & =(\mathbb C^q)^{\otimes\Lambda}
+        \otimes\mathbb C^{d_C}\otimes\mathbb C^{d_R}, \\
+        \ell       & =1+(2r_0+1)^2\log q.
+    \end{align}
+    Fix $a>0$ with $a\ell\le c_0$ and use $t=a/2$ in every band's
+    metric. Let $\mathscr D_j$ be the actual round family of
+    Definition~\ref{def:al_scan_actual_round_family}.
+
+    Use one energy family for all rounds: let $\widetilde h_i$ and
+    $\widetilde X_i$ be the actual truncated terms and designated
+    supports of Definition~\ref{def:al_scan_actual_energy_terms} for
+    $H,\Omega,\Delta,L$, retaining every original support label, and set
+    \begin{align}
+        E_i           & =\widetilde h_i\otimes I_C\otimes I_R, \\
+        \overline H_k & =\frac1k\sum_{b=0}^{k-1}
+        \left(\left(\sum_i\widetilde h_i\right)
+        \otimes I_C\otimes I_R\right)_b,\qquad \overline H_0=0.
+        \label{eq:al_scan_family_energy}
+    \end{align}
+    The subscript $b$ denotes insertion in copy $b$.
+
+    There exist $C_\beta\ge0$ and sequences
+    $\beta,\varepsilon:\mathbb N\to\mathbb R$ such that, for every
+    $k\in\mathbb N$,
+    \begin{align}
+        0\le\beta_k & \le C_\beta\log(k+2),   \\
+        0           & \le\varepsilon_k,\qquad
+        \lim_{k\to\infty}\varepsilon_k=0.
+    \end{align}
+    These choices precede the round $j$, replica count $k$, supplied
+    nonzero symmetric vector $\mathrm{pre}\in\operatorname{Sym}^k(\mathcal V)$,
+    interpolation parameters, and energy eigenvalue.
+    For every such $j,k,\mathrm{pre}$, let $\mathcal M_{j,k}(p)$ be
+    the actual interpolating root and set
+    \begin{align}
+        N_{j,k,\mathrm{pre}}(p)^2
+         & =\|\mathcal M_{j,k}(p)^{-1/4}\mathrm{pre}\|^2, \\
+        v_{j,k,\mathrm{pre}}(p)
+         & =\frac{\mathcal M_{j,k}(p)^{-1/4}\mathrm{pre}}
+        {N_{j,k,\mathrm{pre}}(p)}.
+    \end{align}
+    For this round, let $\mathcal L_{j,k,\mathrm{pre}}$,
+    $\mathcal G_{j,k,\mathrm{pre}}$, and $\mathcal E_{j,k,\mathrm{pre}}$
+    be the derivative, entropy-gain, and energy-error expressions in
+    Theorem~\ref{thm:al_scan_actual_transport_estimates}, with the actual
+    history and conditional-choice trees of $\mathscr D_j$.
+    In particular, the energy error retains both split probabilities:
+    writing $\mathcal J_{j,i}$ for the leaves splitting
+    $\widetilde X_i$, its expression is
+    \begin{align}
+        W_{j,i}(p) & =\sum_{b\in\mathcal J_{j,i}}\pi_{j,b}(p),                 \\
+        \mathcal E_{j,k,\mathrm{pre}}(p)
+                   & =\sum_i W_{j,i}(p)\sum_{b\in\mathcal J_{j,i}}\pi_{j,b}(p)
+        \int_{\mathbb R}m_{1/4}(u)
+        \int\eta_{i,b}(\theta)^{1/8}\,
+        d\mu_{\sigma_{j,b,u}(p)}(\theta)\,du.
+    \end{align}
+    Then for every $0<p<1$,
+    \begin{align}
+        -\frac{d}{dp}\log N_{j,k,\mathrm{pre}}(p)^2
+         & =\mathcal L_{j,k,\mathrm{pre}}(p),   \\
+        ka\mathcal G_{j,k,\mathrm{pre}}(p)
+        -C_{\mathrm{ent}}kaK a^{1/4}\ell^{e_{\mathrm{ent}}}-\beta_k
+         & \le\mathcal L_{j,k,\mathrm{pre}}(p).
+    \end{align}
+    For every $E_0\in\mathbb R$ satisfying
+    $\overline H_k\mathrm{pre}=E_0\mathrm{pre}$, the energy conclusion is
+    \begin{align}
+        \operatorname{Re}\langle v_{j,k,\mathrm{pre}}(p),
+        \overline H_k v_{j,k,\mathrm{pre}}(p)\rangle
+         & \le2E_0+C_{\mathrm{en}}a^2\ell^{e_{\mathrm{en}}}
+        \mathcal E_{j,k,\mathrm{pre}}(p)+\varepsilon_k.
+    \end{align}
+    For every $0\le p_0\le p_1\le1$,
+    \begin{align}
+        \int_{p_0}^{p_1}\bigl(ka\mathcal G_{j,k,\mathrm{pre}}(p)
+        -C_{\mathrm{ent}}kaK a^{1/4}\ell^{e_{\mathrm{ent}}}
+        -\beta_k\bigr)\,dp
+         & \le\log N_{j,k,\mathrm{pre}}(p_0)^2
+        -\log N_{j,k,\mathrm{pre}}(p_1)^2.
+    \end{align}
+    The common errors may depend on the fixed physical data, auxiliary
+    dimensions, $a$, and finite family, but are independent of
+    $j,k,\mathrm{pre},p,p_0,p_1,E_0$. This does not assert a uniform limit
+    when the system or auxiliary dimensions grow with $k$.
+    At $k=0$, the energy premise and $\mathrm{pre}\ne0$ force $E_0=0$.
+    No physical prevector or identification with a fixed physical ground
+    energy is asserted.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible,
+        thm:al_scan_actual_energy_terms,thm:al_scan_actual_fill_supports,
+        thm:al_scan_augmented_supports,thm:al_scan_nested_band_metrics,
+        thm:al_scan_actual_transport_dimension}
+    Choose the universal constants once from the finite-family form of
+    \cite[Proposition~7.4]{OpenAI2026AreaLaw}. For every $j<2nm$,
+    $s_j+1\le nm$, including the final charge at $s_j=nm-1$.
+    The scale assumptions give $m>0$ and $M=\lceil C_1nD\rceil>0$.
+    Split according to the parity of $j$. The actual fill and charge
+    constructions give admissibility, designated-support compatibility,
+    cross-band commutation for every $k$, and the moved-subsystem and
+    split-support dimension bounds by $\ell$. Both cases have the same
+    $K$, dimensions, and positive supported energy terms $E_i$.
+    Apply the finite-family theorem once to $\{\mathscr D_j\}_{j<2nm}$.
+    It chooses nonnegative common errors and the all-count logarithmic
+    bound before the round and vector. Finally the replica sum of
+    $E_i$ is exactly~(\ref{eq:al_scan_family_energy}); substitute this
+    identity only in the energy expression and its eigenvector premise.
+\end{proof}
+
+\begin{theorem}[Telescoping the actual round norms]
+    \label{thm:al_scan_actual_round_telescope}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_actualRoundData_logNormSq_sub,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_rootPath_one_eq_succ_zero,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_rootPath_one_of_last}
+    \uses{def:al_scan_actual_round_family,thm:al_scan_actual_fill_endpoints}
+    Fix a scanner with $m,M>0$, positive factor dimensions, $t\ge0$,
+    and a replica count $k\ge0$. Let $\mathcal M_{j,k}(p)$ be the
+    actual round roots, and let $P_{s,k}$ be the root at parameter zero
+    of the fill after $s$ completed charges. Whenever $j+1<2nm$,
+    $\mathcal M_{j,k}(1)=\mathcal M_{j+1,k}(0)$. If $nm>0$, the last
+    charge satisfies $\mathcal M_{2nm-1,k}(1)=P_{nm,k}$.
+
+    For any supplied vector $\mathrm{pre}$ in the replica space, set
+    $N_{j,k,\mathrm{pre}}(p)^2
+    =\|\mathcal M_{j,k}(p)^{-1/4}\mathrm{pre}\|^2$ and
+    $(N^{\mathrm{fill}}_{s,k,\mathrm{pre}})^2
+    =\|P_{s,k}^{-1/4}\mathrm{pre}\|^2$. Then
+    \begin{align}
+        \sum_{j=0}^{2nm-1}
+        \bigl(\log N_{j,k,\mathrm{pre}}(0)^2
+        -\log N_{j,k,\mathrm{pre}}(1)^2\bigr)
+        & =\log (N^{\mathrm{fill}}_{0,k,\mathrm{pre}})^2
+        -\log (N^{\mathrm{fill}}_{nm,k,\mathrm{pre}})^2.
+        \label{eq:al_scan_actual_telescope}
+    \end{align}
+    For the zero vector, use the convention $\log0=0$. No symmetry
+    assumption is needed. If $n=0$, the sum is empty and both remaining
+    roots are $P_{0,k}$. The assertion also holds at $k=0$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:al_scan_actual_fill_endpoints}
+    For every integer $r\ge0$, let $B_{r,k}$ be the root at parameter
+    zero of the fill at stage $r/2$ when $r$ is even, and of the charge
+    at stage $(r-1)/2$ when $r$ is odd. The exact fill and charge
+    identities give $\mathcal M_{j,k}(0)=B_{j,k}$ and
+    $\mathcal M_{j,k}(1)=B_{j+1,k}$. Also
+    $B_{2s,k}=P_{s,k}$. With
+    $F(r)=\log\|B_{r,k}^{-1/4}\mathrm{pre}\|^2$, the sum in
+    (\ref{eq:al_scan_actual_telescope}) is
+    $\sum_{j<2nm}(F(j)-F(j+1))=F(0)-F(2nm)$.
+\end{proof}
+
+\begin{theorem}[Integrated entropy over all actual rounds]
+    \label{thm:al_scan_actual_round_entropy}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_entropy_integral_le_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_crossBandCommute}
+    \uses{def:al_scan_actual_round_family,def:al_scan_physical_dimension_cap}
+    There exist universal real constants
+    $c_0,C_{\mathrm{ent}},e_{\mathrm{ent}}$, with $c_0>0$,
+    such that the following holds. Assume the geometric, Hamiltonian,
+    dimension, and smallness hypotheses of
+    Theorem~\ref{thm:al_scan_actual_round_transport}, in particular
+    $n>0$ and $a\ell\le c_0$. There exist $C_\beta\ge0$ and a sequence
+    $\beta:\mathbb N\to\mathbb R$, chosen before the replica count and
+    supplied vector, with $0\le\beta_k\le C_\beta\log(k+2)$.
+    For every $k\ge0$ and every nonzero symmetric vector
+    $\mathrm{pre}\in\operatorname{Sym}^k(\mathcal V)$,
+    \begin{align}
+        ka\sum_{j=0}^{2nm-1}\int_0^1
+        \mathcal G_{j,k,\mathrm{pre}}(p)\,dp
+        &\le \log (N^{\mathrm{fill}}_{0,k,\mathrm{pre}})^2
+        -\log (N^{\mathrm{fill}}_{nm,k,\mathrm{pre}})^2 \\
+        &\quad +2nm\bigl(C_{\mathrm{ent}}kaK a^{1/4}
+        \ell^{e_{\mathrm{ent}}}+\beta_k\bigr).
+        \label{eq:al_scan_actual_entropy_sum}
+    \end{align}
+    Here $t=a/2$, and the entropy gains are those of
+    Theorem~\ref{thm:al_scan_actual_round_transport}. The fixed physical
+    and auxiliary dimensions precede the choice of $\beta$.
+    No energy eigenvector equation or initial or final norm comparison
+    is assumed. At zero replicas the left side is zero and the total
+    error term is $2nm\beta_0$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:al_scan_actual_round_transport,thm:al_scan_actual_round_telescope,
+        thm:al_scan_nested_band_metrics}
+    Choose the universal constants and common error from
+    Theorem~\ref{thm:al_scan_actual_round_transport} once, before the
+    replica count and vector. Actual band nesting gives cross-band
+    commutation. Together with admissibility and $\mathrm{pre}\ne0$,
+    this gives integrability of each entropy gain on $[0,1]$ by the
+    integrated transport argument in
+    \cite[Proposition~7.4]{OpenAI2026AreaLaw}. Moving the constant error
+    outside each full-round integral gives
+    \begin{align}
+        ka\int_0^1\mathcal G_{j,k,\mathrm{pre}}(p)\,dp
+        &\le \log N_{j,k,\mathrm{pre}}(0)^2
+        -\log N_{j,k,\mathrm{pre}}(1)^2
+        +C_{\mathrm{ent}}kaK a^{1/4}\ell^{e_{\mathrm{ent}}}+\beta_k.
+    \end{align}
+    Sum over all $2nm$ rounds, including fills. The logarithmic terms
+    reduce by~(\ref{eq:al_scan_actual_telescope}), and the common error
+    occurs exactly $2nm$ times, giving~(\ref{eq:al_scan_actual_entropy_sum}).
+    This is the telescoping step of the scanner argument in
+    \cite[proof of Proposition~9.2]{OpenAI2026AreaLaw}.
+\end{proof}
