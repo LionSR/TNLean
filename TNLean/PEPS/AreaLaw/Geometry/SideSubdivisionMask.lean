@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.SideSubdivision
 import Mathlib.Analysis.Convex.Between
+import Mathlib.Analysis.Normed.Affine.Convex
 
 /-!
 # Side subdivisions determined by actual opposing corners
@@ -131,6 +132,20 @@ theorem cellFan_elementary_segment_subset_whole (o : ℝ × ℝ) (ℓ : ℕ)
   · rw [hm, hb]
     exact (convex_segment (𝕜 := ℝ) _ _).segment_subset (midpoint_mem_segment (𝕜 := ℝ) _ _)
       (right_mem_segment _ _ _)
+
+/-- The two halves of a segment meet exactly at its midpoint. -/
+theorem segment_midpoint_inter_segment {E : Type*} [NormedAddCommGroup E]
+    [NormedSpace ℝ E] (a b : E) :
+    segment ℝ a (midpoint ℝ a b) ∩ segment ℝ (midpoint ℝ a b) b = {midpoint ℝ a b} := by
+  refine Set.eq_singleton_iff_unique_mem.mpr
+    ⟨⟨right_mem_segment ℝ _ _, left_mem_segment ℝ _ _⟩, fun x hx ↦ ?_⟩
+  have h₁ := dist_add_dist_of_mem_segment hx.1
+  have h₂ := dist_add_dist_of_mem_segment hx.2
+  have h₃ := dist_add_dist_of_mem_segment (midpoint_mem_segment (𝕜 := ℝ) a b)
+  have h₄ := dist_triangle a x b
+  have h₅ := dist_nonneg (x := x) (y := midpoint ℝ a b)
+  rw [dist_comm (midpoint ℝ a b) x] at h₂
+  exact dist_eq_zero.mp (by linarith)
 
 private theorem trichotomy_on_first_half {a b x : ℝ × ℝ}
     (hthree : x = a ∨ x = midpoint ℝ a b ∨ x = b)

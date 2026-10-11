@@ -43,9 +43,6 @@ private theorem interval_three_disjoint {a b c d e f x : ℝ}
     rcases interval_disjoint_cases hcd hef h₂₃ with h'' | h'' <;> linarith [hx₁.1, hx₁.2,
       hx₂.1, hx₂.2, hx₃.1, hx₃.2]
 
-private def rectangleCorner (a b : ℝ × ℝ) (ε : Fin 2 × Fin 2) : ℝ × ℝ :=
-  (if ε.1.val = 0 then a.1 else b.1, if ε.2.val = 0 then a.2 else b.2)
-
 private theorem rectangle_tangential_strict {p q a b : ℝ × ℝ} {ξ η : ℝ}
     (hp : p.1 < q.1 ∧ p.2 < q.2) (ha : a.1 < b.1 ∧ a.2 < b.2)
     (hξp : ξ ∈ Set.Icc p.1 q.1) (hηp : η ∈ Set.Ioo p.2 q.2)
@@ -99,10 +96,6 @@ private theorem rectangle_three_vertical {p q a b c d : ℝ × ℝ} {ξ η : ℝ
     (normal_disjoint hηp hηa hpa) (normal_disjoint hηp hηc hpc)
     (normal_disjoint hηa hηc hac)
 
-private theorem midpoint_coordinates (u v : ℝ × ℝ) :
-    midpoint ℝ u v = ((u.1 + v.1) / 2, (u.2 + v.2) / 2) := by
-  apply Prod.ext <;> norm_num [midpoint_eq_smul_add, smul_eq_mul] <;> ring
-
 private theorem rectangle_vertical_no_three {p q a b c d u v : ℝ × ℝ}
     (hp : p.1 < q.1 ∧ p.2 < q.2) (ha : a.1 < b.1 ∧ a.2 < b.2)
     (hc : c.1 < d.1 ∧ c.2 < d.2)
@@ -125,7 +118,7 @@ private theorem rectangle_vertical_no_three {p q a b c d u v : ℝ × ℝ}
     rcases lt_or_gt_of_ne hneq with h | h <;> constructor <;>
       linarith [hu.1, hu.2, hv.1, hv.2]
   have hm : (u.1 + v.1) / 2 = u.1 := by linarith
-  rw [midpoint_coordinates, hm] at hx hcorners
+  rw [midpoint_prod_eq, hm] at hx hcorners
   have hηc := rectangle_tangential_strict hp hc hup.1
     (strict_midpoint hup.2 hvp.2) hx hpc hcorners
   exact rectangle_three_vertical hp ha hc hup.1 (strict_midpoint hup.2 hvp.2)
@@ -189,50 +182,32 @@ private theorem cells_on_elementarySide_absurd (o : ℝ × ℝ) (ℓ j n : ℕ)
       dyadicCellCorner o n t ε = cellFanStart o ℓ z split i ∨
         dyadicCellCorner o n t ε = cellFanEnd o ℓ z split i) : False := by
   obtain ⟨hne, haxis⟩ := cellFan_elementary_geometry o ℓ z split i
-  let lower (r : ℕ) (v : ℤ × ℤ) := dyadicCellCorner o r v (0, 0)
-  let upper (r : ℕ) (v : ℤ × ℤ) := dyadicCellCorner o r v (1, 1)
-  have bounds (r : ℕ) (v : ℤ × ℤ) :
-      (lower r v).1 < (upper r v).1 ∧ (lower r v).2 < (upper r v).2 := by
-    have ht : 0 < (2 : ℝ) ^ r := by positivity
-    constructor <;> norm_num [lower, upper, dyadicCellCorner]
-  have interior_box (r : ℕ) (v : ℤ × ℤ) : interior (dyadicCell o r v) =
-      Set.Ioo (lower r v).1 (upper r v).1 ×ˢ Set.Ioo (lower r v).2 (upper r v).2 := by
-    simp [lower, upper, dyadicCellCorner, dyadicCell, interior_prod_eq, interior_Ico]
-  have closed_box (r : ℕ) (v : ℤ × ℤ) : closure (dyadicCell o r v) =
-      Set.Icc (lower r v).1 (upper r v).1 ×ˢ Set.Icc (lower r v).2 (upper r v).2 := by
-    simp [lower, upper, dyadicCellCorner, closure_dyadicCell]
-  have hnotcorner (ε : Fin 2 × Fin 2) : dyadicCellCorner o n t ε ≠
-      midpoint ℝ (cellFanStart o ℓ z split i) (cellFanEnd o ℓ z split i) := by
+  have hcorners' (ε : Fin 2 × Fin 2) :
+      rectangleCorner (dyadicCellCorner o n t (0, 0)) (dyadicCellCorner o n t (1, 1)) ε ≠
+        midpoint ℝ (cellFanStart o ℓ z split i) (cellFanEnd o ℓ z split i) := by
+    rw [rectangleCorner_eq_dyadicCellCorner]
     intro he
     have hm := midpoint_mem_segment (𝕜 := ℝ) (cellFanStart o ℓ z split i)
       (cellFanEnd o ℓ z split i)
-    rcases hcorners ε (he.symm ▸ hm) with h | h
+    rcases hcorners ε (he ▸ hm) with h | h
     · exact hne ((midpoint_eq_left_iff ℝ).mp (he.symm.trans h))
     · exact hne ((midpoint_eq_right_iff ℝ).mp (he.symm.trans h))
-  have hcorners' (ε : Fin 2 × Fin 2) : rectangleCorner (lower n t) (upper n t) ε ≠
-      midpoint ℝ (cellFanStart o ℓ z split i) (cellFanEnd o ℓ z split i) := by
-    intro he
-    apply hnotcorner ε
-    have hec : rectangleCorner (lower n t) (upper n t) ε = dyadicCellCorner o n t ε := by
-      rcases ε with ⟨e, f⟩
-      fin_cases e <;> fin_cases f <;> norm_num [rectangleCorner, lower, upper, dyadicCellCorner]
-    exact hec.symm.trans he
   have disjoint_box (r s : ℕ) (v u : ℤ × ℤ)
       (hd : Disjoint (dyadicCell o r v) (dyadicCell o s u)) :
-      Disjoint (Set.Ioo (lower r v).1 (upper r v).1 ×ˢ
-        Set.Ioo (lower r v).2 (upper r v).2)
-        (Set.Ioo (lower s u).1 (upper s u).1 ×ˢ
-          Set.Ioo (lower s u).2 (upper s u).2) := by
-    rw [← interior_box, ← interior_box]
+      Disjoint (Set.Ioo (dyadicCellCorner o r v (0, 0)).1 (dyadicCellCorner o r v (1, 1)).1 ×ˢ
+        Set.Ioo (dyadicCellCorner o r v (0, 0)).2 (dyadicCellCorner o r v (1, 1)).2)
+        (Set.Ioo (dyadicCellCorner o s u (0, 0)).1 (dyadicCellCorner o s u (1, 1)).1 ×ˢ
+          Set.Ioo (dyadicCellCorner o s u (0, 0)).2 (dyadicCellCorner o s u (1, 1)).2) := by
+    rw [← interior_dyadicCell_eq_corners, ← interior_dyadicCell_eq_corners]
     exact hd.mono interior_subset interior_subset
   obtain ⟨ha, hb⟩ := (cellFan_vertices_mem_beltCellMarks o ℓ z split).2 i
   have haR := beltCellMarks_subset_closure_dyadicCell o ℓ z ha
   have hbR := beltCellMarks_subset_closure_dyadicCell o ℓ z hb
   have haW := hside (left_mem_segment ℝ _ _)
   have hbW := hside (right_mem_segment ℝ _ _)
-  rw [closed_box] at haR hbR haW hbW hx
-  exact rectangle_axis_no_three (bounds ℓ z) (bounds j w) (bounds n t)
-    haR hbR haW hbW hx hne (haxis.imp And.left And.left) hcorners'
+  rw [closure_dyadicCell_eq_corners] at haR hbR haW hbW hx
+  exact rectangle_axis_no_three (dyadicCellCorner_lt o ℓ z) (dyadicCellCorner_lt o j w)
+    (dyadicCellCorner_lt o n t) haR hbR haW hbW hx hne (haxis.imp And.left And.left) hcorners'
     (disjoint_box ℓ j z w hzw) (disjoint_box ℓ n z t hzt) (disjoint_box j n w t hwt)
 
 private theorem fine_opponents_eq (o : ℝ × ℝ) (k₀ k h j : ℕ)

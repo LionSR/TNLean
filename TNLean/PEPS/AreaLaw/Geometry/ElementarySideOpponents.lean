@@ -56,7 +56,10 @@ private theorem rectangle_normal_boundary {p q a b : ℝ × ℝ} {ξ η : ℝ}
       ⟨lt_of_le_of_lt (le_max_left _ _) hv.1,
         lt_of_lt_of_le hv.2 (min_le_left _ _)⟩⟩
 
-private def rectangleCorner (a b : ℝ × ℝ) (ε : Fin 2 × Fin 2) : ℝ × ℝ :=
+/-- The corner of the closed axis-parallel rectangle with opposite corners `a`
+and `b` selected by `ε`, where the coordinate `0` picks `a` and `1` picks `b`.
+Source: area-law Section 11, lines 299–316. -/
+def rectangleCorner (a b : ℝ × ℝ) (ε : Fin 2 × Fin 2) : ℝ × ℝ :=
   (if ε.1.val = 0 then a.1 else b.1, if ε.2.val = 0 then a.2 else b.2)
 
 private theorem rectangle_vertical_containment {p q a b : ℝ × ℝ} {ξ η l u : ℝ}
@@ -88,7 +91,8 @@ private theorem rectangle_vertical_containment {p q a b : ℝ × ℝ} {ξ η l u
   exact ⟨by simpa only [hyξ] using hx.1,
     ⟨hlo.trans hy.2.1, hy.2.2.trans hhi⟩⟩
 
-private theorem midpoint_coordinates (u v : ℝ × ℝ) :
+/-- Coordinates of the midpoint of two points in the plane. -/
+theorem midpoint_prod_eq (u v : ℝ × ℝ) :
     midpoint ℝ u v = ((u.1 + v.1) / 2, (u.2 + v.2) / 2) := by
   apply Prod.ext <;> norm_num [midpoint_eq_smul_add, smul_eq_mul] <;> ring
 
@@ -179,24 +183,33 @@ private theorem rectangle_axis_segment {p q a b u v x : ℝ × ℝ}
     have hr := hsub (swap_mem_segment hxS)
     exact ⟨hr.2, hr.1⟩
 
-private theorem cell_corner_bounds (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ) :
+/-- The lower-left corner of a dyadic cell lies strictly below and to the left
+of its upper-right corner. Source: area-law Section 11, lines 299–310. -/
+theorem dyadicCellCorner_lt (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ) :
     (dyadicCellCorner o ℓ z (0, 0)).1 < (dyadicCellCorner o ℓ z (1, 1)).1 ∧
       (dyadicCellCorner o ℓ z (0, 0)).2 < (dyadicCellCorner o ℓ z (1, 1)).2 := by
   have ht : 0 < (2 : ℝ) ^ ℓ := by positivity
   constructor <;> norm_num [dyadicCellCorner]
 
-private theorem cell_rectangle (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ) :
+/-- The interior of a dyadic cell is the open rectangle spanned by its extreme
+corners. Source: area-law Section 11, lines 299–310. -/
+theorem interior_dyadicCell_eq_corners (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ) :
     interior (dyadicCell o ℓ z) =
-        Set.Ioo (dyadicCellCorner o ℓ z (0, 0)).1 (dyadicCellCorner o ℓ z (1, 1)).1 ×ˢ
-          Set.Ioo (dyadicCellCorner o ℓ z (0, 0)).2 (dyadicCellCorner o ℓ z (1, 1)).2 ∧
-      closure (dyadicCell o ℓ z) =
-        Set.Icc (dyadicCellCorner o ℓ z (0, 0)).1 (dyadicCellCorner o ℓ z (1, 1)).1 ×ˢ
-          Set.Icc (dyadicCellCorner o ℓ z (0, 0)).2 (dyadicCellCorner o ℓ z (1, 1)).2 := by
-  constructor
-  · simp [dyadicCell, interior_prod_eq, interior_Ico, dyadicCellCorner]
-  · simp [closure_dyadicCell, dyadicCellCorner]
+      Set.Ioo (dyadicCellCorner o ℓ z (0, 0)).1 (dyadicCellCorner o ℓ z (1, 1)).1 ×ˢ
+        Set.Ioo (dyadicCellCorner o ℓ z (0, 0)).2 (dyadicCellCorner o ℓ z (1, 1)).2 := by
+  simp [dyadicCell, interior_prod_eq, interior_Ico, dyadicCellCorner]
 
-private theorem rectangleCorner_eq_dyadicCellCorner (o : ℝ × ℝ) (ℓ : ℕ)
+/-- The closure of a dyadic cell is the closed rectangle spanned by its extreme
+corners. Source: area-law Section 11, lines 299–310. -/
+theorem closure_dyadicCell_eq_corners (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ) :
+    closure (dyadicCell o ℓ z) =
+      Set.Icc (dyadicCellCorner o ℓ z (0, 0)).1 (dyadicCellCorner o ℓ z (1, 1)).1 ×ˢ
+        Set.Icc (dyadicCellCorner o ℓ z (0, 0)).2 (dyadicCellCorner o ℓ z (1, 1)).2 := by
+  simp [closure_dyadicCell, dyadicCellCorner]
+
+/-- The rectangle corners spanned by the extreme corners of a dyadic cell are
+its four corners. Source: area-law Section 11, lines 299–310. -/
+theorem rectangleCorner_eq_dyadicCellCorner (o : ℝ × ℝ) (ℓ : ℕ)
     (z : ℤ × ℤ) (ε : Fin 2 × Fin 2) :
     rectangleCorner (dyadicCellCorner o ℓ z (0, 0)) (dyadicCellCorner o ℓ z (1, 1)) ε =
       dyadicCellCorner o ℓ z ε := by
@@ -247,21 +260,21 @@ theorem cellFan_elementary_geometry (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ
   · exact ⟨hne, haxis⟩
   · refine ⟨fun h ↦ hne ((midpoint_eq_left_iff ℝ).mp h.symm), ?_⟩
     rcases haxis with ⟨he, hbound⟩ | ⟨he, hbound⟩
-    · exact Or.inl ⟨by rw [midpoint_coordinates]; dsimp only; linarith, hbound⟩
-    · exact Or.inr ⟨by rw [midpoint_coordinates]; dsimp only; linarith, hbound⟩
+    · exact Or.inl ⟨by rw [midpoint_prod_eq]; dsimp only; linarith, hbound⟩
+    · exact Or.inr ⟨by rw [midpoint_prod_eq]; dsimp only; linarith, hbound⟩
   · refine ⟨fun h ↦ hne ((midpoint_eq_right_iff ℝ).mp h), ?_⟩
     rcases haxis with ⟨he, hbound⟩ | ⟨he, hbound⟩
     · have hm : (midpoint ℝ
           (cellFanStart o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩)
           (cellFanEnd o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩)).1 =
           (cellFanStart o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩).1 := by
-        rw [midpoint_coordinates]; dsimp only; linarith
+        rw [midpoint_prod_eq]; dsimp only; linarith
       exact Or.inl ⟨by rw [hm]; exact he, by rwa [hm]⟩
     · have hm : (midpoint ℝ
           (cellFanStart o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩)
           (cellFanEnd o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩)).2 =
           (cellFanStart o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩).2 := by
-        rw [midpoint_coordinates]; dsimp only; linarith
+        rw [midpoint_prod_eq]; dsimp only; linarith
       exact Or.inr ⟨by rw [hm]; exact he, by rwa [hm]⟩
 
 private theorem elementary_endpoints_closed (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
@@ -287,10 +300,9 @@ private theorem cell_contains_elementary_segment (o : ℝ × ℝ) (ℓ j : ℕ)
   obtain ⟨ha, hb⟩ := elementary_endpoints_closed o ℓ z split i
   obtain ⟨hne, haxis⟩ := cellFan_elementary_geometry o ℓ z split i
   have hdi := hd.mono interior_subset interior_subset
-  rw [(cell_rectangle o ℓ z).1, (cell_rectangle o j w).1] at hdi
-  rw [(cell_rectangle o ℓ z).2] at ha hb
-  rw [(cell_rectangle o j w).2] at hx ⊢
-  apply rectangle_axis_segment (cell_corner_bounds o ℓ z) (cell_corner_bounds o j w)
+  rw [interior_dyadicCell_eq_corners, interior_dyadicCell_eq_corners] at hdi
+  rw [closure_dyadicCell_eq_corners] at ha hb hx ⊢
+  apply rectangle_axis_segment (dyadicCellCorner_lt o ℓ z) (dyadicCellCorner_lt o j w)
     ha hb hne (haxis.imp And.left And.left) hxS hx hdi
   intro ε hε
   rw [rectangleCorner_eq_dyadicCellCorner] at hε ⊢
@@ -300,9 +312,9 @@ private theorem elementary_midpoint_not_mem_interior (o : ℝ × ℝ) (ℓ : ℕ
     (z : ℤ × ℤ) (split : Fin 4 → Bool) (i : CellFanSlot split) :
     midpoint ℝ (cellFanStart o ℓ z split i) (cellFanEnd o ℓ z split i) ∉
       interior (closure (dyadicCell o ℓ z)) := by
-  rw [(cell_rectangle o ℓ z).2, interior_prod_eq, interior_Icc, interior_Icc]
+  rw [closure_dyadicCell_eq_corners, interior_prod_eq, interior_Icc, interior_Icc]
   intro hx
-  rw [midpoint_coordinates] at hx
+  rw [midpoint_prod_eq] at hx
   rcases (cellFan_elementary_geometry o ℓ z split i).2 with ⟨he, hbound⟩ | ⟨he, hbound⟩
   · have hm : ((cellFanStart o ℓ z split i).1 + (cellFanEnd o ℓ z split i).1) / 2 =
         (cellFanStart o ℓ z split i).1 := by linarith

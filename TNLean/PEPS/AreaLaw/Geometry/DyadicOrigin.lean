@@ -68,22 +68,9 @@ theorem dyadicOrigin_supporting_lines_avoid_lattice (z : ℤ × ℤ) (m : ℤ) :
       (z.2 : ℝ) ≠ dyadicOrigin.2 + (m : ℝ) ∧
       (z.1 : ℝ) + (z.2 : ℝ) ≠ dyadicOrigin.1 + dyadicOrigin.2 + (m : ℝ) ∧
       (z.1 : ℝ) - (z.2 : ℝ) ≠ dyadicOrigin.1 - dyadicOrigin.2 + (m : ℝ) := by
-  refine ⟨?_, ?_, ?_, ?_⟩
-  · intro h
-    apply (dyadicOrigin_nonintegral (z.1 - m)).1
-    push_cast
-    linarith
-  · intro h
-    apply (dyadicOrigin_nonintegral (z.2 - m)).2.1
-    push_cast
-    linarith
-  · intro h
-    apply (dyadicOrigin_nonintegral (z.1 + z.2 - m)).2.2.1
-    push_cast
-    linarith
-  · intro h
-    apply (dyadicOrigin_nonintegral (z.1 - z.2 - m)).2.2.2
-    push_cast
-    linarith
+  refine ⟨fun h ↦ (dyadicOrigin_nonintegral (z.1 - m)).1 ?_,
+    fun h ↦ (dyadicOrigin_nonintegral (z.2 - m)).2.1 ?_,
+    fun h ↦ (dyadicOrigin_nonintegral (z.1 + z.2 - m)).2.2.1 ?_,
+    fun h ↦ (dyadicOrigin_nonintegral (z.1 - z.2 - m)).2.2.2 ?_⟩ <;> push_cast <;> linarith
 
 end TNLean.PEPS.AreaLaw.Geometry
