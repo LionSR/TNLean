@@ -503,7 +503,6 @@ jobs:
         with:
           build: false
           use-github-cache: false
-          use-mathlib-cache: true
 
       # Setup/Mathlib prebuilt retrieval happens before this separate seed;
       # no seeded artifact is available to a Lean command until pruning passes.
@@ -534,27 +533,6 @@ jobs:
           python3 scripts/ci_compatible_cache.py prune
 
       # Cache setup and provenance guards above must finish before Lean runs.
-      - name: Check original crossing-edge expansion early
-        run: |
-          set -eo pipefail
-          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
-          lake --fail-fast build +TNLean.PEPS.Approximation.SheetSwapBoundaryExpansion:olean \
-            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
-
-      - name: Check doubled-interaction cancellation early
-        run: |
-          set -eo pipefail
-          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
-          lake --fail-fast build +TNLean.PEPS.Approximation.SheetSwapDoubledCancellation:olean \
-            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
-
-      - name: Check supported sheet-swap exchange early
-        run: |
-          set -eo pipefail
-          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
-          lake --fail-fast build +TNLean.PEPS.Approximation.SheetSwapSupported:olean \
-            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
-
       - name: Build template mixed-square and weighted covering estimates early
         timeout-minutes: 5
         run: |
@@ -699,6 +677,15 @@ jobs:
           lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build rectangle mixed-square estimates and shared arithmetic early
+        timeout-minutes: 5
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.QuotientIntervals \
+            TNLean.PEPS.AreaLaw.Geometry.RectangleMixedSquares \
+            TNLean.PEPS.AreaLaw.Geometry.TemplateDyadicRows \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build safe-rectangle dilation early
         run: |
           set -eo pipefail
@@ -723,47 +710,17 @@ jobs:
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
-      - name: Check original crossing-edge expansion and standard axioms strictly
-        timeout-minutes: 4
-        env:
-          LEAN_NUM_THREADS: 1
+      - name: Check rectangle mixed-square estimates strictly and audit axioms
+        timeout-minutes: 5
         run: |
           set -eo pipefail
-          for source in TNLean/PEPS/Approximation/SheetSwapBoundaryExpansion.lean \
-              TNLeanTest/SheetSwapBoundaryExpansionAxioms.lean; do
-            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
-              -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false \
-              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true \
-              -DwarningAsError=true "$source"
-          done
-
-      - name: Check doubled-interaction cancellation and standard axioms strictly
-        timeout-minutes: 4
-        env:
-          LEAN_NUM_THREADS: 1
-        run: |
-          set -eo pipefail
-          for source in TNLean/PEPS/Approximation/SheetSwapDoubledCancellation.lean \
-              TNLeanTest/SheetSwapDoubledCancellationAxioms.lean; do
-            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
-              -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false \
-              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true \
-              -DwarningAsError=true "$source"
-          done
-
-      - name: Check supported sheet-swap exchange and standard axioms strictly
-        timeout-minutes: 4
-        env:
-          LEAN_NUM_THREADS: 1
-        run: |
-          set -eo pipefail
-          for source in TNLean/PEPS/Approximation/SheetSwapSupported.lean \
-              TNLeanTest/SheetSwapSupportedAxioms.lean; do
+          for file in TNLean/PEPS/AreaLaw/Geometry/QuotientIntervals.lean TNLean/PEPS/AreaLaw/Geometry/RectangleMixedSquares.lean TNLean/PEPS/AreaLaw/Geometry/TemplateDyadicRows.lean TNLeanTest/RectangleMixedSquaresAxioms.lean; do
             timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
-              "$source"
+              "$file"
           done
+
       - name: Check physical-column composition axioms strictly
         run: >
           LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
@@ -1068,6 +1025,69 @@ jobs:
 
       # TNLeanTest is outside the default library target. Reuse the imports
       # compiled above, but elaborate these regression examples on every build.
+      - name: Check original crossing-edge expansion early
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.PEPS.Approximation.SheetSwapBoundaryExpansion:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check doubled-interaction cancellation early
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.PEPS.Approximation.SheetSwapDoubledCancellation:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check supported sheet-swap exchange early
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.PEPS.Approximation.SheetSwapSupported:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check original crossing-edge expansion and standard axioms strictly
+        timeout-minutes: 4
+        env:
+          LEAN_NUM_THREADS: 1
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/Approximation/SheetSwapBoundaryExpansion.lean \
+              TNLeanTest/SheetSwapBoundaryExpansionAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true \
+              -DwarningAsError=true "$source"
+          done
+
+      - name: Check doubled-interaction cancellation and standard axioms strictly
+        timeout-minutes: 4
+        env:
+          LEAN_NUM_THREADS: 1
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/Approximation/SheetSwapDoubledCancellation.lean \
+              TNLeanTest/SheetSwapDoubledCancellationAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true \
+              -DwarningAsError=true "$source"
+          done
+
+      - name: Check supported sheet-swap exchange and standard axioms strictly
+        timeout-minutes: 4
+        env:
+          LEAN_NUM_THREADS: 1
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/Approximation/SheetSwapSupported.lean \
+              TNLeanTest/SheetSwapSupportedAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
       - name: Test GHZ sector-probability obstruction
         timeout-minutes: 2
         run: >
