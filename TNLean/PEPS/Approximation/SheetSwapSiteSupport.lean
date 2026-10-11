@@ -41,9 +41,12 @@ theorem reindex_sheetSwapOp_mem_supportedOperators
   constructor
   case right =>
     intro x y hxy i hi
-    simp [sitePairConfigurationEquiv, sheetSwap, hi, hxy i hi]
+    simp [sitePairConfigurationEquiv, sheetSwap, hxy i hi]
   case left =>
     intro x i hi
-    simp [sitePairConfigurationEquiv, sheetSwap, hi]
+    change i ∉ R at hi
+    suffices finProdFinEquiv ((x i).divNat, (x i).modNat) = x i by
+      simpa [sitePairConfigurationEquiv, sheetSwap, hi] using this
+    exact finProdFinEquiv.apply_symm_apply (x i)
 
 end TNLean.PEPS.EncodedFrame
