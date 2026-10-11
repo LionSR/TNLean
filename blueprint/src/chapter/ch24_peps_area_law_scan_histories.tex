@@ -915,6 +915,13 @@ The following finite construction follows
     $Y=UY\setminus U$. For every physical status,
     $V=\Lambda\setminus(P_0\cup Y)$.
 \end{lemma}
+\begin{proof}\leanok
+    The three regions $P_0$, $Y$, and $V$ partition $\Lambda$, so $V$ is the
+    complement of $P_0\cup Y$. For the first identity, a site of $Y$ has
+    positive depth by assumption and is not in $P_0$, so it lies in $UY$ but
+    not in $U$. Conversely, a site of $UY$ outside $U$ has positive depth and
+    is not in $P_0$, so it lies in $Y$.
+\end{proof}
 
 \begin{theorem}[All five physical status cuts]
     \label{thm:al_scan_status_cuts}
@@ -1630,6 +1637,7 @@ The following finite construction follows
 \begin{theorem}[A truncated ground vector with all marginal tail bounds]
     \label{thm:al_scan_exists_marginal_tails}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_reducedState_moment_tail_bounds}
+    \leanok
     \uses{thm:al_lattice_truncation,thm:al_scan_actual_marginal_tails}
     Fix $R\in\mathbb N$, $J\ge0$, $\Delta>0$ and $C_0\ge0$.
     There is $C_{\mathrm{tr}}>0$, depending only on $R,J,\Delta,C_0$,
@@ -1670,7 +1678,7 @@ The following finite construction follows
     scan's charge-slot constant $C_1$, and before $q$, $\Lambda$, $H$,
     $\Omega$ and the scan. Empty domains and empty $S_0$ are permitted.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_lattice_truncation,thm:al_scan_actual_marginal_tails}
     Choose $C_{\mathrm{tr}}$ from Theorem~\ref{thm:al_lattice_truncation}
     with the fixed $R,J,\Delta,C_0$. Apply it using the scan's anchor map,
