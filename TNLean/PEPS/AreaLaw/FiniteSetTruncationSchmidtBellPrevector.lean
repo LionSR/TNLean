@@ -27,6 +27,7 @@ open Filter QuantumCircuit
 
 namespace TNLean.PEPS.AreaLaw
 
+open Classical in
 /-- The finite-set truncation's exact ground vector determines one selected
 Schmidt--Bell label sequence and its initial vector in the original site
 coordinates. The energy equation belongs to the truncated Hamiltonian.
@@ -37,7 +38,6 @@ lines 405–433; `07-comparators.tex`, `comparator:prevector` and
 lines 50–59, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 The two auxiliary projections are their literal transported operators;
 identification with the site-label projectors is a separate result. -/
-open Classical in
 theorem exists_finiteSetTruncation_schmidtBellPrevector_of_gap
     (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ) {J Δ Kb μ C₀ : ℝ}
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hKb : 0 ≤ Kb) (hμ : 0 ≤ μ) (hC₀ : 0 ≤ C₀) :
