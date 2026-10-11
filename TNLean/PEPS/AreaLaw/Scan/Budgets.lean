@@ -159,6 +159,19 @@ lemma eventually_continuityCost_le (C lq : ℝ) (hC : 0 ≤ C) (hlq : 0 ≤ lq) 
     _ ≤ (n : ℝ) ^ (-250 : ℝ) * ((n : ℝ) * (n : ℝ) ^ 2) := by gcongr
     _ = _ := hsplit.symm
 
+/-- The continuity cost of Lemma 2.1 remains at most `n^{-247}` when the trace-distance
+bound has any fixed nonnegative coefficient. The threshold is chosen before `t`.
+Source: `08-scanner.tex`, lines 400–403, where the distance is `O(n^{-500})`.
+
+**Proof status:** The proof is under construction; elaboration is pending. -/
+lemma eventually_continuityCost_le_of_fixed_coefficient (A C lq : ℝ)
+    (hA : 0 ≤ A) (hC : 0 ≤ C) (hlq : 0 ≤ lq) :
+    ∀ᶠ n : ℕ in atTop, ∀ t : ℝ, t ≤ A * (n : ℝ) ^ (-500 : ℝ) →
+      C * √t * (1 + C * (n : ℝ) ^ 2 * lq) ≤ (n : ℝ) ^ (-247 : ℝ) := by
+  filter_upwards [eventually_continuityCost_le (C * √(1 + A)) lq
+    (mul_nonneg hC (Real.sqrt_nonneg _)) hlq] with n hn t ht
+  done
+
 namespace ScanData
 
 variable {X : ScannerExponents} {κ : ScanConstants}
