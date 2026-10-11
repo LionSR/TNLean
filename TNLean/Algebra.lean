@@ -119,6 +119,7 @@ import TNLean.Algebra.MonoidHomCommutingWeight
 import TNLean.Algebra.MonomialFixedSubspace
 import TNLean.Algebra.MonomialGaussOperator
 import TNLean.Algebra.MonomialMatrix
+import TNLean.Algebra.MultilinearSelectedSum
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NatSquarePlusOne
 import TNLean.Algebra.NegMulLog

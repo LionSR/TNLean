@@ -6206,6 +6206,22 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Decision:** One layout-membership lemma removes the repeated argument;
   no further automation is required.
 
+### Finite expansion in selected multilinear arguments — promoted
+
+- **Occurrences:** The selected matrix-unit expansion in
+  `PEPS/Approximation/SelectedSourceContraction` and the selected transported
+  source expansion in `PEPS/Approximation/PreparedSourceTransport` both restrict
+  a multilinear map to a finite set of arguments, expand a sum in each argument,
+  and collect the product of the scalar coefficients.
+- **Shared theorem:** `MultilinearMap.map_piecewise_sum_smul` in
+  `TNLean/Algebra/MultilinearSelectedSum.lean`. It is a direct application of
+  Mathlib's `domDomRestrict`, `map_sum`, and `map_smul_univ`; the unselected
+  arguments are fixed throughout.
+- **Refactors:** Both source-contraction proofs now use this theorem. The
+  matrix-unit consumer retains only the entrywise reconstruction of each matrix.
+  The transported-source consumer uses the QICLean rank-one transport expansion.
+  No additional tactic or simplifier rule is needed.
+
 ### Dyadic refinement cardinality bounds — candidate (2026-10-07)
 
 - **Pattern:** Rewrite an exact refined-cell cardinality as the coarse count
