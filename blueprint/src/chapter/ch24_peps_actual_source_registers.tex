@@ -180,3 +180,35 @@ operations on an empty memory.
     owner is an original selected party, hence its exterior restriction
     is the identity on the empty memory.
 \end{proof}
+
+
+\begin{theorem}[Exterior scalar of an actual empty-party gate]
+    \label{thm:peps_actual_empty_party_gate_scalar}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_localPart_gate_heq_coeffSum_of_isEmpty}
+    \uses{def:peps_partial_source_choices,def:peps_canonical_source_residual,
+        thm:peps_empty_party_gate_scalar}
+    Select all original parties, and consider an actual gate $G$ with
+    no participating parties and branch coefficients $(c_i)_{i\in I}$.
+    For every monomial choice, the exterior restriction of the remaining
+    operations of its partial expansion is
+    \begin{align}
+        \left(\sum_{i\in I}c_i\right)\operatorname{id}_{\mathbb C}.
+        \label{eq:peps_actual_empty_party_gate_scalar}
+    \end{align}
+    An empty branch set gives the zero map. No coefficient sum is
+    cancelled. This is the empty-party case of the chronological
+    contraction in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 24--28, 233--251 and 351--417.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:peps_partial_source_choices,thm:peps_empty_party_gate_scalar,
+        thm:peps_excluded_mapped_owners,thm:peps_party_restriction}
+    The input and output register lists of $G$ are empty. No participating
+    party is selected, so its partial expansion retains the complete
+    operation as a scalar local map at the exterior owner. Its value is
+    the original coefficient sum. Every original spectator belongs to
+    a selected original party and disappears from the exterior restriction.
+    The canonical identifications of the empty memories preserve this
+    scalar map.
+\end{proof}
