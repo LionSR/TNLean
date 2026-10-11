@@ -41,7 +41,7 @@ theorem reindex_sheetSwapOp_mem_supportedOperators
   constructor
   case right =>
     intro x y hxy i hi
-    simp [sitePairConfigurationEquiv, sheetSwap, hi, hxy i hi]
+    simp [sitePairConfigurationEquiv, sheetSwap, hxy i hi]
   case left =>
     intro x i hi
     change i ∉ R at hi
