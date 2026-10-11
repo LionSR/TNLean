@@ -102,6 +102,7 @@ on:
       - 'scripts/test_tenkz_patch_stationarity.py'
       - 'scripts/test_tenkz_region_coordinates.py'
       - 'scripts/test_tenkz_peps_assembly.py'
+      - 'scripts/test_tenkz_area_law_geometry.py'
       - 'scripts/test_tenkz_area_law_scan_buffer.py'
       - 'scripts/test_tenkz_peps_dyadic_geometry.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
@@ -218,6 +219,7 @@ on:
       - 'scripts/test_tenkz_patch_stationarity.py'
       - 'scripts/test_tenkz_region_coordinates.py'
       - 'scripts/test_tenkz_peps_assembly.py'
+      - 'scripts/test_tenkz_area_law_geometry.py'
       - 'scripts/test_tenkz_area_law_scan_buffer.py'
       - 'scripts/test_tenkz_peps_dyadic_geometry.py'
       - 'scripts/test_tenkz_peps_native_semiregular.py'
@@ -377,6 +379,7 @@ jobs:
               - 'scripts/test_tenkz_patch_stationarity.py'
               - 'scripts/test_tenkz_region_coordinates.py'
               - 'scripts/test_tenkz_peps_assembly.py'
+              - 'scripts/test_tenkz_area_law_geometry.py'
               - 'scripts/test_tenkz_area_law_scan_buffer.py'
               - 'scripts/test_tenkz_peps_dyadic_geometry.py'
               - 'scripts/test_tenkz_peps_native_semiregular.py'
@@ -1693,6 +1696,10 @@ jobs:
       - name: Check ordered coordinate insertion diagram
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/test_tenkz_patch_stationarity.py
+
+      - name: Check area-law geometry diagrams
+        if: env.TEX_CHANGED == 'true'
+        run: python3 scripts/test_tenkz_area_law_geometry.py
 
       - name: Check regional basis-relabelling diagrams
         if: env.TEX_CHANGED == 'true'

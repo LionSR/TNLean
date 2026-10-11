@@ -68,6 +68,39 @@
     \end{align}
     These are actual subsets of the plane and finite sets of indices; no
     nesting or distance bound is assumed in their definitions.
+    The picture below shows one endpoint with $C_0=1$: the layer $D_k$ is
+    the ring of scale-$k$ cells that lie in $N_{k+1}$ but not in $N_k$.
+    % Source: 10-geometry.tex, lines 148--200 (N_k, D_k = N_{k+1} minus N_k);
+    % no source figure. Specialization drawn: Z is one endpoint and C_0 = 1.
+    % Ink-to-index: every dot is one half-open scale-k cell C_{k,z}; the red dot
+    % is the occupied index c_k(z) in Z_k. The pink enclosure is the 3-by-3
+    % block P_k, so its union is N_k. Each dashed square is one parent cell
+    % C_{k+1,p} of P_{k+1}, i.e. its four scale-k children; the nine of them
+    % make N_{k+1}, marked by the bracket. The tinted ring is the layer D_k,
+    % the union of the cells in I_k = Ch(P_{k+1}) minus P_k. N_k is not aligned
+    % with the parent squares, which is why D_k cuts through four of them.
+    % No strings, legs or contractions: this is a geometry picture with empty
+    % boundary signature. Not to scale; the plane continues past the frame.
+    \begin{center}
+        \begin{tenkz}[size=s, rows={ket,ket,ket,ket,ket,ket,ket,ket}, cols=8, bonds=none]
+            \tndeclare{species}{endpoint}{hue=source:red}
+            \tn[at=(5,5), skin=dot, species=endpoint]{}
+            \tnmark[form=enclosure, species=secondary, tint]{(2,2) .. (7,7) - (4,4) .. (6,6)}{}
+            \tnmark[form=enclosure, species=selected, tint]{(4,4) .. (6,6)}{}
+            \tnmark[form=enclosure, species=complement]{(2,2) .. (3,3)}{}
+            \tnmark[form=enclosure, species=complement]{(2,4) .. (3,5)}{}
+            \tnmark[form=enclosure, species=complement]{(2,6) .. (3,7)}{}
+            \tnmark[form=enclosure, species=complement]{(4,2) .. (5,3)}{}
+            \tnmark[form=enclosure, species=complement]{(4,4) .. (5,5)}{}
+            \tnmark[form=enclosure, species=complement]{(4,6) .. (5,7)}{}
+            \tnmark[form=enclosure, species=complement]{(6,2) .. (7,3)}{}
+            \tnmark[form=enclosure, species=complement]{(6,4) .. (7,5)}{}
+            \tnmark[form=enclosure, species=complement]{(6,6) .. (7,7)}{}
+            \tnmark[form=label, label pos=e]{midway (2,2) and (3,2)}{$D_k$}
+            \tnmark[form=label, label pos=e]{midway (4,4) and (5,4)}{$N_k$}
+            \tnmark[form=bracket, label pos=e]{(2,2) .. (7,7)}{$N_{k+1}$}
+        \end{tenkz}
+    \end{center}
 \end{definition}
 
 \begin{theorem}[Nested neighborhoods and layer cells]
