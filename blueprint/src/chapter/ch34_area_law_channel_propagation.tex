@@ -744,3 +744,269 @@ $d_G$, so an unreachable vertex belongs to no finite ball about $x$.
     (\ref{eq:al_propagation_actual_increment}) for every $y,B$ under
     the stated support, cutoff, and localization hypotheses.
 \end{proof}
+
+% Retained-family lattice bounds are checked at 3bf19a42, integrated at 2f65172a.
+% Source: 09-amplification.tex, lines 139--160; 03-quasilocal.tex,
+% lines 220--246; 01-preliminaries.tex, lines 82--103, at the source
+% revision recorded at the start of this leaf.
+\subsection{Actual constraints on a finite lattice domain}
+
+\begin{theorem}[Anchor fibers after retaining labels]
+    \label{thm:al_retained_anchor_fibers}
+    \lean{TNLean.PEPS.AreaLaw.card_anchor_fiber_subtype_le}
+    \leanok
+    Let $F$ be a finite label set, let $V$ be any set, and let
+    $a:F\to V$ assign an anchor to every label. For a predicate $P$
+    on $F$, put $F_P=\{i\in F:P(i)\}$.
+    For every $x\in V$,
+    \begin{align}
+        \label{eq:al_propagation_retained_fiber}
+        |\{i\in F_P:a_i=x\}| & \le|\{i\in F:a_i=x\}|.
+    \end{align}
+    Distinct retained labels at the same anchor remain distinct.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The inclusion $F_P\hookrightarrow F$ restricts to an injection
+    from the retained anchor fiber into the original anchor fiber.
+    Taking cardinalities gives~(\ref{eq:al_propagation_retained_fiber}).
+\end{proof}
+
+\begin{theorem}[Uniform retained-channel bounds for lattice positive constraints]
+    \label{thm:al_lattice_channel_uniform_bounds}
+    \uses{def:area_law_hamiltonian,def:al_graph_event_kernel,
+        def:al_local_root_channel,def:qc_site_oscillation}
+    \lean{TNLean.PEPS.AreaLaw.exists_latticeChannelEventKernel_bounds}
+    \leanok
+    Fix integers $p\ge1$ and $R\ge0$, and real constants $J\ge0$
+    and $\Delta>0$. Put $\alpha=p/(p+1)$.
+    There exist $C\ge0$, $c>0$, and $v\ge0$, depending only on
+    $p,R,J,\Delta$, with the following property.
+
+    Choose any local dimension $q\in\N$ with $q>0$ and any finite
+    domain $\Lambda\subseteq\Z^2$, with its induced nearest-neighbour
+    graph $G_\Lambda$. Let $\mathcal F_{\Lambda,R}$ consist of all
+    nonempty supports $X\subseteq\Lambda$ of diameter at most $R$
+    in this graph. For each $X\in\mathcal F_{\Lambda,R}$, let $h_X$
+    be Hermitian, supported on $X$, and satisfy $\|h_X\|\le J$.
+    Put $H=\sum_{X\in\mathcal F_{\Lambda,R}}h_X$ and choose an
+    anchor $a_X\in X$ for every support.
+    Let $E_0\in\R$ and let $\Omega$ be a unit vector such that
+    $H\Omega=E_0\Omega$ and
+    $H-E_0\mathbb 1\ge\Delta(\mathbb 1-|\Omega\rangle\langle\Omega|)$.
+
+    Use the spectral-filter time kernel $f=f_{p,\Delta/2}$ and the
+    positive constraints of
+    Theorem~\ref{thm:al_lattice_positive_replacement}:
+    \begin{align}
+        \label{eq:al_propagation_lattice_filter}
+        M_X & =\int_{\R}f(t)e^{itH}h_Xe^{-itH}\,dt
+        -\langle\Omega,h_X\Omega\rangle\mathbb 1,
+    \end{align}
+    with $c_*=\max\{1,J(\|f\|_1+1)\}$ and $k_X=c_*^{-1}|M_X|$.
+    Write $\mathcal E_X=\mathcal E_{k_X}$ for the full root channel.
+
+    Choose any predicate $P$ on $\mathcal F_{\Lambda,R}$ and put
+    $F_P=\{X\in\mathcal F_{\Lambda,R}:P(X)\}$.
+    Every retained $k_X$ uses the original full Hamiltonian $H$ and
+    ground vector $\Omega$ in~(\ref{eq:al_propagation_lattice_filter}).
+    Take the kernel~(\ref{eq:al_propagation_event_kernel}) on
+    $G_\Lambda$, with label set $F_P$, the restricted anchors,
+    $D=2(2+8\sqrt C\exp(c/2))$, and $b=c/2$.
+    Denote this kernel by $\mathsf A^{(N,P)}$. Its incidence counts are
+    \begin{align}
+        \label{eq:al_propagation_retained_count}
+        m_l^P(y,z) & =|\{X\in F_P:y,z\in N_l(a_X)\}|.
+    \end{align}
+
+    Choose any finite spectator index set $T$ and any cutoff
+    $N\in\N$ such that $N\ge R_{a_X}$ for every $X\in F_P$,
+    where $R_{a_X}$ is the maximum
+    distance from $a_X$ inside its component in $G_\Lambda$.
+    Then, for every $y\in\Lambda$,
+    \begin{align}
+        \label{eq:al_propagation_lattice_row}
+        \sum_{z\in\Lambda}\mathsf A^{(N,P)}_{yz}
+        \exp\left(\frac{c}{4\,2^\alpha}
+        (d_{G_\Lambda}^0(y,z))^\alpha\right)
+         & \le v.
+    \end{align}
+    For every $y\in\Lambda$ and every complex operator $B$ on
+    $(\C^q)^{\otimes\Lambda}\otimes\C^T$,
+    \begin{align}
+        \label{eq:al_propagation_lattice_increment}
+        \sum_{X\in F_P}
+        \bigl(d_y(\mathcal E_X(B))-d_y(B)\bigr)
+         & \le\sum_{z\in\Lambda}\mathsf A^{(N,P)}_{yz}d_z(B).
+    \end{align}
+    The constants $C,c,v$ are chosen before $q$, the domain,
+    Hamiltonian, anchors, ground vector, retained predicate,
+    spectator, and cutoff. The gap assumption concerns the original
+    full Hamiltonian $H$.
+    This applies \cite[Proposition~4.3]{OpenAI2026AreaLaw} to the
+    finite channel estimate in \cite[Section~10]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_lattice_positive_replacement,thm:al_lattice_counts,
+        thm:al_retained_anchor_fibers,thm:al_actual_channel_uniform_bounds}
+    Choose $C,c$ from
+    Theorem~\ref{thm:al_lattice_positive_replacement}.
+    For every admissible lattice instance, it gives
+    $0\le k_X\le\mathbb 1$, exact support in the component of
+    $a_X$, and, for every radius $l\in\N$,
+    \begin{align}
+        \label{eq:al_propagation_lattice_tail}
+        \|k_X-E_{N_l(a_X)}(k_X)\|
+         & \le C\exp(-cl^\alpha).
+    \end{align}
+    These are the localization constants for the positive constraints
+    $k_X$ themselves.
+    Set $v_R=1+2R(R+1)$ and $\mu_R=2^{v_R-1}$.
+    Theorem~\ref{thm:al_lattice_counts} gives, for every site $x$ and
+    radius $l$,
+    \begin{align}
+        \label{eq:al_propagation_lattice_ball}
+        |N_l(x)| & \le2(l+1)^2,
+    \end{align}
+    \begin{align}
+        \label{eq:al_propagation_lattice_fiber}
+        |\{X\in\mathcal F_{\Lambda,R}:a_X=x\}| & \le\mu_R.
+    \end{align}
+    Since $0<\alpha\le1$, apply
+    Theorem~\ref{thm:al_actual_channel_uniform_bounds} with
+    $K=2$ and $\mu=\mu_R$ to choose $v$ before fixing any lattice
+    data or retained predicate. After fixing such data and $P$, use
+    (\ref{eq:al_propagation_lattice_ball}) and
+    Theorem~\ref{thm:al_retained_anchor_fibers} together with
+    (\ref{eq:al_propagation_lattice_fiber}) to obtain
+    \begin{align}
+        \label{eq:al_propagation_lattice_retained_fiber}
+        |\{X\in F_P:a_X=x\}| & \le\mu_R.
+    \end{align}
+    These are the geometric hypotheses for the retained label set.
+    Restrict positivity, component support, and
+    (\ref{eq:al_propagation_lattice_tail}) to $X\in F_P$ and
+    $l\le N$. The cutoff condition for the retained anchors then gives
+    (\ref{eq:al_propagation_lattice_row}) and
+    (\ref{eq:al_propagation_lattice_increment}).
+\end{proof}
+
+For the predicate $P_{\rm all}(X)=\mathrm{true}$, the inclusion
+$F_{P_{\rm all}}\hookrightarrow\mathcal F_{\Lambda,R}$ is a bijection.
+Hence $\mathsf A^{(N,P_{\rm all})}_{yz}=\mathsf A^{(N)}_{yz}$, and
+$\sum_{X\in F_{P_{\rm all}}}u_X
+    =\sum_{X\in\mathcal F_{\Lambda,R}}u_X$ for every family of real
+numbers $u_X$. The full-family weighted row and channel-increment
+bounds therefore follow with the identical witnesses $C,c,v$.
+For the identically false predicate, the kernel and increment sum
+are zero and the cutoff condition is vacuous.
+
+% GraphExtendedMetric and graphChannelEventKernel_nonneg are checked at
+% bad758200, integrated with strict checks at 2ba23cad.
+% These metric facts introduce no time evolution.
+\subsection{Extended graph distance and kernel support}
+
+\begin{definition}[Canonical extended graph pseudometric]
+    \label{def:al_graph_extended_metric}
+    \lean{TNLean.PEPS.AreaLaw.graphPseudoEMetricSpace,
+        TNLean.PEPS.AreaLaw.graphPseudoEMetricSpace_edist}
+    \leanok
+    Let $V$ be any set and let $G$ be a simple graph on $V$.
+    The graph distance $d_G(x,y)$ is the length of a shortest path
+    when one exists, and is $\infty$ otherwise.
+    Let $\iota:\N\cup\{\infty\}\to[0,\infty]$ be the canonical
+    inclusion, sending each natural number to the same real number
+    and $\infty$ to $\infty$. Define
+    \begin{align}
+        \label{eq:al_propagation_extended_distance}
+        \rho_G(x,y) & =\iota(d_G(x,y)).
+    \end{align}
+    This is an extended pseudometric on $V$: it satisfies
+    $\rho_G(x,x)=0$, $\rho_G(x,y)=\rho_G(y,x)$, and
+    $\rho_G(x,z)\le\rho_G(x,y)+\rho_G(y,z)$.
+\end{definition}
+\begin{proof}
+    \leanok
+    The graph distance is zero on the diagonal and symmetric.
+    The inclusion $\iota$ preserves zero, addition, and order, so
+    the graph triangle inequality gives
+    \begin{align}
+        \label{eq:al_propagation_extended_triangle}
+        \rho_G(x,z) & \le\iota(d_G(x,y)+d_G(y,z))
+        =\rho_G(x,y)+\rho_G(y,z).
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Finite distance and connected components]
+    \label{thm:al_graph_extended_components}
+    \uses{def:al_graph_extended_metric}
+    \lean{TNLean.PEPS.AreaLaw.graphPseudoEMetricSpace_edist_ne_top,
+        TNLean.PEPS.AreaLaw.graphPseudoEMetricSpace_edist_eq_top}
+    \leanok
+    For every $x,y\in V$, one has $\rho_G(x,y)\ne\infty$ if and
+    only if a path in $G$ connects $x$ to $y$.
+    Equivalently, $\rho_G(x,y)=\infty$ if and only if $y$ is
+    unreachable from $x$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:al_graph_extended_metric}
+    The inclusion $\iota$ sends only $\infty$ to $\infty$.
+    A finite graph distance is the length of a path, so it is finite
+    precisely for reachable pairs. Negating this equivalence gives
+    the characterization of infinite distance.
+\end{proof}
+
+For $r\in[0,\infty]$, denote its real value by $r_{\R}$: this
+equals $r$ when $r$ is finite, and $\infty_{\R}=0$.
+
+\begin{theorem}[Real value of the extended graph distance]
+    \label{thm:al_graph_extended_real_value}
+    \uses{def:al_graph_extended_metric}
+    \lean{TNLean.PEPS.AreaLaw.graphPseudoEMetricSpace_edist_toReal}
+    \leanok
+    For every $x,y\in V$,
+    \begin{align}
+        \label{eq:al_propagation_extended_real_value}
+        (\rho_G(x,y))_{\R} & =d_G^0(x,y),
+    \end{align}
+    where $d_G^0(x,y)$ is the ordinary graph distance for reachable
+    pairs and zero for unreachable pairs.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:al_graph_extended_metric}
+    If $d_G(x,y)=n\in\N$, both sides of
+    (\ref{eq:al_propagation_extended_real_value}) equal $n$.
+    If $d_G(x,y)=\infty$, both sides equal zero by their defining
+    conventions.
+\end{proof}
+
+\begin{theorem}[Nonnegativity of the finite event kernel]
+    \label{thm:al_graph_event_kernel_nonneg}
+    \uses{def:al_graph_event_kernel}
+    \lean{TNLean.PEPS.AreaLaw.graphChannelEventKernel_nonneg}
+    \leanok
+    For the finite graph and label family in
+    Definition~\ref{def:al_graph_event_kernel}, suppose $D\ge0$.
+    Then $\mathsf A^{(N)}_{yz}\ge0$ for every real $b,\alpha$,
+    every cutoff $N\in\N$, and all sites $y,z$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:al_graph_event_kernel}
+    Each count $m_l(y,z)$ is nonnegative and every exponential is
+    positive. Their finite weighted sum in
+    (\ref{eq:al_propagation_event_kernel}) is therefore nonnegative
+    when multiplied by $D\ge0$.
+\end{proof}
+
+The real-value convention sends infinite distance to zero. In the
+weighted-row estimates, the component restriction is retained by
+Theorems~\ref{thm:al_graph_extended_components} and
+\ref{thm:al_graph_kernel_disconnected}:
+$\rho_G(y,z)=\infty$ implies $\mathsf A^{(N)}_{yz}=0$.
+Consequently disconnected pairs contribute zero to every weighted
+row, and~(\ref{eq:al_propagation_extended_real_value}) replaces
+$d_G^0(y,z)$ there by $(\rho_G(y,z))_{\R}$.

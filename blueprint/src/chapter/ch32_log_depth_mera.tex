@@ -137,7 +137,7 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     \lean{MPSPreparation.exists_disentangler_fixedPointPair}
     \leanok
     \uses{def:prep_pair_product_state, thm:prep_pair_norm,
-        lem:ldp_unitary_implementing_isometry}
+        thm:ldp_unitary_implementing_isometry}
     Let $D\ge1$ and let $\rho\ge0$ with $\tr\rho=1$. Then there is a unitary
     $u$ on $\C^D\otimes\C^D$ with $u\ket0\ket0=\ket\omega$, the pair of the
     fixed-point state.
@@ -149,7 +149,7 @@ leaves, as detailed in the resolved note~\cite{gap:mswc24_tree_mera_scope}.
     (Theorem~\ref{thm:prep_pair_norm}), so it is an isometry. An isometry
     defined on the span of some computational basis vectors extends to a
     unitary, as in the proof of
-    Lemma~\ref{lem:ldp_unitary_implementing_isometry}; applied to the basis
+    Theorem~\ref{thm:ldp_unitary_implementing_isometry}; applied to the basis
     vector $\ket0\ket0$, this gives a unitary $u$ with
     $u\ket0\ket0=V1=\ket\omega$.
 \end{proof}
