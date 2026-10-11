@@ -202,8 +202,8 @@ theorem norm_act_birthOp_sub_le {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsometry
   have hiso : 𝒱ᴴ * 𝒱 = 1 :=
     IsIsometry.kronecker (1 : Matrix (T × E) (T × E) ℂ) V (by simp [IsIsometry]) hV
   have hζ : act Pr ζ = ζ := by
-    simp only [act, Pr, ζ, ← mulVec_mulVec, pairSource_conjTranspose_mulVec_tensorPurification hs,
-      pairSource_mulVec]
+    simp only [act_apply, Pr, ζ, ← mulVec_mulVec,
+      pairSource_conjTranspose_mulVec_tensorPurification hs, pairSource_mulVec]
   have hproj : IsStarProjection Pr := by
     refine ⟨?_, ?_⟩
     · change Pr * Pr = Pr
