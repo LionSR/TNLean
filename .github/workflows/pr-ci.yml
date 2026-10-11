@@ -25,6 +25,7 @@ on:
       - 'scripts/test_lean_file_policies.py'
       - 'docbuild/**'
       - 'scripts/check_docbuild_manifest.py'
+      - 'scripts/test_check_docbuild_manifest.py'
       - 'scripts/coherent_qic_prerequisites.json'
       - 'scripts/export_coherent_qic_prerequisites.py'
       - 'scripts/test_export_coherent_qic_prerequisites.py'
@@ -71,6 +72,8 @@ on:
       - 'scripts/generate_badges.py'
       - 'scripts/test_badge_colors.py'
       - 'scripts/test_blueprint_web_render.py'
+      - 'scripts/test_blueprint_graph_worker.py'
+      - 'scripts/test_blueprint_graph_precompute.py'
       - 'scripts/add_blueprint_search.py'
       - 'scripts/test_add_blueprint_search.py'
       - 'scripts/test_blueprint_search_web.py'
@@ -113,9 +116,11 @@ on:
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_supported_polar_tree.py'
       - 'scripts/test_sector_encoder_diagram.py'
+      - 'scripts/test_nested_patch_geometry_diagram.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_tenkz_sector_weight.py'
       - 'scripts/test_tenkz_string_endpoints.py'
+      - 'scripts/test_tenkz_stationary_density.py'
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
@@ -139,6 +144,7 @@ on:
       - 'scripts/test_lean_file_policies.py'
       - 'docbuild/**'
       - 'scripts/check_docbuild_manifest.py'
+      - 'scripts/test_check_docbuild_manifest.py'
       - 'scripts/coherent_qic_prerequisites.json'
       - 'scripts/export_coherent_qic_prerequisites.py'
       - 'scripts/test_export_coherent_qic_prerequisites.py'
@@ -165,6 +171,7 @@ on:
       - 'scripts/prune_tenkz_render_cache.py'
       - 'scripts/test_prune_tenkz_render_cache.py'
       - 'blueprint/src/**'
+      - 'scripts/build_blueprint_ch01_12.sh'
       - 'docs/slides/**'
       - 'blueprint/.chktexrc'
       - 'blueprint/latexindent.yaml'
@@ -179,6 +186,8 @@ on:
       - 'scripts/generate_badges.py'
       - 'scripts/test_badge_colors.py'
       - 'scripts/test_blueprint_web_render.py'
+      - 'scripts/test_blueprint_graph_worker.py'
+      - 'scripts/test_blueprint_graph_precompute.py'
       - 'scripts/add_blueprint_search.py'
       - 'scripts/test_add_blueprint_search.py'
       - 'scripts/test_blueprint_search_web.py'
@@ -221,9 +230,11 @@ on:
       - 'scripts/test_tenkz_index_routing.py'
       - 'scripts/test_supported_polar_tree.py'
       - 'scripts/test_sector_encoder_diagram.py'
+      - 'scripts/test_nested_patch_geometry_diagram.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
       - 'scripts/test_tenkz_sector_weight.py'
       - 'scripts/test_tenkz_string_endpoints.py'
+      - 'scripts/test_tenkz_stationary_density.py'
   workflow_dispatch:
 
 concurrency:
@@ -259,6 +270,7 @@ jobs:
       lean: ${{ steps.filter.outputs.lean }}
       module_policy: ${{ steps.filter.outputs.module_policy }}
       blueprint: ${{ steps.filter.outputs.blueprint }}
+      blueprint_pdf: ${{ steps.filter.outputs.blueprint_pdf }}
       paper_gaps: ${{ steps.filter.outputs.paper_gaps }}
       workflow: ${{ steps.filter.outputs.workflow }}
       coherent_prerequisites: ${{ steps.filter.outputs.coherent_prerequisites }}
@@ -304,6 +316,7 @@ jobs:
               - 'scripts/test_lean_file_policies.py'
               - 'docbuild/**'
               - 'scripts/check_docbuild_manifest.py'
+              - 'scripts/test_check_docbuild_manifest.py'
               - 'scripts/coherent_qic_prerequisites.json'
               - 'scripts/export_coherent_qic_prerequisites.py'
               - 'scripts/test_export_coherent_qic_prerequisites.py'
@@ -341,6 +354,8 @@ jobs:
               - 'scripts/generate_badges.py'
               - 'scripts/test_badge_colors.py'
               - 'scripts/test_blueprint_web_render.py'
+              - 'scripts/test_blueprint_graph_worker.py'
+              - 'scripts/test_blueprint_graph_precompute.py'
               - 'scripts/add_blueprint_search.py'
               - 'scripts/test_add_blueprint_search.py'
               - 'scripts/test_blueprint_search_web.py'
@@ -372,9 +387,22 @@ jobs:
               - 'scripts/test_tenkz_index_routing.py'
               - 'scripts/test_supported_polar_tree.py'
               - 'scripts/test_sector_encoder_diagram.py'
+              - 'scripts/test_nested_patch_geometry_diagram.py'
               - 'scripts/test_tenkz_ordered_mixing.py'
               - 'scripts/test_tenkz_sector_weight.py'
               - 'scripts/test_tenkz_string_endpoints.py'
+              - 'scripts/test_tenkz_stationary_density.py'
+            # Inputs of the two XeLaTeX volumes the blueprint-pdf job builds:
+            # `leanblueprint pdf` (blueprint/src/latexmkrc) and
+            # scripts/build_blueprint_ch01_12.sh, with the bibliography from
+            # `texra-blueprint bbl` (texra-blueprint.toml).
+            blueprint_pdf:
+              - 'blueprint/src/**'
+              - 'texra-blueprint.toml'
+              - 'scripts/build_blueprint_ch01_12.sh'
+              - 'tenkz.toml'
+              - 'scripts/fetch_tenkz.py'
+              - 'scripts/tenkz_paths.py'
             # Everything the paper-gap reference check reads: the notes,
             # the trees it scans for references, its configuration, and
             # the wrapper scripts.
@@ -505,6 +533,14 @@ jobs:
           python3 scripts/ci_compatible_cache.py prune
 
       # Cache setup and provenance guards above must finish before Lean runs.
+      - name: Build template mixed-square and weighted covering estimates early
+        timeout-minutes: 5
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Check finite rectangular dual geometry early
         run: |
           set -eo pipefail
@@ -598,6 +634,12 @@ jobs:
             +TNLean.MPS.Preparation.SectorEncoderGroundspace:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build birth-target entropy implication early
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.BirthTargetEntropy \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build capped dyadic partition early
         run: |
           set -eo pipefail
@@ -614,6 +656,20 @@ jobs:
             +TNLean.MPS.MPDO.PhysicalSectorFactorization:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build rounded bootstrap collar clearance early
+        timeout-minutes: 2
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.Scan.BootstrapRoundedClearance \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Build rectangle partial-row entropy early
+        timeout-minutes: 2
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.WeakRectanglePartialRowEntropy \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build template layers early
         timeout-minutes: 5
         run: |
@@ -621,11 +677,16 @@ jobs:
           lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.TemplateLayers:olean \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
-      - name: Build template mixed-square estimates early
-        timeout-minutes: 5
+      - name: Build safe-rectangle dilation early
         run: |
           set -eo pipefail
-          lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateMixedSquares \
+          lake --fail-fast build TNLean.PEPS.AreaLaw.SafeRectangleDilation \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Build physical safe-rectangle entropy early
+        run: |
+          set -eo pipefail
+          lake --fail-fast build TNLean.PEPS.AreaLaw.InitialSafeRectangleEntropy \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
       - name: Build physical cross-band commutation early
@@ -646,6 +707,22 @@ jobs:
             lake build
             lake build lint_style
           } 2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
+      - name: Check physical-column composition axioms strictly
+        run: >
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/PartyOutputCoordinatesAxioms.lean
+
+      - name: Check source-free owner restriction kernel dependencies strictly
+        timeout-minutes: 2
+        run: >
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s
+          lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/WordOwnerRestrictionAxioms.lean
 
       - name: Check physical cross-band production modules strictly
         timeout-minutes: 5
@@ -838,6 +915,18 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/EdgeCrossingBudgetAxioms.lean
 
+      - name: Test fan radial-ray restriction strictly and audit axioms
+        timeout-minutes: 4
+        run: |
+          set -e
+          for file in TNLean/PEPS/AreaLaw/Geometry/CellFanRays.lean \
+              TNLeanTest/PEPS/AreaLaw/Geometry/CellFanRaysAxioms.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
+          done
+
       - name: Test concrete one-edge crossing regression strictly
         run: >
           timeout --signal=INT --kill-after=5s 90s lake env lean -j1
@@ -869,6 +958,16 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/SquareGridContraction.lean
 
+      - name: Check safe-rectangle dilation strictly and audit axioms
+        run: |
+          set -eo pipefail
+          for file in TNLean/PEPS/AreaLaw/SafeRectangleDilation.lean TNLeanTest/SafeRectangleDilationAxioms.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 80s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$file"
+          done
+
       - name: Test partial-row entropy strictly
         timeout-minutes: 2
         run: >
@@ -876,6 +975,32 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/TemplateEntropy.lean
+
+      - name: Check rounded bootstrap collar clearance and standard axioms strictly
+        timeout-minutes: 2
+        run: |
+          set -euo pipefail
+          for source in \
+            TNLean/PEPS/AreaLaw/Scan/BootstrapRoundedClearance.lean \
+            TNLeanTest/BootstrapRoundedClearanceAxioms.lean; do
+            lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
+      - name: Check rectangle partial-row entropy and standard axioms strictly
+        timeout-minutes: 2
+        run: |
+          set -euo pipefail
+          for source in \
+            TNLean/PEPS/AreaLaw/WeakRectanglePartialRowEntropy.lean \
+            TNLeanTest/WeakRectanglePartialRowEntropyAxioms.lean; do
+            lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
 
       - name: Test square-grid vector, regional and approximation transport
         timeout-minutes: 2
@@ -946,6 +1071,17 @@ jobs:
           for example in RegularizedPatchMinimum RegularizedPatchNoncommuting \
               DependentRegionCoordinates RegularizedPatchStationarity RegularizedPatchMarginal RegularizedPatchZeroWeight; do
             LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 $flags \
+              "TNLeanTest/$example.lean"
+          done
+
+      - name: Test nested-square geometry and kernel dependencies strictly
+        timeout-minutes: 4
+        run: |
+          set -e
+          for example in NestedPatchGeometry NestedPatchGeometryAxioms; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
               "TNLeanTest/$example.lean"
           done
 
@@ -1235,6 +1371,14 @@ jobs:
               "TNLeanTest/$example.lean"
           done
 
+      - name: Test stationary physical densities
+        timeout-minutes: 2
+        run: >
+          lake env lean -j 1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/StationaryPhysicalDensity.lean
+
       - name: Test reciprocal scalar cancellation
         timeout-minutes: 2
         run: >
@@ -1399,7 +1543,17 @@ jobs:
               TNLeanTest/PEPS/AreaLaw/Amplification/ComponentChannelOscillation.lean \
               TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelOscillation.lean \
               TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelEventKernel.lean \
-              TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelWeightedRow.lean; do
+              TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelWeightedRow.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LatticeChannelWeightedRow.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelWordObservables.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelWordChronology.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelGroundVectors.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelGroundVectorChronology.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/GraphChannelPoissonGrowth.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LatticeChannelPoissonGrowth.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/ChannelWordThinning.lean \
+              TNLeanTest/PEPS/AreaLaw/Amplification/LatticeChannelPoissonThinning.lean \
+              TNLeanTest/PEPS/AreaLaw/GraphExtendedMetric.lean; do
             lake env lean \
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
@@ -1565,6 +1719,9 @@ jobs:
           bash -n scripts/lake_build_locked.sh
           bash -n scripts/seed_lake_build.sh
           bash -n scripts/test_seed_lake_build.sh
+
+      - name: Test docbuild manifest checker
+        run: python3 scripts/test_check_docbuild_manifest.py
 
       # docbuild/ shares the root package directory, so its manifest must pin
       # the same revisions or the weekly API docs build checks out stale ones.
@@ -1852,11 +2009,19 @@ jobs:
         timeout-minutes: 2
         run: python3 scripts/test_tenkz_string_endpoints.py
 
+      - name: Test stationary physical density contractions
+        if: env.TEX_CHANGED == 'true'
+        timeout-minutes: 2
+        run: python3 scripts/test_tenkz_stationary_density.py
+
       - name: Check compatible-seed diagram conventions
         run: python3 scripts/test_compatible_seed_diagram.py
 
       - name: Check coherent sector-encoder diagrams
         run: python3 scripts/test_sector_encoder_diagram.py
+
+      - name: Check nested-patch geometry diagram
+        run: python3 scripts/test_nested_patch_geometry_diagram.py
 
       - name: Lint LaTeX (chktex)
         if: env.TEX_CHANGED == 'true'
@@ -1949,6 +2114,25 @@ jobs:
           python3 scripts/add_blueprint_search.py --web-root blueprint/web
           python3 scripts/test_blueprint_search_web.py --web-root blueprint/web
 
+      - name: Test dependency graph rendering and terminal errors
+        if: env.TEX_CHANGED == 'true'
+        timeout-minutes: 2
+        run: python3 scripts/test_blueprint_graph_worker.py --browser-smoke
+
+      - name: Test precomputed dependency graph interactions
+        if: env.TEX_CHANGED == 'true'
+        timeout-minutes: 2
+        run: python3 scripts/test_blueprint_graph_precompute.py --browser-smoke
+
+      # A zero exit status says the build ran, not that the pages read. This
+      # opens every generated page and measures what a reader would meet.
+      - name: Test generated blueprint pages
+        if: env.TEX_CHANGED == 'true'
+        run: |
+          python3 scripts/test_blueprint_graph_worker.py
+          python3 scripts/test_blueprint_graph_precompute.py
+          python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
+
       - name: Preserve failed blueprint render
         if: failure() && env.TEX_CHANGED == 'true'
         uses: actions/upload-artifact@v7
@@ -1956,12 +2140,6 @@ jobs:
           name: blueprint-render-failure
           path: blueprint/web
           retention-days: 3
-
-      # A zero exit status says the build ran, not that the pages read. This
-      # opens every generated page and measures what a reader would meet.
-      - name: Test generated blueprint pages
-        if: env.TEX_CHANGED == 'true'
-        run: python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
 
       - name: Test Blueprint declaration scanner
         run: python3 scripts/test_blueprint_lean_sync.py
@@ -2031,3 +2209,79 @@ jobs:
               check=True,
           )
           PY
+
+  # PR CI otherwise builds only the web blueprint, whose plasTeX renderer
+  # accepts constructs that stop the print volumes (a bare `_` in text mode, an
+  # unbraced `\spn_\C` subscript). Those errors then surfaced only in the
+  # Blueprint workflow on main. This job runs the same two PDF builds as
+  # blueprint.yml (`leanblueprint pdf` and the FT-MPS volume), the first seeded from the auxiliary files main saved, so a
+  # typical run needs one or two XeLaTeX passes. Read only: branches never save.
+  blueprint-pdf:
+    name: Check blueprint PDF compiles
+    needs: changes
+    if: "!cancelled() && github.event_name == 'pull_request' && needs.changes.result == 'success' && (needs.changes.outputs.blueprint_pdf == 'true' || needs.changes.outputs.workflow == 'true')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      PRINT_AUX_FILES: |
+        blueprint/print/*.aux
+        blueprint/print/*.bbl
+        blueprint/print/*.blg
+        blueprint/print/*.fdb_latexmk
+        blueprint/print/*.out
+        blueprint/print/*.toc
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v7
+
+      - name: Install blueprint system dependencies
+        timeout-minutes: 20
+        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
+        with:
+          cache-suffix: web-v3
+          extra-packages: texlive-fonts-extra texlive-publishers
+
+      - name: Install leanblueprint
+        uses: texra-ai/lean-env-action/leanblueprint@v1
+        with:
+          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
+
+      - name: Fetch pinned tenkz package
+        run: python3 scripts/fetch_tenkz.py
+
+      - name: Build blueprint bibliography
+        run: texra-blueprint bbl
+
+      - name: Restore PDF auxiliary files
+        uses: actions/cache/restore@v6
+        with:
+          path: ${{ env.PRINT_AUX_FILES }}
+          key: blueprint-print-aux-${{ github.run_id }}
+          restore-keys: blueprint-print-aux-
+
+      # As in blueprint.yml: a stale auxiliary file can name a macro that a
+      # changed preamble no longer defines, so a failed seeded build is retried
+      # from a clean print directory and only a broken source fails the step.
+      - name: Build blueprint PDF
+        id: print-pdf
+        run: |
+          if ! leanblueprint pdf; then
+            echo "::warning::Seeded PDF build failed; rebuilding from a clean print directory"
+            rm -rf blueprint/print
+            leanblueprint pdf
+          fi
+
+      # The focused FT-MPS volume compiles the \ifftmpsvolume branches, which
+      # the full print volume never reaches; blueprint.yml builds it too.
+      - name: Build FT-MPS blueprint volume
+        run: ./scripts/build_blueprint_ch01_12.sh
+
+      # The FT-MPS script builds in a temporary directory it removes, so its
+      # log appears in the step output; only the full volume leaves print.log.
+      - name: Preserve failed PDF log
+        if: failure() && steps.print-pdf.outcome == 'failure'
+        uses: actions/upload-artifact@v7
+        with:
+          name: blueprint-pdf-failure
+          path: blueprint/print/print.log
+          retention-days: 3
