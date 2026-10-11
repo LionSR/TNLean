@@ -846,6 +846,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{theorem}[Restricting a swap to an interaction support]
     \label{thm:peps_sheet_swap_interaction_restriction}
     \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_inter}
+    \leanok
     Let $V$ be a finite site set, $q\geq0$ a local dimension, and
     $R,S\subseteq V$. Let $A$ be an operator supported on $S$.
     Write $T(A)=A\otimes I+I\otimes A$, and let $F_D$ exchange the
@@ -857,7 +858,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     This is the support reduction in the boundary perturbation argument
     of \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:peps_frame_sheet_swap_compose,thm:peps_sheet_swap_doubled_cancellation}
     Put $B=R\cap S$ and $O=R\setminus S$. The composition of the
     swaps gives $F_BF_R=F_O$, hence $F_R=F_B^*F_O$ by unitarity.
