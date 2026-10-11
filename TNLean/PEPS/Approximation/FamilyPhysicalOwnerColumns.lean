@@ -89,6 +89,8 @@ private theorem familyPhysicalListBasis_owner_column_heq
           δ (fun j ↦ y (([] : List Q).get j)))).symm
   | cons p ps ih =>
       rw [List.map_cons, familyPhysicalListBasis_cons_apply, familyPhysicalListBasis_cons_apply]
-      exact tmul_heq (familyPhysicalListBasis_owner_mem_eq f δ ps) _ ih
+      exact tmul_heq (W := euc (Fin (δ (f p))))
+        (familyPhysicalListBasis_owner_mem_eq f δ ps)
+        ((EuclideanSpace.basisFun (Fin (δ (f p))) ℂ) (y (f p))) ih
 
 end TNLean.PEPS.PairEffect
