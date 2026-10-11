@@ -728,11 +728,94 @@ class WorkflowTests(unittest.TestCase):
                     imports = (ROOT / 'TNLeanTest/LabelledOpenCoefficient.lean').read_text().splitlines()
                     self.assertEqual([line for line in imports if line.startswith('import ')],
                                      ['import TNLean.PEPS.TorusDualOpenDeformation'])
+                elif step.get('name') == 'Check initial component regions early':
+                    self.assertEqual(sum(s.get('name') == step['name'] for s in self.steps), 1)
+                    self.assertEqual(i, prune + 1)
+                    self.assertLess(i, build)
+                    self.assertNotIn('if', step)
+                    self.assertNotIn('continue-on-error', step)
+                    self.assertEqual(step['timeout-minutes'], 6)
+                    self.assertEqual(step['env'], {'LEAN_NUM_THREADS': 1})
+                    run = step['run']
+                    target = 'lake --fail-fast build +TNLean.PEPS.AreaLaw.Geometry.InitialSectorComponents:olean'
+                    self.assertLess(run.index('test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean'),
+                                    run.index(target))
+                    self.assertLess(run.index(target), run.index('lake env lean -j1'))
+                    flattened = run.replace('\\\n', '')
+                    targets = flattened.split('lake --fail-fast build ', 1)[1].split('2>&1', 1)[0].split()
+                    self.assertEqual(targets, [
+                        '+TNLean.PEPS.AreaLaw.Geometry.InitialSectorComponents:olean',
+                        '+Mathlib.Analysis.Normed.Affine.Convex:olean',
+                    ])
+                    source = 'TNLean/PEPS/AreaLaw/Geometry/InitialComponentRegions.lean'
+                    imports = (ROOT / source).read_text().splitlines()
+                    self.assertEqual([line for line in imports if line.startswith('import ')], [
+                        'import TNLean.PEPS.AreaLaw.Geometry.InitialSectorComponents',
+                        'import Mathlib.Analysis.Normed.Affine.Convex',
+                    ])
+                    for flag in ['set -eo pipefail', '-DwarningAsError=true',
+                                 '-DautoImplicit=false', '-DrelaxedAutoImplicit=false',
+                                 '-Dpp.unicode.fun=true', '-DmaxSynthPendingDepth=3',
+                                 '-Dlinter.mathlibStandardSet=true', source]:
+                        self.assertIn(flag, run)
+                    self.assertIn('timeout --signal=INT --kill-after=5s 240s', run)
+                    self.assertIn('timeout --signal=INT --kill-after=5s 60s lake env lean -j1', run)
+                    self.assertEqual(run.count('timeout '), 2)
+                    self.assertEqual(run.count('lake env lean'), 1)
+                    self.assertEqual(run.count('tee -a "$RUNNER_TEMP/lake-build.log"'), 2)
                 else:
                     self.assertLess(build, i)
         setup = next(s for s in self.steps if s.get('uses') == 'leanprover/lean-action@v1')
         self.assertIs(setup['with']['build'], False)
         self.assertIs(setup['with']['use-github-cache'], False)
+
+    def test_initial_component_early_shell_stops_on_failure(self):
+        step = next(s for s in self.steps if s.get('name') == 'Check initial component regions early')
+        cases = [
+            ('success', ['imports', 'leaf', 'root'], ['240s', '60s']),
+            ('guard', [], []),
+            ('imports', ['imports'], ['240s']),
+            ('leaf', ['imports', 'leaf'], ['240s', '60s']),
+        ]
+        for failure, calls, deadlines in cases:
+            with self.subTest(failure=failure), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                # Only shell stand-ins run; the guard file is an inert temporary placeholder.
+                if failure != 'guard':
+                    put(root, '.lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean', '')
+                timeout = root / 'timeout'
+                timeout.write_text(
+                    '#!/bin/sh\n'
+                    'test "$1" = --signal=INT && test "$2" = --kill-after=5s || exit 98\n'
+                    'case "$3" in 240s|60s) ;; *) exit 98 ;; esac\n'
+                    'printf "%s\\n" "$3" >> "$DEADLINES"\n'
+                    'shift 3\nexec "$@"\n')
+                lake = root / 'lake'
+                lake.write_text(
+                    '#!/bin/sh\n'
+                    'test "$LEAN_NUM_THREADS" = 1 || exit 97\n'
+                    'case "$1" in --fail-fast) phase=imports ;; env) phase=leaf ;; *) exit 99 ;; esac\n'
+                    'printf "%s\\n" "$phase" >> "$CALLS"\n'
+                    'printf "%s\\n" "$phase"\n'
+                    'test "$FAILURE" != "$phase"\n')
+                timeout.chmod(0o755)
+                lake.chmod(0o755)
+                (root / 'calls').write_text('')
+                (root / 'deadlines').write_text('')
+                env = {**os.environ, 'PATH': f'{root}:' + os.environ['PATH'],
+                       'CALLS': str(root / 'calls'), 'DEADLINES': str(root / 'deadlines'),
+                       'FAILURE': failure, 'RUNNER_TEMP': tmp,
+                       'LEAN_NUM_THREADS': str(step['env']['LEAN_NUM_THREADS'])}
+                result = subprocess.run(
+                    ['bash', '-c',
+                     step['run'] + '\nprintf "root\\n" >> "$CALLS"\n'],
+                    cwd=root, env=env, capture_output=True, text=True)
+                self.assertEqual(result.returncode == 0, failure == 'success')
+                self.assertEqual((root / 'calls').read_text().splitlines(), calls)
+                self.assertEqual((root / 'deadlines').read_text().splitlines(), deadlines)
+                if calls:
+                    self.assertEqual((root / 'lake-build.log').read_text().splitlines(),
+                                     [call for call in calls if call != 'root'])
 
     def test_postrestore_shell_stops_before_prune_or_build(self):
         step = next(s for s in self.steps if s.get('name') == 'Discard unvalidated cross-commit artifacts')
