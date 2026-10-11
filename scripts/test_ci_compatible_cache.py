@@ -704,6 +704,29 @@ class WorkflowTests(unittest.TestCase):
                         'import TNLean.PEPS.TorusDualRectangleFlux',
                         'import TNLean.PEPS.TorusDualWinding',
                     ])
+                elif step.get('name') == 'Build safe template rectangle adapter early':
+                    self.assertLess(prune, i)
+                    self.assertLess(i, build)
+                    self.assertNotIn('continue-on-error', step)
+                    run = step['run']
+                    cache_guard = 'test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean'
+                    target = 'lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateSafeRectangles'
+                    self.assertLess(run.index(cache_guard), run.index(target))
+                    self.assertLess(run.index(target), run.index('lake env lean'))
+                    self.assertEqual(run.count('lake env lean'), 1)
+                    for flag in ['set -eo pipefail', '-DwarningAsError=true',
+                                 '-DautoImplicit=false', '-DrelaxedAutoImplicit=false',
+                                 '-DmaxSynthPendingDepth=3', '-Dlinter.mathlibStandardSet=true',
+                                 'timeout --signal=INT --kill-after=5s 90s']:
+                        self.assertIn(flag, run)
+                    self.assertEqual(run.strip().splitlines()[-1].strip(),
+                                     'TNLeanTest/TemplateCutBoundary.lean')
+                    imports = (ROOT / 'TNLeanTest/TemplateCutBoundary.lean').read_text().splitlines()
+                    self.assertEqual([line for line in imports if line.startswith('import ')], [
+                        'import TNLean.PEPS.AreaLaw.Geometry.TemplateSafeRectangles',
+                        'import TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary',
+                        'import TNLean.PEPS.AreaLaw.Geometry.TemplateClearance',
+                        'import Mathlib.Data.Rat.Floor'])
                 elif step.get('name') == 'Check labelled open coefficients early':
                     self.assertLess(prune, i)
                     self.assertLess(i, build)
