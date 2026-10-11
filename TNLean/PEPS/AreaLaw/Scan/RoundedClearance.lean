@@ -43,13 +43,16 @@ private theorem roundedClearance_ratio_tendsto_zero {ell : ℝ} (hell : 0 < ell)
     simpa only [Function.comp_apply, Real.rpow_one,
       show 1 - ell - 1 = -ell by ring] using Real.rpow_sub hn0 (1 - ell) 1
   have hl : Tendsto (fun n : ℕ ↦ Real.log (n : ℝ) ^ 2 / n) atTop (𝓝 0) := by
-    simpa only [one_mul, add_zero, Function.comp_apply] using
-      (Real.tendsto_pow_log_div_mul_add_atTop 1 0 2 one_ne_zero).comp hnat
+    refine ((Real.tendsto_pow_log_div_mul_add_atTop 1 0 2 one_ne_zero).comp hnat).congr ?_
+    intro n
+    simp only [Function.comp_apply, one_mul, add_zero]
   have hi : Tendsto (fun n : ℕ ↦ (n : ℝ)⁻¹) atTop (𝓝 0) :=
     tendsto_inv_atTop_zero.comp hnat
   have h := ((hp.const_mul 4).add (hl.const_mul (20 * Cr))).add (hi.const_mul 20)
   simp only [mul_zero, add_zero] at h
-  convert h using 1 <;> ext n <;> ring
+  convert h using 1
+  ext n
+  ring
 
 /-- Rounded collar and truncation scales satisfy the safe-box and scanner
 clearance budgets eventually. The threshold precedes the safety parameter.
@@ -65,16 +68,13 @@ theorem exists_rounded_clearance_threshold {C₂ Cr ell : ℝ}
   have hη : 0 < 1 / (C₂ + 1) := by positivity
   obtain ⟨N, hN⟩ := ((roundedClearance_ratio_tendsto_zero hell Cr).eventually_lt_const
     hη).exists_forall_of_atTop
+  have hgrow : Tendsto (fun s : ℕ ↦ C₂ * (s : ℝ)) atTop atTop :=
+    Tendsto.const_mul_atTop hC₂ tendsto_natCast_atTop_atTop
   have hlarge : ∀ᶠ s : ℕ in atTop, (max N 1 : ℝ) ≤ C₂ * s :=
-    ((tendsto_natCast_atTop_atTop : Tendsto (fun s : ℕ ↦ (s : ℝ)) atTop atTop).
-      const_mul_atTop hC₂).eventually_ge_atTop _
+    hgrow.eventually_ge_atTop _
   obtain ⟨S, hS⟩ := hlarge.exists_forall_of_atTop
   refine ⟨max S 1, le_max_right _ _, ?_⟩
-  intro s hs
-  dsimp only
-  let n : ℕ := ⌈C₂ * s⌉₊
-  let L : ℕ := ⌊(n : ℝ) ^ (1 - ell)⌋₊
-  let r₀ : ℕ := ⌈Cr * Real.log n ^ 2⌉₊
+  intro s hs n L r₀
   have hs1 : 1 ≤ s := (le_max_right S 1).trans hs
   have hnlo : (max N 1 : ℝ) ≤ n :=
     (hS s ((le_max_left S 1).trans hs)).trans (Nat.le_ceil _)
@@ -122,13 +122,13 @@ theorem ScannerExponents.exists_rounded_clearance_threshold (X : ScannerExponent
       let r₀ := ⌈Cr * Real.log n ^ 2⌉₊
       1 ≤ X.L n ∧ X.L n ≤ s ∧ ∀ D₀ : ℕ, 1 ≤ D₀ →
         (D₀ + 1) * X.L n ≤ D₀ * s ∧ 2 * X.L n + 10 * r₀ ≤ D₀ * s :=
-  exists_rounded_clearance_threshold hC₂ hCr X.ell_pos X.ell_lt_one
+  Scan.exists_rounded_clearance_threshold hC₂ hCr X.ell_pos X.ell_lt_one
 
 end TNLean.PEPS.AreaLaw.Scan
 
 namespace TNLean.PEPS.AreaLaw
 
-open Geometry
+open TNLean.PEPS.AreaLaw.Geometry
 
 /-- Actual selected shell cells of a safe rectangle remain safe under the
 rounded-clearance budget. The cap exponent `Kcap` is independent of the scanner
@@ -156,7 +156,7 @@ end TNLean.PEPS.AreaLaw
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
-open Geometry
+open TNLean.PEPS.AreaLaw.Geometry
 
 /-- One rounded-scale threshold gives scanner clearance and safe actual shell
 cells uniformly in the domain, cut, safety parameter and parent rectangle.
