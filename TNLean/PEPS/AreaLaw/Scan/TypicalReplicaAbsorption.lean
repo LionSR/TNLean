@@ -84,6 +84,8 @@ theorem regionalEntropy_le_of_rough_typical_comparisons
     S ≤ 7 * η - Real.log z + 4 * Bsh / z + 4 * Bexc +
       2 * C * Real.binEntropy τ / a := by
   intro β split ΩX z ψ S S' η hupper hlower
+  have hbounds := TNLean.PEPS.AreaLaw.abs_log_card_and_selectedSchmidtEntropy_sub_le
+    Ωt hΩt X E w hz hE
   done
 
 end TNLean.PEPS.AreaLaw.Scan
