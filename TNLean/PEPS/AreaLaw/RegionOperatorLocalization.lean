@@ -115,6 +115,16 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
       (NormedSpace.exp_mem_unitary_of_mem_skewAdjoint (skewAdjoint.smul_mem (-t) hK))).trans
       (CStarRing.norm_mem_unitary_mul A
         (NormedSpace.exp_mem_unitary_of_mem_skewAdjoint (skewAdjoint.smul_mem t hK)))
+  have hTwo : ‖heisenbergEvolution h.operator t A -
+      siteExpectation q (graphNeighborhood Λ l S) (heisenbergEvolution h.operator t A)‖ ≤
+      ‖A‖ * 2 := by
+    simpa only [hτnorm, mul_two] using
+      (norm_sub_le (heisenbergEvolution h.operator t A)
+        (siteExpectation q (graphNeighborhood Λ l S)
+          (heisenbergEvolution h.operator t A))).trans
+        (add_le_add_left
+          (norm_siteExpectation_le (graphNeighborhood Λ l S)
+            (heisenbergEvolution h.operator t A)) _)
   done
 
 end TNLean.PEPS.AreaLaw
