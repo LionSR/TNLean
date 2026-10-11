@@ -201,3 +201,58 @@ of size at most $r$ (Definition~\ref{def:area_law_safe_rectangle}).
     $\|v-z\|_\infty\le D_0\operatorname{size}(Q)$,
     contrary to the assumed safety of $Q$.
 \end{proof}
+
+\begin{theorem}[Uniform entropy of physical safe rectangles]
+    \label{thm:area_law_initial_safe_rectangle_entropy}
+    \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_rpow}
+    \leanok
+    \uses{thm:area_law_initial_box,def:area_law_box_entropy,
+        def:area_law_hamiltonian,def:area_law_ground_entropy}
+    Fix a local dimension $q\ge1$, an interaction range $R$, a term norm
+    bound $J\ge0$, and a gap $\Delta>0$. There exist constants $C\ge0$
+    and $e_0\in(0,1)$, depending only on $q,R,J,\Delta$, such that the
+    following holds simultaneously for every integer $D_0>2R+10$.
+    Let $\Lambda$ be any finite induced square-lattice domain, let $H$
+    be an admissible Hamiltonian on $\Lambda$, and let $\Omega$ be its
+    normalized ground vector at energy $E_0$ with the full-system
+    projector gap $\Delta$. For every cut $A\subseteq\Lambda$ and every
+    safe integer rectangle $Q$,
+    \begin{align}
+        S_\Omega(A\cap Q)
+        \le C\operatorname{size}(Q)^{1+e_0}.
+        \label{eq:area_law_initial_rectangle_entropy}
+    \end{align}
+    Here $Q$ is a product of two finite nonempty integer intervals,
+    $\operatorname{size}(Q)$ is its larger number of sites along an axis,
+    and safety means that every point of $Q$ has sup-norm distance
+    greater than $D_0\operatorname{size}(Q)$ from every endpoint of a
+    cut edge. The physical region $A\cap Q$ includes only sites of
+    $\Lambda$. Empty cuts, empty physical intersections, disconnected
+    domains, and domains with holes are permitted.
+    This is the pointwise consequence of the safe-box supremum and
+    \cite[Proposition~3.3]{OpenAI2026AreaLaw} at its initial exponent.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_initial_box,thm:area_law_box_entropy_bounds,
+        def:area_law_box_entropy,thm:area_law_box_entropy_safety}
+    The initial safe-box estimate supplies $C$ and $e_0\in(0,1)$
+    uniformly over all safety parameters $D_0>2R+10$. At the admissible
+    threshold $D_0=2R+11$ and scale $r=1$, its nonnegative supremum
+    satisfies
+    \begin{align}
+        0\le F_{\mathrm{box},2R+11}(1)
+        \le C\,1^{1+e_0}=C.
+        \label{eq:area_law_initial_rectangle_constant}
+    \end{align}
+    Thus the same constant is nonnegative. Every integer rectangle has
+    $\operatorname{size}(Q)\ge1$. By the definition of the safe-box
+    supremum and the initial estimate,
+    \begin{align}
+        S_\Omega(A\cap Q)
+         & \le F_{\mathrm{box},D_0}(\operatorname{size}(Q))
+        \le C\operatorname{size}(Q)^{1+e_0},
+    \end{align}
+    which proves (\ref{eq:area_law_initial_rectangle_entropy}).
+    The constant and exponent were chosen before the safety parameter,
+    domain, Hamiltonian, energy, ground vector, cut, and rectangle.
+\end{proof}

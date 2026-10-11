@@ -1,0 +1,85 @@
+\subsection{Uniform coefficients for rounded shell estimates}
+
+The fixed collar exponent in \cite[Section~9, lines~693--703]{OpenAI2026AreaLaw}
+remains unchanged while the current entropy exponent decreases. The following
+auxiliary estimates make the shell coefficient uniform on any interval with
+a positive lower endpoint. The pointwise entropy input is stated explicitly;
+these estimates do not establish the physical improvement in Proposition~9.5.
+
+\begin{theorem}[Uniform rounded-shell coefficient]
+    \label{thm:area_law_uniform_rounded_shell_coefficient}
+    \lean{TNLean.PEPS.AreaLaw.Scan.rounded_shell_coefficient_uniform_le}
+    \leanok
+    Let $b,e,e_0,\eta,C_2\in\mathbb R$ satisfy $0<b\le e\le e_0$,
+    $\eta\ge0$, and $C_2\ge0$. Then
+    \begin{align}
+        \left(24+\frac{64}{2^e-1}\right)(C_2+1)^{\eta e}
+         & \le\left(24+\frac{64}{2^b-1}\right)(C_2+1)^{\eta e_0}.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    The denominator $2^b-1$ is positive and is at most $2^e-1$.
+    Therefore the first factor decreases when $b$ is replaced by $e$.
+    Since $C_2+1\ge1$ and $\eta e\le\eta e_0$, the second factor
+    is bounded by $(C_2+1)^{\eta e_0}$. Multiplying these two bounds,
+    whose factors are nonnegative, gives the result.
+\end{proof}
+
+\begin{theorem}[Conditional entropy of rounded shells with uniform coefficients]
+    \label{thm:area_law_uniform_rounded_shell_entropy}
+    \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_rounded_shell_le_uniform_rpow}
+    \leanok
+    \uses{def:area_law_safe_rectangle,def:area_law_ground_entropy,
+        def:area_law_bootstrap_parameters}
+    Fix $C_2>0$ and $e_0\in(0,1)$, and set
+    $\ell=(1-e_0)/200000$ and $\eta=1-\ell$. There is an integer
+    $N\ge1$, depending only on $C_2$ and $e_0$, with the following
+    property. Let $b>0$, let $\Lambda$ be any finite induced
+    square-lattice domain, let $q\in\mathbb N$, and let $\Omega$
+    be a unit vector on its configurations. Let $D_0\ge1$ be an
+    integer, let $A\subseteq\Lambda$ be any cut, and let $Q$ be any
+    safe integer rectangle with $s=\operatorname{size}(Q)\ge N$.
+    Suppose that $b\le e\le e_0$ and that $C\in\mathbb R$ satisfies,
+    for every safe integer rectangle $P$,
+    \begin{align}
+        S_\Omega(A\cap P)\le C\operatorname{size}(P)^{1+e}.
+    \end{align}
+    Put $L_s=\lfloor\lceil C_2s\rceil^\eta\rfloor$. For every
+    integer $0\le j\le L_s$, one has
+    \begin{align}
+        S_\Omega\bigl(A\cap(Q^{+j}\setminus Q)\bigr)
+         & \le C\left(24+\frac{64}{2^b-1}\right)
+        (C_2+1)^{\eta e_0}s^{1+\eta e}.
+    \end{align}
+    The threshold precedes the lower endpoint, current exponent,
+    coefficient and all geometric and physical data. Both entropy
+    estimates concern the same vector. No ground-state assumption
+    is needed for this conditional statement.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_bootstrap_margins,thm:area_law_bootstrap_collar_clearance,
+        thm:area_law_rounded_collar_power,
+        thm:area_law_uniform_rounded_shell_coefficient,
+        thm:area_law_rectangle_shell_entropy,thm:area_law_regional_state_identities}
+    The fixed parameter bounds give $0<\eta<1$. Theorem~\ref{thm:area_law_bootstrap_collar_clearance} chooses
+    a threshold $N\ge1$ for which $L_s\ge1$, $2L_s\le s$ and
+    $D_0L_s+L_s\le D_0s$ for every allowed safety parameter.
+    In particular, $L_s\le s$. Choose $K=\lfloor\log_2L_s\rfloor$.
+
+    Applying the pointwise estimate to the parent rectangle and using
+    entropy nonnegativity gives $0\le Cs^{1+e}$. Since $s>0$, this
+    implies $C\ge0$. The conditional rectangle-shell estimate and the
+    homogeneous rounded-power bound now yield
+    \begin{align}
+        S_\Omega\bigl(A\cap(Q^{+j}\setminus Q)\bigr)
+         & \le C\left(24+\frac{64}{2^e-1}\right)sL_s^e \\
+         & \le C\left(24+\frac{64}{2^e-1}\right)
+        (C_2+1)^{\eta e}s^{1+\eta e}                   \\
+         & \le C\left(24+\frac{64}{2^b-1}\right)
+        (C_2+1)^{\eta e_0}s^{1+\eta e}.
+    \end{align}
+    The last step uses the uniform coefficient theorem. The choice of
+    threshold depends only on the rounded geometric scale.
+\end{proof}

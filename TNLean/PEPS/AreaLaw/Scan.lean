@@ -13,6 +13,7 @@ import TNLean.PEPS.AreaLaw.Scan.AmbientDepth
 import TNLean.PEPS.AreaLaw.Scan.AssignedLead
 import TNLean.PEPS.AreaLaw.Scan.BandMargins
 import TNLean.PEPS.AreaLaw.Scan.BootstrapParameters
+import TNLean.PEPS.AreaLaw.Scan.BootstrapRoundedClearance
 import TNLean.PEPS.AreaLaw.Scan.Budgets
 import TNLean.PEPS.AreaLaw.Scan.ChargeSlots
 import TNLean.PEPS.AreaLaw.Scan.Defs
@@ -28,6 +29,7 @@ import TNLean.PEPS.AreaLaw.Scan.GoodSampling
 import TNLean.PEPS.AreaLaw.Scan.HistoryWeights
 import TNLean.PEPS.AreaLaw.Scan.OffsetDilution
 import TNLean.PEPS.AreaLaw.Scan.PhysicalPartition
+import TNLean.PEPS.AreaLaw.Scan.RoundedScalePower
 import TNLean.PEPS.AreaLaw.Scan.Scanner
 import TNLean.PEPS.AreaLaw.Scan.Selection
 import TNLean.PEPS.AreaLaw.Scan.SplitIntervals
