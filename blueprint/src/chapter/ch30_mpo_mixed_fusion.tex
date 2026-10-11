@@ -1,7 +1,5 @@
 % Source: GLM23, arXiv:2203.12563v3, REsubmission.tex, lines 1667--1685;
 % rawrels, eq:F_symbol2, and 1Fsymbol, lines 491--552.
-% Proof status: declarations and proofs checked by the exact-source Lean build.
-% Diagram regressions are supplementary checks.
 
 \subsection{Fusion of the mixed operator family}
 \label{sec:mpo_mixed_fusion}
@@ -370,7 +368,9 @@ $\sum_{c,\mu}\widetilde W_{ab;c\mu}\widetilde V_{ab;c\mu}$
 vanishes on the unmatched sectors and need not be the ambient identity.
 The equality $L_0=L_1$ is an assumption about the chosen actual
 comparison matrices. It does not follow here from equivalence of
-$L$-symbols under changes of basis. No common $F$-symbols are needed
+$L$-symbols under changes of basis; this restriction relative to the
+source's gauge alignment of equivalent $L$-symbol classes is recorded in
+\cite{gap:glm23_multiplicity_l_indices}. No common $F$-symbols are needed
 for (\ref{eq:mpo_mix_fusion_exact}) or
 (\ref{eq:mpo_mix_fusion_periodic}). The construction in
 \cite[Section~5]{GarreRubio2023MPOSym} also asks for common $F$-symbols
