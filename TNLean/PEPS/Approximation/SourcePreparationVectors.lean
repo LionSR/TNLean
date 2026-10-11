@@ -20,27 +20,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-exterior-input; Theorem 5.2, lines 409–480.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-sourcepreparationvectors-01
-TNLean.PEPS.PairEffect.SourceInventory.eval_framed_freeSourceVectors
-Provenance-ID: 8769-source-resource-sourcepreparationvectors-02
-TNLean.PEPS.PairEffect.SourceInventory.eval_framed_sourceVector
-Provenance-ID: 8769-source-resource-sourcepreparationvectors-03
-TNLean.PEPS.PairEffect.SourceInventory.eval_prepareFreeSlots_nil_heq
-Provenance-ID: 8769-source-resource-sourcepreparationvectors-04
-TNLean.PEPS.PairEffect.SourceInventory.eval_prepare_nil_heq
-Provenance-ID: 8769-source-resource-sourcepreparationvectors-05
-TNLean.PEPS.PairEffect.SourceInventory.eval_reordered_prepared_vector
-Provenance-ID: 8769-source-resource-sourcepreparationvectors-06
-TNLean.PEPS.PairEffect.SourceInventory.preparedReorderedWord
-Provenance-ID: 8769-source-resource-sourcepreparationvectors-07
-TNLean.PEPS.PairEffect.SourceInventory.sourceVectorPair
-Provenance-ID: 8769-source-resource-sourcepreparationvectors-08
-TNLean.PEPS.PairEffect.SourceInventory.vector_append_eq
-Provenance-ID: 8769-source-resource-sourcepreparationvectors-09
-TNLean.PEPS.PairEffect.SourceInventory.vector_append_heq
-Provenance-ID: 8769-source-resource-sourcepreparationvectors-10
-TNLean.PEPS.PairEffect.Word.eval_source_apply_heq
 -/
 
 

@@ -20,23 +20,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-effect-circuit-error; Theorem 5.2, lines 137–151 and 199–251.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-effectreplacementsources-01
-TNLean.PEPS.PairEffect.OriginalCircuit.card_sourceLocations_replacement_le
-Provenance-ID: 8769-source-resource-effectreplacementsources-02
-TNLean.PEPS.PairEffect.PreparedSourceGate.length_slots
-Provenance-ID: 8769-source-resource-effectreplacementsources-03
-TNLean.PEPS.PairEffect.PreparedSourceGate.length_sources_branchWord
-Provenance-ID: 8769-source-resource-effectreplacementsources-04
-TNLean.PEPS.PairEffect.PreparedSourceGate.length_sources_branchWord_eq_choose
-Provenance-ID: 8769-source-resource-effectreplacementsources-05
-TNLean.PEPS.PairEffect.PreparedSourceGate.length_sources_branchWord_le_choose
-Provenance-ID: 8769-source-resource-effectreplacementsources-06
-TNLean.PEPS.PairEffect.SourceCircuit.card_sourceLocations_eq_sum_choose
-Provenance-ID: 8769-source-resource-effectreplacementsources-07
-TNLean.PEPS.PairEffect.SourceCircuit.card_sourceLocations_le
-Provenance-ID: 8769-source-resource-effectreplacementsources-08
-TNLean.PEPS.PairEffect.SourceCircuit.slotCount_eq_choose
 -/
 
 noncomputable section

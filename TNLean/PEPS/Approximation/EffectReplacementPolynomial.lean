@@ -23,15 +23,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-effect-circuit-error; Theorem 5.2 and its proof.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-actual-sampling-effectreplacementpolynomial-01
-TNLean.PEPS.PairEffect.OriginalCircuit.card_branchLabels_replacement_le_power
-Provenance-ID: 8769-actual-sampling-effectreplacementpolynomial-02
-TNLean.PEPS.PairEffect.replacementMonomialBound_le_of_power_bounds
-Provenance-ID: 8769-actual-sampling-effectreplacementpolynomial-03
-TNLean.PEPS.PairEffect.stackLength_sourceGateBudget_eq
-Provenance-ID: 8769-actual-sampling-effectreplacementpolynomial-04
-TNLean.PEPS.PairEffect.stackLength_sourceGateBudget_lt_of_power_bounds
 -/
 
 

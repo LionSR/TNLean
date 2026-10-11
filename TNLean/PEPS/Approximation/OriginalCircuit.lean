@@ -21,49 +21,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-effect-circuit-error; Theorem 5.2, lines 137–151 and 199–251.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-originalcircuit-01
-TNLean.PEPS.PairEffect.EffectCircuit.gateLocations
-Provenance-ID: 8769-source-resource-originalcircuit-02
-TNLean.PEPS.PairEffect.EffectCircuit.participants
-Provenance-ID: 8769-source-resource-originalcircuit-03
-TNLean.PEPS.PairEffect.OriginalCircuit
-Provenance-ID: 8769-source-resource-originalcircuit-04
-TNLean.PEPS.PairEffect.OriginalCircuit.IsExpansionBounded
-Provenance-ID: 8769-source-resource-originalcircuit-05
-TNLean.PEPS.PairEffect.OriginalCircuit.card_participants_ne_one
-Provenance-ID: 8769-source-resource-originalcircuit-06
-TNLean.PEPS.PairEffect.OriginalCircuit.eval
-Provenance-ID: 8769-source-resource-originalcircuit-07
-TNLean.PEPS.PairEffect.OriginalCircuit.eval_produce
-Provenance-ID: 8769-source-resource-originalcircuit-08
-TNLean.PEPS.PairEffect.OriginalCircuit.expandedGateCount_produce
-Provenance-ID: 8769-source-resource-originalcircuit-09
-TNLean.PEPS.PairEffect.OriginalCircuit.isAllowed_produce
-Provenance-ID: 8769-source-resource-originalcircuit-10
-TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_produce_iff
-Provenance-ID: 8769-source-resource-originalcircuit-11
-TNLean.PEPS.PairEffect.OriginalCircuit.nonprivateCount
-Provenance-ID: 8769-source-resource-originalcircuit-12
-TNLean.PEPS.PairEffect.OriginalCircuit.nonprivateLocations
-Provenance-ID: 8769-source-resource-originalcircuit-13
-TNLean.PEPS.PairEffect.OriginalCircuit.participants
-Provenance-ID: 8769-source-resource-originalcircuit-14
-TNLean.PEPS.PairEffect.OriginalCircuit.participants_produce
-Provenance-ID: 8769-source-resource-originalcircuit-15
-TNLean.PEPS.PairEffect.OriginalCircuit.produce
-Provenance-ID: 8769-source-resource-originalcircuit-16
-TNLean.PEPS.PairEffect.OriginalCircuit.produceLocationsEquiv
-Provenance-ID: 8769-source-resource-originalcircuit-17
-TNLean.PEPS.PairEffect.ProductInput.mem_owners_wholePartyLayout
-Provenance-ID: 8769-source-resource-originalcircuit-18
-TNLean.PEPS.PairEffect.ProductInput.nodup_owners_wholePartyLayout
-Provenance-ID: 8769-source-resource-originalcircuit-19
-TNLean.PEPS.PairEffect.ProductInput.ofAllParties
-Provenance-ID: 8769-source-resource-originalcircuit-20
-TNLean.PEPS.PairEffect.ProductInput.owners_wholePartyLayout
-Provenance-ID: 8769-source-resource-originalcircuit-21
-TNLean.PEPS.PairEffect.ProductInput.wholePartyLayout
 -/
 
 noncomputable section

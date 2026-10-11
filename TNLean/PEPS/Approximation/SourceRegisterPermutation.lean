@@ -21,31 +21,6 @@ Source: September 24, 2026, polynomial-PEPS manuscript, 04-compression.tex,
 eq:compression-exterior-input; Theorem 5.2, lines 409–480.
 Manuscript revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 Independently formalized; no upstream Lean proof text reused.
-
-Provenance-ID: 8769-source-resource-sourceregisterpermutation-01
-TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSourcePositions_append
-Provenance-ID: 8769-source-resource-sourceregisterpermutation-02
-TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSourcePositions_filter
-Provenance-ID: 8769-source-resource-sourceregisterpermutation-03
-TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSourcePositions_heq
-Provenance-ID: 8769-source-resource-sourceregisterpermutation-04
-TNLean.PEPS.PairEffect.SourceInventory.exists_reorderFreeSlots
-Provenance-ID: 8769-source-resource-sourceregisterpermutation-05
-TNLean.PEPS.PairEffect.SourceInventory.exists_reorderSourcePositions
-Provenance-ID: 8769-source-resource-sourceregisterpermutation-06
-TNLean.PEPS.PairEffect.SourceInventory.prepareSourcePositions
-Provenance-ID: 8769-source-resource-sourceregisterpermutation-07
-TNLean.PEPS.PairEffect.SourceInventory.selectedSources_eq_map
-Provenance-ID: 8769-source-resource-sourceregisterpermutation-08
-TNLean.PEPS.PairEffect.SourceInventory.slotReference
-Provenance-ID: 8769-source-resource-sourceregisterpermutation-09
-TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsLayout
-Provenance-ID: 8769-source-resource-sourceregisterpermutation-10
-TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsLayout_append
-Provenance-ID: 8769-source-resource-sourceregisterpermutation-11
-TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsLayout_eq_layout
-Provenance-ID: 8769-source-resource-sourceregisterpermutation-12
-TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsLayout_filter
 -/
 
 
