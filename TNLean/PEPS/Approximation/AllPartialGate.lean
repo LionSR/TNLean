@@ -37,7 +37,7 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_id
   classical
   have ht : ∃ _q : C, true = true := ⟨hC.some, rfl⟩
   let e : Choices (fun _ : P ↦ true) (.gate owner G tail) ≃ ι :=
-    Equiv.cast (by simp [Choices, hC])
+    Equiv.cast (by simp [Choices])
   have hg (i : ι) :=
     Word.restrict_localPart_mapOwner_eval_heq_id_of_disjoint
       (affectedOwner (fun _ : P ↦ true)) none
