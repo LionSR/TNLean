@@ -22,7 +22,7 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 noncomputable section
 namespace TNLean.PEPS.PairEffect.SourceCircuit
 variable {P : Type} [Fintype P] [DecidableEq P] {a b : Layout P}
-variable {I O : Option {_ : P // true = true} → Type}
+variable {I O : Option {p : P // true = true} → Type}
 variable [∀ q, Fintype (I q)] [∀ q, Fintype (O q)]
 
 /-- The matrix of the identity from literal source-slot coordinates to the
@@ -32,8 +32,8 @@ lines 253–267, 409–434 and 565–588. -/
 def actualPartySourceBasisChange (w : SourceCircuit a b)
     (B : ∀ q, OrthonormalBasis (I q) ℂ
       (Mem (Layout.atParty q (w.allResidualSourceLayout ++ []))))
-    (ps : List (Option {_ : P // true = true})) (hn : ps.Nodup)
-    (hc : ∀ q, q ∈ ps) : Matrix ((q : Option {_ : P // true = true}) → I q)
+    (ps : List (Option {p : P // true = true})) (hn : ps.Nodup)
+    (hc : ∀ q, q ∈ ps) : Matrix ((q : Option {p : P // true = true}) → I q)
       w.allSourceLabels ℂ :=
   LinearMap.toMatrix w.actualSourceInputBasis.toBasis
     (partyGroupedBasis (w.allResidualSourceLayout ++ []) B ps hn hc).toBasis
@@ -49,7 +49,7 @@ def partialSourcePartyMatrix (w : SourceCircuit a b) (ψ : ProductInput a)
       (Mem (Layout.atParty q (w.allResidualSourceLayout ++ []))))
     (C : ∀ q, OrthonormalBasis (O q) ℂ
       (Mem (Layout.atParty q (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b))))
-    (q : Option {_ : P // true = true}) : Matrix (O q) (I q) ℂ :=
+    (q : Option {p : P // true = true}) : Matrix (O q) (I q) ℂ :=
   Matrix.of (fun row col ↦ (C q).repr
     (((w.partialSourceWord ψ ξ).restrict (partySelector q)
       (sources_partialSourceWord w ψ ξ)).eval (B q col)) row)
