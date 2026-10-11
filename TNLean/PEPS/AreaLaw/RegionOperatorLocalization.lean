@@ -47,6 +47,7 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
   obtain ⟨C, v, c, hC, hv, hc, hlocal⟩ :=
     exists_quasilocal_lieb_robinson q hq R J
   refine ⟨2 * C, v, c, by positivity, hv, hc, ?_⟩
+  intro Λ h S A hA l t
   done
 
 end TNLean.PEPS.AreaLaw
