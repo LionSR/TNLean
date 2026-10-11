@@ -6397,3 +6397,72 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The current occurrences are all in one proof, below the
   multiple-file promotion threshold. Crossing membership itself is already
   expressed by `mem_edgeBoundary_pair_iff`; no new tactic macro is needed.
+
+### Integer quotient-interval cardinality — promoted (2026-10-09)
+
+- **Pattern:** bound the cardinality of an integer quotient interval by
+  monotonicity of division and the two endpoint remainder inequalities.
+- **Seen:** two coordinate estimates in each of
+  `Geometry/TemplateDyadicRows.lean` and `Geometry/RectangleMixedSquares.lean`.
+- **Abstraction:** `TNLean.PEPS.AreaLaw.Geometry.quotient_interval_card` in
+  `TNLean/PEPS/AreaLaw/Geometry/QuotientIntervals.lean`.
+- **Notes:** the divisor is positive and the endpoints are ordered; negative
+  endpoints are allowed. The existing statement and proof are unchanged,
+  and both counting modules use the shared theorem.
+
+### Capped dyadic summation by scale — candidate (2026-10-09)
+
+- **Pattern:** group a finite sum over the actual capped dyadic partition
+  by its scale coordinate; replace each fibre's constant sum by its
+  cardinality times the scale weight.
+- **Seen:** the rectangle-shell weighted covering and the two template
+  covering proofs in [PR #9000](https://github.com/LionSR/TNLean/pull/9000).
+- **Abstraction:** Geometry.sum_cappedDyadicPartition_by_scale in
+  TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartitionByScale.lean.
+- **Notes:** the rectangle argument uses the shared identity. The existing
+  template arguments still need the corresponding refactoring in their
+  owning PR. The identity is valid for signed real weights, empty
+  partitions and cap zero; no positivity premise is necessary.
+
+### Entropy summation over selected dyadic rectangles — candidate (2026-10-09)
+
+- **Pattern:** intersect a disjoint lattice partition with the same physical
+  region, apply entropy subadditivity for the same unit vector, and sum a
+  pointwise rectangle estimate using the exact side length of each cell.
+- **Seen:** the template core and shell estimates in
+  `Geometry/TemplateBoxEntropy.lean` (the separately developed template
+  argument), and `WeakRectangleShellEntropy.lean`.
+- **Abstraction:** the shared public theorem
+  `Geometry.regionalEntropy_filter_le_weighted_cover` in
+  `Geometry/CappedDyadicEntropyCover.lean`.
+- **Notes:** the rectangle shell uses the shared theorem. The template
+  consumers retain the same proof terms when their four physical-cover
+  declarations move to this module; that extraction is coordinated with
+  the template development. No sign condition on C or e is needed for
+  the entropy summation itself.
+
+### Homogeneous bound for a rounded sublinear scale — candidate (2026-10-09)
+
+- **Pattern:** bound `ceil(C₂*s)` by `(C₂+1)*s` for `s>=1`, then use
+  monotonicity of nonnegative real powers and `Real.mul_rpow`.
+- **Seen:** `Scan/BootstrapRoundedClearance.lean` and
+  `Scan/RoundedScalePower.lean`.
+- **Abstraction:** `floor_rpow_ceil_mul_rpow_le` exposes the complete
+  homogeneous bound, including a further nonnegative power of the scale.
+- **Notes:** the clearance argument and physical entropy argument use
+  different final comparisons. There are two copies of the elementary
+  ceiling estimate; a third use should share that estimate rather than
+  copy it again. No custom tactic is needed.
+
+### Fixed rounded-collar threshold — promoted (2026-10-09)
+
+- **Pattern:** obtain the fixed collar exponent bounds, choose one threshold
+  for the rounded half-side estimate, enlarge it to at least one, and derive
+  positivity and clearance for all safety parameters.
+- **Abstraction:** `Scan.exists_bootstrap_collar_clearance` now records
+  threshold positivity, collar positivity, the half-side bound and clearance
+  in one statement.
+- **Consumers:** `InitialRoundedCollarEntropy.lean` and
+  `RoundedShellEntropy.lean` reuse this statement. Its defining proof handles
+  the numerical argument once; no separate predicate or compatibility alias
+  is introduced.

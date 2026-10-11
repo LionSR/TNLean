@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.Budgets
 import TNLean.PEPS.AreaLaw.Scan.BootstrapParameters
+import Mathlib.Algebra.Order.Floor.Semiring
 
 /-!
 # Rounded collar clearance
@@ -88,20 +89,30 @@ theorem mul_collar_add_collar_le_of_two_mul_le {D₀ L s : ℕ}
     _ = D₀ * (2 * L) := by ring
     _ ≤ D₀ * s := hscaled
 
-/-- A single threshold controls the fixed bootstrap collar for every safety
-parameter at least one. The threshold depends only on `C₂` and `e₀`.
+/-- A single threshold gives a positive fixed bootstrap collar, bounds it by
+half the parent side length, and supplies clearance for every safety parameter.
+The threshold depends only on `C₂` and `e₀`.
 Source: `scanner:bootstrap-parameters` and the safe-box clearance argument,
 `08-scanner.tex`, lines 693–729; `scanner:scales`, lines 32–41. -/
 theorem exists_bootstrap_collar_clearance {C₂ e₀ : ℝ}
     (hC₂ : 0 < C₂) (he₀ : 0 < e₀) (he₀₁ : e₀ < 1) :
-    ∃ N : ℕ, ∀ s : ℕ, N ≤ s →
+    ∃ N : ℕ, 1 ≤ N ∧ ∀ s : ℕ, N ≤ s →
       let L := Nat.floor ((Nat.ceil (C₂ * (s : ℝ)) : ℝ) ^
         (1 - BootstrapParameters.ell e₀))
-      ∀ D₀ : ℕ, 1 ≤ D₀ → D₀ * L + L ≤ D₀ * s := by
+      0 < L ∧ 2 * L ≤ s ∧
+        ∀ D₀ : ℕ, 1 ≤ D₀ → D₀ * L + L ≤ D₀ * s := by
   obtain ⟨_, _, hℓ, hℓ₁, _⟩ := BootstrapParameters.parameter_bounds he₀ he₀₁
   obtain ⟨N, hN⟩ := exists_two_mul_floor_rpow_ceil_mul_le hC₂
     (sub_pos.mpr hℓ₁) (sub_lt_self 1 hℓ)
-  refine ⟨N, fun s hs D₀ hD₀ ↦ ?_⟩
-  exact mul_collar_add_collar_le_of_two_mul_le hD₀ (hN s hs)
+  refine ⟨max N 1, le_max_right _ _, fun s hs ↦ ?_⟩
+  have hs₁ : 1 ≤ s := (le_max_right N 1).trans hs
+  have hspos : (0 : ℝ) < s := by exact_mod_cast (show 0 < s by omega)
+  have hceil : 0 < Nat.ceil (C₂ * (s : ℝ)) := Nat.ceil_pos.mpr (mul_pos hC₂ hspos)
+  have hceil₁ : (1 : ℝ) ≤ Nat.ceil (C₂ * (s : ℝ)) := by
+    exact_mod_cast (Nat.succ_le_of_lt hceil)
+  have hLpos := Nat.floor_pos.mpr (Real.one_le_rpow hceil₁ (sub_pos.mpr hℓ₁).le)
+  have htwo := hN s ((le_max_left N 1).trans hs)
+  exact ⟨hLpos, htwo, fun D₀ hD₀ ↦
+    mul_collar_add_collar_le_of_two_mul_le hD₀ htwo⟩
 
 end TNLean.PEPS.AreaLaw.Scan
