@@ -71,8 +71,7 @@ number of sites along an axis, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
     \label{thm:area_law_initial_buffer}
     \lean{TNLean.PEPS.AreaLaw.exists_condEntropy_le_initialBuffer}
     \leanok
-    \uses{thm:area_law_buffer_contours, thm:area_law_marginal_tails,
-        def:area_law_ground_entropy}
+    \uses{def:area_law_safe_rectangle,def:area_law_ground_entropy}
     For $q\ge1$, $R$, $J\ge0$ and $\Delta>0$ there are an integer
     $C_{\mathrm{pad}}\ge1$ and a constant $C_{\mathrm{buf}}$ with the following
     property. Let $\Omega$ be a unit vector satisfying
@@ -103,12 +102,12 @@ number of sites along an axis, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
     $X_j=A\cap Q_0^{+d_j}$ with $d_j=r+jD$, $1\le j\le m$. By
     Theorem~\ref{thm:area_law_buffer_contours} every admissible support splits
     at most one $X_j$, and the number of split supports and the parameter
-    $\mathcal B_j$ of Lemma~3.1 are at most a constant times $r+d_j$. The
+    $\mathcal B_j$ of~\cite[Lemma~3.1]{OpenAI2026AreaLaw} are at most a constant times $r+d_j$. The
     harmonic weights $a_j=2/(Z_r(r+d_j))$ with $Z_r=\sum_j1/(r+d_j)$ have total
     mass two and quadratic cost $4/Z_r$, and
     $Z_r\ge D^{-1}\log((C_{\mathrm{pad}}+1)/(2+D))$. Choosing
     $C_{\mathrm{pad}}$ makes $a_j\le1/2$, the energy of the optimized filters
-    at most $\Delta/2$, and every $a_j/(1-a_j)$ admissible for Lemma~3.1,
+    at most $\Delta/2$, and every $a_j/(1-a_j)$ admissible for~\cite[Lemma~3.1]{OpenAI2026AreaLaw},
     uniformly in $r$. The comparison of the optimized filter norms with
     Schmidt pinning then gives
     $2S(X\mid T)\le S(X)+C+m\log2$, and $m\le C_{\mathrm{pad}}r$.

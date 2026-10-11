@@ -533,6 +533,33 @@ jobs:
           python3 scripts/ci_compatible_cache.py prune
 
       # Cache setup and provenance guards above must finish before Lean runs.
+      - name: Check finite weighted dyadic sum early
+        timeout-minutes: 10
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.DyadicWeightedSum
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+            -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+            -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+            TNLeanTest/DyadicWeightedSum.lean
+
+      - name: Check integrated template coverings early
+        timeout-minutes: 10
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build TNLean.PEPS.AreaLaw.Geometry.TemplateSafeRectangles \
+            TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCover \
+            TNLean.PEPS.AreaLaw.Geometry.TemplateShellCover \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+          for source in TNLeanTest/TemplateMixedSquares.lean TNLeanTest/TemplateCutBoundary.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
       - name: Build template mixed-square and weighted covering estimates early
         timeout-minutes: 5
         run: |
@@ -724,13 +751,6 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/CappedDyadicPartition.lean
 
-      - name: Test template mixed-square counts strictly
-        run: >
-          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
-          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
-          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
-          TNLeanTest/TemplateMixedSquares.lean
-
       - name: Test exact nearest-neighbor crossing budget strictly
         run: >
           timeout --signal=INT --kill-after=5s 90s lake env lean -j1
@@ -859,14 +879,6 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/AreaLawVertexBoundaries.lean
-
-      - name: Test physical template boundaries strictly and audit axioms
-        timeout-minutes: 2
-        run: >
-          lake env lean
-          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
-          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
-          TNLeanTest/TemplateCutBoundary.lean
 
       - name: Test nested-cylinder orthogonalization edge cases strictly
         run: >

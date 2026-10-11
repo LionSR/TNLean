@@ -1,5 +1,6 @@
 import TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary
 import TNLean.PEPS.AreaLaw.Geometry.TemplateClearance
+import TNLean.PEPS.AreaLaw.Geometry.TemplateSafeRectangles
 import Mathlib.Data.Rat.Floor
 
 /-!
@@ -355,3 +356,59 @@ example (p : ℤ × ℤ) (hp : p ∈ latticeDyadicCell 1 (0, 0)) :
   constructor
   · simpa [z] using h z (by simp) p hp
   · simpa [w] using h w (by simp) p hp
+
+-- Native dyadic rectangles retain negative endpoints and use site-count size.
+example : (latticeDyadicRect 1 (-2, -1)).toFinset =
+    {(-4, -2), (-4, -1), (-3, -2), (-3, -1)} := by decide
+
+example : (latticeDyadicRect 0 (-3, 2)).size = 1 := by simp
+
+-- A genuine selected core cell is safe for the disconnected domain's nonempty cut.
+example : IsSafe disconnectedDomain disconnectedCut 1 (latticeDyadicRect 0 (0, 0)) := by
+  apply Template.IsSeparated.isSafe_cappedDyadicPartition_core
+    (T := thinDiagonalTemplate) (D₀ := 1)
+    (by simpa only [Nat.cast_one] using disconnected_separated)
+    (by decide) 0 0 (0, 0) (by decide)
+  decide
+
+-- Maximal permitted dilation, a cap-scale square, and a negative index.
+example : IsSafe disconnectedDomain disconnectedCut 1 (latticeDyadicRect 1 (-1, 0)) := by
+  apply Template.IsSeparated.isSafe_cappedDyadicPartition_shell
+    (T := thinDiagonalTemplate) (D₀ := 1)
+    (by simpa only [Nat.cast_one] using disconnected_separated)
+    (by decide) 3 1 1 (-1, 0) (by decide) (by decide)
+  decide +kernel
+
+-- A unit shell rectangle has a nonempty physical intersection, despite domain holes.
+example : IsSafe disconnectedDomain disconnectedCut 1 (latticeDyadicRect 0 (1, 0)) := by
+  apply Template.IsSeparated.isSafe_cappedDyadicPartition_shell
+    (T := thinDiagonalTemplate) (D₀ := 1)
+    (by simpa only [Nat.cast_one] using disconnected_separated)
+    (by decide) 1 0 0 (1, 0) (by decide) (by decide)
+  decide +kernel
+
+example : (rectRegion disconnectedCut (latticeDyadicRect 0 (1, 0))).Nonempty := by
+  refine ⟨⟨(1, 0), by simp [disconnectedDomain]⟩, ?_⟩
+  simp [mem_rectRegion, disconnectedCut, IntRect.mem_toFinset, latticeDyadicRect]
+
+-- The physical intersection includes no sites absent from the ambient square.
+example : rectRegion disconnectedCut (latticeDyadicRect 0 (-3, 2)) = ∅ := by
+  apply Finset.eq_empty_iff_forall_notMem.mpr
+  intro x hx
+  have hdomain := x.property
+  have hrect := (mem_rectRegion.mp hx).2
+  simp only [IntRect.mem_toFinset, latticeDyadicRect] at hrect
+  simp only [disconnectedDomain, Finset.mem_insert, Finset.mem_singleton] at hdomain
+  rcases hdomain with h | h | h | h <;> rw [h] at hrect <;> norm_num at hrect
+
+-- Check the complete export list against the standard kernel axioms.
+run_cmd do
+  for name in [``latticeDyadicRect, ``toFinset_latticeDyadicRect,
+      ``size_latticeDyadicRect, ``rectRegion_latticeDyadicRect,
+      ``Template.IsSeparated.isSafe_of_subset_ambientDilation,
+      ``Template.IsSeparated.isSafe_cappedDyadicPartition_core,
+      ``Template.IsSeparated.isSafe_cappedDyadicPartition_shell] do
+    let axioms ← Lean.collectAxioms name
+    for ax in axioms do
+      unless [``propext, ``Classical.choice, ``Quot.sound].contains ax do
+        throwError "{name} uses unexpected axiom {ax}"

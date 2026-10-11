@@ -3365,6 +3365,18 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   absolute entropy cost at most `n * log q` for any subset of one template
   depth row, the partial-row step of area-law Lemma 9.4.
 
+## Safe dyadic template rectangles
+
+- `TNLean.PEPS.AreaLaw.Geometry.latticeDyadicRect` interprets an existing
+  lattice dyadic cell as the native `IntRect`, with the same sites and size `2^k`.
+- `TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_of_subset_ambientDilation`
+  derives native rectangle safety from actual template separation, containment
+  in `T_j`, `j ≤ s₀`, and rectangle size at most `s₀`, for `D₀ ≥ 1`.
+- `TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_cappedDyadicPartition_core`
+  and `isSafe_cappedDyadicPartition_shell` derive those containment and size
+  premises from the selected cells themselves when `2^K ≤ s₀`. These are the
+  clearance step of Lemma 9.4, not its conditional entropy conclusion.
+
 ## Partial rectangle layer entropy
 
 - **Declaration:** `TNLean.PEPS.AreaLaw.IntRect.partial_row_entropy_le`.
