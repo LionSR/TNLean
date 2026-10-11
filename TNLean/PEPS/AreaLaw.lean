@@ -16,6 +16,7 @@ import TNLean.PEPS.AreaLaw.BufferedRectangles
 import TNLean.PEPS.AreaLaw.ConditionalEstimates
 import TNLean.PEPS.AreaLaw.CrossingBudget
 import TNLean.PEPS.AreaLaw.Cylinder
+import TNLean.PEPS.AreaLaw.EdgeBoundaryCalculus
 import TNLean.PEPS.AreaLaw.EdgeCrossingBudget
 import TNLean.PEPS.AreaLaw.EntropyDimension
 import TNLean.PEPS.AreaLaw.FiniteDomain

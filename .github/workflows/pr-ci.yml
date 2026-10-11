@@ -698,6 +698,13 @@ jobs:
           lake --fail-fast build TNLean.PEPS.AreaLaw.InitialSafeRectangleEntropy \
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
+      - name: Build physical cross-band commutation early
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.PEPS.AreaLaw.Scan.PhysicalBandCommutation:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
+
       - name: Build Lean project and capture timings
         run: |
           set -eo pipefail
@@ -736,6 +743,35 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/WordOwnerRestrictionAxioms.lean
+
+      - name: Check physical cross-band production modules strictly
+        timeout-minutes: 5
+        run: |
+          set -eo pipefail
+          for source in TNLean/PEPS/AreaLaw/Scan/AugmentedPartition.lean \
+              TNLean/PEPS/AreaLaw/Scan/NestedBandMetric.lean \
+              TNLean/PEPS/AreaLaw/Scan/PhysicalBandCommutation.lean; do
+            LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
+          done
+
+      - name: Test physical cross-band commutation strictly
+        timeout-minutes: 2
+        run: >
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/PhysicalBandCommutation.lean
+
+      - name: Audit physical cross-band commutation axioms
+        timeout-minutes: 2
+        run: >
+          LEAN_NUM_THREADS=1 timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/PhysicalBandCommutationAxioms.lean
 
       - name: Test capped dyadic partition strictly
         run: >
@@ -991,6 +1027,12 @@ jobs:
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/TemplateBoundary.lean
 
+      - name: Check recursive physical history mean trees
+        run: >-
+          timeout 90s lake env lean -j1
+          -Dpp.unicode.fun=true -DrelaxedAutoImplicit=false -DautoImplicit=false
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/AreaLawHistoryMeanTree.lean
       - name: Test actual scan histories strictly and audit axioms
         timeout-minutes: 2
         run: >
@@ -1006,6 +1048,64 @@ jobs:
           -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
           -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
           TNLeanTest/ActualScanPhysicalSampling.lean
+
+      - name: Test shared physical scan geometry and support classification
+        timeout-minutes: 5
+        run: |
+          set -e
+          # Compile the shared physical data once, outside the production cache.
+          # Each module retains the strict serial 90-second limit.
+          test_root="$(mktemp -d)"
+          trap 'rm -rf "$test_root"' EXIT
+          mkdir -p "$test_root/TNLeanTest"
+          for example in ActualBandGeometryData ActualBandGeometry ActualSupportClassification; do
+            timeout --signal=INT --kill-after=5s 90s lake env bash -c \
+              'export LEAN_PATH="$1${LEAN_PATH:+:$LEAN_PATH}"; shift; exec lean "$@"' \
+              -- "$test_root" -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              -o "$test_root/TNLeanTest/$example.olean" "TNLeanTest/$example.lean"
+          done
+
+      - name: Audit actual band geometry axioms
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualBandGeometryAxioms.lean
+
+      - name: Test full and positive depth-prefix boundaries
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/PEPS/AreaLaw/ScanPrefixBoundary.lean
+
+      - name: Audit actual prefix comparisons and physical cut axioms
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ScanPrefixCutsAxioms.lean
+
+      - name: Audit actual support classification
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualSupportClassificationAxioms.lean
+
+      - name: Audit augmented physical support compatibility
+        timeout-minutes: 2
+        run: >
+          timeout --signal=INT --kill-after=5s 90s lake env lean -j1
+          -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true
+          -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true
+          TNLeanTest/ActualSupportCompatibilityAxioms.lean
 
       - name: Test actual offset counts and history marginals
         timeout-minutes: 2

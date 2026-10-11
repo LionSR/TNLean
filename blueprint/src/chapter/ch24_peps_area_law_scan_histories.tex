@@ -441,3 +441,590 @@ The following finite construction follows
     weights before quantum state transport. It does not construct the remaining
     scanner data fields or the bad-history probability bound.
 \end{proof}
+
+\begin{theorem}[Physical nesting across bands]
+    \label{thm:al_scan_band_nesting}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_of_initial_assigned,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_near_middle_subset_later_near,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_near_middle_subset_later_near,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_near_middle_subset_later_old_near,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_near_middle_subset_later_state_near}
+    \leanok
+    \uses{def:al_scan_actual_histories,def:al_scan_physical_partition}
+    Every initial side assignment survives all subsequent fills and charges.
+    For bands $g<g'$, and for arbitrary independent histories and times,
+    $P_{0,g}\cup Y_g\subseteq P_{0,g'}$. The inclusion holds both after a
+    completed fill--charge pair and immediately before a charge, including
+    comparisons between these two kinds of status.
+\end{theorem}
+\begin{proof}\leanok
+    Moves only assign previously unassigned sites. Thus a site in
+    $P_{0,g}\cup Y_g$ lies in $A$ and has depth at most $8gm+5m+r_g$.
+    Since $r_g<m$ and $g<g'$, this is at most $8g'm+m+r_{g'}$.
+    The site was therefore initially near in band $g'$ and remains there.
+    This argument does not require a time horizon or a good history.
+\end{proof}
+
+\begin{theorem}[Separation of opposite and distinct front intervals]
+    \label{thm:al_scan_front_separation}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.front_intervals_opposite_disjoint,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.front_intervals_unique}
+    \leanok
+    \uses{thm:al_scan_unconditional_split_interval,def:al_scan_actual_histories}
+    Suppose $n>0$, $1\le D$, $r_0\le D$, $4D\le m$, and at most $nm$ fills
+    have occurred. At the offsets of one history, any physical depth belongs
+    to at most one of the band--side intervals
+    $[j-r_0,j+D+2r_0]$, interpreted with the side's orientation.
+    In comparing opposite sides of the same band, the offsets agree.
+\end{theorem}
+\begin{proof}\leanok
+    Each front advances through at most $m$ rows. Opposite fronts start
+    $4m-1$ apart; allowing both advances and both leads still leaves a
+    positive gap because $2D+4r_0\le6D<2m-1$.
+    Distinct bands have centers spaced by $8m$. Their offsets vary through
+    fewer than $m$ rows, so their possible front intervals are disjoint.
+\end{proof}
+
+\begin{definition}[Physical terminal split]
+    \label{def:al_scan_terminal_split}
+    \lean{TNLean.PEPS.AreaLaw.Scan.IsTerminalSplit}
+    \leanok
+    \uses{def:al_scan_physical_partition}
+    A support splits band $g$ on one side when it meets $Y_g$ and that
+    receiving side, misses the opposite side, and is contained in a single
+    physical part of every other band. This is the physical terminal split
+    rule of \cite[Section~7]{OpenAI2026AreaLaw}.
+\end{definition}
+
+\begin{theorem}[Actual incidence is a unique terminal split]
+    \label{thm:al_scan_terminal_split}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_designatedSplitIncidence_unique_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_designatedSplitIncidence_unique_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_ball_other_band_initial_part,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_ball_other_band_initial_part,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_designatedSplitIncidence_isTerminalSplit_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_designatedSplitIncidence_isTerminalSplit_domainGraph}
+    \leanok
+    \uses{def:al_scan_terminal_split,def:al_scan_designated_incidence,
+        thm:al_scan_front_separation,thm:al_scan_band_nesting,
+        thm:al_scan_designated_sampling,thm:al_scan_unconditional_split_interval}
+    Assume the ambient row bound, physical cut clearance, $8Km\le L$,
+    $n>0$, $1\le D$, $r_0\le D$, and $4D\le m$.
+    Every designated receiving--middle incidence is a terminal split with
+    a unique band and side. For a completed history of $k$ pairs require
+    $k\le nm$; for its pre-charge status require $k+1\le nm$.
+\end{theorem}
+\begin{proof}\leanok
+    The actual middle lies in the original compact truncation set. Hence an
+    incident designated support is its radius-$r_0$ graph ball, and clearance
+    places it wholly in $A$. Its anchor satisfies the unconditional split
+    interval. Separation makes the splitting band and side unique.
+    A ball meeting the middle of band $g$ lies within $2r_0$ in depth of a
+    point between that band's initial cutoffs. It is therefore wholly in the
+    initial far side of every earlier band and in the initial near side of
+    every later band. Persistence gives containment in one actual part of
+    each other band. No quantum commutation conclusion is asserted here.
+\end{proof}
+
+\begin{theorem}[Number of labelled terminal split occurrences]
+    \label{thm:al_scan_split_count}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_card_state_designatedSplitIncidence_le_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_card_old_designatedSplitIncidence_le_domainGraph}
+    \leanok
+    \uses{thm:al_scan_unconditional_split_interval,thm:al_scan_terminal_split,
+        def:al_scan_designated_incidence}
+    Suppose $n,m\ge2$, $1\le D$, $r_0\le D$, $4(D+2r_0)\le m$,
+    $8Km\le L$, and the ambient row and cut-clearance bounds hold.
+    If at most $\mu$ interaction labels have any fixed anchor, then
+    \begin{align}
+        \sum_g\sum_{s\in\{P,V\}}
+        \#\{i:\text{$i$ has a receiving--middle incidence at $(g,s)$}\}
+        \le 10KnD\mu.
+    \end{align}
+    This holds for completed histories with $k\le nm$ and for their
+    pre-charge statuses with $k+1\le nm$. Distinct labels with the same
+    anchor are counted separately.
+\end{theorem}
+\begin{proof}\leanok
+    Each incident anchor lies in $[j-r_0,j+D+2r_0]$. Its unsigned depth
+    remains between $1$ and $L$, by the expanded margin condition.
+    The interval has $D+3r_0+1\le5D$ rows, each containing at most $n$
+    actual sites and at most $\mu$ labels per site. Summing over the two
+    sides and $K$ bands gives the bound. The terminal split count is bounded
+    by the same count, since terminal splitting implies incidence.
+\end{proof}
+
+\begin{definition}[Auxiliary factors and actual quantum-region moves]
+    \label{def:al_scan_augmented_partitions}
+    \lean{TNLean.PEPS.AreaLaw.Scan.augmentedState,
+        TNLean.PEPS.AreaLaw.Scan.augmentedPartition,
+        TNLean.PEPS.AreaLaw.Scan.augmentedMove,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumHistoryPartition,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumChargeMove,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeTransportData}
+    \leanok
+    \uses{def:al_scan_actual_histories}
+    Adjoin the fixed factors $C$ and $R$ to the physical near and far sides:
+    $P=C\sqcup P_0$, $Y=Y_0$, and $F=R\sqcup V_0$.
+    The target $X$ remains in $P_0$; it is not removed from the near region.
+    An enabled charge with selected ball $B$ transfers exactly $B\cap Y_0$
+    to the selected side. A blank slot or a ball not meeting both that side
+    and the middle makes no move. History and conditional-choice mean trees
+    retain their supplied shapes.
+\end{definition}
+
+\begin{theorem}[Actual augmented partitions and charge transitions]
+    \label{thm:al_scan_augmented_transitions}
+    \lean{TNLean.PEPS.AreaLaw.Scan.augmentedPartition_isPartition,
+        TNLean.PEPS.AreaLaw.Scan.augmentedPartition_nested,
+        TNLean.PEPS.AreaLaw.Scan.augmentedMove_isValid,
+        TNLean.PEPS.AreaLaw.Scan.augmentedMove_apply,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumChargeMove_isValid,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumChargeMove_apply,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeTransportData_new}
+    \leanok
+    \uses{def:al_scan_augmented_partitions}
+    The augmented regions partition all physical and auxiliary factors.
+    Every charge transfers a subset of the middle, and its new partition
+    equals the actual partition of the extended physical history.
+    If $P_0\cup Y_0\subseteq P'_0$, then $P\cup Y\subseteq P'$.
+\end{theorem}
+\begin{proof}\leanok
+    The auxiliary factors stay on their assigned sides. The actual charge
+    changes precisely the previously unassigned sites of its selected ball.
+\end{proof}
+
+\begin{theorem}[Nested bands commute on the symmetric replica space]
+    \label{thm:al_scan_nested_band_metrics}
+    \lean{TensorPower.ReplicaTransport.bandMetric_commute_on_symmetric_of_nested,
+        TensorPower.ReplicaTransport.commute_symBandMetric_of_nested,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.commute_quantumHistoryPartition,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeTransportData_crossBandCommute}
+    \leanok
+    \uses{thm:al_scan_augmented_transitions,thm:al_scan_band_nesting}
+    Suppose every factor has positive dimension, $t\ge0$, and
+    $(P,Y,F)$ and $(P',Y',F')$ are partitions satisfying
+    $P\cup Y\subseteq P'$. For every replica count, their band metrics
+    \begin{align}
+        A  & =(W_P^{-1}W_F^{-1}W_Y)^2,         &
+        A' & =(W_{P'}^{-1}W_{F'}^{-1}W_{Y'})^2
+    \end{align}
+    commute on the symmetric replica space. Their extensions by the identity
+    on its orthogonal complement commute globally. Consequently, actual
+    scanner bands satisfy cross-band commutation for arbitrary independent
+    histories, times, and completed or pre-charge statuses, including every
+    pair of terminal leaves of a charge round.
+\end{theorem}
+\begin{proof}\leanok
+    Let $\Pi$ be the symmetric projection. Every regional metric and its
+    inverse commutes with $\Pi$. Complementary central label functions agree
+    after multiplication by $\Pi$, so $W_F^{-1}\Pi=W_{P\cup Y}^{-1}\Pi$.
+    This substitution is valid inside products because each intervening
+    factor preserves the range of $\Pi$.
+    Each of $P$, $Y$, and $P\cup Y$ is contained in $P'$ and disjoint from
+    $Y'$ and $F'$. Centrality for nested and disjoint regions makes the
+    resulting factors commute with all three factors of $A'$.
+    Physical cross-band nesting applies to each old/completed status pair.
+    No commutation assertion on the orthogonal complement is required for
+    the original band metrics.
+\end{proof}
+
+\begin{definition}[Recursive physical history mean trees]
+    \label{def:al_scan_history_mean_tree}
+    \lean{TNLean.PEPS.AreaLaw.Scan.chargeChoiceTree,
+        TNLean.PEPS.AreaLaw.Scan.historyMeanTree,
+        TNLean.PEPS.AreaLaw.Scan.fillChoiceTree}
+    \leanok
+    For positive offset and slot capacities, choose a fixed binary uniform
+    tree for the finite initial offsets and a fixed binary uniform tree for
+    one simultaneous charge choice. A tree with $r+1$ leaves is constructed
+    recursively from a first leaf of weight $1/(r+1)$ and an $r$-leaf subtree
+    of total weight $r/(r+1)$. At every charge round, substitute the charge
+    tree at each existing history leaf and append that charge to its label.
+    Deterministic fills have a singleton conditional choice tree.
+\end{definition}
+
+\begin{theorem}[Exact history weights and matrix endpoints]
+    \label{thm:al_scan_history_mean_tree_endpoints}
+    \lean{TNLean.PEPS.AreaLaw.Scan.chargeChoiceTree_weight,
+        TNLean.PEPS.AreaLaw.Scan.historyMeanTree_weight,
+        TNLean.PEPS.AreaLaw.Scan.fillChoiceTree_weight,
+        TNLean.PEPS.AreaLaw.Scan.historyMeanTree_eval_succ,
+        TNLean.PEPS.AreaLaw.Scan.fillChoiceTree_eval,
+        TNLean.PEPS.AreaLaw.Scan.charge_interpRoot_zero,
+        TNLean.PEPS.AreaLaw.Scan.charge_interpRoot_one,
+        TNLean.PEPS.AreaLaw.Scan.fill_interpRoot_zero,
+        TNLean.PEPS.AreaLaw.Scan.fill_interpRoot_one,
+        TNLean.PEPS.AreaLaw.Scan.historyMeanTree_interp_weight_old,
+        TNLean.PEPS.AreaLaw.Scan.historyMeanTree_interp_weight_new}
+    \leanok
+    \uses{def:al_scan_history_mean_tree}
+    Each charge leaf has weight $(2M)^{-K}$ and each history after $k$
+    charges has weight $m^{-K}(2M)^{-Kk}$. Interpolating a charge at
+    parameter $p$ gives terminal weights $(1-p)w_h$ and $pw_hq_c$.
+    For positive definite matrix inputs, the old endpoint is the previous
+    history tree evaluated at the old inputs; the new endpoint is exactly
+    the recursively substituted next tree evaluated at its new inputs.
+\end{theorem}
+\begin{proof}\leanok
+    Induct over the fixed finite uniform tree and then over charge rounds.
+    Write $\mathcal H_k$ for the history tree after $k$ charges, $\mathcal C$ for the charge
+    choice tree, and $h\cdot c$ for the history obtained by appending charge
+    $c$ to $h$. For a matrix family $A$, write $\mathcal T[A]$ for its evaluation
+    along the fixed binary tree $\mathcal T$. Distinct previous histories have
+    disjoint sets of extended labels. The weights and evaluations satisfy
+    \begin{align}
+        w_{h\cdot c}        & =w_hq_c,                                                              \\
+        \mathcal H_{k+1}[A] & =\mathcal H_k\bigl[h\mapsto{\mathcal C[c\mapsto A_{h\cdot c}]}\bigr].
+    \end{align}
+    The geometric mean has the asserted positive definite endpoints.
+    No reassociation of matrix means, or identification from equal
+    classical distributions, is used. This statement does not construct
+    the initial quantum vector or identify transported entropy measures.
+\end{proof}
+\begin{theorem}[Physical cut boundaries and changed sites]
+    \label{thm:al_physical_cut_calculus}
+    \lean{TNLean.PEPS.AreaLaw.mem_edgeBoundary_pair_iff,
+        TNLean.PEPS.AreaLaw.edgeBoundary_compl,
+        TNLean.PEPS.AreaLaw.edgeBoundary_union_subset,
+        TNLean.PEPS.AreaLaw.edgeBoundary_sdiff_subset,
+        TNLean.PEPS.AreaLaw.card_edgeBoundary_union_le,
+        TNLean.PEPS.AreaLaw.card_edgeBoundary_sdiff_le,
+        TNLean.PEPS.AreaLaw.card_edgeBoundary_le_of_endpoint_cover,
+        TNLean.PEPS.AreaLaw.card_edgeBoundary_le_four_mul_card,
+        TNLean.PEPS.AreaLaw.edgeBoundary_subset_union_symmDiff,
+        TNLean.PEPS.AreaLaw.card_edgeBoundary_le_add_four_mul_symmDiff}
+    \leanok
+    \uses{def:area_law_hamiltonian}
+    Let $\Lambda\subset\mathbb Z^2$ be finite and let $B,C\subseteq\Lambda$.
+    An unordered pair belongs to $\partial_\Lambda B$ exactly when its
+    sites are adjacent in the induced graph and exactly one belongs to $B$.
+    Complements are relative to $\Lambda$, and
+    \begin{align}
+        \partial_\Lambda(B^c)          & = \partial_\Lambda B, \\
+        \partial_\Lambda(B\cup C)      & \subseteq
+        \partial_\Lambda B\cup\partial_\Lambda C,              \\
+        \partial_\Lambda(B\setminus C) & \subseteq
+        \partial_\Lambda B\cup\partial_\Lambda C,              \\
+        \partial_\Lambda B             & \subseteq
+        \partial_\Lambda C\cup\partial_\Lambda(B\mathbin{\triangle} C).
+    \end{align}
+    Consequently the boundary cardinalities of $B\cup C$ and
+    $B\setminus C$ are at most
+    $|\partial_\Lambda B|+|\partial_\Lambda C|$.
+    If $R\subseteq\Lambda$ contains at least one site of each edge of
+    $\partial_\Lambda B$, then $|\partial_\Lambda B|\le4|R|$.
+    In particular,
+    \begin{align}
+        |\partial_\Lambda B| & \le4|B|, \\
+        |\partial_\Lambda B| & \le
+        |\partial_\Lambda C|+4|B\mathbin{\triangle} C|.
+    \end{align}
+    The last estimate is the changed-site bound in the proof of
+    \cite[Lemma~9.1(2)]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:area_law_ambient_boundary_crossing}
+    Check membership of the two sites of each physical edge to obtain
+    the three inclusions and complement equality. Inclusion of the domain
+    into the lattice is injective on unordered pairs. Cover the image of
+    the crossing edges by the at most four incident lattice edges at each
+    site of $R$, giving $|\partial_\Lambda B|\le4|R|$.
+    Taking $R=B$ gives the first cardinality estimate. Apply the same
+    estimate to $B\mathbin{\triangle} C$ and count the union in the last
+    inclusion to obtain the changed-site bound.
+\end{proof}
+
+\begin{theorem}[Physical boundaries of depth prefixes]
+    \label{thm:al_scan_prefix_boundary}
+    \lean{TNLean.PEPS.AreaLaw.Scan.disjoint_ambientDilation_boundaryEndpoints_of_clearance,
+        TNLean.PEPS.AreaLaw.Scan.card_edgeBoundary_depthPrefix_le,
+        TNLean.PEPS.AreaLaw.Scan.positiveDepthPrefix_eq_sdiff,
+        TNLean.PEPS.AreaLaw.Scan.card_edgeBoundary_positiveDepthPrefix_le}
+    \leanok
+    \uses{thm:al_scan_ambient_rows,def:area_law_cell_counts}
+    Let $\Lambda,T\subset\mathbb Z^2$ be finite, let $A\subseteq\Lambda$,
+    and let $Z$ consist of both sites of every edge of $\partial_\Lambda A$.
+    Fix integers $L\ge1$ and $n,r_0\ge0$, and suppose
+    $\|t-z\|_\infty>2L+10r_0$ for every $t\in T$ and $z\in Z$.
+    Every ambient dilation $T_j$ with $0\le j\le L$ is disjoint from $Z$.
+    Suppose further that $T$ is nonempty and that
+    $|T_d\setminus T_{d-1}|\le n$ for each integer $1\le d\le L$.
+    Set $\delta(x)=\min_{t\in T}\|x-t\|_\infty$.
+    For every integer $j\le L$, define
+    $P_j=\{x\in A:\delta(x)\le j\}$ and
+    $Q_j=\{x\in A:0<\delta(x)\le j\}$. Then
+    \begin{align}
+        Q_j                    & = P_j\setminus P_0, \\
+        |\partial_\Lambda P_j| & \le4n,              \\
+        |\partial_\Lambda Q_j| & \le8n.
+    \end{align}
+    The set identity holds for every integer-valued function $\delta$.
+    These are the full-row edge estimates used in
+    \cite[Lemma~9.1(2)]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_physical_ambient_boundary,
+        lem:area_law_ambient_boundary_layers,thm:al_physical_cut_calculus}
+    A point of $T_j\cap Z$ would have sup-norm distance at most
+    $j\le L$ from $T$, contradicting the clearance.
+    For $j\ge0$, comparison with the ambient boundary gives
+    $|\partial_\Lambda P_j|\le|\partial T_j|$.
+    When $1\le j\le L$, each edge leaving $T_j$ has its inside site in
+    $T_j\setminus T_{j-1}$; at $j=0$, use its outside site in
+    $T_1\setminus T$. In either case the relevant row has at most $n$
+    sites, so its incident edges give the bound $4n$.
+    For $j<0$, nonnegativity of $\delta$ makes $P_j$ empty.
+    Finally $0<\delta(x)$ is equivalent to $\delta(x)\not\le0$, so
+    $Q_j=P_j\setminus P_0$. Subadditivity under set difference bounds
+    its boundary by $4n+4n=8n$.
+\end{proof}
+
+\begin{definition}[Whole-row comparison prefixes]
+    \label{def:al_scan_comparison_prefixes}
+    \lean{TNLean.PEPS.AreaLaw.Scan.depthPrefix,
+        TNLean.PEPS.AreaLaw.Scan.positiveDepthPrefix,
+        TNLean.PEPS.AreaLaw.Scan.positiveNear,
+        TNLean.PEPS.AreaLaw.Scan.positiveNearMiddle}
+    \leanok
+    Write $d(x)=\operatorname{dist}_\infty(x,T)$ and set
+    \begin{align}
+        R_j & =\{x\in A:d(x)\le j\},   &
+        Q_j & =\{x\in A:0<d(x)\le j\}.
+    \end{align}
+    For a physical status $(P_0,Y,V)$, let $U=P_0\cap\{d>0\}$ and
+    $UY=(P_0\cup Y)\cap\{d>0\}$. These prefixes contain whole rows;
+    the partially consumed nominal row contributes to the error estimate.
+\end{definition}
+
+\begin{lemma}[One nested family and separated deterministic fronts]
+    \label{lem:al_scan_prefix_family}
+    \lean{TNLean.PEPS.AreaLaw.Scan.depthPrefix_mono,
+        TNLean.PEPS.AreaLaw.Scan.positiveDepthPrefix_mono,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.front_leads_separated,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.prefix_uncertainty_rows}
+    \leanok
+    \uses{def:al_scan_comparison_prefixes}
+    Both $R_j$ and $Q_j$ are monotone in the integer cutoff $j$.
+    Suppose $n>0$, $D\ge1$, $r_0\le D$, $4D\le m$, and $8Km\le L$.
+    After $k\le nm$ consumed fills, put $w=D+r_0$ and let $j_N,j_F$
+    be the near and oriented far nominal fronts. Then
+    \begin{align}
+        j_N+w         & <-(j_F+w),      &
+        [j_N,j_N+w]   & \subseteq[1,L], &
+        [-j_F-w,-j_F] & \subseteq[1,L].
+    \end{align}
+    The same assertions apply to a pre-charge status using $k+1\le nm$.
+    All comparison prefixes therefore belong to one nested family,
+    including comparisons from unrelated histories and bands.
+\end{lemma}
+\begin{proof}\leanok
+    Either side consumes at most $nm$ slots and advances at most $m$ rows.
+    Substitute the actual band cutoffs $8gm+m+r$ and $8gm+5m+r$,
+    with $0\le r<m$. The stated scale inequalities separate the two
+    lead intervals and place both uncertainty intervals in the physical rows.
+\end{proof}
+
+\begin{theorem}[Actual statuses between deterministic prefixes]
+    \label{thm:al_scan_prefix_sandwich}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_prefix_sandwich,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_prefix_sandwich}
+    \leanok
+    \uses{lem:al_scan_prefix_family}
+    Under the preceding scale conditions, actual row padding bounds and
+    graph-ball depth variation give
+    \begin{align}
+        R_{j_N-1}    & \subseteq P_0\subseteq R_{j_N+w},      &
+        R_{-j_F-w-1} & \subseteq P_0\cup Y\subseteq R_{-j_F}.
+    \end{align}
+    These inclusions hold for completed and pre-charge histories within
+    their respective horizons, without a good-history hypothesis.
+\end{theorem}
+\begin{proof}\leanok
+    Initial exterior sites remain far. Every unassigned site is on or beyond
+    each nominal front, because all earlier slots were consumed. Assigned
+    sites of $A$ have oriented depth at most the relevant front plus $w$.
+    Separation rules out consumption by the opposite side. No assumption
+    that a partial far row is a prefix in the near-side row order is used.
+\end{proof}
+
+\begin{lemma}[Counting the uncertainty rows]
+    \label{lem:al_scan_prefix_counting}
+    \lean{TNLean.PEPS.AreaLaw.Scan.card_filter_symmDiff_prefix_le,
+        TNLean.PEPS.AreaLaw.Scan.prefix_sandwich_card_bounds}
+    \leanok
+    \uses{thm:al_scan_prefix_sandwich}
+    If $R_a\subseteq E\subseteq R_b$, every row of depths $a+1$ through
+    $b$ has at most $n$ sites, and $c\in\{a,b\}$, then for any fixed
+    site predicate $Z$,
+    \begin{align}
+        |(E\cap Z)\mathbin{\triangle}(R_c\cap Z)|
+         & \le \max(b-a,0)n.
+    \end{align}
+    The preceding sandwiches have $w+1=D+r_0+1\le3D$ uncertainty rows.
+    They give the same $3nD$ estimate before and after removing the target.
+\end{lemma}
+\begin{proof}\leanok
+    For $c=a$, only sites of $E\setminus R_a$ can remain in the symmetric
+    difference; for $c=b$, only sites of $R_b\setminus E$ can remain.
+    In either case, filtering both sets by $Z$ preserves the containment
+    \begin{align}
+        (E\cap Z)\mathbin{\triangle}(R_c\cap Z)
+         & \subseteq \{x:a<d(x)\le b\}.
+    \end{align}
+    There are $\max(b-a,0)$ integer depths in this interval. Sum the row
+    cardinalities, each at most $n$. Apply this bound to the near-side
+    and near-side-with-middle sandwiches, whose intervals each contain
+    $D+r_0+1\le3D$ rows, including the partially consumed front row.
+    Taking $Z$ to be all sites or the positive-depth sites gives the
+    bounds before or after removing the target, respectively.
+\end{proof}
+
+\begin{theorem}[Physical deterministic-prefix approximation]
+    \label{thm:al_scan_physical_prefix_approximation}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_prefix_approximation_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_prefix_approximation_domainGraph}
+    \leanok
+    \uses{lem:al_scan_prefix_counting}
+    Let $T$ be nonempty, use its actual ambient depth and the induced physical
+    lattice graph, and assume each ambient layer $T_d\setminus T_{d-1}$ has
+    at most $n$ sites for $1\le d\le L$. Under the preceding scale and
+    horizon conditions, actual statuses satisfy
+    \begin{align}
+        Q_{j_N-1}                                & \subseteq U, & UY & \subseteq Q_{-j_F}, \\
+        |U\mathbin{\triangle}Q_{j_N-1}|          & \le3nD,      &
+        |UY\mathbin{\triangle}Q_{-j_F}|          & \le3nD,                                 \\
+        |P_0\mathbin{\triangle}R_{j_N-1}|        & \le3nD,      &
+        |(P_0\cup Y)\mathbin{\triangle}R_{-j_F}| & \le3nD.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    Physical depth rows inject into the corresponding ambient layers.
+    Along a physical graph path, ambient depth varies by at most its length,
+    so actual radius-$r_0$ balls supply the depth-variation bound.
+    Apply the proved actual-history sandwiches and count their uncertainty rows.
+\end{proof}
+
+\begin{lemma}[Middle and far regions from the two near regions]
+    \label{lem:al_scan_status_differences}
+    \lean{TNLean.PEPS.AreaLaw.Scan.middle_eq_positiveNearMiddle_sdiff_positiveNear,
+        TNLean.PEPS.AreaLaw.Scan.receiving_far_eq_compl}
+    \leanok
+    \uses{def:al_scan_comparison_prefixes}
+    If the physical middle has positive depth, then
+    $Y=UY\setminus U$. For every physical status,
+    $V=\Lambda\setminus(P_0\cup Y)$.
+\end{lemma}
+\begin{proof}\leanok
+    The three regions $P_0$, $Y$, and $V$ partition $\Lambda$, so $V$ is the
+    complement of $P_0\cup Y$. For the first identity, a site of $Y$ has
+    positive depth by assumption and is not in $P_0$, so it lies in $UY$ but
+    not in $U$. Conversely, a site of $UY$ outside $U$ has positive depth and
+    is not in $P_0$, so it lies in $Y$.
+\end{proof}
+
+\begin{theorem}[All five physical status cuts]
+    \label{thm:al_scan_status_cuts}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_cut_bounds_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_cut_bounds_domainGraph}
+    \leanok
+    \uses{thm:al_scan_physical_prefix_approximation,
+        thm:al_scan_prefix_boundary,thm:al_physical_cut_calculus,
+        lem:al_scan_status_differences}
+    In addition to the physical prefix-approximation hypotheses, suppose
+    every endpoint of an actual cut edge of $A$ has ambient distance
+    greater than $2L+10r_0$ from $T$. Count each undirected physical edge once.
+    Every completed status with $k\le nm$ and every pre-charge status with
+    $k+1\le nm$ obeys
+    \begin{align}
+        |\partial U|   & \le20nD, & |\partial(UY)| & \le20nD, &
+        |\partial Y|   & \le40nD,                               \\
+        |\partial P_0| & \le16nD, & |\partial V|   & \le16nD.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    A full prefix has at most $4n$ physical boundary edges and a positive-depth
+    prefix has at most $8n$. Changing at most $3nD$ sites adds at most $12nD$
+    edges, since the physical graph has degree at most four. Use $D\ge1$,
+    subadditivity for $Y=UY\setminus U$, and complement invariance for $V$.
+\end{proof}
+
+\begin{theorem}[Separation of the actual receiving sides]
+    \label{thm:al_scan_receiving_separation}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_near_subset_truncationSet,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_near_subset_truncationSet,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_designatedSupport_not_near_far_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_designatedSupport_not_near_far_domainGraph}
+    \leanok
+    \uses{def:al_scan_actual_histories}
+    Consider an actual completed status after $q$ fills, or the status after
+    its next fill and before the corresponding charge. The physical near
+    side remains in $A\cap T_L$ whenever $8Km\le L$.
+    Suppose depth is ambient sup-norm distance to the nonempty target,
+    supports use the induced graph of the finite domain, and the target has
+    clearance greater than $2L+10r_0$ from the cut endpoints. If the number
+    of consumed fills is at most $nm$, $n>0$, $r_0\le D$, $D\ge1$, and
+    $4D\le m$, no designated support meets both physical receiving sides.
+    No depth-row cardinality or good-history condition is needed.
+\end{theorem}
+\begin{proof}
+    \leanok
+    An initially far site remains far, so a current near site belongs to
+    $A$ and has depth at most $8gm+5m+r\le L$. A designated support
+    meeting near and far crosses this compact near set, hence is the
+    radius-$r_0$ ball. Clearance puts the whole ball in $A$.
+    For near and far witnesses $x,y$, the assigned-lead bounds give
+    $d(x)\le j_P+D+r_0$ and $-d(y)\le j_F+D+r_0$, whereas the ball
+    gives $d(y)-d(x)\le2r_0$. Thus $j_P+j_F+2D+4r_0\ge0$.
+    Each side consumes at most $m$ complete rows, so
+    $j_P+j_F\le1-2m$ and
+    $j_P+j_F+2D+4r_0\le1-2m+6D<0$, a contradiction.
+\end{proof}
+
+\begin{theorem}[Classification of every actual designated support]
+    \label{thm:al_scan_support_classification}
+    \lean{TNLean.PEPS.AreaLaw.Scan.contained_or_middle_side,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_designatedSupport_classification_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.old_designatedSupport_classification_domainGraph}
+    \leanok
+    \uses{def:al_scan_actual_histories}
+    Under the hypotheses of Theorem~\ref{thm:al_scan_receiving_separation}
+    and the ambient row bound $|T_d\setminus T_{d-1}|\le n$ for
+    $1\le d\le L$, every designated support in every completed or
+    pre-charge status has one of the following forms at each band:
+    it is contained in one part, or it meets the middle and exactly one
+    receiving side and is contained in one part of every other band.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_scan_receiving_separation,thm:al_scan_terminal_split}
+    A support that is not contained in one of three parts meets at least
+    two parts. The receiving-side separation forces one of them to be the
+    middle. The designated middle-side incidence has a unique splitting
+    side and is initially contained in one receiving side of every other
+    band. Initial assignments persist through all subsequent moves.
+\end{proof}
+
+\begin{theorem}[Compatibility of augmented physical supports]
+    \label{thm:al_scan_augmented_supports}
+    \lean{TNLean.PEPS.AreaLaw.Scan.augmentedPartition_contains_of_constant,
+        TNLean.PEPS.AreaLaw.Scan.IsTerminalSplit.augmented,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeTransportData_supportCompatible_domainGraph}
+    \leanok
+    \uses{def:al_scan_augmented_partitions}
+    Under the hypotheses of Theorem~\ref{thm:al_scan_support_classification},
+    adjoin $C$ to the near side and $R$ to the far side, leaving every
+    designated support on physical tensor factors only. At every old and
+    new terminal leaf of an actual charge round, each designated support
+    lies in one part of every band except possibly one; in that band it
+    meets the middle and exactly one receiving side. This holds for any
+    supplied finite history and conditional-choice mean trees.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_scan_support_classification,thm:al_scan_augmented_transitions}
+    Inclusion into the physical tensor factors preserves containment,
+    nonempty intersections, and disjointness. The auxiliary factors do not
+    enter a support. Old leaves are pre-charge statuses, and new leaves
+    are the completed statuses of the extended histories.
+\end{proof}

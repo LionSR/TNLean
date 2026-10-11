@@ -6345,6 +6345,22 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** the nonnegativity argument also covers an empty collection; an additional
   nonemptiness hypothesis would unnecessarily restrict these statements.
 
+
+### Ambient depth variation on a scan ball — refactored (2026-10-11)
+
+- **Pattern:** convert filtered-ball membership to an induced-graph distance bound,
+  then apply `abs_ambientDepth_sub_le_domainGraph` and reverse the absolute difference.
+- **Seen:** `Scan/TerminalSplits.lean` has two occurrences; the private helper in
+  `Scan/SideSeparation.lean` uses the same conversion.
+- **Abstraction:** the new side-separation proofs share one private helper, so their
+  three applications do not repeat this conversion. The mathematical estimate is
+  already supplied by `abs_ambientDepth_sub_le_domainGraph`.
+- **Disposition:** `CollarScan.abs_depth_sub_anchor_le_domainGraph_of_mem_ball`
+  is now available in `Scan/GoodSampling.lean`, and the sampling, ancestry,
+  probability, `SplitIntervals`, `PrefixApproximation`, `SideSeparation`, and
+  `TerminalSplits` callers use it; the private copies are removed. No new tactic
+  or geometric estimate is needed.
+
 ### Physical cardinality of a partial ambient layer — candidate (2026-10-09)
 
 - **Pattern:** Project a physical region injectively to its ambient lattice subset,
