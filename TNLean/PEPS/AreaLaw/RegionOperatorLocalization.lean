@@ -48,6 +48,12 @@ theorem exists_quasilocal_region_localization (q : ℕ) (hq : 1 ≤ q)
     exists_quasilocal_lieb_robinson q hq R J
   refine ⟨2 * C, v, c, by positivity, hv, hc, ?_⟩
   intro Λ h S A hA l t
+  have hdisj (y : Site Λ) (hy : y ∉ graphNeighborhood Λ l S) :
+      Disjoint (S : Set (Site Λ)) (graphBall (domainGraph Λ) y l : Set (Site Λ)) :=
+    Set.disjoint_left.mpr fun x hxS hxball =>
+      hy (Finset.mem_filter.mpr ⟨Finset.mem_univ y, x, hxS,
+        (exists_walk_length_le_iff_edist_le Λ l x y).mpr
+          (by simpa only [SimpleGraph.edist_comm] using (mem_graphBall.mp hxball))⟩)
   done
 
 end TNLean.PEPS.AreaLaw
