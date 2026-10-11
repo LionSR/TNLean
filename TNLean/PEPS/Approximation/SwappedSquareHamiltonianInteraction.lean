@@ -64,6 +64,11 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
   have hFn : ‖F‖ ≤ 1 :=
     (Matrix.l2_opNorm_reindex_equiv p (EncodedFrame.sheetSwapOp q R)).le.trans
       (EncodedFrame.norm_sheetSwapOp_le_one R)
+  have hDn (i : SquareInteraction L) : ‖Matrix.doubledHamiltonian (h.hermitianTerm i)‖ ≤
+      J + J :=
+    (norm_add_le _ _).trans (add_le_add
+      ((Matrix.l2_opNorm_kronecker_one_le _).trans (h.hermitianTerm_norm_le i))
+      ((Matrix.l2_opNorm_one_kronecker_rect_le _).trans (h.hermitianTerm_norm_le i)))
   done
 
 end TNLean.PEPS.Approximation
