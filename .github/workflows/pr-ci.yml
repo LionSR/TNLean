@@ -503,6 +503,7 @@ jobs:
         with:
           build: false
           use-github-cache: false
+          use-mathlib-cache: true
 
       # Setup/Mathlib prebuilt retrieval happens before this separate seed;
       # no seeded artifact is available to a Lean command until pruning passes.
@@ -543,6 +544,12 @@ jobs:
             -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
             -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
             TNLeanTest/DyadicWeightedSum.lean
+      - name: Check sitewise tensor support early
+        run: |
+          set -eo pipefail
+          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
+          lake --fail-fast build +TNLean.Circuit.SitewiseTensorSupport:olean \
+            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
       - name: Build template mixed-square and weighted covering estimates early
         timeout-minutes: 5
@@ -730,6 +737,18 @@ jobs:
               -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
               -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
               "$file"
+      - name: Check sitewise tensor support and standard axioms strictly
+        timeout-minutes: 4
+        env:
+          LEAN_NUM_THREADS: 1
+        run: |
+          set -eo pipefail
+          for source in TNLean/Circuit/SitewiseTensorSupport.lean \
+              TNLeanTest/SitewiseTensorSupportAxioms.lean; do
+            timeout --signal=INT --kill-after=5s 90s lake env lean -j1 \
+              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
+              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
+              "$source"
           done
 
       - name: Check physical-column composition axioms strictly
