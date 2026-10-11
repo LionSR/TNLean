@@ -17,9 +17,11 @@ namespace TNLean.PEPS.PairEffect
 open scoped TensorProduct
 
 /-- Transporting a vector across an equality of the right tensor factor commutes
-with tensoring on the left by a fixed vector. -/
-private theorem tmul_heq {W A B : HSpace} (hAB : A = B) (v : W)
-    {a : A} {b : B} (h : HEq a b) :
+with tensoring on the left by a fixed vector.  The left factor `W` is left as a
+plain type so that it is inferred directly from the supplied vector, rather than
+by inverting `HSpace.carrier`. -/
+private theorem tmul_heq {W : Type} [AddCommGroup W] [Module ℂ W] {A B : HSpace}
+    (hAB : A = B) (v : W) {a : A} {b : B} (h : HEq a b) :
     HEq (v ⊗ₜ[ℂ] a) (v ⊗ₜ[ℂ] b) := by
   subst hAB
   cases h
@@ -89,8 +91,7 @@ private theorem familyPhysicalListBasis_owner_column_heq
           δ (fun j ↦ y (([] : List Q).get j)))).symm
   | cons p ps ih =>
       rw [List.map_cons, familyPhysicalListBasis_cons_apply, familyPhysicalListBasis_cons_apply]
-      exact tmul_heq (W := euc (Fin (δ (f p))))
-        (familyPhysicalListBasis_owner_mem_eq f δ ps)
+      exact tmul_heq (familyPhysicalListBasis_owner_mem_eq f δ ps)
         ((EuclideanSpace.basisFun (Fin (δ (f p))) ℂ) (y (f p))) ih
 
 end TNLean.PEPS.PairEffect
