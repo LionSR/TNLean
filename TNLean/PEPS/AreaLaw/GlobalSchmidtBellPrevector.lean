@@ -38,7 +38,7 @@ lines 50–59, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 The two auxiliary operators are their literal coordinate transports,
 before identification with singleton site-label projectors. -/
 theorem exists_global_schmidtBellPrevector
-    {q : ℕ} [NeZero q] {ι : Type*} [Fintype ι] [DecidableEq ι]
+    {q : ℕ} [NeZero q] {ι : Type} [Fintype ι] [DecidableEq ι]
     (H : Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (Ω : EuclideanSpace ℂ (ι → Fin q)) (E₀ : ℝ)
     (hΩ : ‖Ω‖ = 1) (hE : H *ᵥ Ω.ofLp = (E₀ : ℂ) • Ω.ofLp)

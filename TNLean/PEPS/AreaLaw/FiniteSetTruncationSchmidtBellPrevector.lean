@@ -42,7 +42,7 @@ theorem exists_finiteSetTruncation_schmidtBellPrevector_of_gap
     (R vR : ℕ) (b₀ Kg : ℝ) (kg : ℕ) {J Δ Kb μ C₀ : ℝ}
     (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hKb : 0 ≤ Kb) (hμ : 0 ≤ μ) (hC₀ : 0 ≤ C₀) :
     ∃ C₁ : ℝ, 0 < C₁ ∧
-      ∀ {q : ℕ} [NeZero q] {ι : Type*} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
+      ∀ {q : ℕ} [NeZero q] {ι : Type} [Fintype ι] [DecidableEq ι] {κ : Type*} [Fintype κ]
         (G : SimpleGraph ι) (X : κ → Finset ι) (a : κ → ι), (∀ k, a k ∈ X k) →
         ∀ (h : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ), (∀ k, (h k).IsHermitian) →
         (∀ k, h k ∈ supportedOperators q (X k : Set ι)) →
