@@ -229,8 +229,8 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
     for $i\in\mathcal C_X$, and $\mathcal B_X\le C(1+b_X)(r_0+1)^6$. If moreover
     $r_0=\lceil C_1(\log n)^2\rceil$, $n\ge2$, $D\ge1$ and $b_X\le C_2nD$, then
     $\mathcal B_X\le C'nD(\log n)^{12}$. If $S_0$ is empty every constraint is
-    retained and no label crosses a cut; constraints whose anchors cannot reach
-    $S_0$ are always retained exactly.
+    retained and no label crosses a cut contained in $S_0$; constraints whose
+    anchors cannot reach $S_0$ are always retained exactly.
 \end{theorem}
 \begin{proof}\leanok
     A support meeting $X\subseteq S_0$ has an anchor at finite distance; if
@@ -240,6 +240,46 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
     within $r_0$ of one of the at most $2b_X$ endpoints of cut edges. Each such
     ball has at most $K_b(r_0+1)^2$ sites and each anchor carries at most $\mu$
     labels.
+\end{proof}
+
+% Exact-budget identities preserve the original finite label family.
+% These identities do not assert the lattice-specialized budget producer.
+\begin{theorem}[Exact cut budget and complementary cuts]
+    \label{thm:al_exact_cut_budget}
+    \lean{TNLean.PEPS.AreaLaw.cutBudget_eq_cutLogBudget,
+        TNLean.PEPS.AreaLaw.crossingLabels_compl,
+        TNLean.PEPS.AreaLaw.cutBudget_compl,
+        TNLean.PEPS.AreaLaw.one_le_cutBudget,
+        TNLean.PEPS.AreaLaw.crossingLabels_univ,
+        TNLean.PEPS.AreaLaw.cutBudget_empty,
+        TNLean.PEPS.AreaLaw.cutBudget_univ}
+    \leanok
+    \uses{thm:al_crossing_budget}
+    Let $V$ be the vertex set of a finite graph, let $I$ be a finite label
+    set with anchors $a_i\in V$, and let $q,r_0\in\mathbb N$ and
+    $S_0\subseteq V$. Use the designated supports $\widetilde X_i$ of
+    Theorem~\ref{thm:al_crossing_budget}. For every cut $X\subseteq V$, let
+    $\mathcal C_X$ consist of the original labels whose designated support
+    meets both $X$ and $V\setminus X$. Then the geometric budget is exactly
+    the supported-family budget in \cite[Lemma~3.1]{OpenAI2026AreaLaw}:
+    \begin{align}
+        \mathcal B_X
+         & =1+\sum_{i\in\mathcal C_X}
+        \log^2\Bigl(\mathrm e\prod_{v\in\widetilde X_i}q\Bigr)
+        =1+\sum_{i\in\mathcal C_X}\log^2(\mathrm e\,q^{|\widetilde X_i|}).
+    \end{align}
+    Here $\log0=0$ when $q=0$. Also,
+    $\mathcal C_{V\setminus X}=\mathcal C_X$,
+    $\mathcal B_{V\setminus X}=\mathcal B_X\ge1$, and
+    $\mathcal B_\varnothing=\mathcal B_V=1$.
+    No containment $X\subseteq S_0$ is required. Repeated designated
+    supports and zero terms keep their original labels.
+\end{theorem}
+\begin{proof}\leanok
+    The crossing conditions on each original label agree, and
+    $\prod_{v\in\widetilde X_i}q=q^{|\widetilde X_i|}$. Exchanging the two
+    sides of the cut exchanges the two witnesses of crossing. Every
+    summand is a square, and the empty and full cuts have no crossing labels.
 \end{proof}
 
 \section{The induced lattice instance}
@@ -403,6 +443,11 @@ histories (Lemma~9.1), of transport (Proposition~7.4), of the comparators
 (Proposition~8.1), of continuity (Lemma~2.1) and of tails (Lemma~2.3); it is
 therefore Proposition~9.2 restricted to those conclusions, not the source
 proposition itself, which remains open until the scan data are constructed.
+The finite transported measures are required to have mass $1/2$ only for
+$0<p<1$, where the source's terminal weights are positive. The logarithmic norm is
+continuous on $[0,1]$, and its values at $0$ and $1$ retain their matching
+and comparison properties. No mass equality is required at an inactive
+terminal leaf.
 
 \begin{theorem}[Scanner estimate from the conclusions of its inputs]
     \label{thm:al_scanner_from_inputs}
@@ -431,9 +476,12 @@ proposition itself, which remains open until the scan data are constructed.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    Integrating the derivative of the logarithmic norm of each charge round
-    over $p\in[\epsilon/2,\epsilon]$ and summing over rounds bounds the
-    integrated charge defect by the telescoped entropy budget. Averaging over
+    Integrate the logarithmic norm derivative over $[0,1]$ in every round,
+    retaining the nonnegative charge contribution on
+    $[\epsilon/2,\epsilon]$. Bounds and continuity on $(0,1)$ make the charge
+    defect integrable; changing its values at $0$ and $1$ does not change
+    the integral. Continuity of the logarithmic norm and the matching
+    values at successive rounds give the telescoped entropy budget. Averaging over
     the $nm$ charge rounds and the parameter interval selects a round and a
     parameter with $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$. At that point
     H\"older's inequality with exponents $8/7$ and $8$ bounds the leaf
