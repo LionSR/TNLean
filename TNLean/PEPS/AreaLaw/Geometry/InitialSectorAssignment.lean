@@ -111,6 +111,20 @@ private theorem fine_working_radius_eq (k : ℕ) (hk : 50000000 ≤ k) :
   rw [← hp]
   ring
 
+/-- The closed half-radius square in the initial-star construction has
+half-side one hundred and twenty-eighth of the actual fine-cell side. The
+existing late-layer bound supplies the exponent needed for natural subtraction.
+
+Auxiliary to OpenAI, *A two-dimensional area law from a global spectral gap*,
+September 24, 2026, Section 11, `prop:two-families`, lines 200–207, and
+`geometry:initial-stars`, lines 333–370, especially 352–370, at
+`openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+theorem fineScaleIndex_closed_half_radius_eq (k : ℕ) (hk : 50000000 ≤ k) :
+    ((2 : ℝ) ^ (fineScaleIndex k - 5) / 2) / 2 =
+      (2 : ℝ) ^ fineScaleIndex k / 128 := by
+  have h := fine_working_radius_eq k hk
+  linarith
+
 /-- The eight actual open working triangles about a fine-cell mark have a
 unique assignment to actual initial identifiers. Every initial birth region
 in the smaller concentric closed square is precisely the union of its assigned

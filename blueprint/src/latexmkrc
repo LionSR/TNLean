@@ -6,6 +6,14 @@ $pdflatex = 'xelatex -synctex=1';
 # generated names of its many TikZ/Tenkz objects. This is runtime capacity;
 # no format rebuild is needed. Keep an explicit caller override intact.
 $ENV{'pool_size'} //= 12500000;
+# The accumulated TikZ/Tenkz boxes likewise outgrow the default main memory at
+# the final shipout of the full volume. Like the pool above this is runtime
+# capacity read from the environment; no format rebuild is needed. The
+# extra_mem_* knobs grow the engine's node memory at run time, which is where
+# the shipout box allocation overflowed.
+$ENV{'main_memory'} //= 12000000;
+$ENV{'extra_mem_top'} //= 8000000;
+$ENV{'extra_mem_bot'} //= 8000000;
 @default_files = ('print.tex');
 use Cwd qw(abs_path);
 use File::Spec;

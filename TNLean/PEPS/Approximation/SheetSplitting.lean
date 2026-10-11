@@ -63,7 +63,7 @@ theorem norm_act_submatrix_sub (M : Matrix n n ℂ) (e : m ≃ n) (ψ : Euclidea
   have h : act (M.submatrix e e) ψ - ψ =
       WithLp.toLp 2 ((M *ᵥ (ψ ∘ e.symm) - ψ ∘ e.symm) ∘ e) := by
     ext x
-    simp [act, submatrix_mulVec_equiv]
+    simp [act_apply, submatrix_mulVec_equiv]
   rw [h, EuclideanSpace.norm_toLp_comp_equiv]
   rfl
 
