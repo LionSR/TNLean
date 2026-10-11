@@ -1,0 +1,58 @@
+\section{Restricting the source-register operators}
+\label{sec:peps_source_register_operators}
+
+Let $\mathcal P$ be the set of parties, and let
+$R=((p_i,q_i))_{i=0}^{n-1}$ be an ordered list of pairs of distinct parties.
+For each $i$, let $U_i,V_i$ be complex inner product spaces. The ordered
+register list is
+\begin{align}
+    \mathcal L_R
+    = ((p_0,U_0),(q_0,V_0),\ldots,(p_{n-1},U_{n-1}),(q_{n-1},V_{n-1})).
+    \label{eq:peps_source_register_order}
+\end{align}
+An empty register list has memory space $\C$. Register memories are tensored
+in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
+
+\begin{definition}[The word of local source-register operators]
+    \label{def:peps_source_register_operator_word}
+    \lean{TNLean.PEPS.PairEffect.Word.localEndpoint}
+    \lean{TNLean.PEPS.PairEffect.Word.sources_localEndpoint}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.endpointWord}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.sources_endpointWord}
+    \leanok
+    \uses{def:peps_party_layout,def:peps_source_slots}
+    Let $A_i:U_i\to U_i$ and $B_i:V_i\to V_i$ be continuous linear maps.
+    The word $Z_R$ applies $A_i$ to the register $(p_i,U_i)$ and $B_i$ to
+    $(q_i,V_i)$, leaving every other register unchanged, in increasing order
+    of $i$. It contains no source preparations. In particular,
+    $Z_{\varnothing}=\Id_{\C}$.
+    % Source: 04-compression.tex, lines 279--309 and 565--588.
+    These are the local matrices used in the random source replacement
+    and the contraction within each party in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+\end{definition}
+
+\begin{theorem}[Restriction away from every source owner]
+    \label{thm:peps_source_register_operator_exclusion}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.restrict_endpointWord_eq_nil_and_eval_eq_id}
+    \leanok
+    \uses{def:peps_source_register_operator_word,thm:peps_party_restriction}
+    Let $f:\mathcal P\to\{0,1\}$ select parties, and suppose that
+    $f(p_i)=f(q_i)=0$ for every $i$. Then the selected register list is
+    empty, and the restricted word $Z_R|_f$ acts as $\Id_{\C}$.
+    The register spaces and their local maps are arbitrary, and $n$ may be
+    zero.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_source_register_operator_word,thm:peps_party_restriction,
+        thm:peps_party_factorization}
+    Every party occurring in $Z_R$ owns a register in $\mathcal L_R$.
+    Indeed, adjoining the first pair introduces only its two owners through
+    its local maps and unchanged registers; the claim for the remaining
+    pairs follows by induction. Thus the assumptions exclude every
+    participating party. Restriction retains exactly the selected
+    participating parties, so none remain. A source-free word with no
+    participating party has empty input and output lists and acts as
+    $\Id_{\C}$.
+\end{proof}
