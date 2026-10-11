@@ -55,16 +55,12 @@ open Set Metric SquareEdge
 def shiftGuide {ι : Type*} (o : ℝ × ℝ) (g : ℝ × ℝ → ι) : ℝ × ℝ → ι := fun p => g (p - o)
 
 theorem sub_mem_closure {o y : ℝ × ℝ} {s : Set (ℝ × ℝ)}
-    (hy : y ∈ closure ((fun p => p - o) ⁻¹' s)) : y - o ∈ closure s := by
-  have h := (Homeomorph.subRight o).preimage_closure s
-  have : y ∈ (Homeomorph.subRight o) ⁻¹' closure s := by rw [h]; exact hy
-  exact this
+    (hy : y ∈ closure ((fun p => p - o) ⁻¹' s)) : y - o ∈ closure s :=
+  ((Homeomorph.subRight o).preimage_closure s).ge hy
 
 theorem sub_mem_frontier {o z : ℝ × ℝ} {s : Set (ℝ × ℝ)}
-    (hz : z ∈ frontier ((fun p => p - o) ⁻¹' s)) : z - o ∈ frontier s := by
-  have h := (Homeomorph.subRight o).preimage_frontier s
-  have : z ∈ (Homeomorph.subRight o) ⁻¹' frontier s := by rw [h]; exact hz
-  exact this
+    (hz : z ∈ frontier ((fun p => p - o) ⁻¹' s)) : z - o ∈ frontier s :=
+  ((Homeomorph.subRight o).preimage_frontier s).ge hz
 
 theorem mem_closure_shift {ι : Type*} {f g : ℝ × ℝ → ι} (o : ℝ × ℝ) {y : ℝ × ℝ}
     (hy : y ∈ closure {p | shiftGuide o f p ≠ shiftGuide o g p}) :
