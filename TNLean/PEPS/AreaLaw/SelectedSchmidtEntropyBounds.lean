@@ -25,6 +25,7 @@ open scoped Matrix ComplexOrder
 
 namespace TNLean.PEPS.AreaLaw
 
+set_option diagnostics true in
 open Classical in
 /-- For a unit physical state and a supplied positive-mass spectral set in an
 exponential window, both the logarithmic selected dimension and the entropy of
