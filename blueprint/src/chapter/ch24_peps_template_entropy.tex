@@ -81,35 +81,6 @@
     The same formula includes $K=0$, when the lower sum is empty.
 \end{proof}
 
-\begin{theorem}[Summation of selected dyadic squares by scale]
-    \label{thm:area_law_capped_sum_by_scale}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.sum_cappedDyadicPartition_by_scale}
-    \leanok
-    \uses{def:area_law_capped_dyadic_partition}
-    Let $S\subseteq\mathbb Z^2$ be finite, let $K\in\mathbb N$, and let
-    $f:\mathbb N\to\mathbb R$ be arbitrary. Then
-    \begin{align}
-        \sum_{(r,z)\in\mathcal P_K(S)} f(r)
-         & =\sum_{k=0}^{K}
-        \#\{(r,z)\in\mathcal P_K(S):r=k\}\,f(k).
-    \end{align}
-    This is the finite summation by scale used in the covering argument of
-    \cite[Lemma~9.4, lines~656--664]{OpenAI2026AreaLaw}.
-    The identity includes $S=\varnothing$ and $K=0$ and imposes no sign
-    condition on $f$.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{thm:area_law_capped_dyadic_partition}
-    Membership in $\mathcal P_K(S)$ implies $r\le K$. Group its finitely
-    many terms according to $r$. On each group with $r=k$, the summand is
-    the constant $f(k)$, so
-    \begin{align}
-        \sum_{\substack{(r,z)\in\mathcal P_K(S)      \\r=k}}f(k)
-         & =\#\{(r,z)\in\mathcal P_K(S):r=k\}\,f(k).
-    \end{align}
-    Summing over $k=0,\ldots,K$ gives the identity.
-\end{proof}
-
 \section{Safe rectangles in template coverings}
 
 \begin{definition}[Native rectangles of dyadic cells]
@@ -239,27 +210,6 @@
 \end{proof}
 
 \section{Entropy from a uniform safe-box estimate}
-
-\begin{theorem}[Physical dyadic partition and subadditivity]
-    \label{thm:area_template_physical_dyadic_entropy}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.biUnion_rectRegion_cappedDyadicPartition,
-        TNLean.PEPS.AreaLaw.Geometry.pairwiseDisjoint_rectRegion_cappedDyadicPartition,
-        TNLean.PEPS.AreaLaw.Geometry.regionalEntropy_filter_le_sum_rectRegion}
-    \leanok
-    \uses{thm:area_template_dyadic_rectangle}
-    For a finite lattice set $S$, the native rectangle regions $A\cap Q$
-    of its actual capped dyadic partition are pairwise disjoint and their
-    union is $A\cap S$. For a normalized physical vector $\Omega$,
-    \begin{align}
-        S_\Omega(A\cap S)\le\sum_Q S_\Omega(A\cap Q).
-    \end{align}
-    Sites absent from the physical domain do not contribute to these regions.
-\end{theorem}
-\begin{proof}\leanok
-    Intersect the ambient covering and its pairwise disjointness with $A$.
-    Apply finite disjoint-union subadditivity to the actual regional
-    reductions, starting with the empty region, whose entropy is zero.
-\end{proof}
 
 \begin{theorem}[Conditional template and shell entropy bounds]
     \label{thm:area_template_safe_box_entropy}
