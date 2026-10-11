@@ -57,6 +57,9 @@ theorem exists_bootstrap_comparison_budget_bound {e₀ : ℝ}
       (div_lt_self hg₀ (by norm_num : (1 : ℝ) < 1000))
   have hμℓ : BootstrapParameters.mu e₀ < 1 - BootstrapParameters.ell e₀ :=
     sub_lt_sub_left hℓg₀ 1
+  have hκμ : BootstrapParameters.kappa e₀ < BootstrapParameters.mu e₀ := by
+    linarith [show BootstrapParameters.kappa e₀ ≤ BootstrapParameters.ell e₀ from
+      min_le_left _ _, show BootstrapParameters.mu e₀ = 1 - BootstrapParameters.g0 e₀ from rfl]
   done
 
 end TNLean.PEPS.AreaLaw.Scan
