@@ -111,21 +111,12 @@ theorem IsGInjective.isGInjective_torusNativeIncidentSite {d : ℕ}
     IsGInjective (graphOrientedIncidentRepresentation U torusNativeEdgeFlip v)
       (regularSiteMap (torusNativeIncidentSite a v)) := by
   classical
-  let e := torusNativeIncidentCoordinatesEquiv (X := X) v
-  refine ⟨?_, ?_⟩
-  · intro g
-    apply LinearMap.ext
-    intro x
-    simp only [LinearMap.comp_apply, regularSiteMap_torusNativeIncidentSite_eq_siteMap]
-    rw [graphOrientedIncidentRepresentation_torus]
-    exact LinearMap.congr_fun (ha.invariant g) (x ∘ e.symm)
-  · intro x hx hzero
-    have hy : x ∘ e.symm ∈ (torusLegRep U).invariants := by
-      intro g
-      rw [← graphOrientedIncidentRepresentation_torus, hx g]
-    have hz := ha.injOn_invariants (x ∘ e.symm) hy
-      (by simpa only [regularSiteMap_torusNativeIncidentSite_eq_siteMap] using hzero)
-    exact e.symm.surjective.injective_comp_right hz
+  let E := LinearEquiv.funCongrLeft ℂ ℂ (torusNativeIncidentCoordinatesEquiv (X := X) v).symm
+  have h := ha.comp_virtualEquiv
+    (ρ' := graphOrientedIncidentRepresentation U torusNativeEdgeFlip v) E
+    fun g x => graphOrientedIncidentRepresentation_torus U v g x
+  convert h using 1
+  exact LinearMap.ext fun x => regularSiteMap_torusNativeIncidentSite_eq_siteMap a v x
 
 omit [DecidableEq X] in
 /-- The actual numbered graph tensor map is the incident site map after
