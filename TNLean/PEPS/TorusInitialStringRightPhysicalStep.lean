@@ -125,177 +125,60 @@ private theorem internal_eq (v : X) (g h : G) (b : Bool) (e : Edge Γₜ)
     change (((![0,1,2,2,1,0] i : ℕ) : ZMod width) + p.1,
       ((![0,0,0,1,1,1] i : ℕ) : ZMod height) + p.2) ∈ _ at H
     simpa only [add_comm, Finset.mem_coe] using H
+  have hrec {x y : X} (hxy : (Γₜ).Adj x y) (hx : x ∈ translatedTwoPlaquetteRegion p)
+      (hy : y ∈ translatedTwoPlaquetteRegion p) :=
+    regularDirectedTransport_eq_of_internal_reconstruction (translatedTwoPlaquetteRegion p)
+      (torusFirstRightStepGauge v g h) (torusTranslatedFluxAssignment p b h)
+      (torusGaugedHorizontalFluxAssignment p (torusFirstRightStepGauge v g h) b h)
+      (fun f hf => by simp only [torusGaugedHorizontalFluxAssignment, dite_eq_left hf])
+      hxy hx hy
+  have hR (q : X) : regularDirectedTransport (rightStepFamily v g h b)
+      (torusGraph_adj_right q.1 q.2) = torusSweptStringInitialRight v h q := by
+    cases b
+    exacts [torusSweptStringInitialOperators_right_transport v q g h,
+      torusSweptStringRightStepOperators_right_transport v q g h]
+  have hU (q : X) : regularDirectedTransport (rightStepFamily v g h b)
+      (torusGraph_adj_up q.1 q.2) =
+        if b ∧ q = (v.1 + 2, v.2 + 1) then g * h else torusSweptStringInitialUp v g q := by
+    cases b
+    · simpa [rightStepFamily] using torusSweptStringInitialOperators_up_transport v q g h
+    · simpa [rightStepFamily] using torusSweptStringRightStepOperators_up_transport v q g h
   refine translatedTwoPlaquette_internal_eq_of_transports p (rightStepFamily v g h b)
     (torusGaugedHorizontalFluxAssignment p (torusFirstRightStepGauge v g h) b h)
-    ?_ ?_ ?_ ?_ ?_ ?_ ?_ e he
-  · have hi := hmem 0
-    have hj := hmem 1
-    norm_num at hi hj
-    rw [regularDirectedTransport_eq_of_internal_reconstruction
-      (translatedTwoPlaquetteRegion p) (torusFirstRightStepGauge v g h)
-      (torusTranslatedFluxAssignment p b h)
-      (torusGaugedHorizontalFluxAssignment p (torusFirstRightStepGauge v g h) b h)
-      (fun f hf => by simp only [torusGaugedHorizontalFluxAssignment, dite_eq_left hf])
-      (torusGraph_adj_right p.1 p.2) (by simpa [add_assoc, one_add_one_eq_two] using hi)
-      (by simpa [add_assoc, one_add_one_eq_two] using hj)]
-    simp only [torusFirstRightStepGauge]
-    cases b
-    · simp only [rightStepFamily, Bool.false_eq_true, ite_false]
-      rw [torusSweptStringInitialOperators_right_transport v (p.1,p.2) g h]
-      rw [horizontal_transport p (p.1,p.2) _ h]
-      norm_num [torusSweptStringInitialRight, torusSweptStringInitialUp, p,
-        add_assoc, sub_eq_add_neg, hx21, Ne.symm hx21, hx31, Ne.symm hx31, hx32,
-        Ne.symm hx32, hy20, hy21, hy2n]
-    · simp only [rightStepFamily, ite_true]
-      rw [torusSweptStringRightStepOperators_right_transport v (p.1,p.2) g h]
-      rw [horizontal_transport p (p.1,p.2) _ h]
-      norm_num [torusSweptStringInitialRight, torusSweptStringInitialUp, p,
-        add_assoc, sub_eq_add_neg, hx21, Ne.symm hx21, hx31, Ne.symm hx31, hx32,
-        Ne.symm hx32, hy20, hy21, hy2n]
-  · have hi := hmem 0
-    have hj := hmem 5
-    norm_num at hi hj
-    rw [regularDirectedTransport_eq_of_internal_reconstruction
-      (translatedTwoPlaquetteRegion p) (torusFirstRightStepGauge v g h)
-      (torusTranslatedFluxAssignment p b h)
-      (torusGaugedHorizontalFluxAssignment p (torusFirstRightStepGauge v g h) b h)
-      (fun f hf => by simp only [torusGaugedHorizontalFluxAssignment, dite_eq_left hf])
-      (torusGraph_adj_up p.1 p.2) (by simpa [add_assoc, one_add_one_eq_two] using hi)
-      (by simpa [add_assoc, one_add_one_eq_two] using hj)]
-    simp only [torusFirstRightStepGauge]
-    cases b
-    · simp only [rightStepFamily, Bool.false_eq_true, ite_false]
-      rw [torusSweptStringInitialOperators_up_transport v (p.1,p.2) g h]
-      rw [(torusTranslatedFluxAssignment_up_transport p false h).1]
-      norm_num [torusSweptStringInitialRight, torusSweptStringInitialUp, p,
-        add_assoc, sub_eq_add_neg, hx21, Ne.symm hx21, hx31, Ne.symm hx31, hx32,
-        Ne.symm hx32, hy20, hy21, hy2n]
-    · simp only [rightStepFamily, ite_true]
-      rw [torusSweptStringRightStepOperators_up_transport v (p.1,p.2) g h]
-      rw [(torusTranslatedFluxAssignment_up_transport p true h).1]
-      norm_num [torusSweptStringInitialRight, torusSweptStringInitialUp, p,
-        add_assoc, sub_eq_add_neg, hx21, Ne.symm hx21, hx31, Ne.symm hx31, hx32,
-        Ne.symm hx32, hy20, hy21, hy2n]
-  · have hi := hmem 1
-    have hj := hmem 2
-    norm_num at hi hj
-    rw [regularDirectedTransport_eq_of_internal_reconstruction
-      (translatedTwoPlaquetteRegion p) (torusFirstRightStepGauge v g h)
-      (torusTranslatedFluxAssignment p b h)
-      (torusGaugedHorizontalFluxAssignment p (torusFirstRightStepGauge v g h) b h)
-      (fun f hf => by simp only [torusGaugedHorizontalFluxAssignment, dite_eq_left hf])
-      (torusGraph_adj_right (p.1+1) p.2) (by simpa [add_assoc, one_add_one_eq_two] using hi)
-      (by simpa [add_assoc, one_add_one_eq_two] using hj)]
-    simp only [torusFirstRightStepGauge]
-    cases b
-    · simp only [rightStepFamily, Bool.false_eq_true, ite_false]
-      rw [torusSweptStringInitialOperators_right_transport v ((p.1+1),p.2) g h]
-      rw [horizontal_transport p ((p.1+1),p.2) _ h]
-      norm_num [torusSweptStringInitialRight, torusSweptStringInitialUp, p,
-        add_assoc, sub_eq_add_neg, hx21, Ne.symm hx21, hx31, Ne.symm hx31, hx32,
-        Ne.symm hx32, hy20, hy21, hy2n]
-    · simp only [rightStepFamily, ite_true]
-      rw [torusSweptStringRightStepOperators_right_transport v ((p.1+1),p.2) g h]
-      rw [horizontal_transport p ((p.1+1),p.2) _ h]
-      norm_num [torusSweptStringInitialRight, torusSweptStringInitialUp, p,
-        add_assoc, sub_eq_add_neg, hx21, Ne.symm hx21, hx31, Ne.symm hx31, hx32,
-        Ne.symm hx32, hy20, hy21, hy2n]
-  · have hi := hmem 1
-    have hj := hmem 4
-    norm_num at hi hj
-    rw [regularDirectedTransport_eq_of_internal_reconstruction
-      (translatedTwoPlaquetteRegion p) (torusFirstRightStepGauge v g h)
-      (torusTranslatedFluxAssignment p b h)
-      (torusGaugedHorizontalFluxAssignment p (torusFirstRightStepGauge v g h) b h)
-      (fun f hf => by simp only [torusGaugedHorizontalFluxAssignment, dite_eq_left hf])
-      (torusGraph_adj_up (p.1+1) p.2) (by simpa [add_assoc, one_add_one_eq_two] using hi)
-      (by simpa [add_assoc, one_add_one_eq_two] using hj)]
-    simp only [torusFirstRightStepGauge]
-    cases b
-    · simp only [rightStepFamily, Bool.false_eq_true, ite_false]
-      rw [torusSweptStringInitialOperators_up_transport v ((p.1+1),p.2) g h]
-      rw [(torusTranslatedFluxAssignment_up_transport p false h).2]
-      norm_num [torusSweptStringInitialRight, torusSweptStringInitialUp, p,
-        add_assoc, sub_eq_add_neg, hx21, Ne.symm hx21, hx31, Ne.symm hx31, hx32,
-        Ne.symm hx32, hy20, hy21, hy2n]
-    · simp only [rightStepFamily, ite_true]
-      rw [torusSweptStringRightStepOperators_up_transport v ((p.1+1),p.2) g h]
-      rw [(torusTranslatedFluxAssignment_up_transport p true h).2]
-      norm_num [torusSweptStringInitialRight, torusSweptStringInitialUp, p,
-        add_assoc, sub_eq_add_neg, hx21, Ne.symm hx21, hx31, Ne.symm hx31, hx32,
-        Ne.symm hx32, hy20, hy21, hy2n]
-  · have hi := hmem 2
-    have hj := hmem 3
-    norm_num at hi hj
-    rw [regularDirectedTransport_eq_of_internal_reconstruction
-      (translatedTwoPlaquetteRegion p) (torusFirstRightStepGauge v g h)
-      (torusTranslatedFluxAssignment p b h)
-      (torusGaugedHorizontalFluxAssignment p (torusFirstRightStepGauge v g h) b h)
-      (fun f hf => by simp only [torusGaugedHorizontalFluxAssignment, dite_eq_left hf])
-      (torusGraph_adj_up (p.1+2) p.2) (by simpa [add_assoc, one_add_one_eq_two] using hi)
-      (by simpa [add_assoc, one_add_one_eq_two] using hj)]
-    simp only [torusFirstRightStepGauge]
-    cases b
-    · simp only [rightStepFamily, Bool.false_eq_true, ite_false]
-      rw [torusSweptStringInitialOperators_up_transport v ((p.1+2),p.2) g h]
-      rw [right_up_transport p false h]
-      norm_num [torusSweptStringInitialRight, torusSweptStringInitialUp, p,
-        add_assoc, sub_eq_add_neg, hx21, Ne.symm hx21, hx31, Ne.symm hx31, hx32,
-        Ne.symm hx32, hy20, hy21, hy2n]
-    · simp only [rightStepFamily, ite_true]
-      rw [torusSweptStringRightStepOperators_up_transport v ((p.1+2),p.2) g h]
-      rw [right_up_transport p true h]
-      norm_num [torusSweptStringInitialRight, torusSweptStringInitialUp, p,
-        add_assoc, sub_eq_add_neg, hx21, Ne.symm hx21, hx31, Ne.symm hx31, hx32,
-        Ne.symm hx32, hy20, hy21, hy2n]
-  · have hi := hmem 5
-    have hj := hmem 4
-    norm_num at hi hj
-    rw [regularDirectedTransport_eq_of_internal_reconstruction
-      (translatedTwoPlaquetteRegion p) (torusFirstRightStepGauge v g h)
-      (torusTranslatedFluxAssignment p b h)
-      (torusGaugedHorizontalFluxAssignment p (torusFirstRightStepGauge v g h) b h)
-      (fun f hf => by simp only [torusGaugedHorizontalFluxAssignment, dite_eq_left hf])
-      (torusGraph_adj_right p.1 (p.2+1)) (by simpa [add_assoc, one_add_one_eq_two] using hi)
-      (by simpa [add_assoc, one_add_one_eq_two] using hj)]
-    simp only [torusFirstRightStepGauge]
-    cases b
-    · simp only [rightStepFamily, Bool.false_eq_true, ite_false]
-      rw [torusSweptStringInitialOperators_right_transport v (p.1,(p.2+1)) g h]
-      rw [horizontal_transport p (p.1,(p.2+1)) _ h]
-      norm_num [torusSweptStringInitialRight, torusSweptStringInitialUp, p,
-        add_assoc, sub_eq_add_neg, hx21, Ne.symm hx21, hx31, Ne.symm hx31, hx32,
-        Ne.symm hx32, hy20, hy21, hy2n]
-    · simp only [rightStepFamily, ite_true]
-      rw [torusSweptStringRightStepOperators_right_transport v (p.1,(p.2+1)) g h]
-      rw [horizontal_transport p (p.1,(p.2+1)) _ h]
-      norm_num [torusSweptStringInitialRight, torusSweptStringInitialUp, p,
-        add_assoc, sub_eq_add_neg, hx21, Ne.symm hx21, hx31, Ne.symm hx31, hx32,
-        Ne.symm hx32, hy20, hy21, hy2n]
-  · have hi := hmem 4
-    have hj := hmem 3
-    norm_num at hi hj
-    rw [regularDirectedTransport_eq_of_internal_reconstruction
-      (translatedTwoPlaquetteRegion p) (torusFirstRightStepGauge v g h)
-      (torusTranslatedFluxAssignment p b h)
-      (torusGaugedHorizontalFluxAssignment p (torusFirstRightStepGauge v g h) b h)
-      (fun f hf => by simp only [torusGaugedHorizontalFluxAssignment, dite_eq_left hf])
-      (torusGraph_adj_right (p.1+1) (p.2+1)) (by simpa [add_assoc, one_add_one_eq_two] using hi)
-      (by simpa [add_assoc, one_add_one_eq_two] using hj)]
-    simp only [torusFirstRightStepGauge]
-    cases b
-    · simp only [rightStepFamily, Bool.false_eq_true, ite_false]
-      rw [torusSweptStringInitialOperators_right_transport v ((p.1+1),(p.2+1)) g h]
-      rw [horizontal_transport p ((p.1+1),(p.2+1)) _ h]
-      norm_num [torusSweptStringInitialRight, torusSweptStringInitialUp, p,
-        add_assoc, sub_eq_add_neg, hx21, Ne.symm hx21, hx31, Ne.symm hx31, hx32,
-        Ne.symm hx32, hy20, hy21, hy2n]
-    · simp only [rightStepFamily, ite_true]
-      rw [torusSweptStringRightStepOperators_right_transport v ((p.1+1),(p.2+1)) g h]
-      rw [horizontal_transport p ((p.1+1),(p.2+1)) _ h]
-      norm_num [torusSweptStringInitialRight, torusSweptStringInitialUp, p,
-        add_assoc, sub_eq_add_neg, hx21, Ne.symm hx21, hx31, Ne.symm hx31, hx32,
-        Ne.symm hx32, hy20, hy21, hy2n]
+    ?_ ?_ ?_ ?_ ?_ ?_ ?_ e he <;>
+  [rw [hR (p.1,p.2), hrec (torusGraph_adj_right p.1 p.2)
+      (by simpa [add_assoc, one_add_one_eq_two] using hmem 0)
+      (by simpa [add_assoc, one_add_one_eq_two] using hmem 1),
+      horizontal_transport p (p.1,p.2) _ h];
+    rw [hU (p.1,p.2), hrec (torusGraph_adj_up p.1 p.2)
+      (by simpa [add_assoc, one_add_one_eq_two] using hmem 0)
+      (by simpa [add_assoc, one_add_one_eq_two] using hmem 5),
+      (torusTranslatedFluxAssignment_up_transport p b h).1];
+    rw [hR ((p.1+1),p.2), hrec (torusGraph_adj_right (p.1+1) p.2)
+      (by simpa [add_assoc, one_add_one_eq_two] using hmem 1)
+      (by simpa [add_assoc, one_add_one_eq_two] using hmem 2),
+      horizontal_transport p ((p.1+1),p.2) _ h];
+    rw [hU ((p.1+1),p.2), hrec (torusGraph_adj_up (p.1+1) p.2)
+      (by simpa [add_assoc, one_add_one_eq_two] using hmem 1)
+      (by simpa [add_assoc, one_add_one_eq_two] using hmem 4),
+      (torusTranslatedFluxAssignment_up_transport p b h).2];
+    rw [hU ((p.1+2),p.2), hrec (torusGraph_adj_up (p.1+2) p.2)
+      (by simpa [add_assoc, one_add_one_eq_two] using hmem 2)
+      (by simpa [add_assoc, one_add_one_eq_two] using hmem 3),
+      right_up_transport p b h];
+    rw [hR (p.1,(p.2+1)), hrec (torusGraph_adj_right p.1 (p.2+1))
+      (by simpa [add_assoc, one_add_one_eq_two] using hmem 5)
+      (by simpa [add_assoc, one_add_one_eq_two] using hmem 4),
+      horizontal_transport p (p.1,(p.2+1)) _ h];
+    rw [hR ((p.1+1),(p.2+1)), hrec (torusGraph_adj_right (p.1+1) (p.2+1))
+      (by simpa [add_assoc, one_add_one_eq_two] using hmem 4)
+      (by simpa [add_assoc, one_add_one_eq_two] using hmem 3),
+      horizontal_transport p ((p.1+1),(p.2+1)) _ h]]
+  all_goals
+    cases b <;>
+    norm_num [torusFirstRightStepGauge, torusSweptStringInitialRight,
+      torusSweptStringInitialUp, p, add_assoc, sub_eq_add_neg, hx21, Ne.symm hx21, hx31,
+      Ne.symm hx31, hx32, Ne.symm hx32, hy20, hy21, hy2n]
 
 private theorem extension_eq (v : X) (g h : G) (b : Bool) (u : Edge Γₜ → G) :
     regularRegionBondExtension (translatedTwoPlaquetteRegion (v.1 + 1, v.2 + 1))

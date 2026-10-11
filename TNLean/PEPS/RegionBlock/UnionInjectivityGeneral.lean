@@ -79,6 +79,14 @@ structure ThreeBlockGeometry (V : Type*) [Fintype V] [DecidableEq V] : Type _ wh
 variable (g : ThreeBlockGeometry V)
 
 omit [LinearOrder V] in
+/-- A vertex outside the red and blue blocks lies in the complementary block.
+Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400. -/
+theorem ThreeBlockGeometry.mem_complement_of_notMem {w : V} (hr : w ∉ g.red)
+    (hb : w ∉ g.blue) : w ∈ g.complement := by
+  have hw : w ∈ g.red ∪ g.blue ∪ g.complement := g.cover_univ ▸ Finset.mem_univ w
+  simpa only [Finset.mem_union, hr, hb, false_or] using hw
+
+omit [LinearOrder V] in
 /-- The set complement of the red block is the disjoint union of the blue and
 complement blocks.
 
@@ -90,13 +98,8 @@ theorem ThreeBlockGeometry.sdiff_red_eq_blue_union_complement :
   simp only [Finset.mem_sdiff, Finset.mem_univ, true_and, Finset.mem_union]
   constructor
   · intro hwnotred
-    have hcover : w ∈ g.red ∪ g.blue ∪ g.complement := by
-      rw [g.cover_univ]; exact Finset.mem_univ _
-    rcases Finset.mem_union.mp hcover with hrb | hc
-    · rcases Finset.mem_union.mp hrb with hr | hbl
-      · exact absurd hr hwnotred
-      · exact Or.inl hbl
-    · exact Or.inr hc
+    by_cases hb : w ∈ g.blue
+    exacts [Or.inl hb, Or.inr (g.mem_complement_of_notMem hwnotred hb)]
   · intro hbc hr
     rcases hbc with hbl | hc
     · exact (Finset.disjoint_left.mp g.red_disjoint_blue) hr hbl
@@ -114,15 +117,7 @@ def ThreeBlockGeometry.complPhysical
     RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ g.red) :=
   fun w =>
     if hb : w.1 ∈ g.blue then σblue ⟨w.1, hb⟩
-    else σcompl ⟨w.1, by
-      have hwnotred : w.1 ∉ g.red := (Finset.mem_sdiff.mp w.2).2
-      have hcover : w.1 ∈ g.red ∪ g.blue ∪ g.complement := by
-        rw [g.cover_univ]; exact Finset.mem_univ _
-      rcases Finset.mem_union.mp hcover with hrb | hc
-      · rcases Finset.mem_union.mp hrb with hr | hbl
-        · exact absurd hr hwnotred
-        · exact absurd hbl hb
-      · exact hc⟩
+    else σcompl ⟨w.1, g.mem_complement_of_notMem (Finset.mem_sdiff.mp w.2).2 hb⟩
 
 omit [LinearOrder V] in
 @[simp] theorem ThreeBlockGeometry.complPhysical_apply_blue
@@ -176,15 +171,8 @@ theorem ThreeBlockGeometry.prod_sdiff_red_eq_blue_mul_complement
       congr 1
       by_cases hb : w.1 ∈ g.blue
       · rw [g.complPhysical_apply_blue (d := d) σblue σcompl w hb, hgf]; simp only [dite_eq_left hb]
-      · have hwnotred : w.1 ∉ g.red := (Finset.mem_sdiff.mp w.2).2
-        have hc : w.1 ∈ g.complement := by
-          have hcover : w.1 ∈ g.red ∪ g.blue ∪ g.complement := by
-            rw [g.cover_univ]; exact Finset.mem_univ _
-          rcases Finset.mem_union.mp hcover with hrb | hc
-          · rcases Finset.mem_union.mp hrb with hr | hbl
-            · exact absurd hr hwnotred
-            · exact absurd hbl hb
-          · exact hc
+      · have hc : w.1 ∈ g.complement :=
+          g.mem_complement_of_notMem (Finset.mem_sdiff.mp w.2).2 hb
         rw [g.complPhysical_apply_not_blue (d := d) σblue σcompl w hb hc, hgf]
         simp only [dite_eq_right hb, dite_eq_left hc]
     have hblue : (∏ w : {w : V // w ∈ g.blue},
@@ -651,16 +639,8 @@ theorem ThreeBlockGeometry.complPhysical_surjective (g : ThreeBlockGeometry V) :
     simp only
     by_cases hb : w.1 ∈ g.blue
     · rw [g.complPhysical_apply_blue _ _ w hb]
-    · -- A host vertex outside the blue block lies in the complement block.
-      have hwnotred : w.1 ∉ g.red := (Finset.mem_sdiff.mp w.2).2
-      have hc : w.1 ∈ g.complement := by
-        have hcover : w.1 ∈ g.red ∪ g.blue ∪ g.complement := by
-          rw [g.cover_univ]; exact Finset.mem_univ _
-        rcases Finset.mem_union.mp hcover with hrb | hc
-        · rcases Finset.mem_union.mp hrb with hr | hbl
-          · exact absurd hr hwnotred
-          · exact absurd hbl hb
-        · exact hc
+    · have hc : w.1 ∈ g.complement :=
+        g.mem_complement_of_notMem (Finset.mem_sdiff.mp w.2).2 hb
       rw [g.complPhysical_apply_not_blue _ _ w hb hc]
 
 end PEPS
