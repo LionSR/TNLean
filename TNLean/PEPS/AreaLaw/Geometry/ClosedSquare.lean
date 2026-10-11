@@ -76,21 +76,13 @@ private theorem mem_rectangleBoundaryEdges {Λ : Finset (ℤ × ℤ)}
   simp only [rectangleBoundaryEdges, Finset.mem_union, Finset.mem_image]
   rcases hxy with ⟨h₂, h₁ | h₁⟩ | ⟨h₁, h₂ | h₂⟩
   · refine Or.inl (Or.inl (Or.inr ⟨x.1.2, Finset.mem_Icc.mpr hx.2, ?_⟩))
-    apply Sym2.eq_iff.mpr
-    left
-    constructor <;> apply Prod.ext <;> dsimp <;> omega
+    exact Sym2.eq_iff.mpr (Or.inl ⟨by ext <;> omega, by ext <;> omega⟩)
   · refine Or.inl (Or.inl (Or.inl ⟨x.1.2, Finset.mem_Icc.mpr hx.2, ?_⟩))
-    apply Sym2.eq_iff.mpr
-    left
-    constructor <;> apply Prod.ext <;> dsimp <;> omega
+    exact Sym2.eq_iff.mpr (Or.inl ⟨by ext <;> omega, by ext <;> omega⟩)
   · refine Or.inr ⟨x.1.1, Finset.mem_Icc.mpr hx.1, ?_⟩
-    apply Sym2.eq_iff.mpr
-    left
-    constructor <;> apply Prod.ext <;> dsimp <;> omega
+    exact Sym2.eq_iff.mpr (Or.inl ⟨by ext <;> omega, by ext <;> omega⟩)
   · refine Or.inl (Or.inr ⟨x.1.1, Finset.mem_Icc.mpr hx.1, ?_⟩)
-    apply Sym2.eq_iff.mpr
-    left
-    constructor <;> apply Prod.ext <;> dsimp <;> omega
+    exact Sym2.eq_iff.mpr (Or.inl ⟨by ext <;> omega, by ext <;> omega⟩)
 
 private theorem card_rectangleBoundaryEdges_le (a b : ℤ × ℤ) :
     (rectangleBoundaryEdges a b).card ≤
