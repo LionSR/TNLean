@@ -69,6 +69,11 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
     (norm_add_le _ _).trans (add_le_add
       ((Matrix.l2_opNorm_kronecker_one_le _).trans (h.hermitianTerm_norm_le i))
       ((Matrix.l2_opNorm_one_kronecker_rect_le _).trans (h.hermitianTerm_norm_le i)))
+  have hBn (i : SquareInteraction L) : ‖B i‖ ≤ 2 * J := by
+    simpa only [B, one_mul, mul_one, two_mul] using
+      norm_mul_le_of_le
+        (norm_mul_le_of_le hFn ((Matrix.l2_opNorm_reindex_equiv p _).le.trans (hDn i)))
+        ((Matrix.l2_opNorm_conjTranspose F).trans_le hFn)
   done
 
 end TNLean.PEPS.Approximation
