@@ -53,14 +53,13 @@ theorem reindex_physicalBuffer_eq_siteLift
     Matrix.one_apply, siteLift, QuantumCircuit.embedOp_apply]
   have hcondition : (e.symm x).1 = (e.symm y).1 ↔
       QuantumCircuit.AgreeOff (Subtype.val : Q → ι) x y := by
+    simp only [P, e, g, s, Equiv.symm_trans_apply, Equiv.symm_symm, Equiv.trans_apply,
+      Equiv.doubledRegroup, Equiv.bipartiteRegroup, Equiv.prodCongr_apply, Prod.map,
+      FiniteProduct.splitTwoRegionsEquiv, FiniteProduct.unionEquiv,
+      Equiv.coe_fn_mk, FiniteProduct.splitEquiv_apply_fst, Equiv.refl_apply, Prod.mk.injEq,
+      Equiv.apply_eq_iff_eq]
     constructor
     · intro h i hi
-      simp only [e, g, s, Equiv.symm_trans_apply, Equiv.symm_symm, Equiv.trans_apply,
-        Equiv.doubledRegroup, Equiv.bipartiteRegroup, Equiv.prodCongr_apply, Prod.map,
-        FiniteProduct.splitTwoRegionsEquiv, FiniteProduct.unionEquiv,
-        Equiv.coe_fn_mk, FiniteProduct.splitEquiv_apply_fst, Equiv.refl_apply, Prod.mk.injEq,
-        Equiv.apply_eq_iff_eq] at h
-      simp only [P, Prod.mk.injEq, Equiv.apply_eq_iff_eq] at h
       have hiRC : i ∈ R ∪ C :=
         not_not.mp (fun hn ↦ hi ⟨i, Finset.mem_compl.mpr hn⟩ rfl)
       exact finProdFinEquiv.symm.injective <|
@@ -68,11 +67,6 @@ theorem reindex_physicalBuffer_eq_siteLift
           (fun hiR ↦ Prod.ext (congrFun h.1.1 ⟨i, hiR⟩) (congrFun h.2.1 ⟨i, hiR⟩))
           (fun hiC ↦ Prod.ext (congrFun h.1.2 ⟨i, hiC⟩) (congrFun h.2.2 ⟨i, hiC⟩))
     · intro h
-      simp only [P, e, g, s, Equiv.symm_trans_apply, Equiv.symm_symm, Equiv.trans_apply,
-        Equiv.doubledRegroup, Equiv.bipartiteRegroup, Equiv.prodCongr_apply, Prod.map,
-        FiniteProduct.splitTwoRegionsEquiv, FiniteProduct.unionEquiv,
-        Equiv.coe_fn_mk, FiniteProduct.splitEquiv_apply_fst, Equiv.refl_apply, Prod.mk.injEq,
-        Equiv.apply_eq_iff_eq]
       have hxy (i : ι) (hi : i ∈ R ∪ C) : x i = y i :=
         h i (fun j hij ↦ (Finset.mem_compl.mp (hij ▸ j.property)) hi)
       exact ⟨⟨funext fun v ↦ congrArg (fun z : Fin (q * q) ↦ (finProdFinEquiv.symm z).1)
