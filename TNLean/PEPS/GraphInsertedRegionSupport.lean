@@ -84,10 +84,8 @@ private theorem assembled_region_labels (R : Finset V)
     simp only [graphSiteBondEndpointEquiv, Equiv.coe_fn_symm_mk,
       Equiv.piEquivPiSubtypeProd, hi]
     simpa using h
-  · have hb : IsRegionBoundaryEdge R e.1 := by
-      rcases e.2 with ht | hh
-      · exact Or.inl ⟨ht.symm ▸ v.2, fun h => hi ⟨ht.symm ▸ v.2, h⟩⟩
-      · exact Or.inr ⟨fun h => hi ⟨h, hh.symm ▸ v.2⟩, hh.symm ▸ v.2⟩
+  · have hb : IsRegionBoundaryEdge R e.1 :=
+      (isRegionIncidentEdge_of_regionVertex R v e).isRegionBoundaryEdge hi
     have h := graphRegionIncidentConfigEquiv_apply_boundary R
       ((graphRegionIncidentConfigEquiv R).symm (ξ, insertedBoundary R ζ)) ⟨e.1, hb⟩
     rw [Equiv.apply_symm_apply] at h
