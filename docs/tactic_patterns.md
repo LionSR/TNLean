@@ -674,7 +674,7 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/MPU/Examples/SwapBlockedSymmetryTransport.lean`, in the adjunction,
   transposition and conjugation comparisons (2026-10-03).
 - **Abstraction:** `MPOTensor.isInvariantUnderSymmetry_iff_of_pointwise` in
-  `SwapSymmetryTransport.lean` performs the common quantifier reduction once.
+  `TNLean/MPS/MPU/Equivalence.lean` performs the common quantifier reduction once.
 - **Notes:** the original four-line `forall_congr'`/`imp_congr_right` block is
   removed from all six sites. The helper requires equality of the applicable
   lengths and pointwise equivalence of the actual operator fixed equations;
@@ -4195,6 +4195,19 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Upper endpoint of a scanner band — candidate (2026-10-12)
+
+- **Pattern:** Use the band index bound, the offset bound and $8Km\le L$
+  to place $8gm+5m+r$ below the original collar depth.
+- **Seen:** The endpoint estimate in
+  `Scan/SideSeparation.near_subset_truncationSet` and the two front estimates
+  in `Scan/FrontThresholds.front_comparison_thresholds_le`.
+- **Abstraction:** `CollarScan.upper_le` in `Scan/SideSeparation.lean` states
+  the shared endpoint bound. Both consumers now use that lemma.
+- **Notes:** The fill-count estimate remains `fillCount_div_le_window`;
+  nonnegativity suffices for the far threshold. Neither consumer needs a new
+  scanner structure or additional dimension hypotheses.
+
 ### Sheet swaps in regional coordinates — candidate (2026-10-09)
 
 - **Pattern:** derive regional tensor factors from membership in the supported-operator
@@ -7199,3 +7212,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   retained. No arbitrary heterogeneous-equality premise or new isometry is
   introduced. Compilation of this promotion is pending with the endpoint
   congruence development.
+### Actual-round cross-band commutation — candidate (2026-10-11)
+
+- **Pattern:** Apply `actualRoundData_induction` to a choice-independent property,
+  then use the actual charge and fill commutation theorems at history length
+  `j.val / 2`.
+- **Seen:** The local common-error proof in `Scan/ActualRoundTransport.lean`
+  and `actualRoundData_crossBandCommute` in `Scan/ActualRoundEntropy.lean`.
+- **Abstraction:** The latter now supplies the named assertion to the entropy
+  integrability proof and its regression fixture. The independent parent module
+  remains unchanged; moving this declaration into a common earlier module would
+  be appropriate if a third production consumer appears.
+- **Notes:** Two production occurrences, with no new tactic or additional
+  geometric hypothesis. Exact root telescoping reuses Mathlib's
+  `Fin.sum_univ_eq_sum_range` and `Finset.sum_range_sub'` rather than proving a
+  second finite-sum cancellation theorem.
