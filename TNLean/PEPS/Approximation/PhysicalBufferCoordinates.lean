@@ -83,6 +83,7 @@ theorem reindex_physicalBuffer_eq_siteLift
           (hxy v (Finset.mem_union_left C v.property)),
         funext fun v ↦ congrArg (fun z : Fin (q * q) ↦ (finProdFinEquiv.symm z).2)
           (hxy v (Finset.mem_union_right R v.property))⟩⟩
+  simp only [hcondition, ite_mul, one_mul, zero_mul]
   done
 
 end TNLean.PEPS.EncodedFrame
