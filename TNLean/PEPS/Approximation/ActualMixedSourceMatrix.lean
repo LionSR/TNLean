@@ -22,6 +22,11 @@ noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS.PairEffect
 
+/-- Select an orthonormal column with its vector space determined before
+instantiating a dependent register memory. -/
+private def orthonormalColumn {E : Type} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+    {I : Type} [Fintype I] (b : OrthonormalBasis I ℂ E) (i : I) : E := b i
+
 private theorem mixed_toMatrix_basis_independent
     {E F : Type} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F]
@@ -102,8 +107,7 @@ theorem partialSourceGlobalMatrix_mixed_word
         w.partialSourcePartyMatrix ψ ξ B C q *
           Matrix.of (fun (row col : I q) ↦ (B q).repr
             ((u.restrict (partySelector q) hu).eval
-              ((⇑(B q) : I q → Mem
-                (Layout.atParty q (w.allResidualSourceLayout ++ []))) col)) row) *
+              (orthonormalColumn (B q) col)) row) *
           (w.partialSourcePartyMatrix ψ ζ B C q)ᴴ) := by
   classical
   let bIn := partyGroupedBasis (w.allResidualSourceLayout ++ []) B ps hn hc
@@ -113,7 +117,7 @@ theorem partialSourceGlobalMatrix_mixed_word
     (w.partialSourceWord ψ ξ).eval (w.partialSourceWord ψ ζ).eval u.eval _ _ _
     (partialSourceGlobalMatrix_eq_toMatrix w ψ ξ bOut)
     (partialSourceGlobalMatrix_eq_toMatrix w ψ ζ bOut) ?_
-  simpa only [bIn, bOut, partialSourcePartyMatrix] using
+  simpa only [bIn, bOut, partialSourcePartyMatrix, orthonormalColumn] using
     Word.partyGroupedBasis_mixed_matrix (w.partialSourceWord ψ ξ)
       (w.partialSourceWord ψ ζ) u (sources_partialSourceWord w ψ ξ)
       (sources_partialSourceWord w ψ ζ) hu B C ps hn hc
