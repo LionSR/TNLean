@@ -570,7 +570,7 @@ index sets.
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceWord}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_partialSourceWord}
     \leanok
-    \uses{def:peps_private_product_input,def:peps_canonical_source_residual,def:peps_all_party_source_registers,thm:peps_canonical_source_recovery}
+    \uses{def:peps_private_product_input,def:peps_canonical_source_residual,def:peps_all_party_source_registers,def:peps_affected_owner,def:peps_partial_source_choices,thm:peps_owner_composition,thm:peps_canonical_source_recovery}
     Let $W$ be a distributed composition with input memory $\mathcal H_a$,
     let $\psi\in\mathcal H_a$ be its recorded private product input, and let
     $\xi$ choose a monomial at every gate that meets a party. Write
@@ -605,10 +605,11 @@ index sets.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:peps_private_product_input,lem:peps_register_reorderings,thm:peps_canonical_source_recovery}
+    \uses{def:peps_private_product_input,lem:peps_register_reorderings,thm:peps_owner_composition}
     A composition extended by untouched registers acts as the identity on
-    their tensor factor. Apply this to the recorded preparation, whose
-    value at $1$ is $\psi$, and then compose with $V_\xi$.
+    their tensor factor. Apply this to the recorded preparation after
+    relabelling owners; by (\ref{eq:peps_owner_composition}) its value at $1$
+    is the relabelled vector $\psi$. Then compose with $V_\xi$.
     The source lists of the recorded preparation and $V_\xi$ are empty;
     extending by untouched registers, relabelling owners, and composing
     preserve that assertion.
