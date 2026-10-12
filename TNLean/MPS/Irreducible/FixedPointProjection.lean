@@ -110,7 +110,6 @@ and Cirac, Theorem `Th:TIcanonical`, proof lines 819--826.  The paper writes
 `λ_max I - X`, which avoids a separate sign assumption on the largest
 eigenvalue. -/
 theorem exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint
-    [Nonempty (Fin D)]
     (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
     (h_unital : Kraus.transferMap (d := d) (D := D) A 1 = 1)
     (hX_herm : X.IsHermitian)
@@ -120,6 +119,9 @@ theorem exists_singular_posSemidef_fixedPoint_of_unital_nonScalar_fixedPoint
       ρ.PosSemidef ∧ Kraus.transferMap (d := d) (D := D) A ρ = ρ ∧
         ρ ≠ 0 ∧ ¬ ρ.PosDef := by
   classical
+  rcases Nat.eq_zero_or_pos D with rfl | hD
+  · exact absurd ⟨0, Subsingleton.elim _ _⟩ hX_nonscalar
+  have : Nonempty (Fin D) := ⟨⟨0, hD⟩⟩
   let c : ℝ := maxEigenvalue hX_herm
   let ρ : Matrix (Fin D) (Fin D) ℂ := (↑c : ℂ) • 1 - X
   have hρ_psd : ρ.PosSemidef := by
@@ -216,7 +218,6 @@ source phrase "fixed point different from the identity" is implemented here as
 "non-scalar fixed point", since scalar multiples of the identity are fixed by
 every unital linear map and do not produce a nontrivial support projection. -/
 theorem exists_twoBlock_decomp_of_unital_nonScalar_fixedPoint
-    [Nonempty (Fin D)]
     (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ)
     (h_unital : Kraus.transferMap (d := d) (D := D) A 1 = 1)
     (hX_herm : X.IsHermitian)
