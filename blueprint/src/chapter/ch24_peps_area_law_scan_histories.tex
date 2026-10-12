@@ -909,6 +909,22 @@ The following finite construction follows
     most $v$.
 \end{proof}
 
+\begin{corollary}[One finite family for all comparison fronts]
+    \label{cor:al_scan_front_prefix_family}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.front_positiveDepthPrefix_mem_fixed_family}
+    \uses{lem:al_scan_finite_prefix_family,lem:al_scan_front_thresholds}
+    Fix the original region $A$, its depth function $d$ and the collar depth
+    $L$. Suppose $n>0$ and $8Km\le L$. The nested family
+    $Q_0,\ldots,Q_L$, where $Q_j=\{x\in A:0<d(x)\le j\}$, then contains
+    both $Q_{j_N-1}$ and $Q_{-j_F}$ for every band, offset and round within
+    the fill horizon. This one family is fixed before all such choices.
+\end{corollary}
+\begin{proof}
+    Both integer thresholds are at most $L$ by
+    Lemma~\ref{lem:al_scan_front_thresholds}. Apply
+    Lemma~\ref{lem:al_scan_finite_prefix_family} to each threshold.
+\end{proof}
+
 \begin{lemma}[One nested family and separated deterministic fronts]
     \label{lem:al_scan_prefix_family}
     \lean{TNLean.PEPS.AreaLaw.Scan.depthPrefix_mono,
