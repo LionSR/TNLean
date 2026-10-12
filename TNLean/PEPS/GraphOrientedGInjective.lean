@@ -189,25 +189,8 @@ theorem isGInjective_numberedGraphOrientedAveragingTensor_one
   have hT := isGInjective_graphOrientedAveragingSite (Γ := Γ) U o v
   rw [regularSiteMap_graphOrientedAveragingSite] at hT
   have h : IsGInjective (graphOrientedNumberedIncidentRepresentation U o v)
-      ((graphOrientedIncidentRepresentation U o v).averageMap ∘ₗ E.toLinearMap) := by
-    refine ⟨?_, ?_⟩
-    · intro g
-      apply LinearMap.ext
-      intro x
-      change (graphOrientedIncidentRepresentation U o v).averageMap
-          (E (E.symm (graphOrientedIncidentRepresentation U o v g (E x)))) =
-        (graphOrientedIncidentRepresentation U o v).averageMap (E x)
-      rw [E.apply_symm_apply]
-      exact LinearMap.congr_fun (hT.invariant g) (E x)
-    · intro x hx hzero
-      have hmem : E x ∈ (graphOrientedIncidentRepresentation U o v).invariants := by
-        intro g
-        have heq := congrArg E (hx g)
-        change E (E.symm (graphOrientedIncidentRepresentation U o v g (E x))) = E x at heq
-        simpa only [E.apply_symm_apply] using heq
-      apply E.injective
-      rw [map_zero]
-      exact hT.injOn_invariants (E x) hmem hzero
+      ((graphOrientedIncidentRepresentation U o v).averageMap ∘ₗ E.toLinearMap) :=
+    hT.comp_virtualEquiv E fun _ _ => E.apply_symm_apply _
   exact h.comp_equiv (graphNumberedPhysicalCoeffEquiv e v)
 
 end NumberedCoordinates
