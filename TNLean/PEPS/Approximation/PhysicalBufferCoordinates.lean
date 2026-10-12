@@ -68,6 +68,11 @@ theorem reindex_physicalBuffer_eq_siteLift
           (fun hiR ↦ Prod.ext (congrFun h.1.1 ⟨i, hiR⟩) (congrFun h.2.1 ⟨i, hiR⟩))
           (fun hiC ↦ Prod.ext (congrFun h.1.2 ⟨i, hiC⟩) (congrFun h.2.2 ⟨i, hiC⟩))
     · intro h
+      simp only [P, e, g, s, Equiv.symm_trans_apply, Equiv.symm_symm, Equiv.trans_apply,
+        Equiv.doubledRegroup, Equiv.bipartiteRegroup, Equiv.prodCongr_apply, Prod.map,
+        FiniteProduct.splitTwoRegionsEquiv, FiniteProduct.unionEquiv,
+        Equiv.coe_fn_mk, FiniteProduct.splitEquiv_apply_fst, Equiv.refl_apply, Prod.mk.injEq,
+        Equiv.apply_eq_iff_eq]
       done
   done
 
