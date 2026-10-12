@@ -63,7 +63,10 @@ theorem reindex_physicalBuffer_eq_siteLift
       simp only [P, Prod.mk.injEq, Equiv.apply_eq_iff_eq] at h
       have hiRC : i ∈ R ∪ C :=
         not_not.mp (fun hn ↦ hi ⟨i, Finset.mem_compl.mpr hn⟩ rfl)
-      done
+      exact finProdFinEquiv.symm.injective <|
+        (Finset.mem_union.mp hiRC).elim
+          (fun hiR ↦ Prod.ext (congrFun h.1.1 ⟨i, hiR⟩) (congrFun h.2.1 ⟨i, hiR⟩))
+          (fun hiC ↦ Prod.ext (congrFun h.1.2 ⟨i, hiC⟩) (congrFun h.2.2 ⟨i, hiC⟩))
     · done
   done
 
