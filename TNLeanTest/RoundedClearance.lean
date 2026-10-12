@@ -27,7 +27,7 @@ example {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
     (hsafe : IsSafe Λ A 1 thinNegativeRect) :
     IsSafe Λ A 1 (latticeDyadicRect 0 (-11, 0)) := by
   classical
-  apply hsafe.cappedDyadicPartition_shell (j := 1) (L := 1) (Kcap := 0)
+  apply hsafe.isSafe_cappedDyadicPartition_shell 1 1 0 0 (-11, 0)
     (by decide) (by decide) (by decide)
   rw [mem_cappedDyadicPartition]
   refine ⟨by decide, ?_, by simp⟩
@@ -41,7 +41,6 @@ example (Q : IntRect) (Kcap : ℕ) :
 run_cmd do
   for name in [``TNLean.PEPS.AreaLaw.Scan.exists_rounded_clearance_threshold,
       ``TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_rounded_clearance_threshold,
-      ``TNLean.PEPS.AreaLaw.IsSafe.cappedDyadicPartition_shell,
       ``TNLean.PEPS.AreaLaw.Scan.exists_safe_shell_cells_of_rounded_scales] do
     let axioms ← Lean.collectAxioms name
     for ax in axioms do

@@ -40,6 +40,9 @@ SAL** when `I_1 = I_2 = ⋯` (Definition 4.6, line 811). Equivalently
 * `MPOTensor.blockEntropy`: the block entropy `S_L`.
 * `MPOTensor.blockEntropy_of_charpoly_roots_eq`: computes block entropy from a real
   characteristic-root multiset.
+* `Matrix.vonNeumannEntropy_inv_card_smul_one` and
+  `MPOTensor.blockEntropy_eq_of_reducedBlockState_eq_smul_one`: a maximally mixed
+  state has entropy `log d`, so a maximally mixed `L`-qubit block has entropy `L log 2`.
 * `MPOTensor.mutualInfoChain`: the mutual information `I_L = S_L + S_{N-L} - S_N`.
 * `MPOTensor.IsSAL`: the saturation-of-the-area-law predicate for MPDO.
 * `MPSTensor.normalizedPureState`, `MPSTensor.pureBlockEntropy`,
@@ -217,6 +220,30 @@ theorem PosSemidef.smul_inv_trace {n : Type*} [Fintype n]
   rw [hinv_eq]
   exact hP.smul (a := ((r⁻¹ : ℝ) : ℂ)) (by exact_mod_cast inv_nonneg.mpr hre)
 
+/-- A maximally mixed state on a finite basis of cardinality $d$ has entropy
+$\log d$.
+
+Source: Wolf, *Quantum Channels & Operations*, Section 8.2. -/
+theorem vonNeumannEntropy_inv_card_smul_one
+    {n : Type*} [Fintype n] [DecidableEq n] (d : ℕ)
+    (hcard : Fintype.card n = d) (hd : 0 < d)
+    (hρ : (((d : ℂ)⁻¹) • (1 : Matrix n n ℂ)).IsHermitian) :
+    vonNeumannEntropy (((d : ℂ)⁻¹) • (1 : Matrix n n ℂ)) hρ =
+      Real.log d := by
+  have heq : ((d : ℂ)⁻¹) • (1 : Matrix n n ℂ) =
+      Matrix.diagonal (fun _ : n => (((d : ℝ)⁻¹ : ℝ) : ℂ)) := by
+    rw [Matrix.smul_one_eq_diagonal]
+    ext i j
+    simp
+  let hdiag : (Matrix.diagonal fun _ : n => (((d : ℝ)⁻¹ : ℝ) : ℂ)).IsHermitian :=
+    Matrix.isHermitian_diagonal_of_self_adjoint _ (by
+      rw [isSelfAdjoint_iff]
+      ext i
+      simp)
+  rw [vonNeumannEntropy_congr heq hρ hdiag, Matrix.vonNeumannEntropy_diagonal]
+  rw [Finset.sum_const, Finset.card_univ, hcard, nsmul_eq_mul]
+  simp [Real.negMulLog, hd.ne', Real.log_inv]
+
 end Matrix
 
 /-! ## Contiguous-block reduced state -/
@@ -383,6 +410,25 @@ theorem blockEntropy_of_charpoly_roots_eq (M : MPOTensor d D) {N L : ℕ}
     blockEntropy M N L hL hM = (s.map Real.negMulLog).sum := by
   exact Matrix.vonNeumannEntropy_of_charpoly_roots_eq
     (reducedBlockState_isHermitian M N L hL hM) s hroots
+
+/-- A block of `L` qubits whose reduced state is maximally mixed has entropy
+$L\log 2$. -/
+theorem blockEntropy_eq_of_reducedBlockState_eq_smul_one (M : MPOTensor 2 D)
+    {N L : ℕ} (hL : L ≤ N) (hM : (mpo M N).PosSemidef)
+    (hρ : reducedBlockState M N L hL =
+      ((2 : ℂ)⁻¹ ^ L) • (1 : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ)) :
+    blockEntropy M N L hL hM = L * Real.log 2 := by
+  have hcast : ((2 : ℂ)⁻¹ ^ L) • (1 : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ) =
+      (((2 ^ L : ℕ) : ℂ)⁻¹) • 1 := by
+    push_cast
+    rw [inv_pow]
+  have hherm : ((((2 ^ L : ℕ) : ℂ)⁻¹) •
+      (1 : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ)).IsHermitian :=
+    Matrix.isHermitian_one.smul (by simp [IsSelfAdjoint])
+  rw [blockEntropy, vonNeumannEntropy_congr (hρ.trans hcast) _ hherm,
+    Matrix.vonNeumannEntropy_inv_card_smul_one _ (by simp) (by positivity) hherm]
+  push_cast
+  rw [Real.log_pow]
 
 /-- The **mutual information** `I_L = S_L + S_{N-L} - S_N` between a block of `L`
 spins and the rest of the chain, for the normalized state `σ^{(N)}(M)`.
