@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.InitialSectorRuns
+import TNLean.PEPS.AreaLaw.Geometry.CellFanRays
 import TNLean.PEPS.AreaLaw.Geometry.FanFrontiers
 import Mathlib.Topology.NhdsWithin
 
@@ -19,8 +20,10 @@ description. Identifiers not in that finite image have no local points.
 
 The same description holds in the closed square of half the smaller radius.
 For a mark realizing its smallest incident side, this is a closed radius of
-one hundred and twenty-eighth of that side. No cyclic enumeration, parity
-count, or repaired partition is asserted.
+one hundred and twenty-eighth of that side. In this closed square, each
+active radial segment agrees with its full directed ray. Each ray includes
+the mark; an empty change set gives an empty union. All valid shifts remain
+arbitrary. No cyclic enumeration, parity count, or repaired partition is asserted.
 
 ## References
 
@@ -298,5 +301,54 @@ theorem initialRegion_frontier_small_closedBall_iff_active_radial
   exact initialRegion_frontier_near_mark_iff_active_radial
     o k₀ Z C a b hC h₀ k z v hk₀ hz hv x
     (Metric.closedBall_subset_ball (by linarith) hx)
+
+/-- On the closed half-radius square, the actual initial birth frontiers
+are exactly the directed rays at changes of the canonical sector identifier.
+Ray membership includes the center. An empty change set contributes no ray;
+repeated identifiers in separated sectors remain separate occurrences.
+
+Source: OpenAI, Section 11, `geometry:initial-stars`, lines 333–370,
+especially 352–370, and `prop:two-families`, lines 308–323,
+at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+theorem initialRegion_frontier_small_closedBall_iff_active_ray
+    (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
+    (a b : (h : ℕ) → Fin (2 ^ (pitchScaleIndex h - fineScaleIndex h)))
+    (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
+    (k : ℕ) (z : ℤ × ℤ) (v : ℝ × ℝ) (hk₀ : k₀ ≤ k)
+    (hz : z ∈ fineLayerIndices o k (fineScaleIndex k) Z C)
+    (hv : v ∈ beltCellMarks o (fineScaleIndex k) z) :
+    let ℓ := fineScaleIndex k - 5
+    let r := (2 : ℝ) ^ ℓ / 2
+    let oSmall := (v.1 - r, v.2 - r)
+    let J := CellFanSlot (fun _ : Fin 4 ↦ true)
+    let I := InitialRegionIndex o k₀ Z C a b hC h₀
+    let σ : J → I :=
+      initialSectorAssignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv
+    ∀ x ∈ Metric.closedBall v (r / 2),
+      (∃ i : I, x ∈ frontier (initialBirthRegion o k₀ Z C a b hC h₀ i)) ↔
+      ∃ s : J, σ s ≠ σ (cellFanNext s) ∧
+        SameRay ℝ (x - v)
+          (cellFanEnd oSmall ℓ (0, 0) (fun _ ↦ true) s - v) := by
+  dsimp only
+  intro x hx
+  rw [initialRegion_frontier_small_closedBall_iff_active_radial
+    o k₀ Z C a b hC h₀ k z v hk₀ hz hv x hx]
+  simp only [cellFanEnd_eq_cellFanStart_iff, exists_eq_left]
+  refine exists_congr fun s ↦ and_congr Iff.rfl ?_
+  have hcenter :
+      cellFanCenter
+        (v.1 - (2 : ℝ) ^ (fineScaleIndex k - 5) / 2,
+          v.2 - (2 : ℝ) ^ (fineScaleIndex k - 5) / 2)
+        (fineScaleIndex k - 5) (0, 0) = v := by simp [cellFanCenter]
+  have hfull : x ∈ Metric.closedBall v ((2 : ℝ) ^ (fineScaleIndex k - 5) / 2) :=
+    Metric.closedBall_subset_closedBall
+      (half_le_self (div_nonneg
+        (pow_nonneg (le_of_lt zero_lt_two) _) (le_of_lt zero_lt_two))) hx
+  simpa only [hcenter] using
+    cellFan_mem_radial_iff_sameRay_of_mem_closedBall
+      (v.1 - (2 : ℝ) ^ (fineScaleIndex k - 5) / 2,
+        v.2 - (2 : ℝ) ^ (fineScaleIndex k - 5) / 2)
+      (fineScaleIndex k - 5) (0, 0) (fun _ ↦ true) s x
+      (hcenter.symm ▸ hfull)
 
 end TNLean.PEPS.AreaLaw.Geometry

@@ -157,6 +157,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{def:peps_party_partition,thm:peps_party_restriction}
     Induct on the composition. Let a local operation $L$ at party $p$ act
     on registers $a$, all owned by $p$, in front of a list $\ell$, and let
     $J_{a,\ell}$ identify the memory of $a$ followed by $\ell$ with
@@ -174,11 +175,33 @@
     \end{align*}
     Thus $L$ acts on $s$ inside the first factor when $p\in A$ and inside
     the second otherwise, while the other restriction is the identity.
-    An exchange of two registers is checked in the same way in the four
-    cases determined by which of the two registers have owners in $A$; it
-    either stays within one part or changes only the prescribed ordering
-    between the parts. Tensoring with an untouched register and
-    composition preserve the identity.
+    Let $S_{r,t,\ell}$ exchange the first two registers $r,t$, whose
+    owners are $p_r,p_t$, and write $S_A,S_{A^c}$ for its restrictions.
+    For $u\in\mathcal H_r$ and $v\in\mathcal H_t$, put
+    $w=u\otimes(v\otimes U_{A,\ell}^{-1}(x\otimes y))$.
+    The four cases give
+    \begin{align}
+        U_{A,(t,r,\ell)}S_{r,t,\ell}w
+         & =(S_A\otimes S_{A^c})U_{A,(r,t,\ell)}w   \\
+         & =\begin{cases}
+                (v\otimes(u\otimes x))\otimes y
+                 & \text{if $p_r,p_t\in A$},            \\
+                (u\otimes x)\otimes(v\otimes y)
+                 & \text{if $p_r\in A$, $p_t\notin A$}, \\
+                (v\otimes x)\otimes(u\otimes y)
+                 & \text{if $p_r\notin A$, $p_t\in A$}, \\
+                x\otimes(v\otimes(u\otimes y))
+                 & \text{if $p_r,p_t\notin A$}.
+            \end{cases}
+        \label{eq:peps_party_exchange}
+    \end{align}
+    When both registers belong to one part, its restriction exchanges
+    them and the other restriction is the identity. When their owners
+    belong to different parts, both restrictions are identities on the
+    selected register lists. Elementary tensors span the memories, so
+    (\ref{eq:peps_party_exchange}) proves the exchange case.
+    Tensoring with an untouched register and composition preserve the
+    identity.
 \end{proof}
 
 \begin{theorem}[Tensor product of the local maps]

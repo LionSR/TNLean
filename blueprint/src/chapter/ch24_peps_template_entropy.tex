@@ -13,21 +13,20 @@
 \end{theorem}
 \begin{proof}\leanok
     Subadditivity gives
-    \[
-        S_\Omega(R\cup B)\le S_\Omega(R)+S_\Omega(B).
-    \]
+    \begin{align}
+        S_\Omega(R\cup B) & \le S_\Omega(R)+S_\Omega(B).
+    \end{align}
     Complements are taken in the physical domain. Since $R\cap B=\varnothing$,
-    \[
-        (R\cup B)^c\cap B=\varnothing,
-        \qquad (R\cup B)^c\cup B=R^c.
-    \]
+    \begin{align}
+        (R\cup B)^c\cap B & =\varnothing, & (R\cup B)^c\cup B & =R^c.
+    \end{align}
     Apply subadditivity to this disjoint union and use purity,
     $S_\Omega(X)=S_\Omega(X^c)$, to obtain
-    \[
-        S_\Omega(R)=S_\Omega(R^c)
+    \begin{align}
+        S_\Omega(R) & =S_\Omega(R^c)
         \le S_\Omega((R\cup B)^c)+S_\Omega(B)
         =S_\Omega(R\cup B)+S_\Omega(B).
-    \]
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Partial template row]
@@ -54,6 +53,89 @@
     (Theorem~\ref{thm:area_law_entropy_dimension}) give the claim since $\log q\ge0$.
 \end{proof}
 
+\subsection{Finite weighted dyadic summation}
+
+\begin{theorem}[From side budgets to a dyadic moment]
+    \label{thm:area_law_weighted_dyadic_sum}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.sum_weighted_dyadic_rpow_le}
+    \leanok
+    Let $K\ge0$ be an integer, $e>0$, $B\ge0$, $A\in\mathbb R$, and
+    $a_k\in\mathbb R$. Suppose $2^K a_K\le A$ and $2^k a_k\le B$ for
+    $0\le k<K$. Then
+    \begin{align}
+        \sum_{k=0}^{K} a_k(2^k)^{1+e}
+        \le \left(A+\frac{B}{2^e-1}\right)(2^K)^e.
+    \end{align}
+    This is the finite summation step in
+    \cite[Lemma~9.4]{OpenAI2026AreaLaw}; template counting and the entropy
+    application are separate statements.
+\end{theorem}
+\begin{proof}\leanok
+    Factor each summand as $(2^k a_k)(2^k)^e$. The cap contributes at most
+    $A(2^K)^e$. Since $2^e>1$, the lower scales contribute at most
+    \begin{align}
+        B\sum_{k=0}^{K-1}(2^e)^k
+        =B\frac{(2^e)^K-1}{2^e-1}
+        \le\frac{B}{2^e-1}(2^K)^e.
+    \end{align}
+    The same formula includes $K=0$, when the lower sum is empty.
+\end{proof}
+
+\section{Safe rectangles in template coverings}
+
+\begin{theorem}[Safety from template separation]
+    \label{thm:area_template_safe_rectangles}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_of_subset_ambientDilation,
+        TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_cappedDyadicPartition_core,
+        TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_cappedDyadicPartition_shell}
+    \leanok
+    \uses{def:area_law_template,def:area_law_safe_rectangle,thm:area_template_dyadic_rectangle,
+        thm:area_law_capped_dyadic_partition}
+    Let $T$ be separated from the cut, let $D_0\ge1$ be an integer, and let
+    $0\le j\le s_0$. Every integer rectangle $Q\subseteq T_j$ of size at
+    most $s_0$ is safe. In particular, if $2^K\le s_0$, every selected square
+    of the capped partitions of $T$ and $T_j\setminus T$ is a safe rectangle.
+    The standing choice $D_0>2R+10$ implies $D_0\ge1$.
+    This is the clearance step of~\cite[Lemma~9.4]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:area_law_template_dyadic_clearance,thm:area_template_dyadic_rectangle,
+        thm:area_law_capped_dyadic_partition}
+    For $x\in Q\subseteq T_j$, choose $p\in T$ with
+    $\|p-x\|_\infty\le j$. For every cut endpoint $z$,
+    \begin{align}
+        4D_0s_0<\|p-z\|_\infty
+        \le j+\|x-z\|_\infty.
+    \end{align}
+    Since $j\le s_0\le D_0s_0$, this gives
+    $D_0\operatorname{size}(Q)\le D_0s_0<\|x-z\|_\infty$.
+    Selected cells are contained in the partitioned set, and their sizes
+    satisfy $2^k\le2^K\le s_0$.
+\end{proof}
+
+
+\begin{theorem}[Weighted covering of the template core]
+    \label{thm:area_law_template_weighted_core_cover}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_core_le}
+    \leanok
+    \uses{def:area_law_template,def:area_law_capped_dyadic_partition}
+    Let $T$ be a template with $C_{\rm tpl}\ge24$, let $e>0$, and choose
+    $K\ge0$ with $2^K\le s_0<2^{K+1}$. For the actual capped dyadic
+    partition $\mathcal P$ of $T$,
+    \begin{align}
+        \sum_{Q\in\mathcal P}\operatorname{side}(Q)^{1+e}
+        \le \left(18+\frac{4}{2^e-1}\right)n s_0^e.
+    \end{align}
+    This is the core-covering moment estimate in
+    \cite[Lemma~9.4]{OpenAI2026AreaLaw}. It requires neither separation
+    from a physical cut nor an entropy hypothesis.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_template_core_selected_count,thm:area_law_weighted_dyadic_sum,thm:area_law_capped_sum_by_scale}
+    Group the selected squares by scale. Their side budgets are $18n$ at
+    scale $K$ and $4n$ below it. Apply the finite weighted dyadic-sum
+    estimate, factor out $n$, and use $(2^K)^e\le s_0^e$.
+\end{proof}
 
 \section{Weighted coverings of template shells}
 
@@ -90,7 +172,7 @@
     \cite[Lemma~9.4]{OpenAI2026AreaLaw}; safety and the entropy estimate remain separate.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:area_template_shell_cap,thm:area_law_template_shell_selected_count,thm:area_law_capped_dyadic_partition}
+    \uses{thm:area_template_shell_cap,thm:area_law_template_shell_selected_count,thm:area_law_capped_sum_by_scale,thm:area_law_weighted_dyadic_sum}
     Write $a_k$ for the number of selected squares of side $2^k$.
     The mixed-square bound gives $2^k a_k\le14n$ for $k<K$.
     The cap bound gives $2^K a_K\le2n$. Hence
@@ -100,4 +182,56 @@
         \le\left(2+\frac{14}{2^e-1}\right)nL^e,
     \end{align}
     using $2^e>1$ and $2^K\le L$.
+\end{proof}
+
+\section{Entropy from a uniform safe-box estimate}
+
+\begin{theorem}[Conditional template and shell entropy bounds]
+    \label{thm:area_template_safe_box_entropy}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.regionalEntropy_core_le_of_safe_box,
+        TNLean.PEPS.AreaLaw.Geometry.Template.regionalEntropy_shell_le_of_safe_box,
+        TNLean.PEPS.AreaLaw.Geometry.Template.regionalEntropy_prefix_le_of_safe_box,
+        TNLean.PEPS.AreaLaw.Geometry.exists_template_entropy_bounds_of_arbitrary_safe_box}
+    \leanok
+    \uses{def:area_law_template,def:area_law_safe_rectangle,def:area_law_ground_entropy}
+    Fix a finite physical domain, a cut $A$, a normalized vector $\Omega$,
+    local dimension $q\ge1$, and a native safety parameter $D_0\ge1$.
+    Assume explicitly that for every $\varepsilon\in(0,1)$ there is
+    $C_\varepsilon\ge0$ such that every safe native rectangle satisfies
+    \begin{align}
+        S_\Omega(A\cap Q)\le C_\varepsilon
+        \operatorname{size}(Q)^{1+\varepsilon}.
+    \end{align}
+    Fix $e\in(0,1)$. The same constant $C_e$, independent of the template,
+    works for all separated templates with $C_{\rm tpl}\ge24$.
+    For every $1\le L\le s_0$ and $0\le j\le L$, one has
+    \begin{align*}
+        S_\Omega(A\cap T)
+         & \le C_e\left(18+\frac{4}{2^e-1}\right)ns_0^e, \\
+        S_\Omega(A\cap(T_j\setminus T))
+         & \le C_e\left(2+\frac{14}{2^e-1}\right)nL^e.
+    \end{align*}
+    If $1\le j\le L$ and $Y\subseteq T_j\setminus T_{j-1}$ is arbitrary,
+    the entropy of $A\cap((T_{j-1}\setminus T)\cup Y)$ is at most the
+    displayed shell bound plus $n\log q$.
+    The fixed-exponent statements require only the safe-box estimate at that
+    exponent and $e>0$. The quantified statement retains the source range
+    $0<e<1$ and the uniform choice of $C_e$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_template_physical_dyadic_entropy,thm:area_template_safe_rectangles,
+        thm:area_law_template_weighted_core_cover,thm:area_template_weighted_shell,
+        thm:area_template_partial_row}
+    Every selected square is safe by separation and the scale bounds.
+    Apply the safe-box estimate to its physical rectangle region, sum by
+    subadditivity, and use the actual weighted core and shell estimates.
+    For a prefix, first use the shell estimate at depth $j-1$, then add
+    the proved partial-row cost $n\log q$.
+    The uniform constant is chosen from the safe-box hypothesis before any
+    template or scale is selected. The quantified theorem chooses the caps
+    as $\lfloor\log_2 s_0\rfloor$ and $\lfloor\log_2 L\rfloor$; the
+    integer logarithm inequalities give the required comparable powers of two.
+    This composes the conditional entropy
+    step of \cite[Lemma~9.4]{OpenAI2026AreaLaw}; it does not derive the
+    safe-box hypothesis from an initial existential exponent.
 \end{proof}
