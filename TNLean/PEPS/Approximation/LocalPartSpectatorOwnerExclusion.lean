@@ -98,7 +98,8 @@ private theorem exchangeBlocks_nil_left_eval (b tail : Layout P) :
       change ((exchangeBlocks [] b tail).eval).lTensor r.space ∘L
         ContinuousLinearMap.id ℂ (Mem (r :: (b ++ tail))) =
           ContinuousLinearMap.id ℂ (Mem (r :: (b ++ tail)))
-      rw [ContinuousLinearMap.comp_id, ih', ContinuousLinearMap.lTensor_id]
+      rw [ContinuousLinearMap.comp_id, ih']
+      exact ContinuousLinearMap.lTensor_id (𝕜 := ℂ) (E := Mem (b ++ tail)) r.space
 
 private theorem twoBlockExchange_nil_left_eval_heq (b : Layout P) :
     HEq (twoBlockExchange [] b).eval (Word.id b).eval := by
@@ -173,16 +174,16 @@ theorem restrict_localPart_appendTail_eval_heq_id_of_not_mem_parties {a b : Layo
   have hsZ : Layout.restrict f Z.sources.layout = [] := by
     rw [sources_twoBlockExchange]; rfl
   have hVZ := restrict_localPart_comp_id f V Z T
-    (by simp only [Layout.restrict_append, ha, List.append_nil])
-    (by simp only [Layout.restrict_append, hb, List.append_nil])
-    (by simp only [Layout.restrict_append, hb, List.nil_append]) hsV hsZ hV hZ
+    (by simp only [T, Layout.restrict_append, ha, List.append_nil])
+    (by simp only [T, Layout.restrict_append, hb, List.append_nil])
+    (by simp only [T, Layout.restrict_append, hb, List.nil_append]) hsV hsZ hV hZ
   have hsVZ : Layout.restrict f (V.comp Z).sources.layout = [] := by
     simp only [sources, SourceInventory.layout_append, Layout.restrict_append,
       hsZ, hsV, List.nil_append]
   have h := restrict_localPart_comp_id f A (V.comp Z) T
-    (by simp only [Layout.restrict_append, ha, List.nil_append])
-    (by simp only [Layout.restrict_append, ha, List.append_nil])
-    (by simp only [Layout.restrict_append, hb, List.nil_append]) hsA hsVZ hA hVZ
+    (by simp only [T, Layout.restrict_append, ha, List.nil_append])
+    (by simp only [T, Layout.restrict_append, ha, List.append_nil])
+    (by simp only [T, Layout.restrict_append, hb, List.nil_append]) hsA hsVZ hA hVZ
   change HEq ((A.comp (V.comp Z)).localPart.restrict f
     (A.comp (V.comp Z)).sources_localPart).eval (Word.id T).eval
   exact h
