@@ -43,11 +43,11 @@ theorem atParty_some_mapOwner_all (a : Layout P) (p : {_p : P // true = true}) :
   classical
   unfold atParty
   rw [restrict_mapOwner]
-  have h : (fun q : P ↦ decide (affectedOwner (fun _ : P ↦ true) q = some p)) =
-      (fun q : P ↦ decide (q = p.val)) := by
-    funext q
-    simp [affectedOwner, Subtype.ext_iff]
-  rw [h]
+  apply congrArg (mapOwner (affectedOwner (fun _ : P ↦ true)))
+  apply congrArg (fun f : P → Bool ↦ restrict f a)
+  funext q
+  rw [Bool.eq_iff_iff]
+  simp [affectedOwner, Subtype.ext_iff]
 
 end Layout
 
@@ -86,9 +86,11 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–417 and 5
 theorem selectedFamilyPhysicalPartyBasis_none_apply_heq
     (d : P → ℕ) (ps : List P) (hn : ps.Nodup) (hc : ∀ p, p ∈ ps) (x : PUnit) :
     HEq (selectedFamilyPhysicalPartyBasis d ps hn hc none x) (1 : ℂ) := by
-  simp only [selectedFamilyPhysicalPartyBasis, OrthonormalBasis.map_apply,
-    OrthonormalBasis.singleton_apply]
-  exact Layout.memCongr_apply_heq _ _
+  change HEq
+    (Layout.memCongr (Layout.atParty_none_mapOwner_all (familyPhysicalLayout d ps)).symm
+      ((OrthonormalBasis.singleton PUnit ℂ) x)) (1 : ℂ)
+  exact (Layout.memCongr_apply_heq _ _).trans
+    (heq_of_eq (OrthonormalBasis.singleton_apply x))
 
 /-- Each selected physical column is the original party column under the
 canonical relabelling, without a supplied coordinate identification.
@@ -98,8 +100,13 @@ theorem selectedFamilyPhysicalPartyBasis_some_apply_heq
     (p : {_p : P // true = true}) (x : Fin (d p.val)) :
     HEq (selectedFamilyPhysicalPartyBasis d ps hn hc (some p) x)
       (familyPhysicalPartyBasis d ps hn p.val (hc p.val) x) := by
-  simp only [selectedFamilyPhysicalPartyBasis, OrthonormalBasis.map_apply,
-    LinearIsometryEquiv.trans_apply]
+  change HEq
+    (Layout.memCongr
+      (Layout.atParty_some_mapOwner_all (familyPhysicalLayout d ps) p).symm
+      (Layout.mapOwnerIso (affectedOwner (fun _ : P ↦ true))
+        (Layout.atParty p.val (familyPhysicalLayout d ps))
+        (familyPhysicalPartyBasis d ps hn p.val (hc p.val) x)))
+    (familyPhysicalPartyBasis d ps hn p.val (hc p.val) x)
   exact (Layout.memCongr_apply_heq _ _).trans (Layout.mapOwnerIso_apply_heq _ _ _)
 
 end TNLean.PEPS.PairEffect
