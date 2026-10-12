@@ -7,6 +7,7 @@ import TNLean.MPS.Symmetry.ExactMPSGappedPhase
 import TNLean.MPS.Symmetry.IsometricParentInteraction
 import TNLean.MPS.Core.PhysicalIndexMixing
 import TNLean.MPS.SharedInfra.Scaling
+import TNLean.MPS.CanonicalForm.CPSVBlocking
 
 /-!
 # Gauge invariance of the independent exact MPS phase condition

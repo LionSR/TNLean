@@ -34,10 +34,7 @@ private theorem segment_contact_of_marks (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ �
     {a b : ℝ × ℝ} (ha : a ∈ beltCellMarks o ℓ z) (hb : b ∈ beltCellMarks o ℓ z)
     (hne : a ≠ b) : segment ℝ a b ⊆ closure (dyadicCell o ℓ z) ∧
       (segment ℝ a b ∩ closure (dyadicCell o ℓ z)).Nontrivial := by
-  have hconvex : Convex ℝ (closure (dyadicCell o ℓ z)) := by
-    rw [closure_dyadicCell]
-    exact (convex_Icc _ _).prod (convex_Icc _ _)
-  have hsub := hconvex.segment_subset
+  have hsub := (convex_closure_dyadicCell o ℓ z).segment_subset
     (beltCellMarks_subset_closure_dyadicCell o ℓ z ha)
     (beltCellMarks_subset_closure_dyadicCell o ℓ z hb)
   exact ⟨hsub, (Set.nontrivial_of_mem_mem_ne (left_mem_segment ℝ _ _)
