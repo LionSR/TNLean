@@ -128,6 +128,7 @@ private theorem sampledEndpointInputWord_party_none_eval_heq_id
     (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω)).trans
       (sampledEndpointInputWord_none_eval_heq_id w k lam L R ξ ζ j ω)
 
+set_option maxHeartbeats 800000 in
 /-- The actual exterior sampled mixed trace is the original empty-gate scalar
 times its complex conjugate, in the canonical singleton physical coordinate.
 The input and output orthonormal bases, ket and bra choices, and original joint
