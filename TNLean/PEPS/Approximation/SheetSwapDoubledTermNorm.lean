@@ -33,7 +33,6 @@ theorem norm_sheetSwapOp_conj_doubledHamiltonian_sub_le
     (R : Finset ι) (A : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
     ‖sheetSwapOp q R * doubledHamiltonian A * (sheetSwapOp q R)ᴴ -
       doubledHamiltonian A‖ ≤ 4 * ‖A‖ := by
-  classical
   have hdouble : ‖doubledHamiltonian A‖ ≤ ‖A‖ + ‖A‖ := by
     unfold doubledHamiltonian
     refine (norm_add_le _ _).trans (add_le_add ?_ ?_)

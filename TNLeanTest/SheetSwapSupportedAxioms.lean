@@ -14,8 +14,9 @@ standard logical axioms.
 
 set_option linter.hashCommand false
 
-/-- info: 'TNLean.PEPS.EncodedFrame.sheetSwapOp_mul_kronecker_of_mem_supportedOperators' depends on axioms: [propext,
- Classical.choice,
- Quot.sound] -/
-#guard_msgs in
+/--
+info: 'TNLean.PEPS.EncodedFrame.sheetSwapOp_mul_kronecker_of_mem_supportedOperators'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.EncodedFrame.sheetSwapOp_mul_kronecker_of_mem_supportedOperators
