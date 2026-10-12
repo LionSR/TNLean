@@ -33,7 +33,11 @@
 \begin{theorem}[Physical symmetries of a tensor in irreducible form~II]%
     \label{thm:irreducible_form_physical_symmetry}
     \lean{MPSTensor.exists_diagonal_unitary_of_irreducibleForm_physical_symmetry,
-        MPSTensor.exists_blockScalar_unitary_of_periodic_physical_symmetry}
+        MPSTensor.exists_blockScalar_unitary_of_periodic_physical_symmetry,
+        MPSTensor.toTensorFromBlocks_sum_smul,
+        MPSTensor.blockScalarMatrix_eq_diagonal,
+        MPSTensor.blockScalarMatrix_mem_unitaryGroup,
+        MPSTensor.sameMPV₂_toTensorFromBlocks_of_periodic_phases}
     \leanok
     \uses{def:block_diagonal_tensor, def:same_mpv2, def:same_mpv2_pos}
     Let $A^i=\bigoplus_j\mu_jA_j^i$ with nonzero weights $\mu_j$, where every
