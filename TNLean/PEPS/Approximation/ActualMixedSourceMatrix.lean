@@ -22,11 +22,6 @@ noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS.PairEffect
 
-/-- Select an orthonormal column with its vector space determined before
-instantiating a dependent register memory. -/
-private def orthonormalColumn {E : Type} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    {I : Type} [Fintype I] (b : OrthonormalBasis I ℂ E) (i : I) : E := b i
-
 private theorem mixed_toMatrix_basis_independent
     {E F : Type} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F]
@@ -80,6 +75,7 @@ variable {P : Type} [Fintype P] [DecidableEq P] {a b : Layout P}
 variable {I O : Option {_p : P // true = true} → Type}
 variable [∀ q, Fintype (I q)] [∀ q, Fintype (O q)]
 
+open Classical in
 /-- A literal source-input word between the actual prepared ket and bra columns
 factors through its actual singleton restrictions. This is a coordinate identity
 for an individual input word, without any factorization hypothesis on a sum.
@@ -106,9 +102,8 @@ theorem partialSourceGlobalMatrix_mixed_word
           C ps hn hc))ᴴ =
       dependentPhysicalProductFamilyMatrix (fun q ↦
         w.partialSourcePartyMatrix ψ ξ B C q *
-          Matrix.of (fun (row col : I q) ↦ (B q).repr
-            ((u.restrict (partySelector q) hu).eval
-              (orthonormalColumn (B q) col)) row) *
+          LinearMap.toMatrix (B q).toBasis (B q).toBasis
+            (u.restrict (partySelector q) hu).eval.toLinearMap *
           (w.partialSourcePartyMatrix ψ ζ B C q)ᴴ) := by
   classical
   let bIn := partyGroupedBasis (w.allResidualSourceLayout ++ []) B ps hn hc
@@ -122,7 +117,7 @@ theorem partialSourceGlobalMatrix_mixed_word
     (w.partialSourceWord ψ ζ) u (sources_partialSourceWord w ψ ξ)
     (sources_partialSourceWord w ψ ζ) hu B C ps hn hc
   simp only [matrix_repr_eval_eq_toMatrix] at hWord
-  simp only [bIn, bOut, partialSourcePartyMatrix, orthonormalColumn,
+  simp only [bIn, bOut, partialSourcePartyMatrix,
     matrix_repr_eval_eq_toMatrix]
   convert hWord using 1
   rfl

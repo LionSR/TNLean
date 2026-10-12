@@ -20,7 +20,18 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 
 noncomputable section
 open scoped Matrix
-namespace TNLean.PEPS.PairEffect.SourceCircuit
+namespace TNLean.PEPS.PairEffect
+
+private theorem sandwich_average_of_summands
+    {S T J : Type} [Fintype S] [Fintype J]
+    (A B : Matrix T S ℂ) (X : Matrix S S ℂ) (c : ℂ)
+    (U : J → Matrix S S ℂ) (H : J → Matrix T T ℂ)
+    (hX : X = c • ∑ j, U j) (hH : ∀ j, A * U j * Bᴴ = H j) :
+    A * X * Bᴴ = c • ∑ j, H j := by
+  rw [hX]
+  simp only [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_sum, Matrix.sum_mul, hH]
+
+namespace SourceCircuit
 variable {P : Type} [Fintype P] [DecidableEq P] {a b : Layout P}
 variable {I O : Option {_p : P // true = true} → Type}
 variable [∀ q, Fintype (I q)] [∀ q, Fintype (O q)]
@@ -68,15 +79,13 @@ theorem partialSourceGlobalMatrix_sampled_eq_sum_partyProduct
                     (j ∘ (allSourceSlotEquiv w).symm) ω)).eval.toLinearMap) *
               (w.partialSourcePartyMatrix ψ ζ B C q)ᴴ) := by
   classical
-  rw [sampledEndpointInputMatrix_average w k lam E F ξ ζ ω]
-  simp only [Matrix.mul_smul, Matrix.smul_mul, Matrix.mul_sum, Matrix.sum_mul]
-  congr 1
-  apply Finset.sum_congr rfl
-  intro j _
-  simpa only [matrix_repr_eval_eq_toMatrix] using
-    partialSourceGlobalMatrix_mixed_word w ψ ξ ζ
-      (sampledEndpointInputWord w k lam E F ξ ζ (j ∘ (allSourceSlotEquiv w).symm) ω)
-      (sources_sampledEndpointInputWord w k lam E F ξ ζ
-        (j ∘ (allSourceSlotEquiv w).symm) ω) B C ps hn hc
+  refine sandwich_average_of_summands _ _ _ _ _ _
+    (sampledEndpointInputMatrix_average w k lam E F ξ ζ ω) ?_
+  intro j
+  exact partialSourceGlobalMatrix_mixed_word w ψ ξ ζ
+    (sampledEndpointInputWord w k lam E F ξ ζ (j ∘ (allSourceSlotEquiv w).symm) ω)
+    (sources_sampledEndpointInputWord w k lam E F ξ ζ
+      (j ∘ (allSourceSlotEquiv w).symm) ω) B C ps hn hc
 
-end TNLean.PEPS.PairEffect.SourceCircuit
+end SourceCircuit
+end TNLean.PEPS.PairEffect
