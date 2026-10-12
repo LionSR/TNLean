@@ -1,0 +1,358 @@
+% Source: GLM23v3, REsubmission.tex, lines 1695--1777.
+% Scope: the actual first endpoint on periodic chains, including N=2.
+
+\subsection{The degenerate mixed endpoint on a ring}
+\label{sec:mpo_joint_periodic_endpoint}
+
+Use the common physical alphabet $\mathcal I$, mixed letters $C_x^\mu$,
+and embedded first family $B_x$ of
+Definition~\ref{def:mpo_joint_mixed_family}. Put $P_x=W_x(0)$ and let
+$\Gamma'_2$ be the joint extended map in
+(\ref{eq:mpo_joint_mixed_boundary}). All sums over $x$ retain the physical
+overlaps of the original endpoint blocks.
+
+\begin{definition}[Physical phase projections]
+    \label{def:mpo_joint_phase_projections}
+    \lean{MPSTensor.MPOSymmetry.jointMixedRowWeight,
+        MPSTensor.MPOSymmetry.jointMixedColumnWeight,
+        MPSTensor.MPOSymmetry.jointMixedRowSector,
+        MPSTensor.MPOSymmetry.jointMixedColumnSector,
+        MPSTensor.MPOSymmetry.jointMixedRowSector_apply,
+        MPSTensor.MPOSymmetry.jointMixedColumnSector_apply,
+        MPSTensor.MPOSymmetry.jointMixedEndpointParentInteraction}
+    \leanok
+    \uses{def:mpo_joint_mixed_family,def:mpo_joint_mixed_support}
+    Let $r(\mu),c(\mu)\in\{0,1\}$ indicate whether the row and column
+    phase of $\mu$ are zero. Their values on $00,01,10,11$ are respectively
+    $(r,c)=(1,1),(1,0),(0,1),(0,0)$. On an $N$-site configuration set
+    $(R_i v)_\sigma=r(\sigma_i)v_\sigma$ and
+    $(C_i v)_\sigma=c(\sigma_i)v_\sigma$. Define
+    $S=\operatorname{ran}\Gamma'_2$ and $h'=I-\Pi_S$.
+\end{definition}
+
+\begin{theorem}[Virtual boundary actions of the phase projections]
+    \label{thm:mpo_joint_phase_boundary}
+    \lean{MPSTensor.MPOSymmetry.jointMixedRowWeight_eq_zero_or_one,
+        MPSTensor.MPOSymmetry.jointMixedColumnWeight_eq_zero_or_one,
+        MPSTensor.MPOSymmetry.jointMixedRowColumnWeight_eq_one_iff,
+        MPSTensor.MPOSymmetry.bondInterpolationMatrix_zero_mul_jointMixedEndpointBase,
+        MPSTensor.MPOSymmetry.jointMixedEndpointBase_mul_bondInterpolationMatrix_zero,
+        MPSTensor.MPOSymmetry.blockInsertedBoundaryMap_two_apply,
+        MPSTensor.MPOSymmetry.jointMixedRowSector_blockInsertedBoundaryMap,
+        MPSTensor.MPOSymmetry.jointMixedColumnSector_blockInsertedBoundaryMap,
+        MPSTensor.MPOSymmetry.jointMixedColumnSector_zero_blockInsertedBoundaryMap,
+        MPSTensor.MPOSymmetry.jointMixedRowSector_one_blockInsertedBoundaryMap}
+    \leanok
+    \uses{def:mpo_joint_phase_projections}
+    Left and right virtual projection give
+    $P_xC_x^\mu=r(\mu)C_x^\mu$ and
+    $C_x^\mu P_x=c(\mu)C_x^\mu$.
+    For arbitrary insertions $W_x$ and virtual boundaries $X_x$, write
+    $\Gamma'_{2,W}(X)_{\mu\nu}=\sum_x\tr(C_x^\mu W_xC_x^\nu X_x)$.
+    The outer phase actions are
+    \begin{align}
+        R_0\Gamma'_{2,W}(X) & =\Gamma'_{2,W}((X_xP_x)_x),
+                            & C_1\Gamma'_{2,W}(X)         & =\Gamma'_{2,W}((P_xX_x)_x).
+        \label{eq:mpo_joint_phase_boundary}
+    \end{align}
+    At $W_x=P_x$, the inner phases satisfy
+    $C_0\Gamma'_2(X)=R_1\Gamma'_2(X)=\Gamma'_2(X)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:mpo_joint_mixed_family}
+    Each mixed letter occupies its indicated virtual corner. Multiplication
+    by $P_x$ therefore selects its row or column phase. Cyclicity of the
+    trace moves the first row projection to the right of $X_x$;
+    the last column projection multiplies $X_x$ on the left. The internal
+    insertion $P_x$ already fixes the first column and last row phases.
+\end{proof}
+
+\begin{theorem}[Reducing phase subspaces]
+    \label{thm:mpo_joint_phase_reducing}
+    \lean{Submodule.commute_starProjection_of_invariant,
+        LinearMap.IsSymmetricProjection.mul_of_commute,
+        MPSTensor.MPOSymmetry.jointMixedRowSector_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.jointMixedColumnSector_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.jointMixedRowSector_commute_columnSector,
+        MPSTensor.MPOSymmetry.range_blockInsertedBoundaryMap_jointMixed_invariant_rowSector,
+        MPSTensor.MPOSymmetry.range_blockInsertedBoundaryMap_jointMixed_invariant_columnSector,
+        MPSTensor.MPOSymmetry.jointMixedRowSector_commute_extendedSupport_starProjection,
+        MPSTensor.MPOSymmetry.jointMixedColumnSector_commute_extendedSupport_starProjection,
+        MPSTensor.MPOSymmetry.jointMixedRowSector_commute_parentInteraction_zero,
+        MPSTensor.MPOSymmetry.jointMixedColumnSector_commute_parentInteraction_zero}
+    \leanok
+    \uses{thm:mpo_joint_phase_boundary}
+    The phase selectors are commuting orthogonal projections. Each of
+    $R_0,R_1,C_0,C_1$ preserves $S$, commutes with $\Pi_S$, and commutes
+    with $h'$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_joint_phase_boundary}
+    The diagonal coefficients are real and idempotent. The two boundary
+    actions in (\ref{eq:mpo_joint_phase_boundary}) preserve the range, and
+    the two inner actions fix it. For a self-adjoint map $T$ preserving a
+    subspace $S$, the identity
+    $\langle Tu,w\rangle=\langle u,Tw\rangle$ also makes $S^\perp$
+    invariant. Thus $T\Pi_S=\Pi_ST$.
+\end{proof}
+
+\begin{theorem}[The common canonical corner]
+    \label{thm:mpo_joint_canonical_corner}
+    \lean{MPSTensor.MPOSymmetry.blockInsertedBoundaryMap_jointMixed_first_boundary,
+        MPSTensor.MPOSymmetry.jointMixedEndpoint_extendedSupport_outerCorner_eq_groundSpaceES,
+        MPSTensor.MPOSymmetry.jointMixedEndpointLeftTensor_starProjection_eq_outerCorner,
+        MPSTensor.MPOSymmetry.groundSpaceES_jointMixedEndpointLeftTensor_le_extendedSupport}
+    \leanok
+    \uses{thm:mpo_joint_phase_reducing,thm:mpo_joint_mixed_compression}
+    Let $G=\sum_x\mathcal G_2(B_x)$ be the full joint canonical support.
+    Then $R_0C_1S=G\subseteq S$ and
+    $\Pi_G=R_0C_1\Pi_S$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_joint_phase_boundary,thm:mpo_joint_phase_reducing,
+        thm:mpo_joint_mixed_compression}
+    If $V_x:\C^{D_x^0}\to E_x$ is the first coordinate inclusion, then
+    $P_x=V_xV_x^*$ and
+    \begin{align}
+        \Gamma'_2((V_xY_xV_x^*)_x)_{\mu\nu}
+         & =\sum_x\tr(B_x^\mu B_x^\nu Y_x).
+        \label{eq:mpo_joint_canonical_boundary}
+    \end{align}
+    The outer selectors replace $X_x$ by $P_xX_xP_x$
+    $=V_x(V_x^*X_xV_x)V_x^*$, and every tuple $Y_x$ occurs this way.
+    Hence their image is precisely $G$. The commuting product
+    $R_0C_1\Pi_S$ is the orthogonal projection onto that image.
+\end{proof}
+
+\begin{definition}[The four outer phase corners]
+    \label{def:mpo_joint_outer_corners}
+    \lean{MPSTensor.MPOSymmetry.jointMixedOuterCornerProjection,
+        MPSTensor.MPOSymmetry.jointMixedOuterCornerProjection_apply,
+        MPSTensor.MPOSymmetry.jointMixedEndpointCornerSupport}
+    \leanok
+    \uses{def:mpo_joint_phase_projections}
+    For $a,b\in\{0,1\}$, set
+    $R_0^{(0)}=R_0$, $R_0^{(1)}=I-R_0$,
+    $C_1^{(0)}=C_1$, and $C_1^{(1)}=I-C_1$.
+    Let $T_{ab}=R_0^{(a)}C_1^{(b)}$ and $S_{ab}=T_{ab}S$.
+    The corresponding two-site physical phase pairs are
+    $(00,00),(00,01),(10,00),(10,01)$.
+\end{definition}
+
+\begin{theorem}[Orthogonal decomposition of the actual joint support]
+    \label{thm:mpo_joint_outer_corners}
+    \lean{MPSTensor.MPOSymmetry.jointMixedOuterCornerProjection_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.sum_jointMixedOuterCornerProjection,
+        MPSTensor.MPOSymmetry.jointMixedOuterCornerProjection_mul_eq_zero,
+        MPSTensor.MPOSymmetry.jointMixedOuterCornerProjection_blockInsertedBoundaryMap,
+        MPSTensor.MPOSymmetry.jointMixedEndpointCornerSupport_le,
+        MPSTensor.MPOSymmetry.jointMixedEndpoint_extendedSupport_eq_iSup_corners,
+        MPSTensor.MPOSymmetry.jointMixedEndpointCornerSupport_pairwise_isOrtho,
+        MPSTensor.MPOSymmetry.jointMixedEndpointCornerSupport_false_false}
+    \leanok
+    \uses{def:mpo_joint_outer_corners,thm:mpo_joint_phase_boundary,
+        thm:mpo_joint_canonical_corner}
+    Put $P_x^{(0)}=P_x$ and $P_x^{(1)}=I-P_x$. For arbitrary insertions,
+    \begin{align}
+        T_{ab}\Gamma'_{2,W}(X)
+         & =\Gamma'_{2,W}((P_x^{(b)}X_xP_x^{(a)})_x).
+        \label{eq:mpo_joint_outer_boundary}
+    \end{align}
+    The $T_{ab}$ are orthogonal projections with sum $I$ and
+    $T_{ab}T_{cd}=0$ for $(a,b)\ne(c,d)$. At the first endpoint,
+    $S=\bigoplus_{a,b}S_{ab}$ is an orthogonal sum and $S_{00}=G$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_joint_phase_boundary,thm:mpo_joint_phase_reducing,
+        thm:mpo_joint_canonical_corner}
+    Subtract the outer boundary actions from the identity to obtain
+    the complementary actions. Their products give
+    (\ref{eq:mpo_joint_outer_boundary}). The binary diagonal phase
+    indicators imply $\sum_{a,b}T_{ab}=I$ and the vanishing of distinct
+    products. Every $T_{ab}$ preserves $S$, so their images sum to $S$;
+    self-adjointness and the vanishing products make these images
+    orthogonal. The canonical-corner identity gives $S_{00}=G$.
+\end{proof}
+
+\begin{theorem}[Local endpoint inequalities]
+    \label{thm:mpo_joint_local_comparison}
+    \lean{LinearMap.IsSymmetricProjection.one_sub_mul_le_add_one_sub,
+        LinearMap.IsSymmetricProjection.one_sub_mul_mul_le,
+        MPSTensor.MPOSymmetry.jointMixedEndpointParentInteraction_isPositive,
+        MPSTensor.MPOSymmetry.jointMixedEndpointParentInteraction_zero_le_parentInteractionES,
+        MPSTensor.MPOSymmetry.parentInteractionES_jointMixedEndpointLeftTensor_le,
+        MPSTensor.MPOSymmetry.jointMixedEndpoint_one_sub_columnSector_zero_le_parentInteraction,
+        MPSTensor.MPOSymmetry.jointMixedEndpoint_one_sub_rowSector_one_le_parentInteraction}
+    \leanok
+    \uses{thm:mpo_joint_canonical_corner,thm:mpo_joint_phase_boundary}
+    With $k=I-\Pi_G$, the actual endpoint satisfies
+    \begin{align}
+        0\le h' & \le k\le h'+(I-R_0)+(I-C_1),
+        \label{eq:mpo_joint_local_comparison}                    \\
+        I-C_0   & \le h',                      & I-R_1 & \le h'.
+        \label{eq:mpo_joint_inner_penalties}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_joint_canonical_corner,thm:mpo_joint_phase_reducing}
+    The inclusion $G\subseteq S$ reverses the complementary projection
+    order. For commuting orthogonal projections $P,Q$,
+    $I-PQ\le(I-P)+(I-Q)$ because $(I-P)(I-Q)\ge0$.
+    Apply this twice to $\Pi_G=R_0C_1\Pi_S$. The fixed inner phases give
+    $\Pi_S\le C_0,R_1$, which proves
+    (\ref{eq:mpo_joint_inner_penalties}).
+\end{proof}
+
+\begin{definition}[Cyclic phase penalty]
+    \label{def:mpo_joint_cyclic_penalty}
+    \lean{MPSTensor.MPOSymmetry.jointMixedPeriodicPhasePenalty,
+        MPSTensor.MPOSymmetry.jointMixedPeriodicViolationCount,
+        MPSTensor.MPOSymmetry.JointMixedPeriodicActive,
+        MPSTensor.MPOSymmetry.jointMixedPeriodicActiveProjection,
+        MPSTensor.MPOSymmetry.jointMixedPeriodicActiveProjection_apply}
+    \leanok
+    \uses{def:mpo_joint_phase_projections}
+    On an $N$-site ring let
+    $E_N=\sum_{i\in\Fin{N}}((I-R_i)+(I-C_i))$.
+    For a configuration $\sigma$, let $n(\sigma)$ count the failed row
+    and column phase conditions. Let $Q_N$ be the diagonal projection
+    onto configurations for which every letter has phase $00$.
+    Thus $(Q_Nv)_\sigma=v_\sigma$ if $n(\sigma)=0$, and zero otherwise.
+\end{definition}
+
+\begin{theorem}[Cyclic counting and the inactive penalty]
+    \label{thm:mpo_joint_cyclic_penalty}
+    \lean{MPSTensor.MPOSymmetry.periodicLocalInteractionES_jointMixedRowSector,
+        MPSTensor.MPOSymmetry.periodicLocalInteractionES_jointMixedColumnSector,
+        MPSTensor.MPOSymmetry.sum_periodicLocalInteractionES_jointMixedRowSector,
+        MPSTensor.MPOSymmetry.sum_periodicLocalInteractionES_jointMixedColumnSector,
+        MPSTensor.MPOSymmetry.jointMixedPeriodicViolationCount_eq_zero_iff,
+        MPSTensor.MPOSymmetry.jointMixedPeriodicPhasePenalty_apply,
+        MPSTensor.MPOSymmetry.mem_ker_jointMixedPeriodicPhasePenalty_iff,
+        MPSTensor.MPOSymmetry.jointMixedPeriodicActiveProjection_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.range_jointMixedPeriodicActiveProjection,
+        MPSTensor.MPOSymmetry.jointMixedPeriodicActiveProjection_eq_starProjection,
+        MPSTensor.MPOSymmetry.jointMixedPeriodicPhasePenalty_activeProjection,
+        MPSTensor.MPOSymmetry.one_sub_jointMixedPeriodicActiveProjection_le,
+        MPSTensor.MPOSymmetry.jointMixedPeriodicPhasePenalty_eq_sum_outer,
+        MPSTensor.MPOSymmetry.jointMixedPeriodicPhasePenalty_le_twice,
+        MPSTensor.MPOSymmetry.one_sub_jointMixedPeriodicActiveProjection_le_twice}
+    \leanok
+    \uses{def:mpo_joint_cyclic_penalty,thm:mpo_joint_local_comparison}
+    Let $H'_N=\sum_{i\in\Fin{N}}h'_{i,i+1}$, with cyclic indices.
+    For every $N\ge2$,
+    \begin{align}
+        (E_Nv)_\sigma         & =n(\sigma)v_\sigma, &
+        \operatorname{ran}Q_N & =\ker E_N,
+        \label{eq:mpo_joint_phase_count}                                       \\
+        E_NQ_N                & =0,                 & I-Q_N & \le E_N\le2H'_N.
+        \label{eq:mpo_joint_cyclic_penalty}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_joint_local_comparison}
+    Each diagonal summand contributes one precisely when its condition
+    fails. An inactive configuration has $n(\sigma)\ge1$, proving
+    $I-Q_N\le E_N$. Sum the first-column and second-row inequalities
+    in (\ref{eq:mpo_joint_inner_penalties}). The cyclic shift permutes
+    $\Fin{N}$, so each column and each row appears exactly once.
+    This yields $E_N\le2H'_N$. At $N=2$ the two directed translates
+    remain distinct summands in $H'_N$.
+\end{proof}
+
+\begin{theorem}[Exact active Hamiltonian and periodic kernel]
+    \label{thm:mpo_joint_periodic_active}
+    \lean{LinearMap.apply_eq_of_le_of_sub_le_of_apply_eq_zero,
+        LinearMap.IsSymmetricProjection.apply_eq_self_of_one_sub_le_twice_of_mem_ker,
+        LinearMap.IsPositive.ker_eq_of_le_of_eq_on_projection,
+        MPSTensor.MPOSymmetry.jointMixedRowSector_commute_periodicLocalInteraction,
+        MPSTensor.MPOSymmetry.jointMixedColumnSector_commute_periodicLocalInteraction,
+        MPSTensor.MPOSymmetry.jointMixedPeriodicPhasePenalty_commute,
+        MPSTensor.MPOSymmetry.jointMixedPeriodicActiveProjection_commute,
+        MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_comparison,
+        MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_mul_activeProjection,
+        MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_active_of_mem_ker,
+        MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_ker_eq}
+    \leanok
+    \uses{thm:mpo_joint_cyclic_penalty,thm:mpo_joint_local_comparison,
+        thm:mpo_joint_phase_reducing}
+    Let $K_N=\sum_i k_{i,i+1}$ be the full joint canonical parent.
+    For every $N\ge2$,
+    \begin{align}
+        H'_N    & \le K_N\le H'_N+E_N, & [Q_N,H'_N] & =0,
+        \label{eq:mpo_joint_periodic_comparison}                 \\
+        H'_NQ_N & =K_NQ_N,             & \ker H'_N  & =\ker K_N.
+        \label{eq:mpo_joint_periodic_active}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_joint_phase_reducing,thm:mpo_joint_cyclic_penalty,
+        thm:mpo_joint_local_comparison}
+    Translate and sum (\ref{eq:mpo_joint_local_comparison}). Cyclic
+    reindexing turns the two outer penalties into $E_N$. Every site phase
+    reduces every translated interaction, so $E_N$ commutes with $H'_N$.
+    Its kernel projection $Q_N$ therefore commutes as well.
+    Since $0\le K_N-H'_N\le E_N$ and $E_NQ_N=0$, positivity forces
+    $(K_N-H'_N)Q_N=0$. If $H'_Nv=0$, then
+    $I-Q_N\le2H'_N$ forces $Q_Nv=v$, and hence $K_Nv=0$.
+    Conversely $H'_N\le K_N$ implies $\ker K_N\subseteq\ker H'_N$.
+\end{proof}
+
+\begin{theorem}[Joint endpoint ground space and uniform periodic gap]
+    \label{thm:mpo_joint_periodic_gap}
+    \lean{LinearMap.re_inner_ge_half_of_one_sub_le_twice,
+        LinearMap.IsPositive.norm_gap_of_reducing_projection,
+        MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_norm_gap,
+        MPSTensor.MPOSymmetry.mpv_jointMixedEndpointInterpolation_zero,
+        MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_groundSpace_eq,
+        MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_groundSpace_eq_actual,
+        MPSTensor.MPOSymmetry.exists_uniform_jointMixedEndpoint_periodic_gap}
+    \leanok
+    \uses{thm:mpo_joint_periodic_active,thm:mpo_joint_mixed_compression,
+        def:blockwise_product_word_span}
+    Suppose that both endpoint families have simultaneous one-site span
+    and $D_x^0>0$ for every block. Then for every $N\ge2$,
+    $\ket{V^{(N)}(A_x(0))}=\ket{V^{(N)}(B_x)}$ and
+    $\ker H'_N=\spn_{\C}\{\ket{V^{(N)}(A_x(0))}:x\in\Fin{r}\}$.
+    There is a $\delta>0$, independent of $N$, such that every
+    $v\perp\ker H'_N$ satisfies
+    \begin{align}
+        \|H'_Nv\| & \ge\min(\delta,1/2)\|v\|.
+        \label{eq:mpo_joint_periodic_gap}
+    \end{align}
+    Here $\delta$ is one gap for the full joint canonical parent.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_joint_periodic_active,thm:mpo_joint_cyclic_penalty,
+        thm:mpo_joint_mixed_compression,
+        thm:block-parent-uniform-gap-simultaneous-injectivity,
+        thm:block_ground_space_continuity}
+    Simultaneous spanning is preserved by the first virtual compression.
+    The joint canonical parent theorem gives the stated component span
+    and one positive gap $\delta$ for $K_N$. Since
+    $A_x^\mu(0)P_x=A_x^\mu(0)$, compression by $V_x^*$ and $V_x$
+    preserves every positive-length word trace and gives $B_x$.
+    Write $v=x+y$, where
+    $x=Q_Nv$ and $y=(I-Q_N)v$. These components are orthogonal, and
+    $x\perp\ker K_N$ because $Q_N$ fixes the common kernel.
+    Using (\ref{eq:mpo_joint_periodic_active}) and
+    (\ref{eq:mpo_joint_cyclic_penalty}),
+    \begin{align}
+        \langle H'_Nv,v\rangle
+         & =\langle K_Nx,x\rangle+\langle H'_Ny,y\rangle
+        \ge\delta\|x\|^2+\tfrac12\|y\|^2
+        \ge\min(\delta,1/2)\|v\|^2.
+    \end{align}
+    Cauchy--Schwarz gives (\ref{eq:mpo_joint_periodic_gap}). If the common
+    physical alphabet is empty, the positive-length chain space is zero,
+    and both conclusions hold directly. Empty block families require no
+    separate nonemptiness assumption.
+\end{proof}

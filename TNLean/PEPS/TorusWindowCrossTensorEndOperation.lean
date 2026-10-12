@@ -432,13 +432,11 @@ theorem existsUnique_crossTensorVirtualOperation_of_staircasePhysicalOp_sameStat
     regionInjectivityUnionClosure_of_overlap B hposB
   have hend := staircasePair_insert_eq_open hB hUB hposB hL hK hxw hyh s C common hagree
   have hleftInjective : RegionBlockedTensorInjective (G := torusGraph width height) B
-      (horizontalStaircaseLeftWindow s L K) := by
-    have hi := hB.horizontalStaircaseLeftWindow_injective s
-    rwa [regionInjectivityDataOf_isInjective] at hi
+      (horizontalStaircaseLeftWindow s L K) :=
+    hB.horizontalStaircaseLeftWindow_injective s
   have hrightInjective : RegionBlockedTensorInjective (G := torusGraph width height) B
-      (horizontalStaircaseRightWindow s L K) := by
-    have hi := hB.horizontalStaircaseRightWindow_injective s
-    rwa [regionInjectivityDataOf_isInjective] at hi
+      (horizontalStaircaseRightWindow s L K) :=
+    hB.horizontalStaircaseRightWindow_injective s
   have hLpos : 0 < L := by omega
   have hKpos : 0 < K := by omega
   have hlast := staircaseWindow_last s hLpos hKpos

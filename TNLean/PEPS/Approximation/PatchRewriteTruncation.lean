@@ -453,10 +453,8 @@ theorem mem_patchIndices_of_isOpen (hR : R.Conditions) (β : R.Branch)
       obtain ⟨s', hs', hxs'⟩ :=
         (mem_patchSquares_iff _ _).mp (R.newSample_subset_patchSquares hR β.2.1 β.1 hxh)
       obtain ⟨i', hi'1, -, hi'⟩ := exists_get_append₃_eq_mid E P D hs'
-      exact hE ⟨i', Fin.lt_def.mpr (by omega), by
-        change x ∈ ((E ++ P ++ D).get i').sites
-        rw [hi']
-        exact hxs'⟩
+      exact hE ⟨i', Fin.lt_def.mpr (by omega),
+        show x ∈ ((E ++ P ++ D).get i').sites from hi' ▸ hxs'⟩
     exact ⟨hj1, hP ▸ hj2⟩
   · obtain ⟨hx, hL, hk⟩ := h
     have hi1 : E.length ≤ (i : ℕ) := by
@@ -473,10 +471,8 @@ theorem mem_patchIndices_of_isOpen (hR : R.Conditions) (β : R.Branch)
       obtain ⟨s', hs', hxs'⟩ :=
         (mem_patchSquares_iff _ _).mp (R.oldSample_subset_patchSquares hR β.2.1 β.2.2 hxh)
       obtain ⟨i', -, hi'2, hi'⟩ := exists_get_append₃_eq_mid E P D hs'
-      exact hL ⟨i', Fin.lt_def.mpr (by omega), by
-        change x ∈ ((E ++ P ++ D).get i').sites
-        rw [hi']
-        exact hxs'⟩
+      exact hL ⟨i', Fin.lt_def.mpr (by omega),
+        show x ∈ ((E ++ P ++ D).get i').sites from hi' ▸ hxs'⟩
     exact ⟨hi1, hP ▸ hi2⟩
 
 theorem mem_patchVertices_of_isOpen (hR : R.Conditions) (β : R.Branch)
@@ -518,10 +514,8 @@ theorem exists_owners_of_isOpen_inl (hR : R.Conditions) (β : R.Branch)
       (Or.inl ⟨Q, hQ, Q.exists_mem_sample_of_mem_tagSample hxQ⟩)⟩
     obtain ⟨s', hs', hxs'⟩ := (mem_holeSquares_iff_decSteps _ _).mp hxh
     obtain ⟨i', hi'1, hi'⟩ := exists_get_append₃_eq_right E P D hs'
-    exact hx.2.1 ⟨i', Fin.lt_def.mpr (by omega), by
-      change x ∈ ((E ++ P ++ D).get i').sites
-      rw [hi']
-      exact hxs'⟩
+    exact hx.2.1 ⟨i', Fin.lt_def.mpr (by omega),
+      show x ∈ ((E ++ P ++ D).get i').sites from hi' ▸ hxs'⟩
   · exact ⟨∅, by simp, fun x hx => absurd ⟨x, hx⟩ hj⟩
 
 /-- **Open output legs have at most two new owners.** The open output legs of a ket vertex of a
@@ -555,10 +549,8 @@ theorem exists_owners_of_isOpen_inr (hR : R.Conditions) (β : R.Branch)
       (Or.inl ⟨Q, hQ, Q.exists_mem_sample_of_mem_tagSample hxQ⟩)⟩
     obtain ⟨s', hs', hxs'⟩ := (mem_holeSquares_iff_encSteps _ _).mp hxh
     obtain ⟨i', hi'1, hi'⟩ := exists_get_append₃_eq_left E P D hs'
-    exact hx.2.1 ⟨i', Fin.lt_def.mpr (by omega), by
-      change x ∈ ((E ++ P ++ D).get i').sites
-      rw [hi']
-      exact hxs'⟩
+    exact hx.2.1 ⟨i', Fin.lt_def.mpr (by omega),
+      show x ∈ ((E ++ P ++ D).get i').sites from hi' ▸ hxs'⟩
   · exact ⟨∅, by simp, fun x hx => absurd ⟨x, hx⟩ hi⟩
 
 /-- **Truncation of one branch (Lemma 6.2 applied to the branch network).** Under the conditions
