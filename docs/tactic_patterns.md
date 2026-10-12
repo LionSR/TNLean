@@ -6466,6 +6466,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   than tensor identities. The addition case already uses `congrArg₂`,
   `eq_of_heq`, and `heq_of_eq`. The same core equality tools suffice for the
   head constructions; a generic lemma would only restate their congruence.
+- **Word identities (2026-10-12):** `WordOwnerAppendTailTransport` and
+  `AbsorbedRestriction` both compare chronological compositions, frames,
+  identities and list identifications at the word level after identifying
+  layouts. These are two occurrences of each pattern across two files.
+  Before a third occurrence, promote the corresponding word congruences
+  to a shared provider. This comparison is stronger than equality of
+  evaluated operators and can therefore be used before taking a local
+  part or restricting owners. The new transport has a named axiom check;
+  elaboration is pending.
 - **Relation to the tensor-map candidate:** The two existing private
   `mapL_heq` and `mapL_apply_heq` helpers concern tensor products of two maps
   with four changing spaces. The new helper instead compares an associator

@@ -419,3 +419,38 @@ complete operators. We give the corresponding exact constructions.
     and leaving a register unchanged preserves the source list and
     allowedness of the operations on the other registers.
 \end{proof}
+
+\begin{theorem}[Relabelling a composition beside spectators]
+    \label{thm:peps_owner_spectator_extension}
+    \lean{TNLean.PEPS.PairEffect.Word.mapOwner_appendTail_heq}
+    \uses{def:peps_append_spectators,def:peps_owner_composition,
+        def:peps_owner_layout,thm:peps_register_exchange}
+    Let $g:P\to Q$ be any map of party labels, let $W:a\to b$
+    be an arbitrary chronological composition, and let $t$ be an
+    ordered spectator list. Write $W^g$ and $t^g$ for their
+    relabellings. Under the canonical concatenation identifications
+    $(at)^g=a^g t^g$ and $(bt)^g=b^g t^g$, the constructed
+    compositions satisfy $(W_t)^g=(W^g)_{t^g}$.
+    The map $g$ need not be injective. Pair sources are permitted,
+    including those whose endpoints acquire the same owner; the two
+    constructions use the same relabelled core $W^g$. No contraction
+    or normalization assumption is imposed.
+    This is a compatibility identity for the register operations in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 233--267 and 409--434.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:peps_append_spectators,def:peps_owner_composition,
+        def:peps_owner_layout,thm:peps_register_exchange}
+    Relabelling preserves the spaces, order and concatenation of
+    register lists. Induction on a prefix shows that moving a
+    register through it commutes with relabelling: each frame and
+    adjacent exchange acquires exactly its relabelled owners.
+    Induction on the second block gives the corresponding identity
+    for a block exchange. Likewise, induction on $t$ shows that
+    framing $W$ by $t$ commutes with relabelling. Apply these
+    identities to the initial exchange, the framed core and the
+    final exchange defining $W_t$, and compose them under the
+    canonical concatenation identifications.
+\end{proof}
