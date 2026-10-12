@@ -24,6 +24,31 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Membership in composed gate expansions — promoted (2026-10-08)
+
+- **Pattern:** Decompose membership in the ordered Cartesian gate expansion
+  into membership of the first and second original monomials.
+- **Seen:** `PartyGateComposition.isAllowed_comp`,
+  `PartyGateComposition.effectCount_comp_le`, and
+  `MessageMonomial.isAllowed_effectCount_expand` use the same decomposition.
+- **Abstraction:** `TNLean.PEPS.PairEffect.PartyGate.mem_comp`, using Mathlib's
+  `List.mem_flatMap` and `List.mem_map` once at the defining composition.
+- **Refactor:** All three consumers use this characterization directly;
+  no custom tactic or extra membership definition is introduced.
+
+
+### Telescoping two contraction compositions — promoted (2026-10-08)
+
+- **Pattern:** Expand `B ∘ A - D ∘ C` as `B ∘ (A - C) + (B - D) ∘ C`,
+  then apply the triangle inequality and operator-norm submultiplicativity.
+- **Seen:** The identical 17-line proof in `EffectCircuitError` and the
+  approximate-gate error development; both chronological induction proofs use it.
+- **Abstraction:** The existing `TNLean.PEPS.PairEffect.norm_comp_sub_comp_le_one`
+  is public in `EffectCircuitError`; `ApproximateCircuitError` imports it.
+- **Refactor:** Removed the second proof. The original signature and proof are
+  unchanged. The related three-factor estimate in the symmetry development has
+  different hypotheses and is outside this two-factor statement.
+
 ### Canonical initial sector assignment — promoted (2026-10-09)
 
 - **Pattern:** name the same unique assignment of the eight working sectors
@@ -4050,6 +4075,25 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Decision:** expose the existing proof unchanged and reuse it. Positivity of the
   comparison matrix is not needed.
 
+### Operator norm in orthonormal coordinates — promoted (2026-10-08)
+
+- **Pattern:** Pass between a continuous linear map and its matrix in arbitrary
+  finite orthonormal input and output bases without changing operator norm.
+- **Helper:** `ContinuousLinearMap.norm_toMatrix_orthonormal` in
+  `QICLean/Analysis/OrthonormalMatrixNorm.lean` (QICLean dependency).
+  The proof uses Mathlib's norm invariance under composition with linear
+  isometric equivalences and its Euclidean matrix norm identification.
+- **Call sites:** `Word.norm_preparedMatrix_le_one` in
+  `PEPS/Approximation/PreparedMatrixNorm.lean`,
+  `Word.norm_freeSourceMatrix_le_one` in
+  `PEPS/Approximation/SourceBlockMatrix.lean`, and
+  `Word.norm_physicalOutputMatrix_le_one` in
+  `PEPS/Approximation/ExteriorSourceContraction.lean`.
+- **Decision:** The exterior-word estimate is the third independent application.
+  The two earlier coordinate-vector arguments use this equality, and the
+  private free-source coordinate-norm helper is deleted. All public statements
+  remain unchanged. The general lemma permits rectangular matrices and empty bases.
+
 ### reordering words of a party layout — promoted
 
 - **Pattern:** a word of exchanges of tensor factors, built by recursion or
@@ -4071,6 +4115,17 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+
+### Unselected source positions keep their vectors — candidate (2026-10-12)
+
+- **Pattern:** A selected position that fails the affected-endpoint condition
+  is excluded from the selected set, so the selected source vectors return the
+  original vector there.
+- **Seen:** `selectedSourceVectors_exterior` in `SourceCorrectedContraction.lean`
+  and the inline exterior-source step of `eval_selectedSourceVectors_eq_sum` in
+  `SourceCircuitSubstitution.lean`, under `PEPS/Approximation` (two occurrences).
+- **Abstraction:** At a third occurrence, export the exterior statement from the
+  lower module and use it in both proofs. No tactic is needed.
 
 ### Connected retained pieces along a fan run — candidate (2026-10-09)
 
@@ -4094,26 +4149,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   appears; the shared endpoint-ray theorem already contains the geometry.
 - **Notes:** noncentrality is essential when composing the directed-ray
   relations. The center remains in every triangle when no radial is removed.
-
-
-### Operator norm in orthonormal coordinates — candidate (2026-10-07)
-
-- **Pattern:** Identify matrix multiplication in orthonormal coordinates with
-  the underlying continuous linear map, then use preservation of norms by the
-  coordinate isometries to transfer an operator-norm bound.
-- **Seen:** Two occurrences:
-  `PEPS/Approximation/PreparedMatrixNorm.lean`,
-  `Word.norm_preparedMatrix_le_one`, and
-  `PEPS/Approximation/SourceBlockMatrix.lean`,
-  the private `Word.norm_toMatrix_eval_le_one`.
-- **Abstraction:** If another independent use arises, first check Mathlib for
-  the corresponding orthonormal-coordinate norm identity, then supply a general
-  lemma if needed. No further copy is currently required: the proper-frame
-  bound uses the complete free-source matrix bound through a fixed map word.
-- **Notes:** The predecessor proof and its exact-source verification remain
-  unchanged. The focused scan of the five new modules and `PreparedMatrixNorm`
-  found these two occurrences and no pattern occurring three times. This entry
-  remains below the promotion threshold.
 
 ### sitewise Kronecker power in configuration coordinates — candidate
 - **Pattern:** the matrix `fun a b => ∏ n, A (a n) (b n)` on `Fin N → ι` with its product,
@@ -6286,6 +6321,13 @@ spectral split → block extraction → MPV calculation → strict bounds
   lemma for maps on two tensor products. The existing `clm_ext_tmul` and
   `clm_ext_tmul₃` already handle identities between continuous linear maps
   with one tensor-product input; use those whenever the map has that form.
+- **Reuse (2026-10-08):** The two new concatenation-partition coherence
+  proofs in `PartyPartitionAppend.lean` use Mathlib's existing
+  `TensorProduct.ext_fourfold'`. After writing the two operations as linear
+  maps on `(M ⊗ N) ⊗ (P ⊗ Q)`, equality reduces directly to four elementary
+  factors. This removes both proposed additional double inductions. No new
+  theorem or tactic is needed; the older two source-combination calculations
+  remain the two occurrences listed above.
 - **Notes:** The endpoint-reversal identity uses `clm_ext_tmul`. Exchanging
   complete source blocks reuses the preparation tensor identity and the
   register-block exchange theorem. Neither requires another double induction.
@@ -6323,6 +6365,12 @@ spectral split → block extraction → MPV calculation → strict bounds
   calculations. A new generic congruence lemma would restate the existing
   equality lemmas, so no additional theorem or tactic is promoted. Previously
   audited source-preparation proofs are unchanged.
+- **Further reuse (2026-10-08):** `PartyPartitionAppend` repeats the two
+  head transports from `PartyPartition`, and transports vector addition.
+  These are again defining equations after identifying layout types, rather
+  than tensor identities. The addition case already uses `congrArg₂`,
+  `eq_of_heq`, and `heq_of_eq`. The same core equality tools suffice for the
+  head constructions; a generic lemma would only restate their congruence.
 - **Relation to the tensor-map candidate:** The two existing private
   `mapL_heq` and `mapL_apply_heq` helpers concern tensor products of two maps
   with four changing spaces. The new helper instead compares an associator
@@ -6357,30 +6405,35 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The aggregate case permits several original owners on the block;
   it retains the full operator after those owners are grouped together.
 
-### Weighted ket–bra matrix sums — candidate (2026-10-08)
+### Weighted ket–bra matrix sums — promoted (2026-10-08)
 
 - **Pattern:** Distribute a matrix product through two finite weighted sums,
-  conjugate the bra coefficients, and exchange the two summations.
-- **Seen:** `sum_density_expansion` in `SourceGateDensity.lean` and
-  `density_eval_eq_sum_partialWord` in `PartialSourceDensity.lean` under
-  `PEPS/Approximation` (two occurrences).
-- **Abstraction:** Before a third consumer, expose the rectangular matrix
-  identity as a shared lemma. Its two coefficient families and output index
-  types should remain independent.
-- **Scan:** The full repository scan was run. A focused scan of the eight
-  chronological-expansion modules with minimum count two found no repeated
-  tactic blocks at the default window lengths.
+  conjugating the bra coefficients and exchanging the two summations.
+- **Helper:** `Matrix.sum_smul_mul_mul_conjTranspose` in
+  `TNLean/Algebra/MatrixDensitySum.lean`. Both coefficient families and both
+  output and input coordinate types are independent; the middle matrix may
+  be rectangular.
+- **Refactored occurrences:** The private `sum_density_expansion` in
+  `SourceGateDensity.lean` is removed. Its two callers and
+  `PartialSourceDensity.density_eval_eq_sum_partialWord` use the shared lemma.
+  Corrected source reaggregation uses the same lemma.
+- **Decision:** Ordinary finite-sum and matrix identities suffice. No tactic
+  or special simplification attribute is needed.
 
-### Exterior ownership of a placed block — candidate (2026-10-08)
+### Exterior ownership of a placed block — promoted (2026-10-08)
 
 - **Pattern:** If no participant of a placed gate is affected, every register
   in its transported layout has the exterior owner.
-- **Seen:** `exterior_layout` in `DistributedSourceComposition.lean` and
-  the corresponding local assertion in `PartialSourceEvaluation.lean` under
-  `PEPS/Approximation` (two occurrences).
-- **Abstraction:** A third consumer should use one public layout-membership
-  lemma. The existing `affectedOwner_eq_none` already supplies the pointwise
-  fact; no new tactic is needed.
+- **Helper:** `Layout.affectedOwner_mapOwner_eq_none` in
+  `TNLean/PEPS/Approximation/SourceOwnerSupport.lean`, using
+  `List.mem_map` and the existing pointwise `affectedOwner_eq_none`.
+- **Refactored occurrences:** The private proof in
+  `DistributedSourceComposition.lean` is removed; its gate constructor,
+  `PartialSourceEvaluation.eval_partial_gate`, and the substituted gate
+  constructor in `SourceCircuitSubstitution.lean` use the shared lemma.
+- **Decision:** One layout-membership lemma removes the repeated argument;
+  no further automation is required.
+
 ### Complementary-slice reconstruction — candidate (2026-10-07)
 
 - **Pattern:** Choose one inside vector for each outside configuration and
@@ -6395,6 +6448,22 @@ spectral split → block extraction → MPV calculation → strict bounds
   it never cancels an identity extension or assumes that the outside factor is
   nonzero. The scoped tactic-pattern scan found no exact repeated blocks at
   its default thresholds.
+
+### Finite expansion in selected multilinear arguments — promoted
+
+- **Occurrences:** The selected matrix-unit expansion in
+  `PEPS/Approximation/SelectedSourceContraction` and the selected transported
+  source expansion in `PEPS/Approximation/PreparedSourceTransport` both restrict
+  a multilinear map to a finite set of arguments, expand a sum in each argument,
+  and collect the product of the scalar coefficients.
+- **Shared theorem:** `MultilinearMap.map_piecewise_sum_smul` in
+  `TNLean/Algebra/MultilinearSelectedSum.lean`. It is a direct application of
+  Mathlib's `domDomRestrict`, `map_sum`, and `map_smul_univ`; the unselected
+  arguments are fixed throughout.
+- **Refactors:** Both source-contraction proofs now use this theorem. The
+  matrix-unit consumer retains only the entrywise reconstruction of each matrix.
+  The transported-source consumer uses the QICLean rank-one transport expansion.
+  No additional tactic or simplifier rule is needed.
 
 ### Dyadic refinement cardinality bounds — candidate (2026-10-07)
 
@@ -6623,6 +6692,80 @@ spectral split → block extraction → MPV calculation → strict bounds
   until the same inclusion argument occurs in another module.
 - **Notes:** the nonnegativity argument also covers an empty collection; an additional
   nonemptiness hypothesis would unnecessarily restrict these statements.
+
+### Empty occurrence sets in circuit replacement — candidate (2026-10-08)
+
+- **Pattern:** In a circuit induction, an identity, a private map, or a register
+  permutation has an empty expanded-gate occurrence type. The occurrence
+  equivalence is reflexive and participant preservation follows by eliminating
+  the impossible occurrence.
+- **Seen:** Three cases of
+  `EffectCircuit.exists_replacementLocationsEquiv` in
+  `PEPS/Approximation/EffectCircuitLocations.lean`.
+- **Abstraction:** No new helper is needed within one induction. Before this
+  argument is repeated in a second file, use an equivalence between empty types
+  and a shared statement that participant preservation is vacuous on an empty
+  domain.
+- **Scan:** The focused approximation scan also found short equality-transport
+  proofs in `EffectCircuitReplacement` and `EffectCircuitError`. These are
+  defining equations of distinct dependent maps; they follow the existing
+  congruence-after-identifying-layout-memories decision above. Tensor calculations
+  reuse `clm_ext_tmul`, `rTensor_tmul`, and the existing preparation identities.
+
+### Circuit expansion bounds under retained memories — candidate (2026-10-08)
+
+- **Pattern:** Transport a property of the actual gate expansions through equal
+  layout identifications, retained spectator registers, and source-free local
+  words.
+- **Seen:** `SourceCircuit.isExpansionBounded_castLayouts`,
+  `isExpansionBounded_frameList`, and `isExpansionBounded_ofLocalWord` in
+  `PEPS/Approximation/EffectReplacementExpansion.lean`.
+- **Abstraction:** One predicate records both scalar coefficient and monomial
+  counts, so the original-circuit induction proves both bounds together rather
+  than repeating the chronology for each estimate. Actual source-position counts
+  instead reuse the participant-preserving occurrence equivalence.
+- **Notes:** Short equality elimination continues the earlier congruence decision.
+  A fourth independent property of all gate expansions should be derived from a
+  common occurrence-wise description before adding another structural induction.
+
+
+### Evaluation under equal register lists — promoted (2026-10-08)
+
+- **Pattern:** Apply a word whose input and output register lists have been
+  identified to a vector identified with the original input.
+- **Reuse:** `Word.eval_castLayouts_apply_heq` in
+  `TNLean/PEPS/Approximation/WordEvaluationTransport.lean` is the existing checked
+  public proof from `SourceRegisterPermutation`. Its lower import position makes
+  it available to `SourceSlotMaps`, `SelectiveSourcePreparation`,
+  `SourceRegisterPermutation`, and `EffectCircuitPreparation`.
+- **Refactor:** Remove the three identical private copies and move the public
+  proof unchanged. Every call now uses the same declaration. Source inventories,
+  prepared vectors, public hypotheses, and conclusions are unchanged.
+- **Scouting:** `Word.eval_castLayouts_heq` already identifies the two maps;
+  the value statement additionally identifies their dependent input vectors.
+  Its proof uses core `congrArg`, `eq_of_heq`, and `heq_of_eq`; no custom tactic
+  or new generic congruence theorem is introduced.
+
+### Physical projection coordinates — promoted (2026-10-08)
+
+- **Pattern:** Taking a physical basis component and then a discarded coordinate
+  is the same as taking the tensor-product coordinate.
+- **Reuse:** The existing proof `Word.repr_effectMap` in
+  `PhysicalOutputContraction.lean` is public. Its original physical-output matrix
+  consumer and the new `SeparatedOutputCoordinates` consumer use that one proof.
+  The proposed duplicate in the latter module is removed.
+
+### Physical error through an intermediate operator — candidate (2026-10-08)
+
+- **Pattern:** Write `A - C = (A - B) + (B - C)`, apply the rectangular
+  trace-norm triangle inequality, and add the two already proved error bounds.
+- **Seen:** The private `rectangularTraceNorm_sub_le_sum` in
+  `PEPS/Approximation/SampledOriginalCircuit.lean` and the final calculation in
+  `PEPS/Approximation/ApproximateSourceSampling.lean`.
+- **Abstraction:** These are two uses of the existing QICLean triangle inequality
+  and `sub_add_sub_cancel`. Before a third independent use, look for a public
+  rectangular trace-norm difference estimate in QICLean; if none exists, promote
+  the short estimate there and replace both calculations. No new tactic is needed.
 
 
 ### Ambient depth variation on a scan ball — refactored (2026-10-11)
