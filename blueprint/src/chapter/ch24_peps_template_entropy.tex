@@ -131,10 +131,10 @@
     from a physical cut nor an entropy hypothesis.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:area_law_template_core_selected_count,thm:area_law_weighted_dyadic_sum,thm:area_law_capped_sum_by_scale}
-    Group the selected squares by scale. Their side budgets are $18n$ at
-    scale $K$ and $4n$ below it. Apply the finite weighted dyadic-sum
-    estimate, factor out $n$, and use $(2^K)^e\le s_0^e$.
+    \uses{thm:area_law_template_core_selected_count,thm:area_law_capped_dyadic_moment}
+    The side budgets are $18n$ at scale $K$ and $4n$ below it. Apply
+    Theorem~\ref{thm:area_law_capped_dyadic_moment} with $L=s_0$,
+    $A=18n$ and $B=4n$, and factor out $n$.
 \end{proof}
 
 \section{Weighted coverings of template shells}
@@ -172,10 +172,13 @@
     \cite[Lemma~9.4]{OpenAI2026AreaLaw}; safety and the entropy estimate remain separate.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:area_template_shell_cap,thm:area_law_template_shell_selected_count,thm:area_law_capped_sum_by_scale,thm:area_law_weighted_dyadic_sum}
+    \uses{thm:area_template_shell_cap,thm:area_law_template_shell_selected_count,thm:area_law_capped_dyadic_moment}
     Write $a_k$ for the number of selected squares of side $2^k$.
     The mixed-square bound gives $2^k a_k\le14n$ for $k<K$.
-    The cap bound gives $2^K a_K\le2n$. Hence
+    The cap bound gives $2^K a_K\le2n$. Applying
+    Theorem~\ref{thm:area_law_capped_dyadic_moment} with $A=2n$ and $B=14n$
+    gives the stated bound. Its proof groups terms by scale and estimates
+    the geometric series as follows:
     \begin{align}
         \sum_{k=0}^K a_k(2^k)^{1+e}
         \le14n\sum_{k=0}^{K-1}(2^e)^k+2n(2^K)^e
