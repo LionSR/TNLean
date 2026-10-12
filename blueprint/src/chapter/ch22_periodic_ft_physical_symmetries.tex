@@ -35,8 +35,7 @@
     \lean{MPSTensor.exists_diagonal_unitary_of_irreducibleForm_physical_symmetry,
         MPSTensor.exists_blockScalar_unitary_of_periodic_physical_symmetry}
     \leanok
-    \uses{def:block_diagonal_tensor, def:same_mpv2, def:same_mpv2_pos,
-        thm:spectral_periodic_period_existence}
+    \uses{def:block_diagonal_tensor, def:same_mpv2, def:same_mpv2_pos}
     Let $A^i=\bigoplus_j\mu_jA_j^i$ with nonzero weights $\mu_j$, where every
     $A_j$ is irreducible with spectral radius one and has a trace-preserving
     transfer map. Let $u$ be a unitary $d\times d$ matrix with
@@ -54,7 +53,8 @@
 
 \begin{proof}
     \leanok
-    \uses{thm:periodic_block_families_unitary_matching,
+    \uses{thm:spectral_periodic_period_existence,
+        thm:periodic_block_families_unitary_matching,
         thm:pgvwc07_normalized_periodic_state_vector_decomposition}
     Theorem~\ref{thm:spectral_periodic_period_existence} gives the periods
     $m_j$. Mixing the physical index commutes with the direct sum:
