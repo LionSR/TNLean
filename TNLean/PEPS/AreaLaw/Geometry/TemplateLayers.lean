@@ -50,15 +50,8 @@ theorem Template.latticeRow_dilation_eq_Icc {Ctpl : ℝ} {n s₀ : ℕ}
     (h : (latticeRow (ambientDilation (T.sample i) r) y).Nonempty) :
     latticeRow (ambientDilation (T.sample i) r) y =
       Finset.Icc ((latticeRow (ambientDilation (T.sample i) r) y).min' h)
-        ((latticeRow (ambientDilation (T.sample i) r) y).max' h) := by
-  ext x
-  constructor
-  · intro hx
-    exact Finset.mem_Icc.mpr ⟨Finset.min'_le _ _ hx, Finset.le_max' _ _ hx⟩
-  · intro hx
-    obtain ⟨hl, hu⟩ := Finset.mem_Icc.mp hx
-    exact T.mem_latticeRow_dilation_of_between i r
-      (Finset.min'_mem _ h) (Finset.max'_mem _ h) hl hu
+        ((latticeRow (ambientDilation (T.sample i) r) y).max' h) :=
+  finset_eq_Icc_min'_max'_of_between h (T.mem_latticeRow_dilation_of_between i r)
 
 /-- On an old nonempty output row, increasing the radius by one extends each
 endpoint by at most two. This compares the original row windows directly. -/
