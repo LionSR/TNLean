@@ -34,10 +34,7 @@ private abbrev RE (R : Finset V) := {e : Edge Γ // IsRegionIncidentEdge R e}
 
 private def incidentSplit (R : Finset V) : RE (Γ := Γ) R ≃ RI (Γ := Γ) R ⊕ RB (Γ := Γ) R where
   toFun e := if h : e.1.1.1 ∈ R ∧ e.1.1.2 ∈ R then .inl ⟨e.1, h⟩ else
-    .inr ⟨e.1, by
-      rcases e.2 with ht | hh
-      · exact Or.inl ⟨ht, fun hh => h ⟨ht, hh⟩⟩
-      · exact Or.inr ⟨fun ht => h ⟨ht, hh⟩, hh⟩⟩
+    .inr ⟨e.1, e.2.isRegionBoundaryEdge h⟩
   invFun
     | .inl e => ⟨e.1, Or.inl e.2.1⟩
     | .inr e => ⟨e.1, isRegionBoundaryEdge_touches R e.2⟩

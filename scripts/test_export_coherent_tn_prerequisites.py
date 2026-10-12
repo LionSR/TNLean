@@ -103,16 +103,13 @@ class TNExportTests(unittest.TestCase):
     def test_workflow_upload_gate_order_and_early_timing_capture(self):
         workflow = (Path(__file__).resolve().parents[1] / ".github/workflows/pr-ci.yml").read_text()
         names = ["Prepare verified coherent TN prerequisites", "Export coherent TN prerequisites",
-                 "Check coherent sector conversion targets", "Build Lean project and capture timings"]
+                 "Build Lean project and capture timings"]
         positions = [workflow.index("- name: " + name) for name in names]
         self.assertEqual(positions, sorted(positions))
         upload = workflow[positions[1]:positions[2]]
         self.assertIn("steps.coherent-tn-prerequisites.outcome == 'success'", upload)
         self.assertIn("retention-days: 1", upload)
-        target = workflow[positions[2]:positions[3]]
-        self.assertNotIn("continue-on-error", target)
-        self.assertIn("lake --fail-fast build", target)
-        self.assertIn('tee -a "$RUNNER_TEMP/lake-build.log"', target)
+        # Builds before the root build append to the log the timing gate reads.
         self.assertNotIn('tee "$RUNNER_TEMP/lake-build.log"', workflow)
 
     def test_rejects_missing_or_symlinked_artifact(self):

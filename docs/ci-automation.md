@@ -15,6 +15,8 @@ This repository uses [Claude Code](https://docs.anthropic.com/en/docs/claude-cod
   - [Blueprint Auto-Fix](#blueprint-auto-fix-auto-fixyml)
   - [Lean Module Policy](#lean-module-policy-pr-ciyml-file-length-job)
   - [Changed Lean Compilation-Time Gate](#changed-lean-compilation-time-gate-pr-ciyml)
+  - [Changed-File Lean Checks](#changed-file-lean-checks-pr-ciyml-build-job)
+  - [Blueprint Diagram Tests](#blueprint-diagram-tests-pr-ciyml-blueprint-job)
   - [Lean Linter-Warning Sweep](#lean-linter-warning-sweep-housekeepingyml-linter-sweep-job)
   - [Lean Linter-Warning Auto-Fix](#lean-linter-warning-auto-fix-lean-linter-warning-autofixyml)
   - [Review Comment Auto-Fix](#review-comment-auto-fix-auto-fixyml)
@@ -170,7 +172,7 @@ Here is exactly what happens:
 
 **Thread management**: When triggered by a new push (`synchronize`), the review checks its own previous comments. If a previous bot comment has been addressed by the new commits, it resolves that thread automatically. It never resolves threads authored by humans.
 
-**Concurrency**: One review pipeline per PR at a time; later completions queue rather than cancel a review in progress.
+**Concurrency**: The gate skips CI completions whose commit is no longer the PR head, so stale or re-run completions never start a review. Review jobs run in per-PR job-level groups with `cancel-in-progress: true`, so a review of a newer head cancels one of an older head still in progress.
 
 ---
 
@@ -190,6 +192,55 @@ Archive modules are built explicitly before their timings are checked. A
 genuine Archive compilation error fails the `build` job and follows the normal
 Lean proof-error auto-fix path; a timing-only breach still fails only the
 separate `compile-time` job.
+
+---
+
+### Changed-File Lean Checks (`pr-ci.yml`, `build` job)
+
+The `build` job derives its focused Lean checks from the change set, using
+`scripts/ci_lean_checks.py`; pull requests do not add workflow steps for new
+modules or tests.
+
+- **Early build** (pull requests, before the root build): a fail-fast
+  `lake build` of the changed production modules, logged with the root build
+  for the compilation-time gate. It is a shortcut with a 20-minute budget: a
+  compile error fails the step, but a build that runs past the budget (for
+  example behind a cold dependency cache after a pin change) stops with a
+  warning and leaves the remaining modules to the root build.
+- **Strict checks** (after the root build): every changed production file and
+  every affected test file is elaborated with the package options
+  and `-DwarningAsError=true`, three files at a time, each with a time limit.
+  Test files are those under `TNLeanTest/` and the standalone regressions
+  `scripts/*_regression.lean`. A test is affected when it changed or when its
+  repository import closure contains a changed, deleted or renamed module; the
+  tests it imports are elaborated first, into a
+  fresh overlay placed ahead of every Lake package path. Every test runs on
+  manual dispatch, and when the base revision is unknown or
+  `lake-manifest.json`, `lakefile.toml`, `lean-toolchain`, the workflow, or the
+  selection script changes.
+
+`python3 scripts/ci_lean_checks.py list --base origin/main` prints the
+selection locally. Do not add per-module "build early" or "test strictly" steps
+to `pr-ci.yml`: a new test file under `TNLeanTest/`, or a new
+`scripts/*_regression.lean`, is picked up automatically,
+including axiom-guard files that pin `#print axioms` output with `#guard_msgs`.
+
+---
+
+### Blueprint Diagram Tests (`pr-ci.yml`, `blueprint` job)
+
+When blueprint sources change, `scripts/run_diagram_tests.py` runs every
+`scripts/test_tenkz_*.py` and `scripts/test_*_diagram.py` test and every
+`scripts/check_*_blueprint.py` declaration-inventory check, reports all
+failures, and fails the step if any test fails. Tests that declare an
+`--output-dir` option render into `$RUNNER_TEMP/diagram-tests/<test>`; the whole
+directory is uploaded as the `diagram-tests-<sha>` artifact for review. Each test
+runs in its own process group, and a timeout kills the group, so a hung renderer
+does not outlive its test. The path filters use the same
+glob patterns. A new diagram test therefore needs no workflow edit: do not add a
+step or a path entry for it. `test_tenkz_equation_web.py` and
+`test_tenkz_inline_web.py` keep their own steps, because they need the built
+site or the inline-layout job.
 
 ---
 
@@ -255,12 +306,12 @@ issues, attaching them to the relevant tracking issue as native sub-issues.
 
 **What it does**: When the blueprint linter fails on a PR, this workflow reads the error logs and asks Claude to fix the LaTeX.
 
-**When it runs**: Automatically after a "PR CI" run completes with the blueprint job failed. Runs on any PR from the same repository (not forks).
+**When it runs**: Automatically after a "PR CI" run completes with either blueprint job failed: the `blueprint` job (`texra-blueprint web`, a wrapper of `leanblueprint web` that also fails on unrecognized renderer commands) or the `blueprint-pdf` job (`leanblueprint pdf` and `./scripts/build_blueprint_ch01_12.sh`, XeLaTeX). Runs on any PR from the same repository (not forks).
 
 **What Claude does**:
-- Reads the blueprint compilation error logs
+- Reads the blueprint compilation error logs and identifies which of the two jobs failed
 - Fixes common issues: unresolved `\ref`/`\label` references, duplicate labels, mismatched `\begin`/`\end` environments, invalid `\lean{DeclName}` references, malformed LaTeX, plasTeX parse errors
-- Validates the fix by running `leanblueprint web`
+- Validates the fix with the command matching the failed job: `texra-blueprint web` for the `blueprint` job; `leanblueprint pdf` for the `blueprint-pdf` job, plus `./scripts/build_blueprint_ch01_12.sh` when its FT-MPS step failed
 - Pushes a commit with the `[claude-auto-fix]` prefix
 - Posts a summary comment on the PR
 

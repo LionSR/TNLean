@@ -137,3 +137,16 @@ linters that see three newly public declarations ran. `check_forbidden_lean_toke
 `check_reader_facing_prose.py`, `check_numbered_lean_files.py`,
 `check_oversized_lean_files.py` and `generate_import_aggregators.py --check` are
 clean, and `leanblueprint checkdecls` resolves every tag.
+
+## 2026-10-12 addendum: the uniform-entropy identity
+
+#7906 replaced the two charpoly computations that consumed
+`Real.mul_negMulLog_inv` with one shared statement about maximally mixed
+states, so the lightweight owner recorded above lost its last consumer.
+
+| Removed | Replacement |
+|---|---|
+| `Real.mul_negMulLog_inv` (`TNLean/Algebra/NegMulLog.lean`, module deleted) | `Matrix.vonNeumannEntropy_inv_card_smul_one` in `TNLean/MPS/MPDO/AreaLaw.lean`, the entropy $\log d$ of $d^{-1}I$, and its corollary `MPOTensor.blockEntropy_eq_of_reducedBlockState_eq_smul_one`, which the Kato and Example 4.12 block-entropy lemmas now apply directly |
+| `MPOTensor.CPSVExample412Literal.vonNeumannEntropy_inv_card_smul_one` (private, `TNLean/MPS/MPDO/CPSVExample412FourCycleEntropy.lean`) | the same statement, now public as `Matrix.vonNeumannEntropy_inv_card_smul_one` in `TNLean/MPS/MPDO/AreaLaw.lean` |
+
+Neither removed name had a blueprint `\lean{...}` tag.

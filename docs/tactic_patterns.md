@@ -24,6 +24,65 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Membership in composed gate expansions — promoted (2026-10-08)
+
+- **Pattern:** Decompose membership in the ordered Cartesian gate expansion
+  into membership of the first and second original monomials.
+- **Seen:** `PartyGateComposition.isAllowed_comp`,
+  `PartyGateComposition.effectCount_comp_le`, and
+  `MessageMonomial.isAllowed_effectCount_expand` use the same decomposition.
+- **Abstraction:** `TNLean.PEPS.PairEffect.PartyGate.mem_comp`, using Mathlib's
+  `List.mem_flatMap` and `List.mem_map` once at the defining composition.
+- **Refactor:** All three consumers use this characterization directly;
+  no custom tactic or extra membership definition is introduced.
+
+
+### Telescoping two contraction compositions — promoted (2026-10-08)
+
+- **Pattern:** Expand `B ∘ A - D ∘ C` as `B ∘ (A - C) + (B - D) ∘ C`,
+  then apply the triangle inequality and operator-norm submultiplicativity.
+- **Seen:** The identical 17-line proof in `EffectCircuitError` and the
+  approximate-gate error development; both chronological induction proofs use it.
+- **Abstraction:** The existing `TNLean.PEPS.PairEffect.norm_comp_sub_comp_le_one`
+  is public in `EffectCircuitError`; `ApproximateCircuitError` imports it.
+- **Refactor:** Removed the second proof. The original signature and proof are
+  unchanged. The related three-factor estimate in the symmetry development has
+  different hypotheses and is outside this two-factor statement.
+
+### Canonical initial sector assignment — promoted (2026-10-09)
+
+- **Pattern:** name the same unique assignment of the eight working sectors
+  to actual initial identifiers in a theorem statement and its proof.
+- **Seen:** twenty-one bindings in theorem statements and proofs:
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorColors.lean`: two bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorRuns.lean`: four bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorComponents.lean`: six bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialActiveRayCount.lean`: three bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialSectorCycle.lean`: two bindings.
+  - `TNLean/PEPS/AreaLaw/Geometry/InitialActiveRays.lean`: four bindings.
+- **Abstraction:** `initialSectorAssignment` in
+  `TNLean/PEPS/AreaLaw/Geometry/InitialSectorAssignment.lean` is exactly the
+  choice from `exists_unique_initialRegion_sector_assignment`, with the
+  original parameters and cell/mark hypotheses.
+- **Refactor:** the sector-color, run-assignment and no-active-sector
+  statements and proofs, together with the sector-cycle, active-ray,
+  ray-count and both initial-component declarations, use the same definition
+  for their local assignment. The existing
+  `Classical.choose_spec` arguments are unchanged.
+- **Notes:** this names an existing assignment and introduces no new
+  geometric premise, identifier family or quotient of separated runs.
+
+### Ambient depth variation in an actual charge ball — promoted (2026-10-09)
+
+- **Pattern:** unfold charge-ball membership, identify the induced domain graph,
+  apply the ambient-depth variation bound, and reverse the absolute difference.
+- **Seen:** Four copies in `Scan/GoodSampling.lean`, `Scan/SplitIntervals.lean`,
+  `Scan/PhysicalChargeAncestry.lean`, and `Scan/BadHistoryProbability.lean`.
+- **Abstraction:** `CollarScan.abs_depth_sub_anchor_le_domainGraph_of_mem_ball`
+  in `TNLean/PEPS/AreaLaw/Scan/GoodSampling.lean`.
+- **Refactor:** All five callers use the shared lemma; the private copy in
+  `SplitIntervals.lean` is removed. No import edge or theorem hypothesis changes.
+
 ### Uniform norm lower bound on a tail over a compact parameter set — promoted (2026-10-10)
 
 - **Pattern:** `apply hS.exists_uniform_pos_nat_bounds` with the predicate
@@ -204,6 +263,269 @@ abstracted — record why, so it is not re-proposed).
   endpoints are allowed. The existing statement and proof are unchanged,
   and both counting modules use the shared theorem.
 
+### Separation of pair-conjugacy classes by extracting functionals — promoted (2026-10-11)
+
+- **Pattern:** prove linear independence of a family indexed by
+  simultaneous-conjugacy classes by rescaling, for each pair, a functional that
+  vanishes on the other classes and not on its own, then applying
+  `LinearIndependent.of_pairwise_dual_eq_zero_one` (SCP10, arXiv:1001.3807,
+  Theorem 5.9, lines 1595–1610).
+- **Seen:** three identical 25-line proofs: `linearIndependent_pairConjugacyClassOperator`
+  (`PairConjugacyOperators.lean`),
+  `DependentTorus.linearIndependent_closureClass_canonical`
+  (`DependentTorusClosureIndependence.lean`) and
+  `NativeTorus.linearIndependent_closureClass_canonical`
+  (`NativeTorusClosureIndependence.lean`).
+- **Abstraction:** `TNLean.PEPS.PairConjugacyClass.linearIndependent_of_extraction`
+  in `TNLean/PEPS/PairConjugacy.lean`.
+- **Notes:** part of the PEPS refactor that also promoted the coherent-sum
+  expansion and the three-block cover below (−225 Lean lines in all). No
+  theorem statement changed.
+
+### Coherent-sum expansion after a mixed physical product map — promoted (2026-10-11)
+
+- **Pattern:** after a mixed product map expands each boundary factor of a
+  coherent sum as `∑ z, c b z * x b a z`, exchange sums and products to write
+  the result as a combination of fixed-label coherent sums with weights
+  `∏ b, c b (ζ b)`.
+- **Seen:** four copies of the same 12-line sum manipulation, in
+  `graphRegionCoordinateMatrix_open`, `graphOrientedRegionCoordinateMatrix_open`
+  and the two copy-transport counterparts
+  (`GraphOpenBondCoordinateTransport.lean`, `GraphOrientedCoordinateTransport.lean`,
+  `GraphOpenCopyTransport.lean`, `GraphOrientedCopyTransport.lean`).
+- **Abstraction:** `TNLean.PEPS.sum_prod_sum_mul_eq_sum_prod_smul` in
+  `TNLean/PEPS/MixedPhysicalProductMap.lean`.
+
+### Complementary block of a three-block cover — promoted (2026-10-11)
+
+- **Pattern:** a six-line case split on the three-block cover showing that a
+  vertex outside the red and blue blocks lies in the complementary block.
+- **Seen:** five copies in `RegionBlock/UnionInjectivityGeneral.lean` and
+  `RegionBlock/UnionInjectivityGeneral2.lean`.
+- **Abstraction:** `TNLean.PEPS.ThreeBlockGeometry.mem_complement_of_notMem` in
+  `TNLean/PEPS/RegionBlock/UnionInjectivityGeneral.lean`.
+
+### Shared rectangle, midpoint and partial-row entropy steps — promoted (2026-10-11)
+
+- **Pattern:** (a) intersect the two halves of a segment at its midpoint;
+  (b) write the interior or closure of a dyadic cell through its extreme
+  corners; (c) bound the change of regional entropy by `|Y| log q` when the
+  actual sites of a disjoint `Y` are added (Lemma 9.4, partial-row step,
+  `08-scanner.tex` lines 666–667).
+- **Seen:** (a) two private copies, in `Geometry/FanRunContacts.lean` (equality
+  under `a ≠ b`) and `Geometry/ActualSideMatching.lean` (subsingleton only);
+  (b) private copies of `rectangleCorner` and the midpoint formula plus four
+  local `have`s in `Geometry/ElementarySideOpponentUniqueness.lean`; (c) the
+  same proof in `template_partial_row_entropy_le` and
+  `IntRect.partial_row_entropy_le`.
+- **Abstraction:** in `TNLean.PEPS.AreaLaw.Geometry`:
+  `segment_midpoint_inter_segment` (`Geometry/SideSubdivisionMask.lean`, no
+  hypothesis `a ≠ b`); `interior_dyadicCell_eq_corners`,
+  `closure_dyadicCell_eq_corners`, `dyadicCellCorner_lt`,
+  `rectangleCorner`, `midpoint_prod_eq` and
+  `rectangleCorner_eq_dyadicCellCorner`, now public in
+  `Geometry/ElementarySideOpponents.lean`. In `TNLean.PEPS.AreaLaw`:
+  `abs_regionalEntropy_filter_union_sub_le` (`Geometry/TemplateEntropy.lean`).
+- **Notes:** about −110 lines over 10 files, together with local compressions
+  of `CellContacts.rectangles_contact` and two per-case tactic blocks.
+
+### Designated support at a truncated middle — promoted (2026-10-11)
+
+- **Pattern:** show that a designated support meeting a receiving side and a
+  partition middle in the truncation set is the base-radius ball
+  (`08-scanner.tex`, lines 225–233).
+- **Seen:** re-proved independently in `designatedSupport_eq_ball_of_split` and
+  `designatedSupport_eq_ball_of_state_split` (`Scan/DesignatedDilution.lean`).
+- **Abstraction:** `TNLean.PEPS.AreaLaw.Scan.CollarScan.designatedSupport_eq_ball_of_incidence`
+  in `TNLean/PEPS/AreaLaw/Scan/DesignatedSampling.lean`.
+- **Notes:** the same refactor replaced a residue step by Mathlib's
+  `Nat.ModEq.eq_of_abs_lt` and folded chunk-position and slice-gluing copies
+  into private helpers of `SafeBoxChildren.lean` and `Cylinder.lean`; about
+  −60 lines over 7 files.
+
+### Integer row as an interval — promoted (2026-10-11)
+
+- **Pattern:** an `ext`/`min'`/`max'` argument showing that a nonempty finite
+  set of integers containing every integer between two of its members is the
+  interval between its least and greatest members.
+- **Seen:** `Template.latticeRow_eq_Icc` and
+  `Template.latticeRow_dilation_eq_Icc` (`Geometry/TemplateLayers.lean`).
+- **Abstraction:** `TNLean.PEPS.AreaLaw.Geometry.finset_eq_Icc_min'_max'_of_between`
+  in `TNLean/PEPS/AreaLaw/Geometry/TemplateRows.lean`.
+- **Notes:** with two local contraction steps for `‖√a‖ ≤ 1` and Hermitian
+  parts, −6 lines over 4 files.
+
+### Dyadic footprint scaling, templates and band rim — promoted (2026-10-11)
+
+- **Pattern:** (a) hand-written norm computations identifying
+  `‖t⁻¹ • (q - v)‖ < ρ` (or `≤ ρ`) with membership in the open (or closed)
+  square of radius `t ρ` about `v`; (b) a twelve-line identification of a
+  block guide near a block corner with the unit block template read through
+  the similarity; (c) the case split placing both hole radii `h_n`, `h_{2n}`
+  in `[ε₀ n, 2 ε₀ n]`; (d) slot lifting and injectivity of a relabelled
+  footprint template near a corner; (e) a 35-line argument that the guide and
+  its band update are locally constant at a rim point of the closed band
+  (`06-geometry.tex`, lines 227–241, 321–326, 464–541).
+- **Seen:** (a) five computations in `image_similarity_closedBall`,
+  `HasTwoOwnerFootprints.of_template` and `exists_template_eq`; (b) two
+  identical blocks in `exists_blockGuide_footprintRatio` and
+  `exists_blockGuide_footprintRatio_reading`; (c) the resizing ratio and its
+  reading version; (d) three copies, in `exists_pointTreatment_footprintRatio`
+  and twice in `DyadicReadingFootprints.lean`; (e) `hasTwoLabelsNear_bandUpdate`
+  and `eventually_bandUpdate_eq` (`DyadicRimPatterns.lean`).
+- **Abstraction:** in `TNLean.PEPS.Approximation`: (a)
+  `norm_smul_inv_sub_lt_iff`, `norm_smul_inv_sub_le_iff` and (b)
+  `blockGuide_eq_classRep` (`DyadicFootprintScaling.lean`); (c)
+  `mem_Icc_of_mem_holeRadius_pair` (`DyadicBlockFootprints.lean`); (d)
+  `exists_template_injOn` (`DyadicFootprintTemplates.lean`); (e)
+  `exists_eventuallyEq_bandUpdate_of_mem_closedEdgeBand`
+  (`DyadicUnmodifiedVertices.lean`).
+- **Notes:** −26 net lines together with the memory-identification entry
+  below. No theorem statement changed and no import was added.
+
+### Backward layout memory identification — promoted (2026-10-11)
+
+- **Pattern:** the symmetric form of `Layout.memCongr`, identifying the memory
+  of `b` with that of `a` along `a = b` (`04-compression.tex`, lines 246–267).
+- **Seen:** a public copy in `UnitMemoryCoordinates.lean` and private copies in
+  `GroupedBlockMap.lean` and `WordOwnerMap.lean`.
+- **Abstraction:** `TNLean.PEPS.PairEffect.Layout.memCongr_symm`, moved next to
+  `memCongr` in `TNLean/PEPS/Approximation/PartyPartition.lean`; the duplicates
+  are deleted.
+- **Notes:** the full name is unchanged, so the existing blueprint reference
+  still resolves.
+
+### Homogeneous birth ownership and inner-square membership — promoted (2026-10-11)
+
+- **Pattern:** (a) the four ownership facts of handing a region `T` owned by
+  `P∘` to `Q∘` (Lemma 6.5, `05-frames.tex`, lines 396–446); (b) the membership
+  of a site outside the untouched outer footprints in an inner square of a
+  hole of the rewritten patch (Lemma 6.3, `05-frames.tex`, lines 282–300).
+- **Seen:** (a) derived by hand in both `birth_bounded` and `death_bounded`;
+  (b) the old-frame and new-frame membership lemmas.
+- **Abstraction:** in `TNLean.PEPS.EncodedFrame`:
+  `Frame.changeOwner_birth_owners` (`Approximation/HomogeneousOwnership.lean`) and
+  `SmallPatchRewrite.exists_mem_inner_of_notMem_untouched`
+  (`Approximation/PatchRewriteExpansion.lean`).
+- **Notes:** the same refactor gave the five numeric side conditions of
+  `BandOperation` the default `by norm_num`; −43 lines in all.
+
+### Copy-map block as a scalar multiple — promoted (2026-10-11)
+
+- **Pattern:** a nine-line `have` showing that each block of the global
+  copy-restoring map is the block scalar times the regional copy map (SCP10,
+  arXiv:1001.3807, Section 7, lines 2977–3019).
+- **Seen:** four verbatim copies in the unoriented and oriented copy parent
+  transports (`CopyCanonicalParentTransport.lean`,
+  `OrientedCopyParentTransport.lean`).
+- **Abstraction:** `TNLean.PEPS.regionOperatorBlock_fullMultiplicityBondMap_eq_smul`
+  in `TNLean/PEPS/ParentHamiltonian/CopyCanonicalLocalTransport.lean`.
+- **Notes:** the same refactor used `regionInjectivityDataOf_isInjective`
+  definitionally (forty three-line blocks over 14 files became terms) and
+  named `verticalTwoPlaquetteCycleBond_zero_ne_one`; −61 Lean lines over 21
+  files.
+
+### Twisted sites, cyclic coordinates, centralizers, virtual equivalences and unitary inversion — promoted (2026-10-11)
+
+- **Pattern:** (a) inserting the identity on every regular bond leaves the
+  twisted site coefficient unchanged (SCP10, `eq:2d:peps-with-ug-uh`);
+  (b) inequalities such as `(3 : ZMod height) ≠ 2` from a small integer
+  difference; (c) an element fixes a pair under simultaneous conjugation
+  exactly when it lies in the common centralizer (SCP10, proof of Theorem 5.9,
+  lines 1595–1610); (d) transporting G-injectivity along a linear equivalence
+  of virtual spaces that intertwines the representations (local consequence of
+  SCP10, Definition 5.1); (e) for a unitary `U`, `U x = y` gives `Uᴴ y = x`.
+- **Seen:** (a) a private copy in `ParentHamiltonian/RegularRegionFlatness.lean`
+  and three local proofs in `RegularRegionGaugeContraction.lean` and
+  `RegularClosedChargePairPreparation.lean`; (b) fifty-seven inequalities in the
+  string-movement files (`TorusTwoStepStringRouteHolonomy.lean`,
+  `TorusSecondStringPhysicalCrossing.lean`,
+  `TorusInitialStringRightPhysicalStep.lean`,
+  `TorusInitialStringPhysicalCrossing.lean`, `TorusSweptHorizontalStep.lean`);
+  (c) three local proofs in the pair-operator and closure-extraction diagonals;
+  (d) the two numbered-graph G-injectivity proofs
+  (`GraphAveragingGInjective.lean`, `GraphOrientedGInjective.lean`); (e) eight
+  three-line Gram rewrites in the flux-move and bidirectional-permutation
+  files.
+- **Abstraction:** (a) `TNLean.PEPS.regularTwistedSite_one`
+  (`TNLean/PEPS/RegularTwistedRegion.lean`); (b)
+  `ZMod.intCast_ne_intCast_of_natAbs_sub_lt`
+  (`TNLean/Algebra/ZModSmallDifference.lean`), with the bound discharged by
+  `omega`; (c) `TNLean.PEPS.conj_fixed_iff_mem_centralizer`
+  (`TNLean/PEPS/PairConjugacy.lean`); (d)
+  `TNLean.PEPS.IsGInjective.comp_virtualEquiv`
+  (`TNLean/PEPS/GInjectivePhysicalMap.lean`); (e)
+  `Matrix.conjTranspose_mulVec_eq_of_mulVec_eq`
+  (`TNLean/Algebra/UnitaryMulVecInner.lean`).
+- **Notes:** −111 Lean lines over 22 files. `TNLean/PEPS/TorusOrientedIncidentGInjectivity.lean`
+  keeps its direct G-injectivity proof: there (d) forces a costly
+  definitional check of the intertwining relation, which pushed the module
+  past the compilation-time limit. A later pass applied (b) to six proofs of
+  `2 ≠ 0` in `ZMod n` for a torus period `n ≥ 3` that went through `ZMod.val`
+  or divisibility (`TorusJointFluxGeometry.lean`, `TorusVerticalFluxMove.lean`,
+  `TorusTranslatedFluxMove.lean`, `TorusCorrelatedChargeFluxCrossing.lean`,
+  `TorusGaugeUniqueness.lean`); every such inequality outside `PEPS/AreaLaw`
+  now uses it.
+
+### Incident edges that are not internal — promoted (2026-10-12)
+
+- **Pattern:** an edge with an endpoint in a region `R` but not both endpoints
+  in `R` crosses the boundary of `R`, proved by a case split on which endpoint
+  lies in `R`, either as a private lemma or inline when splitting incident
+  configurations into internal and boundary edges.
+- **Seen:** nine call sites in nine files: three private copies
+  (`boundary_of_incident_not_internal` in `RegularRegionProjectorCoordinates.lean`,
+  `ParentHamiltonian/RegionGroundSpaceNesting.lean` and
+  `ParentHamiltonian/RegularRegionOrbitCoordinates.lean`) and six inline case
+  splits (`GraphOpenRegionContraction.lean`,
+  `ParentHamiltonian/GraphDependentRegionSupport.lean`,
+  `GraphInsertedRegionSupport.lean`, `RegularRegionCoordinates.lean`,
+  `ParentHamiltonian/RegularLiftedRegionRange.lean`,
+  `RegularEdgeChargeContraction.lean`).
+- **Abstraction:** `TNLean.PEPS.IsRegionIncidentEdge.isRegionBoundaryEdge` in
+  `TNLean/PEPS/OpenRegionContraction.lean`, combined with
+  `isRegionIncidentEdge_of_regionVertex` for an edge at a region vertex.
+- **Notes:** part of a −101 line refactor over 17 files, which also shared the
+  plaquette-seam lemma `torusPlaquetteRegion_ne_add_two`.
+
+### Fan endpoints, capped-partition moments and closed-cell convexity — promoted (2026-10-12)
+
+- **Pattern:** (a) `change` blocks spelling out the coordinates of the
+  endpoints of an elementary fan segment of a dyadic cell, one per side
+  (Section 11, lines 299–310); (b) grouping a capped dyadic partition by scale,
+  summing the geometric series and comparing powers to bound its moment of
+  order `1 + e` (Lemma 9.4, `08-scanner.tex`, lines 656–664); (c) an inline
+  proof that the closed rectangle of a dyadic cell is convex.
+- **Seen:** (a) six files under `PEPS/AreaLaw/Geometry`: `SideEndpoints.lean`,
+  `CellContacts.lean`, `SideSubdivision.lean`, `SideSubdivisionMask.lean`,
+  `ActualSideMatching.lean` and `FanRuns.lean`; (b) three weighted cover
+  estimates, in `TemplateCoreCover.lean`, `TemplateShellCover.lean` and
+  `RectangleShellWeightedCover.lean`; (c) four files: `DummyCorners.lean`,
+  `ElementarySideOpponents.lean`, `ElementarySideReciprocity.lean` and
+  `SideSubdivision.lean`.
+- **Abstraction:** in `TNLean.PEPS.AreaLaw.Geometry`: (a) `cellFanStart_eq`,
+  `cellFanEnd_eq` (`Geometry/CellFans.lean`), used as
+  `simp [cellFanStart_eq, cellFanEnd_eq, cellFanCenter, cellFanSideVector]`
+  after `fin_cases`; (b) `sum_rpow_cappedDyadicPartition_le`
+  (`Geometry/CappedDyadicPartitionByScale.lean`); (c)
+  `convex_closure_dyadicCell` (`Geometry/DyadicClosure.lean`).
+- **Notes:** both endpoint lemmas hold by definition. Together with local
+  compressions, −206 lines over 11 files and −170 lines over 20 files in two
+  passes; no theorem statement changed.
+
+### Endpoint-membership splits closed by `grind` — promoted (2026-10-12)
+
+- **Pattern:** a propositional classification of an edge relative to two
+  disjoint vertex sets, closed by a sixteen-way `by_cases` split on the
+  membership of both endpoints in both sets followed by `simp_all`.
+- **Seen:** six classifications in
+  `PEPS/Approximation/WholeGroupContraction.lean` (proof of Lemma 6.2,
+  `05-frames.tex`, lines 143–157).
+- **Abstraction:** `grind` (no annotations added), after the same unfolding.
+- **Notes:** the module elaborates slightly faster (about 7 s against 8 s
+  locally). Use `grind` for further endpoint-membership splits of this shape
+  rather than a macro.
+
 ### Single-qubit plus-state positivity — promoted (2026-10-08)
 
 - **Pattern:** Identify the all-halves two-by-two density matrix with one half
@@ -342,6 +664,21 @@ abstracted — record why, so it is not re-proposed).
   index membership, including empty layers and arbitrary origins and radii.
 - **Refactor:** All three callers use the lemma. The closure callers apply
   `closure_mono` to the same containment conclusion. No theorem statement changes.
+
+### Pointwise comparison of finite-chain symmetries — promoted
+- **Pattern:** compare invariance at every applicable chain length by proving
+  equivalent operator equations pointwise, for symmetries with the same
+  applicable lengths.
+- **Seen:** six uses across
+  `TNLean/MPS/MPU/Examples/SwapSymmetryTransport.lean` and
+  `TNLean/MPS/MPU/Examples/SwapBlockedSymmetryTransport.lean`, in the adjunction,
+  transposition and conjugation comparisons (2026-10-03).
+- **Abstraction:** `MPOTensor.isInvariantUnderSymmetry_iff_of_pointwise` in
+  `SwapSymmetryTransport.lean` performs the common quantifier reduction once.
+- **Notes:** the original four-line `forall_congr'`/`imp_congr_right` block is
+  removed from all six sites. The helper requires equality of the applicable
+  lengths and pointwise equivalence of the actual operator fixed equations;
+  it assumes no path or canonical-form certificate.
 
 ### Quasi-local MPS expectation on an interval — promoted (2026-10-07)
 
@@ -3817,6 +4154,25 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Decision:** expose the existing proof unchanged and reuse it. Positivity of the
   comparison matrix is not needed.
 
+### Operator norm in orthonormal coordinates — promoted (2026-10-08)
+
+- **Pattern:** Pass between a continuous linear map and its matrix in arbitrary
+  finite orthonormal input and output bases without changing operator norm.
+- **Helper:** `ContinuousLinearMap.norm_toMatrix_orthonormal` in
+  `QICLean/Analysis/OrthonormalMatrixNorm.lean` (QICLean dependency).
+  The proof uses Mathlib's norm invariance under composition with linear
+  isometric equivalences and its Euclidean matrix norm identification.
+- **Call sites:** `Word.norm_preparedMatrix_le_one` in
+  `PEPS/Approximation/PreparedMatrixNorm.lean`,
+  `Word.norm_freeSourceMatrix_le_one` in
+  `PEPS/Approximation/SourceBlockMatrix.lean`, and
+  `Word.norm_physicalOutputMatrix_le_one` in
+  `PEPS/Approximation/ExteriorSourceContraction.lean`.
+- **Decision:** The exterior-word estimate is the third independent application.
+  The two earlier coordinate-vector arguments use this equality, and the
+  private free-source coordinate-norm helper is deleted. All public statements
+  remain unchanged. The general lemma permits rectangular matrices and empty bases.
+
 ### reordering words of a party layout — promoted
 
 - **Pattern:** a word of exchanges of tensor factors, built by recursion or
@@ -3839,6 +4195,45 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Sheet swaps in regional coordinates — candidate (2026-10-09)
+
+- **Pattern:** derive regional tensor factors from membership in the supported-operator
+  space, rewrite multiplication by the sheet-swap permutation matrix, and compare
+  entries using the region/complement split.
+- **Seen:** `commute_sheetSwapOp_kronecker` in
+  `PEPS/Approximation/SheetSwapCorrection.lean` and
+  `sheetSwapOp_mul_kronecker_of_mem_supportedOperators` in
+  `PEPS/Approximation/SheetSwapSupported.lean`.
+- **Abstraction:** the support decompositions, permutation-matrix products, and split
+  coordinates are already public lemmas. These are the two distinct cases, for
+  operators supported outside and inside the swapped region.
+- **Notes:** subsequent cancellation of doubled Hamiltonian terms uses these two
+  identities directly; it does not require another entrywise proof. Record a shared
+  coordinate lemma if a further independent use appears.
+
+### Unselected source positions keep their vectors — candidate (2026-10-12)
+
+- **Pattern:** A selected position that fails the affected-endpoint condition
+  is excluded from the selected set, so the selected source vectors return the
+  original vector there.
+- **Seen:** `selectedSourceVectors_exterior` in `SourceCorrectedContraction.lean`
+  and the inline exterior-source step of `eval_selectedSourceVectors_eq_sum` in
+  `SourceCircuitSubstitution.lean`, under `PEPS/Approximation` (two occurrences).
+- **Abstraction:** At a third occurrence, export the exterior statement from the
+  lower module and use it in both proofs. No tactic is needed.
+
+### Connected retained pieces along a fan run — candidate (2026-10-09)
+
+- **Pattern:** use the connected-component paths to join connected retained
+  triangles whose intersections survive along each retained edge.
+- **Seen:** the open-radius and closed-half-radius run proofs in
+  `TNLean/PEPS/AreaLaw/Geometry/FanRunConnectedness.lean`.
+- **Abstraction:** both already use Mathlib's
+  `IsConnected.iUnion_of_reflTransGen`; a further application would justify
+  naming the common passage from component paths to intersection chains.
+- **Notes:** two occurrences in one file do not meet the promotion threshold.
+  Nonemptiness of each piece and of the component are derived from the fan.
+
 ### Unique radial through a noncentral fan point — candidate (2026-10-09)
 
 - **Pattern:** turn membership in two center-to-endpoint segments into a common
@@ -3849,26 +4244,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   appears; the shared endpoint-ray theorem already contains the geometry.
 - **Notes:** noncentrality is essential when composing the directed-ray
   relations. The center remains in every triangle when no radial is removed.
-
-
-### Operator norm in orthonormal coordinates — candidate (2026-10-07)
-
-- **Pattern:** Identify matrix multiplication in orthonormal coordinates with
-  the underlying continuous linear map, then use preservation of norms by the
-  coordinate isometries to transfer an operator-norm bound.
-- **Seen:** Two occurrences:
-  `PEPS/Approximation/PreparedMatrixNorm.lean`,
-  `Word.norm_preparedMatrix_le_one`, and
-  `PEPS/Approximation/SourceBlockMatrix.lean`,
-  the private `Word.norm_toMatrix_eval_le_one`.
-- **Abstraction:** If another independent use arises, first check Mathlib for
-  the corresponding orthonormal-coordinate norm identity, then supply a general
-  lemma if needed. No further copy is currently required: the proper-frame
-  bound uses the complete free-source matrix bound through a fixed map word.
-- **Notes:** The predecessor proof and its exact-source verification remain
-  unchanged. The focused scan of the five new modules and `PreparedMatrixNorm`
-  found these two occurrences and no pattern occurring three times. This entry
-  remains below the promotion threshold.
 
 ### sitewise Kronecker power in configuration coordinates — candidate
 - **Pattern:** the matrix `fun a b => ∏ n, A (a n) (b n)` on `Fin N → ι` with its product,
@@ -5517,6 +5892,22 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 ## Rejected
 
+### Axiom allow-list fixtures — rejected (2026-10-12)
+
+- **Pattern:** a `run_cmd` block in a `TNLeanTest/` fixture that checks a
+  named declaration exists, collects its axioms with `Lean.collectAxioms`,
+  and rejects anything outside `propext`, `Classical.choice` and
+  `Quot.sound`.
+- **Seen:** `TNLeanTest/WeakRectanglePartialRowEntropyAxioms.lean`,
+  `TNLeanTest/PartyOutputCoordinatesAxioms.lean`,
+  `TNLeanTest/ContinuityFixedCoefficientAxioms.lean`, and most other
+  exact-name axiom fixtures under `TNLeanTest/`.
+- **Reason:** each fixture is a standalone audit whose declaration list and
+  allow-list should be readable in the file that CI runs. The block is a few
+  lines of metaprogramming with no mathematical content; a shared command would
+  move the allow-list out of the audited file without removing a proof
+  obligation. Fixtures keep the explicit block.
+
 ### Elementary set and finite-sum proof structure — rejected (2026-10-02)
 
 - **Pattern:** The three-line sequences `ext x; constructor; intro hx` and
@@ -5959,6 +6350,51 @@ spectral split → block extraction → MPV calculation → strict bounds
   `mul_mul_exp_neg_le_of_log_le` through `mul_pow_mul_exp_neg_le_of_le`;
   the original uniform-rate proof no longer repeats that arithmetic.
 
+### Isometric active/inactive gap splitting — candidate (2026-10-05)
+
+- **Pattern:** split a vector as `U (U.adjoint v) + (v - U (U.adjoint v))`,
+  remove mixed energy terms by intertwining and symmetry, and combine the
+  two quadratic bounds with their minimum.
+- **Seen:** `MPS/Symmetry/MPOSymmetry/MixedEndpointActiveGapTransfer.lean`
+  and `Algebra/IsometricGapTransfer.lean`.
+- **Abstraction:** `LinearIsometry.re_inner_ge_of_intertwines` and
+  `LinearIsometry.norm_gap_of_intertwines` now serve the noncommuting physical
+  isometry transport. The independent kernel theorem only needs intertwining
+  and a strictly positive inactive bound.
+- **Notes:** The existing mixed-endpoint consumer is unchanged while its
+  separate validation is in progress; its later migration is a direct
+  application of the generic norm-gap theorem.
+
+### Transporting endpoint parent order through polar inclusion — candidate (2026-10-06)
+
+- **Pattern:** Recover an embedded original tensor from its polar factor,
+  rewrite its canonical parent as an isometric interaction extension, then
+  transfer the square-support order through `isometricInteractionExtension_mono`
+  and `Matrix.isPositive_toEuclideanLin_iff`.
+- **Seen:** The two actual limiting-interaction comparisons in
+  `MPS/Symmetry/MPOSymmetry/ArbitraryPhysicalEndpointAttachment.lean`.
+- **Abstraction:** The common order transport already uses the existing
+  isometric-extension monotonicity theorem; the endpoint-specific rewrites
+  have two occurrences in one file and do not yet warrant another theorem.
+- **Notes:** Kernel and norm-gap transport use the existing affine-kernel
+  theorem and QICLean's positive-order gap theorem. No copy of the spectral
+  argument or new proof tactic is introduced.
+
+### Norm gaps under isometric conjugacy — promoted (2026-10-06)
+
+- **Pattern:** Derive kernel membership from the conjugacy identity, transport
+  orthogonality by inner-product preservation, and then transport the norm bound.
+- **Abstraction:** `LinearIsometryEquiv.norm_gap_iff_of_conj` and its kernel and
+  intertwining companions in `IsometricConjugationGap.lean`, without
+  finite-dimensionality or sign assumptions.
+- **Consumers:** The joint normalized core comparison now uses the public
+  theorem. The endpoint-swap development uses the same API. The older
+  single-block `MixedEndpointCoreHamiltonianSpectators` still has its private
+  proof; migrating that independent consumer awaits its own focused validation.
+- **Notes:** The dependent projection identification is separately shared as
+  `conj_eq_dependentRightFiberwiseMap_of_ker_iff`; both joint edge consumers
+  use that theorem instead of repeating the orthogonal-projection proof.
+
 ### Cyclic matrix traces in physical density contractions — rejected (2026-10-05)
 
 - **Pattern:** Normalize matrix associativity around a cyclic trace permutation.
@@ -5996,6 +6432,13 @@ spectral split → block extraction → MPV calculation → strict bounds
   lemma for maps on two tensor products. The existing `clm_ext_tmul` and
   `clm_ext_tmul₃` already handle identities between continuous linear maps
   with one tensor-product input; use those whenever the map has that form.
+- **Reuse (2026-10-08):** The two new concatenation-partition coherence
+  proofs in `PartyPartitionAppend.lean` use Mathlib's existing
+  `TensorProduct.ext_fourfold'`. After writing the two operations as linear
+  maps on `(M ⊗ N) ⊗ (P ⊗ Q)`, equality reduces directly to four elementary
+  factors. This removes both proposed additional double inductions. No new
+  theorem or tactic is needed; the older two source-combination calculations
+  remain the two occurrences listed above.
 - **Notes:** The endpoint-reversal identity uses `clm_ext_tmul`. Exchanging
   complete source blocks reuses the preparation tensor identity and the
   register-block exchange theorem. Neither requires another double induction.
@@ -6033,6 +6476,12 @@ spectral split → block extraction → MPV calculation → strict bounds
   calculations. A new generic congruence lemma would restate the existing
   equality lemmas, so no additional theorem or tactic is promoted. Previously
   audited source-preparation proofs are unchanged.
+- **Further reuse (2026-10-08):** `PartyPartitionAppend` repeats the two
+  head transports from `PartyPartition`, and transports vector addition.
+  These are again defining equations after identifying layout types, rather
+  than tensor identities. The addition case already uses `congrArg₂`,
+  `eq_of_heq`, and `heq_of_eq`. The same core equality tools suffice for the
+  head constructions; a generic lemma would only restate their congruence.
 - **Relation to the tensor-map candidate:** The two existing private
   `mapL_heq` and `mapL_apply_heq` helpers concern tensor products of two maps
   with four changing spaces. The new helper instead compares an associator
@@ -6067,30 +6516,35 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The aggregate case permits several original owners on the block;
   it retains the full operator after those owners are grouped together.
 
-### Weighted ket–bra matrix sums — candidate (2026-10-08)
+### Weighted ket–bra matrix sums — promoted (2026-10-08)
 
 - **Pattern:** Distribute a matrix product through two finite weighted sums,
-  conjugate the bra coefficients, and exchange the two summations.
-- **Seen:** `sum_density_expansion` in `SourceGateDensity.lean` and
-  `density_eval_eq_sum_partialWord` in `PartialSourceDensity.lean` under
-  `PEPS/Approximation` (two occurrences).
-- **Abstraction:** Before a third consumer, expose the rectangular matrix
-  identity as a shared lemma. Its two coefficient families and output index
-  types should remain independent.
-- **Scan:** The full repository scan was run. A focused scan of the eight
-  chronological-expansion modules with minimum count two found no repeated
-  tactic blocks at the default window lengths.
+  conjugating the bra coefficients and exchanging the two summations.
+- **Helper:** `Matrix.sum_smul_mul_mul_conjTranspose` in
+  `TNLean/Algebra/MatrixDensitySum.lean`. Both coefficient families and both
+  output and input coordinate types are independent; the middle matrix may
+  be rectangular.
+- **Refactored occurrences:** The private `sum_density_expansion` in
+  `SourceGateDensity.lean` is removed. Its two callers and
+  `PartialSourceDensity.density_eval_eq_sum_partialWord` use the shared lemma.
+  Corrected source reaggregation uses the same lemma.
+- **Decision:** Ordinary finite-sum and matrix identities suffice. No tactic
+  or special simplification attribute is needed.
 
-### Exterior ownership of a placed block — candidate (2026-10-08)
+### Exterior ownership of a placed block — promoted (2026-10-08)
 
 - **Pattern:** If no participant of a placed gate is affected, every register
   in its transported layout has the exterior owner.
-- **Seen:** `exterior_layout` in `DistributedSourceComposition.lean` and
-  the corresponding local assertion in `PartialSourceEvaluation.lean` under
-  `PEPS/Approximation` (two occurrences).
-- **Abstraction:** A third consumer should use one public layout-membership
-  lemma. The existing `affectedOwner_eq_none` already supplies the pointwise
-  fact; no new tactic is needed.
+- **Helper:** `Layout.affectedOwner_mapOwner_eq_none` in
+  `TNLean/PEPS/Approximation/SourceOwnerSupport.lean`, using
+  `List.mem_map` and the existing pointwise `affectedOwner_eq_none`.
+- **Refactored occurrences:** The private proof in
+  `DistributedSourceComposition.lean` is removed; its gate constructor,
+  `PartialSourceEvaluation.eval_partial_gate`, and the substituted gate
+  constructor in `SourceCircuitSubstitution.lean` use the shared lemma.
+- **Decision:** One layout-membership lemma removes the repeated argument;
+  no further automation is required.
+
 ### Complementary-slice reconstruction — candidate (2026-10-07)
 
 - **Pattern:** Choose one inside vector for each outside configuration and
@@ -6105,6 +6559,22 @@ spectral split → block extraction → MPV calculation → strict bounds
   it never cancels an identity extension or assumes that the outside factor is
   nonzero. The scoped tactic-pattern scan found no exact repeated blocks at
   its default thresholds.
+
+### Finite expansion in selected multilinear arguments — promoted
+
+- **Occurrences:** The selected matrix-unit expansion in
+  `PEPS/Approximation/SelectedSourceContraction` and the selected transported
+  source expansion in `PEPS/Approximation/PreparedSourceTransport` both restrict
+  a multilinear map to a finite set of arguments, expand a sum in each argument,
+  and collect the product of the scalar coefficients.
+- **Shared theorem:** `MultilinearMap.map_piecewise_sum_smul` in
+  `TNLean/Algebra/MultilinearSelectedSum.lean`. It is a direct application of
+  Mathlib's `domDomRestrict`, `map_sum`, and `map_smul_univ`; the unselected
+  arguments are fixed throughout.
+- **Refactors:** Both source-contraction proofs now use this theorem. The
+  matrix-unit consumer retains only the entrywise reconstruction of each matrix.
+  The transported-source consumer uses the QICLean rank-one transport expansion.
+  No additional tactic or simplifier rule is needed.
 
 ### Dyadic refinement cardinality bounds — candidate (2026-10-07)
 
@@ -6334,6 +6804,96 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** the nonnegativity argument also covers an empty collection; an additional
   nonemptiness hypothesis would unnecessarily restrict these statements.
 
+### Empty occurrence sets in circuit replacement — candidate (2026-10-08)
+
+- **Pattern:** In a circuit induction, an identity, a private map, or a register
+  permutation has an empty expanded-gate occurrence type. The occurrence
+  equivalence is reflexive and participant preservation follows by eliminating
+  the impossible occurrence.
+- **Seen:** Three cases of
+  `EffectCircuit.exists_replacementLocationsEquiv` in
+  `PEPS/Approximation/EffectCircuitLocations.lean`.
+- **Abstraction:** No new helper is needed within one induction. Before this
+  argument is repeated in a second file, use an equivalence between empty types
+  and a shared statement that participant preservation is vacuous on an empty
+  domain.
+- **Scan:** The focused approximation scan also found short equality-transport
+  proofs in `EffectCircuitReplacement` and `EffectCircuitError`. These are
+  defining equations of distinct dependent maps; they follow the existing
+  congruence-after-identifying-layout-memories decision above. Tensor calculations
+  reuse `clm_ext_tmul`, `rTensor_tmul`, and the existing preparation identities.
+
+### Circuit expansion bounds under retained memories — candidate (2026-10-08)
+
+- **Pattern:** Transport a property of the actual gate expansions through equal
+  layout identifications, retained spectator registers, and source-free local
+  words.
+- **Seen:** `SourceCircuit.isExpansionBounded_castLayouts`,
+  `isExpansionBounded_frameList`, and `isExpansionBounded_ofLocalWord` in
+  `PEPS/Approximation/EffectReplacementExpansion.lean`.
+- **Abstraction:** One predicate records both scalar coefficient and monomial
+  counts, so the original-circuit induction proves both bounds together rather
+  than repeating the chronology for each estimate. Actual source-position counts
+  instead reuse the participant-preserving occurrence equivalence.
+- **Notes:** Short equality elimination continues the earlier congruence decision.
+  A fourth independent property of all gate expansions should be derived from a
+  common occurrence-wise description before adding another structural induction.
+
+
+### Evaluation under equal register lists — promoted (2026-10-08)
+
+- **Pattern:** Apply a word whose input and output register lists have been
+  identified to a vector identified with the original input.
+- **Reuse:** `Word.eval_castLayouts_apply_heq` in
+  `TNLean/PEPS/Approximation/WordEvaluationTransport.lean` is the existing checked
+  public proof from `SourceRegisterPermutation`. Its lower import position makes
+  it available to `SourceSlotMaps`, `SelectiveSourcePreparation`,
+  `SourceRegisterPermutation`, and `EffectCircuitPreparation`.
+- **Refactor:** Remove the three identical private copies and move the public
+  proof unchanged. Every call now uses the same declaration. Source inventories,
+  prepared vectors, public hypotheses, and conclusions are unchanged.
+- **Scouting:** `Word.eval_castLayouts_heq` already identifies the two maps;
+  the value statement additionally identifies their dependent input vectors.
+  Its proof uses core `congrArg`, `eq_of_heq`, and `heq_of_eq`; no custom tactic
+  or new generic congruence theorem is introduced.
+
+### Physical projection coordinates — promoted (2026-10-08)
+
+- **Pattern:** Taking a physical basis component and then a discarded coordinate
+  is the same as taking the tensor-product coordinate.
+- **Reuse:** The existing proof `Word.repr_effectMap` in
+  `PhysicalOutputContraction.lean` is public. Its original physical-output matrix
+  consumer and the new `SeparatedOutputCoordinates` consumer use that one proof.
+  The proposed duplicate in the latter module is removed.
+
+### Physical error through an intermediate operator — candidate (2026-10-08)
+
+- **Pattern:** Write `A - C = (A - B) + (B - C)`, apply the rectangular
+  trace-norm triangle inequality, and add the two already proved error bounds.
+- **Seen:** The private `rectangularTraceNorm_sub_le_sum` in
+  `PEPS/Approximation/SampledOriginalCircuit.lean` and the final calculation in
+  `PEPS/Approximation/ApproximateSourceSampling.lean`.
+- **Abstraction:** These are two uses of the existing QICLean triangle inequality
+  and `sub_add_sub_cancel`. Before a third independent use, look for a public
+  rectangular trace-norm difference estimate in QICLean; if none exists, promote
+  the short estimate there and replace both calculations. No new tactic is needed.
+
+
+### Ambient depth variation on a scan ball — refactored (2026-10-11)
+
+- **Pattern:** convert filtered-ball membership to an induced-graph distance bound,
+  then apply `abs_ambientDepth_sub_le_domainGraph` and reverse the absolute difference.
+- **Seen:** `Scan/TerminalSplits.lean` has two occurrences; the private helper in
+  `Scan/SideSeparation.lean` uses the same conversion.
+- **Abstraction:** the new side-separation proofs share one private helper, so their
+  three applications do not repeat this conversion. The mathematical estimate is
+  already supplied by `abs_ambientDepth_sub_le_domainGraph`.
+- **Disposition:** `CollarScan.abs_depth_sub_anchor_le_domainGraph_of_mem_ball`
+  is now available in `Scan/GoodSampling.lean`, and the sampling, ancestry,
+  probability, `SplitIntervals`, `PrefixApproximation`, `SideSeparation`, and
+  `TerminalSplits` callers use it; the private copies are removed. No new tactic
+  or geometric estimate is needed.
+
 ### Physical cardinality of a partial ambient layer — candidate (2026-10-09)
 
 - **Pattern:** Project a physical region injectively to its ambient lattice subset,
@@ -6384,6 +6944,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   wrapper are removed. Existing callers select the required component of
   the shared theorem. No new tactic or geometric hypothesis is introduced.
 
+### Initial-sector cut-set transport — candidate (2026-10-09)
+
+- **Pattern:** Identify the center of a translated fan and equate its
+  color-change radial union with the radial union at changes of the canonical
+  initial identifier.
+- **Seen:** The open-square and closed-half-square component correspondences
+  in `PEPS/AreaLaw/Geometry/InitialSectorComponents.lean`.
+- **Abstraction:** Both use the canonical sector assignment and the existing
+  adjacent-color equivalence. The common connected-partition proof is already
+  shared by a private arbitrary-subset lemma in `FanRunComponents.lean`.
+- **Notes:** The cut-set calculation occurs twice in one file, below the
+  promotion threshold. If another consumer repeats it, prefer a lemma for
+  the equality of the two radial unions.
+
 ### Unordered lattice-edge endpoint equality — candidate (2026-10-07)
 
 - **Pattern:** Prove equality of unordered coordinate pairs by choosing the
@@ -6397,3 +6971,135 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The current occurrences are all in one proof, below the
   multiple-file promotion threshold. Crossing membership itself is already
   expressed by `mem_edgeBoundary_pair_iff`; no new tactic macro is needed.
+
+### Exact eigenvalue equations under configuration isometries — candidate (2026-10-09)
+
+- **Pattern:** transport a matrix-vector equation through the configuration
+  isometry, then pass between Euclidean vectors and their coordinate functions.
+- **Seen:** the energy equation, simultaneous symmetry and two auxiliary
+  projection equations in `PEPS/AreaLaw/GlobalSchmidtBellPrevector.lean`.
+- **Abstraction:** all four equations use one local arbitrary-matrix transport
+  lemma, itself an application of
+  `Matrix.toEuclideanLin_reindex_piLpCongrLeft` in
+  `Algebra/MatrixReindexGap.lean`.
+- **Notes:** the four applications occur in one module. A shared scalar-eigenvalue
+  corollary is appropriate if the same conversion occurs in another module;
+  the underlying matrix-action identity is already shared.
+
+### Excluding a party outside the image of an owner map — candidate (2026-10-11)
+
+- **Pattern:** Rewrite the parties of a restriction as a filtered image,
+  extract the original owner from image membership, and contradict the
+  selector using exclusion from the owner map. The no-party theorem then
+  gives the identity on the empty memory.
+- **Seen:** `Word.restrict_mapOwner_eval_eq_id_of_disjoint` in
+  `TNLean/PEPS/Approximation/WordOwnerRestriction.lean` and
+  `Word.restrict_localPart_mapOwner_eval_heq_id_of_disjoint` in
+  `TNLean/PEPS/Approximation/SourceWordParties.lean` (two occurrences).
+- **Abstraction:** At a third occurrence, share the restriction lemma for
+  a party absent from the original participating-party set, before applying
+  the relabelling identities.
+- **Notes:** Named scalar local maps belong to the participating-party set.
+  Excluding register owners alone would not exclude those scalar operations.
+
+### Projection commutation from an invariant subspace — promoted (2026-10-11)
+
+- **Pattern:** show that a symmetric operator preserving a subspace commutes
+  with its orthogonal projection, via `eq_starProjection_of_mem_of_inner_eq_zero`.
+- **Seen:** private copies in `MixedEndpointOpenSectors` and
+  `MixedEndpointReducingSectors`, and the joint reducing-sector proofs.
+- **Abstraction:** `Submodule.commute_starProjection_of_invariant` in
+  `MPS/ParentHamiltonian/Martingale/ReducingProjectionGap.lean`; the private
+  copies were removed and their call sites use the public theorem.
+
+### Block-supported mixed tree contractions — promoted (2026-10-06)
+
+- **Pattern:** Expand a product of analysis/synthesis matrices supported on
+  one common endpoint summand, split the three finite sums by that summand,
+  and take the normalized trace without assuming the endpoint dimensions
+  are nonzero.
+- **Seen:** The sequential-action, fusion-action, and left/right fusion-tree
+  calculations in `MixedEndpointMPOActionSymbols.lean` and
+  `MixedEndpointMPOFusionSymbols.lean`.
+- **Abstraction:** `mixedEndpointTripleAnalysis_mul_synthesis`,
+  `mixedEndpointTripleAnalysis_trace_mul_synthesis`, and
+  `mixedEndpointTripleAnalysis_normalizedTrace_mul_synthesis` in
+  `MixedEndpointTripleMaps.lean`; `finDimension_mul_normalizedTrace`
+  handles the zero-dimensional case separately from field cancellation.
+- **Notes:** The coefficient weights use the final state bond for L and
+  the final operator bond for F. Equal coefficients are inherited; unequal
+  coefficients are dimension-weighted, not averaged without weights.
+### Integer quotient-interval cardinality — promoted (2026-10-09)
+- **Pattern:** bound the cardinality of an integer quotient interval by
+  monotonicity of division and the two endpoint remainder inequalities.
+- **Seen:** two coordinate estimates in each of
+  `Geometry/TemplateDyadicRows.lean` and `Geometry/RectangleMixedSquares.lean`.
+- **Abstraction:** `TNLean.PEPS.AreaLaw.Geometry.quotient_interval_card` in
+  `TNLean/PEPS/AreaLaw/Geometry/QuotientIntervals.lean`.
+- **Notes:** the divisor is positive and the endpoints are ordered; negative
+  endpoints are allowed. The existing statement and proof are unchanged,
+  and both counting modules use the shared theorem.
+### Capped dyadic summation by scale — candidate (2026-10-09)
+- **Pattern:** group a finite sum over the actual capped dyadic partition
+  by its scale coordinate; replace each fibre's constant sum by its
+  cardinality times the scale weight.
+- **Seen:** the rectangle-shell weighted covering and the two template
+  covering proofs in [PR #9000](https://github.com/LionSR/TNLean/pull/9000).
+- **Abstraction:** Geometry.sum_cappedDyadicPartition_by_scale in
+  TNLean/PEPS/AreaLaw/Geometry/CappedDyadicPartitionByScale.lean.
+- **Notes:** the rectangle argument uses the shared identity. The existing
+  template arguments still need the corresponding refactoring in their
+  owning PR. The identity is valid for signed real weights, empty
+  partitions and cap zero; no positivity premise is necessary.
+### Entropy summation over selected dyadic rectangles — candidate (2026-10-09)
+- **Pattern:** intersect a disjoint lattice partition with the same physical
+  region, apply entropy subadditivity for the same unit vector, and sum a
+  pointwise rectangle estimate using the exact side length of each cell.
+- **Seen:** the template core and shell estimates in
+  `Geometry/TemplateBoxEntropy.lean` (the separately developed template
+  argument), and `WeakRectangleShellEntropy.lean`.
+- **Abstraction:** the shared public theorem
+  `Geometry.regionalEntropy_filter_le_weighted_cover` in
+  `Geometry/CappedDyadicEntropyCover.lean`.
+- **Notes:** the rectangle shell uses the shared theorem. The template
+  consumers retain the same proof terms when their four physical-cover
+  declarations move to this module; that extraction is coordinated with
+  the template development. No sign condition on C or e is needed for
+  the entropy summation itself.
+### Homogeneous bound for a rounded sublinear scale — candidate (2026-10-09)
+- **Pattern:** bound `ceil(C₂*s)` by `(C₂+1)*s` for `s>=1`, then use
+  monotonicity of nonnegative real powers and `Real.mul_rpow`.
+- **Seen:** `Scan/BootstrapRoundedClearance.lean` and
+  `Scan/RoundedScalePower.lean`.
+- **Abstraction:** `floor_rpow_ceil_mul_rpow_le` exposes the complete
+  homogeneous bound, including a further nonnegative power of the scale.
+- **Notes:** the clearance argument and physical entropy argument use
+  different final comparisons. There are two copies of the elementary
+  ceiling estimate; a third use should share that estimate rather than
+  copy it again. No custom tactic is needed.
+### Fixed rounded-collar threshold — promoted (2026-10-09)
+- **Pattern:** obtain the fixed collar exponent bounds, choose one threshold
+  for the rounded half-side estimate, enlarge it to at least one, and derive
+  positivity and clearance for all safety parameters.
+- **Abstraction:** `Scan.exists_bootstrap_collar_clearance` now records
+  threshold positivity, collar positivity, the half-side bound and clearance
+  in one statement.
+- **Consumers:** `InitialRoundedCollarEntropy.lean` and
+  `RoundedShellEntropy.lean` reuse this statement. Its defining proof handles
+  the numerical argument once; no separate predicate or compatibility alias
+  is introduced.
+
+### Tensoring an intertwining identity — candidate (2026-10-11)
+
+- **Pattern:** Extend an intertwining identity for a map on one memory by
+  tensoring it with a fixed map on another memory. Compare elementary tensors
+  with `clm_ext_tmul` and apply congruence to the original identity.
+- **Seen:** The private `tensor_factorization` helper in
+  `TNLean/PEPS/Approximation/PartyLocalMaps.lean` and
+  `TNLean/PEPS/Approximation/CanonicalPartyFactorization.lean` (two occurrences).
+- **Abstraction:** At a third occurrence, share the operator identity in a
+  lower-level tensor-map module, or use Mathlib's `TensorProduct.mapL_comp`.
+- **Notes:** The new theorem identifies the actual singleton restrictions
+  without a norm bound; the existing theorem provides existential contractions.
+  Neither theorem replaces the other by cancellation when a factor vanishes.
+  The small helper is retained unchanged for the first compiler diagnostic.

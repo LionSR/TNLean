@@ -52,6 +52,15 @@ theorem isRegionIncidentEdge_of_regionVertex (R : Finset V) (w : {w : V // w ∈
   · exact Or.inl (by rw [h]; exact w.2)
   · exact Or.inr (by rw [h]; exact w.2)
 
+omit [Fintype V] [DecidableRel Γ.Adj] in
+/-- An edge touching the region without having both endpoints in it crosses the boundary. -/
+theorem IsRegionIncidentEdge.isRegionBoundaryEdge {R : Finset V} {e : Edge Γ}
+    (he : IsRegionIncidentEdge R e) (hn : ¬ (e.1.1 ∈ R ∧ e.1.2 ∈ R)) :
+    IsRegionBoundaryEdge R e := by
+  rcases he with h | h
+  · exact Or.inl ⟨h, fun h' => hn ⟨h, h'⟩⟩
+  · exact Or.inr ⟨fun h' => hn ⟨h', h⟩, h⟩
+
 /-- The product of the tensors at the region vertices for a fixed incident-edge assignment. -/
 noncomputable def regionIncidentWeight (A : Tensor Γ d) (R : Finset V)
     (η : RegionIncidentConfig A R) (σ : RegionPhysicalConfig (d := d) R) : ℂ :=

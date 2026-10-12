@@ -49,17 +49,86 @@ parameter with $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$, the H\"older
 accounting of the defect energy at the selected point, and the three
 comparator budgets.\footnote{The packaged statement is
     \leanid{TNLean.PEPS.AreaLaw.Scan.scanner_estimate}.} Each field transcribes
-one displayed conclusion of an input and cites its source line; no field
-asserts more than the cited statement. The constants depend only on the fixed
+a conclusion of an input and cites its source passage. The trace-distance
+field retains a fixed coefficient, as in the source asymptotic bound.
+In particular, the transported-measure mass equality is required only for
+interior interpolation parameters. The constants depend only on the fixed
 exponents and on the constants of the inputs, as in the source.
 
 Two harmless differences in the bookkeeping are recorded. The continuity
 input bounds the change of the shell entropies by
-$C\sqrt{n^{-500}}(1+Cn^2\log q)$, which is $O(n^{-248})$ but not at most
+$C\sqrt{Cn^{-500}}(1+Cn^2\log q)$, which is $O(n^{-248})$ but not at most
 $n^{-248}$ itself; the formal budget lemmas carry the error $n^{-247}$. The
 marginal parameter is bounded with logarithmic power $12$, coming from the
 crossing count $(\log n)^4$ and the squared dimension term $(\log n)^8$; the
 source writes an unspecified power $C$.
+
+\section{The fixed coefficient in the trace-distance estimate}
+
+The source states that the trace distance is $O(n^{-500})$
+\cite{OpenAI2026AreaLaw} (\path{08-scanner.tex}, lines~400--403). The trace-distance field retains
+this fixed coefficient: $t\le Cn^{-500}$, with the common constant $C\ge1$
+chosen before the scale, domain and scan. Here $t$ is one half of the trace
+norm of the difference of the original and truncated density matrices;
+it is not a rescaled distance. The former coefficient-one restriction
+is resolved by retaining $C$ in this field.
+
+For the same truncated ground vector, the perturbation estimate of
+\cite[Proposition~4.5]{OpenAI2026AreaLaw} gives
+\begin{align}
+    t\le\sqrt{2\varepsilon/g},\qquad
+    \varepsilon\le n^{-1000},\qquad g>0,
+    \label{eq:arealaw2d_scanner_inputs_perturbation_bound}
+\end{align}
+and (\ref{eq:arealaw2d_scanner_inputs_perturbation_bound}) yields
+$t\le\sqrt{2/g}\,n^{-500}$. The physical construction must choose
+its common fixed constant to satisfy $C\ge\sqrt{2/g}$ as well as the other
+input bounds. Increasing the scale alone does not remove this coefficient.
+
+Here $g$ is the gap of the positive-constraint Hamiltonian before truncation.
+If the physical Hamiltonian has gap $\Delta$ and the positive constraints
+are divided by their fixed normalization $c_s$, then $g=\Delta/c_s$.
+Both the coefficient above and the truncated-gap lower bound $g/2$ use
+this same normalized gap, rather than $\Delta$.
+
+For any fixed nonnegative $A,C$ and $\log q\ge0$, the numerical continuity
+estimate applies uniformly to every $t\le An^{-500}$ and gives, for all
+sufficiently large $n$,
+\begin{align}
+    C\sqrt t(1+Cn^2\log q)\le n^{-247}.
+    \label{eq:arealaw2d_scanner_inputs_continuity_cost}
+\end{align}
+Taking $A=C$ in (\ref{eq:arealaw2d_scanner_inputs_continuity_cost}) gives the
+arithmetic needed for the retained distance field.
+The threshold depends on the fixed constants and is chosen before the
+physical instance. This resolves the numerical coefficient restriction;
+it does not construct the physical distance, continuity, transport or
+comparator fields. Construction of all inputs from the same original and
+truncated ground vectors remains open. The physical trace distance keeps
+its original meaning.
+
+\section{Parameter domain of the transported measures}
+
+The transported states of Proposition~7.4 are density matrices for
+$0<p<1$ (\path{06-transport.tex}, lines~393--400), so the combined
+Fourier--coherent measures have mass $1/2$ there. At $p=1$ an old terminal
+leaf has weight $(1-p)w_h=0$, and at $p=0$ a new terminal leaf has weight
+$pw_hq_{c\mid h}=0$. The totalized normalized derivative map contains the
+factor $\pi_j^{-1}$ and is zero when $\pi_j=0$. Its transported state and
+combined measure are then zero. Requiring mass $1/2$ for every real $p$
+would therefore exclude the literal transported measures.
+
+The mass hypotheses now have the interior domain $0<p<1$. The measures
+remain defined at every parameter; no replacement probability measure is
+assigned to an inactive leaf. The charge-defect bound and the old- and
+new-leaf energy estimates use the mass hypothesis only in the interior.
+The integral over
+$[0,1]$ uses the interior bounds and interior continuity of the charge defect,
+since the two boundary points have Lebesgue measure zero. The logarithmic
+norm remains continuous on $[0,1]$, and its matching boundary values,
+initial and final comparisons, and integrated entropy conclusions are
+unchanged. This domain correction does not construct the transported
+measures or remove the remaining scanner-input restriction.
 
 \section{Finite history construction now available}
 
@@ -81,8 +150,8 @@ The probabilities are classical history weights, not the transported
 state measures. Nonnegative costs depending on band, receiving side, and
 moved subset also satisfy the corresponding expected-cost lower bound,
 by summing the disjoint labelled events within each band and then summing
-the bands. Identifying these costs
-with the transported conditional entropies remains a separate step.
+the bands. The identification of these costs with the transported conditional
+entropies is established below.
 \footnote{The physical sampling statement is
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.good_split_sampling_domainGraph}.}
 
@@ -110,9 +179,249 @@ The bounded incidence event contains the terminal metric split event of
 \path{06-transport.tex}, lines~336--352. It is not an arbitrary entropy cut
 such as $U=P_0\setminus X$, and it is not yet an identification of the
 arbitrary split predicates stored in the scanner data package with concrete
-transported-state measures. The ancestry estimate for bad histories,
-the remaining geometric conclusions, and the transported-state estimates
-remain outside this finite-history construction.
+transported-state measures.
+
+The finite ancestry probability argument is now derived from the same actual
+history process. Every bad endpoint has a strictly time-ordered selected-charge
+path. The physical cut clearance keeps its predecessors in $A$, including for
+the far side. If its length is $s$ and the tested pair time is $k$, then
+$D<4r_0s$ and every path time lies in the last $4n(r_0s+1)+1$ pair indices.
+Independent selected-coordinate probabilities, exact binomial time counting,
+and the lattice diamond count give the finite tail. Union over actual prefix
+times, both sides, all bands, and compact endpoints, and averaging the initial
+offsets, give
+\begin{align}
+    2K(|T|+nL)(N+1)
+    \sum_{\substack{0\le s\le N \\D<4r_0s}}\rho^s,
+    \qquad
+    \rho=\frac{9e\,nr_0\mu(1+2(2r_0)(2r_0+1))}{2\lceil C_1nD\rceil}.
+    \label{eq:arealaw2d_scanner_inputs_bad_tail}
+\end{align}
+The compact endpoint bound is proved from the actual ambient layers, so
+no exterior-domain volume enters. Label paths suffice for the spatial count;
+predecessor witnesses need not be counted because they do not enter a selected
+coordinate event. The ratio in~(\ref{eq:arealaw2d_scanner_inputs_bad_tail})
+is sharper than the source's loose predecessor-inclusive estimate.\footnote{The all-time finite statement is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_through_geometric_domainGraph_le}.}
+
+The rounded source scales now give arbitrary inverse-power decay of this
+actual all-prefix probability, uniformly in the finite domain, target, label
+family, and scanner. The threshold is chosen from the fixed exponents and
+constants alone. In particular, the actual bad-history probability is at most
+$n^{-200}$ for sufficiently large $n$.\footnote{The result is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.eventually_bad_history_probability_le}.}
+This closes the classical asymptotic probability estimate. The remaining
+geometric conclusions and transported-state estimates remain separate;
+identifying quantum entropy costs and constructing the entire scanner data
+package are not consequences of a probability bound alone.
+
+The physical nesting of distinct bands is now derived for independent actual
+histories and times. Actual designated receiving--middle incidences satisfy the
+full terminal split rule in both completed and pre-charge statuses. Their
+labelled occurrence count is at most $10KnD\mu$, with anchor multiplicity
+$\mu$, under the expanded numerical margin $4(D+2r_0)\le m$.
+Actual completed and pre-charge statuses now have deterministic whole-row
+comparison prefixes from one nested family. Under $D\ge1$, $r_0\le D$,
+$4D\le m$, $8Km\le L$, the ambient row bound, and the respective $k\le nm$
+or $k+1\le nm$ horizon, the sets $U$ and $UY$ differ from their comparison
+prefixes by at most $3nD$ sites. The comparisons are inclusions in opposite
+directions: the near comparison is contained in $U$, while $UY$ is contained
+in its far comparison. The partially consumed row is counted in the error.
+With the source cut clearance, physical undirected cut-edge counts are at most
+$20nD$ for $U$ and $UY$, $40nD$ for $Y$, and $16nD$ for $P_0$ and $V$.
+These bounds are derived from the actual history evaluator and physical lattice
+geometry, without a prefix or cut-count hypothesis.\footnote{The physical
+    results are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_prefix_approximation_domainGraph},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_prefix_approximation_domainGraph},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_cut_bounds_domainGraph}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_cut_bounds_domainGraph}.}
+For positive factor dimensions and a nonnegative metric parameter, actual
+band nesting now implies commutation of the band metrics on the symmetric
+replica space. The complementary metric substitution remains restricted to
+the symmetric projection, and every intervening factor preserves that
+subspace. The augmented quantum-region moves agree with the actual physical
+charge transitions. Cross-band commutation holds for independent histories
+and all completed/pre-charge status pairs, including every pair of terminal
+leaves of a charge round.\footnote{These conclusions are
+    \leanid{TensorPower.ReplicaTransport.bandMetric_commute_on_symmetric_of_nested},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumChargeMove_apply}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeTransportData_crossBandCommute}.}
+This commutation does not identify the tree inputs with transported quantum
+states or establish their entropy-cost identities.
+
+The initial-offset, charge-choice, and recursive history mean trees are now
+constructed, rather than supplied. Their leaf weights equal the actual
+uniform history law $m^{-K}(2M)^{-Kk}$, with charge weights $(2M)^{-K}$
+and deterministic fill weight one. Substitution constructs the next matrix
+mean tree without reassociation, and the old and new interpolation endpoints
+agree with the corresponding tree evaluations for positive definite inputs.
+\footnote{The construction and identities are in
+    \leanid{TNLean.PEPS.AreaLaw.Scan.historyMeanTree},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.historyMeanTree_weight},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.historyMeanTree_eval_succ},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.charge_interpRoot_zero}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.charge_interpRoot_one}; the same module
+    gives the singleton fill trees and their endpoints.}
+These tree identities do not construct the initial quantum prevector or
+identify the history-tree inputs with its transported quantum states.
+The pointwise entropy sampling theorem specializes the actual
+nonnegative move-cost inequality to regional conditional mutual information.
+Every trial set is first intersected with the old middle; the receiving side
+and the old pure vector are kept fixed while charge choices are averaged.
+Disabled choices and empty moved sets have equal zero entropy, without
+identifying their distinct move constructors. Support compatibility derived
+from the actual geometry identifies the incidence sum with terminal split
+entropy. The pointwise inequality is then integrated against the same actual
+old transported state for all conditional
+choices, retaining the exact Fourier and coherent integrals. The resulting
+entropy gain dominates the good-history split defect with coefficient
+$[2(C_1+1)nD]^{-1}$. The history weight in this derivative expression has no
+terminal old-edge factor $1-p$. For a nonzero symmetric common prevector and
+an interior interpolation parameter, the combined integral has mass $1/2$.
+\footnote{The integrated inequality is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_le_entropyGain_domainGraph}.}
+Constructing the scanner's measure-valued fields, an initial prevector,
+typical sectors and comparator budgets, and the complete scanner data package
+remain open. A direct inequality for the canonical integrals does not alone
+construct those measure-valued fields.
+
+The missing direct near--far case is now excluded from the actual geometry.
+The near side lies in the truncation set, so a designated support meeting
+both receiving sides is a radius-$r_0$ graph ball. Clearance places the ball
+inside $A$; the unconditional lead bounds and separated fronts then give a
+contradiction. Thus every support, without a supplied middle-incidence
+premise, is either contained in one physical part or satisfies the terminal
+split rule. No good-history condition is used.
+
+The auxiliary factors remain outside the physical supports. The augmented
+finite-tree compatibility condition therefore holds for every old and new
+leaf of an actual charge round.
+
+The deterministic fill uses the same recursive history tree and a
+singleton conditional tree. Its move transfers exactly the scheduled
+singleton's unassigned part, and the new partition is the following
+charge's old partition. Admissibility, cross-band commutation and
+designated-support compatibility are derived from the actual scan.
+The adjacent fill and charge roots agree without reassociation of
+matrix means.
+
+The physical cardinality and logarithmic-dimension bounds are checked.
+For physical dimension $q\ge1$, the explicit cap is
+$\ell=1+(2r_0+1)^2\log q\ge1$. Fills transfer at most one site and charges
+at most $(2r_0+1)^2$ sites. A designated support has the same bound when its
+actual partition is nonconstant on that support: initial far-side persistence
+and $8Km\le L$ give a physical singleton cut crossing it, hence reduce its
+truncation radius to $r_0$. No support compatibility, good-history, row-bound,
+clearance, or time-horizon assumption is needed for this reduction.
+Unsplit supports remain unbounded. For the rounded radius
+$r_0=\lceil C_r(\log n)^2\rceil$, $C_r\ge0$, the checked eventual estimate is
+$\ell\le[1+(2C_r+3)^2\log q](\log n)^4$, with threshold chosen independently
+of the domain, scanner, labels, and histories.
+
+The quantum transport statements identify moved subsystems with embedded
+physical middle differences, so auxiliary-factor dimensions do not enter
+their cap. A designated support has this cap when its actual split-leaf
+set is nonempty; no bound is imposed on supports that never split.
+
+The actual truncated positive constraints, extended by the identities on
+both auxiliary factors, are positive contractions with their designated
+physical supports. Their replica sum is exactly the copy mean of the
+augmented truncated Hamiltonian. For both actual fill and charge rounds,
+Proposition~7.4 now gives the logarithmic-norm derivative, entropy lower
+bound and energy upper bound for $0<p<1$, and the integrated entropy
+bound for $0\le p_0\le p_1\le1$.
+\footnote{The actual specializations are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFill_transport_domainGraph}
+    and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_transport_domainGraph}.}
+They require a supplied nonzero symmetric prevector and the smallness
+condition $a\ell\le c_0$. Only the energy bound additionally requires
+that prevector to be an eigenvector of the actual augmented truncated
+replica Hamiltonian. The initial physical prevector, typical sectors,
+comparator estimates, the scanner's measure-valued fields and the
+complete scanner data construction remain open.
+
+\section{Truncated physical marginal estimates}
+
+The moment and tail estimates of \cite[Lemma~3.1]{OpenAI2026AreaLaw} are established in
+\path{TNLean/PEPS/AreaLaw/Scan/ActualMarginalTails.lean}
+for every actual regional state of one truncated ground vector.
+The terms are the actual positive constraints centered at the original
+unit vector $\Omega$, truncated near the scanner's compact set.
+Writing $\widetilde H=\sum_i\widetilde h_i$, the physical ground-state
+conditions are
+\begin{align}
+    \|\widetilde\Omega\|         & =1,                 \\
+    \widetilde H\widetilde\Omega & =e\widetilde\Omega, \\
+    \widetilde H-eI              & \ge(g/2)
+    (I-|\widetilde\Omega\rangle\langle\widetilde\Omega|),
+    \label{eq:arealaw2d_scanner_inputs_marginal_gap}
+\end{align}
+where $g=\Delta/\max\{1,J(\|f_{1,\Delta/2}\|_1+1)\}$. Here $\Delta$ is the
+spectral gap of the original Hamiltonian, $J$ bounds the operator norms of its
+terms, and $f_{1,\Delta/2}$ is the time kernel of the quasi-local spectral
+filter of \cite[Lemma~4.2]{OpenAI2026AreaLaw} with exponent $1$ and frequency
+cutoff $\Delta/2$; $\|f_{1,\Delta/2}\|_1=\int_{\mathbb R}|f_{1,\Delta/2}(t)|\,dt$
+is its $L^1$ norm, and $\max\{1,J(\|f_{1,\Delta/2}\|_1+1)\}$ is the normalization
+of the positive constraints in \cite[Section~4]{OpenAI2026AreaLaw}.
+The resulting tail parameter is $2/g$, and the entropy center is the
+entropy of the actual marginal of this same $\widetilde\Omega$ for every cut.
+The exact budget preserves every original label, including repeated
+supports and zero terms; complementary cuts have the same budget, and
+the empty and full cuts have budget one.
+
+The pair $(e,\widetilde\Omega)$ in
+(\ref{eq:arealaw2d_scanner_inputs_marginal_gap}) is now constructed from
+Proposition~4.5. Fix $R$, $J\ge0$, $\Delta>0$ and $C_0\ge0$.
+One constant $C_{\mathrm{tr}}>0$ is chosen before the local dimension,
+domain, interaction, original ground vector and scan. For every such
+instance, the hypotheses retained are the original Hamiltonian's gapped
+ground-state condition, the induced domain graph, anchors in their original
+admissible supports, $n\ge2$, the radius equality
+$r_0=\lceil C_{\mathrm{tr}}(\log n)^2\rceil$, and
+$|S_0|\le C_0n^2$. The chosen radius constant is independent of the scan's
+charge-slot constant $C_1$.
+\footnote{The existential statement is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_reducedState_moment_tail_bounds}.}
+The graph, set, radius and centered constraints agree term by term with the
+physical truncation theorem. Its unit-norm, eigenvector and positive
+semidefinite gap conclusions therefore give the actual physical
+$\widetilde H$ in (\ref{eq:arealaw2d_scanner_inputs_marginal_gap}).
+The resulting single pair is chosen before all cuts. With
+$\epsilon_n=\min\{n^{-1000},g/4\}$, retain the quantitative conclusions
+of Proposition~4.5 for this same pair:
+\begin{align}
+    0 & \le e\le\epsilon_n,      \\
+    \|\widetilde\Omega-\mathrm e^{i\theta}\Omega\|
+      & \le2\sqrt{\epsilon_n/g}, \\
+    \frac12\bigl\||\widetilde\Omega\rangle\langle\widetilde\Omega|
+    -|\Omega\rangle\langle\Omega|\bigr\|_1
+      & \le\sqrt{2\epsilon_n/g}.
+    \label{eq:arealaw2d_scanner_inputs_marginal_closeness}
+\end{align}
+Here $\theta$ is a suitable real phase. This same vector satisfies both marginal
+inequalities for every cut; no truncated spectral, energy-smallness,
+closeness or tail hypothesis is supplied. In particular, $e\le n^{-1000}$
+and $e\le g/4$ hold without a second choice of ground vector.
+
+No kernel equation for each individual term is asserted, and $e$ is not
+assumed to vanish. The original $\Omega$ remains the filter center.
+The projector gap concerns the physical sum before either auxiliary
+identity extension; a nontrivial spectator can destroy the one-vector
+projector gap. Empty domains, local dimension one, empty truncation sets
+and retained disconnected components are allowed. An arbitrary cut inside
+a retained component can still have crossing labels.
+
+The remaining source-facing construction must derive uniform cut budgets
+from the actual geometry and combine them with this physical witness.
+For the target typical spectrum, the bound is $C n(\log n)^{12}$ rather
+than the status bound $C nD(\log n)^{12}$ used elsewhere in the scan
+(\path{08-scanner.tex}, lines~400--414). The canonical target typical set,
+its positive mass and dimension, the initial prevector, the comparator
+estimates, and the scanner's measure-valued fields still have to be supplied.
+The constructed physical witness does not complete the scanner data
+package or remove the restriction on Proposition~9.2.
 
 \section{Elimination}
 

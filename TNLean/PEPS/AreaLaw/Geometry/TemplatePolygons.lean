@@ -91,43 +91,12 @@ private theorem triangle_mem_of_normal_bounds (a b c p : ℝ × ℝ)
       exact ⟨min_le_left _ _, le_max_left _ _⟩
     · rw [hq']
       exact ⟨min_le_right _ _, le_max_right _ _⟩
-  have hα : 0 ≤ α := by
-    apply hside c a hca
-    intro q hq
-    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hq
-    rcases hq with rfl | rfl | rfl
-    · left
-      dsimp [planeCross]
-      ring
-    · right
-      dsimp [d, planeCross]
-      ring
-    · left
-      simp [planeCross]
-  have hβ : 0 ≤ β := by
-    apply hside a b hab
-    intro q hq
-    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hq
-    rcases hq with rfl | rfl | rfl
-    · left
-      simp [planeCross]
-    · left
-      dsimp [planeCross]
-      ring
-    · exact Or.inr rfl
-  have hγ : 0 ≤ γ := by
-    apply hside b c hbc
-    intro q hq
-    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hq
-    rcases hq with rfl | rfl | rfl
-    · right
-      dsimp [d, planeCross]
-      ring
-    · left
-      simp [planeCross]
-    · left
-      dsimp [planeCross]
-      ring
+  obtain ⟨hα, hβ, hγ⟩ : 0 ≤ α ∧ 0 ≤ β ∧ 0 ≤ γ := by
+    refine ⟨hside c a hca ?_, hside a b hab ?_, hside b c hbc ?_⟩ <;> intro q hq <;>
+      simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hq <;>
+      rcases hq with rfl | rfl | rfl <;> first
+        | (left; simp [planeCross]; done) | (left; dsimp [planeCross]; ring1)
+        | (right; dsimp [d, planeCross] <;> ring1)
   have hd' : d ≠ 0 := hd
   have hsum : γ + α + β = 1 := by
     dsimp [α, β, γ]
