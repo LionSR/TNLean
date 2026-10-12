@@ -1,0 +1,143 @@
+% Source: arXiv:2203.12563v3, Section 5, lines 1687--1692.
+
+\subsection{A uniform gap along the closed mixed interpolation}
+
+Consider the mixed interpolation of \cite[Section~5]{GarreRubio2023MPOSym}.
+For each $p\in\{0,1\}$, take any $D_p>0$ and endpoint tensor
+$A_p=(A_p^i)_{i=0}^{D_p^2-1}$ whose letters span $\MN{D_p}$.
+Thus the hypotheses are one-site injectivity and the stated square
+physical alphabets. Write $A(\gamma)$ for their mixed interpolation
+on physical dimension $(D_0+D_1)^2$, and write $H'_{\gamma,N}$ and
+$H'^{\mathrm{open}}_{\gamma,N}$ for the periodic and nonwrapping sums
+of its extended two-site interaction, respectively. All bounds below
+concern these given tensors; the constants may depend on them.
+
+\begin{theorem}[Fixed-window continuity of the actual open gap]
+    \label{thm:mpo_mixed_open_gap_continuity}
+    \lean{MPSTensor.continuous_periodicLocalInteractionES_family,
+        MPSTensor.continuous_openInteractionHamiltonianES_family,
+        MPSTensor.MPOSymmetry.mixedEndpoint_openInteractionHamiltonianES_eq_of_mem_Ioo,
+        MPSTensor.MPOSymmetry.eventually_mixedEndpoint_open_gap,
+        MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_open_gap_fixed_volume}
+    \leanok
+    \uses{def:mpo_mixed_extended_support,def:injective,
+        lem:open_local_interaction_sum_properties}
+    At every fixed $N\geq2$, the actual open Hamiltonian and its
+    kernel projector depend continuously on $\gamma\in\R$. If it has
+    gap $\eta>0$ at $\gamma_0$, then every $\eta'<\eta$ is a lower
+    norm bound on the kernel complement of each Hamiltonian in a
+    neighborhood of $\gamma_0$. For each fixed volume and each compact
+    parameter set, there is a positive gap bound uniform on that set;
+    the bound may depend on both. For $0<\gamma<1$, the actual
+    open Hamiltonian equals the canonical open parent of $A(\gamma)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_support_continuity,
+        thm:mpo_mixed_extended_open_kernel,
+        thm:kernel_gap_perturbation,thm:compact_kernel_gap}
+    Extension by exterior identities and a fixed permutation of the
+    physical coordinates preserve operator continuity. Summing the
+    finitely many nonwrapping terms gives continuity of the open sum.
+    Its exact kernel is the extended boundary range, whose projector
+    is continuous. Apply the operator-and-kernel perturbation estimate
+    and then compactness. In the interior the extended local projection
+    equals the canonical one, so the two open sums coincide.
+\end{proof}
+
+\begin{theorem}[Actual periodic ground lines and fixed-volume gaps]
+    \label{thm:mpo_mixed_periodic_line_continuity}
+    \lean{MPSTensor.periodicMpvLineMap_injective_of_mpv_ne_zero,
+        MPSTensor.continuous_periodicInteractionHamiltonianES_family,
+        MPSTensor.MPOSymmetry.mpv_mixedEndpointInterpolation_zero,
+        MPSTensor.MPOSymmetry.mixedEndpointInterpolation_one_swap,
+        MPSTensor.MPOSymmetry.mpv_mixedEndpointInterpolation_one,
+        MPSTensor.MPOSymmetry.mpv_mixedEndpointInterpolation_ne_zero,
+        MPSTensor.MPOSymmetry.mixedEndpoint_periodicInteractionHamiltonianES_eq_of_mem_Ioo,
+        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_ker_eq_range_periodicMpvLineMap,
+        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_groundSpace_finrank_closedInterval,
+        MPSTensor.MPOSymmetry.continuous_mixedEndpoint_periodic_ker_starProjection,
+        MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_periodic_gap_fixed_volume}
+    \leanok
+    \uses{def:mpo_mixed_extended_support,def:mpo_mixed_endpoint_swap,
+        def:periodic-fixed-interaction,def:injective,def:mpv}
+    At each endpoint, the actual weighted periodic vector equals the
+    corresponding embedded endpoint vector for every positive length.
+    For $N\geq2$ and $\gamma\in[0,1]$, the actual vector
+    $\ket{V^{(N)}(A(\gamma))}$ is nonzero and
+    \begin{align}
+        \ker H'_{\gamma,N}
+        =\spn_{\C}\{\ket{V^{(N)}(A(\gamma))}\}.
+    \end{align}
+    This one-dimensional kernel has a continuous orthogonal projector
+    on $[0,1]$.
+    For each fixed $N\geq2$, a positive periodic gap works throughout
+    the closed parameter interval.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:asymex_absorbing_compression,
+        thm:mpo_mixed_first_support,thm:mpo_mixed_second_endpoint_comparison,
+        thm:mpo_mixed_interior,thm:mpo_mixed_periodic_endpoint_gaps,
+        thm:mpv_ne_zero_blk_injective,thm:chain_ground_space_eq_mpv_blk,
+        thm:continuous_injective_range_projector,thm:compact_kernel_gap}
+    At zero, every weighted letter is right-absorbed by the first
+    virtual corner. Compressing a nonempty product into that corner
+    preserves its trace and gives the embedded endpoint product.
+    Sector exchange gives the identity at one. Endpoint injectivity
+    proves nonvanishing there, while interior injectivity proves it
+    for $0<\gamma<1$. The endpoint kernel comparisons and the
+    canonical interior kernel identify the stated line.
+    The map from a scalar to its multiple of the actual periodic
+    vector is continuous and injective. Its range projector is
+    therefore continuous. Apply the compact finite-dimensional gap
+    theorem to the continuous periodic Hamiltonian and this exact
+    kernel projector.
+\end{proof}
+
+\begin{theorem}[Uniform periodic gap on the closed interpolation]
+    \label{thm:mpo_mixed_uniform_periodic_path_gap}
+    \lean{MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_periodic_path_gap}
+    \leanok
+    \uses{def:mpo_mixed_extended_support,def:periodic-fixed-interaction,def:injective}
+    There is $\delta>0$, depending only on the given endpoints and
+    independent of $\gamma\in[0,1]$ and $N\geq2$,
+    such that every $v\perp\ker H'_{\gamma,N}$ satisfies
+    \begin{align}
+        \delta\|v\|\leq\|H'_{\gamma,N}v\|.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_open_endpoint_gaps,thm:mpo_mixed_interior,
+        thm:injective_strict_knabe_window,thm:open_parent_hamiltonian_kernel_ground_space,
+        thm:mpo_mixed_open_gap_continuity,
+        thm:mpo_mixed_periodic_endpoint_gaps,
+        thm:parent_hamiltonian_gap_from_open_knabe_block,
+        lem:compact_uniform_pos_nat_bounds,
+        thm:mpo_mixed_periodic_line_continuity}
+    At either endpoint, its derived eventual open gap gives a window
+    with $m\geq2$ local terms and $m+1$ sites whose gap $\eta$ satisfies
+    $1<m\eta$. In the interior, injectivity gives such a strict
+    canonical open window, and the actual open operator is the same.
+    Choose $1/m<\eta'<\eta$ before applying fixed-window continuity.
+    For nearby interior parameters, Knabe's estimate gives the positive
+    periodic bound
+    \begin{align}
+        \delta_K=\frac{m\eta'-1}{m-1}
+    \end{align}
+    at every $N\geq2m$. At either endpoint use its independently
+    derived periodic gap $\delta_E>0$. Thus
+    $\min\{\delta_K,\delta_E\}$ is a common bound on a neighborhood
+    in the closed interval. A finite subcover gives one positive
+    constant and one common lower length threshold. Finally, each of
+    the finitely many shorter rings has a positive bound uniform in
+    the parameter by the actual periodic kernel-line continuity.
+    Taking the minimum of these constants proves the assertion.
+\end{proof}
+
+This conclusion concerns the spectral gap of the specified mixed tensor
+path in square physical-support coordinates. A reduction from arbitrary
+original physical alphabets, covariance under a common MPO symmetry
+throughout the path, and the corresponding symmetric-phase classification
+are separate assertions.

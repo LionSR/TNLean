@@ -44,8 +44,9 @@ theorem exists_compressedTensor_of_supported_projection_pos_mpv
       ((n : ℂ) = Matrix.trace P) ∧
       (∑ i : Fin d, (C i)ᴴ * C i = 1) ∧
       (∀ {N : ℕ}, 0 < N → ∀ σ : Fin N → Fin d, mpv A σ = mpv C σ) := by
-  obtain ⟨dim, C, _φ, hdim, hCtp, hCmpv, _hIntertwine, _hMul, _hStar⟩ :=
-    exists_compressedTensor_of_supported_projection A P hP hSupp hTP
+  obtain ⟨dim, C, _φ, _V, hdim, hCtp, hCmpv, _hIntertwine, _hMul, _hStar, _hLetter,
+    _hV_iso, _hV_range, _hEmbed⟩ :=
+    exists_compressedTensor_of_supported_projection_with_letter_and_isometry A P hP hSupp hTP
   refine ⟨dim, C, hdim, hCtp, ?_⟩
   have hleft : ∀ i : Fin d, P * A i = A i := by
     intro i

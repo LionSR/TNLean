@@ -37,9 +37,11 @@ import concurrent.futures
 import os
 import re
 import shutil
+import signal
 import subprocess
 import sys
 import tempfile
+import threading
 from pathlib import Path
 
 LEAN_FLAGS = [
@@ -264,6 +266,64 @@ def run_batch(paths: list[str], overlay: Path | None, jobs: int, timeout: int) -
     return failed
 
 
+def _signal_group(pid: int, sig: int) -> None:
+    try:
+        os.killpg(pid, sig)
+    except ProcessLookupError:
+        pass  # the whole group has already exited
+
+
+def _stop_group(proc: subprocess.Popen, grace: int = 30) -> None:
+    """Terminate the build's process group: SIGTERM, a grace period for `lake`,
+    then SIGKILL for any descendant that ignored it or outlived `lake`."""
+    _signal_group(proc.pid, signal.SIGTERM)
+    try:
+        proc.wait(timeout=grace)
+    except subprocess.TimeoutExpired:
+        pass
+    _signal_group(proc.pid, signal.SIGKILL)
+    proc.wait()
+
+
+def early_build(modules: list[str], log_path: Path | None, budget: int) -> int:
+    """Fail-fast `lake build` of `modules`. The early build is only a shortcut,
+    since the root build compiles the same modules, so when it exceeds `budget`
+    seconds (for example behind a cold dependency cache) it is stopped with a
+    warning instead of failing the job."""
+    proc = subprocess.Popen(["lake", "--fail-fast", "build", *modules],
+                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True,
+                            start_new_session=True)
+    assert proc.stdout is not None
+
+    def pump(stream, log) -> None:
+        for line in stream:
+            sys.stdout.write(line)
+            log.write(line)
+
+    with open(log_path or os.devnull, "a") as log:
+        reader = threading.Thread(target=pump, args=(proc.stdout, log), daemon=True)
+        reader.start()
+        try:
+            code: int | None = proc.wait(timeout=budget or None)
+        except subprocess.TimeoutExpired:
+            _stop_group(proc)
+            code = None
+        except BaseException:
+            # The build runs in its own session, so an interrupt such as Ctrl-C
+            # does not reach it; stop it before re-raising.
+            _stop_group(proc, grace=5)
+            raise
+        finally:
+            # A descendant that outlived `lake` would keep the pipe open.
+            _signal_group(proc.pid, signal.SIGKILL)
+            reader.join(timeout=60)
+    if code is None:
+        print(f"::warning::Early build stopped after {budget}s; "
+              "the root build compiles the remaining modules.", flush=True)
+        return 0
+    return code
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("command", choices=["early", "strict", "list"])
@@ -274,6 +334,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--timeout", type=int, default=240,
                         help="seconds allowed for each file")
     parser.add_argument("--log", type=Path, help="append early-build output here")
+    parser.add_argument("--budget", type=int, default=0,
+                        help="early: stop after this many seconds and leave the rest "
+                             "to the root build (0 means no limit)")
     args = parser.parse_args(argv)
 
     os.chdir(args.root)
@@ -293,14 +356,7 @@ def main(argv: list[str] | None = None) -> int:
             print("No changed production modules to build early.")
             return 0
         print("Building changed modules early:", *early, sep="\n  ", flush=True)
-        proc = subprocess.Popen(["lake", "--fail-fast", "build", *early],
-                                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
-        assert proc.stdout is not None
-        with open(args.log or os.devnull, "a") as log:
-            for line in proc.stdout:
-                sys.stdout.write(line)
-                log.write(line)
-        return proc.wait()
+        return early_build(early, args.log, args.budget)
 
     print(f"Strict checks: {len(sources)} changed source file(s), {len(tests)} test file(s).",
           flush=True)

@@ -66,6 +66,15 @@ theorem commute_iff_of_pairConjugacyClass_eq {p q : G × G}
   rw [h₁, h₂]
   exact commute_map_iff (MulAut.conj x).injective
 
+/-- An element fixes a pair under simultaneous conjugation exactly when it lies in the
+common centralizer of the pair. Source: arXiv:1001.3807, proof of Theorem 5.9,
+lines 1595–1610. -/
+theorem conj_fixed_iff_mem_centralizer (p : G × G) (x : G) :
+    (p.1 = x * p.1 * x⁻¹ ∧ p.2 = x * p.2 * x⁻¹) ↔
+      x ∈ Subgroup.centralizer ({p.1, p.2} : Set G) := by
+  simp only [eq_mul_inv_iff_mul_eq, Subgroup.mem_centralizer_iff,
+    Set.mem_insert_iff, Set.mem_singleton_iff, forall_eq_or_imp, forall_eq]
+
 namespace PairConjugacyClass
 
 /-- A pair-conjugacy class is commuting when its representatives commute.
