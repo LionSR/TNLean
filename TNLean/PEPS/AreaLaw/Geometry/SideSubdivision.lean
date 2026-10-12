@@ -63,8 +63,10 @@ private theorem halfMesh_on_side (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     have h1 := congrArg Prod.fst he
     have h2 := congrArg Prod.snd he
     fin_cases s <;>
-      simp [cellFanStart_eq, cellFanEnd_eq, cellFanCenter, cellFanSideVector, integerPoint]
-        at h1 h2
+      simp only [cellFanStart_eq, cellFanEnd_eq, cellFanCenter, cellFanSideVector, integerPoint,
+        Bool.false_eq_true, ↓reduceIte, Fin.isValue,
+        Prod.smul_mk, smul_eq_mul, Prod.mk_add_mk, Prod.mk_sub_mk, Prod.fst_add, Prod.snd_add,
+        mul_one, mul_neg, neg_neg] at h1 h2
     · exact ⟨m.2 - 2 * z.2, by push_cast; nlinarith [h2]⟩
     · exact ⟨2 * z.1 + 2 - m.1, by push_cast; nlinarith [h1]⟩
     · exact ⟨2 * z.2 + 2 - m.2, by push_cast; nlinarith [h2]⟩
