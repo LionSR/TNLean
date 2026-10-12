@@ -23,8 +23,14 @@
     \end{align*}
 \end{theorem}
 \begin{proof}\leanok
-    Conjugation by the unitary $e^{tK}$ carries
-    $[A,e^{-tK}Be^{tK}]$ to $[e^{tK}Ae^{-tK},B]$ and preserves the norm.
+    Since $K^*=-K$, the element $U=e^{tK}$ is unitary with $U^*=e^{-tK}$.
+    Using $U^*U=UU^*=1$,
+    \begin{align}
+        U\bigl(Ae^{-tK}Be^{tK}-e^{-tK}Be^{tK}A\bigr)U^*
+        =UAU^*B-BUAU^*=[e^{tK}Ae^{-tK},B].
+    \end{align}
+    By the $C^*$ identity, $\|UXU^*\|=\|X\|$ for every $X\in\mathcal A$.
+    Taking $X=[A,e^{-tK}Be^{tK}]$ gives the claim.
 \end{proof}
 
 \begin{theorem}[Localization from a region]
