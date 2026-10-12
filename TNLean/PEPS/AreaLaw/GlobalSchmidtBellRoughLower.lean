@@ -155,6 +155,8 @@ theorem exists_global_schmidtBellPrevector_rough_lower
   intro β split ΩX hz d ι₀ ψ S'
   obtain ⟨ell, hpre, hmass, hdim⟩ :=
     exists_global_schmidtBellPrevector H Ω E₀ hΩ hE X E hz
+  have hcard : E.card ≠ 0 :=
+    (Finset.nonempty_of_sum_ne_zero (s := E) hz.ne').card_ne_zero
   done
 
 end TNLean.PEPS.AreaLaw
