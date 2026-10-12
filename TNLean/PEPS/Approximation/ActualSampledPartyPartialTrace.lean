@@ -83,7 +83,9 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_partyProduct
       Matrix (X q × E q) (X q × E q) ℂ) :
       T (dependentPhysicalProductFamilyMatrix M) =
         dependentPhysicalProductFamilyMatrix (fun q ↦ Matrix.partialTraceRight (M q)) := by
-    change Matrix.partialTraceRight (fun xi yj ↦
+    change Matrix.partialTraceRight (fun
+      (xi yj : ((q : Option {_p : P // true = true}) → X q) ×
+        ((q : Option {_p : P // true = true}) → E q)) ↦
       ∏ q, M q (xi.1 q, xi.2 q) (yj.1 q, yj.2 q)) = _
     exact partialTraceRight_partyProductMatrix M
   have h := congrArg T

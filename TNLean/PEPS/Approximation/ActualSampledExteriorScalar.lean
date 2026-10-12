@@ -6,7 +6,6 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.NoneSourceWordScalar
 import TNLean.PEPS.Approximation.SampledEndpointExteriorIdentity
 import TNLean.PEPS.Approximation.SelectedFamilyPhysicalBasis
-import TNLean.PEPS.Approximation.BasisMatrixOperator
 import QICLean.Channel.PartialTrace
 
 /-!
@@ -26,6 +25,20 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 noncomputable section
 open scoped Matrix ComplexConjugate
 namespace TNLean.PEPS.PairEffect
+
+private theorem restrict_eval_heq_of_selector_eq {Q : Type} {f g : Q → Bool}
+    (h : f = g) {a b : Layout Q} (w : Word a b) (hs : w.sources = []) :
+    HEq (w.restrict f hs).eval (w.restrict g hs).eval := by
+  cases h
+  rfl
+
+private theorem restrict_none_eval_heq_isNone {Q : Type} {a b : Layout (Option Q)}
+    (w : Word a b) (hs : w.sources = []) :
+    HEq (w.restrict (partySelector none) hs).eval (w.restrict Option.isNone hs).eval := by
+  have h : partySelector (none : Option Q) = Option.isNone := by
+    funext q
+    cases q <;> simp [partySelector]
+  exact restrict_eval_heq_of_selector_eq h w hs
 
 private theorem empty_memory_mixed_partialTrace
     {Q I J : Type} [Fintype I] [Fintype J] {a b : Layout Q}
@@ -49,14 +62,20 @@ private theorem empty_memory_mixed_partialTrace
   have hScalar (γ : ℂ) :
       Matrix.of (fun row col ↦ C.repr ((γ • ContinuousLinearMap.id ℂ ℂ) (B col)) row) =
         γ • V := by
-    rw [matrix_repr_eval_eq_toMatrix]
-    change LinearMap.toMatrix B.toBasis C.toBasis (γ • LinearMap.id) = γ • V
-    simp only [map_smul, LinearMap.toMatrix_id_eq_basis_toMatrix,
-      OrthonormalBasis.coe_toBasis, V]
+    ext row col
+    change C.repr (γ • B col) row = γ • C.toBasis.repr (B col) row
+    rw [OrthonormalBasis.coe_toBasis_repr_apply]
+    exact congrArg (fun x : EuclideanSpace ℂ (PUnit × J) ↦ x row)
+      (map_smul C.repr γ (B col))
   have hIdentity : Matrix.of (fun row col ↦
       B.repr ((ContinuousLinearMap.id ℂ ℂ) (B col)) row) = (1 : Matrix I I ℂ) := by
-    rw [matrix_repr_eval_eq_toMatrix]
-    exact LinearMap.toMatrix_id B.toBasis
+    have hself : B.toBasis.toMatrix B = (1 : Matrix I I ℂ) := by
+      change B.toBasis.toMatrix B.toBasis = 1
+      exact Module.Basis.toMatrix_self B.toBasis
+    ext row col
+    have h := congrArg (fun M : Matrix I I ℂ ↦ M row col) hself
+    simpa only [Module.Basis.toMatrix_apply, OrthonormalBasis.coe_toBasis_repr_apply,
+      Matrix.of_apply, ContinuousLinearMap.id_apply] using h
   have hV : V * Vᴴ = 1 := C.toMatrix_orthonormalBasis_self_mul_conjTranspose B
   have hJ : Fintype.card J = 1 := by
     simpa only [Module.finrank_self, Fintype.card_prod, Fintype.card_punit, one_mul] using
@@ -106,21 +125,15 @@ theorem partialSourceWord_sampled_none_partialTrace_eq_scalar
     change Layout.restrict (partySelector none) (w.allResidualSourceLayout ++ []) = []
     rw [partySelector_none, Layout.restrict_append, restrict_allResidualSourceLayout_isNone,
       Layout.restrict_nil, List.nil_append]
-  have hξ : HEq (((w.partialSourceWord ψ ξ).restrict (partySelector none)
-      (sources_partialSourceWord w ψ ξ)).eval)
-      (w.emptyGateScalar • ContinuousLinearMap.id ℂ ℂ) := by
-    simpa only [partySelector_none] using
-      restrict_partialSourceWord_all_eval_heq_emptyGateScalar w ψ ξ
-  have hζ : HEq (((w.partialSourceWord ψ ζ).restrict (partySelector none)
-      (sources_partialSourceWord w ψ ζ)).eval)
-      (w.emptyGateScalar • ContinuousLinearMap.id ℂ ℂ) := by
-    simpa only [partySelector_none] using
-      restrict_partialSourceWord_all_eval_heq_emptyGateScalar w ψ ζ
-  have hU : HEq ((sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict (partySelector none)
-      (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω)).eval
-      (ContinuousLinearMap.id ℂ ℂ) := by
-    simpa only [partySelector_none] using
-      sampledEndpointInputWord_none_eval_heq_id w k lam L R ξ ζ j ω
+  have hξ := (restrict_none_eval_heq_isNone (w.partialSourceWord ψ ξ)
+    (sources_partialSourceWord w ψ ξ)).trans
+      (restrict_partialSourceWord_all_eval_heq_emptyGateScalar w ψ ξ)
+  have hζ := (restrict_none_eval_heq_isNone (w.partialSourceWord ψ ζ)
+    (sources_partialSourceWord w ψ ζ)).trans
+      (restrict_partialSourceWord_all_eval_heq_emptyGateScalar w ψ ζ)
+  have hU := (restrict_none_eval_heq_isNone (sampledEndpointInputWord w k lam L R ξ ζ j ω)
+    (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω)).trans
+      (sampledEndpointInputWord_none_eval_heq_id w k lam L R ξ ζ j ω)
   exact empty_memory_mixed_partialTrace ha (Layout.atParty_none_mapOwner_all b) B C
     ((w.partialSourceWord ψ ξ).restrict (partySelector none)
       (sources_partialSourceWord w ψ ξ)).eval
