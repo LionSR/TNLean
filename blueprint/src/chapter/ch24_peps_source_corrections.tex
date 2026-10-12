@@ -569,6 +569,7 @@ index sets.
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_sourcePrivatePreparation}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceWord}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_partialSourceWord}
+    \leanok
     \uses{def:peps_private_product_input,def:peps_canonical_source_residual,def:peps_all_party_source_registers,thm:peps_canonical_source_recovery}
     Let $W$ be a distributed composition with input memory $\mathcal H_a$,
     let $\psi\in\mathcal H_a$ be its recorded private product input, and let
@@ -591,6 +592,7 @@ index sets.
     \label{thm:peps_actual_private_preparation}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_sourcePrivatePreparation_tmul}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_partialSourceWord_tmul}
+    \leanok
     \uses{def:peps_actual_private_preparation}
     With the canonical append and owner identifications understood,
     every $y\in\mathcal H_S$ satisfies
@@ -602,7 +604,7 @@ index sets.
     The vector $y$ may be zero or correlated between different source registers.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_private_product_input,lem:peps_register_reorderings,thm:peps_canonical_source_recovery}
     A composition extended by untouched registers acts as the identity on
     their tensor factor. Apply this to the recorded preparation, whose
