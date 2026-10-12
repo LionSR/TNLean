@@ -94,17 +94,8 @@
     For the second estimate, the required bounds are
     $j\le L\le s$ and $2^{k+1}\le2^K\le L\le s$.
 
-    Applying Theorem~\ref{thm:area_law_capped_dyadic_moment} with cap
-    budget $24s$ and lower-scale budget $64s$ gives the stated bound.
-    Its proof groups terms by scale and estimates the geometric series as follows:
-    \begin{align}
-        \sum_{(k,z)\in\mathcal P_K(S_j)}(2^k)^{1+e}
-         & =\sum_{k=0}^{K}N_k(2^k)^{1+e}                \\
-         & \le\left(24s+\frac{64s}{2^e-1}\right)(2^K)^e \\
-         & \le\left(24+\frac{64}{2^e-1}\right)sL^e.
-    \end{align}
-    The last inequality uses $e>0$ and $2^K\le L$; its coefficient is
-    nonnegative because $2^e-1>0$.
+    Apply Theorem~\ref{thm:area_law_capped_dyadic_moment} with $A=24s$,
+    $B=64s$ and the cap bounds $2^K\le L<2^{K+1}$, and factor out $s$.
     If $j=0$, the shell and its partition are empty. If $K=0$, the
     lower-scale sum is empty and the cap inequalities force $L=1$.
     The argument also applies to thin rectangles and negative coordinates.
