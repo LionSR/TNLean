@@ -24,16 +24,6 @@ noncomputable section
 namespace TNLean.PEPS.PairEffect
 variable {P : Type}
 
-private theorem restrict_castLayouts_eval_heq {a b a' b' : Layout P}
-    (w : Word a b) (f : P → Bool) (ha : a = a') (hb : b = b')
-    (hs : w.sources = []) :
-    HEq ((w.castLayouts ha hb).restrict f
-      ((Word.sources_castLayouts w ha hb).trans hs)).eval
-      (w.restrict f hs).eval := by
-  cases ha
-  cases hb
-  rfl
-
 namespace SourceCircuit
 variable {a b : Layout P}
 variable (w : SourceCircuit a b) (k : ℕ)
@@ -75,11 +65,12 @@ theorem sampledEndpointInputWord_none_eval_heq_id
       (sources_sampledEndpointInputWord w k lam E F ξ ζ j ω)).eval
       (ContinuousLinearMap.id ℂ ℂ) := by
   unfold sampledEndpointInputWord
-  exact (restrict_castLayouts_eval_heq
-    (sampledEndpointWord w k lam E F ξ ζ j ω) Option.isNone
+  have hc := congrArg Word.eval (Word.restrict_castLayouts Option.isNone
+    (sampledEndpointWord w k lam E F ξ ζ j ω)
     (List.append_nil _).symm (List.append_nil _).symm
-    (sources_sampledEndpointWord w k lam E F ξ ζ j ω)).trans
-      (sampledEndpointWord_none_eval_heq_id w k lam E F ξ ζ j ω)
+    (sources_sampledEndpointWord w k lam E F ξ ζ j ω))
+  exact (heq_of_eq hc).trans ((Word.eval_castLayouts_heq _ _ _).trans
+    (sampledEndpointWord_none_eval_heq_id w k lam E F ξ ζ j ω))
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect

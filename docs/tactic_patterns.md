@@ -7142,14 +7142,22 @@ spectral split → block extraction → MPV calculation → strict bounds
   bases; empty coordinate sets and zero maps are included. A lemma suffices.
 
 
-### Restriction under identification of equal layouts — candidate (2026-10-12)
+### Restriction under identification of equal layouts — promoted (2026-10-12)
 
-- **Pattern:** Eliminate the input and output layout equalities, then use
-  reflexivity to compare restrictions of the identified word.
-- **Seen:** The private `restrict_castLayouts_word_heq` in
-  `AbsorbedRestriction.lean` and `restrict_castLayouts_eval_heq` in
-  `SampledEndpointExteriorIdentity.lean` (two proof bodies).
-- **Abstraction:** At a third proof body, share the restriction identity in
-  `WordRestriction.lean`, retaining the original source-free hypothesis.
-- **Notes:** One compares the words and the other their evaluations. Both
-  concern canonical identifications, without choosing any new isometry.
+- **Pattern:** Eliminate equal input and output register lists before comparing
+  restriction with their canonical identification.
+- **Seen:** `AbsorbedRestriction.restrict_castLayouts_word_heq`, the former
+  `SampledEndpointExteriorIdentity.restrict_castLayouts_eval_heq`, and
+  `EndpointWordRestrictionCongruence.restrict_castLayouts_congr`.
+- **Abstraction:** `Word.restrict_castLayouts` in `WordRestriction.lean`
+  states that restriction commutes with canonical identification of the
+  input and output lists. Its single proof eliminates both equalities.
+- **Refactor:** The endpoint congruence rewrites by this identity. The sampled
+  exterior proof applies evaluation and the existing evaluation-transport
+  lemma. The actively used private word comparison in `AbsorbedRestriction`
+  derives its heterogeneous conclusion from the same identity and the
+  existing single-word transport lemma.
+- **Notes:** Every original public signature and source-free hypothesis is
+  retained. No arbitrary heterogeneous-equality premise or new isometry is
+  introduced. Compilation of this promotion is pending with the endpoint
+  congruence development.
