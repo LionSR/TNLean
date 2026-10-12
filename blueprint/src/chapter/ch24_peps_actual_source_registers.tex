@@ -625,3 +625,151 @@ operations on an empty memory.
     output vectors. Complex linearity of the coordinate change and the
     partial trace gives the result for arbitrary $X$.
 \end{proof}
+
+\begin{theorem}[Local output traces of the actual sampled contraction]
+    \label{thm:peps_actual_sampled_local_output_trace}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_partyProduct}
+    \uses{thm:peps_actual_sampled_party_contraction,thm:peps_party_product_partial_trace}
+    In the notation of Theorem~\ref{thm:peps_actual_sampled_party_contraction},
+    choose each party output basis with index set $H_q\times D_q$.
+    Identify $\prod_q(H_q\times D_q)$ with
+    $(\prod_qH_q)\times(\prod_qD_q)$ by the canonical coordinate
+    equivalence $\chi$. Then
+    \begin{align}
+        \operatorname{tr}_{\prod_qD_q}
+        \left((D_\xi X_{\xi,\zeta}D_\zeta^\dagger)^\chi\right)
+         & =k^{-n}\sum_j\bigotimes_{q\in\mathcal Q}
+        \operatorname{tr}_{D_q}
+        \left(A_{\xi,q}U_{\xi,\zeta,j,q}A_{\zeta,q}^\dagger\right).
+        \label{eq:peps_actual_sampled_local_trace}
+    \end{align}
+    The same original global sample assignment $j$ is retained in each
+    summand. Every owner, including the exterior owner, remains in the
+    product. This is an identity in the specified retained and discarded
+    coordinates; identifying these bases with physical and private register
+    bases is a separate assertion. Zero matrices and empty coordinate sets
+    are included.
+    % Source: 04-compression.tex, lines 409--434 and 565--588, especially 574--579.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_actual_sampled_party_contraction,thm:peps_party_product_partial_trace}
+    Reindexing and partial trace are complex-linear. Apply their composition
+    to Theorem~\ref{thm:peps_actual_sampled_party_contraction} and distribute
+    it over the scalar multiple and finite sum. In each summand,
+    Theorem~\ref{thm:peps_party_product_partial_trace} gives
+    $\operatorname{tr}_{\prod_qD_q}((\bigotimes_q M_q)^\chi)
+        =\bigotimes_q\operatorname{tr}_{D_q}(M_q)$.
+    Substitute $M_q=A_{\xi,q}U_{\xi,\zeta,j,q}A_{\zeta,q}^\dagger$
+    to obtain~(\ref{eq:peps_actual_sampled_local_trace}).
+\end{proof}
+
+\begin{theorem}[Actual sampled factors on the original physical parties]
+    \label{thm:peps_actual_sampled_physical_factors}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors}
+    \uses{thm:peps_actual_sampled_local_output_trace,
+        def:peps_selected_physical_private_basis,thm:peps_selected_physical_product_scalar}
+    Use the actual local physical/private output bases, the prescribed
+    selected-party order, and arbitrary compatible input bases. Let
+    $\chi$ separate the retained and discarded coordinate families and
+    let $\eta$ identify the retained configurations with the original
+    configurations $\prod_{p\in\mathcal P}\{0,\ldots,d_p-1\}$.
+    For one original global sample assignment $j$, put
+    $M_{j,q}=\operatorname{tr}_{E_q}
+        (A_{\xi,q}U_{\xi,\zeta,j,q}A_{\zeta,q}^\dagger)$ and
+    $\alpha_j=M_{j,*}(1,1)$, where $1$ denotes the exterior singleton
+    coordinate. Then
+    \begin{align}
+        \left[\operatorname{tr}_{\prod_qE_q}
+            \left((D_\xi X_{\xi,\zeta}D_\zeta^\dagger)^\chi\right)\right]^\eta
+         & =k^{-n}\sum_j\alpha_j
+        \bigotimes_{p\in\mathcal P}M_{j,p}.
+        \label{eq:peps_actual_sampled_physical_factors}
+    \end{align}
+    Each $j$ is the same complete assignment on the original source slots
+    in every factor of its summand, and $\xi,\zeta$ remain independent.
+    The exterior scalar stays inside the sum and may vanish. Empty source
+    inventories, empty original party sets and zero-dimensional memories
+    are included. This is the local-coordinate contraction in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 565--588, especially 574--579.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_actual_sampled_local_output_trace,
+        thm:peps_selected_physical_product_scalar}
+    Apply the retained configuration change to
+    (\ref{eq:peps_actual_sampled_local_trace}). This change is complex-linear
+    and therefore commutes with the scalar multiple and finite sum.
+    Theorem~\ref{thm:peps_selected_physical_product_scalar} writes the
+    reindexed product in each summand as its exterior singleton entry
+    $\alpha_j$ times the product over the original parties. No scalar is
+    cancelled, giving (\ref{eq:peps_actual_sampled_physical_factors}).
+\end{proof}
+
+\begin{theorem}[The exterior factor in the sampled physical trace]
+    \label{thm:peps_actual_sampled_exterior_trace}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceWord_sampled_none_partialTrace_eq_scalar}
+    \uses{thm:peps_actual_chronological_exterior_scalar,
+        thm:peps_actual_sampled_endpoint_exterior}
+    Let $\lambda_W$ be the original empty-party gate scalar of $W$.
+    Choose any finite orthonormal basis of the exterior input memory and
+    any finite orthonormal basis of the exterior output memory indexed by
+    $\{1\}\times J$. For independent ket and bra choices $\xi,\zeta$
+    and any original joint sample assignment $j$, the actual local trace
+    satisfies
+    \begin{align}
+        \operatorname{tr}_{J}
+        \left(A_{\xi,*}U_{\xi,\zeta,j,*}A_{\zeta,*}^\dagger\right)
+         & =\lambda_W\overline{\lambda_W}\,I_{\{1\}}.
+        \label{eq:peps_actual_exterior_trace}
+    \end{align}
+    In particular its sole entry is $\lambda_W\overline{\lambda_W}$,
+    independently of $j,\xi,\zeta$ and the chosen orthonormal coordinates.
+    The scalar may vanish, and no physical register is introduced.
+    This is the exterior contribution in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 137--139, 246--267 and 565--588.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_actual_chronological_exterior_scalar,
+        thm:peps_actual_sampled_endpoint_exterior,thm:peps_all_party_source_exterior_empty}
+    The exterior input and output memories are both $\C$. Their actual
+    chronological restrictions are $\lambda_W I$, and the sampled input
+    restriction is $I$. If $V$ is the actual orthonormal coordinate change,
+    then $VV^\dagger=I$, so the mixed matrix is
+    $\lambda_W\overline{\lambda_W}\,I_{\{1\}\times J}$.
+    The output basis is a basis of $\C$, and hence $|J|=1$.
+    Tracing $J$ gives (\ref{eq:peps_actual_exterior_trace}). No scalar is
+    divided out.
+\end{proof}
+
+\begin{theorem}[The common exterior scalar in the sampled physical sum]
+    \label{thm:peps_actual_sampled_physical_scalar}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_sampled_partialTrace_eq_scalar_smul_physicalSum}
+    \uses{thm:peps_actual_sampled_physical_factors,thm:peps_actual_sampled_exterior_trace}
+    In the notation of Theorem~\ref{thm:peps_actual_sampled_physical_factors},
+    let $\lambda_W$ be the original empty-party gate scalar. Then
+    \begin{align*}
+        \left[\operatorname{tr}_{\prod_qE_q}
+            \left((D_\xi X_{\xi,\zeta}D_\zeta^\dagger)^\chi\right)\right]^\eta
+         & =k^{-n}\lambda_W\overline{\lambda_W}
+        \sum_j\bigotimes_{p\in\mathcal P}M_{j,p}.
+    \end{align*}
+    Each summand retains the same complete original sample assignment at
+    every endpoint, and the ket and bra choices remain independent.
+    The scalar may vanish; empty original party sets and source inventories
+    are included. This is the common exterior contribution in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 565--588.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_actual_sampled_physical_factors,thm:peps_actual_sampled_exterior_trace}
+    Theorem~\ref{thm:peps_actual_sampled_exterior_trace} gives
+    $M_{j,*}(1,1)=\lambda_W\overline{\lambda_W}$ for every $j$.
+    Substitute this identity into
+    (\ref{eq:peps_actual_sampled_physical_factors}) and distribute the
+    common scalar over the finite sum. No scalar is divided out.
+\end{proof}

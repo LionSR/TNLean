@@ -14,11 +14,16 @@ import TNLean.PEPS.Approximation.ActualGaussianBranch
 import TNLean.PEPS.Approximation.ActualMixedSourceMatrix
 import TNLean.PEPS.Approximation.ActualPartySourceMatrix
 import TNLean.PEPS.Approximation.ActualPurePhysicalSourceReplacement
+import TNLean.PEPS.Approximation.ActualPureSampledPhysicalSum
 import TNLean.PEPS.Approximation.ActualPureSourceMatrix
 import TNLean.PEPS.Approximation.ActualPureSourceReplacement
 import TNLean.PEPS.Approximation.ActualSampledEndpointInputWord
 import TNLean.PEPS.Approximation.ActualSampledEndpointWord
+import TNLean.PEPS.Approximation.ActualSampledExteriorScalar
 import TNLean.PEPS.Approximation.ActualSampledPartyContraction
+import TNLean.PEPS.Approximation.ActualSampledPartyPartialTrace
+import TNLean.PEPS.Approximation.ActualSampledPhysicalFactors
+import TNLean.PEPS.Approximation.ActualSampledPhysicalScalar
 import TNLean.PEPS.Approximation.ActualSourceColumnCoordinates
 import TNLean.PEPS.Approximation.ActualSourceColumnPhysicalTrace
 import TNLean.PEPS.Approximation.ActualSourceEmptyOwner
