@@ -214,7 +214,7 @@ theorem actualCharges_integral_bound_domainGraph :
     hT hgraph hdepth hm hM n E (fun _ => rfl) hn (by omega) hr hD hDpos hL hC
     hrows hmult hclear (half_pos ha).le k pre hne h0 h01 h1
   have hscaled := mul_le_mul_of_nonneg_left hcharge (mul_nonneg (Nat.cast_nonneg k) ha.le)
-  rw [← mul_assoc] at hscaled
+  rw [← _root_.mul_assoc] at hscaled
   exact hscaled.trans (hround k pre hpre hne)
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan
