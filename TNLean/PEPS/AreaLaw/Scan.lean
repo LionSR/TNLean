@@ -31,6 +31,7 @@ import TNLean.PEPS.AreaLaw.Scan.BandCountGrowth
 import TNLean.PEPS.AreaLaw.Scan.BandMargins
 import TNLean.PEPS.AreaLaw.Scan.BandNesting
 import TNLean.PEPS.AreaLaw.Scan.BandUniqueness
+import TNLean.PEPS.AreaLaw.Scan.BootstrapBinaryEntropyCost
 import TNLean.PEPS.AreaLaw.Scan.BootstrapParameters
 import TNLean.PEPS.AreaLaw.Scan.BootstrapReplicaAbsorption
 import TNLean.PEPS.AreaLaw.Scan.BootstrapRoundedClearance
@@ -70,6 +71,7 @@ import TNLean.PEPS.AreaLaw.Scan.PrefixCardinality
 import TNLean.PEPS.AreaLaw.Scan.PrefixComparison
 import TNLean.PEPS.AreaLaw.Scan.RadiusAsymptotics
 import TNLean.PEPS.AreaLaw.Scan.RegionalMoveEntropy
+import TNLean.PEPS.AreaLaw.Scan.RoundedClearance
 import TNLean.PEPS.AreaLaw.Scan.RoundedScalePower
 import TNLean.PEPS.AreaLaw.Scan.Scanner
 import TNLean.PEPS.AreaLaw.Scan.SelectedChainProbability

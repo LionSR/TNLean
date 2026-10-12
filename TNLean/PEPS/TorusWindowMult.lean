@@ -404,13 +404,11 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_coeffTransfer
         Z Zref hE) := by
   -- The window's region injectivity for `A` and `B`, from the arc-window hypotheses.
   have hRA : RegionBlockedTensorInjective (G := torusGraph width height) A
-      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) := by
-    have hi := hA.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
-    rwa [regionInjectivityDataOf_isInjective] at hi
+      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) :=
+    hA.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
   have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B
-      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) := by
-    have hi := hB.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
-    rwa [regionInjectivityDataOf_isInjective] at hi
+      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) :=
+    hB.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
   -- The gauge, the bond-dimension equality, and the conjugation coefficient identity from the
   -- coefficient transfer; the host injectivity is the single-window complement at the minimal size.
   obtain ⟨hE, Z, hid⟩ := exists_windowConjCoeffIdentity_of_coeffTransfer (by omega) (by omega)
@@ -470,13 +468,11 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_transfer
         Z Zref hE) := by
   -- The window's region injectivity for `A` and `B`, from the arc-window hypotheses.
   have hRA : RegionBlockedTensorInjective (G := torusGraph width height) A
-      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) := by
-    have hi := hA.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
-    rwa [regionInjectivityDataOf_isInjective] at hi
+      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) :=
+    hA.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
   have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B
-      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) := by
-    have hi := hB.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
-    rwa [regionInjectivityDataOf_isInjective] at hi
+      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) :=
+    hB.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
   -- The gauge and the conjugation coefficient identity from the transfer datum; the host
   -- injectivity is the single-window complement at the minimal size.
   obtain ⟨hE, Z, hid⟩ := exists_regionConjCoeffIdentity_of_transfer A B

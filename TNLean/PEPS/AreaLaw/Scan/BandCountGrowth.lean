@@ -31,6 +31,25 @@ scales. The band count retains both floors and the integer division of
 theorem eventually_le_K (X : ScannerExponents) (B : ℕ) :
     ∀ᶠ n : ℕ in atTop, B ≤ X.K n := by
   have hgap : 0 < 1 - X.ell - X.mu := sub_pos.mpr X.mu_lt_one_sub_ell
-  done
+  have hμ : 0 < X.mu := X.kappa_pos.trans X.kappa_lt_mu
+  have hℓ : 0 < 1 - X.ell := sub_pos.2 X.ell_lt_one
+  filter_upwards [eventually_ge_atTop 1, eventually_le_natCast_rpow hμ 2,
+    eventually_le_natCast_rpow hℓ 2, eventually_le_natCast_rpow hgap (16 * B)]
+    with n hn hm hL hB
+  have hn0 : (0 : ℝ) < n := by exact_mod_cast hn
+  have hμn : (0 : ℝ) ≤ (n : ℝ) ^ X.mu := by positivity
+  have hm_le : (X.m n : ℝ) ≤ (n : ℝ) ^ X.mu := Nat.floor_le hμn
+  have hm_ge : (n : ℝ) ^ X.mu / 2 ≤ X.m n := half_le_floor hm
+  have hL_ge : (n : ℝ) ^ (1 - X.ell) / 2 ≤ X.L n := half_le_floor hL
+  have hm_pos : 0 < X.m n := by exact_mod_cast (show (0 : ℝ) < X.m n by linarith)
+  have hsplit : (n : ℝ) ^ (1 - X.ell) = (n : ℝ) ^ (1 - X.ell - X.mu) * (n : ℝ) ^ X.mu := by
+    rw [← Real.rpow_add hn0]; ring_nf
+  have hreal : (B : ℝ) * (8 * X.m n) ≤ X.L n := by
+    have h1 : (B : ℝ) * (8 * X.m n) ≤ (B : ℝ) * (8 * (n : ℝ) ^ X.mu) := by gcongr
+    have h2 := mul_le_mul_of_nonneg_right hB hμn
+    nlinarith
+  unfold ScannerExponents.K
+  rw [Nat.le_div_iff_mul_le (by omega)]
+  exact_mod_cast hreal
 
 end TNLean.PEPS.AreaLaw.Scan.ScannerExponents

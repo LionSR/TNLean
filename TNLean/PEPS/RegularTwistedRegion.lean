@@ -47,6 +47,14 @@ def regularTwistedSite
     (v : V) (η : IncidentEdge Γ v → G) (s : Fin d) : ℂ :=
   a v (regularTwistedLabels u v η) s
 
+omit [Fintype V] [DecidableRel Γ.Adj] [Fintype G] [DecidableEq G] in
+/-- Inserting the identity on every regular bond leaves the site coefficient unchanged.
+Source: SCP10, `eq:2d:peps-with-ug-uh`. -/
+theorem regularTwistedSite_one (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) :
+    regularTwistedSite a (fun _ => 1) = a := by
+  funext v η s
+  exact congrArg (a v · s) (funext fun f => by simp only [regularTwistedLabels, one_mul, ite_self])
+
 /-- The actual open-region contraction with inserted regular-bond operators.
 It is the existing region matrix of the transformed `groupBondTensor`.
 Source: SCP10, twisted-region contraction, lines 1935–1990. -/
