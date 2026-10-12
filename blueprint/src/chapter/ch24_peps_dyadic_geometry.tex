@@ -97,6 +97,231 @@ $A$, $B$, $C$ below are permitted to coincide.
     changes its word only on a closed interval, and its surrounding word (the word
     before a birth, after a death) carries one label on a strictly larger open
     interval inside $(-8,2)$, with margins at least $1/2$.
+    The seven normal words are drawn below at one fixed $0<s<n$ over
+    $-8\le x\le2$: row~(1) is the starting main word, row~(2) the auxiliary
+    word~(\ref{eq:pdg_aux_word}) with the lens $Y$, row~(3) the main word after the
+    exchange, and rows~(4)--(7) the main words after the death of $C$ on $(-4,0)$,
+    the death of $A$ on $(-5,1)$, the birth of $C$ on $(-3,0)$ and the death of $B$
+    on $(-6,-3)$.
+    % Source: OpenAI2026PolynomialPEPS, figures/geometry-band-words.tex
+    % (fig:geometry-bands), prose sections/06-geometry.tex:168--225; the rows
+    % reproduce the source figure, which starts the auxiliary sheet uniformly at C.
+    % Ink-to-index: column c of the picture is the half-unit interval
+    % (-8+(c-1)/2, -8+c/2) of the normal ratio x; the top labels are the values
+    % of x at column boundaries.  Each tinted contour is one maximal interval on
+    % which the word is constant, labelled by its letter; the gap between two
+    % contours is an interface, a single value of x (the right label is taken
+    % there).  Row (2) is C|B|A|C|A|B|C at -6,...,-1; row (3) is
+    % C|B|A|C|A|B at -6,-5,-4,0,1; row (7) is C|B at 0.
+    % The red contour is the lens Y={-7<x<-7/2}, columns 3..9; its two ends lie
+    % in C intervals of rows (1) and (2) (Lemma lem:peps_dyadic_lens_word).
+    % Every atom is a glyphless place holder for the contours; there are no
+    % wires, no contractions and no tensor indices; boundary signature empty.
+    % Not to scale in s: only the transverse coordinate x is drawn.
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=20, bonds=none, size=s, metrics=compact]
+            \tndeclare{species}{bandA}{hue=source:orange}
+            \tndeclare{species}{bandB}{hue=source:cyan}
+            \tndeclare{species}{bandC}{hue=source:gray}
+            \tndeclare{species}{lens}{hue=source:red}
+            \tn[at=(1,1), name=bandTick0, skin=none]{}
+            \tnmark[form=label]{0.5 w of bandTick0}{$-8$}
+            \tn[at=(1,4), name=bandTick2, skin=none]{}
+            \tnmark[form=label]{0.5 e of bandTick2}{$-6$}
+            \tn[at=(1,8), name=bandTick4, skin=none]{}
+            \tnmark[form=label]{0.5 e of bandTick4}{$-4$}
+            \tn[at=(1,12), name=bandTick6, skin=none]{}
+            \tnmark[form=label]{0.5 e of bandTick6}{$-2$}
+            \tn[at=(1,16), name=bandTick8, skin=none]{}
+            \tnmark[form=label]{0.5 e of bandTick8}{$0$}
+            \tn[at=(1,20), name=bandTick10, skin=none]{}
+            \tnmark[form=label]{0.5 e of bandTick10}{$2$}
+            % main, start: C \mid A \mid B at 0,1
+            \tn[at=(3,1), skin=none]{}
+            \tn[at=(3,2), skin=none]{}
+            \tn[at=(3,3), skin=none]{}
+            \tn[at=(3,4), skin=none]{}
+            \tn[at=(3,5), skin=none]{}
+            \tn[at=(3,6), skin=none]{}
+            \tn[at=(3,7), skin=none]{}
+            \tn[at=(3,8), skin=none]{}
+            \tn[at=(3,9), skin=none]{}
+            \tn[at=(3,10), skin=none]{}
+            \tn[at=(3,11), skin=none]{}
+            \tn[at=(3,12), skin=none]{}
+            \tn[at=(3,13), skin=none]{}
+            \tn[at=(3,14), skin=none]{}
+            \tn[at=(3,15), skin=none]{}
+            \tn[at=(3,16), skin=none]{}
+            \tn[at=(3,17), skin=none]{}
+            \tn[at=(3,18), skin=none]{}
+            \tn[at=(3,19), skin=none]{}
+            \tn[at=(3,20), skin=none]{}
+            \tnmark[form=enclosure, species=bandC, tint, label pos=n]{(3,1) .. (3,16)}{$C$}
+            \tnmark[form=enclosure, species=bandA, tint, label pos=n]{(3,17) .. (3,18)}{$A$}
+            \tnmark[form=enclosure, species=bandB, tint, label pos=n]{(3,19) .. (3,20)}{$B$}
+            \tnmark[form=label, label pos=w]{0.5 w of (3,1)}{(1)}
+            % auxiliary: C \mid B \mid A \mid C \mid A \mid B \mid C at -6,-5,-4,-3,-2,-1
+            \tn[at=(5,1), skin=none]{}
+            \tn[at=(5,2), skin=none]{}
+            \tn[at=(5,3), skin=none]{}
+            \tn[at=(5,4), skin=none]{}
+            \tn[at=(5,5), skin=none]{}
+            \tn[at=(5,6), skin=none]{}
+            \tn[at=(5,7), skin=none]{}
+            \tn[at=(5,8), skin=none]{}
+            \tn[at=(5,9), skin=none]{}
+            \tn[at=(5,10), skin=none]{}
+            \tn[at=(5,11), skin=none]{}
+            \tn[at=(5,12), skin=none]{}
+            \tn[at=(5,13), skin=none]{}
+            \tn[at=(5,14), skin=none]{}
+            \tn[at=(5,15), skin=none]{}
+            \tn[at=(5,16), skin=none]{}
+            \tn[at=(5,17), skin=none]{}
+            \tn[at=(5,18), skin=none]{}
+            \tn[at=(5,19), skin=none]{}
+            \tn[at=(5,20), skin=none]{}
+            \tnmark[form=enclosure, species=bandC, tint, label pos=n]{(5,1) .. (5,4)}{$C$}
+            \tnmark[form=enclosure, species=bandB, tint, label pos=n]{(5,5) .. (5,6)}{$B$}
+            \tnmark[form=enclosure, species=bandA, tint, label pos=n]{(5,7) .. (5,8)}{$A$}
+            \tnmark[form=enclosure, species=bandC, tint, label pos=n]{(5,9) .. (5,10)}{$C$}
+            \tnmark[form=enclosure, species=bandA, tint, label pos=n]{(5,11) .. (5,12)}{$A$}
+            \tnmark[form=enclosure, species=bandB, tint, label pos=n]{(5,13) .. (5,14)}{$B$}
+            \tnmark[form=enclosure, species=bandC, tint, label pos=n]{(5,15) .. (5,20)}{$C$}
+            \tnmark[form=label, label pos=w]{0.5 w of (5,1)}{(2)}
+            % main, exchanged: C \mid B \mid A \mid C \mid A \mid B at -6,-5,-4,0,1
+            \tn[at=(8,1), skin=none]{}
+            \tn[at=(8,2), skin=none]{}
+            \tn[at=(8,3), skin=none]{}
+            \tn[at=(8,4), skin=none]{}
+            \tn[at=(8,5), skin=none]{}
+            \tn[at=(8,6), skin=none]{}
+            \tn[at=(8,7), skin=none]{}
+            \tn[at=(8,8), skin=none]{}
+            \tn[at=(8,9), skin=none]{}
+            \tn[at=(8,10), skin=none]{}
+            \tn[at=(8,11), skin=none]{}
+            \tn[at=(8,12), skin=none]{}
+            \tn[at=(8,13), skin=none]{}
+            \tn[at=(8,14), skin=none]{}
+            \tn[at=(8,15), skin=none]{}
+            \tn[at=(8,16), skin=none]{}
+            \tn[at=(8,17), skin=none]{}
+            \tn[at=(8,18), skin=none]{}
+            \tn[at=(8,19), skin=none]{}
+            \tn[at=(8,20), skin=none]{}
+            \tnmark[form=enclosure, species=bandC, tint, label pos=n]{(8,1) .. (8,4)}{$C$}
+            \tnmark[form=enclosure, species=bandB, tint, label pos=n]{(8,5) .. (8,6)}{$B$}
+            \tnmark[form=enclosure, species=bandA, tint, label pos=n]{(8,7) .. (8,8)}{$A$}
+            \tnmark[form=enclosure, species=bandC, tint, label pos=n]{(8,9) .. (8,16)}{$C$}
+            \tnmark[form=enclosure, species=bandA, tint, label pos=n]{(8,17) .. (8,18)}{$A$}
+            \tnmark[form=enclosure, species=bandB, tint, label pos=n]{(8,19) .. (8,20)}{$B$}
+            \tnmark[form=label, label pos=w]{0.5 w of (8,1)}{(3)}
+            % death of $C$: C \mid B \mid A \mid B at -6,-5,1
+            \tn[at=(10,1), skin=none]{}
+            \tn[at=(10,2), skin=none]{}
+            \tn[at=(10,3), skin=none]{}
+            \tn[at=(10,4), skin=none]{}
+            \tn[at=(10,5), skin=none]{}
+            \tn[at=(10,6), skin=none]{}
+            \tn[at=(10,7), skin=none]{}
+            \tn[at=(10,8), skin=none]{}
+            \tn[at=(10,9), skin=none]{}
+            \tn[at=(10,10), skin=none]{}
+            \tn[at=(10,11), skin=none]{}
+            \tn[at=(10,12), skin=none]{}
+            \tn[at=(10,13), skin=none]{}
+            \tn[at=(10,14), skin=none]{}
+            \tn[at=(10,15), skin=none]{}
+            \tn[at=(10,16), skin=none]{}
+            \tn[at=(10,17), skin=none]{}
+            \tn[at=(10,18), skin=none]{}
+            \tn[at=(10,19), skin=none]{}
+            \tn[at=(10,20), skin=none]{}
+            \tnmark[form=enclosure, species=bandC, tint, label pos=n]{(10,1) .. (10,4)}{$C$}
+            \tnmark[form=enclosure, species=bandB, tint, label pos=n]{(10,5) .. (10,6)}{$B$}
+            \tnmark[form=enclosure, species=bandA, tint, label pos=n]{(10,7) .. (10,18)}{$A$}
+            \tnmark[form=enclosure, species=bandB, tint, label pos=n]{(10,19) .. (10,20)}{$B$}
+            \tnmark[form=label, label pos=w]{0.5 w of (10,1)}{(4)}
+            % death of $A$: C \mid B at -6
+            \tn[at=(12,1), skin=none]{}
+            \tn[at=(12,2), skin=none]{}
+            \tn[at=(12,3), skin=none]{}
+            \tn[at=(12,4), skin=none]{}
+            \tn[at=(12,5), skin=none]{}
+            \tn[at=(12,6), skin=none]{}
+            \tn[at=(12,7), skin=none]{}
+            \tn[at=(12,8), skin=none]{}
+            \tn[at=(12,9), skin=none]{}
+            \tn[at=(12,10), skin=none]{}
+            \tn[at=(12,11), skin=none]{}
+            \tn[at=(12,12), skin=none]{}
+            \tn[at=(12,13), skin=none]{}
+            \tn[at=(12,14), skin=none]{}
+            \tn[at=(12,15), skin=none]{}
+            \tn[at=(12,16), skin=none]{}
+            \tn[at=(12,17), skin=none]{}
+            \tn[at=(12,18), skin=none]{}
+            \tn[at=(12,19), skin=none]{}
+            \tn[at=(12,20), skin=none]{}
+            \tnmark[form=enclosure, species=bandC, tint, label pos=n]{(12,1) .. (12,4)}{$C$}
+            \tnmark[form=enclosure, species=bandB, tint, label pos=n]{(12,5) .. (12,20)}{$B$}
+            \tnmark[form=label, label pos=w]{0.5 w of (12,1)}{(5)}
+            % birth of $C$: C \mid B \mid C \mid B at -6,-3,0
+            \tn[at=(14,1), skin=none]{}
+            \tn[at=(14,2), skin=none]{}
+            \tn[at=(14,3), skin=none]{}
+            \tn[at=(14,4), skin=none]{}
+            \tn[at=(14,5), skin=none]{}
+            \tn[at=(14,6), skin=none]{}
+            \tn[at=(14,7), skin=none]{}
+            \tn[at=(14,8), skin=none]{}
+            \tn[at=(14,9), skin=none]{}
+            \tn[at=(14,10), skin=none]{}
+            \tn[at=(14,11), skin=none]{}
+            \tn[at=(14,12), skin=none]{}
+            \tn[at=(14,13), skin=none]{}
+            \tn[at=(14,14), skin=none]{}
+            \tn[at=(14,15), skin=none]{}
+            \tn[at=(14,16), skin=none]{}
+            \tn[at=(14,17), skin=none]{}
+            \tn[at=(14,18), skin=none]{}
+            \tn[at=(14,19), skin=none]{}
+            \tn[at=(14,20), skin=none]{}
+            \tnmark[form=enclosure, species=bandC, tint, label pos=n]{(14,1) .. (14,4)}{$C$}
+            \tnmark[form=enclosure, species=bandB, tint, label pos=n]{(14,5) .. (14,10)}{$B$}
+            \tnmark[form=enclosure, species=bandC, tint, label pos=n]{(14,11) .. (14,16)}{$C$}
+            \tnmark[form=enclosure, species=bandB, tint, label pos=n]{(14,17) .. (14,20)}{$B$}
+            \tnmark[form=label, label pos=w]{0.5 w of (14,1)}{(6)}
+            % death of $B$: C \mid B at 0
+            \tn[at=(16,1), skin=none]{}
+            \tn[at=(16,2), skin=none]{}
+            \tn[at=(16,3), skin=none]{}
+            \tn[at=(16,4), skin=none]{}
+            \tn[at=(16,5), skin=none]{}
+            \tn[at=(16,6), skin=none]{}
+            \tn[at=(16,7), skin=none]{}
+            \tn[at=(16,8), skin=none]{}
+            \tn[at=(16,9), skin=none]{}
+            \tn[at=(16,10), skin=none]{}
+            \tn[at=(16,11), skin=none]{}
+            \tn[at=(16,12), skin=none]{}
+            \tn[at=(16,13), skin=none]{}
+            \tn[at=(16,14), skin=none]{}
+            \tn[at=(16,15), skin=none]{}
+            \tn[at=(16,16), skin=none]{}
+            \tn[at=(16,17), skin=none]{}
+            \tn[at=(16,18), skin=none]{}
+            \tn[at=(16,19), skin=none]{}
+            \tn[at=(16,20), skin=none]{}
+            \tnmark[form=enclosure, species=bandC, tint, label pos=n]{(16,1) .. (16,16)}{$C$}
+            \tnmark[form=enclosure, species=bandB, tint, label pos=n]{(16,17) .. (16,20)}{$B$}
+            \tnmark[form=label, label pos=w]{0.5 w of (16,1)}{(7)}
+            \tnmark[form=enclosure, species=lens, label pos=s]{(5,3) .. (5,9)}{$Y$}
+        \end{tenkz}
+    \end{tenkzequation}
 \end{definition}
 
 \begin{lemma}[The lens exchange produces the main word]
@@ -150,6 +375,123 @@ $A$, $B$, $C$ below are permitted to coincide.
     clearance estimate for the central birth in the proof
     of~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS}, for any surrounding guide equal
     to $A$ on the interior of $S$.
+    The guide after the central birth is sketched below, with the bands
+    $\{0<x<1\}$ drawn far wider than they are and their narrowing towards the corners
+    drawn as four strings; the dots are the corners in $\mathcal V$.
+    % Source: OpenAI2026PolynomialPEPS, sections/06-geometry.tex:140--165 (central
+    % birth and the starting word C|A|B); no source figure.
+    % Ink-to-index: the square S=[0,n]^2 has corners at the four red dots
+    % (the set V).  The orange contours are the bands {0<x<1} of the four edges,
+    % keeping the label A; the blue tinted contour is the central region R, of
+    % label B; the four blue strings record that R reaches the boundary of S at
+    % the corners and nowhere else.  C_e is the label of the exterior neighbouring
+    % square across each edge e (the four C_e may differ).  Along any edge, read
+    % inwards, the word is C_e|A|B with interfaces at x=0 and x=1.
+    % Not to scale: a band has width w(s)=10^{-3}min(s,n-s)<=n/2000 and width 0
+    % at the corners, so R is almost all of S; the conical tips cannot be inked.
+    % No wires carry indices; no contractions; boundary signature empty.
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[lattice={9x9}, bonds=none, size=s] % chktex 29
+            \tndeclare{species}{bandA}{hue=source:orange}
+            \tndeclare{species}{bandB}{hue=source:cyan}
+            \tndeclare{species}{contact}{hue=source:red}
+            \tn[at=(1,1), skin=none]{}
+            \tn[at=(1,2), skin=none]{}
+            \tn[at=(1,3), skin=none]{}
+            \tn[at=(1,4), skin=none]{}
+            \tn[at=(1,5), skin=none]{}
+            \tn[at=(1,6), skin=none]{}
+            \tn[at=(1,7), skin=none]{}
+            \tn[at=(1,8), skin=none]{}
+            \tn[at=(1,9), skin=none]{}
+            \tn[at=(2,1), skin=none]{}
+            \tn[at=(2,2), name=centralCornerNW, skin=dot, species=contact]{}
+            \tn[at=(2,3), skin=none]{}
+            \tn[at=(2,4), skin=none]{}
+            \tn[at=(2,5), skin=none]{}
+            \tn[at=(2,6), skin=none]{}
+            \tn[at=(2,7), skin=none]{}
+            \tn[at=(2,8), name=centralCornerNE, skin=dot, species=contact]{}
+            \tn[at=(2,9), skin=none]{}
+            \tn[at=(3,1), skin=none]{}
+            \tn[at=(3,2), skin=none]{}
+            \tn[at=(3,3), name=centralTipNW, skin=none]{}
+            \tn[at=(3,4), skin=none]{}
+            \tn[at=(3,5), skin=none]{}
+            \tn[at=(3,6), skin=none]{}
+            \tn[at=(3,7), name=centralTipNE, skin=none]{}
+            \tn[at=(3,8), skin=none]{}
+            \tn[at=(3,9), skin=none]{}
+            \tn[at=(4,1), skin=none]{}
+            \tn[at=(4,2), skin=none]{}
+            \tn[at=(4,3), skin=none]{}
+            \tn[at=(4,4), skin=none]{}
+            \tn[at=(4,5), skin=none]{}
+            \tn[at=(4,6), skin=none]{}
+            \tn[at=(4,7), skin=none]{}
+            \tn[at=(4,8), skin=none]{}
+            \tn[at=(4,9), skin=none]{}
+            \tn[at=(5,1), skin=none]{}
+            \tn[at=(5,2), skin=none]{}
+            \tn[at=(5,3), skin=none]{}
+            \tn[at=(5,4), skin=none]{}
+            \tn[at=(5,5), skin=none]{}
+            \tn[at=(5,6), skin=none]{}
+            \tn[at=(5,7), skin=none]{}
+            \tn[at=(5,8), skin=none]{}
+            \tn[at=(5,9), skin=none]{}
+            \tn[at=(6,1), skin=none]{}
+            \tn[at=(6,2), skin=none]{}
+            \tn[at=(6,3), skin=none]{}
+            \tn[at=(6,4), skin=none]{}
+            \tn[at=(6,5), skin=none]{}
+            \tn[at=(6,6), skin=none]{}
+            \tn[at=(6,7), skin=none]{}
+            \tn[at=(6,8), skin=none]{}
+            \tn[at=(6,9), skin=none]{}
+            \tn[at=(7,1), skin=none]{}
+            \tn[at=(7,2), skin=none]{}
+            \tn[at=(7,3), name=centralTipSW, skin=none]{}
+            \tn[at=(7,4), skin=none]{}
+            \tn[at=(7,5), skin=none]{}
+            \tn[at=(7,6), skin=none]{}
+            \tn[at=(7,7), name=centralTipSE, skin=none]{}
+            \tn[at=(7,8), skin=none]{}
+            \tn[at=(7,9), skin=none]{}
+            \tn[at=(8,1), skin=none]{}
+            \tn[at=(8,2), name=centralCornerSW, skin=dot, species=contact]{}
+            \tn[at=(8,3), skin=none]{}
+            \tn[at=(8,4), skin=none]{}
+            \tn[at=(8,5), skin=none]{}
+            \tn[at=(8,6), skin=none]{}
+            \tn[at=(8,7), skin=none]{}
+            \tn[at=(8,8), name=centralCornerSE, skin=dot, species=contact]{}
+            \tn[at=(8,9), skin=none]{}
+            \tn[at=(9,1), skin=none]{}
+            \tn[at=(9,2), skin=none]{}
+            \tn[at=(9,3), skin=none]{}
+            \tn[at=(9,4), skin=none]{}
+            \tn[at=(9,5), skin=none]{}
+            \tn[at=(9,6), skin=none]{}
+            \tn[at=(9,7), skin=none]{}
+            \tn[at=(9,8), skin=none]{}
+            \tn[at=(9,9), skin=none]{}
+            \tnmark[form=enclosure, species=bandA, tint]{(2,3) .. (2,7)}{$A$}
+            \tnmark[form=enclosure, species=bandA, tint]{(8,3) .. (8,7)}{$A$}
+            \tnmark[form=enclosure, species=bandA, tint]{(3,2) .. (7,2)}{$A$}
+            \tnmark[form=enclosure, species=bandA, tint]{(3,8) .. (7,8)}{$A$}
+            \tnmark[form=enclosure, species=bandB, tint]{(3,3) .. (7,7)}{$B$}
+            \tnwire[kind=string, species=bandB]{centralTipNW}{centralCornerNW}
+            \tnwire[kind=string, species=bandB]{centralTipNE}{centralCornerNE}
+            \tnwire[kind=string, species=bandB]{centralTipSW}{centralCornerSW}
+            \tnwire[kind=string, species=bandB]{centralTipSE}{centralCornerSE}
+            \tnmark[form=label]{(1,5)}{$C_e$}
+            \tnmark[form=label]{(9,5)}{$C_e$}
+            \tnmark[form=label]{(5,1)}{$C_e$}
+            \tnmark[form=label]{(5,9)}{$C_e$}
+        \end{tenkz}
+    \end{tenkzequation}
 \end{theorem}
 
 \begin{proof}\leanok
@@ -274,6 +616,89 @@ $A$, $B$, $C$ below are permitted to coincide.
     of the root square carries its new label, another block of the root square the
     label of its parent $2n$-block, and a block outside the root square the
     placeholder.
+    The picture shows one stage of the pass to level $n$ for a root square of four
+    blocks per side, before the repainting of the shaded block $S$ to its new label;
+    $\ast$ is the placeholder.
+    % Source: OpenAI2026PolynomialPEPS, sections/06-geometry.tex:60--100 (the
+    % passage from 2n-squares to n-squares); no source figure.  The order in which
+    % the blocks are repainted is not fixed by the source; this is one stage.
+    % Ink-to-index: each box is one n-block of the root square [0,N]^2 with N=4n,
+    % carrying its block label; the four gray contours are the 2n-parents.
+    % Blue boxes B_1,...,B_4 are repainted blocks with their new labels; the
+    % orange box is the block S being repainted, still carrying its parent label
+    % A_2; every other block of the root square carries its parent label A_2, A_3
+    % or A_4.  The asterisks are the blocks outside the root square, which carry
+    % the placeholder.  The labels of S's neighbours across its four edges are its
+    % exterior labels C_e: B_2 (west), A_2 (east and south) and the placeholder
+    % (north).  Boxes are blocks, not tensors: no wires, no contractions, no
+    % indices; boundary signature empty.
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[lattice={6x6}, bonds=none, size=s] % chktex 29
+            \tndeclare{species}{repainted}{hue=source:cyan}
+            \tndeclare{species}{current}{hue=source:orange}
+            \tn[at=(1,1), skin=none]{}
+            \tnmark[form=label]{(1,1)}{$\ast$}
+            \tn[at=(1,2), skin=none]{}
+            \tnmark[form=label]{(1,2)}{$\ast$}
+            \tn[at=(1,3), skin=none]{}
+            \tnmark[form=label]{(1,3)}{$\ast$}
+            \tn[at=(1,4), skin=none]{}
+            \tnmark[form=label]{(1,4)}{$\ast$}
+            \tn[at=(1,5), skin=none]{}
+            \tnmark[form=label]{(1,5)}{$\ast$}
+            \tn[at=(1,6), skin=none]{}
+            \tnmark[form=label]{(1,6)}{$\ast$}
+            \tn[at=(2,1), skin=none]{}
+            \tnmark[form=label]{(2,1)}{$\ast$}
+            \tn[at=(2,2), skin=box, species=repainted]{B_1}
+            \tn[at=(2,3), skin=box, species=repainted]{B_2}
+            \tn[at=(2,4), name=dyadicCurrent, skin=box, species=current]{A_2}
+            \tn[at=(2,5), skin=box]{A_2}
+            \tn[at=(2,6), skin=none]{}
+            \tnmark[form=label]{(2,6)}{$\ast$}
+            \tn[at=(3,1), skin=none]{}
+            \tnmark[form=label]{(3,1)}{$\ast$}
+            \tn[at=(3,2), skin=box, species=repainted]{B_3}
+            \tn[at=(3,3), skin=box, species=repainted]{B_4}
+            \tn[at=(3,4), skin=box]{A_2}
+            \tn[at=(3,5), skin=box]{A_2}
+            \tn[at=(3,6), skin=none]{}
+            \tnmark[form=label]{(3,6)}{$\ast$}
+            \tn[at=(4,1), skin=none]{}
+            \tnmark[form=label]{(4,1)}{$\ast$}
+            \tn[at=(4,2), skin=box]{A_3}
+            \tn[at=(4,3), skin=box]{A_3}
+            \tn[at=(4,4), skin=box]{A_4}
+            \tn[at=(4,5), skin=box]{A_4}
+            \tn[at=(4,6), skin=none]{}
+            \tnmark[form=label]{(4,6)}{$\ast$}
+            \tn[at=(5,1), skin=none]{}
+            \tnmark[form=label]{(5,1)}{$\ast$}
+            \tn[at=(5,2), skin=box]{A_3}
+            \tn[at=(5,3), skin=box]{A_3}
+            \tn[at=(5,4), skin=box]{A_4}
+            \tn[at=(5,5), skin=box]{A_4}
+            \tn[at=(5,6), skin=none]{}
+            \tnmark[form=label]{(5,6)}{$\ast$}
+            \tn[at=(6,1), skin=none]{}
+            \tnmark[form=label]{(6,1)}{$\ast$}
+            \tn[at=(6,2), skin=none]{}
+            \tnmark[form=label]{(6,2)}{$\ast$}
+            \tn[at=(6,3), skin=none]{}
+            \tnmark[form=label]{(6,3)}{$\ast$}
+            \tn[at=(6,4), skin=none]{}
+            \tnmark[form=label]{(6,4)}{$\ast$}
+            \tn[at=(6,5), skin=none]{}
+            \tnmark[form=label]{(6,5)}{$\ast$}
+            \tn[at=(6,6), skin=none]{}
+            \tnmark[form=label]{(6,6)}{$\ast$}
+            \tnmark[form=enclosure]{(2,2) .. (3,3)}{}
+            \tnmark[form=enclosure]{(2,4) .. (3,5)}{}
+            \tnmark[form=enclosure]{(4,2) .. (5,3)}{}
+            \tnmark[form=enclosure]{(4,4) .. (5,5)}{}
+        \end{tenkz}
+    \end{tenkzequation}
 \end{definition}
 
 \begin{lemma}[Translation of the estimates]
@@ -973,6 +1398,230 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     labels lies in the rim pattern. This is the finite pattern of rim intersection
     points of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 344--349, with the rays
     of both adjacent edges and the grid lines.
+    The source's illustration of a point treatment for three distinct labels is
+    redrawn below in units of $t$: homogenizing the open square of radius $t$ about
+    the true vertex to $P$ moves the meeting point of $P$, $A$ and $B$ to the
+    midpoint of the right side of the rim, a point of the rim pattern.
+    % Source: OpenAI2026PolynomialPEPS, figures/geometry-point-treatment.tex
+    % (fig:geometry-points), prose sections/06-geometry.tex:330--356.
+    % Ink-to-index: lattice place (r,c) is the point (x,y)=((c-5)/2,(5-r)/2) in
+    % units of t about the mark v; the dashed square is the rim of the treated
+    % square of radius t, dashed where it is not an interface.  Solid lines are
+    % the interfaces between the labels P (left), A (upper right) and B (lower
+    % right).  The black dot is the true vertex: v before, v+(t,0) after; the
+    % gray pill is the old vertex, now interior to P.  The tinted and untinted red
+    % contours are the inner and outer holes at the true vertex, of radii h_n and
+    % 2h_n, enlarged for visibility.  Lines are interface curves drawn through
+    % glyphless junctions; they carry no tensor index, and each panel has empty
+    % boundary signature.
+    \begin{tenkzequation}
+        \tenkzkernel
+        \begin{tenkz}[lattice={9x9}, bonds=none, size=s] % chktex 29
+            \tndeclare{species}{hole}{hue=source:red}
+            \tndeclare{species}{treated}{hue=source:gray}
+            \tn[at=(1,1), skin=none]{}
+            \tn[at=(1,2), skin=none]{}
+            \tn[at=(1,3), skin=none]{}
+            \tn[at=(1,4), skin=none]{}
+            \tn[at=(1,5), name=ptBefore15, skin=none, ports={270:virtual}]{}
+            \tn[at=(1,6), skin=none]{}
+            \tn[at=(1,7), skin=none]{}
+            \tn[at=(1,8), skin=none]{}
+            \tn[at=(1,9), skin=none]{}
+            \tn[at=(2,1), skin=none]{}
+            \tn[at=(2,2), skin=none]{}
+            \tn[at=(2,3), skin=none]{}
+            \tn[at=(2,4), skin=none]{}
+            \tn[at=(2,5), skin=none]{}
+            \tn[at=(2,6), skin=none]{}
+            \tn[at=(2,7), skin=none]{}
+            \tn[at=(2,8), skin=none]{}
+            \tn[at=(2,9), skin=none]{}
+            \tn[at=(3,1), skin=none]{}
+            \tn[at=(3,2), skin=none]{}
+            \tn[at=(3,3), name=ptBefore33, skin=none, ports={0:virtual, 270:virtual}]{}
+            \tn[at=(3,4), skin=none]{}
+            \tn[at=(3,5), name=ptBefore35, skin=none, ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+            \tn[at=(3,6), skin=none]{}
+            \tn[at=(3,7), name=ptBefore37, skin=none, ports={180:virtual, 270:virtual}]{}
+            \tn[at=(3,8), skin=none]{}
+            \tn[at=(3,9), skin=none]{}
+            \tn[at=(4,1), skin=none]{}
+            \tn[at=(4,2), skin=none]{}
+            \tn[at=(4,3), skin=none]{}
+            \tn[at=(4,4), skin=none]{}
+            \tn[at=(4,5), skin=none]{}
+            \tn[at=(4,6), skin=none]{}
+            \tn[at=(4,7), skin=none]{}
+            \tn[at=(4,8), skin=none]{}
+            \tn[at=(4,9), skin=none]{}
+            \tn[at=(5,1), skin=none]{}
+            \tn[at=(5,2), skin=none]{}
+            \tn[at=(5,3), skin=none]{}
+            \tn[at=(5,4), skin=none]{}
+            \tn[at=(5,5), name=ptBeforeV, skin=dot, ports={0:virtual, 90:virtual, 270:virtual}]{}
+            \tn[at=(5,6), skin=none]{}
+            \tn[at=(5,7), name=ptBefore57, skin=none, ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+            \tn[at=(5,8), skin=none]{}
+            \tn[at=(5,9), name=ptBefore59, skin=none, ports={180:virtual}]{}
+            \tn[at=(6,1), skin=none]{}
+            \tn[at=(6,2), skin=none]{}
+            \tn[at=(6,3), skin=none]{}
+            \tn[at=(6,4), skin=none]{}
+            \tn[at=(6,5), skin=none]{}
+            \tn[at=(6,6), skin=none]{}
+            \tn[at=(6,7), skin=none]{}
+            \tn[at=(6,8), skin=none]{}
+            \tn[at=(6,9), skin=none]{}
+            \tn[at=(7,1), skin=none]{}
+            \tn[at=(7,2), skin=none]{}
+            \tn[at=(7,3), name=ptBefore73, skin=none, ports={0:virtual, 90:virtual}]{}
+            \tn[at=(7,4), skin=none]{}
+            \tn[at=(7,5), name=ptBefore75, skin=none, ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+            \tn[at=(7,6), skin=none]{}
+            \tn[at=(7,7), name=ptBefore77, skin=none, ports={90:virtual, 180:virtual}]{}
+            \tn[at=(7,8), skin=none]{}
+            \tn[at=(7,9), skin=none]{}
+            \tn[at=(8,1), skin=none]{}
+            \tn[at=(8,2), skin=none]{}
+            \tn[at=(8,3), skin=none]{}
+            \tn[at=(8,4), skin=none]{}
+            \tn[at=(8,5), skin=none]{}
+            \tn[at=(8,6), skin=none]{}
+            \tn[at=(8,7), skin=none]{}
+            \tn[at=(8,8), skin=none]{}
+            \tn[at=(8,9), skin=none]{}
+            \tn[at=(9,1), skin=none]{}
+            \tn[at=(9,2), skin=none]{}
+            \tn[at=(9,3), skin=none]{}
+            \tn[at=(9,4), skin=none]{}
+            \tn[at=(9,5), name=ptBefore95, skin=none, ports={90:virtual}]{}
+            \tn[at=(9,6), skin=none]{}
+            \tn[at=(9,7), skin=none]{}
+            \tn[at=(9,8), skin=none]{}
+            \tn[at=(9,9), skin=none]{}
+            \tnwire{ptBefore15.270}{ptBefore35.90}
+            \tnwire{ptBefore35.270}{ptBeforeV.90}
+            \tnwire{ptBeforeV.270}{ptBefore75.90}
+            \tnwire{ptBefore75.270}{ptBefore95.90}
+            \tnwire{ptBeforeV.0}{ptBefore57.180}
+            \tnwire{ptBefore57.0}{ptBefore59.180}
+            \tnwire[stroke=dashed, species=treated]{ptBefore35.0}{ptBefore37.180}
+            \tnwire[stroke=dashed, species=treated]{ptBefore37.270}{ptBefore57.90}
+            \tnwire[stroke=dashed, species=treated]{ptBefore57.270}{ptBefore77.90}
+            \tnwire[stroke=dashed, species=treated]{ptBefore77.180}{ptBefore75.0}
+            \tnwire[stroke=dashed, species=treated]{ptBefore75.180}{ptBefore73.0}
+            \tnwire[stroke=dashed, species=treated]{ptBefore73.90}{ptBefore33.270}
+            \tnwire[stroke=dashed, species=treated]{ptBefore33.0}{ptBefore35.180}
+            \tnmark[form=enclosure, species=hole, tint]{ptBeforeV}{}
+            \tnmark[form=enclosure, species=hole]{(4,4) .. (6,6)}{}
+            \tnmark[form=label]{(4,2)}{$P$}
+            \tnmark[form=label]{(2,8)}{$A$}
+            \tnmark[form=label]{(8,8)}{$B$}
+        \end{tenkz}
+        $\longrightarrow$
+        \begin{tenkz}[lattice={9x9}, bonds=none, size=s] % chktex 29
+            \tndeclare{species}{hole}{hue=source:red}
+            \tndeclare{species}{treated}{hue=source:gray}
+            \tn[at=(1,1), skin=none]{}
+            \tn[at=(1,2), skin=none]{}
+            \tn[at=(1,3), skin=none]{}
+            \tn[at=(1,4), skin=none]{}
+            \tn[at=(1,5), name=ptAfter15, skin=none, ports={270:virtual}]{}
+            \tn[at=(1,6), skin=none]{}
+            \tn[at=(1,7), skin=none]{}
+            \tn[at=(1,8), skin=none]{}
+            \tn[at=(1,9), skin=none]{}
+            \tn[at=(2,1), skin=none]{}
+            \tn[at=(2,2), skin=none]{}
+            \tn[at=(2,3), skin=none]{}
+            \tn[at=(2,4), skin=none]{}
+            \tn[at=(2,5), skin=none]{}
+            \tn[at=(2,6), skin=none]{}
+            \tn[at=(2,7), skin=none]{}
+            \tn[at=(2,8), skin=none]{}
+            \tn[at=(2,9), skin=none]{}
+            \tn[at=(3,1), skin=none]{}
+            \tn[at=(3,2), skin=none]{}
+            \tn[at=(3,3), name=ptAfter33, skin=none, ports={0:virtual, 270:virtual}]{}
+            \tn[at=(3,4), skin=none]{}
+            \tn[at=(3,5), name=ptAfter35, skin=none, ports={0:virtual, 90:virtual, 180:virtual}]{}
+            \tn[at=(3,6), skin=none]{}
+            \tn[at=(3,7), name=ptAfter37, skin=none, ports={180:virtual, 270:virtual}]{}
+            \tn[at=(3,8), skin=none]{}
+            \tn[at=(3,9), skin=none]{}
+            \tn[at=(4,1), skin=none]{}
+            \tn[at=(4,2), skin=none]{}
+            \tn[at=(4,3), skin=none]{}
+            \tn[at=(4,4), skin=none]{}
+            \tn[at=(4,5), skin=none]{}
+            \tn[at=(4,6), skin=none]{}
+            \tn[at=(4,7), skin=none]{}
+            \tn[at=(4,8), skin=none]{}
+            \tn[at=(4,9), skin=none]{}
+            \tn[at=(5,1), skin=none]{}
+            \tn[at=(5,2), skin=none]{}
+            \tn[at=(5,3), skin=none]{}
+            \tn[at=(5,4), skin=none]{}
+            \tn[at=(5,5), name=ptAfterOld, skin=ring, species=treated]{}
+            \tn[at=(5,6), skin=none]{}
+            \tn[at=(5,7), name=ptAfterV, skin=dot, ports={0:virtual, 90:virtual, 270:virtual}]{}
+            \tn[at=(5,8), skin=none]{}
+            \tn[at=(5,9), name=ptAfter59, skin=none, ports={180:virtual}]{}
+            \tn[at=(6,1), skin=none]{}
+            \tn[at=(6,2), skin=none]{}
+            \tn[at=(6,3), skin=none]{}
+            \tn[at=(6,4), skin=none]{}
+            \tn[at=(6,5), skin=none]{}
+            \tn[at=(6,6), skin=none]{}
+            \tn[at=(6,7), skin=none]{}
+            \tn[at=(6,8), skin=none]{}
+            \tn[at=(6,9), skin=none]{}
+            \tn[at=(7,1), skin=none]{}
+            \tn[at=(7,2), skin=none]{}
+            \tn[at=(7,3), name=ptAfter73, skin=none, ports={0:virtual, 90:virtual}]{}
+            \tn[at=(7,4), skin=none]{}
+            \tn[at=(7,5), name=ptAfter75, skin=none, ports={0:virtual, 180:virtual, 270:virtual}]{}
+            \tn[at=(7,6), skin=none]{}
+            \tn[at=(7,7), name=ptAfter77, skin=none, ports={90:virtual, 180:virtual}]{}
+            \tn[at=(7,8), skin=none]{}
+            \tn[at=(7,9), skin=none]{}
+            \tn[at=(8,1), skin=none]{}
+            \tn[at=(8,2), skin=none]{}
+            \tn[at=(8,3), skin=none]{}
+            \tn[at=(8,4), skin=none]{}
+            \tn[at=(8,5), skin=none]{}
+            \tn[at=(8,6), skin=none]{}
+            \tn[at=(8,7), skin=none]{}
+            \tn[at=(8,8), skin=none]{}
+            \tn[at=(8,9), skin=none]{}
+            \tn[at=(9,1), skin=none]{}
+            \tn[at=(9,2), skin=none]{}
+            \tn[at=(9,3), skin=none]{}
+            \tn[at=(9,4), skin=none]{}
+            \tn[at=(9,5), name=ptAfter95, skin=none, ports={90:virtual}]{}
+            \tn[at=(9,6), skin=none]{}
+            \tn[at=(9,7), skin=none]{}
+            \tn[at=(9,8), skin=none]{}
+            \tn[at=(9,9), skin=none]{}
+            \tnwire{ptAfter15.270}{ptAfter35.90}
+            \tnwire{ptAfter35.0}{ptAfter37.180}
+            \tnwire{ptAfter37.270}{ptAfterV.90}
+            \tnwire{ptAfterV.270}{ptAfter77.90}
+            \tnwire{ptAfter77.180}{ptAfter75.0}
+            \tnwire{ptAfter75.270}{ptAfter95.90}
+            \tnwire{ptAfterV.0}{ptAfter59.180}
+            \tnwire[stroke=dashed, species=treated]{ptAfter35.180}{ptAfter33.0}
+            \tnwire[stroke=dashed, species=treated]{ptAfter33.270}{ptAfter73.90}
+            \tnwire[stroke=dashed, species=treated]{ptAfter73.0}{ptAfter75.180}
+            \tnmark[form=enclosure, species=hole, tint]{ptAfterV}{}
+            \tnmark[form=enclosure, species=hole]{(4,6) .. (6,8)}{}
+            \tnmark[form=label]{(4,2)}{$P$}
+            \tnmark[form=label]{(5,4)}{$P$}
+            \tnmark[form=label]{(2,8)}{$A$}
+            \tnmark[form=label]{(8,8)}{$B$}
+        \end{tenkz}
+    \end{tenkzequation}
 \end{lemma}
 
 \begin{proof}\leanok

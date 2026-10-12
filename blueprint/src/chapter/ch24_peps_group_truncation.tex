@@ -9,7 +9,7 @@ singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
 
 \begin{definition}[Nuclear norm]
     \label{def:peps_group_nuclear_norm}
-    \lean{Matrix.nuclearNorm}
+    \lean{Matrix.rectangularTraceNorm}
     \leanok
     For a finite rectangular complex matrix $M$, the nuclear norm $\lVert M\rVert_1$
     is the sum of the singular values of $M$.
@@ -17,7 +17,7 @@ singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
 
 \begin{lemma}[H\"older bound for a product with a transpose]
     \label{lem:peps_group_nuclear_holder}
-    \lean{Matrix.nuclearNorm_mul_transpose_le}
+    \lean{Matrix.rectangularTraceNorm_mul_transpose_le}
     \leanok
     \uses{def:peps_group_nuclear_norm}
     For finite complex matrices $A$ and $B$ with the same column index set,
@@ -101,7 +101,7 @@ singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
 
 \begin{theorem}[Whole-group tensor bound, nuclear part]
     \label{thm:peps_group_contraction_nuclear}
-    \lean{TNLean.PEPS.WholeGroup.nuclearNorm_flattening_le_one,
+    \lean{TNLean.PEPS.WholeGroup.rectangularTraceNorm_flattening_le_one,
         TNLean.PEPS.WholeGroup.flattening,
         TNLean.PEPS.WholeGroup.flattening_contraction}
     \leanok
@@ -188,7 +188,7 @@ singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
 \begin{corollary}[Whole-group tensor bound for networks with edge matrices]
     \label{cor:peps_group_tensor_network}
     \lean{TNLean.PEPS.WholeGroup.network_norm_le_one,
-        TNLean.PEPS.WholeGroup.nuclearNorm_flattening_network_le_one,
+        TNLean.PEPS.WholeGroup.rectangularTraceNorm_flattening_network_le_one,
         TNLean.PEPS.WholeGroup.exists_simultaneous_network_truncation,
         TNLean.PEPS.WholeGroup.network_one_eq_contraction}
     \leanok

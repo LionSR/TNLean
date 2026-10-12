@@ -68,7 +68,7 @@
 
 \begin{theorem}[Binary-entropy cost of the rounded bands]
     \label{thm:area_law_bootstrap_binary_entropy_cost}
-    \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binaryEntropy_cost_bound}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binEntropy_cost_bound}
     \leanok
     Fix the scanner exponents described in Section~\ref{sec:al_scanner}, and put
     \begin{align}
@@ -92,7 +92,9 @@
     rounded band count.
 \end{theorem}
 \begin{proof}\leanok
-    Since $\mu<1-\ell$, the numerical scale estimates give $K_n\ge1$
+    \uses{lem:al_scanner_scale_facts}
+    Since $\mu<1-\ell$, the numerical scale estimates of
+    Lemma~\ref{lem:al_scanner_scale_facts} give $K_n\ge1$
     for all sufficiently large $n$. They also give $L_n\le n$, and
     integer division gives $K_n\le L_n$. The extension satisfies
     $h(\tau)\le\log2$ for every real $\tau$, so

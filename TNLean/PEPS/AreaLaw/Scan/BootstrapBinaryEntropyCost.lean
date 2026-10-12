@@ -5,8 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.Budgets
 import Mathlib.Analysis.SpecialFunctions.BinaryEntropy
-import Mathlib.Tactic.NormNum
-import Mathlib.Tactic.Ring
 
 /-!
 # Binary-entropy cost for the rounded bootstrap bands
@@ -36,7 +34,7 @@ absolute coefficient. The threshold precedes the auxiliary fraction and
 every physical instance. Source: `08-scanner.tex`, `scanner:scales`,
 lines 32–41, and the cost following `scanner:bootstrap-comparison`,
 lines 755–787. -/
-theorem exists_bootstrap_binaryEntropy_cost_bound (X : ScannerExponents) :
+theorem exists_bootstrap_binEntropy_cost_bound (X : ScannerExponents) :
     ∃ N : ℕ, 1 ≤ N ∧ ∀ n : ℕ, N ≤ n →
       1 ≤ X.K n ∧ 0 < X.a 4 n ∧ ∀ τ : ℝ,
         Real.binEntropy τ / X.a 4 n ≤ (Real.log 2 / 4) * (n : ℝ) := by

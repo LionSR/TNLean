@@ -3178,6 +3178,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.exists_latticePositiveConstraints` | Positive contractions `kᵢ` annihilating the gapped ground vector, whose sum dominates the gap and whose graph-ball expectations converge stretched-exponentially, with constants chosen before the domain and the Hamiltonian | Area-law Proposition 4.3 (`prop:positive`) on induced lattice domains; constants depend only on `p, R, J, Δ`. |
 | `TNLean.PEPS.AreaLaw.exists_latticeQuasilocalRoots` | Square roots `(I - kᵢ)^{1/2}`, `kᵢ^{1/2}` and their graph-ball truncations, with stretched-exponential tails and the induced unital local channels | Area-law Lemma 4.4 (`lem:quasilocal-roots`) on induced lattice domains; constants depend only on `p, R, J, Δ`. |
 | `TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation` | Constraints truncated near a finite set `S₀` of at most `C₀ n²` sites at radius `⌈C₁ (log n)²⌉`, within `ε_n` of the positive Hamiltonian, with a unit ground vector and gap at least half | Area-law Proposition 4.5 (`prop:truncation`), first part, on induced lattice domains, with `p = 1`; `C₁` depends only on `R, J, Δ, C₀`. |
+| `TNLean.PEPS.AreaLaw.exists_latticeFiniteSetTruncation_eigenspace_eq_span` | The truncated sum of `exists_latticeFiniteSetTruncation` has a gapped ground vector whose eigenspace at the ground energy is the line it spans | Area-law Proposition 4.5 (`prop:truncation`), uniqueness of the truncated ground vector, on induced lattice domains, with `p = 1`. |
 | `TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget` | Crossing constraints of a cut are balls about their anchors, number at most `C b_X (r₀ + 1)²`, have log-dimension at most `C (r₀ + 1)²`, and the cut budget is at most `C (1 + b_X) (r₀ + 1)⁶` | Area-law `eq:quasilocal-crossing-count` and `eq:quasilocal-cut-budget`; `C` depends only on `q` and `R`. |
 | `TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log` | The cut budget at radius `⌈C₁ (log n)²⌉` is at most `C n D (log n)¹²` when `b_X ≤ C₂ n D` | Area-law Proposition 4.5, last sentence; `C` depends only on `q, R, C₁, C₂`. |
 | `Matrix.IsGappedGroundState`, `Matrix.isGappedGroundState_iff` | Unit eigenvector `HΩ = E₀Ω` of a complex square matrix with the full-system projector-gap inequality; the characterization restates the eigen-equation as `H *ᵥ Ω = E₀ • Ω` on coordinate vectors | Shared by the area-law and polynomial-PEPS models, which specialize it. |
@@ -3194,6 +3195,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.tailParameterConstant` | The constant `C = v_R μ_R log²(e q^{v_R})`, with `v_R = 1 + 2R(R+1)` and `μ_R = 2^{v_R - 1}`, in `ℬ_A ≤ C(1 + |∂_Λ A|)` | Area-law `eq:initial-local-tail-parameter`, `02-initial.tex`, lines 202–206; depends only on `q` and `R`, at least one for `q ≥ 1`; the bound is `cutLogBudget_le_edgeBoundary`. |
 | `TNLean.PEPS.AreaLaw.typicalWidthConstant` | The constant `C_M = 32 √((1 + J/Δ) C) (M + (e/2 + log 2)/log 2)` with `C = tailParameterConstant q R` | Area-law `02-initial.tex`, lines 207–212; depends only on `q, R, J, Δ, M`; bounds the concentration width by `C_M √(1 + |∂_Λ A|) log(n+2)` in `concentrationWidth_le`. |
 | `TNLean.PEPS.AreaLaw.IntRect` | A product `[x₀,x₁] × [y₀,y₁]` of two nonempty finite integer intervals, with `size` the larger number of sites along an axis and `dilate d` the rectangle `Q^{+d}` | Area-law `02-initial.tex`, lines 222–232; an ambient rectangle, not a set of sites of the domain. |
+| `TNLean.PEPS.AreaLaw.IntRect.card_mixedDyadicIndices_toFinset_le` | At every dyadic scale, the number of cells meeting both an integer rectangle and its complement, multiplied by the cell side, is at most `4 * size Q + 8 * 2^k` | Auxiliary boundary-line count for Area-law Proposition 9.5, `08-scanner.tex`, lines 717–729; holds for every native integer rectangle, including thin rectangles and negative coordinates. |
 | `TNLean.PEPS.AreaLaw.IsSafe` | The sup-norm distance from the rectangle `Q` to every endpoint of an edge crossing `A` exceeds `D₀ · size Q` | Area-law `02-initial.tex`, lines 220–228; vacuous when no edge crosses `A`, matching the source's infinite distance to the empty set. The source's standing condition `D₀ > 2R + 10` is a hypothesis of the theorems, not of the predicate. |
 | `TNLean.PEPS.AreaLaw.rectRegion` | The physical region `A ∩ Q` of an ambient rectangle | Area-law `02-initial.tex`, lines 232–233; sites of `Q` missing from the domain or from `A` are absent. |
 | `TNLean.PEPS.AreaLaw.boxEntropy` | The supremum `F_box(r)` of `S_Ω(A ∩ Q)` over all domains, admissible Hamiltonians with gapped ground vectors, cuts, and safe rectangles of size at most `r`, at fixed `q, R, J, Δ, D₀` | Area-law Proposition 3.3 (`prop:initial-box`), `02-initial.tex`, lines 590–594; a real supremum, bounded above by `r² log q` for `q ≥ 1` and estimated in `exists_boxEntropy_le_rpow`. |
@@ -3365,6 +3367,44 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   absolute entropy cost at most `n * log q` for any subset of one template
   depth row, the partial-row step of area-law Lemma 9.4.
 
+## Safe dyadic template rectangles
+
+- `TNLean.PEPS.AreaLaw.Geometry.latticeDyadicRect` interprets an existing
+  lattice dyadic cell as the native `IntRect`, with the same sites and size `2^k`.
+- `TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_of_subset_ambientDilation`
+  derives native rectangle safety from actual template separation, containment
+  in `T_j`, `j ≤ s₀`, and rectangle size at most `s₀`, for `D₀ ≥ 1`.
+- `TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_cappedDyadicPartition_core`
+  and `isSafe_cappedDyadicPartition_shell` derive those containment and size
+  premises from the selected cells themselves when `2^K ≤ s₀`. These are the
+  clearance step of Lemma 9.4, not its conditional entropy conclusion.
+## Weighted template shell coverings
+
+- `TNLean.PEPS.AreaLaw.Geometry.Template.card_shell_le` bounds the actual
+  ambient shell by `n*j` for `Ctpl ≥ 24` and `j ≤ s₀`.
+- `TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_at_cap_le`
+  bounds total cap-side length by `2*n` when `j ≤ L ≤ s₀` and `L < 2^(K+1)`.
+- `TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_shell_le`
+  states the weighted shell-covering bound with constant `2 + 14/(2^e - 1)`
+  for `e > 0` and `2^K ≤ L < 2^(K+1)`. This is the geometric summation step
+  of Lemma 9.4, not safe clearance or a regional entropy theorem.
+
+## Conditional entropy of template regions
+
+- `biUnion_rectRegion_cappedDyadicPartition` and
+  `pairwiseDisjoint_rectRegion_cappedDyadicPartition` identify the actual
+  disjoint physical rectangle cover, including missing sites and disconnected domains.
+- `Template.regionalEntropy_core_le_of_safe_box`,
+  `Template.regionalEntropy_shell_le_of_safe_box`, and
+  `Template.regionalEntropy_prefix_le_of_safe_box` compose actual regional
+  subadditivity, derived safety, and the weighted covering estimates. A partial
+  final row costs at most `n * log q`.
+- `exists_template_entropy_bounds_of_arbitrary_safe_box` assumes the safe-box
+  estimate for every exponent in `(0,1)` and every safe native rectangle. It
+  chooses the corresponding constant before the template and scales. This is
+  the conditional entropy component of Lemma 9.4, not a derivation of the
+  arbitrary-exponent input or a completion marker for the full source lemma.
+
 ## Partial rectangle layer entropy
 
 - **Declaration:** `TNLean.PEPS.AreaLaw.IntRect.partial_row_entropy_le`.
@@ -3394,9 +3434,9 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   to the covering-square clearance budget.
 - **Fixed bootstrap parameters:** for `C₂ > 0` and `0 < e₀ < 1`, put
   `ℓ = (1 − e₀)/200000` and `L_s = ⌊⌈C₂s⌉^(1 − ℓ)⌋`.
-  There is one threshold `N(C₂, e₀)`, chosen before every natural side
-  length `s` and every natural safety parameter `D₀ ≥ 1`, such that
-  `D₀L_s + L_s ≤ D₀s` whenever `s ≥ N`. The initial exponent fixes `ℓ`
+  There is one threshold `N(C₂, e₀) ≥ 1`, chosen before every natural
+  side length `s` and every natural safety parameter `D₀ ≥ 1`, such that
+  `1 ≤ L_s`, `2L_s ≤ s`, and `D₀L_s + L_s ≤ D₀s` whenever `s ≥ N`. The initial exponent fixes `ℓ`
   throughout the entropy-exponent iteration; the threshold is independent
   of the current entropy exponent and all physical data.
 - **Source:** OpenAI's September 24, 2026 area-law manuscript,
@@ -3405,16 +3445,20 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 - **Scope:** these are numerical auxiliary estimates for the rectangle
   covering argument in the proof of Proposition 9.5.
 
-## Weighted template shell coverings
+## Binary-entropy cost of the rounded bootstrap bands
 
-- `TNLean.PEPS.AreaLaw.Geometry.Template.card_shell_le` bounds the actual
-  ambient shell by `n*j` for `Ctpl ≥ 24` and `j ≤ s₀`.
-- `TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_at_cap_le`
-  bounds total cap-side length by `2*n` when `j ≤ L ≤ s₀` and `L < 2^(K+1)`.
-- `TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_shell_le`
-  states the weighted shell-covering bound with constant `2 + 14/(2^e - 1)`
-  for `e > 0` and `2^K ≤ L < 2^(K+1)`. This is the geometric summation step
-  of Lemma 9.4, not safe clearance or a regional entropy theorem.
+- **Declaration:** `TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binEntropy_cost_bound`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Scan/BootstrapBinaryEntropyCost.lean`.
+- **Meaning:** one threshold, chosen for a fixed scanner exponent tuple before
+  the auxiliary fraction and all physical data, gives positive rounded band
+  count `K = ⌊L/(8m)⌋`, positive metric weight `a = 4/K`, and
+  `Real.binEntropy τ / a ≤ (Real.log 2 / 4) n` for every real `τ`. The
+  coefficient is absolute.
+- **Source:** OpenAI's September 24, 2026 area-law manuscript,
+  [the collar scales, `08-scanner.tex`, lines 32–41](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L32-L41).
+- **Scope:** the numerical binary-entropy cost in the proof of Proposition
+  9.5; not the physical norm comparison or the exponent-improvement
+  implication.
 
 ### Nested closed-square patches
 
@@ -3429,13 +3473,128 @@ they are not graph-distance balls. The crossing-edge and two-site-support
 results are geometric statements, not an energy estimate or a proof of the
 source's Proposition 4.1.
 
-### Binary entropy for the rounded bootstrap bands
+## Weighted rectangle-shell covering
 
-`TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binaryEntropy_cost_bound` derives
-one threshold for a fixed scanner exponent tuple, before the auxiliary
-fraction and physical data. It gives positive actual rounded band count
-`K = floor(L/(8m))`, positive metric weight `a = 4/K`, and the bound
-`Real.binEntropy τ / a ≤ (Real.log 2 / 4) n`. The coefficient is absolute;
-the threshold may depend on the fixed exponent tuple. This is the numerical
-binary-entropy cost in the proof of area-law Proposition 9.5, not the
-physical norm comparison or the exponent-improvement implication.
+- **Declarations:** the finite summation theorem
+  Geometry.sum_weighted_dyadic_rpow_le, the grouping identity
+  Geometry.sum_cappedDyadicPartition_by_scale, and
+  IntRect.sum_rpow_cappedDyadicPartition_shell_le, all in
+  TNLean.PEPS.AreaLaw.
+- **Meaning:** for j ≤ L ≤ size(Q), 2^K ≤ L < 2^(K+1), and e > 0,
+  the actual capped partition of Q.dilate(j) minus Q has
+  sum of side lengths to the power 1+e at most
+  (24 + 64/(2^e−1)) * size(Q) * L^e. Its scale counts are derived
+  from the rectangle-shell counting estimates.
+- **Source:** OpenAI (September 24, 2026), the covering argument in
+  Proposition 9.5, 08-scanner.tex, lines 717–729, at the immutable
+  revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+- **Scope:** arbitrary aspect ratio and negative coordinates, including
+  cap zero and an empty shell. The grouping identity permits every
+  real-valued weight without a sign condition. The weighted sum permits
+  signed weights and an arbitrary cap budget; its lower-scale budget
+  is nonnegative.
+- **Caveat:** this is the geometric covering estimate. The safety of the
+  selected squares, their physical entropy estimate, and the one-step
+  improvement of the safe-box exponent are separate results.
+
+## Safe rectangle-shell entropy
+
+- **Declarations:** Geometry.latticeDyadicRect and its three rectangle identities;
+  Geometry.biUnion_rectRegion_cappedDyadicPartition,
+  Geometry.pairwiseDisjoint_rectRegion_cappedDyadicPartition,
+  Geometry.regionalEntropy_filter_le_sum_rectRegion,
+  Geometry.regionalEntropy_filter_le_weighted_cover,
+  IsSafe.isSafe_cappedDyadicPartition_shell, and
+  IntRect.regionalEntropy_shell_le_of_safe_box, all in
+  TNLean.PEPS.AreaLaw.
+- **Meaning:** the actual capped dyadic partition of Q.dilate(j) minus Q
+  consists of safe integer squares when j ≤ L, 2^K ≤ L and
+  D₀ * L + L ≤ D₀ * size(Q). If the original unit vector satisfies the
+  pointwise safe-rectangle estimate C * size(R)^(1+e), then its entropy on
+  A intersect this shell is at most
+  C * (24 + 64/(2^e - 1)) * size(Q) * L^e, assuming also e > 0,
+  C ≥ 0, L ≤ size(Q) and L < 2^(K+1).
+- **Source:** OpenAI, *A two-dimensional area law from a global spectral gap*,
+  Lemma 9.4, lines 641–667, and the proof of Proposition 9.5,
+  08-scanner.tex, lines 717–729, at
+  openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+- **Scope:** the rectangle identities and physical partition allow negative
+  coordinates, holes and disconnected domains. The weighted entropy-cover
+  lemma itself permits arbitrary real C and e. The final shell theorem
+  assumes the pointwise safe-box estimate and derives the selected squares'
+  safety and covering; it does not prove the physical exponent improvement.
+
+## Initial-exponent entropy of rectangle shells
+
+- **Declarations:** TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_rpow
+  and TNLean.PEPS.AreaLaw.exists_regionalEntropy_weak_rectangle_shell_le_rpow.
+- **Meaning:** for fixed q ≥ 1, R, J ≥ 0 and Δ > 0, one nonnegative constant
+  C and one exponent 0 < e₀ < 1 bound the physical entropy of every safe
+  rectangle and its actual dyadically covered shell. These witnesses precede
+  the safety parameter D₀ > 2R + 10, domain, Hamiltonian, energy, ground vector,
+  cut, rectangle and shell scales. The shell estimate has coefficient
+  C * (24 + 64/(2^e₀ - 1)) and factor size(Q) * L^e₀ under the scalar
+  clearance conditions. The dyadic cap is chosen within the proof, and the
+  zero-thickness shell is included.
+- **Source:** OpenAI, *A two-dimensional area law from a global spectral gap*,
+  Proposition 3.3, 02-initial.tex, lines 590–604, and the proof of
+  Proposition 9.5, 08-scanner.tex, lines 717–729, at
+  openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+- **Scope:** the safe-rectangle estimate is obtained from the original
+  gapped ground state, and the shell estimate uses that same vector and
+  those same witnesses. This is the initial existential-exponent consequence;
+  the arbitrary-exponent estimate and physical exponent improvement remain
+  separate results.
+
+## Initial entropy of the rounded collar
+
+- **Declarations:** `TNLean.PEPS.AreaLaw.floor_rpow_ceil_mul_rpow_le` and
+  `TNLean.PEPS.AreaLaw.exists_regionalEntropy_initial_rounded_collar_le_rpow`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Scan/RoundedScalePower.lean` and
+  `TNLean/PEPS/AreaLaw/InitialRoundedCollarEntropy.lean`.
+- **Meaning:** for fixed `q,R,J,Δ`, one initial constant `C` and exponent
+  `e₀` precede `C₂` and all physical instance data. For each positive `C₂`,
+  one threshold precedes every safety parameter and ground vector. The
+  actual shell bound is
+  `C*(24+64/(2^e₀-1))*(C₂+1)^((1-ell(e₀))*e₀)*s^(1+(1-ell(e₀))*e₀)`.
+- **Scope:** the initial-exponent shell input to the proof of Proposition 9.5,
+  not its safe-box exponent improvement. Clearance and the dyadic cap are
+  derived; both estimates concern the original ground vector.
+
+## Uniform conditional entropy of rounded shells
+
+- **Declarations:** `Scan.rounded_shell_coefficient_uniform_le` and
+  `exists_regionalEntropy_rounded_shell_le_uniform_rpow`, in the
+  `TNLean.PEPS.AreaLaw` namespace.
+- **Defined in:** `Scan/RoundedScalePower.lean` and `RoundedShellEntropy.lean`.
+- **Meaning:** fix the enlargement constant and initial exponent. One
+  threshold precedes the positive lower exponent, current exponent, pointwise
+  coefficient and every physical instance. The same unit vector's rounded
+  shell obeys the coefficient formed from the two exponent endpoints.
+- **Hypothesis:** the pointwise safe-rectangle entropy estimate at the current
+  exponent is supplied explicitly. Its coefficient is allowed to be any real
+  number; nonnegativity follows from the positive-size parent estimate.
+- **Scope:** a conditional covering estimate, not the physical exponent
+  improvement in Proposition 9.5. The rounded-power theorem is shared without
+  changing its public name, statement or proof.
+
+## Fixed-scale replica limit in the entropy bootstrap
+
+- **Declarations:** `TNLean.PEPS.AreaLaw.Scan.entropy_le_of_replica_comparisons`
+  and `TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_comparison_loss_threshold`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Scan/BootstrapReplicaAbsorption.lean`.
+- **Meaning:** two eventual rough scalar comparisons share one nonnegative
+  entropy independent of the replica count. Three vanishing remainders can be
+  removed at the fixed physical scale, then the coefficient margin gives the
+  bound by the sum of the two additive budgets. The comparison value and defect
+  sequence need not converge.
+- **Scale threshold:** the fixed bootstrap error exponent gives one threshold
+  with `0 < τ < 1/2` and coefficient loss at most one for
+  `τ = n^(-nu(e₀)/4)` and `E = Cₑ*n^(-nu(e₀)/2)`.
+- **Source:** the fixed-scale limit and coefficient absorption in
+  [the proof of Proposition 9.5, lines 744–769](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L744-L769).
+- **Scope:** a conditional scalar implication and a numerical threshold.
+  Actual norm comparisons, their common physical vector, and substitutions of
+  typical entropy and auxiliary dimension remain separate proof obligations.
+  Those substitutions must already occur in the additive budgets; no uniform
+  replica convergence rate over physical scales is supplied or needed.

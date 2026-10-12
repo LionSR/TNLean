@@ -6,9 +6,31 @@ $pdflatex = 'xelatex -synctex=1';
 # generated names of its many TikZ/Tenkz objects. This is runtime capacity;
 # no format rebuild is needed. Keep an explicit caller override intact.
 $ENV{'pool_size'} //= 12500000;
+# XeTeX fixes its node-memory capacity when the format is dumped. Build a
+# private format for this latexmk process, passing the budget directly to
+# fmtutil (sudo would discard it), and explicitly select that format below.
+# Never mutate system/user formats or trust a persistent success marker.
+$ENV{'main_memory'} //= 20000000;
+use File::Temp qw(tempdir);
+use File::Spec;
+# MiKTeX has its own format manager; keep its existing native build path.
+my $engine_version = `xelatex --version`;
+if ($engine_version !~ /MiKTeX/i) {
+  my $format_root = tempdir('tnlean-xelatex-XXXXXX', TMPDIR => 1, CLEANUP => 1);
+  {
+    local $ENV{'TEXMFVAR'} = $format_root;
+    system('fmtutil', '--user', '--byfmt', 'xelatex') == 0
+      or die "latexmkrc: could not build the private xelatex format\n";
+  }
+  my $format_dir = File::Spec->catdir($format_root, 'web2c', 'xetex');
+  -f File::Spec->catfile($format_dir, 'xelatex.fmt')
+    or die "latexmkrc: private xelatex format is missing\n";
+  $ENV{'TEXFORMATS'} = $format_dir
+    . (($^O =~ /^(MSWin32|msys|cygwin)$/) ? ';' : ':')
+    . ($ENV{'TEXFORMATS'} // '');
+}
 @default_files = ('print.tex');
 use Cwd qw(abs_path);
-use File::Spec;
 my $tenkz_root = $ENV{'TENKZ_ROOT'} // '../../.deps/tenkz';
 $tenkz_root = abs_path($tenkz_root) // File::Spec->rel2abs($tenkz_root);
 # MiKTeX reads TEXINPUTS with ';' and needs a Windows path; under MSYS or Cygwin

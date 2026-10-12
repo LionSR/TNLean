@@ -11,7 +11,7 @@ import Lean.Util.CollectAxioms
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  let decl := ``TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binaryEntropy_cost_bound
+  let decl := ``TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binEntropy_cost_bound
   unless (← Lean.getEnv).contains decl do
     throwError "Missing declaration {decl}"
   let axioms ← Lean.collectAxioms decl

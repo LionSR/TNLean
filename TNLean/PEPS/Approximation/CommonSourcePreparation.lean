@@ -45,26 +45,6 @@ def prepareSlots (R : SourceInventory P) (U V : Fin R.length → HSpace)
   ((ofSlots R U V η).prepare ℓ).castLayouts rfl
     (congrArg (· ++ ℓ) (layout_ofSlots_eq R U V η (fun _ ↦ 0)))
 
-/-- Recover one source by its two local coordinate projections, preserving the tail.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 260–267. -/
-private theorem common_pair_cons_expands (r : PairSource P) (U V : ι → HSpace)
-    (η : ∀ ξ, U ξ ⊗[ℂ] V ξ) (ξ : ι) (T : SourceInventory P) :
-    Expands
-      (⟨r.left, r.right, r.distinct, PairSource.commonSpace U, PairSource.commonSpace V,
-        PairSource.commonVector U V η ξ⟩ :: T)
-      (⟨r.left, r.right, r.distinct, U ξ, V ξ, η ξ⟩ :: T) := by
-  intro ℓ
-  refine ⟨Word.mapPair r.left r.right
-    (PairSource.commonProjection U ξ) (PairSource.commonProjection V ξ) (T.layout ++ ℓ),
-    (Word.mapPair_spec _ _ _ _ (PairSource.norm_commonProjection_le _ _)
-      (PairSource.norm_commonProjection_le _ _) _).1,
-    (Word.mapPair_spec _ _ _ _ (PairSource.norm_commonProjection_le _ _)
-      (PairSource.norm_commonProjection_le _ _) _).2, ?_⟩
-  have h := Word.eval_mapPair_source r.distinct (PairSource.commonProjection U ξ)
-    (PairSource.commonProjection V ξ) (PairSource.commonVector U V η ξ) (T.layout ++ ℓ)
-  simp only [PairSource.mapL_commonProjection_commonVector] at h
-  exact (comp_assoc _ _ _).symm.trans (congrArg (· ∘L (T.prepare ℓ).eval) h)
-
 /-- Coordinate projections recover every branch preparation from the common pair
 spaces by actual allowed operations containing no sources.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267. -/
@@ -78,9 +58,15 @@ theorem common_ofSlots_expands (R : SourceInventory P) (U V : ι → Fin R.lengt
   | nil => exact Expands.refl []
   | cons r R ih =>
       rw [ofSlots_cons, ofSlots_cons]
-      exact (common_pair_cons_expands r (fun ζ ↦ U ζ 0) (fun ζ ↦ V ζ 0)
-        (fun ζ ↦ η ζ 0) ξ _).trans
-        (Expands.cons _ (ih (fun ζ i ↦ U ζ i.succ) (fun ζ i ↦ V ζ i.succ)
-          (fun ζ i ↦ η ζ i.succ)))
+      simpa only [PairSource.mapL_commonProjection_commonVector] using
+        (Expands.cons_mapL r (PairSource.commonSpace (fun ζ ↦ U ζ 0))
+          (PairSource.commonSpace (fun ζ ↦ V ζ 0)) (U ξ 0) (V ξ 0)
+          (PairSource.commonProjection (fun ζ ↦ U ζ 0) ξ)
+          (PairSource.commonProjection (fun ζ ↦ V ζ 0) ξ)
+          (PairSource.norm_commonProjection_le _ _) (PairSource.norm_commonProjection_le _ _)
+          (PairSource.commonVector (fun ζ ↦ U ζ 0) (fun ζ ↦ V ζ 0)
+            (fun ζ ↦ η ζ 0) ξ) _).trans
+          (Expands.cons _ (ih (fun ζ i ↦ U ζ i.succ) (fun ζ i ↦ V ζ i.succ)
+            (fun ζ i ↦ η ζ i.succ)))
 
 end TNLean.PEPS.PairEffect.SourceInventory

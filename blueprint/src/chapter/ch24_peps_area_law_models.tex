@@ -159,6 +159,28 @@ original open square. We state the two models separately, following
     $q,R,J,\Delta$, chosen before every domain, Hamiltonian, ground vector, and cut.
 \end{definition}
 
+\begin{theorem}[Uniqueness from a positive global gap]
+    \label{thm:area_law_ground_eigenspace}
+    \lean{Matrix.IsGappedGroundState.eigenspace_eq_span}
+    \leanok
+    \uses{def:area_law_ground_entropy}
+    Let $H$ be a complex matrix indexed by a finite set, let $E_0$ be real,
+    and let $\Omega$ be a unit vector satisfying
+    (\ref{eq:area_law_ground_vector}) and
+    (\ref{eq:area_law_projector_gap}) with $\Delta>0$.
+    Then the eigenspace of $H$ at $E_0$ is $\operatorname{span}_{\mathbb C}\{\Omega\}$.
+    This is an elementary consequence of the global gap, giving the
+    uniqueness assertion in
+    \cite[Proposition~4.5]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    For an eigenvector $\psi$ at $E_0$, the gap inequality gives
+    $0\ge\Delta\|\psi-\langle\Omega,\psi\rangle\Omega\|^2$.
+    Since $\Delta>0$, $\psi=\langle\Omega,\psi\rangle\Omega$.
+    Conversely, $H\Omega=E_0\Omega$ puts every scalar multiple of $\Omega$
+    in this eigenspace.
+\end{proof}
+
 \begin{theorem}[Regional reductions of pure vectors]
     \label{thm:area_law_regional_state_identities}
     \lean{

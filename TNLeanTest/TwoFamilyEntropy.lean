@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.TwoFamilies
+import TNLean.PEPS.AreaLaw.BirthTargetEntropy
 import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.NormNum
 
@@ -12,6 +13,16 @@ import Mathlib.Tactic.NormNum
 open scoped BigOperators
 open TNLean.PEPS.AreaLaw
 open TNLean.PEPS.AreaLaw.Geometry
+
+/--
+info: 'TNLean.PEPS.AreaLaw.regionalEntropy_le_boundary_of_birth_information_estimates'
+depends on axioms:
+[propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.regionalEntropy_le_boundary_of_birth_information_estimates
 
 /-- Three singleton pieces with labels in the shuffled order 1, 0, 1. -/
 abbrev shuffledPartition : OrderedTwoFamilyPartition ({0, 1, 2} : Finset (Fin 4)) where
