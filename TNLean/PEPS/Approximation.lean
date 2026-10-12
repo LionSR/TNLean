@@ -12,6 +12,7 @@ import TNLean.PEPS.Approximation.ActualSourceEmptyOwner
 import TNLean.PEPS.Approximation.ActualSourceGateDensity
 import TNLean.PEPS.Approximation.ActualSourceRegisters
 import TNLean.PEPS.Approximation.AffectedOwners
+import TNLean.PEPS.Approximation.AllChoicesProjection
 import TNLean.PEPS.Approximation.AngularResetWidth
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.ColumnSelection
@@ -66,11 +67,14 @@ import TNLean.PEPS.Approximation.GroupTruncation
 import TNLean.PEPS.Approximation.GroupedBlockMap
 import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.PEPS.Approximation.HomogeneousOwnership
+import TNLean.PEPS.Approximation.IncidentGateLabels
 import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
 import TNLean.PEPS.Approximation.LayoutExcludedOwners
 import TNLean.PEPS.Approximation.LayoutOwnerMap
 import TNLean.PEPS.Approximation.LocalPairSource
 import TNLean.PEPS.Approximation.MatrixAction
+import TNLean.PEPS.Approximation.NetworkScalarAbsorption
+import TNLean.PEPS.Approximation.NonemptyGateLabels
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates
 import TNLean.PEPS.Approximation.OwnerMemoryTransport
 import TNLean.PEPS.Approximation.OwnershipMonomials
@@ -107,6 +111,7 @@ import TNLean.PEPS.Approximation.PatchRewriteExpansion
 import TNLean.PEPS.Approximation.PatchRewriteMonomials
 import TNLean.PEPS.Approximation.PatchRewriteTruncation
 import TNLean.PEPS.Approximation.PinnedRegionalState
+import TNLean.PEPS.Approximation.PointwiseChoiceCoefficient
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.PreparedPartyMaps
 import TNLean.PEPS.Approximation.PreparedSourceGate
@@ -142,6 +147,7 @@ import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
 import TNLean.PEPS.Approximation.SquareLatticeConnectivity
+import TNLean.PEPS.Approximation.TouchedLabels
 import TNLean.PEPS.Approximation.TwoSheetExchange
 import TNLean.PEPS.Approximation.TwoSheetRegisters
 import TNLean.PEPS.Approximation.UnitMemoryCoordinates

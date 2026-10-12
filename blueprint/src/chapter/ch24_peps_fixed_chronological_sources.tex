@@ -206,3 +206,94 @@ common free inputs used in the two separated contractions in
     holds before evaluating any free source vectors, and hence
     specializes both to arbitrary $\zeta$ and to the original vectors.
 \end{proof}
+
+\begin{definition}[Choices as labels at touched occurrences]
+    \label{def:peps_touched_labels}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.projectAllChoices}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.TouchedLabels}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.choicesOfTouchedLabels}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.choicesTouchedLabelsEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.nonemptyGateLocations}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allChoicesNonemptyLabelsEquiv}
+    \leanok
+    \uses{def:peps_partial_original_source_vector}
+    For affected parties $\mathcal A$, the map
+    $\xi\mapsto(\xi_g)_{g:\,C_g\cap\mathcal A\neq\varnothing}$ is a
+    bijection from $\Xi_{\mathcal A}$ onto
+    $\prod_{g:\,C_g\cap\mathcal A\neq\varnothing}\Xi_g$, also when some
+    $\Xi_g$ is empty. For $\mathcal A=P$ the touched occurrences are
+    those of $\mathcal G^+=\{g:C_g\neq\varnothing\}$, so
+    $\Xi_P\cong\prod_{g\in\mathcal G^+}\Xi_g$. Restricting
+    $\xi\in\Xi_P$ to the occurrences touched by $\mathcal A$ gives the
+    projection $\pi_{\mathcal A}\colon\Xi_P\to\Xi_{\mathcal A}$.
+\end{definition}
+
+\begin{theorem}[Projected choices keep the original labels]
+    \label{thm:peps_touched_labels}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.choiceAt_projectAllChoices}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.choiceAt_choicesOfTouchedLabels}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.choicesOfTouchedLabels_choiceAt}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isTouched_all_iff}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allChoicesNonemptyLabelsEquiv_apply}
+    \leanok
+    \uses{def:peps_touched_labels}
+    For $\xi\in\Xi_P$ and an occurrence $g$ touched by $\mathcal A$,
+    $(\pi_{\mathcal A}\xi)_g=\xi_g$. An occurrence is touched by $P$
+    exactly when $C_g\neq\varnothing$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Induct on the chronological composition. At a touched gate both
+    choices are the same label transported along the same type
+    identification; at an untouched gate the choice set has one element.
+\end{proof}
+
+\begin{theorem}[Labels visible at one party]
+    \label{thm:peps_incident_gate_labels}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partySelector_affectedOwner_all_apply}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isTouched_groupedParty_iff}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.OriginalGateLabelsAt}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.choicesOfOriginalGateLabelsAt}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.originalGateLabelsAtOfAllChoices}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.choicesOfOriginalGateLabelsAt_eq_projectAllChoices}
+    \leanok
+    \uses{thm:peps_touched_labels,def:compression_operator_gate_labels}
+    Let $p\in P$ and take $\mathcal A=\{p\}$ after grouping owners
+    for all parties. The occurrences touched by $\{p\}$ are exactly the
+    occurrences $g\in\mathcal G^+$ with $p\in C_g$. Hence a choice in
+    $\Xi_{\{p\}}$ is the same as a local assignment
+    $\prod_{g\in\mathcal G^+,\,p\in C_g}\Xi_g$ on the gate stars at
+    $p$, and for $\xi\in\Xi_P$ the local assignment $\xi_p$ recovers
+    $\pi_{\{p\}}\xi$. No label at a gate not containing $p$ is used.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    A grouped owner selects the original party $p$ exactly. Compare
+    the two partial choices label by label using
+    Theorem~\ref{thm:peps_touched_labels}.
+\end{proof}
+
+\begin{theorem}[Coefficients factor over participating occurrences]
+    \label{thm:peps_chronological_coefficients}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.coefficient_eq_prod_dite}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.coefficient_all_eq_prod_nonemptyGateLocations}
+    \leanok
+    \uses{def:peps_touched_labels}
+    For $\xi\in\Xi_{\mathcal A}$,
+    $c_\xi=\prod_g c_{g,\xi_g}$ over the occurrences touched by
+    $\mathcal A$, with factor one at the other occurrences. For
+    $\xi\in\Xi_P$ this is $c_\xi=\prod_{g\in\mathcal G^+}c_{g,\xi_g}$,
+    so each factor may be placed on the gate star carrying $\xi_g$,
+    as in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 351--381 and 565--573.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Induct on the chronological composition; composition multiplies
+    the coefficients and the products over the two disjoint occurrence
+    sets. Restrict the product over all occurrences to $\mathcal G^+$,
+    where the touched condition holds.
+\end{proof}
