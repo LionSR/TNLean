@@ -198,9 +198,8 @@ complements.\footnote{Formal declarations:
 
 For the Appendix~\cpsvref{AppendixPure} structural datum, the coefficient-space
 representatives are denoted by $\widehat Q_{AX}$ and $\widehat
-Q_{XB}$,\footnote{Formal declarations:
-\leanid{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace} and
-\leanid{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace}.} each
+Q_{XB}$, which coincide as coefficient-space maps,\footnote{Formal declaration:
+\leanid{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace}.} each
 identified with $q_2(A)$ before placement on the $AX$ and $XB$ faces. Under
 canonical reindexing, their factor actions are
 \begin{align}
@@ -270,8 +269,9 @@ as established in the local structural development.\footnote{Formal theorem:
 \leanid{MPSTensor.AppendixBStructuralData.hasAppendixD2ParentCommutingHamiltonian}.}
 That theorem does not identify the lifted maps with source projectors on the
 explicitly factored spaces. For a normal left-canonical RFP tensor, the RFP
-hypotheses supply the required injectivity.\footnote{Formal theorem:
-\leanid{MPSTensor.rfp_hasAppendixD2ParentCommutingHamiltonian_of_leftCanonical}.}
+hypotheses supply the required injectivity.\footnote{Formal declarations:
+\leanid{MPSTensor.rfp_nt_structural_of_leftCanonical} and
+\leanid{MPSTensor.AppendixBStructuralData.ofRFP}.}
 
 \section{Elimination plan}
 
