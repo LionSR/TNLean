@@ -556,7 +556,9 @@ jobs:
             2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
 
       # Build the changed production modules before the full library so a
-      # failure surfaces early. Selection: scripts/ci_lean_checks.py.
+      # failure surfaces early. The build is a shortcut: past its budget it
+      # stops with a warning and the root build continues. Selection:
+      # scripts/ci_lean_checks.py.
       - name: Build changed Lean modules early
         if: github.event_name == 'pull_request'
         timeout-minutes: 30
@@ -568,7 +570,7 @@ jobs:
           if ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
             git fetch --no-tags origin "$BASE_SHA" || BASE_SHA=""
           fi
-          python3 scripts/ci_lean_checks.py early --log "$RUNNER_TEMP/lake-build.log"
+          python3 scripts/ci_lean_checks.py early --budget 1200 --log "$RUNNER_TEMP/lake-build.log"
 
       - name: Build Lean project and capture timings
         run: |
