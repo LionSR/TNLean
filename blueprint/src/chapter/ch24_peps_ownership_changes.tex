@@ -901,11 +901,20 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{theorem}
 \begin{proof}
     \leanok
-    At a site outside $R$, the permutation fixes the paired coordinate.
-    At a site in $R$, it exchanges the two entries of that coordinate.
-    Thus the permutation fixes the complement and its action on $R$ depends
-    only on the coordinates in $R$. Its permutation matrix is therefore
-    supported on $R$.
+    Let $p:\{0,\dots,q-1\}^2\to\{0,\dots,q^2-1\}$ denote the pairing
+    bijection of local values, and write a two-sheet
+    configuration as $x=(x_1,x_2)$. In paired coordinates the sheet swap
+    acts at each site $i$ by
+    \begin{align*}
+        p\big(x_1(i),x_2(i)\big)\mapsto
+        \begin{cases}
+            p\big(x_2(i),x_1(i)\big), & i\in R,    \\
+            p\big(x_1(i),x_2(i)\big), & i\notin R.
+        \end{cases}
+    \end{align*}
+    Thus the permutation fixes the paired coordinate at every site outside
+    $R$, and its action on $R$ depends only on the paired coordinates in $R$.
+    Its permutation matrix is therefore supported on $R$.
 \end{proof}
 
 \begin{theorem}[Support of a swapped doubled interaction]
