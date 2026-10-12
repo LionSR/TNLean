@@ -96,8 +96,9 @@ private theorem selected_physical_grouped_column
   let z := Layout.mapOwnerIso f (familyPhysicalLayout d ps)
     (familyPhysicalListBasis d ps (fun i ↦ x (ps.get i)))
   have ha : a = familyPhysicalLayout δ qs := by
-    simp [a, qs, f, δ, Layout.mapOwner, familyPhysicalLayout, affectedOwner,
-      List.map_map, Function.comp_def]
+    dsimp only [a, qs, Layout.mapOwner, familyPhysicalLayout]
+    rw [List.map_map, List.map_map]
+    apply List.map_congr_left
     intro p _
     rfl
   have hnqs : qs.Nodup := (List.nodup_cons.mp (selectedPartyOrder_nodup ps hn)).2

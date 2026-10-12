@@ -35,6 +35,9 @@ private theorem partialTrace_mixed_private_basis_eq
         (Matrix.vecMulVec ((bX.tensorProduct bJ).repr v).ofLp
           (fun i ↦ conj ((bX.tensorProduct bJ).repr t i))) := by
   classical
+  have hself : bX.toBasis.toMatrix bX = 1 := by
+    change bX.toBasis.toMatrix bX.toBasis = 1
+    exact Module.Basis.toMatrix_self bX.toBasis
   have hc := OrthonormalBasis.tensorProduct_rankOne_basisChange bX bX bG bJ v t
   have h := Matrix.partialTraceRight_kronecker_conj_of_right_isometry
     (bX.toBasis.toMatrix bX) (bJ.toBasis.toMatrix bG)
@@ -42,7 +45,7 @@ private theorem partialTrace_mixed_private_basis_eq
     (Matrix.vecMulVec ((bX.tensorProduct bG).repr v).ofLp
       (fun i ↦ conj ((bX.tensorProduct bG).repr t i)))
   rw [hc] at h
-  simpa only [Module.Basis.toMatrix_self, Matrix.conjTranspose_one,
+  simpa only [hself, Matrix.conjTranspose_one,
     Matrix.one_mul, Matrix.mul_one] using h.symm
 
 variable {P : Type} [Fintype P] [DecidableEq P]
@@ -105,6 +108,18 @@ theorem selectedPhysicalPrivateBasis_partialTrace_mixed
       (selectedFamilyPhysicalPartyBasis_grouped d ps hn hc) x
     simp only [OrthonormalBasis.reindex_apply, OrthonormalBasis.map_apply,
       OrthonormalBasis.tensorProduct_apply, LinearIsometryEquiv.trans_apply] at hJoined hPhysical
+    change B (e.symm (x, y)) =
+      Layout.memCongr (Layout.mapOwner_append f physical garbage).symm
+        ((appendIso (Layout.mapOwner f physical) (Layout.mapOwner f garbage)).symm
+          ((partyGroupedBasis (Layout.mapOwner f physical)
+            (selectedFamilyPhysicalPartyBasis d ps hn hc) qs
+            (selectedPartyOrder_nodup ps hn) (mem_selectedPartyOrder ps hc))
+              ((selectedFamilyPhysicalConfigEquiv d).symm x) ⊗ₜ[ℂ] bPrivate y)) at hJoined
+    change (partyGroupedBasis (Layout.mapOwner f physical)
+      (selectedFamilyPhysicalPartyBasis d ps hn hc) qs
+      (selectedPartyOrder_nodup ps hn) (mem_selectedPartyOrder ps hc))
+        ((selectedFamilyPhysicalConfigEquiv d).symm x) =
+      Layout.mapOwnerIso f physical (bPhysical x) at hPhysical
     simp only [OrthonormalBasis.reindex_apply, A, OrthonormalBasis.map_apply,
       OrthonormalBasis.tensorProduct_apply, bOriginalPrivate]
     rw [hJoined, hPhysical]
