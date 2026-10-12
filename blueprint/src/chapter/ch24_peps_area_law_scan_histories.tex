@@ -1974,10 +1974,10 @@ The following finite construction follows
     unchanged.
 \end{proof}
 
-% Completion tags await compilation of the integrated charge bound.
 \begin{theorem}[Integrated charge defect in one round]
     \label{thm:al_scan_actual_charge_integral_bound}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_integral_bound_domainGraph}
+    \leanok
     \uses{thm:al_scan_actual_old_entropy_sampling,thm:al_scan_actual_transport_estimates}
     This is a one-round consequence of the sampling estimate and
     \cite[Proposition~7.4]{OpenAI2026AreaLaw}.
@@ -2000,7 +2000,7 @@ The following finite construction follows
         +(p_1-p_0)\bigl(C_{\mathrm{ent}}raKa^{1/4}\ell^{e_{\mathrm{ent}}}+\beta_r\bigr).
     \end{align}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_scan_actual_old_entropy_sampling,thm:al_scan_actual_transport_estimates,
         thm:al_scan_old_parameter_integral}
     Both $\mathcal Q$ and the entropy gain $G$ are interval integrable on
@@ -2054,6 +2054,10 @@ The following finite construction follows
         TNLean.PEPS.AreaLaw.Scan.isFiniteMeasure_transportScanRound_new}
     \leanok
     \uses{def:al_scan_literal_measures}
+    The assertions for the actual fill and charge rounds need no further
+    hypothesis. For general finite transport data, the identities below are
+    asserted for admissible data with cross-band commutation; the actual
+    partitions and moves satisfy both conditions.
     Each measure is finite for every fixed real $p$, every replica count,
     and every supplied vector. If $a\ge0$, every continuous real function
     $f$ on the ambient one-copy vector space satisfies
@@ -2095,6 +2099,10 @@ The following finite construction follows
         TensorPower.ReplicaTransport.TransportData.splitEta_eq_zero_of_not_mem_splitLeaves}
     \leanok
     \uses{def:al_scan_literal_measures,thm:al_scan_literal_integrals}
+    The assertions for the actual fill and charge rounds need no further
+    hypothesis. For general finite transport data, the identities below are
+    asserted for admissible data with cross-band commutation; the actual
+    partitions and moves satisfy both conditions.
     For $a\ge0$ and every real $p$, the choice gain is the transport entropy
     gain, with history factor $w_h$, and the charge defect is the actual
     good-history old-state split-entropy defect. On $0\le p\le1$, the round's
