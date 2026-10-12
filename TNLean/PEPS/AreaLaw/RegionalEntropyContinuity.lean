@@ -22,7 +22,7 @@ Source: *A two-dimensional area law from a global spectral gap*, September 24,
 `08-scanner.tex`, lines 399–404, revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 
-The proof is independently written from the mathematical argument.
+The Lean proof follows the argument of Lemma 2.1 rather than transcribing its text.
 -/
 
 namespace TNLean.PEPS.AreaLaw
@@ -40,7 +40,8 @@ theorem abs_regionalEntropy_sub_le_sqrt_traceDistance
         (1 + (A.card : ℝ) * Real.log q) := by
   have h := FiniteProduct.abs_entropy_sub_le_sqrt_traceDistance
     (fun _ : Site Λ ↦ Fin q) Ω Φ hΩ hΦ A
-  have hdim : (Fintype.card (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q) A) : ℝ) ≠ 0 :=
+  have hdim :
+      (Fintype.card (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q) A) : ℝ) ≠ 0 :=
     (Nat.cast_pos.mpr (Fintype.card_pos_iff.mpr
       (Entropy.Matrix.PosSemidef.nonempty_of_trace_eq_one
         (FiniteProduct.trace_reducedPure (fun _ : Site Λ ↦ Fin q) Ω hΩ A)))).ne'
