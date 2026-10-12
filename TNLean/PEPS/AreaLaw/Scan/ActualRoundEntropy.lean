@@ -48,7 +48,7 @@ private theorem actualBoundaryRoot_even (hm : 0 < S.m) (hM : 0 < S.M)
     S.actualBoundaryRoot hm hM n t k (2 * r) =
       (S.actualFillData hm hM r).rootPath n t k 0 := by
   have hcharge : ¬IsChargeRound (2 * r) := by
-    simp [IsChargeRound, Nat.mul_mod]
+    simp [IsChargeRound]
   have hstage : 2 * r / 2 = r := by omega
   simp only [actualBoundaryRoot, if_neg hcharge]
   rw [hstage]
