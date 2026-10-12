@@ -21,4 +21,10 @@ def partySelector (p : P) : P → Bool := by
   classical
   exact fun q => decide (q = p)
 
+/-- Selecting the exterior owner is the predicate that an optional owner is absent.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–417. -/
+theorem partySelector_none : partySelector (none : Option P) = Option.isNone := by
+  funext q
+  cases q <;> simp [partySelector]
+
 end TNLean.PEPS.PairEffect

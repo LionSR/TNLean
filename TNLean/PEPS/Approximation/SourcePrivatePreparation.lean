@@ -60,38 +60,4 @@ theorem sources_partialSourceWord {a b : Layout P} (w : SourceCircuit a b)
   exact (congrArg₂ (fun S T : SourceInventory _ => S ++ T)
     (sources_partialResidual _ _ _) (sources_sourcePrivatePreparation w ψ)).trans rfl
 
-/-- The literal private preparation inserts the original private product
-vector, leaving all actual source registers arbitrary.
-Source: polynomial-PEPS 04-compression.tex, lines 137–139 and 246–267. -/
-theorem eval_sourcePrivatePreparation_tmul {a b : Layout P}
-    (w : SourceCircuit a b) (ψ : ProductInput a) (y : Mem w.allResidualSourceLayout) :
-    (w.sourcePrivatePreparation ψ).eval
-      ((appendIso w.allResidualSourceLayout []).symm (y ⊗ₜ[ℂ] (1 : ℂ))) =
-      (appendIso w.allResidualSourceLayout (Layout.mapOwner (affectedOwner (fun _ => true)) a)).symm
-        (y ⊗ₜ[ℂ] Layout.mapOwnerIso (affectedOwner (fun _ => true)) a ψ.vector) := by
-  rw [sourcePrivatePreparation, Word.eval_frameList_appendIso_symm]
-  exact congrArg (fun z =>
-    (appendIso w.allResidualSourceLayout
-      (Layout.mapOwner (affectedOwner (fun _ => true)) a)).symm (y ⊗ₜ[ℂ] z))
-        ((Word.eval_mapOwner (affectedOwner (fun _ => true)) ψ.prepare (1 : ℂ)).trans
-          (congrArg (Layout.mapOwnerIso (affectedOwner (fun _ => true)) a) ψ.eval_prepare))
-
-set_option maxHeartbeats 800000 in
--- The actual fixed-source word carries dependent source and owner transports.
-/-- The actual pure-input source word applies the actual residual to the
-source vector tensored with the original private product vector.
-Source: polynomial-PEPS 04-compression.tex, lines 137–139 and 246–267. -/
-theorem eval_partialSourceWord_tmul {a b : Layout P}
-    (w : SourceCircuit a b) (ψ : ProductInput a) (ξ : Choices (fun _ => true) w)
-    (y : Mem w.allResidualSourceLayout) :
-    (w.partialSourceWord ψ ξ).eval
-      ((appendIso w.allResidualSourceLayout []).symm (y ⊗ₜ[ℂ] (1 : ℂ))) =
-      (partialResidual (fun _ => true) w ξ).eval
-        ((appendIso w.allResidualSourceLayout
-          (Layout.mapOwner (affectedOwner (fun _ => true)) a)).symm
-            (y ⊗ₜ[ℂ] Layout.mapOwnerIso (affectedOwner (fun _ => true)) a ψ.vector)) := by
-  rw [partialSourceWord, Word.eval_comp, ContinuousLinearMap.comp_apply]
-  exact congrArg (partialResidual (fun _ => true) w ξ).eval
-    (eval_sourcePrivatePreparation_tmul w ψ y)
-
 end TNLean.PEPS.PairEffect.SourceCircuit
