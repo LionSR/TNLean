@@ -35,7 +35,7 @@ theorem isTouched_all_iff {a b : Layout P} (w : SourceCircuit a b) (g : w.gateLo
     exact ⟨p, hp, rfl⟩
 
 /-- The original chronological occurrences whose participant sets are nonempty.
-These are the shared gate stars; empty-participant operations are retained in
+These carry the gate labels; empty-participant operations are retained in
 the aggregate scalar factor. Source: polynomial-PEPS 04-compression.tex,
 lines 351–381 and 565–573. -/
 def nonemptyGateLocations {a b : Layout P} (w : SourceCircuit a b) : Type :=

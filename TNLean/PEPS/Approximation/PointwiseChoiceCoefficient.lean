@@ -10,7 +10,7 @@ import TNLean.PEPS.Approximation.NonemptyGateLabels
 The coefficient of a partial choice is the product of the original branch
 coefficients at the touched occurrences. For the all-party expansion this is a
 product over the nonempty original gate occurrences, so each factor can be
-assigned to the gate star carrying its label.
+attached to the occurrence carrying its label.
 
 Source: polynomial-PEPS, `04-compression.tex`, lines 351–381 and 565–573.
 -/
@@ -68,7 +68,7 @@ theorem coefficient_eq_prod_dite (A : P → Bool) {a b : Layout P}
   | frame r w ih => exact ih ξ
 
 /-- The actual all-party coefficient is the product of the coefficients at
-its shared nonempty-participant stars. Empty occurrences are already contained
+its nonempty-participant occurrences. Empty occurrences are already contained
 in the aggregate residual, rather than this coefficient.
 Source: polynomial-PEPS 04-compression.tex, lines 351–381 and 565–573. -/
 theorem coefficient_all_eq_prod_nonemptyGateLocations {a b : Layout P}

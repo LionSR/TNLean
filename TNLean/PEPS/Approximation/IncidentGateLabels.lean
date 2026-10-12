@@ -12,7 +12,7 @@ import TNLean.PEPS.Approximation.PartySelector
 For the all-party grouping, the occurrences touched by the grouped owner of an
 original party are exactly the gates in which it participates. The partial
 choice at that party is therefore reconstructed from the labels carried by its
-incident gate stars, and this reconstruction agrees with projecting a global
+incident gates, and this reconstruction agrees with projecting a global
 choice.
 
 Source: polynomial-PEPS, `04-compression.tex`, lines 351–381 and 565–579.
@@ -67,7 +67,7 @@ abbrev OriginalGateLabelsAt {a b : Layout P} (w : SourceCircuit a b) (p : P) :=
 
 open Classical in
 /-- Construct the actual incident partial choices from the gate labels carried
-by the party's shared stars. Source: polynomial-PEPS 04-compression.tex,
+by the party's incident gates. Source: polynomial-PEPS 04-compression.tex,
 lines 351–381 and 565–579. -/
 def choicesOfOriginalGateLabelsAt {a b : Layout P} (w : SourceCircuit a b) (p : P)
     (ξ : OriginalGateLabelsAt w p) :
@@ -78,14 +78,14 @@ def choicesOfOriginalGateLabelsAt {a b : Layout P} (w : SourceCircuit a b) (p : 
     ξ ⟨⟨⟨g, ⟨p, hp⟩⟩, Finset.mem_univ _⟩, hp⟩)
 
 open Classical in
-/-- Restrict the labels of a genuine all-party choice to the stars visible at
+/-- Restrict the labels of a genuine all-party choice to the gates visible at
 an original party. Source: polynomial-PEPS 04-compression.tex, lines 565–579. -/
 def originalGateLabelsAtOfAllChoices {a b : Layout P} (w : SourceCircuit a b) (p : P)
     (ξ : Choices (fun _ => true) w) : OriginalGateLabelsAt w p :=
   fun g => allChoicesNonemptyLabelsEquiv w ξ g.1.1
 
 open Classical in
-/-- The incident choices reconstructed from shared stars are precisely the
+/-- The incident choices reconstructed from incident gate labels are precisely the
 restriction of the actual all-party choices. No unused gate label is chosen.
 Source: polynomial-PEPS 04-compression.tex, lines 351–381 and 565–579. -/
 theorem choicesOfOriginalGateLabelsAt_eq_projectAllChoices {a b : Layout P}
