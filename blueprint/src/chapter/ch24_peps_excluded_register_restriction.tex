@@ -127,8 +127,23 @@ These identities concern the register selections used in
             \end{cases}
         =S_{r,s}(\tau)|_B.
     \end{align}
-    Adjoining an unchanged register also commutes with the
-    two selections. This proves
+    Write $F_r(w)$ for a composition $w$ beside an unchanged register $r$.
+    Its restriction to $C$ is $F_r(w|_C)$ when $o(r)\in C$ and $w|_C$
+    otherwise. Since $o(r)\in B$ implies $o(r)\in A$, the induction
+    hypothesis $(w|_A)|_B=w|_B$ gives
+    \begin{align}
+        (F_r(w)|_A)|_B
+         & =\begin{cases}
+                F_r((w|_A)|_B), & o(r)\in B,    \\
+                (w|_A)|_B,      & o(r)\notin B,
+            \end{cases}
+        =\begin{cases}
+             F_r(w|_B), & o(r)\in B,    \\
+             w|_B,      & o(r)\notin B,
+         \end{cases}
+        =F_r(w)|_B.
+    \end{align}
+    This proves
     (\ref{eq:peps_nested_party_restrictions}) as an identity of
     compositions and hence of their operators.
 \end{proof}
