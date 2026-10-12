@@ -54,7 +54,7 @@ private theorem mixed_matrix_eq_of_column_eq
     {E F : Type} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F]
     {I J K : Type} [Fintype I] [Fintype J] [Fintype K]
-    [DecidableEq I] [DecidableEq J]
+    [DecidableEq I]
     (b : OrthonormalBasis I ℂ E) (c : OrthonormalBasis J ℂ E)
     (d : OrthonormalBasis K ℂ F) (A B : E →L[ℂ] F) (U : E →L[ℂ] E)
     (M N : Matrix K I ℂ) (H : Matrix K K ℂ)
@@ -64,6 +64,7 @@ private theorem mixed_matrix_eq_of_column_eq
       Matrix.of (fun i j ↦ c.repr (U (c j)) i) *
       (Matrix.of (fun i j ↦ d.repr (B (c j)) i))ᴴ = H) :
     M * LinearMap.toMatrix b.toBasis b.toBasis U.toLinearMap * Nᴴ = H := by
+  classical
   have hcolumns := congrArg₂
     (fun M N : Matrix K I ℂ ↦
       M * LinearMap.toMatrix b.toBasis b.toBasis U.toLinearMap * Nᴴ) hM hN
@@ -123,7 +124,8 @@ theorem partialSourceGlobalMatrix_mixed_word
   simp only [matrix_repr_eval_eq_toMatrix] at hWord
   simp only [bIn, bOut, partialSourcePartyMatrix, orthonormalColumn,
     matrix_repr_eval_eq_toMatrix]
-  convert hWord using 1 <;> rfl
+  convert hWord using 1
+  rfl
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect

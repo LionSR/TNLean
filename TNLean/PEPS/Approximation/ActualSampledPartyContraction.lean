@@ -25,6 +25,7 @@ variable {P : Type} [Fintype P] [DecidableEq P] {a b : Layout P}
 variable {I O : Option {_p : P // true = true} → Type}
 variable [∀ q, Fintype (I q)] [∀ q, Fintype (O q)]
 
+open Classical in
 /-- The actual sampled source contraction is a weighted sum of the actual
 local mixed matrices, before any exterior scalar is absorbed or physical
 register is traced out. Empty sample and source sets are included.
@@ -60,11 +61,11 @@ theorem partialSourceGlobalMatrix_sampled_eq_sum_partyProduct
         ∑ j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k,
           dependentPhysicalProductFamilyMatrix (fun q ↦
             w.partialSourcePartyMatrix ψ ξ B C q *
-              Matrix.of (fun row col ↦ (B q).repr
+              LinearMap.toMatrix (B q).toBasis (B q).toBasis
                 (((sampledEndpointInputWord w k lam E F ξ ζ
                     (j ∘ (allSourceSlotEquiv w).symm) ω).restrict (partySelector q)
                   (sources_sampledEndpointInputWord w k lam E F ξ ζ
-                    (j ∘ (allSourceSlotEquiv w).symm) ω)).eval (B q col)) row) *
+                    (j ∘ (allSourceSlotEquiv w).symm) ω)).eval.toLinearMap) *
               (w.partialSourcePartyMatrix ψ ζ B C q)ᴴ) := by
   classical
   rw [sampledEndpointInputMatrix_average w k lam E F ξ ζ ω]
@@ -72,9 +73,10 @@ theorem partialSourceGlobalMatrix_sampled_eq_sum_partyProduct
   congr 1
   apply Finset.sum_congr rfl
   intro j _
-  exact partialSourceGlobalMatrix_mixed_word w ψ ξ ζ
-    (sampledEndpointInputWord w k lam E F ξ ζ (j ∘ (allSourceSlotEquiv w).symm) ω)
-    (sources_sampledEndpointInputWord w k lam E F ξ ζ
-      (j ∘ (allSourceSlotEquiv w).symm) ω) B C ps hn hc
+  simpa only [matrix_repr_eval_eq_toMatrix] using
+    partialSourceGlobalMatrix_mixed_word w ψ ξ ζ
+      (sampledEndpointInputWord w k lam E F ξ ζ (j ∘ (allSourceSlotEquiv w).symm) ω)
+      (sources_sampledEndpointInputWord w k lam E F ξ ζ
+        (j ∘ (allSourceSlotEquiv w).symm) ω) B C ps hn hc
 
 end TNLean.PEPS.PairEffect.SourceCircuit
