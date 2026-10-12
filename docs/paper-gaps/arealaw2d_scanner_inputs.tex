@@ -51,7 +51,7 @@ comparator budgets.\footnote{The packaged statement is
     \leanid{TNLean.PEPS.AreaLaw.Scan.scanner_estimate}.} Each field transcribes
 a conclusion of an input and cites its source passage, except that the
 charge-defect continuity requirement is weakened to the almost-everywhere
-strong measurability sufficient for the two integral arguments. The
+measurability sufficient for the two integral arguments. The
 trace-distance field retains a fixed coefficient, as in the source asymptotic
 bound. In particular, the transported-measure mass equality is required only
 for interior interpolation parameters. The constants depend only on the fixed
@@ -125,7 +125,7 @@ remain defined at every parameter; no replacement probability measure is
 assigned to an inactive leaf. The charge-defect bound and the old- and
 new-leaf energy estimates use the mass hypothesis only in the interior.
 The integral over
-$[0,1]$ uses the interior bounds and almost-everywhere strong measurability
+$[0,1]$ uses the interior bounds and almost-everywhere measurability
 of the charge defect, since the two boundary points have Lebesgue measure zero. The logarithmic
 norm remains continuous on $[0,1]$, and its matching boundary values,
 initial and final comparisons, and integrated entropy conclusions are
@@ -143,6 +143,7 @@ actual state gives Hermiticity, hence
     \operatorname{Re}\operatorname{Tr}(\rho Q_F)
     =\operatorname{Re}\operatorname{Tr}(\rho A_F)
     =\mathcal H_\rho(F).
+    \label{eq:arealaw2d_scanner_inputs_coherent_hermitian}
 \end{align}
 For a nonzero supplied prevector the accepted parameter-measurability result
 and bound $|J_h(F)|\le\|Q_F\|/2$ give integrability on $(0,1)$ and $[0,1]$.
@@ -154,7 +155,7 @@ the regularity of the actual charge defect.\footnote{The source declarations are
     \leanid{TensorPower.ReplicaTransport.TransportData.intervalIntegrable_sum_oldFourierCoherentIntegral},
     and \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.intervalIntegrable_actualChargeEntropyDefect}.}
 
-The scanner package now asks only for almost-everywhere strong measurability
+The scanner package now asks only for almost-everywhere measurability
 of its scalar charge defect. Its existing nonnegativity and upper bound derive
 interval integrability. The derivative telescope retains closed-interval
 continuity of the logarithmic norm, differentiation at every interior point,
@@ -419,13 +420,14 @@ replica-energy operator is retained with the same filtered vector.
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_chargeDefect}.}
 
 For $a\ge0$ and each fixed natural replica count, the literal fill and charge defects
-are almost-everywhere strongly measurable on $(0,1)$ and interval integrable
+are almost-everywhere measurable on $(0,1)$ and interval integrable
 on $[0,1]$. Their pointwise equality with the finite old-state sum transfers
 the preceding regularity theorem without any probability normalization of
 the leaf measures. The coherent symbol is
 \begin{align}
     F_h(\theta)     & =\sum_i\eta_{i,(h,\mathrm{old})}(\theta), &
     \mathcal Q_k(p) & =\sum_{h\text{ good}}w_hJ_{h,k,p}(F_h).
+    \label{eq:arealaw2d_scanner_inputs_coherent_symbol}
 \end{align}
 An unsplit term vanishes by its defining entropy sum. Both the generic round
 and the actual fill and charge specializations retain the same supplied
@@ -448,9 +450,6 @@ theorem is accepted in QICLean at revision
 matching manifest revision now select that commit. The toolchain, Mathlib and
 all other dependency pins are unchanged. Fixed-parameter finiteness is not
 parameter continuity.
-% These literal-measure and regularity statements passed the complete checks
-% on c698f6ab and the strict scanner stages of 56ed4b19. The new integrated
-% charge theorem below has not yet been compiled.
 The endpoint norm and integrated entropy conclusions are unchanged. The
 physical prevector, Bell or typical sector and comparator remain separate
 (the prevector/comparator task is issue 8753); the lattice ground-state task
@@ -461,7 +460,11 @@ supplied vector implies an arbitrary prescribed ground energy.
 
 Under the actual charge sampling and transport hypotheses, set
 $\alpha=[2(C_1+1)nD]^{-1}$ and
-$\ell=1+(2r_0+1)^2\log q$. The pointwise inequality
+$\ell=1+(2r_0+1)^2\log q$. Write $\mathcal Q(p)$ for the actual charge
+defect, $\mathcal G(p)$ for the entropy gain of Proposition~7.4, and $N^2(p)$
+for the squared norm of the transported filtered vector at parameter $p$;
+$C_{\mathrm{ent}}>0$ and $e_{\mathrm{ent}}$ are the universal constants of the
+actual charge transport estimate. The pointwise inequality
 $\alpha\mathcal Q(p)\le\mathcal G(p)$ combines with the integral conclusion
 of Proposition~7.4. For a supplied nonzero symmetric vector, $a>0$,
 $a\ell\le c_0$, every natural replica count $r$, and
@@ -470,6 +473,7 @@ $0\le p_0\le p_1\le1$, the resulting bound is
     ra\alpha\int_{p_0}^{p_1}\mathcal Q(p)\,dp
     & \le \log N^2(p_0)-\log N^2(p_1)
     +(p_1-p_0)\bigl(C_{\mathrm{ent}}raKa^{1/4}\ell^{e_{\mathrm{ent}}}+\beta_r\bigr).
+    \label{eq:arealaw2d_scanner_inputs_charge_integral}
 \end{align}
 Here the universal constants precede the geometric and Hamiltonian choices,
 and $\beta_r=O(\log(r+1))$ is chosen before the replica count and vector.
@@ -479,7 +483,6 @@ the interval-length factor. Equal endpoints give equality, and zero
 replicas require no separate positive-count assumption.
 \footnote{The one-round consequence is
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_integral_bound_domainGraph}.}
-% The new one-round theorem is source-only pending hosted compilation.
 This removes an assumed one-round charge integral bound from the construction.
 It does not identify consecutive rounds at a common physical prevector or
 sum their logarithmic terms. The physical prevector, initial and final
