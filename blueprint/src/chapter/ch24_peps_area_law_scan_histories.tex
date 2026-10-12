@@ -2590,3 +2590,111 @@ The following finite construction follows
     This is the telescoping step of the scanner argument in
     \cite[proof of Proposition~9.2]{OpenAI2026AreaLaw}.
 \end{proof}
+
+% Source: openai/math, adc7f1241b42e322a6451854ab7e4b4c146bf78a,
+% build/sections/06-transport.tex, lines 321--330, and
+% build/sections/08-scanner.tex, lines 442--479.
+\begin{theorem}[Nonnegative transported entropy gain]
+    \label{thm:al_scan_entropy_gain_nonneg}
+    \lean{TensorPower.ReplicaTransport.TransportData.entropyGain_nonneg}
+    \uses{thm:al_scan_old_entropy_integral}
+    Let $\mathscr D$ be finite admissible transport data with positive factor
+    dimensions and $t\ge0$. Suppose its bands commute on the symmetric
+    replica subspace at replica count $k\ge0$. For every supplied vector
+    $\mathrm{pre}$ and every real $p$, its entropy gain satisfies
+    $\mathcal G_{\mathscr D,k,\mathrm{pre}}(p)\ge0$.
+    The vector may vanish, and $p$ may be either endpoint.
+\end{theorem}
+\begin{proof}
+    \uses{thm:al_scan_regional_move_entropy,thm:al_scan_old_entropy_integral}
+    Strong subadditivity gives $\eta_{h,c,g}(\theta)\ge0$ for every valid
+    move. With $J_h$ denoting the old-state Fourier--coherent integral,
+    positivity gives
+    \begin{align}
+        \mathcal G_{\mathscr D,k,\mathrm{pre}}(p)
+         & =\sum_h w_h J_h\!\left(\sum_g\sum_c q_{c\mid h}
+        \eta_{h,c,g}\right)\ge0.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Charge sampling summed over complete rounds]
+    \label{thm:al_scan_actual_charge_sum_sampling}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_actualCharge_integral_le_sum_actualRounds_entropyGain_domainGraph}
+    \uses{thm:al_scan_actual_old_entropy_sampling,def:al_scan_actual_round_family}
+    Assume the geometric and designated-support hypotheses of
+    Theorem~\ref{thm:al_scan_actual_old_entropy_sampling}, uniformly over
+    the $nm$ charge stages, with $m,M>0$, positive factor dimensions,
+    $t\ge0$, a replica count $k\ge0$ and a supplied nonzero vector $\mathrm{pre}$.
+    Put $\alpha=[2(C_1+1)nD]^{-1}$. Write $\mathcal Q_{s,k,\mathrm{pre}}$
+    for the literal good-old-history defect at charge stage $s$, and
+    $\mathcal G_{j,k,\mathrm{pre}}$ for the gain of actual round $j$.
+    For every $0\le p_0\le p_1\le1$,
+    \begin{align}
+        \alpha\sum_{s=0}^{nm-1}\int_{p_0}^{p_1}
+        \mathcal Q_{s,k,\mathrm{pre}}(p)\,dp
+         & \le \sum_{j=0}^{2nm-1}\int_0^1
+        \mathcal G_{j,k,\mathrm{pre}}(p)\,dp.
+        \label{eq:al_scan_charge_sum_sampling}
+    \end{align}
+    No symmetry hypothesis on the supplied vector is needed.
+\end{theorem}
+\begin{proof}
+    \uses{thm:al_scan_entropy_gain_nonneg,thm:al_scan_actual_old_entropy_sampling,
+        thm:al_scan_old_parameter_integral,thm:al_scan_actual_round_entropy}
+    Both scalar functions are interval integrable. Pointwise charge sampling
+    and nonnegativity of the entropy gain give
+    \begin{align}
+        \alpha\int_{p_0}^{p_1}\mathcal Q_{s,k,\mathrm{pre}}(p)\,dp
+         & \le\int_{p_0}^{p_1}\mathcal G_{2s+1,k,\mathrm{pre}}(p)\,dp
+        \le\int_0^1\mathcal G_{2s+1,k,\mathrm{pre}}(p)\,dp.
+        \label{eq:al_scan_charge_interval_sampling}
+    \end{align}
+    The map $s\mapsto2s+1$ is injective. Sum
+    (\ref{eq:al_scan_charge_interval_sampling}) and add the nonnegative
+    integrals of the omitted fill gains to obtain
+    (\ref{eq:al_scan_charge_sum_sampling}). Neither scalar is assumed
+    continuous in $p$.
+\end{proof}
+
+\begin{theorem}[Integrated charge defect over the actual scan]
+    \label{thm:al_scan_actual_charge_sum_bound}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_integral_bound_domainGraph}
+    \uses{thm:al_scan_actual_charge_sum_sampling,thm:al_scan_actual_round_transport}
+    There are universal real constants $c_0,C_{\mathrm{ent}},e_{\mathrm{ent}}$,
+    with $c_0>0$, for which the following holds. Assume the joint geometric,
+    Hamiltonian and smallness hypotheses of
+    Theorems~\ref{thm:al_scan_actual_charge_sum_sampling} and
+    \ref{thm:al_scan_actual_round_transport}; in particular,
+    $n\ge2$, $2r_0\le D$, $C_1>0$, $3\mu\le C_1$, $a>0$ and
+    $a\ell\le c_0$, where $\mu$ bounds the number of labels at each anchor.
+    Use the actual augmented energy terms, set $t=a/2$, and put
+    $\alpha=[2(C_1+1)nD]^{-1}$.
+    The physical and auxiliary dimensions are fixed before choosing
+    $C_\beta\ge0$ and a sequence $\beta:\mathbb N\to\mathbb R$ such that
+    $0\le\beta_k\le C_\beta\log(k+2)$ for every $k\ge0$.
+    The same sequence works for every replica count, supplied vector and
+    retained subinterval. For every $k\ge0$, every nonzero symmetric supplied
+    vector $\mathrm{pre}$, and every $0\le p_0\le p_1\le1$,
+    \begin{align}
+        ka\alpha\sum_{s=0}^{nm-1}\int_{p_0}^{p_1}
+        \mathcal Q_{s,k,\mathrm{pre}}(p)\,dp
+         & \le \log (N^{\mathrm{fill}}_{0,k,\mathrm{pre}})^2
+        -\log (N^{\mathrm{fill}}_{nm,k,\mathrm{pre}})^2 \\
+         & \quad +2nm\bigl(C_{\mathrm{ent}}kaKa^{1/4}
+        \ell^{e_{\mathrm{ent}}}+\beta_k\bigr).
+        \label{eq:al_scan_actual_charge_sum}
+    \end{align}
+    The endpoint norms are those of Theorem~\ref{thm:al_scan_actual_round_telescope}.
+    The error is paid for every full round; it has no factor $p_1-p_0$.
+    Zero replicas, zero bands and equal endpoints are included. Identifying
+    the supplied vector with the physical prevector and bounding the initial
+    and final norms are separate obligations.
+\end{theorem}
+\begin{proof}
+    \uses{thm:al_scan_actual_charge_sum_sampling,thm:al_scan_actual_round_entropy}
+    Choose the common error from Theorem~\ref{thm:al_scan_actual_round_entropy}
+    once. Multiply (\ref{eq:al_scan_charge_sum_sampling}) by $ka\ge0$ and
+    apply (\ref{eq:al_scan_actual_entropy_sum}) to obtain
+    (\ref{eq:al_scan_actual_charge_sum}). The same error sequence and supplied
+    vector occur throughout. No division by the replica count or band count occurs.
+\end{proof}

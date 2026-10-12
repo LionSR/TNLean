@@ -501,7 +501,7 @@ $\alpha=[2(C_1+1)nD]^{-1}$ and
 $\ell=1+(2r_0+1)^2\log q$. Write $\mathcal Q(p)$ for the actual charge
 defect, $\mathcal G(p)$ for the entropy gain of Proposition~7.4, and $N^2(p)$
 for the squared norm of the transported filtered vector at parameter $p$;
-$C_{\mathrm{ent}}>0$ and $e_{\mathrm{ent}}$ are the universal constants of the
+$C_{\mathrm{ent}}$ and $e_{\mathrm{ent}}$ are the universal constants of the
 actual charge transport estimate. The pointwise inequality
 $\alpha\mathcal Q(p)\le\mathcal G(p)$ combines with the integral conclusion
 of Proposition~7.4. For a supplied nonzero symmetric vector, $a>0$,
@@ -522,9 +522,54 @@ replicas require no separate positive-count assumption.
 \footnote{The one-round consequence is
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_integral_bound_domainGraph}.}
 This removes an assumed one-round charge integral bound from the construction.
-It does not identify consecutive rounds at a common physical prevector or
-sum their logarithmic terms. The physical prevector, initial and final
-comparisons, and the remaining scanner conclusions are still required.
+The all-round estimate below combines actual root identities with one common
+error sequence. Identifying the supplied vector in the actual scanner
+coordinates and proving its initial and final norm comparisons remain separate.
+
+\section{All-round integrated charge defect}
+
+The charge-sampling and full-round entropy estimates combine before any
+initial or terminal norm comparison is applied. This is the intermediate
+step in the proof of Proposition~9.2 of \cite{OpenAI2026AreaLaw}.
+Write $\mathcal Q_{s,k,\mathrm{pre}}$ for the literal good-old-history defect
+at charge stage $s$ and replica count $k$, and
+$N^{\mathrm{fill}}_{s,k,\mathrm{pre}}$ for the norm of the supplied vector
+after applying the inverse quarter power of the completed-history root
+after $s$ charges. Under the joint geometric sampling and actual transport
+hypotheses, put $\alpha=[2(C_1+1)nD]^{-1}$ and
+$\ell=1+(2r_0+1)^2\log q$. For the same nonzero symmetric supplied vector,
+every $k\ge0$ and every $0\le p_0\le p_1\le1$ satisfy
+\begin{align}
+    ka\alpha\sum_{s=0}^{nm-1}\int_{p_0}^{p_1}
+    \mathcal Q_{s,k,\mathrm{pre}}(p)\,dp
+     & \le \log (N^{\mathrm{fill}}_{0,k,\mathrm{pre}})^2
+    -\log (N^{\mathrm{fill}}_{nm,k,\mathrm{pre}})^2 \\
+     & \quad +2nm\bigl(C_{\mathrm{ent}}kaKa^{1/4}\ell^{e_{\mathrm{ent}}}
+    +\beta_k\bigr).
+    \label{eq:arealaw2d_scanner_inputs_charge_sum}
+\end{align}
+The universal constants $c_0,C_{\mathrm{ent}},e_{\mathrm{ent}}$, with $c_0>0$,
+precede the physical data and require $a\ell\le c_0$. After the physical and
+auxiliary dimensions are fixed, one sequence satisfying
+$0\le\beta_k\le C_\beta\log(k+2)$, with $C_\beta\ge0$, is chosen before
+every replica count, vector and interval. The full error is retained even
+when $p_0=p_1$. Neither $k>0$ nor $K>0$ is assumed.
+\footnote{The actual sum bound is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_integral_bound_domainGraph}.}
+
+The sign used to add fills is conditional mutual information nonnegativity
+from strong subadditivity. Positive old-state Fourier--coherent integration
+preserves it. Integrating sampling on the retained interval, enlarging the
+nonnegative gain integrals to the full interval, and inserting each charge
+stage at its odd round gives~(\ref{eq:arealaw2d_scanner_inputs_charge_sum}).
+Literal scalar integrability suffices; parameter continuity is not assumed.
+
+The result retains actual charge defects and does not assume their integrated
+bound as part of completed scanner data. The physical Schmidt--Bell prevector
+must still be identified with the supplied vector in the actual root and
+metric coordinates. Its initial norm floor, terminal comparator estimate,
+and the subsequent physical selection and energy estimates remain separate
+requirements for the complete scanner proposition.
 
 \section{Truncated physical marginal estimates}
 
