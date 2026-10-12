@@ -132,6 +132,16 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
       (supportedOperators_mono (fun _ hx ↦ Finset.mem_union_right Q hx) hD) s
       ((show |s| ≤ |t| by
         simpa only [sub_zero] using Set.abs_sub_left_of_mem_uIcc hs).trans ht))
+  have hfactor (t : ℝ) :
+      heisenbergEvolution g.operator t W *
+          (Matrix.hermitianUnitaryPath g.operator t * Matrix.hermitianUnitaryPath H (-t)) =
+        Matrix.hermitianUnitaryPath g.operator t * W * Matrix.hermitianUnitaryPath H (-t) := by
+    rw [heisenbergEvolution_eq_hermitianUnitaryPath,
+      Matrix.mul_assoc (Matrix.hermitianUnitaryPath g.operator t * W),
+      ← Matrix.mul_assoc (Matrix.hermitianUnitaryPath g.operator (-t))
+        (Matrix.hermitianUnitaryPath g.operator t),
+      ← Matrix.hermitianUnitaryPath_add, neg_add_cancel,
+      Matrix.hermitianUnitaryPath_zero, Matrix.one_mul]
   done
 
 end TNLean.PEPS.AreaLaw
