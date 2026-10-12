@@ -36,7 +36,7 @@ def selectedFamilyPhysicalConfigEquiv (d : P → ℕ) :
   left_inv x := by
     funext q
     cases q with
-    | none => exact Subsingleton.elim _ _
+    | none => exact Subsingleton.elim (α := PUnit) _ _
     | some p => rfl
   right_inv x := rfl
 
