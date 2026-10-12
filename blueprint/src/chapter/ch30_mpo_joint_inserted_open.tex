@@ -1,0 +1,128 @@
+% Source: arXiv:2203.12563v3, REsubmission.tex, lines 1695--1777.
+% Auxiliary finite-volume theorem for simultaneously spanning block families.
+% The actual mixed-family span, endpoint gap, periodic identification and
+% symmetry commutation are separate obligations.
+
+\subsection{Joint extended boundary spaces}
+
+\begin{definition}[Joint extended boundary map]
+    \label{def:mpo_joint_inserted_boundary}
+    \lean{MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap,
+        MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_apply,
+        MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_one,
+        MPSTensor.MPOSymmetry.blockInsertedBoundaryMap,
+        MPSTensor.MPOSymmetry.mem_range_blockInsertedBoundaryMap_iff,
+        MPSTensor.MPOSymmetry.blockInsertedGroundSpace}
+    \leanok
+    \uses{def:mpo_mixed_extended_boundary}
+    Let $\{A_x^i\}_{i=0}^{d-1}\subseteq\MN{D_x}$ be a finite family of
+    tensor blocks indexed by $x$, all with the same physical alphabet,
+    and let $W_x\in\MN{D_x}$. For $N\geq1$, define
+    \begin{align}
+        \Gamma'_{W,N}((X_x)_x)_{i_1\cdots i_N}
+                          & =\sum_x\tr(A_x^{i_1}W_xA_x^{i_2}\cdots W_xA_x^{i_N}X_x),
+        \label{eq:mpo_joint_inserted_map}                                            \\
+        \mathcal S'_{W,N} & =\operatorname{range}\Gamma'_{W,N}.
+    \end{align}
+    The boundary domain is $\prod_x\MN{D_x}$.
+    This is the joint extended boundary space for the block construction
+    of \cite[Section~5]{GarreRubio2023MPOSym}.
+\end{definition}
+
+\begin{theorem}[Joint boundary injectivity]
+    \label{thm:mpo_joint_inserted_injective}
+    \lean{MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_injective,
+        MPSTensor.MPOSymmetry.span_range_blockInsertedEvalWord_eq_top,
+        MPSTensor.MPOSymmetry.blockInsertedBoundaryMap_injective,
+        MPSTensor.MPOSymmetry.finrank_range_blockInsertedBoundaryMap,
+        MPSTensor.MPOSymmetry.continuous_blockInsertedBoundaryMap_family}
+    \leanok
+    \uses{def:mpo_joint_inserted_boundary}
+    Suppose $\spn_{\C}\{(A_x^i)_x:0\leq i<d\}=\prod_x\MN{D_x}$
+    and $W_x\neq0$ for every $x$. Then $\Gamma'_{W,N}$ is injective for
+    every $N\geq1$, the tuples of inserted products span
+    $\prod_x\MN{D_x}$, and $\dim\mathcal S'_{W,N}=\sum_xD_x^2$.
+    At fixed $N$, the boundary map varies continuously with the tensor
+    entries and insertions. The physical block columns need not be orthogonal.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_extended_intersection}
+    Simultaneous spanning and the nondegenerate product trace pairing
+    give injectivity at $N=1$. Each block is injective, so there are
+    matrices $R_{x,j}$ satisfying $\sum_jR_{x,j}W_xA_x^j=I$.
+    If $\Gamma'_{W,N+1}(X)=0$, fixing the last letter and applying
+    injectivity at $N$ gives $W_xA_x^jX_x=0$ for every $j,x$.
+    Thus $X_x=\sum_jR_{x,j}W_xA_x^jX_x=0$.
+    Induction proves injectivity, and trace duality proves simultaneous
+    spanning by inserted products. The dimension follows from injectivity.
+    Each coefficient in~(\ref{eq:mpo_joint_inserted_map}) is a finite
+    sum of products of matrix entries, giving continuity.
+\end{proof}
+
+\begin{theorem}[Joint restriction intersection]
+    \label{thm:mpo_joint_inserted_intersection}
+    \lean{MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_restrictLast,
+        MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_restrictFirst,
+        MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_mul_eq_of_restrict,
+        MPSTensor.MPOSymmetry.mem_blockInsertedGroundSpace_succ_of_intertwine,
+        MPSTensor.MPOSymmetry.blockInsertedGroundSpace_intersection,
+        MPSTensor.MPOSymmetry.blockInsertedGroundSpace_iff_left_right,
+        MPSTensor.MPOSymmetry.contiguousRestrictₗ_blockInsertedGroundSpace_mem}
+    \leanok
+    \uses{def:mpo_joint_inserted_boundary}
+    Under the hypotheses of Theorem~\ref{thm:mpo_joint_inserted_injective},
+    for $L\geq2$,
+    \begin{align}
+        (\mathcal S'_{W,L}\otimes\C^d)
+        \cap(\C^d\otimes\mathcal S'_{W,L})
+        =\mathcal S'_{W,L+1}.
+    \end{align}
+    Every positive-length contiguous restriction of a vector in
+    $\mathcal S'_{W,N}$ lies in the corresponding shorter extended support.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_joint_inserted_injective,thm:mpo_mixed_extended_intersection}
+    Fixing the first or last letter changes $X_x$ to $X_xA_x^iW_x$ or
+    $W_xA_x^jX_x$, respectively. Conversely, let $Y_{i,x}$ and $Z_{j,x}$
+    be boundary tuples for the first and last restrictions of a vector.
+    Joint injectivity on the common interior gives
+    $W_xA_x^jY_{i,x}=Z_{j,x}A_x^iW_x$ for every $i,j,x$.
+    Define $X_x=\sum_jR_{x,j}Z_{j,x}$. Then
+    $Y_{i,x}=X_xA_x^iW_x$, reconstructing the vector as
+    $\Gamma'_{W,L+1}(X)$. Iterating the two endpoint restriction formulas
+    proves closure under contiguous restrictions.
+\end{proof}
+
+\begin{theorem}[Exact joint open-chain kernel]
+    \label{thm:mpo_joint_inserted_open_kernel}
+    \lean{MPSTensor.MPOSymmetry.mem_ker_blockInsertedParentInteraction_iff,
+        MPSTensor.MPOSymmetry.ker_openInteractionHamiltonianES_blockInserted_eq,
+        MPSTensor.MPOSymmetry.finrank_ker_openInteractionHamiltonianES_blockInserted,
+        MPSTensor.MPOSymmetry.continuous_ker_openInteractionHamiltonianES_blockInserted_starProjection}
+    \leanok
+    \uses{def:mpo_joint_inserted_boundary}
+    Under the hypotheses of Theorem~\ref{thm:mpo_joint_inserted_injective},
+    put $h'_W=I-\Pi_{\mathcal S'_{W,2}}$ and
+    $H'^{\mathrm{open}}_{W,N}=\sum_{i=0}^{N-2}h'_{W,i,i+1}$.
+    For $N\geq2$,
+    \begin{align}
+        \ker H'^{\mathrm{open}}_{W,N}     & =\mathcal S'_{W,N}, \\
+        \dim\ker H'^{\mathrm{open}}_{W,N} & =\sum_xD_x^2.
+    \end{align}
+    Along a continuous family satisfying these hypotheses, the orthogonal
+    projector onto this kernel is continuous at each fixed $N\geq2$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_joint_inserted_injective,thm:mpo_joint_inserted_intersection,
+        thm:mpo_mixed_extended_open_kernel}
+    Positivity identifies the kernel of the sum with the simultaneous
+    local kernels. These are exactly the constraints that every two-site
+    contiguous restriction lies in $\mathcal S'_{W,2}$.
+    Iterating the joint restriction intersection proves equality with
+    $\mathcal S'_{W,N}$; closure under contiguous restrictions proves the
+    reverse inclusion. Injectivity gives the dimension, and the inverse-Gram
+    formula gives continuity of the orthogonal range projector.
+\end{proof}
