@@ -489,6 +489,28 @@ terminal leaf.
     $\kappa\le e$ and $\lceil x\rceil\le 2x$ for $x\ge1$, with $C_1=32$.
 \end{proof}
 
+\begin{lemma}[Continuity cost at trace distance $n^{-500}$]
+    \label{lem:al_continuity_cost}
+    \lean{TNLean.PEPS.AreaLaw.Scan.eventually_continuityCost_le}
+    \leanok
+    Fix $C,\lambda\ge0$. There is a threshold depending only on these constants
+    such that, for every natural number $n$ above the threshold and every real
+    $t\le n^{-500}$,
+    \begin{align}
+        C\sqrt{t}\bigl(1+Cn^2\lambda\bigr)\le n^{-247}.
+    \end{align}
+    This is the continuity cost of \cite[Lemma~2.1]{OpenAI2026AreaLaw} at the
+    trace distances arising in \cite[Proposition~9.2, proof]{OpenAI2026AreaLaw}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Take $n\ge1$ and $n\ge C(1+C\lambda)$. Then $\sqrt t\le n^{-250}$ and
+    $1+Cn^2\lambda\le(1+C\lambda)n^2$, so
+    $C\sqrt t(1+Cn^2\lambda)\le n^{-250}\cdot C(1+C\lambda)n^2
+        \le n^{-250}\cdot n^3=n^{-247}$.
+\end{proof}
+
 \begin{lemma}[Continuity cost with a fixed distance coefficient]
     \label{lem:al_continuity_fixed_coefficient}
     \lean{TNLean.PEPS.AreaLaw.Scan.eventually_continuityCost_le_of_fixed_coefficient}
@@ -505,16 +527,15 @@ terminal leaf.
 \end{lemma}
 
 \begin{proof}
+    \uses{lem:al_continuity_cost}
     \leanok
     Put $B=1+A$ and $\overline C=C\sqrt B$.
-    For all sufficiently large $n$, the coefficient-one estimate gives
+    For all sufficiently large $n$ and every $u\le n^{-500}$,
+    Lemma~\ref{lem:al_continuity_cost} with the constants $\overline C$ and
+    $\lambda$ gives
     \begin{align}
-        \overline C\sqrt u\bigl(1+\overline Cn^2\lambda\bigr)
-        \le n^{-247}\qquad(u\le n^{-500}).
+        \overline C\sqrt u\bigl(1+\overline Cn^2\lambda\bigr)\le n^{-247}.
     \end{align}
-    Indeed, for $n\ge1$ the left-hand side is at most
-    $\overline C(1+\overline C\lambda)n^{-248}$, so it suffices to take
-    $n\ge\overline C(1+\overline C\lambda)$.
     If $t\le An^{-500}$, then $u=t/B\le n^{-500}$.
     Since $B>0$, the identity $\sqrt t=\sqrt B\sqrt{t/B}$ holds for every real
     $t$, including negative $t$.
