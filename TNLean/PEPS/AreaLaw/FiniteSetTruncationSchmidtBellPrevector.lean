@@ -15,9 +15,10 @@ each actual positive-mass spectral restriction, this same ground vector then
 determines one auxiliary label sequence in physical-site coordinates.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
-`03-quasilocal.tex`, `prop:truncation`, lines 405–433, and
-`07-comparators.tex`, `comparator:prevector` and `comparator:high-label`,
-revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+`03-quasilocal.tex`, `prop:truncation`, lines 405–433,
+`05-replicas.tex`, lines 46–80 (the symmetric-group labels and their
+projectors), and `07-comparators.tex`, `comparator:prevector` and
+`comparator:high-label`, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
 noncomputable section

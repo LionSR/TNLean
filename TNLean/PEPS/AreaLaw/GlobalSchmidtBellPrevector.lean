@@ -16,8 +16,9 @@ uniform auxiliary pair. Configuration reindexing preserves its exact energy,
 symmetry and the two literal auxiliary projection equations.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
-`07-comparators.tex`, `comparator:prevector` and `comparator:high-label`,
-lines 130–147 and 240–281, revision
+`05-replicas.tex`, lines 46–80 (the symmetric-group labels and their
+projectors), and `07-comparators.tex`, `comparator:prevector` and
+`comparator:high-label`, lines 130–147 and 240–281, revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
