@@ -1,0 +1,28 @@
+\section{Regional entropy continuity}
+
+\begin{theorem}[Entropy continuity on a fixed lattice region]
+    \label{thm:area_law_regional_entropy_continuity}
+    \lean{TNLean.PEPS.AreaLaw.abs_regionalEntropy_sub_le_sqrt_traceDistance}
+    \leanok
+    \uses{def:area_law_ground_entropy}
+    Let $\Lambda\subset\mathbb Z^2$ be finite, let $q\in\mathbb N$, and let
+    $\Omega,\Phi\in\bigotimes_{v\in\Lambda}\mathbb C^q$ be unit vectors.
+    Put $\delta=\frac12\bigl\||\Omega\rangle\langle\Omega|
+        -|\Phi\rangle\langle\Phi|\bigr\|_1$.
+    Every region $A\subseteq\Lambda$ satisfies
+    \begin{align*}
+        |S_\Omega(A)-S_\Phi(A)| & \le 4\sqrt\delta\,(1+|A|\log q).
+    \end{align*}
+    If $q=0$, the unit-vector hypotheses force $\Lambda$ and $A$ to be empty;
+    in this case $|A|\log q$ is read as zero.
+    This is the regional form of \cite[Lemma~2.1]{OpenAI2026AreaLaw} used
+    in its scanner entropy estimate.
+\end{theorem}
+\begin{proof}\leanok
+    Partial trace contracts trace distance, so the reduced states have trace
+    distance at most $\delta$. Entropy continuity on their common space of
+    dimension $q^{|A|}$ bounds the entropy difference by
+    $4\sqrt\delta\log(e q^{|A|})$.
+    Each reduced state has trace one, so this dimension is nonzero.
+    The logarithm is $1+|A|\log q$.
+\end{proof}

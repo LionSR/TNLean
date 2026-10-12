@@ -363,3 +363,22 @@ the finite-dimensional density application uses finite ones.
     \uses{thm:compression_operator_matrix_sum,def:compression_operator_density_coefficient}
     Specialize the rectangular matrix identity to the complete ket/bra alphabet and the stated coefficient function.
 \end{proof}
+
+\begin{theorem}[A scalar in one vertex tensor]
+    \label{thm:peps_dependent_network_scalar}
+    \lean{TNLean.PEPS.DependentBondNetwork.network_mul_at_vertex}
+    \leanok
+    \uses{def:peps_dependent_network}
+    Multiplying the tensor $A_p$ at one vertex $p$ by $s\in\C$ and
+    leaving the other tensors unchanged multiplies
+    the contraction $\mathcal N_A(B)(\sigma)$ of
+    Definition~\ref{def:peps_dependent_network} by $s$. The links and their dimensions
+    are unchanged.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Every summand of the contraction in
+    Definition~\ref{def:peps_dependent_network} contains exactly one
+    factor $A_p$.
+\end{proof}

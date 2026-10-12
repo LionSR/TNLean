@@ -64,6 +64,7 @@ import TNLean.PEPS.AreaLaw.Scan.HistoryWeights
 import TNLean.PEPS.AreaLaw.Scan.NestedBandMetric
 import TNLean.PEPS.AreaLaw.Scan.OffsetDilution
 import TNLean.PEPS.AreaLaw.Scan.OldStateIntegral
+import TNLean.PEPS.AreaLaw.Scan.OriginalTruncation
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBadHistoryDecay
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBandCommutation
 import TNLean.PEPS.AreaLaw.Scan.PhysicalChargeAncestry
@@ -95,3 +96,4 @@ import TNLean.PEPS.AreaLaw.Scan.SupportLocalization
 import TNLean.PEPS.AreaLaw.Scan.TerminalSplits
 import TNLean.PEPS.AreaLaw.Scan.TimedChargePaths
 import TNLean.PEPS.AreaLaw.Scan.TransportDimension
+import TNLean.PEPS.AreaLaw.Scan.TypicalReplicaAbsorption

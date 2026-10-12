@@ -893,7 +893,7 @@ The following finite construction follows
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.upper_le,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.front_comparison_thresholds_le}
     \leanok
-    \uses{def:al_scan_actual_histories,def:al_scan_comparison_prefixes}
+    \uses{def:al_scan_actual_histories}
     Suppose $n>0$ and $8Km\le L$. Fix $0\le g<K$, $0\le r<m$ and
     $0\le k\le nm$. Let $j_N,j_F$ be the near and oriented far nominal
     fronts after $k$ fills, and put $v=8gm+5m+r$. Then
@@ -925,6 +925,20 @@ The following finite construction follows
     Both integer thresholds are at most $L$ by
     Lemma~\ref{lem:al_scan_front_thresholds}. Apply
     Lemma~\ref{lem:al_scan_finite_prefix_family} to each threshold.
+\end{proof}
+
+\begin{theorem}[Positive prefixes in the compact collar]
+    \label{thm:al_scan_positive_prefix_collar}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.positiveDepthPrefix_subset_truncationSet}
+    \leanok
+    \uses{def:al_scan_comparison_prefixes}
+    Let $S_0=\{x\in A:d(x)\le L\}$ be the original compact truncation set.
+    For every integer threshold $j\le L$, the positive-depth prefix satisfies
+    $Q_j\subseteq S_0$.
+\end{theorem}
+\begin{proof}\leanok
+    If $x\in Q_j$, then $x\in A$ and $d(x)\le j\le L$.
+    Thus $x\in S_0$.
 \end{proof}
 
 \begin{lemma}[One nested family and separated deterministic fronts]
