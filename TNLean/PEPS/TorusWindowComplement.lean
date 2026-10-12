@@ -482,7 +482,10 @@ $L \times K$ region is injective"), with normality as defined at line 1318. -/
 structure IsNormalTorusArcWindowPEPS (L K : ℕ) (A : Tensor (torusGraph width height) d) : Prop
     extends NormalTorusArcWindowInjectivityHypotheses L K
       (regionInjectivityDataOf (G := torusGraph width height) A) where
-  /-- Every virtual bond space is nonzero. -/
+  /-- Every virtual bond space is nonzero: the source's PEPS bond spaces are nonzero throughout
+  (arXiv:1804.04964, `Papers/1804.04964/paper_normal.tex`, Section 3 and the corollary at
+  lines 2297--2318); the convention is recorded in
+  `docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
   bondDim_pos : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e
 
 end PEPS
