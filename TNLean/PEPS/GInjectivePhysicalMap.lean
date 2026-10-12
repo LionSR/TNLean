@@ -67,6 +67,17 @@ theorem IsGInjective.comp_equiv (hT : IsGInjective ρ T) (F : P ≃ₗ[ℂ] Q) :
     IsGInjective ρ (F.toLinearMap ∘ₗ T) :=
   hT.comp_of_injective F.toLinearMap F.injective
 
+/-- A virtual change of coordinates intertwining two representations preserves
+G-injectivity. Source: local consequence of SCP10, Definition 5.1, lines 1278–1296. -/
+theorem IsGInjective.comp_virtualEquiv {W' : Type*} [AddCommGroup W'] [Module ℂ W']
+    {ρ' : Representation ℂ G W'} (hT : IsGInjective ρ T) (E : W' ≃ₗ[ℂ] W)
+    (hE : ∀ g x, E (ρ' g x) = ρ g (E x)) : IsGInjective ρ' (T ∘ₗ E.toLinearMap) := by
+  refine ⟨fun g => LinearMap.ext fun x => ?_, fun x hx hzero => E.injective ?_⟩
+  · simpa only [LinearMap.comp_apply, LinearEquiv.coe_coe, hE] using
+      LinearMap.congr_fun (hT.invariant g) (E x)
+  · rw [map_zero]
+    exact hT.injOn_invariants (E x) (fun g => by rw [← hE, hx g]) hzero
+
 /-- An invertible physical change of coordinates preserves G-injectivity in
 both directions. Source: SCP10, Definition 5.1, lines 1278–1296. -/
 theorem isGInjective_comp_equiv_iff (F : P ≃ₗ[ℂ] Q) :

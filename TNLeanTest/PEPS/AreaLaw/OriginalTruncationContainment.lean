@@ -10,7 +10,8 @@ import TNLean.PEPS.AreaLaw.Scan.DesignatedSampling
 # Positive-depth prefixes in the compact collar
 
 Every positive-depth prefix whose threshold is at most the collar depth lies
-in the original compact truncation set. The proof below is unfinished.
+in the original compact truncation set. Membership follows from the same
+depth bound by transitivity.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 43–59 and 244–251,
