@@ -14,9 +14,10 @@ standard logical axioms.
 
 set_option linter.hashCommand false
 
+open TNLean.PEPS.Approximation.SquareHamiltonian in
 /--
 info: 'TNLean.PEPS.Approximation.SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.Approximation.SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
+#print axioms sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing

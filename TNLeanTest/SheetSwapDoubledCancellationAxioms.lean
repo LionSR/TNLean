@@ -14,9 +14,10 @@ standard logical axioms.
 
 set_option linter.hashCommand false
 
+open TNLean.PEPS.EncodedFrame in
 /--
 info: 'TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators'
   depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
+#print axioms sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators
