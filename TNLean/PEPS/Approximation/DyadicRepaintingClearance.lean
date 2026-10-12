@@ -163,11 +163,11 @@ structure BandOperation (ι : Type*) where
   hi' : ℝ
   changed : ∀ x, before x ≠ after x → lo ≤ x ∧ x ≤ hi
   sector : ∀ x, lo' < x → x < hi' → surrounding x = label
-  lo_le_hi : lo ≤ hi
-  margin_lo : lo' + 1 / 2 ≤ lo
-  margin_hi : hi + 1 / 2 ≤ hi'
-  lo'_ge : -8 ≤ lo'
-  hi'_le : hi' ≤ 2
+  lo_le_hi : lo ≤ hi := by norm_num
+  margin_lo : lo' + 1 / 2 ≤ lo := by norm_num
+  margin_hi : hi + 1 / 2 ≤ hi' := by norm_num
+  lo'_ge : -8 ≤ lo' := by norm_num
+  hi'_le : hi' ≤ 2 := by norm_num
 
 /-- The changed set of an elementary edge operation lies in the closed band of its changed
 interval, when the guides have the operation's words on the band `-8 < x < 2` and agree off it.
@@ -259,11 +259,6 @@ noncomputable def auxBirthB : BandOperation ι where
     simp only [auxWordOne, bandWord] at h
     split_ifs at h <;> first | exact absurd rfl h | constructor <;> linarith
   sector _ _ _ := rfl
-  lo_le_hi := by norm_num
-  margin_lo := by norm_num
-  margin_hi := by norm_num
-  lo'_ge := by norm_num
-  hi'_le := by norm_num
 
 /-- Birth of `A` in `-5 < x < -2` inside the auxiliary `B` band `(-6, -1)`.
 
@@ -283,11 +278,6 @@ noncomputable def auxBirthA : BandOperation ι where
   sector x h1 h2 := by
     simp only [auxWordOne, bandWord]
     split_ifs <;> first | rfl | (exfalso; linarith)
-  lo_le_hi := by norm_num
-  margin_lo := by norm_num
-  margin_hi := by norm_num
-  lo'_ge := by norm_num
-  hi'_le := by norm_num
 
 /-- Birth of `C` in `-4 < x < -3` inside the auxiliary `A` band `(-5, -2)`.
 
@@ -307,11 +297,6 @@ noncomputable def auxBirthC : BandOperation ι where
   sector x h1 h2 := by
     simp only [auxWordTwo, bandWord]
     split_ifs <;> first | rfl | (exfalso; linarith)
-  lo_le_hi := by norm_num
-  margin_lo := by norm_num
-  margin_hi := by norm_num
-  lo'_ge := by norm_num
-  hi'_le := by norm_num
 
 /-- Death of the main `C` band `(-4, 0)` into `A`; the surrounding `A` interval is `(-5, 1)`.
 
@@ -331,11 +316,6 @@ noncomputable def mainDeathC : BandOperation ι where
   sector x h1 h2 := by
     simp only [mainWordTwo, bandWord]
     split_ifs <;> first | rfl | (exfalso; linarith)
-  lo_le_hi := by norm_num
-  margin_lo := by norm_num
-  margin_hi := by norm_num
-  lo'_ge := by norm_num
-  hi'_le := by norm_num
 
 /-- Death of the main `A` band `(-5, 1)` into `B`; the surrounding `B` sector includes `(-6, 2)`.
 
@@ -355,11 +335,6 @@ noncomputable def mainDeathA : BandOperation ι where
   sector x h1 h2 := by
     simp only [mainWordThree, bandWord]
     split_ifs <;> first | rfl | (exfalso; linarith)
-  lo_le_hi := by norm_num
-  margin_lo := by norm_num
-  margin_hi := by norm_num
-  lo'_ge := by norm_num
-  hi'_le := by norm_num
 
 /-- Birth of `C` in `(-3, 0)` inside the main `B` sector, which includes `(-6, 2)`.
 
@@ -379,11 +354,6 @@ noncomputable def mainBirthC : BandOperation ι where
   sector x h1 h2 := by
     simp only [mainWordThree, bandWord]
     split_ifs <;> first | rfl | (exfalso; linarith)
-  lo_le_hi := by norm_num
-  margin_lo := by norm_num
-  margin_hi := by norm_num
-  lo'_ge := by norm_num
-  hi'_le := by norm_num
 
 /-- Death of the remaining main `B` band `(-6, -3)` into `C`; the surrounding `C` sector
 includes `(-8, 0)`.
@@ -403,11 +373,6 @@ noncomputable def mainDeathB : BandOperation ι where
     split_ifs at h <;> first | exact absurd rfl h | constructor <;> linarith
   sector x h1 h2 := by
     simp only [mainWordFive, bandWord, h2, ↓reduceIte]
-  lo_le_hi := by norm_num
-  margin_lo := by norm_num
-  margin_hi := by norm_num
-  lo'_ge := by norm_num
-  hi'_le := by norm_num
 
 /-- The seven elementary births and deaths of one edge construction, in order.
 

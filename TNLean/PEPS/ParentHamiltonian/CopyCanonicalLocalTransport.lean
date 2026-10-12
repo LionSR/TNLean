@@ -22,7 +22,6 @@ open scoped Matrix BigOperators
 namespace TNLean.PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
-private abbrev RI (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}
 private abbrev RB (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
 variable {G : Type*} [Group G] [Fintype G] {p q : ℕ}
 
@@ -36,6 +35,23 @@ def numberedRegionCopyMatrix (d m : I → ℕ)
     Matrix (RegionPhysicalConfig (d := q) R) (RegionPhysicalConfig (d := p) R) ℂ :=
   (graphRegionCopyMatrix d m R γ).submatrix
     (regionBondConfigEquiv eY R) (regionBondConfigEquiv eX R)
+
+/-- Each block of the global copy-restoring map is the block scalar times the regional copy
+map at the outside boundary labels. Source: SCP10, Section 7, lines 2977–3019. -/
+theorem regionOperatorBlock_fullMultiplicityBondMap_eq_smul (d m : I → ℕ)
+    (eX : (v : V) → (IncidentEdge Γ v → Σ i, Fin (d i)) ≃ Fin p)
+    (eY : (v : V) → (IncidentEdge Γ v → Σ i, Fin (d i) × Fin (m i)) ≃ Fin q)
+    (R : Finset V) (τ : RegionPhysicalConfig (d := q) (Finset.univ \ R))
+    (σ : RegionPhysicalConfig (d := p) (Finset.univ \ R)) :
+    regionOperatorBlock R
+        (graphNumberedBondMatrix eX eY
+          (fullMultiplicityBondMap (fun i => Fin (d i)) (fun i => Fin (m i)))) τ σ =
+      graphMultiplicityBlockCoefficient (fun i => Fin (d i)) (fun i => Fin (m i))
+        eX eY R τ σ • numberedRegionCopyMatrix d m eX eY R
+          (regionOutsideBoundaryEndpoint eY R τ) := by
+  ext y x
+  exact regionOperatorBlock_fullMultiplicityBondMap
+    (fun i => Fin (d i)) (fun i => Fin (m i)) eX eY R τ σ y x
 
 /-- The explicit open-generator formula gives a local-range inclusion in
 bond coordinates. -/

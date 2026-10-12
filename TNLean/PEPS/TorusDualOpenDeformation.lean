@@ -14,9 +14,13 @@ The explicit one-site collar makes that gauge identity at both endpoints of
 crossing bonds. Delta completion then gives equality of actual open coefficients
 and contraction with an arbitrary correlated boundary tensor.
 
-This is the collared rectangular specialization of SCP10, arXiv:1001.3807v3,
-Lemma 6.14. It does not prove arbitrary-region avoidance, cross-winding equality,
-or equality with a vacuum reduced density matrix.
+**Scope restriction (collared open-boundary continuation):** This is the
+collared rectangular specialization of SCP10, arXiv:1001.3807v3, Lemma 6.14,
+with a one-site collar `W + 1 < w` and `H + 1 < h`. It does not prove
+arbitrary-region avoidance, cross-winding equality, or equality with a vacuum
+reduced density matrix. Documented in
+`docs/paper-gaps/scp10_dual_flux_string_deformation.tex`, section "Collared
+open-boundary continuation".
 -/
 
 noncomputable section

@@ -38,18 +38,14 @@ in its equal-case strengthening:
 
 ## Conditional block matching from periodic overlaps
 
-The block-matching conclusion used toward theorem `thm:bd` has two conditional
-forms:
-
-* `fundamentalTheorem_periodic_proportional` takes a `PeriodicOverlapHypothesis` directly,
-  leaving callers free to supply the dichotomy from any source.
-* `fundamentalTheorem_periodic_proportional_of_isPeriodic` is a variant that no
-  longer takes `PeriodicOverlapHypothesis` as a parameter: the
-  `hetRepeatedBlocks_of_nondecaying` field is filled inside
-  `PeriodicOverlapHypothesis.ofIsPeriodic` via `periodicOverlapDichotomy`.
-  Callers only need to supply per-block `IsPeriodic` data
-  plus the existence of non-decaying cross-family overlaps
-  (`exists_nondecaying_A/B`). The companion module `ProportionalOverlap`
+The block-matching conclusion used toward theorem `thm:bd` is
+`fundamentalTheorem_periodic_proportional`, which takes a
+`PeriodicOverlapHypothesis` directly, leaving callers free to supply the
+dichotomy from any source. From per-block `IsPeriodic` data plus the existence
+of non-decaying cross-family overlaps (`exists_nondecaying_A/B`),
+`PeriodicOverlapHypothesis.ofIsPeriodic` fills the
+`hetRepeatedBlocks_of_nondecaying` field via `periodicOverlapDichotomy`.
+The companion module `ProportionalOverlap`
   derives these witnesses from nonzero proportionality for literal
   multiplicity-bearing families of normalized periodic blocks, and also for
   the more restrictive scalar-weight irreducible-form representation.
@@ -457,8 +453,7 @@ retains equality of the matched periods.
 
 The `PeriodicOverlapHypothesis` parameter can be supplied via
 `PeriodicOverlapHypothesis.ofIsPeriodic`, which uses the proved
-`periodicOverlapDichotomy` to fill the `hetRepeatedBlocks_of_nondecaying` field; see
-`fundamentalTheorem_periodic_proportional_of_isPeriodic`. -/
+`periodicOverlapDichotomy` to fill the `hetRepeatedBlocks_of_nondecaying` field. -/
 theorem fundamentalTheorem_periodic_proportional
     (A : (j : Fin rA) → MPSTensor d (dimA j))
     (B : (k : Fin rB) → MPSTensor d (dimB k))
@@ -519,42 +514,6 @@ theorem fundamentalTheorem_periodic_proportional
   exact ⟨Equiv.ofBijective fA hfA_bij, fun j => by
     change HetRepeatedBlocks (A j) (B (fA j))
     exact hfA_rep j⟩
-
-/-- **Conditional block matching from periodic block data.**
-
-This variant of `fundamentalTheorem_periodic_proportional` no longer takes
-`PeriodicOverlapHypothesis` as a parameter; instead, the dichotomy field is filled via
-`periodicOverlapDichotomy`. The caller only needs to supply `IsPeriodic` data plus the
-existence of non-decaying cross-family overlaps.
-
-The overlap-dichotomy input is unconditional: its sector-match branch uses the proved
-full-cycle contraction `sectorTensor_proportional_of_blockedMatch`. The explicit
-non-decaying cross-family overlap hypotheses remain additional inputs.
-
-**Scope restriction (conditional non-decay witnesses):** source theorem
-`thm:bd` at arXiv:1708.00029, lines 613--623 assumes proportionality of the
-assembled MPVs and derives these witnesses. This declaration is only the
-subsequent finite matching step. The gap is recorded in
-`docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
-theorem fundamentalTheorem_periodic_proportional_of_isPeriodic
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k))
-    (periodA : Fin rA → ℕ) (periodB : Fin rB → ℕ)
-    (hPerA : ∀ j, IsPeriodic (periodA j) (A j))
-    (hPerB : ∀ k, IsPeriodic (periodB k) (B k))
-    (hNonRepA : ∀ j₁ j₂ : Fin rA, j₁ ≠ j₂ →
-      ¬ HetRepeatedBlocks (A j₁) (A j₂))
-    (hNonRepB : ∀ k₁ k₂ : Fin rB, k₁ ≠ k₂ →
-      ¬ HetRepeatedBlocks (B k₁) (B k₂))
-    (hExA : ∀ j₀ : Fin rA, ∃ k₀ : Fin rB,
-      ¬ Filter.Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N)
-        Filter.atTop (nhds 0))
-    (hExB : ∀ k₀ : Fin rB, ∃ j₀ : Fin rA,
-      ¬ Filter.Tendsto (fun N => mpvOverlap (d := d) (A j₀) (B k₀) N)
-        Filter.atTop (nhds 0)) :
-    PeriodicBlockMatchingWitness (d := d) A B :=
-  fundamentalTheorem_periodic_proportional A B hNonRepA hNonRepB
-    (PeriodicOverlapHypothesis.ofIsPeriodic A B periodA periodB hPerA hPerB hExA hExB)
 
 end ProportionalCase
 
