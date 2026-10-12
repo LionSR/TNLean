@@ -185,3 +185,44 @@ These are the local initial regions used in
     Hence $x\in X_{\lambda(R)}^0\setminus\partial X_{\lambda(R)}^0
         =\operatorname{int}(X_{\lambda(R)}^0)=U_{\lambda(R)}$.
 \end{proof}
+% Proposed local auxiliary to geometry:initial-stars, lines 333--370,
+% especially 361--370, and prop:two-families, lines 299--323;
+% openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Insert after thm:area_law_initial_run_open_region in
+% ch24_peps_area_law_initial_sector_components.tex.
+% Intended Lean declaration after validation:
+% TNLean.PEPS.AreaLaw.Geometry.exists_unique_initialRegion_of_closedHalf_component
+
+\begin{theorem}[A unique initial region on each closed-half component]
+    \label{thm:area_law_initial_closed_half_unique_region}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_initialRegion_of_closedHalf_component}
+    \leanok
+    \uses{thm:area_law_initial_closed_half_components,
+        thm:area_law_initial_run_open_region,
+        thm:area_law_initial_open_disjoint}
+    Retain all the choices and hypotheses fixed in this section.
+    For every connected component $Q$ of
+    $\Omega_{1/2}=\overline B_\infty(v,r/2)\setminus L$,
+    there is a unique initial identifier $i\in\mathcal I$ such that
+    $Q\subseteq U_i$.
+    Distinct components may carry the same identifier, and the change set
+    may be empty. This is a local auxiliary to the initial-star assertion
+    of \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_initial_closed_half_components,
+        thm:area_law_initial_sector_run_assignment,
+        thm:area_law_initial_run_open_region,
+        thm:area_law_initial_open_disjoint}
+    The component correspondence of the closed half-square identifies each
+    component $Q$ with a run $R$ so that the points of $Q$ are exactly the
+    retained points of the closed run region $Y_R$. Since
+    $\overline B_\infty(v,r/2)\subseteq B_\infty(v,r)$, every point of $Q$
+    is a retained point of $B_\infty(v,r)\setminus L$ lying in $Y_R$, hence
+    belongs to the open region $U_{\lambda(R)}$ assigned to its run. This
+    exhibits the identifier $i=\lambda(R)$ with $Q\subseteq U_i$. For
+    uniqueness, pick any point of $Q$; it lies in $U_{\lambda(R)}$, and were
+    it also contained in some $U_{i'}$ with $i'\neq\lambda(R)$ the two open
+    regions would meet, contradicting their pairwise disjointness. Hence the
+    identifier is unique.
+\end{proof}

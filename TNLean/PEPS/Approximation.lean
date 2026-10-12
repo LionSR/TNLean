@@ -189,9 +189,11 @@ import TNLean.PEPS.Approximation.SeparatedOutputCoordinates
 import TNLean.PEPS.Approximation.SeparatedPhysicalDensity
 import TNLean.PEPS.Approximation.SeparatedSchmidtOutput
 import TNLean.PEPS.Approximation.SheetSplitting
+import TNLean.PEPS.Approximation.SheetSwapBoundaryExpansion
 import TNLean.PEPS.Approximation.SheetSwapConjugateSupport
 import TNLean.PEPS.Approximation.SheetSwapCorrection
 import TNLean.PEPS.Approximation.SheetSwapDoubledCancellation
+import TNLean.PEPS.Approximation.SheetSwapDoubledTermNorm
 import TNLean.PEPS.Approximation.SheetSwapInteractionSupport
 import TNLean.PEPS.Approximation.SheetSwapSiteSupport
 import TNLean.PEPS.Approximation.SheetSwapSupported
@@ -249,6 +251,7 @@ import TNLean.PEPS.Approximation.SourceSlotBasis
 import TNLean.PEPS.Approximation.SourceSlotMaps
 import TNLean.PEPS.Approximation.SourceSubstitutionInventory
 import TNLean.PEPS.Approximation.SourceSubstitutionResidual
+import TNLean.PEPS.Approximation.SourceWordParties
 import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
