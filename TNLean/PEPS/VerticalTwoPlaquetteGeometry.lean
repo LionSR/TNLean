@@ -108,6 +108,12 @@ theorem verticalTwoPlaquetteCycleBond_injective (v : X) :
   apply (inducedRegionEdgeEquiv (verticalTwoPlaquetteRegion v)).injective
   exact congrArg Subtype.val h
 
+/-- The two horizontal chords are distinct as edges of the torus.
+Source: SCP10, Theorem 6.16, lines 2271–2305. -/
+theorem verticalTwoPlaquetteCycleBond_zero_ne_one (v : X) :
+    (verticalTwoPlaquetteCycleBond v 0).1 ≠ (verticalTwoPlaquetteCycleBond v 1).1 :=
+  (Subtype.val_injective.comp (verticalTwoPlaquetteCycleBond_injective v)).ne (by decide)
+
 /-- The numbering is the literal translated vertical five-edge path.
 Source: SCP10, rotated construction in Theorem 6.16, lines 2271–2305. -/
 theorem verticalTwoPlaquetteIso_apply (v : X) (i : Fin 6) :
