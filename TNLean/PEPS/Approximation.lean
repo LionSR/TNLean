@@ -189,7 +189,13 @@ import TNLean.PEPS.Approximation.SeparatedOutputCoordinates
 import TNLean.PEPS.Approximation.SeparatedPhysicalDensity
 import TNLean.PEPS.Approximation.SeparatedSchmidtOutput
 import TNLean.PEPS.Approximation.SheetSplitting
+import TNLean.PEPS.Approximation.SheetSwapBoundaryExpansion
 import TNLean.PEPS.Approximation.SheetSwapCorrection
+import TNLean.PEPS.Approximation.SheetSwapDoubledCancellation
+import TNLean.PEPS.Approximation.SheetSwapDoubledTermNorm
+import TNLean.PEPS.Approximation.SheetSwapInteractionSupport
+import TNLean.PEPS.Approximation.SheetSwapSiteSupport
+import TNLean.PEPS.Approximation.SheetSwapSupported
 import TNLean.PEPS.Approximation.SiteChainMonomials
 import TNLean.PEPS.Approximation.SiteChainNetwork
 import TNLean.PEPS.Approximation.SiteChainTruncation
