@@ -423,17 +423,19 @@ scale, finite domain, Hamiltonian, cut and scanner. The source
 assumptions~\cite{OpenAI2026AreaLaw} (\path{08-scanner.tex},
 lines~21--48, 243--257 and 400--414) are a nonempty ambient target $T$
 with $|T|\le C_Tn^2$, actual ambient
-depth, at most $n$ sites per positive ambient layer through
-$L=\lfloor n^{1-\ell}\rfloor$, and clearance
+depth $d(x)=\operatorname{dist}_\infty(x,T)$, at most $n$ sites per
+positive ambient layer through $L=\lfloor n^{1-\ell_T}\rfloor$ for a
+fixed exponent $0<\ell_T<1$, and clearance
 $\operatorname{dist}_\infty(T,Z)>2L+10r_0$, where $Z$ consists of both
 sites of every edge of $\partial_\Lambda A$.
 The source exponent range gives $1\le L\le n$; this is derived from the
-floor rather than assumed. These hypotheses yield\footnote{The floor bound is
+floor rather than assumed. Put $X=A\cap T$ and
+$S_0=A\cap T_L=\{x\in A:d(x)\le L\}$. These hypotheses yield\footnote{The floor bound is
     \leanid{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.one_le_L_le}; the geometric
     statement is
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.source_target_geometry}.}
 \begin{align}
-    |S_0|\le(C_T+1)n^2,\qquad X=A\cap T\subseteq S_0,\qquad
+    |S_0|\le(C_T+1)n^2,\qquad X\subseteq S_0,\qquad
     |\partial_\Lambda X|\le4n.
     \label{eq:arealaw2d_scanner_inputs_target_geometry}
 \end{align}
