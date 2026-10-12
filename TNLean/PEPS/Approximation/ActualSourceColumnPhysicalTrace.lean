@@ -34,8 +34,7 @@ private theorem mixed_single_eq_columns {S T : Type} [Fintype S] [DecidableEq S]
   classical
   ext i j
   simp [Matrix.mul_apply, Matrix.single, Matrix.vecMulVec_apply,
-    Matrix.conjTranspose_apply, Finset.sum_mul, ite_and, eq_comm,
-    mul_assoc, mul_comm]
+    Matrix.conjTranspose_apply, ite_and, mul_assoc, mul_comm]
 
 private theorem mixed_sandwich_eq_sum_columns {S T : Type} [Fintype S]
     (A B : Matrix T S ℂ) (X : Matrix S S ℂ) :
