@@ -93,6 +93,11 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
       (gaussianReal 0 η) :=
     (integrable_const ‖W‖).mono' hcont.aestronglyMeasurable
       (Filter.Eventually.of_forall hnorm)
+  have hfix (t : ℝ) : siteExpectation q B
+      (siteExpectation q B (heisenbergEvolution g.operator t W) * U t) =
+      siteExpectation q B (heisenbergEvolution g.operator t W) * U t :=
+    siteExpectation_of_mem_supportedOperators B
+      (mul_mem_supportedOperators (siteExpectation_mem_supportedOperators B _) (hsupport t))
   done
 
 end TNLean.PEPS.AreaLaw
