@@ -17,8 +17,7 @@ multiplicative, and star-preserving identities.
 
 ## Main declarations
 
-* `exists_compressedTensor_of_supported_projection_with_letter`
-* `exists_compressedTensor_of_supported_projection`
+* `exists_compressedTensor_of_supported_projection_with_letter_and_isometry`
 
 ## References
 
@@ -106,64 +105,6 @@ theorem exists_compressedTensor_of_supported_projection_with_letter_and_isometry
       _ = Matrix.trace (P * Kraus.evalWord A w) := Matrix.trace_mul_comm _ _
   · intro X
     simpa [Kraus.adjointMap, Kraus.transferMap_apply] using hIntertw X
-
-/-- Compress a tensor supported on an orthogonal projection to the corresponding sector bond
-space.  The compressed tensor has the same sector MPVs and inherits the left-canonical equation.
-Moreover, the compression equivalence sends each compressed letter back to the
-ambient supported letter.
-
-This is the projection of
-`exists_compressedTensor_of_supported_projection_with_letter_and_isometry` that
-forgets the support isometry. -/
-theorem exists_compressedTensor_of_supported_projection_with_letter
-    (A : MPSTensor d D) (P : MatrixAlg D)
-    (hP : IsOrthogonalProjection P)
-    (hSupp : ∀ i : Fin d, P * A i * P = A i)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = P) :
-    ∃ (n : ℕ) (C : MPSTensor d n)
-      (φ : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P),
-      ((n : ℂ) = Matrix.trace P) ∧
-      (∑ i : Fin d, (C i)ᴴ * C i = 1) ∧
-      (∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv C σ = Matrix.trace (P * Kraus.evalWord A (List.ofFn σ))) ∧
-      (∀ X : Matrix (Fin n) (Fin n) ℂ,
-        (φ (Kraus.transferMap (d := d) (D := n) (fun i => (C i)ᴴ) X)).1 =
-          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1)) ∧
-      (∀ X Y : Matrix (Fin n) (Fin n) ℂ,
-        (φ (X * Y)).1 = (φ X).1 * (φ Y).1) ∧
-      (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ Xᴴ).1 = ((φ X).1)ᴴ) ∧
-      (∀ i : Fin d, (φ (C i)).1 = A i) := by
-  obtain ⟨n, C, φ, _V, hdim, hCtp, hCmpv, hIntertwine, hMul, hStar, hLetter,
-    _hV_iso, _hV_range, _hEmbed_eq_V⟩ :=
-    exists_compressedTensor_of_supported_projection_with_letter_and_isometry A P hP hSupp hTP
-  exact ⟨n, C, φ, hdim, hCtp, hCmpv, hIntertwine, hMul, hStar, hLetter⟩
-
-/-- Compress a tensor supported on an orthogonal projection to the corresponding sector bond
-space.  The compressed tensor has the same sector MPVs and inherits the left-canonical equation.
-
-This is the projection of
-`exists_compressedTensor_of_supported_projection_with_letter` that forgets the
-letter-expansion identity. -/
-theorem exists_compressedTensor_of_supported_projection
-    (A : MPSTensor d D) (P : MatrixAlg D)
-    (hP : IsOrthogonalProjection P)
-    (hSupp : ∀ i : Fin d, P * A i * P = A i)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = P) :
-    ∃ (n : ℕ) (C : MPSTensor d n)
-      (φ : Matrix (Fin n) (Fin n) ℂ ≃ₗ[ℂ] cornerSubmodule P),
-      ((n : ℂ) = Matrix.trace P) ∧
-      (∑ i : Fin d, (C i)ᴴ * C i = 1) ∧
-      (∀ (N : ℕ) (σ : Fin N → Fin d),
-        mpv C σ = Matrix.trace (P * Kraus.evalWord A (List.ofFn σ))) ∧
-      (∀ X : Matrix (Fin n) (Fin n) ℂ,
-        (φ (Kraus.transferMap (d := d) (D := n) (fun i => (C i)ᴴ) X)).1 =
-          Kraus.transferMap (d := d) (D := D) (fun i => (A i)ᴴ) ((φ X).1)) ∧
-      (∀ X Y : Matrix (Fin n) (Fin n) ℂ,
-        (φ (X * Y)).1 = (φ X).1 * (φ Y).1) ∧
-      (∀ X : Matrix (Fin n) (Fin n) ℂ, (φ Xᴴ).1 = ((φ X).1)ᴴ) := by
-  obtain ⟨n, C, φ, hdim, hCtp, hCmpv, hIntertwine, hMul, hStar, _hLetter⟩ :=
-    exists_compressedTensor_of_supported_projection_with_letter A P hP hSupp hTP
-  exact ⟨n, C, φ, hdim, hCtp, hCmpv, hIntertwine, hMul, hStar⟩
 
 end Compression
 
