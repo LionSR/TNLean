@@ -59,11 +59,13 @@ theorem eventually_regionalEntropy_positiveDepthPrefix_le
         regionalEntropy Λ q Ωt (positiveDepthPrefix A depth (j : ℤ)) ≤
           Ce * ((n : ℝ) * (L : ℝ) ^ e + n) + (n : ℝ) ^ (-247 : ℝ) := by
   classical
-  filter_upwards [eventually_continuityCost_le_of_fixed_coefficient
+  have hq' : (1 : ℝ) ≤ (q : ℝ) := by exact_mod_cast hq
+  have key := eventually_continuityCost_le_of_fixed_coefficient
     (Real.sqrt (2 / g)) (max 4 Cvol) (Real.log q)
     (Real.sqrt_nonneg _) (le_trans (by norm_num) (le_max_left _ _))
-    (Real.log_nonneg (by exact_mod_cast hq))] with n hcost
-  intro Λ Ω Ωt hΩ hΩt A depth L hcard hdist Ce e hentropy j hj
+    (Real.log_nonneg hq')
+  filter_upwards [key] with
+    n hcost Λ Ω Ωt hΩ hΩt A depth L hcard hdist Ce e hentropy j hj
   have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
   have hqn : 0 < q := by omega
   have hq0 : (0 : ℝ) < (q : ℝ) := by exact_mod_cast hqn
