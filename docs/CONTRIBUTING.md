@@ -424,7 +424,6 @@ The following workflows run automatically:
 | **Import Completeness** (`import-completeness.yml`) | PRs and main pushes touching TNLean sources or generator files | Tests the generator and checks that every production module appears in the generated hierarchical import frontier |
 | **Lean Linter-Warning Sweep** (`housekeeping.yml`, `linter-sweep` job) | Weekly + manual dispatch | Captures Lean compiler/linter warnings and uploads a report for maintainer triage |
 | **Lean Linter-Warning Auto-Fix** (`lean-linter-warning-autofix.yml`) | Manual dispatch | Runs the warning sweep and can open a guarded Lean-only PR when explicitly requested |
-| **Docs & Blueprint Sync** (`docs-blueprint-sync.lock.yml`) | Daily (weekdays) + manual dispatch | Detects stale documentation and opens a sync PR if needed |
 
 ### Generated import aggregators
 
