@@ -111,7 +111,7 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
       (fun t _ ↦ hnorm t)).trans
       (mul_le_of_le_one_right (norm_nonneg W) measureReal_le_one), ?_⟩
   have hnear (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
-      (hA : A ∈ supportedOperators q ((Q ∪ Z) : Set (Site Λ)))
+      (hA : A ∈ supportedOperators q ((Q ∪ Z : Finset (Site Λ)) : Set (Site Λ)))
       (t : ℝ) (ht : |t| ≤ T) :
       ‖heisenbergEvolution g.operator t A -
         siteExpectation q B (heisenbergEvolution g.operator t A)‖ ≤
