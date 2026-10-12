@@ -101,6 +101,7 @@ import TNLean.Algebra.ListProduct
 import TNLean.Algebra.MatrixBilinearCoordinates
 import TNLean.Algebra.MatrixCoordinateInclusion
 import TNLean.Algebra.MatrixCyclicPathSum
+import TNLean.Algebra.MatrixDensitySum
 import TNLean.Algebra.MatrixEntryNorm
 import TNLean.Algebra.MatrixFixedSection
 import TNLean.Algebra.MatrixGramLeftInverse
@@ -120,6 +121,7 @@ import TNLean.Algebra.MonoidHomCommutingWeight
 import TNLean.Algebra.MonomialFixedSubspace
 import TNLean.Algebra.MonomialGaussOperator
 import TNLean.Algebra.MonomialMatrix
+import TNLean.Algebra.MultilinearSelectedSum
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NatSquarePlusOne
 import TNLean.Algebra.NewtonIdempotentConvergence
