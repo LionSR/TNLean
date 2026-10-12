@@ -172,6 +172,17 @@ theorem historyMeanTree_eval_succ (K m M : ℕ) (hm : 0 < m) (hM : 0 < M)
 @[simp] theorem fillChoiceTree_eval (A : Unit → Matrix N N ℂ) :
     fillChoiceTree.eval A = A () := rfl
 
+/-- The interpolating root is the old tree with each leaf replaced by the
+weighted mean of its old input and its conditional choice root
+(`06-transport.tex`, lines 270–286). -/
+private theorem interpRoot_eq {H : Type*} {C : H → Type*} (T : MeanTree H)
+    (S : ∀ h, MeanTree (C h)) (A : H → Matrix N N ℂ) (A' : ∀ h, C h → Matrix N N ℂ)
+    (p : unitInterval) : Matrix.Transport.interpRoot T S A A' p =
+      T.eval fun h ↦ Matrix.geomMean p (A h) ((S h).eval (A' h)) := by
+  simp only [Matrix.Transport.interpRoot, MeanTree.interpTree, MeanTree.eval_bind,
+    MeanTree.eval_node, MeanTree.eval_map, Function.comp_def]
+  rfl
+
 /-- At the old endpoint, the interpolating charge tree has exactly the old
 history root. Positive definiteness is needed by the matrix mean endpoint law. -/
 theorem charge_interpRoot_zero (K m M : ℕ) (hm : 0 < m) (hM : 0 < M)
@@ -181,14 +192,7 @@ theorem charge_interpRoot_zero (K m M : ℕ) (hm : 0 < m) (hM : 0 < M)
     Matrix.Transport.interpRoot (historyMeanTree K m M hm hM k)
       (fun _ ↦ chargeChoiceTree K M hM) A (fun h c ↦ B (extendHistory h c)) 0 =
         (historyMeanTree K m M hm hM k).eval A := by
-  unfold Matrix.Transport.interpRoot MeanTree.interpTree
-  rw [MeanTree.eval_bind]
-  congr 1
-  funext h
-  simp only [MeanTree.eval_node, MeanTree.eval_leaf, MeanTree.eval_map,
-    Matrix.Transport.interpInput, Function.comp_def]
-  exact Matrix.geomMean_zero (hA h)
-    (MeanTree.posDef_eval (fun c ↦ hB (extendHistory h c)) _)
+  simp [interpRoot_eq, hA, hB, MeanTree.posDef_eval]
 
 /-- At the new endpoint, the interpolating root is exactly the recursively
 constructed next history root. Matching distributions alone is not used. -/
@@ -199,15 +203,7 @@ theorem charge_interpRoot_one (K m M : ℕ) (hm : 0 < m) (hM : 0 < M)
     Matrix.Transport.interpRoot (historyMeanTree K m M hm hM k)
       (fun _ ↦ chargeChoiceTree K M hM) A (fun h c ↦ B (extendHistory h c)) 1 =
         (historyMeanTree K m M hm hM (k + 1)).eval B := by
-  rw [historyMeanTree_eval_succ]
-  unfold Matrix.Transport.interpRoot MeanTree.interpTree
-  rw [MeanTree.eval_bind]
-  congr 1
-  funext h
-  simp only [MeanTree.eval_node, MeanTree.eval_leaf, MeanTree.eval_map,
-    Matrix.Transport.interpInput, Function.comp_def]
-  exact Matrix.geomMean_one (hA h)
-    (MeanTree.posDef_eval (fun c ↦ hB (extendHistory h c)) _)
+  simp [historyMeanTree_eval_succ, interpRoot_eq, hA, hB, MeanTree.posDef_eval]
 
 /-- The new endpoint of a deterministic fill keeps the same history tree and
 changes only its leaf inputs. Thus it is the old tree of the following charge. -/
@@ -217,13 +213,7 @@ theorem fill_interpRoot_one (K m M : ℕ) (hm : 0 < m) (hM : 0 < M)
     Matrix.Transport.interpRoot (historyMeanTree K m M hm hM k)
       (fun _ ↦ fillChoiceTree) A (fun h _ ↦ B h) 1 =
         (historyMeanTree K m M hm hM k).eval B := by
-  unfold Matrix.Transport.interpRoot MeanTree.interpTree
-  rw [MeanTree.eval_bind]
-  congr 1
-  funext h
-  simp only [MeanTree.eval_node, MeanTree.eval_leaf, MeanTree.eval_map,
-    Matrix.Transport.interpInput, Function.comp_def, fillChoiceTree_eval]
-  exact Matrix.geomMean_one (hA h) (hB h)
+  simp [interpRoot_eq, hA, hB]
 
 /-- The old endpoint of a deterministic fill is the preceding completed root. -/
 theorem fill_interpRoot_zero (K m M : ℕ) (hm : 0 < m) (hM : 0 < M)
@@ -232,13 +222,7 @@ theorem fill_interpRoot_zero (K m M : ℕ) (hm : 0 < m) (hM : 0 < M)
     Matrix.Transport.interpRoot (historyMeanTree K m M hm hM k)
       (fun _ ↦ fillChoiceTree) A (fun h _ ↦ B h) 0 =
         (historyMeanTree K m M hm hM k).eval A := by
-  unfold Matrix.Transport.interpRoot MeanTree.interpTree
-  rw [MeanTree.eval_bind]
-  congr 1
-  funext h
-  simp only [MeanTree.eval_node, MeanTree.eval_leaf, MeanTree.eval_map,
-    Matrix.Transport.interpInput, Function.comp_def, fillChoiceTree_eval]
-  exact Matrix.geomMean_zero (hA h) (hB h)
+  simp [interpRoot_eq, hA, hB]
 
 /-- The terminal old leaf has its actual history mass times the old-edge weight. -/
 theorem historyMeanTree_interp_weight_old (K m M : ℕ) (hm : 0 < m) (hM : 0 < M)

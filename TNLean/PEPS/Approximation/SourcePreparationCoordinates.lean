@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.CommonSourcePreparation
+import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
 import Mathlib.LinearAlgebra.Multilinear.Curry
 
 /-!
@@ -63,18 +64,13 @@ def slotVector : (R : SourceInventory P) → (U V : Fin R.length → HSpace) →
             ext η
             simp })
 
-private theorem memCongr_apply_heq {a b : Layout P} (h : a = b) (x : Mem a) :
-    HEq (Layout.memCongr h x) x := by
-  cases h
-  rfl
-
 private theorem slotVector_cons_heq (r : PairSource P) (R : SourceInventory P)
     (U V : Fin (r :: R).length → HSpace) (η : ∀ i, U i ⊗[ℂ] V i) :
     HEq (slotVector (r :: R) U V η)
       (assocL (U 0) (V 0) (Mem (slotLayout R (fun i ↦ U i.succ) (fun i ↦ V i.succ)))
         (η 0 ⊗ₜ slotVector R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
           (fun i ↦ η i.succ))) := by
-  exact memCongr_apply_heq (slotLayout_cons r R U V).symm _
+  exact Layout.memCongr_apply_heq (slotLayout_cons r R U V).symm _
 
 private theorem assocL_tmul_heq (U V : HSpace) {a b : Layout P} (h : a = b)
     (η : U ⊗[ℂ] V) {x : Mem a} {y : Mem b} (hxy : HEq x y) :
@@ -105,7 +101,7 @@ theorem slotVector_eq_vector (R : SourceInventory P)
     slotVector R U V η =
       Layout.memCongr (layout_ofSlots_eq R U V η (fun _ ↦ 0))
         (vector (ofSlots R U V η)) := by
-  exact eq_of_heq ((slotVector_heq_vector R U V η).trans (memCongr_apply_heq _ _).symm)
+  exact eq_of_heq ((slotVector_heq_vector R U V η).trans (Layout.memCongr_apply_heq _ _).symm)
 
 private theorem transport_append {a b : Layout P} (h : a = b)
     (ℓ : Layout P) (x : Mem a) (y : Mem ℓ) :

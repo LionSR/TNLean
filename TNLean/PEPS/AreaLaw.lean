@@ -59,6 +59,7 @@ import TNLean.PEPS.AreaLaw.RoundedShellEntropy
 import TNLean.PEPS.AreaLaw.SafeBoxChildren
 import TNLean.PEPS.AreaLaw.SafeRectangleDilation
 import TNLean.PEPS.AreaLaw.Scan
+import TNLean.PEPS.AreaLaw.SelectedSchmidtEntropyBounds
 import TNLean.PEPS.AreaLaw.SupportedGaussianIntegral
 import TNLean.PEPS.AreaLaw.TailParameter
 import TNLean.PEPS.AreaLaw.TheoremStatements
