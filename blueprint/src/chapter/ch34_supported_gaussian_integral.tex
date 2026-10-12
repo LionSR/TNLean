@@ -3,6 +3,7 @@
 \begin{theorem}[Supported Gaussian approximation]
     \label{thm:area_supported_gaussian_integral}
     \lean{TNLean.PEPS.AreaLaw.exists_supported_gaussian_integral}
+    \leanok
     \uses{def:area_law_hamiltonian,def:qc_site_expectation}
     Fix integers $q\geq1$ and $R\geq0$, and a real number $J$.
     There are positive constants $C,v,c$ with the following property.
@@ -39,7 +40,7 @@
     empty domains and empty regions are included. This is the supported
     Gaussian approximation used in \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:area_region_localization,
         thm:qc_supported_projected_relative_evolution,
         lem:qc_site_expectation_properties}
