@@ -1020,6 +1020,61 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     so the conjugated operator is supported on $S$.
 \end{proof}
 
+\begin{theorem}[Support and norm of the doubled boundary perturbation]
+    \label{thm:peps_swapped_doubled_boundary_bound}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.swapped_doubled_boundary_bound}
+    \leanok
+    \uses{def:polynomial_peps_model,def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
+    Let $V=\{0,\ldots,L-1\}^2$, where $L\geq0$ is an integer, and let
+    the local dimension be an integer $q\geq0$.
+    Let $H=\sum_{v\in V}h_v+\sum_e h_e$ be a Hermitian open-square
+    Hamiltonian. Each original site interaction is supported on its site,
+    each original edge interaction is supported on its endpoints, and all
+    these interactions have norm at most $J\in\R$.
+    For $R\subseteq V$, let $\partial R$ consist of the edges with exactly
+    one endpoint in $R$, and put
+    \begin{align*}
+        Z=\bigcup_{e\in\partial R}\{\text{endpoints of }e\}.
+    \end{align*}
+    In paired-site coordinates, let $K$ be the matrix of
+    $H\otimes I+I\otimes H$, and let $F$ be the matrix of the operator
+    exchanging the two copies at the sites in $R$.
+    Then $FKF^\dagger-K$ is supported on $Z$, with local dimension $q^2$, and
+    \begin{align*}
+        \|FKF^\dagger-K\|\leq 8JL^2.
+    \end{align*}
+    Individual interactions need not be Hermitian. No further assumption
+    on the sign of $J$ is required. The statement includes empty grids and
+    zero local dimension. This is the boundary perturbation estimate used
+    in \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_sheet_swap_boundary_expansion,
+        thm:peps_sheet_swap_conjugate_support,
+        thm:peps_sheet_swap_doubled_cancellation,
+        thm:peps_sheet_swap_doubled_term_norm,thm:peps_square_edge_count}
+    The crossing-edge expansion expresses the perturbation as a sum over
+    $e\in\partial R$. Each doubled interaction, before and after the
+    regional swap, is supported on the endpoints of $e$. Closure of the
+    supported operators under subtraction and finite sums proves the
+    support assertion.
+
+    If $L=0$, both original interaction sums vanish and the estimate is
+    $0\leq0$. Otherwise, any site $v\in V$ gives
+    $0\leq\|h_v\|\leq J$. Each crossing-edge contribution has norm at most
+    $4\|h_e\|\leq4J$. The triangle inequality and the square-edge count give
+    \begin{align*}
+        \|FKF^\dagger-K\|
+        \leq \sum_{e\in\partial R}4J
+        =4J|\partial R|
+        \leq 4J(2L^2)
+        =8JL^2.
+    \end{align*}
+    Relabelling the two-copy configurations by paired-site configurations
+    preserves the operator norm.
+\end{proof}
+
 \begin{definition}[Exchange data]
     \label{def:peps_frame_exchange_data}
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange,
