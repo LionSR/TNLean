@@ -210,19 +210,6 @@ theorem embedLocalOperator_isHermitian
     (embedLocalOperator (d := d) L N hLN i A).IsHermitian := by
   rw [Matrix.IsHermitian, ← embedLocalOperator_conjTranspose, hA.eq]
 
-/-- Embedding into a cyclic window preserves unitary matrices. -/
-theorem embedLocalOperator_mem_unitaryGroup
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
-    {A : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ}
-    (hA : A ∈ Matrix.unitaryGroup (Fin L → Fin d) ℂ) :
-    embedLocalOperator (d := d) L N hLN i A ∈
-      Matrix.unitaryGroup (Fin N → Fin d) ℂ := by
-  rw [Matrix.mem_unitaryGroup_iff'] at hA ⊢
-  have hA' : Aᴴ * A = 1 := by
-    simpa [Matrix.star_eq_conjTranspose] using hA
-  rw [Matrix.star_eq_conjTranspose, ← embedLocalOperator_conjTranspose,
-    ← embedLocalOperator_mul, hA', embedLocalOperator_one]
-
 /-- Embedding into a cyclic window preserves orthogonal projections, expressed
 by the type-generic star-projection predicate. -/
 theorem embedLocalOperator_isStarProjection

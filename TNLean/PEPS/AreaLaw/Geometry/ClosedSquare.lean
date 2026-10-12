@@ -107,16 +107,9 @@ private theorem card_rectangleBoundaryEdges_le (a b : ℤ × ℤ) :
 
 private theorem card_integerInterval_le (c r : ℝ) (hr : 0 ≤ r) :
     ((Finset.Icc ⌈c - r⌉ ⌊c + r⌋).card : ℝ) ≤ 2 * r + 1 := by
-  by_cases h : ⌈c - r⌉ ≤ ⌊c + r⌋ + 1
-  · have hc := Int.card_Icc_of_le _ _ h
-    have hc' : ((Finset.Icc ⌈c - r⌉ ⌊c + r⌋).card : ℝ) =
-        (⌊c + r⌋ : ℝ) + 1 - ⌈c - r⌉ := by exact_mod_cast hc
-    rw [hc']
-    linarith [Int.floor_le (c + r), Int.le_ceil (c - r)]
-  · have he : Finset.Icc ⌈c - r⌉ ⌊c + r⌋ = ∅ :=
-      Finset.Icc_eq_empty_of_lt (by omega)
-    rw [he, Finset.card_empty, Nat.cast_zero]
-    linarith
+  rw [Int.card_Icc, ← Int.cast_natCast, Int.toNat_eq_max, Int.cast_max]
+  push_cast
+  exact max_le (by linarith [Int.floor_le (c + r), Int.le_ceil (c - r)]) (by linarith)
 
 /-- A sampled closed square has at most `8 * r + 4` unordered crossing edges.
 Source: polynomial-PEPS `03-patches.tex`, lines 323–326. The statement
@@ -145,7 +138,11 @@ theorem card_edgeBoundary_closedSquareSample_le (Λ : Finset (ℤ × ℤ)) (c : 
   linarith [card_integerInterval_le c.1 r hr, card_integerInterval_le c.2 r hr]
 
 /-- The sup-norm distance of a lattice point from a real center.
-Source: polynomial-PEPS `03-patches.tex`, lines 215–217. -/
+Source: polynomial-PEPS `03-patches.tex`, lines 215–217.
+
+This is not `ambientDilation` in another form: the source's patch centers and
+nested radii are real numbers, whereas `ambientDilation` dilates an integer set
+by a natural-number radius. -/
 noncomputable def squareRadius (c : ℝ × ℝ) (x : ℤ × ℤ) : ℝ :=
   max |(x.1 : ℝ) - c.1| |(x.2 : ℝ) - c.2|
 
