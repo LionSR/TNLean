@@ -55,6 +55,7 @@ theorem augmentedReplicaConfigurationEquiv_subsystemPerm
       (show Sum.inl v ∈ Q.image augmentedSiteEquiv ↔ some (some v) ∈ Q from
         (augmentedSiteEquiv (V := V)).injective.mem_finset_image
           (s := Q) (a := some (some v)))]
+    rfl
   · done
   · done
 
