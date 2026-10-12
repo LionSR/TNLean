@@ -79,6 +79,7 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
   obtain ⟨C, v, c, hC, hv, hc, hgauss⟩ :=
     AreaLaw.exists_supported_gaussian_integral (q * q)
       (Nat.mul_le_mul hq hq) 1 (2 * J)
+  refine ⟨C, v, c, hC, hv, hc, fun L h R C₀ hRC ↦ ?_⟩
   done
 
 end TNLean.PEPS.Approximation
