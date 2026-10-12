@@ -5892,6 +5892,22 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 ## Rejected
 
+### Axiom allow-list fixtures — rejected (2026-10-12)
+
+- **Pattern:** a `run_cmd` block in a `TNLeanTest/` fixture that checks a
+  named declaration exists, collects its axioms with `Lean.collectAxioms`,
+  and rejects anything outside `propext`, `Classical.choice` and
+  `Quot.sound`.
+- **Seen:** `TNLeanTest/WeakRectanglePartialRowEntropyAxioms.lean`,
+  `TNLeanTest/PartyOutputCoordinatesAxioms.lean`,
+  `TNLeanTest/ContinuityFixedCoefficientAxioms.lean`, and most other
+  exact-name axiom fixtures under `TNLeanTest/`.
+- **Reason:** each fixture is a standalone audit whose declaration list and
+  allow-list should be readable in the file that CI runs. The block is a few
+  lines of metaprogramming with no mathematical content; a shared command would
+  move the allow-list out of the audited file without removing a proof
+  obligation. Fixtures keep the explicit block.
+
 ### Elementary set and finite-sum proof structure — rejected (2026-10-02)
 
 - **Pattern:** The three-line sequences `ext x; constructor; intro hx` and
