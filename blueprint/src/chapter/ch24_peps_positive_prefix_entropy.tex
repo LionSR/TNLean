@@ -8,7 +8,7 @@ and the compact-region volume estimate remain explicit hypotheses.
 \begin{theorem}[Uniform entropy transfer on positive-depth prefixes]
     \label{thm:al_positive_prefix_entropy_transfer}
     \lean{TNLean.PEPS.AreaLaw.Scan.eventually_regionalEntropy_positiveDepthPrefix_le}
-    \uses{def:al_scan_comparison_prefixes,lem:al_continuity_fixed_coefficient}
+    \uses{def:al_scan_comparison_prefixes}
     Fix an integer $q\ge1$, a real number $g>0$, and a real constant
     $C_{\mathrm{vol}}$. For all sufficiently large integers $n$, the
     following assertion holds uniformly over the finite domain and all
@@ -40,6 +40,7 @@ and the compact-region volume estimate remain explicit hypotheses.
     $C_e,e$. No sign condition on $C_e,e$ is needed for this implication.
 \end{theorem}
 \begin{proof}
+    \uses{lem:al_continuity_fixed_coefficient}
     For $n\ge1$, the assumed trace-distance estimate gives
     $\Delta\le\sqrt{2/g}\,n^{-500}$. Also $Q_j\subseteq R_L$ whenever
     $j\le L$. Entropy continuity
