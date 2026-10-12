@@ -28,7 +28,7 @@ spectral gap*, Theorem 1.1 and Corollary 1.2. Source revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
-open Matrix ComplexStarModule
+open Matrix
 open scoped BigOperators Matrix.Norms.L2Operator ComplexOrder
 
 noncomputable section
@@ -150,27 +150,6 @@ theorem embedOp_rectangle_eq_reindex {L q : ℕ}
   · intro v hv
     exact False.elim (hv ((AreaLaw.rectangleSiteEquiv L L).symm v)
       ((AreaLaw.rectangleSiteEquiv L L).apply_symm_apply v))
-
-/-- The Hermitian part of an original interaction remains in its designated
-circuit supported-operator algebra. Source: polynomial-PEPS `eq:model`.
-This is the support form used by the partially swapped interaction construction. -/
-theorem SquareHamiltonian.hermitianTerm_mem_supportedOperators {L q : ℕ} {J : ℝ}
-    (h : SquareHamiltonian L q J) (i : SquareInteraction L) :
-    h.hermitianTerm i ∈ QuantumCircuit.supportedOperators q
-      (squareInteractionSupport i : Set (Vertex L)) := by
-  cases i with
-  | inl v =>
-    simpa only [squareInteractionSupport, Finset.coe_singleton] using!
-      coe_realPart_mem_of_star_mem
-        (S := (QuantumCircuit.supportedOperators q ({v} : Set (Vertex L))).restrictScalars ℝ)
-        (h.site_supported v) (QuantumCircuit.star_mem_supportedOperators (h.site_supported v))
-  | inr e =>
-    simpa only [squareInteractionSupport, Finset.coe_insert, Finset.coe_singleton] using!
-      coe_realPart_mem_of_star_mem
-        (S := (QuantumCircuit.supportedOperators q
-          ({e.val.1, e.val.2} : Set (Vertex L))).restrictScalars ℝ)
-        (h.edge_supported (forwardSquareEdgeEquiv L e))
-        (QuantumCircuit.star_mem_supportedOperators (h.edge_supported (forwardSquareEdgeEquiv L e)))
 
 /-- The original square Hamiltonian, with Hermitian parts at its actual
 range-one supports and zero at unused supports. The interaction bound is
