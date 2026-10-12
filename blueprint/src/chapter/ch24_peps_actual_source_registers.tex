@@ -349,11 +349,12 @@ operations on an empty memory.
     Let $U$ be any source-free word from the actual source input memory to
     itself, and let $[U]_E$ be its matrix in the literal source input basis.
     Set $U_q=[U|_q]_{B_q,B_q}$. For independent ket and bra choices,
-    \[
+    \begin{align}
         D_\xi[U]_E D_\zeta^\dagger
-        =\bigotimes_{q\in\mathcal Q}
+         & =\bigotimes_{q\in\mathcal Q}
         A_{\xi,q}U_q A_{\zeta,q}^\dagger.
-    \]
+        \label{eq:peps_actual_source_mixed}
+    \end{align}
     Every owner, including the exterior owner, remains in the product.
     The identity applies to each word in a finite sampled sum separately.
 \end{theorem}
@@ -365,7 +366,7 @@ operations on an empty memory.
     The matrix of their mixed composition is independent of the chosen
     input basis: both expressions represent the same operator on the
     output memory. In the grouped input basis, the actual singleton
-    restrictions give the displayed product.
+    restrictions give~(\ref{eq:peps_actual_source_mixed}).
 \end{proof}
 
 \begin{definition}[Endpoint factors at the original sampled sources]
@@ -379,11 +380,12 @@ operations on an empty memory.
     Denote the resulting left and right endpoint matrices by
     $L_{e,\alpha\beta,s}$ and $H_{e,\alpha\beta,s}$. The right factor uses
     the conjugate of the same Gaussian array. The constructed source matrix is
-    \[
+    \begin{align}
         \widehat X_{e,\alpha\beta}
-        =k^{-1}\sum_{s=0}^{k-1}
+         & =k^{-1}\sum_{s=0}^{k-1}
         L_{e,\alpha\beta,s}\otimes H_{e,\alpha\beta,s}.
-    \]
+        \label{eq:peps_sampled_source_endpoints}
+    \end{align}
     This algebraic formula also defines the zero-sample case using
     $0^{-1}=0$ and an empty sum.
 \end{definition}
@@ -417,11 +419,12 @@ operations on an empty memory.
     $X_{\xi,\zeta}$ be the product of their actual sampled source matrices
     in the literal source input basis $E$. Let $\sigma$ be the fixed
     equivalence from slot positions to original source occurrences. Then
-    \[
+    \begin{align}
         X_{\xi,\zeta}
-        =k^{-n}\sum_{j:\{0,\ldots,n-1\}\to\{0,\ldots,k-1\}}
+         & =k^{-n}\sum_{j:\{0,\ldots,n-1\}\to\{0,\ldots,k-1\}}
         [U_{\xi,\zeta,j\circ\sigma^{-1}}]_E.
-    \]
+        \label{eq:peps_actual_sampled_average}
+    \end{align}
     The canonical identification with the terminal scalar memory preserves
     every matrix entry. The same assignment is used at both endpoints of
     each source. The identity includes $k=0$, $n=0$, empty coordinate sets
@@ -435,7 +438,7 @@ operations on an empty memory.
     source list. The equivalence between its positions and the original
     source occurrences transports one complete assignment $j$. Conjugating
     the word by the canonical input identification leaves its coordinates
-    unchanged, giving the displayed identity entry by entry.
+    unchanged, giving~(\ref{eq:peps_actual_sampled_average}) entry by entry.
 \end{proof}
 
 \begin{theorem}[Actual sampled contraction before the physical trace]
@@ -445,11 +448,12 @@ operations on an empty memory.
     In the same notation, let
     $U_{\xi,\zeta,j,q}=[U_{\xi,\zeta,j\circ\sigma^{-1}}|_q]_{B_q,B_q}$.
     The literal sampled source contraction satisfies
-    \[
+    \begin{align}
         D_\xi X_{\xi,\zeta}D_\zeta^\dagger
-        =k^{-n}\sum_j\bigotimes_{q\in\mathcal Q}
+         & =k^{-n}\sum_j\bigotimes_{q\in\mathcal Q}
         A_{\xi,q}U_{\xi,\zeta,j,q}A_{\zeta,q}^\dagger.
-    \]
+        \label{eq:peps_actual_sampled_contraction}
+    \end{align}
     The sum is over complete assignments on the original ordered slots.
     Every owner, including the exterior owner, remains in the product.
     No output register is traced out in this identity. Empty sample sets,
