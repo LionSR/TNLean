@@ -106,6 +106,10 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
     ((siteExpectationLM q B).toContinuousLinearMap.integral_comp_comm
       (hint.restrict (s := Set.Icc (-T) T))).symm.trans
       (integral_congr_ae (Filter.Eventually.of_forall hfix))
+  refine ⟨hMint ▸ siteExpectation_mem_supportedOperators B _,
+    (norm_setIntegral_le_of_norm_le_const (measure_lt_top _ _)
+      (fun t _ ↦ hnorm t)).trans
+      (mul_le_of_le_one_right (norm_nonneg W) measureReal_le_one), ?_⟩
   done
 
 end TNLean.PEPS.AreaLaw
