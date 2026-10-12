@@ -60,39 +60,17 @@ private theorem halfMesh_on_side (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
   rw [segment_eq_image'] at hs
   obtain ⟨θ, hθ, he⟩ := hs
   have hn : ∃ n : ℤ, (2 : ℝ) ^ ℓ / 2 * (n : ℝ) = 2 * ((2 : ℝ) ^ ℓ / 2) * θ := by
-    fin_cases s
-    · refine ⟨m.2 - 2 * z.2, ?_⟩
-      have he' := congrArg Prod.snd he
-      change (o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1)) +
-        θ * ((o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * 1) -
-          (o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1))) =
-        o.2 + 2 ^ ℓ / 2 * (m.2 : ℝ) at he'
-      push_cast
-      nlinarith [he']
-    · refine ⟨2 * z.1 + 2 - m.1, ?_⟩
-      have he' := congrArg Prod.fst he
-      change (o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-(-1))) +
-        θ * ((o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1)) -
-          (o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-(-1)))) =
-        o.1 + 2 ^ ℓ / 2 * (m.1 : ℝ) at he'
-      push_cast
-      nlinarith [he']
-    · refine ⟨2 * z.2 + 2 - m.2, ?_⟩
-      have he' := congrArg Prod.snd he
-      change (o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-(-1))) +
-        θ * ((o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1)) -
-          (o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-(-1)))) =
-        o.2 + 2 ^ ℓ / 2 * (m.2 : ℝ) at he'
-      push_cast
-      nlinarith [he']
-    · refine ⟨m.1 - 2 * z.1, ?_⟩
-      have he' := congrArg Prod.fst he
-      change (o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1)) +
-        θ * ((o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * 1) -
-          (o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1))) =
-        o.1 + 2 ^ ℓ / 2 * (m.1 : ℝ) at he'
-      push_cast
-      nlinarith [he']
+    have h1 := congrArg Prod.fst he
+    have h2 := congrArg Prod.snd he
+    fin_cases s <;>
+      simp only [cellFanStart_eq, cellFanEnd_eq, cellFanCenter, cellFanSideVector, integerPoint,
+        Bool.false_eq_true, ↓reduceIte, Fin.isValue,
+        Prod.smul_mk, smul_eq_mul, Prod.mk_add_mk, Prod.mk_sub_mk, Prod.fst_add, Prod.snd_add,
+        mul_one, mul_neg, neg_neg] at h1 h2
+    · exact ⟨m.2 - 2 * z.2, by push_cast; nlinarith [h2]⟩
+    · exact ⟨2 * z.1 + 2 - m.1, by push_cast; nlinarith [h1]⟩
+    · exact ⟨2 * z.2 + 2 - m.2, by push_cast; nlinarith [h2]⟩
+    · exact ⟨m.1 - 2 * z.1, by push_cast; nlinarith [h1]⟩
   obtain ⟨n, hn⟩ := hn
   rcases half_parameter_trichotomy (by positivity) hθ n hn with ht | ht | ht
   · left

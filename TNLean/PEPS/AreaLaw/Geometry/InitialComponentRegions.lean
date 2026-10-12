@@ -1,0 +1,90 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.PEPS.AreaLaw.Geometry.InitialSectorComponents
+import Mathlib.Analysis.Normed.Affine.Convex
+
+/-!
+# Unique initial regions on closed-half components
+
+Each connected component of the closed square of half-radius, after deleting
+its actual identifier-change radial segments, lies in a unique actual initial
+open region. The origin, valid pitch residues, fine cell and mark are arbitrary
+under the initial-region hypotheses. Different components may carry the same
+initial identifier, and the change set may be empty.
+
+This local component statement is an auxiliary to the initial-star construction.
+Isolated stars and the recursive two-family construction require further
+geometric arguments.
+
+Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
+Section 11, `geometry:initial-stars`, lines 333–370, especially 361–370,
+and `prop:two-families`, lines 299–323, at
+`openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+-/
+
+namespace TNLean.PEPS.AreaLaw.Geometry
+
+/-- Every connected component of the actual cut closed square of half-radius
+lies in a unique initial open region. Distinct components may carry the same
+initial identifier, and the change set may be empty.
+
+Local auxiliary to OpenAI, Section 11, `geometry:initial-stars`, lines
+333–370, especially 361–370, and `prop:two-families`, lines 299–323, at
+`openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+theorem exists_unique_initialRegion_of_closedHalf_component
+    (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
+    (a b : (h : ℕ) → Fin (2 ^ (pitchScaleIndex h - fineScaleIndex h)))
+    (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
+    (k : ℕ) (z : ℤ × ℤ) (v : ℝ × ℝ) (hk₀ : k₀ ≤ k)
+    (hz : z ∈ fineLayerIndices o k (fineScaleIndex k) Z C)
+    (hv : v ∈ beltCellMarks o (fineScaleIndex k) z) :
+    let ℓ := fineScaleIndex k - 5
+    let r := (2 : ℝ) ^ ℓ / 2
+    let oSmall := (v.1 - r, v.2 - r)
+    let J := CellFanSlot (fun _ : Fin 4 ↦ true)
+    let I := InitialRegionIndex o k₀ Z C a b hC h₀
+    let σ : J → I :=
+      initialSectorAssignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv
+    let L : Set (ℝ × ℝ) :=
+      ⋃ s : {s : J // σ s ≠ σ (cellFanNext s)},
+        segment ℝ v (cellFanEnd oSmall ℓ (0, 0) (fun _ ↦ true) s.val)
+    let Ω := Metric.closedBall v (r / 2) \ L
+    ∀ q : ConnectedComponents Ω, ∃! i : I,
+      ∀ x : Ω, ConnectedComponents.mk x = q →
+        x.val ∈ initialOpenRegion o k₀ Z C a b hC h₀ i := by
+  classical
+  intro ℓ r oSmall J I σ L Ω q
+  -- The half-radius closed square lies inside the open square of radius `r`.
+  have hr : (0 : ℝ) < r := by
+    change (0 : ℝ) < (2 : ℝ) ^ ℓ / 2
+    positivity
+  have hhalf : r / 2 < r := by linarith
+  have hsub : ∀ x : Ω, x.val ∈ Metric.ball v r \ L := by
+    intro x
+    have hxΩ : x.val ∈ Metric.closedBall v (r / 2) \ L := x.property
+    exact ⟨Metric.closedBall_subset_ball hhalf hxΩ.1, hxΩ.2⟩
+  -- The unique component/run equivalence and the canonical run assignment.
+  obtain ⟨e, he, -⟩ := initialRegion_closedHalf_angular_connectedComponents_equiv
+    o k₀ Z C a b hC h₀ k z v hk₀ hz hv
+  set μ := Classical.choose
+    (exists_unique_initialRegion_sector_run_assignment
+      o k₀ Z C a b hC h₀ k z v hk₀ hz hv)
+  have hdisj := initialOpenRegion_pairwise_disjoint o k₀ Z C a b hC h₀
+  -- Every retained point of the component `q` lies in the open region of its run.
+  have hpoint : ∀ x : Ω, ConnectedComponents.mk x = q →
+      x.val ∈ initialOpenRegion o k₀ Z C a b hC h₀ (μ (e q)) := by
+    intro x hx
+    have hrun := (he x (e q)).mp (by rw [hx])
+    exact initialRegion_sector_run_mem_initialOpenRegion
+      o k₀ Z C a b hC h₀ k z v hk₀ hz hv (e q) x.val (hsub x) hrun
+  refine ⟨μ (e q), hpoint, ?_⟩
+  -- Uniqueness: a representative point of `q` pins down the identifier via disjointness.
+  intro j hj
+  obtain ⟨x, hxq⟩ := ConnectedComponents.surjective_coe q
+  by_contra hne
+  exact Set.disjoint_left.1 (hdisj hne) (hj x hxq) (hpoint x hxq)
+
+end TNLean.PEPS.AreaLaw.Geometry

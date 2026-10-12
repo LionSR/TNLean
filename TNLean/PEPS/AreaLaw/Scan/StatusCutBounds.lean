@@ -121,11 +121,7 @@ theorem state_cut_bounds_domainGraph
   have hb := S.prefix_uncertainty_rows h.1 g hn hk hr hDpos hD hL
   have ha := state_prefix_approximation_domainGraph hT S hgraph hdepth
     h g hn hk hr hDpos hD hL hrows
-  have hLpos : 1 ≤ L := by
-    have hK : 0 < S.K := Nat.zero_lt_of_lt g.isLt
-    have hm : 0 < S.m := by omega
-    have hp : 0 < 8 * S.K * S.m := Nat.mul_pos (Nat.mul_pos (by decide) hK) hm
-    omega
+  have hLpos : 1 ≤ L := (Nat.mul_pos (Nat.mul_pos (by decide) g.pos) (by omega)).trans_le hL
   exact physical_status_cut_bounds hT S.A S.depth hdepth (S.state h g) hLpos hDpos
     hrows hclear (S.front g (h.1 g) k false - 1) (-S.front g (h.1 g) k true)
     (by
@@ -158,11 +154,7 @@ theorem oldChargeState_cut_bounds_domainGraph
   have hb := S.prefix_uncertainty_rows h.1 g hn hk hr hDpos hD hL
   have ha := oldChargeState_prefix_approximation_domainGraph hT S hgraph hdepth
     h g hn hk hr hDpos hD hL hrows
-  have hLpos : 1 ≤ L := by
-    have hK : 0 < S.K := Nat.zero_lt_of_lt g.isLt
-    have hm : 0 < S.m := by omega
-    have hp : 0 < 8 * S.K * S.m := Nat.mul_pos (Nat.mul_pos (by decide) hK) hm
-    omega
+  have hLpos : 1 ≤ L := (Nat.mul_pos (Nat.mul_pos (by decide) g.pos) (by omega)).trans_le hL
   exact physical_status_cut_bounds hT S.A S.depth hdepth (S.oldChargeState h g) hLpos hDpos
     hrows hclear (S.front g (h.1 g) (k + 1) false - 1) (-S.front g (h.1 g) (k + 1) true)
     (by

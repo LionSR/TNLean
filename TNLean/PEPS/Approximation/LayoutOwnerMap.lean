@@ -83,4 +83,14 @@ theorem mapOwnerIso_append (f : P → Q) (a b : Layout P) :
   simpa only [comp_apply, isoL_apply, TensorProduct.mapL_tmul] using
     mapOwnerIso_append_tmul f a b x y
 
+open Classical in
+/-- The owners of a relabelled register list are the image of its original owners.
+Source: polynomial-PEPS 04-compression.tex, lines 233–251. -/
+theorem owners_mapOwner_image (f : P → Q) (a : Layout P) :
+    ((mapOwner f a).map Reg.owner).toFinset =
+      (a.map Reg.owner).toFinset.image f := by
+  classical
+  ext q
+  simp [mapOwner, List.map_map, Function.comp_def]
+
 end TNLean.PEPS.PairEffect.Layout
