@@ -48,6 +48,7 @@ theorem reindex_physicalBuffer_eq_siteLift
         siteLift Q (Matrix.reindex pQ pQ W) := by
   classical
   intro Q P s g p pQ e W
+  ext x y
   done
 
 end TNLean.PEPS.EncodedFrame
