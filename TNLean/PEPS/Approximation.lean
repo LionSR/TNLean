@@ -136,6 +136,7 @@ import TNLean.PEPS.Approximation.LayoutExcludedOwners
 import TNLean.PEPS.Approximation.LayoutOwnerMap
 import TNLean.PEPS.Approximation.LocalPairSource
 import TNLean.PEPS.Approximation.LocalPartFrameListRestriction
+import TNLean.PEPS.Approximation.LocalPartRestrictionCongruence
 import TNLean.PEPS.Approximation.LocalPartSpectatorOwnerExclusion
 import TNLean.PEPS.Approximation.LocalSchmidtOutput
 import TNLean.PEPS.Approximation.LocalTransferExpansion
@@ -149,6 +150,7 @@ import TNLean.PEPS.Approximation.NoneResidualOperations
 import TNLean.PEPS.Approximation.NoneResidualScalar
 import TNLean.PEPS.Approximation.NoneSourceWordScalar
 import TNLean.PEPS.Approximation.NonemptyGateLabels
+import TNLean.PEPS.Approximation.NonincidentAllGateRestriction
 import TNLean.PEPS.Approximation.OriginalCircuit
 import TNLean.PEPS.Approximation.OriginalCoefficientMajorant
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates

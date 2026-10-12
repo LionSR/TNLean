@@ -6483,6 +6483,14 @@ spectral split → block extraction → MPV calculation → strict bounds
   `Word.restrict_castInput_eval_heq`. Both shared results are in
   `WordEvaluationTransport`, with named axiom checks in its existing test.
   The old public theorem statements are unchanged; elaboration is pending.
+- **Spectator-list promotion (2026-10-12):** `FrameListRestriction`,
+  `LocalPartFrameListRestriction` and `LocalPartRestrictionCongruence`
+  need the same evaluation congruence for equal spectator lists. The shared
+  `Word.eval_frameList_heq` in `WordEvaluationTransport` replaces private
+  copies and transports the retained prefix explicitly. It compares already
+  equal operators; no equality before restriction is used to infer equality
+  after restriction. Its named axiom check is in the existing test;
+  elaboration is pending.
 - **Word identities (2026-10-12):** `WordOwnerAppendTailTransport` and
   `AbsorbedRestriction` both compare chronological compositions, frames,
   identities and list identifications at the word level after identifying

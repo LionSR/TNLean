@@ -382,7 +382,8 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 \begin{theorem}[Operator identities under composition and framing]
     \label{thm:peps_operator_composition_framing}
     \lean{TNLean.PEPS.PairEffect.Word.eval_comp_heq,
-        TNLean.PEPS.PairEffect.Word.eval_frame_heq}
+        TNLean.PEPS.PairEffect.Word.eval_frame_heq,
+        TNLean.PEPS.PairEffect.Word.eval_frameList_heq}
     \uses{thm:peps_basis_memory_equalities,def:peps_party_registers}
     Let $a=a'$, $b=b'$ and $c=c'$ be equalities of ordered register
     lists. Let $U:a\to b$, $V:b\to c$, $U':a'\to b'$ and
@@ -393,6 +394,9 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     have equal operators under $a=a'$ and $b=b'$, adjoining the
     same register $r$ in front preserves this equality:
     $I_{\mathcal H_r}\otimes U=I_{\mathcal H_r}\otimes U'$.
+    More generally, for equal spectator lists $t=t'$, framing $U$
+    by $t$ and $U'$ by $t'$ gives equal operators under the
+    induced concatenation identifications.
     These assertions do not require the compositions to be
     source-free or contractive. They are elementary compatibility
     identities for the register identifications used in
@@ -405,7 +409,9 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     Identify the equal input, intermediate and output register lists.
     The first assertion follows by composing equal operators in the
     indicated chronological order. The second follows by tensoring
-    their equality with $I_{\mathcal H_r}$.
+    their equality with $I_{\mathcal H_r}$. For spectator lists,
+    identify $t=t'$ and induct on $t$, applying the single-register
+    assertion at each step.
 \end{proof}
 
 \begin{theorem}[Restriction of the local part without sources]
@@ -575,4 +581,163 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     no selected register. Compose the three identity operators under
     the canonical list identifications to obtain
     (\ref{eq:peps_sourced_spectator_exclusion}).
+\end{proof}
+
+\begin{theorem}[Spectators at a party absent from the core]
+    \label{thm:peps_absent_party_spectator_identity}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_appendTail_eval_heq_id_of_not_mem_parties}
+    \uses{thm:peps_source_word_parties,def:peps_append_spectators,
+        thm:peps_party_restriction,def:peps_single_party_selector}
+    Let $U:a\to b$ be an arbitrary chronological composition and
+    let $p\notin\mathcal P(U)$, where $\mathcal P(U)$ includes the
+    owners of its registers and the named parties of its local
+    operations. Let $t$ be any spectator list. Under the canonical
+    retained-list identifications, the local part of the spectator
+    extension satisfies $(L(U_t))|_p=\Id_{\mathcal H_{t|_p}}$.
+    The source inventory may be nonempty, and the retained spectator
+    memory may be arbitrary. Empty lists and zero-dimensional spaces
+    are included. This is an auxiliary restriction identity for
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 233--267, 351--381, 409--434 and 565--588.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_source_word_parties,thm:peps_party_restriction,
+        thm:peps_party_factorization,def:peps_append_spectators,
+        thm:peps_source_free_local_part_restriction,
+        thm:peps_party_restriction_exchange_blocks,
+        thm:peps_party_restriction_canonical_layouts,
+        thm:peps_local_part_framing_restriction,
+        thm:peps_excluded_spectator_restriction,
+        thm:peps_operator_composition_framing,
+        thm:peps_identity_input_identification}
+    Every core input, output and source-register owner belongs to
+    $\mathcal P(U)$, so their restrictions to $p$ are empty.
+    The local part has the same participating parties as $U$;
+    its restriction to $p$ has none and acts as the identity on
+    $\C$. The initial and final exchanges of the spectator extension
+    restrict to exchanges with empty core blocks, hence to identities
+    on $t|_p$. The framed middle local part tensors its scalar
+    identity with the retained spectator identity. In each composition,
+    the additional source prefix is erased and contributes no retained
+    register. Composing these identities gives the asserted operator.
+\end{proof}
+
+\begin{theorem}[A nonincident party in the all-party expansion]
+    \label{thm:peps_all_gate_nonincident_identity}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident}
+    \uses{def:peps_prepared_source_gate,def:peps_partial_source_choices,
+        def:peps_affected_owner,def:peps_single_party_selector}
+    Let $G$ be a prepared gate with finite participant set $C$,
+    finite branch set $\Xi$ and participant injection $\gamma:C\hookrightarrow P$.
+    Let $t$ be any spectator list and fix $p\in P$ with
+    $\gamma(c)\ne p$ for every $c\in C$. Select all original parties,
+    and let $g:P\to Q=P\sqcup\{*\}$ be the resulting owner map;
+    thus $g(p)$ is the retained copy of $p$.
+    For any partial choice $\xi$ for this gate as in
+    Definition~\ref{def:peps_partial_source_choices}, let $V_\xi$
+    be its actual partial composition, including the spectators and
+    the owner map $g$. Its local part satisfies
+    \begin{align}
+        (L(V_\xi))|_{g(p)}
+         & =\Id_{\mathcal H_{(t^g)|_{g(p)}}}
+        \label{eq:peps_all_gate_nonincident}
+    \end{align}
+    under the canonical retained-list identifications. If $C$ is
+    nonempty, $\xi$ is an original branch label. If $C$ is empty,
+    the gate is untouched and has its unique partial choice, even
+    when $\Xi$ is empty. The spectator memory is arbitrary, including
+    empty lists and zero-dimensional spaces.
+    This is an auxiliary identity for the chronological expansion in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 351--381, 409--434 and 565--588.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:peps_partial_source_choices,def:peps_affected_owner,
+        thm:peps_source_word_parties,thm:peps_owner_spectator_extension,
+        thm:peps_absent_party_spectator_identity,
+        thm:peps_source_free_local_part_restriction,
+        def:peps_grouped_block_map,thm:peps_party_restriction,
+        thm:peps_party_restriction_canonical_layouts}
+    If $C$ is nonempty, the literal partial composition is the
+    chosen prepared branch relabelled by $\gamma$, extended by $t$,
+    and then relabelled by $g$. Move the last relabelling through
+    the spectator extension using
+    Theorem~\ref{thm:peps_owner_spectator_extension}.
+    Its core has participating parties in $g(\gamma(C))$, which
+    excludes $g(p)$. Apply
+    Theorem~\ref{thm:peps_absent_party_spectator_identity}.
+    If $C$ is empty, the literal partial composition retains the
+    complete gate as a local operation at the exterior owner $*$.
+    It has no sources. Its local part preserves its restriction,
+    and restriction to $g(p)$ erases this exterior operation while
+    retaining precisely the spectators at $g(p)$. This gives
+    (\ref{eq:peps_all_gate_nonincident}) also when the complete gate
+    vanishes.
+\end{proof}
+
+\begin{theorem}[Restriction of a framed source-free composition]
+    \label{thm:peps_retained_spectator_framing}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_frameList_eval_heq}
+    \uses{thm:peps_party_restriction,thm:peps_basis_memory_equalities}
+    Let $W:a\to b$ be a source-free chronological composition,
+    let $t$ be an arbitrary spectator list, and let $f$ select owners.
+    Write $F_t(W)$ for $W$ framed in front by the registers of $t$.
+    Under the canonical identifications of the retained concatenations,
+    $(F_t(W))|_f=F_{t|_f}(W|_f)$.
+    The input, output and retained spectator memories are arbitrary,
+    including empty lists and zero-dimensional spaces.
+    This is an auxiliary restriction identity for
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 233--267, 351--381, 409--434 and 565--588.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_party_restriction,
+        thm:peps_operator_composition_framing,thm:peps_basis_memory_equalities}
+    Induct on $t$. The empty list gives $W|_f$ directly.
+    If the first register is retained, restriction frames the
+    inductive identity by that register. If it is erased,
+    restriction removes the framing and gives the inductive identity.
+    The retained prefix is respectively the first register followed
+    by the retained tail, or just the retained tail.
+\end{proof}
+
+\begin{theorem}[Composition of equal selected local parts]
+    \label{thm:peps_selected_local_part_composition}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_comp_eval_heq}
+    \uses{thm:peps_source_preparation,thm:peps_party_restriction,
+        thm:peps_basis_memory_equalities}
+    Let $a=a'$, $b=b'$ and $c=c'$ be equalities of ordered register lists.
+    Let $W:a\to b$, $V:b\to c$, $W':a'\to b'$ and $V':b'\to c'$
+    be arbitrary chronological compositions, and let $f$ select owners.
+    Denote their ordered source-register lists by
+    $s_W,s_V,s_{W'},s_{V'}$, respectively.
+    Suppose $s_W|_f=s_{W'}|_f$ and $s_V|_f=s_{V'}|_f$,
+    and suppose that $(L(W))|_f=(L(W'))|_f$ and
+    $(L(V))|_f=(L(V'))|_f$ under the induced memory identifications.
+    Then the selected local parts of the chronological compositions
+    satisfy $(L(V\circ W))|_f=(L(V'\circ W'))|_f$.
+    Source registers outside the selection need not agree.
+    No source-free, normalization or nonzero-operator assumption
+    is imposed. This is an auxiliary composition identity for
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 246--267, 351--381 and 409--434.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_source_preparation,
+        thm:peps_retained_spectator_framing,
+        thm:peps_operator_composition_framing,
+        thm:peps_identity_input_identification}
+    The local part of $V\circ W$ frames $L(W)$ by the later
+    source-register list $s_V$, then applies $L(V)$, with the
+    canonical input identification. Restriction retains exactly
+    $s_V|_f$ in that framing.
+    Equality of the selected source lists and of the selected
+    earlier local parts therefore equates the framed operators.
+    Compose this equality with the equality of the selected later
+    local parts. Compatibility with the input identification gives
+    the asserted identity.
 \end{proof}

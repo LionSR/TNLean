@@ -14,9 +14,9 @@ import TNLean.PEPS.Approximation.WordEvaluationTransport
 /-!
 # Spectators at an owner excluded from the remaining operations
 
-Let a composition, possibly containing pair sources, be relabelled so that none
-of its owners is a given party. After adjoining arbitrary spectator registers,
-the remaining operations restrict to the identity on that party's spectators.
+Let a composition, possibly containing pair sources, have no participating
+operation at a given party. After adjoining arbitrary spectator registers, the
+remaining operations restrict to the identity on that party's spectators.
 The proof restricts the actual source-register exchanges and chronological
 operations separately. No source vector is cancelled.
 
@@ -112,43 +112,46 @@ private theorem twoBlockExchange_nil_right_eval_heq (a : Layout P) :
   unfold twoBlockExchange
   exact (eval_castLayouts_heq _ _ _).trans (eval_id_heq (List.append_nil a))
 
-/-- A party outside the range of a core owner map retains only its spectator
-registers. The restriction of the actual remaining operations is the identity
-there, for arbitrary pair sources and arbitrary spectator memories.
+/-- A party absent from the participating parties of a word retains only its
+spectator registers. The actual remaining operations restrict to the identity
+on these spectators, for arbitrary pair sources and spectator memories.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–267,
 351–381, 409–434 and 565–588. -/
-theorem restrict_localPart_mapOwner_appendTail_eval_heq_id_of_disjoint {C : Type}
-    (owner : C → P) (p : P) {a b : Layout C} (u : Word a b)
-    (howner : ∀ c, owner c ≠ p) (tail : Layout P) :
-    HEq ((((u.mapOwner owner).appendTail tail).localPart.restrict (partySelector p)
-      ((u.mapOwner owner).appendTail tail).sources_localPart).eval)
+theorem restrict_localPart_appendTail_eval_heq_id_of_not_mem_parties {a b : Layout P}
+    (u : Word a b) (p : P) (hp : p ∉ u.parties) (tail : Layout P) :
+    HEq (((u.appendTail tail).localPart.restrict (partySelector p)
+      (u.appendTail tail).sources_localPart).eval)
       (ContinuousLinearMap.id ℂ (Mem (Layout.atParty p tail))) := by
   classical
   let f := partySelector p
-  let w := u.mapOwner owner
   let T := Layout.restrict f tail
-  have hsel : ∀ c, f (owner c) = false := by
-    intro c
-    simp only [f, partySelector, howner c, decide_false]
-  have ha : Layout.restrict f (Layout.mapOwner owner a) = [] :=
-    Layout.restrict_mapOwner_eq_nil owner f a hsel
-  have hb : Layout.restrict f (Layout.mapOwner owner b) = [] :=
-    Layout.restrict_mapOwner_eq_nil owner f b hsel
-  have hinput : Layout.restrict f (w.sources.layout ++ Layout.mapOwner owner a) = [] := by
+  have hretained (L : Layout P) (hL : ∀ r ∈ L, r.owner ∈ u.parties) :
+      Layout.restrict f L = [] := by
     apply List.filter_eq_nil_iff.mpr
     intro r hr
-    have hp := w.localPart.owners_mem_parties.1 r hr
-    rw [parties_localPart, parties_mapOwner] at hp
-    obtain ⟨c, _, hc⟩ := Finset.mem_image.mp hp
-    simp only [f, partySelector, ← hc, howner c, decide_false]
-  have hs : Layout.restrict f w.sources.layout = [] := by
+    have hne : r.owner ≠ p := fun h => hp (h ▸ hL r hr)
+    simp only [f, partySelector, hne, decide_false]
+  have ha : Layout.restrict f a = [] := hretained a u.owners_mem_parties.1
+  have hb : Layout.restrict f b = [] := hretained b u.owners_mem_parties.2
+  have hinput : Layout.restrict f (u.sources.layout ++ a) = [] :=
+    hretained _ (by
+      intro r hr
+      simpa only [parties_localPart] using u.localPart.owners_mem_parties.1 r hr)
+  have hs : Layout.restrict f u.sources.layout = [] := by
     exact (List.append_eq_nil_iff.mp
       (by simpa only [Layout.restrict_append] using hinput)).1
-  have hcore : HEq (w.localPart.restrict f w.sources_localPart).eval (Word.id []).eval :=
-    restrict_localPart_mapOwner_eval_heq_id_of_disjoint owner p u howner
-  let A := twoBlockExchange (Layout.mapOwner owner a) tail
-  let V := frameList tail w
-  let Z := twoBlockExchange tail (Layout.mapOwner owner b)
+  have hparties : (u.localPart.restrict f u.sources_localPart).parties = ∅ := by
+    rw [parties_restrict, parties_localPart]
+    apply Finset.eq_empty_iff_forall_notMem.mpr
+    intro q hq
+    obtain ⟨hq, hsel⟩ := Finset.mem_filter.mp hq
+    have hqp : q = p := by simpa only [f, partySelector, decide_eq_true_eq] using hsel
+    exact hp (hqp ▸ hq)
+  have hcore : HEq (u.localPart.restrict f u.sources_localPart).eval (Word.id []).eval :=
+    (eq_nil_and_eval_eq_id_of_parties_eq_empty _ hparties).2.2
+  let A := twoBlockExchange a tail
+  let V := frameList tail u
+  let Z := twoBlockExchange tail b
   have hA : HEq (A.localPart.restrict f A.sources_localPart).eval (Word.id T).eval := by
     have h := (restrict_localPart_eval_heq_of_sources_nil f A
       (sources_twoBlockExchange _ _)).trans (restrict_twoBlockExchange_eval_heq f _ _)
@@ -160,8 +163,8 @@ theorem restrict_localPart_mapOwner_appendTail_eval_heq_id_of_disjoint {C : Type
     rw [hb] at h
     exact h.trans (twoBlockExchange_nil_right_eval_heq T)
   have hV : HEq (V.localPart.restrict f V.sources_localPart).eval (Word.id T).eval :=
-    (restrict_localPart_frameList_eval_heq f tail w hs).trans
-      (frameList_eval_heq_id_of_empty (w.localPart.restrict f w.sources_localPart)
+    (restrict_localPart_frameList_eval_heq f tail u hs).trans
+      (frameList_eval_heq_id_of_empty (u.localPart.restrict f u.sources_localPart)
         hinput hb hcore T)
   have hsA : Layout.restrict f A.sources.layout = [] := by
     rw [sources_twoBlockExchange]; rfl
@@ -183,5 +186,24 @@ theorem restrict_localPart_mapOwner_appendTail_eval_heq_id_of_disjoint {C : Type
   change HEq ((A.comp (V.comp Z)).localPart.restrict f
     (A.comp (V.comp Z)).sources_localPart).eval (Word.id T).eval
   exact h
+
+/-- A party outside the range of a core owner map retains only its spectator
+registers. The restriction of the actual remaining operations is the identity
+there, for arbitrary pair sources and arbitrary spectator memories.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–267,
+351–381, 409–434 and 565–588. -/
+theorem restrict_localPart_mapOwner_appendTail_eval_heq_id_of_disjoint {C : Type}
+    (owner : C → P) (p : P) {a b : Layout C} (u : Word a b)
+    (howner : ∀ c, owner c ≠ p) (tail : Layout P) :
+    HEq ((((u.mapOwner owner).appendTail tail).localPart.restrict (partySelector p)
+      ((u.mapOwner owner).appendTail tail).sources_localPart).eval)
+      (ContinuousLinearMap.id ℂ (Mem (Layout.atParty p tail))) := by
+  classical
+  apply restrict_localPart_appendTail_eval_heq_id_of_not_mem_parties (u.mapOwner owner) p
+    ?_ tail
+  intro hp
+  rw [parties_mapOwner] at hp
+  obtain ⟨c, _, hc⟩ := Finset.mem_image.mp hp
+  exact howner c hc
 
 end TNLean.PEPS.PairEffect.Word

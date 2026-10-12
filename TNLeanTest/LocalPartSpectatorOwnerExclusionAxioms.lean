@@ -12,13 +12,16 @@ import Lean.Util.CollectAxioms
 set_option linter.hashCommand false
 
 run_cmd do
-  let decl :=
+  let decls := #[
+    ``TNLean.PEPS.PairEffect.Word.restrict_localPart_appendTail_eval_heq_id_of_not_mem_parties,
     ``TNLean.PEPS.PairEffect.Word.restrict_localPart_mapOwner_appendTail_eval_heq_id_of_disjoint
+  ]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
-  unless env.contains decl do
-    throwError "Missing declaration {decl}"
-  let axioms ← Lean.collectAxioms decl
-  unless axioms.all (allowed.contains ·) do
-    throwError "Unexpected axioms for {decl}: {axioms}"
-  Lean.logInfo m!"{decl}: {axioms}"
+  for decl in decls do
+    unless env.contains decl do
+      throwError "Missing declaration {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (allowed.contains ·) do
+      throwError "Unexpected axioms for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"

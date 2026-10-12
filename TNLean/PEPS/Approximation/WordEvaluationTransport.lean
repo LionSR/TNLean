@@ -55,6 +55,21 @@ theorem eval_frame_heq {P : Type} (r : Reg P) {a b a' b' : Layout P}
   exact heq_of_eq (congrArg (fun A : Mem a →L[ℂ] Mem b ↦ A.lTensor r.space)
     (eq_of_heq hu))
 
+/-- Heterogeneously equal word operators remain equal when framed by equal
+lists of spectator registers, after identifying their input and output lists.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–267
+and 409–434. -/
+theorem eval_frameList_heq {P : Type} {a b a' b' : Layout P}
+    (w : Word a b) (v : Word a' b') (ha : a = a') (hb : b = b')
+    (he : HEq w.eval v.eval) (rs rs' : Layout P) (hrs : rs = rs') :
+    HEq (frameList rs w).eval (frameList rs' v).eval := by
+  cases hrs
+  induction rs with
+  | nil => exact he
+  | cons r rs ih =>
+      exact eval_frame_heq r (frameList rs w) (frameList rs v)
+        (congrArg (rs ++ ·) ha) (congrArg (rs ++ ·) hb) ih
+
 /-- Equal register lists give heterogeneously equal identity operators. -/
 theorem eval_id_heq {P : Type} {a b : Layout P} (h : a = b) :
     HEq (Word.id a).eval (Word.id b).eval := by

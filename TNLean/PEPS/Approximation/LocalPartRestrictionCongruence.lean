@@ -1,0 +1,77 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.PEPS.Approximation.FrameListRestriction
+
+/-!
+# Composition of selected remaining operations
+
+Two chronological compositions have the same selected remaining operator
+whenever their selected source-register lists agree and their selected
+remaining operators agree. Source registers outside the selection need not
+coincide. The proof compares the actual later-source framing, composition and
+input identifications after restriction, including zero operators.
+
+Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
+`04-compression.tex`, lines 246–267, 351–381 and 409–434.
+-/
+
+noncomputable section
+namespace TNLean.PEPS.PairEffect.Word
+variable {P : Type}
+
+/-- Equal selected source lists and equal already restricted remaining
+operators give equal selected remaining operators after chronological
+composition. No equality of unselected source registers is required.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267,
+351–381 and 409–434. -/
+theorem restrict_localPart_comp_eval_heq (f : P → Bool)
+    {a b c a' b' c' : Layout P}
+    (w : Word a b) (v : Word b c) (w' : Word a' b') (v' : Word b' c')
+    (ha : a = a') (hb : b = b') (hc : c = c')
+    (hw : Layout.restrict f w.sources.layout = Layout.restrict f w'.sources.layout)
+    (hv : Layout.restrict f v.sources.layout = Layout.restrict f v'.sources.layout)
+    (hew : HEq (w.localPart.restrict f w.sources_localPart).eval
+      (w'.localPart.restrict f w'.sources_localPart).eval)
+    (hev : HEq (v.localPart.restrict f v.sources_localPart).eval
+      (v'.localPart.restrict f v'.sources_localPart).eval) :
+    HEq ((w.comp v).localPart.restrict f (w.comp v).sources_localPart).eval
+      ((w'.comp v').localPart.restrict f (w'.comp v').sources_localPart).eval := by
+  have hwi : Layout.restrict f (w.sources.layout ++ a) =
+      Layout.restrict f (w'.sources.layout ++ a') := by
+    simp only [Layout.restrict_append]
+    exact congrArg₂ List.append hw (congrArg (Layout.restrict f) ha)
+  have hraw : ((frameList v.sources.layout w.localPart).comp v.localPart).sources = [] := by
+    simp only [sources, sources_frameList, sources_localPart, List.nil_append]
+  have hraw' : ((frameList v'.sources.layout w'.localPart).comp v'.localPart).sources = [] := by
+    simp only [sources, sources_frameList, sources_localPart, List.nil_append]
+  have hframe := (restrict_frameList_eval_heq f v.sources.layout
+    w.localPart w.sources_localPart).trans
+      ((eval_frameList_heq (w.localPart.restrict f w.sources_localPart)
+        (w'.localPart.restrict f w'.sources_localPart) hwi
+        (congrArg (Layout.restrict f) hb) hew
+        (Layout.restrict f v.sources.layout) (Layout.restrict f v'.sources.layout) hv).trans
+          (restrict_frameList_eval_heq f v'.sources.layout
+            w'.localPart w'.sources_localPart).symm)
+  have hcomp := eval_comp_heq
+    ((frameList v.sources.layout w.localPart).restrict f
+      ((sources_frameList w.localPart v.sources.layout).trans w.sources_localPart))
+    (v.localPart.restrict f v.sources_localPart)
+    ((frameList v'.sources.layout w'.localPart).restrict f
+      ((sources_frameList w'.localPart v'.sources.layout).trans w'.sources_localPart))
+    (v'.localPart.restrict f v'.sources_localPart)
+    (by
+      simp only [Layout.restrict_append]
+      exact congrArg₂ List.append hv
+        (congrArg₂ List.append hw (congrArg (Layout.restrict f) ha)))
+    (by
+      simp only [Layout.restrict_append]
+      exact congrArg₂ List.append hv (congrArg (Layout.restrict f) hb))
+    (congrArg (Layout.restrict f) hc) hframe hev
+  unfold localPart
+  exact (restrict_castInput_eval_heq f _ _ hraw).trans
+    (hcomp.trans (restrict_castInput_eval_heq f _ _ hraw').symm)
+
+end TNLean.PEPS.PairEffect.Word

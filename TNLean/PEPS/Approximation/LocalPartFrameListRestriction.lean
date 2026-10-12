@@ -67,11 +67,20 @@ theorem restrict_localPart_frameList_eval_heq (f : P → Bool) (tail : Layout P)
                 (w.localPart.restrict f w.sources_localPart))
               (by simp only [Layout.restrict_append, hV, hs, List.nil_append])
               (Layout.restrict_append f tail b) ih)
-          simpa only [R, frameList, Layout.restrict_cons, hr, ↓reduceIte] using h
+          have hprefix : r :: Layout.restrict f tail = Layout.restrict f (r :: tail) := by
+            simp only [Layout.restrict_cons, hr, ↓reduceIte]
+          exact h.trans (eval_frameList_heq
+            (w.localPart.restrict f w.sources_localPart)
+            (w.localPart.restrict f w.sources_localPart)
+            rfl rfl HEq.rfl _ _ hprefix)
         · have hr' := Bool.eq_false_iff.mpr hr
           have h := (restrict_frame_false_eval_heq f r V.localPart V.sources_localPart hr').trans ih
-          simpa only [R, frameList, Layout.restrict_cons, hr', Bool.false_eq_true,
-            ↓reduceIte] using h
+          have hprefix : Layout.restrict f tail = Layout.restrict f (r :: tail) := by
+            simp only [Layout.restrict_cons, hr', Bool.false_eq_true, ↓reduceIte]
+          exact h.trans (eval_frameList_heq
+            (w.localPart.restrict f w.sources_localPart)
+            (w.localPart.restrict f w.sources_localPart)
+            rfl rfl HEq.rfl _ _ hprefix)
       have hcomp := eval_comp_heq
         ((moveHead r V.sources.layout (tail ++ a)).restrict f
           (sources_moveHead r V.sources.layout (tail ++ a)))

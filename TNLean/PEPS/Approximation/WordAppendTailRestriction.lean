@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.WordAppendTail
 import TNLean.PEPS.Approximation.WordPermutationRestriction
 import TNLean.PEPS.Approximation.WordEvaluationTransport
+import TNLean.PEPS.Approximation.FrameListRestriction
 
 /-!
 # Restriction beside retained spectator registers
@@ -23,26 +24,6 @@ noncomputable section
 namespace TNLean.PEPS.PairEffect.Word
 open ContinuousLinearMap
 variable {P : Type}
-
-private theorem restrict_frameList_eval_heq (f : P → Bool) (rs : Layout P)
-    {a b : Layout P} (w : Word a b) (hs : w.sources = []) :
-    HEq ((frameList rs w).restrict f ((sources_frameList w rs).trans hs)).eval
-      (frameList (Layout.restrict f rs) (w.restrict f hs)).eval := by
-  induction rs with
-  | nil => rfl
-  | cons r rs ih =>
-      by_cases hr : f r.owner = true
-      · have h := (restrict_frame_true_eval_heq f r (frameList rs w)
-          ((sources_frameList w rs).trans hs) hr).trans
-            (eval_frame_heq r
-              ((frameList rs w).restrict f ((sources_frameList w rs).trans hs))
-              (frameList (Layout.restrict f rs) (w.restrict f hs))
-              (Layout.restrict_append f rs a) (Layout.restrict_append f rs b) ih)
-        simpa only [frameList, Layout.restrict_cons, hr, ↓reduceIte] using h
-      · have hr' := Bool.eq_false_iff.mpr hr
-        have h := (restrict_frame_false_eval_heq f r (frameList rs w)
-          ((sources_frameList w rs).trans hs) hr').trans ih
-        simpa only [frameList, Layout.restrict_cons, hr', Bool.false_eq_true, ↓reduceIte] using h
 
 /-- The two-block exchange with its empty final memory identified. -/
 private def twoBlockExchange (a b : Layout P) : Word (a ++ b) (b ++ a) :=
@@ -100,7 +81,7 @@ theorem restrict_appendTail_eval_heq (f : P → Bool) {a b : Layout P}
     (Layout.restrict_append f b tail)
     (restrict_twoBlockExchange_eval_heq f a tail) hinner
   have hall : (u.comp (v.comp z)).sources = [] := by
-    simp only [sources, hu, hvz, List.nil_append]
+    simp only [sources, hu, hv, hz, List.nil_append]
   change HEq ((u.comp (v.comp z)).restrict f hall).eval (u'.comp (v'.comp z')).eval
   exact houter
 
