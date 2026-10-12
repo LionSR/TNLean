@@ -101,11 +101,8 @@ private theorem wholeSide_mem_closure (o : ℝ × ℝ) (ℓ : ℕ)
       (cellFanStart o ℓ z (fun _ ↦ false) ⟨s, 0⟩)
       (cellFanEnd o ℓ z (fun _ ↦ false) ⟨s, 0⟩)) :
     x ∈ closure (dyadicCell o ℓ z) := by
-  have hc : Convex ℝ (closure (dyadicCell o ℓ z)) := by
-    rw [closure_dyadicCell]
-    exact (convex_Icc _ _).prod (convex_Icc _ _)
   have hv := (cellFan_vertices_mem_beltCellMarks o ℓ z (fun _ ↦ false)).2 ⟨s, 0⟩
-  exact hc.segment_subset
+  exact (convex_closure_dyadicCell o ℓ z).segment_subset
     (beltCellMarks_subset_closure_dyadicCell o ℓ z hv.1)
     (beltCellMarks_subset_closure_dyadicCell o ℓ z hv.2) hx
 

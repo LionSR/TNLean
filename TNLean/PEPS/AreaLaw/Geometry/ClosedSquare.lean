@@ -221,11 +221,10 @@ theorem card_closedSquareSample_le (Λ : Finset (ℤ × ℤ)) (c : ℝ × ℝ)
   classical
   have hcard : (closedSquareSample Λ c r).card ≤
       ((Finset.Icc ⌈c.1 - r⌉ ⌊c.1 + r⌋).product
-        (Finset.Icc ⌈c.2 - r⌉ ⌊c.2 + r⌋)).card := by
-    apply Finset.card_le_card_of_injOn Subtype.val
-    · intro x hx
-      exact Finset.mem_product.mpr (mem_closedSquareSample_iff_int.mp hx)
-    · exact Subtype.val_injective.injOn
+        (Finset.Icc ⌈c.2 - r⌉ ⌊c.2 + r⌋)).card :=
+    Finset.card_le_card_of_injOn Subtype.val
+      (fun x hx ↦ Finset.mem_product.mpr (mem_closedSquareSample_iff_int.mp hx))
+      Subtype.val_injective.injOn
   have hp := Finset.card_product
     (Finset.Icc ⌈c.1 - r⌉ ⌊c.1 + r⌋) (Finset.Icc ⌈c.2 - r⌉ ⌊c.2 + r⌋)
   have hcard' := hcard.trans_eq hp
