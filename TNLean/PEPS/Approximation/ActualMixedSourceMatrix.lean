@@ -80,6 +80,11 @@ theorem partialSourceGlobalMatrix_mixed_word
   let bIn := partyGroupedBasis (w.allResidualSourceLayout ++ []) B ps hn hc
   let bOut := partyGroupedBasis
     (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b) C ps hn hc
+  let : FiniteDimensional ℂ (Mem (w.allResidualSourceLayout ++ [])).carrier :=
+    bIn.toBasis.finiteDimensional_of_finite
+  let : FiniteDimensional ℂ
+      (Mem (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b)).carrier :=
+    bOut.toBasis.finiteDimensional_of_finite
   have hcolumns := congrArg₂
     (fun (M N : Matrix ((q : Option {_p : P // true = true}) → O q) w.allSourceLabels ℂ) ↦
       M * LinearMap.toMatrix w.actualSourceInputBasis.toBasis w.actualSourceInputBasis.toBasis
