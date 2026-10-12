@@ -674,7 +674,7 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/MPU/Examples/SwapBlockedSymmetryTransport.lean`, in the adjunction,
   transposition and conjugation comparisons (2026-10-03).
 - **Abstraction:** `MPOTensor.isInvariantUnderSymmetry_iff_of_pointwise` in
-  `SwapSymmetryTransport.lean` performs the common quantifier reduction once.
+  `TNLean/MPS/MPU/Equivalence.lean` performs the common quantifier reduction once.
 - **Notes:** the original four-line `forall_congr'`/`imp_congr_right` block is
   removed from all six sites. The helper requires equality of the applicable
   lengths and pointwise equivalence of the actual operator fixed equations;
