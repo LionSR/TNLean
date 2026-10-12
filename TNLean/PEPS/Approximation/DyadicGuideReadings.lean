@@ -72,11 +72,9 @@ variable {X ι : Type*} [AddCommGroup X] [Module ℝ X] [TopologicalSpace X] [Co
 
 /-- A small displacement of `p` along `v` stays in every neighborhood of `p`. -/
 theorem tendsto_add_smul_nhdsGT (p v : X) :
-    Tendsto (fun ε : ℝ => p + ε • v) (𝓝[>] 0) (𝓝 p) := by
-  have h : Tendsto (fun ε : ℝ => p + ε • v) (𝓝 0) (𝓝 (p + (0 : ℝ) • v)) :=
-    (continuous_const.add (continuous_id.smul continuous_const)).tendsto 0
-  rw [zero_smul, add_zero] at h
-  exact h.mono_left nhdsWithin_le_nhds
+    Tendsto (fun ε : ℝ => p + ε • v) (𝓝[>] 0) (𝓝 p) :=
+  ((continuous_const.add (continuous_id.smul continuous_const)).tendsto' 0 p
+    (by simp)).mono_left nhdsWithin_le_nhds
 
 /-- Readings along one displacement of two labellings that agree near `p` agree at `p`. -/
 theorem IsDisplacedReading.eq_of_eventuallyEq {f₁ f₂ f₁' f₂' : X → ι}
