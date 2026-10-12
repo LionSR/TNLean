@@ -539,8 +539,14 @@ terminal leaf.
     If $t\le An^{-500}$, then $u=t/B\le n^{-500}$.
     Since $B>0$, the identity $\sqrt t=\sqrt B\sqrt{t/B}$ holds for every real
     $t$, including negative $t$.
-    Finally, $C\le\overline C$ and all factors in the parentheses are nonnegative,
-    so increasing the coefficient there proves the claimed bound.
+    Since $C\le\overline C$ and $\overline C\sqrt u$ and $n^2\lambda$ are
+    nonnegative,
+    \begin{align}
+        C\sqrt t\bigl(1+Cn^2\lambda\bigr)
+         & =\overline C\sqrt u\bigl(1+Cn^2\lambda\bigr)             \\
+         & \le\overline C\sqrt u\bigl(1+\overline Cn^2\lambda\bigr)
+        \le n^{-247}.
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Scanner estimate from the conclusions of its inputs]
