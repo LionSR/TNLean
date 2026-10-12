@@ -8,14 +8,13 @@ unassigned at the stopping scale.
 
 % Source: 10-geometry.tex, geometry:trim-radius, lines 380--399;
 % geometry:birth-separation, lines 584--591.
-% The removal and child definitions have not yet been elaborated.
 % Isolated-star induction and replacement regions are not asserted here.
 
 \begin{definition}[Dyadic removal square]
     \label{def:area_law_repair_square}
-    % Intended declarations:
-    % TNLean.PEPS.AreaLaw.Geometry.repairHalfSide
-    % TNLean.PEPS.AreaLaw.Geometry.repairSquare
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairHalfSide,
+        TNLean.PEPS.AreaLaw.Geometry.repairSquare}
+    \leanok
     \uses{thm:area_law_exponent_gaps}
     Retain the fixed exponent $\rho_0=(1+\beta)/2$. For a positive
     parent scale $S$ and a mark $v\in\mathbb R^2$, define
@@ -30,9 +29,9 @@ unassigned at the stopping scale.
 
 \begin{definition}[Simultaneous old-region remnants]
     \label{def:area_law_simultaneous_remnants}
-    % Intended declarations:
-    % TNLean.PEPS.AreaLaw.Geometry.repairRemovalSet
-    % TNLean.PEPS.AreaLaw.Geometry.simultaneousRepairRemnants
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairRemovalSet,
+        TNLean.PEPS.AreaLaw.Geometry.simultaneousRepairRemnants}
+    \leanok
     \uses{def:area_law_repair_square}
     Let $M\subset\mathbb R^2$ be a finite marked set with a positive
     assigned scale $S(v)$ at each $v\in M$. Let $(R_i)_{i\in I}$ be
@@ -52,6 +51,11 @@ unassigned at the stopping scale.
 % It asserts no injectivity, isolated-star invariant or repair induction.
 \begin{definition}[Children of nonterminal parents]
     \label{def:area_law_repair_children}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairChildOffset,
+        TNLean.PEPS.AreaLaw.Geometry.RepairChildIndex,
+        TNLean.PEPS.AreaLaw.Geometry.repairChildLocation,
+        TNLean.PEPS.AreaLaw.Geometry.repairChildScale}
+    \leanok
     \uses{def:area_law_repair_square}
     Let $(v_i,S_i)_{i\in I}$ be the current parent family, with
     $v_i\in\mathbb R^2$ and $S_i>0$, and retain the stopping threshold
