@@ -80,7 +80,7 @@ theorem restrict_partialSourceWord_all_eval_heq_emptyGateScalar
     (by simp only [Layout.restrict_append, restrict_allResidualSourceLayout_isNone w,
       hm a, List.nil_append])
     (hm b) 1 w.emptyGateScalar (by simpa only [one_smul] using hp) hr
-  simpa only [one_mul] using h
+  simpa only [partialSourceWord, one_mul] using h
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect
