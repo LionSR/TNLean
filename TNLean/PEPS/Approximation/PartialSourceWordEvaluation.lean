@@ -20,6 +20,11 @@ open scoped TensorProduct
 namespace TNLean.PEPS.PairEffect.SourceCircuit
 variable {P : Type}
 
+private theorem eval_comp_apply_eq {a b c : Layout P}
+    (u : Word a b) (v : Word b c) (x : Mem a) (y : Mem b)
+    (h : u.eval x = y) : (u.comp v).eval x = v.eval y :=
+  congrArg v.eval h
+
 set_option maxHeartbeats 800000 in
 -- The actual fixed-source word carries dependent source and owner transports.
 /-- The actual pure-input source word applies the actual residual to the
@@ -34,8 +39,7 @@ theorem eval_partialSourceWord_tmul {a b : Layout P}
         ((appendIso w.allResidualSourceLayout
           (Layout.mapOwner (affectedOwner (fun _ => true)) a)).symm
             (y ⊗ₜ[ℂ] Layout.mapOwnerIso (affectedOwner (fun _ => true)) a ψ.vector)) := by
-  unfold partialSourceWord
-  exact congrArg (partialResidual (fun _ => true) w ξ).eval
-    (eval_sourcePrivatePreparation_tmul w ψ y)
+  exact eval_comp_apply_eq (w.sourcePrivatePreparation ψ)
+    (partialResidual (fun _ => true) w ξ) _ _ (eval_sourcePrivatePreparation_tmul w ψ y)
 
 end TNLean.PEPS.PairEffect.SourceCircuit
