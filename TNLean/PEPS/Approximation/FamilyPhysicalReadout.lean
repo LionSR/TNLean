@@ -31,6 +31,22 @@ def familyPhysicalListBasis (d : P → ℕ) : (ps : List P) →
       (familyPhysicalListBasis d ps)).reindex
         (Fin.consEquiv (fun i ↦ Fin (d ((p :: ps).get i))))
 
+/-- Evaluating the physical tensor basis on the empty register list returns the
+scalar `1`. Source: polynomial-PEPS, `04-compression.tex:137–151`. -/
+theorem familyPhysicalListBasis_nil_apply (d : P → ℕ)
+    (g : (j : Fin ([] : List P).length) → Fin (d (([] : List P).get j))) :
+    familyPhysicalListBasis d ([] : List P) g = (1 : ℂ) := by
+  simp only [familyPhysicalListBasis]
+  let I : Type := (i : Fin 0) → Fin (d (([] : List P).get i))
+  have hcast : ∀ (ft ft' : Fintype I) (hf : ft = ft')
+      (B : @OrthonormalBasis I ℂ _ ℂ _ _ ft') (i : I),
+      (Eq.mpr (congrArg (fun j : Fintype I ↦ @OrthonormalBasis I ℂ _ ℂ _ _ j) hf) B) i = B i := by
+    rintro ft ft' rfl B i
+    rfl
+  refine (hcast inferInstance _ (Subsingleton.elim _ _)
+    (OrthonormalBasis.singleton I ℂ) g).trans ?_
+  simp only [OrthonormalBasis.singleton_apply]
+
 /-- The physical tensor basis is indexed by original party labels, with each
 original local dimension preserved.
 Source: polynomial-PEPS, `04-compression.tex:137–151`. -/
