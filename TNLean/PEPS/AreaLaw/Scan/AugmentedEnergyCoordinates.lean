@@ -25,7 +25,11 @@ Source: OpenAI, A two-dimensional area law from a global spectral gap,
 06-transport.tex, lines 335–358, and 07-comparators.tex, lines 130–153
 and 421–438, revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 The identities below compare the site coordinates and the copy-mean
-operator. They apply to an arbitrary physical matrix.
+operator. They apply to an arbitrary physical matrix. The auxiliary
+registers C and R share one dimension d because the source pairs them by
+the Bell vector `Bell_CR = d_*^{-1/2} ∑_{i ∈ E} |i⟩_C |i⟩_R` on a common
+label set E (07-comparators.tex, line 89); the general `augmentedDimensions`
+with independent auxiliary dimensions is not needed at this step.
 -/
 
 noncomputable section
