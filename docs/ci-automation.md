@@ -172,7 +172,7 @@ Here is exactly what happens:
 
 **Thread management**: When triggered by a new push (`synchronize`), the review checks its own previous comments. If a previous bot comment has been addressed by the new commits, it resolves that thread automatically. It never resolves threads authored by humans.
 
-**Concurrency**: One review pipeline per PR at a time; later completions queue rather than cancel a review in progress.
+**Concurrency**: The gate skips CI completions whose commit is no longer the PR head, so stale or re-run completions never start a review. Review jobs run in per-PR job-level groups with `cancel-in-progress: true`, so a review of a newer head cancels one of an older head still in progress.
 
 ---
 

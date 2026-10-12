@@ -264,14 +264,8 @@ variable (D) in
 /-- The boundary edges of `S = S₁ ∪ S₂` split into the exits of `S₁` and those of `S₂`. -/
 def cutSplit (hS : ∀ v, v ∈ S ↔ v ∈ S₁ ∨ v ∈ S₂) (hd : ∀ v, v ∈ S₁ → v ∉ S₂) :=
   piSubtypeSplit D (IsCut tail head S) (IsExit tail head S₁ S₂) (IsExit tail head S₂ S₁)
-    (fun e ↦ by
-      simp only [IsExit, IsCut, IsLink]
-      by_cases a : tail e ∈ S₁ <;> by_cases b : head e ∈ S₁ <;>
-        by_cases c : tail e ∈ S₂ <;> by_cases d : head e ∈ S₂ <;> simp_all)
-    (fun e ↦ by
-      simp only [IsExit, IsCut, IsLink]
-      by_cases a : tail e ∈ S₁ <;> by_cases b : head e ∈ S₁ <;>
-        by_cases c : tail e ∈ S₂ <;> by_cases d : head e ∈ S₂ <;> simp_all)
+    (fun e ↦ by simp only [IsExit, IsCut, IsLink]; grind)
+    (fun e ↦ by simp only [IsExit, IsCut, IsLink]; grind)
 
 variable (P) in
 /-- The open legs of `S = S₁ ∪ S₂` split into those of `S₁` and those of `S₂`. -/
@@ -288,9 +282,7 @@ theorem isIncident_classify_left (hS : ∀ v, v ∈ S ↔ v ∈ S₁ ∨ v ∈ S
       (IsExit tail head S₁ S₂ e ∧ ¬IsInternal tail head S e ∧ ¬IsInternal tail head S₁ e ∧
         ¬IsLink tail head S₁ S₂ e) := by
   simp only [IsInternal, IsExit, IsCut, IsLink]
-  rcases he with rfl | rfl <;>
-  by_cases a : tail e ∈ S₁ <;> by_cases b : head e ∈ S₁ <;>
-    by_cases c : tail e ∈ S₂ <;> by_cases d : head e ∈ S₂ <;> simp_all
+  rcases he with rfl | rfl <;> grind
 
 omit [Fintype V] [DecidableEq V] [Fintype E] [DecidableEq E] in
 /-- The three kinds of edges at a vertex of `S₂`. -/
@@ -305,9 +297,7 @@ theorem isIncident_classify_right (hS : ∀ v, v ∈ S ↔ v ∈ S₁ ∨ v ∈ 
         ¬IsInternal tail head S₁ e ∧ ¬IsLink tail head S₁ S₂ e ∧
         ¬IsExit tail head S₁ S₂ e) := by
   simp only [IsInternal, IsExit, IsCut, IsLink]
-  rcases he with rfl | rfl <;>
-  by_cases a : tail e ∈ S₁ <;> by_cases b : head e ∈ S₁ <;>
-    by_cases c : tail e ∈ S₂ <;> by_cases d : head e ∈ S₂ <;> simp_all
+  rcases he with rfl | rfl <;> grind
 
 omit [Fintype V] [∀ v, Fintype (P v)] in
 /-- Merging two disjoint vertex sets contracts all edges between them at once: the partial
@@ -329,14 +319,8 @@ theorem partialContraction_merge (hS : ∀ v, v ∈ S ↔ v ∈ S₁ ∨ v ∈ S
   -- the internal edges of `S` split into joining edges and internal edges of each part
   let int12 : E → Prop := fun e ↦ IsInternal tail head S₁ e ∨ IsInternal tail head S₂ e
   let eInt := piSubtypeSplit D (IsInternal tail head S) (IsLink tail head S₁ S₂) int12
-    (fun e ↦ by
-      simp only [int12, IsInternal, IsLink]
-      by_cases a : tail e ∈ S₁ <;> by_cases b : head e ∈ S₁ <;>
-        by_cases c : tail e ∈ S₂ <;> by_cases d : head e ∈ S₂ <;> simp_all)
-    (fun e ↦ by
-      simp only [int12, IsInternal, IsLink]
-      by_cases a : tail e ∈ S₁ <;> by_cases b : head e ∈ S₁ <;>
-        by_cases c : tail e ∈ S₂ <;> by_cases d : head e ∈ S₂ <;> simp_all)
+    (fun e ↦ by simp only [int12, IsInternal, IsLink]; grind)
+    (fun e ↦ by simp only [int12, IsInternal, IsLink]; grind)
   let e12 := piSubtypeSplit D int12 (IsInternal tail head S₁) (IsInternal tail head S₂)
     (fun _ ↦ Iff.rfl) (fun e ↦ by have := hd (tail e); unfold IsInternal; tauto)
   unfold partialContraction

@@ -117,6 +117,7 @@ import TNLean.PEPS.Approximation.GroupTruncation
 import TNLean.PEPS.Approximation.GroupedBlockMap
 import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.PEPS.Approximation.HomogeneousOwnership
+import TNLean.PEPS.Approximation.IncidentGateLabels
 import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
 import TNLean.PEPS.Approximation.LayoutExcludedOwners
 import TNLean.PEPS.Approximation.LayoutOwnerMap
@@ -127,8 +128,10 @@ import TNLean.PEPS.Approximation.MatrixAction
 import TNLean.PEPS.Approximation.MessageGateCircuit
 import TNLean.PEPS.Approximation.MessageGateExpansion
 import TNLean.PEPS.Approximation.MessageMonomial
+import TNLean.PEPS.Approximation.NetworkScalarAbsorption
 import TNLean.PEPS.Approximation.NoneResidualGate
 import TNLean.PEPS.Approximation.NoneResidualOperations
+import TNLean.PEPS.Approximation.NonemptyGateLabels
 import TNLean.PEPS.Approximation.OriginalCircuit
 import TNLean.PEPS.Approximation.OriginalCoefficientMajorant
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates
@@ -181,6 +184,7 @@ import TNLean.PEPS.Approximation.PhysicalFirstPolynomial
 import TNLean.PEPS.Approximation.PhysicalFirstReadout
 import TNLean.PEPS.Approximation.PhysicalOutputContraction
 import TNLean.PEPS.Approximation.PinnedRegionalState
+import TNLean.PEPS.Approximation.PointwiseChoiceCoefficient
 import TNLean.PEPS.Approximation.PreparedMatrixNorm
 import TNLean.PEPS.Approximation.PreparedPartyMaps
 import TNLean.PEPS.Approximation.PreparedSourceContraction
@@ -204,6 +208,7 @@ import TNLean.PEPS.Approximation.SeparatedPhysicalDensity
 import TNLean.PEPS.Approximation.SeparatedSchmidtOutput
 import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.PEPS.Approximation.SheetSwapBoundaryExpansion
+import TNLean.PEPS.Approximation.SheetSwapConjugateSupport
 import TNLean.PEPS.Approximation.SheetSwapCorrection
 import TNLean.PEPS.Approximation.SheetSwapDoubledCancellation
 import TNLean.PEPS.Approximation.SheetSwapDoubledTermNorm
@@ -269,11 +274,16 @@ import TNLean.PEPS.Approximation.SourceSlotMaps
 import TNLean.PEPS.Approximation.SourceSubstitutionInventory
 import TNLean.PEPS.Approximation.SourceSubstitutionResidual
 import TNLean.PEPS.Approximation.SourceWordParties
+import TNLean.PEPS.Approximation.SquareAreaLawHamiltonian
 import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
+import TNLean.PEPS.Approximation.SquareHamiltonianHermitianTerms
 import TNLean.PEPS.Approximation.SquareLatticeConnectivity
+import TNLean.PEPS.Approximation.SwappedSquareHamiltonianBoundary
+import TNLean.PEPS.Approximation.SwappedSquareHamiltonianInteraction
 import TNLean.PEPS.Approximation.TensorSchmidtIsometries
+import TNLean.PEPS.Approximation.TouchedLabels
 import TNLean.PEPS.Approximation.TransferGateExpansion
 import TNLean.PEPS.Approximation.TwoSheetExchange
 import TNLean.PEPS.Approximation.TwoSheetRegisters

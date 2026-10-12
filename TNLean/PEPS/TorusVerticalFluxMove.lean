@@ -7,6 +7,7 @@ import TNLean.PEPS.VerticalTwoPlaquetteGeometry
 import TNLean.PEPS.RegularCycleGlobalPermutation
 import TNLean.PEPS.RegularTorusEntropy
 import TNLean.PEPS.TorusPlaquetteFluxMeasurement
+import TNLean.Algebra.ZModSmallDifference
 
 /-!
 # Vertical movement of a flux on the original six spins
@@ -102,12 +103,8 @@ theorem regularWalkHolonomy_torusVerticalFluxAssignment
       rcases h with ⟨⟨h₀,_⟩,⟨h₁,_⟩⟩ | ⟨⟨h₀,_⟩,⟨h₁,_⟩⟩ <;> simp_all
     simp [u, regularDirectedTransport, torusVerticalFluxAssignment, hn]
   have htwo : (2 : ZMod height) ≠ 0 := by
-    intro h
-    have hh := congrArg ZMod.val h
-    rw [show (2 : ZMod height) = ((2 : ℕ) : ZMod height) by rfl,
-      ZMod.val_natCast_of_lt (by have := Fact.out (p := 3 < height); omega),
-      ZMod.val_zero] at hh
-    omega
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := height) 2 0
+      (by have := Fact.out (p := 3 < height); omega) (by decide)
   have hy₂ : v.2+1+1 ≠ v.2 := by
     intro h
     have h' : v.2 + (2 : ZMod height) = v.2 + 0 := by

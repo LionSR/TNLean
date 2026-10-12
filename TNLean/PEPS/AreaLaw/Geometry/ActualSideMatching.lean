@@ -57,13 +57,8 @@ private theorem normal_endpoints (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
         normal i.1 (cellFanCenter o ℓ z) + (2 : ℝ) ^ ℓ / 2 * normalSign i.1 ∧
       normal i.1 (cellFanEnd o ℓ z split i) =
         normal i.1 (cellFanCenter o ℓ z) + (2 : ℝ) ^ ℓ / 2 * normalSign i.1 := by
-  constructor
-  · change normal i.1 (cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) •
-      cellFanSideVector i.1 (if split i.1 then (i.2.val : ℝ) - 1 else -1)) = _
-    exact normal_sidePoint _ _ _ _
-  · change normal i.1 (cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) •
-      cellFanSideVector i.1 (if split i.1 then (i.2.val : ℝ) else 1)) = _
-    exact normal_sidePoint _ _ _ _
+  rw [cellFanStart_eq, cellFanEnd_eq]
+  exact ⟨normal_sidePoint _ _ _ _, normal_sidePoint _ _ _ _⟩
 
 private theorem tangent_endpoints (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     (split : Fin 4 → Bool) (i : CellFanSlot split) :
@@ -71,13 +66,8 @@ private theorem tangent_endpoints (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
         (2 : ℝ) ^ ℓ / 2 * (if split i.1 then (i.2.val : ℝ) - 1 else -1) ∧
       tangent i.1 (cellFanEnd o ℓ z split i) = tangent i.1 (cellFanCenter o ℓ z) +
         (2 : ℝ) ^ ℓ / 2 * (if split i.1 then (i.2.val : ℝ) else 1) := by
-  constructor
-  · change tangent i.1 (cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) •
-      cellFanSideVector i.1 (if split i.1 then (i.2.val : ℝ) - 1 else -1)) = _
-    exact tangent_sidePoint _ _ _ _
-  · change tangent i.1 (cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) •
-      cellFanSideVector i.1 (if split i.1 then (i.2.val : ℝ) else 1)) = _
-    exact tangent_sidePoint _ _ _ _
+  rw [cellFanStart_eq, cellFanEnd_eq]
+  exact ⟨tangent_sidePoint _ _ _ _, tangent_sidePoint _ _ _ _⟩
 
 private theorem tangent_start_lt_end (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     (split : Fin 4 → Bool) (i : CellFanSlot split) :
@@ -187,17 +177,7 @@ private theorem endpoints_change_mask (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × �
         cellFanStart o ℓ z split' ⟨s, ⟨v, hv'⟩⟩ ∧
       cellFanEnd o ℓ z split ⟨s, ⟨v, hv⟩⟩ =
         cellFanEnd o ℓ z split' ⟨s, ⟨v, hv'⟩⟩ := by
-  constructor
-  · change cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) •
-      cellFanSideVector s (if split s then (v : ℝ) - 1 else -1) =
-      cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) •
-      cellFanSideVector s (if split' s then (v : ℝ) - 1 else -1)
-    rw [hs]
-  · change cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) •
-      cellFanSideVector s (if split s then (v : ℝ) else 1) =
-      cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) •
-      cellFanSideVector s (if split' s then (v : ℝ) else 1)
-    rw [hs]
+  simp only [cellFanStart_eq, cellFanEnd_eq, hs, and_self]
 
 private theorem true_slot (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     (split : Fin 4 → Bool) (s : Fin 4) (n : Fin 2) (hs : split s = true) :
