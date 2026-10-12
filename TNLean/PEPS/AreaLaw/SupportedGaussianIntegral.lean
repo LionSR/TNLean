@@ -88,6 +88,11 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
     (MatrixEvolution.contDiff_projectedGenerator (siteExpectationLM q B)
       g.operator W 0).continuous.mul
       (show Differentiable ℝ U from fun t ↦ (hU t).differentiableAt).continuous
+  have hint : Integrable (fun t : ℝ ↦
+      siteExpectation q B (heisenbergEvolution g.operator t W) * U t)
+      (gaussianReal 0 η) :=
+    (integrable_const ‖W‖).mono' hcont.aestronglyMeasurable
+      (Filter.Eventually.of_forall hnorm)
   done
 
 end TNLean.PEPS.AreaLaw
