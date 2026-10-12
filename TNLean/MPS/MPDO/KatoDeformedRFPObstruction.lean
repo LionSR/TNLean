@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.FinSum
 import TNLean.Algebra.ComplexSqrt
-import TNLean.Algebra.NegMulLog
 import TNLean.MPS.MPDO.BinaryConfigurationSign
 import TNLean.MPS.MPDO.RFPViaTS
 import TNLean.MPS.MPDO.SectorTrace
@@ -667,62 +666,9 @@ whenever $1 \le L < N$ (so the block is a proper subsystem).
 and the entropy of a scalar matrix are not in Kato or CPSV16.) -/
 private lemma blockEntropy_tensor_eq {N L : ℕ} (hLpos : 1 ≤ L) (hLN : L < N)
     (hL : L ≤ N) (hM : (mpo tensor N).PosSemidef) :
-    blockEntropy tensor N L hL hM = L * Real.log 2 := by
-  rw [blockEntropy]
-  have hrho_herm : (reducedBlockState tensor N L hL).IsHermitian :=
-    reducedBlockState_isHermitian tensor N L hL hM
-  have hrho_eq : reducedBlockState tensor N L hL =
-      ((2 : ℂ)⁻¹ ^ L : ℂ) • (1 : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ) :=
-    reducedBlockState_tensor_eq_scaled_one hLpos hLN
-  -- Hermitian proof for the scaled identity
-  have hc_selfadj : IsSelfAdjoint ((2 : ℂ)⁻¹ ^ L : ℂ) := by
-    simp [IsSelfAdjoint]
-  have h_scaled_herm : (((2 : ℂ)⁻¹ ^ L : ℂ) •
-      (1 : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ)).IsHermitian :=
-    (Matrix.isHermitian_one (n := Fin L → Fin 2) (α := ℂ)).smul hc_selfadj
-  rw [vonNeumannEntropy_congr hrho_eq hrho_herm h_scaled_herm]
-  -- Now compute von Neumann entropy of c • 1 via charpoly
-  rw [vonNeumannEntropy_eq_charpoly_roots _ h_scaled_herm]
-  have h_card : Fintype.card (Fin L → Fin 2) = 2 ^ L := by
-    simp [Fintype.card_fin]
-  have h_charpoly : (((2 : ℂ)⁻¹ ^ L : ℂ) •
-      (1 : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ)).charpoly =
-      (Polynomial.X - Polynomial.C ((2 : ℂ)⁻¹ ^ L : ℂ)) ^
-        (Fintype.card (Fin L → Fin 2)) := by
-    calc
-      _ = (Matrix.diagonal fun _ : Fin L → Fin 2 => ((2 : ℂ)⁻¹ ^ L : ℂ)).charpoly := by
-        rw [Matrix.smul_one_eq_diagonal]
-      _ = ∏ _i : Fin L → Fin 2,
-          (Polynomial.X - Polynomial.C ((2 : ℂ)⁻¹ ^ L : ℂ)) :=
-        Matrix.charpoly_diagonal
-          (fun _ : Fin L → Fin 2 => ((2 : ℂ)⁻¹ ^ L : ℂ))
-      _ = (Polynomial.X - Polynomial.C ((2 : ℂ)⁻¹ ^ L : ℂ)) ^
-          (Fintype.card (Fin L → Fin 2)) := by
-        simp
-  rw [h_charpoly, Polynomial.roots_pow, Polynomial.roots_X_sub_C]
-  simp only [Multiset.map_nsmul, Multiset.sum_nsmul, Multiset.map_singleton,
-    Multiset.sum_singleton]
-  -- Now we have: (Fintype.card ... : ℝ) • Real.negMulLog (...) = ...
-  -- where • is nsmul; convert to multiplication
-  rw [nsmul_eq_mul]
-  rw [h_card]
-  have h_re : (((2 : ℂ)⁻¹ ^ L : ℂ).re : ℝ) = ((2⁻¹ : ℝ) ^ L) := by
-    calc
-      (((2 : ℂ)⁻¹ ^ L : ℂ).re : ℝ) =
-          ((((2⁻¹ : ℝ) : ℂ) ^ L : ℂ).re : ℝ) := by norm_num
-      _ = ((((2⁻¹ : ℝ) ^ L : ℝ) : ℂ).re : ℝ) := by rw [Complex.ofReal_pow]
-      _ = ((2⁻¹ : ℝ) ^ L : ℝ) := by rw [Complex.ofReal_re]
-  rw [h_re]
-  -- Now: (2^L : ℝ) * Real.negMulLog (((2⁻¹ : ℝ) ^ L)) = L * Real.log 2
-  have h_inv : ((2⁻¹ : ℝ) ^ L) = ((2 ^ L : ℝ)⁻¹) := by
-    simp [inv_pow]
-  rw [h_inv]
-  -- Goal: ↑(2 ^ L) * Real.negMulLog ((2 ^ L : ℝ)⁻¹) = ↑L * Real.log 2
-  -- Push the Nat.cast through
-  push_cast
-  -- Goal: (2 ^ L : ℝ) * Real.negMulLog ((2 ^ L : ℝ)⁻¹) = (L : ℝ) * Real.log 2
-  rw [Real.mul_negMulLog_inv ((2 : ℝ) ^ L) (pow_ne_zero L (by norm_num : (2 : ℝ) ≠ 0))]
-  rw [Real.log_pow]
+    blockEntropy tensor N L hL hM = L * Real.log 2 :=
+  blockEntropy_eq_of_reducedBlockState_eq_smul_one tensor hL hM
+    (reducedBlockState_tensor_eq_scaled_one hLpos hLN)
 
 /-- Kato's $p=1/2$ tensor saturates the area law (arXiv:1606.00608,
 Definition 4.6, line 811): the mutual information $I_L$ is constant
