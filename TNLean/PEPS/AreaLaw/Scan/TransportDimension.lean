@@ -146,14 +146,13 @@ theorem chargeTransportData_logDim_support_le_domainGraph {Λ : Finset (ℤ × �
   rw [logDim_physical_eq _ n q hphysical]
   cases c with
   | none =>
-    apply S.log_designatedSupport_dimension_le_of_old_not_constant_domainGraph
-      hgraph h g i hq hL
-    exact fun hc ↦ hg (augmentedPartition_contains_of_constant _ _ hc)
+    exact S.log_designatedSupport_dimension_le_of_old_not_constant_domainGraph
+      hgraph h g i hq hL fun hc ↦ hg (augmentedPartition_contains_of_constant _ _ hc)
   | some c =>
     simp only [TransportData.leafPart, chargeTransportData_new] at hg
-    apply S.log_designatedSupport_dimension_le_of_state_not_constant_domainGraph
+    exact S.log_designatedSupport_dimension_le_of_state_not_constant_domainGraph
       hgraph (extendHistory h c) g i hq hL
-    exact fun hc ↦ hg (augmentedPartition_contains_of_constant _ _ hc)
+        fun hc ↦ hg (augmentedPartition_contains_of_constant _ _ hc)
 
 /-- Nonempty actual fill split-leaf sets satisfy the same designated-support cap. -/
 theorem fillTransportData_logDim_support_le_domainGraph {Λ : Finset (ℤ × ℤ)}
@@ -173,14 +172,12 @@ theorem fillTransportData_logDim_support_le_domainGraph {Λ : Finset (ℤ × ℤ
   rw [logDim_physical_eq _ n q hphysical]
   cases c with
   | none =>
-    apply S.log_designatedSupport_dimension_le_of_state_not_constant_domainGraph
-      hgraph h g i hq hL
-    exact fun hc ↦ hg (augmentedPartition_contains_of_constant _ _ hc)
+    exact S.log_designatedSupport_dimension_le_of_state_not_constant_domainGraph
+      hgraph h g i hq hL fun hc ↦ hg (augmentedPartition_contains_of_constant _ _ hc)
   | some c =>
     simp only [TransportData.leafPart, fillTransportData_new] at hg
-    apply S.log_designatedSupport_dimension_le_of_old_not_constant_domainGraph
-      hgraph h g i hq hL
-    exact fun hc ↦ hg (augmentedPartition_contains_of_constant _ _ hc)
+    exact S.log_designatedSupport_dimension_le_of_old_not_constant_domainGraph
+      hgraph h g i hq hL fun hc ↦ hg (augmentedPartition_contains_of_constant _ _ hc)
 
 end CollarScan
 end TNLean.PEPS.AreaLaw.Scan

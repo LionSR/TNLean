@@ -111,20 +111,9 @@ theorem Template.card_latticeRow_layer_le_four {Ctpl : ℝ} {n s₀ : ℕ}
     simp only [Finset.mem_Icc] at hn
     simp only [Finset.mem_union, Finset.mem_Icc]
     omega
-  have hl : (Finset.Icc (l - 2) (l - 1)).card = 2 := by
-    simp only [Int.card_Icc]
-    omega
-  have hu : (Finset.Icc (u + 1) (u + 2)).card = 2 := by
-    simp only [Int.card_Icc]
-    omega
-  calc
-    (latticeRow (ambientDilation (T.sample i) (r + 1) \
-        ambientDilation (T.sample i) r) y).card ≤
-        (Finset.Icc (l - 2) (l - 1) ∪ Finset.Icc (u + 1) (u + 2)).card :=
-      Finset.card_le_card hsub
-    _ ≤ (Finset.Icc (l - 2) (l - 1)).card + (Finset.Icc (u + 1) (u + 2)).card :=
-      Finset.card_union_le _ _
-    _ = 4 := by rw [hl, hu]
+  refine (Finset.card_le_card hsub).trans ((Finset.card_union_le _ _).trans_eq ?_)
+  simp only [Int.card_Icc]
+  omega
 
 /-- The piece diameter bounds the width of every dilated horizontal row. -/
 theorem Template.card_latticeRow_dilation_le {Ctpl : ℝ} {n s₀ : ℕ}
@@ -139,12 +128,9 @@ theorem Template.card_latticeRow_dilation_le {Ctpl : ℝ} {n s₀ : ℕ}
     simp only [Finset.product_eq_sprod, Finset.mem_product, Finset.mem_Icc] at hqbox
     apply Finset.mem_Icc.mpr
     omega
-  calc
-    (latticeRow (ambientDilation (T.sample i) r) y).card ≤
-        (Finset.Icc (p.1 - s₀ - r) (p.1 + s₀ + r)).card := Finset.card_le_card hsub
-    _ = 2 * s₀ + 2 * r + 1 := by
-      simp only [Int.card_Icc]
-      omega
+  refine (Finset.card_le_card hsub).trans_eq ?_
+  simp only [Int.card_Icc]
+  omega
 
 /-- A nonempty sample has one interval of occupied rows, with a
 diameter-controlled length. Every radius expands that interval by its radius. -/

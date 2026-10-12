@@ -395,6 +395,226 @@ original open square. We state the two models separately, following
     for fixed $q\ge2$, $J,\Delta>0$ before all $L\ge2$, Hamiltonians, and ground vectors.
 \end{definition}
 
+\begin{definition}[Original interaction labels]
+    \label{def:square_interaction_labels}
+    \lean{TNLean.PEPS.Approximation.SquareInteraction}
+    \leanok
+    \uses{def:polynomial_peps_model}
+    Let $\mathcal I_L$ be the disjoint union of the vertices of the open
+    square and its forward nearest-neighbor edges. Every undirected edge
+    has exactly one such orientation. The original term indexed by a
+    vertex is its site term, and the term indexed by a forward edge is
+    the term on the corresponding undirected edge.
+\end{definition}
+
+\begin{definition}[Designated interaction supports]
+    \label{def:square_interaction_support}
+    \lean{TNLean.PEPS.Approximation.squareInteractionSupport}
+    \leanok
+    \uses{def:square_interaction_labels}
+    The support $S_i$ is $\{v\}$ for the vertex label $i=v$, and
+    $\{v,w\}$ for the forward edge label $i=(v,w)$.
+\end{definition}
+
+\begin{definition}[Hermitian local terms]
+    \label{def:square_hermitian_term}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.hermitianTerm}
+    \leanok
+    \uses{def:square_interaction_labels}
+    For each original term $A_i$, put
+    \begin{align*}
+        A_i^{\mathrm h} & =\frac{A_i+A_i^*}{2}.
+    \end{align*}
+    This is the Hermitian replacement of the local terms in
+    \cite[Theorem~1.1]{OpenAI2026PolynomialPEPS}. Only the original total
+    Hamiltonian is assumed Hermitian.
+\end{definition}
+
+\begin{theorem}[Support and norm of the Hermitian terms]
+    \label{thm:square_hermitian_term_properties}
+    \lean{
+        TNLean.PEPS.Approximation.SquareHamiltonian.hermitianTerm_supported,
+        TNLean.PEPS.Approximation.SquareHamiltonian.hermitianTerm_isHermitian,
+        TNLean.PEPS.Approximation.SquareHamiltonian.hermitianTerm_norm_le
+    }
+    \leanok
+    \uses{def:square_interaction_support,def:square_hermitian_term}
+    Each $A_i^{\mathrm h}$ is supported on $S_i$, is Hermitian, and
+    satisfies $\|A_i^{\mathrm h}\|\le J$. These conclusions hold for
+    every $L,q\ge0$ and every real interaction bound allowed by the
+    original model, including empty grids and zero local dimension.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The supported operators form an algebra closed under adjoints, and
+    hence under real linear combinations. Thus the Hermitian part has
+    the same support. Its adjoint equals itself, and
+    $\|A_i^{\mathrm h}\|\le\|A_i\|\le J$.
+\end{proof}
+
+\begin{theorem}[The sum of the Hermitian terms]
+    \label{thm:square_hermitian_term_sum}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.sum_hermitianTerm}
+    \leanok
+    \uses{def:square_hermitian_term}
+    For the original Hermitian Hamiltonian $H$,
+    \begin{align*}
+        \sum_{i\in\mathcal I_L} A_i^{\mathrm h} & =H.
+    \end{align*}
+\end{theorem}
+\begin{proof}
+    \leanok
+    The bijection from forward edges to undirected edges gives
+    $\sum_i A_i=H$. Taking Hermitian parts commutes with this finite
+    sum, and the Hermitian part of $H$ is $H$ itself.
+\end{proof}
+
+\begin{definition}[Original interaction supports in the integer rectangle]
+    \label{def:square_area_law_support}
+    \lean{TNLean.PEPS.Approximation.squareAreaLawSupport}
+    \leanok
+    \uses{def:square_interaction_support,thm:area_law_domain_identifications}
+    Let $L\ge0$ be an integer, and identify the original square-grid sites
+    with $\Lambda=\{0,\ldots,L-1\}^2$ by the coordinate bijection $\sigma$.
+    For an original site or forward-edge label $i$, put
+    \begin{align*}
+        X_i & =\sigma(S_i).
+    \end{align*}
+    These are the designated supports used to view the original square
+    Hamiltonian as a finite-domain interaction family
+    in \cite{OpenAI2026PolynomialPEPS,OpenAI2026AreaLaw}.
+\end{definition}
+
+\begin{theorem}[Designated supports are admissible at range one]
+    \label{thm:square_area_law_support_admissible}
+    \uses{def:square_area_law_support,thm:area_law_domain_identifications}
+    For every original site or forward-edge label $i$, the set $X_i$ is a
+    nonempty support of induced graph diameter at most one in $\Lambda$.
+\end{theorem}
+\begin{proof}
+    If $i=v$ is a site label, then $X_i=\{\sigma(v)\}$ is a singleton,
+    and every singleton is an admissible support at every range.
+    If $i=(v,w)$ is a forward-edge label, then $v$ and $w$ are adjacent
+    in the square grid, so $X_i=\{\sigma(v),\sigma(w)\}$ is a pair of
+    adjacent sites of the integer rectangle. Adjacent pairs are admissible
+    at range one.
+\end{proof}
+
+\begin{theorem}[Distinct designated supports]
+    \label{thm:square_area_law_support_injective}
+    \lean{TNLean.PEPS.Approximation.squareAreaLawSupport_injective}
+    \leanok
+    \uses{def:square_area_law_support,thm:square_area_law_support_admissible}
+    Distinct original interaction labels have distinct supports $X_i$.
+\end{theorem}
+\begin{proof}\leanok
+    Site supports are singletons, whereas every edge has two distinct
+    endpoints. Two equal unordered edge supports have equal ordered
+    endpoints or reversed ordered endpoints. The latter case is excluded
+    because both edges have the prescribed forward orientation.
+\end{proof}
+
+\begin{definition}[The original state in integer coordinates]
+    \label{def:square_area_law_state}
+    \lean{TNLean.PEPS.Approximation.squareAreaLawState}
+    \leanok
+    \uses{thm:area_law_domain_identifications}
+    For an integer $q\ge0$, let $U$ be the unitary induced by the site
+    bijection $\sigma$ on the corresponding configuration spaces.
+    The integer-domain vector corresponding to an original vector
+    $\Omega$ is $U\Omega$. The local dimension and every physical
+    tensor factor remain the same.
+\end{definition}
+
+\begin{theorem}[Norm in integer coordinates]
+    \label{thm:norm_square_area_law_state}
+    \lean{TNLean.PEPS.Approximation.norm_squareAreaLawState}
+    \leanok
+    \uses{def:square_area_law_state}
+    For every original vector $\Omega$,
+    \begin{align*}
+        \|U\Omega\| & =\|\Omega\|.
+    \end{align*}
+\end{theorem}
+\begin{proof}\leanok
+    The coordinate identification permutes an orthonormal basis.
+\end{proof}
+
+\begin{theorem}[Supported Hermitian parts]
+    \label{thm:square_hermitian_term_supported_algebra}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.hermitianTerm_mem_supportedOperators}
+    \leanok
+    \uses{def:square_hermitian_term}
+    The Hermitian part $A_i^{\mathrm h}$ of every original interaction
+    belongs to the algebra of operators supported on its designated
+    site or edge $S_i$.
+\end{theorem}
+\begin{proof}\leanok
+    This algebra is closed under adjoints and real linear combinations.
+    Apply these closure properties to $(A_i+A_i^*)/2$.
+\end{proof}
+
+\begin{definition}[The original square Hamiltonian as a finite-domain interaction]
+    \label{def:square_area_law_hamiltonian}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.toAreaLawHamiltonian}
+    \leanok
+    \uses{def:square_area_law_support,thm:square_area_law_support_admissible,
+        thm:square_area_law_support_injective,
+        def:square_area_law_state,thm:square_hermitian_term_properties,
+        thm:square_hermitian_term_supported_algebra}
+    Let $H=\sum_i A_i$ be an original Hermitian square Hamiltonian with
+    interaction bound $J\ge0$. At every designated support set
+    \begin{align*}
+        h_{X_i} & =U A_i^{\mathrm h}U^*,
+    \end{align*}
+    and put $h_X=0$ at every other admissible range-one support.
+    This defines a Hermitian interaction family on $\Lambda$, with the
+    same bound $\|h_X\|\le J$. Neither a nonempty lattice nor a positive
+    local dimension is required.
+\end{definition}
+
+\begin{theorem}[Exact Hamiltonian in integer coordinates]
+    \label{thm:square_area_law_hamiltonian_operator}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.toAreaLawHamiltonian_operator}
+    \leanok
+    \uses{def:square_area_law_hamiltonian,thm:square_hermitian_term_sum}
+    The finite-domain interaction has total Hamiltonian
+    \begin{align*}
+        H_{\mathrm{int}} & =UHU^*.
+    \end{align*}
+\end{theorem}
+\begin{proof}\leanok
+    The support map is injective and every unused support contributes
+    zero. Thus the sum is $\sum_i U A_i^{\mathrm h}U^*$.
+    Conjugation is linear and $\sum_i A_i^{\mathrm h}=H$.
+\end{proof}
+
+\begin{theorem}[The same ground vector and full-system gap]
+    \label{thm:square_area_law_ground_gap}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.isGappedGroundState_toAreaLawHamiltonian}
+    \leanok
+    \uses{thm:square_area_law_hamiltonian_operator,thm:norm_square_area_law_state}
+    Let $E_0,\Delta\in\mathbb R$. If an original unit vector $\Omega$
+    satisfies
+    \begin{align*}
+        H\Omega & =E_0\Omega,                                \\
+        H-E_0I  & \ge\Delta(I-|\Omega\rangle\langle\Omega|),
+    \end{align*}
+    then $U\Omega$ is a unit vector satisfying
+    \begin{align*}
+        H_{\mathrm{int}}U\Omega & =E_0U\Omega,                                  \\
+        H_{\mathrm{int}}-E_0I
+                                & \ge\Delta(I-|U\Omega\rangle\langle U\Omega|).
+    \end{align*}
+    The conclusion holds for any real lower-gap parameter $\Delta$.
+    In particular, a positive original full-system gap is preserved.
+\end{theorem}
+\begin{proof}\leanok
+    Conjugate the eigenvector equation and the positive semidefinite
+    gap defect by the same unitary $U$, and use norm preservation.
+\end{proof}
+
+
 \begin{theorem}[Polynomial PEPS approximation]
     \label{thm:openai_polynomial_peps}
     \uses{def:polynomial_peps_model}
