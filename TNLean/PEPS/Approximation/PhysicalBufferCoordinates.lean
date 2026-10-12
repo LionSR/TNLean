@@ -49,6 +49,8 @@ theorem reindex_physicalBuffer_eq_siteLift
   classical
   intro Q P s g p pQ e W
   ext x y
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
+    Matrix.one_apply, siteLift, QuantumCircuit.embedOp_apply]
   done
 
 end TNLean.PEPS.EncodedFrame
