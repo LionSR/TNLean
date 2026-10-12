@@ -53,9 +53,8 @@ theorem eval_endpointWord_slotVector_tmul (R : SourceInventory P)
   | nil => rfl
   | cons r R ih =>
       simp only [endpointWord, Word.eval_castLayouts, comp_apply, isoL_apply,
-        slotVector_cons_eq, Layout.memCongr_symm, LinearIsometryEquiv.symm_symm,
-        LinearIsometryEquiv.apply_symm_apply]
-      apply congrArg (Layout.memCongr (slotLayout_cons r R U V)).symm
+        slotVector_cons_eq, LinearIsometryEquiv.symm_apply_apply]
+      apply congrArg (Layout.memCongr (slotLayout_cons r R U V).symm)
       simp only [assocL_tmul, Word.eval_comp, comp_apply, Word.eval_frame,
         lTensor_tmul, eval_localEndpoint_tmul, ih]
 
