@@ -25,7 +25,7 @@ directory here.
 | `gaps.json` | Plain-language summaries of the campaign's paper-gap notes |
 | `intro.html` | Optional campaign-specific section shown after the heading, usually the headline theorems |
 | `references.json` | Optional bibliography of the works that `{{cite:Key}}` tokens in the texts cite (fields below) |
-| `figures.js` | Optional stage figures: sets `window.campaignFigures` to an object of drawing functions, each filling an empty `<svg>` |
+| `figures.js` | Optional stage figures: sets `window.campaignFigures` to an object of drawing functions, each filling an empty `<svg>`; only the drawing functions may use browser APIs, since the render evaluates the file outside a page |
 | `diagrams/` | Optional tensor-network diagrams: tenkz picture bodies `NAME.tex` and the committed `NAME.svg` compiled from them; `diagrams/inline/` holds the equations displayed inside sentences |
 
 The area-law and PEPS campaign in `openai-area-law-peps-proof/` is served at
@@ -119,7 +119,8 @@ pictures with `\approx` between them.
 A stage or gap text cites earlier work with `{{cite:Key}}` or
 `{{cite:Key1,Key2}}` (no spaces), written straight after the phrase that names
 the idea and before any punctuation, in a route introduction, a stage's
-`physics`, `delivers` or captions, or a gap entry's prose fields. Citations are numbered in reading order (the stages,
+`physics` or `delivers`, a diagram caption, the caption of a stage figure that
+`figures.js` draws, or a gap entry's prose fields. Citations are numbered in reading order (the stages,
 then the gap entries) and link to the page's reference list, where each entry
 links back to the stages and gaps that cite it. Each key names an entry of
 `references.json`:
@@ -134,8 +135,10 @@ links back to the stages and gaps that cite it. Each key names an entry of
 Cite only works whose bibliographic data have been checked against arXiv or
 the DOI record, and only for an idea they originate or that the proof uses as
 stated. A malformed token, a token in any other field, a token naming a
-missing key, and a cited entry without `authors`, `title`, `year` and `url`
-each stop the render.
+missing key, a cited entry without `authors`, `title`, `year` and `url`, and
+a stage figure that `figures.js` does not draw each stop the render. To read
+the drawings, `render.py` evaluates `figures.js` with Node, which must be on
+the path.
 
 ## `gaps.json`
 
