@@ -69,6 +69,24 @@ def cellFanEnd (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     (split : Fin 4 → Bool) (i : CellFanSlot split) : ℝ × ℝ :=
   sidePoint (cellFanCenter o ℓ z) ((2 : ℝ) ^ ℓ / 2) i.1 (fanUpper split i)
 
+/-- The start of an elementary segment in center-and-side coordinates: the
+side point at tangent parameter `j - 1` of a split side and `-1` of a whole
+side. Source: area-law Section 11, lines 299–310. -/
+theorem cellFanStart_eq (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
+    (split : Fin 4 → Bool) (i : CellFanSlot split) :
+    cellFanStart o ℓ z split i = cellFanCenter o ℓ z +
+      ((2 : ℝ) ^ ℓ / 2) • cellFanSideVector i.1
+        (if split i.1 then (i.2.val : ℝ) - 1 else -1) := rfl
+
+/-- The end of an elementary segment in center-and-side coordinates: the side
+point at tangent parameter `j` of a split side and `1` of a whole side.
+Source: area-law Section 11, lines 299–310. -/
+theorem cellFanEnd_eq (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
+    (split : Fin 4 → Bool) (i : CellFanSlot split) :
+    cellFanEnd o ℓ z split i = cellFanCenter o ℓ z +
+      ((2 : ℝ) ^ ℓ / 2) • cellFanSideVector i.1
+        (if split i.1 then (i.2.val : ℝ) else 1) := rfl
+
 private theorem fan_params_cases (split : Fin 4 → Bool) (i : CellFanSlot split) :
     (fanLower split i = -1 ∧ fanUpper split i = 1) ∨
       (fanLower split i = -1 ∧ fanUpper split i = 0) ∨

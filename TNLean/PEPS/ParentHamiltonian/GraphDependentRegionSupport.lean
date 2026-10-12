@@ -37,10 +37,7 @@ private def regionSplit (A : Tensor Γ d) (R : Finset V) :
       ((e : Internal (Γ := Γ) R) → Fin (A.bondDim e.1)) × RegionBoundaryConfig A R where
   toFun η := (fun e ↦ η ⟨e.1, Or.inl e.2.1⟩, regionIncidentBoundaryLabel A R η)
   invFun p e := if hi : e.1.1.1 ∈ R ∧ e.1.1.2 ∈ R then p.1 ⟨e.1, hi⟩ else
-    p.2 ⟨e.1, by
-      rcases e.2 with ht | hh
-      · exact Or.inl ⟨ht, fun hh ↦ hi ⟨ht, hh⟩⟩
-      · exact Or.inr ⟨fun ht ↦ hi ⟨ht, hh⟩, hh⟩⟩
+    p.2 ⟨e.1, e.2.isRegionBoundaryEdge hi⟩
   left_inv η := by funext e; dsimp only; split_ifs <;> rfl
   right_inv p := by
     apply Prod.ext
