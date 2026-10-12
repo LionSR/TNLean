@@ -50,7 +50,8 @@ private theorem actualBoundaryRoot_even (hm : 0 < S.m) (hM : 0 < S.M)
   have hcharge : ¬IsChargeRound (2 * r) := by
     simp [IsChargeRound, Nat.mul_mod]
   have hstage : 2 * r / 2 = r := by omega
-  simp only [actualBoundaryRoot, if_neg hcharge, hstage]
+  simp only [actualBoundaryRoot, if_neg hcharge]
+  rw [hstage]
 
 private theorem actualRoundData_rootPath_zero_eq_boundary
     (hm : 0 < S.m) (hM : 0 < S.M) (j : Fin (2 * S.n * S.m))
@@ -79,7 +80,8 @@ private theorem actualRoundData_rootPath_one_eq_boundary
     have hs : (j.val + 1) / 2 = j.val / 2 + 1 := by
       unfold IsChargeRound at hj
       omega
-    simp only [actualBoundaryRoot, if_neg hj', hs]
+    simp only [actualBoundaryRoot, if_neg hj']
+    rw [hs]
     exact S.charge_rootPath_one_eq_actualFillData_zero hm hM (j.val / 2) n ht k
   · intro hj
     have hj' : IsChargeRound (j.val + 1) := by
@@ -88,7 +90,8 @@ private theorem actualRoundData_rootPath_one_eq_boundary
     have hs : (j.val + 1) / 2 = j.val / 2 := by
       unfold IsChargeRound at hj
       omega
-    simp only [actualBoundaryRoot, if_pos hj', hs]
+    simp only [actualBoundaryRoot, if_pos hj']
+    rw [hs]
     exact S.actualFillData_rootPath_one_eq_charge_zero hm hM (j.val / 2) n ht k
 
 /-- Every actual round ends at the root starting the next round. This follows
