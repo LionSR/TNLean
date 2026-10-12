@@ -297,14 +297,30 @@ operations on an empty memory.
     \uses{thm:peps_exterior_owner_selector,thm:peps_actual_touched_gate_exterior,thm:peps_actual_empty_party_gate_scalar,
         thm:peps_scalar_residual_composition,thm:peps_all_party_source_exterior_empty,
         thm:peps_actual_private_preparation_exterior}
-    Induct on the composition. Every local operation or exchange at an
-    original party has exterior restriction $1$. A gate with a participating
-    party also contributes $1$; a gate with no participating party contributes
-    the sum of its original coefficients. Chronological composition multiplies
-    these scalars, and adjoining an excluded register preserves them. All
-    exterior input, intermediate and source memories are empty. The prescribed
-    slot identification adds no operation, and the private preparation
-    contributes the identity. No scalar is cancelled.
+    Induct on the composition, writing $\lambda_u$ for the exterior
+    scalar of a subword $u$. A local operation or exchange at an original
+    party, a gate with participating parties $C$, and a chronological
+    composition contribute
+    \begin{align}
+        \lambda_{\mathrm{op}}=1,\qquad
+        \lambda_{\mathrm{gate}}=
+        \begin{cases}
+            1,                & C\neq\varnothing, \\
+            \sum_{i\in I}c_i, & C=\varnothing,
+        \end{cases}
+        \qquad
+        \lambda_{u\circ v}=\lambda_u\lambda_v,
+        \label{eq:peps_actual_exterior_scalar_cases}
+    \end{align}
+    by Theorems~\ref{thm:peps_actual_touched_gate_exterior},
+    \ref{thm:peps_actual_empty_party_gate_scalar}
+    and~\ref{thm:peps_scalar_residual_composition}, and adjoining an
+    excluded register preserves $\lambda_u$. All exterior input,
+    intermediate and source memories are empty. The prescribed slot
+    identification adds no operation, and the private preparation
+    contributes the identity, so $\lambda_W$ is the product of the
+    factors in~(\ref{eq:peps_actual_exterior_scalar_cases}). No scalar
+    is cancelled.
 \end{proof}
 
 \begin{definition}[Actual party matrices and their source coordinates]
@@ -348,7 +364,16 @@ operations on an empty memory.
     \uses{thm:peps_actual_source_column_coordinates,thm:peps_actual_party_word_entries,
         def:peps_actual_party_source_matrices}
     First express the actual word in the grouped input and output bases.
-    Its matrix is the product of its singleton-restriction matrices.
-    Compose with the identity from the literal source basis to the grouped
-    input basis. The matrix of this composition is the claimed product.
+    By Theorem~\ref{thm:peps_actual_party_word_entries} its matrix is the
+    product of its singleton-restriction matrices,
+    \[
+        [\widetilde W_\xi]_{B,C}=\bigotimes_{q\in\mathcal Q}A_{\xi,q}.
+    \]
+    Composing with the identity from the literal source basis $E$ to the
+    grouped input basis $B$, whose matrix is $R$, gives
+    \[
+        D_\xi=[\widetilde W_\xi]_{E,C}
+            =[\widetilde W_\xi]_{B,C}\,[\operatorname{id}]_{E,B}
+        =\left(\bigotimes_{q\in\mathcal Q}A_{\xi,q}\right)R.
+    \]
 \end{proof}
