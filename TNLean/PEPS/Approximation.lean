@@ -91,6 +91,7 @@ import TNLean.PEPS.Approximation.ExactSquareRepresentation
 import TNLean.PEPS.Approximation.ExactTreeRepresentation
 import TNLean.PEPS.Approximation.ExteriorPhysicalDimension
 import TNLean.PEPS.Approximation.ExteriorSourceContraction
+import TNLean.PEPS.Approximation.FamilyPhysicalOwnerColumns
 import TNLean.PEPS.Approximation.FamilyPhysicalReadout
 import TNLean.PEPS.Approximation.FamilySourceOnlyReduction
 import TNLean.PEPS.Approximation.FiniteInputMemory
@@ -174,6 +175,7 @@ import TNLean.PEPS.Approximation.PreparedSourceCorrections
 import TNLean.PEPS.Approximation.PreparedSourceGate
 import TNLean.PEPS.Approximation.PreparedSourceTransport
 import TNLean.PEPS.Approximation.PreparedSourceVectorDensity
+import TNLean.PEPS.Approximation.PureSourceMatrix
 import TNLean.PEPS.Approximation.RankOneBlocks
 import TNLean.PEPS.Approximation.RegionalStates
 import TNLean.PEPS.Approximation.RegisterReordering
