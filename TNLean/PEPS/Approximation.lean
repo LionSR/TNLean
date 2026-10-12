@@ -206,6 +206,7 @@ import TNLean.PEPS.Approximation.RegisterReordering
 import TNLean.PEPS.Approximation.RoutedContraction
 import TNLean.PEPS.Approximation.SampledOriginalCircuit
 import TNLean.PEPS.Approximation.SelectedSourceContraction
+import TNLean.PEPS.Approximation.SelectedSourceOwnerMap
 import TNLean.PEPS.Approximation.SelectiveSourceFactorization
 import TNLean.PEPS.Approximation.SelectiveSourcePreparation
 import TNLean.PEPS.Approximation.SeparatedOutputCoordinates

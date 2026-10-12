@@ -455,3 +455,42 @@ complete operators. We give the corresponding exact constructions.
     final exchange defining $W_t$, and compose them under the
     canonical concatenation identifications.
 \end{proof}
+
+\begin{theorem}[Source registers at an owner with a singleton fibre]
+    \label{thm:peps_selected_source_owner_registers}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.atParty_layout_mapOwner_of_singleton_fiber}
+    \uses{def:peps_source_inventory,def:peps_owner_sources,
+        def:peps_single_party_selector,def:peps_party_registers,def:peps_owner_layout}
+    Let $f:P\to Q$ be an arbitrary owner map, and let $p\in P$,
+    $q\in Q$ satisfy $f^{-1}(\{q\})=\{p\}$.
+    Let $S$ be any ordered pair-source list, with arbitrary source
+    vectors, and write $\ell_S$ for its ordered register list.
+    Let $S_f$ be the surviving source list of
+    Definition~\ref{def:peps_owner_sources}, which removes precisely
+    the sources whose two owners merge under $f$.
+    Then $(\ell_{S_f})_q=((\ell_S)_p)^f$ as ordered register lists.
+    Thus selecting the source registers at $q$ after grouping owners
+    retains exactly the relabelled original registers at $p$, with
+    their original spaces and order. Owners away from this fibre may
+    merge arbitrarily. The empty source list is included, and no
+    normalization assumption is imposed. This is an auxiliary
+    register identity for
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 383--434 and 565--588.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:peps_source_inventory,def:peps_owner_sources,
+        def:peps_party_registers,def:peps_owner_layout}
+    For any register list, the fibre condition identifies selection
+    at $q$ after relabelling with relabelling the selection at $p$.
+    Now induct on $S$. The empty list gives the identity directly.
+    If the first source has distinct owners $x,y$ whose images
+    coincide, their common image cannot be $q$: otherwise the fibre
+    condition would imply $x=y=p$. Neither half-register is selected,
+    and removing that source leaves the inductive identity.
+    If the two images differ, the source survives with its original
+    spaces and vector. Apply the register-list selection identity
+    to its two half-registers, followed by the induction hypothesis
+    for the tail. Concatenation preserves their order.
+\end{proof}
