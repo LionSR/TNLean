@@ -55,6 +55,8 @@ import TNLean.PEPS.AreaLaw.Scan.FillCoverage
 import TNLean.PEPS.AreaLaw.Scan.FillSupportCompatibility
 import TNLean.PEPS.AreaLaw.Scan.FillTransport
 import TNLean.PEPS.AreaLaw.Scan.FillTransportEndpoints
+import TNLean.PEPS.AreaLaw.Scan.FrontPrefixFamily
+import TNLean.PEPS.AreaLaw.Scan.FrontThresholds
 import TNLean.PEPS.AreaLaw.Scan.GoodSampling
 import TNLean.PEPS.AreaLaw.Scan.HistoryMeanTree
 import TNLean.PEPS.AreaLaw.Scan.HistoryPrefixes
