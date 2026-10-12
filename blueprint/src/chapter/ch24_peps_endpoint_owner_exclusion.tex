@@ -61,6 +61,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 \begin{theorem}[Action on the original endpoint factors]
     \label{thm:peps_source_register_operator_evaluation}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_endpointWord_slotVector_tmul}
+    \leanok
     \uses{def:peps_source_register_operator_word,def:peps_joint_source_vector}
     Let $u_i\in U_i$ and $v_i\in V_i$. In the original register order, the
     actual endpoint word satisfies
@@ -72,7 +73,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     scalar identity, with both empty tensors equal to $1$.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_source_register_operator_word,def:peps_joint_source_vector}
     Induct on the ordered source list. At the first pair, the two recorded
     endpoint operations send $u_0\otimes v_0$ to
