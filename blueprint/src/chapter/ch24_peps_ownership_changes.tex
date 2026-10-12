@@ -772,6 +772,20 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     at the positions in $S$ (\texttt{05-frames.tex}, lines 476--477).
 \end{definition}
 
+\begin{lemma}[Sheet swaps are contractions]
+    \label{lem:peps_frame_sheet_swap_norm}
+    \lean{TNLean.PEPS.EncodedFrame.norm_sheetSwapOp_le_one}
+    \leanok
+    \uses{def:peps_frame_sheet_swap}
+    $\|F_S\|\leq1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    $F_S$ is the matrix of a permutation of the two-sheet configurations, so
+    it maps the standard basis bijectively onto itself and preserves the
+    Euclidean norm.
+\end{proof}
+
 \begin{lemma}[Composing and commuting sheet swaps]
     \label{lem:peps_frame_sheet_swap_compose}
     \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_mul_sheetSwapOp,
@@ -923,7 +937,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:peps_frame_sheet_swap,lem:peps_frame_rewrite_contraction}
+    \uses{def:peps_frame_sheet_swap,lem:peps_frame_sheet_swap_norm,
+        lem:peps_frame_rewrite_contraction}
     The two identity-factor estimates give
     $\|T(A)\|\leq\|A\otimes I\|+\|I\otimes A\|\leq2\|A\|$.
     Since $\|F_R\|\leq1$ and $\|F_R^\dagger\|=\|F_R\|$, submultiplicativity
