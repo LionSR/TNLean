@@ -1,5 +1,5 @@
-\begin{lemma}[Matching weighted sums of periodic blocks]%
-    \label{lem:periodic_block_families_unitary_matching}
+\begin{theorem}[Matching weighted sums of periodic blocks]%
+    \label{thm:periodic_block_families_unitary_matching}
     \lean{MPSTensor.exists_unitary_matching_of_periodic_block_families}
     \leanok
     \uses{def:periodic_tensor, def:same_mpv2_pos, def:block_diagonal_tensor}
@@ -13,7 +13,7 @@
     \begin{align}
         \bigoplus_jc_j\mu_jA_j^i & =W\Bigl(\bigoplus_k\nu_kB_k^i\Bigr)W^\dagger. \notag
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -54,7 +54,7 @@
 
 \begin{proof}
     \leanok
-    \uses{lem:periodic_block_families_unitary_matching,
+    \uses{thm:periodic_block_families_unitary_matching,
         thm:pgvwc07_normalized_periodic_state_vector_decomposition}
     Theorem~\ref{thm:spectral_periodic_period_existence} gives the periods
     $m_j$. Mixing the physical index commutes with the direct sum:
@@ -62,7 +62,7 @@
     $C_j^{i'}=\sum_iu^{i',i}A_j^i$. Since $u$ is unitary, $\E_{C_j}=\E_{A_j}$,
     so $C_j$ is periodic with the same period. By hypothesis
     $\bigoplus_j\mu_jC_j$ and $A$ generate the same vectors at every positive
-    length, so Lemma~\ref{lem:periodic_block_families_unitary_matching} gives
+    length, so Theorem~\ref{thm:periodic_block_families_unitary_matching} gives
     $c_j$ with $c_j^{m_j}=1$ and a unitary $U$ with
     $\bigoplus_jc_j\mu_jC_j^{i'}=UA^{i'}U^\dagger$. With $z_j=c_j^{-1}$ and
     $Z=\bigoplus_jz_j\Id$ this is $\sum_iu^{i',i}A^i=ZUA^{i'}U^\dagger$.
