@@ -2,8 +2,12 @@ import TNLean.PEPS.TorusDualOpenDeformation
 
 /-! Regressions and axiom audits for the native collared open-boundary specialization. -/
 
+set_option linter.hashCommand false
+
 open TNLean.PEPS.DependentBondNetwork
 
+/-- info: 'TNLean.PEPS.DependentBondNetwork.network_deltaCompletedTensor' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
 #print axioms network_deltaCompletedTensor
 
 open TNLean.PEPS
@@ -27,11 +31,23 @@ example : ¬ ∃ C : TorusDualCollar 3 3, C.patch.cols = 2 := by
   have := C.cols_lt
   omega
 
+/-- info: 'TNLean.PEPS.labelledNetwork_eq_torusBondNetwork' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
 #print axioms labelledNetwork_eq_torusBondNetwork
+/-- info: 'TNLean.PEPS.torusBondNetwork_deltaCompletedTensor' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
 #print axioms torusBondNetwork_deltaCompletedTensor
+/-- info: 'TNLean.PEPS.TorusDualCollar.neighbors_mem' depends on axioms: [propext, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
 #print axioms TorusDualCollar.neighbors_mem
+/-- info: 'TNLean.PEPS.TorusDualCollar.exists_internalFluxGauge' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
 #print axioms TorusDualCollar.exists_internalFluxGauge
+/-- info: 'TNLean.PEPS.TorusDualCollar.openCoefficient_eq' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
 #print axioms TorusDualCollar.openCoefficient_eq
+/-- info: 'TNLean.PEPS.TorusDualCollar.correlatedBoundary_eq' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
 #print axioms TorusDualCollar.correlatedBoundary_eq
 
 -- The delta-exterior identity uses a labelled self bond with its two independent incidences.
@@ -67,5 +83,7 @@ example (A : fullCollar.region → (Empty × Empty × Empty × Empty) → ℂ)
   torusOpenCoefficient_eq_zero_of_isEmpty _
     ⟨fullCollar.patch.origin, fullCollar.origin_mem⟩ A O emptyBoundary
 
+/-- info: 'TNLean.PEPS.torusOpenCoefficient_eq_zero_of_isEmpty' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
 #print axioms torusOpenCoefficient_eq_zero_of_isEmpty
 #check TorusDualCollar.openCoefficient_eq
