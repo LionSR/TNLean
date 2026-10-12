@@ -80,6 +80,7 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
     AreaLaw.exists_supported_gaussian_integral (q * q)
       (Nat.mul_le_mul hq hq) 1 (2 * J)
   refine ⟨C, v, c, hC, hv, hc, fun L h R C₀ hRC ↦ ?_⟩
+  intro Q P s g p Λ a e K F K' boundary Z W V l B
   done
 
 end TNLean.PEPS.Approximation
