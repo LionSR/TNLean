@@ -51,6 +51,9 @@ theorem reindex_physicalBuffer_eq_siteLift
   ext x y
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply, Matrix.kroneckerMap_apply,
     Matrix.one_apply, siteLift, QuantumCircuit.embedOp_apply]
+  have hcondition : (e.symm x).1 = (e.symm y).1 ↔
+      QuantumCircuit.AgreeOff (Subtype.val : Q → ι) x y := by
+    constructor <;> done
   done
 
 end TNLean.PEPS.EncodedFrame
