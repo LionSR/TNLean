@@ -120,7 +120,11 @@ private theorem interactionPicture_commutator_sub_eq_integral
     (hContinuous.intervalIntegrable 0 t)
   simpa only [zero_smul, neg_zero, exp_zero, one_mul, mul_one] using h.symm
 
-private theorem norm_commutator_le
+/-- The norm of a commutator is bounded by twice the product of the norms.
+This elementary inequality is used in the localization estimate of OpenAI,
+*Polynomial PEPS approximation of gapped square-grid ground states*,
+`02-information.tex`, `eq:info-operator-localization`. -/
+theorem norm_commutator_le
     {R : Type*} [NormedRing R] (X A : R) :
     ‖X * A - A * X‖ ≤ 2 * ‖A‖ * ‖X‖ := by
   calc
@@ -176,7 +180,11 @@ private theorem norm_interactionPicture_commutator_le_integral
       _ ≤ ‖A * B - B * A‖ + ∫ s in (0 : ℝ)..t, b s := add_le_add le_rfl hInt
   simpa only [b, Z, intervalIntegral.integral_const_mul] using hNorm
 
-private theorem norm_exp_commutator_eq
+/-- Unitary conjugation transfers the evolution of one commutator factor to
+the other factor at the opposite time. This norm identity is used in OpenAI,
+*Polynomial PEPS approximation of gapped square-grid ground states*,
+`02-information.tex`, `eq:info-operator-localization`. -/
+theorem norm_exp_commutator_eq
     {R : Type*} [NormedRing R] [NormedAlgebra ℝ R] [CompleteSpace R]
     [StarRing R] [CStarRing R] [StarModule ℝ R]
     (K : R) (hK : K ∈ skewAdjoint R) (A B : R) (t : ℝ) :

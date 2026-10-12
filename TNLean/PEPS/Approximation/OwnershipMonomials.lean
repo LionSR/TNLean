@@ -503,16 +503,10 @@ theorem birth_monomial [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
             (act ((birthKernel σ.V σ.s)ᴴ * birthKernel σ.V σ.s)).rTensor (Mem ℓ)
               (pairHeadIso ℓ z) := by
   obtain ⟨σ, hσ, -, -, hK, herr⟩ := F.birth (Q := Q) hTP hTH hΩ hI
-  refine ⟨σ, hσ, sheetBirthOp_eq_submatrix _ σ, hK, herr, fun x hx => ?_, fun x hx => ?_,
+  obtain ⟨hB, hT, hB', -⟩ := F.changeOwner_birth_owners (Q := Q) hTP hTH
+  exact ⟨σ, hσ, sheetBirthOp_eq_submatrix _ σ, hK, herr,
+    fun x hx => ⟨hB x (Finset.mem_compl.mpr hx), hB' x (Finset.mem_compl.mpr hx)⟩, hT,
     fun ℓ => exists_birthWord P Q σ ℓ⟩
-  · have hxE : x ∉ F.birthEnv P := fun h => hx (Finset.mem_union_right _ h)
-    have hxT : x ∉ T := fun h => hx (Finset.mem_union_left _ h)
-    refine ⟨F.owner_eq_of_notMem_birthEnv hxE, ?_⟩
-    change (if x ∈ T then Q else F.owner x) = P
-    simp only [hxT, ↓reduceIte]
-    exact F.owner_eq_of_notMem_birthEnv hxE
-  · change (if x ∈ T then Q else F.owner x) = Q
-    simp only [hx, ↓reduceIte]
 
 /-- **The homogeneous death of Lemma 6.5 on grouped registers.** Let `F`
 be the frame *after* the death, in which `T` is owned by `P∘` and avoids every outer hole footprint,

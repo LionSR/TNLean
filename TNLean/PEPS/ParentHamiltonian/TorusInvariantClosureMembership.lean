@@ -28,38 +28,6 @@ local instance : Fact (1 < height) := ⟨by have := Fact.out (p := 2 < height); 
 local notation "TV" => TorusVertex width height
 local notation "TG" => torusGraph width height
 
-private theorem zmod_add_two_ne {n : ℕ} [NeZero n] [Fact (2 < n)] (x : ZMod n) :
-    x + 2 ≠ x ∧ x + 2 ≠ x + 1 := by
-  have hn : 2 < n := Fact.out
-  have htwo : (2 : ZMod n) ≠ 0 := by
-    intro h
-    have hd := (ZMod.natCast_eq_zero_iff 2 n).mp h
-    have := Nat.le_of_dvd (by decide : 0 < 2) hd
-    omega
-  have hone : (1 : ZMod n) ≠ 0 := by
-    intro h
-    have hd := (ZMod.natCast_eq_zero_iff 1 n).mp (by simp at h)
-    have := Nat.le_of_dvd (by decide : 0 < 1) hd
-    omega
-  constructor
-  · simpa using htwo
-  · intro h
-    have hh : (2 : ZMod n) = 1 := add_left_cancel h
-    apply hone
-    linear_combination hh
-
-private theorem torusPlaquetteRegion_fst (v p : TV) (hp : p ∈ torusPlaquetteRegion v) :
-    p.1 = v.1 ∨ p.1 = v.1 + 1 := by
-  simp only [torusPlaquetteRegion, torusPlaquetteWalk, SimpleGraph.Walk.support,
-    List.toFinset_cons, List.toFinset_nil, Finset.mem_insert, Finset.notMem_empty, or_false] at hp
-  rcases hp with rfl | rfl | rfl | rfl | rfl <;> simp
-
-private theorem torusPlaquetteRegion_snd (v p : TV) (hp : p ∈ torusPlaquetteRegion v) :
-    p.2 = v.2 ∨ p.2 = v.2 + 1 := by
-  simp only [torusPlaquetteRegion, torusPlaquetteWalk, SimpleGraph.Walk.support,
-    List.toFinset_cons, List.toFinset_nil, Finset.mem_insert, Finset.notMem_empty, or_false] at hp
-  rcases hp with rfl | rfl | rfl | rfl | rfl <;> simp
-
 variable {G X : Type*} [Group G] [Fintype X] [DecidableEq X]
 
 /-- The shifted commuting seams can avoid every internal edge of any selected
@@ -78,11 +46,7 @@ theorem torusGraphBondMatrix_closureAt_eq_one_on_plaquette_internal
       rcases Edge.ofAdj_endpoints (torusGraph_adj_right p.1 p.2) with ht' | hh'
       · simpa only [torusRightEdge, ht'.2] using hh
       · simpa only [torusRightEdge, hh'.1] using ht
-    have hne : p.1 + 1 ≠ v.1 + 2 := by
-      intro he
-      rcases torusPlaquetteRegion_fst v _ hp with hx | hx
-      · exact (zmod_add_two_ne v.1).1 (he.symm.trans hx)
-      · exact (zmod_add_two_ne v.1).2 (he.symm.trans hx)
+    have hne : p.1 + 1 ≠ v.1 + 2 := (torusPlaquetteRegion_ne_add_two hp).1
     change torusGraphBondMatrix _ _ (torusRightEdge p) = _
     simp [torusHorizontalClosureAt, hne]
   · change (torusUpEdge p).1.1 ∈ torusPlaquetteRegion v at ht
@@ -91,11 +55,7 @@ theorem torusGraphBondMatrix_closureAt_eq_one_on_plaquette_internal
       rcases Edge.ofAdj_endpoints (torusGraph_adj_up p.1 p.2) with ht' | hh'
       · simpa only [torusUpEdge, ht'.2] using hh
       · simpa only [torusUpEdge, hh'.1] using ht
-    have hne : p.2 + 1 ≠ v.2 + 2 := by
-      intro he
-      rcases torusPlaquetteRegion_snd v _ hp with hy | hy
-      · exact (zmod_add_two_ne v.2).1 (he.symm.trans hy)
-      · exact (zmod_add_two_ne v.2).2 (he.symm.trans hy)
+    have hne : p.2 + 1 ≠ v.2 + 2 := (torusPlaquetteRegion_ne_add_two hp).2
     change torusGraphBondMatrix _ _ (torusUpEdge p) = _
     simp [torusVerticalClosureAt, hne]
 

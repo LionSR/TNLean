@@ -38,18 +38,11 @@ private abbrev BlockInternal (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e
 private abbrev Incident (R : Finset V) := {e : Edge Γ // IsRegionIncidentEdge R e}
 private abbrev BlockBoundary (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
 
-omit [Fintype V] [DecidableRel Γ.Adj] in
-private theorem boundary_of_incident_not_internal (R : Finset V) (e : Incident (Γ := Γ) R)
-    (hi : ¬ (e.1.1.1 ∈ R ∧ e.1.1.2 ∈ R)) : IsRegionBoundaryEdge R e.1 := by
-  rcases e.2 with ht | hh
-  · exact Or.inl ⟨ht, fun h => hi ⟨ht, h⟩⟩
-  · exact Or.inr ⟨fun h => hi ⟨h, hh⟩, hh⟩
-
 private def referenceConfig (R : Finset V)
     (y : BlockBoundary (Γ := Γ) R → G) (a : BlockInternal (Γ := Γ) R → G) :
     Incident (Γ := Γ) R → G := fun e =>
   if hi : e.1.1.1 ∈ R ∧ e.1.1.2 ∈ R then a ⟨e.1, hi⟩
-  else y ⟨e.1, boundary_of_incident_not_internal R e hi⟩
+  else y ⟨e.1, e.2.isRegionBoundaryEdge hi⟩
 
 omit [Fintype V] [DecidableRel Γ.Adj] [Group G] [Fintype G] [DecidableEq G] in
 private theorem referenceConfig_internal (R : Finset V)
