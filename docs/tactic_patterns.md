@@ -72,6 +72,19 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** this names an existing assignment and introduces no new
   geometric premise, identifier family or quotient of separated runs.
 
+### Nonfar sites remain in the compact truncation set — promoted (2026-10-10)
+
+- **Pattern:** persistence of the initial far assignment forces a nonfar site
+  into the color and below the initial upper cutoff, which is at most `8Km`.
+- **Seen:** The previous private near-containment proof in `SideSeparation.lean`,
+  the non-contained-support proof in `SplitSupportSize.lean`, and the common
+  five-region budget in `StatusMarginalBudget.lean`.
+- **Abstraction:** `CollarScan.mem_truncationSet_of_not_far` in
+  `TNLean/PEPS/AreaLaw/Scan/StatusContainment.lean`, with completed and
+  pre-charge far-complement inclusions. Both previous proof copies are removed.
+- **Notes:** There is no time-horizon, row, good-history, or positive-band premise.
+  The far side itself is not asserted to be compact.
+
 ### Ambient depth variation in an actual charge ball — promoted (2026-10-09)
 
 - **Pattern:** unfold charge-ball membership, identify the induced domain graph,
@@ -4200,10 +4213,11 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Pattern:** Use the band index bound, the offset bound and $8Km\le L$
   to place $8gm+5m+r$ below the original collar depth.
 - **Seen:** The endpoint estimate in
-  `Scan/SideSeparation.near_subset_truncationSet` and the two front estimates
-  in `Scan/FrontThresholds.front_comparison_thresholds_le`.
+  `Scan/StatusContainment.mem_truncationSet_of_not_far` and the two front
+  estimates in `Scan/FrontThresholds.front_comparison_thresholds_le`.
 - **Abstraction:** `CollarScan.upper_le` in `Scan/SideSeparation.lean` states
-  the shared endpoint bound. Both consumers now use that lemma.
+  the shared endpoint bound, used by the front estimates. The containment proof
+  precedes it in the import order and keeps its own copy.
 - **Notes:** The fill-count estimate remains `fillCount_div_le_window`;
   nonnegativity suffices for the far threshold. Neither consumer needs a new
   scanner structure or additional dimension hypotheses.
