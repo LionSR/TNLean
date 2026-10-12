@@ -10,8 +10,8 @@ import QICLean.Analysis.PoissonContractionDecay
 # Excited-state decay for the exact lattice constraints
 
 The fresh exact positive constraints of a finite induced-domain Hamiltonian
-annihilate its original ground vector. Their sum has gap
-`Δ / positiveNormalization p (Δ / 2) J`. Chronological products of their
+annihilate its original ground vector. Their sum has gap `Δ / c_*`, with
+`c_*` the normalization of the positive replacement. Chronological products of their
 complementary square roots therefore suppress the component orthogonal to
 that ground vector in squared-norm expectation, with any finite spectator.
 The expectation uses the concrete fixed-time Poisson-word probability law.
@@ -26,10 +26,6 @@ The expectation uses the concrete fixed-time Poisson-word probability law.
   Proposition 4.3. Independently formalized from the manuscript;
   no upstream Lean text is reused.
 -/
-
-set_option relaxedAutoImplicit false
-set_option maxSynthPendingDepth 3
-set_option linter.mathlibStandardSet true
 
 noncomputable section
 
