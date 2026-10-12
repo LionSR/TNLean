@@ -29,7 +29,7 @@ operator. They apply to an arbitrary physical matrix.
 -/
 
 noncomputable section
-open TensorPower TensorPower.ReplicaTransport Entropy
+open TensorPower Entropy
 open scoped Kronecker
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -111,7 +111,8 @@ theorem augmentedConfigurationEquiv_apply_R (q d : ℕ)
 variable [Fintype V] [DecidableEq V]
 
 /-- The sum-site configuration in the original physical,C,R copy order.
-Source: OpenAI area-law manuscript, 07-comparators.tex421–438, adc7f124. -/
+Source: 07-comparators.tex, lines 421–438, revision
+adc7f1241b42e322a6451854ab7e4b4c146bf78a. -/
 def augmentedSumReplicaCopiesEquiv (q d k : ℕ) :
     Config k (fun s => Fin (augmentedDimensions (V := V) q (fun _ => d) s)) ≃
       (Fin k → (V → Fin q)) × ((Fin k → Fin d) × (Fin k → Fin d)) :=
@@ -121,8 +122,8 @@ def augmentedSumReplicaCopiesEquiv (q d k : ℕ) :
 /-- The physical replica mean extended by the identities on C and R,
 expressed in the scanner coordinates. The equality also holds at k = 0,
 where the normalized replica sum is zero.
-Source: OpenAI area-law manuscript, 06-transport.tex335–358 and
-07-comparators.tex421–438, adc7f124. -/
+Source: 06-transport.tex, lines 335–358; 07-comparators.tex, lines 421–438,
+revision adc7f1241b42e322a6451854ab7e4b4c146bf78a. -/
 theorem copyMean_augmentOperator_eq_replicaHamiltonian_kronecker
     (q d k : ℕ) (H : Matrix (V → Fin q) (V → Fin q) ℂ) :
     copyMean (augmentedDimensions (V := V) q (fun _ => d)) k
