@@ -1,0 +1,53 @@
+% Source: OpenAI2026AreaLaw, 09-amplification.tex, lines 237--253,
+% eq:amplification-excited-decay, revision
+% openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% The expectation is on the common fixed-time Poisson-word law.
+
+\section{Excited-state decay for the exact constraints}
+
+\begin{theorem}[Physical excited-component decay]
+    \label{thm:al_lattice_excited_decay}
+    \lean{TNLean.PEPS.AreaLaw.latticeConstraintWord_excitedProjection_decay}
+    \leanok
+    \uses{def:area_law_ground_entropy,thm:al_lattice_positive_replacement}
+    Let $\Lambda$ be a finite induced lattice domain with local dimension
+    $q\ge1$, and let $H$ be a range-$R$ interaction of strength $J\ge0$.
+    Suppose that $\Omega$ is a unit ground vector of energy $E_0$ with
+    full-system gap $\Delta>0$. Fix an integer $p\ge1$, and let
+    $k_i=|M_i|/c_*$ be its exact positive constraints from
+    Theorem~\ref{thm:al_lattice_positive_replacement}. Put
+    $g=\Delta/c_*$, $P_\Omega=|\Omega\rangle\langle\Omega|$ and
+    $G_i=(I-k_i)^{1/2}$.
+
+    For $t\ge0$, let $\mu_t$ be the probability law of independent
+    Poisson counts of mean $t$ for the interaction labels, followed by
+    a uniformly ordered word with those counts. For a chronological word
+    $w=(i_0,\ldots,i_{m-1})$, set
+    $D_w=G_{i_{m-1}}\cdots G_{i_0}$ and $D_{\varnothing}=I$.
+    For every finite-dimensional spectator space $\mathcal K$ and every
+    $\zeta\in\mathcal H_\Lambda\otimes\mathcal K$, put
+    $\xi=((I-P_\Omega)\otimes I)\zeta$. The squared norm
+    $\|(D_w\otimes I)\xi\|^2$ is integrable and satisfies
+    \begin{align*}
+        \int\|(D_w\otimes I)\xi\|^2\,d\mu_t(w)
+        \le e^{-gt}\|\xi\|^2.
+    \end{align*}
+    This is the fixed-time excited-state estimate in
+    \cite[Section~10]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    The exact positive replacement gives $k_i\Omega=0$, $k_i\le I$
+    and $\sum_i k_i\ge g(I-P_\Omega)$. Each $G_i$ fixes $\Omega$
+    and preserves its orthogonal complement. On that complement its
+    squared-norm loss is $\langle\xi,k_i\xi\rangle$. Summing over
+    labels gives a loss of at least $g\|\xi\|^2$. Let $N$ be the
+    number of interaction labels. If $g>N$, the inequalities
+    $\sum_i k_i\le NI$ and $\sum_i k_i\ge g(I-P_\Omega)$ force
+    the orthogonal complement of $\Omega$ to be zero, so $\xi=0$
+    and the conclusion is immediate. Otherwise $N-g\ge0$.
+    The sum of the squared norms over all words of length $m$
+    is then at most $(N-g)^m\|\xi\|^2$. Multiplying by the
+    Poisson-word mass $e^{-Nt}t^m/m!$ and summing over $m$
+    gives $e^{-Nt}e^{(N-g)t}=e^{-gt}$, with the identity on the
+    spectator throughout.
+\end{proof}

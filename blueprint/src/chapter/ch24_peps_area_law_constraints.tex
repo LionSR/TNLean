@@ -489,6 +489,29 @@ terminal leaf.
     $\kappa\le e$ and $\lceil x\rceil\le 2x$ for $x\ge1$, with $C_1=32$.
 \end{proof}
 
+\begin{theorem}[Growth of the rounded band count]
+    \label{thm:area_law_band_count_growth}
+    \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.eventually_le_K}
+    \leanok
+    Fix scanner exponents satisfying the preceding conditions and put
+    $K_n=\lfloor\lfloor n^{1-\ell}\rfloor/(8\lfloor n^\mu\rfloor)\rfloor$.
+    For every integer $B\ge0$ there is a threshold $N$, depending only on
+    the exponents and $B$, such that $B\le K_n$ whenever $n\ge N$.
+    These are the rounded scales of \cite[Section~9]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    Since $1-\ell-\mu>0$, eventually $n^{1-\ell-\mu}\ge16B$ and
+    $n^{1-\ell},n^\mu\ge2$. Thus
+    \begin{align}
+        8B\lfloor n^\mu\rfloor
+        \le8Bn^\mu
+        \le\tfrac12 n^{1-\ell}
+        \le\lfloor n^{1-\ell}\rfloor.
+    \end{align}
+    The positive integer divisor $8\lfloor n^\mu\rfloor$ then gives
+    $B\le K_n$.
+\end{proof}
+
 \begin{theorem}[Scanner estimate from the conclusions of its inputs]
     \label{thm:al_scanner_from_inputs}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScanData,

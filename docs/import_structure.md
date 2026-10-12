@@ -193,5 +193,5 @@ The ordinary 1000-line limit still applies to hierarchical aggregators. The CI
 size checker registers only the exact root path `TNLean.lean` as an import-only
 exemption, and validates that it contains no declarations. No hierarchical
 aggregator currently approaches the limit, so broadening that exemption is not
-necessary. The import-completeness workflow independently verifies every
+necessary. The `file-length` job of `pr-ci.yml` independently verifies every
 generated file byte-for-byte.

@@ -772,6 +772,33 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     at the positions in $S$ (\texttt{05-frames.tex}, lines 476--477).
 \end{definition}
 
+\begin{theorem}[Permutation matrices are unitary]
+    \label{thm:permutation_matrix_unitary}
+    \lean{Equiv.Perm.permMatrix_mem_unitaryGroup}
+    \leanok
+    For a permutation $\sigma$ of a finite set, its complex permutation
+    matrix $P_\sigma$ satisfies $P_\sigma P_\sigma^\dagger=P_\sigma^\dagger P_\sigma=I$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The adjoint of $P_\sigma$ is $P_{\sigma^{-1}}$, and
+    $P_\sigma P_{\sigma^{-1}}=P_{\sigma\sigma^{-1}}=I$.
+\end{proof}
+
+\begin{theorem}[Sheet swaps are contractions]
+    \label{thm:peps_frame_sheet_swap_norm}
+    \lean{TNLean.PEPS.EncodedFrame.norm_sheetSwapOp_le_one}
+    \leanok
+    \uses{def:peps_frame_sheet_swap}
+    $\|F_S\|\leq1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    $F_S$ is the matrix of a permutation of the two-sheet configurations, so
+    it maps the standard basis bijectively onto itself and preserves the
+    Euclidean norm.
+\end{proof}
+
 \begin{lemma}[Composing and commuting sheet swaps]
     \label{lem:peps_frame_sheet_swap_compose}
     \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_mul_sheetSwapOp,
@@ -798,7 +825,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{def:peps_frame_sheet_swap}
     Let $R\subseteq\Lambda$, and let $A$ and $B$ be operators on
-    $(\C^q)^{\otimes\Lambda}$ supported on $R$. Then
+    $\mathcal H_\Lambda$ supported on $R$. Then
     \begin{align*}
         F_R(A\otimes B)=(B\otimes A)F_R.
     \end{align*}
@@ -808,7 +835,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:peps_frame_split_forms}
+    \uses{lem:peps_frame_split_forms,lem:peps_frame_exchange_intertwining}
     Split each sheet into $R$ and its complement. The support assumptions give
     $A=A_R\otimes I$ and $B=B_R\otimes I$. The swap interchanges the two
     copies of $R$ and fixes the complementary factors. Writing each
@@ -825,8 +852,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators}
     \leanok
     \uses{def:peps_frame_sheet_swap}
-    Let $\Lambda$ be a finite site set, $q\geq0$ a local dimension, and
-    $R,S\subseteq\Lambda$. Let $A$ be an operator supported on $S$, and let
+    Let $q\geq0$ be a local dimension and $R,S\subseteq\Lambda$. Let $A$
+    be an operator supported on $S$, and let
     $F_R$ exchange two copies at the sites in $R$. If $S\subseteq R$
     or $S\cap R=\varnothing$, then
     \begin{align*}
@@ -838,26 +865,18 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_sheet_swap_supported_exchange,lem:peps_frame_sheet_swap_compose}
-    Write $T(A)=A\otimes I+I\otimes A$. If $S\subseteq R$, then $A$ and
-    $I$ are both supported on $R$, and the exchange identity applied to the
-    pairs $(A,I)$ and $(I,A)$ gives
+    \uses{thm:peps_sheet_swap_supported_exchange,lem:peps_frame_sheet_swap_compose,
+        thm:permutation_matrix_unitary}
+    If $S\subseteq R$, the exchange identity applied with $B=I$ on both
+    sides gives
     \begin{align*}
-        F_R(A\otimes I)=(I\otimes A)F_R,\qquad
-        F_R(I\otimes A)=(A\otimes I)F_R.
+        F_R(A\otimes I)=(I\otimes A)F_R,\qquad F_R(I\otimes A)=(A\otimes I)F_R.
     \end{align*}
-    If $S\cap R=\varnothing$, the commutation of $F_R$ with operators
-    acting on a set disjoint from $R$ gives
-    \begin{align*}
-        F_R(A\otimes I)=(A\otimes I)F_R,\qquad
-        F_R(I\otimes A)=(I\otimes A)F_R.
-    \end{align*}
-    In either case, adding the two identities gives
-    \begin{align*}
-        F_RT(A)=T(A)F_R.
-    \end{align*}
-    Since $F_R$ is a permutation matrix, $F_RF_R^\dagger=I$, and therefore
-    $F_RT(A)F_R^\dagger=T(A)F_RF_R^\dagger=T(A)$.
+    If $S\cap R=\varnothing$, the swap commutes with $A\otimes I$ and with
+    $I\otimes A$. In either case
+    $F_R(A\otimes I+I\otimes A)=(A\otimes I+I\otimes A)F_R$, and
+    multiplying on the right by $F_R^\dagger=F_R^{-1}$ gives the stated
+    identity.
 \end{proof}
 
 \begin{theorem}[Restricting a swap to an interaction support]
@@ -865,8 +884,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_inter}
     \leanok
     \uses{def:peps_frame_sheet_swap}
-    Let $\Lambda$ be a finite site set, $q\geq0$ a local dimension, and
-    $R,S\subseteq\Lambda$. Let $A$ be an operator supported on $S$.
+    Let $q\geq0$ be a local dimension and $R,S\subseteq\Lambda$. Let $A$
+    be an operator supported on $S$.
     Write $T(A)=A\otimes I+I\otimes A$, and let $F_D$ exchange the
     two copies at the sites in $D$. Then
     \begin{align}
@@ -876,9 +895,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     This is the support reduction in the boundary perturbation argument
     of \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
-\begin{proof}
-    \leanok
-    \uses{lem:peps_frame_sheet_swap_compose,thm:peps_sheet_swap_doubled_cancellation}
+\begin{proof}\leanok
+    \uses{lem:peps_frame_sheet_swap_compose,thm:peps_sheet_swap_doubled_cancellation,
+        thm:permutation_matrix_unitary}
     Put $B=R\cap S$ and $O=R\setminus S$. The composition of the
     swaps gives $F_BF_R=F_O$, hence $F_R=F_B^\dagger F_O$ by unitarity.
     Since $S\cap O=\varnothing$, cancellation outside $S$ gives
@@ -887,36 +906,90 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \end{align*}
 \end{proof}
 
+\begin{theorem}[Crossing-edge expansion of the doubled perturbation]
+    \label{thm:peps_sheet_swap_boundary_expansion}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing}
+    \leanok
+    \uses{def:polynomial_peps_model,def:peps_frame_sheet_swap}
+    Let $H=\sum_v h_v+\sum_e h_e$ be an open-square Hamiltonian with the
+    original bounded site and edge interactions, and let $R$ be any set of
+    vertices. For an operator $A$, write $T(A)=A\otimes I+I\otimes A$.
+    Let $F_R$ exchange the two copies at the sites of $R$, and let
+    $\partial R$ be the set of edges with exactly one endpoint in $R$.
+    Then
+    \begin{align*}
+        F_RT(H)F_R^\dagger-T(H)
+        =\sum_{e\in\partial R}\bigl(F_RT(h_e)F_R^\dagger-T(h_e)\bigr).
+    \end{align*}
+    This includes zero local dimension and squares of side zero or one.
+    Individual interactions need not be Hermitian. The identity is the
+    crossing-edge reduction in the boundary perturbation argument of
+    \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_sheet_swap_doubled_cancellation}
+    Write $\delta(A)=F_RT(A)F_R^\dagger-T(A)$, which is linear in $A$. By
+    Theorem~\ref{thm:peps_sheet_swap_doubled_cancellation}, $\delta(h_v)=0$
+    for every site $v$, since $\{v\}\subseteq R$ or
+    $\{v\}\cap R=\varnothing$, and $\delta(h_e)=0$ for every edge
+    $e\notin\partial R$, since both endpoints of $e$ lie in $R$ or neither
+    does. Hence
+    \begin{align*}
+        \delta(H)=\sum_v\delta(h_v)+\sum_e\delta(h_e)=\sum_{e\in\partial R}\delta(h_e).
+    \end{align*}
+\end{proof}
+
+\begin{theorem}[Norm of a swapped doubled interaction]
+    \label{thm:peps_sheet_swap_doubled_term_norm}
+    \lean{TNLean.PEPS.EncodedFrame.norm_sheetSwapOp_conj_doubledHamiltonian_sub_le}
+    \leanok
+    \uses{def:peps_frame_sheet_swap}
+    Let $q\geq0$ be a local dimension and $R\subseteq\Lambda$. For an
+    arbitrary operator $A$ on $\mathcal H_\Lambda$, write $T(A)=A\otimes I+I\otimes A$.
+    Then
+    \begin{align*}
+        \|F_RT(A)F_R^\dagger-T(A)\|\leq4\|A\|.
+    \end{align*}
+    This is the single-interaction estimate for the boundary perturbation in
+    \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_frame_sheet_swap,thm:peps_frame_sheet_swap_norm,
+        thm:peps_frame_identity_tensor_norm}
+    The two identity-factor estimates give
+    $\|T(A)\|\leq\|A\otimes I\|+\|I\otimes A\|\leq2\|A\|$.
+    Since $\|F_R\|\leq1$ and $\|F_R^\dagger\|=\|F_R\|$, submultiplicativity
+    gives $\|F_RT(A)F_R^\dagger\|\leq\|T(A)\|$. The triangle inequality
+    proves the assertion.
+\end{proof}
+
 \begin{theorem}[Support of the swap in paired coordinates]
     \label{thm:peps_sheet_swap_paired_site_support}
     \lean{TNLean.PEPS.EncodedFrame.reindex_sheetSwapOp_mem_supportedOperators}
     \leanok
     \uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
-    Let $\Lambda$ be a finite set, let $q\geq0$ be an integer, and let
-    $R\subseteq\Lambda$. Identify two configurations of local dimension $q$
+    Let $q\geq0$ be a local dimension and $R\subseteq\Lambda$. Identify two configurations of local dimension $q$
     with one configuration of local dimension $q^2$ by pairing the two values
     at each site. In these coordinates, the sheet swap $F_R$ is supported on
     $R$. The assertion includes empty regions and empty configuration spaces.
     This is the local support property used for the doubled Hamiltonian in
     \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
-\begin{proof}
-    \leanok
+\begin{proof}\leanok
     \uses{lem:qc_permutation_layers}
-    Let $p:\{0,\dots,q-1\}^2\to\{0,\dots,q^2-1\}$ denote the pairing
-    bijection of local values, and write a two-sheet
-    configuration as $x=(x_1,x_2)$. In paired coordinates the sheet swap
-    acts at each site $i$ by
+    In paired coordinates the swap is the permutation $\sigma$ of
+    configurations $x=(x_i)_{i\in\Lambda}$, $x_i=(a_i,b_i)$, given by
     \begin{align*}
-        p\big(x_1(i),x_2(i)\big)\mapsto
+        \sigma(x)_i=
         \begin{cases}
-            p\big(x_2(i),x_1(i)\big), & i\in R,    \\
-            p\big(x_1(i),x_2(i)\big), & i\notin R.
+            (b_i,a_i), & i\in R,    \\
+            (a_i,b_i), & i\notin R.
         \end{cases}
     \end{align*}
-    Thus the permutation fixes the paired coordinate at every site outside
-    $R$, and its action on $R$ depends only on the paired coordinates in $R$.
-    Its permutation matrix is therefore supported on $R$.
+    Thus $\sigma$ fixes every coordinate outside $R$, and its coordinates in
+    $R$ depend only on the coordinates of $x$ in $R$. The permutation matrix
+    of such a permutation is supported on $R$.
 \end{proof}
 
 \begin{theorem}[Support of a swapped doubled interaction]
@@ -945,59 +1018,6 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     and each summand of $T(A)$ is supported on $S$.
     Operators supported on $S$ are closed under adjoints, sums and products,
     so the conjugated operator is supported on $S$.
-\end{proof}
-
-\begin{theorem}[Crossing-edge expansion of the doubled perturbation]
-    \label{thm:peps_sheet_swap_boundary_expansion}
-    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing}
-    \leanok
-    \uses{def:polynomial_peps_model,def:peps_frame_sheet_swap}
-    Let $H=\sum_v h_v+\sum_e h_e$ be an open-square Hamiltonian with the
-    original bounded site and edge interactions, and let $R$ be any set of
-    vertices. For an operator $A$, write $T(A)=A\otimes I+I\otimes A$.
-    Let $F_R$ exchange the two copies at the sites of $R$, and let
-    $\partial R$ be the set of edges with exactly one endpoint in $R$.
-    Then
-    \begin{align*}
-        F_RT(H)F_R^\dagger-T(H)
-        =\sum_{e\in\partial R}\bigl(F_RT(h_e)F_R^\dagger-T(h_e)\bigr).
-    \end{align*}
-    This includes zero local dimension and squares of side zero or one.
-    Individual interactions need not be Hermitian. The identity is the
-    crossing-edge reduction in the boundary perturbation argument of
-    \cite{OpenAI2026PolynomialPEPS}.
-\end{theorem}
-\begin{proof}\leanok
-    \uses{thm:peps_sheet_swap_doubled_cancellation}
-    The map $A\mapsto F_RT(A)F_R^\dagger-T(A)$ is linear. Expand the original
-    sum defining $H$. Every singleton support lies in $R$ or is disjoint
-    from $R$, so each site contribution vanishes. The same holds for the
-    two-endpoint support of every noncrossing edge. Removing these zero
-    summands leaves precisely the displayed crossing-edge sum.
-\end{proof}
-
-\begin{theorem}[Norm of a swapped doubled interaction]
-    \label{thm:peps_sheet_swap_doubled_term_norm}
-    \lean{TNLean.PEPS.EncodedFrame.norm_sheetSwapOp_conj_doubledHamiltonian_sub_le}
-    \leanok
-    \uses{def:peps_frame_sheet_swap}
-    Let $\Lambda$ be a finite set, let $q\geq0$ be an integer, and let
-    $R\subseteq\Lambda$. For an arbitrary operator $A$ on
-    $(\C^q)^{\otimes\Lambda}$, write $T(A)=A\otimes I+I\otimes A$.
-    Then
-    \begin{align*}
-        \|F_RT(A)F_R^\dagger-T(A)\|\leq4\|A\|.
-    \end{align*}
-    This is the single-interaction estimate for the boundary perturbation in
-    \cite{OpenAI2026PolynomialPEPS}.
-\end{theorem}
-
-\begin{proof}\leanok
-    The two identity-factor estimates give
-    $\|T(A)\|\leq\|A\otimes I\|+\|I\otimes A\|\leq2\|A\|$.
-    Since $\|F_R\|\leq1$ and $\|F_R^\dagger\|=\|F_R\|$, submultiplicativity
-    gives $\|F_RT(A)F_R^\dagger\|\leq\|T(A)\|$. The triangle inequality
-    proves the assertion.
 \end{proof}
 
 \begin{theorem}[Support and norm of the doubled boundary perturbation]
