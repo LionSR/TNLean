@@ -3951,25 +3951,6 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Notes:** noncentrality is essential when composing the directed-ray
   relations. The center remains in every triangle when no radial is removed.
 
-
-### Operator norm in orthonormal coordinates — candidate (2026-10-07)
-
-- **Pattern:** Identify matrix multiplication in orthonormal coordinates with
-  the underlying continuous linear map, then use preservation of norms by the
-  coordinate isometries to transfer an operator-norm bound.
-- **Seen:** Two occurrences:
-  `PEPS/Approximation/PreparedMatrixNorm.lean`,
-  `Word.norm_freeSourceMatrix_le_one` in
-  `PEPS/Approximation/SourceBlockMatrix.lean`, and
-  `Word.norm_physicalOutputMatrix_le_one` in
-  `PEPS/Approximation/ExteriorSourceContraction.lean`.
-- **Decision:** The exterior-word estimate is the third independent application.
-  Replace the two earlier coordinate-vector arguments by this equality; delete
-  the private free-source coordinate-norm helper. All public statements remain
-  unchanged. The general lemma permits rectangular matrices and empty bases.
-
-## Candidates
-
 ### sitewise Kronecker power in configuration coordinates — candidate
 - **Pattern:** the matrix `fun a b => ∏ n, A (a n) (b n)` on `Fin N → ι` with its product,
   identity, conjugate-transpose and unitarity lemmas.
