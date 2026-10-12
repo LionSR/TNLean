@@ -34,16 +34,20 @@ private theorem mixed_single_eq_columns {S T : Type} [Fintype S] [DecidableEq S]
   classical
   ext i j
   simp [Matrix.mul_apply, Matrix.single, Matrix.vecMulVec_apply,
-    Matrix.conjTranspose_apply, Finset.sum_mul, Finset.mul_sum,
-    mul_assoc, mul_comm, mul_left_comm]
+    Matrix.conjTranspose_apply, Finset.sum_mul, ite_and, eq_comm,
+    mul_assoc, mul_comm]
 
 private theorem mixed_sandwich_eq_sum_columns {S T : Type} [Fintype S]
     (A B : Matrix T S ℂ) (X : Matrix S S ℂ) :
     A * X * Bᴴ = ∑ s, ∑ t,
       X s t • Matrix.vecMulVec (fun r ↦ A r s) (fun r ↦ conj (B r t)) := by
   classical
-  rw [Matrix.matrix_eq_sum_single X]
-  simp only [Matrix.mul_sum, Matrix.sum_mul, mixed_single_eq_columns]
+  calc
+    A * X * Bᴴ = A * (∑ s, ∑ t, Matrix.single s t (X s t)) * Bᴴ :=
+      congrArg (fun Y : Matrix S S ℂ ↦ A * Y * Bᴴ) (Matrix.matrix_eq_sum_single X)
+    _ = ∑ s, ∑ t,
+        X s t • Matrix.vecMulVec (fun r ↦ A r s) (fun r ↦ conj (B r t)) := by
+      simp only [Matrix.mul_sum, Matrix.sum_mul, mixed_single_eq_columns]
 
 namespace SourceCircuit
 variable {P : Type} [Fintype P] [DecidableEq P] {a : Layout P}
