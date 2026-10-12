@@ -77,6 +77,7 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
   have : NeZero q := ⟨by omega⟩
   obtain ⟨U, hU0, hU, hunit, hsupport, huniq, hcompare⟩ :=
     exists_supported_projected_relative_evolution q B g.operator_isHermitian hH
+  refine ⟨U, hU0, hU, hunit, hsupport, fun η T hT ↦ ?_⟩
   done
 
 end TNLean.PEPS.AreaLaw
