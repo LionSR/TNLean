@@ -76,11 +76,7 @@ theorem IsGIsometric.exists_torusPhysicalChargePairReadout
                 if r = some (if n then regularDualChargeLabel χ else χ) then
                   W *ᵥ openRegionWeight (groupBondTensor (A a)) (R v)
                     (fun f => Fintype.equivFin G (θ f)) else 0 := by
-  have hne : (verticalTwoPlaquetteCycleBond v 0).1 ≠
-      (verticalTwoPlaquetteCycleBond v 1).1 := by
-    intro h
-    have h' := verticalTwoPlaquetteCycleBond_injective v (Subtype.ext h)
-    exact (by decide : (0 : Fin 2) ≠ 1) h'
+  have hne := verticalTwoPlaquetteCycleBond_zero_ne_one v
   obtain ⟨Q,hH,hO,hI,hact⟩ := exists_regularChargePairEndpointMeasurements
     (torusIncidentSite (width := width) (height := height) a)
     (fun w => ha.isGIsometric_torusIncidentSite w) (verticalTwoPlaquetteRegion v)

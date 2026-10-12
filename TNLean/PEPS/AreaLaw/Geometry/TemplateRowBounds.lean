@@ -68,9 +68,7 @@ theorem Template.latticeRow_nonempty_between {Ctpl : ℝ} {n s₀ : ℕ}
   have hsa := (h xa a).mp (mem_latticeRow.mp hxa)
   have hsb := (h xb b).mp (mem_latticeRow.mp hxb)
   refine ⟨max lx (max (ls - y) (ld + y)), ?_⟩
-  apply mem_latticeRow.mpr
-  apply (h _ y).mpr
-  omega
+  exact mem_latticeRow.mpr ((h _ y).mpr (by omega))
 
 /-- Lower endpoints of consecutive nonempty sampled rows differ by at most one. -/
 theorem Template.latticeRow_min_step {Ctpl : ℝ} {n s₀ : ℕ}
@@ -84,15 +82,11 @@ theorem Template.latticeRow_min_step {Ctpl : ℝ} {n s₀ : ℕ}
   obtain ⟨lx, ux, ly, uy, ls, us, ld, ud, h⟩ := T.exists_sample_four_strip_bounds i
   have hs₀ := (h _ y).mp (mem_latticeRow.mp (Finset.min'_mem _ h₀))
   have hs₁ := (h _ (y + 1)).mp (mem_latticeRow.mp (Finset.min'_mem _ h₁))
-  have hL₀ : max lx (max (ls - y) (ld + y)) ∈ latticeRow (T.sample i) y := by
-    apply mem_latticeRow.mpr
-    apply (h _ y).mpr
-    omega
+  have hL₀ : max lx (max (ls - y) (ld + y)) ∈ latticeRow (T.sample i) y :=
+    mem_latticeRow.mpr ((h _ y).mpr (by omega))
   have hL₁ : max lx (max (ls - (y + 1)) (ld + (y + 1))) ∈
-      latticeRow (T.sample i) (y + 1) := by
-    apply mem_latticeRow.mpr
-    apply (h _ (y + 1)).mpr
-    omega
+      latticeRow (T.sample i) (y + 1) :=
+    mem_latticeRow.mpr ((h _ (y + 1)).mpr (by omega))
   have hm₀ := Finset.min'_le _ _ hL₀
   have hm₁ := Finset.min'_le _ _ hL₁
   constructor <;> omega
@@ -109,15 +103,11 @@ theorem Template.latticeRow_max_step {Ctpl : ℝ} {n s₀ : ℕ}
   obtain ⟨lx, ux, ly, uy, ls, us, ld, ud, h⟩ := T.exists_sample_four_strip_bounds i
   have hs₀ := (h _ y).mp (mem_latticeRow.mp (Finset.max'_mem _ h₀))
   have hs₁ := (h _ (y + 1)).mp (mem_latticeRow.mp (Finset.max'_mem _ h₁))
-  have hU₀ : min ux (min (us - y) (ud + y)) ∈ latticeRow (T.sample i) y := by
-    apply mem_latticeRow.mpr
-    apply (h _ y).mpr
-    omega
+  have hU₀ : min ux (min (us - y) (ud + y)) ∈ latticeRow (T.sample i) y :=
+    mem_latticeRow.mpr ((h _ y).mpr (by omega))
   have hU₁ : min ux (min (us - (y + 1)) (ud + (y + 1))) ∈
-      latticeRow (T.sample i) (y + 1) := by
-    apply mem_latticeRow.mpr
-    apply (h _ (y + 1)).mpr
-    omega
+      latticeRow (T.sample i) (y + 1) :=
+    mem_latticeRow.mpr ((h _ (y + 1)).mpr (by omega))
   have hm₀ := Finset.le_max' _ _ hU₀
   have hm₁ := Finset.le_max' _ _ hU₁
   constructor <;> omega

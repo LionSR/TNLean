@@ -55,17 +55,7 @@ theorem designatedSupport_eq_ball_of_state_split {k L : ℕ}
     have hA := (initial_middle_depth S.A S.depth _ _
       (S.bandState_unassigned g (h.1 g) k (fun t ↦ h.2 t g) x hn).1 false).1
     exact Finset.mem_filter.mpr ⟨hA, (Finset.mem_Icc.mp (S.state_depth_bounds h g hL x hn)).2⟩
-  have hcross : i ∈ crossingLabels S.graph (S.truncationSet L) S.r₀ S.anchor
-      (middle (S.state h g)) := by
-    obtain ⟨x, hx⟩ := hsplit.2
-    obtain ⟨y, hy⟩ := hsplit.1
-    apply Finset.mem_filter.mpr
-    refine ⟨Finset.mem_univ _, ⟨x, (Finset.mem_inter.mp hx).1, (Finset.mem_inter.mp hx).2⟩,
-      y, (Finset.mem_inter.mp hy).1, ?_⟩
-    have hs := (Finset.mem_filter.mp (Finset.mem_inter.mp hy).2).2
-    simp [middle, hs]
-  simpa only [QuantumCircuit.graphBall, ball] using
-    (truncationRadius_eq_of_mem_crossingLabels hsub hcross).2.2
+  exact S.designatedSupport_eq_ball_of_incidence _ side i hsub hsplit
 
 private theorem dilution_constant {m D r₀ : ℕ} (hr : r₀ ≤ D) (hD : 1 ≤ D) :
     2 * (((r₀ : ℝ) + (D + 2 * r₀ : ℕ) + 1) / m) ≤ 10 * (D : ℝ) / m := by
@@ -99,15 +89,11 @@ theorem old_designated_split_dilution_domainGraph
     (dilution_constant hr hDpos)
   · intro h g side hs
     have heq := S.designatedSupport_eq_ball_of_split h g side i hL hs
-    have hb : (S.ball i ∩ receiving (S.oldChargeState h g) side).Nonempty ∧
-        (S.ball i ∩ middle (S.oldChargeState h g)).Nonempty := by
-      simpa only [designatedSplitIncidence, heq] using hs
-    have hi := old_split_anchor_bounds_domainGraph hT S hgraph hdepth
-      h g side i hn hL hrows hclear hb
+    have hi := old_split_anchor_bounds_domainGraph hT S hgraph hdepth h g side i hn hL hrows
+      hclear (by simpa only [designatedSplitIncidence, heq] using hs)
     simpa only [Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat, add_assoc] using hi
-  · intro side g g' r r' hi hi'
-    apply Fin.ext
-    exact S.split_interval_band_unique hm (by omega) r.isLt r'.isLt side hi hi'
+  · exact fun side g g' r r' hi hi' ↦
+      Fin.ext (S.split_interval_band_unique hm (by omega) r.isLt r'.isLt side hi hi')
 
 open Classical in
 /-- Unconditional dilution for completed actual histories, hence for the new
@@ -132,15 +118,11 @@ theorem state_designated_split_dilution_domainGraph
     (dilution_constant hr hDpos)
   · intro h g side hs
     have heq := S.designatedSupport_eq_ball_of_state_split h g side i hL hs
-    have hb : (S.ball i ∩ receiving (S.state h g) side).Nonempty ∧
-        (S.ball i ∩ middle (S.state h g)).Nonempty := by
-      simpa only [designatedSplitIncidence, heq] using hs
-    have hi := state_split_anchor_bounds_domainGraph hT S hgraph hdepth
-      h g side i hn hL hrows hclear hb
+    have hi := state_split_anchor_bounds_domainGraph hT S hgraph hdepth h g side i hn hL hrows
+      hclear (by simpa only [designatedSplitIncidence, heq] using hs)
     simpa only [Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat, add_assoc] using hi
-  · intro side g g' r r' hi hi'
-    apply Fin.ext
-    exact S.split_interval_band_unique hm (by omega) r.isLt r'.isLt side hi hi'
+  · exact fun side g g' r r' hi hi' ↦
+      Fin.ext (S.split_interval_band_unique hm (by omega) r.isLt r'.isLt side hi hi')
 
 open Classical in
 /-- Old and new leaves with the same mixture parameter retain the same dilution

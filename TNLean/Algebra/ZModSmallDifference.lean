@@ -29,4 +29,10 @@ theorem intCast_eq_intCast_iff_of_natAbs_sub_lt {n : ℕ} (a b : ℤ)
   · rintro rfl
     simp
 
+/-- Distinct integers whose absolute difference is smaller than the modulus stay distinct
+after projection to the cyclic quotient. -/
+theorem intCast_ne_intCast_of_natAbs_sub_lt {n : ℕ} (a b : ℤ)
+    (hd : (b - a).natAbs < n) (hab : a ≠ b) : (a : ZMod n) ≠ (b : ZMod n) :=
+  mt (intCast_eq_intCast_iff_of_natAbs_sub_lt a b hd).mp hab
+
 end ZMod

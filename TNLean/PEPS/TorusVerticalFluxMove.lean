@@ -7,6 +7,7 @@ import TNLean.PEPS.VerticalTwoPlaquetteGeometry
 import TNLean.PEPS.RegularCycleGlobalPermutation
 import TNLean.PEPS.RegularTorusEntropy
 import TNLean.PEPS.TorusPlaquetteFluxMeasurement
+import TNLean.Algebra.ZModSmallDifference
 
 /-!
 # Vertical movement of a flux on the original six spins
@@ -102,12 +103,8 @@ theorem regularWalkHolonomy_torusVerticalFluxAssignment
       rcases h with ⟨⟨h₀,_⟩,⟨h₁,_⟩⟩ | ⟨⟨h₀,_⟩,⟨h₁,_⟩⟩ <;> simp_all
     simp [u, regularDirectedTransport, torusVerticalFluxAssignment, hn]
   have htwo : (2 : ZMod height) ≠ 0 := by
-    intro h
-    have hh := congrArg ZMod.val h
-    rw [show (2 : ZMod height) = ((2 : ℕ) : ZMod height) by rfl,
-      ZMod.val_natCast_of_lt (by have := Fact.out (p := 3 < height); omega),
-      ZMod.val_zero] at hh
-    omega
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := height) 2 0
+      (by have := Fact.out (p := 3 < height); omega) (by decide)
   have hy₂ : v.2+1+1 ≠ v.2 := by
     intro h
     have h' : v.2 + (2 : ZMod height) = v.2 + 0 := by
@@ -184,25 +181,18 @@ theorem IsGIsometric.exists_unitary_torusVerticalFluxMove
     (verticalTwoPlaquetteTree_le v) (verticalTwoPlaquetteTree_isTree v)
     (verticalTwoPlaquetteIso v 0) (regularTwoCycleMove e₀ e₁ hne)
     (regularTwoCycleMove_conjugation e₀ e₁ hne)
-  have hWgram : W.conjTranspose * W = 1 := Matrix.mem_unitaryGroup_iff'.mp hW
-  have hUgram : (regionLocalTerm (R v) W).conjTranspose *
-      regionLocalTerm (R v) W = 1 := Matrix.mem_unitaryGroup_iff'.mp hglobal
   refine ⟨W, hW, hglobal, ?_, ?_⟩
   · intro reverse g θ
     have h := hlocal (ω false g) θ
     rw [hm, hc, hc] at h
     cases reverse
     · exact h
-    · change W.conjTranspose *ᵥ _ = _
-      rw [← h, Matrix.mulVec_mulVec, hWgram, Matrix.one_mulVec]
-      rfl
+    · exact Matrix.conjTranspose_mulVec_eq_of_mulVec_eq hW h
   · intro reverse g u
     have h := hact (ω false g) u
     rw [hm, hc, hc] at h
     cases reverse
     · exact h
-    · change (regionLocalTerm (R v) W).conjTranspose *ᵥ _ = _
-      rw [← h, Matrix.mulVec_mulVec, hUgram, Matrix.one_mulVec]
-      rfl
+    · exact Matrix.conjTranspose_mulVec_eq_of_mulVec_eq hglobal h
 
 end TNLean.PEPS

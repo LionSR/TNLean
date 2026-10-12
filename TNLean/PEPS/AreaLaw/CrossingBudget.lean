@@ -132,18 +132,10 @@ theorem truncationRadius_eq_of_mem_crossingLabels {κ : Type*} [Fintype κ]
   simp only [designatedSupport, hfin, ite_false, mem_graphBall] at hxD
   have hdle : (d : ℕ∞) ≤ G.edist (a i) x := by rw [hdcoe]; exact Finset.inf_le (hX hxX)
   have hr : truncationRadius r₀ d = r₀ := by
-    unfold truncationRadius
-    by_contra hne
-    have hlt : r₀ < d / 2 := by
-      rcases le_or_gt (d / 2) r₀ with h | h
-      · exact absurd (max_eq_left h) hne
-      · exact h
-    have hd2 : d / 2 < d := Nat.div_lt_self (by omega) one_lt_two
-    have : G.edist (a i) x ≤ ((d / 2 : ℕ) : ℕ∞) := by
-      have h' : G.edist (a i) x ≤ ((max r₀ (d / 2) : ℕ) : ℕ∞) := hxD
-      rwa [max_eq_right hlt.le] at h'
-    have := hdle.trans this
-    have : d ≤ d / 2 := by exact_mod_cast this
+    refine max_eq_left (not_lt.mp fun hlt ↦ ?_)
+    have h' : G.edist (a i) x ≤ ((max r₀ (d / 2) : ℕ) : ℕ∞) := hxD
+    rw [max_eq_right hlt.le] at h'
+    have : d ≤ d / 2 := by exact_mod_cast hdle.trans h'
     omega
   refine ⟨hfin, hr, ?_⟩
   simp only [designatedSupport, hfin, ite_false, ← hd, hr]
@@ -196,11 +188,9 @@ theorem card_crossingLabels_le {κ : Type*} [Fintype κ] (G : SimpleGraph ι) (S
       exact_mod_cast Finset.card_pos.mpr ⟨x₀, mem_graphBall.mpr (by simp)⟩
     nlinarith
   have hPcard : (P.card : ℝ) ≤ 2 * E.card := by
-    have : P.card ≤ 2 * E.card :=
-      calc P.card ≤ (E.image Prod.fst).card + (E.image Prod.snd).card := Finset.card_union_le _ _
-        _ ≤ E.card + E.card := add_le_add Finset.card_image_le Finset.card_image_le
-        _ = 2 * E.card := by ring
-    exact_mod_cast this
+    rw [two_mul]
+    exact_mod_cast (Finset.card_union_le _ _).trans
+      (add_le_add Finset.card_image_le Finset.card_image_le)
   calc ((crossingLabels G S₀ r₀ a X).card : ℝ)
       ≤ ((T.biUnion fun x => Finset.univ.filter fun i => a i = x).card : ℝ) := by
         exact_mod_cast Finset.card_le_card hsub

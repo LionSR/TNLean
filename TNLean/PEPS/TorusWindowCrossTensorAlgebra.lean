@@ -47,10 +47,9 @@ private theorem leftInsert_injective :
       (⟨_, isRegionBoundaryEdge_horizontalStaircaseLeftWindow_referenceEdge
         B (by omega) (by omega) ha0 haw hbh⟩)) := by
   have hRB : RegionBlockedTensorInjective B
-      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) := by
-    have hi := hB.horizontalStaircaseLeftWindow_injective
+      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) :=
+    hB.horizontalStaircaseLeftWindow_injective
       ((a : ZMod width), (b : ZMod height))
-    rwa [regionInjectivityDataOf_isInjective] at hi
   exact bondInsertedRegionInsert_injective B
     (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) hRB
     (hB.regionBlockedTensorInjective_windowComplement

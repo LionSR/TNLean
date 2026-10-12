@@ -51,14 +51,9 @@ private abbrev internalUnique (e : Edge Γ) : Unique (Internal e) where
   uniq f := Subtype.ext (internal_eq e f.1 f.2)
 omit [Fintype V] [DecidableRel Γ.Adj] in
 private theorem boundary_of_other (e : Edge Γ) (v : V) (hv : v ∈ regularEdgeRegion e)
-    (f : IncidentEdge Γ v) (hne : f.1 ≠ e) : IsRegionBoundaryEdge (regularEdgeRegion e) f.1 := by
-  have hn : ¬ (f.1.1.1 ∈ regularEdgeRegion e ∧ f.1.1.2 ∈ regularEdgeRegion e) :=
+    (f : IncidentEdge Γ v) (hne : f.1 ≠ e) : IsRegionBoundaryEdge (regularEdgeRegion e) f.1 :=
+  (isRegionIncidentEdge_of_regionVertex _ ⟨v, hv⟩ f).isRegionBoundaryEdge
     fun h => hne (internal_eq e f.1 h)
-  rcases f.2 with h | h
-  · have hm : f.1.1.1 ∈ regularEdgeRegion e := by rwa [h]
-    exact Or.inl ⟨hm,fun hh => hn ⟨hm,hh⟩⟩
-  · have hm : f.1.1.2 ∈ regularEdgeRegion e := by rwa [h]
-    exact Or.inr ⟨fun ht => hn ⟨ht,hm⟩,hm⟩
 private def vertices (e : Edge Γ) : Bool ≃ {v : V // v ∈ regularEdgeRegion e} where
   toFun b := if b then ⟨e.1.2,by simp [regularEdgeRegion]⟩ else ⟨e.1.1,by simp [regularEdgeRegion]⟩
   invFun v := decide (v.1 = e.1.2)

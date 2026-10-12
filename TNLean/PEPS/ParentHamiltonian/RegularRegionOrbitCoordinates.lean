@@ -114,20 +114,12 @@ def regularRegionHalfEdgeConfigEquiv (R : Finset V) :
           regularRegionInternalExtension, ht, false_and, ↓reduceDIte, one_mul,
           regularRegionHalfEdgeReferences]
 
-omit [Fintype V] [DecidableRel Γ.Adj] in
-private theorem boundary_of_incident_not_internal (R : Finset V)
-    (e : {e : Edge Γ // IsRegionIncidentEdge R e})
-    (h : ¬ (e.1.1.1 ∈ R ∧ e.1.1.2 ∈ R)) : IsRegionBoundaryEdge R e.1 := by
-  rcases e.2 with ht | hh
-  · exact Or.inl ⟨ht, fun hh => h ⟨ht, hh⟩⟩
-  · exact Or.inr ⟨fun ht => h ⟨ht, hh⟩, hh⟩
-
 /-- Identity reference on internal edges, with the given boundary references. -/
 def regularRegionCanonicalReferences (R : Finset V)
     (θ : {e : Edge Γ // IsRegionBoundaryEdge R e} → G) :
     {e : Edge Γ // IsRegionIncidentEdge R e} → G :=
   fun e => if h : e.1.1.1 ∈ R ∧ e.1.1.2 ∈ R then 1
-    else θ ⟨e.1, boundary_of_incident_not_internal R e h⟩
+    else θ ⟨e.1, e.2.isRegionBoundaryEdge h⟩
 
 /-- The original boundary restriction of an incident reference assignment. -/
 def regularRegionReferenceBoundary (R : Finset V)

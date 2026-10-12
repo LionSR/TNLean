@@ -82,11 +82,7 @@ private theorem first_last_reachable (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × �
     · intro he
       have hv := congrArg (fun i : CellFanSlot split => i.2.val) he
       simp [firstSlot, lastSlot, hs] at hv
-    · dsimp only [firstSlot, lastSlot, cellFanEnd, cellFanStart]
-      congr 1
-      change (if split side then ((0 : ℕ) : ℝ) else 1) =
-        (if split side then ((if split side then 1 else 0 : ℕ) : ℝ) - 1 else -1)
-      simp [hs]
+    · simp [cellFanStart_eq, cellFanEnd_eq, firstSlot, lastSlot, hs]
 
 private theorem last_next_reachable (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     (split : Fin 4 → Bool) (side : Fin 4) :
@@ -96,25 +92,9 @@ private theorem last_next_reachable (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ
   · intro he
     have hv := congrArg Sigma.fst he
     fin_cases side <;> norm_num [lastSlot, firstSlot] at hv
-  · let c := cellFanCenter o ℓ z
-    let r := (2 : ℝ) ^ ℓ / 2
-    fin_cases side
-    · change (c.1 + r * 1, c.2 + r *
-        (if split 0 then ((if split 0 then 1 else 0 : ℕ) : ℝ) else 1)) =
-        (c.1 + r * -(if split 1 then ((0 : ℕ) : ℝ) - 1 else -1), c.2 + r * 1)
-      split_ifs <;> norm_num
-    · change (c.1 + r * -(if split 1 then ((if split 1 then 1 else 0 : ℕ) : ℝ) else 1),
-        c.2 + r * 1) = (c.1 + r * -1,
-        c.2 + r * -(if split 2 then ((0 : ℕ) : ℝ) - 1 else -1))
-      split_ifs <;> norm_num
-    · change (c.1 + r * -1,
-        c.2 + r * -(if split 2 then ((if split 2 then 1 else 0 : ℕ) : ℝ) else 1)) =
-        (c.1 + r * (if split 3 then ((0 : ℕ) : ℝ) - 1 else -1), c.2 + r * -1)
-      split_ifs <;> norm_num
-    · change (c.1 + r * (if split 3 then ((if split 3 then 1 else 0 : ℕ) : ℝ) else 1),
-        c.2 + r * -1) = (c.1 + r * 1,
-        c.2 + r * (if split 0 then ((0 : ℕ) : ℝ) - 1 else -1))
-      split_ifs <;> norm_num
+  · fin_cases side <;>
+      simp only [cellFanStart_eq, cellFanEnd_eq, firstSlot, lastSlot] <;>
+      split_ifs <;> norm_num [cellFanSideVector]
 
 private theorem perimeterGraph_preconnected (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     (split : Fin 4 → Bool) : (perimeterGraph o ℓ z split).Preconnected := by

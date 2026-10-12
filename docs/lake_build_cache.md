@@ -177,9 +177,8 @@ changes. This prevents historical or removed unreachable modules from satisfying
 regression imports. Unchanged QIC proof artifacts and unchanged Gametheory and
 checkdecls modules remain reusable; no `.trace` or `.hash` is rewritten.
 
-The ordinary full `lake build`, linter target, and all existing checks still run.
-Apart from the narrowly guarded early checks below, direct Lean regressions
-follow the full root build. The guard verifies that the default TNLean root
+The ordinary full `lake build`, linter target, and all existing checks still run
+before direct Lean regressions. The guard verifies that the default TNLean root
 imports `QICLean`, ensuring its aggregator closure is rebuilt normally. This is
 an optimization candidate, not evidence of a cache hit or measured speedup. It
 does not relax `seed_lake_build.sh` or the stricter local seeding policy.
@@ -204,43 +203,19 @@ reuse, upstream/dependent invalidation, independent reuse, missing traces, broke
 source rejection, and refusal of removed modules with surviving artifacts. It
 never builds or edits TNLean, QICLean, Gametheory, or Mathlib caches.
 
-### Focused rectangular PEPS regression before the root build
+### Early builds and strict checks of changed files
 
-The finite rectangular dual-path CI check runs after cache setup and provenance
-pruning. It first requires the prebuilt `Mathlib.olean`, then runs Lake's
-fail-fast build on `TorusDualRectangleFlux` and `TorusDualWinding`, which are
-exactly the regression file's imports. Only after these complete import
-closures are rebuilt does it elaborate `TNLeanTest/TorusDualRectangle.lean`
-with strict options and warnings as errors. The workflow guard tests check
-this narrow exception's order, module targets, regression path, imports, and
-failure behavior.
+After cache setup and provenance pruning, the `build` job runs
+`scripts/ci_lean_checks.py early`, a fail-fast Lake build of the production
+modules changed by the pull request, so their failures surface before the root
+build. After the root build, `scripts/ci_lean_checks.py strict` elaborates the
+changed production files and every affected `TNLeanTest` file with warnings as
+errors. Test objects go to a fresh overlay that precedes every Lake package path,
+so a test may import another test without reading a stale production artifact.
+See `docs/ci-automation.md` for the selection rule.
 
-The collared open-boundary check follows the same provenance pruning and
-explicit Mathlib cache guard. Its fail-fast Lake target is
-`TorusDualOpenDeformation`, the sole regression import, so all four new production
-modules and their complete import closures are rebuilt before strict elaboration.
-The regression prints eight axiom audits; `check_collared_open_axioms.py` requires
-all eight and rejects every axiom outside `propext`, `Classical.choice`, and
-`Quot.sound`, including `sorryAx`.
-
-### Focused actual-round transport checks before the root build
-
-The actual finite-round transport checks also follow cache setup and provenance
-pruning. A prebuilt `Mathlib.olean` is required before one single-threaded,
-fail-fast Lake build of `ActualRoundTransport:olean` and
-`FillTransportEndpoints:olean`. The second target supplies the endpoint
-identities used by the adjacency regressions; the first target alone does not
-include that module. Their complete import closures precede the two strict
-actual-round production and fixture steps. Each strict file retains its
-90-second limit, one thread, strict options, and warnings-as-errors policy.
-
-The focused build appends both output streams to the same
-`$RUNNER_TEMP/lake-build.log` used by the full root and final timing collector.
-An early timed build therefore remains subject to the changed-module
-50-second failure threshold even if the root later replays it quickly or emits
-no further record. Exact workflow guards check the two targets, their import
-coverage, order, resources, failure behavior, and append-only timing path.
-
-All other direct Lean regressions remain after the full root build. The root,
-String Order capstones, style checks, and final timing gate remain required.
-These early checks do not relax dependency pinning or artifact provenance rules.
+The collared open-boundary regression `TNLeanTest/LabelledOpenCoefficient.lean`
+pins its eight axiom audits with `#guard_msgs`; any axiom outside `propext`,
+`Classical.choice` and `Quot.sound`, including `sorryAx`, changes the report and
+fails the strict check. All direct Lean regressions run after the full root
+build.

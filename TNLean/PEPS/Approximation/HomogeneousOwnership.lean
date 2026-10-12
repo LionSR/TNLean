@@ -202,8 +202,8 @@ theorem norm_act_birthOp_sub_le {V : Matrix (BT × BE) U ℂ} (hV : V.IsIsometry
   have hiso : 𝒱ᴴ * 𝒱 = 1 :=
     IsIsometry.kronecker (1 : Matrix (T × E) (T × E) ℂ) V (by simp [IsIsometry]) hV
   have hζ : act Pr ζ = ζ := by
-    simp only [act, Pr, ζ, ← mulVec_mulVec, pairSource_conjTranspose_mulVec_tensorPurification hs,
-      pairSource_mulVec]
+    simp only [act_apply, Pr, ζ, ← mulVec_mulVec,
+      pairSource_conjTranspose_mulVec_tensorPurification hs, pairSource_mulVec]
   have hproj : IsStarProjection Pr := by
     refine ⟨?_, ?_⟩
     · change Pr * Pr = Pr
@@ -379,6 +379,25 @@ theorem disjoint_birthEnv (hTP : ∀ x ∈ T, F.owner x = P)
   rcases (F.mem_birthEnv).mp hxE with h | h
   · exact h (hTP x hxT)
   · exact Set.disjoint_left.mp hTH hxT h
+
+/-- The ownership facts used by both directions of a homogeneous birth: when `T` is owned by `P∘`
+and avoids every outer hole footprint, the sites outside `T ∪ E` are owned by `P∘` both before and
+after `T` is handed to `Q∘`, the sites of `T` are owned by `Q∘` afterwards, and the owners on `E`
+are unchanged.
+
+Polynomial-PEPS manuscript, proof of Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 413–446. -/
+theorem changeOwner_birth_owners (hTP : ∀ x ∈ T, F.owner x = P)
+    (hTH : Disjoint (T : Set ι) F.outerHoles) :
+    (∀ x ∈ (T ∪ F.birthEnv P)ᶜ, F.owner x = P) ∧ (∀ x ∈ T, (F.changeOwner T Q).owner x = Q) ∧
+      (∀ x ∈ (T ∪ F.birthEnv P)ᶜ, (F.changeOwner T Q).owner x = P) ∧
+      ∀ x ∈ F.birthEnv P, (F.changeOwner T Q).owner x = F.owner x := by
+  have hB : ∀ x ∈ (T ∪ F.birthEnv P)ᶜ, F.owner x = P := fun x hx =>
+    F.owner_eq_of_notMem_birthEnv fun h => Finset.mem_compl.mp hx (Finset.mem_union_right _ h)
+  refine ⟨hB, fun x hx => by simp only [hx, ↓reduceIte], fun x hx => ?_, fun x hx => ?_⟩
+  · have hxT : x ∉ T := fun h => Finset.mem_compl.mp hx (Finset.mem_union_left _ h)
+    simpa only [hxT, ↓reduceIte] using hB x hx
+  · have hxT : x ∉ T := fun hT => Finset.disjoint_left.mp (F.disjoint_birthEnv hTP hTH) hT hx
+    simp only [hxT, ↓reduceIte]
 
 /-- **Lemma 6.5 (homogeneous birth).** In an encoded frame `F`, let `T` be a set of raw sites
 owned by `P∘` and disjoint from every outer hole footprint, and let `E` and `U` be as in

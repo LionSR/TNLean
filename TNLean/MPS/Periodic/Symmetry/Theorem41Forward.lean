@@ -320,9 +320,9 @@ of an arbitrary `A` supplied by
 `exists_unitWeight_periodic_presentation_of_blocked_sameMPV₂Pos` in
 `RefinementNormalization`; that theorem recovers the target bond dimension from
 multiplicity matching. It does not establish the all-length premise used here.
-The corrected forward argument must still identify the equal-case gauge on the
-original orbit supports and assemble the construction of \(\widetilde A\) from
-arXiv:1708.00029, lines 765--810. -/
+That argument identifies the equal-case gauge on the original orbit supports
+and assembles the construction of \(\widetilde A\) from arXiv:1708.00029,
+lines 765--810, in `exists_isLeftCanonical_blockTensor_eq_toTensorFromBlocks`. -/
 theorem zGaugeEquiv_of_periodicEqualCaseFT_of_irreducibleForm
     (p : ℕ) (hFT : PeriodicEqualCaseFT (blockPhysDim d p) D)
     {A : MPSTensor d D} {C : MPSTensor (blockPhysDim d p) D}
@@ -415,7 +415,7 @@ the trivial \(Z\)-gauge. Documented in
 restate the construction over a block-form tensor with every multiplicity
 equal to one, as described in the marker of `thm_4_1_p_refinement_forward`;
 tracked in the follow-up issue cited by the paper-gap note. -/
-theorem peripheralEqualCase_periodicFT_of_sameMPV
+theorem peripheralEqualCase_periodicFT_of_sameMPV {p : ℕ}
     (hZGauge : PeripheralEqualCaseZGaugeOfSameMPV d D p)
     (hRoot : PeripheralEqualCaseRootFromZGauge d D p) :
     PeripheralEqualCasePeriodicFTOfSameMPV d D p := by
@@ -486,7 +486,7 @@ preservation of \(\mathcal E_B\) presupposed by its definition of
 restate both hypotheses over a block-form tensor with every multiplicity equal
 to one, as described in the marker of `thm_4_1_p_refinement_forward`; tracked
 in the follow-up issue cited by the paper-gap note. -/
-theorem pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV
+theorem pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV {p : ℕ}
     (hPeripheralEq : PeripheralEqualCasePeriodicFTOfSameMPV d D p) :
     PRefinementCanonicalization d D p := by
   intro B hB hRefine
@@ -560,8 +560,10 @@ equal to one, so that \(\mathcal E_B\) is trace preserving, consuming
 step and formalizing the blocking lemma for a periodic block (lines 432--446),
 the cyclic projector structure of a periodic block (lines 335--341), the unique
 decomposition of residues (lines 446--450), and the redistribution of the
-root-of-unity factors across the sites (lines 765--806); tracked in the
-follow-up issue cited by the paper-gap note. -/
+root-of-unity factors across the sites (lines 765--806). That restatement is
+`isPDivisibleChannel_of_isPRefinable_toTensorFromBlocks`; replacing this
+conditional theorem by it is tracked in the follow-up issue cited by the
+paper-gap note. -/
 theorem thm_4_1_p_refinement_forward
     (B : MPSTensor d D) (hB : IsIrreducibleForm B)
     (p : ℕ)
