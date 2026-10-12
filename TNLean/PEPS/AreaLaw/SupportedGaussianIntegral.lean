@@ -98,6 +98,14 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
       siteExpectation q B (heisenbergEvolution g.operator t W) * U t :=
     siteExpectation_of_mem_supportedOperators B
       (mul_mem_supportedOperators (siteExpectation_mem_supportedOperators B _) (hsupport t))
+  have hMint : siteExpectation q B
+      (∫ t : ℝ in Set.Icc (-T) T,
+        siteExpectation q B (heisenbergEvolution g.operator t W) * U t ∂gaussianReal 0 η) =
+      ∫ t : ℝ in Set.Icc (-T) T,
+        siteExpectation q B (heisenbergEvolution g.operator t W) * U t ∂gaussianReal 0 η :=
+    ((siteExpectationLM q B).toContinuousLinearMap.integral_comp_comm
+      (hint.restrict (s := Set.Icc (-T) T))).symm.trans
+      (integral_congr_ae (Filter.Eventually.of_forall hfix))
   done
 
 end TNLean.PEPS.AreaLaw
