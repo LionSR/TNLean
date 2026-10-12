@@ -32,6 +32,7 @@ import TNLean.Circuit.PairProductPowers
 import TNLean.Circuit.PartialIsometryDilation
 import TNLean.Circuit.ProductStateCircuit
 import TNLean.Circuit.ProductVector
+import TNLean.Circuit.ProjectedRelativeEvolution
 import TNLean.Circuit.QuantitativeSitePermutation
 import TNLean.Circuit.QuantitativeUnitaryGates
 import TNLean.Circuit.RingSeparation

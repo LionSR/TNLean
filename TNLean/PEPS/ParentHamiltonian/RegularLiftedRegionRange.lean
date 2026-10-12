@@ -94,12 +94,8 @@ theorem regularRegionRight_eq_internalMultiplier (R : Finset V) (r : Edge Γ →
   funext v e
   by_cases he : e.1.1.1 ∈ R ∧ e.1.1.2 ∈ R
   · simp [regularRegionHalfEdgeRightMul, regularRegionInternalMultiplier, he]
-  · have hb : IsRegionBoundaryEdge R e.1 := by
-      rcases e.2 with ht | hh
-      · have htR : e.1.1.1 ∈ R := ht.symm ▸ v.2
-        exact Or.inl ⟨htR, fun hhR => he ⟨htR, hhR⟩⟩
-      · have hhR : e.1.1.2 ∈ R := hh.symm ▸ v.2
-        exact Or.inr ⟨fun htR => he ⟨htR, hhR⟩, hhR⟩
+  · have hb : IsRegionBoundaryEdge R e.1 :=
+      (isRegionIncidentEdge_of_regionVertex R v e).isRegionBoundaryEdge he
     simp [regularRegionHalfEdgeRightMul, regularRegionInternalMultiplier, he, hr e.1 hb]
 
 omit [DecidableRel Γ.Adj] [Group G] [Fintype G] [DecidableEq G] in
