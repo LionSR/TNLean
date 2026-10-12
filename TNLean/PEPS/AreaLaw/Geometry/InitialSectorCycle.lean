@@ -69,15 +69,11 @@ theorem initialRegion_sector_assignment_changes_even
     (hz : z ∈ fineLayerIndices o k (fineScaleIndex k) Z C)
     (hv : v ∈ beltCellMarks o (fineScaleIndex k) z) :
     let J := CellFanSlot (fun _ : Fin 4 ↦ true)
-    let σ := Classical.choose
-      (exists_unique_initialRegion_sector_assignment
-        o k₀ Z C a b hC h₀ k z v hk₀ hz hv)
+    let σ := initialSectorAssignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv
     Even (Nat.card {s : J // σ s ≠ σ (cellFanNext s)}) := by
   classical
   dsimp only
-  let σ := Classical.choose
-    (exists_unique_initialRegion_sector_assignment
-      o k₀ Z C a b hC h₀ k z v hk₀ hz hv)
+  let σ := initialSectorAssignment o k₀ Z C a b hC h₀ k z v hk₀ hz hv
   have hchange (s : CellFanSlot (fun _ : Fin 4 ↦ true)) :
       σ s ≠ σ (cellFanNext s) ↔
         initialRegionColor o k₀ Z C a b hC h₀ (σ s) ≠
