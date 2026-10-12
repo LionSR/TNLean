@@ -667,10 +667,36 @@ operations on an empty memory.
     to obtain~(\ref{eq:peps_actual_sampled_local_trace}).
 \end{proof}
 
+\begin{definition}[The actual local physical factor]
+    \label{def:peps_actual_sampled_physical_factor}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledPhysicalFactor}
+    \uses{def:peps_selected_physical_private_basis,
+        def:peps_actual_party_source_matrices,def:peps_actual_sampled_endpoint_word}
+    Fix independent chronological choices $\xi,\zeta$ and an original joint
+    sample assignment $j$. At a selected owner $q$, let $A_{\xi,q}$ and
+    $A_{\zeta,q}$ be the actual source-to-output matrices in the prescribed
+    source bases and the constructed physical/private output basis. Let
+    $U_{\xi,\zeta,j,q}$ be the actual restricted sampled source-input matrix
+    in that same source basis. Define
+    \begin{align}
+        \Phi_q^{\xi,\zeta}(j)
+         & =\operatorname{tr}_{\mathrm{private},q}
+        \bigl(A_{\xi,q}U_{\xi,\zeta,j,q}A_{\zeta,q}^{\dagger}\bigr).
+        \label{eq:peps_actual_sampled_physical_factor}
+    \end{align}
+    At an original party $p$, this matrix has the original physical
+    indices $0,\ldots,d_p-1$; the exterior owner has a singleton physical
+    index. The private basis is arbitrary and finite. The same $j$ is
+    used at both endpoints of every original source. This definition
+    includes zero matrices, empty sample sets and zero physical dimensions.
+    % Source: 04-compression.tex, lines 574--579.
+\end{definition}
+
 \begin{theorem}[Actual sampled factors on the original physical parties]
     \label{thm:peps_actual_sampled_physical_factors}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors}
     \uses{thm:peps_actual_sampled_local_output_trace,
+        def:peps_actual_sampled_physical_factor,
         def:peps_selected_physical_private_basis,thm:peps_selected_physical_product_scalar}
     Use the actual local physical/private output bases, the prescribed
     selected-party order, and arbitrary compatible input bases. Let

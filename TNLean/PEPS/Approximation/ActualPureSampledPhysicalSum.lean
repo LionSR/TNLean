@@ -73,14 +73,8 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum
     let M := fun (ξ ζ : Choices (fun _ : P ↦ true) w)
       (j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k)
       (q : Option {_p : P // true = true}) ↦
-      Matrix.partialTraceRight
-        (w.partialSourcePartyMatrix ψ ξ B C q *
-          LinearMap.toMatrix (B q).toBasis (B q).toBasis
-            (((sampledEndpointInputWord w k lam L R ξ ζ
-                (j ∘ (allSourceSlotEquiv w).symm) ω).restrict (partySelector q)
-              (sources_sampledEndpointInputWord w k lam L R ξ ζ
-                (j ∘ (allSourceSlotEquiv w).symm) ω)).eval.toLinearMap) *
-          (w.partialSourcePartyMatrix ψ ζ B C q)ᴴ)
+      sampledPhysicalFactor d ps hn hc garbage w ψ k lam L R ξ ζ ω B BG
+        (j ∘ (allSourceSlotEquiv w).symm) q
     physicalSourceReplacedDensity (familyPhysicalLayout d ps) garbage w
         (fun e ξ ζ ↦ sampledSourceMatrix w k lam L R e ξ ζ ω)
         bIn (familyLabelledPhysicalBasis d ps hn hc) bRef

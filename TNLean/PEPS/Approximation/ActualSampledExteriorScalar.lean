@@ -107,6 +107,46 @@ private theorem empty_memory_restricted_words_mixed_partialTrace
 namespace SourceCircuit
 variable {P : Type} {a b : Layout P}
 
+/-- The actual exterior source input is empty. Source: polynomial-PEPS
+Theorem 5.2, `04-compression.tex`, lines 246–267 and 565–588. -/
+private theorem actualSourceInput_none_eq_nil (w : SourceCircuit a b) :
+    Layout.atParty none (w.allResidualSourceLayout ++ []) = [] := by
+  change Layout.restrict (partySelector none) (w.allResidualSourceLayout ++ []) = []
+  rw [partySelector_none, Layout.restrict_append, restrict_allResidualSourceLayout_isNone,
+    Layout.restrict_nil, List.nil_append]
+
+/-- The actual exterior source word has its original scalar in the party
+selector. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
+lines 137–139, 246–267 and 565–588. -/
+private theorem partialSourceWord_none_eval_heq_scalar
+    (w : SourceCircuit a b) (ψ : ProductInput a) (ξ : Choices (fun _ : P ↦ true) w) :
+    HEq ((w.partialSourceWord ψ ξ).restrict (partySelector none)
+      (sources_partialSourceWord w ψ ξ)).eval
+      (w.emptyGateScalar • ContinuousLinearMap.id ℂ ℂ) := by
+  exact (restrict_none_eval_heq_isNone (w.partialSourceWord ψ ξ)
+    (sources_partialSourceWord w ψ ξ)).trans
+      (restrict_partialSourceWord_all_eval_heq_emptyGateScalar w ψ ξ)
+
+/-- The sampled exterior input is the identity in the party selector.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
+lines 253–267 and 565–588. -/
+private theorem sampledEndpointInputWord_party_none_eval_heq_id
+    (w : SourceCircuit a b) (k : ℕ)
+    (lam : ∀ e : sourceLocations w, branchLabels w e.1 →
+      Fin (min (sourceDims w e).1 (sourceDims w e).2) → ℝ)
+    (L : ∀ e : sourceLocations w, branchLabels w e.1 →
+      Matrix (Fin (sourceDims w e).1) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
+    (R : ∀ e : sourceLocations w, branchLabels w e.1 →
+      Matrix (Fin (sourceDims w e).2) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
+    (ξ ζ : Choices (fun _ : P ↦ true) w) (j : w.sourceLocations → Fin k)
+    (ω : SourceGaussianSamples w k) :
+    HEq ((sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict (partySelector none)
+      (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω)).eval
+      (ContinuousLinearMap.id ℂ ℂ) := by
+  exact (restrict_none_eval_heq_isNone (sampledEndpointInputWord w k lam L R ξ ζ j ω)
+    (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω)).trans
+      (sampledEndpointInputWord_none_eval_heq_id w k lam L R ξ ζ j ω)
+
 /-- The actual exterior sampled mixed trace is the original empty-gate scalar
 times its complex conjugate, in the canonical singleton physical coordinate.
 The input and output orthonormal bases, ket and bra choices, and original joint
@@ -140,19 +180,6 @@ theorem partialSourceWord_sampled_none_partialTrace_eq_scalar
               (sources_partialSourceWord w ψ ζ)).eval (B col)) row))ᴴ) =
       (w.emptyGateScalar * conj w.emptyGateScalar) • (1 : Matrix PUnit PUnit ℂ) := by
   classical
-  have ha : Layout.atParty none (w.allResidualSourceLayout ++ []) = [] := by
-    change Layout.restrict (partySelector none) (w.allResidualSourceLayout ++ []) = []
-    rw [partySelector_none, Layout.restrict_append, restrict_allResidualSourceLayout_isNone,
-      Layout.restrict_nil, List.nil_append]
-  have hξ := (restrict_none_eval_heq_isNone (w.partialSourceWord ψ ξ)
-    (sources_partialSourceWord w ψ ξ)).trans
-      (restrict_partialSourceWord_all_eval_heq_emptyGateScalar w ψ ξ)
-  have hζ := (restrict_none_eval_heq_isNone (w.partialSourceWord ψ ζ)
-    (sources_partialSourceWord w ψ ζ)).trans
-      (restrict_partialSourceWord_all_eval_heq_emptyGateScalar w ψ ζ)
-  have hU := (restrict_none_eval_heq_isNone (sampledEndpointInputWord w k lam L R ξ ζ j ω)
-    (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω)).trans
-      (sampledEndpointInputWord_none_eval_heq_id w k lam L R ξ ζ j ω)
   have h := empty_memory_restricted_words_mixed_partialTrace
     (Q := Option {p : P // (fun _ : P ↦ true) p = true}) (I := I) (J := J)
     (a := w.allResidualSourceLayout ++ [])
@@ -162,7 +189,11 @@ theorem partialSourceWord_sampled_none_partialTrace_eq_scalar
     (sampledEndpointInputWord w k lam L R ξ ζ j ω)
     (sources_partialSourceWord w ψ ξ) (sources_partialSourceWord w ψ ζ)
     (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω)
-    ha (Layout.atParty_none_mapOwner_all b) B C w.emptyGateScalar w.emptyGateScalar hξ hζ hU
+    (actualSourceInput_none_eq_nil w) (Layout.atParty_none_mapOwner_all b)
+    B C w.emptyGateScalar w.emptyGateScalar
+    (partialSourceWord_none_eval_heq_scalar w ψ ξ)
+    (partialSourceWord_none_eval_heq_scalar w ψ ζ)
+    (sampledEndpointInputWord_party_none_eval_heq_id w k lam L R ξ ζ j ω)
   exact h
 
 end SourceCircuit

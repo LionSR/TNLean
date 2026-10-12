@@ -19,6 +19,7 @@ run_cmd do
   let decls := #[
     ``TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_pure_eq_sum_actualColumns,
     ``partialSourceWord_sampled_none_partialTrace_eq_scalar,
+    ``sampledPhysicalFactor,
     ``partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors,
     ``TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis_partialTrace_mixed,
     ``TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_eq_grouped_partialTrace]

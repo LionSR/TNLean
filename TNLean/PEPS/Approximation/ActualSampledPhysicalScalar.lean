@@ -60,14 +60,8 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_scalar_smul_physicalSu
       (selectedFamilyPhysicalIndex d) E
     let M := fun (j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k)
       (q : Option {_p : P // true = true}) ↦
-      Matrix.partialTraceRight
-        (w.partialSourcePartyMatrix ψ ξ B C q *
-          LinearMap.toMatrix (B q).toBasis (B q).toBasis
-            (((sampledEndpointInputWord w k lam L R ξ ζ
-                (j ∘ (allSourceSlotEquiv w).symm) ω).restrict (partySelector q)
-              (sources_sampledEndpointInputWord w k lam L R ξ ζ
-                (j ∘ (allSourceSlotEquiv w).symm) ω)).eval.toLinearMap) *
-          (w.partialSourcePartyMatrix ψ ζ B C q)ᴴ)
+      sampledPhysicalFactor d ps hn hc garbage w ψ k lam L R ξ ζ ω B BG
+        (j ∘ (allSourceSlotEquiv w).symm) q
     (Matrix.partialTraceRight
       ((w.partialSourceGlobalMatrix ψ ξ bOut *
         SourceInventory.productSourceMatrix (partialSlots (fun _ ↦ true) w)
@@ -88,7 +82,7 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_scalar_smul_physicalSu
         (1 : Matrix PUnit PUnit ℂ) := by
     have h := partialSourceWord_sampled_none_partialTrace_eq_scalar
       w ψ k lam L R ξ ζ (j ∘ (allSourceSlotEquiv w).symm) ω (B none) (C none)
-    simpa only [M, partialSourcePartyMatrix, matrix_repr_eval_eq_toMatrix] using h
+    simpa only [M, sampledPhysicalFactor, partialSourcePartyMatrix, matrix_repr_eval_eq_toMatrix] using h
   have hEntry (j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k) :
       M j none PUnit.unit PUnit.unit = w.emptyGateScalar * conj w.emptyGateScalar := by
     rw [hNone]

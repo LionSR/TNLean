@@ -33,6 +33,37 @@ variable {I E : Option {_p : P // true = true} → Type}
 variable [∀ q, Fintype (I q)] [∀ q, Fintype (E q)]
 
 open Classical in
+/-- The actual local physical matrix for independent ket and bra choices and
+one original sample assignment. Its physical basis is the original basis, and
+its private coordinates are traced in the prescribed local private basis.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 574–579. -/
+def sampledPhysicalFactor
+    (d : P → ℕ) (ps : List P) (hn : ps.Nodup) (hc : ∀ p, p ∈ ps)
+    (garbage : Layout P) (w : SourceCircuit a (familyPhysicalLayout d ps ++ garbage))
+    (ψ : ProductInput a) (k : ℕ)
+    (lam : ∀ e : sourceLocations w, branchLabels w e.1 →
+      Fin (min (sourceDims w e).1 (sourceDims w e).2) → ℝ)
+    (L : ∀ e : sourceLocations w, branchLabels w e.1 →
+      Matrix (Fin (sourceDims w e).1) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
+    (R : ∀ e : sourceLocations w, branchLabels w e.1 →
+      Matrix (Fin (sourceDims w e).2) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
+    (ξ ζ : Choices (fun _ : P ↦ true) w) (ω : SourceGaussianSamples w k)
+    (B : ∀ q, OrthonormalBasis (I q) ℂ
+      (Mem (Layout.atParty q (w.allResidualSourceLayout ++ []))))
+    (BG : ∀ q, OrthonormalBasis (E q) ℂ
+      (Mem (Layout.atParty q
+        (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) garbage))))
+    (j : w.sourceLocations → Fin k) (q : Option {_p : P // true = true}) :
+    Matrix (selectedFamilyPhysicalIndex d q) (selectedFamilyPhysicalIndex d q) ℂ :=
+  let C := selectedPhysicalPrivateBasis d ps hn hc garbage BG
+  Matrix.partialTraceRight (α := selectedFamilyPhysicalIndex d q) (β := E q)
+    (w.partialSourcePartyMatrix ψ ξ B C q *
+      LinearMap.toMatrix (B q).toBasis (B q).toBasis
+        (((sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict (partySelector q)
+          (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω)).eval.toLinearMap) *
+      (w.partialSourcePartyMatrix ψ ζ B C q)ᴴ)
+
+open Classical in
 /-- In the original physical configurations, the actual sampled coordinate
 trace is a sum of products of local physical traces, retaining the exterior
 scalar entry in every summand. The physical/private splitting is given by the
@@ -61,18 +92,10 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors
       (selectedPartyOrder_nodup ps hn) (mem_selectedPartyOrder ps hc)
     let e := Equiv.arrowProdEquivProdArrow (Option {_p : P // true = true})
       (selectedFamilyPhysicalIndex d) E
-    let M : (Fin (partialSlots (fun _ ↦ true) w).length → Fin k) →
-        (q : Option {_p : P // true = true}) →
-        Matrix (selectedFamilyPhysicalIndex d q) (selectedFamilyPhysicalIndex d q) ℂ :=
-      fun j q ↦
-      Matrix.partialTraceRight (α := selectedFamilyPhysicalIndex d q) (β := E q)
-        (w.partialSourcePartyMatrix ψ ξ B C q *
-          LinearMap.toMatrix (B q).toBasis (B q).toBasis
-            (((sampledEndpointInputWord w k lam L R ξ ζ
-                (j ∘ (allSourceSlotEquiv w).symm) ω).restrict (partySelector q)
-              (sources_sampledEndpointInputWord w k lam L R ξ ζ
-                (j ∘ (allSourceSlotEquiv w).symm) ω)).eval.toLinearMap) *
-          (w.partialSourcePartyMatrix ψ ζ B C q)ᴴ)
+    let M := fun (j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k)
+      (q : Option {_p : P // true = true}) ↦
+      sampledPhysicalFactor d ps hn hc garbage w ψ k lam L R ξ ζ ω B BG
+        (j ∘ (allSourceSlotEquiv w).symm) q
     (Matrix.partialTraceRight
       ((w.partialSourceGlobalMatrix ψ ξ bOut *
         SourceInventory.productSourceMatrix (partialSlots (fun _ ↦ true) w)

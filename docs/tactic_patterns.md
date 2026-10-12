@@ -7153,3 +7153,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   `WordRestriction.lean`, retaining the original source-free hypothesis.
 - **Notes:** One compares the words and the other their evaluations. Both
   concern canonical identifications, without choosing any new isometry.
+
+
+### Actual sampled local physical matrices — promoted (2026-10-12)
+
+- **Pattern:** The same mixed physical trace, with independent chronological
+  choices and one original sample assignment, appeared in
+  `ActualSampledPhysicalFactors`, `ActualSampledPhysicalScalar` and
+  `ActualPureSampledPhysicalSum`.
+- **Promotion:** `SourceCircuit.sampledPhysicalFactor` records this matrix once
+  in `ActualSampledPhysicalFactors`. All three statements use that definition;
+  its physical indices are the original indices and its private basis is the
+  actual selected private basis. No scalar or norm is cancelled.
+- **Verification:** The existing physical-trace fixture checks the definition
+  by name. Its blueprint definition remains unmarked; elaboration is pending.
