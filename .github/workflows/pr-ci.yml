@@ -237,6 +237,13 @@ jobs:
       workflow: ${{ steps.filter.outputs.workflow }}
       coherent_prerequisites: ${{ steps.filter.outputs.coherent_prerequisites }}
     steps:
+      - uses: actions/checkout@v7
+
+      - name: Check retired tenkz catalogue stays absent
+        run: |
+          python3 scripts/test_check_tenkz_demolition.py
+          python3 scripts/check_tenkz_demolition.py
+
       - uses: dorny/paths-filter@v4
         id: filter
         with:
