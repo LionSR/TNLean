@@ -866,6 +866,67 @@ The following finite construction follows
     the partially consumed nominal row contributes to the error estimate.
 \end{definition}
 
+\begin{lemma}[A fixed finite family of positive-depth prefixes]
+    \label{lem:al_scan_finite_prefix_family}
+    \lean{TNLean.PEPS.AreaLaw.Scan.positiveDepthPrefix_toNat,
+        TNLean.PEPS.AreaLaw.Scan.positiveDepthPrefix_mem_range_fin_of_le}
+    \leanok
+    \uses{def:al_scan_comparison_prefixes}
+    Let $A$ be finite, let $d$ be any integer-valued depth function, and let
+    $L\ge0$ be an integer. For $Q_j=\{x\in A:0<d(x)\le j\}$ and
+    $j_+=\max(j,0)$, one has $Q_j=Q_{j_+}$. Consequently, every integer
+    cutoff $j\le L$ selects a member of the fixed nested family
+    \[
+        Q_0,Q_1,\ldots,Q_L.
+    \]
+    This family depends only on $A,d,L$ and may contain repeated regions.
+\end{lemma}
+\begin{proof}\leanok
+    If $j<0$, both $Q_j$ and $Q_0$ are empty. If $j\ge0$, then $j_+=j$.
+    For $j\le L$ one also has $0\le j_+\le L$, giving the required member
+    of the displayed family. Nestedness follows directly from the cutoff
+    inequalities.
+\end{proof}
+
+\begin{lemma}[Upper bounds for comparison fronts]
+    \label{lem:al_scan_front_thresholds}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.upper_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.front_comparison_thresholds_le}
+    \leanok
+    \uses{def:al_scan_actual_histories}
+    Suppose $n>0$ and $8Km\le L$. Fix $0\le g<K$, $0\le r<m$ and
+    $0\le k\le nm$. Let $j_N,j_F$ be the near and oriented far nominal
+    fronts after $k$ fills, and put $v=8gm+5m+r$. Then
+    \[
+        v\le L,\qquad j_N-1\le L,\qquad -j_F\le L.
+    \]
+\end{lemma}
+\begin{proof}\leanok
+    The upper endpoint satisfies $v\le8(g+1)m\le8Km\le L$.
+    Put $u=8gm+m+r$. The near threshold is $u$ plus the number of
+    completed near advances, which is at most $m$. Since $v-u=4m$,
+    this threshold is at most $v$. The far threshold is $v$ minus
+    the nonnegative number of completed far advances, so it too is at
+    most $v$.
+\end{proof}
+
+\begin{corollary}[One finite family for all comparison fronts]
+    \label{cor:al_scan_front_prefix_family}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.front_positiveDepthPrefix_mem_fixed_family}
+    \leanok
+    \uses{lem:al_scan_finite_prefix_family,lem:al_scan_front_thresholds}
+    Fix the original region $A$, its depth function $d$ and the collar depth
+    $L$. Suppose $n>0$ and $8Km\le L$. The nested family
+    $Q_0,\ldots,Q_L$, where $Q_j=\{x\in A:0<d(x)\le j\}$, then contains
+    both $Q_{j_N-1}$ and $Q_{-j_F}$ for every band, offset and round within
+    the fill horizon. This one family is fixed before all such choices.
+\end{corollary}
+\begin{proof}\leanok
+    Both integer thresholds are at most $L$ by
+    Lemma~\ref{lem:al_scan_front_thresholds}. Apply
+    Lemma~\ref{lem:al_scan_finite_prefix_family} to each threshold.
+\end{proof}
+
 \begin{theorem}[Positive prefixes in the compact collar]
     \label{thm:al_scan_positive_prefix_collar}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.positiveDepthPrefix_subset_truncationSet}

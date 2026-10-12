@@ -4208,6 +4208,20 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Upper endpoint of a scanner band — candidate (2026-10-12)
+
+- **Pattern:** Use the band index bound, the offset bound and $8Km\le L$
+  to place $8gm+5m+r$ below the original collar depth.
+- **Seen:** The endpoint estimate in
+  `Scan/StatusContainment.mem_truncationSet_of_not_far` and the two front
+  estimates in `Scan/FrontThresholds.front_comparison_thresholds_le`.
+- **Abstraction:** `CollarScan.upper_le` in `Scan/SideSeparation.lean` states
+  the shared endpoint bound, used by the front estimates. The containment proof
+  precedes it in the import order and keeps its own copy.
+- **Notes:** The fill-count estimate remains `fillCount_div_le_window`;
+  nonnegativity suffices for the far threshold. Neither consumer needs a new
+  scanner structure or additional dimension hypotheses.
+
 ### Sheet swaps in regional coordinates — candidate (2026-10-09)
 
 - **Pattern:** derive regional tensor factors from membership in the supported-operator
