@@ -6994,3 +6994,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   `RoundedShellEntropy.lean` reuse this statement. Its defining proof handles
   the numerical argument once; no separate predicate or compatibility alias
   is introduced.
+
+### Tensoring an intertwining identity — candidate (2026-10-11)
+
+- **Pattern:** Extend an intertwining identity for a map on one memory by
+  tensoring it with a fixed map on another memory. Compare elementary tensors
+  with `clm_ext_tmul` and apply congruence to the original identity.
+- **Seen:** The private `tensor_factorization` helper in
+  `TNLean/PEPS/Approximation/PartyLocalMaps.lean` and
+  `TNLean/PEPS/Approximation/CanonicalPartyFactorization.lean` (two occurrences).
+- **Abstraction:** At a third occurrence, share the operator identity in a
+  lower-level tensor-map module, or use Mathlib's `TensorProduct.mapL_comp`.
+- **Notes:** The new theorem identifies the actual singleton restrictions
+  without a norm bound; the existing theorem provides existential contractions.
+  Neither theorem replaces the other by cancellation when a factor vanishes.
+  The small helper is retained unchanged for the first compiler diagnostic.
