@@ -463,3 +463,34 @@ operations on an empty memory.
     matrices. Distribute multiplication over the finite sum and apply the
     individual-word mixed identity to each complete assignment.
 \end{proof}
+
+
+\begin{theorem}[Exterior restriction of the sampled endpoint word]
+    \label{thm:peps_actual_sampled_endpoint_exterior}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointWord_none_eval_heq_id}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointInputWord_none_eval_heq_id}
+    \uses{def:peps_actual_sampled_endpoint_word,thm:peps_partial_fixed_layout,
+        thm:peps_source_register_operator_exclusion}
+    Select all original parties and let $*$ be the exterior owner. For any
+    independent ket and bra choices $\xi,\zeta$, original sample assignment
+    $j$ and sample values $\omega$, the actual sampled endpoint word
+    $U_{\xi,\zeta,j}$ restricts to $\operatorname{id}_{\mathbb C}$ at $*$.
+    This identity holds both on the fixed source layout and after its
+    canonical identification with the private preparation input. The
+    endpoint matrices are arbitrary, and the source inventory may be empty.
+    This is the exterior source factor in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 253--267, 279--309 and 565--588.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:peps_actual_sampled_endpoint_word,thm:peps_partial_fixed_layout,
+        thm:peps_source_register_operator_exclusion}
+    By Theorem~\ref{thm:peps_partial_fixed_layout}, both owners of every
+    source are original selected parties. Restriction to $*$ excludes them
+    both. Theorem~\ref{thm:peps_source_register_operator_exclusion} therefore
+    gives $U_{\xi,\zeta,j}|_*=\operatorname{id}_{\mathbb C}$. Identifying
+    the source layout with the preparation input transports the restriction
+    by the same canonical identification on its input and output; hence
+    this scalar identity is preserved.
+\end{proof}

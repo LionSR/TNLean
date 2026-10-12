@@ -6713,3 +6713,16 @@ spectral split → block extraction → MPV calculation → strict bounds
   `ActualMixedSourceMatrix.lean`, and `ActualSampledEndpointInputWord.lean`.
 - **Scope:** Arbitrary actual continuous linear maps and finite orthonormal
   bases; empty coordinate sets and zero maps are included. A lemma suffices.
+
+
+### Restriction under identification of equal layouts — candidate (2026-10-12)
+
+- **Pattern:** Eliminate the input and output layout equalities, then use
+  reflexivity to compare restrictions of the identified word.
+- **Seen:** The private `restrict_castLayouts_word_heq` in
+  `AbsorbedRestriction.lean` and `restrict_castLayouts_eval_heq` in
+  `SampledEndpointExteriorIdentity.lean` (two proof bodies).
+- **Abstraction:** At a third proof body, share the restriction identity in
+  `WordRestriction.lean`, retaining the original source-free hypothesis.
+- **Notes:** One compares the words and the other their evaluations. Both
+  concern canonical identifications, without choosing any new isometry.
