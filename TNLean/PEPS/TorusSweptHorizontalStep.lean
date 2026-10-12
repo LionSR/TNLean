@@ -109,16 +109,11 @@ theorem regularWalkHolonomy_torusSweptStringRightStep (v : X) (g h : G) :
       (torusPlaquetteWalk (v.1+2,v.2+1)).reverse = h := by
   have hw := Fact.out (p := 7 < width)
   have hh := Fact.out (p := 6 < height)
-  have hx21 := mt (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt (n := width) 2 1
-    (by norm_num; omega)).mp (by decide : (2 : ℤ) ≠ 1)
-  have hx32 := mt (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt (n := width) 3 2
-    (by norm_num; omega)).mp (by decide : (3 : ℤ) ≠ 2)
-  have hy20 := mt (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt (n := height) 2 0
-    (by norm_num; omega)).mp (by decide : (2 : ℤ) ≠ 0)
-  have hy21 := mt (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt (n := height) 2 1
-    (by norm_num; omega)).mp (by decide : (2 : ℤ) ≠ 1)
-  have hy2n := mt (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt (n := height) 2 (-1)
-    (by norm_num; omega)).mp (by decide : (2 : ℤ) ≠ -1)
+  have hx21 := ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := width) 2 1 (by omega) (by decide)
+  have hx32 := ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := width) 3 2 (by omega) (by decide)
+  have hy20 := ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := height) 2 0 (by omega) (by decide)
+  have hy21 := ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := height) 2 1 (by omega) (by decide)
+  have hy2n := ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := height) 2 (-1) (by omega) (by decide)
   norm_num only at hx21 hx32 hy20 hy21 hy2n
   constructor
   · rw [regularWalkHolonomy_torusPlaquetteWalk_reverse,

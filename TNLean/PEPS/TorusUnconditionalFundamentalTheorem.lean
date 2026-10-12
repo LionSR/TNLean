@@ -327,18 +327,16 @@ theorem fundamentalTheorem_normalTorusPEPS_unconditional
     hA hB hAr hBr hUA hUB (by omega) (by omega) (Or.inl (by omega)) (Or.inl (by omega))
     (by omega) (by omega) (Or.inl (by omega)) (Or.inl (by omega)) hbond hAB hd hposA hposB
   -- The base injectivity facts at the corner region and its insert-completed square, for `A`.
-  have hRA : RegionBlockedTensorInjective (G := torusGraph width height) A cornerRegion := by
-    have hi := hAr.cornerRegion_injective hUA hw hh
-    rwa [regionInjectivityDataOf_isInjective] at hi
+  have hRA : RegionBlockedTensorInjective (G := torusGraph width height) A cornerRegion :=
+    hAr.cornerRegion_injective hUA hw hh
   have hSA : RegionBlockedTensorInjective (G := torusGraph width height) A
       (insert (cornerVertex : TorusVertex width height) cornerRegion) := by
     rw [insert_cornerVertex_cornerRegion hw hh]
     have hi := hAr.cornerSquare_injective hUA hw hh
     rwa [regionInjectivityDataOf_isInjective] at hi
   have hCRA : RegionBlockedTensorInjective (G := torusGraph width height) A
-      (Finset.univ \ cornerRegion) := by
-    have hi := hAr.compl_cornerRegion_injective hUA hw hh
-    rwa [regionInjectivityDataOf_isInjective] at hi
+      (Finset.univ \ cornerRegion) :=
+    hAr.compl_cornerRegion_injective hUA hw hh
   have hCSA : RegionBlockedTensorInjective (G := torusGraph width height) A
       (Finset.univ \ insert (cornerVertex : TorusVertex width height) cornerRegion) := by
     rw [insert_cornerVertex_cornerRegion hw hh]
@@ -351,18 +349,16 @@ theorem fundamentalTheorem_normalTorusPEPS_unconditional
         (reindexTensor (G := torusGraph width height) (applyGauge B X) hbond) R := fun R hRB =>
     regionBlockedTensorInjective_reindexTensor (applyGauge B X) hbond R
       (regionBlockedTensorInjective_applyGauge B X R hRB)
-  have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B cornerRegion := by
-    have hi := hBr.cornerRegion_injective hUB hw hh
-    rwa [regionInjectivityDataOf_isInjective] at hi
+  have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B cornerRegion :=
+    hBr.cornerRegion_injective hUB hw hh
   have hSB : RegionBlockedTensorInjective (G := torusGraph width height) B
       (insert (cornerVertex : TorusVertex width height) cornerRegion) := by
     rw [insert_cornerVertex_cornerRegion hw hh]
     have hi := hBr.cornerSquare_injective hUB hw hh
     rwa [regionInjectivityDataOf_isInjective] at hi
   have hCRB : RegionBlockedTensorInjective (G := torusGraph width height) B
-      (Finset.univ \ cornerRegion) := by
-    have hi := hBr.compl_cornerRegion_injective hUB hw hh
-    rwa [regionInjectivityDataOf_isInjective] at hi
+      (Finset.univ \ cornerRegion) :=
+    hBr.compl_cornerRegion_injective hUB hw hh
   have hCSB : RegionBlockedTensorInjective (G := torusGraph width height) B
       (Finset.univ \ insert (cornerVertex : TorusVertex width height) cornerRegion) := by
     rw [insert_cornerVertex_cornerRegion hw hh]
