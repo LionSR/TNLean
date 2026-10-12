@@ -26,6 +26,13 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS.PairEffect.SourceCircuit
+
+private theorem partialTraceRight_fintype_eq {α β : Type} (F G : Fintype β)
+    (M : Matrix (α × β) (α × β) ℂ) :
+    @Matrix.partialTraceRight α β F M = @Matrix.partialTraceRight α β G M := by
+  cases Subsingleton.elim F G
+  rfl
+
 variable {P : Type} [Fintype P] [DecidableEq P] {a b : Layout P}
 variable {I X E : Option {_p : P // true = true} → Type}
 variable [∀ q, Fintype (I q)] [∀ q, Fintype (X q)] [∀ q, Fintype (E q)]
@@ -87,7 +94,7 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_partyProduct
       (xi yj : ((q : Option {_p : P // true = true}) → X q) ×
         ((q : Option {_p : P // true = true}) → E q)) ↦
       ∏ q, M q (xi.1 q, xi.2 q) (yj.1 q, yj.2 q)) = _
-    exact partialTraceRight_partyProductMatrix M
+    exact (partialTraceRight_fintype_eq _ _ _).trans (partialTraceRight_partyProductMatrix M)
   have h := congrArg T
     (partialSourceGlobalMatrix_sampled_eq_sum_partyProduct w ψ k lam L R ξ ζ ω B C ps hn hc)
   simp only [map_smul, map_sum, ht] at h
