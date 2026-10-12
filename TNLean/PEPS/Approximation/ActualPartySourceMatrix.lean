@@ -55,8 +55,11 @@ def partialSourcePartyMatrix (w : SourceCircuit a b) (ψ : ProductInput a)
     (((w.partialSourceWord ψ ξ).restrict (partySelector q)
       (sources_partialSourceWord w ψ ξ)).eval (B q col)) row)
 
-set_option maxHeartbeats 400000 in
--- Unifying the dependent party and source bases requires additional elaboration steps.
+set_option maxHeartbeats 800000 in
+-- Instantiating `linearMap_toMatrix_mul_basis_toMatrix` over the dependent
+-- party-product bases (indexed by `(q : Option _) → I q`) synthesises the
+-- `Fintype`/`DecidableEq` instances of those `Pi` types during unification,
+-- which is heavier than the `Fin`-indexed sibling transports that use 400000.
 /-- Literal source columns are the product of the actual party matrices followed
 by the constructed change from source-slot coordinates to party coordinates.
 This is a coordinate consequence of the actual source-free word factorization.
