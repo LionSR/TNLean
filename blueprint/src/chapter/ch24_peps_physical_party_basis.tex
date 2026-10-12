@@ -279,6 +279,7 @@ These coordinate identities apply to the local contractions in
 \begin{theorem}[Party memories after selecting all original parties]
     \label{thm:peps_selected_physical_party_layouts}
     \lean{TNLean.PEPS.PairEffect.Layout.atParty_none_mapOwner_all}
+    \leanok
     \lean{TNLean.PEPS.PairEffect.Layout.atParty_some_mapOwner_all}
     \uses{def:peps_affected_owner,def:peps_party_registers,def:peps_owner_layout}
     Let $\mathcal P$ be any party set, let
@@ -290,7 +291,7 @@ These coordinate identities apply to the local contractions in
     \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_excluded_mapped_owners,thm:peps_basis_owner_restriction}
     No original party maps to $\star$, so restriction to $\star$ is empty.
     An original register maps to $\iota(p)$ exactly when its owner is $p$.
@@ -303,6 +304,7 @@ These coordinate identities apply to the local contractions in
 \begin{definition}[Selected physical coordinate families and party bases]
     \label{def:peps_selected_family_physical_basis}
     \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalIndex}
+    \leanok
     \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis}
     \uses{thm:peps_selected_physical_party_layouts,def:peps_singleton_physical_basis}
     Let $d:\mathcal P\to\mathbb N$ specify the original physical dimensions,
@@ -323,6 +325,7 @@ These coordinate identities apply to the local contractions in
 \begin{theorem}[Original physical columns after selecting all parties]
     \label{thm:peps_selected_family_physical_columns}
     \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis_none_apply_heq}
+    \leanok
     \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis_some_apply_heq}
     \uses{def:peps_selected_family_physical_basis}
     Under the canonical memory identifications,
@@ -331,7 +334,7 @@ These coordinate identities apply to the local contractions in
     No equality between independently chosen bases is required.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_selected_family_physical_basis,thm:peps_basis_memory_equalities,
         thm:peps_basis_owner_memory}
     The scalar singleton basis has column $1$. Equality identifications of
@@ -346,6 +349,7 @@ These coordinate identities apply to the local contractions in
 \begin{definition}[Actual physical and private columns at a selected owner]
     \label{def:peps_selected_physical_private_basis}
     \lean{TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis}
+    \leanok
     \lean{TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis_apply_heq}
     \uses{def:peps_selected_family_physical_basis,def:peps_party_local_output_basis}
     Write $a$ for the original physical register list and $c$ for the private
@@ -372,6 +376,7 @@ These coordinate identities apply to the local contractions in
 \begin{definition}[Original physical configurations]
     \label{def:peps_selected_physical_configurations}
     \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalConfigEquiv}
+    \leanok
     \uses{def:peps_selected_family_physical_basis}
     The canonical bijection
     $e:\prod_{q\in\mathcal Q}X_q\to
@@ -386,6 +391,7 @@ These coordinate identities apply to the local contractions in
 \begin{theorem}[The exterior scalar in original physical configurations]
     \label{thm:peps_selected_physical_product_scalar}
     \lean{TNLean.PEPS.PairEffect.partyProductMatrix_selectedFamilyPhysicalConfig}
+    \leanok
     \uses{def:peps_selected_physical_configurations}
     Let $\mathcal P$ be finite, and let $M_q$ be arbitrary complex matrices
     indexed by $X_q$. In the original physical configurations,
@@ -400,7 +406,7 @@ These coordinate identities apply to the local contractions in
     product on the right is $1$.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_selected_physical_configurations}
     Separate the exterior factor from the finite product over
     $\mathcal Q=\mathcal P\sqcup\{\star\}$, and relabel the remaining
@@ -413,6 +419,7 @@ These coordinate identities apply to the local contractions in
 \begin{definition}[The selected party order]
     \label{def:peps_selected_party_order}
     \lean{TNLean.PEPS.PairEffect.selectedPartyOrder}
+    \leanok
     \lean{TNLean.PEPS.PairEffect.selectedPartyOrder_nodup}
     \lean{TNLean.PEPS.PairEffect.mem_selectedPartyOrder}
     \uses{thm:peps_selected_physical_party_layouts}
@@ -428,6 +435,7 @@ These coordinate identities apply to the local contractions in
 \begin{theorem}[The grouped basis in original physical configurations]
     \label{thm:peps_selected_physical_basis_grouped}
     \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis_grouped}
+    \leanok
     \uses{def:peps_selected_party_order,def:peps_selected_family_physical_basis,
         def:peps_selected_physical_configurations,def:peps_party_grouped_basis,
         def:peps_family_physical_output}
@@ -445,7 +453,7 @@ These coordinate identities apply to the local contractions in
     Empty party sets and zero physical dimensions are included.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_physical_owner_columns,
         thm:peps_basis_physical_columns_local_coordinates,
         thm:peps_selected_family_physical_columns,thm:peps_basis_empty_first_party,
@@ -466,6 +474,7 @@ These coordinate identities apply to the local contractions in
 \begin{theorem}[Separating the actual physical and private grouped bases]
     \label{thm:peps_selected_physical_private_basis_grouped}
     \lean{TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis_grouped}
+    \leanok
     \uses{def:peps_selected_physical_private_basis,def:peps_party_grouped_basis,
         thm:peps_party_grouped_basis_append}
     Choose any order containing every selected owner exactly once.
@@ -486,7 +495,7 @@ These coordinate identities apply to the local contractions in
     their original dimensions with the exterior singleton coordinate.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_party_grouped_basis_append,thm:peps_basis_memory_equalities}
     Apply the concatenation identity to the separately relabelled register
     lists. Transport each local column and the grouped column by the
