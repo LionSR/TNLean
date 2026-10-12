@@ -35,6 +35,25 @@ private theorem scalar_comp_heq {Q : Type} {a b d : Layout Q}
   simp only [ContinuousLinearMap.comp_apply, smul_apply,
     ContinuousLinearMap.id_apply, smul_smul, mul_comm]
 
+/-- Source-free restrictions compose before instantiating any chronological
+source data. When all selected memories are empty, their scalars multiply.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267 and 565–588. -/
+private theorem restrict_comp_scalar_heq {Q : Type} (f : Q → Bool)
+    {a b c : Layout Q} (u : Word a b) (v : Word b c)
+    (hu : u.sources = []) (hv : v.sources = [])
+    (ha : Layout.restrict f a = []) (hb : Layout.restrict f b = [])
+    (hc : Layout.restrict f c = []) (α β : ℂ)
+    (hA : HEq ((u.restrict f hu).eval) (α • ContinuousLinearMap.id ℂ ℂ))
+    (hB : HEq ((v.restrict f hv).eval) (β • ContinuousLinearMap.id ℂ ℂ)) :
+    HEq (((u.comp v).restrict f
+      (by simp only [Word.sources, hu, hv, List.nil_append])).eval)
+      ((α * β) • ContinuousLinearMap.id ℂ ℂ) := by
+  have hcomp : ((u.comp v).restrict f
+      (by simp only [Word.sources, hu, hv, List.nil_append])).eval =
+      (v.restrict f hv).eval ∘L (u.restrict f hu).eval := rfl
+  exact (heq_of_eq hcomp).trans
+    (scalar_comp_heq (u.restrict f hu).eval (v.restrict f hv).eval ha hb hc α β hA hB)
+
 namespace SourceCircuit
 variable {P : Type}
 
@@ -53,17 +72,9 @@ theorem restrict_partialSourceWord_all_eval_heq_emptyGateScalar
     Layout.restrict_mapOwner_eq_nil _ _ L (by intro p; simp [affectedOwner])
   have hp := restrict_sourcePrivatePreparation_none_eval_heq_id w ψ
   have hr := restrict_partialResidual_all_eval_heq_emptyGateScalar w ξ
-  change HEq
-    (((partialResidual (fun _ : P ↦ true) w ξ).restrict Option.isNone
-      (sources_partialResidual (fun _ : P ↦ true) w ξ)).eval ∘L
-      ((w.sourcePrivatePreparation ψ).restrict Option.isNone
-        (sources_sourcePrivatePreparation w ψ)).eval)
-    (w.emptyGateScalar • ContinuousLinearMap.id ℂ ℂ)
-  have h := scalar_comp_heq
-    ((w.sourcePrivatePreparation ψ).restrict Option.isNone
-      (sources_sourcePrivatePreparation w ψ)).eval
-    ((partialResidual (fun _ : P ↦ true) w ξ).restrict Option.isNone
-      (sources_partialResidual (fun _ : P ↦ true) w ξ)).eval
+  have h := restrict_comp_scalar_heq Option.isNone
+    (w.sourcePrivatePreparation ψ) (partialResidual (fun _ : P ↦ true) w ξ)
+    (sources_sourcePrivatePreparation w ψ) (sources_partialResidual (fun _ : P ↦ true) w ξ)
     (by simp only [Layout.restrict_append, restrict_allResidualSourceLayout_isNone w,
       Layout.restrict_nil, List.nil_append])
     (by simp only [Layout.restrict_append, restrict_allResidualSourceLayout_isNone w,
