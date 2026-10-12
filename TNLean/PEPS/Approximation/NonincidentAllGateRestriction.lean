@@ -56,14 +56,14 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
   let f := partySelector q
   by_cases ht : ∃ _t : C, true = true
   · let e : Choices (fun _ : P => true) (.gate owner G tail) ≃ ι :=
-      Equiv.cast (by simp only [Choices, ite_eq_left ht])
+      Equiv.cast (by simp only [Choices]; exact if_pos ⟨ht.choose, by trivial⟩)
     let i := e ξ
     let core := ((G.branchWord i).mapOwner owner).mapOwner all
     have hcore : q ∉ core.parties := by
       intro hq
       rw [Word.parties_mapOwner, Word.parties_mapOwner] at hq
-      obtain ⟨z, hz, hzq⟩ := Finset.mem_image.mp hq
-      obtain ⟨t, _, htz⟩ := Finset.mem_image.mp hz
+      simp only [Finset.mem_image] at hq
+      obtain ⟨z, ⟨t, _, htz⟩, hzq⟩ := hq
       have he : all (owner t) = q := htz.symm ▸ hzq
       exact howner t (by simpa [all, q, affectedOwner] using he)
     have hw : partialWord (fun _ : P => true) (.gate owner G tail) ξ =
