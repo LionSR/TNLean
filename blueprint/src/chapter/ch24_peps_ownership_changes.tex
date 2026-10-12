@@ -828,7 +828,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $F_R$ exchange two copies at the sites in $R$. If $S\subseteq R$
     or $S\cap R=\varnothing$, then
     \[
-        F_R(A\otimes I+I\otimes A)F_R^*
+        F_R(A\otimes I+I\otimes A)F_R^\dagger
         =A\otimes I+I\otimes A.
     \]
     This is the noncrossing cancellation used in the boundary perturbation
@@ -837,39 +837,57 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{proof}
     \leanok
     \uses{thm:peps_sheet_swap_supported_exchange,lem:peps_frame_sheet_swap_compose}
-    If $S\subseteq R$, the swap exchanges the two tensor summands.
-    If $S\cap R=\varnothing$, it commutes with each summand.
-    In either case their sum commutes with $F_R$, and unitarity gives
-    the stated conjugation identity.
+    Write $T(A)=A\otimes I+I\otimes A$. If $S\subseteq R$, then $A$ and
+    $I$ are both supported on $R$, and the exchange identity applied to the
+    pairs $(A,I)$ and $(I,A)$ gives
+    \begin{align*}
+        F_R(A\otimes I)=(I\otimes A)F_R,\qquad
+        F_R(I\otimes A)=(A\otimes I)F_R.
+    \end{align*}
+    If $S\cap R=\varnothing$, the commutation of $F_R$ with operators
+    acting on a set disjoint from $R$ gives
+    \begin{align*}
+        F_R(A\otimes I)=(A\otimes I)F_R,\qquad
+        F_R(I\otimes A)=(I\otimes A)F_R.
+    \end{align*}
+    In either case, adding the two identities gives
+    \begin{align*}
+        F_RT(A)=T(A)F_R.
+    \end{align*}
+    Since $F_R$ is a permutation matrix, $F_RF_R^\dagger=I$, and therefore
+    $F_RT(A)F_R^\dagger=T(A)F_RF_R^\dagger=T(A)$.
 \end{proof}
 
 \begin{theorem}[Restricting a swap to an interaction support]
     \label{thm:peps_sheet_swap_interaction_restriction}
     \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_inter}
+    \leanok
     Let $V$ be a finite site set, $q\geq0$ a local dimension, and
     $R,S\subseteq V$. Let $A$ be an operator supported on $S$.
     Write $T(A)=A\otimes I+I\otimes A$, and let $F_D$ exchange the
     two copies at the sites in $D$. Then
     \begin{align}
-        F_R T(A) F_R^* = F_{R\cap S}^* T(A) F_{R\cap S}.
+        F_R T(A) F_R^\dagger = F_{R\cap S}^\dagger T(A) F_{R\cap S}.
         \label{eq:peps_swap_interaction_restriction}
     \end{align}
     This is the support reduction in the boundary perturbation argument
     of \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lem:peps_frame_sheet_swap_compose,thm:peps_sheet_swap_doubled_cancellation}
     Put $B=R\cap S$ and $O=R\setminus S$. The composition of the
-    swaps gives $F_BF_R=F_O$, hence $F_R=F_B^*F_O$ by unitarity.
+    swaps gives $F_BF_R=F_O$, hence $F_R=F_B^\dagger F_O$ by unitarity.
     Since $S\cap O=\varnothing$, cancellation outside $S$ gives
     \begin{align*}
-        F_R T(A)F_R^* = F_B^*\bigl(F_OT(A)F_O^*\bigr)F_B = F_B^*T(A)F_B.
+        F_R T(A)F_R^\dagger = F_B^\dagger\bigl(F_OT(A)F_O^\dagger\bigr)F_B = F_B^\dagger T(A)F_B.
     \end{align*}
 \end{proof}
 
 \begin{theorem}[Support of the swap in paired coordinates]
     \label{thm:peps_sheet_swap_paired_site_support}
     \lean{TNLean.PEPS.EncodedFrame.reindex_sheetSwapOp_mem_supportedOperators}
+    \leanok
     \uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
     Let $\Lambda$ be a finite set, let $q\geq0$ be an integer, and let
     $R\subseteq\Lambda$. Identify two configurations of local dimension $q$
@@ -880,6 +898,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}
+    \leanok
     At a site outside $R$, the permutation fixes the paired coordinate.
     At a site in $R$, it exchanges the two entries of that coordinate.
     Thus the permutation fixes the complement and its action on $R$ depends
@@ -897,7 +916,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     Express the two-copy operators in paired-site coordinates, and denote
     the resulting matrices of $F_R$ and $A\otimes I+I\otimes A$ by
     $\widetilde F_R$ and $\widetilde T(A)$, respectively. Then
-    $\widetilde F_R\widetilde T(A)\widetilde F_R^*$ is supported on $S$.
+    $\widetilde F_R\widetilde T(A)\widetilde F_R^\dagger$ is supported on $S$.
     Empty regions and zero local dimension are included. This is the
     interaction-support assertion used for the boundary perturbation in
     \cite{OpenAI2026PolynomialPEPS}.
@@ -906,7 +925,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \uses{thm:peps_sheet_swap_interaction_restriction,
         thm:peps_sheet_swap_paired_site_support,thm:qc_site_pair_tensor_support}
     Set $B=R\cap S$. The restriction identity gives
-    $F_RT(A)F_R^*=F_B^*T(A)F_B$.
+    $F_RT(A)F_R^\dagger=F_B^\dagger T(A)F_B$.
     In paired-site coordinates, $F_B$ is supported on $B\subseteq S$,
     and each summand of $T(A)$ is supported on $S$.
     Operators supported on $S$ are closed under adjoints, sums and products,
@@ -925,8 +944,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $\partial R$ be the set of edges with exactly one endpoint in $R$.
     Then
     \begin{align*}
-        F_RT(H)F_R^*-T(H)
-        =\sum_{e\in\partial R}\bigl(F_RT(h_e)F_R^*-T(h_e)\bigr).
+        F_RT(H)F_R^\dagger-T(H)
+        =\sum_{e\in\partial R}\bigl(F_RT(h_e)F_R^\dagger-T(h_e)\bigr).
     \end{align*}
     This includes zero local dimension and squares of side zero or one.
     Individual interactions need not be Hermitian. The identity is the
@@ -935,7 +954,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_sheet_swap_doubled_cancellation}
-    The map $A\mapsto F_RT(A)F_R^*-T(A)$ is linear. Expand the original
+    The map $A\mapsto F_RT(A)F_R^\dagger-T(A)$ is linear. Expand the original
     sum defining $H$. Every singleton support lies in $R$ or is disjoint
     from $R$, so each site contribution vanishes. The same holds for the
     two-endpoint support of every noncrossing edge. Removing these zero
@@ -952,7 +971,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $(\C^q)^{\otimes\Lambda}$, write $T(A)=A\otimes I+I\otimes A$.
     Then
     \begin{align*}
-        \|F_RT(A)F_R^*-T(A)\|\leq4\|A\|.
+        \|F_RT(A)F_R^\dagger-T(A)\|\leq4\|A\|.
     \end{align*}
     This is the single-interaction estimate for the boundary perturbation in
     \cite{OpenAI2026PolynomialPEPS}.
@@ -961,8 +980,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{proof}\leanok
     The two identity-factor estimates give
     $\|T(A)\|\leq\|A\otimes I\|+\|I\otimes A\|\leq2\|A\|$.
-    Since $\|F_R\|\leq1$ and $\|F_R^*\|=\|F_R\|$, submultiplicativity
-    gives $\|F_RT(A)F_R^*\|\leq\|T(A)\|$. The triangle inequality
+    Since $\|F_R\|\leq1$ and $\|F_R^\dagger\|=\|F_R\|$, submultiplicativity
+    gives $\|F_RT(A)F_R^\dagger\|\leq\|T(A)\|$. The triangle inequality
     proves the assertion.
 \end{proof}
 
@@ -985,9 +1004,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     In paired-site coordinates, let $K$ be the matrix of
     $H\otimes I+I\otimes H$, and let $F$ be the matrix of the operator
     exchanging the two copies at the sites in $R$.
-    Then $FKF^*-K$ is supported on $Z$, with local dimension $q^2$, and
+    Then $FKF^\dagger-K$ is supported on $Z$, with local dimension $q^2$, and
     \begin{align*}
-        \|FKF^*-K\|\leq 8JL^2.
+        \|FKF^\dagger-K\|\leq 8JL^2.
     \end{align*}
     Individual interactions need not be Hermitian. No further assumption
     on the sign of $J$ is required. The statement includes empty grids and
@@ -1011,7 +1030,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $0\leq\|h_v\|\leq J$. Each crossing-edge contribution has norm at most
     $4\|h_e\|\leq4J$. The triangle inequality and the square-edge count give
     \begin{align*}
-        \|FKF^*-K\|
+        \|FKF^\dagger-K\|
         \leq \sum_{e\in\partial R}4J
         =4J|\partial R|
         \leq 4J(2L^2)
