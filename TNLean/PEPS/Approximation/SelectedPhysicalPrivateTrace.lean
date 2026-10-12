@@ -124,7 +124,8 @@ theorem selectedPhysicalPrivateBasis_partialTrace_mixed
       OrthonormalBasis.tensorProduct_apply, bOriginalPrivate]
     rw [hJoined, hPhysical]
     apply (Layout.memCongr (Layout.mapOwner_append f physical garbage)).injective
-    rw [Layout.memCongr_symm, LinearIsometryEquiv.apply_symm_apply]
+    rw [Layout.memCongr_symm (Layout.mapOwner_append f physical garbage),
+      LinearIsometryEquiv.apply_symm_apply]
     simpa only [LinearIsometryEquiv.apply_symm_apply] using
       (Layout.mapOwnerIso_append_tmul f physical garbage (bPhysical x)
         ((Layout.mapOwnerIso f garbage).symm (bPrivate y))).symm
