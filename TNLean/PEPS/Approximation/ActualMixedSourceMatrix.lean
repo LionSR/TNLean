@@ -25,7 +25,6 @@ namespace TNLean.PEPS.PairEffect
 private theorem mixed_toMatrix_basis_independent
     {E F : Type} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F]
-    [FiniteDimensional ℂ E] [FiniteDimensional ℂ F]
     {I J K : Type} [Fintype I] [Fintype J] [Fintype K]
     [DecidableEq I] [DecidableEq J]
     (b : OrthonormalBasis I ℂ E) (c : OrthonormalBasis J ℂ E)
@@ -37,9 +36,37 @@ private theorem mixed_toMatrix_basis_independent
         LinearMap.toMatrix c.toBasis c.toBasis U *
         (LinearMap.toMatrix c.toBasis d.toBasis B)ᴴ := by
   classical
+  let : FiniteDimensional ℂ E := b.toBasis.finiteDimensional_of_finite
+  let : FiniteDimensional ℂ F := d.toBasis.finiteDimensional_of_finite
   rw [← LinearMap.toMatrix_adjoint b d, ← LinearMap.toMatrix_adjoint c d,
     ← LinearMap.toMatrix_comp, ← LinearMap.toMatrix_comp,
     ← LinearMap.toMatrix_comp, ← LinearMap.toMatrix_comp]
+
+/-- Combine literal column matrices and a grouped mixed-coordinate identity
+before instantiating any dependent source-word data.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434 and 565–588. -/
+private theorem mixed_matrix_eq_of_column_eq
+    {E F : Type} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F]
+    {I J K : Type} [Fintype I] [Fintype J] [Fintype K]
+    [DecidableEq I] [DecidableEq J]
+    (b : OrthonormalBasis I ℂ E) (c : OrthonormalBasis J ℂ E)
+    (d : OrthonormalBasis K ℂ F) (A B : E →L[ℂ] F) (U : E →L[ℂ] E)
+    (M N : Matrix K I ℂ) (H : Matrix K K ℂ)
+    (hM : M = LinearMap.toMatrix b.toBasis d.toBasis A.toLinearMap)
+    (hN : N = LinearMap.toMatrix b.toBasis d.toBasis B.toLinearMap)
+    (hGrouped : Matrix.of (fun i j ↦ d.repr (A (c j)) i) *
+      Matrix.of (fun i j ↦ c.repr (U (c j)) i) *
+      (Matrix.of (fun i j ↦ d.repr (B (c j)) i))ᴴ = H) :
+    M * LinearMap.toMatrix b.toBasis b.toBasis U.toLinearMap * Nᴴ = H := by
+  have hcolumns := congrArg₂
+    (fun M N : Matrix K I ℂ ↦
+      M * LinearMap.toMatrix b.toBasis b.toBasis U.toLinearMap * Nᴴ) hM hN
+  have hchange := mixed_toMatrix_basis_independent b c d
+    A.toLinearMap B.toLinearMap U.toLinearMap
+  have h := hGrouped
+  simp only [matrix_repr_eval_eq_toMatrix] at h
+  exact hcolumns.trans (hchange.trans h)
 
 
 namespace SourceCircuit
@@ -80,26 +107,14 @@ theorem partialSourceGlobalMatrix_mixed_word
   let bIn := partyGroupedBasis (w.allResidualSourceLayout ++ []) B ps hn hc
   let bOut := partyGroupedBasis
     (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b) C ps hn hc
-  let : FiniteDimensional ℂ (Mem (w.allResidualSourceLayout ++ [])).carrier :=
-    bIn.toBasis.finiteDimensional_of_finite
-  let : FiniteDimensional ℂ
-      (Mem (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b)).carrier :=
-    bOut.toBasis.finiteDimensional_of_finite
-  have hcolumns := congrArg₂
-    (fun (M N : Matrix ((q : Option {_p : P // true = true}) → O q) w.allSourceLabels ℂ) ↦
-      M * LinearMap.toMatrix w.actualSourceInputBasis.toBasis w.actualSourceInputBasis.toBasis
-        u.eval.toLinearMap * Nᴴ)
+  refine mixed_matrix_eq_of_column_eq w.actualSourceInputBasis bIn bOut
+    (w.partialSourceWord ψ ξ).eval (w.partialSourceWord ψ ζ).eval u.eval _ _ _
     (partialSourceGlobalMatrix_eq_toMatrix w ψ ξ bOut)
-    (partialSourceGlobalMatrix_eq_toMatrix w ψ ζ bOut)
-  have hchange := mixed_toMatrix_basis_independent w.actualSourceInputBasis bIn bOut
-    (w.partialSourceWord ψ ξ).eval.toLinearMap
-    (w.partialSourceWord ψ ζ).eval.toLinearMap u.eval.toLinearMap
-  have h := Word.partyGroupedBasis_mixed_matrix (w.partialSourceWord ψ ξ)
-    (w.partialSourceWord ψ ζ) u (sources_partialSourceWord w ψ ξ)
-    (sources_partialSourceWord w ψ ζ) hu B C ps hn hc
-  simp only [matrix_repr_eval_eq_toMatrix] at h
-  simpa only [partialSourcePartyMatrix, OrthonormalBasis.coe_toBasis,
-    matrix_repr_eval_eq_toMatrix] using hcolumns.trans (hchange.trans h)
+    (partialSourceGlobalMatrix_eq_toMatrix w ψ ζ bOut) ?_
+  simpa only [partialSourcePartyMatrix, OrthonormalBasis.coe_toBasis] using
+    Word.partyGroupedBasis_mixed_matrix (w.partialSourceWord ψ ξ)
+      (w.partialSourceWord ψ ζ) u (sources_partialSourceWord w ψ ξ)
+      (sources_partialSourceWord w ψ ζ) hu B C ps hn hc
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect
