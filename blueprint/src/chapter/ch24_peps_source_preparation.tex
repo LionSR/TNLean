@@ -152,6 +152,7 @@
     \lean{TNLean.PEPS.PairEffect.Word.parties_localPart}
     \lean{TNLean.PEPS.PairEffect.Word.parties_mapOwner}
     \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_mapOwner_eval_heq_id_of_disjoint}
+    \leanok
     \uses{thm:peps_source_preparation,def:peps_owner_composition,thm:peps_party_factorization,thm:peps_party_restriction,def:peps_single_party_selector}
     For any composition $W$, write $\mathcal P(W)$ for the parties of its
     registers and named local operations, and let $B_W$ be the remaining
@@ -166,19 +167,35 @@
     vectors. A scalar local operation retains its named party.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_source_preparation,def:peps_owner_composition,thm:peps_party_factorization,thm:peps_party_restriction,def:peps_single_party_selector}
     Induct on the composition. Moving a pair preparation to the beginning
     replaces it by the identity on its two endpoint registers and the
     original spectators, with the same owners. In a concatenation, the
     extra spectators are source registers of the later composition, so
-    their owners already occur there. The exchanges in the framed case
-    involve only the framed owner and owners of the original registers
-    and sources. Thus no party is added or removed.
-    Relabelling preserves register owners and named local maps. When two
-    endpoints acquire the same owner, that owner is still recorded in the
-    local preparation. Finally, $q\notin f(P)$ implies that the restricted
-    remaining composition has no party; the no-party clause of
+    their owners already occur there, and
+    \begin{align*}
+        \mathcal P(B_{W_2W_1})
+         & =\mathcal P(B_{W_1})\cup\mathcal P(B_{W_2})
+        =\mathcal P(W_1)\cup\mathcal P(W_2)=\mathcal P(W_2W_1).
+    \end{align*}
+    The exchanges in the framed case involve only the framed owner and
+    owners of the original registers and sources. Thus no party is added
+    or removed. Relabelling preserves register owners and named local
+    maps, and the party sets transform through
+    \begin{align*}
+        f(S_1\cup S_2) & =f(S_1)\cup f(S_2),
+                       &
+        f(\{p\}\cup S) & =\{f(p)\}\cup f(S).
+    \end{align*}
+    When two endpoints acquire the same owner, $\{f(p),f(q)\}=\{f(p)\}$
+    and that owner is still recorded in the local preparation. Finally,
+    for $q\notin f(P)$,
+    \begin{align*}
+        \mathcal P(B_{W^f}|_q)=\mathcal P(B_{W^f})\cap\{q\}
+        =f(\mathcal P(W))\cap\{q\}=\varnothing,
+    \end{align*}
+    and the no-party clause of
     Theorem~\ref{thm:peps_party_factorization} gives the identity on $\C$.
 \end{proof}
 

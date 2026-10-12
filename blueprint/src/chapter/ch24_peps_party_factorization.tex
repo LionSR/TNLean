@@ -280,7 +280,8 @@
     \label{thm:peps_actual_singleton_factorization}
     \lean{TNLean.PEPS.PairEffect.Word.groupByPartyIso_eval_eq_tensorRestrictions}
     \leanok
-    \uses{def:peps_party_partition,thm:peps_party_restriction}
+    \uses{def:peps_party_registers,def:peps_party_partition,
+        thm:peps_party_restriction}
     Let $W:\mathcal H_\ell\to\mathcal H_m$ be a source-free
     composition, and let $p_1,\ldots,p_s$ be a list of distinct
     parties containing every party named by $W$. This includes
@@ -303,15 +304,15 @@
 
 \begin{proof}\leanok
     \uses{thm:peps_party_binary_factorization,thm:peps_party_factorization,
-        thm:peps_singleton_after_excluded_party}
+        thm:peps_party_restriction,thm:peps_singleton_after_excluded_party}
     Induct on the ordered party list. For an empty list, the
     composition has no named parties, hence has empty input and
     output lists and is the identity on $\C$, by the no-party clause
     of Theorem~\ref{thm:peps_party_factorization}.
     For a list beginning with $p$, split the registers into those
-    owned by $p$ and the complementary registers. The binary
-    restriction identity splits $W$ into $W|_{\{p\}}$ and
-    $W|_{P\setminus\{p\}}$. Apply the induction hypothesis to
+    owned by $p$ and the complementary registers. Specializing
+    (\ref{eq:peps_party_binary_factorization}) with $A=\{p\}$ splits $W$
+    into $W|_{\{p\}}$ and $W|_{P\setminus\{p\}}$. Apply the induction hypothesis to
     the latter composition. For each remaining party $q\ne p$,
     its singleton factor agrees with $W|_{\{q\}}$ by
     (\ref{eq:peps_singleton_after_excluded_party}). The canonical

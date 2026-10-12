@@ -495,15 +495,15 @@ theorem ft_sector_bnt_equal_mps_gaugeEquiv_literal
           Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ))
   simp only [Matrix.mul_assoc]
 
-/-- **Canonical Form II equal-case unitary global gauge.**
+/-- **Canonical Form II unitary refinement, equal case** (CPSV16 Corollary A.6,
+lines 1197--1199).
 
 If two BNT canonical forms generate the same MPV family at every positive
-length, their literal total tensors are related by a unitary gauge.  The gauge
-is the product of the block-diagonal direct sum of the matched sector unitaries
-and the unitary permutation that restores the original sector coordinates.
-
-Source: Cirac et al., arXiv:1606.00608, Corollary A.6, lines 1197--1199. -/
-private theorem ft_sector_bnt_equal_mps_unitaryGauge_literal
+length, their literal total tensors are related by one unitary global gauge
+after identifying their equal total bond dimensions.  The gauge is the product
+of the block-diagonal direct sum of the matched sector unitaries and the
+unitary permutation that restores the original sector coordinates. -/
+theorem fundamentalTheorem_equal_canonicalForm_unitary
     {P Q : SectorDecomposition d}
     (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
@@ -624,31 +624,6 @@ theorem fundamentalTheorem_equal_canonicalForm
             (((Y)⁻¹ : GL (Fin Q.totalDim) ℂ) :
               Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) :=
   ft_sector_bnt_equal_mps_gaugeEquiv_literal hP hQ hEqual
-
-/-- **Canonical Form II unitary refinement, equal case** (CPSV16 Corollary A.6,
-lines 1197--1199).
-
-Two BNT canonical forms generating the same MPV family at every positive
-length are related by one unitary global gauge after identifying their equal
-total bond dimensions.
--/
-theorem fundamentalTheorem_equal_canonicalForm_unitary
-    {P Q : SectorDecomposition d}
-    (hP : IsBNTCanonicalForm P) (hQ : IsBNTCanonicalForm Q)
-    (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
-    ∃ (hTotal : P.totalDim = Q.totalDim) (Y : GL (Fin Q.totalDim) ℂ),
-      (Y : Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) ∈
-        Matrix.unitaryGroup (Fin Q.totalDim) ℂ ∧
-      ∀ i : Fin d,
-        Q.toTensor i =
-          (Y : Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) *
-            cast (by rw [hTotal] :
-                Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ =
-                Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ)
-              (P.toTensor i) *
-            (((Y)⁻¹ : GL (Fin Q.totalDim) ℂ) :
-              Matrix (Fin Q.totalDim) (Fin Q.totalDim) ℂ) :=
-  ft_sector_bnt_equal_mps_unitaryGauge_literal hP hQ hEqual
 
 /-- **Proportional multi-block fundamental theorem** (CPSV16 Theorem 2.10,
 lines 349--352; CPSV21 Theorem 4.4).

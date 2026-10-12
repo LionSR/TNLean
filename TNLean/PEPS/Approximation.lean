@@ -126,6 +126,7 @@ import TNLean.PEPS.Approximation.LayoutOwnerMap
 import TNLean.PEPS.Approximation.LocalPairSource
 import TNLean.PEPS.Approximation.LocalSchmidtOutput
 import TNLean.PEPS.Approximation.LocalTransferExpansion
+import TNLean.PEPS.Approximation.MatrixAction
 import TNLean.PEPS.Approximation.MessageGateCircuit
 import TNLean.PEPS.Approximation.MessageGateExpansion
 import TNLean.PEPS.Approximation.MessageMonomial
@@ -207,7 +208,13 @@ import TNLean.PEPS.Approximation.SeparatedOutputCoordinates
 import TNLean.PEPS.Approximation.SeparatedPhysicalDensity
 import TNLean.PEPS.Approximation.SeparatedSchmidtOutput
 import TNLean.PEPS.Approximation.SheetSplitting
+import TNLean.PEPS.Approximation.SheetSwapBoundaryExpansion
 import TNLean.PEPS.Approximation.SheetSwapCorrection
+import TNLean.PEPS.Approximation.SheetSwapDoubledCancellation
+import TNLean.PEPS.Approximation.SheetSwapDoubledTermNorm
+import TNLean.PEPS.Approximation.SheetSwapInteractionSupport
+import TNLean.PEPS.Approximation.SheetSwapSiteSupport
+import TNLean.PEPS.Approximation.SheetSwapSupported
 import TNLean.PEPS.Approximation.SiteChainMonomials
 import TNLean.PEPS.Approximation.SiteChainNetwork
 import TNLean.PEPS.Approximation.SiteChainTruncation

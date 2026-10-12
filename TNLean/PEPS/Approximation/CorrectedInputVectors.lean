@@ -31,6 +31,10 @@ namespace TNLean.PEPS.PairEffect.SourceCircuit
 open TNLean.PEPS.Approximation SourceInventory
 variable {P : Type}
 
+-- Keeping the retained-slot list opaque stops elaboration from unfolding the
+-- concrete register memories while matching their tensor-product instances.
+attribute [local irreducible] partialSlots
+
 /-- Absorb the original input preparation before the corrected and crossing
 registers are rearranged. The two free source blocks remain literal layouts. -/
 def correctedInputPreparation {a b : Layout P} (w : SourceCircuit a b)

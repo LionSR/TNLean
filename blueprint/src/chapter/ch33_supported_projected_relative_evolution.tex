@@ -1,0 +1,47 @@
+\section{Supported projected relative evolution}
+
+\begin{theorem}[Supported projected relative evolution]
+    \label{thm:qc_supported_projected_relative_evolution}
+    \lean{QuantumCircuit.exists_supported_projected_relative_evolution}
+    \leanok
+    \uses{def:qc_site_expectation}
+    Let $I$ be a finite set of sites, let $q\geq1$, and let $K\subseteq I$.
+    Let $H'$ and $H$ be Hermitian operators on $(\C^q)^{\otimes I}$, and put
+    $G_K(t)=E_K(e^{itH'}(H'-H)e^{-itH'})$. There is a unique differentiable
+    path $U$ satisfying
+    \begin{align*}
+        U(0)  & =1,           \\
+        U'(t) & =iG_K(t)U(t).
+    \end{align*}
+    For every real $t$, the operator $U(t)$ is unitary and acts on $K$.
+    Moreover, for any real $t,\varepsilon$, if
+    \begin{align*}
+        \|e^{isH'}(H'-H)e^{-isH'}-G_K(s)\|\leq\varepsilon
+    \end{align*}
+    for all $s$ between $0$ and $t$, then
+    \begin{align*}
+        \|e^{itH'}e^{-itH}-U(t)\|\leq\varepsilon |t|.
+    \end{align*}
+    Empty site sets and empty regions are included. This is the supported
+    relative evolution used in \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:qc_site_expectation_properties,lem:al_site_expectation_order}
+    The expectation is complex linear, preserves Hermiticity, and contracts
+    the operator norm. The theorem ``Projected evolution approximates
+    the explicit product'' in \cite{QICLean2026Blueprint} therefore
+    constructs a single unitary path with the stated derivative,
+    uniqueness, and comparison estimate.
+    The derivative of $e^{itH'}e^{-itH}$ has generator
+    $e^{itH'}(H'-H)e^{-itH'}$ multiplying on the left, so both evolutions
+    have the same initial value.
+
+    Each $G_K(s)$ acts on $K$. Hence every operator $B$ acting on $K^c$
+    commutes with every $G_K(s)$. The theorem ``Commutation with the
+    evolution'' in \cite{QICLean2026Blueprint} gives that $U(t)$ commutes
+    with $B$, by the conservation identity $U(t)^*BU(t)=B$ and unitarity.
+    The commutant characterization of the supported-operator algebra
+    shows that $U(t)$ acts on $K$. This argument concerns the same path
+    for every real time, including negative times.
+\end{proof}

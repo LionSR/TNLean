@@ -20,7 +20,6 @@ Source: polynomial-PEPS manuscript (September 24, 2026), Theorem 5.2,
 -/
 
 noncomputable section
-open ContinuousLinearMap
 open scoped TensorProduct
 namespace TNLean.PEPS.PairEffect.SourceCircuit
 variable {P : Type}
