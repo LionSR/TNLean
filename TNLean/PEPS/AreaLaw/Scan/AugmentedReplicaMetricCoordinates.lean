@@ -48,6 +48,8 @@ theorem augmentedReplicaConfigurationEquiv_subsystemPerm
         (augmentedReplicaConfigurationEquiv q d k x) := by
   classical
   funext j s
+  simp only [augmentedReplicaConfigurationEquiv, Equiv.arrowCongr_apply,
+    Equiv.refl_symm, Equiv.refl_apply, subsystemPerm_apply]
   done
 
 variable [Fintype V]
