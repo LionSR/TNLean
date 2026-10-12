@@ -6466,6 +6466,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   than tensor identities. The addition case already uses `congrArg₂`,
   `eq_of_heq`, and `heq_of_eq`. The same core equality tools suffice for the
   head constructions; a generic lemma would only restate their congruence.
+- **Promotion (2026-10-12):** `WordPermutationRestriction`,
+  `WordAppendTailRestriction` and `SourceFreeLocalPart` repeated the same
+  composition and framing helpers. These three copies are replaced by
+  `Word.eval_comp_heq` and `Word.eval_frame_heq` in
+  `WordEvaluationTransport`. The helpers identify the register lists before
+  applying ordinary congruence to the operators. They do not infer equality
+  of restricted operators from equality before restriction. The new framed
+  local-part proof uses the same shared lemmas. Named axiom checks are in
+  `TNLeanTest/WordEvaluationTransportAxioms.lean`; elaboration is pending.
 - **Relation to the tensor-map candidate:** The two existing private
   `mapL_heq` and `mapL_apply_heq` helpers concern tensor products of two maps
   with four changing spaces. The new helper instead compares an associator

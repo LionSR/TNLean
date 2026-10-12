@@ -33,4 +33,26 @@ theorem eval_castLayouts_apply_heq {P : Type} {a b a' b' : Layout P}
   cases ho
   exact heq_of_eq (congrArg w.eval (eq_of_heq hxy))
 
+/-- Heterogeneously equal word operators remain equal under composition after
+identifying their input, intermediate and output register lists. -/
+theorem eval_comp_heq {P : Type} {a b c a' b' c' : Layout P}
+    (u : Word a b) (v : Word b c) (u' : Word a' b') (v' : Word b' c')
+    (ha : a = a') (hb : b = b') (hc : c = c')
+    (hu : HEq u.eval u'.eval) (hv : HEq v.eval v'.eval) :
+    HEq (u.comp v).eval (u'.comp v').eval := by
+  cases ha
+  cases hb
+  cases hc
+  exact heq_of_eq (congrArg₂ ContinuousLinearMap.comp (eq_of_heq hv) (eq_of_heq hu))
+
+/-- Heterogeneously equal word operators remain equal when framed by the same
+register, after identifying their input and output register lists. -/
+theorem eval_frame_heq {P : Type} (r : Reg P) {a b a' b' : Layout P}
+    (u : Word a b) (v : Word a' b') (ha : a = a') (hb : b = b')
+    (hu : HEq u.eval v.eval) : HEq (Word.frame r u).eval (Word.frame r v).eval := by
+  cases ha
+  cases hb
+  exact heq_of_eq (congrArg (fun A : Mem a →L[ℂ] Mem b ↦ A.lTensor r.space)
+    (eq_of_heq hu))
+
 end TNLean.PEPS.PairEffect.Word
