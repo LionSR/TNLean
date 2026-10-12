@@ -47,6 +47,7 @@ theorem augmentedReplicaConfigurationEquiv_subsystemPerm
       subsystemPerm k (ιS q d) (Q.image augmentedSiteEquiv) σ
         (augmentedReplicaConfigurationEquiv q d k x) := by
   classical
+  funext j s
   done
 
 variable [Fintype V]
