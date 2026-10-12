@@ -539,22 +539,6 @@ jobs:
           retention-days: 1
           compression-level: 9
 
-      # Fail on the new theorem targets before building unrelated TN modules.
-      # Keep their timings in the same log consumed by the changed-file gate.
-      - name: Check coherent sector conversion targets
-        if: success() && github.event_name == 'pull_request' && needs.changes.outputs.coherent_prerequisites == 'true'
-        run: |
-          set -eo pipefail
-          lake --fail-fast build \
-            +TNLean.MPS.Preparation.ExactSectorEncoder:olean \
-            +TNLean.MPS.Preparation.SectorEncoderRates:olean \
-            +TNLean.MPS.Preparation.SectorSpectralGap:olean \
-            +TNLean.MPS.Preparation.SectorEncoderPreparation:olean \
-            +TNLean.MPS.Preparation.SectorEncoderCompilation:olean \
-            +TNLean.MPS.Preparation.CoherentGroundspaceConversion:olean \
-            +TNLean.MPS.Preparation.SectorEncoderGroundspace:olean \
-            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
-
       # Build the changed production modules before the full library so a
       # failure surfaces early. The build is a shortcut: past its budget it
       # stops with a warning and the root build continues. Selection:
@@ -818,23 +802,6 @@ jobs:
           python3 -m pip install plasTeX==3.1 playwright==1.56.0
           python3 -m playwright install --with-deps chromium
       - name: Test inline picture semantics
-        run: python3 scripts/test_tenkz_inline_web.py
-
-      - name: Diagnose full TeX system environment
-        timeout-minutes: 20
-        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
-        with:
-          cache-suffix: web-v3
-          extra-packages: texlive-fonts-extra texlive-publishers
-      - name: Check layout with TeX system dependencies
-        run: |
-          fc-match 'Times New Roman'
-          python3 scripts/test_tenkz_inline_web.py
-      - name: Diagnose full blueprint Python environment
-        uses: texra-ai/lean-env-action/leanblueprint@v1
-        with:
-          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
-      - name: Check layout with blueprint Python dependencies
         run: python3 scripts/test_tenkz_inline_web.py
 
   blueprint:
