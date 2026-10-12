@@ -5892,6 +5892,22 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 ## Rejected
 
+### Axiom allow-list fixtures — rejected (2026-10-12)
+
+- **Pattern:** a `run_cmd` block in a `TNLeanTest/` fixture that checks a
+  named declaration exists, collects its axioms with `Lean.collectAxioms`,
+  and rejects anything outside `propext`, `Classical.choice` and
+  `Quot.sound`.
+- **Seen:** `TNLeanTest/WeakRectanglePartialRowEntropyAxioms.lean`,
+  `TNLeanTest/PartyOutputCoordinatesAxioms.lean`,
+  `TNLeanTest/ContinuityFixedCoefficientAxioms.lean`, and most other
+  exact-name axiom fixtures under `TNLeanTest/`.
+- **Reason:** each fixture is a standalone audit whose declaration list and
+  allow-list should be readable in the file that CI runs. The block is a few
+  lines of metaprogramming with no mathematical content; a shared command would
+  move the allow-list out of the audited file without removing a proof
+  obligation. Fixtures keep the explicit block.
+
 ### Elementary set and finite-sum proof structure — rejected (2026-10-02)
 
 - **Pattern:** The three-line sequences `ext x; constructor; intro hx` and
@@ -6964,6 +6980,19 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The current occurrences are all in one proof, below the
   multiple-file promotion threshold. Crossing membership itself is already
   expressed by `mem_edgeBoundary_pair_iff`; no new tactic macro is needed.
+
+### Physical regional density as a tensor-factor partial trace — candidate (2026-10-11)
+
+- **Pattern:** Compose `reducedState_eq_finiteProduct` with
+  `FiniteProduct.reducedPure_eq_partialTrace` after splitting a physical state
+  into the selected region and its complement.
+- **Seen:** Two occurrences in `PEPS/AreaLaw/SelectedSchmidtEntropyBounds.lean`
+  and `PEPS/AreaLaw/Scan/TypicalReplicaAbsorption.lean`.
+- **Abstraction:** A regional-density identity could package the composition
+  if a third use appears. The two existing public identities are reused here.
+- **Notes:** The split state and the selected spectral set remain those of the
+  supplied physical state. No normalization or gap premise is needed for the
+  density identity itself. This is below the promotion threshold.
 
 ### Exact eigenvalue equations under configuration isometries — candidate (2026-10-09)
 

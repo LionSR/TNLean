@@ -29,13 +29,9 @@ Source: arXiv:1804.04964, the normal TI PEPS corollary at lines 2297--2318 and
 its proof at lines 2320--2444 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem fundamentalTheorem_normalTorusArcWindowPEPS
     (A B : Tensor (torusGraph width height) d)
-    (hA : NormalTorusArcWindowInjectivityHypotheses L K (regionInjectivityDataOf A))
-    (hB : NormalTorusArcWindowInjectivityHypotheses L K (regionInjectivityDataOf B))
+    (hA : IsNormalTorusArcWindowPEPS L K A) (hB : IsNormalTorusArcWindowPEPS L K B)
     (hATI : IsTorusTranslationInvariant A) (hBTI : IsTorusTranslationInvariant B)
-    (hAB : SameState A B)
-    (hposA : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
-    (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-    (hL : 0 < L) (hK : 0 < K)
+    (hAB : SameState A B) (hL : 0 < L) (hK : 0 < K)
     (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height) :
     ∃ (hbond : A.bondDim = B.bondDim)
       (X : (e : Edge (torusGraph width height)) → GL (Fin (B.bondDim e)) ℂ)
@@ -59,15 +55,16 @@ theorem fundamentalTheorem_normalTorusArcWindowPEPS
             (c : ℂ) • (X e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) := by
   obtain ⟨hbond, X, lam, hXcov, hPV, hPow⟩ :=
     exists_translationCovariantGauge_of_normalArcWindows_sameState A B hA hB hATI hBTI
-      hAB hposA hposB hL hK hxw hyh
+      hAB hL hK hxw hyh
   refine ⟨hbond, X, lam, hXcov, hPV, hPow, ?_⟩
   intro X' lam' hPV' e
+  have hposA := hA.bondDim_pos
   have hU := regionInjectivityUnionClosure_of_overlap A hposA
   have hR := hA.windowCornerRegion_injective hU (by omega) (by omega) hxw hyh
   have hCR := hA.compl_windowCornerRegion_injective hU (by omega) (by omega) hxw hyh
   have hPow' := lambda_pow_card_torus_eq_one A B (windowCornerRegion L K)
     hR hCR hposA hAB X' hbond lam' hPV'
-  exact torusGauge_unique_scalar_of_normalArcWindows hB hBTI hposB (by omega) (by omega)
-    hxw hyh hbond X X' hPV hPow hPV' hPow' e
+  exact torusGauge_unique_scalar_of_normalArcWindows hB.toNormalTorusArcWindowInjectivityHypotheses
+    hBTI hB.bondDim_pos (by omega) (by omega) hxw hyh hbond X X' hPV hPow hPV' hPow' e
 
 end TNLean.PEPS

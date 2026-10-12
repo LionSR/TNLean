@@ -51,7 +51,12 @@ def MPVPhaseClassData.toSectorDecomposition (classes : MPVPhaseClassData blocks)
 with the same weight moduli and total dimension, related by a unitary similarity.
 Each grouped copy remains identified with `classes.enum j q` in the original
 family. This realizes arXiv:1708.00029, `eq:bdnr`, lines 286–305, with the
-unitary gauge specified after `thm:bd`, line 625. -/
+unitary gauge specified after `thm:bd`, line 625.
+
+The same unitary carries a block-scalar matrix on the grouped copies back to
+the original family: a scalar `c j q` on the grouped copy `(j, q)` becomes a
+factor `c j q` on the weight of the original block `classes.enum j q`. This
+transports the multiplicity gauge `Z` of `thm:bdequal`, lines 653--655. -/
 theorem MPVPhaseClassData.exists_unitary_sectorDecomposition
     (classes : MPVPhaseClassData blocks) (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0)
     (period : Fin r → ℕ) (hper : ∀ k, IsPeriodic (period k) (blocks k)) :
@@ -65,7 +70,11 @@ theorem MPVPhaseClassData.exists_unitary_sectorDecomposition
       SameMPV₂Pos (toTensorFromBlocks μ blocks) P.toTensor ∧
       ∃ Y : Matrix (Fin (∑ k, dim k)) (Fin P.totalDim) ℂ,
         Y * Yᴴ = 1 ∧ Yᴴ * Y = 1 ∧
-        ∀ i, toTensorFromBlocks μ blocks i = Y * P.toTensor i * Yᴴ := by
+        (∀ i, toTensorFromBlocks μ blocks i = Y * P.toTensor i * Yᴴ) ∧
+        ∀ (c : (j : Fin classes.g) → Fin (classes.copies j) → ℂ) (i : Fin d),
+          toTensorFromBlocks (fun k ↦ c (classes.enumEquiv.symm k).1
+              (classes.enumEquiv.symm k).2 * μ k) blocks i =
+            Y * (blockScalarMatrix P.flatDim (P.flatCopyScalar c) * P.toTensor i) * Yᴴ := by
   classical
   choose hd ξ U hξ hrel using fun j q ↦ (classes.periodic_unitary_match period hper j q).2
   let P := classes.toSectorDecomposition μ ξ hμ hξ
@@ -104,10 +113,27 @@ theorem MPVPhaseClassData.exists_unitary_sectorDecomposition
     rw [he _ (f.apply_symm_apply k)] at ht
     simpa only [unitaryGL_val, unitaryGL_inv_val] using ht
   obtain ⟨Y, Y', hYY', hY'Y, hunit, hconj⟩ :=
-    toTensorFromBlocks_conj_of_matched_blocks μ blocks P.flatWeight P.flatBasis
+    toTensorFromBlocks_conj_of_matched_blocks_smul μ blocks P.flatWeight P.flatBasis
       f.symm hd' (fun t ↦ unitaryGL (V t)) hmatched
   have hAdj := hunit (fun t ↦ (V t).property)
-  refine ⟨ξ, hξ, ?_, ?_, ?_, ?_, ?_, Y, ?_, ?_, ?_⟩
+  have hconj' (c : (j : Fin classes.g) → Fin (classes.copies j) → ℂ) (i : Fin d) :
+      toTensorFromBlocks (fun k ↦ c (classes.enumEquiv.symm k).1
+          (classes.enumEquiv.symm k).2 * μ k) blocks i =
+        Y * (blockScalarMatrix P.flatDim (P.flatCopyScalar c) * P.toTensor i) * Yᴴ := by
+    rw [P.toTensor_eq_toTensorFromBlocks_flat, blockScalarMatrix_mul_toTensorFromBlocks,
+      ← hAdj]
+    convert hconj (fun k ↦ c (classes.enumEquiv.symm k).1 (classes.enumEquiv.symm k).2) i
+      using 4
+    funext t
+    have h : classes.enumEquiv.symm (f t) = P.flatIndexEquiv.symm t :=
+      classes.enumEquiv.symm_apply_apply _
+    simp only [Equiv.symm_symm]
+    exact congrArg (fun x ↦ c x.1 x.2 * P.flatWeight t) h.symm
+  have hconj (i : Fin d) :
+      toTensorFromBlocks μ blocks i =
+        Y * toTensorFromBlocks P.flatWeight P.flatBasis i * Y' := by
+    simpa only [one_mul] using hconj (fun _ ↦ 1) i
+  refine ⟨ξ, hξ, ?_, ?_, ?_, ?_, ?_, Y, ?_, ?_, ?_, hconj'⟩
   · exact Fintype.sum_equiv f P.flatDim dim (fun t ↦ (hdim t).symm)
   · exact fun j ↦ hper (classes.repr j)
   · exact classes.not_hetRepeatedBlocks

@@ -50,6 +50,7 @@ import TNLean.PEPS.AreaLaw.QuasilocalRoots
 import TNLean.PEPS.AreaLaw.RectangularDomain
 import TNLean.PEPS.AreaLaw.RegionOperatorLocalization
 import TNLean.PEPS.AreaLaw.RegionalEntropyBridge
+import TNLean.PEPS.AreaLaw.RegionalEntropyContinuity
 import TNLean.PEPS.AreaLaw.RegionalReindex
 import TNLean.PEPS.AreaLaw.RegionalStates
 import TNLean.PEPS.AreaLaw.RegularizedPatchCoordinate
@@ -62,6 +63,7 @@ import TNLean.PEPS.AreaLaw.SafeBoxChildren
 import TNLean.PEPS.AreaLaw.SafeRectangleDilation
 import TNLean.PEPS.AreaLaw.Scan
 import TNLean.PEPS.AreaLaw.SelectedSchmidtEntropyBounds
+import TNLean.PEPS.AreaLaw.SupportedGaussianIntegral
 import TNLean.PEPS.AreaLaw.TailParameter
 import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.PEPS.AreaLaw.TruncationRadius

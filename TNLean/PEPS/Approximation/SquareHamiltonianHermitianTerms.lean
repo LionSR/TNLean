@@ -51,12 +51,13 @@ def SquareHamiltonian.hermitianTerm {L q : ℕ} {J : ℝ} (h : SquareHamiltonian
     (i : SquareInteraction L) : Matrix (Configuration L q) (Configuration L q) ℂ :=
   ℜ (squareInteractionTerm h i)
 
-/-- Hermitian replacement preserves the original interaction support.
-Source: `00-introduction.tex`, `eq:model`. -/
-theorem SquareHamiltonian.hermitianTerm_supported {L q : ℕ} {J : ℝ}
+/-- The Hermitian part of an original interaction remains in its designated
+circuit supported-operator algebra, since that algebra is closed under
+adjoints and real linear combinations. Source: `00-introduction.tex`, `eq:model`. -/
+theorem SquareHamiltonian.hermitianTerm_mem_supportedOperators {L q : ℕ} {J : ℝ}
     (h : SquareHamiltonian L q J) (i : SquareInteraction L) :
-    Entropy.IsSupportedOn (n := fun _ : Vertex L => q)
-      (h.hermitianTerm i) (squareInteractionSupport i) := by
+    h.hermitianTerm i ∈ QuantumCircuit.supportedOperators q
+      (squareInteractionSupport i : Set (Vertex L)) := by
   have hs : squareInteractionTerm h i ∈
       QuantumCircuit.supportedOperators q (squareInteractionSupport i : Set (Vertex L)) := by
     cases i with
@@ -67,11 +68,18 @@ theorem SquareHamiltonian.hermitianTerm_supported {L q : ℕ} {J : ℝ}
       simpa only [squareInteractionTerm, squareInteractionSupport, Finset.coe_insert,
         Finset.coe_singleton, forwardSquareEdgeEquiv_val]
         using h.edge_supported (forwardSquareEdgeEquiv L e)
-  apply QuantumCircuit.isSupportedOn_of_mem_supportedOperators
   exact coe_realPart_mem_of_star_mem
     (S := (QuantumCircuit.supportedOperators q
       (squareInteractionSupport i : Set (Vertex L))).restrictScalars ℝ)
     hs (QuantumCircuit.star_mem_supportedOperators hs)
+
+/-- Hermitian replacement preserves the original interaction support.
+Source: `00-introduction.tex`, `eq:model`. -/
+theorem SquareHamiltonian.hermitianTerm_supported {L q : ℕ} {J : ℝ}
+    (h : SquareHamiltonian L q J) (i : SquareInteraction L) :
+    Entropy.IsSupportedOn (n := fun _ : Vertex L => q)
+      (h.hermitianTerm i) (squareInteractionSupport i) :=
+  QuantumCircuit.isSupportedOn_of_mem_supportedOperators (h.hermitianTerm_mem_supportedOperators i)
 
 /-- Every replaced interaction is Hermitian. Source:
 `00-introduction.tex`, `eq:model`. -/

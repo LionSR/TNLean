@@ -10,11 +10,13 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Periodic.Symmetry.Corollary41
 import TNLean.MPS.Periodic.Symmetry.EqualCaseFTHyp
+import TNLean.MPS.Periodic.Symmetry.PhysicalSymmetry
 import TNLean.MPS.Periodic.Symmetry.RefinementFromInjectiveTransfer
 import TNLean.MPS.Periodic.Symmetry.RefinementFromInvertibleWordSpan
 import TNLean.MPS.Periodic.Symmetry.RefinementNormalizationCounterexample
 import TNLean.MPS.Periodic.Symmetry.Theorem41Bundle
 import TNLean.MPS.Periodic.Symmetry.Theorem41Defs
 import TNLean.MPS.Periodic.Symmetry.Theorem41Forward
+import TNLean.MPS.Periodic.Symmetry.Theorem41ForwardBlockForm
 import TNLean.MPS.Periodic.Symmetry.Theorem41OneSite
 import TNLean.MPS.Periodic.Symmetry.Theorem41Reverse
