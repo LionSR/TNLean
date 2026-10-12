@@ -870,6 +870,7 @@ The following finite construction follows
     \label{lem:al_scan_front_thresholds}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.upper_le,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.front_comparison_thresholds_le}
+    \leanok
     \uses{def:al_scan_actual_histories,def:al_scan_comparison_prefixes}
     Suppose $n>0$ and $8Km\le L$. Fix $0\le g<K$, $0\le r<m$ and
     $0\le k\le nm$. Let $j_N,j_F$ be the near and oriented far nominal
@@ -878,7 +879,7 @@ The following finite construction follows
         v\le L,\qquad j_N-1\le L,\qquad -j_F\le L.
     \]
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The upper endpoint satisfies $v\le8(g+1)m\le8Km\le L$.
     Put $u=8gm+m+r$. The near threshold is $u$ plus the number of
     completed near advances, which is at most $m$. Since $v-u=4m$,
