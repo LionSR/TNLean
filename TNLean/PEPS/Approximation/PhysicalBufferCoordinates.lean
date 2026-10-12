@@ -73,6 +73,8 @@ theorem reindex_physicalBuffer_eq_siteLift
         FiniteProduct.splitTwoRegionsEquiv, FiniteProduct.unionEquiv,
         Equiv.coe_fn_mk, FiniteProduct.splitEquiv_apply_fst, Equiv.refl_apply, Prod.mk.injEq,
         Equiv.apply_eq_iff_eq]
+      have hxy (i : ι) (hi : i ∈ R ∪ C) : x i = y i :=
+        h i (fun j hij ↦ (Finset.mem_compl.mp (hij ▸ j.property)) hi)
       done
   done
 
