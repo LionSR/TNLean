@@ -177,22 +177,25 @@ theorem Template.mem_sample_of_row_between {Ctpl : ℝ} {n s₀ : ℕ}
     ((T.mem_sample i (a, y)).mp ha) ((T.mem_sample i (b, y)).mp hb)
     (by exact_mod_cast hax) (by exact_mod_cast hxb)
 
+/-- A nonempty finite set of integers containing every integer between two of its
+members is the interval between its least and greatest members. -/
+theorem finset_eq_Icc_min'_max'_of_between {S : Finset ℤ} (h : S.Nonempty)
+    (hS : ∀ {a b x : ℤ}, a ∈ S → b ∈ S → a ≤ x → x ≤ b → x ∈ S) :
+    S = Finset.Icc (S.min' h) (S.max' h) := by
+  ext x
+  refine ⟨fun hx ↦ Finset.mem_Icc.mpr ⟨S.min'_le _ hx, S.le_max' _ hx⟩, fun hx ↦ ?_⟩
+  obtain ⟨hl, hu⟩ := Finset.mem_Icc.mp hx
+  exact hS (S.min'_mem h) (S.max'_mem h) hl hu
+
 /-- The endpoints of a nonempty sampled row are its attained integer extrema. -/
 theorem Template.latticeRow_eq_Icc {Ctpl : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (i : Fin T.pieceCount) (y : ℤ)
     (h : (latticeRow (T.sample i) y).Nonempty) :
     latticeRow (T.sample i) y =
       Finset.Icc ((latticeRow (T.sample i) y).min' h)
-        ((latticeRow (T.sample i) y).max' h) := by
-  ext x
-  constructor
-  · intro hx
-    exact Finset.mem_Icc.mpr ⟨Finset.min'_le _ _ hx, Finset.le_max' _ _ hx⟩
-  · intro hx
-    obtain ⟨hax, hxb⟩ := Finset.mem_Icc.mp hx
-    exact mem_latticeRow.mpr (T.mem_sample_of_row_between i
-      (mem_latticeRow.mp (Finset.min'_mem _ h))
-      (mem_latticeRow.mp (Finset.max'_mem _ h)) hax hxb)
+        ((latticeRow (T.sample i) y).max' h) :=
+  finset_eq_Icc_min'_max'_of_between h fun ha hb hax hxb ↦ mem_latticeRow.mpr
+    (T.mem_sample_of_row_between i (mem_latticeRow.mp ha) (mem_latticeRow.mp hb) hax hxb)
 
 /-- Every nonempty sampled piece lies in the integer square of radius `s₀`
 about any one of its sampled sites. -/

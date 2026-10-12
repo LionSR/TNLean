@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import QICLean.Algebra.KroneckerFactorPositivity
 import QICLean.Algebra.SpinCover.Basic
-import TNLean.Algebra.NegMulLog
 import TNLean.MPS.MPDO.AreaLaw
 import TNLean.MPS.MPDO.BinaryConfigurationSign
 import TNLean.MPS.MPDO.RFPViaTS
@@ -267,40 +266,9 @@ theorem one_site_trace_loses_sigmaZ (L : ℕ) (hL : 1 ≤ L) :
 
 private lemma blockEntropy_M_eq {N L : ℕ} (hLpos : 1 ≤ L) (hLN : L < N)
     (hL : L ≤ N) (hM : (mpo M N).PosSemidef) :
-    blockEntropy M N L hL hM = L * Real.log 2 := by
-  rw [blockEntropy]
-  have hrho_herm := reducedBlockState_isHermitian M N L hL hM
-  have hrho_eq := reducedBlockState_M_eq_scaled_one hLpos hLN
-  have hc_selfadj : IsSelfAdjoint ((2 : ℂ)⁻¹ ^ L : ℂ) := by simp [IsSelfAdjoint]
-  have hscaled : (((2 : ℂ)⁻¹ ^ L : ℂ) •
-      (1 : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ)).IsHermitian :=
-    (Matrix.isHermitian_one (n := Fin L → Fin 2) (α := ℂ)).smul hc_selfadj
-  rw [vonNeumannEntropy_congr hrho_eq hrho_herm hscaled,
-    vonNeumannEntropy_eq_charpoly_roots _ hscaled]
-  have hcard : Fintype.card (Fin L → Fin 2) = 2 ^ L := by simp
-  have hchar : (((2 : ℂ)⁻¹ ^ L : ℂ) •
-      (1 : Matrix (Fin L → Fin 2) (Fin L → Fin 2) ℂ)).charpoly =
-      (Polynomial.X - Polynomial.C ((2 : ℂ)⁻¹ ^ L : ℂ)) ^
-        Fintype.card (Fin L → Fin 2) := by
-    calc
-      _ = (Matrix.diagonal fun _ : Fin L → Fin 2 => ((2 : ℂ)⁻¹ ^ L : ℂ)).charpoly := by
-        rw [Matrix.smul_one_eq_diagonal]
-      _ = ∏ _i : Fin L → Fin 2,
-          (Polynomial.X - Polynomial.C ((2 : ℂ)⁻¹ ^ L : ℂ)) :=
-        Matrix.charpoly_diagonal _
-      _ = _ := by simp
-  rw [hchar, Polynomial.roots_pow, Polynomial.roots_X_sub_C]
-  simp only [Multiset.map_nsmul, Multiset.sum_nsmul, Multiset.map_singleton,
-    Multiset.sum_singleton, nsmul_eq_mul, hcard]
-  have hre : (((2 : ℂ)⁻¹ ^ L : ℂ).re : ℝ) = ((2⁻¹ : ℝ) ^ L) := by
-    calc
-      (((2 : ℂ)⁻¹ ^ L : ℂ).re : ℝ) =
-          ((((2⁻¹ : ℝ) : ℂ) ^ L : ℂ).re : ℝ) := by norm_num
-      _ = ((((2⁻¹ : ℝ) ^ L : ℝ) : ℂ).re : ℝ) := by rw [Complex.ofReal_pow]
-      _ = ((2⁻¹ : ℝ) ^ L : ℝ) := by rw [Complex.ofReal_re]
-  rw [hre, show ((2⁻¹ : ℝ) ^ L) = ((2 ^ L : ℝ)⁻¹) by simp [inv_pow]]
-  push_cast
-  rw [Real.mul_negMulLog_inv ((2 : ℝ) ^ L) (pow_ne_zero L (by norm_num)), Real.log_pow]
+    blockEntropy M N L hL hM = L * Real.log 2 :=
+  blockEntropy_eq_of_reducedBlockState_eq_smul_one M hL hM
+    (reducedBlockState_M_eq_scaled_one hLpos hLN)
 
 /-- The literal tensor satisfies saturation of the area law: every nonempty proper
 reduced block is maximally mixed, so $S_L=L\log 2$ and the mutual information

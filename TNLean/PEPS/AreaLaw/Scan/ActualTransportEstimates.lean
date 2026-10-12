@@ -127,18 +127,11 @@ theorem actualFill_transport_domainGraph :
     ha (one_le_transportLogDimBound hq S.r₀) haℓ hcomm hmove hsplit
   have henergy (r : ℕ) : E.replicaEnergy r = Hbar r :=
     S.replicaEnergy_actualEnergyTerms h Ω Δ L aux r
-  refine ⟨β, ε, hβ, hε, ?_⟩
-  intro r pre hpre hne
+  refine ⟨β, ε, hβ, hε, fun r pre hpre hne ↦ ?_⟩
   obtain ⟨hpoint, hintegral⟩ := hresult r pre hpre hne
-  refine ⟨?_, hintegral⟩
-  intro p hp
+  refine ⟨fun p hp ↦ ?_, hintegral⟩
   obtain ⟨hderiv, hent, hen⟩ := hpoint p hp
-  refine ⟨hderiv, hent, ?_⟩
-  intro E₀ heig
-  have heig' : E.replicaEnergy r *ᵥ pre = (E₀ : ℂ) • pre := by
-    rw [henergy]
-    exact heig
-  simpa only [henergy r] using hen E₀ heig'
+  exact ⟨hderiv, hent, fun E₀ heig ↦ by simpa only [henergy r] using hen E₀ (henergy r ▸ heig)⟩
 
 /-- The actual charge round satisfies all four conclusions of Proposition 7.4.
 The energy equation is for the actual truncated Hamiltonian, while the derivative,
@@ -229,17 +222,10 @@ theorem actualCharge_transport_domainGraph :
     ha (one_le_transportLogDimBound hq S.r₀) haℓ hcomm hmove hsplit
   have henergy (r : ℕ) : E.replicaEnergy r = Hbar r :=
     S.replicaEnergy_actualEnergyTerms h Ω Δ L aux r
-  refine ⟨β, ε, hβ, hε, ?_⟩
-  intro r pre hpre hne
+  refine ⟨β, ε, hβ, hε, fun r pre hpre hne ↦ ?_⟩
   obtain ⟨hpoint, hintegral⟩ := hresult r pre hpre hne
-  refine ⟨?_, hintegral⟩
-  intro p hp
+  refine ⟨fun p hp ↦ ?_, hintegral⟩
   obtain ⟨hderiv, hent, hen⟩ := hpoint p hp
-  refine ⟨hderiv, hent, ?_⟩
-  intro E₀ heig
-  have heig' : E.replicaEnergy r *ᵥ pre = (E₀ : ℂ) • pre := by
-    rw [henergy]
-    exact heig
-  simpa only [henergy r] using hen E₀ heig'
+  exact ⟨hderiv, hent, fun E₀ heig ↦ by simpa only [henergy r] using hen E₀ (henergy r ▸ heig)⟩
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

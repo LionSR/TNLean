@@ -32,6 +32,7 @@ import TNLean.Circuit.PairProductPowers
 import TNLean.Circuit.PartialIsometryDilation
 import TNLean.Circuit.ProductStateCircuit
 import TNLean.Circuit.ProductVector
+import TNLean.Circuit.ProjectedRelativeEvolution
 import TNLean.Circuit.QuantitativeSitePermutation
 import TNLean.Circuit.QuantitativeUnitaryGates
 import TNLean.Circuit.RingSeparation
@@ -42,6 +43,7 @@ import TNLean.Circuit.SiteEmbedding
 import TNLean.Circuit.SiteExpectation
 import TNLean.Circuit.SiteExpectationOrder
 import TNLean.Circuit.SiteOscillation
+import TNLean.Circuit.SitewiseTensorSupport
 import TNLean.Circuit.SpectatorOscillationSupport
 import TNLean.Circuit.SpectatorSiteExpectation
 import TNLean.Circuit.SupportedMatrixElements

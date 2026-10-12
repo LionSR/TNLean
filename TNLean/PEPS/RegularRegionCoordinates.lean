@@ -180,12 +180,8 @@ private theorem halfEdgeIndex_right_inv (R : Finset V)
     exact (Subtype.heq_iff_coe_eq (fun f => by
       simp only [halfEdgeIndex, internalHead]
       rw [hh])).mpr rfl
-  · have hb : IsRegionBoundaryEdge R e.1 := by
-      rcases e.2 with ht | ht
-      · exact Or.inl ⟨by simpa only [ht] using v.2,
-          fun hh => hi ⟨by simpa only [ht] using v.2, hh⟩⟩
-      · exact Or.inr ⟨fun hh => hi ⟨hh, by simpa only [ht] using v.2⟩,
-          by simpa only [ht] using v.2⟩
+  · have hb : IsRegionBoundaryEdge R e.1 :=
+      (isRegionIncidentEdge_of_regionVertex R v e).isRegionBoundaryEdge hi
     change halfEdgeIndex R (.inl ⟨e.1, hb⟩) = ⟨v, e⟩
     have hv : boundaryVertex R ⟨e.1, hb⟩ = v := by
       unfold boundaryVertex

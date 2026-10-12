@@ -75,6 +75,255 @@ This gives the contractions used in
     Definition~\ref{def:peps_prepared_density_coefficient}.
 \end{definition}
 
+\begin{definition}[Source columns on a prescribed pure input]
+    \label{def:peps_pure_source_matrix}
+    \lean{TNLean.PEPS.PairEffect.Word.pureSourceMatrix}
+    \leanok
+    \uses{def:peps_source_slot_basis,def:peps_free_source_matrix}
+    For a prescribed vector $\psi\in\mathcal H$, let $A_{T,\psi}$
+    have row index $k\in M$ and column index $a\in\mathcal A$, with
+    \begin{align}
+        A_{T,\psi}(k,a)
+         & =\langle g_k,T(s_a\otimes\psi)\rangle.
+        \label{eq:peps_pure_source_matrix}
+    \end{align}
+    No normalization of $\psi$ is required.
+\end{definition}
+
+\begin{theorem}[Pure-input prepared density coefficients]
+    \label{thm:peps_pure_source_density_coefficient}
+    \lean{TNLean.PEPS.PairEffect.Word.preparedDensityCoefficient_pure_eq_vecMulVec}
+    \leanok
+    \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient}
+    Let $T,T':\mathcal S\otimes\mathcal H\to\mathcal K$ be two
+    compositions, expressed in the same output basis. For independently
+    chosen $a,b\in\mathcal A$, their prepared matrices satisfy
+    \begin{align}
+        K_T(a)|\psi\rangle\langle\psi|K_{T'}(b)^\dagger
+         & =A_{T,\psi}(:,a)A_{T',\psi}(:,b)^\dagger.
+        \label{eq:peps_pure_source_density_coefficient}
+    \end{align}
+    Neither normalization nor allowedness is required. The identity
+    includes the zero input vector and the empty source list.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_prepared_vector_density,def:peps_source_slot_basis,
+        thm:peps_source_preparation_sums}
+    The preparation identity gives
+    $K_T(a)[\psi]=[T(s_a\otimes\psi)]=A_{T,\psi}(:,a)$.
+    Apply Theorem~\ref{thm:peps_prepared_vector_density} to the ket
+    and bra preparations to obtain
+    (\ref{eq:peps_pure_source_density_coefficient}).
+\end{proof}
+
+\begin{definition}[The product source matrix]
+    \label{def:peps_product_source_matrix}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.productSourceMatrix}
+    \leanok
+    \uses{def:peps_source_inventory}
+    Let $K_e$ be sets indexed by the ordered source positions, and put
+    $\mathcal A_K=\prod_e K_e$. For matrices
+    $X_e\in\C^{K_e\times K_e}$, define
+    $\mathcal X\in\C^{\mathcal A_K\times\mathcal A_K}$ by
+    \begin{align}
+        \mathcal X(\alpha,\beta)
+         & =\prod_e X_e(\alpha_e,\beta_e).
+        \label{eq:peps_product_source_matrix}
+    \end{align}
+    The product over an empty source list is one.
+\end{definition}
+
+\begin{theorem}[Finite contraction of source columns]
+    \label{thm:peps_source_column_contraction}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.sourceContraction_columns_eq_mul}
+    \leanok
+    \uses{def:peps_product_source_matrix}
+    Suppose each $K_e$ is finite. Let $\mathcal R,\mathcal T$ be
+    arbitrary sets, and let
+    $L\in\C^{\mathcal R\times\mathcal A_K}$ and
+    $M\in\C^{\mathcal T\times\mathcal A_K}$.
+    For $H(\alpha,\beta)=L(:,\alpha)M(:,\beta)^\dagger$, the
+    contraction of (\ref{eq:peps_source_contraction}) satisfies
+    \begin{align}
+        \mathcal C_H(X) & =L\mathcal X M^\dagger.
+        \label{eq:peps_source_column_contraction}
+    \end{align}
+    The matrices $X_e$ are arbitrary complex matrices; no positivity
+    or nonvanishing condition is required.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_product_source_matrix}
+    Pairing the ket and bra assignments at each source position
+    identifies them with $(\alpha,\beta)\in\mathcal A_K^2$.
+    The $(r,s)$ entry of the contraction is
+    \begin{align*}
+        \sum_{\alpha,\beta}
+        L(r,\alpha)\overline{M(s,\beta)}
+        \prod_e X_e(\alpha_e,\beta_e)
+         & =\sum_{\beta,\alpha}
+        L(r,\alpha)\mathcal X(\alpha,\beta)
+        \overline{M(s,\beta)}
+        =(L\mathcal X M^\dagger)(r,s).
+    \end{align*}
+    The sums are finite, so their order may be interchanged.
+\end{proof}
+
+\begin{theorem}[Contraction on a prescribed pure input]
+    \label{thm:peps_pure_source_contraction}
+    \lean{TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
+    \leanok
+    \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient,
+        def:peps_product_source_matrix}
+    In the source bases of Definition~\ref{def:peps_source_slot_basis},
+    take $K_e=I_e\times J_e$ and let $X_e$ be arbitrary complex
+    matrices on $K_e$. For the actual prepared coefficients
+    $H(\alpha,\beta)=K_T(\alpha)|\psi\rangle\langle\psi|
+        K_{T'}(\beta)^\dagger$, one has
+    \begin{align}
+        \mathcal C_H(X)
+         & =A_{T,\psi}\mathcal X A_{T',\psi}^\dagger.
+        \label{eq:peps_pure_source_contraction}
+    \end{align}
+    The two compositions are independent, and $\psi$ need not be
+    normalized. Empty source lists and zero input vectors are included.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_pure_source_density_coefficient,
+        thm:peps_source_column_contraction}
+    Substitute (\ref{eq:peps_pure_source_density_coefficient}) into
+    each prepared coefficient, then apply
+    (\ref{eq:peps_source_column_contraction}).
+\end{proof}
+
+\begin{theorem}[Physical entries of a pure prepared coefficient]
+    \label{thm:peps_pure_source_physical}
+    \lean{TNLean.PEPS.PairEffect.Word.preparedDensityCoefficient_pure_partialTrace_apply}
+    \leanok
+    \uses{def:peps_pure_source_matrix,def:peps_prepared_density_coefficient}
+    Suppose the output consists of a physical memory followed by a
+    discarded memory. Choose finite orthonormal bases $(h_r)_{r\in X}$ and
+    $(t_z)_{z\in D}$ of these memories, and use their tensor product
+    as the output basis in (\ref{eq:peps_pure_source_matrix}).
+    For independent source assignments $\alpha,\beta\in\mathcal A$,
+    put $H_{\alpha,\beta}=K_T(\alpha)|\psi\rangle\langle\psi|
+        K_{T'}(\beta)^\dagger$. Then
+    \begin{align}
+        \bigl(\tr_D H_{\alpha,\beta}\bigr)(r,s)
+         & =\sum_{z\in D}
+        A_{T,\psi}((r,z),\alpha)
+        \overline{A_{T',\psi}((s,z),\beta)}.
+        \label{eq:peps_pure_source_physical}
+    \end{align}
+    No normalization or positivity hypothesis is imposed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_pure_source_density_coefficient}
+    Take the $((r,z),(s,z))$ entry of
+    (\ref{eq:peps_pure_source_density_coefficient}) and sum over
+    the common discarded index $z$.
+\end{proof}
+
+\begin{theorem}[Mixed products of party matrices]
+    \label{thm:peps_party_product_conjugation}
+    \lean{TNLean.PEPS.PairEffect.partyProductMatrix_conjTranspose,
+        TNLean.PEPS.PairEffect.partyProductMatrix_conjugate}
+    \leanok
+    \uses{def:peps_dependent_physical_product}
+    Let $P$ be finite, let $I_p$ be finite input alphabets, and let
+    $O_p$ be output alphabets. For matrices
+    $A_p,B_p\in\C^{O_p\times I_p}$ and
+    $X_p\in\C^{I_p\times I_p}$, one has
+    \begin{align}
+        \left(\bigotimes_p B_p\right)^\dagger
+         & =\bigotimes_p B_p^\dagger,         \\
+        \left(\bigotimes_p A_p\right)
+        \left(\bigotimes_p X_p\right)
+        \left(\bigotimes_p B_p\right)^\dagger
+         & =\bigotimes_p (A_pX_pB_p^\dagger).
+        \label{eq:peps_party_product_conjugation}
+    \end{align}
+    The local matrices are arbitrary; the middle global matrix is
+    their prescribed product $\bigotimes_p X_p$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_dependent_product_calculus}
+    Complex conjugation preserves finite products, giving the adjoint
+    identity entrywise. Coordinatewise matrix multiplication of
+    Theorem~\ref{thm:peps_dependent_product_calculus}, applied twice,
+    gives
+    \begin{align}
+        \left(\bigotimes_p A_p\right)\left(\bigotimes_p X_p\right)
+         & =\bigotimes_p(A_pX_p),            \\
+        \left(\bigotimes_p(A_pX_p)\right)\left(\bigotimes_p B_p\right)^\dagger
+         & =\bigotimes_p(A_pX_pB_p^\dagger),
+    \end{align}
+    where the second line also uses the adjoint identity.
+\end{proof}
+
+\begin{theorem}[Tracing the private coordinates at each party]
+    \label{thm:peps_party_product_partial_trace}
+    \lean{TNLean.PEPS.PairEffect.partialTraceRight_partyProductMatrix,
+        TNLean.PEPS.PairEffect.partialTraceRight_partyProduct_conjugate}
+    \leanok
+    \uses{def:peps_dependent_physical_product,
+        thm:peps_party_product_conjugation}
+    Let $P$ be finite, with physical alphabets $H_p$ and finite private
+    alphabets $D_p$. For arbitrary matrices
+    $M_p\in\C^{(H_p\times D_p)\times(H_p\times D_p)}$, identify
+    $\prod_p(H_p\times D_p)$ with
+    $(\prod_pH_p)\times(\prod_pD_p)$. Then
+    \begin{align}
+        \tr_{\prod_pD_p}\left(\bigotimes_p M_p\right)
+         & =\bigotimes_p\tr_{D_p}(M_p).
+        \label{eq:peps_party_product_partial_trace}
+    \end{align}
+    In particular, if $O_p=H_p\times D_p$ in
+    (\ref{eq:peps_party_product_conjugation}), tracing the mixed
+    product gives $\bigotimes_p\tr_{D_p}(A_pX_pB_p^\dagger)$.
+    These identities include empty index sets.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_party_product_conjugation}
+    The $(a,b)$ entry of the partial trace is
+    \begin{align*}
+        \sum_{(z_p)_p}\prod_p M_p((a_p,z_p),(b_p,z_p))
+         & =\prod_p\sum_{z_p\in D_p}
+        M_p((a_p,z_p),(b_p,z_p)),
+    \end{align*}
+    by finite distributivity. For the mixed product, first apply
+    (\ref{eq:peps_party_product_conjugation}) and then this identity.
+\end{proof}
+
+\begin{theorem}[Absorbing a common scalar at one party]
+    \label{thm:peps_party_product_scalar}
+    \lean{TNLean.PEPS.PairEffect.partyProductMatrix_smul_at_party}
+    \leanok
+    \uses{def:peps_dependent_physical_product}
+    Let $P$ be finite and choose $p_0\in P$. For any family of
+    rectangular matrices $M_p$ and any $\mu\in\C$, put
+    $c_p=\mu$ when $p=p_0$ and $c_p=1$ otherwise. Then
+    \begin{align}
+        \bigotimes_p(c_pM_p)
+         & =\mu\bigotimes_pM_p.
+        \label{eq:peps_party_product_scalar}
+    \end{align}
+    The scalar is absorbed once, including when it vanishes.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_dependent_physical_product}
+    At each matrix entry,
+    $\prod_pc_pM_p(x_p,y_p)=\bigl(\prod_pc_p\bigr)\prod_pM_p(x_p,y_p)
+        =\mu\prod_pM_p(x_p,y_p)$, since $c_{p_0}=\mu$ and $c_p=1$ for
+    $p\ne p_0$.
+\end{proof}
+
 \begin{theorem}[Joint contraction of all source inputs]
     \label{thm:peps_free_source_contraction}
     \lean{TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_le_one}
@@ -283,4 +532,40 @@ This gives the contractions used in
     \begin{align*}
         \|A_T^{L,M}\| & =\|A_{TF_{L,M}}\|\le1.
     \end{align*}
+\end{proof}
+
+\begin{theorem}[Contraction through the actual source columns]
+    \label{thm:peps_actual_pure_source_contraction}
+    \leanok
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
+    \uses{def:peps_actual_source_column_matrix,def:peps_product_source_matrix,
+        thm:peps_pure_source_density_coefficient}
+    Let $\psi$ be the recorded private product input, let $\xi,\zeta$
+    be independent choices of gate monomials, and choose finite orthonormal
+    bases of the private input and complete output memories. For source
+    labels $x,y\in I_W$, let $C_{\xi,\zeta}(x,y)$ be the prepared output
+    coefficient of $\ketbra{\psi}{\psi}$ for the canonical remaining
+    operations $V_\xi,V_\zeta$ and elementary source vectors $b_x,b_y$.
+    For arbitrary complex matrices $X_e$ on the endpoint-coordinate pairs,
+    put $\mathcal X_{x,y}=\prod_e(X_e)_{x_e,y_e}$.
+    The literal column matrices satisfy
+    \begin{align}
+        \sum_{x,y\in I_W}\mathcal X_{x,y}C_{\xi,\zeta}(x,y)
+         & =M_\xi\mathcal X M_\zeta^\dagger.
+        \label{eq:peps_actual_pure_source_contraction}
+    \end{align}
+    This is the actual-source specialization of the coordinate contraction
+    in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 137--139, 279--355 and 409--434.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_actual_private_preparation,
+        thm:peps_pure_source_density_coefficient,thm:peps_source_column_contraction}
+    The action of the recorded preparation identifies the column indexed by
+    $x$ with the output coordinates of $V_\xi(b_x\otimes\psi)$.
+    The pure-input coefficient is therefore the outer product of column
+    $x$ of $M_\xi$ and column $y$ of $M_\zeta$.
+    The finite column-contraction identity gives
+    (\ref{eq:peps_actual_pure_source_contraction}).
 \end{proof}

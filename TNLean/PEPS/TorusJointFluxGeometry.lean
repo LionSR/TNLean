@@ -155,8 +155,8 @@ private theorem horizontal_transport (v : X) (a b : G)
 omit [NeZero width] in
 private theorem two_right_ne (x : ZMod width) : x + 1 + 1 ≠ x := by
   have htwo : (2 : ZMod width) ≠ 0 := by
-    simpa using (ZMod.natCast_eq_zero_iff 2 width).not.mpr
-      (Nat.not_dvd_of_pos_of_lt (by decide) (by have := Fact.out (p := 3 < width); omega))
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := width) 2 0
+      (by have := Fact.out (p := 3 < width); omega) (by decide)
   intro h
   exact htwo (add_left_cancel (by simpa only [add_assoc, one_add_one_eq_two, add_zero] using h))
 

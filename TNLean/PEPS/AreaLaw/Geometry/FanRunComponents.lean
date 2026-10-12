@@ -9,46 +9,57 @@ import TNLean.PEPS.AreaLaw.Geometry.TemplateRows
 import Mathlib.Topology.Connected.Clopen
 
 /-!
-# Connected components of a cut fan square
+# Connected components of cut fan squares
 
-Remove the radial segments at color changes in an actual all-midpoint fan.
-The connected components of the remaining open square correspond uniquely
-to the runs of consecutive equally colored triangles. Membership in a closed
-run region determines the component containing a point.
+Remove the radial segments at color changes in an all-midpoint fan. The
+connected components of the remaining open cell square, and of its concentric
+closed square of half the radius, correspond uniquely to the runs of
+consecutive equally colored triangles. Membership in a closed run region
+determines the component containing a point.
 
-The correspondence follows from the finite cover by connected, relatively
-open and closed retained run regions. It applies to arbitrary dyadic origins,
-cell indices and natural exponents, including exponent zero. The change set
-may be empty. Distinct runs carrying the same color give distinct components.
+Both correspondences follow from a finite cover by connected retained run
+regions that are relatively open and closed. They apply to arbitrary dyadic
+origins, cell indices and natural exponents, including exponent zero. The
+change set may be empty. Distinct runs carrying the same color give distinct
+components.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 11, `geometry:initial-stars`, lines 352–370,
 and `prop:two-families`, lines 308–323.
-This is an auxiliary to the initial-star construction.
+These are local auxiliaries to the initial-star construction.
 Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently proved from the manuscript; no upstream Lean proof text is reused.
 -/
 
 namespace TNLean.PEPS.AreaLaw.Geometry
 
-/-- Connected components of the cut square correspond uniquely to actual fan runs.
-Connectedness, disjointness, coverage and relative clopenness are derived from
-the actual fan geometry.
+/-- A subset of the closed fan cell has one connected component for each
+run whenever every retained run intersection is connected. Closedness of the
+run regions, coverage and disjointness give relative clopenness. The window
+need not itself be open or closed.
 
+Common argument for the two centered-square correspondences below.
 Auxiliary to OpenAI, *A two-dimensional area law from a global spectral gap*,
 Section 11, `geometry:initial-stars`, lines 352–370, and `prop:two-families`,
-lines 308–323, at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
-Empty cuts are allowed. Distinct runs bearing the same color remain distinct. -/
-theorem cellFanRun_connectedComponents_equiv
+lines 308–323, at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+private theorem cellFanRun_connectedComponents_equiv_of_window
     (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
-    (family : CellFanSlot (fun _ : Fin 4 ↦ true) → Fin 2) :
+    (family : CellFanSlot (fun _ : Fin 4 ↦ true) → Fin 2)
+    (K : Set (ℝ × ℝ))
+    (hK : K ⊆ closure (dyadicCell o ℓ z))
+    (hconnectedWindow : ∀ R : CellFanRun o ℓ z (fun _ ↦ true) family,
+      let c := cellFanCenter o ℓ z
+      let A : Set (CellFanSlot (fun _ : Fin 4 ↦ true)) :=
+        {t | family t ≠ family (cellFanNext t)}
+      let L := ⋃ t ∈ A,
+        segment ℝ c (cellFanEnd o ℓ z (fun _ ↦ true) t)
+      IsConnected ((cellFanRunRegion o ℓ z (fun _ ↦ true) family R \ L) ∩ K)) :
     let c := cellFanCenter o ℓ z
-    let r := (2 : ℝ) ^ ℓ / 2
     let A : Set (CellFanSlot (fun _ : Fin 4 ↦ true)) :=
       {t | family t ≠ family (cellFanNext t)}
     let L := ⋃ t ∈ A,
       segment ℝ c (cellFanEnd o ℓ z (fun _ ↦ true) t)
-    let Ω := Metric.ball c r \ L
+    let Ω := K \ L
     let W := fun R : CellFanRun o ℓ z (fun _ ↦ true) family ↦
       cellFanRunRegion o ℓ z (fun _ ↦ true) family R
     ∃! e : ConnectedComponents Ω ≃ CellFanRun o ℓ z (fun _ ↦ true) family,
@@ -57,28 +68,23 @@ theorem cellFanRun_connectedComponents_equiv
   classical
   dsimp only
   let c := cellFanCenter o ℓ z
-  let r := (2 : ℝ) ^ ℓ / 2
   let A : Set (CellFanSlot (fun _ : Fin 4 ↦ true)) :=
     {t | family t ≠ family (cellFanNext t)}
   let L := ⋃ t ∈ A,
     segment ℝ c (cellFanEnd o ℓ z (fun _ ↦ true) t)
-  let Ω := Metric.ball c r \ L
+  let Ω := K \ L
   let W := fun R : CellFanRun o ℓ z (fun _ ↦ true) family ↦
     cellFanRunRegion o ℓ z (fun _ ↦ true) family R
   let S := fun R : CellFanRun o ℓ z (fun _ ↦ true) family ↦
-    (W R \ L) ∩ Metric.ball c r
+    (W R \ L) ∩ K
   let U := fun R : CellFanRun o ℓ z (fun _ ↦ true) family ↦
     {x : Ω | x.val ∈ W R}
   have hconnected (R : CellFanRun o ℓ z (fun _ ↦ true) family) :
-      IsConnected (S R) :=
-    cellFanRunRegion_cut_inter_ball_isConnected o ℓ z family R
+      IsConnected (S R) := hconnectedWindow R
   have hdisjoint : Pairwise (fun R T ↦ Disjoint (S R) (S T)) := by
     intro R T hRT
     exact (cellFanRunRegion_sdiff_radials_pairwise_disjoint o ℓ z family hRT).mono
       Set.inter_subset_left Set.inter_subset_left
-  have hball : Metric.ball c r ⊆ closure (dyadicCell o ℓ z) := by
-    rw [← closedBall_cellFanCenter_eq_closure_dyadicCell o ℓ z]
-    exact Metric.ball_subset_closedBall
   have hclosed (R : CellFanRun o ℓ z (fun _ ↦ true) family) : IsClosed (W R) := by
     change IsClosed (⋃ i ∈ R.supp, (cellFanPolygon o ℓ z (fun _ ↦ true) i).region)
     exact R.supp.toFinite.isClosed_biUnion fun i _ ↦
@@ -107,7 +113,7 @@ theorem cellFanRun_connectedComponents_equiv
     · intro _
       trivial
     · intro _
-      have hxcell : x.val ∈ closure (dyadicCell o ℓ z) := hball x.property.1
+      have hxcell : x.val ∈ closure (dyadicCell o ℓ z) := hK x.property.1
       obtain ⟨R, hxR⟩ := Set.mem_iUnion.mp
         ((cellFanRunRegions_cover o ℓ z (fun _ ↦ true) family).symm ▸ hxcell)
       exact Set.mem_iUnion.mpr ⟨R, hxR⟩
@@ -147,5 +153,68 @@ theorem cellFanRun_connectedComponents_equiv
   obtain ⟨x, rfl⟩ := ConnectedComponents.surjective_coe q
   exact (he x (E (ConnectedComponents.mk x))).mpr
     ((hE x (E (ConnectedComponents.mk x))).mp rfl)
+
+/-- Connected components of the cut square correspond uniquely to actual fan runs.
+Connectedness, disjointness, coverage and relative clopenness are derived from
+the actual fan geometry.
+
+Auxiliary to OpenAI, *A two-dimensional area law from a global spectral gap*,
+Section 11, `geometry:initial-stars`, lines 352–370, and `prop:two-families`,
+lines 308–323, at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+Empty cuts are allowed. Distinct runs bearing the same color remain distinct. -/
+theorem cellFanRun_connectedComponents_equiv
+    (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
+    (family : CellFanSlot (fun _ : Fin 4 ↦ true) → Fin 2) :
+    let c := cellFanCenter o ℓ z
+    let r := (2 : ℝ) ^ ℓ / 2
+    let A : Set (CellFanSlot (fun _ : Fin 4 ↦ true)) :=
+      {t | family t ≠ family (cellFanNext t)}
+    let L := ⋃ t ∈ A,
+      segment ℝ c (cellFanEnd o ℓ z (fun _ ↦ true) t)
+    let Ω := Metric.ball c r \ L
+    let W := fun R : CellFanRun o ℓ z (fun _ ↦ true) family ↦
+      cellFanRunRegion o ℓ z (fun _ ↦ true) family R
+    ∃! e : ConnectedComponents Ω ≃ CellFanRun o ℓ z (fun _ ↦ true) family,
+      ∀ (x : Ω) (R : CellFanRun o ℓ z (fun _ ↦ true) family),
+        e (ConnectedComponents.mk x) = R ↔ x.val ∈ W R := by
+  refine cellFanRun_connectedComponents_equiv_of_window o ℓ z family
+    (Metric.ball (cellFanCenter o ℓ z) ((2 : ℝ) ^ ℓ / 2)) ?_ ?_
+  · rw [← closedBall_cellFanCenter_eq_closure_dyadicCell o ℓ z]
+    exact Metric.ball_subset_closedBall
+  · exact fun R ↦ cellFanRunRegion_cut_inter_ball_isConnected o ℓ z family R
+
+/-- Connected components of the closed square of half the fan radius,
+with the color-change radial segments removed, correspond uniquely to fan
+runs. A component is assigned to a run exactly when one of its points belongs
+to that run's closed region.
+
+The origin and cell index are arbitrary, exponent zero and empty cuts are
+permitted, and distinct runs bearing the same color remain distinct.
+
+Auxiliary to OpenAI, *A two-dimensional area law from a global spectral gap*,
+Section 11, `geometry:initial-stars`, lines 352–370, and `prop:two-families`,
+lines 308–323, at `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+This is a local component correspondence in the initial-star construction. -/
+theorem cellFanRun_closedHalf_connectedComponents_equiv
+    (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
+    (family : CellFanSlot (fun _ : Fin 4 ↦ true) → Fin 2) :
+    let c := cellFanCenter o ℓ z
+    let r := (2 : ℝ) ^ ℓ / 2
+    let A : Set (CellFanSlot (fun _ : Fin 4 ↦ true)) :=
+      {t | family t ≠ family (cellFanNext t)}
+    let L := ⋃ t ∈ A,
+      segment ℝ c (cellFanEnd o ℓ z (fun _ ↦ true) t)
+    let Ω := Metric.closedBall c (r / 2) \ L
+    let W := fun R : CellFanRun o ℓ z (fun _ ↦ true) family ↦
+      cellFanRunRegion o ℓ z (fun _ ↦ true) family R
+    ∃! e : ConnectedComponents Ω ≃ CellFanRun o ℓ z (fun _ ↦ true) family,
+      ∀ (x : Ω) (R : CellFanRun o ℓ z (fun _ ↦ true) family),
+        e (ConnectedComponents.mk x) = R ↔ x.val ∈ W R := by
+  refine cellFanRun_connectedComponents_equiv_of_window o ℓ z family
+    (Metric.closedBall (cellFanCenter o ℓ z) (((2 : ℝ) ^ ℓ / 2) / 2)) ?_ ?_
+  · rw [← closedBall_cellFanCenter_eq_closure_dyadicCell o ℓ z]
+    exact Metric.closedBall_subset_closedBall
+      (half_le_self (div_nonneg (pow_nonneg zero_le_two ℓ) zero_le_two))
+  · exact fun R ↦ cellFanRunRegion_cut_inter_closedHalfBall_isConnected o ℓ z family R
 
 end TNLean.PEPS.AreaLaw.Geometry

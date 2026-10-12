@@ -23,6 +23,7 @@ blocks the global similarity is unitary.
 
 * `MPSTensor.blockScalarMatrix`
 * `MPSTensor.permMatrixOfEquiv`
+* `MPSTensor.toTensorFromBlocks_conj_of_matched_blocks_smul`
 * `MPSTensor.toTensorFromBlocks_conj_of_matched_blocks`
 
 ## References
@@ -219,18 +220,22 @@ end PermMatrix
 
 /-! ## Conjugation between matched block-diagonal tensors -/
 
-/-- **Global similarity between matched block-diagonal tensors.**
+/-- **Global similarity between matched block-diagonal tensors, for every
+rescaling of the weights.**
 
 If the blocks of two block-diagonal tensors are matched by an equivalence of
 their index sets, with matching bond dimensions, and every matched pair of
 weighted blocks is related by a similarity, then the two assembled tensors are
-related by a single invertible matrix between their bond spaces.
+related by a single invertible matrix between their bond spaces. The same
+matrix still relates the two tensors after the weights of matched blocks are
+multiplied by a common scalar `c k`.
 
 The matrix is the composition of the permutation of the matched blocks with the
 direct sum of the blockwise similarities, which is the matrix
-`Y = ⊕_j T_j ⊗ Y_j` of arXiv:1708.00029, line 690. If each blockwise
-similarity is unitary, its global inverse is the conjugate transpose. -/
-theorem toTensorFromBlocks_conj_of_matched_blocks
+`Y = ⊕_j T_j ⊗ Y_j` of arXiv:1708.00029, line 690; it does not depend on the
+weights. If each blockwise similarity is unitary, its global inverse is the
+conjugate transpose. -/
+theorem toTensorFromBlocks_conj_of_matched_blocks_smul
     {r r' : ℕ} {dim : Fin r → ℕ} {dim' : Fin r' → ℕ}
     (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
     (μ' : Fin r' → ℂ) (B : (t : Fin r') → MPSTensor d (dim' t))
@@ -247,30 +252,16 @@ theorem toTensorFromBlocks_conj_of_matched_blocks
       Y * Y' = 1 ∧ Y' * Y = 1 ∧
       ((∀ t, (X t : Matrix (Fin (dim' t)) (Fin (dim' t)) ℂ) ∈
         Matrix.unitaryGroup (Fin (dim' t)) ℂ) → Y' = Yᴴ) ∧
-      ∀ i : Fin d,
-        toTensorFromBlocks (d := d) (μ := μ) A i =
-          Y * toTensorFromBlocks (d := d) (μ := μ') B i * Y' := by
+      ∀ (c : Fin r → ℂ) (i : Fin d),
+        toTensorFromBlocks (d := d) (μ := fun k => c k * μ k) A i =
+          Y * toTensorFromBlocks (d := d) (μ := fun t => c (e.symm t) * μ' t) B i * Y' := by
   classical
   -- The conjugated `B`-family, still indexed by the `B`-side blocks.
   set B' : (t : Fin r') → MPSTensor d (dim' t) := fun t i =>
     (X t : Matrix (Fin (dim' t)) (Fin (dim' t)) ℂ) * B t i *
       (((X t)⁻¹ : GL (Fin (dim' t)) ℂ) : Matrix (Fin (dim' t)) (Fin (dim' t)) ℂ)
     with hB'
-  have hconj := toTensorFromBlocks_eq_globalGaugeOfBlocks_conj (d := d)
-    (μ := μ') (A := B) (B := B') X (fun t i => rfl)
   -- The index permutation between the two flattened bond spaces.
-  have hblocks : ∀ (k : Fin r) (i : Fin d),
-      μ k • A k i =
-        Matrix.reindex (finCongr (hd k)).symm (finCongr (hd k)).symm
-          (μ' (e k) • B' (e k) i) := by
-    intro k i
-    have h := hrel k i
-    rw [hB']
-    rw [← h]
-    ext x y
-    simp
-  have hreindex := toTensorFromBlocks_eq_reindex_of_equiv (d := d)
-    μ A μ' B' e hd hblocks
   set E : Fin (∑ t : Fin r', dim' t) ≃ Fin (∑ k : Fin r, dim k) :=
     blockDimEquiv e hd with hE
   set G : Matrix (Fin (∑ t : Fin r', dim' t)) (Fin (∑ t : Fin r', dim' t)) ℂ :=
@@ -314,9 +305,54 @@ theorem toTensorFromBlocks_conj_of_matched_blocks
       ext i j
       simp [permMatrixOfEquiv, Matrix.conjTranspose_apply, Matrix.transpose_apply]
     rw [Matrix.conjTranspose_mul, hGadj, hEadj]
-  · intro i
+  · intro c i
+    have hconj := toTensorFromBlocks_eq_globalGaugeOfBlocks_conj (d := d)
+      (μ := fun t => c (e.symm t) * μ' t) (A := B) (B := B') X (fun t i => rfl)
+    have hblocks : ∀ (k : Fin r) (i : Fin d),
+        (c k * μ k) • A k i =
+          Matrix.reindex (finCongr (hd k)).symm (finCongr (hd k)).symm
+            ((c (e.symm (e k)) * μ' (e k)) • B' (e k) i) := by
+      intro k i
+      have h := congrArg (fun M => c k • M) (hrel k i)
+      simp only [Equiv.symm_apply_apply]
+      rw [hB', mul_smul, mul_smul, ← h]
+      ext x y
+      simp
+    have hreindex := toTensorFromBlocks_eq_reindex_of_equiv (d := d)
+      (fun k => c k * μ k) A (fun t => c (e.symm t) * μ' t) B' e hd hblocks
     rw [hreindex i, hconj i, reindex_eq_permMatrixOfEquiv_conj]
     simp only [Matrix.mul_assoc]
+    rfl
+
+/-- **Global similarity between matched block-diagonal tensors.**
+
+This is `toTensorFromBlocks_conj_of_matched_blocks_smul` with the weights left
+unchanged: the matrix `Y = ⊕_j T_j ⊗ Y_j` of arXiv:1708.00029, line 690,
+relates the two assembled tensors. -/
+theorem toTensorFromBlocks_conj_of_matched_blocks
+    {r r' : ℕ} {dim : Fin r → ℕ} {dim' : Fin r' → ℕ}
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
+    (μ' : Fin r' → ℂ) (B : (t : Fin r') → MPSTensor d (dim' t))
+    (e : Fin r ≃ Fin r') (hd : ∀ k, dim k = dim' (e k))
+    (X : (t : Fin r') → GL (Fin (dim' t)) ℂ)
+    (hrel : ∀ (k : Fin r) (i : Fin d),
+      Matrix.reindex (finCongr (hd k)) (finCongr (hd k)) (μ k • A k i) =
+        μ' (e k) • ((X (e k) : Matrix (Fin (dim' (e k))) (Fin (dim' (e k))) ℂ) *
+          B (e k) i *
+          (((X (e k))⁻¹ : GL (Fin (dim' (e k))) ℂ) :
+            Matrix (Fin (dim' (e k))) (Fin (dim' (e k))) ℂ))) :
+    ∃ (Y : Matrix (Fin (∑ k : Fin r, dim k)) (Fin (∑ t : Fin r', dim' t)) ℂ)
+      (Y' : Matrix (Fin (∑ t : Fin r', dim' t)) (Fin (∑ k : Fin r, dim k)) ℂ),
+      Y * Y' = 1 ∧ Y' * Y = 1 ∧
+      ((∀ t, (X t : Matrix (Fin (dim' t)) (Fin (dim' t)) ℂ) ∈
+        Matrix.unitaryGroup (Fin (dim' t)) ℂ) → Y' = Yᴴ) ∧
+      ∀ i : Fin d,
+        toTensorFromBlocks (d := d) (μ := μ) A i =
+          Y * toTensorFromBlocks (d := d) (μ := μ') B i * Y' := by
+  obtain ⟨Y, Y', hYY', hY'Y, hunit, hconj⟩ :=
+    toTensorFromBlocks_conj_of_matched_blocks_smul μ A μ' B e hd X hrel
+  refine ⟨Y, Y', hYY', hY'Y, hunit, fun i => ?_⟩
+  simpa only [one_mul] using hconj (fun _ => 1) i
 
 /-! ## Transport of blockwise data along equal bond dimensions -/
 

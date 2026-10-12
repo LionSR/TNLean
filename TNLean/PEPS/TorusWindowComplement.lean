@@ -421,9 +421,8 @@ theorem regionBlockedTensorInjective_windowComplement
     (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) :
     RegionBlockedTensorInjective (G := torusGraph width height) B
-      (Finset.univ \ torusArcRectangle s L K) := by
-  have hi := h.windowComplement_injective hUB hL hK hxw hyh s
-  rwa [regionInjectivityDataOf_isInjective] at hi
+      (Finset.univ \ torusArcRectangle s L K) :=
+  h.windowComplement_injective hUB hL hK hxw hyh s
 
 /-- **The horizontal consecutive-window-union complement is blocked-tensor
 injective for `B`.**
@@ -439,9 +438,8 @@ theorem regionBlockedTensorInjective_horizontalUnionComplement
     (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) :
     RegionBlockedTensorInjective (G := torusGraph width height) B
-      (Finset.univ \ torusArcRectangle s (L + 1) K) := by
-  have hi := h.horizontalUnionComplement_injective hUB hL hK hxw hyh s
-  rwa [regionInjectivityDataOf_isInjective] at hi
+      (Finset.univ \ torusArcRectangle s (L + 1) K) :=
+  h.horizontalUnionComplement_injective hUB hL hK hxw hyh s
 
 /-- **The vertical consecutive-window-union complement is blocked-tensor
 injective for `B`.**
@@ -457,11 +455,38 @@ theorem regionBlockedTensorInjective_verticalUnionComplement
     (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) :
     RegionBlockedTensorInjective (G := torusGraph width height) B
-      (Finset.univ \ torusArcRectangle s L (K + 1)) := by
-  have hi := h.verticalUnionComplement_injective hUB hL hK hxw hyh s
-  rwa [regionInjectivityDataOf_isInjective] at hi
+      (Finset.univ \ torusArcRectangle s L (K + 1)) :=
+  h.verticalUnionComplement_injective hUB hL hK hxw hyh s
 
 end NormalTorusArcWindowInjectivityHypotheses
+
+/-! ### The physical normal-PEPS interface -/
+
+/-- A normal PEPS tensor on the torus at window size `L × K`: every virtual bond space is
+nonzero, and every cyclic `L × K` window is injective. This is the tensor hypothesis of the
+normal translation-invariant PEPS corollary; the window field is the region-family
+hypothesis `NormalTorusArcWindowInjectivityHypotheses` read for the injective regions of
+the tensor, which stays available for families of regions with zero-dimensional bonds.
+
+**Local fix (nonzero virtual spaces):** the source treats PEPS virtual bond spaces as
+nonzero and does not list positive bond dimensions among the hypotheses. Injectivity does
+not imply them: suitable configurations of zero-dimensional bonds make every relevant local
+domain empty, so injectivity and equality of states hold vacuously. The library adopts the
+nonzero reading as the field `bondDim_pos`; documented in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex` (the nonzero virtual-space
+convention) and `docs/paper-gaps/peps_normal_ft_2d_overlap.tex` (Section 1).
+
+Source: arXiv:1804.04964, the corollary at lines 2297--2318 of
+`Papers/1804.04964/paper_normal.tex` ("two normal 2D PEPS tensors such that every
+$L \times K$ region is injective"), with normality as defined at line 1318. -/
+structure IsNormalTorusArcWindowPEPS (L K : ℕ) (A : Tensor (torusGraph width height) d) : Prop
+    extends NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) A) where
+  /-- Every virtual bond space is nonzero: the source's PEPS bond spaces are nonzero throughout
+  (arXiv:1804.04964, `Papers/1804.04964/paper_normal.tex`, Section 3 and the corollary at
+  lines 2297--2318); the convention is recorded in
+  `docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
+  bondDim_pos : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e
 
 end PEPS
 end TNLean

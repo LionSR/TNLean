@@ -206,17 +206,11 @@ theorem affineMesh_line_dist_ge {o : ℝ × ℝ} {q : ℝ} (hq : 0 < q)
     linarith
   rcases hs with hs | hs | hs | hs
   · exact False.elim (hf (by dsimp at hs; linarith))
-  · apply nonvertical_mesh_line_dist_ge hq hu hx 0 (by norm_num) hf _ hout hy
-    dsimp at hs
-    norm_num
-    linarith
-  · apply nonvertical_mesh_line_dist_ge hq hu hx 1 (by norm_num) hf _ hout hy
-    dsimp at hs
-    norm_num
-    linarith
-  · apply nonvertical_mesh_line_dist_ge hq hu hx (-1) (by norm_num) hf _ hout hy
-    dsimp at hs
-    norm_num
-    linarith
+  · exact nonvertical_mesh_line_dist_ge hq hu hx 0 (by norm_num) hf
+      (by dsimp at hs; norm_num; linarith) hout hy
+  · exact nonvertical_mesh_line_dist_ge hq hu hx 1 (by norm_num) hf
+      (by dsimp at hs; norm_num; linarith) hout hy
+  · exact nonvertical_mesh_line_dist_ge hq hu hx (-1) (by norm_num) hf
+      (by dsimp at hs; norm_num; linarith) hout hy
 
 end TNLean.PEPS.AreaLaw.Geometry

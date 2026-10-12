@@ -102,12 +102,6 @@ theorem exists_unitary_regularClosedChargePairPreparation
   obtain ⟨W, hW, hcols⟩ := exists_unitary_regularPhysicalChargePairCreation
     a ha R T hT htree o e₀ e₁ hne χ hχ p
   refine ⟨W, hW, regionLocalTerm_mem_unitaryGroup R W hW, ?_⟩
-  have hu : regularTwistedSite a (fun _ => (1 : G)) = a := by
-    funext v η s
-    change a v (regularTwistedLabels (fun _ => 1) v η) s = a v η s
-    congr 1
-    funext f
-    simp only [regularTwistedLabels, one_mul, ite_self]
   rw [regularCorrelatedChargeState]
   symm
   rw [← Finset.sum_congr rfl (fun q _ => (one_smul ℂ _))]
@@ -143,7 +137,7 @@ theorem exists_unitary_regularClosedChargePairPreparation
           (regularEdgeCharacterSite (regularTwistedSite a (fun _ => 1)) e₀.1 c 1)
           e₁.1 (fun t => if t = q then 1 else 0) 1)) R μ) (hc q)
     simp_rw [hopen]
-    rw [← hμ, sum_openRegionWeight_regularCorrelatedChargePair, hu]
+    rw [← hμ, sum_openRegionWeight_regularCorrelatedChargePair, regularTwistedSite_one]
     rw [← regularChargePairOpenRegionMatrix_one_eq_openRegionWeight a
       (fun v => (ha v).toIsGInjective) R e₀ e₁ θ]
     exact hcols θ
@@ -151,7 +145,7 @@ theorem exists_unitary_regularClosedChargePairPreparation
     funext η s
     have h₀ : v ≠ e₀.1.1.1 := fun h => hv (h.symm ▸ e₀.2.1)
     have h₁ : v ≠ e₁.1.1.1 := fun h => hv (h.symm ▸ e₁.2.1)
-    simp only [hu, regularEdgeCharacterSite, h₀, h₁, ↓reduceDIte]
+    simp only [regularTwistedSite_one, regularEdgeCharacterSite, h₀, h₁, ↓reduceDIte]
 
 /-- Actual closed charge-pair preparation preserves the vacuum norm and is
 nonzero. Both facts follow from the derived original-spin unitary, rather than
@@ -178,14 +172,8 @@ theorem regularClosedChargePairPreparation_normSq_ne_zero
   · intro hz
     have hback := congrArg (fun ψ => (regionLocalTerm R W)ᴴ *ᵥ ψ) hact
     rw [Matrix.mulVec_mulVec, hgram, Matrix.one_mulVec, hz, Matrix.mulVec_zero] at hback
-    have hu : regularTwistedSite a (fun _ => (1 : G)) = a := by
-      funext v η s
-      change a v (regularTwistedLabels (fun _ => 1) v η) s = a v η s
-      congr 1
-      funext f
-      simp only [regularTwistedLabels, one_mul, ite_self]
     apply stateCoeff_regularTwistedSite_ne_zero_of_isGInjective a
       (fun v => (ha v).toIsGInjective) (fun _ => 1)
-    simpa only [hu] using hback
+    simpa only [regularTwistedSite_one] using hback
 
 end TNLean.PEPS
