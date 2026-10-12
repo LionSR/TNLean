@@ -99,14 +99,6 @@ theorem parties_localPart {a b : Layout P} (w : Word a b) :
           owners_subset w.owners_mem_parties.1⟩
 
 open Classical in
-private theorem owners_mapOwner_image (f : P → Q) (a : Layout P) :
-    ((Layout.mapOwner f a).map Reg.owner).toFinset =
-      (a.map Reg.owner).toFinset.image f := by
-  classical
-  ext q
-  simp [Layout.mapOwner, List.map_map, Function.comp_def]
-
-open Classical in
 /-- An arbitrary relabelling sends the participating parties to their image.
 A pair whose endpoints become equal remains a preparation at that named party.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–417. -/
@@ -114,17 +106,17 @@ theorem parties_mapOwner (f : P → Q) {a b : Layout P} (w : Word a b) :
     (w.mapOwner f).parties = w.parties.image f := by
   classical
   induction w with
-  | id => exact owners_mapOwner_image f _
+  | id => exact Layout.owners_mapOwner_image f _
   | comp w v ihw ihv => simp only [mapOwner, parties, ihw, ihv, Finset.image_union]
-  | localMap => simp only [mapOwner, parties_castLayouts, parties, owners_mapOwner_image,
+  | localMap => simp only [mapOwner, parties_castLayouts, parties, Layout.owners_mapOwner_image,
       Finset.image_insert]
   | @source p q hpq U V η tail =>
       by_cases h : f p = f q
       · simp only [mapOwner, dite_true, parties_castLayouts, localPairSource, parties,
-          owners_mapOwner_image, Finset.image_insert, h, Finset.insert_idem]
-      · simp only [mapOwner, dite_eq_right h, parties, owners_mapOwner_image,
+          Layout.owners_mapOwner_image, Finset.image_insert, h, Finset.insert_idem]
+      · simp only [mapOwner, dite_eq_right h, parties, Layout.owners_mapOwner_image,
           Finset.image_insert]
-  | swap => simp only [mapOwner, parties, owners_mapOwner_image, Finset.image_insert]
+  | swap => simp only [mapOwner, parties, Layout.owners_mapOwner_image, Finset.image_insert]
   | frame r w ih => simp only [mapOwner, parties, ih, Finset.image_insert]
 
 /-- A party outside the image of the owner map is absent from the remaining
