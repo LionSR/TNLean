@@ -30,29 +30,10 @@ theorem Template.sum_rpow_cappedDyadicPartition_core_le {Ctpl : ℝ} {n s₀ : �
     (hlo : 2 ^ K ≤ s₀) (hhi : s₀ < 2 ^ (K + 1)) (e : ℝ) (he : 0 < e) :
     ∑ c ∈ cappedDyadicPartition T.points K, ((2 : ℝ) ^ c.1) ^ (1 + e) ≤
       (18 + 4 / ((2 : ℝ) ^ e - 1)) * n * (s₀ : ℝ) ^ e := by
-  classical
-  let P := cappedDyadicPartition T.points K
-  let a (k : ℕ) : ℝ := ((P.filter fun c ↦ c.1 = k).card : ℝ)
-  have hgroup : (∑ c ∈ P, ((2 : ℝ) ^ c.1) ^ (1 + e)) =
-      ∑ k ∈ Finset.range (K + 1), a k * ((2 : ℝ) ^ k) ^ (1 + e) := by
-    exact sum_cappedDyadicPartition_by_scale T.points K
-      (fun k ↦ ((2 : ℝ) ^ k) ^ (1 + e))
-  have hcap : (2 : ℝ) ^ K * a K ≤ 18 * n := by
-    dsimp [a, P]
-    exact_mod_cast T.card_cappedDyadicPartition_at_cap_le (by linarith) K hhi
-  have hsmall (k : ℕ) (hk : k < K) : (2 : ℝ) ^ k * a k ≤ 4 * n := by
-    dsimp [a, P]
-    exact_mod_cast T.card_cappedDyadicPartition_below_cap_le hC K k hlo hk
-  have hsum := sum_weighted_dyadic_rpow_le a K he (by positivity) hcap hsmall
-  have hpower : ((2 : ℝ) ^ K) ^ e ≤ (s₀ : ℝ) ^ e :=
-    Real.rpow_le_rpow (by positivity) (by exact_mod_cast hlo) he.le
-  have hden : 0 < (2 : ℝ) ^ e - 1 :=
-    sub_pos.mpr (Real.one_lt_rpow (by norm_num) he)
-  change (∑ c ∈ P, ((2 : ℝ) ^ c.1) ^ (1 + e)) ≤ _
-  rw [hgroup]
-  calc
-    _ ≤ (18 * n + (4 * n) / ((2 : ℝ) ^ e - 1)) * ((2 : ℝ) ^ K) ^ e := hsum
-    _ = (18 + 4 / ((2 : ℝ) ^ e - 1)) * n * ((2 : ℝ) ^ K) ^ e := by ring
-    _ ≤ _ := mul_le_mul_of_nonneg_left hpower (by positivity)
+  exact (sum_rpow_cappedDyadicPartition_le T.points K s₀ he (A := 18 * n) (B := 4 * n)
+    (by positivity) hlo
+    (by exact_mod_cast T.card_cappedDyadicPartition_at_cap_le (by linarith) K hhi)
+    fun k hk ↦ by exact_mod_cast T.card_cappedDyadicPartition_below_cap_le hC K k hlo hk).trans_eq
+    (by ring)
 
 end TNLean.PEPS.AreaLaw.Geometry

@@ -58,10 +58,6 @@ private theorem vertex_table (v : X) (i : Fin 8) :
   rw [h]
   fin_cases i <;> ext <;> norm_num <;> ring
 
-omit [NeZero height] in
-private theorem one_ne_zero_height : (1 : ZMod height) ≠ 0 := by
-  exact one_ne_zero
-
 private def rowGauge (v : X) (k : G) : RootedGroupLabels (G := G) (E v 0) :=
   ⟨fun w => if w.1.2 = v.2 + 1 then 1 else k, by
     change (if (E v 0).1.2 = v.2+1 then (1:G) else k) = 1
@@ -77,7 +73,7 @@ private theorem rowGauge_vertex (v : X) (k : G) (i : Fin 8) :
     intro h
     have h' : (1 : ZMod height) + 1 = 1 + 0 := by
       simpa only [one_add_one_eq_two, add_zero] using h
-    exact one_ne_zero_height (add_left_cancel h')
+    exact one_ne_zero (add_left_cancel h')
   fin_cases i <;> simp [h21]
 
 variable [Fintype G]
@@ -339,7 +335,7 @@ private theorem source_cycle_residual (v : X) (k : G) :
     intro h
     have h' : (1 : ZMod height) + 1 = 1 + 0 := by
       simpa only [one_add_one_eq_two, add_zero] using h
-    exact one_ne_zero_height (add_left_cancel h')
+    exact one_ne_zero (add_left_cancel h')
   change regularRegionGaugeResidual (R v)
     (regularRegionTreeGauge (R v) (T v)
       (translatedThreePlaquetteTree_le (base v))
