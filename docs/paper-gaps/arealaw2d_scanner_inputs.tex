@@ -386,13 +386,18 @@ The source exponent range gives $1\le L\le n$; this is derived from the
 floor rather than assumed. These hypotheses yield
 $|S_0|\le(C_T+1)n^2$, $X=A\cap T\subseteq S_0$ and
 $|\partial_\Lambda X|\le4n$.
-\footnote{The geometric statement is
+\footnote{The floor bound is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.one_le_L_le}; the geometric
+    statement is
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.source_target_geometry}.}
 
 The lattice crossing-budget theorem accounts for the multiplicity of
 original admissible labels and the actual radius
 $r_0=\lceil C_{\mathrm{tr}}(\log n)^2\rceil$.
 Thus $1\le\mathcal B_X\le C_Bn(\log n)^{12}$ for this target.
+\footnote{The lower bound is
+    \leanid{TNLean.PEPS.AreaLaw.one_le_cutBudget}; the upper bound is part of
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_typical_window}.}
 Only its $4n$ boundary permits using the budget factor $D=1$;
 the status bound remains $CnD(\log n)^{12}$.
 The same actual physical pair $(e,\widetilde\Omega)$ retains
@@ -403,8 +408,8 @@ $n^{-100}$ for $n\ge N$. The canonical set of positive eigenvalues
 within this surprisal window~\cite{OpenAI2026AreaLaw}
 (\path{07-comparators.tex}, lines~37--53) is nonempty and has mass
 $z\ge1-n^{-100}>0$, with $z\le1$ and
-$\mathrm e^{-S-w}\le p_i\le\mathrm e^{-S+w}$ for each selected eigenvalue.
-Here $S$ is the target entropy of $\widetilde\Omega$, whereas the original
+$\mathrm e^{-s_X-w}\le p_i\le\mathrm e^{-s_X+w}$ for each selected eigenvalue.
+Here $s_X=S_{\widetilde\Omega}(X)$ is the target entropy of $\widetilde\Omega$, whereas the original
 $\Omega$ continues to center every Hamiltonian term.
 \footnote{The same-witness statement is
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_typical_window}.}
