@@ -226,6 +226,103 @@ This gives the contractions used in
     the common discarded index $z$.
 \end{proof}
 
+\begin{theorem}[Mixed products of party matrices]
+    \label{thm:peps_party_product_conjugation}
+    \lean{TNLean.PEPS.PairEffect.partyProductMatrix_conjTranspose,
+        TNLean.PEPS.PairEffect.partyProductMatrix_conjugate}
+    \leanok
+    \uses{def:peps_dependent_physical_product}
+    Let $P$ be finite, let $I_p$ be finite input alphabets, and let
+    $O_p$ be output alphabets. For matrices
+    $A_p,B_p\in\C^{O_p\times I_p}$ and
+    $X_p\in\C^{I_p\times I_p}$, one has
+    \begin{align}
+        \left(\bigotimes_p B_p\right)^\dagger
+         & =\bigotimes_p B_p^\dagger,         \\
+        \left(\bigotimes_p A_p\right)
+        \left(\bigotimes_p X_p\right)
+        \left(\bigotimes_p B_p\right)^\dagger
+         & =\bigotimes_p (A_pX_pB_p^\dagger).
+        \label{eq:peps_party_product_conjugation}
+    \end{align}
+    The local matrices are arbitrary; the middle global matrix is
+    their prescribed product $\bigotimes_p X_p$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_dependent_product_calculus}
+    Complex conjugation preserves finite products, giving the adjoint
+    identity entrywise. Coordinatewise matrix multiplication of
+    Theorem~\ref{thm:peps_dependent_product_calculus}, applied twice,
+    gives
+    \begin{align}
+        \left(\bigotimes_p A_p\right)\left(\bigotimes_p X_p\right)
+         & =\bigotimes_p(A_pX_p),            \\
+        \left(\bigotimes_p(A_pX_p)\right)\left(\bigotimes_p B_p\right)^\dagger
+         & =\bigotimes_p(A_pX_pB_p^\dagger),
+    \end{align}
+    where the second line also uses the adjoint identity.
+\end{proof}
+
+\begin{theorem}[Tracing the private coordinates at each party]
+    \label{thm:peps_party_product_partial_trace}
+    \lean{TNLean.PEPS.PairEffect.partialTraceRight_partyProductMatrix,
+        TNLean.PEPS.PairEffect.partialTraceRight_partyProduct_conjugate}
+    \leanok
+    \uses{def:peps_dependent_physical_product,
+        thm:peps_party_product_conjugation}
+    Let $P$ be finite, with physical alphabets $H_p$ and finite private
+    alphabets $D_p$. For arbitrary matrices
+    $M_p\in\C^{(H_p\times D_p)\times(H_p\times D_p)}$, identify
+    $\prod_p(H_p\times D_p)$ with
+    $(\prod_pH_p)\times(\prod_pD_p)$. Then
+    \begin{align}
+        \tr_{\prod_pD_p}\left(\bigotimes_p M_p\right)
+         & =\bigotimes_p\tr_{D_p}(M_p).
+        \label{eq:peps_party_product_partial_trace}
+    \end{align}
+    In particular, if $O_p=H_p\times D_p$ in
+    (\ref{eq:peps_party_product_conjugation}), tracing the mixed
+    product gives $\bigotimes_p\tr_{D_p}(A_pX_pB_p^\dagger)$.
+    These identities include empty index sets.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_party_product_conjugation}
+    The $(a,b)$ entry of the partial trace is
+    \begin{align*}
+        \sum_{(z_p)_p}\prod_p M_p((a_p,z_p),(b_p,z_p))
+         & =\prod_p\sum_{z_p\in D_p}
+        M_p((a_p,z_p),(b_p,z_p)),
+    \end{align*}
+    by finite distributivity. For the mixed product, first apply
+    (\ref{eq:peps_party_product_conjugation}) and then this identity.
+\end{proof}
+
+\begin{theorem}[Absorbing a common scalar at one party]
+    \label{thm:peps_party_product_scalar}
+    \lean{TNLean.PEPS.PairEffect.partyProductMatrix_smul_at_party}
+    \leanok
+    \uses{def:peps_dependent_physical_product}
+    Let $P$ be finite and choose $p_0\in P$. For any family of
+    rectangular matrices $M_p$ and any $\mu\in\C$, put
+    $c_p=\mu$ when $p=p_0$ and $c_p=1$ otherwise. Then
+    \begin{align}
+        \bigotimes_p(c_pM_p)
+         & =\mu\bigotimes_pM_p.
+        \label{eq:peps_party_product_scalar}
+    \end{align}
+    The scalar is absorbed once, including when it vanishes.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_dependent_physical_product}
+    At each matrix entry,
+    $\prod_pc_pM_p(x_p,y_p)=\bigl(\prod_pc_p\bigr)\prod_pM_p(x_p,y_p)
+        =\mu\prod_pM_p(x_p,y_p)$, since $c_{p_0}=\mu$ and $c_p=1$ for
+    $p\ne p_0$.
+\end{proof}
+
 \begin{theorem}[Joint contraction of all source inputs]
     \label{thm:peps_free_source_contraction}
     \lean{TNLean.PEPS.PairEffect.Word.norm_freeSourceMatrix_le_one}
