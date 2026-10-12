@@ -29,7 +29,8 @@ private theorem restrict_castLayouts_congr (f : P → Bool)
     (ha : a = a') (hb : b = b') (h : u.restrict f hu = v.restrict f hv) :
     (u.castLayouts ha hb).restrict f ((Word.sources_castLayouts u ha hb).trans hu) =
       (v.castLayouts ha hb).restrict f ((Word.sources_castLayouts v ha hb).trans hv) := by
-  rw [Word.restrict_castLayouts, Word.restrict_castLayouts, h]
+  rw [Word.restrict_castLayouts f u ha hb hu,
+    Word.restrict_castLayouts f v ha hb hv, h]
 
 private theorem restrict_comp_congr (f : P → Bool) {a b c : Layout P}
     (u u' : Word a b) (v v' : Word b c)
@@ -66,7 +67,7 @@ private theorem restrict_endpointWord_eq_of_local_eq
     (hR : ∀ i, f (R.get i).right = true → B i = B' i) :
     (endpointWord R U V A B).restrict f (sources_endpointWord R U V A B) =
       (endpointWord R U V A' B').restrict f (sources_endpointWord R U V A' B') := by
-  induction R generalizing U V with
+  induction R with
   | nil => rfl
   | cons r R ih =>
       have hTail := ih (fun i ↦ U i.succ) (fun i ↦ V i.succ)
@@ -92,8 +93,7 @@ private theorem restrict_endpointWord_eq_of_local_eq
             try simp only [Word.sources, Word.sources_localEndpoint, sources_endpointWord,
               List.nil_append]
           apply restrict_comp_congr f <;>
-            try simp only [Word.sources, Word.sources_localEndpoint, sources_endpointWord,
-              List.nil_append]
+            try simp only [Word.sources, Word.sources_localEndpoint, sources_endpointWord]
           · exact hRight
           · exact restrict_frame_congr f _ _ _ _ _ hTail
 
