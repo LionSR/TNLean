@@ -55,6 +55,11 @@ theorem reindex_physicalBuffer_eq_siteLift
       QuantumCircuit.AgreeOff (Subtype.val : Q → ι) x y := by
     constructor
     · intro h i hi
+      simp only [e, g, s, Equiv.symm_trans_apply, Equiv.symm_symm, Equiv.trans_apply,
+        Equiv.doubledRegroup, Equiv.bipartiteRegroup, Equiv.prodCongr_apply, Prod.map,
+        FiniteProduct.splitTwoRegionsEquiv, FiniteProduct.unionEquiv,
+        FiniteProduct.splitEquiv_apply_fst, Equiv.refl_apply, Prod.mk.injEq,
+        Equiv.apply_eq_iff_eq] at h
       done
     · done
   done
