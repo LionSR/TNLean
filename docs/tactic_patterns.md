@@ -6876,6 +6876,22 @@ spectral split → block extraction → MPV calculation → strict bounds
   multiple-file promotion threshold. Crossing membership itself is already
   expressed by `mem_edgeBoundary_pair_iff`; no new tactic macro is needed.
 
+### Excluding a party outside the image of an owner map — candidate (2026-10-11)
+
+- **Pattern:** Rewrite the parties of a restriction as a filtered image,
+  extract the original owner from image membership, and contradict the
+  selector using exclusion from the owner map. The no-party theorem then
+  gives the identity on the empty memory.
+- **Seen:** `Word.restrict_mapOwner_eval_eq_id_of_disjoint` in
+  `TNLean/PEPS/Approximation/WordOwnerRestriction.lean` and
+  `Word.restrict_localPart_mapOwner_eval_heq_id_of_disjoint` in
+  `TNLean/PEPS/Approximation/SourceWordParties.lean` (two occurrences).
+- **Abstraction:** At a third occurrence, share the restriction lemma for
+  a party absent from the original participating-party set, before applying
+  the relabelling identities.
+- **Notes:** Named scalar local maps belong to the participating-party set.
+  Excluding register owners alone would not exclude those scalar operations.
+
 ### Projection commutation from an invariant subspace — promoted (2026-10-11)
 
 - **Pattern:** show that a symmetric operator preserving a subspace commutes
