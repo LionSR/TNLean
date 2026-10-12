@@ -75,7 +75,14 @@ theorem reindex_physicalBuffer_eq_siteLift
         Equiv.apply_eq_iff_eq]
       have hxy (i : ι) (hi : i ∈ R ∪ C) : x i = y i :=
         h i (fun j hij ↦ (Finset.mem_compl.mp (hij ▸ j.property)) hi)
-      done
+      exact ⟨⟨funext fun v ↦ congrArg (fun z : Fin (q * q) ↦ (finProdFinEquiv.symm z).1)
+          (hxy v (Finset.mem_union_left C v.property)),
+        funext fun v ↦ congrArg (fun z : Fin (q * q) ↦ (finProdFinEquiv.symm z).1)
+          (hxy v (Finset.mem_union_right R v.property))⟩,
+        ⟨funext fun v ↦ congrArg (fun z : Fin (q * q) ↦ (finProdFinEquiv.symm z).2)
+          (hxy v (Finset.mem_union_left C v.property)),
+        funext fun v ↦ congrArg (fun z : Fin (q * q) ↦ (finProdFinEquiv.symm z).2)
+          (hxy v (Finset.mem_union_right R v.property))⟩⟩
   done
 
 end TNLean.PEPS.EncodedFrame
