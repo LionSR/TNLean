@@ -50,7 +50,9 @@ The statement here is not that corollary verbatim: it
 applies the same idea pointwise to a group representation, assumes the periodic equal-case
 Fundamental Theorem (arXiv:1708.00029, lines 643--656) through `PeriodicEqualCaseFT`, and
 records the conclusion in `ZGaugeEquiv` form. The diagonal normalization of \(Z\) and the
-exact displayed source equation are not asserted by this theorem.
+exact displayed source equation are not asserted by this theorem; the source corollary
+itself, without the `PeriodicEqualCaseFT` hypothesis, is
+`exists_diagonal_unitary_of_irreducibleForm_physical_symmetry`.
 
 The single-`u` specialization is obtained via
 `zGaugeEquiv_of_isIrreducibleForm_sameMPV_rotatePhysical`.
