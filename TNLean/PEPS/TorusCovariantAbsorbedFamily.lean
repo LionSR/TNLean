@@ -114,17 +114,15 @@ theorem exists_torusCovariantAbsorbedGaugeFamily
     (torusVerticalReferenceEdge xvStart yvStart)
     (fun g => isCrossingEdge_torusVerticalRectangleBlockingDatum A hAr hUA hxv0 hyv0 hxvw
       hyvh g) with hfvdef
-  have hRhB : RegionBlockedTensorInjective B Rh := by
-    have hi := hBr.horizontalEdgeRed_injective (xStart := xhStart) (yStart := yhStart)
+  have hRhB : RegionBlockedTensorInjective B Rh :=
+    hBr.horizontalEdgeRed_injective (xStart := xhStart) (yStart := yhStart)
       (by omega) (by omega)
-    rwa [regionInjectivityDataOf_isInjective] at hi
   have hChB : RegionBlockedTensorInjective B (Finset.univ \ Rh) :=
     regionBlockedTensorInjective_host
       (torusHorizontalRectangleBlockingDatum hBr hUB hxh0 hyh0 hxhw hyhh) hUB
-  have hRvB : RegionBlockedTensorInjective B Rv := by
-    have hi := hBr.verticalEdgeRed_injective (xStart := xvStart) (yStart := yvStart)
+  have hRvB : RegionBlockedTensorInjective B Rv :=
+    hBr.verticalEdgeRed_injective (xStart := xvStart) (yStart := yvStart)
       (by omega) (by omega)
-    rwa [regionInjectivityDataOf_isInjective] at hi
   have hCvB : RegionBlockedTensorInjective B (Finset.univ \ Rv) :=
     regionBlockedTensorInjective_host
       (torusVerticalRectangleBlockingDatum hBr hUB hxv0 hyv0 hxvw hyvh) hUB

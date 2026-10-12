@@ -3,9 +3,7 @@
 
 \begin{definition}[Relabelling physical configurations]
     \label{def:area_law_regional_relabelling}
-    \lean{TNLean.PEPS.AreaLaw.configurationSiteEquiv,
-        TNLean.PEPS.AreaLaw.regionConfigurationEquiv,
-        TNLean.PEPS.AreaLaw.complementConfigurationEquiv,
+    \lean{TNLean.PEPS.AreaLaw.regionConfigurationEquiv,
         TNLean.PEPS.AreaLaw.relabelState}
     \leanok
     \uses{def:area_law_domain}
@@ -47,7 +45,13 @@
     conventions of \cite[Section~2]{OpenAI2026AreaLaw} in the induced-domain coordinates.
 \end{theorem}
 \begin{proof}\leanok
-    For $\sigma:A\to\{0,\ldots,q-1\}$ and
+    The three identities are the special case of a general covariance
+    statement for finite tensor products: under a bijection of tensor factors
+    combined with bijections of the local bases, the transported vector has the
+    same norm, its regional state is the transported regional state, and its
+    regional entropy is unchanged. Here all local dimensions equal $q$ and every
+    local basis bijection is the identity. The computation for this case is as
+    follows. For $\sigma:A\to\{0,\ldots,q-1\}$ and
     $\upsilon:\Lambda\setminus A\to\{0,\ldots,q-1\}$, write $\sigma\sqcup\upsilon$
     for the configuration on $\Lambda$ that restricts to $\sigma$ and $\upsilon$.
     Since $\sigma'\mapsto\sigma'\circ e$ is a bijection of configuration sets,

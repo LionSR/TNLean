@@ -1,0 +1,328 @@
+% Source: arXiv:2203.12563v3, REsubmission.tex, lines 1580--1601 and 1687--1692.
+% This leaf establishes the actual mixed tensor and its extended two-site
+% supports. It does not claim MPO coherence or a uniform many-body gap.
+
+\section{Mixed interpolation and endpoint supports}
+\label{sec:mpo_mixed_endpoints}
+
+Let $D_0,D_1\geq1$ and let $A_p^{ij}$, with $1\leq i,j\leq D_p$,
+be arbitrary injective endpoint tensors in physical-support coordinates.
+Write $V=\C^{D_0}\oplus\C^{D_1}$ and $D=D_0+D_1$, and let $I_0,I_1$
+be the disjoint index sets of the two standard bases.
+The interpolation of \cite[Section~5]{GarreRubio2023MPOSym} retains the
+original endpoint tensors in the two diagonal sectors of $V\otimes V$.
+
+\begin{definition}[Mixed endpoint tensor]
+    \label{def:mpo_mixed_endpoint_tensor}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointLetter,
+        MPSTensor.MPOSymmetry.mixedEndpointBase,
+        MPSTensor.MPOSymmetry.mixedEndpointInterpolation}
+    \leanok
+    \uses{def:mps_tensor}
+    Embed each endpoint matrix into its diagonal block of $\End(V)$ and put
+    \begin{align}
+        A^{ij}    & =
+        \begin{cases}
+            A_0^{ij}\oplus0,     & i,j\in I_0,          \\
+            |i\rangle\langle j|, & i\in I_0,\ j\in I_1, \\
+            |i\rangle\langle j|, & i\in I_1,\ j\in I_0, \\
+            0\oplus A_1^{ij},    & i,j\in I_1,
+        \end{cases}
+        \label{eq:mpo_mixed_letters}                                            \\
+        W(\gamma) & =(1-\gamma)I_{D_0}\oplus\gamma I_{D_1},
+                  & A^{ij}(\gamma)                          & =A^{ij}W(\gamma).
+        \label{eq:mpo_mixed_weight}
+    \end{align}
+\end{definition}
+
+The combined physical index is $\mu=(i,j)$; the inserted weight acts on
+only the outgoing virtual bond. In particular, no inverse of $W(\gamma)$
+is used to define the tensor at either endpoint. In the diagram,
+$W_\gamma$ denotes $W(\gamma)$.
+\begin{tenkzequation}
+    % Formula: A^mu(gamma)_{ab} = sum_r A^mu_{ar} W(gamma)_{rb}.
+    % Source: defAgamma, GLM23v3 lines 1586--1601.
+    % Boundary on each side: virtual a west, virtual b east, physical mu north.
+    % The only internal contraction is r between A and W; mu=(i,j) has dimension D^2.
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[at=(1,1), name=B, skin=box, size=l,
+            ports={180:virtual:$a$, 0:virtual:$b$, 90:physical:$\mu$}]{A(\gamma)}
+    \end{tenkz}
+    \quad $=$ \quad
+    \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+        \tn[at=(1,1), name=A, skin=box, size=l,
+            ports={180:virtual:$a$, 0:virtual, 90:physical:$\mu$}]{A}
+        \tn[at=(1,2), name=W, skin=box, size=l,
+            ports={180:virtual, 0:virtual:$b$}]{W_\gamma}
+        \tnwire{A.0}{W.180}
+    \end{tenkz}
+\end{tenkzequation}
+
+\begin{theorem}[Interior injectivity]
+    \label{thm:mpo_mixed_interior}
+    \lean{MPSTensor.MPOSymmetry.span_mixedEndpointLetter_eq_top,
+        MPSTensor.MPOSymmetry.isInjective_mixedEndpointBase,
+        MPSTensor.MPOSymmetry.mixedEndpointInterpolation_eq_smul,
+        MPSTensor.MPOSymmetry.continuous_mixedEndpointInterpolation,
+        MPSTensor.MPOSymmetry.bondInterpolationWeight_ne_zero_of_mem_Ioo,
+        MPSTensor.MPOSymmetry.isUnit_bondInterpolationMatrix_of_mem_Ioo,
+        MPSTensor.MPOSymmetry.isInjective_mixedEndpointInterpolation}
+    \leanok
+    \uses{def:mpo_mixed_endpoint_tensor,def:injective}
+    The unweighted letters span $\End(V)$. The tensor $A(\gamma)$ depends
+    continuously on $\gamma\in\R$ and is injective for $0<\gamma<1$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:mpo_mixed_endpoint_tensor,def:injective,
+        thm:spt_normalized_bond_interpolation}
+    Endpoint injectivity supplies every matrix in each diagonal block.
+    The mixed letters supply every off-diagonal matrix unit, so all matrix
+    units belong to the span. Right multiplication in
+    (\ref{eq:mpo_mixed_weight}) rescales letters in the two column sectors
+    by $1-\gamma$ and $\gamma$. Both scalars are nonzero in the open
+    interval, preserving the span. Matrix multiplication gives continuity.
+\end{proof}
+
+\begin{definition}[Extended two-site support]
+    \label{def:mpo_mixed_extended_support}
+    \lean{MPSTensor.MPOSymmetry.insertedTwoSiteMap,
+        MPSTensor.MPOSymmetry.insertedTwoSiteMap_apply,
+        MPSTensor.MPOSymmetry.mixedEndpointParentInteraction}
+    \leanok
+    \uses{def:mpo_mixed_endpoint_tensor}
+    For a tensor $B$ and an inserted matrix $W$, define
+    \begin{align}
+        \Gamma_{B,W}(X)_{ij} & =\tr(B^iWB^jX),
+                             & \mathcal S'_{B,W} & =\operatorname{range}\Gamma_{B,W}.
+        \label{eq:mpo_inserted_boundary}
+    \end{align}
+    For the unweighted tensor in (\ref{eq:mpo_mixed_letters}), set
+    $\mathcal S'_\gamma=\mathcal S'_{A,W(\gamma)}$ and
+    $h_\gamma=I-\Pi_{\mathcal S'_\gamma}$, including at $\gamma=0,1$.
+\end{definition}
+
+\begin{theorem}[Nondegenerate inserted boundary pairing]
+    \label{thm:mpo_inserted_boundary_injective}
+    \lean{MPSTensor.MPOSymmetry.eq_zero_of_inserted_pair_trace_eq_zero,
+        MPSTensor.MPOSymmetry.insertedTwoSiteMap_injective,
+        MPSTensor.MPOSymmetry.finrank_range_insertedTwoSiteMap}
+    \leanok
+    \uses{def:mpo_mixed_extended_support,def:injective}
+    If $B$ is injective and $W\neq0$, then $\Gamma_{B,W}$ is injective
+    and $\dim\mathcal S'_{B,W}=D^2$. Invertibility of $W$ is unnecessary.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:one_block_injective_of_injective,
+        lem:block_injective_two_sided_word_span,def:mpo_mixed_extended_support,
+        def:eval_word}
+    The products $B^iWB^j$ span the full matrix algebra by
+    Lemmas~\ref{lem:one_block_injective_of_injective}
+    and~\ref{lem:block_injective_two_sided_word_span}:
+    injectivity of $B$ extends their span to every $RWS$, and if $W_{ab}\neq0$,
+    then $|i\rangle\langle a|W|b\rangle\langle j|
+        =W_{ab}|i\rangle\langle j|$ supplies every matrix unit.
+    If $\Gamma_{B,W}(X)=0$, the linear functional $Y\mapsto\tr(YX)$
+    therefore vanishes on all matrices. Nondegeneracy of the trace pairing
+    gives $X=0$, and injectivity gives the dimension.
+\end{proof}
+
+\begin{theorem}[Continuous extension of the parent terms]
+    \label{thm:mpo_mixed_support_continuity}
+    \lean{MPSTensor.MPOSymmetry.continuous_insertedTwoSiteMap,
+        MPSTensor.MPOSymmetry.continuous_range_insertedTwoSiteMap_starProjection,
+        MPSTensor.MPOSymmetry.range_insertedTwoSiteMap_eq_groundSpaceES,
+        MPSTensor.MPOSymmetry.mixedEndpoint_extendedSupport_eq_groundSpaceES,
+        MPSTensor.MPOSymmetry.finrank_mixedEndpoint_extendedSupport,
+        MPSTensor.MPOSymmetry.continuous_mixedEndpoint_extendedSupport_starProjection,
+        MPSTensor.MPOSymmetry.continuous_mixedEndpointParentInteraction,
+        MPSTensor.MPOSymmetry.mixedEndpointParentInteraction_eq_parentInteractionES,
+        MPSTensor.MPOSymmetry.tendsto_mixedEndpoint_parentInteractionES}
+    \leanok
+    \uses{def:mpo_mixed_extended_support,def:ground_space_es,
+        def:parent_interaction}
+    The spaces $\mathcal S'_\gamma$ have dimension $D^2$ for every real
+    $\gamma$, and their orthogonal projectors are continuous.
+    For $0<\gamma<1$, the space $\mathcal S'_\gamma$ equals the canonical
+    two-site MPS support of $A(\gamma)$. Consequently $h_\gamma$ extends
+    the canonical local parent interaction continuously to both endpoints.
+    In particular, its interior limit at $p=0,1$ is
+    $I-\Pi_{\mathcal S'_p}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_interior,thm:mpo_inserted_boundary_injective,
+        thm:spt_normalized_bond_interpolation,lem:uncle_local_projector_continuity,
+        lem:mem_ground_space_es,lem:ground_space_map_apply,
+        def:mpo_mixed_extended_support,def:eval_word,
+        rem:euclidean_local_projector_ingredients}
+    Since both endpoint bond dimensions are positive,
+    $W(\gamma)\neq0$ for every real $\gamma$.
+    Theorems~\ref{thm:mpo_mixed_interior}
+    and~\ref{thm:mpo_inserted_boundary_injective} give injectivity of
+    $\Gamma_\gamma$.
+    Its entries are continuous, and the inverse-Gram expression
+    \begin{align}
+        \Pi_{\mathcal S'_\gamma}
+         & =\Gamma_\gamma(\Gamma_\gamma^*\Gamma_\gamma)^{-1}
+        \Gamma_\gamma^*
+    \end{align}
+    is continuous by Lemma~\ref{lem:uncle_local_projector_continuity}.
+    In the open interval, $W(\gamma)$ is invertible.
+    The boundary substitution $X\mapsto W(\gamma)X$ identifies
+    $\tr(A^iW(\gamma)A^jW(\gamma)X)$ with
+    (\ref{eq:mpo_inserted_boundary}), giving the equality of supports.
+\end{proof}
+
+\subsection{Local sectors at the first endpoint}
+
+\begin{definition}[Physical row and column sectors]
+    \label{def:mpo_mixed_physical_sectors}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointRowSector,
+        MPSTensor.MPOSymmetry.mixedEndpointColumnSector,
+        MPSTensor.MPOSymmetry.mixedEndpointRowSector_apply,
+        MPSTensor.MPOSymmetry.mixedEndpointColumnSector_apply}
+    \leanok
+    \uses{def:mpo_mixed_endpoint_tensor}
+    Put $P_0=I_{D_0}\oplus0$.
+    On the two-site physical space, let $R_k$ and $C_k$ be the diagonal
+    projections onto configurations whose row and column register,
+    respectively, at site $k\in\{0,1\}$ lies in $I_0$.
+\end{definition}
+
+\begin{theorem}[Boundary action of the outer sector projections]
+    \label{thm:mpo_mixed_outer_sectors}
+    \lean{MPSTensor.MPOSymmetry.bondInterpolationMatrix_mul_mixedEndpointBase,
+        MPSTensor.MPOSymmetry.mixedEndpointRowSector_insertedTwoSiteMap,
+        MPSTensor.MPOSymmetry.mixedEndpointColumnSector_insertedTwoSiteMap,
+        MPSTensor.MPOSymmetry.range_insertedTwoSiteMap_invariant_rowSector,
+        MPSTensor.MPOSymmetry.range_insertedTwoSiteMap_invariant_columnSector}
+    \leanok
+    \uses{def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support}
+    For every inserted matrix $W$ and boundary matrix $X$,
+    \begin{align}
+        R_0\Gamma_{A,W}(X) & =\Gamma_{A,W}(XP_0),
+                           & C_1\Gamma_{A,W}(X)   & =\Gamma_{A,W}(P_0X).
+        \label{eq:mpo_mixed_outer_sectors}
+    \end{align}
+    Hence $\mathcal S'_{A,W}$ is invariant under both outer sector projections.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_interior,def:mpo_mixed_endpoint_tensor,
+        def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support}
+    Left multiplication by $P_0$ selects the physical row sector of each
+    letter, while right multiplication selects its column sector.
+    Move the former insertion around the trace:
+    $\tr(P_0A^iWA^jX)=\tr(A^iWA^jXP_0)$.
+    The latter identity is $\tr(A^iWA^jP_0X)$ directly.
+    Both expressions have the form of an extended boundary vector.
+\end{proof}
+
+\begin{theorem}[Inner sectors of the first endpoint support]
+    \label{thm:mpo_mixed_inner_sectors}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointColumnSector_zero_insertedTwoSiteMap,
+        MPSTensor.MPOSymmetry.mixedEndpointRowSector_one_insertedTwoSiteMap}
+    \leanok
+    \uses{def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support}
+    Every $v\in\mathcal S'_0$ satisfies $C_0v=v$ and $R_1v=v$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_interior,thm:mpo_mixed_outer_sectors,
+        def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support}
+    In $\tr(A^iP_0A^jX)$, a first letter with column in $I_1$ satisfies
+    $A^iP_0=0$, and a second letter with row in $I_1$ satisfies
+    $P_0A^j=0$. All such physical coefficients vanish.
+\end{proof}
+
+\begin{theorem}[Reducing outer sectors]
+    \label{thm:mpo_mixed_reducing_sectors}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointRowSector_isSymmetric,
+        MPSTensor.MPOSymmetry.mixedEndpointColumnSector_isSymmetric,
+        MPSTensor.MPOSymmetry.mixedEndpointRowSector_commute_extendedSupport_starProjection,
+        MPSTensor.MPOSymmetry.mixedEndpointColumnSector_commute_extendedSupport_starProjection}
+    \leanok
+    \uses{def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support}
+    The maps $R_0,C_1$ are self-adjoint and commute with
+    $\Pi_{\mathcal S'_{A,W}}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_outer_sectors,def:mpo_mixed_physical_sectors}
+    Their diagonal entries are zero or one, so they are self-adjoint.
+    If a self-adjoint map $Q$ preserves a subspace $S$, it also preserves
+    $S^\perp$: $\langle Qv,w\rangle=\langle v,Qw\rangle=0$ for
+    $v\in S^\perp$ and $w\in S$.
+    Uniqueness of orthogonal projection gives
+    $Q\Pi_S=\Pi_SQ$. Apply this to the derived outer-sector invariance.
+\end{proof}
+
+\begin{definition}[Embedded first endpoint]
+    \label{def:mpo_mixed_first_endpoint}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointLeftTensor}
+    \leanok
+    \uses{def:mpo_mixed_endpoint_tensor}
+    Let $B_0$ equal $A_0$ on the physical sector $I_0\times I_0$ and
+    vanish on the other three physical sectors. Let
+    $V_0:\C^{D_0}\to V$ be the coordinate inclusion.
+\end{definition}
+
+\begin{theorem}[First-corner compression and support inclusion]
+    \label{thm:mpo_mixed_first_support}
+    \lean{MPSTensor.MPOSymmetry.isInjective_mixedEndpointLeftTensor,
+        MPSTensor.MPOSymmetry.coordinateInclusion_first_projection_eq_bondWeight,
+        MPSTensor.MPOSymmetry.mixedEndpointBase_first_compression,
+        MPSTensor.MPOSymmetry.insertedTwoSiteMap_first_boundary,
+        MPSTensor.MPOSymmetry.groundSpaceES_mixedEndpointLeftTensor_le_extendedSupport}
+    \leanok
+    \uses{def:mpo_mixed_first_endpoint,def:mpo_mixed_extended_support,
+        def:ground_space_es,def:injective}
+    The tensor $B_0$ is injective whenever $A_0$ is injective, and
+    $V_0V_0^*=P_0$, $V_0^*A^iV_0=B_0^i$.
+    For every endpoint boundary matrix $X$,
+    \begin{align}
+        \Gamma_{A,P_0}(V_0XV_0^*) & =\Gamma^{B_0}_2(X).
+        \label{eq:mpo_mixed_corner_boundary}
+    \end{align}
+    Consequently $G_2(B_0)\subseteq\mathcal S'_0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:mpo_mixed_first_endpoint,def:mpo_mixed_endpoint_tensor,
+        def:mpo_mixed_extended_support,def:spt_coordinate_inclusions,def:injective,
+        def:ground_space_es,lem:ground_space_map_apply,def:eval_word}
+    Every letter of $A_0$ occurs in $B_0$, so its span remains full.
+    Coordinate compression selects the first diagonal virtual block.
+    Substituting $P_0=V_0V_0^*$ and moving the last factor around the
+    trace gives
+    \begin{align}
+        \tr(A^iP_0A^jV_0XV_0^*)
+         & =\tr((V_0^*A^iV_0)(V_0^*A^jV_0)X)
+        =\tr(B_0^iB_0^jX).
+    \end{align}
+    This is (\ref{eq:mpo_mixed_corner_boundary}), and every vector in
+    $G_2(B_0)$ has such a boundary representation.
+\end{proof}
+
+\begin{theorem}[The canonical endpoint support is the outer physical corner]
+    \label{thm:mpo_mixed_corner_support}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpoint_extendedSupport_outerCorner_eq_groundSpaceES}
+    \leanok
+    \uses{def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support,
+        def:mpo_mixed_first_endpoint,def:ground_space_es}
+    The image of $\mathcal S'_0$ under $R_0C_1$ is exactly $G_2(B_0)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_outer_sectors,thm:mpo_mixed_first_support,
+        def:ground_space_es}
+    Applying both outer projections replaces $X$ by $P_0XP_0$.
+    Since $P_0=V_0V_0^*$, this boundary equals
+    $V_0(V_0^*XV_0)V_0^*$ and (\ref{eq:mpo_mixed_corner_boundary})
+    places the resulting vector in $G_2(B_0)$.
+    Conversely, $V_0^*V_0=I$ implies
+    $P_0(V_0XV_0^*)P_0=V_0XV_0^*$, so every canonical endpoint vector
+    is the outer-corner image of its padded-boundary vector.
+\end{proof}

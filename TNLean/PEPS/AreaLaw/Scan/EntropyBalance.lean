@@ -185,8 +185,9 @@ theorem chargeDefect_nonneg (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) :
     · exact le_rfl
   · exact le_rfl
 
-/-- The charge defect is bounded at fixed `k` (lines 438–440, 488). -/
-theorem chargeDefect_le (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) :
+/-- The charge defect is bounded at fixed `k` for interior interpolation parameters
+(`08-scanner.tex`, lines 438–440, 488). -/
+theorem chargeDefect_le (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) (hp : p ∈ Ioo (0 : ℝ) 1) :
     (S.round r).chargeDefect k p ≤ κ.C * X.K n * n * X.D n * (κ.C * Real.log n ^ κ.Cl) := by
   classical
   set b : ℝ := κ.C * Real.log n ^ κ.Cl with hb
@@ -203,7 +204,7 @@ theorem chargeDefect_le (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) :
           integral_mono (integrable_of_bounded (S.measurable_etaOld r i h)
             (S.etaOld_nonneg r i h) (S.etaOld_le r i h)) (integrable_const _)
             (S.etaOld_le r i h)
-      _ = b / 2 := by rw [integral_const, smul_eq_mul, S.μOld_real_univ]; ring
+      _ = b / 2 := by rw [integral_const, smul_eq_mul, S.μOld_real_univ r k p hp h]; ring
       _ ≤ b := by linarith
   calc (S.round r).chargeDefect k p
       ≤ ∑ h, (S.round r).w h * (κ.C * X.K n * n * X.D n * b) := by
@@ -241,7 +242,7 @@ theorem integratedChargeBound {C₁ : ℝ} (hn : ScaleFacts X n C₁) (k : ℕ) 
     (β := X.eps n) (by positivity) (by linarith)
     (by linarith) (by positivity) hR (fun r ↦ S.continuousOn_logNormSq r k)
     (fun r ↦ S.differentiableOn_logNormSq r k) (fun r p _ ↦ S.chargeDefect_nonneg r k p)
-    (fun r ↦ S.continuousOn_chargeDefect r k) ⟨_, fun r p _ ↦ S.chargeDefect_le r k p⟩
+    (fun r ↦ S.continuousOn_chargeDefect r k) ⟨_, fun r p hp ↦ S.chargeDefect_le r k p hp⟩
     (fun r hr p hp ↦ by
       have h1 := S.entropy_gain r k p hp
       have h2 := S.chargeDefect_le_choiceGainSum r (Finset.mem_filter.1 hr).2 k p
