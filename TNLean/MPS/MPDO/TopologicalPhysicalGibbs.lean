@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.CoisometricCompression
 import TNLean.MPS.MPDO.PhysicalGibbsEmbedding
+import TNLean.MPS.MPDO.TopologicalGibbsHamiltonian
 
 /-!
 # Physical-space topological Gibbs Hamiltonian

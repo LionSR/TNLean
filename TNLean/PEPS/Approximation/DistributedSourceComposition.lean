@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.PreparedSourceGate
 import TNLean.PEPS.Approximation.WordAppendTail
 import TNLean.PEPS.Approximation.SourceOwnerSupport
+import TNLean.PEPS.Approximation.AffectedOwners
 
 /-!
 # Chronological compositions of source-prepared gates

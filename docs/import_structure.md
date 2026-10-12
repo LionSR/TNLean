@@ -139,16 +139,6 @@ These changes retain the physical dimensions and coordinate order used in
 Theorem 5.2. They do not establish the identification of the sampled operator
 with a contraction of local tensors.
 
-## PEPS tensor-memory identifications
-
-`PEPS.Approximation.UnitMemoryCoordinates` identifies an empty final tensor
-memory with the scalar field. Its theorem
-`Layout.memCongr_append_nil_appendIso_symm_tmul` states that adjoining a scalar
-and identifying the empty final register list gives scalar multiplication on
-the preceding memory. The spectator-register construction in `WordAppendTail`
-uses this theorem directly. Its former private copy `appendIso_nil_tmul` is
-removed; no public declaration is removed or renamed.
-
 ## Corrected source coordinates and vectors
 
 `PEPS.Approximation.SourceCircuitSourceOrder` owns the paired Schmidt
@@ -203,5 +193,5 @@ The ordinary 1000-line limit still applies to hierarchical aggregators. The CI
 size checker registers only the exact root path `TNLean.lean` as an import-only
 exemption, and validates that it contains no declarations. No hierarchical
 aggregator currently approaches the limit, so broadening that exemption is not
-necessary. The import-completeness workflow independently verifies every
+necessary. The `file-length` job of `pr-ci.yml` independently verifies every
 generated file byte-for-byte.

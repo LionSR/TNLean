@@ -108,7 +108,8 @@ This gives the contractions used in
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_prepared_vector_density,def:peps_source_slot_basis}
+    \uses{thm:peps_prepared_vector_density,def:peps_source_slot_basis,
+        thm:peps_source_preparation_sums}
     The preparation identity gives
     $K_T(a)[\psi]=[T(s_a\otimes\psi)]=A_{T,\psi}(:,a)$.
     Apply Theorem~\ref{thm:peps_prepared_vector_density} to the ket
@@ -252,8 +253,16 @@ This gives the contractions used in
 \begin{proof}\leanok
     \uses{thm:peps_dependent_product_calculus}
     Complex conjugation preserves finite products, giving the adjoint
-    identity entrywise. Apply coordinatewise matrix multiplication
-    twice to obtain the second identity.
+    identity entrywise. Coordinatewise matrix multiplication of
+    Theorem~\ref{thm:peps_dependent_product_calculus}, applied twice,
+    gives
+    \begin{align}
+        \left(\bigotimes_p A_p\right)\left(\bigotimes_p X_p\right)
+         & =\bigotimes_p(A_pX_p),            \\
+        \left(\bigotimes_p(A_pX_p)\right)\left(\bigotimes_p B_p\right)^\dagger
+         & =\bigotimes_p(A_pX_pB_p^\dagger),
+    \end{align}
+    where the second line also uses the adjoint identity.
 \end{proof}
 
 \begin{theorem}[Tracing the private coordinates at each party]
@@ -261,7 +270,8 @@ This gives the contractions used in
     \lean{TNLean.PEPS.PairEffect.partialTraceRight_partyProductMatrix,
         TNLean.PEPS.PairEffect.partialTraceRight_partyProduct_conjugate}
     \leanok
-    \uses{def:peps_dependent_physical_product}
+    \uses{def:peps_dependent_physical_product,
+        thm:peps_party_product_conjugation}
     Let $P$ be finite, with physical alphabets $H_p$ and finite private
     alphabets $D_p$. For arbitrary matrices
     $M_p\in\C^{(H_p\times D_p)\times(H_p\times D_p)}$, identify
@@ -308,9 +318,10 @@ This gives the contractions used in
 
 \begin{proof}\leanok
     \uses{def:peps_dependent_physical_product}
-    At each matrix entry, factor the product of the $c_p$ from the
-    product of the entries of $M_p$. The former product equals $\mu$
-    because exactly one of its factors may differ from one.
+    At each matrix entry,
+    $\prod_pc_pM_p(x_p,y_p)=\bigl(\prod_pc_p\bigr)\prod_pM_p(x_p,y_p)
+        =\mu\prod_pM_p(x_p,y_p)$, since $c_{p_0}=\mu$ and $c_p=1$ for
+    $p\ne p_0$.
 \end{proof}
 
 \begin{theorem}[Joint contraction of all source inputs]

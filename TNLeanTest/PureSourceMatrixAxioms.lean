@@ -15,8 +15,6 @@ the standard logical axioms. Each declaration must be present in the imported
 production module before its transitive axiom dependencies are collected.
 -/
 
-set_option linter.hashCommand false
-
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv

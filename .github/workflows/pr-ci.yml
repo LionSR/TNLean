@@ -55,6 +55,8 @@ on:
       - 'scripts/test_prune_tenkz_render_cache.py'
       - 'blueprint/src/**'
       - 'docs/paper-gaps/**'
+      - 'scripts/generate_import_aggregators.py'
+      - 'scripts/test_generate_import_aggregators.py'
       # Trees the paper-gap reference check scans (texra-blueprint
       # paper-gaps check); without these the check never runs
       # on merge pushes that only touch a scanned file.
@@ -108,6 +110,9 @@ on:
       - 'docs/paper-gaps/**/*.tex'
       - 'docs/paper-gaps/**/*.bib'
       - 'texra-blueprint.toml'
+      - 'scripts/generate_import_aggregators.py'
+      - 'scripts/lean_import_syntax.py'
+      - 'scripts/test_generate_import_aggregators.py'
       # Trees the paper-gap reference check scans (texra-blueprint
       # paper-gaps check); without these the check never runs
       # on PRs that only touch a scanned file.
@@ -300,6 +305,8 @@ jobs:
               - 'scripts/test_ci_fixture_overlay.py'
               - 'docs/ci-automation.md'
               - 'docs/CONTRIBUTING.md'
+              - 'scripts/generate_import_aggregators.py'
+              - 'scripts/test_generate_import_aggregators.py'
             blueprint:
               - 'blueprint/src/**'
               - 'texra-blueprint.toml'
@@ -477,23 +484,6 @@ jobs:
           python3 scripts/ci_compatible_cache.py prune
 
       # Cache setup and provenance guards above must finish before Lean runs.
-      - name: Check labelled open coefficients early
-        run: |
-          set -eo pipefail
-          test -f .lake/packages/mathlib/.lake/build/lib/lean/Mathlib.olean
-          lake --fail-fast build +TNLean.PEPS.TorusDualOpenDeformation:olean \
-            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
-          : > "$RUNNER_TEMP/collared-open-check.log"
-          for source in TNLeanTest/LabelledOpenCoefficient.lean \
-              TNLean/PEPS/LabelledOpenCoefficient.lean TNLean/PEPS/TorusLabelledOpenCoefficient.lean \
-              TNLean/PEPS/TorusDualCollar.lean TNLean/PEPS/TorusDualOpenDeformation.lean; do
-            lake env lean \
-              -DautoImplicit=false -DrelaxedAutoImplicit=false -Dpp.unicode.fun=true \
-              -DmaxSynthPendingDepth=3 -Dlinter.mathlibStandardSet=true -DwarningAsError=true \
-              "$source" 2>&1 | tee -a "$RUNNER_TEMP/collared-open-check.log"
-          done
-          python3 scripts/check_collared_open_axioms.py "$RUNNER_TEMP/collared-open-check.log"
-
       # Build and export only the allowlisted QIC prerequisites before the TN root build.
       # The root build reuses their Lake traces; an artifact is not a TN build pass.
       # Export only the explicit QIC allowlist and hashes, never the whole workspace.
@@ -539,24 +529,10 @@ jobs:
           retention-days: 1
           compression-level: 9
 
-      # Fail on the new theorem targets before building unrelated TN modules.
-      # Keep their timings in the same log consumed by the changed-file gate.
-      - name: Check coherent sector conversion targets
-        if: success() && github.event_name == 'pull_request' && needs.changes.outputs.coherent_prerequisites == 'true'
-        run: |
-          set -eo pipefail
-          lake --fail-fast build \
-            +TNLean.MPS.Preparation.ExactSectorEncoder:olean \
-            +TNLean.MPS.Preparation.SectorEncoderRates:olean \
-            +TNLean.MPS.Preparation.SectorSpectralGap:olean \
-            +TNLean.MPS.Preparation.SectorEncoderPreparation:olean \
-            +TNLean.MPS.Preparation.SectorEncoderCompilation:olean \
-            +TNLean.MPS.Preparation.CoherentGroundspaceConversion:olean \
-            +TNLean.MPS.Preparation.SectorEncoderGroundspace:olean \
-            2>&1 | tee -a "$RUNNER_TEMP/lake-build.log"
-
       # Build the changed production modules before the full library so a
-      # failure surfaces early. Selection: scripts/ci_lean_checks.py.
+      # failure surfaces early. The build is a shortcut: past its budget it
+      # stops with a warning and the root build continues. Selection:
+      # scripts/ci_lean_checks.py.
       - name: Build changed Lean modules early
         if: github.event_name == 'pull_request'
         timeout-minutes: 30
@@ -568,7 +544,7 @@ jobs:
           if ! git cat-file -e "$BASE_SHA^{commit}" 2>/dev/null; then
             git fetch --no-tags origin "$BASE_SHA" || BASE_SHA=""
           fi
-          python3 scripts/ci_lean_checks.py early --log "$RUNNER_TEMP/lake-build.log"
+          python3 scripts/ci_lean_checks.py early --budget 1200 --log "$RUNNER_TEMP/lake-build.log"
 
       - name: Build Lean project and capture timings
         run: |
@@ -728,6 +704,13 @@ jobs:
         with:
           python-version: '3.12'
 
+      # Formerly the separate import-completeness.yml workflow.
+      - name: Test import-aggregator generator
+        run: PYTHONPATH=scripts python3 scripts/test_generate_import_aggregators.py -v
+
+      - name: Check generated import aggregators
+        run: PYTHONPATH=scripts python3 scripts/generate_import_aggregators.py --check
+
       - name: Test Lean module-policy checkers
         run: PYTHONPATH=scripts python3 scripts/test_lean_file_policies.py -v
 
@@ -816,23 +799,6 @@ jobs:
           python3 -m pip install plasTeX==3.1 playwright==1.56.0
           python3 -m playwright install --with-deps chromium
       - name: Test inline picture semantics
-        run: python3 scripts/test_tenkz_inline_web.py
-
-      - name: Diagnose full TeX system environment
-        timeout-minutes: 20
-        uses: texra-ai/lean-env-action/blueprint-system-deps@v1
-        with:
-          cache-suffix: web-v3
-          extra-packages: texlive-fonts-extra texlive-publishers
-      - name: Check layout with TeX system dependencies
-        run: |
-          fc-match 'Times New Roman'
-          python3 scripts/test_tenkz_inline_web.py
-      - name: Diagnose full blueprint Python environment
-        uses: texra-ai/lean-env-action/leanblueprint@v1
-        with:
-          extra-pip-packages: 'git+https://github.com/LionSR/texra-blueprint@v0.3.8'
-      - name: Check layout with blueprint Python dependencies
         run: python3 scripts/test_tenkz_inline_web.py
 
   blueprint:

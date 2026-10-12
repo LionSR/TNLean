@@ -56,6 +56,16 @@ def partialSourcePartyMatrix (w : SourceCircuit a b) (ψ : ProductInput a)
     (((w.partialSourceWord ψ ξ).restrict (partySelector q)
       (sources_partialSourceWord w ψ ξ)).eval (B q col)) row)
 
+private theorem toMatrix_eq_mul_basisChange_of_eq
+    {E F : Type} [AddCommGroup E] [Module ℂ E] [AddCommGroup F] [Module ℂ F]
+    {J K L : Type} [Fintype J] [Fintype K] [Fintype L]
+    [DecidableEq J] [DecidableEq K]
+    (b : Module.Basis J ℂ E) (b' : Module.Basis K ℂ E) (c : Module.Basis L ℂ F)
+    (A : E →ₗ[ℂ] F) (M : Matrix L K ℂ) (hM : LinearMap.toMatrix b' c A = M) :
+    LinearMap.toMatrix b c A = M * LinearMap.toMatrix b b' LinearMap.id := by
+  rw [LinearMap.toMatrix_id_eq_basis_toMatrix, ← hM]
+  exact (linearMap_toMatrix_mul_basis_toMatrix b b' c A).symm
+
 /-- Literal source columns are the product of the actual party matrices followed
 by the constructed change from source-slot coordinates to party coordinates.
 This is a coordinate consequence of the actual source-free word factorization.
@@ -88,17 +98,12 @@ theorem partialSourceGlobalMatrix_eq_partyProduct_mul_basisChange
     simpa only [bIn, bOut, partialSourcePartyMatrix] using hparty
   have hm : LinearMap.toMatrix bIn.toBasis bOut.toBasis
       (w.partialSourceWord ψ ξ).eval.toLinearMap =
-      dependentPhysicalProductFamilyMatrix (w.partialSourcePartyMatrix ψ ξ B C) := by
+      dependentPhysicalProductFamilyMatrix (fun q ↦
+        w.partialSourcePartyMatrix ψ ξ B C q) := by
     simpa only [matrix_repr_eval_eq_toMatrix] using hmatrix
-  have hchange := linearMap_toMatrix_mul_basis_toMatrix
-    w.actualSourceInputBasis.toBasis bIn.toBasis bOut.toBasis
-    (w.partialSourceWord ψ ξ).eval.toLinearMap
-  have hid := LinearMap.toMatrix_id_eq_basis_toMatrix
-    w.actualSourceInputBasis.toBasis bIn.toBasis
   exact (partialSourceGlobalMatrix_eq_toMatrix w ψ ξ bOut).trans
-    (hchange.symm.trans
-      ((congrArg (fun M ↦ M * bIn.toBasis.toMatrix w.actualSourceInputBasis.toBasis) hm).trans
-        (congrArg (fun R ↦ dependentPhysicalProductFamilyMatrix
-          (w.partialSourcePartyMatrix ψ ξ B C) * R) hid.symm)))
+    (toMatrix_eq_mul_basisChange_of_eq w.actualSourceInputBasis.toBasis
+      bIn.toBasis bOut.toBasis (w.partialSourceWord ψ ξ).eval.toLinearMap
+      (dependentPhysicalProductFamilyMatrix (fun q ↦ w.partialSourcePartyMatrix ψ ξ B C q)) hm)
 
 end TNLean.PEPS.PairEffect.SourceCircuit

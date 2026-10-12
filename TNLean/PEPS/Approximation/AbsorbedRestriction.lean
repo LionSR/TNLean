@@ -12,7 +12,7 @@ The statements concern the explicitly constructed words, their register order,
 and their restrictions to selected parties. They are auxiliary identities for
 the chronological construction, before the final physical partial trace.
 
-Source: polynomial-PEPS, `04-compression.tex`, lines 233–267 and 342–381.
+Source: polynomial-PEPS, `04-compression.tex`, lines 233–267 and 351–381.
 -/
 
 
@@ -84,7 +84,7 @@ private theorem swap_word_heq (r s : Reg P) {t u : Layout P} (h : t = u) :
 
 /-- A second restriction to a subset of the first selection is the actual
 single restriction. This is an identity of words, including zero local maps.
-Source: polynomial-PEPS 04-compression.tex, lines 233–251 and 351–381. -/
+Source: polynomial-PEPS 04-compression.tex, lines 233–267 and 351–381. -/
 theorem Word.restrict_restrict_heq_of_implies {a b : Layout P}
     (w : Word a b) (hs : w.sources = []) (f g : P → Bool)
     (h : ∀ p, g p = true → f p = true) :
@@ -213,7 +213,7 @@ private theorem eval_word_heq {a b a' b' : Layout P}
 
 /-- The actual twice-restricted operator is the singly restricted operator
 under the canonical identification of register lists.
-Source: polynomial-PEPS 04-compression.tex, lines 233–251 and 351–381. -/
+Source: polynomial-PEPS 04-compression.tex, lines 233–267 and 351–381. -/
 theorem Word.restrict_restrict_eval_heq_of_implies {a b : Layout P}
     (w : Word a b) (hs : w.sources = []) (f g : P → Bool)
     (h : ∀ p, g p = true → f p = true) :
@@ -225,7 +225,7 @@ theorem Word.restrict_restrict_eval_heq_of_implies {a b : Layout P}
 /-- Removing another party does not change the actual local operator at a
 specified party. This follows from the words themselves and does not cancel
 an operator on the complementary parties.
-Source: polynomial-PEPS 04-compression.tex, lines 233–251 and 351–381. -/
+Source: polynomial-PEPS 04-compression.tex, lines 233–267 and 351–381. -/
 theorem Word.restrict_withoutParty_atParty_eval_heq {a b : Layout P}
     (w : Word a b) (hs : w.sources = []) (p q : P) (hqp : q ≠ p) :
     HEq (((w.restrict (fun r => !partySelector p r) hs).restrict

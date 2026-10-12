@@ -221,6 +221,10 @@ def crossingSourceLayout {a b : Layout P} (w : SourceCircuit a b)
       (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv (correctedMask w S) w i).1).2))
       (crossingSlotMask w S))
 
+-- Keeping the retained-slot list opaque stops elaboration from unfolding the
+-- concrete register memories below while matching their tensor-product instances.
+attribute [local irreducible] partialSlots
+
 /-- The actual product of exact crossing sources, in fixed affected/exterior
 register spaces. Only its vectors depend on the partial branch. -/
 def sourceCrossingVector {a b : Layout P} (w : SourceCircuit a b)
