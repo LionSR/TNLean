@@ -50,7 +50,7 @@ theorem augmentedReplicaConfigurationEquiv_subsystemPerm
   funext j s
   simp only [augmentedReplicaConfigurationEquiv, Equiv.arrowCongr_apply,
     Equiv.refl_symm, Function.comp_apply, Equiv.refl_apply, subsystemPerm_apply]
-  done
+  rcases s with v | (_ | _) <;> done
 
 variable [Fintype V]
 
