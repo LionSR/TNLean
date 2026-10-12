@@ -119,14 +119,10 @@ private theorem mapOwner_exchangeBlocks_word_heq (g : P → Q) (a b tail : Layou
           (congrArg (Layout.mapOwner g a ++ ·) (congrArg (r' :: ·) hbt)))
         (congrArg (r' :: ·) hi) (congrArg (r' :: ·) ho) hm hf
 
-private def twoBlockExchange (a b : Layout Q) : Word (a ++ b) (b ++ a) :=
-  (exchangeBlocks a b []).castLayouts (congrArg (a ++ ·) (List.append_nil b))
-    (congrArg (b ++ ·) (List.append_nil a))
-
-private theorem mapOwner_twoBlockExchange_word_heq (g : P → Q) (a b : Layout P) :
-    HEq ((twoBlockExchange a b).mapOwner g)
-      (twoBlockExchange (Layout.mapOwner g a) (Layout.mapOwner g b)) := by
-  unfold twoBlockExchange
+private theorem mapOwner_exchangeTwo_word_heq (g : P → Q) (a b : Layout P) :
+    HEq ((exchangeTwo a b).mapOwner g)
+      (exchangeTwo (Layout.mapOwner g a) (Layout.mapOwner g b)) := by
+  unfold exchangeTwo
   exact (mapOwner_castLayouts_word_heq g (exchangeBlocks a b []) _ _).trans
     ((mapOwner_exchangeBlocks_word_heq g a b []).trans
       (castLayouts_word_heq (exchangeBlocks (Layout.mapOwner g a) (Layout.mapOwner g b) [])
@@ -146,16 +142,16 @@ theorem mapOwner_appendTail_heq (g : P → Q) {a b : Layout P}
   have hinner := comp_word_heq
     (Layout.mapOwner_append g tail a) (Layout.mapOwner_append g tail b)
     (Layout.mapOwner_append g b tail)
-    (mapOwner_frameList_word_heq g tail w) (mapOwner_twoBlockExchange_word_heq g tail b)
+    (mapOwner_frameList_word_heq g tail w) (mapOwner_exchangeTwo_word_heq g tail b)
   have houter := comp_word_heq
     (Layout.mapOwner_append g a tail) (Layout.mapOwner_append g tail a)
     (Layout.mapOwner_append g b tail)
-    (mapOwner_twoBlockExchange_word_heq g a tail) hinner
-  change HEq (((twoBlockExchange a tail).mapOwner g).comp
-    (((frameList tail w).mapOwner g).comp ((twoBlockExchange tail b).mapOwner g)))
-      ((twoBlockExchange (Layout.mapOwner g a) (Layout.mapOwner g tail)).comp
+    (mapOwner_exchangeTwo_word_heq g a tail) hinner
+  change HEq (((exchangeTwo a tail).mapOwner g).comp
+    (((frameList tail w).mapOwner g).comp ((exchangeTwo tail b).mapOwner g)))
+      ((exchangeTwo (Layout.mapOwner g a) (Layout.mapOwner g tail)).comp
         ((frameList (Layout.mapOwner g tail) (w.mapOwner g)).comp
-          (twoBlockExchange (Layout.mapOwner g tail) (Layout.mapOwner g b))))
+          (exchangeTwo (Layout.mapOwner g tail) (Layout.mapOwner g b))))
   exact houter
 
 end TNLean.PEPS.PairEffect.Word
