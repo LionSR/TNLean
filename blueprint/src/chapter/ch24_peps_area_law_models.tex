@@ -480,17 +480,31 @@ original open square. We state the two models separately, following
     \begin{align*}
         X_i & =\sigma(S_i).
     \end{align*}
-    Each $X_i$ is a nonempty support of induced graph diameter at most one.
     These are the designated supports used to view the original square
     Hamiltonian as a finite-domain interaction family
     in \cite{OpenAI2026PolynomialPEPS,OpenAI2026AreaLaw}.
 \end{definition}
 
+\begin{theorem}[Designated supports are admissible at range one]
+    \label{thm:square_area_law_support_admissible}
+    \uses{def:square_area_law_support,thm:area_law_domain_identifications}
+    For every original site or forward-edge label $i$, the set $X_i$ is a
+    nonempty support of induced graph diameter at most one in $\Lambda$.
+\end{theorem}
+\begin{proof}
+    If $i=v$ is a site label, then $X_i=\{\sigma(v)\}$ is a singleton,
+    and every singleton is an admissible support at every range.
+    If $i=(v,w)$ is a forward-edge label, then $v$ and $w$ are adjacent
+    in the square grid, so $X_i=\{\sigma(v),\sigma(w)\}$ is a pair of
+    adjacent sites of the integer rectangle. Adjacent pairs are admissible
+    at range one.
+\end{proof}
+
 \begin{theorem}[Distinct designated supports]
     \label{thm:square_area_law_support_injective}
     \lean{TNLean.PEPS.Approximation.squareAreaLawSupport_injective}
     \leanok
-    \uses{def:square_area_law_support}
+    \uses{def:square_area_law_support,thm:square_area_law_support_admissible}
     Distinct original interaction labels have distinct supports $X_i$.
 \end{theorem}
 \begin{proof}\leanok
@@ -544,7 +558,8 @@ original open square. We state the two models separately, following
     \label{def:square_area_law_hamiltonian}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.toAreaLawHamiltonian}
     \leanok
-    \uses{def:square_area_law_support,thm:square_area_law_support_injective,
+    \uses{def:square_area_law_support,thm:square_area_law_support_admissible,
+        thm:square_area_law_support_injective,
         def:square_area_law_state,thm:square_hermitian_term_properties,
         thm:square_hermitian_term_supported_algebra}
     Let $H=\sum_i A_i$ be an original Hermitian square Hamiltonian with
