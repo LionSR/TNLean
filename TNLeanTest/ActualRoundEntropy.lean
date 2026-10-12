@@ -160,8 +160,7 @@ example (hn : S.n = 0) (k : ℕ) (pre : Config k (fun v => Fin (n v)) → ℂ) :
         (Real.log (Transport.filteredNormSq ((S.actualRoundData hm hM j).rootPath n t k 0) pre) -
           Real.log (Transport.filteredNormSq ((S.actualRoundData hm hM j).rootPath n t k 1) pre)) =
       0 := by
-  rw [S.sum_actualRoundData_logNormSq_sub hm hM n ht k pre]
-  simp only [hn, Nat.zero_mul, sub_self]
+  rw [S.sum_actualRoundData_logNormSq_sub hm hM n ht k pre, hn, Nat.zero_mul, sub_self]
 
 -- The exact algebraic identity also applies to the zero vector.
 example (k : ℕ) :
