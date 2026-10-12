@@ -29,9 +29,9 @@ namespace TNLean.PEPS.AreaLaw.Scan
 
 variable {V : Type} [DecidableEq V]
 
-local notation "ιO" q d =>
+local notation "ιO" q:max d:max =>
   addedSiteSpace (addedSiteSpace (fun _ : V => Fin q) (Fin d)) (Fin d)
-local notation "ιS" q d =>
+local notation "ιS" q:max d:max =>
   fun s : V ⊕ Bool => Fin (augmentedDimensions q (fun _ => d) s)
 
 /-- The same one-copy coordinate identification transports permutations of
