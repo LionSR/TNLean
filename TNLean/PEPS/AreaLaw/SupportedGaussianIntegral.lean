@@ -78,6 +78,11 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
   obtain ⟨U, hU0, hU, hunit, hsupport, huniq, hcompare⟩ :=
     exists_supported_projected_relative_evolution q B g.operator_isHermitian hH
   refine ⟨U, hU0, hU, hunit, hsupport, fun η T hT ↦ ?_⟩
+  have hnorm (t : ℝ) :
+      ‖siteExpectation q B (heisenbergEvolution g.operator t W) * U t‖ ≤ ‖W‖ :=
+    (CStarRing.norm_mul_mem_unitary _ (hunit t)).trans_le
+      (MatrixEvolution.norm_projectedGenerator_le (siteExpectationLM q B)
+        (norm_siteExpectation_le B) g.operator_isHermitian W t)
   done
 
 end TNLean.PEPS.AreaLaw
