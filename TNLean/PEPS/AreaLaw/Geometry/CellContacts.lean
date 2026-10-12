@@ -362,10 +362,6 @@ private theorem contact_side_of_position (o : ℝ × ℝ) (ℓ j : ℕ) (z w : �
     simpa only [hp, mul_assoc] using
       And.intro (scaled_right_touch ((2 : ℝ) ^ ℓ) m z.2 w.2 he) (And.intro hl' hu')
 
-private theorem exists_binary_index (b : ℤ) (hb0 : 0 ≤ b) (hb2 : b < 2) :
-    ∃ n : Fin 2, (n.val : ℤ) = b := by
-  exact ⟨⟨b.toNat, by omega⟩, by simp [Int.toNat_of_nonneg hb0]⟩
-
 private theorem opposing_side_of_position (o : ℝ × ℝ) (ℓ j : ℕ) (z w : ℤ × ℤ)
     (m : ℤ) (hscale : (m = 1 ∧ j = ℓ) ∨ (m = 2 ∧ j = ℓ + 1)) (s : Fin 4)
     (hpos : match s.val with
@@ -378,104 +374,40 @@ private theorem opposing_side_of_position (o : ℝ × ℝ) (ℓ j : ℕ) (z w : 
         (j = ℓ + 1 ∧ ∃ n : Fin 2, dyadicCellSide o ℓ z s = segment ℝ
           (cellFanStart o j w (fun _ ↦ true) ⟨t, n⟩)
           (cellFanEnd o j w (fun _ ↦ true) ⟨t, n⟩))) := by
-  fin_cases s <;> norm_num at hpos
-  · refine ⟨2, rfl, ?_⟩
-    rcases hscale with ⟨rfl, hj⟩ | ⟨rfl, hj⟩
-    · subst j
-      left
-      refine ⟨rfl, ?_⟩
-      have hN := scaled_left_touch ((2 : ℝ) ^ ℓ) 1 z.1 w.1 hpos.1
-      norm_num at hN
-      have hT : z.2 = w.2 := by omega
-      rw [whole_side_rectangle, whole_side_rectangle]
-      norm_num
-      rw [hT, hN]
-    · subst j
-      right
-      refine ⟨rfl, ?_⟩
-      obtain ⟨n, hn⟩ := exists_binary_index (1 - (z.2 - 2 * w.2)) (by omega) (by omega)
-      refine ⟨n, ?_⟩
-      have hN := scaled_left_touch ((2 : ℝ) ^ ℓ) 2 z.1 w.1 hpos.1
-      norm_num at hN
-      have hT : (2 : ℝ) ^ ℓ * n.val = 2 ^ ℓ * (1 - ((z.2 : ℝ) - 2 * w.2)) := by
-        congr 1
-        exact_mod_cast hn
-      rw [whole_side_rectangle, midpoint_side_rectangle]
-      norm_num [pow_succ]
-      congr 2 <;> nlinarith only [hN, hT]
-  · refine ⟨3, rfl, ?_⟩
-    rcases hscale with ⟨rfl, hj⟩ | ⟨rfl, hj⟩
-    · subst j
-      left
-      refine ⟨rfl, ?_⟩
-      have hN := scaled_left_touch ((2 : ℝ) ^ ℓ) 1 z.2 w.2 hpos.1
-      norm_num at hN
-      have hT : z.1 = w.1 := by omega
-      rw [whole_side_rectangle, whole_side_rectangle]
-      norm_num
-      rw [hT, hN]
-    · subst j
-      right
-      refine ⟨rfl, ?_⟩
-      obtain ⟨n, hn⟩ := exists_binary_index (z.1 - 2 * w.1) (by omega) (by omega)
-      refine ⟨n, ?_⟩
-      have hN := scaled_left_touch ((2 : ℝ) ^ ℓ) 2 z.2 w.2 hpos.1
-      norm_num at hN
-      have hT : (2 : ℝ) ^ ℓ * n.val = 2 ^ ℓ * ((z.1 : ℝ) - 2 * w.1) := by
-        congr 1
-        exact_mod_cast hn
-      rw [whole_side_rectangle, midpoint_side_rectangle]
-      norm_num [pow_succ]
-      congr 2 <;> nlinarith only [hN, hT]
-  · refine ⟨0, rfl, ?_⟩
-    rcases hscale with ⟨rfl, hj⟩ | ⟨rfl, hj⟩
-    · subst j
-      left
-      refine ⟨rfl, ?_⟩
-      have hN := scaled_right_touch ((2 : ℝ) ^ ℓ) 1 z.1 w.1 hpos.1
-      norm_num at hN
-      have hT : z.2 = w.2 := by omega
-      rw [whole_side_rectangle, whole_side_rectangle]
-      norm_num
-      rw [hT, hN]
-    · subst j
-      right
-      refine ⟨rfl, ?_⟩
-      obtain ⟨n, hn⟩ := exists_binary_index (z.2 - 2 * w.2) (by omega) (by omega)
-      refine ⟨n, ?_⟩
-      have hN := scaled_right_touch ((2 : ℝ) ^ ℓ) 2 z.1 w.1 hpos.1
-      norm_num at hN
-      have hT : (2 : ℝ) ^ ℓ * n.val = 2 ^ ℓ * ((z.2 : ℝ) - 2 * w.2) := by
-        congr 1
-        exact_mod_cast hn
-      rw [whole_side_rectangle, midpoint_side_rectangle]
-      norm_num [pow_succ]
-      congr 2 <;> nlinarith only [hN, hT]
-  · refine ⟨1, rfl, ?_⟩
-    rcases hscale with ⟨rfl, hj⟩ | ⟨rfl, hj⟩
-    · subst j
-      left
-      refine ⟨rfl, ?_⟩
-      have hN := scaled_right_touch ((2 : ℝ) ^ ℓ) 1 z.2 w.2 hpos.1
-      norm_num at hN
-      have hT : z.1 = w.1 := by omega
-      rw [whole_side_rectangle, whole_side_rectangle]
-      norm_num
-      rw [hT, hN]
-    · subst j
-      right
-      refine ⟨rfl, ?_⟩
-      obtain ⟨n, hn⟩ := exists_binary_index (1 - (z.1 - 2 * w.1)) (by omega) (by omega)
-      refine ⟨n, ?_⟩
-      have hN := scaled_right_touch ((2 : ℝ) ^ ℓ) 2 z.2 w.2 hpos.1
-      norm_num at hN
-      have hT : (2 : ℝ) ^ ℓ * n.val = 2 ^ ℓ * (1 - ((z.1 : ℝ) - 2 * w.1)) := by
-        congr 1
-        exact_mod_cast hn
-      rw [whole_side_rectangle, midpoint_side_rectangle]
-      norm_num [pow_succ]
-      congr 2 <;> nlinarith only [hN, hT]
-
+  obtain ⟨z1, z2⟩ := z
+  obtain ⟨w1, w2⟩ := w
+  fin_cases s <;> norm_num at hpos <;> obtain ⟨he, hl, hu⟩ := hpos <;>
+    refine ⟨_, rfl, ?_⟩ <;> rcases hscale with ⟨rfl, hj⟩ | ⟨rfl, hj⟩ <;> subst j
+  all_goals first
+    | (left
+       refine ⟨rfl, ?_⟩
+       first
+         | (have h : w1 = z1 + 1 ∧ w2 = z2 := by omega); obtain ⟨rfl, rfl⟩ := h
+         | (have h : w1 = z1 ∧ w2 = z2 + 1 := by omega); obtain ⟨rfl, rfl⟩ := h
+         | (have h : z1 = w1 + 1 ∧ w2 = z2 := by omega); obtain ⟨rfl, rfl⟩ := h
+         | (have h : w1 = z1 ∧ z2 = w2 + 1 := by omega); obtain ⟨rfl, rfl⟩ := h
+       rw [whole_side_rectangle, whole_side_rectangle]
+       norm_num)
+    | (right
+       refine ⟨rfl, ?_⟩
+       first
+         | (have h : z1 = 2 * w1 - 1 := by omega); subst h
+         | (have h : z2 = 2 * w2 - 1 := by omega); subst h
+         | (have h : z1 = 2 * w1 + 2 := by omega); subst h
+         | (have h : z2 = 2 * w2 + 2 := by omega); subst h
+       first
+         | (have h : z2 = 2 * w2 ∨ z2 = 2 * w2 + 1 := by omega); obtain rfl | rfl := h
+         | (have h : z1 = 2 * w1 ∨ z1 = 2 * w1 + 1 := by omega); obtain rfl | rfl := h
+       all_goals first
+         | (refine ⟨0, ?_⟩
+            rw [whole_side_rectangle, midpoint_side_rectangle]
+            norm_num [pow_succ]
+            ring_nf
+            done)
+         | (refine ⟨1, ?_⟩
+            rw [whole_side_rectangle, midpoint_side_rectangle]
+            norm_num [pow_succ]
+            ring_nf))
 
 private theorem cell_contact_ordered (o : ℝ × ℝ) (ℓ j : ℕ) (z w : ℤ × ℤ)
     (hj : j = ℓ ∨ j = ℓ + 1)
