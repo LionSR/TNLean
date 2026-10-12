@@ -78,14 +78,7 @@ theorem cellFan_elementary_endpoints_lineMap (o : ℝ × ℝ) (ℓ : ℕ) (z : �
     (if split i.1 then (i.2.val : ℝ) - 1 else -1)
   have he := side_interpolation (cellFanCenter o ℓ z) ((2 : ℝ) ^ ℓ / 2) i.1
     (if split i.1 then (i.2.val : ℝ) else 1)
-  change cellFanStart o ℓ z split i = AffineMap.lineMap
-    (cellFanStart o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩)
-    (cellFanEnd o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩)
-    (((if split i.1 then (i.2.val : ℝ) - 1 else -1) + 1) / 2) at hs
-  change cellFanEnd o ℓ z split i = AffineMap.lineMap
-    (cellFanStart o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩)
-    (cellFanEnd o ℓ z (fun _ ↦ false) ⟨i.1, 0⟩)
-    (((if split i.1 then (i.2.val : ℝ) else 1) + 1) / 2) at he
+  simp only [cellFanStart_eq, cellFanEnd_eq, Bool.false_eq_true, ite_false]
   constructor
   · convert hs using 2; split_ifs <;> ring
   · convert he using 2; split_ifs <;> ring

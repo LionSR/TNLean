@@ -41,12 +41,9 @@ theorem Template.card_shell_le {Ctpl : ℝ} {n s₀ : ℕ}
     have hlayer := template_layer_card_le T hC (j + 1) (by omega) hj
     simp only [Nat.add_sub_cancel] at hlayer
     calc
-      _ ≤ ((ambientDilation T.points j \ T.points) ∪
-          (ambientDilation T.points (j + 1) \ ambientDilation T.points j)).card :=
-        Finset.card_le_card hcover
       _ ≤ (ambientDilation T.points j \ T.points).card +
           (ambientDilation T.points (j + 1) \ ambientDilation T.points j).card :=
-        Finset.card_union_le _ _
+        (Finset.card_le_card hcover).trans (Finset.card_union_le _ _)
       _ ≤ n * j + n := Nat.add_le_add (ih (by omega)) hlayer
       _ = n * (j + 1) := (Nat.mul_succ n j).symm
 
@@ -81,32 +78,11 @@ theorem Template.sum_rpow_cappedDyadicPartition_shell_le {Ctpl : ℝ} {n s₀ : 
     ∑ c ∈ cappedDyadicPartition (ambientDilation T.points j \ T.points) K,
       ((2 : ℝ) ^ c.1) ^ (1 + e) ≤
         (2 + 14 / ((2 : ℝ) ^ e - 1)) * n * (L : ℝ) ^ e := by
-  classical
-  let P := cappedDyadicPartition (ambientDilation T.points j \ T.points) K
-  let a (k : ℕ) : ℝ := ((P.filter fun c ↦ c.1 = k).card : ℝ)
-  have hgroup : (∑ c ∈ P, ((2 : ℝ) ^ c.1) ^ (1 + e)) =
-      ∑ k ∈ Finset.range (K + 1), a k * ((2 : ℝ) ^ k) ^ (1 + e) := by
-    exact sum_cappedDyadicPartition_by_scale (ambientDilation T.points j \ T.points) K
-      (fun k ↦ ((2 : ℝ) ^ k) ^ (1 + e))
-  have hcap : (2 : ℝ) ^ K * a K ≤ 2 * n := by
-    dsimp [a, P]
-    exact_mod_cast T.card_cappedDyadicPartition_shell_at_cap_le hC j L K hj hL hhi
-  have hsmall (k : ℕ) (hk : k < K) : (2 : ℝ) ^ k * a k ≤ 14 * n := by
-    have hsize : 2 ^ k ≤ s₀ :=
-      (Nat.pow_le_pow_right (by omega) (Nat.le_of_lt hk)).trans (hlo.trans hL)
-    dsimp [a, P]
-    exact_mod_cast T.card_cappedDyadicPartition_shell_below_cap_le
-      hC j K k (hj.trans hL) hk hsize
-  have hsum := sum_weighted_dyadic_rpow_le a K he (by positivity) hcap hsmall
-  have hden : 0 < (2 : ℝ) ^ e - 1 :=
-    sub_pos.mpr (Real.one_lt_rpow (by norm_num) he)
-  have hpower : ((2 : ℝ) ^ K) ^ e ≤ (L : ℝ) ^ e :=
-    Real.rpow_le_rpow (by positivity) (by exact_mod_cast hlo) he.le
-  change (∑ c ∈ P, ((2 : ℝ) ^ c.1) ^ (1 + e)) ≤ _
-  rw [hgroup]
-  calc
-    _ ≤ (2 * n + (14 * n) / ((2 : ℝ) ^ e - 1)) * ((2 : ℝ) ^ K) ^ e := hsum
-    _ = (2 + 14 / ((2 : ℝ) ^ e - 1)) * n * ((2 : ℝ) ^ K) ^ e := by ring
-    _ ≤ _ := mul_le_mul_of_nonneg_left hpower (by positivity)
+  exact (sum_rpow_cappedDyadicPartition_le _ K L he (A := 2 * n) (B := 14 * n)
+    (by positivity) hlo
+    (by exact_mod_cast T.card_cappedDyadicPartition_shell_at_cap_le hC j L K hj hL hhi)
+    fun k hk ↦ by
+      exact_mod_cast T.card_cappedDyadicPartition_shell_below_cap_le hC j K k (hj.trans hL) hk
+        ((Nat.pow_le_pow_right (by omega) hk.le).trans (hlo.trans hL))).trans_eq (by ring)
 
 end TNLean.PEPS.AreaLaw.Geometry

@@ -168,10 +168,8 @@ theorem bandState_unassigned (g r : ℕ) (k : ℕ) (choices : Fin k → Bool × 
     obtain ⟨hold, hslot⟩ := S.fill_none g r k _ x hfill
     obtain ⟨hinit, hprev⟩ := ih (fun i ↦ choices i.castSucc) hold
     refine ⟨hinit, fun f hf ↦ ?_⟩
-    by_cases hfk : f < k
-    · exact hprev f hfk
-    · have heq : f = k := by omega
-      simpa only [heq] using hslot
+    rcases Nat.lt_succ_iff_lt_or_eq.mp hf with hfk | rfl
+    exacts [hprev f hfk, hslot]
 
 /-- Sites still in the old middle were in the initial middle of that band. -/
 theorem oldChargeState_initial_none {k : ℕ} (h : History S.K S.m S.M k)
@@ -193,10 +191,8 @@ theorem oldChargeState_front_le {k : ℕ} (h : History S.K S.m S.M k)
   apply nominalFront_le_of_unconsumed S.A S.depth hn (S.lower g (h.1 g))
     (S.upper g (h.1 g)) (k + 1) side x hinit hrow
   intro f hf
-  by_cases hfk : f < k
-  · exact hprev f hfk
-  · have heq : f = k := by omega
-    simpa only [heq] using hslot
+  rcases Nat.lt_succ_iff_lt_or_eq.mp hf with hfk | rfl
+  exacts [hprev f hfk, hslot]
 
 end CollarScan
 

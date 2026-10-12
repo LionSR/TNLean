@@ -1,0 +1,75 @@
+\section{Removal squares and repair children}
+\label{sec:area_law_simultaneous_repair}
+
+The removal step in \cite[Section~11]{OpenAI2026AreaLaw} takes place
+before replacement regions are created. Every old region loses the same
+union of closed squares, including squares whose interiors will be left
+unassigned at the stopping scale.
+
+% Source: 10-geometry.tex, geometry:trim-radius, lines 380--399;
+% geometry:birth-separation, lines 584--591.
+% Isolated-star induction and replacement regions are not asserted here.
+
+\begin{definition}[Dyadic removal square]
+    \label{def:area_law_repair_square}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairHalfSide,
+        TNLean.PEPS.AreaLaw.Geometry.repairSquare}
+    \leanok
+    \uses{thm:area_law_exponent_gaps}
+    Retain the fixed exponent $\rho_0=(1+\beta)/2$. For a positive
+    parent scale $S$ and a mark $v\in\mathbb R^2$, define
+    \begin{align}
+        d(S)   & =2^{\lfloor\rho_0\log_2 S\rfloor}, &
+        Q(v,S) & =v+[-d(S),d(S)]^2.
+        \label{eq:area_law_repair_square}
+    \end{align}
+    The floor and the exponent are integers. Equivalently, $Q(v,S)$
+    is the closed ball of radius $d(S)$ for the maximum metric.
+\end{definition}
+
+\begin{definition}[Simultaneous old-region remnants]
+    \label{def:area_law_simultaneous_remnants}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairRemovalSet,
+        TNLean.PEPS.AreaLaw.Geometry.simultaneousRepairRemnants}
+    \leanok
+    \uses{def:area_law_repair_square}
+    Let $(v_j,S_j)_{j\in J}$ be a finite family of marks, each with a
+    location $v_j\in\mathbb R^2$ and a positive assigned scale $S_j$;
+    distinct indices may share a location. Let $(R_i)_{i\in I}$ be
+    the current actual regions of the old identifiers. Set
+    \begin{align}
+        Q_J  & =\bigcup_{j\in J}Q(v_j,S_j), &
+        R'_i & =R_i\setminus Q_J.
+        \label{eq:area_law_simultaneous_remnants}
+    \end{align}
+    This formula applies to every $i\in I$. The labels and remembered
+    birth regions retain their values at the removal step.
+\end{definition}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% lines 401--409 and geometry:repair-induction, lines 506--512.
+% This definition records child indices, locations and scales only.
+% It asserts no injectivity, isolated-star invariant or repair induction.
+\begin{definition}[Children of nonterminal parents]
+    \label{def:area_law_repair_children}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairChildOffset,
+        TNLean.PEPS.AreaLaw.Geometry.RepairChildIndex,
+        TNLean.PEPS.AreaLaw.Geometry.repairChildLocation,
+        TNLean.PEPS.AreaLaw.Geometry.repairChildScale}
+    \leanok
+    \uses{def:area_law_repair_square}
+    Let $(v_i,S_i)_{i\in I}$ be the current parent family, with
+    $v_i\in\mathbb R^2$ and $S_i>0$, and retain the stopping threshold
+    $S_*$. Set $I_+=\{i\in I:d(S_i)\ge S_*\}$ and
+    $P=\{-1,0,1\}^2$. The next children are indexed by $I_+\times P$.
+    For each $(i,p)\in I_+\times P$, their locations and assigned scales are
+    \begin{align}
+        v'_{i,p} & =v_i+d(S_i)p, & S'_{i,p} & =d(S_i).
+        \label{eq:area_law_repair_children}
+    \end{align}
+    These offsets give the center, corners and side midpoints of
+    $Q(v_i,S_i)$. Each child retains its parent and offset as indices;
+    coincident locations do not identify these indices. A parent with
+    $d(S_i)<S_*$ contributes no children, and its square is terminal.
+    This is the marking rule of \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{definition}

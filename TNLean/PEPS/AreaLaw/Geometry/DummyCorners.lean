@@ -91,10 +91,7 @@ theorem dyadicNeighborhood_corner_on_side (o : ℝ × ℝ) (k₀ k : ℕ)
     (fun _ ↦ false)).2 ⟨s, 0⟩
   have ha := beltCellMarks_subset_closure_dyadicCell o (fineScaleIndex k) z hv.1
   have hb := beltCellMarks_subset_closure_dyadicCell o (fineScaleIndex k) z hv.2
-  have hc : Convex ℝ (closure (dyadicCell o (fineScaleIndex k) z)) := by
-    rw [closure_dyadicCell]
-    exact (convex_Icc _ _).prod (convex_Icc _ _)
-  have hxCell := hc.segment_subset ha hb hside
+  have hxCell := (convex_closure_dyadicCell o (fineScaleIndex k) z).segment_subset ha hb hside
   have hxD := closure_mono (dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices
     o k (fineScaleIndex k) Z C z (fineScaleIndex_le k) hz) hxCell
   have he := dyadicNeighborhood_contact_layer_eq o k₀ k Z C x hC hk hxN hxD
