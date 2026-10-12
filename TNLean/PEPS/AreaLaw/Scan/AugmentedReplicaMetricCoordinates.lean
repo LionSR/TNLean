@@ -50,7 +50,13 @@ theorem augmentedReplicaConfigurationEquiv_subsystemPerm
   funext j s
   simp only [augmentedReplicaConfigurationEquiv, Equiv.arrowCongr_apply,
     Equiv.refl_symm, Function.comp_apply, Equiv.refl_apply, subsystemPerm_apply]
-  rcases s with v | (_ | _) <;> done
+  rcases s with v | (_ | _)
+  · simp only [augmentedConfigurationEquiv_apply_physical, subsystemPerm_apply,
+      (show Sum.inl v ∈ Q.image augmentedSiteEquiv ↔ some (some v) ∈ Q from
+        (augmentedSiteEquiv (V := V)).injective.mem_finset_image
+          (s := Q) (a := some (some v)))]
+  · done
+  · done
 
 variable [Fintype V]
 
