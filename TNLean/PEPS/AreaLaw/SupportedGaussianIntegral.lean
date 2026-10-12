@@ -171,6 +171,10 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
               (Real.exp_pos (v * T - c * l)).le)))
         (norm_nonneg W))).trans_eq ?_
     ring
+  rw [GaussianFilter.gaussianIntertwinerTruncated,
+    ← integral_sub (hint.restrict (s := Set.Icc (-T) T))
+      (GaussianFilter.integrable_intertwinerIntegrand_restrict
+        η T g.operator_isHermitian hH W)]
   done
 
 end TNLean.PEPS.AreaLaw
