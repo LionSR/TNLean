@@ -345,12 +345,176 @@ operations on an empty memory.
 
 \begin{proof}
     \leanok
-    \uses{thm:peps_actual_source_column_coordinates,thm:peps_actual_party_word_entries,
+    \uses{thm:peps_matrix_orthonormal_coordinates,thm:peps_actual_source_column_coordinates,thm:peps_actual_party_word_entries,
         def:peps_actual_party_source_matrices}
     First express the actual word in the grouped input and output bases.
     Its matrix is the product of its singleton-restriction matrices.
     Compose with the identity from the literal source basis to the grouped
     input basis. The matrix of this composition is the claimed product.
+\end{proof}
+
+\begin{theorem}[An actual input operator between prepared source columns]
+    \label{thm:peps_actual_source_mixed_word}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_mixed_word}
+    \leanok
+    \uses{def:peps_actual_party_source_matrices,
+        thm:peps_actual_source_column_coordinates,thm:peps_actual_party_mixed_matrix}
+    Let $U$ be any source-free word from the actual source input memory to
+    itself, and let $[U]_E$ be its matrix in the literal source input basis.
+    Set $U_q=[U|_q]_{B_q,B_q}$. For independent ket and bra choices,
+    \begin{align}
+        D_\xi[U]_E D_\zeta^\dagger
+         & =\bigotimes_{q\in\mathcal Q}
+        A_{\xi,q}U_q A_{\zeta,q}^\dagger.
+        \label{eq:peps_actual_source_mixed}
+    \end{align}
+    Every owner, including the exterior owner, remains in the product.
+    The identity applies to each word in a finite sampled sum separately.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_matrix_orthonormal_coordinates,thm:peps_actual_source_column_coordinates,
+        thm:peps_actual_party_mixed_matrix,def:peps_actual_party_source_matrices}
+    Express the prepared words and $U$ in orthonormal coordinates.
+    The matrix of their mixed composition is independent of the chosen
+    input basis: both expressions represent the same operator on the
+    output memory. In the grouped input basis, the actual singleton
+    restrictions give~(\ref{eq:peps_actual_source_mixed}).
+\end{proof}
+
+\begin{definition}[Endpoint factors at the original sampled sources]
+    \label{def:peps_original_sampled_endpoint_factors}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointLeft}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointRight}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledSourceMatrix_eq_endpoint_average}
+    \leanok
+    \uses{def:peps_sampled_source_matrix,def:peps_source_gaussian_law}
+    At an original source occurrence $e$, retain its ordered ket and bra
+    branch labels $\alpha,\beta$, its Gaussian array, and its sample index $s$.
+    Denote the resulting left and right endpoint matrices by
+    $L_{e,\alpha\beta,s}$ and $H_{e,\alpha\beta,s}$. The right factor uses
+    the conjugate of the same Gaussian array. The constructed source matrix is
+    \begin{align}
+        \widehat X_{e,\alpha\beta}
+         & =k^{-1}\sum_{s=0}^{k-1}
+        L_{e,\alpha\beta,s}\otimes H_{e,\alpha\beta,s}.
+        \label{eq:peps_sampled_source_endpoints}
+    \end{align}
+    This algebraic formula also defines the zero-sample case using
+    $0^{-1}=0$ and an empty sum.
+\end{definition}
+
+\begin{definition}[The sampled endpoint word on the actual source input]
+    \label{def:peps_actual_sampled_endpoint_word}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointWord}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_sampledEndpointWord}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointInputWord}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_sampledEndpointInputWord}
+    \leanok
+    \uses{def:peps_original_sampled_endpoint_factors,
+        def:peps_source_register_operator_word,def:peps_actual_source_input_basis}
+    Fix independent global monomial choices $\xi,\zeta$ and one sample
+    assignment $j$ on all original source occurrences. At each source, form
+    the endpoint word with its actual branch pair and the two endpoint
+    matrices carrying $j(e)$. Transport this word to the actual input of the
+    recorded private preparation, including the terminal scalar memory,
+    and denote it by $U_{\xi,\zeta,j}$. Neither word contains a source
+    preparation. The original occurrence, branch pair, Gaussian array and
+    sample assignment are retained throughout the construction.
+\end{definition}
+
+\begin{theorem}[The actual sampled source matrix as a sum of endpoint words]
+    \label{thm:peps_actual_sampled_endpoint_average}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointWord_average}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.actualSourceInputBasis_repr_sampledEndpointInputWord}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointInputMatrix_average}
+    \leanok
+    \uses{def:peps_actual_sampled_endpoint_word,
+        thm:peps_endpoint_matrix_average,def:peps_actual_source_input_basis}
+    Let $n$ be the number of original source slots and let
+    $X_{\xi,\zeta}$ be the product of their actual sampled source matrices
+    in the literal source input basis $E$. Let $\sigma$ be the fixed
+    equivalence from slot positions to original source occurrences. Then
+    \begin{align}
+        X_{\xi,\zeta}
+         & =k^{-n}\sum_{j:\{0,\ldots,n-1\}\to\{0,\ldots,k-1\}}
+        [U_{\xi,\zeta,j\circ\sigma^{-1}}]_E.
+        \label{eq:peps_actual_sampled_average}
+    \end{align}
+    The canonical identification with the terminal scalar memory preserves
+    every matrix entry. The same assignment is used at both endpoints of
+    each source. The identity includes $k=0$, $n=0$, empty coordinate sets
+    and arbitrary sampled matrices.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_matrix_orthonormal_coordinates,thm:peps_endpoint_matrix_average,def:peps_actual_sampled_endpoint_word,
+        def:peps_actual_source_input_basis}
+    Apply the finite endpoint-averaging identity to the original ordered
+    source list. The equivalence between its positions and the original
+    source occurrences transports one complete assignment $j$. Conjugating
+    the word by the canonical input identification leaves its coordinates
+    unchanged, giving~(\ref{eq:peps_actual_sampled_average}) entry by entry.
+\end{proof}
+
+\begin{theorem}[Actual sampled contraction before the physical trace]
+    \label{thm:peps_actual_sampled_party_contraction}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_sampled_eq_sum_partyProduct}
+    \leanok
+    \uses{thm:peps_actual_sampled_endpoint_average,thm:peps_actual_source_mixed_word}
+    In the same notation, let
+    $U_{\xi,\zeta,j,q}=[U_{\xi,\zeta,j\circ\sigma^{-1}}|_q]_{B_q,B_q}$.
+    The literal sampled source contraction satisfies
+    \begin{align}
+        D_\xi X_{\xi,\zeta}D_\zeta^\dagger
+         & =k^{-n}\sum_j\bigotimes_{q\in\mathcal Q}
+        A_{\xi,q}U_{\xi,\zeta,j,q}A_{\zeta,q}^\dagger.
+        \label{eq:peps_actual_sampled_contraction}
+    \end{align}
+    The sum is over complete assignments on the original ordered slots.
+    Every owner, including the exterior owner, remains in the product.
+    No output register is traced out in this identity. Empty sample sets,
+    empty source lists, zero-dimensional memories and an empty set of
+    original parties are included.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_actual_sampled_endpoint_average,thm:peps_actual_source_mixed_word}
+    Insert the actual endpoint-word average between the prepared column
+    matrices. Distribute multiplication over the finite sum and apply the
+    individual-word mixed identity to each complete assignment.
+\end{proof}
+
+
+\begin{theorem}[Exterior restriction of the sampled endpoint word]
+    \label{thm:peps_actual_sampled_endpoint_exterior}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointWord_none_eval_heq_id}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointInputWord_none_eval_heq_id}
+    \leanok
+    \uses{def:peps_actual_sampled_endpoint_word,thm:peps_partial_fixed_layout,
+        thm:peps_source_register_operator_exclusion}
+    Select all original parties and let $*$ be the exterior owner. For any
+    independent ket and bra choices $\xi,\zeta$, original sample assignment
+    $j$ and sample values $\omega$, the actual sampled endpoint word
+    $U_{\xi,\zeta,j}$ restricts to $\operatorname{id}_{\mathbb C}$ at $*$.
+    This identity holds both on the fixed source layout and after its
+    canonical identification with the private preparation input. The
+    endpoint matrices are arbitrary, and the source inventory may be empty.
+    This is the exterior source factor in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 253--267, 279--309 and 565--588.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_actual_sampled_endpoint_word,thm:peps_partial_fixed_layout,
+        thm:peps_source_register_operator_exclusion}
+    By Theorem~\ref{thm:peps_partial_fixed_layout}, both owners of every
+    source are original selected parties. Restriction to $*$ excludes them
+    both. Theorem~\ref{thm:peps_source_register_operator_exclusion} therefore
+    gives $U_{\xi,\zeta,j}|_*=\operatorname{id}_{\mathbb C}$. Identifying
+    the source layout with the preparation input transports the restriction
+    by the same canonical identification on its input and output; hence
+    this scalar identity is preserved.
 \end{proof}
 
 \begin{theorem}[Source replacement through the actual prepared columns]
