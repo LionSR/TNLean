@@ -155,6 +155,14 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
     rw [← sub_mul, ← mul_sub, CStarRing.norm_mul_mem_unitary _ (hunit t),
       norm_sub_rev (siteExpectation q B (heisenbergEvolution g.operator t W))
         (heisenbergEvolution g.operator t W)]
+    refine (add_le_add
+      (hnear W (supportedOperators_mono (fun _ hx ↦ Finset.mem_union_left Z hx) hW) t ht)
+      (norm_mul_le_of_le
+        (show ‖heisenbergEvolution g.operator t W‖ ≤ ‖W‖ from
+          (SpectralFilter.norm_hermitianUnitaryPath_conj g.operator_isHermitian W t).le)
+        ((norm_sub_rev (U t)
+          (Matrix.hermitianUnitaryPath g.operator t * Matrix.hermitianUnitaryPath H (-t))).trans_le
+            (hrelative t ht)))).trans ?_
     done
   done
 
