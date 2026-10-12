@@ -164,12 +164,6 @@ theorem openRegionWeight_eq_untwisted_of_regularRegionGaugeResidual_eq_one
     split_ifs
     · exact hflat _
     · rfl
-  have hsite : regularTwistedSite a (fun _ => 1) = a := by
-    funext v η s
-    unfold regularTwistedSite
-    congr 1
-    funext e
-    simp only [regularTwistedLabels, one_mul, ite_self]
-  rw [hop, hsite]
+  rw [hop, regularTwistedSite_one]
 
 end TNLean.PEPS

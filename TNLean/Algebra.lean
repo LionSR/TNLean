@@ -21,6 +21,7 @@ import TNLean.Algebra.CharacterProjector
 import TNLean.Algebra.CharacterProjectorTwirl
 import TNLean.Algebra.CharacterProjectorWeighted
 import TNLean.Algebra.CircleCohomology
+import TNLean.Algebra.CoalgebraDualStar
 import TNLean.Algebra.CocycleCohomology
 import TNLean.Algebra.CocycleRestriction
 import TNLean.Algebra.CommonBufferLength
@@ -82,6 +83,7 @@ import TNLean.Algebra.InjectiveRangeProjectorContinuity
 import TNLean.Algebra.IsNilpotentOfTracePow
 import TNLean.Algebra.IsingCrossingCoefficients
 import TNLean.Algebra.IsometricFrameEmbedding
+import TNLean.Algebra.IsometricGapTransfer
 import TNLean.Algebra.IsometricProjection
 import TNLean.Algebra.IsometryUnitaryExtension
 import TNLean.Algebra.KernelGapPerturbation
@@ -122,11 +124,9 @@ import TNLean.Algebra.MonomialMatrix
 import TNLean.Algebra.MultilinearSelectedSum
 import TNLean.Algebra.NatInterval
 import TNLean.Algebra.NatSquarePlusOne
-import TNLean.Algebra.NegMulLog
 import TNLean.Algebra.NewtonIdempotentConvergence
 import TNLean.Algebra.NonnegativeMatrixSpectralRadius
 import TNLean.Algebra.NormedRingTelescoping
-import TNLean.Algebra.NuclearNormTruncation
 import TNLean.Algebra.OneMagnon
 import TNLean.Algebra.OperatorSchmidt
 import TNLean.Algebra.OrderedIdempotentTracePerturbation

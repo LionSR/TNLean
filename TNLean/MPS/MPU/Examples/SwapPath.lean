@@ -51,11 +51,6 @@ theorem isStarProjection_swapSymmetricProjection :
   · change (swapSymmetricProjection d)ᴴ = swapSymmetricProjection d
     simp [swapSymmetricProjection, swapMatrix_conjTranspose]
 
-/-- The antisymmetric-subspace projection is self-adjoint and idempotent. -/
-theorem isStarProjection_swapAntisymmetricProjection :
-    IsStarProjection (swapAntisymmetricProjection d) := by
-  exact (isStarProjection_swapSymmetricProjection d).one_sub
-
 /-- The unit complex phase used on the antisymmetric subspace. -/
 noncomputable def swapPhase (x : ℝ) : ℂ :=
   Complex.exp ((Real.pi * x : ℝ) * Complex.I)

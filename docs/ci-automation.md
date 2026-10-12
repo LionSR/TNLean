@@ -203,7 +203,10 @@ modules or tests.
 
 - **Early build** (pull requests, before the root build): a fail-fast
   `lake build` of the changed production modules, logged with the root build
-  for the compilation-time gate.
+  for the compilation-time gate. It is a shortcut with a 20-minute budget: a
+  compile error fails the step, but a build that runs past the budget (for
+  example behind a cold dependency cache after a pin change) stops with a
+  warning and leaves the remaining modules to the root build.
 - **Strict checks** (after the root build): every changed production file and
   every affected test file is elaborated with the package options
   and `-DwarningAsError=true`, three files at a time, each with a time limit.
@@ -303,12 +306,12 @@ issues, attaching them to the relevant tracking issue as native sub-issues.
 
 **What it does**: When the blueprint linter fails on a PR, this workflow reads the error logs and asks Claude to fix the LaTeX.
 
-**When it runs**: Automatically after a "PR CI" run completes with the blueprint job failed. Runs on any PR from the same repository (not forks).
+**When it runs**: Automatically after a "PR CI" run completes with either blueprint job failed: the `blueprint` job (`texra-blueprint web`, a wrapper of `leanblueprint web` that also fails on unrecognized renderer commands) or the `blueprint-pdf` job (`leanblueprint pdf` and `./scripts/build_blueprint_ch01_12.sh`, XeLaTeX). Runs on any PR from the same repository (not forks).
 
 **What Claude does**:
-- Reads the blueprint compilation error logs
+- Reads the blueprint compilation error logs and identifies which of the two jobs failed
 - Fixes common issues: unresolved `\ref`/`\label` references, duplicate labels, mismatched `\begin`/`\end` environments, invalid `\lean{DeclName}` references, malformed LaTeX, plasTeX parse errors
-- Validates the fix by running `leanblueprint web`
+- Validates the fix with the command matching the failed job: `texra-blueprint web` for the `blueprint` job; `leanblueprint pdf` for the `blueprint-pdf` job, plus `./scripts/build_blueprint_ch01_12.sh` when its FT-MPS step failed
 - Pushes a commit with the `[claude-auto-fix]` prefix
 - Posts a summary comment on the PR
 

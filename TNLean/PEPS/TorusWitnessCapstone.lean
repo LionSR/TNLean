@@ -124,10 +124,9 @@ theorem exists_edgeCoeffIdentityWitness_horizontalFamily
     (fun g => isCrossingEdge_torusHorizontalRectangleBlockingDatum A hAh hUAh hx0 hy0 hxw hyh
       g) with hfdef
   -- `B`'s reference region block and host block are injective.
-  have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B R := by
-    have hi := hBh.horizontalEdgeRed_injective (xStart := xStart) (yStart := yStart)
+  have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B R :=
+    hBh.horizontalEdgeRed_injective (xStart := xStart) (yStart := yStart)
       (by omega) (by omega)
-    rwa [regionInjectivityDataOf_isInjective] at hi
   have hCB : RegionBlockedTensorInjective (G := torusGraph width height) B (Finset.univ \ R) :=
     regionBlockedTensorInjective_host
       (torusHorizontalRectangleBlockingDatum hBh hUBh hx0 hy0 hxw hyh) hUBh
@@ -190,10 +189,9 @@ theorem exists_edgeCoeffIdentityWitness_verticalFamily
     (torusVerticalReferenceEdge xStart yStart)
     (fun g => isCrossingEdge_torusVerticalRectangleBlockingDatum A hAh hUAh hx0 hy0 hxw hyh
       g) with hfdef
-  have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B R := by
-    have hi := hBh.verticalEdgeRed_injective (xStart := xStart) (yStart := yStart)
+  have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B R :=
+    hBh.verticalEdgeRed_injective (xStart := xStart) (yStart := yStart)
       (by omega) (by omega)
-    rwa [regionInjectivityDataOf_isInjective] at hi
   have hCB : RegionBlockedTensorInjective (G := torusGraph width height) B (Finset.univ \ R) :=
     regionBlockedTensorInjective_host
       (torusVerticalRectangleBlockingDatum hBh hUBh hx0 hy0 hxw hyh) hUBh

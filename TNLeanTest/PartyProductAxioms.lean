@@ -13,7 +13,7 @@ import Lean.Util.CollectAxioms
 
 The adjoint, mixed product, private partial trace and one-party scalar
 identities may depend only on the standard logical axioms. The guard checks
-the named declarations in their ordinary production modules.
+the named declarations in their defining modules.
 -/
 
 set_option linter.hashCommand false
