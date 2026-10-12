@@ -447,7 +447,6 @@ jobs:
         with:
           build: false
           use-github-cache: false
-          use-mathlib-cache: true
 
       # Setup/Mathlib prebuilt retrieval happens before this separate seed;
       # no seeded artifact is available to a Lean command until pruning passes.
