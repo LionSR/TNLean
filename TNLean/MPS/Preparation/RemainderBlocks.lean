@@ -65,17 +65,10 @@ theorem exists_remainderBlocks {q N : ℕ} (hq : 0 < q) (hqN : q ≤ N) :
       (∀ k, q ≤ ℓ k) ∧ ∀ k, ℓ k ≤ 2 * q := by
   obtain ⟨m, hm⟩ : ∃ m, N / q = m + 1 :=
     ⟨N / q - 1, (Nat.succ_pred_eq_of_pos (Nat.div_pos hqN hq)).symm⟩
-  refine ⟨m, fun k => if k = Fin.last m then q + N % q else q, hm, ?_, fun k => ?_, fun k => ?_⟩
-  · rw [Fin.sum_univ_castSucc]
-    simp only [Fin.castSucc_ne_last, ite_false, Finset.sum_const, Finset.card_univ,
-      Fintype.card_fin, smul_eq_mul, ite_true]
-    have := Nat.div_add_mod N q
-    rw [hm] at this
-    linarith
-  · dsimp only
-    split_ifs <;> omega
-  · have := Nat.mod_lt N hq
-    dsimp only
-    split_ifs <;> omega
+  exact ⟨m, fun k => remainderBlockLengths q N (Fin.cast hm.symm k), hm,
+    (Fin.sum_congr' (remainderBlockLengths q N) hm.symm).trans
+      (sum_remainderBlockLengths hq hqN),
+    fun k => le_remainderBlockLengths q N _,
+    fun k => (remainderBlockLengths_lt_two_mul hq _).le⟩
 
 end MPSPreparation

@@ -78,11 +78,9 @@ private theorem right_up_transport (p : X) (b : Bool) (h : G) :
       (torusGraph_adj_up (p.1+2) p.2) = 1 := by
   have hw := Fact.out (p := 7 < width)
   have h20 : (2 : ZMod width) ≠ 0 := by
-    simpa using (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt
-      (n := width) 2 0 (by norm_num; omega)).not.mpr (by norm_num : (2 : ℤ) ≠ 0)
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := width) 2 0 (by omega) (by decide)
   have h21 : (2 : ZMod width) ≠ 1 := by
-    simpa using (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt
-      (n := width) 2 1 (by norm_num; omega)).not.mpr (by norm_num : (2 : ℤ) ≠ 1)
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := width) 2 1 (by omega) (by decide)
   have he₀ : Edge.ofAdj (torusGraph_adj_up (p.1+2) p.2) ≠
       Edge.ofAdj (torusGraph_adj_up p.1 p.2) :=
     Edge.ofAdj_ne_of_endpoint_coordinates _ _ Prod.fst rfl (Or.inl (by simpa using h20))
@@ -101,23 +99,17 @@ private theorem internal_eq (v : X) (g h : G) (b : Bool) (e : Edge Γₜ)
   have hw := Fact.out (p := 7 < width)
   have hh := Fact.out (p := 6 < height)
   have hx21 : (2 : ZMod width) ≠ 1 := by
-    simpa using (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt
-      (n := width) 2 1 (by norm_num; omega)).not.mpr (by norm_num : (2 : ℤ) ≠ 1)
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := width) 2 1 (by omega) (by decide)
   have hx31 : (3 : ZMod width) ≠ 1 := by
-    simpa using (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt
-      (n := width) 3 1 (by norm_num; omega)).not.mpr (by norm_num : (3 : ℤ) ≠ 1)
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := width) 3 1 (by omega) (by decide)
   have hx32 : (3 : ZMod width) ≠ 2 := by
-    simpa using (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt
-      (n := width) 3 2 (by norm_num; omega)).not.mpr (by norm_num : (3 : ℤ) ≠ 2)
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := width) 3 2 (by omega) (by decide)
   have hy20 : (2 : ZMod height) ≠ 0 := by
-    simpa using (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt
-      (n := height) 2 0 (by norm_num; omega)).not.mpr (by norm_num : (2 : ℤ) ≠ 0)
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := height) 2 0 (by omega) (by decide)
   have hy21 : (2 : ZMod height) ≠ 1 := by
-    simpa using (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt
-      (n := height) 2 1 (by norm_num; omega)).not.mpr (by norm_num : (2 : ℤ) ≠ 1)
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := height) 2 1 (by omega) (by decide)
   have hy2n : (2 : ZMod height) ≠ -1 := by
-    simpa using (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt
-      (n := height) 2 (-1) (by norm_num; omega)).not.mpr (by norm_num : (2 : ℤ) ≠ -1)
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := height) 2 (-1) (by omega) (by decide)
   have hmem (i : Fin 6) :
       (p.1 + ((![0,1,2,2,1,0] i : ℕ) : ZMod width),
        p.2 + ((![0,0,0,1,1,1] i : ℕ) : ZMod height)) ∈ translatedTwoPlaquetteRegion p := by
