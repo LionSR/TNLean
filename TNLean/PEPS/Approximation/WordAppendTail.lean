@@ -52,7 +52,7 @@ private theorem appendIso_nil_pair (a b : Layout P) (x : Mem a) (y : Mem b) :
 namespace Word
 
 /-- Exchange two complete lists, identifying their empty final memory. -/
-private def exchangeTwo (a b : Layout P) : Word (a ++ b) (b ++ a) :=
+def exchangeTwo (a b : Layout P) : Word (a ++ b) (b ++ a) :=
   (exchangeBlocks a b []).castLayouts (congrArg (a ++ ·) (List.append_nil b))
     (congrArg (b ++ ·) (List.append_nil a))
 

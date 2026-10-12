@@ -6466,6 +6466,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   than tensor identities. The addition case already uses `congrArg₂`,
   `eq_of_heq`, and `heq_of_eq`. The same core equality tools suffice for the
   head constructions; a generic lemma would only restate their congruence.
+- **Word identities (2026-10-12):** `WordOwnerAppendTailTransport` and
+  `AbsorbedRestriction` both compare chronological compositions, frames,
+  identities and list identifications at the word level after identifying
+  layouts. These are two occurrences of each pattern across two files.
+  Before a third occurrence, promote the corresponding word congruences
+  to a shared provider. This comparison is stronger than equality of
+  evaluated operators and can therefore be used before taking a local
+  part or restricting owners. The new transport has a named axiom check;
+  elaboration is pending.
 - **Relation to the tensor-map candidate:** The two existing private
   `mapL_heq` and `mapL_apply_heq` helpers concern tensor products of two maps
   with four changing spaces. The new helper instead compares an associator
@@ -7127,3 +7136,37 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** At a third occurrence, share the scalar composition lemma
   in a lower-level module and retain the explicit empty-layout assumptions.
 - **Notes:** The two scalars may vanish. No cancellation or normalization is used.
+
+### Matrices of actual maps in orthonormal coordinates — promoted (2026-10-11)
+
+- **Helper:** `matrix_repr_eval_eq_toMatrix` in
+  `TNLean/PEPS/Approximation/BasisMatrixOperator.lean` identifies the matrix
+  formed from the coordinate entries with the linear map's matrix.
+- **Use:** Apply the identity before multiplying, summing or changing bases,
+  rather than repeatedly comparing entries and simplifying the two basis
+  coercions.
+- **Occurrences replaced:** `ActualPartySourceMatrix.lean`,
+  `ActualMixedSourceMatrix.lean`, and `ActualSampledEndpointInputWord.lean`.
+- **Scope:** Arbitrary actual continuous linear maps and finite orthonormal
+  bases; empty coordinate sets and zero maps are included. A lemma suffices.
+
+
+### Restriction under identification of equal layouts — promoted (2026-10-12)
+
+- **Pattern:** Eliminate equal input and output register lists before comparing
+  restriction with their canonical identification.
+- **Seen:** `AbsorbedRestriction.restrict_castLayouts_word_heq`, the former
+  `SampledEndpointExteriorIdentity.restrict_castLayouts_eval_heq`, and
+  `EndpointWordRestrictionCongruence.restrict_castLayouts_congr`.
+- **Abstraction:** `Word.restrict_castLayouts` in `WordRestriction.lean`
+  states that restriction commutes with canonical identification of the
+  input and output lists. Its single proof eliminates both equalities.
+- **Refactor:** The endpoint congruence rewrites by this identity. The sampled
+  exterior proof applies evaluation and the existing evaluation-transport
+  lemma. The actively used private word comparison in `AbsorbedRestriction`
+  derives its heterogeneous conclusion from the same identity and the
+  existing single-word transport lemma.
+- **Notes:** Every original public signature and source-free hypothesis is
+  retained. No arbitrary heterogeneous-equality premise or new isometry is
+  introduced. Compilation of this promotion is pending with the endpoint
+  congruence development.
