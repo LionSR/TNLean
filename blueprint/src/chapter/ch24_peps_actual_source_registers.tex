@@ -356,6 +356,7 @@ operations on an empty memory.
 \begin{theorem}[An actual input operator between prepared source columns]
     \label{thm:peps_actual_source_mixed_word}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_mixed_word}
+    \leanok
     \uses{def:peps_actual_party_source_matrices,
         thm:peps_actual_source_column_coordinates,thm:peps_actual_party_mixed_matrix}
     Let $U$ be any source-free word from the actual source input memory to
@@ -371,7 +372,7 @@ operations on an empty memory.
     The identity applies to each word in a finite sampled sum separately.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_matrix_orthonormal_coordinates,thm:peps_actual_source_column_coordinates,
         thm:peps_actual_party_mixed_matrix,def:peps_actual_party_source_matrices}
     Express the prepared words and $U$ in orthonormal coordinates.
@@ -386,6 +387,7 @@ operations on an empty memory.
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointLeft}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointRight}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledSourceMatrix_eq_endpoint_average}
+    \leanok
     \uses{def:peps_sampled_source_matrix,def:peps_source_gaussian_law}
     At an original source occurrence $e$, retain its ordered ket and bra
     branch labels $\alpha,\beta$, its Gaussian array, and its sample index $s$.
@@ -408,6 +410,7 @@ operations on an empty memory.
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_sampledEndpointWord}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointInputWord}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_sampledEndpointInputWord}
+    \leanok
     \uses{def:peps_original_sampled_endpoint_factors,
         def:peps_source_register_operator_word,def:peps_actual_source_input_basis}
     Fix independent global monomial choices $\xi,\zeta$ and one sample
@@ -425,6 +428,7 @@ operations on an empty memory.
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointWord_average}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.actualSourceInputBasis_repr_sampledEndpointInputWord}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointInputMatrix_average}
+    \leanok
     \uses{def:peps_actual_sampled_endpoint_word,
         thm:peps_endpoint_matrix_average,def:peps_actual_source_input_basis}
     Let $n$ be the number of original source slots and let
@@ -443,7 +447,7 @@ operations on an empty memory.
     and arbitrary sampled matrices.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_matrix_orthonormal_coordinates,thm:peps_endpoint_matrix_average,def:peps_actual_sampled_endpoint_word,
         def:peps_actual_source_input_basis}
     Apply the finite endpoint-averaging identity to the original ordered
@@ -456,6 +460,7 @@ operations on an empty memory.
 \begin{theorem}[Actual sampled contraction before the physical trace]
     \label{thm:peps_actual_sampled_party_contraction}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_sampled_eq_sum_partyProduct}
+    \leanok
     \uses{thm:peps_actual_sampled_endpoint_average,thm:peps_actual_source_mixed_word}
     In the same notation, let
     $U_{\xi,\zeta,j,q}=[U_{\xi,\zeta,j\circ\sigma^{-1}}|_q]_{B_q,B_q}$.
@@ -473,7 +478,7 @@ operations on an empty memory.
     original parties are included.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_actual_sampled_endpoint_average,thm:peps_actual_source_mixed_word}
     Insert the actual endpoint-word average between the prepared column
     matrices. Distribute multiplication over the finite sum and apply the
@@ -485,6 +490,7 @@ operations on an empty memory.
     \label{thm:peps_actual_sampled_endpoint_exterior}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointWord_none_eval_heq_id}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointInputWord_none_eval_heq_id}
+    \leanok
     \uses{def:peps_actual_sampled_endpoint_word,thm:peps_partial_fixed_layout,
         thm:peps_source_register_operator_exclusion}
     Select all original parties and let $*$ be the exterior owner. For any
@@ -499,7 +505,7 @@ operations on an empty memory.
     % Source: 04-compression.tex, lines 253--267, 279--309 and 565--588.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_actual_sampled_endpoint_word,thm:peps_partial_fixed_layout,
         thm:peps_source_register_operator_exclusion}
     By Theorem~\ref{thm:peps_partial_fixed_layout}, both owners of every

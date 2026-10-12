@@ -87,6 +87,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     \label{thm:peps_joint_source_vector_coordinates}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.slotVector_eq_sum_slotBasis}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.slotBasis_repr_slotVector}
+    \leanok
     \uses{def:peps_joint_source_vector,def:peps_source_slot_basis}
     Choose finite orthonormal bases $b_i,c_i$ of $U_i,V_i$ and let $e_x$ be their
     ordered joint source basis. For arbitrary $\eta_i\in U_i\otimes V_i$,
@@ -101,7 +102,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     zero-dimensional register spaces.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_source_slot_basis,def:peps_joint_source_vector}
     Expand each factor in its orthonormal basis and distribute the finite
     tensor product over the finite sums. Taking the coordinate of $e_x$
@@ -112,6 +113,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     \label{def:peps_operator_from_basis_matrix}
     \lean{TNLean.PEPS.PairEffect.basisMatrixOperator}
     \lean{TNLean.PEPS.PairEffect.basisMatrixOperator_repr}
+    \leanok
     Let $b=(b_j)_{j\in I}$ be an orthonormal basis of a finite-dimensional
     complex inner product space. For a matrix $M$, define $T_b(M)$ by
     $T_b(M)b_j=\sum_i M_{ij}b_i$. Its matrix in $b$ is exactly $M$.
@@ -123,6 +125,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     \lean{TNLean.PEPS.PairEffect.SourceInventory.slotBasis_repr_endpointWord}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.endpointMatrixWord}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.slotBasis_repr_endpointMatrixWord}
+    \leanok
     \uses{thm:peps_source_register_operator_evaluation,
         thm:peps_joint_source_vector_coordinates,def:peps_operator_from_basis_matrix}
     In the joint source basis, the endpoint operator satisfies
@@ -137,7 +140,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
         (H_i)_{x_i^{(2)},y_i^{(2)}}$.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_source_register_operator_evaluation,
         thm:peps_joint_source_vector_coordinates,def:peps_operator_from_basis_matrix}
     Apply the endpoint action to the basis vector $e_y$, then take its
@@ -147,6 +150,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 \begin{theorem}[Finite averaging of endpoint operators]
     \label{thm:peps_endpoint_matrix_average}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.endpointMatrixAverage_eq_product}
+    \leanok
     \uses{thm:peps_endpoint_operator_coordinates}
     Let $L_{i,s},H_{i,s}$ be endpoint matrices for $s\in\{0,\ldots,k-1\}$.
     Then, entrywise in the joint source basis,
@@ -162,7 +166,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     and $n=0$, with the empty assignment contributing the scalar identity.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_endpoint_operator_coordinates}
     Substitute the endpoint-coordinate formula and distribute the product
     of finite sums. One choice of a summand at every original slot gives
@@ -172,13 +176,14 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 \begin{theorem}[Matrices in orthonormal coordinates]
     \label{thm:peps_matrix_orthonormal_coordinates}
     \lean{TNLean.PEPS.PairEffect.matrix_repr_eval_eq_toMatrix}
+    \leanok
     Let $b,c$ be finite orthonormal bases and let $A$ be a continuous linear
     map between their spaces. Its linear-map matrix is the coordinate-entry
     matrix $M_{ij}=\langle c_i,A b_j\rangle$. Empty index sets and the zero
     map are included.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     The matrix of a linear map is defined by the coordinates of the images
     of its basis vectors. Evaluate that definition at each pair of indices.
 \end{proof}
