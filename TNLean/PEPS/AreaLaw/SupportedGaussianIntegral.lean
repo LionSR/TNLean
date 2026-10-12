@@ -73,6 +73,7 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
   obtain ⟨C, v, c, hC, hv, hc, hlocal⟩ :=
     exists_quasilocal_region_localization q hq R J
   refine ⟨C, v, c, hC, hv, hc, ?_⟩
+  intro Λ g H W hH Q Z hW hD l B
   done
 
 end TNLean.PEPS.AreaLaw
