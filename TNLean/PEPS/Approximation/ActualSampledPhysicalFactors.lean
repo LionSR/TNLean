@@ -61,9 +61,11 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors
       (selectedPartyOrder_nodup ps hn) (mem_selectedPartyOrder ps hc)
     let e := Equiv.arrowProdEquivProdArrow (Option {_p : P // true = true})
       (selectedFamilyPhysicalIndex d) E
-    let M := fun (j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k)
-      (q : Option {_p : P // true = true}) ↦
-      Matrix.partialTraceRight
+    let M : (Fin (partialSlots (fun _ ↦ true) w).length → Fin k) →
+        (q : Option {_p : P // true = true}) →
+        Matrix (selectedFamilyPhysicalIndex d q) (selectedFamilyPhysicalIndex d q) ℂ :=
+      fun j q ↦
+      Matrix.partialTraceRight (α := selectedFamilyPhysicalIndex d q) (β := E q)
         (w.partialSourcePartyMatrix ψ ξ B C q *
           LinearMap.toMatrix (B q).toBasis (B q).toBasis
             (((sampledEndpointInputWord w k lam L R ξ ζ

@@ -153,12 +153,17 @@ theorem partialSourceWord_sampled_none_partialTrace_eq_scalar
   have hU := (restrict_none_eval_heq_isNone (sampledEndpointInputWord w k lam L R ξ ζ j ω)
     (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω)).trans
       (sampledEndpointInputWord_none_eval_heq_id w k lam L R ξ ζ j ω)
-  exact empty_memory_restricted_words_mixed_partialTrace (partySelector none)
+  have h := empty_memory_restricted_words_mixed_partialTrace
+    (Q := Option {p : P // (fun _ : P ↦ true) p = true}) (I := I) (J := J)
+    (a := w.allResidualSourceLayout ++ [])
+    (b := Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b)
+    (partySelector none)
     (w.partialSourceWord ψ ξ) (w.partialSourceWord ψ ζ)
     (sampledEndpointInputWord w k lam L R ξ ζ j ω)
     (sources_partialSourceWord w ψ ξ) (sources_partialSourceWord w ψ ζ)
     (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω)
     ha (Layout.atParty_none_mapOwner_all b) B C w.emptyGateScalar w.emptyGateScalar hξ hζ hU
+  exact h
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect
