@@ -167,27 +167,6 @@ theorem sourceVDressedGram_iff_simple2_transpose_fixed_pair
     dsimp only at hA hB
     rw [hA, hB, h]
 
-/-- A simple tensor whose normalized double-layer diagonal stabilizes to
-$|\rho)(\Phi|$ has $v^\dagger v=\Id$ for the auxiliary gate obtained by
-recomputing the source factors with the weight $\rho^{\mathsf T}$.
-
-This is the reparametrized-weight consequence of the complete network. It is
-not the source gate built from the fixed-point weight $\rho$ unless
-$\rho^{\mathsf T}=\rho$. The source assumes that $\rho$ is diagonal before
-its proof of Theorem `ThmFund1`, $1\to2$ (arXiv:1703.09188, lines 495 and
-577--588). -/
-theorem IsMPUSimple.sourceV_transpose_isIsometry [NeZero d]
-    {U : MPOTensor d D} (hU : IsMPUSimple U)
-    (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosDef) (J : ℕ) (hJ : 0 < J)
-    (hpower : normalizedDiagonal (doubleLayerTensor U) ^ J =
-      Matrix.vecMulVec (fun x ↦ ρ.vec (finProdFinEquiv.symm x))
-        (fun x ↦ (1 : Matrix (Fin D) (Fin D) ℂ).vec (finProdFinEquiv.symm x))) :
-    (sourceV U ρᵀ hρ.transpose).IsIsometry := by
-  rw [← sourceVDressedGram_iff_isIsometry,
-    sourceVDressedGram_iff_simple2_transpose_fixed_pair]
-  simpa only [Matrix.transpose_transpose] using
-    hU.simple2_of_normalizedDiagonal_pow_eq_vecMulVec _ _ J hJ hpower
-
 /-- Theorem `ThmFund1`, $1\to2$: under the source's standing canonical-form-II
 convention, the paper gate $v$ built from the recorded weight $\rho$ satisfies
 $v^\dagger v=\Id$.
