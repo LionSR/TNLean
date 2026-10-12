@@ -124,6 +124,14 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
               (sub_le_sub_right (mul_le_mul_of_nonneg_left ht hv.le) _))
             (mul_nonneg hC.le (Nat.cast_nonneg _))))
         (norm_nonneg A))
+  have hrelative (t : ℝ) (ht : |t| ≤ T) :
+      ‖Matrix.hermitianUnitaryPath g.operator t * Matrix.hermitianUnitaryPath H (-t) -
+        U t‖ ≤ ‖g.operator - H‖ *
+          (C * (Λ.card : ℝ) * Real.exp (v * T - c * l)) * |t| :=
+    hcompare t _ (fun s hs ↦ hnear (g.operator - H)
+      (supportedOperators_mono (fun _ hx ↦ Finset.mem_union_right Q hx) hD) s
+      ((show |s| ≤ |t| by
+        simpa only [sub_zero] using Set.abs_sub_left_of_mem_uIcc hs).trans ht))
   done
 
 end TNLean.PEPS.AreaLaw
