@@ -55,8 +55,10 @@ theorem eval_endpointWord_slotVector_tmul (R : SourceInventory P)
       simp only [endpointWord, Word.eval_castLayouts, comp_apply, isoL_apply,
         slotVector_cons_eq, LinearIsometryEquiv.symm_apply_apply]
       apply congrArg (Layout.memCongr (slotLayout_cons r R U V).symm)
-      simp only [assocL_tmul, Word.eval_comp, comp_apply, Word.eval_frame,
-        lTensor_tmul, eval_localEndpoint_tmul, ih]
+      simp only [assocL_tmul, Word.eval_comp, comp_apply, Word.eval_frame]
+      rw [eval_localEndpoint_tmul ⟨r.left, U 0⟩ (A 0) _ (u 0) _, lTensor_tmul,
+        comp_apply, eval_localEndpoint_tmul ⟨r.right, V 0⟩ (B 0) _ (v 0) _,
+        lTensor_tmul, ih]
 
 end SourceInventory
 end TNLean.PEPS.PairEffect
