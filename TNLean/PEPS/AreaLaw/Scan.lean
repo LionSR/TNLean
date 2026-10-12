@@ -93,3 +93,4 @@ import TNLean.PEPS.AreaLaw.Scan.SupportLocalization
 import TNLean.PEPS.AreaLaw.Scan.TerminalSplits
 import TNLean.PEPS.AreaLaw.Scan.TimedChargePaths
 import TNLean.PEPS.AreaLaw.Scan.TransportDimension
+import TNLean.PEPS.AreaLaw.Scan.TypicalReplicaAbsorption
