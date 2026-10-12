@@ -67,7 +67,8 @@ theorem reindex_physicalBuffer_eq_siteLift
         (Finset.mem_union.mp hiRC).elim
           (fun hiR ↦ Prod.ext (congrFun h.1.1 ⟨i, hiR⟩) (congrFun h.2.1 ⟨i, hiR⟩))
           (fun hiC ↦ Prod.ext (congrFun h.1.2 ⟨i, hiC⟩) (congrFun h.2.2 ⟨i, hiC⟩))
-    · done
+    · intro h
+      done
   done
 
 end TNLean.PEPS.EncodedFrame
