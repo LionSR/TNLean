@@ -36,7 +36,6 @@ local instance kitaevNativeHeightOne : Fact (1 < height) :=
   ⟨by have := Fact.out (p := 2 < height); omega⟩
 local notation "TV" => TorusVertex width height
 local notation "Γₜ" => torusGraph width height
-private abbrev RV (v : TV) := {w : TV // w ∈ torusPlaquetteRegion v}
 private abbrev RI (v : TV) :=
   {e : Edge Γₜ // e.1.1 ∈ torusPlaquetteRegion v ∧ e.1.2 ∈ torusPlaquetteRegion v}
 private abbrev RB (v : TV) := {e : Edge Γₜ // IsRegionBoundaryEdge (torusPlaquetteRegion v) e}

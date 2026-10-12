@@ -421,9 +421,8 @@ theorem regionBlockedTensorInjective_windowComplement
     (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) :
     RegionBlockedTensorInjective (G := torusGraph width height) B
-      (Finset.univ \ torusArcRectangle s L K) := by
-  have hi := h.windowComplement_injective hUB hL hK hxw hyh s
-  rwa [regionInjectivityDataOf_isInjective] at hi
+      (Finset.univ \ torusArcRectangle s L K) :=
+  h.windowComplement_injective hUB hL hK hxw hyh s
 
 /-- **The horizontal consecutive-window-union complement is blocked-tensor
 injective for `B`.**
@@ -439,9 +438,8 @@ theorem regionBlockedTensorInjective_horizontalUnionComplement
     (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) :
     RegionBlockedTensorInjective (G := torusGraph width height) B
-      (Finset.univ \ torusArcRectangle s (L + 1) K) := by
-  have hi := h.horizontalUnionComplement_injective hUB hL hK hxw hyh s
-  rwa [regionInjectivityDataOf_isInjective] at hi
+      (Finset.univ \ torusArcRectangle s (L + 1) K) :=
+  h.horizontalUnionComplement_injective hUB hL hK hxw hyh s
 
 /-- **The vertical consecutive-window-union complement is blocked-tensor
 injective for `B`.**
@@ -457,9 +455,8 @@ theorem regionBlockedTensorInjective_verticalUnionComplement
     (hL : 0 < L) (hK : 0 < K) (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height)
     (s : TorusVertex width height) :
     RegionBlockedTensorInjective (G := torusGraph width height) B
-      (Finset.univ \ torusArcRectangle s L (K + 1)) := by
-  have hi := h.verticalUnionComplement_injective hUB hL hK hxw hyh s
-  rwa [regionInjectivityDataOf_isInjective] at hi
+      (Finset.univ \ torusArcRectangle s L (K + 1)) :=
+  h.verticalUnionComplement_injective hUB hL hK hxw hyh s
 
 end NormalTorusArcWindowInjectivityHypotheses
 

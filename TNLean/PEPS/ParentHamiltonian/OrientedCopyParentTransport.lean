@@ -144,15 +144,7 @@ theorem graphNumberedCopyMatrix_maps_oriented_parent
         (blockMultiplicityRepresentation d m D) 1 o eY) R := by
   apply map_regionParentGroundSpace_le_of_blocks
   intro i τ σ
-  have hb : regionOperatorBlock (R i)
-      (graphNumberedBondMatrix eX eY
-        (fullMultiplicityBondMap (fun i => Fin (d i)) (fun i => Fin (m i)))) τ σ =
-      graphMultiplicityBlockCoefficient (fun i => Fin (d i)) (fun i => Fin (m i))
-        eX eY (R i) τ σ • numberedRegionCopyMatrix d m eX eY (R i)
-          (regionOutsideBoundaryEndpoint eY (R i) τ) := by
-    ext y x
-    exact regionOperatorBlock_fullMultiplicityBondMap
-      (fun i => Fin (d i)) (fun i => Fin (m i)) eX eY (R i) τ σ y x
+  have hb := regionOperatorBlock_fullMultiplicityBondMap_eq_smul d m eX eY (R i) τ σ
   rintro _ ⟨φ, hφ, rfl⟩
   change _ *ᵥ φ ∈ _
   rw [hb, Matrix.smul_mulVec]
@@ -175,15 +167,7 @@ theorem graphNumberedCopyMatrix_adjoint_maps_oriented_parent
         (blockMatrixRepresentation d D) (blockMultiplicityRootWeight d m) o eX) R := by
   apply map_regionParentGroundSpace_le_of_blocks
   intro i σ τ
-  have hb : regionOperatorBlock (R i)
-      (graphNumberedBondMatrix eX eY
-        (fullMultiplicityBondMap (fun i => Fin (d i)) (fun i => Fin (m i)))) τ σ =
-      graphMultiplicityBlockCoefficient (fun i => Fin (d i)) (fun i => Fin (m i))
-        eX eY (R i) τ σ • numberedRegionCopyMatrix d m eX eY (R i)
-          (regionOutsideBoundaryEndpoint eY (R i) τ) := by
-    ext y x
-    exact regionOperatorBlock_fullMultiplicityBondMap
-      (fun i => Fin (d i)) (fun i => Fin (m i)) eX eY (R i) τ σ y x
+  have hb := regionOperatorBlock_fullMultiplicityBondMap_eq_smul d m eX eY (R i) τ σ
   rintro _ ⟨φ, hφ, rfl⟩
   change _ *ᵥ φ ∈ _
   rw [regionOperatorBlock_conjTranspose, hb, Matrix.conjTranspose_smul, Matrix.smul_mulVec]

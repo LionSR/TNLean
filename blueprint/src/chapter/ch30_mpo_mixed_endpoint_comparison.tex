@@ -1,0 +1,213 @@
+% Source: arXiv:2203.12563v3, REsubmission.tex, lines 1690--1692.
+% This leaf compares both actual endpoint interactions; no gap is assumed.
+
+\subsection{Comparison at the first endpoint}
+
+\begin{theorem}[Endpoint projector and local interaction comparison]
+    \label{thm:mpo_mixed_endpoint_projector_comparison}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointRowSector_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.mixedEndpointColumnSector_isSymmetricProjection,
+        MPSTensor.MPOSymmetry.mixedEndpointRowSector_commute_columnSector,
+        MPSTensor.MPOSymmetry.mixedEndpointLeftTensor_starProjection_eq_outerCorner,
+        MPSTensor.MPOSymmetry.mixedEndpointParentInteraction_isPositive,
+        MPSTensor.MPOSymmetry.mixedEndpointParentInteraction_zero_le_parentInteractionES,
+        MPSTensor.MPOSymmetry.parentInteractionES_mixedEndpointLeftTensor_le,
+        MPSTensor.MPOSymmetry.mixedEndpoint_one_sub_columnSector_zero_le_parentInteraction,
+        MPSTensor.MPOSymmetry.mixedEndpoint_one_sub_rowSector_one_le_parentInteraction}
+    \leanok
+    \uses{def:mpo_mixed_extended_support,def:mpo_mixed_physical_sectors,
+        def:mpo_mixed_first_endpoint,def:ground_space_es}
+    Let $P'=\Pi_{\mathcal S'_0}$, $P=\Pi_{G_2(B_0)}$, and
+    $h'=I-P'$, $h=I-P$. Then
+    \begin{align}
+        P     & =R_0C_1P',
+              & 0\leq h'   & \leq h\leq h'+(I-R_0)+(I-C_1),
+        \label{eq:mpo_mixed_endpoint_local_comparison}      \\
+        I-C_0 & \leq h',
+              & I-R_1      & \leq h'.
+        \label{eq:mpo_mixed_endpoint_inner_penalties}
+    \end{align}
+    These comparisons hold for arbitrary endpoint tensors; injectivity
+    is unnecessary for the local statements.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:mpo_mixed_physical_sectors,def:mpo_mixed_extended_support,
+        thm:mpo_mixed_corner_support,thm:mpo_mixed_first_support,
+        thm:mpo_mixed_reducing_sectors,thm:mpo_mixed_inner_sectors}
+    The diagonal sector selectors are commuting orthogonal projections.
+    By Theorem~\ref{thm:mpo_mixed_reducing_sectors}, the outer selectors
+    also commute with $P'$. Their product $R_0C_1P'$ is therefore an
+    orthogonal projection whose range is $G_2(B_0)$ by
+    Theorem~\ref{thm:mpo_mixed_corner_support}, giving the first identity.
+    The inclusion $G_2(B_0)\subseteq\mathcal S'_0$ from
+    Theorem~\ref{thm:mpo_mixed_first_support} yields $h'\leq h$,
+    and $h'\geq0$ because it is an orthogonal projection.
+    For commuting orthogonal projections $Q,T$,
+    \begin{align}
+        (I-Q)+(I-T)-(I-QT)=(I-Q)(I-T)\geq0.
+    \end{align}
+    Applying this twice yields the upper comparison.
+    Finally, Theorem~\ref{thm:mpo_mixed_inner_sectors} gives
+    $\mathcal S'_0\subseteq\operatorname{range}C_0$ and
+    $\mathcal S'_0\subseteq\operatorname{range}R_1$, which imply
+    (\ref{eq:mpo_mixed_endpoint_inner_penalties}) by taking
+    complementary projections.
+\end{proof}
+
+\begin{definition}[Exchanging endpoint sectors]
+    \label{def:mpo_mixed_endpoint_swap}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointBondSwap,
+        MPSTensor.MPOSymmetry.mixedEndpointPhysicalSwap,
+        MPSTensor.MPOSymmetry.mixedEndpointRightTensor,
+        MPSTensor.physicalReindexLinearIsometryEquiv,
+        MPSTensor.physicalReindexLinearIsometryEquiv_apply_apply}
+    \leanok
+    \uses{def:mpo_mixed_first_endpoint}
+    Exchange the summands of $\C^{D_0}\oplus\C^{D_1}$, and exchange
+    them in each physical register. Let $U_N$ be the resulting
+    coefficient-space isometry from the reversed pair to the original
+    pair on $N$ sites. Let $B_1$ be the physical relabeling of the first
+    embedding of the reversed pair. Thus $B_1$ equals $A_1$ on
+    $I_1\times I_1$ and vanishes on the other physical sectors.
+\end{definition}
+
+\begin{theorem}[Second endpoint by sector exchange]
+    \label{thm:mpo_mixed_second_endpoint_comparison}
+    \lean{MPSTensor.MPOSymmetry.mixedEndpointRightTensor_apply,
+        MPSTensor.MPOSymmetry.isInjective_mixedEndpointRightTensor,
+        MPSTensor.MPOSymmetry.mixedEndpointBase_swap,
+        MPSTensor.MPOSymmetry.bondInterpolationMatrix_one_swap,
+        MPSTensor.MPOSymmetry.insertedTwoSiteMap_swap_zero,
+        MPSTensor.MPOSymmetry.mixedEndpoint_extendedSupport_one_eq_map_swap,
+        MPSTensor.MPOSymmetry.mixedEndpointParentInteraction_one_eq_conj_swap,
+        MPSTensor.MPOSymmetry.mixedEndpointRowSector_conj_swap,
+        MPSTensor.MPOSymmetry.mixedEndpointColumnSector_conj_swap,
+        MPSTensor.MPOSymmetry.parentInteractionES_mixedEndpointRightTensor_eq_conj,
+        MPSTensor.MPOSymmetry.mixedEndpointParentInteraction_one_le_parentInteractionES,
+        MPSTensor.MPOSymmetry.parentInteractionES_mixedEndpointRightTensor_le,
+        MPSTensor.MPOSymmetry.mixedEndpoint_columnSector_zero_le_parentInteraction_one,
+        MPSTensor.MPOSymmetry.mixedEndpoint_rowSector_one_le_parentInteraction_one,
+        MPSTensor.physicalReindexLinearIsometryEquiv_conj_diagonal,
+        MPSTensor.physicalReindexLinearIsometryEquiv_groundSpaceMapES,
+        MPSTensor.groundSpaceES_reindexPhysical_equiv,
+        MPSTensor.parentInteractionES_reindexPhysical_equiv}
+    \leanok
+    \uses{def:mpo_mixed_endpoint_swap,def:mpo_mixed_extended_support,
+        def:mpo_mixed_physical_sectors,def:ground_space_es,def:injective}
+    Put $h'_1=I-\Pi_{\mathcal S'_1}$ and $h_1=I-\Pi_{G_2(B_1)}$.
+    The second endpoint support and interaction are the images of the
+    first endpoint support and interaction of the reversed pair under
+    $U_2$. Moreover, $B_1$ is injective if $A_1$ is injective, and
+    \begin{align}
+        h'_1 & \leq h_1\leq h'_1+R_0+C_1,
+             & C_0                        & \leq h'_1,
+             & R_1                        & \leq h'_1.
+        \label{eq:mpo_mixed_second_endpoint_comparison}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:mpo_mixed_endpoint_swap,def:mpo_mixed_extended_support,
+        def:mpo_mixed_physical_sectors,thm:mpo_mixed_first_support,
+        thm:mpo_mixed_endpoint_projector_comparison}
+    If $A_1$ is injective, its first embedding in the reversed pair is
+    injective by Theorem~\ref{thm:mpo_mixed_first_support}. Relabeling
+    its physical letters preserves their span, so $B_1$ is injective.
+    If $\Phi$ denotes the simultaneous virtual basis exchange, each
+    mixed letter of the reversed pair is $\Phi(A^{ij})$, and its
+    first-endpoint insertion is $\Phi(W(1))$. Hence preservation of
+    products and trace gives
+    \begin{align}
+        U_2\Gamma_{\mathrm{rev},0}(\Phi(X))=\Gamma_{A,W(1)}(X).
+    \end{align}
+    The boundary exchange is bijective, so the supports are isometric
+    images. Isometries transport orthogonal projections, while physical
+    relabeling transports the canonical boundary spaces of $B_1$.
+    Each first-sector selector for the reversed pair becomes the
+    complementary selector for the original pair. Conjugate
+    (\ref{eq:mpo_mixed_endpoint_local_comparison}) and
+    (\ref{eq:mpo_mixed_endpoint_inner_penalties}) to obtain
+    (\ref{eq:mpo_mixed_second_endpoint_comparison}).
+\end{proof}
+
+\begin{theorem}[Periodic endpoint comparison, ground lines, and gaps]
+    \label{thm:mpo_mixed_periodic_endpoint_gaps}
+    \lean{MPSTensor.periodicLocalInteractionES_add,
+        MPSTensor.periodicLocalInteractionES_sub,
+        MPSTensor.periodicLocalInteractionES_one,
+        MPSTensor.periodicLocalInteractionES_diagonal_apply,
+        MPSTensor.MPOSymmetry.periodicLocalInteractionES_mixedEndpointRowSector_previous,
+        MPSTensor.MPOSymmetry.periodicLocalInteractionES_mixedEndpointColumnSector_next,
+        MPSTensor.MPOSymmetry.periodicLocalInteractionES_outerRowPenalty_le_previous,
+        MPSTensor.MPOSymmetry.periodicLocalInteractionES_outerColumnPenalty_le_next,
+        MPSTensor.MPOSymmetry.localTermES_mixedEndpointLeftTensor_le_three_extended,
+        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_comparison,
+        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_ker_eq,
+        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_norm_gap,
+        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_groundSpace_eq,
+        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_groundSpace_finrank,
+        MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_periodic_gap,
+        MPSTensor.MPOSymmetry.periodicLocalInteractionES_outerRowPenalty_one_le_previous,
+        MPSTensor.MPOSymmetry.periodicLocalInteractionES_outerColumnPenalty_one_le_next,
+        MPSTensor.MPOSymmetry.localTermES_mixedEndpointRightTensor_le_three_extended,
+        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_one_comparison,
+        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_one_ker_eq,
+        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_one_norm_gap,
+        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_one_groundSpace_eq,
+        MPSTensor.MPOSymmetry.mixedEndpoint_periodic_one_groundSpace_finrank,
+        MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_periodic_one_gap,
+        MPSTensor.MPOSymmetry.exists_uniform_mixedEndpoint_periodic_endpoints_gap}
+    \leanok
+    \uses{def:mpo_mixed_extended_support,def:mpo_mixed_endpoint_swap,
+        def:periodic-fixed-interaction,def:parent_hamiltonian_es,
+        def:injective,def:mpv}
+    Let $H'_{p,N}$ be the periodic sum of the actual extended interaction
+    at $p\in\{0,1\}$, and let $K_{p,N}$ be the canonical nearest-neighbor
+    parent Hamiltonian of the embedded tensor $B_p$. For every $N\geq2$,
+    \begin{align}
+        H'_{p,N}      & \leq K_{p,N}\leq3H'_{p,N}, \\
+        \ker H'_{p,N} & =\ker K_{p,N}.
+    \end{align}
+    If $A_p$ is injective and $D_p>0$, this kernel is exactly the
+    one-dimensional span of its embedded periodic MPS.
+    A positive gap $\delta_p$ of $K_{p,N}$ transfers to a gap $\delta_p/3$ of
+    $H'_{p,N}$. Consequently, if both endpoint tensors are injective,
+    with $D_0,D_1>0$, there is $\delta>0$ such that both endpoint
+    Hamiltonians have gap at least $\delta$ on every periodic chain
+    of length at least two.
+    Only the two endpoint parameters are quantified in this conclusion.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:periodic-fixed-interaction,
+        thm:mpo_mixed_endpoint_projector_comparison,
+        thm:mpo_mixed_second_endpoint_comparison,
+        thm:periodic-fixed-interaction-order,
+        thm:periodic-fixed-interaction-canonical,lem:local_term_es_average,
+        lem:transported_es_positive,lem:positive-comparison-kernel-gap,
+        thm:parent_ground_space_es_kernel,
+        thm:parent_hamiltonian_kernel_eq_chain_ground_space,
+        thm:chain_ground_space_eq_mpv_blk,thm:ground_space_unique_periodic,
+        thm:mpo_mixed_first_support,thm:compact_parent_gap}
+    A missing outer row sector on one edge is an inner row sector of
+    the previous edge; a missing outer column sector is an inner column
+    sector of the next edge. Cyclic extension preserves order by
+    Theorem~\ref{thm:periodic-fixed-interaction-order}, so the local
+    comparisons give
+    \begin{align}
+        h'_{p,i}\leq h_{p,i}
+        \leq h'_{p,i-1}+h'_{p,i}+h'_{p,i+1}.
+    \end{align}
+    Summing counts each extended term three times, also when $N=2$.
+    Positivity and Lemma~\ref{lem:positive-comparison-kernel-gap} give
+    equal kernels and transfer the canonical gap with factor $1/3$.
+    When $A_p$ is injective and $D_p>0$, the embedded tensor $B_p$ is
+    one-site injective. Theorems~\ref{thm:chain_ground_space_eq_mpv_blk}
+    and~\ref{thm:ground_space_unique_periodic} identify its canonical
+    kernel as the one-dimensional periodic MPS span. Apply
+    Theorem~\ref{thm:compact_parent_gap} to the constant family $B_p$
+    over a one-point parameter space to obtain a positive canonical
+    gap independent of the chain length. Taking the smaller of the two
+    transferred bounds gives the common endpoint bound.
+\end{proof}
