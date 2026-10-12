@@ -103,6 +103,7 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
       change (∑ i : SquareInteraction L,
         (Matrix.reindexAlgEquiv ℂ ℂ p) (Matrix.doubledHamiltonian (h.hermitianTerm i))) = K
       rw [← map_sum (Matrix.reindexAlgEquiv ℂ ℂ p), hDsum]
+      rfl
     calc (∑ i : SquareInteraction L, B i)
         = F * (∑ i : SquareInteraction L,
             Matrix.reindex p p (Matrix.doubledHamiltonian (h.hermitianTerm i))) * Fᴴ := by
@@ -151,5 +152,6 @@ theorem SquareHamiltonian.exists_swapped_doubled_localHamiltonian
     rw [← hsum]
     change (∑ i : SquareInteraction L, (Matrix.reindexAlgEquiv ℂ ℂ e) (B i)) = _
     rw [← map_sum (Matrix.reindexAlgEquiv ℂ ℂ e), key]
+    rfl
 
 end TNLean.PEPS.Approximation
