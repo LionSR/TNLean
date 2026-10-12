@@ -266,17 +266,6 @@ theorem graphRegionCopyMatrix_oriented_open
   simp only [graphOrientedOpenBoundaryFactor_copy o,
     graphOrientedOpenInternalFactor_copy o d m D hm]
   simp_rw [graphOrientedOpenBondCoordinates_eq_sum_prod]
-  funext β
-  simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
-  symm
-  simp only [Finset.mul_sum]
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro q _
-  rw [Fintype.prod_sum]
-  simp only [Finset.mul_sum, Finset.sum_mul, Finset.prod_mul_distrib]
-  apply Finset.sum_congr rfl
-  intro a _
-  ring
+  exact sum_prod_sum_mul_eq_sum_prod_smul _ _ _ _
 
 end TNLean.PEPS
