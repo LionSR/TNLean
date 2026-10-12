@@ -22,7 +22,7 @@ noncomputable section
 open scoped Matrix
 namespace TNLean.PEPS.PairEffect.SourceCircuit
 variable {P : Type} [Fintype P] [DecidableEq P] {a b : Layout P}
-variable {I O : Option {p : P // true = true} → Type}
+variable {I O : Option {_p : P // true = true} → Type}
 variable [∀ q, Fintype (I q)] [∀ q, Fintype (O q)]
 
 /-- The actual sampled source contraction is a weighted sum of the actual
@@ -43,7 +43,7 @@ theorem partialSourceGlobalMatrix_sampled_eq_sum_partyProduct
       (Mem (Layout.atParty q (w.allResidualSourceLayout ++ []))))
     (C : ∀ q, OrthonormalBasis (O q) ℂ
       (Mem (Layout.atParty q (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b))))
-    (ps : List (Option {p : P // true = true})) (hn : ps.Nodup)
+    (ps : List (Option {_p : P // true = true})) (hn : ps.Nodup)
     (hc : ∀ q, q ∈ ps) :
     w.partialSourceGlobalMatrix ψ ξ
         (partyGroupedBasis (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b)
