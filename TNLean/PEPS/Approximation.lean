@@ -212,6 +212,7 @@ import TNLean.PEPS.Approximation.PreparedSourceCorrections
 import TNLean.PEPS.Approximation.PreparedSourceGate
 import TNLean.PEPS.Approximation.PreparedSourceTransport
 import TNLean.PEPS.Approximation.PreparedSourceVectorDensity
+import TNLean.PEPS.Approximation.ProductReferenceColumn
 import TNLean.PEPS.Approximation.PurePhysicalCoefficient
 import TNLean.PEPS.Approximation.PurePreparedContraction
 import TNLean.PEPS.Approximation.PureSourceMatrix
