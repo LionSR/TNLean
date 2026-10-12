@@ -234,27 +234,8 @@ private theorem midpoint_endpoints (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
         (o.1 + 2 ^ ℓ * z.1, o.2 + 2 ^ ℓ * (z.2 + 1) - 2 ^ ℓ / 2 * (j.val + 1)))
     | _ => ((o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 * j.val, o.2 + 2 ^ ℓ * z.2),
         (o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 * (j.val + 1), o.2 + 2 ^ ℓ * z.2)) := by
-  fin_cases s
-  · change ((o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * 1,
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * ((j.val : ℝ) - 1)),
-      (o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * 1,
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * j.val)) = _
-    apply Prod.ext <;> apply Prod.ext <;> norm_num <;> ring
-  · change ((o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-((j.val : ℝ) - 1)),
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * 1),
-      (o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-(j.val : ℝ)),
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * 1)) = _
-    apply Prod.ext <;> apply Prod.ext <;> norm_num <;> ring
-  · change ((o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1),
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-((j.val : ℝ) - 1))),
-      (o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1),
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-(j.val : ℝ)))) = _
-    apply Prod.ext <;> apply Prod.ext <;> norm_num <;> ring
-  · change ((o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * ((j.val : ℝ) - 1),
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1)),
-      (o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * j.val,
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1))) = _
-    apply Prod.ext <;> apply Prod.ext <;> norm_num <;> ring
+  fin_cases s <;> apply Prod.ext <;> apply Prod.ext <;>
+    simp [cellFanStart_eq, cellFanEnd_eq, cellFanCenter, cellFanSideVector] <;> ring
 
 private theorem midpoint_side_rectangle (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
     (s : Fin 4) (j : Fin 2) :
