@@ -153,6 +153,8 @@ theorem exists_global_schmidtBellPrevector_rough_lower
                   -Real.log (‖w‖ ^ 2) / (k : ℝ) := by
   classical
   intro β split ΩX hz d ι₀ ψ S'
+  obtain ⟨ell, hpre, hmass, hdim⟩ :=
+    exists_global_schmidtBellPrevector H Ω E₀ hΩ hE X E hz
   done
 
 end TNLean.PEPS.AreaLaw
