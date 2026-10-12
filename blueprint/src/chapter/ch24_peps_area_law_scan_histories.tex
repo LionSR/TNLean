@@ -866,6 +866,27 @@ The following finite construction follows
     the partially consumed nominal row contributes to the error estimate.
 \end{definition}
 
+\begin{lemma}[A fixed finite family of positive-depth prefixes]
+    \label{lem:al_scan_finite_prefix_family}
+    \lean{TNLean.PEPS.AreaLaw.Scan.positiveDepthPrefix_toNat,
+        TNLean.PEPS.AreaLaw.Scan.positiveDepthPrefix_mem_range_fin_of_le}
+    \uses{def:al_scan_comparison_prefixes}
+    Let $A$ be finite, let $d$ be any integer-valued depth function, and let
+    $L\ge0$ be an integer. For $Q_j=\{x\in A:0<d(x)\le j\}$ and
+    $j_+=\max(j,0)$, one has $Q_j=Q_{j_+}$. Consequently, every integer
+    cutoff $j\le L$ selects a member of the fixed nested family
+    \[
+        Q_0,Q_1,\ldots,Q_L.
+    \]
+    This family depends only on $A,d,L$ and may contain repeated regions.
+\end{lemma}
+\begin{proof}
+    If $j<0$, both $Q_j$ and $Q_0$ are empty. If $j\ge0$, then $j_+=j$.
+    For $j\le L$ one also has $0\le j_+\le L$, giving the required member
+    of the displayed family. Nestedness follows directly from the cutoff
+    inequalities.
+\end{proof}
+
 \begin{lemma}[One nested family and separated deterministic fronts]
     \label{lem:al_scan_prefix_family}
     \lean{TNLean.PEPS.AreaLaw.Scan.depthPrefix_mono,
