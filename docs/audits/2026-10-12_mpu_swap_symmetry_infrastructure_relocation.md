@@ -9,15 +9,23 @@ concern. Statements and proofs are unchanged, and no deprecated aliases are kept
 
 ## Moved declarations
 
-| Declaration | New file | Name change |
-|---|---|---|
-| `MPOTensor.isInvariantUnderSymmetry_iff_of_pointwise` | `TNLean/MPS/MPU/Equivalence.lean` | none |
-| `MPOTensor.daggerSymmetry` | `TNLean/MPS/MPU/Equivalence.lean` | none |
-| `MPOTensor.transposeSymmetry` | `TNLean/MPS/MPU/Equivalence.lean` | none |
-| `MPOTensor.conjugationSymmetry` | `TNLean/MPS/MPU/Equivalence.lean` | none |
-| `MPOTensor.swapCombined_fixed_iff_leftMul` | `TNLean/Algebra/MatrixInvolutionConjugation.lean` | see below |
+Moved to `TNLean/MPS/MPU/Equivalence.lean`, beside
+`FiniteChainOperatorSymmetry` and `IsInvariantUnderSymmetry`, with unchanged
+names:
 
-The involution lemma is renamed `Matrix.swapCombined_fixed_iff_leftMul`. It is a statement about square complex matrices and an
+- `MPOTensor.isInvariantUnderSymmetry_iff_of_pointwise`
+- `MPOTensor.daggerSymmetry`
+- `MPOTensor.transposeSymmetry`
+- `MPOTensor.conjugationSymmetry`
+
+Moved to the new file `TNLean/Algebra/MatrixInvolutionConjugation.lean` and
+renamed:
+
+| Old name | New name |
+|---|---|
+| `MPOTensor.swapCombined_fixed_iff_leftMul` | `Matrix.swapCombined_fixed_iff_leftMul` |
+
+The involution lemma is a statement about square complex matrices and an
 arbitrary involution, so it leaves the `MPOTensor` namespace. No equivalent
 lemma was found in Mathlib, QICLean or TNLean.
 
