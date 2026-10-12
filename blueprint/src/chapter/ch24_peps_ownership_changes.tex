@@ -798,7 +798,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{def:peps_frame_sheet_swap}
     Let $R\subseteq\Lambda$, and let $A$ and $B$ be operators on
-    $(\mathbb C^q)^{\otimes\Lambda}$ supported on $R$. Then
+    $(\C^q)^{\otimes\Lambda}$ supported on $R$. Then
     \begin{align*}
         F_R(A\otimes B)=(B\otimes A)F_R.
     \end{align*}
@@ -824,14 +824,14 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators}
     \leanok
     \uses{def:peps_frame_sheet_swap}
-    Let $V$ be a finite site set, $q\geq0$ a local dimension, and
-    $R,S\subseteq V$. Let $A$ be an operator supported on $S$, and let
+    Let $\Lambda$ be a finite site set, $q\geq0$ a local dimension, and
+    $R,S\subseteq\Lambda$. Let $A$ be an operator supported on $S$, and let
     $F_R$ exchange two copies at the sites in $R$. If $S\subseteq R$
     or $S\cap R=\varnothing$, then
-    \[
+    \begin{align*}
         F_R(A\otimes I+I\otimes A)F_R^\dagger
         =A\otimes I+I\otimes A.
-    \]
+    \end{align*}
     This is the noncrossing cancellation used in the boundary perturbation
     argument of \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
@@ -864,8 +864,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_inter}
     \leanok
     \uses{def:peps_frame_sheet_swap}
-    Let $V$ be a finite site set, $q\geq0$ a local dimension, and
-    $R,S\subseteq V$. Let $A$ be an operator supported on $S$.
+    Let $\Lambda$ be a finite site set, $q\geq0$ a local dimension, and
+    $R,S\subseteq\Lambda$. Let $A$ be an operator supported on $S$.
     Write $T(A)=A\otimes I+I\otimes A$, and let $F_D$ exchange the
     two copies at the sites in $D$. Then
     \begin{align}
@@ -922,8 +922,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \lean{TNLean.PEPS.EncodedFrame.reindex_sheetSwapOp_conj_doubledHamiltonian_mem_supportedOperators}
     \leanok
     \uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
-    Let $V$ be a finite site set, let $q\geq0$ be an integer, and let
-    $R,S\subseteq V$. Suppose that $A$ is supported on $S$.
+    Let $\Lambda$ be a finite site set, let $q\geq0$ be an integer, and let
+    $R,S\subseteq\Lambda$. Suppose that $A$ is supported on $S$.
     Express the two-copy operators in paired-site coordinates, and denote
     the resulting matrices of $F_R$ and $A\otimes I+I\otimes A$ by
     $\widetilde F_R$ and $\widetilde T(A)$, respectively. Then
@@ -935,7 +935,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{proof}\leanok
     \uses{thm:peps_sheet_swap_interaction_restriction,
         thm:peps_sheet_swap_paired_site_support,thm:qc_site_pair_tensor_support}
-    Set $B=R\cap S$. The restriction identity gives
+    Set $B=R\cap S$. By
+    Theorem~\ref{thm:peps_sheet_swap_interaction_restriction},
+    (\ref{eq:peps_swap_interaction_restriction}) gives
     $F_RT(A)F_R^\dagger=F_B^\dagger T(A)F_B$.
     In paired-site coordinates, $F_B$ is supported on $B\subseteq S$,
     and each summand of $T(A)$ is supported on $S$.
