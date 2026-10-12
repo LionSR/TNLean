@@ -404,7 +404,7 @@ abstracted — record why, so it is not re-proposed).
 - **Seen:** (a) derived by hand in both `birth_bounded` and `death_bounded`;
   (b) the old-frame and new-frame membership lemmas.
 - **Abstraction:** in `TNLean.PEPS.EncodedFrame`:
-  `Frame.changeOwner_birth_owners` (`Approximation/FrameBoundedChanges.lean`) and
+  `Frame.changeOwner_birth_owners` (`Approximation/HomogeneousOwnership.lean`) and
   `SmallPatchRewrite.exists_mem_inner_of_notMem_untouched`
   (`Approximation/PatchRewriteExpansion.lean`).
 - **Notes:** the same refactor gave the five numeric side conditions of
@@ -460,7 +460,71 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** −111 Lean lines over 22 files. `TNLean/PEPS/TorusOrientedIncidentGInjectivity.lean`
   keeps its direct G-injectivity proof: there (d) forces a costly
   definitional check of the intertwining relation, which pushed the module
-  past the compilation-time limit.
+  past the compilation-time limit. A later pass applied (b) to six proofs of
+  `2 ≠ 0` in `ZMod n` for a torus period `n ≥ 3` that went through `ZMod.val`
+  or divisibility (`TorusJointFluxGeometry.lean`, `TorusVerticalFluxMove.lean`,
+  `TorusTranslatedFluxMove.lean`, `TorusCorrelatedChargeFluxCrossing.lean`,
+  `TorusGaugeUniqueness.lean`); every such inequality outside `PEPS/AreaLaw`
+  now uses it.
+
+### Incident edges that are not internal — promoted (2026-10-12)
+
+- **Pattern:** an edge with an endpoint in a region `R` but not both endpoints
+  in `R` crosses the boundary of `R`, proved by a case split on which endpoint
+  lies in `R`, either as a private lemma or inline when splitting incident
+  configurations into internal and boundary edges.
+- **Seen:** nine call sites in nine files: three private copies
+  (`boundary_of_incident_not_internal` in `RegularRegionProjectorCoordinates.lean`,
+  `ParentHamiltonian/RegionGroundSpaceNesting.lean` and
+  `ParentHamiltonian/RegularRegionOrbitCoordinates.lean`) and six inline case
+  splits (`GraphOpenRegionContraction.lean`,
+  `ParentHamiltonian/GraphDependentRegionSupport.lean`,
+  `GraphInsertedRegionSupport.lean`, `RegularRegionCoordinates.lean`,
+  `ParentHamiltonian/RegularLiftedRegionRange.lean`,
+  `RegularEdgeChargeContraction.lean`).
+- **Abstraction:** `TNLean.PEPS.IsRegionIncidentEdge.isRegionBoundaryEdge` in
+  `TNLean/PEPS/OpenRegionContraction.lean`, combined with
+  `isRegionIncidentEdge_of_regionVertex` for an edge at a region vertex.
+- **Notes:** part of a −101 line refactor over 17 files, which also shared the
+  plaquette-seam lemma `torusPlaquetteRegion_ne_add_two`.
+
+### Fan endpoints, capped-partition moments and closed-cell convexity — promoted (2026-10-12)
+
+- **Pattern:** (a) `change` blocks spelling out the coordinates of the
+  endpoints of an elementary fan segment of a dyadic cell, one per side
+  (Section 11, lines 299–310); (b) grouping a capped dyadic partition by scale,
+  summing the geometric series and comparing powers to bound its moment of
+  order `1 + e` (Lemma 9.4, `08-scanner.tex`, lines 656–664); (c) an inline
+  proof that the closed rectangle of a dyadic cell is convex.
+- **Seen:** (a) six files under `PEPS/AreaLaw/Geometry`: `SideEndpoints.lean`,
+  `CellContacts.lean`, `SideSubdivision.lean`, `SideSubdivisionMask.lean`,
+  `ActualSideMatching.lean` and `FanRuns.lean`; (b) three weighted cover
+  estimates, in `TemplateCoreCover.lean`, `TemplateShellCover.lean` and
+  `RectangleShellWeightedCover.lean`; (c) four files: `DummyCorners.lean`,
+  `ElementarySideOpponents.lean`, `ElementarySideReciprocity.lean` and
+  `SideSubdivision.lean`.
+- **Abstraction:** in `TNLean.PEPS.AreaLaw.Geometry`: (a) `cellFanStart_eq`,
+  `cellFanEnd_eq` (`Geometry/CellFans.lean`), used as
+  `simp [cellFanStart_eq, cellFanEnd_eq, cellFanCenter, cellFanSideVector]`
+  after `fin_cases`; (b) `sum_rpow_cappedDyadicPartition_le`
+  (`Geometry/CappedDyadicPartitionByScale.lean`); (c)
+  `convex_closure_dyadicCell` (`Geometry/DyadicClosure.lean`).
+- **Notes:** both endpoint lemmas hold by definition. Together with local
+  compressions, −206 lines over 11 files and −170 lines over 20 files in two
+  passes; no theorem statement changed.
+
+### Endpoint-membership splits closed by `grind` — promoted (2026-10-12)
+
+- **Pattern:** a propositional classification of an edge relative to two
+  disjoint vertex sets, closed by a sixteen-way `by_cases` split on the
+  membership of both endpoints in both sets followed by `simp_all`.
+- **Seen:** six classifications in
+  `PEPS/Approximation/WholeGroupContraction.lean` (proof of Lemma 6.2,
+  `05-frames.tex`, lines 143–157).
+- **Abstraction:** `grind` (no annotations added), after the same unfolding.
+- **Notes:** the module elaborates slightly faster (about 7 s against 8 s
+  locally). Use `grind` for further endpoint-membership splits of this shape
+  rather than a macro.
 
 ### Single-qubit plus-state positivity — promoted (2026-10-08)
 
@@ -6891,6 +6955,20 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The current occurrences are all in one proof, below the
   multiple-file promotion threshold. Crossing membership itself is already
   expressed by `mem_edgeBoundary_pair_iff`; no new tactic macro is needed.
+
+### Exact eigenvalue equations under configuration isometries — candidate (2026-10-09)
+
+- **Pattern:** transport a matrix-vector equation through the configuration
+  isometry, then pass between Euclidean vectors and their coordinate functions.
+- **Seen:** the energy equation, simultaneous symmetry and two auxiliary
+  projection equations in `PEPS/AreaLaw/GlobalSchmidtBellPrevector.lean`.
+- **Abstraction:** all four equations use one local arbitrary-matrix transport
+  lemma, itself an application of
+  `Matrix.toEuclideanLin_reindex_piLpCongrLeft` in
+  `Algebra/MatrixReindexGap.lean`.
+- **Notes:** the four applications occur in one module. A shared scalar-eigenvalue
+  corollary is appropriate if the same conversion occurs in another module;
+  the underlying matrix-action identity is already shared.
 
 ### Excluding a party outside the image of an owner map — candidate (2026-10-11)
 

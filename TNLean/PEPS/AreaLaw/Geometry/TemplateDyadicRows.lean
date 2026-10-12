@@ -40,12 +40,9 @@ theorem Template.exists_sample_in_row_within {Ctpl : ℝ} {n s₀ : ℕ}
   have hLU : L ≤ U := by dsimp [L, U]; omega
   have hL : L ≤ x + d := by dsimp [L]; omega
   have hU : x - d ≤ U := by dsimp [U]; omega
-  refine ⟨max L (min x U), ?_, ?_, ?_⟩
-  · apply (h _ z).mpr
-    dsimp [L, U] at *
-    omega
-  · omega
-  · omega
+  refine ⟨max L (min x U), (h _ z).mpr ?_, by omega, by omega⟩
+  dsimp [L, U] at *
+  omega
 
 /-- Exact integer dilation preserves the occupied-row displacement bound.
 The proof clamps an actual source row and then an actual integer coordinate. -/
@@ -72,34 +69,10 @@ theorem Template.exists_dilation_in_row_within {Ctpl : ℝ} {n s₀ : ℕ}
         ⟨p.1, mem_latticeRow.mpr hp⟩ h.1 h.2
   obtain ⟨a, ha, hpa⟩ := T.exists_sample_in_row_within i hp hnear hrow
   let w := max (a - r) (min x (a + r))
-  refine ⟨w, mem_ambientDilation_iff.mpr ⟨(a, t), ha, ?_⟩, ?_, ?_⟩
-  · dsimp [w]
-    omega
-  · dsimp [w]
-    omega
-  · dsimp [w]
-    omega
+  refine ⟨w, mem_ambientDilation_iff.mpr ⟨(a, t), ha, ?_⟩, ?_, ?_⟩ <;> dsimp [w] <;> omega
 
-private theorem quotient_near (x y a u z : ℤ) (hu : 0 < u)
-    (hx : z * u ≤ x ∧ x < z * u + u)
-    (hy : z * u ≤ y ∧ y < z * u + u)
-    (h : a - u ≤ x ∧ y < a + u) :
-    z ∈ Finset.Icc (a / u - 2) (a / u + 2) := by
-  have hlo := Int.ediv_mul_le a (ne_of_gt hu)
-  have hhi := Int.lt_ediv_add_one_mul_self a hu
-  apply Finset.mem_Icc.mpr
-  constructor
-  · by_contra hz
-    have : z ≤ a / u - 3 := by omega
-    nlinarith
-  · by_contra hz
-    have : a / u + 3 ≤ z := by omega
-    nlinarith
-
-private theorem quotient_near_right (x y a u z : ℤ) (hu : 0 < u)
-    (hx : z * u ≤ x ∧ x < z * u + u)
-    (hy : z * u ≤ y ∧ y < z * u + u)
-    (h : x ≤ a + u ∧ a - u < y) :
+private theorem quotient_near (a u z : ℤ) (hu : 0 < u)
+    (h : a - u < z * u + u ∧ z * u ≤ a + u) :
     z ∈ Finset.Icc (a / u - 2) (a / u + 2) := by
   have hlo := Int.ediv_mul_le a (ne_of_gt hu)
   have hhi := Int.lt_ediv_add_one_mul_self a hu
@@ -150,11 +123,9 @@ private theorem mixed_interior_columns {Ctpl : ℝ} {n s₀ : ℕ}
       (mem_latticeRow.mpr hlq) (mem_latticeRow.mpr hvq) hbetween.1 hbetween.2))
   rcases hout with hout | hout
   · apply Finset.mem_union_left
-    exact quotient_near p.1 q.1 l (2 ^ k) z.1 hu ⟨hpB.1, hpB.2.1⟩
-      ⟨hqB.1, hqB.2.1⟩ (by omega)
+    exact quotient_near l (2 ^ k) z.1 hu (by omega)
   · apply Finset.mem_union_right
-    exact quotient_near_right p.1 q.1 v (2 ^ k) z.1 hu ⟨hpB.1, hpB.2.1⟩
-      ⟨hqB.1, hqB.2.1⟩ (by omega)
+    exact quotient_near v (2 ^ k) z.1 hu (by omega)
 
 /-- At side `2^k`, the mixed squares of one actual integer-dilated polygon
 have total side length at most `24 * (s₀ + r + 2^k)`. Empty and thin samples

@@ -43,12 +43,11 @@ theorem card_domainGraph_ball_le (Λ : Finset (ℤ × ℤ)) (a : Site Λ) (r : �
       (2 * r + 1) ^ 2 := by
   classical
   calc
-    _ ≤ (ambientDilation {a.val} r).card := by
-      apply Finset.card_le_card_of_injOn Subtype.val
-      · intro x hx
-        apply mem_ambientDilation_singleton_of_domainGraph_edist_le
-        simpa only [SimpleGraph.edist_comm] using (Finset.mem_filter.mp hx).2
-      · exact Subtype.val_injective.injOn
+    _ ≤ (ambientDilation {a.val} r).card :=
+      Finset.card_le_card_of_injOn Subtype.val
+        (fun x hx ↦ mem_ambientDilation_singleton_of_domainGraph_edist_le
+          (by simpa only [SimpleGraph.edist_comm] using (Finset.mem_filter.mp hx).2))
+        Subtype.val_injective.injOn
     _ ≤ (2 * r + 1) ^ 2 := by
       simpa using Geometry.card_ambientDilation_le {a.val} r
 

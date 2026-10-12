@@ -49,14 +49,8 @@ private theorem lowerRow_not_mem (v : X) (x : ZMod width) :
   have hy := congrArg Prod.snd hi
   change (![0,0,0,0,1,1,1,1] i : ℕ) + (v.2+1) = v.2 at hy
   have hn2 : (2 : ZMod height) ≠ 0 := by
-    intro hz
-    have hd : ((0 : ℤ) - 2).natAbs < height := by
-      have := Fact.out (p := 3 < height)
-      norm_num
-      omega
-    have he := (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt 2 0 hd).mp
-      (by simpa only [Int.cast_ofNat, Int.cast_zero] using hz)
-    norm_num at he
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := height) 2 0
+      (by have := Fact.out (p := 3 < height); omega) (by decide)
   fin_cases i <;> norm_num [add_assoc, add_comm, add_left_comm, hn2] at hy
 
 /-- The native remote bond tail lies outside the actual crossing region,
