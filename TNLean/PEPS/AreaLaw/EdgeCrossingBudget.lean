@@ -89,23 +89,16 @@ theorem inr_mem_crossingTerms_iff (A : Finset (Site Λ))
     refine ⟨SimpleGraph.mem_edgeFinset.mpr e.2.2, ?_⟩
     refine ⟨x, hxA, y, hyA, ?_⟩
     simp only [Finset.mem_insert, Finset.mem_singleton] at hx hy
-    rcases hx with rfl | rfl <;> rcases hy with rfl | rfl
-    · exact False.elim (hyA hxA)
-    · rfl
-    · exact Sym2.eq_swap
-    · exact False.elim (hyA hxA)
+    rcases hx with rfl | rfl <;> rcases hy with rfl | rfl <;>
+      first | exact absurd hxA hyA | rfl | exact Sym2.eq_swap
   · intro h
     obtain ⟨x, hxA, y, hyA, hxy⟩ := (Finset.mem_filter.mp h).2
     apply Finset.mem_filter.mpr
     refine ⟨Finset.mem_univ _, ?_⟩
     change (∃ v ∈ ({e.1.1, e.1.2} : Finset (Site Λ)), v ∈ A) ∧
       (∃ v ∈ ({e.1.1, e.1.2} : Finset (Site Λ)), v ∉ A)
-    rcases Sym2.eq_iff.mp hxy with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
-    · exact ⟨⟨e.1.1, Finset.mem_insert_self _ _, h₁.symm ▸ hxA⟩,
-        ⟨e.1.2, Finset.mem_insert_of_mem (Finset.mem_singleton_self _), h₂.symm ▸ hyA⟩⟩
-    · exact ⟨⟨e.1.2, Finset.mem_insert_of_mem (Finset.mem_singleton_self _),
-        h₂.symm ▸ hxA⟩,
-        ⟨e.1.1, Finset.mem_insert_self _ _, h₁.symm ▸ hyA⟩⟩
+    rcases Sym2.eq_iff.mp hxy with ⟨rfl, rfl⟩ | ⟨rfl, rfl⟩ <;>
+      exact ⟨⟨_, by simp, hxA⟩, _, by simp, hyA⟩
 
 /-- Every crossing term has one inside site, including in the presence of on-site terms. -/
 theorem card_nearestNeighbor_insideConfig (q : ℕ)
