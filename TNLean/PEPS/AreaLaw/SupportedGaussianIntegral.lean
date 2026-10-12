@@ -152,6 +152,9 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
       (heisenbergEvolution g.operator t W * U t)
       (heisenbergEvolution g.operator t W *
         (Matrix.hermitianUnitaryPath g.operator t * Matrix.hermitianUnitaryPath H (-t)))).trans ?_
+    rw [← sub_mul, ← mul_sub, CStarRing.norm_mul_mem_unitary _ (hunit t),
+      norm_sub_rev (siteExpectation q B (heisenbergEvolution g.operator t W))
+        (heisenbergEvolution g.operator t W)]
     done
   done
 
