@@ -175,6 +175,8 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
     ← integral_sub (hint.restrict (s := Set.Icc (-T) T))
       (GaussianFilter.integrable_intertwinerIntegrand_restrict
         η T g.operator_isHermitian hH W)]
-  done
+  exact (norm_setIntegral_le_of_norm_le_const (measure_lt_top _ _)
+    (fun t ht ↦ hpoint t (abs_le.mpr ht))).trans
+      (mul_le_of_le_one_right (by positivity) measureReal_le_one)
 
 end TNLean.PEPS.AreaLaw
