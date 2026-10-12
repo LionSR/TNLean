@@ -122,9 +122,8 @@ theorem windowRegionInsertedCoeff_injective
               (by omega) ha0 haw hbh⟩ M' σ τ) :
     M = M' := by
   have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B
-      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) := by
-    have hi := hB.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
-    rwa [regionInjectivityDataOf_isInjective] at hi
+      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) :=
+    hB.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
   exact regionInsertedCoeff_injective (G := torusGraph width height) B
     (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K)
     hRB (hB.regionBlockedTensorInjective_windowComplement hUB (by omega) (by omega) hxw hyh _) hposB
@@ -204,9 +203,8 @@ theorem exists_windowEdgeCoeffIdentityWitness_of_realizes
         (horizontalStaircaseReferenceEdge ((a : ZMod width), (b : ZMod height)) L K)
         Z Zref hE) := by
   have hRB : RegionBlockedTensorInjective (G := torusGraph width height) B
-      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) := by
-    have hi := hB.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
-    rwa [regionInjectivityDataOf_isInjective] at hi
+      (horizontalStaircaseLeftWindow ((a : ZMod width), (b : ZMod height)) L K) :=
+    hB.horizontalStaircaseLeftWindow_injective ((a : ZMod width), (b : ZMod height))
   exact exists_windowEdgeCoeffIdentityWitness_of_transfer hA hB hUA hUB hL hK ha0 haw hbh hxw hyh
     hposA hposB
     (regionInsertionTransfer_of_realizes A B

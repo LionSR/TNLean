@@ -530,10 +530,37 @@ continuous on $[0,1]$, and its values at $0$ and $1$ retain their matching
 and comparison properties. No mass equality is required at an inactive
 terminal leaf.
 
+% Source: OpenAI2026AreaLaw, sections/08-scanner.tex, lines 32--41 (the scales);
+% the three comparison bounds are the estimates used at lines 469, 480, 519--520.
+\begin{lemma}[Numerical scale estimates]
+    \label{lem:al_scanner_scale_facts}
+    \lean{TNLean.PEPS.AreaLaw.Scan.eventually_scaleFacts}
+    \leanok
+    Fix exponents $0<\ell<1$, $0<\kappa<\mu<1-\ell$, $\nu>0$ and $0<e<1$ with
+    $\kappa\le e$, and put $L=\lfloor n^{1-\ell}\rfloor$,
+    $m=\lfloor n^\mu\rfloor$, $K=\lfloor L/(8m)\rfloor$,
+    $D=\lceil n^\kappa\rceil$ and $\epsilon=n^{-\nu}$, the scales of
+    \cite[Section~9]{OpenAI2026AreaLaw}. There is a constant $C_1\ge1$,
+    depending only on the exponents, such that for all sufficiently large
+    integers $n$:
+    $n\ge2$, $K\ge1$, $m\ge1$, $D\ge1$, $L\le n$, $0<\epsilon<1$, and
+    \begin{align}
+        \frac{n^e}{m}   & \le C_1n^{e-\mu},  &
+        D               & \le C_1n^e,        &
+        \frac{nD^2}{mK} & \le C_1n^\ell D^2.
+    \end{align}
+\end{lemma}
+\begin{proof}\leanok
+    For large $n$, $n^\mu\ge2$, $n^{1-\ell}\ge2$ and
+    $n^{1-\ell-\mu}\ge48$. Since $\lfloor x\rfloor\ge x/2$ for $x\ge2$, this
+    gives $m\ge n^\mu/2$ and $L\ge n^{1-\ell}/2\ge24m$, hence $K\ge1$ and
+    $mK\ge L/16\ge n^{1-\ell}/32$. The remaining bounds follow from
+    $\kappa\le e$ and $\lceil x\rceil\le 2x$ for $x\ge1$, with $C_1=32$.
+\end{proof}
+
 \begin{theorem}[Scanner estimate from the conclusions of its inputs]
     \label{thm:al_scanner_from_inputs}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScanData,
-        TNLean.PEPS.AreaLaw.Scan.eventually_scaleFacts,
         TNLean.PEPS.AreaLaw.Scan.exists_budgets,
         TNLean.PEPS.AreaLaw.Scan.ScanData.integratedChargeBound,
         TNLean.PEPS.AreaLaw.Scan.exists_selected_density,
@@ -557,6 +584,7 @@ terminal leaf.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
+    \uses{lem:al_scanner_scale_facts}
     Integrate the logarithmic norm derivative over $[0,1]$ in every round,
     retaining the nonnegative charge contribution on
     $[\epsilon/2,\epsilon]$. Bounds and continuity on $(0,1)$ make the charge

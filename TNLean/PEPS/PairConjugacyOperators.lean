@@ -117,11 +117,8 @@ theorem pairOperatorDeltaPairing_self_eq_card_centralizer
       (Nat.card (Subgroup.centralizer ({p.1, p.2} : Set G)) : ℂ) := by
   classical
   rw [pairOperatorDeltaPairing_pairConjugacyOperator ρ hρ]
-  have hm (x : G) : (p.1 = x * p.1 * x⁻¹ ∧ p.2 = x * p.2 * x⁻¹) ↔
-      x ∈ Subgroup.centralizer ({p.1, p.2} : Set G) := by
-    simp only [eq_mul_inv_iff_mul_eq, Subgroup.mem_centralizer_iff,
-      Set.mem_insert_iff, Set.mem_singleton_iff, forall_eq_or_imp, forall_eq]
-  simp only [hm, Nat.card_eq_fintype_card, Fintype.card_subtype, Finset.sum_boole]
+  simp only [conj_fixed_iff_mem_centralizer p,
+    Nat.card_eq_fintype_card, Fintype.card_subtype, Finset.sum_boole]
 
 /-- The diagonal value of the trace-dual tensor functional is nonzero, since the common
 centralizer contains the identity. -/
