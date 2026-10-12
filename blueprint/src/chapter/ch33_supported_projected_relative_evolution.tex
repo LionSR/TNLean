@@ -3,6 +3,7 @@
 \begin{theorem}[Supported projected relative evolution]
     \label{thm:qc_supported_projected_relative_evolution}
     \lean{QuantumCircuit.exists_supported_projected_relative_evolution}
+    \leanok
     \uses{def:qc_site_expectation}
     Let $I$ be a finite set of sites, let $q\geq1$, and let $K\subseteq I$.
     Let $H'$ and $H$ be Hermitian operators on $(\C^q)^{\otimes I}$, and put
@@ -25,6 +26,7 @@
     relative evolution used in \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lem:qc_site_expectation_properties,lem:al_site_expectation_order}
     The expectation is complex linear, preserves Hermiticity, and contracts
     the operator norm. The theorem ``Projected evolution approximates

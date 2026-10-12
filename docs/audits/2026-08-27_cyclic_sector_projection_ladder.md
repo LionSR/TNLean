@@ -62,3 +62,25 @@ this change with no remaining Lean consumer: its last consumer was the adjoint
 letter rung removed here. It is retained because it is the natural
 isometry-free reading of the top rung and its removal is a separate judgement
 call about what the directory offers as public API.
+
+## 2026-10-11 extension: the relation and compression ladders
+
+The same pass-through shape occurred in two neighbouring ladders, and #7914
+removed their isometry-free rungs.
+
+| Removed | Replacement |
+| --- | --- |
+| `MPSTensor.exists_cyclic_sector_decomp_after_blocking_with_letter` (`TNLean/MPS/CanonicalForm/SectorComparison/CyclicSectorRelation.lean`) | `MPSTensor.exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry` (same file) |
+| `MPSTensor.exists_cyclic_sector_decomp_after_blocking` (same file) | the same isometry rung |
+| `MPSTensor.exists_compressedTensor_of_supported_projection_with_letter` (`TNLean/MPS/CanonicalForm/CyclicSectors/Compression.lean`) | `MPSTensor.exists_compressedTensor_of_supported_projection_with_letter_and_isometry` (same file) |
+| `MPSTensor.exists_compressedTensor_of_supported_projection` (same file) | the same isometry rung |
+
+Each removed rung had the hypotheses of its replacement and forgot the
+letter identity, the support isometries, or both. Their only consumers were
+the next rung down and one `obtain` each, in the private period-removal
+theorem of `CyclicSectorDecomposition.lean` and in
+`exists_compressedTensor_of_supported_projection_pos_mpv`
+(`CompressionPositive.lean`); both now destructure the isometry rung. None of
+the four names was tagged in the blueprint. `CompressionPositive.lean` itself
+stays: it is registered in `docs/counterexamples.md`, and whether that entry
+is a witness is left to the owner.

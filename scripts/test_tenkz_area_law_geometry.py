@@ -129,7 +129,7 @@ def check_primary(unit: str) -> None:
     assert unit.count("{$R_j$}") == 2 and unit.count("{$R_{j'}$}") == 1
 
 
-def rays(unit: str, centre: str) -> dict[tuple[int, int], str]:
+def rays(unit: str, centre: str) -> tuple[dict[tuple[int, int], str], list[str | None]]:
     names = {n: (int(r), int(c)) for r, c, n in
              re.findall(r"\\tn\[at=\((\d+),(\d+)\), name=(\w+)", unit)}
     assert names[centre] == (5, 5)
@@ -138,20 +138,22 @@ def rays(unit: str, centre: str) -> dict[tuple[int, int], str]:
     sides = []
     for opts, a, pa, b, pb in re.findall(
             r"\\tnwire\[([^]]*)\]\{(\w+)\.(\d+)\}\{(\w+)\.(\d+)\}", unit):
+        stroke = re.search(r"stroke=(\w+)", opts)
+        style = stroke[1] if stroke else None
         if a == centre:
             p = names[b]
             assert int(pa) == BEARING[p] and int(pb) == (BEARING[p] + 180) % 360, (a, b)
-            stroke = re.search(r"stroke=(\w+)", opts)
-            out[p] = stroke[1] if stroke else "solid"
+            out[p] = style or "solid"
         else:
-            sides.append((names[a], names[b]))
+            sides.append((names[a], names[b], style))
     expected = [(PERIMETER[i], PERIMETER[(i + 1) % 8]) for i in range(8)]
-    assert sides == expected, "the eight half sides of the square"
-    return out
+    assert [(a, b) for a, b, _ in sides] == expected, "the eight half sides of the square"
+    return out, [style for _, _, style in sides]
 
 
 def check_fan(unit: str) -> None:
-    drawn = rays(unit, "fanc")
+    drawn, sides = rays(unit, "fanc")
+    assert all(style is None for style in sides), "plain triangle bases"
     # Upper and right sides halved; lower and left sides whole.
     assert drawn == {p: "solid" for p in CORNERS | {(1, 5), (5, 9)}}, drawn
     assert 4 <= len(drawn) <= 8 and len(drawn) == 6
@@ -162,7 +164,8 @@ def check_fan(unit: str) -> None:
 
 
 def check_rays(unit: str) -> None:
-    drawn = rays(unit, "starc")
+    drawn, sides = rays(unit, "starc")
+    assert all(style == "dotted" for style in sides), "dotted ball boundary"
     sectors = [(p, re.search(r"\{\((%d),(%d)\)\}\{\$(i_\d)\$\}" % cell, unit)[3])
                for p, cell in enumerate([(3, 4), (3, 6), (4, 8), (7, 8),
                                          (8, 6), (8, 4), (7, 2), (4, 2)])]
@@ -219,8 +222,10 @@ def check_rejected_mutations(units: dict[str, str]) -> int:
         ("primary", "- (1,6) .. (3,8)}{}", "- (1,6) .. (4,8)}{}"),
         ("fan", "{fanc.90}{fann.270}", "{fanc.270}{fans.90}"),
         ("fan", "{$P_e$}", "{$P_{e'}$}"),
+        ("fan", "name=fansidenw]", "stroke=dotted, name=fansidenw]"),
         ("rays", "stroke=dashed, name=starrayn]", "name=starrayn]"),
         ("rays", "{(8,4)}{$i_3$}", "{(8,4)}{$i_2$}"),
+        ("rays", "stroke=dotted, name=starsidenw]", "name=starsidenw]"),
     ]
     for name, old, new in mutations:
         unit = units[name]
