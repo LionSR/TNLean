@@ -56,7 +56,14 @@ theorem physicalDensity_eq_grouped_partialTrace
     C.physicalDimension C.physicalOrder C.physicalOrder_nodup C.mem_physicalOrder
     C.privateOutput bGarbage (stdOrthonormalBasis ℂ (Mem C.privateOutput).carrier)
     (C.circuit.eval C.input.vector) (C.circuit.eval C.input.vector)
-  simpa only [physicalDensity, familyLabelledPhysicalReadout,
-    Matrix.euclideanOuterProduct, Pi.star_def, starRingEnd_apply] using h
+  let coords := ((familyLabelledPhysicalBasis C.physicalDimension C.physicalOrder
+    C.physicalOrder_nodup C.mem_physicalOrder).tensorProduct
+      (stdOrthonormalBasis ℂ (Mem C.privateOutput).carrier)).repr
+        (appendIso (familyPhysicalLayout C.physicalDimension C.physicalOrder) C.privateOutput
+          (C.circuit.eval C.input.vector))
+  have hDensity : C.physicalDensity =
+      Matrix.partialTraceRight (Matrix.euclideanOuterProduct coords coords) := rfl
+  rw [hDensity]
+  simpa only [Matrix.euclideanOuterProduct, Pi.star_def, starRingEnd_apply] using h
 
 end TNLean.PEPS.PairEffect.DistributedConstruction
