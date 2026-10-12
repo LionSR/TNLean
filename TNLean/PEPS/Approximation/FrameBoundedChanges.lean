@@ -117,6 +117,25 @@ variable (F : Frame pos q Party)
 
 variable {T : Finset ι} {P Q : Party}
 
+/-- The ownership facts used by both directions of a homogeneous birth: when `T` is owned by `P∘`
+and avoids every outer hole footprint, the sites outside `T ∪ E` are owned by `P∘` both before and
+after `T` is handed to `Q∘`, the sites of `T` are owned by `Q∘` afterwards, and the owners on `E`
+are unchanged.
+
+Polynomial-PEPS manuscript, proof of Lemma 6.5 `lem:birth`, `05-frames.tex`, lines 413–446. -/
+theorem changeOwner_birth_owners (hTP : ∀ x ∈ T, F.owner x = P)
+    (hTH : Disjoint (T : Set ι) F.outerHoles) :
+    (∀ x ∈ (T ∪ F.birthEnv P)ᶜ, F.owner x = P) ∧ (∀ x ∈ T, (F.changeOwner T Q).owner x = Q) ∧
+      (∀ x ∈ (T ∪ F.birthEnv P)ᶜ, (F.changeOwner T Q).owner x = P) ∧
+      ∀ x ∈ F.birthEnv P, (F.changeOwner T Q).owner x = F.owner x := by
+  have hB : ∀ x ∈ (T ∪ F.birthEnv P)ᶜ, F.owner x = P := fun x hx =>
+    F.owner_eq_of_notMem_birthEnv fun h => Finset.mem_compl.mp hx (Finset.mem_union_right _ h)
+  refine ⟨hB, fun x hx => by simp only [hx, ↓reduceIte], fun x hx => ?_, fun x hx => ?_⟩
+  · have hxT : x ∉ T := fun h => Finset.mem_compl.mp hx (Finset.mem_union_left _ h)
+    simpa only [hxT, ↓reduceIte] using hB x hx
+  · have hxT : x ∉ T := fun hT => Finset.disjoint_left.mp (F.disjoint_birthEnv hTP hTH) hT hx
+    simp only [hxT, ↓reduceIte]
+
 /-- **Lemma 6.5 (homogeneous birth): the birth is a bounded change involving only `P∘` and
 `Q∘`.** In an encoded frame `F`, let `T` be a set of raw sites owned by `P∘` and disjoint from
 every outer hole footprint, and let `E` and `U = Λ ∖ (T ∪ E)` be as in `eq:birth-partition`. If
@@ -159,16 +178,9 @@ theorem birth_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
   set hTE := F.disjoint_birthEnv hTP hTH
   obtain ⟨wm, hwA, hwU, hwS, hwE⟩ := exists_birthWord P Q σ
     (tagRegs F.holes ++ siteRegs q F.owner (listE (sites ι) T (F.birthEnv P)))
-  have hB : ∀ x ∈ (T ∪ F.birthEnv P)ᶜ, F.owner x = P := fun x hx =>
-    F.owner_eq_of_notMem_birthEnv fun h => Finset.mem_compl.mp hx (Finset.mem_union_right _ h)
-  have hA' : ∀ x ∈ T, (F.changeOwner T Q).owner x = Q := fun x hx => by
-    simp only [hx, ↓reduceIte]
-  have hB' : ∀ x ∈ (T ∪ F.birthEnv P)ᶜ, (F.changeOwner T Q).owner x = P := fun x hx => by
-    have hxT : x ∉ T := fun h => Finset.mem_compl.mp hx (Finset.mem_union_left _ h)
-    simpa only [hxT, ↓reduceIte] using hB x hx
-  have hE : ∀ x ∈ F.birthEnv P, F.owner x = (F.changeOwner T Q).owner x := fun x hx => by
-    have hxT : x ∉ T := fun hT => Finset.disjoint_left.mp hTE hT hx
-    simp only [hxT, ↓reduceIte]
+  obtain ⟨hB, hA', hB', hE'⟩ := F.changeOwner_birth_owners (Q := Q) hTP hTH
+  have hE : ∀ x ∈ F.birthEnv P, F.owner x = (F.changeOwner T Q).owner x :=
+    fun x hx => (hE' x hx).symm
   obtain ⟨g₁, g₂, g₃⟩ := groupWord_props (q := q) F.owner nodup_sites mem_sites (tagRegs F.holes)
     hTP hB (V := {P, Q}) (Set.mem_insert P _) (Set.mem_insert P _)
   have r := isReordering_relabelRest (q := q) F.owner (F.changeOwner T Q).owner mem_sites
@@ -233,16 +245,7 @@ theorem death_bounded [NeZero q] (hTP : ∀ x ∈ T, F.owner x = P)
   set hTE := F.disjoint_birthEnv hTP hTH
   obtain ⟨Mm, hMA, hMU, hMS, hMe, hME⟩ := exists_deathChain P Q σ
     (tagRegs F.holes ++ siteRegs q (F.changeOwner T Q).owner (listE (sites ι) T (F.birthEnv P)))
-  have hB' : ∀ x ∈ (T ∪ F.birthEnv P)ᶜ, F.owner x = P := fun x hx =>
-    F.owner_eq_of_notMem_birthEnv fun h => Finset.mem_compl.mp hx (Finset.mem_union_right _ h)
-  have hA : ∀ x ∈ T, (F.changeOwner T Q).owner x = Q := fun x hx => by
-    simp only [hx, ↓reduceIte]
-  have hB : ∀ x ∈ (T ∪ F.birthEnv P)ᶜ, (F.changeOwner T Q).owner x = P := fun x hx => by
-    have hxT : x ∉ T := fun h => Finset.mem_compl.mp hx (Finset.mem_union_left _ h)
-    simpa only [hxT, ↓reduceIte] using hB' x hx
-  have hE : ∀ x ∈ F.birthEnv P, (F.changeOwner T Q).owner x = F.owner x := fun x hx => by
-    have hxT : x ∉ T := fun hT => Finset.disjoint_left.mp hTE hT hx
-    simp only [hxT, ↓reduceIte]
+  obtain ⟨hB', hA, hB, hE⟩ := F.changeOwner_birth_owners (Q := Q) hTP hTH
   obtain ⟨g₁, g₂, g₃⟩ := groupWord_props (q := q) (F.changeOwner T Q).owner nodup_sites
     mem_sites (tagRegs F.holes) hA hB (V := {P, Q}) (Set.mem_insert_of_mem P rfl)
     (Set.mem_insert P _)
