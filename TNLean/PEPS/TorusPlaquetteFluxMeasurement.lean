@@ -103,6 +103,28 @@ theorem torusPlaquetteRegion_card (v : X) : (torusPlaquetteRegion v).card = 4 :=
   simp [torusPlaquetteRegion, torusPlaquetteWalk, SimpleGraph.Walk.support,
     hx, hy, Ne.symm hx, Ne.symm hy]
 
+omit [NeZero width] [NeZero height] [Fact (2 < width)] [Fact (2 < height)] in
+private theorem zmod_ne_add_two {n : ℕ} (hn : 2 < n) (x : ZMod n) : x ≠ x + 2 ∧ x + 1 ≠ x + 2 := by
+  have h (k : ℕ) (hk : k < 2) : ((k : ℕ) : ZMod n) ≠ ((2 : ℕ) : ZMod n) := by
+    rw [Ne, ZMod.natCast_eq_natCast_iff', Nat.mod_eq_of_lt (show k < n by omega),
+      Nat.mod_eq_of_lt hn]
+    omega
+  have h0 := h 0 (by norm_num)
+  have h1 := h 1 (by norm_num)
+  push_cast at h0 h1
+  exact ⟨fun he => h0.symm (by simpa using he.symm), fun he => h1 (add_left_cancel he)⟩
+
+/-- No site of a native plaquette lies in the column two steps to the right of its base, nor in
+the row two steps above it. Source: SCP10, the local seam deformation in Theorem 5.7. -/
+theorem torusPlaquetteRegion_ne_add_two {v p : X} (hp : p ∈ torusPlaquetteRegion v) :
+    p.1 ≠ v.1 + 2 ∧ p.2 ≠ v.2 + 2 := by
+  have hx := zmod_ne_add_two (Fact.out : 2 < width) v.1
+  have hy := zmod_ne_add_two (Fact.out : 2 < height) v.2
+  simp only [torusPlaquetteRegion, torusPlaquetteWalk, SimpleGraph.Walk.support,
+    List.toFinset_cons, List.toFinset_nil, Finset.mem_insert, Finset.notMem_empty, or_false] at hp
+  rcases hp with rfl | rfl | rfl | rfl | rfl <;> refine ⟨?_, ?_⟩ <;>
+    first | exact hx.1 | exact hx.2 | exact hy.1 | exact hy.2
+
 private theorem plaquette_connected (v : X) :
     ((Γₜ).induce (torusPlaquetteRegion v : Set X)).Connected := by
   have hR : (torusPlaquetteRegion v : Set X) =

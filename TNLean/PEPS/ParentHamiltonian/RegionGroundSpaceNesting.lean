@@ -76,19 +76,11 @@ theorem sum_mul_openRegionWeight (A : Tensor Γ d) (R : Finset V)
   intro η hη
   simp [mul_ite]
 
-omit [Fintype V] [DecidableRel Γ.Adj] in
-private theorem boundary_of_incident_not_internal (R : Finset V) {e : Edge Γ}
-    (he : IsRegionIncidentEdge R e) (hn : ¬ (e.1.1 ∈ R ∧ e.1.2 ∈ R)) :
-    IsRegionBoundaryEdge R e := by
-  rcases he with h | h
-  · exact Or.inl ⟨h, fun h' => hn ⟨h, h'⟩⟩
-  · exact Or.inr ⟨fun h' => hn ⟨h', h⟩, h⟩
-
 private def nestedExteriorLabel (A : Tensor Γ d) {R S : Finset V}
     (μ : RegionBoundaryConfig A R) (ζ : RegionRemainderConfig A R S)
     (e : Edge Γ) (he : IsRegionIncidentEdge S e)
     (hn : ¬ (e.1.1 ∈ R ∧ e.1.2 ∈ R)) : Fin (A.bondDim e) :=
-  if hR : IsRegionIncidentEdge R e then μ ⟨e, boundary_of_incident_not_internal R hR hn⟩
+  if hR : IsRegionIncidentEdge R e then μ ⟨e, hR.isRegionBoundaryEdge hn⟩
     else ζ ⟨e, he, hR⟩
 
 omit [Fintype V] [DecidableRel Γ.Adj] in
