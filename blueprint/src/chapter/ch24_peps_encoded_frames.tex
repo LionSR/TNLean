@@ -390,15 +390,15 @@ norm of matrices, rectangular ones included.
     $\mathcal F_{\rm new}$ (\texttt{05-frames.tex}, lines 222--232).
 \end{definition}
 
-\begin{lemma}[Tensoring with an identity is a contraction]
-    \label{lem:peps_frame_identity_tensor_norm}
+\begin{theorem}[Tensoring with an identity is a contraction]
+    \label{thm:peps_frame_identity_tensor_norm}
     \lean{Matrix.l2_opNorm_kronecker_one_le,
         Matrix.l2_opNorm_one_kronecker_rect_le}
     \leanok
     For complex matrices $A$ and $B$, not necessarily square, and identity
     matrices $I$ of any size, $\lVert A\otimes I\rVert\le\lVert A\rVert$ and
     $\lVert I\otimes B\rVert\le\lVert B\rVert$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     For a vector $x=\sum_k x_k\otimes e_k$ one has
@@ -413,7 +413,7 @@ norm of matrices, rectangular ones included.
     \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_rewrite_le_one,
         Matrix.l2_opNorm_reindex_le}
     \leanok
-    \uses{def:peps_frame_rewrite,lem:peps_frame_gram,lem:peps_frame_identity_tensor_norm}
+    \uses{def:peps_frame_rewrite,lem:peps_frame_gram,thm:peps_frame_identity_tensor_norm}
     $\lVert M\rVert\le1$.
 \end{lemma}
 

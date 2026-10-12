@@ -772,13 +772,26 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     at the positions in $S$ (\texttt{05-frames.tex}, lines 476--477).
 \end{definition}
 
-\begin{lemma}[Sheet swaps are contractions]
-    \label{lem:peps_frame_sheet_swap_norm}
+\begin{theorem}[Permutation matrices are unitary]
+    \label{thm:permutation_matrix_unitary}
+    \lean{Equiv.Perm.permMatrix_mem_unitaryGroup}
+    \leanok
+    For a permutation $\sigma$ of a finite set, its complex permutation
+    matrix $P_\sigma$ satisfies $P_\sigma P_\sigma^\dagger=P_\sigma^\dagger P_\sigma=I$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The adjoint of $P_\sigma$ is $P_{\sigma^{-1}}$, and
+    $P_\sigma P_{\sigma^{-1}}=P_{\sigma\sigma^{-1}}=I$.
+\end{proof}
+
+\begin{theorem}[Sheet swaps are contractions]
+    \label{thm:peps_frame_sheet_swap_norm}
     \lean{TNLean.PEPS.EncodedFrame.norm_sheetSwapOp_le_one}
     \leanok
     \uses{def:peps_frame_sheet_swap}
     $\|F_S\|\leq1$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     $F_S$ is the matrix of a permutation of the two-sheet configurations, so
@@ -852,7 +865,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_sheet_swap_supported_exchange,lem:peps_frame_sheet_swap_compose}
+    \uses{thm:peps_sheet_swap_supported_exchange,lem:peps_frame_sheet_swap_compose,
+        thm:permutation_matrix_unitary}
     If $S\subseteq R$, the exchange identity applied with $B=I$ on both
     sides gives
     \begin{align*}
@@ -879,7 +893,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     of \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{lem:peps_frame_sheet_swap_compose,thm:peps_sheet_swap_doubled_cancellation}
+    \uses{lem:peps_frame_sheet_swap_compose,thm:peps_sheet_swap_doubled_cancellation,
+        thm:permutation_matrix_unitary}
     Put $B=R\cap S$ and $O=R\setminus S$. The composition of the
     swaps gives $F_BF_R=F_O$, hence $F_R=F_B^\dagger F_O$ by unitarity.
     Since $S\cap O=\varnothing$, cancellation outside $S$ gives
@@ -937,8 +952,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:peps_frame_sheet_swap,lem:peps_frame_sheet_swap_norm,
-        lem:peps_frame_identity_tensor_norm}
+    \uses{def:peps_frame_sheet_swap,thm:peps_frame_sheet_swap_norm,
+        thm:peps_frame_identity_tensor_norm}
     The two identity-factor estimates give
     $\|T(A)\|\leq\|A\otimes I\|+\|I\otimes A\|\leq2\|A\|$.
     Since $\|F_R\|\leq1$ and $\|F_R^\dagger\|=\|F_R\|$, submultiplicativity
