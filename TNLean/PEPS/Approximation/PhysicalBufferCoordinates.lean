@@ -47,6 +47,7 @@ theorem reindex_physicalBuffer_eq_siteLift
       Matrix.reindex e e ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W) =
         siteLift Q (Matrix.reindex pQ pQ W) := by
   classical
+  intro Q P s g p pQ e W
   done
 
 end TNLean.PEPS.EncodedFrame
