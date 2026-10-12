@@ -526,6 +526,51 @@ It does not identify consecutive rounds at a common physical prevector or
 sum their logarithmic terms. The physical prevector, initial and final
 comparisons, and the remaining scanner conclusions are still required.
 
+\section{Actual charge energy before a bad-history tail substitution}
+
+The finite-leaf energy calculation of \path{08-scanner.tex},
+lines~416--440 and~492--511, now has a supplied-vector statement for an
+actual charge round. Let $s+1\le nm$, $n\ge2$, $1\le D$,
+$r_0\le D$, $4(D+2r_0)\le m$, $8Km\le L$ and $C_1>0$.
+Retain the induced physical graph, ambient target-distance depth, actual
+row and cut-clearance bounds, and anchor multiplicity at most $\mu$.
+For $a\ge0$, a nonzero symmetric supplied vector $\psi_k$ and $0<p<1$,
+write $\mathcal Q_k(p)$ for the actual good-old charge defect and
+$\mathcal E_k(p)$ for the literal energy-error sum in Proposition~7.4.
+Set $A=10KnD\mu$, $\ell=1+(2r_0+1)^2\log q$, and let
+$b=\sum_{h\text{ not good}}w_h$ be the actual classical bad-old probability.
+Then
+\begin{align}
+    \mathcal E_k(p)&\le\frac{10D}{m}
+    \left((1-p)A^{7/8}\mathcal Q_k(p)^{1/8}
+    +\frac{A(2\ell)^{1/8}}2\bigl((1-p)b+p\bigr)\right).
+    \label{eq:arealaw2d_scanner_inputs_charge_energy}
+\end{align}
+The split-label capacity $A$ is deterministic. It is distinct from the
+mass $1/2$ of each actual Fourier--coherent leaf measure. Those mass
+identities are derived for this same supplied vector; norm one is not an
+assumption. The H\"older argument divides by neither the capacity nor
+the total good-history weight. It therefore includes $K=0$, $A=0$, zero
+good-history weight and zero replicas. The bound $\eta\le2\ell$ uses
+only the physical support and is independent of both auxiliary dimensions.
+\footnote{The actual supplied-vector statement is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_energyError_le_domainGraph}.}
+
+The stronger margin $4(D+2r_0)\le m$ is retained because it supplies the
+labelled split count. To obtain the source-scale conclusion, this margin
+must be derived from the rounded scales for each fixed positive exponent
+gap; a threshold uniform over all such gaps is not asserted. The factor $b$ in
+(\ref{eq:arealaw2d_scanner_inputs_charge_energy}) has not been replaced by
+a uniform power-law tail. Such a substitution must use the actual
+classical bad-history theorem with all of its scale, horizon and parameter
+dependencies. The estimate contributes to issue 8755, but it does not
+assert the full energy expectation in lines~507--511. In particular, it
+supplies no physical prevector eigenvalue, comparator bound, or complete
+scanner construction. Identification of the physical Schmidt--Bell
+prevector with the actual root and metric coordinates, and the comparator
+estimates, remain separate from this one-round calculation; the work
+tracked by issues 9224, 9227, 9230 and 9231 is unchanged.
+
 \section{Truncated physical marginal estimates}
 
 The moment and tail estimates of \cite[Lemma~3.1]{OpenAI2026AreaLaw} are established in
