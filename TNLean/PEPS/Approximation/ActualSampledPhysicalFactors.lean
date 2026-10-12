@@ -104,17 +104,23 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors
     (BG : ∀ q, OrthonormalBasis (E q) ℂ
       (Mem (Layout.atParty q
         (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) garbage)))) :
-    let C := selectedPhysicalPrivateBasis (E := E) d ps hn hc garbage BG
-    let bOut := partyGroupedBasis
+    let C : (q : Option {_p : P // true = true}) →
+      OrthonormalBasis (selectedFamilyPhysicalIndex d q × E q) ℂ
+        (Mem (Layout.atParty q (Layout.mapOwner (affectedOwner (fun _ : P ↦ true))
+          (familyPhysicalLayout d ps ++ garbage)))) :=
+      selectedPhysicalPrivateBasis (E := E) d ps hn hc garbage BG
+    let bOut := partyGroupedBasis (I := fun q ↦ selectedFamilyPhysicalIndex d q × E q)
       (Layout.mapOwner (affectedOwner (fun _ : P ↦ true))
         (familyPhysicalLayout d ps ++ garbage)) C (selectedPartyOrder ps)
       (selectedPartyOrder_nodup ps hn) (mem_selectedPartyOrder ps hc)
     let e := Equiv.arrowProdEquivProdArrow (Option {_p : P // true = true})
       (selectedFamilyPhysicalIndex d) E
-    let M := fun (j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k)
-      (q : Option {_p : P // true = true}) ↦
-      sampledPhysicalFactor (I := I) (E := E) d ps hn hc garbage w ψ k lam L R ξ ζ ω B BG
-        (j ∘ (allSourceSlotEquiv w).symm) q
+    let M : (Fin (partialSlots (fun _ ↦ true) w).length → Fin k) →
+      (q : Option {_p : P // true = true}) →
+        Matrix (selectedFamilyPhysicalIndex d q) (selectedFamilyPhysicalIndex d q) ℂ :=
+      fun j q ↦ sampledPhysicalFactor (I := I) (E := E)
+        d ps hn hc garbage w ψ k lam L R ξ ζ ω B BG
+          (j ∘ (allSourceSlotEquiv w).symm) q
     (Matrix.partialTraceRight
       ((w.partialSourceGlobalMatrix ψ ξ bOut *
         SourceInventory.productSourceMatrix (partialSlots (fun _ ↦ true) w)

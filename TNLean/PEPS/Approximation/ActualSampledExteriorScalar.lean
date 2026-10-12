@@ -85,6 +85,25 @@ private theorem empty_memory_mixed_partialTrace
     Matrix.partialTraceRight_smul, Matrix.partialTraceRight_one, hJ]
   simp only [Nat.cast_one, one_smul, Complex.star_def]
 
+/-- The coordinate trace for words on empty memories is computed before the
+actual retained layouts are substituted. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 574–579. -/
+private theorem empty_memory_words_mixed_partialTrace
+    {Q I J : Type} [Fintype I] [Fintype J] {a b : Layout Q}
+    (ha : a = []) (hb : b = [])
+    (B : OrthonormalBasis I ℂ (Mem a))
+    (C : OrthonormalBasis (PUnit × J) ℂ (Mem b))
+    (u t : Word a b) (v : Word a a) (α β : ℂ)
+    (hA : HEq u.eval (α • ContinuousLinearMap.id ℂ ℂ))
+    (hT : HEq t.eval (β • ContinuousLinearMap.id ℂ ℂ))
+    (hU : HEq v.eval (ContinuousLinearMap.id ℂ ℂ)) :
+    Matrix.partialTraceRight
+        (Matrix.of (fun row col ↦ C.repr (u.eval (B col)) row) *
+          Matrix.of (fun row col ↦ B.repr (v.eval (B col)) row) *
+          (Matrix.of (fun row col ↦ C.repr (t.eval (B col)) row))ᴴ) =
+      (α * conj β) • (1 : Matrix PUnit PUnit ℂ) := by
+  exact empty_memory_mixed_partialTrace ha hb B C u.eval t.eval v.eval α β hA hT hU
+
 namespace SourceCircuit
 variable {P : Type} {a b : Layout P}
 
@@ -172,12 +191,13 @@ theorem partialSourceWord_sampled_none_partialTrace_eq_scalar
       (sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict
         (partySelector none) (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω) = U
       at hξ hζ hU ⊢
-  exact empty_memory_mixed_partialTrace
+  exact empty_memory_words_mixed_partialTrace
     (Q := Option {p : P // (fun _ : P ↦ true) p = true}) (I := I) (J := J)
-    (a := Layout.atParty none (w.allResidualSourceLayout ++ []))
-    (b := Layout.atParty none (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b))
+    (a := Layout.restrict (partySelector none) (w.allResidualSourceLayout ++ []))
+    (b := Layout.restrict (partySelector none)
+      (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b))
     (actualSourceInput_none_eq_nil w) (Layout.atParty_none_mapOwner_all b)
-    B C A.eval T.eval U.eval w.emptyGateScalar w.emptyGateScalar hξ hζ hU
+    B C A T U w.emptyGateScalar w.emptyGateScalar hξ hζ hU
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect
