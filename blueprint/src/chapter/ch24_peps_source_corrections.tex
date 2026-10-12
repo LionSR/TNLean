@@ -66,7 +66,21 @@ no bound on private dimensions is imposed.
     vectors are original, and every participant has exterior owner;
     its branch sum is therefore its original aggregate operator.
     Composition distributes through the finite sums, while idle
-    registers tensor each term with an identity. Every endpoint of a
+    registers tensor each term with an identity. For a composition
+    $W=W''W'$ with intermediate identification $J_c$, the two induction
+    hypotheses give
+    \begin{align}
+        J_bW''(\eta)W'(\eta)
+         & =\sum_{\zeta}c_{\mathcal A,\zeta}W''_{\mathcal A,\zeta}(\eta)
+        J_cW'(\eta)
+        =\sum_{\zeta,\zeta'}c_{\mathcal A,\zeta}c_{\mathcal A,\zeta'}
+        W''_{\mathcal A,\zeta}(\eta)W'_{\mathcal A,\zeta'}(\eta)J_a .
+    \end{align}
+    The pairs $(\zeta',\zeta)$ are the branches $\xi$ of $W$, with
+    $c_{\mathcal A,\xi}=c_{\mathcal A,\zeta}c_{\mathcal A,\zeta'}$ and
+    $W_{\mathcal A,\xi}(\eta)=W''_{\mathcal A,\zeta}(\eta)W'_{\mathcal A,\zeta'}(\eta)$,
+    which is
+    (\ref{eq:peps_substitution_partial}). Every endpoint of a
     selected source belongs to its owning gate, which proves the
     final specialization.
 \end{proof}
@@ -148,8 +162,13 @@ no bound on private dimensions is imposed.
     Surviving pair preparations change only their vectors. A source
     whose endpoints are both exterior becomes a local preparation;
     the stated condition keeps that local operation unchanged.
-    All other remaining operations agree. Apply the canonical recovery
-    identity to the resulting exact inventory.
+    All other remaining operations agree. Hence
+    $W_{\mathcal A,\xi}(\eta)$ has canonical remaining composition
+    $V_{\mathcal A,\xi}$ and exact ordered inventory $\eta_\xi$.
+    Theorem~\ref{thm:peps_canonical_source_recovery}, applied to this
+    word, replaces $\nu_\xi$ by $\eta_\xi$ in
+    (\ref{eq:peps_canonical_recovery}) and gives
+    (\ref{eq:peps_substituted_recovery}).
 \end{proof}
 
 \begin{theorem}[Weighted matrix sums]

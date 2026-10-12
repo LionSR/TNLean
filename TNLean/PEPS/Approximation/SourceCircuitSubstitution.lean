@@ -132,6 +132,11 @@ theorem partialWithSources_original (A : P → Bool) {a b : Layout P}
   | swap => rfl
   | frame r w ih => exact congrArg (Word.frame ⟨affectedOwner A r.owner, r.space⟩) (ih ξ)
 
+/-- One gate: the branch sum of its partial branches, after the affected-owner
+identification of the input layout, is the identification of its substituted evaluation.
+A touched gate gives its defining branch sum; an untouched gate keeps its original
+source vectors and hence its aggregate operator.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–381. -/
 private theorem eval_partialWithSources_gate {C ι : Type} [Fintype C] [Fintype ι]
     (A : P → Bool) (owner : C ↪ P) {a b : Layout C} {c : ι → ℂ}
     (G : PreparedSourceGate c a b) (tail : Layout P)

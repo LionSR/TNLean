@@ -161,19 +161,12 @@ theorem sum_historyWeight_exists_band_side_le {k : ℕ}
   calc
     _ ≤ ∑ h : History S.K S.m S.M k, ∑ side : Bool,
         if ∃ g, E h g side then historyWeight h else 0 := by
-      apply Finset.sum_le_sum
-      intro h _
-      by_cases he : ∃ g side, E h g side
-      · obtain ⟨g, side, hg⟩ := he
-        have hs : ∃ g, E h g side := ⟨g, hg⟩
-        rw [ite_eq_left ⟨g, side, hg⟩]
-        calc
-          _ = (if ∃ g, E h g side then historyWeight h else 0) := by simp [hs]
-          _ ≤ _ := Finset.single_le_sum (f := fun side : Bool ↦
-            if ∃ g, E h g side then historyWeight h else 0)
-            (fun side _ ↦ by split_ifs <;> simp [historyWeight_nonneg]) (Finset.mem_univ side)
-      · simp only [he, ↓reduceIte]
-        exact Finset.sum_nonneg fun side _ ↦ by split_ifs <;> simp [historyWeight_nonneg]
+      refine Finset.sum_le_sum fun h _ ↦ ?_
+      have hw := historyWeight_nonneg h
+      rw [Fintype.sum_bool]
+      split_ifs with he <;> try linarith
+      obtain ⟨g, side, hg⟩ := he
+      cases side <;> simp_all
     _ = ∑ side : Bool, ∑ h : History S.K S.m S.M k,
         if ∃ g, E h g side then historyWeight h else 0 := Finset.sum_comm
     _ ≤ ∑ _side : Bool, (((a : ℝ) + b + 1) / S.m) :=

@@ -49,6 +49,46 @@ number of sites along an axis, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
     $8(R+1)\mu_R(\operatorname{size}(Q_0)+d')$ admissible supports are split by
     $A\cap Q_0^{+d'}$, where $\mu_R=2^{2R(R+1)}$ bounds the number of admissible
     supports containing a site.
+
+    The picture shows the nested rectangles for range $R=1$, $d=1$ and
+    $d'=2$, with two admissible supports that are each split by exactly one
+    contour.
+    \begin{tenkzequation}
+        % Source: arXiv OpenAI2026AreaLaw, sections/02-initial.tex:219--300
+        % (lemma lem:initial-buffer and the contour separation in its proof);
+        % the source has no figure.
+        % Geometry only: dots are sites of Q (nearest-neighbor edges are not
+        % drawn); there are no tensors or open indices, and the boundary
+        % signature is empty.
+        % Enclosures, inner to outer: Q_0 = rows/cols 4..5; Q_0^{+d} with
+        % d=1 = rows/cols 3..6; Q_0^{+d'} with d'=2 = rows/cols 2..7; the
+        % safe rectangle Q = rows/cols 1..8. All of Q is drawn inside A.
+        % Tinted pairs: adjacent pairs, admissible at range R=1. The pair
+        % (2,4),(3,4) is split by Q_0^{+d} and lies in Q_0^{+(d+R)} = Q_0^{+d'};
+        % the pair (1,6),(2,6) is split by Q_0^{+d'} only. Since d+R<=d',
+        % neither is split by both contours.
+        % Not to scale: safety puts the cut endpoints Z at sup-norm distance
+        % greater than D_0 size(Q) from Q, so Z lies far outside the picture.
+        \tenkzkernel
+        \begin{tenkz}[size=s, rows={wire,wire,wire,wire,wire,wire,wire,wire},
+                cols=8, bonds=none]
+            \tndeclare{species}{support}{hue=source:orange!85!black}
+            \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+            \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+            \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+            \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+            \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+            \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+            \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+            \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
+            \tnmark[form=enclosure, species=selected, tint, label pos=e]{(4,4) .. (5,5)}{$Q_0$}
+            \tnmark[form=enclosure, species=secondary, label pos=e]{(3,3) .. (6,6)}{$Q_0^{+d}$}
+            \tnmark[form=enclosure, species=complement, label pos=e]{(2,2) .. (7,7)}{$Q_0^{+d'}$}
+            \tnmark[form=enclosure, label pos=e]{(1,1) .. (8,8)}{$Q$}
+            \tnmark[form=enclosure, species=support, tint]{{(2,4), (3,4)}}{}
+            \tnmark[form=enclosure, species=support, tint]{{(1,6), (2,6)}}{}
+        \end{tenkz}
+    \end{tenkzequation}
 \end{theorem}
 \begin{proof}\leanok
     \lean{TNLean.PEPS.AreaLaw.latticeL1Distance_le_one_of_adj,
@@ -71,8 +111,7 @@ number of sites along an axis, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
     \label{thm:area_law_initial_buffer}
     \lean{TNLean.PEPS.AreaLaw.exists_condEntropy_le_initialBuffer}
     \leanok
-    \uses{thm:area_law_buffer_contours, thm:area_law_marginal_tails,
-        def:area_law_ground_entropy}
+    \uses{def:area_law_safe_rectangle,def:area_law_ground_entropy}
     For $q\ge1$, $R$, $J\ge0$ and $\Delta>0$ there are an integer
     $C_{\mathrm{pad}}\ge1$ and a constant $C_{\mathrm{buf}}$ with the following
     property. Let $\Omega$ be a unit vector satisfying
@@ -86,7 +125,7 @@ number of sites along an axis, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
     This is~\cite[Lemma~3.2]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:area_law_buffer_contours}
+    \uses{thm:area_law_buffer_contours,thm:area_law_marginal_tails}
     \lean{TNLean.PEPS.AreaLaw.condEntropy_le_initialBuffer_of_constants,
         TNLean.PEPS.AreaLaw.sum_range_succ_eq_sum_Icc,
         TNLean.PEPS.AreaLaw.supportDim_le,
@@ -103,12 +142,12 @@ number of sites along an axis, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
     $X_j=A\cap Q_0^{+d_j}$ with $d_j=r+jD$, $1\le j\le m$. By
     Theorem~\ref{thm:area_law_buffer_contours} every admissible support splits
     at most one $X_j$, and the number of split supports and the parameter
-    $\mathcal B_j$ of Lemma~3.1 are at most a constant times $r+d_j$. The
+    $\mathcal B_j$ of~\cite[Lemma~3.1]{OpenAI2026AreaLaw} are at most a constant times $r+d_j$. The
     harmonic weights $a_j=2/(Z_r(r+d_j))$ with $Z_r=\sum_j1/(r+d_j)$ have total
     mass two and quadratic cost $4/Z_r$, and
     $Z_r\ge D^{-1}\log((C_{\mathrm{pad}}+1)/(2+D))$. Choosing
     $C_{\mathrm{pad}}$ makes $a_j\le1/2$, the energy of the optimized filters
-    at most $\Delta/2$, and every $a_j/(1-a_j)$ admissible for Lemma~3.1,
+    at most $\Delta/2$, and every $a_j/(1-a_j)$ admissible for~\cite[Lemma~3.1]{OpenAI2026AreaLaw},
     uniformly in $r$. The comparison of the optimized filter norms with
     Schmidt pinning then gives
     $2S(X\mid T)\le S(X)+C+m\log2$, and $m\le C_{\mathrm{pad}}r$.

@@ -42,36 +42,10 @@ Theorem~\ref{thm:area_law_fan_triangle_contact}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{def:area_law_fan_cut_piece,
-        thm:area_law_cell_fan_successor_iff,
-        thm:area_law_cell_fan_base_radius,
-        thm:area_law_cell_fan_end_same_ray,
-        thm:area_law_fan_noncentral_radial_incidence}
-    First suppose that $j=\tau(i)$, so $b_i=a_j$.
-    Set
-    \begin{align}
-        m & =\frac{c+b_i}{2}.
-    \end{align}
-    The base-radius identity gives $\|b_i-c\|_\infty=r$, and therefore
-    \begin{align}
-        \|m-c\|_\infty & =\frac r2<r.
-    \end{align}
-    Thus $m\in B_\infty(c,r)$ and $m\ne c$.
-    The noncentral radial-incidence characterization of
-    Theorem~\ref{thm:area_law_fan_noncentral_radial_incidence}, applied to
-    $m\in[c,b_i]$ and $b_i=a_j$, places $m$ in both triangles.
-
-    If $m\in[c,b_t]$ for another fan index $t$, then $m-c$ is a
-    positive multiple of $b_t-c$. It is also the positive multiple
-    $(b_i-c)/2$. Equality of endpoint directions forces $t=i$.
-    Since $f_i=f_j=f_{\tau(i)}$, the index $i$ does not belong to $A$.
-    Hence $m$ lies on none of the deleted radials and
-    $m\in S_i\cap S_j$.
-
-    If $i=\tau(j)$, interchange $i$ and $j$ and use the midpoint of
-    $[c,b_j]$. Symmetry of intersection gives the same conclusion.
-    When $A$ is empty, the same midpoint witnesses the intersection;
-    the center is retained in every $S_i$ as well.
-    This is an auxiliary to the initial-star construction in
-    \cite[Section~11]{OpenAI2026AreaLaw}.
+    \uses{def:area_law_fan_closed_half_piece,
+        thm:area_law_fan_closed_half_intersection}
+    Theorem~\ref{thm:area_law_fan_closed_half_intersection} gives
+    $K_i\cap K_j\ne\varnothing$. By
+    Definition~\ref{def:area_law_fan_closed_half_piece}, $K_i\subseteq S_i$
+    and $K_j\subseteq S_j$, so $S_i\cap S_j\ne\varnothing$.
 \end{proof}

@@ -1,0 +1,189 @@
+% Source: GLM23, arXiv:2203.12563v3, REsubmission.tex, lines 1687--1689;
+% eq:orthoV, and the square-physical restriction in lines 1584--1601.
+% This proves three-site injectivity from isolated biorthogonal maps.
+% The one-site source claim belongs to the aligned categorical setting.
+
+\subsection{Three-site injectivity of the mixed operator}
+\label{sec:mpo_mixed_normality}
+
+Let $E_p=\C^{D_p}$ and $K_p=\C^{\chi_p}$ for $p\in\{0,1\}$,
+with $D_0,D_1>0$. Take operator tensors $T_p$ with physical space
+$E_p\otimes E_p$ and bond space $K_p$, and a common multiplicity
+$m>0$. Suppose the maps $V_{p,\mu}:K_p\otimes E_p\to E_p$ and
+$W_{p,\mu}:E_p\to K_p\otimes E_p$ satisfy
+$V_{p,\mu}W_{p,\nu}=\delta_{\mu\nu}\Id_{E_p}$.
+Let $T$ be the mixed operator of
+Definition~\ref{def:mpo_mixed_action_tensor}, on $K=K_0\oplus K_1$.
+The distinction between this three-site conclusion and the source's
+one-site assertion is recorded in
+\cite{gap:glm23_mpo_symmetric_mps_scope}.
+Its diagonal letters are the embedded letters of $T_0,T_1$; in a
+crossed physical sector $p\ne q$ its coefficients are
+\begin{align}
+    T^{(r,s),(k,l)}_{\alpha\beta}
+     & =\sum_{\mu=0}^{m-1}
+    (W_{p,\mu})_{(\alpha,k),r}(V_{q,\mu})_{s,(\beta,l)}.
+    \label{eq:mpo_mix_normal_cross}
+\end{align}
+All unmatched sectors vanish. Write $\mathcal S_L$ for the complex
+span of products of exactly $L$ letters of $T$. Thus
+$\mathcal S_{L+M}=\mathcal S_L\mathcal S_M$, where the product on the
+right denotes the span of all matrix products.
+
+\begin{theorem}[Three-site injectivity]
+    \label{thm:mpo_mixed_normality}
+    \lean{MPSTensor.MPOSymmetry.isNBlkInjective_mixedEndpointMPO_three,
+        MPSTensor.MPOSymmetry.isNormal_mixedEndpointMPO}
+    \leanok
+    \uses{def:mpo_mixed_action_tensor}
+    If both $T_0$ and $T_1$ are injective, then
+    $\mathcal S_3=\End(K)$. In particular, $T$ is normal, with
+    blocking length three.
+\end{theorem}
+\begin{proof}
+    \leanok
+    For $X:E_1\to E_0$ and any $0\leq\nu<m$, biorthogonality gives
+    \begin{align}
+        V_{0,\nu}\left(\sum_{\mu=0}^{m-1}W_{0,\mu}XV_{1,\mu}\right)W_{1,\nu}
+         & =\sum_{\mu=0}^{m-1}
+        (V_{0,\nu}W_{0,\mu})X(V_{1,\mu}W_{1,\nu})=X.
+        \label{eq:mpo_mix_normal_recovery}
+    \end{align}
+    Choose a nonzero matrix unit $X=|r\rangle\langle s|$.
+    The matrix inside parentheses in
+    (\ref{eq:mpo_mix_normal_recovery}) is nonzero. One of its
+    coefficients is therefore a nonzero coefficient $C_{uv}$ of a
+    crossed letter $C$ of $T$, by (\ref{eq:mpo_mix_normal_cross}).
+    Exchanging $0$ and $1$ gives a nonzero letter in the other
+    crossed corner as well.
+
+    Injectivity of $T_p$ puts every matrix unit supported on
+    $K_p\times K_p$ in $\mathcal S_1$. For a crossed letter with
+    $u\in K_p$, $v\in K_q$, $p\ne q$, and $C_{uv}\ne0$, every
+    $a\in K_p$, $b\in K_q$ satisfies
+    \begin{align}
+        E_{au}CE_{vb} & =C_{uv}E_{ab},
+                      & E_{ab}         & =C_{uv}^{-1}E_{au}CE_{vb}\in\mathcal S_3.
+        \label{eq:mpo_mix_normal_sandwich}
+    \end{align}
+    For $a,b$ in the same sector,
+    $E_{ab}=E_{ab}E_{bb}E_{bb}\in\mathcal S_3$.
+    Hence every matrix unit belongs to $\mathcal S_3$.
+\end{proof}
+
+In the first diagram $i\in E_0$ and $j\in E_1$ are the open row
+and column indices. The four internal bonds range, from left to right,
+over $K_0\otimes E_0$, $E_0$, $E_1$, and $K_1\otimes E_1$.
+The displayed sum contracts the common multiplicity; $\nu$ is fixed.
+% TENKZ-MIXED-NORMALITY-RECOVERY-BEGIN
+% Formula: sum_mu V0nu W0mu X V1mu W1nu = X.
+% Ink: five boxes are the five ordered rectangular matrix factors.
+% Contractions: four internal matrix indices and the displayed multiplicity sum.
+% Boundary: i west in E0; j east in E1. No adjoints or normalization.
+\tenkzkernel
+\begin{tenkzequation}
+    $\displaystyle\sum_{\mu=0}^{m-1}$
+    \begin{tenkz}[rows={wire}, cols=5, bonds=none]
+        \tn[at=(1,1), name=va, skin=box,
+            ports={180:virtual:$i$, 0:virtual}]{V_{0,\nu}}
+        \tn[at=(1,2), name=wb, skin=box,
+            ports={180:virtual, 0:virtual}]{W_{0,\mu}}
+        \tn[at=(1,3), name=rect, skin=box,
+            ports={180:virtual, 0:virtual}]{X}
+        \tn[at=(1,4), name=vc, skin=box,
+            ports={180:virtual, 0:virtual}]{V_{1,\mu}}
+        \tn[at=(1,5), name=wd, skin=box,
+            ports={180:virtual, 0:virtual:$j$}]{W_{1,\nu}}
+        \tnwire{va.0}{wb.180}
+        \tnwire{wb.0}{rect.180}
+        \tnwire{rect.0}{vc.180}
+        \tnwire{vc.0}{wd.180}
+    \end{tenkz}
+    $=$
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[at=(1,1), name=recovered, skin=box,
+            ports={180:virtual:$i$, 0:virtual:$j$}]{X}
+    \end{tenkz}
+\end{tenkzequation}
+% TENKZ-MIXED-NORMALITY-RECOVERY-END
+
+For (\ref{eq:mpo_mix_normal_sandwich}), the middle box is a fixed
+letter $C$. The two internal matrix indices are summed. The outer
+matrix units force those indices to be $u$ and $v$, respectively.
+% TENKZ-MIXED-NORMALITY-SANDWICH-BEGIN
+% Formula: E_au C E_vb = C_uv E_ab.
+% Ink: left/right boxes are diagonal-sector matrix units; C is a cross letter.
+% Contractions: two internal K indices, fixed to u,v by the matrix units.
+% Boundary: i west in Kp; j east in Kq. The scalar C_uv is written explicitly.
+\tenkzkernel
+\begin{tenkzequation}
+    \begin{tenkz}[rows={wire}, cols=3, bonds=none]
+        \tn[at=(1,1), name=left, skin=box,
+            ports={180:virtual:$i$, 0:virtual}]{E_{au}}
+        \tn[at=(1,2), name=cross, skin=box,
+            ports={180:virtual, 0:virtual}]{C}
+        \tn[at=(1,3), name=right, skin=box,
+            ports={180:virtual, 0:virtual:$j$}]{E_{vb}}
+        \tnwire{left.0}{cross.180}
+        \tnwire{cross.0}{right.180}
+    \end{tenkz}
+    $=C_{uv}$
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[at=(1,1), name=unit, skin=box,
+            ports={180:virtual:$i$, 0:virtual:$j$}]{E_{ab}}
+    \end{tenkz}
+\end{tenkzequation}
+% TENKZ-MIXED-NORMALITY-SANDWICH-END
+
+\begin{theorem}[Positive action multiplicity]
+    \label{thm:mpo_mixed_positive_multiplicity}
+    \lean{MPSTensor.MPOSymmetry.multiplicity_pos_of_injective_endpoint_action}
+    \leanok
+    \uses{def:glm_boundary_decomposition}
+    Let $A$ be an injective tensor of physical dimension $D^2$ and
+    bond dimension $D$, and let $T$ be an injective operator tensor
+    of the same physical dimension and positive bond dimension $\chi$.
+    If an exact biorthogonal action decomposition has $m\geq0$ copies
+    of $A$, so that $(T\cdot A)^x=\sum_{\mu=0}^{m-1}W_\mu A^xV_\mu$,
+    then $m>0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The $D^2$ matrices $A^y$ span the $D^2$-dimensional space
+    $\End(\C^D)$, so they are linearly independent. If $m=0$, the
+    action equation gives $\sum_y T^{xy}_{\alpha\beta}A^y=0$ for
+    every $x,\alpha,\beta$. Linear independence makes every
+    coefficient $T^{xy}_{\alpha\beta}$ zero. Its letters then span
+    only zero, contradicting injectivity since $\chi>0$.
+\end{proof}
+
+\begin{theorem}[Three-site injectivity from exact actions]
+    \label{thm:mpo_mixed_normality_exact_action}
+    \lean{MPSTensor.MPOSymmetry.isNBlkInjective_mixedEndpointMPO_three_of_exact_action}
+    \leanok
+    \uses{def:mpo_mixed_action_tensor,def:glm_boundary_decomposition}
+    Let $D_0,D_1>0$ and $\chi_0>0$. Suppose both $T_0,T_1$ are
+    injective, $A_0$ is injective of physical dimension $D_0^2$ and
+    bond dimension $D_0$, and $A_1$ has physical dimension $D_1^2$
+    and bond dimension $D_1$. Suppose both exact actions
+    $(T_p\cdot A_p)^x=\sum_{\mu=0}^{m-1}W_{p,\mu}A_p^xV_{p,\mu}$
+    have biorthogonal analysis and synthesis with common multiplicity
+    $m\geq0$. Then the mixed operator is injective after blocking
+    three sites.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:mpo_mixed_positive_multiplicity,thm:mpo_mixed_normality}
+    Theorem~\ref{thm:mpo_mixed_positive_multiplicity} applied at $p=0$
+    gives $m>0$. The biorthogonality hypotheses and the injectivity
+    of $T_0,T_1$ now give the conclusion by
+    Theorem~\ref{thm:mpo_mixed_normality}.
+\end{proof}
+
+The operator construction and the one-site injectivity discussion occur
+in \cite[Section~5]{GarreRubio2023MPOSym}. Theorems
+\ref{thm:mpo_mixed_normality} and
+\ref{thm:mpo_mixed_normality_exact_action} establish a three-site
+conclusion. The first uses only the two injective operator tensors and
+biorthogonality with positive multiplicity; the second derives that
+positivity from exact action on a square-physical injective tensor.

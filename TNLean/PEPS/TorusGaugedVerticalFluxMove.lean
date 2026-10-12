@@ -127,25 +127,18 @@ theorem IsGIsometric.exists_unitary_torusGaugedVerticalFluxMove
       (verticalTwoPlaquetteTree_le v) (verticalTwoPlaquetteTree_isTree v)
       (verticalTwoPlaquetteIso v 0) (regularTwoCycleMove e₀ e₁ hne)
       (regularTwoCycleMove_conjugation e₀ e₁ hne)
-  have hWgram : W.conjTranspose * W = 1 := Matrix.mem_unitaryGroup_iff'.mp hW
-  have hUgram : (regionLocalTerm (R v) W).conjTranspose *
-      regionLocalTerm (R v) W = 1 := Matrix.mem_unitaryGroup_iff'.mp hglobal
   refine ⟨W, hW, hglobal, ?_, ?_⟩
   · intro k reverse g u θ
     have h := hlocal k (ω false g) u θ
     rw [hm, hg, hg] at h
     cases reverse
     · exact h
-    · change W.conjTranspose *ᵥ _ = _
-      rw [← h, Matrix.mulVec_mulVec, hWgram, Matrix.one_mulVec]
-      rfl
+    · exact Matrix.conjTranspose_mulVec_eq_of_mulVec_eq hW h
   · intro k reverse g u
     have h := hact k (ω false g) u
     rw [hm, hg, hg] at h
     cases reverse
     · exact h
-    · change (regionLocalTerm (R v) W).conjTranspose *ᵥ _ = _
-      rw [← h, Matrix.mulVec_mulVec, hUgram, Matrix.one_mulVec]
-      rfl
+    · exact Matrix.conjTranspose_mulVec_eq_of_mulVec_eq hglobal h
 
 end TNLean.PEPS
