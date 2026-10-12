@@ -47,20 +47,22 @@ Source: area-law Section 11, `geometry:trim-radius`, lines 398–399. -/
 def repairSquare (v : ℝ × ℝ) (S : ℝ) : Set (ℝ × ℝ) :=
   Metric.closedBall v (repairHalfSide S)
 
-/-- The union of the closed removal squares over a finite marked set with
-assigned scales. This same union is removed from every old region.
+/-- The union of the closed removal squares over a family of mark occurrences,
+each with a location `v j` and an assigned scale `S j`. This same union is
+removed from every old region. Occurrences are indexed separately from their
+locations, so coincident marks with different scales each contribute a square.
 Source: area-law Section 11, `geometry:trim-radius`, lines 393–399. -/
-def repairRemovalSet (M : Finset (ℝ × ℝ)) (S : M → ℝ) : Set (ℝ × ℝ) :=
-  ⋃ v : M, repairSquare v.val (S v)
+def repairRemovalSet {κ : Type*} (v : κ → ℝ × ℝ) (S : κ → ℝ) : Set (ℝ × ℝ) :=
+  ⋃ j, repairSquare (v j) (S j)
 
 /-- The remnants of every old actual region after simultaneous removal.
 The old identifiers are retained; birth regions and labels retain their
 values separately. Removal precedes the creation of replacement regions.
 Source: area-law Section 11, `geometry:trim-radius`, lines 398–399, and
 `geometry:birth-separation`, lines 584–591. -/
-def simultaneousRepairRemnants {ι : Type*} (R : ι → Set (ℝ × ℝ))
-    (M : Finset (ℝ × ℝ)) (S : M → ℝ) : ι → Set (ℝ × ℝ) :=
-  fun i ↦ R i \ repairRemovalSet M S
+def simultaneousRepairRemnants {ι κ : Type*} (R : ι → Set (ℝ × ℝ))
+    (v : κ → ℝ × ℝ) (S : κ → ℝ) : ι → Set (ℝ × ℝ) :=
+  fun i ↦ R i \ repairRemovalSet v S
 
 /-- The nine centered offsets, with each coordinate in `{-1, 0, 1}`.
 The `Fin 3 × Fin 3` indexing agrees with the existing belt-cell marks.

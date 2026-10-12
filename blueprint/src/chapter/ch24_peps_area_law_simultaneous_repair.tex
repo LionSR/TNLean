@@ -33,12 +33,13 @@ unassigned at the stopping scale.
         TNLean.PEPS.AreaLaw.Geometry.simultaneousRepairRemnants}
     \leanok
     \uses{def:area_law_repair_square}
-    Let $M\subset\mathbb R^2$ be a finite marked set with a positive
-    assigned scale $S(v)$ at each $v\in M$. Let $(R_i)_{i\in I}$ be
+    Let $(v_j,S_j)_{j\in J}$ be a finite family of marks, each with a
+    location $v_j\in\mathbb R^2$ and a positive assigned scale $S_j$;
+    distinct indices may share a location. Let $(R_i)_{i\in I}$ be
     the current actual regions of the old identifiers. Set
     \begin{align}
-        Q_M & =\bigcup_{v\in M}Q(v,S(v)), &
-        R'_i & =R_i\setminus Q_M.
+        Q_J & =\bigcup_{j\in J}Q(v_j,S_j), &
+        R'_i & =R_i\setminus Q_J.
         \label{eq:area_law_simultaneous_remnants}
     \end{align}
     This formula applies to every $i\in I$. The labels and remembered
