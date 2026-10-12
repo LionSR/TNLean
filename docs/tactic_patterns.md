@@ -6475,6 +6475,14 @@ spectral split → block extraction → MPV calculation → strict bounds
   of restricted operators from equality before restriction. The new framed
   local-part proof uses the same shared lemmas. Named axiom checks are in
   `TNLeanTest/WordEvaluationTransportAxioms.lean`; elaboration is pending.
+- **Further promotion (2026-10-12):** Three identity-operator transports in
+  `WordPermutationRestriction`, `LocalPartFrameListRestriction` and
+  `LocalPartSpectatorOwnerExclusion` now use `Word.eval_id_heq`. Four input
+  transports in `NoneResidualOperations`, `NoneResidualScalar`,
+  `SourceFreeLocalPart` and `LocalPartSpectatorOwnerExclusion` now use
+  `Word.restrict_castInput_eval_heq`. Both shared results are in
+  `WordEvaluationTransport`, with named axiom checks in its existing test.
+  The old public theorem statements are unchanged; elaboration is pending.
 - **Relation to the tensor-map candidate:** The two existing private
   `mapL_heq` and `mapL_apply_heq` helpers concern tensor products of two maps
   with four changing spaces. The new helper instead compares an associator

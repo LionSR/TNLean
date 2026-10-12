@@ -503,3 +503,76 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     erase it. Compatibility with composition and the canonical list
     identifications gives (\ref{eq:peps_local_part_framing}).
 \end{proof}
+
+\begin{theorem}[Identities and input identifications under restriction]
+    \label{thm:peps_identity_input_identification}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_id_heq,
+        TNLean.PEPS.PairEffect.Word.restrict_castInput_eval_heq}
+    \uses{thm:peps_basis_memory_equalities,thm:peps_party_restriction}
+    Let $a=a'$ be an equality of ordered register lists. The identity
+    operators on $\mathcal H_a$ and $\mathcal H_{a'}$ agree under
+    the canonical memory identification. Moreover, let $W:a\to b$
+    be source-free and let $f$ select owners. Replacing its input
+    list by the equal list $a'$ before restriction gives the same
+    selected operator as restricting $W$ directly, under the induced
+    identification $a|_f=a'|_f$. The register spaces and selected
+    memories are arbitrary. These are elementary compatibility
+    identities for the register identifications in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 233--251 and 409--434.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_basis_memory_equalities,thm:peps_party_restriction}
+    Identify the equal register lists. Both assertions reduce to
+    equality of an operator with itself.
+\end{proof}
+
+\begin{theorem}[Spectators outside the owners of a sourced composition]
+    \label{thm:peps_sourced_spectator_owner_exclusion}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_mapOwner_appendTail_eval_heq_id_of_disjoint}
+    \uses{thm:peps_source_word_parties,def:peps_append_spectators,
+        thm:peps_party_restriction,thm:peps_basis_memory_equalities}
+    Let $U:a\to b$ be an arbitrary chronological composition whose
+    owners lie in $C$, and let $\gamma:C\to\mathcal P$ relabel them.
+    Fix $p\in\mathcal P$ with $\gamma(c)\ne p$ for every $c\in C$.
+    Extend $U^\gamma$ by an arbitrary spectator list $t$, obtaining
+    $(U^\gamma)_t$, and move its source preparations to the beginning.
+    The local part then satisfies, under the canonical retained-list
+    identifications,
+    \begin{align}
+        \bigl(L((U^\gamma)_t)\bigr)|_p
+         & =\Id_{\mathcal H_{t|_p}}.
+        \label{eq:peps_sourced_spectator_exclusion}
+    \end{align}
+    The source inventory of $U$ may be nonempty, its source vectors
+    are arbitrary, and the spectator memory at $p$ may be arbitrary.
+    Empty lists and zero-dimensional spaces are included.
+    This is an auxiliary owner-exclusion identity for
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 233--267, 351--381, 409--434 and 565--588.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_source_word_parties,def:peps_append_spectators,
+        thm:peps_source_free_local_part_restriction,
+        thm:peps_party_restriction_exchange_blocks,
+        thm:peps_party_restriction_canonical_layouts,
+        thm:peps_local_part_framing_restriction,
+        thm:peps_excluded_spectator_restriction,
+        thm:peps_operator_composition_framing,
+        thm:peps_identity_input_identification}
+    No core input, output or source register is owned by $p$.
+    By Theorem~\ref{thm:peps_source_word_parties}, the restricted
+    core local part is the identity on the empty memory.
+    In the spectator extension, each of the initial and final
+    exchanges therefore exchanges the retained spectators with an
+    empty block, giving their identity. For the middle framed
+    composition, Theorem~\ref{thm:peps_local_part_framing_restriction}
+    tensors the scalar identity with the retained spectator identity.
+    When taking the local part of either chronological composition,
+    the additional source prefix is erased. Its framing contributes
+    no selected register. Compose the three identity operators under
+    the canonical list identifications to obtain
+    (\ref{eq:peps_sourced_spectator_exclusion}).
+\end{proof}

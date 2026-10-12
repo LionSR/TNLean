@@ -23,13 +23,6 @@ namespace TNLean.PEPS.PairEffect.Word
 open ContinuousLinearMap
 variable {P : Type}
 
-private theorem restrict_castInput_eval_heq (f : P → Bool) {a b a' : Layout P}
-    (w : Word a b) (h : a = a') (hs : w.sources = []) :
-    HEq ((w.castInput h).restrict f ((sources_castInput w h).trans hs)).eval
-      (w.restrict f hs).eval := by
-  cases h
-  rfl
-
 private theorem restrict_moveHead_empty_eval_heq (f : P → Bool) (r : Reg P)
     (S a : Layout P) (hS : S = []) :
     HEq ((moveHead r S a).restrict f (sources_moveHead r S a)).eval
@@ -64,20 +57,21 @@ theorem restrict_localPart_eval_heq_of_sources_nil (f : P → Bool) {a b : Layou
         ((frameList v.sources.layout w.localPart).restrict f
           ((sources_frameList w.localPart v.sources.layout).trans w.sources_localPart))
         (v.localPart.restrict f v.sources_localPart) (w.restrict f hsw) (v.restrict f hsv)
-        (by simp only [Layout.restrict_append, hW, hV, Layout.restrict_nil, List.nil_append])
-        (by simp only [Layout.restrict_append, hV, Layout.restrict_nil, List.nil_append])
+        (by simp only [hW, hV, List.nil_append])
+        (by simp only [hV, List.nil_append])
         rfl hleft hright
   | localMap => rfl
   | source => cases hs
   | swap => rfl
   | @frame r a b w ih =>
-      have hS : w.sources.layout = [] := by rw [hs]; rfl
+      have hsw : w.sources = [] := hs
+      have hS : w.sources.layout = [] := by rw [hsw]; rfl
       have hframe : HEq ((Word.frame r w.localPart).restrict f w.sources_localPart).eval
           ((Word.frame r w).restrict f hs).eval := by
         by_cases hr : f r.owner = true
         · exact (restrict_frame_true_eval_heq f r w.localPart w.sources_localPart hr).trans
             ((eval_frame_heq r (w.localPart.restrict f w.sources_localPart) (w.restrict f hs)
-              (by simp only [Layout.restrict_append, hS, Layout.restrict_nil, List.nil_append])
+              (by simp only [hS, List.nil_append])
               rfl (ih hs)).trans (restrict_frame_true_eval_heq f r w hs hr).symm)
         · have hr' := Bool.eq_false_iff.mpr hr
           exact (restrict_frame_false_eval_heq f r w.localPart w.sources_localPart hr').trans
@@ -86,7 +80,7 @@ theorem restrict_localPart_eval_heq_of_sources_nil (f : P → Bool) {a b : Layou
         ((moveHead r w.sources.layout a).restrict f (sources_moveHead r w.sources.layout a))
         ((Word.frame r w.localPart).restrict f w.sources_localPart)
         (Word.id (Layout.restrict f (r :: a))) ((Word.frame r w).restrict f hs)
-        (by simp only [Layout.restrict_append, hS, Layout.restrict_nil, List.nil_append])
+        (by simp only [hS, List.nil_append])
         (by rw [hS]; rfl) rfl
         (restrict_moveHead_empty_eval_heq f r w.sources.layout a hS) hframe
       change HEq (((moveHead r w.sources.layout a).restrict f

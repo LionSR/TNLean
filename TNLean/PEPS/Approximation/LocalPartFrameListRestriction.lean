@@ -23,11 +23,6 @@ namespace TNLean.PEPS.PairEffect.Word
 open ContinuousLinearMap
 variable {P : Type}
 
-private theorem id_eval_heq {a b : Layout P} (h : a = b) :
-    HEq (Word.id a).eval (Word.id b).eval := by
-  cases h
-  rfl
-
 /-- If all original source registers are erased, restricting the local part of
 a framed composition gives its restricted local part framed by the retained
 spectators. The input, output and retained spectator memories are arbitrary.
@@ -62,7 +57,7 @@ theorem restrict_localPart_frameList_eval_heq (f : P → Bool) (tail : Layout P)
           (Word.id I).eval :=
         (restrict_moveHead_eval_heq_id_of_prefix_eq_nil f r V.sources.layout
           (tail ++ a) hV).trans
-            (id_eval_heq (a := Layout.restrict f (r :: (tail ++ a))) (b := I) hi)
+            (eval_id_heq (a := Layout.restrict f (r :: (tail ++ a))) (b := I) hi)
       have hframe : HEq ((Word.frame r V.localPart).restrict f V.sources_localPart).eval
           R.eval := by
         by_cases hr : f r.owner = true
