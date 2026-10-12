@@ -3367,6 +3367,44 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   absolute entropy cost at most `n * log q` for any subset of one template
   depth row, the partial-row step of area-law Lemma 9.4.
 
+## Safe dyadic template rectangles
+
+- `TNLean.PEPS.AreaLaw.Geometry.latticeDyadicRect` interprets an existing
+  lattice dyadic cell as the native `IntRect`, with the same sites and size `2^k`.
+- `TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_of_subset_ambientDilation`
+  derives native rectangle safety from actual template separation, containment
+  in `T_j`, `j ≤ s₀`, and rectangle size at most `s₀`, for `D₀ ≥ 1`.
+- `TNLean.PEPS.AreaLaw.Geometry.Template.IsSeparated.isSafe_cappedDyadicPartition_core`
+  and `isSafe_cappedDyadicPartition_shell` derive those containment and size
+  premises from the selected cells themselves when `2^K ≤ s₀`. These are the
+  clearance step of Lemma 9.4, not its conditional entropy conclusion.
+## Weighted template shell coverings
+
+- `TNLean.PEPS.AreaLaw.Geometry.Template.card_shell_le` bounds the actual
+  ambient shell by `n*j` for `Ctpl ≥ 24` and `j ≤ s₀`.
+- `TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_at_cap_le`
+  bounds total cap-side length by `2*n` when `j ≤ L ≤ s₀` and `L < 2^(K+1)`.
+- `TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_shell_le`
+  states the weighted shell-covering bound with constant `2 + 14/(2^e - 1)`
+  for `e > 0` and `2^K ≤ L < 2^(K+1)`. This is the geometric summation step
+  of Lemma 9.4, not safe clearance or a regional entropy theorem.
+
+## Conditional entropy of template regions
+
+- `biUnion_rectRegion_cappedDyadicPartition` and
+  `pairwiseDisjoint_rectRegion_cappedDyadicPartition` identify the actual
+  disjoint physical rectangle cover, including missing sites and disconnected domains.
+- `Template.regionalEntropy_core_le_of_safe_box`,
+  `Template.regionalEntropy_shell_le_of_safe_box`, and
+  `Template.regionalEntropy_prefix_le_of_safe_box` compose actual regional
+  subadditivity, derived safety, and the weighted covering estimates. A partial
+  final row costs at most `n * log q`.
+- `exists_template_entropy_bounds_of_arbitrary_safe_box` assumes the safe-box
+  estimate for every exponent in `(0,1)` and every safe native rectangle. It
+  chooses the corresponding constant before the template and scales. This is
+  the conditional entropy component of Lemma 9.4, not a derivation of the
+  arbitrary-exponent input or a completion marker for the full source lemma.
+
 ## Partial rectangle layer entropy
 
 - **Declaration:** `TNLean.PEPS.AreaLaw.IntRect.partial_row_entropy_le`.
@@ -3407,16 +3445,20 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 - **Scope:** these are numerical auxiliary estimates for the rectangle
   covering argument in the proof of Proposition 9.5.
 
-## Weighted template shell coverings
+## Binary-entropy cost of the rounded bootstrap bands
 
-- `TNLean.PEPS.AreaLaw.Geometry.Template.card_shell_le` bounds the actual
-  ambient shell by `n*j` for `Ctpl ≥ 24` and `j ≤ s₀`.
-- `TNLean.PEPS.AreaLaw.Geometry.Template.card_cappedDyadicPartition_shell_at_cap_le`
-  bounds total cap-side length by `2*n` when `j ≤ L ≤ s₀` and `L < 2^(K+1)`.
-- `TNLean.PEPS.AreaLaw.Geometry.Template.sum_rpow_cappedDyadicPartition_shell_le`
-  states the weighted shell-covering bound with constant `2 + 14/(2^e - 1)`
-  for `e > 0` and `2^K ≤ L < 2^(K+1)`. This is the geometric summation step
-  of Lemma 9.4, not safe clearance or a regional entropy theorem.
+- **Declaration:** `TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binEntropy_cost_bound`.
+- **Defined in:** `TNLean/PEPS/AreaLaw/Scan/BootstrapBinaryEntropyCost.lean`.
+- **Meaning:** one threshold, chosen for a fixed scanner exponent tuple before
+  the auxiliary fraction and all physical data, gives positive rounded band
+  count `K = ⌊L/(8m)⌋`, positive metric weight `a = 4/K`, and
+  `Real.binEntropy τ / a ≤ (Real.log 2 / 4) n` for every real `τ`. The
+  coefficient is absolute.
+- **Source:** OpenAI's September 24, 2026 area-law manuscript,
+  [the collar scales, `08-scanner.tex`, lines 32–41](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L32-L41).
+- **Scope:** the numerical binary-entropy cost in the proof of Proposition
+  9.5; not the physical norm comparison or the exponent-improvement
+  implication.
 
 ### Nested closed-square patches
 
