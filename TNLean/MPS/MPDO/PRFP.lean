@@ -33,7 +33,6 @@ positive map on the spin degrees of freedom.
 * `MPOTensor.HasPurificationRFPWitness`: the global-family equation together
   with a pure-state RFP purifier.
 * `MPOTensor.ancillaryTraceMap`: the spin map obtained by tracing the ancilla.
-* `MPOTensor.HasTracePreservingSpinReduction`: the tpCPM condition for that map.
 * `MPOTensor.IsPRFP`: the source one-site ancillary-contraction predicate.
 
 ## References
@@ -108,13 +107,6 @@ def HasPurificationRFPWitness (M : MPOTensor d D) : Prop :=
     HasGlobalPurificationEquation M A ∧
       MPSTensor.IsTransferIdempotent (purificationTensor A)
 
-/-- The post-ancilla spin reduction is trace-preserving and completely positive.
-This records the tpCPM described after arXiv:1606.00608, Definition 4.3
-(lines 761--764), without imposing the two-map mixed-state RFP
-condition of Definition 4.1. -/
-def HasTracePreservingSpinReduction (d dK : ℕ) : Prop :=
-  IsKrausCPTP (ancillaryTraceMap d dK)
-
 /-- The ancillary trace is trace-preserving and completely positive. The Kraus
 operators are the fixed-ancilla projections from the spin--ancilla space onto
 the spin space, one for each ancillary label. This is the tpCPM obtained after
@@ -123,13 +115,6 @@ theorem ancillaryTraceMap_isKrausCPTP (d dK : ℕ) :
     IsKrausCPTP (ancillaryTraceMap d dK) := by
   simpa [ancillaryTraceMap] using
     (Matrix.partialTraceRightLM_isKrausCPTP (α := Fin d) (β := Fin dK))
-
-/-- The post-ancilla spin reduction is trace-preserving and completely positive
-for every ancillary dimension. This is the one-site tpCPM obtained by tracing
-ancillas in arXiv:1606.00608, lines 761--764. -/
-theorem hasTracePreservingSpinReduction (d dK : ℕ) :
-    HasTracePreservingSpinReduction d dK :=
-  ancillaryTraceMap_isKrausCPTP d dK
 
 /-- An MPO tensor is a **purification renormalization fixed point** when
 it has the one-site ancillary-contraction presentation inherited by

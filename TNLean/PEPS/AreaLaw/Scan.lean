@@ -13,6 +13,8 @@ import TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms
 import TNLean.PEPS.AreaLaw.Scan.ActualEntropySampling
 import TNLean.PEPS.AreaLaw.Scan.ActualHistory
 import TNLean.PEPS.AreaLaw.Scan.ActualMarginalTails
+import TNLean.PEPS.AreaLaw.Scan.ActualRoundEntropy
+import TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport
 import TNLean.PEPS.AreaLaw.Scan.ActualTransportEstimates
 import TNLean.PEPS.AreaLaw.Scan.AmbientDepth
 import TNLean.PEPS.AreaLaw.Scan.AncestryCover
@@ -55,6 +57,8 @@ import TNLean.PEPS.AreaLaw.Scan.FillCoverage
 import TNLean.PEPS.AreaLaw.Scan.FillSupportCompatibility
 import TNLean.PEPS.AreaLaw.Scan.FillTransport
 import TNLean.PEPS.AreaLaw.Scan.FillTransportEndpoints
+import TNLean.PEPS.AreaLaw.Scan.FrontPrefixFamily
+import TNLean.PEPS.AreaLaw.Scan.FrontThresholds
 import TNLean.PEPS.AreaLaw.Scan.GoodSampling
 import TNLean.PEPS.AreaLaw.Scan.HistoryMeanTree
 import TNLean.PEPS.AreaLaw.Scan.HistoryPrefixes
@@ -71,6 +75,7 @@ import TNLean.PEPS.AreaLaw.Scan.PrefixApproximation
 import TNLean.PEPS.AreaLaw.Scan.PrefixBoundary
 import TNLean.PEPS.AreaLaw.Scan.PrefixCardinality
 import TNLean.PEPS.AreaLaw.Scan.PrefixComparison
+import TNLean.PEPS.AreaLaw.Scan.PrefixFiniteFamily
 import TNLean.PEPS.AreaLaw.Scan.RadiusAsymptotics
 import TNLean.PEPS.AreaLaw.Scan.RegionalMoveEntropy
 import TNLean.PEPS.AreaLaw.Scan.RoundedClearance
