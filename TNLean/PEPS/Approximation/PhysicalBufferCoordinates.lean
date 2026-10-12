@@ -60,6 +60,7 @@ theorem reindex_physicalBuffer_eq_siteLift
         FiniteProduct.splitTwoRegionsEquiv, FiniteProduct.unionEquiv,
         Equiv.coe_fn_mk, FiniteProduct.splitEquiv_apply_fst, Equiv.refl_apply, Prod.mk.injEq,
         Equiv.apply_eq_iff_eq] at h
+      simp only [P, Prod.mk.injEq, Equiv.apply_eq_iff_eq] at h
       done
     · done
   done
