@@ -15,6 +15,7 @@ import TNLean.PEPS.Approximation.ActualMixedSourceMatrix
 import TNLean.PEPS.Approximation.ActualPartySourceMatrix
 import TNLean.PEPS.Approximation.ActualPureSourceMatrix
 import TNLean.PEPS.Approximation.ActualSampledEndpointInputWord
+import TNLean.PEPS.Approximation.ActualSampledEndpointLocality
 import TNLean.PEPS.Approximation.ActualSampledEndpointWord
 import TNLean.PEPS.Approximation.ActualSampledPartyContraction
 import TNLean.PEPS.Approximation.ActualSourceColumnCoordinates
@@ -102,6 +103,7 @@ import TNLean.PEPS.Approximation.EndpointOperatorCoordinates
 import TNLean.PEPS.Approximation.EndpointOperatorWord
 import TNLean.PEPS.Approximation.EndpointWordEvaluation
 import TNLean.PEPS.Approximation.EndpointWordRestriction
+import TNLean.PEPS.Approximation.EndpointWordRestrictionCongruence
 import TNLean.PEPS.Approximation.ExactFiniteException
 import TNLean.PEPS.Approximation.ExactSmallSizeApproximation
 import TNLean.PEPS.Approximation.ExactSquareRepresentation
