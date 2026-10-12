@@ -88,8 +88,6 @@ theorem exists_bootstrap_comparison_budget_bound {e₀ : ℝ}
   change (n : ℝ) * (X.L n : ℝ) ^ e + (n : ℝ) * (X.D n : ℝ) + (n : ℝ) ^ (3 / 5 : ℝ)
       + Real.binEntropy τ / X.a 4 n + 1
       ≤ (5 + Real.log 2 / 4) * (n : ℝ) ^ (1 + (1 - X.ell) * e)
-  have hη : (0 : ℝ) < 1 - X.ell := sub_pos.2 X.ell_lt_one
-  have hexp0 : (0 : ℝ) ≤ (1 - X.ell) * e := mul_nonneg hη.le hepos.le
   have hmul : (n : ℝ) ^ (1 + (1 - X.ell) * e)
       = (n : ℝ) * (n : ℝ) ^ ((1 - X.ell) * e) := by
     rw [Real.rpow_add hnpos, Real.rpow_one]
