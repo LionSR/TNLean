@@ -107,6 +107,18 @@ def restrict (f : P → Bool) : {ℓ ℓ' : Layout P} → (w : Word ℓ ℓ') �
         (restrict f w hs).castLayouts
           (by simp [Layout.restrict_cons, hr]) (by simp [Layout.restrict_cons, hr])
 
+/-- Restriction commutes with the canonical identification of equal input and
+output layouts. The same source-free word is retained on both sides.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–251,
+279–309 and 565–588. -/
+theorem restrict_castLayouts (f : P → Bool) {a b a' b' : Layout P}
+    (w : Word a b) (ha : a = a') (hb : b = b') (hs : w.sources = []) :
+    (w.castLayouts ha hb).restrict f ((sources_castLayouts w ha hb).trans hs) =
+      (w.restrict f hs).castLayouts (congrArg (Layout.restrict f) ha)
+        (congrArg (Layout.restrict f) hb) := by
+  cases ha
+  cases hb
+  rfl
 
 /-- Restriction does not introduce a pair source. -/
 @[simp] theorem sources_restrict (f : P → Bool) {ℓ ℓ' : Layout P} (w : Word ℓ ℓ')

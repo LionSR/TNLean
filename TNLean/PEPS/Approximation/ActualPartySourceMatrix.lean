@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.ActualSourceColumnCoordinates
 import TNLean.PEPS.Approximation.WordPartyMixedMatrix
+import TNLean.PEPS.Approximation.BasisMatrixOperator
 import Mathlib.LinearAlgebra.Matrix.Basis
 
 /-! # Actual source columns in party coordinates
@@ -100,11 +101,7 @@ theorem partialSourceGlobalMatrix_eq_partyProduct_mul_basisChange
       (w.partialSourceWord ψ ξ).eval.toLinearMap =
       dependentPhysicalProductFamilyMatrix (fun q ↦
         w.partialSourcePartyMatrix ψ ξ B C q) := by
-    ext row col
-    simpa only [LinearMap.toMatrix_apply, OrthonormalBasis.coe_toBasis,
-      OrthonormalBasis.coe_toBasis_repr_apply, Matrix.of_apply,
-      ContinuousLinearMap.coe_coe] using
-        congrFun (congrFun hmatrix row) col
+    simpa only [matrix_repr_eval_eq_toMatrix] using hmatrix
   exact (partialSourceGlobalMatrix_eq_toMatrix w ψ ξ bOut).trans
     (toMatrix_eq_mul_basisChange_of_eq w.actualSourceInputBasis.toBasis
       bIn.toBasis bOut.toBasis (w.partialSourceWord ψ ξ).eval.toLinearMap
