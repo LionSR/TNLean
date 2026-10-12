@@ -54,7 +54,7 @@ theorem ScannerExponents.exists_eventually_rpow_le_mul_K (X : ScannerExponents) 
   have hcoeff := (div_le_iff₀ (mul_pos hmpos hKpos)).mp hn.coefficient_le
   have hnle : (n : ℝ) ≤ C * (n : ℝ) ^ X.ell *
       ((X.m n : ℝ) * (X.K n : ℝ)) := by
-    apply (mul_le_mul_right (sq_pos_of_pos hDpos)).mp
+    apply (mul_le_mul_iff_left₀ (sq_pos_of_pos hDpos)).mp
     calc
       (n : ℝ) * (X.D n : ℝ) ^ 2
           ≤ C * (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2 *
@@ -74,7 +74,7 @@ theorem ScannerExponents.exists_eventually_rpow_le_mul_K (X : ScannerExponents) 
         rw [Real.rpow_add hnpos]
         ring
   refine ⟨hn.two_le_n, hn.one_le_K, ?_⟩
-  apply (mul_le_mul_right (Real.rpow_pos_of_pos hnpos (X.ell + X.mu))).mp
+  apply (mul_le_mul_iff_left₀ (Real.rpow_pos_of_pos hnpos (X.ell + X.mu))).mp
   calc
     (n : ℝ) ^ (1 - X.ell - X.mu) * (n : ℝ) ^ (X.ell + X.mu)
         = n := by
@@ -136,7 +136,7 @@ theorem ScannerExponents.eventually_mul_a_sqrt_budget_le (X : ScannerExponents)
   have hδ : 0 < δ := sub_pos.mpr hmargin
   have hlog : (fun n : ℕ => A * C * Real.sqrt (2 * CB) *
       Real.log (n : ℝ) ^ 6) =o[atTop] fun n => (n : ℝ) ^ δ := by
-    simpa only [Real.rpow_natCast] using
+    simpa only [Real.rpow_ofNat] using
       ((isLittleO_log_rpow_rpow_atTop 6 hδ).natCast_atTop.const_mul_left
         (A * C * Real.sqrt (2 * CB)))
   filter_upwards [hK, hlog.bound hc] with n hn hsmall
