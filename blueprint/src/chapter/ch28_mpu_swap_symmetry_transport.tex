@@ -70,8 +70,25 @@
     spins, and let $\widetilde{\mathcal U}=\mathbb S\mathcal U$ denote the
     action on its output physical leg. The swap satisfies $\mathbb S^2=I$.
     For every $N>0$,
-    $\widetilde U^{(N)}=S_NU^{(N)}$. Each of the following equivalences
-    holds simultaneously at all positive chain lengths:
+    $\widetilde U^{(N)}=S_NU^{(N)}$. Then $\mathcal U$ is invariant under
+    swap-combined adjunction if and only if $\widetilde{\mathcal U}$ is
+    invariant under adjunction, $\mathcal U$ is invariant under
+    swap-combined transposition if and only if $\widetilde{\mathcal U}$ is
+    invariant under transposition, and $\mathcal U$ is invariant under
+    conjugation if and only if $\widetilde{\mathcal U}$ is.
+    The one-sided transformation is the one prescribed by the transformed
+    examples in \cite[Section~VI.B.1]{Cirac2017MPU}; the printed proof's
+    two-sided expression has the local correction recorded in
+    \cite{gap:mpu_swap_symmetry_one_sided}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:threeMPU2_chain_formulas,
+        thm:mpu_pointwise_symmetry_invariance_comparison,
+        thm:mpu_involution_combined_fixed_equation}
+    The swap satisfies
+    $S_N^2=I$, $S_N^\dagger=S_N^{\mathsf T}=S_N$, and
+    $\overline{S_N}=S_N$. We show that, for every $N>0$,
     \begin{align}
         S_N(U^{(N)})^\dagger S_N=U^{(N)}
          & \quad\Longleftrightarrow\quad
@@ -86,23 +103,12 @@
         \overline{\widetilde U^{(N)}}=\widetilde U^{(N)}.
         \label{eq:mpu_swap_transport_conjugation}
     \end{align}
-    The one-sided transformation is the one prescribed by the transformed
-    examples in \cite[Section~VI.B.1]{Cirac2017MPU}; the printed proof's
-    two-sided expression has the local correction recorded in
-    \cite{gap:mpu_swap_symmetry_one_sided}.
-\end{theorem}
-
-\begin{proof}\leanok
-    \uses{thm:threeMPU2_chain_formulas,
-        thm:mpu_pointwise_symmetry_invariance_comparison,
-        thm:mpu_involution_combined_fixed_equation}
-    The swap satisfies
-    $S_N^2=I$, $S_N^\dagger=S_N^{\mathsf T}=S_N$, and
-    $\overline{S_N}=S_N$.
     Substituting $\widetilde U^{(N)}=S_NU^{(N)}$ and multiplying by
     $S_N$ proves (\ref{eq:mpu_swap_transport_dagger}) and
     (\ref{eq:mpu_swap_transport_transpose}). Reality of $S_N$ proves
-    (\ref{eq:mpu_swap_transport_conjugation}).
+    (\ref{eq:mpu_swap_transport_conjugation}). Since all three symmetries
+    apply at the same chain lengths, the pointwise equivalences give the
+    three equivalences of invariance.
 \end{proof}
 
 \begin{theorem}[Continuous involutive physical left actions]
@@ -296,11 +302,14 @@
     \uses{thm:mpu_positive_block_symmetry_path_transport,
         thm:mpu_pointwise_symmetry_invariance_comparison,
         thm:mpu_involution_combined_fixed_equation,
+        thm:mpu_one_sided_swap_invariance,
         thm:threeMPU2_chain_formulas}
     Blocking identifies the sitewise swap with
-    $(\mathbb S^{\otimes k})^{\otimes N}$. Reindexing the original
+    $B_N=(\mathbb S^{\otimes k})^{\otimes N}$. Reindexing the original
     $Nk$ physical sites preserves adjunction, transposition, and
-    entrywise conjugation. Hence on every blocked tensor the same
+    entrywise conjugation, and
+    $B_N^2=I$, $B_N^\dagger=B_N^{\mathsf T}=B_N$, and
+    $\overline{B_N}=B_N$. Hence on every blocked tensor the same
     one-sided involution gives the three symmetry-invariance
     correspondences. Apply
     Theorem~\ref{thm:mpu_positive_block_symmetry_path_transport} with
