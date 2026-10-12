@@ -228,6 +228,19 @@ second, stronger hypothesis. The faithful Lean hypothesis bundle is
 the sense of \leanid{TNLean.PEPS.RegionBlockedTensorInjective}. This neither
 exceeds nor falls short of the source's hypothesis.
 
+The tensor-level hypothesis of the corollary is
+\leanid{TNLean.PEPS.IsNormalTorusArcWindowPEPS}: the window bundle above for
+the injective regions of the tensor, together with nonzero virtual bond
+spaces. The latter is the library's convention for physical PEPS, not an
+additional hypothesis. Section~3 of Ref.~\cite{Molnar2018NormalPEPS} treats
+virtual bond spaces as nonzero throughout, and injectivity does not imply it:
+with a zero-dimensional bond every region is injective and every state is
+zero, so the hypotheses hold vacuously for tensors whose bond dimensions
+disagree. The convention and the zero-bond counterexamples are recorded in
+\path{docs/paper-gaps/peps_injective_ft_section3_route.tex}. The region-family
+bundle itself carries no such condition and stays available for families of
+regions in which zero-dimensional bonds occur.
+
 \paragraph{2. What is formalized.}
 The following surrounding results are formalized at the corollary's minimal
 size:
@@ -440,8 +453,9 @@ The existence argument includes the unit-side cases.
 \paragraph{6. Status.}
 The source corollary is formalized by
 \leanid{TNLean.PEPS.fundamentalTheorem_normalTorusArcWindowPEPS}.
-Its hypotheses are normal cyclic $L\times K$ windows for both tensors,
-$L,K>0$, translation invariance, equal states, positive bond dimensions,
+Its hypotheses are normality at window size $L\times K$ for both tensors
+(cyclic window injectivity, with the nonzero virtual-space convention),
+$L,K>0$, translation invariance, equal states,
 and the original bounds $2L+1\leq n$, $2K+1\leq m$.
 It derives all-edge bond-dimension equality, a translation-covariant edge
 gauge family $X$, and $\lambda$ satisfying
@@ -925,7 +939,7 @@ proved for all positive window lengths, including unit-side cases. The layer lis
           gives the common site scalar and its volume-one power. The
           Fundamental Theorem assumes only normal $L\times K$ windows,
           $L,K>0$, $n\geq2L+1$, $m\geq2K+1$, translation invariance,
-          positive bonds and equality of the states (complete).
+          nonzero virtual spaces and equality of the states (complete).
           Bond-dimension equality is derived, and the gauge matrices are
           unique up to scalar.
 \end{enumerate}

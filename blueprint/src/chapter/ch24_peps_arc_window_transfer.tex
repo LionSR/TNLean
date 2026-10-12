@@ -109,11 +109,11 @@
     \label{thm:peps_arc_window_covariant_gauge_existence}
     \lean{TNLean.PEPS.exists_translationCovariantGauge_of_normalArcWindows_sameState}
     \leanok
+    \uses{def:peps_normal_torus_arc_window_tensor}
     Let $A,B$ be translation-invariant PEPS tensors on a $w\times h$ torus
-    with positive bond dimensions and the same state. Suppose every cyclic
-    $L\times K$ window is injective for each tensor, where $L,K>0$,
-    $2L+1\leq w$ and $2K+1\leq h$. Then their bond dimensions agree and
-    there are a translation-covariant invertible edge gauge family $X$
+    with the same state, both normal at window size $L\times K$, where
+    $L,K>0$, $2L+1\leq w$ and $2K+1\leq h$. Then their bond dimensions
+    agree and there are a translation-covariant invertible edge gauge family $X$
     and $\lambda\in\mathbb C$ such that
     \begin{align}
         A_v          & =\lambda(X\cdot B)_v,\label{eq:peps_arc_window_local_gauge} \\
@@ -143,9 +143,9 @@
     \label{thm:fundamentalTheorem_normalTorusArcWindowPEPS}
     \lean{TNLean.PEPS.fundamentalTheorem_normalTorusArcWindowPEPS}
     \leanok
-    Let $A,B$ be translation-invariant PEPS tensors with positive bond
-    dimensions, generating the same state on an $n\times m$ torus.
-    Suppose every cyclic $L\times K$ window is injective for both tensors,
+    \uses{def:peps_normal_torus_arc_window_tensor}
+    Let $A,B$ be translation-invariant PEPS tensors generating the same
+    state on an $n\times m$ torus, both normal at window size $L\times K$,
     where $L,K>0$, $n\geq2L+1$ and $m\geq2K+1$.
     Then their bond dimensions agree and there are invertible horizontal
     and vertical gauges $X,Y$ and a scalar $\lambda$ such that

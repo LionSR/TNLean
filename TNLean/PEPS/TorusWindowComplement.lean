@@ -460,5 +460,29 @@ theorem regionBlockedTensorInjective_verticalUnionComplement
 
 end NormalTorusArcWindowInjectivityHypotheses
 
+/-! ### The physical normal-PEPS interface -/
+
+/-- A normal PEPS tensor on the torus at window size `L × K`: every virtual bond space is
+nonzero, and every cyclic `L × K` window is injective. This is the tensor hypothesis of the
+normal translation-invariant PEPS corollary; the window field is the region-family
+hypothesis `NormalTorusArcWindowInjectivityHypotheses` read for the injective regions of
+the tensor, which stays available for families of regions with zero-dimensional bonds.
+
+**Local fix (nonzero virtual spaces):** the source treats PEPS virtual bond spaces as
+nonzero and does not list positive bond dimensions among the hypotheses. Injectivity does
+not imply them: a zero-dimensional bond makes injectivity and equality of states hold
+vacuously. The library adopts the nonzero reading as the field `bondDim_pos`; documented in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex` (the nonzero virtual-space
+convention) and `docs/paper-gaps/peps_normal_ft_2d_overlap.tex` (Section 1).
+
+Source: arXiv:1804.04964, the corollary at lines 2297--2318 of
+`Papers/1804.04964/paper_normal.tex` ("two normal 2D PEPS tensors such that every
+$L \times K$ region is injective"), with normality as defined at line 1318. -/
+structure IsNormalTorusArcWindowPEPS (L K : ℕ) (A : Tensor (torusGraph width height) d) : Prop
+    extends NormalTorusArcWindowInjectivityHypotheses L K
+      (regionInjectivityDataOf (G := torusGraph width height) A) where
+  /-- Every virtual bond space is nonzero. -/
+  bondDim_pos : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e
+
 end PEPS
 end TNLean

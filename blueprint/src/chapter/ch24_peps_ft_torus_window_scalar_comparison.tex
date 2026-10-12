@@ -14,6 +14,20 @@
     corollary of~\cite{Molnar2018NormalPEPS}.
 \end{definition}
 
+\begin{definition}[Normal torus tensor at window size $L\times K$]%
+    \label{def:peps_normal_torus_arc_window_tensor}
+    \lean{TNLean.PEPS.IsNormalTorusArcWindowPEPS}
+    \leanok
+    \uses{def:peps_normal_arc_windows}
+    A PEPS tensor on the $w\times h$ torus is normal at window size
+    $L\times K$ when its family of injective regions satisfies the
+    $L\times K$ cyclic-window hypothesis. As throughout, its virtual bond
+    spaces are nonzero. Injectivity does not force this: a
+    zero-dimensional bond makes every region injective and every state
+    zero. This is the hypothesis on each tensor in the normal TI PEPS
+    corollary of~\cite{Molnar2018NormalPEPS}.
+\end{definition}
+
 \begin{theorem}[Enlarging an injective cyclic window]%
     \label{thm:peps_arc_rectangle_injective}
     \lean{TNLean.PEPS.NormalTorusArcWindowInjectivityHypotheses.arcRectangle_injective}
