@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.NonemptyGateLabels
 import TNLean.PEPS.Approximation.DistributedOperatorContraction
+import TNLean.PEPS.Approximation.PartySelector
 
 /-! # Gate labels visible at one party
 

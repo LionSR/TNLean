@@ -3,13 +3,15 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.AllChoicesProjection
+import TNLean.PEPS.Approximation.SourceCircuitChoiceAt
+import TNLean.PEPS.Approximation.DistributedSourceComposition
 
 /-! # Partial choices as labels at touched occurrences
 
 A partial choice for a selected set of parties is the same datum as one branch
 label at each gate occurrence touched by that set. The equivalence holds for
-empty branch types as well.
+empty branch types as well. Keeping the labels of an all-party choice at the
+occurrences touched by the selected parties projects it to their partial choice.
 
 Source: polynomial-PEPS, `04-compression.tex`, lines 351–381.
 -/
@@ -112,5 +114,25 @@ def choicesTouchedLabelsEquiv (A : P → Bool) {a b : Layout P} (w : SourceCircu
   right_inv ξ := by
     funext g hg
     exact choiceAt_choicesOfTouchedLabels A w ξ g hg
+
+
+/-- Restrict actual all-party choices to the occurrences touched by a selected
+set of parties. Empty-participant gates request no label in either expansion.
+Source: polynomial-PEPS 04-compression.tex, lines 351–381. -/
+def projectAllChoices (A : P → Bool) {a b : Layout P} (w : SourceCircuit a b)
+    (ξ : Choices (fun _ => true) w) : Choices A w :=
+  choicesOfTouchedLabels A w fun g hg =>
+    choiceAt (fun _ => true) w ξ g (by obtain ⟨p, hp, _⟩ := hg; exact ⟨p, hp, rfl⟩)
+
+/-- A retained partial choice is the original label of the same occurrence in
+the actual all-party expansion. Source: polynomial-PEPS 04-compression.tex,
+lines 351–381. -/
+theorem choiceAt_projectAllChoices (A : P → Bool) {a b : Layout P}
+    (w : SourceCircuit a b) (ξ : Choices (fun _ => true) w) (g : w.gateLocations)
+    (hg : w.IsTouched A g) :
+    choiceAt A w (projectAllChoices A w ξ) g hg =
+      choiceAt (fun _ => true) w ξ g
+        (by obtain ⟨p, hp, _⟩ := hg; exact ⟨p, hp, rfl⟩) :=
+  choiceAt_choicesOfTouchedLabels A w _ g hg
 
 end TNLean.PEPS.PairEffect.SourceCircuit
