@@ -68,7 +68,12 @@ theorem restrict_sampledEndpointInputWord_eval_eq_of_incident_samples
       obtain ⟨hj, hω⟩ := h i (Or.inr hi)
       simp only [sampledEndpointRight, hj, hω]
   unfold sampledEndpointInputWord
-  rw [Word.restrict_castLayouts, Word.restrict_castLayouts]
+  rw [Word.restrict_castLayouts f (sampledEndpointWord w k lam L R ξ ζ j ω)
+      (List.append_nil _).symm (List.append_nil _).symm
+      (sources_sampledEndpointWord w k lam L R ξ ζ j ω),
+    Word.restrict_castLayouts f (sampledEndpointWord w k lam L R ξ ζ j' ω')
+      (List.append_nil _).symm (List.append_nil _).symm
+      (sources_sampledEndpointWord w k lam L R ξ ζ j' ω')]
   simp only [Word.eval_castLayouts, hWord]
 
 end TNLean.PEPS.PairEffect.SourceCircuit

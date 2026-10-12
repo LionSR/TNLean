@@ -89,9 +89,9 @@ private theorem restrict_endpointWord_eq_of_local_eq
           try simp only [Word.sources, Word.sources_localEndpoint, sources_endpointWord,
             List.nil_append]
         · exact hLeft
-        · apply restrict_frame_congr f <;>
-            try simp only [Word.sources, Word.sources_localEndpoint, sources_endpointWord,
-              List.nil_append]
+        · apply restrict_frame_congr f
+          try simp only [Word.sources, Word.sources_localEndpoint, sources_endpointWord,
+            List.nil_append]
           apply restrict_comp_congr f <;>
             try simp only [Word.sources, Word.sources_localEndpoint, sources_endpointWord]
           · exact hRight
