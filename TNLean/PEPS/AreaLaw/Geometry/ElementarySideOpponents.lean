@@ -359,10 +359,8 @@ theorem exists_elementarySide_opponent (o : ℝ × ℝ) (k₀ k : ℕ)
   have href := dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices o k
     (fineScaleIndex k) Z C z (fineScaleIndex_le k) hz
   obtain ⟨ha, hb⟩ := elementary_endpoints_closed o (fineScaleIndex k) z split i
-  have hcv : Convex ℝ (closure (dyadicCell o (fineScaleIndex k) z)) := by
-    rw [closure_dyadicCell]
-    exact (convex_Icc _ _).prod (convex_Icc _ _)
-  have hxref : x ∈ closure (dyadicCell o (fineScaleIndex k) z) := hcv.midpoint_mem ha hb
+  have hxref : x ∈ closure (dyadicCell o (fineScaleIndex k) z) :=
+    (convex_closure_dyadicCell o (fineScaleIndex k) z).midpoint_mem ha hb
   have hxD := closure_mono href hxref
   obtain ⟨v, hv, _⟩ := dyadicLayer_exists_dist_le o k Z C x hxD
   have hZ : Z.Nonempty := ⟨v, hv⟩

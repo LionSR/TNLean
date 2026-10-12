@@ -7,6 +7,7 @@ import TNLean.PEPS.TranslatedTwoPlaquetteGeometry
 import TNLean.PEPS.RegularTwoCycleGlobalFluxMove
 import TNLean.PEPS.RegularTorusEntropy
 import TNLean.PEPS.TorusPlaquetteFluxMeasurement
+import TNLean.Algebra.ZModSmallDifference
 
 /-!
 # A six-spin flux movement at every torus position
@@ -126,12 +127,8 @@ theorem regularWalkHolonomy_torusTranslatedFluxAssignment
     simp [u, regularDirectedTransport, torusTranslatedFluxAssignment,
       horizontal_ne_vertical x v.1 y v.2, horizontal_ne_vertical x (v.1+1) y v.2]
   have htwo : (2 : ZMod width) ≠ 0 := by
-    intro h
-    have hh := congrArg ZMod.val h
-    rw [show (2 : ZMod width) = ((2 : ℕ) : ZMod width) by rfl,
-      ZMod.val_natCast_of_lt (by have := Fact.out (p := 3 < width); omega),
-      ZMod.val_zero] at hh
-    omega
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := width) 2 0
+      (by have := Fact.out (p := 3 < width); omega) (by decide)
   have hx₂ : v.1+1+1 ≠ v.1 := by
     intro h
     have h' : v.1 + (2 : ZMod width) = v.1 + 0 := by

@@ -886,6 +886,19 @@ The following finite construction follows
     this threshold is at most $v$. The far threshold is $v$ minus
     the nonnegative number of completed far advances, so it too is at
     most $v$.
+
+\begin{theorem}[Positive prefixes in the compact collar]
+    \label{thm:al_scan_positive_prefix_collar}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.positiveDepthPrefix_subset_truncationSet}
+    \leanok
+    \uses{def:al_scan_comparison_prefixes}
+    Let $S_0=\{x\in A:d(x)\le L\}$ be the original compact truncation set.
+    For every integer threshold $j\le L$, the positive-depth prefix satisfies
+    $Q_j\subseteq S_0$.
+\end{theorem}
+\begin{proof}\leanok
+    If $x\in Q_j$, then $x\in A$ and $d(x)\le j\le L$.
+    Thus $x\in S_0$.
 \end{proof}
 
 \begin{lemma}[One nested family and separated deterministic fronts]
