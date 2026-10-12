@@ -50,6 +50,7 @@ operations on an empty memory.
 
 \begin{definition}[Fixed coordinates of the actual source input]
     \label{def:peps_actual_source_input_basis}
+    \leanok
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceU}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceV}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceLabels}
@@ -73,6 +74,7 @@ operations on an empty memory.
 
 \begin{definition}[Literal source-to-output columns]
     \label{def:peps_actual_source_column_matrix}
+    \leanok
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix}
     \uses{def:peps_actual_private_preparation,def:peps_actual_source_input_basis}
     Let $T_\xi$ be the actual source-to-output composition with recorded
@@ -90,6 +92,7 @@ operations on an empty memory.
 
 \begin{theorem}[Coordinates of the actual source-to-output word]
     \label{thm:peps_actual_source_column_coordinates}
+    \leanok
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.actualSourceInputBasis_apply}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_eq_toMatrix}
     \uses{def:peps_actual_source_column_matrix}
@@ -101,7 +104,7 @@ operations on an empty memory.
     halfspace of dimension zero gives an empty column-index set.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_actual_source_input_basis,def:peps_actual_source_column_matrix,thm:peps_basis_final_scalar}
     Appending an empty register list identifies its scalar unit with the
     original source vector. This gives the stated expression for $b_x^+$.
@@ -111,6 +114,7 @@ operations on an empty memory.
 
 \begin{definition}[Scalar contributions of zero-party gates]
     \label{def:peps_empty_party_gate_scalar}
+    \leanok
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.emptyGateScalar}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.emptyGateScalar_gate_of_isEmpty}
     \uses{def:peps_source_circuit_positions,def:peps_prepared_source_gate}
@@ -133,6 +137,7 @@ operations on an empty memory.
 
 \begin{theorem}[The operator and norm of a zero-party gate]
     \label{thm:peps_empty_party_gate_scalar}
+    \leanok
     \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.eval_heq_coeffSum_smul_id_of_isEmpty}
     \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.norm_coeffSum_le_one_of_isEmpty}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.norm_emptyGateScalar_le_one}
@@ -145,7 +150,7 @@ operations on an empty memory.
     including compositions with vanishing scalar contributions.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_party_factorization,def:peps_prepared_source_gate,def:peps_empty_party_gate_scalar}
     A register list on an empty party set is empty, and a word with no
     participating parties acts as the identity on $\C$ by the no-party
