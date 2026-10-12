@@ -5,11 +5,12 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SourceSlotBasis
 
-/-! # Actual endpoint coordinates and their sample average
+/-! # Slot-basis coordinates of the joint source vector
 
-The literal endpoint operator is expressed in the recorded source-slot bases.
-The sample assignments are shared between the two endpoints of each slot.
-Source: polynomial-PEPS, `04-compression.tex`, lines 279–355 and 565–588.
+The joint source vector of a source inventory expands in the recorded slot
+basis with the product of its original source coefficients, and its
+coordinates are read off from that expansion.
+Source: polynomial-PEPS, `04-compression.tex`, lines 253–267 and 279–355.
 
 ## References
 
