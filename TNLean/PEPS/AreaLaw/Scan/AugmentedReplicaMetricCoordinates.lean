@@ -82,6 +82,27 @@ theorem replicaMetric_submatrix_augmentedReplicaConfigurationEquiv
         (augmentedReplicaConfigurationEquiv q d k).symm
         (augmentedReplicaConfigurationEquiv q d k).symm := by
   classical
-  done
+  -- The two one-copy descriptions have the same dimension `d`, so the common
+  -- label weight is unchanged.
+  have hdim : replicaDim (ιS q d) = replicaDim (ιO q d) :=
+    Fintype.card_congr (augmentedConfigurationEquiv q d).symm
+  have hw : replicaLabelWeight (ιS q d) t = replicaLabelWeight (ιO q d) t := by
+    funext l
+    simp only [replicaLabelWeight]
+    rw [hdim]
+  -- The coordinate equivalence intertwines the two subsystem permutations, so
+  -- it reindexes every label projector.
+  have key : ∀ l : IrrepLabel (Equiv.Perm (Fin k)),
+      labelProj (subsystemPerm k (ιS q d) (Q.image augmentedSiteEquiv)) l =
+        reindex (augmentedReplicaConfigurationEquiv q d k)
+          (augmentedReplicaConfigurationEquiv q d k)
+          (labelProj (subsystemPerm k (ιO q d) Q) l) := fun l =>
+    labelProj_of_intertwine (augmentedReplicaConfigurationEquiv q d k)
+      (fun σ x => (augmentedReplicaConfigurationEquiv_subsystemPerm q d k Q σ x).symm) l
+  simp only [replicaMetric, labelObservable, hw]
+  ext i j
+  simp only [Matrix.submatrix_apply, Matrix.sum_apply, Matrix.smul_apply]
+  refine Finset.sum_congr rfl fun l _ => ?_
+  rw [key l, reindex_apply, Matrix.submatrix_apply]
 
 end TNLean.PEPS.AreaLaw.Scan

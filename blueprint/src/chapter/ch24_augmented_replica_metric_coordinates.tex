@@ -14,18 +14,18 @@ These are the augmented coordinates used for the physical energy.
 \begin{theorem}[Subsystem permutations in augmented coordinates]
     \label{thm:al_augmented_subsystem_action}
     \lean{TNLean.PEPS.AreaLaw.Scan.augmentedReplicaConfigurationEquiv_subsystemPerm}
+    \leanok
     \uses{def:al_scan_auxiliary_coordinates}
     Let $V$ be a set, let $q,d,k\ge0$ be integers, and let $Q\subseteq I$
     be finite. For $\sigma\in S_k$, write $\rho_Q(\sigma)$ for the
     permutation that permutes the copies at the sites in $Q$ and fixes
     all other coordinates. Then, for every $x\in\mathcal X_I^k$,
     \begin{align*}
-        e_k\bigl(\rho_Q(\sigma)x\bigr)
-        &=\rho_{a(Q)}(\sigma)e_k(x).
+        e_k\bigl(\rho_Q(\sigma)x\bigr)=\rho_{a(Q)}(\sigma)e_k(x).
     \end{align*}
     No finiteness assumption on $V$ is needed.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     At the site $a(i)$ and copy $j$, both sides have the value of $x$
     at site $i$ and copy $\sigma^{-1}(j)$ if $i\in Q$, and at copy $j$
     otherwise. The equivalence $i\in Q\iff a(i)\in a(Q)$ gives the
@@ -35,19 +35,19 @@ These are the augmented coordinates used for the physical energy.
 \begin{theorem}[Replica metrics in augmented coordinates]
     \label{thm:al_augmented_replica_metric_coordinates}
     \lean{TNLean.PEPS.AreaLaw.Scan.replicaMetric_submatrix_augmentedReplicaConfigurationEquiv}
+    \leanok
     Suppose now that $V$ is finite. Put
     $N=|\mathcal X_I|=|\mathcal X_J|$, and use the replica weight
     $w_{k,N,t}(\lambda)$ for the full one-copy dimension $N$.
     For every real $t$, every $k\ge0$ and every $Q\subseteq I$, the
     two replica metrics satisfy
     \begin{align*}
-        W^{J}_{a(Q),k}(x,y)
-        &=W^{I}_{Q,k}\bigl(e_k^{-1}x,e_k^{-1}y\bigr).
+        W^{J}_{a(Q),k}(x,y)=W^{I}_{Q,k}\bigl(e_k^{-1}x,e_k^{-1}y\bigr).
     \end{align*}
     The weights on both sides use $N$, including when a coordinate
     space is empty. The assertion also includes $k=0$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_augmented_subsystem_action}
     The one-copy bijection gives equality of the full dimensions and
     hence equality of the label weights. The subsystem identity transports
