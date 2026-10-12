@@ -55,6 +55,8 @@ def partialSourcePartyMatrix (w : SourceCircuit a b) (ψ : ProductInput a)
     (((w.partialSourceWord ψ ξ).restrict (partySelector q)
       (sources_partialSourceWord w ψ ξ)).eval (B q col)) row)
 
+set_option maxHeartbeats 400000 in
+-- Unifying the dependent party and source bases requires additional elaboration steps.
 /-- Literal source columns are the product of the actual party matrices followed
 by the constructed change from source-slot coordinates to party coordinates.
 This is a coordinate consequence of the actual source-free word factorization.
@@ -87,7 +89,8 @@ theorem partialSourceGlobalMatrix_eq_partyProduct_mul_basisChange
     simpa only [bIn, bOut, partialSourcePartyMatrix] using hparty
   have hm : LinearMap.toMatrix bIn.toBasis bOut.toBasis
       (w.partialSourceWord ψ ξ).eval.toLinearMap =
-      dependentPhysicalProductFamilyMatrix (w.partialSourcePartyMatrix ψ ξ B C) := by
+      dependentPhysicalProductFamilyMatrix (fun q ↦
+        w.partialSourcePartyMatrix ψ ξ B C q) := by
     ext row col
     simpa only [LinearMap.toMatrix_apply, OrthonormalBasis.coe_toBasis,
       OrthonormalBasis.coe_toBasis_repr_apply, Matrix.of_apply,
@@ -102,6 +105,6 @@ theorem partialSourceGlobalMatrix_eq_partyProduct_mul_basisChange
     (hchange.symm.trans
       ((congrArg (fun M ↦ M * bIn.toBasis.toMatrix w.actualSourceInputBasis.toBasis) hm).trans
         (congrArg (fun R ↦ dependentPhysicalProductFamilyMatrix
-          (w.partialSourcePartyMatrix ψ ξ B C) * R) hid.symm)))
+          (fun q ↦ w.partialSourcePartyMatrix ψ ξ B C q) * R) hid.symm)))
 
 end TNLean.PEPS.PairEffect.SourceCircuit
