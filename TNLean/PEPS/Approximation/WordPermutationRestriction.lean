@@ -165,7 +165,7 @@ private theorem restrict_moveHead_false_eval_heq (f : P → Bool) (r : Reg P)
           (Word.id (s :: (Layout.restrict f rs ++ Layout.restrict f tail))).eval))).trans
             (eval_id_heq (a := s :: (Layout.restrict f rs ++ Layout.restrict f tail))
               (b := Layout.restrict f (s :: rs) ++ Layout.restrict f tail)
-              (by simp only [Layout.restrict_cons, hs, ↓reduceIte]))
+              (by simp only [Layout.restrict_cons, hs, ↓reduceIte, List.cons_append]))
       · have hs' := Bool.eq_false_iff.mpr hs
         have hu : HEq u.eval
             (Word.id (Layout.restrict f rs ++ Layout.restrict f tail)).eval :=
