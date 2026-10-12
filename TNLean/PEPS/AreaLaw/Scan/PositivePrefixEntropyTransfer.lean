@@ -63,6 +63,87 @@ theorem eventually_regionalEntropy_positiveDepthPrefix_le
     (Real.sqrt (2 / g)) (max 4 Cvol) (Real.log q)
     (Real.sqrt_nonneg _) (le_trans (by norm_num) (le_max_left _ _))
     (Real.log_nonneg (by exact_mod_cast hq))] with n hcost
-  done
+  intro Λ Ω Ωt hΩ hΩt A depth L hcard hdist Ce e hentropy j hj
+  have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
+  have hqn : 0 < q := by omega
+  have hq0 : (0 : ℝ) < (q : ℝ) := by exact_mod_cast hqn
+  set R := positiveDepthPrefix A depth (j : ℤ) with hR
+  -- Entropy continuity in the regional dimension.
+  have hcont := FiniteProduct.abs_entropy_sub_le_sqrt_traceDistance
+    (fun _ : Site Λ ↦ Fin q) Ωt Ω hΩt hΩ R
+  rw [← regionalEntropy_eq_finiteProduct, ← regionalEntropy_eq_finiteProduct] at hcont
+  set t := Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
+      (Matrix.vecMulVec Ω (star Ω)) with ht
+  -- The region is contained in the full prefix, so its volume is controlled.
+  have hsub : R ⊆ depthPrefix A depth (L : ℤ) := by
+    rw [hR]
+    intro x hx
+    simp only [positiveDepthPrefix, Finset.mem_filter] at hx
+    simp only [depthPrefix, Finset.mem_filter]
+    exact ⟨hx.1, hx.2.2.trans (by exact_mod_cast hj)⟩
+  have hcardle : (R.card : ℝ) ≤ (max 4 Cvol) * (n : ℝ) ^ 2 := by
+    have hcard1 : (R.card : ℝ) ≤ ((depthPrefix A depth (L : ℤ)).card : ℝ) := by
+      exact_mod_cast Finset.card_le_card hsub
+    refine hcard1.trans (hcard.trans ?_)
+    exact mul_le_mul_of_nonneg_right (le_max_right 4 Cvol) (by positivity)
+  -- The regional dimension is `q ^ |R|`, so the continuity log factor is `1 + |R| log q`.
+  have hcard_cfg :
+      Fintype.card (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q) R) = q ^ R.card := by
+    simp only [FiniteProduct.Configuration, Fintype.card_pi, Fintype.card_fin,
+      Finset.prod_const, Finset.card_univ, Fintype.card_coe]
+  have hlogterm : Real.log (Real.exp 1 *
+      (Fintype.card (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q) R) : ℝ)) =
+      1 + (R.card : ℝ) * Real.log q := by
+    rw [hcard_cfg]
+    push_cast
+    rw [Real.log_mul (Real.exp_ne_zero 1) (pow_ne_zero _ hq0.ne'),
+      Real.log_exp, Real.log_pow]
+    ring
+  rw [hlogterm] at hcont
+  -- The actual trace distance stays below the threshold of the continuity estimate.
+  have hhalf : Real.sqrt ((n : ℝ) ^ (-1000 : ℝ)) = (n : ℝ) ^ (-500 : ℝ) := by
+    have h1 : (n : ℝ) ^ (-1000 : ℝ) = ((n : ℝ) ^ (-500 : ℝ)) ^ 2 := by
+      rw [← Real.rpow_natCast ((n : ℝ) ^ (-500 : ℝ)) 2, ← Real.rpow_mul (Nat.cast_nonneg n)]
+      congr 1
+      norm_num
+    rw [h1, Real.sqrt_sq (Real.rpow_nonneg (Nat.cast_nonneg n) _)]
+  have htbound : t ≤ Real.sqrt (2 / g) * (n : ℝ) ^ (-500 : ℝ) := by
+    refine hdist.trans ?_
+    have hmin : min ((n : ℝ) ^ (-1000 : ℝ)) (g / 4) ≤ (n : ℝ) ^ (-1000 : ℝ) := min_le_left _ _
+    have h2g : (0 : ℝ) ≤ 2 / g := div_nonneg (by norm_num) hg.le
+    have hle : 2 * min ((n : ℝ) ^ (-1000 : ℝ)) (g / 4) / g ≤ 2 * (n : ℝ) ^ (-1000 : ℝ) / g := by
+      rw [show 2 * min ((n : ℝ) ^ (-1000 : ℝ)) (g / 4) / g
+            = (2 / g) * min ((n : ℝ) ^ (-1000 : ℝ)) (g / 4) by ring,
+        show 2 * (n : ℝ) ^ (-1000 : ℝ) / g = (2 / g) * (n : ℝ) ^ (-1000 : ℝ) by ring]
+      exact mul_le_mul_of_nonneg_left hmin h2g
+    calc Real.sqrt (2 * min ((n : ℝ) ^ (-1000 : ℝ)) (g / 4) / g)
+        ≤ Real.sqrt (2 * (n : ℝ) ^ (-1000 : ℝ) / g) := Real.sqrt_le_sqrt hle
+      _ = Real.sqrt (2 / g) * (n : ℝ) ^ (-500 : ℝ) := by
+          rw [show 2 * (n : ℝ) ^ (-1000 : ℝ) / g = (2 / g) * (n : ℝ) ^ (-1000 : ℝ) by ring,
+            Real.sqrt_mul h2g, hhalf]
+  -- The continuity cost on this region is at most `n^{-247}`.
+  have hBcost : 4 * Real.sqrt t * (1 + (R.card : ℝ) * Real.log q) ≤ (n : ℝ) ^ (-247 : ℝ) := by
+    refine le_trans ?_ (hcost t htbound)
+    have hst : (0 : ℝ) ≤ Real.sqrt t := Real.sqrt_nonneg t
+    have h4C : (4 : ℝ) ≤ max 4 Cvol := le_max_left 4 Cvol
+    have hC0 : (0 : ℝ) ≤ max 4 Cvol := le_trans (by norm_num) h4C
+    have hfacpos : (0 : ℝ) ≤ 1 + (R.card : ℝ) * Real.log q := by
+      have := mul_nonneg (Nat.cast_nonneg R.card) hlq; linarith
+    have hfac1 : 1 + (R.card : ℝ) * Real.log q ≤
+        1 + (max 4 Cvol) * (n : ℝ) ^ 2 * Real.log q := by
+      have := mul_le_mul_of_nonneg_right hcardle hlq; linarith
+    calc 4 * Real.sqrt t * (1 + (R.card : ℝ) * Real.log q)
+        ≤ (max 4 Cvol) * Real.sqrt t * (1 + (R.card : ℝ) * Real.log q) :=
+          mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_right h4C hst) hfacpos
+      _ ≤ (max 4 Cvol) * Real.sqrt t * (1 + (max 4 Cvol) * (n : ℝ) ^ 2 * Real.log q) :=
+          mul_le_mul_of_nonneg_left hfac1 (mul_nonneg hC0 hst)
+  -- Combine with the continuity difference and the original prefix bound.
+  have heΩ := hentropy j hj
+  rw [← hR] at heΩ
+  have hupper : regionalEntropy Λ q Ωt R ≤
+      regionalEntropy Λ q Ω R + 4 * Real.sqrt t * (1 + (R.card : ℝ) * Real.log q) := by
+    have habs := le_abs_self (regionalEntropy Λ q Ωt R - regionalEntropy Λ q Ω R)
+    linarith [hcont, habs]
+  linarith [heΩ, hupper, hBcost]
 
 end TNLean.PEPS.AreaLaw.Scan
