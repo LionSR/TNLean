@@ -870,6 +870,7 @@ The following finite construction follows
     \label{lem:al_scan_finite_prefix_family}
     \lean{TNLean.PEPS.AreaLaw.Scan.positiveDepthPrefix_toNat,
         TNLean.PEPS.AreaLaw.Scan.positiveDepthPrefix_mem_range_fin_of_le}
+    \leanok
     \uses{def:al_scan_comparison_prefixes}
     Let $A$ be finite, let $d$ be any integer-valued depth function, and let
     $L\ge0$ be an integer. For $Q_j=\{x\in A:0<d(x)\le j\}$ and
@@ -880,7 +881,7 @@ The following finite construction follows
     \]
     This family depends only on $A,d,L$ and may contain repeated regions.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     If $j<0$, both $Q_j$ and $Q_0$ are empty. If $j\ge0$, then $j_+=j$.
     For $j\le L$ one also has $0\le j_+\le L$, giving the required member
     of the displayed family. Nestedness follows directly from the cutoff
@@ -912,6 +913,7 @@ The following finite construction follows
 \begin{corollary}[One finite family for all comparison fronts]
     \label{cor:al_scan_front_prefix_family}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.front_positiveDepthPrefix_mem_fixed_family}
+    \leanok
     \uses{lem:al_scan_finite_prefix_family,lem:al_scan_front_thresholds}
     Fix the original region $A$, its depth function $d$ and the collar depth
     $L$. Suppose $n>0$ and $8Km\le L$. The nested family
@@ -919,7 +921,7 @@ The following finite construction follows
     both $Q_{j_N-1}$ and $Q_{-j_F}$ for every band, offset and round within
     the fill horizon. This one family is fixed before all such choices.
 \end{corollary}
-\begin{proof}
+\begin{proof}\leanok
     Both integer thresholds are at most $L$ by
     Lemma~\ref{lem:al_scan_front_thresholds}. Apply
     Lemma~\ref{lem:al_scan_finite_prefix_family} to each threshold.
