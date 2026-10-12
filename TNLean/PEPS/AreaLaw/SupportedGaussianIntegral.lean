@@ -110,6 +110,20 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
     (norm_setIntegral_le_of_norm_le_const (measure_lt_top _ _)
       (fun t _ ↦ hnorm t)).trans
       (mul_le_of_le_one_right (norm_nonneg W) measureReal_le_one), ?_⟩
+  have hnear (A : Matrix (Configuration Λ q) (Configuration Λ q) ℂ)
+      (hA : A ∈ supportedOperators q ((Q ∪ Z) : Set (Site Λ)))
+      (t : ℝ) (ht : |t| ≤ T) :
+      ‖heisenbergEvolution g.operator t A -
+        siteExpectation q B (heisenbergEvolution g.operator t A)‖ ≤
+        ‖A‖ * (C * (Λ.card : ℝ) * Real.exp (v * T - c * l)) :=
+    (hlocal Λ g (Q ∪ Z) A hA l t).trans
+      (mul_le_mul_of_nonneg_left
+        ((min_le_right _ _).trans
+          (mul_le_mul_of_nonneg_left
+            (Real.exp_le_exp.mpr
+              (sub_le_sub_right (mul_le_mul_of_nonneg_left ht hv.le) _))
+            (mul_nonneg hC.le (Nat.cast_nonneg _))))
+        (norm_nonneg A))
   done
 
 end TNLean.PEPS.AreaLaw
