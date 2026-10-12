@@ -57,6 +57,6 @@ theorem physicalDensity_eq_grouped_partialTrace
     C.privateOutput bGarbage (stdOrthonormalBasis ℂ (Mem C.privateOutput).carrier)
     (C.circuit.eval C.input.vector) (C.circuit.eval C.input.vector)
   simpa only [physicalDensity, familyLabelledPhysicalReadout,
-    LinearIsometryEquiv.trans_apply, Matrix.euclideanOuterProduct] using h
+    Matrix.euclideanOuterProduct, Pi.star_def, starRingEnd_apply] using h
 
 end TNLean.PEPS.PairEffect.DistributedConstruction
