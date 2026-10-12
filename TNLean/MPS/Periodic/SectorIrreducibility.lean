@@ -9,6 +9,5 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Periodic.SectorIrreducibility
 
 import TNLean.MPS.Periodic.SectorIrreducibility.HLift
-import TNLean.MPS.Periodic.SectorIrreducibility.HLiftCore
 import TNLean.MPS.Periodic.SectorIrreducibility.OrbitSum
 import TNLean.MPS.Periodic.SectorIrreducibility.ProjectionOrtho

@@ -4,9 +4,10 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.FiniteSetTruncation
+import QICLean.Entropy.SupportedMarginalTails
 
 /-!
-# Supports crossing a cut inside the truncation set
+# Crossing supports and cut budgets
 
 After truncation near `S₀`, a label whose anchor is at finite distance `d` from `S₀` has the
 designated support `N_r(aᵢ)` with `r = max {r₀, ⌊d/2⌋}`; a label whose anchor cannot reach
@@ -15,8 +16,10 @@ meeting both `X` and its complement is a ball of radius exactly `r₀`, and its 
 within `r₀` of an endpoint of an edge of the cut. Hence at most `2 μ K_b (r₀ + 1)² b_X` labels
 cross the cut, where `b_X` is the number of cut edges, and the cut parameter
 `ℬ_X = 1 + ∑_{i ∈ 𝒞_X} log²(e dᵢ)` with `dᵢ = q^{|Sᵢ|}`, `Sᵢ` the designated support, is at
-most `C (1 + b_X) (r₀ + 1)⁶`. No factor involving the total volume appears; components not
-meeting `S₀`, and the empty set `S₀`, contribute no crossing label.
+most `C (1 + b_X) (r₀ + 1)⁶`. No factor involving the total volume appears. For cuts
+`X ⊆ S₀`, components not meeting `S₀` contribute no crossing label; when `S₀` is empty,
+the only such cut is empty. The exact identification with the marginal-tail budget,
+complement invariance, and lower bound by one hold for arbitrary cuts and local dimensions.
 
 ## Main definitions
 
@@ -30,6 +33,10 @@ meeting `S₀`, and the empty set `S₀`, contribute no crossing label.
   radius exactly `r₀`.
 * `TNLean.PEPS.AreaLaw.card_crossingLabels_le`: `|𝒞_X| ≤ 2 μ K_b (r₀ + 1)² b_X`.
 * `TNLean.PEPS.AreaLaw.cutBudget_le`: `ℬ_X ≤ C (1 + b_X) (r₀ + 1)⁶`.
+* `TNLean.PEPS.AreaLaw.cutBudget_eq_cutLogBudget`: the same budget on the original labels
+  and designated support dimensions as in the marginal-tail bound.
+* `TNLean.PEPS.AreaLaw.cutBudget_compl`: complementary cuts have the same budget.
+* `TNLean.PEPS.AreaLaw.one_le_cutBudget`: the budget is at least one for every cut.
 
 ## References
 
@@ -73,6 +80,17 @@ noncomputable def crossingLabels {κ : Type*} [Fintype κ] (G : SimpleGraph ι) 
   exact Finset.univ.filter fun i =>
     (∃ x ∈ designatedSupport G S₀ r₀ (a i), x ∈ X) ∧
       ∃ x ∈ designatedSupport G S₀ r₀ (a i), x ∉ X
+
+/-- Interchanging the sides of a cut preserves each crossing label. This holds for every
+cut, whether or not it is contained in the truncation set. -/
+@[simp] theorem crossingLabels_compl {κ : Type*} [Fintype κ] (G : SimpleGraph ι)
+    (S₀ : Finset ι) (r₀ : ℕ) (a : κ → ι) (X : Finset ι) :
+    crossingLabels G S₀ r₀ a Xᶜ = crossingLabels G S₀ r₀ a X := by
+  classical
+  ext i
+  simp only [crossingLabels, Finset.mem_filter, Finset.mem_univ, true_and,
+    Finset.mem_compl, not_not]
+  exact and_comm
 
 omit [Fintype ι] [DecidableEq ι] in
 /-- A point of a ball of radius `r` about `a ∈ S` outside `S` forces a cut edge `(u, v)`,
@@ -205,6 +223,34 @@ noncomputable def cutBudget {κ : Type*} [Fintype κ] (q : ℕ) (G : SimpleGraph
   1 + ∑ i ∈ crossingLabels G S₀ r₀ a X,
     Real.log (Real.exp 1 * (q : ℝ) ^ (designatedSupport G S₀ r₀ (a i)).card) ^ 2
 
+/-- The geometric cut budget is exactly the designated-support budget of the marginal-tail
+bound (Lemma 3.1, `02-initial.tex`, lines 47–55). The original label family is unchanged,
+including repeated supports and labels whose operators vanish. No positivity of `q` or
+containment of the cut in the truncation set is required for this identity. -/
+theorem cutBudget_eq_cutLogBudget {κ : Type*} [Fintype κ] (q : ℕ) (G : SimpleGraph ι)
+    (S₀ : Finset ι) (r₀ : ℕ) (a : κ → ι) (X : Finset ι) :
+    cutBudget q G S₀ r₀ a X =
+      Entropy.cutLogBudget
+        (Entropy.crossingTerms (fun i => designatedSupport G S₀ r₀ (a i)) X)
+        (Entropy.supportDim (fun _ : ι => q) ∘
+          (fun i => designatedSupport G S₀ r₀ (a i))) := by
+  classical
+  simp only [cutBudget, crossingLabels, Entropy.cutLogBudget, Entropy.crossingTerms,
+    Function.comp_apply, Entropy.supportDim, Finset.prod_const, Nat.cast_pow]
+
+/-- The cut budget is invariant under exchanging the two sides of any cut. -/
+@[simp] theorem cutBudget_compl {κ : Type*} [Fintype κ] (q : ℕ) (G : SimpleGraph ι)
+    (S₀ : Finset ι) (r₀ : ℕ) (a : κ → ι) (X : Finset ι) :
+    cutBudget q G S₀ r₀ a Xᶜ = cutBudget q G S₀ r₀ a X := by
+  simp only [cutBudget, crossingLabels_compl]
+
+/-- The constant term in the cut budget is retained even when no label crosses the cut. -/
+theorem one_le_cutBudget {κ : Type*} [Fintype κ] (q : ℕ) (G : SimpleGraph ι)
+    (S₀ : Finset ι) (r₀ : ℕ) (a : κ → ι) (X : Finset ι) :
+    1 ≤ cutBudget q G S₀ r₀ a X := by
+  rw [cutBudget_eq_cutLogBudget]
+  exact Entropy.one_le_cutLogBudget _ _
+
 /-- **Support dimensions of crossing labels** (`eq:quasilocal-crossing-count`,
 `03-quasilocal.tex`, lines 447–448): `log dᵢ = |Sᵢ| log q ≤ K_b (r₀ + 1)² log q`. -/
 theorem log_dim_le_of_mem_crossingLabels {κ : Type*} [Fintype κ] {q : ℕ} (hq : 1 ≤ q)
@@ -311,9 +357,25 @@ theorem truncatedConstraint_empty {q : ℕ} (G : SimpleGraph ι) (r₀ : ℕ) (a
     (k : Matrix (ι → Fin q) (ι → Fin q) ℂ) : truncatedConstraint q G ∅ r₀ a k = k := by
   simp [truncatedConstraint, setDist]
 
-theorem crossingLabels_empty {κ : Type*} [Fintype κ] (G : SimpleGraph ι) (S₀ : Finset ι)
+@[simp] theorem crossingLabels_empty {κ : Type*} [Fintype κ] (G : SimpleGraph ι) (S₀ : Finset ι)
     (r₀ : ℕ) (a : κ → ι) : crossingLabels G S₀ r₀ a ∅ = ∅ := by
   simp [crossingLabels]
+
+/-- No designated support crosses the full cut. -/
+@[simp] theorem crossingLabels_univ {κ : Type*} [Fintype κ] (G : SimpleGraph ι)
+    (S₀ : Finset ι) (r₀ : ℕ) (a : κ → ι) :
+    crossingLabels G S₀ r₀ a Finset.univ = ∅ := by
+  simp [crossingLabels]
+
+/-- The empty cut has budget one, for every truncation set and local dimension. -/
+@[simp] theorem cutBudget_empty {κ : Type*} [Fintype κ] (q : ℕ) (G : SimpleGraph ι)
+    (S₀ : Finset ι) (r₀ : ℕ) (a : κ → ι) : cutBudget q G S₀ r₀ a ∅ = 1 := by
+  simp [cutBudget]
+
+/-- The full cut has budget one, for every truncation set and local dimension. -/
+@[simp] theorem cutBudget_univ {κ : Type*} [Fintype κ] (q : ℕ) (G : SimpleGraph ι)
+    (S₀ : Finset ι) (r₀ : ℕ) (a : κ → ι) : cutBudget q G S₀ r₀ a Finset.univ = 1 := by
+  simp [cutBudget]
 
 /-- **Components away from `S₀` are retained exactly** (`03-quasilocal.tex`, lines
 532–533): a label whose anchor cannot reach `S₀` keeps its constraint. -/

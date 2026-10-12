@@ -108,7 +108,8 @@ This gives the contractions used in
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_prepared_vector_density,def:peps_source_slot_basis}
+    \uses{thm:peps_prepared_vector_density,def:peps_source_slot_basis,
+        thm:peps_source_preparation_sums}
     The preparation identity gives
     $K_T(a)[\psi]=[T(s_a\otimes\psi)]=A_{T,\psi}(:,a)$.
     Apply Theorem~\ref{thm:peps_prepared_vector_density} to the ket
@@ -252,8 +253,16 @@ This gives the contractions used in
 \begin{proof}\leanok
     \uses{thm:peps_dependent_product_calculus}
     Complex conjugation preserves finite products, giving the adjoint
-    identity entrywise. Apply coordinatewise matrix multiplication
-    twice to obtain the second identity.
+    identity entrywise. Coordinatewise matrix multiplication of
+    Theorem~\ref{thm:peps_dependent_product_calculus}, applied twice,
+    gives
+    \begin{align}
+        \left(\bigotimes_p A_p\right)\left(\bigotimes_p X_p\right)
+         & =\bigotimes_p(A_pX_p),            \\
+        \left(\bigotimes_p(A_pX_p)\right)\left(\bigotimes_p B_p\right)^\dagger
+         & =\bigotimes_p(A_pX_pB_p^\dagger),
+    \end{align}
+    where the second line also uses the adjoint identity.
 \end{proof}
 
 \begin{theorem}[Tracing the private coordinates at each party]
@@ -261,7 +270,8 @@ This gives the contractions used in
     \lean{TNLean.PEPS.PairEffect.partialTraceRight_partyProductMatrix,
         TNLean.PEPS.PairEffect.partialTraceRight_partyProduct_conjugate}
     \leanok
-    \uses{def:peps_dependent_physical_product}
+    \uses{def:peps_dependent_physical_product,
+        thm:peps_party_product_conjugation}
     Let $P$ be finite, with physical alphabets $H_p$ and finite private
     alphabets $D_p$. For arbitrary matrices
     $M_p\in\C^{(H_p\times D_p)\times(H_p\times D_p)}$, identify
@@ -308,9 +318,10 @@ This gives the contractions used in
 
 \begin{proof}\leanok
     \uses{def:peps_dependent_physical_product}
-    At each matrix entry, factor the product of the $c_p$ from the
-    product of the entries of $M_p$. The former product equals $\mu$
-    because exactly one of its factors may differ from one.
+    At each matrix entry,
+    $\prod_pc_pM_p(x_p,y_p)=\bigl(\prod_pc_p\bigr)\prod_pM_p(x_p,y_p)
+        =\mu\prod_pM_p(x_p,y_p)$, since $c_{p_0}=\mu$ and $c_p=1$ for
+    $p\ne p_0$.
 \end{proof}
 
 \begin{theorem}[Joint contraction of all source inputs]
@@ -521,4 +532,40 @@ This gives the contractions used in
     \begin{align*}
         \|A_T^{L,M}\| & =\|A_{TF_{L,M}}\|\le1.
     \end{align*}
+\end{proof}
+
+\begin{theorem}[Contraction through the actual source columns]
+    \label{thm:peps_actual_pure_source_contraction}
+    \leanok
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
+    \uses{def:peps_actual_source_column_matrix,def:peps_product_source_matrix,
+        thm:peps_pure_source_density_coefficient}
+    Let $\psi$ be the recorded private product input, let $\xi,\zeta$
+    be independent choices of gate monomials, and choose finite orthonormal
+    bases of the private input and complete output memories. For source
+    labels $x,y\in I_W$, let $C_{\xi,\zeta}(x,y)$ be the prepared output
+    coefficient of $\ketbra{\psi}{\psi}$ for the canonical remaining
+    operations $V_\xi,V_\zeta$ and elementary source vectors $b_x,b_y$.
+    For arbitrary complex matrices $X_e$ on the endpoint-coordinate pairs,
+    put $\mathcal X_{x,y}=\prod_e(X_e)_{x_e,y_e}$.
+    The literal column matrices satisfy
+    \begin{align}
+        \sum_{x,y\in I_W}\mathcal X_{x,y}C_{\xi,\zeta}(x,y)
+         & =M_\xi\mathcal X M_\zeta^\dagger.
+        \label{eq:peps_actual_pure_source_contraction}
+    \end{align}
+    This is the actual-source specialization of the coordinate contraction
+    in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 137--139, 279--355 and 409--434.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_actual_private_preparation,
+        thm:peps_pure_source_density_coefficient,thm:peps_source_column_contraction}
+    The action of the recorded preparation identifies the column indexed by
+    $x$ with the output coordinates of $V_\xi(b_x\otimes\psi)$.
+    The pure-input coefficient is therefore the outer product of column
+    $x$ of $M_\xi$ and column $y$ of $M_\zeta$.
+    The finite column-contraction identity gives
+    (\ref{eq:peps_actual_pure_source_contraction}).
 \end{proof}

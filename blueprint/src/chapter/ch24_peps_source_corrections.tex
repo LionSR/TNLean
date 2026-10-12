@@ -66,7 +66,21 @@ no bound on private dimensions is imposed.
     vectors are original, and every participant has exterior owner;
     its branch sum is therefore its original aggregate operator.
     Composition distributes through the finite sums, while idle
-    registers tensor each term with an identity. Every endpoint of a
+    registers tensor each term with an identity. For a composition
+    $W=W''W'$ with intermediate identification $J_c$, the two induction
+    hypotheses give
+    \begin{align}
+        J_bW''(\eta)W'(\eta)
+         & =\sum_{\zeta}c_{\mathcal A,\zeta}W''_{\mathcal A,\zeta}(\eta)
+        J_cW'(\eta)
+        =\sum_{\zeta,\zeta'}c_{\mathcal A,\zeta}c_{\mathcal A,\zeta'}
+        W''_{\mathcal A,\zeta}(\eta)W'_{\mathcal A,\zeta'}(\eta)J_a .
+    \end{align}
+    The pairs $(\zeta',\zeta)$ are the branches $\xi$ of $W$, with
+    $c_{\mathcal A,\xi}=c_{\mathcal A,\zeta}c_{\mathcal A,\zeta'}$ and
+    $W_{\mathcal A,\xi}(\eta)=W''_{\mathcal A,\zeta}(\eta)W'_{\mathcal A,\zeta'}(\eta)$,
+    which is
+    (\ref{eq:peps_substitution_partial}). Every endpoint of a
     selected source belongs to its owning gate, which proves the
     final specialization.
 \end{proof}
@@ -148,8 +162,13 @@ no bound on private dimensions is imposed.
     Surviving pair preparations change only their vectors. A source
     whose endpoints are both exterior becomes a local preparation;
     the stated condition keeps that local operation unchanged.
-    All other remaining operations agree. Apply the canonical recovery
-    identity to the resulting exact inventory.
+    All other remaining operations agree. Hence
+    $W_{\mathcal A,\xi}(\eta)$ has canonical remaining composition
+    $V_{\mathcal A,\xi}$ and exact ordered inventory $\eta_\xi$.
+    Theorem~\ref{thm:peps_canonical_source_recovery}, applied to this
+    word, replaces $\nu_\xi$ by $\eta_\xi$ in
+    (\ref{eq:peps_canonical_recovery}) and gives
+    (\ref{eq:peps_substituted_recovery}).
 \end{proof}
 
 \begin{theorem}[Weighted matrix sums]
@@ -559,4 +578,58 @@ index sets.
     (\ref{eq:peps_global_corrected_subsets}), then use the triangle
     inequality for trace norm. No discarded-memory dimension factor
     appears in either assertion.
+\end{proof}
+
+\subsection{Preparing the original private input}
+
+\begin{definition}[The actual source-to-output composition]
+    \label{def:peps_actual_private_preparation}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourcePrivatePreparation}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_sourcePrivatePreparation}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceWord}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_partialSourceWord}
+    \leanok
+    \uses{def:peps_private_product_input,def:peps_canonical_source_residual,def:peps_all_party_source_registers,def:peps_affected_owner,def:peps_partial_source_choices,thm:peps_owner_composition,thm:peps_canonical_source_recovery}
+    Let $W$ be a distributed composition with input memory $\mathcal H_a$,
+    let $\psi\in\mathcal H_a$ be its recorded private product input, and let
+    $\xi$ choose a monomial at every gate that meets a party. Write
+    $\mathcal H_S$ for its fixed source-register memory and $V_\xi$ for
+    its canonical remaining operations when every party is selected.
+    Relabel private owners by the canonical owner identification.
+
+    Extend the recorded preparation of $\psi$ by the identity on
+    $\mathcal H_S$, obtaining
+    $P_\psi:\mathcal H_S\otimes\C\to\mathcal H_S\otimes\mathcal H_a$.
+    The actual source-to-output composition is $T_\xi=V_\xi P_\psi$.
+    Both compositions contain no pair-source preparations. This uses the
+    private input and fixed source spaces of
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 137--139 and 246--267.
+\end{definition}
+
+\begin{theorem}[Action of the actual private preparation]
+    \label{thm:peps_actual_private_preparation}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_sourcePrivatePreparation_tmul}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_partialSourceWord_tmul}
+    \leanok
+    \uses{def:peps_actual_private_preparation}
+    With the canonical append and owner identifications understood,
+    every $y\in\mathcal H_S$ satisfies
+    \begin{align}
+        P_\psi(y\otimes1) & =y\otimes\psi,
+        \label{eq:peps_actual_private_preparation} \\
+        T_\xi(y\otimes1)  & =V_\xi(y\otimes\psi).
+    \end{align}
+    The vector $y$ may be zero or correlated between different source registers.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_private_product_input,lem:peps_register_reorderings,thm:peps_owner_composition}
+    A composition extended by untouched registers acts as the identity on
+    their tensor factor. Apply this to the recorded preparation after
+    relabelling owners; by (\ref{eq:peps_owner_composition}) its value at $1$
+    is the relabelled vector $\psi$. Then compose with $V_\xi$.
+    The source lists of the recorded preparation and $V_\xi$ are empty;
+    extending by untouched registers, relabelling owners, and composing
+    preserve that assertion.
 \end{proof}
