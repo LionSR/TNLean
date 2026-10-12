@@ -91,7 +91,7 @@ theorem sampledEndpointInputMatrix_average (ξ ζ : Choices (fun _ ↦ true) w)
   simp_rw [← matrix_repr_eval_eq_toMatrix]
   ext x y
   simpa only [SourceInventory.productSourceMatrix, Matrix.smul_apply, Matrix.sum_apply,
-    smul_eq_mul,
+    Matrix.of_apply, smul_eq_mul,
     actualSourceInputBasis_repr_sampledEndpointInputWord] using
       sampledEndpointWord_average w k lam E F ξ ζ ω x y
 
