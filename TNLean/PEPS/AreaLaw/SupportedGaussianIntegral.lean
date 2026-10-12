@@ -170,7 +170,7 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
             (mul_nonneg (mul_nonneg hC.le (Nat.cast_nonneg Λ.card))
               (Real.exp_pos (v * T - c * l)).le)))
         (norm_nonneg W))).trans_eq ?_
-    done
+    ring
   done
 
 end TNLean.PEPS.AreaLaw
