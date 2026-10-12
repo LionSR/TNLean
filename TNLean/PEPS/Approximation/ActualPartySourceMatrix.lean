@@ -58,11 +58,12 @@ def partialSourcePartyMatrix (w : SourceCircuit a b) (ψ : ProductInput a)
 
 private theorem toMatrix_eq_mul_basisChange_of_eq
     {E F : Type} [AddCommGroup E] [Module ℂ E] [AddCommGroup F] [Module ℂ F]
-    {J K L : Type} [Fintype J] [Fintype K] [Fintype L]
+    {J K L : Type} [Fintype J] [Fintype K] [Finite L]
     [DecidableEq J] [DecidableEq K]
     (b : Module.Basis J ℂ E) (b' : Module.Basis K ℂ E) (c : Module.Basis L ℂ F)
     (A : E →ₗ[ℂ] F) (M : Matrix L K ℂ) (hM : LinearMap.toMatrix b' c A = M) :
     LinearMap.toMatrix b c A = M * LinearMap.toMatrix b b' LinearMap.id := by
+  letI := Fintype.ofFinite L
   rw [LinearMap.toMatrix_id_eq_basis_toMatrix, ← hM]
   exact (linearMap_toMatrix_mul_basis_toMatrix b b' c A).symm
 

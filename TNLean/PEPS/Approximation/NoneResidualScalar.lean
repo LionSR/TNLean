@@ -64,8 +64,8 @@ theorem restrict_partialWord_all_localPart_eval_heq_emptyGateScalar
       (w.emptyGateScalar • ContinuousLinearMap.id ℂ ℂ) := by
   induction w with
   | id a =>
-      simpa only [partialWord, Word.mapOwner, emptyGateScalar, one_smul] using
-        restrict_allMapped_localPart (Word.id a)
+      simp only [emptyGateScalar, one_smul]
+      exact restrict_allMapped_localPart (Word.id a)
   | @comp a b d w v ihw ihv =>
       exact Word.restrict_localPart_comp_scalar Option.isNone
         (partialWord (fun _ : P ↦ true) w ξ.1) (partialWord (fun _ : P ↦ true) v ξ.2)
@@ -73,8 +73,8 @@ theorem restrict_partialWord_all_localPart_eval_heq_emptyGateScalar
         (restrict_affectedOwner_all d) (restrict_sources_partialWord_all_eq_nil w ξ.1)
         (restrict_sources_partialWord_all_eq_nil v ξ.2) _ _ (ihw ξ.1) (ihv ξ.2)
   | localMap p ha hb U tail =>
-      simpa only [partialWord, emptyGateScalar, one_smul] using
-        restrict_allMapped_localPart (Word.localMap p ha hb U tail)
+      simp only [emptyGateScalar, one_smul]
+      exact restrict_allMapped_localPart (Word.localMap p ha hb U tail)
   | @gate C ι _ _ owner a b c G tail =>
       classical
       by_cases h : Nonempty C
@@ -84,8 +84,8 @@ theorem restrict_partialWord_all_localPart_eval_heq_emptyGateScalar
         simpa only [emptyGateScalar_gate_of_isEmpty] using
           restrict_partialWord_localPart_gate_heq_coeffSum_of_isEmpty owner G tail ξ
   | swap r t tail =>
-      simpa only [partialWord, emptyGateScalar, one_smul] using
-        restrict_allMapped_localPart (Word.swap r t tail)
+      simp only [emptyGateScalar, one_smul]
+      exact restrict_allMapped_localPart (Word.swap r t tail)
   | @frame r a b w ih =>
       exact Word.restrict_localPart_frame_scalar Option.isNone
         ⟨affectedOwner (fun _ : P ↦ true) r.owner, r.space⟩
