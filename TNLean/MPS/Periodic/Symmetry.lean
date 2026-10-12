@@ -17,5 +17,6 @@ import TNLean.MPS.Periodic.Symmetry.RefinementNormalizationCounterexample
 import TNLean.MPS.Periodic.Symmetry.Theorem41Bundle
 import TNLean.MPS.Periodic.Symmetry.Theorem41Defs
 import TNLean.MPS.Periodic.Symmetry.Theorem41Forward
+import TNLean.MPS.Periodic.Symmetry.Theorem41ForwardBlockForm
 import TNLean.MPS.Periodic.Symmetry.Theorem41OneSite
 import TNLean.MPS.Periodic.Symmetry.Theorem41Reverse
