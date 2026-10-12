@@ -53,7 +53,12 @@ theorem restrict_partialSourceWord_all_eval_heq_emptyGateScalar
     Layout.restrict_mapOwner_eq_nil _ _ L (by intro p; simp [affectedOwner])
   have hp := restrict_sourcePrivatePreparation_none_eval_heq_id w ψ
   have hr := restrict_partialResidual_all_eval_heq_emptyGateScalar w ξ
-  rw [partialSourceWord, Word.restrict, Word.eval_comp]
+  change HEq
+    (((partialResidual (fun _ : P ↦ true) w ξ).restrict Option.isNone
+      (sources_partialResidual (fun _ : P ↦ true) w ξ)).eval ∘L
+      ((w.sourcePrivatePreparation ψ).restrict Option.isNone
+        (sources_sourcePrivatePreparation w ψ)).eval)
+    (w.emptyGateScalar • ContinuousLinearMap.id ℂ ℂ)
   have h := scalar_comp_heq
     ((w.sourcePrivatePreparation ψ).restrict Option.isNone
       (sources_sourcePrivatePreparation w ψ)).eval
