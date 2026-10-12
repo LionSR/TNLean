@@ -292,9 +292,10 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   the trace norm of the difference of their density matrices (lines 400–403). -/
   traceDist : ℝ
   traceDist_nonneg : 0 ≤ traceDist
-  /-- Fixed-coefficient bound from the source's `O(n^(-500))` estimate
-  (`08-scanner.tex`, lines 400–403). The remaining physical construction is recorded in
-  `docs/paper-gaps/arealaw2d_scanner_inputs.tex`. -/
+  /-- **Local fix (retained trace-distance coefficient):** the source's `O(n^(-500))`
+  estimate (`08-scanner.tex`, lines 400–403) is kept with its fixed coefficient `κ.C`
+  rather than coefficient one; see `docs/paper-gaps/arealaw2d_scanner_inputs.tex`, which
+  also records the remaining physical construction. -/
   traceDist_le : traceDist ≤ κ.C * (n : ℝ) ^ (-500 : ℝ)
   /-- Lemma 2.1 on the target, whose Hilbert space has `log`-dimension at most `C n² log q`. -/
   continuity_X : |SXt - SX| ≤ κ.C * √traceDist * (1 + κ.C * n ^ 2 * Real.log κ.q)

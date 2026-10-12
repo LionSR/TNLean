@@ -75,11 +75,13 @@ is resolved by retaining $C$ in this field.
 
 For the same truncated ground vector, the perturbation estimate of
 Proposition~4.5 gives
-\[
+\begin{align}
     t\le\sqrt{2\varepsilon/g},\qquad
     \varepsilon\le n^{-1000},\qquad g>0,
-\]
-so that $t\le\sqrt{2/g}\,n^{-500}$. The physical construction must choose
+    \label{eq:arealaw2d_scanner_inputs_perturbation_bound}
+\end{align}
+and (\ref{eq:arealaw2d_scanner_inputs_perturbation_bound}) yields
+$t\le\sqrt{2/g}\,n^{-500}$. The physical construction must choose
 its common fixed constant to satisfy $C\ge\sqrt{2/g}$ as well as the other
 input bounds. Increasing the scale alone does not remove this coefficient.
 
@@ -92,10 +94,12 @@ this same normalized gap, rather than $\Delta$.
 For any fixed nonnegative $A,C$ and $\log q\ge0$, the numerical continuity
 estimate applies uniformly to every $t\le An^{-500}$ and gives, for all
 sufficiently large $n$,
-\[
+\begin{align}
     C\sqrt t(1+Cn^2\log q)\le n^{-247}.
-\]
-Taking $A=C$ gives the arithmetic needed for the retained distance field.
+    \label{eq:arealaw2d_scanner_inputs_continuity_cost}
+\end{align}
+Taking $A=C$ in (\ref{eq:arealaw2d_scanner_inputs_continuity_cost}) gives the
+arithmetic needed for the retained distance field.
 The threshold depends on the fixed constants and is chosen before the
 physical instance. This resolves the numerical coefficient restriction;
 it does not construct the physical distance, continuity, transport or
