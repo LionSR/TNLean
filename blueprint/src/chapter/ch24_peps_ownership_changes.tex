@@ -823,12 +823,13 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \label{thm:peps_sheet_swap_doubled_cancellation}
     \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_of_mem_supportedOperators}
     \leanok
+    \uses{def:peps_frame_sheet_swap}
     Let $V$ be a finite site set, $q\geq0$ a local dimension, and
     $R,S\subseteq V$. Let $A$ be an operator supported on $S$, and let
     $F_R$ exchange two copies at the sites in $R$. If $S\subseteq R$
     or $S\cap R=\varnothing$, then
     \[
-        F_R(A\otimes I+I\otimes A)F_R^*
+        F_R(A\otimes I+I\otimes A)F_R^\dagger
         =A\otimes I+I\otimes A.
     \]
     This is the noncrossing cancellation used in the boundary perturbation
@@ -837,39 +838,58 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{proof}
     \leanok
     \uses{thm:peps_sheet_swap_supported_exchange,lem:peps_frame_sheet_swap_compose}
-    If $S\subseteq R$, the swap exchanges the two tensor summands.
-    If $S\cap R=\varnothing$, it commutes with each summand.
-    In either case their sum commutes with $F_R$, and unitarity gives
-    the stated conjugation identity.
+    Write $T(A)=A\otimes I+I\otimes A$. If $S\subseteq R$, then $A$ and
+    $I$ are both supported on $R$, and the exchange identity applied to the
+    pairs $(A,I)$ and $(I,A)$ gives
+    \begin{align*}
+        F_R(A\otimes I)=(I\otimes A)F_R,\qquad
+        F_R(I\otimes A)=(A\otimes I)F_R.
+    \end{align*}
+    If $S\cap R=\varnothing$, the commutation of $F_R$ with operators
+    acting on a set disjoint from $R$ gives
+    \begin{align*}
+        F_R(A\otimes I)=(A\otimes I)F_R,\qquad
+        F_R(I\otimes A)=(I\otimes A)F_R.
+    \end{align*}
+    In either case, adding the two identities gives
+    \begin{align*}
+        F_RT(A)=T(A)F_R.
+    \end{align*}
+    Since $F_R$ is a permutation matrix, $F_RF_R^\dagger=I$, and therefore
+    $F_RT(A)F_R^\dagger=T(A)F_RF_R^\dagger=T(A)$.
 \end{proof}
 
 \begin{theorem}[Restricting a swap to an interaction support]
     \label{thm:peps_sheet_swap_interaction_restriction}
     \lean{TNLean.PEPS.EncodedFrame.sheetSwapOp_conj_doubledHamiltonian_eq_inter}
+    \leanok
+    \uses{def:peps_frame_sheet_swap}
     Let $V$ be a finite site set, $q\geq0$ a local dimension, and
     $R,S\subseteq V$. Let $A$ be an operator supported on $S$.
     Write $T(A)=A\otimes I+I\otimes A$, and let $F_D$ exchange the
     two copies at the sites in $D$. Then
     \begin{align}
-        F_R T(A) F_R^* = F_{R\cap S}^* T(A) F_{R\cap S}.
+        F_R T(A) F_R^\dagger = F_{R\cap S}^\dagger T(A) F_{R\cap S}.
         \label{eq:peps_swap_interaction_restriction}
     \end{align}
     This is the support reduction in the boundary perturbation argument
     of \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{lem:peps_frame_sheet_swap_compose,thm:peps_sheet_swap_doubled_cancellation}
     Put $B=R\cap S$ and $O=R\setminus S$. The composition of the
-    swaps gives $F_BF_R=F_O$, hence $F_R=F_B^*F_O$ by unitarity.
+    swaps gives $F_BF_R=F_O$, hence $F_R=F_B^\dagger F_O$ by unitarity.
     Since $S\cap O=\varnothing$, cancellation outside $S$ gives
     \begin{align*}
-        F_R T(A)F_R^* = F_B^*\bigl(F_OT(A)F_O^*\bigr)F_B = F_B^*T(A)F_B.
+        F_R T(A)F_R^\dagger = F_B^\dagger\bigl(F_OT(A)F_O^\dagger\bigr)F_B = F_B^\dagger T(A)F_B.
     \end{align*}
 \end{proof}
 
 \begin{theorem}[Support of the swap in paired coordinates]
     \label{thm:peps_sheet_swap_paired_site_support}
     \lean{TNLean.PEPS.EncodedFrame.reindex_sheetSwapOp_mem_supportedOperators}
+    \leanok
     \uses{def:qc_site_pair_coordinates,def:peps_frame_sheet_swap}
     Let $\Lambda$ be a finite set, let $q\geq0$ be an integer, and let
     $R\subseteq\Lambda$. Identify two configurations of local dimension $q$
@@ -880,6 +900,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}
+    \leanok
     At a site outside $R$, the permutation fixes the paired coordinate.
     At a site in $R$, it exchanges the two entries of that coordinate.
     Thus the permutation fixes the complement and its action on $R$ depends
@@ -897,7 +918,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     Express the two-copy operators in paired-site coordinates, and denote
     the resulting matrices of $F_R$ and $A\otimes I+I\otimes A$ by
     $\widetilde F_R$ and $\widetilde T(A)$, respectively. Then
-    $\widetilde F_R\widetilde T(A)\widetilde F_R^*$ is supported on $S$.
+    $\widetilde F_R\widetilde T(A)\widetilde F_R^\dagger$ is supported on $S$.
     Empty regions and zero local dimension are included. This is the
     interaction-support assertion used for the boundary perturbation in
     \cite{OpenAI2026PolynomialPEPS}.
@@ -906,7 +927,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \uses{thm:peps_sheet_swap_interaction_restriction,
         thm:peps_sheet_swap_paired_site_support,thm:qc_site_pair_tensor_support}
     Set $B=R\cap S$. The restriction identity gives
-    $F_RT(A)F_R^*=F_B^*T(A)F_B$.
+    $F_RT(A)F_R^\dagger=F_B^\dagger T(A)F_B$.
     In paired-site coordinates, $F_B$ is supported on $B\subseteq S$,
     and each summand of $T(A)$ is supported on $S$.
     Operators supported on $S$ are closed under adjoints, sums and products,
