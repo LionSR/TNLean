@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.TorusCovariantAbsorbedFamily
 import TNLean.PEPS.NormalSquareInjectivity
 import TNLean.PEPS.TorusFundamentalTheorem
+import TNLean.Algebra.ZModSmallDifference
 
 /-!
 # Uniqueness of the torus gauge family up to a multiplicative constant
@@ -304,10 +305,7 @@ theorem torusRightEdge_fst_eq_iff (hw : 2 < width) (q : TorusVertex width height
     (torusRightEdge q).1.1 = q ↔
       (torusRightEdge q).1.1.1 + 1 = (torusRightEdge q).1.2.1 := by
   have h20 : ((2 : ℕ) : ZMod width) ≠ 0 := by
-    intro hcon
-    rw [ZMod.natCast_eq_zero_iff] at hcon
-    have := Nat.le_of_dvd (by norm_num) hcon
-    omega
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := width) 2 0 (by omega) (by decide)
   have hends := Edge.ofAdj_endpoints (torusGraph_adj_right q.1 q.2)
   simp only [Prod.mk.eta] at hends
   rcases hends with ⟨h1, h2⟩ | ⟨h1, h2⟩
@@ -343,10 +341,7 @@ theorem torusUpEdge_fst_eq_iff (hh : 2 < height) (q : TorusVertex width height) 
     (torusUpEdge q).1.1 = q ↔
       (torusUpEdge q).1.1.2 + 1 = (torusUpEdge q).1.2.2 := by
   have h20 : ((2 : ℕ) : ZMod height) ≠ 0 := by
-    intro hcon
-    rw [ZMod.natCast_eq_zero_iff] at hcon
-    have := Nat.le_of_dvd (by norm_num) hcon
-    omega
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := height) 2 0 (by omega) (by decide)
   have hends := Edge.ofAdj_endpoints (torusGraph_adj_up q.1 q.2)
   simp only [Prod.mk.eta] at hends
   rcases hends with ⟨h1, h2⟩ | ⟨h1, h2⟩

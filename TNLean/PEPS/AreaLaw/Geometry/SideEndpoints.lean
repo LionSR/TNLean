@@ -34,31 +34,8 @@ theorem cellFan_unsplit_endpoints_coordinates (o : ℝ × ℝ) (ℓ : ℕ) (z : 
         (o.1 + 2 ^ ℓ * z.1, o.2 + 2 ^ ℓ * z.2))
     | _ => ((o.1 + 2 ^ ℓ * z.1, o.2 + 2 ^ ℓ * z.2),
         (o.1 + 2 ^ ℓ * (z.1 + 1), o.2 + 2 ^ ℓ * z.2)) := by
-  fin_cases s
-  · change ((o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * 1,
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1)),
-      (o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * 1,
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * 1)) = _
-    norm_num
-    constructor <;> ring
-  · change ((o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-(-1)),
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * 1),
-      (o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1),
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * 1)) = _
-    norm_num
-    constructor <;> ring
-  · change ((o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1),
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-(-1))),
-      (o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1),
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1))) = _
-    norm_num
-    ring
-  · change ((o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1),
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1)),
-      (o.1 + 2 ^ ℓ * z.1 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * 1,
-      o.2 + 2 ^ ℓ * z.2 + 2 ^ ℓ / 2 + 2 ^ ℓ / 2 * (-1))) = _
-    norm_num
-    ring
+  fin_cases s <;> apply Prod.ext <;> apply Prod.ext <;>
+    simp [cellFanStart_eq, cellFanEnd_eq, cellFanCenter, cellFanSideVector] <;> ring
 
 /-- The two endpoints of a whole fan side are actual binary corners of the
 same dyadic cell. Source: area-law Section 11, lines 299–306. -/
