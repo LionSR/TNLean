@@ -4,19 +4,19 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.SheetSwapBoundaryExpansion
-import Lean.Elab.Command
-import Lean.Util.CollectAxioms
 
-/-! Audit the original crossing-edge expansion against the standard axioms. -/
+/-!
+# Axiom guard for the crossing-edge expansion
 
-open TNLean.PEPS.Approximation in
-run_cmd do
-  let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  let decl :=
-    ``SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
-  unless (← Lean.getEnv).contains decl do
-    throwError "Missing declaration {decl}"
-  let axioms ← Lean.collectAxioms decl
-  unless axioms.all (allowed.contains ·) do
-    throwError "Unexpected axioms for {decl}: {axioms}"
-  Lean.logInfo m!"{decl}: {axioms}"
+This guard imports the production theorem and requires it to use only the three
+standard logical axioms.
+-/
+
+set_option linter.hashCommand false
+
+/--
+info: 'TNLean.PEPS.Approximation.SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing'
+  depends on axioms: [propext, Classical.choice, Quot.sound]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.Approximation.SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing
