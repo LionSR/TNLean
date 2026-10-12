@@ -23,8 +23,14 @@
     \end{align*}
 \end{theorem}
 \begin{proof}\leanok
-    Conjugation by the unitary $e^{tK}$ carries
-    $[A,e^{-tK}Be^{tK}]$ to $[e^{tK}Ae^{-tK},B]$ and preserves the norm.
+    Since $K^*=-K$, the element $U=e^{tK}$ is unitary with $U^*=e^{-tK}$.
+    Using $U^*U=UU^*=1$,
+    \begin{align}
+        U\bigl(Ae^{-tK}Be^{tK}-e^{-tK}Be^{tK}A\bigr)U^*
+        =UAU^*B-BUAU^*=[e^{tK}Ae^{-tK},B].
+    \end{align}
+    By the $C^*$ identity, $\|UXU^*\|=\|X\|$ for every $X\in\mathcal A$.
+    Taking $X=[A,e^{-tK}Be^{tK}]$ gives the claim.
 \end{proof}
 
 \begin{theorem}[Localization from a region]
@@ -63,8 +69,19 @@
         \leq2C_0\|A\|e^{v|t|-cl}.
     \end{align*}
     Lemma~\ref{lem:qc_site_expectation_commutator} sums these bounds over
-    at most $|\Lambda|$ sites. Independently, norm preservation of the
-    evolution and contractivity of the expectation give the bound
-    $2\|A\|$. Combining the two estimates proves the assertion with
+    at most $|\Lambda|$ sites:
+    \begin{align*}
+        \|\tau_t(A)-E_{N_l(S)}(\tau_t(A))\|
+         & \leq\sum_{y\in\Lambda\setminus N_l(S)}2C_0\|A\|e^{v|t|-cl}
+        \leq2C_0|\Lambda|\,\|A\|e^{v|t|-cl}.
+    \end{align*}
+    Independently, since $\|\tau_t(A)\|=\|A\|$ and
+    $\|E_{N_l(S)}(X)\|\leq\|X\|$,
+    \begin{align*}
+        \|\tau_t(A)-E_{N_l(S)}(\tau_t(A))\|
+         & \leq\|\tau_t(A)\|+\|E_{N_l(S)}(\tau_t(A))\|
+        \leq2\|A\|.
+    \end{align*}
+    Taking the smaller of the two bounds proves the assertion with
     $C=2C_0$. The same argument uses an empty sum when the domain is empty.
 \end{proof}
