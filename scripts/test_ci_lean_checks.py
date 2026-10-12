@@ -179,5 +179,56 @@ class SelectTest(unittest.TestCase):
         self.assertIn("TNLeanTest/FixtureTest.lean", batches[1])
 
 
+class EarlyBuildTest(unittest.TestCase):
+    """Run early_build against a stand-in `lake`."""
+
+    def setUp(self) -> None:
+        import os
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.dir = Path(tmp.name)
+        self.old_path = os.environ["PATH"]
+        self.addCleanup(os.environ.__setitem__, "PATH", self.old_path)
+        os.environ["PATH"] = f"{self.dir}:{self.old_path}"
+        self.log = self.dir / "lake-build.log"
+
+    def lake(self, body: str) -> None:
+        path = self.dir / "lake"
+        path.write_text("#!/bin/bash\necho building \"$@\"\n" + body)
+        path.chmod(0o755)
+
+    def test_success_and_log(self) -> None:
+        self.lake("exit 0\n")
+        self.assertEqual(ci.early_build(["TNLean.Core"], self.log, 0), 0)
+        self.assertIn("building --fail-fast build TNLean.Core", self.log.read_text())
+
+    def test_build_failure_fails_the_step(self) -> None:
+        self.lake("exit 3\n")
+        self.assertEqual(ci.early_build(["TNLean.Core"], self.log, 0), 3)
+
+    def test_budget_kills_descendants_that_ignore_sigterm(self) -> None:
+        # lake exits on SIGTERM, but its compiler child ignores it and holds the
+        # output pipe; the step must still end promptly.
+        self.lake("bash -c 'trap \"\" TERM; sleep 60' &\n"
+                  "trap 'exit 143' TERM\nsleep 60 & wait\n")
+        import io, time
+        from contextlib import redirect_stdout
+        start = time.monotonic()
+        with redirect_stdout(io.StringIO()):
+            code = ci.early_build(["TNLean.Core"], self.log, 1)
+        self.assertEqual(code, 0)
+        self.assertLess(time.monotonic() - start, 20)
+
+    def test_budget_exceeded_is_a_warning(self) -> None:
+        self.lake("sleep 30\n")
+        import io
+        from contextlib import redirect_stdout
+        out = io.StringIO()
+        with redirect_stdout(out):
+            code = ci.early_build(["TNLean.Core"], self.log, 1)
+        self.assertEqual(code, 0)
+        self.assertIn("::warning::Early build stopped after 1s", out.getvalue())
+
+
 if __name__ == "__main__":
     unittest.main()

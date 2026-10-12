@@ -443,7 +443,7 @@ equations (3.16)--(3.18), lines 543--578, and Definition D.2, lines
 theorem AppendixBStructuralData.hasOverlappingTwoSiteCommutation
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A) :
     HasOverlappingTwoSiteCommutation (d := d) hStruct.appendixBQAXOnCoeffSpace
-      hStruct.appendixBQXBOnCoeffSpace := by
+      hStruct.appendixBQAXOnCoeffSpace := by
   let hSupport : HasOverlappingTwoSiteCommutation (d := d)
       hStruct.twoSiteBasicSupportProjection hStruct.twoSiteBasicSupportProjection :=
     { left_idempotent := hStruct.twoSiteBasicSupportProjection_idempotent
@@ -451,8 +451,7 @@ theorem AppendixBStructuralData.hasOverlappingTwoSiteCommutation
       commute_lifts := hStruct.twoSiteBasicSupportProjection_commute_lifts }
   have hComplement := hSupport.complement
   simpa [hStruct.twoSiteBasicSupportProjection_eq_complement,
-    AppendixBStructuralData.appendixBQAXOnCoeffSpace,
-    AppendixBStructuralData.appendixBQXBOnCoeffSpace] using hComplement
+    AppendixBStructuralData.appendixBQAXOnCoeffSpace] using hComplement
 
 
 end MPSTensor
