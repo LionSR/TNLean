@@ -43,7 +43,7 @@ example : statusMarginalRegions (fun _ : Fin 2 ↦ (0 : ℤ)) (fun _ ↦ some tr
   have hf : receiving (fun _ : Fin 2 ↦ some true) false = ∅ := by
     apply Finset.filter_false_of_mem
     intro x _
-    decide
+    simp
   have ht : receiving (fun _ : Fin 2 ↦ some true) true = Finset.univ := by
     apply Finset.filter_true_of_mem
     intro x _
@@ -51,7 +51,7 @@ example : statusMarginalRegions (fun _ : Fin 2 ↦ (0 : ℤ)) (fun _ ↦ some tr
   have hm : middle (fun _ : Fin 2 ↦ some true) = ∅ := by
     apply Finset.filter_false_of_mem
     intro x _
-    decide
+    simp
   have hpn : positiveNear (fun _ : Fin 2 ↦ (0 : ℤ)) (fun _ ↦ some true) = ∅ := by
     apply Finset.filter_false_of_mem
     intro x _
