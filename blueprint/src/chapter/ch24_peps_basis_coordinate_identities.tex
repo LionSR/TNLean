@@ -632,3 +632,76 @@ These are the tensor-coordinate identities used in
 \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \texttt{04-compression.tex}, lines 137--151, 233--267, 383--450 and
 565--588.
+
+
+\begin{theorem}[Matrix entries of actual party restrictions]
+    \label{thm:peps_actual_party_word_entries}
+    \lean{TNLean.PEPS.PairEffect.Word.partyGroupedBasis_repr_eval,
+        TNLean.PEPS.PairEffect.Word.partyGroupedBasis_matrix_eval}
+    \leanok
+    \uses{def:peps_party_grouped_basis,thm:peps_party_restriction}
+    Let $P$ be finite, fix an ordering of all parties without
+    repetitions, and let $W:\mathcal H_a\to\mathcal H_z$ be a
+    source-free composition. For each $p$, choose finite orthonormal
+    bases $(b_p(i))_{i\in I_p}$ and $(c_p(j))_{j\in J_p}$ of its
+    input and output memories. Let $B_y,C_x$ be the corresponding
+    product basis columns, transported to the original register
+    orders by the inverse canonical grouping isometries. Then
+    \begin{align}
+        \langle C_x,WB_y\rangle
+         & =\prod_{p\in P}
+        \langle c_p(x_p),W|_{\{p\}}b_p(y_p)\rangle.
+        \label{eq:peps_actual_party_word_entries}
+    \end{align}
+    Thus the matrix of $W$ is the product of the matrices of its
+    actual singleton restrictions. The two families of bases may be
+    chosen independently. Zero maps, scalar operations on empty
+    memories, and empty coordinate sets are included.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_actual_singleton_factorization,
+        thm:peps_basis_party_map_entries}
+    Apply the operator factorization
+    (\ref{eq:peps_actual_singleton_factorization}) to the input
+    basis column. The grouping isometry cancels its inverse in
+    the definition of $B_y$. Taking coordinates in the output
+    product basis gives (\ref{eq:peps_actual_party_word_entries})
+    by the tensor-coordinate formula. Equality of the matrices
+    follows entrywise.
+\end{proof}
+
+\begin{theorem}[Mixed matrices of three source-free compositions]
+    \label{thm:peps_actual_party_mixed_matrix}
+    \lean{TNLean.PEPS.PairEffect.Word.partyGroupedBasis_mixed_matrix}
+    \leanok
+    \uses{def:peps_party_grouped_basis,def:peps_dependent_physical_product,
+        thm:peps_party_restriction}
+    In the same bases and party order, let
+    $W,V:\mathcal H_a\to\mathcal H_z$ and
+    $U:\mathcal H_a\to\mathcal H_a$ be three independently chosen
+    source-free compositions. Denote their matrices by $M_W,M_V,M_U$,
+    and the matrices of their restrictions at $p$ by $A_p,B_p,X_p$,
+    respectively. Then
+    \begin{align}
+        M_W M_U M_V^\dagger
+         & =\bigotimes_{p\in P}(A_pX_pB_p^\dagger).
+        \label{eq:peps_actual_party_mixed_matrix}
+    \end{align}
+    The middle matrix is the matrix of the actual composition $U$;
+    its product form is a consequence of its restrictions.
+    No positivity, normalization, norm bound or nonvanishing
+    hypothesis is imposed on these compositions.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_actual_party_word_entries,thm:peps_party_product_conjugation}
+    Use (\ref{eq:peps_actual_party_word_entries}) for each of
+    $W,U,V$, keeping the same input and output bases. The finite
+    product-conjugation identity then gives
+    (\ref{eq:peps_actual_party_mixed_matrix}).
+\end{proof}
+
+These are auxiliary identities for
+\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+\texttt{04-compression.tex}, lines 409--434 and 565--588.

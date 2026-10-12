@@ -32,6 +32,7 @@ import TNLean.PEPS.Approximation.ApproximateGateRescaling
 import TNLean.PEPS.Approximation.ApproximateSourceSampling
 import TNLean.PEPS.Approximation.AuxiliaryRegisterFiniteness
 import TNLean.PEPS.Approximation.Basic
+import TNLean.PEPS.Approximation.CanonicalPartyFactorization
 import TNLean.PEPS.Approximation.ColumnSelection
 import TNLean.PEPS.Approximation.CommonPairSources
 import TNLean.PEPS.Approximation.CommonPartyMaps
@@ -267,6 +268,8 @@ import TNLean.PEPS.Approximation.WordAppendTail
 import TNLean.PEPS.Approximation.WordEvaluationTransport
 import TNLean.PEPS.Approximation.WordOwnerMap
 import TNLean.PEPS.Approximation.WordOwnerRestriction
+import TNLean.PEPS.Approximation.WordPartyCoordinates
+import TNLean.PEPS.Approximation.WordPartyMixedMatrix
 import TNLean.PEPS.Approximation.WordPermutation
 import TNLean.PEPS.Approximation.WordRestriction
 import TNLean.PEPS.Approximation.WordSelectivePartition
