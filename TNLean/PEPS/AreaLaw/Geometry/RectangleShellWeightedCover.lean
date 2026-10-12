@@ -39,38 +39,13 @@ theorem IntRect.sum_rpow_cappedDyadicPartition_shell_le
       ((Q.dilate j).toFinset \ Q.toFinset) K,
       ((2 : ℝ) ^ c.1) ^ (1 + e)) ≤
         (24 + 64 / ((2 : ℝ) ^ e - 1)) * (Q.size : ℝ) * (L : ℝ) ^ e := by
-  classical
-  let P := Geometry.cappedDyadicPartition ((Q.dilate j).toFinset \ Q.toFinset) K
-  let a (k : ℕ) : ℝ := ((P.filter (fun c ↦ c.1 = k)).card : ℝ)
-  have hcap : (2 : ℝ) ^ K * a K ≤ 24 * (Q.size : ℝ) := by
-    dsimp [a, P]
-    exact_mod_cast Q.card_cappedDyadicPartition_shell_at_cap_le j L K hj hL hhi
-  have hsmall (k : ℕ) (hk : k < K) :
-      (2 : ℝ) ^ k * a k ≤ 64 * (Q.size : ℝ) := by
-    dsimp [a, P]
-    exact_mod_cast Q.card_cappedDyadicPartition_shell_below_cap_le j K k
-      (hj.trans hL) hk
-      ((Nat.pow_le_pow_right (n := 2) (by decide) (Nat.succ_le_of_lt hk)).trans
-        (hlo.trans hL))
-  have hgroup : (∑ c ∈ P, ((2 : ℝ) ^ c.1) ^ (1 + e)) =
-      ∑ k ∈ Finset.range (K + 1), a k * ((2 : ℝ) ^ k) ^ (1 + e) :=
-    Geometry.sum_cappedDyadicPartition_by_scale
-      ((Q.dilate j).toFinset \ Q.toFinset) K (fun k ↦ ((2 : ℝ) ^ k) ^ (1 + e))
-  have hbound := Geometry.sum_weighted_dyadic_rpow_le a K
+  exact (Geometry.sum_rpow_cappedDyadicPartition_le _ K L he
     (A := 24 * (Q.size : ℝ)) (B := 64 * (Q.size : ℝ))
-    he (by positivity) hcap hsmall
-  have hpower : ((2 : ℝ) ^ K) ^ e ≤ (L : ℝ) ^ e :=
-    Real.rpow_le_rpow (by positivity) (by exact_mod_cast hlo) he.le
-  have hden : 0 < (2 : ℝ) ^ e - 1 :=
-    sub_pos.mpr (Real.one_lt_rpow (by norm_num) he)
-  change (∑ c ∈ P, ((2 : ℝ) ^ c.1) ^ (1 + e)) ≤ _
-  rw [hgroup]
-  calc
-    _ ≤ (24 * (Q.size : ℝ) + 64 * (Q.size : ℝ) / ((2 : ℝ) ^ e - 1)) *
-        ((2 : ℝ) ^ K) ^ e := hbound
-    _ = ((24 + 64 / ((2 : ℝ) ^ e - 1)) * (Q.size : ℝ)) *
-        ((2 : ℝ) ^ K) ^ e := by ring
-    _ ≤ _ := mul_le_mul_of_nonneg_left hpower (by positivity)
-
+    (by positivity) hlo
+    (by exact_mod_cast Q.card_cappedDyadicPartition_shell_at_cap_le j L K hj hL hhi)
+    fun k hk ↦ by
+      exact_mod_cast Q.card_cappedDyadicPartition_shell_below_cap_le j K k (hj.trans hL) hk
+        ((Nat.pow_le_pow_right (n := 2) (by decide) (Nat.succ_le_of_lt hk)).trans
+          (hlo.trans hL))).trans_eq (by ring)
 
 end TNLean.PEPS.AreaLaw

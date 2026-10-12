@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition
+import TNLean.PEPS.AreaLaw.Geometry.DyadicWeightedSum
 import Mathlib.Basic.Real.Basic
 
 /-!
@@ -40,5 +41,22 @@ theorem sum_cappedDyadicPartition_by_scale
   have h := Finset.sum_fiberwise_of_maps_to' (g := Prod.fst)
     (s := cappedDyadicPartition S K) (t := Finset.range (K + 1)) hmap f
   simpa only [Finset.sum_const, nsmul_eq_mul] using h.symm
+
+/-- A cap-scale side budget `A` and a lower-scale side budget `B` for the actual
+capped partition bound its dyadic moment of order `1 + e` at every length
+`L ≥ 2^K`. Source: Lemma 9.4, `08-scanner.tex`, lines 656–664. -/
+theorem sum_rpow_cappedDyadicPartition_le (S : Finset (ℤ × ℤ)) (K L : ℕ) {e A B : ℝ}
+    (he : 0 < e) (hB : 0 ≤ B) (hlo : 2 ^ K ≤ L)
+    (hcap : (2 : ℝ) ^ K * ((cappedDyadicPartition S K).filter (fun c ↦ c.1 = K)).card ≤ A)
+    (hsmall : ∀ k < K,
+      (2 : ℝ) ^ k * ((cappedDyadicPartition S K).filter (fun c ↦ c.1 = k)).card ≤ B) :
+    ∑ c ∈ cappedDyadicPartition S K, ((2 : ℝ) ^ c.1) ^ (1 + e) ≤
+      (A + B / ((2 : ℝ) ^ e - 1)) * (L : ℝ) ^ e := by
+  rw [sum_cappedDyadicPartition_by_scale S K fun k ↦ ((2 : ℝ) ^ k) ^ (1 + e)]
+  have hA : 0 ≤ A := le_trans (by positivity) hcap
+  have hden : 0 < (2 : ℝ) ^ e - 1 := sub_pos.mpr (Real.one_lt_rpow (by norm_num) he)
+  exact (sum_weighted_dyadic_rpow_le _ K he hB hcap hsmall).trans
+    (mul_le_mul_of_nonneg_left
+      (Real.rpow_le_rpow (by positivity) (by exact_mod_cast hlo) he.le) (by positivity))
 
 end TNLean.PEPS.AreaLaw.Geometry
