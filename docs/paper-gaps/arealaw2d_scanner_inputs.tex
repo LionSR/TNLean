@@ -374,11 +374,14 @@ The target specialization is now stated in
 \path{TNLean/PEPS/AreaLaw/Scan/TargetTypicalWindow.lean}.
 Fix $q\ge1$, $R$, $J\ge0$, $\Delta>0$ and $C_T\ge0$.
 The constants $C_{\mathrm{tr}}>0$, $C_B>0$ and $N\ge2$ precede every
-scale, finite domain, Hamiltonian, cut and scanner. The source assumptions
-are a nonempty ambient target $T$ with $|T|\le C_Tn^2$, actual ambient
+scale, finite domain, Hamiltonian, cut and scanner. The source
+assumptions~\cite{OpenAI2026AreaLaw} (\path{08-scanner.tex},
+lines~21--48, 243--257 and 400--414) are a nonempty ambient target $T$
+with $|T|\le C_Tn^2$, actual ambient
 depth, at most $n$ sites per positive ambient layer through
 $L=\lfloor n^{1-\ell}\rfloor$, and clearance
-$\operatorname{dist}_\infty(T,Z)>2L+10r_0$ from actual cut endpoints.
+$\operatorname{dist}_\infty(T,Z)>2L+10r_0$, where $Z$ consists of both
+sites of every edge of $\partial_\Lambda A$.
 The source exponent range gives $1\le L\le n$; this is derived from the
 floor rather than assumed. These hypotheses yield
 $|S_0|\le(C_T+1)n^2$, $X=A\cap T\subseteq S_0$ and
@@ -397,7 +400,8 @@ The same actual physical pair $(e,\widetilde\Omega)$ retains
 (\ref{eq:arealaw2d_scanner_inputs_marginal_closeness}), and all-cut
 moment and tail estimates. At $w=n^{3/5}$ its target tail is at most
 $n^{-100}$ for $n\ge N$. The canonical set of positive eigenvalues
-within this surprisal window is nonempty and has mass
+within this surprisal window~\cite{OpenAI2026AreaLaw}
+(\path{07-comparators.tex}, lines~37--53) is nonempty and has mass
 $z\ge1-n^{-100}>0$, with $z\le1$ and
 $\mathrm e^{-S-w}\le p_i\le\mathrm e^{-S+w}$ for each selected eigenvalue.
 Here $S$ is the target entropy of $\widetilde\Omega$, whereas the original
@@ -405,8 +409,6 @@ $\Omega$ continues to center every Hamiltonian term.
 \footnote{The same-witness statement is
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_typical_window}.}
 
-% Exact-head strict compilation and full CI are still required for this entry.
-% No completion marker is added before those checks pass.
 This target-window statement does not construct the initial physical
 prevector, its Bell factors, the comparator estimates, the scanner's
 measure-valued fields, or the complete scanner data package. It does not
