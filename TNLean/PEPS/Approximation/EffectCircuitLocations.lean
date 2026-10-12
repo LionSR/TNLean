@@ -25,7 +25,11 @@ Independently formalized; no upstream Lean proof text reused.
 
 noncomputable section
 namespace TNLean.PEPS.PairEffect
+
+variable {P : Type}
+
 namespace SourceCircuit
+
 /-- Changes of register-layout identification do not change gate occurrences.
 Source: polynomial-PEPS 04-compression.tex, lines 210–229. -/
 def castLocationsEquiv {a b a' b' : Layout P} (w : SourceCircuit a b)
@@ -92,7 +96,11 @@ end SourceCircuit
 end TNLean.PEPS.PairEffect
 
 namespace TNLean.PEPS.PairEffect
+
+variable {P : Type}
+
 namespace EffectCircuit
+
 /-- Replacement preserves every original expanded occurrence and its prescribed
 participant image. Newly inserted tensor-order exchanges contribute no occurrence.
 Source: polynomial-PEPS 04-compression.tex, lines 210–229. -/

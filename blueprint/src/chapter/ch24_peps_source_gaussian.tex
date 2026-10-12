@@ -58,7 +58,8 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.PEPS.PairEffect.PairSource.exists_probability_schmidt_isometries}
     \leanok
     Let $U,V$ be complex inner-product spaces and let
-    $z$ in the algebraic tensor product $U\otimes V$ have norm one. There exist a natural number $r$,
+    $z$ in the algebraic tensor product $U\otimes V$ have norm one
+    (cf.~\cite[Proposition~1.1]{Wolf2012Quantum}). There exist a natural number $r$,
     nonnegative weights $\lambda_t$ with $\sum_t\lambda_t=1$, and linear
     isometries $f:\C^r\to U$, $g:\C^r\to V$ such that
     \begin{align}
@@ -226,7 +227,8 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \label{thm:peps_prepared_source_frames}
     \lean{TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_selected_frames}
     \leanok
-    \uses{thm:peps_selected_multilinear_expansion}
+    \uses{thm:peps_selected_multilinear_expansion,
+        thm:peps_prepared_source_contraction}
     Let $V,V'$ be words acting after the same ordered pair-source layout,
     with finite orthonormal coordinates on the input and output memories
     and on each source halfspace. Ket and bra endpoint bases may differ.
@@ -265,6 +267,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSchmidtCoordinateEquiv_apply}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSchmidtSourceVectors}
     \leanok
+    \uses{def:peps_selected_retained_positions}
     Let $S\subseteq\mathcal E$ and suppose every position in $S$ has an
     endpoint among the affected parties $\mathcal A$.
     The actual ordered retained slots identify the selected partial slots
@@ -279,7 +282,8 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \label{thm:peps_corrected_gaussian_sum}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_gaussian_eq_sum}
     \leanok
-    \uses{def:peps_partial_schmidt_assignments,thm:peps_prepared_source_frames,thm:peps_unbiased_original_sources}
+    \uses{def:peps_partial_schmidt_assignments,thm:peps_prepared_source_frames,
+        thm:peps_unbiased_original_sources,thm:peps_corrected_source_contraction}
     Under the preceding incidence condition, suppose the fixed weights
     and frames represent every original source vector. For every sample
     $\omega$ and every input matrix $\rho$, the globally defined corrected
@@ -312,7 +316,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.physical_sampledSourceMatrix_sub_eq_sum}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.rectangularTraceNorm_physical_sampledSourceMatrix_sub_le}
     \leanok
-    \uses{def:peps_sampled_source_matrix}
+    \uses{def:peps_sampled_source_matrix,thm:peps_physical_corrected_subsets}
     Suppose the final memory is the ordered tensor product of physical
     and discarded registers. Choose finite orthonormal bases on the
     input and both output factors. Let $\widehat\rho_{\rm phys}(\omega)$

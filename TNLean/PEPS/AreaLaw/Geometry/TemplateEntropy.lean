@@ -49,6 +49,34 @@ theorem abs_regionalEntropy_union_sub_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
   rw [he, FiniteProduct.entropy_compl, FiniteProduct.entropy_compl] at hl
   exact abs_le.mpr ⟨by linarith, by linarith⟩
 
+/-- Adding the sites of a region `Y` disjoint from `X` to the actual sites of
+`A` in `X` changes the regional entropy by at most `|Y| log q`.
+Source: Lemma 9.4, partial-row step, `08-scanner.tex`, lines 666–667. -/
+theorem abs_regionalEntropy_filter_union_sub_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
+    (hq : 1 ≤ q) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1) (A : Finset (Site Λ))
+    (X Y : Finset (ℤ × ℤ)) (hXY : Disjoint X Y) :
+    |regionalEntropy Λ q Ω (A.filter fun x ↦ x.val ∈ X ∪ Y) -
+      regionalEntropy Λ q Ω (A.filter fun x ↦ x.val ∈ X)| ≤ Y.card * Real.log q := by
+  classical
+  let R := A.filter fun x ↦ x.val ∈ X
+  let B := A.filter fun x ↦ x.val ∈ Y
+  have hd : Disjoint R B := Finset.disjoint_left.mpr fun x hx hb ↦
+    Finset.disjoint_left.mp hXY (Finset.mem_filter.mp hx).2 (Finset.mem_filter.mp hb).2
+  have he : (A.filter fun x ↦ x.val ∈ X ∪ Y) = R ∪ B := by
+    simp only [R, B, Finset.mem_union, Finset.filter_or]
+  have hcard : B.card ≤ Y.card := by
+    rw [← Finset.card_image_of_injective B Subtype.val_injective]
+    exact Finset.card_le_card fun x hx ↦ by
+      obtain ⟨z, hz, rfl⟩ := Finset.mem_image.mp hx
+      exact (Finset.mem_filter.mp hz).2
+  rw [he]
+  calc
+    |regionalEntropy Λ q Ω (R ∪ B) - regionalEntropy Λ q Ω R| ≤
+        regionalEntropy Λ q Ω B := abs_regionalEntropy_union_sub_le Λ q Ω hΩ R B hd
+    _ ≤ B.card * Real.log q := regionalEntropy_le_card_mul_log Λ q Ω hΩ B
+    _ ≤ Y.card * Real.log q := mul_le_mul_of_nonneg_right (by exact_mod_cast hcard)
+      (Real.log_nonneg (by exact_mod_cast hq))
+
 namespace Geometry
 
 /-- Lemma 9.4's partial-final-row cost, with its explicit `n log q` constant.
@@ -67,38 +95,13 @@ theorem template_partial_row_entropy_le (Λ : Finset (ℤ × ℤ)) (q : ℕ)
       regionalEntropy Λ q Ω
         (A.filter fun x ↦ x.val ∈ ambientDilation T.points (j - 1) \ T.points)| ≤
       n * Real.log q := by
-  classical
-  let R := A.filter fun x ↦ x.val ∈ ambientDilation T.points (j - 1) \ T.points
-  let B := A.filter fun x ↦ x.val ∈ Y
-  have hd : Disjoint R B := by
-    apply Finset.disjoint_left.mpr
-    intro x hx hb
-    have hx' := (Finset.mem_sdiff.mp (Finset.mem_filter.mp hx).2).1
-    exact (Finset.mem_sdiff.mp (hY (Finset.mem_filter.mp hb).2)).2 hx'
-  have he : (A.filter fun x ↦
-      x.val ∈ (ambientDilation T.points (j - 1) \ T.points) ∪ Y) = R ∪ B := by
-    ext x
-    simp only [R, B, Finset.mem_filter, Finset.mem_union]
-    tauto
-  rw [he]
-  have hcard : B.card ≤ n := by
-    have hBY : B.image Subtype.val ⊆ Y := by
-      intro x hx
-      obtain ⟨z, hz, rfl⟩ := Finset.mem_image.mp hx
-      exact (Finset.mem_filter.mp hz).2
-    calc
-      B.card = (B.image Subtype.val).card :=
-        (Finset.card_image_of_injective B Subtype.val_injective).symm
-      _ ≤ Y.card := Finset.card_le_card hBY
-      _ ≤ (ambientDilation T.points j \ ambientDilation T.points (j - 1)).card :=
-        Finset.card_le_card hY
-      _ ≤ n := template_layer_card_le T hC j hj hjs
-  calc
-    |regionalEntropy Λ q Ω (R ∪ B) - regionalEntropy Λ q Ω R| ≤
-        regionalEntropy Λ q Ω B := abs_regionalEntropy_union_sub_le Λ q Ω hΩ R B hd
-    _ ≤ B.card * Real.log q := regionalEntropy_le_card_mul_log Λ q Ω hΩ B
-    _ ≤ n * Real.log q := mul_le_mul_of_nonneg_right (by exact_mod_cast hcard)
-      (Real.log_nonneg (by exact_mod_cast hq))
+  have hXY : Disjoint (ambientDilation T.points (j - 1) \ T.points) Y :=
+    Finset.disjoint_left.mpr fun x hx hy ↦
+      (Finset.mem_sdiff.mp (hY hy)).2 (Finset.mem_sdiff.mp hx).1
+  refine (abs_regionalEntropy_filter_union_sub_le Λ q hq Ω hΩ A _ Y hXY).trans ?_
+  have hcard := (Finset.card_le_card hY).trans (template_layer_card_le T hC j hj hjs)
+  exact mul_le_mul_of_nonneg_right (by exact_mod_cast hcard)
+    (Real.log_nonneg (by exact_mod_cast hq))
 
 end Geometry
 end TNLean.PEPS.AreaLaw

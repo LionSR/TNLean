@@ -266,12 +266,12 @@ theorem regionalEntropy_eq_zero_of_forall_subset_or_disjoint (h : LocalHamiltoni
     rw [← hHs]; exact h.operator_isHermitian.submatrix _
   set HA' := (1 / 2 : ℂ) • (HA + HAᴴ)
   set HB' := (1 / 2 : ℂ) • (HB + HBᴴ)
-  have hA' : HA'.IsHermitian := by
-    simp only [HA', IsHermitian, conjTranspose_smul, conjTranspose_add, conjTranspose_conjTranspose]
+  have hherm {n : Type _} [Fintype n] (M : Matrix n n ℂ) :
+      ((1 / 2 : ℂ) • (M + Mᴴ)).IsHermitian := by
+    simp only [IsHermitian, conjTranspose_smul, conjTranspose_add, conjTranspose_conjTranspose]
     rw [add_comm]; congr 1; simp
-  have hB' : HB'.IsHermitian := by
-    simp only [HB', IsHermitian, conjTranspose_smul, conjTranspose_add, conjTranspose_conjTranspose]
-    rw [add_comm]; congr 1; simp
+  have hA' : HA'.IsHermitian := hherm HA
+  have hB' : HB'.IsHermitian := hherm HB
   have hsum : HA ⊗ₖ (1 : Matrix ({x : Site Λ // x ∉ A} → Fin q) _ ℂ) + 1 ⊗ₖ HB =
       HA' ⊗ₖ 1 + 1 ⊗ₖ HB' := by
     have hc := hHerm.eq

@@ -62,6 +62,8 @@ theorem sourceOperatorDensity_sub
   classical
   simp only [sourceOperatorDensity, Pi.add_apply, ← Finset.sum_sub_distrib, ← smul_sub]
   simp only [Matrix.sourceContraction_sub, Finset.smul_sum]
+  -- `simp_rw` applies the exchange at both nesting depths, moving the subset sum
+  -- outside the inner `ζ` sum and then outside the outer `ξ` sum.
   simp_rw [Finset.sum_comm (s := (Finset.univ : Finset ι))
     (t := (Finset.univ : Finset (Finset (Fin R.length))).erase ∅)]
 

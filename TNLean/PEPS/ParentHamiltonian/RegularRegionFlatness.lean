@@ -40,16 +40,6 @@ variable {G : Type*} [Group G] [Fintype G] [DecidableEq G]
 
 variable {d : ℕ}
 
-omit [Fintype V] [DecidableRel Γ.Adj] [Fintype G] [DecidableEq G] in
-private theorem twistedSite_one
-    (a : (v : V) → (IncidentEdge Γ v → G) → Fin d → ℂ) :
-    regularTwistedSite a (fun _ => 1) = a := by
-  funext v η s
-  change a v (regularTwistedLabels (fun _ => 1) v η) s = a v η s
-  congr 1
-  funext f
-  simp only [regularTwistedLabels, one_mul, ite_self]
-
 set_option maxHeartbeats 800000 in
 -- The dependent boundary equivalences require additional reduction steps.
 omit [DecidableEq G] in
@@ -203,7 +193,7 @@ theorem regionPhysicalMap_apply_eq_zero_of_mem_regularGroundSpace_of_cycle_ne_on
   classical
   have hψone : ψ ∈ regionGroundSpace
       (groupBondTensor (regularTwistedSite a (fun _ => 1))) R := by
-    simpa only [twistedSite_one] using hψ
+    simpa only [regularTwistedSite_one] using hψ
   have hφ := regionPhysicalMap_mem_regularProjectorTwistedRange a F hF R
     (fun _ => 1) hψone
   rw [regularProjectorTwistedRegionMatrix_one] at hφ
@@ -296,7 +286,7 @@ theorem disjoint_regionGroundSpace_regularTwisted_of_cycleResidual_ne_one
   intro ψ hψ hψu
   have hψone : ψ ∈ regionGroundSpace
       (groupBondTensor (regularTwistedSite a (fun _ => 1))) R := by
-    simpa only [twistedSite_one] using hψ
+    simpa only [regularTwistedSite_one] using hψ
   have hφ := regionPhysicalMap_mem_regularProjectorTwistedRange a F hF R
     (fun _ => 1) hψone
   rw [regularProjectorTwistedRegionMatrix_one] at hφ
