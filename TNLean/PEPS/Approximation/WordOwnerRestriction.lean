@@ -20,16 +20,6 @@ namespace TNLean.PEPS.PairEffect
 variable {P Q : Type}
 
 open Classical in
-/-- The owners of a relabelled register list are the image of its original owners.
-Source: polynomial-PEPS 04-compression.tex, lines 233–251. -/
-private theorem owners_mapOwner_image (f : P → Q) (a : Layout P) :
-    ((Layout.mapOwner f a).map Reg.owner).toFinset =
-      (a.map Reg.owner).toFinset.image f := by
-  classical
-  ext q
-  simp [Layout.mapOwner, List.map_map, Function.comp_def]
-
-open Classical in
 /-- Relabelling the owners of a source-free word relabels precisely its
 participating parties, including named scalar local maps.
 Source: polynomial-PEPS 04-compression.tex, lines 233–251. -/
@@ -38,16 +28,16 @@ theorem Word.parties_mapOwner_of_sources_nil (f : P → Q) {a b : Layout P}
     (w.mapOwner f).parties = w.parties.image f := by
   classical
   induction w with
-  | id => exact owners_mapOwner_image f _
+  | id => exact Layout.owners_mapOwner_image f _
   | comp w v ihw ihv =>
       simp only [mapOwner, parties, ihw (List.append_eq_nil_iff.mp hs).2,
         ihv (List.append_eq_nil_iff.mp hs).1, Finset.image_union]
   | localMap =>
-      simp only [mapOwner, parties_castLayouts, parties, owners_mapOwner_image,
+      simp only [mapOwner, parties_castLayouts, parties, Layout.owners_mapOwner_image,
         Finset.image_insert]
   | source => cases hs
   | swap =>
-      simp only [mapOwner, parties, owners_mapOwner_image, Finset.image_insert]
+      simp only [mapOwner, parties, Layout.owners_mapOwner_image, Finset.image_insert]
   | frame r w ih =>
       simp only [mapOwner, parties, ih hs, Finset.image_insert]
 

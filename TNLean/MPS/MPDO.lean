@@ -160,7 +160,6 @@ import TNLean.MPS.MPDO.CommutingBondEtaDecomposition
 import TNLean.MPS.MPDO.CommutingBondTraceMatrixObstruction
 import TNLean.MPS.MPDO.CommutingForm
 import TNLean.MPS.MPDO.CommutingFormBridge
-import TNLean.MPS.MPDO.CommutingFormSpatialBridge
 import TNLean.MPS.MPDO.CommutingOverlappingCoordinates
 import TNLean.MPS.MPDO.CompleteZipperFusion
 import TNLean.MPS.MPDO.CompleteZipperFusionBlocked
