@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.MatrixDensitySum
 import TNLean.PEPS.Approximation.FiniteSourceGate
 import TNLean.PEPS.Approximation.SourcePreparationCoordinates
 import Mathlib.LinearAlgebra.Matrix.ConjTranspose
@@ -102,20 +103,6 @@ def Word.preparedDensityCoefficient {P m n : Type} [Fintype m] [Fintype n]
     (v'.preparedMatrix R U V (fun i ↦ uU' i (b i).1 ⊗ₜ[ℂ] uV' i (b i).2)
       ℓ bIn bOut)ᴴ
 
-/-- A matrix expansion on each side gives the corresponding ket–bra sum.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–317. -/
-private theorem sum_density_expansion {α β m n p : Type}
-    [Fintype α] [Fintype β] [Fintype n]
-    (c : α → ℂ) (d : β → ℂ) (K : α → Matrix m n ℂ)
-    (K' : β → Matrix p n ℂ) (ρ : Matrix n n ℂ) :
-    (∑ a, c a • K a) * ρ * (∑ b, d b • K' b)ᴴ =
-      ∑ a, ∑ b, (c a * conj (d b)) • (K a * ρ * (K' b)ᴴ) := by
-  simp only [Matrix.conjTranspose_sum, Matrix.conjTranspose_smul, Matrix.sum_mul,
-    Matrix.mul_sum, Matrix.smul_mul, Matrix.mul_smul, Finset.smul_sum, smul_smul,
-    Complex.star_def]
-  rw [Finset.sum_comm]
-  simp only [mul_comm]
-
 /-- Expanding both source vectors gives the ket–bra coefficient at each slot.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–317. -/
 private theorem finite_source_density_expansion
@@ -128,7 +115,8 @@ private theorem finite_source_density_expansion
         (∑ b, (∏ i, ζ i (b i)) • K' b)ᴴ =
       ∑ a, ∑ b, (∏ i, η i (a i) * conj (ζ i (b i))) • (K a * ρ * (K' b)ᴴ) := by
   simpa only [map_prod, Finset.prod_mul_distrib] using
-    sum_density_expansion (fun a ↦ ∏ i, η i (a i)) (fun b ↦ ∏ i, ζ i (b i)) K K' ρ
+    Matrix.sum_smul_mul_mul_conjTranspose (fun a ↦ ∏ i, η i (a i))
+      (fun b ↦ ∏ i, ζ i (b i)) K K' ρ
 
 /-- Finite endpoint expansions in the actual ket and bra sources give the density
 coefficients. The endpoint families may span proper subspaces of the private spaces.
@@ -207,7 +195,7 @@ theorem Word.preparedMatrix_gate_density_eq_sum_basis {P m n ι : Type}
               (v ξ).preparedDensityCoefficient R U V
                 (fun i ↦ bU ξ i) (fun i ↦ bV ξ i)
                 (fun i ↦ bU ζ i) (fun i ↦ bV ζ i) ℓ (v ζ) bIn bOut ρ a b := by
-  rw [sum_density_expansion]
+  rw [Matrix.sum_smul_mul_mul_conjTranspose]
   refine Finset.sum_congr rfl fun ξ _ ↦ Finset.sum_congr rfl fun ζ _ ↦ ?_
   rw [(v ξ).preparedMatrix_density_eq_sum_basis R U V
     (bU ξ) (bV ξ) (bU ζ) (bV ζ) (η ξ) (η ζ) ℓ (v ζ) bIn bOut ρ]
