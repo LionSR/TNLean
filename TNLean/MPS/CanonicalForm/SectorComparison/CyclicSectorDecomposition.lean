@@ -277,10 +277,10 @@ private theorem exists_cyclic_sector_decomp_with_peripheral_data_of_TP_of_irredu
     simp [Set.mem_range, eq_comm]
   let hne : NeZero m := ⟨Nat.ne_of_gt hm_pos⟩
   have : NeZero m := hne
-  obtain ⟨dim, blocks, P, φ, hTP_blocks, hSame, hPproj, hPsum, hcyclic, hComm,
-      hTrace, hIntertwine, hMul, hStar, hNondeg⟩ :=
-    exists_cyclic_sector_decomp_after_blocking A hTP hIrr ρ hρ_pd h_adjfix hIrrK hγ_prim
-      hperiph_range
+  obtain ⟨dim, blocks, P, φ, _V, hTP_blocks, hSame, hPproj, hPsum, hcyclic, hComm,
+      hTrace, hIntertwine, hMul, hStar, _hLetter, _hV_iso, _hV_range, _hEmbed, hNondeg⟩ :=
+    exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry A hTP hIrr ρ hρ_pd
+      h_adjfix hIrrK hγ_prim hperiph_range
   exact ⟨m, hne, hm_pos, γ, hγ_prim, hperiph_range, dim, blocks, P, φ, hTP_blocks, hSame,
     hPproj, hPsum, hcyclic, hComm, hTrace, hIntertwine, hMul, hStar, hNondeg⟩
 
