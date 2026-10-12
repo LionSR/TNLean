@@ -4,8 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.Defs
-import TNLean.PEPS.AreaLaw.SafeRectangleDilation
-import TNLean.PEPS.AreaLaw.Geometry.TemplateSafeRectangles
 import TNLean.PEPS.AreaLaw.WeakRectangleShellSafety
 import Mathlib.Analysis.SpecialFunctions.Pow.Asymptotics
 
