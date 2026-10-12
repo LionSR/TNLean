@@ -29,6 +29,18 @@ namespace CollarScan
 
 variable (S : CollarScan V I)
 
+omit [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I] in
+/-- The upper endpoint of each band lies below the original collar depth.
+Source: OpenAI area-law manuscript, `08-scanner.tex`, `scanner:fronts`,
+lines 83–124, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+theorem upper_le {L : ℕ} (g : Fin S.K) (r : Fin S.m)
+    (hL : 8 * S.K * S.m ≤ L) : S.upper g r ≤ (L : ℤ) := by
+  have hg : g.val + 1 ≤ S.K := g.isLt
+  have hgm := Nat.mul_le_mul_right S.m (Nat.mul_le_mul_left 8 hg)
+  have hr := r.isLt
+  simp only [upper]
+  exact_mod_cast (show 8 * g.val * S.m + 5 * S.m + r.val ≤ L by nlinarith)
+
 omit [Fintype I] [LinearOrder I] in
 private theorem near_subset_truncationSet {L : ℕ} (g : Fin S.K) (r : Fin S.m)
     (hL : 8 * S.K * S.m ≤ L) (σ : PhysicalPartition V)
@@ -49,13 +61,7 @@ private theorem near_subset_truncationSet {L : ℕ} (g : Fin S.K) (r : Fin S.m)
     by_contra h
     exact hi (by simp [initialPartition, hxA, show ¬ S.depth x ≤ S.lower g r by omega,
       show S.upper g r < S.depth x by omega])
-  have hbound : S.upper g r ≤ L := by
-    have hg : g.val + 1 ≤ S.K := g.isLt
-    have hgm := Nat.mul_le_mul_right S.m (Nat.mul_le_mul_left 8 hg)
-    have hr := r.isLt
-    simp only [upper]
-    exact_mod_cast (show 8 * g.val * S.m + 5 * S.m + r.val ≤ L by nlinarith)
-  exact Finset.mem_filter.mpr ⟨hxA, hupper.trans hbound⟩
+  exact Finset.mem_filter.mpr ⟨hxA, hupper.trans (S.upper_le g r hL)⟩
 
 /-- The actual near side remains in the truncation set at every completed history,
 including the fixed target. No row bound or good-history condition is needed. -/
