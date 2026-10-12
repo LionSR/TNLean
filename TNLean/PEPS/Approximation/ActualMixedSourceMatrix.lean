@@ -27,7 +27,7 @@ private theorem mixed_toMatrix_basis_independent
     [NormedAddCommGroup F] [InnerProductSpace ℂ F]
     [FiniteDimensional ℂ E] [FiniteDimensional ℂ F]
     {I J K : Type} [Fintype I] [Fintype J] [Fintype K]
-    [DecidableEq I] [DecidableEq J] [DecidableEq K]
+    [DecidableEq I] [DecidableEq J]
     (b : OrthonormalBasis I ℂ E) (c : OrthonormalBasis J ℂ E)
     (d : OrthonormalBasis K ℂ F) (A B : E →ₗ[ℂ] F) (U : E →ₗ[ℂ] E) :
     LinearMap.toMatrix b.toBasis d.toBasis A *
@@ -73,20 +73,28 @@ theorem partialSourceGlobalMatrix_mixed_word
           C ps hn hc))ᴴ =
       dependentPhysicalProductFamilyMatrix (fun q ↦
         w.partialSourcePartyMatrix ψ ξ B C q *
-          Matrix.of (fun row col ↦ (B q).repr
-            ((u.restrict (partySelector q) hu).eval (B q col)) row) *
+          Matrix.of (fun (row col : I q) ↦ (B q).repr
+            ((u.restrict (partySelector q) hu).eval ((B q).toBasis col)) row) *
           (w.partialSourcePartyMatrix ψ ζ B C q)ᴴ) := by
   classical
   let bIn := partyGroupedBasis (w.allResidualSourceLayout ++ []) B ps hn hc
   let bOut := partyGroupedBasis
     (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b) C ps hn hc
-  rw [partialSourceGlobalMatrix_eq_toMatrix, partialSourceGlobalMatrix_eq_toMatrix,
-    mixed_toMatrix_basis_independent w.actualSourceInputBasis bIn bOut]
+  have hcolumns := congrArg₂
+    (fun (M N : Matrix ((q : Option {_p : P // true = true}) → O q) w.allSourceLabels ℂ) ↦
+      M * LinearMap.toMatrix w.actualSourceInputBasis.toBasis w.actualSourceInputBasis.toBasis
+        u.eval.toLinearMap * Nᴴ)
+    (partialSourceGlobalMatrix_eq_toMatrix w ψ ξ bOut)
+    (partialSourceGlobalMatrix_eq_toMatrix w ψ ζ bOut)
+  have hchange := mixed_toMatrix_basis_independent w.actualSourceInputBasis bIn bOut
+    (w.partialSourceWord ψ ξ).eval.toLinearMap
+    (w.partialSourceWord ψ ζ).eval.toLinearMap u.eval.toLinearMap
   have h := Word.partyGroupedBasis_mixed_matrix (w.partialSourceWord ψ ξ)
     (w.partialSourceWord ψ ζ) u (sources_partialSourceWord w ψ ξ)
     (sources_partialSourceWord w ψ ζ) hu B C ps hn hc
   simp only [matrix_repr_eval_eq_toMatrix] at h
-  simpa only [partialSourcePartyMatrix, matrix_repr_eval_eq_toMatrix] using h
+  simpa only [partialSourcePartyMatrix, OrthonormalBasis.coe_toBasis,
+    matrix_repr_eval_eq_toMatrix] using hcolumns.trans (hchange.trans h)
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect
