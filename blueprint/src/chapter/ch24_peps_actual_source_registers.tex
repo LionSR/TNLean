@@ -160,6 +160,7 @@ operations on an empty memory.
 \begin{theorem}[Exterior restriction of the private preparation]
     \label{thm:peps_actual_private_preparation_exterior}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_sourcePrivatePreparation_none_eval_heq_id}
+    \leanok
     \uses{def:peps_actual_private_preparation,
         thm:peps_all_party_source_exterior_empty}
     Select all original parties. The restriction of the actual private
@@ -170,21 +171,31 @@ operations on an empty memory.
     \texttt{04-compression.tex}, lines 137--139, 246--267 and 409--434.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_exterior_owner_selector,thm:peps_all_party_source_exterior_empty,
         thm:peps_excluded_spectator_restriction,
         thm:peps_owner_disjoint_restriction,def:peps_actual_private_preparation}
-    Every source register belongs to an original party, so none survives
-    the exterior restriction. Removing these spectator registers leaves
-    the private preparation with relabelled owners. Every relabelled
-    owner is an original selected party, hence its exterior restriction
-    is the identity on the empty memory.
+    Write the private preparation as $F_\tau(V^f)$, where $V$ prepares
+    the recorded private input, $V^f$ relabels each owner $p$ by the
+    selected original owner $f(p)=p\in Q$, and $F_\tau$ adjoins the source
+    register list $\tau$ unchanged. By
+    Theorem~\ref{thm:peps_exterior_owner_selector}, restriction to $\{*\}$
+    selects exactly the registers owned by $*$. Every source register
+    belongs to an original party, so $\tau|_{\{*\}}$ is empty by
+    Theorem~\ref{thm:peps_all_party_source_exterior_empty}, and removing
+    these spectators gives the first equality below. Since $*\notin f(P)$,
+    Theorem~\ref{thm:peps_owner_disjoint_restriction} gives the second:
+    \begin{align}
+        F_\tau(V^f)|_{\{*\}}
+         & =V^f|_{\{*\}}=\operatorname{id}_{\mathbb C}.
+    \end{align}
 \end{proof}
 
 
 \begin{theorem}[Exterior scalar of an actual empty-party gate]
     \label{thm:peps_actual_empty_party_gate_scalar}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_localPart_gate_heq_coeffSum_of_isEmpty}
+    \leanok
     \uses{def:peps_partial_source_choices,def:peps_canonical_source_residual,
         thm:peps_empty_party_gate_scalar}
     Select all original parties, and consider an actual gate $G$ with
@@ -201,28 +212,39 @@ operations on an empty memory.
     \texttt{04-compression.tex}, lines 24--28, 233--251 and 351--417.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_partial_source_choices,thm:peps_empty_party_gate_scalar,
         thm:peps_excluded_mapped_owners,thm:peps_party_restriction}
     The input and output register lists of $G$ are empty. No participating
-    party is selected, so its partial expansion retains the complete
-    operation as a scalar local map at the exterior owner. Its value is
-    the original coefficient sum. Every original spectator belongs to
-    a selected original party and disappears from the exterior restriction.
-    The canonical identifications of the empty memories preserve this
-    scalar map.
+    party is selected, so the remaining operations of its partial expansion
+    are the local map $\Lambda_*(\widetilde G;\tau^f)$ at the exterior
+    owner, beside the relabelled spectator list $\tau^f$, where
+    $\widetilde G=UGU^{-1}$ for the canonical identifications $U$ of the
+    empty memories. By
+    Theorem~\ref{thm:peps_empty_party_gate_scalar},
+    $G=(\sum_{i\in I}c_i)\operatorname{id}_{\mathbb C}$. Every original
+    spectator belongs to a selected original party, so
+    $\tau^f|_{\{*\}}$ is empty. Hence
+    \begin{align}
+        \Lambda_*(\widetilde G;\tau^f)|_{\{*\}}
+         & =\Lambda_*(\widetilde G;\varnothing)
+        =UGU^{-1}
+        =\left(\sum_{i\in I}c_i\right)\operatorname{id}_{\mathbb C},
+    \end{align}
+    which is (\ref{eq:peps_actual_empty_party_gate_scalar}).
 \end{proof}
 
 
-\begin{lemma}[Selecting the exterior owner]
+\begin{theorem}[Selecting the exterior owner]
     \label{thm:peps_exterior_owner_selector}
     \lean{TNLean.PEPS.PairEffect.partySelector_none}
+    \leanok
     \uses{def:peps_single_party_selector}
-    In the owner set $\mathcal P\sqcup\{\star\}$, the singleton selector
-    at $\star$ is the indicator of the exterior owner.
-\end{lemma}
+    In the owner set $Q=P\sqcup\{*\}$, the singleton selector
+    at $*$ is the indicator of the exterior owner.
+\end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_single_party_selector}
-    The two selectors are $1$ at $\star$ and $0$ at every original party.
+    The two selectors are $1$ at $*$ and $0$ at every original party.
 \end{proof}
