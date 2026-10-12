@@ -98,6 +98,8 @@ private theorem selected_physical_grouped_column
   have ha : a = familyPhysicalLayout δ qs := by
     simp [a, qs, f, δ, Layout.mapOwner, familyPhysicalLayout, affectedOwner,
       List.map_map, Function.comp_def]
+    intro p _
+    rfl
   have hnqs : qs.Nodup := (List.nodup_cons.mp (selectedPartyOrder_nodup ps hn)).2
   have hδ : ∀ r ∈ familyPhysicalLayout δ qs, r.owner ∈ qs := by
     intro r hr
@@ -136,8 +138,10 @@ private theorem selected_physical_grouped_column
   have hunit : b none (y none) =
       Layout.memCongr (Layout.atParty_none_mapOwner_all (familyPhysicalLayout d ps)).symm
         (1 : ℂ) := by
-    simp only [b, selectedFamilyPhysicalPartyBasis, OrthonormalBasis.map_apply,
-      OrthonormalBasis.singleton_apply]
+    exact eq_of_heq ((selectedFamilyPhysicalPartyBasis_none_apply_heq
+      d ps hn hc (y none)).trans
+        (Layout.memCongr_apply_heq
+          (Layout.atParty_none_mapOwner_all (familyPhysicalLayout d ps)).symm (1 : ℂ)).symm)
   have htensor := Layout.memCongr_tmul_heq
     (Layout.atParty_none_mapOwner_all (familyPhysicalLayout d ps)).symm
     (rfl : partyLayout qs a = partyLayout qs a) (1 : ℂ)
