@@ -5,7 +5,8 @@
 and WASM for a small browser check. It renders only the
 pinned Jinja template, without parsing or building the blueprint.
 
---browser-smoke checks that graph and a malformed DOT graph in one browser.
+--browser-smoke checks that graph, a malformed DOT graph, and a worker whose
+Graphviz script throws while loading, in one browser.
 The default tests use no browser.
 """
 
@@ -163,6 +164,36 @@ def _browser_smoke() -> None:
                     assert not failed["ready"] and not failed["svg"], failed
                     assert not blocked and not errors, (blocked, errors)
                     results["malformed"] = failed
+
+                # A worker script that throws while the worker imports it raises
+                # an uncaught exception inside the worker. The browser reports it
+                # as an error event on the Worker object, which only the worker
+                # listener turns into a graph failure: Graphviz never answers, so
+                # its onerror callback cannot fire.
+                generated.write_text(source, encoding="utf-8")
+                hpcc = root / "js/hpcc.min.js"
+                hpcc.write_text('throw new Error("forced worker failure");\n', encoding="utf-8")
+                with _browser_page(browser, base_url) as (page, blocked, errors):
+                    try:
+                        with patch.object(reader, "PAGE_LOAD_TIMEOUT_MS", 30_000):
+                            reader._load_page(page, base_url, generated.name)
+                    except RuntimeError as failure:
+                        assert str(failure).startswith("Graphviz failed:"), str(failure)
+                        # The listener passes the event's message to graphFailure.
+                        # The stalled worker may fail again on a later message and
+                        # overwrite the recorded error, so the log is checked.
+                        note = failure.__notes__[0]
+                        assert ("console.error: [blueprint-graph] Uncaught Error: "
+                                "forced worker failure") in note, note
+                    else:
+                        raise AssertionError("A failing worker was accepted as a completed graph")
+                    crashed = page.evaluate(_GRAPH_SNAPSHOT)
+                    assert crashed["worker"] and crashed["phase"] == "error", crashed
+                    assert crashed["error"].startswith("Uncaught "), crashed
+                    assert not crashed["ready"] and not crashed["svg"], crashed
+                    assert not blocked, blocked
+                    assert "forced worker failure" in errors, errors
+                    results["worker"] = crashed
             finally:
                 browser.close()
     print(json.dumps(results, sort_keys=True))

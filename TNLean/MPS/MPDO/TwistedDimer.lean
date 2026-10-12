@@ -162,8 +162,6 @@ def tau (k f : Fin 2) : ℝ := if k = 1 ∧ f = 1 then -1 else 1
 
 lemma tau_zero (f : Fin 2) : tau 0 f = 1 := by simp [tau]
 
-lemma tau_one_sum : tau 1 0 + tau 1 1 = 0 := by simp [tau]
-
 /-- The coefficient $\tfrac12 C_k[l,l']\,(\tau_k)_{ff}\,\delta_{ff'}$ of the matrix unit
 at the bond pair $((l,l',k),(r,r',k))$ in the physical letter $(i, j)$. -/
 def coef (k : Fin 2) (i j : Fin 8) : ℂ :=
