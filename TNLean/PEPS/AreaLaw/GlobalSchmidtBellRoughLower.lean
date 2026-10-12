@@ -152,6 +152,7 @@ theorem exists_global_schmidtBellPrevector_rough_lower
                     3 * (δ / τ) * max 0 (2 * S') - ρ k ≤
                   -Real.log (‖w‖ ^ 2) / (k : ℝ) := by
   classical
+  intro β split ΩX hz d ι₀ ψ S'
   done
 
 end TNLean.PEPS.AreaLaw
