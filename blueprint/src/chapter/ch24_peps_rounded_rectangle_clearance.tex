@@ -33,30 +33,27 @@
 
 \begin{theorem}[Safe selected shell cells]
     \label{thm:area_law_rounded_safe_shell_cells}
-    \lean{TNLean.PEPS.AreaLaw.IsSafe.cappedDyadicPartition_shell,
-        TNLean.PEPS.AreaLaw.Scan.exists_safe_shell_cells_of_rounded_scales}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_safe_shell_cells_of_rounded_scales}
     \leanok
     \uses{def:area_law_safe_rectangle,def:area_law_capped_dyadic_partition,
         def:area_template_dyadic_rectangle}
-    Let $Q$ be a safe integer rectangle of size $s$. Whenever $j\le L$,
-    $2^{K_{\rm cap}}\le L$ and $(D_0+1)L\le D_0s$, every square selected
-    by the capped dyadic partition of $Q^{+j}\setminus Q$ is safe.
-    In particular, for the rounded scales of
+    For the rounded scales of
     Theorem~\ref{thm:area_law_rounded_clearance}, one threshold precedes
     every finite physical domain, cut, integer $D_0\ge1$ and safe parent
-    rectangle. For all parent sizes beyond that threshold, the selected
-    shell cells are safe and every parent site has sup-norm distance
-    strictly greater than $2L+10r_0$ from every crossing-edge endpoint.
+    rectangle $Q$ of size $s$. For all parent sizes beyond that threshold,
+    whenever $j\le L$ and $2^{K_{\rm cap}}\le L$, every square selected
+    by the capped dyadic partition of $Q^{+j}\setminus Q$ is safe, and
+    every parent site has sup-norm distance strictly greater than
+    $2L+10r_0$ from every crossing-edge endpoint.
     The dyadic cap exponent $K_{\rm cap}$ is independent of the scanner band count.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:area_law_rounded_clearance,thm:area_law_safe_rectangle_dilation,
-        thm:area_template_dyadic_rectangle,thm:area_law_capped_dyadic_partition}
-    A selected square of scale $k\le K_{\rm cap}$ is a rectangle $Q'$ in
-    $Q^{+j}$ of size $2^k\le L$. Thus
+    \uses{thm:area_law_rounded_clearance,thm:area_law_rectangle_shell_safe_cells}
+    Beyond the threshold, the first rounded budget reads
     \begin{align}
-        D_0\operatorname{size}(Q')+j & \le(D_0+1)L\le D_0s.
+        D_0L+L & =(D_0+1)L\le D_0s,
     \end{align}
-    The safety inheritance theorem applies. Native parent safety is strict,
+    so Theorem~\ref{thm:area_law_rectangle_shell_safe_cells} makes every
+    selected square safe. Native parent safety is strict,
     so the second rounded budget gives the asserted strict endpoint clearance.
 \end{proof}
