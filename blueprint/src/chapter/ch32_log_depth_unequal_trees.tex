@@ -200,7 +200,7 @@ configurations of the $n$ sites.
         MPSPreparation.treeLevelsOp_apply_nodeCfg,
         MPSPreparation.treeBlockOp_apply}
     \leanok
-    \uses{def:ldp_tree_layout, lem:ldp_unitary_implementing_isometry}
+    \uses{def:ldp_tree_layout, thm:ldp_unitary_implementing_isometry}
     Let $V_m\colon\C^\chi\to(\C^d)^{\otimes m}$ and
     $W_{l,r}\colon\C^\chi\to\C^\chi\otimes\C^\chi$ be isometries for
     $m,l,r\ge s$, satisfying $V_{l+r}=(V_l\otimes V_r)W_{l,r}$.
@@ -223,7 +223,7 @@ configurations of the $n$ sites.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:ldp_unitary_implementing_isometry, lem:ldp_tree_amplitudes}
+    \uses{thm:ldp_unitary_implementing_isometry, lem:ldp_tree_amplitudes}
     By induction from the leaves: after the leaves and the depths $h,\dots,j$,
     the amplitude of $\tau$ on the inputs $x_p$ of the nodes of depth $j$ is
     $\prod_p\bra{\tau_{j,p}}V_{\ell_{j,p}}\ket{x_p}$, with $\tau_{j,p}$ the part

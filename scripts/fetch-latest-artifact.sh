@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Download the newest non-expired GitHub Actions artifact with a given name.
+# Download the newest non-expired GitHub Actions artifact with a given name
+# produced by a workflow run on main.
 # Usage: fetch-latest-artifact.sh NAME DEST_DIR
 #
 # Exits 0 with a warning (and without creating DEST_DIR) when no artifact is
@@ -11,9 +12,12 @@ NAME="$1"
 DEST="$2"
 REPO="${GITHUB_REPOSITORY:?GITHUB_REPOSITORY must be set}"
 
+# Only artifacts produced on main may reach the production site; a manual run
+# on another branch can upload a newer artifact of the same name.
 # The API returns newest-first; sort by created_at anyway to be explicit.
 artifact_id="$(gh api "repos/${REPO}/actions/artifacts?name=${NAME}&per_page=100" \
-  --jq '[.artifacts[] | select(.expired | not)] | sort_by(.created_at) | last | .id // empty')"
+  --jq '[.artifacts[] | select((.expired | not) and .workflow_run.head_branch == "main")]
+        | sort_by(.created_at) | last | .id // empty')"
 
 if [ -z "$artifact_id" ]; then
   echo "::warning::No artifact named '${NAME}' found"

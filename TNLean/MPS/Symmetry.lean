@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.MPS.Symmetry
 
 import TNLean.MPS.Symmetry.AdjointFixedSpaceDimension
+import TNLean.MPS.Symmetry.BlockBoundaryParentHamiltonian
 import TNLean.MPS.Symmetry.BlockingVirtualCovariance
 import TNLean.MPS.Symmetry.BondInterpolation
 import TNLean.MPS.Symmetry.BondInterpolationSymmetry
@@ -22,6 +23,10 @@ import TNLean.MPS.Symmetry.BondProductSpectralGap
 import TNLean.MPS.Symmetry.BondRegrouping
 import TNLean.MPS.Symmetry.BondRegroupingLocality
 import TNLean.MPS.Symmetry.BondRegroupingSymmetry
+import TNLean.MPS.Symmetry.BoundaryParentCommutation
+import TNLean.MPS.Symmetry.BoundaryParentHamiltonian
+import TNLean.MPS.Symmetry.BoundaryProjectionAverage
+import TNLean.MPS.Symmetry.BoundaryUnitSupport
 import TNLean.MPS.Symmetry.CanonicalInjectiveGappedPath
 import TNLean.MPS.Symmetry.CanonicalInjectiveGroundPath
 import TNLean.MPS.Symmetry.Character
@@ -49,6 +54,7 @@ import TNLean.MPS.Symmetry.ContinuousStationaryDensity
 import TNLean.MPS.Symmetry.ContinuousStringEndpoints
 import TNLean.MPS.Symmetry.ContinuousStringOrder
 import TNLean.MPS.Symmetry.Defs
+import TNLean.MPS.Symmetry.DualRepresentationParentHamiltonian
 import TNLean.MPS.Symmetry.EmbeddedFixedPointParent
 import TNLean.MPS.Symmetry.EmbeddedFixedPointTensor
 import TNLean.MPS.Symmetry.EmbeddedInjectiveGappedPath
@@ -85,6 +91,7 @@ import TNLean.MPS.Symmetry.MixedSPTFixedPoint
 import TNLean.MPS.Symmetry.MixedSymmetry
 import TNLean.MPS.Symmetry.MpvRayLimit
 import TNLean.MPS.Symmetry.NearbyInjectiveAdjointActions
+import TNLean.MPS.Symmetry.NormalBlockBoundaryParentHamiltonian
 import TNLean.MPS.Symmetry.NormalizedBondLocalSymmetry
 import TNLean.MPS.Symmetry.OnSiteSymmetry
 import TNLean.MPS.Symmetry.OrderedGappedInteractionPath
@@ -97,6 +104,7 @@ import TNLean.MPS.Symmetry.PhysicalCharacterGappedPath
 import TNLean.MPS.Symmetry.PhysicalCharacterTwist
 import TNLean.MPS.Symmetry.PhysicalInteractionGap
 import TNLean.MPS.Symmetry.PhysicalInteractionGroundSpace
+import TNLean.MPS.Symmetry.PhysicalIsometricGapTransport
 import TNLean.MPS.Symmetry.PhysicalMatrixBondCovariance
 import TNLean.MPS.Symmetry.PhysicalSchmidtSupport
 import TNLean.MPS.Symmetry.PhysicalSpectatorBondExtension
@@ -132,6 +140,7 @@ import TNLean.MPS.Symmetry.SPTFixedPointEmbedding
 import TNLean.MPS.Symmetry.ScalarIdentityAmbientObstruction
 import TNLean.MPS.Symmetry.SpinHalfObstruction
 import TNLean.MPS.Symmetry.StationaryDensitySymmetry
+import TNLean.MPS.Symmetry.StationaryPhysicalSymmetry
 import TNLean.MPS.Symmetry.StationarySupportLimitIdentification
 import TNLean.MPS.Symmetry.StationarySupportPreparation
 import TNLean.MPS.Symmetry.StationarySupportedDensityPhaseInvariance

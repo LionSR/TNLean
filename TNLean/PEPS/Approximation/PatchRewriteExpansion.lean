@@ -240,6 +240,39 @@ def liftBranch (β : R.Branch) (Y : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
   reindex (R.layoutEquiv R.newAffected) (R.layoutEquiv R.oldAffected)
     (tagLift β.1 β.2.2 Y ⊗ₖ (1 : Matrix (TagSpace R.untouched) (TagSpace R.untouched) ℂ))
 
+/-- `liftBranch β` as a linear map. -/
+def liftBranchLinearMap (β : R.Branch) :
+    Matrix (ι → Fin q) (ι → Fin q) ℂ →ₗ[ℂ] Matrix R.newFrame.Layout R.oldFrame.Layout ℂ where
+  toFun := R.liftBranch β
+  map_add' Y Y' := by
+    ext x y
+    simp only [liftBranch, tagLift, reindex_apply, submatrix_apply, Matrix.add_apply,
+      kroneckerMap_apply, of_apply]
+    split_ifs <;> ring
+  map_smul' a Y := by
+    ext x y
+    simp only [liftBranch, tagLift, reindex_apply, submatrix_apply, Matrix.smul_apply,
+      kroneckerMap_apply, of_apply, smul_eq_mul, RingHom.id_apply]
+    split_ifs <;> ring
+
+@[simp] theorem liftBranchLinearMap_apply (β : R.Branch)
+    (Y : Matrix (ι → Fin q) (ι → Fin q) ℂ) : R.liftBranchLinearMap β Y = R.liftBranch β Y :=
+  rfl
+
+theorem liftBranch_sub (β : R.Branch) (Y Y' : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
+    R.liftBranch β Y - R.liftBranch β Y' = R.liftBranch β (Y - Y') :=
+  (map_sub (R.liftBranchLinearMap β) Y Y').symm
+
+theorem liftBranch_smul (β : R.Branch) (a : ℂ) (Y : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
+    R.liftBranch β (a • Y) = a • R.liftBranch β Y :=
+  map_smul (R.liftBranchLinearMap β) a Y
+
+theorem liftBranch_sum_smul (β : R.Branch) {κ : Type*} [Fintype κ] (a : κ → ℂ)
+    (Y : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ) :
+    R.liftBranch β (∑ k, a k • Y k) = ∑ k, a k • R.liftBranch β (Y k) := by
+  rw [← liftBranchLinearMap_apply, map_sum]
+  simp only [map_smul, liftBranchLinearMap_apply]
+
 /-- **Branch expansion of the canonical rewrite.** `M = ∑_β M_β`, where `M_β` is the branch
 operator `|a⟩⟨b| ⊗ R^{new}_a C_s (R^{old}_b)ᴴ` on the affected tags and the raw registers,
 extended by the identity on the untouched tags.
@@ -290,28 +323,31 @@ theorem newSample_subset_patchSquares (hR : R.Conditions) (s : PatchTags R.patch
   exact innerUnion_subset_patchSquares _ s
     (hR.affected_subset h (List.mem_append_right _ hh) hxh)
 
+/-- A site outside the untouched outer footprints that lies in an inner square of a hole of
+`untouched ++ a` lies in the inner square of a hole of `a`.
+
+Polynomial-PEPS manuscript, `05-frames.tex`, lines 282–300. -/
+theorem exists_mem_inner_of_notMem_untouched {a : List (Hole pos q Party)} {x : ι}
+    (hx : x ∉ R.untouchedFootprint) (hH : x ∈ innerUnion ((R.untouched ++ a).map Hole.patch)) :
+    ∃ h ∈ a, x ∈ h.patch.inner := by
+  obtain ⟨p, hp, hxp⟩ := hH
+  obtain ⟨h, hh, rfl⟩ := List.mem_map.mp hp
+  rcases List.mem_append.mp hh with hu | ha
+  · exact absurd (subset_footprint (List.mem_map_of_mem hu) (h.patch.inner_subset_outer hxp)) hx
+  · exact ⟨h, ha, hxp⟩
+
 /-- A site of a patch outer square inside `H^-(F_old)` lies in the inner square of an affected
 old hole: by condition (i) it is not in an untouched hole. -/
 theorem mem_oldAffected_inner_of_mem_innerHoles (hR : R.Conditions) {P : SquarePatch pos q}
     (hP : P ∈ R.patches) {x : ι} (hx : x ∈ P.outer) (hH : x ∈ R.oldFrame.innerHoles) :
-    ∃ h ∈ R.oldAffected, x ∈ h.patch.inner := by
-  obtain ⟨p, hp, hxp⟩ := hH
-  obtain ⟨h, hh, rfl⟩ := List.mem_map.mp hp
-  rcases List.mem_append.mp hh with hu | ha
-  · exact absurd (subset_footprint (List.mem_map_of_mem hu) (h.patch.inner_subset_outer hxp))
-      (Set.disjoint_left.mp (hR.patch_avoid P hP) hx)
-  · exact ⟨h, ha, hxp⟩
+    ∃ h ∈ R.oldAffected, x ∈ h.patch.inner :=
+  R.exists_mem_inner_of_notMem_untouched (Set.disjoint_left.mp (hR.patch_avoid P hP) hx) hH
 
 /-- The new-frame analogue of `mem_oldAffected_inner_of_mem_innerHoles`. -/
 theorem mem_newAffected_inner_of_mem_innerHoles (hR : R.Conditions) {P : SquarePatch pos q}
     (hP : P ∈ R.patches) {x : ι} (hx : x ∈ P.outer) (hH : x ∈ R.newFrame.innerHoles) :
-    ∃ h ∈ R.newAffected, x ∈ h.patch.inner := by
-  obtain ⟨p, hp, hxp⟩ := hH
-  obtain ⟨h, hh, rfl⟩ := List.mem_map.mp hp
-  rcases List.mem_append.mp hh with hu | ha
-  · exact absurd (subset_footprint (List.mem_map_of_mem hu) (h.patch.inner_subset_outer hxp))
-      (Set.disjoint_left.mp (hR.patch_avoid P hP) hx)
-  · exact ⟨h, ha, hxp⟩
+    ∃ h ∈ R.newAffected, x ∈ h.patch.inner :=
+  R.exists_mem_inner_of_notMem_untouched (Set.disjoint_left.mp (hR.patch_avoid P hP) hx) hH
 
 /-- **Open inputs of a patch bra have at most two old owners.** Let `P` be a patch of the list
 and `j` any of its cylinder terms, so that `P.tagSample j` is the selected square of any entry of
@@ -486,6 +522,13 @@ def truncationRank (N g δ : ℝ) : ℕ := ⌈(2 * N * g / δ) ^ 2⌉₊ + 1
 
 theorem one_le_truncationRank (N g δ : ℝ) : 1 ≤ truncationRank N g δ :=
   Nat.le_add_left _ _
+
+/-- The truncation rank grows with the number of branches and the number of groups. -/
+theorem truncationRank_mono {N N' g g' δ : ℝ} (hN : 0 ≤ N) (hNN' : N ≤ N') (hg : 0 ≤ g)
+    (hgg' : g ≤ g') (hδ : 0 < δ) : truncationRank N g δ ≤ truncationRank N' g' δ := by
+  unfold truncationRank
+  gcongr
+  exact mul_nonneg zero_le_two (hN.trans hNN')
 
 /-- **Choice of the truncation rank.** With `k = truncationRank N g δ`, the summed branch error
 `N g / √k` is at most `δ / 2`.

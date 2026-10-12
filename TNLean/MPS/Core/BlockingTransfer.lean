@@ -128,4 +128,20 @@ theorem transferMap_blockTensor_mul
   rw [transferMap_blockTensor, transferMap_blockTensor, transferMap_blockTensor]
   simp [pow_mul]
 
+/-- The mixed transfer map of two `L`-site blocked tensors is the `L`-th power of the mixed
+transfer map of the tensors. -/
+theorem mixedMapLM_blockTensor_apply {D₁ D₂ : ℕ} (X : MPSTensor d D₁) (Y : MPSTensor d D₂)
+    (L : ℕ) (Z : Matrix (Fin D₁) (Fin D₂) ℂ) :
+    Kraus.mixedMapLM (blockTensor X L) (blockTensor Y L) Z = (Kraus.mixedMapLM X Y ^ L) Z := by
+  classical
+  rw [Kraus.mixedMapLM_pow_apply, Kraus.mixedMapLM_apply]
+  simp only [Kraus.blockTensor, Kraus.wordOfBlock]
+  let e : Fin (blockPhysDim d L) ≃ (Fin L → Fin d) := decodeBlockEquiv d L
+  simpa [Kraus.decodeBlockEquiv_apply, e] using
+    (Fintype.sum_equiv e
+      (f := fun i =>
+        Kraus.evalWord X (List.ofFn (e i)) * Z * (Kraus.evalWord Y (List.ofFn (e i)))ᴴ)
+      (g := fun σ => Kraus.evalWord X (List.ofFn σ) * Z * (Kraus.evalWord Y (List.ofFn σ))ᴴ)
+      (by intro i; rfl))
+
 end MPSTensor

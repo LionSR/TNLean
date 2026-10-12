@@ -1,0 +1,19 @@
+% Area-law manuscript, Section 2 (02-initial.tex, lines 337-344): the
+% filtered vector L_m ... L_1 Omega with positive filters L_j on the nested
+% regions X_j; drawn for m = 2, with T_j = X_j \ X_{j-1} the shells.
+\[
+  N=\Biggl\|
+  \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none]
+    \tn[at=(3,1), skin=box, wide=4, name=o,
+        ports={90@1:physical, 90@2:physical, 90@3:physical, 90@4:physical:$\Lambda\setminus X_2$}]{\Omega}
+    \tn[at=(2,1), skin=box, wide=2, name=l1,
+        ports={270@1:physical, 270@2:physical, 90@1:physical, 90@2:physical}]{L_1}
+    \tn[at=(1,1), skin=box, wide=3, name=l2,
+        ports={270@1:physical, 270@2:physical, 270@3:physical,
+               90@1:physical:$X$, 90@2:physical:$T_1$, 90@3:physical:$T_2$}]{L_2}
+    \tnwire{o.90@1}{l1.270@1} \tnwire{o.90@2}{l1.270@2}
+    \tnwire{l1.90@1}{l2.270@1} \tnwire{l1.90@2}{l2.270@2}
+    \tnwire{o.90@3}{l2.270@3}
+  \end{tenkz}
+  \Biggr\|
+\]

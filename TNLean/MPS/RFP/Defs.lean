@@ -203,18 +203,12 @@ theorem GaugeEquiv.isTransferIdempotent_iff {A B : MPSTensor d D}
 /-- Every nonzero eigenvalue of an idempotent transfer map equals `1`. This is the form in
 which arXiv:2011.12127, `Papers/2011.12127/TN-Review-main.tex` line 1197, states the
 renormalization fixed-point property ("all nonzero eigenvalues of the corresponding transfer
-matrix are equal to 1"). -/
+matrix are equal to 1"). It is the transfer-map case of Mathlib's
+`IsIdempotentElem.spectrum_subset`: an idempotent has spectrum in `{0, 1}`. -/
 theorem eq_one_of_hasEigenvalue_of_isTransferIdempotent {A : MPSTensor d D}
     (hA : IsTransferIdempotent A) {μ : ℂ}
     (hμ : Module.End.HasEigenvalue (Kraus.transferMap A) μ) (h0 : μ ≠ 0) : μ = 1 := by
-  obtain ⟨v, hv⟩ := hμ.exists_hasEigenvector
-  have hE := hv.apply_eq_smul
-  have h2 := LinearMap.congr_fun hA v
-  simp only [LinearMap.comp_apply, hE, map_smul, smul_smul] at h2
-  have h3 : (μ * μ - μ) • v = 0 := by rw [sub_smul, h2, sub_self]
-  have h4 : μ * (μ - 1) = 0 := by
-    rw [mul_sub, mul_one]
-    exact (smul_eq_zero.1 h3).resolve_right hv.2
-  exact sub_eq_zero.1 ((mul_eq_zero.1 h4).resolve_left h0)
+  have hE : IsIdempotentElem (Kraus.transferMap A) := hA
+  simpa [h0] using hE.spectrum_subset ℂ hμ.mem_spectrum
 
 end MPSTensor

@@ -401,7 +401,7 @@ into a single constant.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:ldp_unitary_implementing_isometry,
+    \uses{thm:ldp_unitary_implementing_isometry,
         thm:ldp_sequential_factorization_on,
         thm:ldp_block_sum_unitary,
         thm:qc_bounded_unitary_two_site_gates}
@@ -448,7 +448,7 @@ into a single constant.
         MPSPreparation.exists_blockUnitary_of_equiv_mul}
     \leanok
     \uses{thm:ldp_block_sum_unitary, thm:qc_bounded_unitary_two_site_gates,
-        lem:ldp_unitary_implementing_isometry}
+        thm:ldp_unitary_implementing_isometry}
     Let $D\ge1$, encode the bond indices injectively in $r_1\ge1$ sites, let $\pi$
     enumerate the bond pairs, and let $Q_1,\dots,Q_q$ be an isometric chain
     with $b_0=1$, as in Theorem~\ref{thm:ldp_block_sum_unitary}. There is $C$,
@@ -464,7 +464,7 @@ into a single constant.
     \leanok
     The encoded levels span an isometric copy of $\C^m$, so $G$ on them is an
     isometry into the window, which extends to a unitary by
-    Lemma~\ref{lem:ldp_unitary_implementing_isometry}. In the circuit of
+    Theorem~\ref{thm:ldp_unitary_implementing_isometry}. In the circuit of
     Theorem~\ref{thm:ldp_block_sum_unitary}, after the SWAP gates have brought
     the two inputs onto the last $2r_1$ sites, apply this unitary for $G$ on
     those sites, a product of a bounded number of gates by

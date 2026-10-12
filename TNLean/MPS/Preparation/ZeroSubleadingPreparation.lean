@@ -7,6 +7,7 @@ import TNLean.MPS.Preparation.BlockIsometryState
 import TNLean.MPS.Preparation.DepthUpperBound
 import TNLean.MPS.Preparation.ExactFixedPointPolar
 import TNLean.MPS.Preparation.ZeroSubleadingSpectrum
+import TNLean.MPS.Preparation.RemainderBlocks
 
 /-!
 # Exact preparation when the subleading spectrum vanishes
@@ -117,21 +118,7 @@ theorem exists_isPreparedInDepth_normalizedMPVState_of_subleading_eigenvalues_eq
   have hqpos : 0 < q := by dsimp [q]; omega
   have hqN : q ≤ N := hN0
   have : NeZero N := NeZero.of_pos (hqpos.trans_le hqN)
-  obtain ⟨m, hm⟩ : ∃ m, N / q = m + 1 :=
-    ⟨N / q - 1, (Nat.succ_pred_eq_of_pos (Nat.div_pos hqN hqpos)).symm⟩
-  let ℓ : Fin (m + 1) → ℕ := fun k => if k = Fin.last m then q + N % q else q
-  have hsum : ∑ k, ℓ k = N := by
-    rw [Fin.sum_univ_castSucc]
-    simp only [ℓ, Fin.castSucc_ne_last, ite_false, Finset.sum_const, Finset.card_univ,
-      Fintype.card_fin, smul_eq_mul, ite_true]
-    have h := Nat.div_add_mod N q
-    rw [hm] at h
-    linarith
-  have hℓq : ∀ k, q ≤ ℓ k := fun k => by dsimp [ℓ]; split_ifs <;> omega
-  have hℓupper : ∀ k, ℓ k ≤ 2 * q := fun k => by
-    have hrem := Nat.mod_lt N hqpos
-    dsimp [ℓ]
-    split_ifs <;> omega
+  obtain ⟨m, ℓ, hm, hsum, hℓq, hℓupper⟩ := exists_remainderBlocks hqpos hqN
   have hℓD : ∀ k, D ^ 2 ≤ ℓ k := fun k => by
     have h := hℓq k
     dsimp [q] at h

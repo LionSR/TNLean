@@ -380,7 +380,7 @@ notation below.
 \end{proof}
 
 \begin{theorem}[Projectors transported by scaled partial isometries]%
-    \label{thm:peps_scaled_projection_transport}
+    \label{thm:peps_scaled_partial_isometry_projector_transport}
     \lean{TNLean.PEPS.isStarProjection_smul_mul_mul_conjTranspose_of_gram,
         TNLean.PEPS.smul_mul_mul_conjTranspose_mul_of_gram,
         TNLean.PEPS.range_smul_mul_mul_conjTranspose_of_gram}
@@ -420,7 +420,7 @@ notation below.
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_scaled_projection_transport,thm:peps_projection_range_unique,
+    \uses{thm:peps_scaled_partial_isometry_projector_transport,thm:peps_projection_range_unique,
         thm:peps_regional_range_invariant_flat}
     The physical product map takes each canonical open-region column to the
     original tensor's column with the same boundary labels. Their spans give
@@ -428,7 +428,7 @@ notation below.
     Every vector in $\mathcal S_R^0$ is fixed by the product of local regular
     averages, proving $E_RP_R^0=P_R^0$; adjoints give $P_R^0E_R=P_R^0$.
     Tensor the local Gram identities and apply
-    Theorem~\ref{thm:peps_scaled_projection_transport}.
+    Theorem~\ref{thm:peps_scaled_partial_isometry_projector_transport}.
     The resulting orthogonal projector has range $\mathcal S_R$, so uniqueness
     identifies it with $P_R$ and gives (\ref{eq:peps_physical_projector_transport}).
 \end{proof}

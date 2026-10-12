@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Basic.Complex.Basic
+import TNLean.Algebra.BinaryCharacterSum
 import TNLean.Algebra.GeneralizeDecide
 import TNLean.Algebra.HypercubePhasePotential
 import TNLean.Algebra.MonomialGaussOperator
@@ -108,12 +109,6 @@ $\tilde\lambda$. -/
 def fExponent (x : Fin 4 → ZMod 2) : ZMod 2 :=
   x 0 * x 1 + x 1 * x 2 + x 0 + x 1 + x 3
 
-theorem neg_one_pow_val_add (a b : ZMod 2) :
-    (-1 : ℂ) ^ (a + b).val = (-1) ^ a.val * (-1) ^ b.val := by
-  rcases TNLean.Algebra.zmod_two_eq_zero_or_one a with rfl | rfl <;>
-    rcases TNLean.Algebra.zmod_two_eq_zero_or_one b with rfl | rfl <;>
-    simp [show ((1 : ZMod 2) + 1).val = 0 from rfl, show ((1 : ZMod 2)).val = 1 from rfl]
-
 theorem barFlip_apply (x : Fin 4 → ZMod 2) :
     barFlip x = x + (Pi.single 0 1 + Pi.single 1 1) :=
   rfl
@@ -140,7 +135,7 @@ theorem w_eq : w = monomial barFlip fun x ↦ (-1) ^ (eExponent x).val := by
   rw [hperm]
   congr 1
   funext x
-  rw [eExponent, neg_one_pow_val_add, neg_one_pow_val_add, neg_one_pow_val_add]
+  rw [eExponent, ZMod.neg_one_pow_val_add, ZMod.neg_one_pow_val_add, ZMod.neg_one_pow_val_add]
 
 /-- The phase table of $\lambda$: $\lambda\ket{x}=-i(-1)^{h(x)}\ket{\overline x}$;
 the two occurrences of $X_2$ cancel on computational-basis states. -/
@@ -164,7 +159,8 @@ theorem lambda_eq : lambda = monomial barFlip fun x ↦ -I * (-1) ^ (hExponent x
   have hh : hExponent x = x 3 + x 0 * x 1 + x 1 * (x 2 + 1) := by
     rw [hExponent]
     ring
-  rw [Pi.smul_apply, smul_eq_mul, h0, h1, h2, h3, hh, neg_one_pow_val_add, neg_one_pow_val_add]
+  rw [Pi.smul_apply, smul_eq_mul, h0, h1, h2, h3, hh, ZMod.neg_one_pow_val_add,
+    ZMod.neg_one_pow_val_add]
 
 /-- The phase table of $\tilde\lambda$:
 $\tilde\lambda\ket{x}=-i(-1)^{f(x)}\ket{\overline x}$. -/
@@ -176,7 +172,7 @@ theorem tildeLambda_eq :
   have hf : fExponent x = hExponent x + x 0 := by
     rw [fExponent, hExponent]
     ring
-  rw [Equiv.Perm.coe_one, id_eq, hf, neg_one_pow_val_add]
+  rw [Equiv.Perm.coe_one, id_eq, hf, ZMod.neg_one_pow_val_add]
   ring
 
 /-! ### The circuit tuple on the two-site matter space -/
@@ -435,10 +431,10 @@ theorem gaussOperator_circuitTuple_gen :
     rcases MPSTensor.zmod2_cases a with rfl | rfl <;>
       rcases MPSTensor.zmod2_cases b with rfl | rfl
     · simp [gen_inv, matterBarFlip_symm, fExponent_barFlip, phaseExponent_zero_zero,
-        iPow_add, iPow_two_mul_cast, neg_one_pow_val_add, Complex.star_def,
+        iPow_add, iPow_two_mul_cast, ZMod.neg_one_pow_val_add, Complex.star_def,
         show ((1 : ZMod 2)).val = 1 from rfl]
     · simp [gen_inv, gen_mul_gen, matterBarFlip_symm, eExponent_barFlip, phaseExponent_zero_one,
-        iPow_add, iPow_two_mul_cast, neg_one_pow_val_add, show ((1 : ZMod 2)).val = 1 from rfl]
+        iPow_add, iPow_two_mul_cast, ZMod.neg_one_pow_val_add, show ((1 : ZMod 2)).val = 1 from rfl]
     · simp [gen_inv, gen_mul_gen, phaseExponent_one_zero, iPow_two_mul_cast]
     · simp [gen_inv, gen_mul_gen, phaseExponent_one_one, iPow_add, iPow_two_mul_cast]
 

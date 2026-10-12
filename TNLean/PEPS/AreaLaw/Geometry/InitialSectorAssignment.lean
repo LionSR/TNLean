@@ -111,6 +111,20 @@ private theorem fine_working_radius_eq (k : ℕ) (hk : 50000000 ≤ k) :
   rw [← hp]
   ring
 
+/-- The closed half-radius square in the initial-star construction has
+half-side one hundred and twenty-eighth of the actual fine-cell side. The
+existing late-layer bound supplies the exponent needed for natural subtraction.
+
+Auxiliary to OpenAI, *A two-dimensional area law from a global spectral gap*,
+September 24, 2026, Section 11, `prop:two-families`, lines 200–207, and
+`geometry:initial-stars`, lines 333–370, especially 352–370, at
+`openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+theorem fineScaleIndex_closed_half_radius_eq (k : ℕ) (hk : 50000000 ≤ k) :
+    ((2 : ℝ) ^ (fineScaleIndex k - 5) / 2) / 2 =
+      (2 : ℝ) ^ fineScaleIndex k / 128 := by
+  have h := fine_working_radius_eq k hk
+  linarith
+
 /-- The eight actual open working triangles about a fine-cell mark have a
 unique assignment to actual initial identifiers. Every initial birth region
 in the smaller concentric closed square is precisely the union of its assigned
@@ -280,5 +294,26 @@ theorem exists_unique_initialRegion_sector_assignment
   · intro τ hτ
     funext s
     exact (Classical.choose_spec (hassign s)).2 (τ s) (hτ.1 s)
+
+/-- The canonical assignment of the eight working sectors about an actual
+fine-cell mark to the initial region identifiers. It is characterized by
+containment of each working open triangle in its assigned initial open region
+and by the smaller closed-square decomposition.
+
+Auxiliary to OpenAI, *A two-dimensional area law from a global spectral gap*,
+Section 11, `geometry:initial-stars`, lines 333–370, especially 352–370,
+and `prop:two-families`, lines 299–323, at
+`openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+noncomputable def initialSectorAssignment
+    (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
+    (a b : (h : ℕ) → Fin (2 ^ (pitchScaleIndex h - fineScaleIndex h)))
+    (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀)
+    (k : ℕ) (z : ℤ × ℤ) (v : ℝ × ℝ) (hk₀ : k₀ ≤ k)
+    (hz : z ∈ fineLayerIndices o k (fineScaleIndex k) Z C)
+    (hv : v ∈ beltCellMarks o (fineScaleIndex k) z) :
+    CellFanSlot (fun _ : Fin 4 ↦ true) → InitialRegionIndex o k₀ Z C a b hC h₀ :=
+  Classical.choose
+    (exists_unique_initialRegion_sector_assignment
+      o k₀ Z C a b hC h₀ k z v hk₀ hz hv)
 
 end TNLean.PEPS.AreaLaw.Geometry

@@ -223,30 +223,6 @@ theorem traceAC_fourCycleTripartiteState :
       exact congrArg (fun z : Fin 2 × Fin 4 × Fin 2 => z.2.1) h
     simp [Matrix.traceAC_ABC, hxy, hneq]
 
-/-- A maximally mixed state on a finite basis of cardinality $d$ has entropy
-$\log d$.
-
-Source: Wolf, *Quantum Channels & Operations*, Section 8.2. -/
-private theorem vonNeumannEntropy_inv_card_smul_one
-    {n : Type*} [Fintype n] [DecidableEq n] (d : ℕ)
-    (hcard : Fintype.card n = d) (hd : 0 < d)
-    (hρ : (((d : ℂ)⁻¹) • (1 : Matrix n n ℂ)).IsHermitian) :
-    vonNeumannEntropy (((d : ℂ)⁻¹) • (1 : Matrix n n ℂ)) hρ =
-      Real.log d := by
-  have heq : ((d : ℂ)⁻¹) • (1 : Matrix n n ℂ) =
-      Matrix.diagonal (fun _ : n => (((d : ℝ)⁻¹ : ℝ) : ℂ)) := by
-    rw [Matrix.smul_one_eq_diagonal]
-    ext i j
-    simp
-  let hdiag : (Matrix.diagonal fun _ : n => (((d : ℝ)⁻¹ : ℝ) : ℂ)).IsHermitian :=
-    Matrix.isHermitian_diagonal_of_self_adjoint _ (by
-      rw [isSelfAdjoint_iff]
-      ext i
-      simp)
-  rw [vonNeumannEntropy_congr heq hρ hdiag, Matrix.vonNeumannEntropy_diagonal]
-  rw [Finset.sum_const, Finset.card_univ, hcard, nsmul_eq_mul]
-  simp [Real.negMulLog, hd.ne', Real.log_inv]
-
 /-- The entropy of the normalized four-site Example 4.12 state is
 $3\log 2$.
 
@@ -293,7 +269,7 @@ theorem traceC_fourCycleTripartiteState_entropy :
     _ = vonNeumannEntropy
         (((8 : ℂ)⁻¹) • (1 : Matrix (Fin 2 × Fin 4) (Fin 2 × Fin 4) ℂ))
         hscaled := vonNeumannEntropy_congr traceC_fourCycleTripartiteState _ _
-    _ = Real.log 8 := vonNeumannEntropy_inv_card_smul_one 8 (by simp) (by omega) hscaled
+    _ = Real.log 8 := Matrix.vonNeumannEntropy_inv_card_smul_one 8 (by simp) (by omega) hscaled
     _ = 3 * Real.log 2 := by
       rw [show (8 : ℝ) = 2 ^ 3 by norm_num, Real.log_pow]
       norm_num
@@ -314,7 +290,7 @@ theorem traceA_fourCycleTripartiteState_entropy :
     _ = vonNeumannEntropy
         (((8 : ℂ)⁻¹) • (1 : Matrix (Fin 4 × Fin 2) (Fin 4 × Fin 2) ℂ))
         hscaled := vonNeumannEntropy_congr traceA_fourCycleTripartiteState _ _
-    _ = Real.log 8 := vonNeumannEntropy_inv_card_smul_one 8 (by simp) (by omega) hscaled
+    _ = Real.log 8 := Matrix.vonNeumannEntropy_inv_card_smul_one 8 (by simp) (by omega) hscaled
     _ = 3 * Real.log 2 := by
       rw [show (8 : ℝ) = 2 ^ 3 by norm_num, Real.log_pow]
       norm_num
@@ -333,7 +309,7 @@ theorem traceAC_fourCycleTripartiteState_entropy :
   calc
     _ = vonNeumannEntropy (((4 : ℂ)⁻¹) • (1 : Matrix (Fin 4) (Fin 4) ℂ))
         hscaled := vonNeumannEntropy_congr traceAC_fourCycleTripartiteState _ _
-    _ = Real.log 4 := vonNeumannEntropy_inv_card_smul_one 4 (by simp) (by omega) hscaled
+    _ = Real.log 4 := Matrix.vonNeumannEntropy_inv_card_smul_one 4 (by simp) (by omega) hscaled
     _ = 2 * Real.log 2 := by
       rw [show (4 : ℝ) = 2 ^ 2 by norm_num, Real.log_pow]
       norm_num

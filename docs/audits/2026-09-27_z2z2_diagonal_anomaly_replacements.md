@@ -36,3 +36,23 @@ All names are in the namespace `Z2Z2Condensation`.
   `MPSTensor.isDressedProportional_complexOfInt_of_mem`.
 
 `columnInt` is kept.
+
+## Later rename (2026-10-10)
+
+The order-two family of `Z2Z2AnomalyClass` was generalized to
+`TNLean/MPS/Symmetry/MPOSymmetry/AssociatorOrderTwo.lean`, so the replacements above now
+read as follows (names outside `Z2Z2Condensation` are in `MPOTensor.GroupFamily`):
+
+- `pairFamily A`: `orderTwoFamily eTensor A`.
+- `pairFusionData`: `FusionData.orderTwo eTensor`, with the extra argument
+  `mulTensor_eTensor_eTensor`.
+- `pairFusionData_omega_gen_one_gen`, `pairFusionData_leftV_gen_gen_gen`,
+  `pairFusionData_rightV_gen_gen_gen`, `cyclicInvariant_pairFusionData`:
+  `FusionData.orderTwo_omega_gen_one_gen`, `FusionData.orderTwo_leftV_gen_gen_gen`,
+  `FusionData.orderTwo_rightV_gen_gen_gen`, `FusionData.cyclicInvariant_orderTwo`.
+- `pairBondDim`, `pairLabelTensor`, `pairLabelV`, `pairLabelW`: `orderTwoBondDim`,
+  `orderTwoLabelTensor`, `orderTwoLabelV`, `orderTwoLabelW`.
+- `z2Gen`, `z2Gen_pow_two`: `orderTwoGen`, `orderTwoGen_pow_two`.
+- `pairFamily_kx_isNormalRepresentation`, `pairFamily_kxy_isNormalRepresentation`:
+  `Z2Z2Condensation.orderTwoFamily_kx_isNormalRepresentation`,
+  `Z2Z2Condensation.orderTwoFamily_kxy_isNormalRepresentation`.

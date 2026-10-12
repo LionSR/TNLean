@@ -122,6 +122,7 @@ jobs:
           python3 -m playwright install --with-deps chromium
           python3 scripts/test_blueprint_search_web.py --web-root blueprint/web
           python3 scripts/test_blueprint_graph_worker.py
+          python3 scripts/test_blueprint_graph_precompute.py
           python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
 
       - name: Generate API docs
@@ -152,7 +153,10 @@ jobs:
           source: home_page
           destination: site-blueprint/homepage
 
+      # deploy-pages.yml publishes the newest artifact of each name, so only a
+      # build of main, run from main, may upload site components or deploy.
       - name: Upload blueprint component
+        if: github.ref == 'refs/heads/main' && (inputs.ref || 'main') == 'main'
         uses: actions/upload-artifact@v7
         with:
           name: site-blueprint
@@ -160,6 +164,7 @@ jobs:
           retention-days: 30
 
       - name: Upload docs component
+        if: github.ref == 'refs/heads/main' && (inputs.ref || 'main') == 'main'
         uses: actions/upload-artifact@v7
         with:
           name: site-docs
@@ -167,6 +172,7 @@ jobs:
           retention-days: 90
 
       - name: Upload badges component
+        if: github.ref == 'refs/heads/main' && (inputs.ref || 'main') == 'main'
         uses: actions/upload-artifact@v7
         with:
           name: site-badges
@@ -176,6 +182,7 @@ jobs:
   deploy:
     name: Deploy Pages site
     needs: build_project
+    if: github.ref == 'refs/heads/main' && (inputs.ref || 'main') == 'main'
     uses: ./.github/workflows/deploy-pages.yml
     permissions:
       contents: read

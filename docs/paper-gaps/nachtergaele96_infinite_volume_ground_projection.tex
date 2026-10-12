@@ -130,12 +130,27 @@ projections of the two subspaces. The result is proved in
 Stationarity is unnecessary for these finite densities. Without stationarity
 the conclusion does not assert consistency across intervals.
 
-These finite-volume statements take the faithful generating data as given.
-Nachtergaele passes from an arbitrary GVBS presentation to faithful minimal
-generating data \cite{Nachtergaele1996Spectral}, local source lines 1724--1738.
-That passage is not formalized here; the support results therefore carry the
-faithful generators as an explicit hypothesis. Removing it requires
-formalizing the minimal-data construction from a general presentation.
+Faithfulness of $\rho$ can be removed for normalized stationary data.
+Let $\sum_iA_i^*A_i=I$, let $\rho\geq0$ have nonzero trace, and let
+$\sum_iA_i\rho A_i^*=\rho$. The support projection $P$ of $\rho$ satisfies
+$(I-P)A_iP=0$. Choose an isometry $V$ with $VV^*=P$ and put
+$B_i=V^*A_iV$ and $\sigma=V^*\rho V$. Then $A_iV=VB_i$, $\sigma>0$, and
+$\eta_{A,\rho}=\eta_{B,\sigma}$ on every interval. Moreover
+$G_B(k)$ is the image of the corner $PM_DP$ under the boundary map of $A$.
+Hence $\eta_{A,\rho}(X^*X)=0$ exactly when $X$ annihilates this corner
+image, and when $A$ is left canonical the density $\sigma_k$ has this
+corner image as its range. These statements are proved in
+\path{TNLean/MPS/ParentHamiltonian/StationaryLocalSupport.lean}.
+
+The remaining step is the passage from an arbitrary GVBS boundary limit,
+Equation~(1.1) of Ref.~\cite{Nachtergaele1996Spectral}, to normalized
+stationary data. Nachtergaele takes it from
+Fannes--Nachtergaele--Werner \cite{Nachtergaele1996Spectral}, local source
+lines 1411--1414, and the faithful minimal data used at lines 1724--1738
+also rely on the minimality condition of lines 1457--1467. That passage is
+not formalized here; the support results therefore start from normalized
+stationary generating data. Removing this restriction requires formalizing
+the cited normalization and minimality results from a general presentation.
 Likewise, results stated for a primitive tensor with canonical data, for a
 normalized periodic tensor, or for a finite periodic family take that tensor
 presentation as given. Deriving such a presentation from a general GVBS

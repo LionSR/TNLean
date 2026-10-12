@@ -557,6 +557,60 @@ products of $D^2$ Hermitian one-site operators. Arbitrary virtual boundaries
 need not have Hermitian product representatives, so that nonvanishing
 statement is separate from exact realization.
 
+\section{Stationary physical reduced densities}
+\label{sec:pgwsvc08_stationary_physical_densities}
+
+The physical state in Theorem~2 is now represented by its stationary
+finite-block density matrices
+\begin{align}
+    (\varrho_N(A,\Lambda))_{s,t}
+        &=\tr(\Lambda A_sA_t^\dagger),
+    \label{eq:pgwsvc08_stationary_physical_density}\\
+    \varrho_N(A,\Lambda)
+        &=P_N(\Lambda^{\mathsf T}\otimes\mathbf1_D)P_N^\dagger,
+    \qquad (P_N)_{s,(a,b)}=(A_s)_{a,b}.
+    \label{eq:pgwsvc08_stationary_physical_factorization}
+\end{align}
+This is a physical matrix on $N$ sites, not the virtual stationary matrix
+$\Lambda$ and not a reduction of a finite periodic vector.
+For every physical block operator $O$, it represents the existing transfer
+functional exactly: $\tr(\varrho_NO)=\tr(\Lambda\mathcal E_O^{[N]}(\mathbf1))$,
+with coefficient orientation $O_{t,s}$ and without a Hermitian restriction.
+Under $\Lambda\geq0$, $\tr\Lambda=1$, $\mathcal E_A(\mathbf1)=\mathbf1$,
+and $\mathcal E_A^*(\Lambda)=\Lambda$, these matrices are positive,
+trace one, and consistent under tracing out either end. Their ranks are
+at most $D^2$. A square-root factorization through the virtual pair space
+proves $D^{-2}\leq\tr(\varrho_N^2)$ independently of $N$.
+
+For $B_i=\sum_j u_{ij}A_j$ put $G_N=(P_N^A)^\dagger P_N^B$ and
+$K=\Lambda^{\mathsf T}\otimes\mathbf1_D$. The exact contraction is
+\begin{align}
+    \tr(\varrho_N(A,\Lambda)\varrho_N(B,\Lambda))
+        &=\tr(KG_NKG_N^\dagger),
+    \label{eq:pgwsvc08_stationary_physical_overlap}\\
+    (G_N)_{(a,b),(c,e)}
+        &=\bigl[\mathcal E_u^N(\ketbra{e}{b})\bigr]_{c,a}.
+    \label{eq:pgwsvc08_stationary_physical_gram}
+\end{align}
+The density construction, consistency, covariance, purity bound, and the
+conditional decay of this contraction are formalized.
+The final source-canonical equivalence, which derives the decay from
+$\rho(\mathcal E_u)<1$ and uses peripheral rigidity in the opposite
+direction, is
+\leanid{MPSTensor.stationaryBlockDensity_invariant_iff_spectralRadius_eq_one}.
+Its hypotheses are exactly the source's pure finitely correlated state
+assumptions, so Theorem~2 for a fixed physical unitary is formalized.
+
+The fixed-$u$ statement includes scalar unitaries. It does not impose the
+projective nonscalar convention used for the existential string-order
+criterion. A regression considers $A_0=|0\rangle\langle0|$,
+$A_1=|1\rangle\langle1|$, $\Lambda=\operatorname{diag}(3/4,1/4)$,
+and $u=X$. Here $\Lambda$ is faithful, the channel is unital and dual
+stationary, and the twisted map is the nonzero projection onto the
+off-diagonal matrices, of spectral radius one. Nevertheless,
+$\varrho_1=\Lambda$ is not $X$-invariant. Thus faithfulness and
+stationarity alone do not justify dropping the source purity assumption.
+
 \section{Effective continuous generators}
 
 For the continuous criterion in source lines~352--359, the scalar virtual
@@ -614,9 +668,12 @@ literal Hermitian one-site products with positive limiting string magnitude.
 
 The fixed-twist virtual-boundary predicate remains unchanged and includes
 identity symmetry elements. It is not itself the physical endpoint assertion
-of the printed Theorem~1. The physical reduced-state symmetry statement of
-Theorem~2 is a separate remaining task. These source-facing tasks are tracked
-in \ghissue{4872}; \ghissue{2660} was absorbed into that issue.
+of the printed Theorem~1; that physical endpoint assertion is tracked in
+\ghissue{4872}, which absorbed \ghissue{2660}. The physical reduced-state
+symmetry statement of Theorem~2, for a fixed physical unitary and under the
+source's pure finitely correlated state assumptions, is formalized by the
+stationary-density equivalence of
+Section~\ref{sec:pgwsvc08_stationary_physical_densities}.
 
 \bibliographystyle{alpha}
 \bibliography{references}

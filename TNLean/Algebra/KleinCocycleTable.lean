@@ -61,7 +61,7 @@ satisfies the three-cocycle equation. -/
 theorem kleinCocycleFamily_isCocycle (p q r : ZMod 2) :
     IsCocycle (kleinCocycleFamily p q r) := by
   intro g h k l
-  simp only [kleinCocycleFamily, neg_one_pow_val_add, toAdd_mul, Prod.fst_add, Prod.snd_add]
+  simp only [kleinCocycleFamily, ← ZMod.neg_one_pow_val_add, toAdd_mul, Prod.fst_add, Prod.snd_add]
   congr 2
   ring
 

@@ -38,10 +38,19 @@ on:
       - 'scripts/test_tenkz_pic.py'
       - 'scripts/test_blueprint_pdf_capacity.py'
       - 'scripts/test_tenkz_ordered_mixing.py'
+      - 'scripts/test_tenkz_mixed_action.py'
+      - 'scripts/test_tenkz_isometric_gap_transport.py'
+      - 'scripts/test_tenkz_scan_ancestry.py'
       - 'scripts/test_tenkz_quantum_double_source_construction.py'
       - 'scripts/test_sector_encoder_diagram.py'
+      - 'scripts/test_tenkz_mixed_fusion.py'
+      - 'scripts/test_nested_patch_geometry_diagram.py'
+      - 'scripts/test_tenkz_mixed_normality.py'
+      - 'scripts/test_tenkz_mixed_symbols.py'
+      - 'scripts/test_tenkz_normal_adjoint_boundary.py'
       - 'scripts/test_blueprint_web_render.py'
       - 'scripts/test_blueprint_graph_worker.py'
+      - 'scripts/test_blueprint_graph_precompute.py'
       - 'scripts/add_blueprint_search.py'
       - 'scripts/test_add_blueprint_search.py'
       - 'scripts/test_blueprint_search_web.py'
@@ -105,8 +114,16 @@ jobs:
             'docs/slides/*.tex'
           python3 scripts/test_tenkz_pic.py
           python3 scripts/test_tenkz_ordered_mixing.py
+          python3 scripts/test_tenkz_mixed_action.py
+          python3 scripts/test_tenkz_isometric_gap_transport.py
+          python3 scripts/test_tenkz_scan_ancestry.py
           python3 scripts/test_tenkz_quantum_double_source_construction.py
           python3 scripts/test_sector_encoder_diagram.py
+          python3 scripts/test_tenkz_mixed_fusion.py
+          python3 scripts/test_nested_patch_geometry_diagram.py
+          python3 scripts/test_tenkz_mixed_normality.py
+          python3 scripts/test_tenkz_mixed_symbols.py
+          python3 scripts/test_tenkz_normal_adjoint_boundary.py
 
       - name: Check paper-gap references resolve
         run: texra-blueprint paper-gaps check
@@ -253,7 +270,12 @@ jobs:
           python3 -m playwright install --with-deps chromium
           python3 scripts/test_blueprint_search_web.py --web-root blueprint/web
           python3 scripts/test_blueprint_graph_worker.py
+          python3 scripts/test_blueprint_graph_precompute.py
           python3 scripts/test_blueprint_web_render.py --web-root blueprint/web
+          python3 scripts/test_tenkz_mixed_action.py --web-root blueprint/web --browser
+          python3 scripts/test_tenkz_mixed_fusion.py --web-root blueprint/web --browser
+          python3 scripts/test_tenkz_mixed_normality.py --web-root blueprint/web --browser
+          python3 scripts/test_tenkz_mixed_symbols.py --web-root blueprint/web --browser
 
       # Drop pictures no page references any more, so neither the published
       # site nor the saved cache carries figures that were edited away.
@@ -308,7 +330,11 @@ jobs:
           source: home_page
           destination: site-blueprint/homepage
 
+      # deploy-pages.yml fetches the newest artifact of each name, so only
+      # main may publish site components; a manual run elsewhere builds them
+      # but keeps them out of the next production deploy.
       - name: Upload blueprint component
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v7
         with:
           name: site-blueprint
@@ -316,6 +342,7 @@ jobs:
           retention-days: 30
 
       - name: Upload badges component
+        if: github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v7
         with:
           name: site-badges

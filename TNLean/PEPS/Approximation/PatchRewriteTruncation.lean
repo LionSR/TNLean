@@ -26,25 +26,10 @@ branch within `2m / √k` by at most `k ^ (2m)` product terms with coefficients 
 one, uniformly in the dimensions of the sites (`exists_branch_truncation`), and the rescaling of
 `norm_rescale_sum_le_of_branches` gives `M_δ` (`exists_contractive_approx`).
 
-**Scope restriction (monomial reading):** the last step of the proof of Lemma 6.3
-(`05-frames.tex`, lines 306–316), reading each product term as a monomial allowed by Theorem 5.2,
-is not formalized. `exists_contractive_approx` gives the product terms as explicit tensor products
-of normalized vectors and covectors on the open-leg groups of the patch vertices (each group on at
-most two parties of the specified list), of product zero vectors on the selected hole squares, of
-tag basis vectors, and of identities (`SiteChain.termOp_apply`); their identification with the
-operators of allowed monomials (`PairEffect.PartyChain`) on the registers of the frames, one per
-site and per tag (`EncodedFrame.layoutRegs`, `EncodedFrame.layoutIso` in
-`TNLean.PEPS.Approximation.FrameRegisters`), is not constructed. The number of terms is
-bounded through the number `N` of branches only (`card_branch_le`); it becomes polynomial in `L`
-with the cylinder-term bound of Proposition 4.1, which the patch data do not record, and bounded
-numbers of patches and affected holes. Documented in
-`docs/paper-gaps/polypeps_small_rewrite_monomials.tex`. Elimination: write each product term as
-an allowed party chain on the registers of the frames, moving the registers of each open-leg group
-in front with the reordering words of `TNLean.PEPS.Approximation.SiteRegisters` and
-`TNLean.PEPS.Approximation.RegisterReordering`, placing the grouped factors with
-`EncodedFrame.layoutIso_place` (`TNLean.PEPS.Approximation.FrameRegisters`), and reading the
-explicit matrices with the front-register calculus (`PairEffect.eval_localMap`), and carry the
-cylinder-term bound.
+Each product term is read as an allowed monomial of Theorem 5.2 on the registers of the frames
+in `TNLean.PEPS.Approximation.PatchRewriteMonomials` (`SmallPatchRewrite.exists_termChain`,
+`SmallPatchRewrite.exists_allowed_monomial_approx`), which also bounds the number of monomials
+polynomially in `L` (`SmallPatchRewrite.exists_allowed_monomial_approx_polynomial`).
 
 ## Main definitions
 
@@ -468,10 +453,8 @@ theorem mem_patchIndices_of_isOpen (hR : R.Conditions) (β : R.Branch)
       obtain ⟨s', hs', hxs'⟩ :=
         (mem_patchSquares_iff _ _).mp (R.newSample_subset_patchSquares hR β.2.1 β.1 hxh)
       obtain ⟨i', hi'1, -, hi'⟩ := exists_get_append₃_eq_mid E P D hs'
-      exact hE ⟨i', Fin.lt_def.mpr (by omega), by
-        change x ∈ ((E ++ P ++ D).get i').sites
-        rw [hi']
-        exact hxs'⟩
+      exact hE ⟨i', Fin.lt_def.mpr (by omega),
+        show x ∈ ((E ++ P ++ D).get i').sites from hi' ▸ hxs'⟩
     exact ⟨hj1, hP ▸ hj2⟩
   · obtain ⟨hx, hL, hk⟩ := h
     have hi1 : E.length ≤ (i : ℕ) := by
@@ -488,10 +471,8 @@ theorem mem_patchIndices_of_isOpen (hR : R.Conditions) (β : R.Branch)
       obtain ⟨s', hs', hxs'⟩ :=
         (mem_patchSquares_iff _ _).mp (R.oldSample_subset_patchSquares hR β.2.1 β.2.2 hxh)
       obtain ⟨i', -, hi'2, hi'⟩ := exists_get_append₃_eq_mid E P D hs'
-      exact hL ⟨i', Fin.lt_def.mpr (by omega), by
-        change x ∈ ((E ++ P ++ D).get i').sites
-        rw [hi']
-        exact hxs'⟩
+      exact hL ⟨i', Fin.lt_def.mpr (by omega),
+        show x ∈ ((E ++ P ++ D).get i').sites from hi' ▸ hxs'⟩
     exact ⟨hi1, hP ▸ hi2⟩
 
 theorem mem_patchVertices_of_isOpen (hR : R.Conditions) (β : R.Branch)
@@ -533,10 +514,8 @@ theorem exists_owners_of_isOpen_inl (hR : R.Conditions) (β : R.Branch)
       (Or.inl ⟨Q, hQ, Q.exists_mem_sample_of_mem_tagSample hxQ⟩)⟩
     obtain ⟨s', hs', hxs'⟩ := (mem_holeSquares_iff_decSteps _ _).mp hxh
     obtain ⟨i', hi'1, hi'⟩ := exists_get_append₃_eq_right E P D hs'
-    exact hx.2.1 ⟨i', Fin.lt_def.mpr (by omega), by
-      change x ∈ ((E ++ P ++ D).get i').sites
-      rw [hi']
-      exact hxs'⟩
+    exact hx.2.1 ⟨i', Fin.lt_def.mpr (by omega),
+      show x ∈ ((E ++ P ++ D).get i').sites from hi' ▸ hxs'⟩
   · exact ⟨∅, by simp, fun x hx => absurd ⟨x, hx⟩ hj⟩
 
 /-- **Open output legs have at most two new owners.** The open output legs of a ket vertex of a
@@ -570,10 +549,8 @@ theorem exists_owners_of_isOpen_inr (hR : R.Conditions) (β : R.Branch)
       (Or.inl ⟨Q, hQ, Q.exists_mem_sample_of_mem_tagSample hxQ⟩)⟩
     obtain ⟨s', hs', hxs'⟩ := (mem_holeSquares_iff_encSteps _ _).mp hxh
     obtain ⟨i', hi'1, hi'⟩ := exists_get_append₃_eq_left E P D hs'
-    exact hx.2.1 ⟨i', Fin.lt_def.mpr (by omega), by
-      change x ∈ ((E ++ P ++ D).get i').sites
-      rw [hi']
-      exact hxs'⟩
+    exact hx.2.1 ⟨i', Fin.lt_def.mpr (by omega),
+      show x ∈ ((E ++ P ++ D).get i').sites from hi' ▸ hxs'⟩
   · exact ⟨∅, by simp, fun x hx => absurd ⟨x, hx⟩ hi⟩
 
 /-- **Truncation of one branch (Lemma 6.2 applied to the branch network).** Under the conditions
@@ -606,14 +583,6 @@ theorem exists_branch_truncation (hR : R.Conditions) (β : R.Branch) (k : ℕ) (
     (Real.sqrt_nonneg _))
 
 omit [NeZero q] in
-theorem liftBranch_sub (β : R.Branch) (Y Y' : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
-    R.liftBranch β Y - R.liftBranch β Y' = R.liftBranch β (Y - Y') := by
-  ext x y
-  simp only [liftBranch, tagLift, reindex_apply, submatrix_apply, Matrix.sub_apply,
-    kroneckerMap_apply, of_apply]
-  split_ifs <;> ring
-
-omit [NeZero q] in
 theorem norm_liftBranch_le (β : R.Branch) (Y : Matrix (ι → Fin q) (ι → Fin q) ℂ) :
     ‖R.liftBranch β Y‖ ≤ ‖Y‖ :=
   (l2_opNorm_reindex_le _ _ _).trans ((l2_opNorm_kronecker_one_le _).trans
@@ -632,9 +601,8 @@ specified list (`exists_owners_of_isOpen_inl`, `exists_owners_of_isOpen_inr`), o
 zero vectors of the hole encodings, and of the identity on the sites outside the selected patch
 squares (`termOp_apply`).
 
-The reading of each product term as an allowed monomial of Theorem 5.2 on the registers of the
-frames, and a polynomial bound on `N`, are not part of this statement; see the scope restriction
-in the module docstring.
+Each product term is read as an allowed monomial in `exists_allowed_monomial_approx`, and the
+number of terms is bounded polynomially in `L` in `exists_allowed_monomial_approx_polynomial`.
 
 Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 214–217;
 proof lines 254–341. -/

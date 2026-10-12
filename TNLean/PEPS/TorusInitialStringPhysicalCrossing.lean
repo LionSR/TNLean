@@ -54,29 +54,23 @@ private theorem initial_internal_eq (v : X) (g h : G) (e : Edge Γₜ)
   let p := torusFirstStringCrossingBase v
   let φ := verticalTwoPlaquetteIso p
   have h21 : (2 : ZMod height) ≠ 1 := by
-    simpa using (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt
-      (n := height) 2 1 (by have := Fact.out (p := 5 < height); norm_num; omega)).not.mpr
-      (by norm_num : (2 : ℤ) ≠ 1)
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := height) 2 1
+        (by have := Fact.out (p := 5 < height); norm_num; omega) (by decide)
   have h31 : (3 : ZMod height) ≠ 1 := by
-    simpa using (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt
-      (n := height) 3 1 (by have := Fact.out (p := 5 < height); norm_num; omega)).not.mpr
-      (by norm_num : (3 : ℤ) ≠ 1)
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := height) 3 1
+        (by have := Fact.out (p := 5 < height); norm_num; omega) (by decide)
   have h20 : (2 : ZMod height) ≠ (0) := by
-    simpa using (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt
-      (n := height) 2 (0) (by have := Fact.out (p := 5 < height); norm_num; omega)).not.mpr
-      (by norm_num : (2 : ℤ) ≠ (0))
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := height) 2 (0)
+        (by have := Fact.out (p := 5 < height); norm_num; omega) (by decide)
   have h30 : (3 : ZMod height) ≠ (0) := by
-    simpa using (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt
-      (n := height) 3 (0) (by have := Fact.out (p := 5 < height); norm_num; omega)).not.mpr
-      (by norm_num : (3 : ℤ) ≠ (0))
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := height) 3 (0)
+        (by have := Fact.out (p := 5 < height); norm_num; omega) (by decide)
   have h2m1 : (2 : ZMod height) ≠ (-1) := by
-    simpa using (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt
-      (n := height) 2 (-1) (by have := Fact.out (p := 5 < height); norm_num; omega)).not.mpr
-      (by norm_num : (2 : ℤ) ≠ (-1))
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := height) 2 (-1)
+        (by have := Fact.out (p := 5 < height); norm_num; omega) (by decide)
   have h3m1 : (3 : ZMod height) ≠ (-1) := by
-    simpa using (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt
-      (n := height) 3 (-1) (by have := Fact.out (p := 5 < height); norm_num; omega)).not.mpr
-      (by norm_num : (3 : ℤ) ≠ (-1))
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := height) 3 (-1)
+        (by have := Fact.out (p := 5 < height); norm_num; omega) (by decide)
   have h12 : (1 : ZMod height) + 2 = 3 := by norm_num
   have h23 : (2 : ZMod height) + 1 = 3 := by norm_num
   have hm (i : Fin 6) :
@@ -204,9 +198,8 @@ theorem torusFirstStringCrossingOutput_middle_transport (v : X) (g h : G) :
     rw [verticalTwoPlaquetteIso_apply p 4] at H
     simpa [p, torusFirstStringCrossingBase, add_assoc, one_add_one_eq_two] using H
   have h21 : (2 : ZMod height) ≠ 1 := by
-    simpa using (ZMod.intCast_eq_intCast_iff_of_natAbs_sub_lt
-      (n := height) 2 1 (by have := Fact.out (p := 5 < height); norm_num; omega)).not.mpr
-      (by norm_num : (2 : ℤ) ≠ 1)
+    simpa using ZMod.intCast_ne_intCast_of_natAbs_sub_lt (n := height) 2 1
+        (by have := Fact.out (p := 5 < height); norm_num; omega) (by decide)
   rw [regularDirectedTransport_eq_of_internal_reconstruction
     (verticalTwoPlaquetteRegion p) (torusFirstStringCrossingGauge v g)
     (torusVerticalFluxAssignment p true h⁻¹) (torusFirstStringCrossingOutput v g h)

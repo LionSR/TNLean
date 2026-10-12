@@ -1,0 +1,26 @@
+% Area-law manuscript, eq:quasilocal-ce (03-quasilocal.tex, lines 20-24):
+% E_{i,l}(B) = q^{-|outside|} Tr_outside(B) (x) I_outside, with
+% "ball" = N_l(a_i) and "outside" its complement.
+\[
+  E_{i,l}\Biggl(
+  \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+    \tn[at=(1,1), skin=box, wide=2,
+        ports={90@1:physical:$N_l$, 90@2:physical:$\mathrm{out}$,
+               270@1:physical, 270@2:physical}]{B}
+  \end{tenkz}
+  \Biggr)
+  \;=\;q^{-|\mathrm{out}|}\;
+  \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none]
+    \tn[at=(2,1), skin=box, wide=2, name=b,
+        ports={90@1:physical:$N_l$, 90@2:physical, 270@1:physical, 270@2:physical}]{B}
+    \tn[at=(1,2), skin=none, name=j1, ports={270:physical, 0:physical}]{}
+    \tn[at=(1,3), skin=none, name=j2, ports={180:physical, 270:physical}]{}
+    \tn[at=(3,3), skin=none, name=j3, ports={90:physical, 180:physical}]{}
+    \tn[at=(3,2), skin=none, name=j4, ports={0:physical, 90:physical}]{}
+    \tnwire{b.90@2}{j1.270} \tnwire{j1.0}{j2.180} \tnwire{j2.270}{j3.90}
+    \tnwire{j3.180}{j4.0} \tnwire{j4.90}{b.270@2}
+    \tn[at=(1,4), skin=none, name=it, ports={90:physical:$\mathrm{out}$, 270:physical}]{}
+    \tn[at=(3,4), skin=none, name=ib, ports={90:physical, 270:physical}]{}
+    \tnwire{it.270}{ib.90}
+  \end{tenkz}
+\]

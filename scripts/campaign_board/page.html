@@ -6,7 +6,7 @@
 <title>{{TITLE}}</title>
 <meta name="description" content="{{DESCRIPTION}}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+Math&display=swap">
 <style>
 {{CSS}}
 </style>
@@ -17,6 +17,7 @@
     <nav class="eyebrow" id="crumbs"></nav>
     <h1 id="heading"></h1>
     <p class="lede" id="lede"></p>
+    <p class="status" id="status"></p>
     <div class="stamp" id="stamp"></div>
     <p class="libs" id="libs"></p>
   </div>
@@ -28,11 +29,13 @@
     <div class="legend" id="legend"></div>
   </section>
 
-  <section id="gaps">
+  <div id="routes"></div>
+
+  <section id="gaps" class="part">
     <header>
       <div class="eyebrow">Checking the papers</div>
       <h2>Gaps found so far</h2>
-      <p>A machine-checked proof has to state every step. When the Lean development cannot follow a paper exactly, the deviation is recorded in a paper-gap note. The categories below separate problems in a paper from Lean work that is unfinished.</p>
+      <p>A machine-checked proof has to state every step. Where the Lean development cannot yet follow a paper exactly, the difference is written up in a paper-gap note. Each entry below says where in the proof it sits, what that step does, and whether it puts the theorem at risk. Most are unfinished Lean work, not problems in the papers.</p>
     </header>
     <div class="gapsum" id="gapsum"></div>
     <dl class="kinds" id="kinds"></dl>
@@ -40,54 +43,13 @@
     <div id="gapchecked"></div>
   </section>
 
-  <div id="routes"></div>
-
-  <section class="part">
+  <section id="refs" class="part">
     <header>
-      <div class="eyebrow">For maintainers</div>
-      <h2>What to do next</h2>
-      <p>Derived from CI, merge state and the blocking graph at the time of the snapshot.</p>
+      <div class="eyebrow">Sources</div>
+      <h2>References</h2>
+      <p>Earlier work behind the ideas in the proof stages and gap entries above, numbered in order of first citation. A work marked as not cited in the manuscripts is an earlier source for an idea they use without a citation.</p>
     </header>
-    <div class="actions" id="actions"></div>
-  </section>
-
-  <section>
-    <header>
-      <h2>Blocking map</h2>
-      <p>Each issue sits one column to the right of its deepest blocker, in the band of its stream. Select an issue to see what it needs and what it unlocks. The orange chain is the longest run of open prerequisites behind it.</p>
-    </header>
-    <div class="mapbox"><svg id="map" role="img" aria-label="Dependency map of campaign issues"></svg></div>
-    <div class="detail" id="detail"></div>
-  </section>
-
-  <section>
-    <header>
-      <h2>Activity and formalization status</h2>
-      <p>How much has been written, how much has merged, and how much of it the blueprint marks as checked by Lean (<span class="mono">\leanok</span>).</p>
-    </header>
-    <div class="tiles" id="fstiles"></div>
-    <h3 class="charttitle">Pull requests, cumulative</h3>
-    <div class="chartbox"><svg id="chart" role="img" aria-label="Cumulative pull requests over time"></svg></div>
-    <h3 class="charttitle">Lean lines merged, cumulative</h3>
-    <p class="note">Net lines (added minus deleted) in <span class="mono">.lean</span> files of merged campaign pull requests. The dashed line counts every file, including blueprint chapters, paper-gap notes and CI configuration.</p>
-    <div class="chartbox"><svg id="locchart" role="img" aria-label="Cumulative Lean lines merged over time"></svg></div>
-    <h3 class="charttitle">Blueprint chapters on main</h3>
-    <div class="tablebox"><table id="bptable"><thead><tr><th>Library</th><th>Chapter</th><th>Proved</th><th>Stated, proof pending</th><th>Not formalized</th><th>Not ready</th></tr></thead><tbody></tbody></table></div>
-  </section>
-
-  <section>
-    <div class="toolbar">
-      <h2>Issues and pull requests</h2>
-      <input class="search" id="q" type="search" placeholder="Filter by number or words, e.g. entropy" aria-label="Filter issues and pull requests">
-    </div>
-    <div class="tablebox"><table id="issues"><thead><tr><th>Issue</th><th>Title</th><th>Status</th><th>Blocked by</th><th>Pull requests</th></tr></thead><tbody></tbody></table></div>
-    <div class="filters" id="prfilters"></div>
-    <div class="tablebox"><table id="prs"><thead><tr><th>PR</th><th>Title</th><th>Status</th><th>CI</th><th>Size</th><th>Issues</th><th>Opened</th></tr></thead><tbody></tbody></table></div>
-  </section>
-
-  <section>
-    <header><h2>Lean files on main</h2><p id="filesnote"></p></header>
-    <div class="files" id="files"></div>
+    <ol class="refs" id="reflist"></ol>
   </section>
 
   <section id="libraries">
@@ -100,9 +62,63 @@
     <dl class="glossary" id="glossary"></dl>
   </section>
 
+  <!-- The reader's page ends above; the working record of the campaign is folded below. -->
+  <details class="fold part maint" id="maint">
+    <summary><span class="eyebrow">For maintainers</span> <h2>Work queue, blocking map, activity and file list</h2></summary>
+    <section>
+      <header>
+        <h2>What to do next</h2>
+        <p>Derived from CI, merge state and the blocking graph at the time of the snapshot.</p>
+      </header>
+      <div class="actions" id="actions"></div>
+    </section>
+
+    <section>
+      <header>
+        <h2>Blocking map</h2>
+        <p>Each issue sits one column to the right of its deepest blocker, in the band of its stream. Select an issue to see what it needs and what it unlocks. The orange chain is the longest run of open prerequisites behind it.</p>
+      </header>
+      <div class="mapbox"><svg id="map" role="img" aria-label="Dependency map of campaign issues"></svg></div>
+      <div class="detail" id="detail"></div>
+    </section>
+
+    <section>
+      <header>
+        <h2>Activity and formalization status</h2>
+        <p>How much has been written, how much has merged, and how much of it the blueprint marks as checked by Lean (<span class="mono">\leanok</span>).</p>
+      </header>
+      <div class="tiles" id="fstiles"></div>
+      <h3 class="charttitle">Pull requests, cumulative</h3>
+      <div class="chartbox"><svg id="chart" role="img" aria-label="Cumulative pull requests over time"></svg></div>
+      <h3 class="charttitle">Lean lines merged, cumulative</h3>
+      <p class="note">Net lines (added minus deleted) in <span class="mono">.lean</span> files of merged campaign pull requests. The dashed line counts every file, including blueprint chapters, paper-gap notes and CI configuration.</p>
+      <div class="chartbox"><svg id="locchart" role="img" aria-label="Cumulative Lean lines merged over time"></svg></div>
+      <h3 class="charttitle">Blueprint chapters on main</h3>
+      <div class="tablebox"><table id="bptable"><thead><tr><th>Library</th><th>Chapter</th><th>Proved</th><th>Stated, proof pending</th><th>Not formalized</th><th>Not ready</th></tr></thead><tbody></tbody></table></div>
+    </section>
+
+    <section>
+      <div class="toolbar">
+        <h2>Issues and pull requests</h2>
+        <input class="search" id="q" type="search" placeholder="Filter by number or words, e.g. entropy" aria-label="Filter issues and pull requests">
+      </div>
+      <div class="tablebox"><table id="issues"><thead><tr><th>Issue</th><th>Title</th><th>Status</th><th>Blocked by</th><th>Pull requests</th></tr></thead><tbody></tbody></table></div>
+      <div class="filters" id="prfilters"></div>
+      <div class="tablebox"><table id="prs"><thead><tr><th>PR</th><th>Title</th><th>Status</th><th>CI</th><th>Size</th><th>Issues</th><th>Opened</th></tr></thead><tbody></tbody></table></div>
+    </section>
+
+    <section>
+      <header><h2>Lean files on main</h2><p id="filesnote"></p></header>
+      <div class="files" id="files"></div>
+    </section>
+  </details>
+
   <p class="note" id="footer"></p>
 </div>
 <script id="data" type="application/json">{{DATA}}</script>
+<script>
+{{FIGURES}}
+</script>
 <script>
 {{JS}}
 </script>

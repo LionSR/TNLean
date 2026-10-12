@@ -8,6 +8,7 @@ import TNLean.MPS.Preparation.SectorEncoderPreparation
 import TNLean.MPS.Preparation.SectorSpectralGap
 import TNLean.MPS.Preparation.BlockSumUnitary
 import TNLean.Spectral.MixedEigenvalueGap
+import TNLean.MPS.Preparation.RemainderBlocks
 
 /-!
 # Coherent conversion of complete canonical sector encodings
@@ -125,20 +126,7 @@ theorem exists_log_depth_coherent_sectorEncoder_conversion
           (KA + KB) * Real.sqrt ((N : ℝ) * Real.exp (-(r * q))) := by
     intro N _ _ q hLq hqN hsmall
     have hq0 : 0 < q := by omega
-    obtain ⟨m, hm⟩ : ∃ m, N / q = m + 1 :=
-      ⟨N / q - 1, (Nat.succ_pred_eq_of_pos (Nat.div_pos hqN hq0)).symm⟩
-    let ℓ : Fin (m + 1) → ℕ := fun k => if k = Fin.last m then q + N % q else q
-    have hsum : ∑ k, ℓ k = N := by
-      rw [Fin.sum_univ_castSucc]
-      simp only [ℓ, Fin.castSucc_ne_last, ite_false, Finset.sum_const, Finset.card_univ,
-        Fintype.card_fin, smul_eq_mul, ite_true]
-      have := Nat.div_add_mod N q
-      rw [hm] at this
-      linarith
-    have hℓ : ∀ k, q ≤ ℓ k := fun k => by simp only [ℓ]; split_ifs <;> omega
-    have hℓ₂ : ∀ k, ℓ k ≤ 2 * q := fun k => by
-      have := Nat.mod_lt N hq0
-      simp only [ℓ]; split_ifs <;> omega
+    obtain ⟨m, ℓ, hm, hsum, hℓ, hℓ₂⟩ := exists_remainderBlocks hq0 hqN
     obtain ⟨UA, TA, hUA, hTA, heA⟩ := hAp (m + 1) ℓ hsum q hLq hℓ hℓ₂ hsmall
     obtain ⟨UB, TB, hUB, hTB, heB⟩ := hBp (m + 1) ℓ hsum q hLq hℓ hℓ₂ hsmall
     let J := registerEncoder hsum (fun k => by have := hℓ k; omega) dig₀

@@ -1,0 +1,13 @@
+% PEPS, lem:exchange (05-frames.tex, eq:exchange-net-map):
+% (V^{(x)2})^dagger F_{T B_T} V^{(x)2} on two sheets; the B_T wires exist
+% only between V and V^dagger.
+\[
+  \begin{quantikz}
+    \lstick{$T^{(1)}$} & & \swap{3} & & & \rstick{$T^{(1)}$} \\
+    \setwiretype{n} & \gate[2]{V} & \setwiretype{q} & \swap{3} & \gate[2]{V^{\dagger}} & \setwiretype{n} \\
+    \lstick{$U^{(1)}$} & & & & & \rstick{$U^{(1)}$} \\
+    \lstick{$T^{(2)}$} & & \targX{} & & & \rstick{$T^{(2)}$} \\
+    \setwiretype{n} & \gate[2]{V} & \setwiretype{q} & \targX{} & \gate[2]{V^{\dagger}} & \setwiretype{n} \\
+    \lstick{$U^{(2)}$} & & & & & \rstick{$U^{(2)}$}
+  \end{quantikz}
+\]

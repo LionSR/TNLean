@@ -1,0 +1,6 @@
+% alt: The small-patch rewrite M: the old encoder adjoint, the patch projectors P_1 to P_m, then the new encoder, acting on the hole and its tag register.
+% PEPS manuscript, lem:small-rewrite (05-frames.tex, eq:rewrite-map), read left to right.
+M=\begin{quantikz}[row sep=0.12cm, column sep=0.22cm]
+  \lstick{$Q^+$} & \gate[2]{K_{\rm old}^{\dagger}} & \gate{P_1} & \ \cdots\ & \gate{P_m} & \gate[2]{K_{\rm new}} & \\
+  \lstick{$\mathcal J$} & & \setwiretype{n} & & & & \setwiretype{q}
+\end{quantikz}

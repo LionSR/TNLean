@@ -23,6 +23,8 @@ MPV families into a virtual gauge.
 
 * `MPSTensor.twistedTensor` : twist an MPS tensor by a group representation on the physical index
 * `MPSTensor.IsOnSiteSymmetric` : predicate for on-site symmetry under a representation
+* `MPSTensor.IsOnSiteSymmetricUpToPhase` : on-site symmetry of each periodic vector up to
+  a scalar depending on the group element and the chain length
 * `MPSTensor.blockKronAction` : the on-site representation lifted to the blocked
   physical space by the Kronecker power of each group element's physical action
 
@@ -63,6 +65,23 @@ noncomputable def twistedTensor (A : MPSTensor d D)
 def IsOnSiteSymmetric (A : MPSTensor d D)
     (U : G →* Matrix (Fin d) (Fin d) ℂ) : Prop :=
   ∀ g : G, SameMPV A (twistedTensor A U g)
+
+/-- `A` is on-site symmetric under `U` up to a phase if, for each group element `g` and
+each chain length `N`, the periodic vector of the twisted tensor is a scalar multiple
+`λ_{g,N}` of the periodic vector of `A`: \(U_g^{\otimes N}|\psi_N\rangle =
+\lambda_{g,N}|\psi_N\rangle\). The scalar may depend on both `g` and `N`.
+Source: arXiv:1010.3732, `Papers/1010.3732/paper_v3.tex` lines 655--657 (a symmetry
+\(U_g^{\otimes N}\) of the MPS), lines 1313--1314 and 2590--2593 (an MPS with a
+\(U_g\)-invariant parent Hamiltonian is invariant under \(U_g\) up to a phase). -/
+def IsOnSiteSymmetricUpToPhase (A : MPSTensor d D)
+    (U : G →* Matrix (Fin d) (Fin d) ℂ) : Prop :=
+  ∀ (g : G) (N : ℕ), ∃ c : ℂ, ∀ s : Fin N → Fin d, mpv (twistedTensor A U g) s = c * mpv A s
+
+/-- Exact on-site symmetry is on-site symmetry up to the trivial phase. -/
+theorem IsOnSiteSymmetric.isOnSiteSymmetricUpToPhase {A : MPSTensor d D}
+    {U : G →* Matrix (Fin d) (Fin d) ℂ} (h : IsOnSiteSymmetric A U) :
+    IsOnSiteSymmetricUpToPhase A U :=
+  fun g N => ⟨1, fun s => by rw [one_mul, h g N s]⟩
 
 /-- Twisting by the identity group element is trivial. -/
 @[simp] lemma twistedTensor_one (A : MPSTensor d D)
