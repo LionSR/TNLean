@@ -56,8 +56,16 @@ theorem augmentedReplicaConfigurationEquiv_subsystemPerm
         (augmentedSiteEquiv (V := V)).injective.mem_finset_image
           (s := Q) (a := some (some v)))]
     rfl
-  · done
-  · done
+  all_goals
+    simp only [augmentedConfigurationEquiv_apply_C, augmentedConfigurationEquiv_apply_R,
+      subsystemPerm_apply,
+      (show Sum.inr false ∈ Q.image augmentedSiteEquiv ↔ some none ∈ Q from
+        (augmentedSiteEquiv (V := V)).injective.mem_finset_image
+          (s := Q) (a := some none)),
+      (show Sum.inr true ∈ Q.image augmentedSiteEquiv ↔ none ∈ Q from
+        (augmentedSiteEquiv (V := V)).injective.mem_finset_image
+          (s := Q) (a := none))]
+    done
 
 variable [Fintype V]
 
