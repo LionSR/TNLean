@@ -347,7 +347,7 @@ marginal replacement is used, so the separated coefficient is the normalized
 square of the restricted cyclic-active trace matrix.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_cyclicActiveFourthRegion_formula_of_isSourceZCL
-    (F : PhysicalSectorFactorization K) [NeZero D]
+    (F : PhysicalSectorFactorization K)
     (hK : K.IsInjective)
     (hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef)
     (hZCL : K.IsSourceZCL) (n : ℕ) :
@@ -361,6 +361,7 @@ theorem exists_cyclicActiveFourthRegion_formula_of_isSourceZCL
             ((Matrix.trace (mpo F.sectorCoordinateTensor (n + 4)))⁻¹ : ℂ) •
               Matrix.blockDiagonal'
                 (fun k ↦ F.cyclicActiveFourthRegionBlock lam a b k) := by
+  have : NeZero D := ⟨hZCL.bondDim_ne_zero⟩
   obtain ⟨lam, hlam, a, b, ha, hb, hab, hdot⟩ :=
     F.exists_normalized_cyclicActiveSectorTraceMatrix_pos_factorization_of_isSourceZCL
       hK hpos hZCL
