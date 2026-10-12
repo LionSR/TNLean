@@ -163,6 +163,13 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
         ((norm_sub_rev (U t)
           (Matrix.hermitianUnitaryPath g.operator t * Matrix.hermitianUnitaryPath H (-t))).trans_le
             (hrelative t ht)))).trans ?_
+    refine (add_le_add_left
+      (mul_le_mul_of_nonneg_left
+        (mul_le_mul_of_nonneg_left ht
+          (mul_nonneg (norm_nonneg (g.operator - H))
+            (mul_nonneg (mul_nonneg hC.le (Nat.cast_nonneg Λ.card))
+              (Real.exp_pos (v * T - c * l)).le)))
+        (norm_nonneg W)) _).trans_eq ?_
     done
   done
 
