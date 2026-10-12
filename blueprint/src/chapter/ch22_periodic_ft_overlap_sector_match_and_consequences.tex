@@ -906,7 +906,8 @@
 
 \begin{theorem}[Global similarity between matched block sums]
     \label{thm:periodic_matched_blocks_global_similarity}
-    \lean{MPSTensor.toTensorFromBlocks_conj_of_matched_blocks}
+    \lean{MPSTensor.toTensorFromBlocks_conj_of_matched_blocks,
+        MPSTensor.toTensorFromBlocks_conj_of_matched_blocks_smul}
     \leanok
     \uses{def:block_diagonal_tensor}
     Let $e$ be a bijection between the blocks of $\bigoplus_k\mu_kA_k$ and of
@@ -918,7 +919,11 @@
     \end{align}
     If every $X_t$ is unitary, then $Y'=Y^\dagger$. This is the matrix
     $Y=\bigoplus_jT_j\otimes Y_j$ of
-    \cite[line~690]{DeLasCuevas2017Irreducible}.
+    \cite[line~690]{DeLasCuevas2017Irreducible}. The matrices $Y$ and $Y'$
+    do not depend on the weights: for all scalars $c_k$,
+    \begin{align}
+        \bigoplus_kc_k\mu_kA_k^i & =Y\Bigl(\bigoplus_tc_{e^{-1}(t)}\mu'_tB_t^i\Bigr)Y'. \notag
+    \end{align}
 \end{theorem}
 
 \begin{proof}
@@ -934,6 +939,9 @@
         =\bigoplus_k\mu_kA_k^i. \notag
     \end{align}
     For unitary $X_t$, $X_t^{-1}=X_t^\dagger$, so $Y'=Y^\dagger$.
+    Multiplying the blockwise relation for $k$ by $c_k$ gives the same
+    relation for the weights $c_k\mu_k$ and $c_{e^{-1}(t)}\mu'_t$, with the
+    same $X_t$, hence the same $Y$ and $Y'$.
 \end{proof}
 
 \begin{definition}[Multiplicities grouped by phase class]
@@ -972,6 +980,11 @@
     space with $YY^\dagger=I$ and $Y^\dagger Y=I$, satisfying
     $T^i=YP^iY^\dagger$ for every physical index $i$.
     In particular, $V^{(N)}(T)_\sigma=V^{(N)}(P)_\sigma$ at every positive length.
+    The same $Y$ transports multiplicity scalars: for all scalars $c_{j,q}$,
+    with $Z_c=\bigoplus_j\operatorname{diag}(c_{j,0},\ldots,c_{j,n_j-1})\otimes\Id$,
+    \begin{align}
+        \bigoplus_kc_{e^{-1}(k)}\mu_kA_k^i & =Y\,Z_cP^i\,Y^\dagger. \notag
+    \end{align}
     This gives the grouping of \cite[Section~2.1 and the paragraph after
         Theorem~3.4]{DeLasCuevas2017Irreducible} in a unitary gauge.
 \end{theorem}
@@ -998,7 +1011,11 @@
         YP^iY^\dagger & =\Pi\Bigl(\bigoplus_{j,q}\mu'_{j,q}U_{j,q}A_{\rho_j}^iU_{j,q}^\dagger\Bigr)\Pi^\dagger
         =\bigoplus_k\mu_kA_k^i=T^i, \notag
     \end{align}
-    and likewise $Y^\dagger Y=\Id$. The same bijection and the equality of matched
+    and likewise $Y^\dagger Y=\Id$. Replacing $\mu_{e(j,q)}$ by
+    $c_{j,q}\mu_{e(j,q)}$ and $\mu'_{j,q}$ by $c_{j,q}\mu'_{j,q}$ leaves the
+    blockwise relations and $Y$ unchanged; since $Z_cP^i$ is the block sum with
+    weights $c_{j,q}\mu'_{j,q}$, this gives the transport of $Z_c$.
+    The same bijection and the equality of matched
     block dimensions give equality of total dimensions.
     The phases have modulus one, so the individual weight moduli are
     unchanged. For $N>0$, the factors $Y^\dagger Y=I$ between adjacent

@@ -1,3 +1,79 @@
+\begin{lemma}[Matching weighted sums of periodic blocks]%
+    \label{lem:periodic_block_families_unitary_matching}
+    \lean{MPSTensor.exists_unitary_matching_of_periodic_block_families}
+    \leanok
+    \uses{def:periodic_tensor, def:same_mpv2_pos, def:block_diagonal_tensor}
+    Let $A_j$ and $B_k$ be left-canonical periodic tensors with periods
+    $m_j$ and $n_k$, and let all weights $\mu_j$ and $\nu_k$ be nonzero.
+    Repeated blocks are allowed. If
+    $\bigoplus_j\mu_jA_j$ and $\bigoplus_k\nu_kB_k$ generate the same vectors
+    at every positive length, then there are complex numbers $c_j$ with
+    $c_j^{m_j}=1$ and a matrix $W$ with $WW^\dagger=\Id$ and
+    $W^\dagger W=\Id$ such that, for every $i$,
+    \begin{align}
+        \bigoplus_jc_j\mu_jA_j^i & =W\Bigl(\bigoplus_k\nu_kB_k^i\Bigr)W^\dagger. \notag
+    \end{align}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_grouped_unitary, thm:periodic_ft_equal_case_trace_preserving}
+    Theorem~\ref{thm:periodic_grouped_unitary} groups both sums into
+    multiplicity forms $P$ and $Q$ over bases of periodic tensors without
+    repetition, with unitaries $Y_A$ and $Y_B$. The two forms generate the
+    same vectors at every positive length, so
+    Theorem~\ref{thm:periodic_ft_equal_case_trace_preserving} gives
+    multiplicity scalars $z_{j,q}$ with $z_{j,q}^{m_{\rho_j}}=1$ and a unitary
+    $Y$ with $Z_zP^i=YQ^iY^\dagger$. Transporting $Z_z$ back with $Y_A$ as in
+    Theorem~\ref{thm:periodic_grouped_unitary} gives the scalars
+    $c_{e(j,q)}=z_{j,q}$ and $W=Y_AYY_B^\dagger$. Each original block has
+    the period of its representative, so $c_k^{m_k}=1$.
+\end{proof}
+
+\begin{theorem}[Physical symmetries of a tensor in irreducible form~II]%
+    \label{thm:irreducible_form_physical_symmetry}
+    \lean{MPSTensor.exists_diagonal_unitary_of_irreducibleForm_physical_symmetry,
+        MPSTensor.exists_blockScalar_unitary_of_periodic_physical_symmetry}
+    \leanok
+    \uses{def:block_diagonal_tensor, def:same_mpv2, def:same_mpv2_pos,
+        thm:spectral_periodic_period_existence}
+    Let $A^i=\bigoplus_j\mu_jA_j^i$ with nonzero weights $\mu_j$, where every
+    $A_j$ is irreducible with spectral radius one and has a trace-preserving
+    transfer map. Let $u$ be a unitary $d\times d$ matrix with
+    $u^{\otimes N}\ket{V_N(A)}=\ket{V_N(A)}$ for every $N>0$. Then there are a
+    diagonal unitary $Z$ with $[A^i,Z]=0$ for all $i$ and
+    $\mc V(A)=\mc V(ZA)$, and a unitary $U$, such that for every $i'$
+    \begin{align}
+        \sum_iu^{i',i}A^i & =ZUA^{i'}U^\dagger. \notag
+    \end{align}
+    Moreover $Z=\bigoplus_jz_j\Id$ with $z_j^{m_j}=1$, where $m_j$ is the
+    period of $A_j$. This is the symmetry corollary of
+    \cite[lines~834--845]{DeLasCuevas2017Irreducible}; the diagonal form of
+    the fixed points in irreducible form~II is not needed.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:periodic_block_families_unitary_matching,
+        thm:pgvwc07_normalized_periodic_state_vector_decomposition}
+    Theorem~\ref{thm:spectral_periodic_period_existence} gives the periods
+    $m_j$. Mixing the physical index commutes with the direct sum:
+    $\sum_iu^{i',i}A^i=\bigoplus_j\mu_jC_j^{i'}$ with
+    $C_j^{i'}=\sum_iu^{i',i}A_j^i$. Since $u$ is unitary, $\E_{C_j}=\E_{A_j}$,
+    so $C_j$ is periodic with the same period. By hypothesis
+    $\bigoplus_j\mu_jC_j$ and $A$ generate the same vectors at every positive
+    length, so Lemma~\ref{lem:periodic_block_families_unitary_matching} gives
+    $c_j$ with $c_j^{m_j}=1$ and a unitary $U$ with
+    $\bigoplus_jc_j\mu_jC_j^{i'}=UA^{i'}U^\dagger$. With $z_j=c_j^{-1}$ and
+    $Z=\bigoplus_jz_j\Id$ this is $\sum_iu^{i',i}A^i=ZUA^{i'}U^\dagger$.
+    The matrix $Z$ is diagonal with entries of modulus one and commutes with
+    every $A^i$. Finally,
+    $V_N(ZA)=\sum_jz_j^N\mu_j^NV_N(A_j)$: if $m_j\mid N$ then $z_j^N=1$, and
+    otherwise $V_N(A_j)=0$
+    (Theorem~\ref{thm:pgvwc07_normalized_periodic_state_vector_decomposition}).
+    Hence $\mc V(A)=\mc V(ZA)$.
+\end{proof}
+
 \begin{theorem}[Conditional group-action $Z$-gauge reformulation of the symmetry corollary]%
     \label{cor:cor_4_1_physical_symmetry_zgauge}
     \lean{MPSTensor.cor_4_1_physical_symmetry_zgauge}
@@ -30,7 +106,8 @@
     % The statement here is a pointwise group-action reformulation using the
     % periodic equal-case Fundamental Theorem as an explicit hypothesis. It does
     % not assert the diagonal normalization of $Z_g$ or the exact displayed
-    % source equation.
+    % source equation; the source corollary itself is
+    % Theorem~\ref{thm:irreducible_form_physical_symmetry}.
 \end{theorem}
 
 \begin{proof}\leanok

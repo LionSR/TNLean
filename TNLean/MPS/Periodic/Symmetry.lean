@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.MPS.Periodic.Symmetry.Corollary41
 import TNLean.MPS.Periodic.Symmetry.EqualCaseFTHyp
+import TNLean.MPS.Periodic.Symmetry.PhysicalSymmetry
 import TNLean.MPS.Periodic.Symmetry.RefinementFromInjectiveTransfer
 import TNLean.MPS.Periodic.Symmetry.RefinementFromInvertibleWordSpan
 import TNLean.MPS.Periodic.Symmetry.RefinementNormalizationCounterexample
