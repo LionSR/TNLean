@@ -14,7 +14,7 @@
 
 \begin{document}
 \maketitle
-\gapnote{false-source}{open}
+\gapnote{false-source}{wip}
 
 \section{The assertion}
 
@@ -202,14 +202,19 @@ when a positive blocking matches a periodic decomposition with unit-modulus
 multiplicities, the original tensor admits a unit-weight periodic presentation.
 The exact target bond dimension follows from the equal-case theorem, without
 requiring equality at length zero or assuming an initial canonical form.
-The remaining construction must assemble these results over the full
-multiplicity-bearing decomposition, identify the equal-case gauge on the
-original orbit supports, and obtain the corrected forward implication from
-its stated input hypotheses. The single-block results do not discharge that
-construction by themselves. The restatement is tracked in
+These results are assembled over the full multiplicity-bearing
+decomposition in
+\path{TNLean/MPS/Periodic/Symmetry/Theorem41ForwardBlockForm.lean}: the
+equal-case gauge is identified on the original orbit supports through
+\leanid{MPSTensor.exists_unitary_matching_of_periodic_block_families}, and
+\leanid{MPSTensor.isPDivisibleChannel_of_isPRefinable_toTensorFromBlocks}
+proves the corrected forward implication for a direct sum of left-canonical
+periodic blocks with unit-modulus multiplicities, with no further hypothesis.
+What remains, tracked in
 \href{https://github.com/LionSR/TNLean/issues/7762}{issue \#7762}, a child
-of \href{https://github.com/LionSR/TNLean/issues/622}{issue \#622}. Until
-that restatement lands, every formal theorem whose proof consumes a refuted
+of \href{https://github.com/LionSR/TNLean/issues/622}{issue \#622}, is to
+retire the conditional formal theorems below in favour of this statement.
+Until then, every formal theorem whose proof consumes a refuted
 hypothesis carries an unfaithfulness marker naming this note: the conditional
 forward theorem, its blocked-stage variant, the bundled biconditional, and
 the three reduction theorems between the refuted hypotheses, namely

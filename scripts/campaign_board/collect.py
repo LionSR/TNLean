@@ -298,12 +298,14 @@ def gap_notes(cfg: dict, checkouts: dict[str, Checkout], prs: list[dict], cites:
                 notes[(repo["name"], path)] = {"repo": repo["name"], "path": path, "onMain": True, "prs": [], **note_meta(source)}
     slugs = {r["name"]: r["slug"] for r in cfg["repos"]}
     # A note touched by open pull requests is read from the newest of them, which
-    # carries its latest version (for example a status changed to resolved).
+    # carries its latest version (for example a status changed to resolved). A
+    # closed or merged pull request adds no note that main lacks: the note was
+    # abandoned, renamed or deleted.
     refreshed: set[tuple[str, str]] = set()
     for pr in sorted(prs, key=lambda p: p["number"], reverse=True):
         for path in pr["gapFiles"]:
             key = (pr["repo"], path)
-            if key not in refreshed and (pr["state"] == "OPEN" or key not in notes):
+            if key not in refreshed and pr["state"] == "OPEN":
                 source = raw_file(slugs[pr["repo"]], path, pr["headRefOid"])
                 if source and cites.search(source):
                     on_main = key in notes and notes[key]["onMain"]

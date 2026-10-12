@@ -31,10 +31,14 @@ import TNLean.PEPS.AreaLaw.Scan.BadHistoryPowerBound
 import TNLean.PEPS.AreaLaw.Scan.BadHistoryProbability
 import TNLean.PEPS.AreaLaw.Scan.BadHistoryTimeUnion
 import TNLean.PEPS.AreaLaw.Scan.BadHistoryUnion
+import TNLean.PEPS.AreaLaw.Scan.BandCountGrowth
 import TNLean.PEPS.AreaLaw.Scan.BandMargins
 import TNLean.PEPS.AreaLaw.Scan.BandNesting
 import TNLean.PEPS.AreaLaw.Scan.BandUniqueness
+import TNLean.PEPS.AreaLaw.Scan.BootstrapBinaryEntropyCost
+import TNLean.PEPS.AreaLaw.Scan.BootstrapComparisonBudget
 import TNLean.PEPS.AreaLaw.Scan.BootstrapParameters
+import TNLean.PEPS.AreaLaw.Scan.BootstrapReplicaAbsorption
 import TNLean.PEPS.AreaLaw.Scan.BootstrapRoundedClearance
 import TNLean.PEPS.AreaLaw.Scan.Budgets
 import TNLean.PEPS.AreaLaw.Scan.ChargeAncestry
@@ -63,6 +67,7 @@ import TNLean.PEPS.AreaLaw.Scan.NestedBandMetric
 import TNLean.PEPS.AreaLaw.Scan.OffsetDilution
 import TNLean.PEPS.AreaLaw.Scan.OldStateIntegral
 import TNLean.PEPS.AreaLaw.Scan.OldStateParameterIntegral
+import TNLean.PEPS.AreaLaw.Scan.OriginalTruncation
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBadHistoryDecay
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBandCommutation
 import TNLean.PEPS.AreaLaw.Scan.PhysicalChargeAncestry
@@ -73,6 +78,8 @@ import TNLean.PEPS.AreaLaw.Scan.PrefixCardinality
 import TNLean.PEPS.AreaLaw.Scan.PrefixComparison
 import TNLean.PEPS.AreaLaw.Scan.RadiusAsymptotics
 import TNLean.PEPS.AreaLaw.Scan.RegionalMoveEntropy
+import TNLean.PEPS.AreaLaw.Scan.RoundedClearance
+import TNLean.PEPS.AreaLaw.Scan.RoundedScalePower
 import TNLean.PEPS.AreaLaw.Scan.Scanner
 import TNLean.PEPS.AreaLaw.Scan.SelectedChainProbability
 import TNLean.PEPS.AreaLaw.Scan.Selection
@@ -94,3 +101,4 @@ import TNLean.PEPS.AreaLaw.Scan.TransportDimension
 import TNLean.PEPS.AreaLaw.Scan.TransportRound
 import TNLean.PEPS.AreaLaw.Scan.TransportRoundEnergy
 import TNLean.PEPS.AreaLaw.Scan.TransportRoundParameterIntegral
+import TNLean.PEPS.AreaLaw.Scan.TypicalReplicaAbsorption

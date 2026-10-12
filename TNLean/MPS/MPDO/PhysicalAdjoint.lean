@@ -89,15 +89,6 @@ def productBondSwapEquiv (D₁ D₂ : ℕ) : Fin (D₁ * D₂) ≃ Fin (D₂ * D
   rcases finProdFinEquiv.surjective x with ⟨⟨a, b⟩, rfl⟩
   simp
 
-/-- For equal factor dimensions, the heterogeneous product-bond swap agrees with the
-established doubled-bond swap. -/
-theorem productBondSwapEquiv_self (D : ℕ) :
-    productBondSwapEquiv D D = bondPairSwapEquiv D := by
-  ext x
-  rw [show x = finProdFinEquiv (x.divNat, x.modNat) by
-    exact (finProdFinEquiv.apply_symm_apply x).symm]
-  simp
-
 /-- Transport both virtual indices of an MPO tensor along a bond-space equivalence. -/
 def reindexBond {D D' : ℕ} (e : Fin D' ≃ Fin D) (K : MPOTensor d D) :
     MPOTensor d D' :=

@@ -1324,3 +1324,102 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     $\bigoplus_kC_k=\bigoplus_k\mu_kB_k$, and since $|\mu_k|=1$ each $C_k$ is
     left-canonical periodic with the period of $B_k$.
 \end{proof}
+
+\begin{theorem}[Orbit coordinates of a blocked block sum]
+    \label{thm:periodic_block_sum_orbit_root}
+    \lean{MPSTensor.exists_unitary_stepOrbit_decomposition_toTensorFromBlocks,
+        MPSTensor.isLeftCanonical_toTensorFromBlocks_one}
+    \leanok
+    \uses{def:periodic_tensor,def:block_diagonal_tensor}
+    Let $A_k$ be left-canonical periodic tensors of periods $m_k$, let $p>0$,
+    and put $r_k=\gcd(m_k,p)$. The blocks $C_{k,a}$, $0\le a<r_k$, of
+    Theorem~\ref{thm:periodic_unitary_orbit_root} for all $A_k$ admit one
+    unitary $Y$ with
+    \begin{align}
+        \Bigl(\Bigl(\bigoplus_kA_k\Bigr)^{[p]}\Bigr)^I & =Y\Bigl(\bigoplus_{k,a}C_{k,a}^I\Bigr)Y^\dagger. \notag
+    \end{align}
+    For every choice of $c_{k,a}$ with $c_{k,a}^{m_k/r_k}=1$, there is a
+    left-canonical tensor $A'$ on the bond space of $\bigoplus_kA_k$ with
+    \begin{align}
+        (A'^{[p]})^I & =Y\Bigl(\bigoplus_{k,a}c_{k,a}C_{k,a}^I\Bigr)Y^\dagger. \notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_unitary_orbit_root,thm:periodic_unitary_resolution,
+        thm:block_tensor_to_tensor_from_blocks}
+    Blocking commutes with the direct sum. Composing the inclusion $J_k$ of
+    the $k$-th summand with the orbit isometries $V_{k,a}$ of $A_k$ gives
+    isometries $J_kV_{k,a}$ that resolve the identity and intertwine the
+    blocked sum with $C_{k,a}$; Theorem~\ref{thm:periodic_unitary_resolution}
+    assembles them into $Y$. For the phases, take for each $k$ the
+    left-canonical tensor $A'_k$ of
+    Theorem~\ref{thm:periodic_unitary_orbit_root} and set
+    $A'=\bigoplus_kA'_k$, which is left-canonical. Both sides of the last
+    display send $J_kV_{k,a}$ to $J_kV_{k,a}\,c_{k,a}C_{k,a}^I$, and these
+    isometries resolve the identity.
+\end{proof}
+
+\begin{theorem}[Trace-preserving root with prescribed blocking]
+    \label{thm:periodic_trace_preserving_root}
+    \lean{MPSTensor.exists_isLeftCanonical_blockTensor_eq_toTensorFromBlocks}
+    \leanok
+    \uses{def:periodic_tensor,def:same_mpv2_pos,def:block_diagonal_tensor}
+    Let $p>0$, let $B_k$ be left-canonical periodic tensors on the blocked
+    physical alphabet, and let $|\nu_k|=1$. If a tensor $A$ satisfies
+    $V^{(N)}(A^{[p]})=V^{(N)}\bigl(\bigoplus_k\nu_kB_k\bigr)$ for every $N>0$,
+    then there is a left-canonical tensor $R$ on the original alphabet with
+    $R^{[p]}=\bigoplus_k\nu_kB_k$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_grouped_unitary,thm:periodic_refinement_normalized_presentation,
+        thm:periodic_block_sum_orbit_root,thm:periodic_block_families_unitary_matching}
+    Group the target by Theorem~\ref{thm:periodic_grouped_unitary}; its
+    multiplicities have modulus one. By
+    Theorem~\ref{thm:periodic_refinement_normalized_presentation}, $A$ has
+    the vectors of a unit-weight sum $\bigoplus_jA_j$ of left-canonical
+    periodic tensors. Theorem~\ref{thm:periodic_block_sum_orbit_root} writes
+    the blocked sum as $Y(\bigoplus_sC_s)Y^\dagger$, so $\bigoplus_sC_s$ and
+    $\bigoplus_k\nu_kB_k$ have the same vectors at every positive length.
+    Theorem~\ref{thm:periodic_block_families_unitary_matching} gives roots of
+    unity $c_s$ of the periods of the $C_s$ and a unitary $W$ with
+    $\bigoplus_sc_sC_s=W(\bigoplus_k\nu_kB_k)W^\dagger$. The phase lift of
+    Theorem~\ref{thm:periodic_block_sum_orbit_root} gives a left-canonical
+    $A'$ with $A'^{[p]}=TA_\nu T^\dagger$, where
+    $T=YW$ and $A_\nu=\bigoplus_k\nu_kB_k$. Then $R=T^\dagger A'T$ is
+    left-canonical, and for every nonempty word the factors $TT^\dagger=\Id$
+    cancel, so $R^{[p]}=T^\dagger A'^{[p]}T=A_\nu$.
+\end{proof}
+
+\begin{theorem}[$p$-refinability implies $p$-divisibility for unit multiplicities]
+    \label{thm:thm_4_1_p_refinement_forward_unit_weights}
+    \lean{MPSTensor.isPDivisibleChannel_of_isPRefinable_toTensorFromBlocks,
+        MPSTensor.exists_isLeftCanonical_transferMap_eq_pow_of_isPRefinable}
+    \leanok
+    \uses{def:p_refinable,def:p_divisible_channel,def:periodic_tensor,
+        def:block_diagonal_tensor}
+    Let $B=\bigoplus_k\mu_kB_k$, where the $B_k$ are left-canonical periodic
+    tensors and $|\mu_k|=1$, and let $p>0$. If $B$ is $p$-refinable, then
+    $\E_B$ is $p$-divisible. This is the forward implication of
+    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible} with the trace preservation
+    of $\E_B$ made explicit; see
+    Remark~\ref{rem:thm_4_1_forward_trace_preservation} and
+    \cite{gap:dccsp17_thm41_forward_trace_preservation}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:periodic_trace_preserving_root}
+    Let $(A,W)$ be a refinement witness and $C_k^\tau=\sum_iW^{\tau,i}B_k^i$.
+    Each $C_k$ is left-canonical periodic with the period of $B_k$, since
+    $\E_{C_k}=\E_{B_k}$, and $\sum_iW^{\tau,i}B^i=\bigoplus_k\mu_kC_k^\tau$.
+    The refinement identity says that $A^{[p]}$ and $\bigoplus_k\mu_kC_k$
+    generate the same vectors, so
+    Theorem~\ref{thm:periodic_trace_preserving_root} gives a left-canonical
+    $R$ with $R^{[p]}=\bigoplus_k\mu_kC_k$. Hence
+    $\E_B=\E_{\bigoplus_k\mu_kC_k}=\E_{R^{[p]}}=\E_R^p$, and $\E_R$ is a
+    channel.
+\end{proof}

@@ -49,20 +49,65 @@ parameter with $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$, the H\"older
 accounting of the defect energy at the selected point, and the three
 comparator budgets.\footnote{The packaged statement is
     \leanid{TNLean.PEPS.AreaLaw.Scan.scanner_estimate}.} Each field transcribes
-the relevant input conclusion and cites its source passage, except that the
+a conclusion of an input and cites its source passage, except that the
 charge-defect continuity requirement is weakened to the almost-everywhere
-strong measurability sufficient for the two integral arguments. In particular,
-the transported-measure mass equality is required only for interior
-interpolation parameters. The constants depend only on the fixed exponents
-and on the constants of the inputs, as in the source.
+strong measurability sufficient for the two integral arguments. The
+trace-distance field retains a fixed coefficient, as in the source asymptotic
+bound. In particular, the transported-measure mass equality is required only
+for interior interpolation parameters. The constants depend only on the fixed
+exponents and on the constants of the inputs, as in the source.
 
 Two harmless differences in the bookkeeping are recorded. The continuity
 input bounds the change of the shell entropies by
-$C\sqrt{n^{-500}}(1+Cn^2\log q)$, which is $O(n^{-248})$ but not at most
+$C\sqrt{Cn^{-500}}(1+Cn^2\log q)$, which is $O(n^{-248})$ but not at most
 $n^{-248}$ itself; the formal budget lemmas carry the error $n^{-247}$. The
 marginal parameter is bounded with logarithmic power $12$, coming from the
 crossing count $(\log n)^4$ and the squared dimension term $(\log n)^8$; the
 source writes an unspecified power $C$.
+
+\section{The fixed coefficient in the trace-distance estimate}
+
+The source states that the trace distance is $O(n^{-500})$
+\cite{OpenAI2026AreaLaw} (\path{08-scanner.tex}, lines~400--403). The trace-distance field retains
+this fixed coefficient: $t\le Cn^{-500}$, with the common constant $C\ge1$
+chosen before the scale, domain and scan. Here $t$ is one half of the trace
+norm of the difference of the original and truncated density matrices;
+it is not a rescaled distance. The former coefficient-one restriction
+is resolved by retaining $C$ in this field.
+
+For the same truncated ground vector, the perturbation estimate of
+\cite[Proposition~4.5]{OpenAI2026AreaLaw} gives
+\begin{align}
+    t\le\sqrt{2\varepsilon/g},\qquad
+    \varepsilon\le n^{-1000},\qquad g>0,
+    \label{eq:arealaw2d_scanner_inputs_perturbation_bound}
+\end{align}
+and (\ref{eq:arealaw2d_scanner_inputs_perturbation_bound}) yields
+$t\le\sqrt{2/g}\,n^{-500}$. The physical construction must choose
+its common fixed constant to satisfy $C\ge\sqrt{2/g}$ as well as the other
+input bounds. Increasing the scale alone does not remove this coefficient.
+
+Here $g$ is the gap of the positive-constraint Hamiltonian before truncation.
+If the physical Hamiltonian has gap $\Delta$ and the positive constraints
+are divided by their fixed normalization $c_s$, then $g=\Delta/c_s$.
+Both the coefficient above and the truncated-gap lower bound $g/2$ use
+this same normalized gap, rather than $\Delta$.
+
+For any fixed nonnegative $A,C$ and $\log q\ge0$, the numerical continuity
+estimate applies uniformly to every $t\le An^{-500}$ and gives, for all
+sufficiently large $n$,
+\begin{align}
+    C\sqrt t(1+Cn^2\log q)\le n^{-247}.
+    \label{eq:arealaw2d_scanner_inputs_continuity_cost}
+\end{align}
+Taking $A=C$ in (\ref{eq:arealaw2d_scanner_inputs_continuity_cost}) gives the
+arithmetic needed for the retained distance field.
+The threshold depends on the fixed constants and is chosen before the
+physical instance. This resolves the numerical coefficient restriction;
+it does not construct the physical distance, continuity, transport or
+comparator fields. Construction of all inputs from the same original and
+truncated ground vectors remains open. The physical trace distance keeps
+its original meaning.
 
 \section{Parameter domain of the transported measures}
 
