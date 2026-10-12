@@ -76,6 +76,9 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
                   ‖W‖ * C * (L : ℝ) ^ 2 * (1 + 8 * J * (L : ℝ) ^ 2 * T) *
                     Real.exp (v * T - c * l) := by
   classical
+  obtain ⟨C, v, c, hC, hv, hc, hgauss⟩ :=
+    AreaLaw.exists_supported_gaussian_integral (q * q)
+      (Nat.mul_le_mul hq hq) 1 (2 * J)
   done
 
 end TNLean.PEPS.Approximation
