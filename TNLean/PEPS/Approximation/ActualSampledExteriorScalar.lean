@@ -85,25 +85,6 @@ private theorem empty_memory_mixed_partialTrace
     Matrix.partialTraceRight_smul, Matrix.partialTraceRight_one, hJ]
   simp only [Nat.cast_one, one_smul, Complex.star_def]
 
-private theorem empty_memory_restricted_words_mixed_partialTrace
-    {Q I J : Type} [Fintype I] [Fintype J] {a b : Layout Q} (f : Q → Bool)
-    (u t : Word a b) (v : Word a a)
-    (hu : u.sources = []) (ht : t.sources = []) (hv : v.sources = [])
-    (ha : Layout.restrict f a = []) (hb : Layout.restrict f b = [])
-    (B : OrthonormalBasis I ℂ (Mem (Layout.restrict f a)))
-    (C : OrthonormalBasis (PUnit × J) ℂ (Mem (Layout.restrict f b))) (α β : ℂ)
-    (hA : HEq (u.restrict f hu).eval (α • ContinuousLinearMap.id ℂ ℂ))
-    (hT : HEq (t.restrict f ht).eval (β • ContinuousLinearMap.id ℂ ℂ))
-    (hU : HEq (v.restrict f hv).eval (ContinuousLinearMap.id ℂ ℂ)) :
-    Matrix.partialTraceRight
-        (Matrix.of (fun row col ↦ C.repr ((u.restrict f hu).eval (B col)) row) *
-          Matrix.of (fun row col ↦ B.repr ((v.restrict f hv).eval (B col)) row) *
-          (Matrix.of (fun row col ↦ C.repr ((t.restrict f ht).eval (B col)) row))ᴴ) =
-      (α * conj β) • (1 : Matrix PUnit PUnit ℂ) := by
-  exact empty_memory_mixed_partialTrace
-    (a := Layout.restrict f a) (b := Layout.restrict f b) ha hb B C
-    (u.restrict f hu).eval (t.restrict f ht).eval (v.restrict f hv).eval α β hA hT hU
-
 namespace SourceCircuit
 variable {P : Type} {a b : Layout P}
 
@@ -180,21 +161,21 @@ theorem partialSourceWord_sampled_none_partialTrace_eq_scalar
               (sources_partialSourceWord w ψ ζ)).eval (B col)) row))ᴴ) =
       (w.emptyGateScalar * conj w.emptyGateScalar) • (1 : Matrix PUnit PUnit ℂ) := by
   classical
-  have h := empty_memory_restricted_words_mixed_partialTrace
+  have hξ := partialSourceWord_none_eval_heq_scalar w ψ ξ
+  have hζ := partialSourceWord_none_eval_heq_scalar w ψ ζ
+  have hU := sampledEndpointInputWord_party_none_eval_heq_id w k lam L R ξ ζ j ω
+  generalize hA : (w.partialSourceWord ψ ξ).restrict (partySelector none)
+    (sources_partialSourceWord w ψ ξ) = A at hξ ⊢
+  generalize hT : (w.partialSourceWord ψ ζ).restrict (partySelector none)
+    (sources_partialSourceWord w ψ ζ) = T at hζ ⊢
+  generalize hV : (sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict
+    (partySelector none) (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω) = U at hU ⊢
+  exact empty_memory_mixed_partialTrace
     (Q := Option {p : P // (fun _ : P ↦ true) p = true}) (I := I) (J := J)
-    (a := w.allResidualSourceLayout ++ [])
-    (b := Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b)
-    (partySelector none)
-    (w.partialSourceWord ψ ξ) (w.partialSourceWord ψ ζ)
-    (sampledEndpointInputWord w k lam L R ξ ζ j ω)
-    (sources_partialSourceWord w ψ ξ) (sources_partialSourceWord w ψ ζ)
-    (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω)
+    (a := Layout.atParty none (w.allResidualSourceLayout ++ []))
+    (b := Layout.atParty none (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b))
     (actualSourceInput_none_eq_nil w) (Layout.atParty_none_mapOwner_all b)
-    B C w.emptyGateScalar w.emptyGateScalar
-    (partialSourceWord_none_eval_heq_scalar w ψ ξ)
-    (partialSourceWord_none_eval_heq_scalar w ψ ζ)
-    (sampledEndpointInputWord_party_none_eval_heq_id w k lam L R ξ ζ j ω)
-  exact h
+    B C A.eval T.eval U.eval w.emptyGateScalar w.emptyGateScalar hξ hζ hU
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect

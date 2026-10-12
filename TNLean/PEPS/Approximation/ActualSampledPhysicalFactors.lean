@@ -32,6 +32,21 @@ variable {P : Type} [Fintype P] [DecidableEq P] {a : Layout P}
 variable {I E : Option {_p : P // true = true} → Type}
 variable [∀ q, Fintype (I q)] [∀ q, Fintype (E q)]
 
+/-- The mixed coordinate trace for arbitrary source-free words is formed before
+the actual sampled words are substituted. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 574–579. -/
+private abbrev restrictedMixedPhysicalTrace {Q I X E : Type}
+    [Fintype I] [Fintype X] [Fintype E] {a b : Layout Q} (f : Q → Bool)
+    (u t : Word a b) (v : Word a a)
+    (hu : u.sources = []) (ht : t.sources = []) (hv : v.sources = [])
+    (B : OrthonormalBasis I ℂ (Mem (Layout.restrict f a)))
+    (C : OrthonormalBasis (X × E) ℂ (Mem (Layout.restrict f b))) : Matrix X X ℂ := by
+  classical
+  exact Matrix.partialTraceRight (α := X) (β := E)
+    (Matrix.of (fun row col ↦ C.repr ((u.restrict f hu).eval (B col)) row) *
+      LinearMap.toMatrix B.toBasis B.toBasis (v.restrict f hv).eval.toLinearMap *
+      (Matrix.of (fun row col ↦ C.repr ((t.restrict f ht).eval (B col)) row))ᴴ)
+
 open Classical in
 /-- The actual local physical matrix for independent ket and bra choices and
 one original sample assignment. Its physical basis is the original basis, and
@@ -56,12 +71,16 @@ def sampledPhysicalFactor
     (j : w.sourceLocations → Fin k) (q : Option {_p : P // true = true}) :
     Matrix (selectedFamilyPhysicalIndex d q) (selectedFamilyPhysicalIndex d q) ℂ :=
   let C := selectedPhysicalPrivateBasis d ps hn hc garbage BG
-  Matrix.partialTraceRight (α := selectedFamilyPhysicalIndex d q) (β := E q)
-    (w.partialSourcePartyMatrix ψ ξ B C q *
-      LinearMap.toMatrix (B q).toBasis (B q).toBasis
-        (((sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict (partySelector q)
-          (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω)).eval.toLinearMap) *
-      (w.partialSourcePartyMatrix ψ ζ B C q)ᴴ)
+  restrictedMixedPhysicalTrace
+    (Q := Option {_p : P // true = true}) (I := I q)
+    (X := selectedFamilyPhysicalIndex d q) (E := E q)
+    (a := w.allResidualSourceLayout ++ [])
+    (b := Layout.mapOwner (affectedOwner (fun _ : P ↦ true))
+      (familyPhysicalLayout d ps ++ garbage)) (partySelector q)
+    (w.partialSourceWord ψ ξ) (w.partialSourceWord ψ ζ)
+    (sampledEndpointInputWord w k lam L R ξ ζ j ω)
+    (sources_partialSourceWord w ψ ξ) (sources_partialSourceWord w ψ ζ)
+    (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω) (B q) (C q)
 
 open Classical in
 /-- In the original physical configurations, the actual sampled coordinate
@@ -124,6 +143,6 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors
       w ψ k lam L R ξ ζ ω B (selectedPhysicalPrivateBasis d ps hn hc garbage BG)
       (selectedPartyOrder ps) (selectedPartyOrder_nodup ps hn) (mem_selectedPartyOrder ps hc))
   simp only [map_smul, map_sum, ht] at h
-  exact h
+  simpa only [sampledPhysicalFactor, restrictedMixedPhysicalTrace, partialSourcePartyMatrix] using h
 
 end TNLean.PEPS.PairEffect.SourceCircuit
