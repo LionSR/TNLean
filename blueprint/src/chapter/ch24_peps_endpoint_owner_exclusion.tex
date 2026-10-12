@@ -86,6 +86,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 \begin{theorem}[The physical mixed trace in the original coordinates]
     \label{thm:peps_selected_physical_private_trace}
     \lean{TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis_partialTrace_mixed}
+    \leanok
     \uses{thm:peps_selected_physical_private_basis_grouped,
         thm:peps_selected_physical_basis_grouped,def:peps_selected_physical_configurations}
     Let $H$ be the original physical memory and $G$ the original retained
@@ -111,7 +112,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     % Source: 04-compression.tex, lines 137--151, 409--434 and 565--588.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_selected_physical_private_basis_grouped,
         thm:peps_selected_physical_basis_grouped}
     The two grouping identities identify $B$ after $\chi$ with the
@@ -129,6 +130,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 \begin{theorem}[The original physical density in grouped coordinates]
     \label{thm:peps_distributed_grouped_physical_trace}
     \lean{TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_eq_grouped_partialTrace}
+    \leanok
     \uses{def:peps_distributed_construction_density,
         thm:peps_selected_physical_private_trace}
     For a distributed construction, let $v$ be its actual original
@@ -141,7 +143,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     % Source: 04-compression.tex, lines 137--153 and 574--579.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_distributed_construction_density,
         thm:peps_selected_physical_private_trace}
     Apply Theorem~\ref{thm:peps_selected_physical_private_trace} with

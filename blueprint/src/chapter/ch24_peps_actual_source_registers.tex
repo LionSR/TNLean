@@ -356,6 +356,7 @@ operations on an empty memory.
 \begin{theorem}[Source replacement through the actual prepared columns]
     \label{thm:peps_actual_pure_source_replacement}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_pure_eq_sum_actualColumns}
+    \leanok
     \uses{def:peps_global_source_replacement,thm:peps_actual_pure_source_contraction}
     Let $\psi$ be the recorded product input, let $c_\xi$ be the original
     coefficient of the choice $\xi$, and let $D_\xi$ be its actual prepared
@@ -378,7 +379,7 @@ operations on an empty memory.
     % Source: 04-compression.tex, lines 279--355, 409--434 and 565--588.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_global_source_replacement,thm:peps_actual_pure_source_contraction}
     Expand the definition of source replacement as a sum over independent
     choices $\xi,\zeta$. Transporting the input basis and the input vector
@@ -393,6 +394,7 @@ operations on an empty memory.
 \begin{theorem}[Physical source replacement through the actual columns]
     \label{thm:peps_actual_pure_physical_source_replacement}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_pure_eq_sum_actualColumnTraces}
+    \leanok
     \uses{thm:peps_actual_pure_source_replacement,def:peps_physical_source_replacement}
     Choose finite orthonormal bases of the original physical and private
     output memories, and use their tensor product through the canonical
@@ -413,7 +415,7 @@ operations on an empty memory.
     % Source: 04-compression.tex, lines 338--383 and 565--588.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_actual_pure_source_replacement,def:peps_physical_source_replacement}
     Apply the partial trace over the original private output memory to
     (\ref{eq:peps_actual_pure_replacement}). The partial trace is
@@ -427,6 +429,7 @@ operations on an empty memory.
 \begin{theorem}[Physical traces of arbitrary mixed source-column matrices]
     \label{thm:peps_actual_source_column_physical_trace}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.selectedPhysicalPrivateBasis_partialTrace_actualColumns}
+    \leanok
     \uses{thm:peps_selected_physical_private_trace,thm:peps_actual_source_column_coordinates}
     Let $X$ be any matrix on the original joint source-coordinate space,
     and let $\xi,\zeta$ be independent chronological choices. Let
@@ -452,7 +455,7 @@ operations on an empty memory.
     % Source: 04-compression.tex, lines 279--355, 409--434 and 565--588.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_selected_physical_private_trace,thm:peps_actual_source_column_coordinates}
     Expand $X$ in matrix units. For a unit at $(s,t)$, the mixed product
     is the rank-one operator formed from the actual $s$-th ket column and
