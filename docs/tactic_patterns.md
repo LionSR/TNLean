@@ -513,6 +513,19 @@ abstracted — record why, so it is not re-proposed).
   compressions, −206 lines over 11 files and −170 lines over 20 files in two
   passes; no theorem statement changed.
 
+### Endpoint-membership splits closed by `grind` — promoted (2026-10-12)
+
+- **Pattern:** a propositional classification of an edge relative to two
+  disjoint vertex sets, closed by a sixteen-way `by_cases` split on the
+  membership of both endpoints in both sets followed by `simp_all`.
+- **Seen:** six classifications in
+  `PEPS/Approximation/WholeGroupContraction.lean` (proof of Lemma 6.2,
+  `05-frames.tex`, lines 143–157).
+- **Abstraction:** `grind` (no annotations added), after the same unfolding.
+- **Notes:** the module elaborates slightly faster (about 7 s against 8 s
+  locally). Use `grind` for further endpoint-membership splits of this shape
+  rather than a macro.
+
 ### Single-qubit plus-state positivity — promoted (2026-10-08)
 
 - **Pattern:** Identify the all-halves two-by-two density matrix with one half
@@ -4197,20 +4210,6 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Notes:** subsequent cancellation of doubled Hamiltonian terms uses these two
   identities directly; it does not require another entrywise proof. Record a shared
   coordinate lemma if a further independent use appears.
-
-### Endpoint-membership splits closed by `grind` — candidate (2026-10-12)
-
-- **Pattern:** a propositional classification of an edge relative to two
-  disjoint vertex sets, closed by a sixteen-way `by_cases` split on the
-  membership of both endpoints in both sets followed by `simp_all`.
-- **Seen:** six classifications in
-  `PEPS/Approximation/WholeGroupContraction.lean` (proof of Lemma 6.2,
-  `05-frames.tex`, lines 143–157), now each closed by `grind` after the same
-  unfolding; the module elaborates slightly faster.
-- **Abstraction:** none beyond `grind`. Replace further endpoint-membership
-  `by_cases … <;> simp_all` splits by `grind` where they appear; promote only
-  if a shared unfolding lemma becomes necessary in a second file.
-- **Notes:** one file so far, below the promotion threshold.
 
 ### Unselected source positions keep their vectors — candidate (2026-10-12)
 
