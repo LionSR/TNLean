@@ -164,12 +164,14 @@ theorem partialSourceWord_sampled_none_partialTrace_eq_scalar
   have hξ := partialSourceWord_none_eval_heq_scalar w ψ ξ
   have hζ := partialSourceWord_none_eval_heq_scalar w ψ ζ
   have hU := sampledEndpointInputWord_party_none_eval_heq_id w k lam L R ξ ζ j ω
-  generalize hA : (w.partialSourceWord ψ ξ).restrict (partySelector none)
-    (sources_partialSourceWord w ψ ξ) = A at hξ ⊢
-  generalize hT : (w.partialSourceWord ψ ζ).restrict (partySelector none)
-    (sources_partialSourceWord w ψ ζ) = T at hζ ⊢
-  generalize hV : (sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict
-    (partySelector none) (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω) = U at hU ⊢
+  with_reducible
+    generalize (w.partialSourceWord ψ ξ).restrict (partySelector none)
+        (sources_partialSourceWord w ψ ξ) = A,
+      (w.partialSourceWord ψ ζ).restrict (partySelector none)
+        (sources_partialSourceWord w ψ ζ) = T,
+      (sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict
+        (partySelector none) (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω) = U
+      at hξ hζ hU ⊢
   exact empty_memory_mixed_partialTrace
     (Q := Option {p : P // (fun _ : P ↦ true) p = true}) (I := I) (J := J)
     (a := Layout.atParty none (w.allResidualSourceLayout ++ []))

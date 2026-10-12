@@ -70,7 +70,7 @@ def sampledPhysicalFactor
         (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) garbage))))
     (j : w.sourceLocations → Fin k) (q : Option {_p : P // true = true}) :
     Matrix (selectedFamilyPhysicalIndex d q) (selectedFamilyPhysicalIndex d q) ℂ :=
-  let C := selectedPhysicalPrivateBasis d ps hn hc garbage BG
+  let C := selectedPhysicalPrivateBasis (E := E) d ps hn hc garbage BG
   restrictedMixedPhysicalTrace
     (Q := Option {_p : P // true = true}) (I := I q)
     (X := selectedFamilyPhysicalIndex d q) (E := E q)
@@ -104,7 +104,7 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors
     (BG : ∀ q, OrthonormalBasis (E q) ℂ
       (Mem (Layout.atParty q
         (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) garbage)))) :
-    let C := selectedPhysicalPrivateBasis d ps hn hc garbage BG
+    let C := selectedPhysicalPrivateBasis (E := E) d ps hn hc garbage BG
     let bOut := partyGroupedBasis
       (Layout.mapOwner (affectedOwner (fun _ : P ↦ true))
         (familyPhysicalLayout d ps ++ garbage)) C (selectedPartyOrder ps)
@@ -113,7 +113,7 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors
       (selectedFamilyPhysicalIndex d) E
     let M := fun (j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k)
       (q : Option {_p : P // true = true}) ↦
-      sampledPhysicalFactor d ps hn hc garbage w ψ k lam L R ξ ζ ω B BG
+      sampledPhysicalFactor (I := I) (E := E) d ps hn hc garbage w ψ k lam L R ξ ζ ω B BG
         (j ∘ (allSourceSlotEquiv w).symm) q
     (Matrix.partialTraceRight
       ((w.partialSourceGlobalMatrix ψ ξ bOut *
@@ -140,7 +140,8 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors
     partyProductMatrix_selectedFamilyPhysicalConfig d M
   have h := congrArg T
     (partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_partyProduct
-      w ψ k lam L R ξ ζ ω B (selectedPhysicalPrivateBasis d ps hn hc garbage BG)
+      (I := I) (X := selectedFamilyPhysicalIndex d) (E := E)
+      w ψ k lam L R ξ ζ ω B (selectedPhysicalPrivateBasis (E := E) d ps hn hc garbage BG)
       (selectedPartyOrder ps) (selectedPartyOrder_nodup ps hn) (mem_selectedPartyOrder ps hc))
   simp only [map_smul, map_sum, ht] at h
   simpa only [sampledPhysicalFactor, restrictedMixedPhysicalTrace, partialSourcePartyMatrix] using h
