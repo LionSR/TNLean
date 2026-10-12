@@ -423,6 +423,7 @@ complete operators. We give the corresponding exact constructions.
 \begin{theorem}[Relabelling a composition beside spectators]
     \label{thm:peps_owner_spectator_extension}
     \lean{TNLean.PEPS.PairEffect.Word.mapOwner_appendTail_heq}
+    \leanok
     \uses{def:peps_append_spectators,def:peps_owner_composition,
         def:peps_owner_layout,thm:peps_register_exchange}
     Let $g:P\to Q$ be any map of party labels, let $W:a\to b$
@@ -440,7 +441,7 @@ complete operators. We give the corresponding exact constructions.
     % Source: 04-compression.tex, lines 233--267 and 409--434.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_append_spectators,def:peps_owner_composition,
         def:peps_owner_layout,thm:peps_register_exchange}
     Relabelling preserves the spaces, order and concatenation of
