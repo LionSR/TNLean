@@ -1670,6 +1670,56 @@ The following finite construction follows
     factors. The dimensions of $C$ and $R$ are independently specified.
 \end{definition}
 
+\begin{definition}[Coordinates of the two auxiliary factors]
+    \label{def:al_scan_auxiliary_coordinates}
+    \lean{TNLean.PEPS.AreaLaw.Scan.augmentedSiteEquiv,
+        TNLean.PEPS.AreaLaw.Scan.augmentedConfigurationEquiv,
+        TNLean.PEPS.AreaLaw.Scan.augmentedReplicaConfigurationEquiv,
+        TNLean.PEPS.AreaLaw.Scan.augmentedSumReplicaCopiesEquiv}
+    \uses{def:al_scan_actual_energy_terms}
+    Let $V$ be a finite set of physical sites, each of dimension $q$, and
+    let the dimensions of $C$ and $R$ both be $d$. Write
+    $X=\{0,\ldots,q-1\}^V$ for the physical configuration space. Identify the physical
+    site $v$ with $v$ in $V\sqcup\{C,R\}$. The two successive adjoining
+    operations place $C$ at the first added site and $R$ at the second.
+    Let $e$ be this identification of one-copy configurations and $e_k$
+    its copywise extension. Let $g_k$ group the configurations in the
+    order $X^k,C^k,R^k$, where each auxiliary configuration space has
+    $d$ elements. These are bijections also for zero dimensions
+    and for $k=0$.
+\end{definition}
+
+\begin{theorem}[The physical replica mean with two auxiliary identities]
+    \label{thm:al_scan_auxiliary_energy}
+    \lean{TNLean.PEPS.AreaLaw.Scan.augmentedConfigurationEquiv_apply_physical,
+        TNLean.PEPS.AreaLaw.Scan.augmentedConfigurationEquiv_apply_C,
+        TNLean.PEPS.AreaLaw.Scan.augmentedConfigurationEquiv_apply_R,
+        TNLean.PEPS.AreaLaw.Scan.copyMean_augmentOperator_eq_replicaHamiltonian_kronecker}
+    \uses{def:al_scan_auxiliary_coordinates}
+    Let $H$ be an arbitrary matrix on the physical configuration space.
+    Write $\overline H_k=k^{-1}\sum_{j=0}^{k-1}H_j$ and define
+    $\overline H_0=0$. Let $\widetilde H=H\otimes I_C\otimes I_R$
+    be expressed on $V\sqcup\{C,R\}$. Then
+    \begin{align}
+        \overline{\widetilde H}_k(x,y)
+         & = (\overline H_k\otimes I_{C^k\otimes R^k})
+        (g_kx,g_ky).
+    \end{align}
+    The bijection $e$ preserves every physical coordinate and sends the
+    first and second auxiliary coordinates to $C$ and $R$, respectively.
+    This is the identity extension used in
+    \cite[Proposition~7.4 and Section~8]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    The one-copy coordinate identities follow from the definition of $e$.
+    Reindex each term of the replica sum by $e_k$ and regroup the physical
+    copies and the joint auxiliary copies. This gives
+    $\overline{H\otimes I}_{k}=\overline H_k\otimes I$ in the regrouped
+    coordinates. Equality of the joint auxiliary configurations is
+    equivalent to equality of both their $C$ and $R$ configurations.
+    The identity entries therefore agree under the final regrouping $g_k$.
+\end{proof}
+
 \begin{theorem}[Positive supported augmented energy]
     \label{thm:al_scan_actual_energy_terms}
     \lean{TNLean.PEPS.AreaLaw.Scan.augmentOperator_mem_Icc,
