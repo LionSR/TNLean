@@ -110,6 +110,27 @@ theorem rfp_implies_nncph_of_leftCanonical
     IsNNCPH A N :=
   (AppendixBStructuralData.ofRFP A hNT hRFP hLeft).isNNCPH hN
 
+/-- Ground-vector form of `rfp_implies_nncph_of_leftCanonical`.
+
+The translated parent terms commute and annihilate the periodic MPS vector.
+The source ground-space spanning clause remains separate.
+
+**Scope restriction (ground vector):** The source implication includes the
+ground-space spanning equation and is stated in canonical-form scope.  This
+theorem proves the commutation and zero-energy equations under an explicit
+left-canonical hypothesis.  The two restrictions are recorded in
+`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
+
+Source: arXiv:1606.00608, Definition 3.9, source lines 517--524, and
+Theorem 3.10, source lines 534--540. -/
+theorem rfp_implies_nncph_ground_state_of_leftCanonical
+    (A : MPSTensor d D) [NeZero D]
+    (hRFP : IsTransferIdempotent A) (hNT : Kraus.IsNormal A) (hLeft : IsLeftCanonical A)
+    (N : ℕ) (hN : 2 < N) :
+    IsNNCPHGroundState A N :=
+  (rfp_implies_nncph_of_leftCanonical A hRFP hNT hLeft N hN).isNNCPHGroundState
+    (by omega)
+
 /-- A normal renormalization fixed-point tensor has commuting length-two parent
 interactions on every periodic chain of length (N>2).
 
