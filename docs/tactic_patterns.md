@@ -601,6 +601,21 @@ abstracted — record why, so it is not re-proposed).
 - **Refactor:** All three callers use the lemma. The closure callers apply
   `closure_mono` to the same containment conclusion. No theorem statement changes.
 
+### Pointwise comparison of finite-chain symmetries — promoted
+- **Pattern:** compare invariance at every applicable chain length by proving
+  equivalent operator equations pointwise, for symmetries with the same
+  applicable lengths.
+- **Seen:** six uses across
+  `TNLean/MPS/MPU/Examples/SwapSymmetryTransport.lean` and
+  `TNLean/MPS/MPU/Examples/SwapBlockedSymmetryTransport.lean`, in the adjunction,
+  transposition and conjugation comparisons (2026-10-03).
+- **Abstraction:** `MPOTensor.isInvariantUnderSymmetry_iff_of_pointwise` in
+  `SwapSymmetryTransport.lean` performs the common quantifier reduction once.
+- **Notes:** the original four-line `forall_congr'`/`imp_congr_right` block is
+  removed from all six sites. The helper requires equality of the applicable
+  lengths and pointwise equivalence of the actual operator fixed equations;
+  it assumes no path or canonical-form certificate.
+
 ### Quasi-local MPS expectation on an interval — promoted (2026-10-07)
 
 - **Pattern:** Rewrite the quasi-local MPS expectation of an interval
@@ -4116,6 +4131,22 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Sheet swaps in regional coordinates — candidate (2026-10-09)
+
+- **Pattern:** derive regional tensor factors from membership in the supported-operator
+  space, rewrite multiplication by the sheet-swap permutation matrix, and compare
+  entries using the region/complement split.
+- **Seen:** `commute_sheetSwapOp_kronecker` in
+  `PEPS/Approximation/SheetSwapCorrection.lean` and
+  `sheetSwapOp_mul_kronecker_of_mem_supportedOperators` in
+  `PEPS/Approximation/SheetSwapSupported.lean`.
+- **Abstraction:** the support decompositions, permutation-matrix products, and split
+  coordinates are already public lemmas. These are the two distinct cases, for
+  operators supported outside and inside the swapped region.
+- **Notes:** subsequent cancellation of doubled Hamiltonian terms uses these two
+  identities directly; it does not require another entrywise proof. Record a shared
+  coordinate lemma if a further independent use appears.
+
 ### Unselected source positions keep their vectors — candidate (2026-10-12)
 
 - **Pattern:** A selected position that fails the affected-endpoint condition
@@ -6860,6 +6891,22 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** The current occurrences are all in one proof, below the
   multiple-file promotion threshold. Crossing membership itself is already
   expressed by `mem_edgeBoundary_pair_iff`; no new tactic macro is needed.
+
+### Excluding a party outside the image of an owner map — candidate (2026-10-11)
+
+- **Pattern:** Rewrite the parties of a restriction as a filtered image,
+  extract the original owner from image membership, and contradict the
+  selector using exclusion from the owner map. The no-party theorem then
+  gives the identity on the empty memory.
+- **Seen:** `Word.restrict_mapOwner_eval_eq_id_of_disjoint` in
+  `TNLean/PEPS/Approximation/WordOwnerRestriction.lean` and
+  `Word.restrict_localPart_mapOwner_eval_heq_id_of_disjoint` in
+  `TNLean/PEPS/Approximation/SourceWordParties.lean` (two occurrences).
+- **Abstraction:** At a third occurrence, share the restriction lemma for
+  a party absent from the original participating-party set, before applying
+  the relabelling identities.
+- **Notes:** Named scalar local maps belong to the participating-party set.
+  Excluding register owners alone would not exclude those scalar operations.
 
 ### Projection commutation from an invariant subspace — promoted (2026-10-11)
 

@@ -60,38 +60,6 @@ local instance : Fact (1 < height) := ⟨by have := Fact.out (p := 2 < height); 
 local notation "TV" => TorusVertex width height
 local notation "TG" => torusGraph width height
 
-private theorem zmod_add_two_ne {n : ℕ} [NeZero n] [Fact (2 < n)] (x : ZMod n) :
-    x + 2 ≠ x ∧ x + 2 ≠ x + 1 := by
-  have hn : 2 < n := Fact.out
-  have htwo : (2 : ZMod n) ≠ 0 := by
-    intro h
-    have hd := (ZMod.natCast_eq_zero_iff 2 n).mp h
-    have := Nat.le_of_dvd (by decide : 0 < 2) hd
-    omega
-  have hone : (1 : ZMod n) ≠ 0 := by
-    intro h
-    have hd := (ZMod.natCast_eq_zero_iff 1 n).mp (by simp at h)
-    have := Nat.le_of_dvd (by decide : 0 < 1) hd
-    omega
-  constructor
-  · simpa using htwo
-  · intro h
-    have hh : (2 : ZMod n) = 1 := add_left_cancel h
-    apply hone
-    linear_combination hh
-
-private theorem torusPlaquetteRegion_fst (v p : TV) (hp : p ∈ torusPlaquetteRegion v) :
-    p.1 = v.1 ∨ p.1 = v.1 + 1 := by
-  simp only [torusPlaquetteRegion, torusPlaquetteWalk, SimpleGraph.Walk.support,
-    List.toFinset_cons, List.toFinset_nil, Finset.mem_insert, Finset.notMem_empty, or_false] at hp
-  rcases hp with rfl | rfl | rfl | rfl | rfl <;> simp
-
-private theorem torusPlaquetteRegion_snd (v p : TV) (hp : p ∈ torusPlaquetteRegion v) :
-    p.2 = v.2 ∨ p.2 = v.2 + 1 := by
-  simp only [torusPlaquetteRegion, torusPlaquetteWalk, SimpleGraph.Walk.support,
-    List.toFinset_cons, List.toFinset_nil, Finset.mem_insert, Finset.notMem_empty, or_false] at hp
-  rcases hp with rfl | rfl | rfl | rfl | rfl <;> simp
-
 /-- Two seams placed two steps past a plaquette avoid all its internal edges,
 including when either torus period is three. Source: SCP10, Theorem 5.7. -/
 theorem torusPlaquette_internal_not_mem_shiftedGraphSeamCut
@@ -108,10 +76,7 @@ theorem torusPlaquette_internal_not_mem_shiftedGraphSeamCut
       · simpa only [torusRightEdge, hh'.1] using ht
     change torusRightEdge p ∉ torusGraphSeamCut (v.1 + 2) (v.2 + 2)
     rw [torusRightEdge_mem_graphSeamCut]
-    intro he
-    rcases torusPlaquetteRegion_fst v _ hp with hx | hx
-    · exact (zmod_add_two_ne v.1).1 (he.symm.trans hx)
-    · exact (zmod_add_two_ne v.1).2 (he.symm.trans hx)
+    exact (torusPlaquetteRegion_ne_add_two hp).1
   · change (torusUpEdge p).1.1 ∈ torusPlaquetteRegion v at ht
     change (torusUpEdge p).1.2 ∈ torusPlaquetteRegion v at hh
     have hp : (p.1, p.2 + 1) ∈ torusPlaquetteRegion v := by
@@ -120,10 +85,7 @@ theorem torusPlaquette_internal_not_mem_shiftedGraphSeamCut
       · simpa only [torusUpEdge, hh'.1] using ht
     change torusUpEdge p ∉ torusGraphSeamCut (v.1 + 2) (v.2 + 2)
     rw [torusUpEdge_mem_graphSeamCut]
-    intro he
-    rcases torusPlaquetteRegion_snd v _ hp with hy | hy
-    · exact (zmod_add_two_ne v.2).1 (he.symm.trans hy)
-    · exact (zmod_add_two_ne v.2).2 (he.symm.trans hy)
+    exact (torusPlaquetteRegion_ne_add_two hp).2
 
 variable {G : Type*} [Group G]
 
