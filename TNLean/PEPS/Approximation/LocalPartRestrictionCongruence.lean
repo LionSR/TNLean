@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.FrameListRestriction
+import TNLean.PEPS.Approximation.WordPermutationRestriction
 
 /-!
 # Composition of selected remaining operations
@@ -73,5 +74,60 @@ theorem restrict_localPart_comp_eval_heq (f : P → Bool)
   unfold localPart
   exact (restrict_castInput_eval_heq f _ _ hraw).trans
     (hcomp.trans (restrict_castInput_eval_heq f _ _ hraw').symm)
+
+/-- Framing preserves equality of selected remaining operators when the
+selected source prefixes agree. Unselected source registers may differ, and
+no operator is cancelled.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267,
+351–381 and 409–434. -/
+theorem restrict_localPart_frame_eval_heq (f : P → Bool) (r : Reg P)
+    {a b a' b' : Layout P} (w : Word a b) (w' : Word a' b')
+    (ha : a = a') (hb : b = b')
+    (hs : Layout.restrict f w.sources.layout = Layout.restrict f w'.sources.layout)
+    (he : HEq (w.localPart.restrict f w.sources_localPart).eval
+      (w'.localPart.restrict f w'.sources_localPart).eval) :
+    HEq ((Word.frame r w).localPart.restrict f (Word.frame r w).sources_localPart).eval
+      ((Word.frame r w').localPart.restrict f (Word.frame r w').sources_localPart).eval := by
+  have hwi : Layout.restrict f (w.sources.layout ++ a) =
+      Layout.restrict f (w'.sources.layout ++ a') := by
+    simp only [Layout.restrict_append]
+    exact congrArg₂ List.append hs (congrArg (Layout.restrict f) ha)
+  have hmove := restrict_moveHead_eval_heq_of_restrict_eq f r
+    w.sources.layout w'.sources.layout a a' hs (congrArg (Layout.restrict f) ha)
+  have hframe : HEq ((Word.frame r w.localPart).restrict f w.sources_localPart).eval
+      ((Word.frame r w'.localPart).restrict f w'.sources_localPart).eval := by
+    by_cases hr : f r.owner = true
+    · exact (restrict_frame_true_eval_heq f r w.localPart w.sources_localPart hr).trans
+        ((eval_frame_heq r (w.localPart.restrict f w.sources_localPart)
+          (w'.localPart.restrict f w'.sources_localPart) hwi
+          (congrArg (Layout.restrict f) hb) he).trans
+            (restrict_frame_true_eval_heq f r w'.localPart w'.sources_localPart hr).symm)
+    · have hr' := Bool.eq_false_iff.mpr hr
+      exact (restrict_frame_false_eval_heq f r w.localPart w.sources_localPart hr').trans
+        (he.trans (restrict_frame_false_eval_heq f r w'.localPart
+          w'.sources_localPart hr').symm)
+  have hmid : Layout.restrict f (r :: (w.sources.layout ++ a)) =
+      Layout.restrict f (r :: (w'.sources.layout ++ a')) := by
+    simp only [Layout.restrict_cons]
+    rw [hwi]
+  have hcomp := eval_comp_heq
+    ((moveHead r w.sources.layout a).restrict f (sources_moveHead r w.sources.layout a))
+    ((Word.frame r w.localPart).restrict f w.sources_localPart)
+    ((moveHead r w'.sources.layout a').restrict f (sources_moveHead r w'.sources.layout a'))
+    ((Word.frame r w'.localPart).restrict f w'.sources_localPart)
+    (by
+      simp only [Layout.restrict_append]
+      exact congrArg₂ List.append hs
+        (congrArg (Layout.restrict f) (congrArg (r :: ·) ha)))
+    hmid (congrArg (Layout.restrict f) (congrArg (r :: ·) hb)) hmove hframe
+  change HEq
+    (((moveHead r w.sources.layout a).restrict f
+      (sources_moveHead r w.sources.layout a)).comp
+        ((Word.frame r w.localPart).restrict f w.sources_localPart)).eval
+    (((moveHead r w'.sources.layout a').restrict f
+      (sources_moveHead r w'.sources.layout a')).comp
+        ((Word.frame r w'.localPart).restrict f w'.sources_localPart)).eval
+  exact hcomp
+
 
 end TNLean.PEPS.PairEffect.Word

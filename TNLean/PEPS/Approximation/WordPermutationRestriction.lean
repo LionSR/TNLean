@@ -193,6 +193,25 @@ private theorem restrict_moveHead_false_eval_heq (f : P → Bool) (r : Reg P)
               (b := Layout.restrict f (s :: rs) ++ Layout.restrict f tail)
               (by simp only [Layout.restrict_cons, hs', Bool.false_eq_true, ↓reduceIte]))
 
+/-- Restricting a register exchange depends only on its selected prefix and
+selected tail. The source prefix may contain arbitrary retained registers.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267,
+351–381 and 409–434. -/
+theorem restrict_moveHead_eval_heq_of_restrict_eq (f : P → Bool) (r : Reg P)
+    (s s' a a' : Layout P)
+    (hs : Layout.restrict f s = Layout.restrict f s')
+    (ha : Layout.restrict f a = Layout.restrict f a') :
+    HEq ((moveHead r s a).restrict f (sources_moveHead r s a)).eval
+      ((moveHead r s' a').restrict f (sources_moveHead r s' a')).eval := by
+  by_cases hr : f r.owner = true
+  · exact (restrict_moveHead_true_eval_heq f r s a hr).trans
+      ((moveHead_eval_heq_of_layouts_eq r hs ha).trans
+        (restrict_moveHead_true_eval_heq f r s' a' hr).symm)
+  · have hr' := Bool.eq_false_iff.mpr hr
+    exact (restrict_moveHead_false_eval_heq f r s a hr').trans
+      ((eval_id_heq (congrArg₂ List.append hs ha)).trans
+        (restrict_moveHead_false_eval_heq f r s' a' hr').symm)
+
 /-- Moving a register through an erased prefix leaves its retained register
 and the retained tail unchanged. The retained tail may be arbitrary.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–267,

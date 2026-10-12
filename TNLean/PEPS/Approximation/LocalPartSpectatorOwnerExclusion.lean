@@ -54,7 +54,7 @@ private theorem restrict_localPart_comp_id (f : P → Bool) {a b c : Layout P}
     (hcomp.trans (heq_of_eq (ContinuousLinearMap.comp_id (Word.id T).eval)))
 
 private theorem frameList_eval_heq_id_of_empty {a b : Layout P} (w : Word a b)
-    (ha : a = []) (hb : b = []) (he : HEq w.eval (Word.id []).eval)
+    (ha : a = []) (hb : b = []) (he : HEq w.eval (Word.id (P := P) []).eval)
     (tail : Layout P) : HEq (frameList tail w).eval (Word.id tail).eval := by
   cases ha
   cases hb
@@ -93,12 +93,12 @@ private theorem exchangeBlocks_nil_left_eval (b tail : Layout P) :
   induction b with
   | nil => rfl
   | cons r b ih =>
-      change ((Word.frame r (exchangeBlocks [] b tail)).eval) ∘L
-        (Word.id (r :: (b ++ tail))).eval = _
-      rw [ContinuousLinearMap.comp_id]
-      change ((exchangeBlocks [] b tail).eval).lTensor r.space = _
-      rw [ih, ContinuousLinearMap.lTensor_id]
-      rfl
+      have ih' : (exchangeBlocks [] b tail).eval =
+          ContinuousLinearMap.id ℂ (Mem (b ++ tail)) := ih
+      change ((exchangeBlocks [] b tail).eval).lTensor r.space ∘L
+        ContinuousLinearMap.id ℂ (Mem (r :: (b ++ tail))) =
+          ContinuousLinearMap.id ℂ (Mem (r :: (b ++ tail)))
+      rw [ContinuousLinearMap.comp_id, ih', ContinuousLinearMap.lTensor_id]
 
 private theorem twoBlockExchange_nil_left_eval_heq (b : Layout P) :
     HEq (twoBlockExchange [] b).eval (Word.id b).eval := by
@@ -130,7 +130,7 @@ theorem restrict_localPart_appendTail_eval_heq_id_of_not_mem_parties {a b : Layo
     apply List.filter_eq_nil_iff.mpr
     intro r hr
     have hne : r.owner ≠ p := fun h => hp (h ▸ hL r hr)
-    simp only [f, partySelector, hne, decide_false]
+    simpa only [f, partySelector, decide_eq_true_eq] using hne
   have ha : Layout.restrict f a = [] := hretained a u.owners_mem_parties.1
   have hb : Layout.restrict f b = [] := hretained b u.owners_mem_parties.2
   have hinput : Layout.restrict f (u.sources.layout ++ a) = [] :=
@@ -147,7 +147,7 @@ theorem restrict_localPart_appendTail_eval_heq_id_of_not_mem_parties {a b : Layo
     obtain ⟨hq, hsel⟩ := Finset.mem_filter.mp hq
     have hqp : q = p := by simpa only [f, partySelector, decide_eq_true_eq] using hsel
     exact hp (hqp ▸ hq)
-  have hcore : HEq (u.localPart.restrict f u.sources_localPart).eval (Word.id []).eval :=
+  have hcore : HEq (u.localPart.restrict f u.sources_localPart).eval (Word.id (P := P) []).eval :=
     (eq_nil_and_eval_eq_id_of_parties_eq_empty _ hparties).2.2
   let A := twoBlockExchange a tail
   let V := frameList tail u

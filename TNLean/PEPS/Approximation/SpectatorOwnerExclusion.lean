@@ -36,6 +36,7 @@ private theorem appendTail_eval_heq_id_of_empty_layouts {P : Type}
   apply heq_of_eq
   ext x
   have hx := DFunLike.congr_fun h (appendIso [] tail x)
+  change (w.appendTail tail).eval x = x
   simpa only [ContinuousLinearMap.comp_apply, isoL_apply,
     LinearIsometryEquiv.symm_apply_apply, ContinuousLinearMap.id_apply] using hx
 

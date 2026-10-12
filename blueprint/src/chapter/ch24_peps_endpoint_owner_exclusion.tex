@@ -741,3 +741,70 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     local parts. Compatibility with the input identification gives
     the asserted identity.
 \end{proof}
+
+\begin{theorem}[Register moves with equal retained prefixes]
+    \label{thm:peps_register_move_retained_prefix}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_moveHead_eval_heq_of_restrict_eq}
+    \uses{thm:peps_party_restriction,thm:peps_register_exchange,
+        thm:peps_basis_memory_equalities}
+    Let $r$ be a register, let $s,s',a,a'$ be ordered register
+    lists, and let $f$ select owners. Suppose $s|_f=s'|_f$ and
+    $a|_f=a'|_f$. The move of $r$ through $s$ in front of the
+    tail $a$, from $sra$ to $rsa$, and the corresponding move
+    from $s'ra'$ to $rs'a'$ have equal restricted operators
+    under the induced retained-list identifications.
+    The retained prefix may be arbitrary, and $r$ may be retained
+    or erased. No equality of the unselected registers is required.
+    This is an auxiliary register-order identity for
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 246--267, 351--381 and 409--434.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_party_restriction,thm:peps_register_exchange,
+        thm:peps_basis_memory_equalities}
+    If $r$ is retained, both restrictions move it through the same
+    retained prefix before the same retained tail. Identify these
+    equal lists to equate the operators. If $r$ is erased, both
+    restrictions are identities on the equal memories of
+    $s|_f\,a|_f=s'|_f\,a'|_f$.
+\end{proof}
+
+\begin{theorem}[Framing equal selected local parts]
+    \label{thm:peps_selected_local_part_framing}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_frame_eval_heq}
+    \uses{thm:peps_source_preparation,thm:peps_party_restriction,
+        thm:peps_basis_memory_equalities}
+    Let $a=a'$ and $b=b'$ be equalities of ordered register lists,
+    and let $W:a\to b$ and $W':a'\to b'$ be arbitrary chronological
+    compositions. Let $f$ select owners and let $r$ be a common
+    spectator register. Write $s_W,s_{W'}$ for the ordered
+    source-register lists. Suppose $s_W|_f=s_{W'}|_f$ and
+    $(L(W))|_f=(L(W'))|_f$ under the induced memory identifications.
+    Framing by $r$ then gives
+    \begin{align}
+        (L(F_r(W)))|_f
+         & =(L(F_r(W')))|_f.
+        \label{eq:peps_selected_local_part_framing}
+    \end{align}
+    The selected source prefix may be nonempty, and its unselected
+    registers may differ. No source-free, normalization or nonzero
+    assumption is imposed. This is an auxiliary framing identity for
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 246--267, 351--381 and 409--434.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_source_preparation,thm:peps_party_restriction,
+        thm:peps_register_move_retained_prefix,
+        thm:peps_operator_composition_framing}
+    Forming the local part of $F_r(W)$ first moves $r$ through
+    $s_W$, then frames $L(W)$ by $r$. The corresponding moves
+    for $W$ and $W'$ have equal restricted operators by
+    Theorem~\ref{thm:peps_register_move_retained_prefix}.
+    If $r$ is retained, frame the assumed equality of the selected
+    local parts by its identity operator; if it is erased, use
+    that equality directly. Compose the move and framed-core
+    identities under the induced memory identifications to obtain
+    (\ref{eq:peps_selected_local_part_framing}).
+\end{proof}

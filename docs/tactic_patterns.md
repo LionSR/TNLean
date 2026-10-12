@@ -6491,6 +6491,14 @@ spectral split → block extraction → MPV calculation → strict bounds
   equal operators; no equality before restriction is used to infer equality
   after restriction. Its named axiom check is in the existing test;
   elaboration is pending.
+- **Selected source prefixes (2026-10-12):** The retained-prefix proofs in
+  `WordPermutationRestriction` also give
+  `Word.restrict_moveHead_eval_heq_of_restrict_eq`, which depends only on
+  the selected prefix and selected tail. The framed local-part congruence
+  in `LocalPartRestrictionCongruence` uses this result together with
+  `Word.eval_frame_heq` and `Word.eval_comp_heq`. It does not erase a
+  retained source prefix or cancel a prepared source vector. The existing
+  named tests cover both new declarations; elaboration is pending.
 - **Word identities (2026-10-12):** `WordOwnerAppendTailTransport` and
   `AbsorbedRestriction` both compare chronological compositions, frames,
   identities and list identifications at the word level after identifying
