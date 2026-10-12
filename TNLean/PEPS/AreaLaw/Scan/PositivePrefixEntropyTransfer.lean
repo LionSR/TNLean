@@ -59,6 +59,10 @@ theorem eventually_regionalEntropy_positiveDepthPrefix_le
         regionalEntropy Λ q Ωt (positiveDepthPrefix A depth (j : ℤ)) ≤
           Ce * ((n : ℝ) * (L : ℝ) ^ e + n) + (n : ℝ) ^ (-247 : ℝ) := by
   classical
+  filter_upwards [eventually_continuityCost_le_of_fixed_coefficient
+    (Real.sqrt (2 / g)) (max 4 Cvol) (Real.log q)
+    (Real.sqrt_nonneg _) (le_trans (by norm_num) (le_max_left _ _))
+    (Real.log_nonneg (by exact_mod_cast hq))] with n hcost
   done
 
 end TNLean.PEPS.AreaLaw.Scan
