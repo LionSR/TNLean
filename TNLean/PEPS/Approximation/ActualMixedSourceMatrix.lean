@@ -101,7 +101,9 @@ theorem partialSourceGlobalMatrix_mixed_word
       dependentPhysicalProductFamilyMatrix (fun q ↦
         w.partialSourcePartyMatrix ψ ξ B C q *
           Matrix.of (fun (row col : I q) ↦ (B q).repr
-            ((u.restrict (partySelector q) hu).eval (B q col)) row) *
+            ((u.restrict (partySelector q) hu).eval
+              ((⇑(B q) : I q → Mem
+                (Layout.atParty q (w.allResidualSourceLayout ++ []))) col)) row) *
           (w.partialSourcePartyMatrix ψ ζ B C q)ᴴ) := by
   classical
   let bIn := partyGroupedBasis (w.allResidualSourceLayout ++ []) B ps hn hc
