@@ -142,6 +142,17 @@ theorem exists_supported_gaussian_integral (q : ℕ) (hq : 1 ≤ q)
         (Matrix.hermitianUnitaryPath g.operator t),
       ← Matrix.hermitianUnitaryPath_add, neg_add_cancel,
       Matrix.hermitianUnitaryPath_zero, Matrix.one_mul]
+  have hpoint (t : ℝ) (ht : |t| ≤ T) :
+      ‖siteExpectation q B (heisenbergEvolution g.operator t W) * U t -
+        Matrix.hermitianUnitaryPath g.operator t * W * Matrix.hermitianUnitaryPath H (-t)‖ ≤
+        ‖W‖ * C * (Λ.card : ℝ) * (1 + ‖g.operator - H‖ * T) *
+          Real.exp (v * T - c * l) := by
+    refine (hfactor t) ▸ (norm_sub_le_norm_sub_add_norm_sub
+      (siteExpectation q B (heisenbergEvolution g.operator t W) * U t)
+      (heisenbergEvolution g.operator t W * U t)
+      (heisenbergEvolution g.operator t W *
+        (Matrix.hermitianUnitaryPath g.operator t * Matrix.hermitianUnitaryPath H (-t)))).trans ?_
+    done
   done
 
 end TNLean.PEPS.AreaLaw
