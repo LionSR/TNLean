@@ -7,6 +7,7 @@ import TNLean.PEPS.AreaLaw.Geometry.DyadicLayers
 import Mathlib.Topology.Order.DenselyOrdered
 import Mathlib.Topology.Algebra.Ring.Real
 import Mathlib.Topology.Constructions.SumProd
+import Mathlib.Analysis.Convex.Basic
 
 /-!
 # Closures of dyadic cells and layers
@@ -37,6 +38,13 @@ theorem closure_dyadicCell (o : ℝ × ℝ) (k : ℕ) (z : ℤ × ℤ) :
     have hp : 0 < (2 : ℝ) ^ k := pow_pos zero_lt_two k
     linarith
   rw [dyadicCell, closure_prod_eq, closure_Ico (h _ _), closure_Ico (h _ _)]
+
+/-- The closed rectangle of a dyadic cell is convex. Source: area-law Section 11,
+`prop:two-families`, lines 151–185. -/
+theorem convex_closure_dyadicCell (o : ℝ × ℝ) (k : ℕ) (z : ℤ × ℤ) :
+    Convex ℝ (closure (dyadicCell o k z)) := by
+  rw [closure_dyadicCell]
+  exact (convex_Icc _ _).prod (convex_Icc _ _)
 
 /-- The closure of a dyadic layer is the finite union of its cell closures.
 Source: area-law Section 11, `prop:two-families`, `geometry:layer-distance`,

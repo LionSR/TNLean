@@ -37,13 +37,9 @@ Source: arXiv:1804.04964, normal TI PEPS corollary, lines 2368--2444 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem exists_translationCovariantGauge_of_normalArcWindows_sameState
     (A B : Tensor (torusGraph width height) d)
-    (hA : NormalTorusArcWindowInjectivityHypotheses L K (regionInjectivityDataOf A))
-    (hB : NormalTorusArcWindowInjectivityHypotheses L K (regionInjectivityDataOf B))
+    (hA : IsNormalTorusArcWindowPEPS L K A) (hB : IsNormalTorusArcWindowPEPS L K B)
     (hATI : IsTorusTranslationInvariant A) (hBTI : IsTorusTranslationInvariant B)
-    (hAB : SameState A B)
-    (hposA : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
-    (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-    (hL : 0 < L) (hK : 0 < K)
+    (hAB : SameState A B) (hL : 0 < L) (hK : 0 < K)
     (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height) :
     ∃ (hbond : A.bondDim = B.bondDim)
       (X : (e : Edge (torusGraph width height)) → GL (Fin (B.bondDim e)) ℂ)
@@ -55,6 +51,8 @@ theorem exists_translationCovariantGauge_of_normalArcWindows_sameState
         A.component v η σ =
           lam * gaugeVertex B X v (fun ie => Fin.cast (congr_fun hbond ie.1) (η ie)) σ) ∧
       lam ^ (width * height) = 1 := by
+  obtain ⟨hA, hposA⟩ := hA
+  obtain ⟨hB, hposB⟩ := hB
   have hbond := bondDim_eq_of_normalArcWindows_sameState A B hA hB hATI hBTI hAB
     hposA hposB hL hK hxw hyh
   obtain ⟨hEh, Zh, wh, _, hmemh⟩ := exists_staircaseWindowEdgeCoeffIdentityWitness

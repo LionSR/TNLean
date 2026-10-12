@@ -89,15 +89,11 @@ theorem old_designated_split_dilution_domainGraph
     (dilution_constant hr hDpos)
   · intro h g side hs
     have heq := S.designatedSupport_eq_ball_of_split h g side i hL hs
-    have hb : (S.ball i ∩ receiving (S.oldChargeState h g) side).Nonempty ∧
-        (S.ball i ∩ middle (S.oldChargeState h g)).Nonempty := by
-      simpa only [designatedSplitIncidence, heq] using hs
-    have hi := old_split_anchor_bounds_domainGraph hT S hgraph hdepth
-      h g side i hn hL hrows hclear hb
+    have hi := old_split_anchor_bounds_domainGraph hT S hgraph hdepth h g side i hn hL hrows
+      hclear (by simpa only [designatedSplitIncidence, heq] using hs)
     simpa only [Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat, add_assoc] using hi
-  · intro side g g' r r' hi hi'
-    apply Fin.ext
-    exact S.split_interval_band_unique hm (by omega) r.isLt r'.isLt side hi hi'
+  · exact fun side g g' r r' hi hi' ↦
+      Fin.ext (S.split_interval_band_unique hm (by omega) r.isLt r'.isLt side hi hi')
 
 open Classical in
 /-- Unconditional dilution for completed actual histories, hence for the new
@@ -122,15 +118,11 @@ theorem state_designated_split_dilution_domainGraph
     (dilution_constant hr hDpos)
   · intro h g side hs
     have heq := S.designatedSupport_eq_ball_of_state_split h g side i hL hs
-    have hb : (S.ball i ∩ receiving (S.state h g) side).Nonempty ∧
-        (S.ball i ∩ middle (S.state h g)).Nonempty := by
-      simpa only [designatedSplitIncidence, heq] using hs
-    have hi := state_split_anchor_bounds_domainGraph hT S hgraph hdepth
-      h g side i hn hL hrows hclear hb
+    have hi := state_split_anchor_bounds_domainGraph hT S hgraph hdepth h g side i hn hL hrows
+      hclear (by simpa only [designatedSplitIncidence, heq] using hs)
     simpa only [Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat, add_assoc] using hi
-  · intro side g g' r r' hi hi'
-    apply Fin.ext
-    exact S.split_interval_band_unique hm (by omega) r.isLt r'.isLt side hi hi'
+  · exact fun side g g' r r' hi hi' ↦
+      Fin.ext (S.split_interval_band_unique hm (by omega) r.isLt r'.isLt side hi hi')
 
 open Classical in
 /-- Old and new leaves with the same mixture parameter retain the same dilution
