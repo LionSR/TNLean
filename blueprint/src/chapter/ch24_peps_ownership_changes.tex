@@ -808,6 +808,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{lem:peps_frame_split_forms}
     Split each sheet into $R$ and its complement. The support assumptions give
     $A=A_R\otimes I$ and $B=B_R\otimes I$. The swap interchanges the two
     copies of $R$ and fixes the complementary factors. Writing each
@@ -901,6 +902,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{lem:qc_permutation_layers}
     Let $p:\{0,\dots,q-1\}^2\to\{0,\dots,q^2-1\}$ denote the pairing
     bijection of local values, and write a two-sheet
     configuration as $x=(x_1,x_2)$. In paired coordinates the sheet swap
@@ -949,7 +951,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \label{thm:peps_sheet_swap_boundary_expansion}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.sheetSwapOp_conj_doubled_operator_sub_eq_sum_crossing}
     \leanok
-    \uses{def:polynomial_peps_model}
+    \uses{def:polynomial_peps_model,def:peps_frame_sheet_swap}
     Let $H=\sum_v h_v+\sum_e h_e$ be an open-square Hamiltonian with the
     original bounded site and edge interactions, and let $R$ be any set of
     vertices. For an operator $A$, write $T(A)=A\otimes I+I\otimes A$.
