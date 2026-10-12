@@ -61,6 +61,8 @@ theorem reindex_physicalBuffer_eq_siteLift
         Equiv.coe_fn_mk, FiniteProduct.splitEquiv_apply_fst, Equiv.refl_apply, Prod.mk.injEq,
         Equiv.apply_eq_iff_eq] at h
       simp only [P, Prod.mk.injEq, Equiv.apply_eq_iff_eq] at h
+      have hiRC : i ∈ R ∪ C :=
+        not_not.mp (fun hn ↦ hi ⟨i, Finset.mem_compl.mpr hn⟩ rfl)
       done
     · done
   done
