@@ -15,9 +15,6 @@ on:
     workflows: ["PR CI"]
     types: [completed]
 
-concurrency:
-  group: pr-review-${{ github.event.workflow_run.pull_requests[0].number || github.event.workflow_run.id }}
-  cancel-in-progress: false
 
 jobs:
   # Shared gate: review only successful pull-request CI runs from this
@@ -52,8 +49,18 @@ jobs:
             });
             const msg = commit.commit.message;
             const isBot = /^\[(claude|codex)-(auto|review)-fix\]/.test(msg);
-            core.setOutput('skip', isBot ? 'true' : 'false');
+            // A late or re-run CI completion for an older commit must not
+            // start (or, via the job-level concurrency groups below, cancel)
+            // a review: only the PR's current head is reviewed.
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.workflow_run.pull_requests[0].number
+            });
+            const stale = pr.head.sha !== context.payload.workflow_run.head_sha;
+            core.setOutput('skip', (isBot || stale) ? 'true' : 'false');
             if (isBot) core.notice(`Skipping review for bot-fix commit: ${msg.split('\n')[0]}`);
+            if (stale) core.notice(`Skipping review of ${context.payload.workflow_run.head_sha}: PR head is now ${pr.head.sha}`);
 
   code-review:
     name: code-review-${{ matrix.provider }}
@@ -63,6 +70,11 @@ jobs:
       matrix:
         provider: ${{ fromJson(vars.CLAUDE_CODE_REVIEW_PROVIDERS || format('["{0}"]', vars.CLAUDE_CODE_PROVIDER || 'anthropic')) }}
     if: "!cancelled() && needs.gate.result == 'success' && needs.gate.outputs.skip != 'true'"
+    # Only reviews of the PR's current head reach this job (the gate skips stale
+    # completions), so a newer head's review cancels an older one in progress.
+    concurrency:
+      group: pr-review-${{ needs.gate.outputs.pr_number }}-code-${{ matrix.provider }}
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -157,6 +169,11 @@ jobs:
   prose-review:
     needs: gate
     if: "!cancelled() && needs.gate.result == 'success' && needs.gate.outputs.skip != 'true'"
+    # Only reviews of the PR's current head reach this job (the gate skips stale
+    # completions), so a newer head's review cancels an older one in progress.
+    concurrency:
+      group: pr-review-${{ needs.gate.outputs.pr_number }}-prose
+      cancel-in-progress: true
     runs-on: ubuntu-latest
     permissions:
       contents: read
