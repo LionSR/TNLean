@@ -257,6 +257,7 @@ operations on an empty memory.
 \begin{theorem}[Exterior restriction of a touched gate]
     \label{thm:peps_actual_touched_gate_exterior}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_all_gate_localPart_eval_heq_id}
+    \leanok
     \uses{def:peps_partial_source_choices,thm:peps_source_word_parties}
     Select all original parties. If a gate has a participating party, then,
     for each choice of its monomial, the exterior restriction of its remaining
@@ -265,6 +266,7 @@ operations on an empty memory.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:peps_exterior_owner_selector,def:peps_partial_source_choices,thm:peps_source_word_parties}
     The gate is replaced by the chosen monomial. Relabelling its operations
     and spectator registers assigns every owner to a selected original party.
@@ -278,6 +280,7 @@ operations on an empty memory.
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_all_localPart_eval_heq_emptyGateScalar}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialResidual_all_eval_heq_emptyGateScalar}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialSourceWord_all_eval_heq_emptyGateScalar}
+    \leanok
     \uses{def:peps_empty_party_gate_scalar,def:peps_canonical_source_residual,
         thm:peps_actual_touched_gate_exterior,thm:peps_actual_empty_party_gate_scalar,
         thm:peps_actual_private_preparation_exterior}
@@ -290,6 +293,7 @@ operations on an empty memory.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:peps_exterior_owner_selector,thm:peps_actual_touched_gate_exterior,thm:peps_actual_empty_party_gate_scalar,
         thm:peps_scalar_residual_composition,thm:peps_all_party_source_exterior_empty,
         thm:peps_actual_private_preparation_exterior}
@@ -307,6 +311,7 @@ operations on an empty memory.
     \label{def:peps_actual_party_source_matrices}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.actualPartySourceBasisChange}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourcePartyMatrix}
+    \leanok
     \uses{def:peps_actual_source_input_basis,def:peps_actual_private_preparation,
         def:peps_party_grouped_basis}
     Let $\mathcal P$ be finite and set
@@ -327,6 +332,7 @@ operations on an empty memory.
 \begin{theorem}[Actual source columns in party coordinates]
     \label{thm:peps_actual_party_source_columns}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_eq_partyProduct_mul_basisChange}
+    \leanok
     \uses{def:peps_actual_party_source_matrices,thm:peps_actual_source_column_coordinates,
         thm:peps_actual_party_word_entries}
     The literal prepared source-column matrix, with output basis $C$, satisfies
@@ -338,6 +344,7 @@ operations on an empty memory.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:peps_actual_source_column_coordinates,thm:peps_actual_party_word_entries,
         def:peps_actual_party_source_matrices}
     First express the actual word in the grouped input and output bases.
