@@ -415,7 +415,7 @@ the trivial \(Z\)-gauge. Documented in
 restate the construction over a block-form tensor with every multiplicity
 equal to one, as described in the marker of `thm_4_1_p_refinement_forward`;
 tracked in the follow-up issue cited by the paper-gap note. -/
-theorem peripheralEqualCase_periodicFT_of_sameMPV
+theorem peripheralEqualCase_periodicFT_of_sameMPV {p : ℕ}
     (hZGauge : PeripheralEqualCaseZGaugeOfSameMPV d D p)
     (hRoot : PeripheralEqualCaseRootFromZGauge d D p) :
     PeripheralEqualCasePeriodicFTOfSameMPV d D p := by
@@ -486,7 +486,7 @@ preservation of \(\mathcal E_B\) presupposed by its definition of
 restate both hypotheses over a block-form tensor with every multiplicity equal
 to one, as described in the marker of `thm_4_1_p_refinement_forward`; tracked
 in the follow-up issue cited by the paper-gap note. -/
-theorem pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV
+theorem pRefinementCanonicalization_of_peripheralEqualCase_periodicFT_of_sameMPV {p : ℕ}
     (hPeripheralEq : PeripheralEqualCasePeriodicFTOfSameMPV d D p) :
     PRefinementCanonicalization d D p := by
   intro B hB hRefine
