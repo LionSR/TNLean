@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPU.Equivalence
 import TNLean.MPS.MPU.Examples.ShiftTilde
 import TNLean.MPS.MPU.SymmetryPathTransport
+import TNLean.Algebra.InvolutionFixedEquation
 
 /-!
 # Symmetry transport by the physical swap
@@ -40,35 +41,6 @@ open scoped Matrix
 namespace MPOTensor
 
 variable {d D Da Db : ℕ}
-
-/-- Pointwise equivalent invariance equations at the same applicable chain
-lengths give equivalent symmetry-invariance predicates.
-This is the pointwise step in arXiv:1703.09188, Lemma `lemma:sym-trafo-swap`. -/
-theorem isInvariantUnderSymmetry_iff_of_pointwise
-    (S T : FiniteChainOperatorSymmetry d) (U V : MPOTensor d D)
-    (happlicable : S.applicable = T.applicable)
-    (hST : ∀ N : ℕ, S.action (mpo U N) = mpo U N ↔ T.action (mpo V N) = mpo V N) :
-    IsInvariantUnderSymmetry S U ↔ IsInvariantUnderSymmetry T V := by
-  unfold IsInvariantUnderSymmetry
-  simp_rw [happlicable, hST]
-
-/-- Adjunction on every positive-length periodic operator.
-Source: arXiv:1703.09188, time reversal, lines 965--973. -/
-def daggerSymmetry (d : ℕ) : FiniteChainOperatorSymmetry d where
-  applicable := {N | 0 < N}
-  action := fun X ↦ Xᴴ
-
-/-- Transposition on every positive-length periodic operator.
-Source: arXiv:1703.09188, transposition, lines 1258--1264. -/
-def transposeSymmetry (d : ℕ) : FiniteChainOperatorSymmetry d where
-  applicable := {N | 0 < N}
-  action := fun X ↦ Xᵀ
-
-/-- Entrywise conjugation on every positive-length periodic operator.
-Source: arXiv:1703.09188, conjugation, lines 1005--1010. -/
-def conjugationSymmetry (d : ℕ) : FiniteChainOperatorSymmetry d where
-  applicable := {N | 0 < N}
-  action := fun X ↦ X.map (starRingEnd ℂ)
 
 /-- Adjunction combined with exchange of the two physical species.
 Source: arXiv:1703.09188, equation `SSymmetries-dagger`, with \(Q=S\). -/
@@ -130,26 +102,6 @@ private theorem chainSwap_map_star (d N : ℕ) :
   simp [sitewisePhysicalMatrix, shiftPhysicalSwap, Equiv.Perm.permMatrix,
     PEquiv.toMatrix_apply]
 
-/-- For an involution \(Q\), an operation satisfying
-\(\mathrm{op}(QX)=\mathrm{op}(X)Q\) converts the equation
-\(Q\mathrm{op}(X)Q=X\) into \(\mathrm{op}(QX)=QX\).
-This is the matrix argument in arXiv:1703.09188, Section `othersymmetries`,
-lines 1295--1322, and Lemma `lemma:sym-trafo-swap`. -/
-theorem swapCombined_fixed_iff_leftMul {n : Type*} [Fintype n] [DecidableEq n]
-    (Q X : Matrix n n ℂ) (hQ : Q * Q = 1)
-    (op : Matrix n n ℂ → Matrix n n ℂ) (hop : op (Q * X) = op X * Q) :
-    Q * op X * Q = X ↔ op (Q * X) = Q * X := by
-  rw [hop]
-  constructor
-  · intro h
-    simpa only [← Matrix.mul_assoc, hQ, Matrix.one_mul] using
-      congrArg (fun Y ↦ Q * Y) h
-  · intro h
-    calc
-      Q * op X * Q = Q * (op X * Q) := Matrix.mul_assoc ..
-      _ = Q * (Q * X) := congrArg (fun Y ↦ Q * Y) h
-      _ = X := by rw [← Matrix.mul_assoc, hQ, Matrix.one_mul]
-
 /-- The physical swap converts swap-combined adjunction into adjunction.
 Source: arXiv:1703.09188, Lemma `lemma:sym-trafo-swap`, lines 2065--2085. -/
 theorem isInvariantUnderSymmetry_shiftSwapDagger_iff {E : ℕ} (U : MPOTensor (d * d) E) :
@@ -161,7 +113,7 @@ theorem isInvariantUnderSymmetry_shiftSwapDagger_iff {E : ℕ} (U : MPOTensor (d
   intro N
   change _ ↔ (mpo (U.ketLeftMul (shiftPhysicalSwap d)) N)ᴴ = _
   rw [mpo_ketLeftMul]
-  apply swapCombined_fixed_iff_leftMul _ _ (chainSwap_mul_self d N)
+  apply Matrix.involution_conj_eq_iff_leftMul _ _ (chainSwap_mul_self d N)
   rw [Matrix.conjTranspose_mul, sitewisePhysicalMatrix_conjTranspose,
     shiftPhysicalSwap_conjTranspose]
 
@@ -176,7 +128,7 @@ theorem isInvariantUnderSymmetry_shiftSwapTranspose_iff {E : ℕ} (U : MPOTensor
   intro N
   change _ ↔ (mpo (U.ketLeftMul (shiftPhysicalSwap d)) N)ᵀ = _
   rw [mpo_ketLeftMul]
-  apply swapCombined_fixed_iff_leftMul _ _ (chainSwap_mul_self d N)
+  apply Matrix.involution_conj_eq_iff_leftMul _ _ (chainSwap_mul_self d N)
   rw [Matrix.transpose_mul, chainSwap_transpose]
 
 /-- The physical swap preserves entrywise conjugation invariance.
