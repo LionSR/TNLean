@@ -457,10 +457,23 @@ operations on an empty memory.
 
 \begin{proof}\leanok
     \uses{thm:peps_selected_physical_private_trace,thm:peps_actual_source_column_coordinates}
-    Expand $X$ in matrix units. For a unit at $(s,t)$, the mixed product
-    is the rank-one operator formed from the actual $s$-th ket column and
-    $t$-th bra column. Apply
-    Theorem~\ref{thm:peps_selected_physical_private_trace} to these actual
-    output vectors. Complex linearity of the coordinate change and the
-    partial trace gives the result for arbitrary $X$.
+    Expand $X$ in matrix units. Writing $e_s$ for the basis vectors of
+    the original joint source-coordinate space,
+    \begin{align*}
+        D_\xi XD_\zeta^\dagger
+         & =\sum_{s,t}X_{s,t}\,(D_\xi e_s)(D_\zeta e_t)^\dagger,
+    \end{align*}
+    and likewise for $D_\xi^{\mathrm{ref}}X(D_\zeta^{\mathrm{ref}})^\dagger$.
+    For each $(s,t)$ the summand is the rank-one operator formed from the
+    actual $s$-th ket column and $t$-th bra column, and
+    Theorem~\ref{thm:peps_selected_physical_private_trace} applied to
+    these actual output vectors gives
+    \begin{align*}
+        \operatorname{tr}_{\prod_qE_q}
+        \left(\left((D_\xi e_s)(D_\zeta e_t)^\dagger\right)^\chi\right)
+         & =\operatorname{tr}_{G}
+        \left((D_\xi^{\mathrm{ref}}e_s)(D_\zeta^{\mathrm{ref}}e_t)^\dagger\right).
+    \end{align*}
+    Complex linearity of the coordinate change $\chi$ and of both partial
+    traces gives the result for arbitrary $X$.
 \end{proof}
