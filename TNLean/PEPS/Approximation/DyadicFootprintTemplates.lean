@@ -767,16 +767,10 @@ theorem exists_template_eq {g : ℝ × ℝ → ι}
   refine ⟨(⟨g₀, hg₀⟩, ⟨_, isSquareCorner_cornerOffset hQ⟩, Pκ, classRep σ), rfl, rfl, rfl,
     fun q hq => ?_⟩
   set u := t⁻¹ • (q - v)
-  have hqu : q = v + t • u := by
-    simp only [u, smul_smul, mul_inv_cancel₀ ht.ne', one_smul, add_sub_cancel]
-  have hu : ‖u‖ < 4 := by
-    rw [mem_ball, dist_eq_norm] at hq
-    simp only [u, norm_smul, Real.norm_eq_abs, abs_inv, abs_of_pos ht]
-    rw [inv_mul_lt_iff₀ ht]; linarith
+  have hqu : q = v + t • u := (similarity_inv v ht.ne' q).symm
+  have hu : ‖u‖ < 4 := (norm_smul_inv_sub_lt_iff v q ht 4).2 (by rwa [mul_comm])
   have hball : q ∈ ball v t ↔ u ∈ ball (0 : ℝ × ℝ) 1 := by
-    rw [mem_ball, mem_ball, dist_eq_norm, dist_eq_norm, sub_zero]
-    simp only [u, norm_smul, Real.norm_eq_abs, abs_inv, abs_of_pos ht]
-    rw [inv_mul_lt_iff₀ ht, mul_one]
+    rw [mem_ball_zero_iff, norm_smul_inv_sub_lt_iff v q ht, mul_one]
   have hf := heq u hu
   rw [← hqu] at hf
   simp only [footprintTemplate, classRep_spec]
@@ -788,6 +782,37 @@ theorem exists_template_eq {g : ℝ × ℝ → ι}
     · simp [h, hball.1 h]
     · simp only [h, hball.not.1 h, ite_false]
       exact hf
+
+/-- **A template with an injective relabelling.** Let the homogenizing label `P`, if any, be the
+final label `B` or a label of a block adjacent to `S`. Then, on the open square of radius `4 t`
+about the corner, the point-treated guide is the relabelling of a footprint template on whose
+values the relabelling is injective.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:330–333, 469–471,
+481–505`. -/
+theorem exists_template_injOn {g : ℝ × ℝ → ι}
+    (hg : (blockBaseline hn lab S B).IsUnmodifiedGuide g) {Q : ℤ × ℤ} (hQ : IsBlockCornerOf S Q)
+    (ht : 0 < t) (htn : 8 * t < n) (P : Option ι)
+    (hP : ∀ x ∈ P, x = B ∨ ∃ R ∈ blockWindow 1, x = lab (R + S)) :
+    ∃ i : TemplateIndex,
+      InjOn (blockSlotLabel (fun R => lab (R + S)) B) (range (footprintTemplate i)) ∧
+      ∀ q ∈ ball (blockCorner n Q) (4 * t),
+        pointTreated (blockCorner n Q) t P (shiftGuide (blockCorner n S) g) q =
+        blockSlotLabel (fun R => lab (R + S)) B
+          (footprintTemplate i (t⁻¹ • (q - blockCorner n Q))) := by
+  set σ := blockSlotLabel (fun R => lab (R + S)) B
+  obtain ⟨Pκ, rfl⟩ : ∃ Pκ : Option (BlockSlot 1), P = Pκ.map σ := by
+    cases P with
+    | none => exact ⟨none, rfl⟩
+    | some x =>
+      rcases hP x rfl with rfl | ⟨R, hR, rfl⟩
+      · exact ⟨some none, rfl⟩
+      · exact ⟨some (some ⟨R, hR⟩), rfl⟩
+  obtain ⟨i, -, -, hπ, heq⟩ := exists_template_eq hn hg hQ ht htn Pκ
+  refine ⟨i, (injOn_range_classRep σ).mono ?_, heq⟩
+  rintro _ ⟨w, rfl⟩
+  simp only [footprintTemplate, hπ]
+  exact mem_range_self _
 
 end Instantiation
 
@@ -823,23 +848,10 @@ theorem exists_pointTreatment_footprintRatio {ε₀ : ℝ} (hε : 0 < ε₀) :
     (r₀ := ε₀) (r₁ := ε₀) (fun _ c hc htv =>
       ⟨c, ⟨closedBall_subset_closedBall (by norm_num) hc, htv⟩, mem_ball_self hε⟩)
   refine ⟨ν, hν, fun {ι n t} hn ht htn {lab S B g} hg {Q} hQ P hP => ?_⟩
-  set σ := blockSlotLabel (fun R => lab (R + S)) B
-  set v := blockCorner n Q
-  obtain ⟨Pκ, rfl⟩ : ∃ Pκ : Option (BlockSlot 1), P = Pκ.map σ := by
-    cases P with
-    | none => exact ⟨none, rfl⟩
-    | some x =>
-      rcases hP x rfl with rfl | ⟨R, hR, rfl⟩
-      · exact ⟨some none, rfl⟩
-      · exact ⟨some (some ⟨R, hR⟩), rfl⟩
-  obtain ⟨i, -, -, hπ, heq⟩ := exists_template_eq hn hg hQ ht htn Pκ
-  have hinj : InjOn σ (range (footprintTemplate i)) := (injOn_range_classRep σ).mono (by
-    rintro _ ⟨w, rfl⟩
-    simp only [footprintTemplate, hπ]
-    exact mem_range_self _)
+  obtain ⟨i, hinj, heq⟩ := exists_template_injOn hn hg hQ ht htn P hP
   have key := HasTwoOwnerFootprints.of_template (ρ₁ := 2) (ρ₂ := 3) (ρ₃ := 4) hinj ht
     (by norm_num) (by norm_num) (fun q hq => heq q (by rwa [mul_comm] at hq))
-    (H i σ v ht ε₀ ⟨le_rfl, le_rfl⟩)
+    (H i _ (blockCorner n Q) ht ε₀ ⟨le_rfl, le_rfl⟩)
   rwa [mul_comm t 2, mul_comm t 3, mul_comm t ε₀] at key
 
 /-- **Simultaneous treatment near one corner.** For `8 t < n`, homogenizing on the open squares of

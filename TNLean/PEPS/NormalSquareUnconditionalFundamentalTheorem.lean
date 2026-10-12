@@ -224,25 +224,21 @@ theorem comparisonRegionProportional_of_interiorAbsorbed
   classical
   obtain ⟨ha4, haw, hb4, hbh⟩ := hwin
   have hRA : RegionBlockedTensorInjective (G := squareLatticeGraph width height) A
-      (normalSquareComparisonRegion v.1.1 v.2.1) := by
-    have hi := hAr.comparisonRegion_injective hUA (a := v.1.1) (b := v.2.1)
+      (normalSquareComparisonRegion v.1.1 v.2.1) :=
+    hAr.comparisonRegion_injective hUA (a := v.1.1) (b := v.2.1)
       (by omega) (by omega)
-    rwa [regionInjectivityDataOf_isInjective] at hi
   have hCRA : RegionBlockedTensorInjective (G := squareLatticeGraph width height) A
-      (Finset.univ \ normalSquareComparisonRegion v.1.1 v.2.1) := by
-    have hi := hAr.compl_comparisonRegion_injective hUA (a := v.1.1) (b := v.2.1)
+      (Finset.univ \ normalSquareComparisonRegion v.1.1 v.2.1) :=
+    hAr.compl_comparisonRegion_injective hUA (a := v.1.1) (b := v.2.1)
       (by omega) (by omega) (by omega) (by omega)
-    rwa [regionInjectivityDataOf_isInjective] at hi
   have hRB : RegionBlockedTensorInjective (G := squareLatticeGraph width height) B
-      (normalSquareComparisonRegion v.1.1 v.2.1) := by
-    have hi := hBr.comparisonRegion_injective hUB (a := v.1.1) (b := v.2.1)
+      (normalSquareComparisonRegion v.1.1 v.2.1) :=
+    hBr.comparisonRegion_injective hUB (a := v.1.1) (b := v.2.1)
       (by omega) (by omega)
-    rwa [regionInjectivityDataOf_isInjective] at hi
   have hCRB : RegionBlockedTensorInjective (G := squareLatticeGraph width height) B
-      (Finset.univ \ normalSquareComparisonRegion v.1.1 v.2.1) := by
-    have hi := hBr.compl_comparisonRegion_injective hUB (a := v.1.1) (b := v.2.1)
+      (Finset.univ \ normalSquareComparisonRegion v.1.1 v.2.1) :=
+    hBr.compl_comparisonRegion_injective hUB (a := v.1.1) (b := v.2.1)
       (by omega) (by omega) (by omega) (by omega)
-    rwa [regionInjectivityDataOf_isInjective] at hi
   have hNeR : Nonempty {f : Edge (squareLatticeGraph width height) //
       IsRegionBoundaryEdge (G := squareLatticeGraph width height)
         (normalSquareComparisonRegion v.1.1 v.2.1) f} :=
@@ -299,25 +295,21 @@ theorem comparisonSquareProportional_of_interiorAbsorbed
   obtain ⟨ha4, haw, hb4, hbh⟩ := hwin
   rw [insert_normalSquareComparisonRegion v]
   have hSA : RegionBlockedTensorInjective (G := squareLatticeGraph width height) A
-      (normalSquareComparisonSquare v.1.1 v.2.1) := by
-    have hi := hAr.comparisonSquare_injective hUA (a := v.1.1) (b := v.2.1)
+      (normalSquareComparisonSquare v.1.1 v.2.1) :=
+    hAr.comparisonSquare_injective hUA (a := v.1.1) (b := v.2.1)
       (by omega) (by omega)
-    rwa [regionInjectivityDataOf_isInjective] at hi
   have hCSA : RegionBlockedTensorInjective (G := squareLatticeGraph width height) A
-      (Finset.univ \ normalSquareComparisonSquare v.1.1 v.2.1) := by
-    have hi := hAr.compl_comparisonSquare_injective hUA (a := v.1.1) (b := v.2.1)
+      (Finset.univ \ normalSquareComparisonSquare v.1.1 v.2.1) :=
+    hAr.compl_comparisonSquare_injective hUA (a := v.1.1) (b := v.2.1)
       (by omega) (by omega) (by omega) (by omega)
-    rwa [regionInjectivityDataOf_isInjective] at hi
   have hSB : RegionBlockedTensorInjective (G := squareLatticeGraph width height) B
-      (normalSquareComparisonSquare v.1.1 v.2.1) := by
-    have hi := hBr.comparisonSquare_injective hUB (a := v.1.1) (b := v.2.1)
+      (normalSquareComparisonSquare v.1.1 v.2.1) :=
+    hBr.comparisonSquare_injective hUB (a := v.1.1) (b := v.2.1)
       (by omega) (by omega)
-    rwa [regionInjectivityDataOf_isInjective] at hi
   have hCSB : RegionBlockedTensorInjective (G := squareLatticeGraph width height) B
-      (Finset.univ \ normalSquareComparisonSquare v.1.1 v.2.1) := by
-    have hi := hBr.compl_comparisonSquare_injective hUB (a := v.1.1) (b := v.2.1)
+      (Finset.univ \ normalSquareComparisonSquare v.1.1 v.2.1) :=
+    hBr.compl_comparisonSquare_injective hUB (a := v.1.1) (b := v.2.1)
       (by omega) (by omega) (by omega) (by omega)
-    rwa [regionInjectivityDataOf_isInjective] at hi
   have hNeS : Nonempty {f : Edge (squareLatticeGraph width height) //
       IsRegionBoundaryEdge (G := squareLatticeGraph width height)
         (normalSquareComparisonSquare v.1.1 v.2.1) f} :=
@@ -381,10 +373,9 @@ theorem exists_windowScalar_of_interiorAbsorbed
       (reindexTensor (G := squareLatticeGraph width height) (applyGauge B X) hbond)
       (normalSquareComparisonRegion v.1.1 v.2.1) := by
     have hRB : RegionBlockedTensorInjective (G := squareLatticeGraph width height) B
-        (normalSquareComparisonRegion v.1.1 v.2.1) := by
-      have hi := hBr.comparisonRegion_injective hUB (a := v.1.1) (b := v.2.1)
+        (normalSquareComparisonRegion v.1.1 v.2.1) :=
+      hBr.comparisonRegion_injective hUB (a := v.1.1) (b := v.2.1)
         (by omega) (by omega)
-      rwa [regionInjectivityDataOf_isInjective] at hi
     exact regionBlockedTensorInjective_reindexTensor (applyGauge B X) hbond _
       (regionBlockedTensorInjective_applyGauge B X _ hRB)
   exact ⟨cS / cR, div_ne_zero hcS0 hcR0,

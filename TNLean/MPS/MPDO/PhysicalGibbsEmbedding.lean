@@ -3,7 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.MPS.MPDO.TopologicalGibbsHamiltonian
+import TNLean.MPS.MPDO.CommutingForm
+import TNLean.MPS.MPDO.SitewisePhysicalMatrix
+import Mathlib.Analysis.Normed.Algebra.MatrixExponential
 
 /-!
 # Generic physical Gibbs embedding
@@ -207,19 +209,6 @@ theorem embedLocalOperator_isHermitian
     {A : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ} (hA : A.IsHermitian) :
     (embedLocalOperator (d := d) L N hLN i A).IsHermitian := by
   rw [Matrix.IsHermitian, ← embedLocalOperator_conjTranspose, hA.eq]
-
-/-- Embedding into a cyclic window preserves unitary matrices. -/
-theorem embedLocalOperator_mem_unitaryGroup
-    (L N : ℕ) (hLN : L ≤ N) (i : Fin N)
-    {A : Matrix (Fin L → Fin d) (Fin L → Fin d) ℂ}
-    (hA : A ∈ Matrix.unitaryGroup (Fin L → Fin d) ℂ) :
-    embedLocalOperator (d := d) L N hLN i A ∈
-      Matrix.unitaryGroup (Fin N → Fin d) ℂ := by
-  rw [Matrix.mem_unitaryGroup_iff'] at hA ⊢
-  have hA' : Aᴴ * A = 1 := by
-    simpa [Matrix.star_eq_conjTranspose] using hA
-  rw [Matrix.star_eq_conjTranspose, ← embedLocalOperator_conjTranspose,
-    ← embedLocalOperator_mul, hA', embedLocalOperator_one]
 
 /-- Embedding into a cyclic window preserves orthogonal projections, expressed
 by the type-generic star-projection predicate. -/

@@ -28,6 +28,56 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     \end{align}
     These are nondegenerate closed triangles. Their perimeter and radial
     edges have slopes $0,\infty,1,-1$.
+    The picture below shows one admissible choice: the upper and right
+    sides are halved, the lower and left sides are kept whole, and the fan
+    has six triangles.
+    % Source: 10-geometry.tex, lines 299--310 (fan) and 325--330 (nine marks);
+    % no source figure. Ink-to-index: the nine dots are the marks of Q (four
+    % corners, four side midpoints, the red centre c). Each perimeter segment
+    % between consecutive dots is a half side; a whole side is the union of
+    % its two halves. The segments from c are the radial edges of the fan:
+    % rays end at the four corners and at the midpoints of the halved upper and
+    % right sides only; the midpoints of the whole lower and left sides are
+    % marks but not fan vertices. P_e is the triangle on the half side
+    % e = [a_e, b_e]; P_{e'} is the triangle on the whole lower side. The six
+    % triangles are, clockwise from the upper left: two on the upper halves,
+    % two on the right halves, one on the lower side, one on the left side.
+    % These lines are geometry, not tensor indices: no contractions, empty
+    % boundary signature.
+    \begin{center}
+        \begin{tenkz}[size=s, metrics=compact, rows={wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=9, bonds=none]
+            \tndeclare{species}{centre}{hue=source:red}
+            \tn[at=(5,5), name=fanc, species=centre, ports={0:virtual, 45:virtual, 90:virtual, 135:virtual, 225:virtual, 315:virtual}]{}
+            \tn[at=(1,1), name=fannw, ports={0:virtual, 270:virtual, 315:virtual}]{}
+            \tn[at=(1,5), name=fann, ports={0:virtual, 180:virtual, 270:virtual}]{}
+            \tn[at=(1,9), name=fanne, ports={180:virtual, 225:virtual, 270:virtual}]{}
+            \tn[at=(5,9), name=fane, ports={90:virtual, 180:virtual, 270:virtual}]{}
+            \tn[at=(9,9), name=fanse, ports={90:virtual, 135:virtual, 180:virtual}]{}
+            \tn[at=(9,5), name=fans, ports={0:virtual, 180:virtual}]{}
+            \tn[at=(9,1), name=fansw, ports={0:virtual, 45:virtual, 90:virtual}]{}
+            \tn[at=(5,1), name=fanw, ports={90:virtual, 270:virtual}]{}
+            \tnwire[name=fansidenw]{fannw.0}{fann.180}
+            \tnwire[name=fansiden]{fann.0}{fanne.180}
+            \tnwire[name=fansidene]{fanne.270}{fane.90}
+            \tnwire[name=fansidee]{fane.270}{fanse.90}
+            \tnwire[name=fansidese]{fanse.180}{fans.0}
+            \tnwire[name=fansides]{fans.180}{fansw.0}
+            \tnwire[name=fansidesw]{fansw.90}{fanw.270}
+            \tnwire[name=fansidew]{fanw.90}{fannw.270}
+            \tnwire[name=fanraynw]{fanc.135}{fannw.315}
+            \tnwire[name=fanrayn]{fanc.90}{fann.270}
+            \tnwire[name=fanrayne]{fanc.45}{fanne.225}
+            \tnwire[name=fanraye]{fanc.0}{fane.180}
+            \tnwire[name=fanrayse]{fanc.315}{fanse.135}
+            \tnwire[name=fanraysw]{fanc.225}{fansw.45}
+            \tnmark[form=label, label pos=s]{(5,5)}{$c$}
+            \tnmark[form=label, label pos=n]{(1,1)}{$a_e$}
+            \tnmark[form=label, label pos=n]{(1,5)}{$b_e$}
+            \tnmark[form=label]{(3,4)}{$P_e$}
+            \tnmark[form=label]{(8,5)}{$P_{e'}$}
+            \tnmark[form=label, label pos=se]{(9,9)}{$Q$}
+        \end{tenkz}
+    \end{center}
 \end{definition}
 
 \begin{theorem}[A dyadic square as a maximum-norm ball]
