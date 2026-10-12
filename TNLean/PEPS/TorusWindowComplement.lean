@@ -471,7 +471,8 @@ the tensor, which stays available for families of regions with zero-dimensional 
 **Local fix (nonzero virtual spaces):** the source treats PEPS virtual bond spaces as
 nonzero and does not list positive bond dimensions among the hypotheses. Injectivity does
 not imply them: suitable configurations of zero-dimensional bonds make every relevant local
-domain empty, so injectivity and equality of states hold vacuously. The library adopts the nonzero reading as the field `bondDim_pos`; documented in
+domain empty, so injectivity and equality of states hold vacuously. The library adopts the
+nonzero reading as the field `bondDim_pos`; documented in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex` (the nonzero virtual-space
 convention) and `docs/paper-gaps/peps_normal_ft_2d_overlap.tex` (Section 1).
 
