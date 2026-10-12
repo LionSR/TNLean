@@ -237,9 +237,9 @@ satisfies
 
 The coefficient-space maps corresponding to the canonical two-site parent
 interaction $q_2(A)$ before placement on the $AX$ and $XB$ faces are denoted by
-$\widehat Q_{AX}$ and $\widehat Q_{XB}$.\footnote{Formal maps:
-\leanid{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace} and
-\leanid{MPSTensor.AppendixBStructuralData.appendixBQXBOnCoeffSpace}.} Their
+$\widehat Q_{AX}$ and $\widehat Q_{XB}$; the two coincide as coefficient-space
+maps.\footnote{Formal map:
+\leanid{MPSTensor.AppendixBStructuralData.appendixBQAXOnCoeffSpace}.} Their
 lifts act on the three-site coefficient space; they have not yet been identified
 with the source projectors on $\mathcal H_A\otimes\mathcal H_X$ and $\mathcal
 H_X\otimes\mathcal H_B$.
@@ -277,9 +277,10 @@ with the hatted maps remains open; this local coefficient-space result is not
 used in the chain commutator proof.
 
 The forward commutation and zero-energy statements are proved for normal
-left-canonical RFP tensors.\footnote{Formal declarations:
-\leanid{MPSTensor.rfp_implies_nncph_of_leftCanonical} and
-\leanid{MPSTensor.rfp_implies_nncph_ground_state_of_leftCanonical}.} For a
+left-canonical RFP tensors.\footnote{Formal declaration:
+\leanid{MPSTensor.rfp_implies_nncph_of_leftCanonical}; the zero-energy clause
+is the left-canonical case of \leanid{MPSTensor.rfp_implies_nncph_ground_state},
+through \leanid{MPSTensor.isNormalTensor_of_isNormal_leftCanonical}.} For a
 CPSV normal tensor, spectral-radius-one normalization supplies a pure
 trace-preserving gauge. Gauge invariance of the physical RFP relation and of
 the canonical parent interactions transports the result

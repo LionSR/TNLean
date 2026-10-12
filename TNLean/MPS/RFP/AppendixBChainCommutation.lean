@@ -48,40 +48,14 @@ theorem AppendixBStructuralData.hasAppendixD2ParentCommutingHamiltonian
     {A : MPSTensor d D} (hStruct : AppendixBStructuralData A)
     (hA : Kraus.IsInjective A) :
     HasAppendixD2ParentCommutingHamiltonian (d := d) (groundSpace A 3)
-      hStruct.appendixBQAXOnCoeffSpace hStruct.appendixBQXBOnCoeffSpace := by
+      hStruct.appendixBQAXOnCoeffSpace hStruct.appendixBQAXOnCoeffSpace := by
   refine
     { left_idempotent := hStruct.appendixBQAXOnCoeffSpace_idempotent
-      right_idempotent := hStruct.appendixBQXBOnCoeffSpace_idempotent
+      right_idempotent := hStruct.appendixBQAXOnCoeffSpace_idempotent
       commute_lifts := hStruct.hasOverlappingTwoSiteCommutation.commute_lifts
       kernel_intersection := ?_ }
-  rw [hStruct.appendixBQAXOnCoeffSpace_eq_parentInteraction,
-    hStruct.appendixBQXBOnCoeffSpace_eq_parentInteraction]
+  rw [hStruct.appendixBQAXOnCoeffSpace_eq_parentInteraction]
   exact groundSpace_three_eq_adjacent_twoSite_parent_kernels hA
-
-/-- A normal left-canonical RFP tensor supplies the three-site coefficient-space
-analogue of the algebraic and kernel-intersection datum in arXiv:1606.00608,
-Definition D.2.
-
-Injectivity is not an additional hypothesis: it follows from normality, the RFP
-identity, and left-canonical normalization.
-
-**Scope restriction (left-canonical local datum):** The source structural
-theorem is stated for tensors in canonical form. This result uses the proved
-left-canonical specialization recorded in
-`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
-
-Source: arXiv:1606.00608, Theorem 3.11, lines 543--578, and Definition D.2,
-lines 2205--2218. -/
-theorem rfp_hasAppendixD2ParentCommutingHamiltonian_of_leftCanonical
-    (A : MPSTensor d D) [NeZero D]
-    (hRFP : IsTransferIdempotent A) (hNT : Kraus.IsNormal A) (hLeft : IsLeftCanonical A) :
-    let hStruct := AppendixBStructuralData.ofRFP A hNT hRFP hLeft
-    HasAppendixD2ParentCommutingHamiltonian (d := d) (groundSpace A 3)
-      hStruct.appendixBQAXOnCoeffSpace hStruct.appendixBQXBOnCoeffSpace := by
-  dsimp only
-  exact AppendixBStructuralData.hasAppendixD2ParentCommutingHamiltonian
-    (AppendixBStructuralData.ofRFP A hNT hRFP hLeft)
-    (rfp_nt_structural_of_leftCanonical A hNT hRFP hLeft)
 
 /-- The Appendix B structural datum gives commutation of adjacent translated
 length-two parent interactions on every periodic chain of length (N>2).
@@ -135,27 +109,6 @@ theorem rfp_implies_nncph_of_leftCanonical
     (N : ℕ) (hN : 2 < N) :
     IsNNCPH A N :=
   (AppendixBStructuralData.ofRFP A hNT hRFP hLeft).isNNCPH hN
-
-/-- Ground-vector form of `rfp_implies_nncph_of_leftCanonical`.
-
-The translated parent terms commute and annihilate the periodic MPS vector.
-The source ground-space spanning clause remains separate.
-
-**Scope restriction (ground vector):** The source implication includes the
-ground-space spanning equation and is stated in canonical-form scope.  This
-theorem proves the commutation and zero-energy equations under an explicit
-left-canonical hypothesis.  The two restrictions are recorded in
-`docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`.
-
-Source: arXiv:1606.00608, Definition 3.9, source lines 517--524, and
-Theorem 3.10, source lines 534--540. -/
-theorem rfp_implies_nncph_ground_state_of_leftCanonical
-    (A : MPSTensor d D) [NeZero D]
-    (hRFP : IsTransferIdempotent A) (hNT : Kraus.IsNormal A) (hLeft : IsLeftCanonical A)
-    (N : ℕ) (hN : 2 < N) :
-    IsNNCPHGroundState A N :=
-  (rfp_implies_nncph_of_leftCanonical A hRFP hNT hLeft N hN).isNNCPHGroundState
-    (by omega)
 
 /-- A normal renormalization fixed-point tensor has commuting length-two parent
 interactions on every periodic chain of length (N>2).
