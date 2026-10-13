@@ -12,6 +12,7 @@ import shutil
 import sys
 import tempfile
 
+from blueprint_tex_tree import read_tex_tree
 from tenkz_paths import ensure_pythonpath
 
 ensure_pythonpath()
@@ -22,6 +23,14 @@ sys.path.insert(0, str(ROOT / "blueprint/src/Packages"))
 import tenkz_pic  # noqa: E402
 
 CHAPTER = ROOT / "blueprint/src/chapter/ch24_peps_regularized_patch_stationarity.tex"
+# The display lives in a shared figure that the theorem inputs; the checks read the
+# expanded chapter, so they still assert that the ink sits in the theorem.
+FIGURE = ROOT / "blueprint/src/figures/peps_patch_first_variation.tex"
+# The notes relabel the three ordered factors, so the figure routes their labels through
+# macros whose defaults are the blueprint's original literals.
+LABEL_DEFAULTS = {
+    r"\tnlFvOuter": r"P_j^+", r"\tnlFvInsert": r"D_j", r"\tnlFvInner": r"P_j^-",
+}
 EXPECTED_WIRES = [
     ("open w", "coordinateouter.180"),
     ("coordinateouter.0", "coordinateinsert.180"),
@@ -31,7 +40,8 @@ EXPECTED_WIRES = [
 
 
 def main() -> int:
-    chapter = CHAPTER.read_text(encoding="utf-8")
+    assert r"\input{figures/peps_patch_first_variation}" in CHAPTER.read_text(encoding="utf-8")
+    chapter = read_tex_tree(CHAPTER)
     units = re.findall(r"\\begin\{tenkz\}.*?\\end\{tenkz\}", chapter, re.S)
     assert len(units) == 1, "one source-owned ordered insertion"
     unit = units[0]
@@ -41,12 +51,17 @@ def main() -> int:
     for source in [
         "at=(1,1), name=coordinateouter", "at=(1,3), name=coordinateinsert",
         "at=(1,5), name=coordinateinner", "at=(1,7), name=coordinatestate",
-        r"{P_j^+}", r"{D_j}", r"{P_j^-}", r"{\Omega}",
+        r"{\tnlFvOuter}", r"{\tnlFvInsert}", r"{\tnlFvInner}", r"{\Omega}",
     ]:
         assert source in unit, source
+    first_atom = unit.index(r"\tn[")
+    for macro, default in LABEL_DEFAULTS.items():
+        declaration = r"\providecommand{" + macro + "}{" + default + "}"
+        assert unit.count(declaration) == 1, ("blueprint default label", declaration)
+        assert unit.index(declaration) < first_atom, (macro, "declared before use")
     labels = {
-        "coordinateouter": r"P_j^+", "coordinateinsert": r"D_j",
-        "coordinateinner": r"P_j^-", "coordinatestate": r"\Omega",
+        "coordinateouter": r"\tnlFvOuter", "coordinateinsert": r"\tnlFvInsert",
+        "coordinateinner": r"\tnlFvInner", "coordinatestate": r"\Omega",
     }
     for name, label in labels.items():
         atom = rf"\\tn\[[^]]*name={name},[^]]*\]\{{{re.escape(label)}\}}"
@@ -90,6 +105,8 @@ def main() -> int:
             "result": "passed",
             "chapter": str(CHAPTER.relative_to(ROOT)),
             "chapter_sha256": hashlib.sha256(CHAPTER.read_bytes()).hexdigest(),
+            "figure": str(FIGURE.relative_to(ROOT)),
+            "figure_sha256": hashlib.sha256(FIGURE.read_bytes()).hexdigest(),
             "production_renderer": "blueprint/src/Packages/tenkz_pic.py",
             "unit_hash": tenkz_pic.unit_hash(unit),
             "svg_sha256": digest,
