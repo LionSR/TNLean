@@ -461,7 +461,31 @@ normalizations.
 - **Caveat:** blocked, coarse, reindexed and transported tensors inside proofs
   keep `IsVertexInjective` with positivity derived or stated separately; only
   the source-facing theorems (the injective Fundamental Theorem, its uniqueness
-  clause, and their cycle and torus corollaries) take this structure.
+  clause, their cycle and torus corollaries, and the parent-Hamiltonian
+  support, rank and one-dimensionality results on general graphs) take this
+  structure; the span and kernel descriptions of the parent ground space keep
+  `IsVertexInjective` alone.
+
+#### `TNLean.PEPS.NormalPEPSPairHypotheses`
+
+- **Declaration:** `TNLean.PEPS.NormalPEPSPairHypotheses (A B : Tensor G d)`, a
+  structure extending `NormalPEPSBlockingHypotheses` at the doubly injective
+  assignment of `A` and `B`, with fields `bondDim_pos_left` and
+  `bondDim_pos_right`.
+- **Defined in:** `TNLean/PEPS/NormalBondDimension.lean`.
+- **Meaning:** two normal PEPS tensors in the setting of the general normal
+  Fundamental Theorem: shared edge blockings and one-site comparison regions,
+  each region injective for both tensors, and every virtual bond space of both
+  tensors nonzero.
+- **Source:** arXiv:1804.04964 §3, theorem labelled `normal`,
+  `Papers/1804.04964/paper_normal.tex:1576-1583`, with normality as defined at
+  line 1318; the nonzero bond spaces are recorded as a Local fix in
+  `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+- **Sanctioned bridges:** the structure projections and the structure-instance
+  constructor.
+- **Caveat:** it carries data (the blocking regions), so it is a `Type`, not a
+  `Prop`. The one-edge and coherent-frame steps keep explicit positivity,
+  because they see their tensors only through blocking data.
 
 #### `TNLean.PEPS.RegionBlockedTensorInjective`
 

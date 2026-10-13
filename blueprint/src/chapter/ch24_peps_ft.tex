@@ -11,23 +11,7 @@ contracting the tensors along the edges. Each vertex carries one physical index
 $\sigma(v)\in\{0,\ldots,d-1\}$, and each edge $e$ carries a virtual index of
 bond dimension $D_e$ shared by its two endpoints. On a square lattice this is
 the picture
-% Formula: |Psi_A> = sum_sigma c_A(sigma)|sigma>, specialized here to a
-% finite 3-by-3 square graph.  Ink-to-index: each dot is A_v, each thin
-% in-plane segment contracts one shared virtual edge index, and each north
-% stub is the physical index sigma(v).
-% Contraction and boundary signature: all 12 graph edges are contracted; no
-% virtual boundary leg is present and the nine physical legs remain open, so
-% (V,P)=(0,9).  The central label identifies one representative local tensor.
-% Source verdict: exact finite square-graph specialization of
-% Papers/1804.04964/paper_normal.tex:961--979; the source theorem itself
-% applies to arbitrary finite simple graphs.  The projected sheet shows all
-% nine physical legs; the former lattice spelling drew only three.
-\begin{center}
-    \tenkzkernel
-    \begin{tenkz}[rows={ket,ket,ket}, cols=3, frame=plane, physical=up]
-        \tnmark[form=label, label pos=e]{(2,2)}{$A_v$}
-    \end{tenkz}
-\end{center}
+\input{figures/peps_ft_sheet}
 in which every black dot is a local tensor, the thin in-plane bonds are the
 virtual edges, and the vertical leg at each vertex is its physical index.
 

@@ -35,24 +35,7 @@ injectivity condition together with the local inverse it provides.
     and whose physical index lies in $\{0,\ldots,d-1\}$.
     The local tensor at $v$ has one physical leg and one virtual leg for each
     incident edge:
-    % Formula: A_v in (tensor_{e incident to v} C^{D_e})^* tensor C^d.
-    % Ink-to-index: the three drawn thin legs represent the first, a typical,
-    % and the last member of the arbitrary incident-edge family; intervening
-    % incident edges are suppressed, and the north leg is sigma(v).
-    % Contraction and boundary signature: no index is contracted; the exact
-    % tensor has (V,P)=(deg(v),1), independently of the three-leg schematic.
-    % Source verdict: arbitrary-graph local tensor of
-    % Papers/1804.04964/paper_normal.tex:961--979; suppressing intervening
-    % edges avoids a square-lattice degree-four restriction.
-    \begin{center}
-        \tenkzkernel
-        \begin{tenkz}[rows={wire}, cols=1, bonds=none]
-            \tn[label pos=w,
-                ports={210:virtual:$e_1$, 270:virtual:$e_k$,
-                        330:virtual:$e_{\deg(v)}$,
-                        90:physical:$\sigma(v)$}]{A_v}
-        \end{tenkz}
-    \end{center}
+    \input{figures/peps_tensor}
 \end{definition}
 
 \begin{definition}[Virtual configuration]

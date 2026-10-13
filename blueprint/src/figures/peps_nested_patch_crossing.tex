@@ -1,0 +1,33 @@
+% Figure peps_nested_patch_crossing.
+% Owner: chapter/ch24_peps_nested_patch_geometry.tex (after thm:peps_nested_patch_crossing).
+% Used by: gapped-2d-notes PP Sec. 5 step (d).
+% Formula verdict: exact samples of the three closed squares at the stated
+% nonintegral centre, with radii 4, 6, 8. The finite domain clips every square.
+% Ink-to-index verdict: dots denote lattice sites and lines denote adjacency;
+% this is a graph illustration, not a tensor contraction or an operator.
+% Contraction/boundary verdict: 33 sites, 52 distinct internal adjacency
+% segments, no periodic edges, physical legs, or edges outside the domain.
+% Source verdict: original finite example of the geometric step in
+% September 24, 2026, 03-patches.tex, Proposition 4.1.
+% Label macros: \tnlNpcInner{K_0}, \tnlNpcMiddle{K_1}, \tnlNpcOuter{K_2};
+% the PEPS note overrides them with X_1, X_2, X_3 (its K is the encoder).
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire}, cols=11, metrics=compact,
+            west=none, east=none, north=none, south=none]
+        \providecommand{\tnlNpcInner}{K_0}
+        \providecommand{\tnlNpcMiddle}{K_1}
+        \providecommand{\tnlNpcOuter}{K_2}
+        \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} \\
+        \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[at=(2,8), name=inside, skin=dot, species=marked]{} & \tn[at=(2,9), name=outside, skin=dot, species=marked]{} & \tn[skin=dot]{} & \tn[skin=dot]{} \\
+        \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{}
+        \tnwire[name=crossing, species=marked]{inside.0}{outside.180}
+        \tnmark[form=enclosure, species=selected, label pos=s]
+        {(1,1) .. (3,6)}{$\textcolor{tenkzAction}{\tnlNpcInner}$}
+        \tnmark[form=enclosure, species=secondary, label pos=n]
+        {(1,1) .. (3,8)}{$\textcolor{tenkzMarked}{\tnlNpcMiddle}$}
+        \tnmark[form=enclosure, species=collar, label pos=se]
+        {(1,1) .. (3,10)}{$\textcolor{tenkzExtra}{\tnlNpcOuter}$}
+        \tnmark[form=label, label pos=n]{on crossing 0.65}{$e$}
+    \end{tenkz}
+\end{center}
