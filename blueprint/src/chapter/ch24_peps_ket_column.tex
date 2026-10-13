@@ -213,75 +213,7 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
     On a $3\times3$ square, fixing the inputs closes the input leg of every
     site tensor with the basis vector $\ket{z_v}$ and leaves every bond in
     place.
-    % Source: arXiv OpenAI2026PolynomialPEPS, 07-assembly.tex, lines 67--94
-    % (lem:columns: "Fixing the input basis index separately in each
-    % physical tensor selects the same column without altering a virtual
-    % leg"); no source figure.
-    % Ink-to-index: each ellipse is a site tensor A_v of the operator
-    % network; the in-plane lines are the virtual bonds e with dimension
-    % D_e, identical in both pictures; the upward leg at v is the output
-    % index s_v, the downward leg the input index r_v. In the right picture
-    % each downward leg ends in a blue dot, the basis vector |z_v>, so the
-    % input index is contracted to the value z_v; the dot on the leg of the
-    % middle site of the right column carries the generic label z_v.
-    % Boundary signatures: left, nine open output and nine open input
-    % physical legs (the operator sigma); right, nine open output legs only
-    % (the column sigma|z>). No virtual leg is open in either picture.
-    % In the right panel each cell has two members: the operator tensor
-    % and its input basis vector. Their intra-cell physical wire is closed;
-    % only the operator member carries the twelve original virtual bonds
-    % between adjacent sites and the nine open output legs.
-    \begin{tenkzequation}
-        \tenkzkernel
-        \begin{tenkz}[rows={op,op,op}, cols=3, frame=plane,
-                physical=updown]
-            \tnmark[form=label, label pos=e]{(2,3)}{$A_v$}
-        \end{tenkz}
-        $\quad\longmapsto\quad$
-        \begin{tenkz}[rows={op,op,op}, cols=3,
-                frame={plane, basis={op at (0,0), ket at (1,-2)}}, bonds=none]
-            \tndeclare{species}{input}{hue=source:blue}
-            \tn[at=(1,1,2), skin=dot, species=input, label pos=e]{}
-            \tnwire{(1,1,1)}{(1,1,2)}
-            \tnwire{(1,1,1)}{open up}
-            \tnwire{(1,1,1)}{(1,2,1)}
-            \tnwire{(1,1,1)}{(2,1,1)}
-            \tn[at=(1,2,2), skin=dot, species=input, label pos=e]{}
-            \tnwire{(1,2,1)}{(1,2,2)}
-            \tnwire{(1,2,1)}{open up}
-            \tnwire{(1,2,1)}{(1,3,1)}
-            \tnwire{(1,2,1)}{(2,2,1)}
-            \tn[at=(1,3,2), skin=dot, species=input, label pos=e]{}
-            \tnwire{(1,3,1)}{(1,3,2)}
-            \tnwire{(1,3,1)}{open up}
-            \tnwire{(1,3,1)}{(2,3,1)}
-            \tn[at=(2,1,2), skin=dot, species=input, label pos=e]{}
-            \tnwire{(2,1,1)}{(2,1,2)}
-            \tnwire{(2,1,1)}{open up}
-            \tnwire{(2,1,1)}{(2,2,1)}
-            \tnwire{(2,1,1)}{(3,1,1)}
-            \tn[at=(2,2,2), skin=dot, species=input, label pos=e]{}
-            \tnwire{(2,2,1)}{(2,2,2)}
-            \tnwire{(2,2,1)}{open up}
-            \tnwire{(2,2,1)}{(2,3,1)}
-            \tnwire{(2,2,1)}{(3,2,1)}
-            \tn[at=(2,3,2), skin=dot, species=input, label pos=e]{z_v}
-            \tnwire{(2,3,1)}{(2,3,2)}
-            \tnwire{(2,3,1)}{open up}
-            \tnwire{(2,3,1)}{(3,3,1)}
-            \tn[at=(3,1,2), skin=dot, species=input, label pos=e]{}
-            \tnwire{(3,1,1)}{(3,1,2)}
-            \tnwire{(3,1,1)}{open up}
-            \tnwire{(3,1,1)}{(3,2,1)}
-            \tn[at=(3,2,2), skin=dot, species=input, label pos=e]{}
-            \tnwire{(3,2,1)}{(3,2,2)}
-            \tnwire{(3,2,1)}{open up}
-            \tnwire{(3,2,1)}{(3,3,1)}
-            \tn[at=(3,3,2), skin=dot, species=input, label pos=e]{}
-            \tnwire{(3,3,1)}{(3,3,2)}
-            \tnwire{(3,3,1)}{open up}
-        \end{tenkz}
-    \end{tenkzequation}
+    \input{figures/peps_ket_column_square_fix_input}
 \end{definition}
 
 \begin{lemma}[Fixed inputs and the native square-grid tensor]
@@ -366,4 +298,64 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
     dimensions are those of the operator network. These dimensions are
     positive because the column is nonzero: if some $D_e$ vanished, the
     contraction would be an empty sum.
+\end{proof}
+
+\subsection{Column selection after discarding a product reference}
+
+\begin{theorem}[A column from the actual compressed density]
+    \label{thm:peps_product_reference_column}
+    \lean{TNLean.PEPS.Approximation.Pinned.exists_fixInput_contractPEPS_of_product_reference}
+    \lean{TNLean.PEPS.Approximation.Pinned.exists_peps_of_product_reference}
+    \uses{def:peps_ket_column_square_fix_input}
+    Let $\Omega$ be a unit vector on the open $L\times L$ square. Let
+    $\Psi$ be a joint vector on its physical and private coordinates, and
+    $\Xi$ a private vector such that
+    \begin{align}
+        \lVert\Psi\rVert                  & \leq1,           &
+        1-\delta\leq\lVert\Xi\rVert       & \leq1,           &
+        \lVert\Psi-\Omega\otimes\Xi\rVert & \leq\varepsilon.
+    \end{align}
+    Let $\sigma$ be the contracted operator of a supplied operator network
+    on the same square, with edge dimensions $D_e$, satisfying
+    \begin{align}
+        \lVert\sigma-\Tr_{\rm private}|\Psi\rangle\langle\Psi|\rVert_1
+                                            & \leq\kappa, &
+        \alpha:=\kappa+2\varepsilon+2\delta & <1.
+    \end{align}
+    Then some product-basis input $z$ gives fixed-input tensors whose
+    contraction is the nonzero column $\Phi=\sigma|z\rangle$, with
+    \begin{align}
+        \Big\lVert\frac{\Phi}{\lVert\Phi\rVert}
+        -e^{i\theta}\Omega\Big\rVert & \leq2\alpha
+    \end{align}
+    for some real $\theta$. The edge dimensions remain exactly $D_e$;
+    they are positive and preserve any supplied bounds $D_e\leq B$.
+    The operator $\sigma$ need not be positive or Hermitian.
+    This combines the normalization calculation of
+    \cite[Section~8.1]{OpenAI2026PolynomialPEPS} with its Lemma~8.1.
+    The hypothesis on $\Psi$ and the compression estimate concern the
+    same joint vector. The network is already on the square, so the
+    routing order is as in Corollary~\ref{cor:peps_ket_column_square_main}.
+    The supplied estimates and the assumption of a network already on the
+    square are distinguished from the protocol construction in
+    \cite{gap:polypeps_product_reference_column}.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_ket_column_square, cor:peps_ket_column_square_main}
+    The partial trace of the product-reference density is
+    $\lVert\Xi\rVert^2|\Omega\rangle\langle\Omega|$. The pure-density
+    error bound and contraction under partial trace give
+    \begin{align}
+        \big\lVert\Tr_{\rm private}|\Psi\rangle\langle\Psi|
+        -|\Omega\rangle\langle\Omega|\big\rVert_1
+         & \leq2\varepsilon+1-\lVert\Xi\rVert^2
+        \leq2\varepsilon+2\delta.
+    \end{align}
+    The triangle inequality through the actual physical density gives
+    $\lVert\sigma-|\Omega\rangle\langle\Omega|\rVert_1\leq\alpha<1$.
+    Apply Theorem~\ref{thm:peps_ket_column_square}. Fixing the input changes
+    only physical entries of the supplied tensors, leaving every virtual
+    dimension unchanged. A zero virtual dimension would make the
+    selected contraction vanish, so all $D_e$ are positive.
 \end{proof}

@@ -221,31 +221,7 @@ $K_2=\{0,\ldots,9\}\times\{0,1,2\}$.
 The marked edge $e=\{(7,1),(8,1)\}$ crosses $K_1$; it is disjoint from $K_0$
 and contained in $K_2$. The rounded outlines enclose the clipped sets of
 physical sites; they are not the boundaries of the ambient real squares.
-% Formula verdict: exact samples of the three closed squares at the stated
-% nonintegral centre, with radii 4, 6, 8. The finite domain clips every square.
-% Ink-to-index verdict: dots denote lattice sites and lines denote adjacency;
-% this is a graph illustration, not a tensor contraction or an operator.
-% Contraction/boundary verdict: 33 sites, 52 distinct internal adjacency
-% segments, no periodic edges, physical legs, or edges outside the domain.
-% Source verdict: original finite example of the geometric step in
-% September 24, 2026, 03-patches.tex, Proposition 4.1.
-\begin{center}
-    \tenkzkernel
-    \begin{tenkz}[rows={wire,wire,wire}, cols=11, metrics=compact,
-            west=none, east=none, north=none, south=none]
-        \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} \\
-        \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[at=(2,8), name=inside, skin=dot, species=marked]{} & \tn[at=(2,9), name=outside, skin=dot, species=marked]{} & \tn[skin=dot]{} & \tn[skin=dot]{} \\
-        \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{}
-        \tnwire[name=crossing, species=marked]{inside.0}{outside.180}
-        \tnmark[form=enclosure, species=selected, label pos=s]
-        {(1,1) .. (3,6)}{$\textcolor{tenkzAction}{K_0}$}
-        \tnmark[form=enclosure, species=secondary, label pos=n]
-        {(1,1) .. (3,8)}{$\textcolor{tenkzMarked}{K_1}$}
-        \tnmark[form=enclosure, species=collar, label pos=se]
-        {(1,1) .. (3,10)}{$\textcolor{tenkzExtra}{K_2}$}
-        \tnmark[form=label, label pos=n]{on crossing 0.65}{$e$}
-    \end{tenkz}
-\end{center}
+\input{figures/peps_nested_patch_crossing}
 
 
 \begin{theorem}[Uniform quadratic boundary sum]

@@ -15,6 +15,8 @@ import re
 import sys
 import tempfile
 
+from blueprint_tex_tree import read_tex_tree
+
 ROOT = Path(__file__).resolve().parents[1]
 REGIONAL = ROOT / "blueprint/src/chapter/ch24_peps_g_isometric_regional_parents.tex"
 MARGINAL = ROOT / "blueprint/src/chapter/ch24_peps_regularized_patch_stationarity.tex"
@@ -201,8 +203,10 @@ def main() -> int:
     parser.add_argument("--source-only", action="store_true")
     parser.add_argument("--output-dir", type=Path)
     args = parser.parse_args()
-    generic = entry(REGIONAL.read_text(), "Local basis relabelling")
-    marginal_source = MARGINAL.read_text()
+    # Read the expanded sources: the stationarity chapter inputs its ordered-insertion
+    # display from figures/peps_patch_first_variation.tex.
+    generic = entry(read_tex_tree(REGIONAL), "Local basis relabelling")
+    marginal_source = read_tex_tree(MARGINAL)
     marginal = entry(marginal_source, "Relabelling the final-state marginal")
     check_density_scope(marginal_source)
     units = check_source(generic, marginal)

@@ -1,0 +1,42 @@
+% Figure peps_patch_first_variation.
+% Owner: chapter/ch24_peps_regularized_patch_stationarity.tex (thm:peps_patch_first_variation).
+% Used by: gapped-2d-notes PP Sec. 5 step (b); relabelled there as
+% L_{>j} [B,L_j] L_{<j} Omega, the derivative M'(0)Omega (not the paper's
+% log-derivative insertion B - L_j B L_j^{-1}).
+% Formula: (Delta_j)_sigma = sum_{alpha,beta,gamma}
+% (P_j^+)_{sigma,alpha} (D_j)_{alpha,beta}
+% (P_j^-)_{beta,gamma} Omega_gamma.
+% Source: 03-patches.tex lines 134--149, adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Ink-to-index map: every wire is a global configuration index.
+% D_j is the identity extension of the regional commutator; P_j^+ and
+% P_j^- are global ordered products, not operators on X_j.
+% Contractions: alpha, beta, gamma, in that left-to-right order.
+% Open leg: sigma on the left. Boundary signature: phys:w.
+% Action begins at Omega on the right: P_j^-, then D_j, then P_j^+.
+% No tensor-factor decomposition, nesting, or commutation is assumed.
+% Label macros: \tnlFvOuter{P_j^+}, \tnlFvInsert{D_j}, \tnlFvInner{P_j^-};
+% the PEPS note overrides them with L_{>j}, [B,L_j], L_{<j}.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=7, bonds=none]
+        \providecommand{\tnlFvOuter}{P_j^+}
+        \providecommand{\tnlFvInsert}{D_j}
+        \providecommand{\tnlFvInner}{P_j^-}
+        \tn[at=(1,1), name=coordinateouter, skin=box,
+            ports={180:physical, 0:physical}]{\tnlFvOuter}
+        \tn[at=(1,3), name=coordinateinsert, skin=box,
+            ports={180:physical, 0:physical}]{\tnlFvInsert}
+        \tn[at=(1,5), name=coordinateinner, skin=box,
+            ports={180:physical, 0:physical}]{\tnlFvInner}
+        \tn[at=(1,7), name=coordinatestate, skin=box,
+            ports={180:physical}]{\Omega}
+        \tnwire[name=coordinateoutput]{open w}{coordinateouter.180}
+        \tnwire[name=coordinatealpha]{coordinateouter.0}{coordinateinsert.180}
+        \tnwire[name=coordinatebeta]{coordinateinsert.0}{coordinateinner.180}
+        \tnwire[name=coordinategamma]{coordinateinner.0}{coordinatestate.180}
+        \tnmark[form=label, label pos=n]{on coordinateoutput 0.5}{$\sigma$}
+        \tnmark[form=label, label pos=n]{on coordinatealpha 0.5}{$\alpha$}
+        \tnmark[form=label, label pos=n]{on coordinatebeta 0.5}{$\beta$}
+        \tnmark[form=label, label pos=n]{on coordinategamma 0.5}{$\gamma$}
+    \end{tenkz}
+\end{center}
