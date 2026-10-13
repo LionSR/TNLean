@@ -119,29 +119,39 @@ private theorem isSelectedLocalPartComparison_frame_of_false {Q : Type}
   exact (Word.restrict_localPart_frame_false_eval_heq f r u hr).trans
     (h.trans (Word.restrict_localPart_frame_false_eval_heq f s v hs).symm)
 
-/-- The selected remaining operator of a genuine all-party branch agrees with
-the lifted selected remaining operator of its actual singleton projection.
-The source inventory, original dimensions and chronological order are those
-of the given circuit. Empty participant and branch sets and zero maps are
-included; no extension of incident labels is assumed.
+/-- The comparison of the lifted word gives the comparison with lifting
+after restriction. This conversion is made with both words arbitrary.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434
+and 565–588. -/
+private theorem selectedRemainingComparison_of_selectedLocalPartComparison {Q R : Type}
+    (lift : R → Q) (r : R) (q : Q) (hlift : ∀ z, lift z = q ↔ z = r)
+    {a b : Layout Q} {c d : Layout R} (u : Word a b) (v : Word c d)
+    (h : selectedLocalPartComparison (partySelector q) u (v.mapOwner lift)) :
+    HEq (u.localPart.restrict (partySelector q) u.sources_localPart).eval
+      ((v.localPart.restrict (partySelector r) v.sources_localPart).mapOwner lift).eval := by
+  have hLift := Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
+    lift r q hlift v
+  exact h.trans hLift
+
+/-- The chronological induction compares words through the canonical
+selected-operation proposition before the final owner-lifting conversion.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–434
 and 565–588. -/
-theorem restrict_partialWord_all_localPart_eval_heq_singleton_projection
+private theorem selectedLocalPartComparison_circuit
     {a b : Layout P} (w : SourceCircuit a b) (p : P)
     (ξ : Choices (fun _ : P ↦ true) w) :
     let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
       (affectedOwner (fun _ : P ↦ true) t)
     let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
       (by classical exact decide_eq_true rfl)
-    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+    let _q : Option {t : P // A t = true} := some ⟨p, hp⟩
     let lift : Option {t : P // A t = true} → Option {_t : P // true = true} :=
       fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
     let χ := projectAllChoices A w ξ
     let W := partialWord (fun _ : P ↦ true) w ξ
     let V := partialWord A w χ
-    HEq (W.localPart.restrict (partySelector (some (⟨p, rfl⟩ : {_p : P // true = true})))
-      W.sources_localPart).eval
-      ((V.localPart.restrict (partySelector q) V.sources_localPart).mapOwner lift).eval := by
+    selectedLocalPartComparison
+      (partySelector (some (⟨p, rfl⟩ : {_p : P // true = true}))) W (V.mapOwner lift) := by
   classical
   intro A hp q lift χ W V
   let all := affectedOwner (fun _ : P ↦ true)
@@ -233,16 +243,45 @@ theorem restrict_partialWord_all_localPart_eval_heq_singleton_projection
         · have hFalseAll : sq rall.owner = false := by
             simp [sq, rall, all, qp, partySelector, affectedOwner, hr]
           have hFalseA : sq ra.owner = false := by
-            simp [sq, ra, fa, lift, qp, A, partySelector_affectedOwner_all_apply,
-              partySelector, affectedOwner, hr]
+            simp [sq, ra, fa, lift, qp, A, partySelector, affectedOwner, hr]
           change selectedLocalPartComparison sq
             (Word.frame rall Vall) (Word.frame ra (Va.mapOwner lift))
           exact isSelectedLocalPartComparison_frame_of_false sq rall ra Vall
             (Va.mapOwner lift) hFalseAll hFalseA (ih η)
-  have h := hCompare w ξ
-  unfold selectedLocalPartComparison at h
-  have hLift := Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
-    lift q qp hfLift V
-  exact h.trans hLift
+  exact hCompare w ξ
+
+/-- The selected remaining operator of a genuine all-party branch agrees with
+the lifted selected remaining operator of its actual singleton projection.
+The source inventory, original dimensions and chronological order are those
+of the given circuit. Empty participant and branch sets and zero maps are
+included; no extension of incident labels is assumed.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–434
+and 565–588. -/
+theorem restrict_partialWord_all_localPart_eval_heq_singleton_projection
+    {a b : Layout P} (w : SourceCircuit a b) (p : P)
+    (ξ : Choices (fun _ : P ↦ true) w) :
+    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
+      (affectedOwner (fun _ : P ↦ true) t)
+    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
+      (by classical exact decide_eq_true rfl)
+    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+    let lift : Option {t : P // A t = true} → Option {_t : P // true = true} :=
+      fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
+    let χ := projectAllChoices A w ξ
+    let W := partialWord (fun _ : P ↦ true) w ξ
+    let V := partialWord A w χ
+    HEq (W.localPart.restrict (partySelector (some (⟨p, rfl⟩ : {_p : P // true = true})))
+      W.sources_localPart).eval
+      ((V.localPart.restrict (partySelector q) V.sources_localPart).mapOwner lift).eval := by
+  classical
+  intro A hp q lift χ W V
+  have hlift : ∀ o, lift o = some (⟨p, rfl⟩ : {_p : P // true = true}) ↔ o = q := by
+    intro o
+    cases o with
+    | none => simp [lift, q]
+    | some z => simp [lift, q, Subtype.ext_iff]
+  exact selectedRemainingComparison_of_selectedLocalPartComparison lift q
+    (some (⟨p, rfl⟩ : {_p : P // true = true})) hlift W V
+    (selectedLocalPartComparison_circuit w p ξ)
 
 end TNLean.PEPS.PairEffect.SourceCircuit

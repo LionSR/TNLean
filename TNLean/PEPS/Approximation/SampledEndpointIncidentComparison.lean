@@ -55,6 +55,24 @@ private def selectedEndpointOperator (w : SourceCircuit a b) (p : P)
   (SourceInventory.endpointRegisterWord
     (D.filter (fun z ↦ partySelector q z.1.owner))).eval
 
+/-- The common selected operator evaluates its recorded filtered register
+word. This defining equality is checked before a restricted word is supplied.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434 and 565–588. -/
+private theorem selectedEndpointOperator_eq_registerWord (w : SourceCircuit a b) (p : P)
+    (M : ∀ e : sourceLocations w, euc (Fin (sourceDims w e).1) →L[ℂ]
+      euc (Fin (sourceDims w e).1))
+    (N : ∀ e : sourceLocations w, euc (Fin (sourceDims w e).2) →L[ℂ]
+      euc (Fin (sourceDims w e).2)) :
+    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
+      (affectedOwner (fun _ : P ↦ true) t)
+    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
+      (by classical exact decide_eq_true rfl)
+    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+    let D := (partialPositions A w).flatMap (endpointDataAt A w M N)
+    selectedEndpointOperator w p M N =
+      (SourceInventory.endpointRegisterWord
+        (D.filter (fun z ↦ partySelector q z.1.owner))).eval := rfl
+
 /-- An arbitrary source-free word representing the original endpoint maps
 has their common selected operator after restriction. The equality transports
 its own source-free proof before any sampled maps are supplied.
@@ -91,12 +109,11 @@ private theorem restrict_eval_heq_selectedEndpointOperator
   have hrestriction : (W.restrict (partySelector qp) hs).eval =
       (Z.restrict (partySelector qp) hz).eval :=
     restrict_eval_eq_of_word_eq (partySelector qp) W Z hs hz hword
-  have hoperator : HEq (Z.restrict (partySelector qp) hz).eval
-      (selectedEndpointOperator w p M N) := by
-    change HEq (Z.restrict (partySelector qp) hz).eval
-      (SourceInventory.endpointRegisterWord Dp).eval
-    exact hselected
-  exact (heq_of_eq hrestriction).trans hoperator
+  have hoperator : selectedEndpointOperator w p M N =
+      (SourceInventory.endpointRegisterWord Dp).eval :=
+    selectedEndpointOperator_eq_registerWord w p M N
+  exact (heq_of_eq hrestriction).trans
+    (hselected.trans (heq_of_eq hoperator.symm))
 
 variable (w : SourceCircuit a b) (k : ℕ)
   (lam : ∀ e : sourceLocations w, branchLabels w e.1 →
