@@ -7001,11 +7001,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   transport the actual regional lift through the existing configuration
   equivalence and pair its pure state by the existing partial trace.
 - **Seen:** `PEPS/AreaLaw/RegularizedPatchCoordinate`,
-  `RegularizedPatchStationarity`, and `RegularizedPatchMarginal`.
+  `RegularizedPatchStationarity`, `RegularizedPatchMarginal`, and
+  `RegularizedPatchDiagonalVariation`.
 - **Abstraction:** the coordinate module factors the insertion linear map once;
   the marginal module exposes one full-region/global configuration isometry and
   one arbitrary-complex expectation theorem. Existing real-power covariance,
   exponential derivative, and finite-product reduced-state results are reused.
+  The diagonal variation reuses positivity under unitary conjugation and cyclic
+  trace to keep one changed density feasible, then restricts the norm minimum
+  by monotonicity of squaring nonnegative numbers.
 - **Notes:** these are distinct proofs, not three copies of one tactic block.
   No custom tactic or new optimizer/state structure is justified. Keep the
   actual product order and complex inner-product orientation explicit; neither

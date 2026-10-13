@@ -190,3 +190,48 @@ Its marginals are those of the same final normalized vector defined in
     using the canonical identification $J$ in
     Definition~\ref{def:peps_patch_canonical_marginal}.
 \end{proof}
+
+
+\begin{definition}[Diagonal coordinate objective]
+    \label{def:peps_patch_diagonal_objective}
+    \lean{
+        TNLean.PEPS.regularizedPatchDiagonalUpdate,
+        TNLean.PEPS.regularizedPatchDiagonalObjective
+    }
+    \uses{def:peps_regularized_patch_objective}
+    Fix a coordinate $j$ and a unitary $U$ on $\mathcal H_{X_j}$.
+    For a real vector $y=(y_i)$ indexed by an orthonormal basis of this
+    space, let $x[y]$ agree with $x$ at every coordinate except $j$, and set
+    \begin{align}
+        x[y]_j & =U\operatorname{diag}(y)U^*, &
+        f(y)   & =F(x[y])^2.
+        \label{eq:peps_patch_diagonal_objective}
+    \end{align}
+    The factors in $F$ retain their original order and act on the original
+    vector $\Omega$. This is the diagonal variation in the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L170-L191}{proof of Proposition~4.1}.
+\end{definition}
+
+\begin{theorem}[Restriction of a patch minimum to the diagonal simplex]
+    \label{thm:peps_patch_diagonal_minimum}
+    \lean{TNLean.PEPS.isMinOn_regularizedPatchDiagonalObjective}
+    \uses{def:peps_patch_diagonal_objective}
+    Let $b>0$, let $x\in\mathcal D$ minimize $F$ on $\mathcal D$, and
+    suppose that $x_j=U\operatorname{diag}(s)U^*$. For every $y$ with
+    $y_i\ge0$ for all $i$ and $\sum_i y_i=1$, one has
+    \begin{align}
+        f(s) & \le f(y).
+        \label{eq:peps_patch_diagonal_minimum}
+    \end{align}
+    The weights may be arbitrary real numbers, and $\Omega$ may be any
+    vector, including zero.
+\end{theorem}
+\begin{proof}
+    \uses{def:peps_patch_diagonal_objective}
+    If $y$ belongs to the probability simplex, then
+    $U\operatorname{diag}(y)U^*$ is positive semidefinite and has trace
+    $\sum_i y_i=1$. Hence $x[y]\in\mathcal D$. The diagonal expression
+    for $x_j$ gives $x[s]=x$, so minimality yields
+    $0\le F(x[s])=F(x)\le F(x[y])$. Squaring gives
+    (\ref{eq:peps_patch_diagonal_minimum}).
+\end{proof}
