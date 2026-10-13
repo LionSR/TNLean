@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import Mathlib.Tactic.Convert
+import TNLean.PEPS.Approximation.RestrictedMixedPhysicalTrace
 import TNLean.PEPS.Approximation.ActualSampledPartyPartialTrace
 import TNLean.PEPS.Approximation.SelectedPhysicalPrivateBasis
 import TNLean.PEPS.Approximation.SelectedPhysicalPartyGrouping
@@ -32,21 +33,6 @@ namespace TNLean.PEPS.PairEffect.SourceCircuit
 variable {P : Type} [Fintype P] [DecidableEq P] {a : Layout P}
 variable {I E : Option {_p : P // true = true} → Type}
 variable [∀ q, Fintype (I q)] [∀ q, Fintype (E q)]
-
-/-- The mixed coordinate trace for arbitrary source-free words is formed before
-the actual sampled words are substituted. Source: polynomial-PEPS Theorem 5.2,
-`04-compression.tex`, lines 574–579. -/
-private abbrev restrictedMixedPhysicalTrace {Q I X E : Type}
-    [Fintype I] [Fintype X] [Fintype E] {a b : Layout Q} (f : Q → Bool)
-    (u t : Word a b) (v : Word a a)
-    (hu : u.sources = []) (ht : t.sources = []) (hv : v.sources = [])
-    (B : OrthonormalBasis I ℂ (Mem (Layout.restrict f a)))
-    (C : OrthonormalBasis (X × E) ℂ (Mem (Layout.restrict f b))) : Matrix X X ℂ := by
-  classical
-  exact Matrix.partialTraceRight (α := X) (β := E)
-    (Matrix.of (fun row col ↦ C.repr ((u.restrict f hu).eval (B col)) row) *
-      LinearMap.toMatrix B.toBasis B.toBasis (v.restrict f hv).eval.toLinearMap *
-      (Matrix.of (fun row col ↦ C.repr ((t.restrict f ht).eval (B col)) row))ᴴ)
 
 open Classical in
 /-- The actual local physical matrix for independent ket and bra choices and

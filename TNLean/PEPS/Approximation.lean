@@ -223,6 +223,7 @@ import TNLean.PEPS.Approximation.PureSourceMatrix
 import TNLean.PEPS.Approximation.RankOneBlocks
 import TNLean.PEPS.Approximation.RegionalStates
 import TNLean.PEPS.Approximation.RegisterReordering
+import TNLean.PEPS.Approximation.RestrictedMixedPhysicalTrace
 import TNLean.PEPS.Approximation.RoutedContraction
 import TNLean.PEPS.Approximation.SampledEndpointExteriorIdentity
 import TNLean.PEPS.Approximation.SampledEndpointFactors

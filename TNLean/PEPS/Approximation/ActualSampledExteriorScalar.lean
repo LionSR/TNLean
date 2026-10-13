@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.Approximation.RestrictedMixedPhysicalTrace
 import TNLean.PEPS.Approximation.NoneSourceWordScalar
 import TNLean.PEPS.Approximation.SampledEndpointExteriorIdentity
 import TNLean.PEPS.Approximation.SelectedFamilyPhysicalBasis
@@ -114,11 +115,7 @@ private abbrev emptyPartyTraceIdentity
     (hu : u.sources = []) (ht : t.sources = []) (hv : v.sources = [])
     (B : OrthonormalBasis I ℂ (Mem (Layout.atParty q a)))
     (C : OrthonormalBasis (PUnit × J) ℂ (Mem (Layout.atParty q b))) (α β : ℂ) : Prop :=
-  Matrix.partialTraceRight
-      (Matrix.of (fun row col ↦ C.repr ((u.restrict (partySelector q) hu).eval (B col)) row) *
-        Matrix.of (fun row col ↦ B.repr ((v.restrict (partySelector q) hv).eval (B col)) row) *
-        (Matrix.of (fun row col ↦ C.repr
-          ((t.restrict (partySelector q) ht).eval (B col)) row))ᴴ) =
+  restrictedMixedPhysicalTrace (partySelector q) u t v hu ht hv B C =
     (α * conj β) • (1 : Matrix PUnit PUnit ℂ)
 
 /-- The selected coordinate trace is formed for arbitrary source-free words
@@ -138,10 +135,13 @@ private theorem empty_party_words_mixed_partialTrace
     (hU : HEq (v.restrict (partySelector q) hv).eval
       (ContinuousLinearMap.id ℂ ℂ)) :
     emptyPartyTraceIdentity q u t v hu ht hv B C α β := by
-  exact empty_memory_words_mixed_partialTrace
+  classical
+  have h := empty_memory_words_mixed_partialTrace
     (a := Layout.atParty q a) (b := Layout.atParty q b) ha hb B C
     (u.restrict (partySelector q) hu) (t.restrict (partySelector q) ht)
     (v.restrict (partySelector q) hv) α β hA hT hU
+  rw [matrix_repr_eval_eq_toMatrix B B (v.restrict (partySelector q) hv).eval] at h
+  simpa only [emptyPartyTraceIdentity, restrictedMixedPhysicalTrace] using h
 
 namespace SourceCircuit
 variable {P : Type} {a b : Layout P}

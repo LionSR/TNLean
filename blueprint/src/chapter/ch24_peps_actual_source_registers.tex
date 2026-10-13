@@ -720,10 +720,34 @@ operations on an empty memory.
     to obtain~(\ref{eq:peps_actual_sampled_local_trace}).
 \end{proof}
 
+\begin{definition}[Mixed physical trace of restricted words]
+    \label{def:peps_restricted_mixed_physical_trace}
+    \lean{TNLean.PEPS.PairEffect.restrictedMixedPhysicalTrace}
+    \uses{thm:peps_party_restriction,def:peps_actual_party_source_matrices}
+    Let $S$ be a selection of parties, let $u,t:a\to b$ and $v:a\to a$
+    be chronological words containing no pair-source preparations, and
+    choose finite orthonormal bases $B$ and $C$ of their selected input
+    and output memories. Write the output basis index as $H\times E$,
+    with $H$ the retained coordinate and $E$ the discarded coordinate.
+    Let $A_u,A_t$ be the matrices of the restrictions of $u,t$ in
+    these bases, and let $U_v$ be the matrix of the restriction of $v$
+    in the input basis. Define the mixed physical matrix by
+    \begin{align}
+        \Phi_S(u,t,v;B,C)
+         & =\operatorname{tr}_{E}(A_uU_vA_t^\dagger).
+        \label{eq:peps_restricted_mixed_physical_trace}
+    \end{align}
+    No contraction, positivity or normalization is required. Empty
+    coordinate sets are permitted. This is the coordinate contraction in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 574--579.
+\end{definition}
+
 \begin{definition}[The actual local physical factor]
     \label{def:peps_actual_sampled_physical_factor}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledPhysicalFactor}
-    \uses{def:peps_selected_physical_private_basis,
+    \uses{def:peps_restricted_mixed_physical_trace,
+        def:peps_selected_physical_private_basis,
         def:peps_actual_party_source_matrices,def:peps_actual_sampled_endpoint_word}
     Fix independent chronological choices $\xi,\zeta$ and an original joint
     sample assignment $j$. At a selected owner $q$, let $A_{\xi,q}$ and

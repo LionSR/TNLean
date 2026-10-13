@@ -7297,3 +7297,22 @@ spectral split → block extraction → MPV calculation → strict bounds
   geometric hypothesis. Exact root telescoping reuses Mathlib's
   `Fin.sum_univ_eq_sum_range` and `Finset.sum_range_sub'` rather than proving a
   second finite-sum cancellation theorem.
+
+
+### Restricted mixed physical coordinate trace — promoted (2026-10-13)
+
+- **Pattern:** Form the same mixed coordinate matrix from two restricted
+  source-to-output words and one restricted source-input word, then trace
+  the prescribed private output coordinates.
+- **Seen:** The local sampled factors in `ActualSampledPhysicalFactors`, the
+  empty-party scalar in `ActualSampledExteriorScalar`, and their comparison
+  in `ActualSampledPhysicalScalar` use this same trace.
+- **Abstraction:** `PairEffect.restrictedMixedPhysicalTrace` in
+  `RestrictedMixedPhysicalTrace.lean` owns the exact matrix expression.
+  The sampled factors and exterior scalar use the same definition; their
+  comparison retains that expression instead of expanding the circuit words.
+- **Notes:** The exterior computation identifies the coordinate-entry
+  matrix with `LinearMap.toMatrix` while its words are still arbitrary,
+  using the existing `matrix_repr_eval_eq_toMatrix`. The actual circuit
+  is substituted afterward. No hypotheses or proof limits are added.
+  The extracted definition has a named axiom check; compilation is pending.
