@@ -571,6 +571,89 @@ metric coordinates. Its initial norm floor, terminal comparator estimate,
 and the subsequent physical selection and energy estimates remain separate
 requirements for the complete scanner proposition.
 
+\section{Actual charge energy and uniform old-history tails}
+
+The finite-leaf energy calculation of~\cite{OpenAI2026AreaLaw}
+(\path{08-scanner.tex}, lines~416--440 and~492--511) now has a supplied-vector statement for an
+actual charge round. Let $s+1\le nm$, $n\ge2$, $1\le D$,
+$r_0\le D$, $4(D+2r_0)\le m$, $8Km\le L$ and $C_1>0$.
+Retain the induced physical graph, ambient target-distance depth, actual
+row and cut-clearance bounds, and anchor multiplicity at most $\mathfrak m$.
+For $a\ge0$, a nonzero symmetric supplied vector $\psi_k$ and $0<p<1$,
+write $\mathcal Q_k(p)$ for the actual good-old charge defect and
+$\mathcal E_k(p)$ for the literal energy-error sum in Proposition~7.4.
+Set $A=10KnD\mathfrak m$, $\ell=1+(2r_0+1)^2\log q$, and let
+$b=\sum_{h\text{ not good}}w_h$ be the actual classical bad-old probability.
+Then
+\begin{align}
+    \mathcal E_k(p)&\le\frac{10D}{m}
+    \left((1-p)A^{7/8}\mathcal Q_k(p)^{1/8}
+    +\frac{A(2\ell)^{1/8}}2\bigl((1-p)b+p\bigr)\right).
+    \label{eq:arealaw2d_scanner_inputs_charge_energy}
+\end{align}
+The split-label capacity $A$ is deterministic. It is distinct from the
+mass $1/2$ of each actual Fourier--coherent leaf measure. Those mass
+identities are derived for this same supplied vector; norm one is not an
+assumption. The H\"older argument divides by neither the capacity nor
+the total good-history weight. It therefore includes $K=0$, $A=0$, zero
+good-history weight and zero replicas. The bound $\eta\le2\ell$ uses
+only the physical support and is independent of both auxiliary dimensions.
+\footnote{The actual supplied-vector statement is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_energyError_le_domainGraph}.}
+
+At the fixed scanner exponents $\ell_{\mathrm{sc}}=10^{-5}$, $\kappa=10^{-6}$,
+$\mu_{\mathrm{sc}}=1/4$, and the literal rounded scales, a single threshold now derives
+$4(D+2r_0)\le m$ and replaces $b$ by $n^{-P}$ for any fixed real $P$.
+Its dependencies are the radius and charge-slot constants, compact-target
+coefficient, anchor multiplicity bound and $P$. It precedes the domain,
+labels, scanner, charge round, physical and auxiliary dimensions, replica
+count, supplied vector and common interpolation parameter.
+
+The old-prefix probability is exactly its full-history marginal. Failure of
+old goodness implies failure of goodness through the full history, so the
+accepted all-time tail applies without another factor counting rounds.
+The stronger counting margin follows from $r_0\le D$ and
+$12\lceil n^\kappa\rceil\le\lfloor n^{\mu_{\mathrm{sc}}}\rfloor$, eventually for this
+fixed positive exponent gap. Consequently
+(\ref{eq:arealaw2d_scanner_inputs_charge_energy}) holds with $b$ replaced by $n^{-P}$
+uniformly over all $s+1\le nm$, at the same supplied vector and $a/2$.
+\footnote{The classical bound and its energy consequence are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_badOldHistory_threshold} and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_actualCharge_energy_threshold}.}
+
+For fixed physical dimension $q\ge1$ and arbitrary real transport
+coefficient $C_{\mathrm{en}}$ and exponent $e_{\mathrm{en}}$, the rounded
+scales give a further uniform coefficient estimate. There are $C\ge1$,
+$C_l\ge0$ and $N$, chosen before the physical scanner, charge round,
+auxiliary dimensions, vector, weight and interpolation parameter, such that
+for $n\ge N$, $W\ge0$ and $a=W/K$,
+\begin{align}
+    |C_{\mathrm{en}}|a^2\ell^{e_{\mathrm{en}}}\mathcal E_k(p)
+    &\le C W^2 n^{\ell_{\mathrm{sc}}}D^2(\log n)^{C_l}
+    \left((1-p)\left(\frac{\mathcal Q_k(p)}{KnD}\right)^{1/8}
+    +(1-p)n^{-P}+p\right).
+    \label{eq:arealaw2d_scanner_inputs_charge_coefficients}
+\end{align}
+Here $K>0$ is derived from the eventual rounded-scale facts, and
+$\mathcal Q_k(p)\ge0$ is derived from the literal leaf measures and
+nonnegative split entropies. The exact dimension coefficients after
+normalization are $10(10\mathfrak m)^{7/8}|C_{\mathrm{en}}|\ell^{e_{\mathrm{en}}}$
+and $50\mathfrak m\,2^{1/8}|C_{\mathrm{en}}|\ell^{e_{\mathrm{en}}+1/8}$.
+A common logarithmic-power bound absorbs them, including negative real
+exponents. No division by anchor multiplicity is used. The statement
+retains $W=0$, $\mathfrak m=0$, $q=1$ and $k=0$.
+\footnote{The literal nonnegativity and fixed coefficient estimates are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_nonneg} and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_actualCharge_energy_coefficients}.}
+
+This remains a supplied-vector charge estimate with unselected defect
+$\mathcal Q_k(p)$. It does not assert the full energy expectation in
+lines~507--511. Identifying the physical Schmidt--Bell prevector with the
+actual root and metric coordinates, selecting a small charge defect,
+and applying comparator estimates remain separate. No complete scanner
+construction is asserted.
+
+
 \section{Truncated physical marginal estimates}
 
 The moment and tail estimates of \cite[Lemma~3.1]{OpenAI2026AreaLaw} are established in
