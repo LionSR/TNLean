@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scan.PrefixComparison
 import TNLean.PEPS.AreaLaw.Scan.Budgets
 import TNLean.PEPS.AreaLaw.TwoFamilies
-import QICLean.Entropy.FiniteProductContinuity
+import TNLean.PEPS.AreaLaw.RegionalEntropyContinuity
 
 /-!
 # Entropy transfer on positive-depth prefixes
@@ -67,13 +67,9 @@ theorem eventually_regionalEntropy_positiveDepthPrefix_le
   filter_upwards [key] with
     n hcost Λ Ω Ωt hΩ hΩt A depth L hcard hdist Ce e hentropy j hj
   have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
-  have hqn : 0 < q := by omega
-  have hq0 : (0 : ℝ) < (q : ℝ) := by exact_mod_cast hqn
   set R := positiveDepthPrefix A depth (j : ℤ) with hR
   -- Entropy continuity in the regional dimension.
-  have hcont := FiniteProduct.abs_entropy_sub_le_sqrt_traceDistance
-    (fun _ : Site Λ ↦ Fin q) Ωt Ω hΩt hΩ R
-  rw [← regionalEntropy_eq_finiteProduct, ← regionalEntropy_eq_finiteProduct] at hcont
+  have hcont := abs_regionalEntropy_sub_le_sqrt_traceDistance Λ q Ωt Ω hΩt hΩ R
   set t := Matrix.traceDistance (Matrix.vecMulVec Ωt (star Ωt))
       (Matrix.vecMulVec Ω (star Ω)) with ht
   -- The region is contained in the full prefix, so its volume is controlled.
@@ -88,19 +84,6 @@ theorem eventually_regionalEntropy_positiveDepthPrefix_le
       exact_mod_cast Finset.card_le_card hsub
     refine hcard1.trans (hcard.trans ?_)
     exact mul_le_mul_of_nonneg_right (le_max_right 4 Cvol) (by positivity)
-  -- The regional dimension is `q ^ |R|`, so the continuity log factor is `1 + |R| log q`.
-  have hcard_cfg :
-      Fintype.card (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q) R) = q ^ R.card := by
-    simp only [FiniteProduct.Configuration, Fintype.card_pi, Fintype.card_fin,
-      Finset.prod_const, Finset.card_univ, Fintype.card_coe]
-  have hlogterm : Real.log (Real.exp 1 *
-      (Fintype.card (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q) R) : ℝ)) =
-      1 + (R.card : ℝ) * Real.log q := by
-    rw [hcard_cfg]
-    push_cast
-    rw [Real.log_mul (Real.exp_ne_zero 1) (pow_ne_zero _ hq0.ne'),
-      Real.log_exp, Real.log_pow]
-  rw [hlogterm] at hcont
   -- The actual trace distance stays below the threshold of the continuity estimate.
   have hhalf : Real.sqrt ((n : ℝ) ^ (-1000 : ℝ)) = (n : ℝ) ^ (-500 : ℝ) := by
     have h1 : (n : ℝ) ^ (-1000 : ℝ) = ((n : ℝ) ^ (-500 : ℝ)) ^ 2 := by
