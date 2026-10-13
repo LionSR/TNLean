@@ -70,6 +70,83 @@ private theorem restrict_frameList_mapOwner_eval_heq {R Q : Type}
   exact hMap.trans (Word.eval_heq (Layout.mapOwner_append lift _ _)
     (Layout.mapOwner_append lift _ _) (Word.mapOwner_frameList_heq lift _ _))
 
+/-- Compare evaluations of arbitrary chronological words before the source
+prefixes or private preparation are substituted.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
+246–267, 409–434 and 565–588. -/
+private def preparedWordEvalComparison {Q R : Type} {a b : Layout Q} {c d : Layout R}
+    (u : Word a b) (v : Word c d) : Prop := HEq u.eval v.eval
+
+/-- The original private preparation has the same selected operator as its
+lifted singleton preparation. No monomial choice occurs in this comparison.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
+246–267, 409–434 and 565–588. -/
+private theorem preparedWordEvalComparison_privatePreparation {a b : Layout P}
+    (w : SourceCircuit a b) (p : P) (ψ : ProductInput a) :
+    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
+      (affectedOwner (fun _ : P ↦ true) t)
+    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
+      (by classical exact decide_eq_true rfl)
+    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+    let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
+    let lift : Option {t : P // A t = true} → Option {_p : P // true = true} :=
+      fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
+    let S := SourceInventory.slotLayout (partialSlots A w)
+      (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).1))
+      (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).2))
+    let Pa : Word (S ++ []) (S ++ Layout.mapOwner (affectedOwner A) a) :=
+      Word.frameList S (ψ.prepare.mapOwner (affectedOwner A))
+    let hsPa : Pa.sources = [] := by
+      simp only [Pa, Word.sources_frameList, Word.sources_mapOwner, ψ.sources_prepare,
+        SourceInventory.mapOwner_nil]
+    preparedWordEvalComparison
+      ((w.sourcePrivatePreparation ψ).restrict (partySelector qp)
+        (sources_sourcePrivatePreparation w ψ))
+      ((Pa.restrict (partySelector q) hsPa).mapOwner lift) := by
+  classical
+  intro A hp q qp lift S Pa hsPa
+  let all := affectedOwner (fun _ : P ↦ true)
+  let fa := affectedOwner A
+  let sq := partySelector qp
+  let sa := partySelector q
+  have hfAll : ∀ r, all r = qp ↔ r = p := by
+    intro r
+    simp [all, qp, affectedOwner]
+  have hfA : ∀ r, fa r = q ↔ r = p := by
+    intro r
+    simpa only [fa, q, affectedOwner, hp, ↓reduceDIte,
+      Bool.true_eq_false, and_false, or_false] using affectedOwner_eq_iff A r p
+  have hSlots : Layout.mapOwner lift (Layout.restrict sa S) =
+      Layout.restrict sq w.allResidualSourceLayout :=
+    mapOwner_atParty_partialSlots_eq_allResidualSourceLayout w p
+  have hBoundary (L : Layout P) :
+      Layout.mapOwner lift (Layout.restrict sa (Layout.mapOwner fa L)) =
+        Layout.restrict sq (Layout.mapOwner all L) :=
+    mapOwner_selected_originalLayout_eq p L
+  have hInner : HEq ((ψ.prepare.mapOwner all).restrict sq
+      (by simp only [Word.sources_mapOwner, ψ.sources_prepare,
+        SourceInventory.mapOwner_nil])).eval
+      (((ψ.prepare.mapOwner fa).restrict sa
+        (by simp only [Word.sources_mapOwner, ψ.sources_prepare,
+          SourceInventory.mapOwner_nil])).mapOwner lift).eval :=
+    (restrict_privatePreparation_mapOwner_eval_heq all p qp hfAll ψ).trans
+      ((Word.eval_mapOwner_heq lift _).trans
+        (restrict_privatePreparation_mapOwner_eval_heq fa p q hfA ψ)).symm
+  have hPaMapped : HEq ((Pa.restrict sa hsPa).mapOwner lift).eval
+      (Word.frameList (Layout.mapOwner lift (Layout.restrict sa S))
+        (((ψ.prepare.mapOwner fa).restrict sa
+          (by simp only [Word.sources_mapOwner, ψ.sources_prepare,
+            SourceInventory.mapOwner_nil])).mapOwner lift)).eval :=
+    restrict_frameList_mapOwner_eval_heq sa lift S (ψ.prepare.mapOwner fa)
+      (by simp only [Word.sources_mapOwner, ψ.sources_prepare, SourceInventory.mapOwner_nil])
+  have hPrep := (Word.restrict_frameList_eval_heq sq w.allResidualSourceLayout
+    (ψ.prepare.mapOwner all)
+    (by simp only [Word.sources_mapOwner, ψ.sources_prepare, SourceInventory.mapOwner_nil])).trans
+      ((Word.eval_frameList_heq _ _ rfl (hBoundary a).symm hInner
+        (Layout.restrict sq w.allResidualSourceLayout)
+        (Layout.mapOwner lift (Layout.restrict sa S)) hSlots.symm).trans hPaMapped.symm)
+  exact hPrep
+
 /-- Compare a restricted source-free word with a word on its selected
 input and output lists, retaining the source-free proof with its word.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
@@ -115,13 +192,6 @@ private theorem selectedPreparedWordComparison_of_original_labels {a b : Layout 
   let Va := Pa.comp (partialResidual A w χ)
   have hsVa : Va.sources = [] := by
     simp only [Va, Word.sources, sources_partialResidual, hsPa, List.nil_append]
-  have hfAll : ∀ r, all r = qp ↔ r = p := by
-    intro r
-    simp [all, qp, affectedOwner]
-  have hfA : ∀ r, fa r = q ↔ r = p := by
-    intro r
-    simpa only [fa, q, affectedOwner, hp, ↓reduceDIte,
-      Bool.true_eq_false, and_false, or_false] using affectedOwner_eq_iff A r p
   have hSlots : Layout.mapOwner lift (Layout.restrict sa S) =
       Layout.restrict sq w.allResidualSourceLayout :=
     mapOwner_atParty_partialSlots_eq_allResidualSourceLayout w p
@@ -129,28 +199,10 @@ private theorem selectedPreparedWordComparison_of_original_labels {a b : Layout 
       Layout.mapOwner lift (Layout.restrict sa (Layout.mapOwner fa L)) =
         Layout.restrict sq (Layout.mapOwner all L) :=
     mapOwner_selected_originalLayout_eq p L
-  have hInner : HEq ((ψ.prepare.mapOwner all).restrict sq
-      (by simp only [Word.sources_mapOwner, ψ.sources_prepare,
-        SourceInventory.mapOwner_nil])).eval
-      (((ψ.prepare.mapOwner fa).restrict sa
-        (by simp only [Word.sources_mapOwner, ψ.sources_prepare,
-          SourceInventory.mapOwner_nil])).mapOwner lift).eval :=
-    (restrict_privatePreparation_mapOwner_eval_heq all p qp hfAll ψ).trans
-      ((Word.eval_mapOwner_heq lift _).trans
-        (restrict_privatePreparation_mapOwner_eval_heq fa p q hfA ψ)).symm
-  have hPaMapped : HEq ((Pa.restrict sa hsPa).mapOwner lift).eval
-      (Word.frameList (Layout.mapOwner lift (Layout.restrict sa S))
-        (((ψ.prepare.mapOwner fa).restrict sa
-          (by simp only [Word.sources_mapOwner, ψ.sources_prepare,
-            SourceInventory.mapOwner_nil])).mapOwner lift)).eval :=
-    restrict_frameList_mapOwner_eval_heq sa lift S (ψ.prepare.mapOwner fa)
-      (by simp only [Word.sources_mapOwner, ψ.sources_prepare, SourceInventory.mapOwner_nil])
-  have hPrep := (Word.restrict_frameList_eval_heq sq w.allResidualSourceLayout
-    (ψ.prepare.mapOwner all)
-    (by simp only [Word.sources_mapOwner, ψ.sources_prepare, SourceInventory.mapOwner_nil])).trans
-      ((Word.eval_frameList_heq _ _ rfl (hBoundary a).symm hInner
-        (Layout.restrict sq w.allResidualSourceLayout)
-        (Layout.mapOwner lift (Layout.restrict sa S)) hSlots.symm).trans hPaMapped.symm)
+  have hPrep : preparedWordEvalComparison
+      ((w.sourcePrivatePreparation ψ).restrict sq (sources_sourcePrivatePreparation w ψ))
+      ((Pa.restrict sa hsPa).mapOwner lift) :=
+    preparedWordEvalComparison_privatePreparation w p ψ
   have hResidualA := restrict_partialResidual_eval_heq A w χ sa
   have hResidualMapped := (Word.eval_mapOwner_heq lift
     ((partialResidual A w χ).restrict sa (sources_partialResidual A w χ))).trans
