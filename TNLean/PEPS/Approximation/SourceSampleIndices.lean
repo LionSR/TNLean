@@ -22,10 +22,10 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–245,
 -/
 
 noncomputable section
-open Classical
 
 namespace TNLean.PEPS.PairEffect.SourceCircuit
 
+open Classical in
 private def participantPairEquiv {C P : Type} [Fintype C] (owner : C ↪ P) :
     {z : Sym2 C // ¬z.IsDiag} ≃
       {z : Sym2 P // z ∈ Approximation.pairSampleLabels
@@ -63,6 +63,7 @@ private theorem participantPairEquiv_apply {C P : Type} [Fintype C]
 
 variable {P : Type}
 
+open Classical in
 /-- Each original gate slot is exactly one sample pair of its actual
 participants. No monomial labels or source vectors are chosen.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–245,
@@ -71,8 +72,8 @@ def sourcePairEquiv : {a b : Layout P} → (w : SourceCircuit a b) →
     (g : w.gateLocations) → Fin (w.slotCount g) ≃
       {z : Sym2 P // z ∈ Approximation.pairSampleLabels (w.participants g)}
   | _, _, .id _, g => nomatch g
-  | _, _, .comp w _, .inl g => sourcePairEquiv w g
-  | _, _, .comp _ v, .inr g => sourcePairEquiv v g
+  | _, _, .comp w _, Sum.inl g => sourcePairEquiv w g
+  | _, _, .comp _ v, Sum.inr g => sourcePairEquiv v g
   | _, _, .localMap .., g => nomatch g
   | _, _, @SourceCircuit.gate _ _ _ _ _ owner _ _ _ G _, _ =>
       (SourceInventory.pairIndexEquiv G.slots G.pair_nodup G.pair_complete).trans
@@ -87,6 +88,7 @@ and 568–571. -/
 theorem sourcePairEquiv_apply {a b : Layout P} (w : SourceCircuit a b)
     (e : w.sourceLocations) :
     (sourcePairEquiv w e.1 e.2).1 = Sym2.mk (w.endpoints e).1 (w.endpoints e).2 := by
+  classical
   induction w with
   | id => exact nomatch e.1
   | comp w v ihw ihv =>
@@ -102,6 +104,7 @@ theorem sourcePairEquiv_apply {a b : Layout P} (w : SourceCircuit a b)
   | swap => exact nomatch e.1
   | frame r w ih => exact ih e
 
+open Classical in
 /-- Original source occurrences and the distributed sample positions agree.
 An empty or singleton-participant gate contributes no pair position.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 568–571

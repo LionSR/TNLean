@@ -21,11 +21,11 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267,
 -/
 
 noncomputable section
-open Classical
 namespace TNLean.PEPS.PairEffect.SourceCircuit
 open TNLean.PEPS.Approximation
 variable {P : Type}
 
+open Classical in
 /-- Incidence of a sample pair is exactly incidence of its original two
 source endpoints. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
 lines 342–364 and 568–579. -/
@@ -38,6 +38,7 @@ theorem mem_sourceSampleEquiv_iff {a b : Layout P} (w : SourceCircuit a b)
   rw [sourcePairEquiv_apply]
   simp only [Sym2.toFinset_mk_eq, Finset.mem_insert, Finset.mem_singleton, eq_comm]
 
+open Classical in
 /-- The ordered singleton source slots are precisely the local sample indices
 of the distributed contraction. No sample value at another source position
 is chosen. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
