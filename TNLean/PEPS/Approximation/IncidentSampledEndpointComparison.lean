@@ -43,7 +43,8 @@ private theorem eval_endpointRegisterWord_cons
   apply clm_ext_tmul
   intro x y
   simp [endpointRegisterWord, Word.localEndpoint, Word.eval, appendIso,
-    isoL_apply, LinearIsometryEquiv.symm_lTensor]
+    isoL_apply, LinearIsometryEquiv.symm_lTensor, ContinuousLinearMap.lTensor_tmul,
+    TensorProduct.mapL_tmul]
 
 /-- Owner labels do not change the operator of an already retained endpoint
 word. Its endpoint spaces, maps and order are unchanged.
@@ -126,8 +127,15 @@ private theorem endpointRegisterData_partialSlots (A : P → Bool) (w : SourceCi
         List (Sigma (fun r : Reg (Option {p : P // A p = true}) ↦
           r.space →L[ℂ] r.space))) =
       endpointDataAt A w M N (partialSlotEquiv A w i).1 := by
-    simp only [(partialSlot_spec A w i).1, (partialSlot_spec A w i).2.1,
-      endpointDataAt]
+    exact congrArg₂
+      (fun (left right : Option {p : P // A p = true}) ↦
+        ([⟨⟨left, euc (Fin (sourceDims w (partialSlotEquiv A w i).1).1)⟩,
+            M (partialSlotEquiv A w i).1⟩,
+          ⟨⟨right, euc (Fin (sourceDims w (partialSlotEquiv A w i).1).2)⟩,
+            N (partialSlotEquiv A w i).1⟩] :
+          List (Sigma (fun r : Reg (Option {p : P // A p = true}) ↦
+            r.space →L[ℂ] r.space))))
+      (partialSlot_spec A w i).1 (partialSlot_spec A w i).2.1
   simp_rw [hdata]
   have hn : (partialSlots A w).length = (partialPositions A w).length := by
     simp only [partialSlots, List.length_map, List.length_attach]
@@ -182,6 +190,54 @@ private theorem selectedEndpointData_eq (w : SourceCircuit a b) (p : P)
         · simpa [SourceInventory.mapEndpointData, List.filter_cons, List.flatMap_cons,
             endpointDataAt, A, hp, q, qp, lift, partySelector, affectedOwner, hl, hr]
             using ih
+
+/-- Restriction of arbitrary endpoint endomorphisms agrees with the endpoint
+list selected at the original party. This comparison is independent of the
+sampled matrices. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
+lines 279–309, 409–434 and 565–588. -/
+private theorem restrict_endpointWord_eval_heq_selectedRegisterWord
+    (w : SourceCircuit a b) (p : P)
+    (M : ∀ e : sourceLocations w, euc (Fin (sourceDims w e).1) →L[ℂ]
+      euc (Fin (sourceDims w e).1))
+    (N : ∀ e : sourceLocations w, euc (Fin (sourceDims w e).2) →L[ℂ]
+      euc (Fin (sourceDims w e).2)) :
+    let all : P → Bool := fun _ ↦ true
+    let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
+    let A : P → Bool := fun t ↦ partySelector qp (affectedOwner all t)
+    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
+      (by classical exact decide_eq_true rfl)
+    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+    let Ua := fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv all w i).1).1)
+    let Va := fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv all w i).1).2)
+    let Za := SourceInventory.endpointWord (partialSlots all w) Ua Va
+      (fun i ↦ M (partialSlotEquiv all w i).1)
+      (fun i ↦ N (partialSlotEquiv all w i).1)
+    let hsa : Za.sources = [] := SourceInventory.sources_endpointWord ..
+    let Ds := (partialPositions A w).flatMap (endpointDataAt A w M N)
+    let Ds' := Ds.filter (fun z ↦ partySelector q z.1.owner)
+    HEq (Za.restrict (partySelector qp) hsa).eval
+      (SourceInventory.endpointRegisterWord Ds').eval := by
+  classical
+  intro all qp A hp q Ua Va Za hsa Ds Ds'
+  let lift : Option {t : P // A t = true} → Option {_p : P // true = true} :=
+    fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
+  let Da := (partialPositions all w).flatMap (endpointDataAt all w M N)
+  let Da' := Da.filter (fun z ↦ partySelector qp z.1.owner)
+  have hdataA := endpointRegisterData_partialSlots all w M N
+  have ha : HEq (Za.restrict (partySelector qp) hsa).eval
+      (SourceInventory.endpointRegisterWord Da').eval :=
+    (SourceInventory.restrict_endpointWord_eval_heq_registerWord (partySelector qp)
+      (partialSlots all w) Ua Va (fun i ↦ M (partialSlotEquiv all w i).1)
+      (fun i ↦ N (partialSlotEquiv all w i).1)).trans
+      (SourceInventory.endpointRegisterWord_eval_heq_of_eq
+        (congrArg (List.filter (fun z ↦ partySelector qp z.1.owner)) hdataA))
+  have hdata : SourceInventory.mapEndpointData lift Ds' = Da' :=
+    selectedEndpointData_eq w p M N
+  have hnorm : HEq (SourceInventory.endpointRegisterWord Ds').eval
+      (SourceInventory.endpointRegisterWord Da').eval :=
+    (SourceInventory.endpointRegisterWord_eval_heq_mapOwner lift Ds').trans
+      (SourceInventory.endpointRegisterWord_eval_heq_of_eq hdata)
+  exact ha.trans hnorm.symm
 
 private def allSourceLabel (w : SourceCircuit a b) (ξ : Choices (fun _ ↦ true) w)
     (e : sourceLocations w) : branchLabels w e.1 :=
@@ -247,25 +303,12 @@ theorem restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord
     (fun i ↦ M (partialSlotEquiv all w i).1)
     (fun i ↦ N (partialSlotEquiv all w i).1)
   have hsa : Za.sources = [] := SourceInventory.sources_endpointWord ..
-  let Da := (partialPositions all w).flatMap (endpointDataAt all w M N)
   let Ds := (partialPositions A w).flatMap (endpointDataAt A w M N)
-  let Da' := Da.filter (fun z ↦ partySelector qp z.1.owner)
   let Ds' := Ds.filter (fun z ↦ partySelector q z.1.owner)
-  have hdataA := endpointRegisterData_partialSlots all w M N
   have hdataS := endpointRegisterData_partialSlots A w M N
-  have ha : HEq (Za.restrict (partySelector qp) hsa).eval
-      (SourceInventory.endpointRegisterWord Da').eval :=
-    (SourceInventory.restrict_endpointWord_eval_heq_registerWord (partySelector qp)
-      (partialSlots all w) Ua Va (fun i ↦ M (partialSlotEquiv all w i).1)
-      (fun i ↦ N (partialSlotEquiv all w i).1)).trans
-      (SourceInventory.endpointRegisterWord_eval_heq_of_eq
-        (congrArg (List.filter (fun z ↦ partySelector qp z.1.owner)) hdataA))
-  have hdata : SourceInventory.mapEndpointData lift Ds' = Da' :=
-    selectedEndpointData_eq w p M N
-  have hnorm : HEq (SourceInventory.endpointRegisterWord Ds').eval
-      (SourceInventory.endpointRegisterWord Da').eval :=
-    (SourceInventory.endpointRegisterWord_eval_heq_mapOwner lift Ds').trans
-      (SourceInventory.endpointRegisterWord_eval_heq_of_eq hdata)
+  have hselected : HEq (Za.restrict (partySelector qp) hsa).eval
+      (SourceInventory.endpointRegisterWord Ds').eval :=
+    restrict_endpointWord_eval_heq_selectedRegisterWord w p M N
   have hinput : HEq
       ((sampledEndpointInputWord w k lam E F ξ ζ j ω).restrict
         (partySelector qp) (sources_sampledEndpointInputWord w k lam E F ξ ζ j ω)).eval
@@ -287,12 +330,12 @@ theorem restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord
     rw [choicesOfOriginalGateLabelsAt_eq_projectAllChoices,
       choicesOfOriginalGateLabelsAt_eq_projectAllChoices]
     simp_rw [projectedSlotChoice_eq_allSourceLabel]
-    exact (Word.eval_castLayouts_heq _ _ _).trans
-      ((Word.eval_mapOwner_heq lift _).trans
-        (SourceInventory.endpointRegisterWord_eval_heq_of_eq
-          (congrArg (List.filter (fun z ↦ partySelector q z.1.owner)) hdataS)))
+    refine (Word.eval_castLayouts_heq _ _ _).trans ?_
+    refine (Word.eval_mapOwner_heq lift _).trans ?_
+    exact SourceInventory.endpointRegisterWord_eval_heq_of_eq
+      (congrArg (List.filter (fun z ↦ partySelector q z.1.owner)) hdataS)
   apply eq_of_heq
-  exact (hinput.trans ha).trans (hincident.trans hnorm).symm
+  exact (hinput.trans hselected).trans hincident.symm
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect
