@@ -15,7 +15,7 @@ import time
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / '.ci/area-law-shell/Input.lean'
-SOURCE_SHA = '9ce7ba58252dd68000cc8454bd141b1cb9576a1fa2d73f7ad0dea18c3a7452bf'
+SOURCE_SHA = 'acc3be85e76c4d4ab5e08018cc8baa2b452ba0909284539e50be62f9caee6b5a'
 MATHLIB = 'c55e6e786f49471c72fbddbec5415808896aec1e'
 TOOLCHAIN = 'leanprover/lean4:v4.35.0-rc3'
 SOURCE_BASE = 'dd2e900d25464445c125b94d7a78fac6b2dd8d6e'
