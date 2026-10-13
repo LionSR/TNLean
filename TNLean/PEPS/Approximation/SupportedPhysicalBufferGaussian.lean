@@ -99,6 +99,12 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
     simpa only [a, V, embedOp_rectangle_eq_reindex, Finset.coe_image,
       Matrix.reindex_apply, Matrix.submatrix_submatrix] using!
       embedOp_mem_supportedOperators_image a.injective hV₀
+  have hD : gH.operator - K ∈
+      supportedOperators (q * q) (Z.image a : Set (AreaLaw.Site Λ)) := by
+    simpa only [hK', a, K', F, K, embedOp_rectangle_eq_reindex, Finset.coe_image,
+      Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_sub,
+      Pi.sub_apply, Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using!
+      embedOp_mem_supportedOperators_image a.injective (h.swapped_doubled_boundary_bound R).1
   done
 
 end TNLean.PEPS.Approximation
