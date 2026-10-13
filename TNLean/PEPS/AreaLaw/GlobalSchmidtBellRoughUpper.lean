@@ -93,7 +93,7 @@ theorem eventually_suppliedGlobalSchmidtBellPrevector_rough_upper
         0 < ‖w‖ ^ 2 ∧ -Real.log (‖w‖ ^ 2) / (k : ℝ) ≤
           2 * Real.log (d : ℝ) - Real.log z +
             4 * (Bsh / z + Bexc) + Real.bellOverlapRemainder d c K k := by
-  trace "rough-upper proof body reached"
+  run_tac Lean.throwError (α := Unit) "rough-upper proof body reached"
   classical
   intro β ΩX z hz ψ hmass
   done
