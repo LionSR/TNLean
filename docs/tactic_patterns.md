@@ -24,6 +24,32 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Reflected marked-chain scalar and gauge cancellation — promoted (2026-10-12)
+
+- **Pattern:** conjugate a double sum `∑ i j, star (x i) * K i j * y j`
+  through `star_sum`/`star_mul'`/`Finset.sum_comm`, cancel a positive
+  self-conjugate scalar from a conjugate identity by `mul_left_cancel₀`, and
+  cancel a vertical gauge by conjugating a reflected identity with the
+  adjoint gauge (`hCov`/`hLeft`/`hRight`).
+- **Seen:** each of the three blocks twice, in
+  `TNLean/MPS/MPDO/ReflectedMarkedChain.lean` and
+  `TNLean/MPS/MPDO/TwoSitePrefixReflectedMarkedChain.lean` (the gauge block
+  also in `FigureEightPairwise.lean`); 150 lines in total.
+- **Abstraction:** `Finset.sum_sum_star_mul_mul_eq_star` and
+  `MPOTensor.markedChainCoefficient_eq_reflectedAdjoint_of_mul_eq_star` in
+  `ReflectedMarkedChain.lean`;
+  `MPOTensor.markedChainCoefficient_gramDressing_eq_of_bondMul_reflected` in
+  `FigureEightPairwise.lean`. The self-conjugacy of a positive scalar is
+  Mathlib's `IsSelfAdjoint.of_nonneg`.
+- **Refactor:** the public `IsMPDO.coordinateCompression_star` keeps its
+  statement and becomes a two-line instance of the generic identity and
+  Hermiticity; the private `blockTwoPrefixCoordinateCompression_star` is
+  deleted, and both `_eq_reflectedAdjoint` proofs reduce to that instance
+  and the scalar cancellation; both Gram-dressed theorems apply the gauge
+  lemma. The private `hslice` copy is replaced by
+  `horizontalSlice_twoSidedCompression`, now in `ReflectedMarkedChain.lean`.
+  No statement or tag changes.
+
 ### Membership in composed gate expansions — promoted (2026-10-08)
 
 - **Pattern:** Decompose membership in the ordered Cartesian gate expansion

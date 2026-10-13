@@ -888,8 +888,8 @@ The following finite construction follows
     inequalities.
 \end{proof}
 
-\begin{lemma}[Upper bounds for comparison fronts]
-    \label{lem:al_scan_front_thresholds}
+\begin{theorem}[Upper bounds for comparison fronts]
+    \label{thm:al_scan_front_thresholds}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.upper_le,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.front_comparison_thresholds_le}
     \leanok
@@ -897,10 +897,10 @@ The following finite construction follows
     Suppose $n>0$ and $8Km\le L$. Fix $0\le g<K$, $0\le r<m$ and
     $0\le k\le nm$. Let $j_N,j_F$ be the near and oriented far nominal
     fronts after $k$ fills, and put $v=8gm+5m+r$. Then
-    \[
+    \begin{align}
         v\le L,\qquad j_N-1\le L,\qquad -j_F\le L.
-    \]
-\end{lemma}
+    \end{align}
+\end{theorem}
 \begin{proof}\leanok
     The upper endpoint satisfies $v\le8(g+1)m\le8Km\le L$.
     Put $u=8gm+m+r$. The near threshold is $u$ plus the number of
@@ -914,7 +914,7 @@ The following finite construction follows
     \label{cor:al_scan_front_prefix_family}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.front_positiveDepthPrefix_mem_fixed_family}
     \leanok
-    \uses{lem:al_scan_finite_prefix_family,lem:al_scan_front_thresholds}
+    \uses{lem:al_scan_finite_prefix_family,thm:al_scan_front_thresholds}
     Fix the original region $A$, its depth function $d$ and the collar depth
     $L$. Suppose $n>0$ and $8Km\le L$. The nested family
     $Q_0,\ldots,Q_L$, where $Q_j=\{x\in A:0<d(x)\le j\}$, then contains
@@ -923,7 +923,7 @@ The following finite construction follows
 \end{corollary}
 \begin{proof}\leanok
     Both integer thresholds are at most $L$ by
-    Lemma~\ref{lem:al_scan_front_thresholds}. Apply
+    Theorem~\ref{thm:al_scan_front_thresholds}. Apply
     Lemma~\ref{lem:al_scan_finite_prefix_family} to each threshold.
 \end{proof}
 
@@ -1774,6 +1774,59 @@ The following finite construction follows
     with designated support $\widetilde X_i$ embedded among physical
     factors. The dimensions of $C$ and $R$ are independently specified.
 \end{definition}
+
+\begin{definition}[Coordinates of the two auxiliary factors]
+    \label{def:al_scan_auxiliary_coordinates}
+    \lean{TNLean.PEPS.AreaLaw.Scan.augmentedSiteEquiv,
+        TNLean.PEPS.AreaLaw.Scan.augmentedConfigurationEquiv,
+        TNLean.PEPS.AreaLaw.Scan.augmentedReplicaConfigurationEquiv,
+        TNLean.PEPS.AreaLaw.Scan.augmentedSumReplicaCopiesEquiv}
+    \leanok
+    \uses{def:al_scan_actual_energy_terms}
+    Let $V$ be a finite set of physical sites, each of dimension $q$, and
+    let the dimensions of $C$ and $R$ both be $d$. Write
+    $X=\{0,\ldots,q-1\}^V$ for the physical configuration space. Identify the physical
+    site $v$ with $v$ in $V\sqcup\{C,R\}$. The two successive adjoining
+    operations place $C$ at the first added site and $R$ at the second.
+    Let $e$ be this identification of one-copy configurations and $e_k$
+    its copywise extension. Let $g_k$ group the configurations in the
+    order $X^k,C^k,R^k$, where each auxiliary configuration space has
+    $d$ elements. These are bijections also for zero dimensions
+    and for $k=0$.
+\end{definition}
+
+\begin{theorem}[The physical replica mean with two auxiliary identities]
+    \label{thm:al_scan_auxiliary_energy}
+    \lean{TNLean.PEPS.AreaLaw.Scan.augmentedConfigurationEquiv_apply_physical,
+        TNLean.PEPS.AreaLaw.Scan.augmentedConfigurationEquiv_apply_C,
+        TNLean.PEPS.AreaLaw.Scan.augmentedConfigurationEquiv_apply_R,
+        TNLean.PEPS.AreaLaw.Scan.copyMean_augmentOperator_eq_replicaHamiltonian_kronecker}
+    \leanok
+    \uses{def:al_scan_auxiliary_coordinates}
+    Let $H$ be an arbitrary matrix on the physical configuration space.
+    Write $\overline H_k=k^{-1}\sum_{j=0}^{k-1}H_j$ and define
+    $\overline H_0=0$. Let $\widetilde H=H\otimes I_C\otimes I_R$
+    be expressed on $V\sqcup\{C,R\}$. Then
+    \begin{align}
+        \overline{\widetilde H}_k(x,y)
+         & = (\overline H_k\otimes I_{C^k\times R^k})
+        (g_kx,g_ky).
+    \end{align}
+    The bijection $e$ preserves every physical coordinate and sends the
+    first and second auxiliary coordinates to $C$ and $R$, respectively.
+    This is the identity extension used in
+    \cite[Proposition~7.4 and Section~8]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The one-copy coordinate identities follow from the definition of $e$.
+    Reindex each term of the replica sum by $e_k$ and regroup the physical
+    copies and the joint auxiliary copies. This gives
+    $\overline{H\otimes I}_{k}=\overline H_k\otimes I$ in the regrouped
+    coordinates. Equality of the joint auxiliary configurations is
+    equivalent to equality of both their $C$ and $R$ configurations.
+    The identity entries therefore agree under the final regrouping $g_k$.
+\end{proof}
 
 \begin{theorem}[Positive supported augmented energy]
     \label{thm:al_scan_actual_energy_terms}

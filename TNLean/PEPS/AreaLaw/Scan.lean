@@ -25,7 +25,9 @@ import TNLean.PEPS.AreaLaw.Scan.AncestryCover
 import TNLean.PEPS.AreaLaw.Scan.AncestryGeometry
 import TNLean.PEPS.AreaLaw.Scan.AncestryLead
 import TNLean.PEPS.AreaLaw.Scan.AssignedLead
+import TNLean.PEPS.AreaLaw.Scan.AugmentedEnergyCoordinates
 import TNLean.PEPS.AreaLaw.Scan.AugmentedPartition
+import TNLean.PEPS.AreaLaw.Scan.AugmentedReplicaMetricCoordinates
 import TNLean.PEPS.AreaLaw.Scan.BadChargeRatioBound
 import TNLean.PEPS.AreaLaw.Scan.BadHistoryAsymptotics
 import TNLean.PEPS.AreaLaw.Scan.BadHistoryGeometricTail
