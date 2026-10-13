@@ -28,8 +28,11 @@ so no gauge equivalence exists.
 Source: arXiv:1804.04964, Theorem 2, local source `paper_normal.tex`, line
 1209. The source treats injective PEPS as having nonzero-dimensional virtual
 bond spaces. The same missing positivity condition was identified for
-`edgeBlockedThreeSiteInjective` (#1366) and `physical_to_virtual_insertion`
-(#1370).
+`edgeBlockedThreeSiteInjective` and `physical_to_virtual_insertion`
+(`docs/paper-gaps/peps_injective_ft_section3_route.tex`). The library theorem
+`fundamentalTheorem_PEPS` takes the injective tensor hypothesis
+`Tensor.IsInjective`, which carries this convention; the general normal theorem
+still states positivity separately.
 -/
 
 namespace TNLean
