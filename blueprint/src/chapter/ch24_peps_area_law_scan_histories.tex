@@ -856,7 +856,9 @@ The following finite construction follows
         TNLean.PEPS.AreaLaw.Scan.positiveNear,
         TNLean.PEPS.AreaLaw.Scan.positiveNearMiddle}
     \leanok
-    Write $d(x)=\operatorname{dist}_\infty(x,T)$ and set
+    \uses{thm:al_scan_ambient_rows}
+    Let $T$ be finite and nonempty. Write
+    $d(x)=\operatorname{dist}_\infty(x,T)$ and set
     \begin{align}
         R_j & =\{x\in A:d(x)\le j\},   &
         Q_j & =\{x\in A:0<d(x)\le j\}.
@@ -865,6 +867,26 @@ The following finite construction follows
     $UY=(P_0\cup Y)\cap\{d>0\}$. These prefixes contain whole rows;
     the partially consumed nominal row contributes to the error estimate.
 \end{definition}
+
+\begin{theorem}[Positive-depth prefixes as ambient collars]
+    \label{thm:al_scan_positive_prefix_collars}
+    \lean{TNLean.PEPS.AreaLaw.Scan.positiveDepthPrefix_eq_filter_ambientDilation}
+    \leanok
+    \uses{def:al_scan_comparison_prefixes}
+    Let $T\subset\mathbb Z^2$ be finite and nonempty, and let $A$ be a
+    finite physical color. For every integer $j$, the positive-depth
+    prefix satisfies $Q_j=A\cap(T_{\max\{j,0\}}\setminus T)$.
+    These are the collars of \cite[Section~9]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scan_ambient_rows,def:al_scan_comparison_prefixes}
+    For $j\ge0$, the distance sublevel condition $d(x)\le j$ is
+    equivalent to $x\in T_j$, while $d(x)=0$ is equivalent to
+    $x\in T$ since $T_0=T$. Removing the zero-depth points gives
+    $Q_j=A\cap(T_j\setminus T)$. For $j<0$, nonnegativity of $d$
+    makes $Q_j$ empty, and $T_{\max\{j,0\}}\setminus T=T_0\setminus T$
+    is empty as well.
+\end{proof}
 
 \begin{lemma}[A fixed finite family of positive-depth prefixes]
     \label{lem:al_scan_finite_prefix_family}
