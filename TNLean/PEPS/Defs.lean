@@ -175,5 +175,25 @@ correct notion here. -/
 def IsVertexInjective (A : Tensor G d) : Prop :=
   ∀ v : V, LinearIndependent ℂ (A.component v)
 
+/-- An injective PEPS tensor in the sense of arXiv:1804.04964, Section 3: every
+vertex tensor is injective as a map from its virtual space to the physical space
+(`Papers/1804.04964/paper_normal.tex:979--981`), and every virtual bond space is
+nonzero.
+
+**Local fix (nonzero virtual spaces):** the source never names the second
+condition, but Section 3 uses it throughout, for instance when it picks reference
+virtual configurations and full matrix algebras on the bonds. The generic
+`Tensor` admits zero-dimensional bonds, and on such a bond the state vanishes and
+vertex injectivity holds vacuously, so the source's conclusions fail. The
+convention is carried here once; `IsVertexInjective` alone keeps zero bonds for
+the blocked, coarse and transported tensors of the proofs. Documented in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
+structure Tensor.IsInjective (A : Tensor G d) : Prop where
+  /-- Every vertex tensor is injective (`paper_normal.tex:979--981`). -/
+  isVertexInjective : IsVertexInjective A
+  /-- Every virtual bond space is nonzero, the standing convention of
+  arXiv:1804.04964, Section 3. -/
+  bondDim_pos : ∀ e : Edge G, 0 < A.bondDim e
+
 end PEPS
 end TNLean

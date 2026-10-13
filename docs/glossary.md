@@ -440,7 +440,28 @@ normalizations.
   `TNLean.PEPS.regionBlockedTensorInjective_of_isVertexInjective`.
 - **Caveat:** the last bridge requires
   `∀ e, 0 < A.bondDim e`. Function injectivity of the raw indexing function is
-  strictly weaker and is not the sanctioned notion.
+  strictly weaker and is not the sanctioned notion. Vertex injectivity alone
+  admits zero-dimensional bonds; source-facing theorems take
+  `TNLean.PEPS.Tensor.IsInjective` instead.
+
+#### `TNLean.PEPS.Tensor.IsInjective`
+
+- **Declaration:** `TNLean.PEPS.Tensor.IsInjective (A : Tensor G d) : Prop`, a
+  structure with fields `isVertexInjective : IsVertexInjective A` and
+  `bondDim_pos : ∀ e, 0 < A.bondDim e`.
+- **Defined in:** `TNLean/PEPS/Defs.lean`.
+- **Meaning:** an injective PEPS tensor: vertex injective, with every virtual
+  bond space nonzero.
+- **Source:** arXiv:1804.04964 §3, `Papers/1804.04964/paper_normal.tex:979-981`
+  for injectivity, together with the section's standing convention that virtual
+  bond spaces are nonzero; recorded as a Local fix in
+  `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+- **Sanctioned bridges:** the two field projections, the anonymous constructor,
+  and `TNLean.PEPS.Tensor.IsInjective.transport`.
+- **Caveat:** blocked, coarse, reindexed and transported tensors inside proofs
+  keep `IsVertexInjective` with positivity derived or stated separately; only
+  the source-facing theorems (the injective Fundamental Theorem, its uniqueness
+  clause, and their cycle and torus corollaries) take this structure.
 
 #### `TNLean.PEPS.RegionBlockedTensorInjective`
 
