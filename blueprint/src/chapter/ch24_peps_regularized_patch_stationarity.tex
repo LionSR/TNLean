@@ -190,3 +190,76 @@ Its marginals are those of the same final normalized vector defined in
     using the canonical identification $J$ in
     Definition~\ref{def:peps_patch_canonical_marginal}.
 \end{proof}
+
+% Source: OpenAI, Polynomial PEPS approximation of gapped square-grid ground states,
+% September 24, 2026, proof of Proposition 4.1, 03-patches.tex,
+% lines 123--154 (eq:patch-trace-stripping) and 170--178
+% (eq:patch-simplex-derivative).
+% Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\begin{theorem}[Trace pairing for an insertion in a nested product]
+    \label{thm:peps_patch_insertion_trace}
+    \lean{TNLean.PEPS.inner_regularizedPatchInsertion_eq_trace_of_outer_commute}
+    \uses{def:peps_patch_coordinate_insertion,
+        def:peps_patch_canonical_marginal}
+    Let $V$ be a finite set with finite-dimensional complex Hilbert spaces
+    $\mathcal H_v$, and let $X_0\subseteq\cdots\subseteq X_{m-1}\subseteq V$.
+    For each $k$, let $x_k$ be a positive semidefinite operator on
+    $\mathcal H_{X_k}$ and let $a_k\in\R$. Fix $b>0$ and an arbitrary
+    vector $\Omega\in\mathcal H_V$. Set
+    \begin{align*}
+        K_k     & =(x_k+bI_{X_k})^{-a_k/2}, & L_k & =\widehat{K_k}_{X_k}, \\
+        \Psi(x) & =L_{m-1}\cdots L_0\Omega, & F   & =\|\Psi(x)\|.
+    \end{align*}
+    Put $\phi=F^{-1}\Psi(x)$ when $F>0$, and $\phi=0$ when $F=0$.
+    Let $\rho_k$ be the canonical marginal of $\phi$ on $X_k$.
+    Fix $0\leq j<m$ and suppose that $[K_k,\rho_k]=0$ for every $k>j$.
+    For every complex operator $H$ on $\mathcal H_{X_j}$, the insertion
+    \begin{align*}
+        \mathcal I_j(H)
+         & =L_{m-1}\cdots L_{j+1}\widehat H_{X_j}L_{j-1}\cdots L_0\Omega
+    \end{align*}
+    satisfies
+    \begin{align}
+        \langle\Psi(x),\mathcal I_j(H)\rangle
+         & =F^2\operatorname{Tr}(\rho_j H K_j^{-1}).
+        \label{eq:peps_patch_insertion_trace}
+    \end{align}
+    Empty products are identities. The operators $x_k$ need only be
+    positive semidefinite, and the weights $a_k$ may be arbitrary real numbers.
+    This is the trace calculation used in the proof of
+    \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS}, before taking the real
+    part in the unitary and diagonal variations.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_patch_marginal_expectation,
+        thm:peps_patch_basis_relabelling}
+    If $F=0$, then $\Psi(x)=0$ and both sides of
+    (\ref{eq:peps_patch_insertion_trace}) vanish. Suppose that $F>0$.
+    Every $K_k$ is positive definite and invertible, and so is its identity
+    extension $L_k$. Set $A=L_{m-1}\cdots L_{j+1}$ and
+    $Y=\widehat{H K_j^{-1}}_{X_j}$. Cancellation in the ordered product gives
+    $\mathcal I_j(H)=A Y A^{-1}\Psi(x)$. Since $\Psi(x)=F\phi$ and $F$ is real,
+    \begin{align*}
+        \langle\Psi(x),\mathcal I_j(H)\rangle
+         & =F^2\langle\phi,A Y A^{-1}\phi\rangle.
+    \end{align*}
+    Choose sitewise orthonormal coordinates; the marginal transforms by the
+    same unitary relabelling, preserving the trace pairing. If $T$ is an
+    operator on $\mathcal H_{X_k}$ and $k>j$, the regional expectation identity,
+    cyclicity of the trace, and $[K_k,\rho_k]=0$ give
+    \begin{align*}
+        \langle\phi,L_k\widehat T_{X_k}L_k^{-1}\phi\rangle
+         & =\operatorname{Tr}(K_k^{-1}\rho_k K_k T)
+        =\operatorname{Tr}(\rho_k T)
+        =\langle\phi,\widehat T_{X_k}\phi\rangle.
+    \end{align*}
+    Apply this identity successively for $k=m-1,m-2,\ldots,j+1$.
+    At each step the remaining conjugated operator is supported on $X_k$,
+    because all its factors are supported on regions contained in $X_k$.
+    It follows that
+    $\langle\phi,A Y A^{-1}\phi\rangle
+        =\langle\phi,Y\phi\rangle
+        =\operatorname{Tr}(\rho_j H K_j^{-1})$, which proves the assertion.
+\end{proof}
