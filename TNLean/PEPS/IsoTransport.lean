@@ -292,6 +292,17 @@ theorem IsVertexInjective.transport {A : Tensor G d} (hA : IsVertexInjective A)
   rw [heq] at h
   exact h
 
+omit [Fintype V] [Fintype W] in
+/-- An injective PEPS tensor stays injective under transport along a graph
+isomorphism: vertex injectivity transports, and the bond dimensions are only
+reindexed by the edge action of the isomorphism.
+
+Source: arXiv:1804.04964, Applications section, lines 1807--1842 of
+`Papers/1804.04964/paper_normal.tex`. -/
+theorem Tensor.IsInjective.transport {A : Tensor G d} (hA : A.IsInjective)
+    (φ : G ≃g G') : (A.transport φ).IsInjective :=
+  ⟨hA.isVertexInjective.transport φ, fun e' => hA.bondDim_pos (Edge.map φ.symm e')⟩
+
 /-- The virtual configurations of `A.transport φ` correspond to those of `A` by the
 edge action of `φ`: a configuration on the edges of `G'` is the same data as a
 configuration on the edges of `G`, since the edges and their bond dimensions are

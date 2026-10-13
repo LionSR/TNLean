@@ -369,16 +369,18 @@ theorem FlagData.exists_blockCoordinates_of_equiv (F : FlagData M S C) (k : Fin 
 become the prescribed diagonal blocks: the corresponding block on a matched step, the `1 × 1`
 zero matrix on an unmatched step (P5 note, Theorem 7.7, clauses (ii) and (iii)). -/
 theorem FlagData.exists_blockCoordinates (F : FlagData M S C) (k : Fin F.r) :
-    ∃ ψ : Submodule.flagQuot F.cflag k ≃ₗ[ℂ] (Fin (slotSize D (F.label k)) → ℂ),
-      ∀ i : Fin d, LinearMap.toMatrix' (ψ.conj (LinearMap.flagQuotMap F.cflag
-        (Algebra.lsmul ℂ ℂ M (ofWord [i])) (F.lsmul_mem_cflag i) k)) =
-          blockOf D C i (F.label k) := by
+    ∃ ψ : Submodule.subquot (F.cflag k.castSucc) (F.cflag k.succ) ≃ₗ[ℂ]
+        (Fin (slotSize D (F.label k)) → ℂ),
+      ∀ i : Fin d, LinearMap.toMatrix' (ψ.conj (Submodule.subquotMap (F.cflag k.castSucc)
+        (F.cflag k.succ) (Algebra.lsmul ℂ ℂ M (ofWord [i])) (F.lsmul_mem_cflag i k.castSucc)
+        (F.lsmul_mem_cflag i k.succ))) = blockOf D C i (F.label k) := by
   classical
-  let β : Submodule.flagQuot F.cflag k ≃ₗ[ℂ] F.step k :=
+  let β : Submodule.subquot (F.cflag k.castSucc) (F.cflag k.succ) ≃ₗ[ℂ] F.step k :=
     Submodule.Quotient.restrictScalarsEquiv ℂ ((F.H k.castSucc).comap (F.H k.succ).subtype)
-  have hβ : ∀ (i : Fin d) (x : Submodule.flagQuot F.cflag k),
-      β (LinearMap.flagQuotMap F.cflag (Algebra.lsmul ℂ ℂ M (ofWord [i]))
-          (F.lsmul_mem_cflag i) k x) =
+  have hβ : ∀ (i : Fin d) (x : Submodule.subquot (F.cflag k.castSucc) (F.cflag k.succ)),
+      β (Submodule.subquotMap (F.cflag k.castSucc) (F.cflag k.succ)
+          (Algebra.lsmul ℂ ℂ M (ofWord [i])) (F.lsmul_mem_cflag i k.castSucc)
+          (F.lsmul_mem_cflag i k.succ) x) =
         (ofWord [i] : WordAlgebra d) • β x := by
     intro i x
     refine Submodule.Quotient.induction_on _ x fun v => ?_
@@ -386,29 +388,32 @@ theorem FlagData.exists_blockCoordinates (F : FlagData M S C) (k : Fin F.r) :
   rcases hk : F.label k with s | t
   · obtain ⟨ε⟩ := F.matched k s hk
     refine ⟨β.trans ((ε.restrictScalars ℂ).trans (C s.1).wordRep.asModuleEquiv), fun i => ?_⟩
-    have hcomm : ∀ x : Submodule.flagQuot F.cflag k,
-        (C s.1).wordRep.asModuleEquiv (ε (β (LinearMap.flagQuotMap F.cflag
-            (Algebra.lsmul ℂ ℂ M (ofWord [i])) (F.lsmul_mem_cflag i) k x))) =
+    have hcomm : ∀ x : Submodule.subquot (F.cflag k.castSucc) (F.cflag k.succ),
+        (C s.1).wordRep.asModuleEquiv (ε (β (Submodule.subquotMap (F.cflag k.castSucc)
+            (F.cflag k.succ) (Algebra.lsmul ℂ ℂ M (ofWord [i])) (F.lsmul_mem_cflag i k.castSucc)
+            (F.lsmul_mem_cflag i k.succ) x))) =
           Matrix.toLin' (C s.1 i) ((C s.1).wordRep.asModuleEquiv (ε (β x))) := by
       intro x
       rw [hβ i x, map_smul, MPSTensor.asModuleEquiv_ofWord_smul, Matrix.toLin'_apply]
       simp [Kraus.evalWord]
     have hmap : (β.trans ((ε.restrictScalars ℂ).trans (C s.1).wordRep.asModuleEquiv)).conj
-        (LinearMap.flagQuotMap F.cflag (Algebra.lsmul ℂ ℂ M (ofWord [i])) (F.lsmul_mem_cflag i) k) =
-          Matrix.toLin' (C s.1 i) := by
+        (Submodule.subquotMap (F.cflag k.castSucc) (F.cflag k.succ)
+          (Algebra.lsmul ℂ ℂ M (ofWord [i])) (F.lsmul_mem_cflag i k.castSucc)
+          (F.lsmul_mem_cflag i k.succ)) = Matrix.toLin' (C s.1 i) := by
       refine LinearMap.ext fun y => ?_
       rw [LinearEquiv.conj_apply_apply]
       simpa using hcomm ((β.trans ((ε.restrictScalars ℂ).trans
         (C s.1).wordRep.asModuleEquiv)).symm y)
     rw [hmap, LinearMap.toMatrix'_toLin']
     rfl
-  · have hdim : Module.finrank ℂ (Submodule.flagQuot F.cflag k) =
+  · have hdim : Module.finrank ℂ (Submodule.subquot (F.cflag k.castSucc) (F.cflag k.succ)) =
         Module.finrank ℂ (Fin (slotSize D (Sum.inr t : BlockIndex S F.z)) → ℂ) := by
       rw [β.finrank_eq, F.unmatched_finrank k t hk, Module.finrank_fintype_fun_eq_card]
       simp
     refine ⟨LinearEquiv.ofFinrankEq _ _ hdim, fun i => ?_⟩
-    have hzero : LinearMap.flagQuotMap F.cflag (Algebra.lsmul ℂ ℂ M (ofWord [i]))
-        (F.lsmul_mem_cflag i) k = 0 := by
+    have hzero : Submodule.subquotMap (F.cflag k.castSucc) (F.cflag k.succ)
+        (Algebra.lsmul ℂ ℂ M (ofWord [i])) (F.lsmul_mem_cflag i k.castSucc)
+        (F.lsmul_mem_cflag i k.succ) = 0 := by
       refine LinearMap.ext fun x => ?_
       have hx := hβ i x
       rw [F.unmatched_smul k t hk i (β x)] at hx

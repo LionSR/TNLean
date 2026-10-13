@@ -89,7 +89,8 @@ omit [DecidableRel G.Adj] in
 omit [Fintype V] in
 /-- The vertex product over `R` reads a global virtual configuration only through
 its `R`-incident edges. -/
-theorem regionProd_congr (R : Finset V) (σ : V → Fin d) {ζ ζ' : VirtualConfig A}
+theorem regionProd_congr {A : Tensor G d} (R : Finset V) (σ : V → Fin d)
+    {ζ ζ' : VirtualConfig A}
     (h : ∀ e : Edge G, IsRegionIncidentEdge (G := G) R e → ζ e = ζ' e) :
     (∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ ie.1) (σ w.1)) =
       ∏ w : {w : V // w ∈ R}, A.component w.1 (fun ie => ζ' ie.1) (σ w.1) := by
@@ -164,10 +165,9 @@ hypothesis bundle. -/
 
 /-- **Vertex-injective specialization of the normal-PEPS Fundamental Theorem.**
 
-For vertex-injective PEPS tensors `A`, `B` with positive bond dimensions on a
-connected graph, if `A` satisfies the normal blocking hypotheses and the two
-tensors generate the same state, then their defining tensors are gauge
-equivalent.
+For injective PEPS tensors `A`, `B` (`Tensor.IsInjective`) on a connected
+graph, if `A` satisfies the normal blocking hypotheses and the two tensors
+generate the same state, then their defining tensors are gauge equivalent.
 
 **Scope restriction (vertex injectivity):** This is the vertex-injective
 specialization of the general normal theorem of arXiv:1804.04964, Section 3
@@ -182,14 +182,12 @@ missing step is the region-level insertion-algebra isomorphism that produces the
 per-edge gauge after blocking, recorded as remaining obligation 4 of
 `docs/paper-gaps/peps_normal_ft_section3_route.tex`. -/
 theorem fundamentalTheorem_normalPEPS_of_vertexInjective (A B : Tensor G d)
-    (hA : IsVertexInjective A) (hB : IsVertexInjective B)
+    (hA : A.IsInjective) (hB : B.IsInjective)
     (hAB : SameState A B)
-    (hposA : ∀ e : Edge G, 0 < A.bondDim e)
-    (hposB : ∀ e : Edge G, 0 < B.bondDim e)
     (hconn : G.Connected)
     (_h : NormalPEPSBlockingHypotheses (regionInjectivityDataOf (G := G) A) G) :
     GaugeEquiv A B :=
-  fundamentalTheorem_PEPS A B hA hB hAB hposA hposB hconn
+  fundamentalTheorem_PEPS A B hA hB hAB hconn
 
 end PEPS
 end TNLean
