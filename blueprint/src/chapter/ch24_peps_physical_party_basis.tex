@@ -282,10 +282,10 @@ These coordinate identities apply to the local contractions in
     \leanok
     \lean{TNLean.PEPS.PairEffect.Layout.atParty_some_mapOwner_all}
     \uses{def:peps_affected_owner,def:peps_party_registers,def:peps_owner_layout}
-    Let $\mathcal P$ be any party set, let
-    $\mathcal Q=\mathcal P\sqcup\{\star\}$, and let $\iota:\mathcal P\to\mathcal Q$
+    Let $P$ be any party set, let
+    $Q=P\sqcup\{*\}$, and let $\iota:P\toQ$
     assign each original party its selected owner. For any register list $a$,
-    the registers of $\iota_*a$ at $\star$ form the empty list. At $\iota(p)$,
+    the registers of $\iota_*a$ at $*$ form the empty list. At $\iota(p)$,
     their list is $\iota_*(a_p)$, in the original order. This is the
     all-party selection in the proof of
     \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
@@ -293,7 +293,7 @@ These coordinate identities apply to the local contractions in
 
 \begin{proof}\leanok
     \uses{thm:peps_excluded_mapped_owners,thm:peps_basis_owner_restriction}
-    No original party maps to $\star$, so restriction to $\star$ is empty.
+    No original party maps to $*$, so restriction to $*$ is empty.
     An original register maps to $\iota(p)$ exactly when its owner is $p$.
     Restriction after relabelling therefore selects exactly $a_p$.
 \end{proof}
@@ -307,10 +307,10 @@ These coordinate identities apply to the local contractions in
     \leanok
     \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis}
     \uses{thm:peps_selected_physical_party_layouts,def:peps_singleton_physical_basis}
-    Let $d:\mathcal P\to\mathbb N$ specify the original physical dimensions,
+    Let $d:P\to\mathbb N$ specify the original physical dimensions,
     and let $\mathbf p$ list every original party exactly once. Set
-    $X_\star=\{\bullet\}$ and $X_{\iota(p)}=\{0,\ldots,d(p)-1\}$.
-    On the physical memory at $\star$, take the scalar basis with column $1$.
+    $X_*=\{\bullet\}$ and $X_{\iota(p)}=\{0,\ldots,d(p)-1\}$.
+    On the physical memory at $*$, take the scalar basis with column $1$.
     At $\iota(p)$, transport the original singleton physical basis
     $b_p$ along the canonical owner isometry and the register-list equality
     of Theorem~\ref{thm:peps_selected_physical_party_layouts}.
@@ -329,7 +329,7 @@ These coordinate identities apply to the local contractions in
     \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis_some_apply_heq}
     \uses{def:peps_selected_family_physical_basis}
     Under the canonical memory identifications,
-    $b^{\mathrm{sel}}_{\star,\bullet}=1$ and
+    $b^{\mathrm{sel}}_{*,\bullet}=1$ and
     $b^{\mathrm{sel}}_{\iota(p),j}=b_{p,j}$ for every $j\in X_{\iota(p)}$.
     No equality between independently chosen bases is required.
 \end{theorem}
@@ -367,7 +367,7 @@ These coordinate identities apply to the local contractions in
     $(\iota_*(a\mathbin{+\!+}c))_q
         =(\iota_*a)_q\mathbin{+\!+}(\iota_*c)_q$.
     Thus the physical coordinate has its original dimension at each
-    $\iota(p)$ and a single scalar coordinate at $\star$. The private bases
+    $\iota(p)$ and a single scalar coordinate at $*$. The private bases
     are arbitrary; their columns are retained in~(\ref{eq:peps_selected_physical_private_column}).
 \end{definition}
 
@@ -379,10 +379,10 @@ These coordinate identities apply to the local contractions in
     \leanok
     \uses{def:peps_selected_family_physical_basis}
     The canonical bijection
-    $e:\prod_{q\in\mathcal Q}X_q\to
-        \prod_{p\in\mathcal P}\{0,\ldots,d(p)-1\}$,
+    $e:\prod_{q\inQ}X_q\to
+        \prod_{p\inP}\{0,\ldots,d(p)-1\}$,
     given by $e(x)_p=x_{\iota(p)}$, removes the single exterior coordinate. Its inverse assigns
-    $x_\star=\bullet$ and $x_{\iota(p)}=y_p$.
+    $x_*=\bullet$ and $x_{\iota(p)}=y_p$.
     It neither enlarges a physical space nor requires that a party exist.
 \end{definition}
 
@@ -393,23 +393,23 @@ These coordinate identities apply to the local contractions in
     \lean{TNLean.PEPS.PairEffect.partyProductMatrix_selectedFamilyPhysicalConfig}
     \leanok
     \uses{def:peps_selected_physical_configurations}
-    Let $\mathcal P$ be finite, and let $M_q$ be arbitrary complex matrices
+    Let $P$ be finite, and let $M_q$ be arbitrary complex matrices
     indexed by $X_q$. In the original physical configurations,
     \begin{align}
-        \prod_{q\in\mathcal Q}
+        \prod_{q\inQ}
         (M_q)_{e^{-1}(x)_q,e^{-1}(y)_q}
-         & =(M_\star)_{\bullet,\bullet}
-        \prod_{p\in\mathcal P}(M_{\iota(p)})_{x_p,y_p}.
+         & =(M_*)_{\bullet,\bullet}
+        \prod_{p\inP}(M_{\iota(p)})_{x_p,y_p}.
         \label{eq:peps_selected_physical_product_scalar}
     \end{align}
-    The exterior scalar may vanish. If $\mathcal P$ is empty, the
+    The exterior scalar may vanish. If $P$ is empty, the
     product on the right is $1$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_selected_physical_configurations}
     Separate the exterior factor from the finite product over
-    $\mathcal Q=\mathcal P\sqcup\{\star\}$, and relabel the remaining
+    $Q=P\sqcup\{*\}$, and relabel the remaining
     factors by their original owners. No division is used.
 \end{proof}
 
@@ -424,10 +424,10 @@ These coordinate identities apply to the local contractions in
     \lean{TNLean.PEPS.PairEffect.mem_selectedPartyOrder}
     \uses{thm:peps_selected_physical_party_layouts}
     From the original order $\mathbf p=(p_0,\ldots,p_{m-1})$, form
-    $\mathbf q=(\star,\iota(p_0),\ldots,\iota(p_{m-1}))$.
+    $\mathbf q=(*,\iota(p_0),\ldots,\iota(p_{m-1}))$.
     If $\mathbf p$ lists every original party exactly once, then
     $\mathbf q$ lists every selected owner exactly once. If there is no
-    original party, $\mathbf q=(\star)$.
+    original party, $\mathbf q=(*)$.
 \end{definition}
 
 
@@ -463,7 +463,7 @@ These coordinate identities apply to the local contractions in
     $(\iota(p_0),\ldots,\iota(p_{m-1}))$. The owner isometry preserves the
     ordered physical factors. At each listed owner the selected local column
     is the original singleton column, so the grouped vector is their
-    ordered tensor product. Prepending $\star$ contributes only $1$,
+    ordered tensor product. Prepending $*$ contributes only $1$,
     since it owns no register. Transport back to the register memory to
     obtain~(\ref{eq:peps_selected_physical_basis_grouped}).
 \end{proof}
