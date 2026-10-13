@@ -3,6 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import QICLean.Entropy.MovementEtaRegional
+import QICLean.Entropy.RegionCovariance
 import TNLean.PEPS.Approximation.SquareAreaLawHamiltonian
 import TNLean.PEPS.AreaLaw.EdgeBoundaryCalculus
 import TNLean.PEPS.AreaLaw.TwoFamilies
@@ -64,46 +66,22 @@ section Relabel
 variable {V W : Type*} [Fintype V] [DecidableEq V] [Fintype W] [DecidableEq W]
 
 /-- Relabeling the sites of a finite product state along a bijection leaves the
-entropy of every region unchanged, once the region is relabeled as well.
-Source: polynomial-PEPS `01-preliminaries.tex`, lines 23–31, definition of `S_ω(A)`. -/
+entropy of every region unchanged, once the region is relabeled as well. This is
+the constant-dimension case of `Entropy.regionEntropy_relabel`, with identity
+basis maps. Source: polynomial-PEPS `01-preliminaries.tex`, lines 23–31,
+definition of `S_ω(A)`. -/
 theorem finiteProductEntropy_relabel (σ : V ≃ W) (q : ℕ)
     (Ω : EuclideanSpace ℂ (V → Fin q)) (A : Finset V) :
     FiniteProduct.entropy (fun _ : W ↦ Fin q)
         (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (σ.arrowCongr (Equiv.refl (Fin q))) Ω)
         (A.map σ.toEmbedding) =
       FiniteProduct.entropy (fun _ : V ↦ Fin q) Ω A := by
-  let g : {v // v ∈ A} ≃ {w // w ∈ A.map σ.toEmbedding} :=
-    σ.subtypeEquiv (by simp)
-  let gc : {v // v ∈ Aᶜ} ≃ {w // w ∈ (A.map σ.toEmbedding)ᶜ} :=
-    σ.subtypeEquiv (by simp)
-  let F := g.arrowCongr (Equiv.refl (Fin q))
-  let G := gc.arrowCongr (Equiv.refl (Fin q))
-  have hρ : FiniteProduct.reducedPure (fun _ : W ↦ Fin q)
-      (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (σ.arrowCongr (Equiv.refl (Fin q))) Ω)
-      (A.map σ.toEmbedding) =
-      (FiniteProduct.reducedPure (fun _ : V ↦ Fin q) Ω A).submatrix F.symm F.symm := by
-    ext a b
-    simp only [FiniteProduct.reducedPure, Matrix.submatrix_apply,
-      FiniteProduct.reducedMatrix_apply, Matrix.vecMulVec_apply, Pi.star_apply]
-    refine Fintype.sum_equiv G.symm _ _ (fun c ↦ ?_)
-    have key : ∀ a : FiniteProduct.Configuration (fun _ : W ↦ Fin q) (A.map σ.toEmbedding),
-        ((σ.arrowCongr (Equiv.refl (Fin q))).symm
-          ((FiniteProduct.splitEquiv (fun _ : W ↦ Fin q) (A.map σ.toEmbedding)).symm (a, c))) =
-        (FiniteProduct.splitEquiv (fun _ : V ↦ Fin q) A).symm (F.symm a, G.symm c) := by
-      intro a
-      funext v
-      by_cases hv : v ∈ A
-      · simp [FiniteProduct.splitEquiv, Equiv.piEquivPiSubtypeProd,
-          FiniteProduct.complementEquiv, hv, F, g]
-        rfl
-      · simp [FiniteProduct.splitEquiv, Equiv.piEquivPiSubtypeProd,
-          FiniteProduct.complementEquiv, hv, G, gc]
-    simp only [LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft'_apply, key]
-  unfold FiniteProduct.entropy
-  rw [vonNeumannEntropy_congr hρ _
-    ((Matrix.isHermitian_submatrix_equiv F.symm).mpr
-      (FiniteProduct.reducedPure_posSemidef _ Ω A).isHermitian)]
-  exact vonNeumannEntropy_submatrix_equiv F.symm _ _
+  have h := Entropy.regionEntropy_relabel (n := fun _ : V ↦ q) (n' := fun _ : W ↦ q)
+    A (A.map σ.toEmbedding) σ (by simp) (fun _ ↦ Equiv.refl _) Ω
+  rw [Entropy.regionEntropy_eq_entropy, Entropy.regionEntropy_eq_entropy] at h
+  convert h using 2
+  ext x
+  rfl
 
 end Relabel
 
