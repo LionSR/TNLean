@@ -49,6 +49,7 @@ import TNLean.PEPS.AreaLaw.Scan.BandUniqueness
 import TNLean.PEPS.AreaLaw.Scan.BootstrapBinaryEntropyCost
 import TNLean.PEPS.AreaLaw.Scan.BootstrapComparisonBudget
 import TNLean.PEPS.AreaLaw.Scan.BootstrapParameters
+import TNLean.PEPS.AreaLaw.Scan.BootstrapPrincipalEnergyBounds
 import TNLean.PEPS.AreaLaw.Scan.BootstrapReplicaAbsorption
 import TNLean.PEPS.AreaLaw.Scan.BootstrapRoundedClearance
 import TNLean.PEPS.AreaLaw.Scan.Budgets

@@ -66,6 +66,112 @@
     $e_0>0$.
 \end{proof}
 
+% Source: 08-scanner.tex, lines 371--384 and 731--755, adc7f124.
+% The fixed C n^{-1000} contribution and replica remainder are excluded from A_n.
+\begin{theorem}[Principal energy term at the fixed bootstrap scales]
+    \label{thm:area_law_bootstrap_principal_energy}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_principal_energy_bound}
+    \leanok
+    \uses{def:area_law_bootstrap_parameters}
+    Fix $0<e_0<1$, use the fixed parameters of
+    Definition~\ref{def:area_law_bootstrap_parameters}, and fix
+    $C,C_\delta\ge0$ and $\gamma,\gamma_\delta\in\mathbb R$.
+    For an integer $n\ge2$ and a real exponent $e\le e_0$, put
+    \begin{align}
+        L_n         & =\lfloor n^{1-\ell}\rfloor,                 &
+        m_n         & =\lfloor n^\mu\rfloor,                      &
+        K_n         & =\left\lfloor\frac{L_n}{8m_n}\right\rfloor, &
+        D_n         & =\lceil n^\kappa\rceil,                     & a_n & =\frac4{K_n},
+        \label{eq:al_principal_energy_scales}                                           \\
+        \delta_n(e) & =C_\delta n^\nu
+        \bigl(n^{e-\mu}+a_n^{1/4}(\log n)^{\gamma_\delta}\bigr),
+        \label{eq:al_principal_energy_density}                                          \\
+        A_n(e)      & =16C n^\ell D_n^2(\log n)^\gamma
+        \bigl(\delta_n(e)^{1/8}+n^{-\nu}+n^{-100}\bigr).
+        \label{eq:al_principal_energy_term}
+    \end{align}
+    All quotients have the convention $x/0=0$.
+    There is an integer $N\ge2$, depending only on the fixed constants
+    and $e_0$, such that every integer $n\ge N$ and every real $e\le e_0$
+    satisfy $A_n(e)\le n^{-\nu/2}$.
+    This is the numerical principal term in the energy estimate of
+    \cite[Section~9, lines~731--755]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:al_scanner_scale_facts,thm:area_law_bootstrap_margins}
+    Apply the numerical scale estimates with the fixed exponents and
+    auxiliary entropy exponent $\mu$. For some fixed $C_1\ge1$ and all
+    sufficiently large $n$, cancellation of the positive $D_n^2$ gives
+    \begin{align}
+        n   & \le C_1n^\ell m_nK_n\le C_1n^{\ell+\mu}K_n, &
+        a_n & \le4C_1n^{-(g_0-\ell)}.
+        \label{eq:al_principal_energy_band}
+    \end{align}
+    Increase the threshold so that
+    \begin{align}
+        4C_1                     & \le n^\nu,     & 2C_\delta & \le n^\nu, \\
+        (\log n)^{\gamma_\delta} & \le n^\nu,     &
+        192C(\log n)^\gamma      & \le n^{\nu/4}.
+    \end{align}
+    These bounds follow because $\nu>0$ and every fixed power of $\log n$
+    grows more slowly than every positive power of $n$.
+    The parameter inequalities $g_0-\ell\ge45\nu$ and
+    $e-\mu\le-10\nu$ hold uniformly for $e\le e_0$. Hence
+    \begin{align}
+        a_n         & \le n^{-44\nu}, \\
+        n^{e-\mu}+a_n^{1/4}(\log n)^{\gamma_\delta}
+                    & \le2n^{-10\nu}, \\
+        \delta_n(e) & \le n^{-8\nu}.
+    \end{align}
+    Since $\nu<100$, the sum in parentheses in $A_n(e)$ is at most
+    $3n^{-\nu}$. The ceiling bound $D_n\le2n^\kappa$ therefore yields
+    \begin{align}
+        A_n(e)
+         & \le192C(\log n)^\gamma n^{\ell+2\kappa-\nu} \\
+         & \le n^{\ell+2\kappa-3\nu/4}
+        \le n^{-\nu/2},
+    \end{align}
+    where the last inequality uses $\ell+2\kappa\le3\nu/100$.
+    Every enlargement of the threshold depends only on the fixed constants
+    and $e_0$.
+\end{proof}
+
+% Source: 08-scanner.tex, scanner:energy-output and scanner:bootstrap-energy,
+% lines 371--377 and 744--755, adc7f124.
+\begin{corollary}[Numerical energy bound at the fixed bootstrap scales]
+    \label{cor:area_law_bootstrap_energy_expression}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_energy_expression_bound}
+    \leanok
+    \uses{thm:area_law_bootstrap_principal_energy}
+    Under the hypotheses and notation of
+    Theorem~\ref{thm:area_law_bootstrap_principal_energy}, put
+    \begin{align}
+        E_n(e)=A_n(e)+Cn^{-1000}.
+        \label{eq:al_bootstrap_energy_expression}
+    \end{align}
+    There is an integer $N\ge2$, depending only on the fixed constants
+    and $e_0$, such that every integer $n\ge N$ and every real $e\le e_0$
+    satisfy
+    \begin{align}
+        E_n(e)\le(1+C)n^{-\nu/2}.
+        \label{eq:al_bootstrap_energy_expression_bound}
+    \end{align}
+    The threshold in the principal energy estimate suffices.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{thm:area_law_bootstrap_principal_energy,def:area_law_bootstrap_parameters}
+    Since $0<g_0<1/2$ and $\nu=g_0/1000$, we have $\nu/2<1000$.
+    For $n\ge2$, it follows that $n^{-1000}\le n^{-\nu/2}$.
+    As $C\ge0$, the principal energy estimate gives
+    \begin{align}
+        E_n(e)\le n^{-\nu/2}+Cn^{-\nu/2}=(1+C)n^{-\nu/2}.
+    \end{align}
+\end{proof}
+
+The fixed contribution $Cn^{-1000}$ is included in $E_n(e)$.
+The remaining error in the scanner energy estimate tends to zero with the
+replica index at each fixed system size.
+
 \begin{theorem}[Binary-entropy cost of the rounded bands]
     \label{thm:area_law_bootstrap_binary_entropy_cost}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binEntropy_cost_bound}
