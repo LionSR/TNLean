@@ -1,0 +1,62 @@
+\section{Entropy transfer on positive-depth prefixes}
+
+The scanner uses one truncated state on an entire family of comparison
+prefixes. The following consequence of entropy continuity transfers the
+original prefix bound to that same state. The original entropy estimate
+and the compact-region volume estimate remain explicit hypotheses.
+
+\begin{theorem}[Uniform entropy transfer on positive-depth prefixes]
+    \label{thm:al_positive_prefix_entropy_transfer}
+    \lean{TNLean.PEPS.AreaLaw.Scan.eventually_regionalEntropy_positiveDepthPrefix_le}
+    \leanok
+    \uses{def:al_scan_comparison_prefixes}
+    Fix an integer $q\ge1$, a real number $g>0$, and a real constant
+    $C_{\mathrm{vol}}$. For all sufficiently large integers $n$, the
+    following assertion holds uniformly over the finite domain and all
+    the data below.
+
+    Let $\Omega,\Omega_t$ be unit vectors on a finite domain $\Lambda$,
+    with local dimension $q$. For a subset $A\subseteq\Lambda$, an
+    integer-valued depth function $d$, and a natural number $L$, put
+    \begin{align}
+        R_L & =\{x\in A:d(x)\le L\},   &
+        Q_j & =\{x\in A:0<d(x)\le j\}.
+    \end{align}
+    Suppose $|R_L|\le C_{\mathrm{vol}}n^2$ and, writing $\Delta$ for
+    the trace distance between the two pure states, suppose
+    \begin{align}
+        \Delta & \le
+        \sqrt{\frac{2\min\{n^{-1000},g/4\}}{g}}.
+    \end{align}
+    Let $C_e,e\in\mathbb R$. If the original vector satisfies
+    \begin{align}
+        S_\Omega(Q_j) & \le C_e(nL^e+n)
+    \end{align}
+    for every natural number $j\le L$, then the same prefixes satisfy
+    \begin{align}
+        S_{\Omega_t}(Q_j) & \le C_e(nL^e+n)+n^{-247}.
+    \end{align}
+    The threshold depends only on $q,g,C_{\mathrm{vol}}$; in particular,
+    it precedes the choices of both vectors, the depth function, and
+    $C_e,e$. No sign condition on $C_e,e$ is needed for this implication.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:al_continuity_fixed_coefficient,
+        thm:area_law_regional_entropy_continuity}
+    For $n\ge1$, the assumed trace-distance estimate gives
+    $\Delta\le\sqrt{2/g}\,n^{-500}$. Also $Q_j\subseteq R_L$ whenever
+    $j\le L$. Entropy continuity
+    \cite[Lemma~2.1]{OpenAI2026AreaLaw}, applied in the regional dimension
+    $q^{|Q_j|}$, therefore bounds the entropy difference by
+    \begin{align}
+        |S_{\Omega_t}(Q_j)-S_\Omega(Q_j)|
+         & \le4\sqrt{\Delta}\,(1+|Q_j|\log q).
+    \end{align}
+    Set $C_0=\max\{4,C_{\mathrm{vol}}\}$. The volume bound and
+    $\log q\ge0$ bound the right-hand side by
+    $C_0\sqrt{\Delta}(1+C_0n^2\log q)$. The fixed-coefficient
+    continuity estimate makes this at most $n^{-247}$ for all
+    sufficiently large $n$, uniformly over all the supplied data.
+    Adding the original prefix entropy bound proves the assertion.
+\end{proof}

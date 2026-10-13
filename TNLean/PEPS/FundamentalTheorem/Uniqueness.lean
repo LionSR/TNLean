@@ -322,22 +322,16 @@ triangle with one-dimensional bonds refutes uniqueness modulo one global scalar.
 The graph-correct quotient is uniqueness modulo vertex-balanced edge scalars;
 see `docs/paper-gaps/peps_gauge_edge_scalars.tex`.
 
-**Scope restriction (positive bond dimensions):** The hypothesis
-`hpos : ∀ e, 0 < A.bondDim e` is the paper's standing normal-PEPS convention
-that every bond space is nonzero (it matches `hposA` in the existence direction
-`fundamentalTheorem_PEPS`). It is genuinely needed: if a bond space is empty the
-local virtual configurations at its endpoints vanish, the linear-independence
-hypothesis becomes vacuous there, and the gauges on a positive-dimensional bond
-adjacent to such an endpoint are left unconstrained, so the conclusion can fail.
-This restriction is recorded in `docs/paper-gaps/peps_gauge_edge_scalars.tex`.
+The injectivity hypothesis `Tensor.IsInjective` includes the source's convention
+that every bond space is nonzero; the proof uses it to make every bond index
+type nonempty.
 
 The proof extracts, at every vertex `v`, the local scalar ratios relating the
 two oriented edge-gauge families via `piProduct_forms_scalar`, then assembles
 them into one edge-scalar family `c` whose oriented product is `1` at every
 vertex (`IsVertexBalanced c`). -/
 theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
-    (hA : IsVertexInjective A)
-    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
+    (hA : A.IsInjective)
     (hDim : A.bondDim = B.bondDim)
     (X Y : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
     (hX : ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1))
@@ -362,15 +356,16 @@ theorem gauge_unique_mod_edge_scalars (A B : Tensor G d)
       (∏ ie : IncidentEdge G v, edgeGaugeAt A X v ie (η ie) (η' ie)) =
         ∏ ie : IncidentEdge G v, edgeGaugeAt A Y v ie (η ie) (η' ie) :=
     fun v η η' =>
-      edgeGaugeProduct_eq_of_gaugeVertex_eq (G := G) A hA v X Y (hGauge v) η η'
+      edgeGaugeProduct_eq_of_gaugeVertex_eq (G := G) A hA.isVertexInjective v X Y
+        (hGauge v) η η'
   -- Each oriented endpoint gauge is invertible.
   have hUnitX : ∀ (v : V) (ie : IncidentEdge G v), IsUnit (edgeGaugeAt A X v ie) :=
     fun v ie => ⟨⟨_, _, edgeGaugeAt_mul_inv A X v ie, edgeGaugeAtInv_mul A X v ie⟩, rfl⟩
   have hUnitY : ∀ (v : V) (ie : IncidentEdge G v), IsUnit (edgeGaugeAt A Y v ie) :=
     fun v ie => ⟨⟨_, _, edgeGaugeAt_mul_inv A Y v ie, edgeGaugeAtInv_mul A Y v ie⟩, rfl⟩
-  -- Bond spaces are nonempty under positive bond dimensions.
+  -- Bond spaces of an injective PEPS tensor are nonempty.
   have hneVertex : ∀ (v : V) (ie : IncidentEdge G v), Nonempty (Fin (A.bondDim ie.1)) :=
-    fun _ ie => ⟨⟨0, hpos ie.1⟩⟩
+    fun _ ie => ⟨⟨0, hA.bondDim_pos ie.1⟩⟩
   -- Step 3: at every vertex, extract the local proportionality scalars whose
   -- oriented product is one (`piProduct_forms_scalar`).
   have hvertex : ∀ v : V, ∃ cv : IncidentEdge G v → ℂ,
