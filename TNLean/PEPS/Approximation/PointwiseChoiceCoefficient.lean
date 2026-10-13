@@ -23,6 +23,8 @@ Independently formalized; no upstream Lean proof text reused.
 -/
 
 noncomputable section
+
+open scoped ComplexConjugate
 namespace TNLean.PEPS.PairEffect.SourceCircuit
 variable {P : Type}
 
@@ -97,5 +99,51 @@ theorem coefficient_all_eq_prod_nonemptyGateLocations {a b : Layout P}
       apply Finset.prod_congr rfl
       intro g _
       exact dite_eq_left ((isTouched_all_iff w g.1).mpr g.2)
+
+/-- The mixed coefficient of two all-party choices is the product of their
+mixed branch coefficients at the original nonempty gate occurrences.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–381 and
+565–573. -/
+theorem coefficient_all_mul_conj_eq_prod_nonemptyGateLocations
+    {a b : Layout P} (w : SourceCircuit a b)
+    (ξ ζ : Choices (fun _ : P => true) w) :
+    coefficient (fun _ : P => true) w ξ *
+        conj (coefficient (fun _ : P => true) w ζ) =
+      ∏ g : w.nonemptyGateLocations,
+        w.branchCoefficient g.1 (allChoicesNonemptyLabelsEquiv w ξ g) *
+          conj (w.branchCoefficient g.1 (allChoicesNonemptyLabelsEquiv w ζ g)) := by
+  classical
+  rw [coefficient_all_eq_prod_nonemptyGateLocations w ξ,
+    coefficient_all_eq_prod_nonemptyGateLocations w ζ, map_prod,
+    Finset.prod_mul_distrib]
+
+/-- Reindex the two all-party choice sums by their original gate-label
+functions, with the mixed coefficient written as a product over the nonempty
+original gate occurrences. The matrix summand is arbitrary.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–381 and
+565–573. -/
+theorem sum_coefficient_all_mul_conj_smul_eq_sum_nonemptyGateLabels
+    {a b : Layout P} (w : SourceCircuit a b) {m n : Type}
+    (K : Choices (fun _ : P => true) w → Choices (fun _ : P => true) w →
+      Matrix m n ℂ) :
+    (∑ ξ : Choices (fun _ : P => true) w,
+      ∑ ζ : Choices (fun _ : P => true) w,
+        (coefficient (fun _ : P => true) w ξ *
+          conj (coefficient (fun _ : P => true) w ζ)) • K ξ ζ) =
+      ∑ η : (g : w.nonemptyGateLocations) → w.branchLabels g.1,
+        ∑ θ : (g : w.nonemptyGateLocations) → w.branchLabels g.1,
+          (∏ g : w.nonemptyGateLocations,
+            w.branchCoefficient g.1 (η g) * conj (w.branchCoefficient g.1 (θ g))) •
+              K ((allChoicesNonemptyLabelsEquiv w).symm η)
+                ((allChoicesNonemptyLabelsEquiv w).symm θ) := by
+  classical
+  let e := allChoicesNonemptyLabelsEquiv w
+  simp_rw [coefficient_all_mul_conj_eq_prod_nonemptyGateLocations]
+  refine Fintype.sum_equiv e _ _ ?_
+  intro ξ
+  simp only [Equiv.symm_apply_apply]
+  refine Fintype.sum_equiv e _ _ ?_
+  intro ζ
+  simp only [Equiv.symm_apply_apply]
 
 end TNLean.PEPS.PairEffect.SourceCircuit
