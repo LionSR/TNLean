@@ -51,7 +51,7 @@ import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
-from blueprint_tex_tree import INPUT_RE, SOURCE_ROOT, input_path
+from blueprint_tex_tree import INPUT_RE, SOURCE_ROOT, input_path, strip_line_comment
 from tenkz_paths import TenkzMissing, tenkz_tex
 
 FIGURES = "figures"
@@ -105,7 +105,7 @@ class Env:
 
 def strip_comments(text: str) -> str:
     """Remove TeX comments, keeping every newline so offsets map to lines."""
-    return "\n".join(re.sub(r"(?<!\\)%.*", "", line) for line in text.split("\n"))
+    return "\n".join(strip_line_comment(line) for line in text.split("\n"))
 
 
 def line_of(text: str, offset: int) -> int:

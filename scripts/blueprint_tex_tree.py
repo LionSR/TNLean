@@ -24,6 +24,12 @@ INPUT_RE = re.compile(r"\\input\{([^}]+)\}")
 COMMENT_START_RE = re.compile(r"(?:^|[^\\])(?:\\\\)*%")
 
 
+def strip_line_comment(line: str) -> str:
+    """Drop the TeX comment, if any, from one line (``\\%`` and ``\\\\%`` differ)."""
+    match = COMMENT_START_RE.search(line)
+    return line if match is None else line[: match.end() - 1]
+
+
 def in_comment(source: str, offset: int) -> bool:
     """Whether ``offset`` in ``source`` lies inside a TeX comment."""
     line_start = source.rfind("\n", 0, offset) + 1
