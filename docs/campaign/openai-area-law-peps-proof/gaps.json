@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-10-12T17:30:00Z",
+  "reviewedAt": "2026-10-13T01:30:00Z",
   "entries": [
     {
       "id": "docs/paper-gaps/oai26_peps_patch_stationarity_gap.tex",
@@ -176,6 +176,8 @@
           8944,
           9002,
           9004,
+          9037,
+          9079,
           9123,
           9129
         ]
@@ -184,7 +186,7 @@
       "summary": "No problem with the paper has been found; Lean proves the final step from five earlier results, which are not yet all proved.",
       "context": "The proof sweeps a partition across a band around a target region in small random steps, while many copies of the ground state are filtered by operators built from the partition; an interpolation parameter moves the filter smoothly as a small region changes sides. Proposition 9.2 finds a point of the sweep where the filtered state has small excess energy; the later entropy bounds are applied there.",
       "claims": "Some step and some interpolation parameter make the excess energy <i>E</i><sub>def</sub> = (⟨<i>v</i>, <i class=\"ov\">H</i><i>v</i>⟩ − <i>E</i><sub>0</sub>)/<i>g</i> small, for every large number <i>k</i> of copies; here <i>v</i> is the filtered state of the copies, <i class=\"ov\">H</i> the Hamiltonian averaged over the copies, and <i>g</i> the gap. The proof combines the geometry of the sweep, entropy and energy transport (Proposition 7.4), norm comparisons (Proposition 8.1), entropy continuity and spectral tail bounds.",
-      "found": "Lean proves the step from the conclusions of those five results to the proposition; each conclusion enters as a hypothesis transcribing one displayed statement of the paper. Entropy and energy transport (Proposition 7.4) is now proved on its own, and Lean builds the random sweep, proves its main probability bounds and fixes the numerical constants of the continuity input. The five inputs are not yet constructed from the same original and truncated ground states of one physical system.",
+      "found": "Lean proves the step from the conclusions of those five results to the proposition; each conclusion enters as a hypothesis transcribing one displayed statement of the paper. Entropy and energy transport (Proposition 7.4) is now proved on its own, and its entropy bound is summed over every round of the actual sweep. Lean builds the random sweep, proves its main probability bounds, fixes the numerical constants of the continuity input, and bounds the spectra of the truncated ground state on the five regions of every step of the sweep with one common constant. The five inputs are not yet constructed from the same original and truncated ground states of one physical system.",
       "impact": "No. The proposition holds once its inputs are proved.",
       "plan": "Construct the five inputs for the actual sweep from one pair of ground states, the original and its truncation."
     },
@@ -209,6 +211,27 @@
       "found": "The proof uses four properties. Each party sits at a point of the grid enlarged to a power-of-two side. Each dyadic square has at most <i>B</i> parties. Each party has at most <i>K</i> links. Linked parties are within <i>c</i> times their scale. Proposition 7.1 is not yet formalized, so Lean proves the lemma for every network with these properties. Each grid edge then carries at most 8(2<i>c</i> + 1)<i>BK</i> links. If every link has dimension at most <i>D</i>, the result is a PEPS on the grid. Its bond dimension is at most max(<i>D</i>, 1)<sup>8(2<i>c</i>+1)<i>BK</i></sup>.",
       "impact": "No. The paper's lemma is the case of its own network.",
       "plan": "Formalize Proposition 7.1 and check the four properties for its network."
+    },
+    {
+      "id": "docs/paper-gaps/polypeps_product_reference_column.tex",
+      "repo": "TNLean",
+      "kind": "narrower",
+      "status": "open",
+      "paper": "peps",
+      "result": "Section 8.1 and Lemma 8.1, extracting a ket from the compressed state",
+      "issue": 8773,
+      "prs": {
+        "TNLean": [
+          9258
+        ]
+      },
+      "title": "A ket close to the ground state from supplied estimates",
+      "summary": "No problem with the paper has been found; Lean proves the step from the paper's three vector estimates to a ket close to the ground state, but does not yet construct the vectors that satisfy them.",
+      "context": "The construction produces a joint vector Ψ of the lattice and of private registers, close to the ground state Ω times a private reference vector Ξ. Tracing out the private registers and compressing gives a tensor network whose operator is close to the ground-state projector; fixing the inputs of that network to one basis configuration, a column of the operator, gives a network for a ket close to Ω, which is then placed on the <i>L</i> × <i>L</i> grid.",
+      "claims": "Section 8.1 builds Ψ and Ξ with ‖Ψ‖ ≤ 1, 1 − <i>CL</i><sup>−57</sup> ≤ ‖Ξ‖ ≤ 1 and ‖Ψ − Ω ⊗ Ξ‖ ≤ <i>CL</i><sup>−17</sup>, with <i>C</i> independent of the lattice size and the Hamiltonian. Lemma 8.1 extracts a nonzero column of the compressed operator that, after normalization, is close to Ω up to a phase; the network is then routed onto the grid.",
+      "found": "Lean proves the step for arbitrary vectors with these properties. Suppose ‖Ξ‖ ≥ 1 − δ, ‖Ψ − Ω ⊗ Ξ‖ ≤ ε, and a network already on the grid has operator σ within κ in trace norm of the traced state of Ψ, with α = κ + 2ε + 2δ &lt; 1. Then some input configuration gives a nonzero ket within 2α of Ω up to a phase after normalization, and every bond keeps its dimension. The compressed operator need not be positive or Hermitian. The vectors, their estimates and the compressed network are assumed rather than constructed. The statement also takes a network already routed onto the grid and then fixes its column, while the paper fixes the column first and routes afterwards.",
+      "impact": "No. The paper's step is the case of its own vectors and network.",
+      "plan": "Construct the actual vectors and the compression with constants independent of the lattice size and the Hamiltonian, then either route the compressed operator before fixing its column, or apply the same density estimate to the existing column result for the party network and route the ket."
     },
     {
       "id": "docs/paper-gaps/oai26_transport_crossband_commutation.tex",
