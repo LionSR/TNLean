@@ -63,6 +63,8 @@ theorem exists_bootstrap_principal_energy_bound
     (show 0 < BootstrapParameters.nu e₀ by
       dsimp only [BootstrapParameters.nu, BootstrapParameters.g0]
       linarith)).natCast_atTop
+  obtain ⟨hg₀, hg₀half, hℓ, hℓ₁, hκ⟩ :=
+    BootstrapParameters.parameter_bounds he₀ he₀₁
   done
 
 end TNLean.PEPS.AreaLaw.Scan
