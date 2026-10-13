@@ -87,6 +87,16 @@ theorem ThreeBlockGeometry.mem_complement_of_notMem {w : V} (hr : w ∉ g.red)
   simpa only [Finset.mem_union, hr, hb, false_or] using hw
 
 omit [LinearOrder V] in
+/-- A vertex lies in the complementary block exactly when it lies outside the red and
+blue blocks.
+Source: arXiv:1804.04964, Section 3, Lemma `injective_union`, lines 1324--1400. -/
+theorem ThreeBlockGeometry.mem_complement_iff {w : V} :
+    w ∈ g.complement ↔ w ∉ g.red ∧ w ∉ g.blue :=
+  ⟨fun hc => ⟨fun hr => Finset.disjoint_left.mp g.red_disjoint_complement hr hc,
+      fun hb => Finset.disjoint_left.mp g.blue_disjoint_complement hb hc⟩,
+    fun h => g.mem_complement_of_notMem h.1 h.2⟩
+
+omit [LinearOrder V] in
 /-- The set complement of the red block is the disjoint union of the blue and
 complement blocks.
 
@@ -279,26 +289,11 @@ theorem ThreeBlockGeometry.hostLabel_p2_eq_hostLabel_regionMerge_complement
   by_cases hinc : IsRegionIncidentEdge (G := G) g.complement f.1
   · -- A complement-incident host boundary edge is a boundary edge of the complement.
     have hbdry : IsRegionBoundaryEdge (G := G) g.complement f.1 := by
-      -- The host-side endpoint that lies in `univ \ red` is the complement endpoint;
-      -- the red endpoint lies outside the complement.
-      rcases f.2 with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
-      · -- `f.1.1 ∈ univ \ red`, `f.1.2 ∉ univ \ red` i.e. `f.1.2 ∈ red`.
-        have h2red : f.1.1.2 ∈ g.red := by
-          have := h2nothost; rw [Finset.mem_sdiff] at this; push Not at this
-          exact this (Finset.mem_univ _)
-        have h2notcompl : f.1.1.2 ∉ g.complement := fun hc =>
-          (Finset.disjoint_left.mp g.red_disjoint_complement) h2red hc
-        rcases hinc with hc1 | hc2
-        · refine Or.inl ⟨hc1, h2notcompl⟩
-        · exact absurd hc2 h2notcompl
-      · have h1red : f.1.1.1 ∈ g.red := by
-          have := h1nothost; rw [Finset.mem_sdiff] at this; push Not at this
-          exact this (Finset.mem_univ _)
-        have h1notcompl : f.1.1.1 ∉ g.complement := fun hc =>
-          (Finset.disjoint_left.mp g.red_disjoint_complement) h1red hc
-        rcases hinc with hc1 | hc2
-        · exact absurd hc1 h1notcompl
-        · refine Or.inr ⟨h1notcompl, hc2⟩
+      have h2 := f.2
+      have := @Finset.disjoint_left.mp g.red_disjoint_complement
+      simp only [IsRegionBoundaryEdge, IsRegionIncidentEdge, Finset.mem_sdiff, Finset.mem_univ,
+        true_and] at h2 hinc ⊢
+      grind
     rw [regionMerge_of_incident (G := G) A _ p hinc]
     have := congrFun hp ⟨f.1, hbdry⟩
     simpa [regionBoundaryLabel] using this.symm

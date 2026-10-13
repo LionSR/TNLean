@@ -26,18 +26,6 @@ Independently formalized; no upstream Lean proof text reused.
 noncomputable section
 open scoped TensorProduct
 open ContinuousLinearMap
-namespace TNLean.PEPS.PairEffect.Word
-
-/-- A source operation respects equality of the spectator register list and vector. -/
-theorem eval_source_apply_heq {P : Type} (s : PairSource P) {a b : Layout P} (h : a = b)
-    {x : Mem a} {y : Mem b} (hxy : HEq x y) :
-    HEq ((source s.distinct s.leftSpace s.rightSpace s.vector a).eval x)
-      ((source s.distinct s.leftSpace s.rightSpace s.vector b).eval y) := by
-  cases h
-  exact heq_of_eq (congrArg _ (eq_of_heq hxy))
-
-end TNLean.PEPS.PairEffect.Word
-
 namespace TNLean.PEPS.PairEffect.SourceInventory
 variable {P : Type}
 

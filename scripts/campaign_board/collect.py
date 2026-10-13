@@ -255,12 +255,11 @@ def collect_prs(cfg: dict, campaign_issues: set[int], cache: dict | None = None)
     prs = []
     for repo in cfg["repos"]:
         found = {p["number"]: p for p in search(f"repo:{repo['slug']} is:pr label:{cfg['label']}", PR_FIELDS)}
-        if not repo.get("primary"):
-            # Companion repositories may lag in labelling: also take recent PRs citing a campaign issue.
-            for p in search(f"repo:{repo['slug']} is:pr created:>={cfg['since']}", PR_FIELDS):
-                if {int(n) for n in cross_ref.findall(p["body"] or "")} & campaign_issues:
-                    found.setdefault(p["number"], p)
         refs = local_ref if repo.get("primary") else cross_ref
+        # Labelling lags in every repository: also take recent PRs citing a campaign issue.
+        for p in search(f"repo:{repo['slug']} is:pr created:>={cfg['since']}", PR_FIELDS):
+            if {int(n) for n in refs.findall(p["body"] or "")} & campaign_issues:
+                found.setdefault(p["number"], p)
         for p in found.values():
             referenced = {int(n) for n in refs.findall(p.pop("body") or "")}
             closing = {n["number"] for n in p.pop("closingIssuesReferences")["nodes"]}

@@ -138,13 +138,14 @@ complement legs followed by `complPhysical_surjective`). -/
 /-- Every pair of a red physical configuration `σ` and a host physical configuration `τ`
 is realized by the descent's physical legs for some coarse physical assignment `s`. -/
 theorem exists_descent_legs (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
-    (hP : F.frame.IsPartition) (hd : 0 < d)
+    (hP : F.frame.IsPartition)
     (σ : RegionPhysicalConfig (V := V) (d := d) F.frame.red)
     (τ : RegionPhysicalConfig (V := V) (d := d) (Finset.univ \ F.frame.red)) :
     ∃ s : Fin 3 → Fin (coarseDim V d),
       coarseProj F.frame.red (s 0) = σ ∧
         (F.frame.toThreeBlockGeometry hP).complPhysical
             (coarseProj F.frame.blue (s 1)) (coarseProj F.frame.complement (s 2)) = τ := by
+  have hd : 0 < d := F.frame.pos_dim
   obtain ⟨s0, hs0⟩ := coarseProj_surjective (V := V) (d := d) hd F.frame.red σ
   obtain ⟨⟨σblue, σcompl⟩, hτ⟩ :=
     (F.frame.toThreeBlockGeometry hP).complPhysical_surjective (d := d) τ
@@ -262,7 +263,7 @@ theorem regionInsertedCoeff_eq_of_coarse_eq
     (hP : F.frame.IsPartition) (hP' : F'.frame.IsPartition)
     (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
     (hcompl : F.frame.complement = F'.frame.complement)
-    (hbond : A.bondDim = B.bondDim) (hd : 0 < d)
+    (hbond : A.bondDim = B.bondDim)
     (hpos : ∀ g : Edge G, 0 < A.bondDim g)
     (e : Edge G)
     (hsingle : ∀ g : Edge G,
@@ -290,7 +291,7 @@ theorem regionInsertedCoeff_eq_of_coarse_eq
   classical
   set hsingle' := hsingle_transport F F' e hred hblue hsingle with hsingle'_def
   -- Realize `(σ, τ)` by the descent's physical legs on the first frame.
-  obtain ⟨s, hsσ, hsτ⟩ := exists_descent_legs F hP hd σ τ
+  obtain ⟨s, hsσ, hsτ⟩ := exists_descent_legs F hP σ τ
   -- The same coarse assignment realizes the transported legs on the second frame.
   have hsσ' : coarseProj F'.frame.red (s 0) = regionPhysicalConfigCongr (d := d) hred σ := by
     rw [← hsσ]; funext w; rfl
@@ -375,7 +376,7 @@ theorem exists_regionInsertedCoeff_eq_of_coherentFrames
     (hP : F.frame.IsPartition) (hP' : F'.frame.IsPartition)
     (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
     (hcompl : F.frame.complement = F'.frame.complement)
-    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
+    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B)
     (hpos : ∀ g : Edge G, 0 < A.bondDim g)
     (e : Edge G)
     (hsingle : ∀ g : Edge G,
@@ -406,7 +407,7 @@ theorem exists_regionInsertedCoeff_eq_of_coherentFrames
       (Matrix.reindexAlgEquiv ℂ ℂ (bridgeEquiv (G := G) F e hsingle).symm M) = M := by
     rw [← Matrix.symm_reindexAlgEquiv, AlgEquiv.apply_symm_apply]
   rw [← hMrecover]
-  exact regionInsertedCoeff_eq_of_coarse_eq F F' hP hP' hred hblue hcompl hbond hd hpos e
+  exact regionInsertedCoeff_eq_of_coarse_eq F F' hP hP' hred hblue hcompl hbond hpos e
     hsingle _ Ncoarse hN σ τ
 
 /-- **The single-region single-edge coefficient transfer.** Restating the coefficient
@@ -425,7 +426,7 @@ theorem exists_regionInsertedCoeff_eq_sharedRegion
     (hP : F.frame.IsPartition) (hP' : F'.frame.IsPartition)
     (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
     (hcompl : F.frame.complement = F'.frame.complement)
-    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
+    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B)
     (hpos : ∀ g : Edge G, 0 < A.bondDim g)
     (e : Edge G)
     (hsingle : ∀ g : Edge G,
@@ -439,7 +440,7 @@ theorem exists_regionInsertedCoeff_eq_sharedRegion
           regionInsertedCoeff (G := G) B F.frame.red
             (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) N σ τ := by
   obtain ⟨N, hN⟩ := exists_regionInsertedCoeff_eq_of_coherentFrames F F' hP hP' hred hblue
-    hcompl hbond hAB hd hpos e hsingle M
+    hcompl hbond hAB hpos e hsingle M
   refine ⟨N, fun σ τ => ?_⟩
   rw [hN σ τ, regionInsertedCoeff_congr (A := B) hred
     (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) N σ τ]
@@ -487,7 +488,7 @@ theorem regionEdgeTransfer_regionInsertedCoeff
     (hP : F.frame.IsPartition) (hP' : F'.frame.IsPartition)
     (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
     (hcompl : F.frame.complement = F'.frame.complement)
-    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
+    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B)
     (hpos : ∀ g : Edge G, 0 < A.bondDim g)
     (e : Edge G)
     (hsingle : ∀ g : Edge G,
@@ -520,7 +521,7 @@ theorem regionEdgeTransfer_regionInsertedCoeff
         (bridgeEquiv (G := G) F' e (hsingle_transport F F' e hred hblue hsingle)) Ncoarse := rfl
   rw [hRtransfer]
   conv_lhs => rw [← hMrecover]
-  refine regionInsertedCoeff_eq_of_coarse_eq F F' hP hP' hred hblue hcompl hbond hd hpos e
+  refine regionInsertedCoeff_eq_of_coarse_eq F F' hP hP' hred hblue hcompl hbond hpos e
     hsingle Mcoarse Ncoarse (fun s => ?_) σ τ
   exact edgeTransferMatrix_edgeInsertedCoeff (F.frame.coarseTensor) (F'.frame.coarseTensor)
     coarseEdgeRB (F.frame.coarseTensor_edgeBlockedThreeSiteInjective)
@@ -586,7 +587,7 @@ theorem regionEdgeTransfer_regionInsertedCoeff_sharedRegion
     (hP : F.frame.IsPartition) (hP' : F'.frame.IsPartition)
     (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
     (hcompl : F.frame.complement = F'.frame.complement)
-    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
+    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B)
     (hpos : ∀ g : Edge G, 0 < A.bondDim g)
     (e : Edge G)
     (hsingle : ∀ g : Edge G,
@@ -599,7 +600,7 @@ theorem regionEdgeTransfer_regionInsertedCoeff_sharedRegion
       regionInsertedCoeff (G := G) B F.frame.red
         (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle)
         (regionEdgeTransfer F F' hred hblue e hsingle M) σ τ := by
-  rw [regionEdgeTransfer_regionInsertedCoeff F F' hP hP' hred hblue hcompl hbond hAB hd hpos e
+  rw [regionEdgeTransfer_regionInsertedCoeff F F' hP hP' hred hblue hcompl hbond hAB hpos e
     hsingle M σ τ, regionInsertedCoeff_congr (A := B) hred
     (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle)
     (regionEdgeTransfer F F' hred hblue e hsingle M) σ τ]
@@ -629,7 +630,7 @@ theorem exists_regionInsertedCoeff_eq_sharedRegion_symm
     (hP : F.frame.IsPartition) (hP' : F'.frame.IsPartition)
     (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
     (hcompl : F.frame.complement = F'.frame.complement)
-    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
+    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B)
     (hposB : ∀ g : Edge G, 0 < B.bondDim g)
     (e : Edge G)
     (hsingle : ∀ g : Edge G,
@@ -646,7 +647,7 @@ theorem exists_regionInsertedCoeff_eq_sharedRegion_symm
   have hsingle' := hsingle_transport F F' e hred hblue hsingle
   -- The swapped frames give the `B → A` transfer over `F'.frame.red`.
   obtain ⟨M, hM⟩ := exists_regionInsertedCoeff_eq_sharedRegion F' F hP' hP hred.symm hblue.symm
-    hcompl.symm hbond.symm hAB.symm hd hposB e hsingle' N
+    hcompl.symm hbond.symm hAB.symm hposB e hsingle' N
   refine ⟨M, fun σ τ => ?_⟩
   rw [regionInsertedCoeff_congr (A := B) hred
       (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) N σ τ,
@@ -674,7 +675,7 @@ theorem coeffTransferMap_eq_regionEdgeTransfer
     (hP : F.frame.IsPartition) (hP' : F'.frame.IsPartition)
     (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
     (hcompl : F.frame.complement = F'.frame.complement)
-    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
+    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B)
     (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
     (e : Edge G)
     (hsingle : ∀ g : Edge G,
@@ -705,7 +706,7 @@ theorem coeffTransferMap_eq_regionEdgeTransfer
   rw [← coeffTransferMap_coeff A B F.frame.red
       (singleBoundaryEdge (G := G) A F.frame.red F.frame.blue e hsingle) htransferAB M σ τ,
     ← regionEdgeTransfer_regionInsertedCoeff_sharedRegion F F' hP hP' hred hblue hcompl hbond
-      hAB hd hposA e hsingle M σ τ]
+      hAB hposA e hsingle M σ τ]
 
 open scoped Classical in
 /-- **The per-edge gauge from two coherent frames.** Two coherent frames over `A` and `B`
@@ -726,7 +727,7 @@ theorem exists_regionEdgeGauge_of_coherentFrames
     (hP : F.frame.IsPartition) (hP' : F'.frame.IsPartition)
     (hred : F.frame.red = F'.frame.red) (hblue : F.frame.blue = F'.frame.blue)
     (hcompl : F.frame.complement = F'.frame.complement)
-    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
+    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B)
     (hposA : ∀ g : Edge G, 0 < A.bondDim g) (hposB : ∀ g : Edge G, 0 < B.bondDim g)
     (e : Edge G)
     (hsingle : ∀ g : Edge G,
@@ -809,7 +810,7 @@ theorem exists_regionEdgeGauge_of_coherentFrames
             regionInsertedCoeff (G := G) A F.frame.red f M σ τ =
               regionInsertedCoeff (G := G) B F.frame.red f N σ τ :=
     fun M => exists_regionInsertedCoeff_eq_sharedRegion F F' hP hP' hred hblue hcompl hbond hAB
-      hd hposA e hsingle M
+      hposA e hsingle M
   have htransferBA :
       ∀ N : Matrix (Fin (B.bondDim f.1)) (Fin (B.bondDim f.1)) ℂ,
         ∃ M : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
@@ -818,18 +819,18 @@ theorem exists_regionEdgeGauge_of_coherentFrames
             regionInsertedCoeff (G := G) B F.frame.red f N σ τ =
               regionInsertedCoeff (G := G) A F.frame.red f M σ τ :=
     fun N => exists_regionInsertedCoeff_eq_sharedRegion_symm F F' hP hP' hred hblue hcompl hbond
-      hAB hd hposB e hsingle N
+      hAB hposB e hsingle N
   -- The forward multiplicativity, via the concrete transfer's multiplicativity.
   have hmul : ∀ M M' : Matrix (Fin (A.bondDim f.1)) (Fin (A.bondDim f.1)) ℂ,
       coeffTransferMap (G := G) A B F.frame.red f htransferAB (M * M') =
         coeffTransferMap (G := G) A B F.frame.red f htransferAB M *
           coeffTransferMap (G := G) A B F.frame.red f htransferAB M' := by
     intro M M'
-    rw [coeffTransferMap_eq_regionEdgeTransfer F F' hP hP' hred hblue hcompl hbond hAB hd hposA
+    rw [coeffTransferMap_eq_regionEdgeTransfer F F' hP hP' hred hblue hcompl hbond hAB hposA
         hposB e hsingle htransferAB (M * M'),
-      coeffTransferMap_eq_regionEdgeTransfer F F' hP hP' hred hblue hcompl hbond hAB hd hposA
+      coeffTransferMap_eq_regionEdgeTransfer F F' hP hP' hred hblue hcompl hbond hAB hposA
         hposB e hsingle htransferAB M,
-      coeffTransferMap_eq_regionEdgeTransfer F F' hP hP' hred hblue hcompl hbond hAB hd hposA
+      coeffTransferMap_eq_regionEdgeTransfer F F' hP hP' hred hblue hcompl hbond hAB hposA
         hposB e hsingle htransferAB M']
     exact regionEdgeTransfer_mul F F' hP hP' hred hblue hcompl hbond hAB e hsingle M M'
   refine ⟨htransferAB, htransferBA, hmul, ?_⟩

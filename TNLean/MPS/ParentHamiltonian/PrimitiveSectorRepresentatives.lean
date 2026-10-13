@@ -52,9 +52,11 @@ have exactly the same open-boundary spaces. The fundamental theorem supplies
 the dimension equality and gauge transformation first.
 Source: arXiv:1606.00608, Proposition prop:char-BNT and Theorem thm1. -/
 theorem MPVBlockPhaseEquiv.groundSpaceES_eq_of_isNormalTensor
-    [NeZero DA] [NeZero DB] {A : MPSTensor d DA} {B : MPSTensor d DB}
+    {A : MPSTensor d DA} {B : MPSTensor d DB}
     (hA : IsNormalTensor A) (hB : IsNormalTensor B)
     (h : MPVBlockPhaseEquiv A B) (N : ℕ) : groundSpaceES A N = groundSpaceES B N := by
+  have : NeZero DA := ⟨hA.bondDim_ne_zero⟩
+  have : NeZero DB := ⟨hB.bondDim_ne_zero⟩
   obtain ⟨e, he⟩ := h.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor hA hB
   cases e
   exact he.groundSpaceES_eq N

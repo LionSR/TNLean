@@ -47,24 +47,9 @@ theorem ThreeBlockGeometry.isBlueBoundaryEdge_of_hostBoundary_blue
     (hb : (f.1.1 ∈ Finset.univ \ g.red ∧ f.1.1 ∈ g.blue) ∨
       (f.1.2 ∈ Finset.univ \ g.red ∧ f.1.2 ∈ g.blue)) :
     IsRegionBoundaryEdge (G := G) g.blue f := by
-  rcases hf with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
-  · -- `f.1.1 ∈ univ \ red`, `f.1.2 ∈ red`.
-    have h2red : f.1.2 ∈ g.red := by
-      rw [Finset.mem_sdiff] at h2nothost; push Not at h2nothost
-      exact h2nothost (Finset.mem_univ _)
-    have h2notblue : f.1.2 ∉ g.blue := fun hbl =>
-      (Finset.disjoint_left.mp g.red_disjoint_blue) h2red hbl
-    rcases hb with ⟨_, hb1⟩ | ⟨h2host', _⟩
-    · exact Or.inl ⟨hb1, h2notblue⟩
-    · exact absurd h2host' (by rw [Finset.mem_sdiff]; push Not; exact fun _ => h2red)
-  · have h1red : f.1.1 ∈ g.red := by
-      rw [Finset.mem_sdiff] at h1nothost; push Not at h1nothost
-      exact h1nothost (Finset.mem_univ _)
-    have h1notblue : f.1.1 ∉ g.blue := fun hbl =>
-      (Finset.disjoint_left.mp g.red_disjoint_blue) h1red hbl
-    rcases hb with ⟨h1host', _⟩ | ⟨_, hb2⟩
-    · exact absurd h1host' (by rw [Finset.mem_sdiff]; push Not; exact fun _ => h1red)
-    · exact Or.inr ⟨h1notblue, hb2⟩
+  have := @Finset.disjoint_left.mp g.red_disjoint_blue
+  simp only [IsRegionBoundaryEdge, Finset.mem_sdiff, Finset.mem_univ, true_and] at *
+  grind
 
 omit [DecidableRel G.Adj] in
 /-- A boundary edge of the host `univ \ red` whose host-side endpoint lies in the
@@ -74,23 +59,9 @@ theorem ThreeBlockGeometry.isComplBoundaryEdge_of_hostBoundary_compl
     (hc : (f.1.1 ∈ Finset.univ \ g.red ∧ f.1.1 ∈ g.complement) ∨
       (f.1.2 ∈ Finset.univ \ g.red ∧ f.1.2 ∈ g.complement)) :
     IsRegionBoundaryEdge (G := G) g.complement f := by
-  rcases hf with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
-  · have h2red : f.1.2 ∈ g.red := by
-      rw [Finset.mem_sdiff] at h2nothost; push Not at h2nothost
-      exact h2nothost (Finset.mem_univ _)
-    have h2notcompl : f.1.2 ∉ g.complement := fun hcl =>
-      (Finset.disjoint_left.mp g.red_disjoint_complement) h2red hcl
-    rcases hc with ⟨_, hc1⟩ | ⟨h2host', _⟩
-    · exact Or.inl ⟨hc1, h2notcompl⟩
-    · exact absurd h2host' (by rw [Finset.mem_sdiff]; push Not; exact fun _ => h2red)
-  · have h1red : f.1.1 ∈ g.red := by
-      rw [Finset.mem_sdiff] at h1nothost; push Not at h1nothost
-      exact h1nothost (Finset.mem_univ _)
-    have h1notcompl : f.1.1 ∉ g.complement := fun hcl =>
-      (Finset.disjoint_left.mp g.red_disjoint_complement) h1red hcl
-    rcases hc with ⟨h1host', _⟩ | ⟨_, hc2⟩
-    · exact absurd h1host' (by rw [Finset.mem_sdiff]; push Not; exact fun _ => h1red)
-    · exact Or.inr ⟨h1notcompl, hc2⟩
+  have := @Finset.disjoint_left.mp g.red_disjoint_complement
+  simp only [IsRegionBoundaryEdge, Finset.mem_sdiff, Finset.mem_univ, true_and] at *
+  grind
 
 omit [DecidableRel G.Adj] in
 /-- The host-side endpoint of a host boundary edge lies in the blue block or in the
@@ -99,13 +70,8 @@ theorem ThreeBlockGeometry.hostBoundary_hostVertex_mem_blue_or_compl
     {f : Edge G} (hf : IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) f) :
     (f.1.1 ∈ Finset.univ \ g.red ∧ (f.1.1 ∈ g.blue ∨ f.1.1 ∈ g.complement)) ∨
       (f.1.2 ∈ Finset.univ \ g.red ∧ (f.1.2 ∈ g.blue ∨ f.1.2 ∈ g.complement)) := by
-  have hsplit : ∀ w : V, w ∈ Finset.univ \ g.red → w ∈ g.blue ∨ w ∈ g.complement := by
-    intro w hw
-    rw [g.sdiff_red_eq_blue_union_complement] at hw
-    exact Finset.mem_union.mp hw
-  rcases hf with ⟨h1host, _⟩ | ⟨_, h2host⟩
-  · exact Or.inl ⟨h1host, hsplit _ h1host⟩
-  · exact Or.inr ⟨h2host, hsplit _ h2host⟩
+  simp only [IsRegionBoundaryEdge, Finset.mem_sdiff, Finset.mem_univ, true_and] at *
+  grind [g.mem_complement_iff]
 
 /-- The host boundary configuration reconstructed from a blue boundary configuration
 `bβ` and a complement boundary configuration `bc'`: on a host boundary edge whose
@@ -126,14 +92,8 @@ noncomputable def ThreeBlockGeometry.hostLabelFrom
       bβ ⟨f.1, g.isBlueBoundaryEdge_of_hostBoundary_blue f.2 hb⟩
     else
       bc' ⟨f.1, g.isComplBoundaryEdge_of_hostBoundary_compl f.2 (by
-        rcases g.hostBoundary_hostVertex_mem_blue_or_compl f.2 with
-          ⟨h1host, hbc⟩ | ⟨h2host, hbc⟩
-        · rcases hbc with hbl | hcl
-          · exact absurd (Or.inl ⟨h1host, hbl⟩) hb
-          · exact Or.inl ⟨h1host, hcl⟩
-        · rcases hbc with hbl | hcl
-          · exact absurd (Or.inr ⟨h2host, hbl⟩) hb
-          · exact Or.inr ⟨h2host, hcl⟩)⟩
+        have := g.hostBoundary_hostVertex_mem_blue_or_compl f.2
+        tauto)⟩
 
 /-- The host boundary label of a global virtual configuration `q` is reconstructed
 from its blue and complement boundary labels by `hostLabelFrom`. On a host boundary
@@ -311,34 +271,10 @@ endpoints lies in the red or blue block, both disjoint from the complement. -/
 theorem ThreeBlockGeometry.not_isRegionIncidentEdge_complement_of_blueRedCrossing
     {eg : Edge G} (hg : g.IsBlueRedCrossingEdge A eg) :
     ¬ IsRegionIncidentEdge (G := G) g.complement eg := by
-  -- If an endpoint were in the complement it would be outside both red and blue, so
-  -- both red and blue boundary edges would put their in-block endpoint on the other
-  -- vertex, forcing that vertex into both red and blue — impossible.
-  have key : ∀ w : V, w ∈ g.complement →
-      (eg.1.1 ∈ g.red ∧ eg.1.2 ∉ g.red ∨ eg.1.1 ∉ g.red ∧ eg.1.2 ∈ g.red) →
-      (eg.1.1 ∈ g.blue ∧ eg.1.2 ∉ g.blue ∨ eg.1.1 ∉ g.blue ∧ eg.1.2 ∈ g.blue) →
-      (w = eg.1.1 ∨ w = eg.1.2) → False := by
-    intro w hw hr hb hwg
-    have hwnotred : w ∉ g.red := fun h =>
-      (Finset.disjoint_left.mp g.red_disjoint_complement) h hw
-    have hwnotblue : w ∉ g.blue := fun h =>
-      (Finset.disjoint_left.mp g.blue_disjoint_complement) h hw
-    -- The other endpoint lies in both red and blue.
-    rcases hwg with hwg | hwg
-    · -- `w = eg.1.1`, so `eg.1.1 ∉ red, ∉ blue`; the edges put `eg.1.2 ∈ red ∩ blue`.
-      have h1notred : eg.1.1 ∉ g.red := hwg ▸ hwnotred
-      have h1notblue : eg.1.1 ∉ g.blue := hwg ▸ hwnotblue
-      have h2red : eg.1.2 ∈ g.red := (hr.resolve_left (fun h => h1notred h.1)).2
-      have h2blue : eg.1.2 ∈ g.blue := (hb.resolve_left (fun h => h1notblue h.1)).2
-      exact (Finset.disjoint_left.mp g.red_disjoint_blue) h2red h2blue
-    · have h2notred : eg.1.2 ∉ g.red := hwg ▸ hwnotred
-      have h2notblue : eg.1.2 ∉ g.blue := hwg ▸ hwnotblue
-      have h1red : eg.1.1 ∈ g.red := (hr.resolve_right (fun h => h2notred h.2)).1
-      have h1blue : eg.1.1 ∈ g.blue := (hb.resolve_right (fun h => h2notblue h.2)).1
-      exact (Finset.disjoint_left.mp g.red_disjoint_blue) h1red h1blue
-  rintro (hc | hc)
-  · exact key _ hc hg.1 hg.2 (Or.inl rfl)
-  · exact key _ hc hg.1 hg.2 (Or.inr rfl)
+  have := @Finset.disjoint_left.mp g.red_disjoint_blue
+  unfold ThreeBlockGeometry.IsBlueRedCrossingEdge IsRegionBoundaryEdge at hg
+  unfold IsRegionIncidentEdge
+  grind [g.mem_complement_iff]
 
 /-- The complement vertex product reads a global virtual configuration only through the
 complement-incident edges, which never include a red/blue crossing edge. Overwriting a
@@ -430,17 +366,8 @@ and one in `red` is the same as having one endpoint in `red` and one outside. -/
 theorem ThreeBlockGeometry.isRegionBoundaryEdge_red_of_host
     {eg : Edge G} (hg : IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) eg) :
     IsRegionBoundaryEdge (G := G) g.red eg := by
-  rcases hg with ⟨h1host, h2nothost⟩ | ⟨h1nothost, h2host⟩
-  · have h1notred : eg.1.1 ∉ g.red := (Finset.mem_sdiff.mp h1host).2
-    have h2red : eg.1.2 ∈ g.red := by
-      rw [Finset.mem_sdiff] at h2nothost; push Not at h2nothost
-      exact h2nothost (Finset.mem_univ _)
-    exact Or.inr ⟨h1notred, h2red⟩
-  · have h1red : eg.1.1 ∈ g.red := by
-      rw [Finset.mem_sdiff] at h1nothost; push Not at h1nothost
-      exact h1nothost (Finset.mem_univ _)
-    have h2notred : eg.1.2 ∉ g.red := (Finset.mem_sdiff.mp h2host).2
-    exact Or.inl ⟨h1red, h2notred⟩
+  simp only [IsRegionBoundaryEdge, Finset.mem_sdiff, Finset.mem_univ, true_and] at *
+  grind
 
 /-- A host boundary edge that is not a red/blue crossing edge is a complement boundary
 edge: its host-side endpoint lies in the complement (otherwise it would lie in the blue
@@ -449,23 +376,10 @@ theorem ThreeBlockGeometry.isComplBoundary_of_hostBoundary_not_crossing
     {eg : Edge G} (hg : IsRegionBoundaryEdge (G := G) (Finset.univ \ g.red) eg)
     (hncross : ¬ g.IsBlueRedCrossingEdge A eg) :
     IsRegionBoundaryEdge (G := G) g.complement eg := by
-  -- The host-side endpoint is in `blue ∪ complement`. If it were in blue, with the red
-  -- endpoint outside blue, the edge would be a blue boundary edge, making it a crossing
-  -- edge. So the host-side endpoint is in the complement.
-  rcases g.hostBoundary_hostVertex_mem_blue_or_compl hg with
-    ⟨h1host, hbc⟩ | ⟨h2host, hbc⟩
-  · rcases hbc with hbl | hcl
-    · exact absurd ⟨g.isRegionBoundaryEdge_red_of_host hg,
-        g.isBlueBoundaryEdge_of_hostBoundary_blue hg
-          (Or.inl ⟨h1host, hbl⟩)⟩ hncross
-    · exact g.isComplBoundaryEdge_of_hostBoundary_compl hg
-        (Or.inl ⟨h1host, hcl⟩)
-  · rcases hbc with hbl | hcl
-    · exact absurd ⟨g.isRegionBoundaryEdge_red_of_host hg,
-        g.isBlueBoundaryEdge_of_hostBoundary_blue hg
-          (Or.inr ⟨h2host, hbl⟩)⟩ hncross
-    · exact g.isComplBoundaryEdge_of_hostBoundary_compl hg
-        (Or.inr ⟨h2host, hcl⟩)
+  have := @Finset.disjoint_left.mp g.red_disjoint_blue
+  simp only [ThreeBlockGeometry.IsBlueRedCrossingEdge, IsRegionBoundaryEdge, Finset.mem_sdiff,
+    Finset.mem_univ, true_and] at *
+  grind [g.mem_complement_iff]
 
 open scoped Classical in
 /-- **The per-fiber complement weight collapse.** When some global configuration `q₀`
@@ -543,24 +457,10 @@ theorem ThreeBlockGeometry.regionBlockedWeight_complement_eq_smul_constrained
         -- its blue-side endpoint's neighbour lies in the complement, not red.
         have hred : ¬ IsRegionBoundaryEdge (G := G) g.red f.1 := fun hr => hcross ⟨hr, f.2⟩
         have hcompl : IsRegionBoundaryEdge (G := G) g.complement f.1 := by
-          -- `f` is a blue boundary edge: one endpoint in blue, one not. The non-blue
-          -- endpoint is not in red (else `f` would be a red boundary edge), so it is in
-          -- the complement.
-          rcases f.2 with ⟨h1blue, h2notblue⟩ | ⟨h1notblue, h2blue⟩
-          · have h2notred : f.1.1.2 ∉ g.red := fun h2red =>
-              hred (Or.inr ⟨fun h1red =>
-                (Finset.disjoint_left.mp g.red_disjoint_blue) h1red h1blue, h2red⟩)
-            have h2compl : f.1.1.2 ∈ g.complement :=
-              g.mem_complement_of_notMem h2notred h2notblue
-            exact Or.inr ⟨fun h1compl =>
-              (Finset.disjoint_left.mp g.blue_disjoint_complement) h1blue h1compl, h2compl⟩
-          · have h1notred : f.1.1.1 ∉ g.red := fun h1red =>
-              hred (Or.inl ⟨h1red, fun h2red =>
-                (Finset.disjoint_left.mp g.red_disjoint_blue) h2red h2blue⟩)
-            have h1compl : f.1.1.1 ∈ g.complement :=
-              g.mem_complement_of_notMem h1notred h1notblue
-            exact Or.inl ⟨h1compl, fun h2compl =>
-              (Finset.disjoint_left.mp g.blue_disjoint_complement) h2blue h2compl⟩
+          have h2 := f.2
+          have := @Finset.disjoint_left.mp g.red_disjoint_blue
+          unfold IsRegionBoundaryEdge at h2 hred ⊢
+          grind [g.mem_complement_iff]
         rw [hagree_compl ζ hζ.2 f.1 hcompl]
         exact congrFun hq0blue f
     · -- Complement label unchanged.

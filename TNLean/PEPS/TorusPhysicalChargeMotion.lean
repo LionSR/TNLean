@@ -88,15 +88,9 @@ theorem IsGIsometric.exists_unitary_torusPhysicalChargeMotion
           (torusPlaquetteRegion v) (fun b => Fintype.equivFin G (θ b)) =
         openRegionWeight (groupBondTensor (regularEdgeCharacterSite
           (torusIncidentSite a) (torusPlaquetteChargeMotionBond v false).1 χ p))
-          (torusPlaquetteRegion v) (fun b => Fintype.equivFin G (θ b)) := by
-  have hR : ((Γₜ).induce (torusPlaquetteRegion v : Set X)).Connected := by
-    have hs : (torusPlaquetteRegion v : Set X) =
-        {w | w ∈ (torusPlaquetteWalk v).support} := by
-      ext w
-      simp only [torusPlaquetteRegion, Finset.mem_coe, List.mem_toFinset, Set.mem_ofPred_eq]
-    rw [hs]
-    exact (torusPlaquetteWalk v).connected_induce_support
-  exact exists_unitary_regularPhysicalChargeMotion_of_connected (torusPlaquetteRegion v)
-    (torusIncidentSite a) (fun w => ha.isGIsometric_torusIncidentSite w) hR
+          (torusPlaquetteRegion v) (fun b => Fintype.equivFin G (θ b)) :=
+  exists_unitary_regularPhysicalChargeMotion_of_connected (torusPlaquetteRegion v)
+    (torusIncidentSite a) (fun w => ha.isGIsometric_torusIncidentSite w)
+    (connected_torusPlaquetteRegion v)
     (torusPlaquetteChargeMotionBond v true) (torusPlaquetteChargeMotionBond v false)
 end TNLean.PEPS
