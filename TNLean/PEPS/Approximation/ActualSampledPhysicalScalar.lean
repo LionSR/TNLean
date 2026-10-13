@@ -82,7 +82,8 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_scalar_smul_physicalSu
         (1 : Matrix PUnit PUnit ℂ) := by
     have h := partialSourceWord_sampled_none_partialTrace_eq_scalar
       w ψ k lam L R ξ ζ (j ∘ (allSourceSlotEquiv w).symm) ω (B none) (C none)
-    simpa only [M, sampledPhysicalFactor] using h
+    simp only [M, sampledPhysicalFactor]
+    exact h
   have hEntry (j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k) :
       M j none PUnit.unit PUnit.unit = w.emptyGateScalar * conj w.emptyGateScalar := by
     rw [hNone]

@@ -147,7 +147,9 @@ private theorem empty_party_words_mixed_partialTrace
     exact matrix_repr_eval_eq_toMatrix B B (v.restrict (partySelector q) hv).eval
   erw [hcoord] at h
   simp only [emptyPartyTraceIdentity, restrictedMixedPhysicalTrace] at h ⊢
-  convert h using 1 <;> funext row col <;> rfl
+  convert h using 1
+  funext row col
+  rfl
 
 namespace SourceCircuit
 variable {P : Type} {a b : Layout P}
