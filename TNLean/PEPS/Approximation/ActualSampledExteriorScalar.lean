@@ -145,7 +145,7 @@ private theorem empty_party_words_mixed_partialTrace
       LinearMap.toMatrix B.toBasis B.toBasis
         (v.restrict (partySelector q) hv).eval.toLinearMap := by
     exact matrix_repr_eval_eq_toMatrix B B (v.restrict (partySelector q) hv).eval
-  rw [hcoord] at h
+  erw [hcoord] at h
   simpa only [emptyPartyTraceIdentity, restrictedMixedPhysicalTrace] using h
 
 namespace SourceCircuit
