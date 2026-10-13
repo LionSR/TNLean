@@ -6,7 +6,7 @@ Authors: TNLean contributors
 import TNLean.Spectral.TransferOperatorGapInjective
 import QICLean.Channel.Peripheral.Spectrum
 import TNLean.Wielandt.Primitivity.EasyDirections
-import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducibleAux
+import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 import QICLean.Kraus.PrimitiveFixedPoint.FromPeripheral
 
 /-!

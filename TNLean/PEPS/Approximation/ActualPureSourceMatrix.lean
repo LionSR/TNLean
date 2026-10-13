@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.PurePreparedContraction
 import TNLean.PEPS.Approximation.ActualSourceColumnCoordinates
+import TNLean.PEPS.Approximation.PartialSourceWordEvaluation
 
 /-! # Chronological source columns on a recorded product input
 
