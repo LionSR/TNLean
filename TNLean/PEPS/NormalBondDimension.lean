@@ -48,8 +48,10 @@ chain (arXiv:1804.04964, lines 981--1009 and 1475--1498 of
 The two tensors of the general theorem are packaged as
 `NormalPEPSPairHypotheses`, which carries the nonzero virtual-space convention
 together with the shared blockings.  The one-edge and coherent-frame steps keep
-explicit positivity, because their tensors are only constrained through the
-blocking data.
+explicit positivity of the original tensors, because their tensors are only
+constrained through the blocking data; every caller supplies it from
+`NormalPEPSPairHypotheses` or from the explicit positivity hypotheses still
+stated by the normal corollaries on cycle, square and torus lattices.
 
 ## References
 

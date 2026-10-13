@@ -836,9 +836,9 @@ corresponding inserted coefficients agree.
 version of the Section 3 insertion-algebra correspondence. The extra hypotheses
 `hposA` and `hposB` are recorded in
 `docs/paper-gaps/peps_injective_ft_section3_route.tex`. Injectivity of the
-blocked chain does not imply them, and the lemma is applied to coarse blocked
-tensors whose positivity is derived, so they stay explicit rather than being
-carried by `Tensor.IsInjective`.
+blocked chain does not imply them, and the lemma sees its tensors only through
+that chain, so they stay explicit; its caller `exists_edgeGaugeFamily` receives
+them from the injective tensor hypothesis `Tensor.IsInjective`.
 
 The inserted-matrix correspondence $X \mapsto Y$ is built explicitly as the
 composition of algebra maps `edgeTransferMatrix`: insert $X$ on the right

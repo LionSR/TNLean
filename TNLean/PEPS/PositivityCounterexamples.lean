@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.NormalBondDimension
+import TNLean.PEPS.FundamentalTheorem
 
 /-!
-# The PEPS bond-dimension comparisons are false without positive bond dimensions
+# `fundamentalTheorem_PEPS` is false without positive bond dimensions
 
 This file gives a counterexample. Without positive virtual bond dimensions,
 vertex-injectivity and equality of all PEPS state coefficients do not imply
@@ -25,25 +25,21 @@ virtual-configuration spaces are empty, so both PEPS are vacuously
 vertex-injective and both have the zero state; but the bond dimensions disagree,
 so no gauge equivalence exists.
 
-The same witness meets every hypothesis of the one-edge step
-`bondDim_apply_eq_of_blockingData` except positivity. Around the edge `f3`, where
-the bond dimensions differ, the three blocks are the singletons `{0}`, `{2}` and
-`{1}`. Each singleton has a zero-dimensional boundary edge, so it has no boundary
-configurations and its blocked tensor is vacuously injective.
-`bondDimOfBlockingDataStatement_false` refutes that step without positivity.
-
 Source: arXiv:1804.04964, Theorem 2, local source `paper_normal.tex`, line
-1209. The source treats PEPS as having nonzero-dimensional virtual bond spaces.
-The same missing positivity condition was identified for
+1209. The source treats injective PEPS as having nonzero-dimensional virtual
+bond spaces. The same missing positivity condition was identified for
 `edgeBlockedThreeSiteInjective` and `physical_to_virtual_insertion`
-(`docs/paper-gaps/peps_injective_ft_section3_route.tex`). The source-facing
-theorems carry the convention in their tensor hypotheses: `fundamentalTheorem_PEPS`
-takes `Tensor.IsInjective`, and the general normal theorem
-`fundamentalTheorem_normalPEPS` takes `NormalPEPSPairHypotheses`. The one-edge
-and coherent-frame steps `bondDim_apply_eq_of_blockingData` and
-`bondDim_apply_eq_of_coherentFrames` constrain their tensors only through
-blocking data, and keep explicit positivity; the second refutation below shows
-that this positivity is needed.
+(`docs/paper-gaps/peps_injective_ft_section3_route.tex`). The library theorem
+`fundamentalTheorem_PEPS` takes the injective tensor hypothesis
+`Tensor.IsInjective`, and the general normal theorem
+`fundamentalTheorem_normalPEPS` takes `NormalPEPSPairHypotheses`; both carry
+this convention. The module is kept while the source-facing normal corollaries
+on fixed lattices still state tensor positivity explicitly:
+`fundamentalTheorem_normalMPS_cycle` and its uniqueness clause,
+`fundamentalTheorem_normalSquarePEPS_unconditional`,
+`bondDim_eq_of_normalTorusRectangle`,
+`fundamentalTheorem_normalTorusPEPS_unconditional` and
+`bondDim_eq_of_normalArcWindows_sameState`.
 -/
 
 namespace TNLean
@@ -218,75 +214,6 @@ theorem fundamentalTheoremPEPSStatement_false :
   intro hThm
   exact not_gaugeEquiv
     (hThm A3 B3 A3_vertexInjective B3_vertexInjective A3_B3_sameState)
-
-/-! ### Refutation of the one-edge blocking-data step without positivity -/
-
-/-- A region with a zero-dimensional boundary edge is vacuously injective: it has no
-boundary configurations. -/
-theorem regionBlockedTensorInjective_of_bondDim_eq_zero {V : Type*} [Fintype V]
-    [LinearOrder V] {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ} (A : Tensor G d)
-    (R : Finset V) (f : Edge G) (hf : IsRegionBoundaryEdge (G := G) R f)
-    (h0 : A.bondDim f = 0) : RegionBlockedTensorInjective (G := G) A R := by
-  have : IsEmpty (RegionBoundaryConfig (G := G) A R) := ⟨fun c => by
-    have h := c ⟨f, hf⟩
-    rw [h0] at h
-    exact h.elim0⟩
-  exact linearIndependent_empty_type
-
-/-- The blocking around `f3` into the singletons `{0}`, `{2}` and `{1}`, for a tensor whose
-only nonzero bond is `f3`. -/
-def blockingAtF3 (T : Tensor G3 2) (hT : ∀ h : Edge G3, h ≠ f3 → T.bondDim h = 0) :
-    NormalEdgeBlockingData (regionInjectivityDataOf (G := G3) T) G3 f3 where
-  red := {0}
-  blue := {2}
-  complement := {1}
-  left_mem_red := by decide
-  right_mem_blue := by decide
-  red_injective :=
-    regionBlockedTensorInjective_of_bondDim_eq_zero T {0} e3 (by decide) (hT e3 f3_ne_e3.symm)
-  blue_injective :=
-    regionBlockedTensorInjective_of_bondDim_eq_zero T {2} g3 (by decide) (hT g3 f3_ne_g3.symm)
-  complement_injective :=
-    regionBlockedTensorInjective_of_bondDim_eq_zero T {1} e3 (by decide) (hT e3 f3_ne_e3.symm)
-  red_disjoint_blue := by decide
-  red_disjoint_complement := by decide
-  blue_disjoint_complement := by decide
-  cover_univ := by decide
-
-theorem A3_bondDim_of_ne {h : Edge G3} (hh : h ≠ f3) : A3.bondDim h = 0 := by
-  simp [A3, bdA, hh]
-
-theorem B3_bondDim_of_ne {h : Edge G3} (hh : h ≠ f3) : B3.bondDim h = 0 := by
-  simp [B3, bdB, hh]
-
-/-- The edge `f3` is the only edge joining the blocks `{0}` and `{2}`. -/
-theorem isCrossingEdge_blockingAtF3 (g : Edge G3) :
-    IsCrossingEdge (G := G3) A3 {0} {2} g ↔ g = f3 := by
-  revert g
-  decide
-
-/-- The one-edge bond-dimension step of the general normal theorem, with the positivity
-hypotheses removed: shared red and blue blocks, the same state, positive physical dimension
-and a single crossing edge. -/
-def BondDimOfBlockingDataStatement : Prop :=
-  ∀ {V : Type} [Fintype V] [LinearOrder V] {G : SimpleGraph V} [DecidableRel G.Adj]
-    {d : ℕ} (A B : Tensor G d) (e : Edge G)
-    (DA : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) A) G e)
-    (DB : NormalEdgeBlockingData (regionInjectivityDataOf (G := G) B) G e),
-    DA.red = DB.red → DA.blue = DB.blue → SameState A B → 0 < d →
-    (∀ g : Edge G, IsCrossingEdge (G := G) A DA.red DA.blue g ↔ g = e) →
-    A.bondDim e = B.bondDim e
-
-/-- `bondDim_apply_eq_of_blockingData` does not hold without its positivity hypotheses: the
-witness `(G3, A3, B3)` with the singleton blocking around `f3` satisfies all the remaining
-hypotheses, yet the bond dimensions on `f3` are `1` and `2`. -/
-theorem bondDimOfBlockingDataStatement_false : ¬ BondDimOfBlockingDataStatement := by
-  intro hThm
-  have h := hThm A3 B3 f3 (blockingAtF3 A3 fun _ => A3_bondDim_of_ne)
-    (blockingAtF3 B3 fun _ => B3_bondDim_of_ne) rfl rfl A3_B3_sameState (by norm_num)
-    isCrossingEdge_blockingAtF3
-  rw [A3_bondDim, B3_bondDim, bdA_f3, bdB_f3] at h
-  exact absurd h (by decide)
 
 end FundamentalTheoremCounterexample
 end PEPS

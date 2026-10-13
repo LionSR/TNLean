@@ -119,10 +119,12 @@ data:
   region-reconciliation routes.
 - `physical_to_virtual_insertion` (`InsertionRealization.lean`). Its
   injectivity hypothesis is chain data, `EdgeBlockedThreeSiteInjective A e`,
-  and it is used on blocked tensors whose positivity is derived.
+  and it sees its tensors only through that chain. Its caller, through
+  `isEdgeBlockedInsertionAlgebraIsomorphism` and `exists_edgeGaugeFamily`,
+  takes positivity from `Tensor.IsInjective`.
 - `isEdgeBlockedInsertionAlgebraIsomorphism` (`InsertionAlgebra.lean`). Chain
-  data as well; its algebra equivalence is applied to the coarse chains in
-  `NormalBondDimension.lean`. Its scope-restriction marker no longer proposes
+  data as well; its caller `exists_edgeGaugeFamily` takes positivity from
+  `Tensor.IsInjective`. Its scope-restriction marker no longer proposes
   deriving positivity from injectivity, which is false.
 
 `NormalAbsorbedFamily.lean`, `NormalComparisonScalar.lean`,
@@ -142,8 +144,7 @@ the torus window corollary, is the remaining work.
 
 ## Counterexample modules
 
-Both modules are kept. Each still justifies an explicit positivity hypothesis
-of a library theorem whose other hypotheses its witness meets.
+Both modules are kept, and this pass adds no new refutation.
 
 - `TNLean/PEPS/PositivityCounterexamples.lean`.
   - `fundamentalTheoremPEPSStatement_false` refutes the injective Fundamental
@@ -151,18 +152,19 @@ of a library theorem whose other hypotheses its witness meets.
     hypothesis set any more: the injective theorems take `Tensor.IsInjective`,
     and the general normal theorem and `bondDim_eq_of_normalBlocking` take
     `NormalPEPSPairHypotheses`. Both interfaces exclude the triangle witness.
-  - This pass adds `bondDimOfBlockingDataStatement_false`. It is a checked
-    proof of what the previous note recorded by hand: around the edge where
-    the bond dimensions differ, the singleton blocks `{0}`, `{2}` and `{1}` have
-    zero-dimensional boundary edges, so their injectivity holds vacuously. The
-    triangle witness therefore meets every hypothesis of
-    `bondDim_apply_eq_of_blockingData` except positivity. That step keeps
-    explicit positivity, and this refutation justifies it.
+  - The module is kept while the source-facing normal corollaries on fixed
+    lattices listed above still state tensor positivity explicitly.
+  - The one-edge step `bondDim_apply_eq_of_blockingData` keeps explicit
+    positivity of the original tensors. It is an internal step that cites no
+    source statement as its hypothesis set, and every caller supplies the
+    positivity from `NormalPEPSPairHypotheses` or from the fixed-lattice
+    corollaries, so it needs no counterexample.
 - `TNLean/PEPS/PhysicalToVirtualCounterexample.lean` refutes
   `physical_to_virtual_insertion` without positivity. That theorem keeps
   `hpos` explicit, and its witness satisfies `EdgeBlockedThreeSiteInjective`.
 
 The fixed-lattice theorems listed above are on cycle, square and torus graphs.
-The triangle witness is the cycle on three vertices. Its graph `G3` is not
+The triangle witness is the cycle on three vertices, but its graph `G3` is not
 literally `SimpleGraph.cycleGraph 3`, so it does not instantiate the cycle
-corollary as stated. Neither module's deletion depends on those theorems.
+corollary as stated. Deleting `PositivityCounterexamples.lean` is left to the
+pass that carries the convention through those corollaries.
