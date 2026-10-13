@@ -82,7 +82,6 @@ def sampledPhysicalFactor
     (sources_partialSourceWord w ψ ξ) (sources_partialSourceWord w ψ ζ)
     (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω) (B q) (C q)
 
-set_option maxHeartbeats 800000 in
 open Classical in
 /-- In the original physical configurations, the actual sampled coordinate
 trace is a sum of products of local physical traces, retaining the exterior
