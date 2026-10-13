@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Tactic.Convert
 import TNLean.PEPS.Approximation.ActualSampledPartyPartialTrace
 import TNLean.PEPS.Approximation.SelectedPhysicalPrivateBasis
 import TNLean.PEPS.Approximation.SelectedPhysicalPartyGrouping
@@ -176,7 +177,8 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors
     w ψ k lam L R ξ ζ ω B (selectedPhysicalPrivateBasis (E := E) d ps hn hc garbage BG)
     (selectedPartyOrder ps) (selectedPartyOrder_nodup ps hn) (mem_selectedPartyOrder ps hc)
   have hphysical := sampledPhysicalFactorsEquality_of_partyProduct d h
-  simpa only [sampledPhysicalFactor, restrictedMixedPhysicalTrace, partialSourcePartyMatrix]
-    using hphysical
+  simp only [sampledPhysicalFactor, restrictedMixedPhysicalTrace, partialSourcePartyMatrix]
+    at hphysical ⊢
+  convert hphysical using 1
 
 end TNLean.PEPS.PairEffect.SourceCircuit
