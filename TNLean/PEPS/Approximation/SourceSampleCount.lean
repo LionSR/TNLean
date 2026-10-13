@@ -30,6 +30,22 @@ open TNLean.PEPS.Approximation
 variable {P : Type}
 
 open Classical in
+/-- Count sample positions on an abstract finite gate family before inserting
+its original circuit occurrences. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 568–588. -/
+private theorem card_sample_univ_eq_sum_pairSampleLabels {G : Type} [Fintype G]
+    (participants : G → Finset P) :
+    Fintype.card (DistributedOperatorContraction.Sample
+      (Finset.univ : Finset G) participants) =
+      ∑ g : G, (pairSampleLabels (participants g)).card := by
+  change Fintype.card (Σ g : {g : G // g ∈ Finset.univ},
+    {pair // pair ∈ pairSampleLabels (participants g.1)}) = _
+  rw [Fintype.card_sigma]
+  simp only [Fintype.card_coe]
+  exact (Equiv.subtypeUnivEquiv (fun g : G ↦ Finset.mem_univ g)).sum_comp
+    (fun g ↦ (pairSampleLabels (participants g)).card)
+
+open Classical in
 /-- The original ordered source slots are counted by the pair samples at each
 original nonempty gate occurrence. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 342–417 and 568–588. -/
@@ -39,13 +55,8 @@ theorem length_allSourceSlots_eq_sum_pairSampleLabels {a b : Layout P}
       ∑ g : w.nonemptyGateLocations, (pairSampleLabels (w.participants g.1)).card := by
   have hCard := Fintype.card_congr ((allSourceSlotEquiv w).trans (sourceSampleEquiv w))
   rw [Fintype.card_fin] at hCard
-  refine hCard.trans ?_
-  change Fintype.card (Σ g : {g : w.nonemptyGateLocations // g ∈ Finset.univ},
-    {pair // pair ∈ pairSampleLabels (w.participants g.1.1)}) = _
-  rw [Fintype.card_sigma]
-  simp only [Fintype.card_coe]
-  exact (Equiv.subtypeUnivEquiv (fun g : w.nonemptyGateLocations ↦
-    Finset.mem_univ g)).sum_comp (fun g ↦ (pairSampleLabels (w.participants g.1)).card)
+  exact hCard.trans (card_sample_univ_eq_sum_pairSampleLabels
+    (G := w.nonemptyGateLocations) (fun g ↦ w.participants g.1))
 
 open Classical in
 /-- The common sample averaging factor is the product of the averaging factors
