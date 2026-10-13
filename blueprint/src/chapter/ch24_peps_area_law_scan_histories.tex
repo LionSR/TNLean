@@ -1498,6 +1498,7 @@ The following finite construction follows
 \begin{theorem}[Initial normalization of the actual fill]
     \label{thm:al_scan_actual_initial_log_norm}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualFillData_initial_log_filteredNormSq_bound}
+    \leanok
     Fix a collar scan with positive offset and charge capacities,
     positive physical and auxiliary dimensions, and $a>0$.
     There exists $C\ge0$, chosen before the number $k\ge0$ of replicas
@@ -1510,7 +1511,7 @@ The following finite construction follows
     The real logarithm has value zero at zero. For a nonzero vector,
     this is the initial normalization estimate in the scanner argument.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:al_scan_actual_fill_transport,thm:al_scan_actual_fill_admission}
     The actual fill is admissible, and its band metrics commute.
     The polynomial transport-root floor supplies $C_0\ge0$, fixed
