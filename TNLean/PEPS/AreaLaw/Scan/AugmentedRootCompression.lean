@@ -58,6 +58,14 @@ theorem bandMetric_submatrix_augmentedReplicaConfigurationEquiv
             (augmentedReplicaConfigurationEquiv q d k).symm
             (augmentedReplicaConfigurationEquiv q d k).symm := by
   classical
+  have hmetric (Q : Finset (V ⊕ Bool)) :
+      replicaMetric (ιS q d) t k Q =
+        (replicaMetric (ιO q d) t k (Q.image augmentedSiteEquiv.symm)).submatrix
+          (augmentedReplicaConfigurationEquiv q d k).symm
+          (augmentedReplicaConfigurationEquiv q d k).symm := by
+    simpa only [Finset.image_image, Equiv.apply_symm_apply, Finset.image_id] using
+      replicaMetric_submatrix_augmentedReplicaConfigurationEquiv q d k t
+        (Q.image augmentedSiteEquiv.symm)
   done
 
 /-- The same actual root and supplied symmetric coordinates give the
