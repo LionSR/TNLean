@@ -7,12 +7,19 @@
 % units of t about the mark v; the dashed square is the rim of the treated
 % square of radius t, dashed where it is not an interface.  Solid lines are
 % the interfaces between the labels P (left), A (upper right) and B (lower
-% right).  The black dot is the true vertex: v before, v+(t,0) after; the
-% gray pill is the old vertex, now interior to P.  The tinted and untinted red
-% contours are the inner and outer holes at the true vertex, of radii h_n and
-% 2h_n, enlarged for visibility.  Lines are interface curves drawn through
-% glyphless junctions; they carry no tensor index, and each panel has empty
-% boundary signature.
+% right).  The red dot (species centre) is the true vertex, labelled v
+% before and v+(t,0) after; the gray pill, labelled "old v", is the old vertex, now interior to
+% P.  The two dotted strings are label leaders, not interfaces.  The bracket
+% t under the first panel spans the columns of v and of the rim's left side,
+% so it is the radius t of the treated square.  The red squares about the
+% true vertex are its encoded hole in the \holeglyph code (shared-spec 4.1,
+% H5): the inner square Q^- solid and untinted, the outer Q^+ dashed, of radii
+% h_n and 2h_n, enlarged for visibility (as in the source figure).  Lines are
+% interface curves drawn through glyphless junctions; they carry no tensor
+% index.
+% Boundary signature: each panel empty; the joiner is a step arrow, not a
+% relation.
+% Label macros: none.
 % Related: arealaw2d_repair_replacement is not a duplicate. This figure
 % homogenises a square to the surrounding label, which moves a true vertex
 % to the rim; the area-law repair keeps the eight rays and gives every new
@@ -22,6 +29,7 @@
     \begin{tenkz}[lattice={9x9}, bonds=none, size=s] % chktex 29
         \tndeclare{species}{hole}{hue=source:red}
         \tndeclare{species}{treated}{hue=source:gray}
+        \tndeclare{species}{centre}{hue=source:red}
         \tn[at=(1,1), skin=none]{}
         \tn[at=(1,2), skin=none]{}
         \tn[at=(1,3), skin=none]{}
@@ -62,7 +70,7 @@
         \tn[at=(5,2), skin=none]{}
         \tn[at=(5,3), skin=none]{}
         \tn[at=(5,4), skin=none]{}
-        \tn[at=(5,5), name=ptBeforeV, skin=dot, ports={0:virtual, 90:virtual, 270:virtual}]{}
+        \tn[at=(5,5), name=ptBeforeV, skin=dot, species=centre, size=l, ports={0:virtual, 90:virtual, 270:virtual}]{}
         \tn[at=(5,6), skin=none]{}
         \tn[at=(5,7), name=ptBefore57, skin=none, ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
         \tn[at=(5,8), skin=none]{}
@@ -104,10 +112,10 @@
         \tn[at=(9,8), skin=none]{}
         \tn[at=(9,9), skin=none]{}
         \tnwire{ptBefore15.270}{ptBefore35.90}
-        \tnwire{ptBefore35.270}{ptBeforeV.90}
-        \tnwire{ptBeforeV.270}{ptBefore75.90}
+        \tnwire[name=ptBeforeIfN]{ptBefore35.270}{ptBeforeV.90}
+        \tnwire[name=ptBeforeIfS]{ptBeforeV.270}{ptBefore75.90}
         \tnwire{ptBefore75.270}{ptBefore95.90}
-        \tnwire{ptBeforeV.0}{ptBefore57.180}
+        \tnwire[name=ptBeforeIfE]{ptBeforeV.0}{ptBefore57.180}
         \tnwire{ptBefore57.0}{ptBefore59.180}
         \tnwire[stroke=dashed, species=treated]{ptBefore35.0}{ptBefore37.180}
         \tnwire[stroke=dashed, species=treated]{ptBefore37.270}{ptBefore57.90}
@@ -116,16 +124,24 @@
         \tnwire[stroke=dashed, species=treated]{ptBefore75.180}{ptBefore73.0}
         \tnwire[stroke=dashed, species=treated]{ptBefore73.90}{ptBefore33.270}
         \tnwire[stroke=dashed, species=treated]{ptBefore33.0}{ptBefore35.180}
-        \tnmark[form=enclosure, species=hole, tint]{ptBeforeV}{}
-        \tnmark[form=enclosure, species=hole]{(4,4) .. (6,6)}{}
+        \tnmark[form=enclosure, species=hole]{ptBeforeV}{}
+        \tnwire[kind=string, species=hole, stroke=dashed, closed, route=orth, name=ptBeforeOuter,
+            cross={under at crossing of ptBeforeOuter and ptBeforeIfN,
+                    under at crossing of ptBeforeOuter and ptBeforeIfS,
+                    under at crossing of ptBeforeOuter and ptBeforeIfE},
+            via={0.3 n of 0.3 w of (4,4), 0.3 n of 0.3 e of (4,6),
+                    0.3 s of 0.3 e of (6,6), 0.3 s of 0.3 w of (6,4)}]
         \tnmark[form=label]{(4,2)}{$P$}
         \tnmark[form=label]{(2,8)}{$A$}
         \tnmark[form=label]{(8,8)}{$B$}
+        \tnmark[form=label, label pos=sw]{(5,5)}{$v$}
+        \tnmark[form=bracket, label pos=s]{(9,3) .. (9,5)}{$t$}
     \end{tenkz}
     $\longrightarrow$
     \begin{tenkz}[lattice={9x9}, bonds=none, size=s] % chktex 29
         \tndeclare{species}{hole}{hue=source:red}
         \tndeclare{species}{treated}{hue=source:gray}
+        \tndeclare{species}{centre}{hue=source:red}
         \tn[at=(1,1), skin=none]{}
         \tn[at=(1,2), skin=none]{}
         \tn[at=(1,3), skin=none]{}
@@ -168,7 +184,7 @@
         \tn[at=(5,4), skin=none]{}
         \tn[at=(5,5), name=ptAfterOld, skin=ring, species=treated]{}
         \tn[at=(5,6), skin=none]{}
-        \tn[at=(5,7), name=ptAfterV, skin=dot, ports={0:virtual, 90:virtual, 270:virtual}]{}
+        \tn[at=(5,7), name=ptAfterV, skin=dot, species=centre, size=l, ports={0:virtual, 90:virtual, 270:virtual}]{}
         \tn[at=(5,8), skin=none]{}
         \tn[at=(5,9), name=ptAfter59, skin=none, ports={180:virtual}]{}
         \tn[at=(6,1), skin=none]{}
@@ -209,19 +225,32 @@
         \tn[at=(9,9), skin=none]{}
         \tnwire{ptAfter15.270}{ptAfter35.90}
         \tnwire{ptAfter35.0}{ptAfter37.180}
-        \tnwire{ptAfter37.270}{ptAfterV.90}
-        \tnwire{ptAfterV.270}{ptAfter77.90}
+        \tnwire[name=ptAfterIfN]{ptAfter37.270}{ptAfterV.90}
+        \tnwire[name=ptAfterIfS]{ptAfterV.270}{ptAfter77.90}
         \tnwire{ptAfter77.180}{ptAfter75.0}
         \tnwire{ptAfter75.270}{ptAfter95.90}
-        \tnwire{ptAfterV.0}{ptAfter59.180}
+        \tnwire[name=ptAfterIfE]{ptAfterV.0}{ptAfter59.180}
         \tnwire[stroke=dashed, species=treated]{ptAfter35.180}{ptAfter33.0}
         \tnwire[stroke=dashed, species=treated]{ptAfter33.270}{ptAfter73.90}
-        \tnwire[stroke=dashed, species=treated]{ptAfter73.0}{ptAfter75.180}
-        \tnmark[form=enclosure, species=hole, tint]{ptAfterV}{}
-        \tnmark[form=enclosure, species=hole]{(4,6) .. (6,8)}{}
+        \tnwire[stroke=dashed, species=treated, name=ptAfterRimSouth]{ptAfter73.0}{ptAfter75.180}
+        \tnmark[form=enclosure, species=hole]{ptAfterV}{}
+        \tnwire[kind=string, species=hole, stroke=dashed, closed, route=orth, name=ptAfterOuter,
+            cross={under at crossing of ptAfterOuter and ptAfterIfN,
+                    under at crossing of ptAfterOuter and ptAfterIfS,
+                    under at crossing of ptAfterOuter and ptAfterIfE},
+            via={0.3 n of 0.3 w of (4,6), 0.3 n of 0.3 e of (4,8),
+                    0.3 s of 0.3 e of (6,8), 0.3 s of 0.3 w of (6,6)}]
         \tnmark[form=label]{(4,2)}{$P$}
         \tnmark[form=label]{(5,4)}{$P$}
         \tnmark[form=label]{(2,8)}{$A$}
         \tnmark[form=label]{(8,8)}{$B$}
+        \tnwire[kind=string, stroke=dotted, name=ptAfterNewLead,
+            cross={over at crossing of ptAfterNewLead and ptAfterOuter}]
+        {0.6 e of (6,8)}{0.3 s of 0.3 e of (5,7)}
+        \tnmark[form=label, label pos=e]{0.6 e of (6,8)}{$v+(t{,}0)$}
+        \tnwire[kind=string, stroke=dotted, name=ptAfterOldLead,
+            cross={over at crossing of ptAfterOldLead and ptAfterRimSouth}]
+        {1.2 n of 0.6 e of (9,3)}{0.3 s of 0.3 w of (5,5)}
+        \tnmark[form=label]{(9,3)}{$\mathrm{old}\ v$}
     \end{tenkz}
 \end{tenkzequation}

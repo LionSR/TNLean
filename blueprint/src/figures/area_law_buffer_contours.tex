@@ -1,6 +1,12 @@
 % Figure area_law_buffer_contours.
 % Owner: chapter/ch24_peps_area_law_initial_buffer.tex (thm:area_law_buffer_contours).
 % Used by: gapped-2d-notes AL Sec. 4 (Lemma 3.2 of the area-law paper, Move 1).
+% Ink-to-index: none (geometry only); red tint Q_0, black contours the two
+% dilations, grey frame Q, violet tints the admissible supports.
+% Boundary signature: empty.
+% Label macros: \tnlBcD{Q_0^{+d}}, \tnlBcDp{Q_0^{+d'}}; the area-law note
+% overrides them with the radii d and d' (a label +d would need about 8 mm
+% of pitch to clear the next contour).
 \begin{tenkzequation}
     % Source: arXiv OpenAI2026AreaLaw, sections/02-initial.tex:219--300
     % (lemma lem:initial-buffer and the contour separation in its proof);
@@ -15,12 +21,18 @@
     % (2,4),(3,4) is split by Q_0^{+d} and lies in Q_0^{+(d+R)} = Q_0^{+d'};
     % the pair (1,6),(2,6) is split by Q_0^{+d'} only. Since d+R<=d',
     % neither is split by both contours.
+    % Labels: Q_0, Q_0^{+d}, Q_0^{+d'} in one row between dot rows 4 and 5,
+    % each just east of its own contour and inside the next one; Q above
+    % its frame. South stations would sit on the dots of rows 6-8.
+    % Hues (shared-spec 4.1, H3/H4): supports violet, dilations neutral.
     % Not to scale: safety puts the cut endpoints Z at sup-norm distance
     % greater than D_0 size(Q) from Q, so Z lies far outside the picture.
     \tenkzkernel
     \begin{tenkz}[size=s, rows={wire,wire,wire,wire,wire,wire,wire,wire},
             cols=8, bonds=none]
-        \tndeclare{species}{support}{hue=source:orange!85!black}
+        \tndeclare{species}{support}{hue=source:violet!65!black}
+        \providecommand{\tnlBcD}{Q_0^{+d}}
+        \providecommand{\tnlBcDp}{Q_0^{+d'}}
         \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
         \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
         \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
@@ -30,9 +42,9 @@
         \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
         \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
         \tnmark[form=enclosure, species=selected, tint, label pos=e]{(4,4) .. (5,5)}{$Q_0$}
-        \tnmark[form=enclosure, species=secondary, label pos=e]{(3,3) .. (6,6)}{$Q_0^{+d}$}
-        \tnmark[form=enclosure, species=complement, label pos=e]{(2,2) .. (7,7)}{$Q_0^{+d'}$}
-        \tnmark[form=enclosure, label pos=e]{(1,1) .. (8,8)}{$Q$}
+        \tnmark[form=enclosure, species=neutral, label pos=e]{(3,3) .. (6,6)}{$\tnlBcD$}
+        \tnmark[form=enclosure, species=neutral, label pos=e]{(2,2) .. (7,7)}{$\tnlBcDp$}
+        \tnmark[form=enclosure, label pos=n]{(1,1) .. (8,8)}{$Q$}
         \tnmark[form=enclosure, species=support, tint]{{(2,4), (3,4)}}{}
         \tnmark[form=enclosure, species=support, tint]{{(1,6), (2,6)}}{}
     \end{tenkz}

@@ -5,27 +5,56 @@
 % Source: regular boundary cut in the proof of Theorem 6.9,
 % Papers/1001.3807/paper_v3.tex:1927--1984; this is the matrix
 % factorization used here, not a claim to reproduce the lattice geometry.
-% Ink-to-index: the T--S bond bundles all b crossing group labels into x.
-% C has physical indices p and q.
-% Boundary signature: (V,P)=(0,2).
-% T and S share a virtual basis without conjugation: the factor is S^T.
+% Ink-to-index: the T--S bond bundles all b crossing group labels into x
+% (labelled above the bond, the count below it). C has physical indices p
+% and q; each is drawn as a full-length leg (a skin=none extender atom) level
+% with the matching leg of T or S, and every index name sits above its wire,
+% off the equation axis.
+% Boundary signature: (V,P)=(0,2) in both panels.
+% T and S share a virtual basis without conjugation: the factor is S^T. The
+% label "= T S^T" after the right panel's q leg is a label mark, not a
+% joiner, so no relation is checked against it.
+% Both panels and the three boxes state size=l, so the inscribed names C, T,
+% S are set at full math size inside their boxes, never smaller than the
+% index names p, x, q (rule L1).
 % Label macros: \tnlCutWhole{C}, \tnlCutLeft{T}, \tnlCutRight{S}; the PEPS note
 % overrides them with Z, A, B (S maps to B, so the drawn factor is B^T).
 % Related: the entry's second display (C L = T) stays in the chapter; the notes
 % do not need it.
 \begin{tenkzequation}
     \tenkzkernel
-    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+    \begin{tenkz}[rows={wire}, cols=3, bonds=none, size=l]
         \providecommand{\tnlCutWhole}{C}
-        \tn[skin=box, ports={180:physical, 0:physical}]{\tnlCutWhole}
+        \tn[at=(1,1), name=cutWholeP, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tn[at=(1,2), name=cutWhole, skin=box, size=l,
+            ports={180:physical, 0:physical}]{\tnlCutWhole}
+        \tn[at=(1,3), name=cutWholeQ, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tnwire[name=cutWholeLegP]{cutWholeP.0}{cutWhole.180}
+        \tnmark[form=label, label pos=n]{on cutWholeLegP 0.3}{$p$}
+        \tnwire[name=cutWholeLegQ]{cutWhole.0}{cutWholeQ.180}
+        \tnmark[form=label, label pos=n]{on cutWholeLegQ 0.7}{$q$}
     \end{tenkz}
     $=$
-    \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+    \begin{tenkz}[rows={wire}, cols=5, bonds=none, size=l]
         \providecommand{\tnlCutLeft}{T}
         \providecommand{\tnlCutRight}{S}
-        \tn[name=cutLeft, ports={180:physical, 0:virtual}]{\tnlCutLeft}
-        \tn[at=(1,2), name=cutRight,
+        \tn[at=(1,2), name=cutLeft, skin=box, size=l,
+            ports={180:physical, 0:virtual}]{\tnlCutLeft}
+        \tn[at=(1,4), name=cutRight, skin=box, size=l,
             ports={180:virtual, 0:physical}]{\tnlCutRight}
-        \tnwire{cutLeft.0}{cutRight.180}
+        \tn[at=(1,1), name=cutLegP, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tn[at=(1,5), name=cutLegQ, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tnwire[name=cutWireP]{cutLegP.0}{cutLeft.180}
+        \tnmark[form=label, label pos=n]{on cutWireP 0.3}{$p$}
+        \tnwire[name=cutBundle]{cutLeft.0}{cutRight.180}
+        \tnwire[name=cutWireQ]{cutRight.0}{cutLegQ.180}
+        \tnmark[form=label, label pos=n]{on cutWireQ 0.7}{$q$}
+        \tnmark[form=label, label pos=n]{on cutBundle 0.5}{$x$}
+        \tnmark[form=label, label pos=s]{on cutBundle 0.5}{$b\text{ crossing edges}$}
+        \tnmark[form=label, label pos=e]{cutLegQ}{$\;=\tnlCutLeft\,\tnlCutRight^{\mathsf T}$}
     \end{tenkz}
 \end{tenkzequation}
