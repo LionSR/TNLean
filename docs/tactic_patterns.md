@@ -24,6 +24,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Actual sampled local physical matrices — promoted (2026-10-12)
+
+- **Pattern:** The same mixed physical trace, with independent chronological
+  choices and one original sample assignment, appeared in
+  `ActualSampledPhysicalFactors`, `ActualSampledPhysicalScalar` and
+  `ActualPureSampledPhysicalSum`.
+- **Promotion:** `SourceCircuit.sampledPhysicalFactor` records this matrix once
+  in `ActualSampledPhysicalFactors`. All three statements use that definition;
+  its physical indices are the original indices and its private basis is the
+  actual selected private basis. No scalar or norm is cancelled.
+- **Verification:** The existing physical-trace fixture checks the definition
+  by name, and its blueprint definition is marked complete.
+
 ### Reflected marked-chain scalar and gauge cancellation — promoted (2026-10-12)
 
 - **Pattern:** conjugate a double sum `∑ i j, star (x i) * K i j * y j`
@@ -7350,3 +7363,22 @@ spectral split → block extraction → MPV calculation → strict bounds
   geometric hypothesis. Exact root telescoping reuses Mathlib's
   `Fin.sum_univ_eq_sum_range` and `Finset.sum_range_sub'` rather than proving a
   second finite-sum cancellation theorem.
+
+
+### Restricted mixed physical coordinate trace — promoted (2026-10-13)
+
+- **Pattern:** Form the same mixed coordinate matrix from two restricted
+  source-to-output words and one restricted source-input word, then trace
+  the prescribed private output coordinates.
+- **Seen:** The local sampled factors in `ActualSampledPhysicalFactors`, the
+  empty-party scalar in `ActualSampledExteriorScalar`, and their comparison
+  in `ActualSampledPhysicalScalar` use this same trace.
+- **Abstraction:** `PairEffect.restrictedMixedPhysicalTrace` in
+  `RestrictedMixedPhysicalTrace.lean` owns the exact matrix expression.
+  The sampled factors and exterior scalar use the same definition; their
+  comparison retains that expression instead of expanding the circuit words.
+- **Notes:** The exterior computation identifies the coordinate-entry
+  matrix with `LinearMap.toMatrix` while its words are still arbitrary,
+  using the existing `matrix_repr_eval_eq_toMatrix`. The actual circuit
+  is substituted afterward. No hypotheses or proof limits are added.
+  The extracted definition has a named axiom check.
