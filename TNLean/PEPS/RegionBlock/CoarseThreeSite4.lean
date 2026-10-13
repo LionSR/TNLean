@@ -155,30 +155,11 @@ theorem not_crossing_of_crossing_disjoint {R R' R'' : Finset V}
     (hRR' : Disjoint R R') (hRR'' : Disjoint R R'') (hR'R'' : Disjoint R' R'') {g : Edge G}
     (h : IsCrossingEdge (G := G) A R R'' g) :
     ¬ IsCrossingEdge (G := G) A R R' g := by
-  rintro hbad
-  rcases h.1 with ⟨hR1, hR2⟩ | ⟨hR1, hR2⟩
-  · have hg1n'' : g.1.1 ∉ R'' := (Finset.disjoint_left.mp hRR'') hR1
-    have hg1n' : g.1.1 ∉ R' := (Finset.disjoint_left.mp hRR') hR1
-    have hg2'' : g.1.2 ∈ R'' := by
-      rcases h.2 with ⟨hc1, _⟩ | ⟨_, hc2⟩
-      · exact absurd hc1 hg1n''
-      · exact hc2
-    have hg2' : g.1.2 ∈ R' := by
-      rcases hbad.2 with ⟨hc1, _⟩ | ⟨_, hc2⟩
-      · exact absurd hc1 hg1n'
-      · exact hc2
-    exact (Finset.disjoint_left.mp hR'R'') hg2' hg2''
-  · have hg2n'' : g.1.2 ∉ R'' := (Finset.disjoint_left.mp hRR'') hR2
-    have hg2n' : g.1.2 ∉ R' := (Finset.disjoint_left.mp hRR') hR2
-    have hg1'' : g.1.1 ∈ R'' := by
-      rcases h.2 with ⟨hc1, _⟩ | ⟨_, hc2⟩
-      · exact hc1
-      · exact absurd hc2 hg2n''
-    have hg1' : g.1.1 ∈ R' := by
-      rcases hbad.2 with ⟨hc1, _⟩ | ⟨_, hc2⟩
-      · exact hc1
-      · exact absurd hc2 hg2n'
-    exact (Finset.disjoint_left.mp hR'R'') hg1' hg1''
+  have := @Finset.disjoint_left.mp hRR'
+  have := @Finset.disjoint_left.mp hRR''
+  have := @Finset.disjoint_left.mp hR'R''
+  unfold IsCrossingEdge IsRegionBoundaryEdge at *
+  grind
 
 variable (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
 

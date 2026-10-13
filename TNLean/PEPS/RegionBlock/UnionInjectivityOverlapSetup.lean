@@ -315,9 +315,8 @@ omit [Fintype V] [DecidableRel G.Adj] in
 /-- Both endpoints of a `P₁`--`P₀` crossing edge lie in `R₁`. -/
 theorem isOverlapCrossingEdge_both_mem_R₁ {R₁ R₂ : Finset V} {eg : Edge G}
     (h : IsOverlapCrossingEdge (G := G) R₁ R₂ eg) : eg.1.1 ∈ R₁ ∧ eg.1.2 ∈ R₁ := by
-  rcases h with ⟨h1, h2⟩ | ⟨h1, h2⟩
-  · exact ⟨(Finset.mem_inter.mp h1).1, (Finset.mem_sdiff.mp h2).1⟩
-  · exact ⟨(Finset.mem_sdiff.mp h1).1, (Finset.mem_inter.mp h2).1⟩
+  simp only [IsOverlapCrossingEdge, Finset.mem_inter, Finset.mem_sdiff] at h
+  grind
 
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- A `P₁`--`P₀` crossing edge is not a boundary edge of the union `R₁ ∪ R₂`: both
@@ -325,10 +324,9 @@ endpoints lie in `R₁ ⊆ R₁ ∪ R₂`. -/
 theorem not_isRegionBoundaryEdge_union_of_overlapCrossing {R₁ R₂ : Finset V} {eg : Edge G}
     (h : IsOverlapCrossingEdge (G := G) R₁ R₂ eg) :
     ¬ IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) eg := by
-  obtain ⟨h1, h2⟩ := isOverlapCrossingEdge_both_mem_R₁ (G := G) h
-  rintro (⟨_, h2'⟩ | ⟨h1', _⟩)
-  · exact h2' (Finset.mem_union_left _ h2)
-  · exact h1' (Finset.mem_union_left _ h1)
+  simp only [IsOverlapCrossingEdge, IsRegionBoundaryEdge, Finset.mem_union, Finset.mem_inter,
+    Finset.mem_sdiff] at *
+  grind
 
 end PEPS
 end TNLean

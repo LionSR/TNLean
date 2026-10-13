@@ -64,16 +64,8 @@ theorem isRegionBoundaryEdge_of_vIncident_regionIncident (R : Finset V) {v : V}
     (hv : v ∉ R) {e : Edge G} (hev : e.1.1 = v ∨ e.1.2 = v)
     (hinc : IsRegionIncidentEdge (G := G) R e) :
     IsRegionBoundaryEdge (G := G) R e := by
-  rcases hev with he | he
-  · -- `e.1.1 = v ∉ R`; incidence forces the other endpoint into `R`.
-    have h1 : e.1.1 ∉ R := by rw [he]; exact hv
-    rcases hinc with h | h
-    · exact absurd h h1
-    · exact Or.inr ⟨h1, h⟩
-  · have h2 : e.1.2 ∉ R := by rw [he]; exact hv
-    rcases hinc with h | h
-    · exact Or.inl ⟨h, h2⟩
-    · exact absurd h h2
+  simp only [IsRegionBoundaryEdge, IsRegionIncidentEdge] at *
+  grind
 
 omit [Fintype V] in
 /-- **Inserted-site consistency pins a local configuration to its bridge label.**
