@@ -109,6 +109,10 @@ theorem rootPath_augmented_compressed_bandProduct
   have hrecover : ZO.submatrix e.symm (id : Fin N → Fin N) = ZS := by
     simp only [ZO, Matrix.submatrix_submatrix, Function.comp_id, Equiv.self_comp_symm,
       Matrix.submatrix_id_id]
+  have hA (j : Σ h, Option (C h)) (g : Fin K) :
+      bandMetric (nS q d) t k (D.leafPart j g) =
+        (AO j g).submatrix e.symm e.symm :=
+    bandMetric_submatrix_augmentedReplicaConfigurationEquiv q d k t (D.leafPart j g)
   done
 
 end TNLean.PEPS.AreaLaw.Scan
