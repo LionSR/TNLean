@@ -105,6 +105,11 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
       Matrix.reindex_apply, Matrix.conjTranspose_submatrix, Matrix.submatrix_sub,
       Pi.sub_apply, Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using!
       embedOp_mem_supportedOperators_image a.injective (h.swapped_doubled_boundary_bound R).1
+  have hDn : ‖K' - K‖ ≤ 8 * J * (L : ℝ) ^ 2 := by
+    simpa only [K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
+      Matrix.submatrix_sub, Pi.sub_apply, Matrix.submatrix_mul_equiv,
+      Matrix.submatrix_submatrix] using!
+      (Matrix.l2_opNorm_reindex_equiv e _).trans_le (h.swapped_doubled_boundary_bound R).2
   done
 
 end TNLean.PEPS.Approximation
