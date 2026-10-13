@@ -213,6 +213,7 @@ import TNLean.PEPS.Approximation.PreparedSourceCorrections
 import TNLean.PEPS.Approximation.PreparedSourceGate
 import TNLean.PEPS.Approximation.PreparedSourceTransport
 import TNLean.PEPS.Approximation.PreparedSourceVectorDensity
+import TNLean.PEPS.Approximation.ProductReferenceColumn
 import TNLean.PEPS.Approximation.PurePhysicalCoefficient
 import TNLean.PEPS.Approximation.PurePreparedContraction
 import TNLean.PEPS.Approximation.PureSourceMatrix
@@ -328,11 +329,14 @@ import TNLean.PEPS.Approximation.WholeGroupNetwork
 import TNLean.PEPS.Approximation.WordAppendTail
 import TNLean.PEPS.Approximation.WordEvaluationTransport
 import TNLean.PEPS.Approximation.WordOwnerAppendTailTransport
+import TNLean.PEPS.Approximation.WordOwnerEvaluation
 import TNLean.PEPS.Approximation.WordOwnerMap
 import TNLean.PEPS.Approximation.WordOwnerRestriction
+import TNLean.PEPS.Approximation.WordOwnerRestrictionCommutation
 import TNLean.PEPS.Approximation.WordPartyCoordinates
 import TNLean.PEPS.Approximation.WordPartyMixedMatrix
 import TNLean.PEPS.Approximation.WordPermutation
 import TNLean.PEPS.Approximation.WordRestriction
 import TNLean.PEPS.Approximation.WordSelectivePartition
+import TNLean.PEPS.Approximation.WordStructuralCongruence
 import TNLean.PEPS.Approximation.ZeroPartyGates

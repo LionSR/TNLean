@@ -559,11 +559,49 @@ abstracted — record why, so it is not re-proposed).
   membership of both endpoints in both sets followed by `simp_all`.
 - **Seen:** six classifications in
   `PEPS/Approximation/WholeGroupContraction.lean` (proof of Lemma 6.2,
-  `05-frames.tex`, lines 143–157).
-- **Abstraction:** `grind` (no annotations added), after the same unfolding.
+  `05-frames.tex`, lines 143–157); under `PEPS/RegionBlock/`,
+  `CoarseThreeSiteCoherentFrame.lean`, `CoarseThreeSite4.lean`,
+  `UnionInjectivityGeneral.lean`, `UnionInjectivityGeneral2.lean`,
+  `UnionInjectivityOverlapSetup.lean`, `UnionInjectivityOverlap3.lean`,
+  `UnionInjectivityOverlapBridge.lean`, `InsertResidual.lean` and
+  `ScalarExtraction.lean`; and `PEPS/TorusWindowPeeling/BoundaryGeometry.lean`.
+- **Abstraction:** `grind` (no annotations added), after the same unfolding;
+  for region-block edge classifications, the endpoint lemmas
+  `TNLean.PEPS.IsCrossingEdge.of_incident`, `IsCrossingEdge.not_incident`
+  (`PEPS/RegionBlock/CoarseThreeSiteCoherentFrame.lean`) and
+  `boundary_right_mem`, `boundary_right_not_mem`
+  (`PEPS/RegionBlock/GaugeBridge.lean`).
 - **Notes:** the module elaborates slightly faster (about 7 s against 8 s
   locally). Use `grind` for further endpoint-membership splits of this shape
-  rather than a macro.
+  rather than a macro. Unfold first with
+  `simp only [IsRegionBoundaryEdge, IsRegionIncidentEdge] at *`, adding the
+  membership lemmas of the regions involved (`Finset.mem_union`,
+  `Finset.mem_inter`, `Finset.mem_sdiff`, `Finset.mem_insert`);
+  supply disjointness as `have := @Finset.disjoint_left.mp h`, and a
+  three-block cover as `grind [hP.mem_complement_iff]`.
+
+### Parent ground-space equivalences and ordered transports — promoted (2026-10-13)
+
+- **Pattern:** (a) a parent ground-space equivalence built as
+  `LinearEquiv.ofBijective` of a `codRestrict`ed transport, with injectivity
+  proved by cancelling a left inverse by hand; (b) an ordered-edge parent
+  transport statement proved in parallel with its oriented counterpart
+  (SCP10, arXiv:1001.3807, Theorem 5.7 and Section 7, lines 2938–3019).
+- **Seen:** (a) five equivalences, in `CopyCanonicalParentTransport.lean`,
+  `OrientedCopyParentTransport.lean`,
+  `GraphCoordinateCanonicalParentTransport.lean`,
+  `OrientedCoordinateParentTransport.lean` and
+  `RangePhysicalParentTransport.lean` under `PEPS/ParentHamiltonian/`;
+  (b) the ordered statements of `CopyCanonicalParentTransport.lean` and
+  `GraphCoordinateCanonicalParentTransport.lean`.
+- **Abstraction:** (a) `LinearMap.submoduleEquivOfInjOn`
+  (`PEPS/ParentHamiltonian/RegionPhysicalGroundSpaceTransport.lean`), with
+  injectivity from Mathlib's `Set.LeftInvOn.injOn`; (b) state the ordered
+  result as the oriented one at `o = fun _ => false`, through
+  `numberedGraphOrientedAveragingTensor_false` and
+  `graphNumberedBondFamilyMatrix_orientedBondCoordinateMatrix_false`.
+- **Notes:** the ordered modules import the oriented ones. No theorem
+  statement changed.
 
 ### Single-qubit plus-state positivity — promoted (2026-10-08)
 
@@ -6542,15 +6580,34 @@ spectral split → block extraction → MPV calculation → strict bounds
   than tensor identities. The addition case already uses `congrArg₂`,
   `eq_of_heq`, and `heq_of_eq`. The same core equality tools suffice for the
   head constructions; a generic lemma would only restate their congruence.
-- **Word identities (2026-10-12):** `WordOwnerAppendTailTransport` and
-  `AbsorbedRestriction` both compare chronological compositions, frames,
-  identities and list identifications at the word level after identifying
-  layouts. These are two occurrences of each pattern across two files.
-  Before a third occurrence, promote the corresponding word congruences
-  to a shared provider. This comparison is stronger than equality of
-  evaluated operators and can therefore be used before taking a local
-  part or restricting owners. The new transport has a named axiom check;
-  elaboration is pending.
+- **Word identities — promoted (2026-10-13):**
+  `WordOwnerAppendTailTransport`, `AbsorbedRestriction` and
+  `WordOwnerRestrictionCommutation` compare chronological compositions,
+  frames, identities, swaps and list identifications as constructed words.
+  Their shared congruences are `Word.comp_heq`, `Word.frame_heq`,
+  `Word.id_heq`, `Word.swap_heq` and `Word.castLayouts_heq` in
+  `WordStructuralCongruence`. Ten private primitive copies in the first
+  two modules are removed. The canonical `Word.mapOwner_castLayouts`
+  identity also supplies the relabelled cast comparison. These results
+  require word equality, so their use before restriction does not infer
+  equality of restrictions from equality of evaluated operators.
+  `Word.eval_heq` adds the evaluation consequence of structural word
+  equality under explicit input and output list identifications. It
+  replaces the two private evaluation-congruence proofs in
+  `AbsorbedRestriction` and `WordSelectedOwnerLocalPart`.
+  `Word.mapOwner_frameList_heq` gives the constructed-word identity for
+  owner relabelling of a framed register list. It replaces the two
+  private list-induction proofs in `WordOwnerAppendTailTransport` and
+  `WordSelectedOwnerLocalPart`; the incident-label source word uses this
+  same shared identity. Both results have exact named axiom checks.
+  Elaboration of the shared additions and refactored consumers is pending.
+- **Owner evaluation (2026-10-13):** `Word.eval_mapOwner_heq` in
+  `WordOwnerEvaluation` identifies the mapped and original operators under
+  equality of their ordered memory spaces. It uses the existing owner-memory
+  isometries and their pointwise heterogeneous identities. This comparison
+  can be applied to words whose restrictions have already been formed; it
+  does not assert that equal complete operators have equal restrictions.
+  A named axiom test covers the new result; elaboration is pending.
 - **Selected owner lists (2026-10-13):**
   `SourceCircuit.mapOwner_selected_originalLayout_eq` in
   `SelectedPartialSourceSlots` compares the selected original register lists
@@ -6559,7 +6616,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   the first selected register explicitly and reuses the unchanged tail
   identity. Circuit and prepared-input comparisons can use this shared result
   with `Layout.restrict_mapOwner`; those further public uses remain planned.
-  Its named check is in `SelectedPartialSourceSlotsAxioms`; elaboration is pending.
+  Its named check in `SelectedPartialSourceSlotsAxioms` passed at `453dd822`.
 - **Relation to tensor-map congruence:** The shared public `mapL_heq` and
   its private application lemma `mapL_apply_heq` concern tensor products of
   two maps with four changing spaces. The new helper instead compares an associator
@@ -7268,6 +7325,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   retained. No arbitrary heterogeneous-equality premise or new isometry is
   introduced. Compilation of this promotion is pending with the endpoint
   congruence development.
+- **Input-only form (2026-10-13):** `Word.restrict_castInput_eval_heq` in
+  `WordRestriction.lean` derives the evaluation identity for a word cast along
+  an equality of its input layout only from `Word.restrict_castLayouts` with
+  equal output layouts and the evaluation-transport lemma. It replaced the
+  byte-identical private helpers of `NoneResidualOperations.lean` and
+  `NoneResidualScalar.lean`, where the word identity cannot be applied by
+  rewriting because the restriction's source argument depends on the cast
+  word.
+
 ### Actual-round cross-band commutation — candidate (2026-10-11)
 
 - **Pattern:** Apply `actualRoundData_induction` to a choice-independent property,

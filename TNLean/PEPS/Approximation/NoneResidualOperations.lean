@@ -39,13 +39,6 @@ private theorem scalar_comp_heq {Q : Type} {a b d : Layout Q}
   simp only [ContinuousLinearMap.comp_apply, smul_apply,
     ContinuousLinearMap.id_apply, smul_smul, mul_comm]
 
-private theorem restrict_castInput_eval_heq {Q : Type} (f : Q → Bool)
-    {a b a' : Layout Q} (w : Word a b) (h : a = a') (hs : w.sources = []) :
-    HEq (((w.castInput h).restrict f ((Word.sources_castInput _ _).trans hs)).eval)
-      ((w.restrict f hs).eval) := by
-  cases h
-  rfl
-
 /-- Scalar restrictions compose in chronological order when all retained input,
 intermediate, output and source registers are empty. Source: polynomial-PEPS,
 `04-compression.tex`, lines 246–251 and 351–381. -/
@@ -65,7 +58,7 @@ theorem Word.restrict_localPart_comp_scalar {Q : Type} (f : Q → Bool)
   have hc : ((Word.frameList v.sources.layout w.localPart).comp v.localPart).sources = [] := by
     simp only [Word.sources, Word.sources_frameList, Word.sources_localPart, List.nil_append]
   unfold Word.localPart
-  refine (restrict_castInput_eval_heq f _ _ hc).trans ?_
+  refine (Word.restrict_castInput_eval_heq f _ _ hc).trans ?_
   exact scalar_comp_heq
     ((Word.frameList v.sources.layout w.localPart).restrict f
       ((Word.sources_frameList _ _).trans w.sources_localPart)).eval

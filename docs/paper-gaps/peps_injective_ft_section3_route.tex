@@ -401,13 +401,27 @@ obstruction is
 \leanid{TNLean.PEPS.not_edgeMiddleTensorInjective_of_isEmpty}. Thus the
 positive-bond assumptions formalize the source's nonzero virtual bond spaces
 rather than an unproved consequence of injectivity.
+
+The convention is carried once by the injective tensor hypothesis
+\leanid{TNLean.PEPS.Tensor.IsInjective}: vertex injectivity together with the
+field \leanid{TNLean.PEPS.Tensor.IsInjective.bondDim_pos}, which requires
+every virtual bond space to be nonzero. Theorem~2 of
+Ref.~\cite{Molnar2018NormalPEPS} and its uniqueness clause,
+\leanid{TNLean.PEPS.fundamentalTheorem_PEPS} and
+\leanid{TNLean.PEPS.gauge_unique_mod_edge_scalars}, take this hypothesis
+and carry no separate positivity assumption. The generic tensor and the
+chain-level lemmas above keep zero-dimensional bonds, because the proofs apply
+them to blocked, coarse and transported tensors whose positivity is derived.
 For the normal translation-invariant corollary at
 \path{Papers/1804.04964/paper_normal.tex:2297--2318}, the convention is part of
 the tensor hypothesis \leanid{TNLean.PEPS.IsNormalTorusArcWindowPEPS}, whose
 field \leanid{TNLean.PEPS.IsNormalTorusArcWindowPEPS.bondDim_pos} requires
 every virtual bond space to be nonzero; the corollary's formal statement carries
-no separate positivity hypothesis. The counterexamples above concern tensors
-on general graphs, which keep zero-dimensional bonds.
+no separate positivity hypothesis. The counterexamples above concern the
+generic tensor on general graphs, which keeps zero-dimensional bonds; they
+remain because the general normal theorem and the physical-to-virtual recovery
+still state positivity on region and chain data rather than through an
+injective tensor hypothesis.
 
 The final step proves that the edge-inserted coefficient is injective as a
 function of the inserted matrix: equality of all physical coefficients
@@ -572,8 +586,8 @@ algebras of virtual insertions. The dimension theorem
 \leanid{TNLean.PEPS.bondDim_eq_of_matrixAlgEquiv} then forces equality of the
 corresponding bond dimensions. The theorem
 \leanid{TNLean.PEPS.fundamentalTheorem_PEPS} gives the gauge-equivalence
-conclusion of Ref.~\cite{Molnar2018NormalPEPS} for connected graphs with
-positive bond dimensions. The connectivity correction is documented in
+conclusion of Ref.~\cite{Molnar2018NormalPEPS} for injective tensors on
+connected graphs. The connectivity correction is documented in
 \path{docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex}.
 \end{enumerate}
 
@@ -821,18 +835,19 @@ source.
 
 \section{Conclusion}
 
-The connected, positive-bond version of the injective PEPS Fundamental Theorem
-from Section~3 of Ref.~\cite{Molnar2018NormalPEPS} is formalized. The existence
+The connected version of the injective PEPS Fundamental Theorem from Section~3
+of Ref.~\cite{Molnar2018NormalPEPS} is formalized, with the source's nonzero
+virtual spaces carried by the injective tensor hypothesis. The existence
 theorem \leanid{TNLean.PEPS.fundamentalTheorem\_PEPS} and the uniqueness theorem
 \leanid{TNLean.PEPS.gauge\_unique\_mod\_edge\_scalars} are proved and
 axiom-clean. The proof includes the three-site injectivity transfer, the
 matrix-insertion comparison as a $\mathbb{C}$-algebra isomorphism, the edge
 gauge construction, and the one-vertex-versus-complement comparison.
 
-The positive-bond-dimension hypothesis records the nonzero virtual bond spaces
-assumed in Ref.~\cite{Molnar2018NormalPEPS}. The theorem
+The positivity field of the injective tensor hypothesis records the nonzero
+virtual bond spaces assumed in Ref.~\cite{Molnar2018NormalPEPS}. The theorem
 \leanid{TNLean.PEPS.FundamentalTheoremCounterexample.fundamentalTheoremPEPSStatement_false}
-refutes the conclusion when this hypothesis is dropped. Connectivity is an
+refutes the conclusion for vertex injectivity alone. Connectivity is an
 explicit correction to the literal source statement and is documented in
 \path{docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex}. The
 counterexample
