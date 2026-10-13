@@ -71,46 +71,6 @@ theorem Word.mapSourceSlots_spec (R : SourceInventory P)
       List.nil_append]
     exact ⟨⟨ha, hta⟩, trivial⟩
 
-/-- An operation on spectator registers commutes with preparing the pair in front. -/
-private theorem frame_pair_source (r : PairSource P) (U V : HSpace)
-    (η : U ⊗[ℂ] V) {a b : Layout P} (w : Word a b) (x : Mem a) :
-    (Word.frame ⟨r.left, U⟩ (Word.frame ⟨r.right, V⟩ w)).eval
-      ((Word.source r.distinct U V η a).eval x) =
-    (Word.source r.distinct U V η b).eval (w.eval x) := by
-  exact eval_frameList_prepare [⟨r.left, r.right, r.distinct, U, V, η⟩] w x
-
-/-- Fixed-layout preparation retains the actual preparation vector. -/
-private theorem prepareSlots_heq_prepare (R : SourceInventory P)
-    (U V : Fin R.length → HSpace) (η : ∀ i, U i ⊗[ℂ] V i)
-    (ℓ : Layout P) (x : Mem ℓ) :
-    HEq ((prepareSlots R U V η ℓ).eval x) (((ofSlots R U V η).prepare ℓ).eval x) := by
-  exact Word.eval_castLayouts_apply_heq _ _ _ HEq.rfl
-
-/-- Equal spectator layouts identify the vectors obtained by adjoining one source. -/
-private theorem source_apply_heq (r : PairSource P) (U V : HSpace) (η : U ⊗[ℂ] V)
-    {a b : Layout P} (h : a = b) {x : Mem a} {y : Mem b} (hxy : HEq x y) :
-    HEq ((Word.source r.distinct U V η a).eval x)
-      ((Word.source r.distinct U V η b).eval y) := by
-  cases h
-  exact heq_of_eq (congrArg _ (eq_of_heq hxy))
-
-/-- Preparation of a nonempty source list first prepares its tail and then its head. -/
-private theorem prepareSlots_cons_heq (r : PairSource P) (R : SourceInventory P)
-    (U V : Fin (r :: R).length → HSpace) (η : ∀ i, U i ⊗[ℂ] V i)
-    (ℓ : Layout P) (x : Mem ℓ) :
-    HEq ((prepareSlots (r :: R) U V η ℓ).eval x)
-      ((Word.source r.distinct (U 0) (V 0) (η 0)
-        (slotLayout R (fun i ↦ U i.succ) (fun i ↦ V i.succ) ++ ℓ)).eval
-        ((prepareSlots R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
-          (fun i ↦ η i.succ) ℓ).eval x)) := by
-  apply (prepareSlots_heq_prepare (r :: R) U V η ℓ x).trans
-  rw [ofSlots_cons]
-  exact source_apply_heq r (U 0) (V 0) (η 0)
-    (congrArg (· ++ ℓ) (layout_ofSlots_eq R (fun i ↦ U i.succ)
-      (fun i ↦ V i.succ) (fun i ↦ η i.succ) (fun _ ↦ 0)))
-    (prepareSlots_heq_prepare R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
-      (fun i ↦ η i.succ) ℓ x).symm
-
 /-- The same source-free word transforms every source preparation by the tensor
 products of its endpoint maps. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 279–355 and 409–427. -/
@@ -133,12 +93,12 @@ theorem Word.eval_mapSourceSlots_prepareSlots (R : SourceInventory P)
           (Word.mapSourceSlots R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
             (fun i ↦ U' i.succ) (fun i ↦ V' i.succ)
             (fun i ↦ f i.succ) (fun i ↦ g i.succ) ℓ))))
-      _ _ (prepareSlots_cons_heq r R U V η ℓ x)).trans ?_
-    refine (heq_of_eq ?_).trans (prepareSlots_cons_heq r R U' V'
+      _ _ (prepareSlots_cons_eval_heq r R U V η ℓ x)).trans ?_
+    refine (heq_of_eq ?_).trans (prepareSlots_cons_eval_heq r R U' V'
       (fun i ↦ TensorProduct.mapL (f i) (g i) (η i)) ℓ x).symm
     simp only [Word.eval_comp, comp_apply]
     rw [← comp_apply (Word.mapPair r.left r.right (f 0) (g 0) _).eval,
-      Word.eval_mapPair_source, frame_pair_source]
+      Word.eval_mapPair_source, PairSource.eval_frame_frame_source]
     rw [← comp_apply (Word.mapSourceSlots R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
       (fun i ↦ U' i.succ) (fun i ↦ V' i.succ)
       (fun i ↦ f i.succ) (fun i ↦ g i.succ) ℓ).eval, ih]

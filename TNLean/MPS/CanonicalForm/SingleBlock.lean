@@ -26,11 +26,12 @@ already in one-block canonical form II in its given bond coordinates.
 
 Source: arXiv:1606.00608, Appendix A, lines 1054–1077. -/
 noncomputable def CPSVCanonicalFormIIData.ofNormalLeftCanonical {A : MPSTensor d D}
-    [NeZero D] (hNormal : MPSTensor.IsNormalTensor A)
+    (hNormal : MPSTensor.IsNormalTensor A)
     (hLeft : MPSTensor.IsLeftCanonical A)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρpd : ρ.PosDef) (hρdiag : ρ.IsDiag)
     (hρfix : Kraus.transferMap A ρ = ρ) :
     MPSTensor.CPSVCanonicalFormIIData A := by
+  have : NeZero D := ⟨hNormal.bondDim_ne_zero⟩
   classical
   refine {
     r := 1

@@ -37,7 +37,6 @@ Source: arXiv:1708.00029, Lemma `lem:bdcf`, and the cyclic projections in
 arXiv:quant-ph/0608197, Theorem 5. -/
 theorem IsPeriodic.period_le_bondDim {m : ℕ} {A : MPSTensor d D}
     (hA : IsPeriodic m A) : m ≤ D := by
-  have : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨dim, _, P, _, V, _, _, _, hsum, _, _, _, _, _, _, hdim, _, hV, hP, _⟩ :=
     exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic A hA
   have htrace (k : Fin m) : Matrix.trace (P k) = (dim k : ℂ) := by
