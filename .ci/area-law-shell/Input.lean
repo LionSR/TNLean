@@ -86,6 +86,8 @@ theorem positiveDepthPrefix_eq_filter_ambientDilation
       A.filter fun x ↦ x.val ∈ (ambientDilation T j.toNat \ T) := by
   simp only [Finset.ext_iff, positiveDepthPrefix, Finset.mem_filter, Finset.mem_sdiff]
   by_cases hj : 0 ≤ j
-  done
+  · simp only [← ambientDepth_le_iff_mem_dilation T hT, Int.toNat_of_nonneg hj]
+    done
+  · done
 
 end TNLean.PEPS.AreaLaw.Scan
