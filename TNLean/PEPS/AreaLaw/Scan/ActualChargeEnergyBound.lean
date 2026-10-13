@@ -149,6 +149,7 @@ theorem actualCharge_energyError_le_domainGraph
       (hOldSplit hist)).trans
       (S.sum_card_old_designatedSplitIncidence_le_domainGraph hT hgraph hdepth
         hist hn hm2 hs hr hDpos hmargin hL hrows hmult hclear)
+    dsimp only [A]
     exact_mod_cast hc
   have hcardNew (hist : Rd.H) (c : Rd.Ch hist) :
       ((Finset.univ.filter fun i ↦ Rd.splitNew i hist c).card : ℝ) ≤ A := by
@@ -157,6 +158,7 @@ theorem actualCharge_energyError_le_domainGraph
       (hNewSplit hist c)).trans
       (S.sum_card_state_designatedSplitIncidence_le_domainGraph hT hgraph hdepth
         (extendHistory hist c) hn hm2 hs hr hDpos hmargin hL hrows hmult hclear)
+    dsimp only [A]
     exact_mod_cast hc
   have hw (hist : Rd.H) : Rd.w hist = historyWeight hist :=
     historyMeanTree_weight S.K S.m S.M hm hM s hist
@@ -188,7 +190,7 @@ theorem actualCharge_energyError_le_domainGraph
           if newEvent hist then historyWeight hist else 0) =
           ∑ hist : History S.K S.m S.M s, ∑ c : ChargeChoices S.K S.M,
             if newEvent (extendHistory hist c) then historyWeight hist * chargeWeight c else 0 := by
-        simpa only [mul_ite, _root_.mul_one, _root_.mul_zero] using
+        simpa only [mul_ite, _root_.mul_one, MulZeroClass.mul_zero] using
           sum_historyWeight_mul_eq_sum_extendHistory
             (fun hist ↦ if newEvent hist then (1 : ℝ) else 0)
       rw [heq, Finset.mul_sum]
@@ -217,6 +219,10 @@ theorem actualCharge_energyError_le_domainGraph
       (j : Σ _ : History S.K S.m S.M s, Option (ChargeChoices S.K S.M))
       (θ : CoherentSphere (SiteConfig n)) : D.splitEta E i j θ.1 ≤ 2 * ℓ :=
     D.splitEta_le_two_mul_of_logDim_le n E hadm hcompat hℓ hsupp i j θ
+  letI : ∀ hist : Rd.H, IsFiniteMeasure (Rd.μOld k p hist) := fun hist ↦
+    D.isFiniteMeasure_transportLeafMeasure n (a / 2) k (pre k) p ⟨hist, none⟩
+  letI : ∀ (hist : Rd.H) (c : Rd.Ch hist), IsFiniteMeasure (Rd.μNew k p hist c) :=
+    fun hist c ↦ D.isFiniteMeasure_transportLeafMeasure n (a / 2) k (pre k) p ⟨hist, some c⟩
   have hmass := S.actualChargeScanRound_mass hm hM s n E a pre ha k hsym hpre hp
   have hbound := Rd.energySum_le_of_leaf_bounds (B := 2 * ℓ) (N := A)
     (d := 10 * (S.D : ℝ) / S.m) k hp'
@@ -233,10 +239,10 @@ theorem actualCharge_energyError_le_domainGraph
     (fun i hist c θ ↦ hηB i ⟨hist, some c⟩ θ) hcardOld hcardNew hsplit
   have hbad : Rd.badWeight = ∑ hist : History S.K S.m S.M s,
       if S.IsGoodOldHistory hist then 0 else historyWeight hist := by
-    unfold ScanRound.badWeight
     change (∑ hist : History S.K S.m S.M s,
-      if S.IsGoodOldHistory hist then 0 else Rd.w hist) = _
-    simp only [hw]
+      if S.IsGoodOldHistory hist then 0 else
+        (historyMeanTree S.K S.m S.M hm hM s).weight hist) = _
+    simp only [historyMeanTree_weight]
   rw [S.actualChargeScanRound_energySum hm hM s n E a pre ha k hp',
     S.actualChargeScanRound_chargeDefect hm hM s n E a pre ha k p, hbad] at hbound
   exact hbound
