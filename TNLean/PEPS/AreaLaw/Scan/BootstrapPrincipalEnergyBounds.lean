@@ -65,6 +65,10 @@ theorem exists_bootstrap_principal_energy_bound
       linarith)).natCast_atTop
   obtain ⟨hg₀, hg₀half, hℓ, hℓ₁, hκ⟩ :=
     BootstrapParameters.parameter_bounds he₀ he₀₁
+  have hℓg₀ : BootstrapParameters.ell e₀ < BootstrapParameters.g0 e₀ :=
+    (div_lt_self (div_pos hg₀ (by norm_num : (0 : ℝ) < 1000))
+      (by norm_num : (1 : ℝ) < 100)).trans
+      (div_lt_self hg₀ (by norm_num : (1 : ℝ) < 1000))
   done
 
 end TNLean.PEPS.AreaLaw.Scan
