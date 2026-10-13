@@ -77,6 +77,30 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
 private def preparedWordEvalComparison {Q R : Type} {a b : Layout Q} {c d : Layout R}
     (u : Word a b) (v : Word c d) : Prop := HEq u.eval v.eval
 
+/-- Selection of arbitrary source-free words commutes with framing and
+owner transport when the retained source and boundary lists agree. The inner
+operator comparison is supplied before any original source inventory is fixed.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
+246–267, 409–434 and 565–588. -/
+private theorem preparedWordEvalComparison_frameList {Q R : Type}
+    {a b : Layout Q} {c d : Layout R} (sq : Q → Bool) (sa : R → Bool)
+    (lift : R → Q) (Sq : Layout Q) (Sa : Layout R)
+    (u : Word a b) (v : Word c d) (hu : u.sources = []) (hv : v.sources = [])
+    (hi : Layout.restrict sq a = Layout.mapOwner lift (Layout.restrict sa c))
+    (ho : Layout.restrict sq b = Layout.mapOwner lift (Layout.restrict sa d))
+    (hS : Layout.restrict sq Sq = Layout.mapOwner lift (Layout.restrict sa Sa))
+    (hInner : HEq (u.restrict sq hu).eval ((v.restrict sa hv).mapOwner lift).eval) :
+    preparedWordEvalComparison
+      ((Word.frameList Sq u).restrict sq ((Word.sources_frameList u Sq).trans hu))
+      (((Word.frameList Sa v).restrict sa
+        ((Word.sources_frameList v Sa).trans hv)).mapOwner lift) := by
+  have hMapped := restrict_frameList_mapOwner_eval_heq sa lift Sa v hv
+  have hFramed := Word.eval_frameList_heq (u.restrict sq hu)
+    ((v.restrict sa hv).mapOwner lift) hi ho hInner
+    (Layout.restrict sq Sq) (Layout.mapOwner lift (Layout.restrict sa Sa)) hS
+  exact (Word.restrict_frameList_eval_heq sq Sq u hu).trans
+    (hFramed.trans hMapped.symm)
+
 /-- The original private preparation has the same selected operator as its
 lifted singleton preparation. No monomial choice occurs in this comparison.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
@@ -132,20 +156,11 @@ private theorem preparedWordEvalComparison_privatePreparation {a b : Layout P}
     (restrict_privatePreparation_mapOwner_eval_heq all p qp hfAll ψ).trans
       ((Word.eval_mapOwner_heq lift _).trans
         (restrict_privatePreparation_mapOwner_eval_heq fa p q hfA ψ)).symm
-  have hPaMapped : HEq ((Pa.restrict sa hsPa).mapOwner lift).eval
-      (Word.frameList (Layout.mapOwner lift (Layout.restrict sa S))
-        (((ψ.prepare.mapOwner fa).restrict sa
-          (by simp only [Word.sources_mapOwner, ψ.sources_prepare,
-            SourceInventory.mapOwner_nil])).mapOwner lift)).eval :=
-    restrict_frameList_mapOwner_eval_heq sa lift S (ψ.prepare.mapOwner fa)
-      (by simp only [Word.sources_mapOwner, ψ.sources_prepare, SourceInventory.mapOwner_nil])
-  have hPrep := (Word.restrict_frameList_eval_heq sq w.allResidualSourceLayout
-    (ψ.prepare.mapOwner all)
-    (by simp only [Word.sources_mapOwner, ψ.sources_prepare, SourceInventory.mapOwner_nil])).trans
-      ((Word.eval_frameList_heq _ _ rfl (hBoundary a).symm hInner
-        (Layout.restrict sq w.allResidualSourceLayout)
-        (Layout.mapOwner lift (Layout.restrict sa S)) hSlots.symm).trans hPaMapped.symm)
-  exact hPrep
+  exact preparedWordEvalComparison_frameList sq sa lift w.allResidualSourceLayout S
+    (ψ.prepare.mapOwner all) (ψ.prepare.mapOwner fa)
+    (by simp only [Word.sources_mapOwner, ψ.sources_prepare, SourceInventory.mapOwner_nil])
+    (by simp only [Word.sources_mapOwner, ψ.sources_prepare, SourceInventory.mapOwner_nil])
+    rfl (hBoundary a).symm hSlots.symm hInner
 
 /-- Compare a restricted source-free word with a word on its selected
 input and output lists, retaining the source-free proof with its word.
@@ -156,6 +171,18 @@ private def selectedPreparedWordComparison {Q : Type} {a b : Layout Q}
     (v : Word (Layout.restrict f a) (Layout.restrict f b)) : Prop :=
   (u.restrict f hu).eval = v.eval
 
+/-- Compare the original prepared word with its incident-label word, with
+all original source and output data fixed before the comparison is proved.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
+246–267, 351–434 and 565–588. -/
+private def selectedPreparedOriginalLabelComparison {a b : Layout P}
+    (w : SourceCircuit a b) (p : P) (ψ : ProductInput a)
+    (ξ : Choices (fun _ : P ↦ true) w) : Prop :=
+    selectedPreparedWordComparison
+      (partySelector (some (⟨p, rfl⟩ : {_p : P // true = true})))
+      (w.partialSourceWord ψ ξ) (sources_partialSourceWord w ψ ξ)
+      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ))
+
 /-- The preparation and residual comparisons are combined with a canonical
 word comparison as target, before its concrete operator equality is exposed.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
@@ -163,10 +190,8 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
 private theorem selectedPreparedWordComparison_of_original_labels {a b : Layout P}
     (w : SourceCircuit a b) (p : P) (ψ : ProductInput a)
     (ξ : Choices (fun _ : P ↦ true) w) :
-    selectedPreparedWordComparison
-      (partySelector (some (⟨p, rfl⟩ : {_p : P // true = true})))
-      (w.partialSourceWord ψ ξ) (sources_partialSourceWord w ψ ξ)
-      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)) := by
+    selectedPreparedOriginalLabelComparison w p ψ ξ := by
+  unfold selectedPreparedOriginalLabelComparison
   classical
   let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
     (affectedOwner (fun _ : P ↦ true) t)
