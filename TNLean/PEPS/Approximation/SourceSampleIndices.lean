@@ -72,8 +72,11 @@ def sourcePairEquiv : {a b : Layout P} → (w : SourceCircuit a b) →
     (g : w.gateLocations) → Fin (w.slotCount g) ≃
       {z : Sym2 P // z ∈ Approximation.pairSampleLabels (w.participants g)}
   | _, _, .id _, g => nomatch g
-  | _, _, .comp w _, Sum.inl g => sourcePairEquiv w g
-  | _, _, .comp _ v, Sum.inr g => sourcePairEquiv v g
+  | _, _, .comp w v, g => by
+      change gateLocations w ⊕ gateLocations v at g
+      cases g with
+      | inl g => exact sourcePairEquiv w g
+      | inr g => exact sourcePairEquiv v g
   | _, _, .localMap .., g => nomatch g
   | _, _, @SourceCircuit.gate _ _ _ _ _ owner _ _ _ G _, _ =>
       (SourceInventory.pairIndexEquiv G.slots G.pair_nodup G.pair_complete).trans
