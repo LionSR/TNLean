@@ -57,7 +57,7 @@ theorem atParty_layout_mapOwner_of_singleton_fiber (f : P → Q) (p : P) (q : Q)
         have hl : s.left ≠ p := fun hp ↦ hq ((hf s.left).mpr hp)
         have hr : s.right ≠ p := fun hp ↦ hq (h.trans ((hf s.right).mpr hp))
         have hcons : mapOwner f (s :: S) = mapOwner f S := by
-          simp only [mapOwner_cons, PairSource.mapOwner, dif_pos h]
+          simp only [mapOwner_cons, PairSource.mapOwner, dite_eq_left h]
         have hhead : Layout.atParty p s.layout = [] := by
           simp [Layout.atParty, PairSource.layout, Layout.restrict_cons, hl, hr]
         rw [hcons, layout_cons, hsplit, hhead, List.nil_append]
@@ -65,7 +65,7 @@ theorem atParty_layout_mapOwner_of_singleton_fiber (f : P → Q) (p : P) (q : Q)
       · have hcons : mapOwner f (s :: S) =
             (⟨f s.left, f s.right, h, s.leftSpace, s.rightSpace, s.vector⟩ : PairSource Q) ::
               mapOwner f S := by
-          simp only [mapOwner_cons, PairSource.mapOwner, dif_neg h]
+          simp only [mapOwner_cons, PairSource.mapOwner, dite_eq_right h]
         have hhead : Layout.atParty q
             (⟨f s.left, f s.right, h, s.leftSpace, s.rightSpace, s.vector⟩ :
               PairSource Q).layout =

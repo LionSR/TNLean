@@ -127,10 +127,12 @@ theorem mapOwner_selected_originalLayout_eq (p : P) (L : Layout P) :
           simp only [partySelector, hr, decide_false]
         have hOne : affectedOwner A r.owner ≠ q := by
           rw [(affectedOwner_eq_none A r.owner).mpr hA]
-          simp only [q, reduceCtorEq, not_false_eq_true]
+          intro h
+          exact Option.noConfusion h
         have hAll : all r.owner ≠ qp := by
-          simpa only [all, qp, affectedOwner, ↓reduceDIte, Option.some.injEq,
-            Subtype.mk.injEq] using hr
+          intro h
+          change (some ⟨r.owner, rfl⟩ : Option {_p : P // true = true}) = some ⟨p, rfl⟩ at h
+          exact hr (congrArg Subtype.val (Option.some.inj h))
         change Layout.mapOwner lift
           (Layout.atParty q (Layout.mapOwner (affectedOwner A) (r :: L))) =
           Layout.atParty qp (Layout.mapOwner all (r :: L))
