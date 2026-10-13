@@ -66,6 +66,59 @@
     $e_0>0$.
 \end{proof}
 
+% Source: 08-scanner.tex, lines 371--384 and 731--755, adc7f124.
+% Initial statement; the Lean proof is unfinished. No completion marks are attached.
+% The fixed C n^{-1000} contribution and replica remainder are excluded from A_n.
+\begin{theorem}[Principal energy term at the fixed bootstrap scales]
+    \label{thm:area_law_bootstrap_principal_energy}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_principal_energy_bound}
+    \uses{def:area_law_bootstrap_parameters}
+    Fix $0<e_0<1$, use the fixed parameters of
+    Definition~\ref{def:area_law_bootstrap_parameters}, and fix
+    $C,C_\delta\ge0$ and $\gamma,\gamma_\delta\in\mathbb R$.
+    For an integer $n\ge2$ and a real exponent $e\le e_0$, put
+    \begin{align}
+        L_n&=\lfloor n^{1-\ell}\rfloor,&
+        m_n&=\lfloor n^\mu\rfloor,&
+        K_n&=\left\lfloor\frac{L_n}{8m_n}\right\rfloor,&
+        D_n&=\lceil n^\kappa\rceil,& a_n&=\frac4{K_n},
+        \label{eq:al_principal_energy_scales}\\
+        \delta_n(e)&=C_\delta n^\nu
+          \bigl(n^{e-\mu}+a_n^{1/4}(\log n)^{\gamma_\delta}\bigr),
+        \label{eq:al_principal_energy_density}\\
+        A_n(e)&=16C n^\ell D_n^2(\log n)^\gamma
+          \bigl(\delta_n(e)^{1/8}+n^{-\nu}+n^{-100}\bigr).
+        \label{eq:al_principal_energy_term}
+    \end{align}
+    All quotients have the convention $x/0=0$.
+    There is an integer $N\ge2$, depending only on the fixed constants
+    and $e_0$, such that every integer $n\ge N$ and every real $e\le e_0$
+    satisfy $A_n(e)\le n^{-\nu/2}$.
+    This is the numerical principal term in the energy estimate of
+    \cite[Section~9, lines~731--755]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \uses{lem:al_scanner_scale_facts,thm:area_law_bootstrap_margins}
+    Apply the numerical scale estimates with the fixed exponents and
+    auxiliary entropy exponent $\mu$. For all sufficiently large $n$,
+    cancellation of the positive $D_n^2$ gives
+    \begin{align}
+        n&\le C_1n^\ell m_nK_n\le C_1n^{\ell+\mu}K_n,&
+        a_n&\le4C_1n^{-(g_0-\ell)}.
+        \label{eq:al_principal_energy_band}
+    \end{align}
+    The density expression is increasing in $e$ for $n\ge1$.
+    Each fixed power of $\log n$ is smaller than every positive power of $n$
+    eventually. The strict density margins therefore give
+    $\delta_n(e)\le n^{-0.24g_0}$ uniformly for $e\le e_0$.
+    Since $D_n\le2n^\kappa$, the three terms in $A_n(e)$ are bounded by
+    fixed multiples of $(\log n)^\gamma$ times powers with exponents
+    $\ell+2\kappa-0.03g_0$, $\ell+2\kappa-\nu$ and
+    $\ell+2\kappa-100$. Each exponent is strictly smaller than $-\nu/2$.
+    Increasing the same threshold absorbs the fixed coefficients,
+    logarithms and finite sum into $n^{-\nu/2}$.
+\end{proof}
+
 \begin{theorem}[Binary-entropy cost of the rounded bands]
     \label{thm:area_law_bootstrap_binary_entropy_cost}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binEntropy_cost_bound}
