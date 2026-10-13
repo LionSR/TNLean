@@ -295,6 +295,7 @@ import TNLean.PEPS.Approximation.SourcePrivatePreparationEvaluation
 import TNLean.PEPS.Approximation.SourcePrivatePreparationRestriction
 import TNLean.PEPS.Approximation.SourceRegisterPermutation
 import TNLean.PEPS.Approximation.SourceResidualCoordinates
+import TNLean.PEPS.Approximation.SourceSampleAssignmentIndices
 import TNLean.PEPS.Approximation.SourceSampleChoice
 import TNLean.PEPS.Approximation.SourceSampleIndices
 import TNLean.PEPS.Approximation.SourceSamplingCount
