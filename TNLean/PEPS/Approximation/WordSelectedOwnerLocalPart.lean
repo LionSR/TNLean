@@ -176,7 +176,7 @@ theorem restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
             _ = Layout.mapOwner f (Layout.restrict sp v.sources.layout) ++
                 Layout.mapOwner f (Layout.restrict sp (w.sources.layout ++ a)) :=
               congrArg₂ List.append (hS v) (hI w)
-            _ = _ := by rw [Layout.restrict_append, Layout.mapOwner_append])
+            _ = _ := by simp only [Layout.restrict_append, Layout.mapOwner_append])
         (by
           calc
             _ = Layout.restrict sq V.sources.layout ++
@@ -184,7 +184,7 @@ theorem restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
             _ = Layout.mapOwner f (Layout.restrict sp v.sources.layout) ++
                 Layout.mapOwner f (Layout.restrict sp b) :=
               congrArg₂ List.append (hS v) (hL b)
-            _ = _ := by rw [Layout.restrict_append, Layout.mapOwner_append])
+            _ = _ := by simp only [Layout.restrict_append, Layout.mapOwner_append])
         (hL c) hframe ihv
       unfold localPart
       exact (restrict_castInput_eval_heq sq _ _ hraw').trans
@@ -257,7 +257,7 @@ theorem restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
             _ = Layout.mapOwner f (Layout.restrict sp w.sources.layout) ++
                 Layout.mapOwner f (Layout.restrict sp (r :: a)) :=
               congrArg₂ List.append (hS w) (hL (r :: a))
-            _ = _ := by rw [Layout.restrict_append, Layout.mapOwner_append])
+            _ = _ := by simp only [Layout.restrict_append, Layout.mapOwner_append])
         hmid (hL (r :: b)) hmove hframe
       exact hcomp
   | @source x y hxy U V η tail =>

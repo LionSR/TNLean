@@ -301,6 +301,7 @@ common free inputs used in the two separated contractions in
 \begin{theorem}[Mixed coefficients at the original gate occurrences]
     \label{thm:peps_mixed_chronological_coefficients}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.coefficient_all_mul_conj_eq_prod_nonemptyGateLocations}
+    \leanok
     \uses{def:peps_touched_labels}
     Let $w$ be a chronological source composition on an arbitrary party set
     $P$, and let $\xi,\zeta\in\Xi_P$ be two all-party choices. Write
@@ -319,7 +320,7 @@ common free inputs used in the two separated contractions in
     \texttt{04-compression.tex}, lines 351--381 and 565--573.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_chronological_coefficients}
     Apply Theorem~\ref{thm:peps_chronological_coefficients} to each choice.
     Complex conjugation preserves finite products, so
@@ -330,6 +331,7 @@ common free inputs used in the two separated contractions in
 \begin{theorem}[Reindexing the mixed expansion by gate labels]
     \label{thm:peps_mixed_gate_label_sum}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_coefficient_all_mul_conj_smul_eq_sum_nonemptyGateLabels}
+    \leanok
     \uses{def:peps_touched_labels}
     With the same chronological composition, let
     $L=\prod_{g\in\mathcal G^+}\Xi_g$ and let
@@ -352,7 +354,7 @@ common free inputs used in the two separated contractions in
     \texttt{04-compression.tex}, lines 351--381 and 565--573.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_touched_labels,thm:peps_mixed_chronological_coefficients}
     Replace each mixed coefficient by
     Theorem~\ref{thm:peps_mixed_chronological_coefficients}. Reindex the outer
