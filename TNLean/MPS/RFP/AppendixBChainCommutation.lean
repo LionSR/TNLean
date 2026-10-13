@@ -149,10 +149,11 @@ canonical-form tensors, which may contain several normal sectors and repeated
 copies. This theorem treats one CPSV normal tensor. The extension to the full
 canonical-form scope is documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
-theorem rfp_implies_nncph (A : MPSTensor d D) [NeZero D]
+theorem rfp_implies_nncph (A : MPSTensor d D)
     (hRFP : IsTransferIdempotent A) (hNT : IsNormalTensor A)
     (N : ℕ) (hN : 2 < N) :
     IsNNCPH A N := by
+  have : NeZero D := ⟨hNT.bondDim_ne_zero⟩
   obtain ⟨σ, _hσ, _hσfix, hLeft, hGauge, _hPrim, _hIrr⟩ := hNT.exists_tpGauge
   have hRFP' : IsTransferIdempotent (Kraus.tpGauge (d := d) (D := D) A σ) :=
     hGauge.isTransferIdempotent_iff.mp hRFP
@@ -176,7 +177,7 @@ theorem is stated for canonical-form tensors and includes the all-chain
 ground-space spanning equation. This theorem treats one CPSV normal tensor and
 proves only commutation and annihilation of its periodic MPS vector. Documented
 in `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
-theorem rfp_implies_nncph_ground_state (A : MPSTensor d D) [NeZero D]
+theorem rfp_implies_nncph_ground_state (A : MPSTensor d D)
     (hRFP : IsTransferIdempotent A) (hNT : IsNormalTensor A)
     (N : ℕ) (hN : 2 < N) :
     IsNNCPHGroundState A N :=

@@ -36,9 +36,10 @@ canonical-form tensor with several normal sectors and repeated copies. This
 result treats the singleton family consisting of one normal tensor. See
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem rfp_hasParentHamiltonianGroundSpaceSpanning_single
-    (A : MPSTensor d D) [NeZero D]
+    (A : MPSTensor d D)
     (hRFP : IsTransferIdempotent A) (hNT : IsNormalTensor A) :
     HasParentHamiltonianGroundSpaceSpanning A 2 (fun _ : Fin 1 ↦ A) := by
+  have : NeZero D := ⟨hNT.bondDim_ne_zero⟩
   intro N hN
   have hInj : Kraus.IsInjective A := rfp_nt_structural A hNT.isNormal hRFP
   rw [ker_parentHamiltonian_eq_chainGroundSpace A (by omega) (by omega),
@@ -56,9 +57,10 @@ canonical-form tensor with several normal sectors and repeated copies. This
 result treats the singleton family consisting of one normal tensor. See
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem rfp_implies_hasNNCPHGroundSpaces_single
-    (A : MPSTensor d D) [NeZero D]
+    (A : MPSTensor d D)
     (hRFP : IsTransferIdempotent A) (hNT : IsNormalTensor A) :
     HasNNCPHGroundSpaces A (fun _ : Fin 1 ↦ A) := by
+  have : NeZero D := ⟨hNT.bondDim_ne_zero⟩
   rw [hasNNCPHGroundSpaces_iff_forall_isNNCPHGroundState_and_groundSpaceSpanning]
   exact
     ⟨rfp_implies_nncph_ground_state A hRFP hNT,

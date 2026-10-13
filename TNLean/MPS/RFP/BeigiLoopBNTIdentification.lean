@@ -130,9 +130,9 @@ arXiv:1606.00608, line 1307; algebraic normal tensors enter that application thr
 Wielandt Proposition 3 (arXiv:0909.5347) and Wolf, Theorem 6.3.
 -/
 theorem exists_mpvBlockPhaseEquiv_of_mem_span_eventually
-    {D₀ : ℕ} [NeZero D₀]
+    {D₀ : ℕ}
     {A : MPSTensor d D₀} (hA : IsNormalTensor A)
-    {ι : Type*} [Finite ι] {dim : ι → ℕ} [∀ j, NeZero (dim j)]
+    {ι : Type*} [Finite ι] {dim : ι → ℕ}
     (B : (j : ι) → MPSTensor d (dim j))
     (hB : ∀ j, IsNormalTensor (B j))
     (hBCross : ∀ i j, i ≠ j →
@@ -142,6 +142,8 @@ theorem exists_mpvBlockPhaseEquiv_of_mem_span_eventually
       mpvState (d := d) A N ∈
         Submodule.span ℂ (Set.range fun j : ι => mpvState (d := d) (B j) N)) :
     ∃ j, MPVBlockPhaseEquiv A (B j) := by
+  have : ∀ j, NeZero (dim j) := fun j ↦ ⟨(hB j).bondDim_ne_zero⟩
+  have : NeZero D₀ := ⟨hA.bondDim_ne_zero⟩
   classical
   by_contra hNo
   push Not at hNo
@@ -240,10 +242,11 @@ identification at arXiv:1606.00608, line 1307. Algebraic normality reaches these
 quantum Wielandt Proposition 3 (arXiv:0909.5347), Wolf, Theorem 6.3, and the spectral
 normalization of arXiv:1606.00608, lines 224--235.
 -/
-theorem GaugePhaseEquiv.isTransferIdempotent [NeZero D]
+theorem GaugePhaseEquiv.isTransferIdempotent
     {A B : MPSTensor d D} (h : GaugePhaseEquiv A B)
     (hA : IsNormalTensor A) (hB : IsNormalTensor B)
     (hRFP : IsTransferIdempotent A) : IsTransferIdempotent B := by
+  have : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨X, ζ, _hζ, hrel⟩ := h
   have hζnorm : ‖ζ‖ = 1 :=
     norm_eq_one_of_gaugePhase_cast_of_isNormalTensor hA hB rfl (by simpa using hrel)

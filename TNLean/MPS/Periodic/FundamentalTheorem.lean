@@ -358,8 +358,6 @@ theorem PeriodicOverlapHypothesis.ofIsPeriodic
   exists_nondecaying_B := hExB
   hetRepeatedBlocks_of_nondecaying := by
     intro j k hnd
-    have : NeZero (dimA j) := ⟨(hPerA j).bondDim_ne_zero⟩
-    have : NeZero (dimB k) := ⟨(hPerB k).bondDim_ne_zero⟩
     rcases periodicOverlapDichotomy (A j) (B k) (hPerA j) (hPerB k) with hdecay | hrep
     · exact absurd hdecay hnd
     · exact hrep
@@ -387,11 +385,13 @@ dichotomy from Appendix A, lines 1023--1117. The positive-length formulation is 
 `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`.
 -/
 theorem peripheralProportionalCase_periodicFT_of_sameMPV₂Pos
-    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    {D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) {m_a m_b : ℕ}
     (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
     (hSame : SameMPV₂Pos A B) :
     HetRepeatedBlocks A B := by
+  have : NeZero D₁ := ⟨hA.bondDim_ne_zero⟩
+  have : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩
   rcases periodicOverlapDichotomy A B hA hB with hDecay | ⟨hdim, hRep⟩
   · have hSameOverlap : ∀ᶠ N : ℕ in Filter.atTop,
         mpvOverlap (d := d) A B N = mpvOverlap A A N := by

@@ -103,7 +103,6 @@ theorem IsPeriodic.exists_ker_openParentHamiltonianES_eq_groundSpaceES
     {A : MPSTensor d D} (hA : IsPeriodic m A) :
     ∃ R₀, 0 < R₀ ∧ ∀ R N, R₀ ≤ R → R ≤ N →
       LinearMap.ker (openParentHamiltonianES A R N) = groundSpaceES A N := by
-  let : NeZero D := ⟨hA.bondDim_ne_zero⟩
   let : NeZero d := ⟨hA.physDim_ne_zero⟩
   obtain ⟨n₀, hstep⟩ := hA.exists_eventually_groundSpace_restriction_intersection
   refine ⟨n₀ + 1, by omega, fun R N hR hRN => ?_⟩

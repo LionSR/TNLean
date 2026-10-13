@@ -483,7 +483,7 @@ normalized square of the trace matrix restricted to positive-length cyclic
 sectors, and it is obtained after one additional marginal replacement.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_hayashiMarkovDecomposition_cyclicActiveCut_of_isSourceZCL
-    (F : PhysicalSectorFactorization K) [NeZero D]
+    (F : PhysicalSectorFactorization K)
     (hK : K.IsInjective)
     (hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef)
     (hZCL : K.IsSourceZCL) (A C : ℕ) :
@@ -495,6 +495,7 @@ theorem exists_hayashiMarkovDecomposition_cyclicActiveCut_of_isSourceZCL
           (tripartiteSplitEquiv
             (Fintype.card F.SectorSiteIndex) A 1 C).symm
     Nonempty (HayashiMarkovDecomposition ρ_ABC) := by
+  have : NeZero D := ⟨hZCL.bondDim_ne_zero⟩
   classical
   dsimp only
   obtain ⟨lam, _, a, b, ha, hb, _, hfour⟩ :=
