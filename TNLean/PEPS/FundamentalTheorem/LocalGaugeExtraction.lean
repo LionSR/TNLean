@@ -24,9 +24,10 @@ import Mathlib.Combinatorics.SimpleGraph.Connectivity.Connected
 /-!
 # Local gauge extraction for injective PEPS
 
-This module develops the local gauge extraction, absorbed-tensor injectivity,
-and the one-vertex scalar comparison used to construct the global gauge in the
-PEPS Fundamental Theorem (arXiv:1804.04964, Section 3, Theorem 2).
+This module develops absorbed-tensor injectivity and the one-vertex scalar
+comparison used to construct the global gauge in the PEPS Fundamental Theorem
+(arXiv:1804.04964, Section 3, Theorem 2). The local gauge extraction itself is
+`localGauge_exists_of_factorizedLocalGauge` in `PEPS/LocalGauge`.
 -/
 
 open scoped BigOperators Matrix
@@ -36,29 +37,6 @@ namespace PEPS
 
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
-
-/-! ### Local gauge extraction -/
-
-/-- Under the sharper local hypothesis `HasFactorizedLocalGauge`, one obtains a
-factorized local gauge relation at `v`.
-
-The local left inverse and the canonical local gauge map are defined in
-`PEPS/LocalGauge`. It remains to derive `BlockedMiddleGaugeFormula` from
-`SameState` by comparing the edge-blocked coefficient from `PEPS/Blocking` with
-the three-site MPS reduction, then convert it to `HasFactorizedLocalGauge` by
-`hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula`. -/
-theorem localGauge_exists (A B : Tensor G d)
-    (hA : IsVertexInjective A)
-    (hDim : A.bondDim = B.bondDim) (v : V)
-    (hFactorized : HasFactorizedLocalGauge A B hA hDim v) :
-    ∃ (Xv : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ),
-      ∀ (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
-        B.component v (fun ie => Fin.cast (congr_fun hDim ie.1) (η ie)) σ =
-          ∑ η' : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1),
-            (∏ ie : IncidentEdge G v,
-              (↑(Xv ie.1) : Matrix _ _ ℂ) (η ie) (η' ie)) *
-              A.component v η' σ :=
-  localGauge_exists_of_factorizedLocalGauge A B hA hDim v hFactorized
 
 /-! ### Vertex injectivity of the absorbed tensor family -/
 

@@ -247,9 +247,9 @@ normalizations.
   Proposition 3(a), `Papers/0909.5347/main.tex:403-409` and `:501-509`;
   Wolf Chapter 6, Theorem 6.8.
 - **Sanctioned bridges:**
-  `MPSTensor.primitivePaper_iff_hasEventuallyFullKrausRank`,
-  `MPSTensor.primitivePaper_iff_stronglyIrreducible`, and
-  `MPSTensor.wolf_theorem_6_8_kraus_span`.
+  `MPSTensor.primitivePaper_iff_hasEventuallyFullKrausRank`, which is also
+  the Kraus-span form of Wolf Theorem 6.8, and
+  `MPSTensor.primitivePaper_iff_stronglyIrreducible`.
 - **Caveat:** each stated equivalence requires `[NeZero D]` and the explicit
   left-canonical normalization `∑ i, (A i)ᴴ * A i = 1`. The unconditional
   directions `MPSTensor.isPrimitivePaper_of_hasEventuallyFullKrausRank` and
