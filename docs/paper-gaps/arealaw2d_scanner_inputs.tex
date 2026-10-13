@@ -753,6 +753,41 @@ supply normalized typical-sector rank or entropy estimates for the later
 comparator construction. No auxiliary unique-gap assertion is made.
 The restriction on Proposition~9.2 therefore remains.
 
+\section{Rounded weights and the marginal-moment interval}
+
+Fix $0<\ell_{\rm s}<1$ and $0<\kappa<\mu<1-\ell_{\rm s}$.
+For the literal source scales
+$L=\lfloor n^{1-\ell_{\rm s}}\rfloor$,
+$m=\lfloor n^\mu\rfloor$, $K=\lfloor L/(8m)\rfloor$ and
+$D=\lceil n^\kappa\rceil$, fix $\omega\in\mathbb R$, $C_B,A\ge0$ and
+$c>0$. The separate numerical condition
+\begin{align}
+    \omega+(1+\kappa)/2 & <1-\ell_{\rm s}-\mu
+    \label{eq:arealaw2d_moment_margin}
+\end{align}
+gives one threshold, chosen before $n,W,B$, at which every
+$0\le W\le n^\omega$ and $1\le B\le C_BnD(\log n)^{12}$ obey
+$Aa\le c/\sqrt B$, where $a=W/K$.
+\footnote{The numerical statement is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_a_le_moment_radius}.}
+Condition~(\ref{eq:arealaw2d_moment_margin}) is not inferred from the
+ordinary scanner hypotheses and is not asserted for the bootstrap
+parameter choice.
+
+The final collar parameters of
+\cite[Section~9, lines~839--865]{OpenAI2026AreaLaw} have the exact gap
+$499879/2000000$. Consequently, for every fixed $t\in\mathbb R$,
+$|ta|\le c/\sqrt B$ eventually when $W=n^{1/20000}$, with the
+threshold uniform in all admissible budgets.
+\footnote{The exact final-scale statement is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_final_a_le_moment_radius}.}
+The square-root estimate retains the factor $D$ and the sixth power
+of the logarithm. Applied to the already chosen common physical
+budget, this numerical implication leaves that budget and its
+truncated ground vector unchanged. Deriving the sharp norm comparisons,
+identifying their actual physical inputs, and completing the scanner
+data package remain separate obligations.
+
 \section{Elimination}
 
 The restriction disappears once the data package is constructed from the
