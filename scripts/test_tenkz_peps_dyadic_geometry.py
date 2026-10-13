@@ -18,8 +18,17 @@ import re
 import sys
 import tempfile
 
+from blueprint_tex_tree import read_tex_tree
+
 ROOT = Path(__file__).resolve().parents[1]
 CHAPTER = ROOT / "blueprint/src/chapter/ch24_peps_dyadic_geometry.tex"
+# The four displays live in shared figure files that the entries input; the checks read
+# the expanded chapter, so the Source and Ink-to-index comments must still sit in each
+# entry (each figure file carries them after its header).
+FIGURES = (
+    "figures/peps_dyadic_normal_words", "figures/peps_dyadic_central_clearance",
+    "figures/peps_dyadic_block_guide", "figures/peps_dyadic_rim_pattern",
+)
 COLUMNS = 20  # half-unit intervals of x from -8 to 2
 
 
@@ -255,7 +264,11 @@ def main() -> int:
     parser.add_argument("--source-only", action="store_true")
     parser.add_argument("--output-dir", type=Path)
     args = parser.parse_args()
-    source = CHAPTER.read_text()
+    raw = CHAPTER.read_text()
+    for figure in FIGURES:
+        assert f"\\input{{{figure}}}" in raw, figure
+    # Mutations below are applied to the expanded text, i.e. to the figures' ink.
+    source = read_tex_tree(CHAPTER)
     pictures = check_source(source)
     check_rejected_mutations(source)
     print("PASS: recomputed band words, lens, level labels, central bands, "

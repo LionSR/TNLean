@@ -1,0 +1,26 @@
+% Figure peps_configuration_copy.
+% Owner: chapter/ch34_peps_exact_tree.tex (after def:peps_configuration_copy).
+% Used by: gapped-2d-notes PP Sec. 10 (small sizes).
+% Source: arXiv OpenAI2026PolynomialPEPS, 07-assembly.tex:204--214 (exact PEPS on a
+% spanning tree for the finitely many small sizes); no source figure.
+% Three-vertex path specialization of (eq:peps_configuration_copy).
+% Ink-to-index: the two joined virtual wires each carry one Sigma index;
+% the three open physical legs are the three local basis indices.
+% Boundary signature: no open virtual indices and three open physical indices.
+% No conjugation, trace, or normalization factor is present. Only the root
+% tensor contains psi; all other tensors have entries zero or one.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=3, bonds=none]
+        \tn[at=(1,1), name=exactRoot, label pos=270,
+            ports={0:virtual, 90:physical:$i_r$}]{A_r}
+        \tn[at=(1,2), name=exactMiddle, label pos=270,
+            ports={180:virtual, 0:virtual, 90:physical:$i_2$}]{A_2}
+        \tn[at=(1,3), name=exactLast, label pos=270,
+            ports={180:virtual, 90:physical:$i_3$}]{A_3}
+        \tnwire[name=exactFirstBond]{exactRoot.0}{exactMiddle.180}
+        \tnmark[form=label, label pos=n]{on exactFirstBond 0.5}{$\tau_{r2}$}
+        \tnwire[name=exactSecondBond]{exactMiddle.0}{exactLast.180}
+        \tnmark[form=label, label pos=n]{on exactSecondBond 0.5}{$\tau_{23}$}
+    \end{tenkz}
+\end{center}
