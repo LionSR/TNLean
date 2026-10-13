@@ -51,29 +51,21 @@ def augmentedSiteEquiv : Option (Option V) ≃ V ⊕ Bool :=
         ((Equiv.refl V).sumCongr Equiv.boolEquivPUnitSumPUnit.{0, 0}.symm)))
 
 /-- The one-copy configuration equivalence for two auxiliary registers of
-the same selected dimension d. Both grouping steps preserve the physical
-coordinate and place C before R. No auxiliary basis is changed.
+the same selected dimension d: reindex the sites along `augmentedSiteEquiv`,
+which preserves the physical coordinate and places C before R, and identify
+each fibre. No auxiliary basis is changed.
 Source: 06-transport.tex, lines 335–358; 07-comparators.tex, lines 130–153,
 revision adc7f1241b42e322a6451854ab7e4b4c146bf78a. -/
 def augmentedConfigurationEquiv (q d : ℕ) :
     ((s : Option (Option V)) →
       addedSiteSpace (addedSiteSpace (fun _ : V => Fin q) (Fin d)) (Fin d) s) ≃
       SiteConfig (augmentedDimensions (V := V) q (fun _ => d)) :=
-  let optionSplit :
-      ((s : Option (Option V)) →
-        addedSiteSpace (addedSiteSpace (fun _ : V => Fin q) (Fin d)) (Fin d) s) ≃
-        (V → Fin q) × (Fin d × Fin d) :=
-    Equiv.piOptionEquivProd.trans
-      (((Equiv.refl (Fin d)).prodCongr Equiv.piOptionEquivProd).trans
-        ((Equiv.prodAssoc (Fin d) (Fin d) (V → Fin q)).symm.trans
-          ((Equiv.prodComm (Fin d × Fin d) (V → Fin q)).trans
-            ((Equiv.refl (V → Fin q)).prodCongr
-              (Equiv.prodComm (Fin d) (Fin d))))))
-  optionSplit.trans
-    (((Equiv.refl (V → Fin q)).prodCongr
-      (Equiv.boolArrowEquivProd (Fin d)).symm).trans
-      (Equiv.sumPiEquivProdPi
-        (fun s => Fin (augmentedDimensions (V := V) q (fun _ => d) s))).symm)
+  (Equiv.piCongrLeft' _ augmentedSiteEquiv).trans
+    (Equiv.piCongrRight fun s =>
+      match s with
+      | Sum.inl _ => Equiv.refl (Fin q)
+      | Sum.inr false => Equiv.refl (Fin d)
+      | Sum.inr true => Equiv.refl (Fin d))
 
 /-- Apply the same one-copy identification independently on every replica.
 The physical coordinates, C and R are retained at every copy, also when k=0.
