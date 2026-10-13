@@ -52,7 +52,9 @@ def partialSlotSampleEquiv {a b : Layout P} (w : SourceCircuit a b) (p : P) :
   refine (partialSlotEquiv A w).trans ((sourceSampleEquiv w).subtypeEquiv ?_)
   intro e
   rw [mem_sourceSampleEquiv_iff]
-  simp only [A, partySelector_affectedOwner_all_apply, partySelector, decide_eq_true_eq]
+  dsimp only [A]
+  simp_rw [partySelector_affectedOwner_all_apply]
+  simp only [partySelector, decide_eq_true_eq]
 
 end TNLean.PEPS.PairEffect.SourceCircuit
 
