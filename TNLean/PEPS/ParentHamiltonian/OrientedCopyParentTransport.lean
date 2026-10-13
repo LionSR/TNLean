@@ -280,13 +280,9 @@ theorem graphNumberedCopyMatrix_injOn_oriented_parent
     Set.InjOn (Matrix.mulVecLin (graphNumberedBondMatrix eX eY
       (fullMultiplicityBondMap (fun i => Fin (d i)) (fun i => Fin (m i)))))
       (regionParentGroundSpace (numberedGraphOrientedAveragingTensor
-        (blockMatrixRepresentation d D) (blockMultiplicityRootWeight d m) o eX) R) := by
-  intro ψ hψ φ hφ hEq
-  have h := congrArg (fun x => (graphNumberedBondMatrix eX eY
-    (fullMultiplicityBondMap (fun i => Fin (d i)) (fun i => Fin (m i)))).conjTranspose *ᵥ x) hEq
-  change _ *ᵥ (_ *ᵥ ψ) = _ *ᵥ (_ *ᵥ φ) at h
-  rwa [graphNumberedCopyMatrix_leftInverse_oriented_parent o d m D hm eX eY R hcover hψ,
-    graphNumberedCopyMatrix_leftInverse_oriented_parent o d m D hm eX eY R hcover hφ] at h
+        (blockMatrixRepresentation d D) (blockMultiplicityRootWeight d m) o eX) R) :=
+  Set.LeftInvOn.injOn (f₁' := Matrix.mulVecLin _) fun _ hψ =>
+    graphNumberedCopyMatrix_leftInverse_oriented_parent o d m D hm eX eY R hcover hψ
 
 /-- Restriction of the actual supported bond map gives a linear equivalence
 of the entire canonical parent ground spaces. -/
@@ -301,19 +297,9 @@ def canonicalOrientedCopyParentEquiv
       (blockMatrixRepresentation d D) (blockMultiplicityRootWeight d m) o eX) R ≃ₗ[ℂ]
       regionParentGroundSpace (numberedGraphOrientedAveragingTensor
         (blockMultiplicityRepresentation d m D) 1 o eY) R :=
-  LinearEquiv.ofBijective
-    (((Matrix.mulVecLin (graphNumberedBondMatrix eX eY
-      (fullMultiplicityBondMap (fun i => Fin (d i)) (fun i => Fin (m i))))) ∘ₗ
-      (regionParentGroundSpace (numberedGraphOrientedAveragingTensor
-        (blockMatrixRepresentation d D)
-          (blockMultiplicityRootWeight d m) o eX) R).subtype).codRestrict _
-      (fun ψ => graphNumberedCopyMatrix_maps_oriented_parent o d m D hm eX eY R ⟨ψ, ψ.2, rfl⟩))
-    ⟨fun ψ φ h => Subtype.ext (graphNumberedCopyMatrix_injOn_oriented_parent
-        o d m D hm eX eY R hcover ψ.2 φ.2 (congrArg Subtype.val h)), by
-      intro ψ
-      have hψ := (map_regionParentGroundSpace_oriented_copy_eq o d m D hm eX eY R hcover).ge ψ.2
-      obtain ⟨φ, hφ, hEq⟩ := hψ
-      exact ⟨⟨φ, hφ⟩, Subtype.ext hEq⟩⟩
+  LinearMap.submoduleEquivOfInjOn _
+    (graphNumberedCopyMatrix_injOn_oriented_parent o d m D hm eX eY R hcover)
+    (map_regionParentGroundSpace_oriented_copy_eq o d m D hm eX eY R hcover)
 
 /-- The full canonical ground-space dimension is unchanged by multiplicity restoration. -/
 theorem finrank_regionParentGroundSpace_oriented_copy_eq

@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.GraphOrientedCoordinateTransport
 import TNLean.PEPS.GraphBondFamilyRegionBlocks
-import TNLean.PEPS.ParentHamiltonian.GraphCoordinateCanonicalParentTransport
+import TNLean.PEPS.ParentHamiltonian.SemiRegularCanonicalParentTransport
 
 /-!
 # Canonical parent transport with arbitrary edge orientations
@@ -27,6 +27,16 @@ private abbrev RI (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}
 private abbrev RB (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
 variable {G X Y : Type*} [Group G] [Fintype G]
 variable [Fintype X] [DecidableEq X] [Fintype Y] [DecidableEq Y] {p q : ℕ}
+
+omit [Fintype X] [DecidableEq X] [Fintype Y] [DecidableEq Y] in
+/-- With no reversed edge, the oriented global Fourier bond family is the
+ordered global Fourier bond matrix. Source: SCP10, Section 7. -/
+theorem graphNumberedBondFamilyMatrix_orientedBondCoordinateMatrix_false
+    (Q : Matrix Y X ℂ) (eX : (v : V) → (IncidentEdge Γ v → X) ≃ Fin p)
+    (eY : (v : V) → (IncidentEdge Γ v → Y) ≃ Fin q) :
+    graphNumberedBondFamilyMatrix eX eY (graphOrientedBondCoordinateMatrix Q fun _ => false) =
+      graphNumberedBondMatrix eX eY (bondCoordinateMatrix Q) :=
+  rfl
 
 /-- The scalar contributed by the fixed exterior endpoint of each crossing
 bond, with the arbitrary edge orientation retained. -/
@@ -182,18 +192,11 @@ theorem graphNumberedBondFamilyMatrix_oriented_coordinates_injective [Finite X]
     Function.Injective (Matrix.mulVecLin
       (graphNumberedBondFamilyMatrix eX eY (graphOrientedBondCoordinateMatrix Q o))) := by
   let := Fintype.ofFinite X
-  intro ψ φ h
-  have hc (χ : (V → Fin p) → ℂ) :
-      graphNumberedBondFamilyMatrix eY eX (graphOrientedBondCoordinateMatrix Q.conjTranspose o) *ᵥ
-        (graphNumberedBondFamilyMatrix eX eY (graphOrientedBondCoordinateMatrix Q o) *ᵥ χ) = χ := by
-    simpa only [Matrix.conjTranspose_conjTranspose] using
-      graphNumberedBondFamilyMatrix_oriented_coordinates_rightInverse Q.conjTranspose
-        (by simpa only [Matrix.conjTranspose_conjTranspose] using hQ) o eY eX χ
-  have he := congrArg (fun χ =>
-    graphNumberedBondFamilyMatrix eY eX
-      (graphOrientedBondCoordinateMatrix Q.conjTranspose o) *ᵥ χ) h
-  change _ *ᵥ (_ *ᵥ ψ) = _ *ᵥ (_ *ᵥ φ) at he
-  rwa [hc, hc] at he
+  refine Function.LeftInverse.injective (g := Matrix.mulVecLin (graphNumberedBondFamilyMatrix
+    eY eX (graphOrientedBondCoordinateMatrix Q.conjTranspose o))) fun χ => ?_
+  simpa only [Matrix.mulVecLin_apply, Matrix.conjTranspose_conjTranspose] using
+    graphNumberedBondFamilyMatrix_oriented_coordinates_rightInverse Q.conjTranspose
+      (by simpa only [Matrix.conjTranspose_conjTranspose] using hQ) o eY eX χ
 
 /-- Restriction of the actual Fourier operation is a linear equivalence of
 canonical parent ground spaces for every region family. -/
@@ -205,21 +208,9 @@ def canonicalOrientedCoordinateParentEquiv
     (eY : (v : V) → (IncidentEdge Γ v → Y) ≃ Fin q) (R : ι → Finset V) :
     regionParentGroundSpace (numberedGraphOrientedAveragingTensor U 1 o eX) R ≃ₗ[ℂ]
       regionParentGroundSpace (numberedGraphOrientedAveragingTensor L 1 o eY) R :=
-  LinearEquiv.ofBijective
-    (((Matrix.mulVecLin
-        (graphNumberedBondFamilyMatrix eX eY (graphOrientedBondCoordinateMatrix Q o))) ∘ₗ
-      (regionParentGroundSpace
-        (numberedGraphOrientedAveragingTensor U 1 o eX) R).subtype).codRestrict
-        _ (fun ψ =>
-          graphNumberedBondFamilyMatrix_oriented_coordinates_maps_regionParentGroundSpace
-            Q hQ U L hL o eX eY R ⟨ψ, ψ.2, rfl⟩))
-    ⟨fun ψ φ h => Subtype.ext (graphNumberedBondFamilyMatrix_oriented_coordinates_injective
-        Q hQ o eX eY
-        (congrArg Subtype.val h)), by
-      intro ψ
-      have hψ := (map_regionParentGroundSpace_oriented_coordinates_eq Q hQ U L hL o eX eY R).ge ψ.2
-      obtain ⟨φ, hφ, hEq⟩ := hψ
-      exact ⟨⟨φ, hφ⟩, Subtype.ext hEq⟩⟩
+  LinearMap.submoduleEquivOfInjOn _
+    (graphNumberedBondFamilyMatrix_oriented_coordinates_injective Q hQ o eX eY).injOn
+    (map_regionParentGroundSpace_oriented_coordinates_eq Q hQ U L hL o eX eY R)
 
 /-- The dimension of the entire canonical parent kernel is coordinate invariant. -/
 theorem finrank_regionParentGroundSpace_oriented_coordinates_eq

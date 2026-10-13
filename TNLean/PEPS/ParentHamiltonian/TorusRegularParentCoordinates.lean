@@ -39,10 +39,6 @@ local instance : Fact (1 < height) := ⟨by have := Fact.out (p := 2 < height); 
 local notation "X" => TorusVertex width height
 local notation "Γₜ" => torusGraph width height
 
-/-- Every site belongs to the native plaquette based there. -/
-theorem mem_torusPlaquetteRegion_self (v : X) : v ∈ torusPlaquetteRegion v :=
-  List.mem_toFinset.mpr (torusPlaquetteWalk v).start_mem_support
-
 /-- The native plaquette collection contains both endpoints of every edge. -/
 theorem exists_torusPlaquetteRegion_contains_edge (e : Edge Γₜ) :
     ∃ v : X, e.1.1 ∈ torusPlaquetteRegion v ∧ e.1.2 ∈ torusPlaquetteRegion v := by
@@ -80,24 +76,9 @@ theorem globalDependentPhysicalMap_regularInverse_eq_zero_of_torusPlaquetteHolon
     (hhol : regularWalkHolonomy (regularHalfEdgeOperators α) (torusPlaquetteWalk v) ≠ 1) :
     globalDependentPhysicalMap F Ψ (fun w => α w.1) = 0 := by
   classical
-  let R := torusPlaquetteRegion v
-  have hsupport : ∀ x ∈ (torusPlaquetteWalk v).support, x ∈ (R : Set X) := by
-    intro x hx
-    exact List.mem_toFinset.mpr hx
-  have hR : ((Γₜ).induce (R : Set X)).Connected := by
-    have heq : (R : Set X) = {x | x ∈ (torusPlaquetteWalk v).support} := by
-      ext x
-      simp [R, torusPlaquetteRegion]
-    rw [heq]
-    exact (torusPlaquetteWalk v).connected_induce_support
-  let o : {x : X // x ∈ R} := ⟨v, mem_torusPlaquetteRegion_self v⟩
-  let p : ((Γₜ).induce (R : Set X)).Walk o o :=
-    (torusPlaquetteWalk v).induce (R : Set X) hsupport
   apply globalDependentPhysicalMap_regularInverse_eq_zero_of_holonomy_ne_one
-    a F hF R hR o p P hP Ψ hΨ α
-  dsimp only [p]
-  rw [regularWalkHolonomy_inducedWalk, SimpleGraph.Walk.map_induce]
-  exact hhol
+    a F hF _ (connected_torusPlaquetteRegion v) _ (torusPlaquetteInducedWalk v) P hP Ψ hΨ α
+  rwa [regularWalkHolonomy_torusPlaquetteInducedWalk]
 
 /-- Every vector in the actual native torus parent kernel admits reconstructing
 regular coordinates with vertex-left invariance, shared-edge-right invariance,
