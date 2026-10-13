@@ -195,9 +195,9 @@ private theorem selected_localPart_frame_eval_heq
   have hmid : Layout.restrict sq (r' :: (W.sources.layout ++ Layout.mapOwner f a)) =
       Layout.mapOwner f (Layout.restrict sp (r :: (w.sources.layout ++ a))) := by
     have hr' : sq r'.owner = sp r.owner := congrFun hsel r.owner
-    cases hr : sp r.owner <;>
-      simp only [Layout.restrict_cons, hr', hr, Bool.false_eq_true, ↓reduceIte,
-        Layout.mapOwner_cons, hI]
+    cases hr : sp r.owner
+    simp only [Layout.restrict_cons, hr', hr, Bool.false_eq_true, ↓reduceIte,
+      Layout.mapOwner_cons, hI]
     rfl
   have hcomp := eval_comp_heq
     ((moveHead r' W.sources.layout (Layout.mapOwner f a)).restrict sq
