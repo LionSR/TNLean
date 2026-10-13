@@ -117,6 +117,51 @@ private theorem selectedRemainingComparison_of_spectator_id {P Q R S : Type}
     id_heq_of_memory_eq htailMem
   exact hW.trans (hid.trans hMapped.symm)
 
+/-- The selected spectator identity with the source-free local-part proof
+supplied by the word itself. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 351–434 and 565–588. -/
+private def selectedSpectatorIdentity {Q : Type} {a b : Layout Q}
+    (v : Word a b) (q : Q) (tail : Layout Q) : Prop :=
+  HEq (v.localPart.restrict (partySelector q) v.sources_localPart).eval
+    (Word.id (Layout.atParty q tail)).eval
+
+/-- An aggregate map at an excluded owner leaves precisely the selected
+spectator identity. Its operator and register spaces are arbitrary.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–434
+and 565–588. -/
+private theorem selectedSpectatorIdentity_groupedBlockMap {P Q : Type}
+    (f : P → Q) (r q : Q) (hrq : r ≠ q) (a b : Layout P)
+    (ha : ∀ z ∈ a, f z.owner = r) (hb : ∀ z ∈ b, f z.owner = r)
+    (A : Mem a →L[ℂ] Mem b) (tail : Layout P) :
+    selectedSpectatorIdentity (Word.groupedBlockMap f r a b ha hb A tail)
+      q (Layout.mapOwner f tail) := by
+  classical
+  unfold selectedSpectatorIdentity
+  have hs : (Word.groupedBlockMap f r a b ha hb A tail).sources = [] := by
+    simp only [Word.groupedBlockMap, Word.sources_castLayouts, Word.sources]
+  refine (Word.restrict_localPart_eval_heq_of_sources_nil
+    (partySelector q) _ hs).trans ?_
+  unfold Word.groupedBlockMap
+  rw [Word.restrict_castLayouts (partySelector q) _ _ _ rfl]
+  exact (Word.eval_castLayouts_heq _ _ _).trans
+    (Word.restrict_localMap_false_eval_heq (partySelector q) r _ _ _ _
+      (by simp [partySelector, hrq]))
+
+/-- A structural equality with an excluded aggregate map gives the selected
+spectator identity without rewriting a fixed source proof.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–434
+and 565–588. -/
+private theorem selectedSpectatorIdentity_of_groupedBlockMap_eq {P Q : Type}
+    (f : P → Q) (r q : Q) (hrq : r ≠ q) (a b : Layout P)
+    (ha : ∀ z ∈ a, f z.owner = r) (hb : ∀ z ∈ b, f z.owner = r)
+    (A : Mem a →L[ℂ] Mem b) (tail : Layout P)
+    (v : Word (Layout.mapOwner f (a ++ tail)) (Layout.mapOwner f (b ++ tail)))
+    (hv : v = Word.groupedBlockMap f r a b ha hb A tail) :
+    selectedSpectatorIdentity v q (Layout.mapOwner f tail) := by
+  exact Eq.mpr (congrArg (fun z ↦ selectedSpectatorIdentity z q
+    (Layout.mapOwner f tail)) hv)
+    (selectedSpectatorIdentity_groupedBlockMap f r q hrq a b ha hb A tail)
+
 namespace SourceCircuit
 variable {P C ι : Type} [Fintype C] [Fintype ι]
 
@@ -148,7 +193,6 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection
   let all := affectedOwner (fun _ : P ↦ true)
   let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
   let fa := affectedOwner A
-  let sq := partySelector q
   change selectedRemainingComparison W V qp q lift
   have hfAll : ∀ r, all r = qp ↔ r = p := by
     intro r
@@ -185,10 +229,9 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection
       exact hincident ⟨t, ht⟩
     have htA : ¬ ∃ t : C, A (owner t) = true := by
       rintro ⟨t, ht⟩
-      have he : owner t = p := by
-        simpa only [A, partySelector_affectedOwner_all_apply, partySelector,
-          decide_eq_true_eq] using ht
-      exact howner t he
+      have he : all (owner t) = qp := by
+        simpa only [A, partySelector, decide_eq_true_eq] using ht
+      exact howner t ((hfAll (owner t)).mp he)
     have hV : V = Word.groupedBlockMap fa none
         (Layout.mapOwner owner a) (Layout.mapOwner owner b)
         (Layout.affectedOwner_mapOwner_eq_none A owner htA a)
@@ -196,19 +239,12 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection
         (G.evalAtOwners owner) tail := by
       unfold V partialWord
       rw [dite_eq_right htA]
-      rfl
-    have hsV : V.sources = [] := by
-      rw [hV]
-      simp only [Word.groupedBlockMap, Word.sources_castLayouts, Word.sources]
-    have hOne : HEq (V.localPart.restrict sq V.sources_localPart).eval
-        (Word.id (Layout.atParty q (Layout.mapOwner fa tail))).eval := by
-      refine (Word.restrict_localPart_eval_heq_of_sources_nil sq V hsV).trans ?_
-      rw [hV]
-      unfold Word.groupedBlockMap
-      rw [Word.restrict_castLayouts]
-      exact (Word.eval_castLayouts_heq _ _ _).trans
-        (Word.restrict_localMap_false_eval_heq sq none _ _ _ _
-          (by simp [sq, q, partySelector]))
+    have hOne : selectedSpectatorIdentity V q (Layout.mapOwner fa tail) :=
+      selectedSpectatorIdentity_of_groupedBlockMap_eq fa none q (by simp [q])
+        (Layout.mapOwner owner a) (Layout.mapOwner owner b)
+        (Layout.affectedOwner_mapOwner_eq_none A owner htA a)
+        (Layout.affectedOwner_mapOwner_eq_none A owner htA b)
+        (G.evalAtOwners owner) tail V hV
     have hAll := restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
       owner G tail p howner ξ
     exact selectedRemainingComparison_of_spectator_id all fa lift p qp q

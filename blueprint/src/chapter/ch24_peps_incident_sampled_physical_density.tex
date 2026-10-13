@@ -750,3 +750,22 @@ endpoint labels agree after grouping.
     arbitrary-operator restriction comparison, and then apply the incident-label
     comparison. The same operators and register order occur at every step.
 \end{proof}
+
+\begin{theorem}[Owner and layout identification of endpoint registers]
+    \label{thm:peps_endpoint_register_owner_transport}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.endpointRegisterWord_eval_heq_mapOwner_castLayouts}
+    Let $D$ be an arbitrary finite ordered list of endpoint registers and
+    their endomorphisms. Relabel the owners by any map, and identify the
+    input and output register lists with equal lists. Under the canonical
+    identification of the ordered memory spaces, the resulting operator
+    equals the operator of the original endpoint word. Empty lists and
+    zero-dimensional endpoint spaces are included.
+    This is an auxiliary transport identity for
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_party_restriction,thm:peps_owner_evaluation_identification}
+    Identifying equal layouts preserves the evaluated word. Relabelling
+    owners preserves the ordered memory spaces and each endpoint operator.
+    Compose these two canonical identifications.
+\end{proof}

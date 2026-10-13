@@ -113,6 +113,7 @@ import TNLean.PEPS.Approximation.EndpointMatrixAverage
 import TNLean.PEPS.Approximation.EndpointMatrixWord
 import TNLean.PEPS.Approximation.EndpointOperatorCoordinates
 import TNLean.PEPS.Approximation.EndpointOperatorWord
+import TNLean.PEPS.Approximation.EndpointRegisterOwnerTransport
 import TNLean.PEPS.Approximation.EndpointRegisterRestriction
 import TNLean.PEPS.Approximation.EndpointSelectedRegisterComparison
 import TNLean.PEPS.Approximation.EndpointWordEvaluation

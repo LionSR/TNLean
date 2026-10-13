@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.IncidentSampledEndpointWord
 import TNLean.PEPS.Approximation.SampledEndpointOperatorRepresentation
 import TNLean.PEPS.Approximation.EndpointSelectedRegisterComparison
+import TNLean.PEPS.Approximation.EndpointRegisterOwnerTransport
 
 /-!
 # Incident sampled endpoint data and original labels
@@ -63,9 +64,27 @@ theorem incidentSampledEndpointWord_eval_heq_endpointRegisterWord
         ((SourceInventory.endpointRegisterData R U V M N).filter
           (fun z ↦ partySelector q z.1.owner))).eval := by
   classical
-  unfold incidentSampledEndpointWord
-  dsimp only
-  exact (Word.eval_castLayouts_heq _ _ _).trans (Word.eval_mapOwner_heq _ _)
+  intro A hp q R U V M N
+  let lift : Option {t : P // A t = true} → Option {_p : P // true = true} :=
+    fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
+  let D := SourceInventory.endpointRegisterData R U V M N
+  let Dp := D.filter (fun z ↦ partySelector q z.1.owner)
+  have hDp : Dp.map Sigma.fst =
+      Layout.restrict (partySelector q) (SourceInventory.slotLayout R U V) :=
+    SourceInventory.endpointRegisterData_filter_layout (partySelector q) R U V M N
+  have hselected :
+      Layout.mapOwner lift (Layout.restrict (partySelector q)
+        (SourceInventory.slotLayout R U V)) =
+      Layout.atParty (some ⟨p, rfl⟩) (w.allResidualSourceLayout ++ []) := by
+    rw [List.append_nil]
+    exact mapOwner_atParty_partialSlots_eq_allResidualSourceLayout w p
+  have hin : Layout.mapOwner lift (Dp.map Sigma.fst) =
+      Layout.atParty (some ⟨p, rfl⟩) (w.allResidualSourceLayout ++ []) :=
+    (congrArg (Layout.mapOwner lift) hDp).trans hselected
+  change HEq
+    (((SourceInventory.endpointRegisterWord Dp).mapOwner lift).castLayouts hin hin).eval
+    (SourceInventory.endpointRegisterWord Dp).eval
+  exact SourceInventory.endpointRegisterWord_eval_heq_mapOwner_castLayouts Dp lift hin hin
 
 /-- Reconstructing incident choices preserves the original label at each
 surviving source slot. This equality is proved before any sampled operator or
@@ -127,12 +146,22 @@ theorem incidentSampledEndpointWord_eval_heq_selectedRegisterWord
         (j (partialSlotEquiv A w i).1) ω)
   have hM : Mi = (fun i ↦ M (partialSlotEquiv A w i).1) := by
     funext i
-    dsimp only [Mi, χξ, χζ, M, sampledEndpointOperatorLeft]
-    simp only [incidentPartialSlotChoice_eq_allSourceLabel]
+    exact congrArg₂
+      (fun η θ ↦ basisMatrixOperator
+        (EuclideanSpace.basisFun (Fin (sourceDims w (partialSlotEquiv A w i).1).1) ℂ)
+        (sampledEndpointLeft w k lam E (partialSlotEquiv A w i).1
+          (η, θ) (j (partialSlotEquiv A w i).1) ω))
+      (incidentPartialSlotChoice_eq_allSourceLabel w p ξ i)
+      (incidentPartialSlotChoice_eq_allSourceLabel w p ζ i)
   have hN : Ni = (fun i ↦ N (partialSlotEquiv A w i).1) := by
     funext i
-    dsimp only [Ni, χξ, χζ, N, sampledEndpointOperatorRight]
-    simp only [incidentPartialSlotChoice_eq_allSourceLabel]
+    exact congrArg₂
+      (fun η θ ↦ basisMatrixOperator
+        (EuclideanSpace.basisFun (Fin (sourceDims w (partialSlotEquiv A w i).1).2) ℂ)
+        (sampledEndpointRight w k lam F (partialSlotEquiv A w i).1
+          (η, θ) (j (partialSlotEquiv A w i).1) ω))
+      (incidentPartialSlotChoice_eq_allSourceLabel w p ξ i)
+      (incidentPartialSlotChoice_eq_allSourceLabel w p ζ i)
   have hdata : SourceInventory.endpointRegisterData (partialSlots A w) U V Mi Ni = D :=
     (congrArg₂ (SourceInventory.endpointRegisterData (partialSlots A w) U V) hM hN).trans
       (endpointRegisterData_partialSlots A w M N)
