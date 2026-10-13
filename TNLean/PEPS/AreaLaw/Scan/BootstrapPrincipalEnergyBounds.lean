@@ -95,6 +95,7 @@ theorem exists_bootstrap_principal_energy_bound
           ((isLittleO_log_rpow_rpow_atTop Cl (div_pos X.nu_pos
             (by norm_num : (0 : ℝ) < 4))).natCast_atTop.const_mul_left
               (192 * C)).eventuallyLE))))
+  refine ⟨N, (hN N le_rfl).1.two_le_n, fun n hn e he ↦ ?_⟩
   done
 
 end TNLean.PEPS.AreaLaw.Scan
