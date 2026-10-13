@@ -808,3 +808,50 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     identities under the induced memory identifications to obtain
     (\ref{eq:peps_selected_local_part_framing}).
 \end{proof}
+
+\begin{theorem}[Local dependence on supplied incident choices]
+    \label{thm:peps_all_branch_incident_locality}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_all_localPart_eval_heq_of_projectAllChoices_eq}
+    \uses{def:peps_partial_source_choices,def:peps_touched_labels,
+        thm:peps_incident_gate_labels,def:peps_affected_owner,
+        def:peps_single_party_selector,thm:peps_source_preparation}
+    Let $W:a\to b$ be a chronological composition of prepared gates
+    and local operations on the original parties $P$, and fix $p\in P$.
+    Select all original parties and let $g:P\to P\sqcup\{*\}$
+    be the resulting owner map. Let $V_\xi$ and $V_\zeta$ be the
+    actual partial compositions corresponding to two supplied choices
+    $\xi,\zeta\in\Xi_P$. If their incident projections agree,
+    $\pi_{\{p\}}\xi=\pi_{\{p\}}\zeta$, then
+    $(L(V_\xi))|_{g(p)}=(L(V_\zeta))|_{g(p)}$
+    under the canonical identifications of the retained input and
+    output register lists. Both full choices are supplied; no choice
+    of a label at an unused occurrence is required.
+    This is an auxiliary locality identity for the chronological
+    contraction in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 246--267, 351--381, 409--434 and 565--588.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:peps_partial_source_choices,thm:peps_canonical_source_recovery,
+        thm:peps_touched_labels,thm:peps_incident_gate_labels,
+        thm:peps_selected_local_part_composition,
+        thm:peps_selected_local_part_framing,
+        thm:peps_all_gate_nonincident_identity}
+    Every supplied all-party branch has the same ordered source-register
+    list in the canonical slot spaces. Restricting this list therefore
+    gives the same selected source prefix for $\xi$ and $\zeta$.
+    Induct on the chronological composition. Identity operations,
+    local maps and register exchanges carry no branch choice.
+    For a composition, the incident projections agree separately
+    on its earlier and later operations. Apply the inductive
+    identities and Theorem~\ref{thm:peps_selected_local_part_composition},
+    using equality of the two selected source lists. Framing is
+    handled by Theorem~\ref{thm:peps_selected_local_part_framing}.
+    At a gate incident to $p$, projected choices preserve its
+    original label, so both supplied choices specify the same
+    branch. At a nonincident gate, both selected local parts are
+    the identity on precisely the retained spectators by
+    Theorem~\ref{thm:peps_all_gate_nonincident_identity}. The latter
+    case includes empty participant sets, for which the aggregate
+    gate requests no branch label.
+\end{proof}

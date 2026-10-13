@@ -29,6 +29,7 @@ import TNLean.PEPS.Approximation.ActualSourceSampling
 import TNLean.PEPS.Approximation.AffectedOwners
 import TNLean.PEPS.Approximation.AffectedPhysicalDimension
 import TNLean.PEPS.Approximation.AllPartialGate
+import TNLean.PEPS.Approximation.AllPartyBranchLocality
 import TNLean.PEPS.Approximation.AllSourceSlots
 import TNLean.PEPS.Approximation.AngularResetWidth
 import TNLean.PEPS.Approximation.ApproximateCircuitBudget
