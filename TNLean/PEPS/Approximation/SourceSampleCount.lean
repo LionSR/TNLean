@@ -40,7 +40,8 @@ private theorem card_sample_univ_eq_sum_pairSampleLabels {G : Type} [Fintype G]
       ∑ g : G, (pairSampleLabels (participants g)).card := by
   unfold DistributedOperatorContraction.Sample
   rw [Fintype.card_sigma]
-  simp only [Fintype.card_coe, Finset.sum_coe_sort_eq_attach, Finset.sum_attach]
+  simp only [Fintype.card_coe, Finset.sum_coe_sort_eq_attach]
+  exact Finset.sum_attach Finset.univ (fun g : G ↦ (pairSampleLabels (participants g)).card)
 
 open Classical in
 /-- The original ordered source slots are counted by the pair samples at each
