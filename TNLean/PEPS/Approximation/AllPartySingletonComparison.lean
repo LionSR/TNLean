@@ -194,7 +194,7 @@ private theorem selectedRemainingComparison_of_incident_gate
     let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
       (by classical exact decide_eq_true rfl)
     let q : Option {t : P // A t = true} := some ⟨p, hp⟩
-    let lift : Option {t : P // A t = true} → Option {t : P // true = true} :=
+    let lift : Option {t : P // A t = true} → Option {_t : P // true = true} :=
       fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
     let χ := projectAllChoices A (.gate owner G tail) ξ
     let W := partialWord (fun _ : P ↦ true) (.gate owner G tail) ξ
@@ -252,20 +252,18 @@ private theorem selectedRemainingComparison_of_nonincident_gate
     let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
       (by classical exact decide_eq_true rfl)
     let q : Option {t : P // A t = true} := some ⟨p, hp⟩
-    let lift : Option {t : P // A t = true} → Option {t : P // true = true} :=
+    let lift : Option {t : P // A t = true} → Option {_t : P // true = true} :=
       fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
     let χ := projectAllChoices A (.gate owner G tail) ξ
     let W := partialWord (fun _ : P ↦ true) (.gate owner G tail) ξ
     let V := partialWord A (.gate owner G tail) χ
-    HEq (W.localPart.restrict (partySelector (some (⟨p, rfl⟩ : {_p : P // true = true})))
-      W.sources_localPart).eval
-      ((V.localPart.restrict (partySelector q) V.sources_localPart).mapOwner lift).eval := by
+    selectedRemainingComparison W V
+      (some (⟨p, rfl⟩ : {_p : P // true = true})) q lift := by
   classical
   intro A hp q lift χ W V
   let all := affectedOwner (fun _ : P ↦ true)
   let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
   let fa := affectedOwner A
-  change selectedRemainingComparison W V qp q lift
   have hfAll : ∀ r, all r = qp ↔ r = p := by
     intro r
     simp [all, qp, affectedOwner]
