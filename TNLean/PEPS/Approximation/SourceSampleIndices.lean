@@ -102,6 +102,8 @@ theorem sourcePairEquiv_apply {a b : Layout P} (w : SourceCircuit a b)
   | localMap => exact False.elim (Empty.elim e.1 : False)
   | @gate C ι _ _ owner a b c G tail =>
       rcases e with ⟨g, i⟩
+      cases g
+      change Fin G.slots.length at i
       change ((participantPairEquiv owner)
         (SourceInventory.pairIndexEquiv G.slots G.pair_nodup G.pair_complete i)).val =
           Sym2.mk (owner (G.slots.get i).left) (owner (G.slots.get i).right)
