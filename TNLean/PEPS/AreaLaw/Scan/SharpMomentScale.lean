@@ -78,8 +78,9 @@ theorem ScannerExponents.exists_eventually_rpow_le_mul_K (X : ScannerExponents) 
   calc
     (n : ℝ) ^ (1 - X.ell - X.mu) * (n : ℝ) ^ (X.ell + X.mu)
         = n := by
-          rw [← Real.rpow_add hnpos]
-          convert Real.rpow_one (n : ℝ) using 1 <;> ring
+          rw [← Real.rpow_add hnpos,
+            show 1 - X.ell - X.mu + (X.ell + X.mu) = (1 : ℝ) by ring,
+            Real.rpow_one]
     _ ≤ (C * (X.K n : ℝ)) * (n : ℝ) ^ (X.ell + X.mu) := hpower
 
 /-- A ceiling budget of order `n D (log n)^12` has the expected square-root
@@ -169,7 +170,10 @@ theorem ScannerExponents.eventually_mul_a_sqrt_budget_le (X : ScannerExponents)
           A * Real.sqrt (2 * CB) * Real.log (n : ℝ) ^ 6
               ≤ (c * (n : ℝ) ^ δ) / C := by
                 apply (le_div_iff₀ (zero_lt_one.trans_le hC)).2
-                convert hsmall' using 1 <;> ring
+                calc A * Real.sqrt (2 * CB) * Real.log (n : ℝ) ^ 6 * C
+                    = A * C * Real.sqrt (2 * CB) * Real.log (n : ℝ) ^ 6 := by
+                      ring
+                  _ ≤ c * (n : ℝ) ^ δ := hsmall'
           _ = (c / C) * (n : ℝ) ^ δ := by ring
       _ = (c / C) * (n : ℝ) ^ (1 - X.ell - X.mu) := by
         rw [mul_assoc, ← Real.rpow_add hnpos]
