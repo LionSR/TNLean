@@ -731,6 +731,7 @@ This gives the contractions used in
 \begin{theorem}[Number of the original shared samples]
     \label{thm:peps_original_source_sample_count}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.length_allSourceSlots_eq_sum_pairSampleLabels}
+    \leanok
     \uses{def:peps_original_source_sample_indices,thm:peps_source_pair_count}
     Let $G$ be the nonempty participant occurrences of the original
     chronological composition. For $g\in G$, write $C_g$ for its
@@ -750,6 +751,7 @@ This gives the contractions used in
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{def:peps_original_source_sample_indices,thm:peps_source_pair_count}
     The original ordered source slots are in bijection with the
     disjoint union of the sets $\mathcal E(C_g)$. Take cardinalities
@@ -760,6 +762,7 @@ This gives the contractions used in
 \begin{theorem}[Distributing the source averaging factor]
     \label{thm:peps_original_source_sample_averaging}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.inv_sampleSize_pow_allSourceSlots_eq_prod}
+    \leanok
     \uses{thm:peps_original_source_sample_count}
     With the notation of Theorem~\ref{thm:peps_original_source_sample_count},
     for any nonnegative integer $k$,
@@ -776,6 +779,7 @@ This gives the contractions used in
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:peps_original_source_sample_count}
     Substitute (\ref{eq:peps_original_source_sample_count}) for $N$ and
     use the product formula
