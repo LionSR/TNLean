@@ -35,7 +35,7 @@ abstracted — record why, so it is not re-proposed).
   its physical indices are the original indices and its private basis is the
   actual selected private basis. No scalar or norm is cancelled.
 - **Verification:** The existing physical-trace fixture checks the definition
-  by name. Its blueprint definition remains unmarked; elaboration is pending.
+  by name, and its blueprint definition is marked complete.
 
 ### Reflected marked-chain scalar and gauge cancellation — promoted (2026-10-12)
 
@@ -4299,8 +4299,8 @@ three-plaquette output measurement, and the routed reunion measurement.
   coordinate formula.
 - **Scope:** The exterior application identifies words after restriction;
   no equality of full operators is restricted. The coordinate formulas and
-  public hypotheses are unchanged. Verification at the default proof limits
-  remains pending.
+  public hypotheses are unchanged; both occurrences compile at the default
+  proof limits.
 
 ### Upper endpoint of a scanner band — candidate (2026-10-12)
 
@@ -7381,4 +7381,4 @@ spectral split → block extraction → MPV calculation → strict bounds
   matrix with `LinearMap.toMatrix` while its words are still arbitrary,
   using the existing `matrix_repr_eval_eq_toMatrix`. The actual circuit
   is substituted afterward. No hypotheses or proof limits are added.
-  The extracted definition has a named axiom check; compilation is pending.
+  The extracted definition has a named axiom check.
