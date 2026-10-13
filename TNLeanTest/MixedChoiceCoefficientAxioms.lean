@@ -11,10 +11,12 @@ import Lean.Util.CollectAxioms
 
 set_option linter.hashCommand false
 
+open TNLean.PEPS.PairEffect.SourceCircuit
+
 run_cmd do
   let decls := #[
-    ``TNLean.PEPS.PairEffect.SourceCircuit.coefficient_all_mul_conj_eq_prod_nonemptyGateLocations,
-    ``TNLean.PEPS.PairEffect.SourceCircuit.sum_coefficient_all_mul_conj_smul_eq_sum_nonemptyGateLabels]
+    ``coefficient_all_mul_conj_eq_prod_nonemptyGateLocations,
+    ``sum_coefficient_all_mul_conj_smul_eq_sum_nonemptyGateLabels]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   for decl in decls do
