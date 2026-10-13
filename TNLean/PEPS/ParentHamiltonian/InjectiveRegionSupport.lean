@@ -21,10 +21,9 @@ Source: CPGSV21, arXiv:2011.12127, Section IV.C.1, lines 2003–2044;
 the complementary-block Schmidt-span argument is also in
 arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254–582.
 
-**Scope restriction (nonzero virtual spaces):** The vertex-injective
-consequences assume positive bond dimensions, following the convention
-recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
-The complementary-map support theorem does not need this restriction.
+The site-injective consequences take the injective tensor hypothesis
+`Tensor.IsInjective`, which carries the nonzero virtual-space convention.
+The complementary-map support theorem does not need it.
 
 ## References
 
@@ -90,11 +89,11 @@ theorem openRegionMap_injective_of_regionBlockedTensorInjective
 
 /-- Contracting ordinary injective sites gives an injective actual region map.
 Source: arXiv:1804.04964, Section 3, lines 205–250 and 1205–1210. -/
-theorem openRegionMap_injective_of_isVertexInjective
-    (A : Tensor Γ d) (R : Finset V) (hA : IsVertexInjective A)
-    (hpos : ∀ e, 0 < A.bondDim e) : Function.Injective (openRegionMap A R) :=
+theorem openRegionMap_injective_of_isInjective
+    (A : Tensor Γ d) (R : Finset V) (hA : A.IsInjective) :
+    Function.Injective (openRegionMap A R) :=
   openRegionMap_injective_of_regionBlockedTensorInjective A R
-    (regionBlockedTensorInjective_of_isVertexInjective A R hA hpos)
+    (regionBlockedTensorInjective_of_isVertexInjective A R hA.isVertexInjective hA.bondDim_pos)
 
 /-- An injective open-region map realizes the full boundary dimension.
 Source: the boundary-parameter count for ordinary injective PEPS in
@@ -153,16 +152,15 @@ theorem range_regionReducedDensity_eq_regionGroundSpace_of_injective_complement
   rw [← toMatrix_openRegionMap, Matrix.toLin'_toMatrix']
   rfl
 
-/-- Every cut of a vertex-injective PEPS has the full regional support.
+/-- Every cut of an injective PEPS has the full regional support.
 No connectedness of either side is required. Source: the injective
 Schmidt-span argument in arXiv:1804.04964, Lemma `inj_isomorph`,
 lines 254–582, and CPGSV21, Section IV.C.1, lines 2003–2044. -/
-theorem range_regionReducedDensity_eq_regionGroundSpace_of_isVertexInjective
-    (A : Tensor Γ d) (R : Finset V) (hA : IsVertexInjective A)
-    (hpos : ∀ e, 0 < A.bondDim e) :
+theorem range_regionReducedDensity_eq_regionGroundSpace_of_isInjective
+    (A : Tensor Γ d) (R : Finset V) (hA : A.IsInjective) :
     (Matrix.mulVecLin (regionReducedDensity A R)).range = regionGroundSpace A R :=
   range_regionReducedDensity_eq_regionGroundSpace_of_injective_complement A R
-    (openRegionMap_injective_of_isVertexInjective A (Finset.univ \ R) hA hpos)
+    (openRegionMap_injective_of_isInjective A (Finset.univ \ R) hA)
 
 /-- Two injective actual region maps saturate the Schmidt boundary rank.
 No site injectivity or connectedness hypothesis is imposed.
@@ -194,13 +192,12 @@ theorem SameState.regionGroundSpace_eq_of_injective_complements
 /-- The exact Schmidt rank across an arbitrary injective cut is the product
 of its crossing-bond dimensions. Source: the injective boundary count of
 CPGSV21, Section IV.C.1, lines 2003–2044. -/
-theorem rank_regionReducedDensity_of_isVertexInjective
-    (A : Tensor Γ d) (R : Finset V) (hA : IsVertexInjective A)
-    (hpos : ∀ e, 0 < A.bondDim e) :
+theorem rank_regionReducedDensity_of_isInjective
+    (A : Tensor Γ d) (R : Finset V) (hA : A.IsInjective) :
     (regionReducedDensity A R).rank =
       ∏ e : {e : Edge Γ // IsRegionBoundaryEdge R e}, A.bondDim e.1 := by
   exact rank_regionReducedDensity_of_injective_open_cut A R
-    (openRegionMap_injective_of_isVertexInjective A R hA hpos)
-    (openRegionMap_injective_of_isVertexInjective A (Finset.univ \ R) hA hpos)
+    (openRegionMap_injective_of_isInjective A R hA)
+    (openRegionMap_injective_of_isInjective A (Finset.univ \ R) hA)
 
 end TNLean.PEPS

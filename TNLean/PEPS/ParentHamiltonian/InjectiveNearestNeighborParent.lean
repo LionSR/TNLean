@@ -94,15 +94,14 @@ theorem regionParentGroundSpace_edgePairs_eq_span
   regionParentGroundSpace_eq_span_of_isVertexInjective_of_cover A hA edgePairRegion
     (edgePairRegion_covers_vertices hneighbors) edgePairRegion_covers_edges
 
-/-- Positive bonds give a one-dimensional nearest-neighbor parent space
+/-- An injective PEPS has a one-dimensional nearest-neighbor parent space
 on a graph without isolated vertices. Source: CPGSV21, Section IV.C.1,
 the nearest-neighbor uniqueness argument, lines 2032–2044. -/
 theorem finrank_regionParentGroundSpace_edgePairs_eq_one
-    (A : Tensor Γ d) (hA : IsVertexInjective A)
-    (hneighbors : ∀ v, ∃ w, Γ.Adj v w) (hD : ∀ e, 0 < A.bondDim e) :
+    (A : Tensor Γ d) (hA : A.IsInjective) (hneighbors : ∀ v, ∃ w, Γ.Adj v w) :
     Module.finrank ℂ (regionParentGroundSpace A (edgePairRegion (Γ := Γ))) = 1 :=
-  finrank_regionParentGroundSpace_eq_one_of_isVertexInjective_of_cover A hA edgePairRegion
-    (edgePairRegion_covers_vertices hneighbors) edgePairRegion_covers_edges hD
+  finrank_regionParentGroundSpace_eq_one_of_isInjective_of_cover A hA edgePairRegion
+    (edgePairRegion_covers_vertices hneighbors) edgePairRegion_covers_edges
 
 /-- Every positive exact-kernel nearest-neighbor parent has the closed
 injective PEPS span as its kernel, provided no vertex is isolated.
@@ -127,15 +126,15 @@ theorem regionParentGroundSpace_edgeAndIsolated_eq_span
   regionParentGroundSpace_eq_span_of_isVertexInjective_of_cover A hA edgeAndIsolatedRegion
     edgeAndIsolatedRegion_covers_vertices edgeAndIsolatedRegion_covers_edges
 
-/-- Positive bonds give a one-dimensional augmented nearest-neighbor parent
+/-- An injective PEPS has a one-dimensional augmented nearest-neighbor parent
 space on every finite graph. Source: the covering-region consequence of
 CPGSV21, Section IV.C.1, lines 2017–2044. -/
 theorem finrank_regionParentGroundSpace_edgeAndIsolated_eq_one
-    (A : Tensor Γ d) (hA : IsVertexInjective A) (hD : ∀ e, 0 < A.bondDim e) :
+    (A : Tensor Γ d) (hA : A.IsInjective) :
     Module.finrank ℂ (regionParentGroundSpace A (edgeAndIsolatedRegion (Γ := Γ))) = 1 :=
-  finrank_regionParentGroundSpace_eq_one_of_isVertexInjective_of_cover A hA
+  finrank_regionParentGroundSpace_eq_one_of_isInjective_of_cover A hA
     edgeAndIsolatedRegion edgeAndIsolatedRegion_covers_vertices
-    edgeAndIsolatedRegion_covers_edges hD
+    edgeAndIsolatedRegion_covers_edges
 
 /-- Arbitrary positive exact-kernel parents on the edge-pair and isolated-site
 regions have precisely the closed injective PEPS span as their kernel.
@@ -154,24 +153,23 @@ theorem ker_regionParentHamiltonian_edgeAndIsolated_eq_span
     edgeAndIsolatedRegion edgeAndIsolatedRegion_covers_vertices
     edgeAndIsolatedRegion_covers_edges H hH
 
-/-- With positive bonds, every exact-kernel nearest-neighbor Hamiltonian
+/-- For an injective PEPS, every exact-kernel nearest-neighbor Hamiltonian
 has a one-dimensional kernel on a graph without isolated vertices.
 Source: CPGSV21, Section IV.C.1, lines 2032–2044. -/
 theorem finrank_ker_regionParentHamiltonian_edgePairs_eq_one
-    (A : Tensor Γ d) (hA : IsVertexInjective A)
-    (hneighbors : ∀ v, ∃ w, Γ.Adj v w) (hD : ∀ e, 0 < A.bondDim e)
+    (A : Tensor Γ d) (hA : A.IsInjective) (hneighbors : ∀ v, ∃ w, Γ.Adj v w)
     (H : (e : Edge Γ) → Matrix (RegionPhysicalConfig (d := d) (edgePairRegion e))
       (RegionPhysicalConfig (d := d) (edgePairRegion e)) ℂ)
     (hH : ∀ e, IsRegionParentInteraction A (edgePairRegion e) (H e)) :
     Module.finrank ℂ (Matrix.mulVecLin (regionParentHamiltonian edgePairRegion H)).ker = 1 := by
   rw [ker_regionParentHamiltonian A edgePairRegion H hH]
-  exact finrank_regionParentGroundSpace_edgePairs_eq_one A hA hneighbors hD
+  exact finrank_regionParentGroundSpace_edgePairs_eq_one A hA hneighbors
 
-/-- With positive bonds, every exact-kernel augmented nearest-neighbor
+/-- For an injective PEPS, every exact-kernel augmented nearest-neighbor
 Hamiltonian has a one-dimensional kernel on an arbitrary finite graph.
 Source: covering-region consequence of CPGSV21, Section IV.C.1, lines 2017–2044. -/
 theorem finrank_ker_regionParentHamiltonian_edgeAndIsolated_eq_one
-    (A : Tensor Γ d) (hA : IsVertexInjective A) (hD : ∀ e, 0 < A.bondDim e)
+    (A : Tensor Γ d) (hA : A.IsInjective)
     (H : (i : Edge Γ ⊕ {v : V // ¬ ∃ w, Γ.Adj v w}) →
       Matrix (RegionPhysicalConfig (d := d) (edgeAndIsolatedRegion i))
         (RegionPhysicalConfig (d := d) (edgeAndIsolatedRegion i)) ℂ)
@@ -180,6 +178,6 @@ theorem finrank_ker_regionParentHamiltonian_edgeAndIsolated_eq_one
       1 := by
   classical
   rw [ker_regionParentHamiltonian A edgeAndIsolatedRegion H hH]
-  exact finrank_regionParentGroundSpace_edgeAndIsolated_eq_one A hA hD
+  exact finrank_regionParentGroundSpace_edgeAndIsolated_eq_one A hA
 
 end TNLean.PEPS

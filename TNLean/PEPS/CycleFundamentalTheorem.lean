@@ -135,8 +135,9 @@ theorem fundamentalTheorem_normalMPS_cycle {n L d : ℕ}
     obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
     exact SimpleGraph.cycleGraph_connected
   exact fundamentalTheorem_normalPEPS A B
-    (cycleNormalPEPSBlockingHypotheses harc hU hL hn)
-    (fun e g => isCrossingEdge_cycleEdge_iff A hL hn e g) hAB hd hposA hposB hconn
+    { cycleNormalPEPSBlockingHypotheses harc hU hL hn with
+      bondDim_pos_left := hposA, bondDim_pos_right := hposB }
+    (fun e g => isCrossingEdge_cycleEdge_iff A hL hn e g) hAB hd hconn
 
 /-- **Uniqueness clause of the Fundamental Theorem for normal MPS on a closed
 chain** (arXiv:1804.04964, Section 3, first corollary after the theorem
@@ -183,7 +184,8 @@ theorem fundamentalTheorem_normalMPS_cycle_gauge_unique {n L d : ℕ}
         (regionInjectivityDataOf (G := SimpleGraph.cycleGraph n) B)) :=
     ⟨fun s => ⟨harcA s, harcB s⟩⟩
   exact fundamentalTheorem_normalPEPS_gauge_unique A B
-    (cycleNormalPEPSBlockingHypotheses harc hU hL hn) hbond hposA X X' hX hX' e
+    { cycleNormalPEPSBlockingHypotheses harc hU hL hn with
+      bondDim_pos_left := hposA, bondDim_pos_right := hposB } hbond X X' hX hX' e
 
 end PEPS
 end TNLean

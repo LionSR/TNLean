@@ -417,11 +417,26 @@ For the normal translation-invariant corollary at
 the tensor hypothesis \leanid{TNLean.PEPS.IsNormalTorusArcWindowPEPS}, whose
 field \leanid{TNLean.PEPS.IsNormalTorusArcWindowPEPS.bondDim_pos} requires
 every virtual bond space to be nonzero; the corollary's formal statement carries
-no separate positivity hypothesis. The counterexamples above concern the
-generic tensor on general graphs, which keeps zero-dimensional bonds; they
-remain because the general normal theorem and the physical-to-virtual recovery
-still state positivity on region and chain data rather than through an
-injective tensor hypothesis.
+no separate positivity hypothesis. The general normal theorem
+\leanid{TNLean.PEPS.fundamentalTheorem_normalPEPS} carries the convention in its
+hypothesis on two normal PEPS tensors,
+\leanid{TNLean.PEPS.NormalPEPSPairHypotheses}, whose fields
+\leanid{TNLean.PEPS.NormalPEPSPairHypotheses.bondDim_pos_left} and
+\leanid{TNLean.PEPS.NormalPEPSPairHypotheses.bondDim_pos_right} require every
+virtual bond space of both tensors to be nonzero. The injective parent
+Hamiltonian results on general graphs take the injective tensor hypothesis.
+
+The counterexamples above concern the generic tensor on general graphs, which
+keeps zero-dimensional bonds. They remain because two steps that see their
+tensors only through chain or blocking data state positivity explicitly. The
+recovery \leanid{TNLean.PEPS.physical_to_virtual_insertion} assumes injectivity
+of the edge-blocked three-site chain, and the one-edge bond-dimension step
+\leanid{TNLean.PEPS.bondDim_apply_eq_of_blockingData} assumes a blocking datum
+at one edge. Both are applied to blocked tensors whose positivity is derived.
+Without positivity the first is refuted by
+\leanid{TNLean.PEPS.PhysicalToVirtualCounterexample.physical_to_virtual_insertion_statement_false}
+and the second by
+\leanid{TNLean.PEPS.FundamentalTheoremCounterexample.bondDimOfBlockingDataStatement_false}.
 
 The final step proves that the edge-inserted coefficient is injective as a
 function of the inserted matrix: equality of all physical coefficients

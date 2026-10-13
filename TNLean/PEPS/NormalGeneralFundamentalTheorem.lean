@@ -63,10 +63,12 @@ The hypotheses beyond the source's wording are documented:
   recorded blocking bundle does not carry it as a field (see
   `TNLean.PEPS.NormalAbsorbedFamily` and
   `docs/paper-gaps/peps_normal_ft_section3_route.tex`).
-* Positive bond dimensions and connectivity are the faithfulness fixes of the
-  injective Fundamental Theorem, both backed by machine-checked
-  counterexamples (`docs/paper-gaps/peps_injective_ft_section3_route.tex`,
-  `docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`); the scalar
+* Nonzero virtual bond spaces are part of the normal PEPS hypothesis
+  `NormalPEPSPairHypotheses`, which carries the convention
+  (`docs/paper-gaps/peps_injective_ft_section3_route.tex`).  Connectivity is
+  the faithfulness fix of the injective Fundamental Theorem, backed by a
+  machine-checked counterexample
+  (`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`); the scalar
   absorption is exactly the step that requires connectivity.
 
 The source's remark following the theorem (line 1584 of
@@ -103,12 +105,12 @@ variable {G : SimpleGraph V} [DecidableRel G.Adj] {d : ℕ}
 /-- **Fundamental Theorem for normal PEPS on a connected graph**
 (arXiv:1804.04964, Section 3, theorem labelled `normal`).
 
-Two tensors on a connected finite simple graph satisfying the general normal
-PEPS blocking hypotheses over the pair predicate — every edge carries a
-three-region injective blocking shared by both tensors, and every site admits
-one-site-different injective regions with injective complements, also shared —
-with each distinguished edge the single red-to-blue crossing of its frame,
-the same state, and positive bond dimensions, are gauge equivalent: there are
+Two normal PEPS tensors on a connected finite simple graph
+(`NormalPEPSPairHypotheses`: every edge carries a three-region injective
+blocking shared by both tensors, every site admits one-site-different injective
+regions with injective complements, also shared, and both tensors have nonzero
+virtual bond spaces), with each distinguished edge the single red-to-blue
+crossing of its frame and the same state, are gauge equivalent: there are
 invertible edge matrices relating the defining tensors with no leftover
 scalar.
 
@@ -137,40 +139,33 @@ distinguished edge is the entire bond between the first two parties of the
 three-site chain, as the source's blocking construction and the Theorem 3
 regions realize it (arXiv:1804.04964, lines 981--1009 and 1475--1498 of
 `Papers/1804.04964/paper_normal.tex`); see
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`.  Positive bonds and
-connectivity are the counterexample-backed faithfulness fixes of the
-injective Fundamental Theorem
-(`docs/paper-gaps/peps_injective_ft_section3_route.tex`,
-`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`).
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`.  Connectivity is the
+counterexample-backed faithfulness fix of the injective Fundamental Theorem
+(`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`).
 
 Source: arXiv:1804.04964, Section 3, theorem labelled `normal`, lines
 1576--1583 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem fundamentalTheorem_normalPEPS
-    (A B : Tensor G d)
-    (h : NormalPEPSBlockingHypotheses
-      (regionInjectivityDataPair (regionInjectivityDataOf (G := G) A)
-        (regionInjectivityDataOf (G := G) B)) G)
+    (A B : Tensor G d) (h : NormalPEPSPairHypotheses A B)
     (hsingle : ∀ e g : Edge G,
       IsCrossingEdge (G := G) A (h.edgeBlocking.red e) (h.edgeBlocking.blue e) g ↔ g = e)
-    (hAB : SameState A B) (hd : 0 < d)
-    (hposA : ∀ g : Edge G, 0 < A.bondDim g)
-    (hposB : ∀ g : Edge G, 0 < B.bondDim g)
-    (hconn : G.Connected) :
+    (hAB : SameState A B) (hd : 0 < d) (hconn : G.Connected) :
     GaugeEquiv A B := by
   classical
+  have hposA := h.bondDim_pos_left
   -- The blocking hypotheses force equal bond dimensions on every edge.
-  have hbond : A.bondDim = B.bondDim :=
-    bondDim_eq_of_normalBlocking A B h hsingle hAB hd hposA hposB
+  have hbond : A.bondDim = B.bondDim := bondDim_eq_of_normalBlocking A B h hsingle hAB hd
   -- The absorbing gauge family with the bare-edge absorbed equality everywhere.
-  obtain ⟨Z, hedge⟩ :=
-    exists_normalAbsorbedGaugeFamily A B h hsingle hbond hAB hd hposA hposB
+  obtain ⟨Z, hedge⟩ := exists_normalAbsorbedGaugeFamily A B h.toNormalPEPSBlockingHypotheses
+    hsingle hbond hAB hd hposA h.bondDim_pos_right
   -- The per-vertex scalars from the one-site comparisons.
   have hpvs : ∀ v : V, ∃ lam : ℂ, lam ≠ 0 ∧
       ∀ (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
         A.component v η σ =
           lam * gaugeVertex B Z v
             (fun ie => Fin.cast (congr_fun hbond ie.1) (η ie)) σ :=
-    fun v => exists_normalPerVertexScalar A B h hconn hbond hAB hposA Z hedge v
+    fun v => exists_normalPerVertexScalar A B h.toNormalPEPSBlockingHypotheses hconn hbond hAB
+      hposA Z hedge v
   choose c hcne hcPV using hpvs
   -- The closed state pins the product of the scalars to one.
   obtain ⟨v₀⟩ := hconn.nonempty
@@ -341,12 +336,8 @@ hypotheses and union closure.
 Source: arXiv:1804.04964, Section 3, theorem labelled `normal`, lines
 1576--1583 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem fundamentalTheorem_normalPEPS_gauge_unique
-    (A B : Tensor G d)
-    (h : NormalPEPSBlockingHypotheses
-      (regionInjectivityDataPair (regionInjectivityDataOf (G := G) A)
-        (regionInjectivityDataOf (G := G) B)) G)
+    (A B : Tensor G d) (h : NormalPEPSPairHypotheses A B)
     (hbond : A.bondDim = B.bondDim)
-    (hposA : ∀ g : Edge G, 0 < A.bondDim g)
     (X X' : (e : Edge G) → GL (Fin (A.bondDim e)) ℂ)
     (hX : ∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),
       B.component v (fun ie => Fin.cast (congr_fun hbond ie.1) (η ie)) σ =
@@ -358,6 +349,7 @@ theorem fundamentalTheorem_normalPEPS_gauge_unique
     ∃ c : ℂˣ, (X' e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) =
       (c : ℂ) • (X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) := by
   classical
+  have hposA := h.bondDim_pos_left
   -- The scalar-free relation in the exchanged-roles per-vertex form.
   have hswap : ∀ (Y : (g : Edge G) → GL (Fin (A.bondDim g)) ℂ),
       (∀ (v : V) (η : (ie : IncidentEdge G v) → Fin (A.bondDim ie.1)) (σ : Fin d),

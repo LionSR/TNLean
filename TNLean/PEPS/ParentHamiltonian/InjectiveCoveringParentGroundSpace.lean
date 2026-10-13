@@ -94,17 +94,20 @@ theorem ker_regionParentHamiltonian_eq_span_of_isVertexInjective_of_cover
   rw [ker_regionParentHamiltonian A R H hH,
     regionParentGroundSpace_eq_span_of_isVertexInjective_of_cover A hA R hvertices hedges]
 
-/-- Positive bond dimensions give a one-dimensional parent ground space
-for an injective family on a vertex- and edge-covering collection.
+/-- An injective PEPS has a one-dimensional parent ground space on a
+vertex- and edge-covering collection. The nonzero bond spaces carried by
+`Tensor.IsInjective` make the closed vector nonzero.
 Source: covering-region form of the injective uniqueness argument of
 CPGSV21, Section IV.C.1, lines 2017–2044. -/
-theorem finrank_regionParentGroundSpace_eq_one_of_isVertexInjective_of_cover
-    (A : Tensor Γ d) (hA : IsVertexInjective A) {ι : Type*} (R : ι → Finset V)
+theorem finrank_regionParentGroundSpace_eq_one_of_isInjective_of_cover
+    (A : Tensor Γ d) (hA : A.IsInjective) {ι : Type*} (R : ι → Finset V)
     (hvertices : ∀ v, ∃ i, v ∈ R i)
-    (hedges : ∀ e : Edge Γ, ∃ i, e.1.1 ∈ R i ∧ e.1.2 ∈ R i)
-    (hD : ∀ e, 0 < A.bondDim e) : Module.finrank ℂ (regionParentGroundSpace A R) = 1 := by
-  rw [regionParentGroundSpace_eq_span_of_isVertexInjective_of_cover A hA R hvertices hedges]
+    (hedges : ∀ e : Edge Γ, ∃ i, e.1.1 ∈ R i ∧ e.1.2 ∈ R i) :
+    Module.finrank ℂ (regionParentGroundSpace A R) = 1 := by
+  rw [regionParentGroundSpace_eq_span_of_isVertexInjective_of_cover A hA.isVertexInjective R
+    hvertices hedges]
   exact finrank_span_singleton
-    ((stateCoeff_ne_zero_iff_bondDim_pos_of_isVertexInjective A hA).mpr hD)
+    ((stateCoeff_ne_zero_iff_bondDim_pos_of_isVertexInjective A hA.isVertexInjective).mpr
+      hA.bondDim_pos)
 
 end TNLean.PEPS
