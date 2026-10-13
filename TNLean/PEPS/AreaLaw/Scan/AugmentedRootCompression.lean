@@ -113,6 +113,10 @@ theorem rootPath_augmented_compressed_bandProduct
       bandMetric (nS q d) t k (D.leafPart j g) =
         (AO j g).submatrix e.symm e.symm :=
     bandMetric_submatrix_augmentedReplicaConfigurationEquiv q d k t (D.leafPart j g)
+  have hB (j : Σ h, Option (C h)) (g : Fin K) :
+      ZSᴴ * bandMetric (nS q d) t k (D.leafPart j g) * ZS = B j g := by
+    simp only [B, hA, ← hrecover, Matrix.conjTranspose_submatrix,
+      Matrix.submatrix_mul_equiv, Matrix.submatrix_id_id]
   done
 
 end TNLean.PEPS.AreaLaw.Scan
