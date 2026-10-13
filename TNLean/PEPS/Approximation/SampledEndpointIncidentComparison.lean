@@ -34,6 +34,59 @@ private theorem restrict_eval_heq_of_eq_and_common_eval {Q : Type}
     (fun z : {z : Word ℓ ℓ' // z.sources = []} ↦ (z.1.restrict f z.2).eval) h
   exact ((heq_of_eq hrestriction).trans hselected).trans hincident.symm
 
+/-- The common selected endpoint operator is formed from arbitrary original
+endpoint maps. Owner selection preserves the original source and register order.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434 and 565–588. -/
+private def selectedEndpointOperator (w : SourceCircuit a b) (p : P)
+    (M : ∀ e : sourceLocations w, euc (Fin (sourceDims w e).1) →L[ℂ]
+      euc (Fin (sourceDims w e).1))
+    (N : ∀ e : sourceLocations w, euc (Fin (sourceDims w e).2) →L[ℂ]
+      euc (Fin (sourceDims w e).2)) :=
+  let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
+    (affectedOwner (fun _ : P ↦ true) t)
+  let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
+    (by classical exact decide_eq_true rfl)
+  let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+  let D := (partialPositions A w).flatMap (endpointDataAt A w M N)
+  (SourceInventory.endpointRegisterWord
+    (D.filter (fun z ↦ partySelector q z.1.owner))).eval
+
+/-- An arbitrary source-free word representing the original endpoint maps
+has their common selected operator after restriction. The equality transports
+its own source-free proof before any sampled maps are supplied.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–355 and 409–434. -/
+private theorem restrict_eval_heq_selectedEndpointOperator
+    (w : SourceCircuit a b) (p : P)
+    (M : ∀ e : sourceLocations w, euc (Fin (sourceDims w e).1) →L[ℂ]
+      euc (Fin (sourceDims w e).1))
+    (N : ∀ e : sourceLocations w, euc (Fin (sourceDims w e).2) →L[ℂ]
+      euc (Fin (sourceDims w e).2))
+    (W : Word w.allResidualSourceLayout w.allResidualSourceLayout) (hs : W.sources = [])
+    (hword : W = SourceInventory.endpointWord (partialSlots (fun _ ↦ true) w)
+      w.allSourceU w.allSourceV
+      (fun i ↦ M (partialSlotEquiv (fun _ ↦ true) w i).1)
+      (fun i ↦ N (partialSlotEquiv (fun _ ↦ true) w i).1)) :
+    HEq (W.restrict (partySelector (some ⟨p, rfl⟩)) hs).eval
+      (selectedEndpointOperator w p M N) := by
+  classical
+  let all : P → Bool := fun _ ↦ true
+  let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
+  let A : P → Bool := fun t ↦ partySelector qp (affectedOwner all t)
+  let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
+    (decide_eq_true rfl)
+  let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+  let Z := SourceInventory.endpointWord (partialSlots all w) w.allSourceU w.allSourceV
+    (fun i ↦ M (partialSlotEquiv all w i).1)
+    (fun i ↦ N (partialSlotEquiv all w i).1)
+  have hz : Z.sources = [] := SourceInventory.sources_endpointWord ..
+  let D := (partialPositions A w).flatMap (endpointDataAt A w M N)
+  let Dp := D.filter (fun z ↦ partySelector q z.1.owner)
+  have hselected : HEq (Z.restrict (partySelector qp) hz).eval
+      (SourceInventory.endpointRegisterWord Dp).eval :=
+    restrict_endpointWord_eval_heq_selectedRegisterWord w p M N
+  exact restrict_eval_heq_of_eq_and_common_eval (partySelector qp) W Z hs hz hword
+    hselected HEq.rfl
+
 variable (w : SourceCircuit a b) (k : ℕ)
   (lam : ∀ e : sourceLocations w, branchLabels w e.1 →
     Fin (min (sourceDims w e).1 (sourceDims w e).2) → ℝ)
@@ -60,40 +113,53 @@ private def sampledEndpointIncidentComparison
           (fun t ↦ partySelector (some ⟨p, rfl⟩)
             (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω).eval
 
-/-- The canonical comparison follows from equal source-free words and the
+/-- The sampled endpoint word restricts to the common selected operator of
+its original endpoint maps. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 279–355 and 409–434. -/
+private theorem restrict_sampledEndpointWord_eval_heq_selectedEndpointOperator
+    (p : P) (ξ ζ : Choices (fun _ : P ↦ true) w)
+    (j : w.sourceLocations → Fin k) (ω : SourceGaussianSamples w k) :
+    HEq ((sampledEndpointWord w k lam E F ξ ζ j ω).restrict
+        (partySelector (some ⟨p, rfl⟩))
+        (sources_sampledEndpointWord w k lam E F ξ ζ j ω)).eval
+      (selectedEndpointOperator w p
+        (sampledEndpointOperatorLeft w k lam E ξ ζ j ω)
+        (sampledEndpointOperatorRight w k lam F ξ ζ j ω)) :=
+  restrict_eval_heq_selectedEndpointOperator w p
+    (sampledEndpointOperatorLeft w k lam E ξ ζ j ω)
+    (sampledEndpointOperatorRight w k lam F ξ ζ j ω)
+    (sampledEndpointWord w k lam E F ξ ζ j ω)
+    (sources_sampledEndpointWord w k lam E F ξ ζ j ω)
+    (sampledEndpointWord_eq_endpointWord w k lam E F ξ ζ j ω)
+
+/-- The incident sampled word has the same common selected endpoint operator.
+Its local labels and samples are those extracted from the original choices.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434 and 565–588. -/
+private theorem incidentSampledEndpointWord_eval_heq_selectedEndpointOperator
+    (p : P) (ξ ζ : Choices (fun _ : P ↦ true) w)
+    (j : w.sourceLocations → Fin k) (ω : SourceGaussianSamples w k) :
+    HEq (incidentSampledEndpointWord w k lam E F p
+        (originalGateLabelsAtOfAllChoices w p ξ)
+        (originalGateLabelsAtOfAllChoices w p ζ)
+        (fun i ↦ j (partialSlotEquiv
+          (fun t ↦ partySelector (some ⟨p, rfl⟩)
+            (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω).eval
+      (selectedEndpointOperator w p
+        (sampledEndpointOperatorLeft w k lam E ξ ζ j ω)
+        (sampledEndpointOperatorRight w k lam F ξ ζ j ω)) :=
+  incidentSampledEndpointWord_eval_heq_selectedRegisterWord w k lam E F p ξ ζ j ω
+
+/-- The two sampled words are compared through their independently identified
 common selected endpoint operator. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 279–355, 409–434 and 565–588. -/
 private theorem sampledEndpointIncidentComparison_of_original_labels
     (p : P) (ξ ζ : Choices (fun _ : P ↦ true) w)
     (j : w.sourceLocations → Fin k) (ω : SourceGaussianSamples w k) :
-    sampledEndpointIncidentComparison w k lam E F p ξ ζ j ω := by
-  classical
-  let all : P → Bool := fun _ ↦ true
-  let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
-  let A : P → Bool := fun t ↦ partySelector qp (affectedOwner all t)
-  let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
-    (decide_eq_true rfl)
-  let q : Option {t : P // A t = true} := some ⟨p, hp⟩
-  let M := sampledEndpointOperatorLeft w k lam E ξ ζ j ω
-  let N := sampledEndpointOperatorRight w k lam F ξ ζ j ω
-  let Ua := fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv all w i).1).1)
-  let Va := fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv all w i).1).2)
-  let Za := SourceInventory.endpointWord (partialSlots all w) Ua Va
-    (fun i ↦ M (partialSlotEquiv all w i).1)
-    (fun i ↦ N (partialSlotEquiv all w i).1)
-  have hsa : Za.sources = [] := SourceInventory.sources_endpointWord ..
-  let Ds := (partialPositions A w).flatMap (endpointDataAt A w M N)
-  let Ds' := Ds.filter (fun z ↦ partySelector q z.1.owner)
-  have hselected : HEq (Za.restrict (partySelector qp) hsa).eval
-      (SourceInventory.endpointRegisterWord Ds').eval :=
-    restrict_endpointWord_eval_heq_selectedRegisterWord w p M N
-  have hword : sampledEndpointWord w k lam E F ξ ζ j ω = Za :=
-    sampledEndpointWord_eq_endpointWord w k lam E F ξ ζ j ω
-  have hincident := incidentSampledEndpointWord_eval_heq_selectedRegisterWord
-    w k lam E F p ξ ζ j ω
-  exact restrict_eval_heq_of_eq_and_common_eval (partySelector qp)
-    (sampledEndpointWord w k lam E F ξ ζ j ω) Za
-    (sources_sampledEndpointWord w k lam E F ξ ζ j ω) hsa hword hselected hincident
+    sampledEndpointIncidentComparison w k lam E F p ξ ζ j ω :=
+  (restrict_sampledEndpointWord_eval_heq_selectedEndpointOperator
+    w k lam E F p ξ ζ j ω).trans
+    (incidentSampledEndpointWord_eval_heq_selectedEndpointOperator
+      w k lam E F p ξ ζ j ω).symm
 
 /-- Restricting the sampled endpoint operators gives the word constructed
 from the incident labels. The input-layout identification is compared
