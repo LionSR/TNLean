@@ -85,6 +85,10 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
   have hK' : gH.operator = K' := by
     simpa only [K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
       Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using! hgOperator
+  have hDK : (doubledHamiltonian h.operator).IsHermitian := by
+    simp only [Matrix.IsHermitian, doubledHamiltonian, Matrix.conjTranspose_add,
+      Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one,
+      (show h.operator.IsHermitian from h.hermitian).eq]
   done
 
 end TNLean.PEPS.Approximation
