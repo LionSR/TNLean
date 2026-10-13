@@ -23,6 +23,15 @@ This is the uniqueness argument in arXiv:1804.04964, Theorem 3 and the normal TI
 PEPS corollary, lines 1471 and 2297–2318 of `Papers/1804.04964/paper_normal.tex`.
 The uniqueness statement applies to all positive window lengths; it requires no
 lower bound of seven on either torus size.
+
+**Local fix (nonzero virtual spaces):** the source treats the virtual bond spaces as
+nonzero (arXiv:1804.04964, lines 582 and 1037 of `Papers/1804.04964/paper_normal.tex`)
+without listing this among the hypotheses of the corollary. The uniqueness clause
+`torusGauge_unique_scalar_of_normalArcWindows` takes the tensor hypothesis
+`IsNormalTorusArcWindowPEPS`, which carries the convention as the field `bondDim_pos`, and
+states no separate positivity hypothesis. The region step
+`torusAbsorbedGauge_unique_scalar_of_region` keeps explicit positivity and receives it from
+that field. Documented in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 -/
 
 namespace TNLean.PEPS
@@ -55,12 +64,14 @@ private theorem isRegionBoundaryEdge_windowCornerRegion_right (hL : 0 < L)
 variable {d : ℕ}
 
 /-- Every torus edge is a boundary edge of an injective translated corner region whose
-complement is also injective, under the positive-window and minimal-size hypotheses. -/
+complement is also injective, for a translation-invariant normal torus tensor at positive
+window lengths and the minimal torus sizes.
+
+Source: arXiv:1804.04964, proof of the normal TI PEPS corollary, lines 2320--2444 of
+`Papers/1804.04964/paper_normal.tex`. -/
 private theorem exists_injective_region_boundary_of_normalArcWindows
     (B : Tensor (torusGraph width height) d)
-    (hB : NormalTorusArcWindowInjectivityHypotheses L K (regionInjectivityDataOf B))
-    (hBTI : IsTorusTranslationInvariant B)
-    (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
+    (hB : IsNormalTorusArcWindowPEPS L K B) (hBTI : IsTorusTranslationInvariant B)
     (hL : 0 < L) (hK : 0 < K)
     (hw : 2 * L + 1 ≤ width) (hh : 2 * K + 1 ≤ height)
     (e : Edge (torusGraph width height)) :
@@ -69,7 +80,7 @@ private theorem exists_injective_region_boundary_of_normalArcWindows
   classical
   let R : Finset (TorusVertex width height) := windowCornerRegion L K
   let q : TorusVertex width height := windowCornerVertex L K
-  have hU := regionInjectivityUnionClosure_of_overlap B hposB
+  have hU := regionInjectivityUnionClosure_of_overlap B hB.bondDim_pos
   have hR : RegionBlockedTensorInjective B R :=
     hB.windowCornerRegion_injective hU hL hK hw hh
   have hCR : RegionBlockedTensorInjective B (Finset.univ \ R) :=
@@ -104,17 +115,15 @@ private theorem exists_injective_region_boundary_of_normalArcWindows
 
 
 /-- If two edge gauge families give local tensor relations with volume-one scalar powers,
-their matrices are proportional at each edge. Only the second tensor needs positive-length
-normal arc windows, translation invariance and positive bond dimensions. The torus sizes
-are the minimal window bounds.
+their matrices are proportional at each edge. Only the second tensor needs to be a normal
+torus tensor at positive window lengths (`IsNormalTorusArcWindowPEPS`) and translation
+invariant. The torus sizes are the minimal window bounds.
 
 Source: arXiv:1804.04964, Theorem 3 and the normal TI PEPS corollary, lines 1471 and
 2297–2318 of `Papers/1804.04964/paper_normal.tex` (uniqueness up to a multiplicative constant). -/
 theorem torusGauge_unique_scalar_of_normalArcWindows
     {A B : Tensor (torusGraph width height) d}
-    (hB : NormalTorusArcWindowInjectivityHypotheses L K (regionInjectivityDataOf B))
-    (hBTI : IsTorusTranslationInvariant B)
-    (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
+    (hB : IsNormalTorusArcWindowPEPS L K B) (hBTI : IsTorusTranslationInvariant B)
     (hL : 0 < L) (hK : 0 < K)
     (hw : 2 * L + 1 ≤ width) (hh : 2 * K + 1 ≤ height)
     (hbond : A.bondDim = B.bondDim)
@@ -136,8 +145,8 @@ theorem torusGauge_unique_scalar_of_normalArcWindows
     ∃ c : ℂˣ, (X' e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) =
       (c : ℂ) • (X e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) := by
   obtain ⟨R, hf, hR, hCR⟩ :=
-    exists_injective_region_boundary_of_normalArcWindows B hB hBTI hposB hL hK hw hh e
-  exact torusAbsorbedGauge_unique_scalar_of_region hbond R ⟨e, hf⟩ hR hCR hposB X X'
+    exists_injective_region_boundary_of_normalArcWindows B hB hBTI hL hK hw hh e
+  exact torusAbsorbedGauge_unique_scalar_of_region hbond R ⟨e, hf⟩ hR hCR hB.bondDim_pos X X'
     (edgeAbsorbed_of_perVertex hbond X hPV hlam e)
     (edgeAbsorbed_of_perVertex hbond X' hPV' hlam' e)
 

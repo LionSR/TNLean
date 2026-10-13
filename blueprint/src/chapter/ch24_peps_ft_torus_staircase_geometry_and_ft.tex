@@ -370,13 +370,12 @@
     \label{thm:torusAbsorbedGauge_unique_scalar}
     \lean{TNLean.PEPS.torusAbsorbedGauge_unique_scalar}
     \leanok
-    \uses{def:applyGauge, def:peps_edgeInsertedCoeff}
+    \uses{def:applyGauge, def:peps_edgeInsertedCoeff, def:peps_normalTorusRectanglePEPS}
     Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
-    $n\times m$ torus with $n,m\geq 7$, with positive physical dimension,
-    equal and positive bond dimensions, generating the same state, and such
-    that every contiguous
-    $2\times 3$ and $3\times 2$ coordinate rectangle of either tensor is
-    injective. Let $X$ and $X'$ be two families of invertible matrices, one
+    $n\times m$ torus with $n,m\geq 7$, both normal with injective rectangles
+    (Definition~\ref{def:peps_normalTorusRectanglePEPS}), with positive
+    physical dimension and equal bond dimensions, generating the same state.
+    Let $X$ and $X'$ be two families of invertible matrices, one
     on each edge of the torus, and let $e$ be an edge at which both families
     realize the absorbed inserted-coefficient equality: inserting any matrix
     on the edge $e$ of $A$ gives the same coefficient as inserting it on the
@@ -395,7 +394,7 @@
         The rectangle hypotheses produce, along the orientation class of $e$,
         a comparison region having $e$ as its single boundary edge on which
         the second tensor and its complement are injective; the union closure
-        of injective regions follows from the positive bond dimensions and
+        of injective regions follows from the nonzero bond spaces and
         Lemma~\ref{lem:peps_injectiveRegion_union_pos}. The bare-edge
         absorbed equality of each family lifts to the region
         inserted-coefficient identity over this region, with the inserted
@@ -477,13 +476,12 @@
     \label{thm:torusGauge_unique_scalar_of_perVertex}
     \lean{TNLean.PEPS.torusGauge_unique_scalar_of_perVertex}
     \leanok
-    \uses{def:gaugeVertex, def:applyGauge}
+    \uses{def:gaugeVertex, def:applyGauge, def:peps_normalTorusRectanglePEPS}
     Let $A$ and $B$ be translationally invariant PEPS tensors on the discrete
-    $n\times m$ torus with $n,m\geq 7$, with positive physical dimension,
-    equal and positive bond dimensions, generating the same state, and such
-    that every contiguous
-    $2\times 3$ and $3\times 2$ coordinate rectangle of either tensor is
-    injective. Suppose the families $X$ and $X'$ of invertible matrices, one
+    $n\times m$ torus with $n,m\geq 7$, both normal with injective rectangles
+    (Definition~\ref{def:peps_normalTorusRectanglePEPS}), with positive
+    physical dimension and equal bond dimensions, generating the same state.
+    Suppose the families $X$ and $X'$ of invertible matrices, one
     on each edge, each realize the per-vertex relation of
     Theorem~\ref{thm:fundamentalTheorem_normalTorusPEPS_unconditional}: at
     every site the tensor $A$ equals $\lambda$ (respectively $\lambda'$)

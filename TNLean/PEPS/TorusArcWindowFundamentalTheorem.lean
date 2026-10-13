@@ -12,6 +12,13 @@ import TNLean.PEPS.TorusWindowGaugeUniqueness
 The existence and uniqueness statements are assembled here: equality of the torus states
 determines the two directional gauges up to scalar, with one common site scalar whose
 torus-volume power is one.
+
+**Local fix (nonzero virtual spaces):** the source treats the virtual bond spaces as nonzero
+(arXiv:1804.04964, lines 582 and 1037 of `Papers/1804.04964/paper_normal.tex`) without listing
+this among the hypotheses of the corollary. Both tensors are taken through
+`IsNormalTorusArcWindowPEPS`, which carries the convention as the field `bondDim_pos`, so the
+theorem states no separate positivity hypothesis. Documented in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 -/
 
 namespace TNLean.PEPS
@@ -64,7 +71,7 @@ theorem fundamentalTheorem_normalTorusArcWindowPEPS
   have hCR := hA.compl_windowCornerRegion_injective hU (by omega) (by omega) hxw hyh
   have hPow' := lambda_pow_card_torus_eq_one A B (windowCornerRegion L K)
     hR hCR hposA hAB X' hbond lam' hPV'
-  exact torusGauge_unique_scalar_of_normalArcWindows hB.toNormalTorusArcWindowInjectivityHypotheses
-    hBTI hB.bondDim_pos (by omega) (by omega) hxw hyh hbond X X' hPV hPow hPV' hPow' e
+  exact torusGauge_unique_scalar_of_normalArcWindows hB hBTI (by omega) (by omega) hxw hyh
+    hbond X X' hPV hPow hPV' hPow' e
 
 end TNLean.PEPS
