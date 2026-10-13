@@ -14,11 +14,11 @@ Method
   and collect every ``theorem``, ``lemma``, ``def``, ``abbrev``,
   ``structure``, ``class``, ``inductive`` and ``opaque`` header.  Comments
   are stripped before matching, so a docstring sentence starting with
-  "theorem." is not a header.  Instances are skipped (they are found by
-  synthesis, not by name).  Declarations whose header carries an attribute
-  (``@[simp]``, ``@[grind]``, ``@[ext]``, ...) are skipped unless
-  ``--include-attributed`` is given, because ``simp``, ``grind`` and ``ext``
-  use them without naming them.
+  "theorem." is not a header; an indented header still counts.  Instances
+  are skipped (they are found by synthesis, not by name).  Declarations
+  whose header carries an attribute (``@[simp]``, ``@[grind]``, ``@[ext]``,
+  ...) are skipped unless ``--include-attributed`` is given, because
+  ``simp``, ``grind`` and ``ext`` use them without naming them.
 * Count word-boundary occurrences of each declaration's final name component
   across the reference corpus: every ``.lean`` file under ``TNLean/``,
   ``TNLeanTest/``, ``Archive/`` and ``scripts/``, the blueprint sources,
@@ -26,7 +26,9 @@ Method
   ``scripts/``.  Extra corpus directories (for example a checked-out
   downstream package) are added with ``--corpus``.  Dot notation
   (``h.foo``) and namespace-qualified calls (``Foo.bar.foo``) both contain
-  the final component, so a count of one means the definition site only.
+  the final component.  Occurrences inside the declaration's own extent
+  (its docstring, header and body, so also recursive calls) do not count,
+  and a declaration is a candidate when nothing is left.
 * Iterate to a fixed point: the source extent of each candidate (its
   docstring, header and indented body) is removed from the counting corpus
   and the count is taken again, so a declaration used only by other dead
@@ -82,7 +84,7 @@ MODIFIERS = (
 NAME_PATTERN = r"[^\W\d][\w!?']*(?:\.[^\W\d][\w!?']*)*"
 
 HEADER_RE = re.compile(
-    r"^(?P<attr>(?:@\[[^\]]*\]\s*)*)"
+    r"^[ \t]*(?P<attr>(?:@\[[^\]]*\]\s*)*)"
     r"(?P<mods>(?:(?:" + "|".join(MODIFIERS) + r")\s+)*)"
     r"(?P<kind>" + "|".join(DECLARATION_KEYWORDS) + r")\s+"
     r"(?P<name>" + NAME_PATTERN + r")",
@@ -159,12 +161,13 @@ def strip_comments(text: str) -> str:
     return "".join(out)
 
 
-def _extent(text: str, header_start: int) -> tuple[int, int]:
+def _extent(text: str, header_start: int, next_header_start: int | None) -> tuple[int, int]:
     """Return the character range of a declaration's docstring, header and body.
 
     The body is every following line that is blank or indented; the extent
-    ends at the next line that starts in column zero.  A docstring block
-    ending just before the header is included.
+    ends at the next line that starts in column zero, or at the line of the
+    next declaration header when that comes first.  A docstring block ending
+    just before the header is included.
     """
     line_starts = [0] + [m.end() for m in re.finditer(r"\n", text)]
     header_line = max(i for i, s in enumerate(line_starts) if s <= header_start)
@@ -184,6 +187,9 @@ def _extent(text: str, header_start: int) -> tuple[int, int]:
         if line.strip() and not line[0].isspace():
             end = line_starts[k]
             break
+    if next_header_start is not None:
+        next_line = max(i for i, s in enumerate(line_starts) if s <= next_header_start)
+        end = min(end, line_starts[next_line])
     return start, end
 
 
@@ -192,13 +198,16 @@ def collect_declarations(path: Path, rel: str, include_attributed: bool) -> list
     text = path.read_text(encoding="utf-8")
     code = strip_comments(text)
     decls: list[Declaration] = []
-    for m in HEADER_RE.finditer(code):
+    matches = list(HEADER_RE.finditer(code))
+    for m, following in zip(matches, matches[1:] + [None]):
         if m.group("kind") == "instance":
             continue
         attributed = bool(m.group("attr").strip())
         if attributed and not include_attributed:
             continue
-        start, end = _extent(text, m.start("kind"))
+        start, end = _extent(
+            text, m.start("kind"), None if following is None else following.start("kind")
+        )
         decls.append(
             Declaration(
                 path=rel,
@@ -249,6 +258,12 @@ def count_tokens(texts: dict[str, str], names: set[str]) -> Counter[str]:
     return counts
 
 
+def _own_occurrences(text: str, decl: Declaration) -> int:
+    """Count the declaration's own name inside its docstring, header and body."""
+    own = text[decl.start : decl.end]
+    return sum(1 for token in TOKEN_RE.findall(own) if token == decl.short_name)
+
+
 def _blank_extents(text: str, extents: list[tuple[int, int]]) -> str:
     chars = list(text)
     for start, end in extents:
@@ -266,7 +281,7 @@ def find_zero_reference(
     transitive: bool = True,
     extra_corpus: list[Path] | None = None,
 ) -> list[Declaration]:
-    """Return the declarations whose final name component occurs once in the corpus."""
+    """Return the declarations whose final name component occurs only in their own extent."""
     decls: list[Declaration] = []
     for path in declaration_files(root, include_archive):
         decls.extend(
@@ -283,7 +298,10 @@ def find_zero_reference(
     while True:
         counts = count_tokens(texts, names)
         fresh = [
-            d for d in decls if (d.path, d.line) not in dead and counts[d.short_name] <= 1
+            d
+            for d in decls
+            if (d.path, d.line) not in dead
+            and counts[d.short_name] <= _own_occurrences(texts[d.path], d)
         ]
         if not fresh:
             break

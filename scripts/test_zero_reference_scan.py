@@ -48,6 +48,13 @@ theorem blueprintOnly : True := trivial
 
 theorem docsOnly' : True := trivial
 
+/-- Recursive and unused: its only other occurrence is its own recursive call. -/
+theorem deadRecursive : (n : ℕ) → n = n
+  | 0 => rfl
+  | n + 1 => by have := deadRecursive n; rfl
+
+  theorem indentedDead : True := trivial
+
 end Demo
 """
 
@@ -80,13 +87,13 @@ class ZeroReferenceScanTests(unittest.TestCase):
     def test_first_round_reports_only_unreferenced_declarations(self) -> None:
         self.assertEqual(
             self.names(transitive=False),
-            ["deadLeaf", "deadRoot"],
+            ["deadLeaf", "deadRoot", "deadRecursive", "indentedDead"],
         )
 
     def test_fixed_point_reports_helpers_used_only_by_dead_code(self) -> None:
         self.assertEqual(
             self.names(),
-            ["deadLeaf", "deadRoot", "deadChainHelper"],
+            ["deadLeaf", "deadRoot", "deadChainHelper", "deadRecursive", "indentedDead"],
         )
 
     def test_attributed_declarations_are_opt_in(self) -> None:
@@ -118,6 +125,13 @@ class ZeroReferenceScanTests(unittest.TestCase):
         self.assertIn("  rfl\n", extent)
         self.assertNotIn("deadRoot", extent)
 
+    def test_extent_stops_at_an_indented_following_header(self) -> None:
+        decls = scan.collect_declarations(
+            self.root / "TNLean" / "Demo" / "Basic.lean", "TNLean/Demo/Basic.lean", True
+        )
+        recursive = next(d for d in decls if d.name == "deadRecursive")
+        self.assertNotIn("indentedDead", LEAN_FILE[recursive.start : recursive.end])
+
     def test_archive_is_excluded_by_default(self) -> None:
         archive = self.root / "TNLean" / "Archive"
         archive.mkdir()
@@ -134,7 +148,7 @@ class ZeroReferenceScanTests(unittest.TestCase):
             code = scan.main(["--root", str(self.root)])
         self.assertEqual(code, 0)
         lines = buffer.getvalue().splitlines()
-        self.assertEqual(lines[0], "3 declarations with no reference outside their own definition")
+        self.assertEqual(lines[0], "5 declarations with no reference outside their own definition")
         self.assertEqual(lines[1], "TNLean/Demo/Basic.lean:17: theorem deadLeaf")
 
 
