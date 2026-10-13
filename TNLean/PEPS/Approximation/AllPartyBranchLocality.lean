@@ -28,7 +28,7 @@ variable {P : Type}
 /-- Equality of the already selected remaining operators, formed before
 concrete circuit words are substituted. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 246–267, 351–381, 409–434 and 565–588. -/
-private abbrev selectedRemainingEvalHEq {Q : Type} (f : Q → Bool)
+private def selectedRemainingEvalHEq {Q : Type} (f : Q → Bool)
     {a b a' b' : Layout Q} (u : Word a b) (v : Word a' b') : Prop :=
   HEq (u.localPart.restrict f u.sources_localPart).eval
     (v.localPart.restrict f v.sources_localPart).eval
@@ -44,6 +44,29 @@ private theorem selectedRemainingEvalHEq_of_identity {Q : Type} (f : Q → Bool)
       (ContinuousLinearMap.id ℂ (Mem spectators))) :
     selectedRemainingEvalHEq f u v := by
   exact hu.trans hv.symm
+
+/-- Any two supplied branches of a nonincident gate retain the same spectator
+identity. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
+lines 351–381, 409–434 and 565–588. -/
+private theorem selectedRemainingEvalHEq_nonincident_gate
+    {C ι : Type} [Fintype C] [Fintype ι] (owner : C ↪ P)
+    {a b : Layout C} {c : ι → ℂ} (G : PreparedSourceGate c a b)
+    (tail : Layout P) (p : P) (howner : ∀ t, owner t ≠ p)
+    (ξ ζ : Choices (fun _ : P => true) (.gate owner G tail)) :
+    let q := some (⟨p, rfl⟩ : {t : P // (fun _ : P => true) t = true})
+    selectedRemainingEvalHEq (partySelector q)
+      (partialWord (fun _ : P => true) (.gate owner G tail) ξ)
+      (partialWord (fun _ : P => true) (.gate owner G tail) ζ) := by
+  classical
+  intro q
+  exact selectedRemainingEvalHEq_of_identity (partySelector q)
+    (partialWord (fun _ : P => true) (.gate owner G tail) ξ)
+    (partialWord (fun _ : P => true) (.gate owner G tail) ζ)
+    (Layout.atParty q (Layout.mapOwner (affectedOwner (fun _ : P => true)) tail))
+    (restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
+      owner G tail p howner ξ)
+    (restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
+      owner G tail p howner ζ)
 
 /-- Chronological composition preserves the selected operator equality under
 the existing selected-layout identifications. Source: polynomial-PEPS
@@ -137,14 +160,7 @@ theorem restrict_partialWord_all_localPart_eval_heq_of_projectAllChoices_eq
           rw [htp]
           exact (partySelector_affectedOwner_all_apply p p).trans
             (by simp only [partySelector, decide_true])
-        exact selectedRemainingEvalHEq_of_identity f
-          (partialWord (fun _ : P => true) (.gate owner G tail) ξ)
-          (partialWord (fun _ : P => true) (.gate owner G tail) ζ)
-          (Layout.atParty q (Layout.mapOwner (affectedOwner (fun _ : P => true)) tail))
-          (restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
-            owner G tail p howner ξ)
-          (restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
-            owner G tail p howner ζ)
+        exact selectedRemainingEvalHEq_nonincident_gate owner G tail p howner ξ ζ
   | swap => rfl
   | frame r w ih =>
       exact selectedRemainingEvalHEq_frame f
