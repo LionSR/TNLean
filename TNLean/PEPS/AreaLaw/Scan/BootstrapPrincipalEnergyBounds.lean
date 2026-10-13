@@ -111,6 +111,21 @@ theorem exists_bootstrap_principal_energy_bound
       C₁ * (n : ℝ) ^ X.ell * ((X.m n : ℝ) * (X.K n : ℝ)) :=
     (mul_le_mul_iff_of_pos_right (sq_pos_of_pos hD₀)).mp (by
       convert (div_le_iff₀ (mul_pos hm₀ hK₀)).mp hf.coefficient_le using 1 <;> ring)
+  have hpowK : (n : ℝ) ^ (BootstrapParameters.g0 e₀ - X.ell) ≤ C₁ * (X.K n : ℝ) :=
+    (mul_le_mul_iff_of_pos_right (Real.rpow_pos_of_pos hn₀ (X.ell + X.mu))).mp <|
+      calc
+        (n : ℝ) ^ (BootstrapParameters.g0 e₀ - X.ell) * (n : ℝ) ^ (X.ell + X.mu) = n := by
+          rw [← Real.rpow_add hn₀, show
+            BootstrapParameters.g0 e₀ - X.ell + (X.ell + X.mu) = 1 by
+              dsimp only [X, BootstrapParameters.mu]; ring, Real.rpow_one]
+        _ ≤ C₁ * (n : ℝ) ^ X.ell * ((X.m n : ℝ) * (X.K n : ℝ)) := hnCoeff
+        _ ≤ C₁ * (n : ℝ) ^ X.ell * ((n : ℝ) ^ X.mu * (X.K n : ℝ)) :=
+          mul_le_mul_of_nonneg_left
+            (mul_le_mul_of_nonneg_right
+              (Nat.floor_le (Real.rpow_nonneg hn₀.le _)) hK₀.le)
+            (mul_nonneg hC₁ (Real.rpow_nonneg hn₀.le _))
+        _ = (C₁ * (X.K n : ℝ)) * (n : ℝ) ^ (X.ell + X.mu) := by
+          rw [Real.rpow_add hn₀]; ring
   done
 
 end TNLean.PEPS.AreaLaw.Scan
