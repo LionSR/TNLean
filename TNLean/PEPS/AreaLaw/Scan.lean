@@ -34,6 +34,7 @@ import TNLean.PEPS.AreaLaw.Scan.AncestryLead
 import TNLean.PEPS.AreaLaw.Scan.AssignedLead
 import TNLean.PEPS.AreaLaw.Scan.AugmentedEnergyCoordinates
 import TNLean.PEPS.AreaLaw.Scan.AugmentedPartition
+import TNLean.PEPS.AreaLaw.Scan.AugmentedReceivingRegions
 import TNLean.PEPS.AreaLaw.Scan.AugmentedReplicaMetricCoordinates
 import TNLean.PEPS.AreaLaw.Scan.AugmentedRootCompression
 import TNLean.PEPS.AreaLaw.Scan.BadChargeRatioBound
