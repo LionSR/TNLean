@@ -574,7 +574,9 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** the module elaborates slightly faster (about 7 s against 8 s
   locally). Use `grind` for further endpoint-membership splits of this shape
   rather than a macro. Unfold first with
-  `simp only [IsRegionBoundaryEdge, IsRegionIncidentEdge, Finset.mem_*] at *`;
+  `simp only [IsRegionBoundaryEdge, IsRegionIncidentEdge] at *`, adding the
+  membership lemmas of the regions involved (`Finset.mem_union`,
+  `Finset.mem_inter`, `Finset.mem_sdiff`, `Finset.mem_insert`);
   supply disjointness as `have := @Finset.disjoint_left.mp h`, and a
   three-block cover as `grind [hP.mem_complement_iff]`.
 
