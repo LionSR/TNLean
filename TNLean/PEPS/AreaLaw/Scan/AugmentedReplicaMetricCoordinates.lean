@@ -65,7 +65,7 @@ theorem augmentedReplicaConfigurationEquiv_subsystemPerm
       (show Sum.inr true ∈ Q.image augmentedSiteEquiv ↔ none ∈ Q from
         (augmentedSiteEquiv (V := V)).injective.mem_finset_image
           (s := Q) (a := none))]
-    done
+    rfl
 
 variable [Fintype V]
 
@@ -86,7 +86,8 @@ theorem replicaMetric_submatrix_augmentedReplicaConfigurationEquiv
   -- label weight is unchanged.
   have hdim : replicaDim (ιS q d) = replicaDim (ιO q d) :=
     Fintype.card_congr (augmentedConfigurationEquiv q d).symm
-  have hw : replicaLabelWeight (ιS q d) t = replicaLabelWeight (ιO q d) t := by
+  have hw : replicaLabelWeight (ιS q d) t (k := k) =
+      replicaLabelWeight (ιO q d) t (k := k) := by
     funext l
     simp only [replicaLabelWeight]
     rw [hdim]
