@@ -35,8 +35,8 @@ private theorem restrict_castLayouts_word_heq (f : P → Bool) {a b a' b' : Layo
     (w : Word a b) (ha : a = a') (hb : b = b') (hs : w.sources = []) :
     HEq ((w.castLayouts ha hb).restrict f ((Word.sources_castLayouts _ _ _).trans hs))
       (w.restrict f hs) := by
-  rw [Word.restrict_castLayouts]
-  exact castLayouts_word_heq _ _ _
+  rw [Word.restrict_castLayouts f w ha hb hs]
+  exact Word.castLayouts_heq _ _ _
 
 private theorem localMap_word_heq {p : P} {a b : Layout P}
     (ha : ∀ r ∈ a, r.owner = p) (hb : ∀ r ∈ b, r.owner = p)
