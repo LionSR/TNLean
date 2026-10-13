@@ -559,11 +559,47 @@ abstracted — record why, so it is not re-proposed).
   membership of both endpoints in both sets followed by `simp_all`.
 - **Seen:** six classifications in
   `PEPS/Approximation/WholeGroupContraction.lean` (proof of Lemma 6.2,
-  `05-frames.tex`, lines 143–157).
-- **Abstraction:** `grind` (no annotations added), after the same unfolding.
+  `05-frames.tex`, lines 143–157); under `PEPS/RegionBlock/`,
+  `CoarseThreeSiteCoherentFrame.lean`, `CoarseThreeSite4.lean`,
+  `UnionInjectivityGeneral.lean`, `UnionInjectivityGeneral2.lean`,
+  `UnionInjectivityOverlapSetup.lean`, `UnionInjectivityOverlap3.lean`,
+  `UnionInjectivityOverlapBridge.lean`, `InsertResidual.lean` and
+  `ScalarExtraction.lean`; and `PEPS/TorusWindowPeeling/BoundaryGeometry.lean`.
+- **Abstraction:** `grind` (no annotations added), after the same unfolding;
+  for region-block edge classifications, the endpoint lemmas
+  `TNLean.PEPS.IsCrossingEdge.of_incident`, `IsCrossingEdge.not_incident`
+  (`PEPS/RegionBlock/CoarseThreeSiteCoherentFrame.lean`) and
+  `boundary_right_mem`, `boundary_right_not_mem`
+  (`PEPS/RegionBlock/GaugeBridge.lean`).
 - **Notes:** the module elaborates slightly faster (about 7 s against 8 s
   locally). Use `grind` for further endpoint-membership splits of this shape
-  rather than a macro.
+  rather than a macro. Unfold first with
+  `simp only [IsRegionBoundaryEdge, IsRegionIncidentEdge, Finset.mem_*] at *`;
+  supply disjointness as `have := @Finset.disjoint_left.mp h`, and a
+  three-block cover as `grind [hP.mem_complement_iff]`.
+
+### Parent ground-space equivalences and ordered transports — promoted (2026-10-13)
+
+- **Pattern:** (a) a parent ground-space equivalence built as
+  `LinearEquiv.ofBijective` of a `codRestrict`ed transport, with injectivity
+  proved by cancelling a left inverse by hand; (b) an ordered-edge parent
+  transport statement proved in parallel with its oriented counterpart
+  (SCP10, arXiv:1001.3807, Theorem 5.7 and Section 7, lines 2938–3019).
+- **Seen:** (a) five equivalences, in `CopyCanonicalParentTransport.lean`,
+  `OrientedCopyParentTransport.lean`,
+  `GraphCoordinateCanonicalParentTransport.lean`,
+  `OrientedCoordinateParentTransport.lean` and
+  `RangePhysicalParentTransport.lean` under `PEPS/ParentHamiltonian/`;
+  (b) the ordered statements of `CopyCanonicalParentTransport.lean` and
+  `GraphCoordinateCanonicalParentTransport.lean`.
+- **Abstraction:** (a) `LinearMap.submoduleEquivOfInjOn`
+  (`PEPS/ParentHamiltonian/RegionPhysicalGroundSpaceTransport.lean`), with
+  injectivity from Mathlib's `Set.LeftInvOn.injOn`; (b) state the ordered
+  result as the oriented one at `o = fun _ => false`, through
+  `numberedGraphOrientedAveragingTensor_false` and
+  `graphNumberedBondFamilyMatrix_orientedBondCoordinateMatrix_false`.
+- **Notes:** the ordered modules import the oriented ones. No theorem
+  statement changed.
 
 ### Single-qubit plus-state positivity — promoted (2026-10-08)
 
