@@ -128,7 +128,7 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
       (mul_le_mul
         (mul_le_mul_of_nonneg_right
           (mul_le_mul_of_nonneg_right hVn hC.le) (sq_nonneg (L : ℝ)))
-        (add_le_add_left (mul_le_mul_of_nonneg_right hDn hT) 1)
+        (add_le_add_right (mul_le_mul_of_nonneg_right hDn hT) 1)
         (add_nonneg zero_le_one (mul_nonneg (norm_nonneg (K' - K)) hT))
         (mul_nonneg (mul_nonneg (norm_nonneg W) hC.le) (sq_nonneg (L : ℝ))))
       (Real.exp_pos (v * T - c * l)).le
