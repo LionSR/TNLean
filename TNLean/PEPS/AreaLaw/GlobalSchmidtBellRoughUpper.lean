@@ -100,6 +100,7 @@ theorem eventually_suppliedGlobalSchmidtBellPrevector_rough_upper
           2 * Real.log (d : ℝ) - Real.log z +
             4 * (Bsh / z + Bexc) + Real.bellOverlapRemainder d c K k := by
   classical
+  intro β ΩX z hz ψ hmass
   done
 
 end TNLean.PEPS.AreaLaw
