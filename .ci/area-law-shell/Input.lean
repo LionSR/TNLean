@@ -92,6 +92,9 @@ theorem positiveDepthPrefix_eq_filter_ambientDilation
         (Iff.of_eq (congrArg (fun U : Finset (ℤ × ℤ) ↦ x ∈ U) (ambientDilation_zero T)))
     simp [← hzero, not_le, and_comm]
     done
-  · done
+  · simp [Int.toNat_of_nonpos (le_of_lt (lt_of_not_ge hj)),
+      fun x : ℤ × ℤ ↦ not_le.mpr
+        ((lt_of_not_ge hj).trans_le (ambientDepth_nonneg T hT x))]
+    done
 
 end TNLean.PEPS.AreaLaw.Scan
