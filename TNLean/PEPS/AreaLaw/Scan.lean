@@ -96,6 +96,7 @@ import TNLean.PEPS.AreaLaw.Scan.PrefixCardinality
 import TNLean.PEPS.AreaLaw.Scan.PrefixComparison
 import TNLean.PEPS.AreaLaw.Scan.PrefixFiniteFamily
 import TNLean.PEPS.AreaLaw.Scan.RadiusAsymptotics
+import TNLean.PEPS.AreaLaw.Scan.ReceivingRegions
 import TNLean.PEPS.AreaLaw.Scan.RegionalMoveEntropy
 import TNLean.PEPS.AreaLaw.Scan.RoundedClearance
 import TNLean.PEPS.AreaLaw.Scan.RoundedScalePower
