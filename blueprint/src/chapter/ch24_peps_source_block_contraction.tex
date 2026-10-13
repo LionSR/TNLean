@@ -732,7 +732,8 @@ This gives the contractions used in
     \label{thm:peps_original_source_sample_count}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.length_allSourceSlots_eq_sum_pairSampleLabels}
     \leanok
-    \uses{def:peps_original_source_sample_indices,thm:peps_source_pair_count}
+    \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices,
+        thm:peps_source_pair_count}
     Let $G$ be the nonempty participant occurrences of the original
     chronological composition. For $g\in G$, write $C_g$ for its
     participant set and $\mathcal E(C_g)$ for the unordered pairs of
@@ -752,7 +753,8 @@ This gives the contractions used in
 
 \begin{proof}
     \leanok
-    \uses{def:peps_original_source_sample_indices,thm:peps_source_pair_count}
+    \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices,
+        thm:peps_source_pair_count}
     The original ordered source slots are in bijection with the
     disjoint union of the sets $\mathcal E(C_g)$. Take cardinalities
     and sum over the original occurrences. The number of unordered
