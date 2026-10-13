@@ -35,7 +35,6 @@
     "TNLean.MPS.Preparation.SecondOrderOverlap",
     "TNLean.MPS.SharedInfra.GaugePhase",
     "TNLean.MPS.Structure.PrimitiveFixedPoint",
-    "TNLean.MPS.Structure.PrimitivityBridge",
     "TNLean.PiAlgebra.CanonicalFormSepAux",
     "TNLean.Spectral.MixedEigenvalueGap",
     "TNLean.Spectral.PrimitiveOverlap",
@@ -44,7 +43,7 @@
     "TNLean.Wielandt.Inequality.MatrixSpanSharpBound",
     "TNLean.Wielandt.Inequality.NonzeroTraceWord",
     "TNLean.Wielandt.Primitivity.Equivalence",
-    "TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducibleAux",
+    "TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible",
     "TNLean.Wielandt.Primitivity.PrimitiveBridge",
     "TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank",
     "TNLean.Wielandt.RectangularSpan.Universality"

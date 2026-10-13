@@ -272,6 +272,75 @@ $\mu$ labels.
     $\xi_k$; the transported symmetrizer of all copies is $P_{\mathrm{sym}}$.
 \end{proof}
 
+\begin{theorem}[One physical label sequence for the rough lower comparison]
+    \label{thm:al_global_schmidt_bell_rough_lower}
+    \lean{TNLean.PEPS.AreaLaw.exists_global_schmidtBellPrevector_rough_lower}
+    \leanok
+    \uses{thm:al_global_schmidt_bell_prevector}
+    In the setting of Theorem~\ref{thm:al_global_schmidt_bell_prevector},
+    suppose also that $H-EI\geq\gamma(I-|\Omega\rangle\langle\Omega|)$
+    for some $\gamma>0$. There is one label sequence $\lambda_k$
+    satisfying all the conclusions of that theorem. Write
+    $S'=S(\rho)$ and set
+    \begin{align*}
+        \varepsilon_k=-2(\log\dim\lambda_k-kS').
+    \end{align*}
+    Then $2kS'-\varepsilon_k=2\log\dim\lambda_k$ for every $k$,
+    and $\varepsilon_k/k\to0$.
+
+    Fix $K\geq8$ and put $a=4/K$, $t=2/K$. There are constants
+    $c,C_f\geq0$ before the copy number, symmetric coordinates,
+    regional family and iterated weighted geometric mean are chosen.
+    Let $Z^*Z=I$ and $ZZ^*=P_{\mathrm{sym}}$. For a finite family
+    of physical regions $Q_{jg},Y_{jg}$, with $0\leq g<K$, assume
+    \begin{align*}
+        Q_{jg}\cap Y_{jg} & =\varnothing,                 \\
+        Q_{jg}\cup Y_{jg} & \subseteq Q_{j'h}\qquad(g<h).
+    \end{align*}
+    Include the near auxiliary site $C$ in $L_{jg}=Q_{jg}\cup\{C\}$
+    and the far auxiliary site $R$ in
+    $F_{jg}=(Q_{jg}\cup Y_{jg})^c\cup\{R\}$, where the complement
+    is taken in the physical sites. For the replica metric $W$ at
+    parameter $t$, put
+    \begin{align*}
+        A_{jg} & =(W_{L_{jg}}^{-1}W_{F_{jg}}^{-1}W_{Y_{jg}})^2,
+               & B_{jg}                                         & =Z^*A_{jg}Z,         \\
+        M_k    & =\prod_{g=0}^{K-1}T(B_{\cdot g}),
+               & w_k                                            & =M_k^{-1/4}Z^*\xi_k.
+    \end{align*}
+    Here $T$ is any iterated weighted geometric mean of the family,
+    and $\xi_k$ is the same initial vector as in the preceding theorem.
+    Put $\varphi_k=w_k/\|w_k\|$, $v_k=Z\varphi_k$, and
+    \begin{align*}
+        \delta_k & =\frac{\langle v_k,(\overline H_k\otimes I)v_k\rangle-E}{\gamma}, \\
+        r_k      & =\log(k+1)+c\log(k+2)+a\varepsilon_k,                             \\
+        R_k      & =\frac K{2k}\left(2|r_k|+C_f\log(k+2)+2\log2+\log(3/2)\right).
+    \end{align*}
+    The sequence $R_k$ tends to zero and is independent of the chosen
+    coordinates, regions and geometric mean. For every $k>0$,
+    $w_k\ne0$, $\|v_k\|=1$, and $\delta_k\geq0$. For $0<\tau\leq1/2$,
+    \begin{align*}
+        4S'-6\left(\tau\log d+\frac{h(\tau)}a\right)
+        -3\frac{\delta_k}{\tau}\max(0,2S')-R_k
+        \leq-\frac{\log\|w_k\|^2}{k}.
+    \end{align*}
+    This is the lower comparison for the physical initial vector of
+    \cite[Section~8]{OpenAI2026AreaLaw}. Choosing a scan point and
+    identifying its regions and geometric mean remain separate assertions.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Choose the preceding theorem's label sequence once and retain its
+    initial vector, mass bound and dimension asymptotic. Positive selected
+    mass gives $d>0$. The initial vector's symmetry and auxiliary equations
+    supply the hypotheses of the rough lower comparison at $t=2/K$ and
+    inverse-power exponent $1/4$. Apply the numerical coefficient-three
+    estimate to its same normalized vector and energy defect.
+    The signed definition of $\varepsilon_k$ gives the exact label equality.
+    The dimension asymptotic gives $\varepsilon_k/k\to0$; the remaining
+    logarithmic terms are also sublinear. Hence $R_k\to0$.
+\end{proof}
+
 \begin{theorem}[The initial vector for the truncated Hamiltonian]
     \label{thm:al_truncation_schmidt_bell_prevector}
     \lean{TNLean.PEPS.AreaLaw.exists_finiteSetTruncation_schmidtBellPrevector_of_gap}
@@ -529,6 +598,7 @@ only on the parameters named below.
 \end{proof}
 
 \input{chapter/ch24_peps_area_law_scan_histories}
+\input{chapter/ch24_augmented_replica_metric_coordinates}
 \input{chapter/ch24_peps_area_law_bad_histories}
 
 \section{The scanner estimate from its inputs}
@@ -551,7 +621,9 @@ The finite transported measures are required to have mass $1/2$ only for
 $0<p<1$, where the source's terminal weights are positive. The logarithmic norm is
 continuous on $[0,1]$, and its values at $0$ and $1$ retain their matching
 and comparison properties. No mass equality is required at an inactive
-terminal leaf.
+terminal leaf. The charge defect is assumed almost everywhere
+measurable in the interior; its existing nonnegative upper bound then gives
+integrability on the closed interval.
 
 % Source: OpenAI2026AreaLaw, sections/08-scanner.tex, lines 32--41 (the scales);
 % the three comparison bounds are the estimates used at lines 469, 480, 519--520.
@@ -670,6 +742,7 @@ terminal leaf.
         TNLean.PEPS.AreaLaw.Scan.ScanData.SXt_le,
         TNLean.PEPS.AreaLaw.Scan.ScanData.SQt_le,
         TNLean.PEPS.AreaLaw.Scan.exists_budgets,
+        TNLean.PEPS.AreaLaw.Scan.ScanData.intervalIntegrable_chargeDefect,
         TNLean.PEPS.AreaLaw.Scan.ScanData.integratedChargeBound,
         TNLean.PEPS.AreaLaw.Scan.exists_selected_density,
         TNLean.PEPS.AreaLaw.Scan.ScanData.energySum_le,
@@ -712,12 +785,32 @@ terminal leaf.
     and shell index.
     Integrate the logarithmic norm derivative over $[0,1]$ in every round,
     retaining the nonnegative charge contribution on
-    $[\epsilon/2,\epsilon]$. Bounds and continuity on $(0,1)$ make the charge
-    defect integrable; changing its values at $0$ and $1$ does not change
-    the integral. Continuity of the logarithmic norm and the matching
-    values at successive rounds give the telescoped entropy budget. Averaging over
-    the $nm$ charge rounds and the parameter interval selects a round and a
-    parameter with $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$. At that point
+    $[\epsilon/2,\epsilon]$. Interior almost-everywhere measurability
+    and the nonnegative upper bound make the charge defect integrable; the
+    two endpoint values do not change the integral. The integral comparison
+    retains continuity of the logarithmic norm on $[0,1]$, its derivative
+    at every interior point, and the pointwise gain inequality. Matching
+    successive endpoint values give the telescoped entropy budget.
+    Write $T$ for the charge rounds, so $|T|=nm$, and let
+    $\mathcal Q_{r,k}(p)$ be the defect in round $r$. With
+    $c_k=KnD(\delta_n+\rho_k)$, the normalized entropy budget gives
+    \begin{align}
+        \sum_{r\in T}\int_{\epsilon/2}^{\epsilon}\mathcal Q_{r,k}(p)\,dp
+        \le |T|\frac{\epsilon}{2}c_k.
+        \label{eq:al_scanner_charge_sum}
+    \end{align}
+    Since $T\ne\varnothing$, finite averaging in~(\ref{eq:al_scanner_charge_sum})
+    gives $r\in T$ with
+    $\int_{\epsilon/2}^{\epsilon}\mathcal Q_{r,k}(p)\,dp\le(\epsilon/2)c_k$.
+    If $\mathcal Q_{r,k}(p)>c_k$ for every $p\in[\epsilon/2,\epsilon]$,
+    integrability and $\epsilon>0$ imply
+    \begin{align}
+        0 & < \int_{\epsilon/2}^{\epsilon}\bigl(\mathcal Q_{r,k}(p)-c_k\bigr)\,dp \notag            \\
+          & = \int_{\epsilon/2}^{\epsilon}\mathcal Q_{r,k}(p)\,dp-\frac{\epsilon}{2}c_k\le0, \notag
+    \end{align}
+    a contradiction. Hence some $p_k\in[\epsilon/2,\epsilon]$ satisfies
+    $\mathcal Q_{r,k}(p_k)/(KnD)\le\delta_n+\rho_k$.
+    At that point
     H\"older's inequality with exponents $8/7$ and $8$ bounds the leaf
     energies of the old good leaves by $N(\mathcal Q/N)^{1/8}$, the new and
     bad leaves contribute at most $\epsilon$ and $n^{-200}$ times the total
