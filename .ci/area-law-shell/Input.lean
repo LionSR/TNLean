@@ -95,6 +95,18 @@ theorem positiveDepthPrefix_eq_filter_ambientDilation
       fun x : ℤ × ℤ ↦ not_le.mpr
         ((lt_of_not_ge hj).trans_le (ambientDepth_nonneg T hT x))]
 
+/-- The fixed positive-depth comparison prefixes exclude the chosen-color target.
+Source: OpenAI, A two-dimensional area law from a global spectral gap,
+08-scanner.tex, lines 21–24, at
+openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a. -/
+theorem disjoint_target_positiveDepthPrefix
+    {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
+    (A : Finset (Site Λ)) (j : ℤ) :
+    Disjoint (A.filter fun x ↦ x.val ∈ T)
+      (positiveDepthPrefix A (fun x ↦ ambientDepth T hT x.val) j) := by
+  simp [Finset.disjoint_left, positiveDepthPrefix_eq_filter_ambientDilation hT A j]
+  done
+
 #print axioms positiveDepthPrefix_eq_filter_ambientDilation
 
 end TNLean.PEPS.AreaLaw.Scan
