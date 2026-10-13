@@ -165,7 +165,7 @@ with the strongly symmetric dilations of arXiv:2112.04483, lines 448–452. By L
 are proportional at every positive length; the proportionality scalar is nonzero at all large
 lengths because the twisted tensor is normal, and Corollary `eqV` and Lemma `equalMPS` of
 arXiv:1606.00608 (lines 1080–1128) give the gauge phase. -/
-theorem exists_gaugePhase_of_isStrongOnSiteSymmetry_of_isNormalTensor [NeZero D']
+theorem exists_gaugePhase_of_isStrongOnSiteSymmetry_of_isNormalTensor
     {G : Type*} [Monoid G] (U : G →* Matrix (Fin d) (Fin d) ℂ) (hU : ∀ g, (U g)ᴴ * U g = 1)
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D') {M : MPOTensor d D}
@@ -176,6 +176,7 @@ theorem exists_gaugePhase_of_isStrongOnSiteSymmetry_of_isNormalTensor [NeZero D'
     ∃ (X : GL (Fin D') ℂ) (ζ : ℂ), ‖ζ‖ = 1 ∧ ∀ i k, ∑ j, U g i j • A j k =
       ζ • ((X : Matrix (Fin D') (Fin D') ℂ) * A i k *
         ((X⁻¹ : GL (Fin D') ℂ) : Matrix (Fin D') (Fin D') ℂ)) := by
+  have : NeZero D' := ⟨hA.bondDim_ne_zero⟩
   set B := purificationTensor (spinTwist (U g) A) with hBdef
   have hB : IsNormalTensor B := isNormalTensor_purificationTensor_spinTwist (hU g) hA
   have hrel : ∀ L, 0 < L → ∀ w : Fin L → Fin (d * dK),
@@ -210,7 +211,7 @@ purifications.**
 
 Bridge: combines `exists_gaugePhase_of_isStrongOnSiteSymmetry_of_isNormalTensor` with the
 sufficient condition `isStrongOnSiteSymmetry_of_gaugePhase_purification`. -/
-theorem exists_isStrongOnSiteSymmetry_iff_of_isNormalTensor [NeZero D']
+theorem exists_isStrongOnSiteSymmetry_iff_of_isNormalTensor
     {G : Type*} [Monoid G] (U : G →* Matrix (Fin d) (Fin d) ℂ) (hU : ∀ g, (U g)ᴴ * U g = 1)
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D') {M : MPOTensor d D}
@@ -221,6 +222,7 @@ theorem exists_isStrongOnSiteSymmetry_iff_of_isNormalTensor [NeZero D']
       ∀ g, ∃ (X : GL (Fin D') ℂ) (ζ : ℂ), ‖ζ‖ = 1 ∧ ∀ i k, ∑ j, U g i j • A j k =
         ζ • ((X : Matrix (Fin D') (Fin D') ℂ) * A i k *
           ((X⁻¹ : GL (Fin D') ℂ) : Matrix (Fin D') (Fin D') ℂ)) := by
+  have : NeZero D' := ⟨hA.bondDim_ne_zero⟩
   constructor
   · rintro ⟨c, hsym⟩ g
     exact exists_gaugePhase_of_isStrongOnSiteSymmetry_of_isNormalTensor U hU A e hM hsym hA g
@@ -234,7 +236,7 @@ Bridge: under the hypotheses of `exists_gaugePhase_of_isStrongOnSiteSymmetry_of_
 there are unit scalars `ζ_g` with `c_g^{(L)} = ζ_g^L` at every positive length where
 `ρ^{(L)} ≠ 0`; at the remaining lengths the eigenvalue of arXiv:2504.16985, line 182, is not
 determined. -/
-theorem IsStrongOnSiteSymmetry.exists_eq_pow_of_isNormalTensor [NeZero D']
+theorem IsStrongOnSiteSymmetry.exists_eq_pow_of_isNormalTensor
     {G : Type*} [Monoid G] {U : G →* Matrix (Fin d) (Fin d) ℂ} (hU : ∀ g, (U g)ᴴ * U g = 1)
     (A : Fin d → Fin dK → Matrix (Fin D') (Fin D') ℂ)
     (e : Fin D ≃ Fin D' × Fin D') {M : MPOTensor d D}
@@ -244,6 +246,7 @@ theorem IsStrongOnSiteSymmetry.exists_eq_pow_of_isNormalTensor [NeZero D']
     (hA : IsNormalTensor (purificationTensor A)) :
     ∃ ζ : G → ℂ, (∀ g, ‖ζ g‖ = 1) ∧
       ∀ g L, 0 < L → mpo M L ≠ 0 → c g L = ζ g ^ L := by
+  have : NeZero D' := ⟨hA.bondDim_ne_zero⟩
   choose X ζ hζ hX using
     exists_gaugePhase_of_isStrongOnSiteSymmetry_of_isNormalTensor U hU A e hM hsym hA
   refine ⟨ζ, hζ, fun g L hL hρ => ?_⟩

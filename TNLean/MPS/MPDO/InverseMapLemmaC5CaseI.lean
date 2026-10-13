@@ -57,7 +57,6 @@ theorem exists_rephased_inverseMap_caseI_rank_one_coefficients_witnesses
           (∀ k h, F.activeSectorTraceMatrix p k h = a k * b h) ∧
             (∑ k, a k * b k) = 1 ∧
               (∀ k h, p k = 0 ∨ p h = 0 → F.neighboringOperator k h = 0) := by
-  let : NeZero D := ⟨hK_normal.bondDim_ne_zero⟩
   obtain ⟨hη⟩ := exists_etaStructure_reducedBlockState_of_isSAL K hSAL
   obtain ⟨beta, alpha, hm⟩ :=
     exists_normalizedFourSiteTail_entry_ne_zero

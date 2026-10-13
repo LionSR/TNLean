@@ -74,7 +74,7 @@ $P_{\alpha,k}$ selects a nonzero normal sector of the vertical direct sum.
 The present lemma isolates the algebraic nonvanishing implication from the
 exact gauge-corner identity. -/
 theorem exists_rangeProjection_corner_ne_zero
-    {n : ℕ} [NeZero n] (M : MPOTensor d D) (A : MPSTensor (D * D) n)
+    {n : ℕ} (M : MPOTensor d D) (A : MPSTensor (D * D) n)
     (hA : A.IsNormalTensor) (V : Matrix (Fin d) (Fin n) ℂ)
     (hV : Vᴴ * V = 1) (X : GL (Fin n) ℂ) (ω : ℂ) (hω : ω ≠ 0)
     (hcorner : ∀ v,
@@ -82,6 +82,7 @@ theorem exists_rangeProjection_corner_ne_zero
         (↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ)) =
           Vᴴ * verticalTensor M v * V) :
     ∃ v, (V * Vᴴ) * verticalTensor M v * (V * Vᴴ) ≠ 0 := by
+  have : NeZero n := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨v, hv⟩ := hA.exists_apply_ne_zero
   refine ⟨v, ?_⟩
   have hconj : (X : Matrix (Fin n) (Fin n) ℂ) * A v *
