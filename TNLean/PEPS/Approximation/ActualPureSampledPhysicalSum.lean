@@ -69,7 +69,7 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum
         (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) garbage))))
     {n J : Type} [Fintype n] [Fintype J]
     (bIn : OrthonormalBasis n ℂ (Mem a)) (bRef : OrthonormalBasis J ℂ (Mem garbage)) :
-    let C := selectedPhysicalPrivateBasis d ps hn hc garbage BG
+    let _C := selectedPhysicalPrivateBasis d ps hn hc garbage BG
     let M := fun (ξ ζ : Choices (fun _ : P ↦ true) w)
       (j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k)
       (q : Option {_p : P // true = true}) ↦
@@ -87,11 +87,11 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum
           ∑ j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k,
             dependentPhysicalProductFamilyMatrix (fun p : P ↦ M ξ ζ j (some ⟨p, rfl⟩)) := by
   classical
-  intro C M
+  intro _C M
   let physical := familyPhysicalLayout d ps
   let qs := selectedPartyOrder ps
   let G := partyGroupedBasis
-    (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) (physical ++ garbage)) C qs
+    (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) (physical ++ garbage)) _C qs
     (selectedPartyOrder_nodup ps hn) (mem_selectedPartyOrder ps hc)
   let H := (((familyLabelledPhysicalBasis d ps hn hc).tensorProduct bRef).map
     (appendIso physical garbage).symm).map
