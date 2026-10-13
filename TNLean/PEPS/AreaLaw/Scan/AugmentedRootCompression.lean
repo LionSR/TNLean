@@ -128,6 +128,13 @@ theorem rootPath_augmented_compressed_bandProduct
       Matrix.mulVec_mulVec, hZZ] using hsym
   have hnorm : Transport.filteredNormSq M (ZOᴴ *ᵥ vO) = ‖w‖ ^ 2 :=
     Matrix.re_star_dotProduct_self_eq_norm_sq _
-  done
+  simpa only [hpre, Transport.filteredVector, hnorm, Real.sqrt_sq (norm_nonneg w),
+    WithLp.ofLp_smul] using And.intro
+      (Transport.filteredNormSq_intertwine
+        (MeanTree.posDef_eval (D.posDef_input hD ht hcomm) T).posSemidef
+        hroot'.1.posSemidef ZS hroot'.2 hZ (ZOᴴ *ᵥ vO))
+      (Transport.filteredVector_intertwine
+        (MeanTree.posDef_eval (D.posDef_input hD ht hcomm) T).posSemidef
+        hroot'.1.posSemidef ZS hroot'.2 hZ (ZOᴴ *ᵥ vO))
 
 end TNLean.PEPS.AreaLaw.Scan
