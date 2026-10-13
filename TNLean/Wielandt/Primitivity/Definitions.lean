@@ -37,7 +37,7 @@ The definitions are stated in the notation of the theorem: `S_n(A)`, `i(A)`,
 
 There are four distinct primitivity predicates in the codebase:
 
-* `_root_.IsPrimitive E` in `TNLean/Channel/Peripheral/Spectrum.lean`: the canonical
+* `_root_.IsPrimitive E` in `QICLean/Channel/Peripheral/Spectrum.lean`: the canonical
   peripheral-spectrum predicate for an arbitrary linear map `E`, defined by
   `peripheralEigenvalues E = {1}`.
 * `MPSTensor.HasPrimitiveFixedPoint A` in
@@ -167,7 +167,7 @@ circle.
 
 This is the transfer-map formulation of the canonical predicate
 `_root_.IsPrimitive (Kraus.transferMap A)` from
-`TNLean/Channel/Peripheral/Spectrum.lean`.
+`QICLean/Channel/Peripheral/Spectrum.lean`.
 
 For orientation, the codebase distinguishes four related notions:
 

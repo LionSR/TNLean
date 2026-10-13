@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Wielandt.Primitivity.EasyDirections
-import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducibleAux
+import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 
 /-!
@@ -30,7 +30,7 @@ The following are equivalent for an MPS tensor `A` with `∑ Aᵢ† Aᵢ = 1`:
 - **(b)→(a)**: `isPrimitivePaper_of_hasEventuallyFullKrausRank`
   in `EasyDirections`
 - **(a)→(c)**: `isStronglyIrreduciblePaper_of_isPrimitivePaper`
-  in `ImpliesStronglyIrreducibleAux`
+  in `ImpliesStronglyIrreducible`
 - **(c)→(b)**:
   `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper`
   in `StronglyIrreducibleToFullRank`
@@ -40,8 +40,7 @@ full equivalence of all three conditions.
 
 Within TNLean this is the preferred Proposition 3 entry point on the root
 import surface. The direction-specific files
-`Primitivity/ImpliesStronglyIrreducible.lean`,
-`Primitivity/ImpliesStronglyIrreducibleAux.lean`, and
+`Primitivity/ImpliesStronglyIrreducible.lean` and
 `Primitivity/StronglyIrreducibleToFullRank.lean` remain specialized
 implementation modules, while the canonical / FT / BNT construction does not
 import these statements directly.
