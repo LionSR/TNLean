@@ -559,7 +559,9 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     \leanok
     \uses{def:mpdo_ancillary_trace_map}
     For every ancillary dimension, the one-site ancillary trace map is
-    trace-preserving and completely positive.
+    trace-preserving and completely positive. This is the structure described
+    immediately after Definition~4.3 in
+    \cite[lines~761--764]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -599,33 +601,6 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     This condition records the density-operator equation of
     \cite[line~751]{Cirac2016MPDO_arXiv}.
 \end{definition}
-
-\begin{definition}[Trace-preserving spin reduction]
-    \label{def:mpdo_has_trace_preserving_spin_reduction}
-    \lean{MPOTensor.HasTracePreservingSpinReduction}
-    \leanok
-    \uses{def:mpdo_ancillary_trace_map}
-    The spin reduction obtained by tracing the ancillary index is
-    trace-preserving completely positive
-    \cite[``Trace-preserving completely positive map'']{QICLean2026Blueprint}.
-    This formalizes the structure described immediately after Definition~4.3 in
-    \cite[lines~761--764]{Cirac2016MPDO_arXiv}.
-\end{definition}
-
-\begin{corollary}[Trace-preserving spin reduction of the ancillary trace]
-    \label{cor:mpdo_has_trace_preserving_spin_reduction}
-    \lean{MPOTensor.hasTracePreservingSpinReduction}
-    \leanok
-    \uses{def:mpdo_has_trace_preserving_spin_reduction, thm:mpdo_ancillary_trace_map_is_kraus_cptp}
-    For every ancillary dimension, the spin reduction obtained by tracing the
-    ancillary index is trace-preserving and completely positive.
-\end{corollary}
-\begin{proof}
-    \leanok
-    This is exactly
-    Theorem~\ref{thm:mpdo_ancillary_trace_map_is_kraus_cptp}, unpacked through
-    Definition~\ref{def:mpdo_has_trace_preserving_spin_reduction}.
-\end{proof}
 
 % **Local fix (intended presentation):** Definition 4.3 literally refers to
 % the global equation MPDO-Puri-1, while lines 744--763 continue with the

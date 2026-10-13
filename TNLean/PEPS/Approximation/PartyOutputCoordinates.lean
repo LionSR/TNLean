@@ -360,20 +360,10 @@ private theorem groupByPartyIso_familyPhysicalListBasis_eq_orderedPartyVector
   induction ps with
   | nil =>
       simp only [groupByPartyIso, familyPhysicalLayout, Layout.memCongr,
-        familyPhysicalListBasis, orderedPartyVector, List.length_nil, List.get_eq_getElem]
-      let I := (i : Fin 0) → Fin (d (([] : List P).get i))
-      have hcast : ∀ (ft ft' : Fintype I) (hf : ft = ft')
-          (B : @OrthonormalBasis I ℂ _ ℂ _ _ ft') (i : I),
-          (Eq.mpr (congrArg (fun j : Fintype I => @OrthonormalBasis I ℂ _ ℂ _ _ j)
-            hf) B) i = B i := by
-        rintro ft ft' rfl B i
-        rfl
+        orderedPartyVector, List.length_nil, List.get_eq_getElem]
       change (LinearIsometryEquiv.refl ℂ ℂ) _ = (1 : ℂ)
       rw [LinearIsometryEquiv.coe_refl (R := ℂ) (E := ℂ)]
-      refine (hcast inferInstance _ (Subsingleton.elim _ _)
-        (OrthonormalBasis.singleton I ℂ)
-        (fun i => x (([] : List P).get i))).trans ?_
-      simp only [OrthonormalBasis.singleton_apply]
+      exact familyPhysicalListBasis_nil_apply d _
   | cons p ps ih =>
       rw [familyPhysicalListBasis, orderedPartyVector]
       refine (congrArg

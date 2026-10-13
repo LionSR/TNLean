@@ -81,6 +81,35 @@ def IsInvariantUnderSymmetry (S : FiniteChainOperatorSymmetry d)
     (W : MPOTensor d D) : Prop :=
   ∀ ⦃N : ℕ⦄, N ∈ S.applicable → S.action (mpo W N) = mpo W N
 
+/-- Pointwise equivalent invariance equations at the same applicable chain
+lengths give equivalent symmetry-invariance predicates.
+This is the pointwise step in arXiv:1703.09188, Lemma `lemma:sym-trafo-swap`. -/
+theorem isInvariantUnderSymmetry_iff_of_pointwise
+    (S T : FiniteChainOperatorSymmetry d) (U V : MPOTensor d D)
+    (happlicable : S.applicable = T.applicable)
+    (hST : ∀ N : ℕ, S.action (mpo U N) = mpo U N ↔ T.action (mpo V N) = mpo V N) :
+    IsInvariantUnderSymmetry S U ↔ IsInvariantUnderSymmetry T V := by
+  unfold IsInvariantUnderSymmetry
+  simp_rw [happlicable, hST]
+
+/-- Adjunction on every positive-length periodic operator.
+Source: arXiv:1703.09188, time reversal, lines 965--973. -/
+def daggerSymmetry (d : ℕ) : FiniteChainOperatorSymmetry d where
+  applicable := {N | 0 < N}
+  action := fun X ↦ Xᴴ
+
+/-- Transposition on every positive-length periodic operator.
+Source: arXiv:1703.09188, transposition, lines 1258--1264. -/
+def transposeSymmetry (d : ℕ) : FiniteChainOperatorSymmetry d where
+  applicable := {N | 0 < N}
+  action := fun X ↦ Xᵀ
+
+/-- Entrywise conjugation on every positive-length periodic operator.
+Source: arXiv:1703.09188, conjugation, lines 1005--1010. -/
+def conjugationSymmetry (d : ℕ) : FiniteChainOperatorSymmetry d where
+  applicable := {N | 0 < N}
+  action := fun X ↦ X.map (starRingEnd ℂ)
+
 /-- Attach an identity ancilla of dimension \(x\) to a finite-chain operator.
 
 This is the canonical embedding \(X\mapsto X\otimes I\), written in the

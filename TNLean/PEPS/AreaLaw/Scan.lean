@@ -9,10 +9,16 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Scan
 
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeData
+import TNLean.PEPS.AreaLaw.Scan.ActualChargeParameterBound
 import TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms
 import TNLean.PEPS.AreaLaw.Scan.ActualEntropySampling
 import TNLean.PEPS.AreaLaw.Scan.ActualHistory
 import TNLean.PEPS.AreaLaw.Scan.ActualMarginalTails
+import TNLean.PEPS.AreaLaw.Scan.ActualParameterIntegral
+import TNLean.PEPS.AreaLaw.Scan.ActualRoundEntropy
+import TNLean.PEPS.AreaLaw.Scan.ActualRoundParameterIntegral
+import TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport
+import TNLean.PEPS.AreaLaw.Scan.ActualScanMeasures
 import TNLean.PEPS.AreaLaw.Scan.ActualTransportEstimates
 import TNLean.PEPS.AreaLaw.Scan.AmbientDepth
 import TNLean.PEPS.AreaLaw.Scan.AncestryCover
@@ -56,6 +62,8 @@ import TNLean.PEPS.AreaLaw.Scan.FillCoverage
 import TNLean.PEPS.AreaLaw.Scan.FillSupportCompatibility
 import TNLean.PEPS.AreaLaw.Scan.FillTransport
 import TNLean.PEPS.AreaLaw.Scan.FillTransportEndpoints
+import TNLean.PEPS.AreaLaw.Scan.FrontPrefixFamily
+import TNLean.PEPS.AreaLaw.Scan.FrontThresholds
 import TNLean.PEPS.AreaLaw.Scan.GoodSampling
 import TNLean.PEPS.AreaLaw.Scan.HistoryMeanTree
 import TNLean.PEPS.AreaLaw.Scan.HistoryPrefixes
@@ -63,6 +71,7 @@ import TNLean.PEPS.AreaLaw.Scan.HistoryWeights
 import TNLean.PEPS.AreaLaw.Scan.NestedBandMetric
 import TNLean.PEPS.AreaLaw.Scan.OffsetDilution
 import TNLean.PEPS.AreaLaw.Scan.OldStateIntegral
+import TNLean.PEPS.AreaLaw.Scan.OldStateParameterIntegral
 import TNLean.PEPS.AreaLaw.Scan.OriginalTruncation
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBadHistoryDecay
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBandCommutation
@@ -72,6 +81,7 @@ import TNLean.PEPS.AreaLaw.Scan.PrefixApproximation
 import TNLean.PEPS.AreaLaw.Scan.PrefixBoundary
 import TNLean.PEPS.AreaLaw.Scan.PrefixCardinality
 import TNLean.PEPS.AreaLaw.Scan.PrefixComparison
+import TNLean.PEPS.AreaLaw.Scan.PrefixFiniteFamily
 import TNLean.PEPS.AreaLaw.Scan.RadiusAsymptotics
 import TNLean.PEPS.AreaLaw.Scan.RegionalMoveEntropy
 import TNLean.PEPS.AreaLaw.Scan.RoundedClearance
@@ -80,17 +90,28 @@ import TNLean.PEPS.AreaLaw.Scan.Scanner
 import TNLean.PEPS.AreaLaw.Scan.SelectedChainProbability
 import TNLean.PEPS.AreaLaw.Scan.Selection
 import TNLean.PEPS.AreaLaw.Scan.SideSeparation
+import TNLean.PEPS.AreaLaw.Scan.SourceStatusMarginalMoments
 import TNLean.PEPS.AreaLaw.Scan.SplitCounting
 import TNLean.PEPS.AreaLaw.Scan.SplitEntropyCost
 import TNLean.PEPS.AreaLaw.Scan.SplitIntervals
 import TNLean.PEPS.AreaLaw.Scan.SplitSupportSize
+import TNLean.PEPS.AreaLaw.Scan.StatusContainment
 import TNLean.PEPS.AreaLaw.Scan.StatusCutBounds
+import TNLean.PEPS.AreaLaw.Scan.StatusMarginalBudget
+import TNLean.PEPS.AreaLaw.Scan.StatusMarginalMoments
+import TNLean.PEPS.AreaLaw.Scan.StatusScaleSeparation
 import TNLean.PEPS.AreaLaw.Scan.SubsystemDimension
 import TNLean.PEPS.AreaLaw.Scan.SubsystemDimensionScale
 import TNLean.PEPS.AreaLaw.Scan.SubsystemSize
 import TNLean.PEPS.AreaLaw.Scan.SupportClassification
 import TNLean.PEPS.AreaLaw.Scan.SupportCompatibility
 import TNLean.PEPS.AreaLaw.Scan.SupportLocalization
+import TNLean.PEPS.AreaLaw.Scan.TargetGeometry
+import TNLean.PEPS.AreaLaw.Scan.TargetTypicalWindow
 import TNLean.PEPS.AreaLaw.Scan.TerminalSplits
 import TNLean.PEPS.AreaLaw.Scan.TimedChargePaths
 import TNLean.PEPS.AreaLaw.Scan.TransportDimension
+import TNLean.PEPS.AreaLaw.Scan.TransportRound
+import TNLean.PEPS.AreaLaw.Scan.TransportRoundEnergy
+import TNLean.PEPS.AreaLaw.Scan.TransportRoundParameterIntegral
+import TNLean.PEPS.AreaLaw.Scan.TypicalReplicaAbsorption

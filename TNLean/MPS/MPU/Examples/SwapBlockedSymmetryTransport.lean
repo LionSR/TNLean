@@ -145,7 +145,7 @@ private theorem block_swap_dagger_invariance_iff (d k : ℕ) {E : ℕ}
     ((shiftSwapDaggerSymmetry d).block k) ((daggerSymmetry (d * d)).block k) _ _ rfl
   intro N
   rw [block_swap_dagger_action, block_dagger_action, mpo_ketLeftMul]
-  apply swapCombined_fixed_iff_leftMul _ _ (blocked_chainSwap_mul_self d k N)
+  apply Matrix.swapCombined_fixed_iff_leftMul _ _ (blocked_chainSwap_mul_self d k N)
   rw [Matrix.conjTranspose_mul, blocked_chainSwap_conjTranspose]
 
 private theorem block_swap_transpose_invariance_iff (d k : ℕ) {E : ℕ}
@@ -157,7 +157,7 @@ private theorem block_swap_transpose_invariance_iff (d k : ℕ) {E : ℕ}
     ((shiftSwapTransposeSymmetry d).block k) ((transposeSymmetry (d * d)).block k) _ _ rfl
   intro N
   rw [block_swap_transpose_action, block_transpose_action, mpo_ketLeftMul]
-  apply swapCombined_fixed_iff_leftMul _ _ (blocked_chainSwap_mul_self d k N)
+  apply Matrix.swapCombined_fixed_iff_leftMul _ _ (blocked_chainSwap_mul_self d k N)
   rw [Matrix.transpose_mul, blocked_chainSwap_transpose]
 
 private theorem block_conjugation_invariance_iff (d k : ℕ) {E : ℕ}

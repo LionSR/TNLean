@@ -191,7 +191,6 @@ arbitrary supplied representation after adjoining an all-zero virtual summand;
 the source-selected bond instead uses the source tensor itself. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_unit_phase_power_mpo_eq_product_of_normal_smul
-    [NeZero D]
     (data : EtaLocalStructureData M)
     (repr : TranslationInvariantBondData.FixedProductTensorData data.bondData)
     (s : ℝ) (hs : 0 < s)
@@ -200,6 +199,7 @@ theorem exists_unit_phase_power_mpo_eq_product_of_normal_smul
       (fun i ↦ (s : ℂ) • repr.tensor.toMPSTensor i)) :
     ∃ ζ : ℂ, ‖ζ‖ = 1 ∧ ∀ (N : ℕ) (hN : 2 ≤ N),
       mpo M N = ((ζ * (s : ℂ)) ^ N) • (data.bondData.toCommutingFormData hN).product := by
+  have : NeZero D := ⟨hM.bondDim_ne_zero⟩
   let : NeZero repr.bondDim := ⟨Nat.ne_of_gt repr.bondDim_pos⟩
   have hsℂ : (s : ℂ) ≠ 0 := by
     exact_mod_cast ne_of_gt hs
@@ -244,7 +244,6 @@ arbitrary supplied representation after adjoining an all-zero virtual summand;
 the source-selected bond instead uses the source tensor itself. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem mpo_eq_positive_power_product_of_normal_smul
-    [NeZero D]
     (data : EtaLocalStructureData M)
     (repr : TranslationInvariantBondData.FixedProductTensorData data.bondData)
     (s : ℝ) (hs : 0 < s)
@@ -253,6 +252,7 @@ theorem mpo_eq_positive_power_product_of_normal_smul
       (fun i ↦ (s : ℂ) • repr.tensor.toMPSTensor i)) :
     ∀ (N : ℕ) (hN : 2 ≤ N),
       mpo M N = ((s : ℂ) ^ N) • (data.bondData.toCommutingFormData hN).product := by
+  have : NeZero D := ⟨hM.bondDim_ne_zero⟩
   rcases data.exists_unit_phase_power_mpo_eq_product_of_normal_smul
       repr s hs hM hRepr with ⟨ζ, hζ, hGeo⟩
   obtain ⟨K, hK⟩ := Metric.tendsto_atTop.mp hM.selfOverlap_tendsto_one

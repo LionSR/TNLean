@@ -1,0 +1,48 @@
+\section{Buffer operators in paired physical coordinates}
+
+\begin{theorem}[The physical buffer operator]
+    \label{thm:peps_physical_buffer_coordinates}
+    \lean{TNLean.PEPS.EncodedFrame.reindex_physicalBuffer_eq_siteLift}
+    \leanok
+    \uses{def:qc_site_pair_coordinates}
+    Let $V$ be a finite set of sites, let $q\ge0$ be an integer, and let
+    $R,C\subseteq V$ be disjoint. Put $Q=(R\cup C)^c$ and write
+    $\mathcal X_D=[q]^D$ for the configurations on a region $D$.
+    Use the canonical finite enumerations of $\mathcal X_R$ and
+    $\mathcal X_C$, and put $P=[|\mathcal X_R|]\times[|\mathcal X_C|]$.
+    Let $s:\mathcal X_V\to P\times\mathcal X_Q$ be the resulting
+    coordinate bijection. Define
+    \begin{align*}
+        g(x,y) & =((s(x)_1,s(y)_1),(s(x)_2,s(y)_2)).
+    \end{align*}
+    Let $p_D:\mathcal X_D\times\mathcal X_D\to[q^2]^D$ pair the two
+    configuration values at each site, and put $e=p_V\circ g^{-1}$.
+    For every complex matrix $W$ on $\mathcal X_Q\times\mathcal X_Q$,
+    \begin{align*}
+        \operatorname{reindex}_e(I_{P\times P}\otimes W)
+         & =(\operatorname{reindex}_{p_Q}W)_Q\otimes\id.
+    \end{align*}
+    Here reindexing transports both matrix indices, and
+    $X_Q\otimes\id$ acts as $X$ on the sites of $Q$ and as the identity
+    elsewhere. This identifies the physical buffer operator
+    used in the localization argument of \cite{OpenAI2026PolynomialPEPS}.
+    The identity includes empty regions and zero local dimension.
+\end{theorem}
+\begin{proof}\leanok
+    Compare matrix entries at two paired configurations $z,z'$, and write
+    $e^{-1}(z)=(u,x)$ and $e^{-1}(z')=(u',x')$ with $u,u'\in P\times P$.
+    Then
+    \begin{align*}
+        (I_{P\times P}\otimes W)_{(u,x),(u',x')}
+          & =[u=u']\,W_{x,x'}, &
+        x & =p_Q^{-1}(z|_Q).
+    \end{align*}
+    The identity factor on $P\times P$ requires equality of both copies of
+    the restrictions to $R$ and $C$. Since the finite enumerations are
+    bijective,
+    \begin{align*}
+        u=u' & \iff z|_{Q^c}=z'|_{Q^c}.
+    \end{align*}
+    When this condition holds, both entries are the same entry of $W$ on
+    the two restrictions to $Q$; otherwise both entries vanish.
+\end{proof}

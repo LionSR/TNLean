@@ -42,9 +42,8 @@ private theorem restrict_castLayouts_word_heq (f : P → Bool) {a b a' b' : Layo
     (w : Word a b) (ha : a = a') (hb : b = b') (hs : w.sources = []) :
     HEq ((w.castLayouts ha hb).restrict f ((Word.sources_castLayouts _ _ _).trans hs))
       (w.restrict f hs) := by
-  cases ha
-  cases hb
-  rfl
+  rw [Word.restrict_castLayouts]
+  exact castLayouts_word_heq _ _ _
 
 private theorem comp_word_heq {a b d a' b' d' : Layout P}
     (ha : a = a') (hb : b = b') (hd : d = d')

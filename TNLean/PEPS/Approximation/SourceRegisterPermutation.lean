@@ -57,14 +57,6 @@ theorem sourcePositionsLayout_eq_layout (r : I → PairSource P) (indices : List
         (r i).leftSpace, (r i).rightSpace, η i⟩)) := by
   simp [sourcePositionsLayout, layout, List.flatMap_map, PairSource.layout]
 
-/-- Preparing a source commutes with identifying the spectator register list. -/
-private theorem source_apply_heq (s : PairSource P) {a b : Layout P} (h : a = b)
-    {x : Mem a} {y : Mem b} (hxy : HEq x y) :
-    HEq ((Word.source s.distinct s.leftSpace s.rightSpace s.vector a).eval x)
-      ((Word.source s.distinct s.leftSpace s.rightSpace s.vector b).eval y) := by
-  cases h
-  exact heq_of_eq (congrArg _ (eq_of_heq hxy))
-
 /-- The position-indexed preparation is the actual preparation of its source records. -/
 theorem eval_prepareSourcePositions_heq (r : I → PairSource P) (indices : List I)
     (η : ∀ i, (r i).leftSpace ⊗[ℂ] (r i).rightSpace) (ℓ : Layout P) (x : Mem ℓ) :
@@ -74,7 +66,7 @@ theorem eval_prepareSourcePositions_heq (r : I → PairSource P) (indices : List
   induction indices with
   | nil => rfl
   | cons i indices ih =>
-    exact source_apply_heq
+    exact Word.eval_source_apply_heq
       ⟨(r i).left, (r i).right, (r i).distinct,
         (r i).leftSpace, (r i).rightSpace, η i⟩
       (congrArg (· ++ ℓ) (sourcePositionsLayout_eq_layout r indices η)) ih
@@ -93,7 +85,7 @@ theorem eval_prepareSourcePositions_append (r : I → PairSource P) (a b : List 
   induction a with
   | nil => rfl
   | cons i a ih =>
-    exact source_apply_heq
+    exact Word.eval_source_apply_heq
       ⟨(r i).left, (r i).right, (r i).distinct,
         (r i).leftSpace, (r i).rightSpace, η i⟩
       (by rw [sourcePositionsLayout_append, List.append_assoc]) ih
