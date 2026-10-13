@@ -38,7 +38,7 @@ is eventually below the bootstrap energy scale. Every coefficient is fixed
 before the threshold, which precedes every current exponent `e ≤ e₀`.
 The unit coefficient in the conclusion is obtained by increasing the threshold.
 This is a numerical auxiliary to `08-scanner.tex`, lines 731–755;
-no defect energy or entropy estimate is assumed. The proof remains unfinished. -/
+no defect energy or entropy estimate is assumed. -/
 theorem exists_bootstrap_principal_energy_bound
     {e₀ : ℝ} (he₀ : 0 < e₀) (he₀₁ : e₀ < 1)
     (C Cδ Cl Clδ : ℝ) (hC : 0 ≤ C) (hCδ : 0 ≤ Cδ) :
@@ -110,7 +110,7 @@ theorem exists_bootstrap_principal_energy_bound
   have hnCoeff : (n : ℝ) ≤
       C₁ * (n : ℝ) ^ X.ell * ((X.m n : ℝ) * (X.K n : ℝ)) :=
     (mul_le_mul_iff_of_pos_right (sq_pos_of_pos hD₀)).mp (by
-      convert (div_le_iff₀ (mul_pos hm₀ hK₀)).mp hf.coefficient_le using 1 <;> ring)
+      convert (div_le_iff₀ (mul_pos hm₀ hK₀)).mp hf.coefficient_le using 1; ring)
   have hpowK : (n : ℝ) ^ (BootstrapParameters.g0 e₀ - X.ell) ≤ C₁ * (X.K n : ℝ) :=
     (mul_le_mul_iff_of_pos_right (Real.rpow_pos_of_pos hn₀ (X.ell + X.mu))).mp <|
       calc
@@ -135,11 +135,97 @@ theorem exists_bootstrap_principal_energy_bound
       _ ≤ (n : ℝ) ^ X.nu * (n : ℝ) ^ (-(BootstrapParameters.g0 e₀ - X.ell)) :=
         mul_le_mul_of_nonneg_right hC₁n (Real.rpow_nonneg hn₀.le _)
       _ = (n : ℝ) ^ (X.nu - (BootstrapParameters.g0 e₀ - X.ell)) := by
-        rw [sub_eq_add_neg, Real.rpow_add hn₀]
+        simpa only [sub_eq_add_neg] using
+          (Real.rpow_add hn₀ X.nu (-(BootstrapParameters.g0 e₀ - X.ell))).symm
       _ ≤ (n : ℝ) ^ (-44 * X.nu) :=
         Real.rpow_le_rpow_of_exponent_le hn₁ (by
           dsimp only [X, BootstrapParameters.ell, BootstrapParameters.nu]
           linarith)
-  done
+  have hsum : (n : ℝ) ^ (e - X.mu) +
+      (X.a 4 n) ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Clδ ≤
+        2 * (n : ℝ) ^ (-10 * X.nu) := by
+    have hepow : (n : ℝ) ^ (e - X.mu) ≤ (n : ℝ) ^ (-10 * X.nu) :=
+      Real.rpow_le_rpow_of_exponent_le hn₁ (by
+        dsimp only [X, BootstrapParameters.mu, BootstrapParameters.nu, BootstrapParameters.g0]
+        linarith)
+    have hlogδ : Real.log (n : ℝ) ^ Clδ ≤ (n : ℝ) ^ X.nu :=
+      (Real.le_norm_self _).trans (hlogδn.trans_eq
+        (Real.norm_of_nonneg (Real.rpow_nonneg hn₀.le _)))
+    have haPow : (X.a 4 n) ^ (1 / 4 : ℝ) ≤ (n : ℝ) ^ (-11 * X.nu) :=
+      (Real.rpow_le_rpow (div_nonneg (by norm_num) hK₀.le) ha
+        (by norm_num : (0 : ℝ) ≤ 1 / 4)).trans_eq (by
+          rw [← Real.rpow_mul hn₀.le]
+          congr 1; ring)
+    calc
+      (n : ℝ) ^ (e - X.mu) + (X.a 4 n) ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Clδ
+          ≤ (n : ℝ) ^ (-10 * X.nu) + (n : ℝ) ^ (-11 * X.nu) * (n : ℝ) ^ X.nu :=
+        add_le_add hepow (mul_le_mul haPow hlogδ
+          (Real.rpow_nonneg hlogn _) (Real.rpow_nonneg hn₀.le _))
+      _ = 2 * (n : ℝ) ^ (-10 * X.nu) := by
+        rw [← Real.rpow_add hn₀, show -11 * X.nu + X.nu = -10 * X.nu by ring]
+        ring
+  let δ := Cδ * ((n : ℝ) ^ (-X.nu))⁻¹ *
+    ((n : ℝ) ^ (e - X.mu) + (X.a 4 n) ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Clδ)
+  obtain ⟨hδ₀, hδ⟩ : 0 ≤ δ ∧ δ ≤ (n : ℝ) ^ (-8 * X.nu) :=
+    ⟨by dsimp only [δ, ScannerExponents.a]; positivity, by
+      calc
+        δ = Cδ * (n : ℝ) ^ X.nu *
+            ((n : ℝ) ^ (e - X.mu) + (X.a 4 n) ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Clδ) := by
+          dsimp only [δ]
+          rw [Real.rpow_neg hn₀.le, inv_inv]
+        _ ≤ Cδ * (n : ℝ) ^ X.nu * (2 * (n : ℝ) ^ (-10 * X.nu)) :=
+          mul_le_mul_of_nonneg_left hsum (mul_nonneg hCδ (Real.rpow_nonneg hn₀.le _))
+        _ = (2 * Cδ) * (n : ℝ) ^ (-9 * X.nu) := by
+          rw [show -9 * X.nu = X.nu + (-10 * X.nu) by ring, Real.rpow_add hn₀]
+          ring
+        _ ≤ (n : ℝ) ^ X.nu * (n : ℝ) ^ (-9 * X.nu) :=
+          mul_le_mul_of_nonneg_right hCδn (Real.rpow_nonneg hn₀.le _)
+        _ = (n : ℝ) ^ (-8 * X.nu) := by
+          rw [← Real.rpow_add hn₀]
+          congr 1; ring⟩
+  have hbracket : δ ^ (1 / 8 : ℝ) + (n : ℝ) ^ (-X.nu) + (n : ℝ) ^ (-100 : ℝ) ≤
+      3 * (n : ℝ) ^ (-X.nu) := by
+    have hroot : δ ^ (1 / 8 : ℝ) ≤ (n : ℝ) ^ (-X.nu) :=
+      (Real.rpow_le_rpow hδ₀ hδ (by norm_num : (0 : ℝ) ≤ 1 / 8)).trans_eq (by
+        rw [← Real.rpow_mul hn₀.le]
+        congr 1; ring)
+    have htail : (n : ℝ) ^ (-100 : ℝ) ≤ (n : ℝ) ^ (-X.nu) :=
+      Real.rpow_le_rpow_of_exponent_le hn₁ (by
+        dsimp only [X, BootstrapParameters.nu]
+        linarith)
+    linarith
+  have hDsq : (X.D n : ℝ) ^ 2 ≤ 4 * (n : ℝ) ^ (2 * X.kappa) := by
+    have hceil : (X.D n : ℝ) ≤ 2 * (n : ℝ) ^ X.kappa :=
+      (Nat.ceil_lt_add_one (Real.rpow_nonneg hn₀.le X.kappa)).le.trans
+        (by linarith [Real.one_le_rpow hn₁ X.kappa_pos.le])
+    calc
+      (X.D n : ℝ) ^ 2 ≤ (2 * (n : ℝ) ^ X.kappa) ^ 2 :=
+        pow_le_pow_left₀ (Nat.cast_nonneg _) hceil 2
+      _ = 4 * (n : ℝ) ^ (2 * X.kappa) := by
+        rw [mul_pow, ← Real.rpow_mul_natCast hn₀.le]
+        norm_num [mul_comm]
+  calc
+    C * (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2 * (4 : ℝ) ^ 2 * Real.log (n : ℝ) ^ Cl *
+        (δ ^ (1 / 8 : ℝ) + (n : ℝ) ^ (-X.nu) + (n : ℝ) ^ (-100 : ℝ))
+        ≤ C * (n : ℝ) ^ X.ell * (4 * (n : ℝ) ^ (2 * X.kappa)) * (4 : ℝ) ^ 2 *
+          Real.log (n : ℝ) ^ Cl * (3 * (n : ℝ) ^ (-X.nu)) := by
+      gcongr
+    _ = (192 * C * Real.log (n : ℝ) ^ Cl) *
+        (n : ℝ) ^ (X.ell + 2 * X.kappa - X.nu) := by
+      rw [Real.rpow_sub hn₀, Real.rpow_add hn₀, Real.rpow_neg hn₀.le, div_eq_mul_inv]
+      ring
+    _ ≤ (n : ℝ) ^ (X.nu / 4) * (n : ℝ) ^ (X.ell + 2 * X.kappa - X.nu) :=
+      mul_le_mul_of_nonneg_right
+        ((Real.le_norm_self _).trans (hlogCn.trans_eq
+          (Real.norm_of_nonneg (Real.rpow_nonneg hn₀.le _))))
+        (Real.rpow_nonneg hn₀.le _)
+    _ = (n : ℝ) ^ (X.ell + 2 * X.kappa - 3 * X.nu / 4) := by
+      rw [← Real.rpow_add hn₀]
+      congr 1; ring
+    _ ≤ (n : ℝ) ^ (-X.nu / 2) :=
+      Real.rpow_le_rpow_of_exponent_le hn₁ (by
+        have hk : X.kappa ≤ X.ell := min_le_left _ _
+        dsimp only [X, BootstrapParameters.ell, BootstrapParameters.nu] at hk ⊢
+        linarith)
 
 end TNLean.PEPS.AreaLaw.Scan
