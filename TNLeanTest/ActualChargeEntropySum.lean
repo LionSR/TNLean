@@ -62,9 +62,9 @@ theorem zero_replica_round_integrability {t : ℝ} (ht : 0 ≤ t)
     (S.actualRoundData_isAdmissible hm hM j) ht
     (S.actualRoundData_crossBandCommute hm hM j n ht 0) hne
 
+omit [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I] in
 /-- The full charge bound chooses one logarithmic error before every replica
 count, supplied vector and retained closed interval. -/
-omit [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I] in
 theorem capstone_signature :
     ∃ c₀ Cent eent : ℝ, 0 < c₀ ∧
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
@@ -106,9 +106,9 @@ theorem capstone_signature :
                     (Cent * k * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent + β k) :=
   CollarScan.actualCharges_integral_bound_domainGraph
 
+omit [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I] in
 /-- Equal endpoints retain all complete-round errors. In particular, the
 right side still contains exactly `2 * S.n * S.m` copies of the same error. -/
-omit [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I] in
 theorem equal_endpoints_full_error :
     ∃ c₀ Cent eent : ℝ, 0 < c₀ ∧
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
