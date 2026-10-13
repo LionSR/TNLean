@@ -123,6 +123,14 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
   rw [hK'] at hU hM
   refine ⟨U, hU0, hU, hunit, hsupport, fun η T hT ↦ ?_⟩
   refine ⟨(hM η T hT).1, (hM η T hT).2.1.trans hVn, (hM η T hT).2.2.trans ?_⟩
-  done
+  simpa only [hcard] using
+    mul_le_mul_of_nonneg_right
+      (mul_le_mul
+        (mul_le_mul_of_nonneg_right
+          (mul_le_mul_of_nonneg_right hVn hC.le) (sq_nonneg (L : ℝ)))
+        (add_le_add_left (mul_le_mul_of_nonneg_right hDn hT) 1)
+        (add_nonneg zero_le_one (mul_nonneg (norm_nonneg (K' - K)) hT))
+        (mul_nonneg (mul_nonneg (norm_nonneg W) hC.le) (sq_nonneg (L : ℝ))))
+      (Real.exp_pos (v * T - c * l)).le
 
 end TNLean.PEPS.Approximation
