@@ -64,6 +64,7 @@ theorem zero_replica_round_integrability {t : ℝ} (ht : 0 ≤ t)
 
 /-- The full charge bound chooses one logarithmic error before every replica
 count, supplied vector and retained closed interval. -/
+omit [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I] in
 theorem capstone_signature :
     ∃ c₀ Cent eent : ℝ, 0 < c₀ ∧
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
@@ -107,6 +108,7 @@ theorem capstone_signature :
 
 /-- Equal endpoints retain all complete-round errors. In particular, the
 right side still contains exactly `2 * S.n * S.m` copies of the same error. -/
+omit [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I] in
 theorem equal_endpoints_full_error :
     ∃ c₀ Cent eent : ℝ, 0 < c₀ ∧
       ∀ {Λ T : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
