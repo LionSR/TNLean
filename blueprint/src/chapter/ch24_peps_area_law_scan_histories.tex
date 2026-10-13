@@ -3040,3 +3040,56 @@ The finite-leaf estimates below follow the charge-energy argument in
     replacing $b_s$ by $n^{-P}$ gives
     (\ref{eq:al_scan_actual_charge_energy_decay}).
 \end{proof}
+
+% Source: 08-scanner.tex, lines 492--520 and final parameters.
+% Completion markers await exact-head hosted compilation.
+\begin{theorem}[Uniform coefficients for the actual charge energy]
+    \label{thm:al_scan_actual_charge_energy_coefficients}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_nonneg,
+        TNLean.PEPS.AreaLaw.Scan.exists_actualCharge_energy_coefficients}
+    \uses{thm:al_scan_actual_charge_energy_decay}
+    Fix the physical dimension $q\ge1$, $C_r,C_1>0$, $C_T\ge0$,
+    $\mathfrak m\in\mathbb N$ and $P,C_{\mathrm{en}},e_{\mathrm{en}}\in\mathbb R$.
+    There exist $C\ge1$, $C_l\ge0$ and $N\in\mathbb N$, depending only
+    on these fixed quantities, with the following property.
+    For every $n\ge N$, use the literal rounded scales
+    (\ref{eq:al_scan_uniform_tail_scales}) and the geometric assumptions
+    of Lemma~\ref{lem:al_scan_uniform_bad_old}. For every charge $s+1\le nm$,
+    every pair of positive auxiliary dimensions, supplied local Hamiltonian,
+    vector $\Omega$ and real $\Delta$, every $W\ge0$, replica count $k\ge0$,
+    nonzero symmetric supplied vector $\psi_k$ and $0<p<1$, put $a=W/K$.
+    Then $K>0$, the literal defect $\mathcal Q_{s,k}(p)$ is nonnegative, and
+    \begin{align}
+        |C_{\mathrm{en}}|a^2\ell_q^{e_{\mathrm{en}}}\mathcal E_{s,k}(p)
+        &\le C W^2 n^{\ell}D^2(\log n)^{C_l}
+        \left((1-p)\left(\frac{\mathcal Q_{s,k}(p)}{KnD}\right)^{1/8}
+        +(1-p)n^{-P}+p\right),
+        \label{eq:al_scan_actual_charge_energy_coefficients}
+    \end{align}
+    where $\ell=10^{-5}$ and $\ell_q=1+(2r_0+1)^2\log q$.
+    Both the energy and defect use the same supplied vector and metric
+    parameter $a/2$. No round or small defect is selected. The estimate
+    includes zero total weight, zero anchor multiplicity, $q=1$ and $k=0$.
+\end{theorem}
+\begin{proof}
+    The old-history weights and split entropy symbols are nonnegative,
+    so integration against the actual leaf measures gives
+    $\mathcal Q_{s,k}(p)\ge0$. At the rounded scales, eventually $K\ge1$ and
+    $nD^2/(mK)\le C_s n^{\ell}D^2$ for a fixed $C_s\ge1$.
+    Substitute $a=W/K$ in
+    (\ref{eq:al_scan_actual_charge_energy_decay}). Factoring $KnD$ from
+    the good contribution leaves, before the two interpolation terms,
+    the exact coefficients
+    \begin{align}
+        10(10\mathfrak m)^{7/8}|C_{\mathrm{en}}|\ell_q^{e_{\mathrm{en}}},
+        \qquad
+        50\mathfrak m\,2^{1/8}|C_{\mathrm{en}}|
+            \ell_q^{e_{\mathrm{en}}+1/8}.
+    \end{align}
+    No division by $\mathfrak m$ is used. Since $\ell_q\ge1$, enlarge
+    both real exponents to one common nonnegative exponent before using
+    $\ell_q\le C_q(\log n)^4$. Thus both coefficients are at most
+    $C_d(\log n)^{C_l}$, with $C_d\ge1$ and $C_l\ge0$ fixed before
+    the remaining physical and quantum data. Multiply the scale and dimension
+    estimates and take $C=C_sC_d$.
+\end{proof}
