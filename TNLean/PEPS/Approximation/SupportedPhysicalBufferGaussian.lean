@@ -81,6 +81,7 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
       (Nat.mul_le_mul hq hq) 1 (2 * J)
   refine ⟨C, v, c, hC, hv, hc, fun L h R C₀ hRC ↦ ?_⟩
   intro Q P s g p Λ a e K F K' boundary Z W V l B
+  obtain ⟨gH, _, hgOperator⟩ := h.exists_swapped_doubled_localHamiltonian hJ R
   done
 
 end TNLean.PEPS.Approximation
