@@ -4285,23 +4285,6 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
-### Mixed coordinate traces at abstract memories — candidate (2026-10-13)
-
-- **Pattern:** Form a mixed coordinate trace at arbitrary input and output
-  memories, then substitute the actual sampled words. Explicit dependent
-  index families keep the physical and private matrix types fixed.
-- **Seen:** `restrictedMixedPhysicalTrace` in `ActualSampledPhysicalFactors`
-  and `empty_memory_words_mixed_partialTrace` in
-  `ActualSampledExteriorScalar` (two occurrences).
-- **Abstraction:** Before a third occurrence, compare the required abstract
-  memory and basis interfaces and share the coordinate construction if their
-  statements agree. Keep source-free restriction proofs separate from the
-  coordinate formula.
-- **Scope:** The exterior application identifies words after restriction;
-  no equality of full operators is restricted. The coordinate formulas and
-  public hypotheses are unchanged; both occurrences compile at the default
-  proof limits.
-
 ### Upper endpoint of a scanner band — candidate (2026-10-12)
 
 - **Pattern:** Use the band index bound, the offset bound and $8Km\le L$
