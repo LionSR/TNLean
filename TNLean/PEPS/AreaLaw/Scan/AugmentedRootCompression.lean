@@ -35,7 +35,7 @@ variable {V : Type} [Fintype V] [DecidableEq V]
 local notation "ιO" q:max d:max =>
   addedSiteSpace (addedSiteSpace (fun _ : V => Fin q) (Fin d)) (Fin d)
 local notation "nS" q:max d:max => augmentedDimensions (V := V) q (fun _ => d)
-local notation "ιS" q:max d:max => fun s => Fin (nS q d s)
+local notation "ιS" q:max d:max => fun s => Fin ((nS q d) s)
 
 local instance augmentedRootOriginalConfigDecidableEq (q d k : ℕ) :
     DecidableEq (Config k (ιO q d)) := Fintype.decidablePiFintype
