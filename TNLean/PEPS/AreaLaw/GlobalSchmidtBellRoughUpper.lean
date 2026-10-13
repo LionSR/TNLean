@@ -100,10 +100,9 @@ theorem eventually_suppliedGlobalSchmidtBellPrevector_rough_upper
     hz
   have hu :=
     FiniteProduct.eventually_suppliedReplicaPrevector_rough_upper
-      (S := J) β Ω X E hΩ hzQ regions hnested hdisjoint ell
-      (t := 2 / (K : ℝ))
-      (div_pos zero_lt_two (Nat.cast_pos.mpr (lt_of_lt_of_le (by decide : 0 < 8) hK)))
-  run_tac Lean.throwError (α := Unit) "rough-upper direct QIC application reached"
+      (S := J) β Ω X E hΩ hzQ
+  specialize hu regions
+  run_tac Lean.throwError (α := Unit) "rough-upper split region application reached"
   done
 
 end TNLean.PEPS.AreaLaw
