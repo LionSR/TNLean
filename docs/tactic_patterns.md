@@ -7167,3 +7167,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   actual selected private basis. No scalar or norm is cancelled.
 - **Verification:** The existing physical-trace fixture checks the definition
   by name. Its blueprint definition remains unmarked; elaboration is pending.
+
+### Mixed coordinate traces at abstract memories — candidate (2026-10-13)
+
+- **Pattern:** Form a mixed coordinate trace at arbitrary input and output
+  memories, then substitute the actual sampled words. Explicit dependent
+  index families keep the physical and private matrix types fixed.
+- **Seen:** `restrictedMixedPhysicalTrace` in `ActualSampledPhysicalFactors`
+  and `empty_memory_words_mixed_partialTrace` in
+  `ActualSampledExteriorScalar` (two occurrences).
+- **Abstraction:** Before a third occurrence, compare the required abstract
+  memory and basis interfaces and share the coordinate construction if their
+  statements agree. Keep source-free restriction proofs separate from the
+  coordinate formula.
+- **Scope:** The exterior application identifies words after restriction;
+  no equality of full operators is restricted. The coordinate formulas and
+  public hypotheses are unchanged. Verification at the default proof limits
+  remains pending.
