@@ -541,23 +541,6 @@ used by the edge-kernel argument of Section~\ref{sec:peps_edge_kernel_gauges}.
     the left and right endpoint tensor maps of the edge-blocked chain.
 \end{proof}
 
-\begin{theorem}[Endpoint injectivity at all edges]%
-    \label{thm:peps_edgeBlockedEndpointTensorMaps_injective_all}
-    \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedEndpointTensorMaps_injective_all}
-    \leanok
-    \uses{def:IsVertexInjective, thm:peps_edgeBlockedEndpointTensorMaps_injective}
-    If the original PEPS tensor $A$ is vertex-injective, then the two endpoint
-    tensor maps in the edge-blocked three-site chain are injective at every edge $e=(u,v)$:
-    \begin{align}
-        \forall e=(u,v),\quad \inj(T_{A,u}) \quad\text{and}\quad \inj(T_{A,v}). \notag
-    \end{align}
-\end{theorem}
-\begin{proof}\leanok
-    For each $e=(u,v)$,
-    Theorem~\ref{thm:peps_edgeBlockedEndpointTensorMaps_injective} gives
-    $\inj(T_{A,u})\wedge\inj(T_{A,v})$.
-\end{proof}
-
 \begin{theorem}[Reducing edge-blocked injectivity to the middle block]%
     \label{thm:peps_edgeBlockedThreeSiteInjective_of_middle}
     \lean{TNLean.PEPS.IsVertexInjective.edgeBlockedThreeSiteInjective_of_middle}

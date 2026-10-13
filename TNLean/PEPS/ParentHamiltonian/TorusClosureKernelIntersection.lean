@@ -99,37 +99,19 @@ theorem IsGInjective.exists_torusClosureCommutationFilter
             torusGClosure (width := width) (height := height)
               (leftRegularMatrix G) a g h else 0 := by
   classical
-  let v : X := (-1, -1)
-  have hs : ∀ x ∈ (torusPlaquetteWalk v).support, x ∈ (R₀ : Set X) := by
-    intro x hx
-    exact List.mem_toFinset.mpr hx
-  have hR : ((Γₜ).induce (R₀ : Set X)).Connected := by
-    have he : (R₀ : Set X) = {x | x ∈ (torusPlaquetteWalk v).support} := by
-      ext x
-      simp [v, torusPlaquetteRegion]
-    rw [he]
-    exact (torusPlaquetteWalk v).connected_induce_support
-  let o : {x : X // x ∈ R₀} := ⟨v, hs _ (torusPlaquetteWalk v).start_mem_support⟩
-  let p : ((Γₜ).induce (R₀ : Set X)).Walk o o :=
-    (torusPlaquetteWalk v).induce (R₀ : Set X) hs
   obtain ⟨Q, hfix, heigen⟩ := exists_regularClosedWalkGlobalIdentityFilter
-    (torusIncidentSite a) (fun w => ha.isGInjective_torusIncidentSite w) R₀ hR o p
+    (torusIncidentSite a) (fun w => ha.isGInjective_torusIncidentSite w) R₀
+    (connected_torusPlaquetteRegion _) _ (torusPlaquetteInducedWalk _)
   refine ⟨Q, hfix, ?_⟩
   intro g h
   have he := heigen (torusClosureEdgeAssignment g h)
-  have hhol : regularWalkHolonomy (regularRegionInternalOperators R₀
-      (torusClosureEdgeAssignment g h)) p =
-      regularWalkHolonomy (torusClosureEdgeAssignment g h) (torusPlaquetteWalk v) := by
-    dsimp only [p]
-    rw [regularWalkHolonomy_inducedWalk, SimpleGraph.Walk.map_induce]
-    rfl
-  rw [hhol] at he
+  rw [regularWalkHolonomy_torusPlaquetteInducedWalk] at he
   have hc : torusGClosure (width := width) (height := height) (leftRegularMatrix G) a g h =
       stateCoeff (groupBondTensor (regularTwistedSite (torusIncidentSite a)
         (torusClosureEdgeAssignment g h))) := funext (torusGClosure_eq_stateCoeff_twisted a g h)
   rw [← hc] at he
   have hcomm : regularWalkHolonomy (torusClosureEdgeAssignment g h)
-      (torusPlaquetteWalk v) = 1 ↔ Commute g h :=
+      (torusPlaquetteWalk ((-1, -1) : X)) = 1 ↔ Commute g h :=
     torusPlaquetteHolonomy_closure_corner_eq_one_iff_commute
       (width := width) (height := height) g h
   by_cases hgh : Commute g h

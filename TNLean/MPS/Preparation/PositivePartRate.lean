@@ -111,12 +111,13 @@ theorem lt_exp_neg_div_correlationLength {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 
 
 arXiv:2103.13367, the decomposition `τ_AA = τ_BB + R` before eq. `eq:difference`: `R` carries the
 Jordan blocks of the subleading eigenvalues. -/
-theorem norm_le_of_hasEigenvalue_transferMap_sub_fixedPointProj [NeZero D] (A : MPSTensor d D)
+theorem norm_le_of_hasEigenvalue_transferMap_sub_fixedPointProj (A : MPSTensor d D)
     (hN : IsNormalTensor A) (hA : IsLeftCanonical A) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosDef) (htr : σ.trace ≠ 0) (hfix : Kraus.transferMap A σ = σ) {lam₂ : ℂ}
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
     {z : ℂ} (hz : Module.End.HasEigenvalue (Kraus.transferMap A - fixedPointProj σ htr) z) :
     ‖z‖ < 1 ∧ ‖z‖ ≤ ‖lam₂‖ := by
+  have : NeZero D := ⟨hN.bondDim_ne_zero⟩
   classical
   have hCh := Kraus.isChannel_mapLM A hA
   have hIrr := Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hN.no_invariant_proj

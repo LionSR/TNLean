@@ -82,6 +82,14 @@
     const known = nums.map(n => byNum.get(n)).filter(Boolean);
     return known.length ? known.reduce((a, i) => RANK[i.status] < RANK[a] ? i.status : a, "done") : "untracked";
   };
+  /** Open gap entries, other than conventions, whose result field begins with this paper result, as "Lemma 8.2, ...". */
+  const gapsOf = r => (((D.gaps || {}).entries || []).filter(g => g.paper === r.paper && (g.status || "open") === "open" && g.kind !== "convention"
+    && new RegExp(`^${r.kind} ${r.num.replace(/\./g, "\\.")}\\b`).test(g.result || "")));
+  /** Status of a paper result: all its issues closed counts as proved only when no open gap entry names it. */
+  const resultStatus = r => {
+    const s = leastStatus(r.issues);
+    return s === "done" && gapsOf(r).length ? "landed" : s;
+  };
 
   /* ---------- blocking graph ---------- */
   const preds = n => ((byNum.get(n) || {}).blockedBy || []).filter(b => byNum.has(b));
@@ -188,10 +196,10 @@
   const merged = D.prs.filter(p => p.kind === "merged");
   const open = D.prs.filter(p => p.open);
   const byRepo = ps => C.repos.map(r => `${ps.filter(p => p.repo === r.name).length} ${r.name}`).join(" · ");
-  const withWork = D.results.filter(r => RANK[leastStatus(r.issues)] >= RANK.draft).length;
-  const provedResults = D.results.filter(r => leastStatus(r.issues) === "done").length;
+  const withWork = D.results.filter(r => RANK[resultStatus(r)] >= RANK.draft).length;
+  const provedResults = D.results.filter(r => resultStatus(r) === "done").length;
   $("tiles").append(
-    tile(`${provedResults} / ${D.results.length}`, "Paper results proved", `every issue of the result closed · ${withWork - provedResults} more have a pull request`),
+    tile(`${provedResults} / ${D.results.length}`, "Paper results proved", `every issue of the result closed and no open gap · ${withWork - provedResults} more have pull requests`),
     tile(`${leaves.filter(i => i.status === "done").length} / ${leaves.length}`, "Work issues closed", `${leaves.filter(i => i.status === "landed").length} more have merged pieces`),
     tile(String(merged.length), "Pull requests merged", byRepo(merged)),
     tile(String(open.length), "Pull requests open", `${open.filter(p => p.kind === "review").length} ready for review · ${open.filter(p => p.attention).length} need a fix`)
@@ -396,9 +404,9 @@
           .map(g => { const a = el("a", { href: "#" + gapAnchor(g), class: "pill k-" + g.kind, text: `${GAP_KIND[g.kind][0]}: ${g.result.split(",")[0]}` }); a.title = (g.summary || g.title).replace(/<[^>]+>|\{\{(tn|cite):[^}]+\}\}/g, ""); return a; });
 
         const resultList = el("ul", { class: "results" }, ...results.map(r => {
-          const rs = leastStatus(r.issues);
+          const rs = resultStatus(r);
           const name = r.name || (C.resultNames || {})[r.label] || r.label;
-          const li = el("li", {}, el("i", { class: "rd st-" + rs, title: STATUS[rs] }), el("span", {}, r.url ? ext(r.url, name) : name, " ", el("span", { class: "rn", text: `${r.kind} ${r.num}` })));
+          const li = el("li", {}, el("i", { class: "rd st-" + rs, title: STATUS[rs] + (gapsOf(r).length ? "; an open gap entry names this result" : "") }), el("span", {}, r.url ? ext(r.url, name) : name, " ", el("span", { class: "rn", text: `${r.kind} ${r.num}` })));
           if (r.gate) li.title = r.gate;
           return li;
         }));
