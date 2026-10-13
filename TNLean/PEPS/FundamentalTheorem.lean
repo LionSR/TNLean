@@ -656,8 +656,8 @@ valid only on a single component. Documented in
 
 **Proof status:** Complete and axiom-clean. The conclusion is the source
 gauge-equivalence conclusion. The bond-dimension equality is discharged edgewise
-from the edge-blocked insertion algebra equivalence (issue #874), and the
-edge-centred gauge obligation is supplied by gauge consistency. -/
+from the edge-blocked insertion algebra equivalence, and the edge-centred gauge
+obligation is supplied by gauge consistency. -/
 theorem fundamentalTheorem_PEPS (A B : Tensor G d)
     (hA : A.IsInjective) (hB : B.IsInjective)
     (hAB : SameState A B) (hconn : G.Connected) :
