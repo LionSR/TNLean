@@ -1573,6 +1573,31 @@ The following finite construction follows
     to all completed and pre-charge statuses.
 \end{proof}
 
+\begin{theorem}[Initial normalization of the actual fill]
+    \label{thm:al_scan_actual_initial_log_norm}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualFillData_initial_log_filteredNormSq_bound}
+    Fix a collar scan with positive offset and charge capacities,
+    positive physical and auxiliary dimensions, and $a>0$.
+    There exists $C\ge0$, chosen before the number $k\ge0$ of replicas
+    and the vector $\xi$, such that $\|\xi\|\le1$ implies
+    \begin{align}
+        \log\|M_{0,k}(0)^{-1/4}\xi\|^2\le C\log(k+2).
+    \end{align}
+    Here $M_{0,k}(0)$ is the initial actual fill root with band
+    exponent $a/2$. The same vector is used in the filtered norm.
+    The real logarithm has value zero at zero. For a nonzero vector,
+    this is the initial normalization estimate in the scanner argument.
+\end{theorem}
+\begin{proof}
+    \uses{def:al_scan_actual_fill_transport,thm:al_scan_actual_fill_admission}
+    The actual fill is admissible, and its band metrics commute.
+    The polynomial transport-root floor supplies $C_0\ge0$, fixed
+    before the replica count, with
+    $(k+2)^{-C_0K}I\le M_{0,k}(0)$, where $K$ is the number of bands.
+    The filtered-norm estimate gives the claimed inequality with
+    $C=C_0K/2$.
+\end{proof}
+
 \begin{theorem}[Exact adjacent fill and charge roots]
     \label{thm:al_scan_actual_fill_endpoints}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillData_rootPath_one_eq_charge_zero,
