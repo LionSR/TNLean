@@ -82,7 +82,7 @@ private theorem selectedLocalPartComparison_gate {C ι : Type} [Fintype C] [Fint
       (affectedOwner (fun _ : P ↦ true) t)
     let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
       (by classical exact decide_eq_true rfl)
-    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+    let _q : Option {t : P // A t = true} := some ⟨p, hp⟩
     let lift : Option {t : P // A t = true} → Option {_t : P // true = true} :=
       fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
     let χ := projectAllChoices A (.gate owner G tail) ξ
@@ -91,6 +91,33 @@ private theorem selectedLocalPartComparison_gate {C ι : Type} [Fintype C] [Fint
     selectedLocalPartComparison (partySelector (some (⟨p, rfl⟩ : {_p : P // true = true})))
       W (V.mapOwner lift) := by
   exact isSelectedLocalPartComparison_partialWord_all_gate owner G tail p ξ
+
+/-- Equal framing registers preserve the comparison of selected remaining
+operations when the selected boundary and source lists agree.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267,
+351–381 and 409–434. -/
+private theorem isSelectedLocalPartComparison_frame_of_eq {Q : Type}
+    (f : Q → Bool) (r s : Reg Q) {a b c d : Layout Q}
+    (u : Word a b) (v : Word c d) (hrs : r = s)
+    (ha : Layout.restrict f a = Layout.restrict f c)
+    (hb : Layout.restrict f b = Layout.restrict f d)
+    (hs : Layout.restrict f u.sources.layout = Layout.restrict f v.sources.layout)
+    (h : Word.IsSelectedLocalPartComparison f u v) :
+    Word.IsSelectedLocalPartComparison f (Word.frame r u) (Word.frame s v) := by
+  cases hrs
+  exact Word.restrict_localPart_frame_eval_heq f r u v ha hb hs h
+
+/-- Framing registers outside the selection preserves the comparison of
+selected remaining operations, without comparing the unselected registers.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267,
+351–381 and 409–434. -/
+private theorem isSelectedLocalPartComparison_frame_of_false {Q : Type}
+    (f : Q → Bool) (r s : Reg Q) {a b c d : Layout Q}
+    (u : Word a b) (v : Word c d) (hr : f r.owner = false) (hs : f s.owner = false)
+    (h : Word.IsSelectedLocalPartComparison f u v) :
+    Word.IsSelectedLocalPartComparison f (Word.frame r u) (Word.frame s v) := by
+  exact (Word.restrict_localPart_frame_false_eval_heq f r u hr).trans
+    (h.trans (Word.restrict_localPart_frame_false_eval_heq f s v hs).symm)
 
 /-- The selected remaining operator of a genuine all-party branch agrees with
 the lifted selected remaining operator of its actual singleton projection.
@@ -199,25 +226,19 @@ theorem restrict_partialWord_all_localPart_eval_heq_singleton_projection
         by_cases hr : r.owner = p
         · have he : rall = ra := by
             simp [rall, ra, all, fa, lift, affectedOwner, hr, hp]
-          change HEq ((Word.frame rall Vall).localPart.restrict sq
-            (Word.frame rall Vall).sources_localPart).eval
-            ((Word.frame ra (Va.mapOwner lift)).localPart.restrict sq
-              (Word.frame ra (Va.mapOwner lift)).sources_localPart).eval
-          rw [← he]
-          exact Word.restrict_localPart_frame_eval_heq sq rall Vall (Va.mapOwner lift)
+          change selectedLocalPartComparison sq
+            (Word.frame rall Vall) (Word.frame ra (Va.mapOwner lift))
+          exact isSelectedLocalPartComparison_frame_of_eq sq rall ra Vall (Va.mapOwner lift) he
             (hBoundary a) (hBoundary b) (hSources v η) (ih η)
         · have hFalseAll : sq rall.owner = false := by
             simp [sq, rall, all, qp, partySelector, affectedOwner, hr]
           have hFalseA : sq ra.owner = false := by
             simp [sq, ra, fa, lift, qp, A, partySelector_affectedOwner_all_apply,
               partySelector, affectedOwner, hr]
-          change HEq ((Word.frame rall Vall).localPart.restrict sq
-            (Word.frame rall Vall).sources_localPart).eval
-            ((Word.frame ra (Va.mapOwner lift)).localPart.restrict sq
-              (Word.frame ra (Va.mapOwner lift)).sources_localPart).eval
-          exact (Word.restrict_localPart_frame_false_eval_heq sq rall Vall hFalseAll).trans
-            ((ih η).trans (Word.restrict_localPart_frame_false_eval_heq sq ra
-              (Va.mapOwner lift) hFalseA).symm)
+          change selectedLocalPartComparison sq
+            (Word.frame rall Vall) (Word.frame ra (Va.mapOwner lift))
+          exact isSelectedLocalPartComparison_frame_of_false sq rall ra Vall
+            (Va.mapOwner lift) hFalseAll hFalseA (ih η)
   have h := hCompare w ξ
   unfold selectedLocalPartComparison at h
   have hLift := Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber

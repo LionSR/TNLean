@@ -384,7 +384,7 @@ theorem isSelectedLocalPartComparison_partialWord_all_gate
       (affectedOwner (fun _ : P ↦ true) t)
     let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
       (by classical exact decide_eq_true rfl)
-    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+    let _q : Option {t : P // A t = true} := some ⟨p, hp⟩
     let lift : Option {t : P // A t = true} → Option {_t : P // true = true} :=
       fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
     let χ := projectAllChoices A (.gate owner G tail) ξ
