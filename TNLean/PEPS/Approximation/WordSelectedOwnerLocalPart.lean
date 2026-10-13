@@ -111,6 +111,101 @@ private theorem sourceFree_selected_localPart (f : P → Q) (p : P) (q : Q)
   exact (restrict_localPart_eval_heq_of_sources_nil (partySelector q) _ hm).trans
     ((eval_heq hi ho hc).trans hml.symm)
 
+/-- Framing preserves the selected relabelling identity when the retained
+source prefixes agree. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 246–267, 383–434 and 565–588. -/
+private theorem selected_localPart_frame_eval_heq
+    (f : P → Q) (sp : P → Bool) (sq : Q → Bool)
+    (hsel : (fun r ↦ sq (f r)) = sp)
+    (r : Reg P) {a b : Layout P} (w : Word a b)
+    (hS : Layout.restrict sq (w.mapOwner f).sources.layout =
+      Layout.mapOwner f (Layout.restrict sp w.sources.layout))
+    (he : HEq ((w.mapOwner f).localPart.restrict sq
+        (w.mapOwner f).sources_localPart).eval
+      ((w.localPart.restrict sp w.sources_localPart).mapOwner f).eval) :
+    HEq (((Word.frame r w).mapOwner f).localPart.restrict sq
+        ((Word.frame r w).mapOwner f).sources_localPart).eval
+      (((Word.frame r w).localPart.restrict sp
+        (Word.frame r w).sources_localPart).mapOwner f).eval := by
+  classical
+  let W := w.mapOwner f
+  let r' : Reg Q := ⟨f r.owner, r.space⟩
+  have hL (L : Layout P) : Layout.restrict sq (Layout.mapOwner f L) =
+      Layout.mapOwner f (Layout.restrict sp L) := by
+    rw [Layout.restrict_mapOwner, hsel]
+  have hI : Layout.restrict sq (W.sources.layout ++ Layout.mapOwner f a) =
+      Layout.mapOwner f (Layout.restrict sp (w.sources.layout ++ a)) := by
+    simpa only [Layout.restrict_append, Layout.mapOwner_append] using
+      congrArg₂ List.append hS (hL a)
+  have hcomm := restrict_mapOwner_heq f sq (moveHead r w.sources.layout a)
+    (sources_moveHead r w.sources.layout a)
+  rw [hsel] at hcomm
+  have hmoveWord := mapOwner_moveHead_heq f r w.sources.layout a
+  have hmoveMap : HEq
+      (((moveHead r w.sources.layout a).mapOwner f).restrict sq
+        (by simp only [sources_mapOwner, sources_moveHead, SourceInventory.mapOwner_nil])).eval
+      ((moveHead r' (Layout.mapOwner f w.sources.layout)
+        (Layout.mapOwner f a)).restrict sq
+          (sources_moveHead r' (Layout.mapOwner f w.sources.layout)
+            (Layout.mapOwner f a))).eval := by
+    exact restrict_eval_of_word_heq sq _ _
+      (Layout.mapOwner_append f w.sources.layout (r :: a))
+      (congrArg (r' :: ·) (Layout.mapOwner_append f w.sources.layout a))
+      hmoveWord _ _
+  have hprefix : Layout.restrict sq W.sources.layout =
+      Layout.restrict sq (Layout.mapOwner f w.sources.layout) :=
+    hS.trans (hL w.sources.layout).symm
+  have hmove := (restrict_moveHead_eval_heq_of_restrict_eq sq r'
+    W.sources.layout (Layout.mapOwner f w.sources.layout)
+    (Layout.mapOwner f a) (Layout.mapOwner f a) hprefix rfl).trans
+      (hmoveMap.symm.trans (eval_heq
+        (hL (w.sources.layout ++ r :: a))
+        (hL (r :: (w.sources.layout ++ a))) hcomm))
+  have hframe : HEq ((Word.frame r' W.localPart).restrict sq W.sources_localPart).eval
+      (((Word.frame r w.localPart).restrict sp w.sources_localPart).mapOwner f).eval := by
+    by_cases hr : sp r.owner = true
+    · have hr' : sq r'.owner = true := (congrFun hsel r.owner).trans hr
+      have hright := eval_mapOwner_of_eval_heq f
+        ((Word.frame r w.localPart).restrict sp w.sources_localPart)
+        (Word.frame r (w.localPart.restrict sp w.sources_localPart))
+        (restrict_frame_true_eval_heq sp r w.localPart w.sources_localPart hr)
+      exact (restrict_frame_true_eval_heq sq r' W.localPart W.sources_localPart hr').trans
+        ((eval_frame_heq r' (W.localPart.restrict sq W.sources_localPart)
+          ((w.localPart.restrict sp w.sources_localPart).mapOwner f)
+          hI (hL b) he).trans hright.symm)
+    · have hr0 := Bool.eq_false_iff.mpr hr
+      have hr' : sq r'.owner = false := (congrFun hsel r.owner).trans hr0
+      have hright := eval_mapOwner_of_eval_heq f
+        ((Word.frame r w.localPart).restrict sp w.sources_localPart)
+        (w.localPart.restrict sp w.sources_localPart)
+        (restrict_frame_false_eval_heq sp r w.localPart w.sources_localPart hr0)
+      exact (restrict_frame_false_eval_heq sq r' W.localPart W.sources_localPart hr').trans
+        (he.trans hright.symm)
+  have hmid : Layout.restrict sq (r' :: (W.sources.layout ++ Layout.mapOwner f a)) =
+      Layout.mapOwner f (Layout.restrict sp (r :: (w.sources.layout ++ a))) := by
+    have hr' : sq r'.owner = sp r.owner := congrFun hsel r.owner
+    cases hr : sp r.owner <;>
+      simp only [Layout.restrict_cons, hr', hr, Bool.false_eq_true, ↓reduceIte,
+        Layout.mapOwner_cons, hI]
+  have hcomp := eval_comp_heq
+    ((moveHead r' W.sources.layout (Layout.mapOwner f a)).restrict sq
+      (sources_moveHead r' W.sources.layout (Layout.mapOwner f a)))
+    ((Word.frame r' W.localPart).restrict sq W.sources_localPart)
+    (((moveHead r w.sources.layout a).restrict sp
+      (sources_moveHead r w.sources.layout a)).mapOwner f)
+    (((Word.frame r w.localPart).restrict sp w.sources_localPart).mapOwner f)
+    (by
+      calc
+        _ = Layout.restrict sq W.sources.layout ++
+            Layout.restrict sq (r' :: Layout.mapOwner f a) :=
+          Layout.restrict_append sq _ _
+        _ = Layout.mapOwner f (Layout.restrict sp w.sources.layout) ++
+            Layout.mapOwner f (Layout.restrict sp (r :: a)) :=
+          congrArg₂ List.append hS (hL (r :: a))
+        _ = _ := by simp only [Layout.restrict_append, Layout.mapOwner_append])
+    hmid (hL (r :: b)) hmove hframe
+  exact hcomp
+
 /-- At a new owner whose fibre is one original party, the remaining selected
 operator is the relabelled remaining operator selected at that original party.
 The original word may contain arbitrary pair sources, and owners outside the
@@ -190,76 +285,7 @@ theorem restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
       exact (restrict_castInput_eval_heq sq _ _ hraw').trans
         (hcomp.trans (eval_mapOwner_restrict_castInput f sp _ _ hraw).symm)
   | @frame r a b w ih =>
-      let W := w.mapOwner f
-      let r' : Reg Q := ⟨f r.owner, r.space⟩
-      have hcomm := restrict_mapOwner_heq f sq (moveHead r w.sources.layout a)
-        (sources_moveHead r w.sources.layout a)
-      rw [hsel] at hcomm
-      have hmoveWord := mapOwner_moveHead_heq f r w.sources.layout a
-      have hmoveMap : HEq
-          (((moveHead r w.sources.layout a).mapOwner f).restrict sq
-            (by simp only [sources_mapOwner, sources_moveHead, SourceInventory.mapOwner_nil])).eval
-          ((moveHead r' (Layout.mapOwner f w.sources.layout)
-            (Layout.mapOwner f a)).restrict sq
-              (sources_moveHead r' (Layout.mapOwner f w.sources.layout)
-                (Layout.mapOwner f a))).eval := by
-        exact restrict_eval_of_word_heq sq _ _
-          (Layout.mapOwner_append f w.sources.layout (r :: a))
-          (congrArg (r' :: ·) (Layout.mapOwner_append f w.sources.layout a))
-          hmoveWord _ _
-      have hprefix : Layout.restrict sq W.sources.layout =
-          Layout.restrict sq (Layout.mapOwner f w.sources.layout) :=
-        (hS w).trans (hL w.sources.layout).symm
-      have hmove := (restrict_moveHead_eval_heq_of_restrict_eq sq r'
-        W.sources.layout (Layout.mapOwner f w.sources.layout)
-        (Layout.mapOwner f a) (Layout.mapOwner f a) hprefix rfl).trans
-          (hmoveMap.symm.trans (eval_heq
-            (hL (w.sources.layout ++ r :: a))
-            (hL (r :: (w.sources.layout ++ a))) hcomm))
-      have hframe : HEq ((Word.frame r' W.localPart).restrict sq W.sources_localPart).eval
-          (((Word.frame r w.localPart).restrict sp w.sources_localPart).mapOwner f).eval := by
-        by_cases hr : sp r.owner = true
-        · have hr' : sq r'.owner = true := (congrFun hsel r.owner).trans hr
-          have hright := eval_mapOwner_of_eval_heq f
-            ((Word.frame r w.localPart).restrict sp w.sources_localPart)
-            (Word.frame r (w.localPart.restrict sp w.sources_localPart))
-            (restrict_frame_true_eval_heq sp r w.localPart w.sources_localPart hr)
-          exact (restrict_frame_true_eval_heq sq r' W.localPart W.sources_localPart hr').trans
-            ((eval_frame_heq r' (W.localPart.restrict sq W.sources_localPart)
-              ((w.localPart.restrict sp w.sources_localPart).mapOwner f)
-              (hI w) (hL b) ih).trans hright.symm)
-        · have hr0 := Bool.eq_false_iff.mpr hr
-          have hr' : sq r'.owner = false := (congrFun hsel r.owner).trans hr0
-          have hright := eval_mapOwner_of_eval_heq f
-            ((Word.frame r w.localPart).restrict sp w.sources_localPart)
-            (w.localPart.restrict sp w.sources_localPart)
-            (restrict_frame_false_eval_heq sp r w.localPart w.sources_localPart hr0)
-          exact (restrict_frame_false_eval_heq sq r' W.localPart W.sources_localPart hr').trans
-            (ih.trans hright.symm)
-      have hmid : Layout.restrict sq (r' :: (W.sources.layout ++ Layout.mapOwner f a)) =
-          Layout.mapOwner f (Layout.restrict sp (r :: (w.sources.layout ++ a))) := by
-        have hr' : sq r'.owner = sp r.owner := congrFun hsel r.owner
-        cases hr : sp r.owner <;>
-          simp only [Layout.restrict_cons, hr', hr, Bool.false_eq_true, ↓reduceIte,
-            Layout.mapOwner_cons, hI w]
-      have hcomp := eval_comp_heq
-        ((moveHead r' W.sources.layout (Layout.mapOwner f a)).restrict sq
-          (sources_moveHead r' W.sources.layout (Layout.mapOwner f a)))
-        ((Word.frame r' W.localPart).restrict sq W.sources_localPart)
-        (((moveHead r w.sources.layout a).restrict sp
-          (sources_moveHead r w.sources.layout a)).mapOwner f)
-        (((Word.frame r w.localPart).restrict sp w.sources_localPart).mapOwner f)
-        (by
-          calc
-            _ = Layout.restrict sq W.sources.layout ++
-                Layout.restrict sq (r' :: Layout.mapOwner f a) :=
-              Layout.restrict_append sq _ _
-            _ = Layout.mapOwner f (Layout.restrict sp w.sources.layout) ++
-                Layout.mapOwner f (Layout.restrict sp (r :: a)) :=
-              congrArg₂ List.append (hS w) (hL (r :: a))
-            _ = _ := by simp only [Layout.restrict_append, Layout.mapOwner_append])
-        hmid (hL (r :: b)) hmove hframe
-      exact hcomp
+      exact selected_localPart_frame_eval_heq f sp sq hsel r w (hS w) ih
   | @source x y hxy U V η tail =>
       by_cases h : f x = f y
       · have hxq : f x ≠ q := by
