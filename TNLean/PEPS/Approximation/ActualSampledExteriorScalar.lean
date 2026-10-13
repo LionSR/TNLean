@@ -183,21 +183,25 @@ theorem partialSourceWord_sampled_none_partialTrace_eq_scalar
   have hξ := partialSourceWord_none_eval_heq_scalar w ψ ξ
   have hζ := partialSourceWord_none_eval_heq_scalar w ψ ζ
   have hU := sampledEndpointInputWord_party_none_eval_heq_id w k lam L R ξ ζ j ω
+  have ha := actualSourceInput_none_eq_nil w
+  have hb := Layout.atParty_none_mapOwner_all b
+  dsimp only [Layout.atParty, partySelector] at B C ha hb hξ hζ hU ⊢
   with_reducible
-    generalize (w.partialSourceWord ψ ξ).restrict (partySelector none)
+    generalize Layout.restrict (fun q ↦ decide (q = none))
+        (w.allResidualSourceLayout ++ []) = a₀,
+      Layout.restrict (fun q ↦ decide (q = none))
+        (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b) = b₀,
+      (w.partialSourceWord ψ ξ).restrict (fun q ↦ decide (q = none))
         (sources_partialSourceWord w ψ ξ) = A,
-      (w.partialSourceWord ψ ζ).restrict (partySelector none)
+      (w.partialSourceWord ψ ζ).restrict (fun q ↦ decide (q = none))
         (sources_partialSourceWord w ψ ζ) = T,
       (sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict
-        (partySelector none) (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω) = U
-      at hξ hζ hU ⊢
+        (fun q ↦ decide (q = none)) (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω) = U
+      at B C ha hb hξ hζ hU ⊢
   exact empty_memory_words_mixed_partialTrace
     (Q := Option {p : P // (fun _ : P ↦ true) p = true}) (I := I) (J := J)
-    (a := Layout.restrict (partySelector none) (w.allResidualSourceLayout ++ []))
-    (b := Layout.restrict (partySelector none)
-      (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b))
-    (actualSourceInput_none_eq_nil w) (Layout.atParty_none_mapOwner_all b)
-    B C A T U w.emptyGateScalar w.emptyGateScalar hξ hζ hU
+    (a := a₀) (b := b₀) ha hb B C A T U
+    w.emptyGateScalar w.emptyGateScalar hξ hζ hU
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect
