@@ -606,3 +606,43 @@ This gives the contractions used in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 568--588.
 \end{definition}
+
+
+\begin{theorem}[Incidence of original sample positions]
+    \label{thm:peps_original_source_sample_incidence}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.mem_sourceSampleEquiv_iff}
+    \uses{def:peps_original_source_pair_indices,
+        def:peps_original_source_sample_indices}
+    Let $e$ be an original source position with ordered endpoint owners
+    $p_e,q_e$, and let $p$ be any party. The sample position corresponding
+    to $e$ is incident to $p$ if and only if $p_e=p$ or $q_e=p$.
+    This is the incidence identification for the sample links in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 342--364 and 568--579.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:peps_original_source_pair_indices}
+    The pair attached to $e$ is $\{p_e,q_e\}$. Membership in this
+    two-element set is equivalent to $p_e=p$ or $q_e=p$.
+\end{proof}
+
+\begin{definition}[Local sample positions in the original order]
+    \label{def:peps_local_source_sample_indices}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSlotSampleEquiv}
+    \uses{def:peps_partial_fixed_positions,
+        def:peps_original_source_sample_indices,
+        thm:peps_original_source_sample_incidence}
+    Fix a party $p$. Retain the original ordered source slots whose
+    endpoint owners include $p$, and write $r_p$ for their number.
+    Enumerating these slots in their original order gives a bijection
+    from $\{0,\ldots,r_p-1\}$ to the sample positions incident to $p$.
+    The corresponding original slot retains its ordered endpoint spaces.
+    For any sample alphabet $J$, a local assignment therefore consists
+    of a map $\{0,\ldots,r_p-1\}\to J$; no value at a sample position
+    not incident to $p$ is required. This includes the empty alphabet
+    and the empty list of incident positions.
+    This is the local indexing used for the sample links in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 253--267, 383--417 and 568--579.
+\end{definition}
