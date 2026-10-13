@@ -116,6 +116,7 @@ assumption is imposed on $\Lambda$ or $A$.
 \begin{theorem}[Graph neighborhoods separated from a cut]
     \label{thm:area_law_graph_neighborhood_cut_clearance}
     \lean{TNLean.PEPS.AreaLaw.graphNeighborhood_subset_of_cut_clearance}
+    \leanok
     \uses{def:area_law_domain,def:area_law_cell_counts}
     Let $\Lambda\subset\mathbb Z^2$ be finite, $A\subseteq\Lambda$, and
     $T\subset\mathbb Z^2$ finite. For integers $L,R\ge0$, write
@@ -130,7 +131,7 @@ assumption is imposed on $\Lambda$ or $A$.
     \cite[Theorem~1.1]{OpenAI2026AreaLaw}; separation from the earlier
     members of a family is a further geometric condition.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_scan_ambient_rows}
     Let $x$ be joined to $y\in A\cap T_L$ by a path of length at most $R$.
     Then $T$ is nonempty. The depth
