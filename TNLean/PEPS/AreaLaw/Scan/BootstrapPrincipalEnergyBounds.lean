@@ -109,7 +109,7 @@ theorem exists_bootstrap_principal_energy_bound
       zero_le_one.trans hf.one_le_C₁, Real.log_nonneg hn₁⟩
   have hnCoeff : (n : ℝ) ≤
       C₁ * (n : ℝ) ^ X.ell * ((X.m n : ℝ) * (X.K n : ℝ)) :=
-    (mul_le_mul_right (sq_pos_of_pos hD₀)).mp (by
+    (mul_le_mul_iff_of_pos_right (sq_pos_of_pos hD₀)).mp (by
       convert (div_le_iff₀ (mul_pos hm₀ hK₀)).mp hf.coefficient_le using 1 <;> ring)
   done
 
