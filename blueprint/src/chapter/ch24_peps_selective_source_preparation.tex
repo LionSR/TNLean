@@ -480,6 +480,7 @@ complete operators. We give the corresponding exact constructions.
     \lean{TNLean.PEPS.PairEffect.Word.swap_heq}
     \lean{TNLean.PEPS.PairEffect.Word.castLayouts_heq}
     \lean{TNLean.PEPS.PairEffect.Word.eval_heq}
+    \leanok
     \uses{def:peps_party_layout,thm:peps_party_restriction}
     Identify equal ordered input, intermediate and output register
     lists. If chronological compositions $W$ and $W'$ agree under
@@ -499,7 +500,7 @@ complete operators. We give the corresponding exact constructions.
     % Source: 04-compression.tex, lines 233--267 and 351--381.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     Replace each equal register list by its identified list, and each
     equal composition by the same composition. Both sides then have
     identical chronological operations, including the identity,
@@ -510,6 +511,7 @@ complete operators. We give the corresponding exact constructions.
 \begin{theorem}[Relabelling equal register lists]
     \label{thm:peps_owner_layout_identification}
     \lean{TNLean.PEPS.PairEffect.Word.mapOwner_castLayouts}
+    \leanok
     \uses{def:peps_owner_composition,thm:peps_party_restriction}
     Let $f:P\to Q$ be an arbitrary owner map and $W:a\to b$ an
     arbitrary chronological composition. Given equalities
@@ -524,7 +526,7 @@ complete operators. We give the corresponding exact constructions.
     % Source: 04-compression.tex, lines 383--434 and 565--588.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     After identifying $a'$ with $a$ and $b'$ with $b$, both sides
     are the same relabelled composition $W^f$.
 \end{proof}
@@ -532,6 +534,7 @@ complete operators. We give the corresponding exact constructions.
 \begin{theorem}[Restriction commutes with relabelling owners]
     \label{thm:peps_owner_selection_commutation}
     \lean{TNLean.PEPS.PairEffect.Word.restrict_mapOwner_heq}
+    \leanok
     \uses{def:peps_owner_composition,thm:peps_party_restriction}
     Let $f:P\to Q$ be any map of party labels, let $B\subseteq Q$
     be any selection of new owners, and let $W:a\to b$ be a
@@ -548,7 +551,7 @@ complete operators. We give the corresponding exact constructions.
     % Source: 04-compression.tex, lines 383--434 and 565--588.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_word_structural_congruence,
         thm:peps_owner_layout_identification,thm:peps_party_restriction}
     Induct on the chronological operations of $W$. For a local map
@@ -568,6 +571,7 @@ complete operators. We give the corresponding exact constructions.
 \begin{theorem}[Evaluation under relabelling owners]
     \label{thm:peps_owner_evaluation_identification}
     \lean{TNLean.PEPS.PairEffect.Word.eval_mapOwner_heq}
+    \leanok
     \uses{def:peps_owner_composition,def:peps_owner_layout}
     Let $f:P\to Q$ be any map of party labels and let $W:a\to b$
     be an arbitrary chronological composition. The relabelled lists
@@ -582,7 +586,7 @@ complete operators. We give the corresponding exact constructions.
     % Source: 04-compression.tex, lines 383--434 and 565--588.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_owner_composition,def:peps_owner_layout}
     The canonical isometries $R_{f,a}$ and $R_{f,b}$ preserve each
     tensor factor and act as the identity after identifying the
@@ -595,6 +599,7 @@ complete operators. We give the corresponding exact constructions.
 \begin{theorem}[Relabelling a framed word]
     \label{thm:peps_owner_framed_word}
     \lean{TNLean.PEPS.PairEffect.Word.mapOwner_frameList_heq}
+    \leanok
     \uses{def:peps_owner_composition,def:peps_owner_layout,
         thm:peps_word_structural_congruence}
     Let $f:P\to Q$ be any map of party labels, let $W:a\to b$
@@ -610,7 +615,7 @@ complete operators. We give the corresponding exact constructions.
     % Source: 04-compression.tex, lines 233--267, 409--434 and 565--588.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_owner_composition,def:peps_owner_layout,
         thm:peps_word_structural_congruence}
     Induct on $s$. For the empty list, both constructions are
