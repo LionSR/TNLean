@@ -41,7 +41,15 @@ private def selectedEndpointOperator (w : SourceCircuit a b) (p : P)
     (M : ∀ e : sourceLocations w, euc (Fin (sourceDims w e).1) →L[ℂ]
       euc (Fin (sourceDims w e).1))
     (N : ∀ e : sourceLocations w, euc (Fin (sourceDims w e).2) →L[ℂ]
-      euc (Fin (sourceDims w e).2)) :=
+      euc (Fin (sourceDims w e).2)) :
+    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
+      (affectedOwner (fun _ : P ↦ true) t)
+    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
+      (by classical exact decide_eq_true rfl)
+    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+    let D := (partialPositions A w).flatMap (endpointDataAt A w M N)
+    let L := (D.filter (fun z ↦ partySelector q z.1.owner)).map Sigma.fst
+    Mem L →L[ℂ] Mem L :=
   let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
     (affectedOwner (fun _ : P ↦ true) t)
   let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans

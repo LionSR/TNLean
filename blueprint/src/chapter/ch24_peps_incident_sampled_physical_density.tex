@@ -125,7 +125,7 @@ endpoint labels agree after grouping.
 \begin{theorem}[A circuit in the singleton and all-party expansions]
     \label{thm:peps_singleton_circuit_comparison}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_all_localPart_eval_heq_singleton_projection}
-    \uses{def:peps_source_circuit,def:peps_partial_source_choices,
+    \uses{thm:peps_lifted_singleton_gate_comparison,def:peps_source_circuit,def:peps_partial_source_choices,
         def:peps_affected_owner,thm:peps_incident_gate_labels}
     Let $\mathcal W:a\to b$ be an arbitrary chronological circuit,
     let $\xi$ be a genuine all-party partial choice, and set
@@ -768,4 +768,38 @@ endpoint labels agree after grouping.
     Identifying equal layouts preserves the evaluated word. Relabelling
     owners preserves the ordered memory spaces and each endpoint operator.
     Compose these two canonical identifications.
+\end{proof}
+
+\begin{definition}[Equality of selected remaining operations]
+    \label{def:peps_selected_local_part_comparison}
+    \lean{TNLean.PEPS.PairEffect.Word.IsSelectedLocalPartComparison}
+    Two chronological words have equal selected remaining operations if,
+    after retaining each word's original source registers as inputs and
+    restricting to the selected parties, their resulting linear maps agree
+    under the corresponding identifications of input and output spaces.
+    Source registers retain their original order and dimensions.
+\end{definition}
+
+\begin{theorem}[A lifted singleton gate expansion]
+    \label{thm:peps_lifted_singleton_gate_comparison}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.isSelectedLocalPartComparison_partialWord_all_gate}
+    \uses{def:peps_selected_local_part_comparison}
+    Fix an original gate, its spectator registers, an original party, and
+    a branch of its all-party expansion. Project that branch choice to the
+    singleton consisting of this party. Relabel the singleton word by its
+    inclusion among all parties. The all-party word and the relabelled
+    singleton word have equal remaining operations at the selected party.
+    The original source dimensions and spectator registers are retained.
+    The participant and branch sets may be empty, and zero maps are allowed.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_singleton_gate_comparison,thm:peps_singleton_fibre_local_part}
+    At an incident party, both expansions use the same original branch label.
+    Outside the participating set, both selected operations are the spectator
+    identity. Relabelling the singleton word preserves its selected operation,
+    since the selected party has exactly one preimage. Compose these comparisons
+    before substituting the particular gate words. This is the selected-party
+    comparison in Theorem~5.2 of the polynomial-PEPS manuscript,
+    \texttt{04-compression.tex}, lines 351--434 and 565--588.
 \end{proof}

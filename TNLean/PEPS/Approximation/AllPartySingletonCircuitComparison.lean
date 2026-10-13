@@ -44,8 +44,7 @@ source-freeness proof supplied by its own word. Source: polynomial-PEPS
 Theorem 5.2, `04-compression.tex`, lines 351–434 and 565–588. -/
 private def selectedLocalPartComparison {Q : Type}
     {a b c d : Layout Q} (f : Q → Bool) (u : Word a b) (v : Word c d) : Prop :=
-  HEq (u.localPart.restrict f u.sources_localPart).eval
-    (v.localPart.restrict f v.sources_localPart).eval
+  Word.IsSelectedLocalPartComparison f u v
 
 /-- Two changes of owners with one common singleton original fibre give the
 same selected remaining evaluation after lifting the second word.
@@ -70,20 +69,6 @@ private theorem selectedLocalPartComparison_mapOwner {Q R : Type}
           ((u.mapOwner g).localPart.restrict (partySelector r)
             (u.mapOwner g).sources_localPart)).symm.trans hLift.symm))))
 
-/-- Lifting the second selected word may be performed before taking its
-remaining restriction. The words are arbitrary in this comparison.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434
-and 565–588. -/
-private theorem selectedLocalPartComparison_of_lift {Q R : Type}
-    (lift : R → Q) (r : R) (q : Q) (hlift : ∀ z, lift z = q ↔ z = r)
-    {a b : Layout Q} {c d : Layout R} (u : Word a b) (v : Word c d)
-    (h : HEq (u.localPart.restrict (partySelector q) u.sources_localPart).eval
-      ((v.localPart.restrict (partySelector r) v.sources_localPart).mapOwner lift).eval) :
-    selectedLocalPartComparison (partySelector q) u (v.mapOwner lift) := by
-  have hLift := Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
-    lift r q hlift v
-  exact h.trans hLift.symm
-
 /-- The single-gate comparison is lifted before its application to the
 chronological circuit induction. All branch choices and source dimensions
 are those of the original gate.
@@ -105,16 +90,7 @@ private theorem selectedLocalPartComparison_gate {C ι : Type} [Fintype C] [Fint
     let V := partialWord A (.gate owner G tail) χ
     selectedLocalPartComparison (partySelector (some (⟨p, rfl⟩ : {_p : P // true = true})))
       W (V.mapOwner lift) := by
-  classical
-  intro A hp q lift χ W V
-  have hlift : ∀ o, lift o = some (⟨p, rfl⟩ : {_p : P // true = true}) ↔ o = q := by
-    intro o
-    cases o with
-    | none => simp [lift, q]
-    | some z => simp [lift, q, Subtype.ext_iff]
-  exact selectedLocalPartComparison_of_lift lift q
-    (some (⟨p, rfl⟩ : {_p : P // true = true})) hlift W V
-    (restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection owner G tail p ξ)
+  exact isSelectedLocalPartComparison_partialWord_all_gate owner G tail p ξ
 
 /-- The selected remaining operator of a genuine all-party branch agrees with
 the lifted selected remaining operator of its actual singleton projection.

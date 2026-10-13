@@ -41,6 +41,13 @@ abstracted — record why, so it is not re-proposed).
   alias for a general equality lemma is introduced. Public hypotheses and
   proof limits are unchanged; Lean verification remains pending.
 
+- **Shared selected-word comparison:** `Word.IsSelectedLocalPartComparison` in
+  `AllPartySingletonComparison` records the exact selected remaining evaluation.
+  Its single-gate theorem supplies the circuit comparison directly from the
+  existing incident and nonincident arguments. The circuit's superseded private
+  lifting lemma is removed. Two named axiom checks and two unmarked blueprint
+  entries accompany the new declarations; Lean verification remains pending.
+
 ### Actual sampled local physical matrices — promoted (2026-10-12)
 
 - **Pattern:** The same mixed physical trace, with independent chronological

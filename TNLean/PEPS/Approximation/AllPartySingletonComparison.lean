@@ -31,6 +31,14 @@ private theorem id_heq_of_memory_eq {E F : HSpace} (h : E = F) :
   cases h
   rfl
 
+/-- Two words have the same selected remaining evaluation, with the source
+proof supplied by each word. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 351–434 and 565–588. -/
+def Word.IsSelectedLocalPartComparison {Q : Type}
+    {a b c d : Layout Q} (f : Q → Bool) (u : Word a b) (v : Word c d) : Prop :=
+  HEq (u.localPart.restrict f u.sources_localPart).eval
+    (v.localPart.restrict f v.sources_localPart).eval
+
 /-- The comparison of the two selected remaining words, with each source
 proof supplied by its word argument. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 351–434 and 565–588. -/
@@ -38,6 +46,19 @@ private def selectedRemainingComparison {Q R S : Type} {a b : Layout Q} {c d : L
     (W : Word a b) (V : Word c d) (q : Q) (r : R) (lift : R → S) : Prop :=
   HEq (W.localPart.restrict (partySelector q) W.sources_localPart).eval
     ((V.localPart.restrict (partySelector r) V.sources_localPart).mapOwner lift).eval
+
+/-- A canonical comparison of selected words also compares the second
+word after changing its owners, provided the selected owner has one preimage.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434
+and 565–588. -/
+private theorem isSelectedLocalPartComparison_of_selectedRemainingComparison {Q R : Type}
+    (lift : R → Q) (r : R) (q : Q) (hlift : ∀ z, lift z = q ↔ z = r)
+    {a b : Layout Q} {c d : Layout R} (u : Word a b) (v : Word c d)
+    (h : selectedRemainingComparison u v q r lift) :
+    Word.IsSelectedLocalPartComparison (partySelector q) u (v.mapOwner lift) := by
+  have hLift := Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
+    lift r q hlift v
+  exact h.trans hLift.symm
 
 /-- Two relabellings with the same singleton original fibre give the same
 selected remaining operation, after any further relabelling of the second
@@ -324,6 +345,63 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection
   by_cases hincident : ∃ t : C, owner t = p
   · exact selectedRemainingComparison_of_incident_gate owner G tail p ξ hincident
   · exact selectedRemainingComparison_of_nonincident_gate owner G tail p ξ hincident
+
+/-- The gate comparison is retained as a comparison of arbitrary word
+arguments before changing the singleton owners.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–434
+and 565–588. -/
+private theorem selectedRemainingComparison_of_gate_projection
+    (owner : C ↪ P) {a b : Layout C} {c : ι → ℂ}
+    (G : PreparedSourceGate c a b) (tail : Layout P) (p : P)
+    (ξ : Choices (fun _ : P ↦ true) (.gate owner G tail)) :
+    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
+      (affectedOwner (fun _ : P ↦ true) t)
+    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
+      (by classical exact decide_eq_true rfl)
+    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+    let lift : Option {t : P // A t = true} → Option {_t : P // true = true} :=
+      fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
+    let χ := projectAllChoices A (.gate owner G tail) ξ
+    let W := partialWord (fun _ : P ↦ true) (.gate owner G tail) ξ
+    let V := partialWord A (.gate owner G tail) χ
+    selectedRemainingComparison W V
+      (some (⟨p, rfl⟩ : {_p : P // true = true})) q lift := by
+  classical
+  by_cases hincident : ∃ t : C, owner t = p
+  · exact selectedRemainingComparison_of_incident_gate owner G tail p ξ hincident
+  · exact selectedRemainingComparison_of_nonincident_gate owner G tail p ξ hincident
+
+/-- The selected remaining evaluation of the all-party branch equals
+that of the lifted singleton branch, retaining every original gate occurrence,
+source dimension and spectator register.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–434
+and 565–588. -/
+theorem isSelectedLocalPartComparison_partialWord_all_gate
+    (owner : C ↪ P) {a b : Layout C} {c : ι → ℂ}
+    (G : PreparedSourceGate c a b) (tail : Layout P) (p : P)
+    (ξ : Choices (fun _ : P ↦ true) (.gate owner G tail)) :
+    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
+      (affectedOwner (fun _ : P ↦ true) t)
+    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
+      (by classical exact decide_eq_true rfl)
+    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+    let lift : Option {t : P // A t = true} → Option {_t : P // true = true} :=
+      fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
+    let χ := projectAllChoices A (.gate owner G tail) ξ
+    let W := partialWord (fun _ : P ↦ true) (.gate owner G tail) ξ
+    let V := partialWord A (.gate owner G tail) χ
+    Word.IsSelectedLocalPartComparison
+      (partySelector (some (⟨p, rfl⟩ : {_p : P // true = true}))) W (V.mapOwner lift) := by
+  classical
+  intro A hp q lift χ W V
+  have hlift : ∀ o, lift o = some (⟨p, rfl⟩ : {_p : P // true = true}) ↔ o = q := by
+    intro o
+    cases o with
+    | none => simp [lift, q]
+    | some z => simp [lift, q, Subtype.ext_iff]
+  exact isSelectedLocalPartComparison_of_selectedRemainingComparison lift q
+    (some (⟨p, rfl⟩ : {_p : P // true = true})) hlift W V
+    (selectedRemainingComparison_of_gate_projection owner G tail p ξ)
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect
