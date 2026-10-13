@@ -43,6 +43,17 @@ grouped sectors.
 
 open scoped Matrix BigOperators ComplexOrder
 
+/-- The conjugate of a double sum `∑ i j, star (y i) * star (K j i) * x j` is the
+sandwich `∑ i j, star (x i) * K i j * y j`, for any kernel `K`. -/
+theorem Finset.sum_sum_star_mul_mul_eq_star {ι : Type*} [Fintype ι]
+    (K : ι → ι → ℂ) (x y : ι → ℂ) :
+    ∑ i, ∑ j, star (x i) * K i j * y j =
+      star (∑ i, ∑ j, star (y i) * star (K j i) * x j) := by
+  simp only [star_sum, star_mul', star_star]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun i _ ↦ Finset.sum_congr rfl fun j _ ↦ ?_
+  ring
+
 namespace MPOTensor
 
 variable {d D n : ℕ}
@@ -108,6 +119,25 @@ theorem markedChainCoefficient_reflectedAdjoint (A : MPSTensor (D * D) n)
     ← Matrix.trace_conjTranspose, Matrix.conjTranspose_mul]
   exact Matrix.trace_mul_comm _ _
 
+/-- A two-sided physical compression gives a linear combination of the
+physical letters after horizontal slicing. -/
+theorem horizontalSlice_twoSidedCompression
+    (M : MPOTensor d D) (L R : Matrix (Fin d) (Fin n) ℂ) (r s : Fin n) :
+    horizontalSlice (fun v ↦ Lᴴ * verticalTensor M v * R) r s =
+      ∑ i : Fin d, ∑ j : Fin d,
+        (star (L i r) * R j s) • M i j := by
+  ext a b
+  simp only [horizontalSlice, Matrix.mul_apply, Matrix.conjTranspose_apply,
+    verticalTensor_finProdFinEquiv, Matrix.sum_apply, Matrix.smul_apply,
+    smul_eq_mul]
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro i _
+  rw [Finset.sum_mul]
+  apply Finset.sum_congr rfl
+  intro j _
+  ring
+
 /-- Compressing the first physical site by a matrix gives the marked-chain
 coefficient of the corresponding vertical corner.
 
@@ -122,21 +152,8 @@ theorem coordinateCompression_eq_markedChainCoefficient
       markedChainCoefficient
         (fun v => Vᴴ * verticalTensor M v * V) M r s
         (List.ofFn σ) (List.ofFn τ) := by
-  have hslice :
-      horizontalSlice (fun v => Vᴴ * verticalTensor M v * V) r s =
-        ∑ i : Fin d, ∑ j : Fin d, (star (V i r) * V j s) • M i j := by
-    ext a b
-    simp only [horizontalSlice, Matrix.mul_apply, Matrix.conjTranspose_apply,
-      verticalTensor_finProdFinEquiv, Matrix.sum_apply, Matrix.smul_apply,
-      smul_eq_mul]
-    rw [Finset.sum_comm]
-    apply Finset.sum_congr rfl
-    intro i _
-    rw [Finset.sum_mul]
-    apply Finset.sum_congr rfl
-    intro j _
-    ring
-  rw [markedChainCoefficient, hslice, Finset.sum_mul, Matrix.trace_sum]
+  rw [markedChainCoefficient, horizontalSlice_twoSidedCompression, Finset.sum_mul,
+    Matrix.trace_sum]
   simp_rw [Finset.sum_mul, Matrix.trace_sum, Matrix.smul_mul,
     Matrix.trace_smul, smul_eq_mul]
   simp only [mpo_apply, mpoMatrixEntry, List.ofFn_succ, Fin.cons_zero,
@@ -144,6 +161,24 @@ theorem coordinateCompression_eq_markedChainCoefficient
   apply Finset.sum_congr₂
   intro i _ j _
   ring
+
+/-- A marked chain whose positive multiple is conjugate to its index-exchanged
+chain equals the reflected chain of Figure 7.
+
+This is the scalar cancellation shared by every reflected marked-chain
+identity: the positive scalar is self-conjugate, so it cancels from both sides
+of the conjugate identity. -/
+theorem markedChainCoefficient_eq_reflectedAdjoint_of_mul_eq_star
+    (A : MPSTensor (D * D) n) (M : MPOTensor d D) {c : ℂ} (hc : (0 : ℂ) < c)
+    (N : ℕ) (r s : Fin n) (σ τ : Fin N → Fin d)
+    (h : c * markedChainCoefficient A M r s (List.ofFn σ) (List.ofFn τ) =
+      star (c * markedChainCoefficient A M s r (List.ofFn τ) (List.ofFn σ))) :
+    markedChainCoefficient A M r s (List.ofFn σ) (List.ofFn τ) =
+      markedChainCoefficient (reflectedAdjoint A) (MPOTensor.adjointTensor M) r s
+        (List.ofFn σ).reverse (List.ofFn τ).reverse := by
+  rw [markedChainCoefficient_reflectedAdjoint A M r s (List.ofFn σ) (List.ofFn τ) (by simp)]
+  rw [star_mul', (IsSelfAdjoint.of_nonneg hc.le).star_eq] at h
+  exact mul_left_cancel₀ (ne_of_gt hc) h
 
 /-- The coordinate compression of an MPDO is Hermitian for every tail
 length. -/
@@ -157,30 +192,8 @@ theorem IsMPDO.coordinateCompression_star
       star (∑ i : Fin d, ∑ j : Fin d,
         star (V i s) *
           mpo M (N + 1) (Fin.cons i τ) (Fin.cons j σ) * V j r) := by
-  have hstar :
-      star (∑ i : Fin d, ∑ j : Fin d,
-          star (V i s) *
-            mpo M (N + 1) (Fin.cons i τ) (Fin.cons j σ) * V j r) =
-        ∑ i : Fin d, ∑ j : Fin d,
-          star (V j r) *
-            star (mpo M (N + 1) (Fin.cons i τ) (Fin.cons j σ)) * V i s := by
-    change (starRingEnd ℂ) (∑ i : Fin d, ∑ j : Fin d,
-        star (V i s) *
-          mpo M (N + 1) (Fin.cons i τ) (Fin.cons j σ) * V j r) = _
-    rw [map_sum]
-    apply Finset.sum_congr rfl
-    intro i _
-    rw [map_sum]
-    apply Finset.sum_congr rfl
-    intro j _
-    change star (star (V i s) *
-        mpo M (N + 1) (Fin.cons i τ) (Fin.cons j σ) * V j r) = _
-    rw [star_mul', star_mul', star_star]
-    ring
-  rw [hstar, Finset.sum_comm]
-  apply Finset.sum_congr₂
-  intro i _ j _
-  rw [(hM (N + 1) (by omega)).isHermitian.apply]
+  rw [Finset.sum_sum_star_mul_mul_eq_star]
+  simp_rw [(hM (N + 1) (by omega)).isHermitian.apply]
 
 /-- **The reflected marked-chain identity of Figure 7.**
 
@@ -205,45 +218,17 @@ theorem IsMPDO.markedChainCoefficient_eq_reflectedAdjoint
     markedChainCoefficient A M r s (List.ofFn σ) (List.ofFn τ) =
       markedChainCoefficient (reflectedAdjoint A) (MPOTensor.adjointTensor M) r s
         (List.ofFn σ).reverse (List.ofFn τ).reverse := by
-  have hcstar : star c = c := by
-    obtain ⟨_, hcim⟩ := Complex.pos_iff.mp hc
-    apply Complex.ext
-    · simp
-    · change -c.im = c.im
-      calc
-        -c.im = -0 := congrArg Neg.neg hcim.symm
-        _ = 0 := neg_zero
-        _ = c.im := hcim
   have hscale : ∀ (r s : Fin n) (σs τs : List (Fin d)),
       markedChainCoefficient
           (fun v => Vᴴ * verticalTensor M v * V) M r s
           σs τs = c * markedChainCoefficient A M r s σs τs := by
     intro r s σs τs
-    rw [show (fun v => Vᴴ * verticalTensor M v * V) = fun v => c • A v by
-      funext v
-      exact hcorner v]
+    rw [show (fun v => Vᴴ * verticalTensor M v * V) = fun v => c • A v from
+      funext hcorner]
     simp [markedChainCoefficient]
-  have hscaleSwap :
-      markedChainCoefficient
-          (fun v => Vᴴ * verticalTensor M v * V) M s r
-          (List.ofFn τ) (List.ofFn σ) =
-        c * markedChainCoefficient A M s r (List.ofFn τ) (List.ofFn σ) := by
-    exact hscale s r (List.ofFn τ) (List.ofFn σ)
-  have hcoord := hM.coordinateCompression_star V N r s σ τ
-  rw [coordinateCompression_eq_markedChainCoefficient,
-    coordinateCompression_eq_markedChainCoefficient,
-    hscale r s (List.ofFn σ) (List.ofFn τ), hscaleSwap] at hcoord
-  change c * markedChainCoefficient A M r s (List.ofFn σ) (List.ofFn τ) =
-    (starRingEnd ℂ)
-      (c * markedChainCoefficient A M s r (List.ofFn τ) (List.ofFn σ)) at hcoord
-  rw [map_mul] at hcoord
-  change c * markedChainCoefficient A M r s (List.ofFn σ) (List.ofFn τ) =
-    star c * star (markedChainCoefficient A M s r
-      (List.ofFn τ) (List.ofFn σ)) at hcoord
-  rw [hcstar] at hcoord
-  have hc0 : c ≠ 0 := ne_of_gt hc
-  rw [MPOTensor.markedChainCoefficient_reflectedAdjoint A M r s
-    (List.ofFn σ) (List.ofFn τ) (by simp)]
-  exact mul_left_cancel₀ hc0 hcoord
+  apply markedChainCoefficient_eq_reflectedAdjoint_of_mul_eq_star A M hc
+  rw [← hscale, ← hscale, ← coordinateCompression_eq_markedChainCoefficient,
+    ← coordinateCompression_eq_markedChainCoefficient]
+  exact hM.coordinateCompression_star V N r s σ τ
 
 end MPOTensor

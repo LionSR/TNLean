@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-10-10T01:00:00Z",
+  "reviewedAt": "2026-10-13T03:00:00Z",
   "entries": [
     {
       "id": "docs/paper-gaps/oai26_peps_patch_stationarity_gap.tex",
@@ -122,7 +122,7 @@
       "id": "docs/paper-gaps/polypeps_nonempty_parties.tex",
       "repo": "TNLean",
       "kind": "convention",
-      "status": "resolved-pending",
+      "status": "resolved",
       "paper": "peps",
       "result": "Theorem 5.2, distributed density compression",
       "issue": 8769,
@@ -134,12 +134,12 @@
         ]
       },
       "title": "Compression needs at least one party",
-      "summary": "The theorem fails only with no parties, a case the paper never uses; Lean excludes it once, in a pull request awaiting merge.",
+      "summary": "The theorem fails only with no parties, a case the paper never uses; Lean excludes it once, in the definition of a construction.",
       "context": "Theorem 5.2 turns the state produced by the construction, whose shared resources may be arbitrarily large, into a tensor network with one node per party and polynomial bonds. A party is a label for a set of quantum registers.",
       "claims": "Let ρ be the output density matrix of the construction. For every fixed <i>p</i>, some such network σ satisfies ‖σ − ρ‖<sub>1</sub> ≤ <i>L</i><sup>−<i>p</i></sup>, with <i>L</i> the size parameter. The statement does not say that there is at least one party.",
       "found": "With no parties it fails. An empty tensor product has dimension one, so a construction can still multiply by a scalar <i>c</i>, giving density |<i>c</i>|<sup>2</sup>, while a network with no nodes contracts to 1. For <i>c</i> = 1/2 the error is |1/4 − 1| = 3/4. The paper's proof places scalars on an existing party. Lean requires at least one party once, in the definition of a construction, and repeats it on no theorem.",
       "impact": "No. Every application uses an L × L grid with L ≥ 2, which has parties.",
-      "plan": "Merge the pending pull request."
+      "plan": "Nothing remains."
     },
     {
       "id": "docs/paper-gaps/arealaw2d_nondegenerate_templates.tex",
@@ -175,16 +175,22 @@
           8926,
           8944,
           9002,
-          9004
+          9004,
+          9028,
+          9037,
+          9067,
+          9079,
+          9123,
+          9129
         ]
       },
       "title": "The low-energy sweep from its five inputs",
       "summary": "No problem with the paper has been found; Lean proves the final step from five earlier results, which are not yet all proved.",
       "context": "The proof sweeps a partition across a band around a target region in small random steps, while many copies of the ground state are filtered by operators built from the partition; an interpolation parameter moves the filter smoothly as a small region changes sides. Proposition 9.2 finds a point of the sweep where the filtered state has small excess energy; the later entropy bounds are applied there.",
       "claims": "Some step and some interpolation parameter make the excess energy <i>E</i><sub>def</sub> = (⟨<i>v</i>, <i class=\"ov\">H</i><i>v</i>⟩ − <i>E</i><sub>0</sub>)/<i>g</i> small, for every large number <i>k</i> of copies; here <i>v</i> is the filtered state of the copies, <i class=\"ov\">H</i> the Hamiltonian averaged over the copies, and <i>g</i> the gap. The proof combines the geometry of the sweep, entropy and energy transport (Proposition 7.4), norm comparisons (Proposition 8.1), entropy continuity and spectral tail bounds.",
-      "found": "Lean proves the step from the conclusions of those five results to the proposition; each conclusion enters as a hypothesis transcribing one displayed statement of the paper. Lean also builds the random sweep and proves its main probability bounds, but not yet all of its geometry.",
+      "found": "Lean proves the step from the conclusions of those five results to the proposition; each conclusion enters as a hypothesis transcribing one displayed statement of the paper. Entropy and energy transport (Proposition 7.4) is now proved on its own, and its entropy bound is summed over every round of the actual sweep. Lean builds the random sweep and the measures of each round from the actual transported states (each leaf has mass 1/2 at interior parameters and zero when inactive, so they are not probability measures), proves its main probability bounds, and bounds the integrated charge defect of each charge round. It bounds the spectra of the truncated ground state on the five regions of every step with one common constant, and selects the typical part of the target region's spectrum, of mass at least 1 − <i>n</i><sup>−100</sup>. The paper asserts that the charge defect varies continuously with the interpolation parameter; Lean does not prove this and does not need it, since the measurability it proves suffices for both integral arguments. The five inputs are not yet constructed from the same original and truncated ground states of one physical system.",
       "impact": "No. The proposition holds once its inputs are proved.",
-      "plan": "Prove the five inputs for the actual sweep. Each is a separate item of the project."
+      "plan": "Construct the five inputs for the actual sweep from one pair of ground states, the original and its truncation."
     },
     {
       "id": "docs/paper-gaps/polypeps_routing_network_bounds.tex",
@@ -207,6 +213,27 @@
       "found": "The proof uses four properties. Each party sits at a point of the grid enlarged to a power-of-two side. Each dyadic square has at most <i>B</i> parties. Each party has at most <i>K</i> links. Linked parties are within <i>c</i> times their scale. Proposition 7.1 is not yet formalized, so Lean proves the lemma for every network with these properties. Each grid edge then carries at most 8(2<i>c</i> + 1)<i>BK</i> links. If every link has dimension at most <i>D</i>, the result is a PEPS on the grid. Its bond dimension is at most max(<i>D</i>, 1)<sup>8(2<i>c</i>+1)<i>BK</i></sup>.",
       "impact": "No. The paper's lemma is the case of its own network.",
       "plan": "Formalize Proposition 7.1 and check the four properties for its network."
+    },
+    {
+      "id": "docs/paper-gaps/polypeps_product_reference_column.tex",
+      "repo": "TNLean",
+      "kind": "narrower",
+      "status": "open",
+      "paper": "peps",
+      "result": "Section 8.1 and Lemma 8.1, extracting a ket from the compressed state",
+      "issue": 8773,
+      "prs": {
+        "TNLean": [
+          9258
+        ]
+      },
+      "title": "A ket close to the ground state from supplied estimates",
+      "summary": "No problem with the paper has been found; Lean proves the step from the paper's three vector estimates to a ket close to the ground state, but does not yet construct the vectors that satisfy them.",
+      "context": "The construction produces a joint vector Ψ of the lattice and of private registers, close to the ground state Ω times a private reference vector Ξ. Tracing out the private registers and compressing gives a tensor network whose operator is close to the ground-state projector; fixing the inputs of that network to one basis configuration, a column of the operator, gives a network for a ket close to Ω, which is then placed on the <i>L</i> × <i>L</i> grid.",
+      "claims": "Section 8.1 builds Ψ and Ξ with ‖Ψ‖ ≤ 1, 1 − <i>CL</i><sup>−57</sup> ≤ ‖Ξ‖ ≤ 1 and ‖Ψ − Ω ⊗ Ξ‖ ≤ <i>CL</i><sup>−17</sup>, with <i>C</i> independent of the lattice size and the Hamiltonian. Lemma 8.1 extracts a nonzero column of the compressed operator that, after normalization, is close to Ω up to a phase; the network is then routed onto the grid.",
+      "found": "Lean proves the step for arbitrary vectors with these properties. Suppose ‖Ξ‖ ≥ 1 − δ, ‖Ψ − Ω ⊗ Ξ‖ ≤ ε, and a network already on the grid has operator σ within κ in trace norm of the traced state of Ψ, with α = κ + 2ε + 2δ &lt; 1. Then some input configuration gives a nonzero ket within 2α of Ω up to a phase after normalization, and every bond keeps its dimension. The compressed operator need not be positive or Hermitian. The vectors, their estimates and the compressed network are assumed rather than constructed. The statement also takes a network already routed onto the grid and then fixes its column, while the paper fixes the column first and routes afterwards.",
+      "impact": "No. The paper's step is the case of its own vectors and network.",
+      "plan": "Construct the actual vectors and the compression with constants independent of the lattice size and the Hamiltonian, then either route the compressed operator before fixing its column, or apply the same density estimate to the existing column result for the party network and route the ket."
     },
     {
       "id": "docs/paper-gaps/oai26_transport_crossband_commutation.tex",

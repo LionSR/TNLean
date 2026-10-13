@@ -866,6 +866,67 @@ The following finite construction follows
     the partially consumed nominal row contributes to the error estimate.
 \end{definition}
 
+\begin{lemma}[A fixed finite family of positive-depth prefixes]
+    \label{lem:al_scan_finite_prefix_family}
+    \lean{TNLean.PEPS.AreaLaw.Scan.positiveDepthPrefix_toNat,
+        TNLean.PEPS.AreaLaw.Scan.positiveDepthPrefix_mem_range_fin_of_le}
+    \leanok
+    \uses{def:al_scan_comparison_prefixes}
+    Let $A$ be finite, let $d$ be any integer-valued depth function, and let
+    $L\ge0$ be an integer. For $Q_j=\{x\in A:0<d(x)\le j\}$ and
+    $j_+=\max(j,0)$, one has $Q_j=Q_{j_+}$. Consequently, every integer
+    cutoff $j\le L$ selects a member of the fixed nested family
+    \[
+        Q_0,Q_1,\ldots,Q_L.
+    \]
+    This family depends only on $A,d,L$ and may contain repeated regions.
+\end{lemma}
+\begin{proof}\leanok
+    If $j<0$, both $Q_j$ and $Q_0$ are empty. If $j\ge0$, then $j_+=j$.
+    For $j\le L$ one also has $0\le j_+\le L$, giving the required member
+    of the displayed family. Nestedness follows directly from the cutoff
+    inequalities.
+\end{proof}
+
+\begin{theorem}[Upper bounds for comparison fronts]
+    \label{thm:al_scan_front_thresholds}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.upper_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.front_comparison_thresholds_le}
+    \leanok
+    \uses{def:al_scan_actual_histories}
+    Suppose $n>0$ and $8Km\le L$. Fix $0\le g<K$, $0\le r<m$ and
+    $0\le k\le nm$. Let $j_N,j_F$ be the near and oriented far nominal
+    fronts after $k$ fills, and put $v=8gm+5m+r$. Then
+    \begin{align}
+        v\le L,\qquad j_N-1\le L,\qquad -j_F\le L.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    The upper endpoint satisfies $v\le8(g+1)m\le8Km\le L$.
+    Put $u=8gm+m+r$. The near threshold is $u$ plus the number of
+    completed near advances, which is at most $m$. Since $v-u=4m$,
+    this threshold is at most $v$. The far threshold is $v$ minus
+    the nonnegative number of completed far advances, so it too is at
+    most $v$.
+\end{proof}
+
+\begin{corollary}[One finite family for all comparison fronts]
+    \label{cor:al_scan_front_prefix_family}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.front_positiveDepthPrefix_mem_fixed_family}
+    \leanok
+    \uses{lem:al_scan_finite_prefix_family,thm:al_scan_front_thresholds}
+    Fix the original region $A$, its depth function $d$ and the collar depth
+    $L$. Suppose $n>0$ and $8Km\le L$. The nested family
+    $Q_0,\ldots,Q_L$, where $Q_j=\{x\in A:0<d(x)\le j\}$, then contains
+    both $Q_{j_N-1}$ and $Q_{-j_F}$ for every band, offset and round within
+    the fill horizon. This one family is fixed before all such choices.
+\end{corollary}
+\begin{proof}\leanok
+    Both integer thresholds are at most $L$ by
+    Theorem~\ref{thm:al_scan_front_thresholds}. Apply
+    Lemma~\ref{lem:al_scan_finite_prefix_family} to each threshold.
+\end{proof}
+
 \begin{theorem}[Positive prefixes in the compact collar]
     \label{thm:al_scan_positive_prefix_collar}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.positiveDepthPrefix_subset_truncationSet}
@@ -1320,6 +1381,50 @@ The following finite construction follows
     to one half.
 \end{proof}
 
+\begin{theorem}[Parameter integrability of the old-state entropy integral]
+    \label{thm:al_scan_old_parameter_integral}
+    \lean{TensorPower.ReplicaTransport.TransportData.oldFourierCoherentIntegral_zero_pre,
+        TensorPower.ReplicaTransport.TransportData.oldFourierCoherentIntegral_eq_integral_hermPart,
+        TensorPower.ReplicaTransport.TransportData.aestronglyMeasurable_oldFourierCoherentIntegral,
+        TensorPower.ReplicaTransport.TransportData.abs_oldFourierCoherentIntegral_le,
+        TensorPower.ReplicaTransport.TransportData.integrableOn_Ioo_oldFourierCoherentIntegral,
+        TensorPower.ReplicaTransport.TransportData.intervalIntegrable_oldFourierCoherentIntegral,
+        TensorPower.ReplicaTransport.TransportData.integrableOn_Icc_oldFourierCoherentIntegral,
+        TensorPower.ReplicaTransport.TransportData.aestronglyMeasurable_Icc_oldFourierCoherentIntegral,
+        TensorPower.ReplicaTransport.TransportData.aestronglyMeasurable_sum_oldFourierCoherentIntegral,
+        TensorPower.ReplicaTransport.TransportData.intervalIntegrable_sum_oldFourierCoherentIntegral,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_actualChargeEntropyDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.intervalIntegrable_actualChargeEntropyDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.integrableOn_Icc_actualChargeEntropyDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_Icc_actualChargeEntropyDefect}
+    \leanok
+    \uses{def:al_scan_old_entropy_integral,def:al_scan_actual_charge_data}
+    For admissible transport data with positive factor dimensions,
+    nonnegative metric parameter and cross-band commutation, fix a continuous
+    real symbol $F$, a history $h$, a replica count $k\ge0$ and a supplied
+    prevector. The function $p\mapsto J_h(F)$ is almost everywhere
+    measurable and integrable on both $(0,1)$ and $[0,1]$.
+    Writing $Q_F=(A_F+A_F^\dagger)/2$ for the Hermitian part of the coherent
+    average $A_F$, one has $|J_h(F)|\le\|Q_F\|/2$ in the interior.
+    Fixed finite weighted sums selected by a fixed history predicate retain
+    this regularity, including the actual good-history charge defect.
+    No symmetry or nonzero-prevector hypothesis is needed for these assertions.
+\end{theorem}
+\begin{proof}\leanok
+    For a zero prevector the filtered vector, its rank-one matrix and the
+    trace-adjoint transported state are zero, so $J_h(F)=0$.
+    Otherwise the Hermitian transported state satisfies
+    $\operatorname{Re}\operatorname{Tr}(\rho Q_F)
+        =\operatorname{Re}\operatorname{Tr}(\rho A_F)=\mathcal H_\rho(F)$.
+    The parameter measurability and absolute-value estimate for transported
+    Hermitian expectations therefore apply to precisely $J_h(F)$.
+    The uniform bound on the finite-measure interior gives integrability;
+    the endpoints are null. Finite sums and fixed scalar weights preserve
+    regularity. For the actual charge defect the finite split-entropy symbol
+    is continuous in the coherent vector, and the actual admissibility and
+    commutation statements supply the structural hypotheses.
+\end{proof}
+
 \begin{theorem}[Actual old-state entropy sampling]
     \label{thm:al_scan_actual_old_entropy_sampling}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_le_entropyGain_domainGraph,
@@ -1670,6 +1775,59 @@ The following finite construction follows
     factors. The dimensions of $C$ and $R$ are independently specified.
 \end{definition}
 
+\begin{definition}[Coordinates of the two auxiliary factors]
+    \label{def:al_scan_auxiliary_coordinates}
+    \lean{TNLean.PEPS.AreaLaw.Scan.augmentedSiteEquiv,
+        TNLean.PEPS.AreaLaw.Scan.augmentedConfigurationEquiv,
+        TNLean.PEPS.AreaLaw.Scan.augmentedReplicaConfigurationEquiv,
+        TNLean.PEPS.AreaLaw.Scan.augmentedSumReplicaCopiesEquiv}
+    \leanok
+    \uses{def:al_scan_actual_energy_terms}
+    Let $V$ be a finite set of physical sites, each of dimension $q$, and
+    let the dimensions of $C$ and $R$ both be $d$. Write
+    $X=\{0,\ldots,q-1\}^V$ for the physical configuration space. Identify the physical
+    site $v$ with $v$ in $V\sqcup\{C,R\}$. The two successive adjoining
+    operations place $C$ at the first added site and $R$ at the second.
+    Let $e$ be this identification of one-copy configurations and $e_k$
+    its copywise extension. Let $g_k$ group the configurations in the
+    order $X^k,C^k,R^k$, where each auxiliary configuration space has
+    $d$ elements. These are bijections also for zero dimensions
+    and for $k=0$.
+\end{definition}
+
+\begin{theorem}[The physical replica mean with two auxiliary identities]
+    \label{thm:al_scan_auxiliary_energy}
+    \lean{TNLean.PEPS.AreaLaw.Scan.augmentedConfigurationEquiv_apply_physical,
+        TNLean.PEPS.AreaLaw.Scan.augmentedConfigurationEquiv_apply_C,
+        TNLean.PEPS.AreaLaw.Scan.augmentedConfigurationEquiv_apply_R,
+        TNLean.PEPS.AreaLaw.Scan.copyMean_augmentOperator_eq_replicaHamiltonian_kronecker}
+    \leanok
+    \uses{def:al_scan_auxiliary_coordinates}
+    Let $H$ be an arbitrary matrix on the physical configuration space.
+    Write $\overline H_k=k^{-1}\sum_{j=0}^{k-1}H_j$ and define
+    $\overline H_0=0$. Let $\widetilde H=H\otimes I_C\otimes I_R$
+    be expressed on $V\sqcup\{C,R\}$. Then
+    \begin{align}
+        \overline{\widetilde H}_k(x,y)
+         & = (\overline H_k\otimes I_{C^k\times R^k})
+        (g_kx,g_ky).
+    \end{align}
+    The bijection $e$ preserves every physical coordinate and sends the
+    first and second auxiliary coordinates to $C$ and $R$, respectively.
+    This is the identity extension used in
+    \cite[Proposition~7.4 and Section~8]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The one-copy coordinate identities follow from the definition of $e$.
+    Reindex each term of the replica sum by $e_k$ and regroup the physical
+    copies and the joint auxiliary copies. This gives
+    $\overline{H\otimes I}_{k}=\overline H_k\otimes I$ in the regrouped
+    coordinates. Equality of the joint auxiliary configurations is
+    equivalent to equality of both their $C$ and $R$ configurations.
+    The identity entries therefore agree under the final regrouping $g_k$.
+\end{proof}
+
 \begin{theorem}[Positive supported augmented energy]
     \label{thm:al_scan_actual_energy_terms}
     \lean{TNLean.PEPS.AreaLaw.Scan.augmentOperator_mem_Icc,
@@ -1828,6 +1986,73 @@ The following finite construction follows
     Theorem~\ref{thm:al_scan_actual_marginal_tails} to that single pair
     $(e,\widetilde\Omega)$ for all cuts. Terms in components disjoint
     from $S_0$ remain in the physical sum. No auxiliary system is adjoined.
+\end{proof}
+
+% Source: 08-scanner.tex, lines 21--48, 243--257 and 400--414;
+% 07-comparators.tex, lines 37--53, at openai/math@adc7f124.
+\begin{theorem}[The target typical window of one truncated ground vector]
+    \label{thm:al_scan_target_typical_window}
+    \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.one_le_L_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.source_target_geometry,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.target_typicalSet_bounds,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_typical_window}
+    \leanok
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_prefix_boundary}
+    Fix $q\ge1$, $R\in\mathbb N$, $J\ge0$, $\Delta>0$ and $C_T\ge0$.
+    There exist $C_{\mathrm{tr}}>0$, $C_B>0$ and $N\ge2$, chosen before
+    the domain, Hamiltonian, ground vector, cut, scan and source exponents.
+    Consider any instance of Theorem~\ref{thm:al_scan_exists_marginal_tails}
+    with $n\ge N$, except that the compact-volume bound is replaced by
+    the following source geometry. Let $T$ be a nonempty ambient target,
+    $d(x)=\operatorname{dist}_\infty(x,T)$, $0<\ell_T<1$,
+    $L=\lfloor n^{1-\ell_T}\rfloor$, and
+    $r_0=\lceil C_{\mathrm{tr}}(\log n)^2\rceil$.
+    Suppose $|T|\le C_Tn^2$, each positive ambient dilation layer through
+    depth $L$ has at most $n$ sites, and
+    $\operatorname{dist}_\infty(T,Z)>2L+10r_0$, where $Z$ is the set
+    of endpoints of the actual cut edges. Set $X=A\cap T$ and
+    $S_0=A\cap T_L$. Then
+    \begin{align}
+        1 & \le L\le n,    & |S_0|                & \le(C_T+1)n^2, &
+        X & \subseteq S_0, & |\partial_\Lambda X| & \le4n.
+        \label{eq:al_scan_target_geometry}
+    \end{align}
+    One pair $(e,\widetilde\Omega)$ satisfies every energy, phase-distance,
+    trace-distance, moment and all-cut tail conclusion of
+    Theorem~\ref{thm:al_scan_exists_marginal_tails}. For the target marginal
+    of this same vector, write $p_i$ for its eigenvalues,
+    $s_X=S_{\widetilde\Omega}(X)$, $w=n^{3/5}$ and $\delta=n^{-100}$.
+    Its literal labelled cut budget and canonical typical set satisfy
+    \begin{align}
+        \mathcal B_X                 & \le C_Bn(\log n)^{12},                 &
+        \Pr_p\{|{-\log p_i}-s_X|>w\} & \le\delta,                                                       \\
+        E                            & =\{i:p_i>0,\ |{-\log p_i}-s_X|\le w\}, &
+        z                            & =\sum_{i\in E}p_i,                     & 0 & <1-\delta\le z\le1.
+        \label{eq:al_scan_target_typical_mass}
+    \end{align}
+    In particular, $E$ is nonempty. Every $i\in E$ obeys
+    $\mathrm e^{-s_X-w}\le p_i\le\mathrm e^{-s_X+w}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_prefix_boundary,
+        thm:al_exact_cut_budget,thm:al_scan_compact_collar_card,
+        thm:al_lattice_crossing_budget,lem:al_scan_fixed_ancestry_cutoff}
+    The source floor gives $1\le L\le n$. Summing ambient layers gives
+    $|S_0|\le|T|+nL\le(C_T+1)n^2$. The zero-depth prefix is $X$;
+    clearance removes edges to the opposite color, and the prefix bound at
+    depth zero gives $|\partial_\Lambda X|\le4n$. Choose
+    $C_{\mathrm{tr}}$ with $C_0=C_T+1$ in
+    Theorem~\ref{thm:al_scan_exists_marginal_tails}. The lattice crossing
+    estimate, retaining all original admissible labels, yields
+    $\mathcal B_X\le Cn(\log n)^{12}$. Replace $C$ by $\max\{1,C\}$.
+    Theorem~\ref{thm:al_exact_cut_budget} gives $\mathcal B_X\ge1$, so the
+    tail radius is positive. For fixed $\vartheta=2/g$, the tail expression is bounded by
+    $C'\exp[-c'n^{1/10}/(\log n)^6]\le n^{-100}$ for $n\ge N$.
+    Choose this $N$ before any instance and apply the all-cut tail estimate
+    to the single vector already constructed. The canonical positive
+    spectrum has mass at least $1-\delta>0$, and its defining logarithmic
+    window gives the stated exponential bounds. Zero eigenvalues are excluded.
 \end{proof}
 
 % Direct specializations of QICLean at 7224037, ReplicaTransport/Transport.lean.
@@ -2013,4 +2238,700 @@ The following finite construction follows
     Substitute this identity in the eigenvector hypothesis and energy
     conclusion; the derivative, entropy, and integral conclusions are
     unchanged.
+\end{proof}
+
+\begin{theorem}[Integrated charge defect in one round]
+    \label{thm:al_scan_actual_charge_integral_bound}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_integral_bound_domainGraph}
+    \leanok
+    \uses{thm:al_scan_actual_old_entropy_sampling,thm:al_scan_actual_transport_estimates}
+    This is a one-round consequence of the sampling estimate and
+    \cite[Proposition~7.4]{OpenAI2026AreaLaw}.
+    Under the joint geometric and Hamiltonian hypotheses of
+    Theorems~\ref{thm:al_scan_actual_old_entropy_sampling}
+    and~\ref{thm:al_scan_actual_transport_estimates}, consider one actual charge
+    round and its literal good-history defect $\mathcal Q(p)$.
+    There are universal real constants $c_0,C_{\mathrm{ent}},e_{\mathrm{ent}}$,
+    with $c_0>0$, such that for $a>0$ and $a\ell\le c_0$ there is a sequence
+    $\beta_r=O(\log(r+1))$ satisfying the following assertion.
+    The constants are chosen before the geometry and Hamiltonian; the error
+    sequence is chosen before the replica count and supplied vector.
+    For every $r\ge0$, every nonzero symmetric supplied vector, and every
+    $0\le p_0\le p_1\le1$, put $\alpha=1/(2(C_1+1)nD)$.
+    Here $N$ and $\ell$ are as in Theorem~\ref{thm:al_scan_actual_transport_estimates}.
+    Then
+    \begin{align}
+        ra\alpha\int_{p_0}^{p_1}\mathcal Q(p)\,dp
+         & \le \log N^2(p_0)-\log N^2(p_1)
+        +(p_1-p_0)\bigl(C_{\mathrm{ent}}raKa^{1/4}\ell^{e_{\mathrm{ent}}}+\beta_r\bigr).
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scan_actual_old_entropy_sampling,thm:al_scan_actual_transport_estimates,
+        thm:al_scan_old_parameter_integral}
+    Both $\mathcal Q$ and the entropy gain $G$ are interval integrable on
+    $[0,1]$. Integrating $\alpha\mathcal Q(p)\le G(p)$ and multiplying by
+    $ra\ge0$ gives $ra\alpha\int_{p_0}^{p_1}\mathcal Q\le
+        ra\int_{p_0}^{p_1}G$. Apply the integrated entropy estimate and move
+    its two constant error terms to the right. Each contributes its value
+    times $p_1-p_0$. If $p_0=p_1$, both sides of the resulting inequality
+    vanish.
+\end{proof}
+
+\begin{definition}[Literal transported measures of a scan round]
+    \label{def:al_scan_literal_measures}
+    \lean{TNLean.PEPS.AreaLaw.Scan.transportScanRound,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillScanRound,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound}
+    \leanok
+    \uses{def:al_scan_actual_fill_transport,def:al_scan_actual_charge_data}
+    Fix one actual fill or charge round, its recursive history and choice trees,
+    dimensions, and a supplied family of replica vectors $\psi_k$.
+    Let $\Theta$ be the unit sphere of the one-copy space and set $t=a/2$.
+    For each terminal leaf $j$, let $\mu_{k,p,j}$ be the image on $\Theta$ of
+    \begin{align}
+        \max\{0,m_{1/4}(u)D_k\operatorname{Re}\operatorname{tr}
+        (\sigma_{k,p,j,u}P_{Ue,k})\}\,du\,dU,
+        \label{eq:al_scan_leaf_density}
+    \end{align}
+    where $dU$ is normalized Haar measure and $\sigma_{k,p,j,u}$ is the
+    transported state of the filtered vector obtained from this same $\psi_k$.
+    For $a\ge0$ the real density is nonnegative, so the maximum leaves it unchanged.
+    The old and new measures are $\mu_{k,p,(h,\mathrm{old})}$ and
+    $\mu_{k,p,(h,c,\mathrm{new})}$. History and choice weights are not part of
+    these measures. The round uses the corresponding split entropies, choice
+    entropy, logarithmic root norm and replica-energy expectation.
+\end{definition}
+
+\begin{theorem}[Sphere integral and mass identities]
+    \label{thm:al_scan_literal_integrals}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.integral_actualFillScanRound_old,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.integral_actualFillScanRound_new,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.integral_actualChargeScanRound_old,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.integral_actualChargeScanRound_new,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillScanRound_mass,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_mass,
+        TNLean.PEPS.AreaLaw.Scan.transportScanRound_inactive,
+        TNLean.PEPS.AreaLaw.Scan.transportScanRound_active,
+        TNLean.PEPS.AreaLaw.Scan.integral_transportScanRound_old,
+        TNLean.PEPS.AreaLaw.Scan.integral_transportScanRound_new,
+        TNLean.PEPS.AreaLaw.Scan.transportScanRound_mass,
+        TNLean.PEPS.AreaLaw.Scan.isFiniteMeasure_transportScanRound_old,
+        TNLean.PEPS.AreaLaw.Scan.isFiniteMeasure_transportScanRound_new}
+    \leanok
+    \uses{def:al_scan_literal_measures}
+    The assertions for the actual fill and charge rounds need no further
+    hypothesis. For general finite transport data, the identities below are
+    asserted for admissible data with cross-band commutation; the actual
+    partitions and moves satisfy both conditions.
+    Each measure is finite for every fixed real $p$, every replica count,
+    and every supplied vector. If $a\ge0$, every continuous real function
+    $f$ on the ambient one-copy vector space satisfies
+    \begin{align}
+        \int_\Theta f(\theta)\,d\mu_{k,p,j}(\theta)
+         & =\int_{\mathbb R}m_{1/4}(u)
+        \int_\Theta f(\theta)\,d\mu_{\sigma_{k,p,j,u}}(\theta)\,du.
+        \label{eq:al_scan_leaf_integral}
+    \end{align}
+    If $a\ge0$ and $\psi_k$ is nonzero and symmetric, each interior leaf has mass $1/2$.
+    The old leaf has zero measure at $p=1$, and the new leaf has zero measure
+    at $p=0$. Under $a\ge0$ and the same nonzero symmetric-vector hypothesis, the
+    complementary old and new leaves at $p=0$ and $p=1$ have mass $1/2$.
+    These statements include $k=0$ for a supplied nonzero scalar vector.
+\end{theorem}
+\begin{proof}\leanok
+    The actual partitions and moves give admissibility and cross-band
+    commutation. Apply the canonical Fourier-weighted coherent measure
+    identity to each old or new terminal state. Its fixed-parameter compact
+    unitary bound gives finiteness. A positive terminal weight gives trace one,
+    so integrating the constant symbol gives $\int m_{1/4}=1/2$.
+    A zero terminal weight gives zero normalized derivative, state and measure.
+\end{proof}
+
+\begin{theorem}[Scalar identities for the literal round]
+    \label{thm:al_scan_literal_scalars}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillScanRound_choiceGainSum,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_choiceGainSum,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillScanRound_energySum,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_energySum,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillScanRound_meanEnergy,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_meanEnergy,
+        TNLean.PEPS.AreaLaw.Scan.transportScanRound_choiceGainSum,
+        TNLean.PEPS.AreaLaw.Scan.transportScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.transportScanRound_splitWeight,
+        TNLean.PEPS.AreaLaw.Scan.transportScanRound_termEnergy,
+        TNLean.PEPS.AreaLaw.Scan.transportScanRound_energySum,
+        TensorPower.ReplicaTransport.TransportData.splitEta_eq_zero_of_not_mem_splitLeaves}
+    \leanok
+    \uses{def:al_scan_literal_measures,thm:al_scan_literal_integrals}
+    The assertions for the actual fill and charge rounds need no further
+    hypothesis. For general finite transport data, the identities below are
+    asserted for admissible data with cross-band commutation; the actual
+    partitions and moves satisfy both conditions.
+    For $a\ge0$ and every real $p$, the choice gain is the transport entropy
+    gain, with history factor $w_h$, and the charge defect is the actual
+    good-history old-state split-entropy defect. On $0\le p\le1$, the round's
+    energy sum is exactly
+    \begin{align}
+        \sum_i\left(\sum_{j\in\mathcal J_i}\pi_j\right)
+        \sum_{j\in\mathcal J_i}\pi_j
+        \int_\Theta\eta_{i,j}(\theta)^{1/8}\,d\mu_{k,p,j}(\theta),
+        \label{eq:al_scan_literal_energy}
+    \end{align}
+    with $\pi_{h,\mathrm{old}}=(1-p)w_h$ and
+    $\pi_{h,c,\mathrm{new}}=pw_hq_{c\mid h}$. For the actual augmented
+    truncated terms, the mean energy is the expectation of their actual
+    replica Hamiltonian in the same filtered vector.
+\end{theorem}
+\begin{proof}\leanok
+    Apply~(\ref{eq:al_scan_leaf_integral}) to the continuous choice entropy,
+    split entropy and one-eighth-power split-entropy symbols. Finite sums pass
+    through the common old-state integral. Unsplit leaves have zero split
+    entropy. Separate each terminal sum into old and new leaves and substitute
+    their weights; the clamp is the identity on $[0,1]$. Linearity of the copy
+    mean identifies the actual replica Hamiltonian.
+\end{proof}
+
+\begin{theorem}[Parameter integrability of literal round defects]
+    \label{thm:al_scan_literal_parameter_integral}
+    \lean{TNLean.PEPS.AreaLaw.Scan.aestronglyMeasurable_transportScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.intervalIntegrable_transportScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.integrableOn_Icc_transportScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.aestronglyMeasurable_Icc_transportScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_actualFillScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.intervalIntegrable_actualFillScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.integrableOn_Icc_actualFillScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_Icc_actualFillScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_actualChargeScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.intervalIntegrable_actualChargeScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.integrableOn_Icc_actualChargeScanRound_chargeDefect,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_Icc_actualChargeScanRound_chargeDefect}
+    \leanok
+    \uses{def:al_scan_literal_measures,thm:al_scan_literal_scalars,
+        thm:al_scan_old_parameter_integral}
+    Fix admissible finite transport data, a nonnegative metric parameter $t$,
+    a natural replica count $k$ with cross-band commutation, and the supplied
+    vector $\psi_k$. For a fixed good-history predicate and the original
+    history weights, the literal round's defect $\mathcal Q_k$ is
+    almost-everywhere measurable on $(0,1)$ and $[0,1]$, and
+    integrable on $[0,1]$. This applies to both actual fill and charge rounds
+    with $t=a/2$ and $a\ge0$, for the same supplied family of vectors.
+    No symmetry, nonzero-vector or positive-copy hypothesis is needed.
+\end{theorem}
+\begin{proof}\leanok
+    The finite split-entropy symbol
+    $F_h(\theta)=\sum_i\eta_{i,(h,\mathrm{old})}(\theta)$ is continuous in
+    the coherent vector. The exact scalar identity is
+    \begin{align}
+        \mathcal Q_k(p)=\sum_{h\text{ good}}w_hJ_{h,k,p}(F_h).
+        \label{eq:al_scan_literal_defect_integral}
+    \end{align}
+    An unsplit term is zero by its defining entropy sum. Apply parameter
+    integrability of the old-state integral to the finite weighted sum in
+    (\ref{eq:al_scan_literal_defect_integral}); pointwise equality transfers
+    the two regularity conclusions. Null endpoints preserve the original
+    endpoint values. Actual admissibility and cross-band commutation provide
+    the hypotheses for each kind of round. For charge rounds, the identity
+    with the actual good-history entropy defect gives the same
+    closed-interval conclusion directly.
+\end{proof}
+
+% Source: 08-scanner.tex, lines 32--58 and 400--414; 07-comparators.tex,
+% lines 70--85. Completion markers await exact-head hosted verification.
+\subsection{A common marginal moment bound for physical statuses}
+
+\begin{theorem}[Compact containment outside the far side]
+    \label{thm:al_scan_nonfar_compact}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.mem_truncationSet_of_not_far,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_far_compl_subset_truncationSet,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_far_compl_subset_truncationSet}
+    \uses{def:al_scan_actual_histories}
+    Suppose $8Km\le L$. If a physical partition preserves every initial
+    far-side assignment of a band, every site outside its far side lies
+    in $S_0=\{x\in A:d(x)\le L\}$. In particular, $V^c\subseteq S_0$
+    at every completed and pre-charge status, with no time-horizon or
+    row assumption.
+\end{theorem}
+\begin{proof}
+    A site outside $A$, or above the initial upper cutoff, is initially
+    far and stays far. Every other site has depth at most
+    $8gm+5m+r\le8Km\le L$, since $g<K$ and $r<m$.
+    Fills and charges preserve all assigned sites.
+\end{proof}
+
+\begin{definition}[Physical status marginal regions]
+    \label{def:al_scan_status_marginals}
+    \lean{TNLean.PEPS.AreaLaw.Scan.statusMarginalRegions}
+    \uses{def:al_scan_actual_histories}
+    The physical marginal regions at a status are
+    $XU,V,Y,U,UY$, where $XU$ is the near receiving side, $V$ is the far
+    side, $Y$ is the middle, and $U,UY$ are the positive-depth portions
+    of $XU,XU\cup Y$, respectively. Coincident and empty regions are allowed.
+\end{definition}
+
+\begin{theorem}[One budget for every physical status]
+    \label{thm:al_scan_common_status_budget}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_statusMarginal_cutBudget_le_log}
+    \uses{thm:al_scan_nonfar_compact,def:al_scan_status_marginals,
+        thm:al_scan_status_cuts,thm:al_lattice_crossing_budget,thm:al_exact_cut_budget}
+    Fix $q\ge1$, the interaction range $R$, and $C_r\ge0$.
+    There is $C_B>0$, chosen before the finite domain and scanner, with
+    the following property. Use the induced lattice graph and anchors
+    in their original admissible supports. Suppose $n\ge2$, $T\ne\varnothing$,
+    depth is ambient sup-norm distance to $T$, and
+    \begin{align}
+        r_0 & =\lceil C_r(\log n)^2\rceil\le D, & 1 & \le D, & 4D & \le m, & 8Km & \le L.
+    \end{align}
+    Assume $|T_d\setminus T_{d-1}|\le n$ for $1\le d\le L$, and every
+    endpoint of a physical cut edge of $A$ has ambient distance greater
+    than $2L+10r_0$ from $T$. One common number
+    $\mathcal B=C_B nD(\log n)^{12}\ge1$ bounds the designated-support
+    budget of every region in Definition~\ref{def:al_scan_status_marginals},
+    at every completed status with $k\le nm$ and every pre-charge status
+    with $k+1\le nm$.
+\end{theorem}
+\begin{proof}
+    The regions $XU,Y,U,UY$ lie in $V^c\subseteq S_0$.
+    For $V$, apply the lattice estimate to $V^c$ and use complement
+    invariance of both the cut-edge count and the labelled budget.
+    The actual boundary counts are $16nD$ for $XU,V$, $20nD$ for $U,UY$,
+    and $40nD$ for $Y$. The lattice logarithmic estimate with coefficient
+    $40$ therefore gives one constant $C$ for every status. Take
+    $C_B=C+1$. Applying the same estimate to the empty cut, whose budget
+    is one, proves $\mathcal B\ge1$ even when there are no bands.
+\end{proof}
+
+\begin{theorem}[Common real moment interval]
+    \label{thm:al_scan_common_moment_interval}
+    \lean{TNLean.PEPS.AreaLaw.Scan.tailRadius_antitone_budget,
+        TNLean.PEPS.AreaLaw.Scan.tailRadius_eq_div_sqrt,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.log_surprisalMoment_truncated_reducedState_le_common}
+    \uses{thm:al_scan_actual_marginal_tails,thm:al_exact_cut_budget}
+    For $\vartheta\ge0$ and $0<B\le B'$, the radius
+    $[32\sqrt{(1+\vartheta)B}]^{-1}$ decreases when $B$ is replaced by $B'$.
+    Under the physical ground-state hypotheses of
+    Theorem~\ref{thm:al_scan_actual_marginal_tails}, suppose
+    the designated-support budget of a cut $Q$ is at most $\mathcal B$.
+    Put $C_0=512\mathrm e(2/g)$ and $c_0=[32\sqrt{1+2/g}]^{-1}$.
+    For every real $u$ with $|u|\le c_0/\sqrt{\mathcal B}$,
+    \begin{align}
+        \log\sum_{p_j>0}p_j^{1-u} & \le uS_{\widetilde\Omega}(Q)+C_0\mathcal B u^2,
+        \label{eq:al_scan_common_moment}
+    \end{align}
+    where $p_j$ are the eigenvalues of the marginal of the same
+    physical ground vector $\widetilde\Omega$.
+\end{theorem}
+\begin{proof}
+    Factor $\sqrt{(1+\vartheta)B}=\sqrt{1+\vartheta}\sqrt B$ and use
+    monotonicity of the square root and its positive reciprocal.
+    The larger budget restricts the interval and increases the
+    nonnegative quadratic term in the existing moment estimate.
+\end{proof}
+
+\begin{theorem}[One truncated vector for all physical marginal inputs]
+    \label{thm:al_scan_common_status_moments}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_statusMarginal_moment_bounds}
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_common_status_budget,
+        thm:al_scan_common_moment_interval}
+    Fix $R$, $J\ge0$, $\Delta>0$, and $C_{\mathrm{card}}\ge0$.
+    There is $C_{\mathrm{tr}}>0$ such that, for each $q\ge1$, there is
+    $C_B>0$, both chosen before the domain, Hamiltonian and scanner.
+    Assume the original Hamiltonian has the ground vector and gap of
+    Theorem~\ref{thm:al_scan_exists_marginal_tails}, that
+    $|S_0|\le C_{\mathrm{card}}n^2$, and that the geometric hypotheses of
+    Theorem~\ref{thm:al_scan_common_status_budget} hold with $C_r=C_{\mathrm{tr}}$.
+    There are one pair $(e,\widetilde\Omega)$ and one number
+    $1\le\mathcal B\le C_BnD(\log n)^{12}$ such that the truncated sum has
+    ground vector $\widetilde\Omega$, energy $e$ and projector gap $g/2$.
+    This pair retains
+    \begin{align}
+        0          & \le e\le\epsilon_n,      &
+        \epsilon_n & =\min\{n^{-1000},g/4\},    \\
+        \|\widetilde\Omega-\mathrm e^{i\theta}\Omega\|
+                   & \le2\sqrt{\epsilon_n/g},   \\
+        \frac12\bigl\||\widetilde\Omega\rangle\langle\widetilde\Omega|
+        -|\Omega\rangle\langle\Omega|\bigr\|_1
+                   & \le\sqrt{2\epsilon_n/g}
+    \end{align}
+    for a real phase $\theta$. The positive constants
+    $C_0=512\mathrm e(2/g)$ and $c_0=[32\sqrt{1+2/g}]^{-1}$ give
+    (\ref{eq:al_scan_common_moment}) for all five physical regions,
+    every completed status with $k\le nm$, every pre-charge status with
+    $k+1\le nm$, and every real $u$ in the same interval
+    $|u|\le c_0/\sqrt{\mathcal B}$.
+\end{theorem}
+\begin{proof}
+    Choose the truncated ground vector once, before all cut and history
+    indices, retaining its energy and distance bounds. Choose the geometric
+    coefficient with radius coefficient $C_{\mathrm{tr}}$, and apply the
+    common-interval estimate to every actual status cut. The original
+    $\Omega$ continues to center every positive constraint.
+\end{proof}
+
+\begin{theorem}[Rounded scales satisfy the status separations]
+    \label{thm:al_scan_status_scale_separation}
+    \lean{TNLean.PEPS.AreaLaw.Scan.eight_mul_bandCount_mul_le,
+        TNLean.PEPS.AreaLaw.Scan.eventually_status_scale_separation}
+    Fix $C_r\ge0$ and real exponents $0<\kappa<\mu$ and $\ell$.
+    For all sufficiently large integer $n$, put
+    $L=\lfloor n^{1-\ell}\rfloor$, $m=\lfloor n^\mu\rfloor$,
+    $D=\lceil n^\kappa\rceil$, and $K=L/(8m)$ with integer division.
+    Then $n\ge2$, $r_0=\lceil C_r(\log n)^2\rceil\le D$, $D\ge1$,
+    $4D\le m$, and $8Km\le L$. The threshold may depend on the fixed
+    exponents. The last inequality holds for all natural $L,m$.
+\end{theorem}
+\begin{proof}
+    The squared logarithm is smaller than $n^\kappa$ eventually.
+    Also $n^{\mu-\kappa}\ge8$ eventually and
+    $\lceil n^\kappa\rceil\le n^\kappa+1\le2n^\kappa$ for $n\ge2$.
+    Thus $4\lceil n^\kappa\rceil\le n^\mu$, so the integer left side is
+    at most $\lfloor n^\mu\rfloor$. Integer division gives $8Km\le L$.
+\end{proof}
+
+\begin{theorem}[Quadratic volume of the compact collar]
+    \label{thm:al_scan_compact_quadratic_volume}
+    \lean{TNLean.PEPS.AreaLaw.Scan.card_compact_collar_le_quadratic}
+    \uses{thm:al_scan_ambient_rows}
+    Let $T\ne\varnothing$ be a finite ambient target and let $A$ be any
+    subset of the finite physical domain. Suppose $n,L\in\N$, $L\le n$,
+    $C\in\R$, $|T|\le Cn^2$, and
+    $|T_d\setminus T_{d-1}|\le n$ for $1\le d\le L$.
+    Then $|A\cap T_L|\le(C+1)n^2$.
+\end{theorem}
+\begin{proof}
+    The actual physical collar injects into $T_L$. Summing its ambient
+    layers gives $|T_L|\le |T|+nL\le Cn^2+n^2=(C+1)n^2$.
+    This also applies when $L=0$ or $A=\varnothing$.
+\end{proof}
+
+\begin{theorem}[Positive rounded band count]
+    \label{thm:al_scan_positive_source_bands}
+    \lean{TNLean.PEPS.AreaLaw.Scan.eventually_one_le_source_bandCount}
+    Fix real exponents $0<\mu<1-\ell$.
+    For all sufficiently large integer $n$, the exact integer quotient
+    $K=\lfloor n^{1-\ell}\rfloor/(8\lfloor n^\mu\rfloor)$ is at least one.
+    The threshold may depend on $\mu$ and $1-\ell-\mu$.
+\end{theorem}
+\begin{proof}
+    Eventually $n\ge1$ and $n^{1-\ell-\mu}\ge8$.
+    Hence $m=\lfloor n^\mu\rfloor\ge1$ and
+    $8m\le8n^\mu\le n^{1-\ell}$, so $8m\le L=\lfloor n^{1-\ell}\rfloor$.
+    Division by the positive integer $8m$ gives $K\ge1$.
+\end{proof}
+
+\begin{theorem}[Physical marginal moments at the source scales]
+    \label{thm:al_scan_source_status_moments}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_source_statusMarginal_moment_bounds}
+    \uses{thm:al_scan_compact_quadratic_volume,thm:al_scan_positive_source_bands,
+        thm:al_scan_status_scale_separation,thm:al_scan_common_status_moments}
+    Fix $R$, $J\ge0$, $\Delta>0$, $C_T\ge0$, and
+    $0<\ell<1$, $0<\kappa<\mu<1-\ell$.
+    There are $C_{\mathrm{tr}}>0$ and $N\ge2$, chosen before the local
+    dimension, such that for every $q\ge1$ there is $C_B>0$ chosen before
+    the physical domain, Hamiltonian and scanner. Use an original gapped
+    ground vector as in Theorem~\ref{thm:al_scan_common_status_moments},
+    the induced lattice graph, and anchors in their original supports.
+    For $n\ge N$, use the literal scales
+    $L=\lfloor n^{1-\ell}\rfloor$, $m=\lfloor n^\mu\rfloor$,
+    $D=\lceil n^\kappa\rceil$, $K=L/(8m)$ with integer division, and
+    $r_0=\lceil C_{\mathrm{tr}}(\log n)^2\rceil$.
+    Suppose $T\ne\varnothing$, depth is ambient sup-norm distance to $T$,
+    $|T|\le C_Tn^2$, $|T_d\setminus T_{d-1}|\le n$ for $1\le d\le L$,
+    and every endpoint of a physical cut edge of $A$ has ambient distance
+    greater than $2L+10r_0$ from $T$.
+
+    Then $K\ge1$. There are one pair $(e,\widetilde\Omega)$ and one
+    number $1\le\mathcal B\le C_BnD(\log n)^{12}$ satisfying all the
+    spectral, energy, phase and trace-distance conclusions of
+    Theorem~\ref{thm:al_scan_common_status_moments}. The positive constants
+    $C_0=512\mathrm e(2/g)$ and $c_0=[32\sqrt{1+2/g}]^{-1}$ give
+    (\ref{eq:al_scan_common_moment}) for every actual region
+    $XU,V,Y,U,UY$, every completed status with $k\le nm$, every pre-charge
+    status with $k+1\le nm$, and every real $u$ with
+    $|u|\le c_0/\sqrt{\mathcal B}$, using that same $\widetilde\Omega$.
+\end{theorem}
+\begin{proof}
+    Choose the truncation coefficient for the compact-volume coefficient
+    $C_T+1$. Choose one threshold for the radius coefficient and fixed exponents so that
+    $r_0\le D$, $D\ge1$, $4D\le m$, and $K\ge1$; integer division always
+    gives $8Km\le L$. Since $\ell>0$ and $n\ge1$, the floor gives $L\le n$.
+    Theorem~\ref{thm:al_scan_compact_quadratic_volume} supplies
+    $|S_0|\le(C_T+1)n^2$. Apply
+    Theorem~\ref{thm:al_scan_common_status_moments} with these derived
+    inequalities, retaining its single truncated ground vector.
+\end{proof}
+
+\begin{definition}[The finite family of actual scan rounds]
+    \label{def:al_scan_actual_round_family}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundHistory,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundChoice,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_induction}
+    \leanok
+    \uses{def:al_scan_actual_fill_transport,def:al_scan_actual_charge_data}
+    For a fixed scanner with $m,M>0$, index its rounds by integers
+    $0\le j<2nm$ and put $s_j=\lfloor j/2\rfloor$.
+    Write $\mathcal Q=(\{0,1\}\times\{0,\ldots,M-1\})^K$ for the
+    charge choices. The history and conditional-choice sets are
+    \begin{align}
+        \mathcal H_j     & =\{0,\ldots,m-1\}^K\times\mathcal Q^{s_j}, \\
+        \mathcal C_{j,h} & =
+        \begin{cases}
+            \{\ast\},   & j\text{ even}, \\
+            \mathcal Q, & j\text{ odd}.
+        \end{cases}
+    \end{align}
+    The transport data $\mathscr D_j$ are the actual fill data at stage
+    $s_j$ for even $j$ and the actual charge data at stage $s_j$ for odd
+    $j$. Thus round zero is a fill, rounds zero and one both have empty
+    charge history, and rounds two and three both have one completed
+    charge. Every round has exactly $K$ bands. Empty physical moves
+    remain among these rounds. A property depending on the conditional-choice
+    sets and transport data can be proved separately for the fill and charge
+    cases, identifying their conditional-choice sets with $\mathcal C_{j,h}$.
+\end{definition}
+
+\begin{theorem}[Common transport errors for all actual scan rounds]
+    \label{thm:al_scan_actual_round_transport}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_transport_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundHistory_length_add_one_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_isAdmissible}
+    \leanok
+    \uses{def:al_scan_actual_round_family,def:al_scan_actual_energy_terms,
+        def:al_scan_physical_dimension_cap}
+    There exist universal real constants
+    $c_0,C_{\mathrm{ent}},e_{\mathrm{ent}},C_{\mathrm{en}},e_{\mathrm{en}}$,
+    with $c_0>0$, chosen before all the following data.
+
+    Let $\Lambda,T\subset\mathbb Z^2$ be finite with $T\ne\varnothing$,
+    $q,R_{\mathrm{int}}\in\mathbb N$ with $q\ge1$, and $J\in\mathbb R$.
+    Let $H=\sum_i h_i$ be a local Hamiltonian of range
+    $R_{\mathrm{int}}$ and term norm bound $J$ on
+    $(\mathbb C^q)^{\otimes\Lambda}$, with its admissible support labels
+    in a fixed linear order. Fix $\|\Omega\|=1$ and $\Delta>0$.
+    Take a scanner of color $A\subseteq\Lambda$, with parameters
+    $n,m,K,D,r_0\in\mathbb N$ and $C_1\in\mathbb R$, the induced
+    nearest-neighbor graph on $\Lambda$, depth
+    $d(x)=\min_{t\in T}\|x-t\|_\infty$, and anchors $x_i\in i$.
+    For a truncation depth $L\in\mathbb N$, assume
+    \begin{align}
+        0<n,\qquad r_0\le D,\qquad 1\le D,
+        \qquad 4D\le m,\qquad 8Km\le L,\qquad 0<C_1.
+        \label{eq:al_scan_family_scales}
+    \end{align}
+    Put $T_d=T+[-d,d]^2_{\mathbb Z}$ and let $Z$ contain both endpoints
+    of every edge crossing $A$ in $\Lambda$. Assume
+    $|T_d\setminus T_{d-1}|\le n$ for every integer $1\le d\le L$, and
+    $2L+10r_0<\|t-z\|_\infty$ for every $t\in T$ and $z\in Z$.
+    Fix arbitrary auxiliary dimensions $d_C,d_R\ge1$ and put
+    \begin{align}
+        \mathcal V & =(\mathbb C^q)^{\otimes\Lambda}
+        \otimes\mathbb C^{d_C}\otimes\mathbb C^{d_R}, \\
+        \ell       & =1+(2r_0+1)^2\log q.
+    \end{align}
+    Fix $a>0$ with $a\ell\le c_0$ and use $t=a/2$ in every band's
+    metric. Let $\mathscr D_j$ be the actual round family of
+    Definition~\ref{def:al_scan_actual_round_family}.
+
+    Use one energy family for all rounds: let $\widetilde h_i$ and
+    $\widetilde X_i$ be the actual truncated terms and designated
+    supports of Definition~\ref{def:al_scan_actual_energy_terms} for
+    $H,\Omega,\Delta,L$, retaining every original support label, and set
+    \begin{align}
+        E_i           & =\widetilde h_i\otimes I_C\otimes I_R, \\
+        \overline H_k & =\frac1k\sum_{b=0}^{k-1}
+        \left(\left(\sum_i\widetilde h_i\right)
+        \otimes I_C\otimes I_R\right)_b,\qquad \overline H_0=0.
+        \label{eq:al_scan_family_energy}
+    \end{align}
+    The subscript $b$ denotes insertion in copy $b$.
+
+    There exist $C_\beta\ge0$ and sequences
+    $\beta,\varepsilon:\mathbb N\to\mathbb R$ such that, for every
+    $k\in\mathbb N$,
+    \begin{align}
+        0\le\beta_k & \le C_\beta\log(k+2),   \\
+        0           & \le\varepsilon_k,\qquad
+        \lim_{k\to\infty}\varepsilon_k=0.
+    \end{align}
+    These choices precede the round $j$, replica count $k$, supplied
+    nonzero symmetric vector $\mathrm{pre}\in\operatorname{Sym}^k(\mathcal V)$,
+    interpolation parameters, and energy eigenvalue.
+    For every such $j,k,\mathrm{pre}$, let $\mathcal M_{j,k}(p)$ be
+    the actual interpolating root and set
+    \begin{align}
+        N_{j,k,\mathrm{pre}}(p)^2
+         & =\|\mathcal M_{j,k}(p)^{-1/4}\mathrm{pre}\|^2, \\
+        v_{j,k,\mathrm{pre}}(p)
+         & =\frac{\mathcal M_{j,k}(p)^{-1/4}\mathrm{pre}}
+        {N_{j,k,\mathrm{pre}}(p)}.
+    \end{align}
+    For this round, let $\mathcal L_{j,k,\mathrm{pre}}$,
+    $\mathcal G_{j,k,\mathrm{pre}}$, and $\mathcal E_{j,k,\mathrm{pre}}$
+    be the derivative, entropy-gain, and energy-error expressions in
+    Theorem~\ref{thm:al_scan_actual_transport_estimates}, with the actual
+    history and conditional-choice trees of $\mathscr D_j$.
+    In particular, the energy error retains both split probabilities:
+    writing $\mathcal J_{j,i}$ for the leaves splitting
+    $\widetilde X_i$, its expression is
+    \begin{align}
+        W_{j,i}(p) & =\sum_{b\in\mathcal J_{j,i}}\pi_{j,b}(p),                 \\
+        \mathcal E_{j,k,\mathrm{pre}}(p)
+                   & =\sum_i W_{j,i}(p)\sum_{b\in\mathcal J_{j,i}}\pi_{j,b}(p)
+        \int_{\mathbb R}m_{1/4}(u)
+        \int\eta_{i,b}(\theta)^{1/8}\,
+        d\mu_{\sigma_{j,b,u}(p)}(\theta)\,du.
+    \end{align}
+    Then for every $0<p<1$,
+    \begin{align}
+        -\frac{d}{dp}\log N_{j,k,\mathrm{pre}}(p)^2
+         & =\mathcal L_{j,k,\mathrm{pre}}(p),   \\
+        ka\mathcal G_{j,k,\mathrm{pre}}(p)
+        -C_{\mathrm{ent}}kaK a^{1/4}\ell^{e_{\mathrm{ent}}}-\beta_k
+         & \le\mathcal L_{j,k,\mathrm{pre}}(p).
+    \end{align}
+    For every $E_0\in\mathbb R$ satisfying
+    $\overline H_k\mathrm{pre}=E_0\mathrm{pre}$, the energy conclusion is
+    \begin{align}
+        \operatorname{Re}\langle v_{j,k,\mathrm{pre}}(p),
+        \overline H_k v_{j,k,\mathrm{pre}}(p)\rangle
+         & \le2E_0+C_{\mathrm{en}}a^2\ell^{e_{\mathrm{en}}}
+        \mathcal E_{j,k,\mathrm{pre}}(p)+\varepsilon_k.
+    \end{align}
+    For every $0\le p_0\le p_1\le1$,
+    \begin{align}
+        \int_{p_0}^{p_1}\bigl(ka\mathcal G_{j,k,\mathrm{pre}}(p)
+        -C_{\mathrm{ent}}kaK a^{1/4}\ell^{e_{\mathrm{ent}}}
+        -\beta_k\bigr)\,dp
+         & \le\log N_{j,k,\mathrm{pre}}(p_0)^2
+        -\log N_{j,k,\mathrm{pre}}(p_1)^2.
+    \end{align}
+    The common errors may depend on the fixed physical data, auxiliary
+    dimensions, $a$, and finite family, but are independent of
+    $j,k,\mathrm{pre},p,p_0,p_1,E_0$. This does not assert a uniform limit
+    when the system or auxiliary dimensions grow with $k$.
+    At $k=0$, the energy premise and $\mathrm{pre}\ne0$ force $E_0=0$.
+    No physical prevector or identification with a fixed physical ground
+    energy is asserted.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible,
+        thm:al_scan_actual_energy_terms,thm:al_scan_actual_fill_supports,
+        thm:al_scan_augmented_supports,thm:al_scan_nested_band_metrics,
+        thm:al_scan_actual_transport_dimension}
+    Choose the universal constants once from the finite-family form of
+    \cite[Proposition~7.4]{OpenAI2026AreaLaw}. For every $j<2nm$,
+    $s_j+1\le nm$, including the final charge at $s_j=nm-1$.
+    The scale assumptions give $m>0$ and $M=\lceil C_1nD\rceil>0$.
+    Split according to the parity of $j$. The actual fill and charge
+    constructions give admissibility, designated-support compatibility,
+    cross-band commutation for every $k$, and the moved-subsystem and
+    split-support dimension bounds by $\ell$. Both cases have the same
+    $K$, dimensions, and positive supported energy terms $E_i$.
+    Apply the finite-family theorem once to $\{\mathscr D_j\}_{j<2nm}$.
+    It chooses nonnegative common errors and the all-count logarithmic
+    bound before the round and vector. Finally the replica sum of
+    $E_i$ is exactly~(\ref{eq:al_scan_family_energy}); substitute this
+    identity only in the energy expression and its eigenvector premise.
+\end{proof}
+
+\begin{theorem}[Telescoping the actual round norms]
+    \label{thm:al_scan_actual_round_telescope}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_actualRoundData_logNormSq_sub,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_rootPath_one_eq_succ_zero,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_rootPath_one_of_last}
+    \leanok
+    \uses{def:al_scan_actual_round_family,thm:al_scan_actual_fill_endpoints}
+    Fix a scanner with $m,M>0$, positive factor dimensions, $t\ge0$,
+    and a replica count $k\ge0$. Let $\mathcal M_{j,k}(p)$ be the
+    actual round roots, and let $P_{s,k}$ be the root at parameter zero
+    of the fill after $s$ completed charges. Whenever $j+1<2nm$,
+    $\mathcal M_{j,k}(1)=\mathcal M_{j+1,k}(0)$. If $nm>0$, the last
+    charge satisfies $\mathcal M_{2nm-1,k}(1)=P_{nm,k}$.
+
+    For any supplied vector $\mathrm{pre}$ in the replica space, set
+    $N_{j,k,\mathrm{pre}}(p)^2
+        =\|\mathcal M_{j,k}(p)^{-1/4}\mathrm{pre}\|^2$ and
+    $(N^{\mathrm{fill}}_{s,k,\mathrm{pre}})^2
+        =\|P_{s,k}^{-1/4}\mathrm{pre}\|^2$. Then
+    \begin{align}
+        \sum_{j=0}^{2nm-1}
+        \bigl(\log N_{j,k,\mathrm{pre}}(0)^2
+        -\log N_{j,k,\mathrm{pre}}(1)^2\bigr)
+         & =\log (N^{\mathrm{fill}}_{0,k,\mathrm{pre}})^2
+        -\log (N^{\mathrm{fill}}_{nm,k,\mathrm{pre}})^2.
+        \label{eq:al_scan_actual_telescope}
+    \end{align}
+    For the zero vector, use the convention $\log0=0$. No symmetry
+    assumption is needed. If $n=0$, the sum is empty and both remaining
+    roots are $P_{0,k}$. The assertion also holds at $k=0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scan_actual_fill_endpoints}
+    For every integer $r\ge0$, let $B_{r,k}$ be the root at parameter
+    zero of the fill at stage $r/2$ when $r$ is even, and of the charge
+    at stage $(r-1)/2$ when $r$ is odd. The exact fill and charge
+    identities give $\mathcal M_{j,k}(0)=B_{j,k}$ and
+    $\mathcal M_{j,k}(1)=B_{j+1,k}$. Also
+    $B_{2s,k}=P_{s,k}$. With
+    $F(r)=\log\|B_{r,k}^{-1/4}\mathrm{pre}\|^2$, the sum in
+    (\ref{eq:al_scan_actual_telescope}) is
+    $\sum_{j<2nm}(F(j)-F(j+1))=F(0)-F(2nm)$.
+\end{proof}
+
+\begin{theorem}[Integrated entropy over all actual rounds]
+    \label{thm:al_scan_actual_round_entropy}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_entropy_integral_le_domainGraph,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_crossBandCommute}
+    \leanok
+    \uses{def:al_scan_actual_round_family,def:al_scan_physical_dimension_cap}
+    There exist universal real constants
+    $c_0,C_{\mathrm{ent}},e_{\mathrm{ent}}$, with $c_0>0$,
+    such that the following holds. Assume the geometric, Hamiltonian,
+    dimension, and smallness hypotheses of
+    Theorem~\ref{thm:al_scan_actual_round_transport}, in particular
+    $n>0$ and $a\ell\le c_0$. There exist $C_\beta\ge0$ and a sequence
+    $\beta:\mathbb N\to\mathbb R$, chosen before the replica count and
+    supplied vector, with $0\le\beta_k\le C_\beta\log(k+2)$.
+    For every $k\ge0$ and every nonzero symmetric vector
+    $\mathrm{pre}\in\operatorname{Sym}^k(\mathcal V)$,
+    \begin{align}
+        ka\sum_{j=0}^{2nm-1}\int_0^1
+        \mathcal G_{j,k,\mathrm{pre}}(p)\,dp
+         & \le \log (N^{\mathrm{fill}}_{0,k,\mathrm{pre}})^2
+        -\log (N^{\mathrm{fill}}_{nm,k,\mathrm{pre}})^2      \\
+         & \quad +2nm\bigl(C_{\mathrm{ent}}kaK a^{1/4}
+        \ell^{e_{\mathrm{ent}}}+\beta_k\bigr).
+        \label{eq:al_scan_actual_entropy_sum}
+    \end{align}
+    Here $t=a/2$, and the entropy gains are those of
+    Theorem~\ref{thm:al_scan_actual_round_transport}. The fixed physical
+    and auxiliary dimensions precede the choice of $\beta$.
+    No energy eigenvector equation or initial or final norm comparison
+    is assumed. At zero replicas the left side is zero and the total
+    error term is $2nm\beta_0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scan_actual_round_transport,thm:al_scan_actual_round_telescope,
+        thm:al_scan_nested_band_metrics}
+    Choose the universal constants and common error from
+    Theorem~\ref{thm:al_scan_actual_round_transport} once, before the
+    replica count and vector. Actual band nesting gives cross-band
+    commutation. Together with admissibility and $\mathrm{pre}\ne0$,
+    this gives integrability of each entropy gain on $[0,1]$ by the
+    integrated transport argument in
+    \cite[Proposition~7.4]{OpenAI2026AreaLaw}. Moving the constant error
+    outside each full-round integral gives
+    \begin{align}
+        ka\int_0^1\mathcal G_{j,k,\mathrm{pre}}(p)\,dp
+         & \le \log N_{j,k,\mathrm{pre}}(0)^2
+        -\log N_{j,k,\mathrm{pre}}(1)^2
+        +C_{\mathrm{ent}}kaK a^{1/4}\ell^{e_{\mathrm{ent}}}+\beta_k.
+    \end{align}
+    Sum over all $2nm$ rounds, including fills. The logarithmic terms
+    reduce by~(\ref{eq:al_scan_actual_telescope}), and the common error
+    occurs exactly $2nm$ times, giving~(\ref{eq:al_scan_actual_entropy_sum}).
+    This is the telescoping step of the scanner argument in
+    \cite[proof of Proposition~9.2]{OpenAI2026AreaLaw}.
 \end{proof}

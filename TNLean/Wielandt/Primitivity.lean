@@ -11,9 +11,7 @@ Authors: TNLean contributors
 import TNLean.Wielandt.Primitivity.Definitions
 import TNLean.Wielandt.Primitivity.EasyDirections
 import TNLean.Wielandt.Primitivity.Equivalence
-import TNLean.Wielandt.Primitivity.ImpliesIrreducible
 import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
-import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducibleAux
 import TNLean.Wielandt.Primitivity.Normal
 import TNLean.Wielandt.Primitivity.PrimitiveBridge
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank

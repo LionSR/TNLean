@@ -39,12 +39,6 @@ Unlike the tensor printed in arXiv:1703.09188, lines 1906–1943, the
 constituent uses `√2 H` and an output Z gate. -/
 def tensor : MPOTensor 4 2 := blockTwo decoratedSiteTensor
 
-/-- General physical blocking gives the same tensor after the maintained
-length-two index equivalence. -/
-theorem tensor_eq_blockTensor : tensor = fun i j ↦
-    blockTensor decoratedSiteTensor 2 (twoSiteBlockEquiv 2 i) (twoSiteBlockEquiv 2 j) :=
-  blockTwo_eq_blockTensor_reindex decoratedSiteTensor
-
 /-- Both matter bits complemented, in the established site encoding. -/
 def complementSite : Equiv.Perm (Fin 4) :=
   siteBits.trans ((Equiv.prodCongr (Equiv.subLeft (1 : ZMod 2))

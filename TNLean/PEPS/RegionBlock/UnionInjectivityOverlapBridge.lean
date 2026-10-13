@@ -274,13 +274,8 @@ omit [Fintype V] [DecidableRel G.Adj] in
 lies outside `R₁ ∪ R₂`, hence outside `R₁`. -/
 theorem isRegionBoundaryEdge_R₁_of_p0Outer {R₁ R₂ : Finset V} {e : Edge G}
     (h : IsP0OuterEdge (G := G) R₁ R₂ e) : IsRegionBoundaryEdge (G := G) R₁ e := by
-  obtain ⟨h1, h2⟩ := isP0OuterEdge_both_not_mem_R₂ (G := G) h
-  obtain ⟨hunion, _⟩ := h
-  rcases hunion with ⟨h1u, h2nu⟩ | ⟨h1nu, h2u⟩
-  · refine Or.inl ⟨(Finset.mem_union.mp h1u).resolve_right h1, ?_⟩
-    exact fun hc => h2nu (Finset.mem_union_left _ hc)
-  · refine Or.inr ⟨fun hc => h1nu (Finset.mem_union_left _ hc), ?_⟩
-    exact (Finset.mem_union.mp h2u).resolve_right h2
+  simp only [IsP0OuterEdge, IsRegionBoundaryEdge, Finset.mem_union] at *
+  grind
 
 omit [Fintype V] in
 /-- The `R₁` boundary label determines the `P₀`-outer label: if two configurations share their
