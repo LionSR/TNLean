@@ -129,7 +129,8 @@ theorem rootPath_augmented_compressed_bandProduct
   have hnorm : Transport.filteredNormSq M (ZOᴴ *ᵥ vO) = ‖w‖ ^ 2 :=
     Matrix.re_star_dotProduct_self_eq_norm_sq _
   simpa only [hpre, Transport.filteredVector, hnorm, Real.sqrt_sq (norm_nonneg w),
-    WithLp.ofLp_smul] using And.intro
+    WithLp.ofLp_smul, Transport.filteredRaw, w, Matrix.toEuclideanLin,
+    Matrix.toLpLin_apply, WithLp.ofLp_toLp] using And.intro
       (Transport.filteredNormSq_intertwine
         (MeanTree.posDef_eval (D.posDef_input hD ht hcomm) T).posSemidef
         hroot'.1.posSemidef ZS hroot'.2 hZ (ZOᴴ *ᵥ vO))
