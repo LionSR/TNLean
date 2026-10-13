@@ -3436,6 +3436,73 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   approximate-expansion case and composition with the quantum/sampling results
   remain open in [#8769](https://github.com/LionSR/TNLean/issues/8769).
 
+### Individual coefficients and pair-effect counts
+
+- **Declaration:** `TNLean.PEPS.PairEffect.EffectCircuit.IsTermwiseBounded r C`.
+- **Defined in:** `TNLean/PEPS/Approximation/EffectCircuitTermwiseCoefficientBounds.lean`.
+- **Meaning:** Every monomial in each prescribed nonprivate gate expansion has
+  at most $r$ pair effects and scalar coefficient of norm at most $C$.
+  Composition combines these conditions on the two chronological subcircuits;
+  adjoining a spectator register preserves them.
+- **Source:** Polynomial-PEPS Theorem 5.2, assumption 3 and the approximate
+  expansion clause, `04-compression.tex:143–149,199–208,590–600`, revision
+  `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+- **Sanctioned bridge:** `isExpansionBounded_of_isTermwiseBounded` derives the
+  bound $\sum_t |c_t|\le K C$ when each gate has at most $K$ monomials and
+  $C\ge0$. `exists_one_le_isExpansionBounded_of_termwise_power_bounds` derives
+  a polynomial coefficient-sum bound from polynomial bounds on counts and
+  individual coefficients. `IsTermwiseBounded.mono_coefficient` enlarges the
+  coefficient majorant on the same circuit, preserving its pair-effect bound.
+- **Caveat:** Local allowedness, contraction of the original operators, and
+  approximation error are separate conditions. This predicate contains no
+  coefficient-sum assumption or global density comparison. The new bridges
+  await Lean verification.
+
+### Message-containing approximation of the original gates
+
+- **Declaration:**
+  `TNLean.PEPS.PairEffect.EffectCircuit.IsMessageGateApproximation δ lists G`.
+- **Defined in:** `TNLean/PEPS/Approximation/MessageGateLists.lean`.
+- **Meaning:** Each original private map and each prescribed original gate is
+  a contraction. At a nonprivate gate occurrence the participant index has
+  cardinality different from one, every listed message monomial is allowed,
+  and the literal sum of the listed terms differs from that original gate
+  by at most $\delta$ in operator norm. The conditions are imposed separately
+  at each occurrence of the same chronology.
+- **Source:** Polynomial-PEPS Theorem 5.2, `04-compression.tex:32–43,137–149,590–600`,
+  revision `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+- **Sanctioned bridges:** `IsMessageGateApproximation.mono` enlarges the local
+  error budget. `isGateApproximation_expandMessageGateLists` exactly expands
+  the messages and retains the comparison with the prescribed original
+  operators, under the occurrence-preserving gate assignment.
+- **Caveat:** The predicate states local errors. It assumes no whole-circuit
+  norm estimate or comparison between physical densities. A zero budget
+  expresses exact local equality. The new bridges await Lean verification.
+
+### Counts and dimensions before expanding messages
+
+- **Declaration:**
+  `TNLean.PEPS.PairEffect.EffectCircuit.IsMessageResourceBounded r m K D C lists`.
+- **Defined in:** `TNLean/PEPS/Approximation/MessageGateLists.lean`.
+- **Meaning:** Each original nonprivate gate list has at most $K$ monomials.
+  Each term has at most $r$ pair effects, a scalar coefficient of norm at
+  most $C$, and at most $m$ message occurrences, each transferring an actual
+  register of dimension at most $D$. Repeated occurrences are counted
+  separately; empty lists and zero-dimensional messages are permitted.
+- **Source:** Polynomial-PEPS Theorem 5.2, `04-compression.tex:32–43,137–149,199–208`,
+  revision `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+- **Sanctioned bridges:** With $D\ge1$, `monomialCount_expandMessageGateLists_le`
+  bounds the expanded count by $\lceil K D^m\rceil$.
+  With D ≥ 1, C ≥ 0, and `IsMessageGateApproximation` supplying allowedness,
+  `isTermwiseBounded_expandMessageGateLists` bounds each expanded coefficient
+  by K C D^m and retains the original pair-effect bound.
+  `IsMessageResourceBounded.mono_dimension` enlarges the dimension bound on
+  the same original message lists.
+- **Caveat:** This predicate does not impose allowedness or contraction; these
+  belong to `IsMessageGateApproximation`. It bounds individual coefficients,
+  rather than assuming a bound on their sum. It has no private-memory or
+  source-Schmidt-rank dimension bound. The new bridges await Lean verification.
+
 ## Nested regional cylinders
 
 ### `TNLean.PEPS.dependentRegionCylinder`
