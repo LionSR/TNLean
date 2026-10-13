@@ -6476,9 +6476,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   two modules are removed. The canonical `Word.mapOwner_castLayouts`
   identity also supplies the relabelled cast comparison. These results
   require word equality, so their use before restriction does not infer
-  equality of restrictions from equality of evaluated operators. The
-  new provider and commutation have named axiom checks; elaboration is
-  pending.
+  equality of restrictions from equality of evaluated operators.
+  `Word.eval_heq` adds the evaluation consequence of structural word
+  equality under explicit input and output list identifications. It
+  replaces the two private evaluation-congruence proofs in
+  `AbsorbedRestriction` and `WordSelectedOwnerLocalPart`.
+  `Word.mapOwner_frameList_heq` gives the constructed-word identity for
+  owner relabelling of a framed register list. It replaces the two
+  private list-induction proofs in `WordOwnerAppendTailTransport` and
+  `WordSelectedOwnerLocalPart`; the incident-label source word uses this
+  same shared identity. Both results have exact named axiom checks.
+  Elaboration of the shared additions and refactored consumers is pending.
 - **Owner evaluation (2026-10-13):** `Word.eval_mapOwner_heq` in
   `WordOwnerEvaluation` identifies the mapped and original operators under
   equality of their ordered memory spaces. It uses the existing owner-memory

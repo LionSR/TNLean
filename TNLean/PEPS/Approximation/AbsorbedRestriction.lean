@@ -167,14 +167,6 @@ theorem Word.restrict_restrict_heq_of_implies {a b : Layout P}
           exact (restrict_castLayouts_word_heq g _ _ _ (w.sources_restrict f hs)).trans
             ((ih hs).trans (Word.castLayouts_heq _ _ _).symm)
 
-private theorem eval_word_heq {a b a' b' : Layout P}
-    (ha : a = a') (hb : b = b') {w : Word a b} {v : Word a' b'}
-    (h : HEq w v) : HEq w.eval v.eval := by
-  cases ha
-  cases hb
-  cases h
-  rfl
-
 /-- The actual twice-restricted operator is the singly restricted operator
 under the canonical identification of register lists.
 Source: polynomial-PEPS 04-compression.tex, lines 233–267 and 351–381. -/
@@ -183,7 +175,7 @@ theorem Word.restrict_restrict_eval_heq_of_implies {a b : Layout P}
     (h : ∀ p, g p = true → f p = true) :
     HEq ((w.restrict f hs).restrict g (w.sources_restrict f hs)).eval
       (w.restrict g hs).eval :=
-  eval_word_heq (restrict_restrict_eq_of_implies f g h a)
+  Word.eval_heq (restrict_restrict_eq_of_implies f g h a)
     (restrict_restrict_eq_of_implies f g h b) (w.restrict_restrict_heq_of_implies hs f g h)
 
 /-- Removing another party does not change the actual local operator at a

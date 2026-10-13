@@ -29,8 +29,9 @@ private theorem restrict_castLayouts_word_heq (g : Q → Bool)
     (hs : w.sources = []) :
     HEq ((w.castLayouts ha hb).restrict g ((sources_castLayouts w ha hb).trans hs))
       (w.restrict g hs) := by
-  rw [restrict_castLayouts]
-  exact castLayouts_heq _ _ _
+  cases ha
+  cases hb
+  rfl
 
 private theorem localMap_tail_heq {q : Q} {a b : Layout Q}
     (ha : ∀ r ∈ a, r.owner = q) (hb : ∀ r ∈ b, r.owner = q)

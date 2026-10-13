@@ -29,16 +29,6 @@ private theorem mapOwner_castLayouts_word_heq (g : P → Q) {a b a' b' : Layout 
   rw [mapOwner_castLayouts]
   exact castLayouts_heq _ _ _
 
-private theorem mapOwner_frameList_word_heq (g : P → Q) (tail : Layout P)
-    {a b : Layout P} (w : Word a b) :
-    HEq ((frameList tail w).mapOwner g)
-      (frameList (Layout.mapOwner g tail) (w.mapOwner g)) := by
-  induction tail with
-  | nil => rfl
-  | cons r tail ih =>
-      exact frame_heq ⟨g r.owner, r.space⟩
-        (Layout.mapOwner_append g tail a) (Layout.mapOwner_append g tail b) ih
-
 private theorem mapOwner_moveHead_word_heq (g : P → Q) (r : Reg P)
     (rs tail : Layout P) :
     HEq ((moveHead r rs tail).mapOwner g)
@@ -107,7 +97,7 @@ theorem mapOwner_appendTail_heq (g : P → Q) {a b : Layout P}
   have hinner := comp_heq
     (Layout.mapOwner_append g tail a) (Layout.mapOwner_append g tail b)
     (Layout.mapOwner_append g b tail)
-    (mapOwner_frameList_word_heq g tail w) (mapOwner_exchangeTwo_word_heq g tail b)
+    (mapOwner_frameList_heq g tail w) (mapOwner_exchangeTwo_word_heq g tail b)
   have houter := comp_heq
     (Layout.mapOwner_append g a tail) (Layout.mapOwner_append g tail a)
     (Layout.mapOwner_append g b tail)

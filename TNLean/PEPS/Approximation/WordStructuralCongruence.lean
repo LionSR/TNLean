@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.WordRestriction
+import TNLean.PEPS.Approximation.WordOwnerMap
 
 /-! # Structural congruences for chronological words
 
@@ -59,5 +60,33 @@ theorem castLayouts_heq {a b a' b' : Layout P}
   cases ha
   cases hb
   rfl
+
+/-- Equal constructed words on canonically identified input and output lists
+have equal evaluations under these same identifications. This implication
+does not pass an equality of complete operators through a restriction.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–267,
+409–434 and 565–588. -/
+theorem eval_heq {a b a' b' : Layout P}
+    (ha : a = a') (hb : b = b') {w : Word a b} {v : Word a' b'}
+    (h : HEq w v) : HEq w.eval v.eval := by
+  cases ha
+  cases hb
+  cases h
+  rfl
+
+/-- Relabelling owners commutes with framing by a list of spectator registers,
+as an identity of constructed words under the canonical concatenation
+identifications. Pair sources and noninjective owner maps are permitted.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–267,
+409–434 and 565–588. -/
+theorem mapOwner_frameList_heq {Q : Type} (f : P → Q) (rs : Layout P)
+    {a b : Layout P} (w : Word a b) :
+    HEq ((frameList rs w).mapOwner f)
+      (frameList (Layout.mapOwner f rs) (w.mapOwner f)) := by
+  induction rs with
+  | nil => rfl
+  | cons r rs ih =>
+      exact frame_heq ⟨f r.owner, r.space⟩
+        (Layout.mapOwner_append f rs a) (Layout.mapOwner_append f rs b) ih
 
 end TNLean.PEPS.PairEffect.Word

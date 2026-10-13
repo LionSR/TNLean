@@ -14,7 +14,8 @@ set_option linter.hashCommand false
 open TNLean.PEPS.PairEffect.Word
 
 run_cmd do
-  let decls := #[``comp_heq, ``frame_heq, ``id_heq, ``swap_heq, ``castLayouts_heq]
+  let decls := #[``comp_heq, ``frame_heq, ``id_heq, ``swap_heq, ``castLayouts_heq,
+    ``mapOwner_frameList_heq, ``eval_heq]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   for decl in decls do

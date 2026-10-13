@@ -479,6 +479,7 @@ complete operators. We give the corresponding exact constructions.
     \lean{TNLean.PEPS.PairEffect.Word.id_heq}
     \lean{TNLean.PEPS.PairEffect.Word.swap_heq}
     \lean{TNLean.PEPS.PairEffect.Word.castLayouts_heq}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_heq}
     \uses{def:peps_party_layout,thm:peps_party_restriction}
     Identify equal ordered input, intermediate and output register
     lists. If chronological compositions $W$ and $W'$ agree under
@@ -488,7 +489,10 @@ complete operators. We give the corresponding exact constructions.
     Identity compositions on equal lists agree, and exchanging the
     same two registers beside equal spectator lists gives the same
     composition. Identifying equal input and output lists preserves
-    the original composition itself. These assertions concern the
+    the original composition itself. If two constructed words agree
+    under equalities of their ordered input and output lists, their
+    evaluated operators also agree under the induced canonical
+    memory identifications. These assertions concern the
     constructed compositions and permit pair sources and arbitrary
     local maps. They are compatibility identities for the register
     operations in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
@@ -499,7 +503,8 @@ complete operators. We give the corresponding exact constructions.
     Replace each equal register list by its identified list, and each
     equal composition by the same composition. Both sides then have
     identical chronological operations, including the identity,
-    frame and exchange operations.
+    frame and exchange operations. Evaluating the same constructed
+    word gives the same operator on the identified input and output memories.
 \end{proof}
 
 \begin{theorem}[Relabelling equal register lists]
@@ -585,4 +590,33 @@ complete operators. We give the corresponding exact constructions.
     $W^fR_{f,a}=R_{f,b}W$ therefore gives $W^f x=W x$ for every
     input $x$. Equality on all inputs identifies the two continuous
     linear operators.
+\end{proof}
+
+\begin{theorem}[Relabelling a framed word]
+    \label{thm:peps_owner_framed_word}
+    \lean{TNLean.PEPS.PairEffect.Word.mapOwner_frameList_heq}
+    \uses{def:peps_owner_composition,def:peps_owner_layout,
+        thm:peps_word_structural_congruence}
+    Let $f:P\to Q$ be any map of party labels, let $W:a\to b$
+    be an arbitrary chronological word, and let $s$ be an ordered
+    list of spectator registers. Write $F_s(W):sa\to sb$ for
+    framing $W$ by $s$, leaving these registers unchanged.
+    Under the canonical concatenation identifications, the constructed
+    words satisfy $(F_s(W))^f=F_{s^f}(W^f)$.
+    Pair sources are permitted, including those whose owners merge,
+    and $f$ need not be injective. This is an auxiliary identity for
+    the register operations in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 233--267, 409--434 and 565--588.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:peps_owner_composition,def:peps_owner_layout,
+        thm:peps_word_structural_congruence}
+    Induct on $s$. For the empty list, both constructions are
+    $W^f$. For a first register $r$, relabelling changes its owner
+    and preserves its space. Frame the inductive identity by this
+    relabelled register, identifying the input and output
+    concatenations by $(sa)^f=s^f a^f$ and $(sb)^f=s^f b^f$.
+    The relabelled core is the same word $W^f$ in both constructions.
 \end{proof}
