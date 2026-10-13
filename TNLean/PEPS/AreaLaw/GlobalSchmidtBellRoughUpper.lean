@@ -109,7 +109,14 @@ theorem eventually_suppliedGlobalSchmidtBellPrevector_rough_upper
       TensorPower.norm_sq_labelProj_compressedTypicalSite_prod β X k Ω E (ell k)] using! hk)
   refine ⟨c, hc, Real.tendsto_bellOverlapRemainder E.card c K,
     hu.mono fun k hk n Z hZ hZZ U Y hUY hnest hXY T Bsh Bexc hsh hmatch ↦ ?_⟩
-  run_tac Lean.throwError (α := Unit) "rough-upper eventual comparison introduced"
-  done
+  have hY : ∀ j g, Y j g \ X = Y j g := fun j g ↦
+    Finset.sdiff_eq_self_of_disjoint
+      ((hXY j g).mono_right Finset.subset_union_right).symm
+  have hcoef : 8 * (1 / 4 : ℝ) * (2 / (K : ℝ)) * (K : ℝ) = 4 := by
+    field_simp [ne_of_gt (show (0 : ℝ) < K from
+      Nat.cast_pos.mpr (lt_of_lt_of_le (by decide : 0 < 8) hK))]
+    norm_num
+  simpa only [hY, hcoef] using!
+    (hk n Z hZ hZZ K U Y hUY hnest hXY T Bsh Bexc hsh hmatch (1 / 4) (by norm_num))
 
 end TNLean.PEPS.AreaLaw
