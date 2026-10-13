@@ -7,14 +7,15 @@ import TNLean.PEPS.AreaLaw.Scan.GlobalReplicaEnergyCoordinates
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
-/-! Standard-axiom check for the global replica energy identity. -/
+/-! Standard-axiom checks for the global replica energy and its expectation. -/
 
 run_cmd do
-  let decl := ``TNLean.PEPS.AreaLaw.Scan.copyMean_augmentOperator_eq_globalReplicaMeanHamiltonian
-  unless (← Lean.getEnv).contains decl do
-    throwError "Missing declaration {decl}"
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  let axioms ← Lean.collectAxioms decl
-  unless axioms.all (allowed.contains ·) do
-    throwError "Unexpected axioms for {decl}: {axioms}"
-  Lean.logInfo m!"{decl}: {axioms}"
+  for decl in #[``TNLean.PEPS.AreaLaw.Scan.copyMean_augmentOperator_eq_globalReplicaMeanHamiltonian,
+      ``TNLean.PEPS.AreaLaw.Scan.star_dotProduct_copyMean_augmentOperator] do
+    unless (← Lean.getEnv).contains decl do
+      throwError "Missing declaration {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (allowed.contains ·) do
+      throwError "Unexpected axioms for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"
