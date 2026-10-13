@@ -126,6 +126,20 @@ theorem exists_bootstrap_principal_energy_bound
             (mul_nonneg hC₁ (Real.rpow_nonneg hn₀.le _))
         _ = (C₁ * (X.K n : ℝ)) * (n : ℝ) ^ (X.ell + X.mu) := by
           rw [Real.rpow_add hn₀]; ring
+  have ha : X.a 4 n ≤ (n : ℝ) ^ (-44 * X.nu) :=
+    calc
+      X.a 4 n ≤ (4 * C₁) / (n : ℝ) ^ (BootstrapParameters.g0 e₀ - X.ell) :=
+        (div_le_div_iff₀ hK₀ (Real.rpow_pos_of_pos hn₀ _)).2 (by nlinarith [hpowK])
+      _ = (4 * C₁) * (n : ℝ) ^ (-(BootstrapParameters.g0 e₀ - X.ell)) := by
+        rw [div_eq_mul_inv, Real.rpow_neg hn₀.le]
+      _ ≤ (n : ℝ) ^ X.nu * (n : ℝ) ^ (-(BootstrapParameters.g0 e₀ - X.ell)) :=
+        mul_le_mul_of_nonneg_right hC₁n (Real.rpow_nonneg hn₀.le _)
+      _ = (n : ℝ) ^ (X.nu - (BootstrapParameters.g0 e₀ - X.ell)) := by
+        rw [sub_eq_add_neg, Real.rpow_add hn₀]
+      _ ≤ (n : ℝ) ^ (-44 * X.nu) :=
+        Real.rpow_le_rpow_of_exponent_le hn₁ (by
+          dsimp only [X, BootstrapParameters.ell, BootstrapParameters.nu]
+          linarith)
   done
 
 end TNLean.PEPS.AreaLaw.Scan
