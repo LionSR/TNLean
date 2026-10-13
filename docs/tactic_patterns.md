@@ -6891,6 +6891,23 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** These are distinct uses of existing isometry and CFC results, below
   the threshold for any additional tactic or general framework.
 
+### Hermiticity of a doubled Hamiltonian — candidate (2026-10-13)
+
+- **Pattern:** unfold `Matrix.doubledHamiltonian`, distribute the adjoint
+  through its sum and Kronecker products, and use the original matrix's
+  Hermitian identity and the adjoint identity for `1`.
+- **Seen:** two local proofs, `hDH` in
+  `TNLean/PEPS/Approximation/SwappedSquareHamiltonianInteraction.lean`
+  and `hDK` in
+  `TNLean/PEPS/Approximation/SupportedPhysicalBufferGaussian.lean`.
+- **Abstraction:** if another occurrence is needed, consider a theorem
+  that `A.IsHermitian` implies `(Matrix.doubledHamiltonian A).IsHermitian`
+  beside the doubled-operator definition in QICLean.
+- **Notes:** the present proofs use the same existing adjoint identities.
+  The statement needs neither nonempty matrix indices nor Hermiticity of
+  each original local interaction term. No new helper is introduced at
+  these two occurrences.
+
 ### Coordinate exponential and canonical partial trace — candidate (2026-10-07)
 
 - **Pattern:** replace one indexed factor in a reverse product by a linear
