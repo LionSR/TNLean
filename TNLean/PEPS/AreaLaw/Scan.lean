@@ -9,12 +9,16 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Scan
 
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeData
+import TNLean.PEPS.AreaLaw.Scan.ActualChargeParameterBound
 import TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms
 import TNLean.PEPS.AreaLaw.Scan.ActualEntropySampling
 import TNLean.PEPS.AreaLaw.Scan.ActualHistory
 import TNLean.PEPS.AreaLaw.Scan.ActualMarginalTails
+import TNLean.PEPS.AreaLaw.Scan.ActualParameterIntegral
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundEntropy
+import TNLean.PEPS.AreaLaw.Scan.ActualRoundParameterIntegral
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport
+import TNLean.PEPS.AreaLaw.Scan.ActualScanMeasures
 import TNLean.PEPS.AreaLaw.Scan.ActualTransportEstimates
 import TNLean.PEPS.AreaLaw.Scan.AmbientDepth
 import TNLean.PEPS.AreaLaw.Scan.AncestryCover
@@ -66,6 +70,7 @@ import TNLean.PEPS.AreaLaw.Scan.HistoryWeights
 import TNLean.PEPS.AreaLaw.Scan.NestedBandMetric
 import TNLean.PEPS.AreaLaw.Scan.OffsetDilution
 import TNLean.PEPS.AreaLaw.Scan.OldStateIntegral
+import TNLean.PEPS.AreaLaw.Scan.OldStateParameterIntegral
 import TNLean.PEPS.AreaLaw.Scan.OriginalTruncation
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBadHistoryDecay
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBandCommutation
@@ -105,4 +110,7 @@ import TNLean.PEPS.AreaLaw.Scan.TargetTypicalWindow
 import TNLean.PEPS.AreaLaw.Scan.TerminalSplits
 import TNLean.PEPS.AreaLaw.Scan.TimedChargePaths
 import TNLean.PEPS.AreaLaw.Scan.TransportDimension
+import TNLean.PEPS.AreaLaw.Scan.TransportRound
+import TNLean.PEPS.AreaLaw.Scan.TransportRoundEnergy
+import TNLean.PEPS.AreaLaw.Scan.TransportRoundParameterIntegral
 import TNLean.PEPS.AreaLaw.Scan.TypicalReplicaAbsorption
