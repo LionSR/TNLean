@@ -3,11 +3,12 @@
     \lean{TNLean.PEPS.globalVertexTensorMap_virtualBondProduct,
         TNLean.PEPS.regionParentGroundSpace_eq_span_of_isVertexInjective_of_cover,
         TNLean.PEPS.ker_regionParentHamiltonian_eq_span_of_isVertexInjective_of_cover,
-        TNLean.PEPS.finrank_regionParentGroundSpace_eq_one_of_isVertexInjective_of_cover}
+        TNLean.PEPS.finrank_regionParentGroundSpace_eq_one_of_isInjective_of_cover}
     \leanok
     \uses{thm:peps_covering_parent_virtual_image,
         thm:peps_regional_virtual_conditions_bell,
-        thm:peps_bell_product_physical_image}
+        thm:peps_bell_product_physical_image,
+        def:peps_injective_tensor}
     Let the site tensors on a finite graph be injective. Suppose a
     collection of regions contains every vertex in some region and
     contains the two endpoints of every edge together in some region.
@@ -16,9 +17,9 @@
         \mathcal G=\operatorname{span}\{\Psi(A)\}.
     \]
     Every finite positive interaction family with the genuine regional
-    kernels has this same zero-energy space. If all bond dimensions
-    are positive, the closed vector is nonzero and the ground space
-    is one-dimensional. The span formula also holds when a bond
+    kernels has this same zero-energy space. If the tensor is an injective
+    PEPS tensor, so that all bond dimensions are positive, the closed vector
+    is nonzero and the ground space is one-dimensional. The span formula also holds when a bond
     dimension vanishes, in which case the span can be zero.
 
     This is the covering-region form of the virtual-pair argument in

@@ -60,6 +60,18 @@ def mapOwner (f : P → Q) : {ℓ ℓ' : Layout P} → Word ℓ ℓ' →
       (Layout.mapOwner f ℓ)
   | _, _, .frame r w => .frame ⟨f r.owner, r.space⟩ (mapOwner f w)
 
+/-- Changing owners commutes with identifying equal input and output lists.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 383–434
+and 565–588. -/
+theorem mapOwner_castLayouts (f : P → Q) {a b a' b' : Layout P}
+    (w : Word a b) (ha : a = a') (hb : b = b') :
+    (w.castLayouts ha hb).mapOwner f =
+      (w.mapOwner f).castLayouts (congrArg (Layout.mapOwner f) ha)
+        (congrArg (Layout.mapOwner f) hb) := by
+  cases ha
+  cases hb
+  rfl
+
 /-- Grouping owners preserves allowedness of the actual operations.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–427. -/
 theorem isAllowed_mapOwner (f : P → Q) {ℓ ℓ' : Layout P}

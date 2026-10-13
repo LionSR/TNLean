@@ -1994,10 +1994,14 @@ Ref.~\cite{Molnar2018NormalPEPS}; source file
           hypotheses, since the families of gauges it compares are typed by the
           identification of the two bond spaces that the existence theorem
           produces.
-    \item \emph{Positive bonds and connectivity.}  These are the
-          counterexample-backed corrections carried over from the injective
-          theorem (\path{docs/paper-gaps/peps_injective_ft_section3_route.tex}
-          and \path{docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex});
+    \item \emph{Nonzero bonds and connectivity.}  The nonzero virtual bond
+          spaces are the source's convention, carried by the hypothesis on two
+          normal PEPS tensors
+          \leanid{TNLean.PEPS.NormalPEPSPairHypotheses}
+          (\path{docs/paper-gaps/peps_injective_ft_section3_route.tex}).
+          Connectivity is the counterexample-backed correction carried over
+          from the injective theorem
+          (\path{docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex});
           the scalar absorption is exactly the step that requires
           connectivity, matching the source's remark that the proportionality
           constants can be incorporated into the gauges.
@@ -2062,8 +2066,9 @@ lemma cancels the common blocked region against both sides.  The conjunction
 predicate of the formal hypotheses, each region injective for both tensors
 at once, is therefore the source's hypothesis set, and the connected-graph
 entry \path{thm:fundamentalTheorem_normalPEPS_connected} no longer counts it
-as a restriction; the remaining additions against the source statement are
-the counterexample-backed positivity and connectivity corrections shared
+as a restriction. The nonzero bond spaces are the source's convention,
+carried by the normal pair hypothesis; the remaining addition against the
+source statement is the counterexample-backed connectivity correction shared
 with the injective theorem.
 
 The source's remark after the theorem (line 1584 of
@@ -2329,7 +2334,8 @@ general-graph gauge-equivalence theorem
 \leanid{TNLean.PEPS.fundamentalTheorem_normalPEPS} now cover the corresponding
 square-lattice content without single-site injectivity: the former uses the stated
 rectangle-injectivity, matched-bond, same-state, and positivity hypotheses, while
-the latter uses the paired blocking, single-crossing, same-state, positivity, and
+the latter uses the normal pair hypothesis, which carries the paired blocking and
+the nonzero bond spaces, together with the single-crossing, same-state, and
 connectivity hypotheses. Gone are: the conditional
 statements themselves (\path{fundamentalTheorem_normalSquarePEPS},
 \path{fundamentalTheorem_normalSquarePEPS_of_modScalarGauge},
@@ -2544,8 +2550,8 @@ A site-dependent chain with one dimension per bond is represented by
 \leanid{TNLean.PEPS.cycleRotate} is the cyclic successor $v\mapsto v+1$, and
 \leanid{TNLean.PEPS.Tensor.cycleShift} transports along its inverse, so that
 the tensor at site $v$ is $A_{v+1}$, exactly the family displayed at source
-lines 1819--1826. Vertex injectivity is preserved by graph transport
-(\leanid{TNLean.PEPS.IsVertexInjective.transport}). Hence the injective PEPS
+lines 1819--1826. Injectivity, including nonzero virtual spaces, is preserved
+by graph transport (\leanid{TNLean.PEPS.Tensor.IsInjective.transport}). Hence the injective PEPS
 Fundamental Theorem applies to the original tensor and its shifted transport:
 \leanid{TNLean.PEPS.gaugeEquiv_cycleShift_of_isCycleShiftInvariantState}
 delivers the source's bond gauges. Reading its bond-dimension equality through
@@ -2553,14 +2559,14 @@ the rotation of successor edges gives
 \leanid{TNLean.PEPS.bondDim_cycleSuccEdge_add_one_eq_of_isCycleShiftInvariantState},
 and cyclic induction gives equality on every pair of cycle edges in
 \leanid{TNLean.PEPS.bondDim_eq_of_isCycleShiftInvariantState}. These results
-carry the explicit positivity assumption inherited from the corrected
-injective Fundamental Theorem; it excludes empty virtual spaces. They also
-assume at least three sites, the hypothesis of the injective MPS Fundamental
+take the injective tensor hypothesis of the injective Fundamental Theorem,
+which carries the source's convention that virtual spaces are nonzero; this is
+not a restriction. They also assume at least three sites, the hypothesis of the injective MPS Fundamental
 Theorem at source lines 688--725 that the proof invokes at line 1828.
 
 The repeated-tensor implication in
 (\ref{eq:peps_normal_ft_section3_route_cyclic_shift_repeated_tensor}) is now
-formalized end to end for positive bond dimensions on at least three sites.
+formalized end to end on at least three sites.
 Its gauge calculation is first proved for a family $A_i$ with one common bond
 dimension:
 \begin{align}
@@ -2598,12 +2604,12 @@ lemmas \leanid{TNLean.PEPS.Tensor.stateCoeff_reindexMPSChain},
 that this identification preserves the closed-state coefficients,
 injectivity, and cyclic-shift invariance. Applying the uniform theorem gives
 \leanid{TNLean.PEPS.exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond},
-the positive-bond, at-least-three-site form of
+the at-least-three-site form of
 (\ref{eq:peps_normal_ft_section3_route_cyclic_shift_repeated_tensor}). The
 Blueprint records this proved restriction as
 \path{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond_pos}.
 
-\emph{Verdict: the corrected positive-bond, at-least-three-site theorem is
+\emph{Verdict: the corrected at-least-three-site theorem is
     complete.} It follows the proof at source lines 1807--1890: equality of the
 bond dimensions, explicit identification of the equal virtual spaces, and the
 $L_i,R_i$ telescoping and repeated-tensor construction. It introduces neither
@@ -2650,9 +2656,9 @@ Translation invariance of the represented state is
 \leanid{TNLean.PEPS.IsTorusTranslationInvariantState}. It gives equality of
 the state with every transported tensor through
 \leanid{TNLean.PEPS.sameState_transport_of_isTorusTranslationInvariantState}.
-Transport preserves vertex injectivity, and the virtual-operation algebra
+Transport preserves injectivity, and the virtual-operation algebra
 isomorphism from the proof of the injective Fundamental Theorem,
-\leanid{TNLean.PEPS.bondDim_eq_of_isVertexInjective_sameState}, then shows
+\leanid{TNLean.PEPS.bondDim_eq_of_isInjective_sameState}, then shows
 that the bond dimension at an edge agrees with the dimension at every
 translate. Since translations act transitively on each orientation class,
 \leanid{TNLean.PEPS.torusUniformBondDim_of_isTorusTranslationInvariantState}
@@ -2662,7 +2668,7 @@ dimensions agree. The corresponding blueprint entry is
 
 The full source corollary is recorded separately as
 \path{cor:exists_constant_injectivePEPS_of_translationInvariantState} and
-remains not ready. Its open conclusion is the existence of a vertex-injective
+remains not ready. Its open conclusion is the existence of an injective
 translation-invariant tensor \(B\), with the same bond-dimension function and
 the same represented state. Since the source gives no two-dimensional proof,
 the formalization must derive this construction from the translation
@@ -2671,9 +2677,9 @@ plaquette relation, seam condition, or compatibility datum as if it were part
 of the cited statement.
 
 \emph{Verdict: partial formalization.} The source's orientation-wise bond-
-dimension equalities are complete for a vertex-injective PEPS on a discrete
-torus of width and height greater than one, under the
-explicit positive-bond convention documented in
+dimension equalities are complete for an injective PEPS on a discrete
+torus of width and height greater than one, with the nonzero virtual-space
+convention of the injective tensor hypothesis documented in
 \path{docs/paper-gaps/peps_injective_ft_section3_route.tex}. Crucially, the
 input remains site-dependent and only its represented state is assumed
 translation invariant. The translation-invariant description by a single

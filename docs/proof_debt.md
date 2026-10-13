@@ -23,6 +23,12 @@ The process has these artifacts:
   deletable lines* (`name: 'proof-shrink-tournament'`).
 - `scripts/loc_report.py` — the deterministic size snapshot feeding the
   Metrics table.
+- `scripts/zero_reference_scan.py` — the exact-head residue of ledger entry
+  S2: every public, unattributed declaration whose final name component
+  occurs nowhere but at its own definition across the Lean tree, the
+  blueprint, `docs/`, `Notes/`, `Papers/` and `scripts/`, iterated so that
+  helpers used only by dead code are listed too. Its output is a candidate
+  list; each wave still checks the cited paper passage before deleting.
 - The `find-simplification` skill of texra-lean-skills — the hand-driven
   audit for one directory, PR, or weekly slice: candidate classes, consumer
   classification, proof-by-build, and recording. Its TNLean addendum,

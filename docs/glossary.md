@@ -247,9 +247,9 @@ normalizations.
   Proposition 3(a), `Papers/0909.5347/main.tex:403-409` and `:501-509`;
   Wolf Chapter 6, Theorem 6.8.
 - **Sanctioned bridges:**
-  `MPSTensor.primitivePaper_iff_hasEventuallyFullKrausRank`,
-  `MPSTensor.primitivePaper_iff_stronglyIrreducible`, and
-  `MPSTensor.wolf_theorem_6_8_kraus_span`.
+  `MPSTensor.primitivePaper_iff_hasEventuallyFullKrausRank`, which is also
+  the Kraus-span form of Wolf Theorem 6.8, and
+  `MPSTensor.primitivePaper_iff_stronglyIrreducible`.
 - **Caveat:** each stated equivalence requires `[NeZero D]` and the explicit
   left-canonical normalization `∑ i, (A i)ᴴ * A i = 1`. The unconditional
   directions `MPSTensor.isPrimitivePaper_of_hasEventuallyFullKrausRank` and
@@ -440,7 +440,52 @@ normalizations.
   `TNLean.PEPS.regionBlockedTensorInjective_of_isVertexInjective`.
 - **Caveat:** the last bridge requires
   `∀ e, 0 < A.bondDim e`. Function injectivity of the raw indexing function is
-  strictly weaker and is not the sanctioned notion.
+  strictly weaker and is not the sanctioned notion. Vertex injectivity alone
+  admits zero-dimensional bonds; source-facing theorems take
+  `TNLean.PEPS.Tensor.IsInjective` instead.
+
+#### `TNLean.PEPS.Tensor.IsInjective`
+
+- **Declaration:** `TNLean.PEPS.Tensor.IsInjective (A : Tensor G d) : Prop`, a
+  structure with fields `isVertexInjective : IsVertexInjective A` and
+  `bondDim_pos : ∀ e, 0 < A.bondDim e`.
+- **Defined in:** `TNLean/PEPS/Defs.lean`.
+- **Meaning:** an injective PEPS tensor: vertex injective, with every virtual
+  bond space nonzero.
+- **Source:** arXiv:1804.04964 §3, `Papers/1804.04964/paper_normal.tex:979-981`
+  for injectivity, together with the section's standing convention that virtual
+  bond spaces are nonzero; recorded as a Local fix in
+  `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+- **Sanctioned bridges:** the two field projections, the anonymous constructor,
+  and `TNLean.PEPS.Tensor.IsInjective.transport`.
+- **Caveat:** blocked, coarse, reindexed and transported tensors inside proofs
+  keep `IsVertexInjective` with positivity derived or stated separately; only
+  the source-facing theorems (the injective Fundamental Theorem, its uniqueness
+  clause, their cycle and torus corollaries, and the parent-Hamiltonian
+  support, rank and one-dimensionality results on general graphs) take this
+  structure; the span and kernel descriptions of the parent ground space keep
+  `IsVertexInjective` alone.
+
+#### `TNLean.PEPS.NormalPEPSPairHypotheses`
+
+- **Declaration:** `TNLean.PEPS.NormalPEPSPairHypotheses (A B : Tensor G d)`, a
+  structure extending `NormalPEPSBlockingHypotheses` at the doubly injective
+  assignment of `A` and `B`, with fields `bondDim_pos_left` and
+  `bondDim_pos_right`.
+- **Defined in:** `TNLean/PEPS/NormalBondDimension.lean`.
+- **Meaning:** two normal PEPS tensors in the setting of the general normal
+  Fundamental Theorem: shared edge blockings and one-site comparison regions,
+  each region injective for both tensors, and every virtual bond space of both
+  tensors nonzero.
+- **Source:** arXiv:1804.04964 §3, theorem labelled `normal`,
+  `Papers/1804.04964/paper_normal.tex:1576-1583`, with normality as defined at
+  line 1318; the nonzero bond spaces are recorded as a Local fix in
+  `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+- **Sanctioned bridges:** the structure projections and the structure-instance
+  constructor.
+- **Caveat:** it carries data (the blocking regions), so it is a `Type`, not a
+  `Prop`. The one-edge and coherent-frame steps keep explicit positivity,
+  because they see their tensors only through blocking data.
 
 #### `TNLean.PEPS.RegionBlockedTensorInjective`
 

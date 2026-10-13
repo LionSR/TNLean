@@ -242,21 +242,6 @@ theorem pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop_pe
     (fun r hr =>
       pairIdentity_mem_pairWordTupleSpan_of_pairWordTupleSpanTop A B (hwindow r hr))
 
-/-- For the Burnside–Jacobson all-words span argument, it suffices to produce
-one period and a full residue window of homogeneous span-top certificates. -/
-theorem pairIdentity_mem_pairWordTupleSpan_eventually_of_pairAllWordsSpanTop_period_window
-    {D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (_hSpan : PairAllWordsSpanTop A B)
-    {start period : ℕ} (hperiod_pos : 0 < period)
-    (hperiod : PairWordTupleSpanTop A B period)
-    (hwindow : ∀ r : ℕ, r < period → PairWordTupleSpanTop A B (start + r)) :
-    ∃ L : ℕ, ∀ n : ℕ, n ≥ L →
-      ((1 : Matrix (Fin D₁) (Fin D₁) ℂ), (1 : Matrix (Fin D₂) (Fin D₂) ℂ)) ∈
-        Submodule.span ℂ (Set.range (pairWordTuple A B n)) :=
-  pairIdentity_mem_pairWordTupleSpan_eventually_of_pairWordTupleSpanTop_period_window
-    A B hperiod_pos hperiod hwindow
-
 /-- **Cumulative pair span ⇒ homogeneous pair span, conditional on identity padding.**
 
 From a full cumulative pair span up to length `S` (`hCum`) and the

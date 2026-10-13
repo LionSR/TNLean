@@ -87,38 +87,7 @@ Its marginals are those of the same final normalized vector defined in
     Set $D_j=\widehat{BK_j-K_jB}_{X_j}$ and
     $\Delta_j=P_j^+D_jP_j^-\Omega$. Every line in the following diagram
     carries the full space $\mathcal H_V$.
-    % Formula: (Delta_j)_sigma = sum_{alpha,beta,gamma}
-    % (P_j^+)_{sigma,alpha} (D_j)_{alpha,beta}
-    % (P_j^-)_{beta,gamma} Omega_gamma.
-    % Source: 03-patches.tex lines 134--149, adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-    % Ink-to-index map: every wire is a global configuration index.
-    % D_j is the identity extension of the regional commutator; P_j^+ and
-    % P_j^- are global ordered products, not operators on X_j.
-    % Contractions: alpha, beta, gamma, in that left-to-right order.
-    % Open leg: sigma on the left. Boundary signature: phys:w.
-    % Action begins at Omega on the right: P_j^-, then D_j, then P_j^+.
-    % No tensor-factor decomposition, nesting, or commutation is assumed.
-    \begin{center}
-        \tenkzkernel
-        \begin{tenkz}[rows={wire}, cols=7, bonds=none]
-            \tn[at=(1,1), name=coordinateouter, skin=box,
-                ports={180:physical, 0:physical}]{P_j^+}
-            \tn[at=(1,3), name=coordinateinsert, skin=box,
-                ports={180:physical, 0:physical}]{D_j}
-            \tn[at=(1,5), name=coordinateinner, skin=box,
-                ports={180:physical, 0:physical}]{P_j^-}
-            \tn[at=(1,7), name=coordinatestate, skin=box,
-                ports={180:physical}]{\Omega}
-            \tnwire[name=coordinateoutput]{open w}{coordinateouter.180}
-            \tnwire[name=coordinatealpha]{coordinateouter.0}{coordinateinsert.180}
-            \tnwire[name=coordinatebeta]{coordinateinsert.0}{coordinateinner.180}
-            \tnwire[name=coordinategamma]{coordinateinner.0}{coordinatestate.180}
-            \tnmark[form=label, label pos=n]{on coordinateoutput 0.5}{$\sigma$}
-            \tnmark[form=label, label pos=n]{on coordinatealpha 0.5}{$\alpha$}
-            \tnmark[form=label, label pos=n]{on coordinatebeta 0.5}{$\beta$}
-            \tnmark[form=label, label pos=n]{on coordinategamma 0.5}{$\gamma$}
-        \end{tenkz}
-    \end{center}
+    \input{figures/peps_patch_first_variation}
     Starting at $\Omega$ on the right, $P_j^-$ acts first, $D_j$ second,
     and $P_j^+$ last. The two outer products need not be supported on $X_j$.
 \end{theorem}

@@ -39,13 +39,6 @@ private theorem restrict_allMapped_localPart {a b : Layout P} (w : Word a b) :
   rw [partySelector_none] at h
   exact h
 
-private theorem restrict_castInput_eval_heq {Q : Type} (f : Q → Bool)
-    {a b a' : Layout Q} (w : Word a b) (h : a = a') (hs : w.sources = []) :
-    HEq (((w.castInput h).restrict f ((Word.sources_castInput _ _).trans hs)).eval)
-      ((w.restrict f hs).eval) := by
-  cases h
-  rfl
-
 namespace SourceCircuit
 private theorem restrict_sources_partialWord_all_eq_nil {a b : Layout P}
     (w : SourceCircuit a b) (ξ : Choices (fun _ : P ↦ true) w) :
@@ -102,7 +95,7 @@ theorem restrict_partialResidual_all_eval_heq_emptyGateScalar
       (sources_partialResidual (fun _ : P ↦ true) w ξ)).eval)
       (w.emptyGateScalar • ContinuousLinearMap.id ℂ ℂ) := by
   unfold partialResidual Word.residualInSlots
-  exact (restrict_castInput_eval_heq Option.isNone _ _
+  exact (Word.restrict_castInput_eval_heq Option.isNone _ _
     (partialWord (fun _ : P ↦ true) w ξ).sources_localPart).trans
       (restrict_partialWord_all_localPart_eval_heq_emptyGateScalar w ξ)
 

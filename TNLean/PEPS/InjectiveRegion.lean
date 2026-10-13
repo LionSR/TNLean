@@ -657,17 +657,6 @@ theorem regionUnionPart_biUnion_one_two_disjoint_zero_three [Fintype V]
   simpa [regionComplement] using
     (disjoint_sdiff_self_right : Disjoint B ((Finset.univ : Finset V) \ B))
 
-/-- The union of the three inside indexed regions is disjoint from the outside
-indexed region.
-
-Source: arXiv:1804.04964, Section 3, Lemma lem:injective_union, lines
-1322--1404: the tensor called `X` in the proof is attached to the outside
-block, separated from the three blocks inside `A ∪ B`. -/
-theorem regionUnionPart_inside_disjoint_three [Fintype V] (A B : Finset V) :
-    Disjoint (regionUnionPart A B 0 ∪ regionUnionPart A B 1 ∪ regionUnionPart A B 2)
-      (regionUnionPart A B 3) := by
-  simpa using regionInside_disjoint_outside A B
-
 /-- The indexed four regions are pairwise disjoint. -/
 theorem regionUnionPart_pairwise_disjoint [Fintype V] (A B : Finset V) :
     Pairwise fun i j : Fin 4 =>
