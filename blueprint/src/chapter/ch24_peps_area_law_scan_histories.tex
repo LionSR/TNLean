@@ -1447,6 +1447,35 @@ The following finite construction follows
     commutation statements supply the structural hypotheses.
 \end{proof}
 
+\begin{theorem}[Selection of an actual charge defect]
+    \label{thm:al_scan_actual_charge_selection}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualCharge_point_of_sum_integral_le}
+    \leanok
+    \uses{def:al_scan_actual_charge_data}
+    Fix a collar scan with positive offset, charge-slot and auxiliary counts
+    $n,m,M$, positive finite factor dimensions, energy terms, a replica
+    count $k\ge0$, a supplied prevector, and $a\ge0$.
+    For $0\le s<nm$, let $\mathcal Q_s(p)$ be its actual good-history charge
+    defect with metric parameter $a/2$. Suppose $0\le p_0<p_1\le1$,
+    $\rho>0$, and $B\in\mathbb R$ satisfy
+    \begin{align}
+        \rho\sum_{s=0}^{nm-1}\int_{p_0}^{p_1}\mathcal Q_s(p)\,dp & \le B.
+    \end{align}
+    Then some $0\le s<nm$ and $p\in[p_0,p_1]$ satisfy
+    $\mathcal Q_s(p)\le B/(\rho nm(p_1-p_0))$.
+    This is the finite averaging step in the scanner argument of
+    \cite{OpenAI2026AreaLaw}, applied to the actual charge defects.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scan_old_parameter_integral}
+    Each $\mathcal Q_s$ is interval integrable on $[0,1]$, hence on
+    $[p_0,p_1]$. Divide the integrated inequality by $\rho$ and put
+    $c=B/(\rho nm(p_1-p_0))$. Finite averaging gives a stage $s$ with
+    $\int_{p_0}^{p_1}\mathcal Q_s\le(p_1-p_0)c$.
+    If $\mathcal Q_s(p)>c$ throughout $[p_0,p_1]$, strict positivity of
+    the integral of $\mathcal Q_s-c$ on $(p_0,p_1)$ contradicts this bound.
+\end{proof}
+
 \begin{theorem}[Actual old-state entropy sampling]
     \label{thm:al_scan_actual_old_entropy_sampling}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_le_entropyGain_domainGraph,
