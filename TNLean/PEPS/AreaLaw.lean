@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.AreaLaw.Amplification
 import TNLean.PEPS.AreaLaw.BirthTargetEntropy
+import TNLean.PEPS.AreaLaw.BirthTargetNeighborhoodInformation
 import TNLean.PEPS.AreaLaw.BoundaryConventions
 import TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly
 import TNLean.PEPS.AreaLaw.BufferedRectangles

@@ -71,3 +71,47 @@
     Theorem~\ref{thm:area_law_entropy_dimension}, and gives the claimed
     coefficient.
 \end{proof}
+
+\begin{theorem}[Boundary entropy from neighborhood information]
+    \label{thm:area_law_neighborhood_information_boundary}
+    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_boundary_of_neighborhood_information_estimates}
+    \uses{def:area_law_ground_entropy,def:area_law_two_family_partition}
+    Let $\Lambda\subset\mathbb Z^2$ be finite, let $q\ge1$ be an integer,
+    and let $\Omega\in\bigotimes_{v\in\Lambda}\mathbb C^q$ be a unit vector.
+    Let $A=D\mathbin{\dot\cup}\bigcup_iX_i$ be a finite ordered two-family
+    partition, and set $P_i=\bigcup_{j<i,\,f_j=f_i}X_j$.
+    Suppose that $X_i\subseteq Y_i\subseteq A$, $Y_i\subseteq N_i\subseteq\Lambda$,
+    and $(\Lambda\setminus A)\cup P_i\subseteq\Lambda\setminus N_i$ for every $i$.
+    Let $n_i\in\mathbb N$, $c_D,c_S\in\mathbb R$ and $c_I\ge0$.
+    Suppose that the information estimate holds for every $i$, and that the
+    residual and scale sum satisfy the following bounds:
+    \begin{align*}
+        I_\Omega(Y_i:\Lambda\setminus N_i) & \le c_I n_i^{-100},                                         \\
+        |D|                                & \le c_D|\partial_\Lambda A|,
+                                           & \sum_i n_i^{-100}            & \le c_S|\partial_\Lambda A|.
+    \end{align*}
+    Then
+    \begin{align*}
+        S_\Omega(A) & \le
+        \left(c_D\log q+\frac{c_Ic_S}{2}\right)|\partial_\Lambda A|.
+    \end{align*}
+    The zero-scale convention is $0^{-100}=0$; the manuscript application
+    uses positive scales. This is an auxiliary implication in
+    \cite[Theorem~1.1, lines~815--852 of Section~11]{OpenAI2026AreaLaw}.
+    The construction of the partition, the whole-union exclusion and the
+    information estimates, with uniformly chosen constants, remain separate
+    requirements for the full area law.
+\end{theorem}
+\begin{proof}
+    \uses{thm:area_law_birth_information_boundary}
+    Put $J_i=(\Lambda\setminus A)\cup P_i$.
+    Since $Y_i\subseteq N_i$ and $J_i\subseteq\Lambda\setminus N_i$,
+    $Y_i$ is disjoint from $J_i$ and in particular from $P_i$.
+    Discarding part of the second system gives
+    \begin{align*}
+        I_\Omega(Y_i:J_i) & \le I_\Omega(Y_i:\Lambda\setminus N_i)
+        \le c_I n_i^{-100}.
+    \end{align*}
+    Apply Theorem~\ref{thm:area_law_birth_information_boundary} to the same
+    partition, birth targets and original vector $\Omega$.
+\end{proof}
