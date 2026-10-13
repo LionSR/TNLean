@@ -1,0 +1,124 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{Product-Reference Estimates and a Column on the Open Square}
+\author{}
+\date{2026-10-12}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source construction}
+
+Section~8.1 of the polynomial PEPS approximation manuscript of
+September~24, 2026~\cite{OpenAI2026PolynomialPEPS}
+(\path{07-assembly.tex}, lines~21--63) constructs an actual joint vector
+$\Psi$ and a private reference vector $\Xi$ such that, for the unit ground
+vector $\Omega$,
+\begin{align}
+    \|\Psi\| &\leq 1,
+    &1-CL^{-57}\leq\|\Xi\| &\leq 1,
+    &\|\Psi-\Omega\otimes\Xi\| &\leq CL^{-17}.
+\end{align}
+It traces the private coordinates and applies distributed compression to
+this same joint vector. Lemma~8.1 (lines~67--94) extracts a nonzero column
+of the compressed operator on the party network. Section~8.3 then routes
+the ket network to the open square, preserving its contraction and bounding
+the resulting bond dimensions. The final constants must be uniform in the
+lattice size and Hamiltonian.
+
+\section{The conditional estimate}
+
+For arbitrary finite physical and private spaces, suppose
+\begin{align}
+    \|\Omega\| &=1,
+    &\|\Psi\| &\leq1,
+    &1-\delta\leq\|\Xi\| &\leq1,
+    &\|\Psi-\Omega\otimes\Xi\| &\leq\varepsilon.
+\end{align}
+The product marginal equals
+$\|\Xi\|^2|\Omega\rangle\langle\Omega|$. The subnormalized pure-state
+estimate and contraction under partial trace therefore give
+\begin{align}
+    \bigl\|\operatorname{Tr}_{E}|\Psi\rangle\langle\Psi|
+      -|\Omega\rangle\langle\Omega|\bigr\|_1
+    &\leq 2\varepsilon+1-\|\Xi\|^2
+     \leq 2\varepsilon+2\delta.
+\end{align}
+Here the last inequality uses
+$1-s^2\leq2(1-s)\leq2\delta$ for $s=\|\Xi\|\leq1$.
+It neither squares a possibly negative lower bound nor divides by $s$.
+The accepted generic result includes a zero private vector and an empty
+private coordinate set.\footnote{The generic inequalities are in
+\path{QICLean/Analysis/ProductReferenceDensityError.lean}, in the companion
+library. In particular,
+\leanid{Matrix.rectangularTraceNorm_sub_pure_le_of_product_reference}
+includes the additional compressed-operator error.}
+
+Now suppose an operator network with tensors $A$ and edge dimensions $D_e$
+is already on the open $L\times L$ square. Write $\sigma$ for its contracted
+operator, and assume
+\begin{align}
+    \bigl\|\sigma-\operatorname{Tr}_{E}|\Psi\rangle\langle\Psi|\bigr\|_1
+      &\leq\kappa,
+    &\alpha:=\kappa+2\varepsilon+2\delta &<1.
+\end{align}
+The triangle inequality yields
+$\|\sigma-|\Omega\rangle\langle\Omega|\|_1\leq\alpha$.
+Lemma~8.1 then supplies a product-basis index $z$ and a real $\theta$ such
+that fixing the input of each tensor $A$ to $z$ gives
+\begin{align}
+    \Phi &=\sigma|z\rangle\ne0,
+    &\left\|\frac{\Phi}{\|\Phi\|}-e^{i\theta}\Omega\right\|
+       &\leq2\alpha.
+\end{align}
+Every edge keeps exactly its original dimension $D_e$. A zero dimension
+would make the contraction vanish, so $D_e>0$; every bound $D_e\leq B$
+is preserved. No positivity or Hermiticity of $\sigma$ is assumed.
+The two error estimates use the same $\Psi$.\footnote{The two statements
+are
+\leanid{TNLean.PEPS.Approximation.Pinned.exists_fixInput_contractPEPS_of_product_reference}
+and
+\leanid{TNLean.PEPS.Approximation.Pinned.exists_peps_of_product_reference},
+in \path{TNLean/PEPS/Approximation/ProductReferenceColumn.lean}.}
+
+\section{Remaining construction}
+
+The conditional estimate does not construct $\Psi$, $\Xi$, their terminal
+physical and private coordinates, or the compressed network. To apply it
+to the source theorem, those objects must be identified with the actual
+protocol, and their three estimates must be proved with the same vector
+and constants uniform in the lattice size and Hamiltonian.
+
+There is also an order difference: the conditional statement assumes an
+operator network on the square before fixing its input, whereas the source
+fixes a column of the party network before routing it. A use of the
+conditional statement must supply the already routed operator and prove
+its exact contraction identity and bond bounds. An alternative is to
+apply the generic density estimate directly to the accepted party-network
+column theorem and then route that ket network.
+
+These are remaining implications in the formal construction, not errors
+in the source. The conditional statement is a separate mathematical
+consequence of supplied estimates; it is not Theorem~1.1. Resolving the
+restriction requires the actual protocol and compression estimates and
+one of the two exact routing constructions, followed by the uniform
+large-size and finite-size arguments.\footnote{The full target is tracked
+at \url{https://github.com/LionSR/TNLean/issues/8773}; distributed
+compression is tracked at \url{https://github.com/LionSR/TNLean/issues/8769}.
+The already established generic nonzero-column result is unchanged.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

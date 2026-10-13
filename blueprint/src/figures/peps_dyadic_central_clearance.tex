@@ -1,0 +1,117 @@
+% Figure peps_dyadic_central_clearance.
+% Owner: chapter/ch24_peps_dyadic_geometry.tex (thm:peps_dyadic_central_clearance).
+% Used by: gapped-2d-notes PP Sec. 8.
+% Source: OpenAI2026PolynomialPEPS, sections/06-geometry.tex:140--165 (central
+% birth and the starting word C|A|B); no source figure.
+% Ink-to-index: the square S=[0,n]^2 has corners at the four red dots
+% (the set V).  The orange contours are the bands {0<x<1} of the four edges,
+% keeping the label A; the blue tinted contour is the central region R, of
+% label B; the four blue strings record that R reaches the boundary of S at
+% the corners and nowhere else.  C_e is the label of the exterior neighbouring
+% square across each edge e (the four C_e may differ).  Along any edge, read
+% inwards, the word is C_e|A|B with interfaces at x=0 and x=1.
+% Not to scale: a band has width w(s)=10^{-3}min(s,n-s)<=n/2000 and width 0
+% at the corners, so R is almost all of S; the conical tips cannot be inked.
+% No wires carry indices; no contractions; boundary signature empty.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[lattice={9x9}, bonds=none, size=s] % chktex 29
+        \tndeclare{species}{bandA}{hue=source:orange}
+        \tndeclare{species}{bandB}{hue=source:cyan}
+        \tndeclare{species}{contact}{hue=source:red}
+        \tn[at=(1,1), skin=none]{}
+        \tn[at=(1,2), skin=none]{}
+        \tn[at=(1,3), skin=none]{}
+        \tn[at=(1,4), skin=none]{}
+        \tn[at=(1,5), skin=none]{}
+        \tn[at=(1,6), skin=none]{}
+        \tn[at=(1,7), skin=none]{}
+        \tn[at=(1,8), skin=none]{}
+        \tn[at=(1,9), skin=none]{}
+        \tn[at=(2,1), skin=none]{}
+        \tn[at=(2,2), name=centralCornerNW, skin=dot, species=contact]{}
+        \tn[at=(2,3), skin=none]{}
+        \tn[at=(2,4), skin=none]{}
+        \tn[at=(2,5), skin=none]{}
+        \tn[at=(2,6), skin=none]{}
+        \tn[at=(2,7), skin=none]{}
+        \tn[at=(2,8), name=centralCornerNE, skin=dot, species=contact]{}
+        \tn[at=(2,9), skin=none]{}
+        \tn[at=(3,1), skin=none]{}
+        \tn[at=(3,2), skin=none]{}
+        \tn[at=(3,3), name=centralTipNW, skin=none]{}
+        \tn[at=(3,4), skin=none]{}
+        \tn[at=(3,5), skin=none]{}
+        \tn[at=(3,6), skin=none]{}
+        \tn[at=(3,7), name=centralTipNE, skin=none]{}
+        \tn[at=(3,8), skin=none]{}
+        \tn[at=(3,9), skin=none]{}
+        \tn[at=(4,1), skin=none]{}
+        \tn[at=(4,2), skin=none]{}
+        \tn[at=(4,3), skin=none]{}
+        \tn[at=(4,4), skin=none]{}
+        \tn[at=(4,5), skin=none]{}
+        \tn[at=(4,6), skin=none]{}
+        \tn[at=(4,7), skin=none]{}
+        \tn[at=(4,8), skin=none]{}
+        \tn[at=(4,9), skin=none]{}
+        \tn[at=(5,1), skin=none]{}
+        \tn[at=(5,2), skin=none]{}
+        \tn[at=(5,3), skin=none]{}
+        \tn[at=(5,4), skin=none]{}
+        \tn[at=(5,5), skin=none]{}
+        \tn[at=(5,6), skin=none]{}
+        \tn[at=(5,7), skin=none]{}
+        \tn[at=(5,8), skin=none]{}
+        \tn[at=(5,9), skin=none]{}
+        \tn[at=(6,1), skin=none]{}
+        \tn[at=(6,2), skin=none]{}
+        \tn[at=(6,3), skin=none]{}
+        \tn[at=(6,4), skin=none]{}
+        \tn[at=(6,5), skin=none]{}
+        \tn[at=(6,6), skin=none]{}
+        \tn[at=(6,7), skin=none]{}
+        \tn[at=(6,8), skin=none]{}
+        \tn[at=(6,9), skin=none]{}
+        \tn[at=(7,1), skin=none]{}
+        \tn[at=(7,2), skin=none]{}
+        \tn[at=(7,3), name=centralTipSW, skin=none]{}
+        \tn[at=(7,4), skin=none]{}
+        \tn[at=(7,5), skin=none]{}
+        \tn[at=(7,6), skin=none]{}
+        \tn[at=(7,7), name=centralTipSE, skin=none]{}
+        \tn[at=(7,8), skin=none]{}
+        \tn[at=(7,9), skin=none]{}
+        \tn[at=(8,1), skin=none]{}
+        \tn[at=(8,2), name=centralCornerSW, skin=dot, species=contact]{}
+        \tn[at=(8,3), skin=none]{}
+        \tn[at=(8,4), skin=none]{}
+        \tn[at=(8,5), skin=none]{}
+        \tn[at=(8,6), skin=none]{}
+        \tn[at=(8,7), skin=none]{}
+        \tn[at=(8,8), name=centralCornerSE, skin=dot, species=contact]{}
+        \tn[at=(8,9), skin=none]{}
+        \tn[at=(9,1), skin=none]{}
+        \tn[at=(9,2), skin=none]{}
+        \tn[at=(9,3), skin=none]{}
+        \tn[at=(9,4), skin=none]{}
+        \tn[at=(9,5), skin=none]{}
+        \tn[at=(9,6), skin=none]{}
+        \tn[at=(9,7), skin=none]{}
+        \tn[at=(9,8), skin=none]{}
+        \tn[at=(9,9), skin=none]{}
+        \tnmark[form=enclosure, species=bandA, tint]{(2,3) .. (2,7)}{$A$}
+        \tnmark[form=enclosure, species=bandA, tint]{(8,3) .. (8,7)}{$A$}
+        \tnmark[form=enclosure, species=bandA, tint]{(3,2) .. (7,2)}{$A$}
+        \tnmark[form=enclosure, species=bandA, tint]{(3,8) .. (7,8)}{$A$}
+        \tnmark[form=enclosure, species=bandB, tint]{(3,3) .. (7,7)}{$B$}
+        \tnwire[kind=string, species=bandB]{centralTipNW}{centralCornerNW}
+        \tnwire[kind=string, species=bandB]{centralTipNE}{centralCornerNE}
+        \tnwire[kind=string, species=bandB]{centralTipSW}{centralCornerSW}
+        \tnwire[kind=string, species=bandB]{centralTipSE}{centralCornerSE}
+        \tnmark[form=label]{(1,5)}{$C_e$}
+        \tnmark[form=label]{(9,5)}{$C_e$}
+        \tnmark[form=label]{(5,1)}{$C_e$}
+        \tnmark[form=label]{(5,9)}{$C_e$}
+    \end{tenkz}
+\end{tenkzequation}

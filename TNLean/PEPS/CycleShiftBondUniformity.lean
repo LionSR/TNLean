@@ -137,16 +137,10 @@ Source: arXiv:1804.04964, Applications section, lines 1807--1842 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem gaugeEquiv_cycleShift_of_isCycleShiftInvariantState
     (hn : 3 ≤ n) (A : Tensor (SimpleGraph.cycleGraph n) d)
-    (hA : IsVertexInjective A) (hTI : IsCycleShiftInvariantState A hn)
-    (hpos : ∀ e : Edge (SimpleGraph.cycleGraph n), 0 < A.bondDim e) :
-    GaugeEquiv A (A.cycleShift hn) := by
-  have hconn : (SimpleGraph.cycleGraph n).Connected :=
+    (hA : A.IsInjective) (hTI : IsCycleShiftInvariantState A hn) :
+    GaugeEquiv A (A.cycleShift hn) :=
+  fundamentalTheorem_PEPS A (A.cycleShift hn) hA (hA.transport (cycleRotate hn).symm) hTI
     ⟨SimpleGraph.cycleGraph_preconnected⟩
-  apply fundamentalTheorem_PEPS A (A.cycleShift hn) hA
-      (hA.transport (cycleRotate hn).symm) hTI hpos
-  · intro e
-    exact hpos (Edge.map (cycleRotate hn) e)
-  · exact hconn
 
 /-- Adjacent bonds of a cyclically invariant injective closed-chain MPS have
 the same dimension: if `Dᵢ` is the dimension of the bond from site `i` to
@@ -160,12 +154,10 @@ Source: arXiv:1804.04964, Applications section, corollary line 1804 and proof
 lines 1807--1842 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem bondDim_cycleSuccEdge_add_one_eq_of_isCycleShiftInvariantState
     (hn : 3 ≤ n) (A : Tensor (SimpleGraph.cycleGraph n) d)
-    (hA : IsVertexInjective A) (hTI : IsCycleShiftInvariantState A hn)
-    (hpos : ∀ e : Edge (SimpleGraph.cycleGraph n), 0 < A.bondDim e)
-    (v : Fin n) :
+    (hA : A.IsInjective) (hTI : IsCycleShiftInvariantState A hn) (v : Fin n) :
     A.bondDim (cycleSuccEdge hn (v + 1)) = A.bondDim (cycleSuccEdge hn v) := by
   obtain ⟨hDim, _, _⟩ :=
-    gaugeEquiv_cycleShift_of_isCycleShiftInvariantState hn A hA hTI hpos
+    gaugeEquiv_cycleShift_of_isCycleShiftInvariantState hn A hA hTI
   have h := congrFun hDim (cycleSuccEdge hn v)
   rw [Tensor.cycleShift, Tensor.transport_bondDim] at h
   have h' : A.bondDim (cycleSuccEdge hn v) =
@@ -181,8 +173,7 @@ Source: arXiv:1804.04964, Applications section, corollary line 1804 and proof
 lines 1807--1842 of `Papers/1804.04964/paper_normal.tex`. -/
 theorem bondDim_eq_of_isCycleShiftInvariantState
     (hn : 3 ≤ n) (A : Tensor (SimpleGraph.cycleGraph n) d)
-    (hA : IsVertexInjective A) (hTI : IsCycleShiftInvariantState A hn)
-    (hpos : ∀ e : Edge (SimpleGraph.cycleGraph n), 0 < A.bondDim e)
+    (hA : A.IsInjective) (hTI : IsCycleShiftInvariantState A hn)
     (e f : Edge (SimpleGraph.cycleGraph n)) :
     A.bondDim e = A.bondDim f := by
   obtain ⟨u, rfl⟩ := cycleSuccEdge_surjective hn e
@@ -193,7 +184,7 @@ theorem bondDim_eq_of_isCycleShiftInvariantState
       (P := fun i => A.bondDim (cycleSuccEdge hn i) = A.bondDim (cycleSuccEdge hn 0))
       rfl (fun i hi =>
         (bondDim_cycleSuccEdge_add_one_eq_of_isCycleShiftInvariantState
-          hn A hA hTI hpos i).trans hi) w
+          hn A hA hTI i).trans hi) w
   exact (hzero u).trans (hzero v).symm
 
 end PEPS

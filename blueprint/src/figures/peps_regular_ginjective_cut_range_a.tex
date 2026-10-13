@@ -1,0 +1,31 @@
+% Figure peps_regular_ginjective_cut_range_a.
+% Owner: chapter/ch24_peps_g_injective_cut_range.tex (thm:peps_regular_ginjective_cut_range, proof).
+% Used by: gapped-2d-notes PP Sec. 6 (Lemma 6.2, the flattening Z = A B^T).
+% Formula: C_{p,q}=sum_x T_{p,x} S_{q,x}.
+% Source: regular boundary cut in the proof of Theorem 6.9,
+% Papers/1001.3807/paper_v3.tex:1927--1984; this is the matrix
+% factorization used here, not a claim to reproduce the lattice geometry.
+% Ink-to-index: the T--S bond bundles all b crossing group labels into x.
+% C has physical indices p and q.
+% Boundary signature: (V,P)=(0,2).
+% T and S share a virtual basis without conjugation: the factor is S^T.
+% Label macros: \tnlCutWhole{C}, \tnlCutLeft{T}, \tnlCutRight{S}; the PEPS note
+% overrides them with Z, A, B (S maps to B, so the drawn factor is B^T).
+% Related: the entry's second display (C L = T) stays in the chapter; the notes
+% do not need it.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \providecommand{\tnlCutWhole}{C}
+        \tn[skin=box, ports={180:physical, 0:physical}]{\tnlCutWhole}
+    \end{tenkz}
+    $=$
+    \begin{tenkz}[rows={wire}, cols=2, bonds=none]
+        \providecommand{\tnlCutLeft}{T}
+        \providecommand{\tnlCutRight}{S}
+        \tn[name=cutLeft, ports={180:physical, 0:virtual}]{\tnlCutLeft}
+        \tn[at=(1,2), name=cutRight,
+            ports={180:virtual, 0:physical}]{\tnlCutRight}
+        \tnwire{cutLeft.0}{cutRight.180}
+    \end{tenkz}
+\end{tenkzequation}

@@ -95,6 +95,26 @@ theorem positiveDepthPrefix_eq_sdiff {V : Type*} [DecidableEq V]
   simp only [positiveDepthPrefix, depthPrefix, Finset.mem_filter, Finset.mem_sdiff]
   by_cases hx : x ∈ A <;> simp [hx, not_le, and_comm]
 
+/-- The positive-depth prefix is the chosen color restricted to the ambient
+collar. Source: OpenAI, A two-dimensional area law from a global spectral gap,
+08-scanner.tex, lines 21–29, at
+openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a. -/
+theorem positiveDepthPrefix_eq_filter_ambientDilation
+    {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
+    (A : Finset (Site Λ)) (j : ℤ) :
+    positiveDepthPrefix A (fun x ↦ ambientDepth T hT x.val) j =
+      A.filter fun x ↦ x.val ∈ (ambientDilation T j.toNat \ T) := by
+  simp only [Finset.ext_iff, positiveDepthPrefix, Finset.mem_filter, Finset.mem_sdiff]
+  by_cases hj : 0 ≤ j
+  · simp only [← ambientDepth_le_iff_mem_dilation T hT, Int.toNat_of_nonneg hj]
+    have hzero (x : ℤ × ℤ) : ambientDepth T hT x ≤ 0 ↔ x ∈ T :=
+      (ambientDepth_le_iff_mem_dilation T hT x 0).trans
+        (Iff.of_eq (congrArg (fun U : Finset (ℤ × ℤ) ↦ x ∈ U) (ambientDilation_zero T)))
+    simp [← hzero, not_le, and_comm]
+  · simp [Int.toNat_of_nonpos (le_of_lt (lt_of_not_ge hj)),
+      fun x : ℤ × ℤ ↦ not_le.mpr
+        ((lt_of_not_ge hj).trans_le (ambientDepth_nonneg T hT x))]
+
 /-- Positive-depth physical prefixes have at most `8n` edges, including the
 zero and negative fronts. The two contributions are the last included row
 and the first positive row. Source: Lemma 9.1(2), lines 251–255. -/

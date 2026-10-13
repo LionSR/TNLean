@@ -359,16 +359,31 @@
     $A_v=(\lambda_S/\lambda_R)\widetilde B_v$.
 \end{remark}
 
+\begin{definition}[Injective PEPS tensor]%
+    \label{def:peps_injective_tensor}
+    \lean{TNLean.PEPS.Tensor.IsInjective}
+    \leanok
+    \uses{def:IsVertexInjective}
+    A PEPS tensor $A$ is \emph{injective} if it is vertex-injective and every
+    virtual bond space is nonzero, that is, $D_e>0$ for every edge $e$. The
+    first condition is the injectivity of
+    \cite[Section~3]{Molnar2018NormalPEPS}. The second is the standing
+    convention of that section, which picks reference virtual configurations
+    and full matrix algebras on the bonds. Without it a zero-dimensional bond
+    makes every state coefficient vanish, while vertex injectivity can hold
+    vacuously at its endpoints. The convention is recorded in
+    \cite{gap:peps_injective_ft_section3_route}.
+\end{definition}
+
 \begin{theorem}[Fundamental Theorem for injective PEPS, conditional on
         bond-dimension equality]%
     \label{thm:fundamentalTheorem_PEPS_of_bondDim}
     \lean{TNLean.PEPS.fundamentalTheorem_PEPS_of_bondDim}
     \leanok
-    \uses{thm:gaugeConsistency, thm:peps_oneVertexComplementComparison, def:GaugeEquivPEPS, def:IsVertexInjective}
+    \uses{thm:gaugeConsistency, thm:peps_oneVertexComplementComparison, def:GaugeEquivPEPS, def:peps_injective_tensor}
     Suppose that the corresponding virtual edge spaces of $A$ and $B$ are
-    already identified, every virtual bond of $A$ has positive dimension, and
-    the graph is connected.
-    If $A$ and $B$ are vertex-injective and give the same PEPS state, then
+    already identified and the graph is connected.
+    If $A$ and $B$ are injective PEPS tensors and give the same PEPS state, then
     there are invertible matrices $X_e$, one for each edge, such that at every
     vertex the tensor $B_v$ is obtained from $A_v$ by the oriented endpoint
     action of the incident matrices.
@@ -381,12 +396,11 @@
 \begin{theorem}[Equal bond dimensions for injective PEPS]%
     \label{thm:peps_injective_sameState_bondDim_eq}
     \lean{TNLean.PEPS.bondDim_eq_of_matrixAlgEquiv}
-    \lean{TNLean.PEPS.bondDim_eq_of_isVertexInjective_sameState}
+    \lean{TNLean.PEPS.bondDim_eq_of_isInjective_sameState}
     \leanok
-    \uses{def:IsVertexInjective, def:peps_same_state}
-    Let $A$ and $B$ be vertex-injective PEPS tensors on the same finite simple
-    graph, with positive virtual bond dimensions, and suppose that they
-    represent the same state. Then
+    \uses{def:peps_injective_tensor, def:peps_same_state}
+    Let $A$ and $B$ be injective PEPS tensors on the same finite simple
+    graph, and suppose that they represent the same state. Then
     \begin{align}
         D_A(e)
          & =D_B(e)
@@ -412,14 +426,13 @@
     \label{thm:fundamentalTheorem_PEPS}
     \lean{TNLean.PEPS.fundamentalTheorem_PEPS}
     \leanok
-    % Scope restriction: this is the positive-bond variant of Theorem 2 in
-    % \cite{Molnar2018NormalPEPS}. The elimination plan for the positivity
-    % hypotheses is recorded in
+    % Local fix: the nonzero virtual bond spaces of Theorem 2 in
+    % \cite{Molnar2018NormalPEPS} are part of the injectivity hypothesis,
+    % as recorded in
     % \path{docs/paper-gaps/peps_injective_ft_section3_route.tex}.
-    \uses{thm:fundamentalTheorem_PEPS_of_bondDim, def:GaugeEquivPEPS, def:IsVertexInjective}
-    Let $A$ and $B$ be vertex-injective PEPS tensors on a finite simple
-    graph, and suppose every virtual bond of $A$ and $B$ has positive
-    dimension and that the graph is connected. If they give the same PEPS
+    \uses{thm:fundamentalTheorem_PEPS_of_bondDim, def:GaugeEquivPEPS, def:peps_injective_tensor}
+    Let $A$ and $B$ be injective PEPS tensors on a finite simple graph, and
+    suppose that the graph is connected. If they give the same PEPS
     state, then their corresponding
     virtual edge spaces have the same dimensions and, after identifying these
     spaces, there are invertible matrices $X_e$, one for each edge, such that

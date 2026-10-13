@@ -341,9 +341,10 @@ Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
     \lean{TNLean.PEPS.bondDim_cycleSuccEdge_add_one_eq_of_isCycleShiftInvariantState}
     \lean{TNLean.PEPS.bondDim_eq_of_isCycleShiftInvariantState}
     \leanok
-    \uses{def:peps_cycle_tensor_cyclic_shift, thm:fundamentalTheorem_PEPS, def:cycleTensorOfMPS}
+    \uses{def:peps_cycle_tensor_cyclic_shift, thm:fundamentalTheorem_PEPS, def:cycleTensorOfMPS,
+        def:peps_injective_tensor}
     Let $A_0,\ldots,A_{n-1}$ be a site-dependent injective closed MPS on
-    $n\ge3$ sites, with one positive dimension $D_e$ for each bond $e$.
+    $n\ge3$ sites, with one dimension $D_e$ for each bond $e$.
     If its generated state is invariant under the cyclic shift
     $A_v\mapsto A_{v+1}$, then the injective Fundamental Theorem compares
     the family with its shift by invertible matrices on the corresponding
@@ -351,11 +352,11 @@ Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
     $v+1$ to $v+2$ have the same dimension. Iterating around the cycle gives
     $D_e=D_f$ for every pair of bonds $e,f$.
 
-    This is the positive-bond, at-least-three-site form of the ``all bond
-    dimensions are the same'' clause of the Applications-section corollary in
-    \cite[lines~1803--1842]{Molnar2018NormalPEPS}. Positivity excludes empty
-    virtual spaces, the same counterexample-backed correction as in the
-    injective Fundamental Theorem.
+    This is the at-least-three-site form of the ``all bond dimensions are the
+    same'' clause of the Applications-section corollary in
+    \cite[lines~1803--1842]{Molnar2018NormalPEPS}. As in the injective
+    Fundamental Theorem, injectivity includes the convention that every
+    virtual space is nonzero.
 \end{corollary}
 \begin{proof}\leanok
     Transport along the inverse rotation preserves injectivity and replaces
@@ -500,7 +501,7 @@ Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
 \end{proof}
 
 \begin{corollary}[Translation-invariant description of an injective closed MPS chain,
-        positive-bond form on at least three sites]%
+        form on at least three sites]%
     \label{cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState_per_bond_pos}
     \lean{TNLean.PEPS.Tensor.reindexMPSChain}
     \lean{TNLean.PEPS.Tensor.stateCoeff_reindexMPSChain}
@@ -512,7 +513,7 @@ Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
     \discussion{3371}
     \uses{cor:peps_cycle_shift_bond_uniform, cor:exists_constant_injectiveMPS_of_cyclicShiftInvariantState}
     Let $A_0,\ldots,A_{n-1}$ be a site-dependent injective closed MPS on
-    $n\ge3$ sites, with positive dimensions $D_e$ on its individual bonds.
+    $n\ge3$ sites, with dimensions $D_e$ on its individual bonds.
     If the closed-chain state is translationally invariant, in the finite
     closed-chain sense that it is invariant under the cyclic shift
     $A_v\mapsto A_{v+1}$ of \cite[lines~1807--1827]{Molnar2018NormalPEPS},
@@ -526,7 +527,7 @@ Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
     \end{align}
     for every physical configuration $\sigma$.
 
-    This completes the positive-bond, at-least-three-site form of the
+    This completes the at-least-three-site form of the
     translational-invariance corollary and its proof in
     \cite[lines~1803--1890]{Molnar2018NormalPEPS}. The equality $D_e=D$ is
     Corollary~\ref{cor:peps_cycle_shift_bond_uniform}. Identifying each
@@ -582,11 +583,11 @@ Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
     \lean{TNLean.PEPS.%
         torusUniformBondDim_of_isTorusTranslationInvariantState}
     \leanok
-    \uses{def:IsVertexInjective,
+    \uses{def:peps_injective_tensor,
         def:peps_torus_state_translation_invariant,
         def:peps_torus_uniform_bond_dim}
-    Let $A$ be a vertex-injective PEPS on a discrete $n\times m$ torus with
-    $n,m>1$ and positive bond dimensions. If its represented state is
+    Let $A$ be an injective PEPS on a discrete $n\times m$ torus with
+    $n,m>1$. If its represented state is
     translation invariant, then its bond dimensions are orientation-uniform.
     Explicitly, with
     \begin{align}
@@ -608,8 +609,8 @@ Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
         thm:peps_injective_sameState_bondDim_eq,
         thm:peps_torusUniformBondDim_of_translationInvariant}
     State translation invariance identifies $A$ with
-    $A^{\tau_{a,b}}$ at every translation. Transport preserves vertex
-    injectivity and positivity of the virtual spaces, so
+    $A^{\tau_{a,b}}$ at every translation. Transport preserves injectivity,
+    so
     Theorem~\ref{thm:peps_injective_sameState_bondDim_eq} gives
     \begin{align}
         D_A(\tau_{a,b}(e))
@@ -624,16 +625,16 @@ Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
 \begin{corollary}[Translation-invariant description of an injective 2D PEPS]%
     \label{cor:exists_constant_injectivePEPS_of_translationInvariantState}
     \notready
-    \uses{def:IsVertexInjective, def:peps_torus_translation_invariant,
+    \uses{def:peps_injective_tensor, def:peps_torus_translation_invariant,
         def:peps_torus_state_translation_invariant,
         def:peps_torus_uniform_bond_dim, def:peps_same_state}
-    Let $A$ be a vertex-injective PEPS on a discrete $n\times m$ torus with
-    $n,m>1$ and positive bond dimensions. If the generated state is invariant
+    Let $A$ be an injective PEPS on a discrete $n\times m$ torus with
+    $n,m>1$. If the generated state is invariant
     under all lattice translations $\tau_{a,b}$, that is,
     $\Coeff_A(\sigma\circ\tau_{a,b})=\Coeff_A(\sigma)$ for every translation
     and every physical configuration $\sigma$, then there are positive
     dimensions $D_h,D_v$ such that the bond dimensions of $A$ are
-    orientation-uniform with these values, and there is a vertex-injective
+    orientation-uniform with these values, and there is an injective
     translation-invariant torus tensor $B$ with the same bond-dimension
     function and the same represented state as $A$.
 
@@ -688,9 +689,9 @@ dimensions; this uniform-dimension restriction is the only narrowing.
     \label{thm:fundamentalTheorem_normalPEPS_of_vertexInjective}
     \lean{TNLean.PEPS.fundamentalTheorem_normalPEPS_of_vertexInjective}
     \leanok
-    \uses{thm:fundamentalTheorem_PEPS, def:peps_normalPEPSBlockingHypotheses, def:GaugeEquivPEPS, def:IsVertexInjective}
-    Suppose PEPS tensors $A$ and $B$ are vertex injective with positive bond
-    dimensions on a connected graph, generate the same state, and $A$ satisfies
+    \uses{thm:fundamentalTheorem_PEPS, def:peps_normalPEPSBlockingHypotheses, def:GaugeEquivPEPS, def:peps_injective_tensor}
+    Suppose PEPS tensors $A$ and $B$ on a connected graph are injective,
+    generate the same state, and $A$ satisfies
     the normal blocking hypotheses. Then their defining tensors are related by
     a local gauge.
     This is the vertex-injective specialization of the general normal-PEPS
@@ -699,8 +700,7 @@ dimensions; this uniform-dimension restriction is the only narrowing.
     hypotheses.
 \end{theorem}
 \begin{proof}\leanok
-    Vertex injectivity, positive bond dimensions, same state, and connectivity
-    are exactly the hypotheses of the injective Fundamental Theorem, which
+    Injectivity, same state, and connectivity are exactly the hypotheses of the injective Fundamental Theorem, which
     supplies the local gauge.
 \end{proof}
 
