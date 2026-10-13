@@ -95,6 +95,10 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
     (EncodedFrame.reindex_physicalBuffer_eq_siteLift q R C₀ hRC W).symm ▸
       EncodedFrame.siteLift_mem_supportedOperators Q
         (reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
+  have hV : V ∈ supportedOperators (q * q) (Q.image a : Set (AreaLaw.Site Λ)) := by
+    simpa only [a, V, embedOp_rectangle_eq_reindex, Finset.coe_image,
+      Matrix.reindex_apply, Matrix.submatrix_submatrix] using!
+      embedOp_mem_supportedOperators_image a.injective hV₀
   done
 
 end TNLean.PEPS.Approximation
