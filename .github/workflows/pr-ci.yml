@@ -910,6 +910,7 @@ jobs:
         run: |
           python3 .deps/tenkz/scripts/tenkz_lint.py \
             'blueprint/src/chapter/*.tex' \
+            'blueprint/src/figures/*.tex' \
             'docs/slides/*.tex'
 
       - name: Check paper source label generator syntax

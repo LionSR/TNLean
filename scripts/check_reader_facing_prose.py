@@ -121,6 +121,7 @@ def _git_diff(base_ref: str) -> str:
             "blueprint/src/web.tex",
             ":(glob)blueprint/src/chapter/*.tex",
             ":(glob)blueprint/src/appendix/**/*.tex",
+            ":(glob)blueprint/src/figures/*.tex",
         ],
         check=True,
         stdout=subprocess.PIPE,
@@ -173,6 +174,7 @@ def blueprint_files(root: Path) -> Iterable[Path]:
     blueprint_src = root / "blueprint" / "src"
     yield from (blueprint_src / "chapter").glob("*.tex")
     yield from (blueprint_src / "appendix").rglob("*.tex")
+    yield from (blueprint_src / "figures").glob("*.tex")
 
 
 def lean_comment_lines(path: Path) -> set[int]:
@@ -317,7 +319,7 @@ def is_blueprint_prose_path(path: Path) -> bool:
     return path in BLUEPRINT_ENTRYPOINTS or (
         len(path.parts) >= 4
         and path.parts[:2] == ("blueprint", "src")
-        and path.parts[2] in {"chapter", "appendix"}
+        and path.parts[2] in {"chapter", "appendix", "figures"}
         and path.suffix == ".tex"
     )
 

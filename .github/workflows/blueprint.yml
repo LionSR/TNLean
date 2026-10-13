@@ -111,6 +111,7 @@ jobs:
         run: |
           python3 .deps/tenkz/scripts/tenkz_lint.py \
             'blueprint/src/chapter/*.tex' \
+            'blueprint/src/figures/*.tex' \
             'docs/slides/*.tex'
           python3 scripts/test_tenkz_pic.py
           python3 scripts/test_tenkz_ordered_mixing.py

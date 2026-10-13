@@ -10,24 +10,12 @@ import subprocess
 import tempfile
 from pathlib import Path
 
+from blueprint_tex_tree import read_tex_tree
 from tenkz_paths import ensure_pythonpath, tenkz_tex
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE_ROOT = ROOT / "blueprint/src"
 CHAPTER = SOURCE_ROOT / "chapter/ch24_peps_ft_torus.tex"
-
-
-def read_tex_tree(path: Path) -> str:
-    """Read a TeX source after recursively expanding its input wrappers."""
-    source = path.read_text(encoding="utf-8")
-
-    def expand(match: re.Match[str]) -> str:
-        target = match.group(1)
-        if not target.endswith(".tex"):
-            target += ".tex"
-        return read_tex_tree(SOURCE_ROOT / target)
-
-    return re.sub(r"\\input\{([^}]+)\}", expand, source)
 
 
 def source_picture() -> str:
