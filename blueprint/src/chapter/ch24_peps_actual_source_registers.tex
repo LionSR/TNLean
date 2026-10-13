@@ -685,6 +685,7 @@ operations on an empty memory.
 \begin{theorem}[Local output traces of the actual sampled contraction]
     \label{thm:peps_actual_sampled_local_output_trace}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_partyProduct}
+    \leanok
     \uses{thm:peps_actual_sampled_party_contraction,thm:peps_party_product_partial_trace}
     In the notation of Theorem~\ref{thm:peps_actual_sampled_party_contraction},
     choose each party output basis with index set $H_q\times D_q$.
@@ -709,6 +710,7 @@ operations on an empty memory.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:peps_actual_sampled_party_contraction,thm:peps_party_product_partial_trace}
     Reindexing and partial trace are complex-linear. Apply their composition
     to Theorem~\ref{thm:peps_actual_sampled_party_contraction} and distribute
@@ -723,6 +725,7 @@ operations on an empty memory.
 \begin{definition}[Mixed physical trace of restricted words]
     \label{def:peps_restricted_mixed_physical_trace}
     \lean{TNLean.PEPS.PairEffect.restrictedMixedPhysicalTrace}
+    \leanok
     \uses{thm:peps_party_restriction,def:peps_actual_party_source_matrices}
     Let $S$ be a selection of parties, let $u,t:a\to b$ and $v:a\to a$
     be chronological words containing no pair-source preparations, and
@@ -746,6 +749,7 @@ operations on an empty memory.
 \begin{definition}[The actual local physical factor]
     \label{def:peps_actual_sampled_physical_factor}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledPhysicalFactor}
+    \leanok
     \uses{def:peps_restricted_mixed_physical_trace,
         def:peps_selected_physical_private_basis,
         def:peps_actual_party_source_matrices,def:peps_actual_sampled_endpoint_word}
@@ -772,6 +776,7 @@ operations on an empty memory.
 \begin{theorem}[Actual sampled factors on the original physical parties]
     \label{thm:peps_actual_sampled_physical_factors}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors}
+    \leanok
     \uses{thm:peps_actual_sampled_local_output_trace,
         def:peps_actual_sampled_physical_factor,
         def:peps_selected_physical_private_basis,thm:peps_selected_physical_product_scalar}
@@ -802,6 +807,7 @@ operations on an empty memory.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:peps_actual_sampled_local_output_trace,
         thm:peps_selected_physical_product_scalar}
     Apply the retained configuration change to
@@ -816,6 +822,7 @@ operations on an empty memory.
 \begin{theorem}[The exterior factor in the sampled physical trace]
     \label{thm:peps_actual_sampled_exterior_trace}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceWord_sampled_none_partialTrace_eq_scalar}
+    \leanok
     \uses{thm:peps_actual_chronological_exterior_scalar,
         thm:peps_actual_sampled_endpoint_exterior}
     Let $\lambda_W$ be the original empty-party gate scalar of $W$.
@@ -839,6 +846,7 @@ operations on an empty memory.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:peps_actual_chronological_exterior_scalar,
         thm:peps_actual_sampled_endpoint_exterior,thm:peps_all_party_source_exterior_empty}
     The exterior input and output memories are both $\C$. Their actual
@@ -854,6 +862,7 @@ operations on an empty memory.
 \begin{theorem}[The common exterior scalar in the sampled physical sum]
     \label{thm:peps_actual_sampled_physical_scalar}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSourceGlobalMatrix_sampled_partialTrace_eq_scalar_smul_physicalSum}
+    \leanok
     \uses{thm:peps_actual_sampled_physical_factors,thm:peps_actual_sampled_exterior_trace}
     In the notation of Theorem~\ref{thm:peps_actual_sampled_physical_factors},
     let $\lambda_W$ be the original empty-party gate scalar. Then
@@ -872,6 +881,7 @@ operations on an empty memory.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:peps_actual_sampled_physical_factors,thm:peps_actual_sampled_exterior_trace}
     Theorem~\ref{thm:peps_actual_sampled_exterior_trace} gives
     $M_{j,*}(1,1)=\lambda_W\overline{\lambda_W}$ for every $j$.
