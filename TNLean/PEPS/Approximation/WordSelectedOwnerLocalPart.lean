@@ -135,7 +135,7 @@ private theorem selected_localPart_frame_eval_heq
     rw [Layout.restrict_mapOwner, hsel]
   have hI : Layout.restrict sq (W.sources.layout ++ Layout.mapOwner f a) =
       Layout.mapOwner f (Layout.restrict sp (w.sources.layout ++ a)) := by
-    simpa only [Layout.restrict_append, Layout.mapOwner_append] using
+    simpa only [W, Layout.restrict_append, Layout.mapOwner_append] using
       congrArg₂ List.append hS (hL a)
   have hcomm := restrict_mapOwner_heq f sq (moveHead r w.sources.layout a)
     (sources_moveHead r w.sources.layout a)
@@ -186,7 +186,7 @@ private theorem selected_localPart_frame_eval_heq
     have hr' : sq r'.owner = sp r.owner := congrFun hsel r.owner
     cases hr : sp r.owner <;>
       simp only [Layout.restrict_cons, hr', hr, Bool.false_eq_true, ↓reduceIte,
-        Layout.mapOwner_cons, hI]
+        Layout.mapOwner_cons, hI] <;> rfl
   have hcomp := eval_comp_heq
     ((moveHead r' W.sources.layout (Layout.mapOwner f a)).restrict sq
       (sources_moveHead r' W.sources.layout (Layout.mapOwner f a)))
