@@ -42,8 +42,6 @@ theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isPeriodic
     (hA : IsPeriodic m A) (hB : IsPeriodic n B)
     (h : MPVBlockPhaseEquiv A B) :
     ∃ e : DA = DB, GaugePhaseEquiv (e ▸ A) B := by
-  let : NeZero DA := ⟨hA.bondDim_ne_zero⟩
-  let : NeZero DB := ⟨hB.bondDim_ne_zero⟩
   rcases periodicOverlapDichotomy A B hA hB with hDecay | ⟨e, hRep⟩
   · classical
     obtain ⟨ζ, _, hmpv⟩ := h
@@ -114,7 +112,6 @@ theorem MPVPhaseClassData.groundSpaceES_toTensorFromBlocks_eq_representatives_of
     (μ : Fin b → ℂ) (hμ : ∀ j, μ j ≠ 0) (N : ℕ) :
     groundSpaceES (toTensorFromBlocks μ A) N =
       groundSpaceES (toTensorFromBlocks (fun _ => 1) (fun k => A (classes.repr k))) N := by
-  let : ∀ j, NeZero (dim j) := fun j => ⟨(hA j).bondDim_ne_zero⟩
   rw [groundSpaceES_toTensorFromBlocks_eq_iSup μ A hμ,
     groundSpaceES_toTensorFromBlocks_eq_iSup (fun _ => 1)
       (fun k => A (classes.repr k)) (fun _ => one_ne_zero)]

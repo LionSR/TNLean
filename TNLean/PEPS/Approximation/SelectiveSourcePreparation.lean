@@ -146,45 +146,6 @@ theorem sources_prepareSelected (R : SourceInventory P)
         fillSourceVectors, Bool.eq_false_iff.mpr h, ih]
       rfl
 
-/-- A canonical layout cast identifies the same vector in equal memories. -/
-private theorem memCongr_apply_heq {a b : Layout P} (h : a = b) (x : Mem a) :
-    HEq (Layout.memCongr h x) x := by
-  cases h
-  rfl
-
-/-- Preparation in fixed slots identifies the actual inventory preparation. -/
-private theorem prepareSlots_heq_prepare (R : SourceInventory P)
-    (U V : Fin R.length → HSpace) (η : ∀ i, U i ⊗[ℂ] V i)
-    (ℓ : Layout P) (x : Mem ℓ) :
-    HEq ((prepareSlots R U V η ℓ).eval x) (((ofSlots R U V η).prepare ℓ).eval x) := by
-  rw [prepareSlots, Word.eval_castLayouts]
-  exact memCongr_apply_heq _ _
-
-/-- Adjoining a source respects equality of the spectator layout. -/
-private theorem source_apply_heq (r : PairSource P) (U V : HSpace) (η : U ⊗[ℂ] V)
-    {a b : Layout P} (h : a = b) {x : Mem a} {y : Mem b} (hxy : HEq x y) :
-    HEq ((Word.source r.distinct U V η a).eval x)
-      ((Word.source r.distinct U V η b).eval y) := by
-  cases h
-  exact heq_of_eq (congrArg _ (eq_of_heq hxy))
-
-/-- Full preparation first prepares the tail and then its head source. -/
-private theorem prepareSlots_cons_heq (r : PairSource P) (R : SourceInventory P)
-    (U V : Fin (r :: R).length → HSpace) (η : ∀ i, U i ⊗[ℂ] V i)
-    (ℓ : Layout P) (x : Mem ℓ) :
-    HEq ((prepareSlots (r :: R) U V η ℓ).eval x)
-      ((Word.source r.distinct (U 0) (V 0) (η 0)
-        (slotLayout R (fun i ↦ U i.succ) (fun i ↦ V i.succ) ++ ℓ)).eval
-        ((prepareSlots R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
-          (fun i ↦ η i.succ) ℓ).eval x)) := by
-  apply (prepareSlots_heq_prepare (r :: R) U V η ℓ x).trans
-  rw [ofSlots_cons]
-  exact source_apply_heq r (U 0) (V 0) (η 0)
-    (congrArg (· ++ ℓ) (layout_ofSlots_eq R (fun i ↦ U i.succ)
-      (fun i ↦ V i.succ) (fun i ↦ η i.succ) (fun _ ↦ 0)))
-    (prepareSlots_heq_prepare R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
-      (fun i ↦ η i.succ) ℓ x).symm
-
 /-- Free-slot preparation identifies the selected inventory preparation. -/
 private theorem prepareFreeSlots_heq_prepare (R : SourceInventory P)
     (U V : Fin R.length → HSpace) (free : Fin R.length → Bool)
@@ -206,7 +167,7 @@ private theorem prepareFreeSlots_cons_true_heq (r : PairSource P)
           (fun i ↦ free i.succ) (fun i ↦ ζ i.succ) ℓ).eval x)) := by
   apply (prepareFreeSlots_heq_prepare (r :: R) U V free ζ ℓ x).trans
   rw [selectedSources, ite_eq_left h]
-  exact source_apply_heq r (U 0) (V 0) (ζ 0)
+  exact Word.eval_source_apply_heq ⟨r.left, r.right, r.distinct, U 0, V 0, ζ 0⟩
     (congrArg (· ++ ℓ) (layout_selectedSources_eq R (fun i ↦ U i.succ)
       (fun i ↦ V i.succ) (fun i ↦ free i.succ) (fun i ↦ ζ i.succ) (fun _ ↦ 0)))
     (prepareFreeSlots_heq_prepare R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
@@ -225,14 +186,6 @@ private theorem prepareFreeSlots_cons_false_heq (r : PairSource P)
   exact (prepareFreeSlots_heq_prepare R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
       (fun i ↦ free i.succ) (fun i ↦ ζ i.succ) ℓ x).symm
 
-
-/-- A spectator operation commutes with preparation of the pair in front. -/
-private theorem frame_pair_source (r : PairSource P) (U V : HSpace)
-    (η : U ⊗[ℂ] V) {a b : Layout P} (w : Word a b) (x : Mem a) :
-    (Word.frame ⟨r.left, U⟩ (Word.frame ⟨r.right, V⟩ w)).eval
-      ((Word.source r.distinct U V η a).eval x) =
-    (Word.source r.distinct U V η b).eval (w.eval x) := by
-  exact eval_frameList_prepare [⟨r.left, r.right, r.distinct, U, V, η⟩] w x
 
 /-- One fixed word reconstructs preparation for every family of free vectors.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434. -/
@@ -254,13 +207,13 @@ theorem eval_prepareSelected_prepareFreeSlots (R : SourceInventory P)
           (prepareSelected R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
             (fun i ↦ free i.succ) (fun i h ↦ fixed i.succ h) ℓ))) _ _
         (prepareFreeSlots_cons_true_heq r R U V free h ζ ℓ x)).trans ?_
-      have hout := prepareSlots_cons_heq r R U V
+      have hout := prepareSlots_cons_eval_heq r R U V
         (fillSourceVectors (r :: R) U V free fixed ζ) ℓ x
       have hzero : fillSourceVectors (r :: R) U V free fixed ζ 0 = ζ 0 := by
         simp [fillSourceVectors, h]
       rw [hzero] at hout
       refine (heq_of_eq ?_).trans hout.symm
-      rw [frame_pair_source]
+      rw [PairSource.eval_frame_frame_source]
       rw [← comp_apply (prepareSelected R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
         (fun i ↦ free i.succ) (fun i h ↦ fixed i.succ h) ℓ).eval, ih]
       rfl
@@ -272,7 +225,7 @@ theorem eval_prepareSelected_prepareFreeSlots (R : SourceInventory P)
             (slotLayout R (fun i ↦ U i.succ) (fun i ↦ V i.succ) ++ ℓ))) _ _
         (prepareFreeSlots_cons_false_heq r R U V free (Bool.eq_false_iff.mpr h)
           ζ ℓ x)).trans ?_
-      have hout := prepareSlots_cons_heq r R U V
+      have hout := prepareSlots_cons_eval_heq r R U V
         (fillSourceVectors (r :: R) U V free fixed ζ) ℓ x
       have hzero : fillSourceVectors (r :: R) U V free fixed ζ 0 =
           fixed 0 (Bool.eq_false_iff.mpr h) := by

@@ -39,9 +39,10 @@ private structure CFIIBlockGaugeData {m : ℕ} (A : MPSTensor d m) where
   fixedPoint : ∃ Λ : Matrix (Fin m) (Fin m) ℂ,
     Λ.PosDef ∧ Λ.IsDiag ∧ Kraus.transferMap block Λ = Λ
 
-private theorem IsNormalTensor.exists_cfiiBlockGaugeData {m : ℕ} [NeZero m]
+private theorem IsNormalTensor.exists_cfiiBlockGaugeData {m : ℕ}
     {A : MPSTensor d m} (hA : IsNormalTensor A) :
     Nonempty (CFIIBlockGaugeData A) := by
+  have : NeZero m := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨σ, _hσ, _hσfix, hTP, hGaugeTP, _hPrimitive, hIrreducible⟩ :=
     hA.exists_tpGauge
   let T : MPSTensor d m := Kraus.tpGauge A σ
