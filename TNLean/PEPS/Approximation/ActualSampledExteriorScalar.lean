@@ -104,6 +104,33 @@ private theorem empty_memory_words_mixed_partialTrace
       (α * conj β) • (1 : Matrix PUnit PUnit ℂ) := by
   exact empty_memory_mixed_partialTrace ha hb B C u.eval t.eval v.eval α β hA hT hU
 
+/-- The selected coordinate trace is formed for arbitrary source-free words
+before the actual source and endpoint words are substituted. Source:
+polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 574–579. -/
+private theorem empty_party_words_mixed_partialTrace
+    {Q I J : Type} [Fintype I] [Fintype J] (q : Q) {a b : Layout Q}
+    (u t : Word a b) (v : Word a a)
+    (hu : u.sources = []) (ht : t.sources = []) (hv : v.sources = [])
+    (ha : Layout.atParty q a = []) (hb : Layout.atParty q b = [])
+    (B : OrthonormalBasis I ℂ (Mem (Layout.atParty q a)))
+    (C : OrthonormalBasis (PUnit × J) ℂ (Mem (Layout.atParty q b))) (α β : ℂ)
+    (hA : HEq (u.restrict (partySelector q) hu).eval
+      (α • ContinuousLinearMap.id ℂ ℂ))
+    (hT : HEq (t.restrict (partySelector q) ht).eval
+      (β • ContinuousLinearMap.id ℂ ℂ))
+    (hU : HEq (v.restrict (partySelector q) hv).eval
+      (ContinuousLinearMap.id ℂ ℂ)) :
+    Matrix.partialTraceRight
+        (Matrix.of (fun row col ↦ C.repr ((u.restrict (partySelector q) hu).eval (B col)) row) *
+          Matrix.of (fun row col ↦ B.repr ((v.restrict (partySelector q) hv).eval (B col)) row) *
+          (Matrix.of (fun row col ↦ C.repr
+            ((t.restrict (partySelector q) ht).eval (B col)) row))ᴴ) =
+      (α * conj β) • (1 : Matrix PUnit PUnit ℂ) := by
+  exact empty_memory_words_mixed_partialTrace
+    (a := Layout.atParty q a) (b := Layout.atParty q b) ha hb B C
+    (u.restrict (partySelector q) hu) (t.restrict (partySelector q) ht)
+    (v.restrict (partySelector q) hv) α β hA hT hU
+
 namespace SourceCircuit
 variable {P : Type} {a b : Layout P}
 
@@ -185,22 +212,14 @@ theorem partialSourceWord_sampled_none_partialTrace_eq_scalar
   have hU := sampledEndpointInputWord_party_none_eval_heq_id w k lam L R ξ ζ j ω
   have ha := actualSourceInput_none_eq_nil w
   have hb := Layout.atParty_none_mapOwner_all b
-  dsimp only [Layout.atParty, partySelector] at B C ha hb hξ hζ hU ⊢
-  with_reducible
-    generalize Layout.restrict (fun q ↦ decide (q = none))
-        (w.allResidualSourceLayout ++ []) = a₀,
-      Layout.restrict (fun q ↦ decide (q = none))
-        (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b) = b₀,
-      (w.partialSourceWord ψ ξ).restrict (fun q ↦ decide (q = none))
-        (sources_partialSourceWord w ψ ξ) = A,
-      (w.partialSourceWord ψ ζ).restrict (fun q ↦ decide (q = none))
-        (sources_partialSourceWord w ψ ζ) = T,
-      (sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict
-        (fun q ↦ decide (q = none)) (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω) = U
-      at B C ha hb hξ hζ hU ⊢
-  exact empty_memory_words_mixed_partialTrace
+  exact empty_party_words_mixed_partialTrace
     (Q := Option {p : P // (fun _ : P ↦ true) p = true}) (I := I) (J := J)
-    (a := a₀) (b := b₀) ha hb B C A T U
+    (a := w.allResidualSourceLayout ++ [])
+    (b := Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b) none
+    (w.partialSourceWord ψ ξ) (w.partialSourceWord ψ ζ)
+    (sampledEndpointInputWord w k lam L R ξ ζ j ω)
+    (sources_partialSourceWord w ψ ξ) (sources_partialSourceWord w ψ ζ)
+    (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω) ha hb B C
     w.emptyGateScalar w.emptyGateScalar hξ hζ hU
 
 end SourceCircuit
