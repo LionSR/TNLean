@@ -466,7 +466,7 @@ def spectralProjector (x : Matrix m m ℂ) (μ : ℂ) : Matrix m m ℂ :=
   cfc (fun z : ℂ ↦ if z = μ then (1 : ℂ) else 0) x
 
 /-- Spectral projectors are Hermitian, since the indicator function of a point is real. -/
-theorem conjTranspose_spectralProjector (x : Matrix m m ℂ) (μ : ℂ) :
+lemma conjTranspose_spectralProjector (x : Matrix m m ℂ) (μ : ℂ) :
     (spectralProjector x μ)ᴴ = spectralProjector x μ := by
   change star (cfc _ x) = cfc _ x
   rw [← cfc_star]
@@ -476,7 +476,7 @@ theorem conjTranspose_spectralProjector (x : Matrix m m ℂ) (μ : ℂ) :
 
 /-- Spectral projectors of a normal matrix are idempotent, and those at distinct points are
 mutually orthogonal. -/
-theorem spectralProjector_mul (x : Matrix m m ℂ) [IsStarNormal x] (μ ν : ℂ) :
+lemma spectralProjector_mul (x : Matrix m m ℂ) [IsStarNormal x] (μ ν : ℂ) :
     spectralProjector x μ * spectralProjector x ν =
       if μ = ν then spectralProjector x μ else 0 := by
   have hspec := Matrix.finite_spectrum x
@@ -493,7 +493,7 @@ theorem spectralProjector_mul (x : Matrix m m ℂ) [IsStarNormal x] (μ ν : ℂ
     split_ifs <;> simp_all
 
 /-- The spectral projectors of a normal matrix over its finite spectrum sum to the identity. -/
-theorem sum_spectralProjector (x : Matrix m m ℂ) [IsStarNormal x] :
+lemma sum_spectralProjector (x : Matrix m m ℂ) [IsStarNormal x] :
     ∑ μ ∈ (Matrix.finite_spectrum x).toFinset, spectralProjector x μ = 1 := by
   have hspec := Matrix.finite_spectrum x
   unfold spectralProjector
@@ -502,7 +502,7 @@ theorem sum_spectralProjector (x : Matrix m m ℂ) [IsStarNormal x] :
   simp [Finset.sum_apply, hspec.mem_toFinset.mpr hz]
 
 /-- A normal matrix is the sum of its spectral values weighted by its spectral projectors. -/
-theorem sum_smul_spectralProjector (x : Matrix m m ℂ) [IsStarNormal x] :
+lemma sum_smul_spectralProjector (x : Matrix m m ℂ) [IsStarNormal x] :
     ∑ μ ∈ (Matrix.finite_spectrum x).toFinset, μ • spectralProjector x μ = x := by
   have hspec := Matrix.finite_spectrum x
   unfold spectralProjector
@@ -525,7 +525,7 @@ The projector is a polynomial `q(x)` interpolating the indicator of `μ` on the 
 spectrum, so its transpose is `q(xᵀ) = q(-x)`, which interpolates the indicator of `-μ`. This is
 the pairing `P_E ↔ P_Eᵀ` in the skew branch of CPSV17, Lemma
 `lemma:conjclass-normalform-continuous` (arXiv:1703.09188, lines 1066--1070). -/
-theorem transpose_spectralProjector_of_transpose_eq_neg (x : Matrix m m ℂ) [IsStarNormal x]
+lemma transpose_spectralProjector_of_transpose_eq_neg (x : Matrix m m ℂ) [IsStarNormal x]
     (hskew : xᵀ = -x) (μ : ℂ) :
     (spectralProjector x μ)ᵀ = spectralProjector x (-μ) := by
   have hspec := Matrix.finite_spectrum x
