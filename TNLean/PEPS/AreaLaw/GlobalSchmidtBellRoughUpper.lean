@@ -93,9 +93,13 @@ theorem eventually_suppliedGlobalSchmidtBellPrevector_rough_upper
         0 < ‖w‖ ^ 2 ∧ -Real.log (‖w‖ ^ 2) / (k : ℝ) ≤
           2 * Real.log (d : ℝ) - Real.log z +
             4 * (Bsh / z + Bexc) + Real.bellOverlapRemainder d c K k := by
-  run_tac Lean.throwError (α := Unit) "rough-upper proof body reached"
   classical
   intro β ΩX z hz ψ hmass
+  have hu :=
+    FiniteProduct.eventually_suppliedReplicaPrevector_rough_upper
+      (S := J) β Ω X E hΩ hz regions hnested hdisjoint ell
+      (t := 2 / (K : ℝ))
+      (div_pos (by norm_num) (by exact_mod_cast (show 0 < K by omega)))
   done
 
 end TNLean.PEPS.AreaLaw
