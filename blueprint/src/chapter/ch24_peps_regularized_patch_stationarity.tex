@@ -198,6 +198,7 @@ Its marginals are those of the same final normalized vector defined in
         TNLean.PEPS.regularizedPatchDiagonalUpdate,
         TNLean.PEPS.regularizedPatchDiagonalObjective
     }
+    \leanok
     \uses{def:peps_regularized_patch_objective}
     Fix a coordinate $j$ and a unitary $U$ on $\mathcal H_{X_j}$.
     For a real vector $y=(y_i)$ indexed by an orthonormal basis of this
@@ -215,6 +216,7 @@ Its marginals are those of the same final normalized vector defined in
 \begin{theorem}[Restriction of a patch minimum to the diagonal simplex]
     \label{thm:peps_patch_diagonal_minimum}
     \lean{TNLean.PEPS.isMinOn_regularizedPatchDiagonalObjective}
+    \leanok
     \uses{def:peps_patch_diagonal_objective}
     Let $b>0$, let $x\in\mathcal D$ minimize $F$ on $\mathcal D$, and
     suppose that $x_j=U\operatorname{diag}(s)U^*$. For every $y$ with
@@ -227,6 +229,7 @@ Its marginals are those of the same final normalized vector defined in
     vector, including zero.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:peps_patch_diagonal_objective}
     If $y$ belongs to the probability simplex, then
     $U\operatorname{diag}(y)U^*$ is positive semidefinite and has trace
