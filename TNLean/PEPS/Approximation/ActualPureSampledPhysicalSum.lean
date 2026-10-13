@@ -137,7 +137,16 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum
         (α • ∑ j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k,
           dependentPhysicalProductFamilyMatrix (fun p : P ↦ M ξ ζ j (some ⟨p, rfl⟩))) := by
     simp_rw [hTrace]
+    rfl
   refine hBase.trans (hSum.trans ?_)
+  let N (ξ ζ : Choices (fun _ : P ↦ true) w) :
+      Matrix ((p : P) → Fin (d p)) ((p : P) → Fin (d p)) ℂ :=
+    ∑ j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k,
+      dependentPhysicalProductFamilyMatrix (fun p : P ↦ M ξ ζ j (some ⟨p, rfl⟩))
+  change (∑ ξ, ∑ ζ, (coefficient (fun _ : P ↦ true) w ξ *
+      conj (coefficient (fun _ : P ↦ true) w ζ)) • (α • N ξ ζ)) =
+    α • ∑ ξ, ∑ ζ, (coefficient (fun _ : P ↦ true) w ξ *
+      conj (coefficient (fun _ : P ↦ true) w ζ)) • N ξ ζ
   have hComm (ξ ζ : Choices (fun _ : P ↦ true) w)
       (N : Matrix ((p : P) → Fin (d p)) ((p : P) → Fin (d p)) ℂ) :
       (coefficient (fun _ : P ↦ true) w ξ *
