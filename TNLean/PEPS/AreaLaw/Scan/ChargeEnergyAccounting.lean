@@ -100,11 +100,9 @@ theorem goodOld_le_capacity (R : ScanRound ι Θ) (k : ℕ) (p : ℝ)
   have hsc0 : 0 ≤ ∑ x, c x := Finset.sum_nonneg fun x _ ↦ hc0 x
   have hcJ0 : 0 ≤ ∑ x, c x * J x ^ (8 : ℝ) :=
     Finset.sum_nonneg fun x _ ↦ mul_nonneg (hc0 x) (Real.rpow_nonneg (hJ0 x) _)
-  calc (∑ x, c x) ^ (7 / 8 : ℝ) * (∑ x, c x * J x ^ (8 : ℝ)) ^ (1 / 8 : ℝ)
-      ≤ N ^ (7 / 8 : ℝ) * (R.chargeDefect k p) ^ (1 / 8 : ℝ) :=
-        mul_le_mul (Real.rpow_le_rpow hsc0 hsumc (by norm_num))
-          (Real.rpow_le_rpow hcJ0 hQ (by norm_num)) (Real.rpow_nonneg hcJ0 _)
-          (Real.rpow_nonneg hN _)
+  exact mul_le_mul (Real.rpow_le_rpow hsc0 hsumc (by norm_num))
+    (Real.rpow_le_rpow hcJ0 hQ (by norm_num)) (Real.rpow_nonneg hcJ0 _)
+    (Real.rpow_nonneg hN _)
 
 open Classical in
 /-- A single-round energy bound retaining the exact old and new interpolation
@@ -196,7 +194,8 @@ theorem energySum_le_of_leaf_bounds (R : ScanRound ι Θ) (k : ℕ) {p : ℝ}
       apply mul_le_mul_of_nonneg_left _ hd
       unfold termEnergy
       rw [Finset.sum_add_distrib, Finset.sum_comm]
-      dsimp only [badWeight] at *
-      linarith
+      refine (add_le_add (holdsum.trans (add_le_add_right holdgood _)) hnew).trans_eq ?_
+      unfold badWeight
+      ring
 
 end TNLean.PEPS.AreaLaw.Scan.ScanRound

@@ -60,6 +60,7 @@ private theorem entropy_le_logDim_of_subset (θ : EuclideanSpace ℂ (SiteConfig
       rw [logDim, Real.log_mul (Real.exp_pos 1).ne' hprod.ne', Real.log_exp]
       linarith
 
+omit [∀ v, NeZero (n v)] in
 /-- Both choices of the receiving side have nonnegative split entropy. -/
 theorem splitBandEta_nonneg (π : PYF V) (hπ : π.IsPartition) (B : Finset V)
     (θ : EuclideanSpace ℂ (SiteConfig n)) : 0 ≤ splitBandEta n π B θ := by
@@ -94,14 +95,16 @@ variable {K : ℕ} {H : Type*} [Fintype H] [DecidableEq H] {C : H → Type*}
   [∀ h, Fintype (C h)] [∀ h, DecidableEq (C h)]
   (D : TransportData V K H C) {ι : Type*} [Fintype ι] (E : EnergyTerms V n ι)
 
+omit [∀ v, NeZero (n v)] [Fintype H] [∀ h, Fintype (C h)] [Fintype ι] in
 /-- Split entropy is nonnegative at every leaf of admissible transport data. -/
 theorem splitEta_nonneg (hD : D.IsAdmissible) (i : ι) (j : Σ h, Option (C h))
     (θ : EuclideanSpace ℂ (SiteConfig n)) : 0 ≤ D.splitEta E i j θ := by
   classical
   unfold splitEta
   exact Finset.sum_nonneg fun g _ =>
-    splitBandEta_nonneg n _ (D.isPartition_leafPart hD j g) _ θ
+    splitBandEta_nonneg n _ (D.isPartition_leafPart' hD j g) _ θ
 
+omit [Fintype ι] in
 /-- A compatible leaf's entropy is bounded by twice the support cap. The cap
 is needed only for supports having a split leaf; all other symbols vanish. -/
 theorem splitEta_le_two_mul_of_logDim_le (hD : D.IsAdmissible)
@@ -120,6 +123,8 @@ theorem splitEta_le_two_mul_of_logDim_le (hD : D.IsAdmissible)
     rw [hzero]
     exact mul_nonneg (by norm_num) hℓ
 
+omit [∀ v, NeZero (n v)] [Fintype H] [DecidableEq H]
+  [∀ h, Fintype (C h)] [∀ h, DecidableEq (C h)] [Fintype ι] in
 /-- The actual split symbol restricted to the coherent sphere is measurable. -/
 theorem measurable_splitEta_sphere (i : ι) (j : Σ h, Option (C h)) :
     Measurable (fun θ : CoherentSphere (SiteConfig n) => D.splitEta E i j θ.1) := by
