@@ -297,14 +297,30 @@ operations on an empty memory.
     \uses{thm:peps_exterior_owner_selector,thm:peps_actual_touched_gate_exterior,thm:peps_actual_empty_party_gate_scalar,
         thm:peps_scalar_residual_composition,thm:peps_all_party_source_exterior_empty,
         thm:peps_actual_private_preparation_exterior}
-    Induct on the composition. Every local operation or exchange at an
-    original party has exterior restriction $1$. A gate with a participating
-    party also contributes $1$; a gate with no participating party contributes
-    the sum of its original coefficients. Chronological composition multiplies
-    these scalars, and adjoining an excluded register preserves them. All
-    exterior input, intermediate and source memories are empty. The prescribed
-    slot identification adds no operation, and the private preparation
-    contributes the identity. No scalar is cancelled.
+    Induct on the composition, writing $\lambda_u$ for the exterior
+    scalar of a subword $u$. A local operation or exchange at an original
+    party, a gate with participating parties $C$, and a chronological
+    composition contribute
+    \begin{align}
+        \lambda_{\mathrm{op}}=1,\qquad
+        \lambda_{\mathrm{gate}}=
+        \begin{cases}
+            1,                & C\neq\varnothing, \\
+            \sum_{i\in I}c_i, & C=\varnothing,
+        \end{cases}
+        \qquad
+        \lambda_{u\circ v}=\lambda_u\lambda_v,
+        \label{eq:peps_actual_exterior_scalar_cases}
+    \end{align}
+    by Theorems~\ref{thm:peps_actual_touched_gate_exterior},
+    \ref{thm:peps_actual_empty_party_gate_scalar}
+    and~\ref{thm:peps_scalar_residual_composition}, and adjoining an
+    excluded register preserves $\lambda_u$. All exterior input,
+    intermediate and source memories are empty. The prescribed slot
+    identification adds no operation, and the private preparation
+    contributes the identity, so $\lambda_W$ is the product of the
+    factors in~(\ref{eq:peps_actual_exterior_scalar_cases}). No scalar
+    is cancelled.
 \end{proof}
 
 \begin{definition}[Actual party matrices and their source coordinates]
@@ -314,10 +330,10 @@ operations on an empty memory.
     \leanok
     \uses{def:peps_actual_source_input_basis,def:peps_actual_private_preparation,
         def:peps_party_grouped_basis}
-    Let $\mathcal P$ be finite and set
-    $\mathcal Q=\mathcal P\sqcup\{\star\}$, where $\star$ denotes the
+    Let $P$ be finite and set
+    $Q=P\sqcup\{*\}$, where $*$ denotes the
     exterior owner. Choose orthonormal bases $B_q,C_q$ for the actual input
-    and output register memories at each $q\in\mathcal Q$, and order all
+    and output register memories at each $q\in Q$, and order all
     parties without repetition. Let $B,C$ be the corresponding grouped bases.
     Write $E$ for the literal source input basis. Define
     \[
@@ -337,9 +353,9 @@ operations on an empty memory.
         thm:peps_actual_party_word_entries}
     The literal prepared source-column matrix, with output basis $C$, satisfies
     \[
-        D_\xi=\left(\bigotimes_{q\in\mathcal Q} A_{\xi,q}\right)R.
+        D_\xi=\left(\bigotimes_{q\in Q} A_{\xi,q}\right)R.
     \]
-    Every owner, including $\star$, remains in this product. The same bases
+    Every owner, including $*$, remains in this product. The same bases
     and the same $R$ may be used for independent ket and bra choices.
 \end{theorem}
 
@@ -348,9 +364,18 @@ operations on an empty memory.
     \uses{thm:peps_matrix_orthonormal_coordinates,thm:peps_actual_source_column_coordinates,thm:peps_actual_party_word_entries,
         def:peps_actual_party_source_matrices}
     First express the actual word in the grouped input and output bases.
-    Its matrix is the product of its singleton-restriction matrices.
-    Compose with the identity from the literal source basis to the grouped
-    input basis. The matrix of this composition is the claimed product.
+    By Theorem~\ref{thm:peps_actual_party_word_entries} its matrix is the
+    product of its singleton-restriction matrices,
+    \[
+        [\widetilde W_\xi]_{B,C}=\bigotimes_{q\in Q}A_{\xi,q}.
+    \]
+    Composing with the identity from the literal source basis $E$ to the
+    grouped input basis $B$, whose matrix is $R$, gives
+    \[
+        D_\xi=[\widetilde W_\xi]_{E,C}
+            =[\widetilde W_\xi]_{B,C}\,[\operatorname{id}]_{E,B}
+        =\left(\bigotimes_{q\in Q}A_{\xi,q}\right)R.
+    \]
 \end{proof}
 
 \begin{theorem}[An actual input operator between prepared source columns]
@@ -364,7 +389,7 @@ operations on an empty memory.
     Set $U_q=[U|_q]_{B_q,B_q}$. For independent ket and bra choices,
     \begin{align}
         D_\xi[U]_E D_\zeta^\dagger
-         & =\bigotimes_{q\in\mathcal Q}
+         & =\bigotimes_{q\in Q}
         A_{\xi,q}U_q A_{\zeta,q}^\dagger.
         \label{eq:peps_actual_source_mixed}
     \end{align}
@@ -407,9 +432,7 @@ operations on an empty memory.
 \begin{definition}[The sampled endpoint word on the actual source input]
     \label{def:peps_actual_sampled_endpoint_word}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointWord}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_sampledEndpointWord}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointInputWord}
-    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_sampledEndpointInputWord}
     \leanok
     \uses{def:peps_original_sampled_endpoint_factors,
         def:peps_source_register_operator_word,def:peps_actual_source_input_basis}
@@ -418,10 +441,27 @@ operations on an empty memory.
     the endpoint word with its actual branch pair and the two endpoint
     matrices carrying $j(e)$. Transport this word to the actual input of the
     recorded private preparation, including the terminal scalar memory,
-    and denote it by $U_{\xi,\zeta,j}$. Neither word contains a source
-    preparation. The original occurrence, branch pair, Gaussian array and
-    sample assignment are retained throughout the construction.
+    and denote it by $U_{\xi,\zeta,j}$. The original occurrence, branch
+    pair, Gaussian array and sample assignment are retained throughout the
+    construction.
 \end{definition}
+
+\begin{theorem}[Neither sampled endpoint word contains a source]
+    \label{thm:peps_actual_sampled_endpoint_word_sources}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_sampledEndpointWord}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_sampledEndpointInputWord}
+    \leanok
+    \uses{def:peps_actual_sampled_endpoint_word}
+    The sampled endpoint word and its transport $U_{\xi,\zeta,j}$ to the
+    actual source input contain no source preparation.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_actual_sampled_endpoint_word,def:peps_source_register_operator_word}
+    An endpoint word is a composition of endpoint operators and exchanges,
+    none of which prepares a source, and the canonical transport to the
+    actual input adds no operation.
+\end{proof}
 
 \begin{theorem}[The actual sampled source matrix as a sum of endpoint words]
     \label{thm:peps_actual_sampled_endpoint_average}
@@ -449,7 +489,7 @@ operations on an empty memory.
 
 \begin{proof}\leanok
     \uses{thm:peps_matrix_orthonormal_coordinates,thm:peps_endpoint_matrix_average,def:peps_actual_sampled_endpoint_word,
-        def:peps_actual_source_input_basis}
+        def:peps_original_sampled_endpoint_factors,def:peps_actual_source_input_basis}
     Apply the finite endpoint-averaging identity to the original ordered
     source list. The equivalence between its positions and the original
     source occurrences transports one complete assignment $j$. Conjugating
@@ -467,7 +507,7 @@ operations on an empty memory.
     The literal sampled source contraction satisfies
     \begin{align}
         D_\xi X_{\xi,\zeta}D_\zeta^\dagger
-         & =k^{-n}\sum_j\bigotimes_{q\in\mathcal Q}
+         & =k^{-n}\sum_j\bigotimes_{q\in Q}
         A_{\xi,q}U_{\xi,\zeta,j,q}A_{\zeta,q}^\dagger.
         \label{eq:peps_actual_sampled_contraction}
     \end{align}
@@ -515,4 +555,129 @@ operations on an empty memory.
     the source layout with the preparation input transports the restriction
     by the same canonical identification on its input and output; hence
     this scalar identity is preserved.
+\end{proof}
+
+\begin{theorem}[Source replacement through the actual prepared columns]
+    \label{thm:peps_actual_pure_source_replacement}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_pure_eq_sum_actualColumns}
+    \leanok
+    \uses{def:peps_global_source_replacement,thm:peps_actual_pure_source_contraction}
+    Let $\psi$ be the recorded product input, let $c_\xi$ be the original
+    coefficient of the choice $\xi$, and let $D_\xi$ be its actual prepared
+    source-column matrix in the specified finite orthonormal output basis.
+    Let $\widehat\rho_\psi(Y)$ be the full source-replaced output operator
+    before tracing the private registers. For arbitrary
+    replacement matrices $Y_{e,\alpha,\beta}$, put
+    $Y_{\xi,\zeta}=\bigotimes_e Y_{e,\xi_e,\zeta_e}$. Then
+    \begin{align}
+        \widehat\rho_\psi(Y)
+         & =\sum_{\xi,\zeta}c_\xi\overline{c_\zeta}
+        D_\xi Y_{\xi,\zeta}D_\zeta^\dagger.
+        \label{eq:peps_actual_pure_replacement}
+    \end{align}
+    The ket and bra choices are independent, and every source occurrence
+    is the original occurrence of the circuit. Zero coefficients, empty
+    source inventories and arbitrary complex replacement matrices are
+    included. This is the prepared-input form of source replacement in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 279--355, 409--434 and 565--588.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_global_source_replacement,thm:peps_actual_pure_source_contraction}
+    Expand the definition of source replacement as a sum over independent
+    choices $\xi,\zeta$. Transporting the input basis and the input vector
+    through the same owner isometry preserves their coordinates. Apply
+    Theorem~\ref{thm:peps_actual_pure_source_contraction} to each term,
+    retaining its original scalar $c_\xi\overline{c_\zeta}$.
+\end{proof}
+
+
+
+
+\begin{theorem}[Physical source replacement through the actual columns]
+    \label{thm:peps_actual_pure_physical_source_replacement}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_pure_eq_sum_actualColumnTraces}
+    \leanok
+    \uses{thm:peps_actual_pure_source_replacement,def:peps_physical_source_replacement}
+    Choose finite orthonormal bases of the original physical and private
+    output memories, and use their tensor product through the canonical
+    output identification. Write $G$ for the original private output memory.
+    With the notation of
+    Theorem~\ref{thm:peps_actual_pure_source_replacement}, the physical
+    source-replaced operator $\widehat\rho_{\mathrm{phys},\psi}(Y)$ on the
+    recorded product input satisfies
+    \begin{align*}
+        \widehat\rho_{\mathrm{phys},\psi}(Y)
+         & =\sum_{\xi,\zeta}c_\xi\overline{c_\zeta}
+        \operatorname{tr}_{G}(D_\xi Y_{\xi,\zeta}D_\zeta^\dagger).
+    \end{align*}
+    The choices remain independent and the replacement matrices are
+    arbitrary complex matrices. No positivity or normalization is required.
+    This is the physical partial trace of the prepared-column expansion in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 338--383 and 565--588.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_actual_pure_source_replacement,def:peps_physical_source_replacement}
+    Apply the partial trace over the original private output memory to
+    (\ref{eq:peps_actual_pure_replacement}). The partial trace is
+    complex-linear and therefore distributes over both finite sums and
+    the coefficients $c_\xi\overline{c_\zeta}$.
+\end{proof}
+
+
+
+
+\begin{theorem}[Physical traces of arbitrary mixed source-column matrices]
+    \label{thm:peps_actual_source_column_physical_trace}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.selectedPhysicalPrivateBasis_partialTrace_actualColumns}
+    \leanok
+    \uses{thm:peps_selected_physical_private_trace,thm:peps_actual_source_column_coordinates}
+    Let $X$ be any matrix on the original joint source-coordinate space,
+    and let $\xi,\zeta$ be independent chronological choices. Let
+    $D_\xi,D_\zeta$ be their actual prepared-column matrices in the
+    constructed local physical/private bases. Let $D_\xi^{\mathrm{ref}}$
+    and $D_\zeta^{\mathrm{ref}}$ instead use the original physical basis
+    and any finite orthonormal reference basis of the original private
+    output memory $G$. Write $\chi$ for the canonical separation of
+    retained and discarded coordinates, followed by identification with
+    the original physical configurations. Then
+    \begin{align*}
+        \operatorname{tr}_{\prod_qE_q}
+        \left((D_\xi X D_\zeta^\dagger)^\chi\right)
+         & =\operatorname{tr}_{G}
+        \left(D_\xi^{\mathrm{ref}}X
+        (D_\zeta^{\mathrm{ref}})^\dagger\right).
+    \end{align*}
+    The matrix $X$ may be correlated across source slots, and need not be
+    positive or Hermitian. Empty source inventories, zero matrices and
+    zero-dimensional physical memories are included. This identifies the
+    local-coordinate trace with the actual physical partial trace in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 279--355, 409--434 and 565--588.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_selected_physical_private_trace,thm:peps_actual_source_column_coordinates}
+    Expand $X$ in matrix units. Writing $e_s$ for the basis vectors of
+    the original joint source-coordinate space,
+    \begin{align*}
+        D_\xi XD_\zeta^\dagger
+         & =\sum_{s,t}X_{s,t}\,(D_\xi e_s)(D_\zeta e_t)^\dagger,
+    \end{align*}
+    and likewise for $D_\xi^{\mathrm{ref}}X(D_\zeta^{\mathrm{ref}})^\dagger$.
+    For each $(s,t)$ the summand is the rank-one operator formed from the
+    actual $s$-th ket column and $t$-th bra column, and
+    Theorem~\ref{thm:peps_selected_physical_private_trace} applied to
+    these actual output vectors gives
+    \begin{align*}
+        \operatorname{tr}_{\prod_qE_q}
+        \left(\left((D_\xi e_s)(D_\zeta e_t)^\dagger\right)^\chi\right)
+         & =\operatorname{tr}_{G}
+        \left((D_\xi^{\mathrm{ref}}e_s)(D_\zeta^{\mathrm{ref}}e_t)^\dagger\right).
+    \end{align*}
+    Complex linearity of the coordinate change $\chi$ and of both partial
+    traces gives the result for arbitrary $X$.
 \end{proof}

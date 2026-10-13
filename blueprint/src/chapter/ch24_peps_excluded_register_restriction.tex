@@ -197,14 +197,31 @@ These identities concern the register selections used in
 \begin{proof}\leanok
     \uses{def:peps_canonical_source_residual,
         thm:peps_excluded_spectator_restriction,thm:peps_party_restriction}
-    In the remaining operations of $VW$, the sources of $V$ are
-    untouched registers beside those of $W$. They disappear under
-    restriction, leaving the composition of the two scalar maps.
-    Its scalar is $\beta\alpha=\alpha\beta$.
+    Write $A$ for the selected registers and $W^{\mathrm r},V^{\mathrm r}$
+    for the remaining operations of $W,V$. In the remaining operations
+    of $VW$, the sources of $V$ are untouched registers beside those of
+    $W$, and every one of them is excluded. By
+    Theorem~\ref{thm:peps_excluded_spectator_restriction} they
+    disappear under restriction, and restriction of a composition is
+    the composition of the restrictions, so
+    \begin{align}
+        (VW)^{\mathrm r}|_A
+         & =V^{\mathrm r}|_A\circ W^{\mathrm r}|_A
+        =\beta\operatorname{id}_{\mathbb C}\circ\alpha\operatorname{id}_{\mathbb C}
+        =\alpha\beta\operatorname{id}_{\mathbb C}.
+    \end{align}
 
-    Extending $W$ by an excluded register first moves that register
-    past the prepared sources and then adjoins it unchanged to the
-    remaining operations. Every register in these exchanges is
-    excluded, so their restriction is the identity. Removing the
-    untouched excluded register leaves the scalar map of $W$.
+    Let $\widetilde W$ be $W$ extended by an untouched register $r$
+    with excluded owner and register space $H_r$. Its remaining
+    operations first move $r$ past the prepared sources by an exchange
+    $E$ and then adjoin $r$ unchanged, so
+    $\widetilde W^{\mathrm r}=(\operatorname{id}_{H_r}\otimes W^{\mathrm r})\circ E$.
+    Every register in $E$ is excluded, so $E|_A=\operatorname{id}_{\mathbb C}$,
+    and (\ref{eq:peps_excluded_head}) gives
+    \begin{align}
+        \widetilde W^{\mathrm r}|_A
+         & =(\operatorname{id}_{H_r}\otimes W^{\mathrm r})|_A\circ E|_A
+        =W^{\mathrm r}|_A
+        =\alpha\operatorname{id}_{\mathbb C}.
+    \end{align}
 \end{proof}

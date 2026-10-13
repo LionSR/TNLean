@@ -127,8 +127,6 @@ theorem dim_eq_of_mpvBlockPhaseEquiv_of_isPeriodic {D₁ D₂ m_a m_b : ℕ}
     D₁ = D₂ := by
   classical
   by_contra hD
-  have : NeZero D₁ := ⟨hA.bondDim_ne_zero⟩
-  have : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩
   obtain ⟨ζ, hζ, hmpv⟩ := h
   have hdecay : Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0) := by
     rcases periodicOverlapDichotomy A B hA hB with h1 | ⟨hdim, -⟩

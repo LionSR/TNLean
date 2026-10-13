@@ -106,6 +106,7 @@ import TNLean.Algebra.MatrixEntryNorm
 import TNLean.Algebra.MatrixFixedSection
 import TNLean.Algebra.MatrixGramLeftInverse
 import TNLean.Algebra.MatrixIdempotentFactorization
+import TNLean.Algebra.MatrixInvolutionConjugation
 import TNLean.Algebra.MatrixKroneckerContraction
 import TNLean.Algebra.MatrixL2Contraction
 import TNLean.Algebra.MatrixProjectionReindex

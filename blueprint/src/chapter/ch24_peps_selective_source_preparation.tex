@@ -425,7 +425,7 @@ complete operators. We give the corresponding exact constructions.
     \lean{TNLean.PEPS.PairEffect.Word.mapOwner_appendTail_heq}
     \leanok
     \uses{def:peps_append_spectators,def:peps_owner_composition,
-        def:peps_owner_layout,thm:peps_register_exchange}
+        def:peps_owner_layout}
     Let $g:P\to Q$ be any map of party labels, let $W:a\to b$
     be an arbitrary chronological composition, and let $t$ be an
     ordered spectator list. Write $W^g$ and $t^g$ for their
@@ -445,13 +445,28 @@ complete operators. We give the corresponding exact constructions.
     \uses{def:peps_append_spectators,def:peps_owner_composition,
         def:peps_owner_layout,thm:peps_register_exchange}
     Relabelling preserves the spaces, order and concatenation of
-    register lists. Induction on a prefix shows that moving a
-    register through it commutes with relabelling: each frame and
-    adjacent exchange acquires exactly its relabelled owners.
-    Induction on the second block gives the corresponding identity
-    for a block exchange. Likewise, induction on $t$ shows that
-    framing $W$ by $t$ commutes with relabelling. Apply these
-    identities to the initial exchange, the framed core and the
-    final exchange defining $W_t$, and compose them under the
-    canonical concatenation identifications.
+    register lists. For a register $r$, a block $A$ and an adjacent
+    exchange, each frame and exchange acquires exactly its relabelled
+    owners,
+    \begin{align}
+        (\mathrm{frame}_r\,w)^g
+         & =\mathrm{frame}_{r^g}(w^g),
+        \qquad
+        (\mathrm{Exch}_{r,A})^g=\mathrm{Exch}_{r^g,A^g},
+        \label{eq:peps_owner_frame_exchange}
+    \end{align}
+    so induction on a prefix shows that moving a register through it
+    commutes with relabelling. Induction on the second block then gives
+    the block exchange identity
+    $(\mathrm{Exch}_{A,B})^g=\mathrm{Exch}_{A^g,B^g}$, and induction on
+    $t$ gives $(W_{[t]})^g=(W^g)_{[t^g]}$ for the framing of $W$ by $t$.
+    Apply these identities to the initial exchange, the framed core and
+    the final exchange defining $W_t$ and compose,
+    \begin{align}
+        (W_t)^g
+         & =\bigl(\mathrm{Exch}_{t,b}\circ W_{[t]}\circ\mathrm{Exch}_{a,t}\bigr)^g
+        =\mathrm{Exch}_{t^g,b^g}\circ(W^g)_{[t^g]}\circ\mathrm{Exch}_{a^g,t^g}
+        =(W^g)_{t^g},
+    \end{align}
+    under the canonical concatenation identifications.
 \end{proof}

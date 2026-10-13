@@ -47,16 +47,6 @@ variable [Fact (2 < width)] [Fact (2 < height)]
 local instance : Fact (1 < width) := ⟨by have := Fact.out (p := 2 < width); omega⟩
 local instance : Fact (1 < height) := ⟨by have := Fact.out (p := 2 < height); omega⟩
 
-/-- The induced graph of a four-site plaquette is connected. -/
-theorem connected_torusPlaquetteRegion (v : TorusVertex width height) :
-    ((torusGraph width height).induce (torusPlaquetteRegion v : Set _)).Connected := by
-  have hR : (torusPlaquetteRegion v : Set _) =
-      {x | x ∈ (torusPlaquetteWalk v).support} := by
-    ext x
-    simp [torusPlaquetteRegion]
-  rw [hR]
-  exact (torusPlaquetteWalk v).connected_induce_support
-
 /-- A native plaquette is the translate of the plaquette at the origin. -/
 theorem torusPlaquetteRegion_eq_image_add (v : TorusVertex width height) :
     torusPlaquetteRegion v = (torusPlaquetteRegion (0 : TorusVertex width height)).image

@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Scan.Defs
+import TNLean.PEPS.AreaLaw.Scan.EntropyBalance
 
 /-!
 # Selection of a low-defect charge point
@@ -20,7 +20,7 @@ and 8.1, and Lemmas 2.1 and 2.3 for one scan rather than deriving them. Document
 ## Main results
 
 * `TNLean.PEPS.AreaLaw.Scan.exists_mem_Icc_le_of_sum_integral_le`: averaging over finitely many
-  continuous functions on an interval.
+  interval-integrable functions on an interval.
 * `TNLean.PEPS.AreaLaw.Scan.tendsto_log_div_nat`: `log (k + 2) / k → 0`.
 * `TNLean.PEPS.AreaLaw.Scan.exists_selected_density`.
 
@@ -34,28 +34,30 @@ and 8.1, and Lemmas 2.1 and 2.3 for one scan rather than deriving them. Document
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
-open Filter Topology Set Asymptotics
+open MeasureTheory Filter Topology Set Asymptotics
 
-/-- Averaging: if the integrals of finitely many continuous functions over `[α, β]` sum to at
-most `|T| (β - α) c`, one of them takes a value at most `c` somewhere on `[α, β]`
-(lines 480–490). -/
+/-- Averaging: if the integrals of finitely many interval-integrable functions over `[α, β]`
+sum to at most `|T| (β - α) c`, one of them takes a value at most `c` somewhere on `[α, β]`
+(lines 480–490). Strict positivity of the integral of `Q r - c` proves the exact inequality
+without continuity or attainment of a minimum. -/
 theorem exists_mem_Icc_le_of_sum_integral_le {R : ℕ} (Q : Fin R → ℝ → ℝ) (T : Finset (Fin R))
     (hT : T.Nonempty) {α β c : ℝ} (hαβ : α < β)
-    (hcont : ∀ r ∈ T, ContinuousOn (Q r) (Icc α β))
+    (hint : ∀ r ∈ T, IntervalIntegrable (Q r) volume α β)
     (h : ∑ r ∈ T, ∫ p in α..β, Q r p ≤ T.card * ((β - α) * c)) :
     ∃ r ∈ T, ∃ p ∈ Icc α β, Q r p ≤ c := by
   rw [← nsmul_eq_mul, ← Finset.sum_const] at h
   obtain ⟨r, hr, hle⟩ := Finset.exists_le_of_sum_le hT h
   refine ⟨r, hr, ?_⟩
-  obtain ⟨p₀, hp₀, hmin⟩ := isCompact_Icc.exists_isMinOn (nonempty_Icc.2 hαβ.le) (hcont r hr)
-  refine ⟨p₀, hp₀, ?_⟩
-  by_contra hlt
-  push Not at hlt
-  have hint : ∫ p in α..β, Q r p₀ ≤ ∫ p in α..β, Q r p :=
-    intervalIntegral.integral_mono_on hαβ.le intervalIntegrable_const
-      ((hcont r hr).intervalIntegrable_of_Icc hαβ.le) fun x hx ↦ hmin hx
-  rw [intervalIntegral.integral_const, smul_eq_mul] at hint
-  nlinarith [sub_pos.2 hαβ]
+  by_contra hno
+  have hpos : ∀ p ∈ Ioo α β, 0 < Q r p - c := by
+    intro p hp
+    exact sub_pos.2 (lt_of_not_ge fun hle ↦ hno ⟨p, ⟨hp.1.le, hp.2.le⟩, hle⟩)
+  have hposint : 0 < ∫ p in α..β, (Q r p - c) :=
+    intervalIntegral.intervalIntegral_pos_of_pos_on
+      ((hint r hr).sub intervalIntegrable_const) hpos hαβ
+  rw [intervalIntegral.integral_sub (hint r hr) intervalIntegrable_const,
+    intervalIntegral.integral_const, smul_eq_mul] at hposint
+  linarith
 
 /-- `log (k + 2) / k → 0`: the replica floor `β_k = O(log(k+2))` does not survive the
 normalization by `k` (lines 452–455). -/
@@ -194,7 +196,9 @@ theorem exists_selected_density (X : ScannerExponents) (κ : ScanConstants) (C�
     rw [← this]; ring
   obtain ⟨r, hr, p, hp, hQ⟩ := exists_mem_Icc_le_of_sum_integral_le
     (fun r ↦ (S.round r).chargeDefect k) (X.chargeRounds n) hne (by linarith)
-    (fun r _ ↦ (S.continuousOn_chargeDefect r k).mono hsub)
+    (fun r _ ↦ (S.intervalIntegrable_chargeDefect r k).mono_set (by
+      rw [uIcc_of_le (show X.eps n / 2 ≤ X.eps n by linarith), uIcc_of_le zero_le_one]
+      exact hsub.trans Ioo_subset_Icc_self))
     (c := X.K n * n * X.D n * (δ + ρk)) (le_of_mul_le_mul_left hmain hA)
   exact ⟨r, hr, p, hp, by rw [div_le_iff₀ hKnD]; linarith⟩
 

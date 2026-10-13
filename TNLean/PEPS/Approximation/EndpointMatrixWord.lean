@@ -6,11 +6,13 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.BasisMatrixOperator
 import TNLean.PEPS.Approximation.EndpointOperatorCoordinates
 
-/-! # Actual endpoint coordinates and their sample average
+/-! # The endpoint word of specified endpoint matrices
 
-The literal endpoint operator is expressed in the recorded source-slot bases.
-The sample assignments are shared between the two endpoints of each slot.
-Source: polynomial-PEPS, `04-compression.tex`, lines 279–355 and 565–588.
+The literal endpoint word is built from one matrix at each endpoint of every
+source slot, read through the recorded orthonormal bases, and its matrix in
+the slot basis is the product of the specified entries. No sampling or
+averaging occurs here.
+Source: polynomial-PEPS, `04-compression.tex`, lines 279–309 and 565–588.
 
 ## References
 

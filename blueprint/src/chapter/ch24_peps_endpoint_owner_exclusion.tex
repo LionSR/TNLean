@@ -250,15 +250,29 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
         thm:peps_source_register_operator_local_congruence,
         thm:peps_party_restriction_canonical_layouts}
     Fix independent ket and bra choices $\xi,\zeta$ and a selector $f$
-    of the grouped owners.
-    Let $(j,\Omega)$ and $(j',\Omega')$ be two sample assignments on the
-    original source occurrences. Suppose that, whenever $f$ selects at
-    least one endpoint of a source $e$,
-    $j(e)=j'(e)$ and
-    $\Omega(e,\xi_e,\zeta_e)=\Omega'(e,\xi_e,\zeta_e)$.
-    Then the actual sampled source-input operators have equal restrictions:
-    $Z_{\xi,\zeta}(j,\Omega)|_f
-        =Z_{\xi,\zeta}(j',\Omega')|_f$.
+    of the grouped owners. A sample assignment on the original source
+    occurrences consists of a sample index $j(e)$ and a family of
+    Gaussian coordinates $\omega_{e,\alpha,\beta,s,p,q}$
+    (Definition~\ref{def:peps_source_gaussian_law}) at each source $e$;
+    write $U_{\xi,\zeta,j,\omega}$ for the actual sampled source-input
+    word of Definition~\ref{def:peps_actual_sampled_endpoint_word} built
+    from it. Let $(j,\omega)$ and $(j',\omega')$ be two sample
+    assignments. Suppose that, whenever $f$ selects at least one endpoint
+    of a source $e$, with actual branch pair $(\alpha,\beta)$ chosen by
+    $(\xi,\zeta)$ at $e$,
+    \begin{align}
+        j(e)=j'(e)
+        \qquad\text{and}\qquad
+        \omega_{e,\alpha,\beta,s,p,q}=\omega'_{e,\alpha,\beta,s,p,q}
+        \quad\text{for all }s,p,q.
+        \label{eq:peps_actual_sampled_endpoint_locality_agreement}
+    \end{align}
+    Then the actual sampled source-input words have equal restrictions:
+    \begin{align}
+        U_{\xi,\zeta,j,\omega}|_f
+         & =U_{\xi,\zeta,j',\omega'}|_f.
+        \label{eq:peps_actual_sampled_endpoint_locality}
+    \end{align}
     At each source the two endpoints still use the same sample index and
     the same ordered ket--bra Gaussian array. No condition is imposed on
     samples at sources whose endpoints are both unselected. This is the
@@ -268,15 +282,86 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:peps_original_sampled_endpoint_factors,
+    \uses{def:peps_actual_sampled_endpoint_word,
+        def:peps_original_sampled_endpoint_factors,
         thm:peps_source_register_operator_local_congruence,
         thm:peps_party_restriction_canonical_layouts}
+    Unfold both words by Definition~\ref{def:peps_actual_sampled_endpoint_word}.
     The formulas defining the endpoint matrices agree at every selected
-    endpoint, since their sample index and Gaussian array agree there.
+    endpoint, since by~(\ref{eq:peps_actual_sampled_endpoint_locality_agreement})
+    their sample index and Gaussian array agree there.
     Apply Theorem~\ref{thm:peps_source_register_operator_local_congruence}.
     The canonical identification with the actual source-input register
     list preserves this equality by
     Theorem~\ref{thm:peps_party_restriction_canonical_layouts}.
+\end{proof}
+
+\begin{theorem}[The physical mixed trace in the original coordinates]
+    \label{thm:peps_selected_physical_private_trace}
+    \lean{TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis_partialTrace_mixed}
+    \leanok
+    \uses{thm:peps_selected_physical_private_basis_grouped,
+        thm:peps_selected_physical_basis_grouped,def:peps_selected_physical_configurations}
+    Let $H$ be the original physical memory and $G$ the original retained
+    private memory. Use the prescribed selected-party order and the actual
+    grouped physical/private basis $B$. Let $\chi$ separate the two
+    coordinate families and remove the exterior singleton coordinate.
+    Identify the original output memory with $H\otimes G$ by its canonical
+    append isometry. For $v,t\in H\otimes G$, let $b_v,b_t$ denote their actual grouped
+    coordinates after relabelling owners. Fix the original physical basis
+    and any finite orthonormal reference basis of $G$, with product
+    readout $J$. Then
+    \begin{align}
+        \operatorname{tr}_{\mathrm{private}}
+        \left((b_vb_t^\dagger)^\chi\right)
+         & =\operatorname{tr}_{G}\left((Jv)(Jt)^\dagger\right).
+        \label{eq:peps_original_physical_mixed_trace}
+    \end{align}
+    Both sides have rows indexed by the original configurations
+    $\prod_{p\in\mathcal P}\{0,\ldots,d_p-1\}$. The two vectors are
+    independent and need not be normalized. No physical register is
+    adjoined at the exterior owner. This identifies the discarded trace
+    in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 137--151, 409--434 and 565--588.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_selected_physical_private_basis_grouped,
+        thm:peps_selected_physical_basis_grouped}
+    The two grouping identities identify $B$ after $\chi$ with the
+    product of the original physical basis and the grouped private basis
+    transported to $G$. The append and owner isometries preserve these
+    coordinates. Thus each mixed outer product has the claimed product
+    coordinates. Changing only the private basis by its actual unitary
+    matrix $V$ conjugates that product by $I\otimes V$; the partial trace
+    removes this conjugation. This gives
+    (\ref{eq:peps_original_physical_mixed_trace}).
+\end{proof}
+
+
+
+\begin{theorem}[The original physical density in grouped coordinates]
+    \label{thm:peps_distributed_grouped_physical_trace}
+    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_eq_grouped_partialTrace}
+    \leanok
+    \uses{def:peps_distributed_construction_density,
+        thm:peps_selected_physical_private_trace}
+    For a distributed construction, let $v$ be its actual original
+    circuit output and let $b_v$ be its actual grouped coordinates.
+    In the notation of Theorem~\ref{thm:peps_selected_physical_private_trace},
+    its original physical density satisfies
+    $\rho=\operatorname{tr}_{\mathrm{private}}((b_vb_v^\dagger)^\chi)$.
+    The physical dimensions are the original dimensions $d_p$; the output
+    is not divided by its norm.
+    % Source: 04-compression.tex, lines 137--153 and 574--579.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_distributed_construction_density,
+        thm:peps_selected_physical_private_trace}
+    Apply Theorem~\ref{thm:peps_selected_physical_private_trace} with
+    $t=v$ and the reference private basis used in the construction's
+    original readout. The right side is its defining physical density.
 \end{proof}
 
 \begin{theorem}[Restriction of an exchange of register blocks]

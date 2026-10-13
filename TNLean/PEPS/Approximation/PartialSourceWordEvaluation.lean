@@ -25,8 +25,6 @@ private theorem eval_comp_apply_eq {a b c : Layout P}
     (h : u.eval x = y) : (u.comp v).eval x = v.eval y :=
   congrArg v.eval h
 
-set_option maxHeartbeats 800000 in
--- The actual fixed-source word carries dependent source and owner transports.
 /-- The actual pure-input source word applies the actual residual to the
 source vector tensored with the original private product vector.
 Source: polynomial-PEPS 04-compression.tex, lines 137–139 and 246–267. -/

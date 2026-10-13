@@ -13,12 +13,15 @@ import TNLean.PEPS.Approximation.ActualCorrectedSourceBound
 import TNLean.PEPS.Approximation.ActualGaussianBranch
 import TNLean.PEPS.Approximation.ActualMixedSourceMatrix
 import TNLean.PEPS.Approximation.ActualPartySourceMatrix
+import TNLean.PEPS.Approximation.ActualPurePhysicalSourceReplacement
 import TNLean.PEPS.Approximation.ActualPureSourceMatrix
+import TNLean.PEPS.Approximation.ActualPureSourceReplacement
 import TNLean.PEPS.Approximation.ActualSampledEndpointInputWord
 import TNLean.PEPS.Approximation.ActualSampledEndpointLocality
 import TNLean.PEPS.Approximation.ActualSampledEndpointWord
 import TNLean.PEPS.Approximation.ActualSampledPartyContraction
 import TNLean.PEPS.Approximation.ActualSourceColumnCoordinates
+import TNLean.PEPS.Approximation.ActualSourceColumnPhysicalTrace
 import TNLean.PEPS.Approximation.ActualSourceEmptyOwner
 import TNLean.PEPS.Approximation.ActualSourceGateDensity
 import TNLean.PEPS.Approximation.ActualSourceInputBasis
@@ -64,6 +67,7 @@ import TNLean.PEPS.Approximation.DistributedConstruction
 import TNLean.PEPS.Approximation.DistributedLifetime
 import TNLean.PEPS.Approximation.DistributedLinks
 import TNLean.PEPS.Approximation.DistributedOperatorContraction
+import TNLean.PEPS.Approximation.DistributedPhysicalPrivateTrace
 import TNLean.PEPS.Approximation.DistributedSourceComposition
 import TNLean.PEPS.Approximation.DyadicAnchors
 import TNLean.PEPS.Approximation.DyadicBlockFootprints
@@ -196,6 +200,7 @@ import TNLean.PEPS.Approximation.PatchRewrite
 import TNLean.PEPS.Approximation.PatchRewriteExpansion
 import TNLean.PEPS.Approximation.PatchRewriteMonomials
 import TNLean.PEPS.Approximation.PatchRewriteTruncation
+import TNLean.PEPS.Approximation.PhysicalBufferCoordinates
 import TNLean.PEPS.Approximation.PhysicalDensityPureInput
 import TNLean.PEPS.Approximation.PhysicalFirstExchange
 import TNLean.PEPS.Approximation.PhysicalFirstLinkPolynomial
@@ -222,6 +227,12 @@ import TNLean.PEPS.Approximation.RoutedContraction
 import TNLean.PEPS.Approximation.SampledEndpointExteriorIdentity
 import TNLean.PEPS.Approximation.SampledEndpointFactors
 import TNLean.PEPS.Approximation.SampledOriginalCircuit
+import TNLean.PEPS.Approximation.SelectedFamilyPhysicalBasis
+import TNLean.PEPS.Approximation.SelectedPhysicalConfigurations
+import TNLean.PEPS.Approximation.SelectedPhysicalPartyGrouping
+import TNLean.PEPS.Approximation.SelectedPhysicalPrivateBasis
+import TNLean.PEPS.Approximation.SelectedPhysicalPrivateGrouping
+import TNLean.PEPS.Approximation.SelectedPhysicalPrivateTrace
 import TNLean.PEPS.Approximation.SelectedSourceContraction
 import TNLean.PEPS.Approximation.SelectiveSourceFactorization
 import TNLean.PEPS.Approximation.SelectiveSourcePreparation

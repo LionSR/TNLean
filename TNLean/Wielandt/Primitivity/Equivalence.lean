@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.Wielandt.Primitivity.EasyDirections
-import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducibleAux
+import TNLean.Wielandt.Primitivity.ImpliesStronglyIrreducible
 import TNLean.Wielandt.Primitivity.StronglyIrreducibleToFullRank
 
 /-!
@@ -30,7 +30,7 @@ The following are equivalent for an MPS tensor `A` with `∑ Aᵢ† Aᵢ = 1`:
 - **(b)→(a)**: `isPrimitivePaper_of_hasEventuallyFullKrausRank`
   in `EasyDirections`
 - **(a)→(c)**: `isStronglyIrreduciblePaper_of_isPrimitivePaper`
-  in `ImpliesStronglyIrreducibleAux`
+  in `ImpliesStronglyIrreducible`
 - **(c)→(b)**:
   `hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper`
   in `StronglyIrreducibleToFullRank`
@@ -40,8 +40,7 @@ full equivalence of all three conditions.
 
 Within TNLean this is the preferred Proposition 3 entry point on the root
 import surface. The direction-specific files
-`Primitivity/ImpliesStronglyIrreducible.lean`,
-`Primitivity/ImpliesStronglyIrreducibleAux.lean`, and
+`Primitivity/ImpliesStronglyIrreducible.lean` and
 `Primitivity/StronglyIrreducibleToFullRank.lean` remain specialized
 implementation modules, while the canonical / FT / BNT construction does not
 import these statements directly.
@@ -100,9 +99,10 @@ theorem isNormal_implies_stronglyIrreducible [NeZero D]
 /-! ## Full equivalences -/
 
 /-- **Proposition 3 (a)↔(b)**: paper primitivity is equivalent to eventually
-full Kraus rank.
+full Kraus rank. This is also the Kraus-span form of Wolf Theorem 6.8: the
+Kraus operators eventually span all matrices.
 
-Paper: arXiv:0909.5347, Proposition 3(a)↔(b); Wolf, Chapter 6.
+Paper: arXiv:0909.5347, Proposition 3(a)↔(b); Wolf, Chapter 6, Theorem 6.8.
 -/
 theorem primitivePaper_iff_hasEventuallyFullKrausRank [NeZero D]
     (A : MPSTensor d D)
@@ -155,18 +155,6 @@ theorem hasEventuallyFullKrausRank_iff_stronglyIrreducible [NeZero D]
    fun hC => hasEventuallyFullKrausRank_of_isStronglyIrreduciblePaper A hNorm hC⟩
 
 /-! ## Wolf Theorem 6.8 statements -/
-
-/-- **Wolf Theorem 6.8 (Kraus-span form)**:
-paper primitivity is equivalent to eventual full Kraus-word span.
-
-This theorem gives `primitivePaper_iff_hasEventuallyFullKrausRank` the
-numbered Wolf Chapter 6 name ("the Kraus operators eventually span all
-matrices"). -/
-theorem wolf_theorem_6_8_kraus_span [NeZero D]
-    (A : MPSTensor d D)
-    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1) :
-    IsPrimitivePaper A ↔ HasEventuallyFullKrausRank A :=
-  primitivePaper_iff_hasEventuallyFullKrausRank A hNorm
 
 /-- **Wolf Theorem 6.8 (conjunction form)**:
 paper primitivity is equivalent to the conjunction of eventual full Kraus rank,

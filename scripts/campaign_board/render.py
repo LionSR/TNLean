@@ -89,8 +89,13 @@ def figure_names(campaign_dir: pathlib.Path, config: dict) -> set[str]:
     path = campaign_dir / "figures.js"
     names = set()
     if path.exists():
-        run = subprocess.run(["node", "-e", FIGURE_KEYS_JS, str(path)],
-                             capture_output=True, text=True)
+        try:
+            run = subprocess.run(["node", "-e", FIGURE_KEYS_JS, str(path)],
+                                 capture_output=True, text=True)
+        except FileNotFoundError as exc:
+            raise ValueError(f"reading the figures of {path} needs the `node` executable on "
+                             "the path (see docs/campaign/README.md), and it was not "
+                             "found") from exc
         if run.returncode:
             raise ValueError(f"{path} must define window.campaignFigures without calling browser "
                              f"APIs at load time; evaluating it failed:\n{run.stderr.strip()}")
