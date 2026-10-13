@@ -127,13 +127,15 @@ theorem periodicOverlap_gaugeEquiv_of_sector_match
 match), so the overlap must decay. This covers the `D₁ ≠ D₂` subcase of
 the main dichotomy regardless of period matching. -/
 theorem periodicOverlap_tendsto_zero_of_ne_dim
-    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    {D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     {m_a m_b : ℕ}
     (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
     (hdim : D₁ ≠ D₂) :
-    Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0) :=
-  mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP A B
+    Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0) := by
+  have : NeZero D₁ := ⟨hA.bondDim_ne_zero⟩
+  have : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩
+  exact mpvOverlap_tendsto_zero_of_dim_ne_of_irreducible_TP A B
     hA.irreducible hB.irreducible hA.leftCanonical hB.leftCanonical hdim
 
 

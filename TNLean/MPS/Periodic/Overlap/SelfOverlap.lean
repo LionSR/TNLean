@@ -421,9 +421,10 @@ at multiples of `m`, the limit along `m·ℕ` equals `m`.
 
 This is the first displayed equation of Appendix A. -/
 theorem periodicSelfOverlap_tendsto
-    [NeZero D] (A : MPSTensor d D) {m : ℕ}
+    (A : MPSTensor d D) {m : ℕ}
     (hP : IsPeriodic m A) :
     Tendsto (fun k => mpvOverlap A A (m * k)) atTop (nhds (m : ℂ)) := by
+  have : NeZero D := ⟨hP.bondDim_ne_zero⟩
   let : NeZero m := ⟨Nat.ne_of_gt hP.period_pos⟩
   obtain ⟨dim, blocks, P, φ, V, hBlocks_lc, hBlocks_mpv, hPproj, hPsum, hCyclicRaw,
     hComm, hTrace, hIntertwine, hMul, hStar, hNondeg, hLetterRaw, hV_iso, hV_range,

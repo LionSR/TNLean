@@ -194,7 +194,7 @@ theorem exists_regionEdgeGauge_of_blockingData {e : Edge G}
   have hc : F.frame.complement = F'.frame.complement := by simp [hF, hF', hcompl]
   -- `F.frame.red = DA.red` and `F.frame.blue = DA.blue` hold definitionally, so the
   -- coherent-frames conclusion over `F` is the stated conclusion over `DA.red`/`DA.blue`.
-  exact exists_regionEdgeGauge_of_coherentFrames F F' hPF hPF' hr hb hc hbond hAB hd hposA hposB
+  exact exists_regionEdgeGauge_of_coherentFrames F F' hPF hPF' hr hb hc hbond hAB hposA hposB
     e hsingle hRB hCB
 
 end PEPS

@@ -368,8 +368,9 @@ theorem isNormalTensor_of_isIrreducibleFamily_leftCanonical [NeZero D]
 Indeed, if every letter vanished, then its transfer map and hence its spectral
 radius would vanish, contradicting the spectral-radius-one normalization of
 arXiv:1606.00608, lines 231--235. -/
-theorem IsNormalTensor.exists_apply_ne_zero [NeZero D]
+theorem IsNormalTensor.exists_apply_ne_zero
     {A : MPSTensor d D} (h : IsNormalTensor A) : ∃ i, A i ≠ 0 := by
+  have : NeZero D := ⟨h.bondDim_ne_zero⟩
   by_contra hzero
   push Not at hzero
   have hmap : Kraus.transferMap (d := d) (D := D) A = 0 := by
@@ -385,9 +386,10 @@ The trace-preserving Perron gauge is a pure similarity, so it leaves every
 matrix product vector unchanged.  The assertion therefore follows from the
 primitive trace-preserving overlap limit.  This is the normalization used in
 the proof of Lemma `equalMPS` of arXiv:1606.00608, lines 1080--1097. -/
-theorem IsNormalTensor.selfOverlap_tendsto_one [NeZero D]
+theorem IsNormalTensor.selfOverlap_tendsto_one
     {A : MPSTensor d D} (hA : IsNormalTensor A) :
     Tendsto (fun N => mpvOverlap (d := d) A A N) atTop (nhds (1 : ℂ)) := by
+  have : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨σ, _hσ, _hσfix, hTP, hGauge, hPrim, hIrr⟩ := hA.exists_tpGauge
   let A' := Kraus.tpGauge (d := d) (D := D) A σ
   have hPrepared : Tendsto (fun N => mpvOverlap (d := d) A' A' N)
@@ -415,7 +417,7 @@ self-overlaps tend to one, $\lVert\zeta\rVert=1$.  This is the phase
 normalization following Lemma `equalMPS` of arXiv:1606.00608, lines
 1080--1097. -/
 theorem norm_eq_one_of_gaugePhase_cast_of_isNormalTensor
-    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    {D₁ D₂ : ℕ}
     {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (hA : IsNormalTensor A) (hB : IsNormalTensor B)
     (hdim : D₁ = D₂) {X : GL (Fin D₂) ℂ} {ζ : ℂ}
@@ -423,6 +425,8 @@ theorem norm_eq_one_of_gaugePhase_cast_of_isNormalTensor
       (cast (congr_arg (MPSTensor d) hdim) A) i *
       (↑(X⁻¹) : Matrix (Fin D₂) (Fin D₂) ℂ))) :
     ‖ζ‖ = 1 := by
+  have : NeZero D₁ := ⟨hA.bondDim_ne_zero⟩
+  have : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩
   subst D₂
   have hAA : Tendsto (fun N => ‖mpvOverlap (d := d) A A N‖)
       atTop (nhds (1 : ℝ)) := by
@@ -446,13 +450,15 @@ the positive-length overlaps, without using the empty word.  The
 trace-preserving equal-overlap theorem then supplies the gauge-phase relation,
 which is transported back to the original tensors. -/
 theorem MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
-    {DX DY : ℕ} [NeZero DX] [NeZero DY]
+    {DX DY : ℕ}
     {X : MPSTensor d DX} {Y : MPSTensor d DY}
     (hX : IsNormalTensor X) (hY : IsNormalTensor Y)
     (h : MPVBlockPhaseEquiv X Y) :
     ∃ hdim : DX = DY,
       GaugePhaseEquiv
         (cast (congr_arg (MPSTensor d) hdim) X) Y := by
+  have : NeZero DX := ⟨hX.bondDim_ne_zero⟩
+  have : NeZero DY := ⟨hY.bondDim_ne_zero⟩
   classical
   obtain ⟨σX, _hσX, _hσXfix, hTPX, hGaugeX, hPrimX, hIrrX⟩ := hX.exists_tpGauge
   obtain ⟨σY, _hσY, _hσYfix, hTPY, hGaugeY, hPrimY, hIrrY⟩ := hY.exists_tpGauge

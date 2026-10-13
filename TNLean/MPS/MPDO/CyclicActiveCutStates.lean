@@ -222,10 +222,11 @@ Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
 restricted cut probabilities after the additional marginal replacement. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem trace_mpo_sectorCoordinateTensor_pos_of_isSourceZCL
-    (F : PhysicalSectorFactorization K) [NeZero D]
+    (F : PhysicalSectorFactorization K)
     (hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef)
     (hZCL : K.IsSourceZCL) {N : ℕ} (hN : 0 < N) :
     0 < Matrix.trace (mpo F.sectorCoordinateTensor N) := by
+  have : NeZero D := ⟨hZCL.bondDim_ne_zero⟩
   let : NeZero N := ⟨ne_of_gt hN⟩
   have hpsd := F.mpo_sectorCoordinateTensor_posSemidef hpos (N := N)
   have htrace : Matrix.trace (mpo F.sectorCoordinateTensor N) ≠ 0 := by
