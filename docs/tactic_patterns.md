@@ -41,11 +41,14 @@ abstracted — record why, so it is not re-proposed).
   `MPOTensor.markedChainCoefficient_gramDressing_eq_of_bondMul_reflected` in
   `FigureEightPairwise.lean`. The self-conjugacy of a positive scalar is
   Mathlib's `IsSelfAdjoint.of_nonneg`.
-- **Refactor:** the two private `_star` lemmas are deleted and both
-  `_eq_reflectedAdjoint` proofs instantiate the generic identity and rewrite
-  with Hermiticity; both Gram-dressed theorems apply the gauge lemma. The
-  private `hslice` copy is replaced by `horizontalSlice_twoSidedCompression`,
-  now in `ReflectedMarkedChain.lean`. No statement or tag changes.
+- **Refactor:** the public `IsMPDO.coordinateCompression_star` keeps its
+  statement and becomes a two-line instance of the generic identity and
+  Hermiticity; the private `blockTwoPrefixCoordinateCompression_star` is
+  deleted, and both `_eq_reflectedAdjoint` proofs reduce to that instance
+  and the scalar cancellation; both Gram-dressed theorems apply the gauge
+  lemma. The private `hslice` copy is replaced by
+  `horizontalSlice_twoSidedCompression`, now in `ReflectedMarkedChain.lean`.
+  No statement or tag changes.
 
 ### Membership in composed gate expansions — promoted (2026-10-08)
 

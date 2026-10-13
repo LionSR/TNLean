@@ -180,6 +180,21 @@ theorem markedChainCoefficient_eq_reflectedAdjoint_of_mul_eq_star
   rw [star_mul', (IsSelfAdjoint.of_nonneg hc.le).star_eq] at h
   exact mul_left_cancel₀ (ne_of_gt hc) h
 
+/-- The coordinate compression of an MPDO is Hermitian for every tail
+length. -/
+theorem IsMPDO.coordinateCompression_star
+    {M : MPOTensor d D} (hM : IsMPDO M)
+    (V : Matrix (Fin d) (Fin n) ℂ) (N : ℕ)
+    (r s : Fin n) (σ τ : Fin N → Fin d) :
+    (∑ i : Fin d, ∑ j : Fin d,
+        star (V i r) *
+          mpo M (N + 1) (Fin.cons i σ) (Fin.cons j τ) * V j s) =
+      star (∑ i : Fin d, ∑ j : Fin d,
+        star (V i s) *
+          mpo M (N + 1) (Fin.cons i τ) (Fin.cons j σ) * V j r) := by
+  rw [Finset.sum_sum_star_mul_mul_eq_star]
+  simp_rw [(hM (N + 1) (by omega)).isHermitian.apply]
+
 /-- **The reflected marked-chain identity of Figure 7.**
 
 Suppose that the vertical corner selected by `V` is a positive scalar `c`
@@ -213,7 +228,7 @@ theorem IsMPDO.markedChainCoefficient_eq_reflectedAdjoint
     simp [markedChainCoefficient]
   apply markedChainCoefficient_eq_reflectedAdjoint_of_mul_eq_star A M hc
   rw [← hscale, ← hscale, ← coordinateCompression_eq_markedChainCoefficient,
-    ← coordinateCompression_eq_markedChainCoefficient, Finset.sum_sum_star_mul_mul_eq_star]
-  simp_rw [(hM (N + 1) (by omega)).isHermitian.apply]
+    ← coordinateCompression_eq_markedChainCoefficient]
+  exact hM.coordinateCompression_star V N r s σ τ
 
 end MPOTensor
