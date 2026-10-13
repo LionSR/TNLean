@@ -245,13 +245,16 @@
     \label{thm:fundamentalTheorem_normalSquarePEPS_unconditional}
     \lean{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS_unconditional}
     \leanok
-    \uses{thm:fundamentalTheorem_normalSquarePEPS, def:peps_normalRectangleInjectivityHypotheses, def:applyGauge, def:peps_edgeInsertedCoeff}
+    \uses{thm:fundamentalTheorem_normalSquarePEPS,
+        def:peps_normalSquareLatticeRectanglePEPS, def:applyGauge,
+        def:peps_edgeInsertedCoeff}
     Let $A$ and $B$ be PEPS tensors on the open $n\times m$ square lattice
-    with the same positive physical dimension, equal and positive bond
-    dimensions, generating the same state, and such that every contiguous
-    $2\times 3$ and $3\times 2$ coordinate rectangle of either tensor is
-    injective. Then there is a family of invertible matrices, one on each
-    edge, such that:
+    with the same positive physical dimension and equal bond dimensions,
+    generating the same state, and both normal with injective rectangles
+    (Definition~\ref{def:peps_normalSquareLatticeRectanglePEPS}): every
+    contiguous $2\times 3$ and $3\times 2$ coordinate rectangle of either
+    tensor is injective, and every virtual bond space is nonzero. Then there
+    is a family of invertible matrices, one on each edge, such that:
     \begin{enumerate}
         \item at every edge with interior margins (for a horizontal edge with
               left endpoint $(x,y)$: $3\le x$, $x+7\le n$, $4\le y$,
@@ -282,8 +285,8 @@
     \begin{proof}
         \leanok
         \uses{lem:peps_injectiveRegion_union_pos}
-        The union closure of injective regions follows from the positive bond
-        dimensions and Lemma~\ref{lem:peps_injectiveRegion_union_pos}. The
+        The union closure of injective regions follows from the nonzero bond
+        spaces and Lemma~\ref{lem:peps_injectiveRegion_union_pos}. The
         translated blocking frames at the edges with interior margins produce
         per-edge gauges, whose absorption into $B$ gives the absorbed
         inserted-coefficient equality at every such edge. A gauge preserves

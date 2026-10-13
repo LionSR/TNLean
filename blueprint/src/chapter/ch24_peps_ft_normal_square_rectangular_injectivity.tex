@@ -12,6 +12,21 @@
     $2\times 3$ and $3\times 2$ rectangles.
 \end{definition}
 
+\begin{definition}[Normal square-lattice tensor with injective rectangles]%
+    \label{def:peps_normalSquareLatticeRectanglePEPS}
+    \lean{TNLean.PEPS.IsNormalSquareLatticeRectanglePEPS}
+    \leanok
+    \uses{def:peps_normalRectangleInjectivityHypotheses, def:peps_regionInjectivityDataOf}
+    A PEPS tensor on the open square lattice is
+    \emph{normal with injective rectangles} when its family of injective
+    regions satisfies the coordinate rectangular injectivity hypotheses and
+    every virtual bond space is nonzero. This is the hypothesis on each tensor in
+    \cite[Theorem~3]{Molnar2018NormalPEPS}, read on the open lattice. The
+    nonzero bond spaces are the standing convention of that section; region
+    injectivity does not imply them, and the convention is recorded in
+    \cite{gap:peps_injective_ft_section3_route}.
+\end{definition}
+
 \begin{lemma}[Coordinate rectangular injectivity gives abstract rectangular
         injectivity]%
     \label{lem:peps_squareLatticeRectangleInjectivity_toRectangular}

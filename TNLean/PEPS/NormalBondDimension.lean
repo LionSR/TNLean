@@ -50,8 +50,8 @@ The two tensors of the general theorem are packaged as
 together with the shared blockings.  The one-edge and coherent-frame steps keep
 explicit positivity of the original tensors, because their tensors are only
 constrained through the blocking data; every caller supplies it from
-`NormalPEPSPairHypotheses` or from the explicit positivity hypotheses still
-stated by the normal corollaries on cycle, square and torus lattices.
+`NormalPEPSPairHypotheses` or from the tensor hypotheses of the normal corollaries
+on cycle, square and torus lattices.
 
 ## References
 

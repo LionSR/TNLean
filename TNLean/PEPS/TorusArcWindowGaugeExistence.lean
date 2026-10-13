@@ -20,6 +20,12 @@ All positive window lengths are allowed, including a unit side. These are the ex
 and normalization parts of the normal translation-invariant PEPS corollary in
 arXiv:1804.04964. The complete derivation is recorded in
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
+
+**Local fix (nonzero virtual spaces):** the source treats the virtual bond spaces as nonzero
+(arXiv:1804.04964, lines 582 and 1037 of `Papers/1804.04964/paper_normal.tex`) without listing
+this among the corollary's hypotheses. The theorem here takes the tensor hypothesis
+`IsNormalTorusArcWindowPEPS`, whose field `bondDim_pos` carries it, and states no separate
+positivity hypothesis. Documented in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 -/
 
 namespace TNLean.PEPS
@@ -51,10 +57,10 @@ theorem exists_translationCovariantGauge_of_normalArcWindows_sameState
         A.component v η σ =
           lam * gaugeVertex B X v (fun ie => Fin.cast (congr_fun hbond ie.1) (η ie)) σ) ∧
       lam ^ (width * height) = 1 := by
+  have hbond := bondDim_eq_of_normalArcWindows_sameState A B hA hB hATI hBTI hAB
+    hL hK hxw hyh
   obtain ⟨hA, hposA⟩ := hA
   obtain ⟨hB, hposB⟩ := hB
-  have hbond := bondDim_eq_of_normalArcWindows_sameState A B hA hB hATI hBTI hAB
-    hposA hposB hL hK hxw hyh
   obtain ⟨hEh, Zh, wh, _, hmemh⟩ := exists_staircaseWindowEdgeCoeffIdentityWitness
     (a := 1) (b := 0) A B hA hB hATI hBTI hAB hposA hposB hL hK
     (by omega) (by omega) (by omega) hxw hyh

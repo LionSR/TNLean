@@ -487,6 +487,45 @@ normalizations.
   `Prop`. The one-edge and coherent-frame steps keep explicit positivity,
   because they see their tensors only through blocking data.
 
+#### Fixed-lattice normal tensor hypotheses
+
+- **Declarations:** four `Prop` structures, each extending a region-family
+  hypothesis at `regionInjectivityDataOf A` with the field
+  `bondDim_pos : ∀ e, 0 < A.bondDim e`:
+  - `TNLean.PEPS.IsNormalCycleArcMPS L A`, extending
+    `NormalCycleArcInjectivityHypotheses`, in
+    `TNLean/PEPS/CycleFundamentalTheorem.lean`;
+  - `TNLean.PEPS.IsNormalTorusRectanglePEPS A`, extending
+    `NormalTorusRectangleInjectivityHypotheses`, in
+    `TNLean/PEPS/TorusUnconditionalFundamentalTheorem.lean`;
+  - `TNLean.PEPS.IsNormalSquareLatticeRectanglePEPS A`, extending
+    `NormalSquareLatticeRectangleInjectivityHypotheses`, in
+    `TNLean/PEPS/NormalSquareUnconditionalFundamentalTheorem.lean`;
+  - `TNLean.PEPS.IsNormalTorusArcWindowPEPS L K A`, extending
+    `NormalTorusArcWindowInjectivityHypotheses`, in
+    `TNLean/PEPS/TorusWindowComplement.lean`.
+- **Meaning:** one normal tensor in the setting of a fixed-lattice corollary:
+  the source's injective blocks (`L` consecutive sites on the closed chain,
+  `2 × 3` and `3 × 2` rectangles on the torus or the open square lattice,
+  cyclic `L × K` windows on the torus), with every virtual bond space nonzero.
+- **Source:** arXiv:1804.04964 §3, `Papers/1804.04964/paper_normal.tex`: the
+  closed-chain corollary at lines 1597-1622, Theorem 3 at lines 1453-1471, and
+  the window corollary at lines 2297-2318; the nonzero bond spaces are recorded
+  as a Local fix in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+- **Sanctioned bridges:** the structure projections and the anonymous
+  constructor; `IsNormalCycleArcMPS.pairHypotheses` builds
+  `NormalPEPSPairHypotheses` on the cycle, and
+  `IsNormalTorusRectanglePEPS.unionClosure` gives union closure.
+- **Caveat:** the region-family structures they extend are indexed by an
+  injectivity assignment, not by a tensor, so they cannot carry the
+  convention themselves; internal steps that take them as region data keep
+  explicit positivity, supplied by the source-facing theorems. The torus
+  uniqueness clauses (`torusAbsorbedGauge_unique_scalar`,
+  `torusCovariantAbsorbedGauge_unique_classScalar`,
+  `torusGauge_unique_scalar_of_perVertex` and
+  `torusGauge_unique_scalar_of_normalArcWindows`) are the exception: they
+  still take region hypotheses with explicit positivity of both tensors.
+
 #### `TNLean.PEPS.RegionBlockedTensorInjective`
 
 - **Declaration:**

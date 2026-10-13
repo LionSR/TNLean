@@ -66,33 +66,49 @@ chains, one tensor per site, which is the setting of
     edge.
 \end{proof}
 
+\begin{definition}[Normal MPS on a closed chain]%
+    \label{def:peps_normalCycleArcMPS}
+    \lean{TNLean.PEPS.IsNormalCycleArcMPS}
+    \leanok
+    \uses{thm:peps_cycleNormalPEPSBlockingHypotheses, def:peps_regionInjectivityDataOf}
+    A tensor on the closed chain of $n$ sites is a
+    \emph{normal MPS with blocking length $L$} when blocking any $L$
+    consecutive sites gives an injective tensor and every virtual bond space
+    is nonzero. This is the
+    hypothesis on each of the two MPS in the first corollary following the
+    general normal-PEPS theorem in \cite[Section~4]{Molnar2018NormalPEPS}.
+    The nonzero bond spaces are the standing convention of that section;
+    injectivity of the blocks does not imply them, and the convention is
+    recorded in \cite{gap:peps_injective_ft_section3_route}.
+\end{definition}
+
 \begin{corollary}[Fundamental Theorem for normal MPS on a closed chain]%
     \label{cor:fundamentalTheorem_normalMPS_cycle}
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_cycle}
     \leanok
-    \uses{def:peps_regionInjectivityDataOf, def:GaugeEquivPEPS}
+    \uses{def:peps_normalCycleArcMPS, def:GaugeEquivPEPS}
     Let $A$ and $B$ be tensors on the closed chain of $n$ sites (the cycle
     graph on $n$ vertices, one tensor per site with two virtual legs), with
-    the same positive physical dimension and positive bond dimensions, and
-    let $0 < L$ with $n \ge 3L$. Suppose blocking any $L$ consecutive sites
-    gives an injective tensor, for $A$ and for $B$, and the two MPS generate
-    the same state. Then the defining tensors are related by a local gauge:
+    the same positive physical dimension, and let $0 < L$ with $n \ge 3L$.
+    Suppose $A$ and $B$ are normal MPS with blocking length $L$
+    (Definition~\ref{def:peps_normalCycleArcMPS}) and generate the same
+    state. Then the defining tensors are related by a local gauge:
     there are invertible matrices, one on each bond, whose endpoint actions
     transform $A_i$ into $B_i$ at every site with no leftover scalar. This
     is the source's family $Z_i$ ($i = 1, \ldots, n$, $n + 1 \equiv 1$) with
     $B_i = Z_i^{-1} A_i Z_{i+1}$, the first corollary following the general
     normal-PEPS theorem in \cite[Section~4]{Molnar2018NormalPEPS}, the
     statement for MPS without translation invariance at a fixed system size.
-    The positive physical and bond dimensions are the counterexample-backed
-    corrections carried over from the injective Fundamental Theorem
-    (Theorem~\ref{thm:fundamentalTheorem_PEPS}), and $0 < L$ is implicit in
+    The positive physical dimension is carried over from the general
+    theorem, the nonzero bond spaces are part of the definition of a normal
+    MPS, and $0 < L$ is implicit in
     the source's blocking of $L$ consecutive sites; the equality of the bond
     dimensions is not assumed but derived, and the connectivity of the cycle
     is proved, not assumed.
 \end{corollary}
 \begin{proof}\leanok
     \uses{thm:peps_cycleNormalPEPSBlockingHypotheses, thm:fundamentalTheorem_normalPEPS_connected, lem:peps_injectiveRegion_union_pos}
-    Positive bond dimensions give union closure of injective regions for
+    The nonzero bond spaces give union closure of injective regions for
     each tensor (Lemma~\ref{lem:peps_injectiveRegion_union_pos}), hence for
     the doubly injective assignment. The arc-injectivity hypothesis then
     yields the normal blocking hypotheses on the cycle with the unique
@@ -107,11 +123,11 @@ chains, one tensor per site, which is the setting of
     \label{cor:fundamentalTheorem_normalMPS_cycle_gauge_unique}
     \lean{TNLean.PEPS.fundamentalTheorem_normalMPS_cycle_gauge_unique}
     \leanok
-    \uses{def:peps_regionInjectivityDataOf, def:gaugeVertex}
+    \uses{def:peps_normalCycleArcMPS, def:gaugeVertex}
     In the setting of
-    Corollary~\ref{cor:fundamentalTheorem_normalMPS_cycle}, with the bond
-    dimensions of the two tensors equal and positive and the arcs of $L$
-    consecutive sites injective for each tensor, any two families of
+    Corollary~\ref{cor:fundamentalTheorem_normalMPS_cycle}, for normal MPS
+    $A$ and $B$ with blocking length $L$ and equal bond dimensions, any two
+    families of
     invertible bond matrices realizing the scalar-free gauge relation are
     proportional at every bond: $Z'_i = c \cdot Z_i$ for a nonzero scalar
     $c$ depending on the bond. This is the uniqueness clause of the first
@@ -122,8 +138,8 @@ chains, one tensor per site, which is the setting of
 \end{corollary}
 \begin{proof}\leanok
     \uses{thm:peps_cycleNormalPEPSBlockingHypotheses, thm:fundamentalTheorem_normalPEPS_gauge_unique, lem:peps_injectiveRegion_union_pos}
-    The arc-injectivity hypothesis and union closure from the positive bond
-    dimensions (Lemma~\ref{lem:peps_injectiveRegion_union_pos}) establish the
+    The arc-injectivity hypothesis and union closure from the nonzero bond
+    spaces (Lemma~\ref{lem:peps_injectiveRegion_union_pos}) establish the
     normal blocking hypotheses on the cycle
     (Theorem~\ref{thm:peps_cycleNormalPEPSBlockingHypotheses}), and the
     per-edge uniqueness of the general theorem

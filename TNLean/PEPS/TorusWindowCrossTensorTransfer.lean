@@ -18,6 +18,13 @@ The comparison uses a displayed non-wrapping horizontal staircase with positive 
 lengths. Coordinate exchange gives the vertical witness, and translation gives all edges.
 The derivation is recorded in `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
 
+**Local fix (nonzero virtual spaces):** the source treats the virtual bond spaces as nonzero
+(arXiv:1804.04964, lines 582 and 1037 of `Papers/1804.04964/paper_normal.tex`). The steps here
+take the window hypotheses as region data and state the positive bond dimensions of both
+tensors explicitly; their caller `exists_translationCovariantGauge_of_normalArcWindows_sameState`
+takes both from the tensor hypothesis `IsNormalTorusArcWindowPEPS`. Documented in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+
 Source: arXiv:1804.04964, lines 563--586 and 2368--2444 of
 `Papers/1804.04964/paper_normal.tex`.
 -/
@@ -65,8 +72,8 @@ theorem staircaseCrossTensorVirtualOperation_coeff
     regionInsertedCoeff A W f X σ τ = regionInsertedCoeff B W f
       (staircaseCrossTensorVirtualOperation A B hA hB hATI hBTI hAB hposA hposB
         hL hK ha0 haw hbh hxw hyh X) σ τ := by
-  have hDim := bondDim_eq_of_normalArcWindows_sameState A B hA hB hATI hBTI hAB
-    hposA hposB hL hK hxw hyh
+  have hDim := bondDim_eq_of_normalArcWindows_sameState A B ⟨hA, hposA⟩ ⟨hB, hposB⟩
+    hATI hBTI hAB hL hK hxw hyh
   have h := staircaseCrossTensorVirtualOperation_normalized_coeff A B hA hB hATI hBTI hAB
     hposA hposB hL hK ha0 haw hbh hxw hyh X σ τ
   simp only [regionInteriorBondProd_congr A B _ hDim] at h

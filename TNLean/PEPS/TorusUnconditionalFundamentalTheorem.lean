@@ -15,11 +15,11 @@ import TNLean.PEPS.NormalBondDimension
 # The unconditional normal PEPS Fundamental Theorem on the torus
 
 This file proves the torus Fundamental Theorem with no conditional per-vertex hypothesis: from
-the source hypotheses alone --- translation
-invariance, positive bonds, the same state, the
-rectangular-injectivity hypotheses (the union closure of injective regions is derived from the
-positive bonds, and the bond-dimension equality from the rectangular-injectivity hypotheses
-via `bondDim_eq_of_normalTorusRectangle`), and the source's own sizes `n, m ≥ 7` --- it
+the source hypotheses alone --- translation invariance, the same state, two normal tensors with
+the rectangular-injectivity hypotheses (`IsNormalTorusRectanglePEPS`; the union closure of
+injective regions is derived from its nonzero bonds, and the bond-dimension equality from the
+rectangular-injectivity hypotheses via `bondDim_eq_of_normalTorusRectangle`), and the source's
+own sizes `n, m ≥ 7` --- it
 produces a per-edge gauge family
 `X` and a single scalar `λ` with
 
@@ -51,6 +51,13 @@ the absorbing family carries the transposed inverse of the class matrix on the s
 translation covariance conjunct is the orientation-faithful statement of the source's
 uniformity.
 
+**Local fix (nonzero virtual spaces):** the source treats the virtual bond spaces as nonzero
+(arXiv:1804.04964, lines 582 and 1037 of `Papers/1804.04964/paper_normal.tex`) without listing
+this among the hypotheses of Theorem 3.  The tensor hypothesis `IsNormalTorusRectanglePEPS`
+carries it as the field `bondDim_pos`, so the theorems here state no separate positivity
+hypothesis; the per-vertex step `component_eq_gaugeVertex_of_cornerProportional` receives
+the positivity from them.  Documented in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+
 ## References
 
 * [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected entangled pair states
@@ -65,6 +72,32 @@ namespace PEPS
 
 variable {width height d : ℕ} [NeZero width] [NeZero height]
   [Fact (1 < width)] [Fact (1 < height)]
+
+/-- A normal PEPS tensor on the torus in the setting of Theorem 3: every contiguous `2 × 3`
+and `3 × 2` rectangle is injective, and every virtual bond space is nonzero.  The rectangle
+fields are the region-family hypothesis `NormalTorusRectangleInjectivityHypotheses` read for
+the injective regions of the tensor.
+
+The field `bondDim_pos` is the nonzero virtual-space convention of the module docstring.
+
+Source: arXiv:1804.04964, Section 3, Theorem 3, lines 1453--1454 of
+`Papers/1804.04964/paper_normal.tex` ("two normal 2D PEPS tensors such that every `2 × 3`
+and `3 × 2` region is injective"), with normality as defined at line 1318. -/
+structure IsNormalTorusRectanglePEPS (A : Tensor (torusGraph width height) d) : Prop
+    extends NormalTorusRectangleInjectivityHypotheses
+      (regionInjectivityDataOf (G := torusGraph width height) A) where
+  /-- Every virtual bond space is nonzero: the source's bond spaces are nonzero throughout
+  (arXiv:1804.04964, lines 582 and 1037 of `Papers/1804.04964/paper_normal.tex`); the
+  convention is recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
+  bondDim_pos : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e
+
+/-- The union closure of injective regions of a normal torus tensor, from its nonzero
+bonds (the source's Lemma `injective_union`, lines 1322--1404 of
+`Papers/1804.04964/paper_normal.tex`). -/
+theorem IsNormalTorusRectanglePEPS.unionClosure {A : Tensor (torusGraph width height) d}
+    (hA : IsNormalTorusRectanglePEPS A) :
+    RegionInjectivityUnionClosure (regionInjectivityDataOf (G := torusGraph width height) A) :=
+  regionInjectivityUnionClosure_of_overlap A hA.bondDim_pos
 
 /-- The vertex image of a translated region inserts the translated vertex. -/
 theorem Region_map_insert (a : ZMod width) (b : ZMod height)
@@ -141,8 +174,8 @@ theorem component_eq_gaugeVertex_of_cornerProportional
 
 /-- **Equal bond dimensions from normal torus rectangular injectivity.**
 
-From the source's rectangular-injectivity hypotheses on the torus, together with translation
-invariance, the same state, and positive bond dimensions, the two tensors have equal bond
+For two normal torus tensors with the source's rectangular-injectivity hypotheses, together
+with translation invariance and the same state, the two tensors have equal bond
 dimensions on every edge.  The bond-dimension equality is derived from the one-edge blocking
 data built from the rectangular injectivity (the source's Lemma `inj_isomorph`, lines 560--583
 of `Papers/1804.04964/paper_normal.tex`), not assumed.
@@ -152,19 +185,16 @@ Source: arXiv:1804.04964, Section 3, lines 560--583 and 1407--1500 of
 theorem bondDim_eq_of_normalTorusRectangle
     {A B : Tensor (torusGraph width height) d}
     (hA : IsTorusTranslationInvariant A) (hB : IsTorusTranslationInvariant B)
-    (hAr : NormalTorusRectangleInjectivityHypotheses
-      (regionInjectivityDataOf (G := torusGraph width height) A))
-    (hBr : NormalTorusRectangleInjectivityHypotheses
-      (regionInjectivityDataOf (G := torusGraph width height) B))
-    (hUA : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) A))
-    (hUB : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hAn : IsNormalTorusRectanglePEPS A) (hBn : IsNormalTorusRectanglePEPS B)
     (hw : 7 ≤ width) (hh : 7 ≤ height)
-    (hAB : SameState A B) (hd : 0 < d)
-    (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
-    (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g) :
+    (hAB : SameState A B) (hd : 0 < d) :
     A.bondDim = B.bondDim := by
+  have hAr := hAn.toNormalTorusRectangleInjectivityHypotheses
+  have hBr := hBn.toNormalTorusRectangleInjectivityHypotheses
+  have hUA := hAn.unionClosure
+  have hUB := hBn.unionClosure
+  have hposA := hAn.bondDim_pos
+  have hposB := hBn.bondDim_pos
   set xStart := width - 5 with hxStart_def
   set yStart := height - 5 with hyStart_def
   have hx0h : 2 ≤ xStart := by omega
@@ -254,13 +284,13 @@ theorem bondDim_eq_of_normalTorusRectangle
 /-- **Unconditional normal PEPS Fundamental Theorem on the torus.**
 
 For a translation-invariant pair `A`, `B` on the discrete `n × m` torus with `n, m ≥ 7` (the
-source's own sizes), positive bonds, the same state, and both
-satisfying the rectangular-injectivity hypotheses,
+source's own sizes), the same state, and both normal with the rectangular-injectivity
+hypotheses (`IsNormalTorusRectanglePEPS`),
 the bond dimensions of `A` and `B` agree on every edge and
 there are a translation-covariant per-edge gauge family `X` realizing the
 bare-edge absorbed equality at every edge, and a single scalar `λ` with the per-vertex relation
 `A_v = λ · (gauge action of B at v)` at every torus vertex and `λ^{width·height} = 1`.  The
-union closure of injective regions is derived from the positive bonds
+union closure of injective regions is derived from the nonzero bonds
 (`regionInjectivityUnionClosure_of_overlap`), and the bond-dimension equality is derived
 from the rectangular injectivity hypotheses (`bondDim_eq_of_normalTorusRectangle`); neither
 is assumed.
@@ -287,14 +317,9 @@ Source: arXiv:1804.04964, Section 3, Theorem 3, lines 1449--1471 of
 theorem fundamentalTheorem_normalTorusPEPS_unconditional
     {A B : Tensor (torusGraph width height) d}
     (hA : IsTorusTranslationInvariant A) (hB : IsTorusTranslationInvariant B)
-    (hAr : NormalTorusRectangleInjectivityHypotheses
-      (regionInjectivityDataOf (G := torusGraph width height) A))
-    (hBr : NormalTorusRectangleInjectivityHypotheses
-      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hAn : IsNormalTorusRectanglePEPS A) (hBn : IsNormalTorusRectanglePEPS B)
     (hw : 7 ≤ width) (hh : 7 ≤ height)
-    (hAB : SameState A B) (hd : 0 < d)
-    (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
-    (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g) :
+    (hAB : SameState A B) (hd : 0 < d) :
     ∃ (hbond : A.bondDim = B.bondDim)
         (X : (e : Edge (torusGraph width height)) → GL (Fin (B.bondDim e)) ℂ),
       IsTranslationCovariantGaugeFamily B X ∧
@@ -311,16 +336,16 @@ theorem fundamentalTheorem_normalTorusPEPS_unconditional
             lam * gaugeVertex B X v (fun ie => Fin.cast (congr_fun hbond ie.1) (η ie)) σ) ∧
         lam ^ (width * height) = 1 := by
   classical
-  -- The union closure of injective regions, from positive bonds.
-  have hUA : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) A) :=
-    regionInjectivityUnionClosure_of_overlap A hposA
-  have hUB : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B) :=
-    regionInjectivityUnionClosure_of_overlap B hposB
+  have hAr := hAn.toNormalTorusRectangleInjectivityHypotheses
+  have hBr := hBn.toNormalTorusRectangleInjectivityHypotheses
+  have hposA := hAn.bondDim_pos
+  have hposB := hBn.bondDim_pos
+  -- The union closure of injective regions, from the nonzero bonds.
+  have hUA := hAn.unionClosure
+  have hUB := hBn.unionClosure
   -- The bond-dimension equality, from the rectangular injectivity hypotheses.
   have hbond : A.bondDim = B.bondDim :=
-    bondDim_eq_of_normalTorusRectangle hA hB hAr hBr hUA hUB hw hh hAB hd hposA hposB
+    bondDim_eq_of_normalTorusRectangle hA hB hAn hBn hw hh hAB hd
   -- The translation-covariant absorbed gauge family, at the seam-touching reference anchors.
   obtain ⟨X, hXcov, hedge⟩ := exists_torusCovariantAbsorbedGaugeFamily
     (xhStart := width - 5) (yhStart := height - 5) (xvStart := width - 5) (yvStart := height - 5)
