@@ -303,9 +303,11 @@ import TNLean.PEPS.Approximation.WordEvaluationTransport
 import TNLean.PEPS.Approximation.WordOwnerAppendTailTransport
 import TNLean.PEPS.Approximation.WordOwnerMap
 import TNLean.PEPS.Approximation.WordOwnerRestriction
+import TNLean.PEPS.Approximation.WordOwnerRestrictionCommutation
 import TNLean.PEPS.Approximation.WordPartyCoordinates
 import TNLean.PEPS.Approximation.WordPartyMixedMatrix
 import TNLean.PEPS.Approximation.WordPermutation
 import TNLean.PEPS.Approximation.WordRestriction
 import TNLean.PEPS.Approximation.WordSelectivePartition
+import TNLean.PEPS.Approximation.WordStructuralCongruence
 import TNLean.PEPS.Approximation.ZeroPartyGates
