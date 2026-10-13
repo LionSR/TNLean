@@ -171,6 +171,31 @@ private def selectedPreparedWordComparison {Q : Type} {a b : Layout Q}
     (v : Word (Layout.restrict f a) (Layout.restrict f b)) : Prop :=
   (u.restrict f hu).eval = v.eval
 
+/-- Compose two selected source-free word comparisons before any concrete
+preparation, residual or incident-label word is substituted.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
+246–267, 351–434 and 565–588. -/
+private theorem selectedPreparedWordComparison_comp {Q R : Type}
+    {a b c : Layout Q} {d e f : Layout R}
+    (sq : Q → Bool) (sa : R → Bool) (lift : R → Q)
+    (u : Word a b) (v : Word b c) (x : Word d e) (y : Word e f)
+    (hu : u.sources = []) (hv : v.sources = [])
+    (hx : x.sources = []) (hy : y.sources = []) (hxy : (x.comp y).sources = [])
+    (t : Word (Layout.restrict sq a) (Layout.restrict sq c))
+    (hi : Layout.restrict sq a = Layout.mapOwner lift (Layout.restrict sa d))
+    (hm : Layout.restrict sq b = Layout.mapOwner lift (Layout.restrict sa e))
+    (ho : Layout.restrict sq c = Layout.mapOwner lift (Layout.restrict sa f))
+    (hPrep : HEq (u.restrict sq hu).eval ((x.restrict sa hx).mapOwner lift).eval)
+    (hResidual : HEq (v.restrict sq hv).eval ((y.restrict sa hy).mapOwner lift).eval)
+    (hTarget : HEq t.eval (((x.comp y).restrict sa hxy).mapOwner lift).eval) :
+    selectedPreparedWordComparison sq (u.comp v)
+      (by simp only [Word.sources, hv, hu, List.nil_append]) t := by
+  have hComp := Word.eval_comp_heq (u.restrict sq hu) (v.restrict sq hv)
+    ((x.restrict sa hx).mapOwner lift) ((y.restrict sa hy).mapOwner lift)
+    hi hm ho hPrep hResidual
+  apply eq_of_heq
+  exact hComp.trans hTarget.symm
+
 /-- Compare the original prepared word with its incident-label word, with
 all original source and output data fixed before the comparison is proved.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
@@ -245,13 +270,6 @@ private theorem selectedPreparedWordComparison_of_original_labels {a b : Layout 
       Layout.mapOwner lift (Layout.restrict sa (S ++ Layout.mapOwner fa a)) := by
     simp only [Layout.restrict_append, Layout.mapOwner_append]
     exact congrArg₂ List.append hSlots.symm (hBoundary a).symm
-  have hComp := Word.eval_comp_heq
-    ((w.sourcePrivatePreparation ψ).restrict sq (sources_sourcePrivatePreparation w ψ))
-    ((partialResidual (fun _ : P ↦ true) w ξ).restrict sq
-      (sources_partialResidual (fun _ : P ↦ true) w ξ))
-    ((Pa.restrict sa hsPa).mapOwner lift)
-    (((partialResidual A w χ).restrict sa (sources_partialResidual A w χ)).mapOwner lift)
-    hin hmid (hBoundary b).symm hPrep hResidual
   have hIncident : HEq
       (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)).eval
       ((Va.restrict sa hsVa).mapOwner lift).eval := by
@@ -259,8 +277,14 @@ private theorem selectedPreparedWordComparison_of_original_labels {a b : Layout 
     dsimp only
     rw [choicesOfOriginalGateLabelsAt_eq_projectAllChoices]
     exact Word.eval_castLayouts_heq _ _ _
-  apply eq_of_heq
-  exact hComp.trans hIncident.symm
+  exact selectedPreparedWordComparison_comp sq sa lift
+    (w.sourcePrivatePreparation ψ) (partialResidual (fun _ : P ↦ true) w ξ)
+    Pa (partialResidual A w χ)
+    (sources_sourcePrivatePreparation w ψ)
+    (sources_partialResidual (fun _ : P ↦ true) w ξ)
+    hsPa (sources_partialResidual A w χ) hsVa
+    (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ))
+    hin hmid (hBoundary b).symm hPrep hResidual hIncident
 
 /-- The source-to-output operator selected at one party of a genuine all-party
 branch is exactly the operator constructed from its original incident labels.
