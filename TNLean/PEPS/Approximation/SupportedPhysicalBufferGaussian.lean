@@ -121,6 +121,7 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
     hgauss Λ gH K V (hDK.reindex (p.trans e))
       (Q.image a) (Z.image a) hV hD l
   rw [hK'] at hU hM
+  refine ⟨U, hU0, hU, hunit, hsupport, fun η T hT ↦ ?_⟩
   done
 
 end TNLean.PEPS.Approximation
