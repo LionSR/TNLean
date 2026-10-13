@@ -114,10 +114,10 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
       rw [dite_eq_left ht]
       rfl
     rw [hw]
-    change relabelledSpectatorsIdentity all ((G.branchWord i).mapOwner owner) tail q
+    generalize (G.branchWord i : Word a b) = u
+    change relabelledSpectatorsIdentity all (u.mapOwner owner) tail q
     exact restrict_embedded_branch_spectators_eval_heq_id
-      (P := P) (C := C) (a := a) (b := b) owner
-      (G.branchWord i) tail p howner
+      (P := P) (C := C) (a := a) (b := b) owner u tail p howner
   · have hw : partialWord (fun _ : P => true) (.gate owner G tail) ξ =
         Word.groupedBlockMap all none (Layout.mapOwner owner a) (Layout.mapOwner owner b)
           (Layout.affectedOwner_mapOwner_eq_none (fun _ : P => true) owner ht a)
