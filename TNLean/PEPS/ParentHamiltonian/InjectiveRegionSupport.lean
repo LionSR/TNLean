@@ -21,9 +21,14 @@ Source: CPGSV21, arXiv:2011.12127, Section IV.C.1, lines 2003–2044;
 the complementary-block Schmidt-span argument is also in
 arXiv:1804.04964, Section 3, Lemma `inj_isomorph`, lines 254–582.
 
-The site-injective consequences take the injective tensor hypothesis
-`Tensor.IsInjective`, which carries the nonzero virtual-space convention.
-The complementary-map support theorem does not need it.
+**Local fix (nonzero virtual spaces):** the source treats the virtual bond
+spaces as nonzero (arXiv:1804.04964, lines 582 and 1037 of
+`Papers/1804.04964/paper_normal.tex`) without listing this among the
+hypotheses. The site-injective consequences here take `Tensor.IsInjective`,
+whose field `bondDim_pos` carries the convention; the passage from vertex
+injectivity to injectivity of a blocked region uses it. The complementary-map support
+theorem does not need it. Documented in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 
 ## References
 

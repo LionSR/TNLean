@@ -22,6 +22,15 @@ that every vertex has a neighbor; the unrestricted graph statements include
 isolated-site singleton parents. See
 `docs/paper-gaps/cpgsv21_injective_parent_reconstruction.tex`.
 
+**Local fix (nonzero virtual spaces):** the source treats the virtual bond
+spaces as nonzero (arXiv:1804.04964, lines 582 and 1037 of
+`Papers/1804.04964/paper_normal.tex`) without listing this among the
+hypotheses. The four one-dimensionality theorems here take
+`Tensor.IsInjective`, whose field `bondDim_pos` carries the convention; with a
+zero-dimensional bond the closed PEPS vector is zero. The span and kernel
+theorems take vertex injectivity alone. Documented in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+
 ## References
 
 - [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,

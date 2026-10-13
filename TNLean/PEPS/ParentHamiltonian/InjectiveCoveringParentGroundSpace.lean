@@ -25,6 +25,14 @@ derived from vertex coverage, rather than inferred from bare inverse-adjoint
 congruence. Isolated vertices must occur in some region. See
 `docs/paper-gaps/cpgsv21_injective_parent_reconstruction.tex`.
 
+**Local fix (nonzero virtual spaces):** the source treats the virtual bond
+spaces as nonzero (arXiv:1804.04964, lines 582 and 1037 of
+`Papers/1804.04964/paper_normal.tex`) without listing this among the
+hypotheses. The one-dimensionality theorem here takes `Tensor.IsInjective`,
+whose field `bondDim_pos` carries the convention; with a zero-dimensional bond
+the closed PEPS vector is zero. Documented in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+
 ## References
 
 - [arXiv:2011.12127](https://arxiv.org/abs/2011.12127) -- J. I. Cirac, D. Pérez-García,

@@ -144,27 +144,33 @@ the torus window corollary, is the remaining work.
 
 ## Counterexample modules
 
-Both modules are kept, and this pass adds no new refutation.
+This pass deletes one counterexample module, keeps the other, and adds no new
+refutation.
 
-- `TNLean/PEPS/PositivityCounterexamples.lean`.
-  - `fundamentalTheoremPEPSStatement_false` refutes the injective Fundamental
-    Theorem with vertex injectivity alone. No library theorem has that
-    hypothesis set any more: the injective theorems take `Tensor.IsInjective`,
-    and the general normal theorem and `bondDim_eq_of_normalBlocking` take
-    `NormalPEPSPairHypotheses`. Both interfaces exclude the triangle witness.
-  - The module is kept while the source-facing normal corollaries on fixed
-    lattices listed above still state tensor positivity explicitly.
-  - The one-edge step `bondDim_apply_eq_of_blockingData` keeps explicit
-    positivity of the original tensors. It is an internal step that cites no
-    source statement as its hypothesis set, and every caller supplies the
-    positivity from `NormalPEPSPairHypotheses` or from the fixed-lattice
-    corollaries, so it needs no counterexample.
-- `TNLean/PEPS/PhysicalToVirtualCounterexample.lean` refutes
+- `TNLean/PEPS/PositivityCounterexamples.lean` is deleted. It refuted the
+  injective Fundamental Theorem stated with vertex injectivity alone. No
+  library theorem has that hypothesis set any more: the injective theorems take
+  `Tensor.IsInjective`, the general normal theorem and
+  `bondDim_eq_of_normalBlocking` take `NormalPEPSPairHypotheses`, and the
+  fixed-lattice corollaries listed above state tensor positivity explicitly.
+  None of these admits the zero-bond triangle witness, so the convention is in
+  every hypothesis set the witness could reach. Removed declarations, all in
+  the namespace `TNLean.PEPS.FundamentalTheoremCounterexample`:
+  - the statement `FundamentalTheoremPEPSStatement` and its refutation
+    `fundamentalTheoremPEPSStatement_false`;
+  - the witness data `V3`, `adj3`, `G3`, `e3`, `f3`, `g3`, `bdA`, `bdB`, `A3`,
+    `B3`, `e3_at0`, `e3_at1`, `g3_at2` and the instances on their
+    configuration spaces;
+  - the helper facts `f3_ne_e3`, `f3_ne_g3`, `bdA_e3`, `bdA_g3`, `bdB_e3`,
+    `bdB_g3`, `bdA_f3`, `bdB_f3`, `A3_bondDim`, `B3_bondDim`, `stateCoeff_A3`,
+    `stateCoeff_B3`, `A3_vertexInjective`, `B3_vertexInjective`,
+    `A3_B3_sameState` and `not_gaugeEquiv`.
+- The one-edge step `bondDim_apply_eq_of_blockingData` keeps explicit
+  positivity of the original tensors. It is an internal step that cites no
+  source statement as its hypothesis set, and every caller supplies the
+  positivity from `NormalPEPSPairHypotheses` or from the fixed-lattice
+  corollaries, so it needs no counterexample.
+- `TNLean/PEPS/PhysicalToVirtualCounterexample.lean` is kept. It refutes
   `physical_to_virtual_insertion` without positivity. That theorem keeps
-  `hpos` explicit, and its witness satisfies `EdgeBlockedThreeSiteInjective`.
-
-The fixed-lattice theorems listed above are on cycle, square and torus graphs.
-The triangle witness is the cycle on three vertices, but its graph `G3` is not
-literally `SimpleGraph.cycleGraph 3`, so it does not instantiate the cycle
-corollary as stated. Deleting `PositivityCounterexamples.lean` is left to the
-pass that carries the convention through those corollaries.
+  `hpos` explicit because its hypothesis is chain data, and the witness
+  satisfies `EdgeBlockedThreeSiteInjective`.

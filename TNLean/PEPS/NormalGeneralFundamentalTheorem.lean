@@ -63,10 +63,13 @@ The hypotheses beyond the source's wording are documented:
   recorded blocking bundle does not carry it as a field (see
   `TNLean.PEPS.NormalAbsorbedFamily` and
   `docs/paper-gaps/peps_normal_ft_section3_route.tex`).
-* Nonzero virtual bond spaces are part of the normal PEPS hypothesis
-  `NormalPEPSPairHypotheses`, which carries the convention
-  (`docs/paper-gaps/peps_injective_ft_section3_route.tex`).  Connectivity is
-  the faithfulness fix of the injective Fundamental Theorem, backed by a
+* **Local fix (nonzero virtual spaces):** the source treats the virtual bond
+  spaces as nonzero (arXiv:1804.04964, lines 582 and 1037 of
+  `Papers/1804.04964/paper_normal.tex`) without listing this among the
+  hypotheses.  The theorems here take `NormalPEPSPairHypotheses`, whose fields
+  `bondDim_pos_left` and `bondDim_pos_right` carry the convention.  Documented
+  in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+* Connectivity is the faithfulness fix of the injective Fundamental Theorem, backed by a
   machine-checked counterexample
   (`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`); the scalar
   absorption is exactly the step that requires connectivity.

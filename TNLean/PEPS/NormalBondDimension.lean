@@ -286,9 +286,17 @@ structure NormalPEPSPairHypotheses (A B : Tensor G d) extends
     NormalPEPSBlockingHypotheses
       (regionInjectivityDataPair (regionInjectivityDataOf (G := G) A)
         (regionInjectivityDataOf (G := G) B)) G where
-  /-- Every virtual bond space of the first tensor is nonzero. -/
+  /-- Every virtual bond space of the first tensor is nonzero. The source treats bond spaces
+  as nonzero when it applies Lemma `inj_isomorph` around every edge, with `X` any matrix on
+  the bond and an invertible gauge `Z` (arXiv:1804.04964, lines 582 and 1037 of
+  `Papers/1804.04964/paper_normal.tex`), and repeats that argument for normal PEPS in the
+  theorem labelled `normal` (lines 1574--1583). Local fix documented in
+  `docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
   bondDim_pos_left : ∀ e : Edge G, 0 < A.bondDim e
-  /-- Every virtual bond space of the second tensor is nonzero. -/
+  /-- Every virtual bond space of the second tensor is nonzero, the same convention for the
+  second normal PEPS (arXiv:1804.04964, lines 582, 1037 and 1574--1583 of
+  `Papers/1804.04964/paper_normal.tex`). Local fix documented in
+  `docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
   bondDim_pos_right : ∀ e : Edge G, 0 < B.bondDim e
 
 open scoped Classical in
