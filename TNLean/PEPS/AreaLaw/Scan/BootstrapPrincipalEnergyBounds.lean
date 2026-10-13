@@ -88,6 +88,13 @@ theorem exists_bootstrap_principal_energy_bound
       e_lt_one := sub_lt_self 1 hg₀
       kappa_le_e := hκμ.le }
   obtain ⟨C₁, hscale⟩ := eventually_scaleFacts X
+  obtain ⟨N, hN⟩ := eventually_atTop.mp
+    (hscale.and ((eventually_le_natCast_rpow X.nu_pos (4 * C₁)).and
+      ((eventually_le_natCast_rpow X.nu_pos (2 * Cδ)).and
+        (hlog.eventuallyLE.and
+          ((isLittleO_log_rpow_rpow_atTop Cl (div_pos X.nu_pos
+            (by norm_num : (0 : ℝ) < 4))).natCast_atTop.const_mul_left
+              (192 * C)).eventuallyLE))))
   done
 
 end TNLean.PEPS.AreaLaw.Scan
