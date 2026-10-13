@@ -1,0 +1,70 @@
+\section{The rough upper comparison for the supplied labels}
+
+\begin{theorem}[The physical upper comparison with a vanishing remainder]
+    \label{thm:al_global_schmidt_bell_rough_upper}
+    \lean{TNLean.PEPS.AreaLaw.eventually_suppliedGlobalSchmidtBellPrevector_rough_upper}
+    \uses{thm:al_global_schmidt_bell_prevector}
+    Let $V$ be a finite set of physical sites of local dimension $q$,
+    let $\Omega$ be a unit vector, and fix $X\subseteq V$.
+    Select a spectral set $E$ of the reduced density on $X$ with mass
+    $z>0$, and put $d=|E|$. Let $\psi$ be its normalized selected
+    Schmidt vector. Suppose that a supplied label sequence $\lambda_k$
+    satisfies
+    \[
+        \|(I\otimes P_{\lambda_k})\psi^{\otimes k}\|^2
+        \geq\frac{1}{2(k+1)^{d^2}}
+    \]
+    for every sufficiently large $k$. Form the original physical
+    prevector $\xi_k$ from $\Omega$ and these labels, as in
+    Theorem~\ref{thm:al_global_schmidt_bell_prevector}.
+
+    Fix a finite index set $J$, a finite nested list $\mathcal R$ of
+    physical regions disjoint from $X$, and $K\geq8$. There is a constant
+    $c\geq0$ for which the following holds eventually in $k$.
+    Choose $Z$ with $Z^*Z=I$ and $ZZ^*=P_{\mathrm{sym}}$, physical
+    regions $U_{jg},Y_{jg}$ for $j\in J$ and $0\leq g<K$, and an
+    iterated weighted geometric mean $T$. Assume
+    \begin{align*}
+        U_{jg}\cap Y_{jg}        & =\varnothing,                 \\
+        X\cap(U_{jg}\cup Y_{jg}) & =\varnothing,                 \\
+        U_{jg}\cup Y_{jg}        & \subseteq U_{j'h}\qquad(g<h).
+    \end{align*}
+    Suppose that $S_\Omega(D)\leq B_{\mathrm{sh}}$ for every
+    $D\in\mathcal R$. For each $Q=U_{jg}$ or $Q=U_{jg}\cup Y_{jg}$,
+    suppose that some $D\in\mathcal R$ is nested with $Q$ and satisfies
+    \[
+        1+\log\dim\mathcal H_{D\mathbin\triangle Q}
+        \leq B_{\mathrm{exc}}.
+    \]
+    At parameter $t=2/K$, use the full physical and auxiliary dimension
+    in the replica metric $W$. With auxiliary sites $C$ and $R$, put
+    \begin{align*}
+        L_{jg} & =X\cup U_{jg}\cup\{C\},                        \\
+        F_{jg} & =(X\cup U_{jg}\cup Y_{jg})^c\cup\{R\},         \\
+        A_{jg} & =(W_{L_{jg}}^{-1}W_{F_{jg}}^{-1}W_{Y_{jg}})^2, \\
+        M_k    & =\prod_{g=0}^{K-1}T(Z^*A_{\cdot g}Z),          \\
+        w_k    & =M_k^{-1/4}Z^*\xi_k.
+    \end{align*}
+    Complements are taken in $V$. Then $\|w_k\|^2>0$ and
+    \begin{align*}
+        -\frac{\log\|w_k\|^2}{k}
+         & \leq2\log d-\log z
+        +4\left(\frac{B_{\mathrm{sh}}}{z}+B_{\mathrm{exc}}\right)
+        +R_{d,c,K}(k),                                         \\
+        R_{d,c,K}(k)
+         & =\frac{\log4+(d^2+cK)\log(k+2)}{k}\longrightarrow0.
+    \end{align*}
+    The constant and eventual threshold precede all the choices of
+    $Z,U,Y,T,B_{\mathrm{sh}}$ and $B_{\mathrm{exc}}$.
+    This is the supplied-label application of the rough upper comparison
+    in \cite[Section~8, lines~130--169 and~332--381]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    Express the supplied auxiliary mass in physical-site coordinates.
+    Apply the rough upper estimate for the original prevector with
+    $t=2/K$ and inverse-power exponent $1/4$. The disjointness assumptions
+    give $Y_{jg}\setminus X=Y_{jg}$, so its ordered product is precisely
+    $M_k$. Its coefficient $8(1/4)(2/K)K$ is $4$.
+    The remaining terms are logarithmic in $k$, and division by $k$
+    gives the asserted limit.
+\end{proof}
