@@ -219,9 +219,9 @@ theorem actualCharge_energyError_le_domainGraph
       (j : Σ _ : History S.K S.m S.M s, Option (ChargeChoices S.K S.M))
       (θ : CoherentSphere (SiteConfig n)) : D.splitEta E i j θ.1 ≤ 2 * ℓ :=
     D.splitEta_le_two_mul_of_logDim_le n E hadm hcompat hℓ hsupp i j θ
-  letI : ∀ hist : Rd.H, IsFiniteMeasure (Rd.μOld k p hist) := fun hist ↦
+  let : ∀ hist : Rd.H, IsFiniteMeasure (Rd.μOld k p hist) := fun hist ↦
     D.isFiniteMeasure_transportLeafMeasure n (a / 2) k (pre k) p ⟨hist, none⟩
-  letI : ∀ (hist : Rd.H) (c : Rd.Ch hist), IsFiniteMeasure (Rd.μNew k p hist c) :=
+  let : ∀ (hist : Rd.H) (c : Rd.Ch hist), IsFiniteMeasure (Rd.μNew k p hist c) :=
     fun hist c ↦ D.isFiniteMeasure_transportLeafMeasure n (a / 2) k (pre k) p ⟨hist, some c⟩
   have hmass := S.actualChargeScanRound_mass hm hM s n E a pre ha k hsym hpre hp
   have hbound := Rd.energySum_le_of_leaf_bounds (B := 2 * ℓ) (N := A)
