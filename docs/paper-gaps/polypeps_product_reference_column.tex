@@ -20,6 +20,13 @@
 
 \section{The source construction}
 
+Fix a site dimension $q\ge2$, a bound $J>0$ on the norms of the local
+interaction terms, and a full-system spectral-gap lower bound $\Delta>0$.
+The positive constant $C$ may vary between occurrences and depends only
+on $q,J,\Delta$ and explicitly fixed numerical powers, geometric templates,
+or tolerances. It is uniform in the lattice size $L$ and in the Hamiltonian
+among those satisfying these fixed bounds~\cite{OpenAI2026PolynomialPEPS}.
+
 Section~8.1 of the polynomial PEPS approximation manuscript of
 September~24, 2026~\cite{OpenAI2026PolynomialPEPS}
 (\path{07-assembly.tex}, lines~21--63) constructs an actual joint vector
@@ -29,6 +36,7 @@ vector $\Omega$,
     \|\Psi\| &\leq 1,
     &1-CL^{-57}\leq\|\Xi\| &\leq 1,
     &\|\Psi-\Omega\otimes\Xi\| &\leq CL^{-17}.
+    \label{eq:polypeps_reference_source}
 \end{align}
 It traces the private coordinates and applies distributed compression to
 this same joint vector. Lemma~8.1 (lines~67--94) extracts a nonzero column
@@ -45,15 +53,17 @@ For arbitrary finite physical and private spaces, suppose
     &\|\Psi\| &\leq1,
     &1-\delta\leq\|\Xi\| &\leq1,
     &\|\Psi-\Omega\otimes\Xi\| &\leq\varepsilon.
+    \label{eq:polypeps_reference_hypotheses}
 \end{align}
 The product marginal equals
 $\|\Xi\|^2|\Omega\rangle\langle\Omega|$. The subnormalized pure-state
 estimate and contraction under partial trace therefore give
 \begin{align}
-    \bigl\|\operatorname{Tr}_{E}|\Psi\rangle\langle\Psi|
+    \bigl\|\tr_{E}|\Psi\rangle\langle\Psi|
       -|\Omega\rangle\langle\Omega|\bigr\|_1
     &\leq 2\varepsilon+1-\|\Xi\|^2
      \leq 2\varepsilon+2\delta.
+    \label{eq:polypeps_reference_marginal}
 \end{align}
 Here the last inequality uses
 $1-s^2\leq2(1-s)\leq2\delta$ for $s=\|\Xi\|\leq1$.
@@ -69,9 +79,10 @@ Now suppose an operator network with tensors $A$ and edge dimensions $D_e$
 is already on the open $L\times L$ square. Write $\sigma$ for its contracted
 operator, and assume
 \begin{align}
-    \bigl\|\sigma-\operatorname{Tr}_{E}|\Psi\rangle\langle\Psi|\bigr\|_1
+    \bigl\|\sigma-\tr_{E}|\Psi\rangle\langle\Psi|\bigr\|_1
       &\leq\kappa,
     &\alpha:=\kappa+2\varepsilon+2\delta &<1.
+    \label{eq:polypeps_reference_compression}
 \end{align}
 The triangle inequality yields
 $\|\sigma-|\Omega\rangle\langle\Omega|\|_1\leq\alpha$.
@@ -81,6 +92,7 @@ that fixing the input of each tensor $A$ to $z$ gives
     \Phi &=\sigma|z\rangle\ne0,
     &\left\|\frac{\Phi}{\|\Phi\|}-e^{i\theta}\Omega\right\|
        &\leq2\alpha.
+    \label{eq:polypeps_reference_column}
 \end{align}
 Every edge keeps exactly its original dimension $D_e$. A zero dimension
 would make the contraction vanish, so $D_e>0$; every bound $D_e\leq B$
