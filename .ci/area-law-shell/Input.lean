@@ -90,7 +90,7 @@ theorem positiveDepthPrefix_eq_filter_ambientDilation
     have hzero (x : ℤ × ℤ) : ambientDepth T hT x ≤ 0 ↔ x ∈ T :=
       (ambientDepth_le_iff_mem_dilation T hT x 0).trans
         (Iff.of_eq (congrArg (fun U : Finset (ℤ × ℤ) ↦ x ∈ U) (ambientDilation_zero T)))
-    simp only [← hzero, not_le, and_comm, and_left_comm]
+    simp [← hzero, not_le, and_comm]
     done
   · done
 
