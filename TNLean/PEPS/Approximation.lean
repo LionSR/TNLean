@@ -114,6 +114,7 @@ import TNLean.PEPS.Approximation.EndpointMatrixWord
 import TNLean.PEPS.Approximation.EndpointOperatorCoordinates
 import TNLean.PEPS.Approximation.EndpointOperatorWord
 import TNLean.PEPS.Approximation.EndpointRegisterRestriction
+import TNLean.PEPS.Approximation.EndpointSelectedRegisterComparison
 import TNLean.PEPS.Approximation.EndpointWordEvaluation
 import TNLean.PEPS.Approximation.EndpointWordRestriction
 import TNLean.PEPS.Approximation.EndpointWordRestrictionCongruence
@@ -146,6 +147,7 @@ import TNLean.PEPS.Approximation.HomogeneousOwnership
 import TNLean.PEPS.Approximation.IncidentGateLabels
 import TNLean.PEPS.Approximation.IncidentPureSampledPhysicalSum
 import TNLean.PEPS.Approximation.IncidentSampledEndpointComparison
+import TNLean.PEPS.Approximation.IncidentSampledEndpointRepresentation
 import TNLean.PEPS.Approximation.IncidentSampledEndpointWord
 import TNLean.PEPS.Approximation.IncidentSampledPhysicalFactor
 import TNLean.PEPS.Approximation.IncidentSourceWord
@@ -244,6 +246,8 @@ import TNLean.PEPS.Approximation.RestrictedMixedPhysicalTrace
 import TNLean.PEPS.Approximation.RoutedContraction
 import TNLean.PEPS.Approximation.SampledEndpointExteriorIdentity
 import TNLean.PEPS.Approximation.SampledEndpointFactors
+import TNLean.PEPS.Approximation.SampledEndpointIncidentComparison
+import TNLean.PEPS.Approximation.SampledEndpointOperatorRepresentation
 import TNLean.PEPS.Approximation.SampledOriginalCircuit
 import TNLean.PEPS.Approximation.SelectedFamilyPhysicalBasis
 import TNLean.PEPS.Approximation.SelectedPartialSourceSlots

@@ -24,6 +24,23 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Restriction of equal words with dependent source proofs — promoted (2026-10-13)
+
+- **Pattern:** Transport the word together with its source-free proof before
+  comparing restrictions. Ordinary rewriting may keep a generated proof fixed
+  while changing the word on which it depends.
+- **Seen:** The unequal-owner source case of `WordSelectedOwnerLocalPart`,
+  the two actual gate words in `AllPartySingletonComparison`, and the fixed-layout
+  sampled-word comparison in `SampledEndpointIncidentComparison`.
+- **Abstraction:** The existing `congrArg` and `congrArg₂` transport the complete
+  comparison proposition. For source-free words on a fixed layout, `Subtype.ext`
+  transports the word together with its proof before `congrArg` is applied.
+  Changes of layouts use the existing `Word.restrict_castLayouts`.
+- **Refactor:** Each comparison now applies these existing congruence lemmas
+  before the circuit expressions are specialized. No additional tactic or
+  alias for a general equality lemma is introduced. Public hypotheses and
+  proof limits are unchanged; Lean verification remains pending.
+
 ### Actual sampled local physical matrices — promoted (2026-10-12)
 
 - **Pattern:** The same mixed physical trace, with independent chronological
@@ -4284,23 +4301,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
-
-### Restriction of equal source-free words — candidate (2026-10-13)
-
-- **Pattern:** When equality of words is used inside restriction, transport
-  the word together with its source-free proof. Ordinary rewriting can leave
-  a generated proof fixed while changing the word on which it depends.
-- **Seen:** Two occurrences in `PEPS/Approximation/`: the unequal-owner source
-  case of `WordSelectedOwnerLocalPart.lean` and the sampled-word comparison
-  in `IncidentSampledEndpointComparison.lean`.
-- **Abstraction:** Consider a restriction-congruence lemma if a third
-  occurrence appears. The present proofs use `congrArg` of the complete
-  proposition, or the subtype of source-free words, respectively. For a
-  change of layouts, use the existing `Word.restrict_castLayouts`.
-- **Notes:** The two comparisons have different targets, so no new tactic
-  is introduced. The proof of source-freeness must vary with the abstract
-  word. Mathematical hypotheses and proof limits remain unchanged; Lean
-  verification of these corrections is pending.
 
 ### Upper endpoint of a scanner band — candidate (2026-10-12)
 

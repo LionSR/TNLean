@@ -31,6 +31,92 @@ private theorem id_heq_of_memory_eq {E F : HSpace} (h : E = F) :
   cases h
   rfl
 
+/-- The comparison of the two selected remaining words, with each source
+proof supplied by its word argument. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 351–434 and 565–588. -/
+private def selectedRemainingComparison {Q R S : Type} {a b : Layout Q} {c d : Layout R}
+    (W : Word a b) (V : Word c d) (q : Q) (r : R) (lift : R → S) : Prop :=
+  HEq (W.localPart.restrict (partySelector q) W.sources_localPart).eval
+    ((V.localPart.restrict (partySelector r) V.sources_localPart).mapOwner lift).eval
+
+/-- Two relabellings with the same singleton original fibre give the same
+selected remaining operation, after any further relabelling of the second
+selected word. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
+lines 351–434 and 565–588. -/
+private theorem selectedRemainingComparison_mapOwner {P Q R S : Type}
+    (f : P → Q) (g : P → R) (lift : R → S) (p : P) (q : Q) (r : R)
+    (hf : ∀ z, f z = q ↔ z = p) (hg : ∀ z, g z = r ↔ z = p)
+    {a b : Layout P} (u : Word a b) :
+    selectedRemainingComparison (u.mapOwner f) (u.mapOwner g) q r lift := by
+  unfold selectedRemainingComparison
+  let T := u.localPart.restrict (partySelector p) u.sources_localPart
+  have hfWord := Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber f p q hf u
+  have hgWord := Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber g p r hg u
+  exact hfWord.trans ((Word.eval_mapOwner_heq f T).trans
+    ((Word.eval_mapOwner_heq g T).symm.trans
+      (hgWord.symm.trans (Word.eval_mapOwner_heq lift
+        ((u.mapOwner g).localPart.restrict (partySelector r)
+          (u.mapOwner g).sources_localPart)).symm)))
+
+/-- Structural word equalities specialize the singleton-fibre comparison
+without unfolding the branch construction in its operator comparison.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–434
+and 565–588. -/
+private theorem selectedRemainingComparison_of_mapOwner_eq {P Q R S : Type}
+    (f : P → Q) (g : P → R) (lift : R → S) (p : P) (q : Q) (r : R)
+    (hf : ∀ z, f z = q ↔ z = p) (hg : ∀ z, g z = r ↔ z = p)
+    {a b : Layout P} (u : Word a b)
+    (W : Word (Layout.mapOwner f a) (Layout.mapOwner f b))
+    (V : Word (Layout.mapOwner g a) (Layout.mapOwner g b))
+    (hW : W = u.mapOwner f) (hV : V = u.mapOwner g) :
+    selectedRemainingComparison W V q r lift := by
+  exact Eq.mpr (congrArg₂ (fun w v ↦ selectedRemainingComparison w v q r lift) hW hV)
+    (selectedRemainingComparison_mapOwner f g lift p q r hf hg u)
+
+/-- The same selected spectator memory gives the same identity operation
+under two owner maps with one common singleton original fibre.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–434
+and 565–588. -/
+private theorem selectedRemainingComparison_of_spectator_id {P Q R S : Type}
+    (f : P → Q) (g : P → R) (lift : R → S) (p : P) (q : Q) (r : R)
+    (hf : ∀ z, f z = q ↔ z = p) (hg : ∀ z, g z = r ↔ z = p)
+    (tail : Layout P) {a b : Layout Q} {c d : Layout R} (W : Word a b) (V : Word c d)
+    (hW : HEq (W.localPart.restrict (partySelector q) W.sources_localPart).eval
+      (Word.id (Layout.atParty q (Layout.mapOwner f tail))).eval)
+    (hV : HEq (V.localPart.restrict (partySelector r) V.sources_localPart).eval
+      (Word.id (Layout.atParty r (Layout.mapOwner g tail))).eval) :
+    selectedRemainingComparison W V q r lift := by
+  classical
+  unfold selectedRemainingComparison
+  have hsF : (fun z ↦ partySelector q (f z)) = partySelector p := by
+    funext z
+    apply Bool.eq_iff_iff.mpr
+    simpa only [partySelector, decide_eq_true_eq] using hf z
+  have hsG : (fun z ↦ partySelector r (g z)) = partySelector p := by
+    funext z
+    apply Bool.eq_iff_iff.mpr
+    simpa only [partySelector, decide_eq_true_eq] using hg z
+  have htF : Layout.atParty q (Layout.mapOwner f tail) =
+      Layout.mapOwner f (Layout.restrict (partySelector p) tail) := by
+    change Layout.restrict (partySelector q) (Layout.mapOwner f tail) = _
+    rw [Layout.restrict_mapOwner, hsF]
+  have htG : Layout.atParty r (Layout.mapOwner g tail) =
+      Layout.mapOwner g (Layout.restrict (partySelector p) tail) := by
+    change Layout.restrict (partySelector r) (Layout.mapOwner g tail) = _
+    rw [Layout.restrict_mapOwner, hsG]
+  have hMapped : HEq
+      ((V.localPart.restrict (partySelector r) V.sources_localPart).mapOwner lift).eval
+      (Word.id (Layout.atParty r (Layout.mapOwner g tail))).eval :=
+    (Word.eval_mapOwner_heq lift _).trans hV
+  have htailMem : Mem (Layout.atParty q (Layout.mapOwner f tail)) =
+      Mem (Layout.atParty r (Layout.mapOwner g tail)) :=
+    ((congrArg Mem htF).trans (Layout.mem_mapOwner f _)).trans
+      ((congrArg Mem htG).trans (Layout.mem_mapOwner g _)).symm
+  have hid : HEq (Word.id (Layout.atParty q (Layout.mapOwner f tail))).eval
+      (Word.id (Layout.atParty r (Layout.mapOwner g tail))).eval :=
+    id_heq_of_memory_eq htailMem
+  exact hW.trans (hid.trans hMapped.symm)
+
 namespace SourceCircuit
 variable {P C ι : Type} [Fintype C] [Fintype ι]
 
@@ -63,7 +149,7 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection
   let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
   let fa := affectedOwner A
   let sq := partySelector q
-  let sp := partySelector p
+  change selectedRemainingComparison W V qp q lift
   have hfAll : ∀ r, all r = qp ↔ r = p := by
     intro r
     simp [all, qp, affectedOwner]
@@ -76,9 +162,9 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection
     have htA : ∃ t : C, A (owner t) = true := ⟨t, by rw [ht]; exact hp⟩
     have htAll : ∃ _t : C, true = true := ⟨t, rfl⟩
     let eAll : Choices (fun _ : P ↦ true) (.gate owner G tail) ≃ ι :=
-      Equiv.cast (by simp only [Choices]; exact if_pos ⟨t, by trivial⟩)
+      Equiv.cast (by simp only [Choices]; exact ite_eq_left ⟨t, by trivial⟩)
     let eA : Choices A (.gate owner G tail) ≃ ι :=
-      Equiv.cast (by simp only [Choices]; exact if_pos htA)
+      Equiv.cast (by simp only [Choices]; exact ite_eq_left htA)
     let i := eAll ξ
     have hi : eA χ = i := by
       exact choiceAt_projectAllChoices A (.gate owner G tail) ξ ()
@@ -93,17 +179,7 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection
       rw [dite_eq_left htA]
       change (((G.branchWord (eA χ)).mapOwner owner).appendTail tail).mapOwner fa = _
       rw [hi]
-    let R := U.localPart.restrict sp U.sources_localPart
-    have hAll := Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
-      all p qp hfAll U
-    have hOne := Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
-      fa p q hfA U
-    rw [hW, hV]
-    exact hAll.trans ((Word.eval_mapOwner_heq all R).trans
-      ((Word.eval_mapOwner_heq fa R).symm.trans
-        (hOne.symm.trans
-          (Word.eval_mapOwner_heq lift
-            ((U.mapOwner fa).localPart.restrict sq (U.mapOwner fa).sources_localPart)).symm)))
+    exact selectedRemainingComparison_of_mapOwner_eq all fa lift p qp q hfAll hfA U W V hW hV
   · have howner : ∀ t, owner t ≠ p := by
       intro t ht
       exact hincident ⟨t, ht⟩
@@ -135,34 +211,8 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection
           (by simp [sq, q, partySelector]))
     have hAll := restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
       owner G tail p howner ξ
-    have hsq : (fun r ↦ sq (fa r)) = sp := by
-      funext r
-      apply Bool.eq_iff_iff.mpr
-      simpa only [sq, sp, partySelector, decide_eq_true_eq] using hfA r
-    have hsp : (fun r ↦ partySelector qp (all r)) = sp := by
-      funext r
-      apply Bool.eq_iff_iff.mpr
-      simpa only [sp, partySelector, decide_eq_true_eq] using hfAll r
-    have htAll : Layout.atParty qp (Layout.mapOwner all tail) =
-        Layout.mapOwner all (Layout.restrict sp tail) := by
-      change Layout.restrict (partySelector qp) (Layout.mapOwner all tail) = _
-      rw [Layout.restrict_mapOwner, hsp]
-    have htA : Layout.atParty q (Layout.mapOwner fa tail) =
-        Layout.mapOwner fa (Layout.restrict sp tail) := by
-      change Layout.restrict sq (Layout.mapOwner fa tail) = _
-      rw [Layout.restrict_mapOwner, hsq]
-    have hMapped : HEq
-        ((V.localPart.restrict sq V.sources_localPart).mapOwner lift).eval
-        (Word.id (Layout.atParty q (Layout.mapOwner fa tail))).eval :=
-      (Word.eval_mapOwner_heq lift _).trans hOne
-    have htailMem : Mem (Layout.atParty qp (Layout.mapOwner all tail)) =
-        Mem (Layout.atParty q (Layout.mapOwner fa tail)) :=
-      ((congrArg Mem htAll).trans (Layout.mem_mapOwner all _)).trans
-        ((congrArg Mem htA).trans (Layout.mem_mapOwner fa _)).symm
-    have hid : HEq (Word.id (Layout.atParty qp (Layout.mapOwner all tail))).eval
-        (Word.id (Layout.atParty q (Layout.mapOwner fa tail))).eval := by
-      exact id_heq_of_memory_eq htailMem
-    exact hAll.trans (hid.trans hMapped.symm)
+    exact selectedRemainingComparison_of_spectator_id all fa lift p qp q
+      hfAll hfA tail W V hAll hOne
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect

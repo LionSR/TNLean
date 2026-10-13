@@ -426,7 +426,7 @@ endpoint labels agree after grouping.
 \begin{theorem}[The sampled endpoint operator determined by incident labels]
     \label{thm:peps_incident_sampled_endpoint_comparison}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord}
-    \uses{def:peps_incident_sampled_endpoint_word,
+    \uses{thm:peps_sampled_endpoint_incident_comparison,def:peps_incident_sampled_endpoint_word,
         def:peps_actual_sampled_endpoint_word,thm:peps_incident_gate_labels,
         thm:peps_singleton_all_source_layout}
     Let $\mathcal W:a\to b$ be an arbitrary chronological circuit,
@@ -665,4 +665,88 @@ endpoint labels agree after grouping.
     Substitution in the product gives
     (\ref{eq:peps_incident_pure_sampled_physical_sum}), with the same
     outer coefficients, sample assignments and exterior scalar.
+\end{proof}
+
+\begin{theorem}[Restriction of arbitrary endpoint operators]
+    \label{thm:peps_endpoint_selected_register_comparison}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.endpointDataAt}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.endpointRegisterData_partialSlots}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_endpointWord_eval_heq_selectedRegisterWord}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.endpointRegisterWord_eval_heq_of_eq}
+    Let $M_e$ and $N_e$ be arbitrary endomorphisms of the two endpoint spaces
+    of each original source occurrence $e$. Restricting their ordered endpoint
+    word to a party $p$ gives the word formed by retaining the endpoint
+    registers owned by $p$, in the same order. Equal endpoint lists give equal
+    operators under their canonical register identifications.
+    This is an auxiliary comparison in the proof of
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    Enumerate the retained source occurrences in their original order.
+    Each occurrence contributes its two endpoint registers. Filtering this
+    list by the owner retains precisely the local maps at $p$. Relabelling
+    the owners changes neither the endpoint spaces nor the operators.
+\end{proof}
+
+\begin{definition}[Original sampled endpoint operators]
+    \label{def:peps_original_sampled_endpoint_operators}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceLabel}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointOperatorLeft}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointOperatorRight}
+    Fix two independent original branch choices, one sample assignment to
+    the original sources, and the original Gaussian arrays. At each original
+    source occurrence, form its two sampled endpoint operators in the recorded
+    orthonormal bases. Both endpoints use the same original sample index and
+    the ordered pair of ket and bra labels.
+\end{definition}
+
+\begin{theorem}[The ordered word of the original sampled operators]
+    \label{thm:peps_original_sampled_endpoint_operator_word}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.projectedSlotChoice_eq_allSourceLabel}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allPartialSlotChoice_eq_allSourceLabel}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sampledEndpointWord_eq_endpointWord}
+    \uses{def:peps_original_sampled_endpoint_operators}
+    Projection of the original branch choices reads the same gate label at
+    every surviving source slot. The complete ordered slot enumeration uses
+    the same original source indices. Hence the sampled endpoint word is
+    precisely the ordered word of these endpoint operators.
+\end{theorem}
+\begin{proof}
+    The slot bijection preserves each original occurrence. Reading a projected
+    branch at that occurrence gives its original label. Substitute these
+    identities in the two endpoint-operator families.
+\end{proof}
+
+\begin{theorem}[Incident labels determine the selected endpoint operators]
+    \label{thm:peps_incident_sampled_endpoint_register_representation}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.incidentSampledEndpointWord_eval_heq_endpointRegisterWord}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.incidentPartialSlotChoice_eq_allSourceLabel}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.incidentSampledEndpointWord_eval_heq_selectedRegisterWord}
+    \uses{def:peps_original_sampled_endpoint_operators}
+    The word constructed from the incident labels and local samples of a
+    party $p$ evaluates to the word of its filtered endpoint-register list,
+    after the canonical register identifications. If these labels are extracted
+    from the original branch choices, its endpoint operators equal the
+    corresponding original sampled operators. No label or sample assignment
+    at other occurrences is required.
+\end{theorem}
+\begin{proof}
+    Remove the canonical layout and owner identifications from the incident
+    word. Compare the two endpoint-operator families pointwise using the
+    original gate labels. Equality of these families gives equality of the
+    filtered endpoint-register lists and therefore of their operators.
+\end{proof}
+
+\begin{theorem}[Restriction of the sampled endpoint word]
+    \label{thm:peps_sampled_endpoint_incident_comparison}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_sampledEndpointWord_eval_heq_incidentSampledEndpointWord}
+    \uses{thm:peps_endpoint_selected_register_comparison,thm:peps_original_sampled_endpoint_operator_word,thm:peps_incident_sampled_endpoint_register_representation}
+    The restriction of the original sampled endpoint word to $p$ equals the
+    operator of the word formed directly from its incident ket and bra labels
+    and the same original samples, under the canonical register identification.
+\end{theorem}
+\begin{proof}
+    Express the sampled word by its original endpoint operators, apply the
+    arbitrary-operator restriction comparison, and then apply the incident-label
+    comparison. The same operators and register order occur at every step.
 \end{proof}
