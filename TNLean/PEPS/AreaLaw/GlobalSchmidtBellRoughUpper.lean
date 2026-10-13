@@ -28,12 +28,6 @@ open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
 
 namespace TNLean.PEPS.AreaLaw
 
-local instance globalSchmidtBellRoughUpperConfigDecidableEq
-    (q d k : ℕ) (ι : Type) [Fintype ι] [DecidableEq ι] :
-    DecidableEq (Config k
-      (addedSiteSpace (addedSiteSpace (fun _ : ι ↦ Fin q) (Fin d)) (Fin d))) :=
-  Fintype.decidablePiFintype
-
 open Classical in
 /-- The rough upper comparison for the original physical prevector and the
 supplied common labels. The mass premise is the auxiliary-mass conclusion
