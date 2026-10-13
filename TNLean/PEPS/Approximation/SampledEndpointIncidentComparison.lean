@@ -30,17 +30,6 @@ private theorem restrict_eval_eq_of_word_eq {Q : Type}
   exact congrArg
     (fun z : {z : Word ℓ ℓ' // z.sources = []} ↦ (z.1.restrict f z.2).eval) h
 
-/-- Equal source-free words give equal comparison propositions with an
-arbitrary target value. The target space is independent of the word layouts.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434 and 565–588. -/
-private theorem restrict_eval_heq_of_word_eq {Q T : Type}
-    {ℓ ℓ' : Layout Q} (f : Q → Bool) (u v : Word ℓ ℓ')
-    (hu : u.sources = []) (hv : v.sources = []) (t : T) (hword : u = v)
-    (h : HEq (v.restrict f hv).eval t) : HEq (u.restrict f hu).eval t := by
-  have hprop : HEq (u.restrict f hu).eval t = HEq (v.restrict f hv).eval t :=
-    congrArg (fun z ↦ HEq z t) (restrict_eval_eq_of_word_eq f u v hu hv hword)
-  exact Eq.mpr hprop h
-
 /-- The common selected endpoint operator is formed from arbitrary original
 endpoint maps. Owner selection preserves the original source and register order.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434 and 565–588. -/
@@ -103,6 +92,37 @@ private theorem restrict_endpointWord_eval_heq_selectedEndpointOperator
       (selectedEndpointOperator w p M N) :=
   restrict_endpointWord_eval_heq_selectedRegisterWord w p M N
 
+/-- The comparison with the fixed original endpoint maps is a proposition
+on source-free words. Word equality can therefore be transported before any
+operator space is compared. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 279–355, 409–434 and 565–588. -/
+private def selectedEndpointComparison (w : SourceCircuit a b) (p : P)
+    (M : ∀ e : sourceLocations w, euc (Fin (sourceDims w e).1) →L[ℂ]
+      euc (Fin (sourceDims w e).1))
+    (N : ∀ e : sourceLocations w, euc (Fin (sourceDims w e).2) →L[ℂ]
+      euc (Fin (sourceDims w e).2))
+    (W : {z : Word w.allResidualSourceLayout w.allResidualSourceLayout // z.sources = []}) :
+    Prop :=
+  HEq (W.1.restrict (partySelector (some ⟨p, rfl⟩)) W.2).eval
+    (selectedEndpointOperator w p M N)
+
+/-- Canonical original endpoint selection supplies the comparison proposition
+before a representing word is substituted. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 279–355, 409–434 and 565–588. -/
+private theorem selectedEndpointComparison_endpointWord
+    (w : SourceCircuit a b) (p : P)
+    (M : ∀ e : sourceLocations w, euc (Fin (sourceDims w e).1) →L[ℂ]
+      euc (Fin (sourceDims w e).1))
+    (N : ∀ e : sourceLocations w, euc (Fin (sourceDims w e).2) →L[ℂ]
+      euc (Fin (sourceDims w e).2)) :
+    let all : P → Bool := fun _ ↦ true
+    let Z := SourceInventory.endpointWord (partialSlots all w) w.allSourceU w.allSourceV
+      (fun i ↦ M (partialSlotEquiv all w i).1)
+      (fun i ↦ N (partialSlotEquiv all w i).1)
+    let hz : Z.sources = [] := SourceInventory.sources_endpointWord ..
+    selectedEndpointComparison w p M N ⟨Z, hz⟩ :=
+  restrict_endpointWord_eval_heq_selectedEndpointOperator w p M N
+
 /-- An arbitrary source-free word representing the original endpoint maps
 has their common selected operator after restriction. The equality transports
 its own source-free proof before any sampled maps are supplied.
@@ -120,17 +140,18 @@ private theorem restrict_eval_heq_selectedEndpointOperator
       (fun i ↦ N (partialSlotEquiv (fun _ ↦ true) w i).1)) :
     HEq (W.restrict (partySelector (some ⟨p, rfl⟩)) hs).eval
       (selectedEndpointOperator w p M N) := by
+  change selectedEndpointComparison w p M N ⟨W, hs⟩
   let all : P → Bool := fun _ ↦ true
-  let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
   let Z := SourceInventory.endpointWord (partialSlots all w) w.allSourceU w.allSourceV
     (fun i ↦ M (partialSlotEquiv all w i).1)
     (fun i ↦ N (partialSlotEquiv all w i).1)
   have hz : Z.sources = [] := SourceInventory.sources_endpointWord ..
-  have hcanonical : HEq (Z.restrict (partySelector qp) hz).eval
-      (selectedEndpointOperator w p M N) :=
-    restrict_endpointWord_eval_heq_selectedEndpointOperator w p M N
-  exact restrict_eval_heq_of_word_eq (partySelector qp) W Z hs hz
-    (selectedEndpointOperator w p M N) hword hcanonical
+  have hwords : (⟨W, hs⟩ :
+      {z : Word w.allResidualSourceLayout w.allResidualSourceLayout // z.sources = []}) =
+      ⟨Z, hz⟩ := Subtype.ext hword
+  have hcanonical : selectedEndpointComparison w p M N ⟨Z, hz⟩ :=
+    selectedEndpointComparison_endpointWord w p M N
+  exact Eq.mpr (congrArg (selectedEndpointComparison w p M N) hwords) hcanonical
 
 variable (w : SourceCircuit a b) (k : ℕ)
   (lam : ∀ e : sourceLocations w, branchLabels w e.1 →

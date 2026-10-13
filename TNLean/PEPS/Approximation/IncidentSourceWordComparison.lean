@@ -86,7 +86,8 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
 private theorem selectedPreparedWordComparison_of_original_labels {a b : Layout P}
     (w : SourceCircuit a b) (p : P) (ψ : ProductInput a)
     (ξ : Choices (fun _ : P ↦ true) w) :
-    selectedPreparedWordComparison (partySelector (some ⟨p, rfl⟩))
+    selectedPreparedWordComparison
+      (partySelector (some (⟨p, rfl⟩ : {_p : P // true = true})))
       (w.partialSourceWord ψ ξ) (sources_partialSourceWord w ψ ξ)
       (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)) := by
   classical
