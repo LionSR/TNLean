@@ -30,7 +30,7 @@ jobs:
           ref: c55e6e786f49471c72fbddbec5415808896aec1e
           path: mathlib
           persist-credentials: false
-      - name: Install pinned Lean and fetch prebuilt Mathlib only
+      - name: Install pinned Lean without a full Mathlib cache fetch
         uses: leanprover/lean-action@24581d74d674803a25a81b10b059c5c0cdd344c6
         with:
           auto-config: false
@@ -38,8 +38,17 @@ jobs:
           test: false
           lint: false
           use-github-cache: false
-          use-mathlib-cache: true
+          use-mathlib-cache: false
           lake-package-directory: mathlib
+      - name: Fetch prebuilt artifacts for diagnostic imports
+        working-directory: mathlib
+        run: >-
+          lake exe cache get
+          Mathlib.Data.Int.Interval
+          Mathlib.Data.Finset.Lattice.Fold
+          Mathlib.Algebra.Order.Group.Abs
+          Mathlib.Algebra.Order.Group.Int
+          Mathlib.Data.Finset.Prod
       - name: One strict shell goal diagnostic
         timeout-minutes: 2
         working-directory: mathlib

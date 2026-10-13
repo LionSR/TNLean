@@ -15,7 +15,7 @@ import time
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / '.ci/area-law-shell/Input.lean'
-SOURCE_SHA = '5b8d83fbc2cefbaaaf32da6091a38f86e23acb3ab5da8aaa78bfd13f3155f622'
+SOURCE_SHA = 'a9ae4493539fa3344e9c0db9d68070c6fce0b86b7c1b942f3f77f0b416dc5955'
 MATHLIB = 'c55e6e786f49471c72fbddbec5415808896aec1e'
 TOOLCHAIN = 'leanprover/lean4:v4.35.0-rc3'
 SOURCE_BASE = 'dd2e900d25464445c125b94d7a78fac6b2dd8d6e'
@@ -100,7 +100,6 @@ def main():
     require(not output(['git', '-C', str(package), 'status', '--porcelain',
                         '--untracked-files=no']), 'Mathlib source is dirty')
     library = package / '.lake/build/lib/lean'
-    require((library / 'Mathlib.olean').is_file(), 'Prebuilt Mathlib root is missing')
     for module in IMPORTS[:-1]:
         require((library / (module.replace('.', '/') + '.olean')).is_file(),
                 f'Prebuilt direct import is missing: {module}')
