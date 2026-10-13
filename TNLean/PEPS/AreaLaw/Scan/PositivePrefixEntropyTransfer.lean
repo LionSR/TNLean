@@ -100,7 +100,6 @@ theorem eventually_regionalEntropy_positiveDepthPrefix_le
     push_cast
     rw [Real.log_mul (Real.exp_ne_zero 1) (pow_ne_zero _ hq0.ne'),
       Real.log_exp, Real.log_pow]
-    ring
   rw [hlogterm] at hcont
   -- The actual trace distance stays below the threshold of the continuity estimate.
   have hhalf : Real.sqrt ((n : ℝ) ^ (-1000 : ℝ)) = (n : ℝ) ^ (-500 : ℝ) := by
