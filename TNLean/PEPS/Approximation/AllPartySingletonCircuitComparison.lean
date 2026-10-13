@@ -39,6 +39,37 @@ private theorem projectAllChoices_frame (A : P → Bool) (r : Reg P)
     projectAllChoices A (.frame r w) ξ = projectAllChoices A w ξ := by
   rfl
 
+/-- The selected remaining evaluations of two words are compared with each
+source-freeness proof supplied by its own word. Source: polynomial-PEPS
+Theorem 5.2, `04-compression.tex`, lines 351–434 and 565–588. -/
+private def selectedLocalPartComparison {Q : Type}
+    {a b c d : Layout Q} (f : Q → Bool) (u : Word a b) (v : Word c d) : Prop :=
+  HEq (u.localPart.restrict f u.sources_localPart).eval
+    (v.localPart.restrict f v.sources_localPart).eval
+
+/-- Two changes of owners with one common singleton original fibre give the
+same selected remaining evaluation after lifting the second word.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–434
+and 565–588. -/
+private theorem selectedLocalPartComparison_mapOwner {Q R : Type}
+    (f : P → Q) (g : P → R) (lift : R → Q) (p : P) (q : Q) (r : R)
+    (hf : ∀ z, f z = q ↔ z = p) (hg : ∀ z, g z = r ↔ z = p)
+    (hlift : ∀ z, lift z = q ↔ z = r) {a b : Layout P} (u : Word a b) :
+    selectedLocalPartComparison (partySelector q) (u.mapOwner f)
+      ((u.mapOwner g).mapOwner lift) := by
+  unfold selectedLocalPartComparison
+  let T := u.localPart.restrict (partySelector p) u.sources_localPart
+  have hF := Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber f p q hf u
+  have hG := Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber g p r hg u
+  have hLift := Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
+    lift r q hlift (u.mapOwner g)
+  exact hF.trans ((Word.eval_mapOwner_heq f T).trans
+    ((Word.eval_mapOwner_heq g T).symm.trans
+      (hG.symm.trans
+        ((Word.eval_mapOwner_heq lift
+          ((u.mapOwner g).localPart.restrict (partySelector r)
+            (u.mapOwner g).sources_localPart)).symm.trans hLift.symm))))
+
 /-- The selected remaining operator of a genuine all-party branch agrees with
 the lifted selected remaining operator of its actual singleton projection.
 The source inventory, original dimensions and chronological order are those
@@ -109,35 +140,23 @@ theorem restrict_partialWord_all_localPart_eval_heq_singleton_projection
       exact SourceInventory.atParty_layout_mapOwner_of_singleton_fiber
         lift q qp hfLift Va.sources
     exact hSelected.trans hLift.symm
-  have hRaw {a b : Layout P} (u : Word a b) :
-      HEq ((u.mapOwner all).localPart.restrict sq (u.mapOwner all).sources_localPart).eval
-        (((u.mapOwner fa).mapOwner lift).localPart.restrict sq
-          ((u.mapOwner fa).mapOwner lift).sources_localPart).eval := by
-    let R := u.localPart.restrict (partySelector p) u.sources_localPart
-    have hAll := Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
-      all p qp hfAll u
-    have hOne := Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber fa p q hfA u
-    have hLift := Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
-      lift q qp hfLift (u.mapOwner fa)
-    exact hAll.trans ((Word.eval_mapOwner_heq all R).trans
-      ((Word.eval_mapOwner_heq fa R).symm.trans
-        (hOne.symm.trans
-          ((Word.eval_mapOwner_heq lift
-            ((u.mapOwner fa).localPart.restrict sa (u.mapOwner fa).sources_localPart)).symm.trans
-              hLift.symm))))
   have hCompare {a b : Layout P} (v : SourceCircuit a b)
       (η : Choices (fun _ : P ↦ true) v) :
-      HEq ((partialWord (fun _ : P ↦ true) v η).localPart.restrict sq
-        (partialWord (fun _ : P ↦ true) v η).sources_localPart).eval
-        (((partialWord A v (projectAllChoices A v η)).mapOwner lift).localPart.restrict sq
-          ((partialWord A v (projectAllChoices A v η)).mapOwner lift).sources_localPart).eval := by
+      selectedLocalPartComparison sq (partialWord (fun _ : P ↦ true) v η)
+        ((partialWord A v (projectAllChoices A v η)).mapOwner lift) := by
     induction v with
     | id a =>
-        simpa only [partialWord, Word.mapOwner] using hRaw (Word.id a)
+        simpa only [partialWord, Word.mapOwner, sq] using
+          selectedLocalPartComparison_mapOwner (affectedOwner (fun _ : P ↦ true))
+            (affectedOwner A) lift p qp q hfAll hfA hfLift (Word.id a)
     | localMap r ha hb T tail =>
-        simpa only [partialWord] using hRaw (Word.localMap r ha hb T tail)
+        simpa only [partialWord, sq] using
+          selectedLocalPartComparison_mapOwner (affectedOwner (fun _ : P ↦ true))
+            (affectedOwner A) lift p qp q hfAll hfA hfLift (Word.localMap r ha hb T tail)
     | swap r s tail =>
-        simpa only [partialWord] using hRaw (Word.swap r s tail)
+        simpa only [partialWord, sq] using
+          selectedLocalPartComparison_mapOwner (affectedOwner (fun _ : P ↦ true))
+            (affectedOwner A) lift p qp q hfAll hfA hfLift (Word.swap r s tail)
     | @gate C ι _ _ owner a b c G tail =>
         have hGate := restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection
           owner G tail p η
@@ -183,6 +202,7 @@ theorem restrict_partialWord_all_localPart_eval_heq_singleton_projection
             ((ih η).trans (Word.restrict_localPart_frame_false_eval_heq sq ra
               (Va.mapOwner lift) hFalseA).symm)
   have h := hCompare w ξ
+  unfold selectedLocalPartComparison at h
   have hLift := Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
     lift q qp hfLift V
   exact h.trans hLift
