@@ -126,6 +126,8 @@ theorem rootPath_augmented_compressed_bandProduct
     simpa only [ZO, vO, Matrix.conjTranspose_submatrix, Matrix.submatrix_mulVec_equiv,
       Function.comp_assoc, Equiv.self_comp_symm, Function.comp_id,
       Matrix.mulVec_mulVec, hZZ] using hsym
+  have hnorm : Transport.filteredNormSq M (ZOᴴ *ᵥ vO) = ‖w‖ ^ 2 :=
+    Matrix.re_star_dotProduct_self_eq_norm_sq _
   done
 
 end TNLean.PEPS.AreaLaw.Scan
