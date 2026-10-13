@@ -85,7 +85,7 @@ def sampledPhysicalFactor
 /-- The exact physical-factor equality, formed on arbitrary matrices before
 actual sampled words are substituted. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 565–588. -/
-private abbrev sampledPhysicalFactorsEquality {J : Type} [Fintype J]
+private def sampledPhysicalFactorsEquality {J : Type} [Fintype J]
     (d : P → ℕ) (α : ℂ)
     (F : Matrix ((q : Option {_p : P // true = true}) → selectedFamilyPhysicalIndex d q)
       ((q : Option {_p : P // true = true}) → selectedFamilyPhysicalIndex d q) ℂ)
@@ -96,6 +96,7 @@ private abbrev sampledPhysicalFactorsEquality {J : Type} [Fintype J]
     α • ∑ j, M j none PUnit.unit PUnit.unit •
       dependentPhysicalProductFamilyMatrix (fun p : P ↦ M j (some ⟨p, rfl⟩))
 
+omit [DecidableEq P] in
 /-- Reindex an arbitrary sum of party products in the original physical
 configurations. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
 lines 565–588. -/
