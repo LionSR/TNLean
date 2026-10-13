@@ -141,6 +141,7 @@ import TNLean.PEPS.Approximation.GroupedBlockMap
 import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.PEPS.Approximation.HomogeneousOwnership
 import TNLean.PEPS.Approximation.IncidentGateLabels
+import TNLean.PEPS.Approximation.IncidentSourceWord
 import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
 import TNLean.PEPS.Approximation.LayoutExcludedOwners
 import TNLean.PEPS.Approximation.LayoutOwnerMap
@@ -235,12 +236,14 @@ import TNLean.PEPS.Approximation.SampledEndpointExteriorIdentity
 import TNLean.PEPS.Approximation.SampledEndpointFactors
 import TNLean.PEPS.Approximation.SampledOriginalCircuit
 import TNLean.PEPS.Approximation.SelectedFamilyPhysicalBasis
+import TNLean.PEPS.Approximation.SelectedPartialSourceSlots
 import TNLean.PEPS.Approximation.SelectedPhysicalConfigurations
 import TNLean.PEPS.Approximation.SelectedPhysicalPartyGrouping
 import TNLean.PEPS.Approximation.SelectedPhysicalPrivateBasis
 import TNLean.PEPS.Approximation.SelectedPhysicalPrivateGrouping
 import TNLean.PEPS.Approximation.SelectedPhysicalPrivateTrace
 import TNLean.PEPS.Approximation.SelectedSourceContraction
+import TNLean.PEPS.Approximation.SelectedSourceOwnerMap
 import TNLean.PEPS.Approximation.SelectiveSourceFactorization
 import TNLean.PEPS.Approximation.SelectiveSourcePreparation
 import TNLean.PEPS.Approximation.SeparatedOutputCoordinates

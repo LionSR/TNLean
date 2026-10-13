@@ -6547,18 +6547,21 @@ spectral split → block extraction → MPV calculation → strict bounds
   complete source blocks reuses the preparation tensor identity and the
   register-block exchange theorem. Neither requires another double induction.
 
-### Tensor maps under equal filtered layouts — candidate (2026-10-07)
+### Tensor maps under equal filtered layouts — promoted (2026-10-13)
 
 - **Pattern:** Identify equal owner-filtered memories, transport their tensor
   maps, and compare the resulting operators or their values on vectors.
-- **Seen:** `PartyTensorMaps.mapL_heq` and
-  `PartyFactorization.mapL_apply_heq` under `PEPS/Approximation` (two local
-  helpers across two files).
+- **Seen:** The tensor-map transport in `PartyTensorMaps`, its application
+  to vectors in `PartyFactorization` repeat the same four-space
+  identification argument across two files.
 - **Abstraction:** Canonical conjugation already uses the shared
   `Layout.conj_memCongr_heq`, `Layout.norm_conj_memCongr`, and
-  `Layout.eq_conj_memCongr_of_heq`. The remaining two helpers distinguish
-  equality of tensor maps from equality after evaluation. A further occurrence
-  should use one tensor-map equality lemma followed by evaluation.
+  `Layout.eq_conj_memCongr_of_heq`. The existing `PairEffect.mapL_heq`
+  is now public in `PartyTensorMaps`, with its original signature and
+  equality-elimination proof. `PartyFactorization.mapL_apply_heq` uses
+  that shared map equality and ordinary congruence for its application
+  to heterogeneously equal vectors. Its exact named axiom check is
+  `PartyTensorMapTransportAxioms`.
 - **Notes:** Associator and exchange identities use the existing
   `clm_ext_tmul₃`; no additional tactic is needed.
 - **Scan:** The focused approximation scan also found five instances of
@@ -6658,9 +6661,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   can be applied to words whose restrictions have already been formed; it
   does not assert that equal complete operators have equal restrictions.
   A named axiom test covers the new result; elaboration is pending.
-- **Relation to the tensor-map candidate:** The two existing private
-  `mapL_heq` and `mapL_apply_heq` helpers concern tensor products of two maps
-  with four changing spaces. The new helper instead compares an associator
+- **Selected owner lists (2026-10-13):**
+  `SourceCircuit.mapOwner_selected_originalLayout_eq` in
+  `SelectedPartialSourceSlots` compares the selected original register lists
+  in the singleton and all-party groupings. It retains their order and spaces
+  and replaces the private copy in `IncidentSourceWord`. The proof compares
+  the first selected register explicitly and reuses the unchanged tail
+  identity. Circuit and prepared-input comparisons can use this shared result
+  with `Layout.restrict_mapOwner`; those further public uses remain planned.
+  Its named check in `SelectedPartialSourceSlotsAxioms` passed at `453dd822`.
+- **Relation to tensor-map congruence:** The shared public `mapL_heq` and
+  its private application lemma `mapL_apply_heq` concern tensor products of
+  two maps with four changing spaces. The new helper instead compares an associator
   applied to a fixed pair vector and a changing spectator vector; obtaining
   a tensor-map identity first would require additional equalities without
   simplifying the proof. The common mathematical operation is ordinary
