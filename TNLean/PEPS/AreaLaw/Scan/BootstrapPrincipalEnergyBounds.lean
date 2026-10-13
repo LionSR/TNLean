@@ -87,6 +87,7 @@ theorem exists_bootstrap_principal_energy_bound
       e_pos := hκ.trans hκμ
       e_lt_one := sub_lt_self 1 hg₀
       kappa_le_e := hκμ.le }
+  obtain ⟨C₁, hscale⟩ := eventually_scaleFacts X
   done
 
 end TNLean.PEPS.AreaLaw.Scan
