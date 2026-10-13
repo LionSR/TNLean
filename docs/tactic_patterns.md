@@ -6597,6 +6597,22 @@ spectral split → block extraction → MPV calculation → strict bounds
   congruence after the memory types have been identified.
 
 
+### Selected operator propositions before substitution — reuse (2026-10-13)
+
+- **Pattern:** Form an equality of selected operators on arbitrary typed words,
+  then substitute the actual chronological words while retaining the proposition.
+- **Seen:** The spectator identity in `NonincidentAllGateRestriction.lean` and
+  the incident-choice comparison in `AllPartyBranchLocality.lean`.
+- **Reuse:** The comparison delegates composition and framing to
+  `Word.restrict_localPart_comp_eval_heq` and
+  `Word.restrict_localPart_frame_eval_heq`; the identity transports its exact
+  proposition along the structural word equality using `congrArg` and `Eq.mpr`.
+  No operator calculation or induction is copied. A generic proposition helper
+  would only restate these core congruence operations, so none is introduced.
+- **Notes:** Each private transparent predicate unfolds to its original equality
+  of already restricted operators. Public hypotheses and default proof limits
+  are unchanged. These source revisions remain pending compilation.
+
 ### Cons-source preparation under fixed slot layouts — candidate (2026-10-07)
 
 - **Pattern:** Identify the vector-independent slot layout with an actual source

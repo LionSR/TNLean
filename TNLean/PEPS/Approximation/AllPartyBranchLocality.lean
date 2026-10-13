@@ -25,6 +25,41 @@ noncomputable section
 namespace TNLean.PEPS.PairEffect.SourceCircuit
 variable {P : Type}
 
+/-- Equality of the already selected remaining operators, formed before
+concrete circuit words are substituted. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 246–267, 351–381, 409–434 and 565–588. -/
+private abbrev selectedRemainingEvalHEq {Q : Type} (f : Q → Bool)
+    {a b a' b' : Layout Q} (u : Word a b) (v : Word a' b') : Prop :=
+  HEq (u.localPart.restrict f u.sources_localPart).eval
+    (v.localPart.restrict f v.sources_localPart).eval
+
+/-- Chronological composition preserves the selected operator equality under
+the existing selected-layout identifications. Source: polynomial-PEPS
+Theorem 5.2, `04-compression.tex`, lines 246–267 and 409–434. -/
+private theorem selectedRemainingEvalHEq_comp {Q : Type} (f : Q → Bool)
+    {a b c a' b' c' : Layout Q}
+    (u : Word a b) (v : Word b c) (u' : Word a' b') (v' : Word b' c')
+    (ha : Layout.restrict f a = Layout.restrict f a')
+    (hb : Layout.restrict f b = Layout.restrict f b')
+    (hc : Layout.restrict f c = Layout.restrict f c')
+    (hu : Layout.restrict f u.sources.layout = Layout.restrict f u'.sources.layout)
+    (hv : Layout.restrict f v.sources.layout = Layout.restrict f v'.sources.layout)
+    (heu : selectedRemainingEvalHEq f u u') (hev : selectedRemainingEvalHEq f v v') :
+    selectedRemainingEvalHEq f (u.comp v) (u'.comp v') := by
+  exact Word.restrict_localPart_comp_eval_heq f u v u' v' ha hb hc hu hv heu hev
+
+/-- Framing preserves the selected operator equality under the existing
+selected-layout identifications. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 246–267 and 409–434. -/
+private theorem selectedRemainingEvalHEq_frame {Q : Type} (f : Q → Bool) (r : Reg Q)
+    {a b a' b' : Layout Q} (u : Word a b) (v : Word a' b')
+    (ha : Layout.restrict f a = Layout.restrict f a')
+    (hb : Layout.restrict f b = Layout.restrict f b')
+    (hs : Layout.restrict f u.sources.layout = Layout.restrict f v.sources.layout)
+    (he : selectedRemainingEvalHEq f u v) :
+    selectedRemainingEvalHEq f (Word.frame r u) (Word.frame r v) := by
+  exact Word.restrict_localPart_frame_eval_heq f r u v ha hb hs he
+
 private theorem selected_sources_partialWord_all_eq {a b : Layout P}
     (w : SourceCircuit a b)
     (f : Option {t : P // (fun _ : P => true) t = true} → Bool)
@@ -38,6 +73,8 @@ private theorem selected_sources_partialWord_all_eq {a b : Layout P}
 /-- The singleton restriction of the actual all-party remaining operations
 depends only on the projected choices at the original party. Both full choices
 are supplied, and no unused branch label is chosen.
+The conclusion abbreviates exactly the equality of the two selected remaining
+operators, preserving their original word constructions.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267,
 351–381, 409–434 and 565–588. -/
 theorem restrict_partialWord_all_localPart_eval_heq_of_projectAllChoices_eq
@@ -48,23 +85,20 @@ theorem restrict_partialWord_all_localPart_eval_heq_of_projectAllChoices_eq
       projectAllChoices (fun t => partySelector (some ⟨p, rfl⟩)
         (affectedOwner (fun _ : P => true) t)) w ζ) :
     let q := some (⟨p, rfl⟩ : {t : P // (fun _ : P => true) t = true})
-    HEq ((partialWord (fun _ : P => true) w ξ).localPart.restrict (partySelector q)
-      (partialWord (fun _ : P => true) w ξ).sources_localPart).eval
-      ((partialWord (fun _ : P => true) w ζ).localPart.restrict (partySelector q)
-        (partialWord (fun _ : P => true) w ζ).sources_localPart).eval := by
+    selectedRemainingEvalHEq (partySelector q)
+      (partialWord (fun _ : P => true) w ξ)
+      (partialWord (fun _ : P => true) w ζ) := by
   classical
   let q := some (⟨p, rfl⟩ : {t : P // (fun _ : P => true) t = true})
   let f := partySelector q
   let A := fun t : P => f (affectedOwner (fun _ : P => true) t)
   change projectAllChoices A w ξ = projectAllChoices A w ζ at h
-  change HEq ((partialWord (fun _ : P => true) w ξ).localPart.restrict f
-    (partialWord (fun _ : P => true) w ξ).sources_localPart).eval
-      ((partialWord (fun _ : P => true) w ζ).localPart.restrict f
-        (partialWord (fun _ : P => true) w ζ).sources_localPart).eval
+  change selectedRemainingEvalHEq f (partialWord (fun _ : P => true) w ξ)
+    (partialWord (fun _ : P => true) w ζ)
   induction w with
   | id => rfl
   | comp w v ihw ihv =>
-      have hcomp := Word.restrict_localPart_comp_eval_heq f
+      have hcomp := selectedRemainingEvalHEq_comp f
         (partialWord (fun _ : P => true) w ξ.1) (partialWord (fun _ : P => true) v ξ.2)
         (partialWord (fun _ : P => true) w ζ.1) (partialWord (fun _ : P => true) v ζ.2)
         rfl rfl rfl
@@ -97,7 +131,7 @@ theorem restrict_partialWord_all_localPart_eval_heq_of_projectAllChoices_eq
               owner G tail p howner ζ).symm
   | swap => rfl
   | frame r w ih =>
-      exact Word.restrict_localPart_frame_eval_heq f
+      exact selectedRemainingEvalHEq_frame f
         ⟨affectedOwner (fun _ : P => true) r.owner, r.space⟩
         (partialWord (fun _ : P => true) w ξ) (partialWord (fun _ : P => true) w ζ)
         rfl rfl (selected_sources_partialWord_all_eq w f ξ ζ) (ih ξ ζ h)
