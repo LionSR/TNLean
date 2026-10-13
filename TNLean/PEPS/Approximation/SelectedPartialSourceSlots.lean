@@ -84,8 +84,7 @@ theorem mapOwner_atParty_partialSlots_eq_allResidualSourceLayout {a b : Layout P
   | cons e L ih =>
       by_cases hl : (endpoints w e).1 = p <;>
         by_cases hr : (endpoints w e).2 = p <;>
-        simp [List.filter_cons, List.flatMap_cons, Layout.atParty, Layout.restrict,
-          Layout.mapOwner, A, q, lift, partySelector_affectedOwner_all_apply,
-          partySelector, affectedOwner, hl, hr, ih]
+        simpa [List.flatMap_cons, Layout.atParty, Layout.restrict,
+          Layout.mapOwner, A, q, lift, partySelector, affectedOwner, hl, hr] using ih
 
 end TNLean.PEPS.PairEffect.SourceCircuit
