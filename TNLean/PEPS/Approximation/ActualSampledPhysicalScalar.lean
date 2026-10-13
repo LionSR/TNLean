@@ -82,12 +82,28 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_scalar_smul_physicalSu
         (1 : Matrix PUnit PUnit ℂ) := by
     have h := partialSourceWord_sampled_none_partialTrace_eq_scalar
       w ψ k lam L R ξ ζ (j ∘ (allSourceSlotEquiv w).symm) ω (B none) (C none)
-    simpa only [M, sampledPhysicalFactor, partialSourcePartyMatrix,
-      matrix_repr_eval_eq_toMatrix] using h
+    let A := ((w.partialSourceWord ψ ξ).restrict (partySelector none)
+      (sources_partialSourceWord w ψ ξ)).eval
+    let T := ((w.partialSourceWord ψ ζ).restrict (partySelector none)
+      (sources_partialSourceWord w ψ ζ)).eval
+    let U := ((sampledEndpointInputWord w k lam L R ξ ζ
+      (j ∘ (allSourceSlotEquiv w).symm) ω).restrict (partySelector none)
+      (sources_sampledEndpointInputWord w k lam L R ξ ζ
+        (j ∘ (allSourceSlotEquiv w).symm) ω)).eval
+    change Matrix.partialTraceRight
+      (Matrix.of (fun row col ↦ (C none).repr (A (B none col)) row) *
+        Matrix.of (fun row col ↦ (B none).repr (U (B none col)) row) *
+        (Matrix.of (fun row col ↦ (C none).repr (T (B none col)) row))ᴴ) = _ at h
+    rw [matrix_repr_eval_eq_toMatrix (B none) (B none) U] at h
+    change Matrix.partialTraceRight
+      (Matrix.of (fun row col ↦ (C none).repr (A (B none col)) row) *
+        LinearMap.toMatrix (B none).toBasis (B none).toBasis U.toLinearMap *
+        (Matrix.of (fun row col ↦ (C none).repr (T (B none col)) row))ᴴ) = _
+    exact h
   have hEntry (j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k) :
       M j none PUnit.unit PUnit.unit = w.emptyGateScalar * conj w.emptyGateScalar := by
     rw [hNone]
-    simp only [Matrix.smul_apply, Matrix.one_apply, if_pos rfl, smul_eq_mul, mul_one]
+    simp only [Matrix.smul_apply, Matrix.one_apply, ite_true, smul_eq_mul, mul_one]
   have h := partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors
     d ps hn hc garbage w ψ k lam L R ξ ζ ω B BG
   dsimp only at h
