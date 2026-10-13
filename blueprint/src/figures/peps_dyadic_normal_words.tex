@@ -13,12 +13,21 @@
 % C|B|A|C|A|B at -6,-5,-4,0,1; row (7) is C|B at 0.
 % The red contour is the lens Y={-7<x<-7/2}, columns 3..9; its two ends lie
 % in C intervals of rows (1) and (2) (Lemma lem:peps_dyadic_lens_word).
-% Every atom is a glyphless place holder for the contours; there are no
-% wires, no contractions and no tensor indices; boundary signature empty.
+% The dashed vertical string is x=0, the edge of S, labelled \partial S.
+% The left margin names row (2) "aux" (the auxiliary sheet) and, between
+% two rows, the operation that turns the upper main word into the lower one:
+% \rightleftarrows is the lens exchange on Y, -P the death of the band P
+% (into its surrounding label), +P the birth of P.  The margin is a column
+% of labels, not a band; it sits on the left so the unit stays <= 345 pt.
+% Every atom is a glyphless place holder for the contours; the string is a
+% boundary mark; there are no index wires, no contractions and no tensor
+% indices.
+% Boundary signature: empty.
 % Not to scale in s: only the transverse coordinate x is drawn.
+% Label macros: none.
 \begin{tenkzequation}
     \tenkzkernel
-    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=20, bonds=none, size=s, metrics=compact]
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=20, bonds=none, size=s, metrics=compact]
         \tndeclare{species}{bandA}{hue=source:orange}
         \tndeclare{species}{bandB}{hue=source:cyan}
         \tndeclare{species}{bandC}{hue=source:gray}
@@ -89,6 +98,8 @@
         \tnmark[form=enclosure, species=bandB, tint, label pos=n]{(5,13) .. (5,14)}{$B$}
         \tnmark[form=enclosure, species=bandC, tint, label pos=n]{(5,15) .. (5,20)}{$C$}
         \tnmark[form=label, label pos=w]{0.5 w of (5,1)}{(2)}
+        \tnmark[form=label, label pos=w]{0.5 w of (6,1)}{$\mathrm{aux}$}
+        \tnmark[form=label, label pos=w]{0.5 w of (7,1)}{$\rightleftarrows$}
         % main, exchanged: C \mid B \mid A \mid C \mid A \mid B at -6,-5,-4,0,1
         \tn[at=(8,1), skin=none]{}
         \tn[at=(8,2), skin=none]{}
@@ -117,6 +128,7 @@
         \tnmark[form=enclosure, species=bandA, tint, label pos=n]{(8,17) .. (8,18)}{$A$}
         \tnmark[form=enclosure, species=bandB, tint, label pos=n]{(8,19) .. (8,20)}{$B$}
         \tnmark[form=label, label pos=w]{0.5 w of (8,1)}{(3)}
+        \tnmark[form=label, label pos=w]{0.5 w of (9,1)}{$-C$}
         % death of $C$: C \mid B \mid A \mid B at -6,-5,1
         \tn[at=(10,1), skin=none]{}
         \tn[at=(10,2), skin=none]{}
@@ -143,6 +155,7 @@
         \tnmark[form=enclosure, species=bandA, tint, label pos=n]{(10,7) .. (10,18)}{$A$}
         \tnmark[form=enclosure, species=bandB, tint, label pos=n]{(10,19) .. (10,20)}{$B$}
         \tnmark[form=label, label pos=w]{0.5 w of (10,1)}{(4)}
+        \tnmark[form=label, label pos=w]{0.5 w of (11,1)}{$-A$}
         % death of $A$: C \mid B at -6
         \tn[at=(12,1), skin=none]{}
         \tn[at=(12,2), skin=none]{}
@@ -167,6 +180,7 @@
         \tnmark[form=enclosure, species=bandC, tint, label pos=n]{(12,1) .. (12,4)}{$C$}
         \tnmark[form=enclosure, species=bandB, tint, label pos=n]{(12,5) .. (12,20)}{$B$}
         \tnmark[form=label, label pos=w]{0.5 w of (12,1)}{(5)}
+        \tnmark[form=label, label pos=w]{0.5 w of (13,1)}{$+C$}
         % birth of $C$: C \mid B \mid C \mid B at -6,-3,0
         \tn[at=(14,1), skin=none]{}
         \tn[at=(14,2), skin=none]{}
@@ -193,6 +207,7 @@
         \tnmark[form=enclosure, species=bandC, tint, label pos=n]{(14,11) .. (14,16)}{$C$}
         \tnmark[form=enclosure, species=bandB, tint, label pos=n]{(14,17) .. (14,20)}{$B$}
         \tnmark[form=label, label pos=w]{0.5 w of (14,1)}{(6)}
+        \tnmark[form=label, label pos=w]{0.5 w of (15,1)}{$-B$}
         % death of $B$: C \mid B at 0
         \tn[at=(16,1), skin=none]{}
         \tn[at=(16,2), skin=none]{}
@@ -218,5 +233,8 @@
         \tnmark[form=enclosure, species=bandB, tint, label pos=n]{(16,17) .. (16,20)}{$B$}
         \tnmark[form=label, label pos=w]{0.5 w of (16,1)}{(7)}
         \tnmark[form=enclosure, species=lens, label pos=s]{(5,3) .. (5,9)}{$Y$}
+        % x=0, the edge of S, through all seven words
+        \tnwire[kind=string, stroke=dashed, name=nwEdge]{midway (2,16) and (2,17)}{midway (17,16) and (17,17)}
+        \tnmark[form=label, label pos=s]{midway (17,16) and (17,17)}{$\partial S$}
     \end{tenkz}
 \end{tenkzequation}

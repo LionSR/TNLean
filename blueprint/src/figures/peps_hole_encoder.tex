@@ -1,30 +1,52 @@
 % Figure peps_hole_encoder.
 % Owner: chapter/ch24_peps_hole_encoder.tex (def:peps_hole_encoder).
 % Used by: gapped-2d-notes PP Sec. 6, side by side with peps_frame_hole_encoder_b;
-% it reads left to right (input west, outputs east).
-% Formula: |j,l> tensor (|0_Rj><v_jl| tensor I_(V\Rj)).
-% Ink-to-index: the top row is the inside covector and reset ket;
-% the middle row is the tag ket; the bottom box is the complement identity.
-% No legs are contracted internally. The left ports are y|Rj and y|Rc;
-% the right ports are x|Rj, (j,l), and x|Rc, all physical coordinates.
-% Boundary signature: zero virtual ports and five physical ports,
-% comprising two input and three output bundles. The two output raw
-% bundles regroup to one full configuration x. The tag sum is external.
+% both read right to left (input east, outputs west).
+% Formula: |j,l> tensor (|0_Rj><v_jl| tensor I_(V\Rj)), one summand of the
+% encoding at the tag t=(j,l).
+% Ink-to-index: the input y (east, middle row) is one configuration on V. At
+% the east fork it splits into the inside bundle y|Rj (lower branch) and the
+% outside bundle y|(V\Rj) (the middle row). The lower branch ends in the
+% effect <v_jl| (triangle, east of the gap) and restarts at the reset state
+% |0_Rj> (triangle, west of the gap); no wire joins the two, so the summand
+% is the rank-one map |0_Rj><v_jl| on R_j. The middle row is a plain wire,
+% the identity on V\Rj. At the west fork the two bundles regroup into one
+% configuration x. The top-row triangle is the tag state |j,l>, whose leg is
+% the tag output t. Forks and the end vertices are invisible (skin=none);
+% they only bend and extend the wires. All indices are physical.
+% Boundary signature: (phys:w)x2 | (phys:e): the tag t above the raw output
+% x on the west, the raw input y on the east, the same as
+% peps_frame_hole_encoder_b. The tag sum is external.
 % Label macros: \tnlHeReset{R_j}, \tnlHeSites{V}; the PEPS note overrides
 % them with D_j and Lambda.
 \begin{center}
     \tenkzkernel
-    \begin{tenkz}[rows={wire,wire,wire}, cols=2, bonds=none]
+    \begin{tenkz}[rows={wire,wire,wire}, cols=7, bonds=none, size=l]
         \providecommand{\tnlHeReset}{R_j}
         \providecommand{\tnlHeSites}{V}
-        \tn[at=(1,1), name=holeInsideBra, skin=box,
-            ports={180:physical:$y\vert_{\tnlHeReset}$}]{\bra{v_{j\ell}}}
-        \tn[at=3 e of holeInsideBra, name=holeResetKet, skin=box,
-            ports={0:physical:$x\vert_{\tnlHeReset}$}]{\ket{0_{\tnlHeReset}}}
-        \tn[at=2 s of holeResetKet, name=holeTagKet, skin=box,
-            ports={0:physical:$t$}]{\ket{j,\ell}}
-        \tn[at=4 s of holeInsideBra, name=holeComplement, skin=box,
-            ports={180:physical:$y\vert_{\tnlHeSites\setminus \tnlHeReset}$,
-                    0:physical:$x\vert_{\tnlHeSites\setminus \tnlHeReset}$}]{I_{\tnlHeSites\setminus \tnlHeReset}}
+        \tn[at=(1,2), name=holeTagKet, skin=triwest, size=l, label pos=e,
+            ports={180:physical}]{\ket{j,\ell}}
+        \tn[at=(3,3), name=holeResetKet, skin=triwest, size=l, label pos=s,
+            ports={180:physical}]{\ket{0_{\tnlHeReset}}}
+        \tn[at=(3,5), name=holeInsideBra, skin=tri, size=l, label pos=s,
+            ports={0:physical}]{\bra{v_{j\ell}}}
+        \tn[at=(2,2), name=holeMerge, skin=none,
+            ports={180:physical, 0:physical, 315:physical}]{}
+        \tn[at=(2,6), name=holeSplit, skin=none,
+            ports={0:physical, 180:physical, 225:physical}]{}
+        \tn[at=(1,1), name=holeTagEnd, skin=none,
+            ports={180:physical:$t$, 0:physical}]{}
+        \tn[at=(2,1), name=holeOutEnd, skin=none,
+            ports={180:physical:$x$, 0:physical}]{}
+        \tn[at=(2,7), name=holeInEnd, skin=none,
+            ports={180:physical, 0:physical:$y$}]{}
+        \tnwire{holeTagEnd.0}{holeTagKet.180}
+        \tnwire{holeOutEnd.0}{holeMerge.180}
+        \tnwire{holeMerge.315}{holeResetKet.180}
+        \tnwire[name=holeOutside]{holeMerge.0}{holeSplit.180}
+        \tnwire[name=holeInside]{holeInsideBra.0}{holeSplit.225}
+        \tnwire{holeSplit.0}{holeInEnd.180}
+        \tnmark[form=label, label pos=n]{on holeOutside 0.85}{$\tnlHeSites\setminus\tnlHeReset$}
+        \tnmark[form=label, label pos=e]{on holeInside 0.3}{$\tnlHeReset$}
     \end{tenkz}
 \end{center}

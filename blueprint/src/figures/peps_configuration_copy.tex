@@ -4,23 +4,62 @@
 % Source: arXiv OpenAI2026PolynomialPEPS, 07-assembly.tex:204--214 (exact PEPS on a
 % spanning tree for the finitely many small sizes); no source figure.
 % Three-vertex path specialization of (eq:peps_configuration_copy).
-% Ink-to-index: the two joined virtual wires each carry one Sigma index;
-% the three open physical legs are the three local basis indices.
-% Boundary signature: no open virtual indices and three open physical indices.
+% Ink-to-index: the root A_r is the red (selected) box because it is the only
+% tensor that contains psi; A_2 and A_3 are small black COPY dots (entries zero
+% or one), named by label marks directly below them. The two joined virtual
+% wires each carry one Sigma index (tau_r2, tau_23, labelled below the
+% bonds); the label above the first bond is the bond dimension N of every
+% tree edge. The three open physical legs (drawn full length through
+% skin=none extenders) are the three local basis indices
+% i_r, i_2, i_3. The right panel is the coefficient tensor psi with the same
+% three legs in the same order.
+% Boundary signature: no open virtual indices and three open physical indices
+% (0,3) in both panels.
 % No conjugation, trace, or normalization factor is present. Only the root
 % tensor contains psi; all other tensors have entries zero or one.
-\begin{center}
+% Both panels and the two boxes state size=l, so the inscribed names A_r and
+% psi are set at full math size inside their boxes, the same size as the
+% labels A_2, A_3 and i_v (rule L1).
+% Label macros: \tnlCcDim{N}; the PEPS note overrides it with q^{L^2}.
+\begin{tenkzequation}
     \tenkzkernel
-    \begin{tenkz}[rows={wire}, cols=3, bonds=none]
-        \tn[at=(1,1), name=exactRoot, label pos=270,
-            ports={0:virtual, 90:physical:$i_r$}]{A_r}
-        \tn[at=(1,2), name=exactMiddle, label pos=270,
-            ports={180:virtual, 0:virtual, 90:physical:$i_2$}]{A_2}
-        \tn[at=(1,3), name=exactLast, label pos=270,
-            ports={180:virtual, 90:physical:$i_3$}]{A_3}
+    \begin{tenkz}[rows={wire,wire}, cols=5, bonds=none, size=l]
+        \providecommand{\tnlCcDim}{N}
+        \tn[at=(2,1), name=exactRoot, skin=box, species=selected, size=l,
+            ports={0:virtual, 90:physical}]{A_r}
+        \tn[at=(2,3), name=exactMiddle,
+            ports={180:virtual, 0:virtual, 90:physical}]{}
+        \tn[at=(2,5), name=exactLast,
+            ports={180:virtual, 90:physical}]{}
+        \tnmark[form=label, label pos=s]{exactMiddle}{$A_2$}
+        \tnmark[form=label, label pos=s]{exactLast}{$A_3$}
+        \tn[at=(1,1), name=exactLegR, skin=none,
+            ports={270:physical, 90:physical:$i_r$}]{}
+        \tn[at=(1,3), name=exactLegTwo, skin=none,
+            ports={270:physical, 90:physical:$i_2$}]{}
+        \tn[at=(1,5), name=exactLegThree, skin=none,
+            ports={270:physical, 90:physical:$i_3$}]{}
+        \tnwire{exactRoot.90}{exactLegR.270}
+        \tnwire{exactMiddle.90}{exactLegTwo.270}
+        \tnwire{exactLast.90}{exactLegThree.270}
         \tnwire[name=exactFirstBond]{exactRoot.0}{exactMiddle.180}
-        \tnmark[form=label, label pos=n]{on exactFirstBond 0.5}{$\tau_{r2}$}
+        \tnmark[form=label, label pos=s]{on exactFirstBond 0.5}{$\tau_{r2}$}
+        \tnmark[form=label, label pos=n]{on exactFirstBond 0.5}{$\tnlCcDim$}
         \tnwire[name=exactSecondBond]{exactMiddle.0}{exactLast.180}
-        \tnmark[form=label, label pos=n]{on exactSecondBond 0.5}{$\tau_{23}$}
+        \tnmark[form=label, label pos=s]{on exactSecondBond 0.5}{$\tau_{23}$}
     \end{tenkz}
-\end{center}
+    $=$
+    \begin{tenkz}[rows={wire,wire}, cols=3, bonds=none, size=l]
+        \tn[at=(2,1), name=exactState, skin=box, wide=3, size=l,
+            ports={90@1:physical, 90@2:physical, 90@3:physical}]{\psi}
+        \tn[at=(1,1), name=exactStateLegR, skin=none,
+            ports={270:physical, 90:physical:$i_r$}]{}
+        \tn[at=(1,2), name=exactStateLegTwo, skin=none,
+            ports={270:physical, 90:physical:$i_2$}]{}
+        \tn[at=(1,3), name=exactStateLegThree, skin=none,
+            ports={270:physical, 90:physical:$i_3$}]{}
+        \tnwire{exactState.90@1}{exactStateLegR.270}
+        \tnwire{exactState.90@2}{exactStateLegTwo.270}
+        \tnwire{exactState.90@3}{exactStateLegThree.270}
+    \end{tenkz}
+\end{tenkzequation}
