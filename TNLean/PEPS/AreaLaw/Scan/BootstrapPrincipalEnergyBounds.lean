@@ -69,6 +69,24 @@ theorem exists_bootstrap_principal_energy_bound
     (div_lt_self (div_pos hg₀ (by norm_num : (0 : ℝ) < 1000))
       (by norm_num : (1 : ℝ) < 100)).trans
       (div_lt_self hg₀ (by norm_num : (1 : ℝ) < 1000))
+  let X : ScannerExponents :=
+    let hκμ : BootstrapParameters.kappa e₀ < BootstrapParameters.mu e₀ := by
+      linarith [show BootstrapParameters.kappa e₀ ≤ BootstrapParameters.ell e₀ from
+        min_le_left _ _, show BootstrapParameters.mu e₀ = 1 - BootstrapParameters.g0 e₀ from rfl]
+    { ell := BootstrapParameters.ell e₀
+      kappa := BootstrapParameters.kappa e₀
+      mu := BootstrapParameters.mu e₀
+      nu := BootstrapParameters.nu e₀
+      e := BootstrapParameters.mu e₀
+      ell_pos := hℓ
+      ell_lt_one := hℓ₁
+      kappa_pos := hκ
+      kappa_lt_mu := hκμ
+      mu_lt_one_sub_ell := sub_lt_sub_left hℓg₀ 1
+      nu_pos := div_pos hg₀ (by norm_num)
+      e_pos := hκ.trans hκμ
+      e_lt_one := sub_lt_self 1 hg₀
+      kappa_le_e := hκμ.le }
   done
 
 end TNLean.PEPS.AreaLaw.Scan
