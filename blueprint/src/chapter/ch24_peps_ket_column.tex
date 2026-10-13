@@ -379,22 +379,22 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
     $\Psi$ be a joint vector on its physical and private coordinates, and
     $\Xi$ a private vector such that
     \begin{align}
-        \lVert\Psi\rVert&\leq1,&
-        1-\delta\leq\lVert\Xi\rVert&\leq1,&
-        \lVert\Psi-\Omega\otimes\Xi\rVert&\leq\varepsilon.
+        \lVert\Psi\rVert                  & \leq1,           &
+        1-\delta\leq\lVert\Xi\rVert       & \leq1,           &
+        \lVert\Psi-\Omega\otimes\Xi\rVert & \leq\varepsilon.
     \end{align}
     Let $\sigma$ be the contracted operator of a supplied operator network
     on the same square, with edge dimensions $D_e$, satisfying
     \begin{align}
         \lVert\sigma-\Tr_{\rm private}|\Psi\rangle\langle\Psi|\rVert_1
-          &\leq\kappa,&
-        \alpha:=\kappa+2\varepsilon+2\delta&<1.
+                                            & \leq\kappa, &
+        \alpha:=\kappa+2\varepsilon+2\delta & <1.
     \end{align}
     Then some product-basis input $z$ gives fixed-input tensors whose
     contraction is the nonzero column $\Phi=\sigma|z\rangle$, with
     \begin{align}
         \Big\lVert\frac{\Phi}{\lVert\Phi\rVert}
-            -e^{i\theta}\Omega\Big\rVert&\leq2\alpha
+        -e^{i\theta}\Omega\Big\rVert & \leq2\alpha
     \end{align}
     for some real $\theta$. The edge dimensions remain exactly $D_e$;
     they are positive and preserve any supplied bounds $D_e\leq B$.
@@ -416,9 +416,9 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
     error bound and contraction under partial trace give
     \begin{align}
         \big\lVert\Tr_{\rm private}|\Psi\rangle\langle\Psi|
-            -|\Omega\rangle\langle\Omega|\big\rVert_1
-          &\leq2\varepsilon+1-\lVert\Xi\rVert^2
-           \leq2\varepsilon+2\delta.
+        -|\Omega\rangle\langle\Omega|\big\rVert_1
+         & \leq2\varepsilon+1-\lVert\Xi\rVert^2
+        \leq2\varepsilon+2\delta.
     \end{align}
     The triangle inequality through the actual physical density gives
     $\lVert\sigma-|\Omega\rangle\langle\Omega|\rVert_1\leq\alpha<1$.
