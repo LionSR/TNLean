@@ -104,6 +104,8 @@ theorem rootPath_augmented_compressed_bandProduct
         ZS *ᵥ ((‖w‖⁻¹ : ℂ) • w).ofLp := by
   classical
   intro e ZO vO T AO B M w
+  have hroot := TransportData.rootPath_compressed_bandProduct
+    (nS q d) D hD ht k N hcomm ZS hZ hZZ p
   done
 
 end TNLean.PEPS.AreaLaw.Scan
