@@ -109,7 +109,10 @@ theorem IsCrossingEdge.boundary_left {A : Tensor G d} {R R' : Finset V} {g : Edg
 
 omit [Fintype V] [DecidableEq V] in
 /-- An edge incident to two disjoint regions crosses between them: one endpoint lies
-in each region. -/
+in each region.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
 theorem IsCrossingEdge.of_incident {A : Tensor G d} {R R' : Finset V} (hRR' : Disjoint R R')
     {g : Edge G} (hR : IsRegionIncidentEdge (G := G) R g)
     (hR' : IsRegionIncidentEdge (G := G) R' g) : IsCrossingEdge (G := G) A R R' g :=
@@ -118,7 +121,10 @@ theorem IsCrossingEdge.of_incident {A : Tensor G d} {R R' : Finset V} (hRR' : Di
 
 omit [Fintype V] [DecidableEq V] in
 /-- For three pairwise disjoint regions, an edge crossing between two of them is not
-incident to the third: one endpoint lies in each of the first two regions. -/
+incident to the third: one endpoint lies in each of the first two regions.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
 theorem IsCrossingEdge.not_incident {A : Tensor G d} {R R' R'' : Finset V}
     (hRR' : Disjoint R R') (hRR'' : Disjoint R R'') (hR'R'' : Disjoint R' R'') {g : Edge G}
     (h : IsCrossingEdge (G := G) A R R' g) : ¬ IsRegionIncidentEdge (G := G) R'' g := by
@@ -390,14 +396,20 @@ namespace IsPartition
 
 variable {F}
 
-/-- A vertex outside the red and blue regions lies in the complement region. -/
+/-- A vertex outside the red and blue regions lies in the complement region.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
 theorem mem_complement_of_notMem (hP : F.IsPartition) {w : V} (hr : w ∉ F.red)
     (hb : w ∉ F.blue) : w ∈ F.complement := by
   have hw : w ∈ F.red ∪ F.blue ∪ F.complement := hP.cover_univ ▸ Finset.mem_univ w
   simpa [hr, hb] using hw
 
 /-- A vertex lies in the complement region exactly when it lies outside the red and
-blue regions. -/
+blue regions.
+
+Source: arXiv:1804.04964, Section 3, proof of Theorem 3, lines 1475--1500 of
+`Papers/1804.04964/paper_normal.tex`. -/
 theorem mem_complement_iff (hP : F.IsPartition) {w : V} :
     w ∈ F.complement ↔ w ∉ F.red ∧ w ∉ F.blue :=
   ⟨fun hc => ⟨fun hr => Finset.disjoint_left.mp hP.red_disjoint_complement hr hc,
