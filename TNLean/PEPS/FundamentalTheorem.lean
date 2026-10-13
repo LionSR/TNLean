@@ -272,8 +272,7 @@ theorem stateCoeff_eq_vertexComplement (A : Tensor G d) (v : V) (σ : V → Fin 
     exact hstar ie
   rw [hvfac]
 
-/-- A vertex-injective PEPS with positive bond dimensions has a nonzero state
-coefficient.
+/-- An injective PEPS tensor has a nonzero state coefficient.
 
 Source: arXiv:1804.04964, Section 3. Injective PEPS describe genuine, nonzero
 states; the nonvanishing is the closed-network instance of injectivity of the
@@ -285,12 +284,12 @@ configuration the complement weights would form a kernel vector of the local
 tensor map at `v`; vertex injectivity (`localCoeff_eq_zero_of_contract_zero`)
 forces the whole complement weight family to vanish, contradicting linear
 independence of that family (`isTwoBlockInjective_complementTwoBlock`), which is
-nonzero because positive bond dimensions make the `v`-star configuration type
+nonzero because nonzero bond spaces make the `v`-star configuration type
 nonempty. -/
-theorem exists_stateCoeff_ne_zero (A : Tensor G d)
-    (hA : IsVertexInjective A) (hpos : ∀ e : Edge G, 0 < A.bondDim e) :
+theorem exists_stateCoeff_ne_zero (A : Tensor G d) (hA : A.IsInjective) :
     ∃ σ : V → Fin d, stateCoeff A σ ≠ 0 := by
   classical
+  obtain ⟨hA, hpos⟩ := hA
   by_cases hV : Nonempty V
   · obtain ⟨v⟩ := hV
     -- The complement weight family is linearly independent, hence has a nonzero
@@ -445,7 +444,7 @@ theorem prod_perVertexScalar_eq_one (A B : Tensor G d)
         c v * gaugeVertex B Z v (fun ie => Fin.cast (congr_fun hbd ie.1) (η ie)) σ) :
     (∏ v, c v) = 1 :=
   prod_perVertexScalar_eq_one_of_exists_stateCoeff_ne_zero A B
-    (exists_stateCoeff_ne_zero A hA hpos) hAB Z hbd c hPV
+    (exists_stateCoeff_ne_zero A ⟨hA, hpos⟩) hAB Z hbd c hPV
 
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- On a connected graph with more than one vertex, every vertex has a nonempty
@@ -575,12 +574,9 @@ theorem gaugeConsistency (A B : Tensor G d)
 /-- **Fundamental Theorem for injective PEPS, conditional on bond-dimension
 equality** (arXiv:1804.04964, Theorem 2).
 
-If the bond spaces of `A` and `B` are already identified, equality of their PEPS
-states and vertex injectivity imply the gauge formula
-`B_v = gaugeVertex A X v` for one invertible matrix `X_e` on each edge, under
-the explicit assumption that every virtual bond of `A` has positive dimension.
-Via the bond-dimension equality this is also the corresponding positivity
-assumption for `B`.
+If the bond spaces of the injective PEPS tensors `A` and `B` are already
+identified, equality of their states implies the gauge formula
+`B_v = gaugeVertex A X v` for one invertible matrix `X_e` on each edge.
 
 **Connectivity hypothesis (faithfulness fix).** The connectivity hypothesis
 `G.Connected` is threaded into `gaugeConsistency`, where it is needed: the
@@ -589,17 +585,16 @@ conclusion is false on a disconnected graph. See
 `docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`.
 
 **Proof status:** Complete and axiom-clean; proved from the global-gauge
-statement `gaugeConsistency`. The added positivity and connectivity hypotheses
-relative to the source statement are the documented faithfulness fixes recorded
-in `docs/paper-gaps/peps_injective_ft_section3_route.tex` and
+statement `gaugeConsistency`. The added connectivity hypothesis relative to the
+source statement is the documented faithfulness fix recorded in
 `docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`. -/
 theorem fundamentalTheorem_PEPS_of_bondDim (A B : Tensor G d)
-    (hA : IsVertexInjective A) (hB : IsVertexInjective B)
+    (hA : A.IsInjective) (hB : B.IsInjective)
     (hAB : SameState A B) (hDim : A.bondDim = B.bondDim)
-    (hpos : ∀ e : Edge G, 0 < A.bondDim e)
     (hconn : G.Connected) :
     GaugeEquiv A B := by
-  rcases gaugeConsistency A B hA hB hAB hDim hpos hconn with ⟨X, hX⟩
+  rcases gaugeConsistency A B hA.isVertexInjective hB.isVertexInjective hAB hDim
+    hA.bondDim_pos hconn with ⟨X, hX⟩
   exact ⟨hDim, X, hX⟩
 
 /-- A matrix-algebra equivalence between full matrix algebras on `Fin m` and
@@ -617,8 +612,8 @@ theorem bondDim_eq_of_matrixAlgEquiv {m n : ℕ}
   simp only [Fintype.card_fin, Module.finrank_self, mul_one] at hfr
   exact Nat.mul_self_inj.mp hfr
 
-/-- Vertex-injective PEPS tensors with the same state and positive virtual
-spaces have the same bond dimension on every edge.
+/-- Injective PEPS tensors with the same state have the same bond dimension on
+every edge.
 
 This is the bond-dimension consequence of the virtual-operation algebra
 isomorphism in the proof of the injective PEPS Fundamental Theorem and does not
@@ -629,35 +624,24 @@ that bond; equality of their dimensions forces equality of the matrix sizes.
 Source: arXiv:1804.04964, the virtual-operation algebra isomorphism at lines
 279--282 and 571--582, and Theorem 2 at lines 1207--1210 of
 `Papers/1804.04964/paper_normal.tex`. -/
-theorem bondDim_eq_of_isVertexInjective_sameState (A B : Tensor G d)
-    (hA : IsVertexInjective A) (hB : IsVertexInjective B)
-    (hAB : SameState A B)
-    (hposA : ∀ e : Edge G, 0 < A.bondDim e)
-    (hposB : ∀ e : Edge G, 0 < B.bondDim e) :
+theorem bondDim_eq_of_isInjective_sameState (A B : Tensor G d)
+    (hA : A.IsInjective) (hB : B.IsInjective) (hAB : SameState A B) :
     A.bondDim = B.bondDim := by
   funext e
   exact bondDim_eq_of_matrixAlgEquiv
     (edgeTransferAlgEquiv A B e
-      (hA.edgeBlockedThreeSiteInjective hposA e)
-      (hB.edgeBlockedThreeSiteInjective hposB e)
-      hAB hposA hposB)
+      (hA.isVertexInjective.edgeBlockedThreeSiteInjective hA.bondDim_pos e)
+      (hB.isVertexInjective.edgeBlockedThreeSiteInjective hB.bondDim_pos e)
+      hAB hA.bondDim_pos hB.bondDim_pos)
 
 /-- **Fundamental Theorem for injective PEPS** (arXiv:1804.04964, Theorem 2).
 
-For PEPS tensors on a finite simple graph, if `A` and `B` are vertex-injective
-and have the same state coefficients, then there are invertible edge matrices
-`X_e` such that, at every vertex, `B_v` is obtained from `A_v` by the oriented
-endpoint action of the matrices `X_e` on the incident virtual legs.
-
-**Positive-bond hypothesis (faithfulness fix).** Without the positivity conditions the
-theorem is false: a zero-dimensional edge makes the virtual configuration empty,
-so both state coefficients vanish and `SameState` holds vacuously without
-relating the two tensors, while the gauge-equivalence conclusion stays a genuine
-constraint that fails. The hypotheses (every bond dimension positive) are the
-source's standing assumption that injective PEPS have nonzero virtual bond
-spaces; the same defect was corrected for the edge-blocked three-site
-injectivity (#1366) and the physical-to-virtual recovery (#1370), and is
-recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+For PEPS tensors on a finite simple graph, if `A` and `B` are injective and have
+the same state coefficients, then there are invertible edge matrices `X_e` such
+that, at every vertex, `B_v` is obtained from `A_v` by the oriented endpoint
+action of the matrices `X_e` on the incident virtual legs. Injectivity
+(`Tensor.IsInjective`) includes the source's convention that virtual bond spaces
+are nonzero.
 
 **Connectivity hypothesis (faithfulness fix).** Without `G.Connected` the
 theorem is also false: on the empty graph on two vertices the products of the
@@ -671,23 +655,16 @@ valid only on a single component. Documented in
 `docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`.
 
 **Proof status:** Complete and axiom-clean. The conclusion is the source
-gauge-equivalence conclusion, with positive bond dimension made explicit to
-exclude the zero-bond vacuous-state case above. The bond-dimension equality is
-discharged edgewise from the edge-blocked insertion algebra equivalence (issue
-#874), and the edge-centred gauge obligation is supplied by gauge consistency.
-The faithfulness fixes are recorded in
-`docs/paper-gaps/peps_injective_ft_section3_route.tex` and
-`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`. -/
+gauge-equivalence conclusion. The bond-dimension equality is discharged edgewise
+from the edge-blocked insertion algebra equivalence (issue #874), and the
+edge-centred gauge obligation is supplied by gauge consistency. -/
 theorem fundamentalTheorem_PEPS (A B : Tensor G d)
-    (hA : IsVertexInjective A) (hB : IsVertexInjective B)
-    (hAB : SameState A B)
-    (hposA : ∀ e : Edge G, 0 < A.bondDim e)
-    (hposB : ∀ e : Edge G, 0 < B.bondDim e)
-    (hconn : G.Connected) :
+    (hA : A.IsInjective) (hB : B.IsInjective)
+    (hAB : SameState A B) (hconn : G.Connected) :
     GaugeEquiv A B := by
-  have hDim := bondDim_eq_of_isVertexInjective_sameState A B hA hB hAB hposA hposB
+  have hDim := bondDim_eq_of_isInjective_sameState A B hA hB hAB
   -- With matching bond dimensions, gauge consistency supplies the global gauges.
-  exact fundamentalTheorem_PEPS_of_bondDim A B hA hB hAB hDim hposA hconn
+  exact fundamentalTheorem_PEPS_of_bondDim A B hA hB hAB hDim hconn
 
 
 end PEPS

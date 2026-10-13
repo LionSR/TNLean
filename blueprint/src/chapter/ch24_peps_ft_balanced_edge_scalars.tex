@@ -261,14 +261,14 @@ constant.
     \label{thm:gauge_unique_mod_edge_scalars}
     \lean{TNLean.PEPS.gauge_unique_mod_edge_scalars}
     \leanok
-    \uses{def:GaugeEquivModEdgeScalars, def:IsVertexInjective, thm:peps_piProductFormsScalar}
-    Let every bond space be nonzero. If two gauge families relate the same
-    vertex-injective PEPS tensor to the same target tensor, then their edge
+    \uses{def:GaugeEquivModEdgeScalars, def:peps_injective_tensor, thm:peps_piProductFormsScalar}
+    If two gauge families relate the same injective PEPS tensor to the same
+    target tensor, then their edge
     gauges differ by nonzero scalars $c_e$ whose oriented product at every
     vertex is $1$. Thus the correct graph quotient is by balanced edge scalars.
     % Correction documented in docs/paper-gaps/peps_gauge_edge_scalars.tex.
-    % The nonzero-bond restriction is the standing normal-PEPS convention,
-    % matching the existence direction; see the same paper-gap note.
+    % Nonzero bond spaces are part of the injectivity hypothesis, as in the
+    % existence direction; see docs/paper-gaps/peps_injective_ft_section3_route.tex.
 \end{theorem}
 
 \begin{proof}\leanok

@@ -177,26 +177,25 @@ theorem gaugeConsistencyStatement_false : ¬ GaugeConsistencyStatement := by
     (hThm A2 B2 isVertexInjective_A2 isVertexInjective_B2 sameState_A2_B2 bondDim_eq hpos_A)
 
 /-- The connectivity-free PEPS Fundamental Theorem statement, generic over the
-vertex set, graph, and physical dimension. It keeps the positivity hypotheses to
-show that connectivity, not positivity, is the missing assumption. -/
+vertex set, graph, and physical dimension. It keeps the injectivity hypotheses,
+including nonzero virtual spaces, to show that connectivity is the missing
+assumption. -/
 def FundamentalTheoremPEPSStatement : Prop :=
   ∀ {V : Type} [Fintype V] [LinearOrder V] {G : SimpleGraph V} [DecidableRel G.Adj]
     {d : ℕ} (A B : Tensor G d)
-    (_ : IsVertexInjective A) (_ : IsVertexInjective B)
-    (_ : SameState A B)
-    (_ : ∀ e : Edge G, 0 < A.bondDim e)
-    (_ : ∀ e : Edge G, 0 < B.bondDim e),
+    (_ : A.IsInjective) (_ : B.IsInjective)
+    (_ : SameState A B),
     GaugeEquiv A B
 
 /-- `fundamentalTheorem_PEPS` is false without a connectivity hypothesis: the
-witness `(G2, A2, B2)` satisfies vertex injectivity for both tensors, equality of
-all state coefficients, and (vacuously) positivity of every bond, yet there is no
-gauge equivalence. -/
+witness `(G2, A2, B2)` consists of two injective PEPS tensors (vertex injective,
+with every bond space vacuously nonzero) with equal state coefficients, yet there
+is no gauge equivalence. -/
 theorem fundamentalTheoremPEPS_false_without_connectivity :
     ¬ FundamentalTheoremPEPSStatement := by
   intro hThm
   exact not_gaugeEquiv
-    (hThm A2 B2 isVertexInjective_A2 isVertexInjective_B2 sameState_A2_B2 hpos_A hpos_B)
+    (hThm A2 B2 ⟨isVertexInjective_A2, hpos_A⟩ ⟨isVertexInjective_B2, hpos_B⟩ sameState_A2_B2)
 
 end GaugeConsistencyConnectivityCounterexample
 end PEPS

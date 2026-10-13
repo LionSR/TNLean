@@ -259,8 +259,8 @@ family.
         \label{eq:peps_gaugeConsistency_connectivity_gap_nonzero_state_coefficient}
     \end{align}
     This statement is formalized by
-    \leanid{TNLean.PEPS.exists_stateCoeff_ne_zero}. For a vertex-injective PEPS
-    with positive bond dimensions, it is the standing assumption in
+    \leanid{TNLean.PEPS.exists_stateCoeff_ne_zero}. For an injective PEPS,
+    whose virtual bond spaces are nonzero, it is the standing assumption in
     Ref.~\cite{Molnar2018NormalPEPS} that an injective PEPS is a genuine
     nonzero state.
 
@@ -270,8 +270,8 @@ family.
     is linearly independent by
     \leanid{TNLean.PEPS.vertexComplementTensorInjective_of_isVertexInjective}
     and therefore contains no zero member. Vertex injectivity at the selected
-    vertex then forces a nonzero coefficient. Positive bond dimensions make
-    the vertex-star configuration type nonempty. This argument requires no
+    vertex then forces a nonzero coefficient. Nonzero bond spaces make the
+    vertex-star configuration type nonempty. This argument requires no
     induced-subgraph or leaf-peeling infrastructure. It completes the
     reduction, so \leanid{TNLean.PEPS.fundamentalTheorem_PEPS} is fully proved
     and axiom-clean.
@@ -280,7 +280,8 @@ family.
 \section{Verdict}
 
 The source claim is false as printed for disconnected graphs. The empty-graph
-witness satisfies the stated injectivity and positive-bond hypotheses, has
+witness satisfies the stated injectivity hypotheses, including nonzero bond
+spaces, has
 equal PEPS states, and admits no global edge gauge relating the local tensors.
 Adding connectivity gives the intended theorem, and the corrected formal
 development is resolved.
