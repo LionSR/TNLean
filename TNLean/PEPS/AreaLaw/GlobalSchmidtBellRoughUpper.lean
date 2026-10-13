@@ -62,11 +62,11 @@ theorem eventually_suppliedGlobalSchmidtBellPrevector_rough_upper
             labelProj (copyPerm (Fin E.card) k) (ell k)) *ᵥ
             (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
               (Fin k → Fin E.card) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) →
+    let d := E.card
+    let ι₀ := addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)
     ∃ c : ℝ, 0 ≤ c ∧
       Tendsto (Real.bellOverlapRemainder E.card c K) atTop (𝓝 0) ∧
       ∀ᶠ k : ℕ in atTop,
-        let d := E.card
-        let ι₀ := addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)
         ∀ (n : ℕ) (Z : Matrix (Config k ι₀) (Fin n) ℂ),
         Zᴴ * Z = 1 →
         Z * Zᴴ = symProj (copyPerm ((o : Option (Option ι)) → ι₀ o) k) →
