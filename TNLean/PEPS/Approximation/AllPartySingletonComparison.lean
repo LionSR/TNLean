@@ -180,16 +180,15 @@ private theorem selectedSpectatorIdentity_of_groupedBlockMap_eq {P Q : Type}
 namespace SourceCircuit
 variable {P C ι : Type} [Fintype C] [Fintype ι]
 
-/-- The actual remaining operator at one original party agrees for the
-all-party choice and its singleton projection. The participant and branch
-sets may be empty; no extension of local labels or nonzero scalar is assumed.
-This statement compares a single actual gate, including its spectators.
+/-- At an incident party, the all-party and singleton expansions use the
+same original gate label and the same selected remaining operation.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–434
 and 565–588. -/
-theorem restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection
+private theorem selectedRemainingComparison_of_incident_gate
     (owner : C ↪ P) {a b : Layout C} {c : ι → ℂ}
     (G : PreparedSourceGate c a b) (tail : Layout P) (p : P)
-    (ξ : Choices (fun _ : P ↦ true) (.gate owner G tail)) :
+    (ξ : Choices (fun _ : P ↦ true) (.gate owner G tail))
+    (hincident : ∃ t : C, owner t = p) :
     let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
       (affectedOwner (fun _ : P ↦ true) t)
     let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
@@ -216,54 +215,117 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection
     intro r
     simpa only [fa, q, affectedOwner, hp, ↓reduceDIte,
       Bool.true_eq_false, and_false, or_false] using affectedOwner_eq_iff A r p
+  obtain ⟨t, ht⟩ := hincident
+  have htA : ∃ t : C, A (owner t) = true := ⟨t, by rw [ht]; exact hp⟩
+  have htAll : ∃ _t : C, true = true := ⟨t, rfl⟩
+  let eAll : Choices (fun _ : P ↦ true) (.gate owner G tail) ≃ ι :=
+    Equiv.cast (by simp only [Choices]; exact ite_eq_left ⟨t, by trivial⟩)
+  let eA : Choices A (.gate owner G tail) ≃ ι :=
+    Equiv.cast (by simp only [Choices]; exact ite_eq_left htA)
+  let i := eAll ξ
+  have hi : eA χ = i := by
+    exact choiceAt_projectAllChoices A (.gate owner G tail) ξ ()
+      ((isTouched_gate_iff A owner G tail).mpr htA)
+  let U := ((G.branchWord i).mapOwner owner).appendTail tail
+  have hW : W = U.mapOwner all := by
+    unfold W partialWord
+    rw [dite_eq_left htAll]
+    rfl
+  have hV : V = U.mapOwner fa := by
+    unfold V partialWord
+    rw [dite_eq_left htA]
+    change (((G.branchWord (eA χ)).mapOwner owner).appendTail tail).mapOwner fa = _
+    rw [hi]
+  exact selectedRemainingComparison_of_mapOwner_eq all fa lift p qp q hfAll hfA U W V hW hV
+
+/-- Outside the original participating set, both selected remaining
+operations retain precisely the same spectator identity.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–434
+and 565–588. -/
+private theorem selectedRemainingComparison_of_nonincident_gate
+    (owner : C ↪ P) {a b : Layout C} {c : ι → ℂ}
+    (G : PreparedSourceGate c a b) (tail : Layout P) (p : P)
+    (ξ : Choices (fun _ : P ↦ true) (.gate owner G tail))
+    (hincident : ¬ ∃ t : C, owner t = p) :
+    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
+      (affectedOwner (fun _ : P ↦ true) t)
+    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
+      (by classical exact decide_eq_true rfl)
+    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+    let lift : Option {t : P // A t = true} → Option {t : P // true = true} :=
+      fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
+    let χ := projectAllChoices A (.gate owner G tail) ξ
+    let W := partialWord (fun _ : P ↦ true) (.gate owner G tail) ξ
+    let V := partialWord A (.gate owner G tail) χ
+    HEq (W.localPart.restrict (partySelector (some (⟨p, rfl⟩ : {_p : P // true = true})))
+      W.sources_localPart).eval
+      ((V.localPart.restrict (partySelector q) V.sources_localPart).mapOwner lift).eval := by
+  classical
+  intro A hp q lift χ W V
+  let all := affectedOwner (fun _ : P ↦ true)
+  let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
+  let fa := affectedOwner A
+  change selectedRemainingComparison W V qp q lift
+  have hfAll : ∀ r, all r = qp ↔ r = p := by
+    intro r
+    simp [all, qp, affectedOwner]
+  have hfA : ∀ r, fa r = q ↔ r = p := by
+    intro r
+    simpa only [fa, q, affectedOwner, hp, ↓reduceDIte,
+      Bool.true_eq_false, and_false, or_false] using affectedOwner_eq_iff A r p
+  have howner : ∀ t, owner t ≠ p := by
+    intro t ht
+    exact hincident ⟨t, ht⟩
+  have htA : ¬ ∃ t : C, A (owner t) = true := by
+    rintro ⟨t, ht⟩
+    have he : all (owner t) = qp := by
+      simpa only [A, partySelector, decide_eq_true_eq] using ht
+    exact howner t ((hfAll (owner t)).mp he)
+  have hV : V = Word.groupedBlockMap fa none
+      (Layout.mapOwner owner a) (Layout.mapOwner owner b)
+      (Layout.affectedOwner_mapOwner_eq_none A owner htA a)
+      (Layout.affectedOwner_mapOwner_eq_none A owner htA b)
+      (G.evalAtOwners owner) tail := by
+    unfold V partialWord
+    rw [dite_eq_right htA]
+  have hOne : selectedSpectatorIdentity V q (Layout.mapOwner fa tail) :=
+    selectedSpectatorIdentity_of_groupedBlockMap_eq fa none q (by simp [q])
+      (Layout.mapOwner owner a) (Layout.mapOwner owner b)
+      (Layout.affectedOwner_mapOwner_eq_none A owner htA a)
+      (Layout.affectedOwner_mapOwner_eq_none A owner htA b)
+      (G.evalAtOwners owner) tail V hV
+  have hAll : selectedSpectatorIdentity W qp (Layout.mapOwner all tail) :=
+    restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident owner G tail p howner ξ
+  exact selectedRemainingComparison_of_selectedSpectatorIdentity all fa lift p qp q
+    hfAll hfA tail W V hAll hOne
+
+/-- The actual remaining operator at one original party agrees for the
+all-party choice and its singleton projection. The participant and branch
+sets may be empty; no extension of local labels or nonzero scalar is assumed.
+This statement compares a single actual gate, including its spectators.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–434
+and 565–588. -/
+theorem restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection
+    (owner : C ↪ P) {a b : Layout C} {c : ι → ℂ}
+    (G : PreparedSourceGate c a b) (tail : Layout P) (p : P)
+    (ξ : Choices (fun _ : P ↦ true) (.gate owner G tail)) :
+    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
+      (affectedOwner (fun _ : P ↦ true) t)
+    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
+      (by classical exact decide_eq_true rfl)
+    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+    let lift : Option {t : P // A t = true} → Option {t : P // true = true} :=
+      fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
+    let χ := projectAllChoices A (.gate owner G tail) ξ
+    let W := partialWord (fun _ : P ↦ true) (.gate owner G tail) ξ
+    let V := partialWord A (.gate owner G tail) χ
+    HEq (W.localPart.restrict (partySelector (some (⟨p, rfl⟩ : {_p : P // true = true})))
+      W.sources_localPart).eval
+      ((V.localPart.restrict (partySelector q) V.sources_localPart).mapOwner lift).eval := by
+  classical
   by_cases hincident : ∃ t : C, owner t = p
-  · obtain ⟨t, ht⟩ := hincident
-    have htA : ∃ t : C, A (owner t) = true := ⟨t, by rw [ht]; exact hp⟩
-    have htAll : ∃ _t : C, true = true := ⟨t, rfl⟩
-    let eAll : Choices (fun _ : P ↦ true) (.gate owner G tail) ≃ ι :=
-      Equiv.cast (by simp only [Choices]; exact ite_eq_left ⟨t, by trivial⟩)
-    let eA : Choices A (.gate owner G tail) ≃ ι :=
-      Equiv.cast (by simp only [Choices]; exact ite_eq_left htA)
-    let i := eAll ξ
-    have hi : eA χ = i := by
-      exact choiceAt_projectAllChoices A (.gate owner G tail) ξ ()
-        ((isTouched_gate_iff A owner G tail).mpr htA)
-    let U := ((G.branchWord i).mapOwner owner).appendTail tail
-    have hW : W = U.mapOwner all := by
-      unfold W partialWord
-      rw [dite_eq_left htAll]
-      rfl
-    have hV : V = U.mapOwner fa := by
-      unfold V partialWord
-      rw [dite_eq_left htA]
-      change (((G.branchWord (eA χ)).mapOwner owner).appendTail tail).mapOwner fa = _
-      rw [hi]
-    exact selectedRemainingComparison_of_mapOwner_eq all fa lift p qp q hfAll hfA U W V hW hV
-  · have howner : ∀ t, owner t ≠ p := by
-      intro t ht
-      exact hincident ⟨t, ht⟩
-    have htA : ¬ ∃ t : C, A (owner t) = true := by
-      rintro ⟨t, ht⟩
-      have he : all (owner t) = qp := by
-        simpa only [A, partySelector, decide_eq_true_eq] using ht
-      exact howner t ((hfAll (owner t)).mp he)
-    have hV : V = Word.groupedBlockMap fa none
-        (Layout.mapOwner owner a) (Layout.mapOwner owner b)
-        (Layout.affectedOwner_mapOwner_eq_none A owner htA a)
-        (Layout.affectedOwner_mapOwner_eq_none A owner htA b)
-        (G.evalAtOwners owner) tail := by
-      unfold V partialWord
-      rw [dite_eq_right htA]
-    have hOne : selectedSpectatorIdentity V q (Layout.mapOwner fa tail) :=
-      selectedSpectatorIdentity_of_groupedBlockMap_eq fa none q (by simp [q])
-        (Layout.mapOwner owner a) (Layout.mapOwner owner b)
-        (Layout.affectedOwner_mapOwner_eq_none A owner htA a)
-        (Layout.affectedOwner_mapOwner_eq_none A owner htA b)
-        (G.evalAtOwners owner) tail V hV
-    have hAll : selectedSpectatorIdentity W qp (Layout.mapOwner all tail) :=
-      restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident owner G tail p howner ξ
-    exact selectedRemainingComparison_of_selectedSpectatorIdentity all fa lift p qp q
-      hfAll hfA tail W V hAll hOne
+  · exact selectedRemainingComparison_of_incident_gate owner G tail p ξ hincident
+  · exact selectedRemainingComparison_of_nonincident_gate owner G tail p ξ hincident
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect
