@@ -33,6 +33,18 @@ private abbrev selectedRemainingEvalHEq {Q : Type} (f : Q → Bool)
   HEq (u.localPart.restrict f u.sources_localPart).eval
     (v.localPart.restrict f v.sources_localPart).eval
 
+/-- Two selected remaining operators equal to the same spectator identity
+are equal, even when their original source lists differ. Source:
+polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–381 and 409–434. -/
+private theorem selectedRemainingEvalHEq_of_identity {Q : Type} (f : Q → Bool)
+    {a b a' b' : Layout Q} (u : Word a b) (v : Word a' b') (spectators : Layout Q)
+    (hu : HEq (u.localPart.restrict f u.sources_localPart).eval
+      (ContinuousLinearMap.id ℂ (Mem spectators)))
+    (hv : HEq (v.localPart.restrict f v.sources_localPart).eval
+      (ContinuousLinearMap.id ℂ (Mem spectators))) :
+    selectedRemainingEvalHEq f u v := by
+  exact hu.trans hv.symm
+
 /-- Chronological composition preserves the selected operator equality under
 the existing selected-layout identifications. Source: polynomial-PEPS
 Theorem 5.2, `04-compression.tex`, lines 246–267 and 409–434. -/
@@ -125,10 +137,14 @@ theorem restrict_partialWord_all_localPart_eval_heq_of_projectAllChoices_eq
           rw [htp]
           exact (partySelector_affectedOwner_all_apply p p).trans
             (by simp only [partySelector, decide_true])
-        exact (restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
-          owner G tail p howner ξ).trans
-            (restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
-              owner G tail p howner ζ).symm
+        exact selectedRemainingEvalHEq_of_identity f
+          (partialWord (fun _ : P => true) (.gate owner G tail) ξ)
+          (partialWord (fun _ : P => true) (.gate owner G tail) ζ)
+          (Layout.atParty q (Layout.mapOwner (affectedOwner (fun _ : P => true)) tail))
+          (restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
+            owner G tail p howner ξ)
+          (restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
+            owner G tail p howner ζ)
   | swap => rfl
   | frame r w ih =>
       exact selectedRemainingEvalHEq_frame f
