@@ -79,6 +79,7 @@ import TNLean.PEPS.AreaLaw.Scan.PhysicalBadHistoryDecay
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBandCommutation
 import TNLean.PEPS.AreaLaw.Scan.PhysicalChargeAncestry
 import TNLean.PEPS.AreaLaw.Scan.PhysicalPartition
+import TNLean.PEPS.AreaLaw.Scan.PositivePrefixEntropyTransfer
 import TNLean.PEPS.AreaLaw.Scan.PrefixApproximation
 import TNLean.PEPS.AreaLaw.Scan.PrefixBoundary
 import TNLean.PEPS.AreaLaw.Scan.PrefixCardinality

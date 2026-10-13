@@ -60,20 +60,6 @@ The in-region endpoint of a boundary edge of `S` lies in one of the two end wind
 out-of-region endpoint lies outside that window since it lies outside all of `S`.  This makes the
 edge a boundary edge of that window. -/
 
-omit [Fact (1 < width)] [Fact (1 < height)] in
-/-- A vertex outside the end pair is outside the left end window. -/
-private theorem notMem_leftWindow_of_notMem_endPair {L K : ℕ} {s : TorusVertex width height}
-    {v : TorusVertex width height} (hv : v ∉ horizontalStaircaseEndPair s L K) :
-    v ∉ horizontalStaircaseLeftWindow s L K :=
-  fun hL => hv (horizontalStaircaseLeftWindow_subset_endPair s hL)
-
-omit [Fact (1 < width)] [Fact (1 < height)] in
-/-- A vertex outside the end pair is outside the right end window. -/
-private theorem notMem_rightWindow_of_notMem_endPair {L K : ℕ} {s : TorusVertex width height}
-    {v : TorusVertex width height} (hv : v ∉ horizontalStaircaseEndPair s L K) :
-    v ∉ horizontalStaircaseRightWindow s L K :=
-  fun hR => hv (horizontalStaircaseRightWindow_subset_endPair s hR)
-
 /-- **A boundary edge of the end pair is a boundary edge of one of the two windows.**
 
 A boundary edge `f` of the staircase end pair `S = W_0 ⊔ W_{L+K-1}` is a boundary edge of the
@@ -93,17 +79,8 @@ theorem isRegionBoundaryEdge_window_of_endPair {L K : ℕ} {s : TorusVertex widt
         (horizontalStaircaseLeftWindow s L K) f ∨
       IsRegionBoundaryEdge (G := torusGraph width height)
         (horizontalStaircaseRightWindow s L K) f := by
-  rcases hf with ⟨hin, hout⟩ | ⟨hout, hin⟩
-  · -- `f.1.1 ∈ S`, `f.1.2 ∉ S`.  Split on which window the in-endpoint lies in.
-    rw [horizontalStaircaseEndPair, Finset.mem_union] at hin
-    rcases hin with hinL | hinR
-    · exact Or.inl (Or.inl ⟨hinL, notMem_leftWindow_of_notMem_endPair hout⟩)
-    · exact Or.inr (Or.inl ⟨hinR, notMem_rightWindow_of_notMem_endPair hout⟩)
-  · -- `f.1.2 ∈ S`, `f.1.1 ∉ S`.
-    rw [horizontalStaircaseEndPair, Finset.mem_union] at hin
-    rcases hin with hinL | hinR
-    · exact Or.inl (Or.inr ⟨notMem_leftWindow_of_notMem_endPair hout, hinL⟩)
-    · exact Or.inr (Or.inr ⟨notMem_rightWindow_of_notMem_endPair hout, hinR⟩)
+  simp only [IsRegionBoundaryEdge, horizontalStaircaseEndPair, Finset.mem_union] at *
+  grind
 
 /-! ### A boundary edge of the end pair is not the reference edge
 
@@ -312,14 +289,8 @@ private noncomputable def horizontalStaircaseLeftExternalBoundaryEdgeEquiv
     ⟨⟨f.1.1, f.2⟩, fun he =>
       ne_referenceEdge_of_isRegionBoundaryEdge_endPair hL hK ha0 haw hbh f.1.2
         (congrArg Subtype.val he)⟩
-  left_inv f := by
-    apply Subtype.ext
-    apply Subtype.ext
-    rfl
-  right_inv f := by
-    apply Subtype.ext
-    apply Subtype.ext
-    rfl
+  left_inv _ := rfl
+  right_inv _ := rfl
 
 private noncomputable def horizontalStaircaseRightExternalBoundaryEdgeEquiv
     (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
@@ -340,14 +311,8 @@ private noncomputable def horizontalStaircaseRightExternalBoundaryEdgeEquiv
     ⟨⟨f.1.1, f.2⟩, fun he =>
       ne_referenceEdge_of_isRegionBoundaryEdge_endPair hL hK ha0 haw hbh f.1.2
         (congrArg Subtype.val he)⟩
-  left_inv f := by
-    apply Subtype.ext
-    apply Subtype.ext
-    rfl
-  right_inv f := by
-    apply Subtype.ext
-    apply Subtype.ext
-    rfl
+  left_inv _ := rfl
+  right_inv _ := rfl
 
 private noncomputable def horizontalStaircaseLeftAwayConfigEquiv
     (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
@@ -460,14 +425,8 @@ private noncomputable def horizontalStaircaseNotLeftExternalBoundaryEdgeEquiv
   invFun f := ⟨f.1, fun hfL =>
     ne_referenceEdge_of_isRegionBoundaryEdge_endPair hL hK ha0 haw hbh f.1.2
       (eq_referenceEdge_of_isRegionBoundaryEdge_both_endWindows A hL hK ha0 haw hbh hfL f.2)⟩
-  left_inv f := by
-    apply Subtype.ext
-    apply Subtype.ext
-    rfl
-  right_inv f := by
-    apply Subtype.ext
-    apply Subtype.ext
-    rfl
+  left_inv _ := rfl
+  right_inv _ := rfl
 
 private noncomputable def horizontalStaircaseNotLeftExternalBoundaryConfigEquiv
     (A : Tensor (torusGraph width height) d) {L K a b : ℕ}
