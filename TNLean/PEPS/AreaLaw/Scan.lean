@@ -10,6 +10,7 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeData
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyBound
+import TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyCoefficients
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyDecay
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeParameterBound
 import TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms

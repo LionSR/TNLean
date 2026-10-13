@@ -576,13 +576,38 @@ uniformly over all $s+1\le nm$, at the same supplied vector and $a/2$.
     \leanid{TNLean.PEPS.AreaLaw.Scan.exists_badOldHistory_threshold} and
     \leanid{TNLean.PEPS.AreaLaw.Scan.exists_actualCharge_energy_threshold}.}
 
-This remains a supplied-vector charge estimate with explicit capacity
-$A=10KnD\mathfrak m$ and unselected defect $\mathcal Q_k(p)$. It does not
-assert the full energy expectation in lines~507--511. Identifying the
-physical Schmidt--Bell prevector with the actual root and metric
-coordinates, selecting a small charge defect, absorbing the remaining
-source-scale coefficients, and applying comparator estimates remain
-separate. No complete scanner construction is asserted.
+For fixed physical dimension $q\ge1$ and arbitrary real transport
+coefficient $C_{\mathrm{en}}$ and exponent $e_{\mathrm{en}}$, the rounded
+scales give a further uniform coefficient estimate. There are $C\ge1$,
+$C_l\ge0$ and $N$, chosen before the physical scanner, charge round,
+auxiliary dimensions, vector, weight and interpolation parameter, such that
+for $n\ge N$, $W\ge0$ and $a=W/K$,
+\begin{align}
+    |C_{\mathrm{en}}|a^2\ell^{e_{\mathrm{en}}}\mathcal E_k(p)
+    &\le C W^2 n^{\ell_{\mathrm{sc}}}D^2(\log n)^{C_l}
+    \left((1-p)\left(\frac{\mathcal Q_k(p)}{KnD}\right)^{1/8}
+    +(1-p)n^{-P}+p\right).
+    \label{eq:arealaw2d_scanner_inputs_charge_coefficients}
+\end{align}
+Here $K>0$ is derived from the eventual rounded-scale facts, and
+$\mathcal Q_k(p)\ge0$ is derived from the literal leaf measures and
+nonnegative split entropies. The exact dimension coefficients after
+normalization are $10(10\mathfrak m)^{7/8}|C_{\mathrm{en}}|\ell^{e_{\mathrm{en}}}$
+and $50\mathfrak m\,2^{1/8}|C_{\mathrm{en}}|\ell^{e_{\mathrm{en}}+1/8}$.
+A common logarithmic-power bound absorbs them, including negative real
+exponents. No division by anchor multiplicity is used. The statement
+retains $W=0$, $\mathfrak m=0$, $q=1$ and $k=0$.
+\footnote{The literal nonnegativity and fixed coefficient estimates are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_nonneg} and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_actualCharge_energy_coefficients}.}
+
+This remains a supplied-vector charge estimate with unselected defect
+$\mathcal Q_k(p)$. It does not assert the full energy expectation in
+lines~507--511. Identifying the physical Schmidt--Bell prevector with the
+actual root and metric coordinates, selecting a small charge defect,
+and applying comparator estimates remain separate. No complete scanner
+construction is asserted.
+
 
 \section{Truncated physical marginal estimates}
 
