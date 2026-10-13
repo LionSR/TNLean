@@ -51,6 +51,25 @@ private theorem restrict_privatePreparation_mapOwner_eval_heq {Q : Type}
     rw [Layout.restrict_mapOwner, hsel]
   exact (Word.eval_heq hi ho h).trans (Word.eval_mapOwner_heq f _)
 
+/-- Restrict a source-free framed word and then change its owners. The
+comparison is proved before the original private preparation is supplied.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
+246–267, 409–434 and 565–588. -/
+private theorem restrict_frameList_mapOwner_eval_heq {R Q : Type}
+    (f : R → Bool) (lift : R → Q) (S : Layout R) {a b : Layout R}
+    (u : Word a b) (hu : u.sources = []) :
+    HEq (((Word.frameList S u).restrict f
+      ((Word.sources_frameList u S).trans hu)).mapOwner lift).eval
+      (Word.frameList (Layout.mapOwner lift (Layout.restrict f S))
+        ((u.restrict f hu).mapOwner lift)).eval := by
+  have hframe := Word.restrict_frameList_eval_heq f S u hu
+  have hMap := (Word.eval_mapOwner_heq lift
+      ((Word.frameList S u).restrict f ((Word.sources_frameList u S).trans hu))).trans
+    (hframe.trans (Word.eval_mapOwner_heq lift
+      (Word.frameList (Layout.restrict f S) (u.restrict f hu))).symm)
+  exact hMap.trans (Word.eval_heq (Layout.mapOwner_append lift _ _)
+    (Layout.mapOwner_append lift _ _) (Word.mapOwner_frameList_heq lift _ _))
+
 /-- The source-to-output operator selected at one party of a genuine all-party
 branch is exactly the operator constructed from its original incident labels.
 The input is the recorded private product preparation, and the source and
@@ -112,22 +131,13 @@ theorem restrict_partialSourceWord_eval_eq_incidentSourceWord {a b : Layout P}
     (restrict_privatePreparation_mapOwner_eval_heq all p qp hfAll ψ).trans
       ((Word.eval_mapOwner_heq lift _).trans
         (restrict_privatePreparation_mapOwner_eval_heq fa p q hfA ψ)).symm
-  have hPa := Word.restrict_frameList_eval_heq sa S (ψ.prepare.mapOwner fa)
-    (by simp only [Word.sources_mapOwner, ψ.sources_prepare, SourceInventory.mapOwner_nil])
   have hPaMapped : HEq ((Pa.restrict sa hsPa).mapOwner lift).eval
       (Word.frameList (Layout.mapOwner lift (Layout.restrict sa S))
         (((ψ.prepare.mapOwner fa).restrict sa
           (by simp only [Word.sources_mapOwner, ψ.sources_prepare,
-            SourceInventory.mapOwner_nil])).mapOwner lift)).eval := by
-    have hMap := (Word.eval_mapOwner_heq lift (Pa.restrict sa hsPa)).trans
-      (hPa.trans (Word.eval_mapOwner_heq lift
-        (Word.frameList (Layout.restrict sa S)
-          ((ψ.prepare.mapOwner fa).restrict sa
-            (by simp only [Word.sources_mapOwner, ψ.sources_prepare,
-              SourceInventory.mapOwner_nil])))).symm)
-    exact hMap.trans (Word.eval_heq (Layout.mapOwner_append lift _ _)
-      (Layout.mapOwner_append lift _ _)
-      (Word.mapOwner_frameList_heq lift _ _))
+            SourceInventory.mapOwner_nil])).mapOwner lift)).eval :=
+    restrict_frameList_mapOwner_eval_heq sa lift S (ψ.prepare.mapOwner fa)
+      (by simp only [Word.sources_mapOwner, ψ.sources_prepare, SourceInventory.mapOwner_nil])
   have hPrep := (Word.restrict_frameList_eval_heq sq w.allResidualSourceLayout
     (ψ.prepare.mapOwner all)
     (by simp only [Word.sources_mapOwner, ψ.sources_prepare, SourceInventory.mapOwner_nil])).trans

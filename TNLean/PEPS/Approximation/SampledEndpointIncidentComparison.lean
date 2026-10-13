@@ -30,6 +30,15 @@ private theorem restrict_eval_eq_of_word_eq {Q : Type}
   exact congrArg
     (fun z : {z : Word ℓ ℓ' // z.sources = []} ↦ (z.1.restrict f z.2).eval) h
 
+/-- Equal values on either side of a heterogeneous equality may be replaced
+before any endpoint spaces are specified. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 409–434 and 565–588. -/
+private theorem heq_of_eq_heq_eq {X Y : Type} {x x' : X} {y y' : Y}
+    (hx : x = x') (hxy : HEq x' y') (hy : y = y') : HEq x y := by
+  cases hx
+  cases hy
+  exact hxy
+
 /-- The common selected endpoint operator is formed from arbitrary original
 endpoint maps. Owner selection preserves the original source and register order.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434 and 565–588. -/
@@ -112,8 +121,7 @@ private theorem restrict_eval_heq_selectedEndpointOperator
   have hoperator : selectedEndpointOperator w p M N =
       (SourceInventory.endpointRegisterWord Dp).eval :=
     selectedEndpointOperator_eq_registerWord w p M N
-  exact (heq_of_eq hrestriction).trans
-    (hselected.trans (heq_of_eq hoperator.symm))
+  exact heq_of_eq_heq_eq hrestriction hselected hoperator
 
 variable (w : SourceCircuit a b) (k : ℕ)
   (lam : ∀ e : sourceLocations w, branchLabels w e.1 →

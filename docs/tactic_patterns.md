@@ -7508,3 +7508,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   using the existing `matrix_repr_eval_eq_toMatrix`. The actual circuit
   is substituted afterward. No hypotheses or proof limits are added.
   The extracted definition has a named axiom check.
+
+### Restricting framed words before owner relabelling — candidate (2026-10-14)
+
+- **Pattern:** Restrict a source-free word with an ordered spectator prefix,
+  then relabel its owners. Compare this evaluation with the selected word
+  relabelled first and framed by the relabelled selected spectator list.
+- **Seen:** The private `eval_mapOwner_restrict_frameList` in
+  `WordSelectedOwnerLocalPart.lean` and `restrict_frameList_mapOwner_eval_heq`
+  in `IncidentSourceWordComparison.lean`, under `PEPS/Approximation/`.
+- **Abstraction:** Both reuse `Word.restrict_frameList_eval_heq`,
+  `Word.eval_mapOwner_heq`, `Word.mapOwner_frameList_heq`, and the existing
+  owner-map append identities before substituting concrete words. At a third
+  occurrence, share this calculation as a word lemma; no new tactic is needed.
+- **Notes:** Two known occurrences. The preparation application retains the
+  original spectator and source order; no hypothesis or proof limit is added.
+  Hosted verification of the new application remains pending.
