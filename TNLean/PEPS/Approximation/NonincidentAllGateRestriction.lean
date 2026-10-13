@@ -52,6 +52,29 @@ private theorem restrict_relabelled_spectators_eval_heq_id {R Q : Type}
     (Word.restrict_localPart_appendTail_eval_heq_id_of_not_mem_parties
       (u.mapOwner g) q hu (Layout.mapOwner g tail))
 
+/-- Every original party outside the image of a participant embedding retains
+only its spectators, for an arbitrary branch word. Source: polynomial-PEPS
+Theorem 5.2, `04-compression.tex`, lines 351–381, 409–434 and 565–588. -/
+private theorem restrict_embedded_branch_spectators_eval_heq_id
+    (owner : C ↪ P) {a b : Layout C} (u : Word a b) (tail : Layout P) (p : P)
+    (howner : ∀ t, owner t ≠ p) :
+    let all := affectedOwner (fun _ : P => true)
+    let q := some (⟨p, rfl⟩ : {t : P // (fun _ : P => true) t = true})
+    HEq ((((u.mapOwner owner).appendTail tail).mapOwner all).localPart.restrict
+      (partySelector q)
+      (((u.mapOwner owner).appendTail tail).mapOwner all).sources_localPart).eval
+      (ContinuousLinearMap.id ℂ (Mem (Layout.atParty q (Layout.mapOwner all tail)))) := by
+  classical
+  intro all q
+  have hcore : q ∉ ((u.mapOwner owner).mapOwner all).parties := by
+    intro hq
+    rw [Word.parties_mapOwner, Word.parties_mapOwner] at hq
+    simp only [Finset.mem_image] at hq
+    obtain ⟨z, ⟨t, _, htz⟩, hzq⟩ := hq
+    have he : all (owner t) = q := htz.symm ▸ hzq
+    exact howner t (by simpa [all, q, affectedOwner] using he)
+  exact restrict_relabelled_spectators_eval_heq_id all (u.mapOwner owner) tail q hcore
+
 /-- An original party outside a gate's participants retains only its mapped
 spectator registers in the actual all-party branch. The restriction of the
 remaining operations is the identity on those spectators. No label is chosen
@@ -76,23 +99,14 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
   · let e : Choices (fun _ : P => true) (.gate owner G tail) ≃ ι :=
       Equiv.cast (by simp only [Choices]; exact if_pos ⟨ht.choose, by trivial⟩)
     let i := e ξ
-    let core := ((G.branchWord i).mapOwner owner).mapOwner all
-    have hcore : q ∉ core.parties := by
-      intro hq
-      rw [Word.parties_mapOwner, Word.parties_mapOwner] at hq
-      simp only [Finset.mem_image] at hq
-      obtain ⟨z, ⟨t, _, htz⟩, hzq⟩ := hq
-      have he : all (owner t) = q := htz.symm ▸ hzq
-      exact howner t (by simpa [all, q, affectedOwner] using he)
     have hw : partialWord (fun _ : P => true) (.gate owner G tail) ξ =
         (((G.branchWord i).mapOwner owner).appendTail tail).mapOwner all := by
       unfold partialWord
       rw [dite_eq_left ht]
       rfl
     rw [hw]
-    change q ∉ (((G.branchWord i).mapOwner owner).mapOwner all).parties at hcore
-    generalize ((G.branchWord i).mapOwner owner) = u at hcore ⊢
-    exact restrict_relabelled_spectators_eval_heq_id all u tail q hcore
+    exact restrict_embedded_branch_spectators_eval_heq_id owner
+      (G.branchWord i) tail p howner
   · have hw : partialWord (fun _ : P => true) (.gate owner G tail) ξ =
         Word.groupedBlockMap all none (Layout.mapOwner owner a) (Layout.mapOwner owner b)
           (Layout.affectedOwner_mapOwner_eq_none (fun _ : P => true) owner ht a)
