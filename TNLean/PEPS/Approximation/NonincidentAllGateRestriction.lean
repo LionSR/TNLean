@@ -34,15 +34,23 @@ private theorem restrict_localPart_eval_heq_of_word_heq {Q : Type} (f : Q → Bo
   cases h
   rfl
 
+/-- The exact retained-spectator operator identity, formed on arbitrary word
+layouts before owner maps and branch data are substituted.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–381,
+409–434 and 565–588. -/
+private abbrev relabelledSpectatorsIdentity {R Q : Type}
+    (g : R → Q) {a b : Layout R} (u : Word a b) (tail : Layout R) (q : Q) : Prop :=
+  HEq (((u.appendTail tail).mapOwner g).localPart.restrict (partySelector q)
+    ((u.appendTail tail).mapOwner g).sources_localPart).eval
+    (ContinuousLinearMap.id ℂ (Mem (Layout.atParty q (Layout.mapOwner g tail))))
+
 /-- Restrict a relabelled spectator extension after comparing its constructed
 words. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
 lines 351–381, 409–434 and 565–588. -/
 private theorem restrict_relabelled_spectators_eval_heq_id {R Q : Type}
     (g : R → Q) {a b : Layout R} (u : Word a b) (tail : Layout R) (q : Q)
     (hu : q ∉ (u.mapOwner g).parties) :
-    HEq (((u.appendTail tail).mapOwner g).localPart.restrict (partySelector q)
-      ((u.appendTail tail).mapOwner g).sources_localPart).eval
-      (ContinuousLinearMap.id ℂ (Mem (Layout.atParty q (Layout.mapOwner g tail)))) := by
+    relabelledSpectatorsIdentity g u tail q := by
   have h := restrict_localPart_eval_heq_of_word_heq (partySelector q)
     ((u.appendTail tail).mapOwner g)
     ((u.mapOwner g).appendTail (Layout.mapOwner g tail))
@@ -52,6 +60,7 @@ private theorem restrict_relabelled_spectators_eval_heq_id {R Q : Type}
     (Word.restrict_localPart_appendTail_eval_heq_id_of_not_mem_parties
       (u.mapOwner g) q hu (Layout.mapOwner g tail))
 
+omit [Fintype C] in
 /-- Every original party outside the image of a participant embedding retains
 only its spectators, for an arbitrary branch word. Source: polynomial-PEPS
 Theorem 5.2, `04-compression.tex`, lines 351–381, 409–434 and 565–588. -/
@@ -60,10 +69,7 @@ private theorem restrict_embedded_branch_spectators_eval_heq_id
     (howner : ∀ t, owner t ≠ p) :
     let all := affectedOwner (fun _ : P => true)
     let q := some (⟨p, rfl⟩ : {t : P // (fun _ : P => true) t = true})
-    HEq ((((u.mapOwner owner).appendTail tail).mapOwner all).localPart.restrict
-      (partySelector q)
-      (((u.mapOwner owner).appendTail tail).mapOwner all).sources_localPart).eval
-      (ContinuousLinearMap.id ℂ (Mem (Layout.atParty q (Layout.mapOwner all tail)))) := by
+    relabelledSpectatorsIdentity all (u.mapOwner owner) tail q := by
   classical
   intro all q
   have hcore : q ∉ ((u.mapOwner owner).mapOwner all).parties := by
@@ -73,7 +79,10 @@ private theorem restrict_embedded_branch_spectators_eval_heq_id
     obtain ⟨z, ⟨t, _, htz⟩, hzq⟩ := hq
     have he : all (owner t) = q := htz.symm ▸ hzq
     exact howner t (by simpa [all, q, affectedOwner] using he)
-  exact restrict_relabelled_spectators_eval_heq_id all (u.mapOwner owner) tail q hcore
+  exact restrict_relabelled_spectators_eval_heq_id
+    (R := P) (Q := Option {_p : P // true = true})
+    (a := Layout.mapOwner owner a) (b := Layout.mapOwner owner b)
+    all (u.mapOwner owner) tail q hcore
 
 /-- An original party outside a gate's participants retains only its mapped
 spectator registers in the actual all-party branch. The restriction of the
@@ -97,7 +106,7 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
   let f := partySelector q
   by_cases ht : ∃ _t : C, true = true
   · let e : Choices (fun _ : P => true) (.gate owner G tail) ≃ ι :=
-      Equiv.cast (by simp only [Choices]; exact if_pos ⟨ht.choose, by trivial⟩)
+      Equiv.cast (by simp only [Choices]; exact ite_eq_left ⟨ht.choose, by trivial⟩)
     let i := e ξ
     have hw : partialWord (fun _ : P => true) (.gate owner G tail) ξ =
         (((G.branchWord i).mapOwner owner).appendTail tail).mapOwner all := by
@@ -105,7 +114,9 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
       rw [dite_eq_left ht]
       rfl
     rw [hw]
-    exact restrict_embedded_branch_spectators_eval_heq_id owner
+    change relabelledSpectatorsIdentity all ((G.branchWord i).mapOwner owner) tail q
+    exact restrict_embedded_branch_spectators_eval_heq_id
+      (P := P) (C := C) (a := a) (b := b) owner
       (G.branchWord i) tail p howner
   · have hw : partialWord (fun _ : P => true) (.gate owner G tail) ξ =
         Word.groupedBlockMap all none (Layout.mapOwner owner a) (Layout.mapOwner owner b)
