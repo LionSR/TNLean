@@ -125,6 +125,21 @@ private def selectedSpectatorIdentity {Q : Type} {a b : Layout Q}
   HEq (v.localPart.restrict (partySelector q) v.sources_localPart).eval
     (Word.id (Layout.atParty q tail)).eval
 
+/-- Canonical selected-spectator identities imply the remaining comparison;
+their heterogeneous operator equalities are used before any gate expansion is
+substituted. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
+lines 351–434 and 565–588. -/
+private theorem selectedRemainingComparison_of_selectedSpectatorIdentity {P Q R S : Type}
+    (f : P → Q) (g : P → R) (lift : R → S) (p : P) (q : Q) (r : R)
+    (hf : ∀ z, f z = q ↔ z = p) (hg : ∀ z, g z = r ↔ z = p)
+    (tail : Layout P) {a b : Layout Q} {c d : Layout R} (W : Word a b) (V : Word c d)
+    (hW : selectedSpectatorIdentity W q (Layout.mapOwner f tail))
+    (hV : selectedSpectatorIdentity V r (Layout.mapOwner g tail)) :
+    selectedRemainingComparison W V q r lift := by
+  unfold selectedSpectatorIdentity at hW hV
+  exact selectedRemainingComparison_of_spectator_id f g lift p q r
+    hf hg tail W V hW hV
+
 /-- An aggregate map at an excluded owner leaves precisely the selected
 spectator identity. Its operator and register spaces are arbitrary.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 351–434
@@ -245,9 +260,9 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection
         (Layout.affectedOwner_mapOwner_eq_none A owner htA a)
         (Layout.affectedOwner_mapOwner_eq_none A owner htA b)
         (G.evalAtOwners owner) tail V hV
-    have hAll := restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
-      owner G tail p howner ξ
-    exact selectedRemainingComparison_of_spectator_id all fa lift p qp q
+    have hAll : selectedSpectatorIdentity W qp (Layout.mapOwner all tail) :=
+      restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident owner G tail p howner ξ
+    exact selectedRemainingComparison_of_selectedSpectatorIdentity all fa lift p qp q
       hfAll hfA tail W V hAll hOne
 
 end SourceCircuit
