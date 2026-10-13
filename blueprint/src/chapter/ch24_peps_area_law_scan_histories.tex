@@ -112,70 +112,7 @@ The following finite construction follows
     ordered by depth, with $X=A\cap T$ and $U=P_0\setminus X$; arrows show the
     fill directions at the fronts, and brackets mark the charge intervals of
     oriented depth $[j-r_0,j+D]$ on the two sides.
-    \begin{tenkzequation}
-        % Source: arXiv OpenAI2026AreaLaw, sections/08-scanner.tex:156--192
-        % (figure scanner:figure), prose lines 92--130; fronts (scanner:fronts).
-        % Geometry only: there are no tensors, contractions or open indices,
-        % and the boundary signature is empty.
-        % Horizontal axis: unsigned depth d(x), increasing to the east
-        % (column 2 is d=0); it is not a lattice direction. Not to scale:
-        % r_0 << D << m and the band spacing 8m are compressed.
-        % Rows 2 and 5: bands g and g+1; each dot is one depth row of A
-        % (a dot is a set of sites, not a tensor). Tinted enclosures are the nominal
-        % parts X=A cap T, U=P_0 minus X, the middle Y and the far side V
-        % (only sites of A are drawn; Lambda minus A also lies in V).
-        % Rows 1 and 4: fill arrows. The near front j_P (first column of Y)
-        % fills toward larger depth; the far front, at unsigned depth -j_F
-        % (last column of Y, j_F being oriented), fills toward smaller depth.
-        % Brackets under rows 2 and 5: charge intervals. Near side: depths
-        % [j_P-r_0, j_P+D]; far side: oriented depths [j_F-r_0, j_F+D], i.e.
-        % unsigned depths [-j_F-D, -j_F+r_0]; drawn with r_0=D=1 column.
-        % Charges can assign sites inside these intervals, so the actual U,
-        % Y, V need not be depth intervals.
-        \tenkzkernel
-        \begin{tenkz}[size=s, metrics=compact, rows={wire,wire,wire,wire,wire,wire,wire},
-                cols=18, bonds=none]
-            \tndeclare{species}{target}{hue=source:blue}
-            \tndeclare{species}{near}{hue=source:green!50!black}
-            \tndeclare{species}{middle}{hue=source:orange!85!black}
-            \tndeclare{species}{far}{hue=source:gray}
-            \tndeclare{species}{charge}{hue=source:black}
-            \tnmark[form=label, label pos=w]{(2,1)}{$g$}
-            \tn[at=(2,2)]{} \tn[at=(2,3)]{} \tn[at=(2,4)]{} \tn[at=(2,5)]{}
-            \tn[at=(2,6)]{} \tn[at=(2,7)]{} \tn[at=(2,8)]{} \tn[at=(2,9)]{}
-            \tn[at=(2,10)]{} \tn[at=(2,11)]{} \tn[at=(2,12)]{} \tn[at=(2,13)]{}
-            \tn[at=(2,14)]{} \tn[at=(2,15)]{} \tn[at=(2,16)]{} \tn[at=(2,17)]{}
-            \tn[at=(2,18)]{}
-            \tnmark[form=enclosure, species=target, tint, label pos=n]{(2,2)}{$X$}
-            \tnmark[form=enclosure, species=near, tint, label pos=n]{(2,3) .. (2,5)}{$U$}
-            \tnmark[form=enclosure, species=middle, tint, label pos=n]{(2,6) .. (2,11)}{$Y$}
-            \tnmark[form=enclosure, species=far, tint, label pos=n]{(2,12) .. (2,18)}{$V$}
-            \tnwire[kind=string, dir=to, name=scanNearFrontG]{(1,6)}{(1,7)}
-            \tnmark[form=label, label pos=n]{on scanNearFrontG 0.5}{$j_P$}
-            \tnwire[kind=string, dir=to, name=scanFarFrontG]{(1,11)}{(1,10)}
-            \tnmark[form=label, label pos=n]{on scanFarFrontG 0.5}{$-j_F$}
-            \tnmark[form=bracket, species=charge, label pos=s]{(2,5) .. (2,7)}{}
-            \tnmark[form=bracket, species=charge, label pos=s]{(2,10) .. (2,12)}{}
-            \tnmark[form=label, label pos=w]{(5,1)}{$g+1$}
-            \tn[at=(5,2)]{} \tn[at=(5,3)]{} \tn[at=(5,4)]{} \tn[at=(5,5)]{}
-            \tn[at=(5,6)]{} \tn[at=(5,7)]{} \tn[at=(5,8)]{} \tn[at=(5,9)]{}
-            \tn[at=(5,10)]{} \tn[at=(5,11)]{} \tn[at=(5,12)]{} \tn[at=(5,13)]{}
-            \tn[at=(5,14)]{} \tn[at=(5,15)]{} \tn[at=(5,16)]{} \tn[at=(5,17)]{}
-            \tn[at=(5,18)]{}
-            \tnmark[form=enclosure, species=target, tint, label pos=n]{(5,2)}{$X$}
-            \tnmark[form=enclosure, species=near, tint, label pos=n]{(5,3) .. (5,11)}{$U$}
-            \tnmark[form=enclosure, species=middle, tint, label pos=n]{(5,12) .. (5,17)}{$Y$}
-            \tnmark[form=enclosure, species=far, tint, label pos=n]{(5,18)}{$V$}
-            \tnwire[kind=string, dir=to, name=scanNearFrontH]{(4,12)}{(4,13)}
-            \tnmark[form=label, label pos=n]{on scanNearFrontH 0.5}{$j_P$}
-            \tnwire[kind=string, dir=to, name=scanFarFrontH]{(4,17)}{(4,16)}
-            \tnmark[form=label, label pos=n]{on scanFarFrontH 0.5}{$-j_F$}
-            \tnmark[form=bracket, species=charge, label pos=s]{(5,11) .. (5,13)}{}
-            \tnmark[form=bracket, species=charge, label pos=s]{(5,16) .. (5,18)}{}
-            \tnwire[kind=string, dir=to, name=scanDepthAxis]{(7,2)}{(7,18)}
-            \tnmark[form=label, label pos=e]{(7,18)}{$d$}
-        \end{tenkz}
-    \end{tenkzequation}
+    \input{figures/al_scan_actual_histories}
 \end{definition}
 
 \begin{theorem}[Normalized classical histories and deterministic fronts]
@@ -2470,6 +2407,151 @@ The following finite construction follows
     mean identifies the actual replica Hamiltonian.
 \end{proof}
 
+% Source: 08-scanner.tex, lines 416--440 and 492--511, at adc7f124.
+% The supplied-vector estimate retains the stronger counting margin.
+The finite-leaf estimates below follow the charge-energy argument in
+\cite[proof of Proposition~9.2]{OpenAI2026AreaLaw}.
+
+\begin{theorem}[Split entropy from the physical support]
+    \label{thm:al_scan_split_entropy_cap}
+    \lean{TensorPower.ReplicaTransport.splitBandEta_nonneg,
+        TensorPower.ReplicaTransport.splitBandEta_le_two_mul_logDim,
+        TensorPower.ReplicaTransport.TransportData.splitEta_nonneg,
+        TensorPower.ReplicaTransport.TransportData.splitEta_le_two_mul_of_logDim_le,
+        TensorPower.ReplicaTransport.TransportData.measurable_splitEta_sphere}
+    \leanok
+    Give every local factor a positive dimension $n_v$. For a partition
+    $(P,Y,F)$ and a designated support $B$, let $x=B\cap Y$. The split entropy is nonnegative. On the unit sphere,
+    either choice of receiving side satisfies
+    \begin{align}
+        0\le\eta_B(\theta)
+        \le 2S_\theta(x)
+        \le 2\log\left(\mathrm e\prod_{v\in B}n_v\right).
+        \label{eq:al_scan_split_entropy_support}
+    \end{align}
+    For every finite transport, the split entropy at each leaf is
+    measurable on the unit sphere; for admissible transport it is also
+    nonnegative. If the designated
+    supports are compatible with the leaf partitions and
+    $\log(\mathrm e\prod_{v\in B_i}n_v)\le\ell$ whenever $B_i$ has a split
+    leaf, with $\ell\ge0$, then $0\le\eta_{i,j}(\theta)\le2\ell$ at every
+    leaf. No dimension bound is required for a support with no split leaf.
+\end{theorem}
+\begin{proof}\leanok
+    The two choices are $I_\theta(x:F\mid P)$ and
+    $I_\theta(x:P\mid F)$. Strong subadditivity gives their sign, and
+    subadditivity and the entropy triangle inequality bound each by
+    $2S_\theta(x)$. The reduced state's rank is at most
+    $\prod_{v\in B}n_v$, which gives
+    (\ref{eq:al_scan_split_entropy_support}). Compatibility leaves only
+    the unique splitting band in the entropy sum; an unsplit support
+    contributes zero. Continuity of the finite entropy sum gives
+    measurability on the unit sphere.
+\end{proof}
+
+\begin{theorem}[Finite-leaf charge energy inequality]
+    \label{thm:al_scan_finite_charge_energy}
+    \lean{TNLean.PEPS.AreaLaw.Scan.ScanRound.goodOld_le_capacity,
+        TNLean.PEPS.AreaLaw.Scan.ScanRound.energySum_le_of_leaf_bounds}
+    \leanok
+    Let $w_h\ge0$ and $q_{c\mid h}\ge0$ be finite probability weights.
+    Fix finite old and new leaf measures of mass $1/2$, nonnegative
+    split entropies bounded by $B\ge0$, and a measurable old split entropy.
+    Suppose at most $N\ge0$ labels split at each leaf and each label's
+    terminal split weight is at most $d\ge0$. For $0\le p\le1$, put
+    \begin{align}
+        \mathcal Q & =\sum_{h\text{ good}}w_h
+        \sum_{i\text{ split in }h}\int_\Theta
+        \eta_{i,h}(\theta)\,d\mu_h(\theta),        \\
+        b          & =\sum_{h\text{ not good}}w_h.
+        \label{eq:al_scan_finite_charge_defect}
+    \end{align}
+    The energy sum with terminal weights $(1-p)w_h$ and
+    $pw_hq_{c\mid h}$ satisfies
+    \begin{align}
+        \mathcal E\le d\left((1-p)N^{7/8}\mathcal Q^{1/8}
+        +\frac{NB^{1/8}}2\bigl((1-p)b+p\bigr)\right).
+        \label{eq:al_scan_finite_charge_energy}
+    \end{align}
+    The good-old contribution before multiplication by $1-p$ is at most
+    $N^{7/8}\mathcal Q^{1/8}$, including when $N=0$ or the total good
+    weight is zero.
+\end{theorem}
+\begin{proof}\leanok
+    H\"older's inequality for a leaf measure of mass $1/2$ gives
+    $\int\eta^{1/8}\le(\int\eta)^{1/8}$. Apply finite weighted
+    H\"older to the good-history and split-label pairs. Their total
+    weight is at most $N$, so their contribution is bounded by
+    $N^{7/8}\mathcal Q^{1/8}$ without division by either weight.
+    On each bad-old or new leaf,
+    $\int\eta^{1/8}\le B^{1/8}/2$. Counting labels and summing
+    probabilities gives respectively $NB^{1/8}b/2$ and $NB^{1/8}/2$.
+    Retain the factors $1-p$ and $p$, then bound each label's terminal
+    split weight by $d$.
+\end{proof}
+
+\begin{theorem}[Actual charge energy with its classical bad-history weight]
+    \label{thm:al_scan_actual_charge_energy}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_energyError_le_domainGraph}
+    \leanok
+    \uses{def:al_scan_actual_charge_data,def:al_scan_literal_measures,
+        def:al_scan_physical_dimension_cap}
+    Fix a finite physical domain $\Lambda$, a nonempty target $T$, physical
+    dimension $q\ge1$, and independently chosen positive auxiliary
+    dimensions. Let the scan use the induced domain graph and ambient
+    sup-norm distance to $T$ as depth. Fix a local Hamiltonian, any supplied
+    vector $\Omega$ and real $\Delta$, and form their designated truncated
+    supports and augmented terms by the formulas of
+    Definition~\ref{def:al_scan_actual_energy_terms}.
+    Suppose
+    \begin{align}
+        n         & \ge2,  & s+1 & \le nm, & r_0 & \le D, & D & \ge1, \\
+        4(D+2r_0) & \le m, & 8Km & \le L,  & C_1 & >0.
+        \label{eq:al_scan_charge_energy_scales}
+    \end{align}
+    Every ambient row $T_d\setminus T_{d-1}$ with $1\le d\le L$
+    has at most $n$ sites, at most $\mathfrak m$ interaction labels have any
+    fixed anchor, and every $t\in T$ and physical cut boundary endpoint
+    $z$ satisfy $d_\infty(t,z)>2L+10r_0$.
+    Let $a\ge0$, $k\in\mathbb N$, and $\psi_k\ne0$ be a symmetric
+    supplied replica vector. At $0<p<1$, use the actual charge round at
+    stage $s$ with metric parameter $a/2$ and this same vector. Set
+    \begin{align}
+        A & =10KnD\mathfrak m,            & \ell & =1+(2r_0+1)^2\log q, \\
+        b & =\sum_{h\text{ not good}}w_h.
+        \label{eq:al_scan_charge_energy_capacity}
+    \end{align}
+    With $\mathcal Q$ the actual good-old charge defect and
+    $\mathcal E$ the literal energy error in
+    (\ref{eq:al_scan_literal_energy}),
+    \begin{align}
+        \mathcal E\le\frac{10D}{m}
+        \left((1-p)A^{7/8}\mathcal Q^{1/8}
+        +\frac{A(2\ell)^{1/8}}2\bigl((1-p)b+p\bigr)\right).
+        \label{eq:al_scan_actual_charge_energy}
+    \end{align}
+    The vector need not have norm one. The natural numbers $K$, $\mathfrak m$
+    and $k$ may vanish. The constant $\ell$ is independent of both
+    auxiliary dimensions.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scan_split_count,thm:al_scan_designated_dilution,
+        thm:al_scan_actual_transport_dimension,thm:al_scan_literal_integrals,
+        thm:al_scan_literal_scalars,thm:al_scan_split_entropy_cap,
+        thm:al_scan_finite_charge_energy}
+    Every terminal split implies a receiving--middle incidence. The
+    labelled incidence count bounds each leaf's split count by $A$,
+    and unconditional dilution bounds each label's total split weight
+    by $10D/m$. Only physical sites occur in the designated supports;
+    a support having a split leaf has logarithmic dimension at most
+    $\ell$. Hence its split entropy is at most $2\ell$, independently
+    of the auxiliary sizes. For the same nonzero symmetric vector,
+    every interior old and new leaf measure has mass $1/2$.
+    Substitute $N=A$, $B=2\ell$ and $d=10D/m$ in
+    (\ref{eq:al_scan_finite_charge_energy}), and use the literal scalar
+    identities to identify $\mathcal Q$, $b$ and $\mathcal E$.
+\end{proof}
+
 \begin{theorem}[Parameter integrability of literal round defects]
     \label{thm:al_scan_literal_parameter_integral}
     \lean{TNLean.PEPS.AreaLaw.Scan.aestronglyMeasurable_transportScanRound_chargeDefect,
@@ -3011,6 +3093,153 @@ The following finite construction follows
     occurs exactly $2nm$ times, giving~(\ref{eq:al_scan_actual_entropy_sum}).
     This is the telescoping step of the scanner argument in
     \cite[proof of Proposition~9.2]{OpenAI2026AreaLaw}.
+\end{proof}
+
+% Source: 08-scanner.tex, lines 309--329, 492--511 and final parameters.
+\begin{theorem}[Old-prefix probability and the counting margin]
+    \label{thm:al_scan_uniform_bad_old}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_old_le_bad_through,
+        TNLean.PEPS.AreaLaw.Scan.eventually_split_counting_scale_separation,
+        TNLean.PEPS.AreaLaw.Scan.exists_badOldHistory_threshold}
+    \leanok
+    Let $b_s$ be the classical weight of bad old histories after
+    $s$ complete fill--charge pairs. For $s\le H$ and positive charge
+    capacity, $b_s$ is at most the weight of full histories of length $H$
+    having a bad completed prefix.
+
+    Fix $C_r,C_1>0$, $C_T\ge0$, anchor multiplicity bound $\mathfrak m\in\mathbb N$
+    and $P\in\mathbb R$. Use the final scanner exponents
+    $\ell=10^{-5}$, $\kappa=10^{-6}$ and $\mu=1/4$, and set
+    \begin{align}
+        L & =\lfloor n^{1-\ell}\rfloor,             & m                            & =\lfloor n^\mu\rfloor,
+          & D                                       & =\lceil n^\kappa\rceil,                                                      \\
+        K & =\left\lfloor\frac{L}{8m}\right\rfloor,
+          & r_0                                     & =\lceil C_r(\log n)^2\rceil, & M                      & =\lceil C_1nD\rceil.
+        \label{eq:al_scan_uniform_tail_scales}
+    \end{align}
+    There is $N$, depending only on these fixed quantities, such that
+    for all $n\ge N$ the following holds for every physical scan.
+    Assume $T\ne\varnothing$, $|T|\le C_Tn^2$, the induced domain graph, ambient target-distance
+    depth, ambient row sizes at most $n$ through depth $L$, anchor
+    multiplicities at most $\mathfrak m$, and cut clearance greater than
+    $2L+10r_0$. Then
+    \begin{align}
+        n   & \ge2,                           & r_0 & \le D, & 1 & \le D, & 4(D+2r_0) & \le m, & 8Km & \le L, \\
+        b_s & \le n^{-P}\qquad(0\le s\le nm).
+        \label{eq:al_scan_uniform_bad_old}
+    \end{align}
+    The first statement holds for every scan with positive charge
+    capacity, without the geometric assumptions above. The margin
+    $4(D+2r_0)\le m$, together with $n\ge2$, $r_0\le D$, $1\le D$ and
+    $8Km\le L$, holds eventually for any real
+    $\ell$, any $C_r\ge0$ and any fixed $0<\kappa<\mu$, with its
+    threshold allowed to depend on these quantities; only the bound on
+    $b_s$ uses the listed physical assumptions.
+\end{theorem}
+\begin{proof}\leanok
+    The exact prefix marginal writes $b_s$ as the expectation of its
+    indicator over full histories. Goodness through every completed
+    prefix implies goodness of every old charge state, so the bad-old
+    event is contained in the bad-through event. Apply the all-time
+    inverse-power estimate of \cite[Lemma~9.1]{OpenAI2026AreaLaw}; no
+    additional factor counting rounds is introduced.
+    For the counting margin, eventually $r_0\le D$ and
+    $n^{\mu-\kappa}\ge24$. Since $n^\kappa\ge1$,
+    $12\lceil n^\kappa\rceil\le24n^\kappa\le n^\mu$.
+    Taking the floor gives $4(D+2r_0)\le12D\le m$.
+\end{proof}
+
+\begin{theorem}[Uniform actual charge energy at the rounded scales]
+    \label{thm:al_scan_actual_charge_energy_decay}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_actualCharge_energy_threshold}
+    \leanok
+    \uses{thm:al_scan_uniform_bad_old,thm:al_scan_actual_charge_energy}
+    With the scales and physical assumptions of
+    Theorem~\ref{thm:al_scan_uniform_bad_old}, one threshold $N$ gives the
+    following estimate simultaneously for every charge $s+1\le nm$,
+    every positive local and auxiliary dimension, every supplied local
+    Hamiltonian and vector $\Omega$, every $\Delta\in\mathbb R$,
+    every $a\ge0$, replica count $k\ge0$, nonzero symmetric supplied
+    vector $\psi_k$, and common parameter $0<p<1$:
+    \begin{align}
+        \mathcal E_{s,k}(p)\le\frac{10D}{m}
+        \left((1-p)A^{7/8}\mathcal Q_{s,k}(p)^{1/8}
+        +\frac{A(2\ell_q)^{1/8}}2\bigl((1-p)n^{-P}+p\bigr)\right),
+        \label{eq:al_scan_actual_charge_energy_decay}
+    \end{align}
+    where $A=10KnD\mathfrak m$ and $\ell_q=1+(2r_0+1)^2\log q$.
+    The energy and charge defect use the same actual charge data, supplied
+    vector and metric parameter $a/2$ as in
+    Theorem~\ref{thm:al_scan_actual_charge_energy}. Both history capacities
+    are positive as a consequence of the rounded scales.
+    No selected round, physical prevector identity, or norm comparison
+    is part of this statement.
+\end{theorem}
+\begin{proof}\leanok
+    Use the common threshold in Theorem~\ref{thm:al_scan_uniform_bad_old}
+    before all physical and quantum data. Its margin supplies the
+    hypotheses of Theorem~\ref{thm:al_scan_actual_charge_energy}.
+    Since $1-p\ge0$ and the coefficient of $b_s$ is nonnegative,
+    replacing $b_s$ by $n^{-P}$ gives
+    (\ref{eq:al_scan_actual_charge_energy_decay}).
+\end{proof}
+
+% Source: 08-scanner.tex, lines 492--520 and final parameters.
+\begin{theorem}[Uniform coefficients for the actual charge energy]
+    \label{thm:al_scan_actual_charge_energy_coefficients}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_nonneg,
+        TNLean.PEPS.AreaLaw.Scan.exists_actualCharge_energy_coefficients}
+    \leanok
+    \uses{thm:al_scan_actual_charge_energy_decay}
+    Fix the physical dimension $q\ge1$, $C_r,C_1>0$, $C_T\ge0$,
+    $\mathfrak m\in\mathbb N$ and $P,C_{\mathrm{en}},e_{\mathrm{en}}\in\mathbb R$.
+    There exist $C\ge1$, $C_l\ge0$ and $N\in\mathbb N$, depending only
+    on these fixed quantities, with the following property.
+    For every $n\ge N$, use the literal rounded scales
+    (\ref{eq:al_scan_uniform_tail_scales}) and the geometric assumptions
+    of Theorem~\ref{thm:al_scan_uniform_bad_old}. For every charge $s+1\le nm$,
+    every pair of positive auxiliary dimensions, supplied local Hamiltonian,
+    vector $\Omega$ and real $\Delta$, every $W\ge0$, replica count $k\ge0$,
+    nonzero symmetric supplied vector $\psi_k$ and $0<p<1$, put $a=W/K$.
+    Then both history capacities are positive and
+    \begin{align}
+        |C_{\mathrm{en}}|a^2\ell_q^{e_{\mathrm{en}}}\mathcal E_{s,k}(p)
+         & \le C W^2 n^{\ell}D^2(\log n)^{C_l}
+        \left((1-p)\left(\frac{\mathcal Q_{s,k}(p)}{KnD}\right)^{1/8}
+        +(1-p)n^{-P}+p\right),
+        \label{eq:al_scan_actual_charge_energy_coefficients}
+    \end{align}
+    where $\ell=10^{-5}$ and $\ell_q=1+(2r_0+1)^2\log q$.
+    Both the energy and defect use the same supplied vector and metric
+    parameter $a/2$. No round or small defect is selected. The estimate
+    includes zero total weight, zero anchor multiplicity, $q=1$ and $k=0$.
+    For every scan with positive history capacities, every supplied vector,
+    $a\ge0$ and $p$, the literal defect $\mathcal Q_{s,k}(p)$ is
+    nonnegative.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scan_actual_charge_energy_decay,lem:al_scanner_scale_facts,
+        thm:al_scan_transport_coefficients_log}
+    The old-history weights and split entropy symbols are nonnegative,
+    so integration against the actual leaf measures gives
+    $\mathcal Q_{s,k}(p)\ge0$. At the rounded scales, eventually $K\ge1$ and
+    $nD^2/(mK)\le C_s n^{\ell}D^2$ for a fixed $C_s\ge1$.
+    Substitute $a=W/K$ in
+    (\ref{eq:al_scan_actual_charge_energy_decay}). Factoring $KnD$ from
+    the good contribution leaves, before the two interpolation terms,
+    the exact coefficients
+    \begin{align}
+        10(10\mathfrak m)^{7/8}|C_{\mathrm{en}}|\ell_q^{e_{\mathrm{en}}},
+        \qquad
+        50\mathfrak m\,2^{1/8}|C_{\mathrm{en}}|
+        \ell_q^{e_{\mathrm{en}}+1/8}.
+    \end{align}
+    No division by $\mathfrak m$ is used. Since $\ell_q\ge1$, enlarge
+    both real exponents to one common nonnegative exponent before using
+    $\ell_q\le C_q(\log n)^4$. Thus both coefficients are at most
+    $C_d(\log n)^{C_l}$, with $C_d\ge1$ and $C_l\ge0$ fixed before
+    the remaining physical and quantum data. Multiply the scale and dimension
+    estimates and take $C=C_sC_d$.
 \end{proof}
 
 % Source: openai/math, adc7f1241b42e322a6451854ab7e4b4c146bf78a,

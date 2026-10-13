@@ -17,11 +17,20 @@ import re
 import sys
 import tempfile
 
+from blueprint_tex_tree import read_tex_tree
+
 ROOT = Path(__file__).resolve().parents[1]
 CHAPTERS = ROOT / "blueprint/src/chapter"
 ROUTING = CHAPTERS / "ch24_peps_dyadic_routing.tex"
 FRAMES = CHAPTERS / "ch24_peps_encoded_frames.tex"
 KET = CHAPTERS / "ch24_peps_ket_column.tex"
+# The displays live in shared figure files that the entries input; every check reads
+# the expanded chapter, so it still asserts that the ink sits in its entry.
+FIGURES = {
+    ROUTING: ["figures/peps_dyadic_hv_routing"],
+    FRAMES: ["figures/peps_frame_hole_encoder_a", "figures/peps_frame_hole_encoder_b"],
+    KET: ["figures/peps_ket_column_square_fix_input"],
+}
 
 N, L = 8, 5
 # Open indices promised by each picture's adjacent ink-to-index comment,
@@ -156,7 +165,11 @@ def check_ket(text: str) -> list[str]:
 
 
 def check_sources() -> list[str]:
-    routing, frames, ket = ROUTING.read_text(), FRAMES.read_text(), KET.read_text()
+    for chapter, figures in FIGURES.items():
+        raw = chapter.read_text()
+        for figure in figures:
+            assert f"\\input{{{figure}}}" in raw, (chapter.name, figure)
+    routing, frames, ket = read_tex_tree(ROUTING), read_tex_tree(FRAMES), read_tex_tree(KET)
     found = [check_routing(routing)] + check_frames(frames) + check_ket(ket)
     for source in (routing, frames, ket):
         for line in source.splitlines():
@@ -173,9 +186,9 @@ def check_mutations() -> None:
         (FRAMES, check_frames, "{(2,2) .. (6,6)}{}", "{(3,3) .. (5,5)}{}"),
         (FRAMES, check_frames, r"0@1:physical:$\mathcal J", r"180@1:physical:$\mathcal J"),
         (FRAMES, check_frames, r"0@1:physical:$\mathcal J_{c,h}$," "\n"
-         r"                        0@2:physical:$\mathcal H_\Lambda$",
+         r"                    0@2:physical:$\mathcal H_\Lambda$",
          r"0@2:physical:$\mathcal J_{c,h}$," "\n"
-         r"                        0@1:physical:$\mathcal H_\Lambda$"),
+         r"                    0@1:physical:$\mathcal H_\Lambda$"),
         (KET, check_ket, "at=(3,3,2), skin=dot", "at=(3,3,1), skin=dot"),
         (KET, check_ket, r"\tnwire{(1,1,1)}{(1,1,2)}", r"\tnwire{(1,1,1)}{open down}"),
         (KET, check_ket, r"\tnwire{(1,1,1)}{(1,1,2)}", ""),
@@ -184,17 +197,18 @@ def check_mutations() -> None:
         (KET, check_ket, r"\tnwire{(1,1,1)}{(1,2,1)}", r"\tnwire{(1,1,2)}{(1,2,1)}"),
         (KET, check_ket, r"\tnwire{(1,1,1)}{(1,2,1)}",
          r"\tnwire{(1,1,1)}{(1,2,1)}" "\n"
-         r"            \tnwire[name=extra]{(1,1,1)}{open up}"),
+         r"        \tnwire[name=extra]{(1,1,1)}{open up}"),
     ]
     for path, check, old, new in cases:
-        text = path.read_text()
+        # Mutate the expanded text, i.e. the figure's ink as the entry sees it.
+        text = read_tex_tree(path)
         assert old in text, old
         try:
             check(text.replace(old, new, 1))
         except (AssertionError, ValueError):
             continue
         raise AssertionError(("mutation accepted", old, new))
-    ket = KET.read_text()
+    ket = read_tex_tree(KET)
     unlabelled = "at=(2,2,2), skin=dot, species=input, label pos=e]{}"
     labelled = "at=(2,3,2), skin=dot, species=input, label pos=e]{z_v}"
     assert unlabelled in ket and labelled in ket

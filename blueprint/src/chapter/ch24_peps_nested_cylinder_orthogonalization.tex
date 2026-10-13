@@ -228,18 +228,6 @@ nested regions and inside subspaces.
         is not idempotent, so it is not the projector onto the projected image.
         The diagram records the restrictions of the two orthogonal projections.
         The generator $e_1+e_2$ maps to $e_1$ and $e_2$, respectively.
-        % Formula represented: P_W(e_1+e_2)=e_1 and (I-P_W)(e_1+e_2)=e_2;
-        % both subsequent projections are zero, so the square commutes.
-        % Ink-to-map correspondence: each node is the labelled subspace;
-        % each arrow is the restriction of its labelled orthogonal projection.
-        % This is a commutative diagram, not a tensor network. There are no
-        % contracted or open tensor legs; no tensor boundary signature is asserted.
-        \begin{center}
-            \begin{tikzcd}[column sep=huge,row sep=large]
-                W=\spn\{e_1\} \arrow[d,"I-P_W"'] &
-                S=\spn\{e_1+e_2\} \arrow[l,"P_W"'] \arrow[d,"I-P_W"] \\
-                \{0\} & (I-P_W)S=\spn\{e_2\} \arrow[l,"P_W"]
-            \end{tikzcd}
-        \end{center}
+        \input{figures/peps_nested_cylinder_orthogonalization_projected_image}
     \end{remark}
 \end{samepage}
