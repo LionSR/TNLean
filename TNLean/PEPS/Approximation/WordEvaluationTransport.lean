@@ -76,13 +76,4 @@ theorem eval_id_heq {P : Type} {a b : Layout P} (h : a = b) :
   cases h
   rfl
 
-/-- Restriction preserves the operator after an identification of the input list.
-The source inventory is empty; the selected memories are arbitrary. -/
-theorem restrict_castInput_eval_heq {P : Type} (f : P → Bool) {a b a' : Layout P}
-    (w : Word a b) (h : a = a') (hs : w.sources = []) :
-    HEq ((w.castInput h).restrict f ((sources_castInput w h).trans hs)).eval
-      (w.restrict f hs).eval := by
-  cases h
-  rfl
-
 end TNLean.PEPS.PairEffect.Word

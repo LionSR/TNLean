@@ -9,7 +9,6 @@ import TNLean.PEPS.Approximation.AllPartialGate
 import TNLean.PEPS.Approximation.NoneResidualOperations
 import TNLean.PEPS.Approximation.NoneResidualGate
 import TNLean.PEPS.Approximation.EmptyGateScalar
-import TNLean.PEPS.Approximation.WordEvaluationTransport
 
 /-!
 # The scalar factor of the all-selected chronological residual

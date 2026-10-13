@@ -120,6 +120,16 @@ theorem restrict_castLayouts (f : P → Bool) {a b a' b' : Layout P}
   cases hb
   rfl
 
+/-- Identifying the input layout alone leaves the evaluation of the restriction
+unchanged up to that identification: the case of `restrict_castLayouts` with
+equal output layouts, followed by evaluation transport. -/
+theorem restrict_castInput_eval_heq (f : P → Bool) {a b a' : Layout P}
+    (w : Word a b) (h : a = a') (hs : w.sources = []) :
+    HEq (((w.castInput h).restrict f ((sources_castInput w h).trans hs)).eval)
+      ((w.restrict f hs).eval) :=
+  (heq_of_eq (congrArg Word.eval (restrict_castLayouts f w h rfl hs))).trans
+    (eval_castLayouts_heq _ _ _)
+
 /-- Restriction does not introduce a pair source. -/
 @[simp] theorem sources_restrict (f : P → Bool) {ℓ ℓ' : Layout P} (w : Word ℓ ℓ')
     (hs : w.sources = []) : (restrict f w hs).sources = [] := by
