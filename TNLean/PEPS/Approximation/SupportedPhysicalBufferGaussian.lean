@@ -110,6 +110,9 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
       Matrix.submatrix_sub, Pi.sub_apply, Matrix.submatrix_mul_equiv,
       Matrix.submatrix_submatrix] using!
       (Matrix.l2_opNorm_reindex_equiv e _).trans_le (h.swapped_doubled_boundary_bound R).2
+  have hVn : ‖V‖ ≤ ‖W‖ :=
+    (Matrix.l2_opNorm_reindex_equiv (g.symm.trans (p.trans e)) _).trans_le
+      (Matrix.l2_opNorm_one_kronecker_rect_le W)
   done
 
 end TNLean.PEPS.Approximation
