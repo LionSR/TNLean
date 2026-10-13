@@ -24,6 +24,19 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Actual sampled local physical matrices — promoted (2026-10-12)
+
+- **Pattern:** The same mixed physical trace, with independent chronological
+  choices and one original sample assignment, appeared in
+  `ActualSampledPhysicalFactors`, `ActualSampledPhysicalScalar` and
+  `ActualPureSampledPhysicalSum`.
+- **Promotion:** `SourceCircuit.sampledPhysicalFactor` records this matrix once
+  in `ActualSampledPhysicalFactors`. All three statements use that definition;
+  its physical indices are the original indices and its private basis is the
+  actual selected private basis. No scalar or norm is cancelled.
+- **Verification:** The existing physical-trace fixture checks the definition
+  by name, and its blueprint definition is marked complete.
+
 ### Reflected marked-chain scalar and gauge cancellation — promoted (2026-10-12)
 
 - **Pattern:** conjugate a double sum `∑ i j, star (x i) * K i j * y j`
@@ -6534,18 +6547,21 @@ spectral split → block extraction → MPV calculation → strict bounds
   complete source blocks reuses the preparation tensor identity and the
   register-block exchange theorem. Neither requires another double induction.
 
-### Tensor maps under equal filtered layouts — candidate (2026-10-07)
+### Tensor maps under equal filtered layouts — promoted (2026-10-13)
 
 - **Pattern:** Identify equal owner-filtered memories, transport their tensor
   maps, and compare the resulting operators or their values on vectors.
-- **Seen:** `PartyTensorMaps.mapL_heq` and
-  `PartyFactorization.mapL_apply_heq` under `PEPS/Approximation` (two local
-  helpers across two files).
+- **Seen:** The tensor-map transport in `PartyTensorMaps`, its application
+  to vectors in `PartyFactorization` repeat the same four-space
+  identification argument across two files.
 - **Abstraction:** Canonical conjugation already uses the shared
   `Layout.conj_memCongr_heq`, `Layout.norm_conj_memCongr`, and
-  `Layout.eq_conj_memCongr_of_heq`. The remaining two helpers distinguish
-  equality of tensor maps from equality after evaluation. A further occurrence
-  should use one tensor-map equality lemma followed by evaluation.
+  `Layout.eq_conj_memCongr_of_heq`. The existing `PairEffect.mapL_heq`
+  is now public in `PartyTensorMaps`, with its original signature and
+  equality-elimination proof. `PartyFactorization.mapL_apply_heq` uses
+  that shared map equality and ordinary congruence for its application
+  to heterogeneously equal vectors. Its exact named axiom check is
+  `PartyTensorMapTransportAxioms`.
 - **Notes:** Associator and exchange identities use the existing
   `clm_ext_tmul₃`; no additional tactic is needed.
 - **Scan:** The focused approximation scan also found five instances of
@@ -6573,6 +6589,50 @@ spectral split → block extraction → MPV calculation → strict bounds
   than tensor identities. The addition case already uses `congrArg₂`,
   `eq_of_heq`, and `heq_of_eq`. The same core equality tools suffice for the
   head constructions; a generic lemma would only restate their congruence.
+- **Promotion (2026-10-12):** `WordPermutationRestriction`,
+  `WordAppendTailRestriction` and `SourceFreeLocalPart` repeated the same
+  composition and framing helpers. These three copies are replaced by
+  `Word.eval_comp_heq` and `Word.eval_frame_heq` in
+  `WordEvaluationTransport`. The helpers identify the register lists before
+  applying ordinary congruence to the operators. They do not infer equality
+  of restricted operators from equality before restriction. The new framed
+  local-part proof uses the same shared lemmas. Named axiom checks are in
+  `TNLeanTest/WordEvaluationTransportAxioms.lean`.
+- **Further promotion (2026-10-12):** Three identity-operator transports in
+  `WordPermutationRestriction`, `LocalPartFrameListRestriction` and
+  `LocalPartSpectatorOwnerExclusion` now use `Word.eval_id_heq`. Four input
+  transports in `NoneResidualOperations`, `NoneResidualScalar`,
+  `SourceFreeLocalPart` and `LocalPartSpectatorOwnerExclusion` now use
+  `Word.restrict_castInput_eval_heq`. Both shared results are in
+  `WordEvaluationTransport` and `WordRestriction`, respectively. Main already
+  supplies the restricted input transport; its duplicate is removed from the
+  evaluation provider. The existing named test also checks this shared result.
+  The old public theorem statements are unchanged.
+- **Spectator-list promotion (2026-10-12):** `FrameListRestriction`,
+  `LocalPartFrameListRestriction` and `LocalPartRestrictionCongruence`
+  need the same evaluation congruence for equal spectator lists. The shared
+  `Word.eval_frameList_heq` in `WordEvaluationTransport` replaces private
+  copies and transports the retained prefix explicitly. It compares already
+  equal operators; no equality before restriction is used to infer equality
+  after restriction. Its named axiom check is in the existing test.
+- **Selected source prefixes (2026-10-12):** The retained-prefix proofs in
+  `WordPermutationRestriction` also give
+  `Word.restrict_moveHead_eval_heq_of_restrict_eq`, which depends only on
+  the selected prefix and selected tail. The framed local-part congruence
+  in `LocalPartRestrictionCongruence` uses this result together with
+  `Word.eval_frame_heq` and `Word.eval_comp_heq`. It does not erase a
+  retained source prefix or cancel a prepared source vector. The existing
+  named tests cover both new declarations.
+  The composition and framing congruences now require equality of selected
+  input and output lists only. Their existing proofs do not use equality
+  of the original unselected lists. The retained and erased head identities
+  in `WordPermutationRestriction` are exposed directly from the same proofs;
+  their names are included in the existing permutation axiom test.
+  The erased-frame identity `Word.restrict_localPart_frame_false_eval_heq`
+  composes the erased register move with the restricted local part, retaining
+  arbitrary selected source prefixes. It reuses the same move, frame and
+  composition identities rather than repeating their constructor proofs;
+  its named check is included in `LocalPartRestrictionCongruenceAxioms`.
 - **Word identities — promoted (2026-10-13):**
   `WordOwnerAppendTailTransport`, `AbsorbedRestriction` and
   `WordOwnerRestrictionCommutation` compare chronological compositions,
@@ -6601,14 +6661,39 @@ spectral split → block extraction → MPV calculation → strict bounds
   can be applied to words whose restrictions have already been formed; it
   does not assert that equal complete operators have equal restrictions.
   A named axiom test covers the new result; elaboration is pending.
-- **Relation to the tensor-map candidate:** The two existing private
-  `mapL_heq` and `mapL_apply_heq` helpers concern tensor products of two maps
-  with four changing spaces. The new helper instead compares an associator
+- **Selected owner lists (2026-10-13):**
+  `SourceCircuit.mapOwner_selected_originalLayout_eq` in
+  `SelectedPartialSourceSlots` compares the selected original register lists
+  in the singleton and all-party groupings. It retains their order and spaces
+  and replaces the private copy in `IncidentSourceWord`. The proof compares
+  the first selected register explicitly and reuses the unchanged tail
+  identity. Circuit and prepared-input comparisons can use this shared result
+  with `Layout.restrict_mapOwner`; those further public uses remain planned.
+  Its named check in `SelectedPartialSourceSlotsAxioms` passed at `453dd822`.
+- **Relation to tensor-map congruence:** The shared public `mapL_heq` and
+  its private application lemma `mapL_apply_heq` concern tensor products of
+  two maps with four changing spaces. The new helper instead compares an associator
   applied to a fixed pair vector and a changing spectator vector; obtaining
   a tensor-map identity first would require additional equalities without
   simplifying the proof. The common mathematical operation is ordinary
   congruence after the memory types have been identified.
 
+
+### Selected operator propositions before substitution — reuse (2026-10-13)
+
+- **Pattern:** Form an equality of selected operators on arbitrary typed words,
+  then substitute the actual chronological words while retaining the proposition.
+- **Seen:** The spectator identity in `NonincidentAllGateRestriction.lean` and
+  the incident-choice comparison in `AllPartyBranchLocality.lean`.
+- **Reuse:** The comparison delegates composition and framing to
+  `Word.restrict_localPart_comp_eval_heq` and
+  `Word.restrict_localPart_frame_eval_heq`; the identity transports its exact
+  proposition along the structural word equality using `congrArg` and `Eq.mpr`.
+  No operator calculation or induction is copied. A generic proposition helper
+  would only restate these core congruence operations, so none is introduced.
+- **Notes:** Each private transparent predicate unfolds to its original equality
+  of already restricted operators. Public hypotheses and default proof limits
+  are unchanged.
 
 ### Cons-source preparation under fixed slot layouts — candidate (2026-10-07)
 
@@ -6891,6 +6976,23 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** These are distinct uses of existing isometry and CFC results, below
   the threshold for any additional tactic or general framework.
 
+### Hermiticity of a doubled Hamiltonian — candidate (2026-10-13)
+
+- **Pattern:** unfold `Matrix.doubledHamiltonian`, distribute the adjoint
+  through its sum and Kronecker products, and use the original matrix's
+  Hermitian identity and the adjoint identity for `1`.
+- **Seen:** two local proofs, `hDH` in
+  `TNLean/PEPS/Approximation/SwappedSquareHamiltonianInteraction.lean`
+  and `hDK` in
+  `TNLean/PEPS/Approximation/SupportedPhysicalBufferGaussian.lean`.
+- **Abstraction:** if another occurrence is needed, consider a theorem
+  that `A.IsHermitian` implies `(Matrix.doubledHamiltonian A).IsHermitian`
+  beside the doubled-operator definition in QICLean.
+- **Notes:** the present proofs use the same existing adjoint identities.
+  The statement needs neither nonempty matrix indices nor Hermiticity of
+  each original local interaction term. No new helper is introduced at
+  these two occurrences.
+
 ### Coordinate exponential and canonical partial trace — candidate (2026-10-07)
 
 - **Pattern:** replace one indexed factor in a reverse product by a linear
@@ -7024,6 +7126,20 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** Both arguments retain the original vector and physical region.
   The existing disjoint-region entropy increment theorem is reused directly.
   The two cardinality chains differ only in their ambient geometric bounds.
+
+### Source occurrence indices under composition and framing — candidate (2026-10-13)
+
+- **Pattern:** Construct an occurrence-indexed equivalence by recursion on a
+  source circuit, preserving the sum tags under composition and retaining
+  the same occurrence under framing.
+- **Seen:** `SourceCircuit.sourcePairEquiv` and its endpoint identity in
+  `TNLean/PEPS/Approximation/SourceSampleIndices.lean`.
+- **Abstraction:** The slot enumeration reuses `SourceInventory.pairIndexEquiv`;
+  Mathlib's injective map on unordered pairs supplies the participant image.
+  The global source/sample identification reuses this occurrencewise equivalence.
+- **Notes:** Two recursive constructions in one file; below the promotion
+  threshold. The equivalence of unordered pair indices does not replace
+  the original ordered endpoint spaces.
 
 ### Owners of fixed pair-source registers — candidate (2026-10-09)
 
@@ -7349,3 +7465,22 @@ spectral split → block extraction → MPV calculation → strict bounds
   the fixed retained owner. The three blocks lose five lines each; theorem
   statements, labels, and source-register identifications are unchanged. No
   additional lemma or tactic is introduced.
+
+
+### Restricted mixed physical coordinate trace — promoted (2026-10-13)
+
+- **Pattern:** Form the same mixed coordinate matrix from two restricted
+  source-to-output words and one restricted source-input word, then trace
+  the prescribed private output coordinates.
+- **Seen:** The local sampled factors in `ActualSampledPhysicalFactors`, the
+  empty-party scalar in `ActualSampledExteriorScalar`, and their comparison
+  in `ActualSampledPhysicalScalar` use this same trace.
+- **Abstraction:** `PairEffect.restrictedMixedPhysicalTrace` in
+  `RestrictedMixedPhysicalTrace.lean` owns the exact matrix expression.
+  The sampled factors and exterior scalar use the same definition; their
+  comparison retains that expression instead of expanding the circuit words.
+- **Notes:** The exterior computation identifies the coordinate-entry
+  matrix with `LinearMap.toMatrix` while its words are still arbitrary,
+  using the existing `matrix_repr_eval_eq_toMatrix`. The actual circuit
+  is substituted afterward. No hypotheses or proof limits are added.
+  The extracted definition has a named axiom check.

@@ -28,11 +28,17 @@ consecutive sites are the arcs of `TNLean/PEPS/CycleArcRegion.lean`.
 
 The hypotheses beyond the source's wording carry over from the general
 theorem and are documented there and in
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`: positive physical and
-bond dimensions are the counterexample-backed faithfulness fixes of the
-injective Fundamental Theorem, and `0 < L` makes "blocking `L` consecutive
-sites" a blocking at all.  Connectivity holds on the cycle and is discharged,
-not assumed.
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`: positive physical
+dimension is inherited from the general theorem, and `0 < L` makes "blocking
+`L` consecutive sites" a blocking at all.  Connectivity holds on the cycle and
+is discharged, not assumed.
+
+**Local fix (nonzero virtual spaces):** the source treats the virtual bond
+spaces as nonzero (arXiv:1804.04964, lines 582 and 1037 of
+`Papers/1804.04964/paper_normal.tex`) without listing this among the
+hypotheses.  The tensor hypothesis `IsNormalCycleArcMPS` carries it as the field
+`bondDim_pos`, so neither corollary here states positive bond dimensions separately.
+Documented in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 
 ## Relation to the matrix-product-state chapters
 
@@ -79,6 +85,49 @@ theorem regionInjectivityUnionClosure_pair {V : Type*} [DecidableEq V]
   union_injective hA hB :=
     ⟨h.union_injective hA.1 hB.1, h'.union_injective hA.2 hB.2⟩
 
+/-! ### Normal MPS on a closed chain -/
+
+/-- A normal MPS on the closed chain of `n` sites with blocking length `L`: a tensor on the
+cycle graph over `Fin n` whose blocks of `L` consecutive sites are all injective and whose
+virtual bond spaces are all nonzero. This is the hypothesis on each of the two MPS in the
+source corollary; the arc field is the region-family hypothesis
+`NormalCycleArcInjectivityHypotheses` read for the injective regions of the tensor.
+
+The field `bondDim_pos` is the nonzero virtual-space convention of the module docstring.
+
+Source: arXiv:1804.04964, Section 3, first corollary after the theorem labelled `normal`,
+lines 1597--1598 of `Papers/1804.04964/paper_normal.tex` ("two normal MPS on `n ≥ 3L` sites
+with the property that blocking any `L` consecutive sites results in an injective tensor"). -/
+structure IsNormalCycleArcMPS {n d : ℕ} (L : ℕ) (A : Tensor (SimpleGraph.cycleGraph n) d) :
+    Prop extends NormalCycleArcInjectivityHypotheses L
+      (regionInjectivityDataOf (G := SimpleGraph.cycleGraph n) A) where
+  /-- Every virtual bond space is nonzero: the source's bond spaces are nonzero throughout
+  (arXiv:1804.04964, lines 582 and 1037 of `Papers/1804.04964/paper_normal.tex`); the
+  convention is recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
+  bondDim_pos : ∀ e : Edge (SimpleGraph.cycleGraph n), 0 < A.bondDim e
+
+/-- The pair hypothesis of the general normal theorem for two normal MPS on a closed chain
+of `n ≥ 3L` sites: the arc blocking of the cycle, injective for both tensors, together with
+the nonzero bond spaces of both.
+
+Source: arXiv:1804.04964, Section 3, first corollary after the theorem labelled `normal`,
+lines 1597--1622 of `Papers/1804.04964/paper_normal.tex`. -/
+noncomputable def IsNormalCycleArcMPS.pairHypotheses {n d L : ℕ}
+    {A B : Tensor (SimpleGraph.cycleGraph n) d}
+    (hA : IsNormalCycleArcMPS L A) (hB : IsNormalCycleArcMPS L B)
+    (hL : 0 < L) (hn : 3 * L ≤ n) : NormalPEPSPairHypotheses A B :=
+  haveI : NeZero n := ⟨by omega⟩
+  { cycleNormalPEPSBlockingHypotheses
+      (⟨fun s => ⟨hA.arc_injective s, hB.arc_injective s⟩⟩ :
+        NormalCycleArcInjectivityHypotheses L
+          (regionInjectivityDataPair
+            (regionInjectivityDataOf (G := SimpleGraph.cycleGraph n) A)
+            (regionInjectivityDataOf (G := SimpleGraph.cycleGraph n) B)))
+      (regionInjectivityUnionClosure_pair
+        (regionInjectivityUnionClosure_of_overlap A hA.bondDim_pos)
+        (regionInjectivityUnionClosure_of_overlap B hB.bondDim_pos)) hL hn with
+    bondDim_pos_left := hA.bondDim_pos, bondDim_pos_right := hB.bondDim_pos }
+
 /-! ### The corollary for normal MPS on a closed chain -/
 
 /-- **Fundamental Theorem for normal MPS on a closed chain**
@@ -103,10 +152,9 @@ edge itself.  Connectivity of the cycle discharges the connectivity
 hypothesis.  The bond dimensions are not assumed equal: the general theorem
 forces them.
 
-The hypotheses `0 < d` and the positive bond dimensions are the
-counterexample-backed faithfulness fixes inherited from the injective
-Fundamental Theorem (`docs/paper-gaps/peps_injective_ft_section3_route.tex`,
-`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`); `0 < L` is
+The hypothesis `0 < d` is inherited from the general theorem.  The nonzero bond
+spaces are the field `bondDim_pos` of `IsNormalCycleArcMPS`, the convention of the
+module docstring (`docs/paper-gaps/peps_injective_ft_section3_route.tex`); `0 < L` is
 implicit in the source's blocking of `L` consecutive sites.
 
 Source: arXiv:1804.04964, Section 3, first corollary after the theorem
@@ -115,28 +163,15 @@ labelled `normal`, lines 1585--1622 of
 theorem fundamentalTheorem_normalMPS_cycle {n L d : ℕ}
     (hL : 0 < L) (hn : 3 * L ≤ n)
     (A B : Tensor (SimpleGraph.cycleGraph n) d)
-    (harcA : ∀ s : Fin n,
-      RegionBlockedTensorInjective (G := SimpleGraph.cycleGraph n) A (cycleArcFrom s L))
-    (harcB : ∀ s : Fin n,
-      RegionBlockedTensorInjective (G := SimpleGraph.cycleGraph n) B (cycleArcFrom s L))
-    (hAB : SameState A B) (hd : 0 < d)
-    (hposA : ∀ g : Edge (SimpleGraph.cycleGraph n), 0 < A.bondDim g)
-    (hposB : ∀ g : Edge (SimpleGraph.cycleGraph n), 0 < B.bondDim g) :
+    (hA : IsNormalCycleArcMPS L A) (hB : IsNormalCycleArcMPS L B)
+    (hAB : SameState A B) (hd : 0 < d) :
     GaugeEquiv A B := by
   have : NeZero n := ⟨by omega⟩
-  have hU := regionInjectivityUnionClosure_pair
-    (regionInjectivityUnionClosure_of_overlap A hposA)
-    (regionInjectivityUnionClosure_of_overlap B hposB)
-  have harc : NormalCycleArcInjectivityHypotheses L
-      (regionInjectivityDataPair (regionInjectivityDataOf (G := SimpleGraph.cycleGraph n) A)
-        (regionInjectivityDataOf (G := SimpleGraph.cycleGraph n) B)) :=
-    ⟨fun s => ⟨harcA s, harcB s⟩⟩
   have hconn : (SimpleGraph.cycleGraph n).Connected := by
     obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
     exact SimpleGraph.cycleGraph_connected
-  exact fundamentalTheorem_normalPEPS A B
-    (cycleNormalPEPSBlockingHypotheses harc hU hL hn)
-    (fun e g => isCrossingEdge_cycleEdge_iff A hL hn e g) hAB hd hposA hposB hconn
+  exact fundamentalTheorem_normalPEPS A B (hA.pairHypotheses hB hL hn)
+    (fun e g => isCrossingEdge_cycleEdge_iff A hL hn e g) hAB hd hconn
 
 /-- **Uniqueness clause of the Fundamental Theorem for normal MPS on a closed
 chain** (arXiv:1804.04964, Section 3, first corollary after the theorem
@@ -153,13 +188,8 @@ labelled `normal`, lines 1585--1622 of
 theorem fundamentalTheorem_normalMPS_cycle_gauge_unique {n L d : ℕ}
     (hL : 0 < L) (hn : 3 * L ≤ n)
     (A B : Tensor (SimpleGraph.cycleGraph n) d)
-    (harcA : ∀ s : Fin n,
-      RegionBlockedTensorInjective (G := SimpleGraph.cycleGraph n) A (cycleArcFrom s L))
-    (harcB : ∀ s : Fin n,
-      RegionBlockedTensorInjective (G := SimpleGraph.cycleGraph n) B (cycleArcFrom s L))
+    (hA : IsNormalCycleArcMPS L A) (hB : IsNormalCycleArcMPS L B)
     (hbond : A.bondDim = B.bondDim)
-    (hposA : ∀ g : Edge (SimpleGraph.cycleGraph n), 0 < A.bondDim g)
-    (hposB : ∀ g : Edge (SimpleGraph.cycleGraph n), 0 < B.bondDim g)
     (X X' : (e : Edge (SimpleGraph.cycleGraph n)) → GL (Fin (A.bondDim e)) ℂ)
     (hX : ∀ (v : Fin n)
       (η : (ie : IncidentEdge (SimpleGraph.cycleGraph n) v) → Fin (A.bondDim ie.1))
@@ -173,17 +203,9 @@ theorem fundamentalTheorem_normalMPS_cycle_gauge_unique {n L d : ℕ}
         gaugeVertex A X' v η σ)
     (e : Edge (SimpleGraph.cycleGraph n)) :
     ∃ c : ℂˣ, (X' e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) =
-      (c : ℂ) • (X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) := by
-  have : NeZero n := ⟨by omega⟩
-  have hU := regionInjectivityUnionClosure_pair
-    (regionInjectivityUnionClosure_of_overlap A hposA)
-    (regionInjectivityUnionClosure_of_overlap B hposB)
-  have harc : NormalCycleArcInjectivityHypotheses L
-      (regionInjectivityDataPair (regionInjectivityDataOf (G := SimpleGraph.cycleGraph n) A)
-        (regionInjectivityDataOf (G := SimpleGraph.cycleGraph n) B)) :=
-    ⟨fun s => ⟨harcA s, harcB s⟩⟩
-  exact fundamentalTheorem_normalPEPS_gauge_unique A B
-    (cycleNormalPEPSBlockingHypotheses harc hU hL hn) hbond hposA X X' hX hX' e
+      (c : ℂ) • (X e : Matrix (Fin (A.bondDim e)) (Fin (A.bondDim e)) ℂ) :=
+  fundamentalTheorem_normalPEPS_gauge_unique A B (hA.pairHypotheses hB hL hn) hbond
+    X X' hX hX' e
 
 end PEPS
 end TNLean

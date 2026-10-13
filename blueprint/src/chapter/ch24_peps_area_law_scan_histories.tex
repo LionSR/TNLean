@@ -112,70 +112,7 @@ The following finite construction follows
     ordered by depth, with $X=A\cap T$ and $U=P_0\setminus X$; arrows show the
     fill directions at the fronts, and brackets mark the charge intervals of
     oriented depth $[j-r_0,j+D]$ on the two sides.
-    \begin{tenkzequation}
-        % Source: arXiv OpenAI2026AreaLaw, sections/08-scanner.tex:156--192
-        % (figure scanner:figure), prose lines 92--130; fronts (scanner:fronts).
-        % Geometry only: there are no tensors, contractions or open indices,
-        % and the boundary signature is empty.
-        % Horizontal axis: unsigned depth d(x), increasing to the east
-        % (column 2 is d=0); it is not a lattice direction. Not to scale:
-        % r_0 << D << m and the band spacing 8m are compressed.
-        % Rows 2 and 5: bands g and g+1; each dot is one depth row of A
-        % (a dot is a set of sites, not a tensor). Tinted enclosures are the nominal
-        % parts X=A cap T, U=P_0 minus X, the middle Y and the far side V
-        % (only sites of A are drawn; Lambda minus A also lies in V).
-        % Rows 1 and 4: fill arrows. The near front j_P (first column of Y)
-        % fills toward larger depth; the far front, at unsigned depth -j_F
-        % (last column of Y, j_F being oriented), fills toward smaller depth.
-        % Brackets under rows 2 and 5: charge intervals. Near side: depths
-        % [j_P-r_0, j_P+D]; far side: oriented depths [j_F-r_0, j_F+D], i.e.
-        % unsigned depths [-j_F-D, -j_F+r_0]; drawn with r_0=D=1 column.
-        % Charges can assign sites inside these intervals, so the actual U,
-        % Y, V need not be depth intervals.
-        \tenkzkernel
-        \begin{tenkz}[size=s, metrics=compact, rows={wire,wire,wire,wire,wire,wire,wire},
-                cols=18, bonds=none]
-            \tndeclare{species}{target}{hue=source:blue}
-            \tndeclare{species}{near}{hue=source:green!50!black}
-            \tndeclare{species}{middle}{hue=source:orange!85!black}
-            \tndeclare{species}{far}{hue=source:gray}
-            \tndeclare{species}{charge}{hue=source:black}
-            \tnmark[form=label, label pos=w]{(2,1)}{$g$}
-            \tn[at=(2,2)]{} \tn[at=(2,3)]{} \tn[at=(2,4)]{} \tn[at=(2,5)]{}
-            \tn[at=(2,6)]{} \tn[at=(2,7)]{} \tn[at=(2,8)]{} \tn[at=(2,9)]{}
-            \tn[at=(2,10)]{} \tn[at=(2,11)]{} \tn[at=(2,12)]{} \tn[at=(2,13)]{}
-            \tn[at=(2,14)]{} \tn[at=(2,15)]{} \tn[at=(2,16)]{} \tn[at=(2,17)]{}
-            \tn[at=(2,18)]{}
-            \tnmark[form=enclosure, species=target, tint, label pos=n]{(2,2)}{$X$}
-            \tnmark[form=enclosure, species=near, tint, label pos=n]{(2,3) .. (2,5)}{$U$}
-            \tnmark[form=enclosure, species=middle, tint, label pos=n]{(2,6) .. (2,11)}{$Y$}
-            \tnmark[form=enclosure, species=far, tint, label pos=n]{(2,12) .. (2,18)}{$V$}
-            \tnwire[kind=string, dir=to, name=scanNearFrontG]{(1,6)}{(1,7)}
-            \tnmark[form=label, label pos=n]{on scanNearFrontG 0.5}{$j_P$}
-            \tnwire[kind=string, dir=to, name=scanFarFrontG]{(1,11)}{(1,10)}
-            \tnmark[form=label, label pos=n]{on scanFarFrontG 0.5}{$-j_F$}
-            \tnmark[form=bracket, species=charge, label pos=s]{(2,5) .. (2,7)}{}
-            \tnmark[form=bracket, species=charge, label pos=s]{(2,10) .. (2,12)}{}
-            \tnmark[form=label, label pos=w]{(5,1)}{$g+1$}
-            \tn[at=(5,2)]{} \tn[at=(5,3)]{} \tn[at=(5,4)]{} \tn[at=(5,5)]{}
-            \tn[at=(5,6)]{} \tn[at=(5,7)]{} \tn[at=(5,8)]{} \tn[at=(5,9)]{}
-            \tn[at=(5,10)]{} \tn[at=(5,11)]{} \tn[at=(5,12)]{} \tn[at=(5,13)]{}
-            \tn[at=(5,14)]{} \tn[at=(5,15)]{} \tn[at=(5,16)]{} \tn[at=(5,17)]{}
-            \tn[at=(5,18)]{}
-            \tnmark[form=enclosure, species=target, tint, label pos=n]{(5,2)}{$X$}
-            \tnmark[form=enclosure, species=near, tint, label pos=n]{(5,3) .. (5,11)}{$U$}
-            \tnmark[form=enclosure, species=middle, tint, label pos=n]{(5,12) .. (5,17)}{$Y$}
-            \tnmark[form=enclosure, species=far, tint, label pos=n]{(5,18)}{$V$}
-            \tnwire[kind=string, dir=to, name=scanNearFrontH]{(4,12)}{(4,13)}
-            \tnmark[form=label, label pos=n]{on scanNearFrontH 0.5}{$j_P$}
-            \tnwire[kind=string, dir=to, name=scanFarFrontH]{(4,17)}{(4,16)}
-            \tnmark[form=label, label pos=n]{on scanFarFrontH 0.5}{$-j_F$}
-            \tnmark[form=bracket, species=charge, label pos=s]{(5,11) .. (5,13)}{}
-            \tnmark[form=bracket, species=charge, label pos=s]{(5,16) .. (5,18)}{}
-            \tnwire[kind=string, dir=to, name=scanDepthAxis]{(7,2)}{(7,18)}
-            \tnmark[form=label, label pos=e]{(7,18)}{$d$}
-        \end{tenkz}
-    \end{tenkzequation}
+    \input{figures/al_scan_actual_histories}
 \end{definition}
 
 \begin{theorem}[Normalized classical histories and deterministic fronts]
@@ -1445,6 +1382,35 @@ The following finite construction follows
     regularity. For the actual charge defect the finite split-entropy symbol
     is continuous in the coherent vector, and the actual admissibility and
     commutation statements supply the structural hypotheses.
+\end{proof}
+
+\begin{theorem}[Selection of an actual charge defect]
+    \label{thm:al_scan_actual_charge_selection}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualCharge_point_of_sum_integral_le}
+    \leanok
+    \uses{def:al_scan_actual_charge_data}
+    Fix a collar scan with positive offset, charge-slot and auxiliary counts
+    $n,m,M$, positive finite factor dimensions, energy terms, a replica
+    count $k\ge0$, a supplied prevector, and $a\ge0$.
+    For $0\le s<nm$, let $\mathcal Q_s(p)$ be its actual good-history charge
+    defect with metric parameter $a/2$. Suppose $0\le p_0<p_1\le1$,
+    $\rho>0$, and $B\in\mathbb R$ satisfy
+    \begin{align}
+        \rho\sum_{s=0}^{nm-1}\int_{p_0}^{p_1}\mathcal Q_s(p)\,dp & \le B.
+    \end{align}
+    Then some $0\le s<nm$ and $p\in[p_0,p_1]$ satisfy
+    $\mathcal Q_s(p)\le B/(\rho nm(p_1-p_0))$.
+    This is the finite averaging step in the scanner argument of
+    \cite{OpenAI2026AreaLaw}, applied to the actual charge defects.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scan_old_parameter_integral}
+    Each $\mathcal Q_s$ is interval integrable on $[0,1]$, hence on
+    $[p_0,p_1]$. Divide the integrated inequality by $\rho$ and put
+    $c=B/(\rho nm(p_1-p_0))$. Finite averaging gives a stage $s$ with
+    $\int_{p_0}^{p_1}\mathcal Q_s\le(p_1-p_0)c$.
+    If $\mathcal Q_s(p)>c$ throughout $[p_0,p_1]$, strict positivity of
+    the integral of $\mathcal Q_s-c$ on $(p_0,p_1)$ contradicts this bound.
 \end{proof}
 
 \begin{theorem}[Actual old-state entropy sampling]
@@ -2913,6 +2879,96 @@ The finite-leaf estimates below follow the charge-energy argument in
     sets and transport data can be proved separately for the fill and charge
     cases, identifying their conditional-choice sets with $\mathcal C_{j,h}$.
 \end{definition}
+
+\begin{theorem}[Global replica energy of the actual scan rounds]
+    \label{thm:al_scan_actual_round_global_energy}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillScanRound_meanEnergy_eq_globalReplicaMeanHamiltonian,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_meanEnergy_eq_globalReplicaMeanHamiltonian}
+    \leanok
+    \uses{thm:al_scan_literal_scalars,thm:al_scan_global_replica_expectation}
+    Fix an actual fill or charge round, with positive physical and auxiliary dimensions
+    $q,d$, scan scale $m>0$, padded charge capacity $M>0$, and
+    interpolation scale $a/2$.
+    Let $H=\sum_i\widetilde H_i$ be the sum of its truncated physical
+    terms, formed from the same reference state. For any supplied replica
+    vector $\mathrm{pre}_k$ and any real interpolation parameter $p$,
+    let $\mathcal M$ be its mean at the parameter clamped to $[0,1]$. Put
+    \begin{align}
+        v & =\frac{\mathcal M^{-1/4}\mathrm{pre}_k}
+        {\|\mathcal M^{-1/4}\mathrm{pre}_k\|},
+        \qquad v_O=v\circ e_k,
+    \end{align}
+    with the normalized vector interpreted as zero when its numerator is
+    zero. The mean energy of this round satisfies
+    \begin{align}
+        \mathcal E_k(p)
+         & =\operatorname{Re}\langle v_O,\mathsf H_k v_O\rangle,
+    \end{align}
+    where $\mathsf H_k$ is the physical replica mean of $H$, extended by
+    both auxiliary identities in the successive physical, $C$, $R$
+    coordinates. This is the replica mean in
+    \cite[Section~9, scanner energy output]{OpenAI2026AreaLaw}.
+    The equality includes $k=0$. It imposes no eigenvalue
+    equation or additional assumption on the supplied vector.
+\end{theorem}
+\begin{proof}
+    \uses{thm:al_scan_global_replica_expectation}
+    \leanok
+    The actual mean energy is the real part of the scanner replica
+    energy in its filtered vector. Apply
+    Theorem~\ref{thm:al_scan_global_replica_expectation} to that same
+    vector and take real parts.
+\end{proof}
+
+\begin{theorem}[Low-defect mass of an actual charge vector]
+    \label{thm:al_scan_actual_charge_defect_mass}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.norm_filteredVector_actualChargeData,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_globalLowDefectProjection_mass_ge}
+    \leanok
+    \uses{thm:al_scan_actual_round_global_energy}
+    Use an actual charge round with $m,M>0$, physical and auxiliary
+    dimensions $q,d>0$, and metric parameter $a/2$ with $a\ge0$.
+    For every integer $k\ge0$, every nonzero supplied vector
+    $\mathrm{pre}_k$, and every real $p$, the filtered vector $v$ has
+    norm one. Write $v_O=v\circ e_k$ for the same
+    vector in the successive physical, $C$, $R$ coordinates, and retain
+    the physical Hamiltonian $H=\sum_i\widetilde H_i(\Omega)$ formed from
+    the original reference vector $\Omega$. Write $\mathcal E_k(p)$ for
+    the mean energy of this actual charge round.
+
+    Let $\widetilde\Omega$ be a supplied unit vector, separately from
+    $\Omega$. Suppose $g>0$ and
+    \begin{align}
+        H-e_0 I-g(I-|\widetilde\Omega\rangle
+        \langle\widetilde\Omega|)\ge0.
+    \end{align}
+    For $k\ge1$, suppose that $v_O$ is invariant under simultaneous
+    copy permutations and lies in the two auxiliary isotypic spaces
+    labelled by $\lambda_C,\lambda_R$. Let
+    $\mathsf D_k=\sum_{j=0}^{k-1}(I-|\widetilde\Omega\rangle
+        \langle\widetilde\Omega|)_j$ be the physical-copy defect count.
+    For $\tau>0$, let $\Pi_{k,\tau}$ be the product of its closed
+    spectral projection $\mathbf 1_{(-\infty,\tau k]}(\mathsf D_k)$,
+    the two auxiliary label projections, and the projection onto
+    simultaneous copy symmetry, all in the coordinates of $v_O$. Then
+    \begin{align}
+        1-\frac{\mathcal E_k(p)-e_0}{g\tau}
+        \le\operatorname{Re}\langle v_O,\Pi_{k,\tau}v_O\rangle.
+    \end{align}
+    This is the gap estimate of
+    \cite[Section~8, defect-mass comparison]{OpenAI2026AreaLaw},
+    applied to the vector of the actual charge round.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_scan_actual_round_global_energy}
+    The actual metric root is positive definite. The nonzero initial
+    vector therefore gives $\langle v,v\rangle=1$, and the coordinate
+    bijection preserves its norm. The gap estimate for the common
+    low-defect projection bounds its loss of mass by the excess replica
+    mean energy divided by $g\tau$. Substitute the actual energy identity of
+    Theorem~\ref{thm:al_scan_actual_round_global_energy}.
+\end{proof}
 
 \begin{theorem}[Common transport errors for all actual scan rounds]
     \label{thm:al_scan_actual_round_transport}

@@ -11,6 +11,7 @@ import tempfile
 from collections import Counter
 from pathlib import Path
 
+from blueprint_tex_tree import read_tex_tree
 from tenkz_paths import ensure_pythonpath, tenkz_tex
 
 ensure_pythonpath()
@@ -22,19 +23,6 @@ SOURCE_ROOT = ROOT / "blueprint/src"
 CHAPTER = SOURCE_ROOT / "chapter/ch26_mps_rfp_core.tex"
 BEGIN = "% TENKZ-II-RFP-BEGIN"
 END = "% TENKZ-II-RFP-END"
-
-
-def read_tex_tree(path: Path) -> str:
-    """Read a TeX source after recursively expanding its input wrappers."""
-    source = path.read_text(encoding="utf-8")
-
-    def expand(match: re.Match[str]) -> str:
-        target = match.group(1)
-        if not target.endswith(".tex"):
-            target += ".tex"
-        return read_tex_tree(SOURCE_ROOT / target)
-
-    return re.sub(r"\\input\{([^}]+)\}", expand, source)
 
 
 # The figure's contraction graph, spelled endpoint by endpoint.  An

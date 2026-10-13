@@ -461,7 +461,75 @@ normalizations.
 - **Caveat:** blocked, coarse, reindexed and transported tensors inside proofs
   keep `IsVertexInjective` with positivity derived or stated separately; only
   the source-facing theorems (the injective Fundamental Theorem, its uniqueness
-  clause, and their cycle and torus corollaries) take this structure.
+  clause, their cycle and torus corollaries, and the parent-Hamiltonian
+  support, rank and one-dimensionality results on general graphs) take this
+  structure; the span and kernel descriptions of the parent ground space keep
+  `IsVertexInjective` alone.
+
+#### `TNLean.PEPS.NormalPEPSPairHypotheses`
+
+- **Declaration:** `TNLean.PEPS.NormalPEPSPairHypotheses (A B : Tensor G d)`, a
+  structure extending `NormalPEPSBlockingHypotheses` at the doubly injective
+  assignment of `A` and `B`, with fields `bondDim_pos_left` and
+  `bondDim_pos_right`.
+- **Defined in:** `TNLean/PEPS/NormalBondDimension.lean`.
+- **Meaning:** two normal PEPS tensors in the setting of the general normal
+  Fundamental Theorem: shared edge blockings and one-site comparison regions,
+  each region injective for both tensors, and every virtual bond space of both
+  tensors nonzero.
+- **Source:** arXiv:1804.04964 §3, theorem labelled `normal`,
+  `Papers/1804.04964/paper_normal.tex:1576-1583`, with normality as defined at
+  line 1318; the nonzero bond spaces are recorded as a Local fix in
+  `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+- **Sanctioned bridges:** the structure projections and the structure-instance
+  constructor.
+- **Caveat:** it carries data (the blocking regions), so it is a `Type`, not a
+  `Prop`. The one-edge and coherent-frame steps keep explicit positivity,
+  because they see their tensors only through blocking data.
+
+#### Fixed-lattice normal tensor hypotheses
+
+- **Declarations:** four `Prop` structures, each extending a region-family
+  hypothesis at `regionInjectivityDataOf A` with the field
+  `bondDim_pos : ∀ e, 0 < A.bondDim e`:
+  - `TNLean.PEPS.IsNormalCycleArcMPS L A`, extending
+    `NormalCycleArcInjectivityHypotheses`, in
+    `TNLean/PEPS/CycleFundamentalTheorem.lean`;
+  - `TNLean.PEPS.IsNormalTorusRectanglePEPS A`, extending
+    `NormalTorusRectangleInjectivityHypotheses`, in
+    `TNLean/PEPS/NormalTorusRectanglePEPS.lean`;
+  - `TNLean.PEPS.IsNormalSquareLatticeRectanglePEPS A`, extending
+    `NormalSquareLatticeRectangleInjectivityHypotheses`, in
+    `TNLean/PEPS/NormalSquareUnconditionalFundamentalTheorem.lean`;
+  - `TNLean.PEPS.IsNormalTorusArcWindowPEPS L K A`, extending
+    `NormalTorusArcWindowInjectivityHypotheses`, in
+    `TNLean/PEPS/TorusWindowComplement.lean`.
+- **Meaning:** one normal tensor in the setting of a fixed-lattice corollary:
+  the source's injective blocks (`L` consecutive sites on the closed chain,
+  `2 × 3` and `3 × 2` rectangles on the torus or the open square lattice,
+  cyclic `L × K` windows on the torus), with every virtual bond space nonzero.
+- **Source:** arXiv:1804.04964 §3, `Papers/1804.04964/paper_normal.tex`: the
+  closed-chain corollary at lines 1597-1622, Theorem 3 at lines 1453-1471, and
+  the window corollary at lines 2297-2318; the nonzero bond spaces are recorded
+  as a Local fix in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+- **Sanctioned bridges:** the structure projections and the anonymous
+  constructor; `IsNormalCycleArcMPS.pairHypotheses` builds
+  `NormalPEPSPairHypotheses` on the cycle, and
+  `IsNormalTorusRectanglePEPS.unionClosure` gives union closure.
+- **Caveat:** the region-family structures they extend are indexed by an
+  injectivity assignment, not by a tensor, so they cannot carry the
+  convention themselves. The source-facing existence, bond-dimension and
+  uniqueness theorems take the tensor structures and state no separate
+  positivity; this includes the torus uniqueness clauses
+  `torusAbsorbedGauge_unique_scalar`,
+  `torusCovariantAbsorbedGauge_unique_classScalar`,
+  `torusGauge_unique_scalar_of_perVertex` (both tensors through
+  `IsNormalTorusRectanglePEPS`) and
+  `torusGauge_unique_scalar_of_normalArcWindows` (the second tensor through
+  `IsNormalTorusArcWindowPEPS`). Internal steps that see a tensor only through
+  region data, such as `torusAbsorbedGauge_unique_scalar_of_region`, keep
+  explicit positivity, because injectivity of regions does not force nonzero
+  bonds; the source-facing theorems supply it.
 
 #### `TNLean.PEPS.RegionBlockedTensorInjective`
 

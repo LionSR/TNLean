@@ -1994,10 +1994,14 @@ Ref.~\cite{Molnar2018NormalPEPS}; source file
           hypotheses, since the families of gauges it compares are typed by the
           identification of the two bond spaces that the existence theorem
           produces.
-    \item \emph{Positive bonds and connectivity.}  These are the
-          counterexample-backed corrections carried over from the injective
-          theorem (\path{docs/paper-gaps/peps_injective_ft_section3_route.tex}
-          and \path{docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex});
+    \item \emph{Nonzero bonds and connectivity.}  The nonzero virtual bond
+          spaces are the source's convention, carried by the hypothesis on two
+          normal PEPS tensors
+          \leanid{TNLean.PEPS.NormalPEPSPairHypotheses}
+          (\path{docs/paper-gaps/peps_injective_ft_section3_route.tex}).
+          Connectivity is the counterexample-backed correction carried over
+          from the injective theorem
+          (\path{docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex});
           the scalar absorption is exactly the step that requires
           connectivity, matching the source's remark that the proportionality
           constants can be incorporated into the gauges.
@@ -2062,8 +2066,9 @@ lemma cancels the common blocked region against both sides.  The conjunction
 predicate of the formal hypotheses, each region injective for both tensors
 at once, is therefore the source's hypothesis set, and the connected-graph
 entry \path{thm:fundamentalTheorem_normalPEPS_connected} no longer counts it
-as a restriction; the remaining additions against the source statement are
-the counterexample-backed positivity and connectivity corrections shared
+as a restriction. The nonzero bond spaces are the source's convention,
+carried by the normal pair hypothesis; the remaining addition against the
+source statement is the counterexample-backed connectivity correction shared
 with the injective theorem.
 
 The source's remark after the theorem (line 1584 of
@@ -2221,11 +2226,12 @@ transports the corner-region comparison to every site with the same proportional
 scalars (\path{twoBlockScalarProportional_translate}), so the inserted-site extraction
 yields one ratio $\lambda = c_S/c_R$ at every vertex. The result is the unconditional
 torus theorem (\path{fundamentalTheorem_normalTorusPEPS_unconditional}): from
-translation invariance, matched positive bond dimensions, the same state, and the
-rectangle injectivity hypotheses alone, there are a translation-covariant gauge family
+translation invariance, the same state, and two normal tensors with injective
+rectangles alone (\path{IsNormalTorusRectanglePEPS}: rectangle injectivity and nonzero
+bond spaces), there are a translation-covariant gauge family
 and a single scalar $\lambda$ with $A_v = \lambda\cdot(\text{gauge action of } B)_v$ at
 every site and $\lambda^{nm}=1$. The union closure of injective regions is derived
-from the positive bond dimensions, not assumed.
+from the nonzero bond spaces, not assumed.
 
 One convention finding accompanies the closure. The ordered-edge normal form stores a
 wraparound edge with its endpoints swapped, so the absorbing family carries the
@@ -2327,9 +2333,12 @@ interior-window open-lattice theorem
 \leanid{TNLean.PEPS.fundamentalTheorem_normalSquarePEPS_unconditional} and the
 general-graph gauge-equivalence theorem
 \leanid{TNLean.PEPS.fundamentalTheorem_normalPEPS} now cover the corresponding
-square-lattice content without single-site injectivity: the former uses the stated
-rectangle-injectivity, matched-bond, same-state, and positivity hypotheses, while
-the latter uses the paired blocking, single-crossing, same-state, positivity, and
+square-lattice content without single-site injectivity: the former uses the
+hypothesis on normal tensors with injective rectangles, which carries the rectangle
+injectivity and the nonzero bond spaces, with the matched-bond and same-state
+hypotheses, while
+the latter uses the normal pair hypothesis, which carries the paired blocking and
+the nonzero bond spaces, together with the single-crossing, same-state, and
 connectivity hypotheses. Gone are: the conditional
 statements themselves (\path{fundamentalTheorem_normalSquarePEPS},
 \path{fundamentalTheorem_normalSquarePEPS_of_modScalarGauge},

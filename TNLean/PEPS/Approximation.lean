@@ -37,6 +37,7 @@ import TNLean.PEPS.Approximation.ActualSourceSampling
 import TNLean.PEPS.Approximation.AffectedOwners
 import TNLean.PEPS.Approximation.AffectedPhysicalDimension
 import TNLean.PEPS.Approximation.AllPartialGate
+import TNLean.PEPS.Approximation.AllPartyBranchLocality
 import TNLean.PEPS.Approximation.AllPartySingletonCircuitComparison
 import TNLean.PEPS.Approximation.AllPartySingletonComparison
 import TNLean.PEPS.Approximation.AllSourceSlots
@@ -330,12 +331,14 @@ import TNLean.PEPS.Approximation.SourceSlotMaps
 import TNLean.PEPS.Approximation.SourceSubstitutionInventory
 import TNLean.PEPS.Approximation.SourceSubstitutionResidual
 import TNLean.PEPS.Approximation.SourceWordParties
+import TNLean.PEPS.Approximation.SpectatorOwnerExclusion
 import TNLean.PEPS.Approximation.SquareAreaLawHamiltonian
 import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
 import TNLean.PEPS.Approximation.SquareHamiltonianHermitianTerms
 import TNLean.PEPS.Approximation.SquareLatticeConnectivity
+import TNLean.PEPS.Approximation.SupportedPhysicalBufferGaussian
 import TNLean.PEPS.Approximation.SwappedSquareHamiltonianBoundary
 import TNLean.PEPS.Approximation.SwappedSquareHamiltonianInteraction
 import TNLean.PEPS.Approximation.TensorSchmidtIsometries

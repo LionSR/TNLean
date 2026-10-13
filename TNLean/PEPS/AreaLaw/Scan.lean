@@ -14,11 +14,14 @@ import TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyCoefficients
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyDecay
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeEntropySum
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeParameterBound
+import TNLean.PEPS.AreaLaw.Scan.ActualChargeSelection
 import TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms
 import TNLean.PEPS.AreaLaw.Scan.ActualEntropySampling
+import TNLean.PEPS.AreaLaw.Scan.ActualGlobalReplicaEnergy
 import TNLean.PEPS.AreaLaw.Scan.ActualHistory
 import TNLean.PEPS.AreaLaw.Scan.ActualMarginalTails
 import TNLean.PEPS.AreaLaw.Scan.ActualParameterIntegral
+import TNLean.PEPS.AreaLaw.Scan.ActualReplicaDefect
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundEntropy
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundParameterIntegral
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport
@@ -32,6 +35,7 @@ import TNLean.PEPS.AreaLaw.Scan.AssignedLead
 import TNLean.PEPS.AreaLaw.Scan.AugmentedEnergyCoordinates
 import TNLean.PEPS.AreaLaw.Scan.AugmentedPartition
 import TNLean.PEPS.AreaLaw.Scan.AugmentedReplicaMetricCoordinates
+import TNLean.PEPS.AreaLaw.Scan.AugmentedRootCompression
 import TNLean.PEPS.AreaLaw.Scan.BadChargeRatioBound
 import TNLean.PEPS.AreaLaw.Scan.BadHistoryAsymptotics
 import TNLean.PEPS.AreaLaw.Scan.BadHistoryGeometricTail
@@ -47,6 +51,7 @@ import TNLean.PEPS.AreaLaw.Scan.BandUniqueness
 import TNLean.PEPS.AreaLaw.Scan.BootstrapBinaryEntropyCost
 import TNLean.PEPS.AreaLaw.Scan.BootstrapComparisonBudget
 import TNLean.PEPS.AreaLaw.Scan.BootstrapParameters
+import TNLean.PEPS.AreaLaw.Scan.BootstrapPrincipalEnergyBounds
 import TNLean.PEPS.AreaLaw.Scan.BootstrapReplicaAbsorption
 import TNLean.PEPS.AreaLaw.Scan.BootstrapRoundedClearance
 import TNLean.PEPS.AreaLaw.Scan.Budgets

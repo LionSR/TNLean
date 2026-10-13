@@ -18,14 +18,15 @@ import TNLean.PEPS.NormalBondDimension
 This file assembles the unconditional interior form of the normal PEPS Fundamental Theorem on
 the finite **open** `width × height` square lattice (arXiv:1804.04964, Section 3, Theorem 3,
 lines 1449--1571 of `Papers/1804.04964/paper_normal.tex`): from the source hypotheses alone ---
-the rectangular-injectivity hypotheses for both tensors, matched bond dimensions, positive
-bonds, and the same state --- it produces a per-edge gauge family `X` with
+two normal tensors with the rectangular-injectivity hypotheses
+(`IsNormalSquareLatticeRectanglePEPS`), matched bond dimensions, and the same state --- it
+produces a per-edge gauge family `X` with
 
 * the bare-edge absorbed equality at every edge with interior margins, and
 * at every vertex in the interior comparison window, a nonzero scalar `λ_v` with the per-vertex
   relation `A_v = λ_v · (gauge action of B at v)`.
 
-The union closure of injective regions is derived from the positive bonds
+The union closure of injective regions is derived from the nonzero bonds
 (`regionInjectivityUnionClosure_of_overlap`), not assumed, and no single-vertex injectivity is
 used anywhere.  This is the open-lattice analogue of the torus assembly
 (`fundamentalTheorem_normalTorusPEPS_unconditional`), in the scope the open blocking geometry
@@ -51,6 +52,14 @@ obligations".
    chosen independently.  A single `λ` is in fact false without a translation-invariance
    hypothesis: rescaling `A`'s components at two interior vertices by `μ` and `μ⁻¹` preserves
    the state and the rectangular injectivity but separates the two scalars.
+
+**Local fix (nonzero virtual spaces):** the source treats the virtual bond spaces as nonzero
+(arXiv:1804.04964, lines 582 and 1037 of `Papers/1804.04964/paper_normal.tex`) without listing
+this among the hypotheses of Theorem 3.  The tensor hypothesis
+`IsNormalSquareLatticeRectanglePEPS` carries it as the field `bondDim_pos`, so the final
+theorem states no separate positivity hypothesis.  The interior steps before it take the
+rectangle hypotheses as region data and receive the positivity from that theorem.  Documented
+in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 
 The open lattice carries no translation automorphisms: partial translations are
 not graph automorphisms, so `IsTorusTranslationInvariant` has no open-lattice
@@ -88,6 +97,25 @@ normally.  All proofs below treat `gaugeVertex` as opaque, so nothing else chang
 seal gaugeVertex
 
 variable {width height d : ℕ}
+
+/-- A normal PEPS tensor on the open square lattice in the setting of Theorem 3: every
+contiguous `2 × 3` and `3 × 2` rectangle is injective, and every virtual bond space is
+nonzero.  The rectangle fields are the region-family hypothesis
+`NormalSquareLatticeRectangleInjectivityHypotheses` read for the injective regions of the
+tensor.
+
+The field `bondDim_pos` is the nonzero virtual-space convention of the module docstring.
+
+Source: arXiv:1804.04964, Section 3, Theorem 3, lines 1453--1454 of
+`Papers/1804.04964/paper_normal.tex` ("two normal 2D PEPS tensors such that every `2 × 3`
+and `3 × 2` region is injective"), with normality as defined at line 1318. -/
+structure IsNormalSquareLatticeRectanglePEPS (A : Tensor (squareLatticeGraph width height) d) :
+    Prop extends NormalSquareLatticeRectangleInjectivityHypotheses
+      (regionInjectivityDataOf (G := squareLatticeGraph width height) A) where
+  /-- Every virtual bond space is nonzero: the source's bond spaces are nonzero throughout
+  (arXiv:1804.04964, lines 582 and 1037 of `Papers/1804.04964/paper_normal.tex`); the
+  convention is recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
+  bondDim_pos : ∀ e : Edge (squareLatticeGraph width height), 0 < A.bondDim e
 
 /-- **Per-edge bond dimension equality at interior edges from rectangular injectivity.**
 
@@ -387,8 +415,9 @@ theorem exists_windowScalar_of_interiorAbsorbed
 /-- **Unconditional normal PEPS Fundamental Theorem on the open square lattice (interior
 window).**
 
-For two tensors on the open `width × height` square lattice with the rectangular-injectivity
-hypotheses, matched bond dimensions, positive bonds, and the same state, there is a per-edge
+For two normal tensors on the open `width × height` square lattice with the
+rectangular-injectivity hypotheses (`IsNormalSquareLatticeRectanglePEPS`), matched bond
+dimensions, and the same state, there is a per-edge
 gauge family `X` over the second tensor's bonds such that
 
 * the bare-edge absorbed equality holds at every edge with interior margins: inserting `N` on
@@ -398,7 +427,7 @@ gauge family `X` over the second tensor's bonds such that
   `A_v = λ_v · (gauge action of B at v)` on every local virtual configuration and physical
   index.
 
-The union closure of injective regions is derived from the positive bonds; the comparison pair
+The union closure of injective regions is derived from the nonzero bonds; the comparison pair
 at `v` is the `3 × 3` square at `v` minus its corner and the completed square, whose
 proportionality scalars `c_R`, `c_S` give `λ_v = c_S / c_R` by the inserted-site scalar
 extraction.
@@ -414,13 +443,8 @@ Source: arXiv:1804.04964, Section 3, Theorem 3, lines 1449--1571 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem fundamentalTheorem_normalSquarePEPS_unconditional
     (A B : Tensor (squareLatticeGraph width height) d)
-    (hAr : NormalSquareLatticeRectangleInjectivityHypotheses
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) A))
-    (hBr : NormalSquareLatticeRectangleInjectivityHypotheses
-            (regionInjectivityDataOf (G := squareLatticeGraph width height) B))
-    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
-    (hposA : ∀ g : Edge (squareLatticeGraph width height), 0 < A.bondDim g)
-    (hposB : ∀ g : Edge (squareLatticeGraph width height), 0 < B.bondDim g) :
+    (hA : IsNormalSquareLatticeRectanglePEPS A) (hB : IsNormalSquareLatticeRectanglePEPS B)
+    (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d) :
     ∃ X : (e : Edge (squareLatticeGraph width height)) → GL (Fin (B.bondDim e)) ℂ,
       (∀ e : Edge (squareLatticeGraph width height),
         NormalSquareInteriorEdgeDatum e →
@@ -438,7 +462,11 @@ theorem fundamentalTheorem_normalSquarePEPS_unconditional
             A.component v η σ =
               lam * gaugeVertex B X v (fun ie => Fin.cast (congr_fun hbond ie.1) (η ie)) σ := by
   classical
-  -- The union closure of injective regions, from positive bonds.
+  have hAr := hA.toNormalSquareLatticeRectangleInjectivityHypotheses
+  have hBr := hB.toNormalSquareLatticeRectangleInjectivityHypotheses
+  have hposA := hA.bondDim_pos
+  have hposB := hB.bondDim_pos
+  -- The union closure of injective regions, from the nonzero bonds.
   have hUA : RegionInjectivityUnionClosure
       (regionInjectivityDataOf (G := squareLatticeGraph width height) A) :=
     regionInjectivityUnionClosure_of_overlap A hposA

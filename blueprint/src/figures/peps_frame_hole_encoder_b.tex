@@ -1,0 +1,22 @@
+% Figure peps_frame_hole_encoder_b.
+% Owner: chapter/ch24_peps_encoded_frames.tex (def:peps_frame_hole_encoder, second display).
+% Used by: gapped-2d-notes PP Sec. 6, side by side with peps_hole_encoder under
+% the joiner =sum_{j,l}. It reads left to right (input west, outputs east),
+% against the notes' right-to-left convention; the note says so.
+% Source: arXiv OpenAI2026PolynomialPEPS, 05-frames.tex, lines 26--69
+% (eq. hole-encoder); no source figure.
+% Second picture: the box is K_{c,h}. Its west leg is the input
+% H_Lambda; its two east legs are the outputs, the tag J_{c,h} (upper)
+% and the raw registers H_Lambda (lower), so K_{c,h} maps H_Lambda to
+% J_{c,h} (x) H_Lambda. All three legs are open physical legs; boundary
+% signature (phys:w | phys:e, phys:e). Each tag value |j,l> applies
+% <v_{jl}| on D_j and re-prepares |0> on D_j, as in eq. hole-encoder.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
+        \tn[at=(1,1), skin=box, wires=2,
+            ports={180@2:physical:$\mathcal H_\Lambda$,
+                    0@1:physical:$\mathcal J_{c,h}$,
+                    0@2:physical:$\mathcal H_\Lambda$}]{K_{c,h}}
+    \end{tenkz}
+\end{tenkzequation}
