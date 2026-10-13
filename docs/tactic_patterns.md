@@ -7290,6 +7290,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   retained. No arbitrary heterogeneous-equality premise or new isometry is
   introduced. Compilation of this promotion is pending with the endpoint
   congruence development.
+- **Input-only form (2026-10-13):** `Word.restrict_castInput_eval_heq` in
+  `WordRestriction.lean` derives the evaluation identity for a word cast along
+  an equality of its input layout only from `Word.restrict_castLayouts` with
+  equal output layouts and the evaluation-transport lemma. It replaced the
+  byte-identical private helpers of `NoneResidualOperations.lean` and
+  `NoneResidualScalar.lean`, where the word identity cannot be applied by
+  rewriting because the restriction's source argument depends on the cast
+  word.
+
 ### Actual-round cross-band commutation — candidate (2026-10-11)
 
 - **Pattern:** Apply `actualRoundData_induction` to a choice-independent property,
