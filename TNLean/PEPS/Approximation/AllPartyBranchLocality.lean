@@ -61,16 +61,17 @@ theorem restrict_partialWord_all_localPart_eval_heq_of_projectAllChoices_eq
     (partialWord (fun _ : P => true) w ξ).sources_localPart).eval
       ((partialWord (fun _ : P => true) w ζ).localPart.restrict f
         (partialWord (fun _ : P => true) w ζ).sources_localPart).eval
-  induction w generalizing ξ ζ with
+  induction w with
   | id => rfl
   | comp w v ihw ihv =>
-      exact Word.restrict_localPart_comp_eval_heq f
+      have hcomp := Word.restrict_localPart_comp_eval_heq f
         (partialWord (fun _ : P => true) w ξ.1) (partialWord (fun _ : P => true) v ξ.2)
         (partialWord (fun _ : P => true) w ζ.1) (partialWord (fun _ : P => true) v ζ.2)
         rfl rfl rfl
         (selected_sources_partialWord_all_eq w f ξ.1 ζ.1)
         (selected_sources_partialWord_all_eq v f ξ.2 ζ.2)
         (ihw ξ.1 ζ.1 (congrArg Prod.fst h)) (ihv ξ.2 ζ.2 (congrArg Prod.snd h))
+      exact hcomp
   | localMap => rfl
   | @gate C ι _ _ owner a b c G tail =>
       by_cases hf : ∃ t : C, A (owner t) = true
