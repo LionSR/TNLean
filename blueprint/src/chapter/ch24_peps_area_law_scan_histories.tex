@@ -2787,6 +2787,56 @@ The following finite construction follows
     vector and take real parts.
 \end{proof}
 
+\begin{theorem}[Low-defect mass of an actual charge vector]
+    \label{thm:al_scan_actual_charge_defect_mass}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.norm_filteredVector_actualChargeData,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_globalLowDefectProjection_mass_ge}
+    \leanok
+    \uses{thm:al_scan_actual_round_global_energy}
+    Use an actual charge round with $m,M>0$, physical and auxiliary
+    dimensions $q,d>0$, and metric parameter $a/2$ with $a\ge0$.
+    For every integer $k\ge0$, every nonzero supplied vector
+    $\mathrm{pre}_k$, and every real $p$, the filtered vector $v$ has
+    norm one. Write $v_O=v\circ e_k$ for the same
+    vector in the successive physical, $C$, $R$ coordinates, and retain
+    the physical Hamiltonian $H=\sum_i\widetilde H_i(\Omega)$ formed from
+    the original reference vector $\Omega$. Write $\mathcal E_k(p)$ for
+    the mean energy of this actual charge round.
+
+    Let $\widetilde\Omega$ be a supplied unit vector, separately from
+    $\Omega$. Suppose $g>0$ and
+    \begin{align}
+        H-e_0 I-g(I-|\widetilde\Omega\rangle
+        \langle\widetilde\Omega|)\ge0.
+    \end{align}
+    For $k\ge1$, suppose that $v_O$ is invariant under simultaneous
+    copy permutations and lies in the two auxiliary isotypic spaces
+    labelled by $\lambda_C,\lambda_R$. Let
+    $\mathsf D_k=\sum_{j=0}^{k-1}(I-|\widetilde\Omega\rangle
+        \langle\widetilde\Omega|)_j$ be the physical-copy defect count.
+    For $\tau>0$, let $\Pi_{k,\tau}$ be the product of its closed
+    spectral projection $\mathbf 1_{(-\infty,\tau k]}(\mathsf D_k)$,
+    the two auxiliary label projections, and the projection onto
+    simultaneous copy symmetry, all in the coordinates of $v_O$. Then
+    \begin{align}
+        1-\frac{\mathcal E_k(p)-e_0}{g\tau}
+        \le\operatorname{Re}\langle v_O,\Pi_{k,\tau}v_O\rangle.
+    \end{align}
+    This is the gap estimate of
+    \cite[Section~7, defect-mass comparison]{OpenAI2026AreaLaw},
+    applied to the vector of the actual charge round.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_scan_actual_round_global_energy}
+    The actual metric root is positive definite. The nonzero initial
+    vector therefore gives $\langle v,v\rangle=1$, and the coordinate
+    bijection preserves its norm. The gap estimate for the common
+    low-defect projection bounds its loss of mass by the excess replica
+    mean energy divided by $g\tau$. Substitute the actual energy identity of
+    Theorem~\ref{thm:al_scan_actual_round_global_energy}.
+\end{proof}
+
 \begin{theorem}[Common transport errors for all actual scan rounds]
     \label{thm:al_scan_actual_round_transport}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRounds_transport_domainGraph,
