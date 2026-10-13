@@ -97,6 +97,16 @@ theorem exists_bootstrap_principal_energy_bound
               (192 * C)).eventuallyLE))))
   refine ⟨N, (hN N le_rfl).1.two_le_n, fun n hn e he ↦ ?_⟩
   obtain ⟨hf, hC₁n, hCδn, hlogδn, hlogCn⟩ := hN n hn
+  obtain ⟨hn₁, hn₀, hm₀, hK₀, hD₀, hC₁, hlogn⟩ :
+      (1 : ℝ) ≤ n ∧ 0 < (n : ℝ) ∧ 0 < (X.m n : ℝ) ∧
+        0 < (X.K n : ℝ) ∧ 0 < (X.D n : ℝ) ∧ 0 ≤ C₁ ∧ 0 ≤ Real.log (n : ℝ) :=
+    let hn₁ : (1 : ℝ) ≤ n := by
+      exact_mod_cast (le_trans (by norm_num : (1 : ℕ) ≤ 2) hf.two_le_n)
+    ⟨hn₁, zero_lt_one.trans_le hn₁,
+      Nat.cast_pos.mpr (zero_lt_one.trans_le hf.one_le_m),
+      Nat.cast_pos.mpr (zero_lt_one.trans_le hf.one_le_K),
+      Nat.cast_pos.mpr (zero_lt_one.trans_le hf.one_le_D),
+      zero_le_one.trans hf.one_le_C₁, Real.log_nonneg hn₁⟩
   done
 
 end TNLean.PEPS.AreaLaw.Scan
