@@ -87,6 +87,8 @@ theorem positiveDepthPrefix_eq_filter_ambientDilation
   simp only [Finset.ext_iff, positiveDepthPrefix, Finset.mem_filter, Finset.mem_sdiff]
   by_cases hj : 0 ≤ j
   · simp only [← ambientDepth_le_iff_mem_dilation T hT, Int.toNat_of_nonneg hj]
+    have hzero (x : ℤ × ℤ) : ambientDepth T hT x ≤ 0 ↔ x ∈ T :=
+      (ambientDilation_zero T) ▸ ambientDepth_le_iff_mem_dilation T hT x 0
     done
   · done
 
