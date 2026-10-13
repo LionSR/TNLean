@@ -26,6 +26,7 @@ import TNLean.PEPS.AreaLaw.FiniteSetTruncationSchmidtBellPrevector
 import TNLean.PEPS.AreaLaw.Geometry
 import TNLean.PEPS.AreaLaw.GlobalSchmidtBellPrevector
 import TNLean.PEPS.AreaLaw.GlobalSchmidtBellRoughLower
+import TNLean.PEPS.AreaLaw.GlobalSchmidtBellRoughUpper
 import TNLean.PEPS.AreaLaw.GraphExtendedMetric
 import TNLean.PEPS.AreaLaw.GraphInteractionBudget
 import TNLean.PEPS.AreaLaw.GraphInteractionChain
