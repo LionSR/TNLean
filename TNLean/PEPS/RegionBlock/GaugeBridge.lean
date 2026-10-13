@@ -90,6 +90,18 @@ noncomputable def pairOuterFiberPair (B : Tensor G d) (R : Finset V)
               else if _ : IsRegionIncidentEdge (G := G) R e then h ⟨e, hb⟩
               else pairOuterReadSnd (G := G) B R ξ e)
 
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- A boundary edge whose left endpoint lies outside `R` has its right endpoint in `R`. -/
+theorem boundary_right_mem (R : Finset V) {f : Edge G}
+    (hf : IsRegionBoundaryEdge (G := G) R f) (h1 : f.1.1 ∉ R) : f.1.2 ∈ R :=
+  hf.elim (fun h => absurd h.1 h1) And.right
+
+omit [Fintype V] [DecidableRel G.Adj] in
+/-- A boundary edge whose left endpoint lies in `R` has its right endpoint outside `R`. -/
+theorem boundary_right_not_mem (R : Finset V) {f : Edge G}
+    (hf : IsRegionBoundaryEdge (G := G) R f) (h1 : f.1.1 ∈ R) : f.1.2 ∉ R :=
+  hf.elim And.right (fun h => absurd h1 h.1)
+
 omit [Fintype V] in
 /-- Reading `ξ` at the in-region endpoint of an edge incident to a vertex `v ∈ R`, when `ξ`
 is consistent off `f` and the edge is not `f`, gives `ξ v ie`. -/
@@ -108,12 +120,7 @@ theorem pairOuterReadFst_eq (B : Tensor G d) (R : Finset V)
     · -- both endpoints in R; e is not boundary; if e ≠ f, consistency gives equality.
       by_cases hef : e = f.1
       · -- e = f but both endpoints in R contradicts f being a boundary edge.
-        exfalso
-        have hb := f.2
-        rw [← hef] at hb
-        rcases hb with ⟨_, h2⟩ | ⟨h1', _⟩
-        · exact h2 (by exact ‹e.1.2 ∈ R›)
-        · exact h1' h1
+        exact absurd hv (boundary_right_not_mem (G := G) R (hef ▸ f.2) h1)
       · exact (dite_eq_left h1).trans (hξ e hef)
     · exact dite_eq_right h1
 
@@ -134,12 +141,7 @@ theorem pairOuterReadSnd_eq (B : Tensor G d) (R : Finset V)
     · exact dite_eq_left h1
     · -- both endpoints not in R; e not boundary; if e ≠ f consistency gives equality.
       by_cases hef : e = f.1
-      · exfalso
-        have hb := f.2
-        rw [← hef] at hb
-        rcases hb with ⟨h1', _⟩ | ⟨_, h2⟩
-        · exact h1 h1'
-        · exact hv h2
+      · exact absurd (boundary_right_mem (G := G) R (hef ▸ f.2) h1) hv
       · exact (dite_eq_right h1).trans (hξ e hef)
 
 omit [Fintype V] in
@@ -217,17 +219,11 @@ theorem pairOuterFiber_card (B : Tensor G d) (R : Finset V)
       -- read-fst = read-snd on a boundary edge ≠ f, by consistency.
       have hcf : c.1 ≠ f.1 := fun h => hc (Subtype.ext h)
       by_cases h1 : c.1.1.1 ∈ R
-      · have h2 : c.1.1.2 ∉ R := by
-          rcases hcb with ⟨_, h2⟩ | ⟨h1', _⟩
-          · exact h2
-          · contradiction
+      · have h2 : c.1.1.2 ∉ R := boundary_right_not_mem (G := G) R hcb h1
         exact (pairOuterReadFst_eq B R f ξ hξ h1 (edgeLeftIncident c.1)).trans
           ((hξ c.1 hcf).trans
             (pairOuterReadSnd_eq B R f ξ hξ h2 (edgeRightIncident c.1)).symm)
-      · have h2 : c.1.1.2 ∈ R := by
-          rcases hcb with ⟨h1', _⟩ | ⟨_, h2⟩
-          · contradiction
-          · exact h2
+      · have h2 : c.1.1.2 ∈ R := boundary_right_mem (G := G) R hcb h1
         exact (pairOuterReadFst_eq B R f ξ hξ h2 (edgeRightIncident c.1)).trans
           ((hξ c.1 hcf).symm.trans
             (pairOuterReadSnd_eq B R f ξ hξ h1 (edgeLeftIncident c.1)).symm)
@@ -262,10 +258,7 @@ theorem pairOuterFiber_card (B : Tensor G d) (R : Finset V)
           rw [pairOuterReadSnd]
           by_cases h1 : e.1.1 ∈ R
           · -- e.1.1 ∈ R; boundary ⇒ e.1.2 ∉ R.
-            have h2 : e.1.2 ∉ R := by
-              rcases hb with ⟨_, hr⟩ | ⟨hl, _⟩
-              · exact hr
-              · exact absurd h1 hl
+            have h2 : e.1.2 ∉ R := boundary_right_not_mem (G := G) R hb h1
             exact (dite_eq_left h1).trans (ite_eq_right h2)
           · -- e.1.1 ∉ R; boundary ⇒ e.1.2 ∈ R, so the left endpoint is the complement side.
             exact (dite_eq_right h1).trans (ite_eq_right h1)
@@ -430,10 +423,7 @@ theorem regionInsertedCoeff_eq_smul_edgeInsertedCoeff (B : Tensor G d) (R : Fins
     simp only [H]
     congr 1
     by_cases h1 : f.1.1.1 ∈ R
-    · have h2 : f.1.1.2 ∉ R := by
-        rcases f.2 with ⟨_, hr⟩ | ⟨hl, _⟩
-        · exact hr
-        · contradiction
+    · have h2 : f.1.1.2 ∉ R := boundary_right_not_mem (G := G) R f.2 h1
       have hf := pairOuterReadFst_eq B R f ξ hξ h1 (edgeLeftIncident f.1)
       have hs := pairOuterReadSnd_eq B R f ξ hξ h2 (edgeRightIncident f.1)
       have hN := congrArg₂ N hf hs
@@ -441,10 +431,7 @@ theorem regionInsertedCoeff_eq_smul_edgeInsertedCoeff (B : Tensor G d) (R : Fins
       exact hN.trans (congrArg (fun M => M
         (ξ f.1.1.1 (edgeLeftIncident f.1))
         (ξ f.1.1.2 (edgeRightIncident f.1))) horient).symm
-    · have h2 : f.1.1.2 ∈ R := by
-        rcases f.2 with ⟨hl, _⟩ | ⟨_, hr⟩
-        · contradiction
-        · exact hr
+    · have h2 : f.1.1.2 ∈ R := boundary_right_mem (G := G) R f.2 h1
       have hf := pairOuterReadFst_eq B R f ξ hξ h2 (edgeRightIncident f.1)
       have hs := pairOuterReadSnd_eq B R f ξ hξ h1 (edgeLeftIncident f.1)
       have hN := congrArg₂ N hf hs
@@ -467,20 +454,14 @@ theorem regionInsertedCoeff_eq_smul_edgeInsertedCoeff (B : Tensor G d) (R : Fins
           (pairOuterReadFst_eq B R f (pairOuter B R p) hcons h1
             (edgeLeftIncident f.1)).symm
       · -- f.1.1 ∉ R, boundary ⇒ f.1.2 ∈ R; readFst reads the right (in-region) endpoint = p.1 f.
-        have h2 : f.1.1.2 ∈ R := by
-          rcases f.2 with ⟨hl, _⟩ | ⟨_, hr⟩
-          · exact absurd hl h1
-          · exact hr
+        have h2 : f.1.1.2 ∈ R := boundary_right_mem (G := G) R f.2 h1
         exact (ite_eq_left h2).symm.trans
           (pairOuterReadFst_eq B R f (pairOuter B R p) hcons h2
             (edgeRightIncident f.1)).symm
     · -- `pairOuterReadSnd (pairOuter p) f = p.2 f`.
       by_cases h1 : f.1.1.1 ∈ R
       · -- f.1.1 ∈ R, boundary ⇒ f.1.2 ∉ R; readSnd reads the right (complement) endpoint = p.2 f.
-        have h2 : f.1.1.2 ∉ R := by
-          rcases f.2 with ⟨_, hr⟩ | ⟨hl, _⟩
-          · exact hr
-          · exact absurd h1 hl
+        have h2 : f.1.1.2 ∉ R := boundary_right_not_mem (G := G) R f.2 h1
         exact (ite_eq_right h2).symm.trans
           (pairOuterReadSnd_eq B R f (pairOuter B R p) hcons h2
             (edgeRightIncident f.1)).symm

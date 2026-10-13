@@ -112,14 +112,6 @@ theorem nonboundary_right_not_mem (R : Finset V) {e : Edge G}
   intro h2
   exact he (Or.inr ⟨h1, h2⟩)
 
-omit [Fintype V] [DecidableRel G.Adj] in
-/-- A boundary edge whose left endpoint lies outside `R` has its right endpoint in `R`. -/
-theorem boundary_right_mem (R : Finset V) {f : Edge G}
-    (hf : IsRegionBoundaryEdge (G := G) R f) (h1 : f.1.1 ∉ R) : f.1.2 ∈ R := by
-  rcases hf with ⟨hl, _⟩ | ⟨_, hr⟩
-  · exact absurd hl h1
-  · exact hr
-
 /-- Read a region-local configuration at the in-region endpoint of a boundary edge of `R`. -/
 noncomputable def regionLocalBoundary (B : Tensor G d) (R : Finset V)
     (ξ : RegionLocalConfig (G := G) B R)
@@ -414,10 +406,7 @@ theorem regionGaugeFactor_boundary (B : Tensor G d)
     regionGaugeFactor (G := G) B X R ξ f.1 z =
       regionBoundaryGauge (G := G) B X R f z (regionLocalBoundary (G := G) B R ξ f) := by
   by_cases h1 : f.1.1.1 ∈ R
-  · have h2 : f.1.1.2 ∉ R := by
-      rcases f.2 with ⟨_, hr⟩ | ⟨hl, _⟩
-      · exact hr
-      · exact absurd h1 hl
+  · have h2 : f.1.1.2 ∉ R := boundary_right_not_mem (G := G) R f.2 h1
     let q : Fin (B.bondDim f.1) :=
       ξ ⟨f.1.1.1, h1⟩ (edgeLeftIncident (G := G) f.1)
     have hfactor : regionGaugeFactor (G := G) B X R ξ f.1 z =

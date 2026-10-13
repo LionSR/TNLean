@@ -275,16 +275,6 @@ theorem not_pairAlgSpan_eq_graph_algEquiv_of_not_gaugePhaseEquiv
   intro hS
   exact hNot (gaugePhaseEquiv_of_pairAlgSpan_eq_graph_algEquiv A B φ hS)
 
-private theorem subalgebra_prod_eq_top_of_axes {R A B : Type*}
-    [CommSemiring R] [Semiring A] [Algebra R A] [Semiring B] [Algebra R B]
-    (S : Subalgebra R (A × B))
-    (hfst : ∀ x : A, (x, 0) ∈ S)
-    (hsnd : ∀ y : B, (0, y) ∈ S) :
-    S = ⊤ := by
-  apply eq_top_iff.mpr
-  rintro ⟨x, y⟩ _
-  simpa using S.add_mem (hfst x) (hsnd y)
-
 /-- If both coordinate axes lie in a matrix-pair subalgebra, the subalgebra is
 the whole product. This is the top branch of the subdirect-product dichotomy
 used in the pair-algebra density argument. -/
@@ -292,8 +282,10 @@ theorem matrixPairSubalgebra_eq_top_of_axes {D₁ D₂ : ℕ}
     (S : Subalgebra ℂ (MatD D₁ × MatD D₂))
     (hfst : ∀ x : MatD D₁, (x, 0) ∈ S)
     (hsnd : ∀ y : MatD D₂, (0, y) ∈ S) :
-    S = ⊤ :=
-  subalgebra_prod_eq_top_of_axes S hfst hsnd
+    S = ⊤ := by
+  apply eq_top_iff.mpr
+  rintro ⟨x, y⟩ _
+  simpa using S.add_mem (hfst x) (hsnd y)
 
 private noncomputable def leftAxisIdeal {D₁ D₂ : ℕ}
     (S : Subalgebra ℂ (MatD D₁ × MatD D₂))

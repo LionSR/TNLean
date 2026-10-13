@@ -211,20 +211,9 @@ theorem isRegionBoundaryEdge_insert_of_vIncident_not_regionIncident (R : Finset 
     {v : V} {e : Edge G} (hev : e.1.1 = v ∨ e.1.2 = v)
     (hnr : ¬ IsRegionIncidentEdge (G := G) R e) :
     IsRegionBoundaryEdge (G := G) (insert v R) e := by
-  have h1 : e.1.1 ∉ R := fun h => hnr (Or.inl h)
-  have h2 : e.1.2 ∉ R := fun h => hnr (Or.inr h)
-  rcases hev with he | he
-  · -- `e.1.1 = v`; the other endpoint is outside `insert v R`.
-    refine Or.inl ⟨he ▸ Finset.mem_insert_self v R, ?_⟩
-    rw [Finset.mem_insert]
-    rintro (hc | hc)
-    · exact (G.ne_of_adj e.2.2) (by rw [he, hc])
-    · exact h2 hc
-  · refine Or.inr ⟨?_, he ▸ Finset.mem_insert_self v R⟩
-    rw [Finset.mem_insert]
-    rintro (hc | hc)
-    · exact (G.ne_of_adj e.2.2) (by rw [he, hc])
-    · exact h1 hc
+  have := G.ne_of_adj e.2.2
+  simp only [IsRegionBoundaryEdge, IsRegionIncidentEdge, Finset.mem_insert] at *
+  grind
 
 /-- The inserted-site consistency predicate: `μ` and `η` agree on every `v`-incident
 edge crossing the boundary of `insert v R`.  These are the outer `v`-incident edges
@@ -266,28 +255,8 @@ theorem isRegionBoundaryEdge_of_insert_regionIncident (R : Finset V)
     (hb : IsRegionBoundaryEdge (G := G) (insert v R) e)
     (hinc : IsRegionIncidentEdge (G := G) R e) :
     IsRegionBoundaryEdge (G := G) R e ∧ ¬ (e.1.1 = v ∨ e.1.2 = v) := by
-  -- One endpoint lies in `insert v R`, the other outside; `R`-incidence puts the
-  -- in-region endpoint in `R`, which is therefore not `v`.
-  rcases hb with ⟨h1, h2⟩ | ⟨h1, h2⟩
-  · -- `e.1.1 ∈ insert v R`, `e.1.2 ∉ insert v R`, so `e.1.2 ∉ R`.
-    have h2R : e.1.2 ∉ R := fun h => h2 (Finset.mem_insert_of_mem h)
-    have h1R : e.1.1 ∈ R := by
-      rcases hinc with h | h
-      · exact h
-      · exact absurd h h2R
-    refine ⟨Or.inl ⟨h1R, h2R⟩, ?_⟩
-    rintro (hc | hc)
-    · exact hv (hc ▸ h1R)
-    · exact h2 (hc ▸ Finset.mem_insert_self v R)
-  · have h1R : e.1.1 ∉ R := fun h => h1 (Finset.mem_insert_of_mem h)
-    have h2R : e.1.2 ∈ R := by
-      rcases hinc with h | h
-      · exact absurd h h1R
-      · exact h
-    refine ⟨Or.inr ⟨h1R, h2R⟩, ?_⟩
-    rintro (hc | hc)
-    · exact h1 (hc ▸ Finset.mem_insert_self v R)
-    · exact hv (hc ▸ h2R)
+  simp only [IsRegionBoundaryEdge, IsRegionIncidentEdge, Finset.mem_insert] at *
+  grind
 
 omit [Fintype V] in
 open scoped Classical in
