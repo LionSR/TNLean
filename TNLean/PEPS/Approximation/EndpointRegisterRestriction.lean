@@ -63,8 +63,7 @@ private theorem endpointRegisterData_layout (R : SourceInventory P)
   induction R with
   | nil => rfl
   | cons r R ih =>
-      simp only [endpointRegisterData, List.map_cons, slotLayout_cons,
-        List.cons_append, List.nil_append, ih]
+      simp only [endpointRegisterData, List.map_cons, slotLayout_cons, ih]
 
 private theorem localEndpoint_word_heq (r : Reg P) (A : r.space →L[ℂ] r.space)
     {a b : Layout P} (h : a = b) :
@@ -132,7 +131,9 @@ private theorem restrict_endpointRegisterWord_eval_heq (f : P → Bool)
       let v := (Word.frame r (endpointRegisterWord D)).restrict f
         (sources_endpointRegisterWord D)
       by_cases hr : f r.owner = true
-      · have hu : HEq u.eval (Word.localEndpoint r A T).eval :=
+      · have hLayout : Layout.restrict f (r :: D.map Sigma.fst) = r :: T := by
+          simpa only [Layout.restrict_cons, hr, ↓reduceIte] using congrArg (r :: ·) ht
+        have hu : HEq u.eval (Word.localEndpoint r A T).eval :=
           (Word.restrict_localMap_true_eval_heq f r.owner (a := [r]) (b := [r])
             (by simp) (by simp)
             (A.rTensor ℂ) (D.map Sigma.fst) hr).trans (localEndpoint_eval_heq r A ht)
@@ -145,15 +146,11 @@ private theorem restrict_endpointRegisterWord_eval_heq (f : P → Bool)
               (endpointRegisterWord (D.filter (fun z ↦ f z.1.owner))) ht ht ih)
         have hcomp := Word.eval_comp_heq u v (Word.localEndpoint r A T)
           (Word.frame r (endpointRegisterWord (D.filter (fun z ↦ f z.1.owner))))
-          (by simp only [Layout.restrict_cons, hr, ↓reduceIte, ht])
-          (by simp only [Layout.restrict_cons, hr, ↓reduceIte, ht])
-          (by simp only [Layout.restrict_cons, hr, ↓reduceIte, ht]) hu hv
-        simp only [List.filter_cons, hr, ↓reduceIte]
-        change HEq (u.comp v).eval
-          ((Word.localEndpoint r A T).comp
-            (Word.frame r (endpointRegisterWord (D.filter (fun z ↦ f z.1.owner))))).eval
-        exact hcomp
+          hLayout hLayout hLayout hu hv
+        simpa only [endpointRegisterWord, List.filter_cons, hr, ↓reduceIte] using hcomp
       · have hr' := Bool.eq_false_iff.mpr hr
+        have hLayout : Layout.restrict f (r :: D.map Sigma.fst) = T := by
+          simpa only [Layout.restrict_cons, hr', Bool.false_eq_true, ↓reduceIte] using ht
         have hu : HEq u.eval (Word.id T).eval :=
           (Word.restrict_localMap_false_eval_heq f r.owner (a := [r]) (b := [r])
             (by simp) (by simp)
@@ -164,14 +161,10 @@ private theorem restrict_endpointRegisterWord_eval_heq (f : P → Bool)
             (sources_endpointRegisterWord D) hr').trans ih
         have hcomp := Word.eval_comp_heq u v (Word.id T)
           (endpointRegisterWord (D.filter (fun z ↦ f z.1.owner)))
-          (by simp only [Layout.restrict_cons, hr', Bool.false_eq_true, ↓reduceIte, ht])
-          (by simp only [Layout.restrict_cons, hr', Bool.false_eq_true, ↓reduceIte, ht])
-          (by simp only [Layout.restrict_cons, hr', Bool.false_eq_true, ↓reduceIte, ht]) hu hv
-        simp only [List.filter_cons, hr', Bool.false_eq_true, ↓reduceIte]
-        change HEq (u.comp v).eval
-          (endpointRegisterWord (D.filter (fun z ↦ f z.1.owner))).eval
-        exact hcomp.trans (heq_of_eq (ContinuousLinearMap.comp_id
-          (endpointRegisterWord (D.filter (fun z ↦ f z.1.owner))).eval))
+          hLayout hLayout hLayout hu hv
+        simpa only [endpointRegisterWord, List.filter_cons, hr', Bool.false_eq_true,
+          ↓reduceIte] using hcomp.trans (heq_of_eq (ContinuousLinearMap.comp_id
+            (endpointRegisterWord (D.filter (fun z ↦ f z.1.owner))).eval))
 
 /-- The actual restricted endpoint operator is the chronological word of
 precisely its selected endpoint maps, preserving their original spaces and
@@ -189,8 +182,7 @@ theorem restrict_endpointWord_eval_heq_registerWord (f : P → Bool)
   have hWord : endpointWord R U V A B = (endpointRegisterWord D).castLayouts hL hL :=
     eq_of_heq ((endpointWord_heq_registerWord R U V A B).trans
       (Word.castLayouts_heq (endpointRegisterWord D) hL hL).symm)
-  rw [hWord, Word.restrict_castLayouts f (endpointRegisterWord D) hL hL
-    (sources_endpointRegisterWord D)]
+  simp only [hWord, Word.restrict_castLayouts]
   exact (Word.eval_castLayouts_heq _ _ _).trans
     (restrict_endpointRegisterWord_eval_heq f D)
 
