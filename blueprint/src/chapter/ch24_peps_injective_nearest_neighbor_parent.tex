@@ -42,14 +42,15 @@
         TNLean.PEPS.finrank_regionParentGroundSpace_edgeAndIsolated_eq_one}
     \leanok
     \uses{lem:peps_injective_nearest_neighbor_cover,
-        thm:peps_injective_covering_parent_ground_space}
+        thm:peps_injective_covering_parent_ground_space,
+        def:peps_injective_tensor}
     Suppose every site tensor is injective.
     If every vertex has a neighbor, the common space for the
     edge-pair regions is exactly the span of the closed PEPS vector.
     For an arbitrary finite graph, the same conclusion holds for the
     augmented edge and isolated-site family.
-    If every bond dimension is positive, each of these spaces is
-    one-dimensional.
+    If the tensor is an injective PEPS tensor, so that every bond dimension
+    is positive, each of these spaces is one-dimensional.
     These are the nearest-neighbor and isolated-site forms of the
     virtual-pair argument in
     \cite[Section~IV.C.1]{Cirac2021Matrix}.
@@ -76,7 +77,8 @@
     their extensions to the full physical graph.
     Under the corresponding hypotheses of the preceding theorem,
     the Hamiltonian kernel is exactly the closed PEPS span.
-    Positive bond dimensions make this kernel one-dimensional.
+    For an injective PEPS tensor, whose bond dimensions are positive, this
+    kernel is one-dimensional.
     The edge-only conclusion requires that every vertex have a
     neighbor; the augmented conclusion includes the isolated-site
     singleton interactions explicitly.

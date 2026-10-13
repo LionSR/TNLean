@@ -17,8 +17,13 @@ import re
 import sys
 import tempfile
 
+from blueprint_tex_tree import read_tex_tree
+
 ROOT = Path(__file__).resolve().parents[1]
 CHAPTER = ROOT / "blueprint/src/chapter"
+# Each picture lives in the shared figure blueprint/src/figures/<label stem>.tex,
+# which its entry inputs; entry_unit reads the expanded chapter, so the
+# picture and its Source/Ink/signature comments must still land inside the entry.
 ENTRIES = {
     "layers": ("ch24_peps_area_law_dyadic_layers.tex",
                "def:area_law_dyadic_layers", "definition"),
@@ -37,7 +42,13 @@ PERIMETER = [(1, 1), (1, 5), (1, 9), (5, 9), (9, 9), (9, 5), (9, 1), (5, 1)]
 
 def entry_unit(name: str, source: str | None = None) -> str:
     fname, label, env = ENTRIES[name]
-    text = source if source is not None else (CHAPTER / fname).read_text()
+    if source is None:
+        figure = "figures/" + label.split(":", 1)[1]
+        raw = (CHAPTER / fname).read_text()
+        assert "\\input{" + figure + "}" in raw, (name, "entry inputs", figure)
+        text = read_tex_tree(CHAPTER / fname)
+    else:
+        text = source
     body = text.split(r"\label{" + label + "}", 1)[1].split(r"\end{" + env + "}", 1)[0]
     units = re.findall(r"\\begin\{tenkz\}.*?\\end\{tenkz\}", body, re.S)
     assert len(units) == 1, (name, "one picture inside the entry", len(units))
