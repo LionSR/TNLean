@@ -51,7 +51,6 @@ import TNLean.PEPS.AreaLaw.Scan.BootstrapRoundedClearance
 import TNLean.PEPS.AreaLaw.Scan.Budgets
 import TNLean.PEPS.AreaLaw.Scan.ChargeAncestry
 import TNLean.PEPS.AreaLaw.Scan.ChargeBinomialBound
-import TNLean.PEPS.AreaLaw.Scan.ChargeEnergyAccounting
 import TNLean.PEPS.AreaLaw.Scan.ChargeEntropyCost
 import TNLean.PEPS.AreaLaw.Scan.ChargePathCounting
 import TNLean.PEPS.AreaLaw.Scan.ChargeSlots

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.ActualScanMeasures
-import TNLean.PEPS.AreaLaw.Scan.ChargeEnergyAccounting
+import TNLean.PEPS.AreaLaw.Scan.EnergyBalance
 import TNLean.PEPS.AreaLaw.Scan.SplitEntropyBound
 import TNLean.PEPS.AreaLaw.Scan.SplitCounting
 import TNLean.PEPS.AreaLaw.Scan.TransportDimension
@@ -22,6 +22,12 @@ The bound retains the classical bad-old-history probability, the interpolation
 factors, and the literal charge defect. No positive band count or split capacity
 is imposed, and no capacity is divided out. This is a supplied-vector one-round
 estimate; it does not identify the physical prevector or construct the scanner.
+
+**Scope restriction (counting margin):** `actualCharge_energyError_le_domainGraph`
+assumes the numerical margin `4 * (D + 2 * r₀) ≤ m`, which the source does not
+state for one round; it is used only for the labelled split count. At the final
+rounded scanner scales the margin is derived in `exists_badOldHistory_threshold`.
+Documented in `docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 416–440 and 492–511, at `openai/math@adc7f124`.

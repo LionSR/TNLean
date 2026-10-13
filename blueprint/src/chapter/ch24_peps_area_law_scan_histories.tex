@@ -2395,7 +2395,6 @@ The following finite construction follows
 
 % Source: 08-scanner.tex, lines 416--440 and 492--511, at adc7f124.
 % The supplied-vector estimate retains the stronger counting margin.
-% Completion markers await exact-head hosted compilation.
 The finite-leaf estimates below follow the charge-energy argument in
 \cite[proof of Proposition~9.2]{OpenAI2026AreaLaw}.
 
@@ -2406,6 +2405,7 @@ The finite-leaf estimates below follow the charge-energy argument in
         TensorPower.ReplicaTransport.TransportData.splitEta_nonneg,
         TensorPower.ReplicaTransport.TransportData.splitEta_le_two_mul_of_logDim_le,
         TensorPower.ReplicaTransport.TransportData.measurable_splitEta_sphere}
+    \leanok
     Give every local factor a positive dimension $n_v$. For a partition
     $(P,Y,F)$ and a designated support $B$, let $x=B\cap Y$. The split entropy is nonnegative. On the unit sphere,
     either choice of receiving side satisfies
@@ -2415,14 +2415,15 @@ The finite-leaf estimates below follow the charge-energy argument in
         \le 2\log\left(\mathrm e\prod_{v\in B}n_v\right).
         \label{eq:al_scan_split_entropy_support}
     \end{align}
-    For admissible finite transport, the split entropy at each leaf is
-    nonnegative and measurable on the unit sphere. If the designated
+    For every finite transport, the split entropy at each leaf is
+    measurable on the unit sphere; for admissible transport it is also
+    nonnegative. If the designated
     supports are compatible with the leaf partitions and
     $\log(\mathrm e\prod_{v\in B_i}n_v)\le\ell$ whenever $B_i$ has a split
     leaf, with $\ell\ge0$, then $0\le\eta_{i,j}(\theta)\le2\ell$ at every
     leaf. No dimension bound is required for a support with no split leaf.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The two choices are $I_\theta(x:F\mid P)$ and
     $I_\theta(x:P\mid F)$. Strong subadditivity gives their sign, and
     subadditivity and the entropy triangle inequality bound each by
@@ -2438,6 +2439,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     \label{thm:al_scan_finite_charge_energy}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScanRound.goodOld_le_capacity,
         TNLean.PEPS.AreaLaw.Scan.ScanRound.energySum_le_of_leaf_bounds}
+    \leanok
     Let $w_h\ge0$ and $q_{c\mid h}\ge0$ be finite probability weights.
     Fix finite old and new leaf measures of mass $1/2$, nonnegative
     split entropies bounded by $B\ge0$, and a measurable old split entropy.
@@ -2461,7 +2463,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     $N^{7/8}\mathcal Q^{1/8}$, including when $N=0$ or the total good
     weight is zero.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     H\"older's inequality for a leaf measure of mass $1/2$ gives
     $\int\eta^{1/8}\le(\int\eta)^{1/8}$. Apply finite weighted
     H\"older to the good-history and split-label pairs. Their total
@@ -2477,6 +2479,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 \begin{theorem}[Actual charge energy with its classical bad-history weight]
     \label{thm:al_scan_actual_charge_energy}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_energyError_le_domainGraph}
+    \leanok
     \uses{def:al_scan_actual_charge_data,def:al_scan_literal_measures,
         def:al_scan_physical_dimension_cap}
     Fix a finite physical domain $\Lambda$, a nonempty target $T$, physical
@@ -2493,14 +2496,14 @@ The finite-leaf estimates below follow the charge-energy argument in
         \label{eq:al_scan_charge_energy_scales}
     \end{align}
     Every ambient row $T_d\setminus T_{d-1}$ with $1\le d\le L$
-    has at most $n$ sites, at most $\mu$ interaction labels have any
+    has at most $n$ sites, at most $\mathfrak m$ interaction labels have any
     fixed anchor, and every $t\in T$ and physical cut boundary endpoint
     $z$ satisfy $d_\infty(t,z)>2L+10r_0$.
     Let $a\ge0$, $k\in\mathbb N$, and $\psi_k\ne0$ be a symmetric
     supplied replica vector. At $0<p<1$, use the actual charge round at
     stage $s$ with metric parameter $a/2$ and this same vector. Set
     \begin{align}
-        A & =10KnD\mu,                    & \ell & =1+(2r_0+1)^2\log q, \\
+        A & =10KnD\mathfrak m,                    & \ell & =1+(2r_0+1)^2\log q, \\
         b & =\sum_{h\text{ not good}}w_h.
         \label{eq:al_scan_charge_energy_capacity}
     \end{align}
@@ -2513,11 +2516,11 @@ The finite-leaf estimates below follow the charge-energy argument in
         +\frac{A(2\ell)^{1/8}}2\bigl((1-p)b+p\bigr)\right).
         \label{eq:al_scan_actual_charge_energy}
     \end{align}
-    The vector need not have norm one. The natural numbers $K$, $\mu$
+    The vector need not have norm one. The natural numbers $K$, $\mathfrak m$
     and $k$ may vanish. The constant $\ell$ is independent of both
     auxiliary dimensions.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_scan_split_count,thm:al_scan_designated_dilution,
         thm:al_scan_actual_transport_dimension,thm:al_scan_literal_integrals,
         thm:al_scan_literal_scalars,thm:al_scan_split_entropy_cap,
@@ -3079,12 +3082,12 @@ The finite-leaf estimates below follow the charge-energy argument in
 \end{proof}
 
 % Source: 08-scanner.tex, lines 309--329, 492--511 and final parameters.
-% Completion markers await exact-head hosted compilation.
-\begin{lemma}[Old-prefix probability and the counting margin]
-    \label{lem:al_scan_uniform_bad_old}
+\begin{theorem}[Old-prefix probability and the counting margin]
+    \label{thm:al_scan_uniform_bad_old}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_old_le_bad_through,
         TNLean.PEPS.AreaLaw.Scan.eventually_split_counting_scale_separation,
         TNLean.PEPS.AreaLaw.Scan.exists_badOldHistory_threshold}
+    \leanok
     Let $b_s$ be the classical weight of bad old histories after
     $s$ complete fill--charge pairs. For $s\le H$ and positive charge
     capacity, $b_s$ is at most the weight of full histories of length $H$
@@ -3111,10 +3114,15 @@ The finite-leaf estimates below follow the charge-energy argument in
         b_s & \le n^{-P}\qquad(0\le s\le nm).
         \label{eq:al_scan_uniform_bad_old}
     \end{align}
-    The stronger margin also holds for any fixed $0<\kappa<\mu$,
-    with its threshold allowed to depend on the exponent gap.
-\end{lemma}
-\begin{proof}
+    The first statement holds for every scan with positive charge
+    capacity, without the geometric assumptions above. The margin
+    $4(D+2r_0)\le m$, together with $n\ge2$, $r_0\le D$, $1\le D$ and
+    $8Km\le L$, holds eventually for any real
+    $\ell$, any $C_r\ge0$ and any fixed $0<\kappa<\mu$, with its
+    threshold allowed to depend on these quantities; only the bound on
+    $b_s$ uses the listed physical assumptions.
+\end{theorem}
+\begin{proof}\leanok
     The exact prefix marginal writes $b_s$ as the expectation of its
     indicator over full histories. Goodness through every completed
     prefix implies goodness of every old charge state, so the bad-old
@@ -3130,9 +3138,10 @@ The finite-leaf estimates below follow the charge-energy argument in
 \begin{theorem}[Uniform actual charge energy at the rounded scales]
     \label{thm:al_scan_actual_charge_energy_decay}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_actualCharge_energy_threshold}
-    \uses{lem:al_scan_uniform_bad_old,thm:al_scan_actual_charge_energy}
+    \leanok
+    \uses{thm:al_scan_uniform_bad_old,thm:al_scan_actual_charge_energy}
     With the scales and physical assumptions of
-    Lemma~\ref{lem:al_scan_uniform_bad_old}, one threshold $N$ gives the
+    Theorem~\ref{thm:al_scan_uniform_bad_old}, one threshold $N$ gives the
     following estimate simultaneously for every charge $s+1\le nm$,
     every positive local and auxiliary dimension, every supplied local
     Hamiltonian and vector $\Omega$, every $\Delta\in\mathbb R$,
@@ -3152,8 +3161,8 @@ The finite-leaf estimates below follow the charge-energy argument in
     No selected round, physical prevector identity, or norm comparison
     is part of this statement.
 \end{theorem}
-\begin{proof}
-    Use the common threshold in Lemma~\ref{lem:al_scan_uniform_bad_old}
+\begin{proof}\leanok
+    Use the common threshold in Theorem~\ref{thm:al_scan_uniform_bad_old}
     before all physical and quantum data. Its margin supplies the
     hypotheses of Theorem~\ref{thm:al_scan_actual_charge_energy}.
     Since $1-p\ge0$ and the coefficient of $b_s$ is nonnegative,
@@ -3162,11 +3171,11 @@ The finite-leaf estimates below follow the charge-energy argument in
 \end{proof}
 
 % Source: 08-scanner.tex, lines 492--520 and final parameters.
-% Completion markers await exact-head hosted compilation.
 \begin{theorem}[Uniform coefficients for the actual charge energy]
     \label{thm:al_scan_actual_charge_energy_coefficients}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_nonneg,
         TNLean.PEPS.AreaLaw.Scan.exists_actualCharge_energy_coefficients}
+    \leanok
     \uses{thm:al_scan_actual_charge_energy_decay}
     Fix the physical dimension $q\ge1$, $C_r,C_1>0$, $C_T\ge0$,
     $\mathfrak m\in\mathbb N$ and $P,C_{\mathrm{en}},e_{\mathrm{en}}\in\mathbb R$.
@@ -3174,11 +3183,11 @@ The finite-leaf estimates below follow the charge-energy argument in
     on these fixed quantities, with the following property.
     For every $n\ge N$, use the literal rounded scales
     (\ref{eq:al_scan_uniform_tail_scales}) and the geometric assumptions
-    of Lemma~\ref{lem:al_scan_uniform_bad_old}. For every charge $s+1\le nm$,
+    of Theorem~\ref{thm:al_scan_uniform_bad_old}. For every charge $s+1\le nm$,
     every pair of positive auxiliary dimensions, supplied local Hamiltonian,
     vector $\Omega$ and real $\Delta$, every $W\ge0$, replica count $k\ge0$,
     nonzero symmetric supplied vector $\psi_k$ and $0<p<1$, put $a=W/K$.
-    Then $K>0$, the literal defect $\mathcal Q_{s,k}(p)$ is nonnegative, and
+    Then both history capacities are positive and
     \begin{align}
         |C_{\mathrm{en}}|a^2\ell_q^{e_{\mathrm{en}}}\mathcal E_{s,k}(p)
          & \le C W^2 n^{\ell}D^2(\log n)^{C_l}
@@ -3190,8 +3199,13 @@ The finite-leaf estimates below follow the charge-energy argument in
     Both the energy and defect use the same supplied vector and metric
     parameter $a/2$. No round or small defect is selected. The estimate
     includes zero total weight, zero anchor multiplicity, $q=1$ and $k=0$.
+    For every scan with positive history capacities, every supplied vector,
+    $a\ge0$ and $p$, the literal defect $\mathcal Q_{s,k}(p)$ is
+    nonnegative.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
+    \uses{thm:al_scan_actual_charge_energy_decay,lem:al_scanner_scale_facts,
+        thm:al_scan_transport_coefficients_log}
     The old-history weights and split entropy symbols are nonnegative,
     so integration against the actual leaf measures gives
     $\mathcal Q_{s,k}(p)\ge0$. At the rounded scales, eventually $K\ge1$ and
