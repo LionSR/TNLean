@@ -283,7 +283,7 @@ These coordinate identities apply to the local contractions in
     \lean{TNLean.PEPS.PairEffect.Layout.atParty_some_mapOwner_all}
     \uses{def:peps_affected_owner,def:peps_party_registers,def:peps_owner_layout}
     Let $P$ be any party set, let
-    $Q=P\sqcup\{*\}$, and let $\iota:P\toQ$
+    $Q=P\sqcup\{*\}$, and let $\iota:P\to Q$
     assign each original party its selected owner. For any register list $a$,
     the registers of $\iota_*a$ at $*$ form the empty list. At $\iota(p)$,
     their list is $\iota_*(a_p)$, in the original order. This is the
@@ -379,8 +379,8 @@ These coordinate identities apply to the local contractions in
     \leanok
     \uses{def:peps_selected_family_physical_basis}
     The canonical bijection
-    $e:\prod_{q\inQ}X_q\to
-        \prod_{p\inP}\{0,\ldots,d(p)-1\}$,
+    $e:\prod_{q\in Q}X_q\to
+        \prod_{p\in P}\{0,\ldots,d(p)-1\}$,
     given by $e(x)_p=x_{\iota(p)}$, removes the single exterior coordinate. Its inverse assigns
     $x_*=\bullet$ and $x_{\iota(p)}=y_p$.
     It neither enlarges a physical space nor requires that a party exist.
@@ -396,10 +396,10 @@ These coordinate identities apply to the local contractions in
     Let $P$ be finite, and let $M_q$ be arbitrary complex matrices
     indexed by $X_q$. In the original physical configurations,
     \begin{align}
-        \prod_{q\inQ}
+        \prod_{q\in Q}
         (M_q)_{e^{-1}(x)_q,e^{-1}(y)_q}
          & =(M_*)_{\bullet,\bullet}
-        \prod_{p\inP}(M_{\iota(p)})_{x_p,y_p}.
+        \prod_{p\in P}(M_{\iota(p)})_{x_p,y_p}.
         \label{eq:peps_selected_physical_product_scalar}
     \end{align}
     The exterior scalar may vanish. If $P$ is empty, the
