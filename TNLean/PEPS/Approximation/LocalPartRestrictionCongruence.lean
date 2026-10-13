@@ -23,15 +23,17 @@ noncomputable section
 namespace TNLean.PEPS.PairEffect.Word
 variable {P : Type}
 
-/-- Equal selected source lists and equal already restricted remaining
-operators give equal selected remaining operators after chronological
-composition. No equality of unselected source registers is required.
+/-- Equal selected input, intermediate, output and source lists, together with
+equal already restricted remaining operators, give equal selected remaining
+operators after chronological composition. Unselected registers may differ.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267,
 351–381 and 409–434. -/
 theorem restrict_localPart_comp_eval_heq (f : P → Bool)
     {a b c a' b' c' : Layout P}
     (w : Word a b) (v : Word b c) (w' : Word a' b') (v' : Word b' c')
-    (ha : a = a') (hb : b = b') (hc : c = c')
+    (ha : Layout.restrict f a = Layout.restrict f a')
+    (hb : Layout.restrict f b = Layout.restrict f b')
+    (hc : Layout.restrict f c = Layout.restrict f c')
     (hw : Layout.restrict f w.sources.layout = Layout.restrict f w'.sources.layout)
     (hv : Layout.restrict f v.sources.layout = Layout.restrict f v'.sources.layout)
     (hew : HEq (w.localPart.restrict f w.sources_localPart).eval
@@ -43,7 +45,7 @@ theorem restrict_localPart_comp_eval_heq (f : P → Bool)
   have hwi : Layout.restrict f (w.sources.layout ++ a) =
       Layout.restrict f (w'.sources.layout ++ a') := by
     simp only [Layout.restrict_append]
-    exact congrArg₂ List.append hw (congrArg (Layout.restrict f) ha)
+    exact congrArg₂ List.append hw ha
   have hraw : ((frameList v.sources.layout w.localPart).comp v.localPart).sources = [] := by
     simp only [sources, sources_frameList, sources_localPart, List.nil_append]
   have hraw' : ((frameList v'.sources.layout w'.localPart).comp v'.localPart).sources = [] := by
@@ -52,7 +54,7 @@ theorem restrict_localPart_comp_eval_heq (f : P → Bool)
     w.localPart w.sources_localPart).trans
       ((eval_frameList_heq (w.localPart.restrict f w.sources_localPart)
         (w'.localPart.restrict f w'.sources_localPart) hwi
-        (congrArg (Layout.restrict f) hb) hew
+        hb hew
         (Layout.restrict f v.sources.layout) (Layout.restrict f v'.sources.layout) hv).trans
           (restrict_frameList_eval_heq f v'.sources.layout
             w'.localPart w'.sources_localPart).symm)
@@ -66,23 +68,24 @@ theorem restrict_localPart_comp_eval_heq (f : P → Bool)
     (by
       simp only [Layout.restrict_append]
       exact congrArg₂ List.append hv
-        (congrArg₂ List.append hw (congrArg (Layout.restrict f) ha)))
+        (congrArg₂ List.append hw ha))
     (by
       simp only [Layout.restrict_append]
-      exact congrArg₂ List.append hv (congrArg (Layout.restrict f) hb))
-    (congrArg (Layout.restrict f) hc) hframe hev
+      exact congrArg₂ List.append hv hb)
+    hc hframe hev
   unfold localPart
   exact (restrict_castInput_eval_heq f _ _ hraw).trans
     (hcomp.trans (restrict_castInput_eval_heq f _ _ hraw').symm)
 
 /-- Framing preserves equality of selected remaining operators when the
-selected source prefixes agree. Unselected source registers may differ, and
-no operator is cancelled.
+selected input, output and source lists agree. Unselected registers may differ,
+and no operator is cancelled.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267,
 351–381 and 409–434. -/
 theorem restrict_localPart_frame_eval_heq (f : P → Bool) (r : Reg P)
     {a b a' b' : Layout P} (w : Word a b) (w' : Word a' b')
-    (ha : a = a') (hb : b = b')
+    (ha : Layout.restrict f a = Layout.restrict f a')
+    (hb : Layout.restrict f b = Layout.restrict f b')
     (hs : Layout.restrict f w.sources.layout = Layout.restrict f w'.sources.layout)
     (he : HEq (w.localPart.restrict f w.sources_localPart).eval
       (w'.localPart.restrict f w'.sources_localPart).eval) :
@@ -91,16 +94,16 @@ theorem restrict_localPart_frame_eval_heq (f : P → Bool) (r : Reg P)
   have hwi : Layout.restrict f (w.sources.layout ++ a) =
       Layout.restrict f (w'.sources.layout ++ a') := by
     simp only [Layout.restrict_append]
-    exact congrArg₂ List.append hs (congrArg (Layout.restrict f) ha)
+    exact congrArg₂ List.append hs ha
   have hmove := restrict_moveHead_eval_heq_of_restrict_eq f r
-    w.sources.layout w'.sources.layout a a' hs (congrArg (Layout.restrict f) ha)
+    w.sources.layout w'.sources.layout a a' hs ha
   have hframe : HEq ((Word.frame r w.localPart).restrict f w.sources_localPart).eval
       ((Word.frame r w'.localPart).restrict f w'.sources_localPart).eval := by
     by_cases hr : f r.owner = true
     · exact (restrict_frame_true_eval_heq f r w.localPart w.sources_localPart hr).trans
         ((eval_frame_heq r (w.localPart.restrict f w.sources_localPart)
           (w'.localPart.restrict f w'.sources_localPart) hwi
-          (congrArg (Layout.restrict f) hb) he).trans
+          hb he).trans
             (restrict_frame_true_eval_heq f r w'.localPart w'.sources_localPart hr).symm)
     · have hr' := Bool.eq_false_iff.mpr hr
       exact (restrict_frame_false_eval_heq f r w.localPart w.sources_localPart hr').trans
@@ -117,9 +120,12 @@ theorem restrict_localPart_frame_eval_heq (f : P → Bool) (r : Reg P)
     ((Word.frame r w'.localPart).restrict f w'.sources_localPart)
     (by
       simp only [Layout.restrict_append]
-      exact congrArg₂ List.append hs
-        (congrArg (Layout.restrict f) (congrArg (r :: ·) ha)))
-    hmid (congrArg (Layout.restrict f) (congrArg (r :: ·) hb)) hmove hframe
+      exact congrArg₂ List.append hs (by
+        simp only [Layout.restrict_cons]
+        rw [ha]))
+    hmid (by
+      simp only [Layout.restrict_cons]
+      rw [hb]) hmove hframe
   change HEq
     (((moveHead r w.sources.layout a).restrict f
       (sources_moveHead r w.sources.layout a)).comp
@@ -129,5 +135,30 @@ theorem restrict_localPart_frame_eval_heq (f : P → Bool) (r : Reg P)
         ((Word.frame r w'.localPart).restrict f w'.sources_localPart)).eval
   exact hcomp
 
+/-- Framing a register outside the selection does not change the selected
+remaining operator, even when the original word contains pair sources and
+retained source registers. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 246–267, 351–381 and 409–434. -/
+theorem restrict_localPart_frame_false_eval_heq (f : P → Bool) (r : Reg P)
+    {a b : Layout P} (w : Word a b) (hr : f r.owner = false) :
+    HEq ((Word.frame r w).localPart.restrict f (Word.frame r w).sources_localPart).eval
+      (w.localPart.restrict f w.sources_localPart).eval := by
+  let T := Layout.restrict f (w.sources.layout ++ a)
+  let u := (moveHead r w.sources.layout a).restrict f (sources_moveHead r w.sources.layout a)
+  let v := (Word.frame r w.localPart).restrict f w.sources_localPart
+  let core := w.localPart.restrict f w.sources_localPart
+  have hmove : HEq u.eval (Word.id T).eval :=
+    (restrict_moveHead_false_eval_heq f r w.sources.layout a hr).trans
+      (eval_id_heq (Layout.restrict_append f w.sources.layout a).symm)
+  have hframe : HEq v.eval core.eval :=
+    restrict_frame_false_eval_heq f r w.localPart w.sources_localPart hr
+  have hcomp := eval_comp_heq u v (Word.id T) core
+    (by simp only [T, Layout.restrict_append, Layout.restrict_cons,
+      hr, Bool.false_eq_true, ↓reduceIte])
+    (by simp only [T, Layout.restrict_cons, hr, Bool.false_eq_true, ↓reduceIte])
+    (by simp only [Layout.restrict_cons, hr, Bool.false_eq_true, ↓reduceIte])
+    hmove hframe
+  change HEq (u.comp v).eval core.eval
+  exact hcomp.trans (heq_of_eq (ContinuousLinearMap.comp_id core.eval))
 
 end TNLean.PEPS.PairEffect.Word

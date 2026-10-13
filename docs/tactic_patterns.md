@@ -6499,6 +6499,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   `Word.eval_frame_heq` and `Word.eval_comp_heq`. It does not erase a
   retained source prefix or cancel a prepared source vector. The existing
   named tests cover both new declarations; elaboration is pending.
+  The composition and framing congruences now require equality of selected
+  input and output lists only. Their existing proofs do not use equality
+  of the original unselected lists. The retained and erased head identities
+  in `WordPermutationRestriction` are exposed directly from the same proofs;
+  their names are included in the existing permutation axiom test.
+  The erased-frame identity `Word.restrict_localPart_frame_false_eval_heq`
+  composes the erased register move with the restricted local part, retaining
+  arbitrary selected source prefixes. It reuses the same move, frame and
+  composition identities rather than repeating their constructor proofs;
+  its named check is included in `LocalPartRestrictionCongruenceAxioms`.
+  Elaboration of this additional identity is pending.
 - **Word identities (2026-10-12):** `WordOwnerAppendTailTransport` and
   `AbsorbedRestriction` both compare chronological compositions, frames,
   identities and list identifications at the word level after identifying

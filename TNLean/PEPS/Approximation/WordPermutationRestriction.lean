@@ -46,7 +46,10 @@ private theorem exchangeBlocks_eval_heq_of_layouts_eq {a a' b b' t t' : Layout P
   cases ht
   rfl
 
-private theorem restrict_moveHead_true_eval_heq (f : P → Bool) (r : Reg P)
+/-- Moving a retained register through a prefix restricts to the same move through
+the retained prefix and tail. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 233–267 and 409–434. -/
+theorem restrict_moveHead_true_eval_heq (f : P → Bool) (r : Reg P)
     (rs tail : Layout P) (hr : f r.owner = true) :
     HEq ((moveHead r rs tail).restrict f (sources_moveHead r rs tail)).eval
       (moveHead r (Layout.restrict f rs) (Layout.restrict f tail)).eval := by
@@ -117,7 +120,10 @@ private theorem restrict_moveHead_true_eval_heq (f : P → Bool) (r : Reg P)
               (by simp only [Layout.restrict_cons, hs', Bool.false_eq_true, ↓reduceIte])
               (rfl : Layout.restrict f tail = Layout.restrict f tail))
 
-private theorem restrict_moveHead_false_eval_heq (f : P → Bool) (r : Reg P)
+/-- Moving an erased register through any prefix restricts to the identity on
+the retained prefix followed by the retained tail. Source: polynomial-PEPS
+Theorem 5.2, `04-compression.tex`, lines 233–267 and 409–434. -/
+theorem restrict_moveHead_false_eval_heq (f : P → Bool) (r : Reg P)
     (rs tail : Layout P) (hr : f r.owner = false) :
     HEq ((moveHead r rs tail).restrict f (sources_moveHead r rs tail)).eval
       (Word.id (Layout.restrict f rs ++ Layout.restrict f tail)).eval := by

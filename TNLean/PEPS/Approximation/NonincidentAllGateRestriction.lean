@@ -90,8 +90,9 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
       rw [dite_eq_left ht]
       rfl
     rw [hw]
-    exact restrict_relabelled_spectators_eval_heq_id all
-      ((G.branchWord i).mapOwner owner) tail q hcore
+    change q ∉ (((G.branchWord i).mapOwner owner).mapOwner all).parties at hcore
+    generalize ((G.branchWord i).mapOwner owner) = u at hcore ⊢
+    exact restrict_relabelled_spectators_eval_heq_id all u tail q hcore
   · have hw : partialWord (fun _ : P => true) (.gate owner G tail) ξ =
         Word.groupedBlockMap all none (Layout.mapOwner owner a) (Layout.mapOwner owner b)
           (Layout.affectedOwner_mapOwner_eq_none (fun _ : P => true) owner ht a)

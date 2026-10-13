@@ -12,7 +12,9 @@ import Lean.Util.CollectAxioms
 set_option linter.hashCommand false
 
 run_cmd do
-  let decls := #[``TNLean.PEPS.PairEffect.Word.restrict_exchangeBlocks_eval_heq,
+  let decls := #[``TNLean.PEPS.PairEffect.Word.restrict_moveHead_true_eval_heq,
+    ``TNLean.PEPS.PairEffect.Word.restrict_moveHead_false_eval_heq,
+    ``TNLean.PEPS.PairEffect.Word.restrict_exchangeBlocks_eval_heq,
     ``TNLean.PEPS.PairEffect.Word.restrict_moveHead_eval_heq_id_of_prefix_eq_nil,
     ``TNLean.PEPS.PairEffect.Word.restrict_moveHead_eval_heq_of_restrict_eq]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]

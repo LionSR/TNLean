@@ -13,7 +13,8 @@ set_option linter.hashCommand false
 
 run_cmd do
   let decls := #[``TNLean.PEPS.PairEffect.Word.restrict_localPart_comp_eval_heq,
-    ``TNLean.PEPS.PairEffect.Word.restrict_localPart_frame_eval_heq]
+    ``TNLean.PEPS.PairEffect.Word.restrict_localPart_frame_eval_heq,
+    ``TNLean.PEPS.PairEffect.Word.restrict_localPart_frame_false_eval_heq]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   for decl in decls do
