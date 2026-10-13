@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.BoundaryTheorem
+import TNLean.PEPS.AreaLaw.GraphNeighborhoodCutClearance
 
 /-!
 # The cut-clearance clause of the amplification proposition
@@ -12,15 +13,14 @@ The last assertion of Proposition 10.2 says that the graph neighborhood
 `N_{2r}(S₀)` of the collar `S₀ = A ∩ T_L` stays inside the cut `A` once the ambient
 target `T` is far from the cut endpoints `Z`. A walk of length at most `2r` from
 `S₀` that leaves `A` crosses the cut at an endpoint within ambient distance
-`L + 2r` of `T`. This module proves that clause, first with the explicit clearance
-`L + 2r < dist_∞(T, Z)` and then with the source clearance `L + n^β` at all large
-scales, uniformly in the domain, the cut and the target. Consequently the
-amplification proposition reduces to its radius and information bounds.
+`L + 2r` of `T`; with the explicit clearance `L + 2r < dist_∞(T, Z)` this is
+`graphNeighborhood_subset_of_cut_clearance`. This module derives the clause from the
+source clearance `L + n^β` at all large scales, uniformly in the domain, the cut and
+the target. Consequently the amplification proposition reduces to its radius and
+information bounds.
 
 ## Main statements
 
-* `graphNeighborhood_collar_subset_of_clearance`: the explicit clearance gives
-  `N_k(A ∩ T_L) ⊆ A`.
 * `exists_threshold_graphNeighborhood_collar_subset`: the cut-clearance clause of
   Proposition 10.2 for every radius obeying `eq:amplification-radius`.
 * `amplificationBound_of_radius_output`: the radius and output bounds of
@@ -38,33 +38,6 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 -/
 
 namespace TNLean.PEPS.AreaLaw
-
-/-- A graph neighborhood of radius `k` of the collar `A ∩ T_L` lies inside `A` when every
-cut endpoint is at ambient sup-distance more than `L + k` from `T`. A walk of length at
-most `k` from the collar that leaves `A` crosses the cut at an endpoint within distance
-`L + k` of `T`. Source: `09-amplification.tex`, lines 569–575. -/
-theorem graphNeighborhood_collar_subset_of_clearance {Λ T : Finset (ℤ × ℤ)}
-    {A : Finset (Site Λ)} {L k : ℕ}
-    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
-      ((L + k : ℕ) : ℤ) < Scan.ambientSupDistance t z) :
-    graphNeighborhood Λ k (A.filter fun x ↦ x.val ∈ ambientDilation T L) ⊆ A := by
-  classical
-  intro y hy
-  by_contra hyA
-  obtain ⟨x, hxS, p, hp⟩ := (Finset.mem_filter.mp hy).2
-  obtain ⟨hxA, hxT⟩ := Finset.mem_filter.mp hxS
-  have hT : T.Nonempty := by
-    obtain ⟨t, ht, -⟩ := Finset.mem_biUnion.mp hxT
-    exact ⟨t, ht⟩
-  obtain ⟨u, v, -, -, he, p', hp'⟩ := exists_edgeBoundary_of_walk p hxA hyA
-  have hu : u ∈ graphNeighborhood Λ k (A.filter fun x ↦ x.val ∈ ambientDilation T L) :=
-    Finset.mem_filter.mpr ⟨Finset.mem_univ _, x, hxS, p', hp'.trans hp⟩
-  obtain ⟨t, ht, htu⟩ := exists_ambientSupDistance_le_of_mem_graphNeighborhood hT
-    (fun x hx ↦ (Finset.mem_filter.mp hx).2) hu
-  have hz := hclear t ht u.val
-    (Geometry.mem_boundaryEndpoints_of_mem_edgeBoundary he (Sym2.mem_mk_left u v))
-  push_cast at hz
-  omega
 
 /-- **The cut-clearance clause of Proposition 10.2.** For every radius constant `C` there
 is a threshold `N` such that, at every scale `n ≥ N` and for every radius
@@ -84,7 +57,9 @@ theorem exists_threshold_graphNeighborhood_collar_subset (C : ℝ) :
             (A.filter fun x ↦ x.val ∈ ambientDilation T
               ⌊(n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ))⌋₊) ⊆ A := by
   obtain ⟨N, -, hN⟩ := Exponents.exists_collar_radius_threshold C 1 one_pos
-  refine ⟨N, fun n hn r hr Λ A T hclear ↦ graphNeighborhood_collar_subset_of_clearance ?_⟩
+  refine ⟨N, fun n hn r hr Λ A T hclear ↦
+    (graphNeighborhood_subset_of_cut_clearance Λ T A _ (2 * r) ?_).trans
+      (Finset.filter_subset _ _)⟩
   intro t ht z hz
   have hsmall := hN n hn r hr
   have hL : (0 : ℝ) ≤

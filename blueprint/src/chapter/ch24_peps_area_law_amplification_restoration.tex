@@ -12,33 +12,26 @@ reference state. Neither uses the clocks or the spectral estimates.
 
 \begin{theorem}[Enlarged collars stay inside the cut]
     \label{thm:area_law_amplification_cut_clearance}
-    \lean{TNLean.PEPS.AreaLaw.graphNeighborhood_collar_subset_of_clearance,
-        TNLean.PEPS.AreaLaw.exists_threshold_graphNeighborhood_collar_subset}
+    \lean{TNLean.PEPS.AreaLaw.exists_threshold_graphNeighborhood_collar_subset}
     \leanok
     \uses{def:area_law_radius_exponent}
     Let $\Lambda$ be a finite induced domain, let $A\subseteq\Lambda$, let
     $T\subset\mathbb Z^2$ be finite, and let $Z$ be the set of endpoints of the
-    cut edges of $A$. Put $S_0=A\cap T_L$ for an integer $L\ge0$. If
-    $\operatorname{dist}_\infty(T,Z)>L+k$, then $N_k^\Lambda(S_0)\subseteq A$.
-
-    Consequently, for every $C$ there is $N$ such that for all $n\ge N$, with
-    $L=\lfloor n^{1-\varepsilon}\rfloor$, every integer
-    $r\le Cn^{(1-\varepsilon)/\alpha}$ and every $\Lambda$, $A$, $T$ with
-    $\operatorname{dist}_\infty(T,Z)>L+n^\beta$ satisfy
+    cut edges of $A$. Put $L=\lfloor n^{1-\varepsilon}\rfloor$ and
+    $S_0=A\cap T_L$. For every $C$ there is $N$ such that for all $n\ge N$,
+    every integer $r\le Cn^{(1-\varepsilon)/\alpha}$ and every $\Lambda$, $A$,
+    $T$ with $\operatorname{dist}_\infty(T,Z)>L+n^\beta$ satisfy
     $N_{2r}^\Lambda(S_0)\subseteq A$. This is the last assertion of
     Proposition~10.2 of \cite{OpenAI2026AreaLaw}, given its radius bound.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:area_law_uniform_collar_threshold,
-        thm:area_law_conditional_assembly}
-    Suppose that a walk of length at most $k$ from a site of $S_0\subseteq A$
-    ends outside $A$. It crosses a cut edge, and its first endpoint $u$ in $A$
-    is joined to the start by a walk no longer than $k$. The start lies within
-    ambient distance $L$ of $T$, and each step changes ambient distance by at
-    most one. Hence $u\in Z$ lies within $L+k$ of $T$, a contradiction. For the
-    second assertion, choose $N$ so that $L+2r<n^\beta$ for every admissible
-    radius. Then $L+2r<L+n^\beta<\operatorname{dist}_\infty(T,Z)$.
+        thm:area_law_graph_neighborhood_cut_clearance}
+    Choose $N$ so that $L+2r<n^\beta$ for every admissible radius. Then
+    $L+2r<L+n^\beta<\operatorname{dist}_\infty(T,Z)$, so a walk of length at
+    most $2r$ from $S_0$ cannot cross the cut, and
+    $N_{2r}^\Lambda(S_0)\subseteq A$.
 \end{proof}
 
 \begin{theorem}[Amplification from its radius and output bounds]
