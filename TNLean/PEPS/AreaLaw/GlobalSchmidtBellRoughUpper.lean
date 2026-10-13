@@ -107,7 +107,9 @@ theorem eventually_suppliedGlobalSchmidtBellPrevector_rough_upper
   obtain ⟨c, hc, hu⟩ := hu (hmass.mono fun k hk ↦ by
     simpa only [Nat.cast_pow, one_div,
       TensorPower.norm_sq_labelProj_compressedTypicalSite_prod β X k Ω E (ell k)] using! hk)
-  run_tac Lean.throwError (α := Unit) "rough-upper projected mass applied"
+  refine ⟨c, hc, Real.tendsto_bellOverlapRemainder E.card c K,
+    hu.mono fun k hk n Z hZ hZZ U Y hUY hnest hXY T Bsh Bexc hsh hmatch ↦ ?_⟩
+  run_tac Lean.throwError (α := Unit) "rough-upper eventual comparison introduced"
   done
 
 end TNLean.PEPS.AreaLaw
