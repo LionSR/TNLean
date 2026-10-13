@@ -7193,6 +7193,22 @@ spectral split → block extraction → MPV calculation → strict bounds
   in a lower-level module and retain the explicit empty-layout assumptions.
 - **Notes:** The two scalars may vanish. No cancellation or normalization is used.
 
+### Casting a word along an equal input layout before restriction — candidate (2026-10-13)
+
+- **Pattern:** Transport a restriction of a word along an equality of its
+  input layout: cast the word by the layout equality, restrict with the source
+  hypothesis moved through `Word.sources_castInput`, and identify the result
+  with the restriction of the original word by `cases h; rfl`.
+- **Seen:** The private `restrict_castInput_eval_heq` helpers in
+  `TNLean/PEPS/Approximation/NoneResidualOperations.lean` and
+  `TNLean/PEPS/Approximation/NoneResidualScalar.lean` (two occurrences,
+  byte-identical).
+- **Abstraction:** At a third occurrence, share the lemma in the module that
+  defines `Word.castInput` and `Word.restrict`, keeping the heterogeneous
+  equality as the statement.
+- **Notes:** Sibling of the `scalar_comp_heq` entry above, recorded on the
+  review of #9164.
+
 ### Matrices of actual maps in orthonormal coordinates — promoted (2026-10-11)
 
 - **Helper:** `matrix_repr_eval_eq_toMatrix` in
