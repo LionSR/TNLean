@@ -86,42 +86,24 @@ theorem isCrossing_rb_of_incident (F : CoherentCoarseBlockingFrame (G := G) (d :
     (hP : F.frame.IsPartition) {e : Edge G}
     (hr : IsRegionIncidentEdge (G := G) F.frame.red e)
     (hb : IsRegionIncidentEdge (G := G) F.frame.blue e) :
-    IsCrossingEdge (G := G) A F.frame.red F.frame.blue e := by
-  rcases hr with hr1 | hr2 <;> rcases hb with hb1 | hb2
-  · exact absurd hb1 ((Finset.disjoint_left.mp hP.red_disjoint_blue) hr1)
-  · exact ⟨Or.inl ⟨hr1, (Finset.disjoint_right.mp hP.red_disjoint_blue) hb2⟩,
-      Or.inr ⟨(Finset.disjoint_left.mp hP.red_disjoint_blue) hr1, hb2⟩⟩
-  · exact ⟨Or.inr ⟨(Finset.disjoint_right.mp hP.red_disjoint_blue) hb1, hr2⟩,
-      Or.inl ⟨hb1, (Finset.disjoint_left.mp hP.red_disjoint_blue) hr2⟩⟩
-  · exact absurd hb2 ((Finset.disjoint_left.mp hP.red_disjoint_blue) hr2)
+    IsCrossingEdge (G := G) A F.frame.red F.frame.blue e :=
+  .of_incident hP.red_disjoint_blue hr hb
 
 /-- An edge incident to both red and complement is a red-to-complement crossing edge. -/
 theorem isCrossing_rc_of_incident (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (hP : F.frame.IsPartition) {e : Edge G}
     (hr : IsRegionIncidentEdge (G := G) F.frame.red e)
     (hc : IsRegionIncidentEdge (G := G) F.frame.complement e) :
-    IsCrossingEdge (G := G) A F.frame.red F.frame.complement e := by
-  rcases hr with hr1 | hr2 <;> rcases hc with hc1 | hc2
-  · exact absurd hc1 ((Finset.disjoint_left.mp hP.red_disjoint_complement) hr1)
-  · exact ⟨Or.inl ⟨hr1, (Finset.disjoint_right.mp hP.red_disjoint_complement) hc2⟩,
-      Or.inr ⟨(Finset.disjoint_left.mp hP.red_disjoint_complement) hr1, hc2⟩⟩
-  · exact ⟨Or.inr ⟨(Finset.disjoint_right.mp hP.red_disjoint_complement) hc1, hr2⟩,
-      Or.inl ⟨hc1, (Finset.disjoint_left.mp hP.red_disjoint_complement) hr2⟩⟩
-  · exact absurd hc2 ((Finset.disjoint_left.mp hP.red_disjoint_complement) hr2)
+    IsCrossingEdge (G := G) A F.frame.red F.frame.complement e :=
+  .of_incident hP.red_disjoint_complement hr hc
 
 /-- An edge incident to both blue and complement is a blue-to-complement crossing edge. -/
 theorem isCrossing_bc_of_incident (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (hP : F.frame.IsPartition) {e : Edge G}
     (hb : IsRegionIncidentEdge (G := G) F.frame.blue e)
     (hc : IsRegionIncidentEdge (G := G) F.frame.complement e) :
-    IsCrossingEdge (G := G) A F.frame.blue F.frame.complement e := by
-  rcases hb with hb1 | hb2 <;> rcases hc with hc1 | hc2
-  · exact absurd hc1 ((Finset.disjoint_left.mp hP.blue_disjoint_complement) hb1)
-  · exact ⟨Or.inl ⟨hb1, (Finset.disjoint_right.mp hP.blue_disjoint_complement) hc2⟩,
-      Or.inr ⟨(Finset.disjoint_left.mp hP.blue_disjoint_complement) hb1, hc2⟩⟩
-  · exact ⟨Or.inr ⟨(Finset.disjoint_right.mp hP.blue_disjoint_complement) hc1, hb2⟩,
-      Or.inl ⟨hc1, (Finset.disjoint_left.mp hP.blue_disjoint_complement) hb2⟩⟩
-  · exact absurd hc2 ((Finset.disjoint_left.mp hP.blue_disjoint_complement) hb2)
+    IsCrossingEdge (G := G) A F.frame.blue F.frame.complement e :=
+  .of_incident hP.blue_disjoint_complement hb hc
 
 /-- A red-to-complement crossing edge is not incident to the blue block: its two
 endpoints lie one in the red block and one in the complement, both disjoint from blue.
@@ -130,26 +112,9 @@ with the roles of blue and complement swapped.) -/
 theorem not_isRegionIncidentEdge_blue_of_crossing_rc
     (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.frame.IsPartition)
     {e : Edge G} (hg : IsCrossingEdge (G := G) A F.frame.red F.frame.complement e) :
-    ¬ IsRegionIncidentEdge (G := G) F.frame.blue e := by
-  -- The red-to-complement crossing edge has, on each endpoint, a red and a complement
-  -- boundary condition; the two combine to place each endpoint in red or complement.
-  have hblue : ∀ v : V, v ∈ F.frame.red ∨ v ∈ F.frame.complement → v ∉ F.frame.blue := by
-    rintro v (hr | hc) hb
-    · exact (Finset.disjoint_left.mp hP.red_disjoint_blue) hr hb
-    · exact (Finset.disjoint_left.mp hP.blue_disjoint_complement) hb hc
-  rcases hg.1 with ⟨hr1, hr2⟩ | ⟨hr1, hr2⟩ <;> rcases hg.2 with ⟨hc1, hc2⟩ | ⟨hc1, hc2⟩
-  · -- e.1.1 ∈ red, e.1.1 ∈ complement: impossible.
-    exact absurd hc1 ((Finset.disjoint_left.mp hP.red_disjoint_complement) hr1)
-  · -- e.1.1 ∈ red, e.1.2 ∈ complement.
-    rintro (hb | hb)
-    · exact hblue _ (Or.inl hr1) hb
-    · exact hblue _ (Or.inr hc2) hb
-  · -- e.1.2 ∈ red, e.1.1 ∈ complement.
-    rintro (hb | hb)
-    · exact hblue _ (Or.inr hc1) hb
-    · exact hblue _ (Or.inl hr2) hb
-  · -- e.1.2 ∈ red, e.1.2 ∈ complement: impossible.
-    exact absurd hc2 ((Finset.disjoint_left.mp hP.red_disjoint_complement) hr2)
+    ¬ IsRegionIncidentEdge (G := G) F.frame.blue e :=
+  hg.not_incident hP.red_disjoint_complement hP.red_disjoint_blue
+    hP.blue_disjoint_complement.symm
 
 /-! ### The three-way merge
 
@@ -225,14 +190,7 @@ def assembleTri (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.fr
     (σc : RegionPhysicalConfig (V := V) (d := d) F.frame.complement) : V → Fin d :=
   fun w => if hr : w ∈ F.frame.red then σr ⟨w, hr⟩
     else if hb : w ∈ F.frame.blue then σb ⟨w, hb⟩
-    else σc ⟨w, by
-      have : w ∈ F.frame.red ∪ F.frame.blue ∪ F.frame.complement := by
-        rw [hP.cover_univ]; exact Finset.mem_univ _
-      rcases Finset.mem_union.mp this with h | h
-      · rcases Finset.mem_union.mp h with h | h
-        · exact absurd h hr
-        · exact absurd h hb
-      · exact h⟩
+    else σc ⟨w, hP.mem_complement_of_notMem hr hb⟩
 
 @[simp] theorem assembleTri_red (F : CoherentCoarseBlockingFrame (G := G) (d := d) A)
     (hP : F.frame.IsPartition)
@@ -345,15 +303,7 @@ theorem complIncident_of_not_red_not_blue (F : CoherentCoarseBlockingFrame (G :=
     IsRegionIncidentEdge (G := G) F.frame.complement e := by
   have h1nr : e.1.1 ∉ F.frame.red := fun h => hr (Or.inl h)
   have h1nb : e.1.1 ∉ F.frame.blue := fun h => hb (Or.inl h)
-  have h1c : e.1.1 ∈ F.frame.complement := by
-    have : e.1.1 ∈ F.frame.red ∪ F.frame.blue ∪ F.frame.complement := by
-      rw [hP.cover_univ]; exact Finset.mem_univ _
-    rcases Finset.mem_union.mp this with h | h
-    · rcases Finset.mem_union.mp h with h | h
-      · exact absurd h h1nr
-      · exact absurd h h1nb
-    · exact h
-  exact Or.inl h1c
+  exact Or.inl (hP.mem_complement_of_notMem h1nr h1nb)
 
 /-- The free virtual indices of an agreeing triple in a fiber: each configuration's
 values on the edges not incident to its own region. -/

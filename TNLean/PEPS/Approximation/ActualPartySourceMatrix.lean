@@ -63,9 +63,8 @@ private theorem toMatrix_eq_mul_basisChange_of_eq
     (b : Module.Basis J ℂ E) (b' : Module.Basis K ℂ E) (c : Module.Basis L ℂ F)
     (A : E →ₗ[ℂ] F) (M : Matrix L K ℂ) (hM : LinearMap.toMatrix b' c A = M) :
     LinearMap.toMatrix b c A = M * LinearMap.toMatrix b b' LinearMap.id := by
-  let := Fintype.ofFinite L
   rw [LinearMap.toMatrix_id_eq_basis_toMatrix, ← hM]
-  exact (linearMap_toMatrix_mul_basis_toMatrix b b' c A).symm
+  exact (linearMap_toMatrix_mul_basis_toMatrix (c' := c) b b' A).symm
 
 /-- Literal source columns are the product of the actual party matrices followed
 by the constructed change from source-slot coordinates to party coordinates.
