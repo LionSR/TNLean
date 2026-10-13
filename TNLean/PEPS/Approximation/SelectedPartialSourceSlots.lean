@@ -128,7 +128,7 @@ theorem mapOwner_selected_originalLayout_eq (p : P) (L : Layout P) :
         have hOne : affectedOwner A r.owner ≠ q := by
           rw [(affectedOwner_eq_none A r.owner).mpr hA]
           intro h
-          exact Option.noConfusion h
+          cases h
         have hAll : all r.owner ≠ qp := by
           intro h
           change (some ⟨r.owner, rfl⟩ : Option {_p : P // true = true}) = some ⟨p, rfl⟩ at h
