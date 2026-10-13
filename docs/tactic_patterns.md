@@ -24,6 +24,45 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Actual sampled local physical matrices — promoted (2026-10-12)
+
+- **Pattern:** The same mixed physical trace, with independent chronological
+  choices and one original sample assignment, appeared in
+  `ActualSampledPhysicalFactors`, `ActualSampledPhysicalScalar` and
+  `ActualPureSampledPhysicalSum`.
+- **Promotion:** `SourceCircuit.sampledPhysicalFactor` records this matrix once
+  in `ActualSampledPhysicalFactors`. All three statements use that definition;
+  its physical indices are the original indices and its private basis is the
+  actual selected private basis. No scalar or norm is cancelled.
+- **Verification:** The existing physical-trace fixture checks the definition
+  by name. Its blueprint definition remains unmarked; elaboration is pending.
+
+### Reflected marked-chain scalar and gauge cancellation — promoted (2026-10-12)
+
+- **Pattern:** conjugate a double sum `∑ i j, star (x i) * K i j * y j`
+  through `star_sum`/`star_mul'`/`Finset.sum_comm`, cancel a positive
+  self-conjugate scalar from a conjugate identity by `mul_left_cancel₀`, and
+  cancel a vertical gauge by conjugating a reflected identity with the
+  adjoint gauge (`hCov`/`hLeft`/`hRight`).
+- **Seen:** each of the three blocks twice, in
+  `TNLean/MPS/MPDO/ReflectedMarkedChain.lean` and
+  `TNLean/MPS/MPDO/TwoSitePrefixReflectedMarkedChain.lean` (the gauge block
+  also in `FigureEightPairwise.lean`); 150 lines in total.
+- **Abstraction:** `Finset.sum_sum_star_mul_mul_eq_star` and
+  `MPOTensor.markedChainCoefficient_eq_reflectedAdjoint_of_mul_eq_star` in
+  `ReflectedMarkedChain.lean`;
+  `MPOTensor.markedChainCoefficient_gramDressing_eq_of_bondMul_reflected` in
+  `FigureEightPairwise.lean`. The self-conjugacy of a positive scalar is
+  Mathlib's `IsSelfAdjoint.of_nonneg`.
+- **Refactor:** the public `IsMPDO.coordinateCompression_star` keeps its
+  statement and becomes a two-line instance of the generic identity and
+  Hermiticity; the private `blockTwoPrefixCoordinateCompression_star` is
+  deleted, and both `_eq_reflectedAdjoint` proofs reduce to that instance
+  and the scalar cancellation; both Gram-dressed theorems apply the gauge
+  lemma. The private `hslice` copy is replaced by
+  `horizontalSlice_twoSidedCompression`, now in `ReflectedMarkedChain.lean`.
+  No statement or tag changes.
+
 ### Membership in composed gate expansions — promoted (2026-10-08)
 
 - **Pattern:** Decompose membership in the ordered Cartesian gate expansion
@@ -71,6 +110,19 @@ abstracted — record why, so it is not re-proposed).
   `Classical.choose_spec` arguments are unchanged.
 - **Notes:** this names an existing assignment and introduces no new
   geometric premise, identifier family or quotient of separated runs.
+
+### Nonfar sites remain in the compact truncation set — promoted (2026-10-10)
+
+- **Pattern:** persistence of the initial far assignment forces a nonfar site
+  into the color and below the initial upper cutoff, which is at most `8Km`.
+- **Seen:** The previous private near-containment proof in `SideSeparation.lean`,
+  the non-contained-support proof in `SplitSupportSize.lean`, and the common
+  five-region budget in `StatusMarginalBudget.lean`.
+- **Abstraction:** `CollarScan.mem_truncationSet_of_not_far` in
+  `TNLean/PEPS/AreaLaw/Scan/StatusContainment.lean`, with completed and
+  pre-charge far-complement inclusions. Both previous proof copies are removed.
+- **Notes:** There is no time-horizon, row, good-history, or positive-band premise.
+  The far side itself is not asserted to be compact.
 
 ### Ambient depth variation in an actual charge ball — promoted (2026-10-09)
 
@@ -674,7 +726,7 @@ abstracted — record why, so it is not re-proposed).
   `TNLean/MPS/MPU/Examples/SwapBlockedSymmetryTransport.lean`, in the adjunction,
   transposition and conjugation comparisons (2026-10-03).
 - **Abstraction:** `MPOTensor.isInvariantUnderSymmetry_iff_of_pointwise` in
-  `SwapSymmetryTransport.lean` performs the common quantifier reduction once.
+  `TNLean/MPS/MPU/Equivalence.lean` performs the common quantifier reduction once.
 - **Notes:** the original four-line `forall_congr'`/`imp_congr_right` block is
   removed from all six sites. The helper requires equality of the applicable
   lengths and pointwise equivalence of the actual operator fixed equations;
@@ -4195,6 +4247,37 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Mixed coordinate traces at abstract memories — candidate (2026-10-13)
+
+- **Pattern:** Form a mixed coordinate trace at arbitrary input and output
+  memories, then substitute the actual sampled words. Explicit dependent
+  index families keep the physical and private matrix types fixed.
+- **Seen:** `restrictedMixedPhysicalTrace` in `ActualSampledPhysicalFactors`
+  and `empty_memory_words_mixed_partialTrace` in
+  `ActualSampledExteriorScalar` (two occurrences).
+- **Abstraction:** Before a third occurrence, compare the required abstract
+  memory and basis interfaces and share the coordinate construction if their
+  statements agree. Keep source-free restriction proofs separate from the
+  coordinate formula.
+- **Scope:** The exterior application identifies words after restriction;
+  no equality of full operators is restricted. The coordinate formulas and
+  public hypotheses are unchanged. Verification at the default proof limits
+  remains pending.
+
+### Upper endpoint of a scanner band — candidate (2026-10-12)
+
+- **Pattern:** Use the band index bound, the offset bound and $8Km\le L$
+  to place $8gm+5m+r$ below the original collar depth.
+- **Seen:** The endpoint estimate in
+  `Scan/StatusContainment.mem_truncationSet_of_not_far` and the two front
+  estimates in `Scan/FrontThresholds.front_comparison_thresholds_le`.
+- **Abstraction:** `CollarScan.upper_le` in `Scan/SideSeparation.lean` states
+  the shared endpoint bound, used by the front estimates. The containment proof
+  precedes it in the import order and keeps its own copy.
+- **Notes:** The fill-count estimate remains `fillCount_div_le_window`;
+  nonnegativity suffices for the far threshold. Neither consumer needs a new
+  scanner structure or additional dimension hypotheses.
+
 ### Sheet swaps in regional coordinates — candidate (2026-10-09)
 
 - **Pattern:** derive regional tensor factors from membership in the supported-operator
@@ -5892,6 +5975,22 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 ## Rejected
 
+### Axiom allow-list fixtures — rejected (2026-10-12)
+
+- **Pattern:** a `run_cmd` block in a `TNLeanTest/` fixture that checks a
+  named declaration exists, collects its axioms with `Lean.collectAxioms`,
+  and rejects anything outside `propext`, `Classical.choice` and
+  `Quot.sound`.
+- **Seen:** `TNLeanTest/WeakRectanglePartialRowEntropyAxioms.lean`,
+  `TNLeanTest/PartyOutputCoordinatesAxioms.lean`,
+  `TNLeanTest/ContinuityFixedCoefficientAxioms.lean`, and most other
+  exact-name axiom fixtures under `TNLeanTest/`.
+- **Reason:** each fixture is a standalone audit whose declaration list and
+  allow-list should be readable in the file that CI runs. The block is a few
+  lines of metaprogramming with no mathematical content; a shared command would
+  move the allow-list out of the audited file without removing a proof
+  obligation. Fixtures keep the explicit block.
+
 ### Elementary set and finite-sum proof structure — rejected (2026-10-02)
 
 - **Pattern:** The three-line sequences `ext x; constructor; intro hx` and
@@ -6466,6 +6565,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   than tensor identities. The addition case already uses `congrArg₂`,
   `eq_of_heq`, and `heq_of_eq`. The same core equality tools suffice for the
   head constructions; a generic lemma would only restate their congruence.
+- **Word identities (2026-10-12):** `WordOwnerAppendTailTransport` and
+  `AbsorbedRestriction` both compare chronological compositions, frames,
+  identities and list identifications at the word level after identifying
+  layouts. These are two occurrences of each pattern across two files.
+  Before a third occurrence, promote the corresponding word congruences
+  to a shared provider. This comparison is stronger than equality of
+  evaluated operators and can therefore be used before taking a local
+  part or restricting owners. The new transport has a named axiom check;
+  elaboration is pending.
 - **Relation to the tensor-map candidate:** The two existing private
   `mapL_heq` and `mapL_apply_heq` helpers concern tensor products of two maps
   with four changing spaces. The new helper instead compares an associator
@@ -6956,6 +7064,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   multiple-file promotion threshold. Crossing membership itself is already
   expressed by `mem_edgeBoundary_pair_iff`; no new tactic macro is needed.
 
+### Physical regional density as a tensor-factor partial trace — candidate (2026-10-11)
+
+- **Pattern:** Compose `reducedState_eq_finiteProduct` with
+  `FiniteProduct.reducedPure_eq_partialTrace` after splitting a physical state
+  into the selected region and its complement.
+- **Seen:** Two occurrences in `PEPS/AreaLaw/SelectedSchmidtEntropyBounds.lean`
+  and `PEPS/AreaLaw/Scan/TypicalReplicaAbsorption.lean`.
+- **Abstraction:** A regional-density identity could package the composition
+  if a third use appears. The two existing public identities are reused here.
+- **Notes:** The split state and the selected spectral set remain those of the
+  supplied physical state. No normalization or gap premise is needed for the
+  density identity itself. This is below the promotion threshold.
+
 ### Exact eigenvalue equations under configuration isometries — candidate (2026-10-09)
 
 - **Pattern:** transport a matrix-vector equation through the configuration
@@ -7142,45 +7263,37 @@ spectral split → block extraction → MPV calculation → strict bounds
   bases; empty coordinate sets and zero maps are included. A lemma suffices.
 
 
-### Restriction under identification of equal layouts — candidate (2026-10-12)
+### Restriction under identification of equal layouts — promoted (2026-10-12)
 
-- **Pattern:** Eliminate the input and output layout equalities, then use
-  reflexivity to compare restrictions of the identified word.
-- **Seen:** The private `restrict_castLayouts_word_heq` in
-  `AbsorbedRestriction.lean` and `restrict_castLayouts_eval_heq` in
-  `SampledEndpointExteriorIdentity.lean` (two proof bodies).
-- **Abstraction:** At a third proof body, share the restriction identity in
-  `WordRestriction.lean`, retaining the original source-free hypothesis.
-- **Notes:** One compares the words and the other their evaluations. Both
-  concern canonical identifications, without choosing any new isometry.
+- **Pattern:** Eliminate equal input and output register lists before comparing
+  restriction with their canonical identification.
+- **Seen:** `AbsorbedRestriction.restrict_castLayouts_word_heq`, the former
+  `SampledEndpointExteriorIdentity.restrict_castLayouts_eval_heq`, and
+  `EndpointWordRestrictionCongruence.restrict_castLayouts_congr`.
+- **Abstraction:** `Word.restrict_castLayouts` in `WordRestriction.lean`
+  states that restriction commutes with canonical identification of the
+  input and output lists. Its single proof eliminates both equalities.
+- **Refactor:** The endpoint congruence rewrites by this identity. The sampled
+  exterior proof applies evaluation and the existing evaluation-transport
+  lemma. The actively used private word comparison in `AbsorbedRestriction`
+  derives its heterogeneous conclusion from the same identity and the
+  existing single-word transport lemma.
+- **Notes:** Every original public signature and source-free hypothesis is
+  retained. No arbitrary heterogeneous-equality premise or new isometry is
+  introduced. Compilation of this promotion is pending with the endpoint
+  congruence development.
+### Actual-round cross-band commutation — candidate (2026-10-11)
 
-
-### Actual sampled local physical matrices — promoted (2026-10-12)
-
-- **Pattern:** The same mixed physical trace, with independent chronological
-  choices and one original sample assignment, appeared in
-  `ActualSampledPhysicalFactors`, `ActualSampledPhysicalScalar` and
-  `ActualPureSampledPhysicalSum`.
-- **Promotion:** `SourceCircuit.sampledPhysicalFactor` records this matrix once
-  in `ActualSampledPhysicalFactors`. All three statements use that definition;
-  its physical indices are the original indices and its private basis is the
-  actual selected private basis. No scalar or norm is cancelled.
-- **Verification:** The existing physical-trace fixture checks the definition
-  by name. Its blueprint definition remains unmarked; elaboration is pending.
-
-### Mixed coordinate traces at abstract memories — candidate (2026-10-13)
-
-- **Pattern:** Form a mixed coordinate trace at arbitrary input and output
-  memories, then substitute the actual sampled words. Explicit dependent
-  index families keep the physical and private matrix types fixed.
-- **Seen:** `restrictedMixedPhysicalTrace` in `ActualSampledPhysicalFactors`
-  and `empty_memory_words_mixed_partialTrace` in
-  `ActualSampledExteriorScalar` (two occurrences).
-- **Abstraction:** Before a third occurrence, compare the required abstract
-  memory and basis interfaces and share the coordinate construction if their
-  statements agree. Keep source-free restriction proofs separate from the
-  coordinate formula.
-- **Scope:** The exterior application identifies words after restriction;
-  no equality of full operators is restricted. The coordinate formulas and
-  public hypotheses are unchanged. Verification at the default proof limits
-  remains pending.
+- **Pattern:** Apply `actualRoundData_induction` to a choice-independent property,
+  then use the actual charge and fill commutation theorems at history length
+  `j.val / 2`.
+- **Seen:** The local common-error proof in `Scan/ActualRoundTransport.lean`
+  and `actualRoundData_crossBandCommute` in `Scan/ActualRoundEntropy.lean`.
+- **Abstraction:** The latter now supplies the named assertion to the entropy
+  integrability proof and its regression fixture. The independent parent module
+  remains unchanged; moving this declaration into a common earlier module would
+  be appropriate if a third production consumer appears.
+- **Notes:** Two production occurrences, with no new tactic or additional
+  geometric hypothesis. Exact root telescoping reuses Mathlib's
+  `Fin.sum_univ_eq_sum_range` and `Finset.sum_range_sub'` rather than proving a
+  second finite-sum cancellation theorem.

@@ -188,6 +188,114 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     of its basis vectors. Evaluate that definition at each pair of indices.
 \end{proof}
 
+\begin{theorem}[Dependence on the selected endpoint maps]
+    \label{thm:peps_source_register_operator_local_congruence}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.restrict_endpointWord_eval_eq_of_local_eq}
+    \leanok
+    \uses{def:peps_source_register_operator_word,thm:peps_party_restriction}
+    Fix the ordered source-register list and a party selector $f$.
+    Consider endpoint maps $A_i,B_i$ and $A'_i,B'_i$ on the same spaces.
+    Suppose that $A_i=A'_i$ whenever $f(p_i)=1$, and $B_i=B'_i$ whenever
+    $f(q_i)=1$. Then the two restricted source-register operators agree:
+    \begin{align*}
+        Z_R(A,B)|_f & =Z_R(A',B')|_f.
+    \end{align*}
+    No equality is required at an unselected endpoint. The register order
+    and spectator memories are unchanged; an empty inventory and
+    zero-dimensional spaces are included. This is the pointwise endpoint
+    locality used in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 279--309 and 565--588.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_source_register_operator_word,thm:peps_party_restriction}
+    Induct on the ordered source inventory. An unselected endpoint map
+    is omitted in either restriction. At a selected endpoint the two maps
+    agree by hypothesis. Tensoring with the unchanged spectator identities
+    and composing with the inductive equality preserves equality. The
+    canonical identifications of the fixed register lists are the same on
+    both sides.
+\end{proof}
+
+
+\begin{theorem}[Restriction and canonical register identification]
+    \label{thm:peps_party_restriction_canonical_layouts}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_castLayouts}
+    \leanok
+    \uses{thm:peps_party_restriction,thm:peps_basis_memory_equalities}
+    Let a source-free chronological operator act between two ordered
+    register lists. Canonically identify these with equal input and output
+    lists, and retain the registers and local operations selected by $f$.
+    The result is the same as first making the restriction and then
+    canonically identifying the selected input and output lists.
+    The equalities of register lists supply the identifications; no new
+    isometry is chosen. This is the canonical transport used in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 233--251, 279--309 and 565--588.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_party_restriction,thm:peps_basis_memory_equalities}
+    Identify the equal input lists and equal output lists. Both
+    constructions then retain the same registers and local operations
+    in the same chronological order.
+\end{proof}
+
+\begin{theorem}[Dependence on incident source samples]
+    \label{thm:peps_actual_sampled_endpoint_locality}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_sampledEndpointInputWord_eval_eq_of_incident_samples}
+    \leanok
+    \uses{def:peps_actual_sampled_endpoint_word,
+        def:peps_original_sampled_endpoint_factors,
+        thm:peps_source_register_operator_local_congruence,
+        thm:peps_party_restriction_canonical_layouts}
+    Fix independent ket and bra choices $\xi,\zeta$ and a selector $f$
+    of the grouped owners. A sample assignment on the original source
+    occurrences consists of a sample index $j(e)$ and a family of
+    Gaussian coordinates $\omega_{e,\alpha,\beta,s,p,q}$
+    (Definition~\ref{def:peps_source_gaussian_law}) at each source $e$;
+    write $U_{\xi,\zeta,j,\omega}$ for the actual sampled source-input
+    word of Definition~\ref{def:peps_actual_sampled_endpoint_word} built
+    from it. Let $(j,\omega)$ and $(j',\omega')$ be two sample
+    assignments. Suppose that, whenever $f$ selects at least one endpoint
+    of a source $e$, with actual branch pair $(\alpha,\beta)$ chosen by
+    $(\xi,\zeta)$ at $e$,
+    \begin{align}
+        j(e)=j'(e)
+        \qquad\text{and}\qquad
+        \omega_{e,\alpha,\beta,s,p,q}=\omega'_{e,\alpha,\beta,s,p,q}
+        \quad\text{for all }s,p,q.
+        \label{eq:peps_actual_sampled_endpoint_locality_agreement}
+    \end{align}
+    Then the actual sampled source-input words have equal restrictions:
+    \begin{align}
+        U_{\xi,\zeta,j,\omega}|_f
+         & =U_{\xi,\zeta,j',\omega'}|_f.
+        \label{eq:peps_actual_sampled_endpoint_locality}
+    \end{align}
+    At each source the two endpoints still use the same sample index and
+    the same ordered ket--bra Gaussian array. No condition is imposed on
+    samples at sources whose endpoints are both unselected. This is the
+    sample dependence used in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 279--309 and 565--588.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_actual_sampled_endpoint_word,
+        def:peps_original_sampled_endpoint_factors,
+        thm:peps_source_register_operator_local_congruence,
+        thm:peps_party_restriction_canonical_layouts}
+    Unfold both words by Definition~\ref{def:peps_actual_sampled_endpoint_word}.
+    The formulas defining the endpoint matrices agree at every selected
+    endpoint, since by~(\ref{eq:peps_actual_sampled_endpoint_locality_agreement})
+    their sample index and Gaussian array agree there.
+    Apply Theorem~\ref{thm:peps_source_register_operator_local_congruence}.
+    The canonical identification with the actual source-input register
+    list preserves this equality by
+    Theorem~\ref{thm:peps_party_restriction_canonical_layouts}.
+\end{proof}
+
 \begin{theorem}[The physical mixed trace in the original coordinates]
     \label{thm:peps_selected_physical_private_trace}
     \lean{TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis_partialTrace_mixed}

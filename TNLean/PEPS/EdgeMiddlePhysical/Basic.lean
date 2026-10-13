@@ -284,18 +284,6 @@ theorem IsVertexInjective.edgeBlockedEndpointTensorMaps_injective {A : Tensor G 
       Function.Injective (localTensorMap A e.1.2) :=
   ⟨hA.localTensorMap_injective e.1.1, hA.localTensorMap_injective e.1.2⟩
 
-/-- Vertex injectivity supplies the two endpoint injectivity assertions for
-the edge-blocked three-site chain at every edge.
-
-Source: arXiv:1804.04964, Section 3, `eq:block_to_mps`,
-`Papers/1804.04964/paper_normal.tex`, lines 981--1009. -/
-theorem IsVertexInjective.edgeBlockedEndpointTensorMaps_injective_all {A : Tensor G d}
-    (hA : IsVertexInjective A) :
-    ∀ e : Edge G,
-      Function.Injective (localTensorMap A e.1.1) ∧
-        Function.Injective (localTensorMap A e.1.2) :=
-  fun e => hA.edgeBlockedEndpointTensorMaps_injective e
-
 /-- Once the middle block is injective, vertex injectivity gives the full
 edge-blocked three-site injectivity statement.
 

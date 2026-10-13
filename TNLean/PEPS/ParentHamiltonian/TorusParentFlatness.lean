@@ -59,25 +59,10 @@ theorem IsGInjective.torusPlaquetteHolonomy_eq_one_of_parent_annihilates
       stateCoeff (groupBondTensor (regularTwistedSite (torusIncidentSite a) u)) = 0) :
     regularWalkHolonomy u (torusPlaquetteWalk v) = 1 := by
   classical
-  let R := torusPlaquetteRegion v
-  have hsupport : ∀ x ∈ (torusPlaquetteWalk v).support, x ∈ (R : Set X) := by
-    intro x hx
-    exact List.mem_toFinset.mpr hx
-  have hR : ((Γₜ).induce (R : Set X)).Connected := by
-    have heq : (R : Set X) = {x | x ∈ (torusPlaquetteWalk v).support} := by
-      ext x
-      simp [R, torusPlaquetteRegion]
-    rw [heq]
-    exact (torusPlaquetteWalk v).connected_induce_support
-  let o : {x : X // x ∈ R} := ⟨v, hsupport _ (torusPlaquetteWalk v).start_mem_support⟩
-  let p : ((Γₜ).induce (R : Set X)).Walk o o :=
-    (torusPlaquetteWalk v).induce (R : Set X) hsupport
-  have h := regularWalkHolonomy_eq_one_of_regionParent_annihilates_twistedState
-    (torusIncidentSite a) (fun w => ha.isGInjective_torusIncidentSite w)
-    R hR u o p Q hQ hne hground
-  dsimp only [p] at h
-  rw [regularWalkHolonomy_inducedWalk, SimpleGraph.Walk.map_induce] at h
-  exact h
+  simpa only [regularWalkHolonomy_torusPlaquetteInducedWalk] using
+    regularWalkHolonomy_eq_one_of_regionParent_annihilates_twistedState
+      (torusIncidentSite a) (fun w => ha.isGInjective_torusIncidentSite w) _
+      (connected_torusPlaquetteRegion v) u _ (torusPlaquetteInducedWalk v) Q hQ hne hground
 
 /-- A nonzero one-bond flux state with nonidentity flux cannot satisfy the
 original plaquette parent constraint. Source: SCP10, fluxon strings,

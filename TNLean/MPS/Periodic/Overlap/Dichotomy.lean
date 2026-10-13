@@ -48,13 +48,15 @@ This is the core technical result of the paper: all subsequent theorems
 Source: arXiv:1708.00029, Proposition equal-or-orthogonal-generalized
 (statement, lines 589--609; appendix proof, lines 903--1118). -/
 theorem periodicOverlapDichotomy
-    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    {D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     {m_a m_b : ℕ}
     (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B) :
     Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0)
       ∨ ∃ (hdim : D₁ = D₂),
           RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) A) B := by
+  have : NeZero D₁ := ⟨hA.bondDim_ne_zero⟩
+  have : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩
   -- APPENDIX CASE SPLIT (arXiv:1708.00029 lines 915--1117):
   --   * m_a ≠ m_b            → `periodicOverlap_tendsto_zero_of_ne_period`
   --   * m_a = m_b, D₁ ≠ D₂ → `periodicOverlap_tendsto_zero_of_ne_dim`
@@ -143,7 +145,6 @@ theorem periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_ze
   -- `eventually_linearIndependent_of_gram_tendsto_nondegenerate`.
   classical
   let : Fintype ι := Fintype.ofFinite ι
-  let : ∀ k, NeZero (dim k) := fun k => ⟨(hPer k).bondDim_ne_zero⟩
   set V := lp (fun N : ℕ => MPVSpace d N) 2 with hV
   set v : ι → ℕ → V :=
     fun k N => lp.single 2 (p * N) (mpvState (d := d) (A k) (p * N)) with hv
@@ -229,7 +230,6 @@ theorem periodicBasis_eventuallyLinearlyIndependent
         ¬ RepeatedBlocks (cast (congr_arg (MPSTensor d) hdim) (A i)) (A j)) :
     ∃ N₀ : ℕ, ∀ N ≥ N₀,
       LinearIndependent ℂ (fun k => mpvState (A k) (p * N)) := by
-  let : ∀ k, NeZero (dim k) := fun k => ⟨(hPer k).bondDim_ne_zero⟩
   refine periodicFamily_eventuallyLinearlyIndependent_of_cross_overlap_tendsto_zero
     A period hPer p hDiv ?_
   intro i j hij

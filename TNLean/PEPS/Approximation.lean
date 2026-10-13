@@ -18,6 +18,7 @@ import TNLean.PEPS.Approximation.ActualPureSampledPhysicalSum
 import TNLean.PEPS.Approximation.ActualPureSourceMatrix
 import TNLean.PEPS.Approximation.ActualPureSourceReplacement
 import TNLean.PEPS.Approximation.ActualSampledEndpointInputWord
+import TNLean.PEPS.Approximation.ActualSampledEndpointLocality
 import TNLean.PEPS.Approximation.ActualSampledEndpointWord
 import TNLean.PEPS.Approximation.ActualSampledExteriorScalar
 import TNLean.PEPS.Approximation.ActualSampledPartyContraction
@@ -111,6 +112,7 @@ import TNLean.PEPS.Approximation.EndpointOperatorCoordinates
 import TNLean.PEPS.Approximation.EndpointOperatorWord
 import TNLean.PEPS.Approximation.EndpointWordEvaluation
 import TNLean.PEPS.Approximation.EndpointWordRestriction
+import TNLean.PEPS.Approximation.EndpointWordRestrictionCongruence
 import TNLean.PEPS.Approximation.ExactFiniteException
 import TNLean.PEPS.Approximation.ExactSmallSizeApproximation
 import TNLean.PEPS.Approximation.ExactSquareRepresentation
@@ -198,6 +200,7 @@ import TNLean.PEPS.Approximation.PatchRewrite
 import TNLean.PEPS.Approximation.PatchRewriteExpansion
 import TNLean.PEPS.Approximation.PatchRewriteMonomials
 import TNLean.PEPS.Approximation.PatchRewriteTruncation
+import TNLean.PEPS.Approximation.PhysicalBufferCoordinates
 import TNLean.PEPS.Approximation.PhysicalDensityPureInput
 import TNLean.PEPS.Approximation.PhysicalFirstExchange
 import TNLean.PEPS.Approximation.PhysicalFirstLinkPolynomial
@@ -326,6 +329,7 @@ import TNLean.PEPS.Approximation.WholeGroupContraction
 import TNLean.PEPS.Approximation.WholeGroupNetwork
 import TNLean.PEPS.Approximation.WordAppendTail
 import TNLean.PEPS.Approximation.WordEvaluationTransport
+import TNLean.PEPS.Approximation.WordOwnerAppendTailTransport
 import TNLean.PEPS.Approximation.WordOwnerMap
 import TNLean.PEPS.Approximation.WordOwnerRestriction
 import TNLean.PEPS.Approximation.WordPartyCoordinates

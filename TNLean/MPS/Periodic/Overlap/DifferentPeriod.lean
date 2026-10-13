@@ -50,9 +50,10 @@ load-bearing step of the substitute proof route for different-period decay — t
 peripheral spectrum in place of the paper's lcm-blocking and one-site translation
 argument — documented in docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex. -/
 private theorem period_eq_of_gaugePhaseEquiv_of_isPeriodic
-    [NeZero D] {A B : MPSTensor d D}
+    {A B : MPSTensor d D}
     {m_a m_b : ℕ} (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
     (hGPE : GaugePhaseEquiv A B) : m_a = m_b := by
+  have : NeZero D := ⟨hA.bondDim_ne_zero⟩
   obtain ⟨X, ζ, hζ_ne, hBi⟩ := hGPE
   -- Transfer map scaling: B = ζ • (X A X⁻¹) implies E_B = |ζ|² E_{XAX⁻¹}
   have hEB_eq : ∀ Y, Kraus.transferMap (d := d) (D := D) B Y =
@@ -121,12 +122,14 @@ irreducible trace-preserving overlap dichotomy) gives the decay. This is a
 mathematically equivalent substitute for the paper's step, documented in
 docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex. -/
 theorem periodicOverlap_tendsto_zero_of_ne_period
-    {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    {D₁ D₂ : ℕ}
     (A : MPSTensor d D₁) (B : MPSTensor d D₂)
     {m_a m_b : ℕ}
     (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
     (hne : m_a ≠ m_b) :
     Tendsto (fun N => mpvOverlap A B N) atTop (nhds 0) := by
+  have : NeZero D₁ := ⟨hA.bondDim_ne_zero⟩
+  have : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩
   by_cases hD : D₁ = D₂
   · subst hD
     exact mpvOverlap_tendsto_zero_of_irreducible_TP A B
