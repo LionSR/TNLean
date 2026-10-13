@@ -117,6 +117,9 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
     simpa only [Λ, AreaLaw.Site, SquareLatticeVertex, Fintype.card_coe,
       Fintype.card_prod, Fintype.card_fin, Nat.cast_mul, pow_two] using
       congrArg (fun n : ℕ ↦ (n : ℝ)) (Fintype.card_congr a).symm
+  obtain ⟨U, hU0, hU, hunit, hsupport, hM⟩ :=
+    hgauss Λ gH K V (hDK.reindex (p.trans e))
+      (Q.image a) (Z.image a) hV hD l
   done
 
 end TNLean.PEPS.Approximation
