@@ -150,6 +150,7 @@ import TNLean.PEPS.Approximation.LocalPartFrameListRestriction
 import TNLean.PEPS.Approximation.LocalPartRestrictionCongruence
 import TNLean.PEPS.Approximation.LocalPartSpectatorOwnerExclusion
 import TNLean.PEPS.Approximation.LocalSchmidtOutput
+import TNLean.PEPS.Approximation.LocalSourceSampleIndices
 import TNLean.PEPS.Approximation.LocalTransferExpansion
 import TNLean.PEPS.Approximation.MatrixAction
 import TNLean.PEPS.Approximation.MessageGateCircuit
@@ -310,7 +311,9 @@ import TNLean.PEPS.Approximation.SourcePrivatePreparationEvaluation
 import TNLean.PEPS.Approximation.SourcePrivatePreparationRestriction
 import TNLean.PEPS.Approximation.SourceRegisterPermutation
 import TNLean.PEPS.Approximation.SourceResidualCoordinates
+import TNLean.PEPS.Approximation.SourceSampleAssignmentIndices
 import TNLean.PEPS.Approximation.SourceSampleChoice
+import TNLean.PEPS.Approximation.SourceSampleIndices
 import TNLean.PEPS.Approximation.SourceSamplingCount
 import TNLean.PEPS.Approximation.SourceSamplingPolynomial
 import TNLean.PEPS.Approximation.SourceSlotBasis

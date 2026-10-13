@@ -7127,6 +7127,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   The existing disjoint-region entropy increment theorem is reused directly.
   The two cardinality chains differ only in their ambient geometric bounds.
 
+### Source occurrence indices under composition and framing — candidate (2026-10-13)
+
+- **Pattern:** Construct an occurrence-indexed equivalence by recursion on a
+  source circuit, preserving the sum tags under composition and retaining
+  the same occurrence under framing.
+- **Seen:** `SourceCircuit.sourcePairEquiv` and its endpoint identity in
+  `TNLean/PEPS/Approximation/SourceSampleIndices.lean`.
+- **Abstraction:** The slot enumeration reuses `SourceInventory.pairIndexEquiv`;
+  Mathlib's injective map on unordered pairs supplies the participant image.
+  The global source/sample identification reuses this occurrencewise equivalence.
+- **Notes:** Two recursive constructions in one file; below the promotion
+  threshold. The equivalence of unordered pair indices does not replace
+  the original ordered endpoint spaces.
+
 ### Owners of fixed pair-source registers — candidate (2026-10-09)
 
 - **Pattern:** From membership in a fixed source-register layout, use
