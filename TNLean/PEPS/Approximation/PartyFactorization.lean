@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.Approximation.PartyTensorMaps
 import TNLean.PEPS.Approximation.WordRestriction
 
 /-!
@@ -60,14 +61,14 @@ private theorem mapL_apply_heq {A A' B B' C C' D D' : HSpace}
     (a : A →L[ℂ] B) (a' : A' →L[ℂ] B') (b : C →L[ℂ] D) (b' : C' →L[ℂ] D')
     (ha : HEq a a') (hb : HEq b b') {x : A ⊗[ℂ] C} {x' : A' ⊗[ℂ] C'}
     (hx : HEq x x') : HEq (TensorProduct.mapL a b x) (TensorProduct.mapL a' b' x') := by
+  have hm := mapL_heq hA hB hC hD a a' b b' ha hb
   cases hA
   cases hB
   cases hC
   cases hD
-  cases ha
-  cases hb
-  cases hx
-  rfl
+  exact heq_of_eq (congrArg₂
+    (fun (T : (A ⊗[ℂ] C) →L[ℂ] (B ⊗[ℂ] D)) (y : A ⊗[ℂ] C) ↦ T y)
+    (eq_of_heq hm) (eq_of_heq hx))
 
 variable {P : Type}
 

@@ -4,6 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.ActualPureSourceReplacement
+import TNLean.PEPS.Approximation.ActualSampledExteriorScalar
+import TNLean.PEPS.Approximation.ActualSampledPhysicalFactors
 import TNLean.PEPS.Approximation.DistributedPhysicalPrivateTrace
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
@@ -16,6 +18,9 @@ open TNLean.PEPS.PairEffect.SourceCircuit in
 run_cmd do
   let decls := #[
     ``TNLean.PEPS.PairEffect.SourceCircuit.sourceReplacedDensity_pure_eq_sum_actualColumns,
+    ``partialSourceWord_sampled_none_partialTrace_eq_scalar,
+    ``sampledPhysicalFactor,
+    ``partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors,
     ``TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis_partialTrace_mixed,
     ``TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_eq_grouped_partialTrace]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]

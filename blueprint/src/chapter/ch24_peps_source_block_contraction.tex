@@ -569,3 +569,160 @@ This gives the contractions used in
     The finite column-contraction identity gives
     (\ref{eq:peps_actual_pure_source_contraction}).
 \end{proof}
+
+\begin{definition}[Source slots as participant pairs]
+    \label{def:peps_original_source_pair_indices}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourcePairEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourcePairEquiv_apply}
+    \leanok
+    \uses{def:peps_source_pair_index,def:compression_operator_samples}
+    For each gate occurrence, its recorded source slots are in bijection with
+    the unordered pairs of distinct participants of that occurrence. The slot
+    corresponding to a pair has the original two endpoint owners. The order of
+    these endpoints, their two Euclidean spaces, and the source vector assigned
+    to the slot are retained independently of this unordered pair index.
+    This is an auxiliary identification in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 233--245, 342--364 and 568--588.
+\end{definition}
+\begin{proof}\leanok
+    The recorded slots contain each unordered pair of distinct local participants
+    exactly once. The embedding of the participants into the original party set
+    is injective, and therefore gives a bijection onto the pairs in its image.
+    Composing these two bijections gives the assertion. Under chronological
+    composition, the occurrence tags distinguish the two constituent circuits;
+    framing leaves the occurrence and its slot unchanged.
+\end{proof}
+
+\begin{definition}[Sample positions of the original circuit]
+    \label{def:peps_original_source_sample_indices}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv}
+    \leanok
+    \uses{def:peps_original_source_pair_indices,def:compression_operator_samples}
+    Identify an original source occurrence with the sample position consisting
+    of its nonempty-participant gate occurrence and its unordered endpoint pair.
+    A gate with no participants or only one participant contributes no sample
+    position. The inverse identification recovers the original recorded slot,
+    with its original endpoint order and dimensions.
+    This is an auxiliary identification in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 568--588.
+\end{definition}
+
+
+\begin{theorem}[Incidence of original sample positions]
+    \label{thm:peps_original_source_sample_incidence}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.mem_sourceSampleEquiv_iff}
+    \leanok
+    \uses{def:peps_original_source_pair_indices,
+        def:peps_original_source_sample_indices}
+    Let $e$ be an original source position with ordered endpoint owners
+    $p_e,q_e$, and let $p$ be any party. The sample position corresponding
+    to $e$ is incident to $p$ if and only if $p_e=p$ or $q_e=p$.
+    This is the incidence identification for the sample links in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 342--364 and 568--579.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_original_source_pair_indices}
+    The pair attached to $e$ is $\{p_e,q_e\}$. Membership in this
+    two-element set is equivalent to $p_e=p$ or $q_e=p$.
+\end{proof}
+
+\begin{definition}[Local sample positions in the original order]
+    \label{def:peps_local_source_sample_indices}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSlotSampleEquiv}
+    \leanok
+    \uses{def:peps_partial_fixed_positions,
+        def:peps_original_source_sample_indices,
+        thm:peps_original_source_sample_incidence}
+    Fix a party $p$. Retain the original ordered source slots whose
+    endpoint owners include $p$, and write $r_p$ for their number.
+    Enumerating these slots in their original order gives a bijection
+    from $\{0,\ldots,r_p-1\}$ to the sample positions incident to $p$.
+    The corresponding original slot retains its ordered endpoint spaces.
+    For any sample alphabet $J$, a local assignment therefore consists
+    of a map $\{0,\ldots,r_p-1\}\to J$; no value at a sample position
+    not incident to $p$ is required. This includes the empty alphabet
+    and the empty list of incident positions.
+    This is the local indexing used for the sample links in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 253--267, 383--417 and 568--579.
+\end{definition}
+
+
+\begin{definition}[Common sample assignments in the original source order]
+    \label{def:peps_source_sample_assignment_indices}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceSampleAssignmentEquiv}
+    \leanok
+    \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices}
+    Let $w$ be a chronological source composition on an arbitrary party set
+    $P$, with original source-occurrence set $\mathcal E$ and $r$ ordered
+    source slots. Let $\mathcal S$ be its gate-tagged unordered participant-pair
+    sample positions. Write $\rho:[r]\to\mathcal E$ for the ordered source
+    enumeration and $\tau:\mathcal E\to\mathcal S$ for the source-to-sample
+    bijection, where $[r]=\{0,\ldots,r-1\}$.
+    For each $k\in\mathbb N$, write $[k]=\{0,\ldots,k-1\}$.
+    The bijection $\sigma=\tau\circ\rho$ induces the assignment bijection
+    \begin{align}
+        T:([r]\to[k]) & \longrightarrow(\mathcal S\to[k]), \\
+        (Tj)(s)       & =j(\sigma^{-1}s).
+    \end{align}
+    The original source occurrence retains its ordered endpoint spaces and
+    Gaussian array. The same sample value is used at its two endpoints.
+    Empty sample alphabets and empty source sets are included. This is an
+    auxiliary identification for
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 342--417 and 568--579.
+\end{definition}
+
+\begin{proof}\leanok
+    \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices}
+    Compose the two occurrence bijections to obtain $\sigma$. Precomposition
+    with $\sigma^{-1}$ is a bijection of assignment sets, with inverse
+    $j\mapsto j\circ\sigma$.
+\end{proof}
+
+\begin{theorem}[Inverse assignments at the original source occurrence]
+    \label{thm:peps_source_sample_assignment_occurrence}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceSampleAssignmentEquiv_symm_apply}
+    \leanok
+    \uses{def:peps_source_sample_assignment_indices}
+    For each assignment $j:\mathcal S\to[k]$ and each original source
+    occurrence $e\in\mathcal E$,
+    $(T^{-1}j)(\rho^{-1}e)=j(\tau e)$.
+    This identity reads the sample at the original occurrence and chooses no
+    orientation for its unordered pair. It is an auxiliary identity for
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 342--417 and 568--579.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_source_sample_assignment_indices}
+    The inverse is precomposition with $\sigma=\tau\circ\rho$.
+    Thus $(T^{-1}j)(\rho^{-1}e)=j(\tau(\rho(\rho^{-1}e)))=j(\tau e)$.
+\end{proof}
+
+\begin{theorem}[Reindexing a common sample sum]
+    \label{thm:peps_source_sample_assignment_sum}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_sourceSampleAssignments_eq}
+    \leanok
+    \uses{def:peps_source_sample_assignment_indices}
+    For arbitrary index sets $I,J$ and any matrix family
+    $F:([r]\to[k])\to\C^{I\times J}$,
+    \begin{align}
+        \sum_{j:[r]\to[k]}F(j)
+         & =\sum_{j:\mathcal S\to[k]}F(T^{-1}j).
+    \end{align}
+    If $k=0$ and $r>0$, both sums are empty. If $r=0$, both assignment sets
+    are singletons, also when $k=0$. No normalization or positivity condition
+    is imposed on $F$. This is an auxiliary reindexing of the sample sum in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 568--579.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_source_sample_assignment_indices}
+    Reindex the finite sum by the inverse bijection $T^{-1}$.
+\end{proof}
