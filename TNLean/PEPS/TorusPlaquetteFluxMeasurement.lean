@@ -125,7 +125,12 @@ theorem torusPlaquetteRegion_ne_add_two {v p : X} (hp : p ∈ torusPlaquetteRegi
   rcases hp with rfl | rfl | rfl | rfl | rfl <;> refine ⟨?_, ?_⟩ <;>
     first | exact hx.1 | exact hx.2 | exact hy.1 | exact hy.2
 
-private theorem plaquette_connected (v : X) :
+/-- Every site belongs to the native plaquette based there. -/
+theorem mem_torusPlaquetteRegion_self (v : X) : v ∈ torusPlaquetteRegion v :=
+  List.mem_toFinset.mpr (torusPlaquetteWalk v).start_mem_support
+
+/-- The induced graph of a four-site plaquette is connected. -/
+theorem connected_torusPlaquetteRegion (v : X) :
     ((Γₜ).induce (torusPlaquetteRegion v : Set X)).Connected := by
   have hR : (torusPlaquetteRegion v : Set X) =
       {x | x ∈ (torusPlaquetteWalk v).support} := by
@@ -133,6 +138,21 @@ private theorem plaquette_connected (v : X) :
     simp [torusPlaquetteRegion]
   rw [hR]
   exact (torusPlaquetteWalk v).connected_induce_support
+
+/-- The plaquette loop as a closed walk in the graph induced on its four sites.
+Source: SCP10, the detection tweezer in Theorem 6.15, lines 2225–2258. -/
+def torusPlaquetteInducedWalk (v : X) :
+    ((Γₜ).induce (torusPlaquetteRegion v : Set X)).Walk
+      ⟨v, mem_torusPlaquetteRegion_self v⟩ ⟨v, mem_torusPlaquetteRegion_self v⟩ :=
+  (torusPlaquetteWalk v).induce _ fun _ hx => List.mem_toFinset.mpr hx
+
+/-- The induced plaquette loop has the native plaquette holonomy. Source: SCP10,
+actual region routes, lines 1935–1990. -/
+theorem regularWalkHolonomy_torusPlaquetteInducedWalk (u : Edge Γₜ → G) (v : X) :
+    regularWalkHolonomy (regularRegionInternalOperators (torusPlaquetteRegion v) u)
+      (torusPlaquetteInducedWalk v) = regularWalkHolonomy u (torusPlaquetteWalk v) := by
+  rw [regularWalkHolonomy_inducedWalk, torusPlaquetteInducedWalk, SimpleGraph.Walk.map_induce]
+  rfl
 
 variable {G : Type*} [Group G] [Fintype G] [DecidableEq G] {d : ℕ}
 
@@ -201,23 +221,12 @@ theorem IsGIsometric.exists_torusPlaquette_physicalMeasurement
             (groupBondTensor (regularTwistedSite (torusIncidentSite a) u))
             (torusPlaquetteRegion v) (fun f => Fintype.equivFin G (θ f)) else 0 := by
   classical
-  let R := torusPlaquetteRegion v
-  have hsupport : ∀ x ∈ (torusPlaquetteWalk v).support, x ∈ (R : Set X) := by
-    intro x hx
-    exact List.mem_toFinset.mpr hx
-  let o : {x : X // x ∈ R} := ⟨v, hsupport _ (torusPlaquetteWalk v).start_mem_support⟩
-  let p : ((Γₜ).induce (R : Set X)).Walk o o :=
-    (torusPlaquetteWalk v).induce (R : Set X) hsupport
   obtain ⟨Q, hQh, hQm, hQsum, hQact⟩ :=
     exists_regularClosedWalkClass_physicalMeasurement (torusIncidentSite a)
-      (fun w => ha.isGIsometric_torusIncidentSite w) R (plaquette_connected v) o p
-  refine ⟨Q, hQh, hQm, hQsum, ?_⟩
-  intro u θ C
-  have hp : regularWalkHolonomy (regularRegionInternalOperators R u) p =
-      regularWalkHolonomy u (torusPlaquetteWalk v) := by
-    rw [regularWalkHolonomy_inducedWalk, SimpleGraph.Walk.map_induce]
-    rfl
-  simpa only [hp] using hQact u θ C
+      (fun w => ha.isGIsometric_torusIncidentSite w) _ (connected_torusPlaquetteRegion v) _
+      (torusPlaquetteInducedWalk v)
+  refine ⟨Q, hQh, hQm, hQsum, fun u θ C => ?_⟩
+  simpa only [regularWalkHolonomy_torusPlaquetteInducedWalk] using hQact u θ C
 
 /-- One fixed complete projective measurement detects the flux class `C[g]`
 of every one-bond open regular string ending at a native torus plaquette,
