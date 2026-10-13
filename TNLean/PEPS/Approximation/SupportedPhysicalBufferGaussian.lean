@@ -82,6 +82,9 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
   refine ⟨C, v, c, hC, hv, hc, fun L h R C₀ hRC ↦ ?_⟩
   intro Q P s g p Λ a e K F K' boundary Z W V l B
   obtain ⟨gH, _, hgOperator⟩ := h.exists_swapped_doubled_localHamiltonian hJ R
+  have hK' : gH.operator = K' := by
+    simpa only [K', F, K, Matrix.reindex_apply, Matrix.conjTranspose_submatrix,
+      Matrix.submatrix_mul_equiv, Matrix.submatrix_submatrix] using! hgOperator
   done
 
 end TNLean.PEPS.Approximation
