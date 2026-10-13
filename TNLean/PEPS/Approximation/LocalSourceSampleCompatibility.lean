@@ -16,7 +16,6 @@ and 568–579.
 -/
 
 noncomputable section
-open Classical
 namespace TNLean.PEPS.PairEffect.SourceCircuit
 open TNLean.PEPS.Approximation
 variable {P : Type}
@@ -25,6 +24,7 @@ variable {P : Type}
 restriction through the original ordered source-slot indices. No extension
 of a local assignment is used. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 342–417 and 568–579. -/
+open Classical in
 theorem restrict_sourceSampleAssignment_eq {a b : Layout P}
     (w : SourceCircuit a b) (p : P) (k : ℕ) (j : w.sourceLocations → Fin k) :
     let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)

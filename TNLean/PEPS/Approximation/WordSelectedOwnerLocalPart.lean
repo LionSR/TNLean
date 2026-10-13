@@ -195,10 +195,12 @@ private theorem selected_localPart_frame_eval_heq
   have hmid : Layout.restrict sq (r' :: (W.sources.layout ++ Layout.mapOwner f a)) =
       Layout.mapOwner f (Layout.restrict sp (r :: (w.sources.layout ++ a))) := by
     have hr' : sq r'.owner = sp r.owner := congrFun hsel r.owner
-    cases hr : sp r.owner
-    simp only [Layout.restrict_cons, hr', hr, Bool.false_eq_true, ↓reduceIte,
-      Layout.mapOwner_cons, hI]
-    rfl
+    cases hr : sp r.owner with
+    | false =>
+        simpa only [Layout.restrict_cons, hr', hr, Bool.false_eq_true, ↓reduceIte] using hI
+    | true =>
+        simpa only [Layout.restrict_cons, hr', hr, ↓reduceIte, Layout.mapOwner_cons] using
+          congrArg (r' :: ·) hI
   have hcomp := eval_comp_heq
     ((moveHead r' W.sources.layout (Layout.mapOwner f a)).restrict sq
       (sources_moveHead r' W.sources.layout (Layout.mapOwner f a)))
@@ -325,9 +327,11 @@ private theorem restrict_localPart_mapOwner_eval_heq_induction
           exact hxy (((hf x).mp hx).trans ((hf y).mp (h.symm.trans hx)).symm)
         have hx : x ≠ p := fun hp ↦ hxq ((hf x).mpr hp)
         have hy : y ≠ p := fun hp ↦ hxq (h.trans ((hf y).mpr hp))
+        have hcast : (⟨f x, U⟩ :: ⟨f x, V⟩ :: Layout.mapOwner f tail : Layout Q) =
+            Layout.mapOwner f (⟨x, U⟩ :: ⟨y, V⟩ :: tail) := by
+          simp only [Layout.mapOwner_cons, h]
         have hleft := (restrict_localPart_castLayouts_eval_heq sq
-          (localPairSource (f x) U V η (Layout.mapOwner f tail)) rfl
-          (by simp only [Layout.mapOwner_cons, h])).trans
+          (localPairSource (f x) U V η (Layout.mapOwner f tail)) rfl hcast).trans
             (restrict_localPart_eval_heq_of_sources_nil sq _ rfl)
         have he : HEq
             (((Word.source hxy U V η tail).mapOwner f).localPart.restrict sq
@@ -345,13 +349,16 @@ private theorem restrict_localPart_mapOwner_eval_heq_induction
           simp only [Layout.restrict_cons, sp, partySelector, hx, hy, decide_false,
             Bool.false_eq_true, ↓reduceIte]
         exact he.trans ((eval_id_heq (hL tail)).trans hr.symm)
-      · change HEq
-          (((Word.source hxy U V η tail).mapOwner f).localPart.restrict sq
-            ((Word.source hxy U V η tail).mapOwner f).sources_localPart).eval
-          (((Word.source hxy U V η tail).localPart.restrict sp
-            (Word.source hxy U V η tail).sources_localPart).mapOwner f).eval
-        simp only [mapOwner, dite_eq_right h, localPart, restrict]
-        exact eval_id_heq (hL (⟨x, U⟩ :: ⟨y, V⟩ :: tail))
+      · unfold selectedOwnerLocalPartIdentity
+        dsimp only [mapOwner]
+        split
+        · contradiction
+        · change HEq
+            (Word.id (Layout.restrict sq
+              (Layout.mapOwner f (⟨x, U⟩ :: ⟨y, V⟩ :: tail)))).eval
+            (Word.id (Layout.mapOwner f
+              (Layout.restrict sp (⟨x, U⟩ :: ⟨y, V⟩ :: tail)))).eval
+          exact eval_id_heq (hL (⟨x, U⟩ :: ⟨y, V⟩ :: tail))
 
 /-- At a new owner whose fibre is one original party, the remaining selected
 operator is the relabelled remaining operator selected at that original party.
