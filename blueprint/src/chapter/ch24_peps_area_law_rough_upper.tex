@@ -11,10 +11,10 @@
     $z>0$, and put $d=|E|$. Let $\psi$ be its normalized selected
     Schmidt vector. Suppose that a supplied label sequence $\lambda_k$
     satisfies
-    \[
+    \begin{align}
         \|(I\otimes P_{\lambda_k})\psi^{\otimes k}\|^2
-        \geq\frac{1}{2(k+1)^{d^2}}
-    \]
+         & \geq\frac{1}{2(k+1)^{d^2}}
+    \end{align}
     for every sufficiently large $k$. Form the original physical
     prevector $\xi_k$ from $\Omega$ and these labels, as in
     Theorem~\ref{thm:al_global_schmidt_bell_prevector}.
@@ -25,36 +25,36 @@
     Choose $Z$ with $Z^*Z=I$ and $ZZ^*=P_{\mathrm{sym}}$, physical
     regions $U_{jg},Y_{jg}$ for $j\in J$ and $0\leq g<K$, and an
     iterated weighted geometric mean $T$. Assume
-    \begin{align*}
-        U_{jg}\cap Y_{jg}        & =\varnothing,                 \\
-        X\cap(U_{jg}\cup Y_{jg}) & =\varnothing,                 \\
-        U_{jg}\cup Y_{jg}        & \subseteq U_{j'h}\qquad(g<h).
-    \end{align*}
+    \begin{align}
+        U_{jg}\cap Y_{jg}        & =\varnothing, \\
+        X\cap(U_{jg}\cup Y_{jg}) & =\varnothing.
+    \end{align}
+    For $g<h$, also assume $U_{jg}\cup Y_{jg}\subseteq U_{j'h}$.
     Suppose that $S_\Omega(D)\leq B_{\mathrm{sh}}$ for every
     $D\in\mathcal R$. For each $Q=U_{jg}$ or $Q=U_{jg}\cup Y_{jg}$,
     suppose that some $D\in\mathcal R$ is nested with $Q$ and satisfies
-    \[
+    \begin{align}
         1+\log\dim\mathcal H_{D\mathbin{\triangle} Q}
-        \leq B_{\mathrm{exc}}.
-    \]
+         & \leq B_{\mathrm{exc}}.
+    \end{align}
     At parameter $t=2/K$, use the full physical and auxiliary dimension
     in the replica metric $W$. With auxiliary sites $C$ and $R$, put
-    \begin{align*}
+    \begin{align}
         L_{jg} & =X\cup U_{jg}\cup\{C\},                        \\
         F_{jg} & =(X\cup U_{jg}\cup Y_{jg})^c\cup\{R\},         \\
         A_{jg} & =(W_{L_{jg}}^{-1}W_{F_{jg}}^{-1}W_{Y_{jg}})^2, \\
         M_k    & =\prod_{g=0}^{K-1}T(Z^*A_{\cdot g}Z),          \\
         w_k    & =M_k^{-1/4}Z^*\xi_k.
-    \end{align*}
+    \end{align}
     Complements are taken in $V$. Then $\|w_k\|^2>0$ and
-    \begin{align*}
+    \begin{align}
         -\frac{\log\|w_k\|^2}{k}
          & \leq2\log d-\log z
         +4\left(\frac{B_{\mathrm{sh}}}{z}+B_{\mathrm{exc}}\right)
         +R_{d,c,K}(k),                                         \\
         R_{d,c,K}(k)
          & =\frac{\log4+(d^2+cK)\log(k+2)}{k}\longrightarrow0.
-    \end{align*}
+    \end{align}
     The constant and eventual threshold precede all the choices of
     $Z,U,Y,T,B_{\mathrm{sh}}$ and $B_{\mathrm{exc}}$.
     This is the supplied-label application of the rough upper comparison
