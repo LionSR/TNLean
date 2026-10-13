@@ -137,6 +137,7 @@ import TNLean.PEPS.Approximation.GateCoefficientBounds
 import TNLean.PEPS.Approximation.GaussianPhysicalSource
 import TNLean.PEPS.Approximation.GaussianSeparatedPhysicalDensity
 import TNLean.PEPS.Approximation.GaussianSourceIntegrability
+import TNLean.PEPS.Approximation.GroundStateApproximation
 import TNLean.PEPS.Approximation.GroupTruncation
 import TNLean.PEPS.Approximation.GroupedBlockMap
 import TNLean.PEPS.Approximation.HoleEncoder
@@ -186,6 +187,7 @@ import TNLean.PEPS.Approximation.PartitionOwnerNaturality
 import TNLean.PEPS.Approximation.PartyChain
 import TNLean.PEPS.Approximation.PartyChainComposition
 import TNLean.PEPS.Approximation.PartyCoarseningFactorization
+import TNLean.PEPS.Approximation.PartyColumnRouting
 import TNLean.PEPS.Approximation.PartyFactorization
 import TNLean.PEPS.Approximation.PartyGateComposition
 import TNLean.PEPS.Approximation.PartyGroupedBasis
@@ -325,6 +327,7 @@ import TNLean.PEPS.Approximation.SourceSubstitutionResidual
 import TNLean.PEPS.Approximation.SourceWordParties
 import TNLean.PEPS.Approximation.SpectatorOwnerExclusion
 import TNLean.PEPS.Approximation.SquareAreaLawHamiltonian
+import TNLean.PEPS.Approximation.SquareAreaLawSpecialization
 import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
