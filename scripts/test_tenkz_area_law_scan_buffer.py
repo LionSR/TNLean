@@ -14,9 +14,15 @@ import re
 import sys
 import tempfile
 
+from blueprint_tex_tree import read_tex_tree
+
 ROOT = Path(__file__).resolve().parents[1]
 SCAN = ROOT / "blueprint/src/chapter/ch24_peps_area_law_scan_histories.tex"
 BUFFER = ROOT / "blueprint/src/chapter/ch24_peps_area_law_initial_buffer.tex"
+# Both displays live in shared figure files that the entries \input; the checks
+# read the expanded entry, so they still assert that the ink sits in the entry.
+SCAN_FIGURE = "figures/al_scan_actual_histories"
+BUFFER_FIGURE = "figures/area_law_buffer_contours"
 
 # Bands g (row 2) and g+1 (row 5); column 2 is depth zero.
 SCAN_ENCLOSURES = [
@@ -207,7 +213,10 @@ def main() -> int:
     parser.add_argument("--source-only", action="store_true")
     parser.add_argument("--output-dir", type=Path)
     args = parser.parse_args()
-    scan, buffer = SCAN.read_text(), BUFFER.read_text()
+    for chapter, figure in ((SCAN, SCAN_FIGURE), (BUFFER, BUFFER_FIGURE)):
+        assert f"\\input{{{figure}}}" in chapter.read_text(), (chapter.name, figure)
+    # Mutations below are applied to the expanded text, i.e. to the figure's ink.
+    scan, buffer = read_tex_tree(SCAN), read_tex_tree(BUFFER)
     units = {"scan-depth-partition": check_scan(scan),
              "buffer-contours": check_buffer(buffer)}
     check_rejected_mutations(scan, buffer)

@@ -64,15 +64,17 @@
 
 \begin{theorem}[Exact boundary rank for ordinary injective PEPS]%
     \label{thm:peps_injective_region_boundary_rank}
-    \lean{TNLean.PEPS.openRegionMap_injective_of_isVertexInjective,
+    \lean{TNLean.PEPS.openRegionMap_injective_of_isInjective,
         TNLean.PEPS.finrank_regionGroundSpace_of_injective_openRegionMap,
-        TNLean.PEPS.range_regionReducedDensity_eq_regionGroundSpace_of_isVertexInjective,
-        TNLean.PEPS.rank_regionReducedDensity_of_isVertexInjective}
+        TNLean.PEPS.range_regionReducedDensity_eq_regionGroundSpace_of_isInjective,
+        TNLean.PEPS.rank_regionReducedDensity_of_isInjective}
     \leanok
     \uses{lem:peps_injective_region_actual_map,
-        thm:peps_injective_complement_region_support}
-    Suppose every site tensor is injective and every virtual bond has
-    positive dimension. For every finite region $R$,
+        thm:peps_injective_complement_region_support,
+        def:peps_injective_tensor}
+    Let $A$ be an injective PEPS tensor, so that every site tensor is
+    injective and every virtual bond has positive dimension. For every finite
+    region $R$,
     \[
         \operatorname{ran}\rho_R=\mathcal G_R,
         \qquad
