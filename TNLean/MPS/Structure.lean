@@ -23,7 +23,6 @@ import TNLean.MPS.Structure.InvariantSubspaceDecomp.Basic
 import TNLean.MPS.Structure.LinearExtension
 import TNLean.MPS.Structure.NormalizedTraceQuotientLetters
 import TNLean.MPS.Structure.PrimitiveFixedPoint
-import TNLean.MPS.Structure.PrimitivityBridge
 import TNLean.MPS.Structure.TraceQuotientAlgebraRecovery
 import TNLean.MPS.Structure.TraceQuotientLetterCoordinates
 import TNLean.MPS.Structure.TraceQuotientTripleContinuity
