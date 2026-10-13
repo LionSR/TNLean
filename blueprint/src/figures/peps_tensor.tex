@@ -1,0 +1,24 @@
+% Figure peps_tensor.
+% Owner: chapter/ch24_peps_ft_foundations.tex (def:peps_tensor).
+% Used by: gapped-2d-notes PP Sec. 0 (PEPS definition).
+% Formula: A_v in (tensor_{e incident to v} C^{D_e})^* tensor C^d.
+% Ink-to-index: the three drawn thin legs represent the first, a typical,
+% and the last member of the arbitrary incident-edge family; intervening
+% incident edges are suppressed, and the north leg is sigma(v).
+% Contraction and boundary signature: no index is contracted; the exact
+% tensor has (V,P)=(deg(v),1), independently of the three-leg schematic.
+% Source verdict: arbitrary-graph local tensor of
+% Papers/1804.04964/paper_normal.tex:961--979; suppressing intervening
+% edges avoids a square-lattice degree-four restriction.
+% Related: the injectivity-map display of the same chapter
+% (def:IsVertexInjective, ker A_v = 0) is not reused: injectivity is not
+% a hypothesis of the PEPS note's Theorem 1.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
+        \tn[label pos=w,
+            ports={210:virtual:$e_1$, 270:virtual:$e_k$,
+                    330:virtual:$e_{\deg(v)}$,
+                    90:physical:$\sigma(v)$}]{A_v}
+    \end{tenkz}
+\end{center}
