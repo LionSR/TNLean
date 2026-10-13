@@ -38,10 +38,11 @@ source proposition by itself. The source-faithful implication from a
 translation-invariant commuting bond is
 `EtaLocalStructureData.isSAL_of_isSourceZCL`; see
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
-theorem isSAL_of_isSourceZCL (F : PhysicalSectorFactorization K) [NeZero D]
+theorem isSAL_of_isSourceZCL (F : PhysicalSectorFactorization K)
     (hK : K.IsInjective)
     (hpos : ∀ q h, (F.neighboringOperator q h).PosSemidef)
     (hZCL : K.IsSourceZCL) : IsSAL K := by
+  have : NeZero D := ⟨hZCL.bondDim_ne_zero⟩
   have hMpdo : IsMPDO F.sectorCoordinateTensor := by
     intro N hN
     let : NeZero N := ⟨ne_of_gt hN⟩

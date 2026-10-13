@@ -180,10 +180,8 @@ theorem regionPhysicalMap_injOn_regionGroundSpace (A : Tensor Γ d)
     (R : Finset V) :
     Set.InjOn (regionPhysicalMap R F) (regionGroundSpace A R) := by
   obtain ⟨L, hL⟩ := exists_siteRange_leftInverse A F hF
-  intro ψ hψ φ hφ hEq
-  have h := congrArg (regionPhysicalMap R L) hEq
-  rwa [regionPhysicalMap_leftInverse_on_regionGroundSpace A F L hL R hψ,
-    regionPhysicalMap_leftInverse_on_regionGroundSpace A F L hL R hφ] at h
+  exact Set.LeftInvOn.injOn (f₁' := regionPhysicalMap R L) fun _ hψ =>
+    regionPhysicalMap_leftInverse_on_regionGroundSpace A F L hL R hψ
 
 /-- The product physical map is injective on the parent ground space when it
 is injective on every site image and the regions cover the vertices. -/
@@ -193,10 +191,8 @@ theorem globalPhysicalMap_injOn_parent (A : Tensor Γ d)
     {ι : Type*} (R : ι → Finset V) (hcover : ∀ v, ∃ i, v ∈ R i) :
     Set.InjOn (globalPhysicalMap F) (regionParentGroundSpace A R) := by
   obtain ⟨L, hL⟩ := exists_siteRange_leftInverse A F hF
-  intro ψ hψ φ hφ hEq
-  have h := congrArg (globalPhysicalMap L) hEq
-  rwa [globalPhysicalMap_leftInverse_of_mem_parent A F L hL R hcover hψ,
-    globalPhysicalMap_leftInverse_of_mem_parent A F L hL R hcover hφ] at h
+  exact Set.LeftInvOn.injOn (f₁' := globalPhysicalMap L) fun _ hψ =>
+    globalPhysicalMap_leftInverse_of_mem_parent A F L hL R hcover hψ
 
 /-- Restrict the physical product map to obtain an equivalence of the entire
 parent ground spaces, even for different ambient physical dimensions. -/
@@ -205,15 +201,8 @@ noncomputable def regionParentGroundSpaceRangeEquiv (A : Tensor Γ d)
     (hF : ∀ v, Set.InjOn (Matrix.mulVecLin (F v)) (localTensorMap A v).range)
     {ι : Type*} (R : ι → Finset V) (hcover : ∀ v, ∃ i, v ∈ R i) :
     regionParentGroundSpace A R ≃ₗ[ℂ] regionParentGroundSpace (physicalDeform A F) R :=
-  LinearEquiv.ofBijective
-    (((globalPhysicalMap F) ∘ₗ (regionParentGroundSpace A R).subtype).codRestrict _
-      (fun ψ => globalPhysicalMap_mem_parent_physicalDeform A F R ψ.2))
-    ⟨fun ψ φ h => Subtype.ext (globalPhysicalMap_injOn_parent A F hF R hcover
-        ψ.2 φ.2 (congrArg Subtype.val h)), by
-      intro ψ
-      have hψ := (map_regionParentGroundSpace_physicalDeform_of_injOn A F hF R hcover).ge ψ.2
-      obtain ⟨φ, hφ, hEq⟩ := hψ
-      exact ⟨⟨φ, hφ⟩, Subtype.ext hEq⟩⟩
+  (globalPhysicalMap F).submoduleEquivOfInjOn (globalPhysicalMap_injOn_parent A F hF R hcover)
+    (map_regionParentGroundSpace_physicalDeform_of_injOn A F hF R hcover)
 
 /-- Site-image-injective physical maps preserve the full ground-space dimension
 for vertex-covering parent regions. -/

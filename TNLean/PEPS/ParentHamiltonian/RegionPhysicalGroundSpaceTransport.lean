@@ -165,6 +165,18 @@ theorem regionSliceMap_globalPhysicalMap (R : Finset V)
       change _ = _ * (_ * ψ (assembleRegionσ R α β))
       ring
 
+/-- A linear map that is injective on a submodule `p` and carries `p` onto `q`
+restricts to a linear equivalence `p ≃ q`. This is the last step of every
+transport of parent ground spaces by a map that is not globally invertible. -/
+noncomputable def _root_.LinearMap.submoduleEquivOfInjOn {R M N : Type*} [Semiring R]
+    [AddCommMonoid M] [AddCommMonoid N] [Module R M] [Module R N] (f : M →ₗ[R] N)
+    {p : Submodule R M} {q : Submodule R N} (hinj : Set.InjOn f p) (hmap : p.map f = q) :
+    p ≃ₗ[R] q :=
+  LinearEquiv.ofBijective ((f ∘ₗ p.subtype).codRestrict q fun x => hmap ▸ ⟨x, x.2, rfl⟩)
+    ⟨fun x y h => Subtype.ext (hinj x.2 y.2 (congrArg Subtype.val h)), fun y => by
+      obtain ⟨x, hx, hxy⟩ := hmap.ge y.2
+      exact ⟨⟨x, hx⟩, Subtype.ext hxy⟩⟩
+
 variable {ι : Type*}
 
 /-- Membership in the common parent ground space is membership of every regional slice. -/

@@ -84,7 +84,7 @@ algebras, so irreducibility and primitivity may be transferred through the
 corner representation.  The underlying linear maps are isometries for the
 canonical inner products; the support isometries record this property where
 needed. -/
-def IsCyclicSectorDecompWith [NeZero D] [NeZero m] (A : MPSTensor d D)
+def IsCyclicSectorDecompWith [NeZero D] {m : ℕ} [NeZero m] (A : MPSTensor d D)
     {dim : Fin m → ℕ}
     (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
     (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
@@ -110,7 +110,7 @@ def IsCyclicSectorDecompWith [NeZero D] [NeZero m] (A : MPSTensor d D)
 /-- A cyclic-sector decomposition with existentially quantified projectors and
 corner identifications. Use `IsCyclicSectorDecompWith` when the particular
 projectors and corner maps are part of the surrounding statement. -/
-def IsCyclicSectorDecomp [NeZero D] [NeZero m] (A : MPSTensor d D)
+def IsCyclicSectorDecomp [NeZero D] {m : ℕ} [NeZero m] (A : MPSTensor d D)
     {dim : Fin m → ℕ}
     (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)) : Prop :=
   ∃ (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
@@ -124,7 +124,7 @@ P_{k+1} · A^i = A^i · P_k.  This is the single-site shift for tensor matrices 
 arXiv:1708.00029, eq:Aoffdiag, in inverse-indexed form; the later eq:Auprop only defines the
 sector letters \(A_u^i = P_u A^i P_{u+1}\).  The relation used here is obtained
 from the cyclic relation 𝓔^*(P_{k+1}) = P_k stored in `IsCyclicSectorDecomp`. -/
-theorem IsCyclicSectorDecomp.offDiag_shift [NeZero D] [NeZero m]
+theorem IsCyclicSectorDecomp.offDiag_shift [NeZero D] {m : ℕ} [NeZero m]
     {A : MPSTensor d D} (hP : IsPeriodic m A) {dim : Fin m → ℕ}
     {blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)}
     (hCyclic : IsCyclicSectorDecomp A blocks)
@@ -139,7 +139,7 @@ theorem IsCyclicSectorDecomp.offDiag_shift [NeZero D] [NeZero m]
 /-- The off-diagonal reconstruction A^i = ∑_u P_{u+1} · A^i · P_u carried by a
 cyclic sector decomposition (arXiv:1708.00029, eq:Aoffdiag), graded by the cyclic
 projections stored in `IsCyclicSectorDecomp`. -/
-theorem IsCyclicSectorDecomp.eq_sum_offDiag [NeZero D] [NeZero m]
+theorem IsCyclicSectorDecomp.eq_sum_offDiag [NeZero D] {m : ℕ} [NeZero m]
     {A : MPSTensor d D} (hP : IsPeriodic m A) {dim : Fin m → ℕ}
     {blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k)}
     (hCyclic : IsCyclicSectorDecomp A blocks)
@@ -168,7 +168,7 @@ conclusions of Lemma bdcf are stated separately below, for example in
 `sectorBlocked_isNormal_of_isPeriodic` and
 `not_gaugePhaseEquiv_of_orthogonal_cyclicSector_traces`. -/
 theorem exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic
-    [NeZero D] (A : MPSTensor d D) {m : ℕ}
+    (A : MPSTensor d D) {m : ℕ}
     (hP : IsPeriodic m A) :
     ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
       (P : Fin m → MatrixAlg D)
@@ -202,6 +202,7 @@ theorem exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_i
       (∀ k, V k * (V k)ᴴ = P k) ∧
       (∀ k (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ),
         (φ k X).1 = V k * X * (V k)ᴴ) := by
+  have : NeZero D := ⟨hP.bondDim_ne_zero⟩
   let : NeZero m := ⟨Nat.ne_of_gt hP.period_pos⟩
   obtain ⟨K, h_unitalK, hIrrK, ρ, hρ_pd, h_adjfix, rfl⟩ :=
     conjTranspose_kraus_setup A hP.leftCanonical hP.irreducible
@@ -296,7 +297,7 @@ This is the projection of
 `exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic`
 that forgets the support isometries. -/
 theorem exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic
-    [NeZero D] (A : MPSTensor d D) {m : ℕ}
+    (A : MPSTensor d D) {m : ℕ}
     (hP : IsPeriodic m A) :
     ∃ (dim : Fin m → ℕ) (blocks : (k : Fin m) → MPSTensor (blockPhysDim d m) (dim k))
       (P : Fin m → MatrixAlg D)
@@ -325,6 +326,7 @@ theorem exists_cyclic_sector_decomp_with_letter_after_blocking_of_isPeriodic
       (∀ k, dim k ≠ 0) ∧
       ∀ k (i : Fin (blockPhysDim d m)),
         (φ k (blocks k i)).1 = P k * (blockTensor A m) i * P k := by
+  have : NeZero D := ⟨hP.bondDim_ne_zero⟩
   obtain ⟨dim, blocks, P, φ, _V, hLC, hMPV, hPproj, hPsum, hCyclic, hComm, hTrace,
     hIntertwine, hMul, hStar, hNondeg, hLetter, _hV_iso, _hV_range, _hEmbed⟩ :=
     exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic A hP

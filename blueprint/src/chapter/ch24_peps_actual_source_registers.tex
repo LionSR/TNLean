@@ -330,10 +330,10 @@ operations on an empty memory.
     \leanok
     \uses{def:peps_actual_source_input_basis,def:peps_actual_private_preparation,
         def:peps_party_grouped_basis}
-    Let $\mathcal P$ be finite and set
-    $\mathcal Q=\mathcal P\sqcup\{\star\}$, where $\star$ denotes the
+    Let $P$ be finite and set
+    $Q=P\sqcup\{*\}$, where $*$ denotes the
     exterior owner. Choose orthonormal bases $B_q,C_q$ for the actual input
-    and output register memories at each $q\in\mathcal Q$, and order all
+    and output register memories at each $q\in Q$, and order all
     parties without repetition. Let $B,C$ be the corresponding grouped bases.
     Write $E$ for the literal source input basis. Define
     \[
@@ -353,9 +353,9 @@ operations on an empty memory.
         thm:peps_actual_party_word_entries}
     The literal prepared source-column matrix, with output basis $C$, satisfies
     \[
-        D_\xi=\left(\bigotimes_{q\in\mathcal Q} A_{\xi,q}\right)R.
+        D_\xi=\left(\bigotimes_{q\in Q} A_{\xi,q}\right)R.
     \]
-    Every owner, including $\star$, remains in this product. The same bases
+    Every owner, including $*$, remains in this product. The same bases
     and the same $R$ may be used for independent ket and bra choices.
 \end{theorem}
 
@@ -367,14 +367,14 @@ operations on an empty memory.
     By Theorem~\ref{thm:peps_actual_party_word_entries} its matrix is the
     product of its singleton-restriction matrices,
     \[
-        [\widetilde W_\xi]_{B,C}=\bigotimes_{q\in\mathcal Q}A_{\xi,q}.
+        [\widetilde W_\xi]_{B,C}=\bigotimes_{q\in Q}A_{\xi,q}.
     \]
     Composing with the identity from the literal source basis $E$ to the
     grouped input basis $B$, whose matrix is $R$, gives
     \[
         D_\xi=[\widetilde W_\xi]_{E,C}
             =[\widetilde W_\xi]_{B,C}\,[\operatorname{id}]_{E,B}
-        =\left(\bigotimes_{q\in\mathcal Q}A_{\xi,q}\right)R.
+        =\left(\bigotimes_{q\in Q}A_{\xi,q}\right)R.
     \]
 \end{proof}
 
@@ -389,7 +389,7 @@ operations on an empty memory.
     Set $U_q=[U|_q]_{B_q,B_q}$. For independent ket and bra choices,
     \begin{align}
         D_\xi[U]_E D_\zeta^\dagger
-         & =\bigotimes_{q\in\mathcal Q}
+         & =\bigotimes_{q\in Q}
         A_{\xi,q}U_q A_{\zeta,q}^\dagger.
         \label{eq:peps_actual_source_mixed}
     \end{align}
@@ -507,7 +507,7 @@ operations on an empty memory.
     The literal sampled source contraction satisfies
     \begin{align}
         D_\xi X_{\xi,\zeta}D_\zeta^\dagger
-         & =k^{-n}\sum_j\bigotimes_{q\in\mathcal Q}
+         & =k^{-n}\sum_j\bigotimes_{q\in Q}
         A_{\xi,q}U_{\xi,\zeta,j,q}A_{\zeta,q}^\dagger.
         \label{eq:peps_actual_sampled_contraction}
     \end{align}
