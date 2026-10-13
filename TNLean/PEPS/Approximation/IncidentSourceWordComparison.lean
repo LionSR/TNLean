@@ -275,7 +275,7 @@ private theorem selectedPreparedWordComparison_of_original_labels {a b : Layout 
       ((Va.restrict sa hsVa).mapOwner lift).eval := by
     unfold incidentSourceWord
     dsimp only
-    rw [choicesOfOriginalGateLabelsAt_eq_projectAllChoices]
+    simp only [choicesOfOriginalGateLabelsAt_eq_projectAllChoices]
     exact Word.eval_castLayouts_heq _ _ _
   exact selectedPreparedWordComparison_comp sq sa lift
     (w.sourcePrivatePreparation ψ) (partialResidual (fun _ : P ↦ true) w ξ)
