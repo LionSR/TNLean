@@ -90,12 +90,19 @@ private theorem restrict_localPart_castLayouts_eval_heq (g : Q → Bool)
   cases hb
   rfl
 
+/-- The exact selected local-part identity, kept as one proposition during
+constructor induction. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 246–267, 383–434 and 565–588. -/
+private def selectedOwnerLocalPartIdentity (f : P → Q) (sp : P → Bool) (sq : Q → Bool)
+    {a b : Layout P} (w : Word a b) : Prop :=
+  HEq ((w.mapOwner f).localPart.restrict sq (w.mapOwner f).sources_localPart).eval
+    ((w.localPart.restrict sp w.sources_localPart).mapOwner f).eval
+
 private theorem sourceFree_selected_localPart (f : P → Q) (p : P) (q : Q)
     (hsel : (fun r ↦ partySelector q (f r)) = partySelector p)
     {a b : Layout P} (w : Word a b) (hs : w.sources = []) :
-    HEq ((w.mapOwner f).localPart.restrict (partySelector q)
-      (w.mapOwner f).sources_localPart).eval
-      ((w.localPart.restrict (partySelector p) w.sources_localPart).mapOwner f).eval := by
+    selectedOwnerLocalPartIdentity f (partySelector p) (partySelector q) w := by
+  unfold selectedOwnerLocalPartIdentity
   have hm : (w.mapOwner f).sources = [] := by
     simp only [sources_mapOwner, hs, SourceInventory.mapOwner_nil]
   have hc := restrict_mapOwner_heq f (partySelector q) w hs
@@ -120,14 +127,10 @@ private theorem selected_localPart_frame_eval_heq
     (r : Reg P) {a b : Layout P} (w : Word a b)
     (hS : Layout.restrict sq (w.mapOwner f).sources.layout =
       Layout.mapOwner f (Layout.restrict sp w.sources.layout))
-    (he : HEq ((w.mapOwner f).localPart.restrict sq
-        (w.mapOwner f).sources_localPart).eval
-      ((w.localPart.restrict sp w.sources_localPart).mapOwner f).eval) :
-    HEq (((Word.frame r w).mapOwner f).localPart.restrict sq
-        ((Word.frame r w).mapOwner f).sources_localPart).eval
-      (((Word.frame r w).localPart.restrict sp
-        (Word.frame r w).sources_localPart).mapOwner f).eval := by
+    (he : selectedOwnerLocalPartIdentity f sp sq w) :
+    selectedOwnerLocalPartIdentity f sp sq (Word.frame r w) := by
   classical
+  unfold selectedOwnerLocalPartIdentity at he ⊢
   let W := w.mapOwner f
   let r' : Reg Q := ⟨f r.owner, r.space⟩
   have hL (L : Layout P) : Layout.restrict sq (Layout.mapOwner f L) =
@@ -227,17 +230,11 @@ private theorem selected_localPart_comp_eval_heq
       Layout.mapOwner f (Layout.restrict sp w.sources.layout))
     (hSv : Layout.restrict sq (v.mapOwner f).sources.layout =
       Layout.mapOwner f (Layout.restrict sp v.sources.layout))
-    (ihw : HEq ((w.mapOwner f).localPart.restrict sq
-        (w.mapOwner f).sources_localPart).eval
-      ((w.localPart.restrict sp w.sources_localPart).mapOwner f).eval)
-    (ihv : HEq ((v.mapOwner f).localPart.restrict sq
-        (v.mapOwner f).sources_localPart).eval
-      ((v.localPart.restrict sp v.sources_localPart).mapOwner f).eval) :
-    HEq (((w.comp v).mapOwner f).localPart.restrict sq
-        ((w.comp v).mapOwner f).sources_localPart).eval
-      (((w.comp v).localPart.restrict sp
-        (w.comp v).sources_localPart).mapOwner f).eval := by
+    (ihw : selectedOwnerLocalPartIdentity f sp sq w)
+    (ihv : selectedOwnerLocalPartIdentity f sp sq v) :
+    selectedOwnerLocalPartIdentity f sp sq (w.comp v) := by
   classical
+  unfold selectedOwnerLocalPartIdentity at ihw ihv ⊢
   let W := w.mapOwner f
   let V := v.mapOwner f
   have hL (L : Layout P) : Layout.restrict sq (Layout.mapOwner f L) =
@@ -306,9 +303,7 @@ private theorem restrict_localPart_mapOwner_eval_heq_induction
       Layout.restrict (partySelector q) (w.mapOwner f).sources.layout =
         Layout.mapOwner f (Layout.restrict (partySelector p) w.sources.layout))
     {a b : Layout P} (u : Word a b) :
-    HEq ((u.mapOwner f).localPart.restrict (partySelector q)
-      (u.mapOwner f).sources_localPart).eval
-      ((u.localPart.restrict (partySelector p) u.sources_localPart).mapOwner f).eval := by
+    selectedOwnerLocalPartIdentity f (partySelector p) (partySelector q) u := by
   classical
   let sp := partySelector p
   let sq := partySelector q
@@ -380,6 +375,7 @@ theorem restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
         Layout.mapOwner f (Layout.restrict (partySelector p) w.sources.layout) := by
     rw [sources_mapOwner]
     exact SourceInventory.atParty_layout_mapOwner_of_singleton_fiber f p q hf w.sources
+  change selectedOwnerLocalPartIdentity f (partySelector p) (partySelector q) u
   exact restrict_localPart_mapOwner_eval_heq_induction f p q hf hsel (fun w ↦ hS w) u
 
 end TNLean.PEPS.PairEffect.Word
