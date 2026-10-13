@@ -84,6 +84,32 @@ private theorem restrict_embedded_branch_spectators_eval_heq_id
     (a := Layout.mapOwner owner a) (b := Layout.mapOwner owner b)
     all (u.mapOwner owner) tail q hcore
 
+omit [Fintype C] in
+/-- A structural equality with an embedded spectator extension gives the same
+restricted remaining operator. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 351–381, 409–434 and 565–588. -/
+private theorem restrict_embedded_branch_spectators_eval_heq_id_of_eq
+    (owner : C ↪ P) {a b : Layout C} (u : Word a b) (tail : Layout P) (p : P)
+    (howner : ∀ t, owner t ≠ p)
+    (v : Word
+      (Layout.mapOwner (affectedOwner (fun _ : P => true))
+        (Layout.mapOwner owner a ++ tail))
+      (Layout.mapOwner (affectedOwner (fun _ : P => true))
+        (Layout.mapOwner owner b ++ tail)))
+    (hv : v = (((u.mapOwner owner).appendTail tail).mapOwner
+      (affectedOwner (fun _ : P => true)))) :
+    let q := some (⟨p, rfl⟩ : {t : P // (fun _ : P => true) t = true})
+    HEq (v.localPart.restrict (partySelector q) v.sources_localPart).eval
+      (ContinuousLinearMap.id ℂ
+        (Mem (Layout.atParty q (Layout.mapOwner (affectedOwner (fun _ : P => true)) tail)))) := by
+  classical
+  intro q
+  have h := restrict_localPart_eval_heq_of_word_heq (partySelector q) v
+    (((u.mapOwner owner).appendTail tail).mapOwner (affectedOwner (fun _ : P => true)))
+    rfl rfl (heq_of_eq hv)
+  exact h.trans (restrict_embedded_branch_spectators_eval_heq_id
+    (P := P) (C := C) (a := a) (b := b) owner u tail p howner)
+
 /-- An original party outside a gate's participants retains only its mapped
 spectator registers in the actual all-party branch. The restriction of the
 remaining operations is the identity on those spectators. No label is chosen
@@ -113,11 +139,9 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
       unfold partialWord
       rw [dite_eq_left ht]
       rfl
-    rw [hw]
-    generalize (G.branchWord i : Word a b) = u
-    change relabelledSpectatorsIdentity all (u.mapOwner owner) tail q
-    exact restrict_embedded_branch_spectators_eval_heq_id
-      (P := P) (C := C) (a := a) (b := b) owner u tail p howner
+    exact restrict_embedded_branch_spectators_eval_heq_id_of_eq
+      (P := P) (C := C) (a := a) (b := b) owner (G.branchWord i) tail p howner
+      (partialWord (fun _ : P => true) (.gate owner G tail) ξ) hw
   · have hw : partialWord (fun _ : P => true) (.gate owner G tail) ξ =
         Word.groupedBlockMap all none (Layout.mapOwner owner a) (Layout.mapOwner owner b)
           (Layout.affectedOwner_mapOwner_eq_none (fun _ : P => true) owner ht a)
