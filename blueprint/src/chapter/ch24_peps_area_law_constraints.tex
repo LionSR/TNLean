@@ -272,6 +272,75 @@ $\mu$ labels.
     $\xi_k$; the transported symmetrizer of all copies is $P_{\mathrm{sym}}$.
 \end{proof}
 
+\begin{theorem}[One physical label sequence for the rough lower comparison]
+    \label{thm:al_global_schmidt_bell_rough_lower}
+    \lean{TNLean.PEPS.AreaLaw.exists_global_schmidtBellPrevector_rough_lower}
+    \leanok
+    \uses{thm:al_global_schmidt_bell_prevector}
+    In the setting of Theorem~\ref{thm:al_global_schmidt_bell_prevector},
+    suppose also that $H-EI\geq\gamma(I-|\Omega\rangle\langle\Omega|)$
+    for some $\gamma>0$. There is one label sequence $\lambda_k$
+    satisfying all the conclusions of that theorem. Write
+    $S'=S(\rho)$ and set
+    \begin{align*}
+        \varepsilon_k=-2(\log\dim\lambda_k-kS').
+    \end{align*}
+    Then $2kS'-\varepsilon_k=2\log\dim\lambda_k$ for every $k$,
+    and $\varepsilon_k/k\to0$.
+
+    Fix $K\geq8$ and put $a=4/K$, $t=2/K$. There are constants
+    $c,C_f\geq0$ before the copy number, symmetric coordinates,
+    regional family and iterated weighted geometric mean are chosen.
+    Let $Z^*Z=I$ and $ZZ^*=P_{\mathrm{sym}}$. For a finite family
+    of physical regions $Q_{jg},Y_{jg}$, with $0\leq g<K$, assume
+    \begin{align*}
+        Q_{jg}\cap Y_{jg} & =\varnothing,                 \\
+        Q_{jg}\cup Y_{jg} & \subseteq Q_{j'h}\qquad(g<h).
+    \end{align*}
+    Include the near auxiliary site $C$ in $L_{jg}=Q_{jg}\cup\{C\}$
+    and the far auxiliary site $R$ in
+    $F_{jg}=(Q_{jg}\cup Y_{jg})^c\cup\{R\}$, where the complement
+    is taken in the physical sites. For the replica metric $W$ at
+    parameter $t$, put
+    \begin{align*}
+        A_{jg} & =(W_{L_{jg}}^{-1}W_{F_{jg}}^{-1}W_{Y_{jg}})^2,
+               & B_{jg}                                         & =Z^*A_{jg}Z,         \\
+        M_k    & =\prod_{g=0}^{K-1}T(B_{\cdot g}),
+               & w_k                                            & =M_k^{-1/4}Z^*\xi_k.
+    \end{align*}
+    Here $T$ is any iterated weighted geometric mean of the family,
+    and $\xi_k$ is the same initial vector as in the preceding theorem.
+    Put $\varphi_k=w_k/\|w_k\|$, $v_k=Z\varphi_k$, and
+    \begin{align*}
+        \delta_k & =\frac{\langle v_k,(\overline H_k\otimes I)v_k\rangle-E}{\gamma}, \\
+        r_k      & =\log(k+1)+c\log(k+2)+a\varepsilon_k,                             \\
+        R_k      & =\frac K{2k}\left(2|r_k|+C_f\log(k+2)+2\log2+\log(3/2)\right).
+    \end{align*}
+    The sequence $R_k$ tends to zero and is independent of the chosen
+    coordinates, regions and geometric mean. For every $k>0$,
+    $w_k\ne0$, $\|v_k\|=1$, and $\delta_k\geq0$. For $0<\tau\leq1/2$,
+    \begin{align*}
+        4S'-6\left(\tau\log d+\frac{h(\tau)}a\right)
+        -3\frac{\delta_k}{\tau}\max(0,2S')-R_k
+        \leq-\frac{\log\|w_k\|^2}{k}.
+    \end{align*}
+    This is the lower comparison for the physical initial vector of
+    \cite[Section~8]{OpenAI2026AreaLaw}. Choosing a scan point and
+    identifying its regions and geometric mean remain separate assertions.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Choose the preceding theorem's label sequence once and retain its
+    initial vector, mass bound and dimension asymptotic. Positive selected
+    mass gives $d>0$. The initial vector's symmetry and auxiliary equations
+    supply the hypotheses of the rough lower comparison at $t=2/K$ and
+    inverse-power exponent $1/4$. Apply the numerical coefficient-three
+    estimate to its same normalized vector and energy defect.
+    The signed definition of $\varepsilon_k$ gives the exact label equality.
+    The dimension asymptotic gives $\varepsilon_k/k\to0$; the remaining
+    logarithmic terms are also sublinear. Hence $R_k\to0$.
+\end{proof}
+
 \begin{theorem}[The initial vector for the truncated Hamiltonian]
     \label{thm:al_truncation_schmidt_bell_prevector}
     \lean{TNLean.PEPS.AreaLaw.exists_finiteSetTruncation_schmidtBellPrevector_of_gap}
@@ -529,6 +598,8 @@ only on the parameters named below.
 \end{proof}
 
 \input{chapter/ch24_peps_area_law_scan_histories}
+\input{chapter/ch24_peps_positive_prefix_entropy}
+\input{chapter/ch24_augmented_replica_metric_coordinates}
 \input{chapter/ch24_peps_area_law_bad_histories}
 
 \section{The scanner estimate from its inputs}

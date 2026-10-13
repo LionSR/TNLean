@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import Mathlib.Analysis.CStarAlgebra.CStarMatrix
 import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Unitary
+import Mathlib.Analysis.Matrix.Spectrum
 import Mathlib.Analysis.RCLike.Sqrt
 import Mathlib.LinearAlgebra.Eigenspace.Minpoly
 import Mathlib.LinearAlgebra.Lagrange
@@ -14,7 +15,7 @@ import Mathlib.LinearAlgebra.Lagrange
 
 The two branches of the finite spectral-projector construction in CPSV17, Lemma
 `lemma:conjclass-normalform-continuous`, give congruence factorizations of symmetric and
-skew-symmetric unitary matrices (arXiv:1703.09188, lines 1054--1082).
+skew-symmetric unitary matrices (arXiv:1703.09188, lines 1054--1083).
 -/
 
 open scoped Polynomial
@@ -179,14 +180,51 @@ theorem weighted_sum_mem_unitaryGroup
     norm_num
   rw [hua, one_smul]
 
+/-- If `H` is a Hermitian involution of trace zero, then `i • H` has determinant one.
+
+The eigenvalues of `H` are `±1` with sum zero, so the eigenvalues of `i • H` are `±i` in equal
+numbers. This is the determinant step of the skew branch of CPSV17, Lemma
+`lemma:conjclass-normalform-continuous` (arXiv:1703.09188, lines 1081--1083). -/
+theorem IsHermitian.det_I_smul_eq_one {H : Matrix m m ℂ} (hH : H.IsHermitian)
+    (hHH : H * H = 1) (htr : H.trace = 0) :
+    (Complex.I • H).det = 1 := by
+  have hev (j : m) : hH.eigenvalues j = 1 ∨ hH.eigenvalues j = -1 := by
+    rw [← mul_self_eq_one_iff]
+    set v := ⇑(hH.eigenvectorBasis j)
+    have hv : v ≠ 0 :=
+      (WithLp.ofLp_eq_zero 2).ne.2 <| hH.eigenvectorBasis.orthonormal.ne_zero j
+    have hHv := hH.mulVec_eigenvectorBasis j
+    have h1 : (H * H) *ᵥ v = (hH.eigenvalues j * hH.eigenvalues j) • v := by
+      rw [← mulVec_mulVec, hHv, mulVec_smul, hHv, smul_smul]
+    rw [hHH, one_mulVec] at h1
+    exact smul_left_injective ℝ hv (h1.symm.trans (one_smul ℝ v).symm)
+  have hexp (j : m) : Complex.I * (hH.eigenvalues j : ℂ) =
+      Complex.exp ((Real.pi : ℂ) / 2 * Complex.I * (hH.eigenvalues j : ℂ)) := by
+    rcases hev j with h | h
+    · rw [h]
+      simp
+    · rw [h]
+      push_cast
+      rw [show (Real.pi : ℂ) / 2 * Complex.I * -1 = -Real.pi / 2 * Complex.I by ring,
+        Complex.exp_neg_pi_div_two_mul_I]
+      ring
+  rw [det_smul, hH.det_eq_prod_eigenvalues, Fintype.card, ← Finset.prod_const,
+    ← Finset.prod_mul_distrib]
+  refine (Finset.prod_congr rfl fun j _ ↦ hexp j).trans ?_
+  rw [← Complex.exp_sum, ← Finset.mul_sum]
+  refine (congrArg (fun z ↦ Complex.exp (_ * z)) hH.trace_eq_sum_eigenvalues.symm).trans ?_
+  rw [htr, mul_zero, Complex.exp_zero]
+
 /-- Assemble the skew-symmetric branch of the unitary congruence normal form from the paired
 spectral projectors in CPSV17, Lemma `lemma:conjclass-normalform-continuous`
-(arXiv:1703.09188, lines 1066--1082).
+(arXiv:1703.09188, lines 1066--1083).
 
 The two summands of `Sum κ κ` index `P_E` and `P_Eᵀ`. The hypotheses say that these form a
 complete orthogonal family of Hermitian projectors. The witnesses are exactly
 `S = exp (-iπ/4) ∑_E exp (-iE/2) (P_E + P_Eᵀ)` and
-`Λ = i ∑_E (P_E - P_Eᵀ)` from the paper. -/
+`Λ = i ∑_E (P_E - P_Eᵀ)` from the paper. The determinant of `Λ` is one because its
+eigenvalues come in pairs `±i` (lines 1081--1083): `Λ = i H` with `H = ∑_E (P_E - P_Eᵀ)` a
+Hermitian involution of trace zero. -/
 theorem exists_skew_unitary_congruence_of_paired_projectors
     (P : κ → Matrix m m ℂ)
     (E : κ → ℝ)
@@ -207,6 +245,7 @@ theorem exists_skew_unitary_congruence_of_paired_projectors
       Λ.map (starRingEnd ℂ) = Λ ∧
       Λ.transpose = -Λ ∧
       Λ ∈ Matrix.unitaryGroup m ℂ ∧
+      Λ.det = 1 ∧
       x = S.transpose * Λ * S := by
   let Q : Sum κ κ → Matrix m m ℂ :=
     Sum.elim P (fun k ↦ (P k).transpose)
@@ -310,6 +349,31 @@ theorem exists_skew_unitary_congruence_of_paired_projectors
     cases a <;> simp [l]
   have hΛ_unitary : Λ ∈ Matrix.unitaryGroup m ℂ := by
     exact weighted_sum_mem_unitaryGroup Q hQstar hPmul hPsum l hl_norm
+  have hΛ_det : Λ.det = 1 := by
+    have hΛΛ : Λ * Λ = -1 := by
+      dsimp only [Λ]
+      rw [weighted_sum_mul_weighted_sum Q hPmul, ← neg_one_smul ℂ (1 : Matrix m m ℂ),
+        ← hPsum, Finset.smul_sum]
+      apply Finset.sum_congr rfl
+      intro a ha
+      cases a <;> simp [l, Q]
+    let H : Matrix m m ℂ := ∑ k, (P k - (P k).transpose)
+    have hH : H.IsHermitian := by
+      change (∑ k, (P k - (P k).transpose))ᴴ = _
+      rw [Matrix.conjTranspose_sum]
+      apply Finset.sum_congr rfl
+      intro k hk
+      rw [Matrix.conjTranspose_sub, hPstar]
+      exact congrArg (P k - ·) (hQstar (Sum.inr k))
+    have hHH : H * H = 1 := by
+      have h := hΛΛ
+      rw [hl_formula, Matrix.smul_mul, Matrix.mul_smul, smul_smul, Complex.I_mul_I,
+        neg_one_smul, neg_inj] at h
+      exact h
+    have htr : H.trace = 0 := by
+      simp [H, Matrix.trace_sum, Matrix.trace_sub, Matrix.trace_transpose]
+    rw [hl_formula]
+    exact hH.det_I_smul_eq_one hHH htr
   have hphase (r : ℝ) :
       Complex.exp (-((Real.pi : ℂ) / 4) * Complex.I) *
           (Complex.exp (-((r : ℂ) / 2) * Complex.I) *
@@ -374,6 +438,6 @@ theorem exists_skew_unitary_congruence_of_paired_projectors
     intro k hk
     rw [neg_smul]
   exact ⟨S, Λ, hs_formula, hl_formula, hS_transpose, hS_unitary, hΛ_real,
-    hΛ_transpose, hΛ_unitary, hfactor⟩
+    hΛ_transpose, hΛ_unitary, hΛ_det, hfactor⟩
 
 end Matrix

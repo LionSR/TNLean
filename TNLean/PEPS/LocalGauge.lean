@@ -216,21 +216,13 @@ abbrev BlockedMiddleGaugeFormula (A B : Tensor G d) (_hA : IsVertexInjective A)
                 (Fin (A.bondDim ie.1)) ℂ) (η ie) (η' ie)) *
             A.component v η' σ
 
-/-- The blocked-middle / three-site-MPS output immediately yields
-`HasFactorizedLocalGauge`. -/
-theorem hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula (A B : Tensor G d)
-    (hA : IsVertexInjective A) (hDim : A.bondDim = B.bondDim) (v : V)
-    (hBlocked : BlockedMiddleGaugeFormula A B hA hDim v) :
-    HasFactorizedLocalGauge A B hA hDim v :=
-  hasFactorizedLocalGauge_of_localGaugeFormula A B hA hDim v hBlocked
-
 /-- Under `HasFactorizedLocalGauge`, one obtains the factorized local-gauge formula at
 vertex `v`.
 
 This theorem gives the local factorized gauge relation under `HasFactorizedLocalGauge`.
 Deriving that hypothesis from `SameState` remains the blocked-middle /
 three-site-MPS reduction, followed by
-`hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula`. -/
+`hasFactorizedLocalGauge_of_localGaugeFormula`. -/
 theorem localGauge_exists_of_factorizedLocalGauge (A B : Tensor G d)
     (hA : IsVertexInjective A) (hDim : A.bondDim = B.bondDim) (v : V)
     (hFactorized : HasFactorizedLocalGauge A B hA hDim v) :
@@ -291,7 +283,7 @@ theorem localGauge_exists_of_blockedMiddleGaugeFormula (A B : Tensor G d)
               (↑(Xv ie.1) : Matrix _ _ ℂ) (η ie) (η' ie)) *
               A.component v η' σ :=
   localGauge_exists_of_factorizedLocalGauge A B hA hDim v
-    (hasFactorizedLocalGauge_of_blockedMiddleGaugeFormula A B hA hDim v hBlocked)
+    (hasFactorizedLocalGauge_of_localGaugeFormula A B hA hDim v hBlocked)
 
 end PEPS
 end TNLean
