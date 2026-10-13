@@ -140,7 +140,12 @@ private theorem empty_party_words_mixed_partialTrace
     (a := Layout.atParty q a) (b := Layout.atParty q b) ha hb B C
     (u.restrict (partySelector q) hu) (t.restrict (partySelector q) ht)
     (v.restrict (partySelector q) hv) α β hA hT hU
-  rw [matrix_repr_eval_eq_toMatrix B B (v.restrict (partySelector q) hv).eval] at h
+  have hcoord : Matrix.of (fun row col ↦
+      B.repr ((v.restrict (partySelector q) hv).eval (B col)) row) =
+      LinearMap.toMatrix B.toBasis B.toBasis
+        (v.restrict (partySelector q) hv).eval.toLinearMap := by
+    exact matrix_repr_eval_eq_toMatrix B B (v.restrict (partySelector q) hv).eval
+  rw [hcoord] at h
   simpa only [emptyPartyTraceIdentity, restrictedMixedPhysicalTrace] using h
 
 namespace SourceCircuit
