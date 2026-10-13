@@ -65,10 +65,11 @@ theorem bandMetric_submatrix_augmentedReplicaConfigurationEquiv
           (augmentedReplicaConfigurationEquiv q d k).symm := by
     exact (congrArg (replicaMetric (ιS q d) t k)
       (show Q = (Q.image augmentedSiteEquiv.symm).image augmentedSiteEquiv from by
-        simp only [Finset.image_image, Equiv.apply_symm_apply, Finset.image_id])).trans
+        simp only [Finset.image_image, Equiv.self_comp_symm, Finset.image_id])).trans
       (replicaMetric_submatrix_augmentedReplicaConfigurationEquiv q d k t
         (Q.image augmentedSiteEquiv.symm))
-  done
+  simp only [bandMetric, leafMetric, leafRoot, hmetric, Matrix.inv_submatrix_equiv,
+    pow_two, Matrix.submatrix_mul_equiv]
 
 /-- The same actual root and supplied symmetric coordinates give the
 ordered product of original-coordinate compressed band means. Real powers
