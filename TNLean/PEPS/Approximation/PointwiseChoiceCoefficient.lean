@@ -117,6 +117,7 @@ theorem coefficient_all_mul_conj_eq_prod_nonemptyGateLocations
     coefficient_all_eq_prod_nonemptyGateLocations w ζ, map_prod,
     Finset.prod_mul_distrib]
 
+open Classical in
 /-- Reindex the two all-party choice sums by their original gate-label
 functions, with the mixed coefficient written as a product over the nonempty
 original gate occurrences. The matrix summand is arbitrary.
