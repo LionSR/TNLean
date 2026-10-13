@@ -6581,7 +6581,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   applying ordinary congruence to the operators. They do not infer equality
   of restricted operators from equality before restriction. The new framed
   local-part proof uses the same shared lemmas. Named axiom checks are in
-  `TNLeanTest/WordEvaluationTransportAxioms.lean`; elaboration is pending.
+  `TNLeanTest/WordEvaluationTransportAxioms.lean`.
 - **Further promotion (2026-10-12):** Three identity-operator transports in
   `WordPermutationRestriction`, `LocalPartFrameListRestriction` and
   `LocalPartSpectatorOwnerExclusion` now use `Word.eval_id_heq`. Four input
@@ -6591,15 +6591,14 @@ spectral split → block extraction → MPV calculation → strict bounds
   `WordEvaluationTransport` and `WordRestriction`, respectively. Main already
   supplies the restricted input transport; its duplicate is removed from the
   evaluation provider. The existing named test also checks this shared result.
-  The old public theorem statements are unchanged; elaboration is pending.
+  The old public theorem statements are unchanged.
 - **Spectator-list promotion (2026-10-12):** `FrameListRestriction`,
   `LocalPartFrameListRestriction` and `LocalPartRestrictionCongruence`
   need the same evaluation congruence for equal spectator lists. The shared
   `Word.eval_frameList_heq` in `WordEvaluationTransport` replaces private
   copies and transports the retained prefix explicitly. It compares already
   equal operators; no equality before restriction is used to infer equality
-  after restriction. Its named axiom check is in the existing test;
-  elaboration is pending.
+  after restriction. Its named axiom check is in the existing test.
 - **Selected source prefixes (2026-10-12):** The retained-prefix proofs in
   `WordPermutationRestriction` also give
   `Word.restrict_moveHead_eval_heq_of_restrict_eq`, which depends only on
@@ -6607,7 +6606,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   in `LocalPartRestrictionCongruence` uses this result together with
   `Word.eval_frame_heq` and `Word.eval_comp_heq`. It does not erase a
   retained source prefix or cancel a prepared source vector. The existing
-  named tests cover both new declarations; elaboration is pending.
+  named tests cover both new declarations.
   The composition and framing congruences now require equality of selected
   input and output lists only. Their existing proofs do not use equality
   of the original unselected lists. The retained and erased head identities
@@ -6618,7 +6617,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   arbitrary selected source prefixes. It reuses the same move, frame and
   composition identities rather than repeating their constructor proofs;
   its named check is included in `LocalPartRestrictionCongruenceAxioms`.
-  Elaboration of this additional identity is pending.
 - **Word identities — promoted (2026-10-13):**
   `WordOwnerAppendTailTransport`, `AbsorbedRestriction` and
   `WordOwnerRestrictionCommutation` compare chronological compositions,
@@ -6670,7 +6668,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   would only restate these core congruence operations, so none is introduced.
 - **Notes:** Each private transparent predicate unfolds to its original equality
   of already restricted operators. Public hypotheses and default proof limits
-  are unchanged. These source revisions remain pending compilation.
+  are unchanged.
 
 ### Cons-source preparation under fixed slot layouts — candidate (2026-10-07)
 
