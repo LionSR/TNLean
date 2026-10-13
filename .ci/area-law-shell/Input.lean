@@ -104,7 +104,7 @@ theorem disjoint_target_positiveDepthPrefix
     (A : Finset (Site Λ)) (j : ℤ) :
     Disjoint (A.filter fun x ↦ x.val ∈ T)
       (positiveDepthPrefix A (fun x ↦ ambientDepth T hT x.val) j) := by
-  simp [Finset.disjoint_left, positiveDepthPrefix_eq_filter_ambientDilation hT A j]
+  simp +contextual [Finset.disjoint_left, positiveDepthPrefix_eq_filter_ambientDilation hT A j]
   done
 
 #print axioms positiveDepthPrefix_eq_filter_ambientDilation
