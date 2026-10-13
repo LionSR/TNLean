@@ -1,0 +1,125 @@
+% Figure polypeps_first_head.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. 5 step (g) (first-head expansion), full width.
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/03-patches.tex:484-528
+% (eqs. (4.22) patch-head-tail-bounds and (4.23) patch-first-head-expansion).
+% Formula, drawn for m = 2: F_1 F_2 phi = F_1^h F_2 phi + F_1^t F_2^h phi
+% + F_1^t F_2^t phi, where F_j = L_j^{-1}, F_j^h = F_j Pi_j, F_j^t = F_j (1 - Pi_j),
+% Pi_j = 1[x_j >= b], rank F_j^h <= b^{-1} = e^R, ||F_j^t|| <= (2b)^{a_j/2}.
+% The drawn vector F_1 F_2 phi is Omega / N(R) (Omega = N(R) F_1 ... F_m phi).
+% Ink-to-index: invisible (skin=none) identity vertices only extend wires to the
+% panel edges. The three wires, top to bottom, carry H_{X_1}, H_{X_2 \ X_1}
+% and H_{Lambda \ X_2} (X_1 subset X_2). phi spans all three; F_2 spans the top
+% two (it acts on X_2) and F_1 the top one. Action runs right to left: F_2
+% acts first. A head F_j^h is drawn as two red boxes (selected) joined by a
+% red virtual wire labelled <= e^R (red, script size, inside the bowl): the
+% factorization of a map of rank <= e^R through C^{rank}. The virtual wire
+% leaves the west half at face 300 and enters the east half at face 240
+% (route=arc), so it bows about half a pitch below the head's physical rows
+% and never sits on a physical wire; it is a virtual bond (kind=index, so the
+% port types stay checked), not a physical index. The bracket above names the
+% head. Grey boxes (complement) are tails F_j^t.
+% Labels: every operator name (F_j, F_j^t) stands at label pos=n at size l,
+% one station for the class (one-wire boxes cannot inscribe a size-l name, so
+% the station is north rather than inside); the head names stand on their
+% brackets, also north; the state phi is inscribed in its three-wire box.
+% In each term every factor left of the head (here F_1^t in the second term)
+% acts inside the head's square X_j, so the term lies in
+% S_j (x) H_{Lambda \ X_j} with dim S_j <= e^R. The third term (all tails) has
+% norm <= (2b)^{kappa/2}, i.e. N(R)(2b)^{kappa/2} for the matching term of Omega.
+% Boundary signature: (phys:w)x3 in every panel (four vectors in H_Lambda);
+% the virtual head wires are internal.
+% Related: tn2d_nested_filter_product draws the forward product L_3 L_2 L_1 Omega;
+% this is the inverse product expanded, not a duplicate.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none, size=l]
+        \tn[at=(1,1), name=fhAone, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{F_1}
+        \tn[at=(1,2), name=fhAtwo, skin=box, label pos=n, wires=2,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{F_2}
+        \tn[at=(1,3), name=fhAphi, skin=box, size=l, wires=3,
+            ports={180@1:physical, 180@2:physical, 180@3:physical}]{\phi}
+        \tn[at=(2,1), name=fhAwb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=fhAwc, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire[name=fhOutOne]{open w}{fhAone.180}
+        \tnwire{fhAone.0}{fhAtwo.180@1}
+        \tnwire[name=fhOutTwo]{open w}{fhAwb.180}
+        \tnwire{fhAwb.0}{fhAtwo.180@2}
+        \tnwire{fhAtwo.0@1}{fhAphi.180@1}
+        \tnwire{fhAtwo.0@2}{fhAphi.180@2}
+        \tnwire[name=fhOutThree]{open w}{fhAwc.180}
+        \tnwire{fhAwc.0}{fhAphi.180@3}
+        \tnmark[form=label, label pos=w]{on fhOutOne 0}{$X_1$}
+        \tnmark[form=label, label pos=w]{on fhOutTwo 0}{$X_2\setminus X_1$}
+        \tnmark[form=label, label pos=w]{on fhOutThree 0}{$\Lambda\setminus X_2$}
+    \end{tenkz}
+    $=$
+    \begin{tenkz}[rows={wire,wire,wire}, cols=5, bonds=none, size=l]
+        \tn[at=(1,1), name=fhBheadW, skin=box, species=selected,
+            ports={180:physical, 300:virtual}]{}
+        \tn[at=(1,3), name=fhBheadE, skin=box, species=selected,
+            ports={240:virtual, 0:physical}]{}
+        \tn[at=(1,4), name=fhBtwo, skin=box, label pos=n, wires=2,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{F_2}
+        \tn[at=(1,5), name=fhBphi, skin=box, size=l, wires=3,
+            ports={180@1:physical, 180@2:physical, 180@3:physical}]{\phi}
+        \tn[at=(2,1), name=fhBwb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=fhBwc, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire{open w}{fhBheadW.180}
+        \tnwire[name=fhBrank, species=selected, route=arc]{fhBheadW.300}{fhBheadE.240}
+        \tnwire{fhBheadE.0}{fhBtwo.180@1}
+        \tnwire{open w}{fhBwb.180}
+        \tnwire{fhBwb.0}{fhBtwo.180@2}
+        \tnwire{fhBtwo.0@1}{fhBphi.180@1}
+        \tnwire{fhBtwo.0@2}{fhBphi.180@2}
+        \tnwire{open w}{fhBwc.180}
+        \tnwire{fhBwc.0}{fhBphi.180@3}
+        \tnmark[form=label, species=selected, label pos=n]{on fhBrank 0.5}{$\scriptstyle\le e^R$}
+        \tnmark[form=bracket, label pos=n]{(1,1) .. (1,3)}{$F_1^{\mathrm h}$}
+    \end{tenkz}
+    $+$
+    \begin{tenkz}[rows={wire,wire,wire}, cols=5, bonds=none, size=l]
+        \tn[at=(1,1), name=fhCone, skin=box, label pos=n, species=complement,
+            ports={180:physical, 0:physical}]{F_1^{\mathrm t}}
+        \tn[at=(1,2), name=fhCheadW, skin=box, wires=2, species=selected,
+            ports={180@1:physical, 180@2:physical, 300:virtual}]{}
+        \tn[at=(1,4), name=fhCheadE, skin=box, wires=2, species=selected,
+            ports={240:virtual, 0@1:physical, 0@2:physical}]{}
+        \tn[at=(1,5), name=fhCphi, skin=box, size=l, wires=3,
+            ports={180@1:physical, 180@2:physical, 180@3:physical}]{\phi}
+        \tn[at=(2,1), name=fhCwb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=fhCwc, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire{open w}{fhCone.180}
+        \tnwire{fhCone.0}{fhCheadW.180@1}
+        \tnwire{open w}{fhCwb.180}
+        \tnwire{fhCwb.0}{fhCheadW.180@2}
+        \tnwire[name=fhCrank, species=selected, route=arc]{fhCheadW.300}{fhCheadE.240}
+        \tnwire{fhCheadE.0@1}{fhCphi.180@1}
+        \tnwire{fhCheadE.0@2}{fhCphi.180@2}
+        \tnwire{open w}{fhCwc.180}
+        \tnwire{fhCwc.0}{fhCphi.180@3}
+        \tnmark[form=label, species=selected, label pos=n]{on fhCrank 0.5}{$\scriptstyle\le e^R$}
+        \tnmark[form=bracket, label pos=n]{(1,2) .. (1,4)}{$F_2^{\mathrm h}$}
+    \end{tenkz}
+    $+$
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none, size=l]
+        \tn[at=(1,1), name=fhDone, skin=box, label pos=n, species=complement,
+            ports={180:physical, 0:physical}]{F_1^{\mathrm t}}
+        \tn[at=(1,2), name=fhDtwo, skin=box, label pos=n, wires=2, species=complement,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{F_2^{\mathrm t}}
+        \tn[at=(1,3), name=fhDphi, skin=box, size=l, wires=3,
+            ports={180@1:physical, 180@2:physical, 180@3:physical}]{\phi}
+        \tn[at=(2,1), name=fhDwb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=fhDwc, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire{open w}{fhDone.180}
+        \tnwire{fhDone.0}{fhDtwo.180@1}
+        \tnwire{open w}{fhDwb.180}
+        \tnwire{fhDwb.0}{fhDtwo.180@2}
+        \tnwire{fhDtwo.0@1}{fhDphi.180@1}
+        \tnwire{fhDtwo.0@2}{fhDphi.180@2}
+        \tnwire{open w}{fhDwc.180}
+        \tnwire{fhDwc.0}{fhDphi.180@3}
+        \tnmark[form=label, label pos=s]{(3,2)}{$\Vert\cdot\Vert\le(2b)^{\kappa/2}$}
+    \end{tenkz}
+\end{tenkzequation}

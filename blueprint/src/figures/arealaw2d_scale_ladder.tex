@@ -1,0 +1,51 @@
+% Figure arealaw2d_scale_ladder.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. 2 (template scales of a primary, after al:s2:scales).
+% Source: arXiv OpenAI2026AreaLaw, sections/10-geometry.tex:713-730
+% (geometry:primary-scale, geometry:primary-limits) with the exponents (11.1)-(11.2)
+% (the note's al:s2:exponents); r in [S] is r_k in the note.
+% Content: the scales of a primary template in layer k, as powers of r_k = 2^k, in
+% increasing order from bottom to top: L = n^{1-eps}, n^beta, t_k, r_k, s_k, n, with
+% n ~ r_k^{1+2delta_0}, s_k ~ r_k^{1+delta_0}, t_k ~ r_k^zeta. The order is the exponent
+% chain (1+2delta_0)(1-eps) < (1+2delta_0)beta < zeta < 1 < 1+delta_0 < 1+2delta_0, which
+% follows from 1-eps < beta and (1+2delta_0)beta < zeta < 1 in al:s2:exponents; it gives
+% L = o(r_k), n^beta = o(t_k), n^beta = o(r_k) (geometry:primary-limits).
+% With delta_0 = 2 10^{-7}, beta = 1 - 2 10^{-6}, 1-eps = 0.99999 the exponents are
+% 0.9999904 < 0.9999984 < 0.9999999 < 1 < 1.0000002 < 1.0000004. The amplification radius
+% r of AL Sec. 10 (exponent at most about 0.9999914 = (1+2delta_0)(1-eps)/alpha) would sit
+% between L and n^beta; it is not drawn, since Sec. 2 does not define it.
+% Ink-to-index: none (a 1-D log-scale ruler, padding-ladder idiom, drawn vertically to
+% fit the column). The vertical string is the log-scale axis; each centre dot is one
+% scale, named west, with its exponent of r_k east.
+% Boundary signature: empty.
+% Not to scale: all six exponents lie within 10^{-5} of 1; only their order is drawn,
+% at equal spacing.
+% Label macros: none.
+% Fit: C at 5mm (\tnshow[5mm]).
+% Related: \exponentbars (error powers of AL Sec. 9, against 1-eps); area_law_dyadic_layers
+% (the layers, no template scales). Neither orders the template scales.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire}, cols=3, bonds=none]
+        \tndeclare{species}{centre}{hue=source:red}
+        \tnwire[kind=string]{(6,2)}{(1,2)}
+        \tn[at=(1,2), skin=dot, species=centre, size=l]{}
+        \tnmark[form=label, label pos=w]{(1,2)}{$n$}
+        \tnmark[form=label, label pos=e]{(1,2)}{$1+2\delta_0$}
+        \tn[at=(2,2), skin=dot, species=centre, size=l]{}
+        \tnmark[form=label, label pos=w]{(2,2)}{$s_k$}
+        \tnmark[form=label, label pos=e]{(2,2)}{$1+\delta_0$}
+        \tn[at=(3,2), skin=dot, species=centre, size=l]{}
+        \tnmark[form=label, label pos=w]{(3,2)}{$r_k$}
+        \tnmark[form=label, label pos=e]{(3,2)}{$1$}
+        \tn[at=(4,2), skin=dot, species=centre, size=l]{}
+        \tnmark[form=label, label pos=w]{(4,2)}{$t_k$}
+        \tnmark[form=label, label pos=e]{(4,2)}{$\zeta=1-\delta_0/2$}
+        \tn[at=(5,2), skin=dot, species=centre, size=l]{}
+        \tnmark[form=label, label pos=w]{(5,2)}{$n^\beta$}
+        \tnmark[form=label, label pos=e]{(5,2)}{$(1+2\delta_0)\beta$}
+        \tn[at=(6,2), skin=dot, species=centre, size=l]{}
+        \tnmark[form=label, label pos=w]{(6,2)}{$L$}
+        \tnmark[form=label, label pos=e]{(6,2)}{$(1+2\delta_0)(1-\varepsilon)$}
+    \end{tenkz}
+\end{center}

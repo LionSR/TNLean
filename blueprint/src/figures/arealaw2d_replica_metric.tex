@@ -1,0 +1,65 @@
+% Figure arealaw2d_replica_metric.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. 6 (the leaf metric), preceded by A_3(P,Y,F) z =.
+% Source: arXiv OpenAI2026AreaLaw, sections/05-replicas.tex:451-468 (eqs. (6.17)
+% replicas:leaf-metric and (6.18) replicas:leaf-floor), drawn at k = 3.
+% Formula: A_3(P,Y,F) z = (W_P^{-1} W_F^{-1} W_Y)^2 z = W_P^{-2} W_Y^2 W_F^{-2} z
+% on Sym^3 V, V = P Y F (the three factors act on disjoint subsystems and commute,
+% so the square splits; the note's prose states this identity).
+% Ink-to-index: nine wires grouped by subsystem, P (rows 1-3), Y (rows 5-7) and
+% F (rows 9-11), blank rows 4 and 8 between the groups; each group holds the
+% copies 1, 2, 3 from top to bottom (copies told apart by position; regrouping
+% the tensor factors of V^{(x)3} this way changes nothing). z is a symmetric
+% vector, a joint state of all nine wires. One column holds the three commuting
+% factors W_P^{-2} (on P^{(x)3}), W_Y^2 (on Y^{(x)3}) and W_F^{-2} (on F^{(x)3});
+% their subscripts name the groups, so the wires carry no names. Box names sit
+% at pos=n, those of W_Y^2 and W_F^{-2} in the blank rows. On Sym^3 V,
+% W_Y = W_{PF}.
+% Boundary signature: (phys:w)x9.
+% Label macros: none.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire},
+            cols=5, bonds=none, size=l]
+        \tn[at=(1,1), name=rmEndPa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), name=rmEndPb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=rmEndPc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,1), name=rmEndYa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,1), name=rmEndYb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,1), name=rmEndYc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(9,1), name=rmEndFa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(10,1), name=rmEndFb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(11,1), name=rmEndFc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,3), name=rmP, skin=box, wires=3, label pos=n,
+            ports={180@1:physical, 180@2:physical, 180@3:physical,
+                    0@1:physical, 0@2:physical, 0@3:physical}]{W_P^{-2}}
+        \tn[at=(5,3), name=rmY, skin=box, wires=3, label pos=n,
+            ports={180@1:physical, 180@2:physical, 180@3:physical,
+                    0@1:physical, 0@2:physical, 0@3:physical}]{W_Y^{2}}
+        \tn[at=(9,3), name=rmF, skin=box, wires=3, label pos=n,
+            ports={180@1:physical, 180@2:physical, 180@3:physical,
+                    0@1:physical, 0@2:physical, 0@3:physical}]{W_F^{-2}}
+        \tn[at=(1,5), name=rmZ, skin=box, wires=11, label pos=s,
+            ports={180@1:physical, 180@2:physical, 180@3:physical, 180@5:physical,
+                    180@6:physical, 180@7:physical, 180@9:physical, 180@10:physical,
+                    180@11:physical}]{z\in\operatorname{Sym}^3\mathcal V}
+        \tnwire{rmZ.180@1}{rmP.0@1}
+        \tnwire{rmZ.180@2}{rmP.0@2}
+        \tnwire{rmZ.180@3}{rmP.0@3}
+        \tnwire{rmZ.180@5}{rmY.0@1}
+        \tnwire{rmZ.180@6}{rmY.0@2}
+        \tnwire{rmZ.180@7}{rmY.0@3}
+        \tnwire{rmZ.180@9}{rmF.0@1}
+        \tnwire{rmZ.180@10}{rmF.0@2}
+        \tnwire{rmZ.180@11}{rmF.0@3}
+        \tnwire{rmP.180@1}{rmEndPa.0}
+        \tnwire{rmP.180@2}{rmEndPb.0}
+        \tnwire{rmP.180@3}{rmEndPc.0}
+        \tnwire{rmY.180@1}{rmEndYa.0}
+        \tnwire{rmY.180@2}{rmEndYb.0}
+        \tnwire{rmY.180@3}{rmEndYc.0}
+        \tnwire{rmF.180@1}{rmEndFa.0}
+        \tnwire{rmF.180@2}{rmEndFb.0}
+        \tnwire{rmF.180@3}{rmEndFc.0}
+    \end{tenkz}
+\end{center}

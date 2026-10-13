@@ -1,0 +1,137 @@
+% Figure tn2d_single_conjugation.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. 4 (Move 2); PP Sec. 5 step (d).
+% Source: arXiv OpenAI2026AreaLaw, sections/02-initial.tex:285-292 (single-split
+% property) and 404-416 (at most one conjugation L_j h_i L_j^{-1});
+% arXiv OpenAI2026PolynomialPEPS, sections/03-patches.tex:224-243
+% (eq. patch-single-crossing, (4.13)).
+% Formula: with K = L_3 L_2 L_1 and h split by X_2 (disjoint from X_1, contained
+% in X_3), <phi, K h K^{-1} phi> = <phi, L_3 L_2 h L_2^{-1} L_3^{-1} phi>
+% = <phi, L_2 h L_2^{-1} phi>. The first = is an operator identity:
+% L_1 h L_1^{-1} = h because L_1 and h have disjoint supports; no two distinct
+% filters are commuted. The second = is trace stripping
+% (polypeps_trace_stripping) with T = L_2 h L_2^{-1}, an operator on X_3, and
+% uses [L_3, rho_{phi,X_3}] = 0 (stationarity; rho_3 in PP). Each joiner
+% carries its fact (J2); the last panel is the statement proved, so no trailing
+% formula is appended. K is M in PP; neither letter is drawn.
+% Ink-to-index: four wires, top to bottom: X_1 (row 1), X_2 \ X_1 (row 3),
+% X_3 \ X_2 (row 4), Lambda \ X_3 (row 5), the layout of
+% tn2d_nested_filter_product, named once, west of panel 1. Row 2 is blank (no
+% wire, no port): it holds the name of h, which spans rows 3-4, clear of the X_1
+% wire. L_j and L_j^{-1} span the wires of X_j (identity elsewhere); a blank row
+% passes under a box. Read right to left from the ket phi (east) to the bra
+% phi^dagger (west); bra and ket span all wires, names south. Every operator
+% name sits at label pos=n (one station); the inverses stand two columns apart
+% so that their names do not touch. Plain boxes, no species; states carry none.
+% Boundary signature: empty (three scalars).
+% Fit: W (\tnwide[5mm]); about 164 mm wide.
+% Label macros: none.
+% Related: tn2d_nested_filter_product (the open vector, no h, no inverses);
+% polypeps_trace_stripping (one stripping step, generic T);
+% peps_nested_patch_crossing (the geometry of the crossing edge). Not a
+% duplicate: none shows both cancellations leaving one conjugation.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=11, bonds=none, size=l]
+        \tn[at=(1,1), name=scBra, skin=box, wires=5, label pos=s,
+            ports={0@1:physical, 0@3:physical, 0@4:physical, 0@5:physical}]{\bra{\phi}}
+        \tn[at=(1,2), name=scLthree, skin=box, wires=4, label pos=n,
+            ports={180@1:physical, 180@3:physical, 180@4:physical,
+                    0@1:physical, 0@3:physical, 0@4:physical}]{L_3}
+        \tn[at=(1,3), name=scLtwo, skin=box, wires=3, label pos=n,
+            ports={180@1:physical, 180@3:physical, 0@1:physical, 0@3:physical}]{L_2}
+        \tn[at=(1,4), name=scLone, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{L_1}
+        \tn[at=(3,5), name=scH, skin=box, wires=2, label pos=n,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{h}
+        \tn[at=(1,6), name=scLoneInv, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{L_1^{-1}}
+        \tn[at=(1,8), name=scLtwoInv, skin=box, wires=3, label pos=n,
+            ports={180@1:physical, 180@3:physical, 0@1:physical, 0@3:physical}]{L_2^{-1}}
+        \tn[at=(1,10), name=scLthreeInv, skin=box, wires=4, label pos=n,
+            ports={180@1:physical, 180@3:physical, 180@4:physical,
+                    0@1:physical, 0@3:physical, 0@4:physical}]{L_3^{-1}}
+        \tn[at=(1,11), name=scKet, skin=box, wires=5, label pos=s,
+            ports={180@1:physical, 180@3:physical, 180@4:physical, 180@5:physical}]{\ket{\phi}}
+        \tnwire{scBra.0@1}{scLthree.180@1}
+        \tnwire{scBra.0@3}{scLthree.180@3}
+        \tnwire{scBra.0@4}{scLthree.180@4}
+        \tnwire{scLthree.0@1}{scLtwo.180@1}
+        \tnwire{scLthree.0@3}{scLtwo.180@3}
+        \tnwire{scLtwo.0@1}{scLone.180}
+        \tnwire{scLtwo.0@3}{scH.180@1}
+        \tnwire{scLthree.0@4}{scH.180@2}
+        \tnwire{scLone.0}{scLoneInv.180}
+        \tnwire{scLoneInv.0}{scLtwoInv.180@1}
+        \tnwire{scH.0@1}{scLtwoInv.180@3}
+        \tnwire{scLtwoInv.0@1}{scLthreeInv.180@1}
+        \tnwire{scLtwoInv.0@3}{scLthreeInv.180@3}
+        \tnwire{scH.0@2}{scLthreeInv.180@4}
+        \tnwire{scLthreeInv.0@1}{scKet.180@1}
+        \tnwire{scLthreeInv.0@3}{scKet.180@3}
+        \tnwire{scLthreeInv.0@4}{scKet.180@4}
+        \tnwire{scBra.0@5}{scKet.180@5}
+        \tnmark[form=label, label pos=w]{(1,1)}{$X_1$}
+        \tnmark[form=label, label pos=w]{(3,1)}{$X_2\setminus X_1$}
+        \tnmark[form=label, label pos=w]{(4,1)}{$X_3\setminus X_2$}
+        \tnmark[form=label, label pos=w]{(5,1)}{$\Lambda\setminus X_3$}
+    \end{tenkz}
+    $\;\overset{[L_1,h]=0}{\vphantom{\big(}=}\;$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=8, bonds=none, size=l]
+        \tn[at=(1,1), name=scBra, skin=box, wires=5, label pos=s,
+            ports={0@1:physical, 0@3:physical, 0@4:physical, 0@5:physical}]{\bra{\phi}}
+        \tn[at=(1,2), name=scLthree, skin=box, wires=4, label pos=n,
+            ports={180@1:physical, 180@3:physical, 180@4:physical,
+                    0@1:physical, 0@3:physical, 0@4:physical}]{L_3}
+        \tn[at=(1,3), name=scLtwo, skin=box, wires=3, label pos=n,
+            ports={180@1:physical, 180@3:physical, 0@1:physical, 0@3:physical}]{L_2}
+        \tn[at=(3,4), name=scH, skin=box, wires=2, label pos=n,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{h}
+        \tn[at=(1,5), name=scLtwoInv, skin=box, wires=3, label pos=n,
+            ports={180@1:physical, 180@3:physical, 0@1:physical, 0@3:physical}]{L_2^{-1}}
+        \tn[at=(1,7), name=scLthreeInv, skin=box, wires=4, label pos=n,
+            ports={180@1:physical, 180@3:physical, 180@4:physical,
+                    0@1:physical, 0@3:physical, 0@4:physical}]{L_3^{-1}}
+        \tn[at=(1,8), name=scKet, skin=box, wires=5, label pos=s,
+            ports={180@1:physical, 180@3:physical, 180@4:physical, 180@5:physical}]{\ket{\phi}}
+        \tnwire{scBra.0@1}{scLthree.180@1}
+        \tnwire{scBra.0@3}{scLthree.180@3}
+        \tnwire{scBra.0@4}{scLthree.180@4}
+        \tnwire{scLthree.0@1}{scLtwo.180@1}
+        \tnwire{scLthree.0@3}{scLtwo.180@3}
+        \tnwire{scLtwo.0@3}{scH.180@1}
+        \tnwire{scLthree.0@4}{scH.180@2}
+        \tnwire{scLtwo.0@1}{scLtwoInv.180@1}
+        \tnwire{scH.0@1}{scLtwoInv.180@3}
+        \tnwire{scLtwoInv.0@1}{scLthreeInv.180@1}
+        \tnwire{scLtwoInv.0@3}{scLthreeInv.180@3}
+        \tnwire{scH.0@2}{scLthreeInv.180@4}
+        \tnwire{scLthreeInv.0@1}{scKet.180@1}
+        \tnwire{scLthreeInv.0@3}{scKet.180@3}
+        \tnwire{scLthreeInv.0@4}{scKet.180@4}
+        \tnwire{scBra.0@5}{scKet.180@5}
+    \end{tenkz}
+    $\;\overset{[L_3,\rho_{\phi,X_3}]=0}{\vphantom{\big(}=}\;$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5, bonds=none, size=l]
+        \tn[at=(1,1), name=scBra, skin=box, wires=5, label pos=s,
+            ports={0@1:physical, 0@3:physical, 0@4:physical, 0@5:physical}]{\bra{\phi}}
+        \tn[at=(1,2), name=scLtwo, skin=box, wires=3, label pos=n,
+            ports={180@1:physical, 180@3:physical, 0@1:physical, 0@3:physical}]{L_2}
+        \tn[at=(3,3), name=scH, skin=box, wires=2, label pos=n,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{h}
+        \tn[at=(1,4), name=scLtwoInv, skin=box, wires=3, label pos=n,
+            ports={180@1:physical, 180@3:physical, 0@1:physical, 0@3:physical}]{L_2^{-1}}
+        \tn[at=(1,5), name=scKet, skin=box, wires=5, label pos=s,
+            ports={180@1:physical, 180@3:physical, 180@4:physical, 180@5:physical}]{\ket{\phi}}
+        \tnwire{scBra.0@1}{scLtwo.180@1}
+        \tnwire{scBra.0@3}{scLtwo.180@3}
+        \tnwire{scLtwo.0@3}{scH.180@1}
+        \tnwire{scBra.0@4}{scH.180@2}
+        \tnwire{scLtwo.0@1}{scLtwoInv.180@1}
+        \tnwire{scH.0@1}{scLtwoInv.180@3}
+        \tnwire{scLtwoInv.0@1}{scKet.180@1}
+        \tnwire{scLtwoInv.0@3}{scKet.180@3}
+        \tnwire{scH.0@2}{scKet.180@4}
+        \tnwire{scBra.0@5}{scKet.180@5}
+    \end{tenkz}
+\end{tenkzequation}

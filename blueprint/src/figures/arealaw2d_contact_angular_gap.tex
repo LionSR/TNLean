@@ -1,0 +1,184 @@
+% Figure arealaw2d_contact_angular_gap.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. 2 (Step 5 (b), Lemma 5 and (11.11)).
+% Source: arXiv OpenAI2026AreaLaw, sections/10-geometry.tex:573-666 (Lemma
+% 11.5, geometry:birth-separation; the angular gap (11.11),
+% geometry:angular-gap, and the trim radius c_4 u^{rho_0}).
+% Ink-to-index: lattice places are points of the plane; the contact mark v
+% (large red centre dot) is at (6,6) and the eight thin rays run to (1,1),
+% (1,6), (1,11), (6,11), (11,11), (11,6), (11,1), (6,1). Inside the contact
+% star each same-label closure is a union of closed radial sectors, bounded by
+% the rays. The four rays N, NE, E, SE bound the two sectors of this
+% comparison and are solid; the four rays NW, W, SW, S bound sectors that
+% carry no region of this comparison and are dashed. The red dots are the
+% lattice places of the new birth region B, the closed sector between the N
+% and NE rays, {(r,c): r <= 6, 6 <= c <= 12-r} (v included: B reaches the
+% contact). The teal dots are the lattice places of the final actual region of
+% an older identifier X_j of the same label: the closed sector between the E
+% and SE rays ({(r,c): 6 <= r <= c <= 11}) minus the dashed grey square
+% (4,4)-(8,8) of radius c_4 u^{rho_0} about v, which X_j loses at the trim
+% following B's birth (bracket in row 9, just below the square, from v's
+% column to the square's east side: the halfside). The regions are drawn as
+% site dots, not tints, so the rays are the only boundaries drawn. The sector
+% between NE and E has the opposite label and is left empty; its label pi/4
+% sits inside it between (4,10) and (4,11): the direction sets of B and X_j
+% are pi/4 apart. x = (3,7) in B and y = (8,10) in X_j are centre dots; y lies
+% outside the trimmed square, so ||y-v||_inf >= c_4 u^{rho_0}, and the dashed
+% link carries (11.11), ||x-y||_inf >= c_3 max(||x-v||_inf, ||y-v||_inf),
+% hence the link label ||x-y||_inf >= c_3 c_4 u^{rho_0} (east of the link, in
+% the empty sector). Drawn at the base metric (no metrics=compact), so the
+% site dots and labels read at column width.
+% Boundary signature: empty (geometry only; the rays and the link are
+% geometric segments, not tensor indices).
+% Not to scale: the contact star has radius proportional to u, while the trim
+% radius c_4 u^{rho_0} is much smaller than u.
+% Label macros: none.
+% Label placement: v is anchored half a pitch west of the mark, so that its
+% label sits in the empty W-SW sector clear of all eight rays. The labels B and X_j
+% are set in their regions' hues (direct labels; no colour key needed).
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=11, bonds=none]
+        \tndeclare{species}{fam0}{hue=source:teal}
+        \tndeclare{species}{centre}{hue=source:red}
+        \tn[at=(6,6), name=agv, skin=dot, species=centre, size=l, ports={0:virtual, 45:virtual, 90:virtual, 135:virtual, 180:virtual, 225:virtual, 270:virtual, 315:virtual}]{}
+        \tn[at=(1,1), name=agnw, skin=none, ports={315:virtual}]{}
+        \tn[at=(1,6), name=agn, skin=dot, species=selected, size=s, ports={270:virtual}]{}
+        \tn[at=(1,11), name=agne, skin=dot, species=selected, size=s, ports={225:virtual}]{}
+        \tn[at=(6,11), name=age, skin=dot, species=fam0, size=s, ports={180:virtual}]{}
+        \tn[at=(11,11), name=agse, skin=dot, species=fam0, size=s, ports={135:virtual}]{}
+        \tn[at=(11,6), name=ags, skin=none, ports={90:virtual}]{}
+        \tn[at=(11,1), name=agsw, skin=none, ports={45:virtual}]{}
+        \tn[at=(6,1), name=agw, skin=none, ports={0:virtual}]{}
+        \tn[at=(3,7), name=agx, skin=dot, species=centre, ports={301:virtual}]{}
+        \tn[at=(8,10), name=agy, skin=dot, species=centre, ports={121:virtual}]{}
+        \tn[at=(1,2), skin=none]{}
+        \tn[at=(1,3), skin=none]{}
+        \tn[at=(1,4), skin=none]{}
+        \tn[at=(1,5), skin=none]{}
+        \tn[at=(1,7), skin=dot, species=selected, size=s]{}
+        \tn[at=(1,8), skin=dot, species=selected, size=s]{}
+        \tn[at=(1,9), skin=dot, species=selected, size=s]{}
+        \tn[at=(1,10), skin=dot, species=selected, size=s]{}
+        \tn[at=(2,1), skin=none]{}
+        \tn[at=(2,2), skin=none]{}
+        \tn[at=(2,3), skin=none]{}
+        \tn[at=(2,4), skin=none]{}
+        \tn[at=(2,5), skin=none]{}
+        \tn[at=(2,6), skin=dot, species=selected, size=s]{}
+        \tn[at=(2,7), skin=dot, species=selected, size=s]{}
+        \tn[at=(2,8), skin=dot, species=selected, size=s]{}
+        \tn[at=(2,9), skin=dot, species=selected, size=s]{}
+        \tn[at=(2,10), skin=dot, species=selected, size=s]{}
+        \tn[at=(2,11), skin=none]{}
+        \tn[at=(3,1), skin=none]{}
+        \tn[at=(3,2), skin=none]{}
+        \tn[at=(3,3), skin=none]{}
+        \tn[at=(3,4), skin=none]{}
+        \tn[at=(3,5), skin=none]{}
+        \tn[at=(3,6), skin=dot, species=selected, size=s]{}
+        \tn[at=(3,8), skin=dot, species=selected, size=s]{}
+        \tn[at=(3,9), skin=dot, species=selected, size=s]{}
+        \tn[at=(3,10), skin=none]{}
+        \tn[at=(3,11), skin=none]{}
+        \tn[at=(4,1), skin=none]{}
+        \tn[at=(4,2), skin=none]{}
+        \tn[at=(4,3), skin=none]{}
+        \tn[at=(4,4), skin=none]{}
+        \tn[at=(4,5), skin=none]{}
+        \tn[at=(4,6), skin=dot, species=selected, size=s]{}
+        \tn[at=(4,7), skin=dot, species=selected, size=s]{}
+        \tn[at=(4,8), skin=dot, species=selected, size=s]{}
+        \tn[at=(4,9), skin=none]{}
+        \tn[at=(4,10), skin=none]{}
+        \tn[at=(4,11), skin=none]{}
+        \tn[at=(5,1), skin=none]{}
+        \tn[at=(5,2), skin=none]{}
+        \tn[at=(5,3), skin=none]{}
+        \tn[at=(5,4), skin=none]{}
+        \tn[at=(5,5), skin=none]{}
+        \tn[at=(5,6), skin=dot, species=selected, size=s]{}
+        \tn[at=(5,7), skin=dot, species=selected, size=s]{}
+        \tn[at=(5,8), skin=none]{}
+        \tn[at=(5,9), skin=none]{}
+        \tn[at=(5,10), skin=none]{}
+        \tn[at=(5,11), skin=none]{}
+        \tn[at=(6,2), skin=none]{}
+        \tn[at=(6,3), skin=none]{}
+        \tn[at=(6,4), skin=none]{}
+        \tn[at=(6,5), skin=none]{}
+        \tn[at=(6,7), skin=none]{}
+        \tn[at=(6,8), skin=none]{}
+        \tn[at=(6,9), skin=dot, species=fam0, size=s]{}
+        \tn[at=(6,10), skin=dot, species=fam0, size=s]{}
+        \tn[at=(7,1), skin=none]{}
+        \tn[at=(7,2), skin=none]{}
+        \tn[at=(7,3), skin=none]{}
+        \tn[at=(7,4), skin=none]{}
+        \tn[at=(7,5), skin=none]{}
+        \tn[at=(7,6), skin=none]{}
+        \tn[at=(7,7), skin=none]{}
+        \tn[at=(7,8), skin=none]{}
+        \tn[at=(7,9), skin=dot, species=fam0, size=s]{}
+        \tn[at=(7,10), skin=dot, species=fam0, size=s]{}
+        \tn[at=(7,11), skin=dot, species=fam0, size=s]{}
+        \tn[at=(8,1), skin=none]{}
+        \tn[at=(8,2), skin=none]{}
+        \tn[at=(8,3), skin=none]{}
+        \tn[at=(8,4), skin=none]{}
+        \tn[at=(8,5), skin=none]{}
+        \tn[at=(8,6), skin=none]{}
+        \tn[at=(8,7), skin=none]{}
+        \tn[at=(8,8), skin=none]{}
+        \tn[at=(8,9), skin=dot, species=fam0, size=s]{}
+        \tn[at=(8,11), skin=dot, species=fam0, size=s]{}
+        \tn[at=(9,1), skin=none]{}
+        \tn[at=(9,2), skin=none]{}
+        \tn[at=(9,3), skin=none]{}
+        \tn[at=(9,4), skin=none]{}
+        \tn[at=(9,5), skin=none]{}
+        \tn[at=(9,6), skin=none]{}
+        \tn[at=(9,7), skin=none]{}
+        \tn[at=(9,8), skin=none]{}
+        \tn[at=(9,9), skin=dot, species=fam0, size=s]{}
+        \tn[at=(9,10), skin=dot, species=fam0, size=s]{}
+        \tn[at=(9,11), skin=dot, species=fam0, size=s]{}
+        \tn[at=(10,1), skin=none]{}
+        \tn[at=(10,2), skin=none]{}
+        \tn[at=(10,3), skin=none]{}
+        \tn[at=(10,4), skin=none]{}
+        \tn[at=(10,5), skin=none]{}
+        \tn[at=(10,6), skin=none]{}
+        \tn[at=(10,7), skin=none]{}
+        \tn[at=(10,8), skin=none]{}
+        \tn[at=(10,9), skin=none]{}
+        \tn[at=(10,10), skin=dot, species=fam0, size=s]{}
+        \tn[at=(10,11), skin=dot, species=fam0, size=s]{}
+        \tn[at=(11,2), skin=none]{}
+        \tn[at=(11,3), skin=none]{}
+        \tn[at=(11,4), skin=none]{}
+        \tn[at=(11,5), skin=none]{}
+        \tn[at=(11,7), skin=none]{}
+        \tn[at=(11,8), skin=none]{}
+        \tn[at=(11,9), skin=none]{}
+        \tn[at=(11,10), skin=none]{}
+        \tnwire[stroke=dashed, name=agraynw]{agv.135}{agnw.315}
+        \tnwire[name=agrayn]{agv.90}{agn.270}
+        \tnwire[name=agrayne]{agv.45}{agne.225}
+        \tnwire[name=agraye]{agv.0}{age.180}
+        \tnwire[name=agrayse]{agv.315}{agse.135}
+        \tnwire[stroke=dashed, name=agrays]{agv.270}{ags.90}
+        \tnwire[stroke=dashed, name=agraysw]{agv.225}{agsw.45}
+        \tnwire[stroke=dashed, name=agrayw]{agv.180}{agw.0}
+        \tnmark[form=enclosure, species=complement]{(4,4) .. (8,8)}{}
+        \tnmark[form=bracket, label pos=s]{(9,6) .. (9,8)}{$c_4u^{\rho_0}$}
+        \tnwire[stroke=dashed, name=agxy]{agx.301}{agy.121}
+        \tnmark[form=label, species=selected, label pos=n]{(1,8)}{$\mathcal B$}
+        \tnmark[form=label, species=fam0, label pos=s]{midway (11,10) and (11,11)}{$X_j$}
+        \tnmark[form=label, label pos=n]{(3,7)}{$x$}
+        \tnmark[form=label, label pos=s]{(8,10)}{$y$}
+        \tnmark[form=label, label pos=225]{midway (6,6) and (6,5)}{$v$}
+        \tnmark[form=label]{midway (4,10) and (4,11)}{$\tfrac{\pi}{4}$}
+        \tnmark[form=label, label pos=0]{on agxy 0.4}{$\ge c_3c_4u^{\rho_0}$}
+    \end{tenkz}
+\end{center}

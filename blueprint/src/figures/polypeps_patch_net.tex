@@ -1,0 +1,95 @@
+% Figure polypeps_patch_net.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. 8 (Prop IV, small-patch covers).
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/06-geometry.tex:447-505
+% (compactness observation; point homogenization and removal), with the
+% inner and outer squares Q^-(c,h), Q^+(c,h) of 05-frames.tex:26-31 and the
+% hypotheses of Lemma 6.3 (small-patch rewrite), 05-frames.tex:188-205.
+% Ink-to-index: dots are sites (10x11; the empty last row and the last
+% columns hold labels and brackets). The treated square of radius t about a
+% mark (red centre dot at (6,6); here t = 4 sites) is the 9x9 block of black
+% sites, rows/cols 2-10; the sites outside it are grey context (no contour, so
+% that it does not run against the patch outlines, shared-spec 4.1 S3). The
+% nine thin black (neutral) squares are the patch inner squares Q^-(c_i,u) of
+% a net (here a 3x3 tiling, inner radius u = 1 site); together they cover the
+% treated square. The violet tinted square is the outer square
+% Q^+(c,u) = Q^-(c,2u) of the middle-right patch (label "<= 2 owners" east).
+% The black line, clipped to the lattice, is an interface of the guide being
+% rewritten, between the owners P (west, label in the middle of four sites of
+% the middle-right patch) and A (east, label between two grey sites of the
+% last column); the outer square straddles it and meets exactly these two
+% owners, as the compactness observation guarantees (at most two old and at
+% most two new owners outside the inner holes in each outer patch).
+% Brackets (blank row 11): t from the mark's column to the treated square's
+% last column; 2u = 2 nu t across one patch.
+% Rim vertices, holes and the before/after guides are those of
+% peps_dyadic_rim_pattern and are not repeated.
+% Boundary signature: empty.
+% Not to scale: the patch inner radius is u = nu t with nu a small fixed
+% constant and t = D log L; the paper's net has mesh at most u (overlapping
+% squares); the drawn tiling (mesh 2u+1 sites) is also a cover. The number of
+% patches is fixed because the working diameter is O(t).
+% Related: peps_dyadic_rim_pattern (the treated square, its rim vertex and
+% holes); this figure adds only the patch net and one two-owner footprint.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire},
+            cols=13, bonds=none]
+        \tndeclare{species}{centre}{hue=source:red}
+        \tn[at=(1,1), skin=dot, species=complement]{} \tn[at=(1,2), skin=dot, species=complement]{} \tn[at=(1,3), skin=dot, species=complement]{}
+        \tn[at=(1,4), skin=dot, species=complement]{} \tn[at=(1,5), skin=dot, species=complement]{} \tn[at=(1,6), skin=dot, species=complement]{}
+        \tn[at=(1,7), skin=dot, species=complement]{} \tn[at=(1,8), skin=dot, species=complement]{} \tn[at=(1,9), skin=dot, species=complement]{}
+        \tn[at=(1,10), skin=dot, species=complement]{} \tn[at=(1,11), skin=dot, species=complement]{} \tn[at=(2,1), skin=dot, species=complement]{}
+        \tn[at=(2,2), skin=dot]{} \tn[at=(2,3), skin=dot]{} \tn[at=(2,4), skin=dot]{}
+        \tn[at=(2,5), skin=dot]{} \tn[at=(2,6), skin=dot]{} \tn[at=(2,7), skin=dot]{}
+        \tn[at=(2,8), skin=dot]{} \tn[at=(2,9), skin=dot]{} \tn[at=(2,10), skin=dot]{}
+        \tn[at=(2,11), skin=dot, species=complement]{} \tn[at=(3,1), skin=dot, species=complement]{} \tn[at=(3,2), skin=dot]{}
+        \tn[at=(3,3), skin=dot]{} \tn[at=(3,4), skin=dot]{} \tn[at=(3,5), skin=dot]{}
+        \tn[at=(3,6), skin=dot]{} \tn[at=(3,7), skin=dot]{} \tn[at=(3,8), skin=dot]{}
+        \tn[at=(3,9), skin=dot]{} \tn[at=(3,10), skin=dot]{} \tn[at=(3,11), skin=dot, species=complement]{}
+        \tn[at=(4,1), skin=dot, species=complement]{} \tn[at=(4,2), skin=dot]{} \tn[at=(4,3), skin=dot]{}
+        \tn[at=(4,4), skin=dot]{} \tn[at=(4,5), skin=dot]{} \tn[at=(4,6), skin=dot]{}
+        \tn[at=(4,7), skin=dot]{} \tn[at=(4,8), skin=dot]{} \tn[at=(4,9), skin=dot]{}
+        \tn[at=(4,10), skin=dot]{} \tn[at=(4,11), skin=dot, species=complement]{} \tn[at=(5,1), skin=dot, species=complement]{}
+        \tn[at=(5,2), skin=dot]{} \tn[at=(5,3), skin=dot]{} \tn[at=(5,4), skin=dot]{}
+        \tn[at=(5,5), skin=dot]{} \tn[at=(5,6), skin=dot]{} \tn[at=(5,7), skin=dot]{}
+        \tn[at=(5,8), skin=dot]{} \tn[at=(5,9), skin=dot]{} \tn[at=(5,10), skin=dot]{}
+        \tn[at=(5,11), skin=dot, species=complement]{} \tn[at=(6,1), skin=dot, species=complement]{} \tn[at=(6,2), skin=dot]{}
+        \tn[at=(6,3), skin=dot]{} \tn[at=(6,4), skin=dot]{} \tn[at=(6,5), skin=dot]{}
+        \tn[at=(6,7), skin=dot]{} \tn[at=(6,8), skin=dot]{} \tn[at=(6,9), skin=dot]{}
+        \tn[at=(6,10), skin=dot]{} \tn[at=(6,11), skin=dot, species=complement]{} \tn[at=(7,1), skin=dot, species=complement]{}
+        \tn[at=(7,2), skin=dot]{} \tn[at=(7,3), skin=dot]{} \tn[at=(7,4), skin=dot]{}
+        \tn[at=(7,5), skin=dot]{} \tn[at=(7,6), skin=dot]{} \tn[at=(7,7), skin=dot]{}
+        \tn[at=(7,8), skin=dot]{} \tn[at=(7,9), skin=dot]{} \tn[at=(7,10), skin=dot]{}
+        \tn[at=(7,11), skin=dot, species=complement]{} \tn[at=(8,1), skin=dot, species=complement]{} \tn[at=(8,2), skin=dot]{}
+        \tn[at=(8,3), skin=dot]{} \tn[at=(8,4), skin=dot]{} \tn[at=(8,5), skin=dot]{}
+        \tn[at=(8,6), skin=dot]{} \tn[at=(8,7), skin=dot]{} \tn[at=(8,8), skin=dot]{}
+        \tn[at=(8,9), skin=dot]{} \tn[at=(8,10), skin=dot]{} \tn[at=(8,11), skin=dot, species=complement]{}
+        \tn[at=(9,1), skin=dot, species=complement]{} \tn[at=(9,2), skin=dot]{} \tn[at=(9,3), skin=dot]{}
+        \tn[at=(9,4), skin=dot]{} \tn[at=(9,5), skin=dot]{} \tn[at=(9,6), skin=dot]{}
+        \tn[at=(9,7), skin=dot]{} \tn[at=(9,8), skin=dot]{} \tn[at=(9,9), skin=dot]{}
+        \tn[at=(9,10), skin=dot]{} \tn[at=(9,11), skin=dot, species=complement]{} \tn[at=(10,1), skin=dot, species=complement]{}
+        \tn[at=(10,2), skin=dot]{} \tn[at=(10,3), skin=dot]{} \tn[at=(10,4), skin=dot]{}
+        \tn[at=(10,5), skin=dot]{} \tn[at=(10,6), skin=dot]{} \tn[at=(10,7), skin=dot]{}
+        \tn[at=(10,8), skin=dot]{} \tn[at=(10,9), skin=dot]{} \tn[at=(10,10), skin=dot]{}
+        \tn[at=(10,11), skin=dot, species=complement]{}
+        \tn[at=(6,6), name=netCentre, skin=dot, species=centre, size=l]{}
+        \tn[at=(11,2), skin=none]{} \tn[at=(11,4), skin=none]{}
+        \tn[at=(11,6), skin=none]{} \tn[at=(11,10), skin=none]{}
+        \tnmark[form=enclosure, species=neutral]{(2,2) .. (4,4)}{}
+        \tnmark[form=enclosure, species=neutral]{(2,5) .. (4,7)}{}
+        \tnmark[form=enclosure, species=neutral]{(2,8) .. (4,10)}{}
+        \tnmark[form=enclosure, species=neutral]{(5,2) .. (7,4)}{}
+        \tnmark[form=enclosure, species=neutral]{(5,5) .. (7,7)}{}
+        \tnmark[form=enclosure, species=neutral]{(5,8) .. (7,10)}{}
+        \tnmark[form=enclosure, species=neutral]{(8,2) .. (10,4)}{}
+        \tnmark[form=enclosure, species=neutral]{(8,5) .. (10,7)}{}
+        \tnmark[form=enclosure, species=neutral]{(8,8) .. (10,10)}{}
+        \tnmark[form=enclosure, species=collar, tint, label pos=e]{(4,7) .. (8,11)}{$\le 2\ \text{owners}$}
+        \tnwire[kind=string, name=netInterface]{midway (1,9) and (1,10)}{midway (10,9) and (10,10)}
+        \tnmark[form=label, label pos=s]{0.15 n of 0.5 e of (5,8)}{$P$}
+        \tnmark[form=label, label pos=s]{0.15 n of (5,11)}{$A$}
+        \tnmark[form=bracket, label pos=s]{(11,6) .. (11,10)}{$t$}
+        \tnmark[form=bracket, label pos=s]{(11,2) .. (11,4)}{$2u=2\nu t$}
+    \end{tenkz}
+\end{center}

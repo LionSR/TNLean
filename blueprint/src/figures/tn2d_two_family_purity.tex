@@ -1,0 +1,71 @@
+% Figure tn2d_two_family_purity.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. 1 (Move 2 of the two-family cancellation); PP Sec. 2
+% (the two-family reduction) and PP Sec. 1 (the CMI duality cites the flip panels).
+% Source: arXiv OpenAI2026AreaLaw, sections/10-geometry.tex:27-70 (Lemma 11.1, two-family
+% entropy cancellation: S(B A_f) = S(D A_{1-f}) by purity); arXiv OpenAI2026PolynomialPEPS,
+% sections/08-companion-interface.tex:79-104 (the two-family interface).
+% Ink-to-index: dots are sites of Lambda, 6 x 6 (row 7 is blank), and no line is a
+% contraction.
+% Both panels draw the partition of Lemma 11.1 on the same sites, one column per
+% piece: B = Lambda \ A (col 1), the cut (the six thick red strings between cols 1
+% and 2), the exceptional set D (col 2) and the tiles X_1 .. X_4 (cols 3, 4, 5, 6).
+% Each panel inks only the members of its set, in their own species, and leaves the
+% other sites as bare dots: the left panel is B u A_0 = B (dashed grey) u X_1 u X_3
+% (teal, family 0), the right panel is D u A_1 = D (brown) u X_2 u X_4 (olive,
+% family 1). The order within a family is by index. Same-family tiles are separated,
+% here by one tile of the other family; in Prop 11.2 by more than 2 n_i^beta. The
+% inked sites of one panel are exactly the bare dots of the other, so the two sets
+% are complementary in Lambda and the equality S_psi(B u A_0) = S_psi(D u A_1) is
+% the purity of psi. Each piece is labelled once, at label pos=n, in the panel
+% where it is inked; each union is named once, B u A_0 and D u A_1, under its panel
+% on the blank wire row 7 (two inkless atoms anchor it), so the set names keep a
+% station of their own, clear of the piece labels and of the tints.
+% Check: the only relation is the = inside the middle joiner; it compares the two
+% panels, both of empty signature, through the scalar text S_psi( ... ). The leading
+% joiner S_psi\Biggl( is mathematics and not a relation, so there is nothing to opt
+% out of: check= takes no waiver here (a waiver naming a relation the equation does
+% not perform is refused by tenkz), and the pinned tenkz 08a6493 records no audit
+% failure.
+% Boundary signature: empty in both panels (geometry, no open index).
+% Not to scale: the tiles of Prop 11.2 have scales n_i >= n_* and the separation
+% exceeds 2 n_i^beta with beta = 1 - 2 10^{-6}; each piece is drawn one column wide.
+% Fit: one column (\tnshow[4.5mm], about 83 mm wide).
+% Label macros: none.
+\begin{tenkzequation}
+    \tenkzkernel
+    $S_\psi\Biggl($
+    \begin{tenkz}[rows={ket,ket,ket,ket,ket,ket,wire}, cols=6, bonds=none]
+        \tndeclare{species}{fam0}{hue=source:teal}
+        \tnwire[kind=string, species=selected]{(1,1)}{(1,2)}
+        \tnwire[kind=string, species=selected]{(2,1)}{(2,2)}
+        \tnwire[kind=string, species=selected]{(3,1)}{(3,2)}
+        \tnwire[kind=string, species=selected]{(4,1)}{(4,2)}
+        \tnwire[kind=string, species=selected]{(5,1)}{(5,2)}
+        \tnwire[kind=string, species=selected]{(6,1)}{(6,2)}
+        \tnmark[form=enclosure, species=complement, label pos=n]{(1,1) .. (6,1)}{$B$}
+        \tnmark[form=enclosure, species=fam0, tint, label pos=n]{(1,3) .. (6,3)}{$X_1$}
+        \tnmark[form=enclosure, species=fam0, tint, label pos=n]{(1,5) .. (6,5)}{$X_3$}
+        \tn[at=(7,3), skin=none]{}
+        \tn[at=(7,4), skin=none]{}
+        \tnmark[form=label, label pos=s]{midway (7,3) and (7,4)}{$B\cup A_0$}
+    \end{tenkz}
+    $\Biggr)=S_\psi\Biggl($
+    \begin{tenkz}[rows={ket,ket,ket,ket,ket,ket,wire}, cols=6, bonds=none]
+        \tndeclare{species}{fam1}{hue=source:olive}
+        \tndeclare{species}{exceptional}{hue=source:brown}
+        \tnwire[kind=string, species=selected]{(1,1)}{(1,2)}
+        \tnwire[kind=string, species=selected]{(2,1)}{(2,2)}
+        \tnwire[kind=string, species=selected]{(3,1)}{(3,2)}
+        \tnwire[kind=string, species=selected]{(4,1)}{(4,2)}
+        \tnwire[kind=string, species=selected]{(5,1)}{(5,2)}
+        \tnwire[kind=string, species=selected]{(6,1)}{(6,2)}
+        \tnmark[form=enclosure, species=exceptional, tint, label pos=n]{(1,2) .. (6,2)}{$D$}
+        \tnmark[form=enclosure, species=fam1, tint, label pos=n]{(1,4) .. (6,4)}{$X_2$}
+        \tnmark[form=enclosure, species=fam1, tint, label pos=n]{(1,6) .. (6,6)}{$X_4$}
+        \tn[at=(7,3), skin=none]{}
+        \tn[at=(7,4), skin=none]{}
+        \tnmark[form=label, label pos=s]{midway (7,3) and (7,4)}{$D\cup A_1$}
+    \end{tenkz}
+    $\Biggr)$
+\end{tenkzequation}

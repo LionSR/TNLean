@@ -1,0 +1,76 @@
+% Figure polypeps_cell_statement.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. 2 (Lemma 2, the statement; step 1 cites the right
+% panel for the exterior colouring).
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/02-information.tex:157-176
+% (lem:cell-cmi: G one cell of an axis-parallel grid of side s, B any union of
+% other cells, C in Lambda \ (B u G) with dist_inf(C, closed ambient G) >= cs) and
+% 179-183 (the exterior colouring of the proof).
+% Ink-to-index: dots are lattice sites; there are no tensors or open indices.
+% Both panels draw the same 8 x 8 sites (rows 2-9; rows 1 and 10 are blank label
+% rows with inkless anchors only), cut into a 4 x 4 grid of cells of 2 x 2 sites.
+% G is cell (2,2) of the grid, sites (4,3)..(5,4). Left panel (the statement): G
+% (red tint, the set the lemma bounds, label G east of it); B (teal tint, one
+% enclosure, label B under the panel) is the union of the cells (1,2), (2,1) and
+% (4,1) and of (3,3), which touches G only at a corner; C (blue tint, label C
+% above it) is the cells (1,4) and (2,4); the top bracket, from G's east column
+% to C's west column, is the clearance dist_inf(C, closed ambient G) >= cs.
+% Right panel (step 1 of the proof): every cell of B is forbidden 0 (teal tint
+% on top), every other exterior cell, C included, is forbidden 1 (olive tint:
+% the whole field minus G, drawn whole with B on top, so no moat); C keeps a
+% blue contour, unlabelled (L4); G is the untinted hole, the allowed region of
+% the proof. Since the cells are aligned and of equal side, each side of G
+% borders exactly one exterior cell, so the exterior colour along the boundary
+% of G is constant on each side and can change only at the four corners of the
+% ambient cell (red centre dots): here north and west are forbidden 0, east and
+% south forbidden 1, and the corner cell (3,3) is forbidden 0. These corners
+% are the chamber-line intersections where step 2 reserves its holes.
+% Check opt-out: the joiner \longrightarrow is a step of the proof (colour the
+% exterior), not a relation; both panels have empty boundary signature.
+% Boundary signature: empty in both panels.
+% Not to scale: s >= 1 is any side and c > 0 is fixed; a cell of side s is
+% drawn as 2 x 2 sites (the plan's 3 x 3 cells would put two 12-site panels at
+% 3 mm, below the 4.5 mm lattice floor of shared-spec 4.1 P1); B and C are
+% arbitrary (C need not be a union of cells).
+% Label macros: none.
+% Fit: one column (\tnshow[4.5mm], size=s).
+% Related: polypeps_cell_holes (the first generation of tiles inside G, after the
+% colouring drawn here); tn2d_two_family_purity (the two families). Neither
+% draws the hypotheses of the lemma.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[size=s, rows={wire,ket,ket,ket,ket,ket,ket,ket,ket,wire}, cols=8,
+            bonds=none]
+        \tndeclare{species}{fam0}{hue=source:teal}
+        \tn[at=(1,4), skin=none]{} \tn[at=(1,7), skin=none]{}
+        \tn[at=(10,1), skin=none]{} \tn[at=(1,8), skin=none]{}
+        \tnmark[form=enclosure, species=fam0, tint]
+        {{(2,3), (2,4), (3,3), (3,4), (4,1), (4,2), (5,1), (5,2), (6,5), (6,6), (7,5), (7,6),
+                    (8,1), (8,2), (9,1), (9,2)}}{}
+        \tnmark[form=enclosure, species=secondary, tint]{(2,7) .. (5,8)}{}
+        \tnmark[form=enclosure, species=selected, tint]{(4,3) .. (5,4)}{}
+        \tnmark[form=label, species=selected, label pos=e]{midway (4,4) and (5,4)}{$G$}
+        \tnmark[form=label, species=fam0, label pos=s]{midway (10,1) and (10,2)}{$B$}
+        \tnmark[form=label, species=secondary, label pos=n]{midway (1,7) and (1,8)}{$C$}
+        \tnmark[form=bracket, label pos=n]{(1,4) .. (1,7)}{$\ge cs$}
+    \end{tenkz}
+    $\longrightarrow$
+    \begin{tenkz}[size=s, rows={wire,ket,ket,ket,ket,ket,ket,ket,ket,wire}, cols=8,
+            bonds=none]
+        \tndeclare{species}{fam0}{hue=source:teal}
+        \tndeclare{species}{fam1}{hue=source:olive}
+        \tndeclare{species}{centre}{hue=source:red}
+        \tn[at=(1,4), skin=none]{} \tn[at=(10,4), skin=none]{}
+        \tnmark[form=enclosure, species=fam1, tint]{(2,1) .. (9,8) - (4,3) .. (5,4)}{}
+        \tnmark[form=enclosure, species=fam0, tint]
+        {{(2,3), (2,4), (3,3), (3,4), (4,1), (4,2), (5,1), (5,2), (6,5), (6,6), (7,5), (7,6),
+                    (8,1), (8,2), (9,1), (9,2)}}{}
+        \tnmark[form=enclosure, species=secondary]{(2,7) .. (5,8)}{}
+        \tn[at=0.5 n of 0.5 w of (4,3), skin=dot, species=centre, size=l]{}
+        \tn[at=0.5 n of 0.5 e of (4,4), skin=dot, species=centre, size=l]{}
+        \tn[at=0.5 s of 0.5 w of (5,3), skin=dot, species=centre, size=l]{}
+        \tn[at=0.5 s of 0.5 e of (5,4), skin=dot, species=centre, size=l]{}
+        \tnmark[form=label, species=fam0, label pos=n]{(1,4)}{$\text{forbidden }0$}
+        \tnmark[form=label, species=fam1, label pos=s]{(10,4)}{$\text{forbidden }1$}
+    \end{tenkz}
+\end{tenkzequation}

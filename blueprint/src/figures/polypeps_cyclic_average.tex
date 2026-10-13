@@ -1,0 +1,102 @@
+% Figure polypeps_cyclic_average.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. 9 (Lemma 9, proof; [S, Lemma 5.1]).
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/04-compression.tex:74-98
+% (T_m and eq. (5.2), compression-one-effect), drawn for m=3.
+% Formula: T_m = (1/m) sum_{c=0}^{m-1} (pi^c (x) pi^c)(id_{UV} (x) eta^{(x)(m-1)})
+% maps U (x) V to (U (x) V)^{(x)m}; ||T_m - |eta>^{(x)m}<eta||| = m^{-1/2}
+% exactly in operator norm (zero if the complement of eta is zero), so the
+% second joiner is an operator-norm approximation with that error.
+% Ink-to-index: rows top to bottom are the stack u_1,u_2,u_3 of party P
+% (registers U) and, mirrored, v_3,v_2,v_1 of party Q (registers V); pair
+% slot i is (u_i, v_i), so slot 1 is the outer pair of rows. The input pair
+% (u at P, v at Q) enters slot 1. Each cup eta is a normalized pair source
+% (its label sits inside the bowl); the cap <eta| on the input legs u, v is
+% the pair effect (G1: one glyph per meaning, cup and cap of the same pair
+% vector). Box names are inscribed at size l. pi^c is the cyclic shift by c of the
+% m slots, applied by P to its stack and by Q to its stack: the same
+% permutation, mirrored on the page because the Q stack is drawn bottom up.
+% Both pi^c boxes are black: a party is not a hue (G2), and equal ink shows
+% that the two shifts are the same permutation. Copies of the pair are told
+% apart by position only.
+% Labels (L3, L4): the wire names u_1..v_1 and u, v stand once, on panel 1;
+% panels 2 and 3 keep the same row order, so the column right after each
+% joiner carries no label.
+% Boundary signature: in every panel (phys:e)x2 in (u, v) and (phys:w)x6 out
+% (u_1..u_3, v_3..v_1). The middle panel is one term c of the average; the
+% sum is in the joiner (=\tfrac1m\sum_c). The second joiner carries its
+% error, \approx_{m^{-1/2}} (J2).
+% Label macros: none.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=4, bonds=none, size=l]
+        \tn[at=(1,1), skin=none, name=cycAOutA, ports={180:physical:$u_1$, 0:physical}]{}
+        \tn[at=(2,1), skin=none, name=cycAOutB, ports={180:physical:$u_2$, 0:physical}]{}
+        \tn[at=(3,1), skin=none, name=cycAOutC, ports={180:physical:$u_3$, 0:physical}]{}
+        \tn[at=(5,1), skin=none, name=cycAOutD, ports={180:physical:$v_3$, 0:physical}]{}
+        \tn[at=(6,1), skin=none, name=cycAOutE, ports={180:physical:$v_2$, 0:physical}]{}
+        \tn[at=(7,1), skin=none, name=cycAOutF, ports={180:physical:$v_1$, 0:physical}]{}
+        \tn[at=(1,2), skin=box, wide=2, wires=7, name=cycAMap,
+            ports={180@1:physical, 180@2:physical, 180@3:physical,
+                    180@5:physical, 180@6:physical, 180@7:physical,
+                    0@1:physical, 0@7:physical}]{T_m}
+        \tn[at=(1,4), skin=none, name=cycAInU, ports={180:physical, 0:physical:$u$}]{}
+        \tn[at=(7,4), skin=none, name=cycAInV, ports={180:physical, 0:physical:$v$}]{}
+        \tnwire{cycAOutA.0}{cycAMap.180@1}
+        \tnwire{cycAOutB.0}{cycAMap.180@2}
+        \tnwire{cycAOutC.0}{cycAMap.180@3}
+        \tnwire{cycAOutD.0}{cycAMap.180@5}
+        \tnwire{cycAOutE.0}{cycAMap.180@6}
+        \tnwire{cycAOutF.0}{cycAMap.180@7}
+        \tnwire{cycAMap.0@1}{cycAInU.180}
+        \tnwire{cycAMap.0@7}{cycAInV.180}
+    \end{tenkz}
+    $=\tfrac1m\sum_{c}$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=6, bonds=none, size=l]
+        \tn[at=(1,1), skin=none, name=cycBOutA, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), skin=none, name=cycBOutB, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), skin=none, name=cycBOutC, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,1), skin=none, name=cycBOutD, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,1), skin=none, name=cycBOutE, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,1), skin=none, name=cycBOutF, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,2), skin=box, wide=2, wires=3, name=cycBShiftP,
+            ports={180@1:physical, 180@2:physical, 180@3:physical,
+                    0@1:physical, 0@2:physical, 0@3:physical}]{\pi^c}
+        \tn[at=(5,2), skin=box, wide=2, wires=3, name=cycBShiftQ,
+            ports={180@1:physical, 180@2:physical, 180@3:physical,
+                    0@1:physical, 0@2:physical, 0@3:physical}]{\pi^c}
+        \tn[at=(1,6), skin=none, name=cycBInU, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,6), skin=none, name=cycBInV, ports={180:physical, 0:physical}]{}
+        \tnwire{cycBOutA.0}{cycBShiftP.180@1}
+        \tnwire{cycBOutB.0}{cycBShiftP.180@2}
+        \tnwire{cycBOutC.0}{cycBShiftP.180@3}
+        \tnwire{cycBOutD.0}{cycBShiftQ.180@1}
+        \tnwire{cycBOutE.0}{cycBShiftQ.180@2}
+        \tnwire{cycBOutF.0}{cycBShiftQ.180@3}
+        \tnwire{cycBShiftP.0@1}{cycBInU.180}
+        \tnwire{cycBShiftQ.0@3}{cycBInV.180}
+        \tnwire[route=arc, name=cycBCupTwo]{cycBShiftP.0@2}{cycBShiftQ.0@2}
+        \tnwire[route=arc, name=cycBCupThree]{cycBShiftP.0@3}{cycBShiftQ.0@1}
+        \tnmark[form=label, label pos=w]{on cycBCupTwo 0.5}{$\eta$}
+        \tnmark[form=label, label pos=w]{on cycBCupThree 0.5}{$\eta$}
+    \end{tenkz}
+    $\approx_{\,m^{-1/2}}$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=8, bonds=none, size=l]
+        \tn[at=(1,1), skin=none, name=cycCOutA, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), skin=none, name=cycCOutB, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), skin=none, name=cycCOutC, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,1), skin=none, name=cycCOutD, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,1), skin=none, name=cycCOutE, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,1), skin=none, name=cycCOutF, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,8), skin=none, name=cycCEffU, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,8), skin=none, name=cycCEffV, ports={180:physical, 0:physical}]{}
+        \tnwire[route=arc, name=cycCEff]{cycCEffU.180}{cycCEffV.180}
+        \tnmark[form=label, label pos=e]{on cycCEff 0.5}{$\langle\eta\rvert$}
+        \tnwire[route=arc, name=cycCCupOne]{cycCOutA.0}{cycCOutF.0}
+        \tnwire[route=arc, name=cycCCupTwo]{cycCOutB.0}{cycCOutE.0}
+        \tnwire[route=arc, name=cycCCupThree]{cycCOutC.0}{cycCOutD.0}
+        \tnmark[form=label, label pos=w]{on cycCCupOne 0.5}{$\eta$}
+        \tnmark[form=label, label pos=w]{on cycCCupTwo 0.5}{$\eta$}
+        \tnmark[form=label, label pos=w]{on cycCCupThree 0.5}{$\eta$}
+    \end{tenkz}
+\end{tenkzequation}

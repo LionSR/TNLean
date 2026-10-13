@@ -1,0 +1,117 @@
+% Figure tn2d_template_cover.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. 9 (Def 9.3 and Lemma 9.4); PP App. A (the template
+% hypotheses of the imported collar bound).
+% Source: arXiv OpenAI2026AreaLaw, sections/08-scanner.tex:546-566 (Def 9.3, a template)
+% and 568-661 (Lemma 9.4 and its proof: maximal dyadic squares covering T_j \ T);
+% arXiv OpenAI2026PolynomialPEPS, sections/08-companion-interface.tex:44-58.
+% Ink-to-index: dots are sites of Z^2 (10 x 17; row 11 is blank and carries the
+% bracket); no line is a contraction (the red strings mark lattice edges). The three red
+% sets are the pieces of the template T = P_1 u P_2 u P_3: P_1 = rows 5-7 x cols 4-6
+% (a rectangle), P_2 = {(r,c): 4 <= r <= 7, 7 <= c <= 7 + (r - 4)} (a lattice right
+% triangle with sides of slope 0, infinity and -1 in page coordinates), touching P_1
+% along col 6 | col 7, and P_3 = rows 5-6 x cols 12-13 (a rectangle, a separate
+% component). The black contour is the sup-norm dilation T_2 = T + [-2,2]^2 (rows 2-9,
+% cols 2-15). The shell T_2 \ T is partitioned into maximal dyadic squares with side
+% capped at 2 (the largest power of two not exceeding L = 2): every dyadic block of
+% picture rows {2a, 2a+1} x cols {2b-1, 2b} contained in the shell has a violet contour
+% (eight blocks), and every other shell site is a side-1 square, drawn as a violet dot
+% (45 dots). The ten thick red strings between cols 16 and 17 are the cut Z, so col 16
+% holds its A-side endpoints. The bottom bracket is the clearance dist_inf(T,Z) >
+% 4 D_0 s_0, from the east edge of T (col 13) to col 16. In PP App. A the cut is a
+% general A in Gamma with endpoint set Z_A (drawn and labelled Z), and the clearance
+% is the hypothesis dist_inf(T,Z_A) > 4 D_0 s_0 of the imported bound.
+% Templates may be disconnected; only the piece count N_0 and the piece diameters s_0
+% enter.
+% Boundary signature: empty (geometry).
+% Labels: free labels take label pos=e at a point midway between two dot rows, so the
+% text sits between rows instead of on the dots; each piece label sits inside its piece.
+% Not to scale: n >= C_tpl N_0 (s_0 + 1), diam_inf T <= n, L <= s_0, the number
+% of side-u squares is at most C n / u, and the drawn clearance 3 stands for
+% 4 D_0 s_0.
+% Label macros: \tnlTcDil{T_2}, \tnlTcCut{Z}; PP overrides Dil with T_\ell.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[size=s, rows={ket,ket,ket,ket,ket,ket,ket,ket,ket,ket,wire},
+            cols=17, bonds=none]
+        \providecommand{\tnlTcDil}{T_2}
+        \providecommand{\tnlTcCut}{Z}
+        \tnwire[kind=string, species=selected]{(1,16)}{(1,17)}
+        \tnwire[kind=string, species=selected]{(2,16)}{(2,17)}
+        \tnwire[kind=string, species=selected]{(3,16)}{(3,17)}
+        \tnwire[kind=string, species=selected]{(4,16)}{(4,17)}
+        \tnwire[kind=string, species=selected]{(5,16)}{(5,17)}
+        \tnwire[kind=string, species=selected]{(6,16)}{(6,17)}
+        \tnwire[kind=string, species=selected]{(7,16)}{(7,17)}
+        \tnwire[kind=string, species=selected]{(8,16)}{(8,17)}
+        \tnwire[kind=string, species=selected]{(9,16)}{(9,17)}
+        \tnwire[kind=string, species=selected]{(10,16)}{(10,17)}
+        \tnmark[form=label, label pos=n]{midway (1,16) and (1,17)}{$\tnlTcCut$}
+        \tnmark[form=enclosure, species=neutral]
+        {(2,2) .. (9,15) - (2,2) .. (2,4) - (2,10) .. (2,15) - (9,13) .. (9,15)}{}
+        \tnmark[form=label, label pos=e]{midway (1,12) and (2,12)}{$\tnlTcDil$}
+        \tnmark[form=enclosure, species=collar]{(2,5) .. (3,6)}{}
+        \tnmark[form=enclosure, species=collar]{(2,7) .. (3,8)}{}
+        \tnmark[form=enclosure, species=collar]{(4,9) .. (5,10)}{}
+        \tnmark[form=enclosure, species=collar]{(8,3) .. (9,4)}{}
+        \tnmark[form=enclosure, species=collar]{(8,5) .. (9,6)}{}
+        \tnmark[form=enclosure, species=collar]{(8,7) .. (9,8)}{}
+        \tnmark[form=enclosure, species=collar]{(8,9) .. (9,10)}{}
+        \tnmark[form=enclosure, species=collar]{(8,11) .. (9,12)}{}
+        \tn[at=(2,9), skin=dot, species=collar]{}
+        \tn[at=(3,2), skin=dot, species=collar]{}
+        \tn[at=(3,3), skin=dot, species=collar]{}
+        \tn[at=(3,4), skin=dot, species=collar]{}
+        \tn[at=(3,9), skin=dot, species=collar]{}
+        \tn[at=(3,10), skin=dot, species=collar]{}
+        \tn[at=(3,11), skin=dot, species=collar]{}
+        \tn[at=(3,12), skin=dot, species=collar]{}
+        \tn[at=(3,13), skin=dot, species=collar]{}
+        \tn[at=(3,14), skin=dot, species=collar]{}
+        \tn[at=(3,15), skin=dot, species=collar]{}
+        \tn[at=(4,2), skin=dot, species=collar]{}
+        \tn[at=(4,3), skin=dot, species=collar]{}
+        \tn[at=(4,4), skin=dot, species=collar]{}
+        \tn[at=(4,5), skin=dot, species=collar]{}
+        \tn[at=(4,6), skin=dot, species=collar]{}
+        \tn[at=(4,8), skin=dot, species=collar]{}
+        \tn[at=(4,11), skin=dot, species=collar]{}
+        \tn[at=(4,12), skin=dot, species=collar]{}
+        \tn[at=(4,13), skin=dot, species=collar]{}
+        \tn[at=(4,14), skin=dot, species=collar]{}
+        \tn[at=(4,15), skin=dot, species=collar]{}
+        \tn[at=(5,2), skin=dot, species=collar]{}
+        \tn[at=(5,3), skin=dot, species=collar]{}
+        \tn[at=(5,11), skin=dot, species=collar]{}
+        \tn[at=(5,14), skin=dot, species=collar]{}
+        \tn[at=(5,15), skin=dot, species=collar]{}
+        \tn[at=(6,2), skin=dot, species=collar]{}
+        \tn[at=(6,3), skin=dot, species=collar]{}
+        \tn[at=(6,10), skin=dot, species=collar]{}
+        \tn[at=(6,11), skin=dot, species=collar]{}
+        \tn[at=(6,14), skin=dot, species=collar]{}
+        \tn[at=(6,15), skin=dot, species=collar]{}
+        \tn[at=(7,2), skin=dot, species=collar]{}
+        \tn[at=(7,3), skin=dot, species=collar]{}
+        \tn[at=(7,11), skin=dot, species=collar]{}
+        \tn[at=(7,12), skin=dot, species=collar]{}
+        \tn[at=(7,13), skin=dot, species=collar]{}
+        \tn[at=(7,14), skin=dot, species=collar]{}
+        \tn[at=(7,15), skin=dot, species=collar]{}
+        \tn[at=(8,2), skin=dot, species=collar]{}
+        \tn[at=(8,13), skin=dot, species=collar]{}
+        \tn[at=(8,14), skin=dot, species=collar]{}
+        \tn[at=(8,15), skin=dot, species=collar]{}
+        \tn[at=(9,2), skin=dot, species=collar]{}
+        \tnmark[form=enclosure, species=selected, tint]{(5,4) .. (7,6)}{}
+        \tnmark[form=label, label pos=e]{midway (6,4) and (7,4)}{$P_1$}
+        \tnmark[form=enclosure, species=selected, tint]
+        {{(4,7), (5,7), (5,8), (6,7), (6,8), (6,9), (7,7), (7,8), (7,9), (7,10)}}{}
+        \tnmark[form=label, label pos=e]{midway (6,7) and (7,7)}{$P_2$}
+        \tnmark[form=enclosure, species=selected, tint]{(5,12) .. (6,13)}{$P_3$}
+        \tn[at=(11,13), skin=none]{}
+        \tn[at=(11,16), skin=none]{}
+        \tnmark[form=bracket, label pos=s]
+        {(11,13) .. (11,16)}{$\operatorname{dist}_\infty(T,\tnlTcCut)>4D_0s_0$}
+    \end{tenkz}
+\end{center}

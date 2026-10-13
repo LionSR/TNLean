@@ -1,0 +1,60 @@
+% Figure arealaw2d_movement_word.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. 6 (Lemma 13, conditional movement).
+% Source: arXiv OpenAI2026AreaLaw, sections/04-conditional.tex:118-135 (Lemma 5.1,
+% conditional movement estimate, eq. (5.4)).
+% Formula: sigma^{a/2} hatrho_P^{-a/2} tau^{a/2} hatrho_U^{-a/2} theta; Lemma 5.1
+% bounds its norm by exp(-a eta/2 + C a^{5/4} l^2), l = log(e dim x), for 0 < a l <= c.
+% Ink-to-index: wires from top to bottom are the one-copy tensor factors P, x, U, F
+% (rows 4, 6, 9, 11); theta is a unit vector on PxUF (neutral box with four west
+% ports). Action runs right to left: hatrho_U^{-a/2} on U (col 9), tau^{a/2} on xU
+% (col 7), hatrho_P^{-a/2} on P (col 5), sigma^{a/2} on xP (col 2); F passes straight.
+% All operator names sit at label pos=n (rows 2-3 above P; rows 7-8 above U, which is
+% why x and U are three rows apart). hatrho_D = rho_D + Pi_{ker rho_D} is the
+% marginal of theta extended by 1 on its kernel; sigma (on xP) and tau (on xU) are
+% arbitrary densities or positive subnormalized operators. The two brackets in the
+% top row (row 1, blank anchors; row 2 keeps them off the names) are not indices:
+% the right one, over tau and hatrho_U (cols 7-9), names the grouping P | xU in which
+% they act; the left one, over sigma and hatrho_P (cols 2-5), names Px | U. So x is
+% first grouped with U, then with P. Copies do not occur (one-copy statement).
+% cols=11 (not wider) keeps the display, with its norm bars and right side, inside
+% one column at the note's inline pitch (4.2 mm).
+% Boundary signature: (phys:w)x4 (P, x, U, F open on the west).
+% Label macros: none.
+% The note frames it as || [figure] || <= exp(-a eta/2 + C a^{5/4} l_x^2).
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=11, bonds=none,
+            size=l]
+        \tn[at=(4,1), name=mwEndP, skin=none, ports={180:physical:$P$, 0:physical}]{}
+        \tn[at=(6,1), name=mwEndX, skin=none, ports={180:physical:$x$, 0:physical}]{}
+        \tn[at=(9,1), name=mwEndU, skin=none, ports={180:physical:$U$, 0:physical}]{}
+        \tn[at=(11,1), name=mwEndF, skin=none, ports={180:physical:$F$, 0:physical}]{}
+        \tn[at=(4,11), name=mwTheta, skin=box, wires=8,
+            ports={180@1:physical, 180@3:physical, 180@6:physical, 180@8:physical}]{\theta}
+        \tn[at=(9,9), name=mwRhoU, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{\widehat\rho_U^{-a/2}}
+        \tn[at=(6,7), name=mwTau, skin=box, wires=4, label pos=n,
+            ports={180@1:physical, 180@4:physical, 0@1:physical, 0@4:physical}]{\tau^{a/2}}
+        \tn[at=(4,5), name=mwRhoP, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{\widehat\rho_P^{-a/2}}
+        \tn[at=(4,2), name=mwSigma, skin=box, wires=3, label pos=n,
+            ports={180@1:physical, 180@3:physical, 0@1:physical, 0@3:physical}]{\sigma^{a/2}}
+        \tnwire{mwTheta.180@1}{mwRhoP.0}
+        \tnwire{mwRhoP.180}{mwSigma.0@1}
+        \tnwire{mwSigma.180@1}{mwEndP.0}
+        \tnwire{mwTheta.180@3}{mwTau.0@1}
+        \tnwire{mwTau.180@1}{mwSigma.0@3}
+        \tnwire{mwSigma.180@3}{mwEndX.0}
+        \tnwire{mwTheta.180@6}{mwRhoU.0}
+        \tnwire{mwRhoU.180}{mwTau.0@4}
+        \tnwire{mwTau.180@4}{mwEndU.0}
+        \tnwire{mwTheta.180@8}{mwEndF.0}
+        \tn[at=(1,2), skin=none]{}
+        \tn[at=(1,5), skin=none]{}
+        \tn[at=(1,7), skin=none]{}
+        \tn[at=(1,9), skin=none]{}
+        \tnmark[form=bracket, label pos=n]{(1,2) .. (1,5)}{Px\,\vert\,U}
+        \tnmark[form=bracket, label pos=n]{(1,7) .. (1,9)}{P\,\vert\,xU}
+    \end{tenkz}
+\end{center}

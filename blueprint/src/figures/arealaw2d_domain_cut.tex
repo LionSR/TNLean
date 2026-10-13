@@ -1,0 +1,63 @@
+% Figure arealaw2d_domain_cut.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. 0 (Theorem 1, right after its statement).
+% Source: arXiv OpenAI2026AreaLaw, sections/00-introduction.tex:28-51
+% (the edge boundary partial_Lambda A and Theorem 1.1,
+% S_Omega(A) <= C |partial_Lambda A|).
+% Ink-to-index: every dot is a site of the induced domain Lambda, a 7-by-9
+% block with the four sites (3,4), (3,5), (4,4), (4,5) absent (a hole of
+% Lambda, drawn as nothing and labelled "hole"). Nearest-neighbour edges of
+% Lambda are not drawn. A (red tint) is the 5-by-5 block rows 2-6 x cols 2-6
+% minus the hole: 21 sites, black dots. The 20 red bonds (port-to-port wires)
+% are the edges of partial_Lambda A: (1,c)-(2,c) and (6,c)-(7,c) for c=2..6,
+% and (r,1)-(r,2) and (r,6)-(r,7) for r=2..6; the red east label counts them.
+% The hole is not part of Lambda, so A has no edge into it and none is drawn.
+% Lambda minus A (38 sites; Lambda has 59) is the grey (complement) dots, named
+% by the grey east label.
+% Deviation from shared-spec 3.3: Lambda \ A is drawn as 38 complement dots, not
+% as a dashed complement enclosure; the annulus contour ran along A's tint and
+% the bond ends (rule S3), while the dots carry the set with no extra contour.
+% Labels: the east labels sit midway between dot rows; no literal bar is used
+% (\lvert, \rvert).
+% Label macros: none.
+% Boundary signature: empty (geometry only; no tensors, no open indices).
+% Not to scale: Theorem 1.1 is uniform over domains; this is one small example.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=9, bonds=none,
+            west=none, east=none, north=none, south=none]
+        \tn[skin=dot, species=complement]{} & \tn[skin=dot, species=complement, name=dc12, ports={270:virtual}]{} & \tn[skin=dot, species=complement, name=dc13, ports={270:virtual}]{} & \tn[skin=dot, species=complement, name=dc14, ports={270:virtual}]{} & \tn[skin=dot, species=complement, name=dc15, ports={270:virtual}]{} & \tn[skin=dot, species=complement, name=dc16, ports={270:virtual}]{} & \tn[skin=dot, species=complement]{} & \tn[skin=dot, species=complement]{} & \tn[skin=dot, species=complement]{} \\
+        \tn[skin=dot, species=complement, name=dc21, ports={0:virtual}]{} & \tn[skin=dot, name=dc22, ports={90:virtual, 180:virtual}]{} & \tn[skin=dot, name=dc23, ports={90:virtual}]{} & \tn[skin=dot, name=dc24, ports={90:virtual}]{} & \tn[skin=dot, name=dc25, ports={90:virtual}]{} & \tn[skin=dot, name=dc26, ports={0:virtual, 90:virtual}]{} & \tn[skin=dot, species=complement, name=dc27, ports={180:virtual}]{} & \tn[skin=dot, species=complement]{} & \tn[skin=dot, species=complement]{} \\
+        \tn[skin=dot, species=complement, name=dc31, ports={0:virtual}]{} & \tn[skin=dot, name=dc32, ports={180:virtual}]{} & \tn[skin=dot]{} & \tn[skin=none]{} & \tn[skin=none]{} & \tn[skin=dot, name=dc36, ports={0:virtual}]{} & \tn[skin=dot, species=complement, name=dc37, ports={180:virtual}]{} & \tn[skin=dot, species=complement]{} & \tn[skin=dot, species=complement]{} \\
+        \tn[skin=dot, species=complement, name=dc41, ports={0:virtual}]{} & \tn[skin=dot, name=dc42, ports={180:virtual}]{} & \tn[skin=dot]{} & \tn[skin=none]{} & \tn[skin=none]{} & \tn[skin=dot, name=dc46, ports={0:virtual}]{} & \tn[skin=dot, species=complement, name=dc47, ports={180:virtual}]{} & \tn[skin=dot, species=complement]{} & \tn[skin=dot, species=complement]{} \\
+        \tn[skin=dot, species=complement, name=dc51, ports={0:virtual}]{} & \tn[skin=dot, name=dc52, ports={180:virtual}]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot]{} & \tn[skin=dot, name=dc56, ports={0:virtual}]{} & \tn[skin=dot, species=complement, name=dc57, ports={180:virtual}]{} & \tn[skin=dot, species=complement]{} & \tn[skin=dot, species=complement]{} \\
+        \tn[skin=dot, species=complement, name=dc61, ports={0:virtual}]{} & \tn[skin=dot, name=dc62, ports={180:virtual, 270:virtual}]{} & \tn[skin=dot, name=dc63, ports={270:virtual}]{} & \tn[skin=dot, name=dc64, ports={270:virtual}]{} & \tn[skin=dot, name=dc65, ports={270:virtual}]{} & \tn[skin=dot, name=dc66, ports={0:virtual, 270:virtual}]{} & \tn[skin=dot, species=complement, name=dc67, ports={180:virtual}]{} & \tn[skin=dot, species=complement]{} & \tn[skin=dot, species=complement]{} \\
+        \tn[skin=dot, species=complement]{} & \tn[skin=dot, species=complement, name=dc72, ports={90:virtual}]{} & \tn[skin=dot, species=complement, name=dc73, ports={90:virtual}]{} & \tn[skin=dot, species=complement, name=dc74, ports={90:virtual}]{} & \tn[skin=dot, species=complement, name=dc75, ports={90:virtual}]{} & \tn[skin=dot, species=complement, name=dc76, ports={90:virtual}]{} & \tn[skin=dot, species=complement]{} & \tn[skin=dot, species=complement]{} & \tn[skin=dot, species=complement]{}
+        \tnwire[species=selected]{dc12.270}{dc22.90}
+        \tnwire[species=selected]{dc13.270}{dc23.90}
+        \tnwire[species=selected]{dc14.270}{dc24.90}
+        \tnwire[species=selected]{dc15.270}{dc25.90}
+        \tnwire[species=selected]{dc16.270}{dc26.90}
+        \tnwire[species=selected]{dc62.270}{dc72.90}
+        \tnwire[species=selected]{dc63.270}{dc73.90}
+        \tnwire[species=selected]{dc64.270}{dc74.90}
+        \tnwire[species=selected]{dc65.270}{dc75.90}
+        \tnwire[species=selected]{dc66.270}{dc76.90}
+        \tnwire[species=selected]{dc21.0}{dc22.180}
+        \tnwire[species=selected]{dc31.0}{dc32.180}
+        \tnwire[species=selected]{dc41.0}{dc42.180}
+        \tnwire[species=selected]{dc51.0}{dc52.180}
+        \tnwire[species=selected]{dc61.0}{dc62.180}
+        \tnwire[species=selected]{dc26.0}{dc27.180}
+        \tnwire[species=selected]{dc36.0}{dc37.180}
+        \tnwire[species=selected]{dc46.0}{dc47.180}
+        \tnwire[species=selected]{dc56.0}{dc57.180}
+        \tnwire[species=selected]{dc66.0}{dc67.180}
+        \tnmark[form=enclosure, species=selected, tint]{(2,2) .. (6,6) - (3,4) .. (4,5)}{}
+        \tnmark[form=label, label pos=270]{midway (5,3) and (5,4)}{$A$}
+        \tnmark[form=label]{midway (3,4) and (4,5)}{\text{hole}}
+        \tnmark[form=label, species=complement, label pos=e]{midway (2,9) and (3,9)}{$\Lambda\setminus A$}
+        \tnmark[form=label, species=selected, label pos=e]{midway (5,9) and (6,9)}
+        {$\lvert\partial_\Lambda A\rvert=20$}
+    \end{tenkz}
+\end{center}

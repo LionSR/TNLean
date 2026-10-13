@@ -1,0 +1,86 @@
+% Figure polypeps_swapped_cores.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. 3 (Lemma 3, the idea of the information reset;
+% Step 6 points back to it).
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/02-information.tex:358-366
+% (Psi = Omega^{tensor 2}, Phi = F_R Psi; in Phi the cores R_0, C_0 of one replica
+% come from different original copies) and 612-617 (retaining R_0 and C_0 from one
+% replica of Phi gives exactly rho_{R_0} tensor rho_{C_0}).
+% Formula: Tr_{everything but R_0 C_0 of replica 1} |Phi_2><Phi_2| =
+% rho_{C_0} tensor rho_{R_0}, Phi_2 = F_R (Omega tensor Omega), C_0 in C, a subset
+% of R^c.
+% Ink-to-index: left panel, the vector Phi_2. Each wire is a physical index
+% bundle; copies are told apart by position. Copy 1 of Omega is the upper box,
+% legs R^c (row 1) and R (row 2); copy 2 is the lower box, legs R (row 3) and R^c
+% (row 4), so the two R legs are adjacent. Kets stand on the east, the open
+% outputs on the west. The R legs (selected, red: the swap that matters) cross
+% once, which is F_R: copy 1's R goes to output row 3, copy 2's R to output row 2;
+% the R^c legs run straight. The inkless atoms of columns 2 and 4 only carry the
+% R legs into and out of the crossing (identity, no tensor); the open ends of
+% output rows 2-3 carry species selected so the R legs are red up to their tips.
+% R is named once, between the two R legs (both are R; one label per object
+% class, shared-spec 4.1 L4). Output rows 1-2 are replica 1 (neutral contour, a
+% grouping, not a boundary, so not dashed: 4.1 S1; labelled): its R^c leg comes
+% from copy 1 and its R leg from copy 2. The cores are named on replica 1's
+% open legs: C_0 (in C, inside R^c) on row 1 and R_0 (inside R) on row 2.
+% Right panel: keeping R_0 and C_0 of
+% replica 1 and tracing everything else gives two disconnected density
+% operators, rho_{C_0} over rho_{R_0}, in the rows of their legs; each has an
+% output leg west and an input leg east, and the R_0 legs stay red to their tips
+% (ink follows the index, shared-spec 4.1 H7).
+% Check opt-out: the joiner "keep R_0, C_0 of replica 1" is a partial trace, not
+% a relation; the left panel is a vector with four open legs, the right panel an
+% operator on R_0 C_0.
+% Boundary signature: left (phys:w)x4; right (phys:w)x2 | (phys:e)x2.
+% Label macros: none.
+% Fit: one column (\tnshow[5.5mm], about 79 mm wide).
+% Related: polypeps_swap_purity (the same crossing closed into the purity
+% Tr rho^2 of Step 2; not a duplicate: there the swap is on R B_R of Omega~ and
+% both copies are contracted, here the swap is on R of Omega and replica 1 is
+% kept open); polypeps_reset_cores (where the cores sit in the plane).
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=7, bonds=none, size=l]
+        \tn[at=(1,6), name=scKetA, skin=box, wide=2, wires=2,
+            ports={180@1:physical, 180@2:physical}]{\Omega}
+        \tn[at=(3,6), name=scKetB, skin=box, wide=2, wires=2,
+            ports={180@1:physical, 180@2:physical}]{\Omega}
+        \tn[at=(1,1), name=scOutOne, skin=none, ports={180:physical:$C_0$, 0:physical}]{}
+        \tn[at=(2,1), name=scOutTwo, skin=none, species=selected, ports={180:physical:$R_0$, 0:physical}]{}
+        \tn[at=(3,1), name=scOutThree, skin=none, species=selected, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,1), name=scOutFour, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,4), name=scEastA, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,4), name=scEastB, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,2), name=scWestA, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,2), name=scWestB, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire[name=scRcA]{scKetA.180@1}{scOutOne.0}
+        \tnwire[name=scRcB]{scKetB.180@2}{scOutFour.0}
+        \tnwire[species=selected, name=scRA]{scKetA.180@2}{scEastA.0}
+        \tnwire[species=selected, name=scRB]{scKetB.180@1}{scEastB.0}
+        \tnwire[name=scSwapDown, species=selected]{scEastA.180}{scWestB.0}
+        \tnwire[name=scSwapUp, species=selected,
+            cross={over at crossing of scSwapUp and scSwapDown}]
+        {scEastB.180}{scWestA.0}
+        \tnwire[species=selected]{scWestA.180}{scOutTwo.0}
+        \tnwire[species=selected]{scWestB.180}{scOutThree.0}
+        \tnmark[form=enclosure, species=neutral, label pos=n]{{scOutOne, scOutTwo}}{$\text{replica }1$}
+        \tnmark[form=label, label pos=n]{midway (1,3) and (1,4)}{$R^c$}
+        \tnmark[form=label, label pos=s]{midway (4,3) and (4,4)}{$R^c$}
+        \tnmark[form=label, species=selected, label pos=e]{midway (2,4) and (3,4)}{$R$}
+    \end{tenkz}
+    $\xrightarrow[\text{of replica }1]{\text{keep }R_0,\,C_0}$
+    \begin{tenkz}[rows={wire,wire}, cols=3, bonds=none, size=l]
+        \tn[at=(1,2), name=scRhoC, skin=box, size=l, label pos=n,
+            ports={180:physical, 0:physical}]{\rho_{C_0}}
+        \tn[at=(2,2), name=scRhoR, skin=box, size=l, label pos=s,
+            ports={180:physical, 0:physical}]{\rho_{R_0}}
+        \tn[at=(1,1), name=scRhoCOut, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,3), name=scRhoCIn, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), name=scRhoROut, skin=none, species=selected, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,3), name=scRhoRIn, skin=none, species=selected, ports={180:physical, 0:physical}]{}
+        \tnwire{scRhoCOut.0}{scRhoC.180}
+        \tnwire{scRhoC.0}{scRhoCIn.180}
+        \tnwire[species=selected]{scRhoROut.0}{scRhoR.180}
+        \tnwire[species=selected]{scRhoR.0}{scRhoRIn.180}
+    \end{tenkz}
+\end{tenkzequation}

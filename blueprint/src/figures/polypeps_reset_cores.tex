@@ -1,0 +1,45 @@
+% Figure polypeps_reset_cores.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. 3 (Lemma 3, step 7: the cores).
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/02-information.tex:600-612
+% (support check of lem:reset) with the hypothesis eq:info-reset-width.
+% Ink-to-index: dots are lattice sites of one replica (the second replica is
+% identical); there are no tensors or open indices.  Rows 1-2 and 10 are blank
+% rows for brackets; the window is rows 3-9.  The three sets of the
+% partition are top brackets on row 2: R = columns 1-5 (red bracket),
+% Q = (R u C)^c = columns 6-9 (neutral bracket), C = columns 10-14 (blue
+% bracket).  The cores are R_0 = {x in R : dist(x, Lambda \ R) > w} and
+% C_0 = {x in C : dist(x, Lambda \ C) > w}; with w = 3 lattice steps they are
+% columns 1-2 (red tint, label west) and 13-14 (blue tint, label east).
+% Z_R, the endpoints of the edges crossing R, is columns 5-6 (top bracket on
+% row 1).  The unitary U of the reset lives on \mathcal S = N_ell(Q u Z_R),
+% drawn with ell = 1: columns 4-10 (violet tint, label \mathcal S below).  The
+% two bottom brackets (row 10) are the distances from R_0 to Lambda \ R
+% (columns 2 to 6) and from Lambda \ C to C_0 (columns 9 to 13), each 4 > w.
+% The window is a strip of the plane; every region continues above and below
+% it (seven rows drawn), so the tints share the window's top and bottom edges.
+% \mathcal S misses both cores in both replicas: every site of Q is more than w from
+% both cores, every site of Z_R more than w-1, and C_p > K_loc + 3 absorbs
+% ell = ceil(K_loc B_*).
+% Not to scale: w = C_p(1 + b + log L) and ell = ceil(K_loc B_*), with
+% B_* = 1 + b + log L; the sets are arbitrary disjoint R, C, not strips.
+% Boundary signature: empty.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[size=s, rows={wire,wire,ket,ket,ket,ket,ket,ket,ket,wire}, cols=14, bonds=none]
+        \tn[at=(1,5), skin=none]{} \tn[at=(1,6), skin=none]{}
+        \tn[at=(2,1), skin=none]{} \tn[at=(2,5), skin=none]{} \tn[at=(2,6), skin=none]{}
+        \tn[at=(2,9), skin=none]{} \tn[at=(2,10), skin=none]{} \tn[at=(2,14), skin=none]{}
+        \tn[at=(10,2), skin=none]{} \tn[at=(10,6), skin=none]{}
+        \tn[at=(10,9), skin=none]{} \tn[at=(10,13), skin=none]{}
+        \tnmark[form=enclosure, species=collar, tint, label pos=s]{(3,4) .. (9,10)}{$\mathcal S$}
+        \tnmark[form=enclosure, species=selected, tint, label pos=w]{(3,1) .. (9,2)}{$R_0$}
+        \tnmark[form=enclosure, species=secondary, tint, label pos=e]{(3,13) .. (9,14)}{$C_0$}
+        \tnmark[form=bracket, label pos=n]{(1,5) .. (1,6)}{$Z_R$}
+        \tnmark[form=bracket, species=selected, label pos=n]{(2,1) .. (2,5)}{$R$}
+        \tnmark[form=bracket, label pos=n]{(2,6) .. (2,9)}{$Q$}
+        \tnmark[form=bracket, species=secondary, label pos=n]{(2,10) .. (2,14)}{$C$}
+        \tnmark[form=bracket, label pos=s]{(10,2) .. (10,6)}{$>w$}
+        \tnmark[form=bracket, label pos=s]{(10,9) .. (10,13)}{$>w$}
+    \end{tenkz}
+\end{center}
