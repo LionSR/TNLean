@@ -106,6 +106,9 @@ theorem rootPath_augmented_compressed_bandProduct
   intro e ZO vO T AO B M w
   have hroot := TransportData.rootPath_compressed_bandProduct
     (nS q d) D hD ht k N hcomm ZS hZ hZZ p
+  have hrecover : ZO.submatrix e.symm (id : Fin N → Fin N) = ZS := by
+    simp only [ZO, Matrix.submatrix_submatrix, Function.comp_id, Equiv.self_comp_symm,
+      Matrix.submatrix_id_id]
   done
 
 end TNLean.PEPS.AreaLaw.Scan
