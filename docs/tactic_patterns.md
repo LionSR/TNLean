@@ -6586,6 +6586,50 @@ spectral split → block extraction → MPV calculation → strict bounds
   than tensor identities. The addition case already uses `congrArg₂`,
   `eq_of_heq`, and `heq_of_eq`. The same core equality tools suffice for the
   head constructions; a generic lemma would only restate their congruence.
+- **Promotion (2026-10-12):** `WordPermutationRestriction`,
+  `WordAppendTailRestriction` and `SourceFreeLocalPart` repeated the same
+  composition and framing helpers. These three copies are replaced by
+  `Word.eval_comp_heq` and `Word.eval_frame_heq` in
+  `WordEvaluationTransport`. The helpers identify the register lists before
+  applying ordinary congruence to the operators. They do not infer equality
+  of restricted operators from equality before restriction. The new framed
+  local-part proof uses the same shared lemmas. Named axiom checks are in
+  `TNLeanTest/WordEvaluationTransportAxioms.lean`.
+- **Further promotion (2026-10-12):** Three identity-operator transports in
+  `WordPermutationRestriction`, `LocalPartFrameListRestriction` and
+  `LocalPartSpectatorOwnerExclusion` now use `Word.eval_id_heq`. Four input
+  transports in `NoneResidualOperations`, `NoneResidualScalar`,
+  `SourceFreeLocalPart` and `LocalPartSpectatorOwnerExclusion` now use
+  `Word.restrict_castInput_eval_heq`. Both shared results are in
+  `WordEvaluationTransport` and `WordRestriction`, respectively. Main already
+  supplies the restricted input transport; its duplicate is removed from the
+  evaluation provider. The existing named test also checks this shared result.
+  The old public theorem statements are unchanged.
+- **Spectator-list promotion (2026-10-12):** `FrameListRestriction`,
+  `LocalPartFrameListRestriction` and `LocalPartRestrictionCongruence`
+  need the same evaluation congruence for equal spectator lists. The shared
+  `Word.eval_frameList_heq` in `WordEvaluationTransport` replaces private
+  copies and transports the retained prefix explicitly. It compares already
+  equal operators; no equality before restriction is used to infer equality
+  after restriction. Its named axiom check is in the existing test.
+- **Selected source prefixes (2026-10-12):** The retained-prefix proofs in
+  `WordPermutationRestriction` also give
+  `Word.restrict_moveHead_eval_heq_of_restrict_eq`, which depends only on
+  the selected prefix and selected tail. The framed local-part congruence
+  in `LocalPartRestrictionCongruence` uses this result together with
+  `Word.eval_frame_heq` and `Word.eval_comp_heq`. It does not erase a
+  retained source prefix or cancel a prepared source vector. The existing
+  named tests cover both new declarations.
+  The composition and framing congruences now require equality of selected
+  input and output lists only. Their existing proofs do not use equality
+  of the original unselected lists. The retained and erased head identities
+  in `WordPermutationRestriction` are exposed directly from the same proofs;
+  their names are included in the existing permutation axiom test.
+  The erased-frame identity `Word.restrict_localPart_frame_false_eval_heq`
+  composes the erased register move with the restricted local part, retaining
+  arbitrary selected source prefixes. It reuses the same move, frame and
+  composition identities rather than repeating their constructor proofs;
+  its named check is included in `LocalPartRestrictionCongruenceAxioms`.
 - **Word identities — promoted (2026-10-13):**
   `WordOwnerAppendTailTransport`, `AbsorbedRestriction` and
   `WordOwnerRestrictionCommutation` compare chronological compositions,
@@ -6622,6 +6666,22 @@ spectral split → block extraction → MPV calculation → strict bounds
   simplifying the proof. The common mathematical operation is ordinary
   congruence after the memory types have been identified.
 
+
+### Selected operator propositions before substitution — reuse (2026-10-13)
+
+- **Pattern:** Form an equality of selected operators on arbitrary typed words,
+  then substitute the actual chronological words while retaining the proposition.
+- **Seen:** The spectator identity in `NonincidentAllGateRestriction.lean` and
+  the incident-choice comparison in `AllPartyBranchLocality.lean`.
+- **Reuse:** The comparison delegates composition and framing to
+  `Word.restrict_localPart_comp_eval_heq` and
+  `Word.restrict_localPart_frame_eval_heq`; the identity transports its exact
+  proposition along the structural word equality using `congrArg` and `Eq.mpr`.
+  No operator calculation or induction is copied. A generic proposition helper
+  would only restate these core congruence operations, so none is introduced.
+- **Notes:** Each private transparent predicate unfolds to its original equality
+  of already restricted operators. Public hypotheses and default proof limits
+  are unchanged.
 
 ### Cons-source preparation under fixed slot layouts — candidate (2026-10-07)
 
