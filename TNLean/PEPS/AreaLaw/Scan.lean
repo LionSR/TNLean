@@ -12,6 +12,7 @@ import TNLean.PEPS.AreaLaw.Scan.ActualChargeData
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyBound
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyCoefficients
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyDecay
+import TNLean.PEPS.AreaLaw.Scan.ActualChargeEntropySum
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeParameterBound
 import TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms
 import TNLean.PEPS.AreaLaw.Scan.ActualEntropySampling
@@ -69,6 +70,7 @@ import TNLean.PEPS.AreaLaw.Scan.FillTransport
 import TNLean.PEPS.AreaLaw.Scan.FillTransportEndpoints
 import TNLean.PEPS.AreaLaw.Scan.FrontPrefixFamily
 import TNLean.PEPS.AreaLaw.Scan.FrontThresholds
+import TNLean.PEPS.AreaLaw.Scan.GlobalReplicaEnergyCoordinates
 import TNLean.PEPS.AreaLaw.Scan.GoodSampling
 import TNLean.PEPS.AreaLaw.Scan.HistoryMeanTree
 import TNLean.PEPS.AreaLaw.Scan.HistoryPrefixes
