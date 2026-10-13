@@ -574,6 +574,7 @@ This gives the contractions used in
     \label{def:peps_original_source_pair_indices}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourcePairEquiv}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourcePairEquiv_apply}
+    \leanok
     \uses{def:peps_source_pair_index,def:compression_operator_samples}
     For each gate occurrence, its recorded source slots are in bijection with
     the unordered pairs of distinct participants of that occurrence. The slot
@@ -584,7 +585,7 @@ This gives the contractions used in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 233--245, 342--364 and 568--588.
 \end{definition}
-\begin{proof}
+\begin{proof}\leanok
     The recorded slots contain each unordered pair of distinct local participants
     exactly once. The embedding of the participants into the original party set
     is injective, and therefore gives a bijection onto the pairs in its image.
@@ -596,6 +597,7 @@ This gives the contractions used in
 \begin{definition}[Sample positions of the original circuit]
     \label{def:peps_original_source_sample_indices}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv}
+    \leanok
     \uses{def:peps_original_source_pair_indices,def:compression_operator_samples}
     Identify an original source occurrence with the sample position consisting
     of its nonempty-participant gate occurrence and its unordered endpoint pair.
@@ -611,6 +613,7 @@ This gives the contractions used in
 \begin{theorem}[Incidence of original sample positions]
     \label{thm:peps_original_source_sample_incidence}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.mem_sourceSampleEquiv_iff}
+    \leanok
     \uses{def:peps_original_source_pair_indices,
         def:peps_original_source_sample_indices}
     Let $e$ be an original source position with ordered endpoint owners
@@ -621,7 +624,7 @@ This gives the contractions used in
     % Source: 04-compression.tex, lines 342--364 and 568--579.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_original_source_pair_indices}
     The pair attached to $e$ is $\{p_e,q_e\}$. Membership in this
     two-element set is equivalent to $p_e=p$ or $q_e=p$.
@@ -630,6 +633,7 @@ This gives the contractions used in
 \begin{definition}[Local sample positions in the original order]
     \label{def:peps_local_source_sample_indices}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialSlotSampleEquiv}
+    \leanok
     \uses{def:peps_partial_fixed_positions,
         def:peps_original_source_sample_indices,
         thm:peps_original_source_sample_incidence}
@@ -651,6 +655,7 @@ This gives the contractions used in
 \begin{definition}[Common sample assignments in the original source order]
     \label{def:peps_source_sample_assignment_indices}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceSampleAssignmentEquiv}
+    \leanok
     \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices}
     Let $w$ be a chronological source composition on an arbitrary party set
     $P$, with original source-occurrence set $\mathcal E$ and $r$ ordered
@@ -672,7 +677,7 @@ This gives the contractions used in
     % Source: 04-compression.tex, lines 342--417 and 568--579.
 \end{definition}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices}
     Compose the two occurrence bijections to obtain $\sigma$. Precomposition
     with $\sigma^{-1}$ is a bijection of assignment sets, with inverse
@@ -682,6 +687,7 @@ This gives the contractions used in
 \begin{theorem}[Inverse assignments at the original source occurrence]
     \label{thm:peps_source_sample_assignment_occurrence}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.allSourceSampleAssignmentEquiv_symm_apply}
+    \leanok
     \uses{def:peps_source_sample_assignment_indices}
     For each assignment $j:\mathcal S\to[k]$ and each original source
     occurrence $e\in\mathcal E$,
@@ -692,7 +698,7 @@ This gives the contractions used in
     % Source: 04-compression.tex, lines 342--417 and 568--579.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_source_sample_assignment_indices}
     The inverse is precomposition with $\sigma=\tau\circ\rho$.
     Thus $(T^{-1}j)(\rho^{-1}e)=j(\tau(\rho(\rho^{-1}e)))=j(\tau e)$.
@@ -701,6 +707,7 @@ This gives the contractions used in
 \begin{theorem}[Reindexing a common sample sum]
     \label{thm:peps_source_sample_assignment_sum}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_sourceSampleAssignments_eq}
+    \leanok
     \uses{def:peps_source_sample_assignment_indices}
     For arbitrary index sets $I,J$ and any matrix family
     $F:([r]\to[k])\to\C^{I\times J}$,
@@ -715,7 +722,7 @@ This gives the contractions used in
     % Source: 04-compression.tex, lines 568--579.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:peps_source_sample_assignment_indices}
     Reindex the finite sum by the inverse bijection $T^{-1}$.
 \end{proof}
