@@ -1828,6 +1828,61 @@ The following finite construction follows
     The identity entries therefore agree under the final regrouping $g_k$.
 \end{proof}
 
+\begin{theorem}[The global replica mean in the scanner coordinates]
+    \label{thm:al_scan_global_replica_energy}
+    \lean{TNLean.PEPS.AreaLaw.Scan.copyMean_augmentOperator_eq_globalReplicaMeanHamiltonian}
+    \leanok
+    \uses{def:al_scan_auxiliary_coordinates,thm:al_scan_auxiliary_energy}
+    Let $V$ be a finite set of physical sites, of common dimension $q$,
+    and let both auxiliary factors have dimension $d$. Let $H$ be an
+    arbitrary physical matrix. In the successively augmented coordinates,
+    let $\mathsf H_k$ be the physical replica mean with both auxiliary
+    identities, and in the coordinates $V\sqcup\{C,R\}$ let
+    $\overline{\widetilde H}_k$ be the replica mean of
+    $\widetilde H=H\otimes I_C\otimes I_R$. For the bijection $e_k$ of
+    Definition~\ref{def:al_scan_auxiliary_coordinates},
+    \begin{align}
+        \overline{\widetilde H}_k(x,y)
+         & =\mathsf H_k(e_k^{-1}x,e_k^{-1}y).
+    \end{align}
+    Both means are defined to be zero at $k=0$. The identity includes
+    zero dimensions and empty physical site sets. This is the original
+    energy expectation used in
+    \cite[Section~8, defect-mass comparison]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_scan_auxiliary_energy}
+    Theorem~\ref{thm:al_scan_auxiliary_energy} expresses the scanner mean
+    as the physical mean tensored with both auxiliary identities.
+    The same formula defines $\mathsf H_k$ in the successive coordinates.
+    Their entries agree under $e_k$, including the reciprocal convention
+    $0^{-1}=0$ at zero replicas.
+\end{proof}
+
+\begin{theorem}[The same vector's global replica energy expectation]
+    \label{thm:al_scan_global_replica_expectation}
+    \lean{TNLean.PEPS.AreaLaw.Scan.star_dotProduct_copyMean_augmentOperator}
+    \leanok
+    \uses{thm:al_scan_global_replica_energy}
+    Use the spaces, physical matrix and coordinate bijection of
+    Theorem~\ref{thm:al_scan_global_replica_energy}. For every vector $w$
+    in the scanner configuration space, put $w_O=w\circ e_k$. Then
+    \begin{align}
+        \langle w,\overline{\widetilde H}_k w\rangle
+         & =\langle w_O,\mathsf H_k w_O\rangle.
+    \end{align}
+    The equality is complex-valued. It requires neither normalization
+    nor a nonzero vector, and also holds at zero replicas.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_scan_global_replica_energy}
+    Substitute the operator identity of
+    Theorem~\ref{thm:al_scan_global_replica_energy}. Reindex the finite
+    sum defining the quadratic form by the bijection $e_k$.
+\end{proof}
+
 \begin{theorem}[Positive supported augmented energy]
     \label{thm:al_scan_actual_energy_terms}
     \lean{TNLean.PEPS.AreaLaw.Scan.augmentOperator_mem_Icc,
