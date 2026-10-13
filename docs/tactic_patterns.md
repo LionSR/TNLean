@@ -7468,3 +7468,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   using the existing `matrix_repr_eval_eq_toMatrix`. The actual circuit
   is substituted afterward. No hypotheses or proof limits are added.
   The extracted definition has a named axiom check.
+
+### Fixed vectors under replica-coordinate equivalences — candidate (2026-10-13)
+
+- **Pattern:** identify a transported projector as a matrix submatrix along an
+  equivalence, apply `Matrix.submatrix_mulVec_equiv`, and cancel the equivalence
+  with its inverse in a precomposed vector.
+- **Seen:** three occurrences in
+  `TNLean/PEPS/AreaLaw/Scan/AugmentedReplicaPrevectorProperties.lean`: full copy
+  symmetry and the two branches for the original auxiliary labels.
+- **Abstraction:** the matrix transport is already Mathlib's
+  `Matrix.submatrix_mulVec_equiv`. A separate fixed-vector corollary may be useful
+  if the final composition cancellation recurs in another file.
+- **Notes:** all three uses are in one file, below the two-file promotion
+  threshold. No nonzero vector or nonempty index type is required.
