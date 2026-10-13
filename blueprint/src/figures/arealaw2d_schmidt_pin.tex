@@ -1,0 +1,96 @@
+% Figure arealaw2d_schmidt_pin.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. 4 (Lemma 3.2 of the area-law paper, Move 4).
+% Source: arXiv OpenAI2026AreaLaw, sections/02-initial.tex:497-523 (the
+% Schmidt-pinning trial filters behind N >= sqrt(p_i) N_i). With
+% Omega = sum_l sqrt(p_l) u_l (x) w_l the Schmidt decomposition at X and the
+% trial filters L_j = |u_i><u_i| (x) M_j (M_j >= 0 on T_j = X_j \ X,
+% Tr M_j^{2/a_j} = 1), drawn for m = 2:
+%   L_2 L_1 Omega = sqrt(p_i) u_i (x) M_2 M_1 w_i.
+% Drawn after the zero-floor limit epsilon -> 0
+% ([S, 02-initial.tex:498-505]); the rank-one trial filters are infeasible
+% at epsilon > 0, and (3.18) survives the limit.
+% Ink-to-index: rows from top to bottom are X (row 3), the buffer
+% T_2 = X_2 \ X (row 5; it contains T_1, so it carries both M_j; the paper's
+% T_j, the note's calligraphic T_j), and the rest Lambda \ X_2 (row 7). Rows
+% 1-2 hold the filter brackets, rows 4 and 6 are blank so that the scalar
+% bracket and the M_j names clear the wires. Action runs right to left from
+% Omega (a neutral box). In the left panel each filter L_j is one column
+% group, named by a neutral bracket L_j above it: on X a bra dot <u_i| (east)
+% and a ket dot |u_i> (west), each dot labelled by its own bra or ket, and the
+% box M_j on the buffer wire between them; M_j acts on T_j and as the identity
+% on T_2 \ T_j. The first bra selects the Schmidt branch l = i. The X segment
+% between the two projectors (labels <u_i| |u_i>) is the scalar
+% <u_i|u_i> = 1, marked by the selected (red) bracket under it, so the second
+% projector acts as the identity on u_i. The right panel is u_i on X and
+% M_2 M_1 w_i on Lambda \ X = T_2 cup (Lambda \ X_2); the box w_i is the
+% note's omega_i. All box names sit at pos=s (size l). No commutation of the
+% M_j is assumed. The right panel's open legs start at its column 1, a full
+% pitch west of M_2, so the buffer leg is not a stub.
+% Boundary signature: (phys:w) x 3 in both panels; the joiner is an equality
+% up to the scalar sqrt(p_i).
+% Label macros: none.
+% Related: tn2d_nested_filter_product draws the general filtered vector
+% L_m ... L_1 Omega whose norm N is maximized; this figure is its rank-one
+% trial instance, not a duplicate.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=6, bonds=none, size=l]
+        \tn[at=(3,6), name=pinOmega, skin=box, wires=5, label pos=s,
+            ports={180@1:physical, 180@3:physical, 180@5:physical}]{\Omega}
+        \tn[at=(3,5), name=pinBraOne, skin=dot, ports={0:physical}]{}
+        \tn[at=(3,4), name=pinKetOne, skin=dot, ports={180:physical}]{}
+        \tn[at=midway (5,5) and (5,4), name=pinMOne, skin=box, label pos=s,
+            ports={180:physical, 0:physical}]{M_1}
+        \tn[at=(3,3), name=pinBraTwo, skin=dot, ports={0:physical}]{}
+        \tn[at=(3,2), name=pinKetTwo, skin=dot, ports={180:physical}]{}
+        \tn[at=midway (5,3) and (5,2), name=pinMTwo, skin=box, label pos=s,
+            ports={180:physical, 0:physical}]{M_2}
+        \tnwire{pinBraOne.0}{pinOmega.180@1}
+        \tnwire{pinKetOne.180}{pinBraTwo.0}
+        \tnwire[name=pinOutX]{open w}{pinKetTwo.180}
+        \tnwire{pinMOne.0}{pinOmega.180@3}
+        \tnwire{pinMTwo.0}{pinMOne.180}
+        \tnwire[name=pinOutT]{open w}{pinMTwo.180}
+        \tn[at=(7,2), name=pinRestEnd, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tnwire{pinRestEnd.0}{pinOmega.180@5}
+        \tnwire[name=pinOutRest]{open w}{pinRestEnd.180}
+        \tnmark[form=label, label pos=n]{pinBraOne}{$\bra{u_i}$}
+        \tnmark[form=label, label pos=n]{pinKetOne}{$\ket{u_i}$}
+        \tnmark[form=label, label pos=n]{pinBraTwo}{$\bra{u_i}$}
+        \tnmark[form=label, label pos=n]{pinKetTwo}{$\ket{u_i}$}
+        \tn[at=midway (1,2) and (2,2), name=pinFilterTwoW, skin=none]{}
+        \tn[at=midway (1,3) and (2,3), name=pinFilterTwoE, skin=none]{}
+        \tn[at=midway (1,4) and (2,4), name=pinFilterOneW, skin=none]{}
+        \tn[at=midway (1,5) and (2,5), name=pinFilterOneE, skin=none]{}
+        \tnmark[form=bracket, label pos=n]{{pinFilterTwoW, pinFilterTwoE}}{$L_2$}
+        \tnmark[form=bracket, label pos=n]{{pinFilterOneW, pinFilterOneE}}{$L_1$}
+        \tnmark[form=bracket, species=selected, label pos=s]{{pinBraTwo, pinKetOne}}{$\langle u_i\vert u_i\rangle=1$}
+        \tnmark[form=label, label pos=w]{on pinOutX 0}{$X$}
+        \tnmark[form=label, label pos=w]{on pinOutT 0}{$\mathcal T_2$}
+        \tnmark[form=label, label pos=w]{on pinOutRest 0}{$\Lambda\setminus X_2$}
+    \end{tenkz}
+    $=\;\sqrt{p_i}$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=4, bonds=none, size=l]
+        \tn[at=(3,4), name=pinKet, skin=dot, ports={180:physical}]{}
+        \tn[at=(5,4), name=pinOmegaI, skin=box, wires=3, label pos=s,
+            ports={180@1:physical, 180@3:physical}]{\omega_i}
+        \tn[at=(5,3), name=pinMOneR, skin=box, label pos=s,
+            ports={180:physical, 0:physical}]{M_1}
+        \tn[at=(5,2), name=pinMTwoR, skin=box, label pos=s,
+            ports={180:physical, 0:physical}]{M_2}
+        \tnwire{pinMOneR.0}{pinOmegaI.180@1}
+        \tnwire{pinMTwoR.0}{pinMOneR.180}
+        \tn[at=(3,1), name=pinXEndR, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tnwire{pinXEndR.0}{pinKet.180}
+        \tn[at=(5,1), name=pinTEndR, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tnwire{pinTEndR.0}{pinMTwoR.180}
+        \tn[at=(7,1), name=pinRestEndR, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tnwire{pinRestEndR.0}{pinOmegaI.180@3}
+        \tnmark[form=label, label pos=n]{pinKet}{$\ket{u_i}$}
+    \end{tenkz}
+\end{tenkzequation}

@@ -1,0 +1,106 @@
+% Figure arealaw2d_bell_pin.
+% Registers C, R are typeset sans-serif ($\mathsf C$, $\mathsf R$) to keep them apart
+% from constants (AL review round 1).
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. 8.
+% Source: arXiv OpenAI2026AreaLaw, sections/07-comparators.tex:86-90 (Bell_CR),
+% 241-255 (Omega~, psi, B_XC, post_k) and 284-289 (comparator:bell-pin, eq. (8.16)),
+% drawn for one copy (k=1).
+% Ink-to-index: rows from top to bottom (all three panels) are R, C, X,
+% Ubar = UYV (the rest of the physical system). Omega~ = sum_i sqrt(p_i)|i>_X|w_i>; a cup on R,C is
+% Bell_CR = d_*^{-1/2} sum_{i in E}|i>_C|i>_R; the cap on C,X is the bra
+% <B_XC| and the cup on C,X the ket |B_XC>, B_XC = d_*^{-1/2} sum_{i in E}
+% |i>_X|i>_C, so the bead d_*^{-1/2} on every cup and cap is a bare
+% normalisation scalar (C and R have bases indexed by E). Panel 1 is
+% |B_XC><B_XC|(Omega~ (x) Bell_CR). The cap and the Bell cup form a snake;
+% straightening it (panel 2) leaves the X leg of Omega~ routed onto R through
+% the box P_E = sum_{e in E}|e>_R<e|_X, the only P_E in the picture.
+% psi = sum_{i in E} sqrt(p_i/z)|i>_R|w_i>, z = sum_{i in E} p_i (panel 3); psi has no
+% leg on C or X.
+% Colour (shared-spec 4.1, H1 and H7): red (selected) is the snake that straightens:
+% in panel 1 the cap, the C segment between cap and Bell cup, and the Bell cup; in
+% panel 2 the box P_E, which is what the snake becomes. Ink follows the index
+% elsewhere: the X leg of Omega~ is black in panels 1 and 2 (east of P_E), every R
+% port stub and the R side of P_E are grey, and so is psi's R leg in panel 3, so
+% the colour changes only at P_E, the box that maps X into R. The ket cup C-X is
+% black in all three panels.
+% Labels (shared-spec 4.1, L1, L3, L4): the register names R, C, X, Ubar stand
+% once, west of panel 1; panels 2 and 3 share its rows and repeat no name, so
+% no wire name follows a joiner's scalar. Size class l (picture key) sets the
+% state, box and bead names at the size of the register names.
+% Layout: the cap sits at col 6, five columns east of the ket cup, so the cap-bead
+% label (west, outside the cap) clears the ket-bead label (east); P_E sits on row R
+% with its name north, and psi's R leg bends at the same cell (1,3), so panels 2
+% and 3 differ only by the box P_E Omega~ = sqrt(z) psi.
+% Joiners carry their facts (J2) over the =, scalars in \tfrac (J3): the two snake
+% beads give d_*^{-1/2}.d_*^{-1/2} = 1/d_*; then P_E Omega~ = sqrt(z) psi. The
+% vphantom only opens room between the fact and the sign.
+% Check: <B_XC|(Omega~ (x) Bell_CR) = d_*^{-1} sqrt(z) psi. Panel 2 equals
+% sqrt(z) psi (x) B_XC, so panel 1 = d_*^{-1} panel 2 = (sqrt(z)/d_*) panel 3,
+% which is (8.16) for one copy; k copies follow by tensor power.
+% Boundary signature: (phys:w)x4 in every panel, rows R, C, X, Ubar. R and C
+% are auxiliary registers (outline: aux:w); they carry the tenkz type
+% physical because the cap contracts the X index with the C index.
+% Contractions: panel 1 three internal wires plus the snake; panel 2 the
+% route through P_E; panel 3 none.
+% Label macros: none.
+% Fit: W at 7mm (\tnwide[7mm]; spans the text width).
+% Related: cup and bead idiom of ch26_mps_rfp_zero_correlation_length and
+% ch32_log_depth_fixed_point_pairs (generic MPS cups, labels wrong here); no
+% TNLean picture of the area-law comparators or amplification exists.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=7, bonds=none, size=l]
+        \tn[at=(1,1), skin=none, species=complement, name=pinOneR, ports={180:physical:$\mathsf R$, 0:physical}]{}
+        \tn[at=(2,1), skin=none, name=pinOneKetC, ports={180:physical:$\mathsf C$, 0:physical}]{}
+        \tn[at=(3,1), skin=none, name=pinOneKetX, ports={180:physical:$X$, 0:physical}]{}
+        \tn[at=(4,1), skin=none, name=pinOneU, ports={180:physical:$\bar U$, 0:physical}]{}
+        \tn[at=(2,6), skin=none, name=pinOneBraC, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,6), skin=none, name=pinOneBraX, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,7), skin=none, name=pinOneBellR, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,7), skin=none, name=pinOneBellC, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,7), skin=box, wires=2, name=pinOneState, label pos=e,
+            ports={180@1:physical, 180@2:physical}]{\widetilde\Omega}
+        \tnwire[route=arc, name=pinOneKet]{pinOneKetC.0}{pinOneKetX.0}
+        \tnwire[route=arc, species=selected, name=pinOneBra]{pinOneBraC.180}{pinOneBraX.180}
+        \tnwire[route=arc, species=selected, name=pinOneBell]{pinOneBellR.0}{pinOneBellC.0}
+        \tnwire[species=complement]{pinOneR.0}{pinOneBellR.180}
+        \tnwire[species=selected]{pinOneBraC.0}{pinOneBellC.180}
+        \tnwire{pinOneBraX.0}{pinOneState.180@1}
+        \tnwire{pinOneU.0}{pinOneState.180@2}
+        \tn[skin=dot, at=on pinOneKet 0.5, label pos=e]{d_*^{-1/2}}
+        \tn[skin=dot, at=on pinOneBra 0.5, label pos=w]{d_*^{-1/2}}
+        \tn[skin=dot, at=on pinOneBell 0.5, label pos=e]{d_*^{-1/2}}
+    \end{tenkz}
+    $\;\overset{d_*^{-1/2}\cdot d_*^{-1/2}}{\vphantom{\big|}=}\;\tfrac{1}{d_*}\;$
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=4, bonds=none, size=l]
+        \tn[at=(1,1), skin=none, species=complement, name=pinTwoR, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), skin=none, name=pinTwoKetC, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), skin=none, name=pinTwoKetX, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,1), skin=none, name=pinTwoU, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,3), skin=box, species=selected, name=pinTwoPE, label pos=n,
+            ports={180:physical, 0:physical}]{P_E}
+        \tn[at=(3,4), skin=box, wires=2, name=pinTwoState, label pos=e,
+            ports={180@1:physical, 180@2:physical}]{\widetilde\Omega}
+        \tnwire[route=arc, name=pinTwoKet]{pinTwoKetC.0}{pinTwoKetX.0}
+        \tnwire[species=complement]{pinTwoR.0}{pinTwoPE.180}
+        \tnwire[route=arc]{pinTwoPE.0}{pinTwoState.180@1}
+        \tnwire{pinTwoU.0}{pinTwoState.180@2}
+        \tn[skin=dot, at=on pinTwoKet 0.5, label pos=e]{d_*^{-1/2}}
+    \end{tenkz}
+    $\;\overset{P_E\widetilde\Omega=\sqrt z\,\psi}{\vphantom{\big|}=}\;\tfrac{\sqrt z}{d_*}\;$
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=4, bonds=none, size=l]
+        \tn[at=(1,1), skin=none, species=complement, name=pinThreeR, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), skin=none, name=pinThreeKetC, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), skin=none, name=pinThreeKetX, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,1), skin=none, name=pinThreeU, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,3), skin=none, name=pinThreeBend, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,4), skin=box, wires=2, name=pinThreeState, label pos=e,
+            ports={180@1:physical, 180@2:physical}]{\psi}
+        \tnwire[route=arc, name=pinThreeKet]{pinThreeKetC.0}{pinThreeKetX.0}
+        \tnwire[species=complement]{pinThreeR.0}{pinThreeBend.180}
+        \tnwire[route=arc, species=complement]{pinThreeBend.0}{pinThreeState.180@1}
+        \tnwire{pinThreeU.0}{pinThreeState.180@2}
+        \tn[skin=dot, at=on pinThreeKet 0.5, label pos=e]{d_*^{-1/2}}
+    \end{tenkz}
+\end{tenkzequation}

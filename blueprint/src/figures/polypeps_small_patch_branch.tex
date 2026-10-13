@@ -1,0 +1,214 @@
+% Figure polypeps_small_patch_branch.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. 6 (Lemma 5, the expansion; full width).
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/05-frames.tex:221-320
+% (proof of Lemma 6.3: eq. (6.10) rewrite-map, the branch expansion and the
+% open-leg claim) with Lemma 6.2, eq. (6.7) group-truncation, 05-frames.tex:125-180.
+% Formula: one branch of M = K_new P_2 P_1 K_old^dagger, drawn for two patches,
+% one affected old hole and one affected new hole:
+% K_old^dagger branch = <j,l|_{J_old} (x) |v><0...0|_D, P_1 term = |w><w| on its
+% selected square, P_2 term = |w'><w'| on its selected square, K_new branch
+% = |j',l'>_{J_new} (x) |0...0><v'|_{D'}. Panel (b) is the open tensor Z left
+% after factoring out the private pieces; panel (c) is one of the at most k^g
+% product terms of Z_k (Lemma 6.2), ||Z - Z_k|| <= g/sqrt(k), |c| <= 1.
+% Ink-to-index: seven wires, top to bottom: (1) the old tag J_old; (2) the
+% sites of the selected old-hole square D; (3) sites of patch 1's selected
+% square outside D and outside patch 2; (4) sites in both patches' squares
+% (row label "both"); (5) the sites of the selected new-hole square D' (inside
+% patch 2); (6) one direct site outside every patch; (7) the new tag J_new.
+% Row 8 of panel (a) is void: it carries the order brackets K_new, P_2, P_1,
+% K_old^dagger under the columns of each factor, so the branch reads as the
+% product M = K_new P_2 P_1 K_old^dagger (inkless anchors give the brackets
+% their cells). Invisible (skin=none) vertices only extend wires to the panel
+% edges; the new-hole zero ket and the new tag ket sit in column 1 themselves.
+% Each bra and each ket is its own vertex; a patch term is a bra and a
+% separate ket with no wire between them. Action runs right to left (inputs
+% east, outputs west).
+% Colours and direct labels: private factors and wires (tag bra and ket, zero
+% bra and ket, the direct wire) are grey (complement). Open legs carry their
+% owner, in the band hue and as a direct letter: in (a) the inputs read A
+% (wire 3, orange) and B (wires 4-5, cyan) at the east ends, and the outputs
+% read B (wires 2-4) at the west ends, beside the row names; internal wires
+% are black. In (b) the input groups carry their owner sets in a void column 7
+% east of the open ends (B1: off the wires): a bracket {A,B} on the inputs of
+% <w|, and the direct letter B for the single input of <w'| (a one-row bracket
+% renders as a stray tick), under the one label "<= 2 owners per group"
+% (condition 3 of Lemma 6.3); (c) inherits the hues.
+% No owner label sits in the column right after a joiner (L3), so the output
+% groups of (b) and (c) are not bracketed; their single owner B is the one
+% named at the west ends of (a).
+% Label stations: tags and zero states keep bras north and kets south; the
+% patch boxes keep the stations that clear the neighbouring wires (a uniform
+% bra-north / ket-south rule collides with the D' wire and with the tag bra).
+% Every leg of |v> meets the later bra <w| and every leg of <v'| meets the
+% earlier ket |w'>, so neither has an open leg.
+% Label size: box names stay at the default size, below the row names (an L1
+% waiver): at size l the names |0>, <v'|, |w'> run together and |j',l'> and
+% <0| touch the K_new bracket and the patch-1 wire at this width.
+% Label macros: none.
+% Fit: W (\tnwide[6mm]), about 174 mm wide; a pitch of 6.5 mm no longer fits.
+% Boundary signature: (a) (phys:e) x6 in (wires 1-6) and (phys:w) x6 out
+% (wires 2-7); (b) and (c) (phys:e) x3 in (wires 3, 4, 5) and (phys:w) x3 out
+% (wires 2, 3, 4).
+% Check opt-out: the joiner \longmapsto between (a) and (b) is not a relation;
+% it factors out the private maps (tags, zeros, direct wire), so its sides
+% differ by exactly those legs. The tenkzequation wrapper runs no signature
+% audit; (b) \approx sum c (c) has equal signatures.
+% Related: peps_regular_ginjective_cut_range_a draws the flattening Z = A B^T
+% used to bound each group's nuclear norm; peps_hole_encoder draws one encoder
+% summand. No TNLean figure draws the rewrite branch.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire}, cols=9, bonds=none]
+        \tndeclare{species}{bandA}{hue=source:orange}
+        \tndeclare{species}{bandB}{hue=source:cyan}
+        \tn[at=(1,8), name=brTagBra, skin=box, species=complement, label pos=n,
+            ports={0:physical}]{\bra{j,\ell}}
+        \tn[at=(2,8), name=brZeroBra, skin=box, species=complement, label pos=s,
+            ports={0:physical}]{\bra{0}}
+        \tn[at=(2,7), name=brDec, skin=box, label pos=n, ports={180:physical}]{\ket{v}}
+        \tn[at=(2,6), name=brWbra, skin=box, wires=3, label pos=n,
+            ports={0@1:physical, 0@2:physical, 0@3:physical}]{\bra{w}}
+        \tn[at=(2,5), name=brWket, skin=box, wires=3, label pos=n,
+            ports={180@1:physical, 180@2:physical, 180@3:physical}]{\ket{w}}
+        \tn[at=(4,4), name=brXbra, skin=box, wires=2, label pos=n,
+            ports={0@1:physical, 0@2:physical}]{\bra{w'}}
+        \tn[at=(4,3), name=brXket, skin=box, wires=2, label pos=s,
+            ports={180@1:physical, 180@2:physical}]{\ket{w'}}
+        \tn[at=(5,2), name=brEnc, skin=box, label pos=s, ports={0:physical}]{\bra{v'}}
+        \tn[at=(5,1), name=brZeroKet, skin=box, species=complement, label pos=s,
+            ports={180:physical}]{\ket{0}}
+        \tn[at=(7,1), name=brTagKet, skin=box, species=complement, label pos=s,
+            ports={180:physical}]{\ket{j',\ell'}}
+        \tn[at=(2,1), name=brW2, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=brW3, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,1), name=brW4, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,1), name=brW6, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,9), name=brE1, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,9), name=brE2, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,9), name=brE3, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,9), name=brE4, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,9), name=brE5, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,9), name=brE6, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire[species=complement]{brE1.0}{open e}
+        \tnwire[species=complement]{brE2.0}{open e}
+        \tnwire[species=bandA, name=brIn3]{brE3.0}{open e}
+        \tnwire[species=bandB, name=brIn4]{brE4.0}{open e}
+        \tnwire[species=bandB, name=brIn5]{brE5.0}{open e}
+        \tnwire[species=complement]{brE6.0}{open e}
+        \tnwire[species=complement]{brTagBra.0}{brE1.180}
+        \tnwire[species=complement]{brZeroBra.0}{brE2.180}
+        \tnwire[species=bandA]{brWbra.0@2}{brE3.180}
+        \tnwire[species=bandB]{brWbra.0@3}{brE4.180}
+        \tnwire[species=bandB]{brXbra.0@2}{brE5.180}
+        \tnwire[species=complement]{brW6.0}{brE6.180}
+        \tnwire{brDec.180}{brWbra.0@1}
+        \tnwire{brWket.180@3}{brXbra.0@1}
+        \tnwire{brXket.180@2}{brEnc.0}
+        \tnwire[species=bandB]{brWket.180@1}{brW2.0}
+        \tnwire[species=bandB]{brWket.180@2}{brW3.0}
+        \tnwire[species=bandB]{brXket.180@1}{brW4.0}
+        \tnwire[species=bandB, name=brOut2]{brW2.180}{open w}
+        \tnwire[species=bandB, name=brOut3]{brW3.180}{open w}
+        \tnwire[species=bandB, name=brOut4]{brW4.180}{open w}
+        \tnwire[species=complement]{brZeroKet.180}{open w}
+        \tnwire[species=complement]{brW6.180}{open w}
+        \tnwire[species=complement]{brTagKet.180}{open w}
+        \tnmark[form=label, species=bandA, label pos=e]{on brIn3 1}{$A$}
+        \tnmark[form=label, species=bandB, label pos=e]{on brIn4 1}{$B$}
+        \tnmark[form=label, species=bandB, label pos=e]{on brIn5 1}{$B$}
+        \tnmark[form=label, species=bandB, label pos=w]{on brOut2 1}{$B$}
+        \tnmark[form=label, species=bandB, label pos=w]{on brOut3 1}{$B$}
+        \tnmark[form=label, species=bandB, label pos=w]{on brOut4 1}{$B$}
+        \tnmark[form=label, label pos=w]{1.1 w of (1,1)}{$\mathcal J_{\mathrm{old}}$}
+        \tnmark[form=label, label pos=w]{1.1 w of (2,1)}{$D$}
+        \tnmark[form=label, label pos=w]{1.1 w of (3,1)}{$\text{patch }1$}
+        \tnmark[form=label, label pos=w]{1.1 w of (4,1)}{$\text{both}$}
+        \tnmark[form=label, label pos=w]{1.1 w of (5,1)}{$D'$}
+        \tnmark[form=label, label pos=w]{1.1 w of (6,1)}{$\text{direct}$}
+        \tnmark[form=label, label pos=w]{1.1 w of (7,1)}{$\mathcal J_{\mathrm{new}}$}
+        \tn[at=(8,1), skin=none]{}
+        \tn[at=(8,2), skin=none]{}
+        \tn[at=(8,3), skin=none]{}
+        \tn[at=(8,4), skin=none]{}
+        \tn[at=(8,5), skin=none]{}
+        \tn[at=(8,6), skin=none]{}
+        \tn[at=(8,7), skin=none]{}
+        \tn[at=(8,8), skin=none]{}
+        \tnmark[form=bracket, label pos=s]{(8,1) .. (8,2)}{$K_{\mathrm{new}}$}
+        \tnmark[form=bracket, label pos=s]{(8,3) .. (8,4)}{$P_2$}
+        \tnmark[form=bracket, label pos=s]{(8,5) .. (8,6)}{$P_1$}
+        \tnmark[form=bracket, label pos=s]{(8,7) .. (8,8)}{$K_{\mathrm{old}}^\dagger$}
+    \end{tenkz}
+    $\longmapsto$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire}, cols=7, bonds=none]
+        \tndeclare{species}{bandA}{hue=source:orange}
+        \tndeclare{species}{bandB}{hue=source:cyan}
+        \tn[at=(2,6), name=bzDec, skin=box, label pos=n, ports={180:physical}]{\ket{v}}
+        \tn[at=(2,5), name=bzWbra, skin=box, wires=3, label pos=n,
+            ports={0@1:physical, 0@2:physical, 0@3:physical}]{\bra{w}}
+        \tn[at=(2,4), name=bzWket, skin=box, wires=3, label pos=n,
+            ports={180@1:physical, 180@2:physical, 180@3:physical}]{\ket{w}}
+        \tn[at=(4,3), name=bzXbra, skin=box, wires=2, label pos=n,
+            ports={0@1:physical, 0@2:physical}]{\bra{w'}}
+        \tn[at=(4,2), name=bzXket, skin=box, wires=2, label pos=s,
+            ports={180@1:physical, 180@2:physical}]{\ket{w'}}
+        \tn[at=(5,1), name=bzEnc, skin=box, label pos=s, ports={0:physical}]{\bra{v'}}
+        \tn[at=(2,1), name=bzW2, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=bzW3, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,1), name=bzW4, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,6), name=bzE3, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,6), name=bzE4, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,6), name=bzE5, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire[species=bandA]{bzE3.0}{open e}
+        \tnwire[species=bandB]{bzE4.0}{open e}
+        \tnwire[species=bandB]{bzE5.0}{open e}
+        \tnwire[species=bandA]{bzWbra.0@2}{bzE3.180}
+        \tnwire[species=bandB]{bzWbra.0@3}{bzE4.180}
+        \tnwire[species=bandB]{bzXbra.0@2}{bzE5.180}
+        \tnwire{bzDec.180}{bzWbra.0@1}
+        \tnwire{bzWket.180@3}{bzXbra.0@1}
+        \tnwire{bzXket.180@2}{bzEnc.0}
+        \tnwire[species=bandB]{bzWket.180@1}{bzW2.0}
+        \tnwire[species=bandB]{bzWket.180@2}{bzW3.0}
+        \tnwire[species=bandB]{bzXket.180@1}{bzW4.0}
+        \tnwire[species=bandB]{bzW2.180}{open w}
+        \tnwire[species=bandB]{bzW3.180}{open w}
+        \tnwire[species=bandB]{bzW4.180}{open w}
+        \tn[at=(3,7), skin=none]{}
+        \tn[at=(4,7), skin=none]{}
+        \tn[at=(5,7), skin=none]{}
+        \tnmark[form=bracket, label pos=e]{(3,7) .. (4,7)}{$\{A{,}B\}$}
+        \tnmark[form=label, species=bandB, label pos=e]{(5,7)}{$B$}
+        \tnmark[form=label, label pos=s]{midway (6,3) and (6,4)}{$\le2\ \text{owners per group}$}
+    \end{tenkz}
+    $\approx\sum c\,$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire}, cols=4, bonds=none]
+        \tndeclare{species}{bandA}{hue=source:orange}
+        \tndeclare{species}{bandB}{hue=source:cyan}
+        \tn[at=(2,2), name=bkBetaOne, skin=box, wires=2, label pos=n,
+            ports={180@1:physical, 180@2:physical}]{\ket{\beta_1}}
+        \tn[at=(4,2), name=bkBetaTwo, skin=box, label pos=s, ports={180:physical}]{\ket{\beta_2}}
+        \tn[at=(3,3), name=bkAlphaOne, skin=box, wires=2, label pos=n,
+            ports={0@1:physical, 0@2:physical}]{\bra{\alpha_1}}
+        \tn[at=(5,3), name=bkAlphaTwo, skin=box, label pos=s, ports={0:physical}]{\bra{\alpha_2}}
+        \tn[at=(2,1), name=bkW2, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=bkW3, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,1), name=bkW4, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,4), name=bkE3, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,4), name=bkE4, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,4), name=bkE5, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire[species=bandA, name=bkIn3]{bkE3.0}{open e}
+        \tnwire[species=bandB, name=bkIn4]{bkE4.0}{open e}
+        \tnwire[species=bandB, name=bkIn5]{bkE5.0}{open e}
+        \tnwire[species=bandA]{bkAlphaOne.0@1}{bkE3.180}
+        \tnwire[species=bandB]{bkAlphaOne.0@2}{bkE4.180}
+        \tnwire[species=bandB]{bkAlphaTwo.0}{bkE5.180}
+        \tnwire[species=bandB]{bkBetaOne.180@1}{bkW2.0}
+        \tnwire[species=bandB]{bkBetaOne.180@2}{bkW3.0}
+        \tnwire[species=bandB]{bkBetaTwo.180}{bkW4.0}
+        \tnwire[species=bandB, name=bkOut2]{bkW2.180}{open w}
+        \tnwire[species=bandB, name=bkOut3]{bkW3.180}{open w}
+        \tnwire[species=bandB, name=bkOut4]{bkW4.180}{open w}
+    \end{tenkz}
+\end{tenkzequation}

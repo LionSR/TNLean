@@ -1,0 +1,123 @@
+% Figure polypeps_rename_swap.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. 7 (proof of Lemma 7, two-sheet exchange,
+% after eq. pp:s7:intertwine; \tnshow[6mm]).
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/05-frames.tex:480-499
+% (proof of Lemma 6.6, eq. (6.16) exchange-intertwining).
+% Formula: R K_in = K_out F_{Y cap Lambda}.  Every hole's outer square lies on
+% one side of dY, so frame i's encoder product (on sheet i) splits as
+% K_i = (K_i on Y) (x) (K_i on Y^c), i = 1, 2, and K_in = K_1 K_2.  After the
+% exchange frame 1 is old frame 2 inside Y and old frame 1 outside, and
+% conversely, so K_out = [K_2 on Y, K_1 on Y^c] (sheet 1) (x) [K_1 on Y, K_2 on
+% Y^c] (sheet 2).  The renaming R exchanges the two sheets' registers in Y,
+% tags included; F_{Y cap Lambda} exchanges the two raw sheets on Y cap Lambda.
+% Ink-to-index: four wires on rows 1, 3, 5, 7 (rows 2, 4, 6 are blank, so each
+% box name stands north of its box, rule L1), interleaved by sheet as in
+% polypeps_exchange_swaps: Y on sheet 1, Y on sheet 2, Y^c on sheet 1, Y^c on
+% sheet 2 (sheet 1 is the upper wire of each pair; the subscripts of the first
+% panel show it).  A box K_i on a Y (Y^c) wire is the factor of frame i's
+% encoder on the registers in Y (outside Y).  East of a box a wire carries raw
+% sites; west of it, encoded sites plus the tags of the holes on that side
+% of dY.  West brackets on the first panel name the two pairs.  A crossing of
+% the two Y wires exchanges the sheets there: on the left it is R, after the
+% encoders, so it moves encoded sites and tags; on the right it is
+% F_{Y cap Lambda}, before them, on raw sites only.  Inkless (skin=none)
+% atoms only hold wire ends; the crossing carries no braiding.  The Y boxes
+% are selected (red: the encoders that change sheet); the Y^c boxes stay
+% black on their sheet.  Action runs right to left.
+% Boundary signature: (phys:w) x4 | (phys:e) x4 in both panels, same order.
+% Related: polypeps_exchange_swaps (the swaps after R, on raw sites of U);
+% polypeps_encoded_frame (one hole and its tag).  No figure draws an encoder
+% sliding through the renaming.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=6, bonds=none, size=l]
+        \tn[at=(1,1), name=rsLw0, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,2), name=rsLa0, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,3), name=rsLm0, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,4), name=rsLK0, skin=box, wide=2, species=selected, label pos=n,
+            ports={180:physical, 0:physical}]{K_1}
+        \tn[at=(1,6), name=rsLe0, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=rsLw1, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,2), name=rsLa1, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,3), name=rsLm1, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,4), name=rsLK1, skin=box, wide=2, species=selected, label pos=n,
+            ports={180:physical, 0:physical}]{K_2}
+        \tn[at=(3,6), name=rsLe1, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,1), name=rsLw2, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,4), name=rsLK2, skin=box, wide=2, label pos=n,
+            ports={180:physical, 0:physical}]{K_1}
+        \tn[at=(5,6), name=rsLe2, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,1), name=rsLw3, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,4), name=rsLK3, skin=box, wide=2, label pos=n,
+            ports={180:physical, 0:physical}]{K_2}
+        \tn[at=(7,6), name=rsLe3, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire{open w}{rsLw0.180}
+        \tnwire{open w}{rsLw1.180}
+        \tnwire{open w}{rsLw2.180}
+        \tnwire{open w}{rsLw3.180}
+        \tnwire{rsLw0.0}{rsLa0.180}
+        \tnwire{rsLw1.0}{rsLa1.180}
+        \tnwire[name=rsLxa]{rsLa0.0}{rsLm1.180}
+        \tnwire[name=rsLxb, cross={over at crossing of rsLxb and rsLxa}]{rsLa1.0}{rsLm0.180}
+        \tnwire{rsLm0.0}{rsLK0.180}
+        \tnwire{rsLK0.0}{rsLe0.180}
+        \tnwire{rsLe0.0}{open e}
+        \tnwire{rsLm1.0}{rsLK1.180}
+        \tnwire{rsLK1.0}{rsLe1.180}
+        \tnwire{rsLe1.0}{open e}
+        \tnwire{rsLw2.0}{rsLK2.180}
+        \tnwire{rsLK2.0}{rsLe2.180}
+        \tnwire{rsLe2.0}{open e}
+        \tnwire{rsLw3.0}{rsLK3.180}
+        \tnwire{rsLK3.0}{rsLe3.180}
+        \tnwire{rsLe3.0}{open e}
+        \tnmark[form=label, label pos=n]{0.6 n of midway (1,2) and (1,3)}{$\mathcal R$}
+        \tnmark[form=bracket, label pos=w]{(1,1) .. (3,1)}{$Y$}
+        \tnmark[form=bracket, label pos=w]{(5,1) .. (7,1)}{$Y^{\rm c}$}
+    \end{tenkz}
+    $=$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=6, bonds=none, size=l]
+        \tn[at=(1,1), name=rsRw0, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,2), name=rsRK0, skin=box, wide=2, species=selected, label pos=n,
+            ports={180:physical, 0:physical}]{K_2}
+        \tn[at=(1,4), name=rsRm0, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,5), name=rsRq0, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,6), name=rsRe0, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=rsRw1, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,2), name=rsRK1, skin=box, wide=2, species=selected, label pos=n,
+            ports={180:physical, 0:physical}]{K_1}
+        \tn[at=(3,4), name=rsRm1, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,5), name=rsRq1, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,6), name=rsRe1, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,1), name=rsRw2, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,2), name=rsRK2, skin=box, wide=2, label pos=n,
+            ports={180:physical, 0:physical}]{K_1}
+        \tn[at=(5,6), name=rsRe2, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,1), name=rsRw3, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,2), name=rsRK3, skin=box, wide=2, label pos=n,
+            ports={180:physical, 0:physical}]{K_2}
+        \tn[at=(7,6), name=rsRe3, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire{open w}{rsRw0.180}
+        \tnwire{rsRw0.0}{rsRK0.180}
+        \tnwire{rsRK0.0}{rsRm0.180}
+        \tnwire{open w}{rsRw1.180}
+        \tnwire{rsRw1.0}{rsRK1.180}
+        \tnwire{rsRK1.0}{rsRm1.180}
+        \tnwire{open w}{rsRw2.180}
+        \tnwire{rsRw2.0}{rsRK2.180}
+        \tnwire{rsRK2.0}{rsRe2.180}
+        \tnwire{open w}{rsRw3.180}
+        \tnwire{rsRw3.0}{rsRK3.180}
+        \tnwire{rsRK3.0}{rsRe3.180}
+        \tnwire[name=rsRxa]{rsRm0.0}{rsRq1.180}
+        \tnwire[name=rsRxb, cross={over at crossing of rsRxb and rsRxa}]{rsRm1.0}{rsRq0.180}
+        \tnwire{rsRq0.0}{rsRe0.180}
+        \tnwire{rsRq1.0}{rsRe1.180}
+        \tnwire{rsRe0.0}{open e}
+        \tnwire{rsRe1.0}{open e}
+        \tnwire{rsRe2.0}{open e}
+        \tnwire{rsRe3.0}{open e}
+        \tnmark[form=label, label pos=n]{0.6 n of midway (1,4) and (1,5)}{$F_{Y\cap\Lambda}$}
+    \end{tenkz}
+\end{tenkzequation}

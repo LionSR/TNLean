@@ -1,0 +1,82 @@
+% Figure polypeps_cylinder_projector.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. 5 (Prop III, the cylinder form of P); PP Sec. 6
+% refers back to it for K^dagger K = P_{c,h} with X_j -> D_j.
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/03-patches.tex:24-49
+% (Proposition 4.1, eq. (4.1) patch-cylinder-projection).
+% Formula: P = sum_{j=1}^m sum_{l=1}^{d_j} |v_{jl}><v_{jl}|_{X_j} (x) id_{Lambda \ X_j},
+% with X_j = X(r_j), u <= r_1 <= ... <= r_m <= 2u, sum_j d_j <= C L^c.
+% Ink-to-index: invisible (skin=none) identity vertices only extend wires to the
+% panel edges. The three wires, top to bottom, carry H_{X_j}, H_{X(2u) \ X_j}
+% and H_{Lambda \ X(2u)}; they are named once, at the east end of the right
+% panel. Left: P is supported on X(2u) (the west bracket), so its box spans the
+% top two wires and the bottom wire is the identity; P is inscribed (size l).
+% The left panel's west legs are free ports (no open-w wires), so the bracket
+% X(2u) sits at the very ends of the two legs it names instead of across a
+% longer stub; a void bracket column would push the display past one column.
+% Right: the (j,l) summand consumes its input on X_j by the bra <v_{jl}| (east)
+% and prepares the ket |v_{jl}> (west), in adjacent columns; the two boxes are
+% separate vertices with no wire between them, and the other two wires pass
+% straight through. A one-wire box cannot inscribe |v_{jl}> without growing
+% (tenkz spills the name), so the ket name sits at nw and the bra name at ne.
+% The rank bound sum_j d_j <= C L^cbar is set under the right panel. Action
+% runs right to left.
+% Boundary signature: (phys:w)x3 | (phys:e)x3 on both sides of =sum_{j,l}
+% (set as \sum\limits_{j,\ell}, J3).
+% Label macros: none.
+% Waiver: the split of the top two wires depends on j (X_j grows with j), so
+% the left box is drawn in the coordinates of the j-th summand; the sum over j
+% regroups the same three-wire signature. The summands have pairwise orthogonal
+% ranges, and no bound on the internal complexity of v_{jl} is drawn or claimed.
+% Related: peps_frame_hole_encoder_b and peps_hole_encoder draw the encoder
+% K_{c,h}, whose K^dagger K is this projector with X_j -> D_j; no TNLean figure
+% draws the projector sum itself.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none, size=l]
+        \tn[at=(1,2), name=cylP, skin=box, wide=2, wires=2, size=l,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{P}
+        \tn[at=(1,1), name=cylWa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), name=cylWb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=cylWc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,4), name=cylEa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,4), name=cylEb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,4), name=cylEc, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire{cylWa.0}{cylP.180@1}
+        \tnwire{cylWb.0}{cylP.180@2}
+        \tnwire{cylWc.0}{cylEc.180}
+        \tnwire{cylP.0@1}{cylEa.180}
+        \tnwire{cylP.0@2}{cylEb.180}
+        \tnwire{cylEa.0}{open e}
+        \tnwire{cylEb.0}{open e}
+        \tnwire{cylEc.0}{open e}
+        \tnmark[form=bracket, label pos=w]{(1,1) .. (2,1)}{$X(2u)$}
+    \end{tenkz}
+    $=\sum\limits_{j,\ell}$
+    \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none, size=l]
+        \tn[at=(1,2), name=cylKet, skin=box, size=l, label pos=nw,
+            ports={180:physical}]{\ket{v_{j\ell}}}
+        \tn[at=(1,3), name=cylBra, skin=box, size=l, label pos=ne,
+            ports={0:physical}]{\bra{v_{j\ell}}}
+        \tn[at=(1,1), name=cylRwa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), name=cylRwb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=cylRwc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,4), name=cylRea, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,4), name=cylReb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,4), name=cylRec, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire{open w}{cylRwa.180}
+        \tnwire{cylRwa.0}{cylKet.180}
+        \tnwire{cylBra.0}{cylRea.180}
+        \tnwire[name=cylInIn]{cylRea.0}{open e}
+        \tnwire{open w}{cylRwb.180}
+        \tnwire{cylRwb.0}{cylReb.180}
+        \tnwire[name=cylInPatch]{cylReb.0}{open e}
+        \tnwire{open w}{cylRwc.180}
+        \tnwire{cylRwc.0}{cylRec.180}
+        \tnwire[name=cylInFar]{cylRec.0}{open e}
+        \tnmark[form=label, label pos=e]{on cylInIn 1}{$X_j$}
+        \tnmark[form=label, label pos=e]{on cylInPatch 1}{$X(2u)\setminus X_j$}
+        \tnmark[form=label, label pos=e]{on cylInFar 1}{$\Lambda\setminus X(2u)$}
+        \tnmark[form=label, label pos=s]{0.5 s of midway (3,2) and (3,3)}{$\sum_j d_j\le CL^{\bar c}$}
+    \end{tenkz}
+\end{tenkzequation}

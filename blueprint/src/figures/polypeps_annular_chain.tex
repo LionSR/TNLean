@@ -1,0 +1,110 @@
+% Figure polypeps_annular_chain.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. 4 (the step of Prop II: one annular layer).
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/02-information.tex:695-734
+% (proof of prop:angular: the cells, the initial group, eq:info-cell-clearance,
+% eq:info-before-reset) and 736-746 (the cores of the reset).
+% Formula: I(R:C) <= I(R_init:C) + sum_{i=1}^{4} I(G_i : C | R_init G_{<i}),
+% with I(R_init:C) <= L^{-p} (invariant and data processing) and each term
+% bounded by Lemma 2 (the earlier sites are a union of whole cells).
+% Ink-to-index: each lattice point is one cell of the ambient grid of side
+% c_cell s (the paper's d s); there are no tensors, wires or open indices.
+% Rows 2-9 are the cells; rows 1 and 10 are void bracket rows (inkless
+% anchors only). Cells are dots, except the four new cells, which are teal
+% boxes numbered 1-4 (the chain-rule order) at full label size. Columns 1-2
+% (red dots, label A_old on the west) are cells of the earlier layers A_old.
+% The dashed grey contour, columns 1-4, is the initial group R_init: the cells
+% touching the 1.5 a' s enlargement of A_old; its information with C is
+% <= L^{-p}. The numbered cells (rows 4-7, column 5) are the remaining cells
+% of R, those touching only the enlargement of the new layer, added one at a
+% time by the chain rule; the top bracket marks R = R_init plus the new cells.
+% C = Lambda cap E^{+1.5a's} is columns 9-10 (blue tint); the grey dots of
+% columns 5-8 are context, and the bottom bracket over the empty columns 6-8 is
+% the clearance (a/2 - 3a' - c_cell)s >= c s of eq:info-cell-clearance. The
+% cores kept by the reset are R_0 = Lambda cap A_j^{+a's} (red contour, no
+% tint: columns 1-3 and column 4 rows 5-6, one cell inside R towards
+% Lambda \ R) and C_0 = Lambda cap E^{+a's} (blue contour, column 10).
+% Kept as drawn: the new cells stay in column 5 (a gap column between the
+% initial group and the new cells would leave cells touching the enlargement
+% outside R), and the R_0 and R_init contours share the window's west, north
+% and south sides (the window cuts both sets), so only their east sides carry
+% information.
+% Not to scale: a' < min(a/100, 1/100) and c_cell < a'/4, so a real
+% enlargement 1.5 a' s spans more than six cells; boundedly many new cells.
+% Label macros: none.
+% Boundary signature: empty.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=10, bonds=none]
+        \tndeclare{species}{fam0}{hue=source:teal}
+        % Row 1: inkless anchors of the R bracket.
+        \tn[at=(1,1), skin=none]{} \tn[at=(1,5), skin=none]{}
+        \tn[at=(2,1), skin=dot, species=selected]{} \tn[at=(2,2), skin=dot, species=selected]{}
+        \tn[at=(2,3), skin=dot]{}
+        \tn[at=(2,4), skin=dot]{} \tn[at=(2,5), skin=dot, species=complement]{}
+        \tn[at=(2,6), skin=dot, species=complement]{}
+        \tn[at=(2,7), skin=dot, species=complement]{} \tn[at=(2,8), skin=dot, species=complement]{}
+        \tn[at=(2,9), skin=dot]{}
+        \tn[at=(2,10), skin=dot]{}
+        \tn[at=(3,1), skin=dot, species=selected]{} \tn[at=(3,2), skin=dot, species=selected]{}
+        \tn[at=(3,3), skin=dot]{}
+        \tn[at=(3,4), skin=dot]{} \tn[at=(3,5), skin=dot, species=complement]{}
+        \tn[at=(3,6), skin=dot, species=complement]{}
+        \tn[at=(3,7), skin=dot, species=complement]{} \tn[at=(3,8), skin=dot, species=complement]{}
+        \tn[at=(3,9), skin=dot]{}
+        \tn[at=(3,10), skin=dot]{}
+        \tn[at=(4,1), skin=dot, species=selected]{} \tn[at=(4,2), skin=dot, species=selected]{}
+        \tn[at=(4,3), skin=dot]{}
+        \tn[at=(4,4), skin=dot]{} \tn[at=(4,5), skin=box, size=l, species=fam0]{1}
+        \tn[at=(4,6), skin=dot, species=complement]{}
+        \tn[at=(4,7), skin=dot, species=complement]{} \tn[at=(4,8), skin=dot, species=complement]{}
+        \tn[at=(4,9), skin=dot]{}
+        \tn[at=(4,10), skin=dot]{}
+        \tn[at=(5,1), skin=dot, species=selected]{} \tn[at=(5,2), skin=dot, species=selected]{}
+        \tn[at=(5,3), skin=dot]{}
+        \tn[at=(5,4), skin=dot]{} \tn[at=(5,5), skin=box, size=l, species=fam0]{2}
+        \tn[at=(5,6), skin=dot, species=complement]{}
+        \tn[at=(5,7), skin=dot, species=complement]{} \tn[at=(5,8), skin=dot, species=complement]{}
+        \tn[at=(5,9), skin=dot]{}
+        \tn[at=(5,10), skin=dot]{}
+        \tn[at=(6,1), skin=dot, species=selected]{} \tn[at=(6,2), skin=dot, species=selected]{}
+        \tn[at=(6,3), skin=dot]{}
+        \tn[at=(6,4), skin=dot]{} \tn[at=(6,5), skin=box, size=l, species=fam0]{3}
+        \tn[at=(6,6), skin=dot, species=complement]{}
+        \tn[at=(6,7), skin=dot, species=complement]{} \tn[at=(6,8), skin=dot, species=complement]{}
+        \tn[at=(6,9), skin=dot]{}
+        \tn[at=(6,10), skin=dot]{}
+        \tn[at=(7,1), skin=dot, species=selected]{} \tn[at=(7,2), skin=dot, species=selected]{}
+        \tn[at=(7,3), skin=dot]{}
+        \tn[at=(7,4), skin=dot]{} \tn[at=(7,5), skin=box, size=l, species=fam0]{4}
+        \tn[at=(7,6), skin=dot, species=complement]{}
+        \tn[at=(7,7), skin=dot, species=complement]{} \tn[at=(7,8), skin=dot, species=complement]{}
+        \tn[at=(7,9), skin=dot]{}
+        \tn[at=(7,10), skin=dot]{}
+        \tn[at=(8,1), skin=dot, species=selected]{} \tn[at=(8,2), skin=dot, species=selected]{}
+        \tn[at=(8,3), skin=dot]{}
+        \tn[at=(8,4), skin=dot]{} \tn[at=(8,5), skin=dot, species=complement]{}
+        \tn[at=(8,6), skin=dot, species=complement]{}
+        \tn[at=(8,7), skin=dot, species=complement]{} \tn[at=(8,8), skin=dot, species=complement]{}
+        \tn[at=(8,9), skin=dot]{}
+        \tn[at=(8,10), skin=dot]{}
+        \tn[at=(9,1), skin=dot, species=selected]{} \tn[at=(9,2), skin=dot, species=selected]{}
+        \tn[at=(9,3), skin=dot]{}
+        \tn[at=(9,4), skin=dot]{} \tn[at=(9,5), skin=dot, species=complement]{}
+        \tn[at=(9,6), skin=dot, species=complement]{}
+        \tn[at=(9,7), skin=dot, species=complement]{} \tn[at=(9,8), skin=dot, species=complement]{}
+        \tn[at=(9,9), skin=dot]{}
+        \tn[at=(9,10), skin=dot]{}
+        % Row 10: inkless anchors of the clearance bracket.
+        \tn[at=(10,6), skin=none]{} \tn[at=(10,8), skin=none]{}
+        \tnmark[form=enclosure, species=complement]{(2,1) .. (9,4)}{}
+        \tnmark[form=enclosure, species=selected]{(2,1) .. (9,4) - (2,4) .. (4,4) - (7,4) .. (9,4)}{}
+        \tnmark[form=enclosure, species=secondary, tint, label pos=n]{(2,9) .. (9,10)}{$C$}
+        \tnmark[form=enclosure, species=secondary, label pos=s]{(2,10) .. (9,10)}{$C_0$}
+        \tnmark[form=label, species=selected, label pos=w]{0.6 w of (4,1)}{$A_{\mathrm{old}}$}
+        \tnmark[form=label, species=complement, label pos=w]{0.6 w of (7,1)}{$R_{\mathrm{init}}$}
+        \tnmark[form=label, species=selected, label pos=s]{0.55 s of (9,2)}{$R_0$}
+        \tnmark[form=bracket, label pos=n]{(1,1) .. (1,5)}{$R$}
+        \tnmark[form=bracket, label pos=s]{(10,6) .. (10,8)}{$\ge c\,s$}
+    \end{tenkz}
+\end{center}

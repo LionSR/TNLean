@@ -1,0 +1,56 @@
+% Figure arealaw2d_variable_radii.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. 5 (Proposition 4.5 of the area-law paper).
+% Source: arXiv OpenAI2026AreaLaw, sections/03-quasilocal.tex:405-450
+% (prop:truncation: the variable truncation radii (4.16) and the crossing
+% count (4.19)).
+% Ink-to-index: dots are sites of a 9 x 11 domain Lambda without holes, so
+% the graph distance d_Lambda is the l^1 distance and graph balls
+% N_r(a) are l^1 diamonds clipped to Lambda. The red tint is S_0 = rows 4-6
+% x cols 1-3 (it lies on the west boundary of Lambda; label to its west).
+% The three blue dots (marked) are anchors a_i; each black contour is the
+% graph ball N_{r_i}(a_i), the support of the truncated term k_{i,r_i}, with
+% r_i = max{r_0, floor(d_i^0/2)} and d_i^0 = d_Lambda(a_i,S_0). Drawn with
+% r_0 = 1, and each ball is labelled with d = d_i^0 and its radius:
+%   anchor (5,4):  d = 1,  r = max{1,0} = r_0 = 1, 5 sites; it meets S_0 at
+%   the contact site (5,3), the red centre dot; label in the empty band
+%   between rows 7 and 8, below the ball;
+%   anchor (2,6):  d = 5,  r = floor(5/2) = 2, 12 sites after clipping,
+%   distance 3 to S_0; label above the domain;
+%   anchor (9,11): d = 11, r = floor(11/2) = 5, 21 sites after clipping,
+%   distance 6 to S_0; label below the domain.
+% Sites in no ball and outside S_0 are context: small grey dots
+% (complement, size=s). The three balls are pairwise disjoint (only for
+% legibility; supports of different terms may overlap).
+% A ball with r_i > r_0 has r_i <= d_i^0/2 < d_i^0, so it never meets S_0;
+% hence every support crossing a cut inside S_0 has radius exactly r_0.
+% Terms whose anchor lies at infinite distance (another component) are
+% untruncated and not drawn.
+% Boundary signature: empty (geometry only, no tensors).
+% Not to scale: r_0 = ceil(C_1 (log n)^2) with C_1 = C_1(C_0), and
+% |S_0| <= C_0 n^2.
+% Label macros: none.
+% The commas inside labels are \mathpunct{,}: with bare commas the pinned
+% tenkz drew every one of these labels with the last label's text.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire,wire},
+            cols=11, bonds=none]
+        \tndeclare{species}{centre}{hue=source:red}
+        \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn{} & \tn{} & \tn{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} \\
+        \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn{} & \tn{} & \tn[name=anchorB, species=marked, size=l]{} & \tn{} & \tn{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} \\
+        \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn{} & \tn{} & \tn{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} \\
+        \tn{} & \tn{} & \tn{} & \tn{} & \tn[species=complement, size=s]{} & \tn{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn{} \\
+        \tn{} & \tn{} & \tn[name=contactA, species=centre, size=l]{} & \tn[name=anchorA, species=marked, size=l]{} & \tn{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn{} & \tn{} \\
+        \tn{} & \tn{} & \tn{} & \tn{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn{} & \tn{} & \tn{} \\
+        \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+        \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} \\
+        \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn[species=complement, size=s]{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn[name=anchorC, species=marked, size=l]{}
+        \tnmark[form=enclosure, species=selected, tint]{(4,1) .. (6,3)}{}
+        \tnmark[form=label, species=selected, label pos=w]{(5,1)}{$S_0$}
+        \tnmark[form=enclosure]{{(4,4), (5,3), (5,4), (5,5), (6,4)}}{}
+        \tnmark[form=label, label pos=s]{0.25 n of (7,4)}{$d=1\mathpunct{,}\ r=r_0$}
+        \tnmark[form=enclosure, label pos=n]{{(1,5), (1,6), (1,7), (2,4), (2,5), (2,6), (2,7), (2,8), (3,5), (3,6), (3,7), (4,6)}}{$d=5\mathpunct{,}\ r=\lfloor 5/2\rfloor$}
+        \tnmark[form=enclosure, label pos=s]{{(4,11), (5,10), (5,11), (6,9), (6,10), (6,11), (7,8), (7,9), (7,10), (7,11), (8,7), (8,8), (8,9), (8,10), (8,11), (9,6), (9,7), (9,8), (9,9), (9,10), (9,11)}}{$d=11\mathpunct{,}\ r=\lfloor 11/2\rfloor$}
+    \end{tenkz}
+\end{center}

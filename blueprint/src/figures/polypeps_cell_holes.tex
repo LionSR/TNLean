@@ -1,0 +1,101 @@
+% Figure polypeps_cell_holes.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. 2 (Lemma 2, step 2: one generation).
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/02-information.tex:240-275
+% (proof of lem:cell-cmi: holes, the one-colour observation, the two new
+% tiles); the colouring of the exterior is lines 181-183.
+% Ink-to-index: dots are lattice sites; there are no tensors or open
+% indices.  Row 1 is a blank row for the brackets; the lattice is 14x14
+% (rows 2-15, cols 1-14).  Drawn is the first generation, u = s: the cell
+% G = rows 3-14 x cols 2-13 (black square contour, label G in its lower-right
+% hole), whose closed ambient cell has its corners at the half-integer points
+% (2.5,1.5), ..., (14.5,13.5).  Exterior: the cells of B carry forbidden
+% colour 0 (one L-shaped teal tint: row 2 and column 1), all other exterior
+% cells forbidden colour 1 (one L-shaped olive tint: row 15 and column 14);
+% each exterior corner site is given to one colour, as whole cells are.  The
+% two L-shaped exteriors are written as site lists rather than the chained
+% rectangle differences of shared-spec S2: tenkz resolves every address of a
+% range, and the two 13x14-less-12x13 differences alone cost about 60 s of
+% compile time, which put the unit past the 120 s timeout of the blueprint
+% sweep.  The selected sites, hence the drawn tints, are the same.  Here
+% t_0 = 1 lattice spacing.  Holes, in the \holeglyph code of shared-spec 4.1 (H5) as far as it
+% applies: each is a dashed red square of strings about the hole's sites, with
+% its centre, a corner of G (a represented line intersection), marked by a red
+% centre dot; these holes have no inner square (they are the next
+% generation's active squares, not encoded holes), so the solid inner square
+% of the code is absent.  They are the closed squares of radius 4t_0 = 4 about
+% the four cell corners; only still-allowed material is reserved, so each
+% hole is clipped to G: rows 3-6 and 11-14 x cols 2-5 and 10-13 (one hole
+% labelled).  Brackets on row 1, both measured between points so that their
+% lengths are 1 and 4 spacings: t_0 from the forbidden-0 column (col 1) to
+% the U_1 column (col 2), and the radius 4t_0 of the upper-right hole from
+% its west edge (col 9.5) to the column of its centre, the red corner dot
+% (col 13.5).
+% U_1 (olive tint, family 1): the allowed points within t_0 of forbidden 0,
+% i.e. column 2 rows 7-10 and row 3 columns 6-9.  U_0 (teal tint, family 0):
+% the rest of G, a cross, drawn as one enclosure (G minus the holes and U_1).
+% Outside the holes a site within t_0 of the exterior sees one forbidden
+% colour only, so U_1 never touches forbidden 1.  The far set C lies at
+% sup-norm distance >= cs from the ambient cell, off the picture (stated in
+% the lead-in, not drawn).
+% Not to scale: t_0 = u^gamma << u/16 (beta < gamma < 1); the holes have side
+% u' = 8t_0 and are the next generation's active squares; only their part
+% inside G is still allowed material.
+% Labels: U_1 (olive) is written once, west of the forbidden-0 column level
+% with its column strip; U_0 in the middle of the cross; "forbidden 0" above
+% the lattice on the blank row (a free label in teal, set between the two
+% brackets so that it clears the 4t_0 bracket), "forbidden 1" below.
+% Boundary signature: empty.
+% Related: tn2d_two_family_purity (the companion's two-family reduction that
+% this recursion feeds); not a duplicate: that figure tiles a half-plane by
+% strips and shows the purity flip, this one builds the tiles of one cell.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[size=s, rows={wire,ket,ket,ket,ket,ket,ket,ket,ket,ket,ket,ket,ket,ket,ket},
+            cols=14, bonds=none]
+        \tndeclare{species}{fam0}{hue=source:teal}
+        \tndeclare{species}{fam1}{hue=source:olive}
+        \tndeclare{species}{hole}{hue=source:red}
+        \tndeclare{species}{centre}{hue=source:red}
+        \tn[at=(1,1), name=chTzW, skin=none]{} \tn[at=(1,2), name=chTzE, skin=none]{}
+        \tn[at=0.5 w of (1,10), name=chHoleW, skin=none]{} \tn[at=0.5 e of (1,13), name=chHoleE, skin=none]{}
+        \tnmark[form=enclosure, species=fam0, tint]
+        {{(2,1), (2,2), (2,3), (2,4), (2,5), (2,6), (2,7), (2,8), (2,9), (2,10), (2,11), (2,12),
+                    (2,13), (2,14), (3,1), (4,1), (5,1), (6,1), (7,1), (8,1), (9,1), (10,1), (11,1),
+                    (12,1), (13,1), (14,1)}}{}
+        \tnmark[form=enclosure, species=fam1, tint, label pos=s]
+        {{(15,1), (15,2), (15,3), (15,4), (15,5), (15,6), (15,7), (15,8), (15,9), (15,10),
+                    (15,11), (15,12), (15,13), (15,14), (3,14), (4,14), (5,14), (6,14), (7,14), (8,14),
+                    (9,14), (10,14), (11,14), (12,14), (13,14), (14,14)}}{$\text{forbidden }1$}
+        \tnmark[form=enclosure, species=fam0, tint]
+        {(4,3) .. (14,13) - (4,3) .. (6,5) - (4,10) .. (6,13) - (11,3) .. (14,5) - (11,10) .. (14,13)}{}
+        \tnmark[form=enclosure, species=fam1, tint]{(7,2) .. (10,2)}{}
+        \tnmark[form=enclosure, species=fam1, tint]{(3,6) .. (3,9)}{}
+        \tnwire[kind=string, species=hole, stroke=dashed, closed, route=orth,
+            via={0.3 n of 0.3 w of (3,2), 0.3 n of 0.3 e of (3,5),
+                    0.3 s of 0.3 e of (6,5), 0.3 s of 0.3 w of (6,2)}]
+        \tnwire[kind=string, species=hole, stroke=dashed, closed, route=orth,
+            via={0.3 n of 0.3 w of (3,10), 0.3 n of 0.3 e of (3,13),
+                    0.3 s of 0.3 e of (6,13), 0.3 s of 0.3 w of (6,10)}]
+        \tnwire[kind=string, species=hole, stroke=dashed, closed, route=orth,
+            via={0.3 n of 0.3 w of (11,2), 0.3 n of 0.3 e of (11,5),
+                    0.3 s of 0.3 e of (14,5), 0.3 s of 0.3 w of (14,2)}]
+        \tnwire[kind=string, species=hole, stroke=dashed, closed, route=orth,
+            via={0.3 n of 0.3 w of (11,10), 0.3 n of 0.3 e of (11,13),
+                    0.3 s of 0.3 e of (14,13), 0.3 s of 0.3 w of (14,10)}]
+        \tnwire[kind=string, closed, route=orth,
+            via={midway (2,1) and (3,2), midway (2,13) and (3,14),
+                    midway (14,13) and (15,14), midway (14,1) and (15,2)}]
+        \tnmark[form=label, label pos=e]{midway (13,12) and (14,12)}{$G$}
+        \tn[at=0.5 n of 0.5 w of (3,2), skin=dot, species=centre, size=l]{}
+        \tn[at=0.5 n of 0.5 e of (3,13), skin=dot, species=centre, size=l]{}
+        \tn[at=0.5 s of 0.5 w of (14,2), skin=dot, species=centre, size=l]{}
+        \tn[at=0.5 s of 0.5 e of (14,13), skin=dot, species=centre, size=l]{}
+        \tnmark[form=label, label pos=e]{midway (8,7) and (9,7)}{$\textcolor{teal}{U_0}$}
+        \tnmark[form=label, label pos=w]{midway (8,1) and (9,1)}{$\textcolor{olive}{U_1}$}
+        \tnmark[form=label, label pos=e]{midway (4,2) and (5,2)}{$\textcolor{red}{\text{hole}}$}
+        \tnmark[form=label, label pos=e]{0.1 s of (1,3)}{$\textcolor{teal}{\text{forbidden }0}$}
+        \tnmark[form=bracket, label pos=n]{{chTzW, chTzE}}{$t_0$}
+        \tnmark[form=bracket, label pos=n]{{chHoleW, chHoleE}}{$4t_0$}
+    \end{tenkz}
+\end{center}

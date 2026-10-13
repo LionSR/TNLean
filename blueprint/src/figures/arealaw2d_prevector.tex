@@ -1,0 +1,73 @@
+% Figure arealaw2d_prevector.
+% Registers C, R are typeset sans-serif ($\mathsf C$, $\mathsf R$) to keep them apart
+% from constants (AL review round 1).
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. 8.
+% Source: arXiv OpenAI2026AreaLaw, sections/07-comparators.tex:86-90 (Bell_CR)
+% and 134-138 (comparator:prevector, pre_k = pi_R^{lambda_k}(Omega~ (x) Bell_CR)^{(x)k}),
+% drawn for k=2.
+% Ink-to-index: rows from top to bottom are C^(2), C^(1), R^(1), R^(2), X^(1),
+% Ubar^(1), X^(2), Ubar^(2), with Ubar = UYV the rest of the physical system;
+% the order makes the two Bell cups nest without crossings. Each cup is
+% Bell_CR = d_*^{-1/2} sum_{i in E}|i>_C|i>_R; its bead is the bare
+% normalisation d_*^{-1/2} (no P_E: C and R have bases indexed by E, so any
+% cup touching them is already restricted to E). The two boxes are the copies
+% of Omega~ on (X,Ubar). The box pi_R^{lambda_k} is the Schur-label projector on
+% the two R copies (it correlates the copies); it is two columns wide so that its
+% name, with the note's lambda_k, is inscribed (L1). Grey ink is the auxiliary
+% registers C, R, port stubs included. General k: k nested cups and k state boxes.
+% The two neutral brackets east of the boxes (col 8), labelled copy 1 and copy 2,
+% group the physical rows X, Ubar of each copy; they are not indices.
+% Size class l (picture key): every name is set at the large class.
+% Contractions: the wires into pi_R^{lambda_k} only.
+% Boundary signature: (phys:w)x8. The four auxiliary legs C, R (outline:
+% aux:w) carry the tenkz type physical, as in arealaw2d_bell_pin, where a cap
+% contracts X with C.
+% Label macros: none.
+% Fit: C at 5mm (\tnshow[5mm]).
+% Related: cup and bead idiom of ch26_mps_rfp_zero_correlation_length and
+% ch32_log_depth_fixed_point_pairs (generic MPS cups, labels wrong here); no
+% TNLean picture of the area-law comparators or amplification exists.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire}, cols=8, bonds=none, size=l]
+        \tn[at=(1,1), skin=none, species=complement, name=preTipCtwo, ports={180:physical:$\mathsf C^{(2)}$, 0:physical}]{}
+        \tn[at=(2,1), skin=none, species=complement, name=preTipCone, ports={180:physical:$\mathsf C^{(1)}$, 0:physical}]{}
+        \tn[at=(3,1), skin=none, species=complement, name=preTipRone, ports={180:physical:$\mathsf R^{(1)}$, 0:physical}]{}
+        \tn[at=(4,1), skin=none, species=complement, name=preTipRtwo, ports={180:physical:$\mathsf R^{(2)}$, 0:physical}]{}
+        \tn[at=(5,1), skin=none, name=preTipXone, ports={180:physical:$X^{(1)}$, 0:physical}]{}
+        \tn[at=(6,1), skin=none, name=preTipUone, ports={180:physical:$\bar U^{(1)}$, 0:physical}]{}
+        \tn[at=(7,1), skin=none, name=preTipXtwo, ports={180:physical:$X^{(2)}$, 0:physical}]{}
+        \tn[at=(8,1), skin=none, name=preTipUtwo, ports={180:physical:$\bar U^{(2)}$, 0:physical}]{}
+        \tn[at=(3,2), skin=box, wires=2, wide=2, name=preLabel,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{\pi_{\mathsf R}^{\lambda_k}}
+        \tn[at=(2,4), skin=none, name=preInnerC, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,4), skin=none, name=preInnerR, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,6), skin=none, name=preOuterC, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,6), skin=none, name=preOuterR, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,6), skin=box, wires=2, name=preStateOne, label pos=e,
+            ports={180@1:physical, 180@2:physical}]{\widetilde\Omega}
+        \tn[at=(7,6), skin=box, wires=2, name=preStateTwo, label pos=e,
+            ports={180@1:physical, 180@2:physical}]{\widetilde\Omega}
+        \tnwire[route=arc, species=complement, name=preInnerCup]{preInnerC.0}{preInnerR.0}
+        \tnwire[route=arc, species=complement, name=preOuterCup]{preOuterC.0}{preOuterR.0}
+        \tnwire[species=complement]{preTipCtwo.0}{preOuterC.180}
+        \tnwire[species=complement]{preTipCone.0}{preInnerC.180}
+        \tnwire[species=complement]{preTipRone.0}{preLabel.180@1}
+        \tnwire[species=complement]{preTipRtwo.0}{preLabel.180@2}
+        \tnwire[species=complement]{preLabel.0@1}{preInnerR.180}
+        \tnwire[species=complement]{preLabel.0@2}{preOuterR.180}
+        \tnwire{preTipXone.0}{preStateOne.180@1}
+        \tnwire{preTipUone.0}{preStateOne.180@2}
+        \tnwire{preTipXtwo.0}{preStateTwo.180@1}
+        \tnwire{preTipUtwo.0}{preStateTwo.180@2}
+        \tn[skin=dot, at=on preInnerCup 0.5, label pos=e]{d_*^{-1/2}}
+        \tn[skin=dot, at=on preOuterCup 0.5, label pos=e]{d_*^{-1/2}}
+        \tn[at=(5,8), skin=none]{}
+        \tn[at=(6,8), skin=none]{}
+        \tn[at=(7,8), skin=none]{}
+        \tn[at=(8,8), skin=none]{}
+        \tnmark[form=bracket, label pos=e]{(5,8) .. (6,8)}{\text{copy }1}
+        \tnmark[form=bracket, label pos=e]{(7,8) .. (8,8)}{\text{copy }2}
+    \end{tenkz}
+\end{center}

@@ -1,0 +1,84 @@
+% Figure polypeps_trace_stripping.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. 5 step (b) (descending stationarity).
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/03-patches.tex:120-132
+% (eq. (4.5) patch-trace-stripping).
+% Formula: if [L_k, rho_k] = 0 and T is supported on X_k, then
+% <phi, L_k T L_k^{-1} phi> = Tr(L_k^{-1} rho_k L_k T) = <phi, T phi>,
+% with rho_k = Tr_{Lambda \ X_k} |phi><phi|.
+% Ink-to-index: panel 1 has two wires, H_{Lambda \ X_k} (top, labelled) and
+% H_{X_k} (bottom); the ket phi (east) and the bra phi^dagger (west) span both
+% (wide=2 so that their names are inscribed), the top wire joins them directly
+% (the partial trace that makes rho_k, drawn above the X_k row so that it
+% rhymes with the trace arcs of panels 2 and 3), and the bottom wire carries
+% L_k^{-1}, then T, then L_k, read right to left from the ket. Panels 2 and 3
+% are traces on H_{X_k}: the closing arc is the trace, and the boxes read left
+% to right as the operator product inside Tr, so panel 2 is
+% Tr(L_k^{-1} rho_k L_k T) and panel 3 is Tr(rho_k T). Panel 3 carries inkless
+% extenders so that its arc spans the same four columns as panel 2's (equal
+% arc height). Every one-wire box name sits south at size l (a one-wire box
+% cannot inscribe a name without growing, so tenkz would spill it anyway).
+% Joiners carry their facts (J2): the first = is the partial trace plus
+% cyclicity (cyc, no hypothesis); the second = is where [L_k, rho_k] = 0 is
+% used: L_k^{-1} rho_k L_k = rho_k. The display ends with the statement it
+% proves, = <phi, T phi> (J4).
+% Not drawn: a rho_k enclosure around bra, ket and the top wire. A tenkz
+% enclosure is the hull of its member atoms, and the bra and ket span both
+% rows, so any such enclosure is a rectangle that also swallows L_k, T and
+% L_k^{-1}.
+% Boundary signature: empty (three scalars).
+% Label macros: none.
+% Fit: W (\tnwide[6mm]); the annotated joiners and the closing statement make
+% it about 137 mm wide, beyond one column.
+% Related: peps_patch_first_variation draws the first variation that this
+% identity strips; no TNLean figure draws the stripping identity.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire}, cols=7, bonds=none, size=l]
+        \tn[at=(1,1), name=tsBra, skin=box, wide=2, wires=2,
+            ports={0@1:physical, 0@2:physical}]{\bra{\phi}}
+        \tn[at=(2,3), name=tsL, skin=box, label pos=s,
+            ports={180:physical, 0:physical}]{L_k}
+        \tn[at=(2,4), name=tsT, skin=box, label pos=s,
+            ports={180:physical, 0:physical}]{T}
+        \tn[at=(2,5), name=tsLinv, skin=box, label pos=s,
+            ports={180:physical, 0:physical}]{L_k^{-1}}
+        \tn[at=(1,6), name=tsKet, skin=box, wide=2, wires=2,
+            ports={180@1:physical, 180@2:physical}]{\ket{\phi}}
+        \tnwire{tsBra.0@2}{tsL.180}
+        \tnwire{tsL.0}{tsT.180}
+        \tnwire{tsT.0}{tsLinv.180}
+        \tnwire{tsLinv.0}{tsKet.180@2}
+        \tnwire[name=tsRest]{tsBra.0@1}{tsKet.180@1}
+        \tnmark[form=label, label pos=n]{on tsRest 0.5}{$\Lambda\setminus X_k$}
+    \end{tenkz}
+    $\overset{\text{cyc}}{=}$
+    \begin{tenkz}[rows={wire}, cols=4, bonds=none, size=l]
+        \tn[at=(1,1), name=trLinv, skin=box, label pos=s,
+            ports={180:physical, 0:physical}]{L_k^{-1}}
+        \tn[at=(1,2), name=trRho, skin=box, label pos=s,
+            ports={180:physical, 0:physical}]{\rho_k}
+        \tn[at=(1,3), name=trL, skin=box, label pos=s,
+            ports={180:physical, 0:physical}]{L_k}
+        \tn[at=(1,4), name=trT, skin=box, label pos=s,
+            ports={180:physical, 0:physical}]{T}
+        \tnwire{trLinv.0}{trRho.180}
+        \tnwire{trRho.0}{trL.180}
+        \tnwire{trL.0}{trT.180}
+        \tnwire[route=arc]{trT.0}{trLinv.180}
+    \end{tenkz}
+    $\overset{[L_k,\rho_k]=0}{=}$
+    \begin{tenkz}[rows={wire}, cols=4, bonds=none, size=l]
+        \tn[at=(1,1), name=tsW, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,2), name=tsRho, skin=box, label pos=s,
+            ports={180:physical, 0:physical}]{\rho_k}
+        \tn[at=(1,3), name=tsTT, skin=box, label pos=s,
+            ports={180:physical, 0:physical}]{T}
+        \tn[at=(1,4), name=tsE, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire{tsW.0}{tsRho.180}
+        \tnwire{tsRho.0}{tsTT.180}
+        \tnwire{tsTT.0}{tsE.180}
+        \tnwire[route=arc]{tsE.0}{tsW.180}
+    \end{tenkz}
+    $=\langle\phi,T\phi\rangle$
+\end{tenkzequation}

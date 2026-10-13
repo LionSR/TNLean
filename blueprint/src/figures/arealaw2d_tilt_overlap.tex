@@ -1,0 +1,54 @@
+% Figure arealaw2d_tilt_overlap.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. 3 (Step 3 of the tail lemma).
+% Source: arXiv OpenAI2026AreaLaw, sections/02-initial.tex:60-93 (Theta, F) and
+% 174-185 (the overlap M(u/2)^2/M(u) = |<Psi,Theta>|^2).
+% Formula: <Psi, F Psi> = Tr(rho rho^{-u/2}) = Tr rho^{1-u/2}, where
+% rho = Tr_{B^c}|Psi><Psi| and F = rho^{-u/2} on B. Powers are taken on the
+% support of rho; F is the identity on ker rho, where Psi has no weight, so
+% rho F = rho^{1-u/2} on the whole space. With ||F Psi||^2 = Tr rho^{1-u} and
+% Theta = F Psi / ||F Psi|| this gives
+% |<Psi,Theta>|^2 = (Tr rho^{1-u/2})^2 / Tr rho^{1-u}.
+% Ink-to-index: panel 1 has two wires, B^c (top) and B (bottom), named west of
+% the bra. The traced wire is on top, as in polypeps_trace_stripping, so that F
+% and every operator name sit south (one station) with no wire below them. The
+% ket Psi (east) and the bra Psi^dagger (west) span both wires, names south as
+% in tn2d_single_conjugation; the top wire joins them directly (the partial
+% trace that makes rho), and the bottom wire carries F = rho^{-u/2}. Panel 2 is
+% a trace on H_B: the arc is the trace, and the boxes read left to right as the
+% product inside Tr. The arc leaves the boxes' own faces (no extenders) so that
+% the display fits one column.
+% Joiners: the first = is the partial trace plus cyclicity (cyc, no hypothesis);
+% the second is functional calculus on the support of rho, written as the
+% statement proved (J4).
+% Boundary signature: empty (scalars).
+% Fit: C (\tnshow[6mm]); one line in the PRL column at 6 mm.
+% Label macros: none.
+% Related: polypeps_trace_stripping (the same partial-trace-to-ring first move,
+% a different identity: conjugation, not a power).
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire}, cols=5, bonds=none, size=l]
+        \tn[at=(1,1), name=toBra, skin=box, wires=2, label pos=s,
+            ports={0@1:physical, 0@2:physical}]{\bra{\Psi}}
+        \tn[at=(2,3), name=toF, skin=box, label pos=s,
+            ports={180:physical, 0:physical}]{\rho^{-u/2}}
+        \tn[at=(1,5), name=toKet, skin=box, wires=2, label pos=s,
+            ports={180@1:physical, 180@2:physical}]{\ket{\Psi}}
+        \tnwire{toBra.0@1}{toKet.180@1}
+        \tnwire{toBra.0@2}{toF.180}
+        \tnwire{toF.0}{toKet.180@2}
+        \tnmark[form=label, label pos=w]{(1,1)}{$B^c$}
+        \tnmark[form=label, label pos=w]{(2,1)}{$B$}
+    \end{tenkz}
+    $\overset{\text{cyc}}{=}$
+    \begin{tenkz}[rows={wire}, cols=3, bonds=none, size=l]
+        \tn[at=(1,1), name=toRho, skin=box, label pos=s,
+            ports={180:physical, 0:physical}]{\rho\vphantom{\rho^{-u/2}}}
+        \tn[at=(1,3), name=toFF, skin=box, label pos=s,
+            ports={180:physical, 0:physical}]{\rho^{-u/2}}
+        \tnwire{toRho.0}{toFF.180}
+        \tnwire[route=arc]{toFF.0}{toRho.180}
+    \end{tenkz}
+    $=\operatorname{Tr}\rho^{1-u/2}$
+\end{tenkzequation}

@@ -1,0 +1,117 @@
+% Figure arealaw2d_repair_descendants.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. 2 (Step 4, after the induction skeleton;
+% Lemma 4 and the count (11.12)).
+% Source: arXiv OpenAI2026AreaLaw, sections/10-geometry.tex:471-543 (Lemma
+% 11.4, geometry:repair-induction) and 668-686 (depth and the count (11.12)).
+% Ink-to-index: lattice places are points of the plane at unit spacing on a
+% 21 x 21 window. The parent mark v (large red centre dot, labelled above) is
+% at (11,11) with a_0 S = 10, so its isolated star v + [-a_0 S, a_0 S]^2 is
+% the outer dotted square (1,1)-(21,21), labelled below. The removal square
+% Q_v = v + [-d(S), d(S)]^2 is the solid square (7,7)-(15,15) (label Q_v in
+% its south-west corner), with halfside d(S) = 4: the bracket runs from v to
+% the east side. Its nine children are its corners, side midpoints and centre
+% (v itself); generations are told apart by dot size: v large and red,
+% children medium-large, grandchildren small. One child, w = (7,15) (the
+% north-east corner of Q_v, labelled south-west of the dot), is expanded: its
+% star w + [-a_0 d(S), a_0 d(S)]^2 is the inner dotted square (4,12)-(10,18)
+% of radius 3, labelled "star of w" on its west side; it lies in the parent
+% star and contains no sibling. Its removal square Q_w of halfside d' =
+% d(d(S)) = 2 is the solid square (5,13)-(9,17) (label Q_w in its north-east
+% corner; bracket d' in row 8 from Q_v's east side, which passes through w, to
+% Q_w's east side), and its nine grandchildren are the small dots at Q_w's
+% corners, side midpoints and centre. Q_v's top and right sides run through w
+% and two grandchildren. The dashed square (3,3)-(19,19) is v +
+% [-2d(S), 2d(S)]^2: every descendant mark and descendant birth region of
+% (v,S) lies inside it (Lemma 11.4); the bracket in row 17 spans its halfside
+% 2d(S) = 8, from v's column to its east side. Every label names its contour
+% directly, so the lead-in needs no stroke legend.
+% Boundary signature: empty (geometry only; lines are region boundaries,
+% not tensor indices).
+% Not to scale: d(S) <= a_0 S / 1000 and d(d(S)) <= S^{rho_0^2} (11.10);
+% here a_0 S : d(S) : d(d(S)) = 10 : 4 : 2, and the child star (radius
+% a_0 d(S), much larger than d(S) in the paper) is drawn with radius 3.
+% Label macros: none.
+% Fit: one column at \tnshow[4mm] (base metrics, about 80 mm wide).
+% Sides are bonds between declared ports of the dots and of inkless corner
+% records (strings would need declared crossing orders at every corner);
+% the skin=none records at (8,15), (8,17), (17,11) and (17,19) only anchor
+% the two lower brackets.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=21, bonds=none]
+        \tndeclare{species}{centre}{hue=source:red}
+        \tn[at=(1,1), name=rdR1C1, skin=none, ports={0:virtual, 270:virtual}]{}
+        \tn[at=(1,21), name=rdR1C21, skin=none, ports={180:virtual, 270:virtual}]{}
+        \tn[at=(3,3), name=rdR3C3, skin=none, ports={0:virtual, 270:virtual}]{}
+        \tn[at=(3,19), name=rdR3C19, skin=none, ports={180:virtual, 270:virtual}]{}
+        \tn[at=(4,12), name=rdR4C12, skin=none, ports={0:virtual, 270:virtual}]{}
+        \tn[at=(4,18), name=rdR4C18, skin=none, ports={180:virtual, 270:virtual}]{}
+        \tn[at=(5,13), name=rdR5C13, skin=dot, ports={0:virtual, 270:virtual}]{}
+        \tn[at=(5,15), name=rdR5C15, skin=dot, ports={0:virtual, 180:virtual}]{}
+        \tn[at=(5,17), name=rdR5C17, skin=dot, ports={180:virtual, 270:virtual}]{}
+        \tn[at=(7,7), name=rdR7C7, skin=dot, size=l, ports={0:virtual, 270:virtual}]{}
+        \tn[at=(7,11), name=rdR7C11, skin=dot, size=l, ports={0:virtual, 180:virtual}]{}
+        \tn[at=(7,13), name=rdR7C13, skin=dot, ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+        \tn[at=(7,15), name=rdR7C15, skin=dot, size=l, ports={180:virtual, 270:virtual}]{}
+        \tn[at=(7,17), name=rdR7C17, skin=dot, ports={90:virtual, 270:virtual}]{}
+        \tn[at=(9,13), name=rdR9C13, skin=dot, ports={0:virtual, 90:virtual}]{}
+        \tn[at=(9,15), name=rdR9C15, skin=dot, ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+        \tn[at=(9,17), name=rdR9C17, skin=dot, ports={90:virtual, 180:virtual}]{}
+        \tn[at=(10,12), name=rdR10C12, skin=none, ports={0:virtual, 90:virtual}]{}
+        \tn[at=(10,18), name=rdR10C18, skin=none, ports={90:virtual, 180:virtual}]{}
+        \tn[at=(11,7), name=rdR11C7, skin=dot, size=l, ports={90:virtual, 270:virtual}]{}
+        \tn[at=(11,11), name=rdR11C11, skin=dot, species=centre, size=l]{}
+        \tn[at=(11,15), name=rdR11C15, skin=dot, size=l, ports={90:virtual, 270:virtual}]{}
+        \tn[at=(15,7), name=rdR15C7, skin=dot, size=l, ports={0:virtual, 90:virtual}]{}
+        \tn[at=(15,11), name=rdR15C11, skin=dot, size=l, ports={0:virtual, 180:virtual}]{}
+        \tn[at=(15,15), name=rdR15C15, skin=dot, size=l, ports={90:virtual, 180:virtual}]{}
+        \tn[at=(19,3), name=rdR19C3, skin=none, ports={0:virtual, 90:virtual}]{}
+        \tn[at=(19,19), name=rdR19C19, skin=none, ports={90:virtual, 180:virtual}]{}
+        \tn[at=(21,1), name=rdR21C1, skin=none, ports={0:virtual, 90:virtual}]{}
+        \tn[at=(21,21), name=rdR21C21, skin=none, ports={90:virtual, 180:virtual}]{}
+        \tn[at=(17,11), skin=none]{}
+        \tn[at=(17,19), skin=none]{}
+        \tn[at=(8,15), skin=none]{}
+        \tn[at=(8,17), skin=none]{}
+        \tnwire{rdR7C7.0}{rdR7C11.180}
+        \tnwire{rdR7C11.0}{rdR7C13.180}
+        \tnwire{rdR7C13.0}{rdR7C15.180}
+        \tnwire{rdR7C15.270}{rdR9C15.90}
+        \tnwire{rdR9C15.270}{rdR11C15.90}
+        \tnwire{rdR11C15.270}{rdR15C15.90}
+        \tnwire{rdR15C15.180}{rdR15C11.0}
+        \tnwire{rdR15C11.180}{rdR15C7.0}
+        \tnwire{rdR15C7.90}{rdR11C7.270}
+        \tnwire{rdR11C7.90}{rdR7C7.270}
+        \tnwire{rdR5C13.0}{rdR5C15.180}
+        \tnwire{rdR5C15.0}{rdR5C17.180}
+        \tnwire{rdR5C17.270}{rdR7C17.90}
+        \tnwire{rdR7C17.270}{rdR9C17.90}
+        \tnwire{rdR9C17.180}{rdR9C15.0}
+        \tnwire{rdR9C15.180}{rdR9C13.0}
+        \tnwire{rdR9C13.90}{rdR7C13.270}
+        \tnwire{rdR7C13.90}{rdR5C13.270}
+        \tnwire[stroke=dotted]{rdR4C12.0}{rdR4C18.180}
+        \tnwire[stroke=dotted]{rdR4C18.270}{rdR10C18.90}
+        \tnwire[stroke=dotted]{rdR10C18.180}{rdR10C12.0}
+        \tnwire[stroke=dotted]{rdR10C12.90}{rdR4C12.270}
+        \tnwire[stroke=dashed]{rdR3C3.0}{rdR3C19.180}
+        \tnwire[stroke=dashed]{rdR3C19.270}{rdR19C19.90}
+        \tnwire[stroke=dashed]{rdR19C19.180}{rdR19C3.0}
+        \tnwire[stroke=dashed]{rdR19C3.90}{rdR3C3.270}
+        \tnwire[stroke=dotted]{rdR1C1.0}{rdR1C21.180}
+        \tnwire[stroke=dotted]{rdR1C21.270}{rdR21C21.90}
+        \tnwire[stroke=dotted]{rdR21C21.180}{rdR21C1.0}
+        \tnwire[stroke=dotted]{rdR21C1.90}{rdR1C1.270}
+        \tnmark[form=label, label pos=n]{(11,11)}{$v$}
+        \tnmark[form=bracket, label pos=s]{(11,11) .. (11,15)}{$d(S)$}
+        \tnmark[form=label, label pos=225]{(7,15)}{$w$}
+        \tnmark[form=label, label pos=45]{(15,7)}{$Q_v$}
+        \tnmark[form=label, label pos=225]{(5,17)}{$Q_w$}
+        \tnmark[form=bracket, label pos=n]{(8,15) .. (8,17)}{$d'$}
+        \tnmark[form=label, label pos=w]{(5,12)}{$\text{star of }w$}
+        \tnmark[form=bracket, label pos=s]{(17,11) .. (17,19)}{$\le2d(S)$}
+        \tnmark[form=label, label pos=s]{(21,11)}{$v+[-a_0S\mathpunct{,}a_0S]^2$}
+    \end{tenkz}
+\end{center}

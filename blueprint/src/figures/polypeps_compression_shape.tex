@@ -1,0 +1,131 @@
+% Figure polypeps_compression_shape.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. 0 (Theorem V, distributed density compression).
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/04-compression.tex:132-170
+% (thm:compression: the hypotheses (i)-(iv) and the shape of sigma: one node per
+% party, links only between parties that share a nonprivate gate, the physical
+% legs of a node are that party's output).
+% Ink-to-index: left panel, a distributed construction with four parties
+% P_1, ..., P_4, one row each (rows 1-4, top to bottom). Action runs right to left.
+% East: the normalized private vectors phi_{P_i} (one triangle per party, named
+% east of it). Gates (boxes, unnamed in the drawing: no sentence refers to one),
+% in order of application: g_1 on P_1 P_2 and the private gate h on P_3 (column
+% 4), g_2 on P_2 P_3 P_4 (column 3), g_3 on P_3 P_4 and g_4 on P_1 P_2 (column 2). Each wire is that party's register (one bundled wire per
+% party; the registers of one party are never told apart). West: each party
+% ends in its physical output (black open leg) and its discarded registers (a
+% grey complement stub, labelled "traced" once, on P_4); the partial trace is
+% party by party, so the left panel stands for the density operator rho. The
+% pair sources and effects inside the gates are not drawn (they are
+% polypeps_allowed_monomial). Right panel: the operator tensor network sigma, one
+% box sigma_{P_i} per party, each with its ket leg north and its bra leg south
+% (the physical legs of that party's output; inkless end atoms 0.6 pitch out make
+% them as long as the panel-1 outputs). Layout: P_1 and P_2 on the middle row,
+% P_3 and P_4 stacked at the east, so the triangle P_2 P_3 P_4 is planar and no
+% link crosses a physical leg (a straight row of boxes would force the P_2 P_4
+% link across a leg of P_3). The names are set outside the boxes at size l (a
+% one-cell box does not inscribe a subscripted name, and two-cell boxes do not
+% fit the column): P_1 south-west, off the equation axis (shared-spec 4.1 L3:
+% a name right after the joiner would read "Thm V -> sigma_{P_1}"), P_2 inside
+% the wedge of its two diagonal links, P_3 and P_4 east. The parties that share a
+% nonprivate gate are P_1 P_2 (g_1, g_4), P_2 P_3, P_2 P_4 and P_3 P_4 (g_2,
+% g_3), and these four pairs are exactly the virtual links; P_1 shares no gate
+% with P_3 or P_4, so there is no such link. Parallel links of one pair (from
+% two gates, or the star and sample links of polypeps_gate_links) are merged
+% into one link of polynomial dimension. The private gate h adds no link.
+% Check opt-out: the joiner "Thm V, arrow" is not a relation; the two panels
+% have different boundary signatures (the left panel is a ket-level circuit, the
+% right an operator), and the approximation ||sigma - rho||_1 <= L^{-p} is
+% stated in the theorem, not drawn.
+% Boundary signature: left (phys:w)x4 outputs plus four traced stubs (closed);
+% right (phys:n)x4 ket legs and (phys:s)x4 bra legs; every virtual link is
+% contracted.
+% Not to scale: the numbers of parties and gates are uniformly polynomial, each
+% party joins at most b_star nonprivate gates, and each nonprivate gate involves
+% at most b_star parties; link dimensions are uniformly polynomial.
+% Label macros: none.
+% Fit: one column (\tnshow[5mm], about 77 x 30 mm; at the 6 mm floor of shared-spec
+% 4.1 P1 it is 92 mm and does not fit a column).
+% Related: polypeps_gate_links (the internals of one gate's links: star and
+% sample links, not the network shape); polypeps_allowed_monomial (one monomial
+% of a gate). Neither draws the whole network that Theorem V outputs.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=5, bonds=none, size=l]
+        \tn[at=(1,5), name=csPhiOne, skin=triwest, size=l, label pos=e,
+            ports={180:physical}]{\phi_{P_1}}
+        \tn[at=(2,5), name=csPhiTwo, skin=triwest, size=l, label pos=e,
+            ports={180:physical}]{\phi_{P_2}}
+        \tn[at=(3,5), name=csPhiThree, skin=triwest, size=l, label pos=e,
+            ports={180:physical}]{\phi_{P_3}}
+        \tn[at=(4,5), name=csPhiFour, skin=triwest, size=l, label pos=e,
+            ports={180:physical}]{\phi_{P_4}}
+        \tn[at=(1,4), name=csGOne, skin=box, wires=2,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{}
+        \tn[at=(3,4), name=csH, skin=box, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,3), name=csGTwo, skin=box, wires=3,
+            ports={180@1:physical, 180@2:physical, 180@3:physical,
+                    0@1:physical, 0@2:physical, 0@3:physical}]{}
+        \tn[at=(1,2), name=csGFour, skin=box, wires=2,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{}
+        \tn[at=(3,2), name=csGThree, skin=box, wires=2,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{}
+        \tn[at=(1,1), name=csOutOne, skin=none, ports={180:physical, 0:physical, 225:physical}]{}
+        \tn[at=(2,1), name=csOutTwo, skin=none, ports={180:physical, 0:physical, 225:physical}]{}
+        \tn[at=(3,1), name=csOutThree, skin=none, ports={180:physical, 0:physical, 225:physical}]{}
+        \tn[at=(4,1), name=csOutFour, skin=none, ports={180:physical, 0:physical, 225:physical}]{}
+        \tn[at=0.4 s of 0.4 w of (1,1), name=csStubOne, skin=none, ports={45:physical}]{}
+        \tn[at=0.4 s of 0.4 w of (2,1), name=csStubTwo, skin=none, ports={45:physical}]{}
+        \tn[at=0.4 s of 0.4 w of (3,1), name=csStubThree, skin=none, ports={45:physical}]{}
+        \tn[at=0.4 s of 0.4 w of (4,1), name=csStubFour, skin=none, ports={45:physical}]{}
+        \tnwire{csPhiOne.180}{csGOne.0@1}
+        \tnwire{csPhiTwo.180}{csGOne.0@2}
+        \tnwire{csPhiThree.180}{csH.0}
+        \tnwire{csPhiFour.180}{csGTwo.0@3}
+        \tnwire{csGOne.180@1}{csGFour.0@1}
+        \tnwire{csGOne.180@2}{csGTwo.0@1}
+        \tnwire{csH.180}{csGTwo.0@2}
+        \tnwire{csGTwo.180@1}{csGFour.0@2}
+        \tnwire{csGTwo.180@2}{csGThree.0@1}
+        \tnwire{csGTwo.180@3}{csGThree.0@2}
+        \tnwire{csGFour.180@1}{csOutOne.0}
+        \tnwire{csGFour.180@2}{csOutTwo.0}
+        \tnwire{csGThree.180@1}{csOutThree.0}
+        \tnwire{csGThree.180@2}{csOutFour.0}
+        \tnwire[species=complement]{csOutOne.225}{csStubOne.45}
+        \tnwire[species=complement]{csOutTwo.225}{csStubTwo.45}
+        \tnwire[species=complement]{csOutThree.225}{csStubThree.45}
+        \tnwire[species=complement, name=csTraced]{csOutFour.225}{csStubFour.45}
+        \tnmark[form=label, species=complement, label pos=se]{csStubFour}{$\text{traced}$}
+    \end{tenkz}
+    $\overset{\text{Thm V}}{\longrightarrow}$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=4, bonds=none, size=l]
+        \tn[at=(3,1), name=csSigOne, skin=box, size=l, label pos=225,
+            ports={90:physical, 270:physical, 0:virtual}]{\sigma_{P_1}}
+        \tn[at=(3,2), name=csSigTwo, skin=box, size=l, label pos=e,
+            ports={90:physical, 270:physical, 180:virtual, 30:virtual, 330:virtual}]{\sigma_{P_2}}
+        \tn[at=(1,4), name=csSigThree, skin=box, size=l, label pos=e,
+            ports={90:physical, 270:physical, 210:virtual, 330:virtual}]{\sigma_{P_3}}
+        \tn[at=(5,4), name=csSigFour, skin=box, size=l, label pos=e,
+            ports={90:physical, 270:physical, 150:virtual, 30:virtual}]{\sigma_{P_4}}
+        \tn[at=0.6 n of (3,1), name=csKetOne, skin=none, ports={270:physical, 90:physical}]{}
+        \tn[at=0.6 s of (3,1), name=csBraOne, skin=none, ports={90:physical, 270:physical}]{}
+        \tnwire{csSigOne.90}{csKetOne.270}
+        \tnwire{csSigOne.270}{csBraOne.90}
+        \tn[at=0.6 n of (3,2), name=csKetTwo, skin=none, ports={270:physical, 90:physical}]{}
+        \tn[at=0.6 s of (3,2), name=csBraTwo, skin=none, ports={90:physical, 270:physical}]{}
+        \tnwire{csSigTwo.90}{csKetTwo.270}
+        \tnwire{csSigTwo.270}{csBraTwo.90}
+        \tn[at=0.6 n of (1,4), name=csKetThree, skin=none, ports={270:physical, 90:physical}]{}
+        \tn[at=0.6 s of (1,4), name=csBraThree, skin=none, ports={90:physical, 270:physical}]{}
+        \tnwire{csSigThree.90}{csKetThree.270}
+        \tnwire{csSigThree.270}{csBraThree.90}
+        \tn[at=0.6 n of (5,4), name=csKetFour, skin=none, ports={270:physical, 90:physical}]{}
+        \tn[at=0.6 s of (5,4), name=csBraFour, skin=none, ports={90:physical, 270:physical}]{}
+        \tnwire{csSigFour.90}{csKetFour.270}
+        \tnwire{csSigFour.270}{csBraFour.90}
+        \tnwire{csSigOne.0}{csSigTwo.180}
+        \tnwire{csSigTwo.30}{csSigThree.210}
+        \tnwire{csSigTwo.330}{csSigFour.150}
+        \tnwire[route=arc]{csSigThree.330}{csSigFour.30}
+    \end{tenkz}
+\end{tenkzequation}

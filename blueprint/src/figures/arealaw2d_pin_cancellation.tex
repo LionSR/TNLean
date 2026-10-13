@@ -1,0 +1,106 @@
+% Figure arealaw2d_pin_cancellation.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. 6 (relative coherent pin, lem:pin, Step 2).
+% Source: arXiv OpenAI2026AreaLaw, sections/05-replicas.tex:455-462
+% (A_k(P,Y,F) = (W_P^{-1} W_F^{-1} W_Y)^2) and 516-531 (eq. replicas:move-inverse,
+% [S, (6.20)]).
+% Formula: B_k^{-1/2} A_k^{1/2} theta^{(x)k}
+% = W_{Px} W_F W_{Y_0}^{-1} W_P^{-1} W_F^{-1} W_{xY_0} theta^{(x)k}
+% = W_{Px} W_{xY_0} W_P^{-1} W_{Y_0}^{-1} theta^{(x)k},
+% with A_k = A_k(P,xY_0,F), B_k = A_k(Px,Y_0,F), every W = W_{R,k} the metric of
+% R on R^{(x)k}. W_F commutes with everything (F is disjoint from P, x, Y_0) and
+% cancels against W_F^{-1}; W_{xY_0} then moves to the left of W_P^{-1} (disjoint)
+% and of W_{Y_0}^{-1} (nested, Lemma schur (2)). This is an operator identity
+% applied to theta^{(x)k}, so the = is legitimate; its squared norm is
+% <theta^{(x)k}, C_{x,k}^{-1} theta^{(x)k}>. No commutation of A_k with B_k is used.
+% Ink-to-index: four bundled wires at rows 1, 4, 7, 10: P^{(x)k}, x^{(x)k},
+% Y_0^{(x)k}, F^{(x)k}; each stands for k copies, told apart by position. The two
+% blank rows above each lower wire hold the names of the boxes on it, clear of
+% the box above (one blank row is not enough at this pitch). Row 11 is blank and
+% holds the column names. The unit vector theta^{(x)k} is the box on the east
+% (four west ports, name south). Action runs right to left.
+% Panel 1: column 5 is A_k^{1/2} = W_P^{-1} (x) W_{xY_0} (x) W_F^{-1} and column
+% 3 is B_k^{-1/2} = W_{Px} (x) W_{Y_0}^{-1} (x) W_F, each a tensor product of
+% commuting factors on disjoint wires, named under the column in row 11 (a
+% tenkz enclosure of a column draws one pill per box, not one hull, so none is
+% drawn). Panel 2: W_P^{-1} and W_{Y_0}^{-1} (column 6, disjoint) act first,
+% then W_{xY_0} (column 4), then W_{Px} (column 2); the F wire runs straight.
+% Every operator name sits at label pos=n (one station). Wire names P, x, Y_0, F
+% are port labels of the open legs of panel 1 only (L3, L4).
+% W_F and W_F^{-1} are plain boxes: a dashed (complement) box would mark an
+% index-carrying gate as a boundary (rule S1).
+% Boundary signature: (phys:w)x4 in both panels.
+% Fit: C (\tnshow[5mm]); about 84 mm, one PRL column. 6 mm (the P1 operator floor)
+% does not fit; 4.5 mm also fits but is needlessly small.
+% Label macros: none.
+% Related: arealaw2d_replica_metric (A_3 only); arealaw2d_movement_word (panel 2
+% is that word, bundled, with W in place of the density powers). Not a
+% duplicate: neither shows the cancellation.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=7, bonds=none,
+            size=l]
+        \tn[at=(1,1), name=pcEndP, skin=none, ports={180:physical:$P$, 0:physical}]{}
+        \tn[at=(4,1), name=pcEndx, skin=none, ports={180:physical:$x$, 0:physical}]{}
+        \tn[at=(7,1), name=pcEndY, skin=none, ports={180:physical:$Y_0$, 0:physical}]{}
+        \tn[at=(10,1), name=pcEndF, skin=none, ports={180:physical:$F$, 0:physical}]{}
+        \tn[at=(1,3), name=pcPx, skin=box, wires=4, label pos=n,
+            ports={180@1:physical, 180@4:physical, 0@1:physical, 0@4:physical}]{W_{Px}}
+        \tn[at=(7,3), name=pcYinv, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{W_{Y_0}^{-1}}
+        \tn[at=(10,3), name=pcF, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{W_F}
+        \tn[at=(1,5), name=pcPinv, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{W_P^{-1}}
+        \tn[at=(4,5), name=pcXY, skin=box, wires=4, label pos=n,
+            ports={180@1:physical, 180@4:physical, 0@1:physical, 0@4:physical}]{W_{xY_0}}
+        \tn[at=(10,5), name=pcFinv, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{W_F^{-1}}
+        \tn[at=(1,7), name=pcTheta, skin=box, wires=10, label pos=s,
+            ports={180@1:physical, 180@4:physical, 180@7:physical, 180@10:physical}]
+        {\theta^{\otimes k}}
+        \tnwire{pcTheta.180@1}{pcPinv.0}
+        \tnwire{pcPinv.180}{pcPx.0@1}
+        \tnwire{pcPx.180@1}{pcEndP.0}
+        \tnwire{pcTheta.180@4}{pcXY.0@1}
+        \tnwire{pcXY.180@1}{pcPx.0@4}
+        \tnwire{pcPx.180@4}{pcEndx.0}
+        \tnwire{pcTheta.180@7}{pcXY.0@4}
+        \tnwire{pcXY.180@4}{pcYinv.0}
+        \tnwire{pcYinv.180}{pcEndY.0}
+        \tnwire{pcTheta.180@10}{pcFinv.0}
+        \tnwire{pcFinv.180}{pcF.0}
+        \tnwire{pcF.180}{pcEndF.0}
+        \tnmark[form=label, label pos=s]{(11,3)}{$B_k^{-1/2}$}
+        \tnmark[form=label, label pos=s]{(11,5)}{$A_k^{1/2}$}
+    \end{tenkz}
+    $=$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=8, bonds=none,
+            size=l]
+        \tn[at=(1,1), name=pcEndP, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,1), name=pcEndx, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,1), name=pcEndY, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(10,1), name=pcEndF, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,2), name=pcPx, skin=box, wires=4, label pos=n,
+            ports={180@1:physical, 180@4:physical, 0@1:physical, 0@4:physical}]{W_{Px}}
+        \tn[at=(4,4), name=pcXY, skin=box, wires=4, label pos=n,
+            ports={180@1:physical, 180@4:physical, 0@1:physical, 0@4:physical}]{W_{xY_0}}
+        \tn[at=(1,6), name=pcPinv, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{W_P^{-1}}
+        \tn[at=(7,6), name=pcYinv, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{W_{Y_0}^{-1}}
+        \tn[at=(1,8), name=pcTheta, skin=box, wires=10, label pos=s,
+            ports={180@1:physical, 180@4:physical, 180@7:physical, 180@10:physical}]
+        {\theta^{\otimes k}}
+        \tnwire{pcTheta.180@1}{pcPinv.0}
+        \tnwire{pcPinv.180}{pcPx.0@1}
+        \tnwire{pcPx.180@1}{pcEndP.0}
+        \tnwire{pcTheta.180@4}{pcXY.0@1}
+        \tnwire{pcXY.180@1}{pcPx.0@4}
+        \tnwire{pcPx.180@4}{pcEndx.0}
+        \tnwire{pcTheta.180@7}{pcYinv.0}
+        \tnwire{pcYinv.180}{pcXY.0@4}
+        \tnwire{pcXY.180@4}{pcEndY.0}
+        \tnwire{pcTheta.180@10}{pcEndF.0}
+    \end{tenkz}
+\end{tenkzequation}

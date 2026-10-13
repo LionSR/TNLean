@@ -1,0 +1,53 @@
+% Figure polypeps_affected_set.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. 9 (proof of Theorem V, subset expansion).
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/04-compression.tex:341-370
+% (eq. (5.9) subset expansion, the affected party set, eq. (5.10) choice cost)
+% and 384-385 (sources crossing the boundary of the affected set are exact).
+% Ink-to-index: dots are parties (a 5x9 array chosen for display, nine
+% columns so that the figure fills at least half the column at the note's
+% 6 mm pitch, rule P1; party positions carry no geometry here). Each line is the source slot of one pair
+% of parties that share a nonprivate gate. The three red strings are the
+% corrected positions S (s = |S| = 3, the red label), where X is replaced by
+% the centred correction Delta. Their endpoint parties form the affected set
+% A, the red-tinted field, |A| <= 2s (here |A| = 6 = 2s). The three black
+% slots leaving A cross its boundary and keep their exact sources (H3: exact
+% sources are black); the black vertical slot inside A is an exact source
+% internal to A. Gates touching A (at most 2bs of them) are expanded into
+% labels. The dashed grey contour is the exterior (dashed marks a boundary
+% only, S1); its gates (thin solid grey slots) stay aggregate contractions
+% and are never expanded.
+% Crossings: each red string shares its end dots with the black slots there;
+% these touches are declared over-crossings, so the build raises no
+% TKZ-CROSS-TOUCHALL warning.
+% Not drawn: a bracket "expanded" over a band of columns (the plan's item);
+% the array has no geometry, so a column band would assert one.
+% Boundary signature: empty (lines are incidences, not contracted indices).
+% Not to scale: the party count is uniformly polynomial in L; s is any size.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={ket,ket,ket,ket,ket}, cols=9, bonds=none]
+        \tnmark[form=enclosure, species=complement, label pos=s]{(1,1) .. (5,9) - (1,4) .. (2,6)}{\text{exterior}}
+        \tnmark[form=enclosure, species=selected, tint, label pos=n]{(1,4) .. (2,6)}{\mathcal A,\ \lvert\mathcal A\rvert=6=2s}
+        \tnwire[name=asInner]{(1,5)}{(2,5)}
+        \tnwire[name=asCrossA]{(1,3)}{(1,4)}
+        \tnwire[name=asCrossB]{(2,3)}{(2,4)}
+        \tnwire[name=asCrossC]{(2,6)}{(3,6)}
+        \tnwire[kind=string, species=selected, name=asCorrA,
+            cross={over at crossing of asCorrA and asCrossA,
+                    over at crossing of asCorrA and asCrossB}]{(1,4)}{(2,4)}
+        \tnwire[kind=string, species=selected, name=asCorrB,
+            cross={over at crossing of asCorrB and asInner}]{(1,5)}{(1,6)}
+        \tnwire[kind=string, species=selected, name=asCorrC,
+            cross={over at crossing of asCorrC and asInner,
+                    over at crossing of asCorrC and asCrossC}]{(2,5)}{(2,6)}
+        \tnwire[species=complement]{(3,2)}{(3,3)}
+        \tnwire[species=complement]{(5,4)}{(5,5)}
+        \tnwire[species=complement]{(4,6)}{(4,7)}
+        \tnwire[species=complement]{(2,8)}{(3,8)}
+        \tnwire[species=complement]{(4,3)}{(5,3)}
+        \tnwire[species=complement]{(1,2)}{(2,2)}
+        \tnwire[species=complement]{(4,8)}{(4,9)}
+        \tnmark[form=label, species=selected, label pos=n]{1.0 n of (1,5)}{s=\lvert S\rvert=3}
+    \end{tenkz}
+\end{center}

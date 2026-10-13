@@ -1,0 +1,94 @@
+% Figure arealaw2d_restore_norm.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. 10 (norm of the restoring operator).
+% Source: arXiv OpenAI2026AreaLaw, sections/09-amplification.tex:371-395 (B_Y, the three
+% typical spectral inequalities, eq. (10.25) amplification-operator-norm). Note renaming:
+% Q = Q_{S_0} -> Pi_{S_0}, T_0 = T_Y -> Pi_Y, P_X -> Pi_X.
+% Formula: B_Y = sum_{x sel} p_x^{-1} Pi_Y <x|Pi_{S_0}|x> Pi_Y
+% = Pi_Y Tr_X[(Pi_X rho_X^{-1} (x) I_Y) Pi_{S_0}] Pi_Y (panel 1), since
+% sum_{x sel} p_x^{-1}|x><x| = Pi_X rho_X^{-1}.
+% Chain: e^{-S(X)-S(S_0)-2w} B_Y <= Pi_Y Tr_X[rho_{S_0}] Pi_Y = Pi_Y rho_Y Pi_Y
+% <= e^{-S(Y)+w} Pi_Y. First <=: the windows Pi_X rho_X^{-1} <= e^{S(X)+w} I (p_x^{-1} <=
+% e^{S(X)+w} for selected x; adding the other x adds positive terms) and
+% Pi_{S_0} <= e^{S(S_0)+w} rho_{S_0}, by monotonicity of d -> Tr_X[(d (x) I)P] for P >= 0
+% and of P -> Tr_X[(d (x) I)P] for d >= 0 (partial-trace cyclicity in X puts d^{1/2} on
+% both sides); conjugation by Pi_Y keeps order. The =: Tr_X rho_{S_0} = rho_Y (the loop is Tr_X). Last <=: the window
+% Pi_Y rho_Y Pi_Y <= e^{-S(Y)+w} Pi_Y. Multiplying out, B_Y <= e^{S(X)+S(S_0)-S(Y)+3w} Pi_Y,
+% and S(X)+S(S_0)-S(Y) = I(X:Z') = I by purity of Omega (the note's text says so).
+% The scalar prefactor stands west of panel 1, so each joiner carries one fact (J2, J4)
+% and the line fits the text width.
+% Ink-to-index: rows from top to bottom: (1) blank, carrying only the top of the X loop,
+% (2) X, (3) Y, (4)-(5) blank (they centre the Y wire on the equation axis). Y enters from
+% the east and leaves to the west; the X wire of the two-wire box closes over the top into
+% a loop, the partial trace Tr_X; the bead on the loop is Pi_X rho_X^{-1} (the x-sum with
+% weights p_x^{-1}). Panels 3 and 4 act on Y only. Operator names stand south of their
+% boxes (one station, L1; one-wire boxes cannot inscribe a size-l name); the bead name
+% stands north of the loop.
+% Labels (L3, L4): the register names stand once, on panel 1 (X at its loop, Y west);
+% no name follows a joiner.
+% Boundary signature: (phys:e Y, phys:w Y) in every panel; X is internal.
+% Label macros: none.
+% Fit: W at 4.5mm (\tnwide[4.5mm]); it fills the text width, so do not enlarge.
+% Related: arealaw2d_adjoint_cancellation (eq. (10.26), the same projections and bead
+% family); arealaw2d_move_and_restore (states phi, vartheta). Neither draws B_Y.
+\begin{tenkzequation}
+    \tenkzkernel
+    $e^{-S(X)-S(S_0)-2w}$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=7, bonds=none, size=l]
+        \tn[at=(3,1), skin=none, name=rnOneOut, ports={180:physical:$Y$, 0:physical}]{}
+        \tn[at=(3,2), skin=box, name=rnOneTl, label pos=s, ports={180:physical, 0:physical}]{\Pi_Y}
+        \tn[at=(2,3), skin=none, name=rnOneLoopW, ports={0:physical, 90:physical}]{}
+        \tn[at=(2,4), skin=box, wires=2, name=rnOneJ, label pos=s,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{\Pi_{S_0}}
+        \tn[at=(2,5), skin=none, name=rnOneLoopE, ports={180:physical, 90:physical}]{}
+        \tn[at=(3,6), skin=box, name=rnOneTr, label pos=s, ports={180:physical, 0:physical}]{\Pi_Y}
+        \tn[at=(3,7), skin=none, name=rnOneIn, ports={180:physical, 0:physical}]{}
+        \tnwire{rnOneOut.0}{rnOneTl.180}
+        \tnwire{rnOneTl.0}{rnOneJ.180@2}
+        \tnwire{rnOneJ.0@2}{rnOneTr.180}
+        \tnwire{rnOneTr.0}{rnOneIn.180}
+        \tnwire{rnOneLoopW.0}{rnOneJ.180@1}
+        \tnwire{rnOneJ.0@1}{rnOneLoopE.180}
+        \tnwire[route=arc, name=rnOneLoop]{rnOneLoopW.90}{rnOneLoopE.90}
+        \tn[skin=dot, at=on rnOneLoop 0.5, label pos=n]{\Pi_X\rho_X^{-1}}
+        \tnmark[form=label, label pos=w]{(2,3)}{$X$}
+    \end{tenkz}
+    $\le$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=7, bonds=none, size=l]
+        \tn[at=(3,1), skin=none, name=rnTwoOut, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,2), skin=box, name=rnTwoTl, label pos=s, ports={180:physical, 0:physical}]{\Pi_Y}
+        \tn[at=(2,3), skin=none, name=rnTwoLoopW, ports={0:physical, 90:physical}]{}
+        \tn[at=(2,4), skin=box, wires=2, name=rnTwoJ, label pos=s,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{\rho_{S_0}}
+        \tn[at=(2,5), skin=none, name=rnTwoLoopE, ports={180:physical, 90:physical}]{}
+        \tn[at=(3,6), skin=box, name=rnTwoTr, label pos=s, ports={180:physical, 0:physical}]{\Pi_Y}
+        \tn[at=(3,7), skin=none, name=rnTwoIn, ports={180:physical, 0:physical}]{}
+        \tnwire{rnTwoOut.0}{rnTwoTl.180}
+        \tnwire{rnTwoTl.0}{rnTwoJ.180@2}
+        \tnwire{rnTwoJ.0@2}{rnTwoTr.180}
+        \tnwire{rnTwoTr.0}{rnTwoIn.180}
+        \tnwire{rnTwoLoopW.0}{rnTwoJ.180@1}
+        \tnwire{rnTwoJ.0@1}{rnTwoLoopE.180}
+        \tnwire[route=arc, name=rnTwoLoop]{rnTwoLoopW.90}{rnTwoLoopE.90}
+    \end{tenkz}
+    $\overset{\operatorname{Tr}_X\rho_{S_0}=\rho_Y}{\vphantom{\big|}=}$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=7, bonds=none, size=l]
+        \tn[at=(3,1), skin=none, name=rnThrOut, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,2), skin=box, name=rnThrB0, label pos=s, ports={180:physical, 0:physical}]{\Pi_Y}
+        \tn[at=(3,4), skin=box, name=rnThrB1, label pos=s, ports={180:physical, 0:physical}]{\rho_Y}
+        \tn[at=(3,6), skin=box, name=rnThrB2, label pos=s, ports={180:physical, 0:physical}]{\Pi_Y}
+        \tn[at=(3,7), skin=none, name=rnThrIn, ports={180:physical, 0:physical}]{}
+        \tnwire{rnThrOut.0}{rnThrB0.180}
+        \tnwire{rnThrB0.0}{rnThrB1.180}
+        \tnwire{rnThrB1.0}{rnThrB2.180}
+        \tnwire{rnThrB2.0}{rnThrIn.180}
+    \end{tenkz}
+    $\le e^{-S(Y)+w}$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=3, bonds=none, size=l]
+        \tn[at=(3,1), skin=none, name=rnFouOut, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,2), skin=box, name=rnFouB0, label pos=s, ports={180:physical, 0:physical}]{\Pi_Y}
+        \tn[at=(3,3), skin=none, name=rnFouIn, ports={180:physical, 0:physical}]{}
+        \tnwire{rnFouOut.0}{rnFouB0.180}
+        \tnwire{rnFouB0.0}{rnFouIn.180}
+    \end{tenkz}
+\end{tenkzequation}

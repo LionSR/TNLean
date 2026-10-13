@@ -1,0 +1,160 @@
+% Figure polypeps_patch_at_hole.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. 8 (small-patch covers, before the patch net;
+% \tnshow[4.5mm]); referred to from PP Sec. 6 (Lemma 6, condition 3).
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/06-geometry.tex:452-475
+% (compactness observation: "the center of a footprint may lie inside a hole;
+% the condition counts labels only at footprint points outside the relevant
+% inner holes"), with condition 3 of Lemma 6.3 (small-patch rewrite),
+% sections/05-frames.tex:188-205, and the squares Q^-(c,h), Q^+(c,h) =
+% Q^-(c,2h) of 05-frames.tex:26-31.
+% Formula: in the patch's outer square Q^+(c_p,u), the sites outside the inner
+% hole Q^-(v,h) carry at most two owners (A, B), although the patch also
+% meets the third owner C inside Q^-(v,h).
+% Ink-to-index: dots are the raw registers of one sheet (14x14 sites), coloured
+% by owner: A orange (rows 1-7, cols 1-7), B cyan (rows 1-7, cols 8-14), C grey
+% (rows 8-14); the three owners meet at the true vertex v, the red centre dot
+% between rows 7-8 and cols 7-8.  The hole at v is an affected hole (condition
+% 1 excludes untouched footprints from every patch) and is drawn in the
+% \holeglyph code (shared-spec 4.1, H5): inner square Q^-(v,h) solid red,
+% untinted (h = 3.5 sites: rows/cols 4-11), outer square Q^+(v,h) dashed red
+% through the half-integer corners of the whole drawn lattice (2h = 7 sites).
+% The patch (c_p, u), c_p = (5.5, 7.5) in (row, col), u = 1.25 sites, is drawn
+% as in polypeps_patch_net: inner square Q^-(c_p,u) thin black (rows 5-6,
+% cols 7-8), outer square Q^+(c_p,u) violet tinted (rows 3-8, cols 5-10).
+% Outside Q^-(v,h) the outer square keeps only row 3 (A at cols 5-7, B at
+% cols 8-10); its C sites (row 8) lie inside Q^-(v,h).  The radii are chosen
+% so that no two contours run within one site of each other (rule S3).
+% Labels: A west, B and C east (owner colours); Q^+ at the outer square's NE
+% corner; Q^- ends a red leader from the inner square's east side.
+% Boundary signature: empty (geometry, no tensor contraction).
+% Not to scale: in the paper the hole radius is h_n = epsilon_0 min(n,t) and
+% the patch radius nu t with nu small after epsilon_0, so patches are much
+% smaller than holes; here u/h = 5/14.
+% Related: polypeps_patch_net (a patch net and one two-owner footprint inside a
+% treated square, no hole); polypeps_encoded_frame (one hole, no patch).
+% This figure is the only one with a patch meeting a hole.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire},
+            cols=14, bonds=none, size=s]
+        \tndeclare{species}{hole}{hue=source:red}
+        \tndeclare{species}{centre}{hue=source:red}
+        \tndeclare{species}{bandA}{hue=source:orange}
+        \tndeclare{species}{bandB}{hue=source:cyan}
+        \tndeclare{species}{bandC}{hue=source:gray}
+        \tn[at=(1,1), skin=dot, species=bandA]{} \tn[at=(1,2), skin=dot, species=bandA]{}
+        \tn[at=(1,3), skin=dot, species=bandA]{} \tn[at=(1,4), skin=dot, species=bandA]{}
+        \tn[at=(1,5), skin=dot, species=bandA]{} \tn[at=(1,6), skin=dot, species=bandA]{}
+        \tn[at=(1,7), skin=dot, species=bandA]{} \tn[at=(1,8), skin=dot, species=bandB]{}
+        \tn[at=(1,9), skin=dot, species=bandB]{} \tn[at=(1,10), skin=dot, species=bandB]{}
+        \tn[at=(1,11), skin=dot, species=bandB]{} \tn[at=(1,12), skin=dot, species=bandB]{}
+        \tn[at=(1,13), skin=dot, species=bandB]{} \tn[at=(1,14), skin=dot, species=bandB]{}
+        \tn[at=(2,1), skin=dot, species=bandA]{} \tn[at=(2,2), skin=dot, species=bandA]{}
+        \tn[at=(2,3), skin=dot, species=bandA]{} \tn[at=(2,4), skin=dot, species=bandA]{}
+        \tn[at=(2,5), skin=dot, species=bandA]{} \tn[at=(2,6), skin=dot, species=bandA]{}
+        \tn[at=(2,7), skin=dot, species=bandA]{} \tn[at=(2,8), skin=dot, species=bandB]{}
+        \tn[at=(2,9), skin=dot, species=bandB]{} \tn[at=(2,10), skin=dot, species=bandB]{}
+        \tn[at=(2,11), skin=dot, species=bandB]{} \tn[at=(2,12), skin=dot, species=bandB]{}
+        \tn[at=(2,13), skin=dot, species=bandB]{} \tn[at=(2,14), skin=dot, species=bandB]{}
+        \tn[at=(3,1), skin=dot, species=bandA]{} \tn[at=(3,2), skin=dot, species=bandA]{}
+        \tn[at=(3,3), skin=dot, species=bandA]{} \tn[at=(3,4), skin=dot, species=bandA]{}
+        \tn[at=(3,5), skin=dot, species=bandA]{} \tn[at=(3,6), skin=dot, species=bandA]{}
+        \tn[at=(3,7), skin=dot, species=bandA]{} \tn[at=(3,8), skin=dot, species=bandB]{}
+        \tn[at=(3,9), skin=dot, species=bandB]{} \tn[at=(3,10), skin=dot, species=bandB]{}
+        \tn[at=(3,11), skin=dot, species=bandB]{} \tn[at=(3,12), skin=dot, species=bandB]{}
+        \tn[at=(3,13), skin=dot, species=bandB]{} \tn[at=(3,14), skin=dot, species=bandB]{}
+        \tn[at=(4,1), skin=dot, species=bandA]{} \tn[at=(4,2), skin=dot, species=bandA]{}
+        \tn[at=(4,3), skin=dot, species=bandA]{} \tn[at=(4,4), skin=dot, species=bandA]{}
+        \tn[at=(4,5), skin=dot, species=bandA]{} \tn[at=(4,6), skin=dot, species=bandA]{}
+        \tn[at=(4,7), skin=dot, species=bandA]{} \tn[at=(4,8), skin=dot, species=bandB]{}
+        \tn[at=(4,9), skin=dot, species=bandB]{} \tn[at=(4,10), skin=dot, species=bandB]{}
+        \tn[at=(4,11), skin=dot, species=bandB]{} \tn[at=(4,12), skin=dot, species=bandB]{}
+        \tn[at=(4,13), skin=dot, species=bandB]{} \tn[at=(4,14), skin=dot, species=bandB]{}
+        \tn[at=(5,1), skin=dot, species=bandA]{} \tn[at=(5,2), skin=dot, species=bandA]{}
+        \tn[at=(5,3), skin=dot, species=bandA]{} \tn[at=(5,4), skin=dot, species=bandA]{}
+        \tn[at=(5,5), skin=dot, species=bandA]{} \tn[at=(5,6), skin=dot, species=bandA]{}
+        \tn[at=(5,7), skin=dot, species=bandA]{} \tn[at=(5,8), skin=dot, species=bandB]{}
+        \tn[at=(5,9), skin=dot, species=bandB]{} \tn[at=(5,10), skin=dot, species=bandB]{}
+        \tn[at=(5,11), skin=dot, species=bandB]{} \tn[at=(5,12), skin=dot, species=bandB]{}
+        \tn[at=(5,13), skin=dot, species=bandB]{} \tn[at=(5,14), skin=dot, species=bandB]{}
+        \tn[at=(6,1), skin=dot, species=bandA]{} \tn[at=(6,2), skin=dot, species=bandA]{}
+        \tn[at=(6,3), skin=dot, species=bandA]{} \tn[at=(6,4), skin=dot, species=bandA]{}
+        \tn[at=(6,5), skin=dot, species=bandA]{} \tn[at=(6,6), skin=dot, species=bandA]{}
+        \tn[at=(6,7), skin=dot, species=bandA]{} \tn[at=(6,8), skin=dot, species=bandB]{}
+        \tn[at=(6,9), skin=dot, species=bandB]{} \tn[at=(6,10), skin=dot, species=bandB]{}
+        \tn[at=(6,11), skin=dot, species=bandB]{} \tn[at=(6,12), skin=dot, species=bandB]{}
+        \tn[at=(6,13), skin=dot, species=bandB]{} \tn[at=(6,14), skin=dot, species=bandB]{}
+        \tn[at=(7,1), skin=dot, species=bandA]{} \tn[at=(7,2), skin=dot, species=bandA]{}
+        \tn[at=(7,3), skin=dot, species=bandA]{} \tn[at=(7,4), skin=dot, species=bandA]{}
+        \tn[at=(7,5), skin=dot, species=bandA]{} \tn[at=(7,6), skin=dot, species=bandA]{}
+        \tn[at=(7,7), skin=dot, species=bandA]{} \tn[at=(7,8), skin=dot, species=bandB]{}
+        \tn[at=(7,9), skin=dot, species=bandB]{} \tn[at=(7,10), skin=dot, species=bandB]{}
+        \tn[at=(7,11), skin=dot, species=bandB]{} \tn[at=(7,12), skin=dot, species=bandB]{}
+        \tn[at=(7,13), skin=dot, species=bandB]{} \tn[at=(7,14), skin=dot, species=bandB]{}
+        \tn[at=(8,1), skin=dot, species=bandC]{} \tn[at=(8,2), skin=dot, species=bandC]{}
+        \tn[at=(8,3), skin=dot, species=bandC]{} \tn[at=(8,4), skin=dot, species=bandC]{}
+        \tn[at=(8,5), skin=dot, species=bandC]{} \tn[at=(8,6), skin=dot, species=bandC]{}
+        \tn[at=(8,7), skin=dot, species=bandC]{} \tn[at=(8,8), skin=dot, species=bandC]{}
+        \tn[at=(8,9), skin=dot, species=bandC]{} \tn[at=(8,10), skin=dot, species=bandC]{}
+        \tn[at=(8,11), skin=dot, species=bandC]{} \tn[at=(8,12), skin=dot, species=bandC]{}
+        \tn[at=(8,13), skin=dot, species=bandC]{} \tn[at=(8,14), skin=dot, species=bandC]{}
+        \tn[at=(9,1), skin=dot, species=bandC]{} \tn[at=(9,2), skin=dot, species=bandC]{}
+        \tn[at=(9,3), skin=dot, species=bandC]{} \tn[at=(9,4), skin=dot, species=bandC]{}
+        \tn[at=(9,5), skin=dot, species=bandC]{} \tn[at=(9,6), skin=dot, species=bandC]{}
+        \tn[at=(9,7), skin=dot, species=bandC]{} \tn[at=(9,8), skin=dot, species=bandC]{}
+        \tn[at=(9,9), skin=dot, species=bandC]{} \tn[at=(9,10), skin=dot, species=bandC]{}
+        \tn[at=(9,11), skin=dot, species=bandC]{} \tn[at=(9,12), skin=dot, species=bandC]{}
+        \tn[at=(9,13), skin=dot, species=bandC]{} \tn[at=(9,14), skin=dot, species=bandC]{}
+        \tn[at=(10,1), skin=dot, species=bandC]{} \tn[at=(10,2), skin=dot, species=bandC]{}
+        \tn[at=(10,3), skin=dot, species=bandC]{} \tn[at=(10,4), skin=dot, species=bandC]{}
+        \tn[at=(10,5), skin=dot, species=bandC]{} \tn[at=(10,6), skin=dot, species=bandC]{}
+        \tn[at=(10,7), skin=dot, species=bandC]{} \tn[at=(10,8), skin=dot, species=bandC]{}
+        \tn[at=(10,9), skin=dot, species=bandC]{} \tn[at=(10,10), skin=dot, species=bandC]{}
+        \tn[at=(10,11), skin=dot, species=bandC]{} \tn[at=(10,12), skin=dot, species=bandC]{}
+        \tn[at=(10,13), skin=dot, species=bandC]{} \tn[at=(10,14), skin=dot, species=bandC]{}
+        \tn[at=(11,1), skin=dot, species=bandC]{} \tn[at=(11,2), skin=dot, species=bandC]{}
+        \tn[at=(11,3), skin=dot, species=bandC]{} \tn[at=(11,4), skin=dot, species=bandC]{}
+        \tn[at=(11,5), skin=dot, species=bandC]{} \tn[at=(11,6), skin=dot, species=bandC]{}
+        \tn[at=(11,7), skin=dot, species=bandC]{} \tn[at=(11,8), skin=dot, species=bandC]{}
+        \tn[at=(11,9), skin=dot, species=bandC]{} \tn[at=(11,10), skin=dot, species=bandC]{}
+        \tn[at=(11,11), skin=dot, species=bandC]{} \tn[at=(11,12), skin=dot, species=bandC]{}
+        \tn[at=(11,13), skin=dot, species=bandC]{} \tn[at=(11,14), skin=dot, species=bandC]{}
+        \tn[at=(12,1), skin=dot, species=bandC]{} \tn[at=(12,2), skin=dot, species=bandC]{}
+        \tn[at=(12,3), skin=dot, species=bandC]{} \tn[at=(12,4), skin=dot, species=bandC]{}
+        \tn[at=(12,5), skin=dot, species=bandC]{} \tn[at=(12,6), skin=dot, species=bandC]{}
+        \tn[at=(12,7), skin=dot, species=bandC]{} \tn[at=(12,8), skin=dot, species=bandC]{}
+        \tn[at=(12,9), skin=dot, species=bandC]{} \tn[at=(12,10), skin=dot, species=bandC]{}
+        \tn[at=(12,11), skin=dot, species=bandC]{} \tn[at=(12,12), skin=dot, species=bandC]{}
+        \tn[at=(12,13), skin=dot, species=bandC]{} \tn[at=(12,14), skin=dot, species=bandC]{}
+        \tn[at=(13,1), skin=dot, species=bandC]{} \tn[at=(13,2), skin=dot, species=bandC]{}
+        \tn[at=(13,3), skin=dot, species=bandC]{} \tn[at=(13,4), skin=dot, species=bandC]{}
+        \tn[at=(13,5), skin=dot, species=bandC]{} \tn[at=(13,6), skin=dot, species=bandC]{}
+        \tn[at=(13,7), skin=dot, species=bandC]{} \tn[at=(13,8), skin=dot, species=bandC]{}
+        \tn[at=(13,9), skin=dot, species=bandC]{} \tn[at=(13,10), skin=dot, species=bandC]{}
+        \tn[at=(13,11), skin=dot, species=bandC]{} \tn[at=(13,12), skin=dot, species=bandC]{}
+        \tn[at=(13,13), skin=dot, species=bandC]{} \tn[at=(13,14), skin=dot, species=bandC]{}
+        \tn[at=(14,1), skin=dot, species=bandC]{} \tn[at=(14,2), skin=dot, species=bandC]{}
+        \tn[at=(14,3), skin=dot, species=bandC]{} \tn[at=(14,4), skin=dot, species=bandC]{}
+        \tn[at=(14,5), skin=dot, species=bandC]{} \tn[at=(14,6), skin=dot, species=bandC]{}
+        \tn[at=(14,7), skin=dot, species=bandC]{} \tn[at=(14,8), skin=dot, species=bandC]{}
+        \tn[at=(14,9), skin=dot, species=bandC]{} \tn[at=(14,10), skin=dot, species=bandC]{}
+        \tn[at=(14,11), skin=dot, species=bandC]{} \tn[at=(14,12), skin=dot, species=bandC]{}
+        \tn[at=(14,13), skin=dot, species=bandC]{} \tn[at=(14,14), skin=dot, species=bandC]{}
+        \tnmark[form=enclosure, species=collar, tint]{(3,5) .. (8,10)}{}
+        \tnmark[form=enclosure, species=neutral]{(5,7) .. (6,8)}{}
+        \tnmark[form=enclosure, species=hole]{(4,4) .. (11,11)}{}
+        \tnwire[kind=string, species=hole, stroke=dashed, closed, route=orth, name=pahOuter,
+            via={0.5 n of 0.5 w of (1,1), 0.5 n of 0.5 e of (1,14),
+                    0.5 s of 0.5 e of (14,14), 0.5 s of 0.5 w of (14,1)}]
+        \tn[at=0.5 s of 0.5 e of (7,7), name=pahVertex, skin=dot, species=centre, size=l]{}
+        \tnmark[form=label, species=bandA, label pos=w]{1 w of (3,1)}{$A$}
+        \tnmark[form=label, species=bandB, label pos=e]{1 e of (3,14)}{$B$}
+        \tnmark[form=label, species=bandC, label pos=e]{1 e of (12,14)}{$C$}
+        \tnmark[form=label, species=hole, label pos=e]{0.5 n of 0.5 e of (1,14)}{$Q^+$}
+        \tnwire[kind=string, species=hole, name=pahInnerLead,
+            cross={over at crossing of pahInnerLead and pahOuter}]
+        {0.5 s of 0.5 e of (9,11)}{0.5 s of 1 e of (9,14)}
+        \tnmark[form=label, species=hole, label pos=e]{0.5 s of 1 e of (9,14)}{$Q^-$}
+    \end{tenkz}
+\end{center}

@@ -1,0 +1,101 @@
+% Figure polypeps_buffer_splitting.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. 1 (Lemma 1, default letters); PP Sec. 3
+% (step 1 of the information reset, relabelled through the Bs macros).
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/05-frames.tex:352-391
+% (lem:splitting, eq:frame-splitting); reused for
+% sections/02-information.tex:378-391 (eq:info-split-overlap).
+% Formula: (id_{TE} tensor V) Omega ~ s tensor s', with error
+% ||(id tensor V)Omega - s tensor s'|| <= sqrt(2(1-e^{-b/2})) <= sqrt(b),
+% b = I_Omega(T:E); equivalently the overlap
+% |<s tensor s', (id tensor V) Omega>| >= e^{-b/2}.
+% Ink-to-index: every wire is a physical index.  T, U, E partition Lambda;
+% Omega has the three west legs T (row 1), U (row 2) and E (row 4).  The
+% isometry V : H_U -> B_T tensor B_E takes the U leg on its east face and
+% returns the two new registers B_T (row 2) and B_E (row 3), drawn collar
+% (violet: they are the buffer's registers) in both panels.  Right panel: s
+% on (T, B_T) and s' on (B_E, E).  The inkless atoms of column 1 only carry
+% the four legs to a common west edge (identity, no tensor).  Omega is one
+% column wide (wide=1); its atom carries size=l so that its name stays
+% inscribed, and every box name is inscribed at size l.  The leg names are
+% label marks west of the open ends, so they clear the wire ends (rule L2).
+% Action right to left: Omega, then V on U.
+% Boundary signature: (phys:w) x 4 on both sides of the approximation, in
+% the order T, B_T, B_E, E from top to bottom.  The joiner \approx_{\le\sqrt b}
+% carries the error bound (b generic, so the PP Sec. 3 relabelling reuses it);
+% it is still the relation \approx, so no check opt-out is recorded.
+% Not to scale: the dimensions of B_T and B_E are unbounded (enlarged by
+% blank ancillas so that an isometric image of H_U fits).
+% Label macros: \tnlBsLeft{T}, \tnlBsMid{U}, \tnlBsRight{E},
+% Label macros: \tnlBsAuxLeft{\mathcal B_T}, \tnlBsAuxRight{\mathcal B_E},
+% Label macros: \tnlBsLeftState{s}, \tnlBsRightState{s'};
+% PP Sec. 3 overrides them with R, Q, C, \mathcal B_R, \mathcal B_C, a, a'.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=5, bonds=none, size=l]
+        \providecommand{\tnlBsLeft}{T}
+        \providecommand{\tnlBsMid}{U}
+        \providecommand{\tnlBsRight}{E}
+        \providecommand{\tnlBsAuxLeft}{\mathcal B_T}
+        \providecommand{\tnlBsAuxRight}{\mathcal B_E}
+        \tn[at=(1,5), name=splitState, skin=box, wires=4, size=l,
+            ports={180@1:physical, 180@2:physical, 180@4:physical}]{\Omega}
+        \tn[at=(2,2), name=splitIso, skin=box, wide=2, wires=2,
+            ports={0@1:physical, 180@1:physical, 180@2:physical}]{V}
+        \tn[at=(1,1), name=splitLegT, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), name=splitLegBT, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=splitLegBE, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tn[at=(4,1), name=splitLegE, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tnwire[name=splitBuffer]{splitState.180@2}{splitIso.0@1}
+        \tnwire{splitLegT.0}{splitState.180@1}
+        \tnwire{splitLegE.0}{splitState.180@4}
+        \tnwire[species=collar]{splitLegBT.0}{splitIso.180@1}
+        \tnwire[species=collar]{splitLegBE.0}{splitIso.180@2}
+        \tnwire[name=splitOutT]{open w}{splitLegT.180}
+        \tnwire[name=splitOutBT, species=collar]{open w}{splitLegBT.180}
+        \tnwire[name=splitOutBE, species=collar]{open w}{splitLegBE.180}
+        \tnwire[name=splitOutE]{open w}{splitLegE.180}
+        \tnmark[form=label, label pos=s]{on splitBuffer 0.5}{$\tnlBsMid$}
+        \tnmark[form=label, label pos=w]{on splitOutT 0}{$\tnlBsLeft$}
+        \tnmark[form=label, label pos=w]{on splitOutBT 0}{$\tnlBsAuxLeft$}
+        \tnmark[form=label, label pos=w]{on splitOutBE 0}{$\tnlBsAuxRight$}
+        \tnmark[form=label, label pos=w]{on splitOutE 0}{$\tnlBsRight$}
+    \end{tenkz}
+    $\approx_{\le\sqrt b}$
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=3, bonds=none, size=l]
+        \providecommand{\tnlBsLeft}{T}
+        \providecommand{\tnlBsRight}{E}
+        \providecommand{\tnlBsAuxLeft}{\mathcal B_T}
+        \providecommand{\tnlBsAuxRight}{\mathcal B_E}
+        \providecommand{\tnlBsLeftState}{s}
+        \providecommand{\tnlBsRightState}{s'}
+        \tn[at=(1,2), name=splitLeftState, skin=box, wide=2, wires=2,
+            ports={180@1:physical, 180@2:physical}]{\tnlBsLeftState}
+        \tn[at=(3,2), name=splitRightState, skin=box, wide=2, wires=2,
+            ports={180@1:physical, 180@2:physical}]{\tnlBsRightState}
+        \tn[at=(1,1), name=productLegT, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), name=productLegBT, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=productLegBE, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tn[at=(4,1), name=productLegE, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tnwire{productLegT.0}{splitLeftState.180@1}
+        \tnwire[species=collar]{productLegBT.0}{splitLeftState.180@2}
+        \tnwire[species=collar]{productLegBE.0}{splitRightState.180@1}
+        \tnwire{productLegE.0}{splitRightState.180@2}
+        \tnwire[name=productOutT]{open w}{productLegT.180}
+        \tnwire[name=productOutBT, species=collar]{open w}{productLegBT.180}
+        \tnwire[name=productOutBE, species=collar]{open w}{productLegBE.180}
+        \tnwire[name=productOutE]{open w}{productLegE.180}
+        \tnmark[form=label, label pos=w]{on productOutT 0}{$\tnlBsLeft$}
+        \tnmark[form=label, label pos=w]{on productOutBT 0}{$\tnlBsAuxLeft$}
+        \tnmark[form=label, label pos=w]{on productOutBE 0}{$\tnlBsAuxRight$}
+        \tnmark[form=label, label pos=w]{on productOutE 0}{$\tnlBsRight$}
+    \end{tenkz}
+\end{tenkzequation}
