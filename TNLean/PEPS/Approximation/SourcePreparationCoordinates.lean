@@ -161,4 +161,45 @@ theorem eval_prepareSlots_eq_sum_basis (R : SourceInventory P)
       ((bU i).tensorProduct (bV i)).sum_repr (η i) |>.symm
   conv_lhs => rw [h, eval_prepareSlots_sum_smul]
 
+/-- Fixed-layout preparation retains the actual preparation vector. -/
+theorem prepareSlots_eval_heq_prepare (R : SourceInventory P)
+    (U V : Fin R.length → HSpace) (η : ∀ i, U i ⊗[ℂ] V i)
+    (ℓ : Layout P) (x : Mem ℓ) :
+    HEq ((prepareSlots R U V η ℓ).eval x) (((ofSlots R U V η).prepare ℓ).eval x) := by
+  rw [prepareSlots, Word.eval_castLayouts]
+  exact Layout.memCongr_apply_heq _ _
+
+/-- A source operation respects equality of the spectator register list and vector. -/
+theorem _root_.TNLean.PEPS.PairEffect.Word.eval_source_apply_heq (s : PairSource P)
+    {a b : Layout P} (h : a = b) {x : Mem a} {y : Mem b} (hxy : HEq x y) :
+    HEq ((Word.source s.distinct s.leftSpace s.rightSpace s.vector a).eval x)
+      ((Word.source s.distinct s.leftSpace s.rightSpace s.vector b).eval y) := by
+  cases h
+  exact heq_of_eq (congrArg _ (eq_of_heq hxy))
+
+/-- Preparation of a nonempty source list first prepares its tail and then its head. -/
+theorem prepareSlots_cons_eval_heq (r : PairSource P) (R : SourceInventory P)
+    (U V : Fin (r :: R).length → HSpace) (η : ∀ i, U i ⊗[ℂ] V i)
+    (ℓ : Layout P) (x : Mem ℓ) :
+    HEq ((prepareSlots (r :: R) U V η ℓ).eval x)
+      ((Word.source r.distinct (U 0) (V 0) (η 0)
+        (slotLayout R (fun i ↦ U i.succ) (fun i ↦ V i.succ) ++ ℓ)).eval
+        ((prepareSlots R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
+          (fun i ↦ η i.succ) ℓ).eval x)) := by
+  apply (prepareSlots_eval_heq_prepare (r :: R) U V η ℓ x).trans
+  rw [ofSlots_cons]
+  exact Word.eval_source_apply_heq ⟨r.left, r.right, r.distinct, U 0, V 0, η 0⟩
+    (congrArg (· ++ ℓ) (layout_ofSlots_eq R (fun i ↦ U i.succ)
+      (fun i ↦ V i.succ) (fun i ↦ η i.succ) (fun _ ↦ 0)))
+    (prepareSlots_eval_heq_prepare R (fun i ↦ U i.succ) (fun i ↦ V i.succ)
+      (fun i ↦ η i.succ) ℓ x).symm
+
+/-- An operation on spectator registers commutes with preparing the pair in front. -/
+theorem _root_.TNLean.PEPS.PairEffect.PairSource.eval_frame_frame_source (r : PairSource P)
+    (U V : HSpace) (η : U ⊗[ℂ] V) {a b : Layout P} (w : Word a b) (x : Mem a) :
+    (Word.frame ⟨r.left, U⟩ (Word.frame ⟨r.right, V⟩ w)).eval
+      ((Word.source r.distinct U V η a).eval x) =
+    (Word.source r.distinct U V η b).eval (w.eval x) := by
+  exact eval_frameList_prepare [⟨r.left, r.right, r.distinct, U, V, η⟩] w x
+
 end TNLean.PEPS.PairEffect.SourceInventory

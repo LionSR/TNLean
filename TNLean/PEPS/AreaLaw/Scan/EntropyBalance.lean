@@ -24,6 +24,8 @@ and 8.1, and Lemmas 2.1 and 2.3 for one scan rather than deriving them. Document
 * `TNLean.PEPS.AreaLaw.Scan.sum_integral_le_of_deriv`: telescoped integration of derivative
   lower bounds over a finite chain of intervals.
 * `TNLean.PEPS.AreaLaw.Scan.ScanData.chargeDefect_le_choiceGainSum`: `scanner:charge-gain`.
+* `TNLean.PEPS.AreaLaw.Scan.ScanData.intervalIntegrable_chargeDefect`: bounded measurable
+  charge defects are interval integrable.
 * `TNLean.PEPS.AreaLaw.Scan.ScanData.integratedChargeBound`.
 
 ## References
@@ -41,14 +43,15 @@ open MeasureTheory Set
 /-- Telescoped integration of derivative lower bounds over a chain of `R` unit intervals whose
 adjacent endpoint values agree. Rounds in `T` carry a nonnegative gain `coef · Q r` that is
 retained only on `[α, β] ⊆ [0, 1]`; every round pays the error `err`
-(`08-scanner.tex`, lines 457–475). -/
+(`08-scanner.tex`, lines 457–475). The gain `Q r` need only be AE strongly measurable and
+bounded; endpoint continuity and everywhere interior differentiability of `f r` are retained. -/
 theorem sum_integral_le_of_deriv {R : ℕ} (f Q : Fin R → ℝ → ℝ) (T : Finset (Fin R))
     {coef err α β : ℝ} (hα : 0 ≤ α) (hαβ : α ≤ β) (hβ : β ≤ 1) (hcoef : 0 ≤ coef)
     (hR : 0 < R)
     (hcont : ∀ r, ContinuousOn (f r) (Icc 0 1))
     (hdiff : ∀ r, DifferentiableOn ℝ (f r) (Ioo 0 1))
     (hQ_nonneg : ∀ r, ∀ p ∈ Ioo (0 : ℝ) 1, 0 ≤ Q r p)
-    (hQ_cont : ∀ r, ContinuousOn (Q r) (Ioo 0 1))
+    (hQ_meas : ∀ r, AEStronglyMeasurable (Q r) (volume.restrict (Ioo 0 1)))
     (hQ_bdd : ∃ B, ∀ r, ∀ p ∈ Ioo (0 : ℝ) 1, Q r p ≤ B)
     (hgainT : ∀ r ∈ T, ∀ p ∈ Ioo (0 : ℝ) 1, coef * Q r p - err ≤ -deriv (f r) p)
     (hgain : ∀ r, ∀ p ∈ Ioo (0 : ℝ) 1, -err ≤ -deriv (f r) p)
@@ -60,7 +63,7 @@ theorem sum_integral_le_of_deriv {R : ℕ} (f Q : Fin R → ℝ → ℝ) (T : Fi
   have hQint : ∀ r, IntegrableOn (Q r) (Icc 0 1) := by
     intro r
     rw [integrableOn_Icc_iff_integrableOn_Ioo]
-    refine ⟨(hQ_cont r).aestronglyMeasurable measurableSet_Ioo,
+    refine ⟨hQ_meas r,
       HasFiniteIntegral.restrict_of_bounded (C := max B 0) (by simp) ?_⟩
     refine (ae_restrict_iff' measurableSet_Ioo).2 (Filter.Eventually.of_forall fun p hp ↦ ?_)
     rw [Real.norm_of_nonneg (hQ_nonneg r p hp)]
@@ -222,6 +225,20 @@ theorem chargeDefect_le (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) (hp : p ∈ I
         · exact mul_nonneg (S.w_nonneg r h) (mul_nonneg hN0 hb0)
     _ = _ := by rw [← Finset.sum_mul, S.sum_w, one_mul]
 
+/-- The charge defect is interval integrable from its interior AE strong measurability,
+nonnegativity and bound (`08-scanner.tex`, lines 438–440, 457–490). The endpoint values do
+not affect the integral. -/
+theorem intervalIntegrable_chargeDefect (r : Fin (X.rounds n)) (k : ℕ) :
+    IntervalIntegrable ((S.round r).chargeDefect k) volume 0 1 := by
+  apply (intervalIntegrable_iff_integrableOn_Icc_of_le zero_le_one).2
+  rw [integrableOn_Icc_iff_integrableOn_Ioo]
+  refine ⟨S.aestronglyMeasurable_chargeDefect r k,
+    HasFiniteIntegral.restrict_of_bounded
+      (C := κ.C * X.K n * n * X.D n * (κ.C * Real.log n ^ κ.Cl)) (by simp) ?_⟩
+  refine (ae_restrict_iff' measurableSet_Ioo).2 (Filter.Eventually.of_forall fun p hp ↦ ?_)
+  rw [Real.norm_of_nonneg (S.chargeDefect_nonneg r k p)]
+  exact S.chargeDefect_le r k p hp
+
 /-- The integrated entropy inequality (lines 457–475), for every replica count `k ≥ 1`. -/
 theorem integratedChargeBound {C₁ : ℝ} (hn : ScaleFacts X n C₁) (k : ℕ) (hk : 1 ≤ k) :
     S.IntegratedChargeBound k := by
@@ -242,7 +259,7 @@ theorem integratedChargeBound {C₁ : ℝ} (hn : ScaleFacts X n C₁) (k : ℕ) 
     (β := X.eps n) (by positivity) (by linarith)
     (by linarith) (by positivity) hR (fun r ↦ S.continuousOn_logNormSq r k)
     (fun r ↦ S.differentiableOn_logNormSq r k) (fun r p _ ↦ S.chargeDefect_nonneg r k p)
-    (fun r ↦ S.continuousOn_chargeDefect r k) ⟨_, fun r p hp ↦ S.chargeDefect_le r k p hp⟩
+    (fun r ↦ S.aestronglyMeasurable_chargeDefect r k) ⟨_, fun r p hp ↦ S.chargeDefect_le r k p hp⟩
     (fun r hr p hp ↦ by
       have h1 := S.entropy_gain r k p hp
       have h2 := S.chargeDefect_le_choiceGainSum r (Finset.mem_filter.1 hr).2 k p

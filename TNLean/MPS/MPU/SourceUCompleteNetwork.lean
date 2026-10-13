@@ -3,7 +3,6 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Algebra.FinSumPermutation
 import TNLean.MPS.MPU.MatchingContractions
 import TNLean.MPS.MPU.SourceVIsometry
 
@@ -46,21 +45,6 @@ variable {d D : ℕ} (U : MPOTensor d D)
 
 namespace SourceFactors
 
-/-- The tensor product \(Y_1\otimes Y_2\) for supplied source factors, in the
-paper's dotted/solid source-bond order `(r,l)`.
-
-Source: CPSV17 equations `uu` and `uUnitary` (lines 532--557). -/
-private noncomputable def sourceYTensor {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (S : SourceFactors U ρ) :
-    Matrix (Fin r[U] × Fin ℓ[U])
-      ((Fin D × Fin d) × (Fin d × Fin D)) ℂ :=
-  S.Y₁ ⊗ₖ S.Y₂
-
-@[simp] private theorem sourceYTensor_apply {ρ : Matrix (Fin D) (Fin D) ℂ}
-    (S : SourceFactors U ρ) (r : Fin r[U]) (l : Fin ℓ[U])
-    (x₁ : Fin D × Fin d) (x₂ : Fin d × Fin D) :
-    sourceYTensor U S (r, l) (x₁, x₂) = S.Y₁ r x₁ * S.Y₂ l x₂ := rfl
-
 /-- The paper gate \(u=Y_2\mathbin{-}Y_1\) is the diagonal virtual
 contraction of `sourceYTensor`, with the physical and source-bond orders
 displayed explicitly.
@@ -75,98 +59,6 @@ private theorem sourceU_eq_diagonal_sourceYTensor
   intro β _
   simp only [sourceYTensor_apply]
   ring
-
-private theorem Y₁_gram_eq_weighted_sourceCutM₁_gram
-    {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
-    (p q : Fin d) (a b : Fin D) :
-    (∑ r : Fin r[U], star (S.Y₁ r (a, p)) * S.Y₁ r (b, q)) =
-      ∑ β : Fin D, ∑ β' : Fin D, ∑ i : Fin d,
-        star (U i p a β) * ρ β β' * U i q b β' := by
-  have hgram : S.Y₁ᴴ * S.Y₁ =
-      (sourceCutM₁ U)ᴴ * sourceWeight (d := d) ρ * sourceCutM₁ U := by
-    calc
-      S.Y₁ᴴ * S.Y₁ =
-          S.Y₁ᴴ * (S.X₁ᴴ * sourceWeight (d := d) ρ * S.X₁) * S.Y₁ := by
-        rw [S.X₁_weighted_isometry]
-        simp
-      _ = (S.X₁ * S.Y₁)ᴴ * sourceWeight (d := d) ρ *
-          (S.X₁ * S.Y₁) := by
-        simp only [Matrix.conjTranspose_mul, Matrix.mul_assoc]
-      _ = _ := by rw [← S.sourceCutM₁_eq]
-  have hentry := congrArg (fun M ↦ M (a, p) (b, q)) hgram
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, sourceWeight,
-    Matrix.kronecker_apply, sourceCutM₁_apply, Fintype.sum_prod_type] at hentry
-  conv_rhs at hentry =>
-    simp [Matrix.one_apply]
-    arg 2
-    ext i
-    arg 2
-    ext β'
-    rw [Finset.sum_mul]
-  calc
-    (∑ r : Fin r[U], star (S.Y₁ r (a, p)) * S.Y₁ r (b, q)) =
-        ∑ i : Fin d, ∑ β' : Fin D, ∑ β : Fin D,
-          star (U i p a β) * ρ β β' * U i q b β' := hentry
-    _ = ∑ β : Fin D, ∑ β' : Fin D, ∑ i : Fin d,
-          star (U i p a β) * ρ β β' * U i q b β' := by
-      rw [Fintype.sum_reverse_three]
-
-private theorem Y₂_gram_eq_rotated_sourceCutM₂_gram
-    {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
-    (p q : Fin d) (a b : Fin D) :
-    (∑ l : Fin ℓ[U], star (S.Y₂ l (p, a)) * S.Y₂ l (q, b)) =
-      ∑ β : Fin D, ∑ j : Fin d,
-        star (U j p β a) * U j q β b := by
-  have hgram : S.Y₂ᴴ * S.Y₂ = (sourceCutM₂ U)ᴴ * sourceCutM₂ U := by
-    calc
-      S.Y₂ᴴ * S.Y₂ = S.Y₂ᴴ * (S.X₂ᴴ * S.X₂) * S.Y₂ := by
-        rw [show S.X₂ᴴ * S.X₂ = 1 by exact S.X₂_isometry]
-        simp
-      _ = (S.X₂ * S.Y₂)ᴴ * (S.X₂ * S.Y₂) := by
-        simp only [Matrix.conjTranspose_mul, Matrix.mul_assoc]
-      _ = _ := by rw [← S.sourceCutM₂_eq]
-  have hentry := congrArg (fun M ↦ M (p, a) (q, b)) hgram
-  simp only [Matrix.mul_apply, Matrix.conjTranspose_apply,
-    Fintype.sum_prod_type, sourceCutM₂_apply] at hentry
-  exact hentry
-
-/-- Complete expansion of the supplied \(Y_1\otimes Y_2\) Gram entry into
-four local tensor entries.  The first cut retains the source weight, and the
-second cut uses only the column-isometry normalization of \(X_2\).
-
-Source: CPSV17 equations `X1X2b` and `uUnitary` (lines 487--557). -/
-private theorem sourceYTensor_gram_eq_four_u_weighted
-    {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
-    (p q : Fin d × Fin d) (a b : Fin D × Fin D) :
-    (∑ t : Fin r[U] × Fin ℓ[U],
-      star (sourceYTensor U S t ((a.1, p.1), (p.2, a.2))) *
-        sourceYTensor U S t ((b.1, q.1), (q.2, b.2))) =
-      ∑ β : Fin D, ∑ β' : Fin D, ∑ γ : Fin D,
-      ∑ j₁ : Fin d, ∑ j₂ : Fin d,
-        star (U j₁ p.1 a.1 β) * ρ β β' * U j₁ q.1 b.1 β' *
-          (star (U j₂ p.2 γ a.2) * U j₂ q.2 γ b.2) := by
-  rw [Fintype.sum_prod_type]
-  simp only [sourceYTensor_apply, star_mul]
-  calc
-    _ = (∑ r : Fin r[U], star (S.Y₁ r (a.1, p.1)) *
-          S.Y₁ r (b.1, q.1)) *
-        (∑ l : Fin ℓ[U], star (S.Y₂ l (p.2, a.2)) *
-          S.Y₂ l (q.2, b.2)) := by
-      simp_rw [Finset.sum_mul_sum]
-      apply Finset.sum_congr rfl
-      intro r _
-      apply Finset.sum_congr rfl
-      intro l _
-      ring
-    _ = (∑ β : Fin D, ∑ β' : Fin D, ∑ j₁ : Fin d,
-          star (U j₁ p.1 a.1 β) * ρ β β' * U j₁ q.1 b.1 β') *
-        (∑ γ : Fin D, ∑ j₂ : Fin d,
-          star (U j₂ p.2 γ a.2) * U j₂ q.2 γ b.2) := by
-      rw [Y₁_gram_eq_weighted_sourceCutM₁_gram,
-        Y₂_gram_eq_rotated_sourceCutM₂_gram]
-    _ = _ := by
-      simp_rw [Finset.sum_mul, Finset.mul_sum]
-      conv_lhs => arg 2; ext β; arg 2; ext β'; rw [Finset.sum_comm]
 
 /-- The Gram matrix of the paper gate \(u=Y_2\mathbin{-}Y_1\) is
 the literal staggered reflected--direct four-\(\mathcal U\) network.  The pair
