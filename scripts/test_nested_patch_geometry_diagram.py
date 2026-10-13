@@ -6,13 +6,21 @@ from pathlib import Path
 import re
 import unittest
 
+from blueprint_tex_tree import read_tex_tree
+
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "blueprint/src/chapter/ch24_peps_nested_patch_geometry.tex"
+FIGURE = "figures/peps_nested_patch_crossing"
+# The notes relabel the three squares, so the figure routes their labels through macros
+# whose defaults are the blueprint's original literals K_0, K_1, K_2.
+LABEL_MACROS = (r"\tnlNpcInner", r"\tnlNpcMiddle", r"\tnlNpcOuter")
 
 
 class NestedPatchGeometryDiagramTests(unittest.TestCase):
     def setUp(self):
-        self.source = SOURCE.read_text(encoding="utf-8")
+        self.assertIn("\\input{" + FIGURE + "}", SOURCE.read_text(encoding="utf-8"))
+        # The diagram lives in a shared figure; read the chapter with it expanded.
+        self.source = read_tex_tree(SOURCE)
         diagrams = re.findall(r"\\begin\{tenkz\}\[.*?\\end\{tenkz\}", self.source, re.S)
         self.assertEqual(len(diagrams), 1)
         self.diagram = diagrams[0]
@@ -43,14 +51,24 @@ class NestedPatchGeometryDiagramTests(unittest.TestCase):
         self.assertIn("not a tensor contraction or an operator", self.source)
 
     def test_exact_closed_samples_match_enclosures(self):
-        marks = re.findall(
+        defaults = dict(re.findall(
+            r"\\providecommand\{(\\tnlNpc[A-Za-z]+)\}\{([^}]*)\}", self.diagram
+        ))
+        expected = {macro: f"K_{index}" for index, macro in enumerate(LABEL_MACROS)}
+        self.assertEqual(defaults, expected)
+        first_atom = self.diagram.index(r"\tn[")
+        for macro in LABEL_MACROS:
+            self.assertLess(self.diagram.index(r"\providecommand{" + macro + "}"), first_atom)
+        enclosures = re.findall(
             r"\\tnmark\[form=enclosure,[^]]*\]\s*"
-            r"\{\(1,1\) \.\. \(3,(\d+)\)\}\{\$\\textcolor\{\w+\}\{K_(\d)\}\$\}",
+            r"\{\(1,1\) \.\. \(3,(\d+)\)\}"
+            r"\{\$\\textcolor\{\w+\}\{(\\tnlNpc[A-Za-z]+)\}\$\}",
             self.diagram,
         )
+        marks = [(columns, defaults[macro].removeprefix("K_")) for columns, macro in enclosures]
         self.assertEqual(marks, [("6", "0"), ("8", "1"), ("10", "2")])
-        for index, color in enumerate(("tenkzAction", "tenkzMarked", "tenkzExtra")):
-            self.assertIn(r"$\textcolor{" + color + "}{K_" + str(index) + "}$", self.diagram)
+        for macro, color in zip(LABEL_MACROS, ("tenkzAction", "tenkzMarked", "tenkzExtra")):
+            self.assertIn(r"$\textcolor{" + color + "}{" + macro + "}$", self.diagram)
         self.assertIn("rounded outlines enclose the clipped sets", self.source)
         for columns, index in marks:
             drawn = {(x, y) for x in range(int(columns)) for y in range(3)}

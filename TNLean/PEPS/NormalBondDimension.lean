@@ -45,6 +45,14 @@ chain (arXiv:1804.04964, lines 981--1009 and 1475--1498 of
 `Papers/1804.04964/paper_normal.tex`) — not an added restriction; see
 `docs/paper-gaps/peps_normal_ft_section3_route.tex`.
 
+The two tensors of the general theorem are packaged as
+`NormalPEPSPairHypotheses`, which carries the nonzero virtual-space convention
+together with the shared blockings.  The one-edge and coherent-frame steps keep
+explicit positivity of the original tensors, because their tensors are only
+constrained through the blocking data; every caller supplies it from
+`NormalPEPSPairHypotheses` or from the explicit positivity hypotheses still
+stated by the normal corollaries on cycle, square and torus lattices.
+
 ## References
 
 * [Molnár, Garre-Rubio, Pérez-García, Schuch, Cirac, *Normal projected
@@ -254,16 +262,54 @@ theorem bondDim_apply_eq_of_blockingData {e : Edge G}
   have hb : F.frame.blue = F'.frame.blue := by simp [hF, hF', hblue]
   exact bondDim_apply_eq_of_coherentFrames F F' hPF hPF' hr hb hAB hposA hposB e hsingle
 
+/-! ### Two normal PEPS tensors -/
+
+/-- Two normal PEPS tensors on a finite simple graph, in the setting of the general normal
+Fundamental Theorem. They share one family of edge-centred three-region blockings and of
+one-site-different comparison regions, each region injective for both tensors, and both
+tensors have nonzero virtual bond spaces. Normality is blockability into injective regions,
+as defined at line 1318 of `Papers/1804.04964/paper_normal.tex`. The blocking fields are
+`NormalPEPSBlockingHypotheses` at the doubly injective assignment
+`regionInjectivityDataPair`, which stays available for region families of tensors with
+zero-dimensional bonds.
+
+**Local fix (nonzero virtual spaces):** the source treats PEPS virtual bond spaces as
+nonzero and does not list positive bond dimensions among the hypotheses. Region injectivity
+does not imply them: a zero-dimensional boundary bond leaves a region with no boundary
+configurations, so its injectivity holds vacuously. The library adopts the nonzero reading
+as the fields `bondDim_pos_left` and `bondDim_pos_right`; documented in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+
+Source: arXiv:1804.04964, Section 3, theorem labelled `normal`, lines 1576--1583 of
+`Papers/1804.04964/paper_normal.tex`. -/
+structure NormalPEPSPairHypotheses (A B : Tensor G d) extends
+    NormalPEPSBlockingHypotheses
+      (regionInjectivityDataPair (regionInjectivityDataOf (G := G) A)
+        (regionInjectivityDataOf (G := G) B)) G where
+  /-- Every virtual bond space of the first tensor is nonzero. The source treats bond spaces
+  as nonzero when it applies Lemma `inj_isomorph` around every edge, with `X` any matrix on
+  the bond and an invertible gauge `Z` (arXiv:1804.04964, lines 582 and 1037 of
+  `Papers/1804.04964/paper_normal.tex`), and repeats that argument for normal PEPS in the
+  theorem labelled `normal` (lines 1574--1583). Local fix documented in
+  `docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
+  bondDim_pos_left : ∀ e : Edge G, 0 < A.bondDim e
+  /-- Every virtual bond space of the second tensor is nonzero, the same convention for the
+  second normal PEPS (arXiv:1804.04964, lines 582, 1037 and 1574--1583 of
+  `Papers/1804.04964/paper_normal.tex`). Local fix documented in
+  `docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
+  bondDim_pos_right : ∀ e : Edge G, 0 < B.bondDim e
+
 open scoped Classical in
 /-- **Equal bond dimensions from the general normal blocking hypotheses**
 (arXiv:1804.04964, Section 3, theorem labelled `normal`, lines 1576--1583 of
 `Papers/1804.04964/paper_normal.tex`, via the isomorphism rigidity of Lemma
 `inj_isomorph`, lines 560--583).
 
-Two tensors on a finite simple graph satisfying the general normal PEPS
-blocking hypotheses over the pair predicate, with each distinguished edge the
-single red-to-blue crossing of its frame, the same state, and positive
-physical and bond dimensions, have equal bond dimensions on every edge.  This
+Two normal PEPS tensors on a finite simple graph (`NormalPEPSPairHypotheses`:
+the general normal blocking hypotheses over the pair predicate, with nonzero
+virtual bond spaces), with each distinguished edge the single red-to-blue
+crossing of its frame, the same state, and positive physical dimension, have
+equal bond dimensions on every edge.  This
 discharges the matched-bond-dimension hypothesis of the normal Fundamental
 Theorem from the blocking hypotheses, as the source derives it: the insertion
 correspondence on each blocked chain is an algebra isomorphism between the two
@@ -276,20 +322,15 @@ chain (arXiv:1804.04964, lines 981--1009 and 1475--1498 of
 `Papers/1804.04964/paper_normal.tex`); see
 `docs/paper-gaps/peps_normal_ft_section3_route.tex`. -/
 theorem bondDim_eq_of_normalBlocking
-    (A B : Tensor G d)
-    (h : NormalPEPSBlockingHypotheses
-      (regionInjectivityDataPair (regionInjectivityDataOf (G := G) A)
-        (regionInjectivityDataOf (G := G) B)) G)
+    (A B : Tensor G d) (h : NormalPEPSPairHypotheses A B)
     (hsingle : ∀ e g : Edge G,
       IsCrossingEdge (G := G) A (h.edgeBlocking.red e) (h.edgeBlocking.blue e) g ↔ g = e)
-    (hAB : SameState A B) (hd : 0 < d)
-    (hposA : ∀ g : Edge G, 0 < A.bondDim g)
-    (hposB : ∀ g : Edge G, 0 < B.bondDim g) :
+    (hAB : SameState A B) (hd : 0 < d) :
     A.bondDim = B.bondDim := by
   funext e
   exact bondDim_apply_eq_of_blockingData
     (h.edgeBlocking.blockingData e).pairLeft (h.edgeBlocking.blockingData e).pairRight
-    rfl rfl hAB hd hposA hposB (hsingle e)
+    rfl rfl hAB hd h.bondDim_pos_left h.bondDim_pos_right (hsingle e)
 
 end PEPS
 end TNLean
