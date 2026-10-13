@@ -1831,6 +1831,7 @@ The following finite construction follows
 \begin{theorem}[The global replica mean in the scanner coordinates]
     \label{thm:al_scan_global_replica_energy}
     \lean{TNLean.PEPS.AreaLaw.Scan.copyMean_augmentOperator_eq_globalReplicaMeanHamiltonian}
+    \leanok
     \uses{def:al_scan_auxiliary_coordinates,thm:al_scan_auxiliary_energy}
     Let $V$ be a finite set of physical sites, of common dimension $q$,
     and let both auxiliary factors have dimension $d$. Let $H$ be an
@@ -1850,6 +1851,7 @@ The following finite construction follows
     \cite[Section~8, defect-mass comparison]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:al_scan_auxiliary_energy}
     Theorem~\ref{thm:al_scan_auxiliary_energy} expresses the scanner mean
     as the physical mean tensored with both auxiliary identities.
@@ -1861,6 +1863,7 @@ The following finite construction follows
 \begin{theorem}[The same vector's global replica energy expectation]
     \label{thm:al_scan_global_replica_expectation}
     \lean{TNLean.PEPS.AreaLaw.Scan.star_dotProduct_copyMean_augmentOperator}
+    \leanok
     \uses{thm:al_scan_global_replica_energy}
     Use the spaces, physical matrix and coordinate bijection of
     Theorem~\ref{thm:al_scan_global_replica_energy}. For every vector $w$
@@ -1873,6 +1876,7 @@ The following finite construction follows
     nor a nonzero vector, and also holds at zero replicas.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:al_scan_global_replica_energy}
     Substitute the operator identity of
     Theorem~\ref{thm:al_scan_global_replica_energy}. Reindex the finite
