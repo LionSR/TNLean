@@ -3024,3 +3024,139 @@ The finite-leaf estimates below follow the charge-energy argument in
     This is the telescoping step of the scanner argument in
     \cite[proof of Proposition~9.2]{OpenAI2026AreaLaw}.
 \end{proof}
+
+% Source: 08-scanner.tex, lines 309--329, 492--511 and final parameters.
+% Completion markers await exact-head hosted compilation.
+\begin{lemma}[Old-prefix probability and the counting margin]
+    \label{lem:al_scan_uniform_bad_old}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_historyWeight_bad_old_le_bad_through,
+        TNLean.PEPS.AreaLaw.Scan.eventually_split_counting_scale_separation,
+        TNLean.PEPS.AreaLaw.Scan.exists_badOldHistory_threshold}
+    Let $b_s$ be the classical weight of bad old histories after
+    $s$ complete fill--charge pairs. For $s\le H$ and positive charge
+    capacity, $b_s$ is at most the weight of full histories of length $H$
+    having a bad completed prefix.
+
+    Fix $C_r,C_1>0$, $C_T\ge0$, anchor multiplicity bound $\mathfrak m\in\mathbb N$
+    and $P\in\mathbb R$. Use the final scanner exponents
+    $\ell=10^{-5}$, $\kappa=10^{-6}$ and $\mu=1/4$, and set
+    \begin{align}
+        L & =\lfloor n^{1-\ell}\rfloor,             & m                            & =\lfloor n^\mu\rfloor,
+          & D                                       & =\lceil n^\kappa\rceil,                                                      \\
+        K & =\left\lfloor\frac{L}{8m}\right\rfloor,
+          & r_0                                     & =\lceil C_r(\log n)^2\rceil, & M                      & =\lceil C_1nD\rceil.
+        \label{eq:al_scan_uniform_tail_scales}
+    \end{align}
+    There is $N$, depending only on these fixed quantities, such that
+    for all $n\ge N$ the following holds for every physical scan.
+    Assume $T\ne\varnothing$, $|T|\le C_Tn^2$, the induced domain graph, ambient target-distance
+    depth, ambient row sizes at most $n$ through depth $L$, anchor
+    multiplicities at most $\mathfrak m$, and cut clearance greater than
+    $2L+10r_0$. Then
+    \begin{align}
+        n   & \ge2,                           & r_0 & \le D, & 1 & \le D, & 4(D+2r_0) & \le m, & 8Km & \le L, \\
+        b_s & \le n^{-P}\qquad(0\le s\le nm).
+        \label{eq:al_scan_uniform_bad_old}
+    \end{align}
+    The stronger margin also holds for any fixed $0<\kappa<\mu$,
+    with its threshold allowed to depend on the exponent gap.
+\end{lemma}
+\begin{proof}
+    The exact prefix marginal writes $b_s$ as the expectation of its
+    indicator over full histories. Goodness through every completed
+    prefix implies goodness of every old charge state, so the bad-old
+    event is contained in the bad-through event. Apply the all-time
+    inverse-power estimate of \cite[Lemma~9.1]{OpenAI2026AreaLaw}; no
+    additional factor counting rounds is introduced.
+    For the counting margin, eventually $r_0\le D$ and
+    $n^{\mu-\kappa}\ge24$. Since $n^\kappa\ge1$,
+    $12\lceil n^\kappa\rceil\le24n^\kappa\le n^\mu$.
+    Taking the floor gives $4(D+2r_0)\le12D\le m$.
+\end{proof}
+
+\begin{theorem}[Uniform actual charge energy at the rounded scales]
+    \label{thm:al_scan_actual_charge_energy_decay}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_actualCharge_energy_threshold}
+    \uses{lem:al_scan_uniform_bad_old,thm:al_scan_actual_charge_energy}
+    With the scales and physical assumptions of
+    Lemma~\ref{lem:al_scan_uniform_bad_old}, one threshold $N$ gives the
+    following estimate simultaneously for every charge $s+1\le nm$,
+    every positive local and auxiliary dimension, every supplied local
+    Hamiltonian and vector $\Omega$, every $\Delta\in\mathbb R$,
+    every $a\ge0$, replica count $k\ge0$, nonzero symmetric supplied
+    vector $\psi_k$, and common parameter $0<p<1$:
+    \begin{align}
+        \mathcal E_{s,k}(p)\le\frac{10D}{m}
+        \left((1-p)A^{7/8}\mathcal Q_{s,k}(p)^{1/8}
+        +\frac{A(2\ell_q)^{1/8}}2\bigl((1-p)n^{-P}+p\bigr)\right),
+        \label{eq:al_scan_actual_charge_energy_decay}
+    \end{align}
+    where $A=10KnD\mathfrak m$ and $\ell_q=1+(2r_0+1)^2\log q$.
+    The energy and charge defect use the same actual charge data, supplied
+    vector and metric parameter $a/2$ as in
+    Theorem~\ref{thm:al_scan_actual_charge_energy}. Both history capacities
+    are positive as a consequence of the rounded scales.
+    No selected round, physical prevector identity, or norm comparison
+    is part of this statement.
+\end{theorem}
+\begin{proof}
+    Use the common threshold in Lemma~\ref{lem:al_scan_uniform_bad_old}
+    before all physical and quantum data. Its margin supplies the
+    hypotheses of Theorem~\ref{thm:al_scan_actual_charge_energy}.
+    Since $1-p\ge0$ and the coefficient of $b_s$ is nonnegative,
+    replacing $b_s$ by $n^{-P}$ gives
+    (\ref{eq:al_scan_actual_charge_energy_decay}).
+\end{proof}
+
+% Source: 08-scanner.tex, lines 492--520 and final parameters.
+% Completion markers await exact-head hosted compilation.
+\begin{theorem}[Uniform coefficients for the actual charge energy]
+    \label{thm:al_scan_actual_charge_energy_coefficients}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_nonneg,
+        TNLean.PEPS.AreaLaw.Scan.exists_actualCharge_energy_coefficients}
+    \uses{thm:al_scan_actual_charge_energy_decay}
+    Fix the physical dimension $q\ge1$, $C_r,C_1>0$, $C_T\ge0$,
+    $\mathfrak m\in\mathbb N$ and $P,C_{\mathrm{en}},e_{\mathrm{en}}\in\mathbb R$.
+    There exist $C\ge1$, $C_l\ge0$ and $N\in\mathbb N$, depending only
+    on these fixed quantities, with the following property.
+    For every $n\ge N$, use the literal rounded scales
+    (\ref{eq:al_scan_uniform_tail_scales}) and the geometric assumptions
+    of Lemma~\ref{lem:al_scan_uniform_bad_old}. For every charge $s+1\le nm$,
+    every pair of positive auxiliary dimensions, supplied local Hamiltonian,
+    vector $\Omega$ and real $\Delta$, every $W\ge0$, replica count $k\ge0$,
+    nonzero symmetric supplied vector $\psi_k$ and $0<p<1$, put $a=W/K$.
+    Then $K>0$, the literal defect $\mathcal Q_{s,k}(p)$ is nonnegative, and
+    \begin{align}
+        |C_{\mathrm{en}}|a^2\ell_q^{e_{\mathrm{en}}}\mathcal E_{s,k}(p)
+         & \le C W^2 n^{\ell}D^2(\log n)^{C_l}
+        \left((1-p)\left(\frac{\mathcal Q_{s,k}(p)}{KnD}\right)^{1/8}
+        +(1-p)n^{-P}+p\right),
+        \label{eq:al_scan_actual_charge_energy_coefficients}
+    \end{align}
+    where $\ell=10^{-5}$ and $\ell_q=1+(2r_0+1)^2\log q$.
+    Both the energy and defect use the same supplied vector and metric
+    parameter $a/2$. No round or small defect is selected. The estimate
+    includes zero total weight, zero anchor multiplicity, $q=1$ and $k=0$.
+\end{theorem}
+\begin{proof}
+    The old-history weights and split entropy symbols are nonnegative,
+    so integration against the actual leaf measures gives
+    $\mathcal Q_{s,k}(p)\ge0$. At the rounded scales, eventually $K\ge1$ and
+    $nD^2/(mK)\le C_s n^{\ell}D^2$ for a fixed $C_s\ge1$.
+    Substitute $a=W/K$ in
+    (\ref{eq:al_scan_actual_charge_energy_decay}). Factoring $KnD$ from
+    the good contribution leaves, before the two interpolation terms,
+    the exact coefficients
+    \begin{align}
+        10(10\mathfrak m)^{7/8}|C_{\mathrm{en}}|\ell_q^{e_{\mathrm{en}}},
+        \qquad
+        50\mathfrak m\,2^{1/8}|C_{\mathrm{en}}|
+        \ell_q^{e_{\mathrm{en}}+1/8}.
+    \end{align}
+    No division by $\mathfrak m$ is used. Since $\ell_q\ge1$, enlarge
+    both real exponents to one common nonnegative exponent before using
+    $\ell_q\le C_q(\log n)^4$. Thus both coefficients are at most
+    $C_d(\log n)^{C_l}$, with $C_d\ge1$ and $C_l\ge0$ fixed before
+    the remaining physical and quantum data. Multiply the scale and dimension
+    estimates and take $C=C_sC_d$.
+\end{proof}

@@ -10,6 +10,8 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeData
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyBound
+import TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyCoefficients
+import TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyDecay
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeParameterBound
 import TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms
 import TNLean.PEPS.AreaLaw.Scan.ActualEntropySampling
@@ -34,6 +36,7 @@ import TNLean.PEPS.AreaLaw.Scan.BadHistoryPowerBound
 import TNLean.PEPS.AreaLaw.Scan.BadHistoryProbability
 import TNLean.PEPS.AreaLaw.Scan.BadHistoryTimeUnion
 import TNLean.PEPS.AreaLaw.Scan.BadHistoryUnion
+import TNLean.PEPS.AreaLaw.Scan.BadOldHistoryDecay
 import TNLean.PEPS.AreaLaw.Scan.BandCountGrowth
 import TNLean.PEPS.AreaLaw.Scan.BandMargins
 import TNLean.PEPS.AreaLaw.Scan.BandNesting
