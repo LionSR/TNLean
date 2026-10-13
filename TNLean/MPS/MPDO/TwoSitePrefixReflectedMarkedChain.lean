@@ -74,76 +74,6 @@ private theorem blockTwoPrefixCoordinateCompression_eq_markedChainCoefficient
   rw [Matrix.mul_assoc]
   ring
 
-/-- Hermiticity of every positive-length MPO makes the joint two-site-prefix
-compression Hermitian for every remaining tail length.
-
-Source: arXiv:1606.00608, Proposition 4.13, Figure 7 and lines 1909--1913,
-together with Appendix C.4, lines 1951--1956. -/
-private theorem IsMPDO.blockTwoPrefixCoordinateCompression_star
-    {M : MPOTensor d D} (hM : IsMPDO M)
-    (V : Matrix (Fin (d * d)) (Fin n) ℂ) (N : ℕ)
-    (r s : Fin n) (σ τ : Fin N → Fin d) :
-    (∑ i : Fin (d * d), ∑ j : Fin (d * d),
-        star (V i r) *
-          mpo M (N + 2)
-            (Fin.cons (finProdFinEquiv.symm i).1
-              (Fin.cons (finProdFinEquiv.symm i).2 σ))
-            (Fin.cons (finProdFinEquiv.symm j).1
-              (Fin.cons (finProdFinEquiv.symm j).2 τ)) *
-          V j s) =
-      star (∑ i : Fin (d * d), ∑ j : Fin (d * d),
-        star (V i s) *
-          mpo M (N + 2)
-            (Fin.cons (finProdFinEquiv.symm i).1
-              (Fin.cons (finProdFinEquiv.symm i).2 τ))
-            (Fin.cons (finProdFinEquiv.symm j).1
-              (Fin.cons (finProdFinEquiv.symm j).2 σ)) *
-          V j r) := by
-  have hstar :
-      star (∑ i : Fin (d * d), ∑ j : Fin (d * d),
-          star (V i s) *
-            mpo M (N + 2)
-              (Fin.cons (finProdFinEquiv.symm i).1
-                (Fin.cons (finProdFinEquiv.symm i).2 τ))
-              (Fin.cons (finProdFinEquiv.symm j).1
-                (Fin.cons (finProdFinEquiv.symm j).2 σ)) *
-            V j r) =
-        ∑ i : Fin (d * d), ∑ j : Fin (d * d),
-          star (V j r) *
-            star (mpo M (N + 2)
-              (Fin.cons (finProdFinEquiv.symm i).1
-                (Fin.cons (finProdFinEquiv.symm i).2 τ))
-              (Fin.cons (finProdFinEquiv.symm j).1
-                (Fin.cons (finProdFinEquiv.symm j).2 σ))) *
-            V i s := by
-    change (starRingEnd ℂ) (∑ i : Fin (d * d), ∑ j : Fin (d * d),
-        star (V i s) *
-          mpo M (N + 2)
-            (Fin.cons (finProdFinEquiv.symm i).1
-              (Fin.cons (finProdFinEquiv.symm i).2 τ))
-            (Fin.cons (finProdFinEquiv.symm j).1
-              (Fin.cons (finProdFinEquiv.symm j).2 σ)) *
-          V j r) = _
-    rw [map_sum]
-    apply Finset.sum_congr rfl
-    intro i _
-    rw [map_sum]
-    apply Finset.sum_congr rfl
-    intro j _
-    change star (star (V i s) *
-        mpo M (N + 2)
-          (Fin.cons (finProdFinEquiv.symm i).1
-            (Fin.cons (finProdFinEquiv.symm i).2 τ))
-          (Fin.cons (finProdFinEquiv.symm j).1
-            (Fin.cons (finProdFinEquiv.symm j).2 σ)) *
-        V j r) = _
-    rw [star_mul', star_mul', star_star]
-    ring
-  rw [hstar, Finset.sum_comm]
-  apply Finset.sum_congr₂
-  intro i _ j _
-  rw [(hM (N + 2) (by omega)).isHermitian.apply]
-
 /-- A two-site prefix corner has the reflected-adjoint marked chain with an
 unblocked tail of the original tensor.
 
@@ -161,15 +91,6 @@ private theorem IsMPDO.markedChainCoefficient_blockTwoPrefix_eq_reflectedAdjoint
       markedChainCoefficient (reflectedAdjoint A)
         (MPOTensor.adjointTensor M) r s
         (List.ofFn σ).reverse (List.ofFn τ).reverse := by
-  have hcstar : star c = c := by
-    obtain ⟨_, hcim⟩ := Complex.pos_iff.mp hc
-    apply Complex.ext
-    · simp
-    · change -c.im = c.im
-      calc
-        -c.im = -0 := congrArg Neg.neg hcim.symm
-        _ = 0 := neg_zero
-        _ = c.im := hcim
   have hscale : ∀ (r s : Fin n) (σs τs : List (Fin d)),
       markedChainCoefficient
           (fun v ↦ Vᴴ * verticalTensor (MPOTensor.blockTwo M) v * V)
@@ -177,32 +98,13 @@ private theorem IsMPDO.markedChainCoefficient_blockTwoPrefix_eq_reflectedAdjoint
         c * markedChainCoefficient A M r s σs τs := by
     intro r s σs τs
     rw [show (fun v ↦ Vᴴ * verticalTensor (MPOTensor.blockTwo M) v * V) =
-        fun v ↦ c • A v by
-      funext v
-      exact hcorner v]
+        fun v ↦ c • A v from funext hcorner]
     simp [markedChainCoefficient]
-  have hscaleSwap :
-      markedChainCoefficient
-          (fun v ↦ Vᴴ * verticalTensor (MPOTensor.blockTwo M) v * V)
-          M s r (List.ofFn τ) (List.ofFn σ) =
-        c * markedChainCoefficient A M s r (List.ofFn τ) (List.ofFn σ) := by
-    exact hscale s r (List.ofFn τ) (List.ofFn σ)
-  have hcoord := hM.blockTwoPrefixCoordinateCompression_star V N r s σ τ
-  rw [blockTwoPrefixCoordinateCompression_eq_markedChainCoefficient,
-    blockTwoPrefixCoordinateCompression_eq_markedChainCoefficient,
-    hscale r s (List.ofFn σ) (List.ofFn τ), hscaleSwap] at hcoord
-  change c * markedChainCoefficient A M r s (List.ofFn σ) (List.ofFn τ) =
-    (starRingEnd ℂ)
-      (c * markedChainCoefficient A M s r (List.ofFn τ) (List.ofFn σ)) at hcoord
-  rw [map_mul] at hcoord
-  change c * markedChainCoefficient A M r s (List.ofFn σ) (List.ofFn τ) =
-    star c * star (markedChainCoefficient A M s r
-      (List.ofFn τ) (List.ofFn σ)) at hcoord
-  rw [hcstar] at hcoord
-  have hc0 : c ≠ 0 := ne_of_gt hc
-  rw [markedChainCoefficient_reflectedAdjoint A M r s
-    (List.ofFn σ) (List.ofFn τ) (by simp)]
-  exact mul_left_cancel₀ hc0 hcoord
+  apply markedChainCoefficient_eq_reflectedAdjoint_of_mul_eq_star A M hc
+  rw [← hscale, ← hscale, ← blockTwoPrefixCoordinateCompression_eq_markedChainCoefficient,
+    ← blockTwoPrefixCoordinateCompression_eq_markedChainCoefficient,
+    Finset.sum_sum_star_mul_mul_eq_star]
+  simp_rw [(hM (N + 2) (by omega)).isHermitian.apply]
 
 /-- The marked chain of a Gram-dressed two-site prefix corner has a reflected
 form with an unblocked tail, independent of the corner gauge.
@@ -236,42 +138,10 @@ theorem IsMPDO.markedChainCoefficient_blockTwoPrefix_gramDressing_eq_reflectedAd
       markedChainCoefficient (reflectedAdjoint A)
         (MPOTensor.adjointTensor M) r s
         (List.ofFn σ).reverse (List.ofFn τ).reverse := by
-  let Xm : Matrix (Fin n) (Fin n) ℂ := X
-  let Xi : Matrix (Fin n) (Fin n) ℂ :=
-    (((X)⁻¹ : GL (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ)
-  let B : MPSTensor (D * D) n := bondMul Xm A Xi
-  have hFigure : ∀ p q : Fin n,
-      markedChainCoefficient B M p q (List.ofFn σ) (List.ofFn τ) =
-        markedChainCoefficient (reflectedAdjoint B)
-          (MPOTensor.adjointTensor M) p q
-          (List.ofFn σ).reverse (List.ofFn τ).reverse := by
-    intro p q
-    apply hM.markedChainCoefficient_blockTwoPrefix_eq_reflectedAdjoint
-      B V c hc
-    intro v
-    exact hcorner v
-  have hCov := markedChainCoefficient_bondMul_eq_of_eq Xmᴴ Xiᴴ
-    B (reflectedAdjoint B) M (MPOTensor.adjointTensor M) r s
-    (List.ofFn σ) (List.ofFn τ)
-    (List.ofFn σ).reverse (List.ofFn τ).reverse hFigure
-  have hLeft : bondMul Xmᴴ B Xiᴴ = gramDressing X A := by
-    funext v
-    dsimp only [B, Xm, Xi, bondMul, gramDressing]
-    rw [Matrix.coe_units_inv, Matrix.mul_inv_rev,
-      Matrix.conjTranspose_nonsing_inv]
-    simp only [Matrix.mul_assoc]
-  have hRight : bondMul Xmᴴ (reflectedAdjoint B) Xiᴴ =
-      reflectedAdjoint A := by
-    funext v
-    dsimp only [B, Xm, Xi, bondMul, reflectedAdjoint]
-    rw [Matrix.conjTranspose_mul, Matrix.conjTranspose_mul,
-      Matrix.coe_units_inv]
-    simp only [Matrix.mul_assoc, ← Matrix.conjTranspose_mul,
-      ← Matrix.coe_units_inv, Units.inv_mul, Matrix.mul_one]
-    rw [← Matrix.mul_assoc, ← Units.val_mul]
-    have hXX : X⁻¹ * X = (1 : GL (Fin n) ℂ) := inv_mul_cancel X
-    rw [hXX, Units.val_one, Matrix.one_mul]
-  rw [hLeft, hRight] at hCov
-  exact hCov
+  apply markedChainCoefficient_gramDressing_eq_of_bondMul_reflected
+  intro p q
+  apply hM.markedChainCoefficient_blockTwoPrefix_eq_reflectedAdjoint _ V c hc
+  intro v
+  exact hcorner v
 
 end MPOTensor

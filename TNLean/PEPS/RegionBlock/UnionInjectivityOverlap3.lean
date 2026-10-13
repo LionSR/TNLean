@@ -138,18 +138,8 @@ the other is outside, and not being an `R₂` boundary edge forces both onto the
 `R₂`, namely outside it. -/
 theorem isP0OuterEdge_both_not_mem_R₂ {R₁ R₂ : Finset V} {e : Edge G}
     (h : IsP0OuterEdge (G := G) R₁ R₂ e) : e.1.1 ∉ R₂ ∧ e.1.2 ∉ R₂ := by
-  obtain ⟨hunion, hnotR₂⟩ := h
-  -- The union boundary edge has one endpoint in `R₁ ∪ R₂` and one outside, hence outside `R₂`.
-  rcases hunion with ⟨h1u, h2nu⟩ | ⟨h1nu, h2u⟩
-  · -- `e.1.2 ∉ R₁ ∪ R₂`, so `e.1.2 ∉ R₂`; not an `R₂` boundary edge forces `e.1.1 ∉ R₂`.
-    have h2 : e.1.2 ∉ R₂ := fun h => h2nu (Finset.mem_union_right _ h)
-    refine ⟨?_, h2⟩
-    intro h1
-    exact hnotR₂ (Or.inl ⟨h1, h2⟩)
-  · have h1 : e.1.1 ∉ R₂ := fun h => h1nu (Finset.mem_union_right _ h)
-    refine ⟨h1, ?_⟩
-    intro h2
-    exact hnotR₂ (Or.inr ⟨h1, h2⟩)
+  simp only [IsP0OuterEdge, IsRegionBoundaryEdge, Finset.mem_union] at *
+  grind
 
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- A `P₀`-outer edge is not a boundary edge of the overlap `R₁ ∩ R₂`: both endpoints lie
@@ -157,10 +147,8 @@ outside `R₂`, hence outside the overlap. -/
 theorem not_isRegionBoundaryEdge_inter_of_p0Outer {R₁ R₂ : Finset V} {e : Edge G}
     (h : IsP0OuterEdge (G := G) R₁ R₂ e) :
     ¬ IsRegionBoundaryEdge (G := G) (R₁ ∩ R₂) e := by
-  obtain ⟨h1, h2⟩ := isP0OuterEdge_both_not_mem_R₂ (G := G) h
-  rintro (⟨h1', _⟩ | ⟨_, h2'⟩)
-  · exact h1 (Finset.mem_inter.mp h1').2
-  · exact h2 (Finset.mem_inter.mp h2').2
+  simp only [IsP0OuterEdge, IsRegionBoundaryEdge, Finset.mem_union, Finset.mem_inter] at *
+  grind
 
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- A `P₀`-outer edge is not a boundary edge of `R₂ \ R₁`: both endpoints lie outside `R₂`,
@@ -168,10 +156,8 @@ hence outside the difference. -/
 theorem not_isRegionBoundaryEdge_sdiff_of_p0Outer {R₁ R₂ : Finset V} {e : Edge G}
     (h : IsP0OuterEdge (G := G) R₁ R₂ e) :
     ¬ IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
-  obtain ⟨h1, h2⟩ := isP0OuterEdge_both_not_mem_R₂ (G := G) h
-  rintro (⟨h1', _⟩ | ⟨_, h2'⟩)
-  · exact h1 (Finset.mem_sdiff.mp h1').1
-  · exact h2 (Finset.mem_sdiff.mp h2').1
+  simp only [IsP0OuterEdge, IsRegionBoundaryEdge, Finset.mem_union, Finset.mem_sdiff] at *
+  grind
 
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- A boundary edge of the union `R₁ ∪ R₂` that is not `P₀`-outer is a boundary edge of `R₂`,
@@ -254,18 +240,8 @@ omit [Fintype V] [DecidableRel G.Adj] in
 theorem isRegionBoundaryEdge_inter_or_sdiff_of_R₂ {R₁ R₂ : Finset V} {e : Edge G}
     (h : IsRegionBoundaryEdge (G := G) R₂ e) :
     IsRegionBoundaryEdge (G := G) (R₁ ∩ R₂) e ∨ IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
-  rcases h with ⟨h1, h2⟩ | ⟨h1, h2⟩
-  · -- `e.1.1 ∈ R₂`, `e.1.2 ∉ R₂`; the in-`R₂` endpoint is in the overlap or the difference.
-    by_cases hb : e.1.1 ∈ R₁
-    · exact Or.inl (Or.inl ⟨Finset.mem_inter.mpr ⟨hb, h1⟩,
-        fun hc => h2 (Finset.mem_inter.mp hc).2⟩)
-    · exact Or.inr (Or.inl ⟨Finset.mem_sdiff.mpr ⟨h1, hb⟩,
-        fun hc => h2 (Finset.mem_sdiff.mp hc).1⟩)
-  · by_cases hb : e.1.2 ∈ R₁
-    · exact Or.inl (Or.inr ⟨fun hc => h1 (Finset.mem_inter.mp hc).2,
-        Finset.mem_inter.mpr ⟨hb, h2⟩⟩)
-    · exact Or.inr (Or.inr ⟨fun hc => h1 (Finset.mem_sdiff.mp hc).1,
-        Finset.mem_sdiff.mpr ⟨h2, hb⟩⟩)
+  simp only [IsRegionBoundaryEdge, Finset.mem_inter, Finset.mem_sdiff] at *
+  grind
 
 omit [Fintype V] in
 /-- The `R₂` boundary label is determined by the overlap and difference boundary labels: if
@@ -381,26 +357,8 @@ theorem isOverlapCrossingEdge_of_interBoundary_not_R₁ {R₁ R₂ : Finset V} {
     (hinter : IsRegionBoundaryEdge (G := G) (R₁ ∩ R₂) e)
     (hnR₁ : ¬ IsRegionBoundaryEdge (G := G) R₁ e) :
     IsOverlapCrossingEdge (G := G) R₁ R₂ e := by
-  rcases hinter with ⟨h1, h2⟩ | ⟨h1, h2⟩
-  · -- `e.1.1 ∈ R₁ ∩ R₂`, `e.1.2 ∉ R₁ ∩ R₂`.
-    have h1R₁ : e.1.1 ∈ R₁ := (Finset.mem_inter.mp h1).1
-    have h2R₁ : e.1.2 ∈ R₁ := by
-      by_contra h2nR₁; exact hnR₁ (Or.inl ⟨h1R₁, h2nR₁⟩)
-    refine Or.inl ⟨h1, Finset.mem_sdiff.mpr ⟨h2R₁, fun h2R₂ => ?_⟩⟩
-    exact h2 (Finset.mem_inter.mpr ⟨h2R₁, h2R₂⟩)
-  · have h2R₁ : e.1.2 ∈ R₁ := (Finset.mem_inter.mp h2).1
-    have h1R₁ : e.1.1 ∈ R₁ := by
-      by_contra h1nR₁; exact hnR₁ (Or.inr ⟨h1nR₁, h2R₁⟩)
-    refine Or.inr ⟨Finset.mem_sdiff.mpr ⟨h1R₁, fun h1R₂ => ?_⟩, h2⟩
-    exact h1 (Finset.mem_inter.mpr ⟨h1R₁, h1R₂⟩)
-
-omit [Fintype V] [DecidableRel G.Adj] in
-/-- An overlap-crossing edge is not a boundary edge of the union `R₁ ∪ R₂`: both endpoints
-lie in `R₁ ⊆ R₁ ∪ R₂`. -/
-theorem not_isRegionBoundaryEdge_union_of_overlapCrossing' {R₁ R₂ : Finset V} {e : Edge G}
-    (h : IsOverlapCrossingEdge (G := G) R₁ R₂ e) :
-    ¬ IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e :=
-  not_isRegionBoundaryEdge_union_of_overlapCrossing (G := G) h
+  simp only [IsOverlapCrossingEdge, IsRegionBoundaryEdge, Finset.mem_inter, Finset.mem_sdiff] at *
+  grind
 
 omit [Fintype V] [DecidableRel G.Adj] in
 /-- An overlap-crossing edge is not a boundary edge of the difference `R₂ \ R₁`: both
@@ -408,10 +366,8 @@ endpoints lie in `R₁`, hence outside `R₂ \ R₁`. -/
 theorem not_isRegionBoundaryEdge_sdiff_of_overlapCrossing {R₁ R₂ : Finset V} {e : Edge G}
     (h : IsOverlapCrossingEdge (G := G) R₁ R₂ e) :
     ¬ IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
-  obtain ⟨h1, h2⟩ := isOverlapCrossingEdge_both_mem_R₁ (G := G) h
-  rintro (⟨h1', _⟩ | ⟨_, h2'⟩)
-  · exact (Finset.mem_sdiff.mp h1').2 h1
-  · exact (Finset.mem_sdiff.mp h2').2 h2
+  simp only [IsOverlapCrossingEdge, IsRegionBoundaryEdge, Finset.mem_inter, Finset.mem_sdiff] at *
+  grind
 
 open scoped Classical in
 /-- The configuration overwriting `q₂` by `q₁` on the overlap-crossing edges. -/
@@ -427,7 +383,7 @@ theorem regionBoundaryLabel_union_interCrossGlue {R₁ R₂ : Finset V} (q₁ q�
   classical
   funext f
   rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply, interCrossGlue,
-    ite_eq_right (fun hc => not_isRegionBoundaryEdge_union_of_overlapCrossing' (G := G) hc f.2)]
+    ite_eq_right (fun hc => not_isRegionBoundaryEdge_union_of_overlapCrossing (G := G) hc f.2)]
 
 omit [Fintype V] in
 /-- The overlap-crossing glue keeps `q₂`'s difference label. -/
@@ -478,19 +434,8 @@ omit [Fintype V] [DecidableRel G.Adj] in
 theorem isRegionBoundaryEdge_union_or_sdiff_of_R₁ {R₁ R₂ : Finset V} {e : Edge G}
     (h : IsRegionBoundaryEdge (G := G) R₁ e) :
     IsRegionBoundaryEdge (G := G) (R₁ ∪ R₂) e ∨ IsRegionBoundaryEdge (G := G) (R₂ \ R₁) e := by
-  rcases h with ⟨h1, h2⟩ | ⟨h1, h2⟩
-  · -- `e.1.1 ∈ R₁`, `e.1.2 ∉ R₁`; split on whether `e.1.2 ∈ R₂`.
-    by_cases hb : e.1.2 ∈ R₂
-    · -- `e.1.2 ∈ R₂ \ R₁`, `e.1.1 ∈ R₁` so `e.1.1 ∉ R₂ \ R₁`.
-      exact Or.inr (Or.inr ⟨fun hc => (Finset.mem_sdiff.mp hc).2 h1,
-        Finset.mem_sdiff.mpr ⟨hb, h2⟩⟩)
-    · exact Or.inl (Or.inl ⟨Finset.mem_union_left _ h1,
-        fun hc => (Finset.mem_union.mp hc).elim h2 hb⟩)
-  · by_cases hb : e.1.1 ∈ R₂
-    · exact Or.inr (Or.inl ⟨Finset.mem_sdiff.mpr ⟨hb, h1⟩,
-        fun hc => (Finset.mem_sdiff.mp hc).2 h2⟩)
-    · exact Or.inl (Or.inr ⟨fun hc => (Finset.mem_union.mp hc).elim h1 hb,
-        Finset.mem_union_left _ h2⟩)
+  simp only [IsRegionBoundaryEdge, Finset.mem_union, Finset.mem_sdiff] at *
+  grind
 
 omit [Fintype V] in
 /-- The `R₁` boundary label is determined by the union host and difference boundary labels. -/
