@@ -117,6 +117,8 @@ theorem rootPath_augmented_compressed_bandProduct
       ZSᴴ * bandMetric (nS q d) t k (D.leafPart j g) * ZS = B j g := by
     simp only [B, hA, ← hrecover, Matrix.conjTranspose_submatrix,
       Matrix.submatrix_mul_equiv, Matrix.submatrix_id_id]
+  have hroot' : M.PosDef ∧ D.rootPath (nS q d) t k p * ZS = ZS * M := by
+    simpa only [M, T, hB] using hroot
   done
 
 end TNLean.PEPS.AreaLaw.Scan
