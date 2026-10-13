@@ -461,8 +461,10 @@ normalizations.
 - **Caveat:** blocked, coarse, reindexed and transported tensors inside proofs
   keep `IsVertexInjective` with positivity derived or stated separately; only
   the source-facing theorems (the injective Fundamental Theorem, its uniqueness
-  clause, their cycle and torus corollaries, and the injective parent
-  Hamiltonian results on general graphs) take this structure.
+  clause, their cycle and torus corollaries, and the parent-Hamiltonian
+  support, rank and one-dimensionality results on general graphs) take this
+  structure; the span and kernel descriptions of the parent ground space keep
+  `IsVertexInjective` alone.
 
 #### `TNLean.PEPS.NormalPEPSPairHypotheses`
 

@@ -38,9 +38,10 @@ The span and kernel theorems
 nearest-neighbor specializations keep `IsVertexInjective` alone: they hold with
 zero-dimensional bonds, where the span is zero, and take no positivity.
 
-The `**Scope restriction (nonzero virtual spaces):**` module marker of
-`InjectiveRegionSupport.lean` was removed; the marker on `Tensor.IsInjective`
-covers it.
+The module marker of `InjectiveRegionSupport.lean` is kept as a self-contained
+`**Local fix (nonzero virtual spaces):**` marker citing the paper-gap note, and
+the other parent-Hamiltonian modules that use `Tensor.IsInjective` carry the
+same marker: each affected module stays independently marked.
 
 ## Renames
 
