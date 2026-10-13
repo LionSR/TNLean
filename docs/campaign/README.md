@@ -54,7 +54,7 @@ markers. Use it to decide whether `gaps.json` needs a new entry.
 | `slug` | Directory name and URL path of the page |
 | `pageTitle`, `heading`, `lede`, `description` | Page title, main heading, opening paragraph and meta description |
 | `label` | GitHub label carried by the campaign's issues and pull requests |
-| `since` | Date the campaign started; unlabelled pull requests in companion repositories opened since then are included when they cite a campaign issue |
+| `since` | Date the campaign started; unlabelled pull requests in any of the repositories opened since then are included when they cite a campaign issue |
 | `repos` | Repositories, each with `name`, `slug`, local `checkout` path and optional `checkoutEnv` override and pull-request `prefix`; exactly one is `primary` and holds the issues. A repository with a `homepage` and `description` is listed at the top of the page and in its library section, with links to its site, blueprint, API docs and GitHub |
 | `tracker` | The overall tracking issue. Its sub-issues that have sub-issues of their own become the streams |
 | `streamNames` | Optional display names for streams, keyed by issue number |
@@ -158,6 +158,8 @@ in `id` and its repository in `repo` (default: the primary repository):
 Write every entry for a physicist who has read neither the papers nor the rest of
 the page: name each cited result in words, define each object at first use, and
 keep pull-request history out of the prose, since the links appear beside it.
+
+An open entry of kind other than `convention` whose `result` begins with a paper result, as `Lemma 8.2, routing ...`, keeps that result from counting as proved even when every issue of the result is closed.
 
 `checked` lists results whose pull requests report that no gap was found, and
 `reviewedAt` records when the summaries were last compared with the notes. A
