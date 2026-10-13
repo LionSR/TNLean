@@ -74,6 +74,7 @@ import TNLean.PEPS.Approximation.DistributedLinks
 import TNLean.PEPS.Approximation.DistributedOperatorContraction
 import TNLean.PEPS.Approximation.DistributedPhysicalPrivateTrace
 import TNLean.PEPS.Approximation.DistributedSourceComposition
+import TNLean.PEPS.Approximation.DyadicActiveLabelParties
 import TNLean.PEPS.Approximation.DyadicAnchors
 import TNLean.PEPS.Approximation.DyadicBlockFootprints
 import TNLean.PEPS.Approximation.DyadicChamberSampling
