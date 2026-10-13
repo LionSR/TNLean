@@ -3308,6 +3308,31 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ## Distributed PEPS compression: finite incidence and choice costs
 
+### Equality of selected remaining operations
+
+- **Declaration:** `TNLean.PEPS.PairEffect.Word.IsSelectedLocalPartComparison`.
+- **Defined in:** `TNLean/PEPS/Approximation/AllPartySingletonComparison.lean`.
+- **Meaning:** For a Boolean owner selector and two chronological words, the
+  predicate is the heterogeneous equality of their remaining evaluations after
+  restriction to the selected owners. Each word's local part keeps its actual
+  ordered source registers as inputs and supplies its own source-free proof.
+  The two original input and output lists may differ; selected list identities
+  are supplied separately when deriving a comparison.
+- **Source:** OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
+  states*, September 24, 2026, proof of Theorem 5.2,
+  `04-compression.tex:351–434,565–588`,
+  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L351-L434).
+- **Sanctioned bridges:** In `TNLean.PEPS.PairEffect.SourceCircuit`,
+  `isSelectedLocalPartComparison_partialWord_all_gate` derives this comparison
+  for the actual all-party gate word and its lifted singleton projection.
+  `restrict_partialWord_all_localPart_eval_heq_singleton_projection` gives the
+  corresponding selected-operator identity for the whole original chronology.
+  Both retain the supplied branch choice, original source dimensions and
+  spectator registers.
+- **Caveat:** This predicate compares operators. Allowedness and factorization
+  of the complete physical density require separate results; no equivalence
+  with either is asserted. No norm or nonvanishing condition is imposed.
+
 ### Corrected source positions and whole-lifetime gate participation
 
 - **Declarations:** `TNLean.PEPS.Approximation.sourceEndpoints`, `correctedParties`,

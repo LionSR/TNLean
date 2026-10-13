@@ -70,19 +70,25 @@ private theorem restrict_frameList_mapOwner_eval_heq {R Q : Type}
   exact hMap.trans (Word.eval_heq (Layout.mapOwner_append lift _ _)
     (Layout.mapOwner_append lift _ _) (Word.mapOwner_frameList_heq lift _ _))
 
-/-- The source-to-output operator selected at one party of a genuine all-party
-branch is exactly the operator constructed from its original incident labels.
-The input is the recorded private product preparation, and the source and
-output registers are the actual selected all-party lists. No global extension
-of incident labels or additional condition on source vectors is assumed.
+/-- Compare a restricted source-free word with a word on its selected
+input and output lists, retaining the source-free proof with its word.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
+246–267, 409–434 and 565–588. -/
+private def selectedPreparedWordComparison {Q : Type} {a b : Layout Q}
+    (f : Q → Bool) (u : Word a b) (hu : u.sources = [])
+    (v : Word (Layout.restrict f a) (Layout.restrict f b)) : Prop :=
+  (u.restrict f hu).eval = v.eval
+
+/-- The preparation and residual comparisons are combined with a canonical
+word comparison as target, before its concrete operator equality is exposed.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
 246–267, 351–434 and 565–588. -/
-theorem restrict_partialSourceWord_eval_eq_incidentSourceWord {a b : Layout P}
+private theorem selectedPreparedWordComparison_of_original_labels {a b : Layout P}
     (w : SourceCircuit a b) (p : P) (ψ : ProductInput a)
     (ξ : Choices (fun _ : P ↦ true) w) :
-    ((w.partialSourceWord ψ ξ).restrict (partySelector (some ⟨p, rfl⟩))
-      (sources_partialSourceWord w ψ ξ)).eval =
-      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)).eval := by
+    selectedPreparedWordComparison (partySelector (some ⟨p, rfl⟩))
+      (w.partialSourceWord ψ ξ) (sources_partialSourceWord w ψ ξ)
+      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)) := by
   classical
   let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
     (affectedOwner (fun _ : P ↦ true) t)
@@ -177,5 +183,20 @@ theorem restrict_partialSourceWord_eval_eq_incidentSourceWord {a b : Layout P}
     exact Word.eval_castLayouts_heq _ _ _
   apply eq_of_heq
   exact hComp.trans hIncident.symm
+
+/-- The source-to-output operator selected at one party of a genuine all-party
+branch is exactly the operator constructed from its original incident labels.
+The input is the recorded private product preparation, and the source and
+output registers are the actual selected all-party lists. No global extension
+of incident labels or additional condition on source vectors is assumed.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
+246–267, 351–434 and 565–588. -/
+theorem restrict_partialSourceWord_eval_eq_incidentSourceWord {a b : Layout P}
+    (w : SourceCircuit a b) (p : P) (ψ : ProductInput a)
+    (ξ : Choices (fun _ : P ↦ true) w) :
+    ((w.partialSourceWord ψ ξ).restrict (partySelector (some ⟨p, rfl⟩))
+      (sources_partialSourceWord w ψ ξ)).eval =
+      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)).eval := by
+  exact selectedPreparedWordComparison_of_original_labels w p ψ ξ
 
 end TNLean.PEPS.PairEffect.SourceCircuit

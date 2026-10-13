@@ -30,14 +30,16 @@ private theorem restrict_eval_eq_of_word_eq {Q : Type}
   exact congrArg
     (fun z : {z : Word ℓ ℓ' // z.sources = []} ↦ (z.1.restrict f z.2).eval) h
 
-/-- Equal values on either side of a heterogeneous equality may be replaced
-before any endpoint spaces are specified. Source: polynomial-PEPS Theorem 5.2,
-`04-compression.tex`, lines 409–434 and 565–588. -/
-private theorem heq_of_eq_heq_eq {X Y : Type} {x x' : X} {y y' : Y}
-    (hx : x = x') (hxy : HEq x' y') (hy : y = y') : HEq x y := by
-  cases hx
-  cases hy
-  exact hxy
+/-- Equal source-free words give equal comparison propositions with an
+arbitrary target value. The target space is independent of the word layouts.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434 and 565–588. -/
+private theorem restrict_eval_heq_of_word_eq {Q T : Type}
+    {ℓ ℓ' : Layout Q} (f : Q → Bool) (u v : Word ℓ ℓ')
+    (hu : u.sources = []) (hv : v.sources = []) (t : T) (hword : u = v)
+    (h : HEq (v.restrict f hv).eval t) : HEq (u.restrict f hu).eval t := by
+  have hprop : HEq (u.restrict f hu).eval t = HEq (v.restrict f hv).eval t :=
+    congrArg (fun z ↦ HEq z t) (restrict_eval_eq_of_word_eq f u v hu hv hword)
+  exact Eq.mpr hprop h
 
 /-- The common selected endpoint operator is formed from arbitrary original
 endpoint maps. Owner selection preserves the original source and register order.
@@ -82,6 +84,25 @@ private theorem selectedEndpointOperator_eq_registerWord (w : SourceCircuit a b)
       (SourceInventory.endpointRegisterWord
         (D.filter (fun z ↦ partySelector q z.1.owner))).eval := rfl
 
+/-- The canonical original endpoint word has the common selected operator.
+Selection is compared before an arbitrary representing word is supplied.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–355 and 409–434. -/
+private theorem restrict_endpointWord_eval_heq_selectedEndpointOperator
+    (w : SourceCircuit a b) (p : P)
+    (M : ∀ e : sourceLocations w, euc (Fin (sourceDims w e).1) →L[ℂ]
+      euc (Fin (sourceDims w e).1))
+    (N : ∀ e : sourceLocations w, euc (Fin (sourceDims w e).2) →L[ℂ]
+      euc (Fin (sourceDims w e).2)) :
+    let all : P → Bool := fun _ ↦ true
+    let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
+    let Z := SourceInventory.endpointWord (partialSlots all w) w.allSourceU w.allSourceV
+      (fun i ↦ M (partialSlotEquiv all w i).1)
+      (fun i ↦ N (partialSlotEquiv all w i).1)
+    let hz : Z.sources = [] := SourceInventory.sources_endpointWord ..
+    HEq (Z.restrict (partySelector qp) hz).eval
+      (selectedEndpointOperator w p M N) :=
+  restrict_endpointWord_eval_heq_selectedRegisterWord w p M N
+
 /-- An arbitrary source-free word representing the original endpoint maps
 has their common selected operator after restriction. The equality transports
 its own source-free proof before any sampled maps are supplied.
@@ -99,29 +120,17 @@ private theorem restrict_eval_heq_selectedEndpointOperator
       (fun i ↦ N (partialSlotEquiv (fun _ ↦ true) w i).1)) :
     HEq (W.restrict (partySelector (some ⟨p, rfl⟩)) hs).eval
       (selectedEndpointOperator w p M N) := by
-  classical
   let all : P → Bool := fun _ ↦ true
   let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
-  let A : P → Bool := fun t ↦ partySelector qp (affectedOwner all t)
-  let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
-    (decide_eq_true rfl)
-  let q : Option {t : P // A t = true} := some ⟨p, hp⟩
   let Z := SourceInventory.endpointWord (partialSlots all w) w.allSourceU w.allSourceV
     (fun i ↦ M (partialSlotEquiv all w i).1)
     (fun i ↦ N (partialSlotEquiv all w i).1)
   have hz : Z.sources = [] := SourceInventory.sources_endpointWord ..
-  let D := (partialPositions A w).flatMap (endpointDataAt A w M N)
-  let Dp := D.filter (fun z ↦ partySelector q z.1.owner)
-  have hselected : HEq (Z.restrict (partySelector qp) hz).eval
-      (SourceInventory.endpointRegisterWord Dp).eval :=
-    restrict_endpointWord_eval_heq_selectedRegisterWord w p M N
-  have hrestriction : (W.restrict (partySelector qp) hs).eval =
-      (Z.restrict (partySelector qp) hz).eval :=
-    restrict_eval_eq_of_word_eq (partySelector qp) W Z hs hz hword
-  have hoperator : selectedEndpointOperator w p M N =
-      (SourceInventory.endpointRegisterWord Dp).eval :=
-    selectedEndpointOperator_eq_registerWord w p M N
-  exact heq_of_eq_heq_eq hrestriction hselected hoperator
+  have hcanonical : HEq (Z.restrict (partySelector qp) hz).eval
+      (selectedEndpointOperator w p M N) :=
+    restrict_endpointWord_eval_heq_selectedEndpointOperator w p M N
+  exact restrict_eval_heq_of_word_eq (partySelector qp) W Z hs hz
+    (selectedEndpointOperator w p M N) hword hcanonical
 
 variable (w : SourceCircuit a b) (k : ℕ)
   (lam : ∀ e : sourceLocations w, branchLabels w e.1 →
