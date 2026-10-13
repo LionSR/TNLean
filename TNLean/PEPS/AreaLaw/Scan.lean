@@ -23,6 +23,7 @@ import TNLean.PEPS.AreaLaw.Scan.ActualInitialRootNorm
 import TNLean.PEPS.AreaLaw.Scan.ActualMarginalTails
 import TNLean.PEPS.AreaLaw.Scan.ActualParameterIntegral
 import TNLean.PEPS.AreaLaw.Scan.ActualReplicaDefect
+import TNLean.PEPS.AreaLaw.Scan.ActualRoughUpper
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundEntropy
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundParameterIntegral
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport

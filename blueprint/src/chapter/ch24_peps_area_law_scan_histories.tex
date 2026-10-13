@@ -3493,3 +3493,76 @@ The finite-leaf estimates below follow the charge-energy argument in
     (\ref{eq:al_scan_actual_charge_sum}). The same error sequence and supplied
     vector occur throughout. No division by the replica count or band count occurs.
 \end{proof}
+
+% Source: openai/math, adc7f1241b42e322a6451854ab7e4b4c146bf78a,
+% build/sections/07-comparators.tex, comparator:rough-upper, lines 332--381;
+% build/sections/08-scanner.tex, lines 457--474 and 755--769.
+\begin{theorem}[Uniform rough upper bound for supplied replica labels]
+    \label{thm:al_scan_actual_rough_upper}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.eventually_actualScan_suppliedPrevector_rough_upper}
+    \uses{def:al_scan_comparison_prefixes,def:al_scan_actual_fill_transport,
+        def:al_scan_actual_charge_data}
+    Let $\Lambda\subset\mathbb Z^2$ be finite, let $T$ be finite and nonempty,
+    and put $X=A\cap T$ for a color $A\subseteq\Lambda$.
+    Use the induced physical lattice graph and ambient distance from $T$.
+    Fix a collar scan with $K$ bands, $n,m,M>0$, and scales satisfying
+    $r_0\le D$, $1\le D$, $4D\le m$, and $8Km\le L$.
+    Suppose every ambient layer $T_j\setminus T_{j-1}$ has at most $n$
+    sites for $1\le j\le L$. Fix $q\ge1$, a unit physical vector
+    $\widetilde\Omega$, and $a>0$. Assume
+    \begin{align}
+        S_{\widetilde\Omega}(Q_j)\le B_{\mathrm{sh}}
+        \qquad(0\le j\le L),
+    \end{align}
+    where $Q_j=A\cap(T_j\setminus T)$.
+    Let $E$ be a set of Schmidt indices at $X$, with mass $z>0$ and
+    cardinality $d$. Let $\psi$ be the normalized Schmidt truncation,
+    with the retained $X$ factor relabelled by an auxiliary factor $R$
+    of dimension $d$. Supply labels $\lambda_k$ such that, for all
+    sufficiently large $k$,
+    \begin{align}
+        \|\pi_R^{\lambda_k}\psi^{\otimes k}\|^2
+        \ge\frac{1}{2(k+1)^{d^2}}.
+    \end{align}
+    Use the same vectors
+    $\mathrm{pre}_k=\pi_R^{\lambda_k}
+        (\widetilde\Omega\otimes\mathrm{Bell}_{CR})^{\otimes k}$
+    in every actual fill and charge, with auxiliary dimensions $d,d$
+    and band exponent $a/2$.
+    There exists $c\ge0$ such that, for all sufficiently large $k$,
+    every round $s+1\le nm$, every real interpolation parameter $p$,
+    and either actual root $\mathcal M_{s,k}(p)$, one has
+    \begin{align}
+        N_{s,k}(p)^2
+         & :=\|\mathcal M_{s,k}(p)^{-1/4}\mathrm{pre}_k\|^2>0,  \\
+        -\frac{\log N_{s,k}(p)^2}{k}
+         & \le 2\log d-\log z
+        +aK\left(\frac{B_{\mathrm{sh}}}{z}+1+3nD\log q\right)
+        +\varepsilon_k,                                         \\
+        \varepsilon_k
+         & :=\frac{\log4+(d^2+cK)\log(k+2)}{k}\longrightarrow0.
+    \end{align}
+    The root at real $p$ is evaluated at its projection onto $[0,1]$.
+    Both $c$ and the replica threshold are chosen before $s$ and $p$.
+\end{theorem}
+\begin{proof}
+    \uses{cor:al_scan_front_prefix_family,thm:al_scan_physical_prefix_approximation,
+        lem:al_scan_status_differences,thm:al_augmented_prevector_symmetry,
+        thm:al_augmented_root_compression,thm:al_scan_receiving_regions,
+        def:al_scan_augmented_partitions}
+    Take the finite family of all completed histories through time $nm$
+    and all pre-charge histories before time $nm$.
+    The ordered-band inclusions hold across every pair of these histories.
+    Their positive near regions and near regions with middle differ from
+    members of $Q_0,\ldots,Q_L$ by at most $3nD$ sites.
+    The resulting dimension cost is at most $3nD\log q$.
+    Apply the supplied-label rough comparison to this one finite family.
+    Its constant and replica threshold therefore work simultaneously for
+    all terminal partitions of all the actual interpolation trees.
+    The augmented prevector is symmetric, so compression to the symmetric
+    subspace preserves its filtered squared norm. The exact augmented
+    partition identities identify each terminal metric with the original
+    physical metric. Finally, the filtering exponent $1/4$ and band
+    exponent $a/2$ give the coefficient
+    $8\cdot\frac14\cdot\frac a2\cdot K=aK$.
+\end{proof}
