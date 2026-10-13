@@ -6539,20 +6539,16 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Pattern:** Identify equal owner-filtered memories, transport their tensor
   maps, and compare the resulting operators or their values on vectors.
 - **Seen:** The tensor-map transport in `PartyTensorMaps`, its application
-  to vectors in `PartyFactorization`, and the pending
-  `IncidentSampledEndpointComparison` repeat the same four-space
-  identification argument across three files.
+  to vectors in `PartyFactorization` repeat the same four-space
+  identification argument across two files.
 - **Abstraction:** Canonical conjugation already uses the shared
   `Layout.conj_memCongr_heq`, `Layout.norm_conj_memCongr`, and
   `Layout.eq_conj_memCongr_of_heq`. The existing `PairEffect.mapL_heq`
   is now public in `PartyTensorMaps`, with its original signature and
   equality-elimination proof. `PartyFactorization.mapL_apply_heq` uses
   that shared map equality and ordinary congruence for its application
-  to heterogeneously equal vectors. The narrower private transport in
-  `IncidentSampledEndpointComparison` is removed in favour of the same
-  public lemma. Its exact named axiom check is
-  `PartyTensorMapTransportAxioms`; elaboration of the promotion and
-  refactored consumers is pending.
+  to heterogeneously equal vectors. Its exact named axiom check is
+  `PartyTensorMapTransportAxioms`.
 - **Notes:** Associator and exchange identities use the existing
   `clm_ext_tmul₃`; no additional tactic is needed.
 - **Scan:** The focused approximation scan also found five instances of
