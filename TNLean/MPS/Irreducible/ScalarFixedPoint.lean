@@ -41,7 +41,7 @@ would give another split, so the fixed-point space of the unital block is the
 scalar line.  The channel-theoretic input is Wolf Theorem 6.6, formalized as
 `Kraus.fixed_eq_scalar_of_irreducible_unital`. -/
 theorem fixed_eq_scalar_of_isIrreducibleTensor_unital
-    {d D : ℕ} [Nonempty (Fin D)]
+    {d D : ℕ}
     (A : MPSTensor d D)
     (hIrr : Kraus.IsIrreducibleFamily (d := d) (D := D) A)
     (hUnital : Kraus.transferMap (d := d) (D := D) A 1 = 1)
@@ -49,9 +49,9 @@ theorem fixed_eq_scalar_of_isIrreducibleTensor_unital
     (hfix : Kraus.transferMap (d := d) (D := D) A X = X) :
     ∃ c : ℂ, X = c • (1 : Matrix (Fin D) (Fin D) ℂ) := by
   classical
-  have : NeZero D := by
-    rcases ‹Nonempty (Fin D)› with ⟨i⟩
-    exact ⟨Nat.ne_of_gt (lt_of_le_of_lt (Nat.zero_le i.1) i.2)⟩
+  rcases Nat.eq_zero_or_pos D with rfl | hD
+  · exact ⟨0, Subsingleton.elim _ _⟩
+  have : NeZero D := ⟨hD.ne'⟩
   have hUnitalKraus : KadisonSchwarz.IsUnitalKraus (d := d) (D := D) A := by
     simpa [Kraus.transferMap_apply, Matrix.mul_one, KadisonSchwarz.IsUnitalKraus]
       using hUnital

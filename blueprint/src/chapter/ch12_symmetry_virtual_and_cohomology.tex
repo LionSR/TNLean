@@ -247,26 +247,6 @@ gauge transformations form a projective representation on the bond space.
     $Y=u\cdot X$.
 \end{proof}
 
-\begin{theorem}[Gauge uniqueness from equality of MPV families]
-    \label{thm:gauge_unique_up_to_scalar_sameMPV}
-    \lean{MPSTensor.gauge_unique_up_to_scalar_of_sameMPV}
-    \leanok
-    \uses{def:injective, def:same_mpv}
-    Let $A$ be an injective tensor and assume that $A$ and $B$ generate the
-    same MPV family.
-    If $X,Y \in \GL_{D}(\C)$ both satisfy
-    $B^i=X\,A^i\,X^{-1}=Y\,A^i\,Y^{-1}$ for all $i$, then there is a
-    nonzero scalar $u \in \C^{\times}$ such that $Y=u\cdot X$.
-\end{theorem}
-
-\begin{proof}
-    \leanok
-    \uses{lem:gauge_unique_up_to_scalar}
-    This is exactly Lemma~\ref{lem:gauge_unique_up_to_scalar}; the extra MPV
-    hypothesis specifies the setting in which the two gauges are usually
-    produced.
-\end{proof}
-
 \begin{lemma}[Gauge-phase uniqueness]\label{lem:gauge_phase_unique}
     \lean{MPSTensor.gauge_phase_unique}
     \leanok

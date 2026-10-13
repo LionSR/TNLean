@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.ActualSourceColumnCoordinates
 import TNLean.PEPS.Approximation.WordPartyMixedMatrix
+import TNLean.PEPS.Approximation.BasisMatrixOperator
 import Mathlib.LinearAlgebra.Matrix.Basis
 
 /-! # Actual source columns in party coordinates
@@ -62,9 +63,8 @@ private theorem toMatrix_eq_mul_basisChange_of_eq
     (b : Module.Basis J ℂ E) (b' : Module.Basis K ℂ E) (c : Module.Basis L ℂ F)
     (A : E →ₗ[ℂ] F) (M : Matrix L K ℂ) (hM : LinearMap.toMatrix b' c A = M) :
     LinearMap.toMatrix b c A = M * LinearMap.toMatrix b b' LinearMap.id := by
-  let := Fintype.ofFinite L
   rw [LinearMap.toMatrix_id_eq_basis_toMatrix, ← hM]
-  exact (linearMap_toMatrix_mul_basis_toMatrix b b' c A).symm
+  exact (linearMap_toMatrix_mul_basis_toMatrix (c' := c) b b' A).symm
 
 /-- Literal source columns are the product of the actual party matrices followed
 by the constructed change from source-slot coordinates to party coordinates.
@@ -100,11 +100,7 @@ theorem partialSourceGlobalMatrix_eq_partyProduct_mul_basisChange
       (w.partialSourceWord ψ ξ).eval.toLinearMap =
       dependentPhysicalProductFamilyMatrix (fun q ↦
         w.partialSourcePartyMatrix ψ ξ B C q) := by
-    ext row col
-    simpa only [LinearMap.toMatrix_apply, OrthonormalBasis.coe_toBasis,
-      OrthonormalBasis.coe_toBasis_repr_apply, Matrix.of_apply,
-      ContinuousLinearMap.coe_coe] using
-        congrFun (congrFun hmatrix row) col
+    simpa only [matrix_repr_eval_eq_toMatrix] using hmatrix
   exact (partialSourceGlobalMatrix_eq_toMatrix w ψ ξ bOut).trans
     (toMatrix_eq_mul_basisChange_of_eq w.actualSourceInputBasis.toBasis
       bIn.toBasis bOut.toBasis (w.partialSourceWord ψ ξ).eval.toLinearMap
