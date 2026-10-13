@@ -497,7 +497,7 @@ normalizations.
     `TNLean/PEPS/CycleFundamentalTheorem.lean`;
   - `TNLean.PEPS.IsNormalTorusRectanglePEPS A`, extending
     `NormalTorusRectangleInjectivityHypotheses`, in
-    `TNLean/PEPS/TorusUnconditionalFundamentalTheorem.lean`;
+    `TNLean/PEPS/NormalTorusRectanglePEPS.lean`;
   - `TNLean.PEPS.IsNormalSquareLatticeRectanglePEPS A`, extending
     `NormalSquareLatticeRectangleInjectivityHypotheses`, in
     `TNLean/PEPS/NormalSquareUnconditionalFundamentalTheorem.lean`;
@@ -518,13 +518,18 @@ normalizations.
   `IsNormalTorusRectanglePEPS.unionClosure` gives union closure.
 - **Caveat:** the region-family structures they extend are indexed by an
   injectivity assignment, not by a tensor, so they cannot carry the
-  convention themselves; internal steps that take them as region data keep
-  explicit positivity, supplied by the source-facing theorems. The torus
-  uniqueness clauses (`torusAbsorbedGauge_unique_scalar`,
+  convention themselves. The source-facing existence, bond-dimension and
+  uniqueness theorems take the tensor structures and state no separate
+  positivity; this includes the torus uniqueness clauses
+  `torusAbsorbedGauge_unique_scalar`,
   `torusCovariantAbsorbedGauge_unique_classScalar`,
-  `torusGauge_unique_scalar_of_perVertex` and
-  `torusGauge_unique_scalar_of_normalArcWindows`) are the exception: they
-  still take region hypotheses with explicit positivity of both tensors.
+  `torusGauge_unique_scalar_of_perVertex` (both tensors through
+  `IsNormalTorusRectanglePEPS`) and
+  `torusGauge_unique_scalar_of_normalArcWindows` (the second tensor through
+  `IsNormalTorusArcWindowPEPS`). Internal steps that see a tensor only through
+  region data, such as `torusAbsorbedGauge_unique_scalar_of_region`, keep
+  explicit positivity, because injectivity of regions does not force nonzero
+  bonds; the source-facing theorems supply it.
 
 #### `TNLean.PEPS.RegionBlockedTensorInjective`
 

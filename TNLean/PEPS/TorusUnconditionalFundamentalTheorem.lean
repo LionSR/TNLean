@@ -10,6 +10,7 @@ import TNLean.PEPS.TorusGaugedWeightCovariance
 import TNLean.PEPS.TorusCornerRegion
 import TNLean.PEPS.RegionBlock.ReindexInjectivity
 import TNLean.PEPS.NormalBondDimension
+import TNLean.PEPS.NormalTorusRectanglePEPS
 
 /-!
 # The unconditional normal PEPS Fundamental Theorem on the torus
@@ -72,32 +73,6 @@ namespace PEPS
 
 variable {width height d : ℕ} [NeZero width] [NeZero height]
   [Fact (1 < width)] [Fact (1 < height)]
-
-/-- A normal PEPS tensor on the torus in the setting of Theorem 3: every contiguous `2 × 3`
-and `3 × 2` rectangle is injective, and every virtual bond space is nonzero.  The rectangle
-fields are the region-family hypothesis `NormalTorusRectangleInjectivityHypotheses` read for
-the injective regions of the tensor.
-
-The field `bondDim_pos` is the nonzero virtual-space convention of the module docstring.
-
-Source: arXiv:1804.04964, Section 3, Theorem 3, lines 1453--1454 of
-`Papers/1804.04964/paper_normal.tex` ("two normal 2D PEPS tensors such that every `2 × 3`
-and `3 × 2` region is injective"), with normality as defined at line 1318. -/
-structure IsNormalTorusRectanglePEPS (A : Tensor (torusGraph width height) d) : Prop
-    extends NormalTorusRectangleInjectivityHypotheses
-      (regionInjectivityDataOf (G := torusGraph width height) A) where
-  /-- Every virtual bond space is nonzero: the source's bond spaces are nonzero throughout
-  (arXiv:1804.04964, lines 582 and 1037 of `Papers/1804.04964/paper_normal.tex`); the
-  convention is recorded in `docs/paper-gaps/peps_injective_ft_section3_route.tex`. -/
-  bondDim_pos : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e
-
-/-- The union closure of injective regions of a normal torus tensor, from its nonzero
-bonds (the source's Lemma `injective_union`, lines 1322--1404 of
-`Papers/1804.04964/paper_normal.tex`). -/
-theorem IsNormalTorusRectanglePEPS.unionClosure {A : Tensor (torusGraph width height) d}
-    (hA : IsNormalTorusRectanglePEPS A) :
-    RegionInjectivityUnionClosure (regionInjectivityDataOf (G := torusGraph width height) A) :=
-  regionInjectivityUnionClosure_of_overlap A hA.bondDim_pos
 
 /-- The vertex image of a translated region inserts the translated vertex. -/
 theorem Region_map_insert (a : ZMod width) (b : ZMod height)
