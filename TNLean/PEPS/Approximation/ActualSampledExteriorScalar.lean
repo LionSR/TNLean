@@ -104,6 +104,23 @@ private theorem empty_memory_words_mixed_partialTrace
       (α * conj β) • (1 : Matrix PUnit PUnit ℂ) := by
   exact empty_memory_mixed_partialTrace ha hb B C u.eval t.eval v.eval α β hA hT hU
 
+/-- The selected mixed trace equality in its original coordinates. This
+reducible abbreviation retains the literal matrix expression while allowing
+the words and layouts to be substituted before that expression is unfolded.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 574–579. -/
+private abbrev emptyPartyTraceIdentity
+    {Q I J : Type} [Fintype I] [Fintype J] (q : Q) {a b : Layout Q}
+    (u t : Word a b) (v : Word a a)
+    (hu : u.sources = []) (ht : t.sources = []) (hv : v.sources = [])
+    (B : OrthonormalBasis I ℂ (Mem (Layout.atParty q a)))
+    (C : OrthonormalBasis (PUnit × J) ℂ (Mem (Layout.atParty q b))) (α β : ℂ) : Prop :=
+  Matrix.partialTraceRight
+      (Matrix.of (fun row col ↦ C.repr ((u.restrict (partySelector q) hu).eval (B col)) row) *
+        Matrix.of (fun row col ↦ B.repr ((v.restrict (partySelector q) hv).eval (B col)) row) *
+        (Matrix.of (fun row col ↦ C.repr
+          ((t.restrict (partySelector q) ht).eval (B col)) row))ᴴ) =
+    (α * conj β) • (1 : Matrix PUnit PUnit ℂ)
+
 /-- The selected coordinate trace is formed for arbitrary source-free words
 before the actual source and endpoint words are substituted. Source:
 polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 574–579. -/
@@ -120,12 +137,7 @@ private theorem empty_party_words_mixed_partialTrace
       (β • ContinuousLinearMap.id ℂ ℂ))
     (hU : HEq (v.restrict (partySelector q) hv).eval
       (ContinuousLinearMap.id ℂ ℂ)) :
-    Matrix.partialTraceRight
-        (Matrix.of (fun row col ↦ C.repr ((u.restrict (partySelector q) hu).eval (B col)) row) *
-          Matrix.of (fun row col ↦ B.repr ((v.restrict (partySelector q) hv).eval (B col)) row) *
-          (Matrix.of (fun row col ↦ C.repr
-            ((t.restrict (partySelector q) ht).eval (B col)) row))ᴴ) =
-      (α * conj β) • (1 : Matrix PUnit PUnit ℂ) := by
+    emptyPartyTraceIdentity q u t v hu ht hv B C α β := by
   exact empty_memory_words_mixed_partialTrace
     (a := Layout.atParty q a) (b := Layout.atParty q b) ha hb B C
     (u.restrict (partySelector q) hu) (t.restrict (partySelector q) ht)
@@ -178,6 +190,8 @@ private theorem sampledEndpointInputWord_party_none_eval_heq_id
 times its complex conjugate, in the canonical singleton physical coordinate.
 The input and output orthonormal bases, ket and bra choices, and original joint
 sample are arbitrary. No normalization or nonvanishing is required.
+The conclusion uses a reducible abbreviation of the literal selected mixed
+trace equality, with the same words, coordinates and scalar.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
 246–267 and 565–588. -/
 theorem partialSourceWord_sampled_none_partialTrace_eq_scalar
@@ -195,17 +209,15 @@ theorem partialSourceWord_sampled_none_partialTrace_eq_scalar
       (Mem (Layout.atParty none (w.allResidualSourceLayout ++ []))))
     (C : OrthonormalBasis (PUnit × J) ℂ
       (Mem (Layout.atParty none (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b)))) :
-    Matrix.partialTraceRight
-        (Matrix.of (fun row col ↦ C.repr
-          (((w.partialSourceWord ψ ξ).restrict (partySelector none)
-            (sources_partialSourceWord w ψ ξ)).eval (B col)) row) *
-          Matrix.of (fun row col ↦ B.repr
-            (((sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict (partySelector none)
-              (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω)).eval (B col)) row) *
-          (Matrix.of (fun row col ↦ C.repr
-            (((w.partialSourceWord ψ ζ).restrict (partySelector none)
-              (sources_partialSourceWord w ψ ζ)).eval (B col)) row))ᴴ) =
-      (w.emptyGateScalar * conj w.emptyGateScalar) • (1 : Matrix PUnit PUnit ℂ) := by
+    emptyPartyTraceIdentity
+      (Q := Option {p : P // (fun _ : P ↦ true) p = true}) (I := I) (J := J)
+      (a := w.allResidualSourceLayout ++ [])
+      (b := Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) b) none
+      (w.partialSourceWord ψ ξ) (w.partialSourceWord ψ ζ)
+      (sampledEndpointInputWord w k lam L R ξ ζ j ω)
+      (sources_partialSourceWord w ψ ξ) (sources_partialSourceWord w ψ ζ)
+      (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω) B C
+      w.emptyGateScalar w.emptyGateScalar := by
   classical
   have hξ := partialSourceWord_none_eval_heq_scalar w ψ ξ
   have hζ := partialSourceWord_none_eval_heq_scalar w ψ ζ

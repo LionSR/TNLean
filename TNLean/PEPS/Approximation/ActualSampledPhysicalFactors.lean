@@ -82,6 +82,44 @@ def sampledPhysicalFactor
     (sources_partialSourceWord w ψ ξ) (sources_partialSourceWord w ψ ζ)
     (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω) (B q) (C q)
 
+/-- The exact physical-factor equality, formed on arbitrary matrices before
+actual sampled words are substituted. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 565–588. -/
+private abbrev sampledPhysicalFactorsEquality {J : Type} [Fintype J]
+    (d : P → ℕ) (α : ℂ)
+    (F : Matrix ((q : Option {_p : P // true = true}) → selectedFamilyPhysicalIndex d q)
+      ((q : Option {_p : P // true = true}) → selectedFamilyPhysicalIndex d q) ℂ)
+    (M : J → (q : Option {_p : P // true = true}) →
+      Matrix (selectedFamilyPhysicalIndex d q) (selectedFamilyPhysicalIndex d q) ℂ) : Prop :=
+  F.submatrix (selectedFamilyPhysicalConfigEquiv d).symm
+      (selectedFamilyPhysicalConfigEquiv d).symm =
+    α • ∑ j, M j none PUnit.unit PUnit.unit •
+      dependentPhysicalProductFamilyMatrix (fun p : P ↦ M j (some ⟨p, rfl⟩))
+
+/-- Reindex an arbitrary sum of party products in the original physical
+configurations. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
+lines 565–588. -/
+private theorem sampledPhysicalFactorsEquality_of_partyProduct {J : Type} [Fintype J]
+    (d : P → ℕ) {α : ℂ}
+    {F : Matrix ((q : Option {_p : P // true = true}) → selectedFamilyPhysicalIndex d q)
+      ((q : Option {_p : P // true = true}) → selectedFamilyPhysicalIndex d q) ℂ}
+    {M : J → (q : Option {_p : P // true = true}) →
+      Matrix (selectedFamilyPhysicalIndex d q) (selectedFamilyPhysicalIndex d q) ℂ}
+    (h : F = α • ∑ j, dependentPhysicalProductFamilyMatrix (M j)) :
+    sampledPhysicalFactorsEquality d α F M := by
+  classical
+  let T := (Matrix.reindexLinearEquiv ℂ ℂ
+    (selectedFamilyPhysicalConfigEquiv d) (selectedFamilyPhysicalConfigEquiv d)).toLinearMap
+  have ht (N : (q : Option {_p : P // true = true}) →
+      Matrix (selectedFamilyPhysicalIndex d q) (selectedFamilyPhysicalIndex d q) ℂ) :
+      T (dependentPhysicalProductFamilyMatrix N) =
+        N none PUnit.unit PUnit.unit •
+          dependentPhysicalProductFamilyMatrix (fun p : P ↦ N (some ⟨p, rfl⟩)) :=
+    partyProductMatrix_selectedFamilyPhysicalConfig d N
+  have hphysical := congrArg T h
+  simp only [map_smul, map_sum, ht] at hphysical
+  exact hphysical
+
 open Classical in
 /-- In the original physical configurations, the actual sampled coordinate
 trace is a sum of products of local physical traces, retaining the exterior
@@ -121,35 +159,23 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors
       fun j q ↦ sampledPhysicalFactor (I := I) (E := E)
         d ps hn hc garbage w ψ k lam L R ξ ζ ω B BG
           (j ∘ (allSourceSlotEquiv w).symm) q
-    (Matrix.partialTraceRight
+    sampledPhysicalFactorsEquality d
+      ((k : ℂ)⁻¹ ^ (partialSlots (fun _ ↦ true) w).length)
+      (Matrix.partialTraceRight
       ((w.partialSourceGlobalMatrix ψ ξ bOut *
         SourceInventory.productSourceMatrix (partialSlots (fun _ ↦ true) w)
           (fun i ↦ sampledSourceMatrix w k lam L R
             (partialSlotEquiv (fun _ ↦ true) w i).1
             (partialSlotChoice (fun _ ↦ true) w ξ i)
             (partialSlotChoice (fun _ ↦ true) w ζ i) ω) *
-        (w.partialSourceGlobalMatrix ψ ζ bOut)ᴴ).submatrix e.symm e.symm)).submatrix
-      (selectedFamilyPhysicalConfigEquiv d).symm (selectedFamilyPhysicalConfigEquiv d).symm =
-      ((k : ℂ)⁻¹ ^ (partialSlots (fun _ ↦ true) w).length) •
-        ∑ j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k,
-          M j none PUnit.unit PUnit.unit •
-            dependentPhysicalProductFamilyMatrix (fun p : P ↦ M j (some ⟨p, rfl⟩)) := by
+        (w.partialSourceGlobalMatrix ψ ζ bOut)ᴴ).submatrix e.symm e.symm)) M := by
   classical
-  dsimp only
-  let T := (Matrix.reindexLinearEquiv ℂ ℂ
-    (selectedFamilyPhysicalConfigEquiv d) (selectedFamilyPhysicalConfigEquiv d)).toLinearMap
-  have ht (M : (q : Option {_p : P // true = true}) →
-      Matrix (selectedFamilyPhysicalIndex d q) (selectedFamilyPhysicalIndex d q) ℂ) :
-      T (dependentPhysicalProductFamilyMatrix M) =
-        M none PUnit.unit PUnit.unit •
-          dependentPhysicalProductFamilyMatrix (fun p : P ↦ M (some ⟨p, rfl⟩)) :=
-    partyProductMatrix_selectedFamilyPhysicalConfig d M
-  have h := congrArg T
-    (partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_partyProduct
-      (I := I) (X := selectedFamilyPhysicalIndex d) (E := E)
-      w ψ k lam L R ξ ζ ω B (selectedPhysicalPrivateBasis (E := E) d ps hn hc garbage BG)
-      (selectedPartyOrder ps) (selectedPartyOrder_nodup ps hn) (mem_selectedPartyOrder ps hc))
-  simp only [map_smul, map_sum, ht] at h
-  simpa only [sampledPhysicalFactor, restrictedMixedPhysicalTrace, partialSourcePartyMatrix] using h
+  have h := partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_partyProduct
+    (I := I) (X := selectedFamilyPhysicalIndex d) (E := E)
+    w ψ k lam L R ξ ζ ω B (selectedPhysicalPrivateBasis (E := E) d ps hn hc garbage BG)
+    (selectedPartyOrder ps) (selectedPartyOrder_nodup ps hn) (mem_selectedPartyOrder ps hc)
+  have hphysical := sampledPhysicalFactorsEquality_of_partyProduct d h
+  simpa only [sampledPhysicalFactor, restrictedMixedPhysicalTrace, partialSourcePartyMatrix]
+    using hphysical
 
 end TNLean.PEPS.PairEffect.SourceCircuit
