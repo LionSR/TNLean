@@ -113,6 +113,10 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
   have hVn : ‖V‖ ≤ ‖W‖ :=
     (Matrix.l2_opNorm_reindex_equiv (g.symm.trans (p.trans e)) _).trans_le
       (Matrix.l2_opNorm_one_kronecker_rect_le W)
+  have hcard : (Λ.card : ℝ) = (L : ℝ) ^ 2 := by
+    simpa only [Λ, AreaLaw.Site, SquareLatticeVertex, Fintype.card_coe,
+      Fintype.card_prod, Fintype.card_fin, Nat.cast_mul, pow_two] using
+      congrArg (fun n : ℕ ↦ (n : ℝ)) (Fintype.card_congr a).symm
   done
 
 end TNLean.PEPS.Approximation
