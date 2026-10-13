@@ -24,32 +24,6 @@ noncomputable section
 namespace TNLean.PEPS.PairEffect.SourceCircuit
 variable {P : Type}
 
-/-- The selected original registers have the same order and spaces after
-singleton and all-party owner grouping. Source: polynomial-PEPS Theorem 5.2,
-`04-compression.tex`, lines 409–434 and 565–588. -/
-private theorem mapOwner_selected_originalLayout_eq (p : P) (L : Layout P) :
-    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
-      (affectedOwner (fun _ : P ↦ true) t)
-    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
-      (by classical exact decide_eq_true rfl)
-    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
-    let lift : Option {t : P // A t = true} → Option {t : P // true = true} :=
-      fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
-    Layout.mapOwner lift
-        (Layout.atParty q (Layout.mapOwner (affectedOwner A) L)) =
-      Layout.atParty (some ⟨p, rfl⟩)
-        (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) L) := by
-  classical
-  intro A hp q lift
-  induction L with
-  | nil => rfl
-  | cons r L ih =>
-      by_cases hr : r.owner = p
-      · simp [Layout.mapOwner, Layout.atParty, Layout.restrict, A, q, lift,
-          partySelector, affectedOwner, hr, ih]
-      · simp [Layout.mapOwner, Layout.atParty, Layout.restrict, A, q, lift,
-          partySelector, affectedOwner, hr, Ne.symm hr, ih]
-
 /-- Construct the actual singleton source-to-output word from the original
 incident gate labels and the recorded product input. Its registers are the
 selected original all-party source and output registers, with their original
@@ -102,8 +76,16 @@ theorem sources_incidentSourceWord {a b : Layout P} (w : SourceCircuit a b) (p :
     (ψ : ProductInput a) (η : OriginalGateLabelsAt w p) :
     (incidentSourceWord w p ψ η).sources = [] := by
   classical
+  have h {Q R : Type} {c d : Layout Q} (u : Word c d) (hu : u.sources = [])
+      (f : Q → Bool) (g : Q → R) {c' d' : Layout R}
+      (hi : Layout.mapOwner g (Layout.restrict f c) = c')
+      (ho : Layout.mapOwner g (Layout.restrict f d) = d') :
+      (((u.restrict f hu).mapOwner g).castLayouts hi ho).sources = [] := by
+    exact (Word.sources_castLayouts _ hi ho).trans
+      ((Word.sources_mapOwner g _).trans
+        ((congrArg (SourceInventory.mapOwner g) (Word.sources_restrict f u hu)).trans
+          (SourceInventory.mapOwner_nil g)))
   unfold incidentSourceWord
-  simp only [Word.sources_castLayouts, Word.sources_mapOwner,
-    Word.sources_restrict, SourceInventory.mapOwner_nil]
+  exact h _ _ _ _ _ _
 
 end TNLean.PEPS.PairEffect.SourceCircuit

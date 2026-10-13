@@ -606,3 +606,65 @@ complete operators. We give the corresponding exact constructions.
     and the canonical register-list identifications. Hence the
     constructed incident-label word has empty source inventory.
 \end{proof}
+
+
+\begin{theorem}[Selected original lists in two owner groupings]
+    \label{thm:peps_singleton_all_original_layout}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.mapOwner_selected_originalLayout_eq}
+    \uses{def:peps_affected_owner,thm:peps_incident_gate_labels,
+        def:peps_owner_layout,thm:peps_party_restriction}
+    Fix an original party $p\in P$ and an arbitrary ordered register
+    list $\ell$ on $P$. Let $g$ retain every original party, and
+    select precisely those original owners whose image under $g$
+    is $g(p)$. This selection is $\{p\}$; let $g_p$ group its
+    exterior at one owner and denote its retained copy of $p$ by
+    $q_p$. Let $\lambda_p$ send the singleton exterior owner to the
+    all-party exterior owner and each retained original owner to its
+    all-party copy. Then
+    \begin{align*}
+        (\ell^{g_p}|_{q_p})^{\lambda_p}
+         & =(\ell^g)|_{g(p)}.
+    \end{align*}
+    The equality preserves the original spaces and register order,
+    including the empty list. No source inventory, branch choice
+    or prepared vector is required. It is an auxiliary register
+    identity for \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 409--434 and 565--588.
+\end{theorem}
+
+\begin{proof}
+    \uses{def:peps_affected_owner,thm:peps_incident_gate_labels,
+        def:peps_owner_layout,thm:peps_party_restriction}
+    Induct on $\ell$. If the first register belongs to $p$, both
+    selections retain its original space, and $\lambda_p$ maps its
+    singleton owner to $g(p)$. Prefix this same register to the
+    identity for the tail. If its owner differs from $p$, the
+    singleton selection and the all-party selection both erase it,
+    leaving the identity for the tail.
+\end{proof}
+
+\begin{theorem}[Tensor maps under equal memory spaces]
+    \label{thm:peps_tensor_map_memory_congruence}
+    \lean{TNLean.PEPS.PairEffect.mapL_heq}
+    \uses{def:peps_party_layout,thm:peps_basis_memory_equalities}
+    Let $A,A',B,B',C,C',D,D'$ be complex inner product spaces,
+    with fixed identifications $A=A'$, $B=B'$, $C=C'$ and $D=D'$.
+    Let $T:A\to B$, $T':A'\to B'$, $U:C\to D$ and $U':C'\to D'$
+    be continuous linear maps. Suppose $T$ agrees with $T'$ under
+    the first two identifications, and $U$ agrees with $U'$ under
+    the last two. Then $T\otimes U$ and $T'\otimes U'$ agree under
+    the induced identifications of $A\otimes C$ with $A'\otimes C'$
+    and $B\otimes D$ with $B'\otimes D'$.
+    The spaces and maps are arbitrary, including zero maps and
+    zero-dimensional spaces. This is an auxiliary congruence identity
+    for the tensor maps in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 233--267, 409--434 and 565--588.
+\end{theorem}
+
+\begin{proof}
+    Identify the four pairs of spaces using the given equalities.
+    The corresponding maps then satisfy $T=T'$ and $U=U'$.
+    Substituting these equalities into their tensor products gives
+    the asserted identity.
+\end{proof}

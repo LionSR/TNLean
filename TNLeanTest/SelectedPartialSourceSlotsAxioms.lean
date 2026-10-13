@@ -15,7 +15,8 @@ open TNLean.PEPS.PairEffect.SourceCircuit
 
 run_cmd do
   let decls := #[``slotLayout_partialSlots_eq_layout,
-    ``mapOwner_atParty_partialSlots_eq_allResidualSourceLayout]
+    ``mapOwner_atParty_partialSlots_eq_allResidualSourceLayout,
+    ``mapOwner_selected_originalLayout_eq]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   for decl in decls do

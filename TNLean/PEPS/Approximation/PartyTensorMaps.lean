@@ -61,7 +61,12 @@ theorem partyLayout_eq_of_atParty_eq (ps : List P) (ℓ a : Layout P)
   intro p hp
   rw [h p hp]
 
-private theorem mapL_heq {A A' B B' C C' D D' : HSpace}
+/-- Equal factor operators give equal tensor-product operators after identifying
+their input and output memory spaces. This is congruence under the stated space
+equalities and does not require positivity, normalization or contraction bounds.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 233–267,
+409–434 and 565–588. -/
+theorem mapL_heq {A A' B B' C C' D D' : HSpace}
     (hA : A = A') (hB : B = B') (hC : C = C') (hD : D = D')
     (f : A →L[ℂ] B) (f' : A' →L[ℂ] B') (g : C →L[ℂ] D) (g' : C' →L[ℂ] D')
     (hf : HEq f f') (hg : HEq g g') :

@@ -23,7 +23,7 @@ open scoped TensorProduct
 namespace TNLean.PEPS.PairEffect.SourceCircuit
 variable {P : Type}
 
-/-- The prescribed coordinate halfspaces recover the fixed partial-slot layout,
+/-- The prescribed endpoint spaces recover the fixed partial-slot layout,
 without choosing any branch labels or prepared source vectors.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267
 and 342–417. -/
@@ -58,7 +58,7 @@ theorem mapOwner_atParty_partialSlots_eq_allResidualSourceLayout {a b : Layout P
     let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
       (by classical exact decide_eq_true rfl)
     let q : Option {t : P // A t = true} := some ⟨p, hp⟩
-    let lift : Option {t : P // A t = true} → Option {t : P // true = true} :=
+    let lift : Option {t : P // A t = true} → Option {_t : P // true = true} :=
       fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
     Layout.mapOwner lift (Layout.atParty q
       (SourceInventory.slotLayout (partialSlots A w)
@@ -86,5 +86,56 @@ theorem mapOwner_atParty_partialSlots_eq_allResidualSourceLayout {a b : Layout P
         by_cases hr : (endpoints w e).2 = p <;>
         simpa [List.flatMap_cons, Layout.atParty, Layout.restrict,
           Layout.mapOwner, A, q, lift, partySelector, affectedOwner, hl, hr] using ih
+
+/-- The selected original registers have the same order and spaces after
+singleton and all-party owner grouping. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 409–434 and 565–588. -/
+theorem mapOwner_selected_originalLayout_eq (p : P) (L : Layout P) :
+    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
+      (affectedOwner (fun _ : P ↦ true) t)
+    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
+      (by classical exact decide_eq_true rfl)
+    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+    let lift : Option {t : P // A t = true} → Option {_t : P // true = true} :=
+      fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
+    Layout.mapOwner lift
+        (Layout.atParty q (Layout.mapOwner (affectedOwner A) L)) =
+      Layout.atParty (some ⟨p, rfl⟩)
+        (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) L) := by
+  classical
+  intro A hp q lift
+  let all := affectedOwner (fun _ : P ↦ true)
+  let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
+  induction L with
+  | nil => rfl
+  | cons r L ih =>
+      by_cases hr : r.owner = p
+      · have hOne : affectedOwner A r.owner = q := by
+          simp only [affectedOwner, hr, hp, q, ↓reduceDIte]
+        have hAll : all r.owner = qp := by
+          simp only [all, qp, affectedOwner, hr, ↓reduceDIte]
+        change Layout.mapOwner lift
+          (Layout.atParty q (Layout.mapOwner (affectedOwner A) (r :: L))) =
+          Layout.atParty qp (Layout.mapOwner all (r :: L))
+        simp only [Layout.mapOwner_cons, Layout.atParty, Layout.restrict_cons,
+          hOne, hAll, decide_true, ↓reduceIte]
+        exact congrArg ((⟨qp, r.space⟩ : Reg (Option {_p : P // true = true})) :: ·) ih
+      · have hA : A r.owner = false := by
+          change partySelector (some ⟨p, rfl⟩)
+            (affectedOwner (fun _ : P ↦ true) r.owner) = false
+          rw [partySelector_affectedOwner_all_apply]
+          simp only [partySelector, hr, decide_false]
+        have hOne : affectedOwner A r.owner ≠ q := by
+          rw [(affectedOwner_eq_none A r.owner).mpr hA]
+          simp only [q, reduceCtorEq, not_false_eq_true]
+        have hAll : all r.owner ≠ qp := by
+          simpa only [all, qp, affectedOwner, ↓reduceDIte, Option.some.injEq,
+            Subtype.mk.injEq] using hr
+        change Layout.mapOwner lift
+          (Layout.atParty q (Layout.mapOwner (affectedOwner A) (r :: L))) =
+          Layout.atParty qp (Layout.mapOwner all (r :: L))
+        simp only [Layout.mapOwner_cons, Layout.atParty, Layout.restrict_cons,
+          hOne, hAll, decide_false, Bool.false_eq_true, ↓reduceIte]
+        exact ih
 
 end TNLean.PEPS.PairEffect.SourceCircuit
