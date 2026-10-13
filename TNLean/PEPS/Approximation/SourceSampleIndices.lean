@@ -93,18 +93,21 @@ theorem sourcePairEquiv_apply {a b : Layout P} (w : SourceCircuit a b)
     (sourcePairEquiv w e.1 e.2).1 = Sym2.mk (w.endpoints e).1 (w.endpoints e).2 := by
   classical
   induction w with
-  | id => exact nomatch e.1
+  | id => exact False.elim (Empty.elim e.1 : False)
   | comp w v ihw ihv =>
       rcases e with ⟨g, i⟩
       cases g with
       | inl g => exact ihw ⟨g, i⟩
       | inr g => exact ihv ⟨g, i⟩
-  | localMap => exact nomatch e.1
+  | localMap => exact False.elim (Empty.elim e.1 : False)
   | @gate C ι _ _ owner a b c G tail =>
       rcases e with ⟨g, i⟩
-      simp only [sourcePairEquiv, Equiv.trans_apply, participantPairEquiv_apply,
-        SourceInventory.pairIndexEquiv_apply, PairSource.partyPair, Sym2.map_mk]
-  | swap => exact nomatch e.1
+      change ((participantPairEquiv owner)
+        (SourceInventory.pairIndexEquiv G.slots G.pair_nodup G.pair_complete i)).val =
+          Sym2.mk (owner (G.slots.get i).left) (owner (G.slots.get i).right)
+      rw [participantPairEquiv_apply, SourceInventory.pairIndexEquiv_apply]
+      simp only [PairSource.partyPair, Sym2.map_mk]
+  | swap => exact False.elim (Empty.elim e.1 : False)
   | frame r w ih => exact ih e
 
 open Classical in
