@@ -110,23 +110,27 @@ theorem markedChainCoefficient_bondMul_eq_of_eq
   rw [markedChainCoefficient_bondMul, markedChainCoefficient_bondMul]
   simp_rw [h]
 
-/-- The marked chain of a Gram-dressed vertical corner has a reflected form
-which is independent of the corner gauge.
+/-- Conjugating the open indices of a reflected marked-chain identity by the
+adjoint of the vertical gauge turns the gauge-conjugated tensor into the
+Gram-dressed one and cancels the gauge on the reflected side.
 
-The proof conjugates the two open indices in the reflected Figure 7 identity
-by $X^\dagger$.  On the original side this produces
-$X^\dagger X A^v (X^\dagger X)^{-1}$; on the reflected side the two gauge
-factors cancel.  This is the common right side used in Figure 8 of
-arXiv:1606.00608, Proposition 4.13, lines 1909--1919. -/
-theorem IsMPDO.markedChainCoefficient_gramDressing_eq_reflectedAdjoint
-    {M : MPOTensor d D} (hM : IsMPDO M)
-    (A : MPSTensor (D * D) n) (V : Matrix (Fin d) (Fin n) ℂ)
-    (X : GL (Fin n) ℂ) (c : ℂ) (hc : (0 : ℂ) < c)
-    (hcorner : ∀ v,
-      Vᴴ * verticalTensor M v * V =
-        c • ((X : Matrix (Fin n) (Fin n) ℂ) * A v *
-          (((X)⁻¹ : GL (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ)))
-    (N : ℕ) (r s : Fin n) (σ τ : Fin N → Fin d) :
+This is the gauge cancellation shared by every Gram-dressed reflected chain:
+if the conjugated tensor \(X A X^{-1}\) satisfies the reflected identity at
+every pair of open indices, then `gramDressing X A` has the reflected chain of
+`A` itself. Source: arXiv:1606.00608, Proposition 4.13, lines 1914--1919. -/
+theorem markedChainCoefficient_gramDressing_eq_of_bondMul_reflected
+    (A : MPSTensor (D * D) n) (M : MPOTensor d D) (X : GL (Fin n) ℂ)
+    (N : ℕ) (r s : Fin n) (σ τ : Fin N → Fin d)
+    (hFigure : ∀ p q : Fin n,
+      markedChainCoefficient
+          (bondMul (X : Matrix (Fin n) (Fin n) ℂ) A
+            (((X)⁻¹ : GL (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ))
+          M p q (List.ofFn σ) (List.ofFn τ) =
+        markedChainCoefficient
+          (reflectedAdjoint (bondMul (X : Matrix (Fin n) (Fin n) ℂ) A
+            (((X)⁻¹ : GL (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ)))
+          (MPOTensor.adjointTensor M) p q
+          (List.ofFn σ).reverse (List.ofFn τ).reverse) :
     markedChainCoefficient (gramDressing X A) M r s
         (List.ofFn σ) (List.ofFn τ) =
       markedChainCoefficient (reflectedAdjoint A) (MPOTensor.adjointTensor M) r s
@@ -135,14 +139,6 @@ theorem IsMPDO.markedChainCoefficient_gramDressing_eq_reflectedAdjoint
   let Xi : Matrix (Fin n) (Fin n) ℂ :=
     (((X)⁻¹ : GL (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ)
   let B : MPSTensor (D * D) n := bondMul Xm A Xi
-  have hFigure : ∀ p q : Fin n,
-      markedChainCoefficient B M p q (List.ofFn σ) (List.ofFn τ) =
-        markedChainCoefficient (reflectedAdjoint B) (MPOTensor.adjointTensor M) p q
-          (List.ofFn σ).reverse (List.ofFn τ).reverse := by
-    intro p q
-    apply hM.markedChainCoefficient_eq_reflectedAdjoint B V c hc
-    intro v
-    exact hcorner v
   have hCov := markedChainCoefficient_bondMul_eq_of_eq Xmᴴ Xiᴴ
     B (reflectedAdjoint B) M (MPOTensor.adjointTensor M) r s
     (List.ofFn σ) (List.ofFn τ)
@@ -166,6 +162,33 @@ theorem IsMPDO.markedChainCoefficient_gramDressing_eq_reflectedAdjoint
     rw [hXX, Units.val_one, Matrix.one_mul]
   rw [hLeft, hRight] at hCov
   exact hCov
+
+/-- The marked chain of a Gram-dressed vertical corner has a reflected form
+which is independent of the corner gauge.
+
+The proof conjugates the two open indices in the reflected Figure 7 identity
+by $X^\dagger$.  On the original side this produces
+$X^\dagger X A^v (X^\dagger X)^{-1}$; on the reflected side the two gauge
+factors cancel.  This is the common right side used in Figure 8 of
+arXiv:1606.00608, Proposition 4.13, lines 1909--1919. -/
+theorem IsMPDO.markedChainCoefficient_gramDressing_eq_reflectedAdjoint
+    {M : MPOTensor d D} (hM : IsMPDO M)
+    (A : MPSTensor (D * D) n) (V : Matrix (Fin d) (Fin n) ℂ)
+    (X : GL (Fin n) ℂ) (c : ℂ) (hc : (0 : ℂ) < c)
+    (hcorner : ∀ v,
+      Vᴴ * verticalTensor M v * V =
+        c • ((X : Matrix (Fin n) (Fin n) ℂ) * A v *
+          (((X)⁻¹ : GL (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ)))
+    (N : ℕ) (r s : Fin n) (σ τ : Fin N → Fin d) :
+    markedChainCoefficient (gramDressing X A) M r s
+        (List.ofFn σ) (List.ofFn τ) =
+      markedChainCoefficient (reflectedAdjoint A) (MPOTensor.adjointTensor M) r s
+        (List.ofFn σ).reverse (List.ofFn τ).reverse := by
+  apply markedChainCoefficient_gramDressing_eq_of_bondMul_reflected
+  intro p q
+  apply hM.markedChainCoefficient_eq_reflectedAdjoint _ V c hc
+  intro v
+  exact hcorner v
 
 /-- Two grouped corners of the same vertical representative have identical
 Gram-dressed marked chains.
@@ -195,25 +218,6 @@ theorem IsMPDO.markedChainCoefficient_gramDressing_eq_of_two_corners
     A VX X cX hcX hcornerX N r s σ τ).trans
       (hM.markedChainCoefficient_gramDressing_eq_reflectedAdjoint
         A VY Y cY hcY hcornerY N r s σ τ).symm
-
-/-- A two-sided physical compression gives a linear combination of the
-physical letters after horizontal slicing. -/
-theorem horizontalSlice_twoSidedCompression
-    (M : MPOTensor d D) (L R : Matrix (Fin d) (Fin n) ℂ) (r s : Fin n) :
-    horizontalSlice (fun v ↦ Lᴴ * verticalTensor M v * R) r s =
-      ∑ i : Fin d, ∑ j : Fin d,
-        (star (L i r) * R j s) • M i j := by
-  ext a b
-  simp only [horizontalSlice, Matrix.mul_apply, Matrix.conjTranspose_apply,
-    verticalTensor_finProdFinEquiv, Matrix.sum_apply, Matrix.smul_apply,
-    smul_eq_mul]
-  rw [Finset.sum_comm]
-  apply Finset.sum_congr rfl
-  intro i _
-  rw [Finset.sum_mul]
-  apply Finset.sum_congr rfl
-  intro j _
-  ring
 
 /-- Coefficients of the physical-letter expansion of a two-sided compression
 `Lᴴ * verticalTensor M v * R`, normalized by a nonzero scalar `c`.
