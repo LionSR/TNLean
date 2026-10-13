@@ -333,7 +333,7 @@ private theorem restrict_localPart_mapOwner_eval_heq_induction
         have hmap : (Word.source hxy U V η tail).mapOwner f =
             (localPairSource (f x) U V η (Layout.mapOwner f tail)).castLayouts rfl hcast := by
           unfold mapOwner
-          exact dif_pos h
+          exact dite_eq_left h
         have hleft := (restrict_localPart_castLayouts_eval_heq sq
           (localPairSource (f x) U V η (Layout.mapOwner f tail)) rfl hcast).trans
             (restrict_localPart_eval_heq_of_sources_nil sq _ rfl)
@@ -357,9 +357,15 @@ private theorem restrict_localPart_mapOwner_eval_heq_induction
       · have hmap : (Word.source hxy U V η tail).mapOwner f =
             Word.source h U V η (Layout.mapOwner f tail) := by
           unfold mapOwner
-          exact dif_neg h
+          exact dite_eq_right h
+        have hselected := congrArg
+          (fun z : Word (Layout.mapOwner f tail)
+              (Layout.mapOwner f (⟨x, U⟩ :: ⟨y, V⟩ :: tail)) ↦
+            HEq (z.localPart.restrict sq z.sources_localPart).eval
+              (((Word.source hxy U V η tail).localPart.restrict sp
+                (Word.source hxy U V η tail).sources_localPart).mapOwner f).eval) hmap
         unfold selectedOwnerLocalPartIdentity
-        rw [hmap]
+        apply Eq.mpr hselected
         change HEq
           (Word.id (Layout.restrict sq
             (Layout.mapOwner f (⟨x, U⟩ :: ⟨y, V⟩ :: tail)))).eval

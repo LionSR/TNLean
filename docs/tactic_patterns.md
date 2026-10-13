@@ -4285,6 +4285,23 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Restriction of equal source-free words — candidate (2026-10-13)
+
+- **Pattern:** When equality of words is used inside restriction, transport
+  the word together with its source-free proof. Ordinary rewriting can leave
+  a generated proof fixed while changing the word on which it depends.
+- **Seen:** Two occurrences in `PEPS/Approximation/`: the unequal-owner source
+  case of `WordSelectedOwnerLocalPart.lean` and the sampled-word comparison
+  in `IncidentSampledEndpointComparison.lean`.
+- **Abstraction:** Consider a restriction-congruence lemma if a third
+  occurrence appears. The present proofs use `congrArg` of the complete
+  proposition, or the subtype of source-free words, respectively. For a
+  change of layouts, use the existing `Word.restrict_castLayouts`.
+- **Notes:** The two comparisons have different targets, so no new tactic
+  is introduced. The proof of source-freeness must vary with the abstract
+  word. Mathematical hypotheses and proof limits remain unchanged; Lean
+  verification of these corrections is pending.
+
 ### Upper endpoint of a scanner band — candidate (2026-10-12)
 
 - **Pattern:** Use the band index bound, the offset bound and $8Km\le L$

@@ -43,8 +43,8 @@ private theorem eval_endpointRegisterWord_cons
   apply clm_ext_tmul
   intro x y
   simp [endpointRegisterWord, Word.localEndpoint, Word.eval, appendIso,
-    isoL_apply, LinearIsometryEquiv.symm_lTensor, ContinuousLinearMap.lTensor_tmul,
-    TensorProduct.mapL_tmul]
+    isoL_apply, LinearIsometryEquiv.symm_lTensor]
+  rfl
 
 /-- Owner labels do not change the operator of an already retained endpoint
 word. Its endpoint spaces, maps and order are unchanged.
@@ -253,6 +253,14 @@ private theorem projectedSlotChoice_eq_allSourceLabel (A : P → Bool)
     (isTouched_of_source_endpoint A w (partialSlotEquiv A w i).1
       (partialSlotEquiv A w i).2)
 
+/-- The complete slot enumeration reads the same original gate label.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–355. -/
+private theorem allPartialSlotChoice_eq_allSourceLabel
+    (w : SourceCircuit a b) (ξ : Choices (fun _ ↦ true) w)
+    (i : Fin (partialSlots (fun _ ↦ true) w).length) :
+    partialSlotChoice (fun _ ↦ true) w ξ i =
+      allSourceLabel w ξ (partialSlotEquiv (fun _ ↦ true) w i).1 := rfl
+
 variable (w : SourceCircuit a b) (k : ℕ)
   (lam : ∀ e : sourceLocations w, branchLabels w e.1 →
     Fin (min (sourceDims w e).1 (sourceDims w e).2) → ℝ)
@@ -260,6 +268,135 @@ variable (w : SourceCircuit a b) (k : ℕ)
     Matrix (Fin (sourceDims w e).1) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
   (F : ∀ e : sourceLocations w, branchLabels w e.1 →
     Matrix (Fin (sourceDims w e).2) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
+
+/-- The left endpoint operator uses the original ket and bra labels, source
+index, sample, and Gaussian array.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–309. -/
+private def sampledEndpointOperatorLeft (ξ ζ : Choices (fun _ ↦ true) w)
+    (j : w.sourceLocations → Fin k) (ω : SourceGaussianSamples w k)
+    (e : sourceLocations w) :
+    euc (Fin (sourceDims w e).1) →L[ℂ] euc (Fin (sourceDims w e).1) :=
+  basisMatrixOperator (EuclideanSpace.basisFun (Fin (sourceDims w e).1) ℂ)
+    (sampledEndpointLeft w k lam E e
+      (allSourceLabel w ξ e, allSourceLabel w ζ e) (j e) ω)
+
+/-- The right endpoint operator retains the same original source sample as
+its left endpoint.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–309. -/
+private def sampledEndpointOperatorRight (ξ ζ : Choices (fun _ ↦ true) w)
+    (j : w.sourceLocations → Fin k) (ω : SourceGaussianSamples w k)
+    (e : sourceLocations w) :
+    euc (Fin (sourceDims w e).2) →L[ℂ] euc (Fin (sourceDims w e).2) :=
+  basisMatrixOperator (EuclideanSpace.basisFun (Fin (sourceDims w e).2) ℂ)
+    (sampledEndpointRight w k lam F e
+      (allSourceLabel w ξ e, allSourceLabel w ζ e) (j e) ω)
+
+/-- Express the sampled word using its endpoint operators before restricting
+or identifying layouts. The complete slot enumeration retains the original
+source indices and both original branch labels.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–355. -/
+private theorem sampledEndpointWord_eq_endpointWord
+    (ξ ζ : Choices (fun _ ↦ true) w) (j : w.sourceLocations → Fin k)
+    (ω : SourceGaussianSamples w k) :
+    sampledEndpointWord w k lam E F ξ ζ j ω =
+      SourceInventory.endpointWord (partialSlots (fun _ ↦ true) w)
+        w.allSourceU w.allSourceV
+        (fun i ↦ sampledEndpointOperatorLeft w k lam E ξ ζ j ω
+          (partialSlotEquiv (fun _ ↦ true) w i).1)
+        (fun i ↦ sampledEndpointOperatorRight w k lam F ξ ζ j ω
+          (partialSlotEquiv (fun _ ↦ true) w i).1) := by
+  simp only [sampledEndpointWord, SourceInventory.endpointMatrixWord,
+    allSourceSlotEquiv_apply, allPartialSlotChoice_eq_allSourceLabel,
+    sampledEndpointOperatorLeft, sampledEndpointOperatorRight, allSourceU, allSourceV]
+
+/-- Restriction of the sampled input word differs from restriction of the
+sampled endpoint word only by the canonical layout identification. No
+sampled matrix is expanded in this comparison.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267 and 565–588. -/
+private theorem restrict_sampledEndpointInputWord_eval_heq_sampledEndpointWord
+    (f : Option {_p : P // true = true} → Bool)
+    (ξ ζ : Choices (fun _ ↦ true) w) (j : w.sourceLocations → Fin k)
+    (ω : SourceGaussianSamples w k) :
+    HEq ((sampledEndpointInputWord w k lam E F ξ ζ j ω).restrict f
+        (sources_sampledEndpointInputWord w k lam E F ξ ζ j ω)).eval
+      ((sampledEndpointWord w k lam E F ξ ζ j ω).restrict f
+        (sources_sampledEndpointWord w k lam E F ξ ζ j ω)).eval := by
+  unfold sampledEndpointInputWord
+  exact (heq_of_eq (congrArg Word.eval
+    (Word.restrict_castLayouts f (sampledEndpointWord w k lam E F ξ ζ j ω)
+      (List.append_nil _).symm (List.append_nil _).symm
+      (sources_sampledEndpointWord w k lam E F ξ ζ j ω)))).trans
+    (Word.eval_castLayouts_heq _ _ _)
+
+/-- Restricting the sampled endpoint operators gives the word constructed
+from the incident labels. The input-layout identification is compared
+separately, so this proof concerns only original endpoint operators.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–355,
+409–434 and 565–588. -/
+private theorem restrict_sampledEndpointWord_eval_heq_incidentSampledEndpointWord
+    (p : P) (ξ ζ : Choices (fun _ : P ↦ true) w)
+    (j : w.sourceLocations → Fin k) (ω : SourceGaussianSamples w k) :
+    HEq ((sampledEndpointWord w k lam E F ξ ζ j ω).restrict
+        (partySelector (some ⟨p, rfl⟩))
+        (sources_sampledEndpointWord w k lam E F ξ ζ j ω)).eval
+      (incidentSampledEndpointWord w k lam E F p
+        (originalGateLabelsAtOfAllChoices w p ξ)
+        (originalGateLabelsAtOfAllChoices w p ζ)
+        (fun i ↦ j (partialSlotEquiv
+          (fun t ↦ partySelector (some ⟨p, rfl⟩)
+            (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω).eval := by
+  classical
+  let all : P → Bool := fun _ ↦ true
+  let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
+  let A : P → Bool := fun t ↦ partySelector qp (affectedOwner all t)
+  let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
+    (decide_eq_true rfl)
+  let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+  let lift : Option {t : P // A t = true} → Option {_p : P // true = true} :=
+    fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
+  let M := sampledEndpointOperatorLeft w k lam E ξ ζ j ω
+  let N := sampledEndpointOperatorRight w k lam F ξ ζ j ω
+  let Ua := fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv all w i).1).1)
+  let Va := fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv all w i).1).2)
+  let Za := SourceInventory.endpointWord (partialSlots all w) Ua Va
+    (fun i ↦ M (partialSlotEquiv all w i).1)
+    (fun i ↦ N (partialSlotEquiv all w i).1)
+  have hsa : Za.sources = [] := SourceInventory.sources_endpointWord ..
+  let Ds := (partialPositions A w).flatMap (endpointDataAt A w M N)
+  let Ds' := Ds.filter (fun z ↦ partySelector q z.1.owner)
+  have hdataS := endpointRegisterData_partialSlots A w M N
+  have hselected : HEq (Za.restrict (partySelector qp) hsa).eval
+      (SourceInventory.endpointRegisterWord Ds').eval :=
+    restrict_endpointWord_eval_heq_selectedRegisterWord w p M N
+  have hword : sampledEndpointWord w k lam E F ξ ζ j ω = Za :=
+    sampledEndpointWord_eq_endpointWord w k lam E F ξ ζ j ω
+  have hinput :
+      ((sampledEndpointWord w k lam E F ξ ζ j ω).restrict
+        (partySelector qp) (sources_sampledEndpointWord w k lam E F ξ ζ j ω)).eval =
+      (Za.restrict (partySelector qp) hsa).eval := by
+    have h : (⟨sampledEndpointWord w k lam E F ξ ζ j ω,
+          sources_sampledEndpointWord w k lam E F ξ ζ j ω⟩ :
+          {Z : Word w.allResidualSourceLayout w.allResidualSourceLayout // Z.sources = []}) =
+        ⟨Za, hsa⟩ := Subtype.ext hword
+    exact congrArg
+      (fun z : {Z : Word w.allResidualSourceLayout w.allResidualSourceLayout // Z.sources = []} ↦
+        (z.1.restrict (partySelector qp) z.2).eval) h
+  have hincident : HEq
+      (incidentSampledEndpointWord w k lam E F p
+        (originalGateLabelsAtOfAllChoices w p ξ)
+        (originalGateLabelsAtOfAllChoices w p ζ)
+        (fun i ↦ j (partialSlotEquiv A w i).1) ω).eval
+      (SourceInventory.endpointRegisterWord Ds').eval := by
+    unfold incidentSampledEndpointWord
+    dsimp only
+    rw [choicesOfOriginalGateLabelsAt_eq_projectAllChoices,
+      choicesOfOriginalGateLabelsAt_eq_projectAllChoices]
+    simp_rw [projectedSlotChoice_eq_allSourceLabel]
+    refine (Word.eval_castLayouts_heq _ _ _).trans ?_
+    refine (Word.eval_mapOwner_heq lift _).trans ?_
+    exact SourceInventory.endpointRegisterWord_eval_heq_of_eq
+      (congrArg (List.filter (fun z ↦ partySelector q z.1.owner)) hdataS)
+  exact ((heq_of_eq hinput).trans hselected).trans hincident.symm
 
 /-- The actual sampled endpoint operator at one original party is the word
 constructed directly from its incident ket and bra labels. Both endpoints
@@ -280,62 +417,11 @@ theorem restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord
         (fun i ↦ j (partialSlotEquiv
           (fun t ↦ partySelector (some ⟨p, rfl⟩)
             (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω).eval := by
-  classical
-  let all : P → Bool := fun _ ↦ true
-  let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
-  let A : P → Bool := fun t ↦ partySelector qp (affectedOwner all t)
-  let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
-    (decide_eq_true rfl)
-  let q : Option {t : P // A t = true} := some ⟨p, hp⟩
-  let lift : Option {t : P // A t = true} → Option {_p : P // true = true} :=
-    fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
-  let M (e : sourceLocations w) :=
-    basisMatrixOperator (EuclideanSpace.basisFun (Fin (sourceDims w e).1) ℂ)
-      (sampledEndpointLeft w k lam E e
-        (allSourceLabel w ξ e, allSourceLabel w ζ e) (j e) ω)
-  let N (e : sourceLocations w) :=
-    basisMatrixOperator (EuclideanSpace.basisFun (Fin (sourceDims w e).2) ℂ)
-      (sampledEndpointRight w k lam F e
-        (allSourceLabel w ξ e, allSourceLabel w ζ e) (j e) ω)
-  let Ua := fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv all w i).1).1)
-  let Va := fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv all w i).1).2)
-  let Za := SourceInventory.endpointWord (partialSlots all w) Ua Va
-    (fun i ↦ M (partialSlotEquiv all w i).1)
-    (fun i ↦ N (partialSlotEquiv all w i).1)
-  have hsa : Za.sources = [] := SourceInventory.sources_endpointWord ..
-  let Ds := (partialPositions A w).flatMap (endpointDataAt A w M N)
-  let Ds' := Ds.filter (fun z ↦ partySelector q z.1.owner)
-  have hdataS := endpointRegisterData_partialSlots A w M N
-  have hselected : HEq (Za.restrict (partySelector qp) hsa).eval
-      (SourceInventory.endpointRegisterWord Ds').eval :=
-    restrict_endpointWord_eval_heq_selectedRegisterWord w p M N
-  have hinput : HEq
-      ((sampledEndpointInputWord w k lam E F ξ ζ j ω).restrict
-        (partySelector qp) (sources_sampledEndpointInputWord w k lam E F ξ ζ j ω)).eval
-      (Za.restrict (partySelector qp) hsa).eval := by
-    unfold sampledEndpointInputWord
-    rw [Word.restrict_castLayouts (partySelector qp)
-      (sampledEndpointWord w k lam E F ξ ζ j ω)
-      (List.append_nil _).symm (List.append_nil _).symm
-      (sources_sampledEndpointWord w k lam E F ξ ζ j ω)]
-    exact Word.eval_castLayouts_heq _ _ _
-  have hincident : HEq
-      (incidentSampledEndpointWord w k lam E F p
-        (originalGateLabelsAtOfAllChoices w p ξ)
-        (originalGateLabelsAtOfAllChoices w p ζ)
-        (fun i ↦ j (partialSlotEquiv A w i).1) ω).eval
-      (SourceInventory.endpointRegisterWord Ds').eval := by
-    unfold incidentSampledEndpointWord
-    dsimp only
-    rw [choicesOfOriginalGateLabelsAt_eq_projectAllChoices,
-      choicesOfOriginalGateLabelsAt_eq_projectAllChoices]
-    simp_rw [projectedSlotChoice_eq_allSourceLabel]
-    refine (Word.eval_castLayouts_heq _ _ _).trans ?_
-    refine (Word.eval_mapOwner_heq lift _).trans ?_
-    exact SourceInventory.endpointRegisterWord_eval_heq_of_eq
-      (congrArg (List.filter (fun z ↦ partySelector q z.1.owner)) hdataS)
-  apply eq_of_heq
-  exact (hinput.trans hselected).trans hincident.symm
+  exact eq_of_heq
+    ((restrict_sampledEndpointInputWord_eval_heq_sampledEndpointWord w k lam E F
+      (partySelector (some ⟨p, rfl⟩)) ξ ζ j ω).trans
+      (restrict_sampledEndpointWord_eval_heq_incidentSampledEndpointWord
+        w k lam E F p ξ ζ j ω))
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect
