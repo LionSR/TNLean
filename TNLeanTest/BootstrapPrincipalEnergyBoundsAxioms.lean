@@ -7,14 +7,15 @@ import TNLean.PEPS.AreaLaw.Scan.BootstrapPrincipalEnergyBounds
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
-/-! Check the principal bootstrap energy bound and its kernel dependencies. -/
+/-! Check the bootstrap energy bounds and their kernel dependencies. -/
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  let decl := ``TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_principal_energy_bound
-  unless (← Lean.getEnv).contains decl do
-    throwError "Missing declaration {decl}"
-  let axioms ← Lean.collectAxioms decl
-  unless axioms.all (allowed.contains ·) do
-    throwError "Unexpected axioms for {decl}: {axioms}"
-  Lean.logInfo m!"{decl}: {axioms}"
+  for decl in #[``TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_principal_energy_bound,
+      ``TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_energy_expression_bound] do
+    unless (← Lean.getEnv).contains decl do
+      throwError "Missing declaration {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (allowed.contains ·) do
+      throwError "Unexpected axioms for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"

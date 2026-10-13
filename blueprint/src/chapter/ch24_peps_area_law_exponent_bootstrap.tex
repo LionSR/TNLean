@@ -136,6 +136,42 @@
     and $e_0$.
 \end{proof}
 
+% Source: 08-scanner.tex, scanner:energy-output and scanner:bootstrap-energy,
+% lines 371--377 and 744--755, adc7f124.
+\begin{corollary}[Numerical energy bound at the fixed bootstrap scales]
+    \label{cor:area_law_bootstrap_energy_expression}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_energy_expression_bound}
+    \leanok
+    \uses{thm:area_law_bootstrap_principal_energy}
+    Under the hypotheses and notation of
+    Theorem~\ref{thm:area_law_bootstrap_principal_energy}, put
+    \begin{align}
+        E_n(e)=A_n(e)+Cn^{-1000}.
+        \label{eq:al_bootstrap_energy_expression}
+    \end{align}
+    There is an integer $N\ge2$, depending only on the fixed constants
+    and $e_0$, such that every integer $n\ge N$ and every real $e\le e_0$
+    satisfy
+    \begin{align}
+        E_n(e)\le(1+C)n^{-\nu/2}.
+        \label{eq:al_bootstrap_energy_expression_bound}
+    \end{align}
+    The threshold in the principal energy estimate suffices.
+\end{corollary}
+\begin{proof}\leanok
+    \uses{thm:area_law_bootstrap_principal_energy,def:area_law_bootstrap_parameters}
+    Since $0<g_0<1/2$ and $\nu=g_0/1000$, we have $\nu/2<1000$.
+    For $n\ge2$, it follows that $n^{-1000}\le n^{-\nu/2}$.
+    As $C\ge0$, the principal energy estimate gives
+    \begin{align}
+        E_n(e)\le n^{-\nu/2}+Cn^{-\nu/2}=(1+C)n^{-\nu/2}.
+    \end{align}
+\end{proof}
+
+The fixed contribution $Cn^{-1000}$ is included in $E_n(e)$.
+The remaining error in the scanner energy estimate tends to zero with the
+replica index at each fixed system size.
+
 \begin{theorem}[Binary-entropy cost of the rounded bands]
     \label{thm:area_law_bootstrap_binary_entropy_cost}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_binEntropy_cost_bound}
