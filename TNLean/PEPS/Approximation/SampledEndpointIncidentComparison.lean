@@ -18,6 +18,22 @@ namespace TNLean.PEPS.PairEffect
 namespace SourceCircuit
 variable {P : Type} {a b : Layout P}
 
+/-- Equal source-free words on fixed layouts have the same restricted
+operator. If their restriction and another operator both agree with a common
+operator, compose these comparisons before specializing the word and maps.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434 and 565–588. -/
+private theorem restrict_eval_heq_of_eq_and_common_eval {Q : Type}
+    {ℓ ℓ' : Layout Q} (f : Q → Bool) (u v : Word ℓ ℓ')
+    (hu : u.sources = []) (hv : v.sources = []) (hword : u = v)
+    {E F G H : HSpace} {X : E →L[ℂ] F} {Y : G →L[ℂ] H}
+    (hselected : HEq (v.restrict f hv).eval X) (hincident : HEq Y X) :
+    HEq (u.restrict f hu).eval Y := by
+  have h : (⟨u, hu⟩ : {z : Word ℓ ℓ' // z.sources = []}) = ⟨v, hv⟩ :=
+    Subtype.ext hword
+  have hrestriction := congrArg
+    (fun z : {z : Word ℓ ℓ' // z.sources = []} ↦ (z.1.restrict f z.2).eval) h
+  exact ((heq_of_eq hrestriction).trans hselected).trans hincident.symm
+
 variable (w : SourceCircuit a b) (k : ℕ)
   (lam : ∀ e : sourceLocations w, branchLabels w e.1 →
     Fin (min (sourceDims w e).1 (sourceDims w e).2) → ℝ)
@@ -65,20 +81,11 @@ theorem restrict_sampledEndpointWord_eval_heq_incidentSampledEndpointWord
     restrict_endpointWord_eval_heq_selectedRegisterWord w p M N
   have hword : sampledEndpointWord w k lam E F ξ ζ j ω = Za :=
     sampledEndpointWord_eq_endpointWord w k lam E F ξ ζ j ω
-  have hinput :
-      ((sampledEndpointWord w k lam E F ξ ζ j ω).restrict
-        (partySelector qp) (sources_sampledEndpointWord w k lam E F ξ ζ j ω)).eval =
-      (Za.restrict (partySelector qp) hsa).eval := by
-    have h : (⟨sampledEndpointWord w k lam E F ξ ζ j ω,
-          sources_sampledEndpointWord w k lam E F ξ ζ j ω⟩ :
-          {Z : Word w.allResidualSourceLayout w.allResidualSourceLayout // Z.sources = []}) =
-        ⟨Za, hsa⟩ := Subtype.ext hword
-    exact congrArg
-      (fun z : {Z : Word w.allResidualSourceLayout w.allResidualSourceLayout // Z.sources = []} ↦
-        (z.1.restrict (partySelector qp) z.2).eval) h
   have hincident := incidentSampledEndpointWord_eval_heq_selectedRegisterWord
     w k lam E F p ξ ζ j ω
-  exact ((heq_of_eq hinput).trans hselected).trans hincident.symm
+  exact restrict_eval_heq_of_eq_and_common_eval (partySelector qp)
+    (sampledEndpointWord w k lam E F ξ ζ j ω) Za
+    (sources_sampledEndpointWord w k lam E F ξ ζ j ω) hsa hword hselected hincident
 
 
 end SourceCircuit

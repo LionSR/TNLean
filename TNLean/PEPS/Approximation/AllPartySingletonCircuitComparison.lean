@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.AllPartySingletonComparison
 import TNLean.PEPS.Approximation.SelectedPartialSourceSlots
+import TNLean.PEPS.Approximation.SourceResidualCoordinates
 import TNLean.PEPS.Approximation.LocalPartRestrictionCongruence
 
 /-!
@@ -53,7 +54,7 @@ theorem restrict_partialWord_all_localPart_eval_heq_singleton_projection
     let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
       (by classical exact decide_eq_true rfl)
     let q : Option {t : P // A t = true} := some ⟨p, hp⟩
-    let lift : Option {t : P // A t = true} → Option {t : P // true = true} :=
+    let lift : Option {t : P // A t = true} → Option {_t : P // true = true} :=
       fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
     let χ := projectAllChoices A w ξ
     let W := partialWord (fun _ : P ↦ true) w ξ
@@ -130,10 +131,13 @@ theorem restrict_partialWord_all_localPart_eval_heq_singleton_projection
         (partialWord (fun _ : P ↦ true) v η).sources_localPart).eval
         (((partialWord A v (projectAllChoices A v η)).mapOwner lift).localPart.restrict sq
           ((partialWord A v (projectAllChoices A v η)).mapOwner lift).sources_localPart).eval := by
-    induction v generalizing η with
-    | id => exact hRaw (Word.id _)
-    | localMap r ha hb T tail => exact hRaw (Word.localMap r ha hb T tail)
-    | swap r s tail => exact hRaw (Word.swap r s tail)
+    induction v with
+    | id a =>
+        simpa only [partialWord, Word.mapOwner] using hRaw (Word.id a)
+    | localMap r ha hb T tail =>
+        simpa only [partialWord] using hRaw (Word.localMap r ha hb T tail)
+    | swap r s tail =>
+        simpa only [partialWord] using hRaw (Word.swap r s tail)
     | @gate C ι _ _ owner a b c G tail =>
         have hGate := restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection
           owner G tail p η

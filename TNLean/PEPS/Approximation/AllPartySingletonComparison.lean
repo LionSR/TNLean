@@ -312,7 +312,7 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection
     let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
       (by classical exact decide_eq_true rfl)
     let q : Option {t : P // A t = true} := some ⟨p, hp⟩
-    let lift : Option {t : P // A t = true} → Option {t : P // true = true} :=
+    let lift : Option {t : P // A t = true} → Option {_t : P // true = true} :=
       fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
     let χ := projectAllChoices A (.gate owner G tail) ξ
     let W := partialWord (fun _ : P ↦ true) (.gate owner G tail) ξ
