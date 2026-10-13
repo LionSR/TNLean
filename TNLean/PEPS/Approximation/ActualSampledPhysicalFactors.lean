@@ -180,5 +180,7 @@ theorem partialSourceGlobalMatrix_sampled_partialTrace_eq_sum_physicalFactors
   simp only [sampledPhysicalFactor, restrictedMixedPhysicalTrace, partialSourcePartyMatrix]
     at hphysical ⊢
   convert hphysical using 1
+  funext j q
+  rfl
 
 end TNLean.PEPS.PairEffect.SourceCircuit
