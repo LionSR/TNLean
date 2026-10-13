@@ -122,6 +122,10 @@ theorem rootPath_augmented_compressed_bandProduct
   refine ⟨hroot'.1, hroot'.2, fun r =>
     (MeanTree.posDef_eval (D.posDef_input hD ht hcomm) T).posSemidef.rpow_intertwine
       hroot'.1.posSemidef ZS hroot'.2 r, ?_⟩
+  have hpre : ZS *ᵥ (ZOᴴ *ᵥ vO) = preS := by
+    simpa only [ZO, vO, Matrix.conjTranspose_submatrix, Matrix.submatrix_mulVec_equiv,
+      Function.comp_assoc, Equiv.self_comp_symm, Function.comp_id,
+      Matrix.mulVec_mulVec, hZZ] using hsym
   done
 
 end TNLean.PEPS.AreaLaw.Scan
