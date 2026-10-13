@@ -89,6 +89,12 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
     simp only [Matrix.IsHermitian, doubledHamiltonian, Matrix.conjTranspose_add,
       Matrix.conjTranspose_kronecker, Matrix.conjTranspose_one,
       (show h.operator.IsHermitian from h.hermitian).eq]
+  have hV₀ : reindex (g.symm.trans p) (g.symm.trans p)
+      ((1 : Matrix (P × P) (P × P) ℂ) ⊗ₖ W) ∈
+        supportedOperators (q * q) (Q : Set (SquareLatticeVertex L L)) :=
+    (EncodedFrame.reindex_physicalBuffer_eq_siteLift q R C₀ hRC W).symm ▸
+      EncodedFrame.siteLift_mem_supportedOperators Q
+        (reindex (sitePairConfigurationEquiv Q q q) (sitePairConfigurationEquiv Q q q) W)
   done
 
 end TNLean.PEPS.Approximation
