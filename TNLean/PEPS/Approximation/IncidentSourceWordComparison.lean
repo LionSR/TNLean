@@ -94,13 +94,8 @@ theorem restrict_partialSourceWord_eval_eq_incidentSourceWord {a b : Layout P}
     simp [all, qp, affectedOwner]
   have hfA : ∀ r, fa r = q ↔ r = p := by
     intro r
-    by_cases hr : A r = true
-    · simp [fa, q, affectedOwner, hr]
-    · have hne : r ≠ p := by
-        intro h
-        subst r
-        exact hr hp
-      simp [fa, q, affectedOwner, hr, hne]
+    simpa only [fa, q, affectedOwner, hp, ↓reduceDIte,
+      Bool.true_eq_false, and_false, or_false] using affectedOwner_eq_iff A r p
   have hSlots : Layout.mapOwner lift (Layout.restrict sa S) =
       Layout.restrict sq w.allResidualSourceLayout :=
     mapOwner_atParty_partialSlots_eq_allResidualSourceLayout w p

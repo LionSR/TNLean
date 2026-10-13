@@ -7333,3 +7333,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   geometric hypothesis. Exact root telescoping reuses Mathlib's
   `Fin.sum_univ_eq_sum_range` and `Finset.sum_range_sub'` rather than proving a
   second finite-sum cancellation theorem.
+
+### Selected affected owners have singleton fibres — promoted (2026-10-13)
+
+- **Pattern:** prove that an original party maps to the retained owner of an
+  affected party if and only if the two original parties are equal, by splitting
+  on whether the first party is affected.
+- **Seen:** three occurrences, in `AllPartySingletonComparison.lean`,
+  `AllPartySingletonCircuitComparison.lean`, and
+  `IncidentSourceWordComparison.lean`, under `PEPS/Approximation/`.
+- **Abstraction:** the existing `affectedOwner_eq_iff` in `AffectedOwners.lean`.
+  Its second alternative requires both parties to be exterior and is excluded
+  by the retained party's hypothesis `A p = true`.
+- **Refactor:** each proof applies the characterization directly and simplifies
+  the fixed retained owner. The three blocks lose five lines each; theorem
+  statements, labels, and source-register identifications are unchanged. No
+  additional lemma or tactic is introduced.

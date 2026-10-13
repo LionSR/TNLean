@@ -194,7 +194,8 @@ private theorem selected_localPart_frame_eval_heq
     have hr' : sq r'.owner = sp r.owner := congrFun hsel r.owner
     cases hr : sp r.owner <;>
       simp only [Layout.restrict_cons, hr', hr, Bool.false_eq_true, ↓reduceIte,
-        Layout.mapOwner_cons, hI] <;> rfl
+        Layout.mapOwner_cons, hI]
+    rfl
   have hcomp := eval_comp_heq
     ((moveHead r' W.sources.layout (Layout.mapOwner f a)).restrict sq
       (sources_moveHead r' W.sources.layout (Layout.mapOwner f a)))
@@ -295,14 +296,15 @@ private theorem selected_localPart_comp_eval_heq
   exact (restrict_castInput_eval_heq sq _ _ hraw').trans
     (hcomp.trans (eval_mapOwner_restrict_castInput f sp _ _ hraw).symm)
 
-/-- At a new owner whose fibre is one original party, the remaining selected
-operator is the relabelled remaining operator selected at that original party.
-The original word may contain arbitrary pair sources, and owners outside the
-selected fibre may merge. This compares the actual local-part constructors.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 383–434
-and 565–588. -/
-theorem restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
+/-- The constructor induction uses the selected source-prefix identity as
+an abstract equality for each word. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 246–267, 383–434 and 565–588. -/
+private theorem restrict_localPart_mapOwner_eval_heq_induction
     (f : P → Q) (p : P) (q : Q) (hf : ∀ r, f r = q ↔ r = p)
+    (hsel : (fun r ↦ partySelector q (f r)) = partySelector p)
+    (hS : ∀ {a b : Layout P} (w : Word a b),
+      Layout.restrict (partySelector q) (w.mapOwner f).sources.layout =
+        Layout.mapOwner f (Layout.restrict (partySelector p) w.sources.layout))
     {a b : Layout P} (u : Word a b) :
     HEq ((u.mapOwner f).localPart.restrict (partySelector q)
       (u.mapOwner f).sources_localPart).eval
@@ -310,18 +312,9 @@ theorem restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
   classical
   let sp := partySelector p
   let sq := partySelector q
-  have hsel : (fun r ↦ sq (f r)) = sp := by
-    funext r
-    apply Bool.eq_iff_iff.mpr
-    simpa only [sp, sq, partySelector, decide_eq_true_eq] using hf r
   have hL (L : Layout P) : Layout.restrict sq (Layout.mapOwner f L) =
       Layout.mapOwner f (Layout.restrict sp L) := by
     rw [Layout.restrict_mapOwner, hsel]
-  have hS {a b : Layout P} (w : Word a b) :
-      Layout.restrict sq (w.mapOwner f).sources.layout =
-        Layout.mapOwner f (Layout.restrict sp w.sources.layout) := by
-    rw [sources_mapOwner]
-    exact SourceInventory.atParty_layout_mapOwner_of_singleton_fiber f p q hf w.sources
   induction u with
   | id => exact sourceFree_selected_localPart f p q hsel _ rfl
   | localMap => exact sourceFree_selected_localPart f p q hsel _ rfl
@@ -364,5 +357,29 @@ theorem restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
             (Word.source hxy U V η tail).sources_localPart).mapOwner f).eval
         simp only [mapOwner, dite_eq_right h, localPart, restrict]
         exact eval_id_heq (hL (⟨x, U⟩ :: ⟨y, V⟩ :: tail))
+
+/-- At a new owner whose fibre is one original party, the remaining selected
+operator is the relabelled remaining operator selected at that original party.
+The original word may contain arbitrary pair sources, and owners outside the
+selected fibre may merge. This compares the actual local-part constructors.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 383–434
+and 565–588. -/
+theorem restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
+    (f : P → Q) (p : P) (q : Q) (hf : ∀ r, f r = q ↔ r = p)
+    {a b : Layout P} (u : Word a b) :
+    HEq ((u.mapOwner f).localPart.restrict (partySelector q)
+      (u.mapOwner f).sources_localPart).eval
+      ((u.localPart.restrict (partySelector p) u.sources_localPart).mapOwner f).eval := by
+  classical
+  have hsel : (fun r ↦ partySelector q (f r)) = partySelector p := by
+    funext r
+    apply Bool.eq_iff_iff.mpr
+    simpa only [partySelector, decide_eq_true_eq] using hf r
+  have hS {a b : Layout P} (w : Word a b) :
+      Layout.restrict (partySelector q) (w.mapOwner f).sources.layout =
+        Layout.mapOwner f (Layout.restrict (partySelector p) w.sources.layout) := by
+    rw [sources_mapOwner]
+    exact SourceInventory.atParty_layout_mapOwner_of_singleton_fiber f p q hf w.sources
+  exact restrict_localPart_mapOwner_eval_heq_induction f p q hf hsel (fun w ↦ hS w) u
 
 end TNLean.PEPS.PairEffect.Word

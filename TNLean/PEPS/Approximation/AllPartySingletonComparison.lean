@@ -69,13 +69,8 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_singleton_projection
     simp [all, qp, affectedOwner]
   have hfA : ∀ r, fa r = q ↔ r = p := by
     intro r
-    by_cases hr : A r = true
-    · simp [fa, q, affectedOwner, hr]
-    · have hne : r ≠ p := by
-        intro h
-        subst r
-        exact hr hp
-      simp [fa, q, affectedOwner, hr, hne]
+    simpa only [fa, q, affectedOwner, hp, ↓reduceDIte,
+      Bool.true_eq_false, and_false, or_false] using affectedOwner_eq_iff A r p
   by_cases hincident : ∃ t : C, owner t = p
   · obtain ⟨t, ht⟩ := hincident
     have htA : ∃ t : C, A (owner t) = true := ⟨t, by rw [ht]; exact hp⟩
