@@ -122,6 +122,7 @@ theorem SquareHamiltonian.exists_supported_buffer_gaussian_integral
       (Q.image a) (Z.image a) hV hD l
   rw [hK'] at hU hM
   refine ⟨U, hU0, hU, hunit, hsupport, fun η T hT ↦ ?_⟩
+  refine ⟨(hM η T hT).1, (hM η T hT).2.1.trans hVn, (hM η T hT).2.2.trans ?_⟩
   done
 
 end TNLean.PEPS.Approximation
