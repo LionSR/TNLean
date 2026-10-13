@@ -135,8 +135,16 @@ private theorem selected_localPart_frame_eval_heq
     rw [Layout.restrict_mapOwner, hsel]
   have hI : Layout.restrict sq (W.sources.layout ++ Layout.mapOwner f a) =
       Layout.mapOwner f (Layout.restrict sp (w.sources.layout ++ a)) := by
-    simpa only [W, Layout.restrict_append, Layout.mapOwner_append] using
-      congrArg₂ List.append hS (hL a)
+    calc
+      _ = Layout.restrict sq W.sources.layout ++
+          Layout.restrict sq (Layout.mapOwner f a) := Layout.restrict_append sq _ _
+      _ = Layout.mapOwner f (Layout.restrict sp w.sources.layout) ++
+          Layout.mapOwner f (Layout.restrict sp a) :=
+        congrArg₂ (fun S T : Layout Q ↦ S ++ T) hS (hL a)
+      _ = Layout.mapOwner f
+          (Layout.restrict sp w.sources.layout ++ Layout.restrict sp a) :=
+        (Layout.mapOwner_append f _ _).symm
+      _ = _ := congrArg (Layout.mapOwner f) (Layout.restrict_append sp _ _).symm
   have hcomm := restrict_mapOwner_heq f sq (moveHead r w.sources.layout a)
     (sources_moveHead r w.sources.layout a)
   rw [hsel] at hcomm
@@ -206,6 +214,87 @@ private theorem selected_localPart_frame_eval_heq
     hmid (hL (r :: b)) hmove hframe
   exact hcomp
 
+/-- Composition preserves the selected relabelling identity under the
+retained source-prefix equalities for its two chronological factors.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267,
+383–434 and 565–588. -/
+private theorem selected_localPart_comp_eval_heq
+    (f : P → Q) (sp : P → Bool) (sq : Q → Bool)
+    (hsel : (fun r ↦ sq (f r)) = sp)
+    {a b c : Layout P} (w : Word a b) (v : Word b c)
+    (hSw : Layout.restrict sq (w.mapOwner f).sources.layout =
+      Layout.mapOwner f (Layout.restrict sp w.sources.layout))
+    (hSv : Layout.restrict sq (v.mapOwner f).sources.layout =
+      Layout.mapOwner f (Layout.restrict sp v.sources.layout))
+    (ihw : HEq ((w.mapOwner f).localPart.restrict sq
+        (w.mapOwner f).sources_localPart).eval
+      ((w.localPart.restrict sp w.sources_localPart).mapOwner f).eval)
+    (ihv : HEq ((v.mapOwner f).localPart.restrict sq
+        (v.mapOwner f).sources_localPart).eval
+      ((v.localPart.restrict sp v.sources_localPart).mapOwner f).eval) :
+    HEq (((w.comp v).mapOwner f).localPart.restrict sq
+        ((w.comp v).mapOwner f).sources_localPart).eval
+      (((w.comp v).localPart.restrict sp
+        (w.comp v).sources_localPart).mapOwner f).eval := by
+  classical
+  let W := w.mapOwner f
+  let V := v.mapOwner f
+  have hL (L : Layout P) : Layout.restrict sq (Layout.mapOwner f L) =
+      Layout.mapOwner f (Layout.restrict sp L) := by
+    rw [Layout.restrict_mapOwner, hsel]
+  have hI : Layout.restrict sq (W.sources.layout ++ Layout.mapOwner f a) =
+      Layout.mapOwner f (Layout.restrict sp (w.sources.layout ++ a)) := by
+    calc
+      _ = Layout.restrict sq W.sources.layout ++
+          Layout.restrict sq (Layout.mapOwner f a) := Layout.restrict_append sq _ _
+      _ = Layout.mapOwner f (Layout.restrict sp w.sources.layout) ++
+          Layout.mapOwner f (Layout.restrict sp a) :=
+        congrArg₂ (fun S T : Layout Q ↦ S ++ T) hSw (hL a)
+      _ = Layout.mapOwner f
+          (Layout.restrict sp w.sources.layout ++ Layout.restrict sp a) :=
+        (Layout.mapOwner_append f _ _).symm
+      _ = _ := congrArg (Layout.mapOwner f) (Layout.restrict_append sp _ _).symm
+  have hraw : ((frameList v.sources.layout w.localPart).comp v.localPart).sources = [] := by
+    simp only [sources, sources_frameList, sources_localPart, List.nil_append]
+  have hraw' : ((frameList V.sources.layout W.localPart).comp V.localPart).sources = [] := by
+    simp only [sources, sources_frameList, sources_localPart, List.nil_append]
+  have hframe := (restrict_frameList_eval_heq sq V.sources.layout
+    W.localPart W.sources_localPart).trans
+      ((eval_frameList_heq (W.localPart.restrict sq W.sources_localPart)
+        ((w.localPart.restrict sp w.sources_localPart).mapOwner f)
+        hI (hL b) ihw (Layout.restrict sq V.sources.layout)
+        (Layout.mapOwner f (Layout.restrict sp v.sources.layout)) hSv).trans
+          (eval_mapOwner_restrict_frameList f sp v.sources.layout
+            w.localPart w.sources_localPart).symm)
+  have hcomp := eval_comp_heq
+    ((frameList V.sources.layout W.localPart).restrict sq
+      ((sources_frameList W.localPart V.sources.layout).trans W.sources_localPart))
+    (V.localPart.restrict sq V.sources_localPart)
+    (((frameList v.sources.layout w.localPart).restrict sp
+      ((sources_frameList w.localPart v.sources.layout).trans w.sources_localPart)).mapOwner f)
+    ((v.localPart.restrict sp v.sources_localPart).mapOwner f)
+    (by
+      calc
+        _ = Layout.restrict sq V.sources.layout ++
+            Layout.restrict sq (W.sources.layout ++ Layout.mapOwner f a) :=
+          Layout.restrict_append sq _ _
+        _ = Layout.mapOwner f (Layout.restrict sp v.sources.layout) ++
+            Layout.mapOwner f (Layout.restrict sp (w.sources.layout ++ a)) :=
+          congrArg₂ (fun S T : Layout Q ↦ S ++ T) hSv hI
+        _ = _ := by simp only [Layout.restrict_append, Layout.mapOwner_append])
+    (by
+      calc
+        _ = Layout.restrict sq V.sources.layout ++
+            Layout.restrict sq (Layout.mapOwner f b) := Layout.restrict_append sq _ _
+        _ = Layout.mapOwner f (Layout.restrict sp v.sources.layout) ++
+            Layout.mapOwner f (Layout.restrict sp b) :=
+          congrArg₂ (fun S T : Layout Q ↦ S ++ T) hSv (hL b)
+        _ = _ := by simp only [Layout.restrict_append, Layout.mapOwner_append])
+    (hL c) hframe ihv
+  unfold localPart
+  exact (restrict_castInput_eval_heq sq _ _ hraw').trans
+    (hcomp.trans (eval_mapOwner_restrict_castInput f sp _ _ hraw).symm)
+
 /-- At a new owner whose fibre is one original party, the remaining selected
 operator is the relabelled remaining operator selected at that original party.
 The original word may contain arbitrary pair sources, and owners outside the
@@ -233,57 +322,12 @@ theorem restrict_localPart_mapOwner_eval_heq_of_singleton_fiber
         Layout.mapOwner f (Layout.restrict sp w.sources.layout) := by
     rw [sources_mapOwner]
     exact SourceInventory.atParty_layout_mapOwner_of_singleton_fiber f p q hf w.sources
-  have hI {a b : Layout P} (w : Word a b) :
-      Layout.restrict sq ((w.mapOwner f).sources.layout ++ Layout.mapOwner f a) =
-        Layout.mapOwner f (Layout.restrict sp (w.sources.layout ++ a)) := by
-    rw [Layout.restrict_append, hS, hL, Layout.restrict_append, Layout.mapOwner_append]
   induction u with
   | id => exact sourceFree_selected_localPart f p q hsel _ rfl
   | localMap => exact sourceFree_selected_localPart f p q hsel _ rfl
   | swap => exact sourceFree_selected_localPart f p q hsel _ rfl
   | @comp a b c w v ihw ihv =>
-      let W := w.mapOwner f
-      let V := v.mapOwner f
-      have hraw : ((frameList v.sources.layout w.localPart).comp v.localPart).sources = [] := by
-        simp only [sources, sources_frameList, sources_localPart, List.nil_append]
-      have hraw' : ((frameList V.sources.layout W.localPart).comp V.localPart).sources = [] := by
-        simp only [sources, sources_frameList, sources_localPart, List.nil_append]
-      have hframe := (restrict_frameList_eval_heq sq V.sources.layout
-        W.localPart W.sources_localPart).trans
-          ((eval_frameList_heq (W.localPart.restrict sq W.sources_localPart)
-            ((w.localPart.restrict sp w.sources_localPart).mapOwner f)
-            (hI w) (hL b) ihw (Layout.restrict sq V.sources.layout)
-            (Layout.mapOwner f (Layout.restrict sp v.sources.layout)) (hS v)).trans
-              (eval_mapOwner_restrict_frameList f sp v.sources.layout
-                w.localPart w.sources_localPart).symm)
-      have hcomp := eval_comp_heq
-        ((frameList V.sources.layout W.localPart).restrict sq
-          ((sources_frameList W.localPart V.sources.layout).trans W.sources_localPart))
-        (V.localPart.restrict sq V.sources_localPart)
-        (((frameList v.sources.layout w.localPart).restrict sp
-          ((sources_frameList w.localPart v.sources.layout).trans w.sources_localPart)).mapOwner f)
-        ((v.localPart.restrict sp v.sources_localPart).mapOwner f)
-        (by
-          calc
-            _ = Layout.restrict sq V.sources.layout ++
-                Layout.restrict sq (W.sources.layout ++ Layout.mapOwner f a) :=
-              Layout.restrict_append sq _ _
-            _ = Layout.mapOwner f (Layout.restrict sp v.sources.layout) ++
-                Layout.mapOwner f (Layout.restrict sp (w.sources.layout ++ a)) :=
-              congrArg₂ List.append (hS v) (hI w)
-            _ = _ := by simp only [Layout.restrict_append, Layout.mapOwner_append])
-        (by
-          calc
-            _ = Layout.restrict sq V.sources.layout ++
-                Layout.restrict sq (Layout.mapOwner f b) := Layout.restrict_append sq _ _
-            _ = Layout.mapOwner f (Layout.restrict sp v.sources.layout) ++
-                Layout.mapOwner f (Layout.restrict sp b) :=
-              congrArg₂ List.append (hS v) (hL b)
-            _ = _ := by simp only [Layout.restrict_append, Layout.mapOwner_append])
-        (hL c) hframe ihv
-      unfold localPart
-      exact (restrict_castInput_eval_heq sq _ _ hraw').trans
-        (hcomp.trans (eval_mapOwner_restrict_castInput f sp _ _ hraw).symm)
+      exact selected_localPart_comp_eval_heq f sp sq hsel w v (hS w) (hS v) ihw ihv
   | @frame r a b w ih =>
       exact selected_localPart_frame_eval_heq f sp sq hsel r w (hS w) ih
   | @source x y hxy U V η tail =>
