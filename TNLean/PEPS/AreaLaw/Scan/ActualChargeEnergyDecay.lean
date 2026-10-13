@@ -96,8 +96,8 @@ theorem exists_actualCharge_energy_threshold {Cr C1 Ct : ℝ}
   let b := ∑ hist : History S.K S.m S.M s,
     if S.IsGoodOldHistory hist then 0 else historyWeight hist
   have hbad : (1 - p) * b + p ≤ (1 - p) * (n : ℝ) ^ (-P) + p :=
-    add_le_add_right
-      (mul_le_mul_of_nonneg_left (htail s (by omega)) (sub_nonneg.mpr hp.2.le)) p
+    add_le_add
+      (mul_le_mul_of_nonneg_left (htail s (by omega)) (sub_nonneg.mpr hp.2.le)) (le_refl p)
   have hℓ : 0 ≤ ℓ := zero_le_one.trans (one_le_transportLogDimBound (NeZero.pos q) S.r₀)
   calc
     _ ≤ (10 * (S.D : ℝ) / S.m) *
@@ -109,7 +109,7 @@ theorem exists_actualCharge_energy_threshold {Cr C1 Ct : ℝ}
         hnS hs hrS hDpos hmargin hL hCpos hrows hmult hclear ha k pre hsym hpre hp
     _ ≤ _ :=
       mul_le_mul_of_nonneg_left
-        (add_le_add_left (mul_le_mul_of_nonneg_left hbad (by positivity)) _)
+        (add_le_add (le_refl _) (mul_le_mul_of_nonneg_left hbad (by positivity)))
         (by positivity)
 
 end TNLean.PEPS.AreaLaw.Scan

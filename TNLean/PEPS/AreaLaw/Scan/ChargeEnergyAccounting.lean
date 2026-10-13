@@ -194,7 +194,7 @@ theorem energySum_le_of_leaf_bounds (R : ScanRound ι Θ) (k : ℕ) {p : ℝ}
       apply mul_le_mul_of_nonneg_left _ hd
       unfold termEnergy
       rw [Finset.sum_add_distrib, Finset.sum_comm]
-      refine (add_le_add (holdsum.trans (add_le_add_right holdgood _)) hnew).trans_eq ?_
+      refine (add_le_add (holdsum.trans (add_le_add holdgood (le_refl _))) hnew).trans_eq ?_
       unfold badWeight
       ring
 
