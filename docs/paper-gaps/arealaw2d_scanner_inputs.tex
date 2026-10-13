@@ -495,6 +495,73 @@ scanner's measure-valued fields remain outside this common-status result.
 It does not complete the scanner data package or remove the restriction
 on Proposition~9.2.
 
+\section{Target typical window}
+
+The target specialization is now stated in
+\path{TNLean/PEPS/AreaLaw/Scan/TargetTypicalWindow.lean}.
+Fix $q\ge1$, $R$, $J\ge0$, $\Delta>0$ and $C_T\ge0$.
+The constants $C_{\mathrm{tr}}>0$, $C_B>0$ and $N\ge2$ precede every
+scale, finite domain, Hamiltonian, cut and scanner. The source
+assumptions~\cite{OpenAI2026AreaLaw} (\path{08-scanner.tex},
+lines~21--48, 243--257 and 400--414) are a nonempty ambient target $T$
+with $|T|\le C_Tn^2$, actual ambient
+depth $d(x)=\operatorname{dist}_\infty(x,T)$, at most $n$ sites per
+positive ambient layer through $L=\lfloor n^{1-\ell_T}\rfloor$ for a
+fixed exponent $0<\ell_T<1$, and clearance
+$\operatorname{dist}_\infty(T,Z)>2L+10r_0$. Here, for a set $Y$ of
+sites, $\partial_\Lambda Y$ is the set of nearest-neighbour edges of the
+finite domain $\Lambda$ with exactly one endpoint in $Y$, and $Z$ consists of
+both sites of every edge of $\partial_\Lambda A$.
+The source exponent range gives $1\le L\le n$; this is derived from the
+floor rather than assumed. Put $X=A\cap T$ and
+$S_0=A\cap T_L=\{x\in A:d(x)\le L\}$. These hypotheses yield\footnote{The floor bound is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.one_le_L_le}; the geometric
+    statement is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.source_target_geometry}.}
+\begin{align}
+    |S_0|\le(C_T+1)n^2,\qquad X\subseteq S_0,\qquad
+    |\partial_\Lambda X|\le4n.
+    \label{eq:arealaw2d_scanner_inputs_target_geometry}
+\end{align}
+
+The lattice crossing-budget theorem accounts for the multiplicity of
+original admissible labels and the actual radius
+$r_0=\lceil C_{\mathrm{tr}}(\log n)^2\rceil$.
+Thus, for this target,\footnote{The lower bound is
+    \leanid{TNLean.PEPS.AreaLaw.one_le_cutBudget}; the upper bound is part of
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_typical_window}.}
+\begin{align}
+    1\le\mathcal B_X\le C_Bn(\log n)^{12}.
+    \label{eq:arealaw2d_scanner_inputs_target_budget}
+\end{align}
+Only its $4n$ boundary permits using the budget factor $D=1$;
+the status bound remains $CnD(\log n)^{12}$.
+The same actual physical pair $(e,\widetilde\Omega)$ retains
+(\ref{eq:arealaw2d_scanner_inputs_marginal_gap}),
+(\ref{eq:arealaw2d_scanner_inputs_marginal_closeness}), and all-cut
+moment and tail estimates. At $w=n^{3/5}$ its target tail is at most
+$n^{-100}$ for $n\ge N$. The canonical set of positive eigenvalues
+within this surprisal window~\cite{OpenAI2026AreaLaw}
+(\path{07-comparators.tex}, lines~37--53) is nonempty, and its mass $z$ and
+each selected eigenvalue $p_i$ satisfy
+\begin{align}
+    1-n^{-100}\le z\le1,\qquad
+    \mathrm e^{-s_X-w}\le p_i\le\mathrm e^{-s_X+w}.
+    \label{eq:arealaw2d_scanner_inputs_target_typical_mass}
+\end{align}
+In particular $z>0$.
+Here $s_X=S_{\widetilde\Omega}(X)$ is the target entropy of $\widetilde\Omega$, whereas the original
+$\Omega$ continues to center every Hamiltonian term.
+\footnote{The same-witness statement is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_typical_window}.}
+
+This target-window statement does not construct the initial physical
+prevector, its Bell factors, the comparator estimates, the scanner's
+measure-valued fields, or the complete scanner data package. It does not
+supply normalized typical-sector rank or entropy estimates for the later
+comparator construction. No auxiliary unique-gap assertion is made.
+The restriction on Proposition~9.2 therefore remains.
+
 \section{Elimination}
 
 The restriction disappears once the data package is constructed from the
