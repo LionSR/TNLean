@@ -118,41 +118,34 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum
     have hFactors := partialSourceGlobalMatrix_sampled_partialTrace_eq_scalar_smul_physicalSum
       d ps hn hc garbage w ψ k lam L R ξ ζ ω B BG
     dsimp only at hBridge hFactors
-    calc
-      _ = Matrix.partialTraceRight
-          ((w.partialSourceGlobalMatrix ψ ξ G * X ξ ζ *
-            (w.partialSourceGlobalMatrix ψ ζ G)ᴴ).submatrix
-              (e.trans (f.prodCongr (Equiv.refl _))).symm
-              (e.trans (f.prodCongr (Equiv.refl _))).symm) := hBridge.symm
-      _ = (Matrix.partialTraceRight
-          ((w.partialSourceGlobalMatrix ψ ξ G * X ξ ζ *
-            (w.partialSourceGlobalMatrix ψ ζ G)ᴴ).submatrix e.symm e.symm)).submatrix
-              f.symm f.symm := partialTraceRight_reindex_comp e f _
-      _ = _ := hFactors
+    have hReindex := partialTraceRight_reindex_comp e f
+      (w.partialSourceGlobalMatrix ψ ξ G * X ξ ζ *
+        (w.partialSourceGlobalMatrix ψ ζ G)ᴴ)
+    exact hBridge.symm.trans (hReindex.trans hFactors)
   have hBase := physicalSourceReplacedDensity_pure_eq_sum_actualColumnTraces
     physical garbage w ψ (fun e ξ ζ ↦ sampledSourceMatrix w k lam L R e ξ ζ ω)
     bIn (familyLabelledPhysicalBasis d ps hn hc) bRef
   dsimp only at hBase
-  calc
-    _ = ∑ ξ, ∑ ζ, (coefficient (fun _ : P ↦ true) w ξ *
+  have hSum :
+      (∑ ξ, ∑ ζ, (coefficient (fun _ : P ↦ true) w ξ *
         conj (coefficient (fun _ : P ↦ true) w ζ)) •
         Matrix.partialTraceRight
           (w.partialSourceGlobalMatrix ψ ξ H * X ξ ζ *
-            (w.partialSourceGlobalMatrix ψ ζ H)ᴴ) := hBase
-    _ = ∑ ξ, ∑ ζ, (coefficient (fun _ : P ↦ true) w ξ *
+            (w.partialSourceGlobalMatrix ψ ζ H)ᴴ)) =
+      ∑ ξ, ∑ ζ, (coefficient (fun _ : P ↦ true) w ξ *
         conj (coefficient (fun _ : P ↦ true) w ζ)) •
         (α • ∑ j : Fin (partialSlots (fun _ ↦ true) w).length → Fin k,
           dependentPhysicalProductFamilyMatrix (fun p : P ↦ M ξ ζ j (some ⟨p, rfl⟩))) := by
-      simp_rw [hTrace]
-    _ = _ := by
-      have hComm (ξ ζ : Choices (fun _ : P ↦ true) w)
-          (N : Matrix ((p : P) → Fin (d p)) ((p : P) → Fin (d p)) ℂ) :
-          (coefficient (fun _ : P ↦ true) w ξ *
-            conj (coefficient (fun _ : P ↦ true) w ζ)) • (α • N) =
-            α • ((coefficient (fun _ : P ↦ true) w ξ *
-              conj (coefficient (fun _ : P ↦ true) w ζ)) • N) := smul_comm _ _ _
-      simp_rw [hComm]
-      simp only [Finset.smul_sum]
+    simp_rw [hTrace]
+  refine hBase.trans (hSum.trans ?_)
+  have hComm (ξ ζ : Choices (fun _ : P ↦ true) w)
+      (N : Matrix ((p : P) → Fin (d p)) ((p : P) → Fin (d p)) ℂ) :
+      (coefficient (fun _ : P ↦ true) w ξ *
+        conj (coefficient (fun _ : P ↦ true) w ζ)) • (α • N) =
+        α • ((coefficient (fun _ : P ↦ true) w ξ *
+          conj (coefficient (fun _ : P ↦ true) w ζ)) • N) := smul_comm _ _ _
+  simp_rw [hComm]
+  simp only [Finset.smul_sum]
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect
