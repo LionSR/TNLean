@@ -9306,7 +9306,6 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{Matrix.exists_paired_spectralProjectors_of_transpose_eq_neg,
         Complex.arg_nonpos_iff_not_arg_neg_nonpos}
     \leanok
-    \uses{lem:mpu_transpose_spectral_projector}
     Let $x$ be a unitary matrix with $x^T=-x$. There are a finite set $K$,
     Hermitian projectors $P_k$ and numbers $E_k\in[0,\pi)$, for $k\in K$,
     such that the family $\{P_k,P_k^T\}_{k\in K}$ consists of mutually
@@ -9320,6 +9319,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{lem:mpu_transpose_spectral_projector}
     Every spectral value of $x$ has modulus one, so it is nonzero and differs
     from its negative. By
     Lemma~\ref{lem:mpu_transpose_spectral_projector}, $\sigma(x)=-\sigma(x)$
@@ -9367,7 +9367,6 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{Matrix.exists_unitary_congruence_normalForm}
     \leanok
     \discussion{5713}
-    \uses{lem:mpu_symmetric_unitary_congruence, lem:mpu_skew_unitary_congruence}
     Let $x$ be unitary and satisfy $x=x^T$ or $x=-x^T$. There are a symmetric
     unitary $S$ and a matrix $\widetilde\Lambda$ such that
     \begin{align}
@@ -9380,6 +9379,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{lem:mpu_symmetric_unitary_congruence, lem:mpu_skew_unitary_congruence}
     In the symmetric case, Lemma~\ref{lem:mpu_symmetric_unitary_congruence}
     gives $x=S^TS$, so $\widetilde\Lambda=\Id$ works. The skew-symmetric case
     is Lemma~\ref{lem:mpu_skew_unitary_congruence}. A matrix that is both

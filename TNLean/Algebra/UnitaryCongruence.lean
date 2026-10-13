@@ -594,7 +594,7 @@ The projector `P k` is the spectral projector of `x` at a spectral value `λ_k` 
 `arg λ_k ∈ (-π, 0]`, and `E k = -arg λ_k`. Transposition sends the spectral projector at `λ`
 to the one at `-λ`, and `λ ↦ -λ` has no fixed point on the spectrum because `x` is unitary,
 so exactly one member of each pair `{λ, -λ}` is chosen. -/
-theorem exists_paired_spectralProjectors_of_transpose_eq_neg
+lemma exists_paired_spectralProjectors_of_transpose_eq_neg
     (x : Matrix m m ℂ) (hx : x ∈ Matrix.unitaryGroup m ℂ) (hskew : xᵀ = -x) :
     ∃ (κ : Type) (_ : Fintype κ) (_ : DecidableEq κ) (P : κ → Matrix m m ℂ) (E : κ → ℝ),
       (∀ k, E k ∈ Set.Ico 0 Real.pi) ∧
@@ -693,7 +693,7 @@ This is the skew branch of CPSV17, Lemma `lemma:conjclass-normalform-continuous`
 (arXiv:1703.09188, lines 1066--1083): the spectral data of
 `exists_paired_spectralProjectors_of_transpose_eq_neg` are assembled by
 `exists_skew_unitary_congruence_of_paired_projectors`. -/
-theorem exists_skew_unitary_congruence
+lemma exists_skew_unitary_congruence
     (x : Matrix m m ℂ) (hx : x ∈ Matrix.unitaryGroup m ℂ) (hskew : xᵀ = -x) :
     ∃ S Λ : Matrix m m ℂ,
       Sᵀ = S ∧
@@ -718,7 +718,7 @@ symmetric and skew-symmetric when `x` is skew-symmetric.
 This is CPSV17, Lemma `lemma:conjclass-normalform-continuous` (arXiv:1703.09188,
 lines 1045--1083). In the symmetric branch `Λ = 1`; the skew branch is
 `exists_skew_unitary_congruence`. -/
-theorem exists_unitary_congruence_normalForm
+lemma exists_unitary_congruence_normalForm
     (x : Matrix (Fin n) (Fin n) ℂ) (hx : x ∈ Matrix.unitaryGroup (Fin n) ℂ)
     (hsymm : xᵀ = x ∨ xᵀ = -x) :
     ∃ S Λ : Matrix (Fin n) (Fin n) ℂ,
