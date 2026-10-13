@@ -97,28 +97,7 @@ of the September 24, 2026 polynomial-PEPS manuscript.
     \end{align}
     The reset region in this formula is $R_j$, determined by the tag.
     At a fixed tag $t=(j,\ell)$, the following tensor product depicts its summand.
-    % Formula: |j,l> tensor (|0_Rj><v_jl| tensor I_(V\Rj)).
-    % Ink-to-index: the top row is the inside covector and reset ket;
-    % the middle row is the tag ket; the bottom box is the complement identity.
-    % No legs are contracted internally. The left ports are y|Rj and y|Rc;
-    % the right ports are x|Rj, (j,l), and x|Rc, all physical coordinates.
-    % Boundary signature: zero virtual ports and five physical ports,
-    % comprising two input and three output bundles. The two output raw
-    % bundles regroup to one full configuration x. The tag sum is external.
-    \begin{center}
-        \tenkzkernel
-        \begin{tenkz}[rows={wire,wire,wire}, cols=2, bonds=none]
-            \tn[at=(1,1), name=holeInsideBra, skin=box,
-                ports={180:physical:$y\vert_{R_j}$}]{\bra{v_{j\ell}}}
-            \tn[at=3 e of holeInsideBra, name=holeResetKet, skin=box,
-                ports={0:physical:$x\vert_{R_j}$}]{\ket{0_{R_j}}}
-            \tn[at=2 s of holeResetKet, name=holeTagKet, skin=box,
-                ports={0:physical:$t$}]{\ket{j,\ell}}
-            \tn[at=4 s of holeInsideBra, name=holeComplement, skin=box,
-                ports={180:physical:$y\vert_{V\setminus R_j}$,
-                        0:physical:$x\vert_{V\setminus R_j}$}]{I_{V\setminus R_j}}
-        \end{tenkz}
-    \end{center}
+    \input{figures/peps_hole_encoder}
 \end{definition}
 
 \begin{theorem}[Dimension of the tag register]

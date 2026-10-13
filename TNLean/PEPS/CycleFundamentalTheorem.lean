@@ -28,11 +28,17 @@ consecutive sites are the arcs of `TNLean/PEPS/CycleArcRegion.lean`.
 
 The hypotheses beyond the source's wording carry over from the general
 theorem and are documented there and in
-`docs/paper-gaps/peps_normal_ft_section3_route.tex`: positive physical and
-bond dimensions are the counterexample-backed faithfulness fixes of the
-injective Fundamental Theorem, and `0 < L` makes "blocking `L` consecutive
-sites" a blocking at all.  Connectivity holds on the cycle and is discharged,
-not assumed.
+`docs/paper-gaps/peps_normal_ft_section3_route.tex`: positive physical
+dimension is inherited from the general theorem, and `0 < L` makes "blocking
+`L` consecutive sites" a blocking at all.  Connectivity holds on the cycle and
+is discharged, not assumed.
+
+**Local fix (nonzero virtual spaces):** the source treats the virtual bond
+spaces as nonzero (arXiv:1804.04964, lines 582 and 1037 of
+`Papers/1804.04964/paper_normal.tex`) without listing this among the
+hypotheses.  Both corollaries here state positive bond dimensions of both
+tensors explicitly and pass them to `NormalPEPSPairHypotheses`.  Documented in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 
 ## Relation to the matrix-product-state chapters
 
@@ -103,10 +109,9 @@ edge itself.  Connectivity of the cycle discharges the connectivity
 hypothesis.  The bond dimensions are not assumed equal: the general theorem
 forces them.
 
-The hypotheses `0 < d` and the positive bond dimensions are the
-counterexample-backed faithfulness fixes inherited from the injective
-Fundamental Theorem (`docs/paper-gaps/peps_injective_ft_section3_route.tex`,
-`docs/paper-gaps/peps_gaugeConsistency_connectivity_gap.tex`); `0 < L` is
+The hypothesis `0 < d` is inherited from the general theorem, and the
+positive bond dimensions are the nonzero virtual-space convention of the module
+docstring (`docs/paper-gaps/peps_injective_ft_section3_route.tex`); `0 < L` is
 implicit in the source's blocking of `L` consecutive sites.
 
 Source: arXiv:1804.04964, Section 3, first corollary after the theorem
@@ -135,8 +140,9 @@ theorem fundamentalTheorem_normalMPS_cycle {n L d : ℕ}
     obtain ⟨m, rfl⟩ : ∃ m, n = m + 1 := ⟨n - 1, by omega⟩
     exact SimpleGraph.cycleGraph_connected
   exact fundamentalTheorem_normalPEPS A B
-    (cycleNormalPEPSBlockingHypotheses harc hU hL hn)
-    (fun e g => isCrossingEdge_cycleEdge_iff A hL hn e g) hAB hd hposA hposB hconn
+    { cycleNormalPEPSBlockingHypotheses harc hU hL hn with
+      bondDim_pos_left := hposA, bondDim_pos_right := hposB }
+    (fun e g => isCrossingEdge_cycleEdge_iff A hL hn e g) hAB hd hconn
 
 /-- **Uniqueness clause of the Fundamental Theorem for normal MPS on a closed
 chain** (arXiv:1804.04964, Section 3, first corollary after the theorem
@@ -183,7 +189,8 @@ theorem fundamentalTheorem_normalMPS_cycle_gauge_unique {n L d : ℕ}
         (regionInjectivityDataOf (G := SimpleGraph.cycleGraph n) B)) :=
     ⟨fun s => ⟨harcA s, harcB s⟩⟩
   exact fundamentalTheorem_normalPEPS_gauge_unique A B
-    (cycleNormalPEPSBlockingHypotheses harc hU hL hn) hbond hposA X X' hX hX' e
+    { cycleNormalPEPSBlockingHypotheses harc hU hL hn with
+      bondDim_pos_left := hposA, bondDim_pos_right := hposB } hbond X X' hX hX' e
 
 end PEPS
 end TNLean
