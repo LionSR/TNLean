@@ -275,3 +275,230 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
 These coordinate identities apply to the local contractions in
 \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \texttt{04-compression.tex}, lines 137--151 and 565--588.
+
+\begin{theorem}[Party memories after selecting all original parties]
+    \label{thm:peps_selected_physical_party_layouts}
+    \lean{TNLean.PEPS.PairEffect.Layout.atParty_none_mapOwner_all}
+    \leanok
+    \lean{TNLean.PEPS.PairEffect.Layout.atParty_some_mapOwner_all}
+    \uses{def:peps_affected_owner,def:peps_party_registers,def:peps_owner_layout}
+    Let $\mathcal P$ be any party set, let
+    $\mathcal Q=\mathcal P\sqcup\{\star\}$, and let $\iota:\mathcal P\to\mathcal Q$
+    assign each original party its selected owner. For any register list $a$,
+    the registers of $\iota_*a$ at $\star$ form the empty list. At $\iota(p)$,
+    their list is $\iota_*(a_p)$, in the original order. This is the
+    all-party selection in the proof of
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_excluded_mapped_owners,thm:peps_basis_owner_restriction}
+    No original party maps to $\star$, so restriction to $\star$ is empty.
+    An original register maps to $\iota(p)$ exactly when its owner is $p$.
+    Restriction after relabelling therefore selects exactly $a_p$.
+\end{proof}
+
+% Polynomial-PEPS Theorem 5.2, 04-compression.tex, lines 137--151 and 565--588.
+
+
+\begin{definition}[Selected physical coordinate families and party bases]
+    \label{def:peps_selected_family_physical_basis}
+    \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalIndex}
+    \leanok
+    \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis}
+    \uses{thm:peps_selected_physical_party_layouts,def:peps_singleton_physical_basis}
+    Let $d:\mathcal P\to\mathbb N$ specify the original physical dimensions,
+    and let $\mathbf p$ list every original party exactly once. Set
+    $X_\star=\{\bullet\}$ and $X_{\iota(p)}=\{0,\ldots,d(p)-1\}$.
+    On the physical memory at $\star$, take the scalar basis with column $1$.
+    At $\iota(p)$, transport the original singleton physical basis
+    $b_p$ along the canonical owner isometry and the register-list equality
+    of Theorem~\ref{thm:peps_selected_physical_party_layouts}.
+    Denote the resulting basis by $b^{\mathrm{sel}}_{\iota(p)}$.
+    Dimensions are retained individually, including $d(p)=0$; the original
+    party set may be empty.
+\end{definition}
+
+% Polynomial-PEPS Theorem 5.2, 04-compression.tex, lines 137--151, 409--417 and 565--588.
+
+
+\begin{theorem}[Original physical columns after selecting all parties]
+    \label{thm:peps_selected_family_physical_columns}
+    \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis_none_apply_heq}
+    \leanok
+    \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis_some_apply_heq}
+    \uses{def:peps_selected_family_physical_basis}
+    Under the canonical memory identifications,
+    $b^{\mathrm{sel}}_{\star,\bullet}=1$ and
+    $b^{\mathrm{sel}}_{\iota(p),j}=b_{p,j}$ for every $j\in X_{\iota(p)}$.
+    No equality between independently chosen bases is required.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_selected_family_physical_basis,thm:peps_basis_memory_equalities,
+        thm:peps_basis_owner_memory}
+    The scalar singleton basis has column $1$. Equality identifications of
+    register lists preserve vectors. The canonical owner isometry also
+    preserves each vector under the equality of the underlying memory spaces,
+    so the transported original columns have the stated values.
+\end{proof}
+
+
+
+
+\begin{definition}[Actual physical and private columns at a selected owner]
+    \label{def:peps_selected_physical_private_basis}
+    \lean{TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis}
+    \leanok
+    \lean{TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis_apply_heq}
+    \uses{def:peps_selected_family_physical_basis,def:peps_party_local_output_basis}
+    Write $a$ for the original physical register list and $c$ for the private
+    output list. For each selected owner $q$, choose an orthonormal basis
+    $f_q$ of $M((\iota_*c)_q)$, indexed by a finite set $F_q$.
+    The local basis on $M((\iota_*(a\mathbin{+\!+}c))_q)$ has indices
+    $(x_q,e_q)\in X_q\times F_q$ and column
+    \begin{align}
+        C_q(x_q,e_q)
+         & =J_{(\iota_*a)_q,(\iota_*c)_q}^{-1}
+        \bigl(b^{\mathrm{sel}}_q(x_q)\otimes f_q(e_q)\bigr).
+        \label{eq:peps_selected_physical_private_column}
+    \end{align}
+    Here the two memories are identified using
+    $(\iota_*(a\mathbin{+\!+}c))_q
+        =(\iota_*a)_q\mathbin{+\!+}(\iota_*c)_q$.
+    Thus the physical coordinate has its original dimension at each
+    $\iota(p)$ and a single scalar coordinate at $\star$. The private bases
+    are arbitrary; their columns are retained in~(\ref{eq:peps_selected_physical_private_column}).
+\end{definition}
+
+
+
+\begin{definition}[Original physical configurations]
+    \label{def:peps_selected_physical_configurations}
+    \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalConfigEquiv}
+    \leanok
+    \uses{def:peps_selected_family_physical_basis}
+    The canonical bijection
+    $e:\prod_{q\in\mathcal Q}X_q\to
+        \prod_{p\in\mathcal P}\{0,\ldots,d(p)-1\}$,
+    given by $e(x)_p=x_{\iota(p)}$, removes the single exterior coordinate. Its inverse assigns
+    $x_\star=\bullet$ and $x_{\iota(p)}=y_p$.
+    It neither enlarges a physical space nor requires that a party exist.
+\end{definition}
+
+
+
+\begin{theorem}[The exterior scalar in original physical configurations]
+    \label{thm:peps_selected_physical_product_scalar}
+    \lean{TNLean.PEPS.PairEffect.partyProductMatrix_selectedFamilyPhysicalConfig}
+    \leanok
+    \uses{def:peps_selected_physical_configurations}
+    Let $\mathcal P$ be finite, and let $M_q$ be arbitrary complex matrices
+    indexed by $X_q$. In the original physical configurations,
+    \begin{align}
+        \prod_{q\in\mathcal Q}
+        (M_q)_{e^{-1}(x)_q,e^{-1}(y)_q}
+         & =(M_\star)_{\bullet,\bullet}
+        \prod_{p\in\mathcal P}(M_{\iota(p)})_{x_p,y_p}.
+        \label{eq:peps_selected_physical_product_scalar}
+    \end{align}
+    The exterior scalar may vanish. If $\mathcal P$ is empty, the
+    product on the right is $1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_selected_physical_configurations}
+    Separate the exterior factor from the finite product over
+    $\mathcal Q=\mathcal P\sqcup\{\star\}$, and relabel the remaining
+    factors by their original owners. No division is used.
+\end{proof}
+
+
+
+
+\begin{definition}[The selected party order]
+    \label{def:peps_selected_party_order}
+    \lean{TNLean.PEPS.PairEffect.selectedPartyOrder}
+    \leanok
+    \lean{TNLean.PEPS.PairEffect.selectedPartyOrder_nodup}
+    \lean{TNLean.PEPS.PairEffect.mem_selectedPartyOrder}
+    \uses{thm:peps_selected_physical_party_layouts}
+    From the original order $\mathbf p=(p_0,\ldots,p_{m-1})$, form
+    $\mathbf q=(\star,\iota(p_0),\ldots,\iota(p_{m-1}))$.
+    If $\mathbf p$ lists every original party exactly once, then
+    $\mathbf q$ lists every selected owner exactly once. If there is no
+    original party, $\mathbf q=(\star)$.
+\end{definition}
+
+
+
+\begin{theorem}[The grouped basis in original physical configurations]
+    \label{thm:peps_selected_physical_basis_grouped}
+    \lean{TNLean.PEPS.PairEffect.selectedFamilyPhysicalPartyBasis_grouped}
+    \leanok
+    \uses{def:peps_selected_party_order,def:peps_selected_family_physical_basis,
+        def:peps_selected_physical_configurations,def:peps_party_grouped_basis,
+        def:peps_family_physical_output}
+    Let $\mathbf p$ list every original party exactly once. Group the
+    relabelled physical memory in the selected order $\mathbf q$, using
+    the local bases $b_q^{\mathrm{sel}}$. Write $B$ for the resulting basis
+    on the original register order, and $U_\iota$ for the canonical owner
+    isometry. In each original physical configuration $x$,
+    \begin{align}
+        B_{e^{-1}(x)} & = U_\iota E_x.
+        \label{eq:peps_selected_physical_basis_grouped}
+    \end{align}
+    This identifies the two constructed bases. The exterior party contributes
+    the scalar column $1$, and no additional physical register is inserted.
+    Empty party sets and zero physical dimensions are included.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_physical_owner_columns,
+        thm:peps_basis_physical_columns_local_coordinates,
+        thm:peps_selected_family_physical_columns,thm:peps_basis_empty_first_party,
+        thm:peps_basis_grouping_equality,thm:peps_basis_memory_equalities,
+        thm:peps_basis_party_recursion}
+    First group the relabelled physical column along
+    $(\iota(p_0),\ldots,\iota(p_{m-1}))$. The owner isometry preserves the
+    ordered physical factors. At each listed owner the selected local column
+    is the original singleton column, so the grouped vector is their
+    ordered tensor product. Prepending $\star$ contributes only $1$,
+    since it owns no register. Transport back to the register memory to
+    obtain~(\ref{eq:peps_selected_physical_basis_grouped}).
+\end{proof}
+
+
+
+
+\begin{theorem}[Separating the actual physical and private grouped bases]
+    \label{thm:peps_selected_physical_private_basis_grouped}
+    \lean{TNLean.PEPS.PairEffect.selectedPhysicalPrivateBasis_grouped}
+    \leanok
+    \uses{def:peps_selected_physical_private_basis,def:peps_party_grouped_basis,
+        thm:peps_party_grouped_basis_append}
+    Choose any order containing every selected owner exactly once.
+    Let $C$ be the grouped basis obtained from the actual local columns
+    in~(\ref{eq:peps_selected_physical_private_column}), and let
+    $B^{\iota_*a}$ and $B^{\iota_*c}$ be the separately grouped physical
+    and private bases in the same order. Separating the two coordinate
+    families gives
+    \begin{align}
+        C_{q\mapsto(x_q,e_q)}
+         & =J_{\iota_*a,\iota_*c}^{-1}
+        \bigl(B^{\iota_*a}_x\otimes B^{\iota_*c}_e\bigr).
+        \label{eq:peps_selected_physical_private_basis_grouped}
+    \end{align}
+    The output memories are identified through
+    $\iota_*(a\mathbin{+\!+}c)=\iota_*a\mathbin{+\!+}\iota_*c$.
+    All private basis choices are retained, and the physical indices have
+    their original dimensions with the exterior singleton coordinate.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_party_grouped_basis_append,thm:peps_basis_memory_equalities}
+    Apply the concatenation identity to the separately relabelled register
+    lists. Transport each local column and the grouped column by the
+    displayed equality of output lists. Equality identifications preserve
+    these columns, yielding~(\ref{eq:peps_selected_physical_private_basis_grouped}).
+\end{proof}

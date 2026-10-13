@@ -673,7 +673,7 @@ of the restricted trace matrix.  This does not identify that square with the
 one-step matrix printed at source line 1613 or with the unreduced Beigi
 matrix.  See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_normalized_cyclicActiveSectorTraceMatrix_pos_factorization_of_isSourceZCL
-    (F : PhysicalSectorFactorization K) [NeZero D] (hK : K.IsInjective)
+    (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (hZCL : K.IsSourceZCL) :
     ∃ lam : ℝ, 0 < lam ∧
@@ -682,6 +682,7 @@ theorem exists_normalized_cyclicActiveSectorTraceMatrix_pos_factorization_of_isS
           (lam⁻¹ • F.cyclicActiveSectorTraceMatrix) ^ 2 =
             Matrix.vecMulVec a b ∧
           a ⬝ᵥ b = 1 := by
+  have : NeZero D := ⟨hZCL.bondDim_ne_zero⟩
   obtain ⟨lam, hlam, hpow, _⟩ :=
     F.cyclicActiveSectorTraceMatrix_normalized_relations_of_isSourceZCL
       hK hpos hZCL
@@ -713,7 +714,7 @@ coefficient, whereas this theorem proves rank one for the square of the
 restricted coefficient.  The additional marginal replacement remains open.
 See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one_of_isSourceZCL
-    (F : PhysicalSectorFactorization K) [NeZero D] (hK : K.IsInjective)
+    (F : PhysicalSectorFactorization K) (hK : K.IsInjective)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (hZCL : K.IsSourceZCL) :
     ∃ lam : ℝ, 0 < lam ∧
@@ -722,6 +723,7 @@ theorem exists_normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one_of_i
         ((lam⁻¹ • T) ^ 2).rank = 1 ∧
           ∀ m : ℕ, 0 < m →
             Matrix.trace ((lam⁻¹ • T) ^ m) = Matrix.trace (lam⁻¹ • T) := by
+  have : NeZero D := ⟨hZCL.bondDim_ne_zero⟩
   obtain ⟨lam, hlam, hpow, htrace⟩ :=
     F.cyclicActiveSectorTraceMatrix_normalized_relations_of_isSourceZCL
       hK hpos hZCL

@@ -57,22 +57,6 @@ private theorem familyPhysicalListBasis_cons_apply {P : Type} (d : P → ℕ) (p
       (EuclideanSpace.basisFun (Fin (d p)) ℂ) (familyPhysicalListBasis d ps)
       ((Fin.consEquiv (fun i ↦ Fin (d ((p :: ps).get i)))).symm v))
 
-/-- Evaluating the physical tensor basis on the empty register list returns the
-scalar `1`. -/
-private theorem familyPhysicalListBasis_nil_apply {P : Type} (d : P → ℕ)
-    (g : (j : Fin ([] : List P).length) → Fin (d (([] : List P).get j))) :
-    familyPhysicalListBasis d ([] : List P) g = (1 : ℂ) := by
-  simp only [familyPhysicalListBasis]
-  let I : Type := (i : Fin 0) → Fin (d (([] : List P).get i))
-  have hcast : ∀ (ft ft' : Fintype I) (hf : ft = ft')
-      (B : @OrthonormalBasis I ℂ _ ℂ _ _ ft') (i : I),
-      (Eq.mpr (congrArg (fun j : Fintype I ↦ @OrthonormalBasis I ℂ _ ℂ _ _ j) hf) B) i = B i := by
-    rintro ft ft' rfl B i
-    rfl
-  refine (hcast inferInstance _ (Subsingleton.elim _ _)
-    (OrthonormalBasis.singleton I ℂ) g).trans ?_
-  simp only [OrthonormalBasis.singleton_apply]
-
 /-- Relabelling the owners of an ordered physical register list preserves
 its prescribed tensor column when the dimensions and labels are composed
 with the same map. No injectivity, distinctness, exhaustiveness or positive

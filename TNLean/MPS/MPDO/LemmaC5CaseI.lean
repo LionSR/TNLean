@@ -583,7 +583,7 @@ sector, `P` would be irreducible substochastic on a nontrivial index set, forcin
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499; normal-tensor
 self-overlap limit (`equalMPS`) at lines 1080--1100. -/
 theorem card_activeSector_eq_one_of_literal_ZCL
-    [NeZero D] (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
+    (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (hspan : Submodule.span ℂ (Set.range (F.activeSectorOneSiteMatrixFamily p)) = ⊤)
     (hnonzero : ∀ k : F.ActiveSector p,
@@ -595,6 +595,7 @@ theorem card_activeSector_eq_one_of_literal_ZCL
     (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor)
     [hne : Nonempty (F.ActiveSector p)] :
     Fintype.card (F.ActiveSector p) = 1 := by
+  have : NeZero D := ⟨hK_normal.bondDim_ne_zero⟩
   by_contra hcard
   have hcard1 : 1 < Fintype.card (F.ActiveSector p) := by
     have h1 : 1 ≤ Fintype.card (F.ActiveSector p) := Fintype.card_pos
@@ -657,7 +658,7 @@ matrix `T` collapses to a scalar `t` with `t² = t³` and `t² > 0`, forcing `t 
 
 Source: arXiv:1606.00608, Appendix C.2, Lemma C.5, lines 1473--1499. -/
 theorem activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL
-    [NeZero D] (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
+    (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (hspan : Submodule.span ℂ (Set.range (F.activeSectorOneSiteMatrixFamily p)) = ⊤)
     (hnonzero : ∀ k : F.ActiveSector p,
@@ -669,6 +670,7 @@ theorem activeSectorTraceMatrix_pow_two_eq_of_literal_ZCL
     (hK_normal : MPSTensor.IsNormalTensor K.toMPSTensor)
     [hne : Nonempty (F.ActiveSector p)] :
     (F.activeSectorTraceMatrix p) ^ 2 = F.activeSectorTraceMatrix p := by
+  have : NeZero D := ⟨hK_normal.bondDim_ne_zero⟩
   have hcard := card_activeSector_eq_one_of_literal_ZCL K F p hpos hspan hnonzero htriangle
     hZCL_sq hinactive hK_normal
   have : Subsingleton (F.ActiveSector p) := Fintype.card_le_one_iff_subsingleton.mp hcard.le
@@ -704,7 +706,7 @@ Case-I active-sector packaging of CPSV16 equations `Apptralktrrk` and `AppPsiPhi
 (Appendix C.2, lines 1394--1401 and 1484--1499). No Case-II conclusion follows;
 Case II requires its separate coefficient argument. -/
 theorem activeSectorTraceMatrix_rank_one_coefficients_of_literal_ZCL
-    [NeZero D] (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
+    (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (hspan : Submodule.span ℂ (Set.range (F.activeSectorOneSiteMatrixFamily p)) = ⊤)
     (hnonzero : ∀ k : F.ActiveSector p,
@@ -718,6 +720,7 @@ theorem activeSectorTraceMatrix_rank_one_coefficients_of_literal_ZCL
     ∃ a b : F.ActiveSector p → ℝ,
       (∀ k h, F.activeSectorTraceMatrix p k h = a k * b h) ∧
         ∑ k, a k * b k = 1 := by
+  have : NeZero D := ⟨hK_normal.bondDim_ne_zero⟩
   have hcard := card_activeSector_eq_one_of_literal_ZCL K F p hpos hspan hnonzero htriangle
     hZCL_sq hinactive hK_normal
   let : Unique (F.ActiveSector p) :=
@@ -754,7 +757,7 @@ rectangular form, in project notation, of the factors built from $l_h$ and $r_k$
 CPSV16, Appendix C.2, Lemma C.5, lines 1473--1499; the paper does not state it as a
 separate displayed theorem. -/
 theorem caseI_rectangular_remainder_eq_zero_of_literal_ZCL
-    [NeZero D] (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
+    (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (hspan : Submodule.span ℂ (Set.range (F.activeSectorOneSiteMatrixFamily p)) = ⊤)
     (hnonzero : ∀ k : F.ActiveSector p,
@@ -770,6 +773,7 @@ theorem caseI_rectangular_remainder_eq_zero_of_literal_ZCL
     let Q : Matrix (F.ActiveSector p) (Fin D) ℂ :=
       fun k alpha ↦ (F.rightTensor k alpha).trace
     Q * (1 - L * Q) * L = 0 := by
+  have : NeZero D := ⟨hK_normal.bondDim_ne_zero⟩
   intro L Q
   let T := F.activeSectorTraceMatrix p
   have hT : T ^ 2 = T :=

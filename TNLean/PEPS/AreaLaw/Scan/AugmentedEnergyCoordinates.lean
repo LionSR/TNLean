@@ -25,11 +25,15 @@ Source: OpenAI, A two-dimensional area law from a global spectral gap,
 06-transport.tex, lines 335–358, and 07-comparators.tex, lines 130–153
 and 421–438, revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 The identities below compare the site coordinates and the copy-mean
-operator. They apply to an arbitrary physical matrix.
+operator. They apply to an arbitrary physical matrix. The auxiliary
+registers C and R share one dimension d because the source pairs them by
+the Bell vector `Bell_CR = d_*^{-1/2} ∑_{i ∈ E} |i⟩_C |i⟩_R` on a common
+label set E (07-comparators.tex, line 89); the general `augmentedDimensions`
+with independent auxiliary dimensions is not needed at this step.
 -/
 
 noncomputable section
-open TensorPower TensorPower.ReplicaTransport Entropy
+open TensorPower Entropy
 open scoped Kronecker
 
 namespace TNLean.PEPS.AreaLaw.Scan
@@ -111,7 +115,8 @@ theorem augmentedConfigurationEquiv_apply_R (q d : ℕ)
 variable [Fintype V] [DecidableEq V]
 
 /-- The sum-site configuration in the original physical,C,R copy order.
-Source: OpenAI area-law manuscript, 07-comparators.tex421–438, adc7f124. -/
+Source: 07-comparators.tex, lines 421–438, revision
+adc7f1241b42e322a6451854ab7e4b4c146bf78a. -/
 def augmentedSumReplicaCopiesEquiv (q d k : ℕ) :
     Config k (fun s => Fin (augmentedDimensions (V := V) q (fun _ => d) s)) ≃
       (Fin k → (V → Fin q)) × ((Fin k → Fin d) × (Fin k → Fin d)) :=
@@ -121,8 +126,8 @@ def augmentedSumReplicaCopiesEquiv (q d k : ℕ) :
 /-- The physical replica mean extended by the identities on C and R,
 expressed in the scanner coordinates. The equality also holds at k = 0,
 where the normalized replica sum is zero.
-Source: OpenAI area-law manuscript, 06-transport.tex335–358 and
-07-comparators.tex421–438, adc7f124. -/
+Source: 06-transport.tex, lines 335–358; 07-comparators.tex, lines 421–438,
+revision adc7f1241b42e322a6451854ab7e4b4c146bf78a. -/
 theorem copyMean_augmentOperator_eq_replicaHamiltonian_kronecker
     (q d k : ℕ) (H : Matrix (V → Fin q) (V → Fin q) ℂ) :
     copyMean (augmentedDimensions (V := V) q (fun _ => d)) k
