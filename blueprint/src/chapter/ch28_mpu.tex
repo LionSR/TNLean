@@ -9189,6 +9189,30 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $x^T=x$ implies $S^T=q(x^T)=q(x)=S$. Therefore $x=S^2=S^T S$.
 \end{proof}
 
+\begin{lemma}[Determinant of $i$ times a traceless Hermitian involution]
+    \label{lem:mpu_det_i_hermitian_involution}
+    \lean{Matrix.IsHermitian.det_I_smul_eq_one}
+    \leanok
+    Let $I$ be a finite set and let $H\in\operatorname{Mat}_I(\mathbb C)$ be
+    Hermitian with $H^2=\Id$ and $\operatorname{tr}H=0$. Then
+    \begin{align}
+        \det(iH) & =1.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Let $\mu_1,\dots,\mu_{|I|}$ be the real eigenvalues of $H$. Applying
+    $H^2=\Id$ to an eigenvector gives $\mu_j^2=1$, so $\mu_j=\pm1$ and
+    $i\mu_j=e^{i\pi\mu_j/2}$. The trace condition gives $\sum_j\mu_j=0$.
+    Hence
+    \begin{align}
+        \det(iH)
+         & =\prod_j i\mu_j
+        =\exp\Bigl(\frac{i\pi}{2}\sum_j\mu_j\Bigr)
+        =1.
+    \end{align}
+\end{proof}
+
 \begin{lemma}[Skew congruence from paired spectral projectors]
     \label{lem:mpu_skew_unitary_paired_projectors}
     \lean{Matrix.exists_skew_unitary_congruence_of_paired_projectors}
@@ -9209,16 +9233,17 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \widetilde\Lambda & = i\sum_{k\in K}(P_k-P_k^T)
     \end{align}
     are unitary, $S^T=S$, $\overline{\widetilde\Lambda}=\widetilde\Lambda$,
-    $\widetilde\Lambda^T=-\widetilde\Lambda$, and
+    $\widetilde\Lambda^T=-\widetilde\Lambda$, $\det\widetilde\Lambda=1$, and
     \begin{align}
         x & = S^T\widetilde\Lambda S.
     \end{align}
     This is the paired-projector construction in the skew branch of
     \cite[Lemma~\texttt{lemma:conjclass-normalform-continuous}]{Cirac2017MPU}.
-    % Source lines: paper_v2.tex 1066--1082.
+    % Source lines: paper_v2.tex 1066--1083.
 \end{lemma}
 
 \begin{proof}\leanok
+    \uses{lem:mpu_det_i_hermitian_involution}
     Write the two projectors in each pair as separate members of one complete
     orthogonal family. A weighted sum of this family is unitary whenever every
     weight has modulus one. This applies to $S$, whose two weights at $k$
@@ -9233,7 +9258,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \left(e^{-i\pi/4}e^{-iE_k/2}\right)^2 i & = e^{-iE_k}.
     \end{align}
     The transposed member has the negative weight, which gives
-    $x=S^T\widetilde\Lambda S$.
+    $x=S^T\widetilde\Lambda S$. For the determinant, the same reduction gives
+    $\widetilde\Lambda^2=-\Id$, so $\widetilde\Lambda=iH$ with
+    $H=\sum_{k\in K}(P_k-P_k^T)$ a Hermitian involution. Since
+    $\operatorname{tr}P_k^T=\operatorname{tr}P_k$, the trace of $H$ vanishes,
+    and Lemma~\ref{lem:mpu_det_i_hermitian_involution} gives
+    $\det\widetilde\Lambda=1$. These are the eigenvalue pairs $\pm i$ of the
+    source.
 \end{proof}
 
 \begin{lemma}[Normal form of symmetric and skew-symmetric unitaries]

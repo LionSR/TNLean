@@ -99,24 +99,6 @@ theorem gauge_unique_up_to_scalar {A B : MPSTensor d D} (hA : Kraus.IsInjective 
               (X : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ) := by
               simp
 
-/-- Gauge uniqueness for tensors with identical matrix product vector families: after
-obtaining any two gauges from the single-block fundamental theorem, they are unique up
-to a nonzero scalar.
-
-Although the hypothesis that $A$ and $B$ generate the same matrix product vector
-family is not needed for the conclusion — gauge uniqueness follows from
-injectivity alone, together with the two gauge equations $B_i = X A_i X^{-1}$
-and $B_i = Y A_i Y^{-1}$ — it is retained to match the blueprint statement
-faithfully. -/
-theorem gauge_unique_up_to_scalar_of_sameMPV {A B : MPSTensor d D}
-    (hA : Kraus.IsInjective A) (_hAB : SameMPV A B)
-    {X Y : GL (Fin D) ℂ}
-    (hX : ∀ i, B i = X * A i * X⁻¹)
-    (hY : ∀ i, B i = Y * A i * Y⁻¹) :
-    ∃ u : Units ℂ,
-      (Y : Matrix (Fin D) (Fin D) ℂ) = (u : ℂ) • (X : Matrix (Fin D) (Fin D) ℂ) :=
-  gauge_unique_up_to_scalar hA hX hY
-
 /-- **Gauge-phase uniqueness for injective tensors.**
 Source: arXiv:2011.12127, §III.A, eq. `eq:XAX=B`
 (`Papers/2011.12127/TN-Review-main.tex` lines 1085–1086): for a normal tensor,
