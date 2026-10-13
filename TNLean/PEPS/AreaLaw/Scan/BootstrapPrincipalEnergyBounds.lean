@@ -96,6 +96,7 @@ theorem exists_bootstrap_principal_energy_bound
             (by norm_num : (0 : ℝ) < 4))).natCast_atTop.const_mul_left
               (192 * C)).eventuallyLE))))
   refine ⟨N, (hN N le_rfl).1.two_le_n, fun n hn e he ↦ ?_⟩
+  obtain ⟨hf, hC₁n, hCδn, hlogδn, hlogCn⟩ := hN n hn
   done
 
 end TNLean.PEPS.AreaLaw.Scan
