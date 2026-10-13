@@ -519,7 +519,12 @@ normalizations.
 - **Caveat:** the region-family structures they extend are indexed by an
   injectivity assignment, not by a tensor, so they cannot carry the
   convention themselves; internal steps that take them as region data keep
-  explicit positivity, supplied by the source-facing theorems.
+  explicit positivity, supplied by the source-facing theorems. The torus
+  uniqueness clauses (`torusAbsorbedGauge_unique_scalar`,
+  `torusCovariantAbsorbedGauge_unique_classScalar`,
+  `torusGauge_unique_scalar_of_perVertex` and
+  `torusGauge_unique_scalar_of_normalArcWindows`) are the exception: they
+  still take region hypotheses with explicit positivity of both tensors.
 
 #### `TNLean.PEPS.RegionBlockedTensorInjective`
 

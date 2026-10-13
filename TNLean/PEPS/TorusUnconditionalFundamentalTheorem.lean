@@ -78,9 +78,7 @@ and `3 × 2` rectangle is injective, and every virtual bond space is nonzero.  T
 fields are the region-family hypothesis `NormalTorusRectangleInjectivityHypotheses` read for
 the injective regions of the tensor.
 
-**Local fix (nonzero virtual spaces):** see the module docstring; the field `bondDim_pos` is
-the source's convention that virtual bond spaces are nonzero, recorded in
-`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+The field `bondDim_pos` is the nonzero virtual-space convention of the module docstring.
 
 Source: arXiv:1804.04964, Section 3, Theorem 3, lines 1453--1454 of
 `Papers/1804.04964/paper_normal.tex` ("two normal 2D PEPS tensors such that every `2 × 3`

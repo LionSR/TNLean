@@ -430,8 +430,20 @@ closed-chain corollary at
 \leanid{TNLean.PEPS.IsNormalSquareLatticeRectanglePEPS} on the open square
 lattice, each through a field \path{bondDim_pos}. The torus bond-dimension
 theorem \leanid{TNLean.PEPS.bondDim_eq_of_normalArcWindows_sameState} takes
-\leanid{TNLean.PEPS.IsNormalTorusArcWindowPEPS}. None of these statements
-carries a separate positivity hypothesis. On general graphs, the
+\leanid{TNLean.PEPS.IsNormalTorusArcWindowPEPS}. These existence and
+bond-dimension statements, together with the uniqueness clause of the
+closed-chain corollary, carry no separate positivity hypothesis. The uniqueness
+clauses on the torus do not yet: Theorem~3's clause at
+\path{Papers/1804.04964/paper_normal.tex:1471}, stated in
+\leanid{TNLean.PEPS.torusAbsorbedGauge_unique_scalar},
+\leanid{TNLean.PEPS.torusCovariantAbsorbedGauge_unique_classScalar} and
+\leanid{TNLean.PEPS.torusGauge_unique_scalar_of_perVertex}, and the window
+corollary's clause, stated in
+\leanid{TNLean.PEPS.torusGauge_unique_scalar_of_normalArcWindows}, still pair
+region hypotheses with explicit positivity of both tensors. Carrying the
+convention through these four statements is the remaining work; it first
+requires stating the tensor hypothesis of Theorem~3 before the uniqueness
+results. On general graphs, the
 parent-Hamiltonian support, rank and one-dimensionality results take the
 injective tensor hypothesis, while the span and kernel descriptions of the
 parent ground space keep vertex injectivity alone, since they also hold with
@@ -450,7 +462,8 @@ The one-edge bond-dimension step
 datum of one edge and takes positivity of the original tensors from its caller.
 Every caller supplies it from the hypothesis on two normal PEPS tensors
 \leanid{TNLean.PEPS.NormalPEPSPairHypotheses} or from the tensor hypotheses of
-the normal corollaries on cycle, square and torus lattices listed above. The
+the normal corollaries on cycle, square and torus lattices listed above, or,
+for the torus uniqueness clauses, from their explicit positivity hypotheses. The
 internal steps of those corollaries that see their tensors only through region
 data, such as the staircase steps of the torus window corollary and the interior
 steps on the open square lattice, likewise receive positivity from these tensor

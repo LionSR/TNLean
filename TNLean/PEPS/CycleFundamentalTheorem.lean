@@ -93,9 +93,7 @@ virtual bond spaces are all nonzero. This is the hypothesis on each of the two M
 source corollary; the arc field is the region-family hypothesis
 `NormalCycleArcInjectivityHypotheses` read for the injective regions of the tensor.
 
-**Local fix (nonzero virtual spaces):** see the module docstring; the field `bondDim_pos` is
-the source's convention that virtual bond spaces are nonzero, recorded in
-`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+The field `bondDim_pos` is the nonzero virtual-space convention of the module docstring.
 
 Source: arXiv:1804.04964, Section 3, first corollary after the theorem labelled `normal`,
 lines 1597--1598 of `Papers/1804.04964/paper_normal.tex` ("two normal MPS on `n ≥ 3L` sites
