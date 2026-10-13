@@ -142,9 +142,9 @@ theorem sum_coefficient_all_mul_conj_smul_eq_sum_nonemptyGateLabels
   simp_rw [coefficient_all_mul_conj_eq_prod_nonemptyGateLocations]
   refine Fintype.sum_equiv e _ _ ?_
   intro ξ
-  simp only [Equiv.symm_apply_apply]
+  simp only [e, Equiv.symm_apply_apply]
   refine Fintype.sum_equiv e _ _ ?_
   intro ζ
-  simp only [Equiv.symm_apply_apply]
+  simp only [e, Equiv.symm_apply_apply]
 
 end TNLean.PEPS.PairEffect.SourceCircuit
