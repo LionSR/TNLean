@@ -34,6 +34,24 @@ private theorem restrict_localPart_eval_heq_of_word_heq {Q : Type} (f : Q → Bo
   cases h
   rfl
 
+/-- Restrict a relabelled spectator extension after comparing its constructed
+words. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
+lines 351–381, 409–434 and 565–588. -/
+private theorem restrict_relabelled_spectators_eval_heq_id {R Q : Type}
+    (g : R → Q) {a b : Layout R} (u : Word a b) (tail : Layout R) (q : Q)
+    (hu : q ∉ (u.mapOwner g).parties) :
+    HEq (((u.appendTail tail).mapOwner g).localPart.restrict (partySelector q)
+      ((u.appendTail tail).mapOwner g).sources_localPart).eval
+      (ContinuousLinearMap.id ℂ (Mem (Layout.atParty q (Layout.mapOwner g tail)))) := by
+  have h := restrict_localPart_eval_heq_of_word_heq (partySelector q)
+    ((u.appendTail tail).mapOwner g)
+    ((u.mapOwner g).appendTail (Layout.mapOwner g tail))
+    (Layout.mapOwner_append g a tail) (Layout.mapOwner_append g b tail)
+    (Word.mapOwner_appendTail_heq g u tail)
+  exact h.trans
+    (Word.restrict_localPart_appendTail_eval_heq_id_of_not_mem_parties
+      (u.mapOwner g) q hu (Layout.mapOwner g tail))
+
 /-- An original party outside a gate's participants retains only its mapped
 spectator registers in the actual all-party branch. The restriction of the
 remaining operations is the identity on those spectators. No label is chosen
@@ -72,15 +90,8 @@ theorem restrict_partialWord_all_gate_localPart_eval_heq_id_of_nonincident
       rw [dite_eq_left ht]
       rfl
     rw [hw]
-    have htransport := restrict_localPart_eval_heq_of_word_heq f
-      ((((G.branchWord i).mapOwner owner).appendTail tail).mapOwner all)
-      (core.appendTail (Layout.mapOwner all tail))
-      (Layout.mapOwner_append all (Layout.mapOwner owner a) tail)
-      (Layout.mapOwner_append all (Layout.mapOwner owner b) tail)
-      (Word.mapOwner_appendTail_heq all ((G.branchWord i).mapOwner owner) tail)
-    exact htransport.trans
-      (Word.restrict_localPart_appendTail_eval_heq_id_of_not_mem_parties core q hcore
-        (Layout.mapOwner all tail))
+    exact restrict_relabelled_spectators_eval_heq_id all
+      ((G.branchWord i).mapOwner owner) tail q hcore
   · have hw : partialWord (fun _ : P => true) (.gate owner G tail) ξ =
         Word.groupedBlockMap all none (Layout.mapOwner owner a) (Layout.mapOwner owner b)
           (Layout.affectedOwner_mapOwner_eq_none (fun _ : P => true) owner ht a)
