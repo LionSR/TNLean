@@ -97,7 +97,7 @@ private theorem charge_energy_coefficient_identity
       _ = _ := by rw [hBroot]
   rw [_root_.mul_assoc (1 - p) _ (Q ^ (1 / 8 : ℝ)), hgood,
     Real.mul_rpow (by norm_num : (0 : ℝ) ≤ 2) hℓ.le, Real.rpow_add hℓ]
-  field_simp [hK.ne', hm.ne'] <;> ring
+  field_simp [hK.ne', hm.ne']; ring
 
 open Classical in
 /-- The actual charge error has uniform logarithmic coefficients at the fixed
@@ -178,7 +178,8 @@ theorem exists_actualCharge_energy_coefficients (q : ℕ) [NeZero q]
   obtain ⟨hm, hM, henergy⟩ := hNe n ((le_max_left Ne Ns).trans hn)
     Λ T hT R S hSn hsm hK hD hr hC ht hgraph hdepth hclear hrows hmult
   have hmX : S.m = X.m n := hsm
-  have hKX : S.K = X.K n := by simpa only [ScannerExponents.K, hmX] using hK
+  have hKX : S.K = X.K n := by
+    simpa only [ScannerExponents.K, ScannerExponents.L, hmX] using hK
   have hDX : S.D = X.D n := hD
   have hKpos : (0 : ℝ) < S.K := by
     exact_mod_cast (show 0 < S.K by rw [hKX]; exact lt_of_lt_of_le Nat.zero_lt_one hF.one_le_K)
