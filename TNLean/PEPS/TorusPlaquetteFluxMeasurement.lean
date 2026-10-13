@@ -144,14 +144,16 @@ Source: SCP10, the detection tweezer in Theorem 6.15, lines 2225–2258. -/
 def torusPlaquetteInducedWalk (v : X) :
     ((Γₜ).induce (torusPlaquetteRegion v : Set X)).Walk
       ⟨v, mem_torusPlaquetteRegion_self v⟩ ⟨v, mem_torusPlaquetteRegion_self v⟩ :=
-  (torusPlaquetteWalk v).induce _ fun _ hx => List.mem_toFinset.mpr hx
+  (torusPlaquetteWalk v).induce (torusPlaquetteRegion v : Set X) fun x hx =>
+    show x ∈ (torusPlaquetteRegion v : Set X) from List.mem_toFinset.mpr hx
 
 /-- The induced plaquette loop has the native plaquette holonomy. Source: SCP10,
 actual region routes, lines 1935–1990. -/
 theorem regularWalkHolonomy_torusPlaquetteInducedWalk (u : Edge Γₜ → G) (v : X) :
     regularWalkHolonomy (regularRegionInternalOperators (torusPlaquetteRegion v) u)
       (torusPlaquetteInducedWalk v) = regularWalkHolonomy u (torusPlaquetteWalk v) := by
-  rw [regularWalkHolonomy_inducedWalk, torusPlaquetteInducedWalk, SimpleGraph.Walk.map_induce]
+  unfold torusPlaquetteInducedWalk
+  rw [regularWalkHolonomy_inducedWalk, SimpleGraph.Walk.map_induce]
   rfl
 
 variable {G : Type*} [Group G] [Fintype G] [DecidableEq G] {d : ℕ}

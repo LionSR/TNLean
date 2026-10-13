@@ -194,7 +194,7 @@ theorem graphNumberedBondFamilyMatrix_oriented_coordinates_injective [Finite X]
   let := Fintype.ofFinite X
   refine Function.LeftInverse.injective (g := Matrix.mulVecLin (graphNumberedBondFamilyMatrix
     eY eX (graphOrientedBondCoordinateMatrix Q.conjTranspose o))) fun χ => ?_
-  simpa only [Matrix.conjTranspose_conjTranspose] using
+  simpa only [Matrix.mulVecLin_apply, Matrix.conjTranspose_conjTranspose] using
     graphNumberedBondFamilyMatrix_oriented_coordinates_rightInverse Q.conjTranspose
       (by simpa only [Matrix.conjTranspose_conjTranspose] using hQ) o eY eX χ
 
