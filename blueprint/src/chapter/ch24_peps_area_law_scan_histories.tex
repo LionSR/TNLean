@@ -3468,3 +3468,47 @@ The finite-leaf estimates below follow the charge-energy argument in
     (\ref{eq:al_scan_actual_charge_sum}). The same error sequence and supplied
     vector occur throughout. No division by the replica count or band count occurs.
 \end{proof}
+
+\begin{theorem}[Selection from the actual integrated charge bound]
+    \label{thm:al_scan_actual_charge_sum_selection}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_selection_domainGraph}
+    \uses{thm:al_scan_actual_charge_sum_bound}
+    The universal real constants $c_0,C_{\mathrm{ent}},e_{\mathrm{ent}}$,
+    with $c_0>0$, in Theorem~\ref{thm:al_scan_actual_charge_sum_bound}
+    may be chosen so that the following holds under its geometric,
+    Hamiltonian, dimension and smallness hypotheses. For each fixed choice
+    of these data there are $C_\beta\ge0$ and a sequence
+    $\beta:\mathbb N\to\mathbb R$ with
+    $0\le\beta_k\le C_\beta\log(k+2)$ for every $k\ge0$.
+    The universal constants are chosen before the physical data;
+    $C_\beta$ and $\beta$ are chosen before the replica count, vector and interval.
+    For every $k\ge1$, every nonzero symmetric supplied vector
+    $\mathrm{pre}$, and every $0\le p_0<p_1\le1$, put
+    \begin{align}
+        \rho & = \frac{ka}{2(C_1+1)nD},                        \\
+        B    & = \log (N^{\mathrm{fill}}_{0,k,\mathrm{pre}})^2
+        -\log (N^{\mathrm{fill}}_{nm,k,\mathrm{pre}})^2
+        +2nm\bigl(C_{\mathrm{ent}}kaKa^{1/4}\ell^{e_{\mathrm{ent}}}+\beta_k\bigr).
+    \end{align}
+    Here $(N^{\mathrm{fill}}_{j,k,\mathrm{pre}})^2
+        =\|\mathcal M^{\mathrm{fill}}_{j,k}(0)^{-1/4}\mathrm{pre}\|^2$,
+    where $\mathcal M^{\mathrm{fill}}_{j,k}(0)$ is the actual fill root
+    at stage $j$ and interpolation parameter zero, with metric parameter
+    $a/2$. There are a charge stage $0\le s<nm$ and a parameter
+    $p\in[p_0,p_1]$ such that
+    $\mathcal Q_{s,k,\mathrm{pre}}(p)\le B/(\rho nm(p_1-p_0))$.
+    The endpoint norms and charge defect retain the same supplied vector
+    and metric parameter $a/2$; the defect uses the fixed actual augmented
+    energy terms. This is the finite averaging
+    consequence in \cite[Section~9]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:al_scan_actual_charge_sum_bound,thm:al_scan_actual_charge_selection}
+    The integrated bound (\ref{eq:al_scan_actual_charge_sum}) gives
+    $\rho\sum_s\int_{p_0}^{p_1}\mathcal Q_{s,k,\mathrm{pre}}(p)\,dp\le B$.
+    Since $k\ge1$, $a>0$, $C_1>0$, $n\ge2$ and $D\ge1$, one has
+    $\rho>0$. Also $4D\le m$ gives $nm>0$.
+    Theorem~\ref{thm:al_scan_actual_charge_selection} therefore supplies
+    the stage and parameter. The universal constants and common error
+    sequence are retained from the integrated estimate.
+\end{proof}
