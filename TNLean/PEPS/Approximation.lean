@@ -324,6 +324,7 @@ import TNLean.PEPS.Approximation.SourceSubstitutionResidual
 import TNLean.PEPS.Approximation.SourceWordParties
 import TNLean.PEPS.Approximation.SpectatorOwnerExclusion
 import TNLean.PEPS.Approximation.SquareAreaLawHamiltonian
+import TNLean.PEPS.Approximation.SquareAreaLawSpecialization
 import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
