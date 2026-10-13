@@ -1,0 +1,46 @@
+name: Area-law shell diagnostic
+
+on:
+  push:
+    branches: [agent/8753-shell-diagnostic]
+    paths:
+      - .github/workflows/area-law-shell-diagnostic.yml
+      - .ci/area-law-shell/**
+
+permissions:
+  contents: read
+
+concurrency:
+  group: area-law-shell-diagnostic-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      LEAN_NUM_THREADS: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: leanprover-community/mathlib4
+          ref: c55e6e786f49471c72fbddbec5415808896aec1e
+          path: mathlib
+          persist-credentials: false
+      - name: Install pinned Lean and fetch prebuilt Mathlib only
+        uses: leanprover/lean-action@24581d74d674803a25a81b10b059c5c0cdd344c6
+        with:
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          use-github-cache: false
+          use-mathlib-cache: true
+          lake-package-directory: mathlib
+      - name: One strict shell goal diagnostic
+        timeout-minutes: 2
+        working-directory: mathlib
+        run: lake env python3 ../.ci/area-law-shell/run.py
