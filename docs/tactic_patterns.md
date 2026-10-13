@@ -6479,6 +6479,13 @@ spectral split → block extraction → MPV calculation → strict bounds
   equality of restrictions from equality of evaluated operators. The
   new provider and commutation have named axiom checks; elaboration is
   pending.
+- **Owner evaluation (2026-10-13):** `Word.eval_mapOwner_heq` in
+  `WordOwnerEvaluation` identifies the mapped and original operators under
+  equality of their ordered memory spaces. It uses the existing owner-memory
+  isometries and their pointwise heterogeneous identities. This comparison
+  can be applied to words whose restrictions have already been formed; it
+  does not assert that equal complete operators have equal restrictions.
+  A named axiom test covers the new result; elaboration is pending.
 - **Relation to the tensor-map candidate:** The two existing private
   `mapL_heq` and `mapL_apply_heq` helpers concern tensor products of two maps
   with four changing spaces. The new helper instead compares an associator

@@ -558,3 +558,31 @@ complete operators. We give the corresponding exact constructions.
     operation has the same selected list on both sides. Identifying
     equal lists commutes with relabelling throughout.
 \end{proof}
+
+
+\begin{theorem}[Evaluation under relabelling owners]
+    \label{thm:peps_owner_evaluation_identification}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_mapOwner_heq}
+    \uses{def:peps_owner_composition,def:peps_owner_layout}
+    Let $f:P\to Q$ be any map of party labels and let $W:a\to b$
+    be an arbitrary chronological composition. The relabelled lists
+    $a^f$ and $b^f$ have the same ordered register spaces as $a$ and
+    $b$, respectively. Under these identifications of the memory
+    spaces, $W^f$ and $W$ have the same continuous linear operator.
+    If the two owners of a pair source merge, its original vector is
+    retained as a local preparation on the same ordered spaces.
+    No injectivity, finiteness, contraction or normalization
+    assumption is imposed. This is an auxiliary identity for the
+    relabellings in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 383--434 and 565--588.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:peps_owner_composition,def:peps_owner_layout}
+    The canonical isometries $R_{f,a}$ and $R_{f,b}$ preserve each
+    tensor factor and act as the identity after identifying the
+    ordered memory spaces. The intertwining relation
+    $W^fR_{f,a}=R_{f,b}W$ therefore gives $W^f x=W x$ for every
+    input $x$. Equality on all inputs identifies the two continuous
+    linear operators.
+\end{proof}
