@@ -77,26 +77,8 @@ lie one in the red block and one in the blue block, both disjoint from the compl
 theorem not_isRegionIncidentEdge_complement_of_crossing_rb
     (F : CoherentCoarseBlockingFrame (G := G) (d := d) A) (hP : F.frame.IsPartition)
     {g : Edge G} (hg : IsCrossingEdge (G := G) A F.frame.red F.frame.blue g) :
-    ¬ IsRegionIncidentEdge (G := G) F.frame.complement g := by
-  -- The red-to-blue crossing edge has, on each endpoint, a red and a blue boundary
-  -- condition; the two combine to place each endpoint in red or in blue.
-  have hcompl : ∀ v : V, v ∈ F.frame.red ∨ v ∈ F.frame.blue → v ∉ F.frame.complement := by
-    rintro v (hr | hb) hc
-    · exact (Finset.disjoint_left.mp hP.red_disjoint_complement) hr hc
-    · exact (Finset.disjoint_left.mp hP.blue_disjoint_complement) hb hc
-  rcases hg.1 with ⟨hr1, hr2⟩ | ⟨hr1, hr2⟩ <;> rcases hg.2 with ⟨hb1, hb2⟩ | ⟨hb1, hb2⟩
-  · -- g.1.1 ∈ red, g.1.1 ∈ blue: impossible.
-    exact absurd hb1 ((Finset.disjoint_left.mp hP.red_disjoint_blue) hr1)
-  · -- g.1.1 ∈ red, g.1.2 ∈ blue.
-    rintro (hc | hc)
-    · exact hcompl _ (Or.inl hr1) hc
-    · exact hcompl _ (Or.inr hb2) hc
-  · -- g.1.2 ∈ red, g.1.1 ∈ blue.
-    rintro (hc | hc)
-    · exact hcompl _ (Or.inr hb1) hc
-    · exact hcompl _ (Or.inl hr2) hc
-  · -- g.1.2 ∈ red, g.1.2 ∈ blue: impossible.
-    exact absurd hb2 ((Finset.disjoint_left.mp hP.red_disjoint_blue) hr2)
+    ¬ IsRegionIncidentEdge (G := G) F.frame.complement g :=
+  hg.not_incident hP.red_disjoint_blue hP.red_disjoint_complement hP.blue_disjoint_complement
 
 /-! ### The host merge of a relaxed triple's blue and complement configurations
 
@@ -530,29 +512,8 @@ theorem sameAwayFromRBBundle_regionBoundaryLabel_iff
     have := h ⟨g, hg.boundary_left⟩ hfb
     simpa [regionBoundaryLabel] using this
   · intro h f hf
-    have hrc : IsCrossingEdge (G := G) A F.frame.red F.frame.complement f.1 := by
-      refine ⟨f.2, ?_⟩
-      rcases f.2 with ⟨h1, h2⟩ | ⟨h1, h2⟩
-      · refine Or.inr ⟨(Finset.disjoint_left.mp hP.red_disjoint_complement) h1, ?_⟩
-        have : f.1.1.2 ∈ F.frame.red ∪ F.frame.blue ∪ F.frame.complement := by
-          rw [hP.cover_univ]; exact Finset.mem_univ _
-        rcases Finset.mem_union.mp this with hrb | hcc
-        · rcases Finset.mem_union.mp hrb with hr | hb
-          · exact absurd hr h2
-          · exact absurd (⟨Or.inl ⟨h1, h2⟩,
-              Or.inr ⟨(Finset.disjoint_left.mp hP.red_disjoint_blue) h1, hb⟩⟩ :
-              IsCrossingEdge (G := G) A F.frame.red F.frame.blue f.1) hf
-        · exact hcc
-      · refine Or.inl ⟨?_, (Finset.disjoint_left.mp hP.red_disjoint_complement) h2⟩
-        have : f.1.1.1 ∈ F.frame.red ∪ F.frame.blue ∪ F.frame.complement := by
-          rw [hP.cover_univ]; exact Finset.mem_univ _
-        rcases Finset.mem_union.mp this with hrb | hcc
-        · rcases Finset.mem_union.mp hrb with hr | hb
-          · exact absurd hr h1
-          · exact absurd (⟨Or.inr ⟨h1, h2⟩,
-              Or.inl ⟨hb, (Finset.disjoint_left.mp hP.red_disjoint_blue) h2⟩⟩ :
-              IsCrossingEdge (G := G) A F.frame.red F.frame.blue f.1) hf
-        · exact hcc
+    have hrc : IsCrossingEdge (G := G) A F.frame.red F.frame.complement f.1 :=
+      (F.frame.isCrossingEdge_red_blue_or_red_complement hP f.2).resolve_left hf
     rw [regionBoundaryLabel_apply, regionBoundaryLabel_apply]
     exact h f.1 hrc
 

@@ -12,7 +12,11 @@ import tenkz_pic
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "blueprint/src/chapter"
-# The first named atom identifies the chapter-owned equation, not a copy of it.
+# Displays shared with external notes moved to blueprint/src/figures (cutLeft is
+# figures/peps_regular_ginjective_cut_range_a.tex, input by its chapter), so both
+# directories hold source-owned equations.
+FIGURES = ROOT / "blueprint/src/figures"
+# The first named atom identifies the source-owned equation, not a copy of it.
 # Each tuple is (virtual open legs, physical open legs), in panel order.
 EXPECTED = {
     "rangeProjector": [(1, 1), (1, 1)],
@@ -25,7 +29,7 @@ EXPECTED = {
 
 
 def main() -> int:
-    units = scan_units(SOURCE)
+    units = scan_units(SOURCE) + scan_units(FIGURES)
     panels = 0
     with tempfile.TemporaryDirectory(prefix="tenkz_peps_groundstate_") as tmp:
         for anchor, expected in EXPECTED.items():
