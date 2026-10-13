@@ -19,6 +19,15 @@ SOURCE_ROOT = REPO / "blueprint" / "src"
 # The literal form only: macro wrappers (such as tnleanfigures' \tnfigure)
 # are deliberately not expanded, because chapters must use the literal form.
 INPUT_RE = re.compile(r"\\input\{([^}]+)\}")
+# An unescaped ``%`` (preceded by an even number of backslashes) starts a TeX
+# comment; an ``\input`` after it on the same line is not expanded.
+COMMENT_START_RE = re.compile(r"(?:^|[^\\])(?:\\\\)*%")
+
+
+def in_comment(source: str, offset: int) -> bool:
+    """Whether ``offset`` in ``source`` lies inside a TeX comment."""
+    line_start = source.rfind("\n", 0, offset) + 1
+    return COMMENT_START_RE.search(source[line_start:offset]) is not None
 
 
 def input_path(target: str, src_root: Path = SOURCE_ROOT) -> Path:
@@ -31,9 +40,10 @@ def input_path(target: str, src_root: Path = SOURCE_ROOT) -> Path:
 def read_tex_tree(path: Path, src_root: Path = SOURCE_ROOT) -> str:
     """Read ``path`` after recursively expanding every ``\\input{...}``.
 
-    Each ``\\input{target}`` is replaced by the expanded text of
-    ``input_path(target, src_root)``.  A missing target raises
-    ``FileNotFoundError`` and an input cycle raises ``ValueError``.
+    Each ``\\input{target}`` outside a TeX comment is replaced by the expanded
+    text of ``input_path(target, src_root)``; a commented-out input stays as
+    written.  A missing target raises ``FileNotFoundError`` and an input cycle
+    raises ``ValueError``.
     """
     return _expand(Path(path), Path(src_root), ())
 
@@ -46,6 +56,8 @@ def _expand(path: Path, src_root: Path, stack: tuple[Path, ...]) -> str:
     source = path.read_text(encoding="utf-8")
 
     def expand(match: re.Match[str]) -> str:
+        if in_comment(source, match.start()):
+            return match.group(0)
         return _expand(input_path(match.group(1), src_root), src_root, (*stack, key))
 
     return INPUT_RE.sub(expand, source)

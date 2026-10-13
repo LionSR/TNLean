@@ -93,7 +93,7 @@ amsmath/amssymb, `\ket`, `\bra`, `\C`, `\spn`, and its own label macros.
   centred `tenkzequation`, and the four label macros with the meanings in
   `macros/common.tex`. Do not load `macros/common.tex` in a note: it clashes
   on `\theorem` and `\Tr`.
-- **Checks.** `python3 scripts/test_shared_figures.py` checks the file
+- **Checks.** `python3 scripts/test_shared_figures_diagram.py` checks the file
   contract, every `\input{figures/...}` in the chapters and appendices, the
   sync of `tnleanfigures.sty` with `macros/common.tex`, and compiles every
   figure through `tnleanfigures.sty` with pdflatex. CI also runs `tenkz_lint`

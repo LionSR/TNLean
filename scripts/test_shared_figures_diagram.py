@@ -32,7 +32,8 @@ Checks:
   with only ``\\usepackage{tnleanfigures}`` that typesets every figure, then
   every parametrized figure again under ``\\newcommand`` overrides.  Without a
   TeX engine or tenkz the compile is skipped with a message, unless
-  ``--require-tex`` is given.
+  ``--require-tex`` is given (the default under GitHub Actions, so the
+  discovering runner ``scripts/run_diagram_tests.py`` needs no flag).
 
 The static checks are also run on a synthetic figure and on mutations of it,
 each of which must be rejected.
@@ -57,6 +58,11 @@ FIGURES = "figures"
 PACKAGE = "tnleanfigures.sty"
 COMMON = "macros/common.tex"
 FIGURE_NAME_RE = re.compile(r"[a-z0-9_]+\.tex")
+# Host paths as hosts are recorded (relative to blueprint/src), so the
+# ``Owner:`` line can be compared with the actual hosts in both directions.
+HOST_RE = re.compile(
+    r"(?<![\w/.-])(?:(?:chapter|appendix)/[A-Za-z0-9_./-]+?\.tex|content(?:_ft_mps)?\.tex)"
+)
 ALLOWED_NON_FIGURES = {"README.md", ".gitkeep"}
 PROVIDED = ("ket", "bra", "C", "spn")
 
@@ -227,11 +233,12 @@ def check_figure(
         fail(1, "header needs a '% Used by:' line")
     if owners is not None and len(owner_lines) == 1:
         owner = owner_lines[0].removeprefix("% Owner:").strip()
-        if owners:
-            for host in owners:
-                if host not in owner:
-                    fail(1, f"'% Owner:' must name {host}, which inputs this figure")
-        elif not owner.startswith("none"):
+        declared = set(HOST_RE.findall(owner))
+        for host in sorted(set(owners) - declared):
+            fail(1, f"'% Owner:' must name {host}, which inputs this figure")
+        for host in sorted(declared - set(owners)):
+            fail(1, f"'% Owner:' names {host}, which does not input this figure")
+        if not owners and not owner.startswith("none"):
             fail(1, "no chapter inputs this figure, so '% Owner:' must start with 'none'")
 
     text = strip_comments(raw)
@@ -495,6 +502,13 @@ def self_test(src: Path) -> list[str]:
     owned = check_figure("demo_case", SYNTHETIC, forbidden, ["chapter/ch99_demo.tex"])
     if not owned:
         failures.append("mutation 'owner mismatch' was accepted")
+    stale = SYNTHETIC.replace(
+        "% Owner: none (note-only figure).",
+        "% Owner: chapter/ch99_demo.tex (demo) and chapter/ch98_stale.tex (demo).",
+        1,
+    )
+    if not check_figure("demo_case", stale, forbidden, ["chapter/ch99_demo.tex"]):
+        failures.append("mutation 'stale owner' was accepted")
     for label, (old, new) in MUTATIONS.items():
         assert SYNTHETIC.count(old) >= 1, label
         if not check_figure("demo_case", SYNTHETIC.replace(old, new, 1), forbidden, []):
@@ -603,8 +617,9 @@ def main() -> int:
     parser.add_argument("--src", type=Path, default=SOURCE_ROOT, help="blueprint/src root")
     parser.add_argument("--engine", default="pdflatex", help="TeX engine for the contract")
     parser.add_argument("--require-tex", action="store_true",
+                        default=os.environ.get("GITHUB_ACTIONS") == "true",
                         help="fail instead of skipping when the compile cannot run"
-                        " with the pinned tenkz")
+                        " with the pinned tenkz (the default under GitHub Actions)")
     parser.add_argument("--no-compile", action="store_true", help="static checks only")
     args = parser.parse_args()
     src = args.src.resolve()
@@ -617,7 +632,7 @@ def main() -> int:
             print(f"FAIL: {failure}", file=sys.stderr)
         return 1
     print(f"PASS: {len(names)} shared figures, hosts and tnleanfigures.sty pass the static checks;"
-          f" {len(MUTATIONS) + 1} mutations rejected")
+          f" {len(MUTATIONS) + 2} mutations rejected")
     if args.no_compile:
         return 0
     compile_failures = compile_contract(src, names, labels, args.engine, args.require_tex)

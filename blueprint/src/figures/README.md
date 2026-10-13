@@ -25,6 +25,6 @@ external documents (the diagrammatic notes) typeset from the same source.
   inside the entry, never inside a `tenkzequation`. External documents load
   `\usepackage{tnleanfigures}` and write `\tnfigure{<name>}`.
 
-`scripts/test_shared_figures.py` enforces these rules and compiles every
+`scripts/test_shared_figures_diagram.py` enforces these rules and compiles every
 figure through `tnleanfigures.sty`. See also the "Shared figures" section of
 `blueprint/README.md`.
