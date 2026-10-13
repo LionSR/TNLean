@@ -7227,11 +7227,13 @@ spectral split → block extraction → MPV calculation → strict bounds
   introduced. Compilation of this promotion is pending with the endpoint
   congruence development.
 - **Input-only form (2026-10-13):** `Word.restrict_castInput_eval_heq` in
-  `WordRestriction.lean` states the evaluation identity for a word cast along
-  an equality of its input layout only. It replaced the byte-identical private
-  helpers of `NoneResidualOperations.lean` and `NoneResidualScalar.lean`. The
-  word identity `Word.restrict_castLayouts` cannot be used there by rewriting,
-  since the restriction's source argument depends on the cast word.
+  `WordRestriction.lean` derives the evaluation identity for a word cast along
+  an equality of its input layout only from `Word.restrict_castLayouts` with
+  equal output layouts and the evaluation-transport lemma. It replaced the
+  byte-identical private helpers of `NoneResidualOperations.lean` and
+  `NoneResidualScalar.lean`, where the word identity cannot be applied by
+  rewriting because the restriction's source argument depends on the cast
+  word.
 
 ### Actual-round cross-band commutation — candidate (2026-10-11)
 
