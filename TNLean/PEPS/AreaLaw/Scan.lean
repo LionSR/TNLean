@@ -14,6 +14,7 @@ import TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyCoefficients
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeEnergyDecay
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeEntropySum
 import TNLean.PEPS.AreaLaw.Scan.ActualChargeParameterBound
+import TNLean.PEPS.AreaLaw.Scan.ActualChargeSelection
 import TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms
 import TNLean.PEPS.AreaLaw.Scan.ActualEntropySampling
 import TNLean.PEPS.AreaLaw.Scan.ActualGlobalReplicaEnergy
