@@ -157,8 +157,8 @@ theorem exists_global_schmidtBellPrevector_rough_lower
     exists_global_schmidtBellPrevector H Ω E₀ hΩ hE X E hz
   have hcard : E.card ≠ 0 :=
     (Finset.nonempty_of_sum_ne_zero (s := E) hz.ne').card_ne_zero
-  haveI : NeZero d := ⟨hcard⟩
-  haveI : ∀ x : ι, Nonempty (β x) := fun _ => ⟨(0 : Fin q)⟩
+  have : NeZero d := ⟨hcard⟩
+  have : ∀ x : ι, Nonempty (β x) := fun _ => ⟨(0 : Fin q)⟩
   -- Recast the dimension asymptotic in terms of the selected entropy `S'`.
   have hdim' : Asymptotics.IsLittleO atTop
       (fun k : ℕ => Real.log (ell k).dim - (k : ℝ) * S')
@@ -170,13 +170,13 @@ theorem exists_global_schmidtBellPrevector_rough_lower
     have h2 := hdim'.tendsto_div_nhds_zero.const_mul (-2 : ℝ)
     rw [mul_zero] at h2
     refine h2.congr (fun k => ?_)
-    show (-2 : ℝ) * ((Real.log (ell k).dim - (k : ℝ) * S') / (k : ℝ)) =
+    change (-2 : ℝ) * ((Real.log (ell k).dim - (k : ℝ) * S') / (k : ℝ)) =
         (-2 * (Real.log (ell k).dim - (k : ℝ) * S')) / (k : ℝ)
     ring
   refine ⟨hpre, hmass, hdim', ?_, hratio, ?_⟩
   · -- The energy bookkeeping identity is pure algebra in the definition of `ε`.
     intro k
-    show 2 * (k : ℝ) * S' - (-2 * (Real.log (ell k).dim - (k : ℝ) * S')) =
+    change 2 * (k : ℝ) * S' - (-2 * (Real.log (ell k).dim - (k : ℝ) * S')) =
         Real.log (ell k).dim + Real.log (ell k).dim
     ring
   · -- The fixed-band rough lower comparison comes from the channel-generic
@@ -191,8 +191,7 @@ theorem exists_global_schmidtBellPrevector_rough_lower
         ((K : ℝ) / 2) (1 / 2) (2 / (K : ℝ)) c Cf hratio).congr (fun k => ?_)
       rw [show (2 : ℝ) * (2 / (K : ℝ)) * ε k = 4 / (K : ℝ) * ε k from by ring]
       ring
-    · intro k n hk Z hZ hZZ J _ _ Q Y hdisj hnest T
-      intro eₖ ξ W L F Bmid A B M w φ v δ
+    · intro k n hk Z hZ hZZ J _ _ Q Y hdisj hnest T eₖ ξ W L F Bmid A B M w φ v δ
       obtain ⟨hξne, hξnorm, _henergy, hPe, hCeq, hReq⟩ := hpre k hk
       obtain ⟨hbridgeC, hbridgeR⟩ :=
         labelProj_globalReplicaCopiesEquiv_auxiliary β (Fin d) (Fin d) k (ell k) (ell k)
@@ -203,7 +202,7 @@ theorem exists_global_schmidtBellPrevector_rough_lower
       have hle : 2 * (k : ℝ) * S' - ε k ≤
           Real.log (ell k).dim + Real.log (ell k).dim :=
         le_of_eq (by
-          show 2 * (k : ℝ) * S' - (-2 * (Real.log (ell k).dim - (k : ℝ) * S')) =
+          change 2 * (k : ℝ) * S' - (-2 * (Real.log (ell k).dim - (k : ℝ) * S')) =
             Real.log (ell k).dim + Real.log (ell k).dim
           ring)
       exact hbound k n hk H Ω.ofLp E₀ gap hgap hΩ hgap_pos Z hZ hZZ
