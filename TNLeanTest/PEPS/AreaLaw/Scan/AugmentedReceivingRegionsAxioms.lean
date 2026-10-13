@@ -5,14 +5,27 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.AugmentedReceivingRegions
 
-/-- info: 'TNLean.PEPS.AreaLaw.Scan.augmentedPartition_eq_images' depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.Scan.augmentedPartition_eq_images
+/-! # Expected logical axioms of the augmented receiving-region identities -/
 
-/-- info: 'TNLean.PEPS.AreaLaw.Scan.CollarScan.state_augmentedPartition_eq_target_near_middle' depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.Scan.CollarScan.state_augmentedPartition_eq_target_near_middle
+set_option linter.hashCommand false
 
-/-- info: 'TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_augmentedPartition_eq_target_near_middle' depends on axioms: [propext, Classical.choice, Quot.sound] -/
+open TNLean.PEPS.AreaLaw.Scan in
+/-- info:
+'TNLean.PEPS.AreaLaw.Scan.augmentedPartition_eq_images'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_augmentedPartition_eq_target_near_middle
+#print axioms augmentedPartition_eq_images
+
+open TNLean.PEPS.AreaLaw.Scan.CollarScan in
+/-- info:
+'TNLean.PEPS.AreaLaw.Scan.CollarScan.state_augmentedPartition_eq_target_near_middle'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms state_augmentedPartition_eq_target_near_middle
+
+open TNLean.PEPS.AreaLaw.Scan.CollarScan in
+/-- info:
+'TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_augmentedPartition_eq_target_near_middle'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms oldChargeState_augmentedPartition_eq_target_near_middle
