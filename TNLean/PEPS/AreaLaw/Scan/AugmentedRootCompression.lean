@@ -119,6 +119,9 @@ theorem rootPath_augmented_compressed_bandProduct
       Matrix.submatrix_mul_equiv, Matrix.submatrix_id_id]
   have hroot' : M.PosDef ∧ D.rootPath (nS q d) t k p * ZS = ZS * M := by
     simpa only [M, T, hB] using hroot
+  refine ⟨hroot'.1, hroot'.2, fun r =>
+    (MeanTree.posDef_eval (D.posDef_input hD ht hcomm) T).posSemidef.rpow_intertwine
+      hroot'.1.posSemidef ZS hroot'.2 r, ?_⟩
   done
 
 end TNLean.PEPS.AreaLaw.Scan
