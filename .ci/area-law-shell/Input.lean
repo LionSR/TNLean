@@ -105,8 +105,8 @@ theorem disjoint_target_positiveDepthPrefix
     Disjoint (A.filter fun x ↦ x.val ∈ T)
       (positiveDepthPrefix A (fun x ↦ ambientDepth T hT x.val) j) := by
   simp +contextual [Finset.disjoint_left, positiveDepthPrefix_eq_filter_ambientDilation hT A j]
-  done
 
 #print axioms positiveDepthPrefix_eq_filter_ambientDilation
+#print axioms disjoint_target_positiveDepthPrefix
 
 end TNLean.PEPS.AreaLaw.Scan
