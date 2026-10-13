@@ -569,3 +569,40 @@ This gives the contractions used in
     The finite column-contraction identity gives
     (\ref{eq:peps_actual_pure_source_contraction}).
 \end{proof}
+
+\begin{definition}[Source slots as participant pairs]
+    \label{def:peps_original_source_pair_indices}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourcePairEquiv}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourcePairEquiv_apply}
+    \uses{def:peps_source_pair_index,def:compression_operator_samples}
+    For each gate occurrence, its recorded source slots are in bijection with
+    the unordered pairs of distinct participants of that occurrence. The slot
+    corresponding to a pair has the original two endpoint owners. The order of
+    these endpoints, their two Euclidean spaces, and the source vector assigned
+    to the slot are retained independently of this unordered pair index.
+    This is an auxiliary identification in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 233--245, 342--364 and 568--588.
+\end{definition}
+\begin{proof}
+    The recorded slots contain each unordered pair of distinct local participants
+    exactly once. The embedding of the participants into the original party set
+    is injective, and therefore gives a bijection onto the pairs in its image.
+    Composing these two bijections gives the assertion. Under chronological
+    composition, the occurrence tags distinguish the two constituent circuits;
+    framing leaves the occurrence and its slot unchanged.
+\end{proof}
+
+\begin{definition}[Sample positions of the original circuit]
+    \label{def:peps_original_source_sample_indices}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceSampleEquiv}
+    \uses{def:peps_original_source_pair_indices,def:compression_operator_samples}
+    Identify an original source occurrence with the sample position consisting
+    of its nonempty-participant gate occurrence and its unordered endpoint pair.
+    A gate with no participants or only one participant contributes no sample
+    position. The inverse identification recovers the original recorded slot,
+    with its original endpoint order and dimensions.
+    This is an auxiliary identification in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 568--588.
+\end{definition}
