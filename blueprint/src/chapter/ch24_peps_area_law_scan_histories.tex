@@ -853,14 +853,21 @@ The following finite construction follows
     \label{def:al_scan_comparison_prefixes}
     \lean{TNLean.PEPS.AreaLaw.Scan.depthPrefix,
         TNLean.PEPS.AreaLaw.Scan.positiveDepthPrefix,
+        TNLean.PEPS.AreaLaw.Scan.positiveDepthPrefix_eq_filter_ambientDilation,
         TNLean.PEPS.AreaLaw.Scan.positiveNear,
         TNLean.PEPS.AreaLaw.Scan.positiveNearMiddle}
     \leanok
-    Write $d(x)=\operatorname{dist}_\infty(x,T)$ and set
+    \uses{thm:al_scan_ambient_rows}
+    Let $T$ be finite and nonempty. Write
+    $d(x)=\operatorname{dist}_\infty(x,T)$ and set
     \begin{align}
         R_j & =\{x\in A:d(x)\le j\},   &
         Q_j & =\{x\in A:0<d(x)\le j\}.
     \end{align}
+    For every integer $j$, one has
+    $Q_j=A\cap(T_{\max\{j,0\}}\setminus T)$. Indeed, $T_0=T$
+    and $d(x)=0$ exactly on $T$; negative cutoffs give the empty set.
+    These are the collars of \cite[Section~9]{OpenAI2026AreaLaw}.
     For a physical status $(P_0,Y,V)$, let $U=P_0\cap\{d>0\}$ and
     $UY=(P_0\cup Y)\cap\{d>0\}$. These prefixes contain whole rows;
     the partially consumed nominal row contributes to the error estimate.
