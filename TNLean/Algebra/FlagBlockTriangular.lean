@@ -10,6 +10,7 @@ import Mathlib.LinearAlgebra.Dimension.RankNullity
 import Mathlib.LinearAlgebra.FiniteDimensional.Lemmas
 import Mathlib.Data.Matrix.Block
 import Mathlib.Basic.Complex.Basic
+import TNLean.Algebra.Subquotient
 
 /-!
 # Flag-adapted coordinates give block-triangular matrices
@@ -23,54 +24,20 @@ equal to the matrices induced by the `f i` on the successive subquotients `H (k+
 This is Lemma 7.6 ("composition-series triangular gauge") of the P5 asymmetric-compression
 fundamental-theorem note.
 
-## Main definitions
-
-* `Submodule.flagQuot`: the subquotient `H (k+1) ⧸ H k` of two adjacent flag members.
-* `LinearMap.flagQuotMap`: the endomorphism induced by a flag-preserving endomorphism on a
-  subquotient of the flag.
+The subquotient `H (k+1) ⧸ H k` of two adjacent flag members is `Submodule.subquot (H k) (H (k+1))`
+and the endomorphism induced on it by a flag-preserving endomorphism is `Submodule.subquotMap`,
+both from `TNLean.Algebra.Subquotient`.
 
 ## Main results
 
 * `exists_linearEquiv_blockTriangular_of_flag`: a linear equivalence between `V` and a graded
   coordinate space `(Σ k, Fin (n k)) → ℂ` under which every `f i` is block upper triangular, with
-  diagonal block `k` the matrix of `LinearMap.flagQuotMap H (f i) (hf i) k` in the coordinates
+  diagonal block `k` the matrix of the map induced by `f i` on the subquotient in the coordinates
   `ψ k`.
 * `finrank_eq_sum_of_flag`: the dimension of `V` is the sum of the block sizes `n k`.
 -/
 
 open scoped Matrix
-
-namespace Submodule
-
-/-- The subquotient `H (k+1) ⧸ H k` of two nested submodules. -/
-abbrev flagQuot {K V : Type*} [Field K] [AddCommGroup V] [Module K V] {r : ℕ}
-    (H : Fin (r + 1) → Submodule K V) (k : Fin r) : Type _ :=
-  ↥(H k.succ) ⧸ (H k.castSucc).comap (H k.succ).subtype
-
-end Submodule
-
-namespace LinearMap
-
-variable {K V : Type*} [Field K] [AddCommGroup V] [Module K V] {r : ℕ}
-
-/-- The map induced on the subquotient `H (k+1) ⧸ H k` by an endomorphism `f` of `V` that
-preserves every member of the flag `H`. -/
-def flagQuotMap (H : Fin (r + 1) → Submodule K V) (f : V →ₗ[K] V)
-    (hf : ∀ k, ∀ x ∈ H k, f x ∈ H k) (k : Fin r) :
-    Submodule.flagQuot H k →ₗ[K] Submodule.flagQuot H k :=
-  Submodule.mapQ _ _ (f.restrict (hf k.succ)) (by
-    intro x hx
-    simp only [Submodule.mem_comap] at hx ⊢
-    exact hf k.castSucc x hx)
-
-@[simp]
-theorem flagQuotMap_mk (H : Fin (r + 1) → Submodule K V) (f : V →ₗ[K] V)
-    (hf : ∀ k, ∀ x ∈ H k, f x ∈ H k) (k : Fin r) (x : H k.succ) :
-    flagQuotMap H f hf k (Submodule.Quotient.mk x) =
-      Submodule.Quotient.mk (f.restrict (hf k.succ) x) :=
-  rfl
-
-end LinearMap
 
 /-- The dimension of `V` is the sum of the block sizes `n k` recorded by coordinates `ψ k` on the
 successive subquotients of an increasing flag from `⊥` to `⊤`. Proved by telescoping
@@ -79,7 +46,7 @@ fundamental-theorem note). -/
 theorem finrank_eq_sum_of_flag {K V : Type*} [Field K] [AddCommGroup V] [Module K V]
     [FiniteDimensional K V] {r : ℕ} (H : Fin (r + 1) → Submodule K V) (h0 : H 0 = ⊥)
     (htop : H (Fin.last r) = ⊤) (hmono : Monotone H) (n : Fin r → ℕ)
-    (ψ : ∀ k, Submodule.flagQuot H k ≃ₗ[K] (Fin (n k) → K)) :
+    (ψ : ∀ k, Submodule.subquot (H k.castSucc) (H k.succ) ≃ₗ[K] (Fin (n k) → K)) :
     Module.finrank K V = ∑ k, n k := by
   classical
   have step : ∀ k : Fin r, Module.finrank K (H k.succ) =
@@ -90,7 +57,7 @@ theorem finrank_eq_sum_of_flag {K V : Type*} [Field K] [AddCommGroup V] [Module 
       ((H k.castSucc).comap (H k.succ).subtype)
     have h2 : Module.finrank K ((H k.castSucc).comap (H k.succ).subtype) =
         Module.finrank K (H k.castSucc) := (Submodule.comapSubtypeEquivOfLe hle).finrank_eq
-    have h3 : Module.finrank K (Submodule.flagQuot H k) = n k := by
+    have h3 : Module.finrank K (Submodule.subquot (H k.castSucc) (H k.succ)) = n k := by
       rw [(ψ k).finrank_eq, Module.finrank_fintype_fun_eq_card, Fintype.card_fin]
     rw [h3, h2] at h1
     omega
@@ -125,11 +92,12 @@ theorem exists_linearEquiv_blockTriangular_of_flag {ι : Type*} {V : Type*} [Add
     [Module ℂ V] [FiniteDimensional ℂ V] {r : ℕ} (H : Fin (r + 1) → Submodule ℂ V)
     (h0 : H 0 = ⊥) (htop : H (Fin.last r) = ⊤) (hmono : Monotone H)
     (f : ι → Module.End ℂ V) (hf : ∀ i k, ∀ x ∈ H k, f i x ∈ H k)
-    (n : Fin r → ℕ) (ψ : ∀ k, Submodule.flagQuot H k ≃ₗ[ℂ] (Fin (n k) → ℂ)) :
+    (n : Fin r → ℕ) (ψ : ∀ k, Submodule.subquot (H k.castSucc) (H k.succ) ≃ₗ[ℂ] (Fin (n k) → ℂ)) :
     ∃ e : V ≃ₗ[ℂ] ((Σ k : Fin r, Fin (n k)) → ℂ),
       (∀ i, (LinearMap.toMatrix' (e.conj (f i))).BlockTriangular Sigma.fst) ∧
       (∀ i k, Matrix.blockDiag' (LinearMap.toMatrix' (e.conj (f i))) k =
-        LinearMap.toMatrix' ((ψ k).conj (LinearMap.flagQuotMap H (f i) (hf i) k))) ∧
+        LinearMap.toMatrix' ((ψ k).conj (Submodule.subquotMap (H k.castSucc) (H k.succ) (f i)
+          (hf i k.castSucc) (hf i k.succ)))) ∧
       (∀ k, ∀ v : H k.succ, ∀ j, e (v : V) ⟨k, j⟩ = ψ k (Submodule.Quotient.mk v) j) ∧
       (∀ k, ∀ v ∈ H k.castSucc, ∀ l : Fin r, k ≤ l → ∀ j, e v ⟨l, j⟩ = 0) := by
   classical
@@ -137,11 +105,12 @@ theorem exists_linearEquiv_blockTriangular_of_flag {ι : Type*} {V : Type*} [Add
   -- quotient maps.
   choose W hW using
     fun k : Fin r => Submodule.exists_isCompl ((H k.castSucc).comap (H k.succ).subtype)
-  set equivK : ∀ k, Submodule.flagQuot H k ≃ₗ[ℂ] (W k) :=
+  set equivK : ∀ k, Submodule.subquot (H k.castSucc) (H k.succ) ≃ₗ[ℂ] (W k) :=
     fun k => Submodule.quotientEquivOfIsCompl _ (W k) (hW k) with hequivK
-  set σ : ∀ k, Submodule.flagQuot H k →ₗ[ℂ] H k.succ :=
+  set σ : ∀ k, Submodule.subquot (H k.castSucc) (H k.succ) →ₗ[ℂ] H k.succ :=
     fun k => (W k).subtype ∘ₗ (equivK k).toLinearMap with hσdef
-  have hσ : ∀ k (x : Submodule.flagQuot H k), Submodule.Quotient.mk (σ k x) = x := by
+  have hσ : ∀ k (x : Submodule.subquot (H k.castSucc) (H k.succ)),
+      Submodule.Quotient.mk (σ k x) = x := by
     intro k x
     exact Submodule.mk_quotientEquivOfIsCompl_apply (hW k) x
   -- The block-`k` term of the coordinate map.
@@ -234,7 +203,7 @@ theorem exists_linearEquiv_blockTriangular_of_flag {ι : Type*} {V : Type*} [Add
       rw [← heq]
       exact hterm_l0_mem
     have hzero : Submodule.Quotient.mk (σ l0 ((ψ l0).symm (fun j => x ⟨l0, j⟩))) =
-        (0 : Submodule.flagQuot H l0) := by
+        (0 : Submodule.subquot (H l0.castSucc) (H l0.succ)) := by
       rw [Submodule.Quotient.mk_eq_zero]
       exact hmem
     rw [hσ l0 ((ψ l0).symm (fun j => x ⟨l0, j⟩))] at hzero
@@ -339,7 +308,7 @@ theorem exists_linearEquiv_blockTriangular_of_flag {ι : Type*} {V : Type*} [Add
       rw [eq_sub_iff_add_eq, add_comm]
       exact hsplit.symm
     have hmk : (Submodule.Quotient.mk (⟨term k (e (v : V)), hterm_mem k (e (v : V))⟩ : H k.succ) :
-        Submodule.flagQuot H k) = Submodule.Quotient.mk v := by
+        Submodule.subquot (H k.castSucc) (H k.succ)) = Submodule.Quotient.mk v := by
       rw [Submodule.Quotient.eq]
       rw [Submodule.mem_comap]
       change ((⟨term k (e (v : V)), hterm_mem k (e (v : V))⟩ : H k.succ) : V) - (v : V) ∈
@@ -387,7 +356,8 @@ theorem exists_linearEquiv_blockTriangular_of_flag {ι : Type*} {V : Type*} [Add
     exact hzero
   -- Clause 2: diagonal blocks are the induced subquotient maps.
   have hclause2 : ∀ i k, Matrix.blockDiag' (LinearMap.toMatrix' (e.conj (f i))) k =
-      LinearMap.toMatrix' ((ψ k).conj (LinearMap.flagQuotMap H (f i) (hf i) k)) := by
+      LinearMap.toMatrix' ((ψ k).conj (Submodule.subquotMap (H k.castSucc) (H k.succ) (f i)
+        (hf i k.castSucc) (hf i k.succ))) := by
     intro i k
     funext row col
     rw [Matrix.blockDiag'_apply, LinearMap.toMatrix'_apply, LinearMap.toMatrix'_apply]
@@ -411,9 +381,8 @@ theorem exists_linearEquiv_blockTriangular_of_flag {ι : Type*} {V : Type*} [Add
       rw [h4]
       exact hσ k _
     have hfeq : Submodule.Quotient.mk (⟨f i (Φ w), hfΦw_mem⟩ : H k.succ) =
-        LinearMap.flagQuotMap H (f i) (hf i) k
+        Submodule.subquotMap (H k.castSucc) (H k.succ) (f i) (hf i k.castSucc) (hf i k.succ)
           (Submodule.Quotient.mk (⟨Φ w, hΦw_mem⟩ : H k.succ)) := by
-      rw [LinearMap.flagQuotMap_mk]
-      congr 1
+      rw [Submodule.subquotMap_mk]
     rw [hfeq, hΦw_eq]
   exact ⟨e, hclause1, hclause2, hclause3, hclause4⟩
