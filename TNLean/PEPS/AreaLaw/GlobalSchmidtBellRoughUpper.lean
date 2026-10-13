@@ -95,11 +95,7 @@ theorem eventually_suppliedGlobalSchmidtBellPrevector_rough_upper
             4 * (Bsh / z + Bexc) + Real.bellOverlapRemainder d c K k := by
   classical
   intro β ΩX z hz ψ hmass
-  have hu :=
-    FiniteProduct.eventually_suppliedReplicaPrevector_rough_upper
-      (S := J) β Ω X E hΩ hz regions hnested hdisjoint ell
-      (t := 2 / (K : ℝ))
-      (div_pos (by norm_num) (by exact_mod_cast (show 0 < K by omega)))
+  run_tac Lean.throwError (α := Unit) "rough-upper six introductions reached"
   done
 
 end TNLean.PEPS.AreaLaw
