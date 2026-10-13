@@ -103,6 +103,7 @@ theorem rootPath_augmented_compressed_bandProduct
       Transport.filteredVector (D.rootPath (nS q d) t k p) preS =
         ZS *ᵥ ((‖w‖⁻¹ : ℂ) • w).ofLp := by
   classical
+  intro e ZO vO T AO B M w
   done
 
 end TNLean.PEPS.AreaLaw.Scan
