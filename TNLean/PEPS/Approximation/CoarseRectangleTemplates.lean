@@ -117,7 +117,8 @@ theorem isBoxUnion_of_ordConnected {N₀ k : ℕ} (hk : k ≤ N₀) (I J : Fin k
       hPb.bddBelow hPb.bddAbove
     have hQ := mem_iff_of_ordConnected (ordConnected_intCast_preimage (hJ a)) hQn
       hQb.bddBelow hQb.bddAbove
-    rw [ite_eq_left_of_eq_true _ _ (eq_true ⟨hPn, hQn⟩), ite_eq_left_of_eq_true _ _ (eq_true ⟨hPn, hQn⟩),
+    have hg : good a = True := eq_true ⟨hPn, hQn⟩
+    rw [ite_eq_left_of_eq_true _ _ hg, ite_eq_left_of_eq_true _ _ hg,
       Finset.mem_Icc, Prod.mk_le_mk, Prod.mk_le_mk]
     change t.1 ∈ P a ∧ t.2 ∈ Q a ↔ _
     rw [hP, hQ]

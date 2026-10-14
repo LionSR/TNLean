@@ -63,7 +63,9 @@ theorem boundaryEndpoints_univ (Λ : Finset (ℤ × ℤ)) :
   have : edgeBoundary Λ (Finset.univ : Finset (Site Λ)) = ∅ := by
     ext e
     simp [edgeBoundary]
-  simp [Geometry.boundaryEndpoints, this]
+  unfold Geometry.boundaryEndpoints
+  rw [this]
+  simp
 
 /-- The mutual information of the empty region with any region vanishes. -/
 private theorem mutualInformation_empty_left {V : Type*} [Fintype V] [DecidableEq V]
@@ -93,8 +95,9 @@ Proposition 3.1, `02-information.tex` lines 91–145. -/
 theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D₀ Ctpl : ℝ}
     (hΔ : 0 < Δ) (hcol : SublinearCollarBound q R J Δ D₀ Ctpl) (N₀ : ℕ) (A₀ : ℝ) :
     ∃ β : ℝ, β < 1 ∧ ∃ C u₀ : ℝ, ∀ u : ℝ, u₀ ≤ u →
-      ∀ (Λ : Finset (ℤ × ℤ)) (h : LocalHamiltonian Λ q R J) (E₀ : ℝ) (Ω : StateSpace Λ q),
-        IsGappedGroundState Λ q h.operator E₀ Ω Δ →
+      ∀ (Λ : Finset (ℤ × ℤ)) (h : AreaLaw.LocalHamiltonian Λ q R J) (E₀ : ℝ)
+        (Ω : AreaLaw.StateSpace Λ q),
+        AreaLaw.IsGappedGroundState Λ q h.operator E₀ Ω Δ →
         ∀ T : Finset (ℤ × ℤ), IsBoxUnion N₀ T →
           (∀ x ∈ T, ∀ y ∈ T, (Scan.ambientSupDistance x y : ℝ) ≤ A₀ * u) →
           ∀ X ⊆ Finset.univ.filter (fun x : Site Λ ↦ x.val ∈ T),
@@ -116,7 +119,7 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D�
   set A : ℝ := max A₀ 1 with hA
   have hA1 : 1 ≤ A := le_max_right _ _
   set c₁ : ℝ := (max Ctpl 0 + 1) * (N₀ + 1) with hc₁
-  have hc₁ : 1 ≤ c₁ := by
+  have hc₁1 : 1 ≤ c₁ := by
     have h1 : 1 ≤ max Ctpl 0 + 1 := by linarith [le_max_right Ctpl 0]
     have h2 : (1 : ℝ) ≤ N₀ + 1 := by linarith [(Nat.cast_nonneg N₀ : (0 : ℝ) ≤ N₀)]
     nlinarith
@@ -195,7 +198,8 @@ theorem coarse_mutualInformation_le_of_sublinearCollarBound {q R : ℕ} {J Δ D�
   -- The collar bound with the cut `A = Λ`.
   have hsep : Tt.IsSeparated D₀ (Geometry.boundaryEndpoints Λ Finset.univ) := by
     intro x _ z hz
-    simp [boundaryEndpoints_univ] at hz
+    rw [boundaryEndpoints_univ] at hz
+    simp at hz
   obtain ⟨hI, hXcut, hScut, hYcut, hcard⟩ :=
     hcoll n s₀ ((le_max_left _ _).trans ((le_max_left _ _).trans hnN)) Λ h E₀ Ω hΩ
       Finset.univ Tt hsep hℓ
