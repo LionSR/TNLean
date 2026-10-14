@@ -20,7 +20,8 @@ The proof combines three steps:
   two-site gates (`QuantumCircuit.exists_isPairProduct_ctrlOp`);
 * a two-level rotation between configurations `a`, `b` differing at more sites is conjugated
   to one between `a` and a configuration `c` closer to `a` by a two-level quarter turn on
-  the pair `{c, b}` (`QuantumCircuit.twoLevel_conj_quarterTwo`);
+  the pair `{c, b}` (`QuantumCircuit.twoLevel_conj_quarterTwo`), which costs at most
+  `(2n + 1)` times the controlled count (`QuantumCircuit.isPairProduct_twoLevel_of_ctrlOp`);
 * the Givens decomposition writes a special unitary as a product of two-level rotations
   (`QuantumCircuit.isTwoLevelWord_of_det_eq_one`), and a global phase is a single-site gate.
 
@@ -72,13 +73,16 @@ end Conj
 
 variable {d n : ℕ}
 
-/-- **Two-level rotations are products of two-site gates.** For `d ≥ 1` and `n ≥ 2` there is
-`K` such that every two-level rotation or phase between two distinct configurations of the
-chain of `n` sites is a product of at most `K` gates on neighbouring sites. -/
-theorem exists_isPairProduct_twoLevel (hd : 0 < d) (hn : 2 ≤ n) :
-    ∃ K, ∀ a b : Fin n → Fin d, a ≠ b → ∀ g, IsSpecialTwo g →
-      IsPairProduct d n K (twoLevel a b g) := by
-  obtain ⟨K₁, hK₁⟩ := exists_isPairProduct_ctrlOp hd hn n
+/-- **Two-level rotations from controlled two-level operations.** If every single-site
+two-level rotation or phase controlled by at most `n` sites is a product of at most `K₁` gates on
+neighbouring sites, then every two-level rotation or phase between two distinct configurations of
+the chain of `n` sites is a product of at most `(2n + 1) K₁` such gates: configurations at
+Hamming distance `h + 1` are joined by conjugating with `h` quarter turns. -/
+theorem isPairProduct_twoLevel_of_ctrlOp {K₁ : ℕ}
+    (hK₁ : ∀ S : Finset (Fin n), S.card ≤ n → ∀ t, t ∉ S → ∀ (c : Fin n → Fin d) (α β : Fin d),
+      α ≠ β → ∀ g, IsSpecialTwo g → IsPairProduct d n K₁ (ctrlOp S c t (twoLevel α β g))) :
+    ∀ a b : Fin n → Fin d, a ≠ b → ∀ g, IsSpecialTwo g →
+      IsPairProduct d n ((2 * n + 1) * K₁) (twoLevel a b g) := by
   -- configurations differing at exactly one site
   have hone : ∀ (a : Fin n → Fin d) (t : Fin n) (β : Fin d), β ≠ a t → ∀ g, IsSpecialTwo g →
       IsPairProduct d n K₁ (twoLevel a (Function.update a t β) g) := by
@@ -141,12 +145,20 @@ theorem exists_isPairProduct_twoLevel (hd : 0 < d) (hn : 2 ≤ n) :
       have := (hT.star.mul (ih a c hac' g hg)).mul hT
       refine this.mono (le_of_eq ?_)
       ring
-  refine ⟨(2 * n + 1) * K₁, fun a b hab g hg => ?_⟩
+  intro a b hab g hg
   obtain ⟨h, hh⟩ : ∃ h, hammingDist a b = h + 1 :=
     ⟨hammingDist a b - 1, by have := hammingDist_pos.mpr hab; omega⟩
   refine (key h a b hh g hg).mono (Nat.mul_le_mul_right _ ?_)
   have := (hammingDist_le_card_fintype (x := a) (y := b)).trans_eq (Fintype.card_fin n)
   omega
+
+/-- **Two-level rotations are products of two-site gates.** For `d ≥ 1` and `n ≥ 2` there is
+`K` such that every two-level rotation or phase between two distinct configurations of the
+chain of `n` sites is a product of at most `K` gates on neighbouring sites. -/
+theorem exists_isPairProduct_twoLevel (hd : 0 < d) (hn : 2 ≤ n) :
+    ∃ K, ∀ a b : Fin n → Fin d, a ≠ b → ∀ g, IsSpecialTwo g →
+      IsPairProduct d n K (twoLevel a b g) :=
+  ⟨_, isPairProduct_twoLevel_of_ctrlOp (isPairProduct_ctrlOp_le_exponential hd hn n)⟩
 
 /-- A global phase `μ • 1` with `|μ| = 1` is a product of at most `2n` gates on neighbouring
 sites. -/

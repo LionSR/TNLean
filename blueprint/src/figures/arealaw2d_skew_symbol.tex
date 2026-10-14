@@ -1,0 +1,64 @@
+% Figure arealaw2d_skew_symbol.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL App. D 1 (Lemma 15, the one-copy skew), unnumbered
+% display.
+% Source: arXiv OpenAI2026AreaLaw, sections/04-conditional.tex:487-507 (Lemma 5.3,
+% conditional skew estimate, the entire function f) and
+% sections/05-replicas.tex:615-658 (Lemma 6.4, f_theta = f at s = a/2; there h is
+% any one-copy operator on PY).
+% Formula: f(s) = <theta, rho_P^{[s]} rho_Y^{[-s]} h rho_P^{[-s]} rho_Y^{[s]} theta>,
+% read right to left: theta, rho_Y^{[s]}, rho_P^{[-s]}, h, rho_Y^{[-s]}, rho_P^{[s]},
+% then the bra. Here Y = xU, rho_D is the marginal of theta on D, and
+% rho^{[s]} = sum_{p>0} p^s Pi_p is zero on the kernel for every complex s.
+% Ink-to-index: wires from top to bottom are P, x, U, F (names at the east of the
+% ket theta, off the equation axis after "f(s) ="); theta is the ket box on the east,
+% its conjugate (the bra) on the west, and F joins them directly. The picture is
+% mirrored about h: rho_P and rho_Y act on disjoint factors and commute, so each side
+% of h carries its rho_P power (P wire) and its rho_Y power (x and U wires) in one
+% column, rho_P^{[-s]} rho_Y^{[s]} east of h and rho_P^{[s]} rho_Y^{[-s]} west of it,
+% with opposite exponents in mirror positions. h (0 <= h <= I) is supported on P_0 x
+% with P = P_0 P_1, drawn on the P and x wires; it straddles the single dashed string
+% P | Y (labelled once, at its west end), which is not an index. Strip variable s
+% (the source writes z). Wires sit in rows 1, 5, 7, 9; the cut runs at row 3.5, two
+% rows below P, so its label P | Y clears the P wire.
+% Reduction: with Y empty, P = B and rho_P^{[s]} replaced by sigma^s this is the tilt
+% symbol f_i(s) = <Theta, sigma^s h_i sigma^{-s} Theta> of AL Sec. 3 (AL Lemma 7,
+% [S, Lemma 3.1]).
+% Boundary signature: closed (a scalar); every index is contracted.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=14, bonds=none, size=l]
+        \tn[at=(1,1), name=skBra, skin=box, wires=9,
+            ports={0@1:physical, 0@5:physical, 0@7:physical, 0@9:physical}]{\overline{\theta}}
+        \tn[at=(1,4), name=skPpos, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{\rho_P^{[s]}}
+        \tn[at=(5,4), name=skYneg, skin=box, wires=3, label pos=s,
+            ports={180@1:physical, 180@3:physical, 0@1:physical, 0@3:physical}]{\rho_Y^{[-s]}}
+        \tn[at=(1,7), name=skH, skin=box, wires=5, label pos=n,
+            ports={180@1:physical, 180@5:physical, 0@1:physical, 0@5:physical}]{h}
+        \tn[at=(1,10), name=skPneg, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{\rho_P^{[-s]}}
+        \tn[at=(5,10), name=skYpos, skin=box, wires=3, label pos=s,
+            ports={180@1:physical, 180@3:physical, 0@1:physical, 0@3:physical}]{\rho_Y^{[s]}}
+        \tn[at=(1,13), name=skKet, skin=box, wires=9,
+            ports={180@1:physical, 180@5:physical, 180@7:physical, 180@9:physical}]{\theta}
+        \tnwire{skKet.180@1}{skPneg.0}
+        \tnwire{skPneg.180}{skH.0@1}
+        \tnwire{skH.180@1}{skPpos.0}
+        \tnwire{skPpos.180}{skBra.0@1}
+        \tnwire{skKet.180@5}{skYpos.0@1}
+        \tnwire{skYpos.180@1}{skH.0@5}
+        \tnwire{skH.180@5}{skYneg.0@1}
+        \tnwire{skYneg.180@1}{skBra.0@5}
+        \tnwire{skKet.180@7}{skYpos.0@3}
+        \tnwire{skYpos.180@3}{skYneg.0@3}
+        \tnwire{skYneg.180@3}{skBra.0@7}
+        \tnwire{skKet.180@9}{skBra.0@9}
+        \tnwire[kind=string, stroke=dashed, name=skCut]{midway (3,2) and (4,2)}{midway (3,12) and (4,12)}
+        \tnmark[form=label, label pos=n]{on skCut 0.06}{P\,\vert\,Y}
+        \tnmark[form=label, label pos=e]{(1,13)}{P}
+        \tnmark[form=label, label pos=e]{(5,13)}{x}
+        \tnmark[form=label, label pos=e]{(7,13)}{U}
+        \tnmark[form=label, label pos=e]{(9,13)}{F}
+    \end{tenkz}
+\end{center}

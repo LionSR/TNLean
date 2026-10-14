@@ -21,18 +21,23 @@ Checks:
   blueprint macro outside the provided four, no ``\\tnset``/``\\tndeclare``/
   ``\\tikzset``/``\\providecommand`` outside a picture body, and every
   ``\\tnl...`` label macro declared in the body that uses it, with one default
-  per file, listed in the header, and owned by one file only;
+  per file, listed in the header, and owned by one file only.  A figure that no
+  chapter inputs may also route a joiner of its ``tenkzequation`` (the text
+  between two pictures) through a label macro, declared with
+  ``\\providecommand`` in the ``tenkzequation`` body before its first use: no
+  web build compiles such a figure, so no picture unit has to see it;
 * hosts (chapters, appendices, content routers): every ``\\input{figures/...}``
   resolves, stands on its own line and lies outside any ``tenkzequation``;
   ``\\tnfigure`` is never used there; each figure's ``Owner:`` line names
   exactly the hosts that input it, or ``none``;
 * ``tnleanfigures.sty`` provides ``\\ket``, ``\\bra``, ``\\C``, ``\\spn`` with the
   meanings ``macros/common.tex`` gives them;
-* one compile (pdflatex by default, the notes' engine) of a plain ``article``
-  with only ``\\usepackage{tnleanfigures}`` that typesets every figure, then
-  every parametrized figure again under ``\\newcommand`` overrides.  Without a
-  TeX engine or tenkz the compile is skipped with a message, unless
-  ``--require-tex`` is given (the default under GitHub Actions, so the
+* a compile (pdflatex by default, the notes' engine) of plain ``article``
+  documents with only ``\\usepackage{tnleanfigures}`` that typeset every figure,
+  then every parametrized figure again under ``\\newcommand`` overrides; the
+  figures are split round-robin over ``--jobs`` documents compiled in
+  parallel.  Without a TeX engine or tenkz the compile is skipped with a
+  message, unless ``--require-tex`` is given (the default under GitHub Actions, so the
   discovering runner ``scripts/run_diagram_tests.py`` needs no flag).
 
 The static checks are also run on a synthetic figure and on mutations of it,
@@ -48,6 +53,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -288,11 +294,42 @@ def check_figure(
     in_body = bytearray(len(text))
     for env in pictures:
         in_body[env.body_start : env.body_end] = b"\1" * (env.body_end - env.body_start)
+    # Joiner text: a top-level tenkzequation body outside its pictures.  The web
+    # build typesets joiners apart from the picture units and nothing checks a
+    # label macro there, so only a figure that no chapter inputs may use one.
+    joiner = [" "] * len(text)
+    for env in top:
+        if env.name == "tenkzequation":
+            joiner[env.body_start : env.body_end] = text[env.body_start : env.body_end]
+    for env in pictures:
+        joiner[env.start : env.end] = " " * (env.end - env.start)
+    joiner_text = "".join(joiner)
+    note_only = not owners
     for match in command_re(BODY_ONLY_COMMANDS).finditer(text):
-        if not in_body[match.start()]:
-            fail(line_of(text, match.start()), f"\\{match.group(1)} outside a picture body")
+        if in_body[match.start()]:
+            continue
+        line = line_of(text, match.start())
+        if match.group(1) != "providecommand" or not joiner_text[match.start()].strip():
+            fail(line, f"\\{match.group(1)} outside a picture body")
+        elif not note_only:
+            fail(line, "a joiner label macro needs a figure that no chapter inputs"
+                 " (the web build typesets joiners apart from the pictures)")
 
     defaults: dict[str, str] = {}
+    try:
+        joiner_declared = provided_defaults(joiner_text)
+    except ValueError as error:
+        fail(1, f"\\providecommand in a joiner: {error}")
+        joiner_declared = []
+    joiner_first: dict[str, int] = {}
+    for macro, default, offset in joiner_declared:
+        line = line_of(text, offset)
+        if not TNL_NAME_RE.fullmatch(macro):
+            fail(line, f"{macro}: \\providecommand is only for \\tnl<Tag><Role> label macros")
+            continue
+        joiner_first.setdefault(macro, offset)
+        if defaults.setdefault(macro, default) != default:
+            fail(line, f"{macro} has two defaults in one file")
     for env in pictures:
         body = text[env.body_start : env.body_end]
         try:
@@ -320,8 +357,15 @@ def check_figure(
                     " (the web build compiles each body alone)",
                 )
     for match in TNL_RE.finditer(text):
-        if not in_body[match.start()]:
-            fail(line_of(text, match.start()), f"{match.group(0)} outside a picture body")
+        if in_body[match.start()]:
+            continue
+        macro, line = match.group(0), line_of(text, match.start())
+        if not joiner_text[match.start()].strip():
+            fail(line, f"{macro} outside a picture body")
+        elif text[: match.start()].rstrip().endswith(("\\providecommand{", "\\providecommand")):
+            continue
+        elif macro not in joiner_first or joiner_first[macro] > match.start():
+            fail(line, f"{macro} is used in a joiner before the tenkzequation body declares it")
     if defaults:
         header = " ".join(line for line in lines if line.startswith("% Label macros:"))
         for macro in defaults:
@@ -488,6 +532,46 @@ MUTATIONS = {
     "header name": ("% Figure demo_case.", "% Figure other."),
     "header owner": ("% Owner: none (note-only figure).\n", ""),
     "unlisted label": ("% Label macros: \\tnlDmLeft{T}\n", ""),
+    "undeclared joiner label": ("=\n", "\\tnlDmLeft\n"),
+}
+
+# A note-only figure whose joiner is a label macro declared in the tenkzequation body.
+JOINER_SYNTHETIC = r"""% Figure demo_case.
+% Owner: none (note-only figure).
+% Used by: this test.
+% Label macros: \tnlDmJoin{=}
+\begin{tenkzequation}
+\tenkzkernel
+\providecommand{\tnlDmJoin}{=}%
+\begin{tenkz}[rows={op}, cols=1]
+\tn{\ket{0}}
+\end{tenkz}
+$\tnlDmJoin$
+\begin{tenkz}[rows={op}, cols=1]
+\tn{\ket{0}}
+\end{tenkz}
+\end{tenkzequation}
+"""
+
+CHAPTER_HOST = "chapter/ch99_demo.tex"
+CHAPTER_OWNER = ("% Owner: none (note-only figure).", f"% Owner: {CHAPTER_HOST} (def:demo)")
+
+JOINER_MUTATIONS = {
+    "joiner use before declare": (
+        "\\providecommand{\\tnlDmJoin}{=}%\n\\begin{tenkz}[rows={op}, cols=1]\n\\tn{\\ket{0}}\n"
+        "\\end{tenkz}\n$\\tnlDmJoin$\n",
+        "\\begin{tenkz}[rows={op}, cols=1]\n\\tn{\\ket{0}}\n\\end{tenkz}\n$\\tnlDmJoin$\n"
+        "\\providecommand{\\tnlDmJoin}{=}%\n",
+    ),
+    "joiner declared in a picture only": (
+        "\\providecommand{\\tnlDmJoin}{=}%\n\\begin{tenkz}[rows={op}, cols=1]\n",
+        "\\begin{tenkz}[rows={op}, cols=1]\n\\providecommand{\\tnlDmJoin}{=}%\n",
+    ),
+    "joiner two defaults": (
+        "\\tn{\\ket{0}}\n\\end{tenkz}\n$",
+        "\\providecommand{\\tnlDmJoin}{-}\n\\tn{\\ket{0}}\n\\end{tenkz}\n$",
+    ),
+    "unlisted joiner label": ("% Label macros: \\tnlDmJoin{=}\n", ""),
 }
 
 
@@ -513,6 +597,24 @@ def self_test(src: Path) -> list[str]:
         assert SYNTHETIC.count(old) >= 1, label
         if not check_figure("demo_case", SYNTHETIC.replace(old, new, 1), forbidden, []):
             failures.append(f"mutation {label!r} was accepted")
+    clean = check_figure("demo_case", JOINER_SYNTHETIC, forbidden, [])
+    if clean:
+        failures.append(f"synthetic joiner figure rejected: {clean}")
+    for label, (old, new) in JOINER_MUTATIONS.items():
+        assert JOINER_SYNTHETIC.count(old) >= 1, label
+        if not check_figure("demo_case", JOINER_SYNTHETIC.replace(old, new, 1), forbidden, []):
+            failures.append(f"mutation {label!r} was accepted")
+    # A chapter figure may not carry a joiner label: the same file with a matching
+    # Owner line must be rejected, while the plain synthetic figure is accepted.
+    hosted = check_figure(
+        "demo_case", SYNTHETIC.replace(*CHAPTER_OWNER), forbidden, [CHAPTER_HOST]
+    )
+    if hosted:
+        failures.append(f"synthetic chapter figure rejected: {hosted}")
+    if not check_figure(
+        "demo_case", JOINER_SYNTHETIC.replace(*CHAPTER_OWNER), forbidden, [CHAPTER_HOST]
+    ):
+        failures.append("mutation 'joiner label in a chapter figure' was accepted")
     return failures
 
 
@@ -540,7 +642,12 @@ def contract_document(names: list[str], labels: dict[str, set[str]]) -> str:
 
 
 def compile_contract(
-    src: Path, names: list[str], labels: dict[str, set[str]], engine: str, require: bool
+    src: Path,
+    names: list[str],
+    labels: dict[str, set[str]],
+    engine: str,
+    require: bool,
+    jobs: int,
 ) -> list[str]:
     """Compile the note contract; return findings (empty on success or skip)."""
 
@@ -568,47 +675,72 @@ def compile_contract(
             return skip(f"{error}; no tikz-tensor-networks.sty fallback either")
         print(f"NOTE: pinned tenkz missing ({error}); compiling with the installed "
               f"tikz-tensor-networks fallback {fallback.stdout.strip()}")
+    env = os.environ.copy()
+    # blueprint/src is non-recursive on purpose, as in the notes: figures/<name>
+    # and macros/diagrams resolve, chapter files do not leak in by bare name.
+    parts = [str(src)]
+    if tenkz_dir is not None:
+        parts.append(f"{tenkz_dir}//")
+    env["TEXINPUTS"] = os.pathsep.join(parts) + os.pathsep + env.get("TEXINPUTS", "")
+    for key, value in (
+        ("pool_size", "12500000"), ("main_memory", "12000000"),
+        ("extra_mem_top", "8000000"), ("extra_mem_bot", "8000000"),
+    ):
+        env.setdefault(key, value)
+    env["max_print_line"] = "10000"  # unwrapped log lines, so file paths stay greppable
+    # The figures are split round-robin into one document per job, compiled in
+    # parallel: a single document of every figure outgrows the runner's per-test
+    # time limit as the collection grows.
+    count = max(1, min(jobs, len(names)))
+    pdftotext = shutil.which("pdftotext")
+    chunks = [names[i::count] for i in range(count)]
     with tempfile.TemporaryDirectory(prefix="tnleanfigures-contract-") as tmp:
-        work = Path(tmp)
-        (work / "contract.tex").write_text(contract_document(names, labels), encoding="utf-8")
-        env = os.environ.copy()
-        # blueprint/src is non-recursive on purpose, as in the notes: figures/<name>
-        # and macros/diagrams resolve, chapter files do not leak in by bare name.
-        parts = [str(work), str(src)]
-        if tenkz_dir is not None:
-            parts.append(f"{tenkz_dir}//")
-        env["TEXINPUTS"] = os.pathsep.join(parts) + os.pathsep + env.get("TEXINPUTS", "")
-        for key, value in (
-            ("pool_size", "12500000"), ("main_memory", "12000000"),
-            ("extra_mem_top", "8000000"), ("extra_mem_bot", "8000000"),
-        ):
-            env.setdefault(key, value)
-        env["max_print_line"] = "10000"  # unwrapped log lines, so file paths stay greppable
-        run = subprocess.run(
-            [exe, "-interaction=nonstopmode", "-halt-on-error", "contract.tex"],
-            cwd=work, env=env, check=False, text=True, errors="replace",
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=1800,
-        )
-        if run.returncode or not (work / "contract.pdf").is_file():
-            tail = "\n".join(run.stdout.splitlines()[-40:])
-            return [f"note-contract compile with {engine} failed (exit {run.returncode}):\n{tail}"]
-        log = (work / "contract.log").read_text(encoding="utf-8", errors="replace")
-        expected = sum(len(labels[name]) for name in names if labels.get(name))
-        pdftotext = shutil.which("pdftotext")
-        if expected and pdftotext:
+        root = Path(tmp)
+
+        def compile_chunk(index: int) -> tuple[list[str], str, int | None]:
+            chunk = chunks[index]
+            work = root / f"part{index}"
+            work.mkdir()
+            (work / "contract.tex").write_text(contract_document(chunk, labels), encoding="utf-8")
+            run = subprocess.run(
+                [exe, "-interaction=nonstopmode", "-halt-on-error", "contract.tex"],
+                cwd=work, env=env, check=False, text=True, errors="replace",
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=1800,
+            )
+            if run.returncode or not (work / "contract.pdf").is_file():
+                tail = "\n".join(run.stdout.splitlines()[-40:])
+                return [
+                    f"note-contract compile with {engine} failed (exit {run.returncode})"
+                    f" on {', '.join(chunk)}:\n{tail}"
+                ], "", None
+            log = (work / "contract.log").read_text(encoding="utf-8", errors="replace")
+            if pdftotext is None:
+                return [], log, None
             text = subprocess.run(
                 [pdftotext, "contract.pdf", "-"], cwd=work, check=False, text=True,
                 errors="replace", stdout=subprocess.PIPE,
             ).stdout
-            if text.count(OVERRIDE) < expected:
-                return [
-                    f"host overrides did not win: {text.count(OVERRIDE)} of at least"
-                    f" {expected} label macros show the \\newcommand value"
-                ]
-        used = re.findall(r"\(([^()\s]*(?:tenkz|tikz-tensor-networks)\.sty)", log)
-        print(f"PASS: note contract compiled with {engine}: {len(names)} figures,"
-              f" {sum(1 for n in names if labels.get(n))} overridden;"
-              f" tenkz from {used[0] if used else 'unknown'}")
+            return [], log, text.count(OVERRIDE)
+
+        with ThreadPoolExecutor(max_workers=count) as pool:
+            results = list(pool.map(compile_chunk, range(count)))
+    failures = [failure for found, _, _ in results for failure in found]
+    if failures:
+        return failures
+    # One count over all documents, exactly as for a single document, so the
+    # result does not depend on how the figures are split.
+    expected = sum(len(labels[name]) for name in names if labels.get(name))
+    if expected and pdftotext is not None:
+        shown = sum(count or 0 for _, _, count in results)
+        if shown < expected:
+            return [
+                f"host overrides did not win: {shown} of at least {expected} label"
+                " macros show the \\newcommand value"
+            ]
+    used = re.findall(r"\(([^()\s]*(?:tenkz|tikz-tensor-networks)\.sty)", results[0][1])
+    print(f"PASS: note contract compiled with {engine} in {count} parallel documents:"
+          f" {len(names)} figures, {sum(1 for n in names if labels.get(n))} overridden;"
+          f" tenkz from {used[0] if used else 'unknown'}")
     return []
 
 
@@ -621,6 +753,8 @@ def main() -> int:
                         help="fail instead of skipping when the compile cannot run"
                         " with the pinned tenkz (the default under GitHub Actions)")
     parser.add_argument("--no-compile", action="store_true", help="static checks only")
+    parser.add_argument("--jobs", type=int, default=os.cpu_count() or 1,
+                        help="documents compiled in parallel (default: the CPU count)")
     args = parser.parse_args()
     src = args.src.resolve()
 
@@ -632,10 +766,12 @@ def main() -> int:
             print(f"FAIL: {failure}", file=sys.stderr)
         return 1
     print(f"PASS: {len(names)} shared figures, hosts and tnleanfigures.sty pass the static checks;"
-          f" {len(MUTATIONS) + 2} mutations rejected")
+          f" {len(MUTATIONS) + len(JOINER_MUTATIONS) + 2} mutations rejected")
     if args.no_compile:
         return 0
-    compile_failures = compile_contract(src, names, labels, args.engine, args.require_tex)
+    compile_failures = compile_contract(
+        src, names, labels, args.engine, args.require_tex, args.jobs
+    )
     for failure in compile_failures:
         print(f"FAIL: {failure}", file=sys.stderr)
     return 1 if compile_failures else 0

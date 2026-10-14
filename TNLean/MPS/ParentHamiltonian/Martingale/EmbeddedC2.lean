@@ -75,13 +75,7 @@ theorem openSuffixParentHamiltonianES_eq_orthogonal_starProjection_ker
     openSuffixParentHamiltonianES_isSymmetricProjection A hL hLn hnN
   apply hH.ext (Submodule.isSymmetricProjection_starProjection (LinearMap.ker H)ᗮ)
   rw [Submodule.range_starProjection]
-  have hrangeOrthogonal : (LinearMap.range H)ᗮ = LinearMap.ker H :=
-    (LinearMap.IsIdempotentElem.isSymmetric_iff_orthogonal_range
-      hH.isIdempotentElem).mp hH.isSymmetric
-  calc
-    LinearMap.range H = (LinearMap.range H)ᗮᗮ :=
-      (Submodule.orthogonal_orthogonal (LinearMap.range H)).symm
-    _ = (LinearMap.ker H)ᗮ := congrArg Submodule.orthogonal hrangeOrthogonal
+  rw [← hH.isSymmetric.orthogonal_range, Submodule.orthogonal_orthogonal]
 
 /-- Literal fixed-window identity \(H=I-G\), where \(G\) is the orthogonal
 projection onto the kernel of \(H\). -/

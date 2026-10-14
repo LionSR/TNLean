@@ -72,10 +72,7 @@ Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem mixedEndpointRowSector_isSymmetricProjection (site : Fin 2) :
     (mixedEndpointRowSector D₀ D₁ site).IsSymmetricProjection := by
   refine ⟨?_, mixedEndpointRowSector_isSymmetric site⟩
-  apply LinearMap.ext
-  intro v
-  apply PiLp.ext
-  intro σ
+  ext v σ
   simp only [Module.End.mul_apply, mixedEndpointRowSector_apply]
   unfold bondInterpolationWeight
   split <;> simp
@@ -85,10 +82,7 @@ Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem mixedEndpointColumnSector_isSymmetricProjection (site : Fin 2) :
     (mixedEndpointColumnSector D₀ D₁ site).IsSymmetricProjection := by
   refine ⟨?_, mixedEndpointColumnSector_isSymmetric site⟩
-  apply LinearMap.ext
-  intro v
-  apply PiLp.ext
-  intro σ
+  ext v σ
   simp only [Module.End.mul_apply, mixedEndpointColumnSector_apply]
   unfold bondInterpolationWeight
   split <;> simp
@@ -98,10 +92,7 @@ Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem mixedEndpointRowSector_commute_columnSector (i j : Fin 2) :
     Commute (mixedEndpointRowSector D₀ D₁ i) (mixedEndpointColumnSector D₀ D₁ j) := by
   apply (commute_iff_eq _ _).mpr
-  apply LinearMap.ext
-  intro v
-  apply PiLp.ext
-  intro σ
+  ext v σ
   simp only [Module.End.mul_apply, mixedEndpointRowSector_apply,
     mixedEndpointColumnSector_apply]
   exact mul_left_comm _ _ _

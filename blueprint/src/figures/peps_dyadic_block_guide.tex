@@ -1,83 +1,74 @@
 % Figure peps_dyadic_block_guide.
 % Owner: chapter/ch24_peps_dyadic_geometry.tex (def:peps_dyadic_block_guide).
-% Used by: gapped-2d-notes PP Sec. 8.
+% Used by: gapped-2d-notes PP Sec. VII A (hierarchy and guides, Definition 6), Fig. 6.
 % Source: OpenAI2026PolynomialPEPS, sections/06-geometry.tex:60--100 (the
 % passage from 2n-squares to n-squares); no source figure.  The order in which
 % the blocks are repainted is not fixed by the source; this is one stage.
 % Ink-to-index: each box is one n-block of the root square [0,N]^2 with N=4n,
-% carrying its block label; the four gray contours are the 2n-parents.
-% Blue boxes B_1,...,B_4 are repainted blocks with their new labels; the
-% orange box is the block S being repainted, still carrying its parent label
-% A_2; every other block of the root square carries its parent label A_2, A_3
-% or A_4.  The asterisks are the blocks outside the root square, which carry
-% the placeholder.  The labels of S's neighbours across its four edges are its
-% exterior labels C_e: B_2 (west), A_2 (east and south) and the placeholder
-% (north).  Boxes are blocks, not tensors: no wires, no contractions, no
-% indices; boundary signature empty.
+% carrying its block label inscribed; the four gray contours are the
+% 2n-parents and the black square outline is the root square.  Blue boxes
+% B_1,...,B_4 are repainted blocks with their new labels; the orange box,
+% labelled S beside it, is the block being repainted, still carrying its
+% parent label A_2; every other block of the root square carries its parent
+% label A_2, A_3 or A_4.  The asterisks, centred on their blocks, are the
+% blocks outside the root square, which carry the placeholder.  The labels
+% of S's neighbours across its four edges are its exterior labels C_e: B_2
+% (west), A_2 (east and south) and the placeholder (north).  Boxes are
+% blocks, not tensors: no wires, no contractions, no indices; the root
+% outline is a closed string, not an index.
+% Boundary signature: empty.
+% Not to scale: the blocks are drawn as separated boxes, not abutting tiles.
+% Label macros: none.
 \begin{tenkzequation}
     \tenkzkernel
-    \begin{tenkz}[lattice={6x6}, bonds=none, size=s] % chktex 29
+    \begin{tenkz}[lattice={6x6}, bonds=none, size=m] % chktex 29
         \tndeclare{species}{repainted}{hue=source:cyan}
         \tndeclare{species}{current}{hue=source:orange}
-        \tn[at=(1,1), skin=none]{}
-        \tnmark[form=label]{(1,1)}{$\ast$}
-        \tn[at=(1,2), skin=none]{}
-        \tnmark[form=label]{(1,2)}{$\ast$}
-        \tn[at=(1,3), skin=none]{}
-        \tnmark[form=label]{(1,3)}{$\ast$}
-        \tn[at=(1,4), skin=none]{}
-        \tnmark[form=label]{(1,4)}{$\ast$}
-        \tn[at=(1,5), skin=none]{}
-        \tnmark[form=label]{(1,5)}{$\ast$}
-        \tn[at=(1,6), skin=none]{}
-        \tnmark[form=label]{(1,6)}{$\ast$}
-        \tn[at=(2,1), skin=none]{}
-        \tnmark[form=label]{(2,1)}{$\ast$}
+        % A free label stands half a cell north of its address, so each
+        % placeholder is addressed half a cell south to centre it on its block.
+        \tnmark[form=label]{0.5 s of (1,1)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (1,2)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (1,3)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (1,4)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (1,5)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (1,6)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (2,1)}{$\ast$}
         \tn[at=(2,2), skin=box, species=repainted]{B_1}
         \tn[at=(2,3), skin=box, species=repainted]{B_2}
         \tn[at=(2,4), name=dyadicCurrent, skin=box, species=current]{A_2}
         \tn[at=(2,5), skin=box]{A_2}
-        \tn[at=(2,6), skin=none]{}
-        \tnmark[form=label]{(2,6)}{$\ast$}
-        \tn[at=(3,1), skin=none]{}
-        \tnmark[form=label]{(3,1)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (2,6)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (3,1)}{$\ast$}
         \tn[at=(3,2), skin=box, species=repainted]{B_3}
         \tn[at=(3,3), skin=box, species=repainted]{B_4}
         \tn[at=(3,4), skin=box]{A_2}
         \tn[at=(3,5), skin=box]{A_2}
-        \tn[at=(3,6), skin=none]{}
-        \tnmark[form=label]{(3,6)}{$\ast$}
-        \tn[at=(4,1), skin=none]{}
-        \tnmark[form=label]{(4,1)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (3,6)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (4,1)}{$\ast$}
         \tn[at=(4,2), skin=box]{A_3}
         \tn[at=(4,3), skin=box]{A_3}
         \tn[at=(4,4), skin=box]{A_4}
         \tn[at=(4,5), skin=box]{A_4}
-        \tn[at=(4,6), skin=none]{}
-        \tnmark[form=label]{(4,6)}{$\ast$}
-        \tn[at=(5,1), skin=none]{}
-        \tnmark[form=label]{(5,1)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (4,6)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (5,1)}{$\ast$}
         \tn[at=(5,2), skin=box]{A_3}
         \tn[at=(5,3), skin=box]{A_3}
         \tn[at=(5,4), skin=box]{A_4}
         \tn[at=(5,5), skin=box]{A_4}
-        \tn[at=(5,6), skin=none]{}
-        \tnmark[form=label]{(5,6)}{$\ast$}
-        \tn[at=(6,1), skin=none]{}
-        \tnmark[form=label]{(6,1)}{$\ast$}
-        \tn[at=(6,2), skin=none]{}
-        \tnmark[form=label]{(6,2)}{$\ast$}
-        \tn[at=(6,3), skin=none]{}
-        \tnmark[form=label]{(6,3)}{$\ast$}
-        \tn[at=(6,4), skin=none]{}
-        \tnmark[form=label]{(6,4)}{$\ast$}
-        \tn[at=(6,5), skin=none]{}
-        \tnmark[form=label]{(6,5)}{$\ast$}
-        \tn[at=(6,6), skin=none]{}
-        \tnmark[form=label]{(6,6)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (5,6)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (6,1)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (6,2)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (6,3)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (6,4)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (6,5)}{$\ast$}
+        \tnmark[form=label]{0.5 s of (6,6)}{$\ast$}
         \tnmark[form=enclosure]{(2,2) .. (3,3)}{}
         \tnmark[form=enclosure]{(2,4) .. (3,5)}{}
         \tnmark[form=enclosure]{(4,2) .. (5,3)}{}
         \tnmark[form=enclosure]{(4,4) .. (5,5)}{}
+        \tnwire[kind=string, closed, route=orth, name=bgRoot,
+            via={0.7 n of 0.7 w of (2,2), 0.7 n of 0.7 e of (2,5),
+                    0.7 s of 0.7 e of (5,5), 0.7 s of 0.7 w of (5,2)}]
+        \tnmark[form=label, species=current, label pos=e]{(2,4)}{$S$}
     \end{tenkz}
 \end{tenkzequation}

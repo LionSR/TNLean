@@ -144,6 +144,36 @@ theorem rightAct_add (F F' : Fin d → Fin d → Matrix (Fin D₁) (Fin 1) ℂ)
 
 variable {D D' : ℕ}
 
+/-- Entries of a left endpoint term acting on a family of matrices, through the physical
+pairing of the left inverse with that family. -/
+private theorem leftAct_leftEndpoint_apply (Â : Fin d → Matrix (Fin D) (Fin D) ℂ)
+    (e : Fin d → Matrix (Fin D) (Fin D') ℂ) (V : Matrix (Fin D') (Fin (D₁ * D)) ℂ)
+    (C : Fin d → Matrix (Fin m) (Fin n) ℂ) (a : Fin d) (γ : Fin m) (s : Fin D₁) (δ : Fin n) :
+    leftAct (leftEndpoint Â e V) C a γ (finProdFinEquiv (s, δ)) =
+      ∑ α, ∑ β, (e a * V) α (finProdFinEquiv (s, β)) * physPairing Â C (α, β) (γ, δ) := by
+  simp only [leftAct, leftEndpoint, physPairing, Matrix.submatrix_apply, Matrix.sum_apply,
+    Matrix.kroneckerMap_apply, Matrix.of_apply, Equiv.symm_apply_apply, Finset.sum_mul,
+    Finset.mul_sum]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun α _ ↦ ?_
+  rw [Finset.sum_comm]
+  exact Finset.sum_congr rfl fun β _ ↦ Finset.sum_congr rfl fun c _ ↦ by ring
+
+/-- Entries of a right endpoint term acting on a family of matrices, through the physical
+pairing of the left inverse with that family. -/
+private theorem rightAct_rightEndpoint_apply (Â : Fin d → Matrix (Fin D) (Fin D) ℂ)
+    (W : Matrix (Fin (D₁ * D)) (Fin D') ℂ) (f : Fin d → Matrix (Fin D') (Fin D) ℂ)
+    (C : Fin d → Matrix (Fin m) (Fin n) ℂ) (b : Fin d) (t : Fin D₁) (γ : Fin m) (δ : Fin n) :
+    rightAct (rightEndpoint Â W f) C b (finProdFinEquiv (t, γ)) δ =
+      ∑ α, ∑ β, (W * f b) (finProdFinEquiv (t, α)) β * physPairing Â C (α, β) (γ, δ) := by
+  simp only [rightAct, rightEndpoint, physPairing, Matrix.submatrix_apply, Matrix.sum_apply,
+    Matrix.kroneckerMap_apply, Matrix.of_apply, Equiv.symm_apply_apply, Finset.sum_mul,
+    Finset.mul_sum]
+  rw [Finset.sum_comm]
+  refine Finset.sum_congr rfl fun α _ ↦ ?_
+  rw [Finset.sum_comm]
+  exact Finset.sum_congr rfl fun β _ ↦ Finset.sum_congr rfl fun c _ ↦ by ring
+
 /-- **A left endpoint on its tensor.** If `Â` is a left inverse of `C`, the endpoint term
 `V e Â` acting on `C` is `e V`.
 
@@ -155,18 +185,8 @@ theorem leftAct_leftEndpoint (Â : Fin d → Matrix (Fin D) (Fin D) ℂ)
     leftAct (leftEndpoint Â e V) C a = e a * V := by
   ext γ s
   obtain ⟨⟨s, δ⟩, rfl⟩ := finProdFinEquiv.surjective s
-  have h : ∀ α β : Fin D, ∑ σ, Â σ α β * C σ γ δ = if α = γ ∧ β = δ then 1 else 0 :=
-    fun α β ↦ by
-      simpa [physPairing, Matrix.one_apply] using congrFun (congrFun hC (α, β)) (γ, δ)
-  simp only [leftAct, leftEndpoint, Matrix.submatrix_apply, Matrix.sum_apply,
-    Matrix.kroneckerMap_apply, Matrix.of_apply, Equiv.symm_apply_apply]
-  calc _ = ∑ α, ∑ β, (e a * V) α (finProdFinEquiv (s, β)) * ∑ c, Â c α β * C c γ δ := by
-        simp only [Finset.sum_mul, Finset.mul_sum]
-        rw [Finset.sum_comm]
-        refine Finset.sum_congr rfl fun α _ ↦ ?_
-        rw [Finset.sum_comm]
-        exact Finset.sum_congr rfl fun β _ ↦ Finset.sum_congr rfl fun c _ ↦ by ring
-    _ = _ := by simp [h, ite_and]
+  rw [leftAct_leftEndpoint_apply, hC]
+  simp [Matrix.one_apply, ite_and]
 
 /-- **A left endpoint on the other tensor.** If `Â ∘ C = 0`, the endpoint term `V e Â` acting on
 `C` vanishes.
@@ -179,17 +199,8 @@ theorem leftAct_leftEndpoint_eq_zero (Â : Fin d → Matrix (Fin D) (Fin D) ℂ)
     leftAct (leftEndpoint Â e V) C a = 0 := by
   ext γ s
   obtain ⟨⟨s, δ⟩, rfl⟩ := finProdFinEquiv.surjective s
-  have h : ∀ α β : Fin D, ∑ σ, Â σ α β * C σ γ δ = 0 :=
-    fun α β ↦ by simpa [physPairing] using congrFun (congrFun hC (α, β)) (γ, δ)
-  simp only [leftAct, leftEndpoint, Matrix.submatrix_apply, Matrix.sum_apply,
-    Matrix.kroneckerMap_apply, Matrix.of_apply, Equiv.symm_apply_apply]
-  calc _ = ∑ α, ∑ β, (e a * V) α (finProdFinEquiv (s, β)) * ∑ c, Â c α β * C c γ δ := by
-        simp only [Finset.sum_mul, Finset.mul_sum]
-        rw [Finset.sum_comm]
-        refine Finset.sum_congr rfl fun α _ ↦ ?_
-        rw [Finset.sum_comm]
-        exact Finset.sum_congr rfl fun β _ ↦ Finset.sum_congr rfl fun c _ ↦ by ring
-    _ = _ := by simp [h]
+  rw [leftAct_leftEndpoint_apply, hC]
+  simp
 
 /-- **A right endpoint on its tensor.** If `Â` is a left inverse of `C`, the endpoint term
 `W f Â` acting on `C` is `W f`. -/
@@ -199,18 +210,8 @@ theorem rightAct_rightEndpoint (Â : Fin d → Matrix (Fin D) (Fin D) ℂ)
     rightAct (rightEndpoint Â W f) C b = W * f b := by
   ext t δ
   obtain ⟨⟨t, γ⟩, rfl⟩ := finProdFinEquiv.surjective t
-  have h : ∀ α β : Fin D, ∑ σ, Â σ α β * C σ γ δ = if α = γ ∧ β = δ then 1 else 0 :=
-    fun α β ↦ by
-      simpa [physPairing, Matrix.one_apply] using congrFun (congrFun hC (α, β)) (γ, δ)
-  simp only [rightAct, rightEndpoint, Matrix.submatrix_apply, Matrix.sum_apply,
-    Matrix.kroneckerMap_apply, Matrix.of_apply, Equiv.symm_apply_apply]
-  calc _ = ∑ α, ∑ β, (W * f b) (finProdFinEquiv (t, α)) β * ∑ c, Â c α β * C c γ δ := by
-        simp only [Finset.sum_mul, Finset.mul_sum]
-        rw [Finset.sum_comm]
-        refine Finset.sum_congr rfl fun α _ ↦ ?_
-        rw [Finset.sum_comm]
-        exact Finset.sum_congr rfl fun β _ ↦ Finset.sum_congr rfl fun c _ ↦ by ring
-    _ = _ := by simp [h, ite_and]
+  rw [rightAct_rightEndpoint_apply, hC]
+  simp [Matrix.one_apply, ite_and]
 
 /-- **A right endpoint on the other tensor.** If `Â ∘ C = 0`, the endpoint term `W f Â` acting
 on `C` vanishes. -/
@@ -220,17 +221,8 @@ theorem rightAct_rightEndpoint_eq_zero (Â : Fin d → Matrix (Fin D) (Fin D) �
     rightAct (rightEndpoint Â W f) C b = 0 := by
   ext t δ
   obtain ⟨⟨t, γ⟩, rfl⟩ := finProdFinEquiv.surjective t
-  have h : ∀ α β : Fin D, ∑ σ, Â σ α β * C σ γ δ = 0 :=
-    fun α β ↦ by simpa [physPairing] using congrFun (congrFun hC (α, β)) (γ, δ)
-  simp only [rightAct, rightEndpoint, Matrix.submatrix_apply, Matrix.sum_apply,
-    Matrix.kroneckerMap_apply, Matrix.of_apply, Equiv.symm_apply_apply]
-  calc _ = ∑ α, ∑ β, (W * f b) (finProdFinEquiv (t, α)) β * ∑ c, Â c α β * C c γ δ := by
-        simp only [Finset.sum_mul, Finset.mul_sum]
-        rw [Finset.sum_comm]
-        refine Finset.sum_congr rfl fun α _ ↦ ?_
-        rw [Finset.sum_comm]
-        exact Finset.sum_congr rfl fun β _ ↦ Finset.sum_congr rfl fun c _ ↦ by ring
-    _ = _ := by simp [h]
+  rw [rightAct_rightEndpoint_apply, hC]
+  simp
 
 /-- A left endpoint, the physical action of the bulk tensor, and a right endpoint compose into
 the sum over input configurations of the string coefficients times the input chains. -/

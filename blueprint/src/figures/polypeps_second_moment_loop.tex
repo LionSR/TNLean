@@ -1,0 +1,47 @@
+% Figure polypeps_second_moment_loop.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. VIII C (proof sketch of Theorem 2, the dimension-free
+% second moment), Eq. eq:pp9-loop, two rows; cited in App. G 5.
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/04-compression.tex:395-407
+% (eq. compression-product-covariance) and 498-528 (eqs.
+% compression-block-second-moment and compression-dimension-free).
+% Formula: with W_li = tau~^{1/4} O_li tau^{1/4} and
+% E[z_il conj(z_i'l')] = k^{-s} sqrt(p_i p~_l) delta_ii' delta_ll',
+% E || sum_{i,l} z_il W_li ||_2^2 = k^{-s} sum_{i,l} sqrt(p_i p~_l) ||W_li||_2^2
+% = k^{-s} Tr(O^dagger R~^{1/2} O R^{1/2}) = k^{-s} ||R~^{1/4} O R^{1/4}||_2^2
+% <= k^{-s} ||R~^{1/4}||_4^2 ||O||^2 ||R^{1/4}||_4^2 <= k^{-s}, where
+% R = diag(p_i) (x) tau and R~ = diag(p~_l) (x) tau~ are diagonal and trace one.
+% Ink-to-index: every wire is one bundled index: I (x) T between R^{1/2} and
+% the east legs of O and O^dagger, I~ (x) T~ between R~^{1/2} and their west
+% legs.  The ring is the trace Tr(O^dagger R~^{1/2} O R^{1/2}), read once
+% around clockwise from the east bead: R^{1/2}, then O (top, east to west),
+% then R~^{1/2}, then O^dagger (bottom, west to east).  Each bead joins the ket
+% copy (top) and the bra copy (bottom) on one side: the diag(p)^{1/2} and
+% diag(p~)^{1/2} factors are the z covariance gluing the copies' i and l legs,
+% the tau^{1/2}, tau~^{1/2} factors are the two quarter powers of the
+% Hilbert-Schmidt square.  One-wire boxes are too small to inscribe a name, so
+% O and O^dagger are named outside the loop (north, south) and the beads
+% inside it, away from the joiners (rule L3).
+% Boundary signature: empty on all three sides (scalars).
+% Related: polypeps_separated_block (the block O closed with z, before
+% averaging); polypeps_swap_purity (a ring of the same kind, Tr rho^2).
+\begin{tenkzequation}
+    \tenkzkernel
+    $\mathbb E\bigl\|\sum\limits_{i,l}z_{il}\widetilde\tau^{1/4}O_{li}\tau^{1/4}\bigr\|_2^2
+        =k_{\rm G}^{-s}$
+    \begin{tenkz}[rows={wire,wire,wire}, cols=6, bonds=none, size=l]
+        \tn[at=midway (1,3) and (1,4), name=smKet, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{O}
+        \tn[at=midway (3,3) and (3,4), name=smBra, skin=box, label pos=s,
+            ports={180:physical, 0:physical}]{O^\dagger}
+        \tn[at=(2,1), name=smWest, skin=box, label pos=e,
+            ports={90:physical, 270:physical}]{\widetilde{\mathsf R}^{1/2}}
+        \tn[at=(2,6), name=smEast, skin=box, label pos=w,
+            ports={90:physical, 270:physical}]{\mathsf R^{1/2}}
+        \tnwire[route=arc]{smEast.90}{smKet.0}
+        \tnwire[route=arc]{smKet.180}{smWest.90}
+        \tnwire[route=arc]{smWest.270}{smBra.180}
+        \tnwire[route=arc]{smBra.0}{smEast.270}
+    \end{tenkz}
+    $=k_{\rm G}^{-s}\bigl\|\widetilde{\mathsf R}^{1/4}O\mathsf R^{1/4}\bigr\|_2^2\le k_{\rm G}^{-s}$
+\end{tenkzequation}
