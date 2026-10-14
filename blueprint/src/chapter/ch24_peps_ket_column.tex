@@ -306,6 +306,7 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
     \label{thm:peps_product_reference_column}
     \lean{TNLean.PEPS.Approximation.Pinned.exists_fixInput_contractPEPS_of_product_reference}
     \lean{TNLean.PEPS.Approximation.Pinned.exists_peps_of_product_reference}
+    \leanok
     \uses{def:peps_ket_column_square_fix_input}
     Let $\Omega$ be a unit vector on the open $L\times L$ square. Let
     $\Psi$ be a joint vector on its physical and private coordinates, and
@@ -341,7 +342,7 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
     \cite{gap:polypeps_product_reference_column}.
 \end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_ket_column_square, cor:peps_ket_column_square_main}
     The partial trace of the product-reference density is
     $\lVert\Xi\rVert^2|\Omega\rangle\langle\Omega|$. The pure-density
