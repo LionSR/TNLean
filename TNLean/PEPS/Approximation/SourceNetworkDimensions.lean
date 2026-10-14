@@ -41,7 +41,7 @@ theorem card_alphabet_source_density (w : SourceCircuit a b) (k : ℕ)
       match e.1.2 with
       | Sum.inl _ => Fintype.card (w.branchLabels e.1.1.1) ^ 2
       | Sum.inr _ => k := by
-  simpa only [Fintype.card_prod, pow_two] using
+  simpa only [Fintype.card_prod, pow_two] using!
     DistributedOperatorContraction.card_alphabet
       (Finset.univ : Finset w.nonemptyGateLocations)
       (fun g ↦ w.participants g.1) (sourceGateRoot w)

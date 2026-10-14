@@ -70,7 +70,7 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_originalGateSa
         ω B BG
         ((DistributedOperatorContraction.restrictSamples
           (Finset.univ : Finset w.nonemptyGateLocations) (fun g ↦ w.participants g.1)
-          k j p) ∘ partialSlotSampleEquiv w p)
+          k j p) ∘ (partialSlotSampleEquiv w p).toFun)
     physicalSourceReplacedDensity (familyPhysicalLayout d ps) garbage w
         (fun e ξ ζ ↦ sampledSourceMatrix w k lam L R e ξ ζ ω)
         bIn (familyLabelledPhysicalBasis d ps hn hc) bRef
