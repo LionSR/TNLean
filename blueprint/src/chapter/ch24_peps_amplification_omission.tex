@@ -62,7 +62,7 @@ with their multiplicities. All norms are operator norms.
 
 \begin{theorem}[Omitted-prefix telescope]
     \label{thm:al_channel_word_omission_telescope}
-    \uses{thm:al_channel_word_omission_bounds}
+    \uses{def:al_channel_word_omission_defect}
     \lean{TNLean.PEPS.AreaLaw.channelWordOmissionDefect_le_sum_prefix}
     \leanok
     Suppose $0\le k_i\le\mathbb 1$ for every label. With $w_{<j}$ the prefix
@@ -73,6 +73,7 @@ with their multiplicities. All norms are operator norms.
     \end{align*}
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:al_channel_word_omission_bounds}
     The defect of the empty word vanishes. Sum the increments of
     Theorem~\ref{thm:al_channel_word_omission_bounds} along the prefixes.
 \end{proof}
@@ -82,7 +83,7 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
 
 \begin{theorem}[Expected defect as a time integral]
     \label{thm:al_channel_word_expected_omission}
-    \uses{thm:al_channel_word_omission_telescope}
+    \uses{def:al_channel_word_omission_defect}
     \lean{TNLean.PEPS.AreaLaw.integrable_and_integral_channelWordOmissionDefect_le}
     \leanok
     Suppose $0\le k_i\le\mathbb 1$ for every label of a finite set $F$, and
@@ -94,7 +95,7 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
     \end{align*}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:al_channel_word_filter}
+    \uses{thm:al_channel_word_omission_telescope,thm:al_channel_word_filter}
     The defect is bounded, hence integrable. Integrate the telescope of
     Theorem~\ref{thm:al_channel_word_omission_telescope}. The retained prefix
     before an omitted event is a word over $F_P$, and the expected sum over
@@ -177,8 +178,7 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
 
 \begin{theorem}[Expected channel omission on a graph]
     \label{thm:al_graph_channel_omission}
-    \uses{thm:al_channel_word_expected_omission,thm:al_channel_event_error,
-        thm:al_omitted_anchor_tail}
+    \uses{def:al_channel_word_omission_defect}
     \lean{TNLean.PEPS.AreaLaw.exists_integrable_and_integral_channelWordOmissionDefect_le}
     \leanok
     Let $C,K,\mu\ge0$, $c>0$ and $0<\alpha\le1$. There are $D\ge0$ and
@@ -194,7 +194,9 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
     \end{align*}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:al_actual_channel_uniform_bounds,thm:al_channel_poisson_graph_growth}
+    \uses{thm:al_channel_word_expected_omission,thm:al_channel_event_error,
+        thm:al_omitted_anchor_tail,thm:al_actual_channel_uniform_bounds,
+        thm:al_channel_poisson_graph_growth}
     The retained labels satisfy the same hypotheses. By
     Theorem~\ref{thm:al_channel_poisson_graph_growth}, the expected
     oscillation of the retained process at time $s$ and site $z$ is at most
@@ -211,8 +213,7 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Theorem~\ref{thm:al_lattice_counts}.
 
 \begin{theorem}[Expected channel omission on a lattice domain]
     \label{thm:al_domain_channel_omission}
-    \uses{thm:al_graph_channel_omission,thm:al_component_support_of_tail,
-        thm:al_lattice_counts}
+    \uses{def:al_channel_word_omission_defect}
     \lean{TNLean.PEPS.AreaLaw.exists_domain_integrable_and_integral_channelWordOmissionDefect_le}
     \leanok
     Let $C,\mu\ge0$, $c>0$ and $0<\alpha\le1$. There are $A\ge0$ and
@@ -230,6 +231,8 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Theorem~\ref{thm:al_lattice_counts}.
     constraint products lemma.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:al_graph_channel_omission,thm:al_component_support_of_tail,
+        thm:al_lattice_counts}
     Theorem~\ref{thm:al_component_support_of_tail} supplies the component
     support, and the largest distance in the domain is a common cutoff.
     Apply Theorem~\ref{thm:al_graph_channel_omission} with $K=2$.
@@ -237,7 +240,7 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Theorem~\ref{thm:al_lattice_counts}.
 
 \begin{theorem}[Omission of distant events from the constraint product]
     \label{thm:al_domain_constraint_omission}
-    \uses{thm:al_domain_channel_omission,thm:al_channel_word_vector_difference}
+    \uses{def:al_local_root_channel}
     \lean{TNLean.PEPS.AreaLaw.exists_domainConstraintWord_omission}
     \leanok
     Under the hypotheses of Theorem~\ref{thm:al_domain_channel_omission},
@@ -255,18 +258,18 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Theorem~\ref{thm:al_lattice_counts}.
     The source takes $S$ nonempty and $r\ge1$; neither is needed.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:al_domain_channel_omission,thm:al_channel_word_vector_difference}
     A label outside the retained set is at distance more than $r$ from
     every site of $S$. On the vector $\Omega\otimes\xi$, every channel word
-    acts as the product of its roots $G_i$
-    (Theorem~\ref{thm:al_channel_word_ground}), so the vector difference is
-    at most $D_P(w;B)$ pointwise. Integrate and apply
+    acts as the product of its roots $G_i$, so the vector difference is at
+    most $D_P(w;B)$ pointwise
+    (Theorem~\ref{thm:al_channel_word_vector_difference}). Integrate and apply
     Theorem~\ref{thm:al_domain_channel_omission}.
 \end{proof}
 
 \begin{theorem}[Omission for the exact positive constraints]
     \label{thm:al_lattice_constraint_omission}
-    \uses{thm:al_domain_constraint_omission,
-        thm:al_lattice_positive_replacement}
+    \uses{def:al_local_root_channel}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeConstraintWord_omission}
     \leanok
     Let $p\ge1$, $R$, $J\ge0$ and $\Delta>0$, and put $\alpha=p/(p+1)$. There
@@ -276,6 +279,8 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Theorem~\ref{thm:al_lattice_counts}.
     state $\Omega$, with any anchoring $a_i\in X_i$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:al_domain_constraint_omission,thm:al_lattice_positive_replacement,
+        thm:al_lattice_counts}
     Theorem~\ref{thm:al_lattice_positive_replacement} gives the positivity,
     the zero vector $\Omega$ and the tails, and
     Theorem~\ref{thm:al_lattice_counts} bounds the anchor multiplicity.

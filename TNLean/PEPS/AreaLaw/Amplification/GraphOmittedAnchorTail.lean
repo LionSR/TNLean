@@ -185,23 +185,6 @@ theorem exp_mul_graph_exponentialDistanceProfile_le_of_anchor_far
 
 variable [DecidableEq ι]
 
-/-- The anchors whose balls of radius `l` contain `y` lie in the ball of
-radius `l` about `y`, so their number is at most `μ` times its cardinality. -/
-private theorem card_anchors_mem_graphBall_le (G : SimpleGraph ι) (a : κ → ι)
-    {μ : ℝ} (hfiber : ∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ)
-    (y : ι) (l : ℕ) :
-    ((Finset.univ.filter fun i : κ => y ∈ graphBall G (a i) l).card : ℝ) ≤
-      μ * (graphBall G y l).card := by
-  classical
-  have hcount := Finset.sum_card_fiberwise_eq_card_filter Finset.univ (graphBall G y l) a
-  have hsymm (i : κ) : (y ∈ graphBall G (a i) l) ↔ a i ∈ graphBall G y l := by
-    simp only [mem_graphBall, G.edist_comm]
-  simp_rw [hsymm]
-  rw [← hcount, Nat.cast_sum]
-  calc
-    _ ≤ ∑ _x ∈ graphBall G y l, μ := Finset.sum_le_sum fun x _ => hfiber x
-    _ = _ := by simp [mul_comm]
-
 /-- Bounded anchor fibers reduce the unweighted incidence sum of a
 nonnegative site function to its total mass times a quadratic ball bound.
 Source: area law,
@@ -218,7 +201,7 @@ theorem sum_graphBall_site_function_le (G : SimpleGraph ι) (a : κ → ι)
       ((Finset.univ.filter fun i : κ => z ∈ graphBall G (a i) l).card : ℝ) ≤
         μ * K * ((l : ℝ) + 1) ^ 2 := by
     calc
-      _ ≤ μ * (graphBall G z l).card := card_anchors_mem_graphBall_le G a hfiber z l
+      _ ≤ μ * (graphBall G z l).card := card_graphBall_anchors_le G a hfiber z l
       _ ≤ μ * (K * ((l : ℝ) + 1) ^ 2) := mul_le_mul_of_nonneg_left (hball z l) hμ
       _ = _ := by ring
   calc
