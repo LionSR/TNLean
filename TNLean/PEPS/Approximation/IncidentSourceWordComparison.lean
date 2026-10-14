@@ -196,25 +196,25 @@ private theorem selectedPreparedWordComparison_comp {Q R : Type}
   apply eq_of_heq
   exact hComp.trans hTarget.symm
 
-/-- Equal source-free words give the same selected and relabelled operator,
-including a prescribed identification of its retained register lists.
+/-- Equal source-free words remain equal after selection and owner transport,
+under a prescribed identification of their retained register lists.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
 246–267, 351–434 and 565–588. -/
-private theorem eval_restrict_mapOwner_castLayouts_heq_of_eq {Q R : Type}
+private theorem restrict_mapOwner_castLayouts_heq_of_eq {Q R : Type}
     {a b : Layout Q} {c d : Layout R} (s : Q → Bool) (lift : Q → R)
     (u v : Word a b) (hu : u.sources = []) (hv : v.sources = [])
     (hi : Layout.mapOwner lift (Layout.restrict s a) = c)
     (ho : Layout.mapOwner lift (Layout.restrict s b) = d) (h : u = v) :
-    HEq (((u.restrict s hu).mapOwner lift).castLayouts hi ho).eval
-      ((v.restrict s hv).mapOwner lift).eval := by
+    HEq (((u.restrict s hu).mapOwner lift).castLayouts hi ho)
+      ((v.restrict s hv).mapOwner lift) := by
   cases h
-  exact Word.eval_castLayouts_heq _ hi ho
+  exact Word.castLayouts_heq _ hi ho
 
-/-- The literal incident word has the selected operator of the original
+/-- The literal incident word is the selected and lifted word of the original
 preparation and projected residual. All labels and source registers are derived
 from the same original all-party choice. Source: polynomial-PEPS Theorem 5.2,
 `04-compression.tex`, lines 137–139, 246–267, 351–434 and 565–588. -/
-private theorem preparedWordEvalComparison_incidentSourceWord {a b : Layout P}
+private theorem incidentSourceWord_heq_of_original_labels {a b : Layout P}
     (w : SourceCircuit a b) (p : P) (ψ : ProductInput a)
     (ξ : Choices (fun _ : P ↦ true) w) :
     let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
@@ -236,8 +236,7 @@ private theorem preparedWordEvalComparison_incidentSourceWord {a b : Layout P}
     let Va := Pa.comp (partialResidual A w χ)
     let hsVa : Va.sources = [] := by
       simp only [Va, Word.sources, sources_partialResidual, hsPa, List.nil_append]
-    preparedWordEvalComparison
-      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ))
+    HEq (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ))
       ((Va.restrict (partySelector q) hsVa).mapOwner lift) := by
   classical
   intro A hp q lift S χ Pa hsPa Va hsVa
@@ -256,10 +255,9 @@ private theorem preparedWordEvalComparison_incidentSourceWord {a b : Layout P}
   have hin : Layout.restrict sq (w.allResidualSourceLayout ++ []) =
       Layout.mapOwner lift (Layout.restrict sa (S ++ [])) := by
     simpa only [List.append_nil] using hSlots.symm
-  unfold preparedWordEvalComparison
   unfold incidentSourceWord
   dsimp only
-  exact eval_restrict_mapOwner_castLayouts_heq_of_eq sa lift
+  exact restrict_mapOwner_castLayouts_heq_of_eq sa lift
     (Pa.comp (partialResidual A w
       (choicesOfOriginalGateLabelsAt w p (originalGateLabelsAtOfAllChoices w p ξ))))
     Va
@@ -342,10 +340,14 @@ private theorem selectedPreparedWordComparison_of_original_labels {a b : Layout 
       Layout.mapOwner lift (Layout.restrict sa (S ++ Layout.mapOwner fa a)) := by
     simp only [Layout.restrict_append, Layout.mapOwner_append]
     exact congrArg₂ List.append hSlots.symm (hBoundary a).symm
+  have hWord : HEq
+      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ))
+      ((Va.restrict sa hsVa).mapOwner lift) :=
+    incidentSourceWord_heq_of_original_labels w p ψ ξ
   have hIncident : HEq
       (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)).eval
-      ((Va.restrict sa hsVa).mapOwner lift).eval := by
-    exact preparedWordEvalComparison_incidentSourceWord w p ψ ξ
+      ((Va.restrict sa hsVa).mapOwner lift).eval :=
+    Word.eval_heq hin (hBoundary b).symm hWord
   exact selectedPreparedWordComparison_comp sq sa lift
     (w.sourcePrivatePreparation ψ) (partialResidual (fun _ : P ↦ true) w ξ)
     Pa (partialResidual A w χ)
