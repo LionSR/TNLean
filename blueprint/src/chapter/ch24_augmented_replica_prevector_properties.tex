@@ -24,6 +24,7 @@ and empty-product conventions of the initial-vector construction in
 \begin{theorem}[Full copy symmetry of the augmented initial vector]
     \label{thm:al_augmented_prevector_symmetry}
     \lean{TNLean.PEPS.AreaLaw.Scan.symProj_mulVec_augmentedReplicaPrevector}
+    \leanok
     \uses{def:al_scan_auxiliary_coordinates}
     Let $P_{\mathrm{sym}}$ average the simultaneous permutations of the
     $k$ copies of $\mathcal X_J$. Then
@@ -33,6 +34,7 @@ and empty-product conventions of the initial-vector construction in
     No normalization of $\Omega$ or positivity of $q,d,k$ is required.
 \end{theorem}
 \begin{proof}
+    \leanok
     Each repeated product is fixed by simultaneous copy permutation.
     The central label projection on the right auxiliary factor commutes
     with these permutations. Thus $v_{k,\lambda}$ is fixed by the joint
@@ -44,6 +46,7 @@ and empty-product conventions of the initial-vector construction in
 \begin{theorem}[The supplied label at each augmented auxiliary site]
     \label{thm:al_augmented_prevector_auxiliary_label}
     \lean{TNLean.PEPS.AreaLaw.Scan.labelProj_auxiliary_mulVec_augmentedReplicaPrevector}
+    \leanok
     \uses{def:al_scan_auxiliary_coordinates}
     For either $b\in\{\mathrm{false},\mathrm{true}\}$, let
     $\Pi_{\{b\},\lambda}$ denote the central label projection for the
@@ -55,6 +58,7 @@ and empty-product conventions of the initial-vector construction in
     the zero vector and zero-dimensional or zero-copy cases.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:al_augmented_subsystem_action}
     Put $w=(I_C\otimes\Pi_\lambda)U_k$.
     The left and right central label projections agree on $U_k$;

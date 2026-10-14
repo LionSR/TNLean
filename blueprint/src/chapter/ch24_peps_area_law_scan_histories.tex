@@ -569,7 +569,7 @@ The following finite construction follows
         TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumHistoryPartition,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumChargeMove,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.chargeTransportData}
-    % Pending compiled verification of the added image identity.
+    \leanok
     \uses{def:al_scan_actual_histories}
     Adjoin the fixed factors $C$ and $R$ to the physical near and far sides:
     $P=C\sqcup P_0$, $Y=Y_0$, and $F=R\sqcup V_0$.
@@ -844,11 +844,11 @@ The following finite construction follows
 \end{proof}
 
 % Source: 08-scanner.tex, lines 21--24 and 83--98.
-% Pending production-module and blueprint verification.
 \begin{theorem}[The target and the augmented receiving regions]
     \label{thm:al_scan_augmented_receiving_regions}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_augmentedPartition_eq_target_near_middle,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_augmentedPartition_eq_target_near_middle}
+    \leanok
     \uses{def:al_scan_actual_histories,def:al_scan_augmented_partitions,
         def:al_scan_comparison_prefixes}
     Let $h$ be a finite collar history and let $g$ be one of its bands.
@@ -870,7 +870,7 @@ The following finite construction follows
     The construction is that of
     \cite[Section~9, moving partitions]{OpenAI2026AreaLaw}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_scan_receiving_regions,def:al_scan_augmented_partitions}
     Put $W=(P_0\cup Y_0)\cap\{x\in\Lambda:d(x)>0\}$.
     The physical region identities give $P_0=X\cup U$,
@@ -1576,6 +1576,7 @@ The following finite construction follows
 \begin{theorem}[Initial normalization of the actual fill]
     \label{thm:al_scan_actual_initial_log_norm}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualFillData_initial_log_filteredNormSq_bound}
+    \leanok
     Fix a collar scan with positive offset and charge capacities,
     positive physical and auxiliary dimensions, and $a>0$.
     There exists $C\ge0$, chosen before the number $k\ge0$ of replicas
@@ -1588,7 +1589,7 @@ The following finite construction follows
     The real logarithm has value zero at zero. For a nonzero vector,
     this is the initial normalization estimate in the scanner argument.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:al_scan_actual_fill_transport,thm:al_scan_actual_fill_admission}
     The actual fill is admissible, and its band metrics commute.
     The polynomial transport-root floor supplies $C_0\ge0$, fixed
@@ -3359,6 +3360,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     $b_s$ uses the listed physical assumptions.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:al_scan_bad_history_inverse_power,thm:al_scan_status_scale_separation}
     The exact prefix marginal writes $b_s$ as the expectation of its
     indicator over full histories. Goodness through every completed
     prefix implies goodness of every old charge state, so the bad-old
@@ -3470,6 +3472,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 \begin{theorem}[Nonnegative transported entropy gain]
     \label{thm:al_scan_entropy_gain_nonneg}
     \lean{TensorPower.ReplicaTransport.TransportData.entropyGain_nonneg}
+    \leanok
     \uses{thm:al_scan_old_entropy_integral}
     Let $\mathscr D$ be finite admissible transport data with positive factor
     dimensions and $t\ge0$. Suppose its bands commute on the symmetric
@@ -3478,7 +3481,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     $\mathcal G_{\mathscr D,k,\mathrm{pre}}(p)\ge0$.
     The vector may vanish, and $p$ may be either endpoint.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_scan_regional_move_entropy,thm:al_scan_old_entropy_integral}
     Strong subadditivity gives $\eta_{h,c,g}(\theta)\ge0$ for every valid
     move. With $J_h$ denoting the old-state Fourier--coherent integral,
@@ -3493,6 +3496,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 \begin{theorem}[Charge sampling summed over complete rounds]
     \label{thm:al_scan_actual_charge_sum_sampling}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_actualCharge_integral_le_sum_actualRounds_entropyGain_domainGraph}
+    \leanok
     \uses{thm:al_scan_actual_old_entropy_sampling,def:al_scan_actual_round_family}
     Assume the geometric and designated-support hypotheses of
     Theorem~\ref{thm:al_scan_actual_old_entropy_sampling}, uniformly over
@@ -3511,7 +3515,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     \end{align}
     No symmetry hypothesis on the supplied vector is needed.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_scan_entropy_gain_nonneg,thm:al_scan_actual_old_entropy_sampling,
         thm:al_scan_old_parameter_integral,thm:al_scan_actual_round_entropy}
     Both scalar functions are interval integrable. Pointwise charge sampling
@@ -3532,6 +3536,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 \begin{theorem}[Integrated charge defect over the actual scan]
     \label{thm:al_scan_actual_charge_sum_bound}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_integral_bound_domainGraph}
+    \leanok
     \uses{thm:al_scan_actual_charge_sum_sampling,thm:al_scan_actual_round_transport}
     There are universal real constants $c_0,C_{\mathrm{ent}},e_{\mathrm{ent}}$,
     with $c_0>0$, for which the following holds. Assume the joint geometric,
@@ -3563,7 +3568,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     the supplied vector with the physical prevector and bounding the initial
     and final norms are separate obligations.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_scan_actual_charge_sum_sampling,thm:al_scan_actual_round_entropy}
     Choose the common error from Theorem~\ref{thm:al_scan_actual_round_entropy}
     once. Multiply (\ref{eq:al_scan_charge_sum_sampling}) by $ka\ge0$ and
