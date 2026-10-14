@@ -547,6 +547,7 @@ jobs:
           python3 scripts/ci_lean_checks.py early --budget 1200 --log "$RUNNER_TEMP/lake-build.log"
 
       - name: Build Lean project and capture timings
+        id: lake_build
         run: |
           set -eo pipefail
           {
@@ -644,10 +645,12 @@ jobs:
         timeout-minutes: 10
         run: lake exe checkdecls "$RUNNER_TEMP/paper_gap_leanid_decls"
 
-      # A cancelled or failed build can leave partially written `.olean` files.
-      # Restore only caches saved after the complete build and style checks pass.
+      # A cancelled or failed build can leave partially written `.olean` files,
+      # so save only after the complete build succeeded in a run that was not
+      # cancelled. A later lint or declaration check failure leaves the build
+      # complete; it must not discard a full rebuild after a pin bump.
       - name: Save Lean build cache (main only)
-        if: success() && github.ref == 'refs/heads/main'
+        if: ${{ !cancelled() && github.ref == 'refs/heads/main' && steps.lake_build.outcome == 'success' }}
         uses: actions/cache/save@v6
         with:
           path: ${{ env.BUILD_CACHE_PATHS }}
