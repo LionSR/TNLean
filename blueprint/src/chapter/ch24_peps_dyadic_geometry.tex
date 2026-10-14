@@ -286,7 +286,7 @@ $A$, $B$, $C$ below are permitted to coincide.
     label of its parent $2n$-block, and a block outside the root square the
     placeholder.
     The picture shows one stage of the pass to level $n$ for a root square of four
-    blocks per side, before the repainting of the shaded block $S$ to its new label;
+    blocks per side, before the repainting of the block $S$ (labelled) to its new label;
     $\ast$ is the placeholder.
     \input{figures/peps_dyadic_block_guide}
 \end{definition}
@@ -536,6 +536,8 @@ source's sampled guides with these readings and state Lemma~7.2 for them.
     open chamber of that label.
 \end{proof}
 
+% Source: 06-geometry.tex, Lemma 7.2 (lem:geometry-angular), statement lines
+% 254--273, proof lines 275--319, revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 \begin{theorem}[Separation for the source's sampled guides]
     \label{thm:peps_dyadic_angular_separation_sampled}
     \lean{TNLean.PEPS.Approximation.exists_isChamberSampling_blockRepainting, TNLean.PEPS.Approximation.blockRepainting_central_of_chamberSampling, TNLean.PEPS.Approximation.blockRepainting_auxStep_of_chamberSampling, TNLean.PEPS.Approximation.blockRepainting_mainStep_of_chamberSampling, TNLean.PEPS.Approximation.blockRepainting_exchange_of_chamberSampling}
@@ -551,7 +553,14 @@ source's sampled guides with these readings and state Lemma~7.2 for them.
     guides before a lens exchange satisfies
     $\operatorname{dist}(y,\partial Y)\ge a_0\min\{n,d_{\mathcal V}(y)\}$. This
     is~\cite[Lemma~7.2]{OpenAI2026PolynomialPEPS} under the source's tie convention,
-    lines 69--80, with the source's hypotheses.
+    lines 69--80, with the source's hypotheses. It covers every elementary birth
+    and death, the central birth and the three auxiliary births and four main births
+    and deaths along each edge after any completed edges, and every lens exchange.
+    The block labels and the final label are arbitrary, so any of the labels $A$,
+    $B$, $C_e$ may coincide, also with the placeholder carried by the blocks outside
+    the root square. Distances are sup distances in the plane, and the obstructing
+    sets are closures in the plane. The constant $a_0$ is an absolute number, fixed
+    before the scale $D$ of the information estimate is chosen.
 \end{theorem}
 
 \begin{proof}\leanok

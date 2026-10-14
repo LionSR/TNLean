@@ -204,14 +204,16 @@ theorem graphBall_subset_graphNeighborhood_two_mul {S : Finset (Site Λ)} {r : �
     _ ≤ r + r := add_le_add hd (mem_graphBall.mp hy)
     _ = ((2 * r : ℕ) : ℕ∞) := by push_cast; ring
 
-/-- At most `2 μ_R |S| (1 + r)²` labels have anchors in `N_r(S)`, where `μ_R` is the
-anchor multiplicity. Source: area law, `09-amplification.tex`, line 228, with the
-counts of `01-preliminaries.tex`, lines 82–103. -/
-theorem card_anchor_graphNeighborhood_le {R : ℕ} (a : AdmissibleSupport Λ R → Site Λ)
-    (ha : ∀ X, a X ∈ X.1) (S : Finset (Site Λ)) (r : ℕ) :
+/-- With at most `μ` labels anchored at each site, at most `2 μ |S| (1 + r)²` labels have
+anchors in `N_r(S)`. Source: area law, `09-amplification.tex`, line 228, with the ball
+count of `01-preliminaries.tex`, lines 82–103. -/
+theorem card_filter_anchor_mem_graphNeighborhood_le {κ : Type*} [Fintype κ]
+    (a : κ → Site Λ) {μ : ℝ} (hμ : 0 ≤ μ)
+    (hfiber : ∀ x, ((Finset.univ.filter fun i => a i = x).card : ℝ) ≤ μ)
+    (S : Finset (Site Λ)) (r : ℕ) :
     ((Finset.univ.filter fun i => a i ∈ graphNeighborhood Λ r S).card : ℝ) ≤
-      2 * (2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) * S.card * (1 + (r : ℝ)) ^ 2 := by
-  set μ : ℕ := 2 ^ ((1 + 2 * R * (R + 1)) - 1)
+      2 * μ * S.card * (1 + (r : ℝ)) ^ 2 := by
+  classical
   have hsub : (Finset.univ.filter fun i => a i ∈ graphNeighborhood Λ r S) ⊆
       S.biUnion fun s => (graphBall (domainGraph Λ) s r).biUnion
         fun x => Finset.univ.filter fun i => a i = x := by
@@ -226,20 +228,121 @@ theorem card_anchor_graphNeighborhood_le {R : ℕ} (a : AdmissibleSupport Λ R �
     calc _ ≤ ((∑ x ∈ graphBall (domainGraph Λ) s r,
           (Finset.univ.filter fun i => a i = x).card : ℕ) : ℝ) := by
           exact_mod_cast Finset.card_biUnion_le
-      _ ≤ ((∑ _x ∈ graphBall (domainGraph Λ) s r, μ : ℕ) : ℝ) := by
-          exact_mod_cast Finset.sum_le_sum fun x _ => card_anchor_fiber_le a ha x
+      _ ≤ ∑ _x ∈ graphBall (domainGraph Λ) s r, μ := by
+          push_cast; exact Finset.sum_le_sum fun x _ => hfiber x
       _ = μ * (graphBall (domainGraph Λ) s r).card := by
-          rw [Finset.sum_const, smul_eq_mul, Nat.cast_mul, mul_comm]
+          rw [Finset.sum_const, nsmul_eq_mul, mul_comm]
       _ ≤ μ * (2 * ((r : ℝ) + 1) ^ 2) :=
-          mul_le_mul_of_nonneg_left (card_graphBall_domainGraph_le s r) (Nat.cast_nonneg _)
+          mul_le_mul_of_nonneg_left (card_graphBall_domainGraph_le s r) hμ
   calc ((Finset.univ.filter fun i => a i ∈ graphNeighborhood Λ r S).card : ℝ)
       ≤ ((∑ s ∈ S, ((graphBall (domainGraph Λ) s r).biUnion
           fun x => Finset.univ.filter fun i => a i = x).card : ℕ) : ℝ) := by
         exact_mod_cast hcard
-    _ ≤ ∑ _s ∈ S, (μ : ℝ) * (2 * ((r : ℝ) + 1) ^ 2) := by
+    _ ≤ ∑ _s ∈ S, μ * (2 * ((r : ℝ) + 1) ^ 2) := by
         push_cast; exact Finset.sum_le_sum fun s _ => hball s
     _ = 2 * μ * S.card * (1 + (r : ℝ)) ^ 2 := by
         rw [Finset.sum_const, nsmul_eq_mul]; ring
+
+/-- At most `2 μ_R |S| (1 + r)²` labels have anchors in `N_r(S)`, where `μ_R` is the
+anchor multiplicity. Source: area law, `09-amplification.tex`, line 228, with the
+counts of `01-preliminaries.tex`, lines 82–103. -/
+theorem card_anchor_graphNeighborhood_le {R : ℕ} (a : AdmissibleSupport Λ R → Site Λ)
+    (ha : ∀ X, a X ∈ X.1) (S : Finset (Site Λ)) (r : ℕ) :
+    ((Finset.univ.filter fun i => a i ∈ graphNeighborhood Λ r S).card : ℝ) ≤
+      2 * (2 ^ ((1 + 2 * R * (R + 1)) - 1) : ℕ) * S.card * (1 + (r : ℝ)) ^ 2 :=
+  card_filter_anchor_mem_graphNeighborhood_le a (Nat.cast_nonneg _)
+    (fun x => by exact_mod_cast card_anchor_fiber_le a ha x) S r
+
+/-- Every product of the radius-`r` local roots `(I - E_{N_r(a_i)} k_i)^{1/2}` over labels
+anchored in `N_r(S)` is supported on `N_{2r}(S)`.
+Source: area law, `09-amplification.tex`, lines 232–234. -/
+theorem contractionWord_siteExpectation_mem_supportedOperators {q : ℕ} [NeZero q]
+    {κ : Type*} (a : κ → Site Λ) {S : Finset (Site Λ)} {r : ℕ}
+    (k : {i // a i ∈ graphNeighborhood Λ r S} →
+      Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (hk₁ : ∀ i, k i ≤ 1) :
+    ∀ (m : ℕ) (u : Fin m → {i // a i ∈ graphNeighborhood Λ r S}),
+      contractionWord (fun i : {i // a i ∈ graphNeighborhood Λ r S} =>
+          siteExpectation q (graphBall (domainGraph Λ) (a i) r) (k i))
+        m u ∈ supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) := by
+  have hmem (i : {i // a i ∈ graphNeighborhood Λ r S}) :
+      CFC.sqrt (1 - siteExpectation q (graphBall (domainGraph Λ) (a i) r) (k i)) ∈
+        supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) := by
+    set K := graphBall (domainGraph Λ) (a i) r
+    have hK : CFC.sqrt (1 - siteExpectation q K (k i)) ∈
+        supportedOperators q (K : Set (Site Λ)) :=
+      sqrt_mem_supportedOperators K (sub_nonneg.mpr (siteExpectation_le_one _ (hk₁ i)))
+        ((supportedOperators q (K : Set (Site Λ))).sub_mem (one_mem_supportedOperators _)
+          (siteExpectation_mem_supportedOperators K (k i)))
+    exact supportedOperators_mono
+      (by exact_mod_cast graphBall_subset_graphNeighborhood_two_mul i.2) hK
+  intro m
+  induction m with
+  | zero => intro u; rw [contractionWord_zero]; exact one_mem_supportedOperators _
+  | succ m ih =>
+    intro u
+    rw [contractionWord]
+    exact mul_mem_supportedOperators (hmem _) (ih _)
+
+/-- **Truncation of the retained constraint product for general constraints**
+(Lemma 10.1, `lem:amplification-local-products`, `eq:amplification-product-truncation`,
+`09-amplification.tex`, lines 42–63, proof at lines 228–234).
+For tail constants `C ≥ 0`, `c > 0` and a multiplicity bound `μ ≥ 0` there are `A ≥ 0`
+and `γ > 0` with the following property. Let `k_i` be positive contractions on a finite
+domain `Λ`, anchored at `a_i` with at most `μ` labels per site, with
+`‖k_i - E_{N_l(a_i)} k_i‖ ≤ C e^{-c l^α}` for all `l`. Retain the labels with
+`d_Λ(a_i, S) ≤ r`. On each realization `w` of the full Poisson word, let `D_ret(w)` be
+the chronological product of the roots `(I - k_i)^{1/2}` over the retained events and
+`L(w)` the same product of `(I - E_{N_r(a_i)} k_i)^{1/2}`. Then `‖D_ret - L‖` is
+integrable, `E‖D_ret - L‖ ≤ A t |S| (1 + r)² e^{-γ r^α}`, and every `L(w)` is a
+contraction supported on `N_{2r}(S)`. The constants precede the local dimension,
+domain, labels, anchors, constraints, `S`, `r` and `t`. The source assumes `S`
+nonempty and `r ≥ 1`; neither is needed here. -/
+theorem exists_domainConstraintWord_truncation {C μ c α : ℝ} (hC : 0 ≤ C) (hμ : 0 ≤ μ)
+    (hc : 0 < c) :
+    ∃ A γ : ℝ, 0 ≤ A ∧ 0 < γ ∧
+      ∀ {q : ℕ} [NeZero q] (Λ : Finset (ℤ × ℤ)) (κ : Type*) [Fintype κ]
+        (a : κ → Site Λ) (k : κ → Matrix (Configuration Λ q) (Configuration Λ q) ℂ),
+        (∀ i, 0 ≤ k i) → (∀ i, k i ≤ 1) →
+        (∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ) →
+        (∀ i (l : ℕ), ‖k i - siteExpectation q (graphBall (domainGraph Λ) (a i) l) (k i)‖ ≤
+          C * Real.exp (-(c * (l : ℝ) ^ α))) →
+        ∀ (S : Finset (Site Λ)) (r : ℕ) (t : ℝ≥0),
+        let P := fun i : κ => a i ∈ graphNeighborhood Λ r S
+        let kr := fun i : {i // P i} =>
+          siteExpectation q (graphBall (domainGraph Λ) (a i) r) (k i)
+        let D := fun w : PoissonWord.Word κ =>
+          contractionWord (fun i : {i // P i} => k i) (PoissonWord.partitionWords P w).1.1
+            (PoissonWord.partitionWords P w).1.2
+        let L := fun w : PoissonWord.Word κ =>
+          contractionWord kr (PoissonWord.partitionWords P w).1.1
+            (PoissonWord.partitionWords P w).1.2
+        Integrable (fun w => ‖D w - L w‖) (PoissonWord.measure κ t) ∧
+        (∫ w, ‖D w - L w‖ ∂PoissonWord.measure κ t) ≤
+          A * t * S.card * (1 + (r : ℝ)) ^ 2 * Real.exp (-(γ * (r : ℝ) ^ α)) ∧
+        ∀ w, ‖L w‖ ≤ 1 ∧
+          L w ∈ supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) := by
+  refine ⟨2 * μ * Real.sqrt C, c / 2, by positivity, by positivity, ?_⟩
+  intro q _ Λ κ _ a k hk₀ hk₁ hfiber htail S r t P kr D L
+  have hkr₀ (i : {i // P i}) : 0 ≤ kr i := siteExpectation_nonneg _ (hk₀ i)
+  have hkr₁ (i : {i // P i}) : kr i ≤ 1 := siteExpectation_le_one _ (hk₁ i)
+  set ε := Real.sqrt C * Real.exp (-(c / 2 * (r : ℝ) ^ α)) with hε_def
+  have hε (i : {i // P i}) : ‖CFC.sqrt (1 - k i) - CFC.sqrt (1 - kr i)‖ ≤ ε := by
+    refine (norm_sqrt_one_sub_sub_le (hk₁ i) (hkr₁ i)).trans ?_
+    calc Real.sqrt ‖k i - kr i‖ ≤ Real.sqrt (C * Real.exp (-(c * (r : ℝ) ^ α))) :=
+          Real.sqrt_le_sqrt (htail i r)
+      _ = ε := by
+          rw [Real.sqrt_mul hC, ← Real.exp_half, hε_def]
+          ring_nf
+  obtain ⟨hint, hle⟩ := integrable_and_integral_norm_contractionWord_retained_sub_le P
+    (fun i : {i // P i} => k i) kr (fun i => hk₀ i) hkr₀ hε t
+  refine ⟨hint, hle.trans ?_, fun w => ⟨norm_contractionWord_le_one kr hkr₀ _ _,
+    contractionWord_siteExpectation_mem_supportedOperators a _ (fun i => hk₁ i) _ _⟩⟩
+  have hcardP : (Fintype.card {i // P i} : ℝ) ≤ 2 * μ * S.card * (1 + (r : ℝ)) ^ 2 := by
+    rw [Fintype.card_subtype]; exact card_filter_anchor_mem_graphNeighborhood_le a hμ hfiber S r
+  have hε0 : 0 ≤ ε := by positivity
+  calc ε * Fintype.card {i // P i} * t ≤ ε * (2 * μ * S.card * (1 + (r : ℝ)) ^ 2) * t :=
+        mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hcardP hε0) t.2
+    _ = _ := by rw [hε_def]; ring
 
 /-- **Truncation of the retained constraint product** (Lemma 10.1,
 `lem:amplification-local-products`, `eq:amplification-product-truncation`,
@@ -287,40 +390,20 @@ theorem exists_latticeConstraintWord_truncation {p : ℕ} (hp : 1 ≤ p) (R : �
   obtain ⟨-, hk, -⟩ := hpos Λ h a ha E₀ Ω hgs
   have hk₀ (i : {i // P i}) : 0 ≤ k i := (hk i).1
   have hkr₀ (i : {i // P i}) : 0 ≤ kr i := siteExpectation_nonneg _ (hk i).1
-  have hkr₁ (i : {i // P i}) : kr i ≤ 1 := siteExpectation_le_one _ (hk i).2.1
   set ε := C * Real.exp (-(c * (r : ℝ) ^ kernelExponent p))
   have hε (i : {i // P i}) : ‖CFC.sqrt (1 - k i) - CFC.sqrt (1 - kr i)‖ ≤ ε := by
     obtain ⟨-, -, -, -, -, -, htail, -⟩ := hroots Λ h a ha E₀ Ω hgs i r
     exact le_of_add_le_of_nonneg_left htail (norm_nonneg _)
   obtain ⟨hint, hle⟩ :=
     integrable_and_integral_norm_contractionWord_retained_sub_le P k kr hk₀ hkr₀ hε t
-  refine ⟨hint, hle.trans ?_, fun w => ⟨norm_contractionWord_le_one kr hkr₀ _ _, ?_⟩⟩
-  · have hcardP : (Fintype.card {i // P i} : ℝ) ≤ 2 * μ * S.card * (1 + (r : ℝ)) ^ 2 := by
-      rw [Fintype.card_subtype]; exact card_anchor_graphNeighborhood_le a ha S r
-    have hε0 : 0 ≤ ε := by positivity
-    calc ε * Fintype.card {i // P i} * t ≤ ε * (2 * μ * S.card * (1 + (r : ℝ)) ^ 2) * t :=
-          mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hcardP hε0) t.2
-      _ = _ := by ring
-  · -- Each truncated root acts on `N_r(a_i) ⊆ N_{2r}(S)`, hence so does the product.
-    have hmem (i : {i // P i}) : CFC.sqrt (1 - kr i) ∈
-        supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) := by
-      set K := graphBall (domainGraph Λ) (a i) r
-      have hK : CFC.sqrt (1 - kr i) ∈ supportedOperators q (K : Set (Site Λ)) :=
-        sqrt_mem_supportedOperators K (sub_nonneg.mpr (hkr₁ i))
-          ((supportedOperators q (K : Set (Site Λ))).sub_mem (one_mem_supportedOperators _)
-            (siteExpectation_mem_supportedOperators K (k i)))
-      exact supportedOperators_mono
-        (by exact_mod_cast graphBall_subset_graphNeighborhood_two_mul i.2) hK
-    have hword : ∀ (m : ℕ) (u : Fin m → {i // P i}), contractionWord kr m u ∈
-        supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) := by
-      intro m
-      induction m with
-      | zero => intro u; rw [contractionWord_zero]; exact one_mem_supportedOperators _
-      | succ m ih =>
-        intro u
-        rw [contractionWord]
-        exact mul_mem_supportedOperators (hmem _) (ih _)
-    exact hword _ _
+  refine ⟨hint, hle.trans ?_, fun w => ⟨norm_contractionWord_le_one kr hkr₀ _ _,
+    contractionWord_siteExpectation_mem_supportedOperators a k (fun i => (hk i).2.1) _ _⟩⟩
+  have hcardP : (Fintype.card {i // P i} : ℝ) ≤ 2 * μ * S.card * (1 + (r : ℝ)) ^ 2 := by
+    rw [Fintype.card_subtype]; exact card_anchor_graphNeighborhood_le a ha S r
+  have hε0 : 0 ≤ ε := by positivity
+  calc ε * Fintype.card {i // P i} * t ≤ ε * (2 * μ * S.card * (1 + (r : ℝ)) ^ 2) * t :=
+        mul_le_mul_of_nonneg_right (mul_le_mul_of_nonneg_left hcardP hε0) t.2
+    _ = _ := by ring
 
 end Lattice
 

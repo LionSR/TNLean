@@ -1,0 +1,111 @@
+% Figure arealaw2d_repair_replacement.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL App. A 4 (repairs, Lemma 8), Fig. 8(b), right: the after
+% half of the repair, joined by \longrightarrow to area_law_initial_active_radial.
+% Source: arXiv OpenAI2026AreaLaw, sections/10-geometry.tex:372-416 (the
+% repair step, (11.9)-(11.10)) and the right panel of Fig. 4
+% (geometry:repair-picture, lines 418-466).
+% Ink-to-index: same frame, options, star atoms and rays as
+% area_law_initial_active_radial; v is at (5,5), the dotted square is the
+% boundary of the closed ball of radius r = a_0 S, and the eight rays run in
+% the axis and diagonal directions. The removal square Q_v = v + [-d(S),d(S)]^2
+% has corners (3,3), (3,7), (7,7), (7,3) and is drawn solid on all four sides:
+% every perimeter segment now separates an old identifier from a new one of
+% the opposite label. Outside Q_v the rays are as before: active NW, NE, S,
+% SW solid; merged seams N, E, SE, W dashed. Inside Q_v only the four active
+% rays continue to v (from (3,3), (3,7), (7,5), (7,3)); no seam is drawn
+% inside. A label i_s^l means identifier i_s with family label l, and is
+% inked in that family's hue (teal fam0 = label 0, olive fam1 = label 1),
+% the hues of the before panel's identifiers, so every identifier keeps its
+% ink across the pair (rule H7). The mark v is the red centre dot, as in the
+% before panel; its label sits east, where no inner ray runs.
+% Outer sectors: i_1^0 (NW..NE), i_2^1 (NE..S, via E and SE; labelled once
+% in each of its three outer triangles, at the before panel's stations),
+% i_3^0 (S..SW), i_4^1 (SW..NW, via W), alternating across active rays as
+% in Lemma 11.3. Each new inner sector j_s lies between the same pair of
+% active rays as i_s and carries the opposite label: j_1^1, j_2^0, j_3^1,
+% j_4^0, each set near its sector's centroid. The j labels stay at
+% script size: they are the next generation (scale d(S)), and the S..SW
+% inner sector (inradius 0.59 pitch) cannot hold a text-size label without
+% touching a ray. The eight small black dots (corners and side midpoints of
+% Q_v) and v are the next-generation marks, all at scale d(S); same-label
+% contacts occur only at these nine marks. Q_v has halfside d(S) (stated in
+% the note's text; no bracket, which crowded the j labels at column pitch).
+% The ball B_inf(v,r) is named once, under the before panel.
+% Boundary signature: empty (geometry only; these lines are interfaces, not
+% tensor indices).
+% Not to scale: d(S) <= a_0 S / 1000 by (11.10); here d(S) = r/2.
+% Related: area_law_initial_active_radial is the before panel (identifiers in
+% family hues, no superscripts). peps_dyadic_rim_pattern is not a
+% duplicate: it homogenises a square to the surrounding label, which moves a
+% true vertex to the rim; this repair keeps the eight rays and gives every
+% new identifier the label opposite to the exterior sector it continues.
+% Label placement: explicit stations; the inner anchors are nested
+% midpoints near v, chosen so that each j label lands inside its sector
+% (j_3 is lifted an eighth pitch so it clears the lower side of Q_v).
+% Checked at 150 and 600 dpi side by side at 5.6mm (AL s02 and
+% tests/glyphs.tex); at 4mm the outer labels touch the seams.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[size=s, metrics=compact, rows={wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=9, bonds=none]
+        \tndeclare{species}{fam0}{hue=source:teal}
+        \tndeclare{species}{fam1}{hue=source:olive}
+        \tndeclare{species}{centre}{hue=source:red}
+        \tn[at=(5,5), name=repc, skin=dot, species=centre, ports={45:virtual, 135:virtual, 225:virtual, 270:virtual}]{}
+        \tn[at=(1,1), name=repnw, ports={0:virtual, 270:virtual, 315:virtual}]{}
+        \tn[at=(1,5), name=repn, ports={0:virtual, 180:virtual, 270:virtual}]{}
+        \tn[at=(1,9), name=repne, ports={180:virtual, 225:virtual, 270:virtual}]{}
+        \tn[at=(5,9), name=repe, ports={90:virtual, 180:virtual, 270:virtual}]{}
+        \tn[at=(9,9), name=repse, ports={90:virtual, 135:virtual, 180:virtual}]{}
+        \tn[at=(9,5), name=reps, ports={0:virtual, 90:virtual, 180:virtual}]{}
+        \tn[at=(9,1), name=repsw, ports={0:virtual, 45:virtual, 90:virtual}]{}
+        \tn[at=(5,1), name=repw, ports={0:virtual, 90:virtual, 270:virtual}]{}
+        \tn[at=(3,3), name=qnw, skin=dot, ports={0:virtual, 135:virtual, 270:virtual, 315:virtual}]{}
+        \tn[at=(3,5), name=qn, skin=dot, ports={0:virtual, 90:virtual, 180:virtual}]{}
+        \tn[at=(3,7), name=qne, skin=dot, ports={45:virtual, 180:virtual, 225:virtual, 270:virtual}]{}
+        \tn[at=(5,7), name=qe, skin=dot, ports={0:virtual, 90:virtual, 270:virtual}]{}
+        \tn[at=(7,7), name=qse, skin=dot, ports={90:virtual, 180:virtual, 315:virtual}]{}
+        \tn[at=(7,5), name=qs, skin=dot, ports={0:virtual, 90:virtual, 180:virtual, 270:virtual}]{}
+        \tn[at=(7,3), name=qsw, skin=dot, ports={0:virtual, 45:virtual, 90:virtual, 225:virtual}]{}
+        \tn[at=(5,3), name=qw, skin=dot, ports={90:virtual, 180:virtual, 270:virtual}]{}
+        \tnwire[stroke=dotted, name=repsidenw]{repnw.0}{repn.180}
+        \tnwire[stroke=dotted, name=repsiden]{repn.0}{repne.180}
+        \tnwire[stroke=dotted, name=repsidene]{repne.270}{repe.90}
+        \tnwire[stroke=dotted, name=repsidee]{repe.270}{repse.90}
+        \tnwire[stroke=dotted, name=repsidese]{repse.180}{reps.0}
+        \tnwire[stroke=dotted, name=repsides]{reps.180}{repsw.0}
+        \tnwire[stroke=dotted, name=repsidesw]{repsw.90}{repw.270}
+        \tnwire[stroke=dotted, name=repsidew]{repw.90}{repnw.270}
+        \tnwire[name=reprayoutnw]{qnw.135}{repnw.315}
+        \tnwire[stroke=dashed, name=reprayoutn]{qn.90}{repn.270}
+        \tnwire[name=reprayoutne]{qne.45}{repne.225}
+        \tnwire[stroke=dashed, name=reprayoute]{qe.0}{repe.180}
+        \tnwire[stroke=dashed, name=reprayoutse]{qse.315}{repse.135}
+        \tnwire[name=reprayouts]{qs.270}{reps.90}
+        \tnwire[name=reprayoutsw]{qsw.225}{repsw.45}
+        \tnwire[stroke=dashed, name=reprayoutw]{qw.180}{repw.0}
+        \tnwire[name=qsidenw]{qnw.0}{qn.180}
+        \tnwire[name=qsiden]{qn.0}{qne.180}
+        \tnwire[name=qsidene]{qne.270}{qe.90}
+        \tnwire[name=qsidee]{qe.270}{qse.90}
+        \tnwire[name=qsidese]{qse.180}{qs.0}
+        \tnwire[name=qsides]{qs.180}{qsw.0}
+        \tnwire[name=qsidesw]{qsw.90}{qw.270}
+        \tnwire[name=qsidew]{qw.90}{qnw.270}
+        \tnwire[name=reprayinnw]{repc.135}{qnw.315}
+        \tnwire[name=reprayinne]{repc.45}{qne.225}
+        \tnwire[name=reprayins]{repc.270}{qs.90}
+        \tnwire[name=reprayinsw]{repc.225}{qsw.45}
+        \tnmark[form=label, label pos=0]{(5,5)}{$v$}
+        \tnmark[form=label, species=fam0, label pos=90]{(3,4)}{$i_1^{0}$}
+        \tnmark[form=label, species=fam1, label pos=90]{(4,8)}{$i_2^{1}$}
+        \tnmark[form=label, species=fam1, label pos=90]{(7,8)}{$i_2^{1}$}
+        \tnmark[form=label, species=fam1, label pos=90]{(9,6)}{$i_2^{1}$}
+        \tnmark[form=label, species=fam0, label pos=270]{(7,4)}{$i_3^{0}$}
+        \tnmark[form=label, species=fam1, label pos=180]{(4,3)}{$i_4^{1}$}
+        \tnmark[form=label, species=fam1, label pos=90]{midway midway (4,5) and (5,5) and (5,5)}{$\scriptstyle j_1^{1}$}
+        \tnmark[form=label, species=fam0, label pos=0]{midway midway (6,5) and (7,5) and (6,5)}{$\scriptstyle j_2^{0}$}
+        \tnmark[form=label, species=fam1, label pos=270]{midway midway midway (6,5) and (7,5) and (5,5) and (5,4)}{$\scriptstyle j_3^{1}$}
+        \tnmark[form=label, species=fam0, label pos=180]{midway midway midway (5,4) and (6,5) and (5,5) and (5,5)}{$\scriptstyle j_4^{0}$}
+    \end{tenkz}
+\end{center}

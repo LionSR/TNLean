@@ -47,6 +47,23 @@ abstracted — record why, so it is not re-proposed).
   helper and the production proofs passed the full project build, strict Lean
   checks, the named standard-axiom test, and blueprint declaration checks.
 
+### Finite virtual coordinates — promoted through Mathlib (2026-10-14)
+
+- **Pattern:** Enumerate each finite virtual alphabet independently, then
+  transport the finite contraction sum through the product bijection.
+- **Seen:** `Routing.toTensor_stateCoeff` in `RoutedContraction.lean` and
+  `DistributedOperatorContraction.operatorCoeff_toPartyNetwork` in
+  `DistributedPartyNetwork.lean`, both under `PEPS/Approximation/`.
+- **Abstraction:** Mathlib's `Equiv.piCongrRight` forms the product bijection;
+  `Equiv.sum_comp` transports the whole sum. Local factors reduce by
+  `Equiv.symm_apply_apply`. Both proofs use these existing declarations.
+- **Notes:** No new tactic or parallel finite-network structure is needed.
+  The distributed conversion retains all original link occurrences and their
+  endpoints, including parallel links and empty alphabets. Its equality is
+  entrywise under prescribed physical readouts; those readouts do not, in
+  general, preserve trace norms. The new declaration awaits hosted verification.
+
+
 ### Named comparison of arbitrary word evaluations — promoted (2026-10-14)
 
 - **Pattern:** Retain two constructed words and their own layouts in a named
@@ -4359,6 +4376,21 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Removing subsingleton physical coordinates — candidate (2026-10-14)
+
+- **Pattern:** In an inverse configuration map, prove equality at noncarrying
+  coordinates using the subsingleton property of their physical alphabet.
+- **Seen:** The exterior coordinate in `SelectedPhysicalConfigurations.lean`
+  and the complement of the designated owners in `PartyPhysicalCoordinates.lean`,
+  both under `PEPS/Approximation/`.
+- **Abstraction:** Both cases already use Mathlib's `Subsingleton.elim`.
+  The one-owner-per-site theorem supplies the complete dependent configuration
+  bijection; no additional closing tactic is proposed.
+- **Notes:** Subsingleton physical coordinates retain their scalar tensor
+  factors. No local tensor is assumed to equal one. The actual protocol must
+  supply the hypotheses of the owner-coordinate theorem.
+
+
 ### Upper endpoint of a scanner band — candidate (2026-10-12)
 
 - **Pattern:** Use the band index bound, the offset bound and $8Km\le L$
@@ -7624,3 +7656,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   if the final composition cancellation recurs in another file.
 - **Notes:** all three uses are in one file, below the two-file promotion
   threshold. No nonzero vector or nonempty index type is required.
+
+
+### Colors descended to connected fan runs — candidate (2026-10-14)
+
+- **Pattern:** Apply `SimpleGraph.ConnectedComponent.lift` to the triangle
+  colors, using `cellFanRun_color_eq` on the reachability of a walk.
+- **Seen:** The private `runColor` in
+  `PEPS/AreaLaw/Geometry/InitialRegions.lean` and
+  `repairFanRunExteriorColor` in
+  `PEPS/AreaLaw/Geometry/RepairReplacementRegions.lean`.
+- **Abstraction:** Mathlib already supplies the component descent. A common
+  color function for `CellFanRun` would remove the two applications if the
+  same expression is needed in another module; no additional tactic is needed.
+- **Notes:** Two occurrences in two files. The repair construction retains
+  its explicit exterior-color argument, while the initial family uses the
+  colors of its actual belt fan. Neither requires a representative of a run.

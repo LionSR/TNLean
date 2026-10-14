@@ -1,0 +1,108 @@
+% Figure polypeps_conical_clearance.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. IV D (the hypothesis of Proposition 1), Fig. 4.
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/02-information.tex:636-690
+% (prop:angular, eq:info-angular-separation, the layers and
+% eq:info-cumulative-separation); sections/06-geometry.tex, eqs. (7.6)-(7.8).
+% Formula: dist_inf(x,E) >= a max{s_min, min(n, d_V(x))} for every x in X,
+% with s_min = D log L and d_V(x) = min_{v in V} |x - v|_inf.
+% Ink-to-index: dots are the lattice sites of X and E; the other sites of
+% Lambda play no role and are left blank (glyphless atoms keep their places).
+% No tensors or open indices.  Row 1 and rows 15-19 are blank rows for
+% brackets.  One mark v (red centre dot, larger than the sites) at (14,9);
+% row 14 is the edge through v.  X (red tint, label below) and E (blue tint,
+% label below) are the staircases
+%   rows 12-14: X = cols 1-7, E = cols 11-17;
+%   rows 10-11: X = cols 1-6, E = cols 12-17;
+%   rows  8-9 : X = cols 1-5, E = cols 13-17;
+%   rows  2-7 : X = cols 1-4, E = cols 14-17,
+% so the gap is at the floor near v, grows linearly with d_V, and is capped.
+% With n = 8 and s_min = 2 the hypothesis holds with a = 7/8 (checked over
+% all sites).  The grey dashed strings, whose bottom ends stand on the edge
+% through v, are about v: the square of radius s_m ~ s_min = 2 (the closed
+% ball, rows 12-14, cols 7-11, the floor scale; in the protocol it is the
+% treated square of radius t = s_min); the boundary of {d_V < 2s_m} (rows
+% 11-14, cols 6-12); and the boundary of {d_V < n} (rows 7-14, cols 2-16).
+% The last two cut X into the layers {d_V >= n}, {2s_m <= d_V < n} and
+% {d_V < 2s_m} (here m = 2, s_0 = n, s_1 = 2s_m, s_2 = s_m), processed from
+% the outside in; the digits 0, 1, 2 mark the layer of scale s_j, each inside
+% its layer (column 1 lies in layer 0 on every row, so the digits cannot move
+% to the west margin).  Brackets: the cap >= a n on blank row 1 (cols 4-14,
+% last X column to first E column of the top rows); the cone >= a d_V in the
+% channel on row 8 (last X site to first E site); the floor >= a s_min on
+% blank row 15 (cols 7-11); and on blank rows 17-19 the radii of the three
+% squares measured from v's column: s_m (cols 9-11), 2s_m (cols 5-9, to the
+% west so that its label clears the others) and n (cols 9-17).
+% Not to scale: band slopes are ~10^{-3}; t and s_min = D log L are much
+% smaller than n.
+% Boundary signature: empty.
+% Related: peps_dyadic_normal_words holds the actual band words of the
+% protocol; area_law_dyadic_layers is a different construction (cells about
+% an endpoint set, not a tapering clearance).  \taperglyph is the 1-D profile.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[size=s, rows={wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire},
+            cols=17, bonds=none]
+        \tndeclare{species}{centre}{hue=source:red}
+        \tn[at=(17,9), skin=none]{} \tn[at=(17,11), skin=none]{} \tn[at=(18,5), skin=none]{} \tn[at=(18,9), skin=none]{} \tn[at=(19,9), skin=none]{} \tn[at=(19,17), skin=none]{}
+        \tn[at=(1,4), skin=none]{} \tn[at=(1,14), skin=none]{} \tn[at=(15,7), skin=none]{} \tn[at=(15,11), skin=none]{}
+        \tn[at=(2,1), skin=dot]{} \tn[at=(2,2), skin=dot]{} \tn[at=(2,3), skin=dot]{} \tn[at=(2,4), skin=dot]{}
+        \tn[at=(2,14), skin=dot]{} \tn[at=(2,15), skin=dot]{} \tn[at=(2,16), skin=dot]{} \tn[at=(2,17), skin=dot]{}
+        \tn[at=(3,1), skin=dot]{} \tn[at=(3,2), skin=dot]{} \tn[at=(3,3), skin=dot]{} \tn[at=(3,4), skin=dot]{}
+        \tn[at=(3,14), skin=dot]{} \tn[at=(3,15), skin=dot]{} \tn[at=(3,16), skin=dot]{} \tn[at=(3,17), skin=dot]{}
+        \tn[at=(4,1), skin=dot]{} \tn[at=(4,2), skin=dot]{} \tn[at=(4,3), skin=dot]{} \tn[at=(4,4), skin=dot]{}
+        \tn[at=(4,14), skin=dot]{} \tn[at=(4,15), skin=dot]{} \tn[at=(4,16), skin=dot]{} \tn[at=(4,17), skin=dot]{}
+        \tn[at=(5,1), skin=dot]{} \tn[at=(5,2), skin=dot]{} \tn[at=(5,3), skin=dot]{} \tn[at=(5,4), skin=dot]{}
+        \tn[at=(5,14), skin=dot]{} \tn[at=(5,15), skin=dot]{} \tn[at=(5,16), skin=dot]{} \tn[at=(5,17), skin=dot]{}
+        \tn[at=(6,1), skin=dot]{} \tn[at=(6,2), skin=dot]{} \tn[at=(6,3), skin=dot]{} \tn[at=(6,4), skin=dot]{}
+        \tn[at=(6,14), skin=dot]{} \tn[at=(6,15), skin=dot]{} \tn[at=(6,16), skin=dot]{} \tn[at=(6,17), skin=dot]{}
+        \tn[at=(7,1), skin=dot]{} \tn[at=(7,2), skin=dot]{} \tn[at=(7,3), skin=dot]{} \tn[at=(7,4), skin=dot]{}
+        \tn[at=(7,14), skin=dot]{} \tn[at=(7,15), skin=dot]{} \tn[at=(7,16), skin=dot]{} \tn[at=(7,17), skin=dot]{}
+        \tn[at=(8,1), skin=dot]{} \tn[at=(8,2), skin=dot]{} \tn[at=(8,3), skin=dot]{} \tn[at=(8,4), skin=dot]{}
+        \tn[at=(8,5), skin=dot]{} \tn[at=(8,13), skin=dot]{} \tn[at=(8,14), skin=dot]{} \tn[at=(8,15), skin=dot]{}
+        \tn[at=(8,16), skin=dot]{} \tn[at=(8,17), skin=dot]{} \tn[at=(9,1), skin=dot]{} \tn[at=(9,2), skin=dot]{}
+        \tn[at=(9,3), skin=dot]{} \tn[at=(9,4), skin=dot]{} \tn[at=(9,5), skin=dot]{} \tn[at=(9,13), skin=dot]{}
+        \tn[at=(9,14), skin=dot]{} \tn[at=(9,15), skin=dot]{} \tn[at=(9,16), skin=dot]{} \tn[at=(9,17), skin=dot]{}
+        \tn[at=(10,1), skin=dot]{} \tn[at=(10,2), skin=dot]{} \tn[at=(10,3), skin=dot]{} \tn[at=(10,4), skin=dot]{}
+        \tn[at=(10,5), skin=dot]{} \tn[at=(10,6), skin=dot]{} \tn[at=(10,12), skin=dot]{} \tn[at=(10,13), skin=dot]{}
+        \tn[at=(10,14), skin=dot]{} \tn[at=(10,15), skin=dot]{} \tn[at=(10,16), skin=dot]{} \tn[at=(10,17), skin=dot]{}
+        \tn[at=(11,1), skin=dot]{} \tn[at=(11,2), skin=dot]{} \tn[at=(11,3), skin=dot]{} \tn[at=(11,4), skin=dot]{}
+        \tn[at=(11,5), skin=dot]{} \tn[at=(11,6), skin=dot]{} \tn[at=(11,12), skin=dot]{} \tn[at=(11,13), skin=dot]{}
+        \tn[at=(11,14), skin=dot]{} \tn[at=(11,15), skin=dot]{} \tn[at=(11,16), skin=dot]{} \tn[at=(11,17), skin=dot]{}
+        \tn[at=(12,1), skin=dot]{} \tn[at=(12,2), skin=dot]{} \tn[at=(12,3), skin=dot]{} \tn[at=(12,4), skin=dot]{}
+        \tn[at=(12,5), skin=dot]{} \tn[at=(12,6), skin=dot]{} \tn[at=(12,7), skin=dot]{} \tn[at=(12,11), skin=dot]{}
+        \tn[at=(12,12), skin=dot]{} \tn[at=(12,13), skin=dot]{} \tn[at=(12,14), skin=dot]{} \tn[at=(12,15), skin=dot]{}
+        \tn[at=(12,16), skin=dot]{} \tn[at=(12,17), skin=dot]{} \tn[at=(13,1), skin=dot]{} \tn[at=(13,2), skin=dot]{}
+        \tn[at=(13,3), skin=dot]{} \tn[at=(13,4), skin=dot]{} \tn[at=(13,5), skin=dot]{} \tn[at=(13,6), skin=dot]{}
+        \tn[at=(13,7), skin=dot]{} \tn[at=(13,11), skin=dot]{} \tn[at=(13,12), skin=dot]{} \tn[at=(13,13), skin=dot]{}
+        \tn[at=(13,14), skin=dot]{} \tn[at=(13,15), skin=dot]{} \tn[at=(13,16), skin=dot]{} \tn[at=(13,17), skin=dot]{}
+        \tn[at=(14,1), skin=dot]{} \tn[at=(14,2), skin=dot]{} \tn[at=(14,3), skin=dot]{} \tn[at=(14,4), skin=dot]{}
+        \tn[at=(14,5), skin=dot]{} \tn[at=(14,6), skin=dot]{} \tn[at=(14,7), skin=dot]{} \tn[at=(14,11), skin=dot]{}
+        \tn[at=(14,12), skin=dot]{} \tn[at=(14,13), skin=dot]{} \tn[at=(14,14), skin=dot]{} \tn[at=(14,15), skin=dot]{}
+        \tn[at=(14,16), skin=dot]{} \tn[at=(14,17), skin=dot]{}
+        \tn[at=(14,9), name=coneMark, skin=dot, species=centre, size=l]{}
+        \tnmark[form=enclosure, species=selected, tint, label pos=s]
+        {(2,1) .. (14,7) - (2,5) .. (7,7) - (8,6) .. (9,7) - (10,7) .. (11,7)}{$X$}
+        \tnmark[form=enclosure, species=secondary, tint, label pos=s]
+        {(2,11) .. (14,17) - (2,11) .. (7,13) - (8,11) .. (9,12) - (10,11) .. (11,11)}{$E$}
+        \tnwire[kind=string, species=complement, stroke=dashed, route=orth,
+            via={midway (11,6) and (12,7), midway (11,11) and (12,12)}]
+        {midway (14,6) and (14,7)}{midway (14,11) and (14,12)}
+        \tnwire[kind=string, species=complement, stroke=dashed, route=orth,
+            via={midway (10,5) and (11,6), midway (10,12) and (11,13)}]
+        {midway (14,5) and (14,6)}{midway (14,12) and (14,13)}
+        \tnwire[kind=string, species=complement, stroke=dashed, route=orth,
+            via={midway (6,1) and (7,2), midway (6,16) and (7,17)}]
+        {midway (14,1) and (14,2)}{midway (14,16) and (14,17)}
+        \tnmark[form=label, label pos=n]{coneMark}{$v$}
+        \tnmark[form=bracket, label pos=n]{(1,4) .. (1,14)}{$\ge a n$}
+        \tnmark[form=bracket, label pos=s]{(8,5) .. (8,13)}{$\ge a d_{\mathcal V}$}
+        \tnmark[form=bracket, label pos=s]{(15,7) .. (15,11)}{$\ge a s_{\min}$}
+        \tnmark[form=bracket, label pos=s]{(17,9) .. (17,11)}{$s_m$}
+        \tnmark[form=bracket, label pos=s]{(18,5) .. (18,9)}{$2s_m$}
+        \tnmark[form=bracket, label pos=s]{(19,9) .. (19,17)}{$n$}
+        \tnmark[form=label, label pos=e]{midway (3,2) and (4,2)}{$0$}
+        \tnmark[form=label, label pos=e]{midway (8,2) and (9,2)}{$1$}
+        \tnmark[form=label, label pos=n]{0.15 s of (13,6)}{$2$}
+    \end{tenkz}
+\end{center}

@@ -97,7 +97,6 @@ theorem graphChannelEventKernel_eq_zero_of_not_reachable
 
 /-- The anchors whose balls of radius `l` contain `y` number at most `μ` times the size of the
 ball of radius `l` about `y`.
-
 Source: area law, `09-amplification.tex`, lines 152–154, the anchor-label count in the
 weighted-row estimate. -/
 theorem card_graphBall_anchors_le (G : SimpleGraph ι) (a : κ → ι)
