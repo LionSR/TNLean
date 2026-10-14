@@ -297,3 +297,68 @@ common free inputs used in the two separated contractions in
     sets. Restrict the product over all occurrences to $\mathcal G^+$,
     where the touched condition holds.
 \end{proof}
+
+\begin{theorem}[Mixed coefficients at the original gate occurrences]
+    \label{thm:peps_mixed_chronological_coefficients}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.coefficient_all_mul_conj_eq_prod_nonemptyGateLocations}
+    \leanok
+    \uses{def:peps_touched_labels}
+    Let $w$ be a chronological source composition on an arbitrary party set
+    $P$, and let $\xi,\zeta\in\Xi_P$ be two all-party choices. Write
+    $\mathcal G^+=\{g:C_g\neq\varnothing\}$ for the original nonempty
+    participant occurrences and $c_{g,\alpha}$ for their branch coefficients.
+    Then
+    \begin{align}
+        c_\xi\overline{c_\zeta}
+        =\prod_{g\in\mathcal G^+}
+        c_{g,\xi_g}\overline{c_{g,\zeta_g}}.
+    \end{align}
+    The product over an empty occurrence set is one. Empty-participant
+    occurrences remain in the residual composition and contribute no factor
+    to this coefficient product. This is an auxiliary identity for the
+    expansion in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 351--381 and 565--573.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_chronological_coefficients}
+    Apply Theorem~\ref{thm:peps_chronological_coefficients} to each choice.
+    Complex conjugation preserves finite products, so
+    $\overline{c_\zeta}=\prod_{g\in\mathcal G^+}\overline{c_{g,\zeta_g}}$.
+    Multiply the two products term by term.
+\end{proof}
+
+\begin{theorem}[Reindexing the mixed expansion by gate labels]
+    \label{thm:peps_mixed_gate_label_sum}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sum_coefficient_all_mul_conj_smul_eq_sum_nonemptyGateLabels}
+    \leanok
+    \uses{def:peps_touched_labels}
+    With the same chronological composition, let
+    $L=\prod_{g\in\mathcal G^+}\Xi_g$ and let
+    $e\colon\Xi_P\to L$ be the bijection that records each original gate
+    label. For arbitrary index sets $I,J$ and any matrix family
+    $K\colon\Xi_P\times\Xi_P\to\C^{I\times J}$,
+    \begin{align}
+        \sum_{\xi\in\Xi_P}\sum_{\zeta\in\Xi_P}
+        c_\xi\overline{c_\zeta}\,K(\xi,\zeta)
+         & =\sum_{\eta\in L}\sum_{\theta\in L}
+        \left(\prod_{g\in\mathcal G^+}
+        c_{g,\eta_g}\overline{c_{g,\theta_g}}\right)
+        K(e^{-1}\eta,e^{-1}\theta).
+    \end{align}
+    The identity includes empty party sets and empty label sets.
+    An empty label-function set gives an empty sum; an empty occurrence set
+    gives a singleton label-function set and coefficient one. This is an
+    auxiliary reindexing of the expansion in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
+    \texttt{04-compression.tex}, lines 351--381 and 565--573.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_touched_labels,thm:peps_mixed_chronological_coefficients}
+    Replace each mixed coefficient by
+    Theorem~\ref{thm:peps_mixed_chronological_coefficients}. Reindex the outer
+    sum by $\eta=e\xi$ and the inner sum by $\theta=e\zeta$.
+    The inverse identities give
+    $K(\xi,\zeta)=K(e^{-1}\eta,e^{-1}\theta)$.
+\end{proof}

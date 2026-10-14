@@ -29,7 +29,7 @@ adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 
 The configurations of the physical sites and both auxiliary sites are retained.
 Identification with the regions and geometric mean at a scan point is a
-separate application. The proof remains unfinished.
+separate application.
 -/
 
 noncomputable section

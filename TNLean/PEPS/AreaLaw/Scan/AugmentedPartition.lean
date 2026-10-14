@@ -104,4 +104,28 @@ theorem augmentedMove_apply (σ : PhysicalPartition V) (side : Bool) (B : Finset
       and_false, exists_false, Option.some.injEq, Bool.false_eq_true,
       Bool.true_eq_false, reduceCtorEq] <;> simp
 
+/-- Adjoining C to the physical near side and R to the physical far side gives
+these three images of the same physical partition. The auxiliary sites are
+represented by Sum.inr false and Sum.inr true, respectively.
+Source: OpenAI, A two-dimensional area law from a global spectral gap,
+08-scanner.tex, lines 83–98, at
+openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a. -/
+theorem augmentedPartition_eq_images
+    {V : Type*} [Fintype V] [DecidableEq V] (σ : PhysicalPartition V) :
+    augmentedPartition σ =
+      ({ P := insert (Sum.inr false)
+           ((receiving σ false).image (Sum.inl : V → V ⊕ Bool))
+         Y := (middle σ).image (Sum.inl : V → V ⊕ Bool)
+         F := insert (Sum.inr true)
+           ((receiving σ true).image (Sum.inl : V → V ⊕ Bool)) } :
+        TensorPower.ReplicaTransport.PYF (V ⊕ Bool)) := by
+  unfold augmentedPartition
+  congr 1
+  all_goals ext x
+  all_goals cases x
+  all_goals simp only [receiving, middle, Finset.mem_filter, Finset.mem_univ,
+    true_and, Finset.mem_insert, Finset.mem_image]
+  all_goals simp [augmentedState]
+
+
 end TNLean.PEPS.AreaLaw.Scan

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.TorusCovariantAbsorbedFamily
-import TNLean.PEPS.NormalSquareInjectivity
+import TNLean.PEPS.NormalTorusRectanglePEPS
 import TNLean.PEPS.TorusFundamentalTheorem
 import TNLean.Algebra.ZModSmallDifference
 
@@ -35,6 +35,17 @@ endpoints swapped, the covariance carries the transposed inverse of the class ma
 the transpose-inverse of a proportionality inverts the constant.  The true class statement is
 therefore one constant `c` on the edges stored in the natural cyclic order (the stored second
 endpoint is the cyclic successor of the first) and `c⁻¹` on the seam edges.
+
+**Local fix (nonzero virtual spaces):** the source treats the virtual bond spaces as nonzero
+(arXiv:1804.04964, lines 582 and 1037 of `Papers/1804.04964/paper_normal.tex`) without listing
+this among the hypotheses of Theorem 3.  The three uniqueness clauses
+`torusAbsorbedGauge_unique_scalar`, `torusCovariantAbsorbedGauge_unique_classScalar` and
+`torusGauge_unique_scalar_of_perVertex` take the tensor hypothesis `IsNormalTorusRectanglePEPS`,
+which carries the convention as the field `bondDim_pos`, and state no separate positivity
+hypothesis.  The region step `torusAbsorbedGauge_unique_scalar_of_region` takes its tensor only
+through injectivity of one region and its complement, which does not force nonzero bonds, so it
+keeps explicit positivity; its callers supply it from the tensor hypothesis.  Documented in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
 
 ## References
 
@@ -223,10 +234,11 @@ theorem torusAbsorbedGauge_unique_scalar_of_region
 
 /-- **Per-edge uniqueness of the absorbing gauge family, Theorem 3 uniqueness clause.**
 
-For a translation-invariant pair `A`, `B` on the torus with the hypotheses of the torus
-Fundamental Theorem (rectangular injectivity for both tensors, matched positive bond dimensions,
-the same state), two gauge families `X`, `X'` both realizing the bare-edge absorbed equality at
-an edge `e` are proportional at `e`: `X' e = c · X e` for a nonzero scalar `c`.
+For a translation-invariant pair `A`, `B` of normal torus tensors with the hypotheses of the
+torus Fundamental Theorem (`IsNormalTorusRectanglePEPS` for both tensors, matched bond
+dimensions, the same state), two gauge families `X`, `X'` both realizing the bare-edge
+absorbed equality at an edge `e` are proportional at `e`: `X' e = c · X e` for a nonzero
+scalar `c`.
 
 The comparison region with `e` on its boundary, together with `B`'s region and complement
 injectivity, is the one produced by the witness family of `e`'s orientation class
@@ -239,14 +251,9 @@ via the conjugator determinacy of the isomorphism lemma, lines 560--583. -/
 theorem torusAbsorbedGauge_unique_scalar
     {A B : Tensor (torusGraph width height) d}
     (hA : IsTorusTranslationInvariant A) (hB : IsTorusTranslationInvariant B)
-    (hAr : NormalTorusRectangleInjectivityHypotheses
-      (regionInjectivityDataOf (G := torusGraph width height) A))
-    (hBr : NormalTorusRectangleInjectivityHypotheses
-      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hAn : IsNormalTorusRectanglePEPS A) (hBn : IsNormalTorusRectanglePEPS B)
     (hw : 7 ≤ width) (hh : 7 ≤ height)
     (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
-    (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
-    (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)
     (X X' : (g : Edge (torusGraph width height)) → GL (Fin (B.bondDim g)) ℂ)
     (e : Edge (torusGraph width height))
     (hedgeX : ∀ (σ : TorusVertex width height → Fin d)
@@ -261,12 +268,12 @@ theorem torusAbsorbedGauge_unique_scalar
           (Matrix.reindexAlgEquiv ℂ ℂ (finCongr (congr_fun hbond e)) N)) :
     ∃ c : ℂˣ, (X' e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) =
       (c : ℂ) • (X e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) := by
-  have hUA : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) A) :=
-    regionInjectivityUnionClosure_of_overlap A hposA
-  have hUB : RegionInjectivityUnionClosure
-      (regionInjectivityDataOf (G := torusGraph width height) B) :=
-    regionInjectivityUnionClosure_of_overlap B hposB
+  have hAr := hAn.toNormalTorusRectangleInjectivityHypotheses
+  have hBr := hBn.toNormalTorusRectangleInjectivityHypotheses
+  have hposA := hAn.bondDim_pos
+  have hposB := hBn.bondDim_pos
+  have hUA := hAn.unionClosure
+  have hUB := hBn.unionClosure
   rcases torusEdge_horizontal_or_vertical e with he | he
   · obtain ⟨Z, Zref, hE, ⟨w⟩⟩ := exists_edgeCoeffIdentityWitness_horizontalFamily
       (xStart := width - 5) (yStart := height - 5) hA hB hAr hBr hUA hUB (by omega) (by omega)
@@ -398,14 +405,9 @@ lines 560--583. -/
 theorem torusCovariantAbsorbedGauge_unique_classScalar
     {A B : Tensor (torusGraph width height) d}
     (hA : IsTorusTranslationInvariant A) (hB : IsTorusTranslationInvariant B)
-    (hAr : NormalTorusRectangleInjectivityHypotheses
-      (regionInjectivityDataOf (G := torusGraph width height) A))
-    (hBr : NormalTorusRectangleInjectivityHypotheses
-      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hAn : IsNormalTorusRectanglePEPS A) (hBn : IsNormalTorusRectanglePEPS B)
     (hw : 7 ≤ width) (hh : 7 ≤ height)
     (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
-    (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
-    (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)
     (X X' : (g : Edge (torusGraph width height)) → GL (Fin (B.bondDim g)) ℂ)
     (hXcov : IsTranslationCovariantGaugeFamily B X)
     (hX'cov : IsTranslationCovariantGaugeFamily B X')
@@ -442,11 +444,11 @@ theorem torusCovariantAbsorbedGauge_unique_classScalar
   set xhStart := width - 5 with hxhdef
   set yhStart := height - 5 with hyhdef
   -- The reference-edge scalars of the two orientation classes.
-  obtain ⟨ch, hch⟩ := torusAbsorbedGauge_unique_scalar hA hB hAr hBr hw hh
-    hbond hAB hd hposA hposB X X'
+  obtain ⟨ch, hch⟩ := torusAbsorbedGauge_unique_scalar hA hB hAn hBn hw hh
+    hbond hAB hd X X'
     (torusHorizontalReferenceEdge xhStart yhStart) (hedgeX _) (hedgeX' _)
-  obtain ⟨cv, hcv⟩ := torusAbsorbedGauge_unique_scalar hA hB hAr hBr hw hh
-    hbond hAB hd hposA hposB X X'
+  obtain ⟨cv, hcv⟩ := torusAbsorbedGauge_unique_scalar hA hB hAn hBn hw hh
+    hbond hAB hd X X'
     (torusVerticalReferenceEdge xhStart yhStart) (hedgeX _) (hedgeX' _)
   refine ⟨ch, cv, ?_, ?_⟩
   · -- The horizontal class.
@@ -682,14 +684,9 @@ Source: arXiv:1804.04964, Section 3, Theorem 3, line 1471 of
 theorem torusGauge_unique_scalar_of_perVertex
     {A B : Tensor (torusGraph width height) d}
     (hA : IsTorusTranslationInvariant A) (hB : IsTorusTranslationInvariant B)
-    (hAr : NormalTorusRectangleInjectivityHypotheses
-      (regionInjectivityDataOf (G := torusGraph width height) A))
-    (hBr : NormalTorusRectangleInjectivityHypotheses
-      (regionInjectivityDataOf (G := torusGraph width height) B))
+    (hAn : IsNormalTorusRectanglePEPS A) (hBn : IsNormalTorusRectanglePEPS B)
     (hw : 7 ≤ width) (hh : 7 ≤ height)
     (hbond : A.bondDim = B.bondDim) (hAB : SameState A B) (hd : 0 < d)
-    (hposA : ∀ g : Edge (torusGraph width height), 0 < A.bondDim g)
-    (hposB : ∀ g : Edge (torusGraph width height), 0 < B.bondDim g)
     (X X' : (g : Edge (torusGraph width height)) → GL (Fin (B.bondDim g)) ℂ)
     {lam lam' : ℂ}
     (hPV : ∀ (v : TorusVertex width height)
@@ -707,7 +704,7 @@ theorem torusGauge_unique_scalar_of_perVertex
     (e : Edge (torusGraph width height)) :
     ∃ c : ℂˣ, (X' e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) =
       (c : ℂ) • (X e : Matrix (Fin (B.bondDim e)) (Fin (B.bondDim e)) ℂ) :=
-  torusAbsorbedGauge_unique_scalar hA hB hAr hBr hw hh hbond hAB hd hposA hposB X X' e
+  torusAbsorbedGauge_unique_scalar hA hB hAn hBn hw hh hbond hAB hd X X' e
     (edgeAbsorbed_of_perVertex hbond X hPV hlam e)
     (edgeAbsorbed_of_perVertex hbond X' hPV' hlam' e)
 

@@ -19,6 +19,13 @@ The bond-dimension theorem accepts all positive window lengths at the source's m
 torus sizes. The complete derivation is recorded in
 `docs/paper-gaps/peps_normal_ft_2d_overlap.tex`.
 
+**Local fix (nonzero virtual spaces):** the source treats the virtual bond spaces as nonzero
+(arXiv:1804.04964, lines 582 and 1037 of `Papers/1804.04964/paper_normal.tex`) without listing
+this among the hypotheses of its corollaries. The bond-dimension theorem takes the tensor
+hypothesis `IsNormalTorusArcWindowPEPS`, whose field `bondDim_pos` carries it; the private
+horizontal step receives the positivity from that theorem. Documented in
+`docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+
 Source: arXiv:1804.04964, lines 582--586 and 2368--2444 of
 `Papers/1804.04964/paper_normal.tex`.
 -/
@@ -70,8 +77,8 @@ namespace TNLean.PEPS
 variable {width height d L K : ℕ} [NeZero width] [NeZero height]
 variable [Fact (1 < width)] [Fact (1 < height)]
 
-/-- Equality of PEPS states determines every bond dimension under normal arc-window
-injectivity. The torus has at least `2 * L + 1` columns and `2 * K + 1` rows,
+/-- Equality of PEPS states determines every bond dimension of two normal torus tensors at
+window size `L × K`. The torus has at least `2 * L + 1` columns and `2 * K + 1` rows,
 with positive `L` and `K`. The proof compares a horizontal staircase bond, exchanges the
 coordinates for the vertical comparison, and uses translation invariance.
 
@@ -79,15 +86,13 @@ Source: arXiv:1804.04964, lines 582--586 and 2368--2444 of
 `Papers/1804.04964/paper_normal.tex`. -/
 theorem bondDim_eq_of_normalArcWindows_sameState
     (A B : Tensor (torusGraph width height) d)
-    (hA : NormalTorusArcWindowInjectivityHypotheses L K (regionInjectivityDataOf A))
-    (hB : NormalTorusArcWindowInjectivityHypotheses L K (regionInjectivityDataOf B))
+    (hAn : IsNormalTorusArcWindowPEPS L K A) (hBn : IsNormalTorusArcWindowPEPS L K B)
     (hATI : IsTorusTranslationInvariant A) (hBTI : IsTorusTranslationInvariant B)
-    (hAB : SameState A B)
-    (hposA : ∀ e : Edge (torusGraph width height), 0 < A.bondDim e)
-    (hposB : ∀ e : Edge (torusGraph width height), 0 < B.bondDim e)
-    (hL : 0 < L) (hK : 0 < K)
+    (hAB : SameState A B) (hL : 0 < L) (hK : 0 < K)
     (hxw : 2 * L + 1 ≤ width) (hyh : 2 * K + 1 ≤ height) :
     A.bondDim = B.bondDim := by
+  obtain ⟨hA, hposA⟩ := hAn
+  obtain ⟨hB, hposB⟩ := hBn
   have hH := horizontalBondDim_eq_at_origin A B hA hB hATI hBTI hAB
     hposA hposB hL hK hxw hyh
   have hV' := horizontalBondDim_eq_at_origin

@@ -425,6 +425,27 @@ normalizations.
   parties in a larger construction. A bound on its cardinality and common
   source spaces across different monomials remain separate data or constructions.
 
+#### `TNLean.PEPS.Approximation.RepaintingUses` and `JunctionUses`
+
+- **Defined in:** `TNLean/PEPS/Approximation/DyadicActiveLabelParties.lean`,
+  together with `OwnsLevelBlock` and the hierarchy forms `DyadicSquare.Uses` and
+  `DyadicJunction.Uses`.
+- **Meaning:** the block parties an event of the dyadic protocol uses.
+  `OwnsLevelBlock j' Q x` says that `x` is the new party of the `2 ^ j'`-block `Q`
+  or the old party of its parent block. A repainting uses the owners of the blocks
+  within one index of its square; a junction resize uses the four blocks at its
+  corner.
+- **Source:** polynomial-PEPS manuscript, September 24, 2026, Section 7,
+  `06-geometry.tex`, lines 82–90, 127–131 and 585–594.
+- **Sanctioned bridges:** `repaintingUses_of_levelLabels` and
+  `junctionUses_of_incidentLabels` derive use from the block labelling at the
+  transition times between repaintings. `RepaintingUses.near` and
+  `JunctionUses.near` turn use into the nearness predicates `BlockNear` and
+  `CornerNear` of the lifetime-incidence count.
+- **Caveat:** use is a property of the events, not of gates. That every gate of
+  an event involves only parties the event uses is a separate hypothesis of
+  `card_gates_le_of_uses`, because the protocol's gates are not constructed.
+
 #### `TNLean.PEPS.IsVertexInjective`
 
 - **Declaration:** `TNLean.PEPS.IsVertexInjective (A : Tensor G d) : Prop`.
@@ -440,7 +461,96 @@ normalizations.
   `TNLean.PEPS.regionBlockedTensorInjective_of_isVertexInjective`.
 - **Caveat:** the last bridge requires
   `∀ e, 0 < A.bondDim e`. Function injectivity of the raw indexing function is
-  strictly weaker and is not the sanctioned notion.
+  strictly weaker and is not the sanctioned notion. Vertex injectivity alone
+  admits zero-dimensional bonds; source-facing theorems take
+  `TNLean.PEPS.Tensor.IsInjective` instead.
+
+#### `TNLean.PEPS.Tensor.IsInjective`
+
+- **Declaration:** `TNLean.PEPS.Tensor.IsInjective (A : Tensor G d) : Prop`, a
+  structure with fields `isVertexInjective : IsVertexInjective A` and
+  `bondDim_pos : ∀ e, 0 < A.bondDim e`.
+- **Defined in:** `TNLean/PEPS/Defs.lean`.
+- **Meaning:** an injective PEPS tensor: vertex injective, with every virtual
+  bond space nonzero.
+- **Source:** arXiv:1804.04964 §3, `Papers/1804.04964/paper_normal.tex:979-981`
+  for injectivity, together with the section's standing convention that virtual
+  bond spaces are nonzero; recorded as a Local fix in
+  `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+- **Sanctioned bridges:** the two field projections, the anonymous constructor,
+  and `TNLean.PEPS.Tensor.IsInjective.transport`.
+- **Caveat:** blocked, coarse, reindexed and transported tensors inside proofs
+  keep `IsVertexInjective` with positivity derived or stated separately; only
+  the source-facing theorems (the injective Fundamental Theorem, its uniqueness
+  clause, their cycle and torus corollaries, and the parent-Hamiltonian
+  support, rank and one-dimensionality results on general graphs) take this
+  structure; the span and kernel descriptions of the parent ground space keep
+  `IsVertexInjective` alone.
+
+#### `TNLean.PEPS.NormalPEPSPairHypotheses`
+
+- **Declaration:** `TNLean.PEPS.NormalPEPSPairHypotheses (A B : Tensor G d)`, a
+  structure extending `NormalPEPSBlockingHypotheses` at the doubly injective
+  assignment of `A` and `B`, with fields `bondDim_pos_left` and
+  `bondDim_pos_right`.
+- **Defined in:** `TNLean/PEPS/NormalBondDimension.lean`.
+- **Meaning:** two normal PEPS tensors in the setting of the general normal
+  Fundamental Theorem: shared edge blockings and one-site comparison regions,
+  each region injective for both tensors, and every virtual bond space of both
+  tensors nonzero.
+- **Source:** arXiv:1804.04964 §3, theorem labelled `normal`,
+  `Papers/1804.04964/paper_normal.tex:1576-1583`, with normality as defined at
+  line 1318; the nonzero bond spaces are recorded as a Local fix in
+  `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+- **Sanctioned bridges:** the structure projections and the structure-instance
+  constructor.
+- **Caveat:** it carries data (the blocking regions), so it is a `Type`, not a
+  `Prop`. The one-edge and coherent-frame steps keep explicit positivity,
+  because they see their tensors only through blocking data.
+
+#### Fixed-lattice normal tensor hypotheses
+
+- **Declarations:** four `Prop` structures, each extending a region-family
+  hypothesis at `regionInjectivityDataOf A` with the field
+  `bondDim_pos : ∀ e, 0 < A.bondDim e`:
+  - `TNLean.PEPS.IsNormalCycleArcMPS L A`, extending
+    `NormalCycleArcInjectivityHypotheses`, in
+    `TNLean/PEPS/CycleFundamentalTheorem.lean`;
+  - `TNLean.PEPS.IsNormalTorusRectanglePEPS A`, extending
+    `NormalTorusRectangleInjectivityHypotheses`, in
+    `TNLean/PEPS/NormalTorusRectanglePEPS.lean`;
+  - `TNLean.PEPS.IsNormalSquareLatticeRectanglePEPS A`, extending
+    `NormalSquareLatticeRectangleInjectivityHypotheses`, in
+    `TNLean/PEPS/NormalSquareUnconditionalFundamentalTheorem.lean`;
+  - `TNLean.PEPS.IsNormalTorusArcWindowPEPS L K A`, extending
+    `NormalTorusArcWindowInjectivityHypotheses`, in
+    `TNLean/PEPS/TorusWindowComplement.lean`.
+- **Meaning:** one normal tensor in the setting of a fixed-lattice corollary:
+  the source's injective blocks (`L` consecutive sites on the closed chain,
+  `2 × 3` and `3 × 2` rectangles on the torus or the open square lattice,
+  cyclic `L × K` windows on the torus), with every virtual bond space nonzero.
+- **Source:** arXiv:1804.04964 §3, `Papers/1804.04964/paper_normal.tex`: the
+  closed-chain corollary at lines 1597-1622, Theorem 3 at lines 1453-1471, and
+  the window corollary at lines 2297-2318; the nonzero bond spaces are recorded
+  as a Local fix in `docs/paper-gaps/peps_injective_ft_section3_route.tex`.
+- **Sanctioned bridges:** the structure projections and the anonymous
+  constructor; `IsNormalCycleArcMPS.pairHypotheses` builds
+  `NormalPEPSPairHypotheses` on the cycle, and
+  `IsNormalTorusRectanglePEPS.unionClosure` gives union closure.
+- **Caveat:** the region-family structures they extend are indexed by an
+  injectivity assignment, not by a tensor, so they cannot carry the
+  convention themselves. The source-facing existence, bond-dimension and
+  uniqueness theorems take the tensor structures and state no separate
+  positivity; this includes the torus uniqueness clauses
+  `torusAbsorbedGauge_unique_scalar`,
+  `torusCovariantAbsorbedGauge_unique_classScalar`,
+  `torusGauge_unique_scalar_of_perVertex` (both tensors through
+  `IsNormalTorusRectanglePEPS`) and
+  `torusGauge_unique_scalar_of_normalArcWindows` (the second tensor through
+  `IsNormalTorusArcWindowPEPS`). Internal steps that see a tensor only through
+  region data, such as `torusAbsorbedGauge_unique_scalar_of_region`, keep
+  explicit positivity, because injectivity of regions does not force nonzero
+  bonds; the source-facing theorems supply it.
 
 #### `TNLean.PEPS.RegionBlockedTensorInjective`
 
@@ -3219,6 +3329,31 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ## Distributed PEPS compression: finite incidence and choice costs
 
+### Equality of selected remaining operations
+
+- **Declaration:** `TNLean.PEPS.PairEffect.Word.IsSelectedLocalPartComparison`.
+- **Defined in:** `TNLean/PEPS/Approximation/AllPartySingletonComparison.lean`.
+- **Meaning:** For a Boolean owner selector and two chronological words, the
+  predicate is the heterogeneous equality of their remaining evaluations after
+  restriction to the selected owners. Each word's local part keeps its actual
+  ordered source registers as inputs and supplies its own source-free proof.
+  The two original input and output lists may differ; selected list identities
+  are supplied separately when deriving a comparison.
+- **Source:** OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
+  states*, September 24, 2026, proof of Theorem 5.2,
+  `04-compression.tex:351–434,565–588`,
+  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L351-L434).
+- **Sanctioned bridges:** In `TNLean.PEPS.PairEffect.SourceCircuit`,
+  `isSelectedLocalPartComparison_partialWord_all_gate` derives this comparison
+  for the actual all-party gate word and its lifted singleton projection.
+  `restrict_partialWord_all_localPart_eval_heq_singleton_projection` gives the
+  corresponding selected-operator identity for the whole original chronology.
+  Both retain the supplied branch choice, original source dimensions and
+  spectator registers.
+- **Caveat:** This predicate compares operators. Allowedness and factorization
+  of the complete physical density require separate results; no equivalence
+  with either is asserted. No norm or nonvanishing condition is imposed.
+
 ### Corrected source positions and whole-lifetime gate participation
 
 - **Declarations:** `TNLean.PEPS.Approximation.sourceEndpoints`, `correctedParties`,
@@ -3605,3 +3740,29 @@ source's Proposition 4.1.
   typical entropy and auxiliary dimension remain separate proof obligations.
   Those substitutions must already occur in the additive budgets; no uniform
   replica convergence rate over physical scales is supplied or needed.
+
+### Comparison of chronological word evaluations
+
+- **Declaration:** `TNLean.PEPS.PairEffect.Word.IsEvalComparison`.
+- **Defined in:** `TNLean/PEPS/Approximation/WordEvalComparison.lean`.
+- **Meaning:** For two chronological words, possibly with different owner types
+  and register lists, the predicate is literally heterogeneous equality of
+  their evaluations. Each word retains its actual input and output space.
+- **Source:** OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
+  states*, September 24, 2026, proof of Theorem 5.2,
+  `04-compression.tex:253–267,351–434,565–588`,
+  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L253-L267).
+- **Sanctioned bridges:** `Word.IsEvalComparison.eval_eq` gives ordinary evaluation
+  equality for words on the same input and output layouts.
+  `Word.isEvalComparison_of_eval_eq` gives the converse for those fixed layouts,
+  taking both words explicitly. The prepared-source,
+  sampled-endpoint and physical-coordinate comparisons derive this predicate
+  from their actual word comparison results.
+- **Caveats:** This compares the full evaluations of the supplied words. It
+  neither imposes allowedness, contractions, source normalization or absence of
+  sources, nor supplies equality after an arbitrary restriction to owners.
+  It is not the selected-local-part comparison predicate. No equivalence with
+  physical-density equality, factorization or locality is asserted.
+- **Verification:** The predicate and both fixed-layout bridges passed the
+  hosted Lean build and their named axiom checks at commit
+  `c05b1ee03e2d24d1f93390ada1aa7b7912b0cfba`.

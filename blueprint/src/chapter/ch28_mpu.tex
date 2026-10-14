@@ -9267,11 +9267,106 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     source.
 \end{proof}
 
+\begin{lemma}[Transpose pairing of spectral projectors]
+    \label{lem:mpu_transpose_spectral_projector}
+    \lean{Matrix.spectralProjector, Matrix.conjTranspose_spectralProjector,
+        Matrix.spectralProjector_mul, Matrix.sum_spectralProjector,
+        Matrix.sum_smul_spectralProjector,
+        Matrix.transpose_spectralProjector_of_transpose_eq_neg}
+    \leanok
+    Let $x$ be a normal complex matrix with finite spectrum $\sigma(x)$, and for
+    $\mu\in\mathbb C$ let $P_\mu$ be the spectral projector of $x$ at $\mu$,
+    that is, the indicator function of the point $\mu$ applied to $x$. Then
+    each $P_\mu$ is Hermitian,
+    \begin{align}
+        P_\mu P_\nu                     & =\delta_{\mu\nu}P_\mu, \\
+        \sum_{\mu\in\sigma(x)}P_\mu     & =\Id,                  \\
+        \sum_{\mu\in\sigma(x)}\mu P_\mu & =x.
+    \end{align}
+    If moreover $x^T=-x$, then
+    \begin{align}
+        P_\mu^T & =P_{-\mu}.
+    \end{align}
+    This is the pairing of $P_E$ with $P_E^T$ in the skew branch of
+    \cite[Lemma~\texttt{lemma:conjclass-normalform-continuous}]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 1066--1070.
+\end{lemma}
+
+\begin{proof}\leanok
+    The first three identities hold for the indicator functions on
+    $\sigma(x)$. For the last, interpolate the indicator of $\mu$ on the
+    finite set $\sigma(x)$ by a polynomial $q$, so that $P_\mu=q(x)$. Then
+    $P_\mu^T=q(x^T)=q(-x)$. Since $\sigma(x)=\sigma(x^T)=-\sigma(x)$, the
+    polynomial $z\mapsto q(-z)$ agrees on $\sigma(x)$ with the indicator of
+    $-\mu$, and hence $q(-x)=P_{-\mu}$.
+\end{proof}
+
+\begin{lemma}[Paired spectral data of a skew-symmetric unitary]
+    \label{lem:mpu_skew_unitary_paired_spectral_data}
+    \lean{Matrix.exists_paired_spectralProjectors_of_transpose_eq_neg,
+        Complex.arg_nonpos_iff_not_arg_neg_nonpos}
+    \leanok
+    Let $x$ be a unitary matrix with $x^T=-x$. There are a finite set $K$,
+    Hermitian projectors $P_k$ and numbers $E_k\in[0,\pi)$, for $k\in K$,
+    such that the family $\{P_k,P_k^T\}_{k\in K}$ consists of mutually
+    orthogonal projectors summing to the identity, and
+    \begin{align}
+        x & = \sum_{k\in K} e^{-iE_k}(P_k-P_k^T).
+    \end{align}
+    This is the spectral decomposition in the skew branch of
+    \cite[Lemma~\texttt{lemma:conjclass-normalform-continuous}]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 1066--1070.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_transpose_spectral_projector}
+    Every spectral value of $x$ has modulus one, so it is nonzero and differs
+    from its negative. By
+    Lemma~\ref{lem:mpu_transpose_spectral_projector}, $\sigma(x)=-\sigma(x)$
+    and $P_\lambda^T=P_{-\lambda}$. A nonzero complex number has argument in
+    $(-\pi,0]$ exactly when its negative does not, so let $K$ be the set of
+    spectral values with argument in $(-\pi,0]$; it contains exactly one member
+    of each pair $\{\lambda,-\lambda\}$. Set $P_\lambda$ for the projector at
+    $\lambda\in K$ and $E_\lambda=-\arg\lambda\in[0,\pi)$, so that
+    $e^{-iE_\lambda}=\lambda$. The members of the family
+    $\{P_\lambda,P_\lambda^T\}_{\lambda\in K}$ are the spectral projectors at
+    the distinct points $\pm\lambda$, so they are mutually orthogonal and sum
+    to the identity. Finally,
+    \begin{align}
+        x & =\sum_{\lambda\in\sigma(x)}\lambda P_\lambda
+        =\sum_{\lambda\in K}\lambda\left(P_\lambda-P_{-\lambda}\right)
+        =\sum_{\lambda\in K}e^{-iE_\lambda}\left(P_\lambda-P_\lambda^T\right).
+    \end{align}
+\end{proof}
+
+\begin{lemma}[Skew branch of the unitary congruence normal form]
+    \label{lem:mpu_skew_unitary_congruence}
+    \lean{Matrix.exists_skew_unitary_congruence}
+    \leanok
+    Let $x$ be a unitary matrix with $x^T=-x$. There are a symmetric unitary
+    matrix $S$ and a real skew-symmetric unitary matrix $\widetilde\Lambda$
+    with $\det\widetilde\Lambda=1$ such that
+    \begin{align}
+        x & = S^T\widetilde\Lambda S.
+    \end{align}
+    This is the skew branch of
+    \cite[Lemma~\texttt{lemma:conjclass-normalform-continuous}]{Cirac2017MPU}.
+    % Source lines: paper_v2.tex 1066--1083.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_skew_unitary_paired_spectral_data,
+        lem:mpu_skew_unitary_paired_projectors}
+    Lemma~\ref{lem:mpu_skew_unitary_paired_spectral_data} writes $x$ in the
+    form required by Lemma~\ref{lem:mpu_skew_unitary_paired_projectors}, which
+    gives $S$ and $\widetilde\Lambda$.
+\end{proof}
+
 \begin{lemma}[Normal form of symmetric and skew-symmetric unitaries]
     \label{lemma:conjclass-normalform-continuous}
-    \notready
+    \lean{Matrix.exists_unitary_congruence_normalForm}
+    \leanok
     \discussion{5713}
-    \uses{lem:mpu_symmetric_unitary_congruence, lem:mpu_skew_unitary_paired_projectors}
     Let $x$ be unitary and satisfy $x=x^T$ or $x=-x^T$. There are a symmetric
     unitary $S$ and a matrix $\widetilde\Lambda$ such that
     \begin{align}
@@ -9282,6 +9377,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\det(\widetilde\Lambda)=1$.
     % Source lines: paper_v2.tex 1041--1084.
 \end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:mpu_symmetric_unitary_congruence, lem:mpu_skew_unitary_congruence}
+    In the symmetric case, Lemma~\ref{lem:mpu_symmetric_unitary_congruence}
+    gives $x=S^TS$, so $\widetilde\Lambda=\Id$ works. The skew-symmetric case
+    is Lemma~\ref{lem:mpu_skew_unitary_congruence}. A matrix that is both
+    symmetric and skew-symmetric vanishes, and a vanishing unitary exists
+    only on the zero space, where both conditions on $\widetilde\Lambda$ hold.
+\end{proof}
 
 \begin{lemma}[Odd-dimensional skew-symmetric determinant]
     \label{lem:mpu_skew_symmetric_det_zero}

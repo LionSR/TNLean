@@ -43,8 +43,10 @@
     \label{thm:peps_window_gauge_unique}
     \lean{TNLean.PEPS.torusGauge_unique_scalar_of_normalArcWindows}
     \leanok
-    Let $w,h>1$, and let $B$ be translation invariant on the torus, with
-    positive bond dimensions and every cyclic $L\times K$ window injective.
+    \uses{def:peps_normal_torus_arc_window_tensor}
+    Let $w,h>1$, and let $B$ be a translation-invariant tensor on the torus
+    that is normal at window size $L\times K$
+    (Definition~\ref{def:peps_normal_torus_arc_window_tensor}).
     Assume $L,K>0$, $2L+1\leq w$ and $2K+1\leq h$.
     Let $A$ have the same bond dimensions as $B$, and suppose two invertible
     edge gauge families $X,X'$ satisfy

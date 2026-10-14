@@ -9,10 +9,16 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.AreaLaw
 
 import TNLean.PEPS.AreaLaw.Amplification
+import TNLean.PEPS.AreaLaw.AmplificationCutClearance
+import TNLean.PEPS.AreaLaw.AmplificationProof
+import TNLean.PEPS.AreaLaw.AmplificationProofSteps
 import TNLean.PEPS.AreaLaw.BirthTargetEntropy
+import TNLean.PEPS.AreaLaw.BirthTargetNeighborhoodInformation
 import TNLean.PEPS.AreaLaw.BoundaryConventions
 import TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly
+import TNLean.PEPS.AreaLaw.BoundaryTheorem
 import TNLean.PEPS.AreaLaw.BufferedRectangles
+import TNLean.PEPS.AreaLaw.CollarInformation
 import TNLean.PEPS.AreaLaw.ConditionalEstimates
 import TNLean.PEPS.AreaLaw.CrossingBudget
 import TNLean.PEPS.AreaLaw.Cylinder
@@ -26,6 +32,7 @@ import TNLean.PEPS.AreaLaw.FiniteSetTruncationSchmidtBellPrevector
 import TNLean.PEPS.AreaLaw.Geometry
 import TNLean.PEPS.AreaLaw.GlobalSchmidtBellPrevector
 import TNLean.PEPS.AreaLaw.GlobalSchmidtBellRoughLower
+import TNLean.PEPS.AreaLaw.GlobalSchmidtBellRoughUpper
 import TNLean.PEPS.AreaLaw.GraphExtendedMetric
 import TNLean.PEPS.AreaLaw.GraphInteractionBudget
 import TNLean.PEPS.AreaLaw.GraphInteractionChain
@@ -34,6 +41,7 @@ import TNLean.PEPS.AreaLaw.GraphInteractionSeries
 import TNLean.PEPS.AreaLaw.GraphInteractionTarget
 import TNLean.PEPS.AreaLaw.GraphLatticeDiamond
 import TNLean.PEPS.AreaLaw.GraphLatticeDistance
+import TNLean.PEPS.AreaLaw.GraphNeighborhoodCutClearance
 import TNLean.PEPS.AreaLaw.GraphPropagation
 import TNLean.PEPS.AreaLaw.InitialBoxEstimate
 import TNLean.PEPS.AreaLaw.InitialBuffer
@@ -55,6 +63,8 @@ import TNLean.PEPS.AreaLaw.RegionalEntropyContinuity
 import TNLean.PEPS.AreaLaw.RegionalReindex
 import TNLean.PEPS.AreaLaw.RegionalStates
 import TNLean.PEPS.AreaLaw.RegularizedPatchCoordinate
+import TNLean.PEPS.AreaLaw.RegularizedPatchDiagonalVariation
+import TNLean.PEPS.AreaLaw.RegularizedPatchInsertionTrace
 import TNLean.PEPS.AreaLaw.RegularizedPatchMarginal
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
 import TNLean.PEPS.AreaLaw.RegularizedPatchStationarity

@@ -1,0 +1,109 @@
+\section{A supported Gaussian operator for the physical buffer}
+
+\begin{theorem}[Supported Gaussian approximation of the physical buffer]
+    \label{thm:peps_supported_physical_buffer_gaussian}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_supported_buffer_gaussian_integral}
+    \leanok
+    \uses{def:polynomial_peps_model,def:qc_site_pair_coordinates,
+        def:peps_frame_sheet_swap,def:qc_site_expectation}
+    Fix an integer $q\ge1$ and a real number $J\ge0$.
+    There are positive constants $C,v,c$ with the following property.
+    Let $L\ge0$ be an integer and let
+    $H=\sum_x h_x+\sum_e h_e$ be a Hermitian Hamiltonian on the open
+    square $\mathcal V=\{0,\ldots,L-1\}^2$. Each original interaction
+    is supported on its designated site or nearest-neighbour edge and
+    has norm at most $J$. Let $R,C_0\subseteq\mathcal V$ be disjoint,
+    and put $Q=(R\cup C_0)^c$.
+
+    Write $\mathcal X_D=[q]^D$. The canonical finite enumerations of
+    $\mathcal X_R$ and $\mathcal X_{C_0}$ give a coordinate bijection
+    $s:\mathcal X_{\mathcal V}\to P\times\mathcal X_Q$, where
+    $P=[|\mathcal X_R|]\times[|\mathcal X_{C_0}|]$.
+    Define the doubled regrouping by
+    \begin{align*}
+        g(x,y) & =((s(x)_1,s(y)_1),(s(x)_2,s(y)_2)).
+    \end{align*}
+    Let $p$ pair the two configuration values at each physical site.
+    Let $a:\mathcal V\to\Lambda$ be the canonical bijection to the
+    integer rectangle, and let $a_*$ be its induced bijection on paired
+    configurations. Put $u=a_*\circ p$.
+    For a coordinate bijection $b$, denote matrix transport by
+    $\mathcal R_b(A)(x,y)=A(b^{-1}x,b^{-1}y)$.
+
+    Let $F_R$ exchange the two copies at the sites in $R$.
+    For an arbitrary complex matrix $W$ on
+    $\mathcal X_Q\times\mathcal X_Q$, define
+    \begin{align*}
+        K  & =\mathcal R_u(H\otimes I+I\otimes H),                \\
+        F  & =\mathcal R_u(F_R),                                  \\
+        K' & =FKF^*,                                              \\
+        V  & =\mathcal R_{u\circ g^{-1}}(I_{P\times P}\otimes W).
+    \end{align*}
+    Let $\partial R$ be the original nearest-neighbour edges with
+    exactly one endpoint in $R$, and put
+    \begin{align*}
+        Z_R & =\bigcup_{\{x,y\}\in\partial R}\{x,y\}.
+    \end{align*}
+    For each integer $\ell\ge0$, set
+    $B=N_\ell(a(Q)\cup a(Z_R))$, with distance measured in the
+    induced graph of $\Lambda$.
+
+    There is a differentiable path $U$ such that
+    \begin{align*}
+        U(0)  & =I,                                 \\
+        U'(t) & =iE_B(e^{itK'}(K'-K)e^{-itK'})U(t).
+    \end{align*}
+    For every real $t$, the operator $U(t)$ is unitary and supported
+    on $B$. This same path has the following property for every
+    variance $\eta\ge0$ and every cutoff $T\ge0$.
+    With $\gamma_\eta$ the centered Gaussian measure of variance $\eta$,
+    define
+    \begin{align*}
+        M_{\eta,T}
+         & =\int_{[-T,T]}E_B(e^{itK'}Ve^{-itK'})U(t)\,d\gamma_\eta(t), \\
+        \widetilde M_{\eta,T}
+         & =\int_{[-T,T]}e^{itK'}Ve^{-itK}\,d\gamma_\eta(t).
+    \end{align*}
+    Then $M_{\eta,T}$ is supported on $B$ and
+    \begin{align*}
+        \|M_{\eta,T}\| & \le\|W\|,                           \\
+        \|M_{\eta,T}-\widetilde M_{\eta,T}\|
+                       & \le\|W\|CL^2(1+8JL^2T)e^{vT-c\ell}.
+    \end{align*}
+    The integrals retain the original restricted Gaussian measure.
+    Empty grids and regions, zero variance and zero cutoff are included.
+    This is the spatial Gaussian approximation in
+    \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_physical_buffer_coordinates,
+        thm:peps_swapped_doubled_boundary_bound,
+        thm:swapped_square_hamiltonian_interaction,
+        thm:area_supported_gaussian_integral}
+    Choose $C,v,c$ from Theorem~\ref{thm:area_supported_gaussian_integral}
+    at local dimension $q^2$, range one and interaction bound $2J$.
+    Theorem~\ref{thm:swapped_square_hamiltonian_interaction} constructs
+    a local interaction family with these parameters and total $K'$.
+    It uses the Hermitian parts of the original interactions, whose
+    sum is the given Hermitian operator $H$.
+
+    Theorem~\ref{thm:peps_physical_buffer_coordinates} identifies $V$
+    with the transported lift of $W$ from $Q$, so $V$ is supported
+    on $a(Q)$. Theorem~\ref{thm:peps_swapped_doubled_boundary_bound}
+    gives support of $K'-K$ on $a(Z_R)$ and
+    $\|K'-K\|\le8JL^2$. Coordinate transport preserves norms, while
+    the tensor-product norm inequality gives $\|V\|\le\|W\|$.
+
+    Apply Theorem~\ref{thm:area_supported_gaussian_integral} to these
+    actual operators and the common neighbourhood $B$. It constructs
+    the stated path before $\eta,T$, and hence the literal integral
+    $M_{\eta,T}$. Its support and norm conclusions give the first
+    assertion. Since $|\Lambda|=L^2$ and $T\ge0$, its error estimate
+    yields
+    \begin{align*}
+        \|M_{\eta,T}-\widetilde M_{\eta,T}\|
+         & \le\|V\|CL^2(1+\|K'-K\|T)e^{vT-c\ell} \\
+         & \le\|W\|CL^2(1+8JL^2T)e^{vT-c\ell}.
+    \end{align*}
+\end{proof}

@@ -42,11 +42,13 @@
     \label{thm:peps_arc_window_all_bond_dimensions}
     \lean{TNLean.PEPS.bondDim_eq_of_normalArcWindows_sameState}
     \leanok
+    \uses{def:peps_normal_torus_arc_window_tensor}
     Let $A$ and $B$ be translation-invariant PEPS tensors on the
-    $w\times h$ torus, with positive bond dimensions and the same
-    contracted state. Suppose every cyclic $L\times K$ window is
-    injective for each tensor, where $L,K>0$, $2L+1\leq w$, and
-    $2K+1\leq h$. Then $D_A(e)=D_B(e)$ at every edge $e$.
+    $w\times h$ torus with the same contracted state, both normal at
+    window size $L\times K$
+    (Definition~\ref{def:peps_normal_torus_arc_window_tensor}), where
+    $L,K>0$, $2L+1\leq w$, and $2K+1\leq h$. Then $D_A(e)=D_B(e)$ at
+    every edge $e$.
 \end{theorem}
 \begin{proof}
     \leanok

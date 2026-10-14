@@ -470,3 +470,378 @@ complete operators. We give the corresponding exact constructions.
     \end{align}
     under the canonical concatenation identifications.
 \end{proof}
+
+
+\begin{theorem}[Congruence under equal register lists]
+    \label{thm:peps_word_structural_congruence}
+    \lean{TNLean.PEPS.PairEffect.Word.comp_heq}
+    \lean{TNLean.PEPS.PairEffect.Word.frame_heq}
+    \lean{TNLean.PEPS.PairEffect.Word.id_heq}
+    \lean{TNLean.PEPS.PairEffect.Word.swap_heq}
+    \lean{TNLean.PEPS.PairEffect.Word.castLayouts_heq}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_heq}
+    \leanok
+    \uses{def:peps_party_layout,thm:peps_party_restriction}
+    Identify equal ordered input, intermediate and output register
+    lists. If chronological compositions $W$ and $W'$ agree under
+    these identifications, and so do $V$ and $V'$, then
+    $V\circ W=V'\circ W'$. Framing the same register $r$ preserves
+    this equality: $\mathrm{frame}_r W=\mathrm{frame}_r W'$.
+    Identity compositions on equal lists agree, and exchanging the
+    same two registers beside equal spectator lists gives the same
+    composition. Identifying equal input and output lists preserves
+    the original composition itself. If two constructed words agree
+    under equalities of their ordered input and output lists, their
+    evaluated operators also agree under the induced canonical
+    memory identifications. These assertions concern the
+    constructed compositions and permit pair sources and arbitrary
+    local maps. They are compatibility identities for the register
+    operations in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 233--267 and 351--381.
+\end{theorem}
+
+\begin{proof}\leanok
+    Replace each equal register list by its identified list, and each
+    equal composition by the same composition. Both sides then have
+    identical chronological operations, including the identity,
+    frame and exchange operations. Evaluating the same constructed
+    word gives the same operator on the identified input and output memories.
+\end{proof}
+
+\begin{theorem}[Relabelling equal register lists]
+    \label{thm:peps_owner_layout_identification}
+    \lean{TNLean.PEPS.PairEffect.Word.mapOwner_castLayouts}
+    \leanok
+    \uses{def:peps_owner_composition,thm:peps_party_restriction}
+    Let $f:P\to Q$ be an arbitrary owner map and $W:a\to b$ an
+    arbitrary chronological composition. Given equalities
+    $h_a:a=a'$ and $h_b:b=b'$, denote by $W[h_a,h_b]$ the same
+    composition with its input and output lists identified accordingly.
+    Write $h_a^f:a^f=(a')^f$ and $h_b^f:b^f=(b')^f$ for the
+    induced equalities of relabelled lists. Then
+    $(W[h_a,h_b])^f=W^f[h_a^f,h_b^f]$. This identity permits pair
+    sources and does not require $f$ to be injective. It is an
+    auxiliary compatibility identity for the register operations in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 383--434 and 565--588.
+\end{theorem}
+
+\begin{proof}\leanok
+    After identifying $a'$ with $a$ and $b'$ with $b$, both sides
+    are the same relabelled composition $W^f$.
+\end{proof}
+
+\begin{theorem}[Restriction commutes with relabelling owners]
+    \label{thm:peps_owner_selection_commutation}
+    \lean{TNLean.PEPS.PairEffect.Word.restrict_mapOwner_heq}
+    \leanok
+    \uses{def:peps_owner_composition,thm:peps_party_restriction}
+    Let $f:P\to Q$ be any map of party labels, let $B\subseteq Q$
+    be any selection of new owners, and let $W:a\to b$ be a
+    chronological composition containing no pair-source preparations.
+    Under the canonical list identifications
+    $(a^f)_B=(a_{f^{-1}(B)})^f$ and
+    $(b^f)_B=(b_{f^{-1}(B)})^f$, the constructed compositions satisfy
+    \begin{align*}
+        (W^f)_B & =(W_{f^{-1}(B)})^f.
+    \end{align*}
+    No injectivity, finiteness or norm assumption is imposed.
+    This is an auxiliary identity for the party restrictions in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 383--434 and 565--588.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_word_structural_congruence,
+        thm:peps_owner_layout_identification,thm:peps_party_restriction}
+    Induct on the chronological operations of $W$. For a local map
+    $A:\mathcal H_a\to\mathcal H_b$ at $p$, relabelling gives the
+    same map $R_{f,b}AR_{f,a}^{-1}$ in both constructions. Both
+    restrictions retain it precisely when $f(p)\in B$; otherwise
+    both give the identity on the selected spectator registers.
+    For exchanges, the same condition selects each exchanged register
+    on both sides. Framing retains the framed register on both sides
+    or removes it on both sides. The induction hypotheses combine
+    under composition using the equal register lists, and the identity
+    operation has the same selected list on both sides. Identifying
+    equal lists commutes with relabelling throughout.
+\end{proof}
+
+
+\begin{theorem}[Evaluation under relabelling owners]
+    \label{thm:peps_owner_evaluation_identification}
+    \lean{TNLean.PEPS.PairEffect.Word.eval_mapOwner_heq}
+    \leanok
+    \uses{def:peps_owner_composition,def:peps_owner_layout}
+    Let $f:P\to Q$ be any map of party labels and let $W:a\to b$
+    be an arbitrary chronological composition. The relabelled lists
+    $a^f$ and $b^f$ have the same ordered register spaces as $a$ and
+    $b$, respectively. Under these identifications of the memory
+    spaces, $W^f$ and $W$ have the same continuous linear operator.
+    If the two owners of a pair source merge, its original vector is
+    retained as a local preparation on the same ordered spaces.
+    No injectivity, finiteness, contraction or normalization
+    assumption is imposed. This is an auxiliary identity for the
+    relabellings in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 383--434 and 565--588.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_owner_composition,def:peps_owner_layout}
+    The canonical isometries $R_{f,a}$ and $R_{f,b}$ preserve each
+    tensor factor and act as the identity after identifying the
+    ordered memory spaces. The intertwining relation
+    $W^fR_{f,a}=R_{f,b}W$ therefore gives $W^f x=W x$ for every
+    input $x$. Equality on all inputs identifies the two continuous
+    linear operators.
+\end{proof}
+
+\begin{theorem}[Relabelling a framed word]
+    \label{thm:peps_owner_framed_word}
+    \lean{TNLean.PEPS.PairEffect.Word.mapOwner_frameList_heq}
+    \leanok
+    \uses{def:peps_owner_composition,def:peps_owner_layout,
+        thm:peps_word_structural_congruence}
+    Let $f:P\to Q$ be any map of party labels, let $W:a\to b$
+    be an arbitrary chronological word, and let $s$ be an ordered
+    list of spectator registers. Write $F_s(W):sa\to sb$ for
+    framing $W$ by $s$, leaving these registers unchanged.
+    Under the canonical concatenation identifications, the constructed
+    words satisfy $(F_s(W))^f=F_{s^f}(W^f)$.
+    Pair sources are permitted, including those whose owners merge,
+    and $f$ need not be injective. This is an auxiliary identity for
+    the register operations in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 233--267, 409--434 and 565--588.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_owner_composition,def:peps_owner_layout,
+        thm:peps_word_structural_congruence}
+    Induct on $s$. For the empty list, both constructions are
+    $W^f$. For a first register $r$, relabelling changes its owner
+    and preserves its space. Frame the inductive identity by this
+    relabelled register, identifying the input and output
+    concatenations by $(sa)^f=s^f a^f$ and $(sb)^f=s^f b^f$.
+    The relabelled core is the same word $W^f$ in both constructions.
+\end{proof}
+
+\begin{theorem}[Source registers at an owner with a singleton fibre]
+    \label{thm:peps_selected_source_owner_registers}
+    \lean{TNLean.PEPS.PairEffect.SourceInventory.atParty_layout_mapOwner_of_singleton_fiber}
+    \leanok
+    \uses{def:peps_source_inventory,def:peps_owner_sources,
+        def:peps_single_party_selector,def:peps_party_registers,def:peps_owner_layout}
+    Let $f:P\to Q$ be an arbitrary owner map, and let $p\in P$,
+    $q\in Q$ satisfy $f^{-1}(\{q\})=\{p\}$.
+    Let $S$ be any ordered pair-source list, with arbitrary source
+    vectors, and write $\ell_S$ for its ordered register list.
+    Let $S_f$ be the surviving source list of
+    Definition~\ref{def:peps_owner_sources}, which removes precisely
+    the sources whose two owners merge under $f$.
+    Then $(\ell_{S_f})_q=((\ell_S)_p)^f$ as ordered register lists.
+    Thus selecting the source registers at $q$ after grouping owners
+    retains exactly the relabelled original registers at $p$, with
+    their original spaces and order. Owners away from this fibre may
+    merge arbitrarily. The empty source list is included, and no
+    normalization assumption is imposed. This is an auxiliary
+    register identity for
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 383--434 and 565--588.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_source_inventory,def:peps_owner_sources,
+        def:peps_party_registers,def:peps_owner_layout}
+    For any register list, the fibre condition identifies selection
+    at $q$ after relabelling with relabelling the selection at $p$.
+    Now induct on $S$. The empty list gives the identity directly.
+    If the first source has distinct owners $x,y$ whose images
+    coincide, their common image cannot be $q$: otherwise the fibre
+    condition would imply $x=y=p$. Neither half-register is selected,
+    and removing that source leaves the inductive identity.
+    If the two images differ, the source survives with its original
+    spaces and vector. Apply the register-list selection identity
+    to its two half-registers, followed by the induction hypothesis
+    for the tail. Concatenation preserves their order.
+\end{proof}
+
+\begin{theorem}[Coordinate endpoint spaces recover the fixed source list]
+    \label{thm:peps_partial_slot_coordinate_layout}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.slotLayout_partialSlots_eq_layout}
+    \leanok
+    \uses{def:peps_partial_fixed_positions,thm:peps_partial_fixed_layout}
+    Let $W:a\to b$ be a chronological composition and let
+    $\mathcal A\subseteq P$ be a selection of original parties.
+    Enumerate its retained source occurrences in their original order
+    as $e_0,\ldots,e_{r-1}$. At position $i$, use the endpoint owners
+    after grouping by $\mathcal A$ and the prescribed original
+    endpoint spaces $\C^{u_{e_i}}$ and $\C^{v_{e_i}}$. The concatenation of these two-register lists
+    is exactly the ordered register list of the fixed partial source
+    inventory. This equality preserves every dimension and register
+    position and requires no branch choice or source vector.
+    It is an auxiliary coordinate identity for
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 253--267 and 342--417.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_partial_fixed_layout}
+    The fixed-slot specification identifies each endpoint space
+    with its prescribed original dimension. Concatenating these
+    two-register lists in the fixed occurrence order gives the
+    register list of the original partial inventory. The vectors
+    recorded at the slots do not enter this equality.
+\end{proof}
+
+\begin{theorem}[Selected source lists in two owner groupings]
+    \label{thm:peps_singleton_all_source_layout}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.mapOwner_atParty_partialSlots_eq_allResidualSourceLayout}
+    \leanok
+    \uses{thm:peps_partial_slot_coordinate_layout,thm:peps_incident_gate_labels,
+        def:peps_affected_owner,def:peps_all_party_source_registers}
+    Fix $p\in P$. Let $g_p$ group the exterior of $\{p\}$ at
+    one owner, and let $g$ retain all original parties. Denote their
+    selected copies of $p$ by $q_p$ and $g(p)$, respectively.
+    Let $S_p$ be the coordinate source list for the singleton
+    selection, and let $S_P$ be the all-party source list.
+    The owner map $\lambda_p$ sends the singleton exterior owner
+    to the all-party exterior owner and sends each retained original
+    owner to its all-party copy. Then
+    $(S_p|_{q_p})^{\lambda_p}=S_P|_{g(p)}$ as ordered register lists.
+    In particular, the selected endpoint spaces and their original order
+    agree without a branch choice.
+    This is an auxiliary register identity for
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 253--267, 342--417 and 409--434.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_partial_slot_coordinate_layout,thm:peps_partial_fixed_layout,
+        thm:peps_incident_gate_labels,def:peps_affected_owner}
+    Replace the coordinate lists by their fixed partial inventories.
+    Traverse the original source occurrences in order. A half-register
+    is selected in either grouping precisely when its original
+    endpoint is $p$. Its space is unchanged, and $\lambda_p$ sends
+    its singleton owner to $g(p)$. The other half-registers are
+    erased in both selections. Concatenating the retained halves
+    gives the stated equality.
+\end{proof}
+
+\begin{definition}[The source-to-output word from incident labels]
+    \label{def:peps_incident_source_word}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.incidentSourceWord}
+    \leanok
+    \uses{thm:peps_incident_gate_labels,def:peps_partial_source_choices,
+        def:peps_canonical_source_residual,thm:peps_singleton_all_source_layout,
+        thm:peps_source_preparation,thm:peps_party_restriction,
+        def:peps_owner_composition}
+    Let $W:a\to b$, fix an original party $p\in P$, and supply
+    its incident gate labels $\eta$ and the recorded product input
+    $\psi\in\mathcal H_a$. The labels $\eta$ determine a singleton
+    partial choice $\chi_\eta\in\Xi_{\{p\}}$. Let
+    $V_{p,\chi_\eta}:S_p a^{g_p}\to b^{g_p}$ be its actual
+    source-free chronological residual, and let
+    $P_\psi:\C\to\mathcal H_a$ prepare the recorded input.
+    Form the composition
+    $U_{p,\eta}=V_{p,\chi_\eta}\circ F_{S_p}(P_\psi^{g_p})$,
+    where $F_{S_p}$ frames the preparation by the source registers.
+    Define $K_{p,\eta}=(U_{p,\eta}|_{q_p})^{\lambda_p}$,
+    with the canonical input and output list identifications. Thus
+    $K_{p,\eta}:S_P|_{g(p)}\to (b^g)|_{g(p)}$ is an actual
+    chronological word determined by $W,p,\psi,\eta$ alone.
+    Its input uses precisely the selected original source endpoint spaces.
+    Identifying its operator with the restriction of a supplied
+    all-party branch requires a separate locality identity.
+    This construction is auxiliary to the local contraction in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 253--267, 342--417, 409--434 and 565--588.
+\end{definition}
+
+\begin{theorem}[No pair preparations in the incident-label word]
+    \label{thm:peps_incident_source_word_sources}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_incidentSourceWord}
+    \leanok
+    \uses{def:peps_incident_source_word}
+    For every supplied incident label assignment $\eta$ and recorded
+    product input $\psi$, the word $K_{p,\eta}$ contains no pair-source
+    preparations. Its selected source-register input is free.
+    This is an auxiliary property of the source-to-output composition in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 253--267, 409--434 and 565--588.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_incident_source_word,thm:peps_canonical_source_recovery,
+        thm:peps_source_preparation,thm:peps_party_restriction,
+        def:peps_owner_composition}
+    The original product preparation and the canonical residual
+    contain no pair preparations. Framing and composing them
+    preserves this property, as do restriction, owner relabelling
+    and the canonical register-list identifications. Hence the
+    constructed incident-label word has empty source inventory.
+\end{proof}
+
+
+\begin{theorem}[Selected original lists in two owner groupings]
+    \label{thm:peps_singleton_all_original_layout}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.mapOwner_selected_originalLayout_eq}
+    \leanok
+    \uses{def:peps_affected_owner,thm:peps_incident_gate_labels,
+        def:peps_owner_layout,thm:peps_party_restriction}
+    Fix an original party $p\in P$ and an arbitrary ordered register
+    list $\ell$ on $P$. Let $g$ retain every original party, and
+    select precisely those original owners whose image under $g$
+    is $g(p)$. This selection is $\{p\}$; let $g_p$ group its
+    exterior at one owner and denote its retained copy of $p$ by
+    $q_p$. Let $\lambda_p$ send the singleton exterior owner to the
+    all-party exterior owner and each retained original owner to its
+    all-party copy. Then
+    \begin{align*}
+        (\ell^{g_p}|_{q_p})^{\lambda_p}
+         & =(\ell^g)|_{g(p)}.
+    \end{align*}
+    The equality preserves the original spaces and register order,
+    including the empty list. No source inventory, branch choice
+    or prepared vector is required. It is an auxiliary register
+    identity for \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 409--434 and 565--588.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_affected_owner,thm:peps_incident_gate_labels,
+        def:peps_owner_layout,thm:peps_party_restriction}
+    Induct on $\ell$. If the first register belongs to $p$, both
+    selections retain its original space, and $\lambda_p$ maps its
+    singleton owner to $g(p)$. Prefix this same register to the
+    identity for the tail. If its owner differs from $p$, the
+    singleton selection and the all-party selection both erase it,
+    leaving the identity for the tail.
+\end{proof}
+
+\begin{theorem}[Tensor maps under equal memory spaces]
+    \label{thm:peps_tensor_map_memory_congruence}
+    \lean{TNLean.PEPS.PairEffect.mapL_heq}
+    \leanok
+    \uses{def:peps_party_layout,thm:peps_basis_memory_equalities}
+    Let $A,A',B,B',C,C',D,D'$ be complex inner product spaces,
+    with fixed identifications $A=A'$, $B=B'$, $C=C'$ and $D=D'$.
+    Let $T:A\to B$, $T':A'\to B'$, $U:C\to D$ and $U':C'\to D'$
+    be continuous linear maps. Suppose $T$ agrees with $T'$ under
+    the first two identifications, and $U$ agrees with $U'$ under
+    the last two. Then $T\otimes U$ and $T'\otimes U'$ agree under
+    the induced identifications of $A\otimes C$ with $A'\otimes C'$
+    and $B\otimes D$ with $B'\otimes D'$.
+    The spaces and maps are arbitrary, including zero maps and
+    zero-dimensional spaces. This is an auxiliary congruence identity
+    for the tensor maps in
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 233--267, 409--434 and 565--588.
+\end{theorem}
+
+\begin{proof}\leanok
+    Identify the four pairs of spaces using the given equalities.
+    The corresponding maps then satisfy $T=T'$ and $U=U'$.
+    Substituting these equalities into their tensor products gives
+    the asserted identity.
+\end{proof}

@@ -1,27 +1,28 @@
 {
-  "reviewedAt": "2026-10-13T03:00:00Z",
+  "reviewedAt": "2026-10-14T18:30:00Z",
   "entries": [
     {
       "id": "docs/paper-gaps/oai26_peps_patch_stationarity_gap.tex",
       "repo": "QICLean",
       "kind": "narrower",
-      "status": "open",
+      "status": "resolved",
       "paper": "peps",
       "result": "Proposition 4.1, first-order conditions of the patch optimization",
       "issue": 8767,
       "prs": {
         "QICLean": [
           605,
-          694
+          694,
+          818
         ]
       },
       "title": "First-order conditions of the patch optimization",
-      "summary": "No problem with the paper has been found; Lean has the consequences of the key inequality, but not the inequality itself.",
+      "summary": "No problem with the paper has been found; Lean now proves the key inequality at every minimum, with no hypothesis beyond the paper's.",
       "context": "Proposition 4.1 shows that near any square of logarithmic size the ground state lies almost entirely in subspaces of polynomial total rank. This is what keeps the final bond dimension polynomial.",
       "claims": "The proof picks density matrices <i>x<sub>j</sub></i> on nested squares around the patch. Each defines a filter <i>L<sub>j</sub></i> = (<i>x<sub>j</sub></i> + <i>b</i>·1)<sup>−<i>a<sub>j</sub></i>/2</sup>, with fixed small numbers <i>b</i> and <i>a<sub>j</sub></i>. The choice makes the norm {{tn:al-filter-norm}} as small as possible. Here Ω is the ground state. Let ρ<sub><i>j</i></sub> be the reduced state, on the <i>j</i>-th square, of the normalized filtered state. At the minimum, each <i>x<sub>j</sub></i> commutes with ρ<sub><i>j</i></sub>. Also ρ<sub><i>j</i></sub> ≤ <i>x<sub>j</sub></i> + <i>b</i>·1.",
-      "found": "Lean proves what follows from this inequality, taken as an explicit hypothesis. One consequence concerns the operator <i>T</i> = <i>b</i>ρ<sub><i>j</i></sub>(<i>x<sub>j</sub></i> + <i>b</i>·1)<sup>−1</sup>. It satisfies 0 ≤ <i>T</i> ≤ <i>b</i>·1 and <i>T</i> ≤ ρ<sub><i>j</i></sub>. At the paper's starting radius, its trace is at most 1/4. The commutation and the inequality are not yet derived for the actual product of filters.",
-      "impact": "No. This is the most delicate open step, because the filters need not commute.",
-      "plan": "Carry out the paper's trace calculations from the largest square inward, then apply the bounds already proved."
+      "found": "Lean proves what follows from this inequality, taken as an explicit hypothesis. One consequence concerns the operator <i>T</i> = <i>b</i>ρ<sub><i>j</i></sub>(<i>x<sub>j</sub></i> + <i>b</i>·1)<sup>−1</sup>. It satisfies 0 ≤ <i>T</i> ≤ <i>b</i>·1 and <i>T</i> ≤ ρ<sub><i>j</i></sub>. At the paper's starting radius, its trace is at most 1/4. Lean now derives the commutation and the inequality at every minimum of the actual product of filters, so these bounds hold there. The commutation follows the paper: rotate one <i>x<sub>j</sub></i> by a unitary and use the trace identity, working from the largest square inward. For the inequality, the paper's eigenvalue conditions are replaced by an equivalent operator argument: move <i>x<sub>j</sub></i> toward another density commuting with it and read off the first-order condition.",
+      "impact": "No. The filters need not commute, but the paper's argument handles this, and Lean follows it.",
+      "plan": "Nothing remains for this step. The rank and tail bounds that give the trace bound of 1/4 belong to the rest of Proposition 4.1."
     },
     {
       "id": "docs/paper-gaps/polypeps_ownership_change_monomials.tex",
@@ -181,14 +182,17 @@
           9067,
           9079,
           9123,
-          9129
+          9129,
+          9259,
+          9260,
+          9261
         ]
       },
       "title": "The low-energy sweep from its five inputs",
       "summary": "No problem with the paper has been found; Lean proves the final step from five earlier results, which are not yet all proved.",
       "context": "The proof sweeps a partition across a band around a target region in small random steps, while many copies of the ground state are filtered by operators built from the partition; an interpolation parameter moves the filter smoothly as a small region changes sides. Proposition 9.2 finds a point of the sweep where the filtered state has small excess energy; the later entropy bounds are applied there.",
       "claims": "Some step and some interpolation parameter make the excess energy <i>E</i><sub>def</sub> = (⟨<i>v</i>, <i class=\"ov\">H</i><i>v</i>⟩ − <i>E</i><sub>0</sub>)/<i>g</i> small, for every large number <i>k</i> of copies; here <i>v</i> is the filtered state of the copies, <i class=\"ov\">H</i> the Hamiltonian averaged over the copies, and <i>g</i> the gap. The proof combines the geometry of the sweep, entropy and energy transport (Proposition 7.4), norm comparisons (Proposition 8.1), entropy continuity and spectral tail bounds.",
-      "found": "Lean proves the step from the conclusions of those five results to the proposition; each conclusion enters as a hypothesis transcribing one displayed statement of the paper. Entropy and energy transport (Proposition 7.4) is now proved on its own, and its entropy bound is summed over every round of the actual sweep. Lean builds the random sweep and the measures of each round from the actual transported states (each leaf has mass 1/2 at interior parameters and zero when inactive, so they are not probability measures), proves its main probability bounds, and bounds the integrated charge defect of each charge round. It bounds the spectra of the truncated ground state on the five regions of every step with one common constant, and selects the typical part of the target region's spectrum, of mass at least 1 − <i>n</i><sup>−100</sup>. The paper asserts that the charge defect varies continuously with the interpolation parameter; Lean does not prove this and does not need it, since the measurability it proves suffices for both integral arguments. The five inputs are not yet constructed from the same original and truncated ground states of one physical system.",
+      "found": "Lean proves the step from the conclusions of those five results to the proposition; each conclusion enters as a hypothesis transcribing one displayed statement of the paper. Entropy and energy transport (Proposition 7.4) is now proved on its own, and its entropy bound is summed over every round of the actual sweep. Lean builds the random sweep and the measures of each round from the actual transported states (each leaf has mass 1/2 at interior parameters and zero when inactive, so they are not probability measures), proves its main probability bounds, and bounds the integrated charge defect of each charge round and summed over all rounds. It derives the charge energy error from that defect for the actual supplied vector; one counting margin, 4(<i>D</i> + 2<i>r</i><sub>0</sub>) ≤ <i>m</i>, enters that step as a hypothesis, and Lean derives it at the paper's final rounded scales. It bounds the spectra of the truncated ground state on the five regions of every step with one common constant, and selects the typical part of the target region's spectrum, of mass at least 1 − <i>n</i><sup>−100</sup>. The paper asserts that the charge defect varies continuously with the interpolation parameter; Lean does not prove this and does not need it, since the measurability it proves suffices for both integral arguments. The five inputs are not yet constructed from the same original and truncated ground states of one physical system.",
       "impact": "No. The proposition holds once its inputs are proved.",
       "plan": "Construct the five inputs for the actual sweep from one pair of ground states, the original and its truncation."
     },
@@ -224,16 +228,18 @@
       "issue": 8773,
       "prs": {
         "TNLean": [
-          9258
+          9258,
+          9320,
+          9321
         ]
       },
       "title": "A ket close to the ground state from supplied estimates",
-      "summary": "No problem with the paper has been found; Lean proves the step from the paper's three vector estimates to a ket close to the ground state, but does not yet construct the vectors that satisfy them.",
+      "summary": "No problem with the paper has been found; Lean proves Theorem 1.1 from one unproved proposition, the output of Section 8.1, and that proposition still has to be proved.",
       "context": "The construction produces a joint vector Ψ of the lattice and of private registers, close to the ground state Ω times a private reference vector Ξ. Tracing out the private registers and compressing gives a tensor network whose operator is close to the ground-state projector; fixing the inputs of that network to one basis configuration, a column of the operator, gives a network for a ket close to Ω, which is then placed on the <i>L</i> × <i>L</i> grid.",
       "claims": "Section 8.1 builds Ψ and Ξ with ‖Ψ‖ ≤ 1, 1 − <i>CL</i><sup>−57</sup> ≤ ‖Ξ‖ ≤ 1 and ‖Ψ − Ω ⊗ Ξ‖ ≤ <i>CL</i><sup>−17</sup>, with <i>C</i> independent of the lattice size and the Hamiltonian. Lemma 8.1 extracts a nonzero column of the compressed operator that, after normalization, is close to Ω up to a phase; the network is then routed onto the grid.",
-      "found": "Lean proves the step for arbitrary vectors with these properties. Suppose ‖Ξ‖ ≥ 1 − δ, ‖Ψ − Ω ⊗ Ξ‖ ≤ ε, and a network already on the grid has operator σ within κ in trace norm of the traced state of Ψ, with α = κ + 2ε + 2δ &lt; 1. Then some input configuration gives a nonzero ket within 2α of Ω up to a phase after normalization, and every bond keeps its dimension. The compressed operator need not be positive or Hermitian. The vectors, their estimates and the compressed network are assumed rather than constructed. The statement also takes a network already routed onto the grid and then fixes its column, while the paper fixes the column first and routes afterwards.",
+      "found": "Lean proves the step for arbitrary vectors with these properties. Suppose ‖Ξ‖ ≥ 1 − δ, ‖Ψ − Ω ⊗ Ξ‖ ≤ ε, and an operator network σ is within κ in trace norm of the traced state of Ψ, with α = κ + 2ε + 2δ &lt; 1. Then some input configuration gives a nonzero ket within 2α of Ω up to a phase after normalization; σ need not be positive or Hermitian. Lean now also follows the paper's order: it fixes the column on the party network first and then routes the ket onto the grid, with the same contraction and bonds at most max(<i>D</i>, 1)<sup>χ</sup>, so the order difference is resolved. Finally, it states the output of Section 8.1 for large sizes as a proposition, a compressed dyadic network within <i>CL</i><sup>−5</sup> of |Ω⟩⟨Ω| with polynomial link dimensions and constants chosen before <i>L</i> and the Hamiltonian, and proves that this proposition implies Theorem 1.1. The proposition itself, the vectors Ψ and Ξ with their estimates, and the routing properties of the actual party network are not yet proved.",
       "impact": "No. The paper's step is the case of its own vectors and network.",
-      "plan": "Construct the actual vectors and the compression with constants independent of the lattice size and the Hamiltonian, then either route the compressed operator before fixing its column, or apply the same density estimate to the existing column result for the party network and route the ket."
+      "plan": "Prove the large-size proposition from the actual protocol and compression estimates, with constants independent of the lattice size and the Hamiltonian, and check the routing properties for the actual party network; the routing and the passage to Theorem 1.1 are already in place."
     },
     {
       "id": "docs/paper-gaps/oai26_transport_crossband_commutation.tex",
@@ -293,6 +299,13 @@
       "repo": "QICLean",
       "pr": 565,
       "note": "No paper gap found. The Lean statement is slightly more general than the source."
+    },
+    {
+      "result": "Proposition 10.2 (area law)",
+      "what": "Amplification of collar information",
+      "repo": "TNLean",
+      "pr": 9350,
+      "note": "No paper gap found. Lean proves the proposition for every gap Δ &gt; 0 with the source's hypotheses."
     }
   ]
 }

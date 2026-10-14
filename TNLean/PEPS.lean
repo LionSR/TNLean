@@ -182,6 +182,7 @@ import TNLean.PEPS.NormalSquareInjectivity
 import TNLean.PEPS.NormalSquareInteriorAbsorbedFamily
 import TNLean.PEPS.NormalSquarePEPSBlocking
 import TNLean.PEPS.NormalSquareUnconditionalFundamentalTheorem
+import TNLean.PEPS.NormalTorusRectanglePEPS
 import TNLean.PEPS.OnSiteOperator
 import TNLean.PEPS.OpenRegionContraction
 import TNLean.PEPS.PairConjugacy
@@ -196,7 +197,6 @@ import TNLean.PEPS.PhysicalStateCoherentNormalization
 import TNLean.PEPS.PhysicalStateNormalization
 import TNLean.PEPS.PhysicalSupportSection
 import TNLean.PEPS.PhysicalToVirtualCounterexample
-import TNLean.PEPS.PositivityCounterexamples
 import TNLean.PEPS.PureCutLocalEquivalence
 import TNLean.PEPS.RegionBlock
 import TNLean.PEPS.RegionBondGaugeHolonomy

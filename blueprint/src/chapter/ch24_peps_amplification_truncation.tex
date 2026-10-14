@@ -1,0 +1,122 @@
+% Source: OpenAI2026AreaLaw, 09-amplification.tex, lines 42--63
+% (lem:amplification-local-products, eq:amplification-product-truncation)
+% and lines 228--234 (its proof), revision
+% openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% The expectation is on the common fixed-time Poisson-word law.
+
+\section{Truncating the retained constraint product}
+
+The local constraint products lemma of \cite[Section~10]{OpenAI2026AreaLaw}
+has two estimates. This section proves the first one: replacing every
+retained factor by its radius-$r$ local version costs little in
+expectation. The second estimate, which removes distant events, is not
+treated here.
+
+\begin{theorem}[Products of roots are contractions and telescope]
+    \label{thm:al_contraction_word_telescope}
+    \lean{TNLean.PEPS.AreaLaw.norm_contractionWord_le_one,
+        TNLean.PEPS.AreaLaw.norm_contractionWord_sub_le}
+    \leanok
+    Let $k_i$ and $k_i'$ be positive operators on a finite-dimensional
+    space, indexed by a common alphabet. For a word
+    $w=(i_0,\ldots,i_{m-1})$ put
+    $D_w=(I-k_{i_{m-1}})^{1/2}\cdots(I-k_{i_0})^{1/2}$, and define
+    $D_w'$ in the same way from the $k_i'$. Then $\|D_w\|\le1$. If
+    $\|(I-k_i)^{1/2}-(I-k_i')^{1/2}\|\le\varepsilon$ for every label
+    $i$, then $\|D_w-D_w'\|\le m\varepsilon$.
+\end{theorem}
+\begin{proof}\leanok
+    Each root $(I-k_i)^{1/2}$ is a positive contraction, so $D_w$ is a
+    contraction. For the second claim, write $D_w=GX$ and $D_w'=G'X'$,
+    with $G,G'$ the last factors. Then
+    $GX-G'X'=G(X-X')+(G-G')X'$, and induction on $m$ gives the bound.
+\end{proof}
+
+\begin{theorem}[Expected truncation error on retained events]
+    \label{thm:al_contraction_word_expected_truncation}
+    \lean{TNLean.PEPS.AreaLaw.integrable_and_integral_norm_contractionWord_sub_le,
+        TNLean.PEPS.AreaLaw.integrable_and_integral_norm_contractionWord_retained_sub_le}
+    \leanok
+    \uses{thm:al_contraction_word_telescope}
+    In the setting of Theorem~\ref{thm:al_contraction_word_telescope},
+    let the alphabet be finite and let $\mu_t$ be the Poisson-word law
+    at time $t\ge0$. Fix a set $P$ of retained labels, and for a full
+    word $w$ let $w_P$ be its subword of retained letters, in their
+    original order. Let $k_i,k_i'$ be given for $i\in P$, with roots
+    within $\varepsilon$ of each other. Then
+    $w\mapsto\|D_{w_P}-D_{w_P}'\|$ is integrable and
+    \begin{align*}
+        \int\|D_{w_P}-D_{w_P}'\|\,d\mu_t(w)\le\varepsilon\,|P|\,t.
+    \end{align*}
+\end{theorem}
+\begin{proof}\leanok
+    The integrand is at most $2$, hence integrable. By
+    Theorem~\ref{thm:al_contraction_word_telescope} it is at most
+    $\varepsilon$ times the length of $w_P$. The retained subword has
+    the Poisson-word law of the alphabet $P$, whose expected length is
+    $|P|\,t$.
+\end{proof}
+
+\begin{theorem}[Labels anchored near a set]
+    \label{thm:al_retained_anchor_count}
+    \lean{TNLean.PEPS.AreaLaw.graphBall_subset_graphNeighborhood_two_mul,
+        TNLean.PEPS.AreaLaw.card_anchor_graphNeighborhood_le}
+    \leanok
+    \uses{thm:al_lattice_counts}
+    Let $\Lambda$ be a finite induced lattice domain, $R\ge0$, and let
+    each admissible support $X_i$ of range $R$ carry an anchor
+    $a_i\in X_i$. Let $\mu_R$ be the anchor multiplicity bound of
+    Theorem~\ref{thm:al_lattice_counts}. For every $S\subseteq\Lambda$
+    and $r\ge0$, if $d_\Lambda(a_i,S)\le r$ then
+    $N_r(a_i)\subseteq N_{2r}(S)$, and at most
+    $2\mu_R|S|(1+r)^2$ labels satisfy $d_\Lambda(a_i,S)\le r$.
+\end{theorem}
+\begin{proof}\leanok
+    The inclusion is the triangle inequality. A retained anchor lies in
+    a ball $N_r(s)$ with $s\in S$, which has at most $2(1+r)^2$ sites,
+    and at most $\mu_R$ labels share each anchor.
+\end{proof}
+
+\begin{theorem}[Truncation of the retained constraint product]
+    \label{thm:al_lattice_product_truncation}
+    \lean{TNLean.PEPS.AreaLaw.exists_latticeConstraintWord_truncation}
+    \leanok
+    \uses{thm:al_lattice_positive_replacement}
+    Fix an integer $p\ge1$, a range $R$, a strength $J\ge0$ and a gap
+    $\Delta>0$, and put $\alpha=p/(p+1)$. There are constants $C\ge0$
+    and $c>0$ with the following property. Let $\Lambda$ be a finite
+    induced lattice domain with local dimension $q\ge1$, let $H$ be a
+    range-$R$ interaction of strength $J$, and let $\Omega$ be a ground
+    vector with full-system gap $\Delta$. Let $k_i$ be the exact
+    positive constraints of
+    Theorem~\ref{thm:al_lattice_positive_replacement}, anchored at
+    $a_i\in X_i$, and let $E_{i,r}$ be the conditional expectation onto
+    $N_r(a_i)$. Fix $S\subseteq\Lambda$, an integer $r\ge0$ and
+    $t\ge0$, and retain the labels with $d_\Lambda(a_i,S)\le r$. For a
+    full Poisson word $w$, let $D_{\rm ret}(w)$ be the chronological
+    product of the roots $(I-k_i)^{1/2}$ over its retained events, and
+    let $L(w)$ be the same product of $(I-E_{i,r}k_i)^{1/2}$. Then
+    $\|D_{\rm ret}-L\|$ is integrable for the Poisson-word law $\mu_t$,
+    \begin{align*}
+        \int\|D_{\rm ret}(w)-L(w)\|\,d\mu_t(w)
+        \le Ct\,|S|\,(1+r)^2e^{-cr^\alpha},
+    \end{align*}
+    and every $L(w)$ is a contraction supported on $N_{2r}(S)$.
+    The constants depend only on $p,R,J,\Delta$. This is the first estimate of
+    \cite[Lemma~10.1]{OpenAI2026AreaLaw}, together with its
+    contraction and support clause, without the assumptions that $S$ is
+    nonempty and $r\ge1$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_lattice_quasilocal_roots,
+        thm:al_contraction_word_expected_truncation,
+        thm:al_retained_anchor_count}
+    By Theorem~\ref{thm:al_lattice_quasilocal_roots} each retained root
+    changes by at most $Ce^{-cr^\alpha}$ under the radius-$r$
+    approximation. Theorem~\ref{thm:al_contraction_word_expected_truncation}
+    bounds the expectation by this error times $t$ times the number of
+    retained labels, and Theorem~\ref{thm:al_retained_anchor_count}
+    bounds that number by $2\mu_R|S|(1+r)^2$. Each local root
+    $(I-E_{i,r}k_i)^{1/2}$ is a positive contraction acting on
+    $N_r(a_i)\subseteq N_{2r}(S)$, and so is each product of them.
+\end{proof}
