@@ -94,11 +94,25 @@ selection are inputs.
     probability less than one, so its complement is nonempty.
 \end{proof}
 
+\begin{theorem}[A polynomial weight under a stretched exponential]
+    \label{thm:area_law_amplification_poly_stretched_exp}
+    \leanok
+    \lean{TNLean.PEPS.AreaLaw.exists_one_add_sq_mul_exp_neg_rpow_le}
+    Let $c,\alpha>0$. There is $B\ge1$, depending only on $c$ and $\alpha$,
+    such that $(1+r)^2e^{-cr^\alpha}\le B$ for every $r\ge0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    For $r\le1$ the left side is at most $4$. For $r\ge1$ choose an integer
+    $m\ge2/\alpha$; comparing with the $m$-th term of the exponential series
+    gives $e^{cr^\alpha}\ge c^mr^{\alpha m}/m!\ge c^mr^2/m!$, so the left side
+    is at most $4m!/c^m$.
+\end{proof}
+
 \begin{theorem}[The scale choices]
     \label{thm:area_law_amplification_scale_bounds}
     \leanok
-    \lean{TNLean.PEPS.AreaLaw.amplification_scale_bounds,
-        TNLean.PEPS.AreaLaw.exists_one_add_sq_mul_exp_neg_rpow_le}
+    \lean{TNLean.PEPS.AreaLaw.amplification_scale_bounds}
     \uses{def:area_law_amplification_time_radius}
     Let $g,c,\alpha>0$, let $v,C,C_0\ge0$ and let $K\ge1$ be an integer.
     There are $C'>0$, depending only on $g,v,c$, and $N\ge2$ with the
@@ -107,14 +121,15 @@ selection are inputs.
     $t_*$ and radius $r$ of
     Definition~\ref{def:area_law_amplification_time_radius} and
     $M_0=\exp((\mathcal I+3w)/2)$ satisfy
-    \[
-        M_0^2e^{-gt_*}\le n^{-6K},\qquad
-        Ct_*sM_0e^{vt_*-cr^\alpha}\le n^{-3K},\qquad
-        Ct_*s(1+r)^2M_0e^{-cr^\alpha}\le n^{-3K}.
-    \]
+    \begin{align*}
+        M_0^2e^{-gt_*}                & \le n^{-6K}, \\
+        Ct_*sM_0e^{vt_*-cr^\alpha}    & \le n^{-3K}, \\
+        Ct_*s(1+r)^2M_0e^{-cr^\alpha} & \le n^{-3K}.
+    \end{align*}
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:area_law_amplification_poly_stretched_exp}
     The first bound follows from $gt_*=6(\mathcal I+w+K\log n)$. Since
     $\log M_0\le gt_*/4$ and $r^\alpha\ge C'(t_*+K\log n)$, the choice
     $cC'=g/2+2v+12$ leaves at most a factor
@@ -139,11 +154,11 @@ selection are inputs.
     integer $0\le s\le C_0n^2$, the following holds with $t_*,r,M_0$ as
     there. Let $X,Y,Z$ be real random variables on one probability space,
     with $Y,Z\ge0$ almost surely, such that
-    \[
-        \mathbb EX^2\le M_0^2e^{-gt_*},\qquad
-        \mathbb EY\le Ct_*sM_0e^{vt_*-cr^\alpha},\qquad
-        \mathbb EZ\le Ct_*s(1+r)^2M_0e^{-cr^\alpha}.
-    \]
+    \begin{align*}
+        \mathbb EX^2 & \le M_0^2e^{-gt_*},                \\
+        \mathbb EY   & \le Ct_*sM_0e^{vt_*-cr^\alpha},    \\
+        \mathbb EZ   & \le Ct_*s(1+r)^2M_0e^{-cr^\alpha}.
+    \end{align*}
     Then one realization satisfies $X,Y,Z\le n^{-K}$.
     In the proof of \cite[Proposition~10.2]{OpenAI2026AreaLaw}, with $s=|S_0|$,
     the three variables are $\|D(I-P_\Omega)\zeta\|$,
