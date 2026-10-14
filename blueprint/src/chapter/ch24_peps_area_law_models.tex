@@ -1023,3 +1023,124 @@ original open square. We state the two models separately, following
     partition bounds, with $\sum_in_i^{-100}\le Cb$ and $|D|\le Cb$, gives the
     linear bound with a constant chosen before the domain and the cut.
 \end{proof}
+
+The proof of Proposition~9.6 of \cite{OpenAI2026AreaLaw} combines the scanner
+estimates with three steps that use no estimate of the scan: an exact entropy
+identity at each leaf, the transfer from the truncated to the original ground
+state, and the cut and size assertions of the proposition. The results below
+prove these steps; the information inequality itself is not proved here.
+
+\begin{definition}[Leaf quantities of the sharp comparisons]
+    \label{def:area_law_collar_leaf_quantities}
+    \lean{FiniteProduct.collarPreQuantity,FiniteProduct.collarPostQuantity}
+    \leanok
+    \uses{def:area_law_ground_entropy}
+    Let $\psi$ be a vector of a finite tensor product over a site set $V$, and
+    let $X,U,Y,W\subseteq V$. Put
+    \begin{align*}
+        g_{\rm pre} & =S(X\cup U)+S(W)-S(Y),
+        \qquad
+        g_{\rm post}=S(U)+S(U\cup Y)-S(Y).
+    \end{align*}
+\end{definition}
+
+\begin{theorem}[Leaf entropy identity and its lower bound]
+    \label{thm:area_law_collar_leaf_identity}
+    \lean{FiniteProduct.mutualInformation_comm,
+        FiniteProduct.mutualInformation_mono_right,
+        FiniteProduct.collarLeaf_entropy_identity,
+        FiniteProduct.two_mutualInformation_le_collarLeaf,
+        FiniteProduct.two_mutualInformation_le_collarLeaf_average}
+    \leanok
+    \uses{def:area_law_collar_leaf_quantities}
+    Let $X,U,Y,W$ be pairwise disjoint sets covering $V$. For every vector
+    $\psi$,
+    \begin{align}
+        2S(X)+g_{\rm pre}-g_{\rm post} & =I(X:W)+I(X:Y\cup W).
+        \label{eq:area_law_collar_leaf_identity}
+    \end{align}
+    If a set $F$ lies in $W$, then $2I(X:F)\le2S(X)+g_{\rm pre}-g_{\rm post}$.
+    Consequently, for finitely many leaves with weights $p_i\ge0$ summing to one,
+    each with its own partition $X,U_i,Y_i,W_i$ of $V$ and with $F\subseteq W_i$
+    for every $i$,
+    \begin{align*}
+        2I(X:F) & \le2S(X)+\sum_ip_i\bigl(g_{{\rm pre},i}-g_{{\rm post},i}\bigr).
+    \end{align*}
+    These are the leaf entropy identity and the lower bound after the leaf
+    average in the proof of Proposition~9.6 of \cite{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Purity gives $S(X\cup W)=S(U\cup Y)$, $S(X\cup Y\cup W)=S(U)$ and
+    $S(Y\cup W)=S(X\cup U)$, and the identity follows by expanding both mutual
+    informations. Strong subadditivity makes mutual information monotone in each
+    argument, and both $W$ and $Y\cup W$ contain $F$. Multiply the bound at each
+    leaf by $p_i$ and sum.
+\end{proof}
+
+\begin{theorem}[Transfer of mutual information to the original state]
+    \label{thm:area_law_collar_transfer}
+    \lean{FiniteProduct.abs_mutualInformation_sub_le_of_traceDistance,
+        FiniteProduct.mutualInformation_le_add_of_traceDistance_le_rpow}
+    \leanok
+    \uses{def:area_law_ground_entropy}
+    Let $\Omega,\widetilde\Omega$ be unit vectors at trace distance $\delta$, and
+    let $X,J$ be disjoint. Then
+    \begin{align*}
+        |I_\Omega(X:J)-I_{\widetilde\Omega}(X:J)|
+         & \le8\sqrt\delta\,\log(e\dim\mathcal H_X).
+    \end{align*}
+    In particular, if $\delta\le C_1n^{-500}$ and
+    $\log\dim\mathcal H_X\le C_2n^2$ for an integer $n\ge1$, then
+    $I_\Omega(X:J)\le I_{\widetilde\Omega}(X:J)+8\sqrt{C_1}(1+C_2)n^{-248}$.
+    The dimension of $J$ does not enter.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:al_amp_pure_trace_distance}
+    Apply \cite[Lemma~2.1]{OpenAI2026AreaLaw} to the joint reductions on
+    $X\cup J$, whose trace distance is at most $\delta$ by
+    Lemma~\ref{lem:al_amp_pure_trace_distance}. Then
+    $\sqrt{C_1n^{-500}}=\sqrt{C_1}\,n^{-250}$ and
+    $\log(e\dim\mathcal H_X)\le(1+C_2)n^2$.
+\end{proof}
+
+\begin{theorem}[Cut and size assertions of the collar bound]
+    \label{thm:area_law_collar_cut_bounds}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.collar_cut_card_le}
+    \leanok
+    \uses{def:area_law_template}
+    Let $T$ be a template with parameters $(n,s_0)$ separated from the cut, with
+    $C_{\rm tpl}\ge24$ and $D_0\ge1$, and let $L\le s_0$. Put $X=A\cap T$ and
+    $S_0=A\cap T_L$. Then the cuts of $X$ and $S_0$ have at most $4n$ edges, the
+    cut of $S_0\setminus X$ has at most $8n$ edges, and $|S_0|\le10n^2$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_template_physical_boundary,thm:area_law_template_area,
+        thm:area_law_template_depth_layers,thm:al_scan_compact_collar_card}
+    The cut bounds are those of
+    Theorem~\ref{thm:area_law_template_physical_boundary} with $j=L$, since
+    $S_0\setminus X=A\cap(T_L\setminus T)$. The set $S_0$ lies in $T_L$, and
+    $|T_L|\le|T|+nL\le9ns_0+nL$ by the area and depth-layer bounds. The scale
+    condition $C_{\rm tpl}N_0(s_0+1)\le n$ gives $L\le s_0\le n$.
+\end{proof}
+
+\begin{theorem}[The collar bound from its information inequality]
+    \label{thm:area_law_collar_bound_of_information}
+    \lean{TNLean.PEPS.AreaLaw.sublinearCollarBound_of_mutualInformation_le}
+    \leanok
+    \uses{def:area_law_collar_bound}
+    Let $C_{\rm tpl}\ge24$ and $D_0\ge1$. Suppose there are $C$ and $N$ such
+    that, in the setting of Definition~\ref{def:area_law_collar_bound},
+    $I_\Omega(X:\Lambda\setminus S_0)\le Cn^{1-\varepsilon}$ whenever $n\ge N$.
+    Then the sublinear collar bound holds for $D_0,C_{\rm tpl}$. This assumes
+    the information inequality of Proposition~9.6 of \cite{OpenAI2026AreaLaw};
+    it is not a proof of that proposition.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_collar_cut_bounds}
+    Take the constant $\max(C,10)$; the remaining assertions are those of
+    Theorem~\ref{thm:area_law_collar_cut_bounds}.
+\end{proof}
