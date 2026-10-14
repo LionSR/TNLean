@@ -45,8 +45,149 @@ private theorem sharp_lower_rate_of_finite_copy {G k : ℕ}
       simp only [Finset.mul_sum, Finset.sum_mul]
       apply Finset.sum_congr rfl
       intro g _
-      field_simp [ha.ne', hkpos.ne'] <;> ring
+      field_simp [ha.ne', hkpos.ne']
     _ ≤ -Real.log Nsq := h
+
+open Classical in
+/-- A regional moment bound uses the same reduced matrix in finite-product coordinates. -/
+private theorem sharpLower_marginalMoment_finiteProduct
+    {Λ : Finset (ℤ × ℤ)} {q : ℕ}
+    (Ωt : StateSpace Λ q) (U : Finset (Site Λ)) (Kmom u : ℝ)
+    (h : Real.log (Entropy.surprisalMoment
+      (reducedState_isHermitian Λ q Ωt U).eigenvalues u) ≤
+        u * regionalEntropy Λ q Ωt U + Kmom * u ^ 2) :
+    Real.log (Entropy.surprisalMoment
+      (FiniteProduct.reducedPure_posSemidef
+        (fun _ : Site Λ => Fin q) Ωt U).isHermitian.eigenvalues u) ≤
+      u * FiniteProduct.entropy (fun _ : Site Λ => Fin q) Ωt U + Kmom * u ^ 2 := by
+  classical
+  let β := fun _ : Site Λ => Fin q
+  have hEigen := congrArg (fun A : {A : Matrix (FiniteProduct.Configuration β U)
+      (FiniteProduct.Configuration β U) ℂ // A.IsHermitian} => A.2.eigenvalues)
+    (Subtype.ext
+      (a1 := ⟨reducedState Λ q Ωt U, reducedState_isHermitian Λ q Ωt U⟩)
+      (a2 := ⟨FiniteProduct.reducedPure β Ωt U,
+        (FiniteProduct.reducedPure_posSemidef β Ωt U).isHermitian⟩)
+      (reducedState_eq_finiteProduct Λ q Ωt U))
+  change Real.log (Entropy.surprisalMoment
+    (FiniteProduct.reducedPure_posSemidef β Ωt U).isHermitian.eigenvalues u) ≤
+      u * FiniteProduct.entropy β Ωt U + Kmom * u ^ 2
+  rw [← hEigen, ← regionalEntropy_eq_finiteProduct Λ q Ωt U]
+  exact h
+
+open Classical in
+/-- Completed and pre-charge status moments supply all three original physical marginals. -/
+private theorem actualTerminal_sharpLower_moments
+    {Λ : Finset (ℤ × ℤ)} {q : ℕ} {I : Type} [Fintype I] [LinearOrder I]
+    (S : CollarScan (Site Λ) I) (Ωt : StateSpace Λ q) (Kmom rMom : ℝ)
+    (hmom : ∀ (s : ℕ) (hist : History S.K S.m S.M s) (g : Fin S.K),
+      (s ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state hist g),
+        ∀ u : ℝ, |u| ≤ rMom →
+          Real.log (Entropy.surprisalMoment
+            (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
+            u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2) ∧
+      (s + 1 ≤ S.n * S.m →
+        ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState hist g),
+          ∀ u : ℝ, |u| ≤ rMom →
+            Real.log (Entropy.surprisalMoment
+              (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
+              u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2)) :
+    let β := fun _ : Site Λ => Fin q
+    let σ := terminalPartition S (S.n * S.m)
+    let Q := fun j g => receiving (σ j g) false
+    let Y := fun j g => middle (σ j g)
+    ∀ j g (b : Fin 3) (u : ℝ), |u| ≤ rMom →
+      let U := FiniteProduct.regionalPhysicalRegion (Q j g) (Y j g) b
+      Real.log (Entropy.surprisalMoment
+        (FiniteProduct.reducedPure_posSemidef β Ωt U).isHermitian.eigenvalues u) ≤
+          u * FiniteProduct.entropy β Ωt U + Kmom * u ^ 2 := by
+  classical
+  intro β σ Q Y
+  have hfar (j : terminalFamily S.K S.m S.M (S.n * S.m)) (g : Fin S.K) :
+      receiving (σ j g) true = (Q j g ∪ Y j g)ᶜ := by
+    ext x
+    cases hx : σ j g x with
+    | none => simp [Q, Y, receiving, middle, hx]
+    | some side => cases side <;> simp [Q, Y, receiving, middle, hx]
+  have hmomStatus : ∀ j g (U : Finset (Site Λ)),
+      U ∈ statusMarginalRegions S.depth (σ j g) →
+      ∀ u : ℝ, |u| ≤ rMom →
+        Real.log (Entropy.surprisalMoment
+          (reducedState_isHermitian Λ q Ωt U).eigenvalues u) ≤
+          u * regionalEntropy Λ q Ωt U + Kmom * u ^ 2 := fun
+    | Sum.inl ⟨s, hist⟩, g, U, hU, u, hu =>
+      (hmom s.val hist g).1 (Nat.le_of_lt_succ s.isLt) U hU u hu
+    | Sum.inr ⟨s, hist⟩, g, U, hU, u, hu =>
+      (hmom s.val hist g).2 (Nat.succ_le_of_lt s.isLt) U hU u hu
+  intro j g b u hu U
+  have hmem : U ∈ statusMarginalRegions S.depth (σ j g) := by
+    fin_cases b
+    · simp [U, FiniteProduct.regionalPhysicalRegion, statusMarginalRegions, Q]
+    · simp [U, FiniteProduct.regionalPhysicalRegion, statusMarginalRegions, Y]
+    · change (Q j g ∪ Y j g)ᶜ ∈ statusMarginalRegions S.depth (σ j g)
+      rw [← hfar]
+      simp [statusMarginalRegions]
+  exact sharpLower_marginalMoment_finiteProduct Ωt U Kmom u
+    (hmomStatus j g U hmem u hu)
+
+open Classical in
+/-- The fixed supplied prevector keeps its norm, symmetry and both auxiliary labels. -/
+private theorem sharpLower_suppliedPrevector_properties
+    {Λ : Finset (ℤ × ℤ)} (q d k : ℕ) (Ωt : StateSpace Λ q)
+    (ell : IrrepLabel (Equiv.Perm (Fin k)))
+    (hpre :
+      let β := fun _ : Site Λ => Fin q
+      let ξ := WithLp.toLp 2 (replicaPrevector Ωt d k ell ∘
+        globalReplicaCopiesEquiv β (Fin d) (Fin d) k)
+      ξ ≠ 0 ∧ ‖ξ‖ ≤ 1) :
+    let β := fun _ : Site Λ => Fin q
+    let n := augmentedDimensions (V := Site Λ) q (fun _ => d)
+    let pre : Config k (fun v => Fin (n v)) → ℂ :=
+      replicaPrevector Ωt d k ell ∘ augmentedSumReplicaCopiesEquiv q d k
+    let e := augmentedReplicaConfigurationEquiv (V := Site Λ) q d k
+    let ι₀ := addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)
+    pre ≠ 0 ∧ ‖WithLp.toLp 2 pre‖ ≤ 1 ∧
+      symProj (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre = pre ∧
+      labelProj (subsystemPerm k ι₀ {some none}) ell *ᵥ (pre ∘ e) = pre ∘ e ∧
+      labelProj (subsystemPerm k ι₀ {none}) ell *ᵥ (pre ∘ e) = pre ∘ e := by
+  classical
+  intro β n pre e ι₀
+  have hpreEq : pre ∘ e = replicaPrevector Ωt d k ell ∘
+      globalReplicaCopiesEquiv β (Fin d) (Fin d) k := by
+    simp only [pre, augmentedSumReplicaCopiesEquiv, Equiv.coe_trans,
+      Function.comp_assoc, e, Equiv.symm_comp_self, Function.comp_id, β]
+  have hprenonzero : pre ≠ 0 := by
+    intro hz
+    apply hpre.1
+    change WithLp.toLp 2 (replicaPrevector Ωt d k ell ∘
+      globalReplicaCopiesEquiv β (Fin d) (Fin d) k) = 0
+    rw [← hpreEq, hz]
+    rfl
+  have hprenorm : ‖WithLp.toLp 2 pre‖ ≤ 1 := by
+    have hn := (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e.symm).norm_map
+      (WithLp.toLp 2 pre)
+    have hno : ‖WithLp.toLp 2 (pre ∘ e)‖ ≤ 1 := by
+      rw [hpreEq]
+      exact hpre.2
+    exact hn.symm.trans_le hno
+  have hsym : symProj (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre = pre :=
+    symProj_mulVec_augmentedReplicaPrevector q d k Ωt ell
+  have haux := labelProj_globalReplicaCopiesEquiv_auxiliary β (Fin d) (Fin d)
+    k ell ell
+  have hfixed := replicaPrevector_auxiliary_label_fixed Ωt d k ell
+  have hC : labelProj (subsystemPerm k ι₀ {some none}) ell *ᵥ
+      (pre ∘ e) = pre ∘ e := by
+    rw [hpreEq, ← haux.1]
+    simpa only [Matrix.submatrix_mulVec_equiv, Function.comp_assoc,
+      Equiv.self_comp_symm, Function.comp_id] using
+      congrArg (fun v => v ∘ globalReplicaCopiesEquiv β (Fin d) (Fin d) k) hfixed.1
+  have hR : labelProj (subsystemPerm k ι₀ {none}) ell *ᵥ
+      (pre ∘ e) = pre ∘ e := by
+    rw [hpreEq, ← haux.2]
+    simpa only [Matrix.submatrix_mulVec_equiv, Function.comp_assoc,
+      Equiv.self_comp_symm, Function.comp_id] using
+      congrArg (fun v => v ∘ globalReplicaCopiesEquiv β (Fin d) (Fin d) k) hfixed.2
+  exact ⟨hprenonzero, hprenorm, hsym, hC, hR⟩
 
 open Classical in
 /-- The original supplied Schmidt--Bell label sequence satisfies the actual
@@ -142,74 +283,10 @@ theorem exists_actualScan_suppliedPrevector_sharp_lower
     exists_actualScan_sharp_lower_norm (Λ := Λ) (q := q) (d := d) (R := R) (J := J) a ha
   refine ⟨c, Cf, hc, hCf,
     tendsto_sharpLowerRemainder_of_label_dimension ell Sent hdim a c Cf, ?_⟩
-  have hfar (j : terminalFamily S.K S.m S.M (S.n * S.m)) (g : Fin S.K) :
-      receiving (σ j g) true = (Q j g ∪ Y j g)ᶜ := by
-    ext x
-    cases hx : σ j g x with
-    | none => simp [Q, Y, receiving, middle, hx]
-    | some side => cases side <;> simp [Q, Y, receiving, middle, hx]
-  have hmomStatus : ∀ j g (U : Finset (Site Λ)),
-      U ∈ statusMarginalRegions S.depth (σ j g) →
-      ∀ u : ℝ, |u| ≤ rMom →
-        Real.log (Entropy.surprisalMoment
-          (reducedState_isHermitian Λ q Ωt U).eigenvalues u) ≤
-          u * regionalEntropy Λ q Ωt U + Kmom * u ^ 2 := fun
-    | Sum.inl ⟨s, hist⟩, g, U, hU, u, hu =>
-      (hmom s.val hist g).1 (Nat.le_of_lt_succ s.isLt) U hU u hu
-    | Sum.inr ⟨s, hist⟩, g, U, hU, u, hu =>
-      (hmom s.val hist g).2 (Nat.succ_le_of_lt s.isLt) U hU u hu
-  have hmomQ : ∀ j g (b : Fin 3) (u : ℝ), |u| ≤ rMom →
-      let U := FiniteProduct.regionalPhysicalRegion (Q j g) (Y j g) b
-      Real.log (Entropy.surprisalMoment
-        (FiniteProduct.reducedPure_posSemidef β Ωt U).isHermitian.eigenvalues u) ≤
-          u * FiniteProduct.entropy β Ωt U + Kmom * u ^ 2 := by
-    intro j g b u hu U
-    have hmem : U ∈ statusMarginalRegions S.depth (σ j g) := by
-      fin_cases b
-      · simp [U, FiniteProduct.regionalPhysicalRegion, statusMarginalRegions, Q]
-      · simp [U, FiniteProduct.regionalPhysicalRegion, statusMarginalRegions, Y]
-      · change (Q j g ∪ Y j g)ᶜ ∈ statusMarginalRegions S.depth (σ j g)
-        rw [← hfar]
-        simp [statusMarginalRegions]
-    simpa only [regionalEntropy_eq_finiteProduct, reducedState_eq_finiteProduct, β] using!
-      hmomStatus j g U hmem u hu
+  have hmomQ := actualTerminal_sharpLower_moments S Ωt Kmom rMom hmom
   intro k hk s p lower Dfill Dcharge Tfill Tcharge
-  let e := augmentedReplicaConfigurationEquiv (V := Site Λ) q d k
-  have hpreEq : pre k ∘ e = replicaPrevector Ωt d k (ell k) ∘
-      globalReplicaCopiesEquiv β (Fin d) (Fin d) k := by
-    simp only [pre, augmentedSumReplicaCopiesEquiv, Equiv.coe_trans,
-      Function.comp_assoc, e, Equiv.symm_comp_self, Function.comp_id, β]
-  have hprenonzero : pre k ≠ 0 := by
-    intro hz
-    apply (hpre k hk).1
-    change WithLp.toLp 2 (replicaPrevector Ωt d k (ell k) ∘
-      globalReplicaCopiesEquiv β (Fin d) (Fin d) k) = 0
-    rw [← hpreEq, hz]
-    rfl
-  have hprenorm : ‖WithLp.toLp 2 (pre k)‖ ≤ 1 := by
-    have hn := (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e.symm).norm_map
-      (WithLp.toLp 2 (pre k))
-    have hno : ‖WithLp.toLp 2 (pre k ∘ e)‖ ≤ 1 := by
-      simpa only [hpreEq] using (hpre k hk).2
-    exact hn.symm.trans_le hno
-  have hsym : symProj (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre k = pre k :=
-    symProj_mulVec_augmentedReplicaPrevector q d k Ωt (ell k)
-  let ι₀ := addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)
-  have haux := labelProj_globalReplicaCopiesEquiv_auxiliary β (Fin d) (Fin d)
-    k (ell k) (ell k)
-  have hfixed := replicaPrevector_auxiliary_label_fixed Ωt d k (ell k)
-  have hC : labelProj (subsystemPerm k ι₀ {some none}) (ell k) *ᵥ
-      (pre k ∘ e) = pre k ∘ e := by
-    rw [hpreEq, ← haux.1]
-    simpa only [Matrix.submatrix_mulVec_equiv, Function.comp_assoc,
-      Equiv.self_comp_symm, Function.comp_id] using
-      congrArg (fun v => v ∘ globalReplicaCopiesEquiv β (Fin d) (Fin d) k) hfixed.1
-  have hR : labelProj (subsystemPerm k ι₀ {none}) (ell k) *ᵥ
-      (pre k ∘ e) = pre k ∘ e := by
-    rw [hpreEq, ← haux.2]
-    simpa only [Matrix.submatrix_mulVec_equiv, Function.comp_assoc,
-      Equiv.self_comp_symm, Function.comp_id] using
-      congrArg (fun v => v ∘ globalReplicaCopiesEquiv β (Fin d) (Fin d) k) hfixed.2
+  obtain ⟨hprenonzero, hprenorm, hsym, hC, hR⟩ :=
+    sharpLower_suppliedPrevector_properties q d k Ωt (ell k) (hpre k hk)
   obtain ⟨⟨hfnorm, hfpos, hfδ, hf⟩, ⟨hcnorm, hcpos, hcδ, hcharge⟩⟩ :=
     hlower S hm hM (S.n * S.m) h Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos
       Kmom rMom hmomQ har haone hK pre k hk hprenonzero hprenorm hsym
