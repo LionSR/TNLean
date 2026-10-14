@@ -334,6 +334,7 @@ import TNLean.PEPS.Approximation.SourceRegisterPermutation
 import TNLean.PEPS.Approximation.SourceResidualCoordinates
 import TNLean.PEPS.Approximation.SourceSampleAssignmentIndices
 import TNLean.PEPS.Approximation.SourceSampleChoice
+import TNLean.PEPS.Approximation.SourceSampleCount
 import TNLean.PEPS.Approximation.SourceSampleIndices
 import TNLean.PEPS.Approximation.SourceSamplingCount
 import TNLean.PEPS.Approximation.SourceSamplingPolynomial

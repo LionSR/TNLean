@@ -34,11 +34,6 @@ noncomputable section
 
 variable {D₀ D₁ N : ℕ}
 
-private theorem diagonal_apply {ι : Type*} [Fintype ι] [DecidableEq ι]
-    (f : ι → ℂ) (v : EuclideanSpace ℂ ι) (i : ι) :
-    Matrix.toEuclideanLin (Matrix.diagonal f) v i = f i * v i := by
-  simp [Matrix.toEuclideanLin, Matrix.toLpLin_apply, Matrix.mulVec_diagonal]
-
 /-- Every chain row selector commutes with each actual translated local
 interaction, before summing the open Hamiltonian. -/
 theorem mixedEndpointChainRowSector_commute_localInteraction
@@ -77,7 +72,7 @@ theorem mixedEndpointOpenInnerPenalty_commute_localInteraction
     apply PiLp.ext
     intro σ
     simp [mixedEndpointColumnSector, mixedEndpointChainColumnSector,
-      periodicLocalInteractionES_diagonal_apply hN, diagonal_apply,
+      periodicLocalInteractionES_diagonal_apply hN, Matrix.toEuclideanLin_diagonal_apply,
       extractWindow, Nat.mod_eq_of_lt j.1.isLt]
   have hrow : periodicLocalInteractionES (mixedEndpointRowSector D₀ D₁ 1) j.1 =
       mixedEndpointChainRowSector D₀ D₁ (cyclicForwardSite j.1 1) := by
@@ -86,7 +81,7 @@ theorem mixedEndpointOpenInnerPenalty_commute_localInteraction
     apply PiLp.ext
     intro σ
     simp [mixedEndpointRowSector, mixedEndpointChainRowSector,
-      periodicLocalInteractionES_diagonal_apply hN, diagonal_apply,
+      periodicLocalInteractionES_diagonal_apply hN, Matrix.toEuclideanLin_diagonal_apply,
       extractWindow, cyclicForwardSite]
   rw [hcol, hrow]
   exact ((Commute.one_left _).sub_left

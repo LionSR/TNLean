@@ -124,11 +124,6 @@ theorem jointMixedPeriodicViolationCount_eq_zero_iff
   simp [jointMixedPeriodicViolationCount, JointMixedPeriodicActive,
     Finset.sum_eq_zero_iff]
 
-private theorem euclidean_sum_apply {ι κ : Type*}
-    (s : Finset ι) (v : ι → EuclideanSpace ℂ κ) (k : κ) :
-    (∑ i ∈ s, v i) k = ∑ i ∈ s, v i k :=
-  map_sum (PiLp.projₗ (𝕜 := ℂ) 2 (fun _ : κ => ℂ) k) v s
-
 open Classical in
 private theorem one_sub_binary_eq_indicator {z : ℂ} (hz : z = 0 ∨ z = 1) :
     1 - z = ((if z = 1 then 0 else 1 : ℕ) : ℂ) := by
@@ -142,7 +137,7 @@ theorem jointMixedPeriodicPhasePenalty_apply
     jointMixedPeriodicPhasePenalty d₀ d₁ D₀ D₁ N v σ =
       (jointMixedPeriodicViolationCount d₀ d₁ D₀ D₁ N σ : ℂ) * v σ := by
   classical
-  simp only [jointMixedPeriodicPhasePenalty, LinearMap.sum_apply, euclidean_sum_apply,
+  simp only [jointMixedPeriodicPhasePenalty, LinearMap.sum_apply, WithLp.ofLp_sum, Finset.sum_apply,
     LinearMap.add_apply, LinearMap.sub_apply, Module.End.one_apply, PiLp.add_apply,
     PiLp.sub_apply, jointMixedRowSector_apply, jointMixedColumnSector_apply]
   simp only [jointMixedPeriodicViolationCount, Nat.cast_sum, Nat.cast_add,
