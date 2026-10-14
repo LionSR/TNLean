@@ -117,17 +117,6 @@ def jointEndpointLastEdgeCoreSupportES
     (WithLp.linearEquiv 2 ℂ
       (Fin d₀ × ((x : Fin r) × (Fin (D₀ x) × Fin (E x))) → ℂ)).symm.toLinearMap
 
-private theorem map_conjugateEquiv_of_map_eq
-    {E F : Type*} [AddCommGroup E] [Module ℂ E] [AddCommGroup F] [Module ℂ F]
-    (U : E ≃ₗ[ℂ] F) (e : F ≃ₗ[ℂ] F) (S T : Submodule ℂ F)
-    (h : S.map e.toLinearMap = T) :
-    (S.map U.symm.toLinearMap).map (U.trans (e.trans U.symm)).toLinearMap =
-      T.map U.symm.toLinearMap := by
-  rw [← Submodule.map_comp]
-  have heq : (U.trans (e.trans U.symm)).toLinearMap.comp U.symm.toLinearMap =
-      U.symm.toLinearMap.comp e.toLinearMap := by ext; simp
-  rw [heq, Submodule.map_comp, h]
-
 /-- The Euclidean first-boundary normalization carries the compressed
 actual support exactly onto the unchanged-tensor core support.
 Source: arXiv:2203.12563, Section 5, lines 1695–1777. -/
@@ -138,7 +127,7 @@ theorem map_jointMixedFirstEdgeNormalization_support
     (jointMixedFirstEdgeCompressedSupportES A₀ A₁).map
         (jointMixedFirstEdgeNormalizationEquivES A₀ A₁ h₀ h₁).toLinearMap =
       jointEndpointFirstEdgeCoreSupportES A₀ (fun x => D₀ x + D₁ x) := by
-  apply map_conjugateEquiv_of_map_eq
+  apply LinearEquiv.map_conj_map_symm_of_map_eq
   exact map_jointMixedFirstEdgeCompressed_range_eq_core A₀ A₁ h₀ h₁
 
 /-- The Euclidean last-boundary normalization has the reflected exact
@@ -150,25 +139,8 @@ theorem map_jointMixedLastEdgeNormalization_support
     (jointMixedLastEdgeCompressedSupportES A₀ A₁).map
         (jointMixedLastEdgeNormalizationEquivES A₀ A₁ h₀ h₁).toLinearMap =
       jointEndpointLastEdgeCoreSupportES A₀ (fun x => D₀ x + D₁ x) := by
-  apply map_conjugateEquiv_of_map_eq
+  apply LinearEquiv.map_conj_map_symm_of_map_eq
   exact map_jointMixedLastEdgeCompressed_range_eq_core A₀ A₁ h₀ h₁
-
-private theorem deformed_complementProjections_of_map_eq
-    {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    [FiniteDimensional ℂ E] [NormedAddCommGroup F] [InnerProductSpace ℂ F]
-    [FiniteDimensional ℂ F] (e : E ≃ₗ[ℂ] F) (S : Submodule ℂ E) (T : Submodule ℂ F)
-    (h : S.map e.toLinearMap = T) :
-    e.symm.deformedConstraintProjection Sᗮ.starProjection.toLinearMap =
-        Tᗮ.starProjection.toLinearMap ∧
-      e.deformedConstraintProjection Tᗮ.starProjection.toLinearMap =
-        Sᗮ.starProjection.toLinearMap := by
-  constructor
-  · simp only [LinearEquiv.deformedConstraintProjection, Submodule.ker_starProjection,
-      Submodule.orthogonal_orthogonal, Submodule.comap_equiv_eq_map_symm,
-      LinearEquiv.symm_symm, h]
-  · have hsymm := (Submodule.map_symm_eq_iff e).mpr h
-    simp only [LinearEquiv.deformedConstraintProjection, Submodule.ker_starProjection,
-      Submodule.orthogonal_orthogonal, Submodule.comap_equiv_eq_map_symm, hsymm]
 
 /-- Both orientations of the actual first-edge canonical deformation.
 Normalizing the support deforms its old constraint by the inverse map.
@@ -184,7 +156,7 @@ theorem jointMixedFirstEdgeNormalization_deformed_constraints
         Tᗮ.starProjection.toLinearMap ∧
       e.deformedConstraintProjection Tᗮ.starProjection.toLinearMap =
         Sᗮ.starProjection.toLinearMap :=
-  deformed_complementProjections_of_map_eq _ _ _
+  LinearEquiv.deformedConstraintProjection_orthogonal_of_map_eq _ _ _
     (map_jointMixedFirstEdgeNormalization_support A₀ A₁ h₀ h₁)
 
 /-- Both orientations of the reflected last-edge canonical deformation.
@@ -202,7 +174,7 @@ theorem jointMixedLastEdgeNormalization_deformed_constraints
         Tᗮ.starProjection.toLinearMap ∧
       e.deformedConstraintProjection Tᗮ.starProjection.toLinearMap =
         Sᗮ.starProjection.toLinearMap :=
-  deformed_complementProjections_of_map_eq _ _ _
+  LinearEquiv.deformedConstraintProjection_orthogonal_of_map_eq _ _ _
     (map_jointMixedLastEdgeNormalization_support A₀ A₁ h₀ h₁)
 
 end

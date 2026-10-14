@@ -29,3 +29,82 @@
     The finite-domain regional entropies agree with the corresponding generic
     finite-product reduced-state entropies.
 \end{proof}
+
+% Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
+% lines 197--222.
+\begin{corollary}[Counting form of the conditional information bound]
+    \label{cor:peps_cell_information_counting_form}
+    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_conditional_le_card_residual_add_pieceCount}
+    \leanok
+    \uses{thm:peps_labelled_conditional_entropy}
+    In the setting of Theorem~\ref{thm:peps_labelled_conditional_entropy}, let
+    the local dimension be $q$ and suppose that every piece obeys the
+    hypothesis with the same bound $\varepsilon_i=C_2$. If the partition has
+    $N$ pieces, then
+    \begin{align}
+        S_\Omega(G\cup B)+S_\Omega(C\cup B)-S_\Omega(B)-S_\Omega(G\cup C\cup B)
+        \le 2\lvert D\rvert\log q+NC_2.
+        \notag
+    \end{align}
+\end{corollary}
+\begin{proof}\leanok
+    The sum of the bounds is $NC_2$, and $S_\Omega(D)\le\lvert D\rvert\log q$
+    because the reduced state of $D$ has rank at most $q^{\lvert D\rvert}$.
+\end{proof}
+
+% Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
+% lines 310--311.
+\begin{corollary}[Information of a small cell]
+    \label{cor:peps_small_cell_information}
+    \lean{TNLean.PEPS.AreaLaw.regionalEntropy_conditional_le_two_mul_card_mul_log}
+    \leanok
+    \uses{cor:peps_cell_information_counting_form}
+    Let $\Omega$ be a normalized pure state on a finite domain with local
+    dimension $q$, and let $G,B,C$ be pairwise-disjoint regions. Then
+    \begin{align}
+        S_\Omega(G\cup B)+S_\Omega(C\cup B)-S_\Omega(B)-S_\Omega(G\cup C\cup B)
+        \le 2\lvert G\rvert\log q.
+        \notag
+    \end{align}
+\end{corollary}
+\begin{proof}\leanok
+    Apply Corollary~\ref{cor:peps_cell_information_counting_form} to the
+    partition of $G$ with no pieces and remainder $G$.
+\end{proof}
+
+% Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
+% lines 224--227, 240--241, 276--280 and 302--311.
+\begin{theorem}[Generation count of the cell recursion]
+    \label{thm:peps_cell_generation_count}
+    \lean{TNLean.PEPS.Approximation.cellChildSide,
+        TNLean.PEPS.Approximation.exists_cellChildSide_le_rpow,
+        TNLean.PEPS.Approximation.exists_cell_generation_bound,
+        TNLean.PEPS.Approximation.exists_cell_generation_count_bound}
+    \leanok
+    \uses{thm:area_law_power_recursion_depth}
+    In the recursion for one cell, an active square of side $u$ has children
+    of side $u'=8u^{\gamma}$. If $\gamma<\gamma'$, there is $u_*>1$ with
+    $8u^{\gamma}\le u^{\gamma'}$ for all $u\ge u_*$. Let $0<\gamma'<1$ and let
+    $u_*>1$ be any such threshold. There is a constant $C>0$ such that, for
+    every initial side $s>0$ and every $m$ for which the sides of the
+    generations $0,\dots,m-1$ are at least $u_*$,
+    \begin{align}
+        m & \le C+C\log\log(s+e).
+        \notag
+    \end{align}
+    For every branching bound $b\ge0$ there is moreover $C>0$ such that, under
+    the same condition and with $s\ge1$,
+    \begin{align}
+        \sum_{j=0}^{m}b^{j} & \le C(1+\log s)^{C}.
+        \notag
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    For $u\ge u_*$, the inequality $8u^{\gamma}\le u^{\gamma'}$ amounts to
+    $u^{\gamma'-\gamma}\ge8$, which holds once $u\ge8^{1/(\gamma'-\gamma)}$.
+    The child map is therefore positive and at most $u^{\gamma'}$ above the
+    threshold, and Theorem~\ref{thm:area_law_power_recursion_depth} applies
+    with $\rho=\gamma'$. For $s\ge1$,
+    $\log(s+e)\le\log(e^{2}s)=2+\log s\le2(1+\log s)$, which converts the
+    count in $\log(s+e)$ into one in $1+\log s$.
+\end{proof}

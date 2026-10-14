@@ -1,0 +1,110 @@
+% Figure arealaw2d_adjoint_cancellation.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL App. H 4 (adjoint action, proof of Proposition 3),
+% unnumbered stacked display.
+% Source: arXiv OpenAI2026AreaLaw, sections/09-amplification.tex:303-320 (typical
+% projections P_X, T_Y, Q_{S_0}), 348-353 (amplification-restoring-operator R_0)
+% and 397-407 (amplification-adjoint-identity, eq. (10.26)), drawn with L' = I.
+% Note renaming: Q_{S_0} -> Pi_{S_0}, T_0 = T_Y -> Pi_Y, P_X -> Pi_X.
+% Ink-to-index: rows from top to bottom (both panels) are e', s', X, Y, Z' (Z' = Lambda \ S_0,
+% S_0 = XY). Left panel: R_0^dagger eta, read right to left. eta = Omega (x)
+% sum_{p_x>0} sqrt(p_x)|x>_{s'}|x>_{e'} (cup on e', s' with bead rho_X^{1/2});
+% R_0^dagger = sum_{x selected} p_x^{-1/2} |0><x|_{s'} (x) (|0><x|_X (x) Pi_Y) Pi_{S_0}
+% applies Pi_{S_0} on X,Y, then Pi_Y on Y, then the cap
+% sum_{x selected} p_x^{-1/2} <x|_{s'}<x|_X (bead Pi_X rho_X^{-1/2}), then the
+% blank kets |0> on s', X (grey dots). The cup and the cap meet on s' and form
+% a snake; the beads multiply to rho_X^{1/2} Pi_X rho_X^{-1/2} = Pi_X.
+% Right panel: R_X (Pi_X (x) Pi_Y) Pi_{S_0} Omega, where R_X relabels X as e'
+% and inserts the blanks on X, s' (R_X Omega = phi): the X output of Pi_{S_0}
+% passes the bead Pi_X and is routed onto e'.
+% The identity is exact; its right side is only close to phi, within
+% 3 sqrt(delta) + ||(L')^dagger Omega - Omega|| (eq. (10.27)).
+% Colour (shared-spec 4.1, H1 and H7): red (selected) is the X index of Omega
+% along its whole path, the ink arealaw2d_move_and_restore gives it. Left: Omega's
+% X port, Pi_{S_0}, the cap, the s' segment, the cup and the e' stub (the
+% cap+cup snake and the leg it carries). Right: Omega's X port, Pi_{S_0}, the
+% bead Pi_X and the routed leg onto e' (the straightened snake, ending on e' as
+% the X leg of phi does in move_and_restore). The blanks are grey (complement);
+% Y and Z' are black. The plan's grey e' leg west of Pi_X is not drawn: it would
+% give the relabelled X leg two colours across the pair with move_and_restore.
+% Joiner: the = carries the bead identity it uses (J2),
+% rho_X^{1/2} Pi_X rho_X^{-1/2} = Pi_X; the vphantom only opens room between the
+% fact and the sign.
+% Boundary signature: (phys:w)x5 in both panels; e', s' are auxiliary
+% (outline: aux:w) with the tenkz type physical.
+% Layout: Omega and the cup sit three columns east of Pi_{S_0} (col 8); the cap
+% sits at col 6, so its bead label (west, outside the cap) clears the blank
+% labels |0> (east of the dots at col 1). Pi_Y sits at col 3 with its name north,
+% in the free X-Y gap west of the cap and of the routed leg, so no label sits
+% on the Z' wire. The blank labels stay east of their dots: at label pos=n the
+% s' label would touch the e' wire.
+% Labels (shared-spec 4.1, L1, L3, L4): the row names stand once, west of the
+% left panel; the right panel shares its rows and repeats no name, so no wire
+% name follows the joiner. Size class l (picture key), as in
+% arealaw2d_move_and_restore, sets every operator, state and bead name at the
+% size of the row names.
+% Label macros: none.
+% Fit: W at 6mm (\tnwide[6mm]).
+% Related: arealaw2d_move_and_restore (states phi, eta).
+% Related: cup and bead idiom of ch26_mps_rfp_zero_correlation_length and
+% ch32_log_depth_fixed_point_pairs (generic MPS cups, labels wrong here); no
+% TNLean picture of the area-law comparators or amplification exists.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=11, bonds=none, size=l]
+        \tn[at=(1,1), skin=none, species=selected, name=adjOneTipE, ports={180:physical:$e'$, 0:physical}]{}
+        \tn[at=(2,1), skin=dot, species=complement, name=adjOneBlankS, label pos=e,
+            ports={180:physical:$s'$}]{\ket{0}}
+        \tn[at=(3,1), skin=dot, species=complement, name=adjOneBlankX, label pos=e,
+            ports={180:physical:$X$}]{\ket{0}}
+        \tn[at=(4,1), skin=none, name=adjOneTipY, ports={180:physical:$Y$, 0:physical}]{}
+        \tn[at=(5,1), skin=none, name=adjOneTipZ, ports={180:physical:$Z'$, 0:physical}]{}
+        \tn[at=(2,6), skin=none, name=adjOneCapS, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,6), skin=none, name=adjOneCapX, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,3), skin=box, name=adjOneTyp, label pos=n,
+            ports={180:physical, 0:physical}]{\Pi_Y}
+        \tn[at=(3,8), skin=box, wires=2, name=adjOneJoint, label pos=e,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{\Pi_{S_0}}
+        \tn[at=(1,11), skin=none, name=adjOneCupE, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,11), skin=none, name=adjOneCupS, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,11), skin=box, wires=3, name=adjOneState, label pos=e,
+            ports={180@1:physical, 180@2:physical, 180@3:physical}]{\Omega}
+        \tnwire[route=arc, species=selected, name=adjOneCap]{adjOneCapS.180}{adjOneCapX.180}
+        \tnwire[route=arc, species=selected, name=adjOneCup]{adjOneCupE.0}{adjOneCupS.0}
+        \tnwire[species=selected]{adjOneTipE.0}{adjOneCupE.180}
+        \tnwire[species=selected]{adjOneCapS.0}{adjOneCupS.180}
+        \tnwire[species=selected]{adjOneCapX.0}{adjOneJoint.180@1}
+        \tnwire{adjOneTipY.0}{adjOneTyp.180}
+        \tnwire{adjOneTyp.0}{adjOneJoint.180@2}
+        \tnwire[species=selected]{adjOneJoint.0@1}{adjOneState.180@1}
+        \tnwire{adjOneJoint.0@2}{adjOneState.180@2}
+        \tnwire{adjOneTipZ.0}{adjOneState.180@3}
+        \tn[skin=dot, at=on adjOneCap 0.5, label pos=w]{\Pi_X\rho_X^{-1/2}}
+        \tn[skin=dot, at=on adjOneCup 0.5, label pos=e]{\rho_X^{1/2}}
+    \end{tenkz}
+    $\;\,\overset{\rho_X^{1/2}\Pi_X\rho_X^{-1/2}=\Pi_X}{\vphantom{\big|}=}\;\,$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=11, bonds=none, size=l]
+        \tn[at=(1,1), skin=none, species=selected, name=adjTwoTipE, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), skin=dot, species=complement, name=adjTwoBlankS, label pos=e,
+            ports={180:physical}]{\ket{0}}
+        \tn[at=(3,1), skin=dot, species=complement, name=adjTwoBlankX, label pos=e,
+            ports={180:physical}]{\ket{0}}
+        \tn[at=(4,1), skin=none, name=adjTwoTipY, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,1), skin=none, name=adjTwoTipZ, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,5), skin=none, name=adjTwoBend, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,3), skin=box, name=adjTwoTyp, label pos=n,
+            ports={180:physical, 0:physical}]{\Pi_Y}
+        \tn[at=(3,8), skin=box, wires=2, name=adjTwoJoint, label pos=e,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{\Pi_{S_0}}
+        \tn[at=(3,11), skin=box, wires=3, name=adjTwoState, label pos=e,
+            ports={180@1:physical, 180@2:physical, 180@3:physical}]{\Omega}
+        \tnwire[species=selected]{adjTwoTipE.0}{adjTwoBend.180}
+        \tnwire[route=arc, species=selected, name=adjTwoRoute]{adjTwoBend.0}{adjTwoJoint.180@1}
+        \tnwire{adjTwoTipY.0}{adjTwoTyp.180}
+        \tnwire{adjTwoTyp.0}{adjTwoJoint.180@2}
+        \tnwire[species=selected]{adjTwoJoint.0@1}{adjTwoState.180@1}
+        \tnwire{adjTwoJoint.0@2}{adjTwoState.180@2}
+        \tnwire{adjTwoTipZ.0}{adjTwoState.180@3}
+        \tn[skin=dot, at=on adjTwoRoute 0.5, label pos=45]{\Pi_X}
+    \end{tenkz}
+\end{tenkzequation}
