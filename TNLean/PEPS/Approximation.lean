@@ -41,6 +41,10 @@ import TNLean.PEPS.Approximation.AllPartyBranchLocality
 import TNLean.PEPS.Approximation.AllPartySingletonCircuitComparison
 import TNLean.PEPS.Approximation.AllPartySingletonComparison
 import TNLean.PEPS.Approximation.AllSourceSlots
+import TNLean.PEPS.Approximation.AngularAnnularCells
+import TNLean.PEPS.Approximation.AngularAnnularLayers
+import TNLean.PEPS.Approximation.AngularCellGeometry
+import TNLean.PEPS.Approximation.AngularGridCells
 import TNLean.PEPS.Approximation.AngularResetWidth
 import TNLean.PEPS.Approximation.ApproximateCircuitBudget
 import TNLean.PEPS.Approximation.ApproximateCircuitDensity
