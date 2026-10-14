@@ -153,7 +153,7 @@ theorem selectedDensity_budget_le_principal
           (Cr * W * (n : ℝ) ^ (1 + e) +
             ((2 * n * m : ℕ) : ℝ) * (Ct * Real.log (n : ℝ) ^ Cl) * W *
               a ^ (1 / 4 : ℝ) + R) :=
-      mul_le_mul_of_nonneg_left (add_le_add_right (add_le_add hB htransport) R)
+      mul_le_mul_of_nonneg_left (_root_.add_le_add (_root_.add_le_add hB htransport) le_rfl)
         hcoefficient
     _ = (2 * (C₁ + 1) / ε) *
         (Cr * ((n : ℝ) ^ e / (m : ℝ)) +
@@ -166,7 +166,7 @@ theorem selectedDensity_budget_le_principal
     _ ≤ (2 * (C₁ + 1) / ε) * ((Cr + 2 * Ct) *
         ((n : ℝ) ^ e / (m : ℝ) + a ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Cl)) +
           (2 * (C₁ + 1) / (W * ((n * m : ℕ) : ℝ) * ε)) * R :=
-      add_le_add_right (mul_le_mul_of_nonneg_left hprincipal (by positivity)) _
+      _root_.add_le_add (mul_le_mul_of_nonneg_left hprincipal (by positivity)) le_rfl
     _ = _ := by ring
 
 end TNLean.PEPS.AreaLaw.Scan

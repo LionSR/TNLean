@@ -45,10 +45,11 @@ private theorem actualCharge_energyError_nonneg
   let D := S.actualChargeData hm hM s
   let T := D.tree (Set.projIcc (0 : ℝ) 1 zero_le_one p)
   have hadm : D.IsAdmissible := S.actualChargeData_isAdmissible hm hM s
+  have ha2 : 0 ≤ a / 2 := div_nonneg ha (by norm_num)
   have hcomm : D.CrossBandCommute n (a / 2) k :=
     S.chargeTransportData_crossBandCommute
       (historyMeanTree S.K S.m S.M hm hM s)
-      (fun _ ↦ chargeChoiceTree S.K S.M hM) n (half_nonneg ha) k
+      (fun _ ↦ chargeChoiceTree S.K S.M hM) n ha2 k
   change 0 ≤ D.energyError E (a / 2) k pre p
   unfold TransportData.energyError
   refine Finset.sum_nonneg fun i _ ↦ mul_nonneg ?_ ?_
@@ -56,8 +57,8 @@ private theorem actualCharge_energyError_nonneg
   · refine Finset.sum_nonneg fun j _ ↦ mul_nonneg (T.weight_nonneg j) ?_
     refine MeasureTheory.integral_nonneg fun u ↦ mul_nonneg
       (Real.sinhRatioDensity_pos ⟨by norm_num, by norm_num⟩ u).le ?_
-    exact realCoherentIntegral_nonneg (base n)
-      (D.posSemidef_state hadm (half_nonneg ha) hcomm pre p j u)
+    exact realCoherentIntegral_nonneg _
+      (D.posSemidef_state hadm ha2 hcomm pre p j u)
       (fun _ ↦ rpow_one_div_eight_nonneg _)
 
 open Classical in
@@ -106,7 +107,7 @@ theorem actualCharge_defect_le_of_density_energy_bound
         (Real.rpow_nonneg hℓ een)) herr
   have hg : 0 < g := div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
   exact htransport.trans (div_le_div_of_nonneg_right
-    (add_le_add_right (add_le_add_left (hcoef.trans hcoefficient) e₀) rem)
+    (_root_.add_le_add (_root_.add_le_add le_rfl (hcoef.trans hcoefficient)) le_rfl)
     (half_pos hg).le)
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

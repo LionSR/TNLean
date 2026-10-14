@@ -15,7 +15,7 @@ may depend on that margin, while the geometric constants do not.
     $C_{\rm tr},C_{\rm target},C_B$ with the following property.
     For fixed scanner exponents and a real weight exponent $\omega$ satisfying
     \begin{align}
-        \omega+\frac{1+\kappa}{2}&<1-\ell-\mu,
+        \omega+\frac{1+\kappa}{2} & <1-\ell-\mu,
         \label{eq:arealaw-target-sharp-moment-margin}
     \end{align}
     there is an integer threshold $N\geq2$ before every physical instance.
@@ -27,12 +27,12 @@ may depend on that margin, while the geometric constants do not.
     layers have size at most $n$, and the target clearance is greater than
     $2L+10r_0$.  Retain the literal scales
     \begin{align}
-        L&=\lfloor n^{1-\ell}\rfloor,&
-        m&=\lfloor n^\mu\rfloor,&
-        D&=\lceil n^\kappa\rceil,\nonumber\\
-        K&=\left\lfloor\frac{L}{8m}\right\rfloor,&
-        r_0&=\lceil C_{\rm tr}(\log n)^2\rceil,&
-        B&=C_BnD(\log n)^{12}.
+        L   & =\lfloor n^{1-\ell}\rfloor,             &
+        m   & =\lfloor n^\mu\rfloor,                  &
+        D   & =\lceil n^\kappa\rceil,\nonumber          \\
+        K   & =\left\lfloor\frac{L}{8m}\right\rfloor, &
+        r_0 & =\lceil C_{\rm tr}(\log n)^2\rceil,     &
+        B   & =C_BnD(\log n)^{12}.
         \label{eq:arealaw-target-sharp-moment-scales}
     \end{align}
     Then $K\geq1$, $m>0$, $8Km\leq L$ and $B\geq1$.
@@ -41,20 +41,20 @@ may depend on that margin, while the geometric constants do not.
     and $\varepsilon=\min\{n^{-1000},g/4\}$.  One unit truncated ground
     state $\widetilde\Omega$ has energy $e$ and gap $g/2$, with
     \begin{align}
-        0&\leq e\leq\varepsilon,&
+        0 & \leq e\leq\varepsilon,                                            &
         \|\widetilde\Omega-e^{i\theta}\Omega\|
-          &\leq2\sqrt{\varepsilon/g}\quad\text{for some }\theta\in\mathbb R,
-        \nonumber\\
+          & \leq2\sqrt{\varepsilon/g}\quad\text{for some }\theta\in\mathbb R,
+        \nonumber                                                               \\
         \operatorname{dist}_{\rm tr}
-          (|\widetilde\Omega\rangle\langle\widetilde\Omega|,
-           |\Omega\rangle\langle\Omega|)
-          &\leq\sqrt{2\varepsilon/g}.
+        (|\widetilde\Omega\rangle\langle\widetilde\Omega|,
+        |\Omega\rangle\langle\Omega|)
+          & \leq\sqrt{2\varepsilon/g}.
         \label{eq:arealaw-target-sharp-truncation}
     \end{align}
     This same state has a target
     typical set of width $w=n^{3/5}$ and mass $z$ satisfying
     \begin{align}
-        0&<1-n^{-100}\leq z\leq1.
+        0 & <1-n^{-100}\leq z\leq1.
         \label{eq:arealaw-target-sharp-moment-mass}
     \end{align}
     The target budget is at most $C_{\rm target}n(\log n)^{12}$, and every
@@ -63,24 +63,24 @@ may depend on that margin, while the geometric constants do not.
     $\exp(-S(\widetilde\Omega_X)+w)$.
     Put
     \begin{align}
-        C_0&=512\exp(1)\frac2g,&
-        c_0&=\frac1{32\sqrt{1+2/g}},&
-        r_{\rm mom}&=\frac{c_0}{\sqrt B},&
-        K_{\rm mom}&=C_0B.
+        C_0         & =512\exp(1)\frac2g,      &
+        c_0         & =\frac1{32\sqrt{1+2/g}}, &
+        r_{\rm mom} & =\frac{c_0}{\sqrt B},    &
+        K_{\rm mom} & =C_0B.
         \label{eq:arealaw-target-sharp-common-moments}
     \end{align}
     For every completed or pre-charge history within the physical horizon
     and every one of its five marginal regions $Q$, the same state satisfies
     \begin{align}
         \log\operatorname{tr}(\widetilde\rho_Q^{\,1-u})
-        &\leq uS(\widetilde\rho_Q)+K_{\rm mom}u^2
-        &&\text{for }|u|\leq r_{\rm mom}.
+         & \leq uS(\widetilde\rho_Q)+K_{\rm mom}u^2
+         &                                          & \text{for }|u|\leq r_{\rm mom}.
         \label{eq:arealaw-target-sharp-common-moment-bound}
     \end{align}
     Finally, for every $0<W\leq n^\omega$, with $a=W/K$,
     \begin{align}
-        0&<a,&10a&\leq r_{\rm mom},&10a&\leq1,
-        &6a&\leq r_{\rm mom},&6a&\leq1.
+        0 & <a, & 10a               & \leq r_{\rm mom}, & 10a    & \leq1,
+          & 6a  & \leq r_{\rm mom}, & 6a                & \leq1.
         \label{eq:arealaw-target-sharp-smallness}
     \end{align}
     The physical state and target set are chosen before $W$ and before
@@ -94,7 +94,7 @@ may depend on that margin, while the geometric constants do not.
     (\ref{eq:arealaw-target-sharp-moment-margin}) give a common threshold
     with
     \begin{align}
-        10a\sqrt B&\leq\min\{c_0,1\}.
+        10a\sqrt B & \leq\min\{c_0,1\}.
         \label{eq:arealaw-target-sharp-product-smallness}
     \end{align}
     Since $B\geq1$, division by $\sqrt B$ gives both factor-ten bounds;

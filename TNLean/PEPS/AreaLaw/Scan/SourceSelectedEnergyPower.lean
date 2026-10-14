@@ -256,7 +256,7 @@ theorem selectedEnergy_add_remainder_le {e cap rem g r : ℝ}
     (henergy : (e + cap) / (g / 2) ≤ r) :
     (e + cap + rem) / (g / 2) ≤ r + rem / (g / 2) := by
   rw [add_div]
-  exact add_le_add_right henergy _
+  exact _root_.add_le_add henergy le_rfl
 
 /-- The same uniform threshold controls the energy expression with an
 arbitrary replica remainder, retained as `rem / (g/2)`. This does not assert

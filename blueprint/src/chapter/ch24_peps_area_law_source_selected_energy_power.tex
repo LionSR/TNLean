@@ -15,8 +15,8 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
     $D=\lceil n^\kappa\rceil$ and
     \begin{align}
         E_n(W,x,p)
-        &=CW^2n^\ell D^2(\log n)^{C_\ell}
-            \left((1-p)x^{1/8}+(1-p)n^{-P}+p\right).
+         & =CW^2n^\ell D^2(\log n)^{C_\ell}
+        \left((1-p)x^{1/8}+(1-p)n^{-P}+p\right).
         \label{eq:selected_energy_cap}
     \end{align}
     Here $x$ denotes the normalized entropy defect.
@@ -27,10 +27,10 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
     \lean{TNLean.PEPS.AreaLaw.Scan.final_selectedEnergy_margins}
     At the final scanner exponents,
     \begin{align}
-        2\omega+\ell+2\kappa&=\frac{14}{125000},&
-        2\omega+\ell+2\kappa-\nu&=-\frac{111}{125000},&
+        2\omega+\ell+2\kappa     & =\frac{14}{125000},   &
+        2\omega+\ell+2\kappa-\nu & =-\frac{111}{125000}, &
         -\frac1{2000}-(2\omega+\ell+2\kappa-\nu)
-          &=\frac{97}{250000}.
+                                 & =\frac{97}{250000}.
         \label{eq:selected_energy_margins}
     \end{align}
 \end{theorem}
@@ -48,7 +48,7 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
     $p\in[n^{-\nu},2n^{-\nu}]$, the expression in
     (\ref{eq:selected_energy_cap}) satisfies
     \begin{align}
-        E_n(W,x,p)&\leq16C n^{-111/125000}(\log n)^{C_\ell}.
+        E_n(W,x,p) & \leq16C n^{-111/125000}(\log n)^{C_\ell}.
         \label{eq:selected_energy_pointwise}
     \end{align}
 \end{theorem}
@@ -59,7 +59,7 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
     multiplication by $1-p$ cannot increase either nonnegative term.
     Consequently
     \begin{align}
-        (1-p)x^{1/8}+(1-p)n^{-P}+p&\leq4n^{-\nu}.
+        (1-p)x^{1/8}+(1-p)n^{-P}+p & \leq4n^{-\nu}.
         \label{eq:selected_energy_bracket}
     \end{align}
     Also $D\leq n^\kappa+1\leq2n^\kappa$ and
@@ -76,7 +76,7 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
     every $1\leq W\leq n^\omega$, every $0\leq x\leq n^{-8\nu}$,
     every $p\in[n^{-\nu},2n^{-\nu}]$ and every $e\leq n^{-1000}$,
     \begin{align}
-        \frac{e+E_n(W,x,p)}{g/2}&\leq n^{-1/2000}.
+        \frac{e+E_n(W,x,p)}{g/2} & \leq n^{-1/2000}.
         \label{eq:selected_energy_decay}
     \end{align}
     The threshold is chosen before $n,W,x,p,e$.
@@ -89,8 +89,8 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
     and logarithmic power. Thus, eventually,
     \begin{align}
         16C n^{-111/125000}(\log n)^{C_\ell}
-          &\leq\frac g4 n^{-1/2000},&
-        n^{-1000}&\leq\frac g4 n^{-1/2000}.
+                  & \leq\frac g4 n^{-1/2000}, &
+        n^{-1000} & \leq\frac g4 n^{-1/2000}.
         \label{eq:selected_energy_absorption}
     \end{align}
     Both estimates depend only on the fixed data. Apply
@@ -105,7 +105,7 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
     the same threshold works for every additional real remainder $r$:
     \begin{align}
         \frac{e+E_n(W,x,p)+r}{g/2}
-          &\leq n^{-1/2000}+\frac r{g/2}.
+         & \leq n^{-1/2000}+\frac r{g/2}.
         \label{eq:selected_energy_remainder}
     \end{align}
 \end{theorem}

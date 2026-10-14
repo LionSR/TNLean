@@ -47,7 +47,7 @@ theorem roughSelectionBudget_le_of_endpoint_budget
       <;> ring
     _ ≤ (Brough + roughEndpointRemainder d c K Ci k + (2 * H : ℕ) * rate) +
         ((2 * H : ℕ) : ℝ) * (Cβ * Real.log ((k : ℝ) + 2)) / (k : ℝ) :=
-      add_le_add (add_le_add_right hendpoint _) hβ'
+      _root_.add_le_add (_root_.add_le_add hendpoint le_rfl) hβ'
     _ = _ := by simp only [roughEndpointRemainder]; ring
 
 /-- Normalize the selector's literal endpoint numerator to the entropy-defect

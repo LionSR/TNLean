@@ -341,7 +341,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy
   have hcaprem : (e + cap k s p + rem k) / (g / 2) ≤
       (S.n : ℝ) ^ (-(1 / 2000 : ℝ)) + rem k / (g / 2) := by
     rw [add_div]
-    exact add_le_add_right henergyN _
+    exact _root_.add_le_add henergyN le_rfl
   refine ⟨s, p, hp, hQ0, hQ, hδ0, hδcap, hδcap.trans hcaprem, ?_⟩
   intro τ hτ hτhalf
   have hterm := mul_le_mul_of_nonneg_right

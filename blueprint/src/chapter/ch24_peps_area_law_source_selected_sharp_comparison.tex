@@ -24,12 +24,12 @@ than a final negative power of the system size.
     supports with multiplicity at most $\mathfrak m$. Assume $n\ge N$,
     $|T|\le C_Tn^2$, and retain the literal scales
     \begin{align}
-        L&=\lfloor n^{1-1/100000}\rfloor,&
-        m&=\lfloor n^{1/4}\rfloor,&
-        D&=\lceil n^{1/1000000}\rceil,\nonumber\\
-        K&=L\mathbin{\mathrm{div}}(8m),&
-        r_0&=\lceil C_{\rm tr}\log^2n\rceil,&
-        S.C_1&=C_1.
+        L     & =\lfloor n^{1-1/100000}\rfloor,       &
+        m     & =\lfloor n^{1/4}\rfloor,              &
+        D     & =\lceil n^{1/1000000}\rceil,\nonumber   \\
+        K     & =L\mathbin{\mathrm{div}}(8m),         &
+        r_0   & =\lceil C_{\rm tr}\log^2n\rceil,      &
+        S.C_1 & =C_1.
         \label{eq:arealaw-source-selected-scales}
     \end{align}
     The target's ambient layers through $L$ have size at most $n$,
@@ -40,11 +40,11 @@ than a final negative power of the system size.
 
     Put
     \begin{align}
-        g&=\Delta/\operatorname{positiveNormalization}(1,\Delta/2,J),&
-        \varepsilon&=\min\{n^{-1000},g/4\},\nonumber\\
-        B&=C_BnD(\log n)^{12},&
-        C_0&=512\exp(1)(2/g),\nonumber\\
-        w&=n^{3/5},&B_{\rm sh}&=C_e(nL^\eta+n)+n^{-247}.
+        g           & =\Delta/\operatorname{positiveNormalization}(1,\Delta/2,J), &
+        \varepsilon & =\min\{n^{-1000},g/4\},\nonumber                                                                     \\
+        B           & =C_BnD(\log n)^{12},                                        &
+        C_0         & =512\exp(1)(2/g),\nonumber                                                                           \\
+        w           & =n^{3/5},                                                   & B_{\rm sh} & =C_e(nL^\eta+n)+n^{-247}.
         \label{eq:arealaw-source-selected-budgets}
     \end{align}
     One unit truncated ground vector $\Omega_t$, with energy
@@ -69,21 +69,21 @@ than a final negative power of the system size.
     $p_k\in[p_0,p_1]$ such that
     \begin{align}
         \frac{\mathcal Q_k}{KnD}
-        &\le\frac{2(C_1+1)}{Wnm(p_1-p_0)}
-          \left[B_{\rm rough}
+         & \le\frac{2(C_1+1)}{Wnm(p_1-p_0)}
+        \left[B_{\rm rough}
             +2nm\,C_{\rm ent}aK a^{1/4}\ell_{\dim}^{e_{\rm ent}}
-            +R_{\rm end}(k)\right],\nonumber\\
+        +R_{\rm end}(k)\right],\nonumber                                          \\
         B_{\rm rough}
-        &=2\log d-\log z+W\left(\frac{B_{\rm sh}}z+1+3nD\log q\right),\nonumber\\
+         & =2\log d-\log z+W\left(\frac{B_{\rm sh}}z+1+3nD\log q\right),\nonumber \\
         R_{\rm end}(k)
-        &=R_{\rm Bell}(k)+(C_i+2nmC_b)\frac{\log(k+2)}k
-          \longrightarrow0.
+         & =R_{\rm Bell}(k)+(C_i+2nmC_b)\frac{\log(k+2)}k
+        \longrightarrow0.
         \label{eq:arealaw-source-selected-density}
     \end{align}
     At this same point,
     \begin{align}
         0\le\delta_k=\frac{\mu_k-e}{g/2}
-        &\le\frac{e+\operatorname{cap}_k+r_k}{g/2},&r_k&\longrightarrow0,
+         & \le\frac{e+\operatorname{cap}_k+r_k}{g/2}, & r_k & \longrightarrow0,
         \label{eq:arealaw-source-selected-energy}
     \end{align}
     with the actual density cap from
