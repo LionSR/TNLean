@@ -187,12 +187,13 @@ private theorem selectedPreparedWordComparison_comp {Q R : Type}
     (ho : Layout.restrict sq c = Layout.mapOwner lift (Layout.restrict sa f))
     (hPrep : HEq (u.restrict sq hu).eval ((x.restrict sa hx).mapOwner lift).eval)
     (hResidual : HEq (v.restrict sq hv).eval ((y.restrict sa hy).mapOwner lift).eval)
-    (hTarget : HEq t.eval (((x.comp y).restrict sa hxy).mapOwner lift).eval) :
+    (hWord : HEq t (((x.comp y).restrict sa hxy).mapOwner lift)) :
     selectedPreparedWordComparison sq (u.comp v)
       (by simp only [Word.sources, hv, hu, List.nil_append]) t := by
   have hComp := Word.eval_comp_heq (u.restrict sq hu) (v.restrict sq hv)
     ((x.restrict sa hx).mapOwner lift) ((y.restrict sa hy).mapOwner lift)
     hi hm ho hPrep hResidual
+  have hTarget := Word.eval_heq hi ho hWord
   apply eq_of_heq
   exact hComp.trans hTarget.symm
 
@@ -394,10 +395,6 @@ private theorem selectedPreparedWordComparison_of_original_labels {a b : Layout 
       (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ))
       ((Va.restrict sa hsVa).mapOwner lift) :=
     incidentSourceWord_heq_of_original_labels w p ψ ξ
-  have hIncident : HEq
-      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)).eval
-      ((Va.restrict sa hsVa).mapOwner lift).eval :=
-    Word.eval_heq hin (hBoundary b).symm hWord
   exact selectedPreparedWordComparison_comp sq sa lift
     (w.sourcePrivatePreparation ψ) (partialResidual (fun _ : P ↦ true) w ξ)
     Pa (partialResidual A w χ)
@@ -405,7 +402,7 @@ private theorem selectedPreparedWordComparison_of_original_labels {a b : Layout 
     (sources_partialResidual (fun _ : P ↦ true) w ξ)
     hsPa (sources_partialResidual A w χ) hsVa
     (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ))
-    hin hmid (hBoundary b).symm hPrep hResidual hIncident
+    hin hmid (hBoundary b).symm hPrep hResidual hWord
 
 /-- The source-to-output operator selected at one party of a genuine all-party
 branch is exactly the operator constructed from its original incident labels.
