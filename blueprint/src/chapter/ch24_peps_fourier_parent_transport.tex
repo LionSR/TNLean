@@ -130,43 +130,6 @@ Every open contraction retains its full virtual boundary coefficient.
 
 \subsection{Exterior blocks and complete kernels}
 
-\begin{definition}[Exterior crossing coefficients]%
-    \label{def:peps_fourier_exterior_coefficient}
-    \lean{TNLean.PEPS.graphBoundaryExteriorCoordinateCoefficient}
-    \leanok
-    For fixed exterior crossing configurations $\gamma_X,\gamma_Y$,
-    define
-    \begin{align}
-        c_{\partial R}(\gamma_Y,\gamma_X)
-        =\prod_{f=(t,h)\in\partial E_R}
-        \begin{cases}
-            Q(\gamma_{Y,f},\gamma_{X,f}),            & t\in R, \\
-            \overline{Q(\gamma_{Y,f},\gamma_{X,f})}, & h\in R.
-        \end{cases}
-        \label{eq:peps_fourier_exterior_coefficient}
-    \end{align}
-    The exterior endpoint has the complementary orientation to the
-    retained regional endpoint.
-\end{definition}
-
-\begin{lemma}[Crossing blocks factor through the regional matrix]%
-    \label{lem:peps_fourier_exterior_factorization}
-    \lean{TNLean.PEPS.mixedPhysicalProductMatrix_boundary_coordinates}
-    \leanok
-    \uses{def:peps_fourier_exterior_coefficient,def:peps_fourier_regional_matrix}
-    For fixed exterior crossing configurations $\gamma_X,\gamma_Y$,
-    the mixed product of the crossing blocks of $B(Q)$ at these
-    configurations and the internal matrices $B(Q)$ equals
-    $c_{\partial R}(\gamma_Y,\gamma_X)\,Q_R$, with the coefficient
-    (\ref{eq:peps_fourier_exterior_coefficient}).
-\end{lemma}
-\begin{proof}\leanok
-    Fixing one endpoint in
-    $B(Q)_{(y_h,y_t),(x_h,x_t)}=Q_{y_h,x_h}\overline{Q_{y_t,x_t}}$
-    extracts exactly the exterior scalar and leaves $Q_f$ on the
-    regional endpoint. Multiplying over edges gives the factorization.
-\end{proof}
-
 \begin{theorem}[The actual global Fourier blocks preserve local ranges]%
     \label{thm:peps_fourier_exterior_blocks}
     \lean{TNLean.PEPS.regionOperatorBlock_graphNumberedBondMatrix_coordinates_maps,
