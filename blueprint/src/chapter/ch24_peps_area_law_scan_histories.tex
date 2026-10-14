@@ -564,6 +564,7 @@ The following finite construction follows
     \label{def:al_scan_augmented_partitions}
     \lean{TNLean.PEPS.AreaLaw.Scan.augmentedState,
         TNLean.PEPS.AreaLaw.Scan.augmentedPartition,
+        TNLean.PEPS.AreaLaw.Scan.augmentedPartition_eq_images,
         TNLean.PEPS.AreaLaw.Scan.augmentedMove,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumHistoryPartition,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumChargeMove,
@@ -804,6 +805,83 @@ The following finite construction follows
     $UY=(P_0\cup Y)\cap\{d>0\}$. These prefixes contain whole rows;
     the partially consumed nominal row contributes to the error estimate.
 \end{definition}
+
+% Source: 08-scanner.tex, lines 21--24 and 83--98,
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Target and positive-depth receiving regions]
+    \label{thm:al_scan_receiving_regions}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_target_subset_receiving_near,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_target_subset_receiving_near,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_receiving_regions,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_receiving_regions}
+    \leanok
+    \uses{def:al_scan_actual_histories,def:al_scan_comparison_prefixes}
+    Let $\Lambda,T\subset\mathbb Z^2$ be finite, with $T$ nonempty, and let
+    $A\subseteq\Lambda$. Give the collar scan the ambient depth
+    $d(x)=\min_{t\in T}\|x-t\|_\infty$, and put $X=A\cap T$.
+    For any band and any finite history, let $(P_0,Y,V)$ be its physical
+    partition either after the completed fill--charge pairs or after the next
+    prescribed fill and before its charge. With
+    $U=P_0\cap\{d>0\}$ and $UY=(P_0\cup Y)\cap\{d>0\}$, one has
+    \begin{align}
+        X         & \subseteq P_0,               \\
+        P_0       & =X\cup U,                    \\
+        P_0\cup Y & =X\cup UY,                   \\
+        V         & =\Lambda\setminus(X\cup UY).
+    \end{align}
+    These are the moving-region identities of
+    \cite[Section~9]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scan_ambient_rows,thm:al_scan_band_nesting}
+    Since $d(x)\le0$ is equivalent to $x\in T$ and the initial near cutoff
+    is nonnegative, every site of $X$ is initially near. Every site outside
+    $A$ is initially far. These assignments persist through every fill and
+    charge. Thus $X\subseteq P_0$, and every site of $P_0\cup Y$ with
+    nonpositive depth belongs to $X$. Separating the positive and nonpositive
+    depths gives the two union identities. The three regions partition
+    $\Lambda$, so the far-region identity follows by taking the complement.
+\end{proof}
+
+% Source: 08-scanner.tex, lines 21--24 and 83--98.
+\begin{theorem}[The target and the augmented receiving regions]
+    \label{thm:al_scan_augmented_receiving_regions}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_augmentedPartition_eq_target_near_middle,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_augmentedPartition_eq_target_near_middle}
+    \leanok
+    \uses{def:al_scan_actual_histories,def:al_scan_augmented_partitions,
+        def:al_scan_comparison_prefixes}
+    Let $h$ be a finite collar history and let $g$ be one of its bands.
+    Consider either the physical partition after $h$, or the partition after
+    its next prescribed fill and before the next charge. Write
+    $(P_0,Y_0,V_0)$ for its physical near, middle and far regions. Set
+    $X=A\cap T$ and $U=P_0\cap\{x\in\Lambda:d(x)>0\}$.
+    Let $\iota$ include the physical sites into the domain obtained by
+    adjoining two distinct auxiliary sites $C$ and $R$. The augmented
+    partition is
+    \begin{align}
+        P & = \{C\}\sqcup\iota(X\cup U),
+        \label{eq:al_scan_augmented_near} \\
+        Y & = \iota(Y_0),                 \\
+        F & = \{R\}\sqcup
+        \iota\bigl(\Lambda\setminus(X\cup(U\cup Y_0))\bigr).
+        \label{eq:al_scan_augmented_far}
+    \end{align}
+    The construction is that of
+    \cite[Section~9, moving partitions]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scan_receiving_regions,def:al_scan_augmented_partitions}
+    Put $W=(P_0\cup Y_0)\cap\{x\in\Lambda:d(x)>0\}$.
+    The physical region identities give $P_0=X\cup U$,
+    $P_0\cup Y_0=X\cup W$, and $V_0=\Lambda\setminus(X\cup W)$.
+    Thus $X\cup W=(X\cup U)\cup Y_0=X\cup(U\cup Y_0)$.
+    Substituting this into the expression for $V_0$ gives the physical
+    complement in~(\ref{eq:al_scan_augmented_far}). The auxiliary site $C$
+    belongs to the near region and $R$ to the far region; all physical
+    sites retain their assignments under $\iota$. This also gives
+    (\ref{eq:al_scan_augmented_near}) and the asserted middle region.
+\end{proof}
 
 \begin{theorem}[Positive-depth prefixes as ambient collars]
     \label{thm:al_scan_positive_prefix_collars}
@@ -1493,6 +1571,32 @@ The following finite construction follows
     the physical update. Exact history weights give positivity, and the
     singleton choice has weight one. The ordered-band inclusions apply
     to all completed and pre-charge statuses.
+\end{proof}
+
+\begin{theorem}[Initial normalization of the actual fill]
+    \label{thm:al_scan_actual_initial_log_norm}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualFillData_initial_log_filteredNormSq_bound}
+    \leanok
+    Fix a collar scan with positive offset and charge capacities,
+    positive physical and auxiliary dimensions, and $a>0$.
+    There exists $C\ge0$, chosen before the number $k\ge0$ of replicas
+    and the vector $\xi$, such that $\|\xi\|\le1$ implies
+    \begin{align}
+        \log\|M_{0,k}(0)^{-1/4}\xi\|^2\le C\log(k+2).
+    \end{align}
+    Here $M_{0,k}(0)$ is the initial actual fill root with band
+    exponent $a/2$. The same vector is used in the filtered norm.
+    The real logarithm has value zero at zero. For a nonzero vector,
+    this is the initial normalization estimate in the scanner argument.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:al_scan_actual_fill_transport,thm:al_scan_actual_fill_admission}
+    The actual fill is admissible, and its band metrics commute.
+    The polynomial transport-root floor supplies $C_0\ge0$, fixed
+    before the replica count, with
+    $(k+2)^{-C_0K}I\le M_{0,k}(0)$, where $K$ is the number of bands.
+    The filtered-norm estimate gives the claimed inequality with
+    $C=C_0K/2$.
 \end{proof}
 
 \begin{theorem}[Exact adjacent fill and charge roots]
@@ -3256,6 +3360,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     $b_s$ uses the listed physical assumptions.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:al_scan_bad_history_inverse_power,thm:al_scan_status_scale_separation}
     The exact prefix marginal writes $b_s$ as the expectation of its
     indicator over full histories. Goodness through every completed
     prefix implies goodness of every old charge state, so the bad-old
@@ -3367,6 +3472,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 \begin{theorem}[Nonnegative transported entropy gain]
     \label{thm:al_scan_entropy_gain_nonneg}
     \lean{TensorPower.ReplicaTransport.TransportData.entropyGain_nonneg}
+    \leanok
     \uses{thm:al_scan_old_entropy_integral}
     Let $\mathscr D$ be finite admissible transport data with positive factor
     dimensions and $t\ge0$. Suppose its bands commute on the symmetric
@@ -3375,7 +3481,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     $\mathcal G_{\mathscr D,k,\mathrm{pre}}(p)\ge0$.
     The vector may vanish, and $p$ may be either endpoint.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_scan_regional_move_entropy,thm:al_scan_old_entropy_integral}
     Strong subadditivity gives $\eta_{h,c,g}(\theta)\ge0$ for every valid
     move. With $J_h$ denoting the old-state Fourier--coherent integral,
@@ -3390,6 +3496,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 \begin{theorem}[Charge sampling summed over complete rounds]
     \label{thm:al_scan_actual_charge_sum_sampling}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.sum_actualCharge_integral_le_sum_actualRounds_entropyGain_domainGraph}
+    \leanok
     \uses{thm:al_scan_actual_old_entropy_sampling,def:al_scan_actual_round_family}
     Assume the geometric and designated-support hypotheses of
     Theorem~\ref{thm:al_scan_actual_old_entropy_sampling}, uniformly over
@@ -3408,7 +3515,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     \end{align}
     No symmetry hypothesis on the supplied vector is needed.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_scan_entropy_gain_nonneg,thm:al_scan_actual_old_entropy_sampling,
         thm:al_scan_old_parameter_integral,thm:al_scan_actual_round_entropy}
     Both scalar functions are interval integrable. Pointwise charge sampling
@@ -3429,6 +3536,7 @@ The finite-leaf estimates below follow the charge-energy argument in
 \begin{theorem}[Integrated charge defect over the actual scan]
     \label{thm:al_scan_actual_charge_sum_bound}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_integral_bound_domainGraph}
+    \leanok
     \uses{thm:al_scan_actual_charge_sum_sampling,thm:al_scan_actual_round_transport}
     There are universal real constants $c_0,C_{\mathrm{ent}},e_{\mathrm{ent}}$,
     with $c_0>0$, for which the following holds. Assume the joint geometric,
@@ -3460,11 +3568,86 @@ The finite-leaf estimates below follow the charge-energy argument in
     the supplied vector with the physical prevector and bounding the initial
     and final norms are separate obligations.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_scan_actual_charge_sum_sampling,thm:al_scan_actual_round_entropy}
     Choose the common error from Theorem~\ref{thm:al_scan_actual_round_entropy}
     once. Multiply (\ref{eq:al_scan_charge_sum_sampling}) by $ka\ge0$ and
     apply (\ref{eq:al_scan_actual_entropy_sum}) to obtain
     (\ref{eq:al_scan_actual_charge_sum}). The same error sequence and supplied
     vector occur throughout. No division by the replica count or band count occurs.
+\end{proof}
+
+% Source: openai/math, adc7f1241b42e322a6451854ab7e4b4c146bf78a,
+% build/sections/07-comparators.tex, comparator:rough-upper, lines 332--381;
+% build/sections/08-scanner.tex, lines 457--474 and 755--769.
+\begin{theorem}[Uniform rough upper bound for supplied replica labels]
+    \label{thm:al_scan_actual_rough_upper}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.eventually_actualScan_suppliedPrevector_rough_upper}
+    \leanok
+    \uses{def:al_scan_comparison_prefixes,def:al_scan_actual_fill_transport,
+        def:al_scan_actual_charge_data}
+    Let $\Lambda\subset\mathbb Z^2$ be finite, let $T$ be finite and nonempty,
+    and put $X=A\cap T$ for a color $A\subseteq\Lambda$.
+    Use the induced physical lattice graph and ambient distance from $T$.
+    Fix a collar scan with $K$ bands, $n,m,M>0$, and scales satisfying
+    $r_0\le D$, $1\le D$, $4D\le m$, and $8Km\le L$.
+    Suppose every ambient layer $T_j\setminus T_{j-1}$ has at most $n$
+    sites for $1\le j\le L$. Fix $q\ge1$, a unit physical vector
+    $\widetilde\Omega$, and $a>0$. Assume
+    \begin{align}
+        S_{\widetilde\Omega}(Q_j)\le B_{\mathrm{sh}}
+        \qquad(0\le j\le L),
+    \end{align}
+    where $Q_j=A\cap(T_j\setminus T)$.
+    Let $E$ be a set of Schmidt indices at $X$, with mass $z>0$ and
+    cardinality $d$. Let $\psi$ be the normalized Schmidt truncation,
+    with the retained $X$ factor relabelled by an auxiliary factor $R$
+    of dimension $d$. Supply labels $\lambda_k$ such that, for all
+    sufficiently large $k$,
+    \begin{align}
+        \|\pi_R^{\lambda_k}\psi^{\otimes k}\|^2
+        \ge\frac{1}{2(k+1)^{d^2}}.
+    \end{align}
+    Use the same vectors
+    $\mathrm{pre}_k=\pi_R^{\lambda_k}
+        (\widetilde\Omega\otimes\mathrm{Bell}_{CR})^{\otimes k}$
+    in every actual fill and charge, with auxiliary dimensions $d,d$
+    and band exponent $a/2$.
+    There exists $c\ge0$ such that, for all sufficiently large $k$,
+    every round $s+1\le nm$, every real interpolation parameter $p$,
+    and either actual root $\mathcal M_{s,k}(p)$, one has
+    \begin{align}
+        N_{s,k}(p)^2
+         & :=\|\mathcal M_{s,k}(p)^{-1/4}\mathrm{pre}_k\|^2>0,  \\
+        -\frac{\log N_{s,k}(p)^2}{k}
+         & \le 2\log d-\log z
+        +aK\left(\frac{B_{\mathrm{sh}}}{z}+1+3nD\log q\right)
+        +\varepsilon_k,                                         \\
+        \varepsilon_k
+         & :=\frac{\log4+(d^2+cK)\log(k+2)}{k}\longrightarrow0.
+    \end{align}
+    The root at real $p$ is evaluated at its projection onto $[0,1]$.
+    Both $c$ and the replica threshold are chosen before $s$ and $p$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{cor:al_scan_front_prefix_family,thm:al_scan_physical_prefix_approximation,
+        lem:al_scan_status_differences,thm:al_augmented_prevector_symmetry,
+        thm:al_augmented_root_compression,thm:al_scan_receiving_regions,
+        def:al_scan_augmented_partitions}
+    Take the finite family of all completed histories through time $nm$
+    and all pre-charge histories before time $nm$.
+    The ordered-band inclusions hold across every pair of these histories.
+    Their positive near regions and near regions with middle differ from
+    members of $Q_0,\ldots,Q_L$ by at most $3nD$ sites.
+    The resulting dimension cost is at most $3nD\log q$.
+    Apply the supplied-label rough comparison to this one finite family.
+    Its constant and replica threshold therefore work simultaneously for
+    all terminal partitions of all the actual interpolation trees.
+    The augmented prevector is symmetric, so compression to the symmetric
+    subspace preserves its filtered squared norm. The exact augmented
+    partition identities identify each terminal metric with the original
+    physical metric. Finally, the filtering exponent $1/4$ and band
+    exponent $a/2$ give the coefficient
+    $8\cdot\frac14\cdot\frac a2\cdot K=aK$.
 \end{proof}

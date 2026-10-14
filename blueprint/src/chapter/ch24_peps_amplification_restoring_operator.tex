@@ -1,0 +1,156 @@
+% Source: OpenAI2026AreaLaw, 09-amplification.tex, lines 304--447
+% (proof of prop:amplification: eq:amplification-typical-error through
+% eq:amplification-ground-component), revision
+% openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\section{The restoring operator of the amplification}
+
+After the typical projectors, the proof of the amplification proposition
+of \cite[Section~10]{OpenAI2026AreaLaw} builds a restoring operator from
+them and establishes three estimates before any constraint product is
+used. This section proves these estimates for the original ground state.
+The constraint products, the choice of a clock realization, the polar
+correction and the final entropy comparison are separate steps.
+
+Throughout, $\Omega$ is a unit vector on a finite induced lattice domain
+$\Lambda$ with $q$ levels per site, $X,Y\subseteq\Lambda$ are disjoint,
+$S_0=X\cup Y$ and $Z'=\Lambda\setminus S_0$. For a width $w$ write
+$P_X=P_X^w$, $T_Y=P_Y^w$ and $Q=P_{S_0}^w$ for the typical projections of
+Definition~\ref{def:al_amp_typical_projection}. Let
+$\rho_X=\sum_xp_x|x\rangle\langle x|$ with a full orthonormal eigenbasis
+$\{|x\rangle\}$, and call $x$ selected when $|x\rangle$ lies in the range
+of $P_X$. Append two systems $s',e'$, each a copy of the space on $X$, with
+fixed unit blank vectors $|0\rangle$. The restoring operator on $s',X,Y$
+and the column operator on $s',e',X,Y$ are
+\begin{align*}
+    R_0 & =\sum_{x\ \mathrm{selected}}p_x^{-1/2}
+    |x\rangle\langle0|_{s'}\otimes
+    Q\bigl(|x\rangle\langle0|_X\otimes T_Y\bigr),          \\
+    B_0 & =\sum_{x\ \mathrm{selected}}\ \sum_{y}p_x^{-1/2}
+    |x\rangle\langle0|_{s'}\otimes|y\rangle\langle0|_{e'}\otimes
+    Q\bigl(|x\rangle\langle y|_X\otimes T_Y\bigr),
+\end{align*}
+where $y$ runs over the full basis. Let $\phi$ be $\Omega$ with $X$
+relabelled as $e'$ and blanks inserted on $X,s'$, and let
+$\eta=\Omega\otimes\sum_x\sqrt{p_x}|x\rangle_{s'}|x\rangle_{e'}$.
+
+\begin{definition}[Coordinates of the restoring operator]
+    \label{def:al_amp_restoring_coordinates}
+    \lean{TNLean.PEPS.AreaLaw.restoringVector,
+        TNLean.PEPS.AreaLaw.restoringCutProjection}
+    \leanok
+    \uses{def:al_amp_typical_projection}
+    The configuration space of $\Lambda$ is the product of those of $X$, $Y$
+    and $Z'$. In these coordinates, with the factor $X$ written in the
+    eigenbasis $\{|x\rangle\}$ of $\rho_X$, the vector $\Omega$ and the
+    projection $Q$ are the inputs of $R_0$, $B_0$, $\phi$ and $\eta$.
+\end{definition}
+
+\begin{theorem}[Mutual information of the collar]
+    \label{thm:al_amp_restoring_purity}
+    \lean{TNLean.PEPS.AreaLaw.mutualInformation_compl_eq}
+    \leanok
+    \uses{def:area_law_ground_entropy}
+    For every vector $\Omega$ and disjoint $X,Y$,
+    \begin{align*}
+        I_\Omega(X:Z')=S_\Omega(X)+S_\Omega(S_0)-S_\Omega(Y).
+    \end{align*}
+\end{theorem}
+\begin{proof}\leanok
+    Complementary regions of a pure state have equal entropy. Thus
+    $S_\Omega(Z')=S_\Omega(S_0)$, and $S_\Omega(X\cup Z')=S_\Omega(Y)$
+    because the complement of $X\cup Z'$ is $Y$.
+\end{proof}
+
+\begin{theorem}[Spectral inequalities of the restoring operator]
+    \label{thm:al_amp_restoring_spectral}
+    \lean{TNLean.PEPS.AreaLaw.restoringCutProjection_le_and_typicalProjection_le,
+        TNLean.PEPS.AreaLaw.restoringCutProjection_isStarProjection_commute,
+        Matrix.PosSemidef.spectralSelection_le_smul,
+        Matrix.IsHermitian.spectralSelection_mul_mul_le_smul}
+    \leanok
+    \uses{def:al_amp_restoring_coordinates}
+    The projection $Q$ commutes with $\rho_{S_0}$, and
+    \begin{align*}
+        Q\le\mathrm e^{S_\Omega(S_0)+w}\rho_{S_0},\qquad
+        T_Y\rho_YT_Y\le\mathrm e^{-S_\Omega(Y)+w}T_Y.
+    \end{align*}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_amp_typical_projection_cut}
+    Both projections are spectral projections of the corresponding reduced
+    states. Every eigenvalue selected by $Q$ is at least
+    $\mathrm e^{-S_\Omega(S_0)-w}$, and every eigenvalue selected by $T_Y$ is
+    at most $\mathrm e^{-S_\Omega(Y)+w}$. The inequalities hold
+    eigenvalue by eigenvalue in a common eigenbasis.
+\end{proof}
+
+\begin{theorem}[Failure of the three projections on the ground state]
+    \label{thm:al_amp_restoring_failure}
+    \lean{TNLean.PEPS.AreaLaw.norm_selectedProjection_restoringVector_sub_le,
+        TNLean.PEPS.AreaLaw.norm_typicalProjection_restoringVector_sub_le,
+        TNLean.PEPS.AreaLaw.norm_restoringCutProjection_restoringVector_sub_le,
+        Matrix.norm_projection_mulVec_sub_sq}
+    \leanok
+    \uses{def:al_amp_restoring_coordinates}
+    If $1-\operatorname{tr}(\rho_AP_A^w)\le\delta$ for $A=X,Y,S_0$, then each
+    of $P_X$, $T_Y$ and $Q$ moves $\Omega$ by at most $\sqrt\delta$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_amp_typical_projection_cut}
+    For an orthogonal projection $P$ on a factor $A$,
+    $\|P\Omega-\Omega\|^2=1-\operatorname{tr}(\rho_AP)$.
+\end{proof}
+
+\begin{theorem}[Three estimates for the restoring operator]
+    \label{thm:al_amp_restoring_estimates}
+    \lean{TNLean.PEPS.AreaLaw.restoringOperator_estimates}
+    \leanok
+    \uses{def:al_amp_restoring_coordinates}
+    Suppose $1-\operatorname{tr}(\rho_AP_A^w)\le\delta$ for $A=X,Y,S_0$, and
+    put $\mathcal I=I_\Omega(X:Z')$ and
+    $M_0=\exp\bigl((\mathcal I+3w)/2\bigr)$. Then
+    \begin{align*}
+        \|R_0\|,\ \|B_0\|                    & \le M_0, \\
+        \|P_\Omega R_0\phi\|                 & \le1,    \\
+        \|R_0^\dagger(L')^\dagger\eta-\phi\| & \le
+        3\sqrt\delta+\|(L')^\dagger\Omega-\Omega\|,
+    \end{align*}
+    the last for every physical operator $L'$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_amp_restoring_purity, thm:al_amp_restoring_spectral,
+        thm:al_amp_restoring_failure}
+    Selected eigenvalues satisfy $p_x^{-1}\le\mathrm e^{S_\Omega(X)+w}$. With
+    the inequalities of Theorem~\ref{thm:al_amp_restoring_spectral}, the Gram
+    matrices of $R_0$ and $B_0$ are at most
+    $\mathrm e^{S_\Omega(X)+S_\Omega(S_0)-S_\Omega(Y)+3w}$, which is $M_0^2$ by
+    Theorem~\ref{thm:al_amp_restoring_purity}. The ground component is
+    bounded through
+    $M_X=\operatorname{tr}_Y[(I_X\otimes T_Y)\rho_{S_0}Q]$, which satisfies
+    $0\le M_X\le\rho_X$ because $Q$ commutes with $\rho_{S_0}$; the
+    $X$-marginal is diagonal in the chosen eigenbasis. The adjoint error
+    follows by telescoping the three projections on $\Omega$ with the bounds
+    of Theorem~\ref{thm:al_amp_restoring_failure}.
+\end{proof}
+
+\begin{theorem}[The restoring operator at large scales]
+    \label{thm:al_amp_restoring_large_scales}
+    \lean{TNLean.PEPS.AreaLaw.exists_restoringOperator_estimates}
+    \leanok
+    \uses{thm:al_amp_restoring_estimates}
+    Fix $q\ge1$, a range $R$, a strength $J\ge0$, a gap $\Delta>0$, $C_0\ge0$
+    and an integer $K\ge0$. There is a threshold $N$, depending only on these
+    data, such that the following holds for every $n\ge N$, every
+    range-$R$ interaction of strength $J$ on a finite induced lattice domain
+    with a unit ground vector $\Omega$ of full-system gap $\Delta$, and every
+    disjoint $X,Y$ such that $X$, $Y$ and $S_0$ have at most $C_0n$ crossing
+    edges each. With $w=n^{3/5}$, the estimates of
+    Theorem~\ref{thm:al_amp_restoring_estimates} hold with
+    $3\sqrt\delta=3n^{-K}$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_amp_typical_projectors}
+    Theorem~\ref{thm:al_amp_typical_projectors} gives failure probabilities
+    at most $\delta=n^{-2K}$, and $\sqrt{n^{-2K}}=n^{-K}$.
+\end{proof}

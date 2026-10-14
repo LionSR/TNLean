@@ -95,7 +95,9 @@ theorem graphChannelEventKernel_eq_zero_of_not_reachable
     exact (not_le_of_gt (ENat.natCast_lt_top (2 * l))) h
   simp [graphChannelEventKernel, hempty]
 
-private theorem card_graphBall_anchors_le (G : SimpleGraph ι) (a : κ → ι)
+/-- The anchors whose balls of radius `l` contain `y` number at most `μ` times the size of the
+ball of radius `l` about `y`. -/
+theorem card_graphBall_anchors_le (G : SimpleGraph ι) (a : κ → ι)
     {μ : ℝ} (hfiber : ∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ)
     (y : ι) (l : ℕ) :
     ((Finset.univ.filter fun i : κ => y ∈ graphBall G (a i) l).card : ℝ) ≤

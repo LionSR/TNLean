@@ -425,6 +425,27 @@ normalizations.
   parties in a larger construction. A bound on its cardinality and common
   source spaces across different monomials remain separate data or constructions.
 
+#### `TNLean.PEPS.Approximation.RepaintingUses` and `JunctionUses`
+
+- **Defined in:** `TNLean/PEPS/Approximation/DyadicActiveLabelParties.lean`,
+  together with `OwnsLevelBlock` and the hierarchy forms `DyadicSquare.Uses` and
+  `DyadicJunction.Uses`.
+- **Meaning:** the block parties an event of the dyadic protocol uses.
+  `OwnsLevelBlock j' Q x` says that `x` is the new party of the `2 ^ j'`-block `Q`
+  or the old party of its parent block. A repainting uses the owners of the blocks
+  within one index of its square; a junction resize uses the four blocks at its
+  corner.
+- **Source:** polynomial-PEPS manuscript, September 24, 2026, Section 7,
+  `06-geometry.tex`, lines 82–90, 127–131 and 585–594.
+- **Sanctioned bridges:** `repaintingUses_of_levelLabels` and
+  `junctionUses_of_incidentLabels` derive use from the block labelling at the
+  transition times between repaintings. `RepaintingUses.near` and
+  `JunctionUses.near` turn use into the nearness predicates `BlockNear` and
+  `CornerNear` of the lifetime-incidence count.
+- **Caveat:** use is a property of the events, not of gates. That every gate of
+  an event involves only parties the event uses is a separate hypothesis of
+  `card_gates_le_of_uses`, because the protocol's gates are not constructed.
+
 #### `TNLean.PEPS.IsVertexInjective`
 
 - **Declaration:** `TNLean.PEPS.IsVertexInjective (A : Tensor G d) : Prop`.

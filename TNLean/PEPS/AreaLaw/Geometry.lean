@@ -93,6 +93,7 @@ import TNLean.PEPS.AreaLaw.Geometry.QuotientIntervals
 import TNLean.PEPS.AreaLaw.Geometry.RectangleMixedSquares
 import TNLean.PEPS.AreaLaw.Geometry.RectangleShellCounts
 import TNLean.PEPS.AreaLaw.Geometry.RectangleShellWeightedCover
+import TNLean.PEPS.AreaLaw.Geometry.RepairDepth
 import TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation
 import TNLean.PEPS.AreaLaw.Geometry.SegmentBallClipping
 import TNLean.PEPS.AreaLaw.Geometry.SideEndpoints
