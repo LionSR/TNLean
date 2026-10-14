@@ -213,6 +213,7 @@ theorem card_filter_anchor_mem_graphNeighborhood_le {κ : Type*} [Fintype κ]
     (S : Finset (Site Λ)) (r : ℕ) :
     ((Finset.univ.filter fun i => a i ∈ graphNeighborhood Λ r S).card : ℝ) ≤
       2 * μ * S.card * (1 + (r : ℝ)) ^ 2 := by
+  classical
   have hsub : (Finset.univ.filter fun i => a i ∈ graphNeighborhood Λ r S) ⊆
       S.biUnion fun s => (graphBall (domainGraph Λ) s r).biUnion
         fun x => Finset.univ.filter fun i => a i = x := by
@@ -260,7 +261,8 @@ theorem contractionWord_siteExpectation_mem_supportedOperators {q : ℕ} [NeZero
     (k : {i // a i ∈ graphNeighborhood Λ r S} →
       Matrix (Configuration Λ q) (Configuration Λ q) ℂ) (hk₁ : ∀ i, k i ≤ 1) :
     ∀ (m : ℕ) (u : Fin m → {i // a i ∈ graphNeighborhood Λ r S}),
-      contractionWord (fun i => siteExpectation q (graphBall (domainGraph Λ) (a i) r) (k i))
+      contractionWord (fun i : {i // a i ∈ graphNeighborhood Λ r S} =>
+          siteExpectation q (graphBall (domainGraph Λ) (a i) r) (k i))
         m u ∈ supportedOperators q (graphNeighborhood Λ (2 * r) S : Set (Site Λ)) := by
   have hmem (i : {i // a i ∈ graphNeighborhood Λ r S}) :
       CFC.sqrt (1 - siteExpectation q (graphBall (domainGraph Λ) (a i) r) (k i)) ∈
