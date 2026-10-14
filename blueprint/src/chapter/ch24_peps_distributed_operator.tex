@@ -388,6 +388,7 @@ the finite-dimensional density application uses finite ones.
 \begin{definition}[Enumerated virtual alphabets]
     \label{def:compression_operator_finite_coordinates}
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.toPartyNetwork}
+    \leanok
     \uses{def:compression_operator_local_tensor,def:peps_party_network_routing}
     Use the distributed links and their finite alphabets $A_e$ from
     Definition~\ref{def:compression_operator_operator}. For each link choose
@@ -410,6 +411,7 @@ the finite-dimensional density application uses finite ones.
 \begin{theorem}[Contraction in enumerated coordinates]
     \label{thm:compression_operator_finite_coordinates}
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.operatorCoeff_toPartyNetwork}
+    \leanok
     \uses{def:compression_operator_finite_coordinates,def:compression_operator_operator}
     Let $V$ be any set, and assign a site $a_p\in V$ to each party.
     For $x,y:V\to[q]$, the operator of the network in
@@ -422,7 +424,7 @@ the finite-dimensional density application uses finite ones.
     \end{align}
     The readouts and site assignment need not be injective or surjective.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{def:compression_operator_finite_coordinates,thm:compression_operator_link_sum}
     The product bijection $\prod_e\vartheta_e$ changes variables in the
     finite contraction sum. By (\ref{eq:compression_finite_coordinates}),
