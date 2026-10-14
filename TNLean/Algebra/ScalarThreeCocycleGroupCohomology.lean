@@ -106,7 +106,7 @@ variable {G : Type} [Group G]
 /-- The underlying additive group of the trivial representation on `ℂˣ`
 (notation for `Units ℂ`) is `Additive ℂˣ`. -/
 def scalarRepresentationEquiv (G : Type) [Group G] :
-    Additive (Units ℂ) ≃+ Rep.ofMulDistribMulAction G (Units ℂ) :=
+    Additive (Units ℂ) ≃+ Rep.ofMulDistribMulAction G ℂˣ :=
   (Rep.toAdditive (M := G) (G := Units ℂ)).symm
 
 @[simp]
@@ -119,18 +119,18 @@ namespace ScalarCocycle
 /-- A scalar two-cochain as an inhomogeneous two-cochain of the trivial
 representation on `ℂˣ`. -/
 def toInhomogeneousCochain (β : ScalarCocycle G) :
-    (Fin 2 → G) → Rep.ofMulDistribMulAction G (Units ℂ) :=
+    (Fin 2 → G) → Rep.ofMulDistribMulAction G ℂˣ :=
   fun g ↦ scalarRepresentationEquiv G (Additive.ofMul (β (g 0) (g 1)))
 
 /-- An inhomogeneous two-cochain of the trivial representation on `ℂˣ` as a
 scalar two-cochain. -/
-def ofInhomogeneousCochain (f : (Fin 2 → G) → Rep.ofMulDistribMulAction G (Units ℂ)) :
+def ofInhomogeneousCochain (f : (Fin 2 → G) → Rep.ofMulDistribMulAction G ℂˣ) :
     ScalarCocycle G :=
   fun g h ↦ ((scalarRepresentationEquiv G).symm (f ![g, h])).toMul
 
 @[simp]
 theorem toInhomogeneousCochain_ofInhomogeneousCochain
-    (f : (Fin 2 → G) → Rep.ofMulDistribMulAction G (Units ℂ)) :
+    (f : (Fin 2 → G) → Rep.ofMulDistribMulAction G ℂˣ) :
     toInhomogeneousCochain (ofInhomogeneousCochain f) = f := by
   funext g
   simp only [toInhomogeneousCochain, ofInhomogeneousCochain, ofMul_toMul,
@@ -153,12 +153,12 @@ namespace ScalarThreeCochain
 /-- A scalar three-cochain as an inhomogeneous three-cochain of the trivial
 representation on `ℂˣ`. -/
 def toInhomogeneousCochain (ω : ScalarThreeCochain G) :
-    (Fin 3 → G) → Rep.ofMulDistribMulAction G (Units ℂ) :=
+    (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ :=
   fun g ↦ scalarRepresentationEquiv G (Additive.ofMul (ω (g 0) (g 1) (g 2)))
 
 /-- An inhomogeneous three-cochain of the trivial representation on `ℂˣ` as a
 scalar three-cochain. -/
-def ofInhomogeneousCochain (f : (Fin 3 → G) → Rep.ofMulDistribMulAction G (Units ℂ)) :
+def ofInhomogeneousCochain (f : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) :
     ScalarThreeCochain G :=
   fun g h k ↦ ((scalarRepresentationEquiv G).symm (f ![g, h, k])).toMul
 
@@ -170,7 +170,7 @@ theorem ofInhomogeneousCochain_toInhomogeneousCochain (ω : ScalarThreeCochain G
 
 @[simp]
 theorem toInhomogeneousCochain_ofInhomogeneousCochain
-    (f : (Fin 3 → G) → Rep.ofMulDistribMulAction G (Units ℂ)) :
+    (f : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) :
     toInhomogeneousCochain (ofInhomogeneousCochain f) = f := by
   funext g
   simp only [toInhomogeneousCochain, ofInhomogeneousCochain, ofMul_toMul,
@@ -191,12 +191,13 @@ theorem toInhomogeneousCochain_comap {K : Type} [Group K] (f : K →* G)
 trivial action on `ℂˣ`, is the ratio of the two sides of the three-cocycle
 equation of arXiv:2502.20257, `eq:3-cocycle`. -/
 theorem d_toInhomogeneousCochain (ω : ScalarThreeCochain G) (g : Fin 4 → G) :
-    inhomogeneousCochains.d (Rep.ofMulDistribMulAction G (Units ℂ)) 3 (toInhomogeneousCochain ω) g =
+    inhomogeneousCochains.d (Rep.ofMulDistribMulAction G ℂˣ) 3 (toInhomogeneousCochain ω) g =
       scalarRepresentationEquiv G (Additive.ofMul
         (ω (g 1) (g 2) (g 3) / ω (g 0 * g 1) (g 2) (g 3) * ω (g 0) (g 1 * g 2) (g 3) /
           ω (g 0) (g 1) (g 2 * g 3) * ω (g 0) (g 1) (g 2))) := by
   apply (scalarRepresentationEquiv G).symm.injective
-  rw [inhomogeneousCochains.d_hom_apply, Fin.sum_univ_four, ScalarCohomology.ofMulDistribMulAction_ρ_apply]
+  rw [inhomogeneousCochains.d_hom_apply, Fin.sum_univ_four,
+    ScalarCohomology.ofMulDistribMulAction_ρ_apply]
   simp only [toInhomogeneousCochain, Fin.contractNth, map_add, AddEquiv.symm_apply_apply]
   simp [ofMul_div, ofMul_mul]
   abel_nf
@@ -215,7 +216,8 @@ vanishing of Mathlib's degree-three differential for the trivial action on
 `ℂˣ`. -/
 theorem isCocycle_iff_d_eq_zero (ω : ScalarThreeCochain G) :
     IsCocycle ω ↔
-      inhomogeneousCochains.d (Rep.ofMulDistribMulAction G (Units ℂ)) 3 (toInhomogeneousCochain ω) = 0 := by
+      inhomogeneousCochains.d (Rep.ofMulDistribMulAction G ℂˣ) 3 (toInhomogeneousCochain ω) =
+        0 := by
   constructor
   · intro h
     funext g
@@ -235,11 +237,12 @@ namespace ScalarCocycle
 /-- Mathlib's degree-two differential of a scalar two-cochain, for the trivial
 action on `ℂˣ`, is the alternating product of its four face values. -/
 theorem d_toInhomogeneousCochain_apply (β : ScalarCocycle G) (g : Fin 3 → G) :
-    inhomogeneousCochains.d (Rep.ofMulDistribMulAction G (Units ℂ)) 2 (toInhomogeneousCochain β) g =
+    inhomogeneousCochains.d (Rep.ofMulDistribMulAction G ℂˣ) 2 (toInhomogeneousCochain β) g =
       scalarRepresentationEquiv G (Additive.ofMul
         (β (g 1) (g 2) / β (g 0 * g 1) (g 2) * β (g 0) (g 1 * g 2) / β (g 0) (g 1))) := by
   apply (scalarRepresentationEquiv G).symm.injective
-  rw [inhomogeneousCochains.d_hom_apply, Fin.sum_univ_three, ScalarCohomology.ofMulDistribMulAction_ρ_apply]
+  rw [inhomogeneousCochains.d_hom_apply, Fin.sum_univ_three,
+    ScalarCohomology.ofMulDistribMulAction_ρ_apply]
   simp only [toInhomogeneousCochain, Fin.contractNth, map_add, AddEquiv.symm_apply_apply]
   simp [ofMul_div, ofMul_mul]
   abel_nf
@@ -249,7 +252,7 @@ theorem d_toInhomogeneousCochain_apply (β : ScalarCocycle G) (g : Fin 3 → G) 
 action on `ℂˣ`, is its multiplicative three-coboundary from arXiv:2502.20257,
 `eq:omegagauge`. -/
 theorem d_toInhomogeneousCochain (β : ScalarCocycle G) :
-    inhomogeneousCochains.d (Rep.ofMulDistribMulAction G (Units ℂ)) 2 (toInhomogeneousCochain β) =
+    inhomogeneousCochains.d (Rep.ofMulDistribMulAction G ℂˣ) 2 (toInhomogeneousCochain β) =
       ScalarThreeCochain.toInhomogeneousCochain (ScalarThreeCochain.coboundary β) := by
   funext g
   rw [d_toInhomogeneousCochain_apply]
@@ -273,7 +276,7 @@ theorem toInhomogeneousCochain_div (ω η : ScalarThreeCochain G) :
 @[simp]
 theorem toInhomogeneousCochain_one :
     toInhomogeneousCochain (fun _ _ _ ↦ (1 : Units ℂ)) =
-      (0 : (Fin 3 → G) → Rep.ofMulDistribMulAction G (Units ℂ)) := by
+      (0 : (Fin 3 → G) → Rep.ofMulDistribMulAction G ℂˣ) := by
   funext g
   simp [toInhomogeneousCochain]
 
@@ -293,8 +296,8 @@ theorem fusionGauge_eq_iff (β : ScalarCocycle G) (ω η : ScalarThreeCochain G)
 a Mathlib three-coboundary. No normalization is imposed on either side. -/
 theorem cohomologousTo_iff_exists_d_eq (ω η : ScalarThreeCochain G) :
     CohomologousTo ω η ↔
-      ∃ y : (Fin 2 → G) → Rep.ofMulDistribMulAction G (Units ℂ),
-        inhomogeneousCochains.d (Rep.ofMulDistribMulAction G (Units ℂ)) 2 y =
+      ∃ y : (Fin 2 → G) → Rep.ofMulDistribMulAction G ℂˣ,
+        inhomogeneousCochains.d (Rep.ofMulDistribMulAction G ℂˣ) 2 y =
           toInhomogeneousCochain ω - toInhomogeneousCochain η := by
   constructor
   · rintro ⟨β, hβ⟩
@@ -313,51 +316,52 @@ theorem cohomologousTo_iff_exists_d_eq (ω η : ScalarThreeCochain G) :
 /-- A scalar three-cocycle as a Mathlib three-cocycle of the trivial
 representation on `ℂˣ`. -/
 def toCocycles (ω : {ω : ScalarThreeCochain G // IsCocycle ω}) :
-    cocycles (Rep.ofMulDistribMulAction G (Units ℂ)) 3 :=
+    cocycles (Rep.ofMulDistribMulAction G ℂˣ) 3 :=
   cocyclesMk (toInhomogeneousCochain ω.1) ((isCocycle_iff_d_eq_zero ω.1).1 ω.2)
 
 @[simp]
 theorem iCocycles_toCocycles (ω : {ω : ScalarThreeCochain G // IsCocycle ω}) :
-    iCocycles (Rep.ofMulDistribMulAction G (Units ℂ)) 3 (toCocycles ω) = toInhomogeneousCochain ω.1 :=
+    iCocycles (Rep.ofMulDistribMulAction G ℂˣ) 3 (toCocycles ω) = toInhomogeneousCochain ω.1 :=
   iCocycles_mk _ ((isCocycle_iff_d_eq_zero ω.1).1 ω.2)
 
 /-- A Mathlib three-cocycle of the trivial representation on `ℂˣ` as a scalar
 three-cocycle. -/
-def ofCocycles (x : cocycles (Rep.ofMulDistribMulAction G (Units ℂ)) 3) :
+def ofCocycles (x : cocycles (Rep.ofMulDistribMulAction G ℂˣ) 3) :
     {ω : ScalarThreeCochain G // IsCocycle ω} :=
-  ⟨ofInhomogeneousCochain (iCocycles (Rep.ofMulDistribMulAction G (Units ℂ)) 3 x), by
+  ⟨ofInhomogeneousCochain (iCocycles (Rep.ofMulDistribMulAction G ℂˣ) 3 x), by
     rw [isCocycle_iff_d_eq_zero, toInhomogeneousCochain_ofInhomogeneousCochain,
       ← inhomogeneousCochains.d_def]
     exact ConcreteCategory.congr_hom
-      ((inhomogeneousCochains (Rep.ofMulDistribMulAction G (Units ℂ))).iCycles_d 3 4) x⟩
+      ((inhomogeneousCochains (Rep.ofMulDistribMulAction G ℂˣ)).iCycles_d 3 4) x⟩
 
 /-- Scalar three-cocycles in the sense of arXiv:2502.20257, `eq:3-cocycle`, are
 Mathlib's three-cocycles of the trivial representation on `ℂˣ`. -/
 def cocyclesEquiv :
-    {ω : ScalarThreeCochain G // IsCocycle ω} ≃ cocycles (Rep.ofMulDistribMulAction G (Units ℂ)) 3 where
+    {ω : ScalarThreeCochain G // IsCocycle ω} ≃ cocycles (Rep.ofMulDistribMulAction G ℂˣ) 3 where
   toFun := toCocycles
   invFun := ofCocycles
   left_inv ω := by
     apply Subtype.ext
-    change ofInhomogeneousCochain (iCocycles (Rep.ofMulDistribMulAction G (Units ℂ)) 3 (toCocycles ω)) = ω.1
+    change ofInhomogeneousCochain
+      (iCocycles (Rep.ofMulDistribMulAction G ℂˣ) 3 (toCocycles ω)) = ω.1
     rw [iCocycles_toCocycles, ofInhomogeneousCochain_toInhomogeneousCochain]
   right_inv x := by
-    apply (ModuleCat.mono_iff_injective (iCocycles (Rep.ofMulDistribMulAction G (Units ℂ)) 3)).1
+    apply (ModuleCat.mono_iff_injective (iCocycles (Rep.ofMulDistribMulAction G ℂˣ) 3)).1
       inferInstance
     rw [iCocycles_toCocycles, ofCocycles, toInhomogeneousCochain_ofInhomogeneousCochain]
 
 /-- The class of a scalar three-cocycle in Mathlib's degree-three group
 cohomology `H³(G, ℂˣ)` of the trivial representation on `ℂˣ`. -/
 def anomalyClass (ω : {ω : ScalarThreeCochain G // IsCocycle ω}) :
-    groupCohomology (Rep.ofMulDistribMulAction G (Units ℂ)) 3 :=
-  π (Rep.ofMulDistribMulAction G (Units ℂ)) 3 (toCocycles ω)
+    groupCohomology (Rep.ofMulDistribMulAction G ℂˣ) 3 :=
+  π (Rep.ofMulDistribMulAction G ℂˣ) 3 (toCocycles ω)
 
 /-- Fusion-gauge equivalence of scalar three-cocycles, arXiv:2502.20257,
 `eq:omegagauge`, is equality of their classes in `H³(G, ℂˣ)`. -/
 theorem cohomologousTo_iff_anomalyClass_eq (ω η : {ω : ScalarThreeCochain G // IsCocycle ω}) :
     CohomologousTo ω.1 η.1 ↔ anomalyClass ω = anomalyClass η := by
   rw [anomalyClass, anomalyClass, ← sub_eq_zero, ← map_sub,
-    groupCohomology_π_eq_zero_iff (Rep.ofMulDistribMulAction G (Units ℂ)) 2, map_sub,
+    groupCohomology_π_eq_zero_iff (Rep.ofMulDistribMulAction G ℂˣ) 2, map_sub,
     iCocycles_toCocycles, iCocycles_toCocycles, cohomologousTo_iff_exists_d_eq]
 
 /-- A scalar three-cocycle has trivial fusion-gauge class exactly when its class
@@ -366,7 +370,7 @@ theorem isTrivialGaugeClass_iff_anomalyClass_eq_zero
     (ω : {ω : ScalarThreeCochain G // IsCocycle ω}) :
     IsTrivialGaugeClass ω.1 ↔ anomalyClass ω = 0 := by
   rw [IsTrivialGaugeClass, cohomologousTo_iff_exists_d_eq, toInhomogeneousCochain_one,
-    sub_zero, anomalyClass, groupCohomology_π_eq_zero_iff (Rep.ofMulDistribMulAction G (Units ℂ)) 2,
+    sub_zero, anomalyClass, groupCohomology_π_eq_zero_iff (Rep.ofMulDistribMulAction G ℂˣ) 2,
     iCocycles_toCocycles]
 
 /-- Every class in `H³(G, ℂˣ)` is the class of a scalar three-cocycle. -/

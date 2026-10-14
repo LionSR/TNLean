@@ -65,8 +65,9 @@ pullback `ω.comap f`. -/
 theorem ScalarCocycle.map_H2π {ω : ScalarCocycle G} (hω : ω.IsCocycle) (f : K →* G) :
     groupCohomology.map f (scalarRepresentationRes f) 2
         (groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω.isMulCocycle₂)) =
-      groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ (hω.comap f).isMulCocycle₂) := by
-  rw [groupCohomology.H2π_comp_map_apply, ScalarCocycle.mapCocycles₂_cocyclesOfIsMulCocycle₂]
+      groupCohomology.H2π _
+        (groupCohomology.cocyclesOfIsMulCocycle₂ (hω.comap f).isMulCocycle₂) := by
+  rw [groupCohomology.H2π_comp_map_apply, ScalarCocycle.mapCocycles₂_cocyclesOfIsMulCocycle₂ hω]
 
 /-- Exact representative extension is equivalent to extension of the class: the class of a
 subgroup cocycle `ψ` lies in the range of Mathlib's restriction map

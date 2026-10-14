@@ -409,7 +409,7 @@ equality of classes is identified with `H²(H, ℂˣ)` by `Setoid.quotientKerEqu
 /-- The class in Mathlib's `H²(H, ℂˣ)` of a two-cocycle on the stabilizer. -/
 private noncomputable def cocycleClass
     (ψ : {ψ : ScalarCocycle (MulAction.stabilizer G x₀) // ψ.IsCocycle}) :
-    groupCohomology.H2 (Rep.ofMulDistribMulAction (MulAction.stabilizer G x₀) (Units ℂ)) :=
+    groupCohomology.H2 (Rep.ofMulDistribMulAction (MulAction.stabilizer G x₀) ℂˣ) :=
   groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ ψ.2.isMulCocycle₂)
 
 private theorem cocycleClass_surjective :
@@ -425,7 +425,7 @@ private theorem cocycleClass_eq_iff
 /-- Stabilizer cocycles modulo equality of classes, identified with `H²(H, ℂˣ)`. -/
 private noncomputable def quotientEquivH2 :
     Quotient (Setoid.ker (cocycleClass (G := G) (x₀ := x₀))) ≃
-      groupCohomology.H2 (Rep.ofMulDistribMulAction (MulAction.stabilizer G x₀) (Units ℂ)) :=
+      groupCohomology.H2 (Rep.ofMulDistribMulAction (MulAction.stabilizer G x₀) ℂˣ) :=
   Setoid.quotientKerEquivOfSurjective _ cocycleClass_surjective
 
 private theorem quotientEquivH2_symm_cocycleClass
@@ -463,7 +463,8 @@ private noncomputable def concreteH2EquivSolutionClasses (K : StabilizerRepresen
 /-- The action of a class of stabilizer cocycles on action-gauge classes of solutions,
 `[ψ] · [L] = [L · L[ψ]]`, where `L[ψ]` is the induced L-symbol. The public action is
 `solutionAddAction`, of Mathlib's `groupCohomology.H2`. -/
-private def solutionAction (K : StabilizerRepresentatives G X x₀) {ω : ScalarThreeCochain G} :
+private noncomputable def solutionAction (K : StabilizerRepresentatives G X x₀)
+    {ω : ScalarThreeCochain G} :
     Quotient (Setoid.ker (cocycleClass (G := G) (x₀ := x₀))) →
       Quotient (solutionSetoid (X := X) ω) → Quotient (solutionSetoid (X := X) ω) :=
   Quotient.map₂ (sa := Setoid.ker cocycleClass) (sb := solutionSetoid ω)
@@ -501,7 +502,7 @@ registered as a global instance; install it locally with `letI := K.solutionAddA
 noncomputable def solutionAddAction (K : StabilizerRepresentatives G X x₀)
     (ω : ScalarThreeCochain G) :
     AddAction
-      (groupCohomology.H2 (Rep.ofMulDistribMulAction (MulAction.stabilizer G x₀) (Units ℂ)))
+      (groupCohomology.H2 (Rep.ofMulDistribMulAction (MulAction.stabilizer G x₀) ℂˣ))
       (Quotient (solutionSetoid (X := X) ω)) where
   vadd a c := K.solutionAction (quotientEquivH2.symm a) c
   zero_vadd c := by
@@ -547,7 +548,7 @@ transitive on solution classes.
 Source: arXiv:2203.12563, `REsubmission.tex` line 761. -/
 noncomputable def h2EquivSolutionClasses (K : StabilizerRepresentatives G X x₀)
     {ω : ScalarThreeCochain G} {L₀ : LSymbol G X} (hL₀ : LSymbol.IsCompatible L₀ ω) :
-    groupCohomology.H2 (Rep.ofMulDistribMulAction (MulAction.stabilizer G x₀) (Units ℂ)) ≃
+    groupCohomology.H2 (Rep.ofMulDistribMulAction (MulAction.stabilizer G x₀) ℂˣ) ≃
       Quotient (solutionSetoid (X := X) ω) :=
   quotientEquivH2.symm.trans (K.concreteH2EquivSolutionClasses hL₀)
 
@@ -569,12 +570,12 @@ theorem h2EquivSolutionClasses_H2π (K : StabilizerRepresentatives G X x₀)
 `solutionAddAction`. -/
 theorem h2EquivSolutionClasses_apply (K : StabilizerRepresentatives G X x₀)
     {ω : ScalarThreeCochain G} {L₀ : LSymbol G X} (hL₀ : LSymbol.IsCompatible L₀ ω)
-    (a : groupCohomology.H2 (Rep.ofMulDistribMulAction (MulAction.stabilizer G x₀) (Units ℂ))) :
+    (a : groupCohomology.H2 (Rep.ofMulDistribMulAction (MulAction.stabilizer G x₀) ℂˣ)) :
     letI := K.solutionAddAction ω
     K.h2EquivSolutionClasses hL₀ a = a +ᵥ Quotient.mk (solutionSetoid ω) ⟨L₀, hL₀⟩ := by
   let _ := K.solutionAddAction ω
   obtain ⟨ψ, rfl⟩ := cocycleClass_surjective a
-  rw [cocycleClass, h2EquivSolutionClasses_H2π]
+  rw [cocycleClass, h2EquivSolutionClasses_H2π (hψ := ψ.2)]
   change _ = K.solutionAction (quotientEquivH2.symm (cocycleClass ψ)) _
   rw [quotientEquivH2_symm_cocycleClass]
   rfl
@@ -588,7 +589,7 @@ Source: arXiv:2203.12563, `REsubmission.tex` line 761, "the solutions of `L|_H` 
 theorem existsUnique_vadd_eq (K : StabilizerRepresentatives G X x₀)
     {ω : ScalarThreeCochain G} (c₁ c₂ : Quotient (solutionSetoid (X := X) ω)) :
     letI := K.solutionAddAction ω
-    ∃! a : groupCohomology.H2 (Rep.ofMulDistribMulAction (MulAction.stabilizer G x₀) (Units ℂ)),
+    ∃! a : groupCohomology.H2 (Rep.ofMulDistribMulAction (MulAction.stabilizer G x₀) ℂˣ),
       a +ᵥ c₁ = c₂ := by
   let _ := K.solutionAddAction ω
   induction c₁ using Quotient.ind with | _ L₀ =>

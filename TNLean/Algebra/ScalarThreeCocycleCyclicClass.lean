@@ -126,8 +126,9 @@ theorem mem_zpowers_ofAdd_one (x : Multiplicative (ZMod n)) :
 
 /-- The norm map of the trivial representation of `ℤ_n` on `ℂˣ` is `x ↦ n • x`, that is,
 `z ↦ z^n` multiplicatively. -/
-theorem norm_scalarRepresentation_apply (x : Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) (Units ℂ)) :
-    (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) (Units ℂ)).norm.hom x = n • x := by
+theorem norm_scalarRepresentation_apply
+    (x : Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ) :
+    (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ).norm.hom x = n • x := by
   rw [Rep.norm_apply, Representation.norm, LinearMap.sum_apply]
   simp only [ScalarCohomology.ofMulDistribMulAction_ρ_apply, Finset.sum_const, Finset.card_univ,
     Fintype.card_multiplicative, ZMod.card]
@@ -135,7 +136,8 @@ theorem norm_scalarRepresentation_apply (x : Rep.ofMulDistribMulAction (Multipli
 omit [NeZero n] in
 /-- The generator acts trivially on the scalar representation: `ρ(1) − 1 = 0`. -/
 theorem applyAsHom_ofAdd_one_sub_id :
-    Rep.applyAsHom (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) (Units ℂ)) (Multiplicative.ofAdd 1) -
+    Rep.applyAsHom (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ)
+        (Multiplicative.ofAdd 1) -
       𝟙 _ = 0 := by
   ext x
   simp [Rep.applyAsHom, Rep.sub_hom, ScalarCohomology.ofMulDistribMulAction_ρ_apply]
@@ -143,17 +145,17 @@ theorem applyAsHom_ofAdd_one_sub_id :
 /-- The kernel of the norm map of the trivial representation of `ℤ_n` on `ℂˣ` is the group
 of `n`-th roots of unity. -/
 def normKerEquivRootsOfUnity :
-    LinearMap.ker (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) (Units ℂ)).norm.hom.toLinearMap ≃
+    LinearMap.ker (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ).norm.hom.toLinearMap ≃
       rootsOfUnity n ℂ where
   toFun x := ⟨Additive.toMul ((scalarRepresentationEquiv _).symm x.1), by
     have hx := x.2
     rw [LinearMap.mem_ker] at hx
-    change (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) (Units ℂ)).norm.hom x.1 = 0 at hx
+    change (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ).norm.hom x.1 = 0 at hx
     rw [norm_scalarRepresentation_apply] at hx
     rw [mem_rootsOfUnity, ← toMul_nsmul, ← map_nsmul, hx, map_zero, toMul_zero]⟩
   invFun z := ⟨scalarRepresentationEquiv _ (Additive.ofMul z.1), by
     rw [LinearMap.mem_ker]
-    change (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) (Units ℂ)).norm.hom _ = 0
+    change (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ).norm.hom _ = 0
     rw [norm_scalarRepresentation_apply, ← map_nsmul, ← ofMul_pow,
       (mem_rootsOfUnity _ _).1 z.2, ofMul_one, map_zero]⟩
   left_inv x := by simp
@@ -163,13 +165,14 @@ def normKerEquivRootsOfUnity :
 finite cyclic group identifies `H³(ℤ_n, ℂˣ)` with the kernel of the norm modulo the image of
 `ρ(1) − 1`, which for the trivial action is the group of `n`-th roots of unity. -/
 theorem nat_card_groupCohomology_three_cyclic :
-    Nat.card (groupCohomology (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) (Units ℂ)) 3) = n := by
+    Nat.card (groupCohomology (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ) 3) = n := by
   have h3 : Odd 3 := by decide
   have hπ : Epi (Rep.FiniteCyclicGroup.subCompNormHom
-      (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) (Units ℂ)) (Multiplicative.ofAdd 1)).homologyπ :=
+      (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ)
+        (Multiplicative.ofAdd 1)).homologyπ :=
     inferInstance
   have hinj : Function.Injective (Rep.FiniteCyclicGroup.groupCohomologyπOdd
-      (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) (Units ℂ)) (Multiplicative.ofAdd 1)
+      (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ) (Multiplicative.ofAdd 1)
       mem_zpowers_ofAdd_one 3 h3) := by
     rw [injective_iff_map_eq_zero]
     intro x hx
@@ -177,7 +180,7 @@ theorem nat_card_groupCohomology_three_cyclic :
     obtain ⟨y, hy⟩ := hx
     exact Subtype.ext (hy.symm.trans (by simp))
   have hsurj : Function.Surjective (Rep.FiniteCyclicGroup.groupCohomologyπOdd
-      (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) (Units ℂ)) (Multiplicative.ofAdd 1)
+      (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ) (Multiplicative.ofAdd 1)
       mem_zpowers_ofAdd_one 3 h3) :=
     (ModuleCat.epi_iff_surjective _).1 (by
       unfold Rep.FiniteCyclicGroup.groupCohomologyπOdd
@@ -190,10 +193,10 @@ theorem nat_card_groupCohomology_three_cyclic :
 /-- Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 2040:
 **`H³(ℤ_n, ℂˣ) = {[ω_0], …, [ω_{n−1}]}`**; every class is the class of some `ω_j`, `j < n`. -/
 theorem exists_anomalyClass_cyclicCocycle_eq (hn : 1 < n)
-    (c : groupCohomology (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) (Units ℂ)) 3) :
+    (c : groupCohomology (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ) 3) :
     ∃ j < n, anomalyClass (cyclicCocycleSubtype n j) = c := by
   have hcard := nat_card_groupCohomology_three_cyclic (n := n)
-  have : Finite (groupCohomology (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) (Units ℂ)) 3) :=
+  have : Finite (groupCohomology (Rep.ofMulDistribMulAction (Multiplicative (ZMod n)) ℂˣ) 3) :=
     Nat.finite_of_card_ne_zero (by rw [hcard]; exact NeZero.ne n)
   have hinj : Function.Injective fun j : Fin n ↦ anomalyClass (cyclicCocycleSubtype n j) :=
     fun j j' h ↦ Fin.ext (((anomalyClass_cyclicCocycle_eq_iff hn j j').1 h).eq_of_lt_of_lt j.2 j'.2)

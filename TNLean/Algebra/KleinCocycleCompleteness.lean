@@ -425,7 +425,8 @@ private theorem anomalyClass_mul {G : Type} [Group G]
     anomalyClass ⟨ω.1 * ν.1, ω.2.mul ν.2⟩ = anomalyClass ω + anomalyClass ν := by
   simp only [anomalyClass, ← map_add]
   congr 1
-  apply (ModuleCat.mono_iff_injective (iCocycles (Rep.ofMulDistribMulAction G (Units ℂ)) 3)).1 inferInstance
+  apply (ModuleCat.mono_iff_injective (iCocycles (Rep.ofMulDistribMulAction G ℂˣ) 3)).1
+    inferInstance
   rw [map_add, iCocycles_toCocycles, iCocycles_toCocycles, iCocycles_toCocycles]
   funext g
   exact (scalarRepresentationEquiv G).map_add _ _
@@ -433,7 +434,7 @@ private theorem anomalyClass_mul {G : Type} [Group G]
 /-- The homomorphism from the three binary parameters to their degree-three cohomology
 class (arXiv:2203.12563, lines 1845–1848). -/
 noncomputable def kleinAnomalyClass : (ZMod 2 × ZMod 2 × ZMod 2) →+
-    groupCohomology (Rep.ofMulDistribMulAction (Multiplicative (ZMod 2 × ZMod 2)) (Units ℂ)) 3 :=
+    groupCohomology (Rep.ofMulDistribMulAction (Multiplicative (ZMod 2 × ZMod 2)) ℂˣ) 3 :=
   AddMonoidHom.mk' (fun p ↦ anomalyClass
     ⟨kleinCocycleFamily p.1 p.2.1 p.2.2, kleinCocycleFamily_isCocycle _ _ _⟩) (by
       intro p q
@@ -459,7 +460,7 @@ theorem kleinAnomalyClass_bijective : Function.Bijective kleinAnomalyClass := by
 /-- The isomorphism `H³(ℤ₂ × ℤ₂, ℂˣ) ≃ ℤ₂³`, on Mathlib’s cohomology type; the source
 states it with `U(1)` coefficients (arXiv:2203.12563, lines 1845–1852). -/
 noncomputable def kleinH3Equiv :
-    groupCohomology (Rep.ofMulDistribMulAction (Multiplicative (ZMod 2 × ZMod 2)) (Units ℂ)) 3 ≃+
+    groupCohomology (Rep.ofMulDistribMulAction (Multiplicative (ZMod 2 × ZMod 2)) ℂˣ) 3 ≃+
       (ZMod 2 × ZMod 2 × ZMod 2) :=
   (AddEquiv.ofBijective kleinAnomalyClass kleinAnomalyClass_bijective).symm
 

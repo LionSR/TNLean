@@ -57,7 +57,7 @@ namespace IsNormalRepresentation
 normal doubled-index tensors: the class of the three-cocycle `ω` of
 arXiv:2502.20257, `eq:3-cocycle`, for any choice of fusion tensors. -/
 noncomputable def anomalyClass (hF : F.IsNormalRepresentation) :
-    groupCohomology (Rep.ofMulDistribMulAction G (Units ℂ)) 3 :=
+    groupCohomology (Rep.ofMulDistribMulAction G ℂˣ) 3 :=
   ScalarThreeCochain.anomalyClass
     ⟨hF.nonempty_fusionData.some.omega, FusionData.isCocycle_omega hF⟩
 

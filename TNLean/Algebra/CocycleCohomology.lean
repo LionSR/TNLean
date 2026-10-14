@@ -160,8 +160,8 @@ scoped instance trivialMulDistribMulAction : MulDistribMulAction G (Units ℂ) w
   smul_mul _ _ _ := rfl
 
 /-- The group acts trivially on the scalar coefficient module. -/
-theorem ofMulDistribMulAction_ρ_apply (a : G) (x : Rep.ofMulDistribMulAction G (Units ℂ)) :
-    (Rep.ofMulDistribMulAction G (Units ℂ)).ρ a x = x :=
+theorem ofMulDistribMulAction_ρ_apply (a : G) (x : Rep.ofMulDistribMulAction G ℂˣ) :
+    (Rep.ofMulDistribMulAction G ℂˣ).ρ a x = x :=
   rfl
 
 end ScalarCohomology
@@ -173,8 +173,8 @@ representation of `K`; this is the identity on `Additive ℂˣ` as a representat
 coefficient map for Mathlib's restriction `groupCohomology.cochainsMap f` and
 `groupCohomology.map f`. -/
 def scalarRepresentationRes {K : Type} [Group K] (f : K →* G) :
-    Rep.res f (Rep.ofMulDistribMulAction G (Units ℂ)) ⟶
-      Rep.ofMulDistribMulAction K (Units ℂ) := by
+    Rep.res f (Rep.ofMulDistribMulAction G ℂˣ) ⟶
+      Rep.ofMulDistribMulAction K ℂˣ := by
   apply Rep.ofHom
   refine ⟨LinearMap.id, ?_⟩
   intro g
@@ -222,9 +222,9 @@ Mathlib's `H²(G, ℂˣ)`, by `groupCohomology.H2π_eq_iff`. -/
 theorem ScalarCocycle.cohomologousTo_iff_H2π_eq {ω₁ ω₂ : ScalarCocycle G}
     (h₁ : ω₁.IsCocycle) (h₂ : ω₂.IsCocycle) :
     ω₁.CohomologousTo ω₂ ↔
-      groupCohomology.H2π (Rep.ofMulDistribMulAction G (Units ℂ))
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
           (groupCohomology.cocyclesOfIsMulCocycle₂ h₁.isMulCocycle₂) =
-        groupCohomology.H2π (Rep.ofMulDistribMulAction G (Units ℂ))
+        groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
           (groupCohomology.cocyclesOfIsMulCocycle₂ h₂.isMulCocycle₂) := by
   rw [groupCohomology.H2π_eq_iff, ScalarCocycle.cohomologousTo_iff_isMulCoboundary₂_div]
   constructor
@@ -236,7 +236,7 @@ theorem ScalarCocycle.cohomologousTo_iff_H2π_eq {ω₁ ω₂ : ScalarCocycle G}
 /-- The class of the constant cocycle `1` is zero. -/
 theorem ScalarCocycle.H2π_one
     (h : ScalarCocycle.IsCocycle (fun _ _ ↦ (1 : Units ℂ) : ScalarCocycle G)) :
-    groupCohomology.H2π (Rep.ofMulDistribMulAction G (Units ℂ))
+    groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
       (groupCohomology.cocyclesOfIsMulCocycle₂ h.isMulCocycle₂) = 0 := by
   have : groupCohomology.cocyclesOfIsMulCocycle₂ h.isMulCocycle₂ = 0 := rfl
   rw [this, map_zero]
@@ -246,7 +246,7 @@ class in Mathlib's `H²(G, ℂˣ)` is zero. -/
 theorem ScalarCocycle.cohomologousTo_one_iff_H2π_eq_zero {ω : ScalarCocycle G}
     (hω : ω.IsCocycle) :
     ω.CohomologousTo (fun _ _ ↦ 1) ↔
-      groupCohomology.H2π (Rep.ofMulDistribMulAction G (Units ℂ))
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
         (groupCohomology.cocyclesOfIsMulCocycle₂ hω.isMulCocycle₂) = 0 := by
   have h1 : ScalarCocycle.IsCocycle (fun _ _ ↦ (1 : Units ℂ) : ScalarCocycle G) :=
     fun _ _ _ ↦ rfl
@@ -255,7 +255,7 @@ theorem ScalarCocycle.cohomologousTo_one_iff_H2π_eq_zero {ω : ScalarCocycle G}
 /-- Every class of Mathlib's `H²(G, ℂˣ)`, for the trivial action, is the class of a
 scalar cocycle. -/
 theorem ScalarCocycle.exists_H2π_eq
-    (x : groupCohomology.H2 (Rep.ofMulDistribMulAction G (Units ℂ))) :
+    (x : groupCohomology.H2 (Rep.ofMulDistribMulAction G ℂˣ)) :
     ∃ (ω : ScalarCocycle G) (hω : ω.IsCocycle),
       groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω.isMulCocycle₂) = x := by
   induction x using groupCohomology.H2_induction_on with
@@ -303,7 +303,7 @@ Mathlib's `H²(G, ℂˣ)`. -/
 theorem ScalarCocycle.H2π_ne_zero_of_commPhase_ne_one {ω : ScalarCocycle G}
     (hω : ω.IsCocycle) {g h : G} (hgh : g * h = h * g)
     (hne : ScalarCocycle.commPhase ω g h ≠ 1) :
-    groupCohomology.H2π (Rep.ofMulDistribMulAction G (Units ℂ))
+    groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
       (groupCohomology.cocyclesOfIsMulCocycle₂ hω.isMulCocycle₂) ≠ 0 := by
   intro H
   apply hne
