@@ -50,7 +50,7 @@ theorem exists_uniform_sampled_approximate_network_bounds
     let t := ⌈p⌉₊
     let q := n + t + ⌈16 * C_N⌉₊
     ∃ (C : ℝ) (α : ℕ), 0 ≤ C ∧ 0 < α ∧
-      ∀ (L : ℝ), 2 ≤ L →
+      ∀ (L : ℝ) (hL : 2 ≤ L),
       ∀ (P : Type) [Fintype P]
         (H : P → HSpace) (hH : ∀ j, FiniteDimensional ℂ (H j))
         (x : ∀ j, H j) (hx : ∀ j, ‖x j‖ = 1)
@@ -79,8 +79,8 @@ theorem exists_uniform_sampled_approximate_network_bounds
               (L ^ (n + ⌈(t : ℝ)⌉₊ + ⌈16 * C_N⌉₊))⁻¹ G := by
             simpa only [Nat.ceil_natCast] using happrox
           simpa only [Real.rpow_neg (by linarith : 0 ≤ L), Real.rpow_natCast] using
-            w.isGateApproximation_budget_of_power_bound L C_N (t : ℝ)
-              w.expandedGateCount n (by assumption) hCN hN hprecision
+            w.isGateApproximation_budget_of_power_bound G L C_N (t : ℝ)
+              w.expandedGateCount n hL hCN hN hprecision
         let W := w.rescaledOriginal (sourceGateBudget_pos (half_pos hε) _).le G hbudget
         let hbW := w.isExpansionBounded_rescaledOriginal
           (sourceGateBudget_pos (half_pos hε) _).le G hbudget hb
