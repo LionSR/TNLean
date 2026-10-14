@@ -183,10 +183,10 @@ Its marginals are those of the same final normalized vector defined in
 
 % Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 68--99 and 130--205.
 % Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-% Completion marks await verification of the public declaration.
 \begin{theorem}[Minimization over ordered patch lists]
     \label{thm:peps_ordered_patch_minimizer}
     \lean{TNLean.PEPS.isPatchMinimizer_regularizedPatchFactorList}
+    \leanok
     \uses{def:peps_ordered_patch_factor_list,def:peps_regularized_patch_objective}
     Fix regions $X_0,\ldots,X_{m-1}\subseteq V$, real numbers $a_j,b$,
     and a vector $\Omega$. Write $F(y)$ for the ordered patch objective
@@ -206,6 +206,7 @@ Its marginals are those of the same final normalized vector defined in
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L68-L99}{regularized patch problem}.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:peps_ordered_patch_output_coordinates}
     Enumerate $\mathcal L'$ in reverse order. Equality of the region lists
     first gives its length $m$, and equality of the region and exponent
