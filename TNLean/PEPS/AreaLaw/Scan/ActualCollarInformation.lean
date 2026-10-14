@@ -96,7 +96,7 @@ theorem terminalPartition_collar_entropy_identity
       gpost := by
     unfold FiniteProduct.collarPostQuantity
     rw [hUYeq]
-    simp only [gpost, regionalEntropy_eq_finiteProduct]
+    simp only [β, gpost, regionalEntropy_eq_finiteProduct]
   have hid : 2 * FiniteProduct.entropy β Ωt X +
       (FiniteProduct.collarPreQuantity β Ωt X (positiveNear S.depth σ) Y V -
         FiniteProduct.collarPostQuantity β Ωt (positiveNear S.depth σ) Y) =
