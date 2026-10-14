@@ -28,7 +28,7 @@ open scoped Matrix ComplexConjugate
 namespace TNLean.PEPS.PairEffect.SourceCircuit
 open TNLean.PEPS.Approximation
 attribute [local instance] Classical.propDecidable
-variable {P : Type} [Fintype P] [DecidableEq P] {a : Layout P}
+variable {P : Type} [Fintype P] {a : Layout P}
 variable {I E : Option {_p : P // true = true} → Type}
 variable [∀ q, Fintype (I q)] [∀ q, Fintype (E q)]
 
