@@ -127,7 +127,7 @@ theorem sampledPhysicalFactor_eq_incidentSampledPhysicalFactor
         (familyPhysicalLayout d ps ++ garbage)))) : Matrix (Fin (d p) × E q) (I q) ℂ :=
     Matrix.of (fun row col ↦ bOut.repr (u (bIn col)) row)
   conv_rhs =>
-    dsimp only [incidentSampledPhysicalFactor, wordCoordinateMatrix]
+    dsimp only [incidentSampledPhysicalFactor, wordCoordinateMatrix, Classical.typeDecidableEq]
     rw [← matrix_repr_eval_eq_toMatrix bIn bOut
       (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)).eval,
       ← matrix_repr_eval_eq_toMatrix bIn bOut
