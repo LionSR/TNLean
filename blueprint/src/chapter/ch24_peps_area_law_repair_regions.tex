@@ -10,9 +10,9 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
 % Source: 10-geometry.tex, lines 393--417; geometry:repair-induction,
 % lines 471--514; open actual regions and closed birth regions, lines 558--561.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-% Completion marks are intentionally omitted from every entry in this file.
-% These entries define the regions and iteration only. Their geometric
-% properties and the full exceptional remainder are separate assertions.
+% Completion marks below refer to the definitions and iteration only.
+% Their geometric properties and the full exceptional remainder are
+% separate assertions.
 
 \begin{definition}[The normalized fan and its colored runs]
     \label{def:area_law_repair_fan}
@@ -22,6 +22,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
         TNLean.PEPS.AreaLaw.Geometry.RepairFanRun,
         TNLean.PEPS.AreaLaw.Geometry.repairFanRunExteriorColor,
         TNLean.PEPS.AreaLaw.Geometry.repairReplacementColor}
+    \leanok
     \uses{def:area_law_fan_runs,thm:area_law_fan_run_color}
     Divide each side of $[-1,1]^2$ at its midpoint. Index the eight
     resulting perimeter segments by
@@ -37,8 +38,8 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     For each run $H\in\mathcal R(\xi,\sigma)$ and any $s\in H$, set
     \begin{align}
         T_H & =\bigcup_{s\in H}T_s,
-        & \lambda_\sigma(H) & =\lambda_\sigma(s),
-        & \lambda_\sigma^{\mathrm{new}}(H) & =1-\lambda_\sigma(H).
+            & \lambda_\sigma(H)                & =\lambda_\sigma(s),
+            & \lambda_\sigma^{\mathrm{new}}(H) & =1-\lambda_\sigma(H).
         \label{eq:area_law_repair_run}
     \end{align}
     The common exterior color is well defined by color constancy on a
@@ -52,13 +53,14 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairAffineMap,
         TNLean.PEPS.AreaLaw.Geometry.repairReplacementBirthRegion,
         TNLean.PEPS.AreaLaw.Geometry.repairReplacementOpenRegion}
+    \leanok
     \uses{def:area_law_repair_fan,def:area_law_repair_square}
     For a center $v\in\mathbb R^2$, scale $S\in\mathbb R$ and run $H$,
     define
     \begin{align}
-        F_{v,S}(x) & =v+d(S)x, \\
-        B(v,S,H) & =F_{v,S}(T_H),
-        & U(v,S,H) & =\operatorname{int}B(v,S,H).
+        F_{v,S}(x) & =v+d(S)x,                                     \\
+        B(v,S,H)   & =F_{v,S}(T_H),
+                   & U(v,S,H)       & =\operatorname{int}B(v,S,H).
         \label{eq:area_law_repair_birth}
     \end{align}
     The birth is the affine image of the entire closed triangle union.
@@ -76,16 +78,17 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairCurrentFanTriangle,
         TNLean.PEPS.AreaLaw.Geometry.repairCurrentSectorAssignment,
         TNLean.PEPS.AreaLaw.Geometry.repairCurrentAssignments}
+    \leanok
     \uses{def:area_law_repair_fan,def:area_law_repair_square}
     Let $I$ be nonempty and let $(R_i)_{i\in I}$ be the current regions.
     For $v\in\mathbb R^2$, $r\in\mathbb R$ and $s\in J$, put
     $W_s(v,r)=\{v+rx:x\in T_s\}$. Choose
     \begin{align}
         \sigma^R_{v,r}(s)
-            & =\varepsilon\{i\in I:\operatorname{int}W_s(v,r)\subseteq R_i\},
+         & =\varepsilon\{i\in I:\operatorname{int}W_s(v,r)\subseteq R_i\},
         \\
         \sigma^R_p(s)
-            & =\sigma^R_{v_p,\,6d(S_p)}(s).
+         & =\sigma^R_{v_p,\,6d(S_p)}(s).
         \label{eq:area_law_repair_assignment}
     \end{align}
     Here $\varepsilon$ selects an element of the indicated set when it
@@ -103,6 +106,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
         TNLean.PEPS.AreaLaw.Geometry.repairNextBirthRegion,
         TNLean.PEPS.AreaLaw.Geometry.repairNextCurrentRegion,
         TNLean.PEPS.AreaLaw.Geometry.repairNextRegionColor}
+    \leanok
     \uses{def:area_law_repair_birth,def:area_law_simultaneous_remnants}
     Let $j\ge0$ be the current generation. Let $B_i,R_i$ and $\xi_i$
     be the birth sets, current regions and colors indexed by $I$.
@@ -110,10 +114,10 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     scales $S_p$ and assignments $\sigma_p:J\to I$. For a threshold
     $S_*\in\mathbb R$, set
     \begin{align}
-        K_+ & =\{p\in K:S_*\le d(S_p)\}, \\
+        K_+ & =\{p\in K:S_*\le d(S_p)\},                                                             \\
         I_{\mathrm{new}}
             & =\{j+1\}\times\coprod_{p\in K_+}\mathcal R(\xi,\sigma_p),
-        & I' & =I\sqcup I_{\mathrm{new}}, \\
+            & I'                                                        & =I\sqcup I_{\mathrm{new}}, \\
         Q_K & =\bigcup_{p\in K}Q(v_p,S_p).
         \label{eq:area_law_repair_indices}
     \end{align}
@@ -123,11 +127,11 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     $q=(j+1,p,H)$, define
     \begin{align}
         B'_i & =B_i,
-        & R'_i & =R_i\setminus Q_K,
-        & \xi'_i & =\xi_i, \\
+             & R'_i           & =R_i\setminus Q_K,
+             & \xi'_i         & =\xi_i,                   \\
         B'_q & =B(v_p,S_p,H),
-        & R'_q & =U(v_p,S_p,H),
-        & \xi'_q & =1-\lambda_{\sigma_p}(H).
+             & R'_q           & =U(v_p,S_p,H),
+             & \xi'_q         & =1-\lambda_{\sigma_p}(H).
         \label{eq:area_law_repair_successor}
     \end{align}
     Every old current region loses the same union of closed squares,
@@ -144,17 +148,18 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
         TNLean.PEPS.AreaLaw.Geometry.RepairNextMarkIndex,
         TNLean.PEPS.AreaLaw.Geometry.repairNextMarkLocation,
         TNLean.PEPS.AreaLaw.Geometry.repairNextMarkScale}
+    \leanok
     \uses{def:area_law_repair_successor_regions,def:area_law_repair_children}
     For the parent family of
     Definition~\ref{def:area_law_repair_successor_regions}, define
     \begin{align}
         E_{\mathrm{term}}
-            & =\bigcup_{\substack{p\in K\\d(S_p)<S_*}}
-                \operatorname{int}Q(v_p,S_p), \\
-        P & =\{-1,0,1\}^2,
-        & K' & =\{j+1\}\times K_+\times P, \\
+                            & =\bigcup_{\substack{p\in K                               \\d(S_p)<S_*}}
+        \operatorname{int}Q(v_p,S_p),                                                  \\
+        P                   & =\{-1,0,1\}^2,
+                            & K'                         & =\{j+1\}\times K_+\times P, \\
         v'_{(j+1,p,\omega)} & =v_p+d(S_p)\omega,
-        & S'_{(j+1,p,\omega)} & =d(S_p).
+                            & S'_{(j+1,p,\omega)}        & =d(S_p).
         \label{eq:area_law_repair_next_marks}
     \end{align}
     The offsets give the center, four corners and four side midpoints
@@ -173,6 +178,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
         TNLean.PEPS.AreaLaw.Geometry.initialRepairStage,
         TNLean.PEPS.AreaLaw.Geometry.repairNextStage,
         TNLean.PEPS.AreaLaw.Geometry.repairStage}
+    \leanok
     \uses{def:area_law_repair_current_assignment,
         def:area_law_repair_successor_regions,
         def:area_law_repair_terminal_children,
@@ -196,14 +202,14 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     $\mathcal I$, its birth regions $X_i^0$ and its colors $\lambda(i)$.
     Define the initial stage by
     \begin{align}
-        I_0 & =\mathcal I,
-        & *_0 & =*,
-        & K_0 & =M, \\
+        I_0       & =\mathcal I,
+                  & *_0          & =*,
+                  & K_0          & =M,                       \\
         B_i^{(0)} & =X_i^0,
-        & R_i^{(0)} & =\operatorname{int}X_i^0,
-        & \xi_i^{(0)} & =\lambda(i), \\
+                  & R_i^{(0)}    & =\operatorname{int}X_i^0,
+                  & \xi_i^{(0)}  & =\lambda(i),              \\
         v_p^{(0)} & =p,
-        & S_p^{(0)} & =s(p).
+                  & S_p^{(0)}    & =s(p).
         \label{eq:area_law_repair_initial}
     \end{align}
     Fix a threshold $S_*\in\mathbb R$. For a stage $\mathcal D$ and
@@ -215,7 +221,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     is the retained copy of $*$. The recursive family is
     \begin{align}
         \mathcal D_0 & =\mathcal D_{\mathrm{init}},
-        & \mathcal D_{j+1} & =\Phi_{j,S_*}(\mathcal D_j).
+                     & \mathcal D_{j+1}             & =\Phi_{j,S_*}(\mathcal D_j).
         \label{eq:area_law_repair_iteration}
     \end{align}
     At each generation the assignments are selected from that stage's
@@ -229,12 +235,13 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
 \begin{definition}[Accumulated terminal interiors]
     \label{def:area_law_repair_terminal_interiors}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairTerminalInteriors}
+    \leanok
     \uses{def:area_law_repair_stage}
     Write $E_{\mathrm{term}}(\mathcal D_j)$ for the terminal interiors
     contributed by the mark family at stage $j$. Define
     \begin{align}
         \mathcal E_{\mathrm{term}}
-            & =\bigcup_{j\ge0}E_{\mathrm{term}}(\mathcal D_j).
+         & =\bigcup_{j\ge0}E_{\mathrm{term}}(\mathcal D_j).
         \label{eq:area_law_repair_terminal_interiors}
     \end{align}
 \end{definition}
