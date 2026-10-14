@@ -468,8 +468,7 @@ Projective representations are classified up to projective equivalence by the
 second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
 
 \begin{definition}[Coboundary]\label{def:is_coboundary}
-    \lean{groupCohomology.IsMulCoboundary₂}
-    \leanok
+    \mathlibok % Mathlib: groupCohomology.IsMulCoboundary₂.
     \uses{def:scalar_cocycle}
     Let $G$ act trivially on $\C^{\times}$.
     A scalar 2-cocycle $\omega$ is a \emph{coboundary} if there exists
@@ -600,9 +599,10 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
 \end{proof}
 
 \begin{definition}[Second cohomology group]\label{def:h2_cx}
-    \lean{groupCohomology.H2, groupCohomology.H2π,
-        TNLean.Algebra.ScalarCohomology.trivialMulDistribMulAction}
+    \lean{TNLean.Algebra.ScalarCohomology.trivialMulDistribMulAction}
     \leanok
+    % Mathlib: groupCohomology.H2 and groupCohomology.H2π of
+    % Rep.ofMulDistribMulAction G ℂˣ.
     \uses{def:cohomologous_to, def:is_cocycle}
     Let $G$ act trivially on $\C^{\times}$. The second cohomology group
     is the quotient

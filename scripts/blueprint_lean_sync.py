@@ -34,7 +34,7 @@ from pathlib import Path
 
 _LEAN_DECL_RE = re.compile(
     r"^\s*(?:@\[.*?\]\s*)?"
-    r"(?:(?:noncomputable|protected|private)\s+)*"
+    r"(?:(?:noncomputable|protected|private|scoped)\s+)*"
     r"(def|theorem|lemma|abbrev|instance|class|structure|inductive|axiom|opaque|alias)\s+"
     r"((?![\d.])[\w']+(?:\.(?![\d.])[\w']+)*)",
     re.MULTILINE,
@@ -44,7 +44,7 @@ _LEAN_DECL_RE = re.compile(
 # name appears on the following line.
 _LEAN_DECL_KEYWORD_ONLY_RE = re.compile(
     r"^\s*(?:@\[.*?\]\s*)?"
-    r"(?:(?:noncomputable|protected|private)\s+)*"
+    r"(?:(?:noncomputable|protected|private|scoped)\s+)*"
     r"(def|theorem|lemma|abbrev|instance|class|structure|inductive|axiom|opaque|alias)\s*$"
 )
 # Structure fields are declarations too: Lean generates a projection named
