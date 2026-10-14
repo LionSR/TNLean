@@ -171,8 +171,9 @@ and a threshold `N ≥ 2` such that for every `n ≥ N`, every `𝓘, w ≥ 0` a
 `|S₀| ≤ C₀ n²`, the time `t_* = (6 / g)(𝓘 + w + K log n)` and the radius
 `r = ⌈(C' (t_* + K log n))^(1/α)⌉` give, with `M₀ = exp ((𝓘 + 3w)/2)`,
 `M₀² e^{-g t_*} ≤ n^{-6K}`, `C t_* |S₀| M₀ e^{v t_* - c r^α} ≤ n^{-3K}` and
-`C t_* |S₀| (1 + r)² M₀ e^{-c r^α} ≤ n^{-3K}`. The constant `C'` depends only on
-`g`, `v` and `c`, and `N` only on `g, v, c, C, C₀, α` and `K`.
+`C t_* |S₀| (1 + r)² M₀ e^{-c r^α} ≤ n^{-3K}`. All parameters are fixed before `C'`
+and `N`; the proof takes `C' = (g / 2 + 2 v + 12) / c`, which involves only `g`, `v`
+and `c`.
 Source: `09-amplification.tex`, lines 455–461 and 480–489. -/
 theorem amplification_scale_bounds {g v c C C₀ α : ℝ} (hg : 0 < g) (hv : 0 ≤ v)
     (hc : 0 < c) (hC : 0 ≤ C) (hC₀ : 0 ≤ C₀) (hα : 0 < α) {K : ℕ} (hK : 1 ≤ K) :
