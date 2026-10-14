@@ -19,11 +19,10 @@ that argument:
 * for every such threshold, a recursion from a cell of side `s` has
   `O(1 + log log (s + e))` generations;
 * with at most `b` children per active square, the active squares of all
-  generations number at most `C (1 + log s) ^ C` for `s ≥ 1`. Since each active
-  square creates at most one tile of each family, and each terminal square has
-  boundedly many sites, this bounds the tiles and exceptional sites.
+  generations number at most `C (1 + log s) ^ C` for `s ≥ 1`.
 
-The recursive coloured partition itself is not constructed here.
+The recursive coloured partition itself is not constructed here, so its tiles
+and exceptional sites are not yet related to this count of active squares.
 
 The estimates are the cell-recursion instances of the power-contracting recursion
 bounds in `TNLean.PEPS.AreaLaw.Geometry.PowerScaleDepth`.
