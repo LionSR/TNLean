@@ -7052,8 +7052,8 @@ spectral split → block extraction → MPV calculation → strict bounds
   transport the actual regional lift through the existing configuration
   equivalence and pair its pure state by the existing partial trace.
 - **Seen:** `PEPS/AreaLaw/RegularizedPatchCoordinate`,
-  `RegularizedPatchStationarity`, `RegularizedPatchMarginal`, and
-  `RegularizedPatchDiagonalVariation`.
+  `RegularizedPatchStationarity`, `RegularizedPatchMarginal`,
+  `RegularizedPatchDiagonalVariation`, and `RegularizedPatchListCoordinates`.
 - **Abstraction:** the coordinate module factors the insertion linear map once;
   the marginal module exposes one full-region/global configuration isometry and
   one arbitrary-complex expectation theorem. Existing real-power covariance,
@@ -7065,8 +7065,13 @@ spectral split → block extraction → MPV calculation → strict bounds
   No custom tactic or new optimizer/state structure is justified. Keep the
   actual product order and complex inner-product orientation explicit; neither
   trace-duality nor descending commutation is inferred by this pattern.
-  The scoped AreaLaw scan found no exact repeated tactic blocks at the default
-  thresholds.
+  The ordered-output identity uses `map_list_prod` and
+  `Matrix.submatrix_mulVec_equiv` directly. Its local equality-instance argument
+  generalizes the matrix power over the decision procedure before identifying
+  the procedures by subsingleton elimination; this avoids rewriting through
+  a dependent functional-calculus term. This argument occurs once.
+  The scoped AreaLaw scan on 2026-10-14 found no repeated tactic block in the
+  new ordered-output module at the default thresholds.
 
 
 ### Monotonicity of a regional-entropy supremum — candidate (2026-10-09)

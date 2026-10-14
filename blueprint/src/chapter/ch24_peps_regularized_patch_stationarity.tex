@@ -128,6 +128,52 @@ Its marginals are those of the same final normalized vector defined in
     (\ref{eq:peps_canonical_marginal}).
 \end{definition}
 
+% Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 68--99.
+% Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Completion marks await verification with the public patch-factor definitions.
+\begin{definition}[The ordered list of patch factors]
+    \label{def:peps_ordered_patch_factor_list}
+    \lean{TNLean.PEPS.regularizedPatchFactorList}
+    Let $V$ be a finite ordered set, let $n_v\in\N$, and write
+    $\mathcal H_X=\ell^2(\prod_{v\in X}[n_v];\C)$.
+    For regions $X_0,\ldots,X_{m-1}\subseteq V$, real numbers $a_j$,
+    and matrices $x_j\in\operatorname{End}(\mathcal H_{X_j})$, define
+    \begin{align*}
+        \mathcal L(x) & =[(X_{m-1},a_{m-1},x_{m-1}),\ldots,(X_0,a_0,x_0)].
+    \end{align*}
+    Every occurrence of a region is retained independently.
+    When $m=0$, the list is empty.
+\end{definition}
+
+\begin{theorem}[Canonical coordinates for the ordered output]
+    \label{thm:peps_ordered_patch_output_coordinates}
+    \lean{TNLean.PEPS.dependentGlobalConfigIsometry_regularizedPatchOutput}
+    \uses{def:peps_ordered_patch_factor_list,def:peps_patch_canonical_marginal,
+        def:peps_regularized_patch_objective}
+    Let $J$ be the canonical unitary identification of full-region and global
+    configurations. For arbitrary $b\in\R$ and an arbitrary vector $\Omega$,
+    put $K_j=(x_j+bI)^{-a_j/2}$.
+    Real powers use the nonnegative spectral functional calculus, with value
+    zero when the matrix is not positive semidefinite. Let $\widehat K_j$ and
+    $\widetilde K_j$ be the identity extensions in the two coordinate spaces.
+    Then
+    \begin{align*}
+        J(\widehat K_{m-1}\cdots\widehat K_0\Omega)
+         & =\widetilde K_{m-1}\cdots\widetilde K_0(J\Omega).
+    \end{align*}
+    Empty products are identities. The regions need not be nested or distinct,
+    and the vector need not have unit norm.
+    This identifies the two coordinate descriptions of the ordered product in the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L68-L99}{regularized patch problem}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_regional_basis_relabelling}
+    Regional basis relabelling gives
+    $J\widehat K_jJ^{-1}=\widetilde K_j$ for each $j$.
+    Conjugation preserves the ordered matrix product. Applying the resulting
+    identity to $J\Omega$ proves the assertion.
+\end{proof}
+
 \begin{theorem}[Regional expectation and density properties]
     \label{thm:peps_patch_marginal_expectation}
     \lean{
