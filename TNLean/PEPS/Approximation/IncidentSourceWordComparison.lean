@@ -362,6 +362,53 @@ private def selectedPreparedProjectionComparison {a b : Layout P}
         (sources_partialSourceWord w ψ ξ))
       ((Va.restrict (partySelector q) hsVa).mapOwner lift)
 
+/-- The selected source input, prepared intermediate list and original output
+have their prescribed singleton owner identifications. No input vector or
+monomial choice enters these layout comparisons.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
+253–267, 342–417 and 409–434. -/
+private theorem original_prepared_layout_comparison {a b : Layout P}
+    (w : SourceCircuit a b) (p : P) :
+    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
+      (affectedOwner (fun _ : P ↦ true) t)
+    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
+      (by classical exact decide_eq_true rfl)
+    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+    let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
+    let lift : Option {t : P // A t = true} → Option {_p : P // true = true} :=
+      fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
+    let all := affectedOwner (fun _ : P ↦ true)
+    let fa := affectedOwner A
+    let sq := partySelector qp
+    let sa := partySelector q
+    let S := SourceInventory.slotLayout (partialSlots A w)
+      (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).1))
+      (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).2))
+    (Layout.restrict sq (w.allResidualSourceLayout ++ []) =
+      Layout.mapOwner lift (Layout.restrict sa (S ++ []))) ∧
+    (Layout.restrict sq (w.allResidualSourceLayout ++ Layout.mapOwner all a) =
+      Layout.mapOwner lift (Layout.restrict sa (S ++ Layout.mapOwner fa a))) ∧
+    (Layout.restrict sq (Layout.mapOwner all b) =
+      Layout.mapOwner lift (Layout.restrict sa (Layout.mapOwner fa b))) := by
+  classical
+  intro A hp q qp lift all fa sq sa S
+  have hSlots : Layout.mapOwner lift (Layout.restrict sa S) =
+      Layout.restrict sq w.allResidualSourceLayout :=
+    mapOwner_atParty_partialSlots_eq_allResidualSourceLayout w p
+  have hBoundary (L : Layout P) :
+      Layout.mapOwner lift (Layout.restrict sa (Layout.mapOwner fa L)) =
+        Layout.restrict sq (Layout.mapOwner all L) :=
+    mapOwner_selected_originalLayout_eq p L
+  have hin : Layout.restrict sq (w.allResidualSourceLayout ++ []) =
+      Layout.mapOwner lift (Layout.restrict sa (S ++ [])) := by
+    simpa only [List.append_nil] using hSlots.symm
+  have hmid : Layout.restrict sq
+      (w.allResidualSourceLayout ++ Layout.mapOwner all a) =
+      Layout.mapOwner lift (Layout.restrict sa (S ++ Layout.mapOwner fa a)) := by
+    simp only [Layout.restrict_append, Layout.mapOwner_append]
+    exact congrArg₂ List.append hSlots.symm (hBoundary a).symm
+  exact ⟨hin, hmid, (hBoundary b).symm⟩
+
 /-- Combine the independently established preparation and residual comparisons
 before a literal incident word is supplied.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
@@ -396,13 +443,14 @@ private theorem selectedPreparedProjectionComparison_of_original_labels {a b : L
   let Va := Pa.comp (partialResidual A w χ)
   have hsVa : Va.sources = [] := by
     simp only [Va, Word.sources, sources_partialResidual, hsPa, List.nil_append]
-  have hSlots : Layout.mapOwner lift (Layout.restrict sa S) =
-      Layout.restrict sq w.allResidualSourceLayout :=
-    mapOwner_atParty_partialSlots_eq_allResidualSourceLayout w p
-  have hBoundary (L : Layout P) :
-      Layout.mapOwner lift (Layout.restrict sa (Layout.mapOwner fa L)) =
-        Layout.restrict sq (Layout.mapOwner all L) :=
-    mapOwner_selected_originalLayout_eq p L
+  have hLayouts :
+      (Layout.restrict sq (w.allResidualSourceLayout ++ []) =
+        Layout.mapOwner lift (Layout.restrict sa (S ++ []))) ∧
+      (Layout.restrict sq (w.allResidualSourceLayout ++ Layout.mapOwner all a) =
+        Layout.mapOwner lift (Layout.restrict sa (S ++ Layout.mapOwner fa a))) ∧
+      (Layout.restrict sq (Layout.mapOwner all b) =
+        Layout.mapOwner lift (Layout.restrict sa (Layout.mapOwner fa b))) :=
+    original_prepared_layout_comparison w p
   have hPrep : preparedWordEvalComparison
       ((w.sourcePrivatePreparation ψ).restrict sq (sources_sourcePrivatePreparation w ψ))
       ((Pa.restrict sa hsPa).mapOwner lift) :=
@@ -413,21 +461,13 @@ private theorem selectedPreparedProjectionComparison_of_original_labels {a b : L
       (((partialResidual A w χ).restrict sa
         (sources_partialResidual A w χ)).mapOwner lift) :=
     preparedWordEvalComparison_partialResidual w p ξ
-  have hin : Layout.restrict sq (w.allResidualSourceLayout ++ []) =
-      Layout.mapOwner lift (Layout.restrict sa (S ++ [])) := by
-    simpa only [List.append_nil] using hSlots.symm
-  have hmid : Layout.restrict sq
-      (w.allResidualSourceLayout ++ Layout.mapOwner all a) =
-      Layout.mapOwner lift (Layout.restrict sa (S ++ Layout.mapOwner fa a)) := by
-    simp only [Layout.restrict_append, Layout.mapOwner_append]
-    exact congrArg₂ List.append hSlots.symm (hBoundary a).symm
   exact preparedWordEvalComparison_comp sq sa lift
     (w.sourcePrivatePreparation ψ) (partialResidual (fun _ : P ↦ true) w ξ)
     Pa (partialResidual A w χ)
     (sources_sourcePrivatePreparation w ψ)
     (sources_partialResidual (fun _ : P ↦ true) w ξ)
     hsPa (sources_partialResidual A w χ) hsVa
-    hin hmid (hBoundary b).symm hPrep hResidual
+    hLayouts.1 hLayouts.2.1 hLayouts.2.2 hPrep hResidual
 
 /-- Compare the original prepared word with its incident-label word, with
 all original source and output data fixed before the comparison is proved.
