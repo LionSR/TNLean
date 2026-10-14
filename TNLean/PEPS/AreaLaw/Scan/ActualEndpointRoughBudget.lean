@@ -45,7 +45,9 @@ theorem tendsto_roughEndpointRemainder (d : ℕ) (c : ℝ) (K : ℕ) (C : ℝ) :
       atTop (𝓝 0) := by
     have hh := (Real.tendsto_pow_log_div_mul_add_atTop 1 (-2) 1 one_ne_zero).comp hshift
     simpa only [Function.comp_def, pow_one, one_mul, add_neg_cancel_right] using hh
-  simpa only [roughEndpointRemainder, mul_div_assoc, mul_zero, add_zero] using
+  change Tendsto (fun k : ℕ ↦ Real.bellOverlapRemainder d c K k +
+    C * Real.log ((k : ℝ) + 2) / (k : ℝ)) atTop (𝓝 0)
+  simpa only [mul_div_assoc, mul_zero, add_zero] using
     (Real.tendsto_bellOverlapRemainder d c K).add (hlog.const_mul C)
 
 namespace CollarScan
@@ -114,9 +116,12 @@ theorem eventually_actualScan_suppliedPrevector_endpoint_budget
               roughEndpointRemainder d c S.K Ci k := by
   classical
   intro X β ΩX z hz d n pre ψ hpre hmass
+  have hzQ :
+      0 < (FiniteProduct.reducedPure_posSemidef β Ωt X).isHermitian.spectralRestrictionMass E :=
+    hz
   have hd : 0 < d := Finset.card_pos.mpr
     (Finset.nonempty_iff_ne_empty.mpr fun hE ↦ by
-      simp [hE, Matrix.IsHermitian.spectralRestrictionMass] at hz)
+      simp [hE, Matrix.IsHermitian.spectralRestrictionMass] at hzQ)
   let : NeZero d := ⟨Nat.ne_of_gt hd⟩
   obtain ⟨c, hc, _, hupper⟩ :=
     eventually_actualScan_suppliedPrevector_rough_upper hT S hgraph hdepth hm hM a ha
@@ -132,9 +137,9 @@ theorem eventually_actualScan_suppliedPrevector_endpoint_budget
   have hendpoint :
       (S.actualChargeData hm hM (S.n * S.m - 1)).rootPath n (a / 2) k 1 =
         (S.actualFillData hm hM (S.n * S.m)).rootPath n (a / 2) k 0 := by
-    simpa only [actualChargeData, hlast] using
-      S.charge_rootPath_one_eq_actualFillData_zero hm hM (S.n * S.m - 1) n
-        (half_pos ha).le k
+    exact (S.charge_rootPath_one_eq_actualFillData_zero hm hM (S.n * S.m - 1) n
+      (half_pos ha).le k).trans
+        (congrArg (fun s : ℕ ↦ (S.actualFillData hm hM s).rootPath n (a / 2) k 0) hlast)
   obtain ⟨hN, hfinal⟩ := (hupperK (S.n * S.m - 1) (by omega) 1).2
   rw [hendpoint] at hN hfinal
   have hprenorm : ‖WithLp.toLp 2 (pre k)‖ ≤ 1 := by

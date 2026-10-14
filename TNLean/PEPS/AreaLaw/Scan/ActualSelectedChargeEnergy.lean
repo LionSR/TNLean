@@ -141,15 +141,19 @@ theorem actualCharges_selection_energy_domainGraph :
         D.energyError E (a / 2) k (pre k) p =
           (S.actualChargeData hm hM s.val).energyError E (a / 2) k (pre k) p) ?_ ?_
     · intro _
-      rw [hjhalf]
-      exact ⟨rfl, rfl⟩
+      exact ⟨congrArg (fun t : ℕ ↦
+        (S.actualChargeData hm hM t).rootPath dims (a / 2) k p) hjhalf,
+        congrArg (fun t : ℕ ↦
+          (S.actualChargeData hm hM t).energyError E (a / 2) k (pre k) p) hjhalf⟩
     · intro hnot
       exact (hnot hj).elim
   have henergy := ((hround j k (pre k) hsym hpre).1 p hpInterior).2.2 e₀ heigen
   have hmean : (S.actualChargeScanRound hm hM s.val dims E a pre).meanEnergy k p ≤
       2 * e₀ + Cen * a ^ 2 * ℓ ^ een *
         (S.actualChargeData hm hM s.val).energyError E (a / 2) k (pre k) p + rem k := by
-    simpa only [hbridge.1, hbridge.2, S.actualChargeScanRound_meanEnergy] using henergy
+    rw [hbridge.1, hbridge.2] at henergy
+    rw [S.actualChargeScanRound_meanEnergy]
+    exact henergy
   have hg : 0 < g := div_pos hΔ (positiveNormalization_pos 1 (Δ / 2) J)
   refine ⟨s, p, hp, hQ, ?_⟩
   apply div_le_div_of_nonneg_right _ (half_pos hg).le
