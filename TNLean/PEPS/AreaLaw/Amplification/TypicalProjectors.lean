@@ -68,7 +68,7 @@ noncomputable def typicalProjection (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : S
 
 /-- The probability that a selected spectral projection succeeds is the mass of the
 selected eigenvalues. -/
-private theorem trace_mul_spectralSelection {n : Type*} [Fintype n]
+theorem trace_mul_spectralSelection {n : Type*} [Fintype n]
     [DecidableEq n] {ρ : Matrix n n ℂ} (hρ : ρ.IsHermitian) (E : Finset n) :
     (ρ * hρ.spectralSelection E).trace = (hρ.spectralRestrictionMass E : ℂ) := by
   conv_lhs => arg 1; arg 1; rw [hρ.spectral_theorem]
