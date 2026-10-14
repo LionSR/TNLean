@@ -7,14 +7,16 @@ import TNLean.PEPS.AreaLaw.RegularizedPatchListCoordinates
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
-/-! Audit the ordered patch-output identity under the canonical configuration identification. -/
+/-! Audit the ordered patch output and objective under the canonical
+configuration identification. -/
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  let decl := ``TNLean.PEPS.dependentGlobalConfigIsometry_regularizedPatchOutput
-  unless (← Lean.getEnv).contains decl do
-    throwError "Missing declaration {decl}"
-  let axioms ← Lean.collectAxioms decl
-  unless axioms.all (allowed.contains ·) do
-    throwError "Unexpected axioms for {decl}: {axioms}"
-  Lean.logInfo m!"{decl}: {axioms}"
+  for decl in #[``TNLean.PEPS.dependentGlobalConfigIsometry_regularizedPatchOutput,
+      ``TNLean.PEPS.regularizedPatchObjective_eq_norm_patchOutput] do
+    unless (← Lean.getEnv).contains decl do
+      throwError "Missing declaration {decl}"
+    let axioms ← Lean.collectAxioms decl
+    unless axioms.all (allowed.contains ·) do
+      throwError "Unexpected axioms for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"

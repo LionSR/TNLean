@@ -147,7 +147,10 @@ Its marginals are those of the same final normalized vector defined in
 
 \begin{theorem}[Canonical coordinates for the ordered output]
     \label{thm:peps_ordered_patch_output_coordinates}
-    \lean{TNLean.PEPS.dependentGlobalConfigIsometry_regularizedPatchOutput}
+    \lean{
+        TNLean.PEPS.dependentGlobalConfigIsometry_regularizedPatchOutput,
+        TNLean.PEPS.regularizedPatchObjective_eq_norm_patchOutput
+    }
     \uses{def:peps_ordered_patch_factor_list,def:peps_patch_canonical_marginal,
         def:peps_regularized_patch_objective}
     Let $J$ be the canonical unitary identification of full-region and global
@@ -161,6 +164,7 @@ Its marginals are those of the same final normalized vector defined in
         J(\widehat K_{m-1}\cdots\widehat K_0\Omega)
          & =\widetilde K_{m-1}\cdots\widetilde K_0(J\Omega).
     \end{align*}
+    In particular, the two ordered outputs have the same norm.
     Empty products are identities. The regions need not be nested or distinct,
     and the vector need not have unit norm.
     This identifies the two coordinate descriptions of the ordered product in the
@@ -171,7 +175,8 @@ Its marginals are those of the same final normalized vector defined in
     Regional basis relabelling gives
     $J\widehat K_jJ^{-1}=\widetilde K_j$ for each $j$.
     Conjugation preserves the ordered matrix product. Applying the resulting
-    identity to $J\Omega$ proves the assertion.
+    identity to $J\Omega$ proves the vector identity. Taking norms and using
+    unitarity of $J$ gives equality of the objectives.
 \end{proof}
 
 \begin{theorem}[Regional expectation and density properties]
