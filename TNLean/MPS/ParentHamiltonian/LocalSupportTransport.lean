@@ -452,17 +452,8 @@ private theorem cyclicForwardSite_backwardSite_one {N : ℕ} (hN : 2 ≤ N) (i :
     cyclicForwardSite (cyclicBackwardSite i 1) 1 = i := by
   apply Fin.ext
   simp only [cyclicForwardSite, cyclicBackwardSite, Fin.val_mk]
-  rw [Nat.mod_eq_of_lt (by omega : 1 < N)]
-  by_cases hi : 0 < i.val
-  · have hback : (i.val + N - 1) % N = i.val - 1 := by
-      rw [show i.val + N - 1 = (i.val - 1) + N by omega, Nat.add_mod_right]
-      exact Nat.mod_eq_of_lt (by omega)
-    rw [hback, show i.val - 1 + 1 = i.val by omega, Nat.mod_eq_of_lt i.isLt]
-  · have hi0 : i.val = 0 := by omega
-    rw [hi0]
-    simp only [Nat.zero_add]
-    rw [Nat.mod_eq_of_lt (by omega : N - 1 < N)]
-    rw [show N - 1 + 1 = N by omega, Nat.mod_self]
+  rw [Nat.mod_eq_of_lt (by omega : 1 < N), Nat.mod_add_mod,
+    show i.val + N - 1 + 1 = i.val + N by omega, Nat.add_mod_right, Nat.mod_eq_of_lt i.isLt]
 
 /-- The same three-site anticommutator estimate transports to every backward
 adjacent pair on a periodic chain with \(3 \leq N\), with unchanged coefficient.
