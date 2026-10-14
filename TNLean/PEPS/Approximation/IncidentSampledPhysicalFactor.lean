@@ -57,9 +57,9 @@ def incidentSampledPhysicalFactor
     (j : Fin (partialSlots
       (fun t ↦ partySelector (some ⟨p, rfl⟩)
         (affectedOwner (fun _ : P ↦ true) t)) w).length → Fin k) :
-    Matrix (Fin (d p)) (Fin (d p)) ℂ := by
-  classical
+    Matrix (Fin (d p)) (Fin (d p)) ℂ :=
   let q : Option {_p : P // true = true} := some ⟨p, rfl⟩
+  letI : DecidableEq (I q) := Classical.typeDecidableEq (I q)
   let bIn : OrthonormalBasis (I q) ℂ
       (Mem (Layout.atParty q (w.allResidualSourceLayout ++ []))) := B q
   let bOut : OrthonormalBasis (Fin (d p) × E q) ℂ
@@ -73,7 +73,7 @@ def incidentSampledPhysicalFactor
   let Nηθ : Matrix (I q) (I q) ℂ :=
     LinearMap.toMatrix bIn.toBasis bIn.toBasis
       (incidentSampledEndpointWord w k lam L R p η θ j ω).eval.toLinearMap
-  exact Matrix.partialTraceRight (α := Fin (d p)) (β := E q) (Dη * Nηθ * Dθᴴ)
+  Matrix.partialTraceRight (α := Fin (d p)) (β := E q) (Dη * Nηθ * Dθᴴ)
 
 /-- At independently extracted incident labels, the directly constructed
 physical factor equals the actual factor at the same original party. The
