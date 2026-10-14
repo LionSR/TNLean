@@ -75,35 +75,6 @@ private theorem Matrix.norm_det_scalar_sub_ge_of_spectrum_norm_le
   rw [hcard, ← hprod, Matrix.eval_charpoly] at hbound
   exact hbound
 
-/-- A uniform spectral contraction bounds the determinant away from zero. -/
-private theorem Matrix.norm_det_one_sub_ge_of_spectrum_norm_le
-    {n : Type*} [Fintype n] [DecidableEq n]
-    (M : Matrix n n ℂ) (q : ℝ) (hq : q ≤ 1)
-    (hspec : ∀ z ∈ spectrum ℂ M, ‖z‖ ≤ q) :
-    (1 - q) ^ Fintype.card n ≤ ‖(1 - M).det‖ := by
-  simpa only [norm_one, map_one] using
-    Matrix.norm_det_scalar_sub_ge_of_spectrum_norm_le M 1 q
-      (by simpa only [norm_one] using hq) hspec
-
-/-- The identity remains outside the spectrum of a limit with uniform spectral contraction. -/
-private theorem Matrix.isUnit_one_sub_of_tendsto_of_uniform_spectrum_bound
-    {n : Type*} [Fintype n] [DecidableEq n]
-    (M : ℕ → Matrix n n ℂ) (M₀ : Matrix n n ℂ)
-    (hM : Filter.Tendsto M Filter.atTop (nhds M₀))
-    (q : ℝ) (hq : q < 1)
-    (hspec : ∀ j z, z ∈ spectrum ℂ (M j) → ‖z‖ ≤ q) :
-    IsUnit (1 - M₀) := by
-  have hdet : Filter.Tendsto (fun j => ‖(1 - M j).det‖)
-      Filter.atTop (nhds ‖(1 - M₀).det‖) := by
-    exact ((continuous_const.sub continuous_id).matrix_det.norm).continuousAt.tendsto.comp hM
-  have hbound : (1 - q) ^ Fintype.card n ≤ ‖(1 - M₀).det‖ :=
-    ge_of_tendsto hdet (Filter.Eventually.of_forall fun j =>
-      Matrix.norm_det_one_sub_ge_of_spectrum_norm_le (M j) q hq.le (hspec j))
-  apply (Matrix.isUnit_iff_isUnit_det _).mpr
-  exact isUnit_iff_ne_zero.mpr (norm_pos_iff.mp
-    (lt_of_lt_of_le (pow_pos (sub_pos.mpr hq) _) hbound))
-
-
 /-- Coordinates of operators on a fixed invariant quotient commute with limits.
 No continuously chosen quotient basis is needed: the basis is fixed. -/
 theorem Submodule.tendsto_toMatrix_mapQ_of_tendsto
@@ -129,7 +100,9 @@ theorem Submodule.tendsto_toMatrix_mapQ_of_tendsto
     simp only [LinearMap.toMatrix_apply, ← hx, Submodule.mkQ_apply,
       Submodule.mapQ_apply, Function.comp_def, ContinuousLinearMap.coe_coe]
 
-private theorem fixedLine_eq_maxGenEigenspace_of_simple
+/-- If one is an algebraically simple eigenvalue of `f`, then the line spanned by a nonzero
+fixed vector is the whole generalized eigenspace at one. -/
+theorem LinearMap.span_singleton_eq_maxGenEigenspace_one_of_simple
     {V : Type*} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
     (f : V →ₗ[ℂ] V) (v : V) (hv : v ≠ 0) (hfv : f v = v)
     (hSimple : f.charpoly.rootMultiplicity 1 = 1) :
@@ -141,7 +114,9 @@ private theorem fixedLine_eq_maxGenEigenspace_of_simple
   · rw [finrank_span_singleton hv,
       LinearMap.finrank_maxGenEigenspace_eq, hSimple]
 
-private theorem spectrum_fixedLineQuotient_subset
+/-- Quotienting by the line of a nonzero fixed vector removes an algebraically simple eigenvalue
+one and creates no new eigenvalue. -/
+theorem LinearMap.spectrum_mapQ_span_singleton_subset_of_simple
     {V : Type*} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
     (f : V →ₗ[ℂ] V) (v : V) (hv : v ≠ 0) (hfv : f v = v)
     (hSimple : f.charpoly.rootMultiplicity 1 = 1)
@@ -168,7 +143,7 @@ private theorem spectrum_fixedLineQuotient_subset
           Module.End.one_apply, one_smul, ← hc,
           map_smul, hfv, sub_self, smul_zero]⟩
     exact hu.2 ((Submodule.Quotient.mk_eq_zero p).mpr
-      ((fixedLine_eq_maxGenEigenspace_of_simple f v hv hfv hSimple).ge hxGen))
+      ((LinearMap.span_singleton_eq_maxGenEigenspace_one_of_simple f v hv hfv hSimple).ge hxGen))
   have hcoef : c + c / (z - 1) = z * (c / (z - 1)) := by
     field_simp [sub_ne_zero.mpr hz1]
     ring
@@ -186,8 +161,8 @@ private theorem spectrum_fixedLineQuotient_subset
       ⟨Module.End.mem_eigenspace_iff.mpr hfCorr, hCorr⟩),
     by simpa only [Set.mem_singleton_iff] using hz1⟩
 
-
-private theorem invariant_span_of_fixed
+/-- The line of a fixed vector is invariant. -/
+theorem LinearMap.span_singleton_le_comap_of_apply_eq_self
     {V : Type*} [AddCommGroup V] [Module ℂ V]
     (f : V →ₗ[ℂ] V) (v : V) (hfv : f v = v) :
     Submodule.span ℂ {v} ≤ (Submodule.span ℂ {v}).comap f := by
@@ -195,69 +170,6 @@ private theorem invariant_span_of_fixed
   change f v ∈ Submodule.span ℂ {v}
   rw [hfv]
   exact Submodule.mem_span_singleton_self v
-
-/-- Uniform contraction away from an algebraically simple fixed eigenvalue
-prevents additional fixed vectors from appearing in a finite-dimensional
-operator limit. -/
-theorem ContinuousLinearMap.eigenspace_one_limit_eq_span_of_uniform_spectrum_bound
-    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℂ V] [FiniteDimensional ℂ V]
-    (f : ℕ → V →L[ℂ] V) (f₀ : V →L[ℂ] V)
-    (hf : Tendsto f atTop (𝓝 f₀)) (v : V) (hv : v ≠ 0)
-    (hFix : ∀ n, f n v = v)
-    (hSimple : ∀ n, (f n : V →ₗ[ℂ] V).charpoly.rootMultiplicity 1 = 1)
-    (q : ℝ) (hq : q < 1)
-    (hBound : ∀ n z, z ∈ spectrum ℂ (f n : V →ₗ[ℂ] V) → z ≠ 1 → ‖z‖ ≤ q) :
-    Module.End.eigenspace (f₀ : V →ₗ[ℂ] V) 1 = Submodule.span ℂ {v} := by
-  classical
-  have hEval : Tendsto (fun n => f n v) atTop (𝓝 (f₀ v)) :=
-    (ContinuousLinearMap.apply ℂ V v).continuous.continuousAt.tendsto.comp hf
-  have hFix₀ : f₀ v = v :=
-    tendsto_nhds_unique (by simpa only [hFix] using hEval) tendsto_const_nhds
-  let p := Submodule.span ℂ {v}
-  have hp : ∀ n, p ≤ p.comap (f n : V →ₗ[ℂ] V) :=
-    fun n => invariant_span_of_fixed (f n : V →ₗ[ℂ] V) v (hFix n)
-  have hp₀ : p ≤ p.comap (f₀ : V →ₗ[ℂ] V) :=
-    invariant_span_of_fixed (f₀ : V →ₗ[ℂ] V) v hFix₀
-  let fQ : ℕ → (V ⧸ p →ₗ[ℂ] V ⧸ p) :=
-    fun n => p.mapQ p (f n : V →ₗ[ℂ] V) (hp n)
-  let fQ₀ : V ⧸ p →ₗ[ℂ] V ⧸ p := p.mapQ p (f₀ : V →ₗ[ℂ] V) hp₀
-  let b := Module.finBasis ℂ (V ⧸ p)
-  let M := fun n => LinearMap.toMatrix b b (fQ n)
-  let M₀ := LinearMap.toMatrix b b fQ₀
-  have hM : Tendsto M atTop (𝓝 M₀) :=
-    Submodule.tendsto_toMatrix_mapQ_of_tendsto p b f f₀ hf hp hp₀
-  have hSpec : ∀ n z, z ∈ spectrum ℂ (M n) → ‖z‖ ≤ q := by
-    intro n z hz
-    have hzQ : z ∈ spectrum ℂ (fQ n) := by
-      simpa only [M, LinearMap.spectrum_toMatrix] using hz
-    have hzF := spectrum_fixedLineQuotient_subset
-      (f n : V →ₗ[ℂ] V) v hv (hFix n) (hSimple n) (hp n) hzQ
-    exact hBound n z hzF.1 (by simpa only [Set.mem_singleton_iff] using hzF.2)
-  have hUnit := Matrix.isUnit_one_sub_of_tendsto_of_uniform_spectrum_bound M M₀ hM q hq hSpec
-  have hNotSpec : (1 : ℂ) ∉ spectrum ℂ fQ₀ := by
-    intro hz
-    have hzM : (1 : ℂ) ∈ spectrum ℂ M₀ := by
-      simpa only [M₀, LinearMap.spectrum_toMatrix] using hz
-    exact (spectrum.mem_iff.mp hzM) (by simpa only [map_one] using hUnit)
-  ext x
-  rw [Module.End.mem_eigenspace_iff]
-  simp only [one_smul, ContinuousLinearMap.coe_coe]
-  constructor
-  · intro hx
-    have hxQ : fQ₀ (p.mkQ x) = p.mkQ x := by
-      simp only [fQ₀, Submodule.mkQ_apply, Submodule.mapQ_apply,
-        ContinuousLinearMap.coe_coe, hx]
-    have hZero : p.mkQ x = 0 := by
-      by_contra hNonzero
-      apply hNotSpec
-      exact Module.End.hasEigenvalue_iff_mem_spectrum.mp
-        (Module.End.hasEigenvalue_of_hasEigenvector
-          ⟨Module.End.mem_eigenspace_iff.mpr (by simpa only [one_smul] using hxQ), hNonzero⟩)
-    exact (Submodule.Quotient.mk_eq_zero p).mp hZero
-  · intro hx
-    obtain ⟨c, hc⟩ := Submodule.mem_span_singleton.mp hx
-    rw [← hc, map_smul, hFix₀]
-
 
 /-- A uniform closed-disc spectral bound survives matrix limits. -/
 private theorem Matrix.spectrum_norm_le_of_tendsto_of_uniform_bound
@@ -282,6 +194,83 @@ private theorem Matrix.spectrum_norm_le_of_tendsto_of_uniform_bound
     simpa only [Matrix.scalar_apply, Matrix.algebraMap_eq_diagonal, Pi.algebraMap_def,
       Algebra.algebraMap_self_apply] using hUnit)
 
+/-- A vector fixed along a convergent sequence of operators is fixed by the limit. -/
+private theorem ContinuousLinearMap.apply_eq_self_of_tendsto
+    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℂ V]
+    (f : ℕ → V →L[ℂ] V) (f₀ : V →L[ℂ] V) (hf : Tendsto f atTop (𝓝 f₀)) (v : V)
+    (hFix : ∀ n, f n v = v) : f₀ v = v := by
+  have hEval : Tendsto (fun n => f n v) atTop (𝓝 (f₀ v)) :=
+    (ContinuousLinearMap.apply ℂ V v).continuous.continuousAt.tendsto.comp hf
+  exact tendsto_nhds_unique (by simpa only [hFix] using hEval) tendsto_const_nhds
+
+/-- On the quotient by a common fixed line, a uniform bound on the nontrivial eigenvalues
+of the sequence bounds the whole spectrum of the limiting quotient operator. -/
+private theorem ContinuousLinearMap.spectrum_limit_mapQ_norm_le
+    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℂ V] [FiniteDimensional ℂ V]
+    (f : ℕ → V →L[ℂ] V) (f₀ : V →L[ℂ] V)
+    (hf : Tendsto f atTop (𝓝 f₀)) (v : V) (hv : v ≠ 0)
+    (hFix : ∀ n, f n v = v) (hFix₀ : f₀ v = v)
+    (hSimple : ∀ n, (f n : V →ₗ[ℂ] V).charpoly.rootMultiplicity 1 = 1)
+    (q : ℝ)
+    (hBound : ∀ n z, z ∈ spectrum ℂ (f n : V →ₗ[ℂ] V) → z ≠ 1 → ‖z‖ ≤ q) :
+    ∀ z ∈ spectrum ℂ ((Submodule.span ℂ {v}).mapQ (Submodule.span ℂ {v})
+      (f₀ : V →ₗ[ℂ] V) (LinearMap.span_singleton_le_comap_of_apply_eq_self _ v hFix₀)),
+      ‖z‖ ≤ q := by
+  classical
+  let p := Submodule.span ℂ {v}
+  have hp : ∀ n, p ≤ p.comap (f n : V →ₗ[ℂ] V) :=
+    fun n => LinearMap.span_singleton_le_comap_of_apply_eq_self _ v (hFix n)
+  have hp₀ := LinearMap.span_singleton_le_comap_of_apply_eq_self _ v hFix₀
+  let b := Module.finBasis ℂ (V ⧸ p)
+  intro z hz
+  refine Matrix.spectrum_norm_le_of_tendsto_of_uniform_bound _ _
+    (Submodule.tendsto_toMatrix_mapQ_of_tendsto p b f f₀ hf hp hp₀) q (fun n w hw => ?_) z
+    (by simpa only [LinearMap.spectrum_toMatrix] using hz)
+  have hwF := LinearMap.spectrum_mapQ_span_singleton_subset_of_simple
+    (f n : V →ₗ[ℂ] V) v hv (hFix n) (hSimple n) (hp n)
+    (by simpa only [LinearMap.spectrum_toMatrix] using hw)
+  exact hBound n w hwF.1 (by simpa only [Set.mem_singleton_iff] using hwF.2)
+
+/-- Uniform contraction away from an algebraically simple fixed eigenvalue
+prevents additional fixed vectors from appearing in a finite-dimensional
+operator limit. -/
+theorem ContinuousLinearMap.eigenspace_one_limit_eq_span_of_uniform_spectrum_bound
+    {V : Type*} [NormedAddCommGroup V] [NormedSpace ℂ V] [FiniteDimensional ℂ V]
+    (f : ℕ → V →L[ℂ] V) (f₀ : V →L[ℂ] V)
+    (hf : Tendsto f atTop (𝓝 f₀)) (v : V) (hv : v ≠ 0)
+    (hFix : ∀ n, f n v = v)
+    (hSimple : ∀ n, (f n : V →ₗ[ℂ] V).charpoly.rootMultiplicity 1 = 1)
+    (q : ℝ) (hq : q < 1)
+    (hBound : ∀ n z, z ∈ spectrum ℂ (f n : V →ₗ[ℂ] V) → z ≠ 1 → ‖z‖ ≤ q) :
+    Module.End.eigenspace (f₀ : V →ₗ[ℂ] V) 1 = Submodule.span ℂ {v} := by
+  have hFix₀ := ContinuousLinearMap.apply_eq_self_of_tendsto f f₀ hf v hFix
+  let p := Submodule.span ℂ {v}
+  let fQ₀ : V ⧸ p →ₗ[ℂ] V ⧸ p := p.mapQ p (f₀ : V →ₗ[ℂ] V)
+    (LinearMap.span_singleton_le_comap_of_apply_eq_self _ v hFix₀)
+  have hNotSpec : (1 : ℂ) ∉ spectrum ℂ fQ₀ := fun hz => by
+    have := ContinuousLinearMap.spectrum_limit_mapQ_norm_le f f₀ hf v hv hFix hFix₀ hSimple q
+      hBound 1 hz
+    rw [norm_one] at this
+    linarith
+  ext x
+  rw [Module.End.mem_eigenspace_iff]
+  simp only [one_smul, ContinuousLinearMap.coe_coe]
+  constructor
+  · intro hx
+    have hxQ : fQ₀ (p.mkQ x) = p.mkQ x := by
+      simp only [fQ₀, Submodule.mkQ_apply, Submodule.mapQ_apply,
+        ContinuousLinearMap.coe_coe, hx]
+    have hZero : p.mkQ x = 0 := by
+      by_contra hNonzero
+      apply hNotSpec
+      exact Module.End.hasEigenvalue_iff_mem_spectrum.mp
+        (Module.End.hasEigenvalue_of_hasEigenvector
+          ⟨Module.End.mem_eigenspace_iff.mpr (by simpa only [one_smul] using hxQ), hNonzero⟩)
+    exact (Submodule.Quotient.mk_eq_zero p).mp hZero
+  · intro hx
+    obtain ⟨c, hc⟩ := Submodule.mem_span_singleton.mp hx
+    rw [← hc, map_smul, hFix₀]
+
 /-- The bound on nontrivial eigenvalues survives a limit with a common fixed line.
 The eigenvalue one need not be algebraically simple for the limiting operator. -/
 theorem ContinuousLinearMap.spectrum_limit_norm_le_of_uniform_nontrivial_bound
@@ -293,31 +282,8 @@ theorem ContinuousLinearMap.spectrum_limit_norm_le_of_uniform_nontrivial_bound
     (q : ℝ)
     (hBound : ∀ n z, z ∈ spectrum ℂ (f n : V →ₗ[ℂ] V) → z ≠ 1 → ‖z‖ ≤ q) :
     ∀ z ∈ spectrum ℂ (f₀ : V →ₗ[ℂ] V), z ≠ 1 → ‖z‖ ≤ q := by
-  classical
-  have hEval : Tendsto (fun n => f n v) atTop (𝓝 (f₀ v)) :=
-    (ContinuousLinearMap.apply ℂ V v).continuous.continuousAt.tendsto.comp hf
-  have hFix₀ : f₀ v = v :=
-    tendsto_nhds_unique (by simpa only [hFix] using hEval) tendsto_const_nhds
+  have hFix₀ := ContinuousLinearMap.apply_eq_self_of_tendsto f f₀ hf v hFix
   let p := Submodule.span ℂ {v}
-  have hp : ∀ n, p ≤ p.comap (f n : V →ₗ[ℂ] V) :=
-    fun n => invariant_span_of_fixed (f n : V →ₗ[ℂ] V) v (hFix n)
-  have hp₀ : p ≤ p.comap (f₀ : V →ₗ[ℂ] V) :=
-    invariant_span_of_fixed (f₀ : V →ₗ[ℂ] V) v hFix₀
-  let fQ : ℕ → (V ⧸ p →ₗ[ℂ] V ⧸ p) :=
-    fun n => p.mapQ p (f n : V →ₗ[ℂ] V) (hp n)
-  let fQ₀ : V ⧸ p →ₗ[ℂ] V ⧸ p := p.mapQ p (f₀ : V →ₗ[ℂ] V) hp₀
-  let b := Module.finBasis ℂ (V ⧸ p)
-  let M := fun n => LinearMap.toMatrix b b (fQ n)
-  let M₀ := LinearMap.toMatrix b b fQ₀
-  have hM : Tendsto M atTop (𝓝 M₀) :=
-    Submodule.tendsto_toMatrix_mapQ_of_tendsto p b f f₀ hf hp hp₀
-  have hSpec : ∀ n z, z ∈ spectrum ℂ (M n) → ‖z‖ ≤ q := by
-    intro n z hz
-    have hzQ : z ∈ spectrum ℂ (fQ n) := by
-      simpa only [M, LinearMap.spectrum_toMatrix] using hz
-    have hzF := spectrum_fixedLineQuotient_subset
-      (f n : V →ₗ[ℂ] V) v hv (hFix n) (hSimple n) (hp n) hzQ
-    exact hBound n z hzF.1 (by simpa only [Set.mem_singleton_iff] using hzF.2)
   intro z hz hz1
   obtain ⟨x, hx⟩ := (Module.End.hasEigenvalue_iff_mem_spectrum.mpr hz).exists_hasEigenvector
   have hxQ : p.mkQ x ≠ 0 := by
@@ -330,12 +296,11 @@ theorem ContinuousLinearMap.spectrum_limit_norm_le_of_uniform_nontrivial_bound
       change f₀ x - x = 0
       rw [hfx, sub_self]
     exact (smul_eq_zero.mp hzsmul).elim (fun h => hz1 (sub_eq_zero.mp h)) hx.2
-  have hzQ : z ∈ spectrum ℂ fQ₀ :=
-    Module.End.hasEigenvalue_iff_mem_spectrum.mp
+  exact ContinuousLinearMap.spectrum_limit_mapQ_norm_le f f₀ hf v hv hFix hFix₀ hSimple q
+    hBound z
+    (Module.End.hasEigenvalue_iff_mem_spectrum.mp
       (Module.End.hasEigenvalue_of_hasEigenvector
         ⟨Module.End.mem_eigenspace_iff.mpr (by
-          simpa only [fQ₀, Submodule.mkQ_apply, Submodule.mapQ_apply,
-            ContinuousLinearMap.coe_coe, map_smul] using congrArg p.mkQ hx.apply_eq_smul), hxQ⟩)
-  have hzM : z ∈ spectrum ℂ M₀ := by
-    simpa only [M₀, LinearMap.spectrum_toMatrix] using hzQ
-  exact Matrix.spectrum_norm_le_of_tendsto_of_uniform_bound M M₀ hM q hSpec z hzM
+          simpa only [Submodule.mkQ_apply, Submodule.mapQ_apply,
+            ContinuousLinearMap.coe_coe, map_smul] using congrArg p.mkQ hx.apply_eq_smul),
+          hxQ⟩))

@@ -116,6 +116,47 @@ all have the scale $d^{j}(S)$, the $j$-fold iterate of $d$, and each
 generation has at most $9^j$ marks. The following estimates concern these
 iterated scales only; they do not construct the replacements.
 
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 668--686;
+% OpenAI2026PolynomialPEPS, Lemma 3.2, 02-information.tex, lines 302--311.
+\begin{theorem}[Depth of a power-contracting recursion]
+    \label{thm:area_law_power_recursion_depth}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.log_iterate_le_of_le_rpow,
+        TNLean.PEPS.AreaLaw.Geometry.one_le_log_add_exp_one,
+        TNLean.PEPS.AreaLaw.Geometry.exists_iterate_depth_bound,
+        TNLean.PEPS.AreaLaw.Geometry.exists_iterate_generation_count_bound,
+        TNLean.PEPS.AreaLaw.Geometry.mul_rpow_le_max_mul_rpow,
+        TNLean.PEPS.AreaLaw.Geometry.forall_le_iterate_of_le_iterate}
+    \leanok
+    Let $0<\rho<1$ and $S_*>1$, and let $f$ satisfy $0<f(u)\le u^{\rho}$
+    for every $u\ge S_*$. A recursion from a scale $S>0$ passes from
+    generation $i$ to generation $i+1$ only when $f^{i}(S)\ge S_*$. If the
+    generations $0,\dots,m-1$ have scale at least $S_*$, then
+    $\log f^{i}(S)\le\rho^{i}\log S$ for $i\le m$, and there is a constant
+    $C>0$, independent of $S$ and $m$, with
+    \begin{align}
+        m & \le C+C\log\log(S+e).
+        \notag
+    \end{align}
+    For every $b\ge0$ there is moreover $C>0$ with
+    $\sum_{j=0}^{m}b^{j}\le C\bigl(\log(S+e)\bigr)^{C}$ under the same
+    condition. If $0<f(u)\le u^{\rho}$ for every $u>0$ and $S_*\ge1$, a
+    generation of scale at least $S_*$ has all earlier generations of scale
+    at least $S_*$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Induction on $i$ gives the logarithmic bound. If $m\ge1$, then
+    $0<\log S_*\le\rho^{m-1}\log S$, so $\log S>0$ and
+    $(m-1)\log(1/\rho)\le\log\log S-\log\log S_*$; moreover
+    $\log\log S\le\log\log(S+e)$, which is nonnegative. For the count, with
+    $B=b+2$ the sum is at most $B^{m+1}$, and the depth bound gives
+    $B^{m+1}\le B^{C+1}\bigl(\log(S+e)\bigr)^{C\log B}$. Enlarging the
+    exponent only increases a power of a number at least one. For the last
+    assertion, a scale $x<S_*$ has $f(x)\le x^{\rho}<S_*^{\rho}\le S_*$, so
+    once a generation falls below $S_*$ all later ones do.
+\end{proof}
+
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 668--675.
 \begin{theorem}[Depth of a repair branch]
     \label{thm:area_law_repair_depth}
@@ -139,17 +180,14 @@ iterated scales only; they do not construct the replacements.
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_repair_margins}
+    \uses{thm:area_law_repair_margins, thm:area_law_power_recursion_depth}
     The half-side $d(S)$ is a power of two and $d(S)\le S^{\rho_0}$, so
     $\log d(S)\le\rho_0\log S$. Induction on $j$ gives
-    (\ref{eq:area_law_repair_depth_log}). If $d^{j}(S)\ge S_*$, then
-    $0<\log S_*\le\rho_0^{j}\log S$, so $\log S>0$. Taking logarithms,
-    \begin{align}
-        j\log(1/\rho_0) & \le\log\log S-\log\log S_*.
-    \end{align}
-    Since $\log\log S\le\log\log(e^{e}+S)$ and the latter is at least
-    one, the constant $C=(\lvert\log\log S_*\rvert+1)/\log(1/\rho_0)$
-    suffices.
+    (\ref{eq:area_law_repair_depth_log}). Since $0<d(u)\le u^{\rho_0}$ for
+    every $u>0$, Theorem~\ref{thm:area_law_power_recursion_depth} shows that
+    if $d^{j}(S)\ge S_*$, then all generations $0,\dots,j$ have scale at least
+    $S_*$, and it bounds $j+1$ by $C+C\log\log(S+e)$. Finally
+    $\log\log(S+e)\le\log\log(e^{e}+S)$.
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 676--686,
@@ -172,15 +210,14 @@ iterated scales only; they do not construct the replacements.
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_repair_depth}
-    The sum is at most $9^{m+1}$. The depth bound gives
-    $m+1\le C_1+1+C_1\log\ell$ with $\ell=\log(e^{e}+S)$, so
-    $9^{m+1}\le9^{C_1+1}\ell^{p}$ with $p=C_1\log9$. The hypothesis forces
-    $S>1$, hence $\log(S+2)\ge1$, and
-    $\ell\le e+\log(S+2)\le4\log(S+2)$. Enlarging the exponent from $p$ to
-    $C\ge p$ only increases a power of a number at least one. For the second
-    assertion, $S+2\le(M+2)2^{k}$ gives
-    $\log(S+2)\le(\log(M+2)+1)(k+1)$.
+    \uses{thm:area_law_power_recursion_depth}
+    If $d^{m}(S)\ge S_*$, all generations $0,\dots,m$ have scale at least
+    $S_*$, by Theorem~\ref{thm:area_law_power_recursion_depth}; in particular
+    $S\ge S_*>1$. The same theorem with $b=9$ bounds the sum by
+    $C\bigl(\log(S+e)\bigr)^{C}$. Since $S+e\le e(S+2)$ and
+    $\log(S+2)\ge1$, we have $\log(S+e)\le2\log(S+2)$, and enlarging the
+    constant gives the first assertion. For the second assertion,
+    $S+2\le(M+2)2^{k}$ gives $\log(S+2)\le(\log(M+2)+1)(k+1)$.
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 761--768,
