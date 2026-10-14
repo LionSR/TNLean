@@ -1,0 +1,71 @@
+\section{The initial vector in augmented site coordinates}
+
+Let $V$ be a finite set of physical sites, let $q,d,k\ge0$ be integers,
+and put $X=\{0,\ldots,q-1\}^V$ and $D=\{0,\ldots,d-1\}$.
+The sites are $J=V\sqcup\{\mathrm{false},\mathrm{true}\}$, with
+$q$ values at each physical site and $d$ values at each auxiliary site.
+Write $\mathcal X_J$ for the one-copy configuration space.
+Let
+\begin{align*}
+    E_k:\mathcal X_J^k\longrightarrow X^k\times(D^k\times D^k)
+\end{align*}
+be the coordinate bijection of Definition~\ref{def:al_scan_auxiliary_coordinates},
+with the false and true sites corresponding to $C$ and $R$, respectively.
+For an arbitrary $\Omega\in\mathbb C^X$ and a label $\lambda$ of $S_k$, put
+\begin{align*}
+    v_{k,\lambda}               & =\Omega^{\otimes k}\otimes
+    (I_C\otimes\Pi_\lambda)U_k, &
+    \xi_{k,\lambda}             & =v_{k,\lambda}\circ E_k.
+\end{align*}
+Here $U_k$ is the repeated uniform auxiliary pair, with the zero-dimension
+and empty-product conventions of the initial-vector construction in
+\cite[Section~7]{OpenAI2026AreaLaw}.
+
+\begin{theorem}[Full copy symmetry of the augmented initial vector]
+    \label{thm:al_augmented_prevector_symmetry}
+    \lean{TNLean.PEPS.AreaLaw.Scan.symProj_mulVec_augmentedReplicaPrevector}
+    \leanok
+    \uses{def:al_scan_auxiliary_coordinates}
+    Let $P_{\mathrm{sym}}$ average the simultaneous permutations of the
+    $k$ copies of $\mathcal X_J$. Then
+    \begin{align*}
+        P_{\mathrm{sym}}\xi_{k,\lambda}=\xi_{k,\lambda}.
+    \end{align*}
+    No normalization of $\Omega$ or positivity of $q,d,k$ is required.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Each repeated product is fixed by simultaneous copy permutation.
+    The central label projection on the right auxiliary factor commutes
+    with these permutations. Thus $v_{k,\lambda}$ is fixed by the joint
+    action on its three factors. The bijection $E_k$ commutes with copy
+    permutation, so $\xi_{k,\lambda}$ is fixed by every such permutation
+    in the augmented coordinates. Averaging proves the identity.
+\end{proof}
+
+\begin{theorem}[The supplied label at each augmented auxiliary site]
+    \label{thm:al_augmented_prevector_auxiliary_label}
+    \lean{TNLean.PEPS.AreaLaw.Scan.labelProj_auxiliary_mulVec_augmentedReplicaPrevector}
+    \leanok
+    \uses{def:al_scan_auxiliary_coordinates}
+    For either $b\in\{\mathrm{false},\mathrm{true}\}$, let
+    $\Pi_{\{b\},\lambda}$ denote the central label projection for the
+    copy action at the single auxiliary site $b$. Then
+    \begin{align*}
+        \Pi_{\{b\},\lambda}\xi_{k,\lambda}=\xi_{k,\lambda}.
+    \end{align*}
+    The label is the same supplied $\lambda$ at both sites, including
+    the zero vector and zero-dimensional or zero-copy cases.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_augmented_subsystem_action}
+    Put $w=(I_C\otimes\Pi_\lambda)U_k$.
+    The left and right central label projections agree on $U_k$;
+    their commutation and idempotence show that each fixes $w$.
+    Tensoring with $\Omega^{\otimes k}$ gives both auxiliary identities
+    for $v_{k,\lambda}$. The coordinate bijection identifies the two
+    auxiliary copy actions with the singleton actions at the false and
+    true sites. It therefore transports their central projections and
+    the two fixed-vector identities to the displayed equations.
+\end{proof}
