@@ -198,6 +198,9 @@ theorem exists_sampled_contractedOperator_approximate_error_le
               (familyLabelledPhysicalReadout physicalDim ps hps hcover priv) ψ.vector) ≤ ε := by
   classical
   intro ψ W δ m R Q k garbage hfinite
+  let := ProductInput.finiteDimensional_wholePartyMem H hH
+  let := Layout.finiteDimensional_mem_of_registers priv hpriv
+  let := W.produce.finiteDimensional_auxiliary m
   let bIn := stdOrthonormalBasis ℂ (Mem (ProductInput.wholePartyLayout H)).carrier
   let bDiscard := exchangedGarbageBasis (W.produce.auxiliary m) priv
     (stdOrthonormalBasis ℂ (Mem (W.produce.auxiliary m)).carrier)
@@ -205,7 +208,6 @@ theorem exists_sampled_contractedOperator_approximate_error_le
   obtain ⟨lam, E, F, hframes, ω, hω⟩ :=
     exists_sourceSample_approximate_error_le H hH x hx physicalDim ps hps hcover
       priv w G B D hB hD hb hcount hlifetime hphysical hpriv ε hε hεone happrox
-  dsimp only at hω
   refine ⟨lam, E, F, hframes, ω, ?_⟩
   intro T
   exact contractedOperator_error_le_of_source_error physicalDim ps hps hcover garbage hfinite
