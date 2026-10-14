@@ -182,5 +182,6 @@ theorem dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput
     RCLike.real_smul_eq_coe_smul (K := ℂ), map_smul,
     regularizedPatchObjective_eq_norm_patchOutput,
     dependentGlobalConfigIsometry_regularizedPatchOutput]
+  set_option pp.all true in rfl
 
 end TNLean.PEPS
