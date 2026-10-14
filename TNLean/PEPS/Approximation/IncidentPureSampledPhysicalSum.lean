@@ -79,6 +79,7 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_incidentPhysic
   have h := physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum
     (I := I) (E := E) d ps hn hc garbage w ψ k lam L R ω B BG bIn bRef
   dsimp only at h
-  simpa only [M, sampledPhysicalFactor_eq_incidentSampledPhysicalFactor] using h
+  simpa only [M, Function.comp_apply,
+    sampledPhysicalFactor_eq_incidentSampledPhysicalFactor] using h
 
 end TNLean.PEPS.PairEffect.SourceCircuit
