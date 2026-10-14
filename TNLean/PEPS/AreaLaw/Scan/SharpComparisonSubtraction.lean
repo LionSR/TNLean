@@ -46,7 +46,7 @@ theorem sharp_comparison_subtraction
     (3 + 1 / a) * Real.binEntropy τ + 37 * Kmom * a - Z / a +
       δ / τ * M + 2 * (remUpper + remLower) / W
   change 2 * Sent + Gpre - Gpost ≤ loss
-  apply (mul_le_mul_iff_right₀ (div_pos hW zero_lt_two)).mp
+  apply (mul_le_mul_iff_left₀ (div_pos hW zero_lt_two)).mp
   apply sub_nonpos.mp
   calc
     (2 * Sent + Gpre - Gpost) * (W / 2) - loss * (W / 2) =
