@@ -454,8 +454,8 @@ asymptotic scale specialization is proved below.
     since a scheduled fill cannot create a bad lead.
 \end{proof}
 
-\begin{lemma}[Geometry and probabilities of the scan]
-    \label{lem:al_scan_histories}
+\begin{theorem}[Geometry and probabilities of the scan]
+    \label{thm:al_scan_histories}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.HistoryProperties,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.historyProperties_of_scales,
         TNLean.PEPS.AreaLaw.Scan.eventually_historyProperties}
@@ -464,7 +464,8 @@ asymptotic scale specialization is proved below.
         thm:al_scan_designated_dilution,thm:al_scan_terminal_split,
         thm:al_scan_split_count,thm:al_scan_nested_band_metrics,
         thm:al_scan_physical_prefix_approximation,thm:al_scan_status_cuts,
-        thm:al_scan_bad_history_inverse_power}
+        thm:al_scan_bad_history_inverse_power,
+        thm:al_scan_uniform_bad_old,lem:al_scan_rounded_radius}
     Fix $0<\ell$, $0<\kappa<\mu<1-\ell$, $C_r,C_1>0$, $C_T\ge0$, a bound $b$ on
     the number of labels with a fixed anchor, $3b\le C_1$, and a real exponent
     $p$. Take the source scales $L,m,K,D,M$ above with $r_0=r$, let $Z$ be
@@ -501,7 +502,7 @@ asymptotic scale specialization is proved below.
     \end{enumerate}
     All probabilities are classical path probabilities of the history tree.
     This is \cite[Lemma~9.1]{OpenAI2026AreaLaw} with explicit constants.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The source scales eventually give $n\ge2$, $1\le D$, $2r_0\le D$,
     $4(D+2r_0)\le m$ and $8Km\le L$, and the padded capacity is
