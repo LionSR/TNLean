@@ -1,0 +1,131 @@
+% Source: OpenAI2026AreaLaw, 09-amplification.tex, lines 547--561, and
+% 01-preliminaries.tex, lines 33--46 and 76--80, revision
+% openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\section{The final entropy comparison of the amplification}
+
+The proof of \cite[Proposition~10.2]{OpenAI2026AreaLaw} ends with a unitary
+$U'$ that acts on neither the target system nor a distant region $J$ and that
+moves the state close to a vector whose joint reduction on these two systems
+is a product. The results of this section turn that unitary estimate into the
+bound $C n^{-M}$ on mutual information. They form the last step of the proof
+and do not by themselves establish the proposition: the construction of the
+unitary is a separate argument.
+
+Throughout, $V$ is a finite set of sites with finite local spaces
+$\mathcal H_v$, and $\mathcal H=\bigotimes_{v\in V}\mathcal H_v$. For a region
+$R\subseteq V$ put $\mathcal H_R=\bigotimes_{v\in R}\mathcal H_v$, and for a
+vector $\psi\in\mathcal H$ let $\rho_{\psi,R}$ be the reduced state of
+$|\psi\rangle\langle\psi|$ on $R$. For disjoint regions $X,J$ write
+$I_\psi(X:J)=S(\rho_{\psi,X})+S(\rho_{\psi,J})-S(\rho_{\psi,X\cup J})$.
+Ancillary systems are included by enlarging $V$.
+
+\begin{lemma}[Trace distance of pure states]
+    \label{lem:al_amp_pure_trace_distance}
+    \lean{TNLean.PEPS.AreaLaw.traceDistance_vecMulVec_le_norm_sub,
+        FiniteProduct.traceDistance_reducedPure_le}
+    \leanok
+    For unit vectors $\psi,\varphi$ of a finite-dimensional space,
+    \begin{align*}
+        \tfrac12\bigl\||\psi\rangle\langle\psi|
+        -|\varphi\rangle\langle\varphi|\bigr\|_1 & \le\|\psi-\varphi\|.
+    \end{align*}
+    For unit vectors of $\mathcal H$ the reduced states on every region
+    $R\subseteq V$ are no farther apart in trace distance than the two pure
+    states.
+\end{lemma}
+\begin{proof}\leanok
+    The trace distance of the two pure states is
+    $\sqrt{1-|\langle\psi,\varphi\rangle|^2}$. With
+    $t=|\langle\psi,\varphi\rangle|\le1$ we have
+    $1-t^2\le2-2t\le2-2\Re\langle\psi,\varphi\rangle
+        =\|\psi-\varphi\|^2$.
+    Partial trace contracts trace distance.
+\end{proof}
+
+\begin{lemma}[A unitary away from a region]
+    \label{lem:al_amp_unitary_complement}
+    \lean{FiniteProduct.reducedPure_unitary_compl,
+        FiniteProduct.mutualInformation_eq_of_reducedPure_union_eq,
+        FiniteProduct.trace_reducedPure_eq_norm_sq}
+    \leanok
+    Let $R\subseteq V$ and let $U$ be a unitary on $\mathcal H_{V\setminus R}$.
+    For every $\varphi\in\mathcal H$, the vectors $\varphi$ and
+    $(I_R\otimes U)\varphi$ have the same reduced state on $R$. In particular,
+    for disjoint regions $X,J$ with $R=X\cup J$, they have the same mutual
+    information $I(X:J)$.
+\end{lemma}
+\begin{proof}\leanok
+    The reduced state of $(I_R\otimes U)\varphi$ is the partial trace over
+    $V\setminus R$ of $(I\otimes U)|\varphi\rangle\langle\varphi|(I\otimes
+        U)^\dagger$. Cyclicity of the partial trace in the traced factor and
+    $U^\dagger U=I$ remove $U$. The mutual information of $X$ and $J$ is a
+    function of the reduced state on $X\cup J$.
+\end{proof}
+
+\begin{lemma}[Continuity against a product reduction]
+    \label{lem:al_amp_continuity_product}
+    \lean{FiniteProduct.mutualInformation_le_of_norm_sub_le}
+    \leanok
+    \uses{lem:al_amp_pure_trace_distance}
+    Let $\psi,\eta\in\mathcal H$ be unit vectors and let $X,J\subseteq V$ be
+    disjoint with $I_\eta(X:J)=0$. Then
+    \begin{align*}
+        I_\psi(X:J) & \le 8\sqrt{\|\psi-\eta\|}\,\log(e\dim\mathcal H_X).
+    \end{align*}
+    Only the dimension of $\mathcal H_X$ enters.
+\end{lemma}
+\begin{proof}\leanok
+    Apply \cite[Lemma~2.1]{OpenAI2026AreaLaw} to $S(X)$ and $S(X|J)$ for the
+    joint reduced states on $X\cup J$, and use $I(X:J)=S(X)-S(X|J)$. The two
+    moduli sum to $8\sqrt\delta\log(e\dim\mathcal H_X)$, where $\delta$ is the
+    trace distance of the joint reductions. By
+    Lemma~\ref{lem:al_amp_pure_trace_distance}, $\delta\le\|\psi-\eta\|$.
+\end{proof}
+
+\begin{theorem}[Entropy comparison after the local unitary]
+    \label{thm:al_amp_entropy_comparison}
+    \lean{FiniteProduct.mutualInformation_le_of_unitary_sub_le}
+    \leanok
+    \uses{lem:al_amp_unitary_complement, lem:al_amp_continuity_product}
+    Let $X,J\subseteq V$ be disjoint, let $U$ be a unitary on
+    $\mathcal H_{V\setminus(X\cup J)}$, and let $\varphi,\eta\in\mathcal H$
+    be unit vectors with $I_\eta(X:J)=0$. Put
+    $\delta=\|(I_{X\cup J}\otimes U)\varphi-\eta\|$. Then
+    \begin{align*}
+        I_\varphi(X:J) & \le 8\sqrt\delta\,\log(e\dim\mathcal H_X).
+    \end{align*}
+    This is the comparison in the final part of the proof of
+    \cite[Proposition~10.2]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    The vector $(I\otimes U)\varphi$ is a unit vector with the same mutual
+    information $I(X:J)$ as $\varphi$, by
+    Lemma~\ref{lem:al_amp_unitary_complement}. Apply
+    Lemma~\ref{lem:al_amp_continuity_product} to it and $\eta$.
+\end{proof}
+
+\begin{theorem}[Polynomial decay of the amplified information]
+    \label{thm:al_amp_entropy_comparison_scale}
+    \lean{FiniteProduct.mutualInformation_le_rpow_of_unitary_sub_le,
+        FiniteProduct.mutualInformation_le_inv_pow_of_unitary_sub_le}
+    \leanok
+    \uses{thm:al_amp_entropy_comparison}
+    In the setting of Theorem~\ref{thm:al_amp_entropy_comparison}, let
+    $n\ge1$ be an integer and suppose that $\delta\le C_1n^{-K/2}$ and
+    $\log\dim\mathcal H_X\le C_2n^2$. Then
+    \begin{align*}
+        I_\varphi(X:J) & \le 8\sqrt{C_1}\,(1+C_2)\,n^{2-K/4}.
+    \end{align*}
+    If $M,K$ are integers with $K\ge4(M+2)$, then every $X'\subseteq X$
+    satisfies $I_\varphi(X':J)\le8\sqrt{C_1}\,(1+C_2)\,n^{-M}$. The constant
+    depends only on $C_1$ and $C_2$. The choice $K\ge4(M+3)$ in the proof of
+    \cite[Proposition~10.2]{OpenAI2026AreaLaw} satisfies this condition.
+\end{theorem}
+\begin{proof}\leanok
+    The square root of $C_1n^{-K/2}$ is $\sqrt{C_1}\,n^{-K/4}$, and
+    $\log(e\dim\mathcal H_X)\le1+C_2n^2\le(1+C_2)n^2$ since $n\ge1$.
+    Multiply the two bounds. Since $\log\dim\mathcal H_X\ge0$, the constant
+    $C_2$ is nonnegative, and $2-K/4\le-M$ gives $n^{2-K/4}\le n^{-M}$.
+    Discarding part of $X$ does not increase mutual information.
+\end{proof}
