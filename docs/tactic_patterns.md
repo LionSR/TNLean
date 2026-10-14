@@ -24,6 +24,23 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Finite virtual coordinates — promoted through Mathlib (2026-10-14)
+
+- **Pattern:** Enumerate each finite virtual alphabet independently, then
+  transport the finite contraction sum through the product bijection.
+- **Seen:** `Routing.toTensor_stateCoeff` in `RoutedContraction.lean` and
+  `DistributedOperatorContraction.operatorCoeff_toPartyNetwork` in
+  `DistributedPartyNetwork.lean`, both under `PEPS/Approximation/`.
+- **Abstraction:** Mathlib's `Equiv.piCongrRight` forms the product bijection;
+  `Equiv.sum_comp` transports the whole sum. Local factors reduce by
+  `Equiv.symm_apply_apply`. Both proofs use these existing declarations.
+- **Notes:** No new tactic or parallel finite-network structure is needed.
+  The distributed conversion retains all original link occurrences and their
+  endpoints, including parallel links and empty alphabets. Its equality is
+  entrywise under prescribed physical readouts; those readouts do not, in
+  general, preserve trace norms. The new declaration awaits hosted verification.
+
+
 ### Named comparison of arbitrary word evaluations — promoted (2026-10-14)
 
 - **Pattern:** Retain two constructed words and their own layouts in a named
