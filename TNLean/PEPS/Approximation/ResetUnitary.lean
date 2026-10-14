@@ -344,8 +344,8 @@ variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
 
 /-- **The polar step of the information reset.** Let `M` act on `S`, and let a real
 `z ≥ exp (-2 b)` satisfy `‖M ψ - z φ‖, ‖Mᴴ φ - z ψ‖ ≤ C exp (-10 b) ε`. Then a unitary `U`
-acting on `S` satisfies `‖U ψ - φ‖ ≤ 2 C ε`. It is the polar factor of `D = M / z`; the norm
-`‖D‖ ≤ exp (2 b)` is paid by the factor `exp (-10 b)`.
+acting on `S` satisfies `‖U ψ - φ‖ ≤ 2 C ε`. It is the polar factor of `D = M / z`, whose
+residuals are at most `C exp (-8 b) ε` because `z⁻¹ ≤ exp (2 b)`.
 Source: `02-information.tex`, lines 563–599, equations `eq:info-reset-polar-errors` and
 `eq:info-reset-unitary`. -/
 theorem exists_supported_unitary_of_two_sided (S : Finset ι)
