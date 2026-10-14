@@ -98,7 +98,7 @@ theorem exists_cell_twoFamily_partition {γ : ℝ} (hγ : γ < 1) (u₀ : ℝ) :
   have hγ'0 : 0 < γ' := by have := le_max_right γ 0; linarith
   have hγ'1 : γ' < 1 := by linarith
   obtain ⟨U₁, hU₁, h₁⟩ := exists_const_mul_rpow_le_rpow (K := 1000) (by norm_num) hγ
-  obtain ⟨U₂, hU₂, h₂⟩ := exists_const_mul_rpow_le_rpow (K := 8) (by norm_num) hγγ'
+  obtain ⟨U₂, hU₂, h₂⟩ := exists_cellChildSide_le_rpow hγγ'
   set ustar := max (max U₁ U₂) (max u₀ 2) with hustar
   have hU1 : U₁ ≤ ustar := (le_max_left _ _).trans (le_max_left _ _)
   have hU2 : U₂ ≤ ustar := (le_max_right _ _).trans (le_max_left _ _)
@@ -134,17 +134,16 @@ theorem exists_cell_twoFamily_partition {γ : ℝ} (hγ : γ < 1) (u₀ : ℝ) :
     | zero => exact le_rfl
     | succ g ih =>
       rw [gen_succ]
-      have hpos := Real.rpow_pos_of_pos (hval g (by omega)).side_pos γ
+      have hpos := (hval g (by omega)).rpow_side_pos γ
       have := hlarge _ (hm g (by omega))
       change 8 * (gen γ S₀ g).side ^ γ ≤ s
       linarith [ih (by omega)]
   set L := pieceList γ S₀ m with hLdef
   have hpw : L.Pairwise (PieceRel γ) := pairwise_pieceList hS₀ hlarge hm
-  have hmemL : ∀ e ∈ L, ∃ g < m, ∃ Q ∈ (gen γ S₀ g).squares, ∃ f : Fin 2,
-      e = (tileSample (gen γ S₀ g).colour Q (gen γ S₀ g).side ((gen γ S₀ g).side ^ γ) f, f,
-        (gen γ S₀ g).side) := by
-    intro e he
-    obtain ⟨g, hg, he⟩ := mem_pieceList.mp he
+  have hmemL : ∀ i, ∃ g < m, ∃ Q ∈ (gen γ S₀ g).squares, ∃ f : Fin 2,
+      L.get i = (tileSample (gen γ S₀ g).colour Q (gen γ S₀ g).side ((gen γ S₀ g).side ^ γ) f,
+        f, (gen γ S₀ g).side) := fun i ↦ by
+    obtain ⟨g, hg, he⟩ := mem_pieceList.mp (List.get_mem L i)
     exact ⟨g, hg, mem_genPieces.mp he⟩
   have hcell : ∀ x : ℤ × ℤ, (gen γ S₀ 0).colour (integerPoint x) = none →
       x ∈ cellSample o s m₀ := by
@@ -152,9 +151,10 @@ theorem exists_cell_twoFamily_partition {γ : ℝ} (hγ : γ < 1) (u₀ : ℝ) :
     simp only [gen_zero, hS₀def, initialGeneration, initialColouring] at hx
     split_ifs at hx with h
     exact (mem_cellSample hs0).mpr h
-  have hsub : ∀ e ∈ L, e.1 ⊆ cellSample o s m₀ := by
-    intro e he x hx
-    obtain ⟨g, -, Q, -, f, rfl⟩ := hmemL e he
+  have hsub : ∀ i, (L.get i).1 ⊆ cellSample o s m₀ := by
+    intro i x hx
+    obtain ⟨g, -, Q, -, f, he⟩ := hmemL i
+    rw [he] at hx
     exact hcell x (gen_colour_eq_none_of_le (Nat.zero_le g) (mem_tileSample.mp hx).2.2.1)
   set R := (cellSample o s m₀).filter fun x ↦ (gen γ S₀ m).colour (integerPoint x) = none
     with hRdef
@@ -168,7 +168,7 @@ theorem exists_cell_twoFamily_partition {γ : ℝ} (hγ : γ < 1) (u₀ : ℝ) :
         · exact (hpw.rel_get_of_lt h).1
         · exact (hpw.rel_get_of_lt h).1.symm
       residual_disjoint := fun i ↦ by
-        obtain ⟨g, hg, Q, hQ, f, he⟩ := hmemL _ (List.get_mem L i)
+        obtain ⟨g, hg, Q, hQ, f, he⟩ := hmemL i
         refine Finset.disjoint_left.mpr fun x hxR hxi ↦ ?_
         rw [he] at hxi
         have h1 := gen_colour_of_mem_tile hg (hval g hg.le) hQ (mem_tileSample.mp hxi).2
@@ -214,26 +214,26 @@ theorem exists_cell_twoFamily_partition {γ : ℝ} (hγ : γ < 1) (u₀ : ℝ) :
             exact ⟨i, by rw [hi]; exact mem_tileSample.mpr ⟨mem_latticeBox.mpr hxt.1, hxt⟩⟩
         · rintro (hx | ⟨i, hx⟩)
           · exact (Finset.mem_filter.mp hx).1
-          · exact hsub _ (List.get_mem L i) hx }
+          · exact hsub i hx }
   refine ⟨P, fun i ↦ (L.get i).2.2, fun i ↦ ?_, fun i ↦ ?_, fun i ↦ ?_, fun i ↦ ?_,
     fun i x hx y hy ↦ ?_, ?_⟩
-  · obtain ⟨g, hg, Q, hQ, f, he⟩ := hmemL _ (List.get_mem L i)
+  · obtain ⟨g, hg, Q, hQ, f, he⟩ := hmemL i
     beta_reduce
     rw [he]
     exact ⟨hm g hg, hdec g hg.le⟩
-  · obtain ⟨g, hg, Q, hQ, f, he⟩ := hmemL _ (List.get_mem L i)
+  · obtain ⟨g, hg, Q, hQ, f, he⟩ := hmemL i
     change IsRectUnion _ (L.get i).1
     rw [he]
     exact ((hval g hg.le).chamber Q hQ).isRectUnion_tileSample
-      (Real.rpow_pos_of_pos (hval g hg.le).side_pos γ) (hlarge _ (hm g hg)) f
-  · obtain ⟨g, hg, Q, hQ, f, he⟩ := hmemL _ (List.get_mem L i)
+      ((hval g hg.le).rpow_side_pos γ) (hlarge _ (hm g hg)) f
+  · obtain ⟨g, hg, Q, hQ, f, he⟩ := hmemL i
     intro x hx y hy
     change x ∈ (L.get i).1 at hx
     change y ∈ (L.get i).1 at hy
     beta_reduce
     rw [he] at hx hy ⊢
     exact dist_le_of_mem_box (mem_tileSample.mp hx).2.1 (mem_tileSample.mp hy).2.1
-  · obtain ⟨g, hg, Q, hQ, f, he⟩ := hmemL _ (List.get_mem L i)
+  · obtain ⟨g, hg, Q, hQ, f, he⟩ := hmemL i
     intro x hx y hy hcy
     change x ∈ (L.get i).1 at hx
     change c _ = (L.get i).2.1 at hcy
@@ -244,7 +244,7 @@ theorem exists_cell_twoFamily_partition {γ : ℝ} (hγ : γ < 1) (u₀ : ℝ) :
     have hg' := gen_colour_of_ne_none (Nat.zero_le g) (h0 ▸ Option.some_ne_none f)
     rw [h0] at hg'
     exact ((hval g hg.le).chamber Q hQ).lt_dist_of_mem_tile
-      (Real.rpow_pos_of_pos (hval g hg.le).side_pos γ) (hlarge _ (hm g hg))
+      ((hval g hg.le).rpow_side_pos γ) (hlarge _ (hm g hg))
       (mem_tileSample.mp hx).2 hg'
   · simp only [OrderedTwoFamilyPartition.earlierSameFamily, Finset.mem_biUnion,
       Finset.mem_filter, Finset.mem_univ, true_and] at hy

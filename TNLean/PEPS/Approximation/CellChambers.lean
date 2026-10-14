@@ -70,17 +70,11 @@ theorem SameSide.mono (hXY : X ⊆ Y) (h : SameSide Y a b) : SameSide X a b :=
 any reference coordinate than the farther of the two. -/
 theorem abs_sub_le_max_of_not_iff {x z : ℝ} (h : ¬(x ≤ a ↔ x ≤ b)) :
     |x - z| ≤ max |a - z| |b - z| := by
-  have ha := le_abs_self (a - z)
-  have ha' := neg_abs_le (a - z)
-  have hb := le_abs_self (b - z)
-  have hb' := neg_abs_le (b - z)
-  have hm1 := le_max_left |a - z| |b - z|
-  have hm2 := le_max_right |a - z| |b - z|
-  rw [abs_le]
   by_cases hxa : x ≤ a <;> by_cases hxb : x ≤ b
   · exact absurd (iff_of_true hxa hxb) h
-  · push Not at hxb; constructor <;> linarith
-  · push Not at hxa; constructor <;> linarith
+  · exact max_comm |a - z| |b - z| ▸
+      abs_le_max_abs_abs (sub_le_sub_right (not_le.mp hxb).le z) (sub_le_sub_right hxa z)
+  · exact abs_le_max_abs_abs (sub_le_sub_right (not_le.mp hxa).le z) (sub_le_sub_right hxb z)
   · exact absurd (iff_of_false hxa hxb) h
 
 /-- Near an isolated line `z` of `X`, the chamber of a coordinate is decided by

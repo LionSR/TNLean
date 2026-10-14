@@ -276,7 +276,7 @@ theorem pairwise_pieceList (hS₀ : S₀.IsValid) {ustar : ℝ}
     set S := gen γ S₀ g
     have hS : S.IsValid := hval g hg.le
     have hl : 1000 * S.side ^ γ ≤ S.side := hlarge _ (hm g hg)
-    have ht : 0 < S.side ^ γ := Real.rpow_pos_of_pos hS.side_pos γ
+    have ht : 0 < S.side ^ γ := hS.rpow_side_pos γ
     unfold genPieces
     rw [List.pairwise_flatMap]
     refine ⟨fun Q _ ↦ ?_, hS.separated.imp fun {Q Q'} hsep e he e' he' ↦ ?_⟩
@@ -315,7 +315,7 @@ theorem pairwise_pieceList (hS₀ : S₀.IsValid) {ustar : ℝ}
       dsimp only at hff ⊢
       rw [hff] at h1
       exact (hSg'.chamber Q' hQ').lt_dist_of_mem_tile
-        (Real.rpow_pos_of_pos hSg'.side_pos γ) (hlarge _ (hm g' hg'))
+        (hSg'.rpow_side_pos γ) (hlarge _ (hm g' hg'))
         (mem_tileSample.mp hx).2 h1
 
 /-! ### Counting -/
@@ -331,7 +331,7 @@ theorem length_flatMap_le {α β : Type*} {l : List α} {f : α → List β} {k 
     omega
 
 /-- **Bounded branching.** Every active square has at most `25` children, so
-generation `g` has at most `25 ^ g` active squares when there was one initially.
+generation `g` has at most `25 ^ g` active squares when there was at most one initially.
 Source: Lemma 3.2, `02-information.tex`, lines 302–309. -/
 theorem length_gen_squares_le (hS₀ : S₀.IsValid) (h₀ : S₀.squares.length ≤ 1) {ustar : ℝ}
     (hlarge : ∀ u, ustar ≤ u → 1000 * u ^ γ ≤ u) {m : ℕ}

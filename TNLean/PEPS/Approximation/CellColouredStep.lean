@@ -30,7 +30,7 @@ estimates here assume only `0 < t` and `1000 t ≤ u`.
   rectangles (`IsChamberSquare.isRectUnion_tileSample`).
 * Each hole, with lines at offsets `0, ± t, ± 4 t` from its centre, is an active
   square of side `8 t` satisfying the chamber invariant again for the colouring
-  after this square's tiles are assigned (`IsChamberSquare.child`).
+  after this square's tiles are assigned (`IsChamberSquare.isChamberSquare_child`).
 
 Boundaries follow the half-open convention of `CellChambers`, which is the
 source's common infinitesimal displacement. The source reserves closed holes;
@@ -225,8 +225,7 @@ theorem IsChamberSquare.lt_dist_of_mem_tile {col : Colouring} {Q : ActiveSquare}
   obtain ⟨hpQ, hpc, hph, hpn⟩ := hp
   by_contra hle
   push Not at hle
-  have hf : f = 0 ∨ f = 1 := by fin_cases f <;> simp
-  rcases hf with rfl | rfl
+  obtain rfl | rfl : f = 0 ∨ f = 1 := by omega
   · exact absurd (hpn.mp ⟨q, hq, hle⟩) (by decide)
   · obtain ⟨q₀, hq₀, hd₀⟩ := hpn.mpr rfl
     have h := hQ.colour_eq_of_ne (q₀ := q₀) (q₁ := q) ht htu hpQ hph (by rwa [dist_comm])

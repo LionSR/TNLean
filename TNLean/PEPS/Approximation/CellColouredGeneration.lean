@@ -77,32 +77,25 @@ structure Generation.IsValid (S : Generation) : Prop where
   chamber : ∀ Q ∈ S.squares, IsChamberSquare S.colour S.side Q
   allowed : ∀ p, S.colour p = none → ∃ Q ∈ S.squares, p ∈ box Q.corner S.side
 
-theorem pairwise_rel_of_ne {α : Type*} {R : α → α → Prop} (hR : ∀ a b, R a b → R b a)
-    {l : List α} (hl : l.Pairwise R) {a b : α} (ha : a ∈ l) (hb : b ∈ l) (hab : a ≠ b) :
-    R a b := by
-  induction l with
-  | nil => simp at ha
-  | cons x xs ih =>
-    rw [List.pairwise_cons] at hl
-    rcases List.mem_cons.mp ha with rfl | ha' <;> rcases List.mem_cons.mp hb with rfl | hb'
-    · exact absurd rfl hab
-    · exact hl.1 b hb'
-    · exact hR _ _ (hl.1 a ha')
-    · exact ih hl.2 ha' hb'
-
 theorem AreSeparated.symm {u : ℝ} {Q Q' : ActiveSquare} (h : AreSeparated u Q Q') :
     AreSeparated u Q' Q := fun p hp q hq ↦ by rw [dist_comm]; exact h q hq p hp
+
+instance (u : ℝ) : Std.Symm (AreSeparated u) := ⟨fun _ _ ↦ AreSeparated.symm⟩
 
 namespace Generation
 
 variable {γ : ℝ} {S : Generation}
+
+/-- The scale `t₀ = u ^ γ` of a valid generation is positive. -/
+theorem IsValid.rpow_side_pos (hS : S.IsValid) (γ : ℝ) : 0 < S.side ^ γ :=
+  Real.rpow_pos_of_pos hS.side_pos γ
 
 /-- An active square containing a point near a given active square is that square. -/
 theorem IsValid.eq_of_dist_le (hS : S.IsValid) {Q Q' : ActiveSquare} (hQ : Q ∈ S.squares)
     (hQ' : Q' ∈ S.squares) {a p : ℝ × ℝ} (ha : a ∈ box Q.corner S.side)
     (hp : p ∈ box Q'.corner S.side) (hpa : dist p a ≤ 10 * S.side) : Q' = Q := by
   by_contra hne
-  have := pairwise_rel_of_ne (fun _ _ h ↦ h.symm) hS.separated hQ' hQ hne p hp a ha
+  have := hS.separated.forall hQ' hQ hne p hp a ha
   linarith
 
 theorem tile_subset_box {col : Colouring} {Q : ActiveSquare} {u t : ℝ} {f : Fin 2} :
@@ -118,9 +111,8 @@ Source: Lemma 3.2, `02-information.tex`, lines 184–186. -/
 theorem IsValid.next_colour_of_mem_tile (hS : S.IsValid) {Q : ActiveSquare}
     (hQ : Q ∈ S.squares) {f : Fin 2} {p : ℝ × ℝ}
     (hp : p ∈ tile S.colour Q S.side (S.side ^ γ) f) : (S.next γ).colour p = some f := by
-  have hf : f = 0 ∨ f = 1 := by fin_cases f <;> simp
   simp only [next]
-  rcases hf with rfl | rfl
+  obtain rfl | rfl : f = 0 ∨ f = 1 := by omega
   · have h1 : ¬∃ Q' ∈ S.squares, p ∈ tile S.colour Q' S.side (S.side ^ γ) 1 := by
       rintro ⟨Q', hQ', hp'⟩
       obtain rfl := hS.eq_of_dist_le hQ hQ' hp.1 hp'.1 (by
@@ -167,8 +159,7 @@ theorem IsValid.next_colour_eq_localNext (hS : S.IsValid) {Q : ActiveSquare}
     · rw [ite_eq_right h0]
       refine next_colour_of_forall_not_mem_tile fun Q' hQ' f hp ↦ ?_
       obtain rfl := hS.eq_of_dist_le hQ hQ' ha hp.1 hpa
-      have hf : f = 0 ∨ f = 1 := by fin_cases f <;> simp
-      rcases hf with rfl | rfl
+      obtain rfl | rfl : f = 0 ∨ f = 1 := by omega
       · exact h0 hp
       · exact h1 hp
 
@@ -192,7 +183,7 @@ theorem IsValid.next (hS : S.IsValid) (hlarge : 1000 * S.side ^ γ ≤ S.side) :
     (S.next γ).IsValid := by
   set u := S.side with hu
   set t := u ^ γ with htdef
-  have ht : 0 < t := Real.rpow_pos_of_pos hS.side_pos γ
+  have ht : 0 < t := hS.rpow_side_pos γ
   have hside : (S.next γ).side = 8 * t := rfl
   refine ⟨by rw [hside]; positivity, ?_, ?_, ?_⟩
   · change (S.squares.flatMap fun Q ↦ children Q u t).Pairwise (AreSeparated (8 * t))
