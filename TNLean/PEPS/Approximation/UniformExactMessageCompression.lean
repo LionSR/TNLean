@@ -93,7 +93,7 @@ theorem exists_uniform_exact_message_sampled_network
               ((L : ℝ) ^ (n + ⌈(t : ℝ)⌉₊ + ⌈16 * countC⌉₊))⁻¹ G := by
             simpa only [Nat.ceil_natCast] using happrox
           simpa only [Real.rpow_neg (by linarith : 0 ≤ (L : ℝ)), Real.rpow_natCast] using
-            w.isGateApproximation_budget_of_power_bound (L : ℝ) countC (t : ℝ)
+            w.isGateApproximation_budget_of_power_bound G (L : ℝ) countC (t : ℝ)
               w.expandedGateCount n (by assumption) (by dsimp [countC]; linarith) hNre hprecision
         let W := w.rescaledOriginal (sourceGateBudget_pos (half_pos hε) _).le G hbudget
         let hbW := w.isExpansionBounded_rescaledOriginal
