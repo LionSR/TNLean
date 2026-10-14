@@ -207,6 +207,19 @@ private theorem selectedPreparedWordComparison_of_word_heq {Q : Type}
   apply eq_of_heq
   exact hProjection.trans hTarget.symm
 
+/-- A selected word comparison is preserved when its original word is
+replaced by an equal constructed word, with the source-free proof retained.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
+246–267, 351–434 and 565–588. -/
+private theorem preparedWordEvalComparison_restrict_of_word_eq {Q R : Type}
+    {a b : Layout Q} {c d : Layout R} (s : Q → Bool)
+    (u u' : Word a b) (hu : u.sources = []) (hu' : u'.sources = [])
+    (v : Word c d) (h : u = u')
+    (hComparison : preparedWordEvalComparison (u'.restrict s hu') v) :
+    preparedWordEvalComparison (u.restrict s hu) v := by
+  cases h
+  exact hComparison
+
 /-- Equal source-free words remain equal after selection and owner transport,
 under a prescribed identification of their retained register lists.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
@@ -442,13 +455,26 @@ private theorem selectedPreparedProjectionComparison_of_original_labels {a b : L
       (((partialResidual A w χ).restrict sa
         (sources_partialResidual A w χ)).mapOwner lift) :=
     preparedWordEvalComparison_partialResidual w p ξ
-  exact preparedWordEvalComparison_comp sq sa lift
-    (w.sourcePrivatePreparation ψ) (partialResidual (fun _ : P ↦ true) w ξ)
-    Pa (partialResidual A w χ)
-    (sources_sourcePrivatePreparation w ψ)
-    (sources_partialResidual (fun _ : P ↦ true) w ξ)
-    hsPa (sources_partialResidual A w χ) hsVa
-    hLayouts.1 hLayouts.2.1 hLayouts.2.2 hPrep hResidual
+  have hRaw : preparedWordEvalComparison
+      (((w.sourcePrivatePreparation ψ).comp
+        (partialResidual (fun _ : P ↦ true) w ξ)).restrict sq
+          (by simp only [Word.sources, sources_partialResidual,
+            sources_sourcePrivatePreparation, List.nil_append]))
+      ((Va.restrict sa hsVa).mapOwner lift) := by
+    exact preparedWordEvalComparison_comp sq sa lift
+      (w.sourcePrivatePreparation ψ) (partialResidual (fun _ : P ↦ true) w ξ)
+      Pa (partialResidual A w χ)
+      (sources_sourcePrivatePreparation w ψ)
+      (sources_partialResidual (fun _ : P ↦ true) w ξ)
+      hsPa (sources_partialResidual A w χ) hsVa
+      hLayouts.1 hLayouts.2.1 hLayouts.2.2 hPrep hResidual
+  exact preparedWordEvalComparison_restrict_of_word_eq sq
+    (w.partialSourceWord ψ ξ)
+    ((w.sourcePrivatePreparation ψ).comp (partialResidual (fun _ : P ↦ true) w ξ))
+    (sources_partialSourceWord w ψ ξ)
+    (by simp only [Word.sources, sources_partialResidual,
+      sources_sourcePrivatePreparation, List.nil_append])
+    ((Va.restrict sa hsVa).mapOwner lift) rfl hRaw
 
 /-- Compare the original prepared word with its incident-label word, with
 all original source and output data fixed before the comparison is proved.
