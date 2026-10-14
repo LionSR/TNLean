@@ -419,30 +419,11 @@ private theorem selectedPreparedProjectionComparison_of_original_labels {a b : L
     selectedPreparedProjectionComparison w p ψ ξ := by
   unfold selectedPreparedProjectionComparison
   classical
-  let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
-    (affectedOwner (fun _ : P ↦ true) t)
-  let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
-    (decide_eq_true rfl)
-  let q : Option {t : P // A t = true} := some ⟨p, hp⟩
-  let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
-  let lift : Option {t : P // A t = true} → Option {_p : P // true = true} :=
-    fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
+  intro A hp q qp lift S χ Pa hsPa Va hsVa
   let all := affectedOwner (fun _ : P ↦ true)
   let fa := affectedOwner A
   let sq := partySelector qp
   let sa := partySelector q
-  let χ := projectAllChoices A w ξ
-  let S := SourceInventory.slotLayout (partialSlots A w)
-    (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).1))
-    (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).2))
-  let Pa : Word (S ++ []) (S ++ Layout.mapOwner fa a) :=
-    Word.frameList S (ψ.prepare.mapOwner fa)
-  have hsPa : Pa.sources = [] := by
-    simp only [Pa, Word.sources_frameList, Word.sources_mapOwner, ψ.sources_prepare,
-      SourceInventory.mapOwner_nil]
-  let Va := Pa.comp (partialResidual A w χ)
-  have hsVa : Va.sources = [] := by
-    simp only [Va, Word.sources, sources_partialResidual, hsPa, List.nil_append]
   have hLayouts :
       (Layout.restrict sq (w.allResidualSourceLayout ++ []) =
         Layout.mapOwner lift (Layout.restrict sa (S ++ []))) ∧
