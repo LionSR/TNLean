@@ -117,12 +117,12 @@ generation has at most $9^j$ marks. The following estimates concern these
 iterated scales only; they do not construct the replacements.
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 668--675.
-\begin{lemma}[Depth of a repair branch]
-    \label{lem:area_law_repair_depth}
+\begin{theorem}[Depth of a repair branch]
+    \label{thm:area_law_repair_depth}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairHalfSide_pos,
         TNLean.PEPS.AreaLaw.Geometry.log_repairHalfSide_le,
         TNLean.PEPS.AreaLaw.Geometry.log_repairHalfSide_iterate_le,
-        TNLean.PEPS.AreaLaw.Geometry.exists_repairDepth_bound}
+        TNLean.PEPS.AreaLaw.Geometry.exists_repair_depth_bound}
     \leanok
     \uses{def:area_law_repair_square}
     For every $S>0$ and $j\ge0$,
@@ -135,14 +135,14 @@ iterated scales only; they do not construct the replacements.
     \begin{align}
         j & \le C+C\log\log\bigl(e^{e}+S\bigr).
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:area_law_repair_margins}
     The half-side $d(S)$ is a power of two and $d(S)\le S^{\rho_0}$, so
     $\log d(S)\le\rho_0\log S$. Induction on $j$ gives
-    \eqref{eq:area_law_repair_depth_log}. If $d^{j}(S)\ge S_*$, then
+    (\ref{eq:area_law_repair_depth_log}). If $d^{j}(S)\ge S_*$, then
     $0<\log S_*\le\rho_0^{j}\log S$, so $\log S>0$. Taking logarithms,
     \begin{align}
         j\log(1/\rho_0) & \le\log\log S-\log\log S_*.
@@ -154,10 +154,10 @@ iterated scales only; they do not construct the replacements.
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 676--686,
 % geometry:descendant-count.
-\begin{lemma}[Descendant count of an initial mark]
-    \label{lem:area_law_repair_descendant_count}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_repairDescendantCount_bound,
-        TNLean.PEPS.AreaLaw.Geometry.exists_repairDescendantCount_layer_bound}
+\begin{theorem}[Descendant count of an initial mark]
+    \label{thm:area_law_repair_descendant_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_repair_descendant_count_bound,
+        TNLean.PEPS.AreaLaw.Geometry.exists_repair_descendant_count_layer_bound}
     \leanok
     \uses{def:area_law_repair_square}
     For every $S_*>1$ there is a constant $C>0$ such that, for every $S>0$
@@ -168,11 +168,11 @@ iterated scales only; they do not construct the replacements.
     For every $M>0$ there is moreover a constant $C>0$, depending only on
     $S_*$ and $M$, such that the same sum is at most $C(k+1)^{C}$ whenever
     $S\le M2^{k}$ for a nonnegative integer $k$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{lem:area_law_repair_depth}
+    \uses{thm:area_law_repair_depth}
     The sum is at most $9^{m+1}$. The depth bound gives
     $m+1\le C_1+1+C_1\log\ell$ with $\ell=\log(e^{e}+S)$, so
     $9^{m+1}\le9^{C_1+1}\ell^{p}$ with $p=C_1\log9$. The hypothesis forces
@@ -185,16 +185,16 @@ iterated scales only; they do not construct the replacements.
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 761--768,
 % geometry:fine-clearance.
-\begin{lemma}[Fine clearance threshold]
-    \label{lem:area_law_fine_clearance}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.eventually_fineClearance}
+\begin{theorem}[Fine clearance threshold]
+    \label{thm:area_law_fine_clearance}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.eventually_fine_clearance}
     \leanok
     Let $c_1>0$ and $C_B\ge0$. Every sufficiently large real number $u$
     satisfies
     \begin{align}
         c_1u^{\rho_0} & >2\lceil C_Bu\rceil^{\beta}.
     \end{align}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok

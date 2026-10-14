@@ -29,10 +29,10 @@ construct the repairs or verify the isolated-star induction.
 ## Main statements
 
 * `log_repairHalfSide_iterate_le`: `log d^[j] S ≤ ρ₀ ^ j log S`.
-* `exists_repairDepth_bound`: the depth bound `j ≤ C + C log log (e^e + S)`.
-* `exists_repairDescendantCount_bound`: `geometry:descendant-count`.
-* `exists_repairDescendantCount_layer_bound`: the layer form `C (k + 1) ^ C`.
-* `eventually_fineClearance`: `geometry:fine-clearance`.
+* `exists_repair_depth_bound`: the depth bound `j ≤ C + C log log (e^e + S)`.
+* `exists_repair_descendant_count_bound`: `geometry:descendant-count`.
+* `exists_repair_descendant_count_layer_bound`: the layer form `C (k + 1) ^ C`.
+* `eventually_fine_clearance`: `geometry:fine-clearance`.
 
 ## References
 
@@ -114,7 +114,7 @@ private theorem one_le_log_log_exp_exp_add {S : ℝ} (hS : 0 ≤ S) :
 generation `j` whose scale `d^[j] S` is at least `S_*` satisfies
 `j ≤ C + C log log (e^e + S)`.
 Source: Section 11, `10-geometry.tex`, lines 670–675. -/
-theorem exists_repairDepth_bound {Sstar : ℝ} (hSstar : 1 < Sstar) :
+theorem exists_repair_depth_bound {Sstar : ℝ} (hSstar : 1 < Sstar) :
     ∃ C : ℝ, 0 < C ∧ ∀ S : ℝ, 0 < S → ∀ j : ℕ, Sstar ≤ repairHalfSide^[j] S →
       (j : ℝ) ≤ C + C * Real.log (Real.log (Real.exp (Real.exp 1) + S)) := by
   have hρ := rho_pos_lt_one
@@ -153,10 +153,10 @@ initial scale `S` and every generation `m` of its branch whose scale `d^[m] S` i
 at least `S_*`, the at most `9 ^ j` marks of each generation `j ≤ m` number in
 total at most `C (log (S + 2)) ^ C`.
 Source: Section 11, `10-geometry.tex`, lines 670–682. -/
-theorem exists_repairDescendantCount_bound {Sstar : ℝ} (hSstar : 1 < Sstar) :
+theorem exists_repair_descendant_count_bound {Sstar : ℝ} (hSstar : 1 < Sstar) :
     ∃ C : ℝ, 0 < C ∧ ∀ S : ℝ, 0 < S → ∀ m : ℕ, Sstar ≤ repairHalfSide^[m] S →
       ∑ j ∈ Finset.range (m + 1), (9 : ℝ) ^ j ≤ C * Real.log (S + 2) ^ C := by
-  obtain ⟨C₁, hC₁, hdepth⟩ := exists_repairDepth_bound hSstar
+  obtain ⟨C₁, hC₁, hdepth⟩ := exists_repair_depth_bound hSstar
   set p : ℝ := C₁ * Real.log 9 with hp_def
   have hlog9 : 0 < Real.log 9 := Real.log_pos (by norm_num)
   have hp : 0 ≤ p := by positivity
@@ -213,12 +213,12 @@ theorem exists_repairDescendantCount_bound {Sstar : ℝ} (hSstar : 1 < Sstar) :
 the descendant count of `geometry:descendant-count` is at most `C (k + 1) ^ C`,
 with `C` depending only on `S_*` and `M`.
 Source: Section 11, `10-geometry.tex`, lines 682–686. -/
-theorem exists_repairDescendantCount_layer_bound {Sstar : ℝ} (hSstar : 1 < Sstar)
+theorem exists_repair_descendant_count_layer_bound {Sstar : ℝ} (hSstar : 1 < Sstar)
     {M : ℝ} (hM : 0 < M) :
     ∃ C : ℝ, 0 < C ∧ ∀ k : ℕ, ∀ S : ℝ, 0 < S → S ≤ M * 2 ^ k →
       ∀ m : ℕ, Sstar ≤ repairHalfSide^[m] S →
         ∑ j ∈ Finset.range (m + 1), (9 : ℝ) ^ j ≤ C * ((k : ℝ) + 1) ^ C := by
-  obtain ⟨C, hC, hcount⟩ := exists_repairDescendantCount_bound hSstar
+  obtain ⟨C, hC, hcount⟩ := exists_repair_descendant_count_bound hSstar
   set A : ℝ := Real.log (M + 2) + 1 with hA_def
   have hA : 1 ≤ A := by
     have : 0 ≤ Real.log (M + 2) := Real.log_nonneg (by linarith)
@@ -259,7 +259,7 @@ theorem exists_repairDescendantCount_layer_bound {Sstar : ℝ} (hSstar : 1 < Sst
 and `C_B ≥ 0`, every sufficiently large `u` satisfies
 `2 ⌈C_B u⌉ ^ β < c₁ u ^ ρ₀`. This is possible because `ρ₀ > β`.
 Source: Section 11, `10-geometry.tex`, lines 761–768. -/
-theorem eventually_fineClearance {c₁ CB : ℝ} (hc₁ : 0 < c₁) (hCB : 0 ≤ CB) :
+theorem eventually_fine_clearance {c₁ CB : ℝ} (hc₁ : 0 < c₁) (hCB : 0 ≤ CB) :
     ∀ᶠ u : ℝ in atTop,
       2 * (⌈CB * u⌉₊ : ℝ) ^ (Exponents.beta : ℝ) < c₁ * u ^ (Exponents.rho : ℝ) := by
   have hβ : 0 < (Exponents.beta : ℝ) := by
