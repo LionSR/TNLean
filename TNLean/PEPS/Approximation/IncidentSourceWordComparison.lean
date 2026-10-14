@@ -184,8 +184,10 @@ private theorem preparedWordEvalComparison_comp {Q R : Type}
     (hi : Layout.restrict sq a = Layout.mapOwner lift (Layout.restrict sa d))
     (hm : Layout.restrict sq b = Layout.mapOwner lift (Layout.restrict sa e))
     (ho : Layout.restrict sq c = Layout.mapOwner lift (Layout.restrict sa f))
-    (hPrep : HEq (u.restrict sq hu).eval ((x.restrict sa hx).mapOwner lift).eval)
-    (hResidual : HEq (v.restrict sq hv).eval ((y.restrict sa hy).mapOwner lift).eval) :
+    (hPrep : preparedWordEvalComparison
+      (u.restrict sq hu) ((x.restrict sa hx).mapOwner lift))
+    (hResidual : preparedWordEvalComparison
+      (v.restrict sq hv) ((y.restrict sa hy).mapOwner lift)) :
     preparedWordEvalComparison
       ((u.comp v).restrict sq (by simp only [Word.sources, hv, hu, List.nil_append]))
       (((x.comp y).restrict sa hxy).mapOwner lift) := by
