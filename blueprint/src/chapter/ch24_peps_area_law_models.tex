@@ -1083,7 +1083,7 @@ prove these steps; the information inequality itself is not proved here.
     \lean{FiniteProduct.abs_mutualInformation_sub_le_of_traceDistance,
         FiniteProduct.mutualInformation_le_add_of_traceDistance_le_rpow}
     \leanok
-    \uses{lem:al_amp_pure_trace_distance}
+    \uses{def:area_law_ground_entropy}
     Let $\Omega,\widetilde\Omega$ be unit vectors at trace distance $\delta$, and
     let $X,J$ be disjoint. Then
     \begin{align*}
@@ -1097,6 +1097,7 @@ prove these steps; the information inequality itself is not proved here.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{lem:al_amp_pure_trace_distance}
     Apply \cite[Lemma~2.1]{OpenAI2026AreaLaw} to the joint reductions on
     $X\cup J$, whose trace distance is at most $\delta$ by
     Lemma~\ref{lem:al_amp_pure_trace_distance}. Then
