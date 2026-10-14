@@ -29,6 +29,9 @@ import TNLean.PEPS.AreaLaw.Scan.ActualRoundEntropy
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundParameterIntegral
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport
 import TNLean.PEPS.AreaLaw.Scan.ActualScanMeasures
+import TNLean.PEPS.AreaLaw.Scan.ActualSharpLower
+import TNLean.PEPS.AreaLaw.Scan.ActualSharpLowerPrevector
+import TNLean.PEPS.AreaLaw.Scan.ActualSharpLowerRemainder
 import TNLean.PEPS.AreaLaw.Scan.ActualSharpPrevector
 import TNLean.PEPS.AreaLaw.Scan.ActualSharpUpper
 import TNLean.PEPS.AreaLaw.Scan.ActualTerminalPartitions
