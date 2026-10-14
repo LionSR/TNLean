@@ -60,46 +60,6 @@ variable (w : SourceCircuit a b) (k : ℕ)
   (F : ∀ e : sourceLocations w, branchLabels w e.1 →
     Matrix (Fin (sourceDims w e).2) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
 
-/-- The actual restricted endpoint comparison, stated before the sampled
-operators and the common incident register list are specialized in its proof.
-The two original branch choices and the source samples are unchanged.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–355,
-409–434 and 565–588. -/
-private def sampledEndpointIncidentComparison
-    (p : P) (ξ ζ : Choices (fun _ : P ↦ true) w)
-    (j : w.sourceLocations → Fin k) (ω : SourceGaussianSamples w k) : Prop :=
-    Word.IsEvalComparison
-      ((sampledEndpointWord w k lam E F ξ ζ j ω).restrict
-        (partySelector (some ⟨p, rfl⟩))
-        (sources_sampledEndpointWord w k lam E F ξ ζ j ω))
-      (incidentSampledEndpointWord w k lam E F p
-        (originalGateLabelsAtOfAllChoices w p ξ)
-        (originalGateLabelsAtOfAllChoices w p ζ)
-        (fun i ↦ j (partialSlotEquiv
-          (fun t ↦ partySelector (some ⟨p, rfl⟩)
-            (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω)
-
-/-- The two sampled words are compared through their independently identified
-common selected endpoint operator. Source: polynomial-PEPS Theorem 5.2,
-`04-compression.tex`, lines 279–355, 409–434 and 565–588. -/
-private theorem sampledEndpointIncidentComparison_of_original_labels
-    (p : P) (ξ ζ : Choices (fun _ : P ↦ true) w)
-    (j : w.sourceLocations → Fin k) (ω : SourceGaussianSamples w k) :
-    sampledEndpointIncidentComparison w k lam E F p ξ ζ j ω :=
-  isEvalComparison_restrict_of_endpoint_data w p
-    (sampledEndpointOperatorLeft w k lam E ξ ζ j ω)
-    (sampledEndpointOperatorRight w k lam F ξ ζ j ω)
-    (sampledEndpointWord w k lam E F ξ ζ j ω)
-    (sources_sampledEndpointWord w k lam E F ξ ζ j ω)
-    (incidentSampledEndpointWord w k lam E F p
-      (originalGateLabelsAtOfAllChoices w p ξ)
-      (originalGateLabelsAtOfAllChoices w p ζ)
-      (fun i ↦ j (partialSlotEquiv
-        (fun t ↦ partySelector (some ⟨p, rfl⟩)
-          (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω)
-    (sampledEndpointWord_eq_endpointWord w k lam E F ξ ζ j ω)
-    (incidentSampledEndpointWord_eval_heq_selectedRegisterWord w k lam E F p ξ ζ j ω)
-
 /-- Restricting the sampled endpoint operators gives the word constructed
 from the incident labels. The input-layout identification is compared
 separately, so this proof concerns only original endpoint operators.
@@ -117,7 +77,19 @@ theorem restrict_sampledEndpointWord_eval_heq_incidentSampledEndpointWord
         (fun i ↦ j (partialSlotEquiv
           (fun t ↦ partySelector (some ⟨p, rfl⟩)
             (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω).eval := by
-  exact sampledEndpointIncidentComparison_of_original_labels w k lam E F p ξ ζ j ω
+  exact isEvalComparison_restrict_of_endpoint_data w p
+    (sampledEndpointOperatorLeft w k lam E ξ ζ j ω)
+    (sampledEndpointOperatorRight w k lam F ξ ζ j ω)
+    (sampledEndpointWord w k lam E F ξ ζ j ω)
+    (sources_sampledEndpointWord w k lam E F ξ ζ j ω)
+    (incidentSampledEndpointWord w k lam E F p
+      (originalGateLabelsAtOfAllChoices w p ξ)
+      (originalGateLabelsAtOfAllChoices w p ζ)
+      (fun i ↦ j (partialSlotEquiv
+        (fun t ↦ partySelector (some ⟨p, rfl⟩)
+          (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω)
+    (sampledEndpointWord_eq_endpointWord w k lam E F ξ ζ j ω)
+    (incidentSampledEndpointWord_eval_heq_selectedRegisterWord w k lam E F p ξ ζ j ω)
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect
