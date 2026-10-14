@@ -155,7 +155,10 @@ theorem isGateApproximation_expandMessageGateLists {a b : Layout P}
   | gate owner L tail =>
       intro lists G h
       exact ⟨h.1, lists.isAllowed_expand h.2.1, h.2.2.1,
-        (by rw [lists.eval_expand]; exact h.2.2.2)⟩
+        (by
+          change ‖PairEffect.gate (toGate lists.expand) - G‖ ≤ δ
+          rw [lists.eval_expand]
+          exact h.2.2.2)⟩
   | swap => intro lists G h; trivial
   | frame r w ih => intro lists G h; exact ih lists G h
 

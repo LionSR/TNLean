@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.DistributedConstructionData
 import TNLean.PEPS.Approximation.GateReexpansion
+import TNLean.PEPS.Approximation.ApproximateCircuitDensity
 
 /-!
 # An original distributed construction with prescribed gate operators

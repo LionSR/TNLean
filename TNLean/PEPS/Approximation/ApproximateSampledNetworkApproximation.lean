@@ -36,7 +36,7 @@ variable {P : Type} [Fintype P]
 
 /-- The coordinates of an arbitrary selected memory are indexed by its dimension.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 17–19 and 409–434. -/
-private def partyMemoryCoordinateIndex {Q : Type} (q : Q) (ℓ : Layout Q) : Type :=
+private abbrev partyMemoryCoordinateIndex {Q : Type} (q : Q) (ℓ : Layout Q) : Type :=
   Fin (Module.finrank ℂ (Mem (Layout.atParty q ℓ)))
 
 /-- The incident physical factor in the canonical coordinates of an arbitrary
