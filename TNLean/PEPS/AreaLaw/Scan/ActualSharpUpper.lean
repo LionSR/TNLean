@@ -244,6 +244,101 @@ private theorem sharpUpper_augmented_symmetricCoordinates
   exact ⟨hZO, hZOZO⟩
 
 open Classical in
+/-- Identify the actual filtered norm with the compressed quarter-power norm.
+This matrix identity retains the root, supplied prevector and terminal tree;
+no entropy estimate or scalar rate bound enters.
+Source: `06-transport.tex`, lines 251–286 and 388–392;
+`07-comparators.tex`, lines 383–418; `08-scanner.tex`, lines 416–474,
+revision adc7f124. -/
+private theorem actualRoot_sharpUpper_normSq
+    {q d : ℕ} [NeZero q] [NeZero d] {I : Type} [Fintype I] [LinearOrder I]
+    {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I)
+    (X : Finset (Site Λ)) (a : ℝ) (ha : 0 < a)
+    (Ωt : EuclideanSpace ℂ (Site Λ → Fin q))
+    (k : ℕ) (ell : IrrepLabel (Equiv.Perm (Fin k)))
+    (N : ℕ)
+    (ZS : Matrix (Config k (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q
+      (fun _ ↦ d) v))) (Fin N) ℂ)
+    (hZS : ZSᴴ * ZS = 1)
+    (hZSZS : ZS * ZSᴴ = symProj (copyPerm ((v : Site Λ ⊕ Bool) →
+      Fin (augmentedDimensions (V := Site Λ) q (fun _ ↦ d) v)) k)) :
+    let β := fun _ : Site Λ ↦ Fin q
+    let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+    let pre := replicaPrevector Ωt d k ell ∘ augmentedSumReplicaCopiesEquiv q d k
+    let σ := terminalPartition S (S.n * S.m)
+    let U := fun j g ↦ positiveNear S.depth (σ j g)
+    let Y := fun j g ↦ middle (σ j g)
+    let e := augmentedReplicaConfigurationEquiv (V := Site Λ) q d k
+    let ZO := ZS.submatrix e (id : Fin N → Fin N)
+    (∀ j g, U j g ∪ Y j g = positiveNearMiddle S.depth (σ j g)) →
+    (∀ j g, Disjoint X (U j g ∪ Y j g)) →
+    (∀ j g,
+      receiving (σ j g) false = X ∪ positiveNear S.depth (σ j g) ∧
+      receiving (σ j g) false ∪ middle (σ j g) =
+        X ∪ positiveNearMiddle S.depth (σ j g) ∧
+      receiving (σ j g) true = (X ∪ positiveNearMiddle S.depth (σ j g))ᶜ) →
+    ∀ {Hist : Type} [DecidableEq Hist] {Choice : Hist → Type}
+      [∀ h, DecidableEq (Choice h)]
+      (D : ReplicaTransport.TransportData (Site Λ ⊕ Bool) S.K Hist Choice)
+      (hD : D.IsAdmissible) (hcomm : D.CrossBandCommute n (a / 2) k)
+      (f : (Σ h, Option (Choice h)) → terminalFamily S.K S.m S.M (S.n * S.m))
+      (hparts : ∀ j g, D.leafPart j g = augmentedPartition (σ (f j) g)) (p : ℝ),
+      let tree := (D.tree (Set.projIcc (0 : ℝ) 1 zero_le_one p)).map f
+      let v : EuclideanSpace ℂ (Config k
+        (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d))) := WithLp.toLp 2
+          (replicaPrevector Ωt d k ell ∘ globalReplicaCopiesEquiv β (Fin d) (Fin d) k)
+      let W := replicaMetric (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)) (a / 2) k
+      let Q := fun j g ↦ insert (some none)
+        ((X ∪ U j g).image fun x ↦ some (some x))
+      let F := fun j g ↦ insert none
+        (((X ∪ (U j g ∪ Y j g))ᶜ).image fun x ↦ some (some x))
+      let ext := fun B : Finset (Site Λ) ↦ (B \ X).image fun x ↦ some (some x)
+      let A := fun j g ↦ ((W (Q j g))⁻¹ * (W (F j g))⁻¹ * W (ext (Y j g))) ^ 2
+      let M := (List.ofFn fun g ↦ tree.eval (fun j ↦ ZOᴴ * A j g * ZO)).prod
+      Transport.filteredNormSq (D.rootPath n (a / 2) k p) pre =
+        ‖toEuclideanLin (M ^ (-(1 / 4 : ℝ))) (toEuclideanLin ZOᴴ v)‖ ^ 2 := by
+  classical
+  intro β n pre σ U Y e ZO hUYeq hXY hregions
+    Hist instHist Choice instChoice D hD hcomm f hparts p tree v W Q F ext A M
+  have hsym : symProj (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre = pre :=
+    symProj_mulVec_augmentedReplicaPrevector q d k Ωt ell
+  have hpre : pre ∘ e = replicaPrevector Ωt d k ell ∘
+      globalReplicaCopiesEquiv β (Fin d) (Fin d) k := by
+    simp only [pre, augmentedSumReplicaCopiesEquiv, Equiv.coe_trans,
+      Function.comp_assoc, e, Equiv.symm_comp_self, Function.comp_id, β]
+  have hroot := (rootPath_augmented_compressed_bandProduct q d D hD
+    (div_pos ha zero_lt_two).le k N hcomm ZS hZS hZSZS pre hsym p).2.2.2.1
+  have hP (j : Σ h, Option (Choice h)) (g : Fin S.K) :
+      (D.leafPart j g).P.image augmentedSiteEquiv.symm =
+        insert (some none) ((X ∪ U (f j) g).image (fun x ↦ some (some x))) := by
+    rw [hparts, augmentedPartition_eq_images]
+    simp only [Finset.image_insert, Finset.image_image]
+    change insert (some none)
+      ((receiving (σ (f j) g) false).image (fun x ↦ some (some x))) = _
+    rw [(hregions (f j) g).1]
+  have hF (j : Σ h, Option (Choice h)) (g : Fin S.K) :
+      (D.leafPart j g).F.image augmentedSiteEquiv.symm =
+        insert none (((X ∪ (U (f j) g ∪ Y (f j) g))ᶜ).image
+          (fun x ↦ some (some x))) := by
+    rw [hparts, augmentedPartition_eq_images]
+    simp only [Finset.image_insert, Finset.image_image]
+    change insert none
+      ((receiving (σ (f j) g) true).image (fun x ↦ some (some x))) = _
+    rw [(hregions (f j) g).2.2, ← hUYeq (f j) g]
+  have hY (j : Σ h, Option (Choice h)) (g : Fin S.K) :
+      (D.leafPart j g).Y.image augmentedSiteEquiv.symm =
+        ((Y (f j) g \ X).image (fun x ↦ some (some x))) := by
+    rw [hparts, augmentedPartition_eq_images]
+    simp only [Finset.image_image]
+    change (middle (σ (f j) g)).image (fun x ↦ some (some x)) = _
+    rw [Finset.sdiff_eq_self_of_disjoint
+      (Finset.disjoint_union_right.mp (hXY (f j) g)).2.symm]
+  simp only [e] at hpre
+  simpa only [M, tree, Matrix.MeanTree.eval_map, A, W, Q, F, ext, v,
+    hP, hF, hY, hpre, Matrix.toEuclideanLin, Matrix.toLpLin_apply,
+    WithLp.ofLp_toLp, ZO, e, β] using! hroot
+
+open Classical in
 /-- Transport a quarter-power compressed sharp comparison to the same actual
 root, preserving its terminal weights, prevector and interpolation parameter.
 Source: `06-transport.tex`, lines 251–286 and 388–392;
@@ -316,52 +411,133 @@ private theorem actualRoot_sharpUpper_of_compressed
   classical
   intro β n pre σ U Y e ZO hUYeq hXY hregions hupper
     Hist instHist Choice instChoice D hD hcomm f hparts p Nsq tree gpost
-  let p₀ := Set.projIcc (0 : ℝ) 1 zero_le_one p
-  have hsym : symProj (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre = pre :=
-    symProj_mulVec_augmentedReplicaPrevector q d k Ωt ell
-  have hpre : pre ∘ e = replicaPrevector Ωt d k ell ∘
-      globalReplicaCopiesEquiv β (Fin d) (Fin d) k := by
-    simp only [pre, augmentedSumReplicaCopiesEquiv, Equiv.coe_trans,
-      Function.comp_assoc, e, Equiv.symm_comp_self, Function.comp_id, β]
-  have hroot := (rootPath_augmented_compressed_bandProduct q d D hD
-    (div_pos ha zero_lt_two).le k N hcomm ZS hZS hZSZS pre hsym p).2.2.2.1
-  have hestimate := hupper ((D.tree p₀).map f)
-  have hP (j : Σ h, Option (Choice h)) (g : Fin S.K) :
-      (D.leafPart j g).P.image augmentedSiteEquiv.symm =
-        insert (some none) ((X ∪ U (f j) g).image (fun x ↦ some (some x))) := by
-    rw [hparts, augmentedPartition_eq_images]
-    simp only [Finset.image_insert, Finset.image_image]
-    change insert (some none)
-      ((receiving (σ (f j) g) false).image (fun x ↦ some (some x))) = _
-    rw [(hregions (f j) g).1]
-  have hF (j : Σ h, Option (Choice h)) (g : Fin S.K) :
-      (D.leafPart j g).F.image augmentedSiteEquiv.symm =
-        insert none (((X ∪ (U (f j) g ∪ Y (f j) g))ᶜ).image
-          (fun x ↦ some (some x))) := by
-    rw [hparts, augmentedPartition_eq_images]
-    simp only [Finset.image_insert, Finset.image_image]
-    change insert none
-      ((receiving (σ (f j) g) true).image (fun x ↦ some (some x))) = _
-    rw [(hregions (f j) g).2.2, ← hUYeq (f j) g]
-  have hY (j : Σ h, Option (Choice h)) (g : Fin S.K) :
-      (D.leafPart j g).Y.image augmentedSiteEquiv.symm =
-        ((Y (f j) g \ X).image (fun x ↦ some (some x))) := by
-    rw [hparts, augmentedPartition_eq_images]
-    simp only [Finset.image_image]
-    change (middle (σ (f j) g)).image (fun x ↦ some (some x)) = _
-    rw [Finset.sdiff_eq_self_of_disjoint
-      (Finset.disjoint_union_right.mp (hXY (f j) g)).2.symm]
+  have hnorm := actualRoot_sharpUpper_normSq (q := q) (d := d) S X a ha Ωt
+    k ell N ZS hZS hZSZS hUYeq hXY hregions D hD hcomm f hparts p
   have hcoef : 2 * (1 / 4 : ℝ) * a = a / 2 := by ring
   have hquad : 24 * (1 / 4 : ℝ) * (S.K : ℝ) * Kmom * a ^ 2 =
       6 * (S.K : ℝ) * Kmom * a ^ 2 := by ring
   have hmasscoef : 2 * (1 / 4 : ℝ) * (S.K : ℝ) = (S.K : ℝ) / 2 := by ring
-  dsimp only [Nsq]
-  rw [hroot]
-  simp only [Matrix.MeanTree.eval_map] at hestimate
-  simp only [e] at hpre
-  simpa only [hP, hF, hY, hpre, Matrix.toEuclideanLin, Matrix.toLpLin_apply,
-    WithLp.ofLp_toLp, hcoef, hquad, hmasscoef, ZO, e, β, gpost, tree,
-    regionalEntropy_eq_finiteProduct, FiniteProduct.entropy, U, Y, p₀, hUYeq] using! hestimate
+  refine Eq.mp (congrArg (fun u : ℝ ↦ 0 < u ∧ -Real.log u / (k : ℝ) ≤
+    2 * Real.log (d : ℝ) - Real.log z +
+      (a / 2) * (∑ g, ∑ j, tree.weight j * gpost j g) +
+        6 * (S.K : ℝ) * Kmom * a ^ 2 - (S.K : ℝ) / 2 * Real.log z +
+          Real.bellOverlapRemainder d c S.K k) hnorm.symm) ?_
+  have hestimate := hupper ((D.tree (Set.projIcc (0 : ℝ) 1 zero_le_one p)).map f)
+  refine ⟨hestimate.1, hestimate.2.trans_eq ?_⟩
+  simp only [hcoef, hquad, hmasscoef, gpost, tree,
+    regionalEntropy_eq_finiteProduct, FiniteProduct.entropy, hUYeq, β]
+
+open Classical in
+/-- Apply one uniform compressed estimate at a fixed replica number to the
+actual fill and charge roots. Symmetric-coordinate selection changes neither
+the supplied label nor the physical prevector or terminal weights.
+Source: `06-transport.tex`, lines 251–286 and 388–392;
+`07-comparators.tex`, lines 383–418; `08-scanner.tex`, lines 416–474,
+revision adc7f124. -/
+private theorem actualScan_sharpUpper_of_compressed
+    {q d : ℕ} [NeZero q] [NeZero d] {I : Type} [Fintype I] [LinearOrder I]
+    {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I)
+    (hm : 0 < S.m) (hM : 0 < S.M)
+    (X : Finset (Site Λ)) (a Kmom z c : ℝ) (ha : 0 < a)
+    (Ωt : EuclideanSpace ℂ (Site Λ → Fin q))
+    (k : ℕ) (ell : IrrepLabel (Equiv.Perm (Fin k))) :
+    let β := fun _ : Site Λ ↦ Fin q
+    let n := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+    let pre := replicaPrevector Ωt d k ell ∘ augmentedSumReplicaCopiesEquiv q d k
+    let σ := terminalPartition S (S.n * S.m)
+    let U := fun j g ↦ positiveNear S.depth (σ j g)
+    let Y := fun j g ↦ middle (σ j g)
+    (∀ j g, U j g ∪ Y j g = positiveNearMiddle S.depth (σ j g)) →
+    (∀ j g, Disjoint X (U j g ∪ Y j g)) →
+    (∀ j g,
+      receiving (σ j g) false = X ∪ positiveNear S.depth (σ j g) ∧
+      receiving (σ j g) false ∪ middle (σ j g) =
+        X ∪ positiveNearMiddle S.depth (σ j g) ∧
+      receiving (σ j g) true = (X ∪ positiveNearMiddle S.depth (σ j g))ᶜ) →
+    (∀ (N : ℕ) (ZO : Matrix (Config k
+      (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d))) (Fin N) ℂ),
+      ZOᴴ * ZO = 1 →
+      ZO * ZOᴴ = symProj (copyPerm ((o : Option (Option (Site Λ))) →
+        addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d) o) k) →
+      ∀ tree : MeanTree (terminalFamily S.K S.m S.M (S.n * S.m)),
+      let v : EuclideanSpace ℂ (Config k
+        (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d))) := WithLp.toLp 2
+          (replicaPrevector Ωt d k ell ∘ globalReplicaCopiesEquiv β (Fin d) (Fin d) k)
+      let W := replicaMetric (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)) (a / 2) k
+      let Q := fun j g ↦ insert (some none)
+        ((X ∪ U j g).image fun x ↦ some (some x))
+      let F := fun j g ↦ insert none
+        (((X ∪ (U j g ∪ Y j g))ᶜ).image fun x ↦ some (some x))
+      let ext := fun B : Finset (Site Λ) ↦ (B \ X).image fun x ↦ some (some x)
+      let A := fun j g ↦ ((W (Q j g))⁻¹ * (W (F j g))⁻¹ * W (ext (Y j g))) ^ 2
+      let M := (List.ofFn fun g ↦ tree.eval (fun j ↦ ZOᴴ * A j g * ZO)).prod
+      let Nsq := ‖toEuclideanLin (M ^ (-(1 / 4 : ℝ))) (toEuclideanLin ZOᴴ v)‖ ^ 2
+      let entropy := fun Q : Finset (Site Λ) ↦ vonNeumannEntropy
+        (FiniteProduct.reducedPure β Ωt Q) (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian
+      0 < Nsq ∧ -Real.log Nsq / (k : ℝ) ≤
+        2 * Real.log (d : ℝ) - Real.log z +
+          2 * (1 / 4) * a * (∑ g, ∑ j, tree.weight j *
+            (entropy (U j g) + entropy (U j g ∪ Y j g) - entropy (Y j g))) +
+          24 * (1 / 4) * S.K * Kmom * a ^ 2 - 2 * (1 / 4) * S.K * Real.log z +
+            Real.bellOverlapRemainder d c S.K k) →
+    ∀ (s : ℕ) (hs : s + 1 ≤ S.n * S.m) (p : ℝ),
+      let p₀ := Set.projIcc (0 : ℝ) 1 zero_le_one p
+      let gpost := fun j g ↦ regionalEntropy Λ q Ωt (U j g) +
+        regionalEntropy Λ q Ωt (positiveNearMiddle S.depth (σ j g)) -
+          regionalEntropy Λ q Ωt (Y j g)
+      let bound := fun (tree : MeanTree (terminalFamily S.K S.m S.M (S.n * S.m))) ↦
+        2 * Real.log (d : ℝ) - Real.log z +
+          (a / 2) * (∑ g, ∑ j, tree.weight j * gpost j g) +
+            6 * (S.K : ℝ) * Kmom * a ^ 2 - (S.K : ℝ) / 2 * Real.log z +
+              Real.bellOverlapRemainder d c S.K k
+      let step : Fin (S.n * S.m) := ⟨s, Nat.lt_of_succ_le hs⟩
+      let Nfill := Matrix.Transport.filteredNormSq
+        ((S.actualFillData hm hM s).rootPath n (a / 2) k p) pre
+      let Ncharge := Matrix.Transport.filteredNormSq
+        ((S.actualChargeData hm hM s).rootPath n (a / 2) k p) pre
+      (0 < Nfill ∧ -Real.log Nfill / (k : ℝ) ≤
+        bound (((S.actualFillData hm hM s).tree p₀).map
+          (fillTerminalIndex S.K S.m S.M (S.n * S.m) step))) ∧
+      (0 < Ncharge ∧ -Real.log Ncharge / (k : ℝ) ≤
+        bound (((S.actualChargeData hm hM s).tree p₀).map
+          (chargeTerminalIndex S.K S.m S.M (S.n * S.m) step))) := by
+  classical
+  intro β n pre σ U Y hUYeq hXY hregions hupper s hs p p₀ gpost bound
+    step Nfill Ncharge
+  obtain ⟨N, ZS, hZS, hZSZS⟩ :=
+    (isStarProjection_symProj
+      (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k)).exists_matrix_range_isometry
+  let e := augmentedReplicaConfigurationEquiv (V := Site Λ) q d k
+  let ZO := ZS.submatrix e (id : Fin N → Fin N)
+  obtain ⟨hZO, hZOZO⟩ :=
+    sharpUpper_augmented_symmetricCoordinates q d k N ZS hZS hZSZS
+  have hu (tree : MeanTree (terminalFamily S.K S.m S.M (S.n * S.m))) :=
+    hupper N ZO hZO hZOZO tree
+  have hbound {Hist : Type} [DecidableEq Hist] {Choice : Hist → Type}
+      [∀ h, DecidableEq (Choice h)]
+      (D : ReplicaTransport.TransportData (Site Λ ⊕ Bool) S.K Hist Choice)
+      (hD : D.IsAdmissible) (hcomm : D.CrossBandCommute n (a / 2) k)
+      (f : (Σ h, Option (Choice h)) → terminalFamily S.K S.m S.M (S.n * S.m))
+      (hparts : ∀ j g, D.leafPart j g = augmentedPartition (σ (f j) g)) :
+      let Nsq := Transport.filteredNormSq (D.rootPath n (a / 2) k p) pre
+      0 < Nsq ∧ -Real.log Nsq / (k : ℝ) ≤ bound ((D.tree p₀).map f) := by
+    exact actualRoot_sharpUpper_of_compressed (q := q) (d := d) S X a Kmom z c ha Ωt
+      k ell N ZS hZS hZSZS hUYeq hXY hregions hu D hD hcomm f hparts p
+  exact
+    let r : Fin (S.n * S.m) := ⟨s, Nat.lt_of_succ_le hs⟩
+    ⟨hbound (S.actualFillData hm hM s)
+        (S.actualFillData_isAdmissible hm hM s)
+        (S.fillTransportData_crossBandCommute
+          (historyMeanTree S.K S.m S.M hm hM s) n (div_pos ha zero_lt_two).le k)
+        (fillTerminalIndex S.K S.m S.M (S.n * S.m) r)
+        (fun j g ↦ actualFillData_leafPart_terminalPartition S hm hM (S.n * S.m) r j g),
+      hbound (S.actualChargeData hm hM s)
+        (S.actualChargeData_isAdmissible hm hM s)
+        (S.chargeTransportData_crossBandCommute
+          (historyMeanTree S.K S.m S.M hm hM s)
+          (fun _ ↦ chargeChoiceTree S.K S.M hM) n (div_pos ha zero_lt_two).le k)
+        (chargeTerminalIndex S.K S.m S.M (S.n * S.m) r)
+        (fun j g ↦ actualChargeData_leafPart_terminalPartition S hm hM (S.n * S.m) r j g)⟩
 
 open Classical in
 /-- The supplied-label sharp upper estimate at every actual fill and charge
@@ -459,42 +635,17 @@ theorem eventually_actualScan_suppliedPrevector_sharp_upper
     (Finset.nonempty_iff_ne_empty.mpr fun hE ↦ by
       simp [hE, Matrix.IsHermitian.spectralRestrictionMass] at hzQ)
   let : NeZero d := ⟨Nat.ne_of_gt hd⟩
-  obtain ⟨N, ZS, hZS, hZSZS⟩ :=
-    (isStarProjection_symProj
-      (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k)).exists_matrix_range_isometry
-  let e := augmentedReplicaConfigurationEquiv (V := Site Λ) q d k
-  let ZO := ZS.submatrix e (id : Fin N → Fin N)
-  obtain ⟨hZO, hZOZO⟩ :=
-    sharpUpper_augmented_symmetricCoordinates q d k N ZS hZS hZSZS
-  have hupper (tree : MeanTree (terminalFamily S.K S.m S.M (S.n * S.m))) :=
+  have hupper (N : ℕ) (ZO : Matrix (Config k
+      (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d))) (Fin N) ℂ)
+      (hZO : ZOᴴ * ZO = 1)
+      (hZOZO : ZO * ZOᴴ = symProj (copyPerm ((o : Option (Option (Site Λ))) →
+        addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d) o) k))
+      (tree : MeanTree (terminalFamily S.K S.m S.M (S.n * S.m))) :=
     hk N ZO hZO hZOZO S.K U Y
       (fun j g ↦ (Finset.disjoint_union_right.mp (hXY j g)).1)
       (fun j g ↦ (Finset.disjoint_union_right.mp (hXY j g)).2)
       hUY hnest hmomQ tree (1 / 4) (by norm_num)
-  have hbound {Hist : Type} [DecidableEq Hist] {Choice : Hist → Type}
-      [∀ h, DecidableEq (Choice h)]
-      (D : ReplicaTransport.TransportData (Site Λ ⊕ Bool) S.K Hist Choice)
-      (hD : D.IsAdmissible) (hcomm : D.CrossBandCommute n (a / 2) k)
-      (f : (Σ h, Option (Choice h)) → terminalFamily S.K S.m S.M (S.n * S.m))
-      (hparts : ∀ j g, D.leafPart j g = augmentedPartition (σ (f j) g)) :
-      let Nsq := Transport.filteredNormSq (D.rootPath n (a / 2) k p) (pre k)
-      0 < Nsq ∧ -Real.log Nsq / (k : ℝ) ≤ bound ((D.tree p₀).map f) := by
-    exact actualRoot_sharpUpper_of_compressed (q := q) (d := d) S X a Kmom z c ha Ωt
-      k (ell k) N ZS hZS hZSZS hUYeq hXY hregions hupper D hD hcomm f hparts p
-  exact
-    let r : Fin (S.n * S.m) := ⟨s, Nat.lt_of_succ_le hs⟩
-    ⟨hbound (S.actualFillData hm hM s)
-        (S.actualFillData_isAdmissible hm hM s)
-        (S.fillTransportData_crossBandCommute
-          (historyMeanTree S.K S.m S.M hm hM s) n (div_pos ha zero_lt_two).le k)
-        (fillTerminalIndex S.K S.m S.M (S.n * S.m) r)
-        (fun j g ↦ actualFillData_leafPart_terminalPartition S hm hM (S.n * S.m) r j g),
-      hbound (S.actualChargeData hm hM s)
-        (S.actualChargeData_isAdmissible hm hM s)
-        (S.chargeTransportData_crossBandCommute
-          (historyMeanTree S.K S.m S.M hm hM s)
-          (fun _ ↦ chargeChoiceTree S.K S.M hM) n (div_pos ha zero_lt_two).le k)
-        (chargeTerminalIndex S.K S.m S.M (S.n * S.m) r)
-        (fun j g ↦ actualChargeData_leafPart_terminalPartition S hm hM (S.n * S.m) r j g)⟩
+  exact actualScan_sharpUpper_of_compressed (q := q) (d := d) S hm hM X a Kmom z c ha Ωt
+    k (ell k) hUYeq hXY hregions hupper s hs p
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan
