@@ -1,0 +1,245 @@
+% Figure polypeps_exchange_swaps.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP App. E 2 (proof of Lemma 7, two-sheet exchange: the net
+% map), unnumbered stacked display.
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/05-frames.tex:510-528
+% (proof of Lemma 6.6, first equality of eq. (6.18) exchange-net-map).
+% Formula: D_U F_A F_{Y cap Lambda} = D_U F_A F_A F_T = D_U F_T, since
+% Y cap Lambda = T disjoint-union A (so F_{Y cap Lambda} = F_A F_T, two commuting
+% swaps on disjoint sets) and F_A F_A = id; here A = Y cap U, F_X swaps the two
+% raw sheets on X, and D_U = (V (x) V)^dagger F_{B_T} (V (x) V) acts on the two
+% copies of U.  One fact per equality: the first joiner carries
+% Y cap Lambda = T disjoint-union A, the second F_A^2 = 1.
+% Ink-to-index: eight wires, interleaved by sheet: T^(1), T^(2), A^(1), A^(2),
+% (U\A)^(1), (U\A)^(2), E^(1), E^(2) (superscript = sheet; copies are told
+% apart by position only, sheet 1 is the upper wire of each pair; the note's
+% lead-in says so once).  West brackets on the first panel name each pair
+% (T, A, U\A, E) from an empty first column, west of the open legs; the A
+% bracket is selected (red), as A is the set the statement is about.  A
+% crossing of a pair of wires is the swap of the two sheets on that set; the
+% A crossings are selected (red: the swaps that cancel), the T crossings are
+% black.  Invisible (skin=none) vertices only hold wire ends; the crossings
+% carry no braiding.  D_U is a box on both copies of U = A u (U\A), two
+% columns wide with its name inscribed; the column headers name the swaps;
+% the joiners raise their facts over the axis with \vphantom{\big|}.  Action
+% runs right to left: panel 1 F_{Y cap Lambda} (crossings on T and A), then F_A
+% (crossing on A), then D_U; panel 2 F_T (crossing on T), then the two
+% adjacent F_A crossings, then D_U; panel 3 F_T (crossing on T), then D_U.
+% Boundary signature: (phys:w) x8 | (phys:e) x8 in every panel, same order.
+% The second equality of (6.18), D_U F_T = (Vhat (x) Vhat)^dagger F_{T B_T}
+% (Vhat (x) Vhat), is prose (F_T acts outside U and commutes through V); the
+% internals of D_U are drawn in polypeps_swap_pullback.
+% Related: polypeps_swap_pullback (D_U itself); no TNLean figure draws sheet swaps.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire}, cols=8, bonds=none, size=l]
+        \tn[at=(3,3), name=xsLDU, skin=box, wide=2, wires=4,
+            ports={180@1:physical, 180@2:physical, 180@3:physical, 180@4:physical,
+                    0@1:physical, 0@2:physical, 0@3:physical, 0@4:physical}]{D_U}
+        \tn[at=(1,2), name=xsLa11, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,7), name=xsLa16, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,8), name=xsLa17, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,2), name=xsLa21, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,7), name=xsLa26, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,8), name=xsLa27, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,2), name=xsLa31, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,5), name=xsLa34, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,6), name=xsLa35, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,7), name=xsLa36, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,8), name=xsLa37, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,2), name=xsLa41, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,5), name=xsLa44, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,6), name=xsLa45, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,7), name=xsLa46, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,8), name=xsLa47, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,2), name=xsLa51, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,8), name=xsLa57, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,2), name=xsLa61, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,8), name=xsLa67, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,2), name=xsLa71, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,8), name=xsLa77, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(8,2), name=xsLa81, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(8,8), name=xsLa87, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire{open w}{xsLa11.180}
+        \tnwire{open w}{xsLa21.180}
+        \tnwire{xsLa11.0}{xsLa16.180}
+        \tnwire{xsLa21.0}{xsLa26.180}
+        \tnwire[name=xsLx16a]{xsLa16.0}{xsLa27.180}
+        \tnwire[name=xsLx16b, cross={over at crossing of xsLx16b and xsLx16a}]
+        {xsLa26.0}{xsLa17.180}
+        \tnwire{xsLa17.0}{open e}
+        \tnwire{xsLa27.0}{open e}
+        \tnwire{open w}{xsLa31.180}
+        \tnwire{open w}{xsLa41.180}
+        \tnwire{xsLa31.0}{xsLDU.180@1}
+        \tnwire{xsLDU.0@1}{xsLa34.180}
+        \tnwire{xsLa35.0}{xsLa36.180}
+        \tnwire{xsLa41.0}{xsLDU.180@2}
+        \tnwire{xsLDU.0@2}{xsLa44.180}
+        \tnwire{xsLa45.0}{xsLa46.180}
+        \tnwire[name=xsLx34a, species=selected]{xsLa34.0}{xsLa45.180}
+        \tnwire[name=xsLx34b, species=selected, cross={over at crossing of xsLx34b and xsLx34a}]
+        {xsLa44.0}{xsLa35.180}
+        \tnwire[name=xsLx36a, species=selected]{xsLa36.0}{xsLa47.180}
+        \tnwire[name=xsLx36b, species=selected, cross={over at crossing of xsLx36b and xsLx36a}]
+        {xsLa46.0}{xsLa37.180}
+        \tnwire{xsLa37.0}{open e}
+        \tnwire{xsLa47.0}{open e}
+        \tnwire{open w}{xsLa51.180}
+        \tnwire{open w}{xsLa61.180}
+        \tnwire{xsLa51.0}{xsLDU.180@3}
+        \tnwire{xsLDU.0@3}{xsLa57.180}
+        \tnwire{xsLa61.0}{xsLDU.180@4}
+        \tnwire{xsLDU.0@4}{xsLa67.180}
+        \tnwire{xsLa57.0}{open e}
+        \tnwire{xsLa67.0}{open e}
+        \tnwire{open w}{xsLa71.180}
+        \tnwire{open w}{xsLa81.180}
+        \tnwire{xsLa71.0}{xsLa77.180}
+        \tnwire{xsLa81.0}{xsLa87.180}
+        \tnwire{xsLa77.0}{open e}
+        \tnwire{xsLa87.0}{open e}
+        \tnmark[form=label, species=selected, label pos=n]{0.6 n of midway (1,5) and (1,6)}{$F_A$}
+        \tnmark[form=label, label pos=n]{0.6 n of midway (1,7) and (1,8)}{$F_{Y\cap\Lambda}$}
+        \tn[at=(1,1), name=xsLbT, skin=none]{}
+        \tn[at=(2,1), name=xsLbTT, skin=none]{}
+        \tn[at=(3,1), name=xsLbA, skin=none]{}
+        \tn[at=(4,1), name=xsLbAA, skin=none]{}
+        \tn[at=(5,1), name=xsLbU, skin=none]{}
+        \tn[at=(6,1), name=xsLbUU, skin=none]{}
+        \tn[at=(7,1), name=xsLbE, skin=none]{}
+        \tn[at=(8,1), name=xsLbEE, skin=none]{}
+        \tnmark[form=bracket, label pos=w]{(1,1) .. (2,1)}{$T$}
+        \tnmark[form=bracket, species=selected, label pos=w]{(3,1) .. (4,1)}{$A$}
+        \tnmark[form=bracket, label pos=w]{(5,1) .. (6,1)}{$U\setminus A$}
+        \tnmark[form=bracket, label pos=w]{(7,1) .. (8,1)}{$E$}
+    \end{tenkz}
+    $\;\overset{Y\cap\Lambda=T\sqcup A}{\vphantom{\big|}=}\;$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire}, cols=7, bonds=none, size=l]
+        \tn[at=(3,2), name=xsMDU, skin=box, wide=2, wires=4,
+            ports={180@1:physical, 180@2:physical, 180@3:physical, 180@4:physical,
+                    0@1:physical, 0@2:physical, 0@3:physical, 0@4:physical}]{D_U}
+        \tn[at=(1,1), name=xsMa11, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,6), name=xsMa16, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,7), name=xsMa17, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), name=xsMa21, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,6), name=xsMa26, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,7), name=xsMa27, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=xsMa31, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,4), name=xsMa34, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,5), name=xsMa35, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,6), name=xsMa36, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,7), name=xsMa37, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,1), name=xsMa41, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,4), name=xsMa44, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,5), name=xsMa45, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,6), name=xsMa46, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,7), name=xsMa47, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,1), name=xsMa51, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,7), name=xsMa57, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,1), name=xsMa61, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,7), name=xsMa67, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,1), name=xsMa71, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,7), name=xsMa77, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(8,1), name=xsMa81, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(8,7), name=xsMa87, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire{open w}{xsMa11.180}
+        \tnwire{open w}{xsMa21.180}
+        \tnwire{xsMa11.0}{xsMa16.180}
+        \tnwire{xsMa21.0}{xsMa26.180}
+        \tnwire[name=xsMx16a]{xsMa16.0}{xsMa27.180}
+        \tnwire[name=xsMx16b, cross={over at crossing of xsMx16b and xsMx16a}]
+        {xsMa26.0}{xsMa17.180}
+        \tnwire{xsMa17.0}{open e}
+        \tnwire{xsMa27.0}{open e}
+        \tnwire{open w}{xsMa31.180}
+        \tnwire{open w}{xsMa41.180}
+        \tnwire{xsMa31.0}{xsMDU.180@1}
+        \tnwire{xsMDU.0@1}{xsMa34.180}
+        \tnwire{xsMa36.0}{xsMa37.180}
+        \tnwire{xsMa41.0}{xsMDU.180@2}
+        \tnwire{xsMDU.0@2}{xsMa44.180}
+        \tnwire{xsMa46.0}{xsMa47.180}
+        \tnwire[name=xsMx34a, species=selected]{xsMa34.0}{xsMa45.180}
+        \tnwire[name=xsMx34b, species=selected, cross={over at crossing of xsMx34b and xsMx34a}]
+        {xsMa44.0}{xsMa35.180}
+        \tnwire[name=xsMx35a, species=selected]{xsMa35.0}{xsMa46.180}
+        \tnwire[name=xsMx35b, species=selected, cross={over at crossing of xsMx35b and xsMx35a}]
+        {xsMa45.0}{xsMa36.180}
+        \tnwire{xsMa37.0}{open e}
+        \tnwire{xsMa47.0}{open e}
+        \tnwire{open w}{xsMa51.180}
+        \tnwire{open w}{xsMa61.180}
+        \tnwire{xsMa51.0}{xsMDU.180@3}
+        \tnwire{xsMDU.0@3}{xsMa57.180}
+        \tnwire{xsMa61.0}{xsMDU.180@4}
+        \tnwire{xsMDU.0@4}{xsMa67.180}
+        \tnwire{xsMa57.0}{open e}
+        \tnwire{xsMa67.0}{open e}
+        \tnwire{open w}{xsMa71.180}
+        \tnwire{open w}{xsMa81.180}
+        \tnwire{xsMa71.0}{xsMa77.180}
+        \tnwire{xsMa81.0}{xsMa87.180}
+        \tnwire{xsMa77.0}{open e}
+        \tnwire{xsMa87.0}{open e}
+        \tnmark[form=label, species=selected, label pos=n]{0.6 n of midway (1,4) and (1,5)}{$F_A$}
+        \tnmark[form=label, species=selected, label pos=n]{0.6 n of midway (1,5) and (1,6)}{$F_A$}
+        \tnmark[form=label, label pos=n]{0.6 n of midway (1,6) and (1,7)}{$F_T$}
+    \end{tenkz}
+    $\;\overset{F_A^2=\mathbf 1}{\vphantom{\big|}=}\;$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire}, cols=5, bonds=none, size=l]
+        \tn[at=(3,2), name=xsRDU, skin=box, wide=2, wires=4,
+            ports={180@1:physical, 180@2:physical, 180@3:physical, 180@4:physical,
+                    0@1:physical, 0@2:physical, 0@3:physical, 0@4:physical}]{D_U}
+        \tn[at=(1,1), name=xsRa11, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,4), name=xsRa14, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,5), name=xsRa15, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), name=xsRa21, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,4), name=xsRa24, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,5), name=xsRa25, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=xsRa31, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,5), name=xsRa35, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,1), name=xsRa41, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,5), name=xsRa45, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,1), name=xsRa51, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,5), name=xsRa55, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,1), name=xsRa61, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,5), name=xsRa65, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,1), name=xsRa71, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,5), name=xsRa75, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(8,1), name=xsRa81, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(8,5), name=xsRa85, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire{open w}{xsRa11.180}
+        \tnwire{open w}{xsRa21.180}
+        \tnwire{xsRa11.0}{xsRa14.180}
+        \tnwire{xsRa21.0}{xsRa24.180}
+        \tnwire[name=xsRx14a]{xsRa14.0}{xsRa25.180}
+        \tnwire[name=xsRx14b, cross={over at crossing of xsRx14b and xsRx14a}]
+        {xsRa24.0}{xsRa15.180}
+        \tnwire{xsRa15.0}{open e}
+        \tnwire{xsRa25.0}{open e}
+        \tnwire{open w}{xsRa31.180}
+        \tnwire{open w}{xsRa41.180}
+        \tnwire{xsRa31.0}{xsRDU.180@1}
+        \tnwire{xsRDU.0@1}{xsRa35.180}
+        \tnwire{xsRa41.0}{xsRDU.180@2}
+        \tnwire{xsRDU.0@2}{xsRa45.180}
+        \tnwire{xsRa35.0}{open e}
+        \tnwire{xsRa45.0}{open e}
+        \tnwire{open w}{xsRa51.180}
+        \tnwire{open w}{xsRa61.180}
+        \tnwire{xsRa51.0}{xsRDU.180@3}
+        \tnwire{xsRDU.0@3}{xsRa55.180}
+        \tnwire{xsRa61.0}{xsRDU.180@4}
+        \tnwire{xsRDU.0@4}{xsRa65.180}
+        \tnwire{xsRa55.0}{open e}
+        \tnwire{xsRa65.0}{open e}
+        \tnwire{open w}{xsRa71.180}
+        \tnwire{open w}{xsRa81.180}
+        \tnwire{xsRa71.0}{xsRa75.180}
+        \tnwire{xsRa81.0}{xsRa85.180}
+        \tnwire{xsRa75.0}{open e}
+        \tnwire{xsRa85.0}{open e}
+        \tnmark[form=label, label pos=n]{0.6 n of midway (1,4) and (1,5)}{$F_T$}
+    \end{tenkz}
+\end{tenkzequation}

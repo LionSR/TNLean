@@ -1,0 +1,69 @@
+% Figure polypeps_separated_block.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP App. G 5 (proof of Theorem 2, the second moment),
+% unnumbered display.
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/04-compression.tex:420-475
+% (eq. compression-block-contraction, O = A~_y^dagger A_x with blocks
+% O_li : T -> T~, and eq. compression-exterior-input,
+% Z = sum_{i,l} z_il tau^{1/2} O_li^T tau~^{1/2}).
+% Formula: Z^T = sum_{i,l} z_il tau~^{1/2} O_li tau^{1/2} (tau, tau~ are
+% diagonal in the Schmidt bases, so the full transpose of Z only transposes
+% each block O_li^T back), with O_li = (<l| (x) 1) O (|i> (x) 1).  The sum over
+% i, l is the contraction of the z box with the i and l legs, so the joiner
+% carries no sum.
+% Ink-to-index: action runs right to left.  A_x (box, rows 2-4) takes the
+% corrected ket endpoint index i (north port, contracted with z) and the A-half
+% t of the exact crossing sources (east, row 4) into the discard space H_disc
+% (the middle wire, row 3); A~_y^dagger takes H_disc back to the bra index l
+% (north port) and t' (west, row 4).  The green box z (species route, like the
+% sample links of polypeps_gaussian_source_split) is the coefficient z_il of the
+% corrected positions; its two legs contract l and i (north ports, so the legs
+% leave no hook beside the boxes), and z and O close into one block.  The red
+% solid rectangle (one closed selected string, as the set A of
+% polypeps_affected_set is selected) is the boundary of the affected set A; only
+% the two t-legs cross it, with declared over-crossings.  Outside it the crossing
+% sources weight t by the bead tau^{1/2} (east) and t' by tau~^{1/2} (west);
+% bead names stand north because a one-wire box is too small to inscribe them; t
+% and t' stand just above their legs inside A, off the ink.  The boxes stay black
+% (rule H1: A is the one red object).
+% Boundary signature: (phys:w) t' | (phys:e) t; i, l and H_disc are internal.
+% Related: polypeps_affected_set (the set A on the party graph);
+% polypeps_second_moment_loop (the expected square of this block's
+% quarter-power version).  No figure contracts z with O.
+\begin{tenkzequation}
+    \tenkzkernel
+    $\mathcal Z^{\mathsf T}=$
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=12, bonds=none, size=l]
+        \tndeclare{species}{route}{hue=source:green!50!black}
+        \tn[at=(4,1), name=sbWest, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,12), name=sbEast, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,2), name=sbBeadOut, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{\widetilde\tau^{1/2}}
+        \tn[at=(2,4), name=sbAdj, skin=box, wide=2, wires=3,
+            ports={90@1:physical:$l$, 180@3:physical, 0@2:physical}]{\widetilde A_y^\dagger}
+        \tn[at=(2,8), name=sbA, skin=box, wide=2, wires=3,
+            ports={90@2:physical:$i$, 0@3:physical, 180@2:physical}]{A_x}
+        \tn[at=(4,11), name=sbBeadIn, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{\tau^{1/2}}
+        \tn[at=midway (1,6) and (1,7), name=sbZ, skin=box, species=route,
+            ports={180:physical, 0:physical}]{z}
+        \tnwire[kind=string, species=selected, closed, route=orth, name=sbFrame,
+            via={0.6 n of 0.25 w of (1,3), 0.6 n of 0.25 e of (1,10),
+                    0.6 s of 0.25 e of (4,10), 0.6 s of 0.25 w of (4,3)}]
+        \tnwire{open w}{sbWest.180}
+        \tnwire{sbWest.0}{sbBeadOut.180}
+        \tnwire[name=sbTout, cross={over at crossing of sbTout and sbFrame}]
+        {sbBeadOut.0}{sbAdj.180@3}
+        \tnwire[name=sbDisc]{sbAdj.0@2}{sbA.180@2}
+        \tnwire[name=sbTin, cross={over at crossing of sbTin and sbFrame}]
+        {sbA.0@3}{sbBeadIn.180}
+        \tnwire{sbBeadIn.0}{sbEast.180}
+        \tnwire{sbEast.0}{open e}
+        \tnwire[species=route]{sbA.90@2}{sbZ.0}
+        \tnwire[species=route]{sbZ.180}{sbAdj.90@1}
+        \tnmark[form=label, label pos=n]{0.15 n of 0.6 w of (4,4)}{$t'$}
+        \tnmark[form=label, label pos=n]{0.15 n of 0.6 e of (4,9)}{$t$}
+        \tnmark[form=label, label pos=s]{on sbDisc 0.5}{$\mathcal H_{\rm disc}$}
+        \tnmark[form=label, species=selected, label pos=ne]{0.6 n of 0.25 e of (1,10)}{$\mathcal A$}
+    \end{tenkz}
+\end{tenkzequation}
