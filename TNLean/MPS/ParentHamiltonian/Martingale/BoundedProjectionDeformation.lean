@@ -73,8 +73,9 @@ theorem ker_sum_deformedConstraintProjection {ι : Type*} [Fintype ι]
     WeightedPositiveKernel.ker_sum_eq_iInf hP, Submodule.comap_iInf]
   simp only [ker_deformedConstraintProjection]
 
-/-- If `e` carries `S` onto `T`, deforming the complementary projection of `S` by `e⁻¹` gives
-the complementary projection of `T`, and deforming that of `T` by `e` gives back that of `S`. -/
+/-- If \(e\) carries \(S\) onto \(T\), deforming the projection onto \(S^\perp\) by
+\(e^{-1}\) gives the projection onto \(T^\perp\), and deforming the projection onto
+\(T^\perp\) by \(e\) gives back the projection onto \(S^\perp\). -/
 theorem deformedConstraintProjection_orthogonal_of_map_eq
     (e : E ≃ₗ[ℂ] F) (S : Submodule ℂ E) (T : Submodule ℂ F)
     (h : S.map e.toLinearMap = T) :
@@ -89,8 +90,8 @@ theorem deformedConstraintProjection_orthogonal_of_map_eq
     simp only [deformedConstraintProjection, Submodule.ker_starProjection,
       Submodule.orthogonal_orthogonal, Submodule.comap_equiv_eq_map_symm, hsymm]
 
-/-- Transporting along `U⁻¹` intertwines the image of `S` under `e` with the image of the
-transported subspace under the conjugate `U⁻¹ e U`. -/
+/-- If \(e(S)=T\), then the conjugate \(U^{-1}eU\) carries \(U^{-1}(S)\) onto
+\(U^{-1}(T)\). -/
 theorem map_conj_map_symm_of_map_eq {M N : Type*} [AddCommGroup M] [Module ℂ M]
     [AddCommGroup N] [Module ℂ N] (U : M ≃ₗ[ℂ] N) (e : N ≃ₗ[ℂ] N) (S T : Submodule ℂ N)
     (h : S.map e.toLinearMap = T) :
