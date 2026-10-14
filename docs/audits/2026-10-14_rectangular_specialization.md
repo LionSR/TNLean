@@ -31,8 +31,8 @@ from the square file; the square file does not import the rectangular result.
 
 ## Frozen source and dependency inventory
 
-Parent: `LionSR/TNLean@2d9f97d38804888a85e269e5ffe7df145c2bb75d`.
-Parent tree: `f57ad8059366af1b85399e731f820d996bb86b3b`.
+Original frozen parent: `LionSR/TNLean@2d9f97d38804888a85e269e5ffe7df145c2bb75d`.
+Original frozen parent tree: `f57ad8059366af1b85399e731f820d996bb86b3b`.
 No dependency revision or package option changes are included.
 
 - Lean: `v4.35.0-rc3`.
@@ -83,21 +83,41 @@ premise is explicitly quantified, not treated as an accepted theorem.
 - The source-labelled `cor:rectangles` node has no completion or Lean ownership
   tag. The conditional implication has its own distinct label.
 
-## Validation boundary
+## Hosted validation and remaining gates
 
-Only the pinned repository's pure Python source parsers were run, with all
-subprocess entry points blocked. Candidate module sizes, source declaration
-ownership, blueprint tags, paper-gap declaration references, the exact new
-sorted aggregator imports, numbered-name predicates and reader-facing prose
-were checked. This is source-level checking, not kernel verification or a
-whole-repository checkdecls run. No Lean, Lake, compiler, build, dependency
-fetch, cache action, installation, formatter or renderer was executed locally.
+At PR head `b55d5bfe1ab1f3e4ecf1b77e8ac1eef08d61274f`,
+[natural PR CI run 38648661808](https://github.com/LionSR/TNLean/actions/runs/38648661808)
+checked the prospective merge `0f9f32b9a53f753cd08ed08023f7eb208cc81097`
+with then-main `61ae918efaf8deb3656719c9962bed430bc06d9a`.
+The three production modules and two fixtures in that tested merge were
+verified byte-for-byte against the PR head.
 
-Required hosted validation: all three changed production modules; both
-TNLeanTest modules; the existing square specialization consumer; affected
-aggregators and normal repository blueprint/gap/size/import checks. The exact
-axiom expectations are candidate assertions until that hosted run succeeds.
-No added blueprint entry is marked complete before hosted validation.
+- The full project build completed successfully (14,154 jobs).
+- All three production modules and both fixtures passed strict checking.
+- All 42 named public declarations emitted successful dependency checks.
+  Every dependency is among `propext`, `Classical.choice`, and `Quot.sound`;
+  the same 14 principal declarations passed exact equality with that set.
+- Production build times were 3.0 s (`RectangularBoundary`), 11 s
+  (`RectangularHamiltonian`), and 5.9 s (`RectangularSpecialization`).
+  The unchanged 50-second gate passed.
+- Text style and blueprint/paper-gap declaration checks passed.
+
+Eight conditional definition/theorem entries and their five proofs are
+marked complete on this evidence. The source-labelled `cor:rectangles`
+remains unmarked and open: the uniform finite-domain area law is still an
+explicit premise. No unconditional area law or polynomial-PEPS theorem is
+claimed. The construction includes q=1 and zero side lengths, and preserves
+Hermiticity of the total without assuming Hermiticity of individual terms.
+
+The Web and PDF render jobs were still running when this evidence was
+recorded. This documentation and current-main integration must pass its
+own natural CI before acceptance; the earlier build is not a claim that
+the new integrated tree has already passed.
+
+Local work was limited to source inspection, pinned pure-Python text
+parsers and Git-object reproduction with subprocesses blocked. No Lean,
+Lake, compiler, build, dependency fetch, cache action, installation,
+formatter or renderer was executed locally.
 
 ## Attribution and exclusions
 

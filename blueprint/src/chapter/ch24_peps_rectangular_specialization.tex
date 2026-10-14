@@ -7,8 +7,7 @@ Either side length may be zero. The following reduction is the
 rectangular and vertex-boundary implication in
 \cite[Corollary~1.2]{OpenAI2026AreaLaw}.
 % The unconditional corollary remains open: the final theorem below assumes
-% the uniform finite-domain area law. No new entry is marked complete before
-% hosted linter-bearing validation of the precise candidate revision.
+% the uniform finite-domain area law. Only the conditional reduction is complete.
 
 \begin{corollary}[Rectangles and vertex boundaries]
     \label{cor:rectangles}
@@ -42,6 +41,7 @@ rectangular and vertex-boundary implication in
         TNLean.PEPS.AreaLaw.RectangularHamiltonian.IsGappedGroundState,
         TNLean.PEPS.AreaLaw.RectangleInteraction,
         TNLean.PEPS.AreaLaw.rectangleInteractionSupport}
+    \leanok
     For each site $v$ and undirected nearest-neighbor edge $e$, choose matrices
     $h_v,h_e$, supported on $\{v\}$ and $e$, respectively, with
     $\|h_v\|,\|h_e\|\le J$. Only their sum
@@ -59,11 +59,13 @@ rectangular and vertex-boundary implication in
         TNLean.PEPS.AreaLaw.RectangularHamiltonian.hermitianTerm_isHermitian,
         TNLean.PEPS.AreaLaw.RectangularHamiltonian.hermitianTerm_norm_le,
         TNLean.PEPS.AreaLaw.RectangularHamiltonian.sum_hermitianTerm}
+    \leanok
     Replacing every summand $h_i$ by $k_i=(h_i+h_i^*)/2$ preserves its
     designated support, gives $k_i=k_i^*$ and $\|k_i\|\le J$, and preserves
     the total: $\sum_i k_i=H$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:rectangular_hamiltonian}
     The supported matrix algebra is closed under adjoints and linear
     combinations. The Hermitian-part map is contractive and real-linear,
@@ -80,6 +82,7 @@ rectangular and vertex-boundary implication in
         TNLean.PEPS.AreaLaw.RectangularHamiltonian.toAreaLawHamiltonian,
         TNLean.PEPS.AreaLaw.RectangularHamiltonian.toAreaLawHamiltonian_operator,
         TNLean.PEPS.AreaLaw.RectangularHamiltonian.isGappedGroundState_toAreaLawHamiltonian}
+    \leanok
     Let $U$ identify the native configuration basis with the basis of the
     corresponding integer lattice domain. For $J\ge0$, placing $Uk_iU^*$
     at its singleton or pair support, and zero at unused admissible supports,
@@ -88,6 +91,7 @@ rectangular and vertex-boundary implication in
     the same global projector gap with parameter $\Delta$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:rectangular_hermitian_terms}
     Singletons and adjacent pairs have induced graph diameter at most one.
     Distinct native sites and undirected edges have distinct supports, so no
@@ -100,6 +104,7 @@ rectangular and vertex-boundary implication in
     \label{def:rectangular_vertex_boundaries}
     \lean{TNLean.PEPS.AreaLaw.rectangleInnerBoundary,
         TNLean.PEPS.AreaLaw.rectangleEndpointBoundary}
+    \leanok
     For $A\subseteq V$, the inner boundary is the set of $x\in A$ with
     a neighbor outside $A$. The set $Z_A$ consists of both endpoints of
     every edge crossing $A$.
@@ -115,12 +120,14 @@ rectangular and vertex-boundary implication in
         TNLean.PEPS.AreaLaw.card_endpointBoundary_rectangular,
         TNLean.PEPS.AreaLaw.rectangleEdgeBoundary_card_le_four_mul_innerBoundary_card,
         TNLean.PEPS.AreaLaw.rectangleEdgeBoundary_card_le_two_mul_endpointBoundary_card}
+    \leanok
     The native crossing edges, inner boundary and endpoint set map
     bijectively to the corresponding integer-domain sets. Consequently,
     $|\partial_V A|\le4|\partial_{\rm in}A|$ and
     $|\partial_V A|\le2|Z_A|$, including empty boundaries.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:rectangular_vertex_boundaries}
     The coordinate bijection preserves adjacency and cut membership.
     Sorting the two native endpoints counts each undirected edge exactly
@@ -132,6 +139,7 @@ rectangular and vertex-boundary implication in
 \begin{definition}[Uniform rectangular entropy bounds]
     \label{def:rectangular_entropy_area_law}
     \lean{TNLean.PEPS.AreaLaw.RectangularEntropyAreaLaw}
+    \leanok
     For every integer $q\ge1$ and $J,\Delta>0$, there is $C\ge0$, chosen
     before $w,h$, the interaction family, the ground vector and the cut,
     such that all the hypotheses of Definition~\ref{def:rectangular_hamiltonian}
@@ -148,12 +156,14 @@ rectangular and vertex-boundary implication in
     \label{thm:rectangular_entropy_from_uniform}
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_rectangleAreaLawState,
         TNLean.PEPS.AreaLaw.UniformAreaLaw.rectangularEntropyAreaLaw}
+    \leanok
     Assume the uniform finite-domain area law of
     \cite[Theorem~1.1]{OpenAI2026AreaLaw}. Then
     Definition~\ref{def:rectangular_entropy_area_law} holds, with the
     range-one constant $C(q,1,J,\Delta)$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:rectangular_domain_hamiltonian,thm:rectangular_boundary_transport}
     Choose the uniform constant at range one before the rectangle and
     physical instance. Apply the finite-domain theorem to $UHU^*$ and
@@ -167,11 +177,13 @@ rectangular and vertex-boundary implication in
     \label{thm:rectangular_equal_side_entropy}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.toRectangularHamiltonian,
         TNLean.PEPS.AreaLaw.RectangularEntropyAreaLaw.squareEntropyAreaLaw}
+    \leanok
     The rectangular entropy bound implies the square-grid entropy statement
     used in \cite[Proposition~2.1]{OpenAI2026PolynomialPEPS}, with its original
     restriction $q\ge2$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:rectangular_hamiltonian,def:rectangular_entropy_area_law}
     Put $w=h=L$, keep the original site and edge matrices, and take the
     edge-boundary component of~(\ref{eq:rectangular_entropy_bounds}).
