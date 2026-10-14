@@ -32,18 +32,8 @@ variable {d n A : ℕ}
 
 See the coordinate changes in §5 of the circuit manuscript. -/
 theorem permOp_conjTranspose (τ : Equiv.Perm (Fin n)) :
-    (permOp (d := d) τ)ᴴ = permOp τ.symm := by
-  have hinv : permOp (d := d) τ.symm * permOp τ = 1 := by
-    rw [← permOp_mul]
-    change permOp (τ⁻¹ * τ) = 1
-    rw [inv_mul_cancel, permOp_one]
-  calc
-    (permOp τ)ᴴ = (permOp τ.symm * permOp τ) * (permOp τ)ᴴ := by rw [hinv, one_mul]
-    _ = permOp τ.symm := by
-      have hright : permOp (d := d) τ * (permOp τ)ᴴ = 1 := by
-        simpa only [Matrix.star_eq_conjTranspose] using
-          Unitary.mul_star_self_of_mem (permOp_mem_unitary (d := d) τ)
-      rw [Matrix.mul_assoc, hright, mul_one]
+    (permOp (d := d) τ)ᴴ = permOp τ.symm :=
+  QuantumCircuit.permOp_conjTranspose τ
 
 /-- Pulling a logical matrix into permuted coordinates is adjoint conjugation.
 
@@ -51,7 +41,7 @@ See the coordinate changes in §5 of the circuit manuscript. -/
 theorem permOp_conjTranspose_mul_mul (τ : Equiv.Perm (Fin n))
     (X : Matrix (Cfg d n) (Cfg d n) ℂ) :
     (permOp τ)ᴴ * X * permOp τ = X.submatrix (· ∘ τ.symm) (· ∘ τ.symm) := by
-  simpa only [permOp_conjTranspose, Equiv.symm_symm] using
+  simpa only [QuantumCircuit.permOp_conjTranspose, Equiv.symm_symm] using
     permOp_mul_mul_conjTranspose τ.symm X
 
 /-- A permutation sends logical support to its image under that permutation.
@@ -222,12 +212,12 @@ theorem exists_permuted_encoded_uniform_merging_circuit
   have hZ₁' : Z₁.submatrix (· ∘ siteEquiv.symm) (· ∘ siteEquiv.symm) ∈
       supportedOperators d (siteEquiv.symm '' support) := by
     rw [← permOp_conjTranspose_mul_mul]
-    simpa only [permOp_conjTranspose, Equiv.symm_symm] using
+    simpa only [QuantumCircuit.permOp_conjTranspose, Equiv.symm_symm] using
       permOp_conjugate_mem_supportedOperators siteEquiv.symm hZ₁support
   have hZ₂' : Z₂.submatrix (· ∘ siteEquiv.symm) (· ∘ siteEquiv.symm) ∈
       supportedOperators d (siteEquiv.symm '' support) := by
     rw [← permOp_conjTranspose_mul_mul]
-    simpa only [permOp_conjTranspose, Equiv.symm_symm] using
+    simpa only [QuantumCircuit.permOp_conjTranspose, Equiv.symm_symm] using
       permOp_conjugate_mem_supportedOperators siteEquiv.symm hZ₂support
   have hZsupport := hsupport (siteEquiv.symm '' support) hZ₁' hZ₂'
     hinputSupport hpacketSupport
