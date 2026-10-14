@@ -67,6 +67,7 @@ import TNLean.PEPS.AreaLaw.RegularizedPatchDiagonalVariation
 import TNLean.PEPS.AreaLaw.RegularizedPatchInsertionTrace
 import TNLean.PEPS.AreaLaw.RegularizedPatchMarginal
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
+import TNLean.PEPS.AreaLaw.RegularizedPatchRadiusDerivative
 import TNLean.PEPS.AreaLaw.RegularizedPatchStationarity
 import TNLean.PEPS.AreaLaw.RotatedChainRule
 import TNLean.PEPS.AreaLaw.RoundedShellEntropy

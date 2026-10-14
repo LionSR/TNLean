@@ -103,6 +103,47 @@ Its marginals are those of the same final normalized vector defined in
     Fermat's theorem gives~(\ref{eq:peps_coordinate_first_variation}).
 \end{proof}
 
+\begin{theorem}[Radius derivative of the ordered patch output]
+    \label{thm:peps_patch_radius_derivative}
+    \lean{TNLean.PEPS.hasDerivAt_regularizedPatchOutput_exp_neg}
+    \uses{def:peps_patch_coordinate_insertion}
+    Let $V$ be a finite ordered set with finite local configuration sets $A_v$,
+    and write $\mathcal H_X=\ell^2(\prod_{v\in X}A_v;\C)$.
+    Fix regions $X_0,\ldots,X_{m-1}\subseteq V$, real weights $a_j$,
+    positive semidefinite matrices $x_j$ on $\mathcal H_{X_j}$, and
+    $\Omega\in\mathcal H_V$. A hat denotes extension by the identity
+    outside the indicated region. For $r\in\R$, put $K_j(r)=(x_j+e^{-r}I_{X_j})^{-a_j/2}$ and define
+    \begin{align}
+        \Psi(r)             & =\widehat K_{m-1}(r)\cdots\widehat K_0(r)\Omega,\notag \\
+        \mathcal I_{j,r}(H) & =
+        \widehat K_{m-1}(r)\cdots\widehat K_{j+1}(r)
+        \widehat H_{X_j}
+        \widehat K_{j-1}(r)\cdots\widehat K_0(r)\Omega.
+        \label{eq:peps_patch_radius_output}
+    \end{align}
+    Then $\Psi$ is differentiable at every $R\in\R$, with
+    \begin{align}
+        \Psi'(R)
+         & =\sum_{j=0}^{m-1}\mathcal I_{j,R}\!\left(
+        \frac{a_j}{2}e^{-R}
+        (x_j+e^{-R}I_{X_j})^{-a_j/2-1}\right).
+        \label{eq:peps_patch_radius_derivative}
+    \end{align}
+    The matrices $x_j$ need not have trace one, and the weights may have
+    either sign. Regions may repeat and need not be nested. For $m=0$,
+    the product is the identity, the sum is zero, and $\Psi(r)=\Omega$.
+    This is the ordered product rule underlying the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L425-L437}{radius derivative estimate for regularized patches}.
+\end{theorem}
+\begin{proof}
+    Since $x_j+e^{-R}I$ is positive definite, differentiating its real power
+    gives $K_j'(R)=(a_j/2)e^{-R}(x_j+e^{-R}I)^{-a_j/2-1}$.
+    Extension by the identity is linear. Apply the product rule in the
+    fixed order $m-1,\ldots,0$ and then apply each term to $\Omega$.
+    The term indexed by $j$ replaces only that occurrence of the factor,
+    giving (\ref{eq:peps_patch_radius_derivative}).
+\end{proof}
+
 \begin{definition}[Canonical global coordinates and marginals]
     \label{def:peps_patch_canonical_marginal}
     \lean{

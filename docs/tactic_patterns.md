@@ -4353,6 +4353,20 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Applying an ordered matrix derivative to a vector — candidate (2026-10-15)
+
+- **Pattern:** Compose `Matrix.toEuclideanLin.toLinearMap` with
+  `LinearMap.applyₗ Ω` to apply a varying matrix to a fixed Euclidean vector.
+  Restrict scalars to ℝ and use finite-dimensional continuity for real derivatives.
+- **Seen:** `regularizedPatchInsertion` in `PEPS/AreaLaw/RegularizedPatchCoordinate.lean`
+  and `hasDerivAt_regularizedPatchOutput_exp_neg` in
+  `PEPS/AreaLaw/RegularizedPatchRadiusDerivative.lean`.
+- **Abstraction:** The proofs use the existing linear maps. A third occurrence
+  would justify a public continuous linear evaluation map for matrices.
+- **Caveat:** The ordered product remains noncommutative; differentiate the
+  continuous multilinear product and retain the original insertion indices.
+
+
 ### Upper endpoint of a scanner band — candidate (2026-10-12)
 
 - **Pattern:** Use the band index bound, the offset bound and $8Km\le L$
