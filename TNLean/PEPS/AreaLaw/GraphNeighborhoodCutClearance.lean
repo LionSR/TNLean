@@ -69,4 +69,29 @@ theorem graphNeighborhood_subset_of_cut_clearance
     rw [abs_le] at hvariation
     omega
 
+/-- Clearance from physical cut endpoints and from an entire remote set excludes
+both the exterior and that remote set from the graph neighborhood of the target
+collar inside the region. In the area-law application, the remote set is the
+whole union of the earlier actual regions of the same geometric family.
+
+Source: OpenAI, proof of Theorem 1.1, `10-geometry.tex`, lines 825–838,
+immutable revision `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+This auxiliary geometric implication assumes the two clearance estimates;
+it does not construct the ordered partition or prove its clearance estimates.
+The proof is independently written from the manuscript; no upstream Lean
+proof text is reused. -/
+theorem exterior_union_subset_graphNeighborhood_compl_of_clearance
+    (Λ T : Finset (ℤ × ℤ)) (A J : Finset (Site Λ)) (L R : ℕ)
+    (hcut : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ A,
+      ((L + R : ℕ) : ℤ) < Scan.ambientSupDistance t z)
+    (hremote : ∀ t ∈ T, ∀ x ∈ J,
+      ((L + R : ℕ) : ℤ) < Scan.ambientSupDistance t x.val) :
+    Aᶜ ∪ J ⊆
+      (graphNeighborhood Λ R (A.filter fun x ↦ x.val ∈ ambientDilation T L))ᶜ := by
+  have hN := graphNeighborhood_subset_of_cut_clearance Λ T A L R hcut
+  simp_all only [Finset.subset_iff, Finset.mem_compl, Finset.mem_union, Finset.mem_filter,
+    mem_ambientDilation_iff, Scan.ambientSupDistance, lt_max_iff, lt_abs]
+  grind
+
+
 end TNLean.PEPS.AreaLaw

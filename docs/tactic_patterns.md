@@ -24,6 +24,29 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Ambient dilation in coordinate inequalities — promoted (2026-10-14)
+
+- **Pattern:** Expand the finite union of integer squares, their Cartesian
+  products and interval membership to obtain coordinate inequalities.
+- **Seen:** The original membership lemma in `Geometry/TemplateRows.lean`,
+  `Scan.ambientDepth_le_iff_mem_dilation` in `Scan/AmbientDepth.lean`, and
+  `exterior_union_subset_graphNeighborhood_compl_of_clearance` in
+  `GraphNeighborhoodCutClearance.lean`, under `TNLean/PEPS/AreaLaw/`.
+- **Abstraction:** The unchanged public `mem_ambientDilation_iff` now follows
+  `ambientDilation` in the basic `FiniteDomain.lean` module. The ambient-depth
+  equivalence and the whole-remote exclusion proof simplify with this lemma.
+  No alias, new tactic, global attribute or geometric hypothesis is added.
+- **Remaining occurrences:** Direct expansions remain in `BufferedRectangles.lean`
+  and `Geometry/DistanceLayers.lean`, `Geometry/DummyContacts.lean`,
+  `Geometry/DyadicExhaustion.lean` and `Geometry/DyadicLayers.lean`. They are
+  retained for a focused follow-up. The private dyadic-layer lemma has a
+  different absolute-value formulation and is not a duplicate declaration.
+- **Notes:** The helper allows every finite target and natural radius, including
+  the empty target and radius zero. The ambient-depth replacement removes one
+  proof line and preserves the statement and remaining proof. Verification of
+  the relocated helper and these exact production proofs by the normal CI
+  remains pending; the earlier private exclusion proof used direct expansion.
+
 ### Named comparison of arbitrary word evaluations — promoted (2026-10-14)
 
 - **Pattern:** Retain two constructed words and their own layouts in a named
