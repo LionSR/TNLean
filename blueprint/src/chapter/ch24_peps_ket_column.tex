@@ -300,6 +300,84 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
     contraction would be an empty sum.
 \end{proof}
 
+\subsection{Error and normalization of the protocol}
+
+The following estimates are the calculation of
+\cite[Section~8.1]{OpenAI2026PolynomialPEPS}. The reference trajectory,
+its step errors, the number of changes, the private factor and the
+compressed operator are supplied; they are the outputs of the protocol
+proposition, the small-patch rewrite lemma and the compression theorem
+of that work, which are not proved here.
+
+\begin{lemma}[Telescoping a chain of contractions]
+    \label{lem:peps_protocol_telescoping}
+    \lean{TNLean.PEPS.Approximation.norm_trajectory_sub_reference_le}
+    \lean{TNLean.PEPS.Approximation.norm_trajectory_le}
+    \leanok
+    Let $E_0,E_1,\dots$ be normed spaces, let
+    $S_t\colon E_t\to E_{t+1}$ be linear maps with
+    $\lVert S_tv\rVert\leq\lVert v\rVert$ for $t<n$, and let
+    $r_t\in E_t$. Put $x_0=r_0$ and $x_{t+1}=S_tx_t$. Then
+    \begin{align}
+        \lVert x_n-r_n\rVert & \leq\sum_{t<n}\lVert S_tr_t-r_{t+1}\rVert, &
+        \lVert x_n\rVert     & \leq\lVert r_0\rVert.
+    \end{align}
+\end{lemma}
+
+\begin{proof}\leanok
+    Induct on $n$. Since
+    $x_{n+1}-r_{n+1}=S_n(x_n-r_n)+(S_nr_n-r_{n+1})$ and $S_n$ is a
+    contraction, the error grows by at most $\lVert S_nr_n-r_{n+1}\rVert$.
+    The norm bound is the same induction.
+\end{proof}
+
+\begin{theorem}[Error and normalization of the protocol]
+    \label{thm:peps_protocol_density}
+    \lean{TNLean.PEPS.Approximation.norm_protocol_sub_reference_le}
+    \lean{TNLean.PEPS.Approximation.rectangularTraceNorm_protocol_density_sub_le}
+    \lean{TNLean.PEPS.Approximation.rectangularTraceNorm_compressed_density_sub_le}
+    \leanok
+    Let $L\geq1$ and $C_{\rm ch},C_{\rm step},C_{\rm hole},C_{\rm comp}$
+    be constants with $C_{\rm step},C_{\rm hole}\geq0$. Suppose that, in
+    the notation of Lemma~\ref{lem:peps_protocol_telescoping}, there are
+    $n\leq C_{\rm ch}L^3$ contractions, $\lVert r_0\rVert\leq1$, and
+    $\lVert S_tr_t-r_{t+1}\rVert\leq C_{\rm step}L^{-20}$ for $t<n$.
+    Suppose that $E_n$ is identified isometrically with the physical and
+    private coordinates, so that $r_n=\Omega\otimes\Xi$ with
+    \begin{align}
+        \lVert\Omega\rVert                       & =1,    &
+        1-C_{\rm hole}L^{-57}\leq\lVert\Xi\rVert & \leq1.
+    \end{align}
+    Then the actual vector $\Psi=x_n$ satisfies $\lVert\Psi\rVert\leq1$,
+    \begin{align}
+        \lVert\Psi-\Omega\otimes\Xi\rVert & \leq C_{\rm ch}C_{\rm step}L^{-17},                 \\
+        \big\lVert\Tr_{\rm private}|\Psi\rangle\langle\Psi|
+        -|\Omega\rangle\langle\Omega|\big\rVert_1
+                                          & \leq(2C_{\rm ch}C_{\rm step}+2C_{\rm hole})L^{-10}.
+    \end{align}
+    If moreover
+    $\lVert\sigma-\Tr_{\rm private}|\Psi\rangle\langle\Psi|\rVert_1
+        \leq C_{\rm comp}L^{-5}$, then
+    \begin{align}
+        \lVert\sigma-|\Omega\rangle\langle\Omega|\rVert_1
+         & \leq(C_{\rm comp}+2C_{\rm ch}C_{\rm step}+2C_{\rm hole})L^{-5}.
+    \end{align}
+    The operator $\sigma$ need not be positive or Hermitian, and no
+    vector is renormalized.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_protocol_telescoping}
+    By Lemma~\ref{lem:peps_protocol_telescoping}, the vector error is at
+    most $n\,C_{\rm step}L^{-20}\leq C_{\rm ch}C_{\rm step}L^{-17}$, and
+    $\lVert\Psi\rVert\leq\lVert r_0\rVert\leq1$. The partial trace of the
+    product reference is $\lVert\Xi\rVert^2|\Omega\rangle\langle\Omega|$,
+    so the pure-density error bound gives a density error of at most
+    $2C_{\rm ch}C_{\rm step}L^{-17}+2C_{\rm hole}L^{-57}$, which is at most
+    the stated multiple of $L^{-10}$ because $L\geq1$. The last bound is
+    the triangle inequality through the actual physical density.
+\end{proof}
+
 \subsection{Column selection after discarding a product reference}
 
 \begin{theorem}[A column from the actual compressed density]
