@@ -103,10 +103,14 @@ theorem ancillaTransport_mul_conjTranspose [DecidableEq P] {U : Matrix X X ℂ} 
     Entropy.restoringPhysicalGrouping, (ancillaRotation_unitary hU hU').1,
     submatrix_one_equiv]
 
+omit [Fintype Y] [Fintype Z] in
 /-- The transport is unitary: `𝒲ᴴ 𝒲 = 1`. -/
-theorem conjTranspose_mul_ancillaTransport [Fintype P] {U : Matrix X X ℂ} (hU : U * Uᴴ = 1)
+theorem conjTranspose_mul_ancillaTransport [Fintype P] [Finite Y] [Finite Z] {U : Matrix X X ℂ}
+    (hU : U * Uᴴ = 1)
     (hU' : Uᴴ * U = 1) (rs : P ≃ (X × Y) × Z) :
     (ancillaTransport U rs)ᴴ * ancillaTransport U rs = 1 := by
+  have : Fintype Y := Fintype.ofFinite Y
+  have : Fintype Z := Fintype.ofFinite Z
   rw [ancillaTransport_eq, conjTranspose_submatrix, submatrix_mul_equiv _ _ _
     (ancillaSwap rs), (ancillaRotation_unitary hU hU').2, submatrix_one_equiv]
 
@@ -145,7 +149,8 @@ private theorem kronecker_submatrix_ancillaSwap (rs : P ≃ (X × Y) × Z)
 target as `(Uᴴ ⊗ 1) L (U ⊗ 1)` and acting trivially on both ancillas, is transported to
 `L ⊗ 1` on the original physical coordinates. Source: `09-amplification.tex`,
 lines 399–408. -/
-theorem ancillaTransport_conj_physicalLift {U : Matrix X X ℂ} (hU : U * Uᴴ = 1) (rs : P ≃ (X × Y) × Z) (L : Matrix P P ℂ) :
+theorem ancillaTransport_conj_physicalLift {U : Matrix X X ℂ} (hU : U * Uᴴ = 1)
+    (rs : P ≃ (X × Y) × Z) (L : Matrix P P ℂ) :
     ancillaTransport U rs * Entropy.restoringPhysicalLift
         (((Uᴴ ⊗ₖ (1 : Matrix Y Y ℂ)) ⊗ₖ (1 : Matrix Z Z ℂ)) * L.submatrix rs.symm rs.symm *
           ((U ⊗ₖ (1 : Matrix Y Y ℂ)) ⊗ₖ (1 : Matrix Z Z ℂ))) *
@@ -335,7 +340,8 @@ theorem restoringGlobal_eq_sum (E : Finset X) (p : X → ℝ) (sBlank xBlank : X
   ext ⟨⟨⟨s, e⟩, x, y⟩, z⟩ ⟨⟨⟨s', e'⟩, x', y'⟩, z'⟩
   simp only [Entropy.restoringGlobal, Entropy.restoringOperatorWithAncilla,
     Entropy.restoringOperator, Entropy.restoringAncillaGrouping, kroneckerMap_apply,
-    submatrix_apply, Equiv.coe_fn_mk, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul, Finset.sum_mul]
+    submatrix_apply, Equiv.coe_fn_mk, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul,
+    Finset.sum_mul]
   refine Finset.sum_congr rfl fun a _ => ?_
   ring
 

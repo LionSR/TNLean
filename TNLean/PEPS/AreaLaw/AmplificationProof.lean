@@ -41,6 +41,8 @@ the output bound, with `K = 4(M + 2)`.
 ## Main statements
 
 * `TNLean.PEPS.AreaLaw.amplificationBound`: Proposition 10.2.
+* `TNLean.PEPS.AreaLaw.uniformAreaLaw_of_collar_twoFamilies`: the uniform area law from
+  Propositions 9.6 and 11.2 alone. This is conditional on those two propositions.
 
 ## References
 
@@ -91,19 +93,18 @@ private theorem unitary_error_le {ε : ℝ} (h0 : 0 ≤ ε) (h1 : ε ≤ 1) :
   nlinarith
 
 /-- **Proposition 10.2** (`prop:amplification`, `09-amplification.tex` lines 261–296, proof at
-lines 298–576), for the Hamiltonian parameters `q, R` with interaction strength `J ≥ 0` and
-gap `Δ > 0`. Fix `C₀ > 0` and an integer `M ≥ 1`. Beyond a threshold chosen before the domain,
+lines 298–576), for the Hamiltonian parameters `q, R, J` and every gap `Δ > 0`. Fix `C₀ > 0`
+and an integer `M ≥ 1`. Beyond a threshold chosen before the domain,
 the Hamiltonian, the cut and the target, the collar hypotheses give an integer radius
 `r ≤ C_M n^((1-ε)/α)` such that every part of `X = A ∩ T` has mutual information at most
 `C_M n^(-M)` with every set avoiding `N_{2r}(S₀)`, and `N_{2r}(S₀) ⊆ A` under the cut clearance
 `dist_∞(T, Z) > L + n^β`. -/
-theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
-    AmplificationBound q R J Δ := by
+theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hΔ : 0 < Δ) : AmplificationBound q R J Δ := by
   apply amplificationBound_of_radius_output
   intro C₀ hC₀ M hM
-  rcases Nat.eq_zero_or_pos q with hq0 | hqpos
-  · -- With no local states, a unit vector exists only on the empty domain.
-    subst hq0
+  by_cases hdeg : q = 0 ∨ J < 0
+  · -- With no local states, or with a negative interaction bound, a gapped ground state
+    -- exists only on the empty domain, where the target is empty.
     refine ⟨0, 0, fun n _ _ Λ h E₀ Ω hgs A T _ _ _ _ _ => ⟨0, by simp, ?_⟩⟩
     intro X' _ Jset _
     obtain ⟨hΩ, -, -⟩ := Matrix.isGappedGroundState_iff.mp hgs
@@ -111,15 +112,26 @@ theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ
       by_contra hne
       rw [not_isEmpty_iff] at hne
       obtain ⟨v⟩ := hne
-      have : IsEmpty (Configuration Λ 0) := ⟨fun c => (c v).elim0⟩
-      have hz : Ω = 0 := by
-        ext c
-        exact (IsEmpty.false c).elim
-      rw [hz, norm_zero] at hΩ
-      exact zero_ne_one hΩ
+      rcases hdeg with hq0 | hJneg
+      · subst hq0
+        have : IsEmpty (Configuration Λ 0) := ⟨fun c => (c v).elim0⟩
+        have hz : Ω = 0 := by
+          ext c
+          exact (IsEmpty.false c).elim
+        rw [hz, norm_zero] at hΩ
+        exact zero_ne_one hΩ
+      · have hadm : IsAdmissibleSupport Λ R {v} := ⟨Finset.singleton_nonempty v,
+          fun x hx y hy => by
+            rw [Finset.mem_singleton] at hx hy
+            subst hx hy
+            exact ⟨SimpleGraph.Walk.nil, Nat.zero_le _⟩⟩
+        linarith [h.norm_le ⟨{v}, hadm⟩, norm_nonneg (h.term ⟨{v}, hadm⟩)]
     rw [Finset.eq_empty_of_isEmpty X']
     simp [FiniteProduct.mutualInformation, FiniteProduct.entropy_empty _ Ω hΩ]
-  have : NeZero q := ⟨hqpos.ne'⟩
+  push Not at hdeg
+  obtain ⟨hq0, hJ⟩ := hdeg
+  have hqpos : 0 < q := Nat.pos_of_ne_zero hq0
+  have : NeZero q := ⟨hq0⟩
   have hq : 1 ≤ q := hqpos
   -- The fixed exponent `α = p / (p + 1)` and the integer `K = 4 (M + 2)`.
   set pw := Exponents.amplificationPower with hpwdef
@@ -477,7 +489,8 @@ theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ
     rw [hΩ, one_mul] at h
     rw [← h, ← hη1, hηform]
     rfl
-  have hprod : FiniteProduct.mutualInformation (fun _ : AncillaSites Λ X => Fin q) (WithLp.toLp 2 (η ∘ sp)) copyAll physJ = 0 := by
+  have hprod : FiniteProduct.mutualInformation (fun _ : AncillaSites Λ X => Fin q)
+      (WithLp.toLp 2 (η ∘ sp)) copyAll physJ = 0 := by
     rw [hηform]
     exact mutualInformation_ancillaProduct_copy_eq_zero hΩ hχ _ _
   have hδ : ‖WithLp.toLp 2 (U₁ *ᵥ WithLp.ofLp (WithLp.toLp 2 (φ ∘ sp))) -
@@ -520,5 +533,16 @@ theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ
   refine (hfinal _ (Finset.disjSum_mono le_rfl (Finset.disjSum_mono le_rfl
     (Finset.subset_univ _)))).trans ?_
   exact mul_le_mul_of_nonneg_right (le_max_right _ _) (by positivity)
+
+/-- **Theorem 1.1 from Propositions 9.6 and 11.2.** With Proposition 10.2 proved, the uniform
+area law follows from the sublinear collar bound and the two-family decomposition. This is
+the source proof of Theorem 1.1 (`10-geometry.tex`, lines 803–857); it does not prove
+Propositions 9.6 and 11.2, so it is not a proof of Theorem 1.1. -/
+theorem uniformAreaLaw_of_collar_twoFamilies
+    (hconst : ∀ q : ℕ, 1 ≤ q → ∀ R : ℕ, ∀ J Δ : ℝ, 0 < J → 0 < Δ →
+      ∃ D₀ Ctpl : ℝ, SublinearCollarBound q R J Δ D₀ Ctpl ∧ TwoFamilyDecomposition D₀ Ctpl) :
+    UniformAreaLaw :=
+  uniformAreaLaw_of_collar_amplification_twoFamilies hconst
+    fun _ _ _ _ _ _ hΔ => amplificationBound hΔ
 
 end TNLean.PEPS.AreaLaw

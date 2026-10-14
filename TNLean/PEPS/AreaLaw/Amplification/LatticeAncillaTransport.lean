@@ -76,9 +76,11 @@ theorem l2_opNorm_le_one_of_conjTranspose_mul_self {W : Matrix m n ℂ} (hW : W�
   rw [hW] at h
   nlinarith [norm_nonneg W]
 
+omit [DecidableEq m] in
 /-- A matrix with `Wᴴ W = 1` preserves Euclidean norms. -/
 theorem norm_toLp_mulVec_of_conjTranspose_mul_self {W : Matrix m n ℂ} (hW : Wᴴ * W = 1)
     (v : n → ℂ) : ‖WithLp.toLp 2 (W *ᵥ v)‖ = ‖WithLp.toLp 2 v‖ := by
+  classical
   have hle := l2_opNorm_le_one_of_conjTranspose_mul_self hW
   have hW' : ‖Wᴴ‖ ≤ 1 := by rw [l2_opNorm_conjTranspose]; exact hle
   have hA : ‖WithLp.toLp 2 (W *ᵥ v)‖ ≤ ‖W‖ * ‖WithLp.toLp 2 v‖ :=
@@ -429,7 +431,8 @@ theorem restoringTransport_estimates (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
       have hdiff : WithLp.toLp 2 (LGᴴ *ᵥ ψ.ofLp) - ψ = WithLp.toLp 2 (Uh *ᵥ
           ((Lᴴ).submatrix rs.symm rs.symm *ᵥ (fun i => Ω (rs.symm i)) -
             fun i => Ω (rs.symm i))) := by
-        rw [hLGH, hψdef, ← mulVec_mulVec, ← mulVec_mulVec, mulVec_mulVec (M := Uhᴴ), hUh, one_mulVec,
+        rw [hLGH, hψdef, ← mulVec_mulVec, ← mulVec_mulVec, mulVec_mulVec (M := Uhᴴ), hUh,
+          one_mulVec,
           mulVec_sub]
         rfl
       rw [hdiff, norm_toLp_mulVec_of_conjTranspose_mul_self hUh, submatrix_mulVec_equiv]
