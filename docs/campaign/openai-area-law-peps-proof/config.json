@@ -458,8 +458,11 @@
           "title": "Scan a collar",
           "issues": [
             8754,
+            9332,
+            9333,
             8755,
-            8756
+            8756,
+            9334
           ],
           "physics": "Sweep a partition across a collar, a band around the target <i>X</i>. The steps follow a finite random schedule. So each interaction term is rarely cut. Repeating the two norm comparisons first improves the box exponent. Then it bounds the information between <i>X</i> and the region beyond the collar. That information is computed in the state {{tn:al-collar}}. This is the ground state Ω with the collar <i>Y</i> traced out.",
           "delivers": "The target is <i>X</i> = <i>A</i> ∩ <i>T</i>, where <i>A</i> is one side of the cut. <i>T</i> is a template: a union of small rectangles and triangles of diameter <i>n</i>, with about <i>n</i> boundary edges. Take a collar of width about <i>n</i><sup>1−ε</sup>, with ε = 10<sup>−5</sup>. The mutual information between <i>X</i> and everything beyond the collar{{cite:Lieb1973}} is at most <i>C n</i><sup>1−ε</sup>, for a constant <i>C</i>.",
@@ -529,6 +532,7 @@
         {
           "title": "Amplify the information bound",
           "issues": [
+            9335,
             8757
           ],
           "physics": "Add two reference copies of the target's sites, <i>s</i>′ and <i>e</i>′. Move the target's state onto <i>e</i>′ and leave the target blank. Typical spectral subspaces{{cite:Schumacher1995}} give an operator that restores the target, purified by <i>s</i>′. Products of the positive local pieces of the Hamiltonian remove the part of this operator that leaves the ground state. Polar decomposition{{cite:Autonne1902}} then turns it into a unitary <i>U</i>′ near the target: {{tn:al-restore}}. Here Ω is the ground state, ρ<sub><i>X</i></sub> is the target's reduced state, and triangles are blank states. <i>U</i>′ acts only on <i>s</i>′ and sites near the target. It never touches <i>e</i>′ or the far region. So the target ends up nearly independent of the far region.",
@@ -639,9 +643,13 @@
         {
           "title": "Arrange regions so the entropies cancel",
           "issues": [
+            9336,
+            9337,
+            9338,
             8758,
             8760,
-            8759
+            8759,
+            9339
           ],
           "physics": "Remove a set <i>D</i> of sites from <i>A</i>. It has at most a constant times as many sites as <i>A</i> has boundary edges. Split the rest of <i>A</i> into regions sorted into two ordered families. A collar keeps each region away from the outside of <i>A</i>. It also keeps it away from the earlier regions of its own family. The ground state ψ is pure, so complementary parts share their nonzero spectrum{{cite:Schmidt1907}}: {{tn:al-purity}}. Here <i>B</i> is the outside of <i>A</i>, <i>A<sub>f</sub></i> is one family, and <i>A</i><sub>1−<i>f</i></sub> is the other. Narrow strips and repeated repairs at point contacts handle any cut, even domains with holes.",
           "delivers": "Apply the entropy chain rule once per family. Every region's entropy cancels. What is left is <i>S</i>(<i>A</i>) ≤ |<i>D</i>| log <i>q</i> plus small errors, with <i>q</i> the qudit dimension. The errors add up to at most a constant times the boundary of <i>A</i>. This is the area law.",
@@ -719,7 +727,9 @@
           "title": "Information fades with angular separation",
           "issues": [
             8761,
+            9341,
             8765,
+            9340,
             8766
           ],
           "physics": "Two regions are almost independent when a buffer separates them well. The buffer may narrow linearly toward finitely many points. But its width must stay above a large multiple of log <i>L</i>, where <i>L</i> is the grid side. The proof adds cells one at a time. It uses the two ordered families of regions from the area-law proof. Gaussian filtering in energy{{cite:Hastings2006}}, using the gap, resets the information cost after each step inward.",
@@ -954,6 +964,7 @@
         {
           "title": "A dyadic distribution protocol",
           "issues": [
+            9343,
             8772
           ],
           "physics": "One party starts with the whole ground state Ω. Ownership passes down a hierarchy of dyadic squares, halving the side at each step. It stops when every site has its own party. Extra copies of Ω supply the surroundings that each change of owner needs.",
@@ -971,7 +982,8 @@
           "title": "Compress the shared resources",
           "issues": [
             8768,
-            8769
+            8769,
+            9342
           ],
           "physics": "The protocol uses shared pair states of unbounded Schmidt rank{{cite:Schmidt1907}}. The proof then computes the output density matrix. In it, each pair-state operator |η⟩⟨η̃| is replaced by a random sum of <i>k</i> product terms: {{tn:peps-source}}. Here <i>U<sub>j</sub></i> and <i>V<sub>j</sub></i> are random Gaussian factors on the two halves, and 𝔼 is the average. The sum equals the original on average. The number <i>k</i> is polynomial in the grid side <i>L</i>. Each party joins only boundedly many operations, which keeps the coefficients small. A Gaussian second-moment bound{{cite:Reed1962}} controls the error{{cite:Isserlis1918}}.",
           "delivers": "The trace-norm error does not depend on any private dimension{{cite:Renner2005}}. The result is an operator network with one node per party. Its bonds have dimension polynomial in the grid side.",

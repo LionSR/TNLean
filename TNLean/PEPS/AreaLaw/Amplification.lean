@@ -26,3 +26,4 @@ import TNLean.PEPS.AreaLaw.Amplification.LatticeExcitedDecay
 import TNLean.PEPS.AreaLaw.Amplification.LocalChannelOscillation
 import TNLean.PEPS.AreaLaw.Amplification.LocalRootChannels
 import TNLean.PEPS.AreaLaw.Amplification.RadiusScales
+import TNLean.PEPS.AreaLaw.Amplification.TypicalProjectors
