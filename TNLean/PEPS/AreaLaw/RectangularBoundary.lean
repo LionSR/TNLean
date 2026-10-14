@@ -126,7 +126,8 @@ theorem map_rectangleInnerBoundary {width height : ℕ}
         (squareLatticeGraph width height).Adj a b :=
     (rectangleGraphIso width height).map_rel_iff
   have hmem (a : SquareLatticeVertex width height) :
-      σ a ∈ A.map σ.toEmbedding ↔ a ∈ A := by simp
+      σ a ∈ A.map (rectangleSiteEquiv width height).toEmbedding ↔ a ∈ A := by
+    simp [σ]
   ext x
   obtain ⟨a, rfl⟩ := σ.surjective x
   have hm : σ a ∈ (rectangleInnerBoundary A).map σ.toEmbedding ↔
@@ -154,7 +155,8 @@ theorem map_rectangleEndpointBoundary {width height : ℕ}
         (squareLatticeGraph width height).Adj a b :=
     (rectangleGraphIso width height).map_rel_iff
   have hmem (a : SquareLatticeVertex width height) :
-      σ a ∈ A.map σ.toEmbedding ↔ a ∈ A := by simp
+      σ a ∈ A.map (rectangleSiteEquiv width height).toEmbedding ↔ a ∈ A := by
+    simp [σ]
   ext x
   obtain ⟨a, rfl⟩ := σ.surjective x
   have hm : σ a ∈ (rectangleEndpointBoundary A).map σ.toEmbedding ↔

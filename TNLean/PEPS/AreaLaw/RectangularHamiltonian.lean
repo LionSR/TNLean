@@ -327,7 +327,7 @@ the actual conversion. Source: area-law Corollary 1.2 and polynomial-PEPS
 theorem RectangularHamiltonian.isGappedGroundState_toAreaLawHamiltonian
     {width height q : ℕ} {J : ℝ} (h : RectangularHamiltonian width height q J) (hJ : 0 ≤ J)
     {E₀ Δ : ℝ} {Ω : RectangleStateSpace width height q} (hΩ : h.IsGappedGroundState E₀ Ω Δ) :
-    IsGappedGroundState (rectangularDomain width height) q
+    TNLean.PEPS.AreaLaw.IsGappedGroundState (rectangularDomain width height) q
       (h.toAreaLawHamiltonian hJ).operator E₀ (rectangleAreaLawState Ω) Δ := by
   classical
   let e := rectangleConfigurationEquiv width height q
