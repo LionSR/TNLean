@@ -7579,3 +7579,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   the promotion threshold. This isolates the repeated basis conversion at the
   closed build's checking-limit diagnostic; no hypothesis or limit is added.
   Hosted acceptance and timing remain pending.
+
+### Fixed vectors under replica-coordinate equivalences — candidate (2026-10-13)
+
+- **Pattern:** identify a transported projector as a matrix submatrix along an
+  equivalence, apply `Matrix.submatrix_mulVec_equiv`, and cancel the equivalence
+  with its inverse in a precomposed vector.
+- **Seen:** three occurrences in
+  `TNLean/PEPS/AreaLaw/Scan/AugmentedReplicaPrevectorProperties.lean`: full copy
+  symmetry and the two branches for the original auxiliary labels.
+- **Abstraction:** the matrix transport is already Mathlib's
+  `Matrix.submatrix_mulVec_equiv`. A separate fixed-vector corollary may be useful
+  if the final composition cancellation recurs in another file.
+- **Notes:** all three uses are in one file, below the two-file promotion
+  threshold. No nonzero vector or nonempty index type is required.
