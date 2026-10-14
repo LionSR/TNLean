@@ -19,7 +19,7 @@ the support and the shell cutoff. Empty sets and disconnected components are
 retained, using extended graph distance before taking real values.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
-`09-amplification.tex`, lines 203–215, at revision
+`09-amplification.tex`, lines 188–212, at revision
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscript; no upstream Lean text is reused.
 -/
@@ -51,8 +51,8 @@ private theorem profile_finset_le_sum_singleton {ι : Type*} [PseudoEMetricSpace
 variable {ι κ : Type*} [Fintype ι] [Fintype κ]
 
 /-- A singleton distance profile has a volume-independent total mass under
-quadratic graph-ball growth. The moment is the existing QICLean summable
-second moment. Source: area law, `09-amplification.tex`, lines 203–212. -/
+quadratic graph-ball growth, through the summable second moment of the
+stretched exponential. Source: area law, `09-amplification.tex`, lines 188–212. -/
 theorem sum_graph_singleton_exponentialDistanceProfile_le
     (G : SimpleGraph ι) {K c α : ℝ} (hK : 0 ≤ K) (hc : 0 < c) (hα : 0 < α)
     (hball : ∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2)
@@ -106,7 +106,7 @@ theorem sum_graph_singleton_exponentialDistanceProfile_le
 
 /-- The total profile mass is at most the singleton mass times the support
 cardinality, including zero mass for the empty support. Source: area law,
-`09-amplification.tex`, lines 203–212. -/
+`09-amplification.tex`, lines 188–212. -/
 theorem sum_graph_exponentialDistanceProfile_le
     (G : SimpleGraph ι) {K c α : ℝ} (hK : 0 ≤ K) (hc : 0 < c) (hα : 0 < α)
     (hball : ∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2)
@@ -129,8 +129,8 @@ theorem sum_graph_exponentialDistanceProfile_le
 
 /-- A shell meeting a profile based beyond radius `r` spends half its decay
 rate on `r`, leaving both half-rate factors available for summation. Infinite
-distance to the support gives a literal zero on both sides. Source: area law,
-`09-amplification.tex`, lines 203–212. -/
+distance to the support gives a zero on both sides. Source: area law,
+`09-amplification.tex`, lines 188–212. -/
 theorem exp_mul_graph_exponentialDistanceProfile_le_of_anchor_far
     (G : SimpleGraph ι) (S : Finset ι) {b β α r : ℝ}
     (hb : 0 < b) (hβ : 0 < β) (hα : 0 < α) (hα₁ : α ≤ 1) (hr : 0 ≤ r)
@@ -205,7 +205,7 @@ private theorem card_anchors_mem_graphBall_le (G : SimpleGraph ι) (a : κ → �
 /-- Bounded anchor fibers reduce the unweighted incidence sum of a
 nonnegative site function to its total mass times a quadratic ball bound.
 Source: area law,
-`09-amplification.tex`, lines 203–212. -/
+`09-amplification.tex`, lines 188–212. -/
 theorem sum_graphBall_site_function_le (G : SimpleGraph ι) (a : κ → ι)
     {K μ : ℝ} (hμ : 0 ≤ μ)
     (hball : ∀ x l, ((graphBall G x l).card : ℝ) ≤ K * ((l : ℝ) + 1) ^ 2)
@@ -240,7 +240,7 @@ theorem sum_graphBall_site_function_le (G : SimpleGraph ι) (a : κ → ι)
 
 /-- The unrestricted finite anchor-shell sum is controlled by the product of
 two summable second moments. No bound depends on the site count or cutoff.
-Source: area law, `09-amplification.tex`, lines 203–212. -/
+Source: area law, `09-amplification.tex`, lines 188–212. -/
 theorem sum_graphBall_exponentialDistanceProfile_le
     (G : SimpleGraph ι) (a : κ → ι) {K μ b β α : ℝ}
     (hK : 0 ≤ K) (hμ : 0 ≤ μ) (hb : 0 < b) (hβ : 0 < β) (hα : 0 < α)
@@ -291,11 +291,11 @@ theorem sum_graphBall_exponentialDistanceProfile_le
     _ = _ := by dsimp [M]; ring
 
 /-- Omitted anchor-shell weights have a uniform stretched-exponential tail.
-The witnesses depend only on `K, μ, b, β, α`, and precede the graph, finite
+The constants depend only on `K, μ, b, β, α`, and precede the graph, finite
 site and event types, omitted labels, target support, cutoff and radius.
 The exponent is `(min b β) / 2`; empty supports, empty omitted sets and
 arbitrary disconnected graphs require no special hypotheses.
-Source: area law, `09-amplification.tex`, lines 203–215. -/
+Source: area law, `09-amplification.tex`, lines 188–215. -/
 theorem exists_sum_omitted_graphBall_exponentialDistanceProfile_le
     {K μ b β α : ℝ} (hK : 0 ≤ K) (hμ : 0 ≤ μ)
     (hb : 0 < b) (hβ : 0 < β) (hα : 0 < α) (hα₁ : α ≤ 1) :

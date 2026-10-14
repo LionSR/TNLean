@@ -11,8 +11,8 @@ import TNLean.PEPS.AreaLaw.Amplification.ChannelWordThinning
 
 The error of removing events from a chronological word is bounded by the sum
 of the omitted one-event errors at the retained prefixes. The proof uses
-subtraction and contraction for the actual spectator root
-channels, in matrix operator norm. The existing Poisson prefix identity and
+subtraction and contraction for the spectator root
+channels, in matrix operator norm. The Poisson prefix identity and
 retained-prefix occupation law then give the time-integrated expected error.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
@@ -34,7 +34,7 @@ namespace TNLean.PEPS.AreaLaw
 variable {q : ℕ} {ι κ Aux : Type*} [Fintype ι] [DecidableEq ι]
   [Fintype Aux] [DecidableEq Aux]
 
-/-- Actual chronological channel words preserve subtraction. -/
+/-- The chronological channel words preserve subtraction. -/
 theorem spectatorRootChannelWord_sub
     (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ) (w : List κ)
     (B C : Matrix ((ι → Fin q) × Aux) ((ι → Fin q) × Aux) ℂ) :
@@ -47,7 +47,7 @@ theorem spectatorRootChannelWord_sub
     rw [spectatorRootChannel_sub, ih]
     rfl
 
-/-- The actual channel word contracts differences in matrix operator norm. -/
+/-- The channel word contracts differences in matrix operator norm. -/
 theorem norm_spectatorRootChannelWord_sub_le
     (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (hk₀ : ∀ i, 0 ≤ k i) (hk₁ : ∀ i, k i ≤ 1) (w : List κ)
@@ -56,7 +56,7 @@ theorem norm_spectatorRootChannelWord_sub_le
   rw [← spectatorRootChannelWord_sub]
   exact norm_spectatorRootChannelWord_le k hk₀ hk₁ w (B - C)
 
-/-- The actual operator-norm error from retaining only the selected events. -/
+/-- The operator-norm error from retaining only the selected events. -/
 noncomputable def channelWordOmissionDefect
     (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (P : κ → Prop) [DecidablePred P] (w : List κ)
@@ -64,7 +64,7 @@ noncomputable def channelWordOmissionDefect
   ‖spectatorRootChannelWord k w B -
     spectatorRootChannelWord k (w.filter (fun i => decide (P i))) B‖
 
-/-- The actual omission defect is bounded independently of the word length. -/
+/-- The omission defect is bounded independently of the word length. -/
 theorem channelWordOmissionDefect_bounds
     (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
     (hk₀ : ∀ i, 0 ≤ k i) (hk₁ : ∀ i, k i ≤ 1)
@@ -78,7 +78,7 @@ theorem channelWordOmissionDefect_bounds
     (norm_spectatorRootChannelWord_le k hk₀ hk₁ _ B)).trans_eq (by ring))
 
 /-- A retained event does not increase the defect; an omitted one costs its
-actual action on the retained prefix. Source: area law,
+action on the retained prefix. Source: area law,
 `09-amplification.tex`, lines 203–215. -/
 theorem channelWordOmissionDefect_append_sub_le
     (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
@@ -115,7 +115,7 @@ theorem channelWordOmissionDefect_append_sub_le
       ‖spectatorRootChannel (k i) R - R‖
     linarith
 
-/-- The literal omitted-prefix telescope for an actual full Poisson word.
+/-- The omitted-prefix telescope for an full Poisson word.
 Source: area law, `09-amplification.tex`, lines 203–215. -/
 theorem channelWordOmissionDefect_le_sum_prefix
     (k : κ → Matrix (ι → Fin q) (ι → Fin q) ℂ)
@@ -141,9 +141,8 @@ theorem channelWordOmissionDefect_le_sum_prefix
     channelWordOmissionDefect_append_sub_le k hk₀ hk₁ P
       (List.ofFn (PoissonWord.take w j).2) (w.2 j) B
 
-/-- The actual full/retained channel error is integrable and bounded by the
+/-- The full/retained channel error is integrable and bounded by the
 time integral of omitted one-event errors under the retained-prefix law.
-Neither an independent-prefix assumption nor a supplied telescope is needed.
 Source: area law, `09-amplification.tex`, lines 203–215. -/
 theorem integrable_and_integral_channelWordOmissionDefect_le
     [Fintype κ]

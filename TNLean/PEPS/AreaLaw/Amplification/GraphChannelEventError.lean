@@ -7,16 +7,16 @@ import TNLean.PEPS.AreaLaw.Amplification.ExponentialChannelShells
 import TNLean.PEPS.AreaLaw.Amplification.ComponentChannelOscillation
 
 /-!
-# One-event errors from actual channel shells
+# One-event errors from channel shells
 
-Summing the actual localized channel shells bounds the operator-norm error of
+Summing the localized channel shells bounds the operator-norm error of
 a root channel by the physical site oscillations. At a finite radius containing
 the anchor component, the localized channel equals the full channel exactly.
 The coefficient is the shell coefficient itself, without the extra factor two
 needed when bounding a site-oscillation increment.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
-`09-amplification.tex`, lines 101–121 and 203–215, at revision
+`09-amplification.tex`, lines 101–121 and 188–191, at revision
 `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Independently formalized from the manuscript; no upstream Lean text is reused.
 -/
@@ -34,8 +34,8 @@ namespace TNLean.PEPS.AreaLaw
 variable {q : ℕ} {ι Aux : Type*} [Fintype ι] [DecidableEq ι] [NeZero q]
   [Fintype Aux] [DecidableEq Aux]
 
-/-- The finite shell sum controls the actual localized channel error in
-operator norm. Source: area law, `09-amplification.tex`, lines 101–121,203–215. -/
+/-- The finite shell sum controls the localized channel error in
+operator norm. Source: area law, `09-amplification.tex`, lines 101–121 and 188–191. -/
 theorem norm_localRootChannel_sub_self_le_exp_sum_siteOscillation
     (regions : ℕ → Finset ι) (hregions : Monotone regions)
     {k : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)
@@ -69,7 +69,7 @@ theorem norm_localRootChannel_sub_self_le_exp_sum_siteOscillation
 
 /-- Once the graph-ball cutoff contains the anchor component, the finite shell
 bound controls the full physical event error. Source: area law,
-`09-amplification.tex`, lines 135–139,203–215. -/
+`09-amplification.tex`, lines 135–137 and 188–191. -/
 theorem norm_spectatorRootChannel_sub_self_le_exp_of_component_support
     (G : SimpleGraph ι) (a : ι) {k : Matrix (ι → Fin q) (ι → Fin q) ℂ}
     (hk₀ : 0 ≤ k) (hk₁ : k ≤ 1)

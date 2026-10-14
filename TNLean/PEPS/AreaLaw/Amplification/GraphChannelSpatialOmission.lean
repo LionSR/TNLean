@@ -9,13 +9,13 @@ import TNLean.PEPS.AreaLaw.Amplification.GraphChannelPoissonGrowth
 import TNLean.PEPS.AreaLaw.Amplification.GraphOmittedAnchorTail
 
 /-!
-# Spatial omission bounds for actual physical channel words
+# Spatial omission bounds for physical channel words
 
 The full and retained words are coupled by filtering the same finite Poisson
 word. Their expected operator-norm difference has a stretched-exponential
 spatial bound, uniform in the graph, event labels, local dimension, spectator,
 support and cutoff. The proof derives the physical oscillation growth from
-the actual effects and their localization tails, and combines it with the
+the effects and their localization tails, and combines it with the
 omitted-prefix occupation identity and the graph anchor-tail estimate.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
@@ -62,7 +62,7 @@ theorem mem_supportedOperators_reachable_of_forall_tail
   rw [← hk, ← coe_graphBall_eq_reachable_of_sup_dist_le G a le_rfl]
   exact siteExpectation_mem_supportedOperators _ k
 
-/-- Uniform spatial decay for the expectation of the actual full/retained
+/-- Uniform spatial decay for the expectation of the full/retained
 operator-norm defect. Every constant is chosen before the graph, all finite
 types, physical effects, retained predicate, cutoff, observable and time.
 The initial observable may be non-Hermitian and the finite spectator may be
