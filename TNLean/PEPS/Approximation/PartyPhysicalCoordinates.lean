@@ -54,7 +54,6 @@ theorem bijective_party_configuration_map
     · obtain ⟨v, rfl⟩ := hp
       simpa only [howner v, x, Equiv.coe_ofBijective] using
         (Equiv.ofBijective (out (owner v)) (hout v)).apply_symm_apply (y (owner v))
-    · letI := hdormant p hp
-      exact Subsingleton.elim _ _
+    · exact @Subsingleton.elim (Out p) (hdormant p hp) _ _
 
 end TNLean.PEPS.Approximation
