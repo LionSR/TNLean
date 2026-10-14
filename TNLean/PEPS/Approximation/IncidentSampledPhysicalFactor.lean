@@ -83,6 +83,30 @@ def incidentSampledPhysicalFactor
     wordCoordinateMatrix (incidentSampledEndpointWord w k lam L R p η θ j ω) bIn bIn
   Matrix.partialTraceRight (α := Fin (d p)) (β := E q) (Dη * Nηθ * Dθᴴ)
 
+open Classical in
+/-- Equal selected word evaluations give the same mixed physical matrix in
+prescribed orthonormal bases. The coordinate equalities are formed before
+original circuit and sample data are substituted. Source: polynomial-PEPS
+Theorem 5.2, `04-compression.tex`, lines 253–267 and 574–579. -/
+private theorem restrictedMixedPhysicalTrace_eq_of_word_evals
+    {Q J X K : Type} [Fintype J] [Fintype X] [Fintype K]
+    {a b : Layout Q} (f : Q → Bool) (u t : Word a b) (v : Word a a)
+    (hu : u.sources = []) (ht : t.sources = []) (hv : v.sources = [])
+    (B : OrthonormalBasis J ℂ (Mem (Layout.restrict f a)))
+    (C : OrthonormalBasis (X × K) ℂ (Mem (Layout.restrict f b)))
+    (u' t' : Word (Layout.restrict f a) (Layout.restrict f b))
+    (v' : Word (Layout.restrict f a) (Layout.restrict f a))
+    (hU : (u.restrict f hu).eval = u'.eval)
+    (hT : (t.restrict f ht).eval = t'.eval)
+    (hV : (v.restrict f hv).eval = v'.eval) :
+    restrictedMixedPhysicalTrace f u t v hu ht hv B C =
+      Matrix.partialTraceRight (α := X) (β := K)
+        (wordCoordinateMatrix u' B C * wordCoordinateMatrix v' B B *
+          (wordCoordinateMatrix t' B C)ᴴ) := by
+  unfold restrictedMixedPhysicalTrace wordCoordinateMatrix
+  rw [matrix_repr_eval_eq_toMatrix B C (u.restrict f hu).eval,
+    matrix_repr_eval_eq_toMatrix B C (t.restrict f ht).eval, hU, hT, hV]
+
 /-- At independently extracted incident labels, the directly constructed
 physical factor equals the actual factor at the same original party. The
 sample assignment is restricted to the singleton source slots, and the original
@@ -122,37 +146,24 @@ theorem sampledPhysicalFactor_eq_incidentSampledPhysicalFactor
       (Mem (Layout.atParty q (Layout.mapOwner (affectedOwner (fun _ : P ↦ true))
         (familyPhysicalLayout d ps ++ garbage)))) :=
     selectedPhysicalPrivateBasis (E := E) d ps hn hc garbage BG q
-  let columnMatrix (u : Mem (Layout.atParty q (w.allResidualSourceLayout ++ [])) →L[ℂ]
-      Mem (Layout.atParty q (Layout.mapOwner (affectedOwner (fun _ : P ↦ true))
-        (familyPhysicalLayout d ps ++ garbage)))) : Matrix (Fin (d p) × E q) (I q) ℂ :=
-    Matrix.of (fun row col ↦ bOut.repr (u (bIn col)) row)
-  conv_rhs =>
-    dsimp only [incidentSampledPhysicalFactor, wordCoordinateMatrix, Classical.typeDecidableEq]
-    erw [← matrix_repr_eval_eq_toMatrix bIn bOut
-      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)).eval,
-      ← matrix_repr_eval_eq_toMatrix bIn bOut
-        (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ζ)).eval]
-  change Matrix.partialTraceRight (α := Fin (d p)) (β := E q)
-    (columnMatrix ((w.partialSourceWord ψ ξ).restrict (partySelector q)
-        (sources_partialSourceWord w ψ ξ)).eval *
-      LinearMap.toMatrix bIn.toBasis bIn.toBasis
-        ((sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict (partySelector q)
-          (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω)).eval.toLinearMap *
-      (columnMatrix ((w.partialSourceWord ψ ζ).restrict (partySelector q)
-        (sources_partialSourceWord w ψ ζ)).eval)ᴴ) =
-    Matrix.partialTraceRight (α := Fin (d p)) (β := E q)
-      (columnMatrix (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)).eval *
-        LinearMap.toMatrix bIn.toBasis bIn.toBasis
-          (incidentSampledEndpointWord w k lam L R p
-            (originalGateLabelsAtOfAllChoices w p ξ)
-            (originalGateLabelsAtOfAllChoices w p ζ)
-            (fun i ↦ j (partialSlotEquiv
-              (fun t ↦ partySelector (some ⟨p, rfl⟩)
-                (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω).eval.toLinearMap *
-        (columnMatrix
-          (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ζ)).eval)ᴴ)
-  rw [restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ξ,
-    restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ζ,
-    restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord w k lam L R p ξ ζ j ω]
+  have h := restrictedMixedPhysicalTrace_eq_of_word_evals
+    (partySelector q) (w.partialSourceWord ψ ξ) (w.partialSourceWord ψ ζ)
+    (sampledEndpointInputWord w k lam L R ξ ζ j ω)
+    (sources_partialSourceWord w ψ ξ) (sources_partialSourceWord w ψ ζ)
+    (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω) bIn bOut
+    (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ))
+    (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ζ))
+    (incidentSampledEndpointWord w k lam L R p
+      (originalGateLabelsAtOfAllChoices w p ξ)
+      (originalGateLabelsAtOfAllChoices w p ζ)
+      (fun i ↦ j (partialSlotEquiv
+        (fun t ↦ partySelector (some ⟨p, rfl⟩)
+          (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω)
+    (restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ξ)
+    (restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ζ)
+    (restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord
+      w k lam L R p ξ ζ j ω)
+  simpa only [sampledPhysicalFactor, incidentSampledPhysicalFactor,
+    Classical.typeDecidableEq] using h
 
 end TNLean.PEPS.PairEffect.SourceCircuit

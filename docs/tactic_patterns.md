@@ -7563,13 +7563,13 @@ spectral split → block extraction → MPV calculation → strict bounds
 
 - **Pattern:** Form a word's coordinate matrix in prescribed orthonormal
   input and output bases using `LinearMap.toMatrix`.
-- **Seen:** The three matrix initializers in `IncidentSampledPhysicalFactor.lean`
-  under `PEPS/Approximation/`.
+- **Seen:** Three matrix initializers and three coordinate terms in the generic
+  comparison in `PEPS/Approximation/IncidentSampledPhysicalFactor.lean`.
 - **Abstraction:** The private `wordCoordinateMatrix` applies the existing
   matrix constructor to arbitrary words and bases before the actual incident
   data are supplied. The existing `matrix_repr_eval_eq_toMatrix` identifies
   the result with the coordinate-entry formula. The partial trace is unchanged.
-- **Notes:** Three uses in one file. A matching use in another file would meet
+- **Notes:** Six calls in one file. A matching use in another file would meet
   the promotion threshold. This isolates the repeated basis conversion at the
   closed build's checking-limit diagnostic; no hypothesis or limit is added.
   Hosted acceptance and timing remain pending.
