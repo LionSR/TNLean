@@ -8,12 +8,15 @@ Authors: TNLean contributors
 -- Import architecture: docs/import_structure.md.
 -- Generated aggregator module: TNLean.PEPS.AreaLaw.Amplification
 
+import TNLean.PEPS.AreaLaw.Amplification.AncillaSiteEntropy
+import TNLean.PEPS.AreaLaw.Amplification.AncillaTransport
 import TNLean.PEPS.AreaLaw.Amplification.ChannelGroundVectors
 import TNLean.PEPS.AreaLaw.Amplification.ChannelShellOscillation
 import TNLean.PEPS.AreaLaw.Amplification.ChannelWordObservables
 import TNLean.PEPS.AreaLaw.Amplification.ChannelWordOmission
 import TNLean.PEPS.AreaLaw.Amplification.ChannelWordThinning
 import TNLean.PEPS.AreaLaw.Amplification.ComponentChannelOscillation
+import TNLean.PEPS.AreaLaw.Amplification.ConstraintWordLists
 import TNLean.PEPS.AreaLaw.Amplification.ConstraintWordTruncation
 import TNLean.PEPS.AreaLaw.Amplification.EntropyComparison
 import TNLean.PEPS.AreaLaw.Amplification.ExponentialChannelShells
@@ -26,6 +29,8 @@ import TNLean.PEPS.AreaLaw.Amplification.GraphChannelPoissonGrowth
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelSpatialOmission
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelWeightedRow
 import TNLean.PEPS.AreaLaw.Amplification.GraphOmittedAnchorTail
+import TNLean.PEPS.AreaLaw.Amplification.LatticeAncillaSites
+import TNLean.PEPS.AreaLaw.Amplification.LatticeAncillaTransport
 import TNLean.PEPS.AreaLaw.Amplification.LatticeChannelPoissonGrowth
 import TNLean.PEPS.AreaLaw.Amplification.LatticeChannelPoissonThinning
 import TNLean.PEPS.AreaLaw.Amplification.LatticeChannelSpatialOmission
@@ -34,5 +39,7 @@ import TNLean.PEPS.AreaLaw.Amplification.LatticeExcitedDecay
 import TNLean.PEPS.AreaLaw.Amplification.LatticeRestoring
 import TNLean.PEPS.AreaLaw.Amplification.LocalChannelOscillation
 import TNLean.PEPS.AreaLaw.Amplification.LocalRootChannels
+import TNLean.PEPS.AreaLaw.Amplification.RadiusBound
 import TNLean.PEPS.AreaLaw.Amplification.RadiusScales
+import TNLean.PEPS.AreaLaw.Amplification.SupportedPolarCorrection
 import TNLean.PEPS.AreaLaw.Amplification.TypicalProjectors
