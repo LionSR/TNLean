@@ -3,6 +3,7 @@
 \begin{theorem}[The full physical configuration bijection]
     \label{thm:peps_physical_site_configurations}
     \lean{TNLean.PEPS.Approximation.bijective_party_configuration_map}
+    \leanok
     Let $P$ and $V$ be sets of parties and sites, let $A$ be a physical
     coordinate alphabet, and let $X_p$ be the coordinate alphabet of party
     $p$. Assign a site $a_p\in V$ to each party and a carrying party $r_v\in P$
@@ -20,7 +21,7 @@
     coordinate identification for the assembly in
     \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     The inverse reads each carrying party:
     \begin{align}
         \Psi(y)_v & = f_{r_v}^{-1}(y_{r_v}).

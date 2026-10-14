@@ -4347,8 +4347,8 @@ three-plaquette output measurement, and the routed reunion measurement.
   The one-owner-per-site theorem supplies the complete dependent configuration
   bijection; no additional closing tactic is proposed.
 - **Notes:** Subsingleton physical coordinates retain their scalar tensor
-  factors. No local tensor is assumed to equal one. The new owner-coordinate
-  theorem remains uncompiled; the actual protocol must supply its hypotheses.
+  factors. No local tensor is assumed to equal one. The actual protocol must
+  supply the hypotheses of the owner-coordinate theorem.
 
 
 ### Upper endpoint of a scanner band — candidate (2026-10-12)
