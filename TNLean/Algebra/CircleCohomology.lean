@@ -36,6 +36,8 @@ open CategoryTheory
 
 namespace TNLean.Algebra
 
+open scoped ScalarCohomology
+
 variable {G : Type} [Group G]
 
 set_option warn.classDefReducibility false in
@@ -125,22 +127,9 @@ theorem ScalarCocycle.positiveResidual_isPositiveValued (ω : ScalarCocycle G) :
   intro x g h
   exact ⟨PositiveUnits.norm (ω g h), (Complex.div_toUnits_unitsPhase (ω g h)).symm⟩
 
-/-- For a finite group, the radial residual of a scalar cocycle is a
-coboundary.  This is the one-block specialization of the positive generalized
-cocycle trivialization. -/
-theorem ScalarCocycle.positiveResidual_isCoboundary [Finite G]
-    {ω : ScalarCocycle G} (hω : ω.IsCocycle) :
-    ScalarCocycle.IsCoboundary
-      (fun g h ↦ ω.positiveResidual PUnit.unit g h) := by
-  obtain ⟨χ, _, hχ⟩ := LSymbol.exists_positive_coboundary
-    (positiveResidual_isGeneralizedCocycle hω)
-    (positiveResidual_isPositiveValued ω)
-  refine ⟨fun g ↦ χ g PUnit.unit, fun g h ↦ ?_⟩
-  have hχApply := congrFun (congrFun (congrFun hχ PUnit.unit) g) h
-  simpa [ActionTensorGauge.coboundary, div_eq_mul_inv] using hχApply
-
 /-- Every `ℂˣ`-valued scalar cocycle of a finite group is cohomologous to the
-inclusion of its pointwise `U(1)` phase.
+inclusion of its pointwise `U(1)` phase: the radial residual is a coboundary, by the
+one-block specialization of the positive generalized cocycle trivialization.
 
 This is the finite-discrete algebraic comparison used for
 arXiv:2502.20257, line 1931.  It does not use the sheaf-cohomology argument in
@@ -148,15 +137,20 @@ the source footnote. -/
 theorem ScalarCocycle.cohomologousTo_circlePhaseInclusion [Finite G]
     {ω : ScalarCocycle G} (hω : ω.IsCocycle) :
     ω.CohomologousTo ω.circlePhaseInclusion := by
-  rw [ScalarCocycle.cohomologousTo_iff_isCoboundary_div]
-  change ScalarCocycle.IsCoboundary
-    (fun g h ↦ ω g h / ω.circlePhaseInclusion g h)
-  exact positiveResidual_isCoboundary hω
+  obtain ⟨χ, _, hχ⟩ := LSymbol.exists_positive_coboundary
+    (positiveResidual_isGeneralizedCocycle hω)
+    (positiveResidual_isPositiveValued ω)
+  refine ⟨fun g ↦ χ g PUnit.unit, fun g h ↦ ?_⟩
+  have hχApply := congrFun (congrFun (congrFun hχ PUnit.unit) g) h
+  change ω g h / ω.circlePhaseInclusion g h =
+    χ g PUnit.unit * χ h PUnit.unit / χ (g * h) PUnit.unit at hχApply
+  rw [div_eq_iff_eq_mul] at hχApply
+  rw [hχApply, div_eq_mul_inv]
 
 /-- Inclusion of circle coefficients as a morphism of trivial
 representations. -/
 def circleToComplexUnitsRepHom (G : Type) [Group G] :
-    circleH2Representation G ⟶ scalarH2Representation G := by
+    circleH2Representation G ⟶ Rep.ofMulDistribMulAction G (Units ℂ) := by
   apply Rep.ofHom
   refine ⟨Circle.toUnits.toAdditive.toIntLinearMap, ?_⟩
   intro g
@@ -164,7 +158,7 @@ def circleToComplexUnitsRepHom (G : Type) [Group G] :
 
 /-- Unit phase as a morphism of trivial representations. -/
 def complexUnitsPhaseRepHom (G : Type) [Group G] :
-    scalarH2Representation G ⟶ circleH2Representation G := by
+    Rep.ofMulDistribMulAction G (Units ℂ) ⟶ circleH2Representation G := by
   apply Rep.ofHom
   refine ⟨Complex.unitsPhase.toAdditive.toIntLinearMap, ?_⟩
   intro g
@@ -182,58 +176,37 @@ theorem circleToComplexUnitsRepHom_comp_complexUnitsPhaseRepHom (G : Type) [Grou
 /-- The Mathlib circle-valued cocycle obtained by taking the pointwise phase
 of a complex-unit-valued cocycle. -/
 noncomputable def ScalarCocycle.circlePhaseMathlibCocycle {G : Type} [Group G]
-    (ω : groupCohomology.cocycles₂ (scalarH2Representation G)) :
+    (ω : groupCohomology.cocycles₂ (Rep.ofMulDistribMulAction G (Units ℂ))) :
     groupCohomology.cocycles₂ (circleH2Representation G) :=
   groupCohomology.mapCocycles₂ (MonoidHom.id G)
     (complexUnitsPhaseRepHom G) ω
 
-/-- Mapping the phase representative back to complex units gives the
-pointwise phase inclusion of the original curried representative. -/
-theorem ScalarCocycle.ofMathlibCocycle_map_circlePhaseMathlibCocycle
-    {G : Type} [Group G]
-    (ω : groupCohomology.cocycles₂ (scalarH2Representation G)) :
-    (ScalarCocycle.ofMathlibCocycle
-      (groupCohomology.mapCocycles₂ (MonoidHom.id G)
-        (circleToComplexUnitsRepHom G)
-        (ScalarCocycle.circlePhaseMathlibCocycle ω))).1 =
-      (ScalarCocycle.ofMathlibCocycle ω).1.circlePhaseInclusion := by
-  rfl
-
-/-- For a finite group, the included pointwise-phase representative and the
-original complex-unit-valued representative determine the same canonical
-degree-two cohomology class. -/
+/-- For a finite group, the included pointwise-phase representative of a scalar cocycle `ω`
+and `ω` itself determine the same class in `H²(G, ℂˣ)`. -/
 theorem ScalarCocycle.H2π_map_circlePhaseMathlibCocycle
-    {G : Type} [Group G] [Finite G]
-    (ω : groupCohomology.cocycles₂ (scalarH2Representation G)) :
-    groupCohomology.H2π (scalarH2Representation G)
+    {G : Type} [Group G] [Finite G] {ω : ScalarCocycle G} (hω : ω.IsCocycle) :
+    groupCohomology.H2π (Rep.ofMulDistribMulAction G (Units ℂ))
         (groupCohomology.mapCocycles₂ (MonoidHom.id G)
           (circleToComplexUnitsRepHom G)
-          (ScalarCocycle.circlePhaseMathlibCocycle ω)) =
-      groupCohomology.H2π (scalarH2Representation G) ω := by
-  let ωphase := groupCohomology.mapCocycles₂ (MonoidHom.id G)
-    (circleToComplexUnitsRepHom G)
-    (ScalarCocycle.circlePhaseMathlibCocycle ω)
-  have hcoh :
-      (ScalarCocycle.ofMathlibCocycle ωphase).1.CohomologousTo
-        (ScalarCocycle.ofMathlibCocycle ω).1 := by
-    rw [ofMathlibCocycle_map_circlePhaseMathlibCocycle]
-    exact (ScalarCocycle.cohomologousTo_circlePhaseInclusion
-      (ScalarCocycle.ofMathlibCocycle ω).2).symm
-  exact (ScalarCocycle.cohomologousTo_iff_H2π_eq
-    (ScalarCocycle.ofMathlibCocycle ωphase)
-    (ScalarCocycle.ofMathlibCocycle ω)).mp hcoh
+          (ScalarCocycle.circlePhaseMathlibCocycle
+            (groupCohomology.cocyclesOfIsMulCocycle₂ hω.isMulCocycle₂))) =
+      groupCohomology.H2π (Rep.ofMulDistribMulAction G (Units ℂ))
+        (groupCohomology.cocyclesOfIsMulCocycle₂ hω.isMulCocycle₂) := by
+  have hcoh := ScalarCocycle.cohomologousTo_circlePhaseInclusion hω
+  exact (ScalarCocycle.cohomologousTo_iff_H2π_eq (hω.of_cohomologousTo hcoh.symm) hω).mp
+    hcoh.symm
 
 /-- The coefficient-inclusion map
 `H²(G, U(1)) → H²(G, ℂˣ)`. -/
 noncomputable def circleH2ToComplexUnitsH2 (G : Type) [Group G] :
     groupCohomology.H2 (circleH2Representation G) ⟶
-      groupCohomology.H2 (scalarH2Representation G) :=
+      groupCohomology.H2 (Rep.ofMulDistribMulAction G (Units ℂ)) :=
   groupCohomology.map (MonoidHom.id G) (circleToComplexUnitsRepHom G) 2
 
 /-- The coefficient phase map
 `H²(G, ℂˣ) → H²(G, U(1))`. -/
 noncomputable def complexUnitsH2ToCircleH2 (G : Type) [Group G] :
-    groupCohomology.H2 (scalarH2Representation G) ⟶
+    groupCohomology.H2 (Rep.ofMulDistribMulAction G (Units ℂ)) ⟶
       groupCohomology.H2 (circleH2Representation G) :=
   groupCohomology.map (MonoidHom.id G) (complexUnitsPhaseRepHom G) 2
 
@@ -263,18 +236,14 @@ included pointwise-phase cocycle as a `U(1)`-valued representative. -/
 theorem circleH2ToComplexUnitsH2_surjective (G : Type) [Group G] [Finite G] :
     Function.Surjective (circleH2ToComplexUnitsH2 G) := by
   intro x
-  refine groupCohomology.H2_induction_on
-    (C := fun y ↦ ∃ z, circleH2ToComplexUnitsH2 G z = y) x ?_
-  intro ω
+  obtain ⟨ω, hω, rfl⟩ := ScalarCocycle.exists_H2π_eq x
   refine ⟨groupCohomology.H2π (circleH2Representation G)
-    (ScalarCocycle.circlePhaseMathlibCocycle ω), ?_⟩
+    (ScalarCocycle.circlePhaseMathlibCocycle
+      (groupCohomology.cocyclesOfIsMulCocycle₂ hω.isMulCocycle₂)), ?_⟩
   change groupCohomology.map (MonoidHom.id G)
-      (circleToComplexUnitsRepHom G) 2
-        (groupCohomology.H2π (circleH2Representation G)
-          (ScalarCocycle.circlePhaseMathlibCocycle ω)) =
-    groupCohomology.H2π (scalarH2Representation G) ω
+      (circleToComplexUnitsRepHom G) 2 _ = _
   rw [groupCohomology.H2π_comp_map_apply]
-  exact ScalarCocycle.H2π_map_circlePhaseMathlibCocycle ω
+  exact ScalarCocycle.H2π_map_circlePhaseMathlibCocycle hω
 
 /-- For a finite group with trivial coefficient action, inclusion of the
 circle into the nonzero complex numbers induces the algebraic comparison
@@ -290,7 +259,7 @@ Mathlib's low-degree interface places the acting group and coefficient ring in
 the same universe, so this canonical comparison is stated for `G : Type`. -/
 noncomputable def circleH2EquivComplexUnitsH2 (G : Type) [Group G] [Finite G] :
     groupCohomology.H2 (circleH2Representation G) ≃ₗ[ℤ]
-      groupCohomology.H2 (scalarH2Representation G) :=
+      groupCohomology.H2 (Rep.ofMulDistribMulAction G (Units ℂ)) :=
   LinearEquiv.ofBijective (circleH2ToComplexUnitsH2 G).hom
     ⟨circleH2ToComplexUnitsH2_injective G,
       circleH2ToComplexUnitsH2_surjective G⟩

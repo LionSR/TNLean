@@ -55,6 +55,7 @@ noncomputable section
 namespace MPSTensor
 
 open TNLean.Algebra
+open scoped ScalarCohomology
 
 /-- Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex` line 1157).
 The physical unitary relating the blocked cluster tensor to the fixed-point tensor: its row
@@ -151,10 +152,12 @@ theorem isNontrivialClass_of_clusterSPTFixedPoint
       twistedTensor (sptFixedPointTensor 2) (sptFixedPointAction clusterProjRep 1) g i =
       (ρ'.X (g⁻¹) : Matrix (Fin 2) (Fin 2) ℂ) * sptFixedPointTensor 2 i *
         (((ρ'.X (g⁻¹))⁻¹ : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ)) :
-    ScalarCocycle.IsNontrivialClass ω' := by
+    groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂
+      (ScalarCocycle.isCocycle_of_projRep ρ' two_pos).isMulCocycle₂) ≠ 0 := by
   intro h
-  exact cluster_isNontrivialSPT
-    (((cohomologousTo_of_sptFixedPointTensor clusterProjRep 1 ρ'
-      (fun g i => by rw [MonoidHom.one_apply, one_smul]; exact hρ' g i)).symm).trans h)
+  apply cluster_isNontrivialSPT
+  rw [← ScalarCocycle.cohomologousTo_one_iff_H2π_eq_zero] at h ⊢
+  exact ((cohomologousTo_of_sptFixedPointTensor clusterProjRep 1 ρ'
+    (fun g i => by rw [MonoidHom.one_apply, one_smul]; exact hρ' g i)).symm).trans h
 
 end MPSTensor

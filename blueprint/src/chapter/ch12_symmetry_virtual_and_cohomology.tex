@@ -468,9 +468,10 @@ Projective representations are classified up to projective equivalence by the
 second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
 
 \begin{definition}[Coboundary]\label{def:is_coboundary}
-    \lean{TNLean.Algebra.ScalarCocycle.IsCoboundary}
+    \lean{groupCohomology.IsMulCoboundary₂}
     \leanok
     \uses{def:scalar_cocycle}
+    Let $G$ act trivially on $\C^{\times}$.
     A scalar 2-cocycle $\omega$ is a \emph{coboundary} if there exists
     $\varphi \colon G \to \C^{\times}$ such that, for all $g,h \in G$,
     \begin{align}
@@ -598,45 +599,21 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
     $\C^\times$, which is precisely Definition~\ref{def:is_cocycle}.
 \end{proof}
 
-\begin{definition}[Second cohomology quotient]\label{def:h2_cx}
-    \lean{TNLean.Algebra.H2}
+\begin{definition}[Second cohomology group]\label{def:h2_cx}
+    \lean{groupCohomology.H2, groupCohomology.H2π,
+        TNLean.Algebra.ScalarCohomology.trivialMulDistribMulAction}
     \leanok
     \uses{def:cohomologous_to, def:is_cocycle}
-    The second cohomology set is the quotient
+    Let $G$ act trivially on $\C^{\times}$. The second cohomology group
+    is the quotient
     \begin{align}
         H^2(G,\C^{\times})
-         & :=Z^2(G,\C^{\times})/{\sim},
+         & :=Z^2(G,\C^{\times})/B^2(G,\C^{\times})
         \label{eq:symmetry_h2_quotient}
     \end{align}
-    where $\sim$ is the coboundary-equivalence relation.
+    of $2$-cocycles by coboundaries. The \emph{class} $[\omega]$ of a
+    $2$-cocycle $\omega$ is its image in this quotient.
 \end{definition}
-
-\begin{definition}[Agreement of factor-system cohomology classes]\label{def:projectively_equivalent}
-    \lean{TNLean.Algebra.ProjectivelyEquivalent}
-    \leanok
-    \uses{def:projective_rep, def:cohomologous_to}
-    Two projective representations are \emph{projectively equivalent} when their
-    factor systems are cohomologous in $H^2(G,\C^\times)$.
-\end{definition}
-
-\begin{theorem}[Factor-system class agreement]%
-    \label{thm:projrep_equiv_iff_cohomologous}
-    \lean{TNLean.Algebra.projRep_equiv_iff_cohomologous}
-    \leanok
-    \uses{def:projectively_equivalent, def:cohomologous_to}
-    Let $\rho_1,\rho_2$ be projective representations with factor systems
-    $\omega_1,\omega_2$. Then
-    \begin{align}
-        \rho_1 \sim_{\mathrm{proj}} \rho_2
-         & \iff \omega_1 \sim \omega_2.
-        \label{eq:symmetry_projective_equivalence}
-    \end{align}
-\end{theorem}
-
-\begin{proof}\leanok\uses{def:projectively_equivalent}
-    This follows from the definition of projective equivalence as
-    cohomology-class equality for factor systems.
-\end{proof}
 
 \subsection{Non-triviality via the commutator phase}
 
@@ -681,19 +658,22 @@ witnesses non-triviality of the class.
 \end{proof}
 
 \begin{definition}[Non-trivial cohomology class]\label{def:nontrivial_class}
-    \lean{TNLean.Algebra.ScalarCocycle.IsNontrivialClass}
+    \lean{TNLean.Algebra.ScalarCocycle.H2π_one,
+        TNLean.Algebra.ScalarCocycle.cohomologousTo_one_iff_H2π_eq_zero}
     \leanok
-    \uses{def:cohomologous_to}
-    A factor system $\omega$ has a \emph{non-trivial class} when it is not
-    cohomologous to the constant cocycle $1$.
+    \uses{def:cohomologous_to, def:h2_cx}
+    A factor system $\omega$ that is a $2$-cocycle has a \emph{non-trivial
+        class} when $[\omega]\neq 0$ in $H^2(G,\C^{\times})$. The class of the
+    constant cocycle $1$ is zero, and $[\omega]=0$ exactly when $\omega$ is
+    cohomologous to $1$.
 \end{definition}
 
 \begin{theorem}[Commutator-phase non-triviality test]\label{thm:nontrivial_of_comm_phase}
-    \lean{TNLean.Algebra.ScalarCocycle.isNontrivialClass_of_commPhase_ne_one}
+    \lean{TNLean.Algebra.ScalarCocycle.H2π_ne_zero_of_commPhase_ne_one}
     \leanok
     \uses{def:nontrivial_class, def:comm_phase, thm:comm_phase_invariant}
-    If a commuting pair $g,h$ has $\beta_\omega(g,h)\neq 1$, then $\omega$ has a
-    non-trivial class.
+    If a $2$-cocycle $\omega$ has $\beta_\omega(g,h)\neq 1$ at a commuting
+    pair $g,h$, then $\omega$ has a non-trivial class.
 \end{theorem}
 
 \begin{proof}\leanok\uses{thm:comm_phase_invariant}

@@ -27,6 +27,7 @@ edge modes" (`Papers/2011.12127/TN-Review-main.tex` line 1171).
 -/
 
 open Module
+open scoped TNLean.Algebra.ScalarCohomology
 
 namespace TNLean.Algebra
 
@@ -37,7 +38,9 @@ representation.**  Source: arXiv:2011.12127, §III.A
 (`Papers/2011.12127/TN-Review-main.tex` line 1171). -/
 theorem ProjectiveRepresentation.finrank_eigenspace_ne_one_of_commute
     {ω : ScalarCocycle G} (ρ : ProjectiveRepresentation (D := D) ω)
-    (hω : ScalarCocycle.IsNontrivialClass ω) {Λ : Matrix (Fin D) (Fin D) ℂ}
+    (hω : ω.IsCocycle)
+    (hnt : groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω.isMulCocycle₂) ≠ 0)
+    {Λ : Matrix (Fin D) (Fin D) ℂ}
     (hΛ : ∀ g, Commute Λ (ρ.X g : Matrix (Fin D) (Fin D) ℂ)) (μ : ℂ) :
     finrank ℂ (Module.End.eigenspace (Matrix.toLin' Λ) μ) ≠ 1 := by
   intro h1
@@ -61,8 +64,8 @@ theorem ProjectiveRepresentation.finrank_eigenspace_ne_one_of_commute
     apply hv0'
     have h := congrArg (((ρ.X g)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ).mulVec (hcv g)
     simpa [Matrix.mulVec_mulVec, hg] using h
-  apply hω
-  refine ⟨fun g => Units.mk0 (c g) (hc0 g), fun g h => ?_⟩
+  apply hnt
+  refine (ScalarCocycle.cohomologousTo_one_iff_H2π_eq_zero hω).mp ⟨fun g => Units.mk0 (c g) (hc0 g), fun g h => ?_⟩
   apply Units.ext
   simp only [Units.val_mul, Units.val_mk0, Units.val_inv_eq_inv_val, mul_one]
   have hmul := congrArg (fun M : Matrix (Fin D) (Fin D) ℂ => M.mulVec (v : Fin D → ℂ))
