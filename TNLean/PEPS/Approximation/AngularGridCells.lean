@@ -94,7 +94,7 @@ theorem dist_le_of_mem_cell {o x y : ℝ × ℝ} {q : ℝ} {i : ℤ × ℤ}
   rcases hx with ⟨hx₁, hx₂, hx₃, hx₄⟩
   rcases hy with ⟨hy₁, hy₂, hy₃, hy₄⟩
   rw [Prod.dist_eq, max_le_iff, Real.dist_eq, Real.dist_eq]
-  constructor <;> apply abs_le.mpr <;> constructor <;> linarith
+  constructor <;> apply abs_le.mpr <;> constructor <;> linarith [hq.le]
 
 /-- A finite index square, with one extra cell on each side to handle grid boundaries. -/
 def indexBox (j : ℤ × ℤ) (N : ℕ) : Finset (ℤ × ℤ) :=
@@ -104,7 +104,7 @@ def indexBox (j : ℤ × ℤ) (N : ℕ) : Finset (ℤ × ℤ) :=
 /-- The index square has an exact, translation-independent count. -/
 theorem card_indexBox (j : ℤ × ℤ) (N : ℕ) :
     (indexBox j N).card = (2 * N + 3) ^ 2 := by
-  rw [indexBox, Finset.card_product, Int.card_Icc, Int.card_Icc]
+  rw [indexBox, Finset.product_eq_sprod, Finset.card_product, Int.card_Icc, Int.card_Icc]
   have h₁ : j.1 + (N : ℤ) + 1 + 1 - (j.1 - (N : ℤ) - 1) =
       ((2 * N + 3 : ℕ) : ℤ) := by omega
   have h₂ : j.2 + (N : ℤ) + 1 + 1 - (j.2 - (N : ℤ) - 1) =
@@ -123,8 +123,8 @@ private theorem coordinate_index_bounds {o x c q t : ℝ} {i j : ℤ} {N : ℕ}
     nlinarith
   have hright : (i : ℝ) * q < ((j : ℝ) + (N : ℝ) + 1) * q := by
     nlinarith
-  have hleft' := le_of_lt ((mul_lt_mul_right hq).mp hleft)
-  have hright' := le_of_lt ((mul_lt_mul_right hq).mp hright)
+  have hleft' := le_of_lt ((mul_lt_mul_iff_left₀ hq).mp hleft)
+  have hright' := le_of_lt ((mul_lt_mul_iff_left₀ hq).mp hright)
   constructor
   · exact_mod_cast hleft'
   · exact_mod_cast hright'
