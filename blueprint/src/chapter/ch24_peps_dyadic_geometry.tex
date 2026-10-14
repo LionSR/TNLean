@@ -1350,26 +1350,28 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     gates by $4G\cdot4^2=64G$.
 \end{proof}
 
-\begin{definition}[Small-patch rewrite of a guide]
+\begin{definition}[Patch data of a guide rewrite]
     \label{def:peps_dyadic_guide_patch_rewrite}
     \lean{TNLean.PEPS.Approximation.GuidePatchRewrite, TNLean.PEPS.Approximation.GuidePatchRewrite.footprint, TNLean.PEPS.Approximation.GuidePatchRewrite.parties, TNLean.PEPS.Approximation.GuidePatchRewrite.IsJunctionResize, TNLean.PEPS.Approximation.GuidePatchRewrite.IsDirectRepainting}
     \leanok
     \uses{def:peps_dyadic_block_guide, def:peps_dyadic_incident_labels}
-    A small-patch rewrite of one sheet is given by its old and new guide, the
-    centres of finitely many patches with a common inner radius $u$, and the centres
-    of its affected old and new holes with one outer radius covering each of them.
-    Its footprint is the union of the outer patch squares, of radius $2u$, and of
-    the outer squares of the affected holes. Its parties are the labels of the old
-    and of the new guide on the footprint, and the tag holders of both guides at the
-    affected holes; these are the raw owners and the affected tag owners of
-    condition~4 of the small-patch rewrite lemma
-    in~\cite[Section~6]{OpenAI2026PolynomialPEPS}, which uses only them.
+    The patch data of a candidate small-patch rewrite of one sheet consists of its
+    old and new guide, the centres of finitely many patches with a common inner
+    radius $u$, and the centres of its affected old and new holes with one outer
+    radius covering each of them. Its footprint is the union of the outer patch
+    squares, of radius $2u$, and of the outer squares of the affected holes. Its
+    parties are the labels of the old and of the new guide on the footprint, and the
+    tag holders of both guides at the affected holes; these are the raw owners and
+    the affected tag owners named in condition~4 of the small-patch rewrite lemma
+    in~\cite[Section~6]{OpenAI2026PolynomialPEPS}. Conditions~1--3 of that lemma,
+    the two-owner tests outside the old and new inner holes and the avoidance of the
+    untouched hole footprints, are not part of the patch data.
 
-    The rewrite is the resize at the grid corner $(2^ju,2^jv)$ when both guides
-    are the block guide uniform on blocks of side $2^j$ at the end of the pass to
-    level $2^j$, its only affected hole is at the corner, and its footprint lies
-    within sup distance $2^j$ of the corner. It is the direct repainting of the
-    square $S$ with indices $(r,s)$ and side $2^{j'}$ when its old guide is the block
+    The patch data is that of the resize at the grid corner $(2^ju,2^jv)$ when both
+    guides are the block guide uniform on blocks of side $2^j$ at the end of the pass
+    to level $2^j$, its only affected hole is at the corner, and its footprint lies
+    within sup distance $2^j$ of the corner. It is that of the direct repainting of
+    the square $S$ with indices $(r,s)$ and side $2^{j'}$ when its old guide is the block
     guide of level $2^{j'}$ at a transition time, its new guide is the one in which
     $S$ also carries its new label, its affected holes lie at corners of $S$, and its
     footprint lies within sup distance $2^{j'}$ of the closed square $S$.
@@ -1399,11 +1401,11 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \uses{def:peps_dyadic_guide_patch_rewrite, def:peps_dyadic_used_parties}
     Label the blocks by an injective assignment of parties, none of them the
     placeholder. If the outer radius of the affected holes is positive, the parties
-    of a small-patch rewrite are labels of its old or new guide on its footprint.
-    Every block party of the resize at a grid corner is one of the four block
-    parties at the corner, and every block party of the direct repainting of a square
-    is used by the repainting of that square. This is ``Resizing uses the current
-    block labels near its junction'' and the locality of the direct repaintings
+    of the patch data are labels of its old or new guide on its footprint. Every
+    block party of the patch data of the resize at a grid corner is one of the four
+    block parties at the corner, and every block party of the patch data of the
+    direct repainting of a square is used by the repainting of that square. This is
+    ``Resizing uses the current block labels near its junction'' and the locality of the direct repaintings
     in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 500--541 and 585--594.
 \end{theorem}
 
@@ -1426,18 +1428,19 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \uses{def:peps_dyadic_guide_patch_rewrite}
     Let $\epsilon_0,\nu,t>0$ with $2\epsilon_0+3\nu<1$. The resize at the grid corner
     $c=(2^ju,2^jv)$ of the block guide at the end of the pass to level $2^j$, from
-    the hole radius $\epsilon_0\min(2^j,t)$ to $\epsilon_0\min(2^j/2,t)$, is a
-    resize rewrite whose patches form a square net of mesh $u=\nu2^j$. There are at
+    the hole radius $\epsilon_0\min(2^j,t)$ to $\epsilon_0\min(2^j/2,t)$, has
+    patch data whose patches form a square net of mesh $u=\nu2^j$. There are at
     most $(2(2\epsilon_0+\nu)/\nu+1)^2$ patches, and their inner squares cover both
     outer squares of the hole. The direct repainting of a square $S$ of side
     $n=2^{j'}$ at a transition time of level $n$, with affected holes at the four
-    corners of $S$ and hole radius $\epsilon_0\min(n,t)$, is a direct-repainting
-    rewrite whose patches form a square net of mesh $\nu n$. There are at most
+    corners of $S$ and hole radius $\epsilon_0\min(n,t)$, has patch data whose
+    patches form a square net of mesh $\nu n$. There are at most
     $(2(1/2+2\epsilon_0+\nu)/\nu+1)^2$ patches, and their inner squares cover the
     closed square $S$ and the outer squares of the four holes. Both counts are
     independent of the scale. These are the fine nets of the direct repainting and
     of the hole resizing in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines
-    500--541. The source repaints directly only for $n\le K_0t$; that restriction
+    500--541. Conditions~1--3 of the small-patch rewrite lemma are not verified for
+    these nets. The source repaints directly only for $n\le K_0t$; that restriction
     enters the two-owner condition on the patches, not the nets or their parties.
 \end{theorem}
 
@@ -1461,12 +1464,13 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \leanok
     \uses{thm:peps_dyadic_patch_rewrite_parties}
     Let the gates of a schedule on the hierarchy belong to repaintings and junction
-    resizes, at most $G$ to each event, and let each gate belong to the small-patch
-    rewrite of its event: a direct repainting of its square or the resize at its
-    junction. If a block party participates in a gate only when it is a party of the
-    gate's rewrite, it participates in at most $64G$ gates. That a gate of a
-    small-patch rewrite involves only the parties of the rewrite is the conclusion of
-    the small-patch rewrite lemma. This is the bounded lifetime participation
+    resizes, at most $G$ to each event, and let each gate carry the patch data of its
+    event: a direct repainting of its square or the resize at its junction, at a
+    level $j$ whose root square $[0,2^k]^2$ has $2^{k-j}$ blocks per side. If a block
+    party participates in a gate only when it is a party of the gate's patch data, it
+    participates in at most $64G$ gates. The bound is conditional on this hypothesis,
+    which is the conclusion of the small-patch rewrite lemma and is not derived here
+    from it. This is a conditional form of the bounded lifetime participation
     of~\cite[Proposition~7.1, item~2]{OpenAI2026PolynomialPEPS} for schedules
     consisting of direct repaintings and junction resizes; the large-scale
     repaintings, with their births, deaths, exchanges and point treatments, are not

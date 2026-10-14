@@ -7,55 +7,60 @@ import TNLean.PEPS.Approximation.DyadicActiveLabelParties
 import TNLean.PEPS.Approximation.DyadicSmallPatchCovers
 
 /-!
-# The small-patch rewrites of the junction resizes and the direct repaintings
+# Patch data of the junction resizes and the direct repaintings
 
 Proposition 7.1 of the polynomial-PEPS manuscript (`prop:protocol`, item 2) bounds the number of
 gates with other parties in which a party participates over its lifetime. The count is
 `TNLean.PEPS.Approximation.card_gates_le_of_uses`, under the hypothesis that each gate involves
-only the parties its event uses. This file constructs the small-patch rewrites of two kinds of
-events, and proves that hypothesis for them:
+only the parties its event uses. This file constructs the patch data of candidate small-patch
+rewrites for two kinds of events, and proves that every party of such patch data is used by its
+event:
 
 * the resize of the hole at a grid corner of the guide uniform on `2 ^ j`-blocks, before the
   level `2 ^ j / 2` (`06-geometry.tex:127–131, 529–541`);
 * the direct repainting of a square of side `n = 2 ^ j'` by one small-patch rewrite, as the
   source does for `n ≤ K₀ t` (`06-geometry.tex:500–524`).
 
-A small-patch rewrite (Lemma `lem:small-rewrite`, `05-frames.tex:188–218`) is given here by its
-old and new guide, the centres of its patches with a common inner radius `u`, and the centres of
-its affected holes with one outer radius covering every affected old and new hole. The parties of
-the rewrite are those of item 4 of the lemma: the raw owners, under the old and the new guide, on
-the outer patch squares (radius `2 u`) and on the outer footprints of the affected holes, and the
-tag holders of the affected holes. Lemma `lem:small-rewrite` asserts that the rewrite is
-implemented using only these parties. The frame form of the lemma, with the specified list of
-parties as data, is `TNLean.PEPS.EncodedFrame.SmallPatchRewrite`; here the raw owners are the
-labels of the guides, read in the plane.
+The patch data of a candidate small-patch rewrite (Lemma `lem:small-rewrite`,
+`05-frames.tex:188–218`) is its old and new guide, the centres of its patches with a common inner
+radius `u`, and the centres of its affected holes with one outer radius covering every affected
+old and new hole. Its parties are those named in item 4 of the lemma: the raw owners, under the
+old and the new guide, on the outer patch squares (radius `2 u`) and on the outer footprints of
+the affected holes, and the tag holders of the affected holes. Conditions 1–3 of the lemma (the
+two-owner tests outside the old and new inner holes, and the avoidance of the untouched hole
+footprints by the outer patch squares) are not part of the patch data and are not verified here
+for the constructed nets. The patch data is not connected to the frame form of the lemma,
+`TNLean.PEPS.EncodedFrame.SmallPatchRewrite`; here the raw owners are the labels of the guides,
+read in the plane.
 
 For both kinds of events the patches are a square net of mesh `u = ν 2 ^ j` over the region the
 source covers: the two outer footprints of the resized hole, or the repainted square together with
 the outer holes at its four corners. With `2 ε₀ + 3 ν < 1` the whole footprint of the rewrite
 lies within sup distance `2 ^ j` of the junction, or of the repainted square. A block guide takes
 there only the labels of the four blocks at the junction, or of the blocks that differ from the
-repainted square by at most one in each index. Hence every block party of the rewrite is used by
-its event, and the lifetime bound holds for every schedule whose gates belong to such rewrites.
+repainted square by at most one in each index. Hence every block party of the patch data is used
+by its event. The lifetime bound follows for every schedule of such events, under the hypothesis
+that each gate involves only the parties of its patch data. That hypothesis is the conclusion of
+Lemma `lem:small-rewrite`; it is not yet derived here from the frame-level lemma.
 
-The two-owner condition on the patches, the avoidance of the untouched holes, and the choice of
-`ν` are proved in `TNLean.PEPS.Approximation.DyadicSmallPatchCovers` and
+Geometric facts behind the two-owner condition, the avoidance of the untouched holes, and the
+choice of `ν` are in `TNLean.PEPS.Approximation.DyadicSmallPatchCovers` and
 `TNLean.PEPS.Approximation.DyadicFootprintScaling`; they do not enter the party count. The gates
 of the large-scale repaintings (`n > K₀ t`), with their births, deaths, exchanges and point
 treatments, are not treated here.
 
 ## Main results
 
-* `TNLean.PEPS.Approximation.GuidePatchRewrite`: a small-patch rewrite, with its footprint and its
-  parties.
+* `TNLean.PEPS.Approximation.GuidePatchRewrite`: the patch data of a candidate small-patch
+  rewrite, with its footprint and its parties.
 * `TNLean.PEPS.Approximation.GuidePatchRewrite.IsJunctionResize.uses`,
   `TNLean.PEPS.Approximation.GuidePatchRewrite.IsDirectRepainting.uses`: every block party of the
-  rewrite is used by its event.
+  patch data is used by its event.
 * `TNLean.PEPS.Approximation.exists_junctionResize`,
-  `TNLean.PEPS.Approximation.exists_directRepainting`: the rewrites of the source, with a net of
-  at most a fixed number of patches covering the region the source covers.
-* `TNLean.PEPS.Approximation.card_gates_le_of_guidePatchRewrites`: the lifetime bound when every
-  gate belongs to such a rewrite.
+  `TNLean.PEPS.Approximation.exists_directRepainting`: patch data for the rewrites of the source,
+  with a net of at most a fixed number of patches covering the region the source covers.
+* `TNLean.PEPS.Approximation.card_gates_le_of_guidePatchRewrites`: the lifetime bound, conditional
+  on each gate involving only the parties of its patch data.
 
 ## References
 
@@ -71,9 +76,10 @@ open Set Metric
 
 /-! ### Small-patch rewrites -/
 
-/-- A small-patch rewrite of one sheet: its old and new guide, the centres of its patches with a
-common inner radius `mesh`, and the centres of its affected old and new holes with an outer radius
-`holeOuter` covering each of them.
+/-- The patch data of a candidate small-patch rewrite of one sheet: its old and new guide, the
+centres of its patches with a common inner radius `mesh`, and the centres of its affected old and
+new holes with an outer radius `holeOuter` covering each of them. Conditions 1–3 of Lemma
+`lem:small-rewrite` (`05-frames.tex:194–202`) are not part of this structure.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Lemma `lem:small-rewrite`,
 `05-frames.tex:188–218`. -/
@@ -95,7 +101,7 @@ namespace GuidePatchRewrite
 
 variable {ι : Type*} (G : GuidePatchRewrite ι)
 
-/-- The footprint of a small-patch rewrite: its outer patch squares and the outer footprints of
+/-- The footprint of the patch data: its outer patch squares and the outer footprints of
 its affected holes.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), “the involved patch and affected-hole
@@ -103,8 +109,10 @@ footprints”, `05-frames.tex:203`. -/
 def footprint : Set (ℝ × ℝ) :=
   (⋃ c ∈ G.centers, closedBall c (2 * G.mesh)) ∪ ⋃ h ∈ G.holes, closedBall h G.holeOuter
 
-/-- The parties of a small-patch rewrite: the raw owners, under the old and the new guide, on its
-footprint, and the tag holders of its affected holes. The rewrite uses only these parties.
+/-- The parties of the patch data: the raw owners, under the old and the new guide, on its
+footprint, and the tag holders of its affected holes. These are the parties named in item 4 of
+Lemma `lem:small-rewrite`; that a rewrite meeting conditions 1–3 uses only them is the lemma's
+conclusion, not proved here.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Lemma `lem:small-rewrite`, item 4 and its
 conclusion, `05-frames.tex:203–216`. -/
@@ -113,7 +121,7 @@ def parties (ph : ι) : Set ι :=
     {l | ∃ h ∈ G.holes, IsTagHolder G.old ph h l ∨ IsTagHolder G.new ph h l}
 
 /-- The tag holder of an affected hole is a raw owner on its outer footprint, so the parties of a
-rewrite are the raw owners on its footprint. -/
+patch data are the raw owners on its footprint. -/
 theorem parties_subset (ph : ι) (h0 : 0 < G.holeOuter) :
     G.parties ph ⊆ G.old '' G.footprint ∪ G.new '' G.footprint := by
   have key : ∀ (f : ℝ × ℝ → ι), ∀ h ∈ G.holes, incidentLabels f h ⊆ f '' G.footprint :=
@@ -303,8 +311,8 @@ private theorem holeRadius_pos {ε₀ n t : ℝ} (hε : 0 < ε₀) (hn : 0 < n) 
 
 /-- **The rewrite of a junction resize.** For `0 < ν` and `2 ε₀ + 3 ν < 1`, the resize of the hole
 at the grid corner `c = (2 ^ j u, 2 ^ j v)` of the guide uniform on `2 ^ j`-blocks, from the outer
-radius `2 ε₀ min(2 ^ j, t)` to `2 ε₀ min(2 ^ j / 2, t)`, is a small-patch rewrite whose patches
-form a square net of mesh `u = ν 2 ^ j`. The net has at most `(2 (2 ε₀ + ν) / ν + 1) ^ 2`
+radius `2 ε₀ min(2 ^ j, t)` to `2 ε₀ min(2 ^ j / 2, t)`, has patch data whose patches form a
+square net of mesh `u = ν 2 ^ j`. The net has at most `(2 (2 ε₀ + ν) / ν + 1) ^ 2`
 patches, a number independent of the scale, and their inner squares cover both outer footprints
 of the hole.
 
@@ -368,13 +376,14 @@ theorem exists_junctionResize (party : ℕ × ℕ × ℕ → ι) (ph : ι) (M : 
 
 /-- **The rewrite of a direct repainting.** For `0 < ν` and `2 ε₀ + 3 ν < 1`, the direct
 repainting of the square `S = (r, s)` of side `n = 2 ^ j'` at a transition time of the level
-`2 ^ j'`, with affected holes at the four corners of `S` and outer radius `2 ε₀ min(n, t)`, is a
-small-patch rewrite whose patches form a square net of mesh `u = ν n`. The net has at most
+`2 ^ j'`, with affected holes at the four corners of `S` and outer radius `2 ε₀ min(n, t)`, has
+patch data whose patches form a square net of mesh `u = ν n`. The net has at most
 `(2 (1/2 + 2 ε₀ + ν) / ν + 1) ^ 2` patches, a number independent of the scale, and their inner
 squares cover the closed square `S` and the outer footprints of the affected holes.
 
-The source repaints directly only for `n ≤ K₀ t`; that restriction enters the two-owner condition
-on the patches, not the construction or its parties.
+Conditions 1–3 of Lemma `lem:small-rewrite` are not verified for this net. The source repaints
+directly only for `n ≤ K₀ t`; that restriction enters the two-owner condition on the patches, not
+the construction or its parties.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), “A fine net covers `S` and the entire affected
 outer holes with a fixed number of such patches”, `06-geometry.tex:500–524`. -/
@@ -479,24 +488,27 @@ end Parties
 
 /-- **Bounded lifetime participation for patch rewrites.** Let the gates `Γ` of a schedule on the
 hierarchy of `[0, 2 ^ k] ^ 2` belong to repaintings and junction resizes, `ev γ`, with at most `G`
-gates for each, and let each gate `γ` belong to the small-patch rewrite `rw γ` of its event: a
-direct repainting of its square or the resize of the hole at its junction. If the block party `x`
-participates in a gate only when it is a party of the gate's rewrite, then `x` participates in at
-most `64 G` gates.
+gates for each, and let each gate `γ` carry the patch data `rw γ` of its event: a direct
+repainting of its square or the resize of the hole at its junction, at level `j` with the root
+`[0, 2 ^ k] ^ 2` of `2 ^ (k - j)` blocks per side. If the block party `x` participates in a gate
+only when it is a party of the gate's patch data, then `x` participates in at most `64 G` gates.
 
-That a gate of a small-patch rewrite involves only the parties of the rewrite is the conclusion of
-Lemma `lem:small-rewrite`. The large-scale repaintings, implemented by births, deaths, exchanges
+The bound is conditional on that hypothesis `hP`. It is the conclusion of Lemma
+`lem:small-rewrite`, and is not yet derived from the frame-level lemma. The large-scale
+repaintings, implemented by births, deaths, exchanges
 and point treatments, are not covered.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`, item 2,
 `06-geometry.tex:31–32`, the direct repaintings and the hole resizing (lines 500–541), and the
 lifetime argument (lines 572–631). -/
 theorem card_gates_le_of_guidePatchRewrites {ι : Type*} {party : ℕ × ℕ × ℕ → ι} {ph : ι}
-    (hp : Function.Injective party) (hph : ∀ x, party x ≠ ph) (M : ℤ) {k : ℕ} {Γ : Type*}
+    (hp : Function.Injective party) (hph : ∀ x, party x ≠ ph) {k : ℕ} {Γ : Type*}
     [Fintype Γ] (ev : Γ → DyadicSquare k ⊕ DyadicJunction k) {G : ℕ}
     (hG : ∀ e, (Finset.univ.filter fun γ => ev γ = e).card ≤ G) (rw : Γ → GuidePatchRewrite ι)
-    (hrw : ∀ γ, Sum.elim (fun S => (rw γ).IsDirectRepainting party ph M S.1 S.2.1 S.2.2)
-      (fun J => (rw γ).IsJunctionResize party ph M J.1 J.2.1 J.2.2) (ev γ))
+    (hrw : ∀ γ, Sum.elim
+      (fun S => (rw γ).IsDirectRepainting party ph ((2 : ℤ) ^ (k - (S.1 : ℕ))) S.1 S.2.1 S.2.2)
+      (fun J => (rw γ).IsJunctionResize party ph ((2 : ℤ) ^ (k - (J.1 : ℕ))) J.1 J.2.1 J.2.2)
+      (ev γ))
     (x : ℕ × ℕ × ℕ) (P : Γ → Prop) [DecidablePred P]
     (hP : ∀ γ, P γ → party x ∈ (rw γ).parties ph) :
     (Finset.univ.filter P).card ≤ 64 * G := by
