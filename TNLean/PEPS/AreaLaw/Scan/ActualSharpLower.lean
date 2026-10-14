@@ -55,8 +55,9 @@ private theorem actualTerminal_sharpLower_geometry
   intro σ Q Y
   have hdisj : ∀ j g, Disjoint (Q j g) (Y j g) := fun j g => by
     simp only [Q, Y, receiving, middle]
-    exact Finset.disjoint_filter.mpr fun _ _ hx hy =>
-      Option.noConfusion (hx.symm.trans hy)
+    exact Finset.disjoint_filter.mpr fun _ _ hx hy => by
+      have hfalse : (some false : Option Bool) = none := hx.symm.trans hy
+      cases hfalse
   have hnest : ∀ j j' g g', g < g' → Q j g ∪ Y j g ⊆ Q j' g' := fun
     | Sum.inl ⟨_, hist⟩, Sum.inl ⟨_, hist'⟩, g, g', hgg' =>
       S.state_near_middle_subset_later_near hist hist' g g' hgg'
@@ -164,6 +165,7 @@ theorem exists_actualScan_sharp_lower_norm
   intro S hm hM Horizon h Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos β ι₀ n σ Q Y
     K rMom hmoment har haone hK pre k hk hpre hprenorm hsym ellC ellR Sent ε e
     hC hR hlabel entropyGap gaps gmax r b lower s p Dfill Dcharge Tfill Tcharge
+  letI : DecidableEq (Config k ι₀) := Fintype.decidablePiFintype
   obtain ⟨hdisj, hnest, hfar⟩ := actualTerminal_sharpLower_geometry S Horizon
   obtain ⟨N, ZS, hZS, hZSZS⟩ :=
     (isStarProjection_symProj
@@ -189,6 +191,7 @@ theorem exists_actualScan_sharp_lower_norm
     intro hzero
     apply hpre
     funext x
+    change pre k x = 0
     have hx : pre k (e (e.symm x)) = 0 :=
       congrArg (fun v : EuclideanSpace ℂ (Config k ι₀) => v (e.symm x)) hzero
     simpa only [Equiv.apply_symm_apply] using hx
