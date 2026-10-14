@@ -19,6 +19,7 @@ lines 143–149, 199–208 and 590–600.
 -/
 
 noncomputable section
+open scoped NNReal
 namespace TNLean.PEPS.PairEffect.EffectCircuit
 variable {P : Type}
 
