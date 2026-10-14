@@ -1,0 +1,50 @@
+\section{Stationarity at the original patch minimum}
+\label{sec:peps_regularized_patch_minimizer_stationarity}
+
+Use the finite local coordinates and ordered factors of
+Definition~\ref{def:peps_ordered_patch_factor_list}.
+Let $X_0\subseteq\cdots\subseteq X_{m-1}$, let $a_j>0$ and $b>0$, and
+fix an arbitrary input vector $\Omega\in\mathcal H_V$.
+For a feasible tuple of independent regional densities $x_j$, put
+\[
+    K_j=(x_j+bI_{X_j})^{-a_j/2},\qquad
+    \Psi(x)=\widehat K_{m-1}\cdots\widehat K_0\Omega.
+\]
+Write $\phi=\Psi(x)/\|\Psi(x)\|$, using $\phi=0$ when $\Psi(x)=0$, and
+let $\rho_j$ be its canonical marginal on $X_j$ as in
+Definition~\ref{def:peps_patch_canonical_marginal}.
+The following statement gives the commutation and density order in the
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L130-L205}{stationarity argument}
+at the original norm minimum.
+
+\begin{theorem}[Commutation and density order at a minimum]
+    \label{thm:peps_actual_patch_minimum_stationarity}
+    \lean{
+        TNLean.PEPS.normalizedRegularizedPatchMarginal_stationarity_of_isMinOn,
+        TNLean.PEPS.commute_filter_normalizedRegularizedPatchMarginal_of_isMinOn
+    }
+    \uses{def:peps_ordered_patch_factor_list,def:peps_patch_canonical_marginal}
+    Suppose that $x$ minimizes $\|\Psi(x)\|$ over the original feasible set.
+    Then for every $j$,
+    \[
+        [x_j,\rho_j]=0,\qquad
+        \rho_j\le x_j+bI_{X_j},\qquad
+        [K_j,\rho_j]=0.
+    \]
+    Equal regions at different indices retain independent densities.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_ordered_patch_minimizer,thm:peps_ordered_patch_marginal_coordinates}
+    The reversed list of factors is a descending nested list with positive
+    exponents and feasible density matrices. The canonical coordinate
+    identification preserves its ordered output and norm-minimization
+    comparison. Stationarity of the ordered patch list therefore gives
+    commutation of each $x_j$ with its final marginal and the displayed
+    density order. The coordinate identity for normalized marginals makes
+    this marginal exactly $\rho_j$. Finally, $x_j+bI_{X_j}$ is positive
+    definite. Since it commutes with $\rho_j$, its real powers commute
+    with $\rho_j$ as well, giving the assertion for $K_j$.
+\end{proof}
+
+No commutation between distinct filters is assumed. The input need not be
+normalized or nonzero, and the statement includes the empty product.
