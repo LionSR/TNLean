@@ -1,0 +1,67 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\doclink}[1]{%
+    \href{https://sirui-lu.com/TNLean/docs/#1.html}{\path{#1}}}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{Actual-Template Information Conditional on the Uniform Safe-Box Bound}
+\author{}
+\date{October 14, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+The theorem
+\leanid{TNLean.PEPS.AreaLaw.Scan.exists_template_final_mutualInformation_of_boxEntropy}
+constructs the actual scanner of every separated template and derives all
+its geometric and original-state target/prefix entropy inputs.  Its
+conclusion concerns the original state and the literal template regions
+$X=A\cap T$ and $S_0=A\cap T_L$, with
+\[
+  2I_\Omega(X:S_0^c)\leq Cn^{62497/62500},\qquad
+  2I_\Omega(X:S_0^c)\leq Cn^{1-1/100000}.
+\]
+
+The remaining analytic hypothesis is precisely the global uniform
+safe-box estimate at the fixed exponent $e_*=2\cdot10^{-6}$:
+\[
+  \forall r\geq1,\qquad
+  F_{\rm box}(r)\leq C_{\rm box}r^{1+e_*}.
+\]
+It is not replaced by a package asserting template entropy, scanner
+probability, a selected low-energy point, a norm comparison or the desired
+information bound.  The scanner is the accepted actual-history data type,
+with its induced graph, ambient depth, support-member anchors and literal
+floor/ceiling scales assigned explicitly.  The physical source theorem is
+invoked once on that scanner.
+
+The constants $\mu_R$ and $C_1=3\mu_R$ are fixed before the source entropy
+coefficient.  The radius coefficient precedes that coefficient as well.
+The information constant and one enlarged size threshold precede the
+domain, Hamiltonian, ground vector, cut, template and scale parameters.
+The premise $L\leq s_0$ is the source template-collar scale condition.
+The fixed choices $C_{\rm tpl}\geq24$ and $D_0\geq1$ are sufficient
+conditions for the accepted geometric estimates.  No positive core-size
+premise is added.
+
+The exact scanner-to-template truncation-set identity is exported for
+later use by the existing geometric packaging theorem.  The accepted
+cut bounds and compact-volume packaging are not duplicated or changed.
+The actual uniform safe-box one-step improvement and its physical finite
+iteration remain open in
+\href{https://github.com/LionSR/TNLean/issues/8756}{\#8756}.
+Consequently this theorem does not complete
+\href{https://github.com/LionSR/TNLean/issues/9334}{Proposition 9.6}
+from the physical hypotheses alone and does not prove the full area law.
+
+Source:
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L808-L944}{the immutable final collar-information argument}.
+The proofs are independently written from the manuscript using existing
+TNLean results; no upstream Lean proof text is reused.
+Hosted kernel, axiom and documentation checks are required before
+acceptance; this scope note does not certify them.
+\end{document}

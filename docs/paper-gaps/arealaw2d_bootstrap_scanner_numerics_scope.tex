@@ -1,0 +1,86 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\doclink}[1]{%
+    \href{https://sirui-lu.com/TNLean/docs/#1.html}{\path{#1}}}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{Numerical Scanner Conditions at the Fixed Bootstrap Scales}
+\author{}
+\date{October 14, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+For $0<e_0<1$, the source fixes
+$g_0=(1-e_0)/2$, $\mu=1-g_0$, $\nu=g_0/1000$,
+$\ell=\nu/100$, $\kappa=\min\{\ell,e_*/4\}$ and $W=4$ once
+for the whole bootstrap.
+They satisfy the scanner exponent conditions, and their rounded scales
+remain
+\begin{align}
+    L&=\lfloor n^{1-\ell}\rfloor,
+    &m&=\lfloor n^\mu\rfloor,
+    &D&=\lceil n^\kappa\rceil,\nonumber\\
+    K&=\left\lfloor L/(8m)\right\rfloor,
+    &a&=4/K,
+    &r_0&=\lceil C_r\log^2n\rceil.
+    \label{eq:bootstrap_numerics_scales}
+\end{align}
+The numerical datum assigns its auxiliary entropy exponent the value
+$\mu$; this assignment does not constrain the actual entropy exponent
+being improved.
+\footnote{Formal definition:
+    \leanid{TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.scannerExponents}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/BootstrapScannerExponents}.}
+
+For every scanner exponent tuple and every fixed $q\geq1$, $C_r\geq0$
+and $c_t>0$, one threshold gives $K\geq8$, $a>0$ and
+$a\ell_q(r_0)\leq c_t$.
+Indeed, $\alpha=1-\ell-\mu>0$, the literal band count satisfies
+$n^\alpha\leq C_KK$, and the actual physical logarithmic dimension
+satisfies $\ell_q(r_0)\leq C_d\log^4n$.
+Thus $a\ell_q(r_0)\leq4C_KC_d\log^4n/n^\alpha\to0$.
+No marginal moment or sharp-comparison margin is used.
+\footnote{Formal declaration:
+    \leanid{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_fixedWeightFour_transport_smallness}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/FixedWeightTransportSmallness}.}
+
+A further generic threshold gives $2r_0\leq D$, $1\leq D$,
+$4D\leq m$, $8\leq K$ and $8Km\leq L$ with precisely the same
+rounded scales.
+The first estimate includes the doubled radius used by the physical
+truncation.
+The existing rounded-clearance estimate applies to these exponents as
+well: for fixed positive $C_2$ and $n=\lceil C_2s\rceil$, one
+threshold in the parent side length precedes every positive safety
+parameter and gives the original safe-box clearance budgets.
+\footnote{Formal declaration:
+    \leanid{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_rounded_admissibility}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/ScannerRoundedAdmissibility}.
+    The existing clearance theorem is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_rounded_clearance_threshold}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/RoundedClearance}.}
+
+Every threshold is chosen after its fixed scalar coefficients and
+exponents and before the system size, finite physical instance or
+actual scanner data.
+No uniform threshold over arbitrarily small positive exponent gaps is
+claimed.
+These results supply numerical prerequisites only.
+They do not construct a scanner or physical state, prove entropy
+transport, select an actual interpolation, or carry out the remaining
+bootstrap entropy absorption.
+The source's final-stage exponents are not substituted into the fixed
+bootstrap parameters.
+No full scanner theorem, Proposition~9.6 or area law is asserted.
+\footnote{Source: Ref.~\cite{OpenAI2026AreaLaw},
+    \texttt{08-scanner.tex}, lines 32--49, 358--359 and 693--755,
+    revision \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

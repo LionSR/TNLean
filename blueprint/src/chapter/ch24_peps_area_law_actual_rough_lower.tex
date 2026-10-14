@@ -1,0 +1,162 @@
+\subsection{Rough lower bounds for the actual scanner roots}
+\label{sec:actual_scan_rough_lower}
+
+The rough comparison of \cite{OpenAI2026AreaLaw} uses total band weight
+$W=4$, per-band weight $a=4/K$, and inverse exponent $s=1/4$.
+Its physical vector, auxiliary labels and energy are retained through
+every actual fill and charge interpolation.
+The terminal family consists of completed histories through a fixed
+horizon and pre-charge histories before that horizon.
+Write $Q_{jg}$ and $Y_{jg}$ for its near and middle regions, so its far
+region is $(Q_{jg}\cup Y_{jg})^c$.
+
+\begin{theorem}[Actual-root rough lower estimate]
+    \label{thm:actual_scan_rough_lower_norm}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_rough_lower_norm}
+    Fix a finite physical site space, positive local and auxiliary
+    dimensions $q,d$, and a band count $K\geq8$.
+    Put $a=4/K$.
+    There are $c,C_f\geq0$, chosen before the scanner, horizon, physical
+    vectors, copy number, label and interpolation parameter, with the
+    following property for every scanner with $K$ bands and positive
+    parameters $m,M$.
+    Let $\widetilde H$ be the sum of its actual truncated energy terms,
+    formed from the supplied reference vector.
+    Suppose the unit physical vector $\widetilde\Omega$ satisfies
+    \begin{align}
+        \widetilde H-e_0 I
+            &\succeq\gamma
+              \bigl(I-|\widetilde\Omega\rangle
+                                \langle\widetilde\Omega|\bigr),
+        &\gamma&>0.
+        \label{eq:actual_rough_lower_gap}
+    \end{align}
+    Fix $k>0$ and a supplied nonzero prevector of norm at most one,
+    fixed by simultaneous copy symmetry and the same auxiliary label
+    $\ell$ on both auxiliary factors.
+    For real $S'$ and $\varepsilon$, assume
+    $2kS'-\varepsilon\leq2\log\dim\ell$ and put
+    \begin{align}
+        r_k&=\log(k+1)+c\log(k+2)+a\varepsilon,\nonumber\\
+        R_k&=\frac{K}{2k}
+          \left(2|r_k|+C_f\log(k+2)+2\log2+\log(3/2)\right).
+        \label{eq:actual_rough_lower_finite_remainder}
+    \end{align}
+    At any actual fill or charge interpolation before the horizon, let
+    $\mathcal N_k$ be its squared filtered norm and $\mu_k$ its actual
+    mean energy.
+    Its filtered vector has norm one, $\mathcal N_k>0$, and
+    $\delta_k=(\mu_k-e_0)/\gamma\geq0$.
+    For every $0<\tau\leq1/2$,
+    \begin{align}
+        4S'-6\left(\tau\log d+\frac{h(\tau)}a\right)
+          -3\frac{\delta_k}{\tau}\max\{0,2S'\}-R_k
+          &\leq-\frac1k\log\mathcal N_k.
+        \label{eq:actual_rough_lower_rate}
+    \end{align}
+    No marginal-moment estimate or bound $\delta_k\leq\tau$ is assumed.
+\end{theorem}
+
+\begin{proof}
+    The actual near and middle regions are disjoint and satisfy
+    $Q_{jg}\cup Y_{jg}\subseteq Q_{j'h}$ for every $g<h$.
+    Choose an isometry $Z$ onto simultaneous symmetry and express it in
+    the original physical and two auxiliary coordinates.
+    The metric parameter is $t=2/K=a/2$.
+    The actual root compression identifies its ordered compressed-band
+    product $M_k$, inverse-quarter-power vector and normalization by
+    \begin{align}
+        w_k&=M_k^{-1/4}Z^*\mathrm{pre}_k,
+        &\mathcal N_k&=\|w_k\|^2,
+        &v_k&=Z\frac{w_k}{\|w_k\|}.
+        \label{eq:actual_rough_lower_coordinates}
+    \end{align}
+    The same coordinate transformation preserves the actual mean energy:
+    $\mu_k=\operatorname{Re}\langle v_k,\widetilde H_kv_k\rangle$,
+    where $\widetilde H_k$ is the physical replica mean Hamiltonian.
+    Apply the fixed-total-weight rough lower comparison at $K\geq8$.
+    It gives $w_k\ne0$, $\|v_k\|=1$, nonnegative defect from
+    (\ref{eq:actual_rough_lower_gap}), and
+    (\ref{eq:actual_rough_lower_rate}) with the exact remainder
+    (\ref{eq:actual_rough_lower_finite_remainder}).
+    The actual history tree and its conditional choices are unchanged
+    when placed in the common terminal family.
+\end{proof}
+
+\begin{definition}[The same-label rough lower remainder]
+    \label{def:actual_rough_lower_remainder}
+    \lean{TNLean.PEPS.AreaLaw.Scan.roughLowerLabelDefect,TNLean.PEPS.AreaLaw.Scan.roughLowerRemainder}
+    For one supplied label sequence $\ell_k$ and a real $S'$, put
+    $\varepsilon_k=2|\log\dim\ell_k-kS'|$ and use this
+    $\varepsilon_k$ in (\ref{eq:actual_rough_lower_finite_remainder}).
+\end{definition}
+
+\begin{theorem}[The supplied labels satisfy the entropy condition]
+    \label{thm:actual_rough_lower_label_defect}
+    \lean{TNLean.PEPS.AreaLaw.Scan.roughLowerLabelDefect_label_bound}
+    For every $k$, $\varepsilon_k\geq0$ and
+    $2kS'-\varepsilon_k\leq2\log\dim\ell_k$.
+\end{theorem}
+\begin{proof}
+    Use $kS'-\log\dim\ell_k\leq|\log\dim\ell_k-kS'|$.
+\end{proof}
+
+\begin{theorem}[Vanishing rough remainder and a common threshold]
+    \label{thm:actual_rough_lower_remainder_limit}
+    \lean{TNLean.PEPS.AreaLaw.Scan.tendsto_roughLowerRemainder_of_label_dimension,TNLean.PEPS.AreaLaw.Scan.exists_roughLowerRemainder_threshold}
+    If $\log\dim\ell_k-kS'=o(k)$, then $R_k\to0$ for each fixed
+    $K,c,C_f$.
+    For every $\epsilon_{\rm rep}>0$, there is a threshold $k_0$ such
+    that $R_k<\epsilon_{\rm rep}$ whenever $k\geq k_0$.
+    This threshold is independent of the actual round and its
+    interpolation parameter.
+\end{theorem}
+\begin{proof}
+    The label premise gives $\varepsilon_k/k\to0$.
+    Both shifted logarithms divided by $k$ tend to zero.
+    Hence $r_k/k\to0$ and $|r_k|/k\to0$; the remaining terms of
+    (\ref{eq:actual_rough_lower_finite_remainder}) divided by $k$ also
+    tend to zero.
+    Multiply their sum by the fixed $K/2$ and use convergence to obtain
+    the threshold before choosing a copy number or interpolation.
+\end{proof}
+
+\begin{theorem}[Rough lower rate for the supplied physical sequence]
+    \label{thm:actual_scan_supplied_prevector_rough_lower}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_suppliedPrevector_rough_lower}
+    Under the scanner and gap hypotheses of
+    Theorem~\ref{thm:actual_scan_rough_lower_norm}, take the literal augmented
+    physical replica prevector associated with one supplied sequence
+    $\ell_k$.
+    Assume its original-coordinate vectors are nonzero and have norm
+    at most one for every $k>0$, and
+    $\log\dim\ell_k-kS'=o(k)$.
+    The constants $c,C_f$ can be fixed before the scanner and physical
+    vector, with the finite dimensions and band count already fixed.
+    Every actual fill and charge before the full horizon obeys
+    (\ref{eq:actual_rough_lower_rate}) with this same sequence and
+    $R_k\to0$.
+    The actual normalized vector and nonnegative physical defect are
+    those in Theorem~\ref{thm:actual_scan_rough_lower_norm}.
+\end{theorem}
+\begin{proof}
+    The augmented coordinate equivalence preserves nonvanishing and
+    norm.
+    The literal replica prevector is fixed by simultaneous copy
+    symmetry and by its supplied label on both auxiliary factors.
+    Transport the two auxiliary equations to the original coordinates,
+    then apply Theorem~\ref{thm:actual_scan_rough_lower_norm} with
+    $\varepsilon_k$.
+    The same label-dimension premise gives the vanishing remainder.
+    No state or auxiliary label is selected again.
+\end{proof}
+
+In the physical application, the spectral index set $E$ and the
+normalized Schmidt auxiliary vector $\psi$ are supplied together with
+$\widetilde\Omega$, and $S'=S(\operatorname{Tr}_{\rm left}
+|\psi\rangle\langle\psi|)$.
+The estimate is stated for arbitrary $S'$ so this exact entropy and the
+original label asymptotic may be substituted without changing any
+physical data.
+The selected-point energy bound and subsequent bootstrap absorption
+remain separate steps.

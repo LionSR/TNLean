@@ -1,0 +1,52 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\doclink}[1]{%
+    \href{https://sirui-lu.com/TNLean/docs/#1.html}{\path{#1}}}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{Automatic Numerical Admissibility of the Final Physical Scanner}
+\author{}
+\date{October 14, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+The literal rounded final scales now imply the doubled-radius,
+positive-separation and four-separation inequalities at one uniform
+physical-size threshold.  The proof uses the accepted logarithmic-radius,
+rounded-scale separation and positive band-count estimates.  It adds no
+unproved numerical hypothesis.
+
+The additive physical specialization
+\leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales}
+retains the same original-state information conclusions and every
+geometric and entropy hypothesis of the conditional final-scale theorem.
+Its radius coefficient precedes the source entropy coefficient.  The
+information constant and enlarged threshold precede the domain, cut,
+Hamiltonian, target and scanner.  The original conditional theorem remains
+unchanged.
+
+The remaining geometric inputs are the scanner with the actual domain
+graph and ambient depth, support anchors, quadratic target cardinality,
+ambient row counts, anchor multiplicity and cut clearance.  The genuine
+source target and positive-prefix entropy estimates remain explicit.
+Constructing these from the separated-template model and proving the
+small safe-box exponent are separate obligations.  No complete
+Proposition 9.6 or full area-law conclusion is asserted.
+
+The numerical source is
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L32-L58}{the scanner scale choices},
+and the final application is
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L808-L941}{the conditional collar-information argument}.
+The broader work remains tracked by
+\href{https://github.com/LionSR/TNLean/issues/8754}{\#8754},
+\href{https://github.com/LionSR/TNLean/issues/8756}{\#8756}, and
+\href{https://github.com/LionSR/TNLean/issues/9334}{\#9334}.
+
+The proofs are independently written from the manuscript using existing
+TNLean results.  No upstream Lean proof text is reused.
+\end{document}
