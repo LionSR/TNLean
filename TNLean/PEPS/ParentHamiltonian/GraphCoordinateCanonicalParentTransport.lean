@@ -23,36 +23,8 @@ open scoped Matrix BigOperators
 namespace TNLean.PEPS
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {Γ : SimpleGraph V} [DecidableRel Γ.Adj]
-private abbrev RI (R : Finset V) := {e : Edge Γ // e.1.1 ∈ R ∧ e.1.2 ∈ R}
-private abbrev RB (R : Finset V) := {e : Edge Γ // IsRegionBoundaryEdge R e}
 variable {G X Y : Type*} [Group G] [Fintype G]
 variable [Fintype X] [DecidableEq X] [Fintype Y] [DecidableEq Y] {p q : ℕ}
-
-/-- The scalar supplied by the fixed exterior endpoint of every crossing bond. -/
-def graphBoundaryExteriorCoordinateCoefficient (Q : Matrix Y X ℂ) (R : Finset V)
-    (γY : RB (Γ := Γ) R → Y) (γX : RB (Γ := Γ) R → X) : ℂ :=
-  ∏ e, if e.1.1.1 ∈ R then Q (γY e) (γX e) else star (Q (γY e) (γX e))
-
-omit [Fintype X] [DecidableEq X] [Fintype Y] [DecidableEq Y] in
-/-- Crossing Fourier blocks factor into a fixed exterior scalar and the
-oriented regional Fourier operation. -/
-theorem mixedPhysicalProductMatrix_boundary_coordinates
-    (Q : Matrix Y X ℂ) (R : Finset V)
-    (γY : RB (Γ := Γ) R → Y) (γX : RB (Γ := Γ) R → X) :
-    mixedPhysicalProductMatrix (graphBoundaryBondMatrix (bondCoordinateMatrix Q) R γY γX)
-      (fun _ : RI (Γ := Γ) R => bondCoordinateMatrix Q) =
-      graphBoundaryExteriorCoordinateCoefficient Q R γY γX • graphRegionCoordinateMatrix Q R := by
-  ext τ σ
-  have hb (e : RB (Γ := Γ) R) :
-      graphBoundaryBondMatrix (bondCoordinateMatrix Q) R γY γX e (τ.1 e) (σ.1 e) =
-        (if e.1.1.1 ∈ R then Q (γY e) (γX e) else star (Q (γY e) (γX e))) *
-          graphBoundaryCoordinateMatrix Q R e (τ.1 e) (σ.1 e) := by
-    unfold graphBoundaryBondMatrix graphBoundaryCoordinateMatrix
-    split_ifs <;> simp [bondCoordinateMatrix, mul_comm]
-  simp only [mixedPhysicalProductMatrix, hb, Finset.prod_mul_distrib,
-    graphBoundaryExteriorCoordinateCoefficient, graphRegionCoordinateMatrix,
-    Matrix.smul_apply, smul_eq_mul]
-  rw [mul_assoc]
 
 /-- Every exterior block of the global Fourier bond matrix sends the actual
 numbered regional PEPS range into the target range. -/
