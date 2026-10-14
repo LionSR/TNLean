@@ -77,7 +77,7 @@ example {width height q : ℕ} {J E₀ Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hΩ : h.IsGappedGroundState E₀ Ω Δ) :
     FiniteProduct.entropy (fun _ : SquareLatticeVertex width height ↦ Fin q) Ω ∅ = 0 := by
   apply nativeEntropy_of_zero_boundary hJ hΔ h Ω hΩ
-  simp [Fintype.card_subtype, IsRegionBoundaryEdge]
+  simp [IsRegionBoundaryEdge]
 
 example {width height q : ℕ} {J E₀ Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (h : RectangularHamiltonian width height q J) (Ω : RectangleStateSpace width height q)
@@ -85,7 +85,7 @@ example {width height q : ℕ} {J E₀ Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     FiniteProduct.entropy (fun _ : SquareLatticeVertex width height ↦ Fin q)
       Ω Finset.univ = 0 := by
   apply nativeEntropy_of_zero_boundary hJ hΔ h Ω hΩ
-  simp [Fintype.card_subtype, IsRegionBoundaryEdge]
+  simp [IsRegionBoundaryEdge]
 
 -- The only possible one-site cuts have no crossing edge.
 private theorem singleSite_boundary_card_eq_zero

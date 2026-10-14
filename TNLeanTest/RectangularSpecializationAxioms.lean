@@ -9,90 +9,6 @@ import Lean.Util.CollectAxioms
 
 /-! # Exact kernel-dependency guards for the native rectangular specialization -/
 
-/-- info:
-'TNLean.PEPS.AreaLaw.rectangleAreaLawSupport_injective'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.rectangleAreaLawSupport_injective
-
-/-- info:
-'TNLean.PEPS.AreaLaw.RectangularHamiltonian.hermitianTerm_mem_supportedOperators'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.RectangularHamiltonian.hermitianTerm_mem_supportedOperators
-
-/-- info:
-'TNLean.PEPS.AreaLaw.RectangularHamiltonian.hermitianTerm_norm_le'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.RectangularHamiltonian.hermitianTerm_norm_le
-
-/-- info:
-'TNLean.PEPS.AreaLaw.RectangularHamiltonian.sum_hermitianTerm'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.RectangularHamiltonian.sum_hermitianTerm
-
-/-- info:
-'TNLean.PEPS.AreaLaw.RectangularHamiltonian.toAreaLawHamiltonian_operator'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.RectangularHamiltonian.toAreaLawHamiltonian_operator
-
-/-- info:
-'TNLean.PEPS.AreaLaw.RectangularHamiltonian.isGappedGroundState_toAreaLawHamiltonian'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.RectangularHamiltonian.isGappedGroundState_toAreaLawHamiltonian
-
-/-- info:
-'TNLean.PEPS.AreaLaw.card_edgeBoundary_rectangular'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.card_edgeBoundary_rectangular
-
-/-- info:
-'TNLean.PEPS.AreaLaw.map_rectangleInnerBoundary'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.map_rectangleInnerBoundary
-
-/-- info:
-'TNLean.PEPS.AreaLaw.map_rectangleEndpointBoundary'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.map_rectangleEndpointBoundary
-
-/-- info:
-'TNLean.PEPS.AreaLaw.rectangleEdgeBoundary_card_le_four_mul_innerBoundary_card'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.rectangleEdgeBoundary_card_le_four_mul_innerBoundary_card
-
-/-- info:
-'TNLean.PEPS.AreaLaw.rectangleEdgeBoundary_card_le_two_mul_endpointBoundary_card'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.rectangleEdgeBoundary_card_le_two_mul_endpointBoundary_card
-
-/-- info:
-'TNLean.PEPS.AreaLaw.regionalEntropy_rectangleAreaLawState'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.regionalEntropy_rectangleAreaLawState
-
-/-- info:
-'TNLean.PEPS.AreaLaw.UniformAreaLaw.rectangularEntropyAreaLaw'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.UniformAreaLaw.rectangularEntropyAreaLaw
-
-/-- info:
-'TNLean.PEPS.AreaLaw.RectangularEntropyAreaLaw.squareEntropyAreaLaw'
-depends on axioms: [propext, Classical.choice, Quot.sound] -/
-#guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.AreaLaw.RectangularEntropyAreaLaw.squareEntropyAreaLaw
-
 -- Every public declaration, including all source-model fields, must exist and
 -- have no kernel dependencies outside the standard logical foundations.
 run_cmd do
@@ -140,9 +56,28 @@ run_cmd do
     ``TNLean.PEPS.AreaLaw.rectangleInnerBoundary,
     ``TNLean.PEPS.AreaLaw.rectangleInteractionSupport,
     ``TNLean.PEPS.AreaLaw.regionalEntropy_rectangleAreaLawState]
+  let exactDeclarations := #[
+    ``TNLean.PEPS.AreaLaw.rectangleAreaLawSupport_injective,
+    ``TNLean.PEPS.AreaLaw.RectangularHamiltonian.hermitianTerm_mem_supportedOperators,
+    ``TNLean.PEPS.AreaLaw.RectangularHamiltonian.hermitianTerm_norm_le,
+    ``TNLean.PEPS.AreaLaw.RectangularHamiltonian.sum_hermitianTerm,
+    ``TNLean.PEPS.AreaLaw.RectangularHamiltonian.toAreaLawHamiltonian_operator,
+    ``TNLean.PEPS.AreaLaw.RectangularHamiltonian.isGappedGroundState_toAreaLawHamiltonian,
+    ``TNLean.PEPS.AreaLaw.card_edgeBoundary_rectangular,
+    ``TNLean.PEPS.AreaLaw.map_rectangleInnerBoundary,
+    ``TNLean.PEPS.AreaLaw.map_rectangleEndpointBoundary,
+    ``TNLean.PEPS.AreaLaw.rectangleEdgeBoundary_card_le_four_mul_innerBoundary_card,
+    ``TNLean.PEPS.AreaLaw.rectangleEdgeBoundary_card_le_two_mul_endpointBoundary_card,
+    ``TNLean.PEPS.AreaLaw.regionalEntropy_rectangleAreaLawState,
+    ``TNLean.PEPS.AreaLaw.UniformAreaLaw.rectangularEntropyAreaLaw,
+    ``TNLean.PEPS.AreaLaw.RectangularEntropyAreaLaw.squareEntropyAreaLaw]
   for decl in declarations do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
     unless axioms.all (allowed.contains ·) do
       throwError "Unexpected axioms for {decl}: {axioms}"
+    if exactDeclarations.contains decl then
+      unless allowed.all (axioms.contains ·) do
+        throwError "Missing expected axioms for {decl}: {axioms}"
+    Lean.logInfo m!"{decl}: {axioms}"

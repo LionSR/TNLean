@@ -77,7 +77,8 @@ premise is explicitly quantified, not treated as an accepted theorem.
   declarations, including seven model fields, checks declaration presence,
   and rejects every kernel dependency outside `propext`, `Classical.choice`,
   and `Quot.sound`. Fourteen principal transport/consequence declarations
-  additionally have exact `#guard_msgs` / `#print axioms` checks.
+  additionally require exactly that three-axiom set, checking both inclusions.
+  The fixture reports each declaration after its dependency checks pass.
 - All 42 public declarations have unique blueprint ownership tags.
 - The source-labelled `cor:rectangles` node has no completion or Lean ownership
   tag. The conditional implication has its own distinct label.
