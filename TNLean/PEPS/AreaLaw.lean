@@ -13,6 +13,7 @@ import TNLean.PEPS.AreaLaw.AmplificationCutClearance
 import TNLean.PEPS.AreaLaw.AmplificationProof
 import TNLean.PEPS.AreaLaw.AmplificationProofSteps
 import TNLean.PEPS.AreaLaw.BirthTargetEntropy
+import TNLean.PEPS.AreaLaw.BirthTargetNeighborhoodInformation
 import TNLean.PEPS.AreaLaw.BoundaryConventions
 import TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly
 import TNLean.PEPS.AreaLaw.BoundaryTheorem
