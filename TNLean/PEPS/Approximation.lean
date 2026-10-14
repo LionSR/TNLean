@@ -158,6 +158,7 @@ import TNLean.PEPS.Approximation.IncidentSampledEndpointWord
 import TNLean.PEPS.Approximation.IncidentSampledPhysicalFactor
 import TNLean.PEPS.Approximation.IncidentSourceWord
 import TNLean.PEPS.Approximation.IncidentSourceWordComparison
+import TNLean.PEPS.Approximation.InformationReset
 import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
 import TNLean.PEPS.Approximation.LayoutExcludedOwners
 import TNLean.PEPS.Approximation.LayoutOwnerMap
