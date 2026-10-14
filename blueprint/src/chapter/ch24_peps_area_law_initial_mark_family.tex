@@ -107,6 +107,30 @@ points and assign to each point its smallest incident cell side; see
     their maximum.
 \end{proof}
 
+\begin{theorem}[Smallest incident sides]
+    \label{thm:area_law_least_incident_mark_scales}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_least_incident_scales}
+    \uses{def:area_law_belt_marks,def:area_law_fine_belt_scales}
+    Fix an origin $o$, a lower index $k_0$, and a finite set $F_k$ of
+    cell indices at each layer. Let
+    \begin{align}
+        M=\bigcup_{k\ge k_0}M_{\ell_k}(F_k).
+    \end{align}
+    There is a positive side $s(v)$ for every $v\in M$, realized by a
+    cell indexed by $F_k$ in some layer $k\ge k_0$ that marks $v$.
+    Every cell indexed by $F_h$ in a layer $h\ge k_0$ that marks $v$
+    has side at least $s(v)$. Neither $M$ nor the set of nonempty layers
+    is required to be finite.
+\end{theorem}
+\begin{proof}
+    \uses{thm:area_law_adjacent_fine_meshes}
+    For each $v\in M$, take the least layer index $k(v)\ge k_0$
+    with an incident cell, and put $s(v)=2^{\ell_{k(v)}}$.
+    The exponent $\ell_k$ is nondecreasing in $k$, so $s(v)$ is a
+    smallest incident side. It is realized at the chosen layer and
+    is positive.
+\end{proof}
+
 \begin{theorem}[Counted and separated initial marks]
     \label{thm:area_law_uniform_separated_initial_marks}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_separated_initial_marks}
@@ -128,7 +152,8 @@ points and assign to each point its smallest incident cell side; see
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_uniform_initial_mark_count,
-        thm:area_law_fine_layer_mark_separation,thm:area_law_adjacent_fine_meshes}
+        thm:area_law_least_incident_mark_scales,
+        thm:area_law_fine_layer_mark_separation}
     Choose the counted finite union and residues from the preceding
     construction. For each point of $M$, take the least layer index
     admitting an incident selected cell. The fine-cell exponent is
