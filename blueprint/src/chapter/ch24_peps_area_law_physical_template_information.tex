@@ -8,53 +8,53 @@ argument.  The physical source chain remains subject to validation and
 integration, and the existing cut and compact-volume packaging is unchanged.
 
 \begin{theorem}[Physical original-template information]
-  \label{thm:physical-template-information}
-  \lean{TNLean.PEPS.AreaLaw.Scan.exists_template_final_mutualInformation}
-  Fix $q,R,D_0\in\mathbb N$ and $J,\Delta,C_{\rm tpl}\in\mathbb R$ with
-  \[
-    q\geq1,\qquad J\geq0,\qquad\Delta>0,\qquad
-    D_0>2R+10,\qquad C_{\rm tpl}\geq24.
-  \]
-  There are $C>0$ and $N\geq2$, chosen before every finite instance,
-  such that the following holds.  For all natural $n,s_0$ with $n\geq N$,
-  every finite induced domain $\Lambda$, every local Hamiltonian with
-  parameters $(q,R,J)$, every original gapped ground vector $\Omega$
-  with gap $\Delta$, every cut $A$, and every template $T$ with parameters
-  $(C_{\rm tpl},n,s_0)$, assume the source conditions
-  \[
-    \operatorname{dist}_\infty(T,\partial A)>4D_0s_0,
-    \qquad L=\lfloor n^{1-1/100000}\rfloor\leq s_0.
-  \]
-  Here the cut set is the ambient set of endpoints of edges crossing $A$
-  in the induced domain.  Set $X=A\cap T$ and $S_0=A\cap T_L$.
-  Then
-  \[
-    2I_\Omega(X:\Lambda\setminus S_0)\leq Cn^{62497/62500},\qquad
-    2I_\Omega(X:\Lambda\setminus S_0)\leq Cn^{1-1/100000}.
-  \]
-  The same $C,N$ apply to all the displayed finite data.  The theorem
-  does not assert that they are independent of the fixed $D_0$ or
-  $C_{\rm tpl}$.  No nonempty physical-core hypothesis is required.
+    \label{thm:physical-template-information}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_template_final_mutualInformation}
+    Fix $q,R,D_0\in\mathbb N$ and $J,\Delta,C_{\rm tpl}\in\mathbb R$ with
+    \[
+        q\geq1,\qquad J\geq0,\qquad\Delta>0,\qquad
+        D_0>2R+10,\qquad C_{\rm tpl}\geq24.
+    \]
+    There are $C>0$ and $N\geq2$, chosen before every finite instance,
+    such that the following holds.  For all natural $n,s_0$ with $n\geq N$,
+    every finite induced domain $\Lambda$, every local Hamiltonian with
+    parameters $(q,R,J)$, every original gapped ground vector $\Omega$
+    with gap $\Delta$, every cut $A$, and every template $T$ with parameters
+    $(C_{\rm tpl},n,s_0)$, assume the source conditions
+    \[
+        \operatorname{dist}_\infty(T,\partial A)>4D_0s_0,
+        \qquad L=\lfloor n^{1-1/100000}\rfloor\leq s_0.
+    \]
+    Here the cut set is the ambient set of endpoints of edges crossing $A$
+    in the induced domain.  Set $X=A\cap T$ and $S_0=A\cap T_L$.
+    Then
+    \[
+        2I_\Omega(X:\Lambda\setminus S_0)\leq Cn^{62497/62500},\qquad
+        2I_\Omega(X:\Lambda\setminus S_0)\leq Cn^{1-1/100000}.
+    \]
+    The same $C,N$ apply to all the displayed finite data.  The theorem
+    does not assert that they are independent of the fixed $D_0$ or
+    $C_{\rm tpl}$.  No nonempty physical-core hypothesis is required.
 \end{theorem}
 
 \begin{proof}
-  The physical safe-box theorem supplies $C_{\rm box}>0$, depending only
-  on $q,R,J,\Delta$, before every integer $D_0>2R+10$ and every
-  integer $r\geq1$, with
-  \[
-    \operatorname{boxEntropy}(q,R,J,\Delta,D_0,r)
-      \leq C_{\rm box}r^{1+e_*},\qquad e_*=2\cdot10^{-6}.
-  \]
-  Specialize this uniform bound to the fixed $D_0$.  The strict safety
-  threshold implies $D_0\geq1$, and positivity gives
-  $C_{\rm box}\geq0$.  These are exactly the hypotheses needed by the
-  conditional actual-template information theorem.
+    The physical safe-box theorem supplies $C_{\rm box}>0$, depending only
+    on $q,R,J,\Delta$, before every integer $D_0>2R+10$ and every
+    integer $r\geq1$, with
+    \[
+        \operatorname{boxEntropy}(q,R,J,\Delta,D_0,r)
+        \leq C_{\rm box}r^{1+e_*},\qquad e_*=2\cdot10^{-6}.
+    \]
+    Specialize this uniform bound to the fixed $D_0$.  The strict safety
+    threshold implies $D_0\geq1$, and positivity gives
+    $C_{\rm box}\geq0$.  These are exactly the hypotheses needed by the
+    conditional actual-template information theorem.
 
-  Apply that theorem with the unchanged physical parameters and fixed
-  template constant.  It supplies $C,N$ before all finite data and
-  returns both information powers on the original state and the literal
-  template core and collar.  No state replacement, exchange of limits,
-  extra analytic premise or change to the rounded scales occurs here.
+    Apply that theorem with the unchanged physical parameters and fixed
+    template constant.  It supplies $C,N$ before all finite data and
+    returns both information powers on the original state and the literal
+    template core and collar.  No state replacement, exchange of limits,
+    extra analytic premise or change to the rounded scales occurs here.
 \end{proof}
 
 The source is \emph{A two-dimensional area law from a global spectral gap},

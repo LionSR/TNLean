@@ -39,6 +39,42 @@ namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 open ActualTerminals
 
 open Classical in
+/-- The common terminal family supplies disjoint near/middle regions, ordered
+nesting across bands, and the exact far complement for the sharp lower bound.
+Source: `08-scanner.tex`, lines 83--154 and 416--451, revision adc7f124. -/
+private theorem actualTerminal_sharpLower_geometry
+    {V I : Type} [Fintype V] [DecidableEq V] [Fintype I] [LinearOrder I]
+    (S : CollarScan V I) (Horizon : ℕ) :
+    let σ := terminalPartition S Horizon
+    let Q := fun j g => receiving (σ j g) false
+    let Y := fun j g => middle (σ j g)
+    (∀ j g, Disjoint (Q j g) (Y j g)) ∧
+      (∀ j j' g g', g < g' → Q j g ∪ Y j g ⊆ Q j' g') ∧
+      (∀ j g, receiving (σ j g) true = (Q j g ∪ Y j g)ᶜ) := by
+  classical
+  intro σ Q Y
+  have hdisj : ∀ j g, Disjoint (Q j g) (Y j g) := fun j g => by
+    simp only [Q, Y, receiving, middle]
+    exact Finset.disjoint_filter.mpr fun _ _ hx hy =>
+      Option.noConfusion (hx.symm.trans hy)
+  have hnest : ∀ j j' g g', g < g' → Q j g ∪ Y j g ⊆ Q j' g' := fun
+    | Sum.inl ⟨_, hist⟩, Sum.inl ⟨_, hist'⟩, g, g', hgg' =>
+      S.state_near_middle_subset_later_near hist hist' g g' hgg'
+    | Sum.inl ⟨_, hist⟩, Sum.inr ⟨_, hist'⟩, g, g', hgg' =>
+      S.state_near_middle_subset_later_old_near hist hist' g g' hgg'
+    | Sum.inr ⟨_, hist⟩, Sum.inl ⟨_, hist'⟩, g, g', hgg' =>
+      S.old_near_middle_subset_later_state_near hist hist' g g' hgg'
+    | Sum.inr ⟨_, hist⟩, Sum.inr ⟨_, hist'⟩, g, g', hgg' =>
+      S.oldChargeState_near_middle_subset_later_near hist hist' g g' hgg'
+  have hfar (j : terminalFamily S.K S.m S.M Horizon) (g : Fin S.K) :
+      receiving (σ j g) true = (Q j g ∪ Y j g)ᶜ := by
+    ext x
+    cases hx : σ j g x with
+    | none => simp [Q, Y, receiving, middle, hx]
+    | some side => cases side <;> simp [Q, Y, receiving, middle, hx]
+  exact ⟨hdisj, hnest, hfar⟩
+
+open Classical in
 /-- The sharp finite-copy lower estimate for the actual fill and charge
 interpolations. The physical gap and both label equations concern the same
 supplied state and prevector. The defect is computed from the literal actual
@@ -128,24 +164,7 @@ theorem exists_actualScan_sharp_lower_norm
   intro S hm hM Horizon h Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos β ι₀ n σ Q Y
     K rMom hmoment har haone hK pre k hk hpre hprenorm hsym ellC ellR Sent ε e
     hC hR hlabel entropyGap gaps gmax r b lower s p Dfill Dcharge Tfill Tcharge
-  have hdisj : ∀ j g, Disjoint (Q j g) (Y j g) := fun j g => by
-    simp only [Q, Y, receiving, middle]
-    exact Finset.disjoint_filter.mpr fun _ _ hx hy => by simp_all
-  have hnest : ∀ j j' g g', g < g' → Q j g ∪ Y j g ⊆ Q j' g' := fun
-    | Sum.inl ⟨_, hist⟩, Sum.inl ⟨_, hist'⟩, g, g', hgg' =>
-      S.state_near_middle_subset_later_near hist hist' g g' hgg'
-    | Sum.inl ⟨_, hist⟩, Sum.inr ⟨_, hist'⟩, g, g', hgg' =>
-      S.state_near_middle_subset_later_old_near hist hist' g g' hgg'
-    | Sum.inr ⟨_, hist⟩, Sum.inl ⟨_, hist'⟩, g, g', hgg' =>
-      S.old_near_middle_subset_later_state_near hist hist' g g' hgg'
-    | Sum.inr ⟨_, hist⟩, Sum.inr ⟨_, hist'⟩, g, g', hgg' =>
-      S.oldChargeState_near_middle_subset_later_near hist hist' g g' hgg'
-  have hfar (j : terminalFamily S.K S.m S.M Horizon) (g : Fin S.K) :
-      receiving (σ j g) true = (Q j g ∪ Y j g)ᶜ := by
-    ext x
-    cases hx : σ j g x with
-    | none => simp [Q, Y, receiving, middle, hx]
-    | some side => cases side <;> simp [Q, Y, receiving, middle, hx]
+  obtain ⟨hdisj, hnest, hfar⟩ := actualTerminal_sharpLower_geometry S Horizon
   obtain ⟨N, ZS, hZS, hZSZS⟩ :=
     (isStarProjection_symProj
       (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k)).exists_matrix_range_isometry

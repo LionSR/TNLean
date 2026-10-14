@@ -4,11 +4,11 @@
 The final collar calculation uses the fixed values in
 \cite{OpenAI2026AreaLaw}, \path{08-scanner.tex}, lines~839--942:
 \begin{align}
-    e_*&=\frac{2}{1000000},&
-    \mu&=\frac14,&
-    \ell&=\frac1{100000},&
-    \omega&=\frac1{20000},&
-    \kappa&=\frac1{1000000}.
+    e_*    & =\frac{2}{1000000}, &
+    \mu    & =\frac14,           &
+    \ell   & =\frac1{100000},    &
+    \omega & =\frac1{20000},     &
+    \kappa & =\frac1{1000000}.
     \label{eq:final_scalar_parameters}
 \end{align}
 The source target and prefix entropy estimates at exponent $e_*$
@@ -20,29 +20,29 @@ construct the preceding safe-box estimate.
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.eventually_bandCount_le_rpow,TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_scale_bounds,TNLean.PEPS.AreaLaw.Scan.finalSharp_neg_log_mass_le,TNLean.PEPS.AreaLaw.Scan.finalSharp_binEntropy_le,TNLean.PEPS.AreaLaw.Scan.finalSharp_binary_cost_le}
     Retain the actual scales
     \begin{align}
-        L&=\lfloor n^{1-\ell}\rfloor,&
-        m&=\lfloor n^\mu\rfloor,&
-        K&=\left\lfloor\frac{L}{8m}\right\rfloor,&
-        W&=n^\omega,&
-        a&=\frac WK,&
-        \tau&=n^{-1/4000}.
+        L    & =\lfloor n^{1-\ell}\rfloor,             &
+        m    & =\lfloor n^\mu\rfloor,                  &
+        K    & =\left\lfloor\frac{L}{8m}\right\rfloor, &
+        W    & =n^\omega,                              &
+        a    & =\frac WK,                              &
+        \tau & =n^{-1/4000}.
         \label{eq:final_scalar_scales}
     \end{align}
     There are fixed $C_a\geq1$ and $N\geq2$ such that, for all
     integers $n\geq N$, one has $K\geq1$, $a>0$, $0<\tau\leq1/2$,
     and
     \begin{align}
-        a&\leq C_a n^{-0.74994},&
-        a^{-1}&\leq n^{0.74994}.
+        a      & \leq C_a n^{-0.74994}, &
+        a^{-1} & \leq n^{0.74994}.
         \label{eq:final_scalar_a}
     \end{align}
     For $n\geq2$ and $1-n^{-100}\leq z\leq1$, $z>0$,
     the mass estimate below holds. The binary estimate additionally
     assumes $a>0$ and $a^{-1}\leq n^{0.74994}$, as supplied above.
     \begin{align}
-        0\leq-\log z&\leq2n^{-100},&
+        0\leq-\log z & \leq2n^{-100},                   &
         (3+a^{-1})h(\tau)
-          &\leq4n^{0.74969}(1+\log n/4000).
+                     & \leq4n^{0.74969}(1+\log n/4000).
         \label{eq:final_scalar_mass_binary}
     \end{align}
     The binary estimate uses $h(t)\leq t(1-\log t)$ for $0<t<1$.
@@ -64,17 +64,17 @@ construct the preceding safe-box estimate.
     Set $D=\lceil n^\kappa\rceil$, $w=n^{3/5}$,
     $c=w-\log z$, and
     \begin{align}
-        H&=4S_t+2c+2B_{\rm sh}+6nD\log q.
+        H & =4S_t+2c+2B_{\rm sh}+6nD\log q.
         \label{eq:final_scalar_H}
     \end{align}
     With the actual final choices of $W$ and $\tau$, define
     \begin{align}
         \mathcal E_n
-          &=\frac{4S_t+4c-2\log z}{W}
-            +(\tau+n^{-1/2000}/\tau)H
-            +(3+a^{-1})h(\tau) \notag\\
-          &\quad+37C_0\mathcal B a
-            -\frac{\log z}{a}+2c+16\sqrt t\,d_X.
+         & =\frac{4S_t+4c-2\log z}{W}
+        +(\tau+n^{-1/2000}/\tau)H
+        +(3+a^{-1})h(\tau) \notag     \\
+         & \quad+37C_0\mathcal B a
+        -\frac{\log z}{a}+2c+16\sqrt t\,d_X.
         \label{eq:final_scalar_error}
     \end{align}
     Here $t$ is the original-to-truncated trace distance and
@@ -88,22 +88,22 @@ construct the preceding safe-box estimate.
     and $\log q$. In addition to (\ref{eq:final_scalar_a}) and
     the selected-mass bounds, assume
     \begin{align}
-        S_t&\leq C_e n^{1+e_*}+n^{-247},&
-        B_{\rm sh}&\leq C_e(nL^{e_*}+n)+n^{-247}, \notag\\
-        \mathcal B&\leq C_B nD(\log n)^{12},&
-        t&\leq C_{\rm tr}n^{-500},&
-        d_X&\leq1+C_{\dim}n^2.
+        S_t        & \leq C_e n^{1+e_*}+n^{-247},          &
+        B_{\rm sh} & \leq C_e(nL^{e_*}+n)+n^{-247}, \notag   \\
+        \mathcal B & \leq C_B nD(\log n)^{12},             &
+        t          & \leq C_{\rm tr}n^{-500},              &
+        d_X        & \leq1+C_{\dim}n^2.
         \label{eq:final_scalar_inputs}
     \end{align}
     The complete error is at most
     \begin{align}
         \mathcal E_n
-          &\leq(4C_e+20)n^{0.999952}
-            +2(8C_e+14+12\log q)n^{0.999752} \notag\\
-          &\quad+4n^{0.74969}(1+\log n/4000)
-            +74C_aC_0C_B n^{0.250061}(\log n)^{12} \notag\\
-          &\quad+2n^{-99.25006}+6n^{0.6}
-            +16\sqrt{C_{\rm tr}}(1+C_{\dim})n^{-248}.
+         & \leq(4C_e+20)n^{0.999952}
+        +2(8C_e+14+12\log q)n^{0.999752} \notag       \\
+         & \quad+4n^{0.74969}(1+\log n/4000)
+        +74C_aC_0C_B n^{0.250061}(\log n)^{12} \notag \\
+         & \quad+2n^{-99.25006}+6n^{0.6}
+        +16\sqrt{C_{\rm tr}}(1+C_{\dim})n^{-248}.
         \label{eq:final_scalar_envelope}
     \end{align}
     The decimal powers in this display denote exact terminating
@@ -131,14 +131,14 @@ construct the preceding safe-box estimate.
     one threshold works for every remaining scalar datum at the
     literal rounded scales. With
     \begin{align}
-        C&=20C_e+62+24\log q
-            +16\sqrt{C_{\rm tr}}(1+C_{\dim}),
+        C & =20C_e+62+24\log q
+        +16\sqrt{C_{\rm tr}}(1+C_{\dim}),
         \label{eq:final_scalar_coefficient}
     \end{align}
     it gives
     \begin{align}
-        \mathcal E_n&\leq Cn^{62497/62500}
-          \leq Cn^{1-1/100000}.
+        \mathcal E_n & \leq Cn^{62497/62500}
+        \leq Cn^{1-1/100000}.
         \label{eq:final_scalar_output}
     \end{align}
     The exact maximal power is $62497/62500=0.999952$.
@@ -159,8 +159,8 @@ construct the preceding safe-box estimate.
     \lean{TNLean.PEPS.AreaLaw.Scan.finalSharp_traceDistance_power,TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_source_error_le,TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_transport_smallness}
     For fixed $q\geq1$, $g>0$ and $C_{\rm vol}\geq0$, the source estimate
     \begin{align}
-        t&\leq\sqrt{2\min(n^{-1000},g/4)/g}
-          \leq\sqrt{2/g}\,n^{-500}
+        t & \leq\sqrt{2\min(n^{-1000},g/4)/g}
+        \leq\sqrt{2/g}\,n^{-500}
         \label{eq:final_scalar_trace}
     \end{align}
     is covered by $C_{\rm tr}=\sqrt{2/g}$ in the preceding theorem.
@@ -169,7 +169,7 @@ construct the preceding safe-box estimate.
     Furthermore, for fixed $C_r\geq0$ and $c_t>0$, a uniform
     threshold gives
     \begin{align}
-        a\,\ell_q(\lceil C_r\log^2n\rceil)&\leq c_t.
+        a\,\ell_q(\lceil C_r\log^2n\rceil) & \leq c_t.
         \label{eq:final_scalar_transport}
     \end{align}
 \end{theorem}

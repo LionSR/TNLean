@@ -10,84 +10,84 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
 \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
 
 \begin{lemma}[The actual target dimension]
-  \label{lem:physical-information-dimension}
-  \lean{TNLean.PEPS.AreaLaw.Scan.log_exp_configuration_card_le_of_card}
-  For a finite physical region $X$ with local dimension $q\geq1$, if
-  $|X|\leq C_{\rm vol}n^2$, then
-  \[
-    \log(e\dim\mathcal H_X)
-    \leq 1+(C_{\rm vol}\log q)n^2.
-  \]
+    \label{lem:physical-information-dimension}
+    \lean{TNLean.PEPS.AreaLaw.Scan.log_exp_configuration_card_le_of_card}
+    For a finite physical region $X$ with local dimension $q\geq1$, if
+    $|X|\leq C_{\rm vol}n^2$, then
+    \[
+        \log(e\dim\mathcal H_X)
+        \leq 1+(C_{\rm vol}\log q)n^2.
+    \]
 \end{lemma}
 
 \begin{proof}
-  The actual configuration dimension is $q^{|X|}$.  Take its logarithm,
-  use $\log q\geq0$ and substitute the cardinality estimate.  No dimension
-  of the far region enters the estimate.
+    The actual configuration dimension is $q^{|X|}$.  Take its logarithm,
+    use $\log q\geq0$ and substitute the cardinality estimate.  No dimension
+    of the far region enters the estimate.
 \end{proof}
 
 \begin{theorem}[The concrete source's final-scale conditional information]
-  \label{thm:source-final-information}
-  \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_finalScale_mutualInformation}
-  Fix the local dimension, interaction radius and norm bound, positive
-  spectral gap, quadratic template-volume coefficient, positive scanner
-  coefficient $C_1$, anchor-multiplicity bound and a tail power $P\geq\nu$.
-  There is a positive radius coefficient $C_{\rm tr}$ such that, for every
-  fixed nonnegative source entropy coefficient $C_e$, there are constants
-  $C>0$ and $N\geq2$, chosen before the finite physical system, with the
-  following property.
+    \label{thm:source-final-information}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_finalScale_mutualInformation}
+    Fix the local dimension, interaction radius and norm bound, positive
+    spectral gap, quadratic template-volume coefficient, positive scanner
+    coefficient $C_1$, anchor-multiplicity bound and a tail power $P\geq\nu$.
+    There is a positive radius coefficient $C_{\rm tr}$ such that, for every
+    fixed nonnegative source entropy coefficient $C_e$, there are constants
+    $C>0$ and $N\geq2$, chosen before the finite physical system, with the
+    following property.
 
-  Let the original vector $\Omega$ be a gapped ground state and let the
-  supplied physical scanner obey all the source graph, support-anchor,
-  template-volume, ambient-depth, layer-cardinality, anchor-multiplicity
-  and boundary-clearance hypotheses.  Retain the literal scales
-  \[
-    r_0=\lceil C_{\rm tr}(\log n)^2\rceil,\quad
-    m=\lfloor n^\mu\rfloor,\quad D=\lceil n^\kappa\rceil,\quad
-    L=\lfloor n^{1-\ell}\rfloor,\quad K=L/(8m),
-  \]
-  where the final division is natural-number division, together with
-  $n\geq N$, $2r_0\leq D$, $1\leq D$ and $4D\leq m$.
-  Put $X=A\cap T$ and let $S_0$ be the actual truncation set at depth $L$.
-  Assume the genuine original-state source entropy inputs
-  \[
-    S_\Omega(X)\leq C_e n^{1+e_{\rm box}},\qquad
-    S_\Omega(\text{positive prefix }j)
-      \leq C_e(nL^{e_{\rm box}}+n)\quad(0\leq j\leq L).
-  \]
-  Then
-  \[
-    2I_\Omega(X:S_0^c)\leq Cn^{62497/62500},\qquad
-    2I_\Omega(X:S_0^c)\leq Cn^{1-1/100000}.
-  \]
-  In particular, the exact maximum exponent is $0.999952$ and the
-  displayed paper exponent is $0.99999$.
+    Let the original vector $\Omega$ be a gapped ground state and let the
+    supplied physical scanner obey all the source graph, support-anchor,
+    template-volume, ambient-depth, layer-cardinality, anchor-multiplicity
+    and boundary-clearance hypotheses.  Retain the literal scales
+    \[
+        r_0=\lceil C_{\rm tr}(\log n)^2\rceil,\quad
+        m=\lfloor n^\mu\rfloor,\quad D=\lceil n^\kappa\rceil,\quad
+        L=\lfloor n^{1-\ell}\rfloor,\quad K=L/(8m),
+    \]
+    where the final division is natural-number division, together with
+    $n\geq N$, $2r_0\leq D$, $1\leq D$ and $4D\leq m$.
+    Put $X=A\cap T$ and let $S_0$ be the actual truncation set at depth $L$.
+    Assume the genuine original-state source entropy inputs
+    \[
+        S_\Omega(X)\leq C_e n^{1+e_{\rm box}},\qquad
+        S_\Omega(\text{positive prefix }j)
+        \leq C_e(nL^{e_{\rm box}}+n)\quad(0\leq j\leq L).
+    \]
+    Then
+    \[
+        2I_\Omega(X:S_0^c)\leq Cn^{62497/62500},\qquad
+        2I_\Omega(X:S_0^c)\leq Cn^{1-1/100000}.
+    \]
+    In particular, the exact maximum exponent is $0.999952$ and the
+    displayed paper exponent is $0.99999$.
 \end{theorem}
 
 \begin{proof}
-  Invoke the frozen same-source information theorem once.  Its concrete
-  witness supplies $X\subseteq S_0$, $|S_0|\leq(C_T+1)n^2$ and the actual
-  trace-distance budget.  Therefore the preceding dimension lemma applies
-  with $C_{\rm vol}=C_T+1$.  Quantitative regional entropy continuity gives
-  \[
-    S_{\Omega_t}(X)\leq C_e n^{1+e_{\rm box}}+n^{-247}
-  \]
-  for the same truncated vector.  The same original prefix input supplies
-  the already-derived shell bound with its unchanged $n^{-247}$ error.
+    Invoke the frozen same-source information theorem once.  Its concrete
+    witness supplies $X\subseteq S_0$, $|S_0|\leq(C_T+1)n^2$ and the actual
+    trace-distance budget.  Therefore the preceding dimension lemma applies
+    with $C_{\rm vol}=C_T+1$.  Quantitative regional entropy continuity gives
+    \[
+        S_{\Omega_t}(X)\leq C_e n^{1+e_{\rm box}}+n^{-247}
+    \]
+    for the same truncated vector.  The same original prefix input supplies
+    the already-derived shell bound with its unchanged $n^{-247}$ error.
 
-  Use $W=n^\omega$ and $\tau=n^{-1/4000}$.  The uniform numerical scale
-  theorem gives $0<\tau\leq1/2$ and the actual rounded per-band weight;
-  the transport-smallness theorem puts that same weight in the required
-  interval.  Identify the scalar right-hand side with the complete final
-  error expression, including the selected mass, window, marginal budget
-  and original-state continuity correction.  Apply the final source error
-  bound at these actual data.
+    Use $W=n^\omega$ and $\tau=n^{-1/4000}$.  The uniform numerical scale
+    theorem gives $0<\tau\leq1/2$ and the actual rounded per-band weight;
+    the transport-smallness theorem puts that same weight in the required
+    interval.  Identify the scalar right-hand side with the complete final
+    error expression, including the selected mass, window, marginal budget
+    and original-state continuity correction.  Apply the final source error
+    bound at these actual data.
 
-  The same-source theorem has already taken the replica limit at fixed
-  physical size, weight and smoothing parameter.  This proof only applies
-  the subsequent uniform size estimate; the two limits are not exchanged.
-  The state, spectral window, label sequence and selected points are never
-  reselected.
+    The same-source theorem has already taken the replica limit at fixed
+    physical size, weight and smoothing parameter.  This proof only applies
+    the subsequent uniform size estimate; the two limits are not exchanged.
+    The state, spectral window, label sequence and selected points are never
+    reselected.
 \end{proof}
 
 The scanner, geometric antecedents and source target/prefix entropy

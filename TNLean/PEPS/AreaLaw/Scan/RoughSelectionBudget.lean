@@ -44,7 +44,7 @@ theorem roughSelectionBudget_le_of_endpoint_budget
         (endpoint / (k : ℝ) + (2 * H : ℕ) * rate) +
           ((2 * H : ℕ) : ℝ) * β / (k : ℝ) := by
       field_simp [hkr.ne']
-      <;> ring
+      ring
     _ ≤ (Brough + roughEndpointRemainder d c K Ci k + (2 * H : ℕ) * rate) +
         ((2 * H : ℕ) : ℝ) * (Cβ * Real.log ((k : ℝ) + 2)) / (k : ℝ) :=
       _root_.add_le_add (_root_.add_le_add hendpoint le_rfl) hβ'
@@ -82,7 +82,6 @@ theorem selected_density_le_of_normalized_budget
       push_cast
       field_simp [hkr.ne', hnr.ne', hmr.ne', hDr.ne', hKr.ne',
         ha.ne', hC1.ne', hwidth.ne']
-      <;> ring
     _ ≤ _ := mul_le_mul_of_nonneg_left hbudget hcoeff
 
 end TNLean.PEPS.AreaLaw.Scan

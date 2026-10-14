@@ -12,12 +12,12 @@ original floor, ceiling and integer-division operations.
     \lean{TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.scannerExponents}
     Fix $0<e_0<1$ and put
     \begin{align}
-        g_0&=\frac{1-e_0}{2},
-        &\mu&=1-g_0,
-        &\nu&=\frac{g_0}{1000},\nonumber\\
-        \ell&=\frac{\nu}{100},
-        &\kappa&=\min\{\ell,e_*/4\},
-        &W&=4.
+        g_0  & =\frac{1-e_0}{2},
+             & \mu               & =1-g_0,
+             & \nu               & =\frac{g_0}{1000},\nonumber \\
+        \ell & =\frac{\nu}{100},
+             & \kappa            & =\min\{\ell,e_*/4\},
+             & W                 & =4.
         \label{eq:bootstrap_scanner_exponents}
     \end{align}
     These are scanner exponents:
@@ -35,12 +35,12 @@ original floor, ceiling and integer-division operations.
 
 For any scanner exponent tuple, write
 \begin{align}
-    L_n&=\lfloor n^{1-\ell}\rfloor,
-    &m_n&=\lfloor n^\mu\rfloor,
-    &D_n&=\lceil n^\kappa\rceil,\nonumber\\
-    K_n&=\left\lfloor\frac{L_n}{8m_n}\right\rfloor,
-    &a_n&=\frac4{K_n},
-    &r_n&=\lceil C_r\log^2 n\rceil.
+    L_n & =\lfloor n^{1-\ell}\rfloor,
+        & m_n                                         & =\lfloor n^\mu\rfloor,
+        & D_n                                         & =\lceil n^\kappa\rceil,\nonumber \\
+    K_n & =\left\lfloor\frac{L_n}{8m_n}\right\rfloor,
+        & a_n                                         & =\frac4{K_n},
+        & r_n                                         & =\lceil C_r\log^2 n\rceil.
     \label{eq:bootstrap_scanner_rounded_scales}
 \end{align}
 The integer quotient defining $K_n$ is used even at small sizes;
@@ -57,7 +57,7 @@ Let $\ell_q(r)$ be the physical logarithmic-dimension bound for transport.
     physical data, such that every $n\geq N$ satisfies
     $K_n\geq8$, $a_n>0$ and
     \begin{align}
-        a_n\ell_q(r_n)&\leq c_t.
+        a_n\ell_q(r_n) & \leq c_t.
         \label{eq:fixed_weight_four_transport_smallness}
     \end{align}
     No sharp-comparison exponent margin is assumed.
@@ -71,8 +71,8 @@ Let $\ell_q(r)$ be the physical logarithmic-dimension bound for transport.
     Therefore
     \begin{align}
         a_n\ell_q(r_n)
-          &\leq4C_KC_d\frac{\log^4n}{n^\alpha}
-          \longrightarrow0.
+         & \leq4C_KC_d\frac{\log^4n}{n^\alpha}
+        \longrightarrow0.
         \label{eq:fixed_weight_four_transport_decay}
     \end{align}
     The band count tends beyond every fixed integer, so one common
@@ -87,11 +87,11 @@ Let $\ell_q(r)$ be the physical logarithmic-dimension bound for transport.
     There is $N\geq2$, before all finite physical data, such that every
     $n\geq N$ satisfies
     \begin{align}
-        2r_n&\leq D_n,
-        &1&\leq D_n,
-        &4D_n&\leq m_n,\nonumber\\
-        8&\leq K_n,
-        &8K_nm_n&\leq L_n.
+        2r_n & \leq D_n,
+             & 1         & \leq D_n,
+             & 4D_n      & \leq m_n,\nonumber \\
+        8    & \leq K_n,
+             & 8K_nm_n   & \leq L_n.
         \label{eq:scanner_rounded_admissibility}
     \end{align}
 \end{theorem}

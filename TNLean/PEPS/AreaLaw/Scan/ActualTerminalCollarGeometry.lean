@@ -90,7 +90,9 @@ theorem terminalPartition_collar_geometry
   have hdisjoint (Q : Finset (Site Λ)) (hQ : Q ⊆ X ∪ U ∪ Y) : Disjoint Q V := by
     rw [hfar']
     exact Finset.disjoint_left.mpr fun x hx hv ↦ (Finset.mem_compl.mp hv) (hQ hx)
-  have hcover : X ∪ U ∪ Y ∪ V = Finset.univ := by rw [hfar']; simp
+  have hcover : X ∪ U ∪ Y ∪ V = Finset.univ := by
+    rw [hfar']
+    exact Finset.union_compl (X ∪ U ∪ Y)
   have hcompact : Vᶜ ⊆ S.truncationSet L := by
     cases j with
     | inl j => exact S.state_far_compl_subset_truncationSet j.2 g hL

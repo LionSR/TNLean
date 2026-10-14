@@ -7,58 +7,58 @@ imply those inequalities uniformly at large size.  This specialization
 retains every source geometry and target/prefix entropy hypothesis.
 
 \begin{lemma}[The final scanner scales are admissible]
-  \label{lem:final-scanner-admissibility}
-  \lean{TNLean.PEPS.AreaLaw.Scan.exists_finalScanner_admissibility}
-  Fix $C_r\geq0$ and the final exponents
-  $\mu=1/4$, $\kappa=1/1000000$ and $\ell=1/100000$.
-  There is one $N\geq2$ such that every integer $n\geq N$, with
-  \[
-    r_0=\lceil C_r(\log n)^2\rceil,\quad
-    L=\lfloor n^{1-\ell}\rfloor,\quad
-    m=\lfloor n^\mu\rfloor,\quad D=\lceil n^\kappa\rceil,\quad
-    K=L/(8m),
-  \]
-  satisfies
-  \[
-    2r_0\leq D,\qquad 1\leq D,\qquad 4D\leq m,\qquad
-    1\leq K,\qquad 8Km\leq L.
-  \]
-  The division defining $K$ is natural-number division.
+    \label{lem:final-scanner-admissibility}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_finalScanner_admissibility}
+    Fix $C_r\geq0$ and the final exponents
+    $\mu=1/4$, $\kappa=1/1000000$ and $\ell=1/100000$.
+    There is one $N\geq2$ such that every integer $n\geq N$, with
+    \[
+        r_0=\lceil C_r(\log n)^2\rceil,\quad
+        L=\lfloor n^{1-\ell}\rfloor,\quad
+        m=\lfloor n^\mu\rfloor,\quad D=\lceil n^\kappa\rceil,\quad
+        K=L/(8m),
+    \]
+    satisfies
+    \[
+        2r_0\leq D,\qquad 1\leq D,\qquad 4D\leq m,\qquad
+        1\leq K,\qquad 8Km\leq L.
+    \]
+    The division defining $K$ is natural-number division.
 \end{lemma}
 
 \begin{proof}
-  The accepted logarithmic-radius estimate gives
-  $2r_0\leq n^\kappa$ eventually.  Applying the ceiling bound yields
-  $2r_0\leq D$.  The accepted rounded-scale separation and positive
-  band-count estimates supply the other inequalities because
-  $0<\kappa<\mu<1-\ell$.  Take one maximum threshold.
+    The accepted logarithmic-radius estimate gives
+    $2r_0\leq n^\kappa$ eventually.  Applying the ceiling bound yields
+    $2r_0\leq D$.  The accepted rounded-scale separation and positive
+    band-count estimates supply the other inequalities because
+    $0<\kappa<\mu<1-\ell$.  Take one maximum threshold.
 \end{proof}
 
 \begin{theorem}[Conditional information from literal rounded scales]
-  \label{thm:source-rounded-information}
-  \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales}
-  The conditional final-scale physical information theorem holds without
-  separately assuming $2r_0\leq D$, $1\leq D$ or $4D\leq m$.
-  Retain its original gapped ground state, literal floor and ceiling
-  scales, scanner graph and support anchors, template-volume bound,
-  ambient depth and layer bounds, anchor multiplicity, cut clearance,
-  and source target/prefix entropy bounds.  Then one constant $C>0$ and
-  one uniform threshold give
-  \[
-    2I_\Omega(X:S_0^c)\leq Cn^{62497/62500},\qquad
-    2I_\Omega(X:S_0^c)\leq Cn^{1-1/100000}.
-  \]
-  The radius coefficient is selected before the entropy coefficient;
-  the final constant and size threshold precede every physical instance.
+    \label{thm:source-rounded-information}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales}
+    The conditional final-scale physical information theorem holds without
+    separately assuming $2r_0\leq D$, $1\leq D$ or $4D\leq m$.
+    Retain its original gapped ground state, literal floor and ceiling
+    scales, scanner graph and support anchors, template-volume bound,
+    ambient depth and layer bounds, anchor multiplicity, cut clearance,
+    and source target/prefix entropy bounds.  Then one constant $C>0$ and
+    one uniform threshold give
+    \[
+        2I_\Omega(X:S_0^c)\leq Cn^{62497/62500},\qquad
+        2I_\Omega(X:S_0^c)\leq Cn^{1-1/100000}.
+    \]
+    The radius coefficient is selected before the entropy coefficient;
+    the final constant and size threshold precede every physical instance.
 \end{theorem}
 
 \begin{proof}
-  Keep the same radius coefficient and information constant as the
-  conditional final-scale theorem.  Increase its size threshold to the
-  maximum with the preceding numerical threshold.  Substitute the exact
-  rounded-scale equalities and apply the original theorem to the same
-  physical state and scanner.  No state, label or selected point is
-  changed, and no limit is interchanged.
+    Keep the same radius coefficient and information constant as the
+    conditional final-scale theorem.  Increase its size threshold to the
+    maximum with the preceding numerical threshold.  Substitute the exact
+    rounded-scale equalities and apply the original theorem to the same
+    physical state and scanner.  No state, label or selected point is
+    changed, and no limit is interchanged.
 \end{proof}
 
 The source is \emph{A two-dimensional area law from a global spectral gap},
