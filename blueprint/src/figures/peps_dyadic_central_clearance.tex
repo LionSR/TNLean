@@ -1,24 +1,33 @@
 % Figure peps_dyadic_central_clearance.
 % Owner: chapter/ch24_peps_dyadic_geometry.tex (thm:peps_dyadic_central_clearance).
-% Used by: gapped-2d-notes PP Sec. 8.
+% Used by: gapped-2d-notes PP Sec. VII C (repainting one square), Fig. 7(a).
 % Source: OpenAI2026PolynomialPEPS, sections/06-geometry.tex:140--165 (central
 % birth and the starting word C|A|B); no source figure.
 % Ink-to-index: the square S=[0,n]^2 has corners at the four red dots
-% (the set V).  The orange contours are the bands {0<x<1} of the four edges,
-% keeping the label A; the blue tinted contour is the central region R, of
-% label B; the four blue strings record that R reaches the boundary of S at
-% the corners and nowhere else.  C_e is the label of the exterior neighbouring
-% square across each edge e (the four C_e may differ).  Along any edge, read
-% inwards, the word is C_e|A|B with interfaces at x=0 and x=1.
+% (species centre; the set V).  The orange contours are the bands {0<x<1} of
+% the four edges, keeping the label A (each A is set on the outer side of its
+% band); the blue tinted contour is the central region R, of label B; the
+% four blue strings record that R reaches the boundary of S at the corners
+% and nowhere else.  C_e, set outside S beyond each band, is the label of the
+% exterior neighbouring square across the edge e (the four C_e may differ).
+% Along any edge, read inwards, the word is C_e|A|B with interfaces at x=0
+% (the edge of S, level with the corners) and x=1 (the edge of R).  The arrow
+% below the picture is the parallel coordinate s along the bottom edge; the
+% bracket on the right spans x=0..1 of that edge's band, its width w(s).
+% Boundary signature: empty (no wires carry indices; no contractions; the
+% arrow is a string, not an index).
 % Not to scale: a band has width w(s)=10^{-3}min(s,n-s)<=n/2000 and width 0
-% at the corners, so R is almost all of S; the conical tips cannot be inked.
-% No wires carry indices; no contractions; boundary signature empty.
+% at the corners, so R is almost all of S; the conical tips cannot be inked,
+% and the bracket shows the constant drawn width.
+% Label macros: \tnlCbPar{s}, \tnlCbWidth{w(s)} (PP: \zeta, w_{\rm b}(\zeta)).
 \begin{tenkzequation}
     \tenkzkernel
     \begin{tenkz}[lattice={9x9}, bonds=none, size=s] % chktex 29
+        \providecommand{\tnlCbPar}{s}
+        \providecommand{\tnlCbWidth}{w(s)}
         \tndeclare{species}{bandA}{hue=source:orange}
         \tndeclare{species}{bandB}{hue=source:cyan}
-        \tndeclare{species}{contact}{hue=source:red}
+        \tndeclare{species}{centre}{hue=source:red}
         \tn[at=(1,1), skin=none]{}
         \tn[at=(1,2), skin=none]{}
         \tn[at=(1,3), skin=none]{}
@@ -29,13 +38,13 @@
         \tn[at=(1,8), skin=none]{}
         \tn[at=(1,9), skin=none]{}
         \tn[at=(2,1), skin=none]{}
-        \tn[at=(2,2), name=centralCornerNW, skin=dot, species=contact]{}
+        \tn[at=(2,2), name=centralCornerNW, skin=dot, species=centre]{}
         \tn[at=(2,3), skin=none]{}
         \tn[at=(2,4), skin=none]{}
         \tn[at=(2,5), skin=none]{}
         \tn[at=(2,6), skin=none]{}
         \tn[at=(2,7), skin=none]{}
-        \tn[at=(2,8), name=centralCornerNE, skin=dot, species=contact]{}
+        \tn[at=(2,8), name=centralCornerNE, skin=dot, species=centre]{}
         \tn[at=(2,9), skin=none]{}
         \tn[at=(3,1), skin=none]{}
         \tn[at=(3,2), skin=none]{}
@@ -83,13 +92,13 @@
         \tn[at=(7,8), skin=none]{}
         \tn[at=(7,9), skin=none]{}
         \tn[at=(8,1), skin=none]{}
-        \tn[at=(8,2), name=centralCornerSW, skin=dot, species=contact]{}
+        \tn[at=(8,2), name=centralCornerSW, skin=dot, species=centre]{}
         \tn[at=(8,3), skin=none]{}
         \tn[at=(8,4), skin=none]{}
         \tn[at=(8,5), skin=none]{}
         \tn[at=(8,6), skin=none]{}
         \tn[at=(8,7), skin=none]{}
-        \tn[at=(8,8), name=centralCornerSE, skin=dot, species=contact]{}
+        \tn[at=(8,8), name=centralCornerSE, skin=dot, species=centre]{}
         \tn[at=(8,9), skin=none]{}
         \tn[at=(9,1), skin=none]{}
         \tn[at=(9,2), skin=none]{}
@@ -100,18 +109,21 @@
         \tn[at=(9,7), skin=none]{}
         \tn[at=(9,8), skin=none]{}
         \tn[at=(9,9), skin=none]{}
-        \tnmark[form=enclosure, species=bandA, tint]{(2,3) .. (2,7)}{$A$}
-        \tnmark[form=enclosure, species=bandA, tint]{(8,3) .. (8,7)}{$A$}
-        \tnmark[form=enclosure, species=bandA, tint]{(3,2) .. (7,2)}{$A$}
-        \tnmark[form=enclosure, species=bandA, tint]{(3,8) .. (7,8)}{$A$}
+        \tnmark[form=enclosure, label pos=n, species=bandA, tint]{(2,3) .. (2,7)}{$A$}
+        \tnmark[form=enclosure, label pos=s, species=bandA, tint]{(8,3) .. (8,7)}{$A$}
+        \tnmark[form=enclosure, label pos=w, species=bandA, tint]{(3,2) .. (7,2)}{$A$}
+        \tnmark[form=enclosure, label pos=e, species=bandA, tint]{(3,8) .. (7,8)}{$A$}
         \tnmark[form=enclosure, species=bandB, tint]{(3,3) .. (7,7)}{$B$}
         \tnwire[kind=string, species=bandB]{centralTipNW}{centralCornerNW}
         \tnwire[kind=string, species=bandB]{centralTipNE}{centralCornerNE}
         \tnwire[kind=string, species=bandB]{centralTipSW}{centralCornerSW}
         \tnwire[kind=string, species=bandB]{centralTipSE}{centralCornerSE}
-        \tnmark[form=label]{(1,5)}{$C_e$}
-        \tnmark[form=label]{(9,5)}{$C_e$}
-        \tnmark[form=label]{(5,1)}{$C_e$}
-        \tnmark[form=label]{(5,9)}{$C_e$}
+        \tnmark[form=label, label pos=n]{(1,5)}{$C_e$}
+        \tnmark[form=label, label pos=s]{(9,5)}{$C_e$}
+        \tnmark[form=label, label pos=w]{(5,1)}{$C_e$}
+        \tnmark[form=label, label pos=e]{(5,9)}{$C_e$}
+        \tnwire[kind=string, dir=to, name=centralZeta]{1.8 s of (9,3)}{1.8 s of (9,7)}
+        \tnmark[form=label, label pos=e]{1.8 s of (9,7)}{$\tnlCbPar$}
+        \tnmark[form=bracket, label pos=e]{(7,9) .. (8,9)}{$\tnlCbWidth$}
     \end{tenkz}
 \end{tenkzequation}

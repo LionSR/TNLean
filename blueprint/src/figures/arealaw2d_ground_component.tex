@@ -1,0 +1,108 @@
+% Figure arealaw2d_ground_component.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL App. H 5 (ground component, proof of Proposition 3),
+% unnumbered display.
+% Source: arXiv OpenAI2026AreaLaw, sections/09-amplification.tex:337-353 (phi, R_0) and
+% 418-447 (M_X, eq. (10.28) amplification-ground-component). Note renaming:
+% Q = Q_{S_0} -> Pi_{S_0}, T_0 = T_Y -> Pi_Y, P_X -> Pi_X.
+% Formula: <Omega|R_0 phi = sum_{x sel, y} p_x^{-1/2} (M_X)_{yx} |x>_{s'}|y>_{e'}, with
+% M_X = Tr_Y[(I_X (x) Pi_Y) rho_{S_0} Pi_{S_0}]; P_Omega R_0 phi = Omega (x) <Omega|R_0 phi.
+% Check: the coefficient of |x>_{s'}|y>_{e'} is
+% p_x^{-1/2} sqrt(p_y) <Omega|Pi_{S_0}(|x>_X (x) Pi_Y|omega_y>)
+% = p_x^{-1/2} <Omega|Pi_{S_0}(|x><y|_X (x) Pi_Y)|Omega>
+% = p_x^{-1/2} Tr[rho_{S_0} Pi_{S_0}(|x><y| (x) Pi_Y)] = (M_X)_{yx}/sqrt(p_x)
+% (sqrt(p_y)|omega_y> = (<y|_X (x) I)Omega; cyclicity of Tr_Y moves Pi_Y to the front).
+% Ink-to-index: rows from top to bottom (all panels) are e', s', X, Y, (blank), Z', the
+% rows of arealaw2d_adjoint_cancellation with one blank row (5) added for the names
+% south of the Y boxes; Z' = Lambda \ S_0. Panel 1 is <Omega|R_0 phi with the blanks
+% |0> of phi and the bras <0| of R_0 not drawn (they pair to 1): Omega (east) has its X
+% leg routed onto e' (phi, as in arealaw2d_move_and_restore); R_0 applies Pi_Y on Y and
+% creates the cup sum_{x sel} p_x^{-1/2}|x>_{s'}|x>_X (bead Pi_X rho_X^{-1/2}, as on the
+% cap of adjoint_cancellation), then Pi_{S_0} on X, Y; the bra <Omega| of P_Omega
+% (west) closes X, Y, Z'. Panel 2: the cup on s', e' with the same bead (named once, on
+% panel 1) and M_X on e': the X-to-e' part of panel 1 is the matrix (M_X)_{yx}. Panel 3,
+% after the text joiner ", M_X =": the definition, read right to left, Pi_{S_0}, then
+% rho_{S_0}, then Pi_Y on Y, with the Y wire closed into the loop Tr_Y below; X enters
+% east and leaves west.
+% Joiner (J2): cyc = the cyclicity of Tr_Y (and the definition of M_X).
+% Check opt-out: ", M_X =" is a text joiner defining the symbol M_X, not a relation
+% between panels 2 and 3 (panel 3 has signature (phys:e X, phys:w X)).
+% Colour (shared-spec 4.1, H1, H7): red (selected) are the two open legs whose
+% coefficient the statement computes, x on s' and y on e', along their whole paths: the
+% e' leg from Omega's X port (red in move_and_restore too), and the cup with its X
+% segment up to Pi_{S_0}; in panel 2 both rows and the cup. Everything else is black.
+% Labels (L1, L3, L4): register names once, west of panel 1 (the closed rows X, Y, Z'
+% are identified by Pi_Y and Pi_{S_0}, which the lead-in names). Two-wire boxes are
+% inscribed (wide=2); one-wire names stand south (Pi_Y) or north (M_X, on the top row,
+% where south would touch s'). States are labelled outside their tall boxes.
+% Boundary signature: (phys:w e', phys:w s') in panels 1 and 2; panel 3 (phys:w X,
+% phys:e X).
+% Label macros: none.
+% Fit: W at 5mm (\tnwide[5mm]); about 150 mm wide. It overflows one column at 4.5mm.
+% Related: arealaw2d_adjoint_cancellation (same rows and bead, eq. (10.26));
+% arealaw2d_move_and_restore (phi). Neither draws P_Omega R_0 phi or M_X.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire}, cols=10, bonds=none, size=l]
+        \tn[at=(1,1), skin=none, species=selected, name=gcOneTipE, ports={180:physical:$e'$, 0:physical}]{}
+        \tn[at=(2,1), skin=none, species=selected, name=gcOneTipS, ports={180:physical:$s'$, 0:physical}]{}
+        \tn[at=(3,2), skin=box, wires=4, name=gcOneBra,
+            ports={0@1:physical, 0@2:physical, 0@4:physical}]{\bra{\Omega}}
+        \tn[at=(3,3), skin=box, wires=2, wide=2, name=gcOneJoint,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{\Pi_{S_0}}
+        \tn[at=(4,5), skin=box, name=gcOneTyp, label pos=s, ports={180:physical, 0:physical}]{\Pi_Y}
+        \tn[at=(2,5), skin=none, name=gcOneCupS, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,5), skin=none, name=gcOneCupX, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,9), skin=none, name=gcOneBend, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,10), skin=box, wires=4, name=gcOneKet, label pos=e,
+            ports={180@1:physical, 180@2:physical, 180@4:physical}]{\Omega}
+        \tnwire[species=selected]{gcOneTipE.0}{gcOneBend.180}
+        \tnwire[route=arc, species=selected]{gcOneBend.0}{gcOneKet.180@1}
+        \tnwire[species=selected]{gcOneTipS.0}{gcOneCupS.180}
+        \tnwire[route=arc, species=selected, name=gcOneCup]{gcOneCupS.0}{gcOneCupX.0}
+        \tnwire[species=selected]{gcOneCupX.180}{gcOneJoint.0@1}
+        \tnwire{gcOneJoint.180@1}{gcOneBra.0@1}
+        \tnwire{gcOneJoint.180@2}{gcOneBra.0@2}
+        \tnwire{gcOneTyp.180}{gcOneJoint.0@2}
+        \tnwire{gcOneKet.180@2}{gcOneTyp.0}
+        \tnwire{gcOneKet.180@4}{gcOneBra.0@4}
+        \tn[skin=dot, at=on gcOneCup 0.5, label pos=e]{\Pi_X\rho_X^{-1/2}}
+    \end{tenkz}
+    $\overset{\text{cyc}}{\vphantom{\big|}=}$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire}, cols=4, bonds=none, size=l]
+        \tn[at=(1,1), skin=none, species=selected, name=gcTwoTipE, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), skin=none, species=selected, name=gcTwoTipS, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,2), skin=box, name=gcTwoM, label pos=n, ports={180:physical, 0:physical}]{M_X}
+        \tn[at=(1,4), skin=none, name=gcTwoCupE, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,4), skin=none, name=gcTwoCupS, ports={180:physical, 0:physical}]{}
+        \tnwire[species=selected]{gcTwoTipE.0}{gcTwoM.180}
+        \tnwire[species=selected]{gcTwoM.0}{gcTwoCupE.180}
+        \tnwire[species=selected]{gcTwoTipS.0}{gcTwoCupS.180}
+        \tnwire[route=arc, species=selected, name=gcTwoCup]{gcTwoCupE.0}{gcTwoCupS.0}
+        \tn[skin=dot, at=on gcTwoCup 0.5]{}
+    \end{tenkz}
+    $,\quad M_X=$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire}, cols=9, bonds=none, size=l]
+        \tn[at=(3,1), skin=none, name=gcThrOut, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,2), skin=none, name=gcThrLoopW, ports={0:physical, 270:physical}]{}
+        \tn[at=(6,2), skin=none, name=gcThrLoopSW, ports={90:physical, 0:physical}]{}
+        \tn[at=(4,3), skin=box, name=gcThrTyp, label pos=s, ports={180:physical, 0:physical}]{\Pi_Y}
+        \tn[at=(3,4), skin=box, wires=2, wide=2, name=gcThrRho,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{\rho_{S_0}}
+        \tn[at=(3,6), skin=box, wires=2, wide=2, name=gcThrJoint,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{\Pi_{S_0}}
+        \tn[at=(4,8), skin=none, name=gcThrLoopE, ports={180:physical, 270:physical}]{}
+        \tn[at=(6,8), skin=none, name=gcThrLoopSE, ports={90:physical, 180:physical}]{}
+        \tn[at=(3,9), skin=none, name=gcThrIn, ports={180:physical, 0:physical}]{}
+        \tnwire{gcThrOut.0}{gcThrRho.180@1}
+        \tnwire{gcThrRho.0@1}{gcThrJoint.180@1}
+        \tnwire{gcThrJoint.0@1}{gcThrIn.180}
+        \tnwire{gcThrLoopW.0}{gcThrTyp.180}
+        \tnwire{gcThrTyp.0}{gcThrRho.180@2}
+        \tnwire{gcThrRho.0@2}{gcThrJoint.180@2}
+        \tnwire{gcThrJoint.0@2}{gcThrLoopE.180}
+        \tnwire{gcThrLoopW.270}{gcThrLoopSW.90}
+        \tnwire{gcThrLoopSW.0}{gcThrLoopSE.180}
+        \tnwire{gcThrLoopSE.90}{gcThrLoopE.270}
+    \end{tenkz}
+\end{tenkzequation}

@@ -1,25 +1,50 @@
 % Figure peps_frame_hole_encoder_a.
 % Owner: chapter/ch24_peps_encoded_frames.tex (def:peps_frame_hole_encoder, first display).
-% Used by: gapped-2d-notes PP Sec. 6.
+% Used by: gapped-2d-notes PP Sec. V C (sheets, holes and encoded frames), Fig. 5(a).
 % Source: arXiv OpenAI2026PolynomialPEPS, 05-frames.tex, lines 26--69
 % (eq. hole-projector and eq. hole-encoder); no source figure.
-% First picture: every dot is a site of Lambda (a 7x7 window of the unit
-% grid); no tensor indices are drawn. Cell (4,4) is the centre c. The
-% shaded enclosure is the inner sample (|x-c|_inf<=3/2, a 3x3 block),
-% the solid enclosure is D_j for r_j=2 (5x5 block), the dashed enclosure
-% is the outer sample (|x-c|_inf<=3, the whole 7x7 window). Each label
-% stands inside its own contour. Sample choice only; h, r_j and the
-% window are illustrative. Empty boundary signature.
+% Ink-to-index: no tensor indices are drawn. Every dot is a site of Lambda
+% (a 7x7 window of the unit grid). Cell (4,4) is the centre c, the larger red
+% dot. The shaded enclosure is the inner sample Q^- (|x-c|_inf<=h=3/2, a 3x3
+% block), the solid enclosure is D_j for r_j=2 (5x5 block), the dashed
+% enclosure is the outer sample Q^+ (|x-c|_inf<=2h=3, the whole 7x7
+% window). The rings are one dot wide, so the labels stand outside the window
+% on the right: D_j and Q^- on short leaders (in the row gaps 2.5 and 4.5)
+% from their contours, Q^+ beside the dashed contour; c stands south-west of
+% the centre dot. Under the window, three empty rows (kind wire) carry the
+% radius rulers: each starts on a common origin tick in the column of c and
+% ends in the column of its contour's east side, h at x=c+3/2 (selected, as Q^-), r_j at x=c+2
+% (secondary, as D_j) and 2h at x=c+3 (neutral). Sample choice only; h, r_j
+% and the window are illustrative.
+% Boundary signature: empty.
+% Label macros: none.
 \begin{tenkzequation}
     \tenkzkernel
-    \begin{tenkz}[rows={ket,ket,ket,ket,ket,ket,ket}, cols=7,
+    \begin{tenkz}[rows={ket,ket,ket,ket,ket,ket,ket,wire,wire,wire}, cols=7,
             bonds=none]
+        \tndeclare{species}{centre}{hue=source:red}
         \tnmark[form=enclosure, species=selected, tint]{(3,3) .. (5,5)}{}
         \tnmark[form=enclosure, species=secondary]{(2,2) .. (6,6)}{}
         \tnmark[form=enclosure, species=complement]{(1,1) .. (7,7)}{}
-        \tnmark[form=label, label pos=n]{midway (4,3) and (4,4)}{$Q^-$}
-        \tnmark[form=label, label pos=n]{midway (3,2) and (3,3)}{$D_j$}
-        \tnmark[form=label, label pos=n]{midway (2,1) and (2,2)}{$Q^+$}
-        \tnmark[form=label, label pos=e]{(4,4)}{$c$}
+        \tn[at=(4,4), name=heaCentre, skin=dot, species=centre, size=l]{}
+        \tnwire[kind=string, species=secondary, name=heaDLead]
+        {0.33 e of 0.5 s of (2,6)}{0.7 e of 0.5 s of (2,7)}
+        \tnmark[form=label, label pos=e]{0.7 e of 0.5 s of (2,7)}{$D_j$}
+        \tnwire[kind=string, species=selected, name=heaQmLead]
+        {0.33 e of 0.5 s of (4,5)}{0.7 e of 0.5 s of (4,7)}
+        \tnmark[form=label, label pos=e]{0.7 e of 0.5 s of (4,7)}{$Q^-$}
+        \tnmark[form=label, label pos=e]{0.4 e of 0.5 s of (6,7)}{$Q^+$}
+        \tnmark[form=label, label pos=sw]{(4,4)}{$c$}
+        \tnwire[kind=string, species=neutral, name=heaRulerOrigin]
+        {0.1 w of 0.15 n of (8,4)}{0.1 w of 0.15 s of (10,4)}
+        \tnwire[kind=string, species=selected, name=heaRulerH]
+        {(8,4)}{0.5 e of (8,5)}
+        \tnmark[form=label, label pos=e]{0.5 e of (8,5)}{$h$}
+        \tnwire[kind=string, species=secondary, name=heaRulerR]
+        {(9,4)}{(9,6)}
+        \tnmark[form=label, label pos=e]{(9,6)}{$r_j$}
+        \tnwire[kind=string, species=neutral, name=heaRulerTwoH]
+        {(10,4)}{(10,7)}
+        \tnmark[form=label, label pos=e]{(10,7)}{$2h$}
     \end{tenkz}
 \end{tenkzequation}
