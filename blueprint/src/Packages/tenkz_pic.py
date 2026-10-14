@@ -202,7 +202,10 @@ def _run(cmd: Iterable[str], *, cwd: Path) -> subprocess.CompletedProcess[str]:
         text=True,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
-        timeout=120,
+        # A large grid with several big enclosures (the note figure
+        # tn2d_collar_clearance) takes about 70 s on a laptop and more than
+        # 120 s on a CI runner; the bound only guards against a hung engine.
+        timeout=300,
         check=False,
     )
 
