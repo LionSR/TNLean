@@ -1296,17 +1296,22 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \leanok
     \uses{def:peps_dyadic_used_parties, def:peps_dyadic_block_guide}
     Label the blocks by an injective assignment of parties, none of them the
-    placeholder. During the pass to level $2^{j'}$, a block party that labels a block
+    placeholder. At the start and end of each repainting of level $2^{j'}$, when
+    every block carries its old or its new label, a block party that labels a block
     of side $2^{j'}$ labels a block of the root square and owns it; in particular it
     has scale $j'$ or $j'+1$. At the start of the level only parties of scale $j'+1$
     occur, and once every block of the root square is repainted only parties of scale
-    $j'$. The block party labelling a block adjacent to a repainted square, or the
-    square itself, is used by its repainting; this covers the labels $A$, $B$, $C_e$
-    of its edge constructions and the labels at its corners. At the end of the pass
-    to level $2^j$, the block parties incident at a grid corner of the block guide,
-    among them its tag holder, are used by the resize of the hole there. This is the
-    invariant on active labels in~\cite[Section~7]{OpenAI2026PolynomialPEPS},
-    lines 585--614, stated for the parties.
+    $j'$. At these times the block party labelling a block adjacent to a square, or
+    the square itself, is used by the repainting of that square; this covers the
+    labels $A$, $B$, $C_e$ of its edge constructions and the labels at its corners.
+    At the end of the pass to level $2^j$, the block parties incident at a grid
+    corner of the block guide, among them its tag holder, are used by the resize of
+    the hole there. This is the invariant on active labels
+    in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 597--609, at the transition
+    times between repaintings, where the guide is a block guide, together with the
+    block-guide part of lines 585--594. The labels and tags inside a repainting (the
+    edge and point diagrams, the auxiliary initial owners, the tag updates by corner
+    rewrites) are not covered, because the repainting gates are not constructed.
 \end{theorem}
 
 \begin{proof}\leanok

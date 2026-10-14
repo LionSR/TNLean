@@ -22,9 +22,10 @@ injective labelling `party`, distinct from the placeholder `ph`. At level `2 ^ j
 the `2 ^ j'`-block `Q` is its new party `(j', Q)` or the old party of its parent,
 `(j' + 1, Q / 2)`. This file proves:
 
-* the invariant in party form: a block label of level `2 ^ j'` that is a block party belongs to
-  scale `j'` or `j' + 1`, and owns the block; at the start of the level only scale `j' + 1`
-  occurs, and once every block of the root square is repainted only scale `j'`;
+* the invariant in party form at the transition times between repaintings, where the guide is
+  a block guide: a block label of level `2 ^ j'` that is a block party belongs to scale `j'` or
+  `j' + 1`, and owns the block; at the start of the level only scale `j' + 1` occurs, and once
+  every block of the root square is repainted only scale `j'`;
 * the labels a repainting uses: the labels of the blocks that differ from the repainted square by
   at most one in each index (the labels `A`, `B`, `C_e` of its edge diagrams and the four labels
   at each corner) are owned by its *used parties*; the labels incident at a grid corner of a
@@ -36,12 +37,16 @@ the `2 ^ j'`-block `Q` is its new party `(j', Q)` or the old party of its parent
   gates and each gate involves only parties its event uses, every block party participates in at
   most `64 G` gates.
 
-The gates of the protocol are not constructed; that a gate involves only the parties its event
-uses is the hypothesis of the final count.
+The labels and tags inside a repainting (the edge and point diagrams, the auxiliary initial
+owners, the tag updates by corner rewrites, `06-geometry.tex:585–596`) are not covered, because
+the repainting gates are not constructed; those lines only motivate the definitions of the used
+parties. That a gate involves only the parties its event uses is the hypothesis of the final
+count.
 
 ## Main results
 
-* `TNLean.PEPS.Approximation.levelLabels_eq_party`: the invariant in party form.
+* `TNLean.PEPS.Approximation.levelLabels_eq_party`: the invariant in party form at the
+  transition times between repaintings.
 * `TNLean.PEPS.Approximation.repaintingUses_of_levelLabels`,
   `TNLean.PEPS.Approximation.junctionUses_of_incidentLabels`: the parties of the labels used.
 * `TNLean.PEPS.Approximation.RepaintingUses.near`, `TNLean.PEPS.Approximation.JunctionUses.near`:
@@ -108,9 +113,10 @@ def oldParty (party : ℕ × ℕ × ℕ → ι) (j' : ℕ) (Q : ℤ × ℤ) : ι
 def newParty (party : ℕ × ℕ × ℕ → ι) (j' : ℕ) (Q : ℤ × ℤ) : ι :=
   party (j', Q.1.toNat, Q.2.toNat)
 
-/-- **Active labels in party form.** During the pass to level `2 ^ j'`, a block label that is the
-block party `x` labels a block `Q` of the root square owned by `x`; in particular `x` has scale
-`j'` or `j' + 1`.
+/-- **Active labels in party form.** At the start and end of each repainting of level `2 ^ j'`,
+when every block carries its old or its new label, a block label that is the block party `x`
+labels a block `Q` of the root square owned by `x`; in particular `x` has scale `j'` or `j' + 1`.
+The labels inside a repainting are not covered.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), equation `eq:geometry-active-labels`,
 `06-geometry.tex:597–609`. -/
@@ -162,22 +168,21 @@ theorem levelLabels_eq_party_of_subset (hp : Function.Injective party) (hph : �
     |>.resolve_left (by rw [h]; exact hph x)
   rw [← hp (hy.trans h)]
 
-/-- **Labels of a repainting.** During the pass to level `2 ^ j'`, the label of a block `Q` that
-differs from the repainted square `S` of the root square by at most one in each index, such as
+/-- **Labels of a repainting.** At the start and end of each repainting of level `2 ^ j'`, the
+label of a block `Q` that differs from a square `S` by at most one in each index, such as
 `A = lab S`, `B = new S` and `C_e = lab (nbrBlock e S)` and the labels at the corners of `S`, is
 the placeholder or a party used by the repainting of `S`.
 
-Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:585–596`. -/
+The used parties are motivated by `06-geometry.tex:585–596`; the labels inside a repainting are
+not covered. -/
 theorem repaintingUses_of_levelLabels (hp : Function.Injective party) (hph : ∀ x, party x ≠ ph)
-    (M : ℤ) (j' : ℕ) (done : Set (ℤ × ℤ)) {S Q : ℤ × ℤ} (hS : InRoot M S)
+    (M : ℤ) (j' : ℕ) (done : Set (ℤ × ℤ)) {S Q : ℤ × ℤ}
     (hQ : |Q.1 - S.1| ≤ 1 ∧ |Q.2 - S.2| ≤ 1) {x : ℕ × ℕ × ℕ}
     (h : levelLabels M (oldParty party j') (newParty party j') ph done Q = party x) :
     RepaintingUses j' S.1.toNat S.2.toNat x := by
-  obtain ⟨hQ', hx⟩ := levelLabels_eq_party hp hph M j' done h
+  obtain ⟨-, hx⟩ := levelLabels_eq_party hp hph M j' done h
   obtain ⟨h1, h2⟩ := hQ
   rw [abs_le] at h1 h2
-  obtain ⟨-, -, -, -⟩ := hS
-  obtain ⟨-, -, -, -⟩ := hQ'
   exact ⟨Q.1.toNat, Q.2.toNat, by omega, by omega, by omega, by omega, hx⟩
 
 end Parties
