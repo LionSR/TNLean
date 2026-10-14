@@ -83,6 +83,7 @@ import TNLean.PEPS.Approximation.DyadicFootprintScaling
 import TNLean.PEPS.Approximation.DyadicFootprintTemplates
 import TNLean.PEPS.Approximation.DyadicGuideReadings
 import TNLean.PEPS.Approximation.DyadicHierarchyCounts
+import TNLean.PEPS.Approximation.DyadicLargeRepaintingGates
 import TNLean.PEPS.Approximation.DyadicLevelSchedule
 import TNLean.PEPS.Approximation.DyadicLifetimeIncidence
 import TNLean.PEPS.Approximation.DyadicPatchRewriteGates
@@ -230,6 +231,7 @@ import TNLean.PEPS.Approximation.PreparedSourceGate
 import TNLean.PEPS.Approximation.PreparedSourceTransport
 import TNLean.PEPS.Approximation.PreparedSourceVectorDensity
 import TNLean.PEPS.Approximation.ProductReferenceColumn
+import TNLean.PEPS.Approximation.ProtocolDensityError
 import TNLean.PEPS.Approximation.PurePhysicalCoefficient
 import TNLean.PEPS.Approximation.PurePreparedContraction
 import TNLean.PEPS.Approximation.PureSourceMatrix

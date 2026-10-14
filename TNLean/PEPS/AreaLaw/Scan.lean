@@ -19,9 +19,11 @@ import TNLean.PEPS.AreaLaw.Scan.ActualEnergyTerms
 import TNLean.PEPS.AreaLaw.Scan.ActualEntropySampling
 import TNLean.PEPS.AreaLaw.Scan.ActualGlobalReplicaEnergy
 import TNLean.PEPS.AreaLaw.Scan.ActualHistory
+import TNLean.PEPS.AreaLaw.Scan.ActualInitialRootNorm
 import TNLean.PEPS.AreaLaw.Scan.ActualMarginalTails
 import TNLean.PEPS.AreaLaw.Scan.ActualParameterIntegral
 import TNLean.PEPS.AreaLaw.Scan.ActualReplicaDefect
+import TNLean.PEPS.AreaLaw.Scan.ActualRoughUpper
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundEntropy
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundParameterIntegral
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport
@@ -36,6 +38,7 @@ import TNLean.PEPS.AreaLaw.Scan.AugmentedEnergyCoordinates
 import TNLean.PEPS.AreaLaw.Scan.AugmentedPartition
 import TNLean.PEPS.AreaLaw.Scan.AugmentedReceivingRegions
 import TNLean.PEPS.AreaLaw.Scan.AugmentedReplicaMetricCoordinates
+import TNLean.PEPS.AreaLaw.Scan.AugmentedReplicaPrevectorProperties
 import TNLean.PEPS.AreaLaw.Scan.AugmentedRootCompression
 import TNLean.PEPS.AreaLaw.Scan.BadChargeRatioBound
 import TNLean.PEPS.AreaLaw.Scan.BadHistoryAsymptotics
