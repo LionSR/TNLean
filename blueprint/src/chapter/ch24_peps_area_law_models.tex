@@ -849,51 +849,60 @@ original open square. We state the two models separately, following
     This is Definition~9.3 of \cite{OpenAI2026AreaLaw}.
 \end{definition}
 
-\begin{lemma}[Rectangles, unions and empty pieces of templates]
-    \label{lem:area_law_template_instances}
+\begin{definition}[Rectangle templates, unions and omitted pieces]
+    \label{def:area_law_template_instances}
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.ofIntRect,
-        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region_ofIntRect,
-        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.mem_toFinset_iff_integerPoint_mem_ofIntRect,
         TNLean.PEPS.AreaLaw.Geometry.Template.ofIntRect,
-        TNLean.PEPS.AreaLaw.Geometry.Template.isSeparated_ofIntRect_of_isSafe,
         TNLean.PEPS.AreaLaw.Geometry.Template.union,
-        TNLean.PEPS.AreaLaw.Geometry.Template.omitEmpty,
-        TNLean.PEPS.AreaLaw.Geometry.Template.sample_omitEmpty_nonempty,
-        TNLean.PEPS.AreaLaw.Geometry.Template.pieceCount_omitEmpty_le
+        TNLean.PEPS.AreaLaw.Geometry.Template.omitEmpty
     }
     \leanok
     \uses{def:area_law_template}
     \begin{enumerate}
-        \item Let $C_{\rm tpl}\ge1$. An integer rectangle $Q=([x_0,x_1]\times[y_0,y_1])\cap\mathbb Z^2$ with
-              at most $s_0$ sites along each axis is a template with one piece
-              whenever $C_{\rm tpl}(s_0+1)\le n$. This includes thin rectangles
-              of one row or one column. If every endpoint of a crossing edge of
-              the cut has sup-norm distance more than $D|Q|$ from $Q$, where
-              $|Q|$ is the larger side, and $4D_0s_0\le D|Q|$, then the
-              template is separated from the cut.
-        \item If $T$ and $T'$ are templates with parameters $(n,s_0)$ with
-              $N_0$ and $N_0'$ pieces, $C_{\rm tpl}(N_0+N_0')(s_0+1)\le n$ and
-              $\operatorname{diam}_\infty(T\cup T')\le n$, then $T\cup T'$ is a
-              template with $N_0+N_0'$ pieces. The union need not be connected.
-        \item Deleting the pieces with $P_a\cap\mathbb Z^2=\varnothing$ from a
-              template leaves a template with the same point set, at most as
-              many pieces, and only nonempty sampled pieces; here
-              $C_{\rm tpl}\ge0$ suffices.
+        \item Let $C_{\rm tpl}\ge1$ and $C_{\rm tpl}(s_0+1)\le n$. An integer
+              rectangle $Q=([x_0,x_1]\times[y_0,y_1])\cap\mathbb Z^2$ with at
+              most $s_0$ sites along each axis, including a thin rectangle of
+              one row or one column, defines the template with the single piece
+              $P=[x_0,x_1+\tfrac12]\times[y_0,y_1+\tfrac12]$.
+        \item For templates $T$ and $T'$ with parameters $(n,s_0)$ and $N_0$
+              and $N_0'$ pieces, with $C_{\rm tpl}(N_0+N_0')(s_0+1)\le n$ and
+              $\operatorname{diam}_\infty(T\cup T')\le n$, the union template
+              $T\cup T'$ has the pieces of $T$ followed by those of $T'$. The
+              union need not be connected.
+        \item For $C_{\rm tpl}\ge0$, the template obtained from $T$ by deleting
+              the pieces with $P_a\cap\mathbb Z^2=\varnothing$ has the same
+              point set.
     \end{enumerate}
+\end{definition}
+
+\begin{lemma}[Properties of rectangle templates and omitted pieces]
+    \label{lem:area_law_template_instances}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region_ofIntRect,
+        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.mem_toFinset_iff_integerPoint_mem_ofIntRect,
+        TNLean.PEPS.AreaLaw.Geometry.Template.isSeparated_ofIntRect_of_isSafe,
+        TNLean.PEPS.AreaLaw.Geometry.Template.sample_omitEmpty_nonempty,
+        TNLean.PEPS.AreaLaw.Geometry.Template.pieceCount_omitEmpty_le
+    }
+    \leanok
+    \uses{def:area_law_template_instances}
+    The piece $P$ of a rectangle template is nondegenerate with horizontal and
+    vertical sides, and $P\cap\mathbb Z^2=Q$. If every endpoint of a crossing
+    edge of the cut has sup-norm distance more than $D|Q|$ from $Q$, where
+    $|Q|$ is the larger side, and $4D_0s_0\le D|Q|$, then the rectangle
+    template is separated from the cut. After empty pieces are omitted, every
+    sampled piece is nonempty and the number of pieces does not increase.
 \end{lemma}
 
 \begin{proof}
     \leanok
-    For (1), take the real rectangle
-    $[x_0,x_1+\tfrac12]\times[y_0,y_1+\tfrac12]$. It is nondegenerate, its
-    sides are horizontal and vertical, its sup-norm diameter is at most
-    $|Q|-\tfrac12\le s_0$, and its integer points are exactly $Q$. The
+    The sup-norm diameter of $P$ is at most $|Q|-\tfrac12\le s_0$, and an
+    integer $a$ satisfies $a\le b+\tfrac12$ exactly when $a\le b$. The
     diameter of $Q$ is less than $s_0\le n$. The clearance assumption gives
-    $\operatorname{dist}_\infty(Q,Z)>D|Q|\ge4D_0s_0$. For (2), the pieces of
-    $T\cup T'$ are those of $T$ followed by those of $T'$. For (3), at least
-    one piece is nonempty because $T$ is nonempty, and decreasing $N_0$
-    preserves $C_{\rm tpl}N_0(s_0+1)\le n$ when $C_{\rm tpl}\ge0$.
+    $\operatorname{dist}_\infty(Q,Z)>D|Q|\ge4D_0s_0$. At least one piece of a
+    template is nonempty because the template is nonempty, and decreasing
+    $N_0$ preserves $C_{\rm tpl}N_0(s_0+1)\le n$ when $C_{\rm tpl}\ge0$.
 \end{proof}
 
 \begin{definition}[Ordered two-family partition]
