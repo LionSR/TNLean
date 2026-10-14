@@ -14,7 +14,8 @@ set_option linter.hashCommand false
 open TNLean.PEPS.PairEffect.Word
 
 run_cmd do
-  let declarations := #[``IsEvalComparison, ``IsEvalComparison.eval_eq]
+  let declarations := #[``IsEvalComparison, ``IsEvalComparison.eval_eq,
+    ``isEvalComparison_of_eval_eq]
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let env ← Lean.getEnv
   for decl in declarations do

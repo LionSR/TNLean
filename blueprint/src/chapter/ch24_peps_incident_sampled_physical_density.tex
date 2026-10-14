@@ -37,6 +37,19 @@ independent, and each source uses one shared sample index at its two endpoints.
     is ordinary equality of the two operators.
 \end{proof}
 
+\begin{lemma}[Equal word evaluations on fixed layouts]
+    \label{lem:peps_word_eval_comparison_of_equality}
+    \lean{TNLean.PEPS.PairEffect.Word.isEvalComparison_of_eval_eq}
+    \uses{def:peps_word_eval_comparison}
+    Let $u$ and $v$ have the same input and output register lists.
+    If $\operatorname{eval}(u)=\operatorname{eval}(v)$, their evaluations
+    agree in the sense of Definition~\ref{def:peps_word_eval_comparison}.
+\end{lemma}
+\begin{proof}
+    Ordinary operator equality gives heterogeneous equality on these
+    fixed input and output spaces.
+\end{proof}
+
 \begin{theorem}[Remaining operations at an owner with a singleton fibre]
     \label{thm:peps_singleton_fibre_local_part}
     \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber}
@@ -595,7 +608,8 @@ endpoint labels agree after grouping.
     \uses{thm:peps_prepared_incident_operator,
         thm:peps_incident_sampled_endpoint_comparison,
         def:peps_incident_sampled_physical_factor,
-        lem:peps_word_eval_comparison_fixed_layouts}
+        lem:peps_word_eval_comparison_fixed_layouts,
+        lem:peps_word_eval_comparison_of_equality}
     Apply the prepared-operator identity separately to $\xi$ and $\zeta$.
     Their coordinate matrices in the common input and output bases
     are therefore $A_{p,\xi_p}$ and $A_{p,\zeta_p}$.

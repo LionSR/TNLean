@@ -143,10 +143,27 @@ private theorem selected_word_evals_eq_incident_words {b : Layout P}
           (fun t ↦ partySelector (some ⟨p, rfl⟩)
             (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω) := by
   intro q
-  exact ⟨heq_of_eq (restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ξ),
-    heq_of_eq (restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ζ),
-    heq_of_eq (restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord
-      w k lam L R p ξ ζ j ω)⟩
+  exact ⟨Word.isEvalComparison_of_eval_eq
+      ((w.partialSourceWord ψ ξ).restrict (partySelector q)
+        (sources_partialSourceWord w ψ ξ))
+      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ))
+      (restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ξ),
+    Word.isEvalComparison_of_eval_eq
+      ((w.partialSourceWord ψ ζ).restrict (partySelector q)
+        (sources_partialSourceWord w ψ ζ))
+      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ζ))
+      (restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ζ),
+    Word.isEvalComparison_of_eval_eq
+      ((sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict (partySelector q)
+        (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω))
+      (incidentSampledEndpointWord w k lam L R p
+        (originalGateLabelsAtOfAllChoices w p ξ)
+        (originalGateLabelsAtOfAllChoices w p ζ)
+        (fun i ↦ j (partialSlotEquiv
+          (fun t ↦ partySelector (some ⟨p, rfl⟩)
+            (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω)
+      (restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord
+        w k lam L R p ξ ζ j ω)⟩
 
 /-- At independently extracted incident labels, the directly constructed
 physical factor equals the actual factor at the same original party. The
@@ -203,6 +220,6 @@ theorem sampledPhysicalFactor_eq_incidentSampledPhysicalFactor
           (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω)
     hWords.1 hWords.2.1 hWords.2.2
   simpa only [sampledPhysicalFactor, incidentSampledPhysicalFactor,
-    Classical.typeDecidableEq] using h
+    Classical.typeDecidableEq, q, bIn, bOut, selectedFamilyPhysicalIndex] using h
 
 end TNLean.PEPS.PairEffect.SourceCircuit

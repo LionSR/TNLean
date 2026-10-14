@@ -36,6 +36,9 @@ abstracted — record why, so it is not re-proposed).
   common comparison. The two existing private predicates delegate to it with
   unchanged signatures; their theorem statements and proofs are unchanged.
   `Word.IsEvalComparison.eval_eq` reuses Core `eq_of_heq` on fixed layouts.
+  `Word.isEvalComparison_of_eval_eq` reuses Core `heq_of_eq` with both word
+  arguments explicit; the three physical component comparisons use it before
+  the actual operator-equality proof is supplied.
 - **Purpose:** Match propositions on arbitrary words before evaluating concrete
   original-circuit or sampled-operator expressions. The physical-coordinate
   argument derives all three component comparisons from the existing word
@@ -43,7 +46,7 @@ abstracted — record why, so it is not re-proposed).
 - **Notes:** Three files now use the shared predicate; no third copy is added.
   The promotion adds no original hypothesis or proof limit. It does not use the
   different selected-local-part predicate. Hosted verification and timing remain
-  pending. The new provider has 38 lines; the two delegate body replacements and
+  pending. The new provider has 45 lines; the two delegate body replacements and
   imports add two lines in total to those existing files.
 
 

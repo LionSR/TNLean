@@ -3752,8 +3752,10 @@ source's Proposition 4.1.
   states*, September 24, 2026, proof of Theorem 5.2,
   `04-compression.tex:253–267,351–434,565–588`,
   [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L253-L267).
-- **Sanctioned bridge:** `Word.IsEvalComparison.eval_eq` gives ordinary evaluation
-  equality for words on the same input and output layouts. The prepared-source,
+- **Sanctioned bridges:** `Word.IsEvalComparison.eval_eq` gives ordinary evaluation
+  equality for words on the same input and output layouts.
+  `Word.isEvalComparison_of_eval_eq` gives the converse for those fixed layouts,
+  taking both words explicitly. The prepared-source,
   sampled-endpoint and physical-coordinate comparisons derive this predicate
   from their actual word comparison results.
 - **Caveats:** This compares the full evaluations of the supplied words. It

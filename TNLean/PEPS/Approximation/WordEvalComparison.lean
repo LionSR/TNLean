@@ -35,4 +35,11 @@ theorem IsEvalComparison.eval_eq {Q : Type} {a b : Layout Q}
     {u v : Word a b} (h : IsEvalComparison u v) : u.eval = v.eval :=
   eq_of_heq h
 
+/-- Equal evaluations on fixed input and output layouts give evaluation
+comparison. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
+lines 253–267 and 565–588. -/
+theorem isEvalComparison_of_eval_eq {Q : Type} {a b : Layout Q}
+    (u v : Word a b) (h : u.eval = v.eval) : IsEvalComparison u v :=
+  heq_of_eq h
+
 end TNLean.PEPS.PairEffect.Word
