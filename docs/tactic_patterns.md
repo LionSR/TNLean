@@ -24,6 +24,29 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Named comparison of arbitrary word evaluations — promoted (2026-10-14)
+
+- **Pattern:** Retain two constructed words and their own layouts in a named
+  proposition defined literally by heterogeneous equality of their evaluations.
+- **Seen:** `preparedWordEvalComparison` in `IncidentSourceWordComparison.lean`,
+  `wordEvalComparison` in `IncidentSampledEndpointComparison.lean`, and the generic
+  coordinate and original-word comparisons in `IncidentSampledPhysicalFactor.lean`,
+  under `PEPS/Approximation/`.
+- **Abstraction:** `Word.IsEvalComparison` in `WordEvalComparison.lean` states this
+  common comparison. The two existing private predicates delegate to it with
+  unchanged signatures; their theorem statements and proofs are unchanged.
+  `Word.IsEvalComparison.eval_eq` reuses Core `eq_of_heq` on fixed layouts.
+- **Purpose:** Match propositions on arbitrary words before evaluating concrete
+  original-circuit or sampled-operator expressions. The physical-coordinate
+  argument derives all three component comparisons from the existing word
+  results and converts them to ordinary equality only for abstract words.
+- **Notes:** Three files now use the shared predicate; no third copy is added.
+  The promotion adds no original hypothesis or proof limit. It does not use the
+  different selected-local-part predicate. Hosted verification and timing remain
+  pending. The new provider has 38 lines; the two delegate body replacements and
+  imports add two lines in total to those existing files.
+
+
 ### Restriction of equal words with dependent source proofs — promoted (2026-10-13)
 
 - **Pattern:** Transport the word together with its source-free proof before
@@ -7541,23 +7564,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   third occurrence, share the weakest word-level statement that covers the
   applications. Public hypotheses and proof limits remain unchanged; hosted
   acceptance and timing of the new application remain pending.
-
-### Named comparison of arbitrary word evaluations — candidate (2026-10-14)
-
-- **Pattern:** Retain two constructed words and their own layouts in a named
-  proposition defined literally by heterogeneous equality of their evaluations.
-- **Seen:** The private `preparedWordEvalComparison` in
-  `IncidentSourceWordComparison.lean` and `wordEvalComparison` in
-  `IncidentSampledEndpointComparison.lean`, under `PEPS/Approximation/`.
-- **Purpose:** Match component comparisons as propositions on words before
-  evaluating the concrete circuit or sampled operator expressions. The generic
-  proofs still use the existing heterogeneous equality lemmas.
-- **Notes:** Two private definitions with the same mathematical content. No
-  public general predicate is available in the imported word modules; a
-  selected-local-part predicate would impose different content. At a third
-  occurrence, share the weakest general word-evaluation predicate and migrate
-  these uses. Original hypotheses and proof limits are unchanged; hosted
-  verification and timing of the new application remain pending.
 
 ### Coordinate matrices of selected words — candidate (2026-10-14)
 

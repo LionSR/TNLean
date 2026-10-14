@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.Approximation.WordEvalComparison
 import TNLean.PEPS.Approximation.IncidentSourceWord
 import TNLean.PEPS.Approximation.AllPartySingletonCircuitComparison
 import TNLean.PEPS.Approximation.WordStructuralCongruence
@@ -75,7 +76,7 @@ prefixes or private preparation are substituted.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
 246–267, 409–434 and 565–588. -/
 private def preparedWordEvalComparison {Q R : Type} {a b : Layout Q} {c d : Layout R}
-    (u : Word a b) (v : Word c d) : Prop := HEq u.eval v.eval
+    (u : Word a b) (v : Word c d) : Prop := Word.IsEvalComparison u v
 
 /-- Selection of arbitrary source-free words commutes with framing and
 owner transport when the retained source and boundary lists agree. The inner

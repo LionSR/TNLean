@@ -3719,3 +3719,26 @@ source's Proposition 4.1.
   typical entropy and auxiliary dimension remain separate proof obligations.
   Those substitutions must already occur in the additive budgets; no uniform
   replica convergence rate over physical scales is supplied or needed.
+
+### Comparison of chronological word evaluations
+
+- **Declaration:** `TNLean.PEPS.PairEffect.Word.IsEvalComparison`.
+- **Defined in:** `TNLean/PEPS/Approximation/WordEvalComparison.lean`.
+- **Meaning:** For two chronological words, possibly with different owner types
+  and register lists, the predicate is literally heterogeneous equality of
+  their evaluations. Each word retains its actual input and output space.
+- **Source:** OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
+  states*, September 24, 2026, proof of Theorem 5.2,
+  `04-compression.tex:253–267,351–434,565–588`,
+  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L253-L267).
+- **Sanctioned bridge:** `Word.IsEvalComparison.eval_eq` gives ordinary evaluation
+  equality for words on the same input and output layouts. The prepared-source,
+  sampled-endpoint and physical-coordinate comparisons derive this predicate
+  from their actual word comparison results.
+- **Caveats:** This compares the full evaluations of the supplied words. It
+  neither imposes allowedness, contractions, source normalization or absence of
+  sources, nor supplies equality after an arbitrary restriction to owners.
+  It is not the selected-local-part comparison predicate. No equivalence with
+  physical-density equality, factorization or locality is asserted.
+- **Verification:** The new predicate and bridge await hosted Lean verification;
+  their mathematical meaning does not depend on that pending status.

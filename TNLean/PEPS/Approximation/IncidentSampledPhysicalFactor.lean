@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.Approximation.WordEvalComparison
 import TNLean.PEPS.Approximation.ActualSampledPhysicalFactors
 import TNLean.PEPS.Approximation.IncidentSourceWordComparison
 import TNLean.PEPS.Approximation.IncidentSampledEndpointComparison
@@ -96,16 +97,18 @@ private theorem restrictedMixedPhysicalTrace_eq_of_word_evals
     (C : OrthonormalBasis (X × K) ℂ (Mem (Layout.restrict f b)))
     (u' t' : Word (Layout.restrict f a) (Layout.restrict f b))
     (v' : Word (Layout.restrict f a) (Layout.restrict f a))
-    (hU : (u.restrict f hu).eval = u'.eval)
-    (hT : (t.restrict f ht).eval = t'.eval)
-    (hV : (v.restrict f hv).eval = v'.eval) :
+    (hU : Word.IsEvalComparison (u.restrict f hu) u')
+    (hT : Word.IsEvalComparison (t.restrict f ht) t')
+    (hV : Word.IsEvalComparison (v.restrict f hv) v') :
     restrictedMixedPhysicalTrace f u t v hu ht hv B C =
       Matrix.partialTraceRight (α := X) (β := K)
         (wordCoordinateMatrix u' B C * wordCoordinateMatrix v' B B *
           (wordCoordinateMatrix t' B C)ᴴ) := by
   unfold restrictedMixedPhysicalTrace wordCoordinateMatrix
   rw [matrix_repr_eval_eq_toMatrix B C (u.restrict f hu).eval,
-    matrix_repr_eval_eq_toMatrix B C (t.restrict f ht).eval, hU, hT, hV]
+    matrix_repr_eval_eq_toMatrix B C (t.restrict f ht).eval,
+    Word.IsEvalComparison.eval_eq hU, Word.IsEvalComparison.eval_eq hT,
+    Word.IsEvalComparison.eval_eq hV]
 
 /-- The three selected word comparisons depend only on the original circuit,
 input, two branch choices and samples. They are established before physical
@@ -122,25 +125,28 @@ private theorem selected_word_evals_eq_incident_words {b : Layout P}
     (ξ ζ : Choices (fun _ : P ↦ true) w) (j : w.sourceLocations → Fin k)
     (ω : SourceGaussianSamples w k) :
     let q : Option {_p : P // true = true} := some ⟨p, rfl⟩
-    ((w.partialSourceWord ψ ξ).restrict (partySelector q)
-        (sources_partialSourceWord w ψ ξ)).eval =
-      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)).eval ∧
-    ((w.partialSourceWord ψ ζ).restrict (partySelector q)
-        (sources_partialSourceWord w ψ ζ)).eval =
-      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ζ)).eval ∧
-    ((sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict (partySelector q)
-        (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω)).eval =
+    Word.IsEvalComparison
+      ((w.partialSourceWord ψ ξ).restrict (partySelector q)
+        (sources_partialSourceWord w ψ ξ))
+      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)) ∧
+    Word.IsEvalComparison
+      ((w.partialSourceWord ψ ζ).restrict (partySelector q)
+        (sources_partialSourceWord w ψ ζ))
+      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ζ)) ∧
+    Word.IsEvalComparison
+      ((sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict (partySelector q)
+        (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω))
       (incidentSampledEndpointWord w k lam L R p
         (originalGateLabelsAtOfAllChoices w p ξ)
         (originalGateLabelsAtOfAllChoices w p ζ)
         (fun i ↦ j (partialSlotEquiv
           (fun t ↦ partySelector (some ⟨p, rfl⟩)
-            (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω).eval := by
+            (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω) := by
   intro q
-  exact ⟨restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ξ,
-    restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ζ,
-    restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord
-      w k lam L R p ξ ζ j ω⟩
+  exact ⟨heq_of_eq (restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ξ),
+    heq_of_eq (restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ζ),
+    heq_of_eq (restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord
+      w k lam L R p ξ ζ j ω)⟩
 
 /-- At independently extracted incident labels, the directly constructed
 physical factor equals the actual factor at the same original party. The

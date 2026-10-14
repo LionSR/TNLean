@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.Approximation.WordEvalComparison
 import TNLean.PEPS.Approximation.IncidentSampledEndpointWord
 import TNLean.PEPS.Approximation.EndpointRegisterRestriction
 import TNLean.PEPS.Approximation.WordOwnerEvaluation
@@ -34,7 +35,7 @@ variable {P : Type} {a b : Layout P}
 and output layouts. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
 lines 253–267, 279–355, 409–434 and 565–588. -/
 private def wordEvalComparison {Q R : Type} {a b : Layout Q} {c d : Layout R}
-    (u : Word a b) (v : Word c d) : Prop := HEq u.eval v.eval
+    (u : Word a b) (v : Word c d) : Prop := Word.IsEvalComparison u v
 
 /-- Two operator comparisons through an arbitrary intermediate word give
 equality on fixed original input and output layouts. The composition is proved

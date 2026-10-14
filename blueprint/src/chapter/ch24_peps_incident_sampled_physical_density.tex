@@ -6,6 +6,37 @@ operators determined by incident gate labels and sampled endpoint operators
 indexed by the original incident source slots. The ket and bra labels are
 independent, and each source uses one shared sample index at its two endpoints.
 
+\begin{definition}[Comparison of word evaluations]
+    \label{def:peps_word_eval_comparison}
+    \lean{TNLean.PEPS.PairEffect.Word.IsEvalComparison}
+    \uses{def:peps_party_layout}
+    This relation records the operator comparisons in the proof of
+    Theorem~5.2 of~\cite{OpenAI2026PolynomialPEPS}.
+    Let $u$ and $v$ be chronological words, with their recorded input and
+    output register spaces. Their evaluations are said to agree when they
+    are heterogeneously equal as operators with these actual spaces.
+    The relation imposes no contraction, source normalization or absence
+    of sources. It does not itself assert that an equality of complete
+    operators persists after restriction to selected owners.
+\end{definition}
+
+\begin{lemma}[Evaluation comparison on fixed layouts]
+    \label{lem:peps_word_eval_comparison_fixed_layouts}
+    \lean{TNLean.PEPS.PairEffect.Word.IsEvalComparison.eval_eq}
+    \uses{def:peps_word_eval_comparison}
+    Suppose $u$ and $v$ have the same input and output register lists.
+    If their evaluations agree in the sense of
+    Definition~\ref{def:peps_word_eval_comparison}, then
+    \begin{align*}
+        \operatorname{eval}(u)=\operatorname{eval}(v)
+    \end{align*}
+    as operators on these fixed spaces.
+\end{lemma}
+\begin{proof}
+    The input and output spaces now coincide, so heterogeneous equality
+    is ordinary equality of the two operators.
+\end{proof}
+
 \begin{theorem}[Remaining operations at an owner with a singleton fibre]
     \label{thm:peps_singleton_fibre_local_part}
     \lean{TNLean.PEPS.PairEffect.Word.restrict_localPart_mapOwner_eval_heq_of_singleton_fiber}
@@ -563,7 +594,8 @@ endpoint labels agree after grouping.
 \begin{proof}
     \uses{thm:peps_prepared_incident_operator,
         thm:peps_incident_sampled_endpoint_comparison,
-        def:peps_incident_sampled_physical_factor}
+        def:peps_incident_sampled_physical_factor,
+        lem:peps_word_eval_comparison_fixed_layouts}
     Apply the prepared-operator identity separately to $\xi$ and $\zeta$.
     Their coordinate matrices in the common input and output bases
     are therefore $A_{p,\xi_p}$ and $A_{p,\zeta_p}$.
