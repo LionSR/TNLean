@@ -58,7 +58,7 @@ theorem sharp_comparison_subtraction
           W / (2 * a) * Z + remUpper) := by
       dsimp only [loss]
       field_simp [ha.ne', hW.ne', hτ.ne']
-      <;> ring
+      ring
     _ ≤ 0 := sub_nonpos.mpr (hlower.trans hupper)
 
 end TNLean.PEPS.AreaLaw.Scan
