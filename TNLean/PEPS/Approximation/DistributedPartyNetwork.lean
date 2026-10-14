@@ -74,7 +74,7 @@ theorem operatorCoeff_toPartyNetwork {V : Type*}
       ((e : Link gates participants root) →
         Fin (Fintype.card (alphabet gates participants root Label k e))) :=
     Equiv.piCongrRight fun e ↦ Fintype.equivFin _
-  rw [← E.sum_comp]
+  erw [← E.sum_comp]
   refine Finset.sum_congr rfl fun η _ ↦ Finset.prod_congr rfl fun p _ ↦ ?_
   change localTensor gates participants root hroot Label k c T p
     (fun e ↦ (Fintype.equivFin _).symm (Fintype.equivFin _ (η e.1)))
