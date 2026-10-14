@@ -88,7 +88,7 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_originalGateSa
                   (fun g ↦ w.participants g.1) → Fin k,
                 dependentPhysicalProductFamilyMatrix (M η θ j) := by
   classical
-  intro decEqP M
+  intro M
   have h := physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_incidentPhysicalSum
     (I := I) (E := E) d ps hn hc garbage w ψ k lam L R ω B BG bIn bRef
   dsimp only at h
