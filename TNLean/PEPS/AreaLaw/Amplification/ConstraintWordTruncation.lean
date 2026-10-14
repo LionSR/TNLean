@@ -29,6 +29,11 @@ truncation estimate `eq:amplification-product-truncation`,
 the full word as the untruncated product, with constants chosen before the
 domain. Each truncated product is a contraction supported on `N_{2r}(S)`.
 
+The factors are written `CFC.sqrt (1 - k_i)`. For `0 ≤ k_i ≤ I`, the case of the
+source and of the lattice constraints, this is the positive root of `I - k_i`. The
+generic lemmas assume only `0 ≤ k_i`; then `CFC.sqrt (1 - k_i)` is still a positive
+contraction, which is all their proofs use.
+
 ## References
 
 * OpenAI, *A two-dimensional area law from a global spectral gap*,
