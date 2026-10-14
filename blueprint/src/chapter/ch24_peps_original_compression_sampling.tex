@@ -348,10 +348,31 @@ contraction of local tensors is a separate assertion.
     $\operatorname{Tr}X$.
 \end{proof}
 
+\begin{lemma}[Adding an absolute error to a pure-state approximation]
+    \label{lem:peps_absolute_error_pure_state}
+    \lean{TNLean.PEPS.Approximation.rectangularTraceNorm_sub_pure_le_of_retained_density}
+    \leanok
+    Let $\sigma,\rho$ be complex square matrices and $\Omega$ a unit vector.
+    If $\|\sigma-\rho\|_1\le\kappa$ and
+    $\|\rho-|\Omega\rangle\langle\Omega|\|_1\le\eta$, then
+    \begin{align}
+        \|\sigma-|\Omega\rangle\langle\Omega|\|_1 & \le\kappa+\eta, \\
+        \lvert\operatorname{Tr}\rho-1\rvert       & \le\eta.
+    \end{align}
+    Neither matrix is assumed positive, Hermitian or normalized.
+\end{lemma}
+\begin{proof}
+    \leanok
+    \uses{lem:peps_trace_le_trace_norm}
+    The first bound is the triangle inequality for the trace norm. For the
+    second, apply Lemma~\ref{lem:peps_trace_le_trace_norm} to
+    $\rho-|\Omega\rangle\langle\Omega|$ and use
+    $\operatorname{Tr}|\Omega\rangle\langle\Omega|=1$.
+\end{proof}
+
 \begin{theorem}[Absolute error and retained norm]
     \label{thm:peps_compression_retained_norm}
-    \lean{TNLean.PEPS.Approximation.rectangularTraceNorm_sub_pure_le_of_retained_density,
-        TNLean.PEPS.PairEffect.DistributedConstruction.rectangularTraceNorm_compression_sub_pure_le}
+    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.rectangularTraceNorm_compression_sub_pure_le}
     \leanok
     \uses{def:peps_distributed_construction_density}
     This is \cite[Remark~5.3]{OpenAI2026PolynomialPEPS}.
@@ -372,11 +393,9 @@ contraction of local tensors is a separate assertion.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:peps_trace_le_trace_norm,thm:peps_distributed_construction_density}
-    The first bound is the triangle inequality for the trace norm. For the
-    second, Lemma~\ref{lem:peps_trace_le_trace_norm} and
-    $\operatorname{Tr}|\Omega\rangle\langle\Omega|=1$ give
-    $\lvert\operatorname{Tr}\rho-1\rvert\le\eta$. The upper bound
-    $\operatorname{Tr}\rho\le1$ is
+    \uses{lem:peps_absolute_error_pure_state,thm:peps_distributed_construction_density}
+    Lemma~\ref{lem:peps_absolute_error_pure_state} gives the trace-norm bound
+    and $\lvert\operatorname{Tr}\rho-1\rvert\le\eta$, hence the lower bound on
+    the real part. The upper bound $\operatorname{Tr}\rho\le1$ is
     Theorem~\ref{thm:peps_distributed_construction_density}.
 \end{proof}
