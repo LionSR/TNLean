@@ -881,14 +881,21 @@ original open square. We state the two models separately, following
     \lean{
         TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region_ofIntRect,
         TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.mem_toFinset_iff_integerPoint_mem_ofIntRect,
+        TNLean.PEPS.AreaLaw.Geometry.Template.points_ofIntRect,
+        TNLean.PEPS.AreaLaw.Geometry.Template.pieceCount_ofIntRect,
         TNLean.PEPS.AreaLaw.Geometry.Template.isSeparated_ofIntRect_of_isSafe,
+        TNLean.PEPS.AreaLaw.Geometry.Template.points_union,
+        TNLean.PEPS.AreaLaw.Geometry.Template.pieceCount_union,
+        TNLean.PEPS.AreaLaw.Geometry.Template.points_omitEmpty,
         TNLean.PEPS.AreaLaw.Geometry.Template.sample_omitEmpty_nonempty,
         TNLean.PEPS.AreaLaw.Geometry.Template.pieceCount_omitEmpty_le
     }
     \leanok
     \uses{def:area_law_template_instances}
     The piece $P$ of a rectangle template is nondegenerate with horizontal and
-    vertical sides, and $P\cap\mathbb Z^2=Q$. If every endpoint of a crossing
+    vertical sides, and $P\cap\mathbb Z^2=Q$, so the rectangle template is
+    $Q$ with one piece. The union template has point set $T\cup T'$ and
+    $N_0+N_0'$ pieces, and omitting empty pieces keeps the point set. If every endpoint of a crossing
     edge of the cut has sup-norm distance more than $D|Q|$ from $Q$, where
     $|Q|$ is the larger side, and $4D_0s_0\le D|Q|$, then the rectangle
     template is separated from the cut. After empty pieces are omitted, every
