@@ -110,6 +110,7 @@ points and assign to each point its smallest incident cell side; see
 \begin{theorem}[Smallest incident sides]
     \label{thm:area_law_least_incident_mark_scales}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_least_incident_scales}
+    \leanok
     \uses{def:area_law_belt_marks,def:area_law_fine_belt_scales}
     Fix an origin $o$, a lower index $k_0$, and a finite set $F_k$ of
     cell indices at each layer. Let
@@ -122,7 +123,7 @@ points and assign to each point its smallest incident cell side; see
     has side at least $s(v)$. Neither $M$ nor the set of nonempty layers
     is required to be finite.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:area_law_adjacent_fine_meshes}
     For each $v\in M$, take the least layer index $k(v)\ge k_0$
     with an incident cell, and put $s(v)=2^{\ell_{k(v)}}$.
