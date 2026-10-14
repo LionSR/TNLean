@@ -73,6 +73,7 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOp
           (sourceGateRoot w) (fun g _ ↦ sourceGateRoot_mem w g)
           (fun g ↦ w.branchLabels g.1 × w.branchLabels g.1) k
           (DistributedOperatorContraction.densityPairCoefficient
+            (Gate := w.nonemptyGateLocations)
             (fun g ↦ w.branchLabels g.1) (fun g ↦ w.branchLabels g.1)
             (fun g ↦ w.branchCoefficient g.1) (fun g ↦ w.branchCoefficient g.1)
             (fun g ↦ (k : ℂ)⁻¹ ^ (pairSampleLabels (w.participants g.1)).card))
