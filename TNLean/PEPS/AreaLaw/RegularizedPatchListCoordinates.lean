@@ -3,8 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
-import TNLean.PEPS.ParentHamiltonian.DependentRegionCoordinates
+import TNLean.PEPS.AreaLaw.RegularizedPatchMarginal
 import QICLean.Entropy.PatchStationarity
 
 /-!
@@ -19,6 +18,8 @@ It includes empty lists, empty regions and zero local dimensions. The two object
 norms therefore agree, and a minimum over indexed densities gives a minimum
 over all lists with the same positional regions and exponents. Normalizing the
 outputs preserves this identification, including when the output vanishes.
+Every regional marginal is therefore the regional state of that same normalized
+patch-list output.
 
 Source: OpenAI, *Polynomial PEPS approximation of gapped square-grid ground states*,
 Proposition 4.1, `03-patches.tex`, `eq:patch-variational-problem`, lines 68–99,
@@ -182,6 +183,25 @@ theorem dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput
     RCLike.real_smul_eq_coe_smul (K := ℂ), map_smul,
     regularizedPatchObjective_eq_norm_patchOutput,
     dependentGlobalConfigIsometry_regularizedPatchOutput]
-  set_option pp.all true in rfl
+  rfl
+
+/-- Every canonical marginal is the regional state of the same normalized
+patch-list output, including on an empty region.
+Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 68–99 and
+130–205. -/
+theorem normalizedRegularizedPatchMarginal_eq_regionState_patchState
+    (regions : Fin m → Finset V) (a : Fin m → ℝ) (b : ℝ)
+    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Fin (n v.1)))
+    (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
+      (Entropy.RegionConfig n (regions j)) ℂ) (R : Finset V) :
+    normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
+        regions a b Ω x R =
+      Entropy.regionState R
+        (Entropy.patchState b (regularizedPatchFactorList regions a x)
+          (dependentGlobalConfigIsometry Ω)) := by
+  exact (reindex_normalizedRegularizedPatchMarginal regions
+    (fun v ↦ Equiv.refl (Fin (n v))) a b Ω x R).trans
+    (congrArg (Entropy.regionState R)
+      (dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput regions a b Ω x))
 
 end TNLean.PEPS

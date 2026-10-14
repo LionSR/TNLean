@@ -244,6 +244,28 @@ Its marginals are those of the same final normalized vector defined in
     The identity also holds at zero.
 \end{proof}
 
+% Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 91--99 and 130--205.
+\begin{theorem}[Regional marginals in the ordered coordinates]
+    \label{thm:peps_ordered_patch_marginal_coordinates}
+    \lean{TNLean.PEPS.normalizedRegularizedPatchMarginal_eq_regionState_patchState}
+    \uses{thm:peps_ordered_patch_normalized_coordinates,def:peps_patch_canonical_marginal}
+    For the same arbitrary data and every region $R\subseteq V$, the canonical
+    marginal of the normalized ordered output satisfies
+    \begin{align*}
+        \rho_R
+        =\operatorname{Tr}_{V\setminus R}
+          \ketbra{\widehat{\widetilde\Psi}}{\widehat{\widetilde\Psi}}.
+    \end{align*}
+    The identity includes the empty region and a vanishing output.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_ordered_patch_normalized_coordinates,thm:peps_patch_basis_relabelling}
+    Apply the regional coordinate identity with the identity relabelling at
+    every site. The normalized vectors agree by
+    Theorem~\ref{thm:peps_ordered_patch_normalized_coordinates}, and taking
+    their reduced density matrices preserves this equality.
+\end{proof}
+
 \begin{theorem}[Regional expectation and density properties]
     \label{thm:peps_patch_marginal_expectation}
     \lean{
