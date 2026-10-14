@@ -94,6 +94,6 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_originalGateSa
   dsimp only at h
   rw [sum_choiceSamples_eq_sum_originalGateSamples] at h
   simpa only [M, originalGateLabelsAtOfAllChoices_eq_restrictGates,
-    restrict_reindexedSourceSampleAssignment_eq] using h
+    restrict_reindexedSourceSampleAssignment_eq] using! h
 
 end TNLean.PEPS.PairEffect.SourceCircuit
