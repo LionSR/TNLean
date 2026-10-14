@@ -1,0 +1,58 @@
+% Figure arealaw2d_box_children.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL App. B 3 (proof of Proposition 4), Fig. 11(b).
+% Source: arXiv OpenAI2026AreaLaw, sections/02-initial.tex:596-675
+% (prop:initial-box and its proof: children, padding, random order, (3.22)).
+% Ink-to-index: drawn with C_pad = 1 and an 8 x 8 parent. Each glyph is one
+% child rectangle Q_i (chunks of r sites per axis; the paper allows one
+% shorter final chunk), not a site; the physical child is X_i = A cap Q_i.
+% The solid outer contour is the safe parent Q of size at most N_b r (the
+% paper's M; the note writes N_b because M_j are filters), labelled above.
+% The grey dots (complement) are the 28 noninterior children, whose C_pad r
+% padding leaves the parent (label below the parent); the paper bounds their
+% number by B_{N_b} = 4(C_pad+2) N_b (here 96 >= 28), since in each
+% coordinate only the first or last C_pad+2 chunk positions can fail. No ring
+% contour is drawn: the grey dots are the set. The black dots are the other
+% interior children. The large red dot at (5,4) is one interior child X_i
+% (direct red label below it). The thin contour (4,3)..(6,5) is its padding
+% Q_i^{+C_pad r}, labelled Q_i^{+r} off its north-east corner since C_pad =
+% 1; it is exactly the 3 x 3 block of children around Q_i (8 others), while
+% the proof uses the cruder count (2C_pad+5)^2 - 1. The eight other children
+% of the block are drawn as boxes carrying their ranks among the nine in one
+% uniform random order of all children (3, 7, 1 / 5, X_i, 2 / 8, 4, 6 by
+% rows): X_i, unnumbered, has rank 9, so every child meeting its padding
+% precedes it, the event "X_i last in its padding". Under a uniform random
+% order it has
+% probability at least p_0 = (2C_pad+5)^{-2}; on it the preceding sites
+% contain the buffer of Lemma 3.2 and the chain-rule term of X_i is at most
+% S(X_i)/2 + C_buf r; otherwise it is at most S(X_i). X_i is a dot, not a
+% box numbered 9: a box leaves too little room for the X_i label between the
+% boxes above and below it, and tenkz cannot inscribe X_i. No tint either: at
+% the note pitch a tint would meet its label.
+% Boundary signature: empty (geometry only, no tensors).
+% Not to scale: the proof takes N_b >= 16(C_pad+2) and C_pad large, so a
+% real parent has far more children than its noninterior ring.
+% Label macros: none.
+% Fit: one column, \tnshow[7mm] (about 60 mm); at 6 mm the X_i label no
+% longer clears the boxes above and below it.
+% Related: area_law_buffer_contours draws the inside of one padded child
+% (Lemma 3.2's nested contours); this figure is the parent-level partition.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire},
+            cols=8, bonds=none]
+        \tn[species=complement]{} & \tn[species=complement]{} & \tn[species=complement]{} & \tn[species=complement]{} & \tn[species=complement]{} & \tn[species=complement]{} & \tn[species=complement]{} & \tn[species=complement]{} \\
+        \tn[species=complement]{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn[species=complement]{} \\
+        \tn[species=complement]{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn[species=complement]{} \\
+        \tn[species=complement]{} & \tn{} & \tn[skin=box, size=m]{3} & \tn[skin=box, size=m]{7} & \tn[skin=box, size=m]{1} & \tn{} & \tn{} & \tn[species=complement]{} \\
+        \tn[species=complement]{} & \tn{} & \tn[skin=box, size=m]{5} & \tn[species=selected, size=l]{} & \tn[skin=box, size=m]{2} & \tn{} & \tn{} & \tn[species=complement]{} \\
+        \tn[species=complement]{} & \tn{} & \tn[skin=box, size=m]{8} & \tn[skin=box, size=m]{4} & \tn[skin=box, size=m]{6} & \tn{} & \tn{} & \tn[species=complement]{} \\
+        \tn[species=complement]{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn[species=complement]{} \\
+        \tn[species=complement]{} & \tn[species=complement]{} & \tn[species=complement]{} & \tn[species=complement]{} & \tn[species=complement]{} & \tn[species=complement]{} & \tn[species=complement]{} & \tn[species=complement]{}
+        \tnmark[form=enclosure, label pos=n]{(1,1) .. (8,8)}{$Q\ \text{(safe,}\ {\le}\,N_{\rm b}r\text{)}$}
+        \tnmark[form=enclosure]{(4,3) .. (6,5)}{}
+        \tnmark[form=label, label pos=n]{0.2 e of 0.75 s of midway (3,6) and (4,7)}{$Q_i^{+r}$}
+        \tnmark[form=label, species=selected, label pos=s]{0.2 n of (5,4)}{$X_i$}
+        \tnmark[form=label, species=complement, label pos=s]{0.25 s of midway (8,4) and (8,5)}{$\text{noninterior}$}
+    \end{tenkz}
+\end{center}
