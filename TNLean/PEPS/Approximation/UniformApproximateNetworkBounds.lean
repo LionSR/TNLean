@@ -85,7 +85,7 @@ theorem exists_uniform_sampled_approximate_network_bounds
         let hbW := w.isExpansionBounded_rescaledOriginal
           (sourceGateBudget_pos (half_pos hε) _).le G hbudget hb
         let δ := sourceGateBudget ε w.expandedGateCount
-        let R := W.produce.physicalFirstReplacement (sourceGateBudget_pos hε _)
+        let R := W.produce.physicalFirstReplacement (sourceGateBudget_pos hε w.expandedGateCount)
           (familyPhysicalLayout physicalDim ps) priv W.isAllowed_produce
           ((W.isExpansionBounded_produce_iff r (B : ℝ)).mpr hbW)
         let k := sourceSamplingCount (Fintype.card R.sourceLocations)
@@ -167,12 +167,12 @@ theorem exists_uniform_sampled_approximate_network_bounds
     (familyPhysicalLayout physicalDim ps) priv K r w.expandedGateCount b b
     (B : ℝ) (D : ℝ) L (C_K q) C_N (C_B q) C_D
     (u q) n (s q) d t hbW hK_W harityW hcountW hLone (hCK q) hCN (hCB q)
-    B.coe_nonneg D.coe_nonneg hK hN hBB hDD (sourceGateBudget_pos hε _)
+    B.coe_nonneg D.coe_nonneg hK hN hBB hDD (sourceGateBudget_pos hε w.expandedGateCount)
   have hinc := W.card_incidentPhysicalFirstDensityLinks_le
-    (familyPhysicalLayout physicalDim ps) priv (sourceGateBudget_pos hε _)
+    (familyPhysicalLayout physicalDim ps) priv (sourceGateBudget_pos hε w.expandedGateCount)
     hbW harityW hlifetimeW
   have hlocal := W.exists_original_gate_of_physicalFirst_density_link
-    (familyPhysicalLayout physicalDim ps) priv (sourceGateBudget_pos hε _) hbW
+    (familyPhysicalLayout physicalDim ps) priv (sourceGateBudget_pos hε w.expandedGateCount) hbW
   obtain ⟨lam, E, F, _hframes, ω, hω⟩ :=
     w.exists_sampled_contractedOperator_approximate_error_le H hH x hx
       physicalDim ps hps hcover priv G B D hB hD hb le_rfl hlifetime hphysical

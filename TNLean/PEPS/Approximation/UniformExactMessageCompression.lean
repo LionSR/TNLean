@@ -99,7 +99,7 @@ theorem exists_uniform_exact_message_sampled_network
         let hbW := w.isExpansionBounded_rescaledOriginal
           (sourceGateBudget_pos (half_pos hε) _).le G hbudget hb
         let δ := sourceGateBudget ε w.expandedGateCount
-        let R := W.produce.physicalFirstReplacement (sourceGateBudget_pos hε _)
+        let R := W.produce.physicalFirstReplacement (sourceGateBudget_pos hε w.expandedGateCount)
           (familyPhysicalLayout physicalDim ps) priv W.isAllowed_produce
           ((W.isExpansionBounded_produce_iff r (B : ℝ)).mpr hbW)
         let k := sourceSamplingCount (Fintype.card R.sourceLocations)
