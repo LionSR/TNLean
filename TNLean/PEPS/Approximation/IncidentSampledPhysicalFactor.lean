@@ -110,6 +110,61 @@ private theorem restrictedMixedPhysicalTrace_eq_of_word_evals
     Word.IsEvalComparison.eval_eq hU, Word.IsEvalComparison.eval_eq hT,
     Word.IsEvalComparison.eval_eq hV]
 
+/-- The selected prepared source word and its incident construction have
+matching evaluations for one original branch choice. Source: polynomial-PEPS
+Theorem 5.2, `04-compression.tex`, lines 253–267 and 565–588. -/
+private theorem selected_source_word_eval_comparison {b : Layout P}
+    (w : SourceCircuit a b) (p : P) (ψ : ProductInput a)
+    (ξ : Choices (fun _ : P ↦ true) w) :
+    let q : Option {_p : P // true = true} := some ⟨p, rfl⟩
+    Word.IsEvalComparison
+      ((w.partialSourceWord ψ ξ).restrict (partySelector q)
+        (sources_partialSourceWord w ψ ξ))
+      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)) := by
+  intro q
+  exact Word.isEvalComparison_of_eval_eq
+    ((w.partialSourceWord ψ ξ).restrict (partySelector q)
+      (sources_partialSourceWord w ψ ξ))
+    (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ))
+    (restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ξ)
+
+/-- The selected sampled input word and its incident construction have
+matching evaluations for the original two branch choices and samples. This
+comparison is independent of the original input preparation. Source:
+polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–355 and 565–588. -/
+private theorem selected_endpoint_word_eval_comparison {b : Layout P}
+    (w : SourceCircuit a b) (p : P) (k : ℕ)
+    (lam : ∀ e : sourceLocations w, branchLabels w e.1 →
+      Fin (min (sourceDims w e).1 (sourceDims w e).2) → ℝ)
+    (L : ∀ e : sourceLocations w, branchLabels w e.1 →
+      Matrix (Fin (sourceDims w e).1) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
+    (R : ∀ e : sourceLocations w, branchLabels w e.1 →
+      Matrix (Fin (sourceDims w e).2) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
+    (ξ ζ : Choices (fun _ : P ↦ true) w) (j : w.sourceLocations → Fin k)
+    (ω : SourceGaussianSamples w k) :
+    let q : Option {_p : P // true = true} := some ⟨p, rfl⟩
+    Word.IsEvalComparison
+      ((sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict (partySelector q)
+        (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω))
+      (incidentSampledEndpointWord w k lam L R p
+        (originalGateLabelsAtOfAllChoices w p ξ)
+        (originalGateLabelsAtOfAllChoices w p ζ)
+        (fun i ↦ j (partialSlotEquiv
+          (fun t ↦ partySelector (some ⟨p, rfl⟩)
+            (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω) := by
+  intro q
+  exact Word.isEvalComparison_of_eval_eq
+    ((sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict (partySelector q)
+      (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω))
+    (incidentSampledEndpointWord w k lam L R p
+      (originalGateLabelsAtOfAllChoices w p ξ)
+      (originalGateLabelsAtOfAllChoices w p ζ)
+      (fun i ↦ j (partialSlotEquiv
+        (fun t ↦ partySelector (some ⟨p, rfl⟩)
+          (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω)
+    (restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord
+      w k lam L R p ξ ζ j ω)
+
 /-- The three selected word comparisons depend only on the original circuit,
 input, two branch choices and samples. They are established before physical
 coordinates are supplied. Source: polynomial-PEPS Theorem 5.2,
@@ -143,27 +198,9 @@ private theorem selected_word_evals_eq_incident_words {b : Layout P}
           (fun t ↦ partySelector (some ⟨p, rfl⟩)
             (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω) := by
   intro q
-  exact ⟨Word.isEvalComparison_of_eval_eq
-      ((w.partialSourceWord ψ ξ).restrict (partySelector q)
-        (sources_partialSourceWord w ψ ξ))
-      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ))
-      (restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ξ),
-    Word.isEvalComparison_of_eval_eq
-      ((w.partialSourceWord ψ ζ).restrict (partySelector q)
-        (sources_partialSourceWord w ψ ζ))
-      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ζ))
-      (restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ζ),
-    Word.isEvalComparison_of_eval_eq
-      ((sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict (partySelector q)
-        (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω))
-      (incidentSampledEndpointWord w k lam L R p
-        (originalGateLabelsAtOfAllChoices w p ξ)
-        (originalGateLabelsAtOfAllChoices w p ζ)
-        (fun i ↦ j (partialSlotEquiv
-          (fun t ↦ partySelector (some ⟨p, rfl⟩)
-            (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω)
-      (restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord
-        w k lam L R p ξ ζ j ω)⟩
+  exact ⟨selected_source_word_eval_comparison w p ψ ξ,
+    selected_source_word_eval_comparison w p ψ ζ,
+    selected_endpoint_word_eval_comparison w p k lam L R ξ ζ j ω⟩
 
 /-- At independently extracted incident labels, the directly constructed
 physical factor equals the actual factor at the same original party. The
@@ -220,6 +257,6 @@ theorem sampledPhysicalFactor_eq_incidentSampledPhysicalFactor
           (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω)
     hWords.1 hWords.2.1 hWords.2.2
   simpa only [sampledPhysicalFactor, incidentSampledPhysicalFactor,
-    Classical.typeDecidableEq, q, bIn, bOut, selectedFamilyPhysicalIndex] using h
+    Classical.typeDecidableEq, q, bIn, bOut, selectedFamilyPhysicalIndex] using! h
 
 end TNLean.PEPS.PairEffect.SourceCircuit
