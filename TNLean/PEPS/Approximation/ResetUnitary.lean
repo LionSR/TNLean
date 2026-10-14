@@ -120,8 +120,8 @@ theorem submatrix_partialSwap_kronecker_one_eq_sheetSwapOp (q : ℕ) (R C : Fins
     Option.some.injEq, ← hiff, ite_zero_mul_ite_zero, mul_one]
 
 /-- Doubling commutes with a coordinate change applied to both replicas. -/
-theorem reindex_prodCongr_doubledHamiltonian {m n : Type*} [Fintype m] [DecidableEq m]
-    [Fintype n] [DecidableEq n] (e : m ≃ n) (H : Matrix m m ℂ) :
+theorem reindex_prodCongr_doubledHamiltonian {m n : Type*} [DecidableEq m]
+    [DecidableEq n] (e : m ≃ n) (H : Matrix m m ℂ) :
     reindex (e.prodCongr e) (e.prodCongr e) (doubledHamiltonian H) =
       doubledHamiltonian (reindex e e H) := by
   ext ⟨a, b⟩ ⟨c, d⟩
