@@ -99,14 +99,28 @@ def check_layers(unit: str) -> None:
            for b in range(pz[1] - C0, pz[1] + C0 + 1)}
     nk = pk
     nk1 = {(r, c) for a, b in pk1 for r in (2 * a, 2 * a + 1) for c in (2 * b, 2 * b + 1)}
-    tinted = {sp: sel for sp, tint, sel, _ in marks if tint}
-    assert tinted == {"selected": nk, "secondary": nk1 - nk}, "N_k and the ring D_k"
+    # The blue tint covers N_{k+1} whole and N_k is drawn on top of it, so the
+    # visible blue is exactly the ring D_k = N_{k+1} minus N_k (one set, one
+    # enclosure, no padded moat between the two).
+    tints = [(sp, sel, lab) for sp, tint, sel, lab in marks if tint]
+    assert [(sp, sel) for sp, sel, _ in tints] == [("secondary", nk1), ("selected", nk)], \
+        "N_{k+1} tinted whole, then N_k on top"
+    assert nk < nk1, "N_k nested in N_{k+1}"
+    assert tints[0][2] == "$D_k$" and tints[1][2] == "", "D_k named on the ring's hull"
     parents = [sel for sp, tint, sel, _ in marks if sp == "complement"]
     expected = [{(r, c) for r in (2 * a, 2 * a + 1) for c in (2 * b, 2 * b + 1)}
                 for a, b in sorted(pk1)]
     assert sorted(map(sorted, parents)) == sorted(map(sorted, expected)), "nine parent cells"
     assert set().union(*parents) == nk1
     assert re.search(r"form=bracket[^]]*\]\{\(2,2\) \.\. \(7,7\)\}\{\$N_\{k\+1\}\$\}", unit)
+    # N_k is named by a red bracket on an empty row below N_{k+1}, spanning
+    # exactly the columns of N_k.
+    m = re.search(r"\\tnmark\[form=bracket, species=selected, label pos=s\]"
+                  r"\{\((\d+),(\d+)\) \.\. \((\d+),(\d+)\)\}\{\$N_k\$\}", unit)
+    assert m, "N_k bracket"
+    r1, c1, r2, c2 = map(int, m.groups())
+    assert r1 == r2 and r1 > max(r for r, _ in nk1), "N_k bracket below N_{k+1}"
+    assert (c1, c2) == (min(c for _, c in nk), max(c for _, c in nk)), "N_k bracket columns"
     for label in (r"$D_k$", r"$N_k$"):
         assert unit.count("{" + label + "}") == 1, label
     assert r"\tnwire" not in unit
@@ -137,7 +151,18 @@ def check_primary(unit: str) -> None:
     assert drawn == fragments and all(t for sp, t, _, _ in marks if sp == "layer"), drawn
     dashed = [sel for sp, t, sel, _ in marks if sp == "complement"]
     assert sorted(map(sorted, dashed)) == sorted(map(sorted, layer_cells[1:])), "straddling cells"
-    assert unit.count("{$R_j$}") == 2 and unit.count("{$R_{j'}$}") == 1
+    # Each region is named once, in the layer hue: R_j inscribed in its
+    # whole-cell fragment (both blue fragments in U_j form the one region
+    # R_j), R_{j'} on its fragment's hull.
+    assert unit.count("{$R_j$}") == 1 and unit.count("{$R_{j'}$}") == 1
+    m = re.search(r"\\tnmark\[form=label, species=layer[^]]*\]"
+                  r"\{midway \((\d+),(\d+)\) and \((\d+),(\d+)\)\}\{\$R_j\$\}", unit)
+    assert m, "R_j label in the layer hue"
+    ends = {(int(m[1]), int(m[2])), (int(m[3]), int(m[4]))}
+    assert ends <= interiors[0] and any(ends <= sel for sp, _, sel, _ in marks
+                                         if sp == "layer"), "R_j inside a fragment of U_j"
+    named = [sel for sp, _, sel, lab in marks if sp == "layer" and lab == "$R_{j'}$"]
+    assert len(named) == 1 and named[0] <= interiors[1], "R_{j'} on a fragment of U_{j'}"
 
 
 def rays(unit: str, centre: str) -> tuple[dict[tuple[int, int], str], list[str | None]]:
@@ -168,6 +193,13 @@ def check_fan(unit: str) -> None:
     # Upper and right sides halved; lower and left sides whole.
     assert drawn == {p: "solid" for p in CORNERS | {(1, 5), (5, 9)}}, drawn
     assert 4 <= len(drawn) <= 8 and len(drawn) == 6
+    # All nine marks are red centre dots.
+    marks = re.findall(r"\\tn\[at=\((\d+),(\d+)\), name=\w+, species=centre,", unit)
+    assert {(int(r), int(c)) for r, c in marks} == CORNERS | MIDPOINTS | {(5, 5)}, marks
+    # The bracket e spans the half side [a_e, b_e]; e' spans the whole lower side.
+    for a, b, label in (((1, 1), (1, 5), "e"), ((9, 1), (9, 9), "e'")):
+        assert re.search(r"\\tnmark\[form=bracket[^]]*\]\{\(%d,%d\) \.\. \(%d,%d\)\}\{\$%s\$\}"
+                         % (*a, *b, re.escape(label)), unit), label
     for cell, label in (((1, 1), "a_e"), ((1, 5), "b_e"), ((5, 5), "c"),
                         ((3, 4), "P_e"), ((8, 5), "P_{e'}"), ((9, 9), "Q")):
         assert re.search(r"\\tnmark\[form=label[^]]*\]\{\(%d,%d\)\}\{\$%s\$\}"
@@ -209,6 +241,19 @@ def check_rays(unit: str) -> None:
                             color[y] = 1 - color[u]
                             stack.append(y)
                         assert color[y] != color[u], ("odd identifier cycle", ids)
+    # Each identifier is inked in its color's family hue, so the hues must
+    # be one fixed 2-coloring of the identifiers that differs across every
+    # active ray.
+    hue = {}
+    for cell in [(3, 4), (3, 6), (4, 8), (7, 8), (8, 6), (8, 4), (7, 2), (4, 2)]:
+        m = re.search(r"\\tnmark\[form=label, species=(fam[01])\]\{\(%d,%d\)\}\{\$(i_\d)\$\}"
+                      % cell, unit)
+        assert m, ("family hue", cell)
+        assert hue.setdefault(m[2], m[1]) == m[1], ("one hue per identifier", m[2])
+    for a, b in edges:
+        assert hue[a] != hue[b], ("hues alternate across active rays", a, b)
+    # The radius bracket runs from the midpoint above v to the corner.
+    assert re.search(r"\\tnmark\[form=bracket[^]]*\]\{\(1,5\) \.\. \(1,9\)\}\{\$r\$\}", unit)
     for cell, label, pos in (((5, 5), "v", "22.5"), ((9, 9), r"\overline B_\infty(v,r)", "se")):
         assert re.search(r"\\tnmark\[form=label, label pos=%s\]\{\(%d,%d\)\}\{\$%s\$\}"
                          % (re.escape(pos), cell[0], cell[1], re.escape(label)), unit), label
@@ -237,6 +282,14 @@ def check_rejected_mutations(units: dict[str, str]) -> int:
         ("rays", "stroke=dashed, name=starrayn]", "name=starrayn]"),
         ("rays", "{(8,4)}{$i_3$}", "{(8,4)}{$i_2$}"),
         ("rays", "stroke=dotted, name=starsidenw]", "name=starsidenw]"),
+        ("layers", "(8,4) .. (8,6)}{$N_k$}", "(8,3) .. (8,6)}{$N_k$}"),
+        ("layers", "label pos=180]{(2,2) .. (7,7)}",
+         "label pos=180]{(2,2) .. (7,7) - (4,4) .. (6,6)}"),
+        ("primary", "{midway (1,3) and (2,3)}{$R_j$}", "{midway (1,6) and (2,6)}{$R_j$}"),
+        ("fan", "{(9,1) .. (9,9)}{$e'$}", "{(9,1) .. (9,5)}{$e'$}"),
+        ("fan", "name=fans, species=centre,", "name=fans,"),
+        ("rays", "species=fam1]{(8,6)}{$i_2$}", "species=fam0]{(8,6)}{$i_2$}"),
+        ("rays", "species=fam1]{(4,2)}{$i_4$}", "species=fam0]{(4,2)}{$i_4$}"),
     ]
     for name, old, new in mutations:
         unit = units[name]

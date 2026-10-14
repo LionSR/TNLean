@@ -97,22 +97,6 @@ theorem jointMixedEndpointBase_swap
       simp [jointMixedEndpointBase, jointMixedEndpointLetter, jointMixedEndpointPhysicalSwap,
         jointMixedPhysicalSwap, mixedEndpointBondSwap, hp, Matrix.fromBlocks]
 
-/-- Exchanging the virtual summands reflects the interpolation parameter.
-This holds for every real parameter, including either endpoint.
-Source: arXiv:2203.12563, Section 5, lines 1695–1704. -/
-theorem bondInterpolationMatrix_reflect_swap (D₀ D₁ : ℕ) (γ : ℝ) :
-    bondInterpolationMatrix D₁ D₀ (1 - γ) =
-      Matrix.reindexAlgEquiv ℂ ℂ (mixedEndpointBondSwap D₀ D₁)
-        (bondInterpolationMatrix D₀ D₁ γ) := by
-  ext i j
-  obtain ⟨i, rfl⟩ := (mixedEndpointBondSwap D₀ D₁).surjective i
-  obtain ⟨j, rfl⟩ := (mixedEndpointBondSwap D₀ D₁).surjective j
-  simp only [Matrix.coe_reindexAlgEquiv, Matrix.reindex_apply, Matrix.submatrix_apply,
-    Equiv.symm_apply_apply, bondInterpolationMatrix, Matrix.diagonal_apply,
-    Equiv.apply_eq_iff_eq]
-  obtain ⟨i, rfl⟩ := finSumFinEquiv.surjective i
-  cases i <;> simp [mixedEndpointBondSwap, bondInterpolationWeight]
-
 /-- The actual weighted joint tensors at reflected parameters differ only
 by the physical permutation and the blockwise virtual permutation.
 Source: arXiv:2203.12563, Section 5, lines 1695–1704. -/

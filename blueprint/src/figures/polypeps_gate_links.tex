@@ -1,0 +1,52 @@
+% Figure polypeps_gate_links.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP App. G 6 (proof of Theorem 2, realization as a network),
+% Fig. 17(b).
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/04-compression.tex:565-588
+% (summation and realization as a network).
+% Ink-to-index: one nonprivate gate with b=3 participating parties P_1, P_2,
+% P_3, after the replacement of its sources, drawn as a near-equilateral
+% triangle (P_1 west at (3,1), P_2 and P_3 stacked east at (1,5) and (5,5);
+% four columns apart so that the figure fills at least half the column at
+% the note's 7 mm pitch, rule P1). Each box is the single tensor
+% of a party, with its physical ket leg up and bra leg down. The party names
+% are set at size=l outside the boxes, on the outer side of the triangle (a
+% one-cell box cannot inscribe a name at the label size, and two-cell boxes
+% would push the physical legs off centre). The black links form the star
+% from the chosen party P_1: each carries a copy of the gate's common label
+% (xi, zeta) (ket and bra monomial labels), a virtual index of polynomial
+% dimension; the one label (xi, zeta) sits inside the star's wedge and names
+% both star links. The green links are the sample links: the slot of the
+% pair {P_a, P_b} shares its own sample index j_{ab} in {1,...,k}; every
+% participating pair has a slot (unused pairs carry a one-dimensional
+% source). j_23 is a short bow between P_2 and P_3. Coefficients, averaging
+% factors, private source preparations, memories and garbage traces are
+% contracted inside the party tensors and are not links. Counts: b-1 = 2
+% star links and binom(b,2) = 3 sample links (stated in the note's prose,
+% not as labels, so the drawn b=3 instance carries no general count).
+% Boundary signature: (phys:n)x3 ket legs and (phys:s)x3 bra legs, six open
+% physical legs; every virtual link is contracted.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=5, bonds=none, size=l]
+        \tndeclare{species}{route}{hue=source:green!50!black}
+        \tn[at=(3,1), skin=box, size=l, name=glOne, label pos=w,
+            ports={90:physical, 270:physical, 20:virtual, 45:virtual,
+                    315:virtual, 340:virtual}]{P_1}
+        \tn[at=(1,5), skin=box, size=l, name=glTwo, label pos=e,
+            ports={90:physical, 270:physical, 150:virtual, 200:virtual,
+                    300:virtual}]{P_2}
+        \tn[at=(5,5), skin=box, size=l, name=glThree, label pos=e,
+            ports={90:physical, 270:physical, 210:virtual, 160:virtual,
+                    60:virtual}]{P_3}
+        \tnwire[name=glStarTwo]{glOne.20}{glTwo.200}
+        \tnwire[name=glStarThree]{glOne.340}{glThree.160}
+        \tnwire[species=route, route=arc, name=glSampleOneTwo]{glOne.45}{glTwo.150}
+        \tnwire[species=route, route=arc, name=glSampleOneThree]{glOne.315}{glThree.210}
+        \tnwire[species=route, route=arc, name=glSampleTwoThree]{glTwo.300}{glThree.60}
+        \tnmark[form=label, label pos=e]{0.3 e of (3,2)}{(\xi,\zeta)}
+        \tnmark[form=label, label pos=n]{on glSampleOneTwo 0.5}{$j_{12}$}
+        \tnmark[form=label, label pos=s]{on glSampleOneThree 0.5}{$j_{13}$}
+        \tnmark[form=label, label pos=e]{on glSampleTwoThree 0.5}{$j_{23}$}
+    \end{tenkz}
+\end{tenkzequation}

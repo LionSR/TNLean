@@ -477,10 +477,7 @@ theorem mixedEndpointActiveLocalInteraction_eq_edgePlacement
     mixedEndpointActiveLocalInteraction A₀ A₁ (mixedEndpointActiveEdgeStart p) =
       mixedEndpointActiveEdgePlacement p
         (mixedEndpointEdgeConstraintES A₀ A₁ (mixedEndpointActiveEdgePosition p)) := by
-  apply LinearMap.ext
-  intro v
-  apply PiLp.ext
-  intro ξ
+  ext v ξ
   rw [mixedEndpointActiveLocalInteraction_apply_edgeFiber,
     mixedEndpointActiveEdgePlacement_apply]
 

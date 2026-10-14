@@ -1,13 +1,17 @@
 % Figure peps_ft_sheet.
 % Owner: chapter/ch24_peps_ft.tex (chapter level of ch:peps_ft).
-% Used by: gapped-2d-notes PP Sec. 0 (Phi as the contracted sheet).
+% Used by: gapped-2d-notes PP Sec. I A (Definition 1, Phi as the contracted sheet),
+% Fig. 1(b).
 % Formula: |Psi_A> = sum_sigma c_A(sigma)|sigma>, specialized here to a
 % finite 3-by-3 square graph.  Ink-to-index: each dot is A_v, each thin
 % in-plane segment contracts one shared virtual edge index, and each north
 % stub is the physical index sigma(v).
 % Contraction and boundary signature: all 12 graph edges are contracted; no
 % virtual boundary leg is present and the nine physical legs remain open, so
-% (V,P)=(0,9).  The central label identifies one representative local tensor.
+% (V,P)=(0,9).  The labels A_v and sigma(v) name the front-left vertex and its
+% physical stub, as in peps_tensor; the label under one front edge reads that
+% contracted edge as the pair sum_a |a>|a>.  The front edge is restated as an
+% authored wire only to carry that label; the frame mints no second bond.
 % Source verdict: exact finite square-graph specialization of
 % Papers/1804.04964/paper_normal.tex:961--979; the source theorem itself
 % applies to arbitrary finite simple graphs.  The projected sheet shows all
@@ -15,6 +19,9 @@
 \begin{center}
     \tenkzkernel
     \begin{tenkz}[rows={ket,ket,ket}, cols=3, frame=plane, physical=up]
-        \tnmark[form=label, label pos=e]{(2,2)}{$A_v$}
+        \tnwire[name=sheetPair]{(3,2)}{(3,3)}
+        \tnmark[form=label, label pos=s]{on sheetPair 0.5}{$\sum_a\lvert a\rangle\lvert a\rangle$}
+        \tnmark[form=label, label pos=sw]{(3,1)}{$A_v$}
+        \tnmark[form=label, label pos=w]{on leg-n-3-1 1}{$\sigma(v)$}
     \end{tenkz}
 \end{center}

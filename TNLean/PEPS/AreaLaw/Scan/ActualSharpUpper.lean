@@ -395,9 +395,9 @@ private theorem actualRoot_sharpUpper_of_compressed
     ∀ {Hist : Type} [DecidableEq Hist] {Choice : Hist → Type}
       [∀ h, DecidableEq (Choice h)]
       (D : ReplicaTransport.TransportData (Site Λ ⊕ Bool) S.K Hist Choice)
-      (hD : D.IsAdmissible) (hcomm : D.CrossBandCommute n (a / 2) k)
+      (_ : D.IsAdmissible) (_ : D.CrossBandCommute n (a / 2) k)
       (f : (Σ h, Option (Choice h)) → terminalFamily S.K S.m S.M (S.n * S.m))
-      (hparts : ∀ j g, D.leafPart j g = augmentedPartition (σ (f j) g)) (p : ℝ),
+      (_ : ∀ j g, D.leafPart j g = augmentedPartition (σ (f j) g)) (p : ℝ),
       let Nsq := Transport.filteredNormSq (D.rootPath n (a / 2) k p) pre
       let tree := (D.tree (Set.projIcc (0 : ℝ) 1 zero_le_one p)).map f
       let gpost := fun j g ↦ regionalEntropy Λ q Ωt (U j g) +

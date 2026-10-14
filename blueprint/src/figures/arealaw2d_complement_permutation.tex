@@ -1,0 +1,105 @@
+% Figure arealaw2d_complement_permutation.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. V A (the complement identity, Lemma 16 item (2)),
+% Eq. al:s6:complement.
+% Source: arXiv OpenAI2026AreaLaw, sections/05-replicas.tex:100-101 (complementary
+% label projectors agree on S_k) and 183-191 (U_Q(pi) z = U_{Q^c}(pi^{-1}) z).
+% Formula: for z in S_k = Sym^k V, drawn at k = 3 with pi the 3-cycle
+% 1 -> 2 -> 3 -> 1: U_Q(pi) z = U_{Q^c}(pi^{-1}) z. Reason: the joint permutation
+% U_Q(pi) (x) U_{Q^c}(pi) = U_V(pi) fixes z; apply U_{Q^c}(pi^{-1}) to both sides.
+% Characters are real, chi_lambda(pi) = chi_lambda(pi^{-1}), so every central
+% label function of Q equals that of Q^c on S_k (the note's following sentence).
+% Ink-to-index: wires from top to bottom are the three copies of Q (rows 1-3)
+% and, after a blank row 4, the three copies of Q^c (rows 5-7), copies told
+% apart by position: the order of arealaw2d_fixed_factor, whose west brackets
+% Q^{(x)3} and (Q^c)^{(x)3} this figure repeats on panel 1 only (L3, L4). z is a
+% vector on (QQ^c)^{(x)3} (box on the east, six west ports; at 6 mm tenkz
+% inscribes the name, and at smaller pitches it falls south, never east, so it
+% does not read "z =" before the joiner). Action runs right to left. The inkless
+% atoms of columns 3 and 5 only carry the strings into and out of the crossing
+% (identity, no tensor). Panel 1: the Q strings carry pi, copy i on the east
+% leaves on copy pi(i) on the west (1 -> 2, 2 -> 3, 3 -> 1); the Q^c wires run
+% straight. Panel 2: the Q wires run straight and the Q^c strings carry the
+% inverse cycle (1 -> 3, 2 -> 1, 3 -> 2). The names U_Q(pi) and
+% U_{Q^c}(pi^{-1}) sit in the blank row 4, under and over their crossings.
+% Plain ink: H7 keeps one species per register across panels, and each register
+% is permuted in one panel only.
+% Crossing: the string 3 -> 1 (resp. 1 -> 3) crosses the other two once each;
+% the over/under order is the drawing's and carries no meaning.
+% Boundary signature: (phys:w)x6 in both panels.
+% Fit: C (\tnshow[6mm]); about 80 mm wide, one PRL column.
+% Label macros: none.
+% Related: arealaw2d_fixed_factor (same layout, a different identity: a fixed
+% factor passes through the metric); polypeps_swap_purity (the crossing idiom).
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=6, bonds=none, size=l]
+        \tn[at=(1,1), skin=none]{}
+        \tn[at=(3,1), skin=none]{}
+        \tn[at=(5,1), skin=none]{}
+        \tn[at=(7,1), skin=none]{}
+        \tn[at=(1,2), name=cpEndQa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,2), name=cpEndQb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,2), name=cpEndQc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,2), name=cpEndCa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,2), name=cpEndCb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,2), name=cpEndCc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,3), name=cpWa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,3), name=cpWb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,3), name=cpWc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,5), name=cpEa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,5), name=cpEb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,5), name=cpEc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,6), name=cpZ, skin=box, wires=7, label pos=s,
+            ports={180@1:physical, 180@2:physical, 180@3:physical, 180@5:physical,
+                    180@6:physical, 180@7:physical}]{z}
+        \tnwire{cpZ.180@1}{cpEa.0}
+        \tnwire{cpZ.180@2}{cpEb.0}
+        \tnwire{cpZ.180@3}{cpEc.0}
+        \tnwire[name=cpOne]{cpEa.180}{cpWb.0}
+        \tnwire[name=cpTwo]{cpEb.180}{cpWc.0}
+        \tnwire[name=cpThree, cross={over at crossing of cpThree and cpOne,
+                    over at crossing of cpThree and cpTwo}]{cpEc.180}{cpWa.0}
+        \tnwire{cpWa.180}{cpEndQa.0}
+        \tnwire{cpWb.180}{cpEndQb.0}
+        \tnwire{cpWc.180}{cpEndQc.0}
+        \tnwire{cpZ.180@5}{cpEndCa.0}
+        \tnwire{cpZ.180@6}{cpEndCb.0}
+        \tnwire{cpZ.180@7}{cpEndCc.0}
+        \tnmark[form=label, label pos=s]{(3,4)}{$U_Q(\pi)$}
+        \tnmark[form=bracket, label pos=w]{(1,1) .. (3,1)}{$Q^{\otimes3}$}
+        \tnmark[form=bracket, label pos=w]{(5,1) .. (7,1)}{$(Q^c)^{\otimes3}$}
+    \end{tenkz}
+    $=$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=5, bonds=none, size=l]
+        \tn[at=(1,1), name=cpEndQa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), name=cpEndQb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=cpEndQc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,1), name=cpEndCa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,1), name=cpEndCb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,1), name=cpEndCc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,2), name=cpWa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,2), name=cpWb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,2), name=cpWc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,4), name=cpEa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,4), name=cpEb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,4), name=cpEc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,5), name=cpZ, skin=box, wires=7, label pos=s,
+            ports={180@1:physical, 180@2:physical, 180@3:physical, 180@5:physical,
+                    180@6:physical, 180@7:physical}]{z}
+        \tnwire{cpZ.180@1}{cpEndQa.0}
+        \tnwire{cpZ.180@2}{cpEndQb.0}
+        \tnwire{cpZ.180@3}{cpEndQc.0}
+        \tnwire{cpZ.180@5}{cpEa.0}
+        \tnwire{cpZ.180@6}{cpEb.0}
+        \tnwire{cpZ.180@7}{cpEc.0}
+        \tnwire[name=cpOne, cross={over at crossing of cpOne and cpTwo,
+                    over at crossing of cpOne and cpThree}]{cpEa.180}{cpWc.0}
+        \tnwire[name=cpTwo]{cpEb.180}{cpWa.0}
+        \tnwire[name=cpThree]{cpEc.180}{cpWb.0}
+        \tnwire{cpWa.180}{cpEndCa.0}
+        \tnwire{cpWb.180}{cpEndCb.0}
+        \tnwire{cpWc.180}{cpEndCc.0}
+        \tnmark[form=label, label pos=n]{(5,3)}{$U_{Q^c}(\pi^{-1})$}
+    \end{tenkz}
+\end{tenkzequation}
