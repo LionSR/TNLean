@@ -82,53 +82,13 @@ theorem contiguousRestrictₗ_groundSpaceMap_mem_groundSpace
   simp only [contiguousRestrictₗ_apply, groundSpaceMap_apply]
   have hlist :
       List.ofFn (contiguousCfg s L σ τ) = leftWord ++ List.ofFn σ ++ rightWord := by
-    apply List.ext_getElem
-    · simp [leftWord, rightWord, List.length_ofFn]
-      omega
-    · intro k hk₁ hk₂
-      have hkN : k < N := by
-        simpa [List.length_ofFn] using hk₁
-      simp only [List.getElem_ofFn]
-      by_cases hkLeft : k < s
-      · have hkNotWin : ¬(s ≤ k ∧ k < s + L) := by omega
-        rw [contiguousCfg, dite_eq_right hkNotWin]
-        rw [List.getElem_append_left]
-        · rw [List.getElem_append_left]
-          · have hkLeftWord : k < leftWord.length := by
-              simpa only [leftWord, List.length_ofFn] using hkLeft
-            rw [show leftWord[k]'hkLeftWord = τ ⟨k, by omega⟩ from by
-              simp only [leftWord, List.getElem_ofFn]]
-          · simpa only [leftWord, List.length_ofFn] using hkLeft
-        · simpa only [leftWord, List.length_append, List.length_ofFn] using
-            (show k < s + L by omega)
-      · by_cases hkWin : k < s + L
-        · have hwin : s ≤ k ∧ k < s + L := by omega
-          rw [contiguousCfg, dite_eq_left hwin]
-          rw [List.getElem_append_left]
-          · rw [List.getElem_append_right]
-            · rw [List.getElem_ofFn]
-              congr 1
-              ext
-              simp [leftWord]
-            · simpa only [leftWord, List.length_ofFn] using
-                (show s ≤ k by omega)
-          · simpa only [leftWord, List.length_append, List.length_ofFn] using hkWin
-        · have hkRight : s + L ≤ k := by omega
-          have hkNotWin : ¬(s ≤ k ∧ k < s + L) := by omega
-          rw [contiguousCfg, dite_eq_right hkNotWin]
-          rw [List.getElem_append_right]
-          · have hRightIndex :
-                k - (leftWord ++ List.ofFn σ).length < rightWord.length := by
-              simp only [rightWord, leftWord, List.length_append, List.length_ofFn]
-              omega
-            rw [show rightWord[k - (leftWord ++ List.ofFn σ).length]'hRightIndex =
-                τ ⟨k, by omega⟩ from by
-              simp only [rightWord, List.getElem_ofFn]
-              congr 1
-              ext
-              simp only [leftWord, List.length_append, List.length_ofFn]
-              omega]
-          · simpa only [leftWord, List.length_append, List.length_ofFn] using hkRight
+    rw [List.ofFn_congr (show N = (s + L) + (N - (s + L)) by omega), List.ofFn_add,
+      List.ofFn_add]
+    refine congrArg₂ (· ++ ·) (congrArg₂ (· ++ ·) (List.ofFn_inj.mpr (funext fun k => ?_))
+      (List.ofFn_inj.mpr (funext fun k => ?_))) (List.ofFn_inj.mpr (funext fun k => ?_))
+    · exact dite_eq_right (by simp)
+    · simp [contiguousCfg]
+    · exact dite_eq_right (by simp)
   rw [hlist, Kraus.evalWord_append, Kraus.evalWord_append]
   calc
     Matrix.trace (Kraus.evalWord A (List.ofFn σ) *
