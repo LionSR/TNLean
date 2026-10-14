@@ -11,7 +11,7 @@ import TNLean.PEPS.Approximation.DyadicRoutingPEPS
 import TNLean.PEPS.Approximation.ProtocolDensityError
 
 /-!
-# The dyadic distribution protocol of Proposition 7.1
+# The consequences of Proposition 7.1 used in §8
 
 Proposition 7.1 (`prop:protocol`) of the polynomial-PEPS manuscript asserts, for all
 sufficiently large `L`, a protocol that distributes the ground vector `Ω` through the padded
@@ -20,9 +20,10 @@ product initialization; the changes, their gates, and the lifetime participation
 party; the scales and addresses of the parties at a gate; and the reference vectors, with the
 final reference `Ω ⊗ Ξ`.
 
-A protocol is modelled here as a distributed construction in the sense of Theorem 5.2
-(`thm:compression`) whose chronology is cut into changes, together with a dyadic attachment of
-its parties and a reference vector at every stage:
+This module records the consequences of Proposition 7.1 that the assembly of §8 consumes, not
+the proposition itself. A protocol is modelled as a distributed construction in the sense of
+Theorem 5.2 (`thm:compression`) whose chronology is cut into changes, together with a dyadic
+attachment of its parties and a reference vector at every stage:
 
 * the parties form a finite type `P` with a `DyadicPlacement`: the scale and the block indices
   of the square to which each party is attached;
@@ -37,10 +38,34 @@ its parties and a reference vector at every stage:
   has dimension `q`, and that of every other party has dimension one;
 * the reference vector of the initial stage is the initial vector.
 
-`DyadicProtocol` holds these data. The bounds of Proposition 7.1 are the predicate
-`DyadicProtocol.IsDistributionProtocol`, and the proposition itself is the statement
-`LargeSizeDyadicProtocol`, with its constants chosen before the size, the Hamiltonian, and the
-ground vector. This module does not prove that statement.
+`DyadicProtocol` holds these data. The bounds consumed by §8 are the predicate
+`DyadicProtocol.IsDistributionProtocol`, and the existence of a protocol with these bounds, with
+its constants chosen before the size, the Hamiltonian, and the ground vector, is the statement
+`LargeSizeDyadicProtocolConsequences`. This module does not prove that statement.
+
+**Scope restriction (consequences of Proposition 7.1):** `IsDistributionProtocol` and
+`LargeSizeDyadicProtocolConsequences` are weaker than Proposition 7.1. They omit the following
+clauses of the source:
+
+* a party for every square of the hierarchy, including the root (`06-geometry.tex:64–67`); the
+  placement fields bound the parties of each square from above only;
+* the main copy of `Ω` held by one party and the auxiliary copies initialized privately at their
+  designated parties (`06-geometry.tex:22–23`);
+* the factorization of each reference vector into the main and auxiliary encoded frames, with
+  every factor of norm at most one (`06-geometry.tex:39–41`); only the initial reference, the
+  per-change error, and the final reference are recorded;
+* the scale and address of each additional party, which are those of its repainting event
+  (`06-geometry.tex:36–37`);
+* the bounds on pair sources and messages in each monomial before their expansion (Theorem 5.2,
+  item 3, `04-compression.tex:143–147`); only pair effects are counted;
+* the family of expansions accurate to every fixed inverse power of `L`; the model fixes one
+  instantiated approximation, with reference error `C L⁻²⁰` per change.
+
+None of these clauses is used by the density estimate of §8.1, the separation hypothesis of
+Lemma 8.2, or the lifetime count. Documented in
+`docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. Elimination: build a richer
+construction certificate carrying the omitted clauses, prove Proposition 7.1 for it, and forget
+it into this interface.
 
 Three consequences are proved for every protocol satisfying the bounds:
 
@@ -60,9 +85,10 @@ Three consequences are proved for every protocol satisfying the bounds:
 * `TNLean.PEPS.Approximation.DyadicProtocol.trajectory`: the actual vector at every stage.
 * `TNLean.PEPS.Approximation.DyadicProtocol.readout`: the physical and private coordinates of
   the final memory, with the physical part indexed by configurations of the square.
-* `TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol`: the four items of
-  Proposition 7.1 for given constants.
-* `TNLean.PEPS.Approximation.LargeSizeDyadicProtocol`: Proposition 7.1.
+* `TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol`: the bounds of
+  Proposition 7.1 consumed by §8, for given constants.
+* `TNLean.PEPS.Approximation.LargeSizeDyadicProtocolConsequences`: the existence of a protocol
+  with these bounds, the part of Proposition 7.1 used in §8.
 
 ## Main results
 
@@ -109,8 +135,9 @@ local dimension `q`, on the finite party type `P`, consists of the following.
   one elsewhere, followed by the private registers to be discarded
   (`06-geometry.tex:48–51, 669–679`).
 
-The quantitative assertions of Proposition 7.1 are not part of these data; they are
-`DyadicProtocol.IsDistributionProtocol`.
+The quantitative assertions used by §8 are not part of these data; they are
+`DyadicProtocol.IsDistributionProtocol`. The data omit the clauses of Proposition 7.1 listed in
+the scope restriction of the module docstring.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:12–53`, with the distributed constructions of Theorem 5.2,
@@ -240,8 +267,8 @@ item 2, `04-compression.tex:140–142`. -/
 def participation (p : P) : ℕ :=
   ∑ t ∈ range D.changes, (D.step t).participationCount p
 
-/-- **The bounds of Proposition 7.1.** With constants `C`, `b`, `k`, `r`, and the target vector
-`Ω`, the protocol satisfies:
+/-- **The bounds of Proposition 7.1 consumed by §8.** With constants `C`, `b`, `k`, `r`, and
+the target vector `Ω`, the protocol satisfies:
 
 1. every party is attached to a square of the padded hierarchy, there are at most `C L²`
    parties, and at most `b` of them are attached to any square;
@@ -253,6 +280,12 @@ def participation (p : P) : ℕ :=
    most `b` times the side of either square in each coordinate;
 4. each change takes its reference vector within `C L⁻²⁰` of the next one, and the final
    reference vector is `Ω ⊗ Ξ` with `1 - C L⁻⁵⁷ ≤ ‖Ξ‖ ≤ 1`.
+
+These are the consequences of the four items that the assembly of §8 uses. The predicate is
+weaker than the conclusion of Proposition 7.1: it omits the clauses listed in the scope
+restriction of the module docstring, among them a party for every square of the hierarchy, the
+registers of the copies of `Ω`, the frame factorization of the references, and the counts of
+pair sources and messages.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:17–52`; the expansions are those of Theorem 5.2, item 3,
@@ -298,7 +331,7 @@ namespace IsDistributionProtocol
 
 variable {D} {Ω : StateSpace L q} {C : ℝ} {b k r : ℕ}
 
-/-- **The protocol density estimate.** For a protocol with the bounds of Proposition 7.1 on a
+/-- **The protocol density estimate.** For a protocol with the bounds of §8 on a
 square of side `L ≥ 1`, the physical density of the actual final vector satisfies
 `‖Tr_private |Ψ⟩⟨Ψ| - |Ω⟩⟨Ω|‖₁ ≤ (2 C² + 2 C) L⁻¹⁰`.
 
@@ -374,18 +407,20 @@ theorem participation_le_of_uses {k : ℕ}
 
 end DyadicProtocol
 
-/-- **Proposition 7.1, the dyadic distribution protocol.** For every `q ≥ 2` and `J, Δ > 0`
-there are constants `C`, `b`, `k`, `r` and a threshold `L₀`, chosen before the size, the
-Hamiltonian, the energy, and the ground vector, such that every gapped ground vector `Ω` of a
-square Hamiltonian of side `L ≥ max 2 L₀` has a dyadic distribution protocol with the bounds of
+/-- **The consequences of Proposition 7.1 used in §8.** For every `q ≥ 2` and `J, Δ > 0` there
+are constants `C`, `b`, `k`, `r` and a threshold `L₀`, chosen before the size, the Hamiltonian,
+the energy, and the ground vector, such that every gapped ground vector `Ω` of a square
+Hamiltonian of side `L ≥ max 2 L₀` has a dyadic distribution protocol with the bounds of
 `DyadicProtocol.IsDistributionProtocol`.
 
-This proposition is a theorem statement, not a proof of that theorem.
+This is a target statement, not a proof. It is the form in which §8 uses Proposition 7.1, and
+it is weaker than that proposition: it omits the clauses listed in the scope restriction of the
+module docstring, so it is not the source proposition.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`,
 `06-geometry.tex:12–53`, in the setting of Theorem 1.1, `00-introduction.tex:36–57`, applied
 with patch and information power `60` (`07-assembly.tex:11`). -/
-def LargeSizeDyadicProtocol : Prop :=
+def LargeSizeDyadicProtocolConsequences : Prop :=
   ∀ q : ℕ, 2 ≤ q → ∀ J Δ : ℝ, 0 < J → 0 < Δ →
     ∃ (C : ℝ) (b k r L₀ : ℕ),
       ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ h : SquareHamiltonian L q J,
