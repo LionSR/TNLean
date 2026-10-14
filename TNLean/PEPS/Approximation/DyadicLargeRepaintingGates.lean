@@ -19,11 +19,11 @@ lie at distance `O(n)` from the repainted square. … An auxiliary uses only the
 local edge and point diagrams; its uniform initial owner `C` is the actual neighboring-block
 owner.”
 
-This file proves that statement for the guides of the schedule and their gates. With the square
-moved to `[0, n] ^ 2`, call a guide *local* over a base guide `b` (the starting main guide, or the
-uniform auxiliary guide `C_e`) if it agrees with `b` outside the `n / 2`-neighborhood of the closed
-square and takes only the *local labels* on its `n`-neighborhood: the final label `B` and the
-values of the starting guide there. Then:
+This file proves the locality part of that statement for the guides of the schedule and for the
+patch data of their gates. With the square moved to `[0, n] ^ 2`, call a guide *local* over a base
+guide `b` (the starting main guide, or the uniform auxiliary guide `C_e`) if it agrees with `b`
+outside the `n / 2`-neighborhood of the closed square and takes only the *local labels* on its
+`n`-neighborhood: the final label `B` and the values of the starting guide there. Then:
 
 * the starting main guide, the guide after the central birth, the completed guides, every main
   and auxiliary guide of an edge construction with any of its normal words, the fresh auxiliary
@@ -35,19 +35,20 @@ values of the starting guide there. Then:
   repainting of the square, in the sense of `TNLean.PEPS.Approximation.RepaintingUses`.
 
 A gate of a large-scale repainting is described by patch data
-(`TNLean.PEPS.Approximation.GuidePatchRewrite`) whose old and new guides are local guides over
-one base and whose footprint lies within distance `n` of the square
-(`GuidePatchRewrite.IsLargeRepaintingStep`). For a point treatment this is the small-patch rewrite
-of the source, with a net of mesh `ν t` about a mark (`exists_pointTreatment`). For a bulk birth,
-death or exchange the gate is given by Lemma `lem:birth` or `lem:exchange`, and the patch data
-here (`exists_bulkStep`) is a net of mesh `ν n` over the `3n/4`-neighborhood of the square that
-covers the changed set and the affected outer holes. Its parties contain the raw owners on the
-changed set, the affected outer holes and the tag holders of those holes; it serves only to bound
-the parties of the gate. In both cases every block party of the patch data is used by the
-repainting of `S` (`IsLargeRepaintingStep.uses`), so the lifetime bound of
-`TNLean.PEPS.Approximation.card_gates_le_of_uses` holds for schedules that mix large-scale
-repaintings, direct repaintings and junction resizes
-(`card_gates_le_of_repaintingRewrites`).
+(`TNLean.PEPS.Approximation.GuidePatchRewrite`) whose old and new guides are local guides over one
+base and whose footprint lies within distance `n` of the square
+(`GuidePatchRewrite.IsLargeRepaintingStep`). For a point treatment this is the patch net of the
+source's small-patch rewrite, of mesh `ν t` about a mark (`exists_pointTreatment`); conditions 1–3
+of Lemma `lem:small-rewrite` are not checked here. For a bulk birth, death or exchange the gate is
+given by Lemma `lem:birth` or `lem:exchange`, and the patch data here (`exists_bulkStep`) is a net
+of mesh `ν n` over the `3n/4`-neighborhood of the square that covers the changed set and the
+affected outer holes. Its parties contain the raw owners on the changed set, the affected outer
+holes and the tag holders of those holes; it serves only to bound the parties of the gate. In both
+cases every block party of the patch data is used by the repainting of `S`
+(`IsLargeRepaintingStep.uses`), so the conditional lifetime bound of
+`TNLean.PEPS.Approximation.card_gates_le_of_uses` applies, under the hypothesis that each gate's
+block parties are parties of its patch data, to schedules that mix large-scale repaintings, direct
+repaintings and junction resizes (`card_gates_le_of_repaintingRewrites`).
 
 The conditions of Lemma `lem:small-rewrite` and of the birth and exchange lemmas are not verified
 here, and the reduction of a gate's parties to those of its patch data is the hypothesis of the
@@ -86,17 +87,6 @@ theorem SquareEdge.point_mem_closedSquare {n s : ℝ} (e : SquareEdge) (h0 : 0 �
   rw [mem_closedSquare]
   cases e <;> simp only [SquareEdge.point, sub_zero] <;> refine ⟨?_, ?_, ?_, ?_⟩ <;> linarith
 
-/-- The closed square lies in each of its open neighborhoods. -/
-theorem closedSquare_subset_thickening {n δ : ℝ} (hδ : 0 < δ) :
-    closedSquare n ⊆ thickening δ (closedSquare n) :=
-  self_subset_thickening hδ _
-
-/-- A point within sup distance `δ` of a point of the closed square lies in its
-`δ`-neighborhood. -/
-theorem mem_thickening_closedSquare {n δ : ℝ} {p y : ℝ × ℝ} (hy : y ∈ closedSquare n)
-    (hp : dist p y < δ) : p ∈ thickening δ (closedSquare n) :=
-  mem_thickening_iff.2 ⟨y, hy, hp⟩
-
 /-- The band `-8 < x < 2` of an edge lies in the `n / 2`-neighborhood of the closed square.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), equation `eq:geometry-band`,
@@ -105,11 +95,11 @@ theorem edgeBand_subset_thickening {n : ℝ} (hn : 0 < n) (e : SquareEdge) :
     edgeBand n e (-8) 2 ⊆ thickening (n / 2) (closedSquare n) := by
   intro p hp
   by_cases hd : 0 ≤ e.nor n p
-  · exact closedSquare_subset_thickening (half_pos hn) (mem_closedSquare_of_mem_edgeBand hp hd)
+  · exact self_subset_thickening (half_pos hn) _ (mem_closedSquare_of_mem_edgeBand hp hd)
   · obtain ⟨h1, h2, h3, -⟩ := hp
     have w1 := bandWidth_le_left n (e.par p)
     have w2 := bandWidth_le_right n (e.par p)
-    refine mem_thickening_closedSquare (e.point_mem_closedSquare h1.le h2.le) ?_
+    refine mem_thickening_iff.2 ⟨_, e.point_mem_closedSquare h1.le h2.le, ?_⟩
     rw [SquareEdge.dist_eq n e, par_point, nor_point, sub_self, abs_zero, sub_zero,
       abs_of_neg (not_le.1 hd)]
     refine max_lt (half_pos hn) ?_
@@ -122,8 +112,8 @@ theorem edgeBand_subset_thickening {n : ℝ} (hn : 0 < n) (e : SquareEdge) :
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:330–333`. -/
 theorem edgeTreated_subset_thickening {n t : ℝ} (hn : 0 < n) (ht : t ≤ n / 2) (e : SquareEdge) :
     edgeTreated n e t ⊆ thickening (n / 2) (closedSquare n) := by
-  rintro p (hp | hp) <;> refine mem_thickening_closedSquare
-    (e.point_mem_closedSquare (by linarith) (by linarith)) ((mem_ball.1 hp).trans_le ht)
+  rintro p (hp | hp) <;> exact mem_thickening_iff.2
+    ⟨_, e.point_mem_closedSquare (by linarith) (by linarith), (mem_ball.1 hp).trans_le ht⟩
 
 /-- The treated squares of radius `t ≤ n / 2` about the four corners lie in the
 `n / 2`-neighborhood of the closed square.
@@ -135,8 +125,7 @@ theorem cornerTreated_subset_thickening {n t : ℝ} (hn : 0 < n) (ht : t ≤ n /
     rintro a b (rfl | rfl) (rfl | rfl) <;> rw [mem_closedSquare] <;>
       refine ⟨?_, ?_, ?_, ?_⟩ <;> linarith
   rintro p ((hp | hp) | (hp | hp)) <;>
-    refine mem_thickening_closedSquare (hc _ _ (by simp) (by simp))
-      ((mem_ball.1 hp).trans_le ht)
+    exact mem_thickening_iff.2 ⟨_, hc _ _ (by simp) (by simp), (mem_ball.1 hp).trans_le ht⟩
 
 namespace RepaintingBaseline
 
@@ -175,7 +164,7 @@ theorem oldLabel_mem_localLabels : R.oldLabel ∈ R.localLabels := by
     mem_openSquare.2 ⟨by linarith, by linarith, by linarith, by linarith⟩
   rw [← R.guide_openSquare _ hp]
   exact R.guide_mem_localLabels
-    (closedSquare_subset_thickening hn (openSquare_subset_closedSquare _ hp))
+    (self_subset_thickening hn _ (openSquare_subset_closedSquare _ hp))
 
 /-- The label `C_e` across an edge is a local label.
 
@@ -186,8 +175,8 @@ theorem nbrLabel_mem_localLabels (e : SquareEdge) : R.nbrLabel e ∈ R.localLabe
   have hp : e.point R.n (R.n / 2) (-(R.n / 2)) ∈ edgeNeighbor R.n e := by
     refine ⟨?_, ?_, ?_, ?_⟩ <;> simp only [par_point, nor_point] <;> linarith
   rw [← R.guide_edgeNeighbor e _ hp]
-  refine R.guide_mem_localLabels (mem_thickening_closedSquare
-    (e.point_mem_closedSquare (s := R.n / 2) (by linarith) (by linarith)) ?_)
+  refine R.guide_mem_localLabels (mem_thickening_iff.2
+    ⟨_, e.point_mem_closedSquare (s := R.n / 2) (by linarith) (by linarith), ?_⟩)
   rw [SquareEdge.dist_eq R.n e, par_point, par_point, nor_point, nor_point, sub_self, abs_zero,
     sub_zero, abs_neg, abs_of_pos (half_pos hn)]
   exact max_lt hn (half_lt_self hn)
@@ -286,7 +275,7 @@ theorem isLocalGuide_centralGuide : R.IsLocalGuide R.guide R.centralGuide :=
   R.isLocalGuide_guide.update
     ((centralRegion_subset_openSquare R.n).trans
       ((openSquare_subset_closedSquare R.n).trans
-        (closedSquare_subset_thickening (half_pos R.n_pos))))
+        (self_subset_thickening (half_pos R.n_pos) _)))
     (fun p hp => by rw [R.centralGuide_of_mem hp]; exact R.finalLabel_mem_localLabels)
     fun _ hp => R.centralGuide_of_notMem hp
 
@@ -512,7 +501,7 @@ theorem exists_pointTreatment (party : ℕ × ℕ × ℕ → ι) (ph : ι) (M : 
       (fun h hh => subset_union_right.trans' (subset_biUnion_of_mem (u := fun h =>
         closedBall h (2 * ε₀ * t)) (Finset.mem_coe.2 hh)))
       (fun p y hy hpy => by
-        refine mem_thickening_closedSquare hc ?_
+        refine mem_thickening_iff.2 ⟨_, hc, ?_⟩
         have h1 := mem_closedBall.1 (hK hy)
         have := dist_triangle p y (c + o)
         rw [← dist_add_right (p - o) c o, sub_add_cancel]
@@ -581,7 +570,7 @@ theorem exists_bulkStep (party : ℕ × ℕ × ℕ → ι) (ph : ι) (M : ℤ) (
       (ρ := 5 / 4 * n) (u := ν * n) (by positivity) (by positivity) hK H hR hHK
       (fun p y hy hpy => by
         obtain ⟨z, hz, hyz⟩ := hy
-        refine mem_thickening_closedSquare hz ?_
+        refine mem_thickening_iff.2 ⟨_, hz, ?_⟩
         have := dist_triangle (p - o) (y - o) z
         rw [dist_sub_right] at this
         nlinarith)

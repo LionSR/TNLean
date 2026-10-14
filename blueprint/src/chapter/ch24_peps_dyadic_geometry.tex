@@ -1506,7 +1506,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 
 \begin{theorem}[The guides of a repainting are local]
     \label{thm:peps_dyadic_local_guides}
-    \lean{TNLean.PEPS.Approximation.SquareEdge.point_mem_closedSquare, TNLean.PEPS.Approximation.closedSquare_subset_thickening, TNLean.PEPS.Approximation.mem_thickening_closedSquare, TNLean.PEPS.Approximation.edgeBand_subset_thickening, TNLean.PEPS.Approximation.edgeTreated_subset_thickening, TNLean.PEPS.Approximation.cornerTreated_subset_thickening, TNLean.PEPS.Approximation.RepaintingBaseline.finalLabel_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.guide_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.oldLabel_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.nbrLabel_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.edgeWords_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_guide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_const, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.update, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.homogenize, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.piecewise, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.bandUpdate, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.changed_subset, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_centralGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_completedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_mainGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_auxGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_treatedStartMain, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_treatedAux}
+    \lean{TNLean.PEPS.Approximation.SquareEdge.point_mem_closedSquare, TNLean.PEPS.Approximation.edgeBand_subset_thickening, TNLean.PEPS.Approximation.edgeTreated_subset_thickening, TNLean.PEPS.Approximation.cornerTreated_subset_thickening, TNLean.PEPS.Approximation.RepaintingBaseline.finalLabel_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.guide_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.oldLabel_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.nbrLabel_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.edgeWords_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_guide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_const, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.update, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.homogenize, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.piecewise, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.bandUpdate, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.changed_subset, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_centralGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_completedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_mainGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_auxGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_treatedStartMain, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_treatedAux}
     \leanok
     \uses{def:peps_dyadic_local_guides, lem:peps_dyadic_floor}
     The labels $A$, $B$ and $C_e$ are local labels, and so is every value of a normal
@@ -1601,7 +1601,8 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{thm:peps_dyadic_large_repainting_lifetime}
     \lean{TNLean.PEPS.Approximation.card_gates_le_of_repaintingRewrites}
     \leanok
-    \uses{thm:peps_dyadic_large_repainting_parties, thm:peps_dyadic_patch_rewrite_parties}
+    \uses{def:peps_dyadic_local_guides, def:peps_dyadic_guide_patch_rewrite,
+        def:peps_dyadic_used_parties}
     Let the gates of a schedule on the hierarchy belong to repaintings and junction
     resizes, at most $G$ to each event, and let each gate carry patch data: for a
     repainting, the direct repainting of its square or a gate of its large-scale
@@ -1615,7 +1616,8 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_dyadic_lifetime_parties}
+    \uses{thm:peps_dyadic_patch_rewrite_parties, thm:peps_dyadic_large_repainting_parties,
+        thm:peps_dyadic_lifetime_parties}
     By Theorems~\ref{thm:peps_dyadic_patch_rewrite_parties}
     and~\ref{thm:peps_dyadic_large_repainting_parties} every gate in which the party
     participates is one of an event that uses the party, and
