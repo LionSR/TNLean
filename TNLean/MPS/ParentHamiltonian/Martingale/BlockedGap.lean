@@ -178,6 +178,17 @@ private theorem blockedThreeConfigLinearIsometryEquiv_groundSpaceMapES
     Matrix.trace (Kraus.evalWord A _ * X)
   rw [hword]
 
+/-- A linear map intertwining \(f\) with \(g\circ V\), for a linear equivalence
+\(V\), carries the range of \(f\) onto the range of \(g\). -/
+private theorem map_range_eq_range_of_intertwine {M N P Q : Type*}
+    [AddCommGroup M] [Module ℂ M] [AddCommGroup N] [Module ℂ N]
+    [AddCommGroup P] [Module ℂ P] [AddCommGroup Q] [Module ℂ Q]
+    (U : N →ₗ[ℂ] P) (f : M →ₗ[ℂ] N) (g : Q →ₗ[ℂ] P) (V : M ≃ₗ[ℂ] Q)
+    (h : ∀ x, U (f x) = g (V x)) :
+    (LinearMap.range f).map U = LinearMap.range g := by
+  rw [← LinearMap.range_comp, show U ∘ₗ f = g ∘ₗ V.toLinearMap from LinearMap.ext h,
+    LinearMap.range_comp_of_range_eq_top _ V.range]
+
 /-- The full three-block ground space maps exactly to the original-site ground
 space in the common coordinates. -/
 private theorem groundSpaceES_three_blockTensor_map
@@ -186,13 +197,8 @@ private theorem groundSpaceES_three_blockTensor_map
         (blockedThreeConfigLinearIsometryEquiv d p).toLinearEquiv.toLinearMap =
       groundSpaceES A (p + p + p) := by
   rw [← range_groundSpaceMapES, ← range_groundSpaceMapES]
-  ext v
-  constructor
-  · rintro ⟨w, ⟨x, rfl⟩, rfl⟩
-    exact ⟨x, (blockedThreeConfigLinearIsometryEquiv_groundSpaceMapES A p x).symm⟩
-  · rintro ⟨x, rfl⟩
-    exact ⟨groundSpaceMapES (blockTensor A p) 3 x, ⟨x, rfl⟩,
-      blockedThreeConfigLinearIsometryEquiv_groundSpaceMapES A p x⟩
+  exact map_range_eq_range_of_intertwine _ _ _ (LinearEquiv.refl ℂ _)
+    (blockedThreeConfigLinearIsometryEquiv_groundSpaceMapES A p)
 
 /-- The blocked one-site-prefix tail space maps exactly to the original whole-block
 tail spectator range. -/
@@ -202,18 +208,9 @@ private theorem openChainTailGroundSpaceES_blockTensor_map
         (blockedThreeConfigLinearIsometryEquiv d p).toLinearEquiv.toLinearMap =
       (reassocTailBoundaryMapES A p p p).range := by
   rw [← range_tailBoundaryMapES]
-  ext v
-  constructor
-  · rintro ⟨w, ⟨x, rfl⟩, rfl⟩
-    exact ⟨blockSpectatorLinearIsometryEquiv d D p x,
-      (blockedThreeConfigLinearIsometryEquiv_tailBoundaryMapES A p x).symm⟩
-  · rintro ⟨x, hx⟩
-    let y := (blockSpectatorLinearIsometryEquiv d D p).symm x
-    refine ⟨tailBoundaryMapES (blockTensor A p) 1 2 y, ⟨y, rfl⟩, ?_⟩
-    change blockedThreeConfigLinearIsometryEquiv d p
-      (tailBoundaryMapES (blockTensor A p) 1 2 y) = v
-    rw [blockedThreeConfigLinearIsometryEquiv_tailBoundaryMapES]
-    simpa [y] using hx
+  exact map_range_eq_range_of_intertwine _ _ _
+    (blockSpectatorLinearIsometryEquiv d D p).toLinearEquiv
+    (blockedThreeConfigLinearIsometryEquiv_tailBoundaryMapES A p)
 
 /-- The blocked one-site-suffix left space maps exactly to the original
 whole-block left spectator range. -/
@@ -223,18 +220,9 @@ private theorem openChainLeftGroundSpaceES_blockTensor_map
         (blockedThreeConfigLinearIsometryEquiv d p).toLinearEquiv.toLinearMap =
       (leftBoundaryMapES A (p + p) p).range := by
   rw [← range_leftBoundaryMapES_one]
-  ext v
-  constructor
-  · rintro ⟨w, ⟨x, rfl⟩, rfl⟩
-    exact ⟨blockSpectatorLinearIsometryEquiv d D p x,
-      (blockedThreeConfigLinearIsometryEquiv_leftBoundaryMapES A p x).symm⟩
-  · rintro ⟨x, hx⟩
-    let y := (blockSpectatorLinearIsometryEquiv d D p).symm x
-    refine ⟨leftBoundaryMapES (blockTensor A p) 2 1 y, ⟨y, rfl⟩, ?_⟩
-    change blockedThreeConfigLinearIsometryEquiv d p
-      (leftBoundaryMapES (blockTensor A p) 2 1 y) = v
-    rw [blockedThreeConfigLinearIsometryEquiv_leftBoundaryMapES]
-    simpa [y] using hx
+  exact map_range_eq_range_of_intertwine _ _ _
+    (blockSpectatorLinearIsometryEquiv d D p).toLinearEquiv
+    (blockedThreeConfigLinearIsometryEquiv_leftBoundaryMapES A p)
 
 /-- The whole-block C3-prime projector defect on three consecutive blocks is the
 three-site open-chain projector defect of the blocked tensor.
