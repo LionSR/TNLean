@@ -3763,5 +3763,6 @@ source's Proposition 4.1.
   sources, nor supplies equality after an arbitrary restriction to owners.
   It is not the selected-local-part comparison predicate. No equivalence with
   physical-density equality, factorization or locality is asserted.
-- **Verification:** The new predicate and bridge await hosted Lean verification;
-  their mathematical meaning does not depend on that pending status.
+- **Verification:** The predicate and both fixed-layout bridges passed the
+  hosted Lean build and their named axiom checks at commit
+  `c05b1ee03e2d24d1f93390ada1aa7b7912b0cfba`.
