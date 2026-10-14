@@ -70,3 +70,139 @@
     The remaining terms are logarithmic in $k$, and division by $k$
     gives the asserted limit.
 \end{proof}
+
+\section{The actual sharp upper comparison}
+
+\begin{theorem}[Sharp upper rate for the actual fill and charge roots]
+    \label{thm:al_actual_sharp_upper}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.eventually_actualScan_suppliedPrevector_sharp_upper}
+    \uses{thm:al_global_schmidt_bell_prevector}
+    Fix a finite physical domain, its target region $X$, a unit vector
+    $\Omega_t$, and an actual scanner with $K$ ordered bands. Fix a
+    positive-mass spectral set $E$ of the reduced density on $X$, with
+    $d=|E|$ and mass $z>0$. Let $\lambda_k$ be one supplied label sequence
+    whose selected Schmidt vector satisfies the eventual mass bound
+    $\|(I\otimes P_{\lambda_k})\psi^{\otimes k}\|^2
+    \geq[2(k+1)^{d^2}]^{-1}$.
+    Let $a>0$, $6a\leq r$, and $6a\leq1$. Suppose that, for every
+    completed or pre-charge status through the scan horizon, each of its
+    five physical marginals satisfies
+    \begin{align}
+        \log\mathbb E\exp(u Z_Q)
+        &\leq uS_{\Omega_t}(Q)+K_{\mathrm{mom}}u^2,
+        & |u|&\leq r.
+        \label{eq:al_actual_sharp_moments}
+    \end{align}
+    Here $Z_Q$ is the surprisal of the reduced density on $Q$.
+    All statuses retain their literal completed or pre-charge physical
+    partitions. For each terminal $j$ and band $g$, put
+    \begin{align}
+        G_{jg}
+        &=S_{\Omega_t}(U_{jg})+S_{\Omega_t}(U_{jg}\cup Y_{jg})
+          -S_{\Omega_t}(Y_{jg}),
+        \label{eq:al_actual_sharp_terminal_entropy}
+    \end{align}
+    where $U_{jg}$ is the positive-depth near region and $Y_{jg}$ is
+    the middle region. At every actual fill or charge interpolation,
+    let $T_p$ be its original weighted mean tree, indexed by these
+    terminals, and let $N_{k,p}$ be the squared filtered norm of the
+    original supplied prevector, with metric parameter $a/2$.
+    There is $c\geq0$ such that, eventually in $k$, simultaneously at
+    all scan times and all real interpolation parameters,
+    \begin{align}
+        N_{k,p}&>0,\nonumber\\
+        -\frac{\log N_{k,p}}{k}
+        &\leq2\log d-\log z
+          +\frac a2\sum_g\sum_jT_p(j)G_{jg}
+          +6K K_{\mathrm{mom}}a^2-\frac K2\log z
+          +R_{d,c,K}(k),
+        \label{eq:al_actual_sharp_rate}\\
+        R_{d,c,K}(k)&\longrightarrow0.
+        \label{eq:al_actual_sharp_remainder}
+    \end{align}
+    The constant and replica threshold are chosen before the scan time,
+    interpolation parameter, and actual mean tree. The interpolation
+    parameter is projected onto $[0,1]$, as in the actual scanner.
+\end{theorem}
+\begin{proof}
+    Use one finite family containing every completed and pre-charge
+    partition up to the horizon. The actual terminal maps preserve the
+    physical partitions and the weights of both kinds of mean tree.
+    Cross-status nesting supplies the common band order.
+    Apply the sharp upper comparison of
+    \cite[Section~8, lines~383--418]{OpenAI2026AreaLaw} to this family
+    and the supplied labels. Express the original prevector in symmetric
+    coordinates and specialize the inverse-power exponent to $1/4$.
+    The three coefficients are $2(1/4)a=a/2$,
+    $24(1/4)K K_{\mathrm{mom}}a^2=6K K_{\mathrm{mom}}a^2$,
+    and $2(1/4)K=K/2$.
+\end{proof}
+
+\begin{theorem}[One physical label sequence with the sharp upper rate]
+    \label{thm:al_actual_sharp_prevector}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_schmidtBellPrevector_sharp_upper}
+    \uses{thm:al_global_schmidt_bell_prevector,thm:al_actual_sharp_upper}
+    In Theorem~\ref{thm:al_actual_sharp_upper}, suppose additionally that
+    $\Omega_t$ is an exact eigenvector of a supplied physical Hamiltonian
+    with eigenvalue $e$. One can choose a single label sequence whose
+    original prevector has the exact mean-replica energy $e$, full copy
+    symmetry, and the prescribed label on both original auxiliary
+    registers. Its selected mass satisfies the stated polynomial lower
+    bound, and
+    $\log\dim\lambda_k-kS(\psi_C)=o(k)$.
+    The same sequence and physical prevector satisfy
+    (\ref{eq:al_actual_sharp_rate}) at every actual fill and charge root.
+\end{theorem}
+\begin{proof}
+    Choose the labels once using the selected Schmidt vector and retain
+    all conclusions of Theorem~\ref{thm:al_global_schmidt_bell_prevector}.
+    Apply Theorem~\ref{thm:al_actual_sharp_upper} to that same sequence.
+\end{proof}
+
+\begin{theorem}[The truncated target instance with an explicit power margin]
+    \label{thm:al_source_target_actual_sharp_upper}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_actualSharpUpper}
+    \uses{thm:al_actual_sharp_upper}
+    Fix the local dimension, interaction parameters, target-size
+    coefficient. The truncation, target-budget and common-status-budget
+    coefficients can be chosen before the exponent family and physical
+    instance. Fix a bootstrap exponent family with the explicit margin
+    \begin{align}
+        \omega+\frac{1+\kappa}{2}&<1-\ell-\mu.
+        \label{eq:al_source_target_sharp_margin}
+    \end{align}
+    For sufficiently large boundary size $n$, use the literal rounded source scales and
+    the source row and clearance hypotheses. One truncated unit ground
+    vector $\Omega_t$ satisfies the energy, phase, trace-distance,
+    all-cut tail and target-window estimates. The same vector has the
+    common status budget and moment constants
+    \begin{align}
+        B&=C_B nD(\log n)^{12}, & 1&\leq B,\nonumber\\
+        g&=\frac{\Delta}{c_+}, &
+        C_0&=512e\frac2g, &
+        c_0&=\frac{1}{32\sqrt{1+2/g}}.
+        \label{eq:al_source_target_sharp_budget}
+    \end{align}
+    For $0<W\leq n^\omega$, put $a=W/K$. Then
+    $6a\leq c_0/\sqrt B$ and $6a\leq1$.
+    Every supplied label sequence satisfying the selected mass condition
+    for this same target spectral set satisfies
+    (\ref{eq:al_actual_sharp_rate}), with
+    $K_{\mathrm{mom}}=C_0B$.
+    The coefficients are uniform in the physical instance; the
+    replica-copy threshold and remainder constant may depend on the
+    fixed finite-domain instance and its supplied label sequence.
+    This is the stated target-instance consequence, with
+    (\ref{eq:al_source_target_sharp_margin}) explicit. It is not the
+    complete comparison assertion of Proposition~9.6 in
+    \cite{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    Choose the truncated target vector and window once. Evaluate every
+    completed and pre-charge status budget on that same vector.
+    The strict power margin dominates the common factor
+    $\sqrt{nD}(\log n)^6$ by the growth of $K/W$.
+    Apply the marginal moment estimate with the common budget and then
+    Theorem~\ref{thm:al_actual_sharp_upper} at $K_{\mathrm{mom}}=C_0B$.
+    No independent truncated-vector choice enters the argument.
+\end{proof}
