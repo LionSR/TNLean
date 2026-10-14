@@ -30,6 +30,18 @@ namespace TNLean.PEPS.PairEffect
 namespace SourceCircuit
 variable {P : Type} {a b : Layout P}
 
+/-- Two operator comparisons through an arbitrary intermediate word give
+equality on fixed original input and output layouts. The composition is proved
+before any sampled endpoint maps are supplied.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267,
+279–355, 409–434 and 565–588. -/
+private theorem eval_eq_of_two_word_comparisons {Q R : Type}
+    {a b : Layout Q} {c d : Layout R}
+    (u t : Word a b) (v : Word c d)
+    (hinput : HEq u.eval v.eval) (hincident : HEq v.eval t.eval) :
+    u.eval = t.eval := by
+  exact eq_of_heq (hinput.trans hincident)
+
 variable (w : SourceCircuit a b) (k : ℕ)
   (lam : ∀ e : sourceLocations w, branchLabels w e.1 →
     Fin (min (sourceDims w e).1 (sourceDims w e).2) → ℝ)
@@ -80,7 +92,19 @@ theorem restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord
     w k lam E F (partySelector (some ⟨p, rfl⟩)) ξ ζ j ω
   have hincident := restrict_sampledEndpointWord_eval_heq_incidentSampledEndpointWord
     w k lam E F p ξ ζ j ω
-  exact eq_of_heq (hinput.trans hincident)
+  exact eval_eq_of_two_word_comparisons
+    ((sampledEndpointInputWord w k lam E F ξ ζ j ω).restrict
+      (partySelector (some ⟨p, rfl⟩))
+      (sources_sampledEndpointInputWord w k lam E F ξ ζ j ω))
+    (incidentSampledEndpointWord w k lam E F p
+      (originalGateLabelsAtOfAllChoices w p ξ)
+      (originalGateLabelsAtOfAllChoices w p ζ)
+      (fun i ↦ j (partialSlotEquiv
+        (fun t ↦ partySelector (some ⟨p, rfl⟩)
+          (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω)
+    ((sampledEndpointWord w k lam E F ξ ζ j ω).restrict
+      (partySelector (some ⟨p, rfl⟩))
+      (sources_sampledEndpointWord w k lam E F ξ ζ j ω)) hinput hincident
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect

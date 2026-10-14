@@ -7524,3 +7524,20 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** Two known occurrences. The preparation application retains the
   original spectator and source order; no hypothesis or proof limit is added.
   Hosted verification of the new application remains pending.
+
+### Equality from two word-evaluation comparisons — candidate (2026-10-14)
+
+- **Pattern:** Compose two heterogeneous evaluation comparisons through an
+  intermediate word, then obtain an equality when the first and last words
+  have identical input and output layouts.
+- **Seen:** The private `selectedPreparedWordComparison_of_word_heq` in
+  `IncidentSourceWordComparison.lean` and `eval_eq_of_two_word_comparisons` in
+  `IncidentSampledEndpointComparison.lean`, under `PEPS/Approximation/`.
+- **Abstraction:** Both use the existing `Word.eval_heq`, `HEq.trans` and
+  `eq_of_heq` as applicable. The calculations are checked for arbitrary words
+  before the actual circuit and sampled maps are supplied. The latter private
+  helper isolates a concrete composition that exceeded the checking limit.
+- **Notes:** Two known occurrences, with different intermediate premises. At a
+  third occurrence, share the weakest word-level statement that covers the
+  applications. Public hypotheses and proof limits remain unchanged; hosted
+  acceptance and timing of the new application remain pending.
