@@ -382,3 +382,51 @@ the finite-dimensional density application uses finite ones.
     Definition~\ref{def:peps_dependent_network} contains exactly one
     factor $A_p$.
 \end{proof}
+
+\subsection{Finite coordinates for the distributed network}
+
+\begin{definition}[Enumerated virtual alphabets]
+    \label{def:compression_operator_finite_coordinates}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.toPartyNetwork}
+    \uses{def:compression_operator_local_tensor,def:peps_party_network_routing}
+    Use the distributed links and their finite alphabets $A_e$ from
+    Definition~\ref{def:compression_operator_operator}. For each link choose
+    a bijection $\vartheta_e:A_e\to[|A_e|]$, where
+    $[m]=\{0,\ldots,m-1\}$. Fix $q\in\mathbb N$ and physical readouts
+    $u_p:[q]\to X_p$ and $v_p:[q]\to Y_p$ at each party $p$.
+    The enumerated network has the same links and endpoints, virtual
+    dimension $|A_e|$ on $e$, and local tensors
+    \begin{align}
+        \widetilde A_p(\eta_p;s,t)
+         & = A_p\bigl((\vartheta_e^{-1}(\eta_{p,e}))_{e\ni p};
+        u_p(s),v_p(t)\bigr).
+        \label{eq:compression_finite_coordinates}
+    \end{align}
+    Here $(s,t)$ is read as one index in $[q^2]$.
+    This is a finite change of coordinates for the construction in
+    \cite[proof of Theorem~5.2 and Lemma~8.2]{OpenAI2026PolynomialPEPS}.
+\end{definition}
+
+\begin{theorem}[Contraction in enumerated coordinates]
+    \label{thm:compression_operator_finite_coordinates}
+    \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.operatorCoeff_toPartyNetwork}
+    \uses{def:compression_operator_finite_coordinates,def:compression_operator_operator}
+    Let $V$ be any set, and assign a site $a_p\in V$ to each party.
+    For $x,y:V\to[q]$, the operator of the network in
+    Definition~\ref{def:compression_operator_finite_coordinates}, read at
+    these sites, satisfies
+    \begin{align}
+        \widetilde\sigma(x,y)
+         & = \sigma\bigl((u_p(x(a_p)))_p,(v_p(y(a_p)))_p\bigr).
+        \label{eq:compression_coordinate_operator}
+    \end{align}
+    The readouts and site assignment need not be injective or surjective.
+\end{theorem}
+\begin{proof}
+    \uses{def:compression_operator_finite_coordinates,thm:compression_operator_link_sum}
+    The product bijection $\prod_e\vartheta_e$ changes variables in the
+    finite contraction sum. By (\ref{eq:compression_finite_coordinates}),
+    each transformed local factor is the corresponding factor in
+    (\ref{eq:compression_operator_link_sum}) at the prescribed physical
+    coordinates. Their products and hence their sums agree.
+\end{proof}
