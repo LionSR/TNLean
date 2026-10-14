@@ -162,27 +162,8 @@ theorem multiblock_localCommutator_gap_of_openInteraction_gap
       (observableInsertionExpectation (A α) (ρ α) (localCommutatorObservable h X)).re := by
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
   let H (n : ℕ) := openInteractionHamiltonianES (Matrix.toEuclideanLin h) (N n)
-  have hEnergy :
-      let B (n : ℕ) := ((Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
-        (bulkObservable X (n + (R - 1)) (R - 1 + n))).toLinearMap
-      Tendsto (fun n =>
-        (inner ℂ (((B n).adjoint.comp ((H n).comp (B n) - (B n).comp (H n)))
-          (ψ n)) (ψ n)).re) atTop
-        (𝓝 (observableInsertionExpectation (A α) (ρ α)
-          (localCommutatorObservable h X)).re) := by
-    apply ((hP α).localCommutatorObservable_expectation_tendsto (hρ α) h X hR hk
-      N (fun n => by dsimp [N]; omega) ψ hGround hUnit).congr'
-    filter_upwards [] with n
-    have hH : Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ)
-        (openInteractionMatrix h (N n)) = (H n).toContinuousLinearMap :=
-      congrArg LinearMap.toContinuousLinearMap
-        (openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix
-          h hR (by dsimp [N]; omega)).symm
-    dsimp only
-    rw [map_mul, map_sub, map_mul, map_mul, ← Matrix.star_eq_conjTranspose,
-      map_star, ContinuousLinearMap.star_eq_adjoint, hH,
-      ← bulkObservable_eq_chainWindowOperator hk X (n + (R - 1)) (R - 1 + n)]
-    rfl
+  have hEnergy :=
+    (hP α).openInteraction_commutator_energy_tendsto (hρ α) h X hR hk ψ hGround hUnit
   exact multiblock_commutator_gap_of_bulkObservable_energy_limit A ρ hP hρ hDistinct
     α hk X hcenter (ℓ := fun n : ℕ => n + (R - 1)) (r := fun n => (R - 1) + n)
     (tendsto_add_atTop_nat (R - 1))

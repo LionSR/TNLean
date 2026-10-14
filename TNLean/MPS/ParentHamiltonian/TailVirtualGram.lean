@@ -142,9 +142,7 @@ theorem IsPrimitiveMPS.tailVirtualMapES_norm_four_pow_uniform
   let P := fixedPointProj (D := D) ρ htr
   let N := E - P
   let T := (Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ)) N
-  have hTP : IsTracePreservingMap E := by
-    intro X
-    exact Kraus.isTracePreservingMap_mapLM_of_isTP A hP.norm X
+  have hTP : IsTracePreservingMap E := Kraus.isTracePreservingMap_mapLM_of_isTP A hP.norm
   have hgap : spectralRadius ℂ T < 1 := by
     dsimp only [T, N, E, P]
     convert hP.complementary_transfer_map_gap using 1
