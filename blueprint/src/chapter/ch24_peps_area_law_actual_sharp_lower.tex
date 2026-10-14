@@ -20,17 +20,17 @@ The actual history tree and its conditional choices are retained.
     $\widetilde\Omega$ satisfies
     \begin{align}
         \widetilde H-e_0 I
-            \succeq \gamma
-                \bigl(I-|\widetilde\Omega\rangle
-                                        \langle\widetilde\Omega|\bigr),
+        \succeq \gamma
+        \bigl(I-|\widetilde\Omega\rangle
+        \langle\widetilde\Omega|\bigr),
         \qquad \gamma>0.
     \end{align}
     For every terminal and band, assume the original marginal moment
     estimate
     \begin{align}
         \log\mathbb E\exp(vZ_U)
-              \leq vS(U)+K_{\rm mom}v^2
-              \qquad (|v|\leq r_{\rm mom})
+        \leq vS(U)+K_{\rm mom}v^2
+        \qquad (|v|\leq r_{\rm mom})
     \end{align}
     for $U=Q_{jg},Y_{jg},(Q_{jg}\cup Y_{jg})^c$, where
     $K_{\rm mom}\geq0$, $10a\leq r_{\rm mom}$ and $10a\leq1$.
@@ -43,15 +43,15 @@ The actual history tree and its conditional choices are retained.
     projectors $\ell_C,\ell_R$, and assume
     \begin{align}
         2kS'-\varepsilon
-            \leq\log\dim\ell_C+\log\dim\ell_R.
+        \leq\log\dim\ell_C+\log\dim\ell_R.
     \end{align}
     Define
     \begin{align}
         g_{jg}
-            &=S(Q_{jg})+S((Q_{jg}\cup Y_{jg})^c)-S(Y_{jg}),\\
-        g_{\max}&=\max\bigl(\{0\}\cup\{g_{jg}\}_{j,g}\bigr),\\
-        r_k&=\log(k+1)+c\log(k+2)+a\varepsilon,
-            &b_k&=\tfrac12(k+2)^{-C_f}.
+                 & =S(Q_{jg})+S((Q_{jg}\cup Y_{jg})^c)-S(Y_{jg}),                          \\
+        g_{\max} & =\max\bigl(\{0\}\cup\{g_{jg}\}_{j,g}\bigr),                             \\
+        r_k      & =\log(k+1)+c\log(k+2)+a\varepsilon,
+                 & b_k                                            & =\tfrac12(k+2)^{-C_f}.
     \end{align}
     At every fill or charge interpolation before the horizon, let
     $N_k$ be its actual squared filtered norm, let $\mu_k$ be its
@@ -62,15 +62,15 @@ The actual history tree and its conditional choices are retained.
     For every $0<\tau\leq\tfrac12$, put
     \begin{align}
         L_g=2S'+(1-\tau)\sum_jw_jg_{jg}
-              -2\tau\log d-(3+a^{-1})h(\tau)-25K_{\rm mom}a.
+        -2\tau\log d-(3+a^{-1})h(\tau)-25K_{\rm mom}a.
     \end{align}
     Then
     \begin{align}
         \frac12\sum_g\left[
             ak\left(L_g-\frac{\delta_k}{\tau}
-                                        \max\{0,2S'+g_{\max}\}\right)
+            \max\{0,2S'+g_{\max}\}\right)
             -2|r_k|-|\log b_k|-\log2-\log(3/2)
-        \right]
+            \right]
         \leq-\log N_k.
     \end{align}
     The same prevector, labels, gap and moment data serve all these
@@ -88,9 +88,9 @@ The actual history tree and its conditional choices are retained.
     of compressed band means, its inverse-quarter-power norm and its
     normalized filtered vector exactly:
     \begin{align}
-        w_k&=M_k^{-1/4}Z^*\mathrm{pre}_k,
-            &N_k&=\|w_k\|^2,
-            &v_k&=Z\frac{w_k}{\|w_k\|}.
+        w_k & =M_k^{-1/4}Z^*\mathrm{pre}_k,
+            & N_k                           & =\|w_k\|^2,
+            & v_k                           & =Z\frac{w_k}{\|w_k\|}.
     \end{align}
     The actual fill and charge energy identities therefore identify the
     regional defect with $(\mu_k-e_0)/\gamma$ in that same vector,
@@ -111,8 +111,8 @@ The actual history tree and its conditional choices are retained.
     For one supplied label sequence $\ell_k$ and an entropy $S'$, put
     \begin{align}
         \varepsilon_k
-            &=2\bigl|\log\dim\ell_k-kS'\bigr|,\\
-        R_k^-&=\frac{
+              & =2\bigl|\log\dim\ell_k-kS'\bigr|, \\
+        R_k^- & =\frac{
             2|\log(k+1)+c\log(k+2)+a\varepsilon_k|
             +|\log(\tfrac12(k+2)^{-C_f})|
             +\log2+\log(3/2)}{ak}.
@@ -131,7 +131,7 @@ The actual history tree and its conditional choices are retained.
 
 \begin{proof}
     Apply $kS'-\log\dim\ell_k\leq
-    |\log\dim\ell_k-kS'|$ and multiply by two.
+        |\log\dim\ell_k-kS'|$ and multiply by two.
 \end{proof}
 
 \begin{theorem}[Vanishing lower remainder for the supplied labels]
@@ -170,10 +170,10 @@ The actual history tree and its conditional choices are retained.
     parameter, such that $R_k^-\to0$ and every actual fill or charge obeys
     \begin{align}
         \frac a2\sum_g\left[
-              L_g-\frac{\delta_k}{\tau}\max\{0,2S'+g_{\max}\}-R_k^-
-        \right]
+            L_g-\frac{\delta_k}{\tau}\max\{0,2S'+g_{\max}\}-R_k^-
+            \right]
         \leq\frac{-\log N_k}{k}
-              \qquad(0<\tau\leq\tfrac12).
+        \qquad(0<\tau\leq\tfrac12).
     \end{align}
     Here $N_k$, $\delta_k$, $L_g$ and the terminal weights are those
     of the same actual interpolation in the previous theorem.

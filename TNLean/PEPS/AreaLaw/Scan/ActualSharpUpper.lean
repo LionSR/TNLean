@@ -36,6 +36,129 @@ namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 open ActualTerminals
 
 open Classical in
+/-- The fixed terminal family has the common ordered regions and marginal
+moments used in the sharp upper comparison. This preparation precedes the
+replica count and the actual interpolation tree.
+Source: `07-comparators.tex`, lines 70–85 and 383–418;
+`08-scanner.tex`, lines 83–154 and 400–474, revision adc7f124. -/
+private theorem actualTerminal_sharpUpper_data
+    {q : ℕ} [NeZero q] {I : Type} [Fintype I] [LinearOrder I]
+    {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
+    (S : CollarScan (Site Λ) I)
+    (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
+    (Kmom r : ℝ) (L : ℕ) (hL : 8 * S.K * S.m ≤ L)
+    (Ωt : EuclideanSpace ℂ (Site Λ → Fin q))
+    (hmom : ∀ (s : ℕ) (hist : History S.K S.m S.M s) (g : Fin S.K),
+      (s ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state hist g),
+        ∀ u : ℝ, |u| ≤ r →
+          Real.log (Entropy.surprisalMoment
+            (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
+            u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2) ∧
+      (s + 1 ≤ S.n * S.m →
+        ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState hist g),
+          ∀ u : ℝ, |u| ≤ r →
+            Real.log (Entropy.surprisalMoment
+              (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
+              u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2)) :
+    let β := fun _ : Site Λ ↦ Fin q
+    let X := S.A.filter fun x ↦ x.val ∈ T
+    let σ := terminalPartition S (S.n * S.m)
+    let U := fun j g ↦ positiveNear S.depth (σ j g)
+    let Y := fun j g ↦ middle (σ j g)
+    (∀ j g, U j g ∪ Y j g = positiveNearMiddle S.depth (σ j g)) ∧
+    (∀ j j' g g', g < g' → U j g ∪ Y j g ⊆ U j' g') ∧
+    (∀ j g, Disjoint (U j g) (Y j g)) ∧
+    (∀ j g, Disjoint X (U j g ∪ Y j g)) ∧
+    (∀ j g (Q : Finset (Site Λ)),
+      Q = U j g ∨ Q = U j g ∪ Y j g ∨ Q = Y j g →
+      ∀ u : ℝ, |u| ≤ r →
+        Real.log (Entropy.surprisalMoment
+          (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian.eigenvalues u) ≤
+          u * vonNeumannEntropy (FiniteProduct.reducedPure β Ωt Q)
+            (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian + Kmom * u ^ 2) ∧
+    (∀ j g,
+      receiving (σ j g) false = X ∪ positiveNear S.depth (σ j g) ∧
+      receiving (σ j g) false ∪ middle (σ j g) =
+        X ∪ positiveNearMiddle S.depth (σ j g) ∧
+      receiving (σ j g) true = (X ∪ positiveNearMiddle S.depth (σ j g))ᶜ) := by
+  classical
+  intro β X σ U Y
+  have hdepthX : ∀ x ∈ X, S.depth x ≤ 0 := fun x hx ↦ by
+    simpa only [hdepth, Nat.cast_zero] using
+      (ambientDepth_le_iff_mem_dilation T hT x.val 0).mpr
+        ((ambientDilation_zero T).symm ▸ (Finset.mem_filter.mp hx).2)
+  have hmiddle : ∀ j g x, σ j g x = none → 0 < S.depth x := fun
+    | Sum.inl ⟨r, h⟩, g, x, hx =>
+      lt_of_lt_of_le (by decide : (0 : ℤ) < 1)
+        (Finset.mem_Icc.mp (S.state_depth_bounds h g hL x hx)).1
+    | Sum.inr ⟨r, h⟩, g, x, hx =>
+      lt_of_lt_of_le (by decide : (0 : ℤ) < 1)
+        (Finset.mem_Icc.mp (S.oldChargeState_depth_bounds h g hL x hx)).1
+  have hUYeq : ∀ j g, U j g ∪ Y j g = positiveNearMiddle S.depth (σ j g) :=
+    fun j g ↦ by
+      simp only [U, Y, positiveNear, positiveNearMiddle, Finset.filter_union,
+        (Finset.filter_eq_self (s := middle (σ j g))
+          (p := fun x ↦ 0 < S.depth x)).mpr
+          (fun x hx ↦ hmiddle j g x (Finset.mem_filter.mp hx).2)]
+  have hnest₀ : ∀ j j' g g', g < g' →
+      receiving (σ j g) false ∪ middle (σ j g) ⊆ receiving (σ j' g') false := fun
+    | Sum.inl ⟨_, h⟩, Sum.inl ⟨_, h'⟩, g, g', hgg' =>
+      S.state_near_middle_subset_later_near h h' g g' hgg'
+    | Sum.inl ⟨_, h⟩, Sum.inr ⟨_, h'⟩, g, g', hgg' =>
+      S.state_near_middle_subset_later_old_near h h' g g' hgg'
+    | Sum.inr ⟨_, h⟩, Sum.inl ⟨_, h'⟩, g, g', hgg' =>
+      S.old_near_middle_subset_later_state_near h h' g g' hgg'
+    | Sum.inr ⟨_, h⟩, Sum.inr ⟨_, h'⟩, g, g', hgg' =>
+      S.oldChargeState_near_middle_subset_later_near h h' g g' hgg'
+  have hnest : ∀ j j' g g', g < g' → U j g ∪ Y j g ⊆ U j' g' :=
+    fun j j' g g' hgg' ↦ by
+      exact (hUYeq j g).symm ▸
+        Finset.filter_subset_filter (p := fun x ↦ 0 < S.depth x) (hnest₀ j j' g g' hgg')
+  have hUY : ∀ j g, Disjoint (U j g) (Y j g) := fun j g ↦ by
+    simpa only [U, Y,
+      middle_eq_positiveNearMiddle_sdiff_positiveNear S.depth (σ j g) (hmiddle j g)] using
+      (disjoint_sdiff_self_right : Disjoint (positiveNear S.depth (σ j g))
+        (positiveNearMiddle S.depth (σ j g) \ positiveNear S.depth (σ j g)))
+  have hXY : ∀ j g, Disjoint X (U j g ∪ Y j g) :=
+    fun j g ↦ Finset.disjoint_left.mpr fun x hx hxy ↦
+      (not_lt_of_ge (hdepthX x hx))
+        (Finset.mem_filter.mp
+          (show x ∈ positiveNearMiddle S.depth (σ j g) from (hUYeq j g) ▸ hxy)).2
+  have hmomStatus : ∀ j g (Q : Finset (Site Λ)),
+      Q ∈ statusMarginalRegions S.depth (σ j g) →
+      ∀ u : ℝ, |u| ≤ r →
+        Real.log (Entropy.surprisalMoment
+          (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
+          u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2 := fun
+    | Sum.inl ⟨s, hist⟩, g, Q, hQ, u, hu =>
+      (hmom s.val hist g).1 (Nat.le_of_lt_succ s.isLt) Q hQ u hu
+    | Sum.inr ⟨s, hist⟩, g, Q, hQ, u, hu =>
+      (hmom s.val hist g).2 (Nat.succ_le_of_lt s.isLt) Q hQ u hu
+  have hmomQ : ∀ j g (Q : Finset (Site Λ)),
+      Q = U j g ∨ Q = U j g ∪ Y j g ∨ Q = Y j g →
+      ∀ u : ℝ, |u| ≤ r →
+        Real.log (Entropy.surprisalMoment
+          (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian.eigenvalues u) ≤
+          u * vonNeumannEntropy (FiniteProduct.reducedPure β Ωt Q)
+            (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian + Kmom * u ^ 2 := by
+    intro j g Q hQ u hu
+    have hmem : Q ∈ statusMarginalRegions S.depth (σ j g) := by
+      rcases hQ with rfl | rfl | rfl
+      · simp [statusMarginalRegions, U]
+      · simp [statusMarginalRegions, hUYeq]
+      · simp [statusMarginalRegions, Y]
+    simpa only [regionalEntropy_eq_finiteProduct, FiniteProduct.entropy,
+      reducedState_eq_finiteProduct, β] using! hmomStatus j g Q hmem u hu
+  have hregions : ∀ j g,
+      receiving (σ j g) false = X ∪ positiveNear S.depth (σ j g) ∧
+      receiving (σ j g) false ∪ middle (σ j g) =
+        X ∪ positiveNearMiddle S.depth (σ j g) ∧
+      receiving (σ j g) true = (X ∪ positiveNearMiddle S.depth (σ j g))ᶜ := fun
+    | Sum.inl ⟨_, h⟩, g => state_receiving_regions hT S hdepth h g
+    | Sum.inr ⟨_, h⟩, g => oldChargeState_receiving_regions hT S hdepth h g
+  exact ⟨hUYeq, hnest, hUY, hXY, hmomQ, hregions⟩
+
+open Classical in
 /-- The supplied-label sharp upper estimate at every actual fill and charge
 root. The entropy contribution uses the actual terminal-tree weights, and the
 quadratic moment cost is retained. The per-band weight is `a`, the metric
@@ -122,78 +245,14 @@ theorem eventually_actualScan_suppliedPrevector_sharp_upper
       (K := Kmom) β Ωt X E hΩt hzQ ha har ha1 ell hmass
   refine ⟨c, hc, hlim S.K, hu.mono fun k hk s hs p ↦ ?_⟩
   intro σ gpost p₀ bound step Nfill Ncharge
-  have hdepthX : ∀ x ∈ X, S.depth x ≤ 0 := fun x hx ↦ by
-    simpa only [hdepth, Nat.cast_zero] using
-      (ambientDepth_le_iff_mem_dilation T hT x.val 0).mpr
-        ((ambientDilation_zero T).symm ▸ (Finset.mem_filter.mp hx).2)
-  have hmiddle : ∀ j g x, σ j g x = none → 0 < S.depth x := fun
-    | Sum.inl ⟨r, h⟩, g, x, hx =>
-      lt_of_lt_of_le (by decide : (0 : ℤ) < 1)
-        (Finset.mem_Icc.mp (S.state_depth_bounds h g hL x hx)).1
-    | Sum.inr ⟨r, h⟩, g, x, hx =>
-      lt_of_lt_of_le (by decide : (0 : ℤ) < 1)
-        (Finset.mem_Icc.mp (S.oldChargeState_depth_bounds h g hL x hx)).1
   let U := fun j g ↦ positiveNear S.depth (σ j g)
   let Y := fun j g ↦ middle (σ j g)
-  have hUYeq : ∀ j g, U j g ∪ Y j g = positiveNearMiddle S.depth (σ j g) :=
-    fun j g ↦ by
-      simp only [U, Y, positiveNear, positiveNearMiddle, Finset.filter_union,
-        (Finset.filter_eq_self (s := middle (σ j g))
-          (p := fun x ↦ 0 < S.depth x)).mpr
-          (fun x hx ↦ hmiddle j g x (Finset.mem_filter.mp hx).2)]
-  have hnest₀ : ∀ j j' g g', g < g' →
-      receiving (σ j g) false ∪ middle (σ j g) ⊆ receiving (σ j' g') false := fun
-    | Sum.inl ⟨_, h⟩, Sum.inl ⟨_, h'⟩, g, g', hgg' =>
-      S.state_near_middle_subset_later_near h h' g g' hgg'
-    | Sum.inl ⟨_, h⟩, Sum.inr ⟨_, h'⟩, g, g', hgg' =>
-      S.state_near_middle_subset_later_old_near h h' g g' hgg'
-    | Sum.inr ⟨_, h⟩, Sum.inl ⟨_, h'⟩, g, g', hgg' =>
-      S.old_near_middle_subset_later_state_near h h' g g' hgg'
-    | Sum.inr ⟨_, h⟩, Sum.inr ⟨_, h'⟩, g, g', hgg' =>
-      S.oldChargeState_near_middle_subset_later_near h h' g g' hgg'
-  have hnest : ∀ j j' g g', g < g' → U j g ∪ Y j g ⊆ U j' g' :=
-    fun j j' g g' hgg' ↦ by
-      exact (hUYeq j g).symm ▸
-        Finset.filter_subset_filter (p := fun x ↦ 0 < S.depth x) (hnest₀ j j' g g' hgg')
-  have hUY : ∀ j g, Disjoint (U j g) (Y j g) := fun j g ↦ by
-    simpa only [U, Y,
-      middle_eq_positiveNearMiddle_sdiff_positiveNear S.depth (σ j g) (hmiddle j g)] using
-      (disjoint_sdiff_self_right : Disjoint (positiveNear S.depth (σ j g))
-        (positiveNearMiddle S.depth (σ j g) \ positiveNear S.depth (σ j g)))
-  have hXY : ∀ j g, Disjoint X (U j g ∪ Y j g) :=
-    fun j g ↦ Finset.disjoint_left.mpr fun x hx hxy ↦
-      (not_lt_of_ge (hdepthX x hx))
-        (Finset.mem_filter.mp
-          (show x ∈ positiveNearMiddle S.depth (σ j g) from (hUYeq j g) ▸ hxy)).2
+  obtain ⟨hUYeq, hnest, hUY, hXY, hmomQ, hregions⟩ :=
+    actualTerminal_sharpUpper_data hT S hdepth Kmom r L hL Ωt hmom
   have hd : 0 < d := Finset.card_pos.mpr
     (Finset.nonempty_iff_ne_empty.mpr fun hE ↦ by
       simp [hE, Matrix.IsHermitian.spectralRestrictionMass] at hzQ)
   let : NeZero d := ⟨Nat.ne_of_gt hd⟩
-  have hmomStatus : ∀ j g (Q : Finset (Site Λ)),
-      Q ∈ statusMarginalRegions S.depth (σ j g) →
-      ∀ u : ℝ, |u| ≤ r →
-        Real.log (Entropy.surprisalMoment
-          (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-          u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2 := fun
-    | Sum.inl ⟨s, hist⟩, g, Q, hQ, u, hu =>
-      (hmom s.val hist g).1 (Nat.le_of_lt_succ s.isLt) Q hQ u hu
-    | Sum.inr ⟨s, hist⟩, g, Q, hQ, u, hu =>
-      (hmom s.val hist g).2 (Nat.succ_le_of_lt s.isLt) Q hQ u hu
-  have hmomQ : ∀ j g (Q : Finset (Site Λ)),
-      Q = U j g ∨ Q = U j g ∪ Y j g ∨ Q = Y j g →
-      ∀ u : ℝ, |u| ≤ r →
-        Real.log (Entropy.surprisalMoment
-          (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian.eigenvalues u) ≤
-          u * vonNeumannEntropy (FiniteProduct.reducedPure β Ωt Q)
-            (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian + Kmom * u ^ 2 := by
-    intro j g Q hQ u hu
-    have hmem : Q ∈ statusMarginalRegions S.depth (σ j g) := by
-      rcases hQ with rfl | rfl | rfl
-      · simp [statusMarginalRegions, U]
-      · simp [statusMarginalRegions, hUYeq]
-      · simp [statusMarginalRegions, Y]
-    simpa only [regionalEntropy_eq_finiteProduct, FiniteProduct.entropy,
-      reducedState_eq_finiteProduct, β] using! hmomStatus j g Q hmem u hu
   obtain ⟨N, ZS, hZS, hZSZS⟩ :=
     (isStarProjection_symProj
       (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k)).exists_matrix_range_isometry
@@ -229,13 +288,6 @@ theorem eventually_actualScan_suppliedPrevector_sharp_upper
       (fun j g ↦ (Finset.disjoint_union_right.mp (hXY j g)).1)
       (fun j g ↦ (Finset.disjoint_union_right.mp (hXY j g)).2)
       hUY hnest hmomQ tree (1 / 4) (by norm_num)
-  have hregions : ∀ j g,
-      receiving (σ j g) false = X ∪ positiveNear S.depth (σ j g) ∧
-      receiving (σ j g) false ∪ middle (σ j g) =
-        X ∪ positiveNearMiddle S.depth (σ j g) ∧
-      receiving (σ j g) true = (X ∪ positiveNearMiddle S.depth (σ j g))ᶜ := fun
-    | Sum.inl ⟨_, h⟩, g => state_receiving_regions hT S hdepth h g
-    | Sum.inr ⟨_, h⟩, g => oldChargeState_receiving_regions hT S hdepth h g
   have hbound {Hist : Type} [DecidableEq Hist] {Choice : Hist → Type}
       [∀ h, DecidableEq (Choice h)]
       (D : ReplicaTransport.TransportData (Site Λ ⊕ Bool) S.K Hist Choice)
