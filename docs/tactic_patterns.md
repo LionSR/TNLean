@@ -24,6 +24,57 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Named comparison of arbitrary word evaluations — promoted (2026-10-14)
+
+- **Pattern:** Retain two constructed words and their own layouts in a named
+  proposition defined literally by heterogeneous equality of their evaluations.
+- **Seen:** `preparedWordEvalComparison` in `IncidentSourceWordComparison.lean`,
+  `wordEvalComparison` in `IncidentSampledEndpointComparison.lean`, the generic
+  coordinate and original-word comparisons in `IncidentSampledPhysicalFactor.lean`,
+  and the sampled-to-incident comparison in
+  `SampledEndpointIncidentComparison.lean`, under `PEPS/Approximation/`.
+- **Abstraction:** `Word.IsEvalComparison` in `WordEvalComparison.lean` states this
+  common comparison. The two existing private predicates delegate to it with
+  unchanged signatures; their theorem statements and proofs are unchanged.
+  `Word.IsEvalComparison.eval_eq` reuses Core `eq_of_heq` on fixed layouts.
+  `Word.isEvalComparison_of_eval_eq` reuses Core `heq_of_eq` with both word
+  arguments explicit; the three physical component comparisons use it before
+  the actual operator-equality proof is supplied.
+- **Purpose:** Match propositions on arbitrary words before evaluating concrete
+  original-circuit or sampled-operator expressions. The physical-coordinate
+  argument derives all three component comparisons from the existing word
+  results and converts them to ordinary equality only for abstract words.
+- **Notes:** Four files now use the shared predicate; no third copy is added.
+  The promotion adds no original hypothesis or proof limit. It does not use the
+  different selected-local-part predicate. Hosted verification and timing remain
+  pending. The new provider has 45 lines; the two delegate body replacements and
+  imports add two lines in total to those existing files.
+
+
+### Restriction of equal words with dependent source proofs — promoted (2026-10-13)
+
+- **Pattern:** Transport the word together with its source-free proof before
+  comparing restrictions. Ordinary rewriting may keep a generated proof fixed
+  while changing the word on which it depends.
+- **Seen:** The unequal-owner source case of `WordSelectedOwnerLocalPart`,
+  the two actual gate words in `AllPartySingletonComparison`, and the fixed-layout
+  sampled-word comparison in `SampledEndpointIncidentComparison`.
+- **Abstraction:** The existing `congrArg` and `congrArg₂` transport the complete
+  comparison proposition. For source-free words on a fixed layout, `Subtype.ext`
+  transports the word together with its proof before `congrArg` is applied.
+  Changes of layouts use the existing `Word.restrict_castLayouts`.
+- **Refactor:** Each comparison now applies these existing congruence lemmas
+  before the circuit expressions are specialized. No additional tactic or
+  alias for a general equality lemma is introduced. Public hypotheses and
+  proof limits are unchanged; Lean verification remains pending.
+
+- **Shared selected-word comparison:** `Word.IsSelectedLocalPartComparison` in
+  `AllPartySingletonComparison` records the exact selected remaining evaluation.
+  Its single-gate theorem supplies the circuit comparison directly from the
+  existing incident and nonincident arguments. The circuit's superseded private
+  lifting lemma is removed. Two named axiom checks and two unmarked blueprint
+  entries accompany the new declarations; Lean verification remains pending.
+
 ### Actual sampled local physical matrices — promoted (2026-10-12)
 
 - **Pattern:** The same mixed physical trace, with independent chronological
@@ -7001,11 +7052,15 @@ spectral split → block extraction → MPV calculation → strict bounds
   transport the actual regional lift through the existing configuration
   equivalence and pair its pure state by the existing partial trace.
 - **Seen:** `PEPS/AreaLaw/RegularizedPatchCoordinate`,
-  `RegularizedPatchStationarity`, and `RegularizedPatchMarginal`.
+  `RegularizedPatchStationarity`, `RegularizedPatchMarginal`, and
+  `RegularizedPatchDiagonalVariation`.
 - **Abstraction:** the coordinate module factors the insertion linear map once;
   the marginal module exposes one full-region/global configuration isometry and
   one arbitrary-complex expectation theorem. Existing real-power covariance,
   exponential derivative, and finite-product reduced-state results are reused.
+  The diagonal variation reuses positivity under unitary conjugation and cyclic
+  trace to keep one changed density feasible, then restricts the norm minimum
+  by monotonicity of squaring nonnegative numbers.
 - **Notes:** these are distinct proofs, not three copies of one tactic block.
   No custom tactic or new optimizer/state structure is justified. Keep the
   actual product order and complex inner-product orientation explicit; neither
@@ -7450,6 +7505,22 @@ spectral split → block extraction → MPV calculation → strict bounds
   `Fin.sum_univ_eq_sum_range` and `Finset.sum_range_sub'` rather than proving a
   second finite-sum cancellation theorem.
 
+### Selected affected owners have singleton fibres — promoted (2026-10-13)
+
+- **Pattern:** prove that an original party maps to the retained owner of an
+  affected party if and only if the two original parties are equal, by splitting
+  on whether the first party is affected.
+- **Seen:** three occurrences, in `AllPartySingletonComparison.lean`,
+  `AllPartySingletonCircuitComparison.lean`, and
+  `IncidentSourceWordComparison.lean`, under `PEPS/Approximation/`.
+- **Abstraction:** the existing `affectedOwner_eq_iff` in `AffectedOwners.lean`.
+  Its second alternative requires both parties to be exterior and is excluded
+  by the retained party's hypothesis `A p = true`.
+- **Refactor:** each proof applies the characterization directly and simplifies
+  the fixed retained owner. The three blocks lose five lines each; theorem
+  statements, labels, and source-register identifications are unchanged. No
+  additional lemma or tactic is introduced.
+
 
 ### Restricted mixed physical coordinate trace — promoted (2026-10-13)
 
@@ -7468,6 +7539,54 @@ spectral split → block extraction → MPV calculation → strict bounds
   using the existing `matrix_repr_eval_eq_toMatrix`. The actual circuit
   is substituted afterward. No hypotheses or proof limits are added.
   The extracted definition has a named axiom check.
+
+### Restricting framed words before owner relabelling — candidate (2026-10-14)
+
+- **Pattern:** Restrict a source-free word with an ordered spectator prefix,
+  then relabel its owners. Compare this evaluation with the selected word
+  relabelled first and framed by the relabelled selected spectator list.
+- **Seen:** The private `eval_mapOwner_restrict_frameList` in
+  `WordSelectedOwnerLocalPart.lean` and `restrict_frameList_mapOwner_eval_heq`
+  in `IncidentSourceWordComparison.lean`, under `PEPS/Approximation/`.
+- **Abstraction:** Both reuse `Word.restrict_frameList_eval_heq`,
+  `Word.eval_mapOwner_heq`, `Word.mapOwner_frameList_heq`, and the existing
+  owner-map append identities before substituting concrete words. At a third
+  occurrence, share this calculation as a word lemma; no new tactic is needed.
+- **Notes:** Two known occurrences. The preparation application retains the
+  original spectator and source order; no hypothesis or proof limit is added.
+  Hosted verification of the new application remains pending.
+
+### Equality from two word-evaluation comparisons — candidate (2026-10-14)
+
+- **Pattern:** Compose two heterogeneous evaluation comparisons through an
+  intermediate word, then obtain an equality when the first and last words
+  have identical input and output layouts.
+- **Seen:** The private `selectedPreparedWordComparison_of_word_heq` in
+  `IncidentSourceWordComparison.lean` and `eval_eq_of_two_word_comparisons` in
+  `IncidentSampledEndpointComparison.lean`, under `PEPS/Approximation/`.
+- **Abstraction:** Both use the existing `Word.eval_heq`, `HEq.trans` and
+  `eq_of_heq` as applicable. The calculations are checked for arbitrary words
+  before the actual circuit and sampled maps are supplied. The latter private
+  helper isolates a concrete composition that exceeded the checking limit.
+- **Notes:** Two known occurrences, with different intermediate premises. At a
+  third occurrence, share the weakest word-level statement that covers the
+  applications. Public hypotheses and proof limits remain unchanged; hosted
+  acceptance and timing of the new application remain pending.
+
+### Coordinate matrices of selected words — candidate (2026-10-14)
+
+- **Pattern:** Form a word's coordinate matrix in prescribed orthonormal
+  input and output bases using `LinearMap.toMatrix`.
+- **Seen:** Three matrix initializers and three coordinate terms in the generic
+  comparison in `PEPS/Approximation/IncidentSampledPhysicalFactor.lean`.
+- **Abstraction:** The private `wordCoordinateMatrix` applies the existing
+  matrix constructor to arbitrary words and bases before the actual incident
+  data are supplied. The existing `matrix_repr_eval_eq_toMatrix` identifies
+  the result with the coordinate-entry formula. The partial trace is unchanged.
+- **Notes:** Six calls in one file. A matching use in another file would meet
+  the promotion threshold. This isolates the repeated basis conversion at the
+  closed build's checking-limit diagnostic; no hypothesis or limit is added.
+  Hosted acceptance and timing remain pending.
 
 ### Fixed vectors under replica-coordinate equivalences — candidate (2026-10-13)
 

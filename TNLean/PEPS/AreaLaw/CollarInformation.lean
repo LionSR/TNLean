@@ -230,10 +230,10 @@ theorem abs_mutualInformation_sub_le_of_traceDistance
           (trace_reducedPure β ψ hψ X)))))
   exact h.trans (by gcongr)
 
-/-- **The transfer to the original ground state.** Let `Ω, Ω̃` be normalized vectors
+/-- **The transfer to the original ground state.** Let `Ω, Ω'` be normalized vectors
 at trace distance at most `C₁ n^(-500)`, and let `log dim X ≤ C₂ n²` for an integer
 `n ≥ 1`. Then for every region `J` disjoint from `X`,
-`I_Ω(X : J) ≤ I_Ω̃(X : J) + 8 √C₁ (1 + C₂) n^(-248)`. The constant depends only on
+`I_Ω(X : J) ≤ I_Ω'(X : J) + 8 √C₁ (1 + C₂) n^(-248)`. The constant depends only on
 `C₁, C₂`, not on the size of `J`.
 Source: `08-scanner.tex`, lines 936–942. -/
 theorem mutualInformation_le_add_of_traceDistance_le_rpow
