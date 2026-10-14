@@ -1,0 +1,87 @@
+% Figure arealaw2d_fixed_factor.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL App. D 2 (fixed factors, Eq. al:s6:fixed), unnumbered
+% display.
+% Source: arXiv OpenAI2026AreaLaw, sections/05-replicas.tex:436-449 (eq. (6.16)
+% replicas:fixed-factor), drawn at k = 3.
+% Formula: W_{BQ,3} (phi^{(x)3} (x) z) = phi^{(x)3} (x) W_{Q,3} z.
+% Ink-to-index: wires from top to bottom are the three copies of B (rows 1-3)
+% and, after a blank row 4, the three copies of Q (rows 5-7), copies told apart
+% by position; B and Q are disjoint. The west brackets B^{(x)3} and Q^{(x)3} of
+% the left panel name the two groups; the right panel has the same rows. The
+% three neutral dots are the fixed pure vector phi on each copy of B; z is a
+% vector on Q^{(x)3}. Left: the metric of BQ acts on all six wires (the blank
+% row passes under the box, no port). Right: B passes untouched and the metric
+% of Q acts on the Q wires; its name sits at pos=n in the blank row, the same
+% station as W_{BQ,3}. Reason: every simultaneous permutation of BQ fixes
+% phi^{(x)3} and acts on Q as the same permutation, and W_{R,3} is the same
+% central combination of copy permutations on every subsystem R (one label
+% function, common padding dimension). The same holds for the entropy
+% operator F_{R,3} and every real power of W. AL Sec. 8 uses it with
+% phi = B_{XC}, a Bell vector between two factors of B.
+% Boundary signature: (phys:w)x6 in both panels.
+% Label macros: none.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=6, bonds=none, size=l]
+        \tn[at=(1,2), name=ffEndBa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,2), name=ffEndBb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,2), name=ffEndBc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,2), name=ffEndQa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,2), name=ffEndQb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,2), name=ffEndQc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,4), name=ffW, skin=box, wires=7, label pos=n,
+            ports={180@1:physical, 180@2:physical, 180@3:physical, 180@5:physical,
+                    180@6:physical, 180@7:physical, 0@1:physical, 0@2:physical,
+                    0@3:physical, 0@5:physical, 0@6:physical, 0@7:physical}]{W_{BQ,3}}
+        \tn[at=(1,6), name=ffPhiA, skin=dot, label pos=e, ports={180:physical}]{\phi}
+        \tn[at=(2,6), name=ffPhiB, skin=dot, label pos=e, ports={180:physical}]{\phi}
+        \tn[at=(3,6), name=ffPhiC, skin=dot, label pos=e, ports={180:physical}]{\phi}
+        \tn[at=(5,6), name=ffZ, skin=box, wires=3, label pos=e,
+            ports={180@1:physical, 180@2:physical, 180@3:physical}]{z}
+        \tnwire{ffW.180@1}{ffEndBa.0}
+        \tnwire{ffW.180@2}{ffEndBb.0}
+        \tnwire{ffW.180@3}{ffEndBc.0}
+        \tnwire{ffW.180@5}{ffEndQa.0}
+        \tnwire{ffW.180@6}{ffEndQb.0}
+        \tnwire{ffW.180@7}{ffEndQc.0}
+        \tnwire{ffPhiA.180}{ffW.0@1}
+        \tnwire{ffPhiB.180}{ffW.0@2}
+        \tnwire{ffPhiC.180}{ffW.0@3}
+        \tnwire{ffZ.180@1}{ffW.0@5}
+        \tnwire{ffZ.180@2}{ffW.0@6}
+        \tnwire{ffZ.180@3}{ffW.0@7}
+        \tn[at=(1,1), name=ffGrpBTop, skin=none]{}
+        \tn[at=(3,1), name=ffGrpBBot, skin=none]{}
+        \tn[at=(5,1), name=ffGrpQTop, skin=none]{}
+        \tn[at=(7,1), name=ffGrpQBot, skin=none]{}
+        \tnmark[form=bracket, label pos=w]{(1,1) .. (3,1)}{$B^{\otimes3}$}
+        \tnmark[form=bracket, label pos=w]{(5,1) .. (7,1)}{$Q^{\otimes3}$}
+    \end{tenkz}
+    $\;=\;$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire}, cols=5, bonds=none, size=l]
+        \tn[at=(1,1), name=ffEndBa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), name=ffEndBb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=ffEndBc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,1), name=ffEndQa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,1), name=ffEndQb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,1), name=ffEndQc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,3), name=ffW, skin=box, wires=3, label pos=n,
+            ports={180@1:physical, 180@2:physical, 180@3:physical,
+                    0@1:physical, 0@2:physical, 0@3:physical}]{W_{Q,3}}
+        \tn[at=(1,5), name=ffPhiA, skin=dot, label pos=e, ports={180:physical}]{\phi}
+        \tn[at=(2,5), name=ffPhiB, skin=dot, label pos=e, ports={180:physical}]{\phi}
+        \tn[at=(3,5), name=ffPhiC, skin=dot, label pos=e, ports={180:physical}]{\phi}
+        \tn[at=(5,5), name=ffZ, skin=box, wires=3, label pos=e,
+            ports={180@1:physical, 180@2:physical, 180@3:physical}]{z}
+        \tnwire{ffPhiA.180}{ffEndBa.0}
+        \tnwire{ffPhiB.180}{ffEndBb.0}
+        \tnwire{ffPhiC.180}{ffEndBc.0}
+        \tnwire{ffW.180@1}{ffEndQa.0}
+        \tnwire{ffW.180@2}{ffEndQb.0}
+        \tnwire{ffW.180@3}{ffEndQc.0}
+        \tnwire{ffZ.180@1}{ffW.0@1}
+        \tnwire{ffZ.180@2}{ffW.0@2}
+        \tnwire{ffZ.180@3}{ffW.0@3}
+    \end{tenkz}
+\end{tenkzequation}

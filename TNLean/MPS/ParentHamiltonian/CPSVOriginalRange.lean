@@ -430,6 +430,17 @@ theorem IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroundSpaceSpanning
     hCBNT.blocks_not_gaugePhaseEquiv
   have hBlk : ∀ j, Kraus.IsNBlkInjective (C j) (D ^ 4) := fun j =>
     (hNormal j).isNBlkInjective_cap_pow_four (hDimLe j)
+  have hLocal :
+      groundSpace A Lmax =
+        groundSpace (toTensorFromBlocks (d := d) (fun _ => 1) C) Lmax := by
+    simpa [B, dim] using
+      data.groundSpace_eq_representativeGaugeSum ref hGauge hLmaxPos
+  suffices h : ∃ L ≤ Lmax, HasParentHamiltonianGroundSpaceSpanning
+      (toTensorFromBlocks (d := d) (fun _ => 1) C) L C by
+    obtain ⟨L, hL, hDirect⟩ := h
+    exact ⟨data.phaseClasses.g, dim, C, Lmax, hCBNT, hLmaxPos, hLmaxDim, le_rfl,
+      (hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_le
+        (fun _ => 1) C (by simp) hDirect hL).of_groundSpace_eq hLocal⟩
   by_cases hCountZero : data.phaseClasses.g = 0
   · have hOne : WordTupleSpanTop C 1 := by
       let : IsEmpty (Fin data.phaseClasses.g) := by
@@ -452,16 +463,7 @@ theorem IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroundSpaceSpanning
       dsimp [Lmax]
       have hD5 : 0 < D ^ 5 := Nat.pow_pos (NeZero.pos D)
       omega
-    have hDirect :=
-      hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_le
-        (fun _ => 1) C (by simp) hDirectSmall hTwoLe
-    have hLocal :
-        groundSpace A Lmax =
-          groundSpace (toTensorFromBlocks (d := d) (fun _ => 1) C) Lmax := by
-      simpa [B, dim] using
-        data.groundSpace_eq_representativeGaugeSum ref hGauge hLmaxPos
-    exact ⟨data.phaseClasses.g, dim, C, Lmax, hCBNT, hLmaxPos, hLmaxDim,
-      le_rfl, hDirect.of_groundSpace_eq hLocal⟩
+    exact ⟨2, hTwoLe, hDirectSmall⟩
   by_cases hCountOne : data.phaseClasses.g = 1
   · let L₀ := D ^ 4
     let L := L₀ + 1
@@ -512,16 +514,7 @@ theorem IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroundSpaceSpanning
     have hLBound : L ≤ Lmax := by
       simpa [L, L₀, Lmax] using
         pow_four_add_one_le_three_mul_pow_five (NeZero.pos D)
-    have hDirectMax :=
-      hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_le
-        (fun _ => 1) C (by simp) hDirect hLBound
-    have hLocal :
-        groundSpace A Lmax =
-          groundSpace (toTensorFromBlocks (d := d) (fun _ => 1) C) Lmax := by
-      simpa [B, dim] using
-        data.groundSpace_eq_representativeGaugeSum ref hGauge hLmaxPos
-    exact ⟨data.phaseClasses.g, dim, C, Lmax, hCBNT, hLmaxPos, hLmaxDim,
-      le_rfl, hDirectMax.of_groundSpace_eq hLocal⟩
+    exact ⟨L, hLBound, hDirect⟩
   · have hCountTwo : 2 ≤ data.phaseClasses.g := by omega
     let L₀ := D ^ 4
     let base := (data.phaseClasses.g - 1) *
@@ -571,15 +564,6 @@ theorem IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroundSpaceSpanning
         _ ≤ 3 * D ^ 5 :=
           three_mul_pred_mul_pow_four_add_one_add_pow_four_le_three_mul_pow_five
             (NeZero.pos D)
-    have hDirectMax :=
-      hasParentHamiltonianGroundSpaceSpanning_toTensorFromBlocks_of_le
-        (fun _ => 1) C (by simp) hDirect (by simpa [Lmax] using hLBound)
-    have hLocal :
-        groundSpace A Lmax =
-          groundSpace (toTensorFromBlocks (d := d) (fun _ => 1) C) Lmax := by
-      simpa [B, dim] using
-        data.groundSpace_eq_representativeGaugeSum ref hGauge hLmaxPos
-    exact ⟨data.phaseClasses.g, dim, C, Lmax, hCBNT, hLmaxPos, hLmaxDim,
-      le_rfl, hDirectMax.of_groundSpace_eq hLocal⟩
+    exact ⟨L, by simpa [Lmax] using hLBound, hDirect⟩
 
 end MPSTensor
