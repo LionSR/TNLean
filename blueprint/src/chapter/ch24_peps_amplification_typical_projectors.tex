@@ -30,7 +30,7 @@ that each one fails. The rest of that proof is not treated here.
     \label{thm:al_amp_typical_projection_cut}
     \lean{TNLean.PEPS.AreaLaw.typicalProjection_failure_le_surprisalTail}
     \leanok
-    \uses{def:al_amp_typical_projection}
+    \uses{def:al_amp_typical_projection, thm:area_law_marginal_tails}
     Let $\Omega$ be a unit vector, $A\subseteq\Lambda$ and $w$ real. Then
     $P_A^w$ is an orthogonal projection commuting with $\rho_A$. Every
     selected eigenvalue satisfies $p_j>0$ and
@@ -52,8 +52,7 @@ that each one fails. The rest of that proof is not treated here.
     \label{thm:al_amp_typical_failure}
     \lean{TNLean.PEPS.AreaLaw.exists_typicalProjection_failure_le_stretchedExp}
     \leanok
-    \uses{thm:area_law_marginal_tails, thm:area_law_tail_parameter,
-        thm:al_amp_typical_projection_cut}
+    \uses{def:al_amp_typical_projection}
     Fix $q\ge1$, a range $R$, a strength $J\ge0$, a gap $\Delta>0$ and
     $C_0\ge0$. There are constants $C,c>0$ with the following property.
     Let $n\ge1$, let $H$ be a range-$R$ interaction of strength $J$ on a
@@ -66,6 +65,8 @@ that each one fails. The rest of that proof is not treated here.
     \end{align*}
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:area_law_marginal_tails, thm:area_law_tail_parameter,
+        thm:al_amp_typical_projection_cut}
     Let $C_1$ be the constant of Theorem~\ref{thm:area_law_tail_parameter}
     and put $\vartheta=J/\Delta$. Then
     $\mathcal B_A\le C_1(1+C_0n)\le C_1(1+C_0)n$. By
@@ -83,7 +84,7 @@ that each one fails. The rest of that proof is not treated here.
     \lean{TNLean.PEPS.AreaLaw.exists_typicalProjection_failure_le_inv_pow,
         TNLean.PEPS.AreaLaw.exists_typicalProjectors_three_cuts}
     \leanok
-    \uses{thm:al_amp_typical_failure, thm:al_amp_typical_projection_cut}
+    \uses{def:al_amp_typical_projection}
     Fix $q$, $R$, $J$, $\Delta$ and $C_0$ as in
     Theorem~\ref{thm:al_amp_typical_failure}, and an integer $K\ge0$.
     There is a threshold $N$, depending only on these data, such that the
@@ -102,6 +103,7 @@ that each one fails. The rest of that proof is not treated here.
     preceding the Schmidt expansion of $\Omega$.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:al_amp_typical_failure, thm:al_amp_typical_projection_cut}
     The bound $C\exp(-cn^{1/10})$ of
     Theorem~\ref{thm:al_amp_typical_failure} is eventually at most
     $n^{-2K}$, because $x^{20K}\mathrm e^{-cx}\to0$ as $x\to\infty$.
