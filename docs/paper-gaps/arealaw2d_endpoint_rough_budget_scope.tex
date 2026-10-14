@@ -1,0 +1,66 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\doclink}[1]{%
+    \href{https://sirui-lu.com/TNLean/docs/#1.html}{\path{#1}}}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{The Same Physical Endpoint Budget for Charge Selection}
+\author{}
+\date{October 14, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+The initial floor and final rough comparison of
+Ref.~\cite{OpenAI2026AreaLaw} concern one supplied physical prevector.
+The final fill at $(nm,0)$ is exactly the last charge at $(nm-1,1)$;
+the rough theorem is not applied outside its stated horizon.
+For fixed physical data, the resulting endpoint loss obeys
+\begin{align}
+    \frac{\log N_k^{\rm initial}-\log N_k^{\rm final}}k
+      &\leq2\log d-\log z+
+        aK\left(\frac{B_{\rm sh}}z+1+3nD\log q\right)+R_k,\nonumber\\
+    R_k&=R_k^{\rm Bell}+C_i\frac{\log(k+2)}k\longrightarrow0.
+    \label{eq:endpoint_scope_loss}
+\end{align}
+The general estimate takes the truncated prefix entropy bound as an
+explicit input.  Its source specialization derives that input from the
+original-state entropy hypothesis, the same quantitative trace estimate
+and the compact collar volume, giving
+$B_{\rm sh}=C_e(nL^e+n)+n^{-247}$.
+Neither a new state nor a target set nor a label sequence is selected.
+\footnote{Declarations:
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.eventually_actualScan_suppliedPrevector_endpoint_budget}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/ActualEndpointRoughBudget}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_source_actualScan_suppliedPrevector_endpoint_budget}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/SourceEndpointRoughBudget}.}
+
+The exact accumulated transport error $2nm\,\beta_k/k$ is retained by
+replacing $C_i$ with $C_i+2nmC_\beta$ when
+$\beta_k\leq C_\beta\log(k+2)$.  At the already selected charge point,
+the entropy-defect density is bounded by this normalized numerator
+multiplied by $2(C_1+1)/(aKnm(p_1-p_0))$.
+No target estimate for the endpoint loss or a small density is postulated.
+The scalar density implication consumes the actual selector's established
+output and performs no second selection.
+
+The constants for these replica estimates are fixed after the physical
+data and before the replica limit.  The continuity threshold precedes
+the finite physical system and its entropy coefficient and exponent.
+A bound on the remaining physical target entropy, the literal rounded
+scale estimates, transport coefficient powers and the shrinking parameter
+interval must still turn the displayed density budget into the desired
+decaying source power.  The same-point energy substitution, entropy
+telescope and final absorption remain open.  No full scanner theorem,
+Proposition~9.6 or area law is claimed here.
+\footnote{Source: \texttt{07-comparators.tex}, lines 332--381;
+    \texttt{08-scanner.tex}, lines 353--357, 399--404 and 457--490;
+    revision \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

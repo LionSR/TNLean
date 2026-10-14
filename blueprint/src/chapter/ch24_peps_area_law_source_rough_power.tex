@@ -1,0 +1,125 @@
+\section{The physical rough budget and its principal density terms}
+\label{sec:arealaw-source-rough-power}
+
+\begin{theorem}[Target entropy transfer]
+    \label{thm:arealaw-target-entropy-transfer}
+    \lean{TNLean.PEPS.AreaLaw.Scan.eventually_abs_regionalEntropy_sub_le_of_truncation}
+    Fix a local dimension $q\geq1$, a normalized gap $g>0$ and a
+    volume coefficient $C_{\rm vol}$.  For all sufficiently large $n$,
+    uniformly over the finite lattice, two unit vectors $\Omega$ and
+    $\widetilde\Omega$, and a region $X$ of size at most
+    $C_{\rm vol}n^2$, the trace-distance bound
+    \begin{align}
+        \operatorname{dist}_{\rm tr}
+          (|\widetilde\Omega\rangle\langle\widetilde\Omega|,
+           |\Omega\rangle\langle\Omega|)
+          &\leq\sqrt{2\min\{n^{-1000},g/4\}/g}
+    \end{align}
+    implies
+    \begin{align}
+        |S(\widetilde\Omega_X)-S(\Omega_X)|&\leq n^{-247}.
+        \label{eq:arealaw-target-entropy-transfer}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    The actual trace distance is at most $\sqrt{2/g}\,n^{-500}$.
+    Regional entropy continuity contributes at most
+    $4\sqrt t(1+|X|\log q)$ at trace distance $t$.
+    The fixed coefficient and quadratic volume bound are absorbed by the
+    remaining one-power margin between $n^{-250}n^2$ and $n^{-247}$.
+\end{proof}
+
+\begin{lemma}[The rough budget has the source entropy power]
+    \label{lem:arealaw-source-rough-budget-power}
+    \lean{TNLean.PEPS.AreaLaw.Scan.roughBudget_le_source_power}
+    Let $n\geq2$, $q\geq1$, $L\leq n$, $D\geq1$,
+    $e,C_e\geq0$, $W\geq1$, and $D\leq2n^e$.
+    Suppose the actual positive selected mass and target estimates satisfy
+    \begin{align}
+        1-n^{-100}&\leq z,&
+        S_t&\leq C_en^{1+e}+n^{-247},\nonumber\\
+        |\log d-S_t|&\leq n^{3/5}-\log z,&
+        B_{\rm sh}&\leq C_e(nL^e+n)+n^{-247}.
+    \end{align}
+    Then the literal rough expression obeys
+    \begin{align}
+        2\log d-\log z+
+          W\left(\frac{B_{\rm sh}}z+1+3nD\log q\right)
+          &\leq(6C_e+13+6\log q)Wn^{1+e}.
+        \label{eq:arealaw-source-rough-budget-power}
+    \end{align}
+\end{lemma}
+\begin{proof}
+    The mass estimate gives $z\geq1/2$ and $-\log z\leq1$.
+    Write $N=n^{1+e}$.  The target term is at most $(2C_e+7)N$,
+    the shell term is at most $4(C_e+1)N$, and the mismatch term is at
+    most $2(1+3\log q)N$.  Use $W\geq1$ on the target term and add.
+\end{proof}
+
+\begin{lemma}[Principal terms of the selected-density budget]
+    \label{lem:arealaw-selected-density-principal}
+    \lean{TNLean.PEPS.AreaLaw.Scan.selectedDensity_budget_le_principal}
+    Let $n,m$ be positive integers, $W,\varepsilon,C_1>0$,
+    $a,C_r,C_t\geq0$, and let $e,C_l,B,G,R$ be real.
+    If $B\leq C_rWn^{1+e}$ and $G\leq C_t(\log n)^{C_l}$, then
+    \begin{align}
+        \frac{2(C_1+1)}{Wnm\varepsilon}
+          \bigl(B+2nm\,GW a^{1/4}+R\bigr)
+          &\leq C\frac{n^e/m+a^{1/4}(\log n)^{C_l}}{\varepsilon}
+            +\frac{2(C_1+1)}{Wnm\varepsilon}R,\nonumber\\
+        C&=2(C_1+1)(C_r+2C_t).
+        \label{eq:arealaw-selected-density-principal}
+    \end{align}
+    No sign restriction on $B,G,R$ is required.
+\end{lemma}
+\begin{proof}
+    Multiply the two upper bounds by their nonnegative coefficients and
+    cancel the positive factors $W$ and $n$.  The two principal terms
+    are nonnegative, so their separate coefficients are dominated by
+    their sum.  The remainder coefficient is unchanged.
+\end{proof}
+
+\begin{theorem}[Ordered-limit closure at the selected point]
+    \label{thm:arealaw-selected-density-power}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_final_selectedDensity_le}
+    Fix $q\geq1$, $C_e,C_t\geq0$, $C_1>0$ and a real logarithmic
+    exponent $C_l$.  There is a size threshold $N\geq2$ before all
+    physical scalar inputs, remainders and selected points.  For $n\geq N$
+    use the literal final rounded scales
+    \begin{align}
+        L&=\lfloor n^{1-\ell}\rfloor,&
+        m&=\lfloor n^\mu\rfloor,&
+        K&=L\mathbin{\mathrm{div}}(8m),&
+        D&=\lceil n^\kappa\rceil,\nonumber\\
+        a&=W/K,&\varepsilon&=n^{-\nu},&1&\leq W\leq n^\omega.
+    \end{align}
+    Assume the displayed target-mass, entropy, selected-dimension and shell
+    bounds, with $e$ equal to the source box-error exponent, and
+    $G\leq C_t(\log n)^{C_l}$.  Let $R_k\to0$ for this fixed instance.
+    Suppose that eventually in $k$ there is a point $(x,p)$, with
+    $p\in[p_0,p_1]$, for which a quantity $d_k(x,p)$ satisfies
+    \begin{align}
+        d_k(x,p)&\leq\frac{2(C_1+1)}{Wnm\varepsilon}
+          \bigl(B_{\rm rough}+2nm\,GW a^{1/4}+R_k\bigr),
+    \end{align}
+    together with any attached proposition $\mathcal P_k(x,p)$.
+    Then eventually the same selected point satisfies
+    $d_k(x,p)\leq\varepsilon$ and $\mathcal P_k(x,p)$.
+\end{theorem}
+\begin{proof}
+    The literal scales give $K\geq1$, $m>0$, $L\leq n$ and
+    $D\leq2n^e$.  Apply the two preceding scalar bounds and the separate
+    numerical strict-margin theorem at coefficient $2C$; this reserves
+    $\varepsilon/2$ for the principal expression.  After fixing $n,W$
+    and the physical inputs, the scaled remainder is eventually at most
+    $\varepsilon/2$.  Add these bounds without selecting another point.
+    The large-scale and replica limits are not interchanged.
+\end{proof}
+
+The physical use retains one target window and one supplied sequence.
+The original target entropy bound and target-window spectral estimate
+supply the displayed target premises; the raw selection inequality is
+an explicit input of this modular theorem.  Its concrete scanner consumer
+instantiates that input and preserves the energy and sharp-comparison
+conclusions at the unchanged charge point.  No final energy absorption,
+entropy telescope or area law is asserted here.

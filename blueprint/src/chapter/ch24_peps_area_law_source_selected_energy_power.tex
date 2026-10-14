@@ -1,0 +1,123 @@
+\section{Power decay of the selected charge energy}
+\label{sec:arealaw-source-selected-energy-power}
+
+Fix the final scanner exponents
+$\omega=1/20000$, $\ell=1/100000$, $\kappa=1/1000000$
+and $\nu=1/1000$ of \cite{OpenAI2026AreaLaw}.
+The charge-energy expression in Section~9, lines~492--511, contains
+the eighth root of a normalized entropy defect. Thus a density bound
+at rate $8\nu$ suffices to put that term at rate $\nu$.
+
+\begin{definition}[Final-scale charge energy bound]
+    \label{def:arealaw-final-selected-energy-cap}
+    \lean{TNLean.PEPS.AreaLaw.Scan.finalSelectedEnergyCap}
+    For $C,C_\ell,P,W,x,p\in\mathbb R$ and an integer $n\geq1$, set
+    $D=\lceil n^\kappa\rceil$ and
+    \begin{align}
+        E_n(W,x,p)
+        &=CW^2n^\ell D^2(\log n)^{C_\ell}
+            \left((1-p)x^{1/8}+(1-p)n^{-P}+p\right).
+        \label{eq:selected_energy_cap}
+    \end{align}
+    Here $x$ denotes the normalized entropy defect.
+\end{definition}
+
+\begin{theorem}[Exact energy exponents]
+    \label{thm:arealaw-selected-energy-margins}
+    \lean{TNLean.PEPS.AreaLaw.Scan.final_selectedEnergy_margins}
+    At the final scanner exponents,
+    \begin{align}
+        2\omega+\ell+2\kappa&=\frac{14}{125000},&
+        2\omega+\ell+2\kappa-\nu&=-\frac{111}{125000},&
+        -\frac1{2000}-(2\omega+\ell+2\kappa-\nu)
+          &=\frac{97}{250000}.
+        \label{eq:selected_energy_margins}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    Substitute the displayed rational values and simplify.
+\end{proof}
+
+\begin{theorem}[Pointwise charge energy bound]
+    \label{thm:arealaw-selected-energy-pointwise}
+    \lean{TNLean.PEPS.AreaLaw.Scan.finalSelectedEnergyCap_le}
+    Fix $C\geq0$, $C_\ell\in\mathbb R$ and $P\geq\nu$.
+    For every integer $n\geq1$, every $1\leq W\leq n^\omega$,
+    every $0\leq x\leq n^{-8\nu}$ and every
+    $p\in[n^{-\nu},2n^{-\nu}]$, the expression in
+    (\ref{eq:selected_energy_cap}) satisfies
+    \begin{align}
+        E_n(W,x,p)&\leq16C n^{-111/125000}(\log n)^{C_\ell}.
+        \label{eq:selected_energy_pointwise}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    The density bound gives $x^{1/8}\leq n^{-\nu}$, and
+    $P\geq\nu$ gives $n^{-P}\leq n^{-\nu}$. Since $p\geq0$,
+    multiplication by $1-p$ cannot increase either nonnegative term.
+    Consequently
+    \begin{align}
+        (1-p)x^{1/8}+(1-p)n^{-P}+p&\leq4n^{-\nu}.
+        \label{eq:selected_energy_bracket}
+    \end{align}
+    Also $D\leq n^\kappa+1\leq2n^\kappa$ and
+    $W^2\leq n^{2\omega}$. Substitute these inequalities into
+    (\ref{eq:selected_energy_cap}) and add the exponents to obtain
+    (\ref{eq:selected_energy_pointwise}).
+\end{proof}
+
+\begin{theorem}[Uniform normalized energy decay]
+    \label{thm:arealaw-selected-energy-decay}
+    \lean{TNLean.PEPS.AreaLaw.Scan.eventually_final_selectedEnergy_le_rpow,TNLean.PEPS.AreaLaw.Scan.exists_final_selectedEnergy_le_rpow}
+    Fix $C\geq0$, $C_\ell\in\mathbb R$, $g>0$ and $P\geq\nu$.
+    There exists an integer $N\geq2$ such that, for every $n\geq N$,
+    every $1\leq W\leq n^\omega$, every $0\leq x\leq n^{-8\nu}$,
+    every $p\in[n^{-\nu},2n^{-\nu}]$ and every $e\leq n^{-1000}$,
+    \begin{align}
+        \frac{e+E_n(W,x,p)}{g/2}&\leq n^{-1/2000}.
+        \label{eq:selected_energy_decay}
+    \end{align}
+    The threshold is chosen before $n,W,x,p,e$.
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:arealaw-selected-energy-pointwise}
+    The strict gap $97/250000>0$ in
+    (\ref{eq:selected_energy_margins}) absorbs every fixed coefficient
+    and logarithmic power. Thus, eventually,
+    \begin{align}
+        16C n^{-111/125000}(\log n)^{C_\ell}
+          &\leq\frac g4 n^{-1/2000},&
+        n^{-1000}&\leq\frac g4 n^{-1/2000}.
+        \label{eq:selected_energy_absorption}
+    \end{align}
+    Both estimates depend only on the fixed data. Apply
+    (\ref{eq:selected_energy_pointwise}), add the inequalities in
+    (\ref{eq:selected_energy_absorption}), and divide by $g/2>0$.
+\end{proof}
+
+\begin{theorem}[Separate replica remainder]
+    \label{thm:arealaw-selected-energy-remainder}
+    \lean{TNLean.PEPS.AreaLaw.Scan.selectedEnergy_add_remainder_le,TNLean.PEPS.AreaLaw.Scan.exists_final_selectedEnergy_add_remainder_le_rpow}
+    Under the hypotheses of Theorem~\ref{thm:arealaw-selected-energy-decay},
+    the same threshold works for every additional real remainder $r$:
+    \begin{align}
+        \frac{e+E_n(W,x,p)+r}{g/2}
+          &\leq n^{-1/2000}+\frac r{g/2}.
+        \label{eq:selected_energy_remainder}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:arealaw-selected-energy-decay}
+    Expand the quotient of the sum and add $r/(g/2)$ to
+    (\ref{eq:selected_energy_decay}).
+\end{proof}
+
+These conclusions are numerical. Applying them to a physical scanner
+requires the normalized density and energy comparison at the same selected
+charge point. If $r=r_k$ tends to zero as the replica count $k$ tends to
+infinity, (\ref{eq:selected_energy_remainder}) keeps that limit separate
+from the power estimate in $n$.

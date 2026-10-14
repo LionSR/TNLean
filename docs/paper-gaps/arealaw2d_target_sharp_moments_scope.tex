@@ -1,0 +1,57 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\doclink}[1]{%
+    \href{https://sirui-lu.com/TNLean/docs/#1.html}{\path{#1}}}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{One Target Window for Both Sharp Moment Conditions}
+\author{}
+\date{October 14, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+The source sharp lower estimate of Ref.~\cite{OpenAI2026AreaLaw} requires
+$10a\leq r_{\rm mom}$ and $10a\leq1$ at $t=a/2$.
+These imply the upper estimate's factor-six conditions for the same positive
+$a$.  The single-target construction retains the literal floors for $L,m$,
+the natural-number division for $K=L/(8m)$ and the ceiling for $D$.
+Its constants precede the scanner exponents and every physical instance.
+Its threshold may depend on the explicit positive margin
+\begin{align}
+    \omega+\frac{1+\kappa}{2}&<1-\ell-\mu.
+    \label{eq:target_sharp_scope_margin}
+\end{align}
+The ordinary scanner assumptions alone do not imply this inequality.
+At the source's final parameters, its margin is $499879/2000000$.
+
+The same truncated ground vector, energy, spectral gap, phase and trace
+estimates, target eigenvalue window and positive mass are retained while
+deriving the five physical status moments.  The common budget is
+$B=C_BnD(\log n)^{12}$, so
+$K_{\rm mom}=C_0B$ and $r_{\rm mom}=c_0/\sqrt B$.
+The resulting bounds hold for every $0<W\leq n^\omega$ and therefore do
+not require selecting another physical state or another target set when
+the two sharp consumers use one supplied label sequence.
+\footnote{Formal declaration:
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_sharp_moments}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpMoments}.}
+
+The construction does not itself supply an auxiliary label sequence or
+select a charge stage and interpolation parameter.  The source physical
+prevector construction, the actual upper and lower estimates, and the
+selected-charge energy estimate must still be joined with these common
+data.  The entropy telescope, density estimates and final absorption remain
+separate obligations.  No full sharp comparator, Proposition~9.6 or area-law
+claim is made here.
+\footnote{Source: \texttt{07-comparators.tex}, lines 70--85, 383--418 and
+    550--651; \texttt{08-scanner.tex}, lines 32--58, 400--474 and 859--865;
+    revision \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

@@ -1,0 +1,70 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\doclink}[1]{%
+    \href{https://sirui-lu.com/TNLean/docs/#1.html}{\path{#1}}}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{The Paper Energy Rate at the Same Actual Selected Point}
+\author{}
+\date{October 14, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+The density bound $Q/(KnD)\leq n^{-\nu}$ alone would not justify the
+paper energy exponent after taking its eighth root in the accepted cap.
+The existing strict numerical margins, however, prove the stronger
+$Q/(KnD)\leq n^{-8\nu}$ without changing the chosen interval
+$p\in[n^{-\nu},2n^{-\nu}]$ or any physical hypothesis.
+The paper finally uses $[n^{-\nu}/2,n^{-\nu}]$.
+The theorem's interval is a valid alternative from the same general
+selector, obtained by rescaling the averaging parameter by two.
+Its bound $p\leq2n^{-\nu}$ is kept in the cap, and the size threshold
+ensures $2n^{-\nu}<1$.
+The exact density margins are $120499/500000$ and $35697/200000$.
+\footnote{Declarations:
+    \leanid{TNLean.PEPS.AreaLaw.Scan.final_eightNuDensity_margins},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_final_principalDensity_le_eightNu}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_final_selectedDensity_le_eightNu}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/StrongSelectedDensityPower}.}
+
+The physical consumer calls the raw source comparator once, rather than
+trying to infer this stronger estimate from the already-weakened density
+conclusion.  The same original entropy hypotheses supply its target and
+prefix estimates; the same truncated state, spectral set, mass and labels
+supply all moments, endpoint estimates and selected comparisons.
+The labels precede the weight and the entropy coefficient precedes the
+size threshold.  Only afterward is the replica remainder absorbed for
+that fixed physical system and weight.
+
+With $P\geq\nu$, the energy bracket is at most $4n^{-\nu}$.
+The exact prefactor exponent is $14/125000$, leaving cap exponent
+$-111/125000$ and strict margin $97/250000$ to the paper rate
+$-1/2000$.  The source ground energy is retained and bounded using
+$e_0\leq n^{-1000}$; it is not set to zero.
+The actual physical defect therefore satisfies
+\begin{align}
+    0\leq\frac{\mu_k-e_0}{g/2}
+      \leq n^{-1/2000}+\frac{\mathrm{rem}_k}{g/2},
+\end{align}
+with the same gap $g/2$.  The full sharp inequality uses this bound at the
+unchanged selected point and retains both sharp replica remainders.
+\footnote{Declaration:
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_sharp_energy}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpEnergy}.}
+
+The original geometry and transport smallness remain explicit.  The
+remaining comparison entropy terms, original-state information telescope,
+Proposition 9.6 and final area law are separate obligations.  This extension
+makes no completion or local compiler-validation claim.
+\footnote{Source: Ref.~\cite{OpenAI2026AreaLaw}, \texttt{08-scanner.tex},
+    lines 457--533 and 839--911, revision
+    \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

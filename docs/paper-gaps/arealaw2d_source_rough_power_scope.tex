@@ -1,0 +1,66 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\doclink}[1]{%
+    \href{https://sirui-lu.com/TNLean/docs/#1.html}{\path{#1}}}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{Source Powers for the Same Physical Rough Budget}
+\author{}
+\date{October 14, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+The source rough-budget argument of Ref.~\cite{OpenAI2026AreaLaw} uses
+the original target entropy assumption as well as the whole-row prefix
+assumption.  Regional continuity supplies the same truncated target entropy
+within $n^{-247}$, uniformly over finite systems of controlled quadratic
+volume.  The selected-spectrum entropy estimate concerns the same target
+set and mass, and the rough endpoint theorem concerns the same supplied
+Schmidt--Bell sequence.
+
+The scalar rough budget is at most
+$(6C_e+13+6\log q)Wn^{1+e}$ when $W\geq1$ and the literal geometry gives
+$L\leq n$ and $D\leq2n^e$.  Its target-entropy, selected-dimension and
+shell-entropy premises are precisely the established physical conclusions
+to be supplied by the source application.  No abstract terminal-bound or
+selected-density field is used.
+\footnote{Declarations:
+    \leanid{TNLean.PEPS.AreaLaw.Scan.eventually_abs_regionalEntropy_sub_le_of_truncation}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/TargetEntropyTransfer}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.roughBudget_le_source_power}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/SourceRoughBudgetPower}.}
+
+The normalized selected numerator then has principal part
+\begin{align}
+    C\frac{n^e/m+a^{1/4}(\log n)^{C_l}}{n^{-\nu}},
+    \qquad C=2(C_1+1)(C_r+2C_t),
+\end{align}
+plus the unchanged scaled replica remainder.  The fixed scanner coefficient
+$C_1$, entropy coefficient and transport caps must precede the large-scale
+threshold.  Positivity of an otherwise unbounded scanner coefficient alone
+would not give such a uniform threshold.
+
+The separate numerical strict-margin theorem bounds the principal part.
+At each fixed physical instance the replica remainder then vanishes; these
+limits are not interchanged.  The modular selected-point theorem performs precisely this ordered-limit
+closure and retains an arbitrary proposition already attached to the same
+point.  Its raw selection inequality remains explicit; the concrete source
+scanner consumer supplies it, the target-window estimates and the original
+entropy assumptions without changing the point or label sequence.
+\footnote{Declarations:
+    \leanid{TNLean.PEPS.AreaLaw.Scan.selectedDensity_budget_le_principal}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/SourceRoughBudgetPower}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_final_selectedDensity_le}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/SelectedDensityPower}.}  No full sharp scanner,
+entropy telescope, final absorption or area law is asserted here.
+\footnote{Source: \texttt{08-scanner.tex}, lines 399--404 and 457--490,
+    revision \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.}
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
