@@ -23,6 +23,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 noncomputable section
 
 open Filter
+open Matrix
 open scoped BigOperators
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan

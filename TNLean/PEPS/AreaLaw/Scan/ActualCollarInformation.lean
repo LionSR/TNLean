@@ -96,7 +96,7 @@ theorem terminalPartition_collar_entropy_identity
       gpost := by
     unfold FiniteProduct.collarPostQuantity
     rw [hUYeq]
-    simp only [gpost, regionalEntropy_eq_finiteProduct]
+    simp only [gpost, β, regionalEntropy_eq_finiteProduct]
   have hid : 2 * FiniteProduct.entropy β Ωt X +
       (FiniteProduct.collarPreQuantity β Ωt X (positiveNear S.depth σ) Y V -
         FiniteProduct.collarPostQuantity β Ωt (positiveNear S.depth σ) Y) =
@@ -156,7 +156,7 @@ theorem two_mutualInformation_le_actualTerminal_average
       gpost j g := by
     unfold FiniteProduct.collarPostQuantity
     rw [(hgeom j g).2.1]
-    simp only [gpost, U, Y, regionalEntropy_eq_finiteProduct]
+    simp only [gpost, U, Y, β, regionalEntropy_eq_finiteProduct]
   have hband (g : Fin S.K) :
       2 * FiniteProduct.mutualInformation β Ωt X (S.truncationSet L)ᶜ ≤
         2 * regionalEntropy Λ q Ωt X +

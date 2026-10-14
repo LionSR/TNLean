@@ -100,6 +100,7 @@ theorem exists_actualScan_rough_lower_norm
     pre k hk hpre hprenorm hsym ell Sent ε β ι₀ e hC hR hlabel r remainder lower
     s p Dfill Dcharge
   subst Kband
+  let : DecidableEq (Config k ι₀) := Fintype.decidablePiFintype
   have hKpos : (0 : ℝ) < S.K := by exact_mod_cast (lt_of_lt_of_le (by decide : 0 < 8) hKband)
   have ha : 0 < a := div_pos (by norm_num) hKpos
   have htEq : 2 / (S.K : ℝ) = a / 2 := by dsimp only [a]; ring
@@ -148,6 +149,7 @@ theorem exists_actualScan_rough_lower_norm
     intro hzero
     apply hpre
     funext x
+    change pre k x = 0
     have hx : pre k (e (e.symm x)) = 0 :=
       congrArg (fun v : EuclideanSpace ℂ (Config k ι₀) => v (e.symm x)) hzero
     simpa only [Equiv.apply_symm_apply] using hx
@@ -230,7 +232,9 @@ theorem exists_actualScan_rough_lower_norm
     have henergyO : μ =
         (star vO ⬝ᵥ (globalReplicaMeanHamiltonian β (Fin d) (Fin d)
           (∑ i, S.truncatedEnergyTerm h Ω Δ L i) k *ᵥ vO)).re := by
-      rw [henergy, hvO]
+      rw [henergy]
+      dsimp only
+      rw [hvO]
     have hvnorm : ‖vO‖ = 1 := he.2.1
     have hactualnorm : ‖WithLp.toLp 2
         (Transport.filteredVector (D.rootPath n (a / 2) k p) (pre k))‖ = 1 := by
@@ -244,7 +248,8 @@ theorem exists_actualScan_rough_lower_norm
     change 0 < Transport.filteredNormSq (D.rootPath n (a / 2) k p) (pre k) ∧
       0 ≤ (μ - e₀) / gap ∧ _
     refine ⟨hroot.1.symm ▸ sq_pos_of_pos (norm_pos_iff.mpr he.1), ?_, ?_⟩
-    · simpa only [henergyO] using he.2.2.1
+    · rw [henergyO]
+      exact he.2.2.1
     · intro τ hτ hτhalf
       simpa only [hroot.1, henergyO, r, remainder, lower, a, T] using!
         he.2.2.2 τ hτ hτhalf

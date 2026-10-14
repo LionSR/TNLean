@@ -22,6 +22,7 @@ Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 
 noncomputable section
 
+open Matrix
 open scoped BigOperators
 
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
@@ -60,6 +61,9 @@ theorem terminalPartition_preEntropy_bounds
   let V := receiving σ true
   obtain ⟨hnear, hUYeq, hfar, hXU, hXY, hXV, _, hUV, _, _, _⟩ :=
     terminalPartition_collar_geometry hT S hdepth (S.n * S.m) L hL j g
+  change Q = X ∪ U at hnear
+  change U ∪ Y = positiveNearMiddle S.depth σ at hUYeq
+  change V = (Q ∪ Y)ᶜ at hfar
   have hQV : Disjoint Q V := by
     refine Finset.disjoint_left.mpr fun x hx hv ↦ ?_
     rw [hnear] at hx
@@ -75,7 +79,7 @@ theorem terminalPartition_preEntropy_bounds
   rw [hQVeq, FiniteProduct.entropy_compl] at hnonneg
   have hpreEq : gpre = FiniteProduct.entropy β Ωt (X ∪ U) +
       FiniteProduct.entropy β Ωt (X ∪ (U ∪ Y)) - FiniteProduct.entropy β Ωt Y := by
-    simp only [gpre, Q, hnear, U, FiniteProduct.entropy_compl, Finset.union_assoc]
+    simp only [gpre, hnear, FiniteProduct.entropy_compl, Finset.union_assoc]
   have hXUY : Disjoint X (U ∪ Y) := Finset.disjoint_left.mpr fun x hx hu ↦ by
     rcases Finset.mem_union.mp hu with hu | hy
     · exact Finset.disjoint_left.mp hXU hx hu
@@ -155,7 +159,7 @@ theorem terminalPartition_preEntropy_max_average_bounds
               Finset.sum_le_sum fun j _ ↦
                 mul_le_mul_of_nonneg_left (hb j g).2 (tree.weight_nonneg j)
             _ = B := by rw [← Finset.sum_mul, tree.sum_weight, one_mul]
-        _ = B * (S.K : ℝ) := by simp only [Finset.sum_const, Fintype.card_fin,
+        _ = B * (S.K : ℝ) := by simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin,
           nsmul_eq_mul, mul_comm]
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan
