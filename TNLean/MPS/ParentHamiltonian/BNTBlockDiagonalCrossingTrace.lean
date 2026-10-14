@@ -253,7 +253,7 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_boundary
     List.ofFn_inj.mpr (funext fun k => by
       have htail : i.val + L - N ≤ i.val + L - N + k.val ∧
           i.val + L - N + k.val < i.val := ⟨by omega, by omega⟩
-      simp only [τ, dif_pos htail]
+      simp only [τ, dite_eq_left htail]
       exact congrArg ρ (Fin.ext (by simp)))
   have hmem :
       (∑ j : Fin r,
