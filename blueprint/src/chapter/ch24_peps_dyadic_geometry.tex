@@ -1229,3 +1229,48 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     so the second claim applies with $g=0$. For the count, $r\mapsto r+1$ maps the meeting blocks
     injectively into $[\lfloor V/b\rfloor,\lfloor U/b\rfloor+1]$.
 \end{proof}
+
+\begin{definition}[Squares and junctions near a block]
+    \label{def:peps_dyadic_near_block}
+    \lean{TNLean.PEPS.Approximation.BlockNear, TNLean.PEPS.Approximation.CornerNear, TNLean.PEPS.Approximation.DyadicSquare.Near, TNLean.PEPS.Approximation.DyadicJunction.Near}
+    \leanok
+    \uses{def:peps_dyadic_hierarchy}
+    Fix a block of side $2^j$ with block indices $(r,s)$ and a constant $c$. A square
+    of the hierarchy of scale $j'$ is near the block if $j'\in\{j-1,j\}$ and, in each
+    coordinate, its closed interval is within distance $c\,2^j$ of the closed
+    interval of the block. A junction of scale $j'$ is near the block if
+    $j'\in\{j-1,j\}$ and each of its two coordinates is within distance $c\,2^j$ of
+    the closed interval of the block in that coordinate.
+\end{definition}
+
+\begin{theorem}[Bounded lifetime incidence]
+    \label{thm:peps_dyadic_lifetime_incidence}
+    \lean{TNLean.PEPS.Approximation.card_range_blockNear_le, TNLean.PEPS.Approximation.card_range_cornerNear_le, TNLean.PEPS.Approximation.card_dyadicSquare_near_le, TNLean.PEPS.Approximation.card_dyadicJunction_near_le, TNLean.PEPS.Approximation.card_gates_le_of_near}
+    \leanok
+    \uses{def:peps_dyadic_near_block}
+    For every depth $k$, every block and every constant $c$, at most $2(4c+4)^2$
+    squares and at most $2(4c+4)^2$ junctions of the hierarchy are near the block.
+    Consequently, if every repainting of a square and every junction resize consists
+    of at most $G$ gates, a party all of whose gates belong to repaintings and
+    junction resizes near its block participates in at most $4G(4c+4)^2$ gates.
+    This is the final count of the bounded lifetime participation
+    in~\cite[Proposition~7.1, item~2]{OpenAI2026PolynomialPEPS} (lines 611--618):
+    a party of side $m$ occurs in linked gates only at levels $m$ and $m/2$, and at
+    these scales there are only a fixed number of repaintings or junctions within
+    distance $O(m)$ of its block. That a block party occurs only in such gates is
+    the hypothesis here; the gates of the protocol are not constructed.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_dyadic_address_locality}
+    In one coordinate, with $b=2^{j'}\ge2^{j-1}$ and $g\le c\,2^j$, the blocks of
+    side $b$ meeting $[2^jr-g,2^j(r+1)+g]$ number at most
+    $\lfloor U/b\rfloor+2-\lfloor V/b\rfloor$ by
+    Lemma~\ref{lem:peps_dyadic_address_locality}, and
+    $b\lfloor U/b\rfloor\le U\le V+2^j+2g<b(\lfloor V/b\rfloor+1)+b(4c+2)$ bounds
+    this by $4c+4$. A junction coordinate within distance $g$ of the interval lies
+    in such a block. There are at most two scales $j'\in\{j-1,j\}$, so the near
+    squares and the near junctions number at most $2(4c+4)^2$ each. Finally, the
+    gates of the party are distributed over the at most $4(4c+4)^2$ near
+    repaintings and junction resizes, at most $G$ to each.
+\end{proof}
