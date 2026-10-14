@@ -39,7 +39,7 @@ action of an arbitrary group on `ℂˣ`.  Open it with
 * `ScalarCocycle.exists_H2π_eq` : every class of `H²(G, ℂˣ)` is the class of a
   scalar cocycle
 * `ScalarCocycle.H2π_ne_zero_of_commPhase_ne_one` : a non-trivial commutator phase
-  at a commuting pair forces a non-zero class
+  of a cocycle at a commuting pair forces a non-zero class in `H²(G, ℂˣ)`
 
 ## References
 

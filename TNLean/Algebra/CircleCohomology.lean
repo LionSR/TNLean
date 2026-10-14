@@ -128,8 +128,10 @@ theorem ScalarCocycle.positiveResidual_isPositiveValued (ω : ScalarCocycle G) :
   exact ⟨PositiveUnits.norm (ω g h), (Complex.div_toUnits_unitsPhase (ω g h)).symm⟩
 
 /-- Every `ℂˣ`-valued scalar cocycle of a finite group is cohomologous to the
-inclusion of its pointwise `U(1)` phase: the radial residual is a coboundary, by the
-one-block specialization of the positive generalized cocycle trivialization.
+inclusion of its pointwise `U(1)` phase.
+
+The radial residual is a coboundary, by the one-block specialization of the positive
+generalized cocycle trivialization.
 
 This is the finite-discrete algebraic comparison used for
 arXiv:2502.20257, line 1931.  It does not use the sheaf-cohomology argument in

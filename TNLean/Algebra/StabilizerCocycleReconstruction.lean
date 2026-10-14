@@ -512,8 +512,8 @@ noncomputable def solutionAddAction (K : StabilizerRepresentatives G X x₀)
           (fun _ _ ↦ (1 : Units ℂ) : ScalarCocycle (MulAction.stabilizer G x₀)) :=
         fun _ _ _ ↦ rfl
       change K.solutionAction (quotientEquivH2.symm 0) _ = _
-      rw [← ScalarCocycle.H2π_one h1]
-      rw [show groupCohomology.H2π _ _ = cocycleClass ⟨_, h1⟩ from rfl,
+      rw [← ScalarCocycle.H2π_one h1,
+        show groupCohomology.H2π _ _ = cocycleClass ⟨_, h1⟩ from rfl,
         quotientEquivH2_symm_cocycleClass]
       refine congrArg (Quotient.mk _) (Subtype.ext ?_)
       funext x g h
