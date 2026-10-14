@@ -172,12 +172,12 @@ theorem exists_supported_unitary_of_good_realization (S : Finset ι)
   · rw [conjTranspose_submatrix, submatrix_mul_equiv _ _ _ e, conjTranspose_kronecker,
       ← mul_kronecker_mul, hu, conjTranspose_one, Matrix.one_mul, one_kronecker_one,
       submatrix_one_equiv]
-  · have hŨ : (((U : Matrix (S → Fin q) (S → Fin q) ℂ) ⊗ₖ
+  · have hUe : (((U : Matrix (S → Fin q) (S → Fin q) ℂ) ⊗ₖ
         (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ)).submatrix e e).submatrix e.symm e.symm =
           (U : Matrix (S → Fin q) (S → Fin q) ℂ) ⊗ₖ
             (1 : Matrix (↥Sᶜ → Fin q) (↥Sᶜ → Fin q) ℂ) := by
       simp
-    rw [← WithLp.toLp_sub, ← hnorm, hcomp, ← hvec, hŨ, WithLp.toLp_sub]
+    rw [← WithLp.toLp_sub, ← hnorm, hcomp, ← hvec, hUe, WithLp.toLp_sub]
     simpa only [toEuclideanCLM_toLp] using hU
 
 /-- **The entropy comparison for a unitary acting away from both regions.** Let `U` be a
