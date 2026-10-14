@@ -1,6 +1,7 @@
 % Figure polypeps_small_patch_branch.
 % Owner: none (note-only figure).
-% Used by: gapped-2d-notes PP Sec. 6 (Lemma 5, the expansion; full width).
+% Used by: gapped-2d-notes PP App. E 4 (proof of Lemma 9, one branch of a small-patch
+% rewrite), Fig. 15, full width, with \tnlPanelA-\tnlPanelC set to (a)-(c).
 % Source: arXiv OpenAI2026PolynomialPEPS, sections/05-frames.tex:221-320
 % (proof of Lemma 6.3: eq. (6.10) rewrite-map, the branch expansion and the
 % open-leg claim) with Lemma 6.2, eq. (6.7) group-truncation, 05-frames.tex:125-180.
@@ -45,7 +46,12 @@
 % Label size: box names stay at the default size, below the row names (an L1
 % waiver): at size l the names |0>, <v'|, |w'> run together and |j',l'> and
 % <0| touch the K_new bracket and the patch-1 wire at this width.
-% Label macros: none.
+% Label macros: \tnlPanelA{}, \tnlPanelB{}, \tnlPanelC{}, the letters of panels (a), (b)
+% and (c), empty by default (the blueprint prints no letters); the PEPS note sets them
+% to (a), (b), (c). Each letter stands north-west of cell (1,1) of its panel, the
+% top-left cell, which carries no ink in any panel, so the three letters share one
+% height. Each declaration ends in % so that the empty default adds no space and
+% the default rendering is unchanged.
 % Fit: W (\tnwide[6mm]), about 174 mm wide; a pitch of 6.5 mm no longer fits.
 % Boundary signature: (a) (phys:e) x6 in (wires 1-6) and (phys:w) x6 out
 % (wires 2-7); (b) and (c) (phys:e) x3 in (wires 3, 4, 5) and (phys:w) x3 out
@@ -60,6 +66,7 @@
 \begin{tenkzequation}
     \tenkzkernel
     \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire}, cols=9, bonds=none]
+        \providecommand{\tnlPanelA}{}%
         \tndeclare{species}{bandA}{hue=source:orange}
         \tndeclare{species}{bandB}{hue=source:cyan}
         \tn[at=(1,8), name=brTagBra, skin=box, species=complement, label pos=n,
@@ -139,9 +146,11 @@
         \tnmark[form=bracket, label pos=s]{(8,3) .. (8,4)}{$P_2$}
         \tnmark[form=bracket, label pos=s]{(8,5) .. (8,6)}{$P_1$}
         \tnmark[form=bracket, label pos=s]{(8,7) .. (8,8)}{$K_{\mathrm{old}}^\dagger$}
+        \tnmark[form=label, label pos=nw]{(1,1)}{$\text{\tnlPanelA}$}
     \end{tenkz}
     $\longmapsto$
     \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire}, cols=7, bonds=none]
+        \providecommand{\tnlPanelB}{}%
         \tndeclare{species}{bandA}{hue=source:orange}
         \tndeclare{species}{bandB}{hue=source:cyan}
         \tn[at=(2,6), name=bzDec, skin=box, label pos=n, ports={180:physical}]{\ket{v}}
@@ -181,9 +190,11 @@
         \tnmark[form=bracket, label pos=e]{(3,7) .. (4,7)}{$\{A{,}B\}$}
         \tnmark[form=label, species=bandB, label pos=e]{(5,7)}{$B$}
         \tnmark[form=label, label pos=s]{midway (6,3) and (6,4)}{$\le2\ \text{owners per group}$}
+        \tnmark[form=label, label pos=nw]{(1,1)}{$\text{\tnlPanelB}$}
     \end{tenkz}
     $\approx\sum c\,$
     \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire}, cols=4, bonds=none]
+        \providecommand{\tnlPanelC}{}%
         \tndeclare{species}{bandA}{hue=source:orange}
         \tndeclare{species}{bandB}{hue=source:cyan}
         \tn[at=(2,2), name=bkBetaOne, skin=box, wires=2, label pos=n,
@@ -210,5 +221,6 @@
         \tnwire[species=bandB, name=bkOut2]{bkW2.180}{open w}
         \tnwire[species=bandB, name=bkOut3]{bkW3.180}{open w}
         \tnwire[species=bandB, name=bkOut4]{bkW4.180}{open w}
+        \tnmark[form=label, label pos=nw]{(1,1)}{$\text{\tnlPanelC}$}
     \end{tenkz}
 \end{tenkzequation}

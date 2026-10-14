@@ -21,7 +21,11 @@ Checks:
   blueprint macro outside the provided four, no ``\\tnset``/``\\tndeclare``/
   ``\\tikzset``/``\\providecommand`` outside a picture body, and every
   ``\\tnl...`` label macro declared in the body that uses it, with one default
-  per file, listed in the header, and owned by one file only;
+  per file, listed in the header, and owned by one file only.  A figure that no
+  chapter inputs may also route a joiner of its ``tenkzequation`` (the text
+  between two pictures) through a label macro, declared with
+  ``\\providecommand`` in the ``tenkzequation`` body before its first use: no
+  web build compiles such a figure, so no picture unit has to see it;
 * hosts (chapters, appendices, content routers): every ``\\input{figures/...}``
   resolves, stands on its own line and lies outside any ``tenkzequation``;
   ``\\tnfigure`` is never used there; each figure's ``Owner:`` line names
@@ -288,11 +292,42 @@ def check_figure(
     in_body = bytearray(len(text))
     for env in pictures:
         in_body[env.body_start : env.body_end] = b"\1" * (env.body_end - env.body_start)
+    # Joiner text: a top-level tenkzequation body outside its pictures.  The web
+    # build typesets joiners apart from the picture units and nothing checks a
+    # label macro there, so only a figure that no chapter inputs may use one.
+    joiner = [" "] * len(text)
+    for env in top:
+        if env.name == "tenkzequation":
+            joiner[env.body_start : env.body_end] = text[env.body_start : env.body_end]
+    for env in pictures:
+        joiner[env.start : env.end] = " " * (env.end - env.start)
+    joiner_text = "".join(joiner)
+    note_only = not owners
     for match in command_re(BODY_ONLY_COMMANDS).finditer(text):
-        if not in_body[match.start()]:
-            fail(line_of(text, match.start()), f"\\{match.group(1)} outside a picture body")
+        if in_body[match.start()]:
+            continue
+        line = line_of(text, match.start())
+        if match.group(1) != "providecommand" or not joiner_text[match.start()].strip():
+            fail(line, f"\\{match.group(1)} outside a picture body")
+        elif not note_only:
+            fail(line, "a joiner label macro needs a figure that no chapter inputs"
+                 " (the web build typesets joiners apart from the pictures)")
 
     defaults: dict[str, str] = {}
+    try:
+        joiner_declared = provided_defaults(joiner_text)
+    except ValueError as error:
+        fail(1, f"\\providecommand in a joiner: {error}")
+        joiner_declared = []
+    joiner_first: dict[str, int] = {}
+    for macro, default, offset in joiner_declared:
+        line = line_of(text, offset)
+        if not TNL_NAME_RE.fullmatch(macro):
+            fail(line, f"{macro}: \\providecommand is only for \\tnl<Tag><Role> label macros")
+            continue
+        joiner_first.setdefault(macro, offset)
+        if defaults.setdefault(macro, default) != default:
+            fail(line, f"{macro} has two defaults in one file")
     for env in pictures:
         body = text[env.body_start : env.body_end]
         try:
@@ -320,8 +355,15 @@ def check_figure(
                     " (the web build compiles each body alone)",
                 )
     for match in TNL_RE.finditer(text):
-        if not in_body[match.start()]:
-            fail(line_of(text, match.start()), f"{match.group(0)} outside a picture body")
+        if in_body[match.start()]:
+            continue
+        macro, line = match.group(0), line_of(text, match.start())
+        if not joiner_text[match.start()].strip():
+            fail(line, f"{macro} outside a picture body")
+        elif text[: match.start()].rstrip().endswith(("\\providecommand{", "\\providecommand")):
+            continue
+        elif macro not in joiner_first or joiner_first[macro] > match.start():
+            fail(line, f"{macro} is used in a joiner before the tenkzequation body declares it")
     if defaults:
         header = " ".join(line for line in lines if line.startswith("% Label macros:"))
         for macro in defaults:
@@ -488,6 +530,46 @@ MUTATIONS = {
     "header name": ("% Figure demo_case.", "% Figure other."),
     "header owner": ("% Owner: none (note-only figure).\n", ""),
     "unlisted label": ("% Label macros: \\tnlDmLeft{T}\n", ""),
+    "undeclared joiner label": ("=\n", "\\tnlDmLeft\n"),
+}
+
+# A note-only figure whose joiner is a label macro declared in the tenkzequation body.
+JOINER_SYNTHETIC = r"""% Figure demo_case.
+% Owner: none (note-only figure).
+% Used by: this test.
+% Label macros: \tnlDmJoin{=}
+\begin{tenkzequation}
+\tenkzkernel
+\providecommand{\tnlDmJoin}{=}%
+\begin{tenkz}[rows={op}, cols=1]
+\tn{\ket{0}}
+\end{tenkz}
+$\tnlDmJoin$
+\begin{tenkz}[rows={op}, cols=1]
+\tn{\ket{0}}
+\end{tenkz}
+\end{tenkzequation}
+"""
+
+CHAPTER_HOST = "chapter/ch99_demo.tex"
+CHAPTER_OWNER = ("% Owner: none (note-only figure).", f"% Owner: {CHAPTER_HOST} (def:demo)")
+
+JOINER_MUTATIONS = {
+    "joiner use before declare": (
+        "\\providecommand{\\tnlDmJoin}{=}%\n\\begin{tenkz}[rows={op}, cols=1]\n\\tn{\\ket{0}}\n"
+        "\\end{tenkz}\n$\\tnlDmJoin$\n",
+        "\\begin{tenkz}[rows={op}, cols=1]\n\\tn{\\ket{0}}\n\\end{tenkz}\n$\\tnlDmJoin$\n"
+        "\\providecommand{\\tnlDmJoin}{=}%\n",
+    ),
+    "joiner declared in a picture only": (
+        "\\providecommand{\\tnlDmJoin}{=}%\n\\begin{tenkz}[rows={op}, cols=1]\n",
+        "\\begin{tenkz}[rows={op}, cols=1]\n\\providecommand{\\tnlDmJoin}{=}%\n",
+    ),
+    "joiner two defaults": (
+        "\\tn{\\ket{0}}\n\\end{tenkz}\n$",
+        "\\providecommand{\\tnlDmJoin}{-}\n\\tn{\\ket{0}}\n\\end{tenkz}\n$",
+    ),
+    "unlisted joiner label": ("% Label macros: \\tnlDmJoin{=}\n", ""),
 }
 
 
@@ -513,6 +595,24 @@ def self_test(src: Path) -> list[str]:
         assert SYNTHETIC.count(old) >= 1, label
         if not check_figure("demo_case", SYNTHETIC.replace(old, new, 1), forbidden, []):
             failures.append(f"mutation {label!r} was accepted")
+    clean = check_figure("demo_case", JOINER_SYNTHETIC, forbidden, [])
+    if clean:
+        failures.append(f"synthetic joiner figure rejected: {clean}")
+    for label, (old, new) in JOINER_MUTATIONS.items():
+        assert JOINER_SYNTHETIC.count(old) >= 1, label
+        if not check_figure("demo_case", JOINER_SYNTHETIC.replace(old, new, 1), forbidden, []):
+            failures.append(f"mutation {label!r} was accepted")
+    # A chapter figure may not carry a joiner label: the same file with a matching
+    # Owner line must be rejected, while the plain synthetic figure is accepted.
+    hosted = check_figure(
+        "demo_case", SYNTHETIC.replace(*CHAPTER_OWNER), forbidden, [CHAPTER_HOST]
+    )
+    if hosted:
+        failures.append(f"synthetic chapter figure rejected: {hosted}")
+    if not check_figure(
+        "demo_case", JOINER_SYNTHETIC.replace(*CHAPTER_OWNER), forbidden, [CHAPTER_HOST]
+    ):
+        failures.append("mutation 'joiner label in a chapter figure' was accepted")
     return failures
 
 
@@ -632,7 +732,7 @@ def main() -> int:
             print(f"FAIL: {failure}", file=sys.stderr)
         return 1
     print(f"PASS: {len(names)} shared figures, hosts and tnleanfigures.sty pass the static checks;"
-          f" {len(MUTATIONS) + 2} mutations rejected")
+          f" {len(MUTATIONS) + len(JOINER_MUTATIONS) + 2} mutations rejected")
     if args.no_compile:
         return 0
     compile_failures = compile_contract(src, names, labels, args.engine, args.require_tex)

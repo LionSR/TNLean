@@ -1,6 +1,7 @@
 % Figure polypeps_compression_shape.
 % Owner: none (note-only figure).
-% Used by: gapped-2d-notes PP Sec. 0 (Theorem V, distributed density compression).
+% Used by: gapped-2d-notes PP Sec. III B (Theorem 2, distributed density compression),
+% unnumbered display, with \tnlCsArrow set to Thm. 2.
 % Source: arXiv OpenAI2026PolynomialPEPS, sections/04-compression.tex:132-170
 % (thm:compression: the hypotheses (i)-(iv) and the shape of sigma: one node per
 % party, links only between parties that share a nonprivate gate, the physical
@@ -42,7 +43,11 @@
 % Not to scale: the numbers of parties and gates are uniformly polynomial, each
 % party joins at most b_star nonprivate gates, and each nonprivate gate involves
 % at most b_star parties; link dimensions are uniformly polynomial.
-% Label macros: none.
+% Label macros: \tnlCsArrow{\text{Thm V}}, the label over the joiner arrow; the PEPS
+% note overrides it with \text{Thm.~2}. The label sits in the joiner, outside both tenkz
+% bodies, so the tenkzequation body declares it before the first picture (allowed
+% because no chapter inputs this figure, so the web build never typesets it). The
+% declaration ends in % so that it adds no space before the first picture.
 % Fit: one column (\tnshow[5mm], about 77 x 30 mm; at the 6 mm floor of shared-spec
 % 4.1 P1 it is 92 mm and does not fit a column).
 % Related: polypeps_gate_links (the internals of one gate's links: star and
@@ -50,6 +55,7 @@
 % of a gate). Neither draws the whole network that Theorem V outputs.
 \begin{tenkzequation}
     \tenkzkernel
+    \providecommand{\tnlCsArrow}{\text{Thm V}}%
     \begin{tenkz}[rows={wire,wire,wire,wire}, cols=5, bonds=none, size=l]
         \tn[at=(1,5), name=csPhiOne, skin=triwest, size=l, label pos=e,
             ports={180:physical}]{\phi_{P_1}}
@@ -97,7 +103,7 @@
         \tnwire[species=complement, name=csTraced]{csOutFour.225}{csStubFour.45}
         \tnmark[form=label, species=complement, label pos=se]{csStubFour}{$\text{traced}$}
     \end{tenkz}
-    $\overset{\text{Thm V}}{\longrightarrow}$
+    $\overset{\tnlCsArrow}{\longrightarrow}$
     \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=4, bonds=none, size=l]
         \tn[at=(3,1), name=csSigOne, skin=box, size=l, label pos=225,
             ports={90:physical, 270:physical, 0:virtual}]{\sigma_{P_1}}
