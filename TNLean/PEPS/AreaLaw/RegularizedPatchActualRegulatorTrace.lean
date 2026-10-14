@@ -1,0 +1,101 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.PEPS.AreaLaw.RegularizedPatchMinimizerStationarity
+import QICLean.Entropy.RegionEntropy
+import QICLean.Entropy.SpectralTail
+
+/-!
+# The regulator trace at an actual regularized patch minimum
+
+The entropy bound concerns the original input marginal, and the distance bound
+compares that marginal with the same normalized minimizing output. Stationarity
+is derived from the stated original norm minimum. The canonical spectral
+projection remains the original marginal's projection; it need not commute with
+the minimizing output or its regulator.
+
+This is an auxiliary implication under the explicit entropy and marginal-distance
+bounds. A physical application must derive those bounds from the area law and
+the original Hamiltonian gap. This statement does not assume or establish a
+physical area-law or gap theorem.
+
+Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 362–418,
+`eq:patch-constant-tail` and `eq:patch-regulator-trace`; revision
+`adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+-/
+
+open scoped ComplexOrder MatrixOrder Matrix.Norms.L2Operator
+
+namespace TNLean.PEPS
+
+variable {V : Type*} [Fintype V] [LinearOrder V]
+variable {n : V → ℕ} {m : ℕ}
+
+/-- The canonical regulator of an actual feasible minimum has trace at most
+one quarter, provided the original marginal entropy and its full trace-norm
+distance to the same normalized output obey the displayed source bounds.
+Stationarity and the density order must be derived from the minimum; neither
+is a caller hypothesis. Source: polynomial-PEPS `03-patches.tex`, lines 362–418. -/
+theorem trace_regularizedPatchRegulator_le_quarter_of_isMinOn
+    (regions : Fin m → Finset V) (hnested : Monotone regions)
+    (a : Fin m → ℝ) (ha : ∀ j, 0 < a j)
+    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Fin (n v.1)))
+    (hΩ : ‖Ω‖ = 1) {C u R : ℝ} (hC : 0 < C) (hu : 0 ≤ u)
+    (hR : (16 * C + Real.log 8) * (1 + u) ≤ R)
+    (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
+      (Entropy.RegionConfig n (regions j)) ℂ)
+    (hx : x ∈ regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions)
+    (hmin : IsMinOn
+      (regularizedPatchObjective (Out := fun v ↦ Fin (n v))
+        regions a (Real.exp (-R)) Ω)
+      (regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions) x)
+    (j : Fin m)
+    (hS : _root_.vonNeumannEntropy
+      (Entropy.regionState (regions j) (dependentGlobalConfigIsometry Ω))
+      (Entropy.regionState_posSemidef (regions j)
+        (dependentGlobalConfigIsometry Ω)).isHermitian ≤ C * (1 + u))
+    (hd : (CFC.abs
+      (normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
+        regions a (Real.exp (-R)) Ω x (regions j) -
+        Entropy.regionState (regions j) (dependentGlobalConfigIsometry Ω))).trace.re ≤ 1 / 16) :
+    (Real.exp (-R) •
+      (normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
+          regions a (Real.exp (-R)) Ω x (regions j) *
+        (x j + Real.exp (-R) • (1 : Matrix (Entropy.RegionConfig n (regions j))
+          (Entropy.RegionConfig n (regions j)) ℂ))⁻¹)).trace.re ≤ 1 / 4 := by
+  let ρ := normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
+    regions a (Real.exp (-R)) Ω x (regions j)
+  let σ := Entropy.regionState (regions j) (dependentGlobalConfigIsometry Ω)
+  have hρ : ρ.PosSemidef :=
+    normalizedRegularizedPatchMarginal_posSemidef regions a (Real.exp (-R)) Ω x (regions j)
+  have hρ1 : ρ.trace = 1 :=
+    trace_normalizedRegularizedPatchMarginal regions a (fun k ↦ (ha k).le)
+      (Real.exp_pos (-R)) Ω hΩ hx (regions j)
+  have hσ : σ.PosSemidef :=
+    Entropy.regionState_posSemidef (regions j) (dependentGlobalConfigIsometry Ω)
+  have hσ1 : σ.trace = 1 := by
+    dsimp only [σ]
+    rw [Entropy.trace_regionState, dependentGlobalConfigIsometry.norm_map, hΩ]
+    norm_num
+  have hstat := normalizedRegularizedPatchMarginal_stationarity_of_isMinOn
+    regions hnested a ha (Real.exp_pos (-R)) Ω x hx hmin j
+  have hspec := hσ.spectralProjectionGE_exp_entropy_bounds hσ1
+    (mul_pos hC (by linarith)) (by norm_num : (0 : ℝ) < 16) hS
+  let Q := Matrix.spectralProjectionGE σ (Real.exp (-16 * (C * (1 + u))))
+  have hQ : IsStarProjection Q :=
+    hσ.isHermitian.isStarProjection_spectralProjectionGE _
+  have hσtail : ((1 - Q) * σ).trace.re ≤ 1 / 16 := hspec.2
+  have hdist : Matrix.traceDistance ρ σ ≤ 1 / 32 := by
+    change (CFC.abs (ρ - σ)).trace.re / 2 ≤ 1 / 32
+    have hd' : (CFC.abs (ρ - σ)).trace.re ≤ 1 / 16 := hd
+    linarith
+  have htail : ((1 - Q) * ρ).trace.re ≤ 1 / 8 := by
+    have ht := Matrix.re_trace_mul_sub_le_traceDistance hρ.isHermitian hσ.isHermitian
+      (hρ1.trans hσ1.symm) hQ.one_sub.nonneg (sub_le_self _ hQ.nonneg)
+    linarith
+  exact (hx j).1.trace_shiftedRegulator_le_quarter hρ hstat.1.symm hu hR hstat.2 hQ
+    (by simpa only [mul_assoc] using hspec.1) htail
+
+end TNLean.PEPS
