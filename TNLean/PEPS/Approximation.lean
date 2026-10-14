@@ -62,6 +62,7 @@ import TNLean.PEPS.Approximation.CommonPartyMaps
 import TNLean.PEPS.Approximation.CommonSourceGate
 import TNLean.PEPS.Approximation.CommonSourcePreparation
 import TNLean.PEPS.Approximation.CompletePartyMaps
+import TNLean.PEPS.Approximation.CompressionRetainedNorm
 import TNLean.PEPS.Approximation.ConditionalTwoFamilies
 import TNLean.PEPS.Approximation.CorrectedInputReordering
 import TNLean.PEPS.Approximation.CorrectedInputVectorIdentity
