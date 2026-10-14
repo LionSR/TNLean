@@ -1,0 +1,172 @@
+\section{The supported unitary of the information reset}
+
+This section carries out the overlap, filtering, localization and polar steps
+in the proof of the information reset of \cite{OpenAI2026PolynomialPEPS}.
+Throughout, $\mathcal X_D=[q]^D$ denotes the configurations on a region $D$,
+and two replicas of a state are compared after the exchange $F_R$ of the
+replicas on a region $R$.
+
+\begin{theorem}[A unitary polar factor on the same support]
+    \label{thm:peps_supported_polar_unitary}
+    \lean{QuantumCircuit.exists_supported_unitary_polar_correction}
+    \leanok
+    Let $D$ be an operator on a finite set of sites, supported on a set $S$.
+    There is a unitary $U$, also supported on $S$, such that for all vectors
+    $x,y$,
+    \begin{align*}
+        \|Ux-y\| & \le\|Dx-y\|+\|D^*y-x\|.
+    \end{align*}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Write $D=D_S\otimes\id$. The polar factor of the square operator $D_S$
+    extends to a unitary $U_S$ on the space of $S$, with $D_S=U_S|D_S|$.
+    Put $U=U_S\otimes\id$, so that $D=U|D|$ with $|D|$ positive. Put
+    $w=U^*y$. Since $\id+|D|$ does not decrease norms,
+    \begin{align*}
+        \|x-w\| & \le\|(\id+|D|)(x-w)\|
+        \le\||D|x-w\|+\||D|w-x\|.
+    \end{align*}
+    Applying the unitary $U$ to the first and last terms gives the claim,
+    because $U|D|x=Dx$ and $|D|w=D^*y$.
+    No additional system is adjoined.
+\end{proof}
+
+\begin{lemma}[Regional coordinates of the replica exchange]
+    \label{lem:peps_reset_regional_coordinates}
+    \lean{TNLean.PEPS.Approximation.splitTwoRegions_sheetSwap,
+        TNLean.PEPS.Approximation.submatrix_partialSwap_kronecker_one_eq_sheetSwapOp,
+        TNLean.PEPS.Approximation.quantumRelativeEntropy_splitTwoRegionsState_eq_mutualInformation}
+    \leanok
+    \uses{thm:peps_physical_buffer_coordinates}
+    Let $R,C$ be disjoint regions of a finite set of sites, and put
+    $Q=(R\cup C)^c$. In the coordinates
+    $\mathcal X_R\times\mathcal X_C\times\mathcal X_Q$ of each replica, the
+    exchange $F_R$ exchanges the two $\mathcal X_R$ registers and fixes the
+    remaining four registers. For a normalized vector $\Omega$, the relative
+    entropy of $\rho_{RC}$ from $\rho_R\otimes\rho_C$ equals $I_\Omega(R:C)$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The first assertion is a comparison of coordinates, using $R\cap C=\varnothing$
+    and $R\cap Q=\varnothing$. The second is the identity
+    $D(\rho_{RC}\,\|\,\rho_R\otimes\rho_C)=S(\rho_R)+S(\rho_C)-S(\rho_{RC})$,
+    which holds without any invertibility assumption.
+\end{proof}
+
+\begin{theorem}[The two-sided Gaussian filter of the physical buffer]
+    \label{thm:peps_reset_regional_filter}
+    \lean{TNLean.PEPS.Approximation.exists_regional_physicalBuffer_filter}
+    \leanok
+    \uses{lem:peps_reset_regional_coordinates}
+    Fix $\Delta>0$ and $r\ge0$. There are constants $A,T_0>0$ with the
+    following property. Let $H$ be a Hamiltonian on a finite set of sites
+    with normalized eigenvector $\Omega$ of eigenvalue $E_0$ and
+    \begin{align*}
+        H-E_0 & \ge\Delta(\id-|\Omega\rangle\langle\Omega|).
+    \end{align*}
+    Let $R,C$ be disjoint with $I_\Omega(R:C)\le b$, $b\ge0$, put
+    $Q=(R\cup C)^c$, $\Psi=\Omega\otimes\Omega$ and $\Phi=F_R\Psi$. Let
+    $\mathbb H=H\otimes\id+\id\otimes H$ and $\mathbb H'=F_R\mathbb HF_R^*$.
+    Then there are a contraction $W$ on the two copies of $\mathcal X_Q$ and
+    a real number $z\ge e^{-2b}$, chosen once, such that for every $L\ge1$,
+    with $B_*=1+b+\log L$, $h=AB_*$ and $T=T_0B_*$, the operator
+    \begin{align*}
+        M & =\int_{[-T,T]}g_h(t)e^{it\mathbb H'}(\id\otimes W)e^{-it\mathbb H}\,dt
+    \end{align*}
+    satisfies
+    \begin{align*}
+        \|M\Psi-z\Phi\|,\ \|M^*\Phi-z\Psi\| & \le3e^{-10b}L^{-r}.
+    \end{align*}
+    Here $g_h$ is the centered Gaussian density of variance $h$, and the
+    identity acts on the two copies of $\mathcal X_R\times\mathcal X_C$.
+    The statement holds in any coordinates of the two replicas.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By Lemma~\ref{lem:peps_reset_regional_coordinates}, the information bound is
+    a relative-entropy bound for the regional splitting of $\Omega$. The
+    overlap estimate of the purified relative entropy gives a Hermitian
+    contraction $W$, obtained by pulling a purifier exchange back to the
+    original buffer, with real overlap $z=\langle\Phi,(\id\otimes W)\Psi\rangle
+        \ge e^{-2b}$. The two doubled Hamiltonians have ground vectors $\Psi$ and
+    $\Phi$ at energy $2E_0$ and gap at least $\Delta$. The spectral theorem
+    gives both residuals of the full Gaussian integral at most
+    $e^{-h\Delta^2/2}$, and truncation at $T$ costs at most
+    $2e^{-T^2/(2h)}$. The fixed choice of $A,T_0$ bounds both by
+    $e^{-10b}L^{-r}$ and $2e^{-10b}L^{-r}$. Finally, Lemma~\ref{lem:peps_reset_regional_coordinates}
+    identifies the partial exchange of the regional registers with $F_R$ in
+    every coordinate system.
+\end{proof}
+
+\begin{lemma}[The polar step of the information reset]
+    \label{lem:peps_reset_polar_step}
+    \lean{TNLean.PEPS.Approximation.exists_supported_unitary_of_two_sided}
+    \leanok
+    \uses{thm:peps_supported_polar_unitary}
+    Let $M$ be supported on $S$, let $b\ge0$, $C\ge0$, $\varepsilon\ge0$, and
+    let $z\ge e^{-2b}$ be real with
+    \begin{align*}
+        \|M\psi-z\varphi\|,\ \|M^*\varphi-z\psi\| & \le Ce^{-10b}\varepsilon.
+    \end{align*}
+    Then a unitary $U$ supported on $S$ satisfies
+    $\|U\psi-\varphi\|\le2C\varepsilon$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    Apply Theorem~\ref{thm:peps_supported_polar_unitary} to $D=M/z$. Both
+    residuals of $D$ are at most $z^{-1}Ce^{-10b}\varepsilon\le Ce^{-8b}\varepsilon$,
+    since $z^{-1}\le e^{2b}$.
+\end{proof}
+
+\begin{theorem}[The localized filter of the information reset]
+    \label{thm:peps_reset_localized_filter}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_reset_localized_filter}
+    \leanok
+    \uses{thm:peps_reset_regional_filter,thm:peps_supported_physical_buffer_gaussian}
+    Fix an integer $q\ge1$, real numbers $J\ge0$, $\Delta>0$ and $r\ge0$.
+    There are constants $C,K>0$ with the following property. Let $L\ge1$, let
+    $H$ be an open square Hamiltonian with interaction bound $J$, and let
+    $\Omega$ be a normalized eigenvector with the full-system gap $\Delta$.
+    Let $R,C_0$ be disjoint with $I_\Omega(R:C_0)\le b$, $b\ge0$. Put
+    $Q=(R\cup C_0)^c$, let $Z_R$ be the endpoints of the edges crossing $R$,
+    and let $B$ be the graph neighbourhood of radius $\lceil K(1+b+\log L)\rceil$
+    of $Q\cup Z_R$ on the paired sites. With $\Psi=\Omega\otimes\Omega$ and
+    $\Phi=F_R\Psi$, there are a real number $z\ge e^{-2b}$ and a contraction
+    $M$ supported on $B$ with
+    \begin{align*}
+        \|M\Psi-z\Phi\|,\ \|M^*\Phi-z\Psi\| & \le Ce^{-10b}L^{-r}.
+    \end{align*}
+\end{theorem}
+\begin{proof}
+    \leanok
+    Take $A,T_0$ from Theorem~\ref{thm:peps_reset_regional_filter} in the paired
+    site coordinates, and the localized integral of
+    Theorem~\ref{thm:peps_supported_physical_buffer_gaussian} for the buffer
+    operator $W$, variance $AB_*$, cutoff $T_0B_*$ and radius
+    $\ell=\lceil KB_*\rceil$. Its distance from the truncated integral is at most
+    \begin{align*}
+        C'L^2(1+8JL^2T_0B_*)e^{vT_0B_*-c\ell}
+         & \le C'(1+8J)L^4(1+T_0B_*)e^{vT_0B_*-c\ell} \\
+         & \le C'(1+8J)(1+T_0)e^{-10b}L^{-r}
+    \end{align*}
+    once $cK\ge vT_0+15+r$. Both residuals change by at most this distance,
+    because $\Psi$ and $\Phi$ are unit vectors.
+\end{proof}
+
+\begin{theorem}[The unitary of the information reset]
+    \label{thm:peps_reset_unitary}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_reset_unitary}
+    \leanok
+    \uses{thm:peps_reset_localized_filter,lem:peps_reset_polar_step}
+    In the setting of Theorem~\ref{thm:peps_reset_localized_filter}, there are
+    constants $C,K>0$ such that a unitary $U$ supported on $B$ satisfies
+    $\|U\Psi-\Phi\|\le CL^{-r}$. The constants depend only on $q,J,\Delta,r$;
+    no gap of a restricted Hamiltonian and no bound on a purifying dimension
+    is assumed.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Combine Theorem~\ref{thm:peps_reset_localized_filter} with
+    Lemma~\ref{lem:peps_reset_polar_step}.
+\end{proof}
