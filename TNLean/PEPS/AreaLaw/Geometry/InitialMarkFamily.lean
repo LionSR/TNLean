@@ -151,8 +151,12 @@ theorem exists_uniform_initial_mark_bound :
       _ ≤ 576 * W * B₀ := mul_le_mul_of_nonneg_left hsumK (by positivity)
       _ = _ := by dsimp [W]; ring
 
-private theorem exists_least_incident_scales (o : ℝ × ℝ)
-    (F : ℕ → Finset (ℤ × ℤ)) (k₀ : ℕ) (M : Finset (ℝ × ℝ))
+/-- Every mark has a smallest incident dyadic side, without any finiteness
+assumption on the set of marks or on the supported layers.
+Source: area-law Section 11, `geometry:initial-stars`, lines 325–339,
+especially the smallest incident side in lines 328–330. -/
+theorem exists_least_incident_scales (o : ℝ × ℝ)
+    (F : ℕ → Finset (ℤ × ℤ)) (k₀ : ℕ) (M : Set (ℝ × ℝ))
     (hM : ∀ x, x ∈ M ↔ ∃ k, k₀ ≤ k ∧ x ∈ beltMarks o (fineScaleIndex k) (F k)) :
     ∃ S : M → ℝ,
       (∀ v, 0 < S v ∧ ∃ k z, k₀ ≤ k ∧ z ∈ F k ∧
@@ -209,7 +213,8 @@ theorem exists_uniform_separated_initial_marks :
   let F := fun k => beltCellIndices
     (fineLayerIndices o k (fineScaleIndex k) (boundaryEndpoints Λ A) C)
     (2 ^ (pitchScaleIndex k - fineScaleIndex k)) (a k) (b k)
-  obtain ⟨S, hincident, hminimal⟩ := exists_least_incident_scales o F k₀ M hM
+  obtain ⟨S, hincident, hminimal⟩ :=
+    exists_least_incident_scales o F k₀ (M : Set (ℝ × ℝ)) hM
   refine ⟨a, b, hcells, hfinite, M, hM, hcard, S, hincident, hminimal, ?_⟩
   intro v w hvw
   obtain ⟨_, k, z, hk, hz, hv, hSv⟩ := hincident v

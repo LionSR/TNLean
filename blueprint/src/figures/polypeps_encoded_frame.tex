@@ -1,0 +1,70 @@
+% Figure polypeps_encoded_frame.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. V C (Definition 4, encoded frame), Fig. 5(b).
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/05-frames.tex:28-82 (inner and
+% outer squares, (6.1)-(6.3), Definition 6.1) and sections/06-geometry.tex:109-125
+% (true vertices carry holes; the tag holder is one incident owner).
+% Ink-to-index: dots are the raw registers of one sheet, one per site. The
+% tints are the raw ownership assignment: P_1 (orange, cols 1-5), P_2 (cyan,
+% rows 1-5 x cols 6-10), P_3 (grey, rows 6-10 x cols 6-10). The three labels
+% meet at the true vertex c (red centre dot, label c above it), the lattice
+% point between rows 5-6 and cols 5-6. The hole there is drawn in the
+% \holeglyph code (shared-spec 4.1, H5): inner square Q^-(c,h) a solid red
+% untinted square of strings at sup-distance h = 1 from c (sites rows 5-6 x
+% cols 5-6), outer square Q^+(c,h) a dashed red square of strings at
+% sup-distance 2h = 2 (sites rows 4-7 x cols 4-7), both through half-integer
+% points, so their sides are in the paper's ratio 1:2; every selected sample
+% X_j lies between them.
+% Labels: Q^+ is a direct label just east of the outer square's NE corner, in
+% the empty middle of four P_2 sites; Q^- ends a red leader that leaves the
+% inner square along the white P_2|P_3 gap and ends east of the lattice (the
+% gap is too narrow to hold the label without touching the P_2 and P_3
+% contours).  The box J (placed between
+% sites, inside P_1, label "J (tag)") is the hole's tag register, held by the
+% incident owner P_1; its thin red string runs down the white site gap of
+% column 1-2 and along the P_1 row gap to the inner square, and only says
+% which hole it records.  Along the P_1|P_3 edge only two labels meet, so there
+% is no hole: the grey open ring at the bottom end of that edge, labelled
+% "no hole".  Raw registers stay at every site, including inside the hole
+% (the encoder writes product zeros there).
+% Boundary signature: empty (geometry, no tensor contraction).
+% Not to scale: drawn with h = 1 lattice spacing; in the paper
+% h = h_n = epsilon_0 min(n, t), t = D log L, and outer squares of distinct
+% holes are disjoint.
+% Related: peps_dyadic_rim_pattern shows how such a true vertex arises after
+% point treatment (rim, treated square); this figure has no treatment and no
+% rim. peps_frame_hole_encoder_a draws the nested squares alone.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={ket,ket,ket,ket,ket,ket,ket,ket,ket,ket}, cols=10, bonds=none]
+        \tndeclare{species}{hole}{hue=source:red}
+        \tndeclare{species}{centre}{hue=source:red}
+        \tndeclare{species}{bandA}{hue=source:orange}
+        \tndeclare{species}{bandB}{hue=source:cyan}
+        \tndeclare{species}{bandC}{hue=source:gray}
+        \tnmark[form=enclosure, species=bandA, tint, label pos=w]{(1,1) .. (10,5)}{$P_1$}
+        \tnmark[form=enclosure, species=bandB, tint, label pos=e]{(1,6) .. (5,10)}{$P_2$}
+        \tnmark[form=enclosure, species=bandC, tint, label pos=e]{(6,6) .. (10,10)}{$P_3$}
+        \tnwire[kind=string, species=hole, closed, route=orth, name=frInner,
+            via={0.5 n of 0.5 w of (5,5), 0.5 n of 0.5 e of (5,6),
+                    0.5 s of 0.5 e of (6,6), 0.5 s of 0.5 w of (6,5)}]
+        \tn[at=0.5 s of 0.5 e of (5,5), name=frVertex, skin=dot, species=centre, size=l]{}
+        \tnmark[form=label, label pos=n]{frVertex}{$c$}
+        \tnwire[kind=string, species=hole, stroke=dashed, closed, route=orth, name=frOuter,
+            via={0.5 n of 0.5 w of (4,4), 0.5 n of 0.5 e of (4,7),
+                    0.5 s of 0.5 e of (7,7), 0.5 s of 0.5 w of (7,4)}]
+        \tnmark[form=label, label pos=e]{0.5 n of 0.5 e of (4,7)}{$Q^+$}
+        \tnwire[kind=string, species=hole, name=frInnerLead,
+            cross={over at crossing of frInnerLead and frOuter}]
+        {0.56 e of 0.5 s of (5,6)}{0.6 e of 0.5 s of (5,10)}
+        \tnmark[form=label, label pos=e]{0.6 e of 0.5 s of (5,10)}{$Q^-$}
+        \tn[at=0.5 s of 0.5 e of (2,1), name=frTag, skin=box]{}
+        \tnmark[form=label, label pos=e]{frTag}{$\mathcal J\ (\text{tag})$}
+        \tnwire[kind=string, species=hole, route=orth, name=frTagLink,
+            cross={over at crossing of frTagLink and frOuter},
+            via={0.5 s of 0.5 e of (5,1)}]
+        {frTag}{0.56 w of 0.5 s of (5,5)}
+        \tn[at=0.5 e of (10,5), name=frNoHole, skin=ring, species=complement]{}
+        \tnmark[form=label, label pos=s]{frNoHole}{$\text{no hole}$}
+    \end{tenkz}
+\end{center}
