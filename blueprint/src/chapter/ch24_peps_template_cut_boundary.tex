@@ -146,6 +146,7 @@ assumption is imposed on $\Lambda$ or $A$.
 \begin{theorem}[Exclusion of the exterior and a remote union]
     \label{thm:area_law_graph_neighborhood_remote_exclusion}
     \lean{TNLean.PEPS.AreaLaw.exterior_union_subset_graphNeighborhood_compl_of_clearance}
+    \leanok
     \uses{def:area_law_domain,def:area_law_cell_counts}
     Let $\Lambda,T\subset\mathbb Z^2$ be finite, let $A,J\subseteq\Lambda$,
     and let $L,R\in\mathbb N$. Let $Z_A$ be the set of endpoints of
@@ -163,7 +164,7 @@ assumption is imposed on $\Lambda$ or $A$.
         Section~11]{OpenAI2026AreaLaw}, $J$ is the whole union of earlier
     actual pieces of the same family.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:area_law_graph_neighborhood_cut_clearance}
     By Theorem~\ref{thm:area_law_graph_neighborhood_cut_clearance},
     every $x\in N_R^\Lambda(S)$ belongs to $A$ and to

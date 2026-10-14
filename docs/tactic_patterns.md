@@ -43,9 +43,9 @@ abstracted — record why, so it is not re-proposed).
   different absolute-value formulation and is not a duplicate declaration.
 - **Notes:** The helper allows every finite target and natural radius, including
   the empty target and radius zero. The ambient-depth replacement removes one
-  proof line and preserves the statement and remaining proof. Verification of
-  the relocated helper and these exact production proofs by the normal CI
-  remains pending; the earlier private exclusion proof used direct expansion.
+  proof line and preserves the statement and remaining proof. The relocated
+  helper and the production proofs passed the full project build, strict Lean
+  checks, the named standard-axiom test, and blueprint declaration checks.
 
 ### Named comparison of arbitrary word evaluations — promoted (2026-10-14)
 
