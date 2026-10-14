@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.AreaLaw
 
 import TNLean.PEPS.AreaLaw.Amplification
+import TNLean.PEPS.AreaLaw.AmplificationCutClearance
 import TNLean.PEPS.AreaLaw.BirthTargetEntropy
 import TNLean.PEPS.AreaLaw.BoundaryConventions
 import TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly
