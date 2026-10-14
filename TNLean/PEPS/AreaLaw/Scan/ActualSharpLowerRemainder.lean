@@ -80,7 +80,7 @@ theorem tendsto_sharpLowerRemainder_of_label_dimension
       (hf : Tendsto (fun k : ℕ => f k / (k : ℝ)) atTop (𝓝 0)) :
       Tendsto (fun k : ℕ => |f k| / (k : ℝ)) atTop (𝓝 0) := by
     have heq (k : ℕ) : |f k / (k : ℝ)| = |f k| / (k : ℝ) := by
-      rw [abs_div, abs_of_nonneg (Nat.cast_nonneg k)]
+      rw [abs_div, abs_of_nonneg (Nat.cast_nonneg k : (0 : ℝ) ≤ (k : ℝ))]
     simpa only [heq, abs_zero] using hf.abs
   have hdefect : Tendsto
       (fun k : ℕ => sharpLowerLabelDefect ell Sent k / (k : ℝ)) atTop (𝓝 0) := by
@@ -103,7 +103,9 @@ theorem tendsto_sharpLowerRemainder_of_label_dimension
     simpa only [add_div, mul_div_assoc, mul_zero, add_zero] using
       ((((habs r hr).const_mul 2).add (habs b hb)).add
         (hconst (Real.log 2))).add (hconst (Real.log (3 / 2)))
-  simpa only [sharpLowerRemainder, r, b, div_div, mul_comm, zero_div] using
-    herr.div_const a
+  change Tendsto (fun k : ℕ =>
+    (2 * |r k| + |b k| + Real.log 2 + Real.log (3 / 2)) / (a * (k : ℝ)))
+    atTop (𝓝 0)
+  simpa only [div_div, mul_comm, zero_div] using herr.div_const a
 
 end TNLean.PEPS.AreaLaw.Scan
