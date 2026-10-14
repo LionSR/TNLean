@@ -11,6 +11,7 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Amplification
 import TNLean.PEPS.AreaLaw.AmplificationCutClearance
 import TNLean.PEPS.AreaLaw.AmplificationProof
+import TNLean.PEPS.AreaLaw.AmplificationProofSteps
 import TNLean.PEPS.AreaLaw.BirthTargetEntropy
 import TNLean.PEPS.AreaLaw.BoundaryConventions
 import TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly

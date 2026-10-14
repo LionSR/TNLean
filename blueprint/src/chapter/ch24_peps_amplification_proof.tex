@@ -241,6 +241,35 @@ comparison treats the two copies as additional sites.
     second.
 \end{proof}
 
+\begin{theorem}[The local unitary and the entropy comparison on the enlarged sites]
+    \label{thm:al_amp_enlarged_steps}
+    \lean{TNLean.PEPS.AreaLaw.exists_ancilla_unitary_of_good_realization,
+        TNLean.PEPS.AreaLaw.mutualInformation_le_of_ancilla_unitary}
+    \leanok
+    \uses{thm:al_amp_ancilla_sites,thm:al_amp_supported_polar}
+    Work on the physical sites enlarged by the two copies $s',e'$ of $X$. Let the
+    restoring operator $R_0$ act on $N\sqcup s'$ and the truncated product $L'$ act
+    on a physical region $N$. Under the hypotheses of the deterministic steps after
+    the choice of a good realization, with the physical operators tensored with
+    the identity on both copies, there is a unitary acting on $N\sqcup s'$ with
+    $\|U\varphi-\eta\|\le a+\sqrt{2a+6\varepsilon+9\varepsilon^2}$. If $X\subseteq N$,
+    $\varphi$ is the copied vector built from unit blank vectors, $\varphi$ and
+    $\eta$ have unit norm, $\|U\varphi-\eta\|\le C_1n^{-K/2}$ with $K\ge4(M+2)$ and
+    $|X|\log q\le C_2n^2$, then every part of $X$ has mutual information at most
+    $8\sqrt{C_1}\,(1+C_2)\,n^{-M}$ in $\Omega$ with every physical region avoiding
+    $N$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Relabel the enlarged configurations as physical configurations together with
+    the configurations of $s'$ and $e'$, and apply
+    Theorem~\ref{thm:al_amp_supported_polar} on the enlarged sites. For the entropy
+    comparison, $\eta$ is $\Omega$ tensored with a unit ancillary vector, so it has
+    no mutual information between $e'$ and a physical region, and the copy of
+    each $X'\subseteq X$ in $e'$ carries $I_\Omega(X':J)$ by
+    Theorem~\ref{thm:al_amp_ancilla_sites}.
+\end{proof}
+
 \begin{theorem}[The amplification radius is a power of the scale]
     \label{thm:al_amp_radius_bound}
     \lean{TNLean.PEPS.AreaLaw.exists_amplificationRadius_le}
@@ -273,7 +302,8 @@ comparison treats the two copies as additional sites.
         thm:al_amp_constraint_word_lists,thm:al_lattice_excited_decay,
         thm:al_lattice_constraint_omission,thm:al_lattice_product_truncation,
         thm:area_law_amplification_scale_bounds,thm:al_amp_typical_projectors,
-        thm:al_amp_ancilla_sites,thm:al_amp_supported_polar,thm:al_amp_radius_bound}
+        thm:al_amp_ancilla_sites,thm:al_amp_supported_polar,thm:al_amp_enlarged_steps,
+        thm:al_amp_radius_bound}
     If $q=0$ or $J<0$, a gapped ground vector exists only on the empty domain,
     where every part of the target is empty. Otherwise fix $p=10^6$,
     $\alpha=p/(p+1)$ and $K=4(M+2)$, and take the constants of the excited-state
