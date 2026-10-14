@@ -237,3 +237,19 @@ The argument allows empty or repeated regions, zero weights, and singular
 densities. Neither nestedness of the regions nor commutation of their
 filters is required. It gives the same minimum value for every minimizer,
 without asserting uniqueness or smooth dependence of a minimizer on $R$.
+
+
+\begin{theorem}[The logarithmic minimum]
+    \label{thm:peps_regularized_patch_log_minimum}
+    \lean{TNLean.PEPS.isLeast_log_regularizedPatchObjective}
+    \uses{def:peps_regularized_patch_minimum}
+    Assume all $a_j\ge0$. Then $\log N$ is the attained minimum of
+    $x\mapsto\log F(x)$ on $\mathcal D$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_regularized_patch_minimum}
+    Choose a feasible minimizer $x_*$. Then $F(x_*)=N>0$ and
+    $N\le F(x)$ for every $x\in\mathcal D$. Monotonicity of the
+    logarithm on the positive real numbers gives
+    $\log N\le\log F(x)$, with equality at $x_*$.
+\end{proof}
