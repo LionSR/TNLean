@@ -112,3 +112,33 @@ assumption is imposed on $\Lambda$ or $A$.
     The integer interval description follows directly from the half-open
     dyadic square inequalities.
 \end{proof}
+
+\begin{theorem}[Graph neighborhoods separated from a cut]
+    \label{thm:area_law_graph_neighborhood_cut_clearance}
+    \lean{TNLean.PEPS.AreaLaw.graphNeighborhood_subset_of_cut_clearance}
+    \leanok
+    \uses{def:area_law_domain,def:area_law_cell_counts}
+    Let $\Lambda\subset\mathbb Z^2$ be finite, $A\subseteq\Lambda$, and
+    $T\subset\mathbb Z^2$ finite. For integers $L,R\ge0$, write
+    $T_L=T+[-L,L]^2_{\mathbb Z}$. Suppose
+    $\|t-z\|_\infty>L+R$ for every $t\in T$ and every endpoint
+    $z$ of a physical crossing edge of $A$. Then
+    \begin{align}
+        N_R^\Lambda(A\cap T_L)\subseteq A\cap T_{L+R}.
+    \end{align}
+    The statement includes empty targets and disconnected domains. This is
+    the cut-exclusion step in the proof of
+    \cite[Theorem~1.1]{OpenAI2026AreaLaw}; separation from the earlier
+    members of a family is a further geometric condition.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scan_ambient_rows}
+    Let $x$ be joined to $y\in A\cap T_L$ by a path of length at most $R$.
+    Then $T$ is nonempty. The depth
+    $d(v)=\min_{t\in T}\|v-t\|_\infty$ satisfies $d(y)\le L$ and
+    changes by at most one along each graph edge. Every endpoint of a
+    prefix of the path therefore has depth at most $L+R$.
+    If the path leaves $A$, its first crossing gives a physical cut
+    endpoint of depth at most $L+R$, contrary to the hypothesis.
+    Thus $x\in A$; the depth bound at $x$ gives $x\in T_{L+R}$.
+\end{proof}
