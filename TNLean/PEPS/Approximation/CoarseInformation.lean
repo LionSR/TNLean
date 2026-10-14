@@ -57,7 +57,7 @@ namespace TNLean.PEPS.Approximation
 
 /-- The whole domain has no crossing edges, so its endpoint set `Z_Λ` is empty.
 Source: polynomial-PEPS proof of Proposition 3.1, `02-information.tex` lines 115–117. -/
-theorem boundaryEndpoints_univ (Λ : Finset (ℤ × ℤ)) :
+private theorem boundaryEndpoints_univ (Λ : Finset (ℤ × ℤ)) :
     Geometry.boundaryEndpoints Λ (Finset.univ : Finset (Site Λ)) = ∅ := by
   classical
   have : edgeBoundary Λ (Finset.univ : Finset (Site Λ)) = ∅ := by

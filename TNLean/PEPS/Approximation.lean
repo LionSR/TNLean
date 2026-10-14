@@ -41,6 +41,10 @@ import TNLean.PEPS.Approximation.AllPartyBranchLocality
 import TNLean.PEPS.Approximation.AllPartySingletonCircuitComparison
 import TNLean.PEPS.Approximation.AllPartySingletonComparison
 import TNLean.PEPS.Approximation.AllSourceSlots
+import TNLean.PEPS.Approximation.AngularAnnularCells
+import TNLean.PEPS.Approximation.AngularAnnularLayers
+import TNLean.PEPS.Approximation.AngularCellGeometry
+import TNLean.PEPS.Approximation.AngularGridCells
 import TNLean.PEPS.Approximation.AngularResetWidth
 import TNLean.PEPS.Approximation.ApproximateCircuitBudget
 import TNLean.PEPS.Approximation.ApproximateCircuitDensity
@@ -55,7 +59,12 @@ import TNLean.PEPS.Approximation.AuxiliaryRegisterFiniteness
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.BasisMatrixOperator
 import TNLean.PEPS.Approximation.CanonicalPartyFactorization
+import TNLean.PEPS.Approximation.CellChambers
+import TNLean.PEPS.Approximation.CellColouredGeneration
+import TNLean.PEPS.Approximation.CellColouredRecursion
+import TNLean.PEPS.Approximation.CellColouredStep
 import TNLean.PEPS.Approximation.CellPartitionCount
+import TNLean.PEPS.Approximation.CellTwoFamilyPartition
 import TNLean.PEPS.Approximation.CoarseInformation
 import TNLean.PEPS.Approximation.CoarseRectangleTemplates
 import TNLean.PEPS.Approximation.ColumnSelection
@@ -64,6 +73,7 @@ import TNLean.PEPS.Approximation.CommonPartyMaps
 import TNLean.PEPS.Approximation.CommonSourceGate
 import TNLean.PEPS.Approximation.CommonSourcePreparation
 import TNLean.PEPS.Approximation.CompletePartyMaps
+import TNLean.PEPS.Approximation.CompressionRetainedNorm
 import TNLean.PEPS.Approximation.ConditionalTwoFamilies
 import TNLean.PEPS.Approximation.CorrectedInputReordering
 import TNLean.PEPS.Approximation.CorrectedInputVectorIdentity
@@ -77,6 +87,7 @@ import TNLean.PEPS.Approximation.DistributedConstruction
 import TNLean.PEPS.Approximation.DistributedLifetime
 import TNLean.PEPS.Approximation.DistributedLinks
 import TNLean.PEPS.Approximation.DistributedOperatorContraction
+import TNLean.PEPS.Approximation.DistributedPartyNetwork
 import TNLean.PEPS.Approximation.DistributedPhysicalPrivateTrace
 import TNLean.PEPS.Approximation.DistributedSourceComposition
 import TNLean.PEPS.Approximation.DyadicActiveLabelParties
@@ -217,6 +228,7 @@ import TNLean.PEPS.Approximation.PartyLocalMaps
 import TNLean.PEPS.Approximation.PartyOutputCoordinates
 import TNLean.PEPS.Approximation.PartyPartition
 import TNLean.PEPS.Approximation.PartyPartitionAppend
+import TNLean.PEPS.Approximation.PartyPhysicalCoordinates
 import TNLean.PEPS.Approximation.PartyProductConjugation
 import TNLean.PEPS.Approximation.PartyProductPartialTrace
 import TNLean.PEPS.Approximation.PartyProductScalar

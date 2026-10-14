@@ -148,12 +148,6 @@ theorem IsBoxUnion.translate {N₀ : ℕ} {T : Finset (ℤ × ℤ)} (hT : IsBoxU
     refine ⟨t - c, ⟨a, ⟨?_, ?_⟩, ?_, ?_⟩, sub_add_cancel t c⟩ <;>
       simp only [Prod.fst_sub, Prod.snd_sub] <;> omega
 
-/-- An empty union of boxes is empty. -/
-theorem IsBoxUnion.eq_empty_of_zero {T : Finset (ℤ × ℤ)} (hT : IsBoxUnion 0 T) : T = ∅ := by
-  obtain ⟨k, hk, lo, hi, rfl⟩ := hT
-  obtain rfl : k = 0 := Nat.le_zero.mp hk
-  simp
-
 section Template
 
 /-- The closed axis-parallel rectangle `[a₁, a₁ + w₁] × [a₂, a₂ + w₂]` as a template
@@ -165,7 +159,7 @@ noncomputable def axisRectangle (a : ℝ × ℝ) (w : ℝ × ℝ) (hw₁ : 0 < w
     (by simp [Prod.ext_iff, hw₂.ne']) (by simp) (Or.inr (Or.inl rfl)) (Or.inl rfl)
 
 /-- The axis-parallel rectangle is the product of its two closed side intervals. -/
-theorem axisRectangle_region (a w : ℝ × ℝ) (hw₁ : 0 < w.1) (hw₂ : 0 < w.2) :
+private theorem axisRectangle_region (a w : ℝ × ℝ) (hw₁ : 0 < w.1) (hw₂ : 0 < w.2) :
     (axisRectangle a w hw₁ hw₂).region =
       Set.Icc a.1 (a.1 + w.1) ×ˢ Set.Icc a.2 (a.2 + w.2) := by
   have hset : ({a, a + (w.1, 0), a + (w.1, 0) + (0, w.2), a + (0, w.2)} : Set (ℝ × ℝ)) =
