@@ -106,3 +106,100 @@ unassigned at the stopping scale.
     $d(S_i)<S_*$ contributes no children, and its square is terminal.
     This is the marking rule of \cite[Section~11]{OpenAI2026AreaLaw}.
 \end{definition}
+
+\subsection{Depth and descendant count of a repair branch}
+\label{sec:area_law_repair_depth}
+
+Every child of a parent of scale $S$ receives the scale $d(S)$. The marks
+of generation $j$ descended from one initial mark of scale $S$ therefore
+all have the scale $d^{j}(S)$, the $j$-fold iterate of $d$, and each
+generation has at most $9^j$ marks. The following estimates concern these
+iterated scales only; they do not construct the replacements.
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 668--675.
+\begin{theorem}[Depth of a repair branch]
+    \label{thm:area_law_repair_depth}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairHalfSide_pos,
+        TNLean.PEPS.AreaLaw.Geometry.log_repairHalfSide_le,
+        TNLean.PEPS.AreaLaw.Geometry.log_repairHalfSide_iterate_le,
+        TNLean.PEPS.AreaLaw.Geometry.exists_repair_depth_bound}
+    \leanok
+    \uses{def:area_law_repair_square}
+    For every $S>0$ and $j\ge0$,
+    \begin{align}
+        \log d^{j}(S) & \le\rho_0^{j}\log S.
+        \label{eq:area_law_repair_depth_log}
+    \end{align}
+    For every $S_*>1$ there is a constant $C>0$ such that, for every $S>0$
+    and every $j\ge0$ with $d^{j}(S)\ge S_*$,
+    \begin{align}
+        j & \le C+C\log\log\bigl(e^{e}+S\bigr).
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_margins}
+    The half-side $d(S)$ is a power of two and $d(S)\le S^{\rho_0}$, so
+    $\log d(S)\le\rho_0\log S$. Induction on $j$ gives
+    (\ref{eq:area_law_repair_depth_log}). If $d^{j}(S)\ge S_*$, then
+    $0<\log S_*\le\rho_0^{j}\log S$, so $\log S>0$. Taking logarithms,
+    \begin{align}
+        j\log(1/\rho_0) & \le\log\log S-\log\log S_*.
+    \end{align}
+    Since $\log\log S\le\log\log(e^{e}+S)$ and the latter is at least
+    one, the constant $C=(\lvert\log\log S_*\rvert+1)/\log(1/\rho_0)$
+    suffices.
+\end{proof}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 676--686,
+% geometry:descendant-count.
+\begin{theorem}[Descendant count of an initial mark]
+    \label{thm:area_law_repair_descendant_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_repair_descendant_count_bound,
+        TNLean.PEPS.AreaLaw.Geometry.exists_repair_descendant_count_layer_bound}
+    \leanok
+    \uses{def:area_law_repair_square}
+    For every $S_*>1$ there is a constant $C>0$ such that, for every $S>0$
+    and every $m\ge0$ with $d^{m}(S)\ge S_*$,
+    \begin{align}
+        \sum_{j=0}^{m}9^{j} & \le C\bigl(\log(S+2)\bigr)^{C}.
+    \end{align}
+    For every $M>0$ there is moreover a constant $C>0$, depending only on
+    $S_*$ and $M$, such that the same sum is at most $C(k+1)^{C}$ whenever
+    $S\le M2^{k}$ for a nonnegative integer $k$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_depth}
+    The sum is at most $9^{m+1}$. The depth bound gives
+    $m+1\le C_1+1+C_1\log\ell$ with $\ell=\log(e^{e}+S)$, so
+    $9^{m+1}\le9^{C_1+1}\ell^{p}$ with $p=C_1\log9$. The hypothesis forces
+    $S>1$, hence $\log(S+2)\ge1$, and
+    $\ell\le e+\log(S+2)\le4\log(S+2)$. Enlarging the exponent from $p$ to
+    $C\ge p$ only increases a power of a number at least one. For the second
+    assertion, $S+2\le(M+2)2^{k}$ gives
+    $\log(S+2)\le(\log(M+2)+1)(k+1)$.
+\end{proof}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 761--768,
+% geometry:fine-clearance.
+\begin{theorem}[Fine clearance threshold]
+    \label{thm:area_law_fine_clearance}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.eventually_fine_clearance}
+    \leanok
+    Let $c_1>0$ and $C_B\ge0$. Every sufficiently large real number $u$
+    satisfies
+    \begin{align}
+        c_1u^{\rho_0} & >2\lceil C_Bu\rceil^{\beta}.
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_exponent_gaps}
+    For $u\ge1$, $\lceil C_Bu\rceil\le(C_B+1)u$, so the right side is at
+    most $2(C_B+1)^{\beta}u^{\beta}$. The exponent gaps give $\beta<\rho_0$,
+    and $u^{\beta-\rho_0}$ tends to zero.
+\end{proof}
