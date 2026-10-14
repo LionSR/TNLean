@@ -108,6 +108,7 @@ theorem exists_uniform_sampled_approximate_network_bounds
                 (fun g _ ↦ SourceCircuit.sourceGateRoot_mem R g)
                 (fun g ↦ R.branchLabels g.1 × R.branchLabels g.1) k
                 (DistributedOperatorContraction.densityPairCoefficient
+                  (Gate := R.nonemptyGateLocations)
                   (fun g ↦ R.branchLabels g.1) (fun g ↦ R.branchLabels g.1)
                   (fun g ↦ R.branchCoefficient g.1) (fun g ↦ R.branchCoefficient g.1)
                   (fun g ↦ (k : ℂ)⁻¹ ^ (pairSampleLabels (R.participants g.1)).card)) T -
@@ -197,7 +198,7 @@ theorem exists_uniform_sampled_approximate_network_bounds
       (fun g ↦ (ξζ g).1) (fun g ↦ (ξζ g).2) ω
       (fun z ↦ R.allResidualSourceBasis z)
       (fun z ↦ SourceCircuit.allPartyDiscardBasis garbage hfinite z)
-      (z ∘ SourceCircuit.partialSlotSampleEquiv R j)
+      (z ∘ (SourceCircuit.partialSlotSampleEquiv R j).toFun)
   refine ⟨T, hω.trans hsmall, ?_, hinc, ?_⟩
   · intro e
     exact (hdim e).trans (mul_le_mul_of_nonneg_left

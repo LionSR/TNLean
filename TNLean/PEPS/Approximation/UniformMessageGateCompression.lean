@@ -130,6 +130,7 @@ theorem exists_uniform_message_sampled_network
                 (fun g _ ↦ SourceCircuit.sourceGateRoot_mem R g)
                 (fun g ↦ R.branchLabels g.1 × R.branchLabels g.1) k
                 (DistributedOperatorContraction.densityPairCoefficient
+                  (Gate := R.nonemptyGateLocations)
                   (fun g ↦ R.branchLabels g.1) (fun g ↦ R.branchLabels g.1)
                   (fun g ↦ R.branchCoefficient g.1) (fun g ↦ R.branchCoefficient g.1)
                   (fun g ↦ (k : ℂ)⁻¹ ^ (pairSampleLabels (R.participants g.1)).card)) T -

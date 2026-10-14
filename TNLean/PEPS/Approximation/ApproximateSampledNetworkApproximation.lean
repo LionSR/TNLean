@@ -95,7 +95,7 @@ theorem exists_sampled_contractedOperator_approximate_error_le
             (fun g ↦ R.participants g.1) p → Fin k) ↦
           SourceCircuit.incidentSampledPhysicalFactor (I := I) (E := J)
             physicalDim ps hps hcover garbage R ψ k lam E F p η θ ω Bsrc BG
-            (j ∘ SourceCircuit.partialSlotSampleEquiv R p)
+            (j ∘ (SourceCircuit.partialSlotSampleEquiv R p).toFun)
         Matrix.rectangularTraceNorm
           ((R.emptyGateScalar * conj R.emptyGateScalar) •
               DistributedOperatorContraction.contractedOperator
@@ -103,6 +103,7 @@ theorem exists_sampled_contractedOperator_approximate_error_le
                 (SourceCircuit.sourceGateRoot R) (fun g _ ↦ SourceCircuit.sourceGateRoot_mem R g)
                 (fun g ↦ R.branchLabels g.1 × R.branchLabels g.1) k
                 (DistributedOperatorContraction.densityPairCoefficient
+                  (Gate := R.nonemptyGateLocations)
                   (fun g ↦ R.branchLabels g.1) (fun g ↦ R.branchLabels g.1)
                   (fun g ↦ R.branchCoefficient g.1) (fun g ↦ R.branchCoefficient g.1)
                   (fun g ↦ (k : ℂ)⁻¹ ^ (pairSampleLabels (R.participants g.1)).card))
