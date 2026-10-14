@@ -17,7 +17,8 @@ every occurrence of a region. The identity holds for arbitrary regional matrices
 real exponents and real shifts, with the same convention for real matrix powers.
 It includes empty lists, empty regions and zero local dimensions. The two objective
 norms therefore agree, and a minimum over indexed densities gives a minimum
-over all lists with the same positional regions and exponents.
+over all lists with the same positional regions and exponents. Normalizing the
+outputs preserves this identification, including when the output vanishes.
 
 Source: OpenAI, *Polynomial PEPS approximation of gapped square-grid ground states*,
 Proposition 4.1, `03-patches.tex`, `eq:patch-variational-problem`, lines 68–99,
@@ -162,5 +163,24 @@ theorem isPatchMinimizer_regularizedPatchFactorList
   apply hmin
   intro j
   exact hfeasible (g j) (List.mem_reverse.mpr (List.mem_ofFn.mpr ⟨j, rfl⟩))
+
+/-- The normalized outputs agree under the same configuration identification,
+including when the ordered output is zero.
+Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 68–99 and
+130–205. -/
+theorem dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput
+    (regions : Fin m → Finset V) (a : Fin m → ℝ) (b : ℝ)
+    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Fin (n v.1)))
+    (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
+      (Entropy.RegionConfig n (regions j)) ℂ) :
+    dependentGlobalConfigIsometry
+        (normalizedRegularizedPatchOutput (Out := fun v ↦ Fin (n v))
+          regions a b Ω x) =
+      Entropy.patchState b (regularizedPatchFactorList regions a x)
+        (dependentGlobalConfigIsometry Ω) := by
+  simp only [normalizedRegularizedPatchOutput, Entropy.patchState,
+    RCLike.real_smul_eq_coe_smul (K := ℂ), map_smul,
+    regularizedPatchObjective_eq_norm_patchOutput,
+    dependentGlobalConfigIsometry_regularizedPatchOutput]
 
 end TNLean.PEPS

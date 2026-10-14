@@ -218,6 +218,31 @@ Its marginals are those of the same final normalized vector defined in
     \end{align*}
 \end{proof}
 
+% Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 91--99.
+% Completion marks await verification of the public declaration.
+\begin{theorem}[Canonical coordinates for the normalized output]
+    \label{thm:peps_ordered_patch_normalized_coordinates}
+    \lean{TNLean.PEPS.dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput}
+    \uses{def:peps_ordered_patch_factor_list,def:peps_patch_canonical_marginal,
+        def:peps_regularized_patch_minimum}
+    Retain arbitrary matrices $x_j$, real exponents $a_j$, a real shift $b$,
+    and an arbitrary input $\Omega$. Let $\Psi$ and $\widetilde\Psi=J\Psi$
+    be the two ordered outputs. Define $\widehat\Psi=\|\Psi\|^{-1}\Psi$
+    and $\widehat{\widetilde\Psi}=\|\widetilde\Psi\|^{-1}\widetilde\Psi$,
+    with both normalizations equal to zero when the output vanishes.
+    Then $J\widehat\Psi=\widehat{\widetilde\Psi}$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_ordered_patch_output_coordinates}
+    Linearity and preservation of the norm give
+    \begin{align*}
+        J(\|\Psi\|^{-1}\Psi)
+         & =\|\Psi\|^{-1}J\Psi
+        =\|\widetilde\Psi\|^{-1}\widetilde\Psi.
+    \end{align*}
+    The identity also holds at zero.
+\end{proof}
+
 \begin{theorem}[Regional expectation and density properties]
     \label{thm:peps_patch_marginal_expectation}
     \lean{
