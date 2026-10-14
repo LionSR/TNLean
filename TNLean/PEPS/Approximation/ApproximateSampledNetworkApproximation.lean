@@ -39,6 +39,35 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 17–19 and 409
 private def partyMemoryCoordinateIndex {Q : Type} (q : Q) (ℓ : Layout Q) : Type :=
   Fin (Module.finrank ℂ (Mem (Layout.atParty q ℓ)))
 
+/-- The incident physical factor in the canonical coordinates of an arbitrary
+source circuit and its original finite discarded registers.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434 and 565–579. -/
+private def canonicalIncidentSampledPhysicalFactor {a : Layout P}
+    (d : P → ℕ) (ps : List P) (hn : ps.Nodup) (hc : ∀ p, p ∈ ps)
+    (garbage : Layout P) (hfinite : ∀ t ∈ garbage, FiniteDimensional ℂ t.space)
+    (R : SourceCircuit a (familyPhysicalLayout d ps ++ garbage))
+    (ψ : ProductInput a) (k : ℕ)
+    (lam : ∀ s : R.sourceLocations, R.branchLabels s.1 →
+      Fin (min (R.sourceDims s).1 (R.sourceDims s).2) → ℝ)
+    (E : ∀ s : R.sourceLocations, R.branchLabels s.1 →
+      Matrix (Fin (R.sourceDims s).1) (Fin (min (R.sourceDims s).1 (R.sourceDims s).2)) ℂ)
+    (F : ∀ s : R.sourceLocations, R.branchLabels s.1 →
+      Matrix (Fin (R.sourceDims s).2) (Fin (min (R.sourceDims s).1 (R.sourceDims s).2)) ℂ)
+    (p : P) (η θ : SourceCircuit.OriginalGateLabelsAt R p)
+    (ω : SourceCircuit.SourceGaussianSamples R k)
+    (j : DistributedOperatorContraction.SampleAt
+      (Finset.univ : Finset R.nonemptyGateLocations)
+      (fun g ↦ R.participants g.1) p → Fin k) :
+    Matrix (Fin (d p)) (Fin (d p)) ℂ :=
+  SourceCircuit.incidentSampledPhysicalFactor
+    (I := fun q ↦ partyMemoryCoordinateIndex q (R.allResidualSourceLayout ++ []))
+    (E := fun q ↦ partyMemoryCoordinateIndex q
+      (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) garbage))
+    d ps hn hc garbage R ψ k lam E F p η θ ω
+    (fun q ↦ R.allResidualSourceBasis q)
+    (fun q ↦ SourceCircuit.allPartyDiscardBasis garbage hfinite q)
+    (j ∘ (SourceCircuit.partialSlotSampleEquiv R p).toFun)
+
 /-- Local gate expansions at the prescribed approximation budget give an actual
 sampled distributed contraction within physical trace-norm error `ε` of the
 original gate operators. The original local approximation hypothesis is
@@ -98,9 +127,8 @@ theorem exists_sampled_contractedOperator_approximate_error_le
           (j : DistributedOperatorContraction.SampleAt
             (Finset.univ : Finset R.nonemptyGateLocations)
             (fun g ↦ R.participants g.1) p → Fin k) ↦
-          SourceCircuit.incidentSampledPhysicalFactor (I := I) (E := J)
-            physicalDim ps hps hcover garbage R ψ k lam E F p η θ ω Bsrc BG
-            (j ∘ (SourceCircuit.partialSlotSampleEquiv R p).toFun)
+          canonicalIncidentSampledPhysicalFactor physicalDim ps hps hcover garbage hfinite
+            R ψ k lam E F p η θ ω j
         Matrix.rectangularTraceNorm
           ((R.emptyGateScalar * conj R.emptyGateScalar) •
               DistributedOperatorContraction.contractedOperator
