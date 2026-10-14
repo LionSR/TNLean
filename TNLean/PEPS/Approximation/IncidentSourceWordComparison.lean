@@ -210,6 +210,64 @@ private theorem eval_restrict_mapOwner_castLayouts_heq_of_eq {Q R : Type}
   cases h
   exact Word.eval_castLayouts_heq _ hi ho
 
+/-- The literal incident word has the selected operator of the original
+preparation and projected residual. All labels and source registers are derived
+from the same original all-party choice. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 137–139, 246–267, 351–434 and 565–588. -/
+private theorem preparedWordEvalComparison_incidentSourceWord {a b : Layout P}
+    (w : SourceCircuit a b) (p : P) (ψ : ProductInput a)
+    (ξ : Choices (fun _ : P ↦ true) w) :
+    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
+      (affectedOwner (fun _ : P ↦ true) t)
+    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
+      (by classical exact decide_eq_true rfl)
+    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+    let lift : Option {t : P // A t = true} → Option {_p : P // true = true} :=
+      fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
+    let S := SourceInventory.slotLayout (partialSlots A w)
+      (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).1))
+      (fun i ↦ euc (Fin (sourceDims w (partialSlotEquiv A w i).1).2))
+    let χ := projectAllChoices A w ξ
+    let Pa : Word (S ++ []) (S ++ Layout.mapOwner (affectedOwner A) a) :=
+      Word.frameList S (ψ.prepare.mapOwner (affectedOwner A))
+    let hsPa : Pa.sources = [] := by
+      simp only [Pa, Word.sources_frameList, Word.sources_mapOwner, ψ.sources_prepare,
+        SourceInventory.mapOwner_nil]
+    let Va := Pa.comp (partialResidual A w χ)
+    let hsVa : Va.sources = [] := by
+      simp only [Va, Word.sources, sources_partialResidual, hsPa, List.nil_append]
+    preparedWordEvalComparison
+      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ))
+      ((Va.restrict (partySelector q) hsVa).mapOwner lift) := by
+  classical
+  intro A hp q lift S χ Pa hsPa Va hsVa
+  let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
+  let all := affectedOwner (fun _ : P ↦ true)
+  let fa := affectedOwner A
+  let sq := partySelector qp
+  let sa := partySelector q
+  have hSlots : Layout.mapOwner lift (Layout.restrict sa S) =
+      Layout.restrict sq w.allResidualSourceLayout :=
+    mapOwner_atParty_partialSlots_eq_allResidualSourceLayout w p
+  have hBoundary (L : Layout P) :
+      Layout.mapOwner lift (Layout.restrict sa (Layout.mapOwner fa L)) =
+        Layout.restrict sq (Layout.mapOwner all L) :=
+    mapOwner_selected_originalLayout_eq p L
+  have hin : Layout.restrict sq (w.allResidualSourceLayout ++ []) =
+      Layout.mapOwner lift (Layout.restrict sa (S ++ [])) := by
+    simpa only [List.append_nil] using hSlots.symm
+  unfold preparedWordEvalComparison
+  unfold incidentSourceWord
+  dsimp only
+  exact eval_restrict_mapOwner_castLayouts_heq_of_eq sa lift
+    (Pa.comp (partialResidual A w
+      (choicesOfOriginalGateLabelsAt w p (originalGateLabelsAtOfAllChoices w p ξ))))
+    Va
+    (by simp only [Word.sources, sources_partialResidual, hsPa, List.nil_append])
+    hsVa hin.symm (hBoundary b)
+    (congrArg (fun ζ : Choices A w ↦ Pa.comp (partialResidual A w ζ))
+      (choicesOfOriginalGateLabelsAt_eq_projectAllChoices w p ξ))
+
 /-- Compare the original prepared word with its incident-label word, with
 all original source and output data fixed before the comparison is proved.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
@@ -287,16 +345,7 @@ private theorem selectedPreparedWordComparison_of_original_labels {a b : Layout 
   have hIncident : HEq
       (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)).eval
       ((Va.restrict sa hsVa).mapOwner lift).eval := by
-    unfold incidentSourceWord
-    dsimp only
-    exact eval_restrict_mapOwner_castLayouts_heq_of_eq sa lift
-      (Pa.comp (partialResidual A w
-        (choicesOfOriginalGateLabelsAt w p (originalGateLabelsAtOfAllChoices w p ξ))))
-      Va
-      (by simp only [Word.sources, sources_partialResidual, hsPa, List.nil_append])
-      hsVa hin.symm (hBoundary b)
-      (congrArg (fun ζ : Choices A w ↦ Pa.comp (partialResidual A w ζ))
-        (choicesOfOriginalGateLabelsAt_eq_projectAllChoices w p ξ))
+    exact preparedWordEvalComparison_incidentSourceWord w p ψ ξ
   exact selectedPreparedWordComparison_comp sq sa lift
     (w.sourcePrivatePreparation ψ) (partialResidual (fun _ : P ↦ true) w ξ)
     Pa (partialResidual A w χ)
