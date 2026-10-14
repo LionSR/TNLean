@@ -68,6 +68,66 @@ private def canonicalIncidentSampledPhysicalFactor {a : Layout P}
     (fun q ↦ SourceCircuit.allPartyDiscardBasis garbage hfinite q)
     (j ∘ (SourceCircuit.partialSlotSampleEquiv R p).toFun)
 
+/-- The exact sampled contraction preserves any trace-norm error bound for
+its sampled physical density. This comparison is proved for an arbitrary
+source circuit before the approximate circuit is substituted.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 565–588. -/
+private theorem contractedOperator_error_le_of_source_error {a : Layout P}
+    (d : P → ℕ) (ps : List P) (hn : ps.Nodup) (hc : ∀ p, p ∈ ps)
+    (garbage : Layout P) (hfinite : ∀ t ∈ garbage, FiniteDimensional ℂ t.space)
+    (R : SourceCircuit a (familyPhysicalLayout d ps ++ garbage))
+    (ψ : ProductInput a) (k : ℕ)
+    (lam : ∀ s : R.sourceLocations, R.branchLabels s.1 →
+      Fin (min (R.sourceDims s).1 (R.sourceDims s).2) → ℝ)
+    (E : ∀ s : R.sourceLocations, R.branchLabels s.1 →
+      Matrix (Fin (R.sourceDims s).1) (Fin (min (R.sourceDims s).1 (R.sourceDims s).2)) ℂ)
+    (F : ∀ s : R.sourceLocations, R.branchLabels s.1 →
+      Matrix (Fin (R.sourceDims s).2) (Fin (min (R.sourceDims s).1 (R.sourceDims s).2)) ℂ)
+    (ω : SourceCircuit.SourceGaussianSamples R k)
+    {n C : Type} [Fintype n] [Fintype C]
+    (bIn : OrthonormalBasis n ℂ (Mem a)) (bDiscard : OrthonormalBasis C ℂ (Mem garbage))
+    (A : Matrix ((p : P) → Fin (d p)) ((p : P) → Fin (d p)) ℂ) (ε : ℝ)
+    (h : Matrix.rectangularTraceNorm
+      (SourceCircuit.physicalSourceReplacedDensity (familyPhysicalLayout d ps) garbage R
+        (fun s ξ ζ ↦ SourceCircuit.sampledSourceMatrix R k lam E F s ξ ζ ω)
+        bIn (familyLabelledPhysicalBasis d ps hn hc) bDiscard
+        (Matrix.euclideanOuterProduct (bIn.repr ψ.vector) (bIn.repr ψ.vector)) - A) ≤ ε) :
+    let T := fun (p : P) (η θ : SourceCircuit.OriginalGateLabelsAt R p)
+      (j : DistributedOperatorContraction.SampleAt
+        (Finset.univ : Finset R.nonemptyGateLocations)
+        (fun g ↦ R.participants g.1) p → Fin k) ↦
+      canonicalIncidentSampledPhysicalFactor d ps hn hc garbage hfinite
+        R ψ k lam E F p η θ ω j
+    Matrix.rectangularTraceNorm
+      ((R.emptyGateScalar * conj R.emptyGateScalar) •
+          DistributedOperatorContraction.contractedOperator
+            (Finset.univ : Finset R.nonemptyGateLocations) (fun g ↦ R.participants g.1)
+            (SourceCircuit.sourceGateRoot R) (fun g _ ↦ SourceCircuit.sourceGateRoot_mem R g)
+            (fun g ↦ R.branchLabels g.1 × R.branchLabels g.1) k
+            (DistributedOperatorContraction.densityPairCoefficient
+              (Gate := R.nonemptyGateLocations)
+              (fun g ↦ R.branchLabels g.1) (fun g ↦ R.branchLabels g.1)
+              (fun g ↦ R.branchCoefficient g.1) (fun g ↦ R.branchCoefficient g.1)
+              (fun g ↦ (k : ℂ)⁻¹ ^ (pairSampleLabels (R.participants g.1)).card))
+            (fun p ξζ j ↦ T p (fun g ↦ (ξζ g).1) (fun g ↦ (ξζ g).2) j) - A) ≤ ε := by
+  classical
+  intro T
+  have hNetwork :=
+    SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOperator
+      (I := fun q ↦ partyMemoryCoordinateIndex q (R.allResidualSourceLayout ++ []))
+      (E := fun q ↦ partyMemoryCoordinateIndex q
+        (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) garbage))
+      d ps hn hc garbage R ψ k lam E F ω
+      (fun q ↦ R.allResidualSourceBasis q)
+      (fun q ↦ SourceCircuit.allPartyDiscardBasis garbage hfinite q) bIn bDiscard
+  dsimp only at hNetwork
+  change SourceCircuit.physicalSourceReplacedDensity (familyPhysicalLayout d ps)
+    garbage R (fun s ξ ζ ↦ SourceCircuit.sampledSourceMatrix R k lam E F s ξ ζ ω)
+    bIn (familyLabelledPhysicalBasis d ps hn hc) bDiscard
+    (Matrix.euclideanOuterProduct (bIn.repr ψ.vector) (bIn.repr ψ.vector)) = _ at hNetwork
+  rw [hNetwork] at h
+  exact h
+
 /-- Local gate expansions at the prescribed approximation budget give an actual
 sampled distributed contraction within physical trace-norm error `ε` of the
 original gate operators. The original local approximation hypothesis is
@@ -146,7 +206,6 @@ theorem exists_sampled_contractedOperator_approximate_error_le
   classical
   intro ψ W δ m R Q k garbage hfinite I J Bsrc BG
   let bIn := stdOrthonormalBasis ℂ (Mem (ProductInput.wholePartyLayout H)).carrier
-  let bPhysical := familyLabelledPhysicalBasis physicalDim ps hps hcover
   let bDiscard := exchangedGarbageBasis (W.produce.auxiliary m) priv
     (stdOrthonormalBasis ℂ (Mem (W.produce.auxiliary m)).carrier)
     (stdOrthonormalBasis ℂ (Mem priv).carrier)
@@ -156,15 +215,9 @@ theorem exists_sampled_contractedOperator_approximate_error_le
   dsimp only at hω
   refine ⟨lam, E, F, hframes, ω, ?_⟩
   intro T
-  let ρ := Matrix.euclideanOuterProduct (bIn.repr ψ.vector) (bIn.repr ψ.vector)
-  have hNetwork :=
-    SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOperator
-      (I := I) (E := J) physicalDim ps hps hcover garbage R ψ k lam E F ω Bsrc BG bIn bDiscard
-  dsimp only at hNetwork
-  change SourceCircuit.physicalSourceReplacedDensity (familyPhysicalLayout physicalDim ps)
-    garbage R (fun s ξ ζ ↦ SourceCircuit.sampledSourceMatrix R k lam E F s ξ ζ ω)
-    bIn bPhysical bDiscard ρ = _ at hNetwork
-  rw [hNetwork] at hω
-  exact hω
+  exact contractedOperator_error_le_of_source_error physicalDim ps hps hcover garbage hfinite
+    R ψ k lam E F ω bIn bDiscard
+    (w.physicalDensityWithGateMaps G
+      (familyLabelledPhysicalReadout physicalDim ps hps hcover priv) ψ.vector) ε hω
 
 end TNLean.PEPS.PairEffect.EffectCircuit
