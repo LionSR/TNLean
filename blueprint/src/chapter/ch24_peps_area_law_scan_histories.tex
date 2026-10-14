@@ -564,6 +564,7 @@ The following finite construction follows
     \label{def:al_scan_augmented_partitions}
     \lean{TNLean.PEPS.AreaLaw.Scan.augmentedState,
         TNLean.PEPS.AreaLaw.Scan.augmentedPartition,
+        TNLean.PEPS.AreaLaw.Scan.augmentedPartition_eq_images,
         TNLean.PEPS.AreaLaw.Scan.augmentedMove,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumHistoryPartition,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.quantumChargeMove,
@@ -804,6 +805,83 @@ The following finite construction follows
     $UY=(P_0\cup Y)\cap\{d>0\}$. These prefixes contain whole rows;
     the partially consumed nominal row contributes to the error estimate.
 \end{definition}
+
+% Source: 08-scanner.tex, lines 21--24 and 83--98,
+% revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Target and positive-depth receiving regions]
+    \label{thm:al_scan_receiving_regions}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_target_subset_receiving_near,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_target_subset_receiving_near,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.state_receiving_regions,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_receiving_regions}
+    \leanok
+    \uses{def:al_scan_actual_histories,def:al_scan_comparison_prefixes}
+    Let $\Lambda,T\subset\mathbb Z^2$ be finite, with $T$ nonempty, and let
+    $A\subseteq\Lambda$. Give the collar scan the ambient depth
+    $d(x)=\min_{t\in T}\|x-t\|_\infty$, and put $X=A\cap T$.
+    For any band and any finite history, let $(P_0,Y,V)$ be its physical
+    partition either after the completed fill--charge pairs or after the next
+    prescribed fill and before its charge. With
+    $U=P_0\cap\{d>0\}$ and $UY=(P_0\cup Y)\cap\{d>0\}$, one has
+    \begin{align}
+        X         & \subseteq P_0,               \\
+        P_0       & =X\cup U,                    \\
+        P_0\cup Y & =X\cup UY,                   \\
+        V         & =\Lambda\setminus(X\cup UY).
+    \end{align}
+    These are the moving-region identities of
+    \cite[Section~9]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scan_ambient_rows,thm:al_scan_band_nesting}
+    Since $d(x)\le0$ is equivalent to $x\in T$ and the initial near cutoff
+    is nonnegative, every site of $X$ is initially near. Every site outside
+    $A$ is initially far. These assignments persist through every fill and
+    charge. Thus $X\subseteq P_0$, and every site of $P_0\cup Y$ with
+    nonpositive depth belongs to $X$. Separating the positive and nonpositive
+    depths gives the two union identities. The three regions partition
+    $\Lambda$, so the far-region identity follows by taking the complement.
+\end{proof}
+
+% Source: 08-scanner.tex, lines 21--24 and 83--98.
+\begin{theorem}[The target and the augmented receiving regions]
+    \label{thm:al_scan_augmented_receiving_regions}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.state_augmentedPartition_eq_target_near_middle,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.oldChargeState_augmentedPartition_eq_target_near_middle}
+    \leanok
+    \uses{def:al_scan_actual_histories,def:al_scan_augmented_partitions,
+        def:al_scan_comparison_prefixes}
+    Let $h$ be a finite collar history and let $g$ be one of its bands.
+    Consider either the physical partition after $h$, or the partition after
+    its next prescribed fill and before the next charge. Write
+    $(P_0,Y_0,V_0)$ for its physical near, middle and far regions. Set
+    $X=A\cap T$ and $U=P_0\cap\{x\in\Lambda:d(x)>0\}$.
+    Let $\iota$ include the physical sites into the domain obtained by
+    adjoining two distinct auxiliary sites $C$ and $R$. The augmented
+    partition is
+    \begin{align}
+        P & = \{C\}\sqcup\iota(X\cup U),
+        \label{eq:al_scan_augmented_near} \\
+        Y & = \iota(Y_0),                 \\
+        F & = \{R\}\sqcup
+        \iota\bigl(\Lambda\setminus(X\cup(U\cup Y_0))\bigr).
+        \label{eq:al_scan_augmented_far}
+    \end{align}
+    The construction is that of
+    \cite[Section~9, moving partitions]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scan_receiving_regions,def:al_scan_augmented_partitions}
+    Put $W=(P_0\cup Y_0)\cap\{x\in\Lambda:d(x)>0\}$.
+    The physical region identities give $P_0=X\cup U$,
+    $P_0\cup Y_0=X\cup W$, and $V_0=\Lambda\setminus(X\cup W)$.
+    Thus $X\cup W=(X\cup U)\cup Y_0=X\cup(U\cup Y_0)$.
+    Substituting this into the expression for $V_0$ gives the physical
+    complement in~(\ref{eq:al_scan_augmented_far}). The auxiliary site $C$
+    belongs to the near region and $R$ to the far region; all physical
+    sites retain their assignments under $\iota$. This also gives
+    (\ref{eq:al_scan_augmented_near}) and the asserted middle region.
+\end{proof}
 
 \begin{theorem}[Positive-depth prefixes as ambient collars]
     \label{thm:al_scan_positive_prefix_collars}
