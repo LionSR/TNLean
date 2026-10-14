@@ -85,6 +85,7 @@ import TNLean.PEPS.Approximation.DyadicGuideReadings
 import TNLean.PEPS.Approximation.DyadicHierarchyCounts
 import TNLean.PEPS.Approximation.DyadicLevelSchedule
 import TNLean.PEPS.Approximation.DyadicLifetimeIncidence
+import TNLean.PEPS.Approximation.DyadicPatchRewriteGates
 import TNLean.PEPS.Approximation.DyadicPointTreatment
 import TNLean.PEPS.Approximation.DyadicReadingFootprints
 import TNLean.PEPS.Approximation.DyadicRepaintingClearance
