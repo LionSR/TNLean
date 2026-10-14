@@ -333,13 +333,13 @@ contraction of local tensors is a separate assertion.
     $C_{\mathrm{src}}\geq1$ includes circuits without sources.
 \end{proof}
 
-\begin{lemma}[Trace bounded by the trace norm]
-    \label{lem:peps_trace_le_trace_norm}
+\begin{theorem}[Trace bounded by the trace norm]
+    \label{thm:peps_trace_le_trace_norm}
     \lean{TNLean.PEPS.Approximation.norm_trace_le_rectangularTraceNorm}
     \leanok
     Every complex square matrix $X$ satisfies
     $\lvert\operatorname{Tr}X\rvert\le\|X\|_1$.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
     The identity matrix has operator norm at most one, so trace-norm duality
@@ -348,8 +348,8 @@ contraction of local tensors is a separate assertion.
     $\operatorname{Tr}X$.
 \end{proof}
 
-\begin{lemma}[Adding an absolute error to a pure-state approximation]
-    \label{lem:peps_absolute_error_pure_state}
+\begin{theorem}[Adding an absolute error to a pure-state approximation]
+    \label{thm:peps_absolute_error_pure_state}
     \lean{TNLean.PEPS.Approximation.rectangularTraceNorm_sub_pure_le_of_retained_density}
     \leanok
     Let $\sigma,\rho$ be complex square matrices and $\Omega$ a unit vector.
@@ -360,12 +360,12 @@ contraction of local tensors is a separate assertion.
         \lvert\operatorname{Tr}\rho-1\rvert       & \le\eta.
     \end{align}
     Neither matrix is assumed positive, Hermitian or normalized.
-\end{lemma}
+\end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:peps_trace_le_trace_norm}
+    \uses{thm:peps_trace_le_trace_norm}
     The first bound is the triangle inequality for the trace norm. For the
-    second, apply Lemma~\ref{lem:peps_trace_le_trace_norm} to
+    second, apply Theorem~\ref{thm:peps_trace_le_trace_norm} to
     $\rho-|\Omega\rangle\langle\Omega|$ and use
     $\operatorname{Tr}|\Omega\rangle\langle\Omega|=1$.
 \end{proof}
@@ -393,8 +393,8 @@ contraction of local tensors is a separate assertion.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:peps_absolute_error_pure_state,thm:peps_distributed_construction_density}
-    Lemma~\ref{lem:peps_absolute_error_pure_state} gives the trace-norm bound
+    \uses{thm:peps_absolute_error_pure_state,thm:peps_distributed_construction_density}
+    Theorem~\ref{thm:peps_absolute_error_pure_state} gives the trace-norm bound
     and $\lvert\operatorname{Tr}\rho-1\rvert\le\eta$, hence the lower bound on
     the real part. The upper bound $\operatorname{Tr}\rho\le1$ is
     Theorem~\ref{thm:peps_distributed_construction_density}.
