@@ -1506,7 +1506,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 
 \begin{theorem}[The guides of a repainting are local]
     \label{thm:peps_dyadic_local_guides}
-    \lean{TNLean.PEPS.Approximation.SquareEdge.point_mem_closedSquare, TNLean.PEPS.Approximation.edgeBand_subset_thickening, TNLean.PEPS.Approximation.edgeTreated_subset_thickening, TNLean.PEPS.Approximation.cornerTreated_subset_thickening, TNLean.PEPS.Approximation.RepaintingBaseline.finalLabel_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.guide_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.oldLabel_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.nbrLabel_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.edgeWords_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_guide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_const, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.update, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.homogenize, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.piecewise, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.bandUpdate, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.changed_subset, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_centralGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_completedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_mainGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_auxGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_treatedStartMain, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_treatedAux}
+    \lean{TNLean.PEPS.Approximation.SquareEdge.point_mem_closedSquare, TNLean.PEPS.Approximation.edgeBand_subset_thickening, TNLean.PEPS.Approximation.edgeTreated_subset_thickening, TNLean.PEPS.Approximation.cornerTreated_subset_thickening, TNLean.PEPS.Approximation.edgeLens_subset_thickening, TNLean.PEPS.Approximation.RepaintingBaseline.finalLabel_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.guide_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.oldLabel_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.nbrLabel_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.edgeWords_mem_localLabels, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_guide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_const, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.update, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.homogenize, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.piecewise, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.bandUpdate, TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.changed_subset, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_centralGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_completedGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_mainGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_auxGuide, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_treatedStartMain, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_treatedAux, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_exchangedMain, TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_exchangedAux}
     \leanok
     \uses{def:peps_dyadic_local_guides, lem:peps_dyadic_floor}
     The labels $A$, $B$ and $C_e$ are local labels, and so is every value of a normal
@@ -1516,9 +1516,11 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     $C_e$ and every auxiliary guide of the construction along $e$ with any of its
     normal words are local over the uniform guide $C_e$. Homogenizing a local guide
     to a local label on a set inside the neighbourhood of radius $n/2$, as the point
-    treatment does on the treated squares of radius $t\le n/2$, and exchanging two
-    local guides over one base on any set, as the lens exchange does on the lens,
-    give local guides over the same base. Two local guides over one base differ only
+    treatment does on the treated squares of radius $t\le n/2$, and replacing it on a
+    set inside that neighbourhood by a local guide over another base give local
+    guides over the same base. The lens lies in that neighbourhood, so after the lens
+    exchange along $e$, for $t\le n/2$, the main sheet is local over the starting
+    guide and the auxiliary sheet is local over the uniform guide $C_e$. Two local guides over one base differ only
     inside the neighbourhood of radius $n/2$. This is the locality of the large-scale
     repaintings in~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 585--596: ``An
     auxiliary uses only the labels of the local edge and point diagrams; its uniform
@@ -1535,7 +1537,9 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     guide of the schedule is obtained from the starting guide or from the uniform
     guide $C_e$ by finitely many changes, on the central region or on a band, to
     labels among $A$, $B$, $C_e$, and a change inside the neighbourhood of radius
-    $n/2$ to local labels preserves locality.
+    $n/2$ to local labels preserves locality. The lens $\{-7<x<-7/2\}$ lies in the
+    band, and on it each exchanged sheet takes the values of the other sheet, which
+    are local labels.
 \end{proof}
 
 \begin{theorem}[Parties of the large-scale repaintings]

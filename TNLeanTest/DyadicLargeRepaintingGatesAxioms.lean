@@ -26,6 +26,8 @@ run_cmd do
       ``TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_treatedAux,
       ``TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.homogenize,
       ``TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.piecewise,
+      ``TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_exchangedMain,
+      ``TNLean.PEPS.Approximation.RepaintingBaseline.isLocalGuide_exchangedAux,
       ``TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.changed_subset,
       ``TNLean.PEPS.Approximation.repaintingUses_of_mem_localLabels,
       ``TNLean.PEPS.Approximation.GuidePatchRewrite.IsLargeRepaintingStep.uses,

@@ -28,8 +28,9 @@ outside the `n / 2`-neighborhood of the closed square and takes only the *local 
 * the starting main guide, the guide after the central birth, the completed guides, every main
   and auxiliary guide of an edge construction with any of its normal words, the fresh auxiliary
   guide, and every guide obtained from local guides by homogenizing to a local label on a set
-  inside the `n / 2`-neighborhood (the point treatments, for `t ≤ n / 2`) or by exchanging two of
-  them on any set (the lens exchange) are local;
+  inside the `n / 2`-neighborhood (the point treatments, for `t ≤ n / 2`) or by replacing one of
+  them by a local guide over another base on such a set are local; in particular both sheets after
+  the lens exchange, which lies in the band of its edge, are local over their own bases;
 * two local guides over the same base differ only inside the `n / 2`-neighborhood;
 * for the block guides of a level, every local label that is a block party is used by the
   repainting of the square, in the sense of `TNLean.PEPS.Approximation.RepaintingUses`.
@@ -59,7 +60,7 @@ count, as in `TNLean.PEPS.Approximation.card_gates_le_of_guidePatchRewrites`.
 * `TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide`: local guides, and the instances
   `isLocalGuide_completedGuide`, `isLocalGuide_mainGuide`, `isLocalGuide_auxGuide`,
   `isLocalGuide_treatedStartMain`, `isLocalGuide_treatedAux`, `IsLocalGuide.homogenize`,
-  `IsLocalGuide.piecewise`.
+  `IsLocalGuide.piecewise`, `isLocalGuide_exchangedMain`, `isLocalGuide_exchangedAux`.
 * `TNLean.PEPS.Approximation.RepaintingBaseline.IsLocalGuide.changed_subset`: two local guides
   over one base differ only near the square.
 * `TNLean.PEPS.Approximation.repaintingUses_of_mem_localLabels`: local labels of a level are
@@ -114,6 +115,14 @@ theorem edgeTreated_subset_thickening {n t : ℝ} (hn : 0 < n) (ht : t ≤ n / 2
     edgeTreated n e t ⊆ thickening (n / 2) (closedSquare n) := by
   rintro p (hp | hp) <;> exact mem_thickening_iff.2
     ⟨_, e.point_mem_closedSquare (by linarith) (by linarith), (mem_ball.1 hp).trans_le ht⟩
+
+/-- The lens `-7 < x < -7/2` of an edge lies in the `n / 2`-neighborhood of the closed square.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), equation `eq:geometry-lens`,
+`06-geometry.tex:199–202`. -/
+theorem edgeLens_subset_thickening {n : ℝ} (hn : 0 < n) (e : SquareEdge) :
+    edgeLens n e ⊆ thickening (n / 2) (closedSquare n) :=
+  (edgeBand_mono (by norm_num) (by norm_num)).trans (edgeBand_subset_thickening hn e)
 
 /-- The treated squares of radius `t ≤ n / 2` about the four corners lie in the
 `n / 2`-neighborhood of the closed square.
@@ -228,22 +237,21 @@ theorem IsLocalGuide.homogenize {b g : ℝ × ℝ → ι} (hg : R.IsLocalGuide b
     fun _ hp => homogenize_of_notMem hp
 
 open Classical in
-/-- **Exchange.** Exchanging two local guides over one base on any set, as the lens exchange does
-on the lens `Y`, gives a local guide over that base.
+/-- **Exchange.** Replacing a local guide over `b` by a local guide over another base `b'` on a set
+`Y` inside the `n / 2`-neighborhood of the square, as the lens exchange does between the main and
+the auxiliary sheet on the lens, gives a local guide over `b`. The two sheets need not share a
+base: each keeps its own outside the neighborhood.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:198–212, 341–343`. -/
-theorem IsLocalGuide.piecewise {b g₁ g₂ : ℝ × ℝ → ι} (h₁ : R.IsLocalGuide b g₁)
-    (h₂ : R.IsLocalGuide b g₂) (Y : Set (ℝ × ℝ)) :
-    R.IsLocalGuide b fun p => if p ∈ Y then g₁ p else g₂ p := by
-  refine ⟨fun p hp => ?_, fun p hp => ?_⟩
-  · dsimp only
-    split_ifs
-    · exact h₁.1 p hp
-    · exact h₂.1 p hp
-  · dsimp only
-    split_ifs
-    · exact h₁.2 p hp
-    · exact h₂.2 p hp
+theorem IsLocalGuide.piecewise {b b' g g' : ℝ × ℝ → ι} (hg : R.IsLocalGuide b g)
+    (hg' : R.IsLocalGuide b' g') {Y : Set (ℝ × ℝ)}
+    (hY : Y ⊆ thickening (R.n / 2) (closedSquare R.n)) :
+    R.IsLocalGuide b fun p => if p ∈ Y then g' p else g p :=
+  hg.update hY
+    (fun p hp => by
+      rw [ite_eq_left hp]
+      exact hg'.1 p (thickening_mono (half_le_self R.n_pos.le) _ (hY hp)))
+    fun _ hp => ite_eq_right hp
 
 /-- A band update of a local guide by a word with local labels is local over the same base. -/
 theorem IsLocalGuide.bandUpdate {b g : ℝ × ℝ → ι} (hg : R.IsLocalGuide b g) (e : SquareEdge)
@@ -330,6 +338,32 @@ theorem isLocalGuide_treatedAux {t : ℝ} (ht : t ≤ R.n / 2) (e : SquareEdge) 
     (R.nbrLabel_mem_localLabels e)
   exact Or.inr ⟨auxBirthC R.oldLabel R.finalLabel (R.nbrLabel e), by simp [edgeOperations],
     Or.inr (Or.inl rfl)⟩
+
+open Classical in
+/-- **The exchanged main guide.** After the lens exchange along `e` the main sheet carries the
+treated auxiliary guide on the lens and the treated main guide elsewhere; for `t ≤ n / 2` it is
+local over the starting guide.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:198–212, 341–343`. -/
+theorem isLocalGuide_exchangedMain {t : ℝ} (ht : t ≤ R.n / 2) (E : List SquareEdge)
+    (e : SquareEdge) :
+    R.IsLocalGuide R.guide fun p =>
+      if p ∈ edgeLens R.n e then R.treatedAux t e p else R.treatedStartMain t E e p :=
+  (R.isLocalGuide_treatedStartMain ht E e).piecewise (R.isLocalGuide_treatedAux ht e)
+    (edgeLens_subset_thickening R.n_pos e)
+
+open Classical in
+/-- **The exchanged auxiliary guide.** After the lens exchange along `e` the auxiliary sheet
+carries the treated main guide on the lens and the treated auxiliary guide elsewhere; for
+`t ≤ n / 2` it is local over the uniform guide `C_e`.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:198–212, 341–343`. -/
+theorem isLocalGuide_exchangedAux {t : ℝ} (ht : t ≤ R.n / 2) (E : List SquareEdge)
+    (e : SquareEdge) :
+    R.IsLocalGuide (fun _ => R.nbrLabel e) fun p =>
+      if p ∈ edgeLens R.n e then R.treatedStartMain t E e p else R.treatedAux t e p :=
+  (R.isLocalGuide_treatedAux ht e).piecewise (R.isLocalGuide_treatedStartMain ht E e)
+    (edgeLens_subset_thickening R.n_pos e)
 
 end RepaintingBaseline
 
