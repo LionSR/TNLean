@@ -31,6 +31,15 @@ variable {P : Type} {a : Layout P}
 variable {I E : Option {_p : P // true = true} → Type}
 variable [∀ q, Fintype (I q)] [∀ q, Fintype (E q)]
 
+/-- The coordinate matrix of an arbitrary word in prescribed orthonormal
+input and output bases. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 253–267 and 565–588. -/
+private def wordCoordinateMatrix {Q J K : Type} [Fintype J] [Fintype K] [DecidableEq J]
+    {a b : Layout Q} (u : Word a b)
+    (B : OrthonormalBasis J ℂ (Mem a)) (C : OrthonormalBasis K ℂ (Mem b)) :
+    Matrix K J ℂ :=
+  LinearMap.toMatrix B.toBasis C.toBasis u.eval.toLinearMap
+
 /-- Construct the local physical factor directly from two independent incident
 label assignments. Its output index is the original physical index; the
 private coordinates are traced in the prescribed basis. The construction
@@ -67,12 +76,11 @@ def incidentSampledPhysicalFactor
         (familyPhysicalLayout d ps ++ garbage)))) :=
     selectedPhysicalPrivateBasis (E := E) d ps hn hc garbage BG q
   let Dη : Matrix (Fin (d p) × E q) (I q) ℂ :=
-    LinearMap.toMatrix bIn.toBasis bOut.toBasis (incidentSourceWord w p ψ η).eval.toLinearMap
+    wordCoordinateMatrix (incidentSourceWord w p ψ η) bIn bOut
   let Dθ : Matrix (Fin (d p) × E q) (I q) ℂ :=
-    LinearMap.toMatrix bIn.toBasis bOut.toBasis (incidentSourceWord w p ψ θ).eval.toLinearMap
+    wordCoordinateMatrix (incidentSourceWord w p ψ θ) bIn bOut
   let Nηθ : Matrix (I q) (I q) ℂ :=
-    LinearMap.toMatrix bIn.toBasis bIn.toBasis
-      (incidentSampledEndpointWord w k lam L R p η θ j ω).eval.toLinearMap
+    wordCoordinateMatrix (incidentSampledEndpointWord w k lam L R p η θ j ω) bIn bIn
   Matrix.partialTraceRight (α := Fin (d p)) (β := E q) (Dη * Nηθ * Dθᴴ)
 
 /-- At independently extracted incident labels, the directly constructed
@@ -119,7 +127,7 @@ theorem sampledPhysicalFactor_eq_incidentSampledPhysicalFactor
         (familyPhysicalLayout d ps ++ garbage)))) : Matrix (Fin (d p) × E q) (I q) ℂ :=
     Matrix.of (fun row col ↦ bOut.repr (u (bIn col)) row)
   conv_rhs =>
-    dsimp only [incidentSampledPhysicalFactor]
+    dsimp only [incidentSampledPhysicalFactor, wordCoordinateMatrix]
     rw [← matrix_repr_eval_eq_toMatrix bIn bOut
       (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)).eval,
       ← matrix_repr_eval_eq_toMatrix bIn bOut

@@ -7558,3 +7558,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   occurrence, share the weakest general word-evaluation predicate and migrate
   these uses. Original hypotheses and proof limits are unchanged; hosted
   verification and timing of the new application remain pending.
+
+### Coordinate matrices of selected words — candidate (2026-10-14)
+
+- **Pattern:** Form a word's coordinate matrix in prescribed orthonormal
+  input and output bases using `LinearMap.toMatrix`.
+- **Seen:** The three matrix initializers in `IncidentSampledPhysicalFactor.lean`
+  under `PEPS/Approximation/`.
+- **Abstraction:** The private `wordCoordinateMatrix` applies the existing
+  matrix constructor to arbitrary words and bases before the actual incident
+  data are supplied. The existing `matrix_repr_eval_eq_toMatrix` identifies
+  the result with the coordinate-entry formula. The partial trace is unchanged.
+- **Notes:** Three uses in one file. A matching use in another file would meet
+  the promotion threshold. This isolates the repeated basis conversion at the
+  closed build's checking-limit diagnostic; no hypothesis or limit is added.
+  Hosted acceptance and timing remain pending.
