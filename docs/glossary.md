@@ -3329,6 +3329,31 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 
 ## Distributed PEPS compression: finite incidence and choice costs
 
+### Equality of selected remaining operations
+
+- **Declaration:** `TNLean.PEPS.PairEffect.Word.IsSelectedLocalPartComparison`.
+- **Defined in:** `TNLean/PEPS/Approximation/AllPartySingletonComparison.lean`.
+- **Meaning:** For a Boolean owner selector and two chronological words, the
+  predicate is the heterogeneous equality of their remaining evaluations after
+  restriction to the selected owners. Each word's local part keeps its actual
+  ordered source registers as inputs and supplies its own source-free proof.
+  The two original input and output lists may differ; selected list identities
+  are supplied separately when deriving a comparison.
+- **Source:** OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
+  states*, September 24, 2026, proof of Theorem 5.2,
+  `04-compression.tex:351–434,565–588`,
+  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L351-L434).
+- **Sanctioned bridges:** In `TNLean.PEPS.PairEffect.SourceCircuit`,
+  `isSelectedLocalPartComparison_partialWord_all_gate` derives this comparison
+  for the actual all-party gate word and its lifted singleton projection.
+  `restrict_partialWord_all_localPart_eval_heq_singleton_projection` gives the
+  corresponding selected-operator identity for the whole original chronology.
+  Both retain the supplied branch choice, original source dimensions and
+  spectator registers.
+- **Caveat:** This predicate compares operators. Allowedness and factorization
+  of the complete physical density require separate results; no equivalence
+  with either is asserted. No norm or nonvanishing condition is imposed.
+
 ### Corrected source positions and whole-lifetime gate participation
 
 - **Declarations:** `TNLean.PEPS.Approximation.sourceEndpoints`, `correctedParties`,
@@ -3715,3 +3740,29 @@ source's Proposition 4.1.
   typical entropy and auxiliary dimension remain separate proof obligations.
   Those substitutions must already occur in the additive budgets; no uniform
   replica convergence rate over physical scales is supplied or needed.
+
+### Comparison of chronological word evaluations
+
+- **Declaration:** `TNLean.PEPS.PairEffect.Word.IsEvalComparison`.
+- **Defined in:** `TNLean/PEPS/Approximation/WordEvalComparison.lean`.
+- **Meaning:** For two chronological words, possibly with different owner types
+  and register lists, the predicate is literally heterogeneous equality of
+  their evaluations. Each word retains its actual input and output space.
+- **Source:** OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
+  states*, September 24, 2026, proof of Theorem 5.2,
+  `04-compression.tex:253–267,351–434,565–588`,
+  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L253-L267).
+- **Sanctioned bridges:** `Word.IsEvalComparison.eval_eq` gives ordinary evaluation
+  equality for words on the same input and output layouts.
+  `Word.isEvalComparison_of_eval_eq` gives the converse for those fixed layouts,
+  taking both words explicitly. The prepared-source,
+  sampled-endpoint and physical-coordinate comparisons derive this predicate
+  from their actual word comparison results.
+- **Caveats:** This compares the full evaluations of the supplied words. It
+  neither imposes allowedness, contractions, source normalization or absence of
+  sources, nor supplies equality after an arbitrary restriction to owners.
+  It is not the selected-local-part comparison predicate. No equivalence with
+  physical-density equality, factorization or locality is asserted.
+- **Verification:** The predicate and both fixed-layout bridges passed the
+  hosted Lean build and their named axiom checks at commit
+  `c05b1ee03e2d24d1f93390ada1aa7b7912b0cfba`.

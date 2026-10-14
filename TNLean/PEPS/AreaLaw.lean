@@ -10,7 +10,10 @@ Authors: TNLean contributors
 
 import TNLean.PEPS.AreaLaw.Amplification
 import TNLean.PEPS.AreaLaw.AmplificationCutClearance
+import TNLean.PEPS.AreaLaw.AmplificationProof
+import TNLean.PEPS.AreaLaw.AmplificationProofSteps
 import TNLean.PEPS.AreaLaw.BirthTargetEntropy
+import TNLean.PEPS.AreaLaw.BirthTargetNeighborhoodInformation
 import TNLean.PEPS.AreaLaw.BoundaryConventions
 import TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly
 import TNLean.PEPS.AreaLaw.BoundaryTheorem
@@ -60,6 +63,8 @@ import TNLean.PEPS.AreaLaw.RegionalEntropyContinuity
 import TNLean.PEPS.AreaLaw.RegionalReindex
 import TNLean.PEPS.AreaLaw.RegionalStates
 import TNLean.PEPS.AreaLaw.RegularizedPatchCoordinate
+import TNLean.PEPS.AreaLaw.RegularizedPatchDiagonalVariation
+import TNLean.PEPS.AreaLaw.RegularizedPatchInsertionTrace
 import TNLean.PEPS.AreaLaw.RegularizedPatchMarginal
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
 import TNLean.PEPS.AreaLaw.RegularizedPatchStationarity
