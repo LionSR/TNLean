@@ -7541,3 +7541,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   third occurrence, share the weakest word-level statement that covers the
   applications. Public hypotheses and proof limits remain unchanged; hosted
   acceptance and timing of the new application remain pending.
+
+### Named comparison of arbitrary word evaluations — candidate (2026-10-14)
+
+- **Pattern:** Retain two constructed words and their own layouts in a named
+  proposition defined literally by heterogeneous equality of their evaluations.
+- **Seen:** The private `preparedWordEvalComparison` in
+  `IncidentSourceWordComparison.lean` and `wordEvalComparison` in
+  `IncidentSampledEndpointComparison.lean`, under `PEPS/Approximation/`.
+- **Purpose:** Match component comparisons as propositions on words before
+  evaluating the concrete circuit or sampled operator expressions. The generic
+  proofs still use the existing heterogeneous equality lemmas.
+- **Notes:** Two private definitions with the same mathematical content. No
+  public general predicate is available in the imported word modules; a
+  selected-local-part predicate would impose different content. At a third
+  occurrence, share the weakest general word-evaluation predicate and migrate
+  these uses. Original hypotheses and proof limits are unchanged; hosted
+  verification and timing of the new application remain pending.

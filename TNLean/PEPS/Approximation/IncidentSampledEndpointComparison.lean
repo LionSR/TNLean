@@ -30,6 +30,12 @@ namespace TNLean.PEPS.PairEffect
 namespace SourceCircuit
 variable {P : Type} {a b : Layout P}
 
+/-- Evaluation comparison of two arbitrary words, retaining their own input
+and output layouts. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
+lines 253–267, 279–355, 409–434 and 565–588. -/
+private def wordEvalComparison {Q R : Type} {a b : Layout Q} {c d : Layout R}
+    (u : Word a b) (v : Word c d) : Prop := HEq u.eval v.eval
+
 /-- Two operator comparisons through an arbitrary intermediate word give
 equality on fixed original input and output layouts. The composition is proved
 before any sampled endpoint maps are supplied.
@@ -38,7 +44,7 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 253–267,
 private theorem eval_eq_of_two_word_comparisons {Q R : Type}
     {a b : Layout Q} {c d : Layout R}
     (u t : Word a b) (v : Word c d)
-    (hinput : HEq u.eval v.eval) (hincident : HEq v.eval t.eval) :
+    (hinput : wordEvalComparison u v) (hincident : wordEvalComparison v t) :
     u.eval = t.eval := by
   exact eq_of_heq (hinput.trans hincident)
 
@@ -88,23 +94,24 @@ theorem restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord
         (fun i ↦ j (partialSlotEquiv
           (fun t ↦ partySelector (some ⟨p, rfl⟩)
             (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω).eval := by
-  have hinput := restrict_sampledEndpointInputWord_eval_heq_sampledEndpointWord
-    w k lam E F (partySelector (some ⟨p, rfl⟩)) ξ ζ j ω
-  have hincident := restrict_sampledEndpointWord_eval_heq_incidentSampledEndpointWord
-    w k lam E F p ξ ζ j ω
-  exact eval_eq_of_two_word_comparisons
-    ((sampledEndpointInputWord w k lam E F ξ ζ j ω).restrict
-      (partySelector (some ⟨p, rfl⟩))
-      (sources_sampledEndpointInputWord w k lam E F ξ ζ j ω))
-    (incidentSampledEndpointWord w k lam E F p
-      (originalGateLabelsAtOfAllChoices w p ξ)
-      (originalGateLabelsAtOfAllChoices w p ζ)
-      (fun i ↦ j (partialSlotEquiv
-        (fun t ↦ partySelector (some ⟨p, rfl⟩)
-          (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω)
-    ((sampledEndpointWord w k lam E F ξ ζ j ω).restrict
-      (partySelector (some ⟨p, rfl⟩))
-      (sources_sampledEndpointWord w k lam E F ξ ζ j ω)) hinput hincident
+  let u := (sampledEndpointInputWord w k lam E F ξ ζ j ω).restrict
+    (partySelector (some ⟨p, rfl⟩))
+    (sources_sampledEndpointInputWord w k lam E F ξ ζ j ω)
+  let v := (sampledEndpointWord w k lam E F ξ ζ j ω).restrict
+    (partySelector (some ⟨p, rfl⟩))
+    (sources_sampledEndpointWord w k lam E F ξ ζ j ω)
+  let t := incidentSampledEndpointWord w k lam E F p
+    (originalGateLabelsAtOfAllChoices w p ξ)
+    (originalGateLabelsAtOfAllChoices w p ζ)
+    (fun i ↦ j (partialSlotEquiv
+      (fun t ↦ partySelector (some ⟨p, rfl⟩)
+        (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω
+  have hinput : wordEvalComparison u v :=
+    restrict_sampledEndpointInputWord_eval_heq_sampledEndpointWord
+      w k lam E F (partySelector (some ⟨p, rfl⟩)) ξ ζ j ω
+  have hincident : wordEvalComparison v t :=
+    restrict_sampledEndpointWord_eval_heq_incidentSampledEndpointWord w k lam E F p ξ ζ j ω
+  exact eval_eq_of_two_word_comparisons u t v hinput hincident
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect
