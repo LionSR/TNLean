@@ -289,9 +289,14 @@ private theorem selectedPreparedWordComparison_of_original_labels {a b : Layout 
       ((Va.restrict sa hsVa).mapOwner lift).eval := by
     unfold incidentSourceWord
     dsimp only
-    apply eval_restrict_mapOwner_castLayouts_heq_of_eq
-    exact congrArg (fun ζ : Choices A w ↦ Pa.comp (partialResidual A w ζ))
-      (choicesOfOriginalGateLabelsAt_eq_projectAllChoices w p ξ)
+    exact eval_restrict_mapOwner_castLayouts_heq_of_eq sa lift
+      (Pa.comp (partialResidual A w
+        (choicesOfOriginalGateLabelsAt w p (originalGateLabelsAtOfAllChoices w p ξ))))
+      Va
+      (by simp only [Word.sources, sources_partialResidual, hsPa, List.nil_append])
+      hsVa hin.symm (hBoundary b)
+      (congrArg (fun ζ : Choices A w ↦ Pa.comp (partialResidual A w ζ))
+        (choicesOfOriginalGateLabelsAt_eq_projectAllChoices w p ξ))
   exact selectedPreparedWordComparison_comp sq sa lift
     (w.sourcePrivatePreparation ψ) (partialResidual (fun _ : P ↦ true) w ξ)
     Pa (partialResidual A w χ)
