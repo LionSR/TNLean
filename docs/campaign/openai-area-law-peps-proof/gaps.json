@@ -1,27 +1,28 @@
 {
-  "reviewedAt": "2026-10-13T03:00:00Z",
+  "reviewedAt": "2026-10-13T18:30:00Z",
   "entries": [
     {
       "id": "docs/paper-gaps/oai26_peps_patch_stationarity_gap.tex",
       "repo": "QICLean",
       "kind": "narrower",
-      "status": "open",
+      "status": "resolved",
       "paper": "peps",
       "result": "Proposition 4.1, first-order conditions of the patch optimization",
       "issue": 8767,
       "prs": {
         "QICLean": [
           605,
-          694
+          694,
+          818
         ]
       },
       "title": "First-order conditions of the patch optimization",
-      "summary": "No problem with the paper has been found; Lean has the consequences of the key inequality, but not the inequality itself.",
+      "summary": "No problem with the paper has been found; Lean now proves the key inequality at every minimum, with no hypothesis beyond the paper's.",
       "context": "Proposition 4.1 shows that near any square of logarithmic size the ground state lies almost entirely in subspaces of polynomial total rank. This is what keeps the final bond dimension polynomial.",
       "claims": "The proof picks density matrices <i>x<sub>j</sub></i> on nested squares around the patch. Each defines a filter <i>L<sub>j</sub></i> = (<i>x<sub>j</sub></i> + <i>b</i>·1)<sup>−<i>a<sub>j</sub></i>/2</sup>, with fixed small numbers <i>b</i> and <i>a<sub>j</sub></i>. The choice makes the norm {{tn:al-filter-norm}} as small as possible. Here Ω is the ground state. Let ρ<sub><i>j</i></sub> be the reduced state, on the <i>j</i>-th square, of the normalized filtered state. At the minimum, each <i>x<sub>j</sub></i> commutes with ρ<sub><i>j</i></sub>. Also ρ<sub><i>j</i></sub> ≤ <i>x<sub>j</sub></i> + <i>b</i>·1.",
-      "found": "Lean proves what follows from this inequality, taken as an explicit hypothesis. One consequence concerns the operator <i>T</i> = <i>b</i>ρ<sub><i>j</i></sub>(<i>x<sub>j</sub></i> + <i>b</i>·1)<sup>−1</sup>. It satisfies 0 ≤ <i>T</i> ≤ <i>b</i>·1 and <i>T</i> ≤ ρ<sub><i>j</i></sub>. At the paper's starting radius, its trace is at most 1/4. The commutation and the inequality are not yet derived for the actual product of filters.",
-      "impact": "No. This is the most delicate open step, because the filters need not commute.",
-      "plan": "Carry out the paper's trace calculations from the largest square inward, then apply the bounds already proved."
+      "found": "Lean proves what follows from this inequality, taken as an explicit hypothesis. One consequence concerns the operator <i>T</i> = <i>b</i>ρ<sub><i>j</i></sub>(<i>x<sub>j</sub></i> + <i>b</i>·1)<sup>−1</sup>. It satisfies 0 ≤ <i>T</i> ≤ <i>b</i>·1 and <i>T</i> ≤ ρ<sub><i>j</i></sub>. At the paper's starting radius, its trace is at most 1/4. Lean now derives the commutation and the inequality at every minimum of the actual product of filters, so these bounds hold there. The commutation follows the paper: rotate one <i>x<sub>j</sub></i> by a unitary and use the trace identity, working from the largest square inward. For the inequality, the paper's eigenvalue conditions are replaced by an equivalent operator argument: move <i>x<sub>j</sub></i> toward another density commuting with it and read off the first-order condition.",
+      "impact": "No. The filters need not commute, but the paper's argument handles this, and Lean follows it.",
+      "plan": "Nothing remains for this step. The rank and tail bounds that give the trace bound of 1/4 belong to the rest of Proposition 4.1."
     },
     {
       "id": "docs/paper-gaps/polypeps_ownership_change_monomials.tex",
