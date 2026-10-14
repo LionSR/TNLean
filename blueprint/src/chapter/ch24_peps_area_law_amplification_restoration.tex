@@ -1,0 +1,141 @@
+% Source: OpenAI2026AreaLaw, 09-amplification.tex, lines 289--295 and 493--575,
+% eq:amplification-cut-clearance, eq:amplification-before-polar,
+% eq:amplification-direct-error and eq:amplification-unitary-error, revision
+% openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\section{The cut clearance and the local restoring unitary}
+
+The proof of the amplification proposition ends with two deterministic
+arguments. One keeps the enlarged collar inside the cut. The other turns a
+good clock realization into a local unitary that nearly restores the
+reference state. Neither uses the clocks or the spectral estimates.
+
+\begin{theorem}[Enlarged collars stay inside the cut]
+    \label{thm:area_law_amplification_cut_clearance}
+    \lean{TNLean.PEPS.AreaLaw.exists_threshold_graphNeighborhood_collar_subset}
+    \leanok
+    \uses{def:area_law_radius_exponent}
+    Let $\Lambda$ be a finite induced domain, let $A\subseteq\Lambda$, let
+    $T\subset\mathbb Z^2$ be finite, and let $Z$ be the set of endpoints of the
+    cut edges of $A$. Put $L=\lfloor n^{1-\varepsilon}\rfloor$ and
+    $S_0=A\cap T_L$. For every $C$ there is $N$ such that for all $n\ge N$,
+    every integer $r\le Cn^{(1-\varepsilon)/\alpha}$ and every $\Lambda$, $A$,
+    $T$ with $\operatorname{dist}_\infty(T,Z)>L+n^\beta$ satisfy
+    $N_{2r}^\Lambda(S_0)\subseteq A$. This is the last assertion of
+    Proposition~10.2 of \cite{OpenAI2026AreaLaw}, given its radius bound.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_uniform_collar_threshold,
+        thm:area_law_graph_neighborhood_cut_clearance}
+    Choose $N$ so that $L+2r<n^\beta$ for every admissible radius. Then
+    $L+2r<L+n^\beta<\operatorname{dist}_\infty(T,Z)$, so a walk of length at
+    most $2r$ from $S_0$ cannot cross the cut, and
+    $N_{2r}^\Lambda(S_0)\subseteq A$.
+\end{proof}
+
+\begin{theorem}[Amplification from its radius and output bounds]
+    \label{thm:area_law_amplification_of_radius_output}
+    \lean{TNLean.PEPS.AreaLaw.amplificationBound_of_radius_output}
+    \leanok
+    \uses{def:area_law_amplification_bound}
+    Fix $q,R,J,\Delta$. Suppose that, under the hypotheses of the amplification
+    bound, for every $C_0>0$ and every integer $M\ge1$ there are $C_M$ and $N$
+    such that at every $n\ge\max(2,N)$ some integer
+    $r\le C_Mn^{(1-\varepsilon)/\alpha}$ satisfies $I_\Omega(X':J)\le C_Mn^{-M}$
+    for every $X'\subseteq X$ and every
+    $J\subseteq\Lambda\setminus N_{2r}^\Lambda(S_0)$. Then the amplification
+    bound holds. This reduces Proposition~10.2 of \cite{OpenAI2026AreaLaw} to its
+    radius and output bounds; it does not prove the proposition.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_amplification_cut_clearance}
+    Take the larger of the two thresholds. The cut-clearance clause follows from
+    the preceding theorem applied to the radius supplied by the hypothesis.
+\end{proof}
+
+\begin{theorem}[Truncated products on a good realization]
+    \label{thm:area_law_amplification_before_polar}
+    \lean{TNLean.PEPS.AreaLaw.norm_truncated_restoring_le,
+        TNLean.PEPS.AreaLaw.norm_truncated_adjoint_sub_le}
+    \leanok
+    Let $D$, $D_{\rm ret}$ and $L'$ be square matrices on one finite-dimensional
+    Hilbert space, let $\zeta$ and $g$ be vectors, and let $M_0,\varepsilon$ be
+    real. Suppose that $Dg=g$, $\|g\|\le1$, $\|\zeta\|\le M_0$,
+    \begin{align*}
+        \|D(\zeta-g)\| & \le\varepsilon,
+        \qquad
+        \|(D-D_{\rm ret})\zeta\|\le\varepsilon,
+        \qquad
+        M_0\|D_{\rm ret}-L'\|\le\varepsilon.
+    \end{align*}
+    Then $\|L'\zeta\|\le1+3\varepsilon$. If moreover $M_0\ge1$ and
+    $D_{\rm ret}^\dagger w=w$ for a vector with $\|w\|\le1$, then
+    $\|(L')^\dagger w-w\|\le\varepsilon$. With $g$ the ground component of the
+    restoring vector, these are the two estimates that precede the polar
+    decomposition in the proof of Proposition~10.2 of \cite{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Write
+    $L'\zeta=g+D(\zeta-g)-(D-D_{\rm ret})\zeta-(D_{\rm ret}-L')\zeta$ and use
+    $\|(D_{\rm ret}-L')\zeta\|\le\|D_{\rm ret}-L'\|M_0\le\varepsilon$. For the
+    adjoint, $(L')^\dagger w-w=(L'-D_{\rm ret})^\dagger w$, and the adjoint has
+    the same operator norm, at most $\varepsilon/M_0\le\varepsilon$.
+\end{proof}
+
+\begin{theorem}[From an accurate adjoint to a local unitary]
+    \label{thm:area_law_amplification_unitary_error}
+    \lean{TNLean.PEPS.AreaLaw.norm_sub_sq_le_of_adjoint_error,
+        TNLean.PEPS.AreaLaw.exists_unitary_kronecker_sub_le}
+    \leanok
+    Let $R'$ be a square matrix on a finite-dimensional Hilbert space
+    $\mathcal H$, and let $\phi,\eta$ be unit vectors in
+    $\mathcal H\otimes\mathcal K$ for a finite-dimensional space $\mathcal K$.
+    If $\|(R'\otimes I)^\dagger\eta-\phi\|\le a$ and
+    $\|(R'\otimes I)\phi\|\le1+b$, then
+    \begin{align*}
+        \|(R'\otimes I)\phi-\eta\|^2 & \le2a+2b+b^2,
+    \end{align*}
+    and there is a unitary $U$ on $\mathcal H$ with
+    $\|(U\otimes I)\phi-\eta\|\le a+\sqrt{2a+2b+b^2}$. No invertibility of
+    $R'$ is assumed. These are the direct and unitary errors in the proof of
+    Proposition~10.2 of \cite{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The real part of $\langle\eta,(R'\otimes I)\phi\rangle$ equals that of
+    $\langle(R'\otimes I)^\dagger\eta,\phi\rangle$, which is at least $1-a$.
+    Expanding the square gives the first bound. Take $U$ to be a unitary polar
+    factor of $R'$, so that $R'=UH_+$ with $H_+\ge0$. Since $I+H_+\otimes I$
+    does not decrease norms, the distance from $(U\otimes I)\phi$ to $\eta$ is at
+    most the sum of the direct and adjoint errors.
+\end{proof}
+
+\begin{theorem}[A local unitary from a good realization]
+    \label{thm:area_law_amplification_good_realization}
+    \lean{TNLean.PEPS.AreaLaw.exists_unitary_kronecker_sub_le_of_good_realization}
+    \leanok
+    Let $R_0$ and $L'$ be square matrices on a finite-dimensional space
+    $\mathcal H$, and let $D$, $D_{\rm ret}$ act on $\mathcal H\otimes\mathcal K$.
+    Let $\phi,\eta$ be unit vectors, put $\zeta=(R_0\otimes I)\phi$, and suppose
+    that $\|\zeta\|\le M_0$, that $D$ fixes a vector $g$ with $\|g\|\le1$, that
+    \begin{align*}
+        \|D(\zeta-g)\| & \le\varepsilon,
+        \qquad
+        \|(D-D_{\rm ret})\zeta\|\le\varepsilon,
+        \qquad
+        M_0\|D_{\rm ret}-L'\otimes I\|\le\varepsilon,
+    \end{align*}
+    and that $\|((L'R_0)\otimes I)^\dagger\eta-\phi\|\le a$. Then some unitary
+    $U$ on $\mathcal H$ satisfies
+    $\|(U\otimes I)\phi-\eta\|\le a+\sqrt{2a+6\varepsilon+9\varepsilon^2}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_amplification_before_polar,
+        thm:area_law_amplification_unitary_error}
+    The first truncation estimate gives $\|(L'R_0\otimes I)\phi\|\le1+3\varepsilon$.
+    Apply the preceding theorem with $b=3\varepsilon$.
+\end{proof}

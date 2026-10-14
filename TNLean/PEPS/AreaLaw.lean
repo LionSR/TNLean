@@ -9,6 +9,7 @@ Authors: TNLean contributors
 -- Generated aggregator module: TNLean.PEPS.AreaLaw
 
 import TNLean.PEPS.AreaLaw.Amplification
+import TNLean.PEPS.AreaLaw.AmplificationCutClearance
 import TNLean.PEPS.AreaLaw.BirthTargetEntropy
 import TNLean.PEPS.AreaLaw.BoundaryConventions
 import TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly
@@ -36,6 +37,7 @@ import TNLean.PEPS.AreaLaw.GraphInteractionSeries
 import TNLean.PEPS.AreaLaw.GraphInteractionTarget
 import TNLean.PEPS.AreaLaw.GraphLatticeDiamond
 import TNLean.PEPS.AreaLaw.GraphLatticeDistance
+import TNLean.PEPS.AreaLaw.GraphNeighborhoodCutClearance
 import TNLean.PEPS.AreaLaw.GraphPropagation
 import TNLean.PEPS.AreaLaw.InitialBoxEstimate
 import TNLean.PEPS.AreaLaw.InitialBuffer
