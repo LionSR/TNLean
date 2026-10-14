@@ -144,6 +144,19 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
     the component, while the right side tends to zero.
 \end{proof}
 
+\begin{theorem}[Anchors whose balls contain a site]
+    \label{thm:al_graph_ball_anchor_count}
+    \lean{TNLean.PEPS.AreaLaw.card_graphBall_anchors_le}
+    \leanok
+    Let labels on a graph be anchored at $a_i$ with at most $\mu$ labels per
+    site. For every site $y$ and every $l\ge0$, at most $\mu|N_l(y)|$ labels
+    satisfy $y\in N_l(a_i)$.
+\end{theorem}
+\begin{proof}\leanok
+    The relation $y\in N_l(a_i)$ is symmetric, so such an anchor lies in
+    $N_l(y)$, and each of these sites carries at most $\mu$ labels.
+\end{proof}
+
 \begin{theorem}[Distance tail of the omitted anchors]
     \label{thm:al_omitted_anchor_tail}
     \lean{TNLean.PEPS.AreaLaw.sum_graph_singleton_exponentialDistanceProfile_le,
@@ -166,6 +179,7 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
     \end{align*}
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:al_graph_ball_anchor_count}
     For $z\in N_l(a_i)$ the triangle inequality and $\alpha\le1$ give
     $r^\alpha\le l^\alpha+d(z,S)^\alpha$, so half of each decay rate pays
     for $e^{-\gamma r^\alpha}$. What remains is bounded by summing over all
@@ -196,7 +210,7 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
 \begin{proof}\leanok
     \uses{thm:al_channel_word_expected_omission,thm:al_channel_event_error,
         thm:al_omitted_anchor_tail,thm:al_actual_channel_uniform_bounds,
-        thm:al_channel_poisson_graph_growth}
+        thm:al_channel_poisson_graph_growth,thm:al_retained_anchor_fibers}
     The retained labels satisfy the same hypotheses. By
     Theorem~\ref{thm:al_channel_poisson_graph_growth}, the expected
     oscillation of the retained process at time $s$ and site $z$ is at most
