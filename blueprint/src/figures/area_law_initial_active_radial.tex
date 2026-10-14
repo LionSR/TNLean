@@ -1,22 +1,28 @@
 % Figure area_law_initial_active_radial.
 % Owner: chapter/ch24_peps_area_law_initial_active_rays.tex (thm:area_law_initial_active_radial).
-% Used by: gapped-2d-notes AL Sec. 2, the before half of the repair, beside the
-% note-only arealaw2d_repair_replacement; the note says its r is a_0 S.
+% Used by: gapped-2d-notes AL App. A 4 (repairs, Lemma 8), Fig. 8(b), left: the before
+% half of the repair, joined by \longrightarrow to arealaw2d_repair_replacement.
 % Source: 10-geometry.tex, geometry:initial-stars, lines 333--370, and the
 % left panel of geometry:repair-picture, lines 418--466. Ink-to-index: the
 % red dot is the mark v; the dotted square is the boundary of the closed
 % ball of radius r, with its eight base endpoints (corners and side
-% midpoints) dotted. Each of the eight triangles P_s is labelled by its
-% identifier sigma(s); the sample assignment is i_1,i_1 (upper),
-% i_2,i_2,i_2 (right and lower right), i_3, i_4,i_4. A solid segment
-% [v, b_s^+] separates neighbours with different identifiers (an active
-% pair); a dashed segment separates neighbours with the same identifier and
-% is not a frontier. By the sector-color theorem the colors chi alternate
-% across solid segments only. These lines are geometry, not tensor indices:
-% no contractions, empty boundary signature. Not to scale.
+% midpoints) dotted; the bracket r above the upper right half side, from
+% the midpoint straight above v to the corner, is the radius. Each of the
+% eight triangles P_s is labelled by its identifier sigma(s); the sample
+% assignment is i_1,i_1 (upper), i_2,i_2,i_2 (right and lower right), i_3,
+% i_4,i_4. A solid segment [v, b_s^+] separates neighbours with different
+% identifiers (an active pair); a dashed segment separates neighbours with
+% the same identifier and is not a frontier. By the sector-color theorem
+% the colors chi alternate across solid segments only; each identifier is
+% inked in its color's family hue (chi = 0 teal: i_1, i_3; chi = 1 olive:
+% i_2, i_4), as in the notes' repair panel arealaw2d_repair_replacement.
+% These lines are geometry, not tensor indices: no contractions, empty
+% boundary signature. Not to scale.
 \begin{center}
     \begin{tenkz}[size=s, metrics=compact, rows={wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=9, bonds=none]
         \tndeclare{species}{centre}{hue=source:red}
+        \tndeclare{species}{fam0}{hue=source:teal}
+        \tndeclare{species}{fam1}{hue=source:olive}
         \tn[at=(5,5), name=starc, species=centre, ports={0:virtual, 45:virtual, 90:virtual, 135:virtual, 180:virtual, 225:virtual, 270:virtual, 315:virtual}]{}
         \tn[at=(1,1), name=starnw, ports={0:virtual, 270:virtual, 315:virtual}]{}
         \tn[at=(1,5), name=starn, ports={0:virtual, 180:virtual, 270:virtual}]{}
@@ -43,14 +49,15 @@
         \tnwire[name=starraysw]{starc.225}{starsw.45}
         \tnwire[stroke=dashed, name=starrayw]{starc.180}{starw.0}
         \tnmark[form=label, label pos=22.5]{(5,5)}{$v$}
-        \tnmark[form=label]{(3,4)}{$i_1$}
-        \tnmark[form=label]{(3,6)}{$i_1$}
-        \tnmark[form=label]{(4,8)}{$i_2$}
-        \tnmark[form=label]{(7,8)}{$i_2$}
-        \tnmark[form=label]{(8,6)}{$i_2$}
-        \tnmark[form=label]{(8,4)}{$i_3$}
-        \tnmark[form=label]{(7,2)}{$i_4$}
-        \tnmark[form=label]{(4,2)}{$i_4$}
+        \tnmark[form=label, species=fam0]{(3,4)}{$i_1$}
+        \tnmark[form=label, species=fam0]{(3,6)}{$i_1$}
+        \tnmark[form=label, species=fam1]{(4,8)}{$i_2$}
+        \tnmark[form=label, species=fam1]{(7,8)}{$i_2$}
+        \tnmark[form=label, species=fam1]{(8,6)}{$i_2$}
+        \tnmark[form=label, species=fam0]{(8,4)}{$i_3$}
+        \tnmark[form=label, species=fam1]{(7,2)}{$i_4$}
+        \tnmark[form=label, species=fam1]{(4,2)}{$i_4$}
+        \tnmark[form=bracket, label pos=n]{(1,5) .. (1,9)}{$r$}
         \tnmark[form=label, label pos=se]{(9,9)}{$\overline B_\infty(v,r)$}
     \end{tenkz}
 \end{center}

@@ -6,6 +6,8 @@ Authors: TNLean contributors
 import TNLean.MPS.ParentHamiltonian.Martingale.FixedAmbient
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorMaps
 import TNLean.MPS.ParentHamiltonian.Martingale.C3Threshold
+import TNLean.MPS.ParentHamiltonian.Martingale.EmbeddedC2
+import TNLean.MPS.ParentHamiltonian.Martingale.IsometricConjugationGap
 
 /-!
 # Spectator transport for the open-chain C3 estimate
@@ -422,25 +424,8 @@ theorem openSuffixParentHamiltonianES_full_window_eq_localTermES
     (A : MPSTensor d D) {K L : ℕ} (hL : 0 < L) :
     openSuffixParentHamiltonianES A L L (K + L) (K + L) =
       localTermES A L (⟨K, by omega⟩ : Fin (K + L)) := by
-  classical
-  let i : NonwrappingStart L (K + L) :=
-    ⟨⟨K, by omega⟩, by simp⟩
-  have hfilter :
-      Finset.univ.filter (fun j : NonwrappingStart L (K + L) =>
-        K + L - L ≤ j.1.val ∧ j.1.val + L ≤ K + L) = {i} := by
-    ext j
-    simp only [Finset.mem_filter, Finset.mem_univ, true_and,
-      Finset.mem_singleton]
-    constructor
-    · intro hj
-      apply Subtype.ext
-      apply Fin.ext
-      change j.1.val = K
-      omega
-    · intro hji
-      subst j
-      simp [i]
-  rw [openSuffixParentHamiltonianES, hfilter, Finset.sum_singleton]
+  simpa only [Nat.add_sub_cancel] using
+    openSuffixParentHamiltonianES_eq_localTermES A hL (Nat.le_add_left L K) le_rfl
 
 private theorem cyclicCfg_tail_window
     {d K L : ℕ} (hL : 0 < L) (τ : Cfg d (K + L)) (ω : Cfg d L) :
@@ -542,64 +527,13 @@ theorem ker_starProjection_conj_linearIsometryEquiv
         ((LinearMap.ker G).starProjection.toLinearMap.comp
           U.symm.toLinearEquiv.toLinearMap) =
       (LinearMap.ker H).starProjection.toLinearMap := by
-  let P := U.toLinearEquiv.toLinearMap.comp
-    ((LinearMap.ker G).starProjection.toLinearMap.comp
-      U.symm.toLinearEquiv.toLinearMap)
-  have hkerG := Submodule.isSymmetricProjection_starProjection (LinearMap.ker G)
-  have hP : P.IsSymmetricProjection := by
-    constructor
-    · apply LinearMap.ext
-      intro x
-      change U ((LinearMap.ker G).starProjection
-        (U.symm (U ((LinearMap.ker G).starProjection (U.symm x))))) =
-          U ((LinearMap.ker G).starProjection (U.symm x))
-      rw [LinearIsometryEquiv.symm_apply_apply]
-      exact congrArg U (LinearMap.congr_fun hkerG.isIdempotentElem.eq (U.symm x))
-    · intro x y
-      dsimp only [P, LinearMap.comp_apply]
-      change inner ℂ (U ((LinearMap.ker G).starProjection (U.symm x))) y =
-        inner ℂ x (U ((LinearMap.ker G).starProjection (U.symm y)))
-      calc
-        inner ℂ (U ((LinearMap.ker G).starProjection (U.symm x))) y = inner ℂ
-            (U ((LinearMap.ker G).starProjection (U.symm x)))
-            (U (U.symm y)) := by rw [LinearIsometryEquiv.apply_symm_apply]
-        _ = inner ℂ ((LinearMap.ker G).starProjection (U.symm x)) (U.symm y) :=
-          U.inner_map_map _ _
-        _ = inner ℂ (U.symm x) ((LinearMap.ker G).starProjection (U.symm y)) :=
-          hkerG.isSymmetric _ _
-        _ = inner ℂ (U (U.symm x))
-            (U ((LinearMap.ker G).starProjection (U.symm y))) :=
-          (U.inner_map_map _ _).symm
-        _ = inner ℂ x
-            (U ((LinearMap.ker G).starProjection (U.symm y))) := by
-          rw [LinearIsometryEquiv.apply_symm_apply]
-  apply LinearMap.IsSymmetricProjection.ext hP
-    (Submodule.isSymmetricProjection_starProjection (LinearMap.ker H))
-  rw [Submodule.range_starProjection]
-  ext z
-  constructor
-  · rintro ⟨x, rfl⟩
-    rw [LinearMap.mem_ker]
-    have hconjApply := LinearMap.congr_fun hconj
-      (U ((LinearMap.ker G).starProjection (U.symm x)))
-    change U (G (U.symm
-        (U ((LinearMap.ker G).starProjection (U.symm x))))) =
-      H (U ((LinearMap.ker G).starProjection (U.symm x))) at hconjApply
-    rw [LinearIsometryEquiv.symm_apply_apply] at hconjApply
-    rw [show G ((LinearMap.ker G).starProjection (U.symm x)) = 0 by
-      exact LinearMap.mem_ker.mp (Submodule.starProjection_apply_mem _ _), map_zero] at hconjApply
-    exact hconjApply.symm
-  · intro hz
-    rw [LinearMap.mem_ker] at hz
-    have hconjApply := LinearMap.congr_fun hconj z
-    change U (G (U.symm z)) = H z at hconjApply
-    have hG : G (U.symm z) = 0 := by
-      apply U.injective
-      rw [hconjApply, hz, map_zero]
-    refine ⟨z, ?_⟩
-    change U ((LinearMap.ker G).starProjection (U.symm z)) = z
-    rw [(LinearMap.ker G).starProjection_eq_self_iff.mpr
-      (LinearMap.mem_ker.mpr hG), LinearIsometryEquiv.apply_symm_apply]
+  have hker : LinearMap.ker H = (LinearMap.ker G).map (U.toLinearEquiv : E →ₗ[ℂ] F) :=
+    U.ker_eq_map_of_conj G H hconj
+  apply LinearMap.ext
+  intro x
+  change U ((LinearMap.ker G).starProjection (U.symm x)) =
+    (LinearMap.ker H).starProjection x
+  simp only [hker, Submodule.starProjection_map_apply]
 
 /-- If the right-spectator coordinate isometry conjugates an operator to the
 fiberwise extension of an active-volume operator, it conjugates the kernel

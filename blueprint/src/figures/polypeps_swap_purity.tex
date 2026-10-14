@@ -1,0 +1,80 @@
+% Figure polypeps_swap_purity.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP App. C 2 (proof of Lemma 4, step 2), unnumbered display.
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/02-information.tex:404-416
+% (eq:info-reset-overlap, [S, (3.8)]).
+% Formula: z = <Omega~^{tensor 2}, F_R F_{B_R} Omega~^{tensor 2}>
+% = Tr rho^2 >= e^{-2b}, rho = rho_{Omega~, R B_R}, where
+% Omega~ = (id_{RC} tensor V)Omega and F_R F_{B_R} = F_{R B_R} exchanges the
+% two copies on R B_R.
+% Ink-to-index: every wire is a physical index; R B_R and C B_C are each drawn
+% as one bundled wire.  Copies are told apart by position: copy 1 is rows 1-2,
+% copy 2 is rows 4-5 (row 3 is empty, so the two rho contours stay apart).
+% Kets Omega~ stand on the east, bras Omega~^dagger on the west.  The C B_C
+% wires (row 1 of copy 1, row 5 of copy 2) run straight inside each copy; the
+% inkless atoms purityMidA/B only split them at the midpoint (identity, no
+% tensor) so that each copy's enclosure is one rectangle.  Each copy's
+% enclosure (neutral, labelled rho) holds Omega~, Omega~^dagger and the traced
+% C B_C wire, so it is rho = Tr_{C B_C}|Omega~><Omega~|; its two R B_R legs
+% leave the contour.  The R B_R wires (selected, red: the swap that matters)
+% run from the ket of one copy to the bra of the other, which is the swap
+% F_{R B_R}; the inkless atoms of columns 3 and 5 only carry them into and out
+% of the crossing (identity, no tensor).  Contracting gives
+% sum Omega~_{r c} Omega~_{r' c'} conj(Omega~_{r' c}) conj(Omega~_{r c'})
+% = Tr rho^2, the vertical ring of the second panel: rho over rho, the lower
+% rho's south leg returned to the upper rho's north leg by the arc on the east
+% (the out leg of each rho meets the in leg of the other, so the ring is
+% Tr(rho rho), not Tr(rho rho^T)).  The trailing text states the bound of
+% Step 1 that the display proves.
+% Crossing: the two R B_R strings cross once; the order is the drawing's.
+% Boundary signature: empty on both sides (both are scalars).
+% Related: polypeps_swap_pullback (the same swap pulled back to the buffer).
+\begin{tenkzequation}
+    \tenkzkernel
+    $z=$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=7, bonds=none, size=l]
+        \tn[at=(1,6), name=purityKetA, skin=box, wide=2, wires=2,
+            ports={180@1:physical, 180@2:physical}]{\widetilde\Omega}
+        \tn[at=(4,6), name=purityKetB, skin=box, wide=2, wires=2,
+            ports={180@1:physical, 180@2:physical}]{\widetilde\Omega}
+        \tn[at=(1,1), name=purityBraA, skin=box, wide=2, wires=2,
+            ports={0@1:physical, 0@2:physical}]{\widetilde\Omega^\dagger}
+        \tn[at=(4,1), name=purityBraB, skin=box, wide=2, wires=2,
+            ports={0@1:physical, 0@2:physical}]{\widetilde\Omega^\dagger}
+        \tn[at=midway (1,2) and (1,6), name=purityMidA, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tn[at=midway (5,2) and (5,6), name=purityMidB, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tn[at=(2,5), name=purityEastA, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,5), name=purityEastB, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,3), name=purityWestA, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,3), name=purityWestB, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire[name=purityStraightA]{purityKetA.180@1}{purityMidA.0}
+        \tnwire{purityMidA.180}{purityBraA.0@1}
+        \tnwire[name=purityStraightB]{purityKetB.180@2}{purityMidB.0}
+        \tnwire{purityMidB.180}{purityBraB.0@2}
+        \tnwire[species=selected]{purityKetA.180@2}{purityEastA.0}
+        \tnwire[species=selected]{purityKetB.180@1}{purityEastB.0}
+        \tnwire[name=puritySwapDown, species=selected]{purityEastA.180}{purityWestB.0}
+        \tnwire[name=puritySwapUp, species=selected,
+            cross={over at crossing of puritySwapUp and puritySwapDown}]
+        {purityEastB.180}{purityWestA.0}
+        \tnwire[species=selected]{purityWestA.180}{purityBraA.0@2}
+        \tnwire[species=selected]{purityWestB.180}{purityBraB.0@1}
+        \tnmark[form=enclosure, species=neutral, label pos=n]
+        {{purityBraA, purityMidA, purityKetA}}{$\rho$}
+        \tnmark[form=enclosure, species=neutral, label pos=s]
+        {{purityBraB, purityMidB, purityKetB}}{$\rho$}
+        \tnmark[form=label, label pos=s]{purityMidA}{$C\mathcal B_C$}
+        \tnmark[form=label, species=selected, label pos=e]
+        {crossing of puritySwapUp and puritySwapDown}{$F_{R\mathcal B_R}$}
+    \end{tenkz}
+    $=$
+    \begin{tenkz}[rows={wire,wire,wire}, cols=1, bonds=none, size=l]
+        \tn[at=(1,1), name=purityRhoA, skin=box, size=l, ports={90:physical, 270:physical}]{\rho}
+        \tn[at=(3,1), name=purityRhoB, skin=box, size=l, ports={90:physical, 270:physical}]{\rho}
+        \tnwire{purityRhoA.270}{purityRhoB.90}
+        \tnwire[route=arc]{purityRhoB.270}{purityRhoA.90}
+    \end{tenkz}
+    $=\operatorname{Tr}\rho^2\ge e^{-2b}$
+\end{tenkzequation}

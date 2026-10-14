@@ -32,6 +32,8 @@ Distances are ambient sup distances: `ℝ × ℝ` carries the maximum metric.
 * Polynomial-PEPS manuscript (Sept 24 2026), §7, `06-geometry.tex`: equation
   `eq:geometry-band` (lines 146–150), the edge construction (lines 155–241), and
   Lemma 7.2 `lem:geometry-angular` (lines 254–319).
+
+Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
 namespace TNLean.PEPS.Approximation
