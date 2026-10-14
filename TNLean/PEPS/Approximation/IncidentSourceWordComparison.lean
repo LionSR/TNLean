@@ -266,6 +266,41 @@ private theorem incidentSourceWord_heq_of_original_labels {a b : Layout P}
     (congrArg (fun ζ : Choices A w ↦ Pa.comp (partialResidual A w ζ))
       (choicesOfOriginalGateLabelsAt_eq_projectAllChoices w p ξ))
 
+/-- The original all-party residual and its lifted singleton projection
+have the same selected operator. All choices are projections of the same
+original branch. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
+lines 246–267, 351–434 and 565–588. -/
+private theorem preparedWordEvalComparison_partialResidual {a b : Layout P}
+    (w : SourceCircuit a b) (p : P) (ξ : Choices (fun _ : P ↦ true) w) :
+    let A : P → Bool := fun t ↦ partySelector (some ⟨p, rfl⟩)
+      (affectedOwner (fun _ : P ↦ true) t)
+    let hp : A p = true := (partySelector_affectedOwner_all_apply p p).trans
+      (by classical exact decide_eq_true rfl)
+    let q : Option {t : P // A t = true} := some ⟨p, hp⟩
+    let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
+    let lift : Option {t : P // A t = true} → Option {_p : P // true = true} :=
+      fun o ↦ o.map (fun t ↦ ⟨t.1, rfl⟩)
+    let χ := projectAllChoices A w ξ
+    preparedWordEvalComparison
+      ((partialResidual (fun _ : P ↦ true) w ξ).restrict (partySelector qp)
+        (sources_partialResidual (fun _ : P ↦ true) w ξ))
+      (((partialResidual A w χ).restrict (partySelector q)
+        (sources_partialResidual A w χ)).mapOwner lift) := by
+  classical
+  intro A hp q qp lift χ
+  let sq := partySelector qp
+  let sa := partySelector q
+  have hResidualA := restrict_partialResidual_eval_heq A w χ sa
+  have hResidualMapped := (Word.eval_mapOwner_heq lift
+    ((partialResidual A w χ).restrict sa (sources_partialResidual A w χ))).trans
+      (hResidualA.trans (Word.eval_mapOwner_heq lift
+        ((partialWord A w χ).localPart.restrict sa
+          (partialWord A w χ).sources_localPart)).symm)
+  have hResidual := (restrict_partialResidual_eval_heq (fun _ : P ↦ true) w ξ sq).trans
+    ((restrict_partialWord_all_localPart_eval_heq_singleton_projection w p ξ).trans
+      hResidualMapped.symm)
+  exact hResidual
+
 /-- Compare the original prepared word with its incident-label word, with
 all original source and output data fixed before the comparison is proved.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
@@ -323,15 +358,12 @@ private theorem selectedPreparedWordComparison_of_original_labels {a b : Layout 
       ((w.sourcePrivatePreparation ψ).restrict sq (sources_sourcePrivatePreparation w ψ))
       ((Pa.restrict sa hsPa).mapOwner lift) :=
     preparedWordEvalComparison_privatePreparation w p ψ
-  have hResidualA := restrict_partialResidual_eval_heq A w χ sa
-  have hResidualMapped := (Word.eval_mapOwner_heq lift
-    ((partialResidual A w χ).restrict sa (sources_partialResidual A w χ))).trans
-      (hResidualA.trans (Word.eval_mapOwner_heq lift
-        ((partialWord A w χ).localPart.restrict sa
-          (partialWord A w χ).sources_localPart)).symm)
-  have hResidual := (restrict_partialResidual_eval_heq (fun _ : P ↦ true) w ξ sq).trans
-    ((restrict_partialWord_all_localPart_eval_heq_singleton_projection w p ξ).trans
-      hResidualMapped.symm)
+  have hResidual : preparedWordEvalComparison
+      ((partialResidual (fun _ : P ↦ true) w ξ).restrict sq
+        (sources_partialResidual (fun _ : P ↦ true) w ξ))
+      (((partialResidual A w χ).restrict sa
+        (sources_partialResidual A w χ)).mapOwner lift) :=
+    preparedWordEvalComparison_partialResidual w p ξ
   have hin : Layout.restrict sq (w.allResidualSourceLayout ++ []) =
       Layout.mapOwner lift (Layout.restrict sa (S ++ [])) := by
     simpa only [List.append_nil] using hSlots.symm
