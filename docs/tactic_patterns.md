@@ -7601,3 +7601,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   if the final composition cancellation recurs in another file.
 - **Notes:** all three uses are in one file, below the two-file promotion
   threshold. No nonzero vector or nonempty index type is required.
+
+
+### Colors descended to connected fan runs — candidate (2026-10-14)
+
+- **Pattern:** Apply `SimpleGraph.ConnectedComponent.lift` to the triangle
+  colors, using `cellFanRun_color_eq` on the reachability of a walk.
+- **Seen:** The private `runColor` in
+  `PEPS/AreaLaw/Geometry/InitialRegions.lean` and
+  `repairFanRunExteriorColor` in
+  `PEPS/AreaLaw/Geometry/RepairReplacementRegions.lean`.
+- **Abstraction:** Mathlib already supplies the component descent. A common
+  color function for `CellFanRun` would remove the two applications if the
+  same expression is needed in another module; no additional tactic is needed.
+- **Notes:** Two occurrences in two files. The repair construction retains
+  its explicit exterior-color argument, while the initial family uses the
+  colors of its actual belt fan. Neither requires a representative of a run.
