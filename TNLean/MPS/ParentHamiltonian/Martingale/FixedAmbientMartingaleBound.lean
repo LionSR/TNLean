@@ -23,6 +23,8 @@ open scoped BigOperators ComplexOrder
 
 namespace MPSTensor
 
+variable {d D : ℕ}
+
 /-- Before the first full interaction window fits, the fixed-ambient prefix
 Hamiltonian vanishes. -/
 theorem openPrefixParentHamiltonianES_eq_zero_of_lt
