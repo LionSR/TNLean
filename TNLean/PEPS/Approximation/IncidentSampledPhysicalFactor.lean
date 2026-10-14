@@ -128,7 +128,7 @@ theorem sampledPhysicalFactor_eq_incidentSampledPhysicalFactor
     Matrix.of (fun row col ↦ bOut.repr (u (bIn col)) row)
   conv_rhs =>
     dsimp only [incidentSampledPhysicalFactor, wordCoordinateMatrix, Classical.typeDecidableEq]
-    rw [← matrix_repr_eval_eq_toMatrix bIn bOut
+    erw [← matrix_repr_eval_eq_toMatrix bIn bOut
       (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)).eval,
       ← matrix_repr_eval_eq_toMatrix bIn bOut
         (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ζ)).eval]
