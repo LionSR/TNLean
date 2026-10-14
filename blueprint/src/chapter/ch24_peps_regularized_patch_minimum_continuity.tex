@@ -1,0 +1,50 @@
+\section{Continuity of the regularized minimum}
+\label{sec:peps_regularized_patch_minimum_continuity}
+
+Retain the finite regions, independent density tuples and original unit vector
+of Definition~\ref{def:peps_regularized_patch_objective}. For each real $R$, put
+$b(R)=e^{-R}$ and write
+\[
+    F(R,x)=\|L_{m-1}(R,x)\cdots L_0(R,x)\Omega\|,
+    \qquad N(R)=\inf_{x\in\mathcal D}F(R,x).
+\]
+Here $L_j(R,x)$ is the identity extension of
+$(x_j+e^{-R}I_{X_j})^{-a_j/2}$.
+The feasible set $\mathcal D$ is fixed as $R$ varies.
+The continuity needed in the
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L421-L466}{minimum-growth argument}
+also follows directly from compactness.
+
+\begin{lemma}[Continuity of the norm minimum]
+    \label{lem:peps_regularized_patch_minimum_continuous}
+    \lean{TNLean.PEPS.continuous_regularizedPatchMinimum_exp_neg}
+    \uses{def:peps_regularized_patch_minimum}
+    For arbitrary real weights $a_j$, the function $N:\R\to\R$ is continuous.
+\end{lemma}
+\begin{proof}
+    \uses{lem:peps_regularized_patch_compact_continuous}
+    For every feasible tuple $x$ and real $R$, the matrix
+    $x_j+e^{-R}I_{X_j}$ is positive definite. Its fixed real power varies
+    jointly continuously with $(R,x)$. Identity extension, ordered
+    multiplication, evaluation on $\Omega$, and the norm preserve this
+    continuity. Since $\mathcal D$ is a fixed compact nonempty set, the
+    minimum of the jointly continuous objective varies continuously with $R$.
+    No choice of a minimizing tuple as a function of $R$ is required.
+\end{proof}
+
+\begin{corollary}[Continuity of the logarithmic minimum]
+    \label{cor:peps_regularized_patch_log_minimum_continuous}
+    \lean{TNLean.PEPS.continuous_log_regularizedPatchMinimum_exp_neg}
+    \uses{def:peps_regularized_patch_minimum}
+    If $a_j\ge0$ for every $j$, then $R\mapsto\log N(R)$ is continuous on $\R$.
+\end{corollary}
+\begin{proof}
+    \uses{lem:peps_regularized_patch_minimum_continuous,thm:peps_regularized_patch_minimum}
+    The minimum is continuous and strictly positive at every real radius.
+    Composition with the logarithm gives the assertion.
+\end{proof}
+
+The regions may be empty or repeated and need not be nested. The argument
+does not require commutation of the filters. It establishes continuity;
+the uniform Lipschitz estimate and local absolute continuity in the manuscript
+are separate assertions.
