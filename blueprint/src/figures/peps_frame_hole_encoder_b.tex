@@ -1,22 +1,33 @@
 % Figure peps_frame_hole_encoder_b.
 % Owner: chapter/ch24_peps_encoded_frames.tex (def:peps_frame_hole_encoder, second display).
-% Used by: gapped-2d-notes PP Sec. 6, side by side with peps_hole_encoder under
-% the joiner =sum_{j,l}. It reads left to right (input west, outputs east),
-% against the notes' right-to-left convention; the note says so.
+% Used by: gapped-2d-notes PP Sec. V C (sheets, holes and encoded frames), first row of
+% an unnumbered two-row display whose second row is the sum over j, l of
+% peps_hole_encoder. Both pictures read right to left (input east, outputs west).
 % Source: arXiv OpenAI2026PolynomialPEPS, 05-frames.tex, lines 26--69
 % (eq. hole-encoder); no source figure.
-% Second picture: the box is K_{c,h}. Its west leg is the input
-% H_Lambda; its two east legs are the outputs, the tag J_{c,h} (upper)
-% and the raw registers H_Lambda (lower), so K_{c,h} maps H_Lambda to
-% J_{c,h} (x) H_Lambda. All three legs are open physical legs; boundary
-% signature (phys:w | phys:e, phys:e). Each tag value |j,l> applies
-% <v_{jl}| on D_j and re-prepares |0> on D_j, as in eq. hole-encoder.
+% Ink-to-index: the box is K_{c,h} (inscribed). Its east leg is the input
+% H_Lambda; its two west legs are the outputs, the tag J_{c,h} (upper) and
+% the raw registers H_Lambda (lower), so K_{c,h} maps H_Lambda to
+% J_{c,h} (x) H_Lambda. Invisible vertices (skin=none) carry each leg one
+% pitch out from the box, and the space names stand at the open tips. Each
+% tag value |j,l> applies <v_{jl}| on D_j and re-prepares |0> on D_j, as in
+% eq. hole-encoder.
+% Boundary signature: (phys:w)x2 | (phys:e), the tag above the raw
+% registers; peps_hole_encoder has the same signature.
+% Label macros: none.
 \begin{tenkzequation}
     \tenkzkernel
-    \begin{tenkz}[rows={wire,wire}, cols=1, bonds=none]
-        \tn[at=(1,1), skin=box, wires=2,
-            ports={180@2:physical:$\mathcal H_\Lambda$,
-                    0@1:physical:$\mathcal J_{c,h}$,
-                    0@2:physical:$\mathcal H_\Lambda$}]{K_{c,h}}
+    \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none, size=l]
+        \tn[at=(1,2), name=encK, skin=box, wires=2, wide=2, size=l,
+            ports={180@1:physical, 180@2:physical, 0@2:physical}]{K_{c,h}}
+        \tn[at=(1,1), name=encTag, skin=none,
+            ports={180@1:physical:$\mathcal J_{c,h}$, 0:physical}]{}
+        \tn[at=(2,1), name=encOut, skin=none,
+            ports={180@1:physical:$\mathcal H_\Lambda$, 0:physical}]{}
+        \tn[at=(2,4), name=encIn, skin=none,
+            ports={180:physical, 0@1:physical:$\mathcal H_\Lambda$}]{}
+        \tnwire{encTag.0}{encK.180@1}
+        \tnwire{encOut.0}{encK.180@2}
+        \tnwire{encK.0@2}{encIn.180}
     \end{tenkz}
 \end{tenkzequation}

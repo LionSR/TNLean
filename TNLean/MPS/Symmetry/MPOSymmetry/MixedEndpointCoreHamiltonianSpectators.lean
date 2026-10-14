@@ -315,11 +315,6 @@ theorem mixedEndpointActiveNormalizedLocalInteraction_conj_coreSpectators
       (endpointCoreLocalInteraction A₀ p).toContinuousLinearMap (U (U.symm v)) at h
   simpa only [U.apply_symm_apply] using h
 
-private theorem euclidean_sum_apply {I J : Type*} [Fintype J]
-    (v : J → EuclideanSpace ℂ I) (i : I) :
-    (∑ j, v j) i = ∑ j, v j i :=
-  map_sum (PiLp.projₗ (𝕜 := ℂ) 2 (fun _ => ℂ) i) v Finset.univ
-
 /-- The complete normalized Hamiltonian is the spectator extension of one
 common core operator, with exactly the actually placed interaction sum.
 This equality is derived term by term and is independent of injectivity.
@@ -342,7 +337,7 @@ theorem mixedEndpointActiveNormalizedHamiltonian_conj_coreSpectators
         (endpointCoreLocalInteraction A₀ p).toContinuousLinearMap v) (κ, s) =
     (∑ p : MixedEndpointActiveEdgeSite N, endpointCoreLocalInteraction A₀ p)
       (rightFiber v s) κ
-  rw [euclidean_sum_apply, LinearMap.sum_apply, euclidean_sum_apply]
+  simp only [WithLp.ofLp_sum, Finset.sum_apply, LinearMap.sum_apply]
   apply Finset.sum_congr rfl
   intro p _
   rfl

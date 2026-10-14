@@ -1,0 +1,106 @@
+% Figure tn2d_collar_clearance.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. III C (the sets of one tile in the proof of
+% Theorem 1), Fig. 4, with \tnlColTarget set to X; PP App. B 4 (Proposition 5),
+% Fig. 10(b), with \tnlColRing overridden.
+% Source: arXiv OpenAI2026AreaLaw, sections/10-geometry.tex:100-130 (Prop 11.2, (11.3),
+% (11.4)) and 808-851 (assembly); sections/08-scanner.tex:546-566 and 809-830 (Def 9.3,
+% Prop 9.6: X = A n T, S_0 = A n T_L, Y = S_0 \ X); sections/09-amplification.tex:261-298
+% (Prop 10.2: every remote J outside N_{2r}(S_0)). arXiv OpenAI2026PolynomialPEPS,
+% sections/02-information.tex:91-136 (Prop 3.1, read with A = Lambda) and
+% sections/08-companion-interface.tex:44-77.
+% Ink-to-index: dots are sites (rows 2-15; rows 1 and 16 are blank and carry the
+% brackets); no line is a contraction (the red strings mark lattice edges). Cols 1-2
+% (dashed grey) are Lambda \ A, and the fourteen thick red strings between cols 2 and
+% 3 are the cut, so col 3 holds the A-side endpoints of Z. The red L-shaped set is the
+% template T = (7..10, 8..9) u (9..10, 10..11), a union of two rectangles; here
+% X = A n T = T. The violet set is S_0 = A n T_L, the sup-norm dilation by L = 2,
+% drawn whole (rows 5-12, cols 6-13 minus its notch); X is drawn on top of it, so the
+% violet sites outside the red contour are Y = S_0 \ X and the ring meets X with no
+% gap. The black contour is N_{2r}(S_0), drawn as the sup-norm dilation of S_0 by
+% 2r = 2, which contains the graph neighbourhood. The teal tile (rows 2-4, cols
+% 17-19) is an earlier same-family tile X_j; the olive tile (rows 7-13, cols 17-19)
+% is a tile X_k of the other family (other families may come close).
+% Brackets are horizontal sup-norm separations. Top, on the west side: 2r (col 4 to
+% 6, N_{2r}(S_0) to S_0) and L (col 6 to 8, S_0 to T). Bottom, measured from the edge
+% of T: left, the cut clearance (11.3) from the endpoint column 3 to T at col 8;
+% right, the ordered clearance (11.4) from T at col 11 to X_j at col 17 (sup-norm
+% distance 6). J = (Lambda \ A) u X_j (the J_i of the assembly) lies outside
+% N_{2r}(S_0) = T_{L+2r}, which stays inside A; Z' = Lambda \ S_0 is everything
+% outside the violet set. Nothing is clipped.
+% PP reads it with A = Lambda: the cut and the lower-left bracket are vacuous, the
+% grey strip and the teal tile are two pieces of a remote set E, and the olive tile
+% is unlabelled.
+% Boundary signature: empty (geometry).
+% Labels: free labels take label pos=e at a point midway between two dot rows, so the
+% text sits between rows instead of on the dots (N_{2r}(S_0) is anchored half a
+% column west, between cols 6 and 7, so its tall parentheses fall between dot
+% columns and clear the dots of rows 13 and 14); the target label sits inside
+% the horizontal bar of the L, clear of its outline, and the X_k label sits inside
+% the olive tile in its hue.
+% Not to scale: L = floor(n^{1-epsilon}) (AL Sec. 1; AL Sec. 9 scans with
+% L = floor(n^{1-ell}) and ell = epsilon),
+% 2r <= C n^{(1-epsilon)/alpha}, and L + 2r < n^beta; the clearances exceed 2 n^beta,
+% hence 2(L + 2r). With the drawn L = 2r = 2 the drawn clearances 5 and 6 are below
+% 2(L + 2r) = 8: only the nesting and the order of the sets are faithful.
+% Label macros: \tnlColTarget{X=A\cap T}, \tnlColRing{Y=S_0\setminus X},
+% Label macros: \tnlColFar{\Lambda\setminus A}, \tnlColEarlier{X_j},
+% Label macros: \tnlColWidth{L}, \tnlColClear{2n^\beta}, \tnlColOther{X_k};
+% PP overrides Target, Ring, Far, Earlier, Width, Clear, Other with X, S_0\setminus X,
+% E, E, \ell, u^\beta and empty (its lead-in defines X = Lambda n T); AL overrides
+% only Target, with X (its lead-in says X = A n T = T), and keeps every other default.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[size=s, rows={wire,ket,ket,ket,ket,ket,ket,ket,ket,ket,ket,ket,ket,ket,ket,
+                    wire}, cols=19, bonds=none]
+        \providecommand{\tnlColTarget}{X=A\cap T}
+        \providecommand{\tnlColRing}{Y=S_0\setminus X}
+        \providecommand{\tnlColFar}{\Lambda\setminus A}
+        \providecommand{\tnlColEarlier}{X_j}
+        \providecommand{\tnlColWidth}{L}
+        \providecommand{\tnlColClear}{2n^\beta}
+        \providecommand{\tnlColOther}{X_k}
+        \tndeclare{species}{fam0}{hue=source:teal}
+        \tndeclare{species}{fam1}{hue=source:olive}
+        \tn[at=(1,4), skin=none]{}
+        \tn[at=(1,6), skin=none]{}
+        \tn[at=(1,8), skin=none]{}
+        \tn[at=(16,3), skin=none]{}
+        \tn[at=(16,8), skin=none]{}
+        \tn[at=(16,11), skin=none]{}
+        \tn[at=(16,17), skin=none]{}
+        \tnwire[kind=string, species=selected]{(2,2)}{(2,3)}
+        \tnwire[kind=string, species=selected]{(3,2)}{(3,3)}
+        \tnwire[kind=string, species=selected]{(4,2)}{(4,3)}
+        \tnwire[kind=string, species=selected]{(5,2)}{(5,3)}
+        \tnwire[kind=string, species=selected]{(6,2)}{(6,3)}
+        \tnwire[kind=string, species=selected]{(7,2)}{(7,3)}
+        \tnwire[kind=string, species=selected]{(8,2)}{(8,3)}
+        \tnwire[kind=string, species=selected]{(9,2)}{(9,3)}
+        \tnwire[kind=string, species=selected]{(10,2)}{(10,3)}
+        \tnwire[kind=string, species=selected]{(11,2)}{(11,3)}
+        \tnwire[kind=string, species=selected]{(12,2)}{(12,3)}
+        \tnwire[kind=string, species=selected]{(13,2)}{(13,3)}
+        \tnwire[kind=string, species=selected]{(14,2)}{(14,3)}
+        \tnwire[kind=string, species=selected]{(15,2)}{(15,3)}
+        \tnmark[form=enclosure, species=complement, label pos=n]
+        {(2,1) .. (15,2)}{$\tnlColFar$}
+        \tnmark[form=enclosure, species=neutral]
+        {(3,4) .. (14,15) - (3,14) .. (4,15)}{}
+        \tnmark[form=label, label pos=e]{midway (13,6) and (14,7)}{$N_{2r}(S_0)$}
+        \tnmark[form=enclosure, species=collar, tint]
+        {(5,6) .. (12,13) - (5,12) .. (6,13)}{}
+        \tnmark[form=label, label pos=e]{midway (5,6) and (6,6)}{$\tnlColRing$}
+        \tnmark[form=enclosure, species=selected, tint]
+        {(7,8) .. (10,11) - (7,10) .. (8,11)}{}
+        \tnmark[form=label, label pos=e]{midway (9,8) and (10,8)}{$\tnlColTarget$}
+        \tnmark[form=enclosure, species=fam0, tint, label pos=n]
+        {(2,17) .. (4,19)}{$\tnlColEarlier$}
+        \tnmark[form=enclosure, species=fam1, tint]{(7,17) .. (13,19)}{}
+        \tnmark[form=label, species=fam1, label pos=e]{midway (9,17) and (10,17)}{$\tnlColOther$}
+        \tnmark[form=bracket, label pos=n]{(1,4) .. (1,6)}{$2r$}
+        \tnmark[form=bracket, label pos=n]{(1,6) .. (1,8)}{$\tnlColWidth$}
+        \tnmark[form=bracket, label pos=s]{(16,3) .. (16,8)}{$>\tnlColClear$}
+        \tnmark[form=bracket, label pos=s]{(16,11) .. (16,17)}{$>\tnlColClear$}
+    \end{tenkz}
+\end{center}
