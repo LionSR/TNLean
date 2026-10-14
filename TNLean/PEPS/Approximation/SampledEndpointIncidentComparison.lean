@@ -43,25 +43,6 @@ private def selectedEndpointOperator (w : SourceCircuit a b) (p : P)
   (SourceInventory.endpointRegisterWord
     (D.filter (fun z ↦ partySelector q z.1.owner))).eval
 
-/-- The canonical original endpoint word has the common selected operator.
-Selection is compared before an arbitrary representing word is supplied.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 279–355 and 409–434. -/
-private theorem restrict_endpointWord_eval_heq_selectedEndpointOperator
-    (w : SourceCircuit a b) (p : P)
-    (M : ∀ e : sourceLocations w, euc (Fin (sourceDims w e).1) →L[ℂ]
-      euc (Fin (sourceDims w e).1))
-    (N : ∀ e : sourceLocations w, euc (Fin (sourceDims w e).2) →L[ℂ]
-      euc (Fin (sourceDims w e).2)) :
-    let all : P → Bool := fun _ ↦ true
-    let qp : Option {_p : P // true = true} := some ⟨p, rfl⟩
-    let Z := SourceInventory.endpointWord (partialSlots all w) w.allSourceU w.allSourceV
-      (fun i ↦ M (partialSlotEquiv all w i).1)
-      (fun i ↦ N (partialSlotEquiv all w i).1)
-    let hz : Z.sources = [] := SourceInventory.sources_endpointWord ..
-    HEq (Z.restrict (partySelector qp) hz).eval
-      (selectedEndpointOperator w p M N) :=
-  restrict_endpointWord_eval_heq_selectedRegisterWord w p M N
-
 /-- An arbitrary source-free word representing the original endpoint maps
 has their common selected operator after restriction. The equality transports
 its own source-free proof before any sampled maps are supplied.
@@ -80,7 +61,7 @@ private theorem restrict_eval_heq_selectedEndpointOperator
     HEq (W.restrict (partySelector (some ⟨p, rfl⟩)) hs).eval
       (selectedEndpointOperator w p M N) := by
   subst W
-  exact restrict_endpointWord_eval_heq_selectedEndpointOperator w p M N
+  exact restrict_endpointWord_eval_heq_selectedRegisterWord w p M N
 
 variable (w : SourceCircuit a b) (k : ℕ)
   (lam : ∀ e : sourceLocations w, branchLabels w e.1 →

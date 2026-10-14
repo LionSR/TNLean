@@ -67,9 +67,9 @@ def incidentSampledPhysicalFactor
         (familyPhysicalLayout d ps ++ garbage)))) :=
     selectedPhysicalPrivateBasis (E := E) d ps hn hc garbage BG q
   let Dη : Matrix (Fin (d p) × E q) (I q) ℂ :=
-    Matrix.of (fun row col ↦ bOut.repr ((incidentSourceWord w p ψ η).eval (bIn col)) row)
+    LinearMap.toMatrix bIn.toBasis bOut.toBasis (incidentSourceWord w p ψ η).eval.toLinearMap
   let Dθ : Matrix (Fin (d p) × E q) (I q) ℂ :=
-    Matrix.of (fun row col ↦ bOut.repr ((incidentSourceWord w p ψ θ).eval (bIn col)) row)
+    LinearMap.toMatrix bIn.toBasis bOut.toBasis (incidentSourceWord w p ψ θ).eval.toLinearMap
   let Nηθ : Matrix (I q) (I q) ℂ :=
     LinearMap.toMatrix bIn.toBasis bIn.toBasis
       (incidentSampledEndpointWord w k lam L R p η θ j ω).eval.toLinearMap
@@ -118,6 +118,12 @@ theorem sampledPhysicalFactor_eq_incidentSampledPhysicalFactor
       Mem (Layout.atParty q (Layout.mapOwner (affectedOwner (fun _ : P ↦ true))
         (familyPhysicalLayout d ps ++ garbage)))) : Matrix (Fin (d p) × E q) (I q) ℂ :=
     Matrix.of (fun row col ↦ bOut.repr (u (bIn col)) row)
+  conv_rhs =>
+    dsimp only [incidentSampledPhysicalFactor]
+    rw [← matrix_repr_eval_eq_toMatrix bIn bOut
+      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)).eval,
+      ← matrix_repr_eval_eq_toMatrix bIn bOut
+        (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ζ)).eval]
   change Matrix.partialTraceRight (α := Fin (d p)) (β := E q)
     (columnMatrix ((w.partialSourceWord ψ ξ).restrict (partySelector q)
         (sources_partialSourceWord w ψ ξ)).eval *
