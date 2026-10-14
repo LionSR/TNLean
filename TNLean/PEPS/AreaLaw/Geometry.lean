@@ -110,6 +110,7 @@ import TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCover
 import TNLean.PEPS.AreaLaw.Geometry.TemplateCutBoundary
 import TNLean.PEPS.AreaLaw.Geometry.TemplateDyadicRows
 import TNLean.PEPS.AreaLaw.Geometry.TemplateEntropy
+import TNLean.PEPS.AreaLaw.Geometry.TemplateInstances
 import TNLean.PEPS.AreaLaw.Geometry.TemplateLayers
 import TNLean.PEPS.AreaLaw.Geometry.TemplateMixedSquares
 import TNLean.PEPS.AreaLaw.Geometry.TemplatePolygons
