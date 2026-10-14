@@ -14,6 +14,7 @@ import TNLean.PEPS.AreaLaw.Amplification.ChannelWordObservables
 import TNLean.PEPS.AreaLaw.Amplification.ChannelWordOmission
 import TNLean.PEPS.AreaLaw.Amplification.ChannelWordThinning
 import TNLean.PEPS.AreaLaw.Amplification.ComponentChannelOscillation
+import TNLean.PEPS.AreaLaw.Amplification.ConstraintWordTruncation
 import TNLean.PEPS.AreaLaw.Amplification.EntropyComparison
 import TNLean.PEPS.AreaLaw.Amplification.ExponentialChannelShells
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelEventError
@@ -31,3 +32,4 @@ import TNLean.PEPS.AreaLaw.Amplification.LatticeExcitedDecay
 import TNLean.PEPS.AreaLaw.Amplification.LocalChannelOscillation
 import TNLean.PEPS.AreaLaw.Amplification.LocalRootChannels
 import TNLean.PEPS.AreaLaw.Amplification.RadiusScales
+import TNLean.PEPS.AreaLaw.Amplification.TypicalProjectors
