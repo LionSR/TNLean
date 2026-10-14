@@ -55,6 +55,7 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_originalGateSa
         (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) garbage))))
     {n J : Type} [Fintype n] [Fintype J]
     (bIn : OrthonormalBasis n ℂ (Mem a)) (bRef : OrthonormalBasis J ℂ (Mem garbage)) :
+    letI : DecidableEq P := Classical.typeDecidableEq P
     let M := fun (η θ : (g : w.nonemptyGateLocations) → w.branchLabels g.1)
       (j : DistributedOperatorContraction.Sample
         (Finset.univ : Finset w.nonemptyGateLocations) (fun g ↦ w.participants g.1) → Fin k)
@@ -87,7 +88,7 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_originalGateSa
                   (fun g ↦ w.participants g.1) → Fin k,
                 dependentPhysicalProductFamilyMatrix (M η θ j) := by
   classical
-  intro M
+  intro decEqP M
   have h := physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_incidentPhysicalSum
     (I := I) (E := E) d ps hn hc garbage w ψ k lam L R ω B BG bIn bRef
   dsimp only at h
