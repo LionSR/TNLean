@@ -30,7 +30,7 @@ theorem ceil_le_add_one_mul_of_le_mul {x A s : ℝ}
   calc
     _ ≤ x + 1 := (ceil_lt_add_one hx).le
     _ ≤ A * s + 1 := add_le_add_right hxs _
-    _ ≤ A * s + s := add_le_add (le_refl (A * s)) hs
+    _ ≤ A * s + s := _root_.add_le_add (α := ℝ) (_root_.le_refl (A * s)) hs
     _ = (A + 1) * s := by rw [add_mul, one_mul]
 
 end Nat
