@@ -91,10 +91,11 @@ theorem cell_index_unique {o x : ℝ × ℝ} {q : ℝ} {i j : ℤ × ℤ}
 /-- Two points of a side-`q` cell are at distance at most `q` in the ambient maximum metric. -/
 theorem dist_le_of_mem_cell {o x y : ℝ × ℝ} {q : ℝ} {i : ℤ × ℤ}
     (hq : 0 < q) (hx : x ∈ cell o q i) (hy : y ∈ cell o q i) : dist x y ≤ q := by
+  refine le_trans (b := max q 0) ?_ (max_le le_rfl hq.le)
   rcases hx with ⟨hx₁, hx₂, hx₃, hx₄⟩
   rcases hy with ⟨hy₁, hy₂, hy₃, hy₄⟩
   rw [Prod.dist_eq, max_le_iff, Real.dist_eq, Real.dist_eq]
-  constructor <;> apply abs_le.mpr <;> constructor <;> linarith [hq.le]
+  constructor <;> apply abs_le.mpr <;> constructor <;> linarith [le_max_left q 0]
 
 /-- A finite index square, with one extra cell on each side to handle grid boundaries. -/
 def indexBox (j : ℤ × ℤ) (N : ℕ) : Finset (ℤ × ℤ) :=
@@ -110,7 +111,7 @@ theorem card_indexBox (j : ℤ × ℤ) (N : ℕ) :
   have h₂ : j.2 + (N : ℤ) + 1 + 1 - (j.2 - (N : ℤ) - 1) =
       ((2 * N + 3 : ℕ) : ℤ) := by omega
   rw [h₁, h₂]
-  simp [pow_two]
+  simp only [Int.toNat_natCast, pow_two]
 
 private theorem coordinate_index_bounds {o x c q t : ℝ} {i j : ℤ} {N : ℕ}
     (hq : 0 < q)
