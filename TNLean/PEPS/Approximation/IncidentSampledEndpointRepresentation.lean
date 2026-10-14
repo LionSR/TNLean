@@ -29,6 +29,20 @@ variable (w : SourceCircuit a b) (k : ℕ)
   (F : ∀ e : sourceLocations w, branchLabels w e.1 →
     Matrix (Fin (sourceDims w e).2) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
 
+/-- Equal ordered endpoint data give the same filtered word comparison. The
+comparison is transported before the original labels and sampled maps are supplied.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 409–434 and 565–588. -/
+private theorem eval_heq_filtered_endpointRegisterWord_of_eq
+    {Q R : Type} {c d : Layout Q} (u : Word c d)
+    (D D' : List (Sigma (fun r : Reg R ↦ r.space →L[ℂ] r.space)))
+    (f : R → Bool) (hD : D = D')
+    (h : HEq u.eval (SourceInventory.endpointRegisterWord
+      (D.filter (fun z ↦ f z.1.owner))).eval) :
+    HEq u.eval (SourceInventory.endpointRegisterWord
+      (D'.filter (fun z ↦ f z.1.owner))).eval := by
+  cases hD
+  exact h
+
 /-- Removing the canonical layout and owner identifications from the incident
 word leaves its ordered filtered endpoint data. The original incident labels
 and local samples are arbitrary.
@@ -168,8 +182,12 @@ theorem incidentSampledEndpointWord_eval_heq_selectedRegisterWord
   have hcast := incidentSampledEndpointWord_eval_heq_endpointRegisterWord w k lam E F p
     (originalGateLabelsAtOfAllChoices w p ξ) (originalGateLabelsAtOfAllChoices w p ζ)
     (fun i ↦ j (partialSlotEquiv A w i).1) ω
-  exact hcast.trans (SourceInventory.endpointRegisterWord_eval_heq_of_eq
-    (congrArg (List.filter (fun z ↦ partySelector q z.1.owner)) hdata))
+  exact eval_heq_filtered_endpointRegisterWord_of_eq
+    (incidentSampledEndpointWord w k lam E F p
+      (originalGateLabelsAtOfAllChoices w p ξ) (originalGateLabelsAtOfAllChoices w p ζ)
+      (fun i ↦ j (partialSlotEquiv A w i).1) ω)
+    (SourceInventory.endpointRegisterData (partialSlots A w) U V Mi Ni) D
+    (partySelector q) hdata hcast
 
 end SourceCircuit
 end TNLean.PEPS.PairEffect

@@ -29,9 +29,10 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** Retain two constructed words and their own layouts in a named
   proposition defined literally by heterogeneous equality of their evaluations.
 - **Seen:** `preparedWordEvalComparison` in `IncidentSourceWordComparison.lean`,
-  `wordEvalComparison` in `IncidentSampledEndpointComparison.lean`, and the generic
+  `wordEvalComparison` in `IncidentSampledEndpointComparison.lean`, the generic
   coordinate and original-word comparisons in `IncidentSampledPhysicalFactor.lean`,
-  under `PEPS/Approximation/`.
+  and the sampled-to-incident comparison in
+  `SampledEndpointIncidentComparison.lean`, under `PEPS/Approximation/`.
 - **Abstraction:** `Word.IsEvalComparison` in `WordEvalComparison.lean` states this
   common comparison. The two existing private predicates delegate to it with
   unchanged signatures; their theorem statements and proofs are unchanged.
@@ -43,7 +44,7 @@ abstracted — record why, so it is not re-proposed).
   original-circuit or sampled-operator expressions. The physical-coordinate
   argument derives all three component comparisons from the existing word
   results and converts them to ordinary equality only for abstract words.
-- **Notes:** Three files now use the shared predicate; no third copy is added.
+- **Notes:** Four files now use the shared predicate; no third copy is added.
   The promotion adds no original hypothesis or proof limit. It does not use the
   different selected-local-part predicate. Hosted verification and timing remain
   pending. The new provider has 45 lines; the two delegate body replacements and
