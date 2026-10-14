@@ -195,7 +195,7 @@ theorem IsValid.next (hS : S.IsValid) (hlarge : 1000 * S.side ^ γ ≤ S.side) :
   have ht : 0 < t := Real.rpow_pos_of_pos hS.side_pos γ
   have hside : (S.next γ).side = 8 * t := rfl
   refine ⟨by rw [hside]; positivity, ?_, ?_, ?_⟩
-  · show (S.squares.flatMap fun Q ↦ children Q u t).Pairwise (AreSeparated (8 * t))
+  · change (S.squares.flatMap fun Q ↦ children Q u t).Pairwise (AreSeparated (8 * t))
     rw [List.pairwise_flatMap]
     refine ⟨fun Q hQ ↦ ?_, hS.separated.imp fun {Q Q'} hsep C hC C' hC' ↦ ?_⟩
     · unfold children
