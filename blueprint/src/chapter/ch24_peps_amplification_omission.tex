@@ -60,6 +60,22 @@ with their multiplicities. All norms are operator norms.
     $\|\mathcal E_i(A)-R\|\le\|\mathcal E_i(A-R)\|+\|\mathcal E_i(R)-R\|$.
 \end{proof}
 
+\begin{theorem}[Finite prefix increments]
+    \label{thm:al_poisson_prefix_increment}
+    \lean{PoissonWord.sum_prefix_increment}
+    \leanok
+    Let $f$ be a real function on finite words over any alphabet. For a word
+    $w=(i_0,\ldots,i_{m-1})$, let $w_{<j}$ be its first $j$ letters. Then
+    \begin{align*}
+        \sum_{j=0}^{m-1}\bigl(f(w_{<j}i_j)-f(w_{<j})\bigr)
+        =f(w)-f(\varnothing).
+    \end{align*}
+\end{theorem}
+\begin{proof}\leanok
+    Since $w_{<j}i_j=w_{<j+1}$, the successive differences telescope
+    between the empty word and $w$.
+\end{proof}
+
 \begin{theorem}[Omitted-prefix telescope]
     \label{thm:al_channel_word_omission_telescope}
     \uses{def:al_channel_word_omission_defect}
@@ -73,13 +89,37 @@ with their multiplicities. All norms are operator norms.
     \end{align*}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:al_channel_word_omission_bounds}
-    The defect of the empty word vanishes. Sum the increments of
-    Theorem~\ref{thm:al_channel_word_omission_bounds} along the prefixes.
+    \uses{thm:al_channel_word_omission_bounds,thm:al_poisson_prefix_increment}
+    The defect of the empty word vanishes. Apply
+    Theorem~\ref{thm:al_poisson_prefix_increment} to the defect and bound
+    each increment by Theorem~\ref{thm:al_channel_word_omission_bounds}.
 \end{proof}
 
 For a finite alphabet $A$ and $t\ge0$, let $\nu_{A,t}$ be the law of the
 word recorded by independent rate-one clocks on $[0,t]$, one for each label.
+
+\begin{theorem}[Occupation at omitted letters]
+    \label{thm:al_poisson_omitted_prefix_occupation}
+    \lean{PoissonWord.integrable_sum_omitted_partition_prefix,
+        PoissonWord.integral_sum_omitted_partition_prefix}
+    \leanok
+    Let $F$ be finite, let $P$ be a predicate on $F$, and put
+    $F_P=\{i\in F:P(i)\}$. Suppose a real function $H(u,i)$, for words $u$
+    over $F_P$ and $i\in F$, satisfies $0\le H(u,i)\le M$ for a real
+    constant $M$. For $t\ge0$, the sum over omitted positions is integrable
+    under $\nu_{F,t}$ and
+    \begin{align*}
+        \int\sum_{0\le j<|w|,\ \neg P(i_j)}H(w_{<j}|_P,i_j)\,d\nu_{F,t}(w)
+        =\int_0^t\sum_{i\in F,\ \neg P(i)}\int H(u,i)\,d\nu_{F_P,s}(u)\,ds.
+    \end{align*}
+\end{theorem}
+\begin{proof}\leanok
+    This is the real occupation identity at omitted labels in
+    \cite[``Real occupation at omitted labels'']{QICLean2026Blueprint}.
+    Set the kernel to zero on retained labels and apply the retained-prefix
+    identity. The sum is bounded by $M|w|$, and the Poisson word length has
+    finite expectation, which gives integrability.
+\end{proof}
 
 \begin{theorem}[Expected defect as a time integral]
     \label{thm:al_channel_word_expected_omission}
@@ -95,13 +135,14 @@ word recorded by independent rate-one clocks on $[0,t]$, one for each label.
     \end{align*}
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:al_channel_word_omission_telescope,thm:al_channel_word_filter}
+    \uses{thm:al_channel_word_omission_bounds,thm:al_channel_word_omission_telescope,
+        thm:al_channel_word_filter,thm:al_poisson_omitted_prefix_occupation}
     The defect is bounded, hence integrable. Integrate the telescope of
-    Theorem~\ref{thm:al_channel_word_omission_telescope}. The retained prefix
-    before an omitted event is a word over $F_P$, and the expected sum over
-    omitted positions equals the time integral of the rate-one omitted
-    clocks against the law of the retained process, which runs on
-    independent clocks.
+    Theorem~\ref{thm:al_channel_word_omission_telescope}. Identify the filtered
+    word with its word over $F_P$ by Theorem~\ref{thm:al_channel_word_filter}.
+    Apply Theorem~\ref{thm:al_poisson_omitted_prefix_occupation} to
+    $H(u,i)=\|(\mathcal E_i-\mathrm{id})(\mathcal E_u(B))\|$, which lies in
+    $[0,2\|B\|]$ by contraction.
 \end{proof}
 
 \subsection{One omitted event}
