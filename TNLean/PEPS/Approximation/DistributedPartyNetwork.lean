@@ -28,7 +28,7 @@ variable {Party Gate : Type*} [Fintype Party]
   [DecidableEq Party] [DecidableEq Gate]
 variable (gates : Finset Gate) (participants : Gate → Finset Party)
   (root : Gate → Party) (hroot : ∀ g ∈ gates, root g ∈ participants g)
-  (Label : Gate → Type*) [∀ g, Fintype (Label g)] (k : ℕ)
+  (Label : Gate → Type) [∀ g, Fintype (Label g)] (k : ℕ)
 variable {Out In : Party → Type*} {q : ℕ}
 
 /-- Enumerate the actual virtual alphabets while retaining their links and
