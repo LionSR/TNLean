@@ -7072,6 +7072,11 @@ spectral split → block extraction → MPV calculation → strict bounds
   a dependent functional-calculus term. This argument occurs once.
   The scoped AreaLaw scan on 2026-10-14 found no repeated tactic block in the
   new ordered-output module at the default thresholds.
+  The positional minimizer comparison reconstructs the reversed competitor
+  with `List.equivSigmaTuple.symm.surjective`, then uses
+  `List.ofFn_injective` for its region and exponent lists. These two projection
+  comparisons occur in the same argument. The existing list lemmas and the
+  objective-norm identity suffice; no additional tactic is introduced.
 
 
 ### Monotonicity of a regional-entropy supremum — candidate (2026-10-09)

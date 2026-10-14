@@ -130,10 +130,10 @@ Its marginals are those of the same final normalized vector defined in
 
 % Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 68--99.
 % Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-% Completion marks await verification with the public patch-factor definitions.
 \begin{definition}[The ordered list of patch factors]
     \label{def:peps_ordered_patch_factor_list}
     \lean{TNLean.PEPS.regularizedPatchFactorList}
+    \leanok
     Let $V$ be a finite ordered set, let $n_v\in\N$, and write
     $\mathcal H_X=\ell^2(\prod_{v\in X}[n_v];\C)$.
     For regions $X_0,\ldots,X_{m-1}\subseteq V$, real numbers $a_j$,
@@ -151,6 +151,7 @@ Its marginals are those of the same final normalized vector defined in
         TNLean.PEPS.dependentGlobalConfigIsometry_regularizedPatchOutput,
         TNLean.PEPS.regularizedPatchObjective_eq_norm_patchOutput
     }
+    \leanok
     \uses{def:peps_ordered_patch_factor_list,def:peps_patch_canonical_marginal,
         def:peps_regularized_patch_objective}
     Let $J$ be the canonical unitary identification of full-region and global
@@ -171,12 +172,50 @@ Its marginals are those of the same final normalized vector defined in
     \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L68-L99}{regularized patch problem}.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:peps_regional_basis_relabelling}
     Regional basis relabelling gives
     $J\widehat K_jJ^{-1}=\widetilde K_j$ for each $j$.
     Conjugation preserves the ordered matrix product. Applying the resulting
     identity to $J\Omega$ proves the vector identity. Taking norms and using
     unitarity of $J$ gives equality of the objectives.
+\end{proof}
+
+% Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 68--99 and 130--205.
+% Source revision: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Completion marks await verification of the public declaration.
+\begin{theorem}[Minimization over ordered patch lists]
+    \label{thm:peps_ordered_patch_minimizer}
+    \lean{TNLean.PEPS.isPatchMinimizer_regularizedPatchFactorList}
+    \uses{def:peps_ordered_patch_factor_list,def:peps_regularized_patch_objective}
+    Fix regions $X_0,\ldots,X_{m-1}\subseteq V$, real numbers $a_j,b$,
+    and a vector $\Omega$. Write $F(y)$ for the ordered patch objective
+    and let $x_j\in\operatorname{End}(\mathcal H_{X_j})$ be arbitrary matrices.
+    Suppose that $F(x)\le F(y)$ for every tuple of density matrices $y_j$
+    on the corresponding regions. For a list $\mathcal L$ of patch factors,
+    let $P_b(\mathcal L)$ denote the ordered product of its extended filters.
+    Then every list $\mathcal L'$ of density-matrix factors with the same
+    regions and exponents as $\mathcal L(x)$, in the same positions, satisfies
+    \begin{align*}
+        \|P_b(\mathcal L(x))J\Omega\|
+         & \le \|P_b(\mathcal L')J\Omega\|.
+    \end{align*}
+    Repeated regions retain independent density matrices. The assertion
+    includes the empty list and vanishing outputs.
+    This is the ordered-list form of the minimization in the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L68-L99}{regularized patch problem}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_ordered_patch_output_coordinates}
+    Enumerate $\mathcal L'$ in reverse order. Equality of the region lists
+    first gives its length $m$, and equality of the region and exponent
+    lists then identifies each position. Thus
+    $\mathcal L'=\mathcal L(y)$ for a tuple of density matrices $y_j$.
+    Equality of the objective norms gives
+    \begin{align*}
+        \|P_b(\mathcal L(x))J\Omega\|
+         & =F(x)\le F(y)=\|P_b(\mathcal L')J\Omega\|.
+    \end{align*}
 \end{proof}
 
 \begin{theorem}[Regional expectation and density properties]

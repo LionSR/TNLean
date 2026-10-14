@@ -16,7 +16,8 @@ global configurations. The list places the outermost factor first and retains
 every occurrence of a region. The identity holds for arbitrary regional matrices,
 real exponents and real shifts, with the same convention for real matrix powers.
 It includes empty lists, empty regions and zero local dimensions. The two objective
-norms therefore agree.
+norms therefore agree, and a minimum over indexed densities gives a minimum
+over all lists with the same positional regions and exponents.
 
 Source: OpenAI, *Polynomial PEPS approximation of gapped square-grid ground states*,
 Proposition 4.1, `03-patches.tex`, `eq:patch-variational-problem`, lines 68–99,
@@ -118,5 +119,48 @@ theorem regularizedPatchObjective_eq_norm_patchOutput
         (dependentGlobalConfigIsometry Ω)‖ := by
   simpa only [regularizedPatchObjective, LinearIsometryEquiv.norm_map] using
     congrArg norm (dependentGlobalConfigIsometry_regularizedPatchOutput regions a b Ω x)
+
+/-- A minimum of the ordered patch objective over independent regional density
+matrices also minimizes the norm among all patch lists with the same positional
+regions and exponents. Repeated regions retain independent density matrices.
+The comparison applies to arbitrary distinguished matrices and arbitrary inputs.
+Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 68–99,
+`eq:patch-variational-problem`, revision
+`adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+theorem isPatchMinimizer_regularizedPatchFactorList
+    (regions : Fin m → Finset V) (a : Fin m → ℝ) (b : ℝ)
+    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Fin (n v.1)))
+    (x : ∀ j, Matrix (Entropy.RegionConfig n (regions j))
+      (Entropy.RegionConfig n (regions j)) ℂ)
+    (hmin : IsMinOn
+      (regularizedPatchObjective (Out := fun v ↦ Fin (n v)) regions a b Ω)
+      (regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions) x) :
+    Entropy.IsPatchMinimizer b (regularizedPatchFactorList regions a x)
+      (dependentGlobalConfigIsometry Ω) := by
+  intro l' hregions hexponents hfeasible
+  obtain ⟨⟨r, g⟩, hg⟩ := List.equivSigmaTuple.symm.surjective l'.reverse
+  change List.ofFn g = l'.reverse at hg
+  have hl : (List.ofFn g).reverse = l' := by
+    simpa only [List.reverse_reverse] using congrArg List.reverse hg
+  subst l'
+  have hr : r = m := by
+    simpa only [regularizedPatchFactorList, List.length_map, List.length_reverse,
+      List.length_ofFn] using congrArg List.length hregions
+  subst r
+  have hR : (fun j ↦ (g j).region) = regions := List.ofFn_injective <| by
+    simpa only [regularizedPatchFactorList, List.map_reverse, List.reverse_reverse,
+      List.map_ofFn, Function.comp_def] using congrArg List.reverse hregions
+  have ha : (fun j ↦ (g j).exponent) = a := List.ofFn_injective <| by
+    simpa only [regularizedPatchFactorList, List.map_reverse, List.reverse_reverse,
+      List.map_ofFn, Function.comp_def] using congrArg List.reverse hexponents
+  subst regions
+  subst a
+  have hf : regularizedPatchFactorList (fun j ↦ (g j).region)
+      (fun j ↦ (g j).exponent) (fun j ↦ (g j).density) = (List.ofFn g).reverse := rfl
+  rw [← hf, ← regularizedPatchObjective_eq_norm_patchOutput,
+    ← regularizedPatchObjective_eq_norm_patchOutput]
+  apply hmin
+  intro j
+  exact hfeasible (g j) (List.mem_reverse.mpr (List.mem_ofFn.mpr ⟨j, rfl⟩))
 
 end TNLean.PEPS
