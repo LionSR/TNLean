@@ -43,7 +43,7 @@ theorem continuous_regularizedPatchMinimum_exp_neg (a : Fin m → ℝ)
     Continuous (fun R : ℝ ↦ regularizedPatchMinimum regions a (Real.exp (-R)) Ω) := by
   classical
   let K := ↥(regularizedPatchDomain (Out := Out) regions)
-  letI : CompactSpace K :=
+  let : CompactSpace K :=
     isCompact_iff_compactSpace.mp (isCompact_regularizedPatchDomain regions)
   have hfilter (j : Fin m) :
       Continuous (fun z : ℝ × K ↦
