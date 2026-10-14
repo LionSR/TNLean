@@ -25,8 +25,9 @@ of the paragraph "The sequential-RG circuit".
 
 * `QuantumCircuit.isPairProduct_of_mem_supportedOperators_card_le_two` — a unitary acting on
   at most two sites is a product of at most `2n` gates on neighbouring sites.
-* `QuantumCircuit.exists_isPairProduct_ctrlOp` — controlled two-level rotations and phases
-  with at most `k` control sites are products of at most `K` gates on neighbouring sites.
+* `QuantumCircuit.isPairProduct_ctrlOp_le_exponential` — controlled two-level rotations and
+  phases with at most `k` control sites are products of at most `4 n 3^k` gates on neighbouring
+  sites; `QuantumCircuit.exists_isPairProduct_ctrlOp` is the existential form.
 * `QuantumCircuit.twoLevel_update_eq_ctrlOp` — the two-level operator between configurations
   differing at one site is such a controlled operation with all other sites as controls.
 -/
@@ -108,28 +109,33 @@ theorem IsSpecialTwo.exists_commutator {g : Matrix (Fin 2) (Fin 2) ℂ} (hg : Is
 
 /-! ### Removing the controls one by one -/
 
-/-- **Controlled two-level operations are products of two-site gates.** For every number `k`
-of control sites there is `K` such that every single-site two-level rotation or phase at a
-site `t`, controlled by the configuration of at most `k` other sites, is a product of at most
-`K` gates on neighbouring sites of the chain of `n ≥ 2` sites. -/
-theorem exists_isPairProduct_ctrlOp (hd : 0 < d) (hn : 2 ≤ n) (k : ℕ) :
-    ∃ K, ∀ S : Finset (Fin n), S.card ≤ k → ∀ t, t ∉ S → ∀ (c : Fin n → Fin d) (α β : Fin d),
-      α ≠ β → ∀ g, IsSpecialTwo g → IsPairProduct d n K (ctrlOp S c t (twoLevel α β g)) := by
+/-- A two-level single-site rotation or phase with at most `k` controls is
+an exact product of at most `4 * n * 3 ^ k` neighboring two-qudit gates.
+Derived synthesis estimate for Section 5 of
+`docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
+theorem isPairProduct_ctrlOp_le_exponential (hd : 0 < d) (hn : 2 ≤ n) (k : ℕ) :
+    ∀ S : Finset (Fin n), S.card ≤ k → ∀ t, t ∉ S → ∀ (c : (Fin n → Fin d)) (α β : Fin d),
+      α ≠ β → ∀ g, IsSpecialTwo g →
+        IsPairProduct d n (4 * n * 3 ^ k) (ctrlOp S c t (twoLevel α β g)) := by
   induction k with
   | zero =>
-    refine ⟨2 * n, fun S hS t _ c α β hαβ g hg => ?_⟩
+    refine fun S hS t _ c α β hαβ g hg => ?_
     rw [Nat.le_zero, Finset.card_eq_zero] at hS
     subst hS
     rw [ctrlOp_empty]
     exact isPairProduct_of_mem_supportedOperators_card_le_two hd hn
       (T := {t}) (by simp) (siteOp_mem_unitary t (twoLevel_mem_unitary hαβ hg.mem_unitary))
-      (by simpa using siteOp_mem_supportedOperators t _)
+      (by simpa using siteOp_mem_supportedOperators t _) |>.mono (by simp; omega)
   | succ k ih =>
-    obtain ⟨K, hK⟩ := ih
-    refine ⟨2 * K + 2 * (2 * n), fun S hS t ht c α β hαβ g hg => ?_⟩
+    let K := 4 * n * 3 ^ k
+    have hK := ih
+    intro S hS t ht c α β hαβ g hg
     rcases Nat.lt_or_ge k S.card with hk | hk
     swap
-    · exact (hK S hk t ht c α β hαβ g hg).mono (by omega)
+    · exact (hK S hk t ht c α β hαβ g hg).mono (by
+        have hp := Nat.one_le_pow k 3 (by norm_num)
+        rw [pow_succ]
+        nlinarith)
     obtain ⟨s, hs⟩ : S.Nonempty := Finset.card_pos.mp (by omega)
     set S' := S.erase s
     have hS' : S'.card ≤ k := by rw [Finset.card_erase_of_mem hs]; omega
@@ -156,7 +162,20 @@ theorem exists_isPairProduct_ctrlOp (hd : 0 < d) (hn : 2 ≤ n) (k : ℕ) :
       rw [star_eq_conjTranspose, twoLevel_conjTranspose]
       exact hK S' hS' t htS' c α β hαβ _ hg₁.conjTranspose
     have := ((h1.mul (hsingle _ hW)).mul h2).mul (hsingle _ (Unitary.star_mem hW))
-    exact this.mono (by omega)
+    exact this.mono (by
+      have hp := Nat.one_le_pow k 3 (by norm_num)
+      dsimp [K]
+      rw [pow_succ]
+      nlinarith)
+
+/-- **Controlled two-level operations are products of two-site gates.** For every number `k`
+of control sites there is `K` such that every single-site two-level rotation or phase at a
+site `t`, controlled by the configuration of at most `k` other sites, is a product of at most
+`K` gates on neighbouring sites of the chain of `n ≥ 2` sites. -/
+theorem exists_isPairProduct_ctrlOp (hd : 0 < d) (hn : 2 ≤ n) (k : ℕ) :
+    ∃ K, ∀ S : Finset (Fin n), S.card ≤ k → ∀ t, t ∉ S → ∀ (c : Fin n → Fin d) (α β : Fin d),
+      α ≠ β → ∀ g, IsSpecialTwo g → IsPairProduct d n K (ctrlOp S c t (twoLevel α β g)) :=
+  ⟨_, isPairProduct_ctrlOp_le_exponential hd hn k⟩
 
 /-! ### Two-level operators between neighbouring configurations -/
 

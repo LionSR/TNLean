@@ -49,8 +49,10 @@ def main() -> int:
     wires = re.findall(r"\\tnwire(?:\[[^]]*\])?\{([^}]+)\}\{([^}]+)\}", unit)
     assert wires == EXPECTED_WIRES, ("action order or open boundary changed", wires)
     for source in [
-        "at=(1,1), name=coordinateouter", "at=(1,3), name=coordinateinsert",
-        "at=(1,5), name=coordinateinner", "at=(1,7), name=coordinatestate",
+        # The three products span two cells each so their names stay inscribed at
+        # note pitches; the varied factor is the selected (red) one.
+        "at=(1,1), name=coordinateouter", "at=(1,4), name=coordinateinsert, species=selected",
+        "at=(1,7), name=coordinateinner", "at=(1,10), name=coordinatestate",
         r"{\tnlFvOuter}", r"{\tnlFvInsert}", r"{\tnlFvInner}", r"{\Omega}",
     ]:
         assert source in unit, source

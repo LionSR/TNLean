@@ -1,0 +1,59 @@
+% Figure arealaw2d_good_bad_copies.
+% Registers C, R are typeset sans-serif ($\mathsf C$, $\mathsf R$) to keep them apart
+% from constants (AL review round 1).
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL App. F 6 (lower comparisons), in an unnumbered equation
+% after u_B =.
+% Source: arXiv OpenAI2026AreaLaw, sections/07-comparators.tex:426-453
+% (comparator:defect-mass, Pi, the decomposition u = sum_{|B| <= tau k} u_B and the good
+% copies carrying Omega~^{(x)(k-r)}), drawn with k=5 and bad set B={2,4}, r=2.
+% Ink-to-index: the five black rows are the physical copies (1),(3),(5) (good)
+% and (2),(4) (bad); copy order is permuted only for drawing. The grey row is
+% one bundled wire for all auxiliary copies C^(i), R^(i). The good copies carry
+% exact ground states Omega~; one vector xi_B lives on the bad copies and the
+% registers. Both names sit at label pos=e of their boxes, at the picture's
+% size class l (body size, as large as the wire names); an inscribed name at
+% class l is displaced out of a one-row box by the pinned tenkz, and at the
+% base class it is script size (rule L1). The east brackets in column 5 group
+% the good rows 1-3 (k-r copies) and the bad rows plus the register row 4-6
+% (r copies and the registers, the support of xi_B); they carry counts, not
+% the box names, so each name is written once (rule L4). The register wire
+% and its open end are complement grey. u_B is symmetric separately in the
+% good and in the bad copies;
+% the register factor carries both auxiliary labels lambda_k.
+% Contractions: none.
+% Not to scale: k=5 and r=2 are illustrative; in [S] r <= tau k with tau small.
+% Boundary signature: (phys:w)x6; the grey bundle is the auxiliary leg
+% (outline: aux:w) with the tenkz type physical, as in arealaw2d_prevector.
+% Label macros: none.
+% Related: cup and bead idiom of ch26_mps_rfp_zero_correlation_length and
+% ch32_log_depth_fixed_point_pairs (generic MPS cups, labels wrong here); no
+% TNLean picture of the area-law comparators or amplification exists.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire}, cols=5, bonds=none, size=l]
+        \tn[at=(1,1), skin=none, name=copyTipOne, ports={180:physical:$(1)$, 0:physical}]{}
+        \tn[at=(2,1), skin=none, name=copyTipThree, ports={180:physical:$(3)$, 0:physical}]{}
+        \tn[at=(3,1), skin=none, name=copyTipFive, ports={180:physical:$(5)$, 0:physical}]{}
+        \tn[at=(4,1), skin=none, name=copyTipTwo, ports={180:physical:$(2)$, 0:physical}]{}
+        \tn[at=(5,1), skin=none, name=copyTipFour, ports={180:physical:$(4)$, 0:physical}]{}
+        \tn[at=(6,1), skin=none, species=complement, name=copyTipAux, ports={180:physical:$(\mathsf{CR})^{\otimes k}$, 0:physical}]{}
+        \tn[at=(1,3), skin=box, name=copyGoodOne, label pos=e, ports={180:physical}]{\widetilde\Omega}
+        \tn[at=(2,3), skin=box, name=copyGoodThree, label pos=e, ports={180:physical}]{\widetilde\Omega}
+        \tn[at=(3,3), skin=box, name=copyGoodFive, label pos=e, ports={180:physical}]{\widetilde\Omega}
+        \tn[at=(4,3), skin=box, wires=3, name=copyBad, label pos=e,
+            ports={180@1:physical, 180@2:physical, 180@3:physical}]{\xi_{\mathsf B}}
+        \tnwire{copyTipOne.0}{copyGoodOne.180}
+        \tnwire{copyTipThree.0}{copyGoodThree.180}
+        \tnwire{copyTipFive.0}{copyGoodFive.180}
+        \tnwire{copyTipTwo.0}{copyBad.180@1}
+        \tnwire{copyTipFour.0}{copyBad.180@2}
+        \tnwire[species=complement]{copyTipAux.0}{copyBad.180@3}
+        \tn[at=(1,5), skin=none, name=copyGoodTop]{}
+        \tn[at=(3,5), skin=none, name=copyGoodBottom]{}
+        \tn[at=(4,5), skin=none, name=copyBadTop]{}
+        \tn[at=(6,5), skin=none, name=copyBadBottom]{}
+        \tnmark[form=bracket, label pos=e]{(1,5) .. (3,5)}{$\text{good }(k-r)$}
+        \tnmark[form=bracket, label pos=e]{(4,5) .. (6,5)}{$\text{bad }(r)\text{ + registers}$}
+    \end{tenkz}
+\end{center}
