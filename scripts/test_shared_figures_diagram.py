@@ -32,11 +32,12 @@ Checks:
   exactly the hosts that input it, or ``none``;
 * ``tnleanfigures.sty`` provides ``\\ket``, ``\\bra``, ``\\C``, ``\\spn`` with the
   meanings ``macros/common.tex`` gives them;
-* one compile (pdflatex by default, the notes' engine) of a plain ``article``
-  with only ``\\usepackage{tnleanfigures}`` that typesets every figure, then
-  every parametrized figure again under ``\\newcommand`` overrides.  Without a
-  TeX engine or tenkz the compile is skipped with a message, unless
-  ``--require-tex`` is given (the default under GitHub Actions, so the
+* a compile (pdflatex by default, the notes' engine) of plain ``article``
+  documents with only ``\\usepackage{tnleanfigures}`` that typeset every figure,
+  then every parametrized figure again under ``\\newcommand`` overrides; the
+  figures are split round-robin over ``--jobs`` documents compiled in
+  parallel.  Without a TeX engine or tenkz the compile is skipped with a
+  message, unless ``--require-tex`` is given (the default under GitHub Actions, so the
   discovering runner ``scripts/run_diagram_tests.py`` needs no flag).
 
 The static checks are also run on a synthetic figure and on mutations of it,
@@ -52,6 +53,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -640,7 +642,12 @@ def contract_document(names: list[str], labels: dict[str, set[str]]) -> str:
 
 
 def compile_contract(
-    src: Path, names: list[str], labels: dict[str, set[str]], engine: str, require: bool
+    src: Path,
+    names: list[str],
+    labels: dict[str, set[str]],
+    engine: str,
+    require: bool,
+    jobs: int,
 ) -> list[str]:
     """Compile the note contract; return findings (empty on success or skip)."""
 
@@ -668,47 +675,68 @@ def compile_contract(
             return skip(f"{error}; no tikz-tensor-networks.sty fallback either")
         print(f"NOTE: pinned tenkz missing ({error}); compiling with the installed "
               f"tikz-tensor-networks fallback {fallback.stdout.strip()}")
+    env = os.environ.copy()
+    # blueprint/src is non-recursive on purpose, as in the notes: figures/<name>
+    # and macros/diagrams resolve, chapter files do not leak in by bare name.
+    parts = [str(src)]
+    if tenkz_dir is not None:
+        parts.append(f"{tenkz_dir}//")
+    env["TEXINPUTS"] = os.pathsep.join(parts) + os.pathsep + env.get("TEXINPUTS", "")
+    for key, value in (
+        ("pool_size", "12500000"), ("main_memory", "12000000"),
+        ("extra_mem_top", "8000000"), ("extra_mem_bot", "8000000"),
+    ):
+        env.setdefault(key, value)
+    env["max_print_line"] = "10000"  # unwrapped log lines, so file paths stay greppable
+    # The figures are split round-robin into one document per job, compiled in
+    # parallel: a single document of every figure outgrows the runner's per-test
+    # time limit as the collection grows.
+    count = max(1, min(jobs, len(names)))
+    chunks = [names[i::count] for i in range(count)]
     with tempfile.TemporaryDirectory(prefix="tnleanfigures-contract-") as tmp:
-        work = Path(tmp)
-        (work / "contract.tex").write_text(contract_document(names, labels), encoding="utf-8")
-        env = os.environ.copy()
-        # blueprint/src is non-recursive on purpose, as in the notes: figures/<name>
-        # and macros/diagrams resolve, chapter files do not leak in by bare name.
-        parts = [str(work), str(src)]
-        if tenkz_dir is not None:
-            parts.append(f"{tenkz_dir}//")
-        env["TEXINPUTS"] = os.pathsep.join(parts) + os.pathsep + env.get("TEXINPUTS", "")
-        for key, value in (
-            ("pool_size", "12500000"), ("main_memory", "12000000"),
-            ("extra_mem_top", "8000000"), ("extra_mem_bot", "8000000"),
-        ):
-            env.setdefault(key, value)
-        env["max_print_line"] = "10000"  # unwrapped log lines, so file paths stay greppable
-        run = subprocess.run(
-            [exe, "-interaction=nonstopmode", "-halt-on-error", "contract.tex"],
-            cwd=work, env=env, check=False, text=True, errors="replace",
-            stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=1800,
-        )
-        if run.returncode or not (work / "contract.pdf").is_file():
-            tail = "\n".join(run.stdout.splitlines()[-40:])
-            return [f"note-contract compile with {engine} failed (exit {run.returncode}):\n{tail}"]
-        log = (work / "contract.log").read_text(encoding="utf-8", errors="replace")
-        expected = sum(len(labels[name]) for name in names if labels.get(name))
-        pdftotext = shutil.which("pdftotext")
-        if expected and pdftotext:
-            text = subprocess.run(
-                [pdftotext, "contract.pdf", "-"], cwd=work, check=False, text=True,
-                errors="replace", stdout=subprocess.PIPE,
-            ).stdout
-            if text.count(OVERRIDE) < expected:
+        root = Path(tmp)
+
+        def compile_chunk(index: int) -> tuple[list[str], str]:
+            chunk = chunks[index]
+            work = root / f"part{index}"
+            work.mkdir()
+            (work / "contract.tex").write_text(contract_document(chunk, labels), encoding="utf-8")
+            run = subprocess.run(
+                [exe, "-interaction=nonstopmode", "-halt-on-error", "contract.tex"],
+                cwd=work, env=env, check=False, text=True, errors="replace",
+                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=1800,
+            )
+            if run.returncode or not (work / "contract.pdf").is_file():
+                tail = "\n".join(run.stdout.splitlines()[-40:])
                 return [
-                    f"host overrides did not win: {text.count(OVERRIDE)} of at least"
-                    f" {expected} label macros show the \\newcommand value"
-                ]
-        used = re.findall(r"\(([^()\s]*(?:tenkz|tikz-tensor-networks)\.sty)", log)
-        print(f"PASS: note contract compiled with {engine}: {len(names)} figures,"
-              f" {sum(1 for n in names if labels.get(n))} overridden;"
-              f" tenkz from {used[0] if used else 'unknown'}")
+                    f"note-contract compile with {engine} failed (exit {run.returncode})"
+                    f" on {', '.join(chunk)}:\n{tail}"
+                ], ""
+            log = (work / "contract.log").read_text(encoding="utf-8", errors="replace")
+            expected = sum(len(labels[name]) for name in chunk if labels.get(name))
+            pdftotext = shutil.which("pdftotext")
+            if expected and pdftotext:
+                text = subprocess.run(
+                    [pdftotext, "contract.pdf", "-"], cwd=work, check=False, text=True,
+                    errors="replace", stdout=subprocess.PIPE,
+                ).stdout
+                if text.count(OVERRIDE) < expected:
+                    return [
+                        f"host overrides did not win in {', '.join(chunk)}:"
+                        f" {text.count(OVERRIDE)} of at least {expected} label macros"
+                        " show the \\newcommand value"
+                    ], log
+            return [], log
+
+        with ThreadPoolExecutor(max_workers=count) as pool:
+            results = list(pool.map(compile_chunk, range(count)))
+    failures = [failure for found, _ in results for failure in found]
+    if failures:
+        return failures
+    used = re.findall(r"\(([^()\s]*(?:tenkz|tikz-tensor-networks)\.sty)", results[0][1])
+    print(f"PASS: note contract compiled with {engine} in {count} parallel documents:"
+          f" {len(names)} figures, {sum(1 for n in names if labels.get(n))} overridden;"
+          f" tenkz from {used[0] if used else 'unknown'}")
     return []
 
 
@@ -721,6 +749,8 @@ def main() -> int:
                         help="fail instead of skipping when the compile cannot run"
                         " with the pinned tenkz (the default under GitHub Actions)")
     parser.add_argument("--no-compile", action="store_true", help="static checks only")
+    parser.add_argument("--jobs", type=int, default=os.cpu_count() or 1,
+                        help="documents compiled in parallel (default: the CPU count)")
     args = parser.parse_args()
     src = args.src.resolve()
 
@@ -735,7 +765,9 @@ def main() -> int:
           f" {len(MUTATIONS) + len(JOINER_MUTATIONS) + 2} mutations rejected")
     if args.no_compile:
         return 0
-    compile_failures = compile_contract(src, names, labels, args.engine, args.require_tex)
+    compile_failures = compile_contract(
+        src, names, labels, args.engine, args.require_tex, args.jobs
+    )
     for failure in compile_failures:
         print(f"FAIL: {failure}", file=sys.stderr)
     return 1 if compile_failures else 0
