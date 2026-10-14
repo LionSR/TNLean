@@ -102,7 +102,7 @@ a distributed construction, which is not normalized, and let `σ` be any operato
 state of a unit vector `Ω`, then `‖σ - |Ω⟩⟨Ω|‖₁ ≤ κ + η`, and the retained norm satisfies
 `1 - η ≤ Re Tr ρ ≤ 1`. No positivity or Hermiticity of `σ` and no bound on private
 dimensions or Schmidt ranks is assumed. The compression theorem enters only through its
-error conclusion `hcompression`.
+error conclusion `‖σ - ρ‖₁ ≤ κ`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), Remark 5.3
 (`rem:compression-retained-norm`), `04-compression.tex:602–611`. -/

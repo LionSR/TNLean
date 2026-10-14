@@ -333,32 +333,49 @@ contraction of local tensors is a separate assertion.
     $C_{\mathrm{src}}\geq1$ includes circuits without sources.
 \end{proof}
 
-\begin{remark}[Absolute error and retained norm]
-    \label{rem:peps_compression_retained_norm}
+\begin{lemma}[Trace bounded by the trace norm]
+    \label{lem:peps_trace_le_trace_norm}
+    \lean{TNLean.PEPS.Approximation.norm_trace_le_rectangularTraceNorm}
+    \leanok
+    Every complex square matrix $X$ satisfies
+    $\lvert\operatorname{Tr}X\rvert\le\|X\|_1$.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The identity matrix has operator norm at most one, so trace-norm duality
+    gives $\lvert\operatorname{Tr}(X^\dagger\cdot 1)\rvert\le\|X\|_1$, and
+    $\operatorname{Tr}X^\dagger$ is the complex conjugate of
+    $\operatorname{Tr}X$.
+\end{proof}
+
+\begin{theorem}[Absolute error and retained norm]
+    \label{thm:peps_compression_retained_norm}
     \lean{TNLean.PEPS.Approximation.rectangularTraceNorm_sub_pure_le_of_retained_density,
         TNLean.PEPS.PairEffect.DistributedConstruction.rectangularTraceNorm_compression_sub_pure_le}
     \leanok
-    \uses{thm:peps_distributed_construction_density}
+    \uses{def:peps_distributed_construction_density}
+    This is \cite[Remark~5.3]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 602--611.
     The compression of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
     approximates the actual physical density $\rho$ of a distributed
     construction, which need not have trace one, and does not normalize it.
-    % Source: 04-compression.tex, lines 602--611.
     Let $\sigma$ be any operator with $\|\sigma-\rho\|_1\le\kappa$; it need be
     neither positive nor Hermitian. If $\Omega$ is a unit vector with
     $\|\rho-|\Omega\rangle\langle\Omega|\|_1\le\eta$, then
     \begin{align}
-        \|\sigma-|\Omega\rangle\langle\Omega|\|_1       & \le\kappa+\eta, &
+        \|\sigma-|\Omega\rangle\langle\Omega|\|_1       & \le\kappa+\eta, \\
         1-\eta\le\operatorname{Re}\operatorname{Tr}\rho & \le1.
     \end{align}
     No bound on private dimensions or on Schmidt ranks of supplied pair
     vectors enters. The compression theorem is used only through its error
     estimate $\|\sigma-\rho\|_1\le\kappa$.
-\end{remark}
+\end{theorem}
 \begin{proof}
     \leanok
+    \uses{lem:peps_trace_le_trace_norm,thm:peps_distributed_construction_density}
     The first bound is the triangle inequality for the trace norm. For the
-    second, $\lvert\operatorname{Tr}X\rvert\le\|X\|_1$ for every square
-    matrix $X$, and $\operatorname{Tr}|\Omega\rangle\langle\Omega|=1$, so
+    second, Lemma~\ref{lem:peps_trace_le_trace_norm} and
+    $\operatorname{Tr}|\Omega\rangle\langle\Omega|=1$ give
     $\lvert\operatorname{Tr}\rho-1\rvert\le\eta$. The upper bound
     $\operatorname{Tr}\rho\le1$ is
     Theorem~\ref{thm:peps_distributed_construction_density}.
