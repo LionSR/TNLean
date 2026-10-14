@@ -103,8 +103,10 @@ private theorem floor_div_eq_of_sameSide {o s a b : ℝ} {n : ℤ} (hs : 0 < s)
     (h₂ : o + n * s + s ≤ a ↔ o + n * s + s ≤ b) : ⌊(a - o) / s⌋ = ⌊(b - o) / s⌋ := by
   by_cases hA : o + n * s + s ≤ a
   · have hB := h₂.mp hA
-    rw [floor_div_eq_of_le_of_lt hs (n := n + 1) (by push_cast; linarith) (by push_cast; linarith),
-      floor_div_eq_of_le_of_lt hs (n := n + 1) (by push_cast; linarith) (by push_cast; linarith)]
+    rw [floor_div_eq_of_le_of_lt hs (n := n + 1) (by push_cast; linarith)
+        (by push_cast; linarith),
+      floor_div_eq_of_le_of_lt hs (n := n + 1) (by push_cast; linarith)
+        (by push_cast; linarith)]
   · have hB : ¬o + n * s + s ≤ b := fun h ↦ hA (h₂.mpr h)
     push Not at hA hB
     by_cases hA' : o + n * s ≤ a
@@ -112,8 +114,10 @@ private theorem floor_div_eq_of_sameSide {o s a b : ℝ} {n : ℤ} (hs : 0 < s)
       rw [floor_div_eq_of_le_of_lt hs hA' hA, floor_div_eq_of_le_of_lt hs hB' hB]
     · have hB' : ¬o + n * s ≤ b := fun h ↦ hA' (h₁.mpr h)
       push Not at hA' hB'
-      rw [floor_div_eq_of_le_of_lt hs (n := n - 1) (by push_cast; linarith) (by push_cast; linarith),
-        floor_div_eq_of_le_of_lt hs (n := n - 1) (by push_cast; linarith) (by push_cast; linarith)]
+      rw [floor_div_eq_of_le_of_lt hs (n := n - 1) (by push_cast; linarith)
+          (by push_cast; linarith),
+        floor_div_eq_of_le_of_lt hs (n := n - 1) (by push_cast; linarith)
+          (by push_cast; linarith)]
 
 /-- **The initial invariant.** The padded window of the chosen cell meets only the
 two grid lines through each pair of its sides, so the invariant holds for every
