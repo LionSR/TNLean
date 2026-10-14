@@ -57,6 +57,12 @@ variable {Λ : Finset (ℤ × ℤ)} {q : ℕ}
 Source: `09-amplification.tex`, lines 330–331. -/
 abbrev AncillaSites (Λ : Finset (ℤ × ℤ)) (X : Finset (Site Λ)) := Site Λ ⊕ (↥X ⊕ ↥X)
 
+/-- Shortcut instance, which keeps instance search on regions of the enlarged sites short. -/
+instance (X : Finset (Site Λ)) : DecidableEq (AncillaSites Λ X) := inferInstance
+
+/-- Shortcut instance, which keeps instance search on regions of the enlarged sites short. -/
+instance (X : Finset (Site Λ)) : Fintype (AncillaSites Λ X) := inferInstance
+
 /-- The configurations of the enlarged sites as a physical configuration together with the
 configurations of `s'` and of `e'`. -/
 def ancillaSplit (q : ℕ) (X : Finset (Site Λ)) :

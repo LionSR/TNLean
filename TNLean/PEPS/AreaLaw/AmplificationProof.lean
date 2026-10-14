@@ -99,7 +99,6 @@ the Hamiltonian, the cut and the target, the collar hypotheses give an integer r
 `dist_∞(T, Z) > L + n^β`. -/
 theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) :
     AmplificationBound q R J Δ := by
-  classical
   apply amplificationBound_of_radius_output
   intro C₀ hC₀ M hM
   rcases Nat.eq_zero_or_pos q with hq0 | hqpos
@@ -354,6 +353,172 @@ theorem amplificationBound {q R : ℕ} {J Δ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ
         hCgt)) hM₀0
       exact e3.trans_eq (by ring))
   set ε : ℝ := ((n : ℝ) ^ K)⁻¹ with hεdef
-  sorry
+  have hε0 : 0 ≤ ε := by positivity
+  have hε1 : ε ≤ 1 := inv_le_one_of_one_le₀ (one_le_pow₀ (by exact_mod_cast hn1))
+  -- The enlarged sites and the transported operators and vectors.
+  set sp := ancillaSplit q X with hspdef
+  set N := graphNeighborhood Λ (2 * r) S₀ with hNdef
+  set N'' : Finset (AncillaSites Λ X) := N.disjSum (Finset.univ.disjSum ∅) with hN''def
+  have hS₀N : S₀ ⊆ N := by
+    classical
+    exact fun x hx => Finset.mem_filter.mpr ⟨Finset.mem_univ _, x, hx, SimpleGraph.Walk.nil,
+      by simp⟩
+  have hT (A : Matrix (Configuration Λ q × (RegionalConfiguration q X ×
+      RegionalConfiguration q X)) (Configuration Λ q × (RegionalConfiguration q X ×
+        RegionalConfiguration q X)) ℂ)
+      (v : Configuration Λ q × (RegionalConfiguration q X × RegionalConfiguration q X) → ℂ) :
+      A.submatrix sp sp *ᵥ (v ∘ sp) = (A *ᵥ v) ∘ sp := by
+    rw [submatrix_mulVec_equiv, Function.comp_assoc, Equiv.self_comp_symm, Function.comp_id]
+  have hTn (v : Configuration Λ q × (RegionalConfiguration q X ×
+      RegionalConfiguration q X) → ℂ) : ‖WithLp.toLp 2 (v ∘ sp)‖ = ‖WithLp.toLp 2 v‖ :=
+    EuclideanSpace.norm_toLp_comp_equiv sp v
+  set I₂ := (1 : Matrix (RegionalConfiguration q X × RegionalConfiguration q X)
+    (RegionalConfiguration q X × RegionalConfiguration q X) ℂ) with hI₂def
+  have hsubk (A B : Matrix (Configuration Λ q) (Configuration Λ q) ℂ) :
+      (A - B) ⊗ₖ I₂ = A ⊗ₖ I₂ - B ⊗ₖ I₂ := by
+    ext i j
+    simp [kroneckerMap_apply, sub_mul]
+  set Dfull := contractionWord k u0.1 u0.2 with hDfulldef
+  have hkle : ∀ i, k i ≤ 1 := fun i => (hk i).2.1
+  have hkΩ : ∀ i, k i *ᵥ WithLp.ofLp Ω = 0 := fun i => (hk i).2.2
+  obtain ⟨U₁, hU₁supp, hU₁unit, hU₁err⟩ := exists_supported_unitary_of_good_realization N''
+    (R₀ := Rp.submatrix sp sp) (L' := (Lt u0 ⊗ₖ I₂).submatrix sp sp)
+    (D := (Dfull ⊗ₖ I₂).submatrix sp sp) (Dret := (Dret u0 ⊗ₖ I₂).submatrix sp sp)
+    (φ := φ ∘ sp) (η := η ∘ sp) (g := ((Pg ⊗ₖ I₂) *ᵥ ζ) ∘ sp) (M₀ := M₀) (ε := ε)
+    (a := 3 * ε + ε)
+    (by
+      have hsum : Rp.submatrix sp sp = ∑ x ∈ E, (PR x ⊗ₖ (Entropy.basisColumn x blank ⊗ₖ
+          (1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ))).submatrix
+            sp sp := by
+        rw [hRsum]
+        ext i j
+        simp [Matrix.sum_apply]
+      rw [hsum]
+      refine Submodule.sum_mem _ fun x _ => supportedOperators_mono ?_
+        (kronecker_submatrix_ancillaSplit_mem_supportedOperators (hPR x) _)
+      exact Finset.coe_subset.mpr (Finset.disjSum_mono (hXYS ▸ hS₀N) le_rfl))
+    (kronecker_one_submatrix_ancillaSplit_mem_supportedOperators (hLt u0).2)
+    (by rw [hTn]; exact hφ1) (by rw [hTn]; exact hη1)
+    (by rw [hT, hTn]; exact hζn)
+    (by
+      rw [hT, mulVec_mulVec, ← mul_kronecker_mul, Matrix.one_mul,
+        contractionWord_mul_vecMulVec_self k hkle hkΩ])
+    (by rw [hTn]; exact hgr)
+    (by
+      have hsub : Rp.submatrix sp sp *ᵥ (φ ∘ sp) - ((Pg ⊗ₖ I₂) *ᵥ ζ) ∘ sp =
+          (((1 - Pg) ⊗ₖ I₂) *ᵥ ζ) ∘ sp := by
+        rw [hT, hsubk, sub_mulVec, one_kronecker_one, one_mulVec]
+        rfl
+      rw [hsub, hT, hTn]
+      exact hXu)
+    (by
+      have hsub : (Dfull ⊗ₖ I₂).submatrix sp sp - (Dret u0 ⊗ₖ I₂).submatrix sp sp =
+          ((Dfull - Dret u0) ⊗ₖ I₂).submatrix sp sp := by
+        rw [hsubk]
+        rfl
+      rw [hT, hsub, hT, hTn, hsubk, sub_mulVec, ← hζdef, hcol]
+      have h1 : Dfull = ((List.ofFn u0.2).reverse.map fun i => CFC.sqrt (1 - k i)).prod :=
+        contractionWord_eq_prod_reverse k _ _
+      have h2 : Dret u0 = (((List.ofFn u0.2).filter fun i => decide (Pr i)).reverse.map
+          fun i => CFC.sqrt (1 - k i)).prod := contractionWord_partitionWords_fst Pr k u0
+      rw [h1, h2]
+      exact hYu)
+    (by
+      have hsub : (Dret u0 ⊗ₖ I₂).submatrix sp sp - (Lt u0 ⊗ₖ I₂).submatrix sp sp =
+          ((Dret u0 - Lt u0) ⊗ₖ I₂).submatrix sp sp := by
+        rw [hsubk]
+        rfl
+      rw [hsub]
+      exact (mul_le_mul_of_nonneg_left ((norm_submatrix_equiv_le _ _).trans
+        (l2_opNorm_kronecker_one_le _)) hM₀0).trans hZu)
+    (by
+      have hfix : toEuclideanCLM (𝕜 := ℂ) (Dret u0)ᴴ Ω = Ω := by
+        apply WithLp.ofLp_injective 2
+        rw [ofLp_toEuclideanCLM]
+        exact conjTranspose_contractionWord_mulVec_self (fun i : {i // Pr i} => k i)
+          (fun i => hkle i) (fun i => hkΩ i) _ _
+      have hLΩ := norm_truncated_adjoint_sub_le (L' := Lt u0) hfix hΩ.le hM₀ hZu
+      have hprod : (Lt u0 ⊗ₖ I₂).submatrix sp sp * Rp.submatrix sp sp =
+          ((Lt u0 ⊗ₖ I₂) * Rp).submatrix sp sp := by
+        rw [submatrix_mul_equiv]
+      rw [hprod, conjTranspose_submatrix, hT, ← WithLp.toLp_sub]
+      have hcomp : (((Lt u0 ⊗ₖ I₂) * Rp)ᴴ *ᵥ η) ∘ sp - φ ∘ sp =
+          (((Lt u0 ⊗ₖ I₂) * Rp)ᴴ *ᵥ η - φ) ∘ sp := rfl
+      rw [hcomp, hTn, WithLp.toLp_sub]
+      have h := hadj (Lt u0)
+      have hLΩ' : ‖WithLp.toLp 2 ((Lt u0)ᴴ *ᵥ WithLp.ofLp Ω) - Ω‖ ≤ ε := hLΩ
+      linarith)
+  -- The entropy comparison on the enlarged sites.
+  set copyAll := ancillaCopyRegion (Finset.univ : Finset ↥X) with hcopyAll
+  set physJ := ancillaPhysicalRegion X Jset with hphysJ
+  have hJX : Disjoint Jset X :=
+    Finset.disjoint_of_subset_right (hXS.trans hS₀N) hJset
+  have hcopyJ : Disjoint copyAll physJ := by
+    rw [Finset.disjoint_left]
+    rintro (v | x | x) h1 h2 <;> simp [hcopyAll, hphysJ, ancillaCopyRegion,
+      ancillaPhysicalRegion] at h1 h2
+  have hN''disj : Disjoint (N'' : Set (AncillaSites Λ X)) ((copyAll ∪ physJ :
+      Finset (AncillaSites Λ X)) : Set (AncillaSites Λ X)) := by
+    rw [Finset.disjoint_coe, Finset.disjoint_left]
+    rintro (v | x | x) h1 h2
+    · simp only [hN''def, Finset.inl_mem_disjSum] at h1
+      simp only [hcopyAll, hphysJ, ancillaCopyRegion, ancillaPhysicalRegion, Finset.mem_union,
+        Finset.inl_mem_disjSum, Finset.notMem_empty, false_or] at h2
+      exact Finset.disjoint_left.mp hJset h2 h1
+    · simp [hcopyAll, hphysJ, ancillaCopyRegion, ancillaPhysicalRegion] at h2
+    · simp [hN''def] at h1
+  -- `η` is `Ω` tensored with a unit ancillary vector.
+  set χ0 : RegionalConfiguration q X × RegionalConfiguration q X → ℂ :=
+    fun a => if a.1 = a.2 then (Real.sqrt (p a.1) : ℂ) else 0
+  set χ := ((1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ) ⊗ₖ U) *ᵥ χ0
+  have hηform : η = fun c => Ω c.1 * χ c.2 := restoringTransport_restored Ω X Y hXY p
+  have hχ : ‖WithLp.toLp 2 χ‖ = 1 := by
+    have h := EuclideanSpace.norm_vecKron Ω (WithLp.toLp 2 χ)
+    rw [hΩ, one_mul] at h
+    rw [← h, ← hη1, hηform]
+    rfl
+  have hprod : FiniteProduct.mutualInformation (fun _ : AncillaSites Λ X => Fin q) (WithLp.toLp 2 (η ∘ sp)) copyAll physJ = 0 := by
+    rw [hηform]
+    exact mutualInformation_ancillaProduct_copy_eq_zero hΩ hχ _ _
+  have hδ : ‖WithLp.toLp 2 (U₁ *ᵥ WithLp.ofLp (WithLp.toLp 2 (φ ∘ sp))) -
+      WithLp.toLp 2 (η ∘ sp)‖ ≤ 9 * (n : ℝ) ^ (-(K : ℝ) / 2) := by
+    rw [← sqrt_inv_pow_eq_rpow]
+    exact hU₁err.trans (unitary_error_le hε0 hε1)
+  have hdim : Real.log (Fintype.card (FiniteProduct.Configuration
+      (fun _ : AncillaSites Λ X => Fin q) copyAll)) ≤
+      C₂ * (n : ℝ) ^ 2 := by
+    have hcardC : Fintype.card (FiniteProduct.Configuration (fun _ : AncillaSites Λ X => Fin q)
+        copyAll) = q ^ X.card := by
+      have hc : copyAll.card = X.card := by
+        rw [hcopyAll, ancillaCopyRegion, Finset.card_disjSum, Finset.card_disjSum,
+          Finset.card_empty, Finset.card_empty, Finset.card_univ, Fintype.card_coe]
+        simp
+      rw [Fintype.card_pi, Finset.prod_const, Fintype.card_fin,
+        Finset.card_univ, Fintype.card_coe, hc]
+    rw [hcardC, Nat.cast_pow, Real.log_pow]
+    have hX : (X.card : ℝ) ≤ C₀ * (n : ℝ) ^ 2 :=
+      (Nat.cast_le.mpr (Finset.card_le_card hXS)).trans hcard
+    have hlogq : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
+    calc (X.card : ℝ) * Real.log q ≤ C₀ * (n : ℝ) ^ 2 * Real.log q :=
+          mul_le_mul_of_nonneg_right hX hlogq
+      _ = C₂ * (n : ℝ) ^ 2 := by rw [hC₂def]; ring
+  have t1 := mutualInformation_le_inv_pow_of_supported_unitary (φ := WithLp.toLp 2 (φ ∘ sp))
+    (η := WithLp.toLp 2 (η ∘ sp)) (by rw [hTn]; exact hφ1) (by rw [hTn]; exact hη1) hcopyJ
+    hN''disj hU₁supp hU₁unit hprod (C₁ := 9) (C₂ := C₂) (n := n) (M := M) (K := K)
+  have hfinal := t1 hn1 le_rfl hδ hdim
+  -- Back to `Ω` and the part `X'` of the target.
+  set X'' : Finset ↥X := X'.subtype (· ∈ X)
+  have hX''map : X''.map (Function.Embedding.subtype _) = X' :=
+    Finset.subtype_map_of_mem fun x hx => hX' hx
+  have hcopy := mutualInformation_ancillaCopy_eq hXY hΩ hblank
+    (by rw [norm_toLp_mulVec_of_conjTranspose_mul_self hU', hblank]) X'' hJX
+  have hφform : φ = fun c => blank c.2.1 * (U *ᵥ blank) (restoringSplit q X Y hXY c.1).1.1 *
+      Ω ((restoringSplit q X Y hXY).symm ((c.2.2, (restoringSplit q X Y hXY c.1).1.2),
+        (restoringSplit q X Y hXY c.1).2)) := restoringTransport_copy Ω X Y hXY blank blank
+  rw [hX''map, ← hφform] at hcopy
+  rw [← hcopy]
+  refine (hfinal _ (Finset.disjSum_mono le_rfl (Finset.disjSum_mono le_rfl
+    (Finset.subset_univ _)))).trans ?_
+  exact mul_le_mul_of_nonneg_right (le_max_right _ _) (by positivity)
 
 end TNLean.PEPS.AreaLaw

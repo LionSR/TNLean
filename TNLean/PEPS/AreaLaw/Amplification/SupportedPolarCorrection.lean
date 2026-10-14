@@ -7,6 +7,7 @@ import TNLean.PEPS.AreaLaw.Amplification.GoodRealizationUnitary
 import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.Circuit.SiteEmbedding
 import TNLean.Algebra.MatrixKroneckerContraction
+import TNLean.PEPS.AreaLaw.Amplification.EntropyComparison
 
 /-!
 # The local unitary of a good realization, on a set of sites
@@ -24,6 +25,8 @@ restoring operator `R₀` and the truncated product `L'` act on `S`, the unitary
   is `K ⊗ 1` in the coordinates of `S` and its complement.
 * `TNLean.PEPS.AreaLaw.exists_supported_unitary_of_good_realization`: the unitary of
   `eq:amplification-unitary-error`, acting on `S`.
+* `TNLean.PEPS.AreaLaw.mutualInformation_le_inv_pow_of_supported_unitary`: the entropy
+  comparison of `eq:amplification-output` for a unitary acting away from both regions.
 
 ## References
 
@@ -176,5 +179,60 @@ theorem exists_supported_unitary_of_good_realization (S : Finset ι)
       simp
     rw [← WithLp.toLp_sub, ← hnorm, hcomp, ← hvec, hŨ, WithLp.toLp_sub]
     simpa only [toEuclideanCLM_toLp] using hU
+
+/-- **The entropy comparison for a unitary acting away from both regions.** Let `U` be a
+unitary acting on a region `S` disjoint from `X ∪ J`, and let `η` be a unit vector with
+`I_η(X : J) = 0`. If `‖U φ - η‖ ≤ C₁ n^(-K/2)` with `K ≥ 4(M + 2)` and `log dim X ≤ C₂ n²`,
+then every part of `X` has mutual information at most `8 √C₁ (1 + C₂) n^(-M)` with `J` in
+the unit vector `φ`. Source: `09-amplification.tex`, lines 547–561. -/
+theorem mutualInformation_le_inv_pow_of_supported_unitary
+    {φ η : EuclideanSpace ℂ (ι → Fin q)} (hφ : ‖φ‖ = 1) (hη : ‖η‖ = 1)
+    {X J S : Finset ι} (hXJ : Disjoint X J) (hS : Disjoint (S : Set ι) ((X ∪ J : Finset ι) :
+      Set ι)) {U : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hU : U ∈ supportedOperators q (S : Set ι))
+    (hUu : Uᴴ * U = 1)
+    (hprod : FiniteProduct.mutualInformation (fun _ : ι => Fin q) η X J = 0)
+    {C₁ C₂ : ℝ} {n M K : ℕ} (hn : 1 ≤ n) (hK : 4 * (M + 2) ≤ K)
+    (hδ : ‖WithLp.toLp 2 (U *ᵥ WithLp.ofLp φ) - η‖ ≤ C₁ * (n : ℝ) ^ (-(K : ℝ) / 2))
+    (hdim : Real.log (Fintype.card (FiniteProduct.Configuration (fun _ : ι => Fin q) X)) ≤
+      C₂ * (n : ℝ) ^ 2) :
+    ∀ X' ⊆ X, FiniteProduct.mutualInformation (fun _ : ι => Fin q) φ X' J ≤
+      8 * √C₁ * (1 + C₂) * ((n : ℝ) ^ M)⁻¹ := by
+  obtain ⟨U₂, hU₂⟩ := EncodedFrame.exists_one_kronecker_of_mem_supportedOperators hS hU
+  set e := FiniteProduct.splitEquiv (fun _ : ι => Fin q) (X ∪ J) with he
+  have hUeq : U = ((1 : Matrix (FiniteProduct.Configuration (fun _ : ι => Fin q) (X ∪ J))
+      (FiniteProduct.Configuration (fun _ : ι => Fin q) (X ∪ J)) ℂ)
+      ⊗ₖ U₂).submatrix e e := by
+    rw [← hU₂]
+    simp [e]
+  have hU₂u : U₂ᴴ * U₂ = 1 := by
+    have h1 : ((1 : Matrix (FiniteProduct.Configuration (fun _ : ι => Fin q) (X ∪ J))
+      (FiniteProduct.Configuration (fun _ : ι => Fin q) (X ∪ J)) ℂ) ⊗ₖ
+        (U₂ᴴ * U₂)).submatrix e e = 1 := by
+      rw [← hUu, hUeq, conjTranspose_submatrix, submatrix_mul_equiv, conjTranspose_kronecker,
+        conjTranspose_one, ← mul_kronecker_mul, Matrix.one_mul]
+    have h2 : (1 : Matrix (FiniteProduct.Configuration (fun _ : ι => Fin q) (X ∪ J))
+      (FiniteProduct.Configuration (fun _ : ι => Fin q) (X ∪ J)) ℂ) ⊗ₖ
+        (U₂ᴴ * U₂) = 1 := by
+      have := congrArg (fun A => A.submatrix e.symm e.symm) h1
+      simpa using this
+    have hne : Nonempty (ι → Fin q) := by
+      by_contra hne
+      rw [not_nonempty_iff] at hne
+      have hz : φ = 0 := by
+        ext c
+        exact (IsEmpty.false c).elim
+      rw [hz, norm_zero] at hφ
+      exact zero_ne_one hφ
+    obtain ⟨c⟩ := hne
+    ext i j
+    have hij := congrFun (congrFun h2 ((e c).1, i)) ((e c).1, j)
+    simpa [kroneckerMap_apply, one_apply] using hij
+  have t1 := FiniteProduct.mutualInformation_le_inv_pow_of_unitary_sub_le (fun _ : ι => Fin q) hφ hη
+    hXJ U₂
+  have t2 := t1 hU₂u hprod (C₁ := C₁) (C₂ := C₂) hn hK
+  have t3 := t2 ?_ hdim
+  · exact t3
+  · rw [← hUeq]
+    exact hδ
 
 end TNLean.PEPS.AreaLaw
