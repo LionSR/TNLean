@@ -89,4 +89,48 @@ theorem hasDerivAt_regularizedPatchOutput_exp_neg
       neg_div', neg_neg]
     rfl
 
+open Classical in
+/-- For a fixed feasible tuple, outer commutations at the specified radius give
+the canonical marginal formula for the logarithmic norm derivative. This is an
+auxiliary trace identity: a later minimizer application must derive the displayed
+commutations. No differentiable choice of minimizing tuples is assumed.
+Source: polynomial-PEPS manuscript, 03-patches.tex, lines 453–466. -/
+theorem hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute
+    (hnested : Monotone regions) (a : Fin m → ℝ) (ha : ∀ j, 0 ≤ a j)
+    (Ω : EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+    (hΩ : ‖Ω‖ = 1)
+    (x : ∀ j, Matrix ((v : regions j) → Out v.1) ((v : regions j) → Out v.1) ℂ)
+    (hx : x ∈ regularizedPatchDomain (Out := Out) regions) (R : ℝ)
+    (houter : ∀ j k : Fin m, j < k →
+      Commute ((x k + Real.exp (-R) • 1) ^ (-(a k) / 2))
+        (normalizedRegularizedPatchMarginal regions a (Real.exp (-R)) Ω x (regions k))) :
+    HasDerivAt
+      (fun r : ℝ ↦ Real.log (regularizedPatchObjective regions a (Real.exp (-r)) Ω x))
+      (∑ j, (a j / 2) *
+        (Matrix.trace
+          (normalizedRegularizedPatchMarginal regions a (Real.exp (-R)) Ω x (regions j) *
+            (Real.exp (-R) • (x j + Real.exp (-R) • 1) ^ (-1 : ℝ)))).re) R := by
+  let := InnerProductSpace.rclikeToReal ℂ
+    (EuclideanSpace ℂ ((v : (Finset.univ : Finset V)) → Out v.1))
+  have hb : 0 < Real.exp (-R) := Real.exp_pos _
+  have hxpsd (j : Fin m) : (x j).PosSemidef := (hx j).1
+  have hp := regularizedPatchObjective_pos regions a ha hb Ω hΩ hx
+  have hvec := hasDerivAt_regularizedPatchOutput_exp_neg regions a Ω x hxpsd R
+  have hlog := (hvec.norm_sq.log (pow_ne_zero 2 hp.ne')).div_const 2
+  simp only [Real.log_pow, Nat.cast_ofNat,
+    mul_div_cancel_left₀ _ (two_ne_zero : (2 : ℝ) ≠ 0)] at hlog
+  convert! hlog using 1
+  simp only [real_inner_eq_re_inner, inner_sum]
+  simp_rw [inner_regularizedPatchInsertion_eq_trace_of_outer_commute
+    regions hnested a hb Ω x hxpsd _ (houter _)]
+  simp_rw [smul_mul_assoc, Matrix.inv_eq_left_inv
+    (((hxpsd _).add_smul_one_posDef hb).rpow_neg_mul_rpow _),
+    ((hxpsd _).add_smul_one_posDef hb).rpow_mul_rpow]
+  simp only [sub_add_eq_add_sub, add_neg_cancel, zero_sub, Matrix.mul_smul,
+    Matrix.trace_smul, ← Complex.ofReal_pow, RCLike.re_to_complex, Complex.mul_re,
+    Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero, Complex.smul_re,
+    smul_eq_mul, mul_assoc, ← Finset.mul_sum, regularizedPatchObjective]
+  field_simp [show ‖regularizedPatchOutput regions a (Real.exp (-R)) Ω x‖ ≠ 0 from hp.ne']
+  simp only [mul_comm (Real.exp (-R))]
+
 end TNLean.PEPS

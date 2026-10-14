@@ -308,6 +308,54 @@ Its marginals are those of the same final normalized vector defined in
 \end{proof}
 
 
+\begin{theorem}[Logarithmic radius derivative under outer commutations]
+    \label{thm:peps_patch_log_radius_derivative_of_outer_commute}
+    \lean{TNLean.PEPS.hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute}
+    \uses{thm:peps_patch_radius_derivative,thm:peps_patch_insertion_trace,
+        def:peps_patch_canonical_marginal}
+    Let $V$ be a finite ordered set with finite local configuration sets $A_v$,
+    and put $\mathcal H_X=\ell^2(\prod_{v\in X}A_v;\C)$.
+    Let $X_0\subseteq\cdots\subseteq X_{m-1}\subseteq V$, let $a_j\geq0$,
+    and let $x_j$ be density matrices on $\mathcal H_{X_j}$.
+    Fix a unit vector $\Omega\in\mathcal H_V$.
+    For $r\in\R$, define
+    \[
+        K_j(r)=(x_j+e^{-r}I_{X_j})^{-a_j/2},\qquad
+        \Psi(r)=\widehat K_{m-1}(r)\cdots\widehat K_0(r)\Omega,
+        \qquad F(r)=\|\Psi(r)\|,
+    \]
+    where a hat denotes extension by the identity.
+    Let $\rho_j(r)$ be the reduced density matrix of
+    $\Psi(r)/F(r)$ on $X_j$.
+    Suppose that, at a fixed $R\in\R$,
+    \[
+        K_k(R)\rho_k(R)=\rho_k(R)K_k(R)
+        \qquad\text{for all }0\leq j<k<m.
+    \]
+    Then
+    \begin{equation}
+        \left.\frac{d}{dr}\log F(r)\right|_{r=R}
+        =\sum_{j=0}^{m-1}\frac{a_j}{2}
+        \operatorname{Re}\Tr\!\left(
+        \rho_j(R)e^{-R}(x_j+e^{-R}I_{X_j})^{-1}\right).
+        \label{eq:peps_patch_log_radius_derivative}
+    \end{equation}
+    Regions may repeat, the matrices $x_j$ may be singular, and zero weights
+    and the empty product are allowed. The tuple $(x_j)$ is fixed as $r$ varies.
+    This conditional identity is the trace computation in the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L453-L466}{radius argument for regularized patches}.
+\end{theorem}
+\begin{proof}
+    The positive shifts make every factor invertible, so $F(r)>0$.
+    Differentiate $\frac12\log\|\Psi(r)\|^2$ and apply the ordered
+    insertion formula. For the term at position $j$, the assumed commutations
+    and nested regions give the insertion trace identity. Writing $b=e^{-R}$,
+    the inserted local derivative followed by $K_j(R)^{-1}$ is
+    $(a_j/2)b(x_j+bI)^{-1}$. The common factor $F(R)^2$ cancels
+    the denominator from differentiating the logarithm, yielding
+    (\ref{eq:peps_patch_log_radius_derivative}).
+\end{proof}
+
 \begin{definition}[Diagonal coordinate objective]
     \label{def:peps_patch_diagonal_objective}
     \lean{
