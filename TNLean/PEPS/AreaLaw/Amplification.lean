@@ -14,6 +14,7 @@ import TNLean.PEPS.AreaLaw.Amplification.ChannelWordObservables
 import TNLean.PEPS.AreaLaw.Amplification.ChannelWordThinning
 import TNLean.PEPS.AreaLaw.Amplification.ComponentChannelOscillation
 import TNLean.PEPS.AreaLaw.Amplification.ExponentialChannelShells
+import TNLean.PEPS.AreaLaw.Amplification.GoodRealization
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelEventKernel
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelOscillation
 import TNLean.PEPS.AreaLaw.Amplification.GraphChannelPoissonGrowth

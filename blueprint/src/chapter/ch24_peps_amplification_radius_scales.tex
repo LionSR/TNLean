@@ -51,3 +51,114 @@
     \cite[Proposition~10.2]{OpenAI2026AreaLaw}; the geometric clearance and
     amplified mutual-information estimate require separate arguments.
 \end{proof}
+
+\subsection{The clock time and a good realization}
+
+The following entries formalize the choice of the clock time and the
+truncation radius in the proof of
+\cite[Proposition~10.2]{OpenAI2026AreaLaw}, and the selection of one clock
+realization on which the excited component, the omitted events and the radius
+truncation are all small. The three averaged estimates that precede this
+selection are inputs.
+
+\begin{definition}[Clock time and truncation radius]
+    \label{def:area_law_amplification_time_radius}
+    \leanok
+    \lean{TNLean.PEPS.AreaLaw.amplificationTime,
+        TNLean.PEPS.AreaLaw.amplificationRadius}
+    For $g>0$, real numbers $\mathcal I,w$ and integers $K,n\ge1$, put
+    $t_*=(6/g)(\mathcal I+w+K\log n)$. For real $C'$ and $\alpha$, put
+    $r=\lceil(C'(t_*+K\log n))^{1/\alpha}\rceil$.
+    This is the choice of time and radius of
+    \cite[Proposition~10.2]{OpenAI2026AreaLaw}, with the constant $C=6/g$,
+    which gives $gt_*\ge\mathcal I+3w+6K\log n$ when
+    $\mathcal I,w\ge0$.
+\end{definition}
+
+\begin{theorem}[Markov's inequality for three failure events]
+    \label{thm:area_law_amplification_three_failures}
+    \leanok
+    \lean{TNLean.PEPS.AreaLaw.exists_le_of_integral_sq_le_of_integral_le}
+    Let $X,Y,Z$ be real random variables on a probability space, with
+    $Y,Z\ge0$ almost surely and $X^2,Y,Z$ integrable. Suppose that
+    $\mathbb EX^2\le a$, $\mathbb EY\le b$ and $\mathbb EZ\le c$, and that
+    $a/\varepsilon^2+b/\varepsilon+c/\varepsilon<1$ for some
+    $\varepsilon>0$. Then some realization satisfies
+    $X,Y,Z\le\varepsilon$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    By Markov's inequality the events $X^2\ge\varepsilon^2$,
+    $Y\ge\varepsilon$ and $Z\ge\varepsilon$ have probabilities at most
+    $a/\varepsilon^2$, $b/\varepsilon$ and $c/\varepsilon$. Their union has
+    probability less than one, so its complement is nonempty.
+\end{proof}
+
+\begin{theorem}[The scale choices]
+    \label{thm:area_law_amplification_scale_bounds}
+    \leanok
+    \lean{TNLean.PEPS.AreaLaw.amplification_scale_bounds,
+        TNLean.PEPS.AreaLaw.exists_one_add_sq_mul_exp_neg_rpow_le}
+    \uses{def:area_law_amplification_time_radius}
+    Let $g,c,\alpha>0$, let $v,C,C_0\ge0$ and let $K\ge1$ be an integer.
+    There are $C'>0$, depending only on $g,v,c$, and $N\ge2$ with the
+    following property. For every integer $n\ge N$, all
+    $\mathcal I,w\ge0$ and every integer $0\le s\le C_0n^2$, the time
+    $t_*$ and radius $r$ of
+    Definition~\ref{def:area_law_amplification_time_radius} and
+    $M_0=\exp((\mathcal I+3w)/2)$ satisfy
+    \[
+        M_0^2e^{-gt_*}\le n^{-6K},\qquad
+        Ct_*sM_0e^{vt_*-cr^\alpha}\le n^{-3K},\qquad
+        Ct_*s(1+r)^2M_0e^{-cr^\alpha}\le n^{-3K}.
+    \]
+\end{theorem}
+\begin{proof}
+    \leanok
+    The first bound follows from $gt_*=6(\mathcal I+w+K\log n)$. Since
+    $\log M_0\le gt_*/4$ and $r^\alpha\ge C'(t_*+K\log n)$, the choice
+    $cC'=g/2+2v+12$ leaves at most a factor
+    $C\,C_0\,n^2\,t_*e^{-t_*}\,n^{-6K}$ in the second bound. In the third,
+    half of the stretched exponential absorbs $(1+r)^2$ into a constant
+    $B\ge1$ depending only on $c$ and $\alpha$, by comparing a power of
+    $r^\alpha$ with the exponential series. Finally $t_*e^{-t_*}\le1$, and
+    $n\ge CC_0B$ gives the remaining factor $n^{-3K}$.
+    This is the explicit control of the scale choices in
+    \cite[Proposition~10.2]{OpenAI2026AreaLaw}; no bound on $\mathcal I$
+    is needed for it.
+\end{proof}
+
+\begin{theorem}[A good clock realization]
+    \label{thm:area_law_amplification_good_realization}
+    \leanok
+    \lean{TNLean.PEPS.AreaLaw.exists_good_realization}
+    \uses{def:area_law_amplification_time_radius}
+    Let $g,c,\alpha,v,C,C_0,K$ be as in
+    Theorem~\ref{thm:area_law_amplification_scale_bounds}. There are $C'>0$
+    and $N\ge2$ such that, for all $n\ge N$, all $\mathcal I,w\ge0$ and every
+    integer $0\le s\le C_0n^2$, the following holds with $t_*,r,M_0$ as
+    there. Let $X,Y,Z$ be real random variables on one probability space,
+    with $Y,Z\ge0$ almost surely, such that
+    \[
+        \mathbb EX^2\le M_0^2e^{-gt_*},\qquad
+        \mathbb EY\le Ct_*sM_0e^{vt_*-cr^\alpha},\qquad
+        \mathbb EZ\le Ct_*s(1+r)^2M_0e^{-cr^\alpha}.
+    \]
+    Then one realization satisfies $X,Y,Z\le n^{-K}$.
+    In the proof of \cite[Proposition~10.2]{OpenAI2026AreaLaw}, with $s=|S_0|$,
+    the three variables are $\|D(I-P_\Omega)\zeta\|$,
+    $\|(D-D_{\rm ret})\zeta\|$ and $M_0\|D_{\rm ret}-L'\|$, and the
+    conclusion is the choice of a good realization there. This entry is that
+    step only, with the three averaged estimates as hypotheses; it is not the
+    proposition.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_amplification_scale_bounds,
+        thm:area_law_amplification_three_failures}
+    By Theorem~\ref{thm:area_law_amplification_scale_bounds} the three
+    averages are at most $n^{-6K}$, $n^{-3K}$ and $n^{-3K}$. With
+    $\varepsilon=n^{-K}\le1/2$, the failure probabilities sum to at most
+    $\varepsilon^4+2\varepsilon^2<1$, and
+    Theorem~\ref{thm:area_law_amplification_three_failures} applies.
+\end{proof}
