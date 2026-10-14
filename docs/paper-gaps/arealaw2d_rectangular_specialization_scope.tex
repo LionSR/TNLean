@@ -1,0 +1,83 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\title{Rectangular and Vertex-Boundary Reduction to the Uniform Area Law}
+\author{}
+\date{October 14, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{Source statement}
+
+For fixed $q\ge1$ and $J,\Delta>0$, Corollary 1.2 of
+\cite{OpenAI2026AreaLaw} asserts a uniform entropy bound for every subset
+of a finite rectangular lattice, and the two vertex-boundary forms.
+Let $V=\{0,\ldots,w-1\}\times\{0,\ldots,h-1\}$ with open
+nearest-neighbor edges. Write $H=\sum_v h_v+\sum_e h_e$, where each term
+has its designated support and operator norm at most $J$.
+Only $H=H^*$ is needed: replacing a term by $(h_i+h_i^*)/2$ leaves the
+sum unchanged and does not increase its norm.
+For a unit ground vector of energy $E_0$ satisfying
+$H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, the source conclusion is
+\begin{align}
+ S_\Omega(A)&\le C|\partial_V A|,
+ &S_\Omega(A)&\le4C|\partial_{\rm in}A|,
+ &S_\Omega(A)&\le2C|Z_A|.
+ \label{eq:rectangular_scope_bounds}
+\end{align}
+The same $C=C(q,1,J,\Delta)$ is chosen before the side lengths, matrices,
+vector and cut. Empty boundaries are allowed. For $q=1$ or an empty
+physical domain the source explicitly states that every entropy vanishes.
+\footnote{Immutable source: \texttt{openai/math} revision
+\texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}, area-law
+\texttt{00-introduction.tex}, lines 12--85, and
+\texttt{01-preliminaries.tex}, lines 118--132. The Hermitian-total model is
+also explicit in the polynomial-PEPS paper, \texttt{00-introduction.tex},
+lines 36--49.}
+
+\section{Established reduction and remaining premise}
+
+The rectangular interaction construction uses the native site and undirected
+edge families directly. Singleton and pair supports are injective labels.
+The Hermitian parts are placed on their corresponding integer-domain
+supports, with zero at every other admissible support.
+The resulting sum is exactly $UHU^*$ for the canonical configuration
+isometry $U$; the unit vector, gap, regional entropy and all three boundary
+cardinalities are transported by proved identities.
+\footnote{Declarations:
+\leanid{TNLean.PEPS.AreaLaw.RectangularHamiltonian.toAreaLawHamiltonian},
+\leanid{TNLean.PEPS.AreaLaw.RectangularHamiltonian.toAreaLawHamiltonian_operator},
+\leanid{TNLean.PEPS.AreaLaw.RectangularHamiltonian.isGappedGroundState_toAreaLawHamiltonian},
+\leanid{TNLean.PEPS.AreaLaw.regionalEntropy_rectangleAreaLawState},
+\leanid{TNLean.PEPS.AreaLaw.card_edgeBoundary_rectangular},
+\leanid{TNLean.PEPS.AreaLaw.card_innerBoundary_rectangular}, and
+\leanid{TNLean.PEPS.AreaLaw.card_endpointBoundary_rectangular}.}
+
+The current theorem derives~(\ref{eq:rectangular_scope_bounds}) from the
+uniform finite-domain area law as an explicit analytic premise.
+It does not derive that premise from the physical hypotheses alone.
+Thus this is the implication from Theorem 1.1 to Corollary 1.2, rather than
+an unconditional proof of the corollary. No assumption supplies the desired
+coordinate identities or an entropy inequality for the specific rectangle.
+\footnote{Declarations:
+\leanid{TNLean.PEPS.AreaLaw.UniformAreaLaw},
+\leanid{TNLean.PEPS.AreaLaw.UniformAreaLaw.rectangularEntropyAreaLaw}, and
+\leanid{TNLean.PEPS.AreaLaw.RectangularEntropyAreaLaw}.}
+
+The remaining step is to prove the uniform finite-domain area law from its
+source hypotheses and apply this reduction. The existing square-grid
+entropy statement is recovered by setting both side lengths equal, without
+altering that statement or supplying any new analytic hypothesis.
+\footnote{Declaration:
+\leanid{TNLean.PEPS.AreaLaw.RectangularEntropyAreaLaw.squareEntropyAreaLaw}.}
+This reduction does not establish the polynomial-PEPS approximation theorem,
+the region construction, collar amplification, or the source's unconditional
+area law. The present candidate still requires hosted kernel and linter
+validation before any completion marking.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}
