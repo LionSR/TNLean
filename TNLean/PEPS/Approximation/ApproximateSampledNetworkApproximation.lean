@@ -34,6 +34,11 @@ open TNLean.PEPS.Approximation
 attribute [local instance] Classical.propDecidable
 variable {P : Type} [Fintype P]
 
+/-- The coordinates of an arbitrary selected memory are indexed by its dimension.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 17–19 and 409–434. -/
+private def partyMemoryCoordinateIndex {Q : Type} (q : Q) (ℓ : Layout Q) : Type :=
+  Fin (Module.finrank ℂ (Mem (Layout.atParty q ℓ)))
+
 /-- Local gate expansions at the prescribed approximation budget give an actual
 sampled distributed contraction within physical trace-norm error `ε` of the
 original gate operators. The original local approximation hypothesis is
@@ -72,10 +77,10 @@ theorem exists_sampled_contractedOperator_approximate_error_le
     let garbage := W.produce.auxiliary m ++ priv
     let hfinite := W.produce.finiteDimensional_auxiliary_private_registers m priv hpriv
     let I := fun q : Option {p : P // (fun _ : P ↦ true) p = true} ↦
-      Fin (Module.finrank ℂ (Mem (Layout.atParty q (R.allResidualSourceLayout ++ []))))
+      partyMemoryCoordinateIndex q (R.allResidualSourceLayout ++ [])
     let J := fun q : Option {p : P // (fun _ : P ↦ true) p = true} ↦
-      Fin (Module.finrank ℂ (Mem (Layout.atParty q
-        (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) garbage))))
+      partyMemoryCoordinateIndex q
+        (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) garbage)
     let Bsrc := fun q ↦ R.allResidualSourceBasis q
     let BG := fun q ↦ SourceCircuit.allPartyDiscardBasis garbage hfinite q
     ∃ (lam : ∀ s : R.sourceLocations, R.branchLabels s.1 →
