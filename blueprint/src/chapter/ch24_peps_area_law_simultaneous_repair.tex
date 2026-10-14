@@ -27,6 +27,39 @@ unassigned at the stopping scale.
     is the closed ball of radius $d(S)$ for the maximum metric.
 \end{definition}
 
+% Source: 10-geometry.tex, geometry:trim-margins, lines 386--391.
+\begin{theorem}[Removal margins]
+    \label{thm:area_law_repair_margins}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.rho_pos_lt_one,
+        TNLean.PEPS.AreaLaw.Geometry.repairHalfSide_le_rpow,
+        TNLean.PEPS.AreaLaw.Geometry.half_rpow_le_repairHalfSide,
+        TNLean.PEPS.AreaLaw.Geometry.repairHalfSide_lt_self,
+        TNLean.PEPS.AreaLaw.Geometry.eventually_repairHalfSide_le,
+        TNLean.PEPS.AreaLaw.Geometry.eventually_repairHalfSide_margins}
+    \leanok
+    \uses{def:area_law_repair_square}
+    The exponent satisfies $0<\rho_0<1$. For every $S>0$,
+    \begin{equation}
+        \tfrac12S^{\rho_0}\le d(S)\le S^{\rho_0},
+        \label{eq:area_law_repair_margins}
+    \end{equation}
+    and $d(S)<S$ whenever $S>1$. For every $a_0>0$ there is $S_0$ such
+    that every $S\ge S_0$ satisfies $d(S)\le a_0S/1000$. Hence a stopping
+    scale $S_*$ with the margins of \cite[Section~11]{OpenAI2026AreaLaw}
+    exists and may be taken as large as required.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_exponent_gaps}
+    Put $x=\rho_0\log_2 S$, so that $S^{\rho_0}=2^x$ and
+    $d(S)=2^{\lfloor x\rfloor}$. The inequalities
+    $\lfloor x\rfloor\le x<\lfloor x\rfloor+1$ give
+    \eqref{eq:area_law_repair_margins}. The exponent gaps give
+    $\rho_0<1$, so $S^{\rho_0}<S$ for $S>1$. Finally
+    $S^{\rho_0}=S^{\rho_0-1}S$ and $S^{\rho_0-1}\to0$ as $S\to\infty$.
+\end{proof}
+
 \begin{definition}[Simultaneous old-region remnants]
     \label{def:area_law_simultaneous_remnants}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairRemovalSet,
