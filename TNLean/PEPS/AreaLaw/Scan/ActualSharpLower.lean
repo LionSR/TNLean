@@ -165,7 +165,7 @@ theorem exists_actualScan_sharp_lower_norm
   intro S hm hM Horizon h Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos β ι₀ n σ Q Y
     K rMom hmoment har haone hK pre k hk hpre hprenorm hsym ellC ellR Sent ε e
     hC hR hlabel entropyGap gaps gmax r b lower s p Dfill Dcharge Tfill Tcharge
-  letI : DecidableEq (Config k ι₀) := Fintype.decidablePiFintype
+  let : DecidableEq (Config k ι₀) := Fintype.decidablePiFintype
   obtain ⟨hdisj, hnest, hfar⟩ := actualTerminal_sharpLower_geometry S Horizon
   obtain ⟨N, ZS, hZS, hZSZS⟩ :=
     (isStarProjection_symProj
@@ -277,7 +277,9 @@ theorem exists_actualScan_sharp_lower_norm
     have henergyO : μ =
         (star vO ⬝ᵥ (globalReplicaMeanHamiltonian β (Fin d) (Fin d)
           (∑ i, S.truncatedEnergyTerm h Ω Δ L i) k *ᵥ vO)).re := by
-      rw [henergy, hvO]
+      rw [henergy]
+      dsimp only
+      rw [hvO]
     have hvnorm : ‖vO‖ = 1 := he.2.1
     have hactualnorm : ‖WithLp.toLp 2
         (Transport.filteredVector (D.rootPath n (a / 2) k p) (pre k))‖ = 1 := by
@@ -291,7 +293,8 @@ theorem exists_actualScan_sharp_lower_norm
     change 0 < Transport.filteredNormSq (D.rootPath n (a / 2) k p) (pre k) ∧
       0 ≤ (μ - e₀) / gap ∧ _
     refine ⟨hroot.1.symm ▸ sq_pos_of_pos (norm_pos_iff.mpr he.1), ?_, ?_⟩
-    · simpa only [henergyO] using he.2.2.1
+    · rw [henergyO]
+      exact he.2.2.1
     · intro τ hτ hτhalf
       have htwo : 2 * (a / 2) = a := by ring
       have hvariance : 50 * K * (a / 2) = 25 * K * a := by ring
