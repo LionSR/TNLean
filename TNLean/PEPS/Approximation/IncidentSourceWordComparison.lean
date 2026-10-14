@@ -196,6 +196,20 @@ private theorem selectedPreparedWordComparison_comp {Q R : Type}
   apply eq_of_heq
   exact hComp.trans hTarget.symm
 
+/-- Equal source-free words give the same selected and relabelled operator,
+including a prescribed identification of its retained register lists.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
+246–267, 351–434 and 565–588. -/
+private theorem eval_restrict_mapOwner_castLayouts_heq_of_eq {Q R : Type}
+    {a b : Layout Q} {c d : Layout R} (s : Q → Bool) (lift : Q → R)
+    (u v : Word a b) (hu : u.sources = []) (hv : v.sources = [])
+    (hi : Layout.mapOwner lift (Layout.restrict s a) = c)
+    (ho : Layout.mapOwner lift (Layout.restrict s b) = d) (h : u = v) :
+    HEq (((u.restrict s hu).mapOwner lift).castLayouts hi ho).eval
+      ((v.restrict s hv).mapOwner lift).eval := by
+  cases h
+  exact Word.eval_castLayouts_heq _ hi ho
+
 /-- Compare the original prepared word with its incident-label word, with
 all original source and output data fixed before the comparison is proved.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–139,
@@ -275,8 +289,9 @@ private theorem selectedPreparedWordComparison_of_original_labels {a b : Layout 
       ((Va.restrict sa hsVa).mapOwner lift).eval := by
     unfold incidentSourceWord
     dsimp only
-    simp only [choicesOfOriginalGateLabelsAt_eq_projectAllChoices]
-    exact Word.eval_castLayouts_heq _ _ _
+    apply eval_restrict_mapOwner_castLayouts_heq_of_eq
+    exact congrArg (fun ζ : Choices A w ↦ Pa.comp (partialResidual A w ζ))
+      (choicesOfOriginalGateLabelsAt_eq_projectAllChoices w p ξ)
   exact selectedPreparedWordComparison_comp sq sa lift
     (w.sourcePrivatePreparation ψ) (partialResidual (fun _ : P ↦ true) w ξ)
     Pa (partialResidual A w χ)
