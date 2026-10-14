@@ -35,6 +35,12 @@ namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open ActualTerminals
 
+local instance sharpUpper_originalConfigDecidableEq
+    {V : Type} [Fintype V] [DecidableEq V] (q d k : ℕ) :
+    DecidableEq (Config k
+      (addedSiteSpace (addedSiteSpace (fun _ : V ↦ Fin q) (Fin d)) (Fin d))) :=
+  Fintype.decidablePiFintype
+
 open Classical in
 /-- The actual terminal regions are disjoint, ordered by band, and have the
 same receiving decomposition. No physical vector or replica parameter enters.
@@ -208,14 +214,14 @@ private theorem sharpUpper_augmented_symmetricCoordinates
     (hZSZS : ZS * ZSᴴ = symProj (copyPerm ((v : V ⊕ Bool) →
       Fin (augmentedDimensions (V := V) q (fun _ ↦ d) v)) k)) :
     let β := fun _ : V ↦ Fin q
-    let n := augmentedDimensions (V := V) q (fun _ ↦ d)
     let e := augmentedReplicaConfigurationEquiv (V := V) q d k
     let ZO := ZS.submatrix e (id : Fin N → Fin N)
     ZOᴴ * ZO = 1 ∧
       ZO * ZOᴴ = symProj (copyPerm ((o : Option (Option V)) →
         addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d) o) k) := by
   classical
-  intro β n e ZO
+  intro β e ZO
+  let n := augmentedDimensions (V := V) q (fun _ ↦ d)
   have hZO : ZOᴴ * ZO = 1 :=
     Matrix.IsIsometry.reindex ZS hZS e.symm (Equiv.refl (Fin N))
   have hSymm :
@@ -349,6 +355,7 @@ private theorem actualRoot_sharpUpper_of_compressed
   have hquad : 24 * (1 / 4 : ℝ) * (S.K : ℝ) * Kmom * a ^ 2 =
       6 * (S.K : ℝ) * Kmom * a ^ 2 := by ring
   have hmasscoef : 2 * (1 / 4 : ℝ) * (S.K : ℝ) = (S.K : ℝ) / 2 := by ring
+  dsimp only [Nsq]
   rw [hroot]
   simp only [Matrix.MeanTree.eval_map] at hestimate
   simp only [e] at hpre
