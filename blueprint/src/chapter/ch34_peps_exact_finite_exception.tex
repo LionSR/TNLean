@@ -103,3 +103,82 @@ Hermitian; individual terms need not be. The remaining conditions are
 % The equivalence does not prove either existence assertion on its own.
 % The sufficiently-large-size theorem remains an explicit open dependency.
 % No claim that the manuscript's main theorem has been formalized is made.
+
+\subsection{Assembly from a compressed dyadic operator network}
+\label{sec:peps_ground_state_assembly}
+
+For large sizes, \cite[Section~8.1]{OpenAI2026PolynomialPEPS}
+(\texttt{07-assembly.tex}, lines 9--63) obtains from the protocol of its
+Proposition~7.1 and its compression theorem a party operator network with
+polynomial link dimensions whose operator is within $CL^{-5}$ of
+$|\Omega\rangle\langle\Omega|$ in trace norm. The statement below records this
+output as an assumption and derives the uniform approximation from it. The
+assumption is not proved here, so the result is a conditional form of
+Theorem~\ref{thm:openai_polynomial_peps}, not that theorem.
+
+\begin{theorem}[Increasing the polynomial exponent]
+    \label{thm:peps_exponent_monotone}
+    \lean{TNLean.PEPS.Approximation.HasPEPSApproximation.mono_exponent}
+    \leanok
+    Let $L\ge1$, $C\ge0$ and $c\le c'$. If $\mathcal A_{C,c}(L,\Omega)$, then
+    $\mathcal A_{C,c'}(L,\Omega)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Keep the same PEPS and phase; $CL^c\le CL^{c'}$ because $L\ge1$ and
+    $C\ge0$.
+\end{proof}
+
+\begin{definition}[Compressed dyadic operator networks for large sizes]
+    \label{def:peps_large_size_dyadic_operator_network}
+    \lean{TNLean.PEPS.Approximation.LargeSizeDyadicOperatorNetwork}
+    \leanok
+    \uses{def:peps_dyadic_hv_routing, def:peps_party_operator_fix_input}
+    The assertion is the following. For every integer $q\ge2$ and all reals
+    $J,\Delta>0$ there are reals $C,C_1,k$ and natural numbers $B,\Delta_0,c,L_0$
+    such that for every integer $L\ge\max\{2,L_0\}$ and every
+    $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$ there is an operator party
+    network with the following properties. Every party is attached to a dyadic
+    block inside the padded square, with at most $B$ parties per block; every
+    party has at most $\Delta_0$ links; the two anchors of every link differ in
+    each coordinate by at most $c$ times the side of either endpoint block; every
+    link dimension is at most $C_1L^k$; and the operator $\sigma$ of the network,
+    with the physical pair of each party read at the fold of its anchor, satisfies
+    \begin{align}
+        \bigl\lVert\sigma-|\Omega\rangle\langle\Omega|\bigr\rVert_1
+         & \le CL^{-5}.
+    \end{align}
+    The constants are chosen before $L,H,E_0,\Omega$. This is the conclusion
+    of~\cite[Section~8.1]{OpenAI2026PolynomialPEPS} (\texttt{07-assembly.tex},
+    lines 53--63), with the anchors of lines 102--114 and the network properties
+    of Proposition~7.1 used in the proof of Lemma~8.2 (lines 128--131).
+\end{definition}
+
+\begin{theorem}[Uniform approximation from compressed dyadic operator networks]
+    \label{thm:peps_ground_state_approximation_conditional}
+    \lean{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork}
+    \leanok
+    \uses{def:peps_large_size_dyadic_operator_network}
+    If the assertion of
+    Definition~\ref{def:peps_large_size_dyadic_operator_network} holds, then
+    the uniform polynomial approximation assertion~(\ref{eq:peps_finite_uniform})
+    holds: for every $q\ge2$ and $J,\Delta>0$ there are $C',c'>0$ such that
+    $\mathcal A_{C',c'}(L,\Omega)$ for every $L\ge2$ and every
+    $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$. This is the argument
+    of~\cite[Section~8]{OpenAI2026PolynomialPEPS} (\texttt{07-assembly.tex},
+    lines 53--214) after the compressed network has been obtained.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_party_column_routing_polynomial, thm:peps_exponent_monotone, thm:peps_approximation_iff_large}
+    By Theorem~\ref{thm:peps_approximation_iff_large} it suffices to treat large
+    $L$. Fix $q,J,\Delta$ and take the constants of the assumption. Replace
+    $C_1$ by $\max\{C_1,1\}$ and $k$ by $\max\{k,0\}$; the link bound persists
+    since $L\ge1$. For $L\ge\max\{2,L_0,2C\}$ one has $2C\le L\le L^4$, hence
+    $2CL^{-5}\le L^{-1}\le1/2$ and $CL^{-5}<1$.
+    Theorem~\ref{thm:peps_party_column_routing_polynomial} with $\eta=CL^{-5}$
+    gives $\mathcal A_{C_1^\chi,k\chi}(L,\Omega)$ with $\chi=8(2c+1)B\Delta_0$,
+    and Theorem~\ref{thm:peps_exponent_monotone} raises the exponent to
+    $k\chi+1>0$. The constants $C_1^\chi$, $k\chi+1$ and the threshold depend only
+    on $q,J,\Delta$.
+\end{proof}
