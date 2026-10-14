@@ -327,10 +327,7 @@ theorem mixedEndpointActiveNormalizedHamiltonian_conj_coreSpectators
         (endpointCoreHamiltonian A₀ N).toContinuousLinearMap).toLinearMap := by
   rw [mixedEndpointActiveNormalizedHamiltonian, map_sum]
   simp_rw [mixedEndpointActiveNormalizedLocalInteraction_conj_coreSpectators]
-  apply LinearMap.ext
-  intro v
-  apply PiLp.ext
-  rintro ⟨κ, s⟩
+  ext v ⟨κ, s⟩
   rw [LinearMap.sum_apply]
   change (∑ p : MixedEndpointActiveEdgeSite N,
       rightFiberwiseMap (S := (Fin D₀ ⊕ Fin D₁) × (Fin D₀ ⊕ Fin D₁))
