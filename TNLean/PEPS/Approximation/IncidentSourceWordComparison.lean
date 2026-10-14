@@ -266,6 +266,27 @@ private theorem incidentSourceWord_heq_of_original_labels {a b : Layout P}
     (congrArg (fun ζ : Choices A w ↦ Pa.comp (partialResidual A w ζ))
       (choicesOfOriginalGateLabelsAt_eq_projectAllChoices w p ξ))
 
+/-- Compare selected source-free words through the selected local parts
+of two arbitrary full words, before original circuit data are substituted.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 246–267,
+351–434 and 565–588. -/
+private theorem preparedWordEvalComparison_of_localPart {Q R : Type}
+    {a b e f : Layout Q} {c d g h : Layout R}
+    (sq : Q → Bool) (sa : R → Bool) (lift : R → Q)
+    (u : Word a b) (v : Word c d) (W : Word e f) (Z : Word g h)
+    (hu : u.sources = []) (hv : v.sources = [])
+    (hLeft : HEq (u.restrict sq hu).eval
+      (W.localPart.restrict sq W.sources_localPart).eval)
+    (hRight : HEq (v.restrict sa hv).eval
+      (Z.localPart.restrict sa Z.sources_localPart).eval)
+    (hFull : HEq (W.localPart.restrict sq W.sources_localPart).eval
+      ((Z.localPart.restrict sa Z.sources_localPart).mapOwner lift).eval) :
+    preparedWordEvalComparison (u.restrict sq hu) ((v.restrict sa hv).mapOwner lift) := by
+  have hResidualMapped := (Word.eval_mapOwner_heq lift (v.restrict sa hv)).trans
+    (hRight.trans (Word.eval_mapOwner_heq lift
+      (Z.localPart.restrict sa Z.sources_localPart)).symm)
+  exact hLeft.trans (hFull.trans hResidualMapped.symm)
+
 /-- The original all-party residual and its lifted singleton projection
 have the same selected operator. All choices are projections of the same
 original branch. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`,
@@ -290,16 +311,13 @@ private theorem preparedWordEvalComparison_partialResidual {a b : Layout P}
   intro A hp q qp lift χ
   let sq := partySelector qp
   let sa := partySelector q
-  have hResidualA := restrict_partialResidual_eval_heq A w χ sa
-  have hResidualMapped := (Word.eval_mapOwner_heq lift
-    ((partialResidual A w χ).restrict sa (sources_partialResidual A w χ))).trans
-      (hResidualA.trans (Word.eval_mapOwner_heq lift
-        ((partialWord A w χ).localPart.restrict sa
-          (partialWord A w χ).sources_localPart)).symm)
-  have hResidual := (restrict_partialResidual_eval_heq (fun _ : P ↦ true) w ξ sq).trans
-    ((restrict_partialWord_all_localPart_eval_heq_singleton_projection w p ξ).trans
-      hResidualMapped.symm)
-  exact hResidual
+  exact preparedWordEvalComparison_of_localPart sq sa lift
+    (partialResidual (fun _ : P ↦ true) w ξ) (partialResidual A w χ)
+    (partialWord (fun _ : P ↦ true) w ξ) (partialWord A w χ)
+    (sources_partialResidual (fun _ : P ↦ true) w ξ) (sources_partialResidual A w χ)
+    (restrict_partialResidual_eval_heq (fun _ : P ↦ true) w ξ sq)
+    (restrict_partialResidual_eval_heq A w χ sa)
+    (restrict_partialWord_all_localPart_eval_heq_singleton_projection w p ξ)
 
 /-- Compare the original prepared word with its incident-label word, with
 all original source and output data fixed before the comparison is proved.
