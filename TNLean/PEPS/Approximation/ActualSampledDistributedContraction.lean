@@ -28,7 +28,7 @@ open scoped Matrix ComplexConjugate
 namespace TNLean.PEPS.PairEffect.SourceCircuit
 open TNLean.PEPS.Approximation
 attribute [local instance] Classical.propDecidable
-variable {P : Type} [Fintype P] [DecidableEq P] {a : Layout P}
+variable {P : Type} [Fintype P] {a : Layout P}
 variable {I E : Option {_p : P // true = true} → Type}
 variable [∀ q, Fintype (I q)] [∀ q, Fintype (E q)]
 
@@ -55,12 +55,13 @@ theorem physicalSourceReplacedDensity_pure_sampled_eq_exterior_smul_contractedOp
         (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) garbage))))
     {n J : Type} [Fintype n] [Fintype J]
     (bIn : OrthonormalBasis n ℂ (Mem a)) (bRef : OrthonormalBasis J ℂ (Mem garbage)) :
+    letI : DecidableEq P := Classical.typeDecidableEq P
     let T := fun (p : P)
       (η θ : OriginalGateLabelsAt w p)
       (j : DistributedOperatorContraction.SampleAt
         (Finset.univ : Finset w.nonemptyGateLocations) (fun g ↦ w.participants g.1) p → Fin k) ↦
       incidentSampledPhysicalFactor (I := I) (E := E)
-        d ps hn hc garbage w ψ k lam L R p η θ ω B BG (j ∘ partialSlotSampleEquiv w p)
+        d ps hn hc garbage w ψ k lam L R p η θ ω B BG (j ∘ (partialSlotSampleEquiv w p).toFun)
     physicalSourceReplacedDensity (familyPhysicalLayout d ps) garbage w
         (fun e ξ ζ ↦ sampledSourceMatrix w k lam L R e ξ ζ ω)
         bIn (familyLabelledPhysicalBasis d ps hn hc) bRef
