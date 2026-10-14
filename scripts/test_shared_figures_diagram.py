@@ -692,11 +692,12 @@ def compile_contract(
     # parallel: a single document of every figure outgrows the runner's per-test
     # time limit as the collection grows.
     count = max(1, min(jobs, len(names)))
+    pdftotext = shutil.which("pdftotext")
     chunks = [names[i::count] for i in range(count)]
     with tempfile.TemporaryDirectory(prefix="tnleanfigures-contract-") as tmp:
         root = Path(tmp)
 
-        def compile_chunk(index: int) -> tuple[list[str], str]:
+        def compile_chunk(index: int) -> tuple[list[str], str, int | None]:
             chunk = chunks[index]
             work = root / f"part{index}"
             work.mkdir()
@@ -711,28 +712,31 @@ def compile_contract(
                 return [
                     f"note-contract compile with {engine} failed (exit {run.returncode})"
                     f" on {', '.join(chunk)}:\n{tail}"
-                ], ""
+                ], "", None
             log = (work / "contract.log").read_text(encoding="utf-8", errors="replace")
-            expected = sum(len(labels[name]) for name in chunk if labels.get(name))
-            pdftotext = shutil.which("pdftotext")
-            if expected and pdftotext:
-                text = subprocess.run(
-                    [pdftotext, "contract.pdf", "-"], cwd=work, check=False, text=True,
-                    errors="replace", stdout=subprocess.PIPE,
-                ).stdout
-                if text.count(OVERRIDE) < expected:
-                    return [
-                        f"host overrides did not win in {', '.join(chunk)}:"
-                        f" {text.count(OVERRIDE)} of at least {expected} label macros"
-                        " show the \\newcommand value"
-                    ], log
-            return [], log
+            if pdftotext is None:
+                return [], log, None
+            text = subprocess.run(
+                [pdftotext, "contract.pdf", "-"], cwd=work, check=False, text=True,
+                errors="replace", stdout=subprocess.PIPE,
+            ).stdout
+            return [], log, text.count(OVERRIDE)
 
         with ThreadPoolExecutor(max_workers=count) as pool:
             results = list(pool.map(compile_chunk, range(count)))
-    failures = [failure for found, _ in results for failure in found]
+    failures = [failure for found, _, _ in results for failure in found]
     if failures:
         return failures
+    # One count over all documents, exactly as for a single document, so the
+    # result does not depend on how the figures are split.
+    expected = sum(len(labels[name]) for name in names if labels.get(name))
+    if expected and pdftotext is not None:
+        shown = sum(count or 0 for _, _, count in results)
+        if shown < expected:
+            return [
+                f"host overrides did not win: {shown} of at least {expected} label"
+                " macros show the \\newcommand value"
+            ]
     used = re.findall(r"\(([^()\s]*(?:tenkz|tikz-tensor-networks)\.sty)", results[0][1])
     print(f"PASS: note contract compiled with {engine} in {count} parallel documents:"
           f" {len(names)} figures, {sum(1 for n in names if labels.get(n))} overridden;"
