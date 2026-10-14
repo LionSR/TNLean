@@ -107,6 +107,41 @@ private theorem restrictedMixedPhysicalTrace_eq_of_word_evals
   rw [matrix_repr_eval_eq_toMatrix B C (u.restrict f hu).eval,
     matrix_repr_eval_eq_toMatrix B C (t.restrict f ht).eval, hU, hT, hV]
 
+/-- The three selected word comparisons depend only on the original circuit,
+input, two branch choices and samples. They are established before physical
+coordinates are supplied. Source: polynomial-PEPS Theorem 5.2,
+`04-compression.tex`, lines 253–267 and 565–588. -/
+private theorem selected_word_evals_eq_incident_words {b : Layout P}
+    (w : SourceCircuit a b) (p : P) (ψ : ProductInput a) (k : ℕ)
+    (lam : ∀ e : sourceLocations w, branchLabels w e.1 →
+      Fin (min (sourceDims w e).1 (sourceDims w e).2) → ℝ)
+    (L : ∀ e : sourceLocations w, branchLabels w e.1 →
+      Matrix (Fin (sourceDims w e).1) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
+    (R : ∀ e : sourceLocations w, branchLabels w e.1 →
+      Matrix (Fin (sourceDims w e).2) (Fin (min (sourceDims w e).1 (sourceDims w e).2)) ℂ)
+    (ξ ζ : Choices (fun _ : P ↦ true) w) (j : w.sourceLocations → Fin k)
+    (ω : SourceGaussianSamples w k) :
+    let q : Option {_p : P // true = true} := some ⟨p, rfl⟩
+    ((w.partialSourceWord ψ ξ).restrict (partySelector q)
+        (sources_partialSourceWord w ψ ξ)).eval =
+      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ξ)).eval ∧
+    ((w.partialSourceWord ψ ζ).restrict (partySelector q)
+        (sources_partialSourceWord w ψ ζ)).eval =
+      (incidentSourceWord w p ψ (originalGateLabelsAtOfAllChoices w p ζ)).eval ∧
+    ((sampledEndpointInputWord w k lam L R ξ ζ j ω).restrict (partySelector q)
+        (sources_sampledEndpointInputWord w k lam L R ξ ζ j ω)).eval =
+      (incidentSampledEndpointWord w k lam L R p
+        (originalGateLabelsAtOfAllChoices w p ξ)
+        (originalGateLabelsAtOfAllChoices w p ζ)
+        (fun i ↦ j (partialSlotEquiv
+          (fun t ↦ partySelector (some ⟨p, rfl⟩)
+            (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω).eval := by
+  intro q
+  exact ⟨restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ξ,
+    restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ζ,
+    restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord
+      w k lam L R p ξ ζ j ω⟩
+
 /-- At independently extracted incident labels, the directly constructed
 physical factor equals the actual factor at the same original party. The
 sample assignment is restricted to the singleton source slots, and the original
@@ -146,6 +181,7 @@ theorem sampledPhysicalFactor_eq_incidentSampledPhysicalFactor
       (Mem (Layout.atParty q (Layout.mapOwner (affectedOwner (fun _ : P ↦ true))
         (familyPhysicalLayout d ps ++ garbage)))) :=
     selectedPhysicalPrivateBasis (E := E) d ps hn hc garbage BG q
+  have hWords := selected_word_evals_eq_incident_words w p ψ k lam L R ξ ζ j ω
   have h := restrictedMixedPhysicalTrace_eq_of_word_evals
     (partySelector q) (w.partialSourceWord ψ ξ) (w.partialSourceWord ψ ζ)
     (sampledEndpointInputWord w k lam L R ξ ζ j ω)
@@ -159,10 +195,7 @@ theorem sampledPhysicalFactor_eq_incidentSampledPhysicalFactor
       (fun i ↦ j (partialSlotEquiv
         (fun t ↦ partySelector (some ⟨p, rfl⟩)
           (affectedOwner (fun _ : P ↦ true) t)) w i).1) ω)
-    (restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ξ)
-    (restrict_partialSourceWord_eval_eq_incidentSourceWord w p ψ ζ)
-    (restrict_sampledEndpointInputWord_eval_eq_incidentSampledEndpointWord
-      w k lam L R p ξ ζ j ω)
+    hWords.1 hWords.2.1 hWords.2.2
   simpa only [sampledPhysicalFactor, incidentSampledPhysicalFactor,
     Classical.typeDecidableEq] using h
 
