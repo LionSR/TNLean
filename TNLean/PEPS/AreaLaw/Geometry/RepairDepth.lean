@@ -1,0 +1,299 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+import TNLean.PEPS.AreaLaw.Geometry.SimultaneousRepair
+import Mathlib.Analysis.Complex.ExponentialBounds
+
+/-!
+# Depth and descendant count of a repair branch
+
+Every child of a nonterminal parent of scale `S` receives the scale `d(S)`, so
+the marks of generation `j` descended from an initial mark of scale `S` all have
+scale `d^[j] S`. Since `d(S) ≤ S ^ ρ₀`, the logarithms of these scales satisfy
+`log d^[j] S ≤ ρ₀ ^ j log S`. A generation whose scale is at least the stopping
+scale `S_* > 1` therefore has depth at most `C + C log log (e^e + S)`. With at
+most nine children per mark, the marks of the first `m + 1` generations number at
+most `∑_{j ≤ m} 9 ^ j ≤ C (log (S + 2)) ^ C`. For an initial mark at layer `k`,
+whose scale is at most a fixed multiple of `2 ^ k`, this is at most
+`C (k + 1) ^ C`.
+
+The module also proves the scalar threshold `geometry:fine-clearance`: for fixed
+`c₁ > 0` and `C_B ≥ 0`, every sufficiently large `u` satisfies
+`c₁ u ^ ρ₀ > 2 ⌈C_B u⌉ ^ β`, because `ρ₀ > β`.
+
+These are scalar estimates about the iterated removal half-side. They do not
+construct the repairs or verify the isolated-star induction.
+
+## Main statements
+
+* `log_repairHalfSide_iterate_le`: `log d^[j] S ≤ ρ₀ ^ j log S`.
+* `exists_repair_depth_bound`: the depth bound `j ≤ C + C log log (e^e + S)`.
+* `exists_repair_descendant_count_bound`: `geometry:descendant-count`.
+* `exists_repair_descendant_count_layer_bound`: the layer form `C (k + 1) ^ C`.
+* `eventually_fine_clearance`: `geometry:fine-clearance`.
+
+## References
+
+* OpenAI, *A two-dimensional area law from a global spectral gap*,
+  September 24, 2026, Section 11, `10-geometry.tex`, lines 668–686
+  (`geometry:descendant-count`) and lines 761–768 (`geometry:fine-clearance`).
+  Source revision: `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+
+Independently formalized from the manuscript; no upstream Lean proof text is reused.
+-/
+
+open Filter
+
+noncomputable section
+
+namespace TNLean.PEPS.AreaLaw.Geometry
+
+/-- The removal half-side is a power of two, hence positive. -/
+theorem repairHalfSide_pos (S : ℝ) : 0 < repairHalfSide S := by
+  unfold repairHalfSide
+  positivity
+
+/-- One removal step multiplies the logarithm of a positive scale by at most `ρ₀`.
+Source: Section 11, `10-geometry.tex`, lines 670–671. -/
+theorem log_repairHalfSide_le {S : ℝ} (hS : 0 < S) :
+    Real.log (repairHalfSide S) ≤ (Exponents.rho : ℝ) * Real.log S := by
+  rw [← Real.log_rpow hS]
+  exact Real.log_le_log (repairHalfSide_pos S) (repairHalfSide_le_rpow hS)
+
+/-- Along a repair branch from a positive scale `S`, the generation-`j` scale
+satisfies `log d^[j] S ≤ ρ₀ ^ j log S`.
+Source: Section 11, `10-geometry.tex`, lines 670–671. -/
+theorem log_repairHalfSide_iterate_le {S : ℝ} (hS : 0 < S) (j : ℕ) :
+    Real.log (repairHalfSide^[j] S) ≤ (Exponents.rho : ℝ) ^ j * Real.log S := by
+  induction j with
+  | zero => simp
+  | succ j ih =>
+    have hpos : 0 < repairHalfSide^[j] S := by
+      cases j with
+      | zero => simpa using hS
+      | succ j =>
+        rw [Function.iterate_succ_apply']
+        exact repairHalfSide_pos _
+    rw [Function.iterate_succ_apply']
+    calc Real.log (repairHalfSide (repairHalfSide^[j] S))
+        ≤ (Exponents.rho : ℝ) * Real.log (repairHalfSide^[j] S) :=
+          log_repairHalfSide_le hpos
+      _ ≤ (Exponents.rho : ℝ) * ((Exponents.rho : ℝ) ^ j * Real.log S) :=
+          mul_le_mul_of_nonneg_left ih rho_pos_lt_one.1.le
+      _ = (Exponents.rho : ℝ) ^ (j + 1) * Real.log S := by ring
+
+/-- If a generation of a branch from the positive scale `S` still has scale at least
+`S_* > 1`, then the logarithm of `S` dominates `ρ₀ ^ (-j)` times that of `S_*`.
+In particular the initial scale exceeds one. -/
+private theorem log_le_of_le_repairHalfSide_iterate {Sstar S : ℝ} (hSstar : 1 < Sstar)
+    (hS : 0 < S) {j : ℕ} (hj : Sstar ≤ repairHalfSide^[j] S) :
+    Real.log Sstar ≤ (Exponents.rho : ℝ) ^ j * Real.log S ∧ 0 < Real.log S := by
+  have h1 : Real.log Sstar ≤ (Exponents.rho : ℝ) ^ j * Real.log S :=
+    (Real.log_le_log (by linarith) hj).trans (log_repairHalfSide_iterate_le hS j)
+  refine ⟨h1, ?_⟩
+  by_contra h
+  have hρj : 0 ≤ (Exponents.rho : ℝ) ^ j := pow_nonneg rho_pos_lt_one.1.le j
+  have : (Exponents.rho : ℝ) ^ j * Real.log S ≤ 0 :=
+    mul_nonpos_of_nonneg_of_nonpos hρj (not_lt.mp h)
+  linarith [Real.log_pos hSstar]
+
+/-- `log log (e^e + S) ≥ 1` for every nonnegative `S`. -/
+private theorem one_le_log_log_exp_exp_add {S : ℝ} (hS : 0 ≤ S) :
+    1 ≤ Real.log (Real.log (Real.exp (Real.exp 1) + S)) := by
+  have he : Real.exp 1 ≤ Real.log (Real.exp (Real.exp 1) + S) := by
+    calc Real.exp 1 = Real.log (Real.exp (Real.exp 1)) := (Real.log_exp _).symm
+      _ ≤ Real.log (Real.exp (Real.exp 1) + S) :=
+        Real.log_le_log (Real.exp_pos _) (by linarith)
+  calc (1 : ℝ) = Real.log (Real.exp 1) := (Real.log_exp 1).symm
+    _ ≤ _ := Real.log_le_log (Real.exp_pos 1) he
+
+/-- **Depth of a repair branch.** For a stopping scale `S_* > 1` there is a constant
+`C` such that, along the branch from any positive initial scale `S`, every
+generation `j` whose scale `d^[j] S` is at least `S_*` satisfies
+`j ≤ C + C log log (e^e + S)`.
+Source: Section 11, `10-geometry.tex`, lines 670–675. -/
+theorem exists_repair_depth_bound {Sstar : ℝ} (hSstar : 1 < Sstar) :
+    ∃ C : ℝ, 0 < C ∧ ∀ S : ℝ, 0 < S → ∀ j : ℕ, Sstar ≤ repairHalfSide^[j] S →
+      (j : ℝ) ≤ C + C * Real.log (Real.log (Real.exp (Real.exp 1) + S)) := by
+  have hρ := rho_pos_lt_one
+  set c : ℝ := -Real.log (Exponents.rho : ℝ) with hc_def
+  have hc : 0 < c := neg_pos.mpr (Real.log_neg hρ.1 hρ.2)
+  set a : ℝ := Real.log (Real.log Sstar)
+  refine ⟨(|a| + 1) / c, by positivity, fun S hS j hj => ?_⟩
+  obtain ⟨h1, hlogS⟩ := log_le_of_le_repairHalfSide_iterate hSstar hS hj
+  have h2 : a ≤ (j : ℝ) * Real.log (Exponents.rho : ℝ) + Real.log (Real.log S) := by
+    have := Real.log_le_log (Real.log_pos hSstar) h1
+    rwa [Real.log_mul (pow_ne_zero _ hρ.1.ne') hlogS.ne', Real.log_pow] at this
+  set L : ℝ := Real.log (Real.log (Real.exp (Real.exp 1) + S))
+  have hL : Real.log (Real.log S) ≤ L :=
+    Real.log_le_log hlogS
+      (Real.log_le_log hS (by linarith [Real.exp_pos (Real.exp 1)]))
+  have hL1 : 1 ≤ L := one_le_log_log_exp_exp_add hS.le
+  have key : (j : ℝ) * c ≤ (|a| + 1) * (1 + L) := by
+    nlinarith [neg_abs_le a, abs_nonneg a]
+  calc (j : ℝ) ≤ (|a| + 1) * (1 + L) / c := (le_div_iff₀ hc).mpr key
+    _ = (|a| + 1) / c + (|a| + 1) / c * L := by ring
+
+/-- For `S ≥ 0`, `log (e^e + S) ≤ e + log (S + 2)`. -/
+private theorem log_exp_exp_add_le {S : ℝ} (hS : 0 ≤ S) :
+    Real.log (Real.exp (Real.exp 1) + S) ≤ Real.exp 1 + Real.log (S + 2) := by
+  have hE : 1 ≤ Real.exp (Real.exp 1) := Real.one_le_exp (Real.exp_pos 1).le
+  calc Real.log (Real.exp (Real.exp 1) + S)
+      ≤ Real.log (Real.exp (Real.exp 1) * (S + 2)) :=
+        Real.log_le_log (by positivity) (by nlinarith)
+    _ = Real.exp 1 + Real.log (S + 2) := by
+        rw [Real.log_mul (Real.exp_pos _).ne' (by positivity : (0 : ℝ) < S + 2).ne',
+          Real.log_exp]
+
+/-- **Descendant count of an initial mark** (`geometry:descendant-count`). For a
+stopping scale `S_* > 1` there is a constant `C > 0` such that, for every positive
+initial scale `S` and every generation `m` of its branch whose scale `d^[m] S` is
+at least `S_*`, the at most `9 ^ j` marks of each generation `j ≤ m` number in
+total at most `C (log (S + 2)) ^ C`.
+Source: Section 11, `10-geometry.tex`, lines 670–682. -/
+theorem exists_repair_descendant_count_bound {Sstar : ℝ} (hSstar : 1 < Sstar) :
+    ∃ C : ℝ, 0 < C ∧ ∀ S : ℝ, 0 < S → ∀ m : ℕ, Sstar ≤ repairHalfSide^[m] S →
+      ∑ j ∈ Finset.range (m + 1), (9 : ℝ) ^ j ≤ C * Real.log (S + 2) ^ C := by
+  obtain ⟨C₁, hC₁, hdepth⟩ := exists_repair_depth_bound hSstar
+  set p : ℝ := C₁ * Real.log 9 with hp_def
+  have hlog9 : 0 < Real.log 9 := Real.log_pos (by norm_num)
+  have hp : 0 ≤ p := by positivity
+  set K : ℝ := (9 : ℝ) ^ (C₁ + 1) * (4 : ℝ) ^ p with hK_def
+  have hK : 0 < K := by positivity
+  refine ⟨max K p, lt_max_of_lt_left hK, fun S hS m hm => ?_⟩
+  have hS1 : 1 < S := by
+    have := (log_le_of_le_repairHalfSide_iterate hSstar hS hm).2
+    by_contra h
+    linarith [Real.log_nonpos hS.le (not_lt.mp h)]
+  set ℓ : ℝ := Real.log (Real.exp (Real.exp 1) + S) with hℓ_def
+  set x : ℝ := Real.log (S + 2) with hx_def
+  have hx1 : 1 ≤ x := by
+    calc (1 : ℝ) = Real.log (Real.exp 1) := (Real.log_exp 1).symm
+      _ ≤ x := Real.log_le_log (Real.exp_pos 1)
+          (by linarith [Real.exp_one_lt_three])
+  have hℓpos : 0 < ℓ := Real.log_pos (by linarith [Real.one_le_exp (Real.exp_pos 1).le])
+  have hℓx : ℓ ≤ 4 * x := by
+    have := log_exp_exp_add_le hS.le
+    linarith [Real.exp_one_lt_three]
+  -- the geometric sum
+  have hsum : ∑ j ∈ Finset.range (m + 1), (9 : ℝ) ^ j ≤ (9 : ℝ) ^ (m + 1) := by
+    rw [geom_sum_eq (by norm_num : (9 : ℝ) ≠ 1)]
+    have : (0 : ℝ) ≤ 9 ^ (m + 1) := by positivity
+    rw [div_le_iff₀ (by norm_num)]
+    linarith
+  -- the depth bound in the exponent
+  have hmC : ((m : ℝ) + 1) ≤ (C₁ + 1) + C₁ * Real.log ℓ := by
+    have := hdepth S hS m hm
+    linarith
+  have hpow : (9 : ℝ) ^ (m + 1) ≤ K * x ^ p := by
+    calc (9 : ℝ) ^ (m + 1) = (9 : ℝ) ^ (((m : ℝ) + 1)) := by
+          rw [← Real.rpow_natCast]; push_cast; rfl
+      _ ≤ (9 : ℝ) ^ ((C₁ + 1) + C₁ * Real.log ℓ) :=
+          Real.rpow_le_rpow_of_exponent_le (by norm_num) hmC
+      _ = (9 : ℝ) ^ (C₁ + 1) * ℓ ^ p := by
+          rw [Real.rpow_add (by norm_num)]
+          congr 1
+          rw [Real.rpow_def_of_pos (by norm_num), Real.rpow_def_of_pos hℓpos, hp_def]
+          ring_nf
+      _ ≤ (9 : ℝ) ^ (C₁ + 1) * (4 * x) ^ p := by
+          gcongr
+      _ = K * x ^ p := by
+          rw [Real.mul_rpow (by norm_num) (by linarith), hK_def]
+          ring
+  have hxp : x ^ p ≤ x ^ max K p := Real.rpow_le_rpow_of_exponent_le hx1 (le_max_right _ _)
+  calc ∑ j ∈ Finset.range (m + 1), (9 : ℝ) ^ j ≤ K * x ^ p := hsum.trans hpow
+    _ ≤ K * x ^ max K p := by gcongr
+    _ ≤ max K p * x ^ max K p := by
+        gcongr
+        exact le_max_left _ _
+
+/-- **Descendant count at layer `k`.** If the initial scale is at most `M 2 ^ k`,
+the descendant count of `geometry:descendant-count` is at most `C (k + 1) ^ C`,
+with `C` depending only on `S_*` and `M`.
+Source: Section 11, `10-geometry.tex`, lines 682–686. -/
+theorem exists_repair_descendant_count_layer_bound {Sstar : ℝ} (hSstar : 1 < Sstar)
+    {M : ℝ} (hM : 0 < M) :
+    ∃ C : ℝ, 0 < C ∧ ∀ k : ℕ, ∀ S : ℝ, 0 < S → S ≤ M * 2 ^ k →
+      ∀ m : ℕ, Sstar ≤ repairHalfSide^[m] S →
+        ∑ j ∈ Finset.range (m + 1), (9 : ℝ) ^ j ≤ C * ((k : ℝ) + 1) ^ C := by
+  obtain ⟨C, hC, hcount⟩ := exists_repair_descendant_count_bound hSstar
+  set A : ℝ := Real.log (M + 2) + 1 with hA_def
+  have hA : 1 ≤ A := by
+    have : 0 ≤ Real.log (M + 2) := Real.log_nonneg (by linarith)
+    linarith
+  refine ⟨max (C * A ^ C) C, lt_max_of_lt_right hC, fun k S hS hSk m hm => ?_⟩
+  have hk1 : (1 : ℝ) ≤ (k : ℝ) + 1 := by linarith [(Nat.cast_nonneg k : (0 : ℝ) ≤ k)]
+  have h2k : (1 : ℝ) ≤ 2 ^ k := one_le_pow₀ (by norm_num)
+  have hlog : Real.log (S + 2) ≤ A * ((k : ℝ) + 1) := by
+    calc Real.log (S + 2) ≤ Real.log ((M + 2) * 2 ^ k) :=
+          Real.log_le_log (by linarith) (by nlinarith)
+      _ = Real.log (M + 2) + (k : ℝ) * Real.log 2 := by
+          rw [Real.log_mul (by linarith) (by positivity), Real.log_pow]
+      _ ≤ A * ((k : ℝ) + 1) := by
+          have h2 : Real.log 2 ≤ 1 := by
+            have := Real.log_le_sub_one_of_pos (by norm_num : (0 : ℝ) < 2)
+            linarith
+          have hlM : 0 ≤ Real.log (M + 2) := Real.log_nonneg (by linarith)
+          have hk0 : (0 : ℝ) ≤ k := Nat.cast_nonneg k
+          nlinarith
+  have hpos : 0 ≤ Real.log (S + 2) := Real.log_nonneg (by linarith)
+  calc ∑ j ∈ Finset.range (m + 1), (9 : ℝ) ^ j ≤ C * Real.log (S + 2) ^ C :=
+        hcount S hS m hm
+    _ ≤ C * (A * ((k : ℝ) + 1)) ^ C := by gcongr
+    _ = C * A ^ C * ((k : ℝ) + 1) ^ C := by
+        rw [Real.mul_rpow (by linarith) (by linarith)]
+        ring
+    _ ≤ max (C * A ^ C) C * ((k : ℝ) + 1) ^ max (C * A ^ C) C := by
+        have hexp : ((k : ℝ) + 1) ^ C ≤ ((k : ℝ) + 1) ^ max (C * A ^ C) C :=
+          Real.rpow_le_rpow_of_exponent_le hk1 (le_max_right _ _)
+        have hpos' : 0 ≤ ((k : ℝ) + 1) ^ C := by positivity
+        have hCA : 0 ≤ C * A ^ C := by positivity
+        calc C * A ^ C * ((k : ℝ) + 1) ^ C
+            ≤ C * A ^ C * ((k : ℝ) + 1) ^ max (C * A ^ C) C :=
+              mul_le_mul_of_nonneg_left hexp hCA
+          _ ≤ _ := mul_le_mul_of_nonneg_right (le_max_left _ _) (by positivity)
+
+/-- **Fine clearance threshold** (`geometry:fine-clearance`). For fixed `c₁ > 0`
+and `C_B ≥ 0`, every sufficiently large `u` satisfies
+`2 ⌈C_B u⌉ ^ β < c₁ u ^ ρ₀`. This is possible because `ρ₀ > β`.
+Source: Section 11, `10-geometry.tex`, lines 761–768. -/
+theorem eventually_fine_clearance {c₁ CB : ℝ} (hc₁ : 0 < c₁) (hCB : 0 ≤ CB) :
+    ∀ᶠ u : ℝ in atTop,
+      2 * (⌈CB * u⌉₊ : ℝ) ^ (Exponents.beta : ℝ) < c₁ * u ^ (Exponents.rho : ℝ) := by
+  have hβ : 0 < (Exponents.beta : ℝ) := by
+    norm_num [Exponents.beta, Exponents.boxError]
+  have hβρ : (Exponents.beta : ℝ) < (Exponents.rho : ℝ) := by
+    exact_mod_cast Exponents.geometry_gaps.2.2.2.2.1
+  set B : ℝ := 2 * (CB + 1) ^ (Exponents.beta : ℝ) with hB_def
+  have hB : 0 < B := by positivity
+  have hlim : Tendsto (fun u : ℝ ↦ u ^ (-((Exponents.rho : ℝ) - (Exponents.beta : ℝ))))
+      atTop (nhds 0) := tendsto_rpow_neg_atTop (by linarith)
+  filter_upwards [hlim.eventually (gt_mem_nhds (div_pos hc₁ hB)),
+    eventually_ge_atTop (1 : ℝ)] with u hu hu1
+  have hu0 : 0 < u := by linarith
+  have hceil : (⌈CB * u⌉₊ : ℝ) ≤ (CB + 1) * u := by
+    have := Nat.ceil_lt_add_one (mul_nonneg hCB hu0.le)
+    nlinarith
+  have hsplit : u ^ (Exponents.beta : ℝ) =
+      u ^ (-((Exponents.rho : ℝ) - (Exponents.beta : ℝ))) * u ^ (Exponents.rho : ℝ) := by
+    rw [← Real.rpow_add hu0]
+    ring_nf
+  have hρpos : 0 < u ^ (Exponents.rho : ℝ) := Real.rpow_pos_of_pos hu0 _
+  calc 2 * (⌈CB * u⌉₊ : ℝ) ^ (Exponents.beta : ℝ)
+      ≤ 2 * ((CB + 1) * u) ^ (Exponents.beta : ℝ) := by
+        gcongr
+    _ = B * u ^ (Exponents.beta : ℝ) := by
+        rw [Real.mul_rpow (by linarith) hu0.le, hB_def]
+        ring
+    _ = B * u ^ (-((Exponents.rho : ℝ) - (Exponents.beta : ℝ))) *
+          u ^ (Exponents.rho : ℝ) := by
+        rw [hsplit]
+        ring
+    _ < B * (c₁ / B) * u ^ (Exponents.rho : ℝ) := by
+        gcongr
+    _ = c₁ * u ^ (Exponents.rho : ℝ) := by
+        field_simp
+
+end TNLean.PEPS.AreaLaw.Geometry
