@@ -64,10 +64,11 @@ private theorem restrict_sampledEndpointInputWord_eval_heq_sampledEndpointWord
     (f : Option {_p : P // true = true} → Bool)
     (ξ ζ : Choices (fun _ ↦ true) w) (j : w.sourceLocations → Fin k)
     (ω : SourceGaussianSamples w k) :
-    HEq ((sampledEndpointInputWord w k lam E F ξ ζ j ω).restrict f
-        (sources_sampledEndpointInputWord w k lam E F ξ ζ j ω)).eval
+    wordEvalComparison
+      ((sampledEndpointInputWord w k lam E F ξ ζ j ω).restrict f
+        (sources_sampledEndpointInputWord w k lam E F ξ ζ j ω))
       ((sampledEndpointWord w k lam E F ξ ζ j ω).restrict f
-        (sources_sampledEndpointWord w k lam E F ξ ζ j ω)).eval := by
+        (sources_sampledEndpointWord w k lam E F ξ ζ j ω)) := by
   unfold sampledEndpointInputWord
   exact (heq_of_eq (congrArg Word.eval
     (Word.restrict_castLayouts f (sampledEndpointWord w k lam E F ξ ζ j ω)
