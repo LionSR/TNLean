@@ -53,6 +53,7 @@ import TNLean.PEPS.Approximation.AuxiliaryRegisterFiniteness
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.BasisMatrixOperator
 import TNLean.PEPS.Approximation.CanonicalPartyFactorization
+import TNLean.PEPS.Approximation.CellPartitionCount
 import TNLean.PEPS.Approximation.ColumnSelection
 import TNLean.PEPS.Approximation.CommonPairSources
 import TNLean.PEPS.Approximation.CommonPartyMaps
