@@ -16,10 +16,11 @@ Set $\alpha=1-\ell_{\rm s}-\mu>0$. Only these three exponents enter
 \begin{theorem}[Quantitative growth of the integer band count]
     \label{thm:al_moment_band_power}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_eventually_rpow_le_mul_K}
+    \leanok
     There is a constant $C_K\ge1$ such that all sufficiently large
     integers $n$ satisfy $n\ge2$, $K\ge1$, and $n^\alpha\le C_KK$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:al_scanner_scale_facts}
     The numerical scale estimates give positive $m,K,D$ and
     $nD^2/(mK)\le C_Kn^{\ell_{\rm s}}D^2$.
@@ -34,6 +35,7 @@ Set $\alpha=1-\ell_{\rm s}-\mu>0$. Only these three exponents enter
 \begin{theorem}[Square root of the rounded marginal budget]
     \label{thm:al_moment_sqrt_budget}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.sqrt_budget_le}
+    \leanok
     Let $n\ge1$, $C_B\ge0$ and $B\in\mathbb R$ satisfy
     $B\le C_BnD(\log n)^{12}$. Then
     \begin{align}
@@ -41,7 +43,7 @@ Set $\alpha=1-\ell_{\rm s}-\mu>0$. Only these three exponents enter
     \end{align}
     The real square root is zero on negative arguments.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     Since $n^\kappa\ge1$, rounding gives
     $D\le n^\kappa+1\le2n^\kappa$. Thus
     $B\le2C_Bn^{1+\kappa}(\log n)^{12}$. The right side is the
@@ -52,6 +54,7 @@ Set $\alpha=1-\ell_{\rm s}-\mu>0$. Only these three exponents enter
     \label{thm:al_moment_weight_smallness}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.eventually_mul_a_sqrt_budget_le,
         TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_a_le_moment_radius}
+    \leanok
     Fix $\omega\in\mathbb R$, $C_B,A\ge0$ and $c>0$. Assume the strict
     margin
     \begin{align}
@@ -64,7 +67,7 @@ Set $\alpha=1-\ell_{\rm s}-\mu>0$. Only these three exponents enter
     put $a=W/K$. Then $Aa\sqrt B\le c$. If also $B\ge1$, then
     $Aa\le c/\sqrt B$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_moment_band_power,thm:al_moment_sqrt_budget}
     Choose $C_K$ before the scale. Theorems~\ref{thm:al_moment_band_power}
     and~\ref{thm:al_moment_sqrt_budget} give
@@ -84,6 +87,7 @@ Set $\alpha=1-\ell_{\rm s}-\mu>0$. Only these three exponents enter
     \label{thm:al_moment_final_scales}
     \lean{TNLean.PEPS.AreaLaw.Scan.final_scanner_moment_margin,
         TNLean.PEPS.AreaLaw.Scan.exists_final_a_le_moment_radius}
+    \leanok
     Use the final parameters of
     \cite[Section~9, lines~839--865]{OpenAI2026AreaLaw}:
     \begin{align}
@@ -104,7 +108,7 @@ Set $\alpha=1-\ell_{\rm s}-\mu>0$. Only these three exponents enter
     $a=n^\omega/K$, every $1\le B\le C_BnD(\log n)^{12}$ satisfies
     $|ta|\le c/\sqrt B$.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_moment_weight_smallness}
     Rational arithmetic gives the displayed positive margin and all
     stated exponent inequalities. Apply
