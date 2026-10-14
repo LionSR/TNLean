@@ -25,3 +25,8 @@ Private copies of the same three facts in
 `TNLean/Circuit/QuantitativeSitePermutation.lean` were also removed, and
 `QuantumCircuit.permOp_list_prod` is now the image of a list product under
 `QuantumCircuit.permOpHom`.
+
+Because `TNLean/MPS/MPU/PermutedEncodedMergingCircuit.lean` now sees both
+adjoint lemmas, `MPSPreparation.permOp_conjTranspose` (cited by the blueprint)
+is kept with its statement and proved by `QuantumCircuit.permOp_conjTranspose`,
+and the uses in that module name the latter explicitly.
