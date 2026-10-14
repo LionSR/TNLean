@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.Circuit.PairProduct
+import TNLean.Circuit.Channel.PortMatching
 import TNLean.Circuit.CleanImplementationPlacement
 import Mathlib.GroupTheory.Perm.Sign
 
@@ -70,34 +70,11 @@ namespace QuantumCircuit
 
 variable {d n a K : ℕ}
 
-private theorem routingPermOp_mul (τ₁ τ₂ : Equiv.Perm (Fin n)) :
-    permOp (d := d) (τ₁ * τ₂) = permOp τ₁ * permOp τ₂ := by
-  ext x y
-  simp only [permOp, of_apply, mul_apply, ite_mul, one_mul, zero_mul]
-  rw [Finset.sum_ite_eq' Finset.univ (x ∘ τ₁)]
-  simp only [Finset.mem_univ, ite_true, Equiv.Perm.coe_mul]
-  rfl
-
-private theorem routingPermOp_one :
-    permOp (d := d) (1 : Equiv.Perm (Fin n)) = 1 := by
-  ext x y
-  simp only [permOp, of_apply, Equiv.Perm.coe_one, Function.comp_id, one_apply, eq_comm]
-
-private theorem routingSwap_pairProduct (i j : Fin n) :
-    IsPairProduct d n (2 * n) (permOp (Equiv.swap i j)) := by
-  by_cases h : i = j
-  · rw [h, Equiv.swap_self, ← Equiv.Perm.one_def, routingPermOp_one]
-    exact IsPairProduct.one _
-  · rw [permOp_swap_eq_embedOp h]
-    exact isPairProduct_embedOp_pairSites h (permOp_mem_unitary _)
-
 /-- Site permutation operators preserve products exactly, with no scalar
 phase discarded. Source: swap routing in Section 5 of the circuit audit. -/
 theorem permOp_list_prod (l : List (Equiv.Perm (Fin n))) :
-    permOp (d := d) l.prod = (l.map (permOp (d := d))).prod := by
-  induction l with
-  | nil => simp only [List.prod_nil, List.map_nil, routingPermOp_one]
-  | cons τ l ih => simp only [List.prod_cons, routingPermOp_mul, List.map_cons, ih]
+    permOp (d := d) l.prod = (l.map (permOp (d := d))).prod :=
+  map_list_prod (permOpHom (d := d)) l
 
 /-- Every actual site permutation has an additive quadratic routing bound.
 No swap factorization or circuit witness is supplied. Source: logical
@@ -119,7 +96,7 @@ theorem isPairProduct_permOp (τ : Equiv.Perm (Fin n)) :
     intro X hX
     obtain ⟨σ, hσ, rfl⟩ := List.mem_map.mp hX
     obtain ⟨i, j, _, rfl⟩ := hswap σ hσ
-    exact routingSwap_pairProduct i j
+    exact isPairProduct_permOp_swap i j
 
 /-- Conjugating by a site permutation adds its forward and inverse routing
 cost instead of multiplying the original gate count. Source: register
