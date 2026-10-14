@@ -36,11 +36,11 @@ theorem isLeast_log_regularizedPatchObjective (a : Fin m → ℝ) (ha : ∀ j, 0
     IsLeast ((fun x ↦ Real.log (regularizedPatchObjective regions a b Ω x)) ''
       regularizedPatchDomain regions) (Real.log (regularizedPatchMinimum regions a b Ω)) :=
   match exists_isMinOn_regularizedPatchObjective regions a hb Ω hΩ with
-  | ⟨x, hx, hmin⟩ ↦
+  | ⟨x, hx, hmin⟩ =>
     ⟨⟨x, hx, congrArg Real.log (regularizedPatchObjective_eq_minimum regions a b Ω hx hmin)⟩,
       fun _ hy ↦
         match hy with
-        | ⟨y, hy, heq⟩ ↦
+        | ⟨y, hy, heq⟩ =>
           (Real.log_le_log (regularizedPatchMinimum_pos regions a ha hb Ω hΩ)
             (calc
               regularizedPatchMinimum regions a b Ω = regularizedPatchObjective regions a b Ω x :=
