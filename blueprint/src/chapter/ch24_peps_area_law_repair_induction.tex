@@ -229,3 +229,36 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     Lemma~\ref{lem:area_law_repair_parent_offset} injects $K_{j+1}$ into
     the finite set $K_j\times\{0,1,2\}^2$. Induction proves the claim.
 \end{proof}
+
+% Source: 10-geometry.tex, geometry:descendant-count, lines 670--681;
+% child marks, lines 404--409 and 506--514.
+\begin{lemma}[The number of descendant marks]
+    \label{lem:area_law_repair_descendant_marks}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairMarkAncestor_parent_offset_injective,
+        TNLean.PEPS.AreaLaw.Geometry.card_repairMarkAncestor_fiber_succ_le,
+        TNLean.PEPS.AreaLaw.Geometry.card_repairMarkAncestor_fiber_le}
+    \leanok
+    \uses{def:area_law_repair_ancestors,lem:area_law_repair_parent_offset,
+        lem:area_law_repair_finite_marks}
+    Fix a mark $p\in K_i$. For $n\ge0$, let
+    \begin{equation}
+        F_n(p)=\{q\in K_{i+n}:\alpha_{i,n}(q)=p\}.
+        \label{eq:area_law_repair_descendant_marks}
+    \end{equation}
+    These sets are finite. The parent and offset map restricts to an
+    injection $F_{n+1}(p)\longrightarrow F_n(p)\times\{0,1,2\}^2$.
+    Consequently,
+    \begin{equation}
+        |F_{n+1}(p)|\le9|F_n(p)|,
+        \qquad |F_n(p)|\le9^n.
+        \label{eq:area_law_repair_descendant_count}
+    \end{equation}
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:area_law_repair_parent_offset,lem:area_law_repair_finite_marks}
+    Each $F_n(p)$ is a subset of the finite mark family $K_{i+n}$.
+    The parent of a descendant in $F_{n+1}(p)$ belongs to $F_n(p)$ by the
+    defining recursion for the ancestor map. Its parent and offset
+    determine the child, which proves the stated injection and the
+    first inequality. Since $F_0(p)=\{p\}$, induction gives the second.
+\end{proof}
