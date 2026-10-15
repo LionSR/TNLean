@@ -77,7 +77,7 @@ theorem directRepainting_step [NeZero q] {n r u : ℝ} (hn : 0 < n) (hr : 0 < r)
     (hεhole : ∀ z, ‖act (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
     (htag : ∀ z, Nonempty (hole z).Tag) :
     ∃ P : Finset Party, P.card ≤ 18 ∧
-      (∀ x ∈ P, ∃ Q ∈ nineBlocks S, x = own (lab Q) ∨ x = own (lab' Q)) ∧
+      (∀ x ∈ P, ∃ R ∈ blockWindow 1, x = own (lab (R + S)) ∨ x = own (lab' (R + S))) ∧
       ∃ w : OriginalCircuit (guideFrame pos q g own ph rank V hole hpV).regs
         (guideFrame pos q g' own ph rank V' hole hpV').regs,
       w.nonprivateCount ≤ 1 ∧ (∀ γ, (↑(w.participants γ) : Set Party) ⊆ ↑P) ∧

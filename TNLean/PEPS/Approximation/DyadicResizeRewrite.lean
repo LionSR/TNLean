@@ -89,8 +89,8 @@ theorem exists_resize_planeConditions {N R u : ℝ} (hN : 0 < N) (hR : 0 < R) (h
       G.patch = patch ∧ G.untouched ∪ G.oldAffected = V ∧ G.untouched ∪ G.newAffected = V ∧
       G.oldAffected.card ≤ 1 ∧ G.newAffected.card ≤ 1 ∧
       (G.centers.card : ℝ) ≤ (2 * (2 * R + u) / u + 1) ^ 2 ∧ G.parties.card ≤ 9 ∧
-      G.parties.Nonempty ∧ ∀ x ∈ G.parties, ∃ Q' ∈ nineBlocks (Q.1 - 1, Q.2 - 1),
-        x = own (lab Q') := by
+      G.parties.Nonempty ∧ ∀ x ∈ G.parties, ∃ R ∈ blockWindow 1,
+        x = own (lab (R + (Q.1 - 1, Q.2 - 1))) := by
   classical
   set c₀ := blockCorner N Q
   set S : ℤ × ℤ := (Q.1 - 1, Q.2 - 1)
@@ -126,7 +126,7 @@ theorem exists_resize_planeConditions {N R u : ℝ} (hN : 0 < N) (hR : 0 < R) (h
     { old := g, new := g, own := own, ph := ph, rank := rank, untouched := U,
       oldAffected := {c₀}, newAffected := {c₀}, holeOld := holeOld, holeNew := holeNew,
       centers := s.image (blockCorner u), patch := patch,
-      parties := ((nineBlocks S).image lab).image own,
+      parties := ((blockWindow 1).image fun R => lab (R + S)).image own,
       disjoint_untouched_old := hdU, disjoint_untouched_new := hdU
       pairwise_old := by
         rw [hUA]; exact hpair holeOld (fun z => (hcenter z).1) fun z => (hscale z).1
@@ -146,8 +146,8 @@ theorem exists_resize_planeConditions {N R u : ℝ} (hN : 0 < N) (hR : 0 < R) (h
       rw [(hpatch _).1, (hpatch _).2]; exact hpk.le⟩
   have hparty : ∀ p, dist p c₀ < N → own (g p) ∈ G.parties := by
     intro p hp
-    obtain ⟨Q', hQ', e⟩ := reading_mem_nineBlocks hN hg hc₀S hp
-    exact Finset.mem_image.2 ⟨lab Q', Finset.mem_image_of_mem _ hQ', e.symm ▸ rfl⟩
+    obtain ⟨R', hR', e⟩ := reading_mem_blockWindow hN hg hc₀S hp
+    exact Finset.mem_image.2 ⟨lab (R' + S), Finset.mem_image_of_mem _ hR', e.symm ▸ rfl⟩
   have hU : ∀ c ∈ U, c ∈ V ∧ c ≠ c₀ := fun c hc =>
     ⟨Finset.mem_of_mem_erase hc, Finset.ne_of_mem_erase hc⟩
   have hlabels : ∀ hole : ℝ × ℝ → SquarePatch pos q, (∀ z, (hole z).center = z) →
@@ -240,19 +240,19 @@ theorem exists_resize_planeConditions {N R u : ℝ} (hN : 0 < N) (hR : 0 < R) (h
   · intro a ha
     obtain rfl := Finset.mem_singleton.1 ha
     have hl := (isTagHolder_tagHolder (rank := rank) (ph := ph) (hV c₀ hc₀)).1
-    obtain ⟨Q', hQ', e⟩ := incidentLabel_mem_nineBlocks hN hg hc₀S hl
-    exact Finset.mem_image.2 ⟨lab Q', Finset.mem_image_of_mem _ hQ', congrArg own e.symm⟩
+    obtain ⟨R', hR', e⟩ := incidentLabel_mem_blockWindow hN hg hc₀S hl
+    exact Finset.mem_image.2 ⟨lab (R' + S), Finset.mem_image_of_mem _ hR', congrArg own e.symm⟩
   · intro a ha
     obtain rfl := Finset.mem_singleton.1 ha
     have hl := (isTagHolder_tagHolder (rank := rank) (ph := ph) (hV c₀ hc₀)).1
-    obtain ⟨Q', hQ', e⟩ := incidentLabel_mem_nineBlocks hN hg hc₀S hl
-    exact Finset.mem_image.2 ⟨lab Q', Finset.mem_image_of_mem _ hQ', congrArg own e.symm⟩
+    obtain ⟨R', hR', e⟩ := incidentLabel_mem_blockWindow hN hg hc₀S hl
+    exact Finset.mem_image.2 ⟨lab (R' + S), Finset.mem_image_of_mem _ hR', congrArg own e.symm⟩
   · refine (Nat.cast_le.2 Finset.card_image_le).trans (hcard.trans_eq ?_)
     ring_nf
   · refine Finset.card_image_le.trans (Finset.card_image_le.trans ?_)
-    rw [card_nineBlocks]
-  · exact ⟨own (lab S), Finset.mem_image_of_mem _
-      (Finset.mem_image_of_mem _ (by simp [nineBlocks]))⟩
+    rw [card_blockWindow_one]
+  · exact ⟨own (lab (0 + S)), Finset.mem_image_of_mem _
+      (Finset.mem_image_of_mem (fun R => lab (R + S)) (by decide))⟩
   · intro x hx
     obtain ⟨l, hl, rfl⟩ := Finset.mem_image.1 hx
     obtain ⟨Q', hQ', rfl⟩ := Finset.mem_image.1 hl

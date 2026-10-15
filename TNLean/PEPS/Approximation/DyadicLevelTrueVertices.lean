@@ -60,12 +60,14 @@ theorem mem_levelTrueVertices {n : ℝ} (hn : 0 < n) {M : ℤ} {lab : ℤ × ℤ
   by_contra hQ
   refine (hasTwoLabelsNear_of_eventuallyEq_const (c := ph) ?_).not_isTrueVertex hc
   filter_upwards [ball_mem_nhds (blockCorner n Q) hn] with p hp
-  obtain ⟨Q', hQ', e⟩ := reading_mem_nineBlocks hn hg (blockCorner_mem_closedBlock_sub_one hn Q)
+  obtain ⟨R, hR, e⟩ := reading_mem_blockWindow hn hg (blockCorner_mem_closedBlock_sub_one hn Q)
     (mem_ball.1 hp)
   rw [e]
-  refine hout Q' fun hr => hQ ?_
-  simp only [nineBlocks, Finset.mem_product, Finset.mem_Icc] at hQ'
+  refine hout _ fun hr => hQ ?_
+  simp only [blockWindow, Finset.mem_product, Finset.mem_Icc] at hR
   obtain ⟨h1, h2, h3, h4⟩ := hr
+  simp only [Prod.fst_add, Prod.snd_add] at h1 h2 h3 h4
+  push_cast at hR
   omega
 
 end TNLean.PEPS.Approximation

@@ -27,7 +27,7 @@ the nine blocks around `S`, in the two guides.
 
 ## Main definitions
 
-* `Approximation.squareCorners`, `Approximation.nineBlocks`.
+* `Approximation.squareCorners`, `Approximation.closedBlock`.
 
 ## Main results
 
@@ -56,18 +56,12 @@ def squareCorners (n : ℝ) (S : ℤ × ℤ) : Finset (ℝ × ℝ) :=
   open Classical in
   (({0, 1} : Finset ℤ) ×ˢ ({0, 1} : Finset ℤ)).image fun d => blockCorner n (S.1 + d.1, S.2 + d.2)
 
-/-- The nine blocks that differ from `S` by at most one in each index. -/
-def nineBlocks (S : ℤ × ℤ) : Finset (ℤ × ℤ) :=
-  Finset.Icc (S.1 - 1) (S.1 + 1) ×ˢ Finset.Icc (S.2 - 1) (S.2 + 1)
-
 theorem card_squareCorners_le (n : ℝ) (S : ℤ × ℤ) : (squareCorners n S).card ≤ 4 := by
   classical
   exact Finset.card_image_le.trans (by decide)
 
-theorem card_nineBlocks (S : ℤ × ℤ) : (nineBlocks S).card = 9 := by
-  simp only [nineBlocks, Finset.card_product, Int.card_Icc]
-  rw [show S.1 + 1 + 1 - (S.1 - 1) = 3 by ring, show S.2 + 1 + 1 - (S.2 - 1) = 3 by ring]
-  rfl
+theorem card_blockWindow_one : (blockWindow 1).card = 9 := by
+  decide
 
 theorem blockCorner_injective {n : ℝ} (hn : 0 < n) : Function.Injective (blockCorner n) := by
   intro Q Q' h
@@ -147,27 +141,28 @@ theorem reading_eventuallyEq {lab lab' : ℤ × ℤ → κ} (hlab : ∀ Q, Q ≠
 
 /-- The label of a reading at a point within `n` of the closed block `S` is a label of one of the
 nine blocks around `S`. -/
-theorem reading_mem_nineBlocks {lab : ℤ × ℤ → κ} {v : ℝ × ℝ} {g : ℝ × ℝ → κ}
+theorem reading_mem_blockWindow {lab : ℤ × ℤ → κ} {v : ℝ × ℝ} {g : ℝ × ℝ → κ}
     (hg : IsDisplacedReading g (blockGuide n lab) v) {p y : ℝ × ℝ} (hy : y ∈ closedBlock n S)
-    (hp : dist p y < n) : ∃ Q ∈ nineBlocks S, g p = lab Q := by
+    (hp : dist p y < n) : ∃ R ∈ blockWindow 1, g p = lab (R + S) := by
   have hε := (tendsto_add_smul_nhdsGT p v).eventually
     ((isOpen_lt (continuous_id.dist continuous_const) continuous_const).mem_nhds
       (show dist p y < n from hp))
   obtain ⟨ε, e₁, e₂⟩ := ((hg p).and hε).exists
   obtain ⟨a, b⟩ := abs_blockIndex_sub_le hn hy (show dist (p + ε • v) y < n from e₂)
-  refine ⟨blockIndex n (p + ε • v), ?_, e₁⟩
-  simp only [nineBlocks, Finset.mem_product, Finset.mem_Icc]
+  refine ⟨blockIndex n (p + ε • v) - S, ?_, by rw [sub_add_cancel]; exact e₁⟩
+  simp only [blockWindow, Finset.mem_product, Finset.mem_Icc, Prod.fst_sub, Prod.snd_sub]
   rw [abs_le] at a b
+  push_cast
   omega
 
 /-- An incident label of a reading at a point of the closed block `S` is a label of one of the
 nine blocks around `S`. -/
-theorem incidentLabel_mem_nineBlocks {lab : ℤ × ℤ → κ} {v : ℝ × ℝ} {g : ℝ × ℝ → κ}
+theorem incidentLabel_mem_blockWindow {lab : ℤ × ℤ → κ} {v : ℝ × ℝ} {g : ℝ × ℝ → κ}
     (hg : IsDisplacedReading g (blockGuide n lab) v) {c : ℝ × ℝ} (hc : c ∈ closedBlock n S)
-    {l : κ} (hl : l ∈ incidentLabels g c) : ∃ Q ∈ nineBlocks S, l = lab Q := by
+    {l : κ} (hl : l ∈ incidentLabels g c) : ∃ R ∈ blockWindow 1, l = lab (R + S) := by
   obtain ⟨p, hp, hpc⟩ := Metric.mem_closure_iff.1 hl n hn
-  obtain ⟨Q, hQ, e⟩ := reading_mem_nineBlocks hn hg hc (by rwa [dist_comm])
-  exact ⟨Q, hQ, (mem_singleton_iff.1 hp).symm.trans e⟩
+  obtain ⟨R, hR, e⟩ := reading_mem_blockWindow hn hg hc (by rwa [dist_comm])
+  exact ⟨R, hR, (mem_singleton_iff.1 hp).symm.trans e⟩
 
 end Readings
 
@@ -230,7 +225,7 @@ theorem exists_directRepainting_planeConditions {n r u : ℝ} (hn : 0 < n) (hr :
       G.oldAffected.card ≤ 4 ∧ G.newAffected.card ≤ 4 ∧
       (G.centers.card : ℝ) ≤ (2 * (n / 2 + 2 * r + u) / u + 1) ^ 2 ∧ G.parties.card ≤ 18 ∧
       G.parties.Nonempty ∧
-      ∀ x ∈ G.parties, ∃ Q ∈ nineBlocks S, x = own (lab Q) ∨ x = own (lab' Q) := by
+      ∀ x ∈ G.parties, ∃ R ∈ blockWindow 1, x = own (lab (R + S)) ∨ x = own (lab' (R + S)) := by
   classical
   set B := closedBlock n S
   set K : Set (ℝ × ℝ) := {p | ∃ y ∈ B, dist p y ≤ 2 * r}
@@ -282,7 +277,8 @@ theorem exists_directRepainting_planeConditions {n r u : ℝ} (hn : 0 < n) (hr :
     { old := g, new := g', own := own, ph := ph, rank := rank, untouched := U,
       oldAffected := A, newAffected := A', holeOld := hole, holeNew := hole,
       centers := s.image (blockCorner u), patch := patch,
-      parties := ((nineBlocks S).image lab ∪ (nineBlocks S).image lab').image own,
+      parties := ((blockWindow 1).image (fun R => lab (R + S)) ∪
+        (blockWindow 1).image (fun R => lab' (R + S))).image own,
       disjoint_untouched_old := hdU, disjoint_untouched_new := hdU'
       pairwise_old := by rw [hUA]; exact hpair V hbc
       pairwise_new := by rw [hUA']; exact hpair V' hbc' }
@@ -301,11 +297,11 @@ theorem exists_directRepainting_planeConditions {n r u : ℝ} (hn : 0 < n) (hr :
       rw [(hpatch _).1, (hpatch _).2]; exact hpk.le⟩
   have hparty : ∀ p, ∀ b ∈ B, dist p b < n → own (g p) ∈ G.parties ∧ own (g' p) ∈ G.parties := by
     intro p b hb hpb
-    obtain ⟨Q, hQ, e⟩ := reading_mem_nineBlocks hn hg hb hpb
-    obtain ⟨Q', hQ', e'⟩ := reading_mem_nineBlocks hn hg' hb hpb
-    exact ⟨Finset.mem_image.2 ⟨lab Q, Finset.mem_union_left _ (Finset.mem_image_of_mem _ hQ),
-      e.symm ▸ rfl⟩, Finset.mem_image.2 ⟨lab' Q', Finset.mem_union_right _
-        (Finset.mem_image_of_mem _ hQ'), e'.symm ▸ rfl⟩⟩
+    obtain ⟨Q, hQ, e⟩ := reading_mem_blockWindow hn hg hb hpb
+    obtain ⟨Q', hQ', e'⟩ := reading_mem_blockWindow hn hg' hb hpb
+    exact ⟨Finset.mem_image.2 ⟨lab (Q + S), Finset.mem_union_left _
+      (Finset.mem_image_of_mem _ hQ), e.symm ▸ rfl⟩, Finset.mem_image.2 ⟨lab' (Q' + S),
+        Finset.mem_union_right _ (Finset.mem_image_of_mem _ hQ'), e'.symm ▸ rfl⟩⟩
   have hU : ∀ c ∈ U, c ∈ V ∧ c ∉ squareCorners n S := fun c hc => Finset.mem_filter.1 hc
   have hA : ∀ a ∈ A, a ∈ squareCorners n S := fun a ha => (Finset.mem_filter.1 ha).2
   have hA' : ∀ a ∈ A', a ∈ squareCorners n S := fun a ha => (Finset.mem_filter.1 ha).2
@@ -397,25 +393,25 @@ theorem exists_directRepainting_planeConditions {n r u : ℝ} (hn : 0 < n) (hr :
     intro a ha
     have hl := (isTagHolder_tagHolder (rank := rank) (ph := ph)
       (hV a (Finset.mem_filter.1 ha).1)).1
-    obtain ⟨Q, hQ, e⟩ := incidentLabel_mem_nineBlocks hn hg (hcB a (hA a ha)) hl
-    exact Finset.mem_image.2 ⟨lab Q, Finset.mem_union_left _ (Finset.mem_image_of_mem _ hQ),
-      congrArg own e.symm⟩
+    obtain ⟨Q, hQ, e⟩ := incidentLabel_mem_blockWindow hn hg (hcB a (hA a ha)) hl
+    exact Finset.mem_image.2 ⟨lab (Q + S), Finset.mem_union_left _
+      (Finset.mem_image_of_mem _ hQ), congrArg own e.symm⟩
   · intro a ha
     have hl := (isTagHolder_tagHolder (rank := rank) (ph := ph)
       (hV' a (Finset.mem_filter.1 ha).1)).1
-    obtain ⟨Q, hQ, e⟩ := incidentLabel_mem_nineBlocks hn hg' (hcB a (hA' a ha)) hl
-    exact Finset.mem_image.2 ⟨lab' Q, Finset.mem_union_right _ (Finset.mem_image_of_mem _ hQ),
-      congrArg own e.symm⟩
+    obtain ⟨Q, hQ, e⟩ := incidentLabel_mem_blockWindow hn hg' (hcB a (hA' a ha)) hl
+    exact Finset.mem_image.2 ⟨lab' (Q + S), Finset.mem_union_right _
+      (Finset.mem_image_of_mem _ hQ), congrArg own e.symm⟩
   · exact (Finset.card_le_card fun a ha => hA a ha).trans (card_squareCorners_le n S)
   · exact (Finset.card_le_card fun a ha => hA' a ha).trans (card_squareCorners_le n S)
   · exact (Nat.cast_le.2 Finset.card_image_le).trans hcard
   · refine Finset.card_image_le.trans ((Finset.card_union_le _ _).trans ?_)
-    have h1 := Finset.card_image_le (s := nineBlocks S) (f := lab)
-    have h2 := Finset.card_image_le (s := nineBlocks S) (f := lab')
-    rw [card_nineBlocks] at h1 h2
+    have h1 := Finset.card_image_le (s := blockWindow 1) (f := fun R => lab (R + S))
+    have h2 := Finset.card_image_le (s := blockWindow 1) (f := fun R => lab' (R + S))
+    rw [card_blockWindow_one] at h1 h2
     omega
-  · exact ⟨own (lab S), Finset.mem_image_of_mem _ (Finset.mem_union_left _
-      (Finset.mem_image_of_mem _ (by simp [nineBlocks])))⟩
+  · exact ⟨own (lab (0 + S)), Finset.mem_image_of_mem _ (Finset.mem_union_left _
+      (Finset.mem_image_of_mem (fun R => lab (R + S)) (by decide)))⟩
   · intro x hx
     obtain ⟨l, hl, rfl⟩ := Finset.mem_image.1 hx
     rcases Finset.mem_union.1 hl with hl | hl <;> obtain ⟨Q, hQ, rfl⟩ := Finset.mem_image.1 hl
