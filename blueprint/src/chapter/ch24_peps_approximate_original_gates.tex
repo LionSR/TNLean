@@ -306,7 +306,7 @@ trace-norm estimates do not involve private dimensions.
 \begin{proof}
     \leanok
     \uses{def:peps_original_termwise_bounds,thm:peps_gate_coefficient_sum}
-    Apply Theorem~\ref{thm:peps_gate_coefficient_sum} at each original gate occurrence.
+    Bound the coefficient sum at each original gate occurrence by $KC$.
     Composition and addition of spectator registers retain these same
     local conditions; private operations and register permutations add
     no nonprivate gate expansions, and the effect count is unchanged.

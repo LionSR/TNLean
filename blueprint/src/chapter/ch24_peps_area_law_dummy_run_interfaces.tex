@@ -27,16 +27,15 @@ layer $k$.
 \begin{proof}\leanok
     \uses{thm:area_law_dummy_corner_elementary_side,
         thm:area_law_dummy_layer_disjoint}
-    Choose a coarse cell in $N_0$ whose closure contains $x$. By
-    Theorem~\ref{thm:area_law_dummy_layer_disjoint}, its interior is
+    Choose a coarse cell in $N_0$ whose closure contains $x$. Its interior is
     disjoint from the interior of the reference fine cell. After
     interchanging coordinates if necessary, $e_i$ is vertical. Since
     $x\in(a_i,b_i)$, disjointness forces the normal coordinate of $e_i$
     to be a boundary coordinate of the coarse cell. If a tangential
     boundary coordinate of the coarse cell lay strictly between $a_i$
     and $b_i$, the corresponding coarse-cell corner would lie in
-    $(a_i,b_i)$, contradicting
-    Theorem~\ref{thm:area_law_dummy_corner_elementary_side}. Thus the
+    $(a_i,b_i)$, contradicting the endpoint rule for coarse-cell corners on
+    elementary sides. Thus the
     coarse-cell closure contains $e_i$ and lies in $\overline{N_0}$.
 \end{proof}
 
@@ -56,11 +55,11 @@ layer $k$.
 \begin{proof}\leanok
     \uses{thm:area_law_dummy_layer_disjoint,thm:area_law_cell_fan_cover,
         thm:area_law_fan_own_side_contact,thm:area_law_unsplit_side_endpoints}
-    By Theorem~\ref{thm:area_law_dummy_layer_disjoint}, the open interior
+    The open interior
     of the reference fine cell is disjoint from $N_0$ and hence from
     $\overline{N_0}$. Any point of $P_i\cap\overline{N_0}$ belongs to the
     closed reference square and therefore lies on its boundary, which is
-    the union of its four sides. Theorem~\ref{thm:area_law_fan_own_side_contact}
+    the union of its four sides; the own-side contact identity
     then places the point on $e_i$. The reverse inclusion follows from
     $e_i\subseteq P_i$.
 \end{proof}
@@ -84,11 +83,10 @@ layer $k$.
     Since the shared segment has infinitely many points and the fan has
     finitely many elementary endpoints, choose a point $x$ on the shared
     segment that is not an elementary endpoint, and choose a constituent
-    triangle $P_i$ of $R$ containing $x$. By
-    Theorem~\ref{thm:area_law_fan_dummy_contact}, $x$ lies on the open base
-    segment $(a_i,b_i)$ of $P_i$. Theorem~\ref{thm:area_law_elementary_open_dummy_contact}
-    then gives $e_i\subseteq\overline{N_0}$. By
-    Theorem~\ref{thm:area_law_belt_fan_dummy_color}, $P_i$ has label $k_0$
-    modulo two, and Theorem~\ref{thm:area_law_fan_run_color} extends this
+    triangle $P_i$ of $R$ containing $x$. Because $P_i\cap\overline{N_0}=e_i\cap\overline{N_0}$,
+    $x$ lies on the open base
+    segment $(a_i,b_i)$ of $P_i$, which gives $e_i\subseteq\overline{N_0}$.
+    The dummy-contact color rule assigns $P_i$ label $k_0$
+    modulo two, and constancy of color along a run extends this
     label to every triangle in $R$.
 \end{proof}

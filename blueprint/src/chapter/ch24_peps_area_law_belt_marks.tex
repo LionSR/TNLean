@@ -73,8 +73,7 @@ Coincident points contribute only once to the union.
 \begin{proof}\leanok
     \uses{thm:area_law_belt_cell_mark_count}
     The cardinality of a finite union is at most the sum of the
-    cardinalities of its members, each of which has nine points by
-    Theorem~\ref{thm:area_law_belt_cell_mark_count}.
+    cardinalities of its members, each of which has nine points.
 \end{proof}
 
 \begin{theorem}[Sparse shifts bound the belt marks]
@@ -94,7 +93,7 @@ Coincident points contribute only once to the union.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_belt_mark_count,thm:area_law_sparse_dyadic_belts}
-    Choose the pair of residues given by Theorem~\ref{thm:area_law_sparse_dyadic_belts}
-    and apply Theorem~\ref{thm:area_law_belt_mark_count}. The coefficient is
+    Choose the sparse-belt pair of residues $(a,b)$
+    and multiply the belt-cell count by $9$. The coefficient is
     $9\cdot64=576$.
 \end{proof}

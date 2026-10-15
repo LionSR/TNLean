@@ -463,9 +463,9 @@ $\C$.
     \uses{thm:peps_matrix_orthonormal_coordinates,thm:peps_endpoint_matrix_average,def:peps_actual_sampled_endpoint_word,
         def:peps_original_sampled_endpoint_factors,def:peps_actual_source_input_basis}
     Apply the finite endpoint-averaging identity to the ordered
-    source list, reindexing sample assignments $j$ along $\sigma$. Conjugating
+    source list, reindexing sample assignments $j$ along $\sigma$.    Conjugating
     the endpoint word by the input identification preserves its matrix entries in $E$,
-    which gives~(\ref{eq:peps_actual_sampled_average}).
+    which gives the stated average.
 \end{proof}
 
 \begin{theorem}[Sampled contraction before the physical trace]
@@ -488,8 +488,8 @@ $\C$.
 \begin{proof}\leanok
     \uses{thm:peps_actual_sampled_endpoint_average,thm:peps_actual_source_mixed_word}
     Substitute the average~(\ref{eq:peps_actual_sampled_average}) for $X_{\xi,\zeta}$,
-    distribute multiplication over the finite sum, and apply
-    Theorem~\ref{thm:peps_actual_source_mixed_word} to each term.
+    distribute multiplication over the finite sum, and factor each term across
+    the parties $q\in Q$.
 \end{proof}
 
 
@@ -551,7 +551,7 @@ $\C$.
     choices $\xi,\zeta$. Transporting the input basis and the input vector
     through the same owner isometry preserves their coordinates. Applying
     Theorem~\ref{thm:peps_actual_pure_source_contraction} to each term gives
-    (\ref{eq:peps_actual_pure_replacement}).
+    the stated sum.
 \end{proof}
 
 

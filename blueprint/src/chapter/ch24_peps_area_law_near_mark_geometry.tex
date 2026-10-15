@@ -38,8 +38,8 @@ layer $k$. The estimates below establish the local mesh and scale bounds in
     indices differ by at most one. Monotonicity of the fine exponent
     and its successor increment give the three alternatives, so both
     exponents are at least $\ell_k-1$.
-    Theorems~\ref{thm:area_law_belt_marks_quarter_mesh}
-    and~\ref{thm:area_law_adjacent_fine_meshes} therefore place both
+    The quarter-mesh containment of belt marks and the nesting of
+    adjacent fine meshes therefore place both
     nine-point sets in the same quarter mesh.
 \end{proof}
 
@@ -57,14 +57,13 @@ layer $k$. The estimates below establish the local mesh and scale bounds in
 \begin{proof}\leanok
     \uses{thm:area_law_neighborhood_endpoint_distance,thm:area_law_dyadic_layer_distance,
         thm:area_law_scale_side_ratios}
-    By Theorem~\ref{thm:area_law_neighborhood_endpoint_distance}, there is
-    an endpoint $u\in Z$ with
+    There is an endpoint $u\in Z$ with
     $\|x-u\|_\infty\le(C+1)2^{k_0}$, while
     $\|y-u\|_\infty\ge C2^k$. The triangle inequality and
     $2\,2^{k_0}\le2^k$ give
     \begin{align}
         2\|x-y\|_\infty & \ge(C-1)2^k\ge2^k.
     \end{align}
-    The scale comparison of Theorem~\ref{thm:area_law_scale_side_ratios} gives
+    The scale-ratio inequality gives
     $32\,2^{\ell_k}\le2^k$, proving the result.
 \end{proof}
