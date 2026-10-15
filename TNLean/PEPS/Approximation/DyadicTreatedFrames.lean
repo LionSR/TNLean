@@ -207,4 +207,58 @@ theorem exists_pointTreatment_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε
   exact ⟨w, ⟨h₁, fun γ => (h₂ γ).trans (coe_blockParties_subset_eventUses R done), h₃, h₄, h₅⟩,
     h₆⟩
 
+/-- **The treated frame is the frame of its sampled guide.** At the constants of the protocol, for
+a square `R` of side `n = 2 ^ j > K₀ t` and an unmodified guide `g` of its repainting, the treated
+guide is a reading of the homogenized guide, its true vertices are the points of
+`treatedVertices`, the outer squares of their holes are disjoint, and the treated frame is the
+encoded frame of the treated guide.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 69–80, 102–125 and 328–355. -/
+theorem treatedFrame_spec {K₀ ε₀ ν a D : ℝ} (hc : IsProtocolConstants K₀ ε₀ ν a D B₀)
+    (hL : 2 ≤ L) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
+    (done : Set (ℤ × ℤ)) {g : ℝ × ℝ → GuideLabel}
+    (hg : (blockBaseline (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
+      (protocolLevelLabels k R.1.1 done) R.1.index
+      (newParty Sum.inl R.1.1 R.1.index)).IsUnmodifiedGuide g)
+    (M : Finset (ℤ × ℤ)) (L₀ : GuideLabel)
+    (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧ ε₀ * (D * Real.log L) ≤ B₀ * Real.log L) :
+    IsDisplacedReading (treatedGuide R.1.1 R.1.index (D * Real.log L) M L₀ g)
+      (homogenize (⋃ Q ∈ M, ball (blockCorner ((2 : ℝ) ^ (R.1.1 : ℕ)) Q) (D * Real.log L)) L₀
+        (shiftGuide (blockCorner ((2 : ℝ) ^ (R.1.1 : ℕ)) R.1.index) g)) ((1 : ℝ), (1 : ℝ)) ∧
+    (∀ z, z ∈ treatedVertices k R.1.1 (D * Real.log L) M
+        (treatedGuide R.1.1 R.1.index (D * Real.log L) M L₀ g) ↔
+      IsTrueVertex (treatedGuide R.1.1 R.1.index (D * Real.log L) M L₀ g) z) ∧
+    ∃ h, treatedFrame (q := q) P rank R hr M L₀ g =
+      guideFrame (cellCenterPos L) q (treatedGuide R.1.1 R.1.index (D * Real.log L) M L₀ g)
+        (labelParty R) guidePlaceholder rank
+        (treatedVertices k R.1.1 (D * Real.log L) M
+          (treatedGuide R.1.1 R.1.index (D * Real.log L) M L₀ g)) (suppliedPatch P _ hr) h := by
+  classical
+  set n : ℝ := (2 : ℝ) ^ (R.1.1 : ℕ) with hn_def
+  set t := D * Real.log L with ht_def
+  have hn : 0 < n := by positivity
+  have hℓ : 0 < Real.log L := Real.log_pos (by exact_mod_cast hL)
+  have ht : 0 < t := mul_pos hc.D_pos hℓ
+  have htn : 20 * t < n := by nlinarith [hc.twenty_le_K₀]
+  have hε4 := hc.lt_one_div_four_thousand
+  have hgr : IsRayConstant (shiftGuide (blockCorner n R.1.index) g) :=
+    (hg.isRayConstant _ (by
+      change IsRayConstant fun p => blockGuide n (protocolLevelLabels k R.1.1 done)
+        (p + blockCorner n R.1.index)
+      exact (isRayConstant_blockGuide _ _).comp_add _)).shiftGuide _
+  have hf := (hgr.homogenize M n t L₀).isDisplacedReading_sampleGuide
+  have hout : ∀ Q, ¬InRoot ((2 : ℤ) ^ (k - (R.1.1 : ℕ))) Q →
+      protocolLevelLabels k R.1.1 done Q = guidePlaceholder := fun Q hQ => by
+    simp only [protocolLevelLabels, levelLabels, hQ, ite_false]
+  have hmem : ∀ z, z ∈ treatedVertices k R.1.1 t M (treatedGuide R.1.1 R.1.index t M L₀ g) ↔
+      IsTrueVertex (treatedGuide R.1.1 R.1.index t M L₀ g) z := fun z =>
+    mem_treatedTrueVertices hn (by linarith) hout R.1.inRoot_index hg M L₀ hf
+  refine ⟨hf, hmem, ?_, treatedFrame_eq P rank R _⟩
+  intro z hz z' hz' hne
+  have h := (homogenize_reading_outerHoles_disjoint hn ht htn hε4 hg M L₀
+    ((1 : ℝ), (1 : ℝ))).2 _ hf z z' ((hmem z).1 hz) ((hmem z').1 hz') hne
+  refine disjoint_outer_of_disjoint_closedBall ?_
+  simp only [suppliedPatch_center, suppliedPatch_scale]
+  rwa [← mul_assoc]
+
 end TNLean.PEPS.Approximation
