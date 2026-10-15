@@ -175,6 +175,7 @@ import TNLean.PEPS.Approximation.InformationReset
 import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
 import TNLean.PEPS.Approximation.LayoutExcludedOwners
 import TNLean.PEPS.Approximation.LayoutOwnerMap
+import TNLean.PEPS.Approximation.LayoutPartitionWord
 import TNLean.PEPS.Approximation.LocalPairSource
 import TNLean.PEPS.Approximation.LocalPartFrameListRestriction
 import TNLean.PEPS.Approximation.LocalPartRestrictionCongruence
@@ -187,6 +188,7 @@ import TNLean.PEPS.Approximation.MatrixAction
 import TNLean.PEPS.Approximation.MessageGateCircuit
 import TNLean.PEPS.Approximation.MessageGateExpansion
 import TNLean.PEPS.Approximation.MessageMonomial
+import TNLean.PEPS.Approximation.MonomialFixesOutside
 import TNLean.PEPS.Approximation.NetworkScalarAbsorption
 import TNLean.PEPS.Approximation.NoneResidualGate
 import TNLean.PEPS.Approximation.NoneResidualOperations
@@ -216,10 +218,13 @@ import TNLean.PEPS.Approximation.PartialSourceWordEvaluation
 import TNLean.PEPS.Approximation.PartitionOwnerNaturality
 import TNLean.PEPS.Approximation.PartyChain
 import TNLean.PEPS.Approximation.PartyChainComposition
+import TNLean.PEPS.Approximation.PartyChainRestriction
 import TNLean.PEPS.Approximation.PartyCoarseningFactorization
 import TNLean.PEPS.Approximation.PartyColumnRouting
 import TNLean.PEPS.Approximation.PartyFactorization
+import TNLean.PEPS.Approximation.PartyGateCircuit
 import TNLean.PEPS.Approximation.PartyGateComposition
+import TNLean.PEPS.Approximation.PartyGateOriginalCircuit
 import TNLean.PEPS.Approximation.PartyGroupedBasis
 import TNLean.PEPS.Approximation.PartyGrouping
 import TNLean.PEPS.Approximation.PartyGroupingTransport
@@ -401,6 +406,7 @@ import TNLean.PEPS.Approximation.WordPermutation
 import TNLean.PEPS.Approximation.WordPermutationRestriction
 import TNLean.PEPS.Approximation.WordRestriction
 import TNLean.PEPS.Approximation.WordSelectedOwnerLocalPart
+import TNLean.PEPS.Approximation.WordSelectedRestriction
 import TNLean.PEPS.Approximation.WordSelectivePartition
 import TNLean.PEPS.Approximation.WordStructuralCongruence
 import TNLean.PEPS.Approximation.ZeroPartyGates
