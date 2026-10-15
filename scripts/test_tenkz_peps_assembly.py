@@ -35,7 +35,7 @@ FIGURES = {
 N, L = 8, 5
 # Open indices promised by each picture's adjacent ink-to-index comment,
 # in the order returned by check_sources().
-BOUNDARIES = [Counter(), Counter(), Counter({"phys:w": 1, "phys:e": 2}),
+BOUNDARIES = [Counter(), Counter(), Counter({"phys:w": 2, "phys:e": 1}),
               Counter({"phys:n": 9, "phys:s": 9}), Counter({"phys:n": 9})]
 
 
@@ -93,11 +93,21 @@ def check_routing(text: str) -> str:
     corner = cell(q[0], p[1])  # horizontal on the row of P, then vertical
     wire = re.search(r"\\tnwire\[([^]]*)\]\{(\w+)\}\{(\w+)\}", unit, re.S)
     assert wire and wire[2] == "P" and wire[3] == "Q", "link orientation"
-    assert "route=orth" in wire[1] and "dir=to" in wire[1]
+    # The link is a solid route; P and Q name its ends (no mid-wire arrowhead).
+    assert "route=orth" in wire[1] and "stroke" not in wire[1]
     assert f"via={{({corner[0]},{corner[1]})}}" in wire[1], "horizontal-then-vertical corner"
     folded = cell(fold(q[0]), fold(q[1]))
-    assert f"{{({folded[0]},{folded[1]})}}{{$f(Q)$}}" in unit, "fold of Q"
-    assert f"{{(1,1) .. ({L},{L})}}{{$L\\times L$}}" in unit, "genuine square"
+    # f(Q) is a route ring on the folded cell, reached by a dashed fold string from Q.
+    assert (f"\\tnmark[form=enclosure, species=route]{{({folded[0]},{folded[1]})}}{{}}"
+            in unit), "fold of Q"
+    fold_wire = re.search(r"\\tnwire\[([^]]*)\]\s*\{Q\}\{([^}]*)\}", unit, re.S)
+    assert fold_wire and "stroke=dashed" in fold_wire[1], "dashed fold string"
+    assert fold_wire[2] == f"0.5 e of ({folded[0]},{folded[1]})", "fold string ends at f(Q)"
+    assert unit.count("{$f(Q)$}") == 1, "f(Q) named once"
+    square = re.search(r"\\tnmark\[form=enclosure, species=(\w+)[^]]*\]\s*"
+                       + re.escape(f"{{(1,1) .. ({L},{L})}}{{$L\\times L$}}"), unit)
+    assert square, "genuine square"
+    assert square[1] == "neutral", "the genuine square is context, not the selected set"
     # Separation of the drawn link fits c=3 times either block side.
     assert max(abs(q[0] - p[0]), abs(q[1] - p[1])) <= 3 * min(4, 2)
     return unit
@@ -124,13 +134,30 @@ def check_frames(text: str) -> list[str]:
     for label in ("$Q^-$", "$D_j$", "$Q^+$"):
         assert grid.count(label) == 1, label
     assert r"{(4,4)}{$c$}" in grid
-    ports = re.search(r"ports=\{([^}]*(?:\}[^}]*)*?)\}\]\{K_\{c,h\}\}", encoder, re.S)
+    # Encoder, read right to left: one input on the east face, the tag above
+    # the raw output on the west face. Each port is carried one pitch out by an
+    # invisible end vertex whose outward port names the space.
+    ports = re.search(r"ports=\{([^{}]*)\}\]\{K_\{c,h\}\}", encoder)
     assert ports, "encoder ports"
-    legs = re.findall(
-        r"(\d+)@(\d+):physical:\$(\\mathcal (?:H_\\Lambda|J_\{c,h\}))\$", ports[1])
-    assert sorted(legs) == [("0", "1", r"\mathcal J_{c,h}"),
-                            ("0", "2", r"\mathcal H_\Lambda"),
-                            ("180", "2", r"\mathcal H_\Lambda")], legs
+    faces = sorted(re.findall(r"(\d+@\d):physical", ports[1]))
+    assert faces == ["0@2", "180@1", "180@2"], faces
+    ends = {}
+    for options in re.findall(r"\\tn\[([^]]*)\]\{\}", encoder):
+        name = re.search(r"name=(\w+)", options)
+        named = re.search(r"(\d+)(?:@\d)?:physical:\$(\\mathcal (?:H_\\Lambda|J_\{c,h\}))\$",
+                          options)
+        if name and named:
+            ends[name[1]] = (named[1], named[2])
+    legs = []
+    for a, b in re.findall(r"\\tnwire\{(\w+\.[\d@]+)\}\{(\w+\.[\d@]+)\}", encoder):
+        for mine, other in ((a, b), (b, a)):
+            if mine.startswith("encK."):
+                face = mine.split(".")[1]
+                outward, space = ends[other.split(".")[0]]
+                assert outward == face.split("@")[0], ("space name on the open side", face)
+                legs.append((face, space))
+    assert sorted(legs) == [("0@2", r"\mathcal H_\Lambda"), ("180@1", r"\mathcal J_{c,h}"),
+                            ("180@2", r"\mathcal H_\Lambda")], legs
     return found
 
 
@@ -144,9 +171,12 @@ def check_ket(text: str) -> list[str]:
     assert "physical=" not in right, "physical contractions must be explicit"
     inputs = re.findall(r"at=\((\d),(\d),2\), skin=dot, species=input", right)
     assert sorted(inputs) == [(str(r), str(c)) for r in (1, 2, 3) for c in (1, 2, 3)], inputs
-    labels = re.findall(
-        r"\\tn\[at=\((\d),(\d),2\), skin=dot, species=input,\s*label pos=e\]\{z_v\}", right)
+    # Only the input dot of the middle site of the right column is named |z_v>.
+    assert not re.search(r"skin=dot, species=input[^]]*\]\{[^}]", right), "unlabelled dots"
+    labels = re.findall(r"\\tnmark\[form=label, label pos=e\]\{\((\d),(\d),2\)\}"
+                        r"\{\$\\ket\{z_v\}\$\}", right)
     assert labels == [("2", "3")], ("middle site of the right column", labels)
+    assert right.count("z_v") == 1, "z_v named once"
     wires = re.findall(r"\\tnwire\{([^}]*)\}\{([^}]*)\}", right)
     assert len(re.findall(r"\\tnwire\b", right)) == len(wires), "every wire must be checked"
     expected = []
@@ -180,15 +210,18 @@ def check_sources() -> list[str]:
 def check_mutations() -> None:
     cases = [
         (ROUTING, check_routing, "via={(3,8)}", "via={(6,3)}"),
-        (ROUTING, check_routing, "{(4,2)}{$f(Q)$}", "{(4,8)}{$f(Q)$}"),
-        (ROUTING, check_routing, r"\tn[at=(2,6), species=scale-one]{}", r"\tn[at=(2,6), skin=ring]{}"),
+        (ROUTING, check_routing, "species=route]{(4,2)}{}", "species=route]{(4,8)}{}"),
+        (ROUTING, check_routing, "{Q}{0.5 e of (4,2)}", "{Q}{0.5 e of (4,8)}"),
+        (ROUTING, check_routing, "species=neutral, tint", "species=selected, tint"),
+        (ROUTING, check_routing, r"\tn[at=(2,6), species=scale-one, size=l]{}", r"\tn[at=(2,6), skin=ring, size=l]{}"),
         (ROUTING, check_routing, "{(1,1) .. (5,5)}", "{(1,1) .. (6,6)}"),
         (FRAMES, check_frames, "{(2,2) .. (6,6)}{}", "{(3,3) .. (5,5)}{}"),
-        (FRAMES, check_frames, r"0@1:physical:$\mathcal J", r"180@1:physical:$\mathcal J"),
-        (FRAMES, check_frames, r"0@1:physical:$\mathcal J_{c,h}$," "\n"
-         r"                    0@2:physical:$\mathcal H_\Lambda$",
-         r"0@2:physical:$\mathcal J_{c,h}$," "\n"
-         r"                    0@1:physical:$\mathcal H_\Lambda$"),
+        (FRAMES, check_frames, "{encTag.0}{encK.180@1}", "{encTag.0}{encK.0@1}"),
+        (FRAMES, check_frames, "{encTag.0}{encK.180@1}", "{encTag.0}{encK.180@2}"),
+        (FRAMES, check_frames, r"\tnwire{encTag.0}{encK.180@1}" "\n"
+         r"        \tnwire{encOut.0}{encK.180@2}",
+         r"\tnwire{encTag.0}{encK.180@2}" "\n"
+         r"        \tnwire{encOut.0}{encK.180@1}"),
         (KET, check_ket, "at=(3,3,2), skin=dot", "at=(3,3,1), skin=dot"),
         (KET, check_ket, r"\tnwire{(1,1,1)}{(1,1,2)}", r"\tnwire{(1,1,1)}{open down}"),
         (KET, check_ket, r"\tnwire{(1,1,1)}{(1,1,2)}", ""),
@@ -209,11 +242,9 @@ def check_mutations() -> None:
             continue
         raise AssertionError(("mutation accepted", old, new))
     ket = read_tex_tree(KET)
-    unlabelled = "at=(2,2,2), skin=dot, species=input, label pos=e]{}"
-    labelled = "at=(2,3,2), skin=dot, species=input, label pos=e]{z_v}"
-    assert unlabelled in ket and labelled in ket
-    moved = ket.replace(unlabelled, unlabelled[:-2] + "{z_v}", 1).replace(
-        labelled, labelled[:-5] + "{}", 1)
+    labelled = r"label pos=e]{(2,3,2)}{$\ket{z_v}$}"
+    assert labelled in ket
+    moved = ket.replace(labelled, labelled.replace("(2,3,2)", "(2,2,2)"), 1)
     try:
         check_ket(moved)
     except AssertionError:
@@ -294,7 +325,7 @@ def main() -> int:
     found = check_sources()
     check_mutations()
     print("PASS: anchors, routed link, fold, square samples, encoder legs, "
-          "input contractions and label position, fifteen rejected source mutations, "
+          "input contractions and label position, eighteen rejected source mutations, "
           "five rejected boundary mutations")
     if args.source_only:
         print("NOT RUN: SVG rendering and event-stream audit (--source-only)")

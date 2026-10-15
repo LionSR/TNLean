@@ -16,3 +16,10 @@ open TNLean.PEPS.AreaLaw in
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
 #print axioms graphNeighborhood_subset_of_cut_clearance
+
+open TNLean.PEPS.AreaLaw in
+/-- info:
+'TNLean.PEPS.AreaLaw.exterior_union_subset_graphNeighborhood_compl_of_clearance'
+depends on axioms: [propext, Classical.choice, Quot.sound] -/
+#guard_msgs (whitespace := lax) in
+#print axioms exterior_union_subset_graphNeighborhood_compl_of_clearance

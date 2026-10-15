@@ -1,0 +1,144 @@
+\section{The information reset}
+
+The unitary of Theorem~\ref{thm:peps_reset_unitary} acts away from two cores
+of the regions. Since the exchanged vector carries no information between
+the cores, continuity of mutual information reduces the information between
+the cores to an inverse power of the system size. This is Lemma~3.3 of
+\cite{OpenAI2026PolynomialPEPS}.
+
+\begin{theorem}[Operators on paired sites act on both replicas]
+    \label{thm:peps_reset_paired_support}
+    \lean{QuantumCircuit.reindex_sumArrow_sitePair_embedOp,
+        QuantumCircuit.reindex_sumArrow_sitePair_mem_supportedOperators}
+    \leanok
+    \uses{def:qc_site_pair_coordinates}
+    Identify two replicas of a finite set $V$ of sites, each with local
+    dimension $q$, with $V$ carrying the paired local dimension $q^2$. An
+    operator supported on a set $S$ of paired sites is supported on both
+    replicas of $S$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Write the operator as $X_S\otimes\id$. Two paired configurations agree
+    outside $S$ precisely when both of their replicas agree outside $S$, and
+    the restrictions to $S$ correspond under the pairing.
+\end{proof}
+
+\begin{theorem}[The reset support avoids the cores]
+    \label{thm:peps_reset_support_cores}
+    \lean{TNLean.PEPS.Approximation.notMem_resetSupport}
+    \leanok
+    Let $R,C$ be disjoint sets of sites of the open square, and let
+    $R_0\subseteq R$ and $C_0\subseteq C$ be at sup-distance greater than
+    $w$ from the complements of $R$ and $C$ respectively. If $\ell+1\le w$,
+    the graph neighbourhood of radius $\ell$ of $(R\cup C)^c$ and of the
+    endpoints of the edges crossing $R$ contains no site of $R_0\cup C_0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    A walk of length at most $\ell$ moves by sup-distance at most $\ell$.
+    Every site of $(R\cup C)^c$ lies outside both $R$ and $C$. For an edge
+    crossing $R$, its endpoint outside $R$ is more than $w$ from $R_0$, and its
+    endpoint inside $R$ lies outside $C$, so it is more than $w$ from $C_0$.
+    Each endpoint is at sup-distance at most one from the other, which costs
+    the one-site offset.
+\end{proof}
+
+\begin{theorem}[The exchanged cores are uncorrelated]
+    \label{thm:peps_reset_exchanged_cores}
+    \lean{TNLean.PEPS.Approximation.doubledVector_comp_sumArrow,
+        TNLean.PEPS.Approximation.sheetSwapOp_mulVec_comp_sumArrow,
+        TNLean.PEPS.Approximation.mutualInformation_relabelSites_replicaSwap_eq_zero}
+    \leanok
+    Let $\Omega$ be a unit vector, $R_0\subseteq R$, and $C_0$ disjoint from
+    $R$. In $\Phi=F_R(\Omega\otimes\Omega)$, the cores $R_0$ and $C_0$ of the
+    first replica have no mutual information.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The vector $\Phi$ is $\Omega\otimes\Omega$ read through the exchange of the
+    two replicas on $R$. Under this exchange the core $R_0$ of the first
+    replica becomes the core $R_0$ of the second replica, while $C_0$ is
+    fixed. In a product of the two replicas, a region of the second replica
+    has no mutual information with a region of the first.
+\end{proof}
+
+\begin{theorem}[The entropy comparison of the reset]
+    \label{thm:peps_reset_cores_entropy}
+    \lean{TNLean.PEPS.Approximation.reindex_rectangle_sumArrow_unitary,
+        TNLean.PEPS.Approximation.mutualInformation_cores_le_of_reset_unitary,
+        TNLean.PEPS.AreaLaw.mutualInformation_le_of_supported_unitary,
+        TNLean.PEPS.AreaLaw.exists_one_kronecker_unitary_of_mem_supportedOperators}
+    \leanok
+    \uses{def:peps_frame_sheet_swap}
+    Let $q\ge1$, let $\Omega$ be a unit vector on the open square, let $R,C$ be
+    disjoint, and let $R_0\subseteq R$, $C_0\subseteq C$. Let $U$ be a unitary
+    on the paired sites, supported on a set containing no site of
+    $R_0\cup C_0$, with $\|U\Psi-\Phi\|\le\delta$ for $\Psi=\Omega\otimes\Omega$
+    and $\Phi=F_R\Psi$. Then
+    \begin{align*}
+        I_\Omega(R_0:C_0) & \le8\sqrt\delta\,\log(e\,q^{|R_0|}).
+    \end{align*}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reset_paired_support,thm:peps_reset_exchanged_cores}
+    By Theorem~\ref{thm:peps_reset_paired_support}, $U$ is a unitary on the two
+    replicas acting away from the cores of the first replica, so $U\Psi$ and
+    $\Psi$ have the same joint core marginal, with mutual information
+    $I_\Omega(R_0:C_0)$. The cores of $\Phi$ are uncorrelated by
+    Theorem~\ref{thm:peps_reset_exchanged_cores}. Continuity of mutual
+    information, with only the dimension $q^{|R_0|}$ of the first core, gives the
+    bound.
+\end{proof}
+
+\begin{theorem}[The entropy cost of the reset]
+    \label{thm:peps_reset_entropy_scalar}
+    \lean{TNLean.PEPS.Approximation.reset_entropy_scalar}
+    \leanok
+    Let $C\ge0$, $p$ real, $L\ge\max(1,8\sqrt C(1+\lambda))$,
+    $\delta\le CL^{-(2p+10)}$ and $0\le N\le1+L^2\lambda$. Then
+    $8\sqrt\delta\,N\le L^{-p}$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    We have $\sqrt\delta\le\sqrt CL^{-p-5}$ and $N\le L^2(1+\lambda)$, so
+    $8\sqrt\delta\,N\le8\sqrt C(1+\lambda)L^{-p-3}\le L^{-p}$.
+\end{proof}
+
+\begin{theorem}[Information reset]
+    \label{thm:peps_information_reset}
+    \lean{TNLean.PEPS.Approximation.SquareHamiltonian.information_reset}
+    \leanok
+    \uses{def:polynomial_peps_model}
+    Fix an integer $q\ge1$ and real numbers $J\ge0$, $\Delta>0$ and $p>0$.
+    There are $C_p>0$ and $L_0$ with the following property for every
+    $L\ge L_0$. Let $\Omega$ be a normalized ground vector of an open
+    $L\times L$ square Hamiltonian with interaction bound $J$ and full-system
+    gap $\Delta$. Let $R,C$ be disjoint, let $R_0\subseteq R$ and
+    $C_0\subseteq C$, and suppose $I_\Omega(R:C)\le b$ with $b\ge0$. If
+    \begin{align*}
+        \operatorname{dist}_\infty(R_0,R^c),\ \operatorname{dist}_\infty(C_0,C^c)
+         & >w=C_p(1+b+\log L),
+    \end{align*}
+    then $I_\Omega(R_0:C_0)\le L^{-p}$. Only the original full-system gap is
+    assumed.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_reset_unitary,thm:peps_reset_support_cores,
+        thm:peps_reset_cores_entropy,thm:peps_reset_entropy_scalar}
+    Take $r=2p+10$ and $C,K$ from Theorem~\ref{thm:peps_reset_unitary}, and
+    put $C_p=K+2$. Since $1+b+\log L\ge1$, the radius
+    $\ell=\lceil K(1+b+\log L)\rceil$ satisfies $\ell+1\le w$. By
+    Theorem~\ref{thm:peps_reset_support_cores}, the unitary $U$ of
+    Theorem~\ref{thm:peps_reset_unitary} is supported away from both cores, so
+    Theorem~\ref{thm:peps_reset_cores_entropy} gives
+    \begin{align*}
+        I_\Omega(R_0:C_0) & \le8\sqrt{\|U\Psi-\Phi\|}\,\log(e\,q^{|R_0|}).
+    \end{align*}
+    Only the physical dimension of the core enters. Since
+    $\|U\Psi-\Phi\|\le CL^{-r}$ and $|R_0|\le L^2$,
+    Theorem~\ref{thm:peps_reset_entropy_scalar} with $\lambda=\log q$ gives the
+    claim for $L\ge\max(1,8\sqrt C(1+\log q))$.
+\end{proof}

@@ -1,12 +1,19 @@
 % Figure peps_tensor.
 % Owner: chapter/ch24_peps_ft_foundations.tex (def:peps_tensor).
-% Used by: gapped-2d-notes PP Sec. 0 (PEPS definition).
+% Used by: gapped-2d-notes PP Sec. I A (Definition 1, PEPS), Fig. 1(a).
 % Formula: A_v in (tensor_{e incident to v} C^{D_e})^* tensor C^d.
-% Ink-to-index: the three drawn thin legs represent the first, a typical,
-% and the last member of the arbitrary incident-edge family; intervening
-% incident edges are suppressed, and the north leg is sigma(v).
-% Contraction and boundary signature: no index is contracted; the exact
-% tensor has (V,P)=(deg(v),1), independently of the three-leg schematic.
+% Ink-to-index: the vertex is drawn in the same projected plane as
+% peps_ft_sheet, so its legs point along the sheet's axes. The three drawn
+% thin virtual legs represent the first (west, e_1), a typical (the
+% receding in-plane axis, e_k) and the last (east, e_deg(v)) member of the
+% arbitrary incident-edge family; the elision atom (skin=dots) in the front
+% sector, at cell (3,1) of the plane frame, stands for the
+% suppressed intervening incident edges. The vertical leg is the physical
+% index sigma(v), as at every vertex of the sheet. Label bearings are in the
+% plane's own axes; the name A_v sits below the vertex and e_deg(v) below the
+% east leg's end, which keeps the figure inside half a note column.
+% Contraction and boundary signature: no index is contracted; the drawn
+% schematic has (V,P)=(3,1), and the exact tensor has (V,P)=(deg(v),1).
 % Source verdict: arbitrary-graph local tensor of
 % Papers/1804.04964/paper_normal.tex:961--979; suppressing intervening
 % edges avoids a square-lattice degree-four restriction.
@@ -15,10 +22,19 @@
 % a hypothesis of the PEPS note's Theorem 1.
 \begin{center}
     \tenkzkernel
-    \begin{tenkz}[rows={wire}, cols=1, bonds=none]
-        \tn[label pos=w,
-            ports={210:virtual:$e_1$, 270:virtual:$e_k$,
-                    330:virtual:$e_{\deg(v)}$,
-                    90:physical:$\sigma(v)$}]{A_v}
+    % One vertex of the sheet's plane frame; the wires to the open sides
+    % give the three virtual legs one pitch of length each.
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none, frame=plane]
+        \tn[at=(2,2), name=pepsVertex, physical=up,
+            ports={180:virtual, 90:virtual, 0:virtual}]{}
+        \tnwire[name=pepsFirst]{pepsVertex.180}{open w}
+        \tnwire[name=pepsTypical]{pepsVertex.90}{open n}
+        \tnwire[name=pepsLast]{pepsVertex.0}{open e}
+        \tnmark[form=label, label pos=w]{on pepsFirst 1}{$e_1$}
+        \tnmark[form=label, label pos=n]{on pepsTypical 1}{$e_k$}
+        \tnmark[form=label, label pos=290]{on pepsLast 1}{$e_{\deg(v)}$}
+        \tnmark[form=label, label pos=135]{on leg-n-2-2 1}{$\sigma(v)$}
+        \tnmark[form=label, label pos=300]{pepsVertex}{$A_v$}
+        \tn[at=(3,1), skin=dots]{}
     \end{tenkz}
 \end{center}

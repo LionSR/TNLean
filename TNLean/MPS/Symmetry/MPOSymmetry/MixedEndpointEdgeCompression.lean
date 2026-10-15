@@ -417,10 +417,7 @@ private theorem edgeAdjoint_comp_twoSiteBoundaryMapSum
         (twoSiteBoundaryMapSum A₀ A₁) =
       (WithLp.linearEquiv 2 ℂ (mixedEndpointEdgeCfg D₀ D₁ k → ℂ)).symm.toLinearMap.comp
         (mixedEndpointEdgeBoundaryMap A₀ A₁ k) := by
-  apply LinearMap.ext
-  intro X
-  apply PiLp.ext
-  intro ξ
+  ext X ξ
   rw [LinearMap.comp_apply, mixedEndpointEdgeLinearIsometry_adjoint_apply,
     edgePhysicalCfg_eq_activeCfg, twoSiteBoundaryMapSum_apply_activeCfg]
   cases k <;> rfl

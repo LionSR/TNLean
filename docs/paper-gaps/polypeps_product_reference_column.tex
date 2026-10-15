@@ -20,34 +20,40 @@
 
 \section{The source construction}
 
-Fix a site dimension $q\ge2$, a bound $J>0$ on the norms of the local
-interaction terms, and a full-system spectral-gap lower bound $\Delta>0$.
-The positive constant $C$ may vary between occurrences and depends only
-on $q,J,\Delta$ and explicitly fixed numerical powers, geometric templates,
-or tolerances. It is uniform in the lattice size $L$ and in the Hamiltonian
-among those satisfying these fixed bounds~\cite{OpenAI2026PolynomialPEPS}.
+Fix a site dimension $q\ge2$, an interaction norm bound $J>0$, and a
+full-system spectral-gap lower bound $\Delta>0$. Throughout this note, $C>0$
+denotes a constant that depends only on $q,J,\Delta$ and fixed numerical
+exponents, geometric templates, or tolerances, uniformly in the grid side
+length $L$ and the Hamiltonian~\cite{OpenAI2026PolynomialPEPS}.
 
-Section~8.1 of the polynomial PEPS approximation manuscript of
-September~24, 2026~\cite{OpenAI2026PolynomialPEPS}
-(\path{07-assembly.tex}, lines~21--63) constructs an actual joint vector
-$\Psi$ and a private reference vector $\Xi$ such that, for the unit ground
-vector $\Omega$,
+Section~8.1 of the September~24, 2026 polynomial-PEPS
+manuscript~\cite{OpenAI2026PolynomialPEPS} (\path{07-assembly.tex},
+lines~21--63) constructs a joint physical-and-private state vector $\Psi$ and a
+private reference vector $\Xi$ on the private register space $E$ such that, for
+the unit ground vector $\Omega$ on the $L\times L$ square lattice,
 \begin{align}
     \|\Psi\| &\leq 1,
     &1-CL^{-57}\leq\|\Xi\| &\leq 1,
     &\|\Psi-\Omega\otimes\Xi\| &\leq CL^{-17}.
     \label{eq:polypeps_reference_source}
 \end{align}
-It traces the private coordinates and applies distributed compression to
-this same joint vector. Lemma~8.1 (lines~67--94) extracts a nonzero column
-of the compressed operator on the party network. Section~8.3 then routes
-the ket network to the open square, preserving its contraction and bounding
-the resulting bond dimensions. The final constants must be uniform in the
-lattice size and Hamiltonian.
+Tracing out $E$ and applying the distributed density compression of
+Theorem~5.2 yields an operator tensor network on the party graph whose
+contracted operator $\sigma$ approximates $\tr_E|\Psi\rangle\langle\Psi|$ in
+trace norm. Lemma~8.1 (lines~67--94) selects a computational-basis input column
+of $\sigma$ to obtain a nonzero state vector network on the party graph close
+to $\Omega$, and Section~8.3 routes that network onto the open $L\times L$
+square grid with polynomially bounded bond dimension.
 
-\section{The conditional estimate}
+\section{What is proved and the extra hypotheses}
 
-For arbitrary finite physical and private spaces, suppose
+The deduction from the product-reference and compression bounds to the column
+extraction and grid routing is formalized as a conditional theorem taking those
+bounds as hypotheses.
+
+First, let $\Omega$ be a unit vector on a finite-dimensional physical Hilbert
+space, $\Xi$ a vector on a finite-dimensional private space $E$, and $\Psi$ a
+joint vector satisfying, for tolerances $\delta,\varepsilon\ge 0$,
 \begin{align}
     \|\Omega\| &=1,
     &\|\Psi\| &\leq1,
@@ -55,9 +61,10 @@ For arbitrary finite physical and private spaces, suppose
     &\|\Psi-\Omega\otimes\Xi\| &\leq\varepsilon.
     \label{eq:polypeps_reference_hypotheses}
 \end{align}
-The product marginal equals
-$\|\Xi\|^2|\Omega\rangle\langle\Omega|$. The subnormalized pure-state
-estimate and contraction under partial trace therefore give
+Since $\tr_E|\Omega\otimes\Xi\rangle\langle\Omega\otimes\Xi| =
+\|\Xi\|^2|\Omega\rangle\langle\Omega|$ and partial trace is contractive in the
+trace norm $\|\cdot\|_1$, the triangle inequality and the elementary bound
+$1-s^2\le 2(1-s)\le 2\delta$ for $s=\|\Xi\|\le 1$ give
 \begin{align}
     \bigl\|\tr_{E}|\Psi\rangle\langle\Psi|
       -|\Omega\rangle\langle\Omega|\bigr\|_1
@@ -65,96 +72,78 @@ estimate and contraction under partial trace therefore give
      \leq 2\varepsilon+2\delta.
     \label{eq:polypeps_reference_marginal}
 \end{align}
-Here the last inequality uses
-$1-s^2\leq2(1-s)\leq2\delta$ for $s=\|\Xi\|\leq1$.
-It neither squares a possibly negative lower bound nor divides by $s$.
-The accepted generic result includes a zero private vector and an empty
-private coordinate set.\footnote{The generic inequalities are in
-\path{QICLean/Analysis/ProductReferenceDensityError.lean}, in the companion
-library. In particular,
-\leanid{Matrix.rectangularTraceNorm_sub_pure_le_of_product_reference}
-includes the additional compressed-operator error.}
+This derivation neither squares $1-\delta$ nor divides by $\|\Xi\|$, so it
+holds even when $\Xi=0$ or $E$ is trivial.\footnote{The trace-norm inequalities
+are proved in \path{QICLean/Analysis/ProductReferenceDensityError.lean} in the
+companion library; in particular,
+\leanid{Matrix.rectangularTraceNorm_sub_pure_le_of_product_reference} combines
+the marginal bound with the operator-compression error.}
 
-Now suppose an operator network with tensors $A$ and edge dimensions $D_e$
-is already on the open $L\times L$ square. Write $\sigma$ for its contracted
-operator, and assume
+Second, suppose an operator tensor network with local tensors $A$ and virtual
+bond dimensions $D_e$ has contracted operator $\sigma$ satisfying, for a
+compression error $\kappa\ge 0$,
 \begin{align}
     \bigl\|\sigma-\tr_{E}|\Psi\rangle\langle\Psi|\bigr\|_1
       &\leq\kappa,
     &\alpha:=\kappa+2\varepsilon+2\delta &<1.
     \label{eq:polypeps_reference_compression}
 \end{align}
-The triangle inequality yields
-$\|\sigma-|\Omega\rangle\langle\Omega|\|_1\leq\alpha$.
-Lemma~8.1 then supplies a product-basis index $z$ and a real $\theta$ such
-that fixing the input of each tensor $A$ to $z$ gives
+Then $\|\sigma-|\Omega\rangle\langle\Omega|\|_1\le\alpha<1$. By Lemma~8.1,
+there exist a computational-basis label $z$ and a phase $\theta\in\mathbb R$
+such that fixing the input leg of each tensor $A$ to $|z\rangle$ produces a
+state tensor network with contracted vector $\Phi=\sigma|z\rangle$ satisfying
 \begin{align}
     \Phi &=\sigma|z\rangle\ne0,
     &\left\|\frac{\Phi}{\|\Phi\|}-e^{i\theta}\Omega\right\|
        &\leq2\alpha.
     \label{eq:polypeps_reference_column}
 \end{align}
-Every edge keeps exactly its original dimension $D_e$. A zero dimension
-would make the contraction vanish, so $D_e>0$; every bound $D_e\leq B$
-is preserved. No positivity or Hermiticity of $\sigma$ is assumed.
-The two error estimates use the same $\Psi$.\footnote{The two statements
-are
+No Hermiticity or positivity of $\sigma$ is needed. When the operator network
+is already on the open $L\times L$ square grid, fixing the input preserves
+every bond dimension $D_e>0$.\footnote{Declarations:
 \leanid{TNLean.PEPS.Approximation.Pinned.exists_fixInput_contractPEPS_of_product_reference}
 and
-\leanid{TNLean.PEPS.Approximation.Pinned.exists_peps_of_product_reference},
-in \path{TNLean/PEPS/Approximation/ProductReferenceColumn.lean}.}
+\leanid{TNLean.PEPS.Approximation.Pinned.exists_peps_of_product_reference} in
+\path{TNLean/PEPS/Approximation/ProductReferenceColumn.lean}.}
 
-\section{Remaining construction}
-
-The conditional estimate does not construct $\Psi$, $\Xi$, their terminal
-physical and private coordinates, or the compressed network. To apply it
-to the source theorem, those objects must be identified with the actual
-protocol, and their three estimates must be proved with the same vector
-and constants uniform in the lattice size and Hamiltonian.
-
-The statement above assumes an operator network already on the square,
-whereas the source fixes a column of the party network before routing it.
-The source order is now also available. For an operator party network on
-dyadic anchors satisfying the four routing properties of Lemma~8.2, an
-estimate $\|\sigma-|\Omega\rangle\langle\Omega|\|_1\leq\eta<1$ for its
-operator read at the folded anchors gives a nonzero column on the party
-graph, and routing that ket network gives a PEPS on the open square with the
-same contraction, positive bond dimensions at most $\max(D,1)^{\chi}$, and
-normalized error at most $2\eta$. The estimate may be supplied directly or
-through the product-reference bound above with $\eta=\alpha$. With link
-dimensions at most $C_1L^k$, where $C_1\geq1$ and $k\geq0$, the bond
-dimensions are at most $(C_1L^k)^{\chi}$.\footnote{The statements are
+The paper's order of operations---extracting a column on the party network
+first and then routing it to the $L\times L$ grid---is also formalized. Given an
+operator network on dyadic block anchors satisfying the four routing hypotheses
+of Lemma~8.2 with folded congestion bound $\chi$ and link dimensions at most
+$D$, any bound $\|\sigma-|\Omega\rangle\langle\Omega|\|_1\le\eta<1$ (either
+given directly or obtained from the product-reference and compression bounds with
+$\eta=\alpha$) yields a nonzero column on the party graph whose routing onto
+the open $L\times L$ square grid is a PEPS with bond dimensions at most
+$\max(D,1)^\chi$ (hence at most $(C_1 L^k)^\chi$ when $D\le C_1 L^k$ with
+$C_1\ge 1,k\ge 0$) and normalized error at most $2\eta$.\footnote{Declarations:
 \leanid{TNLean.PEPS.Approximation.exists_squarePEPS_of_fixInput_dyadicRouting},
-\leanid{TNLean.PEPS.Approximation.exists_squarePEPS_of_product_reference_dyadicRouting}
+\leanid{TNLean.PEPS.Approximation.exists_squarePEPS_of_product_reference_dyadicRouting},
 and
-\leanid{TNLean.PEPS.Approximation.hasPEPSApproximation_of_fixInput_dyadicRouting},
+\leanid{TNLean.PEPS.Approximation.hasPEPSApproximation_of_fixInput_dyadicRouting}
 in \path{TNLean/PEPS/Approximation/PartyColumnRouting.lean}.}
-The order difference is therefore resolved. The routing properties remain
-hypotheses on the party network; they are recorded in the separate note on
-the routing lemma.
 
-Finally, the output of Section~8.1 for large sizes, a compressed dyadic
-operator network within $CL^{-5}$ of $|\Omega\rangle\langle\Omega|$ with
-polynomial link dimensions and constants chosen before $L$ and the
-Hamiltonian, is stated as a proposition. That proposition implies the uniform
-approximation statement of Theorem~1.1, through the routed column and the
-exact finite-size construction.\footnote{The proposition is
-\leanid{TNLean.PEPS.Approximation.LargeSizeDyadicOperatorNetwork} and the
-implication is
-\leanid{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork},
+Finally, the output of Section~8.1 for sufficiently large $L$---the existence
+of a compressed dyadic operator network within trace distance $CL^{-5}$ of
+$|\Omega\rangle\langle\Omega|$ with polynomial link dimensions and constants
+chosen before $L$ and the Hamiltonian---is formulated as a hypothesis, and
+Theorem~1.1 is proved from that hypothesis by combining the routed column for
+large $L$ with the exact PEPS representation for bounded $L$.\footnote{The
+hypothesis is \leanid{TNLean.PEPS.Approximation.LargeSizeDyadicOperatorNetwork}
+and the implication is
+\leanid{TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork}
 in \path{TNLean/PEPS/Approximation/GroundStateApproximation.lean}.}
-The proposition itself is not proved.
 
-These are remaining implications in the formal construction, not errors
-in the source. The conditional statement is a separate mathematical
-consequence of supplied estimates; it is not Theorem~1.1. Resolving the
-restriction requires the actual protocol and compression estimates, with the
-routing properties of the actual party network, to prove the large-size
-proposition; the routing and the uniform large-size and finite-size
-arguments are already in place.\footnote{The full target is tracked
-at \url{https://github.com/LionSR/TNLean/issues/8773}; distributed
-compression is tracked at \url{https://github.com/LionSR/TNLean/issues/8769}.
-The already established generic nonzero-column result is unchanged.}
+\section{Effect on the paper and what remains}
+
+These conditional theorems follow the paper's proof in Section~8 without
+modifying any mathematical claim. What remains to make Theorem~1.1
+unconditional is to construct the protocol's joint vector $\Psi$, reference
+vector $\Xi$, and compressed party network, and to verify the three
+product-reference bounds, the compression error of Theorem~5.2, and
+the four routing hypotheses of Lemma~8.2 with constants uniform in $L$ and the
+Hamiltonian.\footnote{The assembly of Theorem~1.1 is tracked at
+\url{https://github.com/LionSR/TNLean/issues/8773}; distributed density
+compression is tracked at \url{https://github.com/LionSR/TNLean/issues/8769}.}
 
 \bibliographystyle{alpha}
 \bibliography{references}

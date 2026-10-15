@@ -9,8 +9,9 @@
 The local constraint products lemma of \cite[Section~10]{OpenAI2026AreaLaw}
 has two estimates. This section proves the first one: replacing every
 retained factor by its radius-$r$ local version costs little in
-expectation. The second estimate, which removes distant events, is not
-treated here.
+expectation. The second estimate, which removes distant events, is
+treated in Section~\ref{sec:al_channel_word_omission}, where the two are
+combined.
 
 \begin{theorem}[Products of roots are contractions and telescope]
     \label{thm:al_contraction_word_telescope}
@@ -60,21 +61,76 @@ treated here.
 \begin{theorem}[Labels anchored near a set]
     \label{thm:al_retained_anchor_count}
     \lean{TNLean.PEPS.AreaLaw.graphBall_subset_graphNeighborhood_two_mul,
+        TNLean.PEPS.AreaLaw.card_filter_anchor_mem_graphNeighborhood_le,
         TNLean.PEPS.AreaLaw.card_anchor_graphNeighborhood_le}
     \leanok
     \uses{thm:al_lattice_counts}
-    Let $\Lambda$ be a finite induced lattice domain, $R\ge0$, and let
-    each admissible support $X_i$ of range $R$ carry an anchor
-    $a_i\in X_i$. Let $\mu_R$ be the anchor multiplicity bound of
-    Theorem~\ref{thm:al_lattice_counts}. For every $S\subseteq\Lambda$
-    and $r\ge0$, if $d_\Lambda(a_i,S)\le r$ then
-    $N_r(a_i)\subseteq N_{2r}(S)$, and at most
-    $2\mu_R|S|(1+r)^2$ labels satisfy $d_\Lambda(a_i,S)\le r$.
+    Let $\Lambda$ be a finite induced lattice domain, and let finitely
+    many labels carry anchors $a_i\in\Lambda$, with at most $\mu\ge0$
+    labels per site. For every $S\subseteq\Lambda$ and $r\ge0$, if
+    $d_\Lambda(a_i,S)\le r$ then $N_r(a_i)\subseteq N_{2r}(S)$, and at
+    most $2\mu|S|(1+r)^2$ labels satisfy $d_\Lambda(a_i,S)\le r$. In
+    particular this holds with $\mu=\mu_R$, the anchor multiplicity bound
+    of Theorem~\ref{thm:al_lattice_counts}, for anchors $a_i\in X_i$ of
+    the admissible supports of range $R$.
 \end{theorem}
 \begin{proof}\leanok
     The inclusion is the triangle inequality. A retained anchor lies in
     a ball $N_r(s)$ with $s\in S$, which has at most $2(1+r)^2$ sites,
-    and at most $\mu_R$ labels share each anchor.
+    and at most $\mu$ labels share each anchor.
+\end{proof}
+
+\begin{theorem}[Support of the truncated products]
+    \label{thm:al_truncated_product_support}
+    \lean{TNLean.PEPS.AreaLaw.contractionWord_siteExpectation_mem_supportedOperators}
+    \leanok
+    In the setting of Theorem~\ref{thm:al_retained_anchor_count}, let
+    $k_i\le I$ be given for the labels with $d_\Lambda(a_i,S)\le r$, and
+    let $E_{i,r}$ be the conditional expectation onto $N_r(a_i)$. Every
+    product of the roots $(I-E_{i,r}k_i)^{1/2}$ over such labels is
+    supported on $N_{2r}(S)$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_retained_anchor_count}
+    Each root is a function of an operator supported on
+    $N_r(a_i)\subseteq N_{2r}(S)$, and products of operators supported on
+    a set stay supported on it.
+\end{proof}
+
+\begin{theorem}[Truncation of the retained product for general constraints]
+    \label{thm:al_domain_product_truncation}
+    \lean{TNLean.PEPS.AreaLaw.exists_domainConstraintWord_truncation}
+    \leanok
+    Let $C,\mu\ge0$, $c>0$ and $\alpha\in\R$. There are $A\ge0$ and
+    $\gamma>0$ with the following property. Let $0\le k_i\le I$ be
+    finitely many operators on a finite induced lattice domain $\Lambda$
+    with local dimension $q\ge1$, anchored at $a_i$ with at most $\mu$
+    labels per site, and with $\|k_i-E_{i,l}k_i\|\le Ce^{-cl^\alpha}$ for
+    every $l\ge0$, where $E_{i,l}$ is the conditional expectation onto
+    $N_l(a_i)$. Fix $S\subseteq\Lambda$, an integer $r\ge0$ and $t\ge0$,
+    and retain the labels with $d_\Lambda(a_i,S)\le r$. For a full Poisson
+    word $w$, let $D_{\rm ret}(w)$ be the chronological product of the
+    roots $(I-k_i)^{1/2}$ over its retained events, and let $L(w)$ be the
+    same product of $(I-E_{i,r}k_i)^{1/2}$. Then $\|D_{\rm ret}-L\|$ is
+    integrable for the Poisson-word law $\mu_t$,
+    \begin{align*}
+        \int\|D_{\rm ret}(w)-L(w)\|\,d\mu_t(w)
+        \le At\,|S|\,(1+r)^2e^{-\gamma r^\alpha},
+    \end{align*}
+    and every $L(w)$ is a contraction supported on $N_{2r}(S)$. The
+    constants depend only on $C,c,\alpha,\mu$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_contraction_word_expected_truncation,
+        thm:al_retained_anchor_count,thm:al_truncated_product_support}
+    Operator monotonicity of the square root gives
+    $\|(I-k_i)^{1/2}-(I-E_{i,r}k_i)^{1/2}\|\le\|k_i-E_{i,r}k_i\|^{1/2}
+        \le C^{1/2}e^{-cr^\alpha/2}$. Apply
+    Theorem~\ref{thm:al_contraction_word_expected_truncation} and bound
+    the number of retained labels by
+    Theorem~\ref{thm:al_retained_anchor_count}; take $A=2\mu C^{1/2}$ and
+    $\gamma=c/2$. The support follows from
+    Theorem~\ref{thm:al_truncated_product_support}.
 \end{proof}
 
 \begin{theorem}[Truncation of the retained constraint product]
@@ -102,15 +158,17 @@ treated here.
         \le Ct\,|S|\,(1+r)^2e^{-cr^\alpha},
     \end{align*}
     and every $L(w)$ is a contraction supported on $N_{2r}(S)$.
-    The constants depend only on $p,R,J,\Delta$. This is the first estimate of
-    \cite[Lemma~10.1]{OpenAI2026AreaLaw}, together with its
-    contraction and support clause, without the assumptions that $S$ is
-    nonempty and $r\ge1$.
+    The constants depend only on $p,R,J,\Delta$. This specializes the
+    first estimate of \cite[Lemma~10.1]{OpenAI2026AreaLaw}, stated for
+    general constraints in
+    Theorem~\ref{thm:al_domain_product_truncation}, to the exact positive
+    constraints, without the assumptions that $S$ is nonempty and
+    $r\ge1$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_lattice_quasilocal_roots,
         thm:al_contraction_word_expected_truncation,
-        thm:al_retained_anchor_count}
+        thm:al_retained_anchor_count,thm:al_truncated_product_support}
     By Theorem~\ref{thm:al_lattice_quasilocal_roots} each retained root
     changes by at most $Ce^{-cr^\alpha}$ under the radius-$r$
     approximation. Theorem~\ref{thm:al_contraction_word_expected_truncation}

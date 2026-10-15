@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Symmetry.MPOSymmetry.MixedEndpointProjectorComparison
 import TNLean.MPS.ParentHamiltonian.PhysicalReindexProjection
 import TNLean.MPS.Core.PhysicalReindexTransport
+import QICLean.Algebra.TraceReindex
 
 /-!
 # Exchanging the two mixed endpoint sectors
@@ -97,12 +98,13 @@ theorem mixedEndpointBase_swap
     simp [mixedEndpointBase, mixedEndpointLetter, mixedEndpointPhysicalSwap,
       mixedEndpointBondSwap, Matrix.fromBlocks, Matrix.single_apply, hdisjoint, hdisjoint']
 
-/-- Under sector exchange, the original second-endpoint insertion becomes
-the first-endpoint insertion. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
-theorem bondInterpolationMatrix_one_swap :
-    bondInterpolationMatrix D₁ D₀ 0 =
+/-- Exchanging the virtual summands reflects the interpolation parameter.
+This holds for every real parameter, including either endpoint.
+Source: arXiv:2203.12563, Section 5, lines 1695–1704. -/
+theorem bondInterpolationMatrix_reflect_swap (D₀ D₁ : ℕ) (γ : ℝ) :
+    bondInterpolationMatrix D₁ D₀ (1 - γ) =
       Matrix.reindexAlgEquiv ℂ ℂ (mixedEndpointBondSwap D₀ D₁)
-        (bondInterpolationMatrix D₀ D₁ 1) := by
+        (bondInterpolationMatrix D₀ D₁ γ) := by
   ext i j
   obtain ⟨i, rfl⟩ := (mixedEndpointBondSwap D₀ D₁).surjective i
   obtain ⟨j, rfl⟩ := (mixedEndpointBondSwap D₀ D₁).surjective j
@@ -112,12 +114,13 @@ theorem bondInterpolationMatrix_one_swap :
   obtain ⟨i, rfl⟩ := finSumFinEquiv.surjective i
   cases i <;> simp [mixedEndpointBondSwap, bondInterpolationWeight]
 
-private theorem trace_reindexAlgEquiv
-    {ι κ : Type*} [Fintype ι] [Fintype κ] [DecidableEq ι] [DecidableEq κ]
-    (e : ι ≃ κ) (X : Matrix ι ι ℂ) :
-    Matrix.trace (Matrix.reindexAlgEquiv ℂ ℂ e X) = Matrix.trace X := by
-  unfold Matrix.trace
-  exact Fintype.sum_equiv e.symm _ _ fun _ => rfl
+/-- Under sector exchange, the original second-endpoint insertion becomes
+the first-endpoint insertion. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
+theorem bondInterpolationMatrix_one_swap :
+    bondInterpolationMatrix D₁ D₀ 0 =
+      Matrix.reindexAlgEquiv ℂ ℂ (mixedEndpointBondSwap D₀ D₁)
+        (bondInterpolationMatrix D₀ D₁ 1) := by
+  simpa using bondInterpolationMatrix_reflect_swap D₀ D₁ 1
 
 /-- The extended boundary maps at opposite endpoints intertwine under the
 explicit physical and virtual sector exchanges. Source: arXiv:2203.12563,
@@ -141,7 +144,8 @@ theorem insertedTwoSiteMap_swap_zero
       Matrix.trace (mixedEndpointBase A₀ A₁ (σ 0) * bondInterpolationMatrix D₀ D₁ 1 *
         mixedEndpointBase A₀ A₁ (σ 1) * X)
   rw [mixedEndpointBase_swap, mixedEndpointBase_swap, bondInterpolationMatrix_one_swap,
-    ← map_mul, ← map_mul, ← map_mul, trace_reindexAlgEquiv]
+    ← map_mul, ← map_mul, ← map_mul]
+  exact Matrix.trace_reindex (mixedEndpointBondSwap D₀ D₁) _
 
 /-- The actual second-endpoint support is the isometric image of the first
 support for the reversed pair. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/

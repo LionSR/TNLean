@@ -1,0 +1,577 @@
+\section{Annular layers and ambient cell clearance}
+\label{sec:peps_angular_annular_geometry}
+
+The plane carries the maximum metric. Let $X,E\subseteq\mathbb R^2$,
+let $\mathcal V$ be a finite set of marked points, and fix $0<t\le n$.
+The construction below is the geometric part of
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/02-information.tex\#L662-L744}{Proposition 3.4}
+in the September 24, 2026 polynomial-PEPS manuscript.
+
+\begin{definition}[Dyadic scales]
+    \label{def:peps_dyadic_scales}
+    \lean{TNLean.PEPS.Approximation.dyadicScale,
+        TNLean.PEPS.Approximation.dyadicScale_zero,
+        TNLean.PEPS.Approximation.dyadicScale_succ,
+        TNLean.PEPS.Approximation.two_mul_dyadicScale_succ}
+    \leanok
+    For a real number $n$ and an integer $j\ge0$, set $s_j=n/2^j$.
+    Then $s_0=n$ and $s_{j+1}=s_j/2$, equivalently $2s_{j+1}=s_j$.
+\end{definition}
+
+\begin{theorem}[Dyadic scale bounds]
+    \label{thm:peps_dyadic_scale_bounds}
+    \lean{TNLean.PEPS.Approximation.dyadicScale_pos,
+        TNLean.PEPS.Approximation.dyadicScale_nonneg,
+        TNLean.PEPS.Approximation.dyadicScale_antitone,
+        TNLean.PEPS.Approximation.dyadicScale_le,
+        TNLean.PEPS.Approximation.two_mul_dyadicScale_le}
+    \leanok
+    \uses{def:peps_dyadic_scales}
+    If $n>0$, every $s_j$ is positive. If $n\ge0$, every $s_j$ is
+    nonnegative, $s_j\le s_i\le n$ for $0\le i\le j$, and
+    $2s_j\le n$ for $j>0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_dyadic_scales}
+    The denominator $2^j$ is positive. For $n\ge0$, the identity
+    $s_{j+1}=s_j/2$ gives $s_{j+1}\le s_j$; induction yields the asserted
+    monotonicity and $s_j\le s_0=n$. If $j=k+1$, then $2s_j=s_k\le n$.
+\end{proof}
+
+\begin{definition}[Capped marked-point distance]
+    \label{def:peps_capped_mark_distance}
+    \lean{TNLean.PEPS.Approximation.cappedMarkDistance,
+        TNLean.PEPS.Approximation.cappedMarkDistance_empty,
+        TNLean.PEPS.Approximation.cappedMarkDistance_eq_min_of_nonempty}
+    \leanok
+    For $x\in\mathbb R^2$, put
+    $\delta(x)=\min(\{n\}\cup\{\operatorname{dist}_{\infty}(x,v):v\in\mathcal V\})$.
+    Thus $\delta(x)=n$ for $\mathcal V=\varnothing$; otherwise
+    $\delta(x)=\min\{n,\operatorname{dist}_{\infty}(x,\mathcal V)\}$.
+\end{definition}
+
+\begin{theorem}[Capped-distance bounds and marked-point witnesses]
+    \label{thm:peps_capped_distance_bounds}
+    \lean{TNLean.PEPS.Approximation.le_cappedMarkDistance_iff,
+        TNLean.PEPS.Approximation.cappedMarkDistance_le_cap,
+        TNLean.PEPS.Approximation.cappedMarkDistance_le_dist,
+        TNLean.PEPS.Approximation.cappedMarkDistance_nonneg,
+        TNLean.PEPS.Approximation.cappedMarkDistance_lt_iff}
+    \leanok
+    \uses{def:peps_capped_mark_distance}
+    For any real $r$, the inequality $r\le\delta(x)$ holds exactly when
+    $r\le n$ and $r\le\operatorname{dist}_{\infty}(x,v)$ for every
+    $v\in\mathcal V$. In particular, $\delta(x)\le n$ and
+    $\delta(x)\le\operatorname{dist}_{\infty}(x,v)$ for every mark $v$;
+    if $n\ge0$, then $\delta(x)\ge0$. If $r\le n$, then
+    \begin{align}
+        \delta(x)<r
+        \quad\Longleftrightarrow\quad
+        \exists v\in\mathcal V:\operatorname{dist}_{\infty}(x,v)<r.
+        \label{eq:peps_capped_distance_witness}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_capped_mark_distance}
+    A lower bound for the minimum of a nonempty finite set is exactly a
+    lower bound for every element. The minimum is at most each element,
+    and all elements are nonnegative when $n\ge0$. If $r\le n$ and
+    every marked-point distance were at least $r$, the minimum would
+    also be at least $r$. Conversely, a marked-point distance below $r$
+    bounds the minimum from above, proving
+    (\ref{eq:peps_capped_distance_witness}).
+\end{proof}
+
+\begin{theorem}[Dyadic stopping scale]
+    \label{thm:peps_annular_cutoff}
+    \lean{TNLean.PEPS.Approximation.exists_dyadicCutoff,
+        TNLean.PEPS.Approximation.DyadicCutoff,
+        TNLean.PEPS.Approximation.chooseDyadicCutoff,
+        TNLean.PEPS.Approximation.DyadicCutoff.lower_at}
+    \leanok
+    \uses{def:peps_dyadic_scales}
+    There is an integer $m\ge0$ such that the scales $s_j=n/2^j$ satisfy
+    $t\le s_m<2t$. For $0\le j\le m$, one has $s_j\ge t$.
+    Fix one such stopping index $m$ for the layer construction.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_dyadic_scales,thm:peps_dyadic_scale_bounds}
+    Choose $m$ with $2^m\le n/t<2^{m+1}$ and divide by the positive
+    quantities $t$ and $2^m$. The sequence $s_j$ is decreasing.
+\end{proof}
+
+\begin{definition}[Farthest-first layers]
+    \label{def:peps_annular_layers}
+    \lean{TNLean.PEPS.Approximation.annularLayer,
+        TNLean.PEPS.Approximation.cumulativeLayer,
+        TNLean.PEPS.Approximation.annularLayer_sole,
+        TNLean.PEPS.Approximation.annularLayer_first,
+        TNLean.PEPS.Approximation.annularLayer_middle,
+        TNLean.PEPS.Approximation.annularLayer_last,
+        TNLean.PEPS.Approximation.annularLayer_subset}
+    \leanok
+    \uses{def:peps_capped_mark_distance,def:peps_dyadic_scales}
+    If $m=0$, set $B_0=X$. If $m\ge1$, define
+    \begin{align}
+        B_0 & =\{x\in X:\delta(x)\ge n\},                   \\
+        B_j & =\{x\in X:s_j\le\delta(x)<2s_j\}\quad(0<j<m), \\
+        B_m & =\{x\in X:\delta(x)<2s_m\}.
+        \label{eq:peps_annular_layers}
+    \end{align}
+    Let $A_j=\bigcup_{i\le j}B_i$ be the processed set.
+    Put $B_j=\varnothing$ for $j>m$, so every $B_j$ is a subset of $X$.
+    For $m>0$, the first layer can equivalently be written as
+    $B_0=\{x\in X:\operatorname{dist}_{\infty}(x,v)\ge n
+        \text{ for every }v\in\mathcal V\}$.
+\end{definition}
+
+\begin{theorem}[Uncapped layer conditions]
+    \label{thm:peps_annular_mark_witness}
+    \lean{TNLean.PEPS.Approximation.mem_annularLayer_middle_iff,
+        TNLean.PEPS.Approximation.mem_annularLayer_last_iff,
+        TNLean.PEPS.Approximation.exists_mark_near_of_mem_annularLayer}
+    \leanok
+    \uses{def:peps_annular_layers}
+    For $0<j<m$, a point belongs to $B_j$ exactly when it belongs to $X$,
+    has distance at least $s_j$ from every mark, and has distance less
+    than $2s_j$ from some mark. If $m>0$, membership in $B_m$ is equivalent
+    to belonging to $X$ and having distance less than $2s_m$ from some
+    mark. In particular, whenever $j>0$ and $x\in B_j$, there is
+    $v\in\mathcal V$ with $\operatorname{dist}_{\infty}(x,v)<2s_j$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_annular_layers,thm:peps_dyadic_scale_bounds,
+        thm:peps_capped_distance_bounds}
+    The inequalities $s_j\le n$ and $2s_j\le n$ for $j>0$ allow both
+    thresholds to be expressed through the marked-point distances using
+    Theorem~\ref{thm:peps_capped_distance_bounds}. The final layer has
+    only the strict upper threshold; every positive-index layer retains
+    this upper threshold, which supplies the asserted mark.
+\end{proof}
+
+\begin{theorem}[Cumulative layer identities]
+    \label{thm:peps_cumulative_layer_identities}
+    \lean{TNLean.PEPS.Approximation.cumulativeLayer_zero,
+        TNLean.PEPS.Approximation.cumulativeLayer_subset,
+        TNLean.PEPS.Approximation.annularLayer_subset_cumulativeLayer,
+        TNLean.PEPS.Approximation.cumulativeLayer_mono,
+        TNLean.PEPS.Approximation.cumulativeLayer_succ,
+        TNLean.PEPS.Approximation.mem_cumulativeLayer_iff}
+    \leanok
+    \uses{def:peps_annular_layers}
+    One has $A_0=B_0$, $B_j\subseteq A_j\subseteq X$, and
+    $A_i\subseteq A_j$ whenever $i\le j$. For every $j\ge0$,
+    $A_{j+1}=A_j\cup B_{j+1}$. For $0\le j\le m$,
+    \begin{align}
+        A_j=\{x\in X:j=m\text{ or }s_j\le\delta(x)\}.
+        \label{eq:peps_cumulative_threshold}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_annular_layers,thm:peps_dyadic_scale_bounds,
+        def:peps_dyadic_scales}
+    The union defining $A_j$ gives the inclusions, monotonicity, and
+    successor identity. If $x\in B_i$ with $i\le j\le m$, then either
+    $i=m$, which forces $j=m$, or $\delta(x)\ge s_i\ge s_j$.
+    For the reverse inclusion in (\ref{eq:peps_cumulative_threshold}),
+    use induction on $j$. The case $j=0$ is the first or sole layer.
+    At $j+1$, a point with $\delta(x)\ge s_j$ is already in $A_j$ by
+    induction. Otherwise $\delta(x)<s_j=2s_{j+1}$, and the assumed
+    lower threshold, or the equality $j+1=m$, places it in $B_{j+1}$.
+\end{proof}
+
+\begin{definition}[Angular separation]
+    \label{def:peps_angular_separation}
+    \lean{TNLean.PEPS.Approximation.AngularSeparation}
+    \leanok
+    \uses{def:peps_capped_mark_distance}
+    The angular separation condition for $X$, $E$, and a real constant $a$
+    is the pairwise bound
+    \begin{align}
+        a\max\{t,\delta(x)\}\le\operatorname{dist}_{\infty}(x,y)
+        \label{eq:peps_angular_separation}
+    \end{align}
+    for every $x\in X$ and $y\in E$. This condition is vacuous if either
+    set is empty.
+\end{definition}
+
+\begin{theorem}[Exhaustion and cumulative separation]
+    \label{thm:peps_annular_separation}
+    \lean{TNLean.PEPS.Approximation.annularLayer_disjoint,
+        TNLean.PEPS.Approximation.cumulativeLayer_last,
+        TNLean.PEPS.Approximation.exists_mem_annularLayer,
+        TNLean.PEPS.Approximation.cumulativeLayer_disjoint_next,
+        TNLean.PEPS.Approximation.cumulativeLayer_separation_nonfinal,
+        TNLean.PEPS.Approximation.cumulativeLayer_separation,
+        TNLean.PEPS.Approximation.annularLayer_empty_marks_zero,
+        TNLean.PEPS.Approximation.annularLayer_empty_marks_of_pos}
+    \leanok
+    \uses{def:peps_annular_layers,def:peps_capped_mark_distance,thm:peps_annular_cutoff}
+    The layers are pairwise disjoint and $A_m=X$. If $a\ge0$ and
+    $\operatorname{dist}_{\infty}(x,y)\ge a\max\{t,\delta(x)\}$ for all
+    $x\in X$ and $y\in E$, then for $0\le j\le m$, every
+    $x\in A_j$ and $y\in E$ satisfy
+    $\operatorname{dist}_{\infty}(x,y)\ge as_j/2$.
+    For $j<m$ the stronger bound $as_j$ holds.
+    If $\mathcal V=\varnothing$, then $B_0=X$ and all later layers are empty.
+    Thus each $x\in X$ belongs to a layer $B_j$ with $j\le m$, and
+    $A_j\cap B_{j+1}=\varnothing$ for every $j\ge0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_annular_cutoff,thm:peps_cumulative_layer_identities,
+        thm:peps_dyadic_scale_bounds,thm:peps_annular_mark_witness}
+    The equality $2s_{j+1}=s_j$ and the strict upper boundary in
+    (\ref{eq:peps_annular_layers}) give disjointness. Induction on $j$ gives
+    $A_j=\{x\in X:\delta(x)\ge s_j\}$ for $j<m$, and $A_m=X$.
+    Before the last scale, $\max\{t,\delta(x)\}\ge s_j$.
+    At the last scale it is at least $t>s_m/2$.
+    When the marked set is empty, $\delta(x)=n$ and $2s_j\le n$ for $j>0$.
+\end{proof}
+
+\begin{definition}[Ambient cells and enlargement]
+    \label{def:peps_angular_grid}
+    \lean{TNLean.PEPS.Approximation.AngularGrid.cell,
+        TNLean.PEPS.Approximation.AngularGrid.owner,
+        TNLean.PEPS.Approximation.AngularGrid.near,
+        TNLean.PEPS.Approximation.AngularGrid.touches,
+        TNLean.PEPS.Approximation.AngularGrid.selectedRegion}
+    \leanok
+    For an origin $o\in\mathbb R^2$, side $q>0$ and $i\in\mathbb Z^2$,
+    let $Q_i=o+q(i+[0,1)^2)$. The owner of $x$ has coordinates
+    $\lfloor(x_k-o_k)/q\rfloor$.
+    For any set $A$, write $A^{+r}=\bigcup_{x\in A}\overline B_\infty(x,r)$.
+    Select precisely the cells meeting $A^{+r}$, and denote their union by
+    $U_{q,r}(A)$.
+    Write $\iota(x)$ for the owner and
+    $I_{q,r}(A)=\{i\in\mathbb Z^2:Q_i\cap A^{+r}\ne\varnothing\}$
+    for the selected indices. The grid origin is fixed in this notation.
+\end{definition}
+
+\begin{theorem}[Cell ownership and diameter]
+    \label{thm:peps_grid_ownership}
+    \lean{TNLean.PEPS.Approximation.AngularGrid.mem_cell_owner,
+        TNLean.PEPS.Approximation.AngularGrid.owner_eq_of_mem_cell,
+        TNLean.PEPS.Approximation.AngularGrid.cell_index_unique,
+        TNLean.PEPS.Approximation.AngularGrid.dist_le_of_mem_cell}
+    \leanok
+    \uses{def:peps_angular_grid}
+    Every point $x$ belongs to $Q_{\iota(x)}$. If $x\in Q_i$, then
+    $i=\iota(x)$; hence $x\in Q_i\cap Q_j$ implies $i=j$.
+    For $x,y\in Q_i$, one has $\operatorname{dist}_{\infty}(x,y)\le q$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_angular_grid}
+    For each coordinate, the floor inequality
+    $\lfloor(x_k-o_k)/q\rfloor\le(x_k-o_k)/q
+        <\lfloor(x_k-o_k)/q\rfloor+1$ gives membership after multiplication
+    by $q>0$. Conversely, the defining inequalities for $Q_i$ identify
+    this floor with $i_k$. Two coordinates in the same half-open interval
+    of length $q$ differ in absolute value by at most $q$, so their
+    maximum does also.
+\end{proof}
+
+\begin{definition}[Finite index squares]
+    \label{def:peps_grid_index_squares}
+    \lean{TNLean.PEPS.Approximation.AngularGrid.indexBox,
+        TNLean.PEPS.Approximation.AngularGrid.candidateIndices}
+    \leanok
+    \uses{def:peps_angular_grid}
+    For $j\in\mathbb Z^2$, an integer $N\ge0$, and a finite set
+    $F\subseteq\mathbb R^2$, define
+    \begin{align}
+        H_N(j)          & =\{i\in\mathbb Z^2:j_k-N-1\le i_k\le j_k+N+1
+        \text{ for }k=1,2\},                                           \\
+        \mathcal C_N(F) & =\bigcup_{c\in F}H_N(\iota(c)).
+        \label{eq:peps_grid_index_squares}
+    \end{align}
+\end{definition}
+
+\begin{theorem}[Index-square bounds]
+    \label{thm:peps_grid_index_bounds}
+    \lean{TNLean.PEPS.Approximation.AngularGrid.card_indexBox,
+        TNLean.PEPS.Approximation.AngularGrid.mem_indexBox_of_dist_le,
+        TNLean.PEPS.Approximation.AngularGrid.card_candidateIndices_le}
+    \leanok
+    \uses{def:peps_grid_index_squares}
+    One has $|H_N(j)|=(2N+3)^2$ and
+    $|\mathcal C_N(F)|\le |F|(2N+3)^2$.
+    If $x\in Q_i$ and $\operatorname{dist}_{\infty}(x,c)\le u\le Nq$,
+    then $i\in H_N(\iota(c))$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_grid_index_squares,thm:peps_grid_ownership}
+    Each coordinate interval defining $H_N(j)$ contains $2N+3$ integers.
+    Multiplying the two counts proves the exact cardinality, and the
+    cardinality of a finite union is at most the sum of the cardinalities.
+    For the last assertion put $j=\iota(c)$, so $c\in Q_j$.
+    The inequalities defining $Q_i$ and $Q_j$, together with
+    $|x_k-c_k|\le u\le Nq$, give
+    $(j_k-N-1)q<i_kq<(j_k+N+1)q$ for each coordinate $k$.
+    Division by $q>0$ gives the required non-strict integer bounds.
+\end{proof}
+
+\begin{theorem}[Selected-cell counts from a finite cover]
+    \label{thm:peps_scaled_grid_count}
+    \lean{TNLean.PEPS.Approximation.AngularGrid.touches_mem_candidateIndices,
+        TNLean.PEPS.Approximation.AngularGrid.exists_selectedIndices_of_cover,
+        TNLean.PEPS.Approximation.AngularGrid.touches_mem_candidateIndices_scaled,
+        TNLean.PEPS.Approximation.AngularGrid.exists_selectedIndices_scaled}
+    \leanok
+    \uses{def:peps_angular_grid,def:peps_grid_index_squares}
+    Suppose $A$ is covered by the closed radius-$R$ squares centered at
+    a finite set $F$. If $R+r\le Nq$ for an integer $N\ge0$, then
+    $I_{q,r}(A)\subseteq\mathcal C_N(F)$. In particular,
+    $I_{q,r}(A)$ is finite and $|I_{q,r}(A)|\le |F|(2N+3)^2$.
+    If instead the covering radius is $Rs$, where $d,s>0$, set
+    $q=ds$ and $N=\lceil(R+r)/d\rceil_+$, where $\lceil u\rceil_+$
+    is the least nonnegative integer at least $u$. Then
+    $I_{ds,rs}(A)\subseteq\mathcal C_N(F)$ for this grid, and
+    \begin{align}
+        |I_{ds,rs}(A)|
+        \le |F|\left(2\left\lceil\frac{R+r}{d}\right\rceil_++3\right)^2.
+        \label{eq:peps_scaled_grid_count}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_grid_index_bounds,def:peps_angular_grid}
+    For a selected index $i$, choose $y\in Q_i$ and $x\in A$ with
+    $\operatorname{dist}_{\infty}(y,x)\le r$, then a cover center $c\in F$
+    with $\operatorname{dist}_{\infty}(x,c)\le R$. The triangle inequality
+    gives $\operatorname{dist}_{\infty}(y,c)\le R+r\le Nq$.
+    Theorem~\ref{thm:peps_grid_index_bounds} places $i$ in
+    $H_N(\iota(c))\subseteq\mathcal C_N(F)$ and bounds the cardinality.
+    Retain exactly those indices in $\mathcal C_N(F)$ whose cells meet
+    the enlargement. In the scaled case, the ceiling inequality gives
+    $Rs+rs=(R+r)s\le Nd s=Nq$, proving
+    (\ref{eq:peps_scaled_grid_count}).
+\end{proof}
+
+\begin{theorem}[Enlargement and cell selection]
+    \label{thm:peps_grid_enlargement}
+    \lean{TNLean.PEPS.Approximation.AngularGrid.near_union,
+        TNLean.PEPS.Approximation.AngularGrid.near_mono,
+        TNLean.PEPS.Approximation.AngularGrid.near_subset_selectedRegion,
+        TNLean.PEPS.Approximation.AngularGrid.selectedRegion_subset_near,
+        TNLean.PEPS.Approximation.AngularGrid.selectedRegion_mono}
+    \leanok
+    \uses{def:peps_angular_grid}
+    For arbitrary sets $A,B$, one has
+    $(A\cup B)^{+r}=A^{+r}\cup B^{+r}$.
+    If $A\subseteq B$ and $r\le u$, then $A^{+r}\subseteq B^{+u}$.
+    For every $q>0$,
+    \begin{align}
+        A^{+r}\subseteq U_{q,r}(A)\subseteq A^{+(r+q)}.
+        \label{eq:peps_grid_enlargement}
+    \end{align}
+    Also $A\subseteq B$ implies $U_{q,r}(A)\subseteq U_{q,r}(B)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_angular_grid,thm:peps_grid_ownership}
+    A center in $A\cup B$ lies in one of the two sets, proving the
+    union identity. Enlarging the center set and radius preserves each
+    distance witness. A point of $A^{+r}$ lies in its owner cell, which
+    is selected. If $x\in U_{q,r}(A)$, choose a point $y$ of the same
+    cell and a center $z\in A$ with
+    $\operatorname{dist}_{\infty}(y,z)\le r$. The cell diameter bound
+    gives $\operatorname{dist}_{\infty}(x,z)\le q+r$, proving
+    (\ref{eq:peps_grid_enlargement}). A witness for selecting a cell
+    from $A$ remains a witness when $A\subseteq B$.
+\end{proof}
+
+\begin{theorem}[Counting newly selected cells]
+    \label{thm:peps_new_cell_count}
+    \lean{TNLean.PEPS.Approximation.AngularGrid.touches_new_of_not_old,
+        TNLean.PEPS.Approximation.AngularGrid.exists_newIndices_scaled}
+    \leanok
+    \uses{def:peps_angular_grid}
+    Every cell selected from $A\cup B$ but not from $A$ is selected
+    from $B$. Suppose $d,s>0$ and a finite set $F$ of centers gives a
+    closed radius-$Rs$ square cover of $B$. Then
+    $I_{ds,rs}(A\cup B)\setminus I_{ds,rs}(A)$ is finite and has
+    cardinality at most
+    $|F|(2\lceil(R+r)/d\rceil_++3)^2$, with no cardinality assumption
+    on the cells selected from $A$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{def:peps_angular_grid,thm:peps_scaled_grid_count}
+    The point of $A\cup B$ witnessing selection must lie in $B$ if
+    the cell is not selected from $A$.
+    By Theorem~\ref{thm:peps_scaled_grid_count}, the cells selected from
+    $B$ have the stated finite bound. Among them retain precisely those
+    not selected from $A$; this is exactly the set of newly selected
+    cells and cannot increase the cardinality.
+\end{proof}
+
+\begin{theorem}[Bounded covers and newly selected cells]
+    \label{thm:peps_annular_cell_count}
+    \lean{TNLean.PEPS.Approximation.exists_annularLayer_cover,
+        TNLean.PEPS.Approximation.exists_annularLayer_square_cover,
+        TNLean.PEPS.Approximation.exists_annularLayer_selectedIndices,
+        TNLean.PEPS.Approximation.exists_annular_newIndices}
+    \leanok
+    \uses{def:peps_annular_layers,def:peps_angular_grid}
+    Suppose $\operatorname{diam}_{\infty}(X)\le A_0n$ and
+    $|\mathcal V|\le m_0$. Put $R=\max\{A_0,2\}$.
+    Each $B_j$ is covered by at most $m_0+1$ closed squares of radius $Rs_j$.
+    It is therefore covered by at most
+    $(m_0+1)(2\lceil R\rceil_++3)^2$ ambient cells of side $s_j$.
+    For $d>0$, the actual cells of side $ds_j$ meeting $B_j^{+rs_j}$ form
+    a finite set with cardinal at most
+    \begin{align}
+        M=(m_0+1)\left(2\left\lceil\frac{R+r}{d}\right\rceil_++3\right)^2.
+        \label{eq:peps_annular_cell_count}
+    \end{align}
+    For $1\le j\le m$, the same bound holds for the cells meeting $A_j^{+rs_j}$ that do not
+    meet $A_{j-1}^{+rs_j}$. The bound is independent of $j,n,o$, the marked
+    points and the shapes of the sets.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_annular_mark_witness,thm:peps_scaled_grid_count,
+        thm:peps_grid_ownership,thm:peps_new_cell_count,
+        thm:peps_cumulative_layer_identities}
+    For the first or sole layer, choose any $x_0\in X$ if $X$ is nonempty.
+    The diameter bound gives $X\subseteq\overline B_\infty(x_0,A_0n)$.
+    If $X$ is empty, use the empty cover.
+    In a later layer, $\delta(x)<2s_j\le n$ gives an actual $v\in\mathcal V$
+    with $\operatorname{dist}_{\infty}(x,v)<2s_j$.
+
+    A cell meeting a radius-$(R+r)s_j$ square has index within
+    $N+1$ in each coordinate of the center's owner, where
+    $N=\lceil(R+r)/d\rceil_+$. There are exactly $(2N+3)^2$ such indices.
+    Taking the union over the cover centers and retaining precisely the
+    cells that meet the enlargement proves (\ref{eq:peps_annular_cell_count}).
+    Finally, $A_j=A_{j-1}\cup B_j$ and enlargement commutes with union.
+    A newly selected cell must therefore meet $B_j^{+rs_j}$.
+\end{proof}
+
+\begin{theorem}[Clearance under enlargement]
+    \label{thm:peps_enlargement_clearance}
+    \lean{TNLean.PEPS.Approximation.AngularGrid.selectedRegion_clearance,
+        TNLean.PEPS.Approximation.AngularGrid.near_core_clearance}
+    \leanok
+    \uses{def:peps_angular_grid}
+    Suppose $q>0$ and
+    $b\le\operatorname{dist}_{\infty}(u,v)$ for every $u\in A$ and
+    $v\in E$. For $x\in U_{q,r}(A)$ and $y\in E^{+\rho}$,
+    \begin{align}
+        b-r-\rho-q\le\operatorname{dist}_{\infty}(x,y).
+        \label{eq:peps_enlargement_clearance}
+    \end{align}
+    Independently, if $x\in A^{+r}$ and $y\notin A^{+\rho}$, then
+    $\rho-r<\operatorname{dist}_{\infty}(x,y)$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_grid_enlargement,def:peps_angular_grid}
+    Choose $z\in A$ and $w\in E$ with
+    $\operatorname{dist}_{\infty}(x,z)\le r+q$ and
+    $\operatorname{dist}_{\infty}(y,w)\le\rho$.
+    The triangle inequality gives
+    $b\le\operatorname{dist}_{\infty}(z,w)
+        \le r+q+\operatorname{dist}_{\infty}(x,y)+\rho$, proving
+    (\ref{eq:peps_enlargement_clearance}). For the second assertion,
+    take $z\in A$ with $\operatorname{dist}_{\infty}(x,z)\le r$.
+    If $\operatorname{dist}_{\infty}(x,y)\le\rho-r$, then
+    $\operatorname{dist}_{\infty}(y,z)\le\rho$, contradicting
+    $y\notin A^{+\rho}$.
+\end{proof}
+
+\begin{theorem}[Cell clearance at a fixed scale]
+    \label{thm:peps_scaled_cell_clearance}
+    \lean{TNLean.PEPS.Approximation.AngularGrid.angular_clearance_pos,
+        TNLean.PEPS.Approximation.AngularGrid.angular_selectedRegion_clearance}
+    \leanok
+    \uses{def:peps_angular_grid}
+    Let $d,s>0$ and assume
+    $(a/2)s\le\operatorname{dist}_{\infty}(u,v)$ for every $u\in A$
+    and $v\in E$. For $x\in U_{ds,3a's/2}(A)$ and
+    $y\in E^{+3a's/2}$, one has
+    $\operatorname{dist}_{\infty}(x,y)\ge(a/2-3a'-d)s$.
+    If also $0<a'<a/100$ and $d<a'/4$, then $a/2-3a'-d>0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_enlargement_clearance}
+    Substitute $b=as/2$, $q=ds$, and $r=\rho=3a's/2$ into
+    (\ref{eq:peps_enlargement_clearance}). For positivity,
+    $a>100a'$ and $d<a'/4$ give
+    $a/2-3a'-d>(50-3-1/4)a'>0$.
+\end{proof}
+
+\begin{theorem}[Old-group containment and physical buffers]
+    \label{thm:peps_annular_cell_clearance}
+    \lean{TNLean.PEPS.Approximation.AngularGrid.old_selectedRegion_subset,
+        TNLean.PEPS.Approximation.AngularGrid.exterior_near_subset,
+        TNLean.PEPS.Approximation.AngularGrid.angular_core_subsets,
+        TNLean.PEPS.Approximation.AngularGrid.angular_physical_disjoint,
+        TNLean.PEPS.Approximation.AngularGrid.angular_target_core_clearance,
+        TNLean.PEPS.Approximation.AngularGrid.angular_exterior_core_clearance,
+        TNLean.PEPS.Approximation.annular_selectedRegion_clearance}
+    \leanok
+    \uses{def:peps_angular_grid,thm:peps_annular_separation}
+    Assume $\operatorname{dist}_{\infty}(x,y)\ge a\max\{t,\delta(x)\}$
+    for every $x\in X$ and $y\in E$. Fix $0\le j\le m$,
+    $0<a'<a/100$, $0<d<a'/4$ and $s=s_j>0$.
+    Let $U=U_{ds,3a's/2}(A_j)$, and let $\Lambda$ be any physical domain.
+    Set $R_\Lambda=\Lambda\cap U$ and
+    $C_\Lambda=\Lambda\cap E^{+3a's/2}$.
+    With $A_{-1}=\varnothing$ at the initial step, the selected old group
+    is contained in $A_{j-1}^{+2a's}$, and
+    $E^{+3a's/2}\subseteq E^{+2a's}$.
+    Every $x\in U$ and $y\in E^{+3a's/2}$ satisfy
+    \begin{align}
+        \operatorname{dist}_{\infty}(x,y)\ge(a/2-3a'-d)s>0.
+        \label{eq:peps_annular_clearance}
+    \end{align}
+    Thus $R_\Lambda$ and $C_\Lambda$ are disjoint. Both cores
+    $\Lambda\cap A_j^{+a's}$ and $\Lambda\cap E^{+a's}$ are contained in
+    their corresponding regions. Every core point is at distance greater
+    than $a's/2$ from every point of the corresponding physical complement.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_annular_separation,thm:peps_grid_enlargement,
+        thm:peps_enlargement_clearance,thm:peps_scaled_cell_clearance}
+    Two points of one cell are at distance at most $ds$, so
+    $U_{ds,3a's/2}(A)\subseteq A^{+(3a'/2+d)s}\subseteq A^{+2a's}$.
+    The triangle inequality subtracts the two enlargement radii and one
+    cell side from the separation $as/2$, proving
+    (\ref{eq:peps_annular_clearance}).
+    The choice of constants makes its coefficient positive.
+    Every point of $A_j^{+3a's/2}$ lies in its selected owner cell.
+    If a point within distance $a's$ of a core center were at distance at
+    most $a's/2$ from an excluded point, that excluded point would belong
+    to the closed radius-$3a's/2$ enlargement, a contradiction.
+    Intersecting with $\Lambda$ preserves every inclusion and pairwise bound.
+\end{proof}
+
+\begin{theorem}[Uniform width inside the cell buffer]
+    \label{thm:peps_annular_reset_width}
+    \lean{TNLean.PEPS.Approximation.AngularGrid.exists_angular_cell_reset_width}
+    \leanok
+    For fixed real $K,C_3,C_4$ and $a'>0$, there exist $D\ge1$ and $L_0\ge2$
+    such that $D\ge4C_4/(a'/3)$ and, for every $L\ge L_0$ and
+    $s\ge D\log L$,
+    $C_3(1+\log s)^K+C_4\log L<(a'/3)s$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_angular_reset_uniform_width}
+    Apply Theorem~\ref{thm:peps_angular_reset_uniform_width} with $c=a'/3$.
+\end{proof}
+
+% Completion markers concern only the geometric and numerical statements above.
+% Conditional cell information, the physical reset and the information
+% induction are separate open obligations; see the accompanying scope note.

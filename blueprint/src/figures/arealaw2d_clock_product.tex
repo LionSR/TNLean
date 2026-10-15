@@ -1,0 +1,470 @@
+% Figure arealaw2d_clock_product.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. VI B (clock products and excited decay; Lemma 13,
+% App. C 5), Fig. 7.
+% Source: arXiv OpenAI2026AreaLaw, sections/09-amplification.tex:42-75
+% (lem:amplification-local-products; the paper's D, D_ret, L are the note's
+% calG, calG_ret, calG_loc). calG is the product of G_i over all clock
+% events on [0,t] in occurrence order, later factors on the left; calG_ret
+% keeps the events with d_Lambda(a_i,S) <= r; calG_loc replaces each
+% retained G_i by G_{i,r} = (I - Av_{i,r} k_i)^{1/2}, supported in N_r(a_i),
+% so calG_loc is supported in N_{2r}(S).
+% Ink-to-index: three panels, calG -> calG_ret -> calG_loc (captions below
+% each panel), on a one-dimensional slice of the graph: in every panel the
+% rows 2..12 are the sites 1..11 (top to bottom), each a physical wire; row 1
+% is blank and carries the time bracket. Clock time runs right to left, as
+% the operator product reads: inputs enter on the east at time 0, outputs
+% leave on the west at time t (bracket on top of the first panel). Each box
+% is one clock event G_i of a label i anchored at a_i = its site; the boxes
+% carry no name (each box is a G_i). Column c holds events at time 8 - c.
+% S = site 6 (|S| = 1) is the red wire (species selected, labelled once, on
+% the west of the first panel), and r = 2. Panel 1 (calG): all events, at
+% (site,column) = (4,2), (6,3), (7,4), (5,5), (8,6), (6,7) (black, retained:
+% d_Lambda(a_i,S) <= r, inside the contour of sites 4-8, labelled on the
+% west) and (9,2), (2,3), (11,4), (1,5), (10,6), (3,7) (grey, complement:
+% omitted). Panel 2 (calG_ret): the grey boxes are gone, the window contour
+% is repeated unlabelled. Panel 3 (calG_loc): each retained box is widened
+% to N_r(a_i) = sites a_i-2..a_i+2 (wires=5; one retained event per column
+% so the widened boxes never collide); their union stays inside N_{2r}(S) =
+% sites 2-10 (east bracket), and sites 1 and 11 are untouched. The joiners
+% name the step: omit (drop the far events) and truncate (G_i -> G_{i,r}).
+% Every other cell holds an inkless skin=none record; it carries no wire.
+% Boundary signature: (phys:w) x 11, (phys:e) x 11 in each panel.
+% Check opt-out: the two joiners are \xrightarrow steps, not relations: the
+% panels are different operators (the lemma bounds their differences), so
+% no equality is claimed. All three panels have the same boundary signature.
+% Not to scale: a real slice is two-dimensional, the clocks have rate one
+% on [0,t], and r grows with the scale.
+% Label macros: none.
+% Fit: full width, \tnwide[4.5mm] (about 150 mm).
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=8, bonds=none, size=s]
+        \tn[at=(5,2), name=cpAd2, skin=box, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,3), name=cpAf3, skin=box, ports={180:physical, 0:physical}]{}
+        \tn[at=(8,4), name=cpAg4, skin=box, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,5), name=cpAe5, skin=box, ports={180:physical, 0:physical}]{}
+        \tn[at=(9,6), name=cpAh6, skin=box, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,7), name=cpAf7, skin=box, ports={180:physical, 0:physical}]{}
+        \tn[at=(10,2), name=cpAi2, skin=box, species=complement, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,3), name=cpAb3, skin=box, species=complement, ports={180:physical, 0:physical}]{}
+        \tn[at=(12,4), name=cpAk4, skin=box, species=complement, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,5), name=cpAa5, skin=box, species=complement, ports={180:physical, 0:physical}]{}
+        \tn[at=(11,6), name=cpAj6, skin=box, species=complement, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,7), name=cpAc7, skin=box, species=complement, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), name=cpAWa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,8), name=cpAEa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=cpAWb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,8), name=cpAEb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,1), name=cpAWc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,8), name=cpAEc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,1), name=cpAWd, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,8), name=cpAEd, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,1), name=cpAWe, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,8), name=cpAEe, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,1), name=cpAWf, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,8), name=cpAEf, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(8,1), name=cpAWg, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(8,8), name=cpAEg, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(9,1), name=cpAWh, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(9,8), name=cpAEh, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(10,1), name=cpAWi, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(10,8), name=cpAEi, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(11,1), name=cpAWj, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(11,8), name=cpAEj, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(12,1), name=cpAWk, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(12,8), name=cpAEk, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,1), skin=none]{}
+        \tn[at=(1,2), skin=none]{}
+        \tn[at=(1,3), skin=none]{}
+        \tn[at=(1,4), skin=none]{}
+        \tn[at=(1,5), skin=none]{}
+        \tn[at=(1,6), skin=none]{}
+        \tn[at=(1,7), skin=none]{}
+        \tn[at=(1,8), skin=none]{}
+        \tn[at=(2,2), skin=none]{}
+        \tn[at=(2,3), skin=none]{}
+        \tn[at=(2,4), skin=none]{}
+        \tn[at=(2,6), skin=none]{}
+        \tn[at=(2,7), skin=none]{}
+        \tn[at=(3,2), skin=none]{}
+        \tn[at=(3,4), skin=none]{}
+        \tn[at=(3,5), skin=none]{}
+        \tn[at=(3,6), skin=none]{}
+        \tn[at=(3,7), skin=none]{}
+        \tn[at=(4,2), skin=none]{}
+        \tn[at=(4,3), skin=none]{}
+        \tn[at=(4,4), skin=none]{}
+        \tn[at=(4,5), skin=none]{}
+        \tn[at=(4,6), skin=none]{}
+        \tn[at=(5,3), skin=none]{}
+        \tn[at=(5,4), skin=none]{}
+        \tn[at=(5,5), skin=none]{}
+        \tn[at=(5,6), skin=none]{}
+        \tn[at=(5,7), skin=none]{}
+        \tn[at=(6,2), skin=none]{}
+        \tn[at=(6,3), skin=none]{}
+        \tn[at=(6,4), skin=none]{}
+        \tn[at=(6,6), skin=none]{}
+        \tn[at=(6,7), skin=none]{}
+        \tn[at=(7,2), skin=none]{}
+        \tn[at=(7,4), skin=none]{}
+        \tn[at=(7,5), skin=none]{}
+        \tn[at=(7,6), skin=none]{}
+        \tn[at=(8,2), skin=none]{}
+        \tn[at=(8,3), skin=none]{}
+        \tn[at=(8,5), skin=none]{}
+        \tn[at=(8,6), skin=none]{}
+        \tn[at=(8,7), skin=none]{}
+        \tn[at=(9,2), skin=none]{}
+        \tn[at=(9,3), skin=none]{}
+        \tn[at=(9,4), skin=none]{}
+        \tn[at=(9,5), skin=none]{}
+        \tn[at=(9,7), skin=none]{}
+        \tn[at=(10,3), skin=none]{}
+        \tn[at=(10,4), skin=none]{}
+        \tn[at=(10,5), skin=none]{}
+        \tn[at=(10,6), skin=none]{}
+        \tn[at=(10,7), skin=none]{}
+        \tn[at=(11,2), skin=none]{}
+        \tn[at=(11,3), skin=none]{}
+        \tn[at=(11,4), skin=none]{}
+        \tn[at=(11,5), skin=none]{}
+        \tn[at=(11,7), skin=none]{}
+        \tn[at=(12,2), skin=none]{}
+        \tn[at=(12,3), skin=none]{}
+        \tn[at=(12,5), skin=none]{}
+        \tn[at=(12,6), skin=none]{}
+        \tn[at=(12,7), skin=none]{}
+        \tnwire{cpAEa.0}{open e}
+        \tnwire{cpAa5.0}{cpAEa.180}
+        \tnwire{cpAWa.0}{cpAa5.180}
+        \tnwire{open w}{cpAWa.180}
+        \tnwire{cpAEb.0}{open e}
+        \tnwire{cpAb3.0}{cpAEb.180}
+        \tnwire{cpAWb.0}{cpAb3.180}
+        \tnwire{open w}{cpAWb.180}
+        \tnwire{cpAEc.0}{open e}
+        \tnwire{cpAc7.0}{cpAEc.180}
+        \tnwire{cpAWc.0}{cpAc7.180}
+        \tnwire{open w}{cpAWc.180}
+        \tnwire{cpAEd.0}{open e}
+        \tnwire{cpAd2.0}{cpAEd.180}
+        \tnwire{cpAWd.0}{cpAd2.180}
+        \tnwire{open w}{cpAWd.180}
+        \tnwire{cpAEe.0}{open e}
+        \tnwire{cpAe5.0}{cpAEe.180}
+        \tnwire{cpAWe.0}{cpAe5.180}
+        \tnwire{open w}{cpAWe.180}
+        \tnwire[species=selected]{cpAEf.0}{open e}
+        \tnwire[species=selected]{cpAf7.0}{cpAEf.180}
+        \tnwire[species=selected]{cpAf3.0}{cpAf7.180}
+        \tnwire[species=selected]{cpAWf.0}{cpAf3.180}
+        \tnwire[species=selected]{open w}{cpAWf.180}
+        \tnwire{cpAEg.0}{open e}
+        \tnwire{cpAg4.0}{cpAEg.180}
+        \tnwire{cpAWg.0}{cpAg4.180}
+        \tnwire{open w}{cpAWg.180}
+        \tnwire{cpAEh.0}{open e}
+        \tnwire{cpAh6.0}{cpAEh.180}
+        \tnwire{cpAWh.0}{cpAh6.180}
+        \tnwire{open w}{cpAWh.180}
+        \tnwire{cpAEi.0}{open e}
+        \tnwire{cpAi2.0}{cpAEi.180}
+        \tnwire{cpAWi.0}{cpAi2.180}
+        \tnwire{open w}{cpAWi.180}
+        \tnwire{cpAEj.0}{open e}
+        \tnwire{cpAj6.0}{cpAEj.180}
+        \tnwire{cpAWj.0}{cpAj6.180}
+        \tnwire{open w}{cpAWj.180}
+        \tnwire{cpAEk.0}{open e}
+        \tnwire{cpAk4.0}{cpAEk.180}
+        \tnwire{cpAWk.0}{cpAk4.180}
+        \tnwire{open w}{cpAWk.180}
+        \tnmark[form=enclosure]{(5,1) .. (9,8)}{}
+        \tnmark[form=label, label pos=w]{0.7 w of (5,1)}{$d_\Lambda(a_i{,}S)\le r$}
+        \tnmark[form=label, species=selected, label pos=w]{0.7 w of (7,1)}{$S$}
+        \tnmark[form=bracket, label pos=n]{(1,2) .. (1,7)}{$t\longleftarrow 0$}
+        \tnmark[form=label, label pos=s]{midway (12,4) and (12,5)}{$\mathcal G$}
+    \end{tenkz}
+    $\xrightarrow{\ \text{omit}\ }$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=8, bonds=none, size=s]
+        \tn[at=(5,2), name=cpBd2, skin=box, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,3), name=cpBf3, skin=box, ports={180:physical, 0:physical}]{}
+        \tn[at=(8,4), name=cpBg4, skin=box, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,5), name=cpBe5, skin=box, ports={180:physical, 0:physical}]{}
+        \tn[at=(9,6), name=cpBh6, skin=box, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,7), name=cpBf7, skin=box, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), name=cpBWa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,8), name=cpBEa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=cpBWb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,8), name=cpBEb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,1), name=cpBWc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,8), name=cpBEc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,1), name=cpBWd, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,8), name=cpBEd, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,1), name=cpBWe, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,8), name=cpBEe, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,1), name=cpBWf, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,8), name=cpBEf, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(8,1), name=cpBWg, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(8,8), name=cpBEg, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(9,1), name=cpBWh, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(9,8), name=cpBEh, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(10,1), name=cpBWi, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(10,8), name=cpBEi, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(11,1), name=cpBWj, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(11,8), name=cpBEj, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(12,1), name=cpBWk, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(12,8), name=cpBEk, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,1), skin=none]{}
+        \tn[at=(1,2), skin=none]{}
+        \tn[at=(1,3), skin=none]{}
+        \tn[at=(1,4), skin=none]{}
+        \tn[at=(1,5), skin=none]{}
+        \tn[at=(1,6), skin=none]{}
+        \tn[at=(1,7), skin=none]{}
+        \tn[at=(1,8), skin=none]{}
+        \tn[at=(2,2), skin=none]{}
+        \tn[at=(2,3), skin=none]{}
+        \tn[at=(2,4), skin=none]{}
+        \tn[at=(2,5), skin=none]{}
+        \tn[at=(2,6), skin=none]{}
+        \tn[at=(2,7), skin=none]{}
+        \tn[at=(3,2), skin=none]{}
+        \tn[at=(3,3), skin=none]{}
+        \tn[at=(3,4), skin=none]{}
+        \tn[at=(3,5), skin=none]{}
+        \tn[at=(3,6), skin=none]{}
+        \tn[at=(3,7), skin=none]{}
+        \tn[at=(4,2), skin=none]{}
+        \tn[at=(4,3), skin=none]{}
+        \tn[at=(4,4), skin=none]{}
+        \tn[at=(4,5), skin=none]{}
+        \tn[at=(4,6), skin=none]{}
+        \tn[at=(4,7), skin=none]{}
+        \tn[at=(5,3), skin=none]{}
+        \tn[at=(5,4), skin=none]{}
+        \tn[at=(5,5), skin=none]{}
+        \tn[at=(5,6), skin=none]{}
+        \tn[at=(5,7), skin=none]{}
+        \tn[at=(6,2), skin=none]{}
+        \tn[at=(6,3), skin=none]{}
+        \tn[at=(6,4), skin=none]{}
+        \tn[at=(6,6), skin=none]{}
+        \tn[at=(6,7), skin=none]{}
+        \tn[at=(7,2), skin=none]{}
+        \tn[at=(7,4), skin=none]{}
+        \tn[at=(7,5), skin=none]{}
+        \tn[at=(7,6), skin=none]{}
+        \tn[at=(8,2), skin=none]{}
+        \tn[at=(8,3), skin=none]{}
+        \tn[at=(8,5), skin=none]{}
+        \tn[at=(8,6), skin=none]{}
+        \tn[at=(8,7), skin=none]{}
+        \tn[at=(9,2), skin=none]{}
+        \tn[at=(9,3), skin=none]{}
+        \tn[at=(9,4), skin=none]{}
+        \tn[at=(9,5), skin=none]{}
+        \tn[at=(9,7), skin=none]{}
+        \tn[at=(10,2), skin=none]{}
+        \tn[at=(10,3), skin=none]{}
+        \tn[at=(10,4), skin=none]{}
+        \tn[at=(10,5), skin=none]{}
+        \tn[at=(10,6), skin=none]{}
+        \tn[at=(10,7), skin=none]{}
+        \tn[at=(11,2), skin=none]{}
+        \tn[at=(11,3), skin=none]{}
+        \tn[at=(11,4), skin=none]{}
+        \tn[at=(11,5), skin=none]{}
+        \tn[at=(11,6), skin=none]{}
+        \tn[at=(11,7), skin=none]{}
+        \tn[at=(12,2), skin=none]{}
+        \tn[at=(12,3), skin=none]{}
+        \tn[at=(12,4), skin=none]{}
+        \tn[at=(12,5), skin=none]{}
+        \tn[at=(12,6), skin=none]{}
+        \tn[at=(12,7), skin=none]{}
+        \tnwire{cpBEa.0}{open e}
+        \tnwire{cpBWa.0}{cpBEa.180}
+        \tnwire{open w}{cpBWa.180}
+        \tnwire{cpBEb.0}{open e}
+        \tnwire{cpBWb.0}{cpBEb.180}
+        \tnwire{open w}{cpBWb.180}
+        \tnwire{cpBEc.0}{open e}
+        \tnwire{cpBWc.0}{cpBEc.180}
+        \tnwire{open w}{cpBWc.180}
+        \tnwire{cpBEd.0}{open e}
+        \tnwire{cpBd2.0}{cpBEd.180}
+        \tnwire{cpBWd.0}{cpBd2.180}
+        \tnwire{open w}{cpBWd.180}
+        \tnwire{cpBEe.0}{open e}
+        \tnwire{cpBe5.0}{cpBEe.180}
+        \tnwire{cpBWe.0}{cpBe5.180}
+        \tnwire{open w}{cpBWe.180}
+        \tnwire[species=selected]{cpBEf.0}{open e}
+        \tnwire[species=selected]{cpBf7.0}{cpBEf.180}
+        \tnwire[species=selected]{cpBf3.0}{cpBf7.180}
+        \tnwire[species=selected]{cpBWf.0}{cpBf3.180}
+        \tnwire[species=selected]{open w}{cpBWf.180}
+        \tnwire{cpBEg.0}{open e}
+        \tnwire{cpBg4.0}{cpBEg.180}
+        \tnwire{cpBWg.0}{cpBg4.180}
+        \tnwire{open w}{cpBWg.180}
+        \tnwire{cpBEh.0}{open e}
+        \tnwire{cpBh6.0}{cpBEh.180}
+        \tnwire{cpBWh.0}{cpBh6.180}
+        \tnwire{open w}{cpBWh.180}
+        \tnwire{cpBEi.0}{open e}
+        \tnwire{cpBWi.0}{cpBEi.180}
+        \tnwire{open w}{cpBWi.180}
+        \tnwire{cpBEj.0}{open e}
+        \tnwire{cpBWj.0}{cpBEj.180}
+        \tnwire{open w}{cpBWj.180}
+        \tnwire{cpBEk.0}{open e}
+        \tnwire{cpBWk.0}{cpBEk.180}
+        \tnwire{open w}{cpBWk.180}
+        \tnmark[form=enclosure]{(5,1) .. (9,8)}{}
+        \tnmark[form=label, label pos=s]{midway (12,4) and (12,5)}{$\mathcal G_{\rm ret}$}
+    \end{tenkz}
+    $\xrightarrow{\ \text{truncate}\ }$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=8, bonds=none, size=s]
+        \tn[at=(3,2), name=cpCd2, skin=box, wires=5, ports={180@1:physical, 0@1:physical, 180@2:physical, 0@2:physical, 180@3:physical, 0@3:physical, 180@4:physical, 0@4:physical, 180@5:physical, 0@5:physical}]{}
+        \tn[at=(5,3), name=cpCf3, skin=box, wires=5, ports={180@1:physical, 0@1:physical, 180@2:physical, 0@2:physical, 180@3:physical, 0@3:physical, 180@4:physical, 0@4:physical, 180@5:physical, 0@5:physical}]{}
+        \tn[at=(6,4), name=cpCg4, skin=box, wires=5, ports={180@1:physical, 0@1:physical, 180@2:physical, 0@2:physical, 180@3:physical, 0@3:physical, 180@4:physical, 0@4:physical, 180@5:physical, 0@5:physical}]{}
+        \tn[at=(4,5), name=cpCe5, skin=box, wires=5, ports={180@1:physical, 0@1:physical, 180@2:physical, 0@2:physical, 180@3:physical, 0@3:physical, 180@4:physical, 0@4:physical, 180@5:physical, 0@5:physical}]{}
+        \tn[at=(7,6), name=cpCh6, skin=box, wires=5, ports={180@1:physical, 0@1:physical, 180@2:physical, 0@2:physical, 180@3:physical, 0@3:physical, 180@4:physical, 0@4:physical, 180@5:physical, 0@5:physical}]{}
+        \tn[at=(5,7), name=cpCf7, skin=box, wires=5, ports={180@1:physical, 0@1:physical, 180@2:physical, 0@2:physical, 180@3:physical, 0@3:physical, 180@4:physical, 0@4:physical, 180@5:physical, 0@5:physical}]{}
+        \tn[at=(2,1), name=cpCWa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,8), name=cpCEa, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=cpCWb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,8), name=cpCEb, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,1), name=cpCWc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,8), name=cpCEc, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,1), name=cpCWd, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,8), name=cpCEd, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,1), name=cpCWe, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,8), name=cpCEe, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,1), name=cpCWf, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,8), name=cpCEf, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(8,1), name=cpCWg, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(8,8), name=cpCEg, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(9,1), name=cpCWh, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(9,8), name=cpCEh, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(10,1), name=cpCWi, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(10,8), name=cpCEi, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(11,1), name=cpCWj, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(11,8), name=cpCEj, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(12,1), name=cpCWk, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(12,8), name=cpCEk, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,1), skin=none]{}
+        \tn[at=(1,2), skin=none]{}
+        \tn[at=(1,3), skin=none]{}
+        \tn[at=(1,4), skin=none]{}
+        \tn[at=(1,5), skin=none]{}
+        \tn[at=(1,6), skin=none]{}
+        \tn[at=(1,7), skin=none]{}
+        \tn[at=(1,8), skin=none]{}
+        \tn[at=(2,2), skin=none]{}
+        \tn[at=(2,3), skin=none]{}
+        \tn[at=(2,4), skin=none]{}
+        \tn[at=(2,5), skin=none]{}
+        \tn[at=(2,6), skin=none]{}
+        \tn[at=(2,7), skin=none]{}
+        \tn[at=(3,3), skin=none]{}
+        \tn[at=(3,4), skin=none]{}
+        \tn[at=(3,5), skin=none]{}
+        \tn[at=(3,6), skin=none]{}
+        \tn[at=(3,7), skin=none]{}
+        \tn[at=(4,3), skin=none]{}
+        \tn[at=(4,4), skin=none]{}
+        \tn[at=(4,6), skin=none]{}
+        \tn[at=(4,7), skin=none]{}
+        \tn[at=(5,4), skin=none]{}
+        \tn[at=(5,6), skin=none]{}
+        \tn[at=(6,6), skin=none]{}
+        \tn[at=(8,2), skin=none]{}
+        \tn[at=(9,2), skin=none]{}
+        \tn[at=(9,5), skin=none]{}
+        \tn[at=(10,2), skin=none]{}
+        \tn[at=(10,3), skin=none]{}
+        \tn[at=(10,5), skin=none]{}
+        \tn[at=(10,7), skin=none]{}
+        \tn[at=(11,2), skin=none]{}
+        \tn[at=(11,3), skin=none]{}
+        \tn[at=(11,4), skin=none]{}
+        \tn[at=(11,5), skin=none]{}
+        \tn[at=(11,7), skin=none]{}
+        \tn[at=(12,2), skin=none]{}
+        \tn[at=(12,3), skin=none]{}
+        \tn[at=(12,4), skin=none]{}
+        \tn[at=(12,5), skin=none]{}
+        \tn[at=(12,6), skin=none]{}
+        \tn[at=(12,7), skin=none]{}
+        \tnwire{cpCEa.0}{open e}
+        \tnwire{cpCWa.0}{cpCEa.180}
+        \tnwire{open w}{cpCWa.180}
+        \tnwire{cpCEb.0}{open e}
+        \tnwire{cpCd2.0@1}{cpCEb.180}
+        \tnwire{cpCWb.0}{cpCd2.180@1}
+        \tnwire{open w}{cpCWb.180}
+        \tnwire{cpCEc.0}{open e}
+        \tnwire{cpCe5.0@1}{cpCEc.180}
+        \tnwire{cpCd2.0@2}{cpCe5.180@1}
+        \tnwire{cpCWc.0}{cpCd2.180@2}
+        \tnwire{open w}{cpCWc.180}
+        \tnwire{cpCEd.0}{open e}
+        \tnwire{cpCf7.0@1}{cpCEd.180}
+        \tnwire{cpCe5.0@2}{cpCf7.180@1}
+        \tnwire{cpCf3.0@1}{cpCe5.180@2}
+        \tnwire{cpCd2.0@3}{cpCf3.180@1}
+        \tnwire{cpCWd.0}{cpCd2.180@3}
+        \tnwire{open w}{cpCWd.180}
+        \tnwire{cpCEe.0}{open e}
+        \tnwire{cpCf7.0@2}{cpCEe.180}
+        \tnwire{cpCe5.0@3}{cpCf7.180@2}
+        \tnwire{cpCg4.0@1}{cpCe5.180@3}
+        \tnwire{cpCf3.0@2}{cpCg4.180@1}
+        \tnwire{cpCd2.0@4}{cpCf3.180@2}
+        \tnwire{cpCWe.0}{cpCd2.180@4}
+        \tnwire{open w}{cpCWe.180}
+        \tnwire[species=selected]{cpCEf.0}{open e}
+        \tnwire[species=selected]{cpCf7.0@3}{cpCEf.180}
+        \tnwire[species=selected]{cpCh6.0@1}{cpCf7.180@3}
+        \tnwire[species=selected]{cpCe5.0@4}{cpCh6.180@1}
+        \tnwire[species=selected]{cpCg4.0@2}{cpCe5.180@4}
+        \tnwire[species=selected]{cpCf3.0@3}{cpCg4.180@2}
+        \tnwire[species=selected]{cpCd2.0@5}{cpCf3.180@3}
+        \tnwire[species=selected]{cpCWf.0}{cpCd2.180@5}
+        \tnwire[species=selected]{open w}{cpCWf.180}
+        \tnwire{cpCEg.0}{open e}
+        \tnwire{cpCf7.0@4}{cpCEg.180}
+        \tnwire{cpCh6.0@2}{cpCf7.180@4}
+        \tnwire{cpCe5.0@5}{cpCh6.180@2}
+        \tnwire{cpCg4.0@3}{cpCe5.180@5}
+        \tnwire{cpCf3.0@4}{cpCg4.180@3}
+        \tnwire{cpCWg.0}{cpCf3.180@4}
+        \tnwire{open w}{cpCWg.180}
+        \tnwire{cpCEh.0}{open e}
+        \tnwire{cpCf7.0@5}{cpCEh.180}
+        \tnwire{cpCh6.0@3}{cpCf7.180@5}
+        \tnwire{cpCg4.0@4}{cpCh6.180@3}
+        \tnwire{cpCf3.0@5}{cpCg4.180@4}
+        \tnwire{cpCWh.0}{cpCf3.180@5}
+        \tnwire{open w}{cpCWh.180}
+        \tnwire{cpCEi.0}{open e}
+        \tnwire{cpCh6.0@4}{cpCEi.180}
+        \tnwire{cpCg4.0@5}{cpCh6.180@4}
+        \tnwire{cpCWi.0}{cpCg4.180@5}
+        \tnwire{open w}{cpCWi.180}
+        \tnwire{cpCEj.0}{open e}
+        \tnwire{cpCh6.0@5}{cpCEj.180}
+        \tnwire{cpCWj.0}{cpCh6.180@5}
+        \tnwire{open w}{cpCWj.180}
+        \tnwire{cpCEk.0}{open e}
+        \tnwire{cpCWk.0}{cpCEk.180}
+        \tnwire{open w}{cpCWk.180}
+        \tnmark[form=bracket, label pos=e]{(3,8) .. (11,8)}{$N_{2r}(S)$}
+        \tnmark[form=label, label pos=s]{midway (12,4) and (12,5)}{$\mathcal G_{\rm loc}$}
+    \end{tenkz}
+\end{tenkzequation}
