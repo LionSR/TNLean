@@ -86,6 +86,29 @@ no holes, this is the normalization of $\Omega$.
     frames.
 \end{proof}
 
+\begin{theorem}[The initial step from raw copies]
+    \label{thm:peps_sheet_raw_initialization}
+    \lean{TNLean.PEPS.EncodedFrame.Frame.norm_refVec_of_holes_eq_nil,
+        TNLean.PEPS.EncodedFrame.norm_framesVec_of_holes_eq_nil,
+        TNLean.PEPS.EncodedFrame.exists_originalCircuit_initial_of_holes_eq_nil}
+    \leanok
+    \uses{thm:peps_sheet_initialization}
+    A frame without holes has reference vector of norm $\lVert\Omega\rVert$. Let
+    $\lVert\Omega\rVert=1$ and let every frame of the list have no hole and be held
+    entirely by one party: the main copy at the root and the auxiliary copies at
+    their future owners. Then the product of the reference vectors of the frames of
+    every party has norm one, and the initial private maps of
+    Theorem~\ref{thm:peps_sheet_initialization} apply (\texttt{06-geometry.tex},
+    lines 658--667).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_frame_norm}
+    Without holes the product of the hole projectors is the identity, so
+    $\lVert\Omega_{\mathcal F}\rVert=\lVert\Omega\rVert=1$, and the norm of a product
+    of reference vectors is the product of their norms.
+\end{proof}
+
 \begin{theorem}[Changes that leave a frame unchanged]
     \label{thm:peps_identity_change}
     \lean{TNLean.PEPS.EncodedFrame.exists_originalCircuit_of_frame_eq,

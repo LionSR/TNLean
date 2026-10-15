@@ -316,6 +316,7 @@ import TNLean.PEPS.Approximation.SeparatedSchmidtOutput
 import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.PEPS.Approximation.SheetStack
 import TNLean.PEPS.Approximation.SheetStackEndpoints
+import TNLean.PEPS.Approximation.SheetStackRawInitial
 import TNLean.PEPS.Approximation.SheetStackReadout
 import TNLean.PEPS.Approximation.SheetStackReadoutCircuit
 import TNLean.PEPS.Approximation.SheetSwapBoundaryExpansion
