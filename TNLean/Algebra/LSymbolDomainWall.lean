@@ -32,6 +32,7 @@ The scalar steps of arXiv:2405.00439, Section IV.C (`Papers/2405.00439/MPU-DW.te
 -/
 
 open TNLean.Algebra
+open scoped TNLean.Algebra.ScalarCohomology
 
 namespace TNLean.Algebra.LSymbol
 
@@ -92,11 +93,10 @@ theorem ratioCocycle_isCocycle {L : LSymbol G X} {ω : ScalarThreeCochain G}
   rw [mul_div_mul_left_eq_div]
 
 /-- The two-cocycle `L^y/L^z` in the form of Mathlib's multiplicative two-cocycles
-(`groupCohomology.IsMulCocycle₂`), through
+(`groupCohomology.IsMulCocycle₂`) for the trivial action, through
 `TNLean.Algebra.ScalarCocycle.isCocycle_iff_isMulCocycle₂`. -/
 theorem ratioCocycle_isMulCocycle₂ {L : LSymbol G X} {ω : ScalarThreeCochain G}
     (hL : IsCompatible L ω) (y z : X) :
-    letI := ScalarCocycle.trivialMulDistribMulAction (G := fixingSubgroup G ({y, z} : Set X))
     groupCohomology.IsMulCocycle₂ (Function.uncurry (ratioCocycle L y z)) :=
   (ScalarCocycle.isCocycle_iff_isMulCocycle₂ _).mp (ratioCocycle_isCocycle hL y z)
 

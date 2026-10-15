@@ -91,6 +91,14 @@ def ambientDilation (T : Finset (ℤ × ℤ)) (r : ℕ) : Finset (ℤ × ℤ) :=
     (Finset.Icc (x.1 - (r : ℤ)) (x.1 + r)).product
       (Finset.Icc (x.2 - (r : ℤ)) (x.2 + r))
 
+/-- Membership in an ambient integer dilation, in coordinate inequalities. -/
+theorem mem_ambientDilation_iff {S : Finset (ℤ × ℤ)} {r : ℕ} {x : ℤ × ℤ} :
+    x ∈ ambientDilation S r ↔ ∃ p ∈ S,
+      p.1 - r ≤ x.1 ∧ x.1 ≤ p.1 + r ∧ p.2 - r ≤ x.2 ∧ x.2 ≤ p.2 + r := by
+  simp only [ambientDilation, Finset.mem_biUnion, Finset.product_eq_sprod,
+    Finset.mem_product, Finset.mem_Icc]
+  tauto
+
 /-- Configuration decomposition into a region and its complement. This is
 Mathlib's finite product decomposition, with no ordering of the sites chosen.
 Source: area-law Section 1, the regional tensor factors. -/

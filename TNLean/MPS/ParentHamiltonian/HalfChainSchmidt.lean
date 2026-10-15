@@ -176,18 +176,7 @@ theorem halfChainGram_apply_eq_transferMap_pow (A : MPSTensor d D) (L : ℕ)
   have hmul (W : Matrix (Fin D) (Fin D) ℂ) (a b c e : Fin D) :
       ((W * Matrix.single c a 1 * Wᴴ : Matrix (Fin D) (Fin D) ℂ) e b) =
         W e c * star (W b a) := by
-    rw [Matrix.mul_apply]
-    calc
-      ∑ j, ((W * Matrix.single c a 1 : Matrix (Fin D) (Fin D) ℂ) e j) * Wᴴ j b =
-          ((W * Matrix.single c a 1 : Matrix (Fin D) (Fin D) ℂ) e a) * Wᴴ a b := by
-        apply Finset.sum_eq_single a
-        · intro j _ hja
-          rw [Matrix.mul_apply]
-          simp [hja.symm]
-        · simp
-      _ = W e c * star (W b a) := by
-        rw [Matrix.mul_apply]
-        simp [Matrix.single_apply]
+    simp [Matrix.mul_apply, Matrix.single_apply, ite_and]
   rw [halfChainGram, Matrix.mul_apply, Kraus.mapLM_pow_apply A L, Matrix.sum_apply]
   refine Finset.sum_congr rfl fun σ _ => ?_
   rw [hmul (Kraus.evalWord A (List.ofFn σ)) p.2 p.1 q.2 q.1]

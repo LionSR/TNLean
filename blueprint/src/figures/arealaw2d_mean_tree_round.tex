@@ -1,0 +1,65 @@
+% Figure arealaw2d_mean_tree_round.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL App. E 3 (the trees of a round), Fig. 14(a).
+% Source: arXiv OpenAI2026AreaLaw, sections/06-transport.tex:245-319 (round data,
+% eq. (7.14) transport:terminal-weights, and Fig. 1 transport:tree-figure, redrawn),
+% with sections/06-transport.tex:392-398 (eq. (7.19), the states sigma_{j,u}) and
+% sections/06-transport.tex:441-465 (eqs. (7.23)-(7.24), the derivative at an
+% interpolating vertex carried to the root).
+% Ink-to-index: one history hh (\mathfrak h) and one choice c of a round. Dots are
+% tree vertices labelled by the positive operator evaluated there: the root M(p)
+% (west), the interpolation vertex A_hh #_p B_hh (A #_p B = A^{1/2}(A^{-1/2} B
+% A^{-1/2})^p A^{1/2}; label directly above the vertex), the old leaf A_hh (straight
+% east of the vertex, continuing the history row), the choice-tree root B_hh (below)
+% and the new leaf A_{hh,c}. Evaluation runs toward the root (dotted arrows; the two
+% solid tree edges carry no tip); edge labels are the weights 1-p (old edge) and p
+% (choice edge); the dotted arrows abbreviate whole paths (history path, product
+% w_hh; choice path, product q_{c|hh}), not single edges. Terminal weights (7.14) sit
+% east of the two leaves, after the leaf names: pi_{(hh,old)} = (1-p) w_hh and
+% pi_{(hh,c,new)} = p w_hh q_{c|hh}. The same p is used at every history in a round.
+% Derivative (red, species selected; eqs. (7.23)-(7.24)): the red string above the
+% history path runs from the vertex column to the root. Its tail label
+% d_p |-> log C_hh says that the normalized p-derivative at the vertex is the
+% old-child map at log C_hh, with C_hh = A_hh^{-1/2} B_hh A_hh^{-1/2} (black label
+% between the old leaf and the choice root); the string itself is w_hh
+% Phi_{(hh,old)}, the map to the root, and its head label is
+% Xi = M^{-1/2}(d_p M)M^{-1/2}. The coefficient is w_hh, not the leaf weight
+% pi_{(hh,old)} = (1-p) w_hh.
+% The grey string underneath (species complement), from root to leaves, is the
+% reverse direction in which the trace adjoints Phi_j^* of the normalized derivative
+% maps carry the states sigma_{j,u}.
+% The edges are drawn as wires between dots only for layout; they are tree edges,
+% not contracted indices.
+% Boundary signature: empty (not a tensor contraction).
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=10, bonds=none, size=l]
+        \tn[at=(4,1), name=mtRoot, label pos=w, ports={0:virtual}]{\mathcal M(p)}
+        \tn[at=(4,4), name=mtVertex, label pos=90,
+            ports={180:virtual, 0:virtual, 315:virtual}]{A_{\mathfrak h}\#_pB_{\mathfrak h}}
+        \tn[at=(4,9), name=mtOld, label pos=e,
+            ports={180:virtual}]{A_{\mathfrak h}\ \ \pi=(1-p)w_{\mathfrak h}}
+        \tn[at=(9,7), name=mtChoice, label pos=s, ports={135:virtual, 0:virtual}]{B_{\mathfrak h}}
+        \tn[at=(9,10), name=mtNew, label pos=e,
+            ports={180:virtual}]{A_{\mathfrak h,c}\ \ \pi=pw_{\mathfrak h}q_{c\mid\mathfrak h}}
+        \tnwire[stroke=dotted, dir=to, name=mtHist]{mtVertex.180}{mtRoot.0}
+        \tnwire[name=mtOldEdge]{mtOld.180}{mtVertex.0}
+        \tnwire[name=mtChoiceEdge]{mtChoice.135}{mtVertex.315}
+        \tnwire[stroke=dotted, dir=to, name=mtChoicePath]{mtNew.180}{mtChoice.0}
+        \tnwire[kind=string, species=selected, dir=to, name=mtXi]{(2,4)}{(2,1)}
+        \tnwire[kind=string, species=complement, dir=to, name=mtStates]{(11,1)}{(11,10)}
+        \tnmark[form=label, label pos=s]{on mtHist 0.65}{
+            \begin{matrix}\text{history path,}\\ \text{weight }w_{\mathfrak h}\end{matrix}}
+        \tnmark[form=label, label pos=n]{on mtOldEdge 0.3}{1-p}
+        \tnmark[form=label, label pos=45]{on mtChoiceEdge 0.5}{p}
+        \tnmark[form=label, label pos=n]{on mtChoicePath 0.5}{
+            \begin{matrix}\text{choice path,}\\ q_{c\mid\mathfrak h}\end{matrix}}
+        \tnmark[form=label, species=selected, label pos=e]{(2,4)}{\partial_p\mapsto\log C_{\mathfrak h}}
+        \tnmark[form=label, species=selected, label pos=n]{on mtXi 0.5}{
+            w_{\mathfrak h}\Phi_{(\mathfrak h,\mathrm{old})}}
+        \tnmark[form=label, species=selected, label pos=w]{(2,1)}{\Xi}
+        \tnmark[form=label, label pos=e]{midway (5,7) and (6,7)}{
+            C_{\mathfrak h}=A_{\mathfrak h}^{-1/2}B_{\mathfrak h}A_{\mathfrak h}^{-1/2}}
+        \tnmark[form=label, label pos=s]{on mtStates 0.5}{\Phi_j^*\text{: states }\sigma_{j,u}}
+    \end{tenkz}
+\end{center}

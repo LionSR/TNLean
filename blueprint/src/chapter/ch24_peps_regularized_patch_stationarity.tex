@@ -103,6 +103,49 @@ Its marginals are those of the same final normalized vector defined in
     Fermat's theorem gives~(\ref{eq:peps_coordinate_first_variation}).
 \end{proof}
 
+\begin{theorem}[Radius derivative of the ordered patch output]
+    \label{thm:peps_patch_radius_derivative}
+    \lean{TNLean.PEPS.hasDerivAt_regularizedPatchOutput_exp_neg}
+    \leanok
+    \uses{def:peps_patch_coordinate_insertion}
+    Let $V$ be a finite ordered set with finite local configuration sets $A_v$,
+    and write $\mathcal H_X=\ell^2(\prod_{v\in X}A_v;\C)$.
+    Fix regions $X_0,\ldots,X_{m-1}\subseteq V$, real weights $a_j$,
+    positive semidefinite matrices $x_j$ on $\mathcal H_{X_j}$, and
+    $\Omega\in\mathcal H_V$. A hat denotes extension by the identity
+    outside the indicated region. For $r\in\R$, put $K_j(r)=(x_j+e^{-r}I_{X_j})^{-a_j/2}$ and define
+    \begin{align}
+        \Psi(r)             & =\widehat K_{m-1}(r)\cdots\widehat K_0(r)\Omega,\notag \\
+        \mathcal I_{j,r}(H) & =
+        \widehat K_{m-1}(r)\cdots\widehat K_{j+1}(r)
+        \widehat H_{X_j}
+        \widehat K_{j-1}(r)\cdots\widehat K_0(r)\Omega.
+        \label{eq:peps_patch_radius_output}
+    \end{align}
+    Then $\Psi$ is differentiable at every $R\in\R$, with
+    \begin{align}
+        \Psi'(R)
+         & =\sum_{j=0}^{m-1}\mathcal I_{j,R}\!\left(
+        \frac{a_j}{2}e^{-R}
+        (x_j+e^{-R}I_{X_j})^{-a_j/2-1}\right).
+        \label{eq:peps_patch_radius_derivative}
+    \end{align}
+    The matrices $x_j$ need not have trace one, and the weights may have
+    either sign. Regions may repeat and need not be nested. For $m=0$,
+    the product is the identity, the sum is zero, and $\Psi(r)=\Omega$.
+    This is the ordered product rule underlying the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L425-L437}{radius derivative estimate for regularized patches}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Since $x_j+e^{-R}I$ is positive definite, differentiating its real power
+    gives $K_j'(R)=(a_j/2)e^{-R}(x_j+e^{-R}I)^{-a_j/2-1}$.
+    Extension by the identity is linear. Apply the product rule in the
+    fixed order $m-1,\ldots,0$ and then apply each term to $\Omega$.
+    The term indexed by $j$ replaces only that occurrence of the factor,
+    giving (\ref{eq:peps_patch_radius_derivative}).
+\end{proof}
+
 \begin{definition}[Canonical global coordinates and marginals]
     \label{def:peps_patch_canonical_marginal}
     \lean{
@@ -220,10 +263,10 @@ Its marginals are those of the same final normalized vector defined in
 \end{proof}
 
 % Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 91--99.
-% Completion marks await verification of the public declaration.
 \begin{theorem}[Canonical coordinates for the normalized output]
     \label{thm:peps_ordered_patch_normalized_coordinates}
     \lean{TNLean.PEPS.dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput}
+    \leanok
     \uses{def:peps_ordered_patch_factor_list,def:peps_patch_canonical_marginal,
         def:peps_regularized_patch_minimum}
     Retain arbitrary matrices $x_j$, real exponents $a_j$, a real shift $b$,
@@ -234,6 +277,7 @@ Its marginals are those of the same final normalized vector defined in
     Then $J\widehat\Psi=\widehat{\widetilde\Psi}$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:peps_ordered_patch_output_coordinates}
     Linearity and preservation of the norm give
     \begin{align*}
@@ -248,6 +292,7 @@ Its marginals are those of the same final normalized vector defined in
 \begin{theorem}[Regional marginals in the ordered coordinates]
     \label{thm:peps_ordered_patch_marginal_coordinates}
     \lean{TNLean.PEPS.normalizedRegularizedPatchMarginal_eq_regionState_patchState}
+    \leanok
     \uses{thm:peps_ordered_patch_normalized_coordinates,def:peps_patch_canonical_marginal}
     For the same arbitrary data and every region $R\subseteq V$, the canonical
     marginal of the normalized ordered output satisfies
@@ -259,6 +304,7 @@ Its marginals are those of the same final normalized vector defined in
     The identity includes the empty region and a vanishing output.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:peps_ordered_patch_normalized_coordinates,thm:peps_patch_basis_relabelling}
     Apply the regional coordinate identity with the identity relabelling at
     every site. The normalized vectors agree by
@@ -404,6 +450,111 @@ Its marginals are those of the same final normalized vector defined in
         =\operatorname{Tr}(\rho_j H K_j^{-1})$, which proves the assertion.
 \end{proof}
 
+
+\begin{theorem}[Logarithmic radius derivative under outer commutations]
+    \label{thm:peps_patch_log_radius_derivative_of_outer_commute}
+    \lean{TNLean.PEPS.hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute}
+    \leanok
+    \uses{thm:peps_patch_radius_derivative,thm:peps_patch_insertion_trace,
+        def:peps_patch_canonical_marginal}
+    Let $V$ be a finite ordered set with finite local configuration sets $A_v$,
+    and put $\mathcal H_X=\ell^2(\prod_{v\in X}A_v;\C)$.
+    Let $X_0\subseteq\cdots\subseteq X_{m-1}\subseteq V$, let $a_j\geq0$,
+    and let $x_j$ be density matrices on $\mathcal H_{X_j}$.
+    Fix a unit vector $\Omega\in\mathcal H_V$.
+    For $r\in\R$, define
+    \[
+        K_j(r)=(x_j+e^{-r}I_{X_j})^{-a_j/2},\qquad
+        \Psi(r)=\widehat K_{m-1}(r)\cdots\widehat K_0(r)\Omega,
+        \qquad F(r)=\|\Psi(r)\|,
+    \]
+    where a hat denotes extension by the identity.
+    Let $\rho_j(r)$ be the reduced density matrix of
+    $\Psi(r)/F(r)$ on $X_j$.
+    Suppose that, at a fixed $R\in\R$,
+    \[
+        K_k(R)\rho_k(R)=\rho_k(R)K_k(R)
+        \qquad\text{for all }0\leq j<k<m.
+    \]
+    Then
+    \begin{equation}
+        \left.\frac{d}{dr}\log F(r)\right|_{r=R}
+        =\sum_{j=0}^{m-1}\frac{a_j}{2}
+        \operatorname{Re}\Tr\!\left(
+        \rho_j(R)e^{-R}(x_j+e^{-R}I_{X_j})^{-1}\right).
+        \label{eq:peps_patch_log_radius_derivative}
+    \end{equation}
+    Regions may repeat, the matrices $x_j$ may be singular, and zero weights
+    and the empty product are allowed. The tuple $(x_j)$ is fixed as $r$ varies.
+    This conditional identity is the trace computation in the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L453-L466}{radius argument for regularized patches}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The positive shifts make every factor invertible, so $F(r)>0$.
+    Differentiate $\frac12\log\|\Psi(r)\|^2$ and apply the ordered
+    insertion formula. For the term at position $j$, the assumed commutations
+    and nested regions give the insertion trace identity. Writing $b=e^{-R}$,
+    the inserted local derivative followed by $K_j(R)^{-1}$ is
+    $(a_j/2)b(x_j+bI)^{-1}$. The common factor $F(R)^2$ cancels
+    the denominator from differentiating the logarithm, yielding
+    (\ref{eq:peps_patch_log_radius_derivative}).
+\end{proof}
+
+\begin{theorem}[Uniform bound for the logarithmic radius derivative]
+    \label{thm:peps_patch_uniform_log_radius_derivative}
+    \lean{TNLean.PEPS.exists_hasDerivAt_log_regularizedPatchObjective_exp_neg_uniform}
+    Let $V$ be a finite ordered set with finite local configuration sets $A_v$,
+    and write $\mathcal H_X=\ell^2(\prod_{v\in X}A_v;\C)$.
+    Fix regions $X_0,\ldots,X_{m-1}\subseteq V$, nonnegative weights $a_j$,
+    and a unit vector $\Omega\in\mathcal H_V$. Put $\kappa=\sum_j a_j$.
+    For density matrices $x_j$ on $\mathcal H_{X_j}$, define
+    \begin{align}
+        \Psi_x(r) & =\widehat{(x_{m-1}+e^{-r}I)^{-a_{m-1}/2}}
+        \cdots\widehat{(x_0+e^{-r}I)^{-a_0/2}}\Omega,         \\
+        F_x(r)    & =\|\Psi_x(r)\|,
+    \end{align}
+    where a hat denotes extension by the identity outside the indicated region.
+    If $T\geq0$, then for every feasible tuple $x$ and every $R\in[0,T]$,
+    the derivative of $\log F_x$ exists at $R$ and satisfies
+    \begin{align}
+        \left|\frac{d}{dr}\log F_x(r)\bigg|_{r=R}\right|
+         & \leq \frac{\kappa}{2}\,2^{\kappa/2}e^{\kappa T/2}.
+        \label{eq:peps_patch_uniform_log_radius_derivative}
+    \end{align}
+    No nesting or commutation is required. The bound includes repeated regions,
+    singular densities, zero weights and the empty product.
+    Source: the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L433-L451}{uniform local Lipschitz estimate for regularized patches}.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_patch_radius_derivative,thm:peps_regularized_patch_bounds}
+    Fix $x$ and $R$, and put $b=e^{-R}$ and $c=\kappa/2$.
+    The positive shift makes all filters invertible, so $F_x(R)>0$.
+    For $K_j=(x_j+bI)^{-a_j/2}$ and
+    $D_j=(a_j/2)b(x_j+bI)^{-a_j/2-1}$, the spectral bounds give
+    \begin{align}
+        \|K_j\| & \leq b^{-a_j/2},        \\
+        \|D_j\| & \leq (a_j/2)b^{-a_j/2}.
+    \end{align}
+    Extension by the identity preserves these upper bounds.
+    Apply the ordered insertion formula and estimate each product in its
+    original order. Summing over its positions yields
+    $\|\Psi_x'(R)\|\leq c b^{-c}$.
+    The lower norm bound is $F_x(R)\geq(1+b)^{-c}$.
+    Differentiating $\frac12\log\|\Psi_x(r)\|^2$ and using
+    Cauchy--Schwarz therefore gives
+    \begin{align}
+        |(\log F_x)'(R)|
+         & \leq\frac{\|\Psi_x'(R)\|}{F_x(R)}
+        \leq c\frac{b^{-c}}{(1+b)^{-c}}
+        =c(1+e^R)^c.
+    \end{align}
+    Since $R\leq T$ and $T\geq0$, one has $1+e^R\leq2e^T$.
+    Raising this inequality to the nonnegative power $c$ proves
+    (\ref{eq:peps_patch_uniform_log_radius_derivative}).
+    No division by a weight is used.
+\end{proof}
 
 \begin{definition}[Diagonal coordinate objective]
     \label{def:peps_patch_diagonal_objective}

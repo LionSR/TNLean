@@ -454,6 +454,72 @@ asymptotic scale specialization is proved below.
     since a scheduled fill cannot create a bad lead.
 \end{proof}
 
+\begin{theorem}[Geometry and probabilities of the scan]
+    \label{thm:al_scan_histories}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.HistoryProperties,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.historyProperties_of_scales,
+        TNLean.PEPS.AreaLaw.Scan.eventually_historyProperties}
+    \leanok
+    \uses{thm:al_scan_designated_sampling,thm:al_scan_unconditional_split_interval,
+        thm:al_scan_designated_dilution,thm:al_scan_terminal_split,
+        thm:al_scan_split_count,thm:al_scan_nested_band_metrics,
+        thm:al_scan_physical_prefix_approximation,thm:al_scan_status_cuts,
+        thm:al_scan_bad_history_inverse_power,
+        thm:al_scan_uniform_bad_old,lem:al_scan_rounded_radius}
+    Fix $0<\ell$, $0<\kappa<\mu<1-\ell$, $C_r,C_1>0$, $C_T\ge0$, a bound $b$ on
+    the number of labels with a fixed anchor, $3b\le C_1$, and a real exponent
+    $p$. Take the source scales $L,m,K,D,M$ above with $r_0=r$, let $Z$ be
+    the set of endpoints of cut edges, and suppose
+    \begin{align}
+        |T|\le C_Tn^2,\qquad
+        |T_d\setminus T_{d-1}|\le n\quad(1\le d\le L),\qquad
+        \operatorname{dist}_\infty(T,Z)>2L+10r_0.
+    \end{align}
+    For all sufficiently large $n$, uniformly over finite lattice domains,
+    cuts, nonempty targets, labels and actual scanners, the following hold
+    for completed statuses after $k\le nm$ fill--charge pairs and for
+    pre-charge statuses with $k+1\le nm$.
+    \begin{enumerate}
+        \item Every splitting designated support is the graph $r_0$-ball of its
+              anchor and lies in $A$. It splits at most one band, where it meets
+              $Y$ and exactly one side and lies in one part of every other band.
+              The metrics of all statuses of distinct bands commute on the
+              symmetric replica space.
+        \item Every assigned site of $A$ has oriented depth at most
+              $j+D+r_0$ on its side. One has
+              $Q_{j_N-1}\subseteq U$ and $UY\subseteq Q_{-j_F}$, and both
+              symmetric differences have at most $3nD$ sites. The cuts of
+              $U,UY,Y,P_0,V$ have at most $40nD$ edges, and at most $10bKnD$
+              labelled terms split.
+        \item For every label, every fill or charge round and every common
+              $p'\in[0,1]$, the terminal-leaf probability that the label splits
+              is at most $10D/m$.
+        \item The probability that a full history fails to be good at some time
+              is at most $n^{-p}$. At a charge round on a good old history, each
+              split term is sampled on its splitting side with probability at
+              least $1/[2(C_1+1)nD]$, and the sampled move is exactly the old
+              $Y$-part of its designated support.
+    \end{enumerate}
+    All probabilities are classical path probabilities of the history tree.
+    This is \cite[Lemma~9.1]{OpenAI2026AreaLaw} with explicit constants.
+\end{theorem}
+\begin{proof}\leanok
+    The source scales eventually give $n\ge2$, $1\le D$, $2r_0\le D$,
+    $4(D+2r_0)\le m$ and $8Km\le L$, and the padded capacity is
+    $M=\lceil C_1nD\rceil$. With these finite inequalities, item~1 follows
+    from Theorems~\ref{thm:al_scan_designated_sampling},
+    \ref{thm:al_scan_terminal_split} and~\ref{thm:al_scan_nested_band_metrics}
+    together with the cut clearance of graph balls meeting the compact collar.
+    Item~2 follows from
+    Theorems~\ref{thm:al_scan_unconditional_split_interval},
+    \ref{thm:al_scan_physical_prefix_approximation},
+    \ref{thm:al_scan_status_cuts} and~\ref{thm:al_scan_split_count}.
+    Item~3 is Theorem~\ref{thm:al_scan_designated_dilution}. The bad-history
+    bound is Theorem~\ref{thm:al_scan_bad_history_inverse_power}, and the
+    good-history sampling bound is
+    Theorem~\ref{thm:al_scan_designated_sampling}.
+\end{proof}
+
 Identifying transported entropy gains and constructing the remaining scanner
 inputs are separate mathematical steps. The probability estimate concerns
 actual classical histories and does not identify their quantum entropy costs.

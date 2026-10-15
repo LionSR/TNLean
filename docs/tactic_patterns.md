@@ -24,6 +24,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Patch net covers in the plane conditions — promoted (2026-10-15)
+
+- **Pattern:** From `exists_netCover`, turn the cover of a set `K` by the net `u ℤ²` into a cover
+  by the inner squares of the patches at the net points, and bound the outer square of a patch at
+  a net point within `3 u` of `K`.
+- **Seen:** the direct repainting, the resize and the local rewrite, in
+  `DyadicDirectRepaintingRewrite.lean`, `DyadicResizeRewrite.lean` and `LocalGuideRewrite.lean`
+  under `TNLean/PEPS/Approximation/`.
+- **Abstraction:** `exists_mem_image_dist_le_scale` and `exists_dist_lt_of_mem_image` in
+  `GuideFrameRewrite.lean`.
+- **Notes:** The patches are assumed centered at their net points with radius `u`.
+
 ### Positional factors in reversed finite lists — promoted through Mathlib
 
 - **Pattern:** Recover an index of a factor in a reversed finite list, transfer
@@ -39,6 +51,46 @@ abstracted — record why, so it is not re-proposed).
   index witness when transferring exponent and density assumptions.
 - **Notes:** No injectivity of the regions or factors is required; equal
   regions retain independent positions in the minimizing comparison.
+
+### Ambient dilation in coordinate inequalities — promoted (2026-10-14)
+
+- **Pattern:** Expand the finite union of integer squares, their Cartesian
+  products and interval membership to obtain coordinate inequalities.
+- **Seen:** The original membership lemma in `Geometry/TemplateRows.lean`,
+  `Scan.ambientDepth_le_iff_mem_dilation` in `Scan/AmbientDepth.lean`, and
+  `exterior_union_subset_graphNeighborhood_compl_of_clearance` in
+  `GraphNeighborhoodCutClearance.lean`, under `TNLean/PEPS/AreaLaw/`.
+- **Abstraction:** The unchanged public `mem_ambientDilation_iff` now follows
+  `ambientDilation` in the basic `FiniteDomain.lean` module. The ambient-depth
+  equivalence and the whole-remote exclusion proof simplify with this lemma.
+  No alias, new tactic, global attribute or geometric hypothesis is added.
+- **Remaining occurrences:** Direct expansions remain in `BufferedRectangles.lean`
+  and `Geometry/DistanceLayers.lean`, `Geometry/DummyContacts.lean`,
+  `Geometry/DyadicExhaustion.lean` and `Geometry/DyadicLayers.lean`. They are
+  retained for a focused follow-up. The private dyadic-layer lemma has a
+  different absolute-value formulation and is not a duplicate declaration.
+- **Notes:** The helper allows every finite target and natural radius, including
+  the empty target and radius zero. The ambient-depth replacement removes one
+  proof line and preserves the statement and remaining proof. The relocated
+  helper and the production proofs passed the full project build, strict Lean
+  checks, the named standard-axiom test, and blueprint declaration checks.
+
+### Finite virtual coordinates — promoted through Mathlib (2026-10-14)
+
+- **Pattern:** Enumerate each finite virtual alphabet independently, then
+  transport the finite contraction sum through the product bijection.
+- **Seen:** `Routing.toTensor_stateCoeff` in `RoutedContraction.lean` and
+  `DistributedOperatorContraction.operatorCoeff_toPartyNetwork` in
+  `DistributedPartyNetwork.lean`, both under `PEPS/Approximation/`.
+- **Abstraction:** Mathlib's `Equiv.piCongrRight` forms the product bijection;
+  `Equiv.sum_comp` transports the whole sum. Local factors reduce by
+  `Equiv.symm_apply_apply`. Both proofs use these existing declarations.
+- **Notes:** No new tactic or parallel finite-network structure is needed.
+  The distributed conversion retains all original link occurrences and their
+  endpoints, including parallel links and empty alphabets. Its equality is
+  entrywise under prescribed physical readouts; those readouts do not, in
+  general, preserve trace norms. The new declaration awaits hosted verification.
+
 
 ### Named comparison of arbitrary word evaluations — promoted (2026-10-14)
 
@@ -4352,6 +4404,64 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Logarithmic norm derivatives from squared norms — candidate (2026-10-15)
+
+- **Pattern:** Differentiate the squared norm, compose with the real logarithm,
+  and divide by two. Positivity of the original norm justifies the logarithm
+  and the subsequent cancellation.
+- **Seen:** `hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute`
+  and `exists_hasDerivAt_log_regularizedPatchObjective_exp_neg_uniform`, both in
+  `PEPS/AreaLaw/RegularizedPatchRadiusDerivative.lean`.
+- **Abstraction:** Both occurrences reuse `HasDerivAt.norm_sq` and `HasDerivAt.log`.
+  A third occurrence in another file would justify a helper for the logarithmic
+  norm derivative of a nonzero complex vector-valued function.
+- **Caveat:** The real inner-product instance must agree with the complex space;
+  positivity concerns the same vector whose derivative is being computed.
+
+### Applying an ordered matrix derivative to a vector — candidate (2026-10-15)
+
+- **Pattern:** Compose `Matrix.toEuclideanLin.toLinearMap` with
+  `LinearMap.applyₗ Ω` to apply a varying matrix to a fixed Euclidean vector.
+  Restrict scalars to ℝ and use finite-dimensional continuity for real derivatives.
+- **Seen:** `regularizedPatchInsertion` in `PEPS/AreaLaw/RegularizedPatchCoordinate.lean`
+  and `hasDerivAt_regularizedPatchOutput_exp_neg` in
+  `PEPS/AreaLaw/RegularizedPatchRadiusDerivative.lean`.
+- **Abstraction:** The proofs use the existing linear maps. A third occurrence
+  would justify a public continuous linear evaluation map for matrices.
+- **Caveat:** The ordered product remains noncommutative; differentiate the
+  continuous multilinear product and retain the original insertion indices.
+
+### Continuity of an ordered regional filter product — candidate
+
+- **Pattern:** Prove continuity of each identity-extended local matrix power,
+  apply finite ordered-product continuity, and compose with evaluation on the
+  fixed vector and the norm.
+- **Seen:** `continuousOn_regularizedPatchObjective` in
+  `PEPS/AreaLaw/RegularizedPatchMinimum.lean` and the joint-continuity step in
+  `continuous_regularizedPatchMinimum_exp_neg` in
+  `PEPS/AreaLaw/RegularizedPatchMinimumContinuity.lean`.
+- **Abstraction:** Both proofs already use Mathlib's `continuousOn_list_prod`
+  or `continuous_list_prod`. A third occurrence may justify a shared theorem
+  for evaluation of a continuously varying ordered product.
+- **Notes:** The second proof varies the positive scalar shift and all feasible
+  regional densities together. Continuity in each variable separately would
+  not suffice for the compact-minimum argument.
+
+### Removing subsingleton physical coordinates — candidate (2026-10-14)
+
+- **Pattern:** In an inverse configuration map, prove equality at noncarrying
+  coordinates using the subsingleton property of their physical alphabet.
+- **Seen:** The exterior coordinate in `SelectedPhysicalConfigurations.lean`
+  and the complement of the designated owners in `PartyPhysicalCoordinates.lean`,
+  both under `PEPS/Approximation/`.
+- **Abstraction:** Both cases already use Mathlib's `Subsingleton.elim`.
+  The one-owner-per-site theorem supplies the complete dependent configuration
+  bijection; no additional closing tactic is proposed.
+- **Notes:** Subsingleton physical coordinates retain their scalar tensor
+  factors. No local tensor is assumed to equal one. The actual protocol must
+  supply the hypotheses of the owner-coordinate theorem.
+
+
 ### Upper endpoint of a scanner band — candidate (2026-10-12)
 
 - **Pattern:** Use the band index bound, the offset bound and $8Km\le L$
@@ -7627,3 +7737,19 @@ spectral split → block extraction → MPV calculation → strict bounds
   if the final composition cancellation recurs in another file.
 - **Notes:** all three uses are in one file, below the two-file promotion
   threshold. No nonzero vector or nonempty index type is required.
+
+
+### Colors descended to connected fan runs — candidate (2026-10-14)
+
+- **Pattern:** Apply `SimpleGraph.ConnectedComponent.lift` to the triangle
+  colors, using `cellFanRun_color_eq` on the reachability of a walk.
+- **Seen:** The private `runColor` in
+  `PEPS/AreaLaw/Geometry/InitialRegions.lean` and
+  `repairFanRunExteriorColor` in
+  `PEPS/AreaLaw/Geometry/RepairReplacementRegions.lean`.
+- **Abstraction:** Mathlib already supplies the component descent. A common
+  color function for `CellFanRun` would remove the two applications if the
+  same expression is needed in another module; no additional tactic is needed.
+- **Notes:** Two occurrences in two files. The repair construction retains
+  its explicit exterior-color argument, while the initial family uses the
+  colors of its actual belt fan. Neither requires a representative of a run.
