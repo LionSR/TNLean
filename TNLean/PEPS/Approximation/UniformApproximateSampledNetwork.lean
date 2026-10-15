@@ -153,26 +153,24 @@ theorem exists_uniform_approximate_sampled_network
               ∃ g : ref.gateLocations, j ∈ ref.participants g ∧ l ∈ ref.participants g) := by
   classical
   intro countC t q
-  choose rAtPrecision C_K C_C u v hCK hCC hLists using hExpansionAvailability
-  let r := rAtPrecision q
-  let C_B := fun z ↦ 1 + C_K z * C_C z
-  let s := fun z ↦ u z + v z
-  have hCB : ∀ z, 0 ≤ C_B z := by
-    intro z
-    exact add_nonneg zero_le_one (mul_nonneg (hCK z) (hCC z))
+  obtain ⟨r, C_K, C_C, u, v, hCK, hCC, hLists⟩ := hExpansionAvailability q
+  let C_B := 1 + C_K * C_C
+  let s := u + v
+  have hCB : 0 ≤ C_B := add_nonneg zero_le_one (mul_nonneg hCK hCC)
   obtain ⟨C_p, α, hC, hα, hfamily⟩ :=
     EffectCircuit.exists_uniform_sampled_approximate_network_bounds
       r b n d countC (1 + C_D) (by dsimp [countC]; linarith)
-      C_K C_B u s hCK hCB p hp
+      (fun _ ↦ C_K) (fun _ ↦ C_B) (fun _ ↦ u) (fun _ ↦ s)
+      (fun _ ↦ hCK) (fun _ ↦ hCB) p hp
   refine ⟨r, C_p, α, hC, hα, ?_⟩
   intro L C H hH x hx physicalDim ps hps hcover priv hpriv ref Goriginal hL D
   have hLone : 1 ≤ (L : ℝ) := le_trans (by norm_num) hL
-  obtain ⟨lists, K, htermwise, hmonomial, hK, happrox⟩ := hLists q L
+  obtain ⟨lists, K, htermwise, hmonomial, hK, happrox⟩ := hLists L
   let w := ref.reexpand lists
   let G := ref.reexpandGateMaps lists Goriginal
   obtain ⟨B, hB, hb, hBB⟩ :=
     w.exists_one_le_isExpansionBounded_of_termwise_power_bounds
-      (L : ℝ) (C_K q) (C_C q) (u q) (v q) hLone (hCK q) (hCC q)
+      (L : ℝ) C_K C_C u v hLone hCK hCC
       hmonomial htermwise hK
   have hNre : (w.expandedGateCount : ℝ) ≤ countC * (L : ℝ) ^ n := by
     rw [ref.expandedGateCount_reexpand lists]

@@ -72,7 +72,6 @@ theorem exists_uniform_sampled_approximate_network_bounds
         (happrox : w.IsGateApproximation (L ^ q)⁻¹ G),
         let ε := (L ^ t)⁻¹
         let hε : 0 < ε := by positivity
-        let hεone : ε ≤ 1 := inv_le_one_of_one_le₀ (one_le_pow₀ (by linarith))
         let hbudget : w.IsGateApproximation
             (sourceGateBudget (ε / 2) w.expandedGateCount) G := by
           have hprecision : w.IsGateApproximation
@@ -84,7 +83,6 @@ theorem exists_uniform_sampled_approximate_network_bounds
         let W := w.rescaledOriginal (sourceGateBudget_pos (half_pos hε) _).le G hbudget
         let hbW := w.isExpansionBounded_rescaledOriginal
           (sourceGateBudget_pos (half_pos hε) _).le G hbudget hb
-        let δ := sourceGateBudget ε w.expandedGateCount
         let R := W.produce.physicalFirstReplacement (sourceGateBudget_pos hε w.expandedGateCount)
           (familyPhysicalLayout physicalDim ps) priv W.isAllowed_produce
           ((W.isExpansionBounded_produce_iff r (B : ℝ)).mpr hbW)
@@ -143,7 +141,7 @@ theorem exists_uniform_sampled_approximate_network_bounds
   refine ⟨C, a + t, by dsimp [C, C_sample]; positivity, by omega, ?_⟩
   intro L hL P inst H hH x hx physicalDim ps hps hcover priv w G K B D hB hD
     hb hmonomial harity hlifetime hphysical hpriv hK hN hBB hDD happrox
-    ε hε hεone hbudget W hbW δ R k
+    ε hε hbudget W hbW R k
   have hLone : 1 ≤ L := le_trans (by norm_num) hL
   have hsmall : ε ≤ L ^ (-p) := by
     calc
@@ -174,6 +172,7 @@ theorem exists_uniform_sampled_approximate_network_bounds
     hbW harityW hlifetimeW
   have hlocal := W.exists_original_gate_of_physicalFirst_density_link
     (familyPhysicalLayout physicalDim ps) priv (sourceGateBudget_pos hε w.expandedGateCount) hbW
+  have hεone : ε ≤ 1 := inv_le_one_of_one_le₀ (one_le_pow₀ hLone)
   obtain ⟨lam, E, F, _hframes, ω, hω⟩ :=
     w.exists_sampled_contractedOperator_approximate_error_le H hH x hx
       physicalDim ps hps hcover priv G B D hB hD hb le_rfl hlifetime hphysical
