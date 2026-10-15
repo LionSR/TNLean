@@ -179,28 +179,7 @@ theorem exists_uniform_sampled_approximate_network_bounds
       physicalDim ps hps hcover priv G B D hB hD hb le_rfl hlifetime hphysical
       hpriv ε hε hεone hbudget
   dsimp only at hω hdim hinc hlocal
-  let ψ := ProductInput.ofAllParties H x hx
-  let m := stackLength r (B : ℝ) δ
-  let garbage := W.produce.auxiliary m ++ priv
-  let hfinite := W.produce.finiteDimensional_auxiliary_private_registers m priv hpriv
-  let I := fun z : Option {j : P // (fun _ : P ↦ true) j = true} ↦
-    Fin (Module.finrank ℂ (Mem (Layout.atParty z (R.allResidualSourceLayout ++ []))))
-  let J := fun z : Option {j : P // (fun _ : P ↦ true) j = true} ↦
-    Fin (Module.finrank ℂ (Mem (Layout.atParty z
-      (Layout.mapOwner (affectedOwner (fun _ : P ↦ true)) garbage))))
-  let T := fun (j : P)
-    (ξζ : DistributedOperatorContraction.GateLabelsAt
-      (Finset.univ : Finset R.nonemptyGateLocations) (fun g ↦ R.participants g.1)
-      (fun g ↦ R.branchLabels g.1 × R.branchLabels g.1) j)
-    (z : DistributedOperatorContraction.SampleAt
-      (Finset.univ : Finset R.nonemptyGateLocations) (fun g ↦ R.participants g.1) j → Fin k) ↦
-    SourceCircuit.incidentSampledPhysicalFactor (I := I) (E := J)
-      physicalDim ps hps hcover garbage R ψ k lam E F j
-      (fun g ↦ (ξζ g).1) (fun g ↦ (ξζ g).2) ω
-      (fun z ↦ R.allResidualSourceBasis z)
-      (fun z ↦ SourceCircuit.allPartyDiscardBasis garbage hfinite z)
-      (z ∘ (SourceCircuit.partialSlotSampleEquiv R j).toFun)
-  refine ⟨T, hω.trans hsmall, ?_, hinc, ?_⟩
+  refine ⟨_, hω.trans hsmall, ?_, hinc, ?_⟩
   · intro e
     exact (hdim e).trans (mul_le_mul_of_nonneg_left
       (pow_le_pow_right₀ hLone (Nat.le_add_right a t)) (by dsimp [C, C_sample]; positivity))
