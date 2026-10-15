@@ -232,7 +232,8 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
         have haux := auxState_succ frozen idle hi (large := large) fun S' h => by
           rw [he] at h; obtain rfl := Sum.inl_injective h; simpa using hlS
         simp only [hst_def, protocolState]
-        rw [haux, mainState_of_lt _ _ _ _ _ _ hi, he, ← eventMain_inl_succ P rank R₀ hε ht hB hk hi he]
+        rw [haux, mainState_of_lt _ _ _ _ _ _ hi, he,
+          ← eventMain_inl_succ P rank R₀ hε ht hB hk hi he]
         simp only [eventMain]
         exact directRepainting_hasSourceBoundedChange hc hm hL hkL hΩ P rank R₀ ⟨S, hS⟩
           hKS _ _ hC hC' hcc _
@@ -243,7 +244,8 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
       have haux := auxState_succ frozen idle hi (large := large) fun S' h => by
         rw [he] at h; exact absurd h Sum.inr_ne_inl
       simp only [hst_def, protocolState]
-      rw [haux, mainState_of_lt _ _ _ _ _ _ hi, he, ← eventMain_inr_succ P rank R₀ hε ht hB hk hi he]
+      rw [haux, mainState_of_lt _ _ _ _ _ _ hi, he,
+        ← eventMain_inr_succ P rank R₀ hε ht hB hk hi he]
       simp only [eventMain]
       exact Hres ν hν hνν' hc hL hkL hΩ P rank R₀ J hJ0 _ _ _ hC hC' hcc _
   -- the trajectory
