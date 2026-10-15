@@ -26,10 +26,11 @@ The hypotheses of the statement are those of the source:
 * the entropy inputs `scanner:entropy-input` for the original ground vector (lines 353–357);
 * `a r₀²` sufficiently small (line 359).
 
-Its conclusion is the source's, with the coefficients changed as in the local fix below: the
-truncated ground vector `Ω̃` of Proposition 4.5, the auxiliary systems of dimension `d_*` (the
-typical window of width `n^{3/5}`) and a label sequence for which the vectors `pre_k` of
-`comparator:prevector` are nonzero; the comparator parameters with `B_sh ≤ C(nL^e + n)`,
+Its conclusion is the source's, with the coefficients changed as in the local fix below and
+the comparisons restricted as in the scope restriction below: the truncated ground vector
+`Ω̃` of Proposition 4.5, the auxiliary systems of dimension `d_*` (the typical window of
+width `n^{3/5}`) and a label sequence for which the vectors `pre_k` of `comparator:prevector`
+are nonzero; the comparator parameters with `B_sh ≤ C(nL^e + n)`,
 `B_exc ≤ CnD` and `𝓑 ≤ CnD(log n)^C`; and, for every sufficiently large replica count `k`,
 a charge round and a common parameter `p_k ∈ [ε/2, ε]` satisfying the defect-energy bound
 `scanner:energy-output` (lines 361–384), with a remainder `o_k(1)` uniform over the selected
@@ -43,6 +44,14 @@ shell bound fails, since a partial last depth row adds `n log q` (line 404); the
 allows its constants to depend on `C_e` (line 396). `ScannerStatement` takes both
 coefficients as existential constants chosen after `C_e`. Documented in
 `docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
+
+**Scope restriction (comparisons at the selected point):** the source also asserts that all
+norm comparisons of Proposition 8.1 hold at the selected round and parameter, including the
+rough lower bound and the conditional sharp upper and lower bounds (`08-scanner.tex`,
+lines 360–366). `ScannerStatement` and `ScanInputsSupply` carry only the rough upper
+comparison at the last endpoint; the comparisons at the selected point are item 3 of the
+scanner issue and are recorded as missing in `docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
+The source proposition is therefore not marked formalized.
 
 ## Main definitions
 
