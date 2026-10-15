@@ -74,7 +74,8 @@ theorem eventually_abs_regionalEntropy_sub_le_of_truncation
     4 * Real.sqrt t * (1 + (X.card : ℝ) * Real.log q) ≤
         (max 4 Cvol) * Real.sqrt t *
           (1 + (max 4 Cvol) * (n : ℝ) ^ 2 * Real.log q) := by
-      gcongr <;> first | exact le_max_left 4 Cvol | exact hcard'
+      gcongr
+      exact le_max_left 4 Cvol
     _ ≤ (n : ℝ) ^ (-247 : ℝ) := hcost t htbound
 
 end TNLean.PEPS.AreaLaw.Scan
