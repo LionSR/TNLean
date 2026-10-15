@@ -5,7 +5,6 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.RegularizedPatchRadiusDerivative
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimizerStationarity
-import Mathlib.Tactic.Trace
 
 /-!
 # The logarithmic radius derivative at an original patch minimum
@@ -51,19 +50,35 @@ theorem hasDerivAt_log_regularizedPatchObjective_exp_neg_of_isMinOn
           (normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
             regions a (Real.exp (-R)) Ω x (regions j) *
             (Real.exp (-R) • (x j + Real.exp (-R) • 1) ^ (-1 : ℝ)))).re) R := by
-  trace "actual minimum derivative: proof entry"
   have houter : ∀ j k : Fin m, j < k →
       Commute ((x k + Real.exp (-R) • 1) ^ (-(a k) / 2))
         (normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
           regions a (Real.exp (-R)) Ω x (regions k)) := by
     intro _j k _hjk
-    trace "actual minimum derivative: commutation callback"
     exact commute_filter_normalizedRegularizedPatchMarginal_of_isMinOn
       regions hnested a ha (Real.exp_pos (-R)) Ω x hx hmin k
-  trace "actual minimum derivative: callback supplied"
-  exact hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute
-    (Out := fun v ↦ Fin (n v))
-    regions hnested a (fun j ↦ (ha j).le) Ω hΩ x hx R houter
-  trace "actual minimum derivative: application returned"
+  let P (D : ∀ v : V, DecidableEq (Fin (n v))) : Prop :=
+    letI := D
+    (∀ j k : Fin m, j < k →
+      Commute ((x k + Real.exp (-R) • 1) ^ (-(a k) / 2))
+        (normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
+          regions a (Real.exp (-R)) Ω x (regions k))) →
+      HasDerivAt
+        (fun r : ℝ ↦ Real.log
+          (regularizedPatchObjective (Out := fun v ↦ Fin (n v))
+            regions a (Real.exp (-r)) Ω x))
+        (∑ j, (a j / 2) *
+          (Matrix.trace
+            (normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
+              regions a (Real.exp (-R)) Ω x (regions j) *
+              (Real.exp (-R) • (x j + Real.exp (-R) • 1) ^ (-1 : ℝ)))).re) R
+  have hP : P (fun v ↦ Classical.typeDecidableEq (Fin (n v))) :=
+    hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute
+      (Out := fun v ↦ Fin (n v))
+      regions hnested a (fun j ↦ (ha j).le) Ω hΩ x hx R
+  have hD : (fun v ↦ Classical.typeDecidableEq (Fin (n v))) =
+      (fun v ↦ (inferInstance : DecidableEq (Fin (n v)))) := Subsingleton.elim _ _
+  have hfinite : P (fun v ↦ (inferInstance : DecidableEq (Fin (n v)))) := hD ▸ hP
+  exact hfinite houter
 
 end TNLean.PEPS
