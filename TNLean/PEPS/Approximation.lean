@@ -193,6 +193,7 @@ import TNLean.PEPS.Approximation.NoneSourceWordScalar
 import TNLean.PEPS.Approximation.NonemptyGateLabels
 import TNLean.PEPS.Approximation.NonincidentAllGateRestriction
 import TNLean.PEPS.Approximation.OriginalCircuit
+import TNLean.PEPS.Approximation.OriginalCircuitLift
 import TNLean.PEPS.Approximation.OriginalCoefficientMajorant
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates
 import TNLean.PEPS.Approximation.OwnerMemoryTransport
@@ -285,6 +286,7 @@ import TNLean.PEPS.Approximation.SeparatedOutputCoordinates
 import TNLean.PEPS.Approximation.SeparatedPhysicalDensity
 import TNLean.PEPS.Approximation.SeparatedSchmidtOutput
 import TNLean.PEPS.Approximation.SheetSplitting
+import TNLean.PEPS.Approximation.SheetStack
 import TNLean.PEPS.Approximation.SheetSwapBoundaryExpansion
 import TNLean.PEPS.Approximation.SheetSwapConjugateSupport
 import TNLean.PEPS.Approximation.SheetSwapCorrection
@@ -383,6 +385,7 @@ import TNLean.PEPS.Approximation.WordAppendTail
 import TNLean.PEPS.Approximation.WordAppendTailRestriction
 import TNLean.PEPS.Approximation.WordEvalComparison
 import TNLean.PEPS.Approximation.WordEvaluationTransport
+import TNLean.PEPS.Approximation.WordOriginalCircuit
 import TNLean.PEPS.Approximation.WordOwnerAppendTailTransport
 import TNLean.PEPS.Approximation.WordOwnerEvaluation
 import TNLean.PEPS.Approximation.WordOwnerMap
