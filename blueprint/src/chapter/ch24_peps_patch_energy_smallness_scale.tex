@@ -10,6 +10,7 @@ densities are chosen. It does not establish the energy estimate itself.
 \begin{lemma}[A uniformly small energy parameter]
     \label{lem:peps_patch_energy_parameter_choice}
     \lean{Real.exists_pos_le_half_mul_sq_le_div_1024}
+    \leanok
     Let $C_E\ge0$ and $\Delta>0$. There exists $\kappa>0$ such that
     \begin{align*}
         \kappa\le\frac12,
@@ -18,6 +19,7 @@ densities are chosen. It does not establish the energy estimate itself.
     The choice depends only on $C_E$ and $\Delta$.
 \end{lemma}
 \begin{proof}
+    \leanok
     If $C_E=0$, take $\kappa=1/2$.
     If $C_E>0$, take
     \begin{align*}
