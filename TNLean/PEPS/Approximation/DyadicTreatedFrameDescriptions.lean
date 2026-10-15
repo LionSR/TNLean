@@ -99,10 +99,6 @@ private theorem blockCorner_add (n : ℝ) (S : ℤ × ℤ) (i j : ℤ) :
   simp only [blockCorner, Prod.fst_add, Prod.snd_add, Int.cast_add, Prod.mk_add_mk]
   ring_nf
 
-private theorem blockCorner_self (n : ℝ) (S : ℤ × ℤ) :
-    blockCorner n S = ((0 : ℝ), (0 : ℝ)) + blockCorner n S := by
-  rw [zero_add']
-
 /-- **The treated squares of an edge at the block.** The open squares of radius `t` about the
 grid corners at the ends of the edge `e` of the block `S` are the treated squares of `e`, moved
 from the origin to the block.
@@ -125,8 +121,8 @@ theorem preimage_cornerTreated (n t : ℝ) (S : ℤ × ℤ) :
       ⋃ Q ∈ cornerBlocks S, ball (blockCorner n Q) t := by
   ext p
   simp only [mem_preimage, cornerTreated, mem_union, sub_mem_ball_iff, mem_iUnion, exists_prop]
-  simp [cornerBlocks, blockCorner_add] <;>
-    simp [blockCorner, Prod.mk_add_mk, or_assoc]
+  simp [cornerBlocks, blockCorner_add]
+  simp [blockCorner, Prod.mk_add_mk, or_assoc]
 
 /-- Homogenizing a guide moved by `o` on the preimage of `U` is moving the homogenized guide. -/
 theorem homogenize_preimage_shiftGuide {κ : Type*} (o : ℝ × ℝ) (U : Set (ℝ × ℝ)) (P : κ)
@@ -169,6 +165,7 @@ theorem isTrueVertex_shiftGuide_iff {c : ℝ × ℝ} :
 /-- A point lies in the closure of a set moved by `d` exactly when it lies there moved back. -/
 private theorem mem_closure_preimage_sub_iff {S : Set (ℝ × ℝ)} {p : ℝ × ℝ} :
     p ∈ closure ((· - d) ⁻¹' S) ↔ p - d ∈ closure S := by
+  change p ∈ closure ((Homeomorph.subRight d) ⁻¹' S) ↔ _
   rw [← (Homeomorph.subRight d).preimage_closure]
   rfl
 
@@ -295,7 +292,7 @@ theorem angularSeparation_birthEnv_guideFrame {G f : ℝ × ℝ → κ} {d v : �
     · have hcl := sub_mem_closure_ne_of_guideFrame_owner_ne hf hx
       have hsub : (· + d) '' closure {p | G p ≠ l} ⊆
           closure ((· + d) '' ({z | G z ≠ l} ∪ vertexZone G (2 * r))) :=
-        (image_closure_subset_closure_image (continuous_add_right d)).trans
+        (image_closure_subset_closure_image (continuous_id.add continuous_const)).trans
           (closure_mono (image_mono subset_union_left))
       exact hsub (mem_image_add_right_iff.2 hcl)
     · exact subset_closure (himg _ (Or.inr (mem_image_add_right_iff.1
@@ -411,7 +408,7 @@ theorem centralBirth_step_guideFrame (hD : IsAngularScale q J Δ a A₀ m₀ 60 
     (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hpos : ∀ v, pos v = sitePosition L v + c)
     (hm₀ : 4 ≤ m₀) (ha : a ≤ angularConstant / 2) (R : RepaintingBaseline κ) (d v : ℝ × ℝ)
     {ε₀ : ℝ} (ht : 0 ≤ D * Real.log L) (htn : D * Real.log L ≤ R.n) (hnL : R.n ≤ A₀ * L)
-    (hε : 2 * ε₀ ≤ angularConstant / 2) {f fb fa : ℝ × ℝ → κ}
+    (hε : 2 * ε₀ ≤ angularConstant / 2) {f fa : ℝ × ℝ → κ}
     (hf : IsDisplacedReading f (shiftGuide d
       (homogenize (cornerTreated R.n (D * Real.log L)) R.oldLabel R.guide)) v)
     (hfa : IsDisplacedReading fa (shiftGuide d
