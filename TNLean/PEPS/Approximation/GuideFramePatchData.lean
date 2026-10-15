@@ -50,6 +50,8 @@ noncomputable section
 
 namespace TNLean.PEPS
 
+open PairEffect
+
 namespace EncodedFrame
 
 variable {ι : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ}
