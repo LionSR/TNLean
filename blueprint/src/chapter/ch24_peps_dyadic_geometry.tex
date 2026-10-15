@@ -1456,7 +1456,8 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 \begin{proof}\leanok
     \uses{thm:peps_dyadic_hierarchy_counts}
     A block of side $2^j$ with index $r<2^{k-j}$ ends at $2^j(r+1)\le2^j\cdot2^{k-j}=2^k$.
-    The parties at a square are its block party and its placeholder, since a square is
+    The parties at a square are its block party and, for a non-root square, its
+    placeholder, since a square is
     determined by its scale and block indices. The count follows from
     Theorem~\ref{thm:peps_dyadic_hierarchy_counts}. During the repainting of $S$, the
     label of a square $Q$ is held by the block party of $Q$, and a square is recovered
