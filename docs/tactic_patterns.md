@@ -3441,9 +3441,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   introduced.
 - **Notes:** the supplied equality and the goal must already describe the
   same mathematical objects after the stated rewrites. This command does not
-  repair incompatible index data or prove an additional hypothesis. The two
-  incident-density occurrences passed the hosted build in #9301; the two
-  new occurrences require the complete #9361 checks before completion marks.
+  repair incompatible index data or prove an additional hypothesis.
 
 ## Completed refactors
 

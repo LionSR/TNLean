@@ -17,6 +17,7 @@ nonemptiness of $P$ is assumed.
 \begin{theorem}[Exact dimensions of the original density links]
     \label{thm:peps_source_density_link_card}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_alphabet_source_density}
+    \leanok
     \uses{def:peps_source_gate_root,def:compression_distributed_links,
         def:compression_operator_alphabets}
     For any sample size $k\in\N$ and any constructed link $e$,
@@ -35,6 +36,7 @@ nonemptiness of $P$ is assumed.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:compression_operator_alphabet_card}
     A star carries $\Xi_{g(e)}\times\Xi_{g(e)}$, whose cardinality
     is $|\Xi_{g(e)}|^2$; a source sample link carries $[k]$.
@@ -44,6 +46,7 @@ nonemptiness of $P$ is assumed.
 \begin{theorem}[A conditional uniform bound for the original density links]
     \label{thm:peps_source_density_link_card_bound}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_alphabet_source_density_le}
+    \leanok
     \uses{def:peps_source_gate_root,def:compression_distributed_links,
         def:compression_operator_alphabets}
     Let $k,M\in\N$ and assume the explicit uniform bound
@@ -57,6 +60,7 @@ nonemptiness of $P$ is assumed.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:compression_operator_alphabet_bound}
     Monotonicity of multiplication in $\N$ gives
     $|\Xi_g\times\Xi_g|=|\Xi_g|^2\le M^2$.
@@ -67,6 +71,7 @@ nonemptiness of $P$ is assumed.
 \begin{theorem}[The endpoints are original participants of the owner gate]
     \label{thm:peps_source_density_link_locality}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.distributedLinkParties_source_subset}
+    \leanok
     \uses{def:peps_source_gate_root,def:compression_distributed_links,
         def:compression_distributed_link_parties}
     Every constructed link satisfies $\partial e\subseteq C_{g(e)}$.
@@ -79,6 +84,7 @@ nonemptiness of $P$ is assumed.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:peps_source_gate_root_mem,thm:compression_original_gate_locality}
     The chosen root satisfies $r_g\in C_g$ at every original occurrence.
     Apply original-gate locality of the distributed link construction
@@ -97,6 +103,7 @@ pair-sample links. Parallel links are retained as distinct links.
 \begin{theorem}[The retained occurrences preserve participation counts]
     \label{thm:peps_nonempty_gate_participation}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_incidentNonemptyGates_eq_participationCount}
+    \leanok
     \uses{def:compression_lifetime_gates}
     For every party $p$, the number of occurrences $g\in G$ with $p\in C_g$
     equals its full participation count in $\mathcal W$.
@@ -107,6 +114,7 @@ pair-sample links. Parallel links are retained as distinct links.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     Removing an occurrence with empty participant set removes no occurrence
     involving $p$. Conversely, an occurrence involving $p$ has nonempty
     participant set. These two maps give a bijection preserving the original
@@ -116,6 +124,7 @@ pair-sample links. Parallel links are retained as distinct links.
 \begin{theorem}[Constant incidence of the actual density links]
     \label{thm:peps_actual_density_link_incidence}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_incidentSourceDensityLinks_le}
+    \leanok
     \uses{def:peps_source_gate_root,def:compression_distributed_links,
         thm:peps_nonempty_gate_participation}
     Suppose $b\in\N$, every occurrence $g\in G$ has $|C_g|\le b$, and every
@@ -129,6 +138,7 @@ pair-sample links. Parallel links are retained as distinct links.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:peps_source_gate_root_mem,thm:peps_nonempty_gate_participation,
         thm:compression_distributed_incidence_bound}
     The chosen root lies in its original participant set. Each incident
@@ -149,6 +159,7 @@ They require no numerical bound on a private register dimension.
 \begin{theorem}[Finite endpoint registers in fixed source slots]
     \label{thm:peps_finite_source_slot_registers}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.finiteDimensional_registers_slotLayout}
+    \leanok
     \uses{def:peps_source_slots}
     Let $R$ be a finite ordered list of pair-source occurrences. For each
     occurrence $i$, let $U_i$ and $V_i$ be finite-dimensional complex
@@ -158,6 +169,7 @@ They require no numerical bound on a private register dimension.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{def:peps_source_slots}
     Induct on the list of occurrences. The empty list has no registers.
     Removing the first occurrence removes exactly its two endpoint
@@ -168,6 +180,7 @@ They require no numerical bound on a private register dimension.
 \begin{theorem}[Finite registers in the actual all-party source layout]
     \label{thm:peps_finite_all_party_source_registers}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.finiteDimensional_allResidualSource_registers}
+    \leanok
     \uses{def:peps_all_party_source_registers,thm:peps_finite_source_slot_registers}
     Let $W$ be an original chronological source composition with arbitrary
     party set $P$, and let $R_W$ be its fixed all-party source layout.
@@ -176,6 +189,7 @@ They require no numerical bound on a private register dimension.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{def:peps_all_party_source_registers,thm:peps_finite_source_slot_registers}
     Each actual endpoint space is an original Euclidean space
     $\C^{u_e}$ or $\C^{v_e}$. Apply the preceding theorem to these spaces,
@@ -185,6 +199,7 @@ They require no numerical bound on a private register dimension.
 \begin{definition}[Finite orthonormal coordinates of a local source memory]
     \label{def:peps_all_party_local_source_basis}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.allResidualSourceBasis}
+    \leanok
     \uses{thm:peps_finite_all_party_source_registers,
         thm:peps_finite_register_memories,def:peps_party_registers}
     With $W$ and $R_W$ as above, write $Q=P\sqcup\{*\}$ for the grouped
@@ -200,6 +215,7 @@ They require no numerical bound on a private register dimension.
 \begin{definition}[Finite orthonormal coordinates of a local discarded memory]
     \label{def:peps_all_party_local_discard_basis}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.allPartyDiscardBasis}
+    \leanok
     \uses{thm:peps_finite_register_memories,def:peps_affected_owner,
         def:peps_party_registers}
     Let $G$ be the original finite ordered list of discarded registers,
@@ -225,6 +241,7 @@ on the private memory dimensions.
 \begin{theorem}[Distributed physical approximation from local gate expansions]
     \label{thm:peps_approximate_sampled_distributed_error}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.exists_sampled_contractedOperator_approximate_error_le}
+    \leanok
     \uses{def:peps_approximate_original_operators,
         thm:peps_approximate_source_sample,
         thm:peps_actual_sampled_distributed_contraction,
@@ -315,6 +332,7 @@ on the private memory dimensions.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:peps_approximate_source_sample,
         thm:peps_actual_sampled_distributed_contraction,
         thm:peps_finite_whole_party_input,thm:peps_auxiliary_register_finiteness,
@@ -343,6 +361,7 @@ set is required.
 \begin{theorem}[Real power bounds for the actual density alphabets]
     \label{thm:peps_actual_density_alphabet_power}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_alphabet_source_density_le_of_power_bounds}
+    \leanok
     \uses{thm:peps_source_density_link_card,def:peps_source_gate_root}
     Let $R$ be a chronological source composition on an arbitrary party
     set. Write $\Xi_g$ for the branch labels of its nonempty gate occurrence
@@ -358,6 +377,7 @@ set is required.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:peps_source_density_link_card}
     On a star, $|D_e|=|\Xi_{g(e)}|^2\leq C_M^2 L^{2u}$.
     On a sample link, $|D_e|=k\leq C_k L^v$.
@@ -368,6 +388,7 @@ set is required.
 \begin{theorem}[Original polynomial bounds for the actual contraction alphabets]
     \label{thm:peps_actual_physicalFirst_density_polynomial}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_physicalFirstDensityAlphabet_le_power}
+    \leanok
     \uses{thm:peps_actual_density_alphabet_power,
         thm:peps_physical_first_branch_polynomial,
         thm:peps_physical_first_sample_polynomial}
@@ -401,6 +422,7 @@ set is required.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:peps_actual_density_alphabet_power,
         thm:peps_physical_first_branch_polynomial,
         thm:peps_physical_first_sample_polynomial}
@@ -415,6 +437,7 @@ set is required.
 \begin{theorem}[Original incidence bound for the actual contraction]
     \label{thm:peps_actual_physicalFirst_density_incidence}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_incidentPhysicalFirstDensityLinks_le}
+    \leanok
     \uses{thm:peps_actual_density_link_incidence,
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality,
         thm:peps_physical_first_occurrences,thm:peps_source_only_resources}
@@ -431,6 +454,7 @@ set is required.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:peps_actual_density_link_incidence,
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality,
         thm:peps_physical_first_occurrences,thm:peps_source_only_resources}
@@ -445,6 +469,7 @@ set is required.
 \begin{theorem}[A common original gate for the actual contraction endpoints]
     \label{thm:peps_actual_physicalFirst_density_locality}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.exists_original_gate_of_physicalFirst_density_link}
+    \leanok
     \uses{thm:peps_source_density_link_locality,
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality}
     With $W,R,\delta$ and the expansion bound as above, take any link of
@@ -457,6 +482,7 @@ set is required.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:peps_source_density_link_locality,
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality}
     Both endpoints belong to the retained link's original owner gate
@@ -468,6 +494,7 @@ set is required.
 \begin{definition}[Termwise bounds for prescribed approximate gate expansions]
     \label{def:peps_effect_termwise_bounds}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsTermwiseBounded}
+    \leanok
     For each nonprivate gate occurrence, retain its prescribed ordered
     monomial expansion. Termwise bounds $(r,C)$ mean that every listed
     monomial contains at most $r$ pair effects and has scalar coefficient
@@ -480,6 +507,7 @@ set is required.
     \label{thm:peps_effect_coefficient_majorant}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.isExpansionBounded_of_isTermwiseBounded}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.exists_one_le_isExpansionBounded_of_termwise_power_bounds}
+    \leanok
     \uses{def:peps_effect_termwise_bounds,thm:peps_gate_coefficient_sum}
     Suppose each prescribed expansion at an original nonprivate gate
     occurrence has at most $K$ terms and has termwise bounds $(r,C)$,
@@ -493,6 +521,7 @@ set is required.
     subsequent effect-elimination expansion. Empty lists are permitted.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:peps_gate_coefficient_sum}
     Sum the individual coefficient inequalities over each original
     ordered list. Multiply its length bound by the nonnegative individual
@@ -504,6 +533,7 @@ set is required.
 \begin{theorem}[Absorbing a scalar into one distributed local matrix]
     \label{thm:peps_distributed_operator_scalar_absorption}
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_smul_at_party}
+    \leanok
     \uses{thm:compression_operator_matrix_sum,thm:peps_party_product_scalar}
     Let $P$ be a finite party set and let $\mathcal C(T)$ be the
     distributed star-and-sample contraction with a supplied finite
@@ -522,6 +552,7 @@ set is required.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:compression_operator_matrix_sum,thm:peps_party_product_scalar}
     Expand the contraction as the sum over common gate labels and
     sample indices of the weighted product of local matrices.
