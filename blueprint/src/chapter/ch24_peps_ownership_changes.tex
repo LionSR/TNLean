@@ -2,8 +2,8 @@
 \label{sec:peps_ownership_changes}
 The statements below formalize Lemmas~6.5 and~6.6 of
 \cite{OpenAI2026PolynomialPEPS}, September 24, 2026, \texttt{05-frames.tex},
-lines 347--570, for the canonical maps constructed in their proofs, with the
-information bounds kept as hypotheses, together with their reading as bounded
+lines 347--570, for the maps constructed in their proofs, with the
+information bounds as hypotheses, together with their realization as bounded
 changes: allowed monomials of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
 (Section~\ref{sec:peps_pair_effects}) on the registers of the frames, one per
 site and per tag (Definition~\ref{def:peps_frame_registers}). The monomials are
@@ -86,7 +86,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 
 \subsection{Homogeneous birth and death}
 
-\begin{definition}[Canonical birth map]
+\begin{definition}[Birth map]
     \label{def:peps_frame_birth_map}
     \lean{TNLean.PEPS.EncodedFrame.pairSource,
         TNLean.PEPS.EncodedFrame.birthKernel,
@@ -100,7 +100,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     With the data of the splitting lemma put $\mathcal V=\id_{TE}\otimes V$ and
     let $S\colon\mathcal H_E\otimes\mathcal B_E\to\mathcal
         H_{TE}\otimes\mathcal B_T\otimes\mathcal B_E$ insert $s$ on
-    $T\mathcal B_T$. The canonical map of the birth is
+    $T\mathcal B_T$. The birth map is
     \begin{align}
         B=\mathcal V^\dagger SS^\dagger\mathcal V
         =\mathcal V^\dagger\bigl(\ket s\bra s_{T\mathcal B_T}
@@ -108,7 +108,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \end{align}
     (\texttt{05-frames.tex}, equation (birth-map), lines 414--426). It is the
     effect $S^\dagger\mathcal V$, which applies $V$ on $U$ and contracts
-    $T\mathcal B_T$ with $\bra s$, followed by its adjoint, which supplies
+    $T\mathcal B_T$ with $\bra s$, followed by its adjoint, which inserts
     $s$ and applies $V^\dagger$.
 \end{definition}
 
@@ -203,7 +203,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     outer hole footprint, so it is in neither part of $E$.
 \end{proof}
 
-\begin{theorem}[Homogeneous birth and death: canonical map]
+\begin{theorem}[Homogeneous birth and death: sheet map]
     \label{thm:peps_frame_birth}
     \lean{TNLean.PEPS.EncodedFrame.Frame.birth,
         TNLean.PEPS.EncodedFrame.Frame.death}
@@ -213,7 +213,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     In an encoded frame $\mathcal F$, let $T$ be owned by $P_\circ$ and
     disjoint from every outer hole footprint, let $E$ be as in the birth
     partition, and let $\lVert\Omega\rVert=1$. If $I_\Omega(T:E)\le L^{-60}$,
-    the canonical map $B$ of splitting data with error at most $L^{-30}$ is a
+    the birth map $B$ of splitting data with error at most $L^{-30}$ is a
     Hermitian contraction, acts as the identity on $E$ and on all tags,
     satisfies $(\id\otimes B)K_{\mathcal F}=K_{\mathcal F'}B$, and
     \begin{align}
@@ -226,9 +226,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     commutes with the encoding; the change of owner is the content of the
     bounded-change assertion below. The death is the same map with the
     reverse input and output ownership; its conditions are those of the frame
-    after the death. This is the
-    content of \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS} for the canonical
-    map, with its hypotheses.
+    after the death. This establishes the operator statement of
+    \cite[Lemma~6.5]{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -239,7 +238,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     with $B$. Hence $\lVert(\id\otimes B)\Omega_{\mathcal F}-\Omega_{\mathcal
             F}\rVert\le\lVert(B-\id)\Omega\rVert\le\lVert\mathcal V\Omega-s\otimes
         s'\rVert\le L^{-30}$, and $\Omega_{\mathcal F'}=\Omega_{\mathcal F}$ in
-    canonical coordinates, since only raw owners change.
+    product coordinates, since only raw owners change.
 \end{proof}
 
 \begin{definition}[Parties used by a monomial]
@@ -415,7 +414,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{thm:peps_frame_birth,lem:peps_frame_birth_partition_owners,
         lem:peps_frame_birth_monomial_operators}
-    In the setting of the canonical birth map, with its hypotheses, there are
+    In the setting of the birth map, with its hypotheses, there are
     splitting data with the reference error of Theorem~\ref{thm:peps_frame_birth}
     such that $B=\id_E\otimes K^\dagger K$ with $K=\bra s(\id_T\otimes V)$, the
     registers of $U$ are owned by $P_\circ$ before and after the birth, and
@@ -543,7 +542,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     pairwise disjoint outer
     footprints, there are a relabelling of the tags that preserves the raw
     part of the encoding and such a composition sending $\ket\tau$ to the
-    relabelled $\ket\tau$ (the canonical identification of tag orderings,
+    relabelled $\ket\tau$ (the identification of tag orderings in
     \texttt{05-frames.tex}, lines 84--85).
 
     More generally, adjoining untouched registers before any composition
@@ -611,8 +610,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         x\in\ell_U & \iff x\in U.
     \end{align}
     If also $T\cap E=\varnothing$, then $x\in\ell_E$ if and only if $x\in E$.
-    If $\ell$ has no repetitions, neither $\ell_T$ nor $\ell_U$ has any;
-    this assertion does not require $\ell$ to contain every site.
+    If $\ell$ has no repetitions, neither $\ell_T$ nor $\ell_U$ has any.
 
     When $\ell$ contains every site exactly once, taking the site at a
     position gives bijections from the positions of $\ell_T$ to $T$ and of
@@ -631,7 +629,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     Filtering gives the membership assertions and preserves the absence of
     repetitions. Outside $T$, membership in $T\cup E$ is membership in $E$;
     disjointness ensures that all sites of $E$ remain. Completeness and
-    non-repetition make the position maps bijective. The canonical coordinate
+    non-repetition make the position maps bijective. The product-coordinate
     identification sends a product basis vector to the configuration read
     along that position map, giving (\ref{eq:peps_region_grouping_basis}).
 \end{proof}
@@ -700,7 +698,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     registers, followed by the tag registers and the raw registers of $E$,
     as $M\otimes\id$, then
     grouping at the owners before, applying it, and ungrouping at the owners
-    after acts on the registers of the frame, in canonical coordinates, as
+    after acts on the registers of the frame, in product coordinates, as
     $\id_{\rm tags}\otimes(\id_E\otimes M)$.
 \end{lemma}
 
@@ -731,8 +729,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $L^{-30}$: there are splitting data and an allowed monomial from the
     registers of $\mathcal F$ to those of the frame in which $T$ is owned by
     $Q_\circ$, using only $P_\circ$ and $Q_\circ$ and at most one normalized
-    pair source, whose operator in canonical coordinates is
-    $\id_{\rm tags}\otimes B$ for the canonical map $B$, and which maps the
+    pair source, whose operator in product coordinates is
+    $\id_{\rm tags}\otimes B$ for the birth map $B$, and which maps the
     reference vector of $\mathcal F$ within $L^{-30}$ of the reference vector
     of the new frame. The reversed death obeys the same
     bound when these conditions hold in the frame after the death, with one
@@ -921,9 +919,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         F_RT(H)F_R^\dagger-T(H)
         =\sum_{e\in\partial R}\bigl(F_RT(h_e)F_R^\dagger-T(h_e)\bigr).
     \end{align*}
-    This includes zero local dimension and squares of side zero or one.
-    Individual interactions need not be Hermitian. The identity is the
-    crossing-edge reduction in the boundary perturbation argument of
+    This is the crossing-edge reduction in the boundary perturbation argument of
     \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}\leanok
@@ -972,8 +968,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     Let $q\geq0$ be a local dimension and $R\subseteq\Lambda$. Identify two configurations of local dimension $q$
     with one configuration of local dimension $q^2$ by pairing the two values
     at each site. In these coordinates, the sheet swap $F_R$ is supported on
-    $R$. The assertion includes empty regions and empty configuration spaces.
-    This is the local support property used for the doubled Hamiltonian in
+    $R$. This is the local support property used for the doubled Hamiltonian in
     \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}\leanok
@@ -1003,8 +998,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     the resulting matrices of $F_R$ and $A\otimes I+I\otimes A$ by
     $\widetilde F_R$ and $\widetilde T(A)$, respectively. Then
     $\widetilde F_R\widetilde T(A)\widetilde F_R^\dagger$ is supported on $S$.
-    Empty regions and zero local dimension are included. This is the
-    interaction-support assertion used for the boundary perturbation in
+    This is the interaction-support assertion used for the boundary perturbation in
     \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}\leanok
@@ -1043,9 +1037,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \begin{align*}
         \|FKF^\dagger-K\|\leq 8JL^2.
     \end{align*}
-    Individual interactions need not be Hermitian. No further assumption
-    on the sign of $J$ is required. The statement includes empty grids and
-    zero local dimension. This is the boundary perturbation estimate used
+    This is the boundary perturbation estimate used
     in \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}
@@ -1097,7 +1089,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     one side of $\partial Y$; that side classifies the hole as outside or
     inside $Y$. The holes of each frame are listed as those outside $Y$
     followed by those inside $Y$, each in its original order, which differs
-    from the given listing by the canonical identification of tag orderings
+    from the given listing by the identification of tag orderings
     (\texttt{05-frames.tex}, lines 84--85). The exchanged
     frames
     $\mathcal F_1',\mathcal F_2'$ carry, inside $Y$, the raw ownership
@@ -1252,7 +1244,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     both new raw owners are $P_\circ$ as well.
 \end{proof}
 
-\begin{theorem}[Two-sheet exchange: canonical map]
+\begin{theorem}[Two-sheet exchange: implemented map]
     \label{thm:peps_frame_exchange}
     \lean{TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchange,
         TNLean.PEPS.EncodedFrame.TwoSheetExchange.exchangeOp_mul_encoder,
@@ -1273,10 +1265,9 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
         -\Omega_{\mathcal F_1'}\otimes\Omega_{\mathcal F_2'}\rVert
         \le4L^{-30}.
     \end{align}
-    The encoded reference vectors are not assumed normalized. This is the
-    content of \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS} for the implemented
-    map, with its hypotheses, when the holes of each frame are listed as those
-    outside $Y$ followed by those inside $Y$.
+    This establishes the operator statement of
+    \cite[Lemma~6.6]{OpenAI2026PolynomialPEPS} when the holes of each frame are
+    listed as those outside $Y$ followed by those inside $Y$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1318,7 +1309,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
 \begin{proof}\leanok
     \uses{thm:peps_frame_exchange,thm:peps_frame_small_rewrite,
         lem:peps_frame_exchange_error}
-    Encodings of distinct holes commute after the canonical identification of
+    Encodings of distinct holes commute after the identification of
     tag orderings (\texttt{05-frames.tex}, lines 84--85), which gives $G$.
     Apply the exchange to the regrouped listings and compose with $G$, a
     contraction.
@@ -1365,7 +1356,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     \leanok
     \uses{lem:peps_frame_registers_coordinates}
     The registers of two frames, those of the first followed by those of the
-    second, are identified with the product of the canonical coordinates of
+    second, are identified with the product of the coordinates of
     the two frames, product basis vectors going to standard basis vectors. Two
     operators on these registers agree as soon as they agree on product basis
     vectors.
@@ -1418,7 +1409,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     arbitrary assignments of raw owners. Retain the sites of $U$ in the
     fixed site order; every site in the complementary list belongs to
     $T\cup E$. Let $\ket c_{U,j}$ be the product basis vector on these raw
-    registers on sheet $j$, and let $\iota_U$ be the inverse of the canonical
+    registers on sheet $j$, and let $\iota_U$ be the inverse of the concatenation
     isometry separating their two consecutive lists. Grouping both lists
     gives an isometry $Q_U$ to $\C^{[q]^U\times[q]^U}$ satisfying
     \begin{align}
@@ -1462,7 +1453,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     the raw registers of $U$ of both sheets to the front, applying a
     contraction $W$ of the two copies of $\mathcal H_U$ as one private
     contraction at $P_\circ$, and moving them back is an allowed monomial
-    using only $P_\circ$ and no pair resource, whose operator in canonical
+    using only $P_\circ$ and no pair resource, whose operator in product
     coordinates is the identity on the tags and on the two copies of
     $T\cup E$, tensored with $W$.
 \end{lemma}
@@ -1495,7 +1486,7 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     an allowed monomial from the registers of the two frames to those of the
     two exchanged frames, consisting of exchanges of tensor factors and
     private contractions at $P_\circ$, so using only $P_\circ$ and no pair
-    resource, whose operator in canonical coordinates is the implemented map
+    resource, whose operator in product coordinates is the implemented map
     $C=D_UF_A\mathcal R$ (composed with the relabelling $G$ of the tags when
     the holes are listed in any order), and which maps the product of the two
     reference vectors within $4L^{-30}$ of the product of the new ones. In
@@ -1516,8 +1507,8 @@ are the reduced density matrices of $\ket\Omega\bra\Omega$.
     $P_\circ$ on both sheets. The operators compose to
     $D_UF_A\mathcal R$, since $D_UF_A$ is the identity on the tags and on the
     two copies of $T\cup E$ tensored with one contraction of the two copies
-    of $\mathcal H_U$. For holes in any order, precede by the canonical
-    identification of tag orderings as reorderings, whose operator is $G$;
+    of $\mathcal H_U$. For holes in any order, precede by the
+    identification of tag orderings via reorderings, whose operator is $G$;
     these exchanges of tag registers move the tag of each hole to the
     position of that hole in the new list, and $G$ is the corresponding
     relabelling of the tags, which preserves the raw part of each encoding.

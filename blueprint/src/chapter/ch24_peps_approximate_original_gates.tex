@@ -162,8 +162,8 @@ trace-norm estimates do not involve private dimensions.
     $\|\widetilde\rho_\delta(x)-\rho_G(x)\|_1\le4\delta N$.
     In particular, for $\varepsilon>0$ and $N\le M$, taking
     $\delta=\varepsilon/(8\max\{1,M\})$ gives error at most
-    $\varepsilon/2$. Replacing this budget parameter by
-    $\varepsilon/2$ reserves $\varepsilon/4$ for this step.
+    $\varepsilon/2$, and replacing $\varepsilon$ by
+    $\varepsilon/2$ gives error at most $\varepsilon/4$.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -180,8 +180,8 @@ trace-norm estimates do not involve private dimensions.
         \le4\delta N.
         \label{eq:peps_approximate_density_error}
     \end{align}
-    Substitute the prescribed scalar budget into
-    (\ref{eq:peps_approximate_density_error}).
+    Substituting the chosen value of $\delta$ into
+    (\ref{eq:peps_approximate_density_error}) yields the remaining claims.
 \end{proof}
 
 \begin{theorem}[Natural inverse-power accuracy]
@@ -229,7 +229,6 @@ trace-norm estimates do not involve private dimensions.
         \frac{L^{-\lceil p\rceil_+}}4
         \le \frac{L^{-p}}4.
     \end{align}
-    The argument includes $N=0$ and requires no further size threshold.
 \end{proof}
 
 \begin{theorem}[Approximate original gates at real inverse-power accuracy]
@@ -249,9 +248,9 @@ trace-norm estimates do not involve private dimensions.
 \begin{proof}
     \leanok
     \uses{thm:peps_approximate_gate_real_accuracy,thm:peps_approximate_physical_error}
-    The chronological physical-density estimate is $4L^{-q}N$.
-    Apply Theorem~\ref{thm:peps_approximate_gate_real_accuracy}. The comparison uses the actual original gate
-    operators, the same private operations and the same physical readout.
+    The chronological physical-density estimate is $4L^{-q}N$;
+    apply Theorem~\ref{thm:peps_approximate_gate_real_accuracy}. The comparison uses the original gate
+    operators, the same private operations, and the same physical readout.
 \end{proof}
 
 \begin{definition}[Termwise bounds on the original gate expansions]
@@ -261,13 +260,11 @@ trace-norm estimates do not involve private dimensions.
     An original contraction circuit has termwise bounds $(r,C)$ if, at
     every nonprivate gate occurrence, each monomial in its prescribed
     expansion contains at most $r$ pair effects and has scalar coefficient
-    of modulus at most $C$. These conditions concern the actual ordered
-    expansions. They do not impose a bound on the sum of the moduli.
-    The constituent local maps already satisfy the contraction conditions
-    of the original circuit.
+    of modulus at most $C$. These conditions apply to the ordered
+    expansions without bounding the sum of the moduli.
 \end{definition}
 
-\begin{theorem}[Coefficient sums of the actual gate lists]
+\begin{theorem}[Coefficient sums of gate expansions]
     \label{thm:peps_gate_coefficient_sum}
     \lean{TNLean.PEPS.PairEffect.PartyGate.sum_norm_coefficients_le}
     \lean{TNLean.PEPS.PairEffect.PartyGate.sum_norm_coefficients_le_of_power_bounds}
@@ -281,9 +278,8 @@ trace-norm estimates do not involve private dimensions.
         \sum_{j=1}^{k}|c_j|\leq C_KC_CL^{u+v}.
         \label{eq:peps_termwise_polynomial_sum}
     \end{align}
-    Both statements include the empty expansion. This is the coefficient
-    estimate used in Theorem~5.2, assumption~3, and the opening reduction
-    in its proof.
+    This is the coefficient estimate used in Theorem~5.2, assumption~3, and
+    the opening reduction in its proof.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -305,14 +301,13 @@ trace-norm estimates do not involve private dimensions.
     $r$ pair effects.
     Consequently, if $K\leq C_KL^u$ and the termwise bounds are
     $(r,C_CL^v)$, with $L,C_C\geq0$, the uniform coefficient-sum bound is
-    $C_KC_CL^{u+v}$. No nonemptiness of the expansion or participating
-    set is required.
+    $C_KC_CL^{u+v}$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:peps_original_termwise_bounds,thm:peps_gate_coefficient_sum}
-    Apply the preceding list estimate at each original gate occurrence.
+    Bound the coefficient sum at each original gate occurrence by $KC$.
     Composition and addition of spectator registers retain these same
     local conditions; private operations and register permutations add
-    no nonprivate gate expansions. The effect count is unchanged.
+    no nonprivate gate expansions, and the effect count is unchanged.
 \end{proof}

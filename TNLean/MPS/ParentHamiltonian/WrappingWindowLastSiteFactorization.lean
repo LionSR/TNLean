@@ -109,36 +109,14 @@ theorem init_evalWord_split {A : MPSTensor d D}
     Kraus.evalWord A (List.ofFn (fun k : Fin (L - 1) => σ_w ⟨k.val + 1, by omega⟩)) *
     Kraus.evalWord A (List.ofFn (fun k : Fin (M + 1 - L) =>
       τ ⟨k.val + L - 1, by omega⟩)) := by
-  rw [← Kraus.evalWord_append]
-  congr 1
-  apply List.ext_getElem
-  · simp only [List.length_ofFn, List.length_append]; omega
-  · intro k hk1 hk2
-    simp only [List.length_ofFn] at hk1
-    simp only [List.getElem_ofFn]
-    by_cases hkL : k < L - 1
-    · -- Window site: init(k) = σ_w(k+1)
-      rw [List.getElem_append_left (by simp only [List.length_ofFn]; exact hkL),
-          List.getElem_ofFn]
-      exact cyclicCfg_window_site (by omega) (by omega) hL σ_w τ hkL
-    · -- Complement site: init(k) = τ(k)
-      rw [List.getElem_append_right (by simp only [List.length_ofFn]; omega),
-          List.getElem_ofFn]
-      simp only [List.length_ofFn]
-      have hcomp := cyclicCfg_complement_site (by omega : 2 ≤ M + 1) hLN hL σ_w τ
-        (show L - 1 ≤ k from by omega) (show k < M from by omega)
-      -- hcomp is about cyclicCfg at the original index; use Fin.castSucc ⟨k, _⟩.
-      have : (Fin.castSucc (⟨k, by omega⟩ : Fin M) : Fin (M + 1)) =
-          ⟨k, by omega⟩ := by ext; simp [Fin.castSucc]
-      rw [this] at *
-      -- The complement site: cyclicCfg returns τ(k)
-      -- After unfolding, offset = k+1 ≥ L, so returns τ
-      unfold cyclicCfg
-      simp only []
-      have hoffset : (k + (M + 1) - M) % (M + 1) = k + 1 := by
-        have : k + (M + 1) - M = k + 1 := by omega
-        rw [this, Nat.mod_eq_of_lt (by omega)]
-      rw [dite_eq_right (by rw [hoffset]; omega)]
-      congr 1; ext; simp; omega
+  rw [← Kraus.evalWord_append,
+    List.ofFn_congr (show M = (L - 1) + (M + 1 - L) by omega), List.ofFn_add]
+  refine congrArg _ (congrArg₂ (· ++ ·) (List.ofFn_inj.mpr (funext fun k => ?_))
+    (List.ofFn_inj.mpr (funext fun k => ?_)))
+  · exact cyclicCfg_window_site (by omega) (by omega) hL σ_w τ k.isLt
+  · have h := cyclicCfg_complement_site (by omega : 2 ≤ M + 1) hLN hL σ_w τ
+      (show L - 1 ≤ L - 1 + k.val by omega) (show L - 1 + k.val < M by omega)
+    convert h using 2 <;> ext <;> simp
+    omega
 
 end MPSTensor

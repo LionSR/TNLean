@@ -30,6 +30,22 @@ theorem eight_mul_bandCount_mul_le (L m : ℕ) :
     _ = (L / (8 * m)) * (8 * m) := by ring
     _ ≤ L := Nat.div_mul_le_self L (8 * m)
 
+/-- If `n^(μ-κ) ≥ 2c` with `n ≥ 1` and `κ ≥ 0`, then `c ⌈n^κ⌉ ≤ ⌊n^μ⌋`: the rounding of
+`D = ⌈n^κ⌉` costs at most a factor two. Source: `08-scanner.tex`, lines 32–58. -/
+theorem mul_ceil_rpow_le_floor_rpow {n c : ℕ} {kappa mu : ℝ} (hn : 1 ≤ n) (hkappa : 0 ≤ kappa)
+    (hratio : 2 * (c : ℝ) ≤ (n : ℝ) ^ (mu - kappa)) :
+    c * ⌈(n : ℝ) ^ kappa⌉₊ ≤ ⌊(n : ℝ) ^ mu⌋₊ := by
+  have hnR : (1 : ℝ) ≤ n := by exact_mod_cast hn
+  have hpow : (1 : ℝ) ≤ (n : ℝ) ^ kappa := Real.one_le_rpow hnR hkappa
+  have hceil : (⌈(n : ℝ) ^ kappa⌉₊ : ℝ) ≤ (n : ℝ) ^ kappa + 1 :=
+    (Nat.ceil_lt_add_one (Real.rpow_nonneg (Nat.cast_nonneg n) _)).le
+  have hc : (0 : ℝ) ≤ c := Nat.cast_nonneg c
+  apply Nat.le_floor
+  push_cast
+  rw [show mu = kappa + (mu - kappa) by ring, Real.rpow_add (zero_lt_one.trans_le hnR)]
+  nlinarith [mul_le_mul_of_nonneg_left hratio (zero_le_one.trans hpow),
+    mul_le_mul_of_nonneg_left hceil hc, mul_le_mul_of_nonneg_left hpow hc]
+
 /-- The source's rounded powers give the three literal scale inequalities used
 by the status geometry. The fixed exponent gap controls the threshold. -/
 theorem eventually_status_scale_separation {Cr ell kappa mu : ℝ}
@@ -47,22 +63,12 @@ theorem eventually_status_scale_separation {Cr ell kappa mu : ℝ}
   filter_upwards [eventually_roundedLogRadius_le_rpow hCr hkappa,
     hratio, eventually_ge_atTop (2 : ℕ)] with n hr hratio hn
   dsimp only
-  have hnR : (1 : ℝ) ≤ n := by exact_mod_cast (show 1 ≤ n by omega)
-  have hnpos : (0 : ℝ) < n := lt_of_lt_of_le zero_lt_one hnR
-  have hpow : (1 : ℝ) ≤ (n : ℝ) ^ kappa := Real.one_le_rpow hnR hkappa.le
-  have hceil : (⌈(n : ℝ) ^ kappa⌉₊ : ℝ) ≤ (n : ℝ) ^ kappa + 1 :=
-    (Nat.ceil_lt_add_one (Real.rpow_nonneg (Nat.cast_nonneg n) _)).le
-  have hmul : (n : ℝ) ^ mu = (n : ℝ) ^ kappa * (n : ℝ) ^ (mu - kappa) := by
-    rw [← Real.rpow_add hnpos]
-    congr 1
-    ring
+  have hpow : (1 : ℝ) ≤ (n : ℝ) ^ kappa :=
+    Real.one_le_rpow (by exact_mod_cast (show 1 ≤ n by omega)) hkappa.le
   refine ⟨hn, ?_, ?_, ?_, eight_mul_bandCount_mul_le _ _⟩
   · exact_mod_cast hr.trans (Nat.le_ceil ((n : ℝ) ^ kappa))
   · exact_mod_cast hpow.trans (Nat.le_ceil ((n : ℝ) ^ kappa))
-  · apply Nat.le_floor
-    push_cast
-    rw [hmul]
-    nlinarith [mul_le_mul_of_nonneg_left hratio (zero_le_one.trans hpow)]
+  · exact mul_ceil_rpow_le_floor_rpow (by omega) hkappa.le (by push_cast; linarith)
 
 /-- The exact rounded band count is positive eventually for each fixed positive
 window exponent strictly below the collar exponent. No unrounded quotient is
@@ -89,10 +95,7 @@ theorem eventually_one_le_source_bandCount {ell mu : ℝ}
       _ ≤ (n : ℝ) ^ mu * (n : ℝ) ^ (1 - ell - mu) := by
         nlinarith [mul_le_mul_of_nonneg_left hratio
           (Real.rpow_nonneg (Nat.cast_nonneg n) mu)]
-      _ = (n : ℝ) ^ (1 - ell) := by
-        rw [← Real.rpow_add hnpos]
-        congr 1
-        ring
+      _ = (n : ℝ) ^ (1 - ell) := by rw [← Real.rpow_add hnpos, add_sub_cancel]
   exact Nat.div_pos hband (by omega)
 
 end TNLean.PEPS.AreaLaw.Scan

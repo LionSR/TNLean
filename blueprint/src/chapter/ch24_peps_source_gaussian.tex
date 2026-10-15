@@ -41,13 +41,12 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     The same choices represent every retained source in every partial
     expansion: one reads the label of its original owning gate.
     For two partial branches, the mixed source matrix is the outer product
-    of these two represented vectors. Zero Schmidt weights are permitted;
-    neither endpoint frame is required to span its ambient space.
+    of these two represented vectors.
 \end{theorem}
 
 \begin{proof}\leanok
     Coordinates in an orthonormal basis preserve the norm. Apply the finite
-    Schmidt decomposition to each $z_{e,\alpha}$ independently. The actual
+    Schmidt decomposition to each $z_{e,\alpha}$ independently. The
     retained vector at a partial slot is its original source vector at the
     selected local label, so both the vector and outer-product assertions
     follow by substitution.
@@ -65,7 +64,6 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \begin{align}
         z=\sum_{t=1}^{r}\sqrt{\lambda_t}\,f|t\rangle\otimes g|t\rangle.
     \end{align}
-    No completeness or finite-dimensionality of $U$ or $V$ is assumed.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -130,7 +128,6 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \end{align}
     Here $U_s$ uses the Gaussian coordinates and $V_s$ their complex
     conjugates, with the quarter-power weights of that equation.
-    The averaged operator need not have rank one.
 \end{definition}
 
 \begin{theorem}[Unbiasedness of the original-source construction]
@@ -150,10 +147,9 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \end{align}
     The choices precede all corrected subsets and partial branches.
     More generally, these assertions hold for any nonnegative weights and
-    endpoint matrices representing the actual vectors as in
-    (\ref{eq:peps_local_schmidt_source}); their normalization and isometry
-    identities are not needed for the expectation calculation.
-    The ambient correction is exactly the four-frame transport of the
+    endpoint matrices representing the source vectors as in
+    (\ref{eq:peps_local_schmidt_source}).
+    The ambient correction is the four-frame transport of the
     centered correction in Schmidt coordinates.
 \end{theorem}
 
@@ -163,7 +159,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     representation identifies the mean with $X_{e,\alpha\beta}$.
     Subtraction gives the centered identity; linearity of the four-frame
     transport gives the final assertion. The required representatives are
-    supplied by Theorem~\ref{thm:peps_local_schmidt_sources}.
+    given by Theorem~\ref{thm:peps_local_schmidt_sources}.
 \end{proof}
 
 \begin{theorem}[Covariance at original corrected positions]
@@ -191,12 +187,11 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
         \label{eq:peps_actual_gaussian_covariance}
     \end{align}
     If $S$ is nonempty, then $\mathbb E_k Z_{u,v}=0$.
-    These identities require no normalization of the weight lists.
 \end{theorem}
 
 \begin{proof}\leanok
-    The product is the established selected Gaussian coefficient with
-    precisely the same original positions and ordered local labels.
+    The product is the selected Gaussian coefficient with
+    the same original positions and ordered local labels.
     Substitute its diagonal covariance formula. Independence multiplies
     the factors $k^{-1}$, one for each original corrected position.
 \end{proof}
@@ -223,7 +218,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     position. The empty selected set gives a single summand.
 \end{proof}
 
-\begin{theorem}[Transported sources in actual prepared words]
+\begin{theorem}[Transported sources in prepared words]
     \label{thm:peps_prepared_source_frames}
     \lean{TNLean.PEPS.PairEffect.Word.sourceContraction_preparedDensityCoefficient_selected_frames}
     \leanok
@@ -236,7 +231,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     For $i\in S$, let $M_i$ have independent row indices $K_i^2$ and
     column indices $(K'_i)^2$, and transport it by arbitrary endpoint
     families $u_i,v_i$ and $u'_i,v'_i$.
-    Contracting these transported matrices against the actual prepared
+    Contracting these transported matrices against the prepared
     density coefficient, with $|\eta_i\rangle\langle\zeta_i|$ elsewhere,
     equals
     \begin{align}
@@ -247,16 +242,14 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \end{align}
     Here $\eta_i^a=u_i((a_i)_1)\otimes v_i((a_i)_2)$ on $S$ and
     $\eta_i$ elsewhere; the bra definition is analogous.
-    The matrix $K_V$ is the actual preparation followed by $V$.
-    No spanning, normalization, or contraction hypothesis is imposed on
-    the endpoint families or words. The input matrix $\rho$ is arbitrary.
+    The matrix $K_V$ is the preparation followed by $V$.
 \end{theorem}
 
 \begin{proof}\leanok
     Expand each transported matrix as the sum of its entries times the
     corresponding rank-one endpoint matrices. Apply
     Theorem~\ref{thm:peps_selected_multilinear_expansion}, and identify
-    each rank-one source contraction with the actual prepared ket and
+    each rank-one source contraction with the prepared ket and
     bra matrices. Separate the independent ket and bra assignments.
 \end{proof}
 
@@ -270,7 +263,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \uses{def:peps_selected_retained_positions}
     Let $S\subseteq\mathcal E$ and suppose every position in $S$ has an
     endpoint among the affected parties $\mathcal A$.
-    The actual ordered retained slots identify the selected partial slots
+    The ordered retained slots identify the selected partial slots
     bijectively with $S$. Hence their Schmidt assignments are identified
     with $\prod_{e\in S}\{1,\ldots,r_e\}^2$ by reading the same original
     position. For a partial branch $\xi$, replace a selected source by
@@ -278,7 +271,7 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     independently by this assignment, and keep all other sources original.
 \end{definition}
 
-\begin{theorem}[Actual corrected terms in Schmidt coordinates]
+\begin{theorem}[Corrected terms in Schmidt coordinates]
     \label{thm:peps_corrected_gaussian_sum}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceTerm_gaussian_eq_sum}
     \leanok
@@ -296,19 +289,18 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
         K_{\xi,u}\rho K_{\zeta,v}^{\dagger}.
         \label{eq:peps_corrected_gaussian_sum}
     \end{align}
-    Here $Z^{\xi,\zeta}$ reads exactly the original positions and the
+    Here $Z^{\xi,\zeta}$ reads the original positions and the
     local labels selected by $\xi,\zeta$. The matrices $K_{\xi,u}$ are
-    the canonical residual words with the source vectors of
+    the source-free residual words with the source vectors of
     Definition~\ref{def:peps_partial_schmidt_assignments} prepared at their inputs.
     Each gate coefficient occurs once on each side.
 \end{theorem}
 
 \begin{proof}\leanok
-    Express the actual corrected term as its partial-branch source
+    Express the corrected term as its partial-branch source
     contraction. The ambient correction is the transport of its Schmidt
     correction. Apply Theorem~\ref{thm:peps_prepared_source_frames} at the
     selected retained slots, and use their original-position identification.
-    This is an operator identity; it precedes the expectation and norm estimates.
 \end{proof}
 
 \begin{theorem}[Pointwise physical error of the sampled operators]
@@ -331,17 +323,15 @@ The construction follows \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
          & \leq\sum_{\varnothing\ne S\subseteq\mathcal E}
         \|\operatorname{tr}_{\rm disc}F_S(\Delta(\omega))\|_1.
     \end{align}
-    The finite bases follow the manuscript's finite-space convention;
-    no bound on private dimensions enters these identities.
 \end{theorem}
 
 \begin{proof}\leanok
-    Substitute the sampled operators into the established nonempty-subset
+    Substitute the sampled operators into the nonempty-subset
     expansion of local source replacements, then apply the triangle inequality
-    after the actual final partial trace.
+    after the final partial trace.
 \end{proof}
 
-The statements above construct the source samples and derive their exact
+The statements above construct the source samples and derive their
 covariance and density identities. Bounding each physical corrected term
 requires the further identification of its original registers with the
 separated affected and exterior contractions.

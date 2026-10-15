@@ -1,6 +1,6 @@
 % Source: arXiv:2203.12563v3, REsubmission.tex, lines 1695--1777.
 
-\subsection{The actual support in the joint boundary frame}
+\subsection{Support in the joint boundary frame}
 \label{sec:mpo_joint_frame_reduction}
 
 Retain the shared alphabet $\mathcal I$, the enlarged dimensions
@@ -12,7 +12,7 @@ $S=\operatorname{ran}\Gamma'_2$, where
      & =\sum_x\tr(C_x^iV_xV_x^*C_x^jX_x).
     \label{eq:mpo_joint_full_trace}
 \end{align}
-The actual local parent interaction is $h=I-P_S$.
+The local parent interaction is $h=I-P_S$.
 
 \begin{definition}[The full product frame and its boundary coefficients]
     \label{def:mpo_joint_full_frame}
@@ -35,7 +35,7 @@ The actual local parent interaction is $h=I-P_S$.
     the ambient column space still contains every ordered pair of labels.
 \end{definition}
 
-\begin{theorem}[Full actual support lies in the boundary frame]
+\begin{theorem}[The two-site support lies in the boundary frame]
     \label{thm:mpo_joint_full_frame_support}
     \lean{MPSTensor.MPOSymmetry.blockInsertedGroundSpaceMap_jointMixed_eq_boundaryColumns,
         MPSTensor.MPOSymmetry.jointMixedTwoSiteBoundaryColumns_eq_polarFrame_mul,
@@ -131,7 +131,7 @@ $D_x$, while the right contracted leg is $b\in\Fin{D_x^0}$.
         =\|(I-Q)v\|^2$, which proves the squared-norm bound.
 \end{proof}
 
-\begin{definition}[The actual full-frame projection]
+\begin{definition}[The full-frame projection]
     \label{def:mpo_joint_full_frame_projection}
     \lean{MPSTensor.MPOSymmetry.jointMixedTwoSiteFrameProjection}
     \leanok
@@ -140,7 +140,7 @@ $D_x$, while the right contracted leg is $b\in\Fin{D_x^0}$.
     Hilbert space.
 \end{definition}
 
-\begin{theorem}[Reduction and penalty for the actual interaction]
+\begin{theorem}[Reduction and penalty for the two-site interaction]
     \label{thm:mpo_joint_full_frame_reduction}
     \lean{MPSTensor.MPOSymmetry.jointMixedTwoSiteFrameProjection_mul_supportProjection,
         MPSTensor.MPOSymmetry.jointMixedTwoSiteFrameProjection_commute_parentInteraction,
@@ -149,7 +149,7 @@ $D_x$, while the right contracted leg is $b\in\Fin{D_x^0}$.
         MPSTensor.MPOSymmetry.jointMixedParentInteraction_frameComplement_norm_sq_le}
     \leanok
     \uses{def:mpo_joint_full_frame_projection}
-    For the actual support $S$ in (\ref{eq:mpo_joint_full_trace}),
+    For the support $S$ in (\ref{eq:mpo_joint_full_trace}),
     $QP_S=P_S$, $Qh=hQ$, and $I-Q\le h$. The interaction equals
     the identity on $(\operatorname{ran}U)^\perp$, and every physical
     vector satisfies $\|(I-Q)v\|^2\le\operatorname{Re}\langle hv,v\rangle$.
@@ -196,7 +196,7 @@ $D_x$, while the right contracted leg is $b\in\Fin{D_x^0}$.
     permits gap restriction through the isometry.
 \end{proof}
 
-\begin{theorem}[The actual compressed interaction and its kernel]
+\begin{theorem}[The compressed interaction and its kernel]
     \label{thm:mpo_joint_full_frame_compression}
     \lean{MPSTensor.MPOSymmetry.jointMixedTwoSitePolarFrame_isIsometry,
         MPSTensor.MPOSymmetry.jointMixedTwoSitePolarIsometry,
@@ -207,7 +207,7 @@ $D_x$, while the right contracted leg is $b\in\Fin{D_x^0}$.
     \uses{def:mpo_joint_full_frame}
     Suppose both endpoint families have simultaneous one-site span.
     Then $U=U_L\otimes U_R$ is an isometry, $Q=UU^*$, and the
-    actual two-site interaction satisfies
+    two-site interaction satisfies
     \begin{align}
         U^*hU & =I-P_{U^*S}, & \ker(U^*hU) & =U^*S.
     \end{align}

@@ -3422,6 +3422,27 @@ three-plaquette output measurement, and the routed reunion measurement.
   `OrthogonalBlockError.lean` were later deleted, when the orthogonal-block bound
   became a corollary of the repeated-overlapping bound.
 
+### Final comparison after restricted simplification — promoted (2026-10-14)
+
+- **Pattern:** simplify a supplied equality with a fixed list of lemmas, then
+  compare its result with the goal when ordinary definition unfolding is
+  needed to identify coordinate aliases or an equivalence's forward function.
+- **Seen:** four final comparisons in
+  `PEPS/Approximation/IncidentSampledPhysicalFactor.lean`,
+  `PEPS/Approximation/IncidentPureSampledPhysicalSum.lean`,
+  `PEPS/Approximation/SourceNetworkDimensions.lean`, and
+  `PEPS/Approximation/OriginalGateSamplePhysicalSum.lean`.
+- **Abstraction:** reuse Lean's existing `simpa only [...] using! h`. Its
+  simplification is identical to `simpa only [...] using h`; only the final
+  comparison uses default transparency. The pinned implementation is
+  `Lean/Elab/Tactic/Simpa.lean`, lines 50–54 and 168–177.
+- **Refactor:** all four occurrences use the existing command directly. No
+  helper lemma, simp set, macro, option increase, or compatibility alias is
+  introduced.
+- **Notes:** the supplied equality and the goal must already describe the
+  same mathematical objects after the stated rewrites. This command does not
+  repair incompatible index data or prove an additional hypothesis.
+
 ## Completed refactors
 
 ### Literal one- and two-bond assignment specialization — resolved (2026-10-02)
@@ -7757,3 +7778,19 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** Two occurrences in two files. The repair construction retains
   its explicit exterior-color argument, while the initial family uses the
   colors of its actual belt fan. Neither requires a representative of a run.
+
+### Actual completed and pre-charge terminal family — promoted (2026-10-14)
+
+- **Pattern:** form the finite family of completed and pre-charge histories
+  through one horizon, and map the actual fill and charge leaves to their
+  literal physical partitions.
+- **Seen:** `Scan/ActualRoughUpper.lean` and `Scan/ActualSharpUpper.lean`.
+- **Abstraction:** `CollarScan.ActualTerminals` in
+  `Scan/ActualTerminalPartitions.lean` owns the six extracted definitions
+  and leaf-partition identities. Definitions and proofs are unchanged;
+  the former private declarations are now shared.
+- **Notes:** The rough theorem and proof remain byte-identical. The sharp
+  comparison reuses its geometric and symmetric-coordinate identities but
+  changes the mathematical input to the common signed moment interval and
+  retains the actual weighted postselected entropy contribution. No custom
+  tactic, reduced hypothesis, or enlarged elaboration budget is introduced.
