@@ -75,19 +75,19 @@ comparisons used in Proposition~7.1 and in the assembly argument of
     identity and the zero local error assertion.
 \end{proof}
 
-\begin{theorem}[Original monomial and coefficient bounds]
+\begin{theorem}[Original monomial and expansion bounds]
     \label{thm:peps_original_produced_resource_bounds}
     \leanok
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.monomialCount_produce_le}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_mono}
     If every original monomial list has at most $K$ terms, then every
-    corresponding produced occurrence has at most $K$ terms. If its
-    coefficient sum is at most $S$ and $S\le S'$, the same expansion has
-    coefficient sum at most $S'$, with its effect-count bound unchanged.
+    corresponding produced occurrence has at most $K$ terms. If an original
+    circuit has pair-effect bound $r$ and coefficient-sum bound $S$, then
+    bounds $r'\ge r$ and $S'\ge S$ also bound that circuit.
 \end{theorem}
 \begin{proof}\leanok
     The original lists are unchanged at each occurrence. Their length bound
-    gives the first assertion; the second is transitivity of the
-    coefficient-sum inequality. Composition and spectator identities preserve
-    these assertions.
+    gives the first assertion. For the second, enlarge the pair-effect bound
+    in each monomial and the coefficient-sum bound by transitivity.
+    Composition and spectator identities preserve these assertions.
 \end{proof}

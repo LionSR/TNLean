@@ -6,12 +6,12 @@ Authors: TNLean contributors
 import TNLean.PEPS.Approximation.ApproximateCircuitResources
 
 /-!
-# Original monomial counts and coefficient-sum majorants
+# Original monomial counts and expansion majorants
 
-Every produced occurrence keeps the original monomial count. Increasing an
-upper bound for the coefficient sum preserves the same bound on the number
-of pair effects. These elementary comparisons supply the actual expansion
-bounds used in distributed compression.
+Every produced occurrence keeps the original monomial count. Increasing the
+pair-effect and coefficient-sum majorants preserves the original expansion
+condition. These elementary comparisons supply the expansion bounds used
+in distributed compression.
 
 Source: polynomial-PEPS manuscript, Theorem 5.2, `04-compression.tex`,
 lines 143–149 and 199–208, revision
@@ -44,19 +44,17 @@ theorem monomialCount_produce_le {a b : Layout P} (w : OriginalCircuit a b) {K :
   | swap => intro _ g; exact nomatch g
   | frame r w ih => intro hK g; exact ih hK g
 
-/-- Increasing the coefficient-sum bound preserves the original effect-count bound.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 143–149 and 199–208. -/
-theorem isExpansionBounded_mono (r : ℕ) (S S' : ℝ) (hSS : S ≤ S') :
-    {a b : Layout P} → (w : OriginalCircuit a b) →
-      w.IsExpansionBounded r S → w.IsExpansionBounded r S'
-  | _, _, .id _, _ => True.intro
-  | _, _, .comp w v, h =>
-      ⟨isExpansionBounded_mono r S S' hSS w h.1,
-        isExpansionBounded_mono r S S' hSS v h.2⟩
-  | _, _, .privateMap .., _ => True.intro
-  | _, _, @OriginalCircuit.nonprivateGate _ _ _ _ _ _ _ _ _ _ _, h =>
-      ⟨h.1, h.2.trans hSS⟩
-  | _, _, .swap .., _ => True.intro
-  | _, _, .frame _ w, h => isExpansionBounded_mono r S S' hSS w h
+/-- Increasing the pair-effect bound and the coefficient bound preserves the original expansion
+condition. Source: polynomial-PEPS, `04-compression.tex`, lines 199–208. -/
+theorem isExpansionBounded_mono {a b : Layout P} (w : OriginalCircuit a b) {r r' : ℕ}
+    {s s' : ℝ} (h : w.IsExpansionBounded r s) (hr : r ≤ r') (hs : s ≤ s') :
+    w.IsExpansionBounded r' s' := by
+  induction w with
+  | id => trivial
+  | comp w v ihw ihv => exact ⟨ihw h.1, ihv h.2⟩
+  | privateMap => trivial
+  | nonprivateGate => exact ⟨fun m hm => (h.1 m hm).trans hr, h.2.trans hs⟩
+  | swap => trivial
+  | frame _ w ih => exact ih h
 
 end TNLean.PEPS.PairEffect.OriginalCircuit
