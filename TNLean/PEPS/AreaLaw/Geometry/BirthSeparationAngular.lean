@@ -224,8 +224,10 @@ private theorem homogeneous_endpoints {α β m : ℤ} (hαβ : |α| + |β| ≤ 2
     (hm : m = -1 ∨ m = 0) {t : ℝ} (ht₀ : (m : ℝ) < t) (ht₁ : t < m + 1)
     (h : (α : ℝ) + β * t ≤ 0) :
     (α : ℝ) + β * m ≤ 0 ∧ (α : ℝ) + β * (m + 1) ≤ 0 := by
-  have hα : -2 ≤ α ∧ α ≤ 2 := by constructor <;> linarith [abs_nonneg β, neg_abs_le α, le_abs_self α]
-  have hβ : -2 ≤ β ∧ β ≤ 2 := by constructor <;> linarith [abs_nonneg α, neg_abs_le β, le_abs_self β]
+  have hα : -2 ≤ α ∧ α ≤ 2 := by
+    constructor <;> linarith [abs_nonneg β, neg_abs_le α, le_abs_self α]
+  have hβ : -2 ≤ β ∧ β ≤ 2 := by
+    constructor <;> linarith [abs_nonneg α, neg_abs_le β, le_abs_self β]
   obtain ⟨hα₁, hα₂⟩ := hα
   obtain ⟨hβ₁, hβ₂⟩ := hβ
   rcases hm with rfl | rfl <;> interval_cases α <;> interval_cases β

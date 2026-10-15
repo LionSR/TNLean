@@ -46,8 +46,9 @@ theorem norm_le_outer_of_mem_repairNormTriangle {L : ℤ} {s : RepairFanSlot} {x
   rcases s with ⟨k, j⟩
   simp only [intHalfPlane, Set.mem_ofPred_eq] at h₂ h₃
   rw [Prod.norm_def, Real.norm_eq_abs, Real.norm_eq_abs, max_le_iff, abs_le, abs_le]
-  fin_cases k <;> fin_cases j <;> simp [repairSlotFacets] at h₂ h₃ ⊢ <;>
-    refine ⟨⟨?_, ?_⟩, ⟨?_, ?_⟩⟩ <;> linarith
+  refine ⟨⟨?_, ?_⟩, ⟨?_, ?_⟩⟩ <;>
+    fin_cases k <;> fin_cases j <;> simp only [repairSlotFacets] at h₂ h₃ ⊢ <;>
+    push_cast at h₂ h₃ ⊢ <;> linarith
 
 /-- Doubling maps the elementary triangle onto the doubled triangle. -/
 theorem two_smul_mem_repairNormTriangle {s : RepairFanSlot} {x : ℝ × ℝ}
@@ -55,7 +56,7 @@ theorem two_smul_mem_repairNormTriangle {s : RepairFanSlot} {x : ℝ × ℝ}
   obtain ⟨⟨h₁, h₂⟩, h₃⟩ := hx
   simp only [repairNormTriangle, intHalfPlane, Set.mem_inter_iff, Set.mem_ofPred_eq,
     Prod.smul_fst, Prod.smul_snd, smul_eq_mul] at h₁ h₂ h₃ ⊢
-  push_cast at h₁ ⊢
+  push_cast at h₁ h₂ h₃ ⊢
   refine ⟨⟨by linarith, by linarith⟩, by linarith⟩
 
 /-- An interior point of the elementary triangle satisfies both radial facet
@@ -213,12 +214,16 @@ theorem IsIsolatedStar.exists_mem_repairExteriorTrapezoid {ι : Type*} [Nonempty
   obtain ⟨⟨t, ht⟩, hwt⟩ := Set.mem_iUnion.mp hwb
   refine ⟨t, (heq t).trans ht, ?_⟩
   have hw2 : w ∈ repairCurrentFanTriangle v (2 * u) t := by
-    rw [← repairCurrentFanTriangle_inter_closedBall v (by positivity) (by linarith) t]
+    rw [← repairCurrentFanTriangle_inter_closedBall v (ρ' := 2 * u) (ρ := ρ) (by positivity)
+      (by linarith) t]
     exact ⟨hwt, by rw [Metric.mem_closedBall, dist_eq_norm]; linarith⟩
   obtain ⟨x, hx, rfl⟩ := hw2
+  dsimp only at hout
   have hxT := cellFanPolygon_region_subset_repairNormTriangle t hx
   have hval : u⁻¹ • (v + (2 * u) • x - v) = (2 : ℝ) • x := by
-    rw [add_sub_cancel_left, smul_smul, inv_mul_cancel_left₀ hu.ne']
+    rw [add_sub_cancel_left, smul_smul]
+    congr 1
+    field_simp
   rw [hval]
   have h2 := two_smul_mem_repairNormTriangle hxT
   refine ⟨h2, ?_⟩

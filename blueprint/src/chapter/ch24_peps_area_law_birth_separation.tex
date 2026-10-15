@@ -237,6 +237,82 @@ removal square has been cut out; the second is the removal of the next
 generation's squares, including terminal ones, from every old region.
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:initial-stars, lines 332--349; geometry:repair-induction,
+% lines 486--494; geometry:birth-separation, lines 584--615.
+\begin{lemma}[Same-label regions in an isolated star]
+    \label{lem:area_law_star_same_label_bound}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.interior_repairNormTriangle_inter_eq_empty,
+        TNLean.PEPS.AreaLaw.Geometry.interior_repairCurrentFanTriangle_inter_eq_empty,
+        TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar.exists_repairCurrentSectorAssignment_eq,
+        TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar.exists_mem_repairExteriorTrapezoid}
+    \leanok
+    \uses{lem:area_law_normalized_fan_contacts}
+    Let the closed square of half-side $\rho$ about $v$ be an isolated star
+    of a labelled region family $(R_i)$, and let $u>0$ with $6u\le\rho$.
+    The identifier chosen by the repair for each working wedge of half-side
+    $6u$ is the identifier assigned to that wedge by the star. If
+    $w\in R_i$ and $u<\|w-v\|<2u$, then $(w-v)/u$ lies in the exterior
+    trapezoid $E_t$ of a wedge $t$ assigned to $i$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The interior of a fan triangle meets no other fan triangle of the same
+    half-side, because it satisfies both radial inequalities strictly. A
+    point of the nonempty interior of the working triangle of $t$ lies in
+    the region chosen for $t$, hence in a star triangle of a wedge assigned
+    to that region; this wedge must be $t$. For the second assertion, the
+    star writes $\overline{R_i}$ near $v$ as the union of the triangles of
+    the wedges assigned to $i$. Clipping to half-side $2u$ and rescaling
+    gives a point of $2T_t$ of norm greater than one; in the cone of $t$
+    the norm is $o_t\cdot x$.
+\end{proof}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:birth-separation, lines 573--659, from
+% geometry:repair-induction, lines 471--485.
+\begin{theorem}[Birth separation of replacements, given the uniform repair
+        induction]
+    \label{thm:area_law_replacement_birth_separation_conditional}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairRegionLift,
+        TNLean.PEPS.AreaLaw.Geometry.repairFinalRegion,
+        TNLean.PEPS.AreaLaw.Geometry.IsRepairBirthSeparated,
+        TNLean.PEPS.AreaLaw.Geometry.exists_isRepairBirthSeparated_of_isUniformRepairInduction,
+        TNLean.PEPS.AreaLaw.Geometry.exists_isRepairBirthSeparated_of_uniformRepairInductionStatement}
+    \leanok
+    \uses{thm:area_law_replacement_birth_separation_local,
+        lem:area_law_star_same_label_bound}
+    Assume the conclusion of the uniform repair induction of
+    \cite[Section~11]{OpenAI2026AreaLaw}. There are a fixed $c_1>0$ and a
+    threshold $T$ such that the following holds for every stopping scale
+    $S_*\ge T$, every layer width, and every sufficiently large lower layer
+    index. Define the final actual region of an identifier as the
+    intersection of its current regions over all later generations. Let a
+    replacement be born at a parent mark of scale $S$. Then its closed birth
+    has distance at least $c_1d(S)^{\rho_0}$ from the final actual region of
+    every other identifier of its generation with the same label.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply Theorem~\ref{thm:area_law_replacement_birth_separation_local}
+    with $u=d(S)\ge S_*\ge1$ to the final actual region $Y$ of the compared
+    identifier. Near the parent mark, an older region lies in the isolated
+    star of the mark and avoids its removal square, so
+    Lemma~\ref{lem:area_law_star_same_label_bound} places it in the exterior
+    trapezoids of the wedges of its label, which is opposite to the exterior
+    label of the run. A peer at the same parent lies in the birth of another
+    run with the same exterior label. A peer at another parent lies in that
+    parent's removal square, at distance at least $2u$ from the mark by the
+    separation of marks and the removal margins. Finally, the next
+    generation removes the squares $Q(v+up,u)$ from every region.
+\end{proof}
+
+This theorem covers the replacement births of
+Lemma~\ref{lem:area_law_birth_separation}; the births of initial belt tiles
+are not yet treated~\cite{gap:arealaw2d_birth_separation_scope}.
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
 % geometry:birth-separation, lines 573--582.
 \begin{lemma}[Birth-template separation]
     \label{lem:area_law_birth_separation}
