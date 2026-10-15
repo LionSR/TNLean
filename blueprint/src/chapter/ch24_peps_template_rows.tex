@@ -97,7 +97,7 @@
 \begin{proof}
     \leanok
     The coordinate inequalities give the row formula. A point newly present
-    in the dilation of a union has a witness in one constituent, and cannot
+    in the dilation of a union comes from some point in one constituent, and cannot
     belong to the old dilation of that constituent. Counting the union gives
     the cardinality inequality without requiring disjointness.
 \end{proof}
@@ -182,7 +182,7 @@
     intervals. Increasing the radius from $r$ to $r+1$ adds at most four
     sites to each old nonempty row. Every radius-$r$ row has at most
     $2s_0+2r+1$ sites. If $S$ is nonempty, there are integers $a\le b$ with
-    $b-a\le2s_0$ such that its radius-$r$ occupied rows are exactly
+    $b-a\le2s_0$ such that its radius-$r$ occupied rows are
     $[a-r,b+r]\cap\mathbb Z$.
     For $1\le j\le s_0$, including empty samples,
     \begin{align}
@@ -194,7 +194,7 @@
     Intersect the original sample with a vertical radius window. Its occupied
     columns are consecutive, so horizontal radius extension gives an interval.
     Compare adjacent windows by clamping an original row index to the smaller
-    window. An occupied adjacent row supplies a sampled point with horizontal
+    window. An occupied adjacent row contains a sampled point with horizontal
     displacement at most one. The additional horizontal radius adds one more,
     so each old endpoint extends by at most two.
     The piece diameter bounds every row width. Count the old occupied rows,

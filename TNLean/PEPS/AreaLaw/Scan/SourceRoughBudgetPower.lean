@@ -162,7 +162,6 @@ theorem selectedDensity_budget_le_principal
       rw [Real.rpow_add hnr, Real.rpow_one]
       push_cast
       field_simp [hW.ne', hnr.ne', hmr.ne', hε.ne']
-      <;> ring
     _ ≤ (2 * (C₁ + 1) / ε) * ((Cr + 2 * Ct) *
         ((n : ℝ) ^ e / (m : ℝ) + a ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Cl)) +
           (2 * (C₁ + 1) / (W * ((n * m : ℕ) : ℝ) * ε)) * R :=

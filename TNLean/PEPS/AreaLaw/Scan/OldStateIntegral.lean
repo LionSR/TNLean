@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Representation.ReplicaTransport.EntropyGain
+import QICLean.Representation.ReplicaTransport.Energy
 import QICLean.Analysis.Transport.ErrorFourier
 import TNLean.PEPS.AreaLaw.Scan.RegionalMoveEntropy
 
@@ -170,6 +171,16 @@ theorem continuous_choiceEntropySymbol (h : H) : Continuous (D.choiceEntropySymb
   unfold choiceEntropySymbol
   exact continuous_finsetSum _ fun g _ => continuous_finsetSum _ fun c _ =>
     continuous_const.mul (continuous_moveEta (D.old h g) (D.move h c g))
+
+omit [DecidableEq H] [∀ h, DecidableEq (C h)] [∀ v, NeZero (n v)] [∀ h, Fintype (C h)] in
+/-- The split entropy `η_{i,j}` of a term at a leaf is continuous in the one-copy vector
+(`06-transport.tex`, lines 342–347). -/
+theorem continuous_splitEta {ι : Type*} (E : EnergyTerms V n ι) (i : ι)
+    (j : Σ h, Option (C h)) :
+    Continuous fun θ : SiteConfig n → ℂ =>
+      D.splitEta E i j ((EuclideanSpace.equiv _ ℂ).symm θ) := by
+  unfold splitEta
+  exact continuous_finsetSum _ fun g _ => continuous_splitBandEta _ _
 
 omit [∀ v, NeZero (n v)] in
 /-- Admissible old partitions and valid moves make the choice symbol nonnegative. -/

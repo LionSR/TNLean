@@ -1,8 +1,8 @@
 \section{Whole sides of a dyadic square}
 \label{sec:area_law_cell_sides}
 
-The primitive boundary analysis in \cite[Section~11]{OpenAI2026AreaLaw}
-uses whole square sides. Let $Q$ be an actual translated half-open dyadic
+The boundary analysis in \cite[Section~11]{OpenAI2026AreaLaw}
+uses whole square sides. Let $Q$ be a translated half-open dyadic
 square, with arbitrary origin, exponent and integer index, and let
 $S_0,S_1,S_2,S_3$ be its four closed whole sides.
 
@@ -10,7 +10,7 @@ $S_0,S_1,S_2,S_3$ be its four closed whole sides.
 % and geometry:initial-stars, lines 333--370, especially 352--359;
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 
-\begin{theorem}[Every square frontier point lies on a whole side]
+\begin{theorem}[Every square boundary point lies on a whole side]
     \label{thm:area_law_square_frontier_side}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_dyadicCellSide_of_mem_frontier}
     \leanok
@@ -21,11 +21,10 @@ $S_0,S_1,S_2,S_3$ be its four closed whole sides.
 \begin{proof}\leanok
     \uses{thm:area_law_unsplit_side_endpoints}
     Write $Q=\lbrack A,A')\times\lbrack B,B')$, where $A<A'$ and $B<B'$.
-    The product frontier identity gives
+    The boundary of the product of intervals is
     \begin{align}
         \partial Q & =([A,A']\times\{B,B'\})
         \cup(\{A,A'\}\times[B,B']).
     \end{align}
-    These four closed segments are exactly the four whole sides,
-    by the established endpoint coordinates.
+    These four closed segments are the four whole sides $S_0,S_1,S_2,S_3$.
 \end{proof}

@@ -163,18 +163,7 @@ theorem inner_single_groundSpaceGram_single_eq_rectangularChoi
   have hmul (W : Matrix (Fin D) (Fin D) ℂ) :
       ((W * Matrix.single c a 1 * Wᴴ : Matrix (Fin D) (Fin D) ℂ) e b) =
         W e c * star (W b a) := by
-    rw [Matrix.mul_apply]
-    calc
-      ∑ j, ((W * Matrix.single c a 1 : Matrix (Fin D) (Fin D) ℂ) e j) * Wᴴ j b =
-          ((W * Matrix.single c a 1 : Matrix (Fin D) (Fin D) ℂ) e a) * Wᴴ a b := by
-        apply Finset.sum_eq_single a
-        · intro j _ hja
-          rw [Matrix.mul_apply]
-          simp [hja.symm]
-        · simp
-      _ = W e c * star (W b a) := by
-        rw [Matrix.mul_apply]
-        simp [Matrix.single_apply]
+    simp [Matrix.mul_apply, Matrix.single_apply, ite_and]
   rw [show (∑ σ : Fin L → Fin d,
       Kraus.evalWord A (List.ofFn σ) * Matrix.single c a 1 *
         (Kraus.evalWord A (List.ofFn σ))ᴴ) =

@@ -74,4 +74,18 @@ theorem domainGraph_ball_subset_of_clearance (Λ T : Finset (ℤ × ℤ))
   rw [abs_le] at hvariation
   omega
 
+/-- Under the ambient row assumption, every physical depth row of index in `[1, L]` has at
+most `n` sites. Source: `08-scanner.tex`, lines 43–48 and 83–87. -/
+theorem depthRow_length_le_of_ambientRows {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
+    {depth : Site Λ → ℤ} (hdepth : depth = fun x ↦ ambientDepth T hT x.val) {n L : ℕ}
+    (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
+      (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ n)
+    {d : ℤ} (hd : d ∈ Finset.Icc (1 : ℤ) L) :
+    (depthRow depth d).length ≤ n := by
+  obtain ⟨h1, hL⟩ := Finset.mem_Icc.mp hd
+  have hb := depthRow_ambientDepth_length_le_of_row_bound T hT
+    (Subtype.val : Site Λ → ℤ × ℤ) Subtype.val_injective hrows
+    (show 1 ≤ d.toNat by omega) (show d.toNat ≤ L by omega)
+  simpa only [← hdepth, Int.toNat_of_nonneg (show 0 ≤ d by omega)] using hb
+
 end TNLean.PEPS.AreaLaw.Scan

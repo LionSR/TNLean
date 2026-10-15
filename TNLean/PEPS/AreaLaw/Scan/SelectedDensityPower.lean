@@ -112,7 +112,7 @@ theorem exists_final_selectedDensity_le
       a ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Cl) / ε ≤ ε at hdouble
     have hdouble' : 2 * (C * ((n : ℝ) ^ e / (m : ℝ) +
         a ^ (1 / 4 : ℝ) * Real.log (n : ℝ) ^ Cl) / ε) ≤ ε := by
-      convert hdouble using 1 <;> ring
+      convert hdouble using 1; ring
     linarith only [hdouble']
   let coeff := 2 * (C₁ + 1) / (W * ((n * m : ℕ) : ℝ) * ε)
   have hrem : Tendsto (fun k ↦ coeff * R k) atTop (𝓝 0) := by

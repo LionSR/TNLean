@@ -122,10 +122,7 @@ theorem eventually_exists_selected_actualCharge_sharp_comparison
     Q δ error cap hselected hcoefficient hcomparison
   have hKr : (0 : ℝ) < S.K := Nat.cast_pos.mpr hKpos
   have hW : 0 < W := mul_pos ha hKr
-  have hweight : W / (S.K : ℝ) = a := by
-    dsimp only [W]
-    field_simp [hKr.ne']
-    <;> ring
+  have hweight : W / (S.K : ℝ) = a := mul_div_cancel_right₀ a hKr.ne'
   filter_upwards [hcomparison, eventually_gt_atTop 0] with k hcomparisonK hk
   obtain ⟨s, p, hp, hQ, henergy⟩ := hselected k hk
   have hcap : δ k s p ≤ (e₀ + cap k s p + rem k) / (g / 2) := by

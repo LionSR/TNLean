@@ -160,32 +160,43 @@ theorem eventually_actualCharge_suppliedPrevector_sharp_comparison
   obtain ⟨_, _, hδ, hLower⟩ := (hlower k hk s p).2
   refine ⟨hN, hδ, ?_⟩
   intro τ hτ hτhalf
-  have hpreSum : (∑ g, ∑ j, tree.weight j * gpre j g) = (S.K : ℝ) * Gpre := by
-    dsimp only [Gpre]
-    field_simp [hKr.ne']
-    <;> ring
-  have hpostSum : (∑ g, ∑ j, tree.weight j * gpost j g) = (S.K : ℝ) * Gpost := by
-    dsimp only [Gpost]
-    field_simp [hKr.ne']
-    <;> ring
+  have hpreSum : (∑ g, ∑ j, tree.weight j * gpre j g) = (S.K : ℝ) * Gpre :=
+    (mul_div_cancel₀ _ hKr.ne').symm
+  have hpostSum : (∑ g, ∑ j, tree.weight j * gpost j g) = (S.K : ℝ) * Gpost :=
+    (mul_div_cancel₀ _ hKr.ne').symm
   let rate := -Real.log (Transport.filteredNormSq (D.rootPath dims (a / 2) k p) (pre k)) /
     (k : ℝ)
   let rU := Real.bellOverlapRemainder d cU S.K k
   let rL := sharpLowerRemainder a cL Cf ell Sent k
+  have hWa : W / (2 * a) = (S.K : ℝ) / 2 := by
+    dsimp only [W]
+    calc a * (S.K : ℝ) / (2 * a) = a * ((S.K : ℝ) / 2) / a := by ring
+      _ = (S.K : ℝ) / 2 := mul_div_cancel_left₀ _ ha.ne'
   have hupperRate : rate ≤ 2 * Real.log (d : ℝ) - Real.log z + W / 2 * Gpost +
       6 * W * Kmom * a - W / (2 * a) * Real.log z + rU := by
-    convert hU using 1
-    rw [hpostSum]
+    refine hU.trans_eq ?_
+    change 2 * Real.log (d : ℝ) - Real.log z +
+        (a / 2) * (∑ g, ∑ j, tree.weight j * gpost j g) +
+          6 * (S.K : ℝ) * Kmom * a ^ 2 - (S.K : ℝ) / 2 * Real.log z + rU = _
+    rw [hpostSum, hWa]
     dsimp only [W]
-    field_simp [ha.ne']
-    <;> ring
+    ring
   have hlowerRate : W / 2 *
       (2 * Sent + (1 - τ) * Gpre - 2 * τ * Real.log (d : ℝ) -
         (3 + 1 / a) * Real.binEntropy τ - 25 * Kmom * a -
           δ / τ * max 0 (2 * Sent + gmax)) - W / 2 * rL ≤ rate := by
-    convert hLower τ hτ hτhalf using 1
+    refine (?_ : _ = _).trans_le (hLower τ hτ hτhalf)
+    change W / 2 *
+        (2 * Sent + (1 - τ) * Gpre - 2 * τ * Real.log (d : ℝ) -
+          (3 + 1 / a) * Real.binEntropy τ - 25 * Kmom * a -
+            δ / τ * max 0 (2 * Sent + gmax)) - W / 2 * rL =
+      (a / 2) * (∑ g : Fin S.K,
+        (2 * Sent + (1 - τ) * (∑ j, tree.weight j * gpre j g) -
+          τ * (2 * Real.log (d : ℝ)) -
+          (3 + 1 / a) * Real.binEntropy τ - 25 * Kmom * a -
+            δ / τ * max 0 (2 * Sent + gmax) - rL))
     simp only [Finset.sum_sub_distrib, Finset.sum_add_distrib, Finset.sum_const,
-      Fintype.card_fin, nsmul_eq_mul, ← Finset.mul_sum]
+      Finset.card_univ, Fintype.card_fin, nsmul_eq_mul, ← Finset.mul_sum]
     rw [hpreSum]
     dsimp only [W]
     ring
@@ -193,8 +204,8 @@ theorem eventually_actualCharge_suppliedPrevector_sharp_comparison
     (Real.log (d : ℝ)) (Real.log z) Kmom δ (max 0 (2 * Sent + gmax))
     rate rU (W / 2 * rL) hlowerRate hupperRate
   have hremainders : 2 * (rU + W / 2 * rL) / W = 2 * rU / W + rL := by
-    field_simp [hW.ne']
-    <;> ring
+    calc 2 * (rU + W / 2 * rL) / W = 2 * rU / W + W * rL / W := by ring
+      _ = 2 * rU / W + rL := by rw [mul_div_cancel_left₀ _ hW.ne']
   simpa only [hremainders, rU, rL, add_assoc] using hcompare
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

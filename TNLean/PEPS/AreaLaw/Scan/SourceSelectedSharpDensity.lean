@@ -49,19 +49,13 @@ and sharp-comparison bounds. Fixed physical and transport constants precede
 the entropy coefficient; that coefficient precedes the size threshold.
 The label sequence precedes every admissible weight `1 ≤ W ≤ n^omega`.
 Replica thresholds may depend on the fixed physical instance and weight.
-
-**Scope restriction (source-selected density):**
-The original target and positive-prefix entropy bounds, scanner geometry
-and transport smallness remain explicit hypotheses. The conclusion is the
-selected-density estimate with the same sharp comparison.
-
 Source: `08-scanner.tex`, lines 353–357, 399–533 and 839–911. -/
 theorem exists_sourceTarget_selected_actualCharge_sharp_density
     {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ)
     {J Δ C_T C₁ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
     (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁) (P : ℝ) :
-    ∃ Ctr Ctarget CB ct Cent eent Cen een C Cl : ℝ,
+    ∃ Ctr Ctarget CB ct _Cent _eent _Cen _een C Cl : ℝ,
       0 < Ctr ∧ 0 < Ctarget ∧ 0 < CB ∧ 0 < ct ∧ 1 ≤ C ∧ 0 ≤ Cl ∧
       ∀ Ce : ℝ, 0 ≤ Ce → ∃ N : ℕ, 2 ≤ N ∧
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
@@ -90,7 +84,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_density
               Ce * ((S.n : ℝ) *
                 ((⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ : ℕ) : ℝ) ^
                   (Exponents.boxError : ℝ) + S.n)) →
-          2 * S.r₀ ≤ S.D → ∀ (hDpos : 1 ≤ S.D) (hDm : 4 * S.D ≤ S.m),
+          2 * S.r₀ ≤ S.D → ∀ (_hDpos : 1 ≤ S.D) (_hDm : 4 * S.D ≤ S.m),
           ∃ (hm : 0 < S.m) (hM : 0 < S.M),
           let L := ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
           let X := S.A.filter fun x ↦ x.val ∈ T
@@ -101,7 +95,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_density
           let δtail := (S.n : ℝ) ^ (-100 : ℝ)
           let B := CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
           let C₀ := 512 * Real.exp 1 * (2 / g)
-          let Bsh := Ce * ((S.n : ℝ) * (L : ℝ) ^ (Exponents.boxError : ℝ) + S.n) +
+          let _Bsh := Ce * ((S.n : ℝ) * (L : ℝ) ^ (Exponents.boxError : ℝ) + S.n) +
             (S.n : ℝ) ^ (-247 : ℝ)
           1 ≤ S.K ∧ 8 * S.K * S.m ≤ L ∧ 1 ≤ B ∧
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
@@ -245,8 +239,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_density
   intro E z
   obtain ⟨hwindow, hd, hpdata⟩ := hwdata
   refine ⟨hwindow, hd, ?_⟩
-  intro inst
-  letI : NeZero E.card := inst
+  let : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
   intro d ΩX ψ Sent dims energy σ near middleRegion gpre gpost gaps gmax tree Gpre Gpost
   have hΩt : ‖Ωt‖ = 1 := (Matrix.isGappedGroundState_iff.mp htrgs).1
   have hXcard : (X.card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 :=
@@ -305,6 +298,16 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_density
     calc
       _ = (Cent * ℓ ^ eent) * (a * S.K) * a ^ (1 / 4 : ℝ) := by ring
       _ = _ := by rw [hWa]
-  simpa only [hCeq, hrate, show 2 * εp - εp = εp by ring, mul_assoc] using hQ
+  have hQ' : S.actualChargeEntropyDefect hm hM s.val dims energy (a / 2) k (pre k) p /
+      (S.K * S.n * S.D : ℝ) ≤
+    (2 * (S.C₁ + 1) / (W * ((S.n * S.m : ℕ) : ℝ) * (2 * εp - εp))) *
+      ((2 * Real.log (d : ℝ) - Real.log z + W *
+        (Bsh / z + (1 + 3 * (S.n : ℝ) * (S.D : ℝ) * Real.log (q : ℝ)))) +
+        (2 * S.n * S.m : ℕ) * (Cent * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent) +
+          roughEndpointRemainder d cR S.K (Ci + (2 * S.n * S.m : ℕ) * Cb) k) := hQ
+  refine hQ'.trans_eq ?_
+  rw [hCeq, hrate, show 2 * εp - εp = εp by ring]
+  dsimp only [εp, a]
+  ring
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

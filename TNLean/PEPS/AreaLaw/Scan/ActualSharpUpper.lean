@@ -20,13 +20,6 @@ A single completed/pre-charge terminal family supplies the physical partitions
 for every actual interpolation tree, without changing histories or weights.
 The constant and replica threshold precede all times and interpolation parameters.
 
-**Scope restriction (fixed-instance supplied-label estimate):**
-`eventually_actualScan_suppliedPrevector_sharp_upper` assumes a positive target
-spectral mass, a supplied label sequence with the eventual mass bound, and
-common completed/pre-charge marginal moments. Its constant and copy threshold
-may depend on the fixed physical instance and supplied labels. The full
-Proposition 9.6 lower estimate, telescope and absorption remain separate.
-
 Source: OpenAI area-law manuscript, `07-comparators.tex`,
 `comparator:sharp-upper`, lines 383–418; `08-scanner.tex`, lines 416–474,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
@@ -41,6 +34,9 @@ open scoped BigOperators Matrix Kronecker ComplexOrder MatrixOrder
 namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open ActualTerminals
+
+attribute [local instance] sharpTreeRegionDecidableEq sharpTreeSiteDecidableEq
+  sharpTreeConfigDecidableEq
 
 local instance sharpUpper_originalConfigDecidableEq
     {V : Type} [Fintype V] [DecidableEq V] (q d k : ℕ) :
@@ -653,9 +649,7 @@ private theorem sharpUpper_uniformCompressedAt_of_qic
           24 * s * G * Kmom * a ^ 2 - 2 * s * G * Real.log zQ +
             Real.bellOverlapRemainder E.card c G k) →
     sharpUpper_uniformCompressedAt Ωt X E.card zQ a Kmom r c k ell := by
-  classical
-  intro β zQ h
-  intro N Z hZ hZZ G ι instF instD U Y hXU hXY hUY hnest hmom tree s hs
+  intro β zQ h N Z hZ hZZ G ι instF instD U Y hXU hXY hUY hnest hmom tree s hs
     v W Q F ext A M Nsq entropy
   exact h N Z hZ hZZ G U Y hXU hXY hUY hnest hmom tree s hs
 
@@ -690,7 +684,6 @@ private theorem eventually_sharpUpper_uniformCompressed
       (∀ G : ℕ, Tendsto (Real.bellOverlapRemainder d c G) atTop (𝓝 0)) ∧
       ∀ᶠ k : ℕ in atTop,
         sharpUpper_uniformCompressedAt Ωt X d z a Kmom r c k (ell k) := by
-  classical
   intro β ΩX z hz d ψ hmass
   have hzQ :
       0 < (FiniteProduct.reducedPure_posSemidef β Ωt X).isHermitian.spectralRestrictionMass E :=

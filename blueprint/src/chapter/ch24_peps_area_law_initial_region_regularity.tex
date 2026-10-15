@@ -1,9 +1,9 @@
 \section{Regularity of initial birth regions}
 \label{sec:area_law_initial_region_regularity}
 
-Retain the actual initial family of \cite[Section~11]{OpenAI2026AreaLaw},
-with arbitrary origin, finite endpoint set and valid residues,
-$C\ge 2$ and $k_0\ge 50{,}000{,}000$.
+Retain the initial family of \cite[Section~11]{OpenAI2026AreaLaw},
+with origin $o$, finite endpoint set $Z$, valid residues,
+$C\ge 2$, and $k_0\ge 50{,}000{,}000$.
 
 % Source: 10-geometry.tex, prop:two-families, lines 154--177,
 % 212--218 and 299--323, especially 308--316;
@@ -15,12 +15,10 @@ $C\ge 2$ and $k_0\ge 50{,}000{,}000$.
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion_eq_closure_initialOpenRegion}
     \leanok
     \uses{def:area_law_initial_birth_regions,def:area_law_initial_open_regions}
-    For every actual initial identifier $i$,
+    For every initial identifier $i$,
     \begin{align}
         X_i^0 & =\overline{\operatorname{int}(X_i^0)}.
     \end{align}
-    The endpoint set may be empty. Empty regions and disconnected
-    primary regions are included.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_cell_fan_cover,
@@ -30,25 +28,18 @@ $C\ge 2$ and $k_0\ge 50{,}000{,}000$.
     \begin{align}
         (b_1-a_1)(c_2-a_2)-(b_2-a_2)(c_1-a_1) & \neq 0.
     \end{align}
-    This determinant is that of the edge vectors $b-a$ and $c-a$, so
-    they are linearly independent and span the plane, and the three
-    vertices affinely span the plane. Thus the triangle has nonempty
-    interior. A convex set with
-    nonempty interior has the same closure as its interior; closedness
-    therefore gives the asserted identity for each triangle.
+    Because the edge vectors $b-a$ and $c-a$ have nonzero determinant, they
+    span the plane, so the triangle has nonempty interior. Every closed convex
+    set with nonempty interior is the closure of its interior.
 
-    One unsplit fan triangle is contained in each closed dyadic square.
-    Its nonempty interior supplies nonempty interior of the square.
-    The same convexity argument proves regularity of the square.
+    Each closed dyadic square is convex and contains an unsplit fan triangle,
+    hence also has nonempty interior and equals the closure of its interior.
 
-    A finite union of regular closed sets is regular closed. Indeed,
-    each member's interior lies in the union's interior, so taking
-    closures shows that the union lies in the closure of that interior.
-    The reverse inclusion follows from closedness of the finite union.
-    This argument also includes the empty union.
-
-    The dummy is a finite union of closed coarse squares, each primary
-    has its exact finite cover by closed nonbelt fine cells, and each
-    run is a finite union of its actual fan triangles. The finite-union
-    argument proves the identity in all three identifier cases.
+    A finite union of regular closed sets is regular closed: each member's
+    interior lies in the interior of the union, so the union lies in the
+    closure of its interior, and closedness gives the reverse inclusion.
+    Since the dummy region is a finite union of closed coarse squares, each
+    primary region is a finite union of closed nonbelt fine cells, and each
+    sector run is a finite union of fan triangles, the identity holds in all
+    three cases.
 \end{proof}

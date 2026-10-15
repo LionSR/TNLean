@@ -321,17 +321,20 @@ Definitions~\ref{def:is_coboundary} and~\ref{def:cohomologous_to}.
 \end{proof}
 
 
-\begin{lemma}[Coboundary iff cohomologous to the trivial cocycle]%
-    \label{lem:coboundary_iff_cohomologous_one}
-    \lean{TNLean.Algebra.ScalarCocycle.isCoboundary_iff_cohomologousTo_one}
+\begin{theorem}[Cohomologous cochains differ by a coboundary]%
+    \label{thm:coboundary_iff_cohomologous_one}
+    \lean{TNLean.Algebra.ScalarCocycle.cohomologousTo_iff_isMulCoboundary₂_div}
     \leanok
     \uses{def:is_coboundary, def:cohomologous_to}
-    A scalar $2$-cochain $\omega$ is a coboundary if and only if
-    $\omega \sim \Id$, where $\Id(g,h)=1$ for all $g,h$.
-\end{lemma}
+    Two scalar $2$-cochains satisfy $\omega_1\sim\omega_2$ if and only if
+    the pointwise ratio $\omega_1\omega_2^{-1}$ is a coboundary. In
+    particular, $\omega$ is a coboundary if and only if $\omega \sim \Id$,
+    where $\Id(g,h)=1$ for all $g,h$.
+\end{theorem}
 
 \begin{proof}\leanok\uses{def:is_coboundary, def:cohomologous_to}
-    Both directions follow by absorbing or introducing the factor
-    $\Id(g,h)=1$ via $x\cdot 1=x$ in
-    (\ref{eq:symmetry_cohomologous}).
+    Divide both sides of (\ref{eq:symmetry_cohomologous}) by
+    $\omega_2(g,h)$, and reorder the factors of
+    $\varphi(g)\varphi(h)\varphi(gh)^{-1}$ in the commutative group
+    $\C^\times$. For $\omega_2=\Id$ the ratio is $\omega_1$ itself.
 \end{proof}

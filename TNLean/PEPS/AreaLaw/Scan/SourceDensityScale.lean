@@ -160,7 +160,6 @@ theorem ScannerExponents.eventually_principalDensity_le_rpow
     _ = (n : ℝ) ^ (-r) * (n : ℝ) ^ (-X.nu) := by
       rw [← Real.rpow_add hnpos]
       congr 1
-      ring
 
 /-- Explicit threshold form of the uniform rounded-scale density bound. -/
 theorem ScannerExponents.exists_principalDensity_le_rpow

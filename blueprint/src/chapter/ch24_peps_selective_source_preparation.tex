@@ -23,7 +23,7 @@ complete operators. We give the corresponding exact constructions.
     Fix a finite branch set $\Xi$, coefficients $c_\xi\in\C$, and
     input and output register lists $a,b$ on the gate's participating
     party set $P$. Common finite source data consist of an ordered list
-    $E$ containing each unordered pair of distinct parties exactly once,
+    $E$ containing each unordered pair of distinct parties once,
     spaces $U_e=\C^{u_e}$ and $V_e=\C^{v_e}$, normalized vectors
     $\eta_{\xi,e}\in U_e\otimes V_e$, and allowed compositions
     $T_\xi:\mathcal S\otimes\mathcal H_a\to\mathcal H_b$
@@ -47,7 +47,7 @@ complete operators. We give the corresponding exact constructions.
     \leanok
     \uses{def:peps_prepared_source_gate}
     Each $F_\xi$ is an allowed composition. Its ordered source list is
-    precisely the list of prescribed pairs with spaces $U_e,V_e$ and
+    the list of prescribed pairs with spaces $U_e,V_e$ and
     vectors $\eta_{\xi,e}$. The complete sum $G$, with its original
     scalar coefficients, is a contraction.
 \end{theorem}
@@ -69,8 +69,7 @@ complete operators. We give the corresponding exact constructions.
     allowed composition, and
     $\|\sum_{\xi\in\Xi}c_\xi W_\xi\|\leq1$.
     There are common finite source data with the same coefficients
-    $c_\xi$ for which $G=\sum_{\xi\in\Xi}c_\xi W_\xi$ exactly.
-    No nonemptiness assumption on $\Xi$ is needed.
+    $c_\xi$ for which $G=\sum_{\xi\in\Xi}c_\xi W_\xi$.
 \end{theorem}
 
 \begin{proof}
@@ -102,7 +101,7 @@ complete operators. We give the corresponding exact constructions.
         \end{cases}
         \label{eq:peps_affected_owner}
     \end{align}
-    Thus $g(p)=*$ exactly when $p$ is exterior.
+    Thus $g(p)=*$ when $p$ is exterior.
 \end{definition}
 
 \begin{theorem}[Equality of grouped owners]
@@ -111,9 +110,9 @@ complete operators. We give the corresponding exact constructions.
     \lean{TNLean.PEPS.PairEffect.PairSource.affectedOwner_ne_iff}
     \leanok
     \uses{def:peps_affected_owner}
-    One has $g(p)=g(q)$ exactly when $p=q$ or both parties are
+    One has $g(p)=g(q)$ if and only if $p=q$ or both parties are
     exterior. Consequently, for distinct source endpoints $p,q$,
-    $g(p)\neq g(q)$ exactly when at least one endpoint belongs to
+    $g(p)\neq g(q)$ if and only if at least one endpoint belongs to
     $\mathcal A$. Both corrected pairs within $\mathcal A$ and pairs
     crossing to its exterior remain between distinct owners.
 \end{theorem}
@@ -133,14 +132,14 @@ complete operators. We give the corresponding exact constructions.
     \lean{TNLean.PEPS.PairEffect.SourceInventory.mapOwner_affectedOwner_eq_nil_iff}
     \leanok
     \uses{def:peps_affected_owner,def:peps_owner_sources}
-    A source occurs in $S_g$ precisely when it is obtained from an
+    A source occurs in $S_g$ if and only if it is obtained from an
     occurrence $s=(p,q;U,V;\eta)$ in $S$ with at least one affected
     endpoint, by replacing its owners with $g(p),g(q)$. Its spaces and
     vector are unchanged. The ordered pair labels are obtained by
     filtering $S$ by this same condition and then applying $g$ to both
     endpoints. Order and multiplicity are retained, even when different
     original pairs acquire the same image. In particular, $S_g$ is
-    empty exactly when both endpoints of every original source are
+    empty if and only if both endpoints of every original source are
     exterior.
 \end{theorem}
 
@@ -163,7 +162,7 @@ complete operators. We give the corresponding exact constructions.
     Let $f:P\to Q$, and suppose every register in $a$ and $b$ has
     owner image $q\in Q$. For $D:\mathcal H_a\to\mathcal H_b$,
     regard $R_{f,b}DR_{f,a}^{-1}$ as a local operation at $q$ and
-    leave the spectator list $\ell$ untouched. This gives an actual
+    leave the spectator list $\ell$ untouched. This gives a
     composition $D^f_{\ell}:(a\ell)^f\to(b\ell)^f$.
 \end{definition}
 
@@ -188,7 +187,7 @@ complete operators. We give the corresponding exact constructions.
 \begin{proof}
     \leanok
     \uses{thm:peps_owner_concatenation,def:peps_grouped_block_map}
-    Apply the concatenation identity for the canonical owner
+    Apply the concatenation identity for the owner
     isometries. The two isometries conjugating $D$ cancel with the
     corresponding input and output identifications, giving
     (\ref{eq:peps_grouped_block_action}). Conjugation by isometries
@@ -213,7 +212,7 @@ complete operators. We give the corresponding exact constructions.
 \begin{proof}
     \leanok
     \uses{thm:peps_owner_composition}
-    Sum the exact identity $F_\xi^fR_{f,a}=R_{f,b}F_\xi$ with
+    Sum the identity $F_\xi^fR_{f,a}=R_{f,b}F_\xi$ with
     coefficients $c_\xi$. Composition is linear on both sides.
 \end{proof}
 
@@ -232,7 +231,7 @@ complete operators. We give the corresponding exact constructions.
     \lean{TNLean.PEPS.PairEffect.PreparedSourceGate.norm_evalAtOwners_le_one}
     \leanok
     \uses{def:peps_prepared_gate_grouped,def:peps_owner_composition}
-    The exact branch expansion is $G^f=\sum_\xi c_\xi F_\xi^f$,
+    The branch expansion is $G^f=\sum_\xi c_\xi F_\xi^f$,
     and $\|G^f\|\leq1$. This bound comes from the original
     aggregate contraction and does not involve
     $\sum_\xi|c_\xi|$.
@@ -242,7 +241,7 @@ complete operators. We give the corresponding exact constructions.
     \leanok
     \uses{thm:peps_grouped_gate_sum,thm:peps_prepared_gate_properties}
     Compose (\ref{eq:peps_grouped_gate_sum}) with $R_{f,a}^{-1}$.
-    Both canonical owner maps are isometries, so conjugating the
+    Both owner maps are isometries, so conjugating the
     aggregate preserves its norm bound.
 \end{proof}
 
@@ -277,8 +276,8 @@ complete operators. We give the corresponding exact constructions.
     $\Phi_\eta:\mathcal S_{\rm free}\otimes\mathcal H_\ell
         \to\mathcal S\otimes\mathcal H_\ell$ by preparing the fixed
     sources and retaining all free registers in their original
-    positions. This is one actual composition, independent of the
-    vectors later supplied to the free registers.
+    positions. This composition is independent of the
+    vectors later assigned to the free registers.
 
     For an arbitrary family $\zeta_e\in U_e\otimes V_e$, write
     $Q^{\rm free}_{\zeta,\mathcal H_\ell}$ for preparation at just
@@ -294,7 +293,7 @@ complete operators. We give the corresponding exact constructions.
     \lean{TNLean.PEPS.PairEffect.SourceInventory.mem_sources_prepareSelected}
     \leanok
     \uses{def:peps_selective_preparation}
-    The source list of $\Phi_\eta$ is exactly the list of fixed
+    The source list of $\Phi_\eta$ is the list of fixed
     original positions, in their original order, with vectors
     $\eta_e$. In particular, each prepared source has the original
     endpoint parties and halfspaces of its fixed position. If every
@@ -307,7 +306,7 @@ complete operators. We give the corresponding exact constructions.
     Induct on the source list. At a free position, retain the two
     registers and apply the construction to the remaining positions.
     At a fixed position, prepare its source after the remaining
-    positions. The source inventory records precisely this fixed
+    positions. The source inventory records this fixed
     occurrence. Its preparation is allowed by normalization.
 \end{proof}
 
@@ -316,8 +315,7 @@ complete operators. We give the corresponding exact constructions.
     \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSelected_prepareFreeSlots}
     \leanok
     \uses{def:peps_selective_preparation}
-    For every family of free vectors, without a normalization
-    assumption,
+    For every family of free vectors,
     \begin{align}
         \Phi_\eta Q^{\rm free}_{\zeta,\mathcal H_\ell}
          & =Q_{\theta,\mathcal H_\ell}.
@@ -357,7 +355,7 @@ complete operators. We give the corresponding exact constructions.
         \label{eq:peps_selective_all_vectors}
     \end{align}
     Here $L$ is the free-source register list followed by $\ell$, and
-    $J_{f,L}$ is its canonical partition isometry. The same two
+    $J_{f,L}$ is its partition isometry. The same two
     compositions work for every family $\zeta$ of free vectors.
     Thus the contraction bounds apply on all free inputs.
 \end{theorem}
@@ -385,7 +383,7 @@ complete operators. We give the corresponding exact constructions.
     \lean{TNLean.PEPS.PairEffect.Word.appendTail}
     \leanok
     \uses{def:peps_party_layout,thm:peps_register_exchange}
-    Given an actual composition $W:a\to b$ and a spectator list
+    Given a composition $W:a\to b$ and a spectator list
     $\ell$, move $\ell$ before $a$, perform $W$ while leaving those
     registers unchanged, and move them back after $b$. Denote the
     resulting composition $a\ell\to b\ell$ by $W_{\ell}$.
@@ -398,15 +396,13 @@ complete operators. We give the corresponding exact constructions.
     \lean{TNLean.PEPS.PairEffect.Word.eval_appendTail}
     \leanok
     \uses{def:peps_append_spectators}
-    The spectator extension has exactly the same ordered source list
+    The spectator extension has the same ordered source list
     as $W$, is allowed whenever $W$ is allowed, and satisfies
     \begin{align}
         W_{\ell}C_{a,\ell}^{-1}
          & =C_{b,\ell}^{-1}(W\otimes I_{\mathcal H_\ell}).
         \label{eq:peps_append_spectators}
     \end{align}
-    The operator identity holds without norm or normalization
-    assumptions.
 \end{theorem}
 
 \begin{proof}
@@ -427,15 +423,11 @@ complete operators. We give the corresponding exact constructions.
     \uses{def:peps_append_spectators,def:peps_owner_composition,
         def:peps_owner_layout}
     Let $g:P\to Q$ be any map of party labels, let $W:a\to b$
-    be an arbitrary chronological composition, and let $t$ be an
+    be a chronological composition, and let $t$ be an
     ordered spectator list. Write $W^g$ and $t^g$ for their
-    relabellings. Under the canonical concatenation identifications
+    relabellings. Under the concatenation identifications
     $(at)^g=a^g t^g$ and $(bt)^g=b^g t^g$, the constructed
     compositions satisfy $(W_t)^g=(W^g)_{t^g}$.
-    The map $g$ need not be injective. Pair sources are permitted,
-    including those whose endpoints acquire the same owner; the two
-    constructions use the same relabelled core $W^g$. No contraction
-    or normalization assumption is imposed.
     This is a compatibility identity for the register operations in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 233--267 and 409--434.
@@ -446,7 +438,7 @@ complete operators. We give the corresponding exact constructions.
         def:peps_owner_layout,thm:peps_register_exchange}
     Relabelling preserves the spaces, order and concatenation of
     register lists. For a register $r$, a block $A$ and an adjacent
-    exchange, each frame and exchange acquires exactly its relabelled
+    exchange, each frame and exchange acquires its relabelled
     owners,
     \begin{align}
         (\mathrm{frame}_r\,w)^g
@@ -468,7 +460,7 @@ complete operators. We give the corresponding exact constructions.
         =\mathrm{Exch}_{t^g,b^g}\circ(W^g)_{[t^g]}\circ\mathrm{Exch}_{a^g,t^g}
         =(W^g)_{t^g},
     \end{align}
-    under the canonical concatenation identifications.
+    under the concatenation identifications.
 \end{proof}
 
 
@@ -492,10 +484,8 @@ complete operators. We give the corresponding exact constructions.
     composition. Identifying equal input and output lists preserves
     the original composition itself. If two constructed words agree
     under equalities of their ordered input and output lists, their
-    evaluated operators also agree under the induced canonical
-    memory identifications. These assertions concern the
-    constructed compositions and permit pair sources and arbitrary
-    local maps. They are compatibility identities for the register
+    evaluated operators also agree under the induced
+    memory identifications. They are compatibility identities for the register
     operations in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 233--267 and 351--381.
 \end{theorem}
@@ -513,15 +503,14 @@ complete operators. We give the corresponding exact constructions.
     \lean{TNLean.PEPS.PairEffect.Word.mapOwner_castLayouts}
     \leanok
     \uses{def:peps_owner_composition,thm:peps_party_restriction}
-    Let $f:P\to Q$ be an arbitrary owner map and $W:a\to b$ an
-    arbitrary chronological composition. Given equalities
+    Let $f:P\to Q$ be an owner map and $W:a\to b$ a
+    chronological composition. Given equalities
     $h_a:a=a'$ and $h_b:b=b'$, denote by $W[h_a,h_b]$ the same
     composition with its input and output lists identified accordingly.
     Write $h_a^f:a^f=(a')^f$ and $h_b^f:b^f=(b')^f$ for the
     induced equalities of relabelled lists. Then
-    $(W[h_a,h_b])^f=W^f[h_a^f,h_b^f]$. This identity permits pair
-    sources and does not require $f$ to be injective. It is an
-    auxiliary compatibility identity for the register operations in
+    $(W[h_a,h_b])^f=W^f[h_a^f,h_b^f]$. This is a
+    compatibility identity for the register operations in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 383--434 and 565--588.
 \end{theorem}
@@ -539,14 +528,13 @@ complete operators. We give the corresponding exact constructions.
     Let $f:P\to Q$ be any map of party labels, let $B\subseteq Q$
     be any selection of new owners, and let $W:a\to b$ be a
     chronological composition containing no pair-source preparations.
-    Under the canonical list identifications
+    Under the list identifications
     $(a^f)_B=(a_{f^{-1}(B)})^f$ and
     $(b^f)_B=(b_{f^{-1}(B)})^f$, the constructed compositions satisfy
     \begin{align*}
         (W^f)_B & =(W_{f^{-1}(B)})^f.
     \end{align*}
-    No injectivity, finiteness or norm assumption is imposed.
-    This is an auxiliary identity for the party restrictions in
+    This is an identity for the party restrictions in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 383--434 and 565--588.
 \end{theorem}
@@ -557,7 +545,7 @@ complete operators. We give the corresponding exact constructions.
     Induct on the chronological operations of $W$. For a local map
     $A:\mathcal H_a\to\mathcal H_b$ at $p$, relabelling gives the
     same map $R_{f,b}AR_{f,a}^{-1}$ in both constructions. Both
-    restrictions retain it precisely when $f(p)\in B$; otherwise
+    restrictions retain it when $f(p)\in B$; otherwise
     both give the identity on the selected spectator registers.
     For exchanges, the same condition selects each exchanged register
     on both sides. Framing retains the framed register on both sides
@@ -574,21 +562,20 @@ complete operators. We give the corresponding exact constructions.
     \leanok
     \uses{def:peps_owner_composition,def:peps_owner_layout}
     Let $f:P\to Q$ be any map of party labels and let $W:a\to b$
-    be an arbitrary chronological composition. The relabelled lists
+    be a chronological composition. The relabelled lists
     $a^f$ and $b^f$ have the same ordered register spaces as $a$ and
     $b$, respectively. Under these identifications of the memory
     spaces, $W^f$ and $W$ have the same continuous linear operator.
     If the two owners of a pair source merge, its original vector is
     retained as a local preparation on the same ordered spaces.
-    No injectivity, finiteness, contraction or normalization
-    assumption is imposed. This is an auxiliary identity for the
+    This is an identity for the
     relabellings in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 383--434 and 565--588.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_owner_composition,def:peps_owner_layout}
-    The canonical isometries $R_{f,a}$ and $R_{f,b}$ preserve each
+    The owner isometries $R_{f,a}$ and $R_{f,b}$ preserve each
     tensor factor and act as the identity after identifying the
     ordered memory spaces. The intertwining relation
     $W^fR_{f,a}=R_{f,b}W$ therefore gives $W^f x=W x$ for every
@@ -603,13 +590,12 @@ complete operators. We give the corresponding exact constructions.
     \uses{def:peps_owner_composition,def:peps_owner_layout,
         thm:peps_word_structural_congruence}
     Let $f:P\to Q$ be any map of party labels, let $W:a\to b$
-    be an arbitrary chronological word, and let $s$ be an ordered
+    be a chronological word, and let $s$ be an ordered
     list of spectator registers. Write $F_s(W):sa\to sb$ for
     framing $W$ by $s$, leaving these registers unchanged.
-    Under the canonical concatenation identifications, the constructed
+    Under the concatenation identifications, the constructed
     words satisfy $(F_s(W))^f=F_{s^f}(W^f)$.
-    Pair sources are permitted, including those whose owners merge,
-    and $f$ need not be injective. This is an auxiliary identity for
+    This is an identity for
     the register operations in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 233--267, 409--434 and 565--588.
@@ -632,19 +618,17 @@ complete operators. We give the corresponding exact constructions.
     \leanok
     \uses{def:peps_source_inventory,def:peps_owner_sources,
         def:peps_single_party_selector,def:peps_party_registers,def:peps_owner_layout}
-    Let $f:P\to Q$ be an arbitrary owner map, and let $p\in P$,
+    Let $f:P\to Q$ be an owner map, and let $p\in P$,
     $q\in Q$ satisfy $f^{-1}(\{q\})=\{p\}$.
     Let $S$ be any ordered pair-source list, with arbitrary source
     vectors, and write $\ell_S$ for its ordered register list.
     Let $S_f$ be the surviving source list of
-    Definition~\ref{def:peps_owner_sources}, which removes precisely
+    Definition~\ref{def:peps_owner_sources}, which removes
     the sources whose two owners merge under $f$.
     Then $(\ell_{S_f})_q=((\ell_S)_p)^f$ as ordered register lists.
     Thus selecting the source registers at $q$ after grouping owners
-    retains exactly the relabelled original registers at $p$, with
-    their original spaces and order. Owners away from this fibre may
-    merge arbitrarily. The empty source list is included, and no
-    normalization assumption is imposed. This is an auxiliary
+    retains the relabelled original registers at $p$, with
+    their original spaces and order. This is a
     register identity for
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 383--434 and 565--588.
@@ -677,10 +661,8 @@ complete operators. We give the corresponding exact constructions.
     as $e_0,\ldots,e_{r-1}$. At position $i$, use the endpoint owners
     after grouping by $\mathcal A$ and the prescribed original
     endpoint spaces $\C^{u_{e_i}}$ and $\C^{v_{e_i}}$. The concatenation of these two-register lists
-    is exactly the ordered register list of the fixed partial source
-    inventory. This equality preserves every dimension and register
-    position and requires no branch choice or source vector.
-    It is an auxiliary coordinate identity for
+    is the ordered register list of the fixed partial source
+    inventory. This is a coordinate identity for
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 253--267 and 342--417.
 \end{theorem}
@@ -711,7 +693,7 @@ complete operators. We give the corresponding exact constructions.
     $(S_p|_{q_p})^{\lambda_p}=S_P|_{g(p)}$ as ordered register lists.
     In particular, the selected endpoint spaces and their original order
     agree without a branch choice.
-    This is an auxiliary register identity for
+    This is a register identity for
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 253--267, 342--417 and 409--434.
 \end{theorem}
@@ -721,7 +703,7 @@ complete operators. We give the corresponding exact constructions.
         thm:peps_incident_gate_labels,def:peps_affected_owner}
     Replace the coordinate lists by their fixed partial inventories.
     Traverse the original source occurrences in order. A half-register
-    is selected in either grouping precisely when its original
+    is selected in either grouping when its original
     endpoint is $p$. Its space is unchanged, and $\lambda_p$ sends
     its singleton owner to $g(p)$. The other half-registers are
     erased in both selections. Concatenating the retained halves
@@ -736,24 +718,22 @@ complete operators. We give the corresponding exact constructions.
         def:peps_canonical_source_residual,thm:peps_singleton_all_source_layout,
         thm:peps_source_preparation,thm:peps_party_restriction,
         def:peps_owner_composition}
-    Let $W:a\to b$, fix an original party $p\in P$, and supply
+    Let $W:a\to b$, fix an original party $p\in P$, and fix
     its incident gate labels $\eta$ and the recorded product input
     $\psi\in\mathcal H_a$. The labels $\eta$ determine a singleton
     partial choice $\chi_\eta\in\Xi_{\{p\}}$. Let
-    $V_{p,\chi_\eta}:S_p a^{g_p}\to b^{g_p}$ be its actual
+    $V_{p,\chi_\eta}:S_p a^{g_p}\to b^{g_p}$ be its
     source-free chronological residual, and let
     $P_\psi:\C\to\mathcal H_a$ prepare the recorded input.
     Form the composition
     $U_{p,\eta}=V_{p,\chi_\eta}\circ F_{S_p}(P_\psi^{g_p})$,
     where $F_{S_p}$ frames the preparation by the source registers.
     Define $K_{p,\eta}=(U_{p,\eta}|_{q_p})^{\lambda_p}$,
-    with the canonical input and output list identifications. Thus
-    $K_{p,\eta}:S_P|_{g(p)}\to (b^g)|_{g(p)}$ is an actual
+    with the input and output list identifications. Thus
+    $K_{p,\eta}:S_P|_{g(p)}\to (b^g)|_{g(p)}$ is a
     chronological word determined by $W,p,\psi,\eta$ alone.
-    Its input uses precisely the selected original source endpoint spaces.
-    Identifying its operator with the restriction of a supplied
-    all-party branch requires a separate locality identity.
-    This construction is auxiliary to the local contraction in
+    Its input uses the selected original source endpoint spaces.
+    This construction is used for the local contraction in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 253--267, 342--417, 409--434 and 565--588.
 \end{definition}
@@ -763,10 +743,10 @@ complete operators. We give the corresponding exact constructions.
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_incidentSourceWord}
     \leanok
     \uses{def:peps_incident_source_word}
-    For every supplied incident label assignment $\eta$ and recorded
+    For every incident label assignment $\eta$ and recorded
     product input $\psi$, the word $K_{p,\eta}$ contains no pair-source
     preparations. Its selected source-register input is free.
-    This is an auxiliary property of the source-to-output composition in
+    This is a property of the source-to-output composition in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 253--267, 409--434 and 565--588.
 \end{theorem}
@@ -775,10 +755,10 @@ complete operators. We give the corresponding exact constructions.
     \uses{def:peps_incident_source_word,thm:peps_canonical_source_recovery,
         thm:peps_source_preparation,thm:peps_party_restriction,
         def:peps_owner_composition}
-    The original product preparation and the canonical residual
+    The original product preparation and the source-free residual
     contain no pair preparations. Framing and composing them
     preserves this property, as do restriction, owner relabelling
-    and the canonical register-list identifications. Hence the
+    and the register-list identifications. Hence the
     constructed incident-label word has empty source inventory.
 \end{proof}
 
@@ -789,9 +769,9 @@ complete operators. We give the corresponding exact constructions.
     \leanok
     \uses{def:peps_affected_owner,thm:peps_incident_gate_labels,
         def:peps_owner_layout,thm:peps_party_restriction}
-    Fix an original party $p\in P$ and an arbitrary ordered register
+    Fix an original party $p\in P$ and an ordered register
     list $\ell$ on $P$. Let $g$ retain every original party, and
-    select precisely those original owners whose image under $g$
+    select those original owners whose image under $g$
     is $g(p)$. This selection is $\{p\}$; let $g_p$ group its
     exterior at one owner and denote its retained copy of $p$ by
     $q_p$. Let $\lambda_p$ send the singleton exterior owner to the
@@ -801,9 +781,7 @@ complete operators. We give the corresponding exact constructions.
         (\ell^{g_p}|_{q_p})^{\lambda_p}
          & =(\ell^g)|_{g(p)}.
     \end{align*}
-    The equality preserves the original spaces and register order,
-    including the empty list. No source inventory, branch choice
-    or prepared vector is required. It is an auxiliary register
+    This is a register
     identity for \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 409--434 and 565--588.
 \end{theorem}
@@ -832,8 +810,7 @@ complete operators. We give the corresponding exact constructions.
     the last two. Then $T\otimes U$ and $T'\otimes U'$ agree under
     the induced identifications of $A\otimes C$ with $A'\otimes C'$
     and $B\otimes D$ with $B'\otimes D'$.
-    The spaces and maps are arbitrary, including zero maps and
-    zero-dimensional spaces. This is an auxiliary congruence identity
+    This is a congruence identity
     for the tensor maps in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 233--267, 409--434 and 565--588.
