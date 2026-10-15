@@ -46,7 +46,9 @@ import TNLean.PEPS.Approximation.AngularAnnularCells
 import TNLean.PEPS.Approximation.AngularAnnularLayers
 import TNLean.PEPS.Approximation.AngularCellGeometry
 import TNLean.PEPS.Approximation.AngularGridCells
+import TNLean.PEPS.Approximation.AngularInformationBound
 import TNLean.PEPS.Approximation.AngularResetWidth
+import TNLean.PEPS.Approximation.AngularSeparationBridges
 import TNLean.PEPS.Approximation.ApproximateCircuitBudget
 import TNLean.PEPS.Approximation.ApproximateCircuitDensity
 import TNLean.PEPS.Approximation.ApproximateCircuitError
@@ -66,6 +68,8 @@ import TNLean.PEPS.Approximation.CellColouredRecursion
 import TNLean.PEPS.Approximation.CellColouredStep
 import TNLean.PEPS.Approximation.CellPartitionCount
 import TNLean.PEPS.Approximation.CellTwoFamilyPartition
+import TNLean.PEPS.Approximation.CoarseInformation
+import TNLean.PEPS.Approximation.CoarseRectangleTemplates
 import TNLean.PEPS.Approximation.ColumnSelection
 import TNLean.PEPS.Approximation.CommonPairSources
 import TNLean.PEPS.Approximation.CommonPartyMaps
@@ -92,6 +96,7 @@ import TNLean.PEPS.Approximation.DistributedSourceComposition
 import TNLean.PEPS.Approximation.DyadicActiveLabelParties
 import TNLean.PEPS.Approximation.DyadicAnchors
 import TNLean.PEPS.Approximation.DyadicBlockFootprints
+import TNLean.PEPS.Approximation.DyadicBulkSteps
 import TNLean.PEPS.Approximation.DyadicChamberSampling
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingRewrite
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingStep

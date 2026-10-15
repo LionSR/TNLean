@@ -24,6 +24,22 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Positional factors in reversed finite lists — promoted through Mathlib
+
+- **Pattern:** Recover an index of a factor in a reversed finite list, transfer
+  its indexed assumptions, and express descending nesting by the original
+  increasing index order.
+- **Seen:** `isPatchMinimizer_regularizedPatchFactorList` in
+  `PEPS/AreaLaw/RegularizedPatchListCoordinates.lean` and
+  `normalizedRegularizedPatchMarginal_stationarity_of_isMinOn` in
+  `PEPS/AreaLaw/RegularizedPatchMinimizerStationarity.lean`.
+- **Abstraction:** Existing `List.mem_reverse`, `List.mem_ofFn`,
+  `List.pairwise_reverse` and `List.pairwise_ofFn` give the positional
+  membership and order statements. The stationarity proof shares its local
+  index witness when transferring exponent and density assumptions.
+- **Notes:** No injectivity of the regions or factors is required; equal
+  regions retain independent positions in the minimizing comparison.
+
 ### Ambient dilation in coordinate inequalities — promoted (2026-10-14)
 
 - **Pattern:** Expand the finite union of integer squares, their Cartesian
@@ -4376,6 +4392,49 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Logarithmic norm derivatives from squared norms — candidate (2026-10-15)
+
+- **Pattern:** Differentiate the squared norm, compose with the real logarithm,
+  and divide by two. Positivity of the original norm justifies the logarithm
+  and the subsequent cancellation.
+- **Seen:** `hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute`
+  and `exists_hasDerivAt_log_regularizedPatchObjective_exp_neg_uniform`, both in
+  `PEPS/AreaLaw/RegularizedPatchRadiusDerivative.lean`.
+- **Abstraction:** Both occurrences reuse `HasDerivAt.norm_sq` and `HasDerivAt.log`.
+  A third occurrence in another file would justify a helper for the logarithmic
+  norm derivative of a nonzero complex vector-valued function.
+- **Caveat:** The real inner-product instance must agree with the complex space;
+  positivity concerns the same vector whose derivative is being computed.
+
+### Applying an ordered matrix derivative to a vector — candidate (2026-10-15)
+
+- **Pattern:** Compose `Matrix.toEuclideanLin.toLinearMap` with
+  `LinearMap.applyₗ Ω` to apply a varying matrix to a fixed Euclidean vector.
+  Restrict scalars to ℝ and use finite-dimensional continuity for real derivatives.
+- **Seen:** `regularizedPatchInsertion` in `PEPS/AreaLaw/RegularizedPatchCoordinate.lean`
+  and `hasDerivAt_regularizedPatchOutput_exp_neg` in
+  `PEPS/AreaLaw/RegularizedPatchRadiusDerivative.lean`.
+- **Abstraction:** The proofs use the existing linear maps. A third occurrence
+  would justify a public continuous linear evaluation map for matrices.
+- **Caveat:** The ordered product remains noncommutative; differentiate the
+  continuous multilinear product and retain the original insertion indices.
+
+### Continuity of an ordered regional filter product — candidate
+
+- **Pattern:** Prove continuity of each identity-extended local matrix power,
+  apply finite ordered-product continuity, and compose with evaluation on the
+  fixed vector and the norm.
+- **Seen:** `continuousOn_regularizedPatchObjective` in
+  `PEPS/AreaLaw/RegularizedPatchMinimum.lean` and the joint-continuity step in
+  `continuous_regularizedPatchMinimum_exp_neg` in
+  `PEPS/AreaLaw/RegularizedPatchMinimumContinuity.lean`.
+- **Abstraction:** Both proofs already use Mathlib's `continuousOn_list_prod`
+  or `continuous_list_prod`. A third occurrence may justify a shared theorem
+  for evaluation of a continuously varying ordered product.
+- **Notes:** The second proof varies the positive scalar shift and all feasible
+  regional densities together. Continuity in each variable separately would
+  not suffice for the compact-minimum argument.
+
 ### Removing subsingleton physical coordinates — candidate (2026-10-14)
 
 - **Pattern:** In an inverse configuration map, prove equality at noncarrying
@@ -7107,8 +7166,8 @@ spectral split → block extraction → MPV calculation → strict bounds
   transport the actual regional lift through the existing configuration
   equivalence and pair its pure state by the existing partial trace.
 - **Seen:** `PEPS/AreaLaw/RegularizedPatchCoordinate`,
-  `RegularizedPatchStationarity`, `RegularizedPatchMarginal`, and
-  `RegularizedPatchDiagonalVariation`.
+  `RegularizedPatchStationarity`, `RegularizedPatchMarginal`,
+  `RegularizedPatchDiagonalVariation`, and `RegularizedPatchListCoordinates`.
 - **Abstraction:** the coordinate module factors the insertion linear map once;
   the marginal module exposes one full-region/global configuration isometry and
   one arbitrary-complex expectation theorem. Existing real-power covariance,
@@ -7120,8 +7179,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   No custom tactic or new optimizer/state structure is justified. Keep the
   actual product order and complex inner-product orientation explicit; neither
   trace-duality nor descending commutation is inferred by this pattern.
-  The scoped AreaLaw scan found no exact repeated tactic blocks at the default
-  thresholds.
+  The ordered-output identity uses `map_list_prod` and
+  `Matrix.submatrix_mulVec_equiv` directly. Its local equality-instance argument
+  generalizes the matrix power over the decision procedure before identifying
+  the procedures by subsingleton elimination; this avoids rewriting through
+  a dependent functional-calculus term. This argument occurs once.
+  The scoped AreaLaw scan on 2026-10-14 found no repeated tactic block in the
+  new ordered-output module at the default thresholds.
+  The positional minimizer comparison reconstructs the reversed competitor
+  with `List.equivSigmaTuple.symm.surjective`, then uses
+  `List.ofFn_injective` for its region and exponent lists. These two projection
+  comparisons occur in the same argument. The existing list lemmas and the
+  objective-norm identity suffice; no additional tactic is introduced.
 
 
 ### Monotonicity of a regional-entropy supremum — candidate (2026-10-09)
