@@ -3459,8 +3459,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   coefficient majorant on the same circuit, preserving its pair-effect bound.
 - **Caveat:** Local allowedness, contraction of the original operators, and
   approximation error are separate conditions. This predicate contains no
-  coefficient-sum assumption or global density comparison. The new bridges
-  await Lean verification.
+  coefficient-sum assumption or global density comparison.
 
 ## Nested regional cylinders
 
