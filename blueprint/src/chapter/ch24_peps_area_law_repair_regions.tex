@@ -10,9 +10,9 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
 % Source: 10-geometry.tex, lines 393--417; geometry:repair-induction,
 % lines 471--514; open actual regions and closed birth regions, lines 558--561.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-% Completion marks below refer to the definitions and iteration only.
-% Their geometric properties and the full exceptional remainder are
-% separate assertions.
+% Completion marks below refer to the definitions, iteration and local
+% disjointness lemma. The full repair induction and exceptional remainder
+% are separate assertions.
 
 \begin{definition}[The normalized fan and its colored runs]
     \label{def:area_law_repair_fan}
@@ -66,6 +66,28 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     The birth region is the affine image of the closed triangle union $T_H$,
     and its interior is taken after forming the union.
 \end{definition}
+
+% Source: 10-geometry.tex, lines 404--417 and 486--514;
+% closed births and open current regions, lines 558--561.
+\begin{lemma}[Disjoint replacement regions at one parent]
+    \label{lem:area_law_repair_replacement_disjoint}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairReplacementOpenRegion_pairwise_disjoint}
+    \leanok
+    \uses{def:area_law_repair_birth,thm:area_law_fan_run_disjoint_interiors}
+    Fix a center $v$, a scale $S$ and an exterior assignment.
+    Distinct runs $H\ne K$ give disjoint current replacement regions:
+    \begin{equation}
+        U(v,S,H)\cap U(v,S,K)=\varnothing.
+        \label{eq:area_law_repair_replacement_disjoint}
+    \end{equation}
+    The assertion includes distinct runs of the same color and reflex runs.
+\end{lemma}
+\begin{proof}\leanok
+    The map $x\mapsto v+d(S)x$ is a homeomorphism since $d(S)>0$.
+    A homeomorphism carries the interior of a set to the interior of its
+    image and preserves disjointness. Apply these facts to the whole-run
+    interiors in Theorem~\ref{thm:area_law_fan_run_disjoint_interiors}.
+\end{proof}
 
 % Source: 10-geometry.tex, lines 404--407; geometry:repair-induction,
 % working square and current exterior sectors, lines 486--504.
