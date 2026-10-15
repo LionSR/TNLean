@@ -27,7 +27,7 @@ namespace ScalarOneCochain
 /-- The multiplicative coboundary of a scalar one-cochain,
 `(dσ)(g,h) = σ(g) σ(h) / σ(gh)`, as in arXiv:2502.20257, line 5916. -/
 def coboundary (σ : ScalarOneCochain G) : ScalarCocycle G :=
-  fun g h => (σ g * σ h) / σ (g * h)
+  fun p => (σ p.1 * σ p.2) / σ (p.1 * p.2)
 
 end ScalarOneCochain
 
@@ -36,13 +36,13 @@ namespace ScalarCocycle
 /-- The hat operation on scalar two-cochains,
 `hat β(g,h) = β(h⁻¹,g⁻¹)`, obtained from arXiv:2502.20257, line 5912. -/
 def hat (β : ScalarCocycle G) : ScalarCocycle G :=
-  fun g h => β h⁻¹ g⁻¹
+  fun p => β (p.2⁻¹, p.1⁻¹)
 
 /-- Applying the hat operation twice returns the original scalar two-cochain,
 as stated after arXiv:2502.20257, line 5912. -/
 @[simp]
 theorem hat_hat (β : ScalarCocycle G) : hat (hat β) = β := by
-  funext g h
+  funext ⟨g, h⟩
   simp [hat]
 
 end ScalarCocycle
@@ -65,7 +65,7 @@ theorem hat_hat (ω : ScalarThreeCochain G) : hat (hat ω) = ω := by
 `Xi(g,h) = ω(h⁻¹,g⁻¹,g) / ω(h⁻¹g⁻¹,g,h)` from arXiv:2502.20257,
 `eq:introXi`. -/
 def Xi (ω : ScalarThreeCochain G) : ScalarCocycle G :=
-  fun g h => ω h⁻¹ g⁻¹ g / ω (h⁻¹ * g⁻¹) g h
+  fun p => ω p.2⁻¹ p.1⁻¹ p.1 / ω (p.2⁻¹ * p.1⁻¹) p.1 p.2
 
 /-- The inversion one-cochain `σ(g) = ω(g,g⁻¹,g)` from arXiv:2502.20257,
 `eq:introXi`. -/
@@ -79,7 +79,7 @@ def sigma (ω : ScalarThreeCochain G) : ScalarOneCochain G :=
 This is the cocycle equation at `(h⁻¹,g⁻¹,g,h)`, not a definitional equality. -/
 theorem Xi_eq_second_formula (ω : ScalarThreeCochain G) (hω : IsCocycle ω)
     (hωn : IsNormalized ω) (g h : G) :
-    Xi ω g h = ω h⁻¹ g⁻¹ (g * h) / ω g⁻¹ g h := by
+    Xi ω (g, h) = ω h⁻¹ g⁻¹ (g * h) / ω g⁻¹ g h := by
   have hCocycle := hω h⁻¹ g⁻¹ g h
   simp only [inv_mul_cancel, hωn.2.1] at hCocycle
   have hCocycle' :
@@ -164,9 +164,9 @@ substitutions `(h⁻¹g⁻¹,g,h,h⁻¹g⁻¹)`, `(h⁻¹,h,h⁻¹,g⁻¹)`, and
 theorem Xi_eq_hat_mul_coboundary_sigma (ω : ScalarThreeCochain G)
     (hω : IsCocycle ω) (hωn : IsNormalized ω) :
     Xi ω = ScalarCocycle.hat (Xi ω) * ScalarOneCochain.coboundary (sigma ω) := by
-  funext g h
+  funext ⟨g, h⟩
   simp only [Pi.mul_apply]
-  rw [show ScalarCocycle.hat (Xi ω) g h = Xi ω h⁻¹ g⁻¹ by rfl]
+  rw [show ScalarCocycle.hat (Xi ω) (g, h) = Xi ω (h⁻¹, g⁻¹) by rfl]
   nth_rewrite 2 [Xi_eq_second_formula ω hω hωn]
   have hCocycle_hInvMulGInv_g_h_hInvMulGInv_raw := hω (h⁻¹ * g⁻¹) g h (h⁻¹ * g⁻¹)
   have hCocycle_hInvMulGInv_g_h_hInvMulGInv :

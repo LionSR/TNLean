@@ -54,11 +54,10 @@ conclusion of the source lemma.
     absolute coefficient sum $\sum_\xi|c_\xi|$. Its additional registers are
     the stacks of the effect occurrences, and the stack of an effect on the
     parties $(p,q)$ consists of $m$ registers of $p$ and $m$ registers of $q$.
-    This is \cite[Lemma~5.1]{OpenAI2026PolynomialPEPS} without its last
-    clause, that all sources on one pair of parties may be combined into one,
-    and without the hypothesis that $G$ is a contraction, which is not needed.
-    The participating parties are the endpoint parties of the effects of the
-    monomials.
+    This establishes \cite[Lemma~5.1]{OpenAI2026PolynomialPEPS} prior to
+    combining sources on each pair of parties, and without assuming that $G$ is
+    a contraction. The participating parties are the endpoint parties of the
+    effects in the monomials.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -486,12 +485,12 @@ and $m\ge1$.
     \leanok
     \uses{thm:peps_pair_effects_operator}
     In the setting of Theorem~\ref{thm:peps_pair_effects_operator}, suppose
-    moreover that $G$ is a contraction, and let $\delta>0$ and
+    that $G$ is a contraction, and let $\delta>0$ and
     $S\ge\sum_\xi|c_\xi|$. With $m=\lceil(rS/\delta)^2\rceil+1$, the replaced
     gate satisfies $\|\widetilde G_m-G\otimes|\Gamma_m\rangle\|\le\delta$ and
     $\|\widetilde G_m\|\le1+\delta$, and $\widetilde G_m/(1+\delta)$ is a
-    contraction within $2\delta$ of $G\otimes|\Gamma_m\rangle$. The number $m$
-    depends only on $r$, $S$ and $\delta$.
+    contraction within $2\delta$ of $G\otimes|\Gamma_m\rangle$. The integer $m$
+    depends only on $r$, $S$, and $\delta$.
 \end{corollary}
 
 \begin{proof}\leanok

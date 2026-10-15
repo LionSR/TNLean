@@ -9,7 +9,7 @@ natural scale and every integer cell index; see
 % Source: 10-geometry.tex, lines 299--306, prop:two-families,
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 
-\begin{theorem}[Whole-side coordinates and corner witnesses]
+\begin{theorem}[Whole-side coordinates and cell corners]
     \label{thm:area_law_unsplit_side_endpoints}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_unsplit_endpoints_coordinates,
         TNLean.PEPS.AreaLaw.Geometry.cellFan_unsplit_endpoints_are_corners}
@@ -31,7 +31,7 @@ natural scale and every integer cell index; see
         a_s=o+t(z+\varepsilon_s),\qquad
         b_s=o+t(z+\eta_s).
     \end{align}
-    Thus both endpoints are actual corners of the same dyadic cell.
+    Thus both endpoints are corners of the same dyadic cell.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan,def:area_law_cell_corner}

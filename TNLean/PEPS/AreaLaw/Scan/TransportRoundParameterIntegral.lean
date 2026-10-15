@@ -45,10 +45,8 @@ omit [Fintype H] [DecidableEq H] [∀ h, Fintype (C h)]
 /-- The old split-entropy sum is continuous in the coherent vector. -/
 private theorem continuous_chargeDefectSymbol (h : H) :
     Continuous (fun θ : SiteConfig n → ℂ =>
-      ∑ i, D.splitEta E i ⟨h, none⟩ ((EuclideanSpace.equiv _ ℂ).symm θ)) := by
-  unfold TransportData.splitEta
-  exact continuous_finsetSum _ fun i _ => continuous_finsetSum _ fun g _ =>
-    continuous_splitBandEta _ _
+      ∑ i, D.splitEta E i ⟨h, none⟩ ((EuclideanSpace.equiv _ ℂ).symm θ)) :=
+  continuous_finsetSum _ fun i _ => D.continuous_splitEta n E i _
 
 /-- The literal round defect is AE strongly measurable on the open unit interval,
 for the original supplied family and every replica count. -/

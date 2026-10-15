@@ -48,7 +48,7 @@ theorem ScalarCocycle.CohomologousTo.comap {ω₁ ω₂ : ScalarCocycle G}
 /-- Multiplying a genuine cocycle by a cochain coboundary preserves its equation. -/
 theorem ScalarCocycle.IsCocycle.coboundary_mul {ω : ScalarCocycle G}
     (hω : ω.IsCocycle) (φ : G → ℂˣ) :
-    ScalarCocycle.IsCocycle (fun a b ↦ φ a * φ b * (φ (a * b))⁻¹ * ω a b) := by
+    ScalarCocycle.IsCocycle (fun p ↦ φ p.1 * φ p.2 * (φ (p.1 * p.2))⁻¹ * ω p) := by
   exact hω.of_cohomologousTo ⟨φ, fun _ _ ↦ rfl⟩
 
 /-- Mathlib's restriction of cocycles along `f` sends the cocycle of `ω` to the cocycle of
@@ -80,7 +80,7 @@ theorem ScalarCocycle.H2π_mem_range_map_subtype_iff (H : Subgroup G)
     {ψ : ScalarCocycle H} (hψ : ψ.IsCocycle) :
     groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hψ.isMulCocycle₂) ∈
         Set.range (groupCohomology.map H.subtype (scalarRepresentationRes H.subtype) 2) ↔
-      ∃ Ψ : ScalarCocycle G, Ψ.IsCocycle ∧ ∀ a b : H, Ψ (a : G) (b : G) = ψ a b := by
+      ∃ Ψ : ScalarCocycle G, Ψ.IsCocycle ∧ ∀ a b : H, Ψ ((a : G), (b : G)) = ψ (a, b) := by
   classical
   constructor
   · rintro ⟨q, hq⟩
@@ -92,15 +92,15 @@ theorem ScalarCocycle.H2π_mem_range_map_subtype_iff (H : Subgroup G)
     let Φ : G → ℂˣ := Function.extend Subtype.val φ (fun _ ↦ 1)
     have hΦ (a : H) : Φ (a : G) = φ a :=
       Subtype.val_injective.extend_apply φ (fun _ ↦ 1) a
-    refine ⟨fun a b ↦ Φ a * Φ b * (Φ (a * b))⁻¹ * ω a b, hω.coboundary_mul Φ, ?_⟩
+    refine ⟨fun p ↦ Φ p.1 * Φ p.2 * (Φ (p.1 * p.2))⁻¹ * ω p, hω.coboundary_mul Φ, ?_⟩
     intro a b
-    change Φ (a : G) * Φ (b : G) * (Φ ((a : G) * (b : G)))⁻¹ * ω (a : G) (b : G) = ψ a b
+    change Φ (a : G) * Φ (b : G) * (Φ ((a : G) * (b : G)))⁻¹ * ω ((a : G), (b : G)) = ψ (a, b)
     rw [hΦ a, hΦ b, ← Subgroup.coe_mul, hΦ (a * b)]
     exact (hφ a b).symm
   · rintro ⟨Ψ, hΨ, heq⟩
     refine ⟨groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hΨ.isMulCocycle₂), ?_⟩
     rw [ScalarCocycle.map_H2π hΨ]
-    have hp : Ψ.comap H.subtype = ψ := funext fun a ↦ funext fun b ↦ heq a b
+    have hp : Ψ.comap H.subtype = ψ := funext fun p ↦ heq p.1 p.2
     subst hp
     rfl
 

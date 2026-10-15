@@ -120,13 +120,13 @@ namespace ScalarCocycle
 representation on `ℂˣ`. -/
 def toInhomogeneousCochain (β : ScalarCocycle G) :
     (Fin 2 → G) → Rep.ofMulDistribMulAction G ℂˣ :=
-  fun g ↦ scalarRepresentationEquiv G (Additive.ofMul (β (g 0) (g 1)))
+  fun g ↦ scalarRepresentationEquiv G (Additive.ofMul (β (g 0, g 1)))
 
 /-- An inhomogeneous two-cochain of the trivial representation on `ℂˣ` as a
 scalar two-cochain. -/
 def ofInhomogeneousCochain (f : (Fin 2 → G) → Rep.ofMulDistribMulAction G ℂˣ) :
     ScalarCocycle G :=
-  fun g h ↦ ((scalarRepresentationEquiv G).symm (f ![g, h])).toMul
+  fun p ↦ ((scalarRepresentationEquiv G).symm (f ![p.1, p.2])).toMul
 
 @[simp]
 theorem toInhomogeneousCochain_ofInhomogeneousCochain
@@ -239,7 +239,7 @@ action on `ℂˣ`, is the alternating product of its four face values. -/
 theorem d_toInhomogeneousCochain_apply (β : ScalarCocycle G) (g : Fin 3 → G) :
     inhomogeneousCochains.d (Rep.ofMulDistribMulAction G ℂˣ) 2 (toInhomogeneousCochain β) g =
       scalarRepresentationEquiv G (Additive.ofMul
-        (β (g 1) (g 2) / β (g 0 * g 1) (g 2) * β (g 0) (g 1 * g 2) / β (g 0) (g 1))) := by
+        (β (g 1, g 2) / β (g 0 * g 1, g 2) * β (g 0, g 1 * g 2) / β (g 0, g 1))) := by
   apply (scalarRepresentationEquiv G).symm.injective
   rw [inhomogeneousCochains.d_hom_apply, Fin.sum_univ_three,
     ScalarCohomology.ofMulDistribMulAction_ρ_apply]

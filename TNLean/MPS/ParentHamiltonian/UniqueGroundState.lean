@@ -797,27 +797,10 @@ theorem chainGroundSpace_le_mpvSubmodule_of_normal_range_reduction
         (A := A) (by omega) (by omega) hLN
     exact hLe.trans
       (chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_full_ring hInj hL₀)
-  have hNpos : 0 < N := by omega
-  intro ψ hψ
-  have hψGS : ψ ∈ groundSpace A N :=
-    chainGroundSpace_le_groundSpace_of_isNBlkInjective hInj hL₀ hNpos hL hLN hψ
-  rw [groundSpace, LinearMap.mem_range] at hψGS
-  obtain ⟨X, hX⟩ := hψGS
-  have : NeZero d := neZero_d_of_isNBlkInjective hInj hL₀
-  let η : Fin d := ⟨0, Nat.pos_of_ne_zero (NeZero.ne d)⟩
-  obtain ⟨Ywrap, Ymirror, hWrap, hMirror⟩ :=
-    chainGroundSpace_wrapped_boundary_compatibilities_of_isNBlkInjective
-      (A := A) hInj hL₀ hN hL hLN hψ hX.symm
-  have hCompare : ∀ μ : Fin (N - (L₀ + 1)) → Fin d,
-      Ywrap (wrappedMiddleBackground L₀ N η μ) =
-        Ymirror (mirrorMiddleBackground L₀ N η μ) := by
-    intro μ
-    exact wrapped_mirror_witness_agree_of_chainGroundSpace
-      (A := A) hInj hL₀ hN hL hLN hNstrict hψ hX.symm Ywrap Ymirror hWrap
-      hMirror η μ
-  rw [← hX]
-  exact groundSpaceMap_mem_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
-    (A := A) (L₀ := L₀) (N := N) hInj hL₀ η Ywrap Ymirror hWrap hMirror hCompare
+  exact chainGroundSpace_le_mpvSubmodule_of_isNBlkInjective_of_wrapped_witness_comparison
+    hInj hL₀ hN hL hLN fun η hψ hψX Ywrap Ymirror hWrap hMirror μ =>
+      wrapped_mirror_witness_agree_of_chainGroundSpace (A := A) hInj hL₀ hN hL hLN
+        hNstrict hψ hψX Ywrap Ymirror hWrap hMirror η μ
 
 /-- On a periodic chain, \(\mathcal G_{N,L}(A)=\mathbb C\,V^{(N)}(A)\) for
 \(L>L₀\) and \(L₀+1\le N\), by arXiv:2011.12127, Section IV.C,

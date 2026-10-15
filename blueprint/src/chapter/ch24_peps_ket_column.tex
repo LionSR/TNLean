@@ -1,13 +1,10 @@
 \section{Extracting one ket column from an operator network}
 \label{sec:peps_ket_column}
-The statements below formalize \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS},
+We establish \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS},
 September 24, 2026, \texttt{07-assembly.tex}, lines 67--94 (statement
 lines 67--78, proof lines 79--94). Throughout, $\Omega$ is a unit vector in a
 finite-dimensional space with a distinguished orthonormal basis
-$\{\ket z\}$, and $\sigma$ is an arbitrary operator on that space; neither
-positivity nor Hermiticity of $\sigma$ is assumed. The trace norm is
-independent of the order in which the basis is enumerated, so it may be
-evaluated along any enumeration.
+$\{\ket z\}$, and $\sigma$ is an arbitrary operator on that space.
 
 \begin{theorem}[Columns of an operator and the trace norm]
     \label{thm:peps_ket_column_hilbert_schmidt}
@@ -32,8 +29,7 @@ evaluated along any enumeration.
     \leanok
     Let $f_z$ be vectors and $a_z$ complex numbers indexed by a finite set,
     with $\sum_z\lVert f_z\rVert^2\le\eta^2$ and $\sum_z|a_z|^2=1$. Then some
-    index $z$ has $a_z\ne0$ and $\lVert f_z\rVert^2\le\eta^2|a_z|^2$. No
-    lower bound on $|a_z|$ is required, and $\eta=0$ is allowed.
+    index $z$ has $a_z\ne0$ and $\lVert f_z\rVert^2\le\eta^2|a_z|^2$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -77,10 +73,7 @@ evaluated along any enumeration.
     \begin{align}
         \Big\lVert\frac{v}{\lVert v\rVert}-e^{i\theta}\Omega\Big\rVert & \le2\eta .
     \end{align}
-    This is the vector part of \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS},
-    with exactly its hypotheses. The source bounds the minimum over
-    $\theta$; an explicit $\theta$ is equivalent, since the minimum over the
-    circle is attained.
+    This is the vector part of \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -111,7 +104,7 @@ evaluated along any enumeration.
     fixed-input network has, at each vertex $v$, the tensor
     $(\eta,s)\mapsto A_v(\eta,(s,z_v))$, on the same multigraph with the same
     alphabets and bond matrices. Its contraction at $\tau$ equals
-    $\sigma_{\tau z}$, so its contracted vector is the column $\sigma\ket z$.
+    $\sigma_{\tau z}$, so the resulting state vector is the column $\sigma\ket z$.
 \end{definition}
 
 \begin{theorem}[Ket column of an operator network on a directed multigraph]
@@ -119,12 +112,12 @@ evaluated along any enumeration.
     \lean{TNLean.PEPS.Approximation.exists_fixInput_network_of_traceNorm_sub_pure_le}
     \leanok
     \uses{def:peps_ket_column_dependent_fix_input}
-    Let $\sigma$ be the operator contracted from an operator network as in
+    Let $\sigma$ be the operator of an operator network as in
     the preceding definition, with the same local physical space for output
     and input at each vertex, and let $\Omega$ be a unit vector with
     $\lVert\sigma-\ket\Omega\langle\Omega|\rVert_1\le\eta<1$. Then for some
     product-basis input $z$ the fixed-input network, on the same multigraph
-    with the same virtual alphabets and bond matrices, contracts to the
+    with the same virtual alphabets and bond matrices, evaluates to the
     column $\psi=\sigma\ket z$, which is nonzero and satisfies
     $\lVert\psi/\lVert\psi\rVert-e^{i\theta}\Omega\rVert\le2\eta$ for some
     real $\theta$. This is \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS} for
@@ -208,7 +201,7 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
     $A_v((s,z_v),\,\cdot\,)$ in the physical-first presentation and
     $A_v(\,\cdot\,,(s,z_v))$ in the virtual-first presentation, with the
     same edge dimensions $D_e$ (in the virtual-first presentation, the same
-    positive dimensions and hence the same maximum bond dimension). Their contraction is exactly the column
+    positive dimensions and hence the same maximum bond dimension). Their contraction is the column
     $\sigma\ket z$.
     On a $3\times3$ square, fixing the inputs closes the input leg of every
     site tensor with the basis vector $\ket{z_v}$ and leaves every bond in
@@ -248,12 +241,11 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
     $L\times L$ square with edge dimensions $D_e$, and let $\Omega$ be a unit
     vector with $\lVert\sigma-\ket\Omega\langle\Omega|\rVert_1\le\eta<1$.
     Then for some product-basis input $z$ the fixed-input tensors, with the
-    same edge dimensions $D_e$, contract to the column $\Phi=\sigma\ket z$,
+    same edge dimensions $D_e$, evaluate to the column $\Phi=\sigma\ket z$,
     which is nonzero and satisfies
     $\lVert\Phi/\lVert\Phi\rVert-e^{i\theta}\Omega\rVert\le2\eta$ for some
     real $\theta$. This is \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS} on the
-    open square, with exactly its hypotheses; $\sigma$ need not be positive
-    or Hermitian.
+    open square.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -283,13 +275,13 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
     (\texttt{00-introduction.tex}, lines 36--57) for one lattice size.
     The source applies the column lemma on the party graph and then routes
     the ket network onto the grid (\texttt{07-assembly.tex}, lines
-    96--177). To use the corollary instead, the routing must be applied to
-    the operator network before the column is fixed. The two steps commute:
-    fixing the inputs acts site by site on physical indices, and the
+    96--177). To use the corollary instead, the routing is applied to
+    the operator network before the column is fixed; the two steps commute
+    because fixing the inputs acts site by site on physical indices while
     routing leaves physical coordinates unchanged (\texttt{07-assembly.tex},
     lines 125--126 and 159--160). Sizes $L<L_0$ are treated separately in
     the source by an exact spanning-tree PEPS (\texttt{07-assembly.tex},
-    lines 205--212) and do not pass through the corollary.
+    lines 205--212).
 \end{corollary}
 
 \begin{proof}\leanok
@@ -304,10 +296,9 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
 
 The following estimates are the calculation of
 \cite[Section~8.1]{OpenAI2026PolynomialPEPS}. The reference trajectory,
-its step errors, the number of changes, the private factor and the
-compressed operator are supplied; they are the outputs of the protocol
-proposition, the small-patch rewrite lemma and the compression theorem
-of that work, which are not proved here.
+its step errors, the number of changes, the private factor, and the
+compressed operator are given as inputs from the protocol proposition,
+the small-patch rewrite lemma, and the compression theorem.
 
 \begin{lemma}[Telescoping a chain of contractions]
     \label{lem:peps_protocol_telescoping}
@@ -348,7 +339,7 @@ of that work, which are not proved here.
         \lVert\Omega\rVert                       & =1,    &
         1-C_{\rm hole}L^{-57}\leq\lVert\Xi\rVert & \leq1.
     \end{align}
-    Then the actual vector $\Psi=x_n$ satisfies $\lVert\Psi\rVert\leq1$,
+    Then $\Psi=x_n$ satisfies $\lVert\Psi\rVert\leq1$,
     \begin{align}
         \lVert\Psi-\Omega\otimes\Xi\rVert & \leq C_{\rm ch}C_{\rm step}L^{-17},                 \\
         \big\lVert\Tr_{\rm private}|\Psi\rangle\langle\Psi|
@@ -362,8 +353,6 @@ of that work, which are not proved here.
         \lVert\sigma-|\Omega\rangle\langle\Omega|\rVert_1
          & \leq(C_{\rm comp}+2C_{\rm ch}C_{\rm step}+2C_{\rm hole})L^{-5}.
     \end{align}
-    The operator $\sigma$ need not be positive or Hermitian, and no
-    vector is renormalized.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -375,12 +364,13 @@ of that work, which are not proved here.
     so the pure-density error bound gives a density error of at most
     $2C_{\rm ch}C_{\rm step}L^{-17}+2C_{\rm hole}L^{-57}$, which is at most
     the stated multiple of $L^{-10}$ because $L\geq1$. The last bound is
-    the triangle inequality through the actual physical density.
+    the triangle inequality through $\Tr_{\rm private}|\Psi\rangle\langle\Psi|$.
 \end{proof}
 
-\begin{lemma}[Retained norm and trace of the protocol]
-    \label{lem:peps_protocol_retained_norm}
+\begin{theorem}[Retained norm and trace of the protocol]
+    \label{thm:peps_protocol_retained_norm}
     \lean{TNLean.PEPS.Approximation.protocol_norm_and_trace_deficit_le}
+    \leanok
     Under the hypotheses of Theorem~\ref{thm:peps_protocol_density}, put
     \begin{align}
         \varepsilon & = C_{\rm ch}C_{\rm step}L^{-17}, &
@@ -397,9 +387,9 @@ of that work, which are not proved here.
     no division by the norm of a vector. They are consequences of the
     error and reference-norm bounds in
     \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
-\end{lemma}
+\end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_protocol_density}
     The reverse triangle inequality and $\lVert\Omega\rVert=1$ give
     \begin{align}
@@ -416,7 +406,7 @@ of that work, which are not proved here.
 
 \subsection{Column selection after discarding a product reference}
 
-\begin{theorem}[A column from the actual compressed density]
+\begin{theorem}[A column from the compressed density]
     \label{thm:peps_product_reference_column}
     \lean{TNLean.PEPS.Approximation.Pinned.exists_fixInput_contractPEPS_of_product_reference}
     \lean{TNLean.PEPS.Approximation.Pinned.exists_peps_of_product_reference}
@@ -430,7 +420,7 @@ of that work, which are not proved here.
         1-\delta\leq\lVert\Xi\rVert       & \leq1,           &
         \lVert\Psi-\Omega\otimes\Xi\rVert & \leq\varepsilon.
     \end{align}
-    Let $\sigma$ be the contracted operator of a supplied operator network
+    Let $\sigma$ be the operator of a given operator network
     on the same square, with edge dimensions $D_e$, satisfying
     \begin{align}
         \lVert\sigma-\Tr_{\rm private}|\Psi\rangle\langle\Psi|\rVert_1
@@ -443,16 +433,13 @@ of that work, which are not proved here.
         \Big\lVert\frac{\Phi}{\lVert\Phi\rVert}
         -e^{i\theta}\Omega\Big\rVert & \leq2\alpha
     \end{align}
-    for some real $\theta$. The edge dimensions remain exactly $D_e$;
-    they are positive and preserve any supplied bounds $D_e\leq B$.
-    The operator $\sigma$ need not be positive or Hermitian.
+    for some real $\theta$. The edge dimensions remain $D_e$;
+    they are positive and preserve any given bounds $D_e\leq B$.
     This combines the normalization calculation of
     \cite[Section~8.1]{OpenAI2026PolynomialPEPS} with its Lemma~8.1.
-    The hypothesis on $\Psi$ and the compression estimate concern the
-    same joint vector. The network is already on the square, so the
-    routing order is as in Corollary~\ref{cor:peps_ket_column_square_main}.
-    The supplied estimates and the assumption of a network already on the
-    square are distinguished from the protocol construction in
+    The network is already on the square, so the routing order is as in
+    Corollary~\ref{cor:peps_ket_column_square_main}; this separation from
+    the protocol construction is recorded in
     \cite{gap:polypeps_product_reference_column}.
 \end{theorem}
 
@@ -467,10 +454,10 @@ of that work, which are not proved here.
          & \leq2\varepsilon+1-\lVert\Xi\rVert^2
         \leq2\varepsilon+2\delta.
     \end{align}
-    The triangle inequality through the actual physical density gives
+    The triangle inequality through $\Tr_{\rm private}|\Psi\rangle\langle\Psi|$ gives
     $\lVert\sigma-|\Omega\rangle\langle\Omega|\rVert_1\leq\alpha<1$.
     Apply Theorem~\ref{thm:peps_ket_column_square}. Fixing the input changes
-    only physical entries of the supplied tensors, leaving every virtual
+    only physical entries of the given tensors, leaving every virtual
     dimension unchanged. A zero virtual dimension would make the
     selected contraction vanish, so all $D_e$ are positive.
 \end{proof}

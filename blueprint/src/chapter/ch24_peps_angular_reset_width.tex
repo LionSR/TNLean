@@ -58,11 +58,11 @@ allow arbitrary fixed real values.
     \uses{thm:peps_reset_polylog_width}
     Take $S$ from Theorem~\ref{thm:peps_reset_polylog_width}.
     Set $T=\max\{S,e^{\max(K,1)}\}$ and
-    $L_0=\max\{2,e^{T/D}\}$. Then $D\log L\ge T$ for all $L\ge L_0$. Then every allowed $s$ is at
-    least $S$, so the polylogarithmic term is at most $cs/2$.
-    The slope inequality and $\log L\ge0$ give
+    $L_0=\max\{2,e^{T/D}\}$. Then $D\log L\ge T$ for all $L\ge L_0$, so every
+    $s\ge D\log L$ satisfies $s\ge S$ and its polylogarithmic term is at most $cs/2$.
+    The assumption $D\ge 4C_4/c$ and $\log L\ge0$ give
     $C_4\log L\le(c/4)D\log L\le cs/4$.
-    Adding proves the first inequality. The second is strict because
+    Adding the two bounds proves the first inequality, and the second is strict because
     $c>0$ and $s\ge1$.
 \end{proof}
 
@@ -79,7 +79,3 @@ allow arbitrary fixed real values.
     If $w(L,s)\le B(L,s)$, then (\ref{eq:peps_angular_reset_uniform_width})
     gives $w(L,s)\le B(L,s)\le\frac{3c}{4}s<cs$.
 \end{proof}
-
-This establishes the numerical clearance needed at every annular layer.
-The physical reset theorem, geometric core separation, entropy estimates,
-and annular induction remain separate obligations.

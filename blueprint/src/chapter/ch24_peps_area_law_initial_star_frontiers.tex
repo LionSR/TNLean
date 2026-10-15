@@ -1,26 +1,26 @@
-\section{Initial frontiers near a mark}
+\section{Initial boundaries near a mark}
 \label{sec:area_law_initial_star_frontiers}
 
-Fix an arbitrary origin, finite endpoint set and valid residue choices
-for the initial construction, with $C\ge2$ and
-$k_0\ge50{,}000{,}000$. The estimate below is the boundary consequence
-of the local mesh argument in \cite[Section~11]{OpenAI2026AreaLaw}.
+Fix an origin, a finite endpoint set, and valid pitch residues
+for the initial region construction, with $C\ge2$ and
+$k_0\ge50{,}000{,}000$. The theorem below establishes the local boundary
+direction constraint from the mesh argument of \cite[Section~11]{OpenAI2026AreaLaw}.
 
 % Source: 10-geometry.tex, geometry:initial-stars, lines 333--370,
 % especially 352--359; prop:two-families, lines 154--177, 212--218
 % and 299--323; revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 
-\begin{theorem}[A nearby initial frontier has an allowed direction]
+\begin{theorem}[Nearby initial boundary points lie on allowed lines]
     \label{thm:area_law_initial_frontier_near_mark}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialBirthRegion_frontier_near_mark_allowed}
     \leanok
     \uses{def:area_law_initial_birth_regions,def:area_law_belt_cell_marks,
         def:area_law_fine_layer_indices}
-    Let $k\ge k_0$, let $z$ be an actual fine-cell index in layer $k$,
-    and let $v$ be one of its nine marks. Put $t=2^{\ell_k}$.
-    For any actual initial identifier $i$ and any
+    Let $k\ge k_0$, let $z$ be a fine-cell index in layer $k$,
+    and let $v$ be one of its nine marks. Set $t=2^{\ell_k}$.
+    For any initial region identifier $i$ and any
     $x\in\partial X_i^0$ satisfying $\|x-v\|_\infty<t/32$, the vector
-    $x-v$ has one of the four allowed slopes. Thus $x$ lies on one
+    $x-v$ has one of the four allowed slopes, so $x$ lies on one
     of the four allowed lines through $v$.
 \end{theorem}
 \begin{proof}\leanok
@@ -30,28 +30,23 @@ of the local mesh argument in \cite[Section~11]{OpenAI2026AreaLaw}.
         thm:area_law_near_mark_quarter_mesh,
         thm:area_law_dummy_fine_scale_separation,
         thm:area_law_affine_mesh_line_clearance}
-    The frontier of a finite union is contained in the union of the
-    constituent frontiers. For a primary, its exact finite closed-cell
-    cover therefore supplies a square frontier; for a fan run, its
-    finite triangle support supplies an outer square side or an actual
-    radial segment. The endpoints of each primitive segment are actual
-    cell marks, and its slope is allowed by the triangle construction.
+    The boundary of a finite union is contained in the union of the boundaries
+    of its pieces. For a primary region, $x$ lies on a side of one of its
+    closed fine cells; for a fan run, $x$ lies on an outer square side or a
+    radial segment of one of its triangles. In either case, $x$ lies on a
+    segment whose endpoints are cell marks and whose supporting line has one of
+    the four allowed slopes.
 
-    Contact with a primitive segment supplies a point of its actual
-    closed fine cell within $t/32$ of $v$. The nearby-cell estimate puts
-    both segment endpoints and $v$ on the common quarter mesh. An
-    allowed supporting line missing $v$ has distance at least $t/8$
-    from $v$, a contradiction. Both points therefore lie on the same
-    allowed line, giving the asserted direction.
+    Since $\|x-v\|_\infty<t/32$, the closed fine cell containing that segment
+    meets the $(t/32)$-ball around $v$, so the nearby-cell mesh lemma places
+    both segment endpoints and $v$ on the quarter mesh of scale $t/4$. Any line
+    of allowed slope through two points of this quarter mesh that misses $v$
+    has sup-norm distance at least $t/8$ from $v$, contradicting
+    $\|x-v\|_\infty<t/32$. Thus $v$ lies on the segment's supporting line.
 
-    A dummy frontier point belongs to the closed dummy neighborhood.
-    If $k>k_0$, the sixteen-fine-side separation contradicts its stated
-    distance from $v$. Hence $k=k_0$. A constituent coarse-square
-    frontier supplies a whole side, whose endpoints lie on the same
-    quarter mesh by the established mesh inclusion and
-    $\ell_k\le k$. The same line-clearance argument applies.
+    For the dummy region $\overline{N_{k_0}}$, separation by $16$ fine-cell
+    sides rules out $k>k_0$, so $k=k_0$. Then $x$ lies on a side of a
+    constituent coarse cell of scale $2^{k_0}$, whose endpoints also lie on the
+    quarter mesh since $\ell_{k_0}\le k_0$, and the same line-clearance
+    bound applies.
 \end{proof}
-
-This estimate concerns primitive boundary directions. Assigning actual
-identifiers to the local sectors and identifying the active rays are
-subsequent assertions.

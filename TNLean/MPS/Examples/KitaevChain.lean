@@ -333,9 +333,8 @@ by `√2`, the Kitaev tensor is conjugate to `evenParityTensor` by the gauge `di
 theorem kitaevTensor_mul_kitaevGauge (i : Fin 2) :
     kitaevTensor i * kitaevGauge =
       ((Real.sqrt 2 : ℂ) * ![1, Complex.I] i) • (kitaevGauge * evenParityTensor i) := by
-  have h2 : (Real.sqrt 2 : ℂ) * (1 / Real.sqrt 2) = 1 := by
-    have : (Real.sqrt 2 : ℂ) ≠ 0 := by exact_mod_cast (Real.sqrt_pos.2 two_pos).ne'
-    field_simp
+  have h2 : (Real.sqrt 2 : ℂ) * (1 / Real.sqrt 2) = 1 :=
+    mul_one_div_cancel (by exact_mod_cast (Real.sqrt_pos.2 two_pos).ne')
   rw [evenParityTensor, Matrix.mul_smul, smul_smul, mul_right_comm, h2, one_mul]
   ext a b
   fin_cases i <;> fin_cases a <;> fin_cases b <;>
