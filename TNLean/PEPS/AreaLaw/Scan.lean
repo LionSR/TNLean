@@ -31,6 +31,9 @@ import TNLean.PEPS.AreaLaw.Scan.ActualRoundParameterIntegral
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundSplits
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport
 import TNLean.PEPS.AreaLaw.Scan.ActualScanMeasures
+import TNLean.PEPS.AreaLaw.Scan.ActualSharpLower
+import TNLean.PEPS.AreaLaw.Scan.ActualSharpLowerPrevector
+import TNLean.PEPS.AreaLaw.Scan.ActualSharpLowerRemainder
 import TNLean.PEPS.AreaLaw.Scan.ActualSharpPrevector
 import TNLean.PEPS.AreaLaw.Scan.ActualSharpUpper
 import TNLean.PEPS.AreaLaw.Scan.ActualTerminalPartitions
@@ -99,6 +102,7 @@ import TNLean.PEPS.AreaLaw.Scan.PhysicalBadHistoryDecay
 import TNLean.PEPS.AreaLaw.Scan.PhysicalBandCommutation
 import TNLean.PEPS.AreaLaw.Scan.PhysicalChargeAncestry
 import TNLean.PEPS.AreaLaw.Scan.PhysicalPartition
+import TNLean.PEPS.AreaLaw.Scan.PhysicalScanner
 import TNLean.PEPS.AreaLaw.Scan.PositivePrefixEntropyTransfer
 import TNLean.PEPS.AreaLaw.Scan.PrefixApproximation
 import TNLean.PEPS.AreaLaw.Scan.PrefixBoundary
@@ -111,6 +115,7 @@ import TNLean.PEPS.AreaLaw.Scan.RegionalMoveEntropy
 import TNLean.PEPS.AreaLaw.Scan.RoundedClearance
 import TNLean.PEPS.AreaLaw.Scan.RoundedScalePower
 import TNLean.PEPS.AreaLaw.Scan.ScanHistories
+import TNLean.PEPS.AreaLaw.Scan.ScanTruncationInputs
 import TNLean.PEPS.AreaLaw.Scan.Scanner
 import TNLean.PEPS.AreaLaw.Scan.SelectedChainProbability
 import TNLean.PEPS.AreaLaw.Scan.Selection

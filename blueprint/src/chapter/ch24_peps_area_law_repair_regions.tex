@@ -242,6 +242,51 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     current regions before simultaneous removal.
 \end{definition}
 
+% Source: 10-geometry.tex, retained identifiers, lines 398--409;
+% comparisons with later actual regions, lines 584--591.
+\begin{definition}[Inclusions between generations]
+    \label{def:area_law_repair_inclusions}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairNextOldInclusion,
+        TNLean.PEPS.AreaLaw.Geometry.repairStageOldInclusion}
+    \leanok
+    \uses{def:area_law_repair_stage}
+    Let $I_j$ be the identifier family at generation $j$ of the actual
+    repair sequence. The map $\iota_{j,j+1}:I_j\to I_{j+1}$ is the
+    inclusion of the retained identifiers. Define the maps between later
+    generations recursively by
+    \begin{align}
+        \iota_{j,j} & =\operatorname{id}_{I_j},
+                    & \iota_{j,j+\ell+1}
+                    & =\iota_{j+\ell,j+\ell+1}\circ\iota_{j,j+\ell}.
+        \label{eq:area_law_repair_inclusions}
+    \end{align}
+\end{definition}
+
+% Source: 10-geometry.tex, ordering before geometry:birth-separation,
+% lines 565--571. The dummy is excluded from the physical order.
+\begin{definition}[Birth rank]
+    \label{def:area_law_repair_birth_rank}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegionBirthRank,
+        TNLean.PEPS.AreaLaw.Geometry.repairStageBirthRank}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions}
+    Assign rank zero to initial primary identifiers and rank one to
+    initial belt identifiers. Give the dummy rank zero as a convention.
+    Write $\operatorname{rk}_j:I_j\to\mathbb N$ for the rank at generation $j$.
+    For an old identifier $i\in I_j$ and a fresh replacement identifier
+    $q\in I_{j+1}$, define
+    \begin{align}
+        \operatorname{rk}_{j+1}(\iota_{j,j+1}(i))
+         & =\operatorname{rk}_j(i),
+         & \operatorname{rk}_{j+1}(q) & =j+2.
+        \label{eq:area_law_repair_birth_rank}
+    \end{align}
+    The dummy is excluded from the physical order. Birth rank prescribes
+    the order of the birth classes; ties within each class may be broken
+    arbitrarily, as prescribed before
+    \cite[Lemma~11.5]{OpenAI2026AreaLaw}.
+\end{definition}
+
 % Source: 10-geometry.tex, terminal interiors, lines 398--409;
 % open actual regions and closed birth regions, lines 558--561.
 % This set is not identified with the full exceptional remainder, which
@@ -259,3 +304,60 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
         \label{eq:area_law_repair_terminal_interiors}
     \end{align}
 \end{definition}
+
+% Source: 10-geometry.tex, actual regions and dummy exclusion, lines 558--568;
+% final restriction to the cut, lines 777--789.
+\begin{definition}[Lattice sites in the current regions]
+    \label{def:area_law_repair_region_sites}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairStage.regionSites,
+        TNLean.PEPS.AreaLaw.Geometry.RepairStage.RetainedRegionIndex}
+    \leanok
+    \uses{def:area_law_repair_stage}
+    Let $\mathcal D$ be a stage with current regions $(R_i)_{i\in I}$
+    and distinguished identifier $*$. For a finite cut $A\subseteq\Lambda$,
+    define
+    \begin{align}
+        X_i(A) & = A\cap R_i,
+               & I_A          & = \{i\in I\setminus\{*\}:X_i(A)\ne\varnothing\}.
+        \label{eq:area_law_repair_region_sites}
+    \end{align}
+    Here lattice sites are identified with their points in $\mathbb R^2$.
+    Every $X_i(A)$ is finite. All sites of one identifier are retained
+    together, including when its current region is disconnected.
+\end{definition}
+
+% Source: 10-geometry.tex, final lattice partition, lines 558--561;
+% geometry:bad-sites, lines 694--707.
+\begin{definition}[Exceptional lattice sites]
+    \label{def:area_law_repair_exceptional_sites}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStageExceptionalSites}
+    \leanok
+    \uses{def:area_law_repair_region_sites,
+        def:area_law_repair_terminal_interiors}
+    For the actual recursive family and any generation $N$, define
+    \begin{align}
+        D_N(A)
+         & = A\cap\bigl(R_{*_N}^{(N)}\cup\mathcal E_{\mathrm{term}}\bigr).
+        \label{eq:area_law_repair_exceptional_sites}
+    \end{align}
+    The terminal contribution is accumulated over all generations.
+    The use of $D_N(A)$ as the exceptional part of the final partition
+    requires the repair induction, exclusion of lattice sites from the
+    interfaces, and a generation after all terminal removals have been
+    performed.
+\end{definition}
+
+% Source: 10-geometry.tex, finiteness after restriction to the cut,
+% lines 777--780.
+\begin{lemma}[Finiteness of the retained identifiers]
+    \label{lem:area_law_repair_region_sites_finite}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairStage.finite_retainedRegionIndex}
+    \leanok
+    \uses{def:area_law_repair_region_sites}
+    If the current regions $(R_i)_{i\in I}$ are pairwise disjoint,
+    then $I_A$ is finite for every finite cut $A$.
+\end{lemma}
+\begin{proof}\leanok
+    The nonempty sets $X_i(A)$ with $i\in I_A$ are pairwise disjoint
+    subsets of the finite set $A$. Their index set is therefore finite.
+\end{proof}

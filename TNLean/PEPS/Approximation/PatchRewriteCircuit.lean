@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.MonomialFixesOutside
-import TNLean.PEPS.Approximation.PartyGateOriginalCircuit
+import TNLean.PEPS.Approximation.PartyGateSourceBound
 import TNLean.PEPS.Approximation.PatchRewriteMonomials
 import TNLean.PEPS.Approximation.SampledOriginalCircuit
 
@@ -32,7 +32,11 @@ Two facts make the sum one gate of the specified parties.
 ## Main results
 
 * `EncodedFrame.SmallPatchRewrite.restrict_regs_eq`
-* `EncodedFrame.SmallPatchRewrite.exists_originalCircuit_refVec`
+* `EncodedFrame.SmallPatchRewrite.exists_originalCircuit_refVec_isSourceBounded`: the gate, with
+  at most `2b` pair sources in every monomial (Theorem 5.2, item 3, `04-compression.tex`,
+  lines 143–147).
+* `EncodedFrame.SmallPatchRewrite.exists_originalCircuit_refVec`: the same without the
+  pair-source bound.
 
 ## References
 
@@ -133,6 +137,67 @@ theorem fixesOutside_of_mem (hR : R.Conditions) (M : PartyChain R.oldFrame.regs 
 
 variable [NeZero q]
 
+/-- **Lemma 6.3, the small-patch rewrite as one gate, with its pair sources.** The conclusion of
+`exists_originalCircuit_refVec`, together with the bound of `2b` pair sources in every monomial
+of the gate.
+
+Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 188–218;
+Theorem 5.2, item 3, `04-compression.tex`, lines 143–147. -/
+theorem exists_originalCircuit_refVec_isSourceBounded (hR : R.Conditions) {C c b L : ℕ}
+    (hL : 1 ≤ L) (hnew : ∀ h ∈ R.newAffected, Fintype.card h.patch.Tag ≤ C * L ^ c)
+    (hpatch : ∀ P ∈ R.patches, Fintype.card P.Tag ≤ C * L ^ c)
+    (hold : ∀ h ∈ R.oldAffected, Fintype.card h.patch.Tag ≤ C * L ^ c)
+    (hm : R.patches.length ≤ b) (hrold : R.oldAffected.length ≤ b)
+    (hrnew : R.newAffected.length ≤ b) (hparties : R.parties.card ≤ b)
+    {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
+    (hεpatch : ∀ P ∈ R.patches, ‖act P.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hεold : ∀ h ∈ R.oldAffected, ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hS₀ : R.parties.Nonempty) (hne : Nontrivial (Mem R.oldFrame.regs)) :
+    ∃ (w : OriginalCircuit R.oldFrame.regs R.newFrame.regs)
+      (Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ), ‖Ma‖ ≤ 1 ∧
+      ‖Ma - R.rewrite‖ ≤ ((L : ℝ) ^ 30)⁻¹ ∧
+      ‖act Ma (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω‖ ≤ (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
+      (∀ z, R.newFrame.regIso (w.eval z) = act Ma (R.oldFrame.regIso z)) ∧
+      w.nonprivateCount ≤ 1 ∧ (∀ g, (↑(w.participants g) : Set Party) ⊆ ↑R.parties) ∧
+      w.IsExpansionBounded (2 * b) ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^
+        (2 * b) * L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) : ℕ) ∧
+      w.IsMonomialBounded ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
+        L ^ (3 * b * c + 4 * b * (3 * b * c + 30))) ∧
+      w.IsSourceBounded (2 * b) := by
+  classical
+  obtain ⟨-, G, hG, hGp, Ma, hMa1, hMa, href, hz⟩ :=
+    R.exists_allowed_monomial_approx_refVec hR hL hnew hpatch hold hm hrold hrnew hparties hΩ
+      hεpatch hεold
+  have hsum : ∀ (z : Mem R.oldFrame.regs) (K : PartyGate R.oldFrame.regs R.newFrame.regs),
+      R.newFrame.regIso (gate (toGate K) z) =
+        (K.map fun p => p.1 • R.newFrame.regIso (p.2.toEffectChain.eval z)).sum := by
+    intro z K
+    induction K with
+    | nil => exact map_zero _
+    | cons p K ih =>
+        change R.newFrame.regIso ((p.1 • p.2.toEffectChain.eval + gate (toGate K)) z) = _
+        rw [_root_.add_apply, map_add, ih, _root_.smul_apply,
+          LinearIsometryEquiv.map_smul, List.map_cons, List.sum_cons]
+  have hgate : ∀ z, R.newFrame.regIso (gate (toGate G) z) = act Ma (R.oldFrame.regIso z) :=
+    fun z => (hsum z G).trans (hz z)
+  have hN : ‖gate (toGate G)‖ ≤ 1 := by
+    refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun z => ?_
+    rw [← LinearIsometryEquiv.norm_map R.newFrame.regIso, hgate, one_mul,
+      ← LinearIsometryEquiv.norm_map R.oldFrame.regIso z]
+    exact norm_act_le_of_norm_le_one hMa1 _
+  obtain ⟨w, hw, hcount, hpart, hexp, hmono, hsrc⟩ :=
+    PartyGate.exists_originalCircuit_isSourceBounded R.parties hS₀ (R.restrict_regs_eq hR) G
+      (fun m hm => (hGp m hm).2.1)
+      (fun m hm => R.fixesOutside_of_mem hR m.2 (hGp m hm).2.2.1 (hGp m hm).2.2.2.1) hN hne
+  refine ⟨w, Ma, hMa1, hMa, href, fun z => by rw [hw, hgate], hcount, hpart,
+    hexp _ _ (fun m hm => (hGp m hm).2.2.2.2.2) ?_, w.isMonomialBounded_mono hmono hG,
+    hsrc _ fun m hm => (hGp m hm).2.2.2.2.1⟩
+  refine (List.sum_le_length_nsmul _ 1 fun x hx => ?_).trans ?_
+  · obtain ⟨m, hm, rfl⟩ := List.mem_map.mp hx
+    exact (hGp m hm).1
+  · rw [List.length_map, nsmul_eq_mul, mul_one]
+    exact_mod_cast hG
+
 /-- **Lemma 6.3, the small-patch rewrite as one gate.** In the setting of
 `exists_allowed_monomial_approx_refVec`, let the specified list of parties be nonempty and the
 memory of the registers of `F_old` be nonzero. There are a contraction `M_30` with
@@ -166,37 +231,10 @@ theorem exists_originalCircuit_refVec (hR : R.Conditions) {C c b L : ℕ}
         (2 * b) * L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) : ℕ) ∧
       w.IsMonomialBounded ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + 30))) := by
-  classical
-  obtain ⟨-, G, hG, hGp, Ma, hMa1, hMa, href, hz⟩ :=
-    R.exists_allowed_monomial_approx_refVec hR hL hnew hpatch hold hm hrold hrnew hparties hΩ
-      hεpatch hεold
-  have hsum : ∀ (z : Mem R.oldFrame.regs) (K : PartyGate R.oldFrame.regs R.newFrame.regs),
-      R.newFrame.regIso (gate (toGate K) z) =
-        (K.map fun p => p.1 • R.newFrame.regIso (p.2.toEffectChain.eval z)).sum := by
-    intro z K
-    induction K with
-    | nil => exact map_zero _
-    | cons p K ih =>
-        change R.newFrame.regIso ((p.1 • p.2.toEffectChain.eval + gate (toGate K)) z) = _
-        rw [_root_.add_apply, map_add, ih, _root_.smul_apply,
-          LinearIsometryEquiv.map_smul, List.map_cons, List.sum_cons]
-  have hgate : ∀ z, R.newFrame.regIso (gate (toGate G) z) = act Ma (R.oldFrame.regIso z) :=
-    fun z => (hsum z G).trans (hz z)
-  have hN : ‖gate (toGate G)‖ ≤ 1 := by
-    refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun z => ?_
-    rw [← LinearIsometryEquiv.norm_map R.newFrame.regIso, hgate, one_mul,
-      ← LinearIsometryEquiv.norm_map R.oldFrame.regIso z]
-    exact norm_act_le_of_norm_le_one hMa1 _
-  obtain ⟨w, hw, hcount, hpart, hexp, hmono⟩ := PartyGate.exists_originalCircuit R.parties hS₀
-    (R.restrict_regs_eq hR) G (fun m hm => (hGp m hm).2.1)
-    (fun m hm => R.fixesOutside_of_mem hR m.2 (hGp m hm).2.2.1 (hGp m hm).2.2.2.1) hN hne
-  refine ⟨w, Ma, hMa1, hMa, href, fun z => by rw [hw, hgate], hcount, hpart,
-    hexp _ _ (fun m hm => (hGp m hm).2.2.2.2.2) ?_, w.isMonomialBounded_mono hmono hG⟩
-  refine (List.sum_le_length_nsmul _ 1 fun x hx => ?_).trans ?_
-  · obtain ⟨m, hm, rfl⟩ := List.mem_map.mp hx
-    exact (hGp m hm).1
-  · rw [List.length_map, nsmul_eq_mul, mul_one]
-    exact_mod_cast hG
+  obtain ⟨w, Ma, h₁, h₂, h₃, h₄, h₅, h₆, h₇, h₈, -⟩ :=
+    R.exists_originalCircuit_refVec_isSourceBounded hR hL hnew hpatch hold hm hrold hrnew hparties
+      hΩ hεpatch hεold hS₀ hne
+  exact ⟨w, Ma, h₁, h₂, h₃, h₄, h₅, h₆, h₇, h₈⟩
 
 end SmallPatchRewrite
 

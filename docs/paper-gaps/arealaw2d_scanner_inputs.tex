@@ -93,14 +93,33 @@ domain, Hamiltonian, scan and replica vectors.\footnote{Lemma~9.1 for the
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_historyFacts_actualScanRound}.}
 These conclusions form a separate sub-record of the hypothesis record, which
 this result supplies whenever the rounds of the record are the actual rounds.
+Similarly, the fields supplied by Proposition~4.5 and Lemmas~2.1 and~3.1 (the
+truncated ground energy and gap, the entropy inputs and their transfer to
+$\widetilde\Omega$, the target typical window, and the marginal-tail parameter
+$\mathcal B\le CnD(\log n)^{12}$ of the status cuts) form a second
+sub-record. For one physical system at the source scales, under the test
+geometry and the entropy inputs, a single truncated ground vector supplies all
+of them for all sufficiently large $n$, and also satisfies the marginal moment
+bound of Lemma~3.1 at every region.\footnote{Truncation inputs:
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_scanTruncation}.}
+
+Combining the two sub-records, Proposition~9.2 holds for the actual scan of
+one physical system at the source scales, under the test geometry and the
+entropy inputs, whenever the actual rounds satisfy the conclusions of
+Propositions~7.4 and~8.1 for the same truncated ground vector; these
+conclusions are the only remaining hypothesis.\footnote{Scanner estimate for
+    the actual scan:
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.scanner_estimate_actualScan}.}
 
 \paragraph{What remains.}
-To eliminate the hypothesis record and obtain Proposition~9.2 unconditionally,
-it remains to construct the initial Schmidt--Bell replica prevector from the
-target typical window, prove the initial and terminal comparator norm bounds of
-Proposition~8.1 for that prevector, and assemble all fields of the scanner
-hypothesis record for the same physical prevector and truncated ground state
-$\widetilde\Omega$.
+To obtain Proposition~9.2 unconditionally, it remains to supply that last
+hypothesis for the actual rounds: the conclusions of Proposition~7.4 for the
+physical prevector (the transport estimates are proved for any nonzero
+symmetric supplied vector, see Step~3, and must be matched to the record's
+form and constants), the construction of the initial Schmidt--Bell replica
+prevector from the target typical window, and the initial and terminal
+comparator norm bounds and comparator budgets of Proposition~8.1 for that
+prevector and the same truncated ground state $\widetilde\Omega$.
 
 \section{Step 1: Truncation trace distance and entropy continuity}
 
@@ -441,10 +460,13 @@ selection.\footnote{Defect nonnegativity and normalized energy coefficients:
 
 The deduction of Proposition~9.2 from the five input components is complete, and
 the geometric, probabilistic, replica-transport, and marginal-tail steps are
-formalized as shown above. The scope restriction will be removed once the
-initial Schmidt--Bell replica prevector and the initial and terminal comparator
-norm bounds of Proposition~8.1 are formalized and connected to instantiate the
-scanner hypothesis record unconditionally.
+formalized as shown above. For the actual scan of one physical system the
+inputs of Lemmas~9.1, 2.1 and~3.1 and Proposition~4.5 are derived, so the
+remaining hypothesis consists of the conclusions of Propositions~7.4 and~8.1.
+The scope restriction will be removed once the initial Schmidt--Bell replica
+prevector and the initial and terminal comparator norm bounds of
+Proposition~8.1 are formalized and connected, with the transport estimates,
+to supply that hypothesis.
 
 \bibliographystyle{alpha}
 \bibliography{references}

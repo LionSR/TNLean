@@ -47,8 +47,8 @@
     \lean{MPSTensor.transferMap_directSumTensor_reindex}
     \leanok
     \uses{def:transfer_map}
-    Let $(B_k)_k$ be a family of tensors, let $\Phi$ be the canonical
-    identification of the block-labelled bond space with the total bond space,
+    Let $(B_k)_k$ be a family of tensors, let $\Phi$ be the block-reindexing
+    isomorphism from the block-labelled bond space to the total bond space,
     and let $\mathcal S_B$ be the block transfer sum. Then, for every block
     matrix $Y$,
     \begin{align}
@@ -96,8 +96,8 @@
     \uses{thm:direct_sum_transfer_reindex}
     Reindex the total bond space by its block labels. By
     Theorem~\ref{thm:direct_sum_transfer_reindex}, the direct-sum transfer map
-    becomes $\mathcal S_B$. Transporting the assumed equation through this
-    identification gives the displayed identity.
+    becomes $\mathcal S_B$. Conjugating the assumed equation by this
+    isomorphism gives the displayed identity.
 \end{proof}
 
 \begin{theorem}[Direct-sum quasi-idempotence on every mixed corner]%
@@ -216,13 +216,13 @@
         =c\overline e\sum_iA^iX(B^i)^\dagger$.
 \end{proof}
 
-\begin{theorem}[Phase coherence for literal repeated blocks]%
+\begin{theorem}[Phase coherence for repeated blocks]%
     \label{thm:literal_repeated_blocks_phase_coherence}
     \lean{MPSTensor.phases_eq_of_isTransferIdempotent_directSum_scaled_self}
     \leanok
     \uses{def:mps_transfer_idempotence, lem:mixed_transfer_rect_smul, thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
     Let $A$ have positive bond dimension and a nonzero idempotent transfer map.
-    Let $\mu_q$ have unit modulus. If the literal bond direct sum
+    Let $\mu_q$ have unit modulus. If the bond direct sum
     $\bigoplus_q \mu_qA$ has an idempotent transfer map, then
     $\mu_q=\mu_{q'}$ for every pair $q,q'$.
 \end{theorem}
@@ -481,7 +481,7 @@
     Whole-tensor idempotence makes the diagonal mixed transfer operator of each
     block its own transfer map, hence each block is a renormalization fixed
     point; the square-root fixed-point form
-    (Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt}) supplies the
+    (Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt}) gives the
     decomposition $A_j^i=X_j\sqrt{\rho_j}U_j^iX_j^{-1}$ with the within-block
     orthonormality, which is the $j=j'$ case. For $j\ne j'$,
     Theorem~\ref{thm:bnt_locally_orthogonal_of_rfp_direct_sum} gives
@@ -590,7 +590,8 @@
 \end{corollary}
 \begin{proof}\leanok
     \uses{thm:rfp_directSumTensor_iff, thm:postblocked_representative_grouped_insert_eq, thm:normal_tp_primitive_irred}
-    Positive basis dimensions supply the nonzero bond spaces. For each basis
+    Since each basis tensor has positive bond dimension, every bond space is
+    nonzero. For each basis
     tensor, irreducibility and left-canonical normalization are part of the
     auxiliary BNT sector hypotheses. If $m_j>0$ is the peripheral period of
     $B_j$, the
