@@ -80,8 +80,9 @@ info: 'TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_net
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network
 
+open TNLean.PEPS.PairEffect.DistributedConstruction in
 /--
 info: 'TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le' depends on axioms: [propext, Classical.choice, Quot.sound]
 -/
 #guard_msgs (whitespace := lax) in
-#print axioms TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le
+#print axioms exists_uniform_sampled_network_sub_pure_le
