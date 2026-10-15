@@ -99,19 +99,24 @@ theorem trace_regularizedPatchRegulator_le_quarter_of_isMinOn
           (Entropy.RegionConfig n (regions j)) ℂ))⁻¹)).trace.re ≤ 1 / 4 := by
   intro ρ σ hS hd
   have hρ : ρ.PosSemidef :=
-    normalizedRegularizedPatchMarginal_posSemidef regions a (Real.exp (-R)) Ω x (regions j)
+    normalizedRegularizedPatchMarginal_posSemidef (Out := fun v ↦ Fin (n v))
+      regions a (Real.exp (-R)) Ω x (regions j)
   have hρ1 : ρ.trace = 1 :=
-    trace_normalizedRegularizedPatchMarginal regions a (fun k ↦ (ha k).le)
-      (Real.exp_pos (-R)) Ω hΩ hx (regions j)
+    trace_normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v)) regions a
+      (fun k ↦ (ha k).le) (Real.exp_pos (-R)) Ω hΩ hx (regions j)
   have hσ : σ.PosSemidef :=
     Entropy.regionState_posSemidef (regions j) (dependentGlobalConfigIsometry Ω)
   have hσ1 : σ.trace = 1 := by
     dsimp only [σ]
     rw [Entropy.trace_regionState, dependentGlobalConfigIsometry.norm_map, hΩ]
     norm_num
-  have hstat := normalizedRegularizedPatchMarginal_stationarity_of_isMinOn
+  obtain ⟨hcomm, hle⟩ := normalizedRegularizedPatchMarginal_stationarity_of_isMinOn
     regions hnested a ha (Real.exp_pos (-R)) Ω x hx hmin j
+  have hcomm' : Commute ρ (x j) := hcomm.symm
+  have hle' : ρ ≤ x j + Real.exp (-R) • (1 : Matrix (Entropy.RegionConfig n (regions j))
+      (Entropy.RegionConfig n (regions j)) ℂ) := hle
   exact trace_shiftedRegulator_le_quarter_of_entropy_distance
-    (hx j).1 hρ hσ hρ1 hσ1 hstat.1.symm hC hu hR hS hd hstat.2
+    (ι := Entropy.RegionConfig n (regions j)) (x := x j) (ρ := ρ) (σ := σ)
+    (hx j).1 hρ hσ hρ1 hσ1 hcomm' hC hu hR hS hd hle'
 
 end TNLean.PEPS
