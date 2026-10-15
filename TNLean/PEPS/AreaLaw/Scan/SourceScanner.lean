@@ -222,8 +222,9 @@ threshold `c_a > 0` such that, for all scanner constants above the thresholds an
 sufficiently large `n`, the following holds for every physical system and collar scan under
 the source hypotheses. Let `Ω̃` be a ground vector of the truncated Hamiltonian with gap
 `g/2` satisfying the marginal moment bound of Lemma 3.1, and let `Tr` record its truncation
-inputs, with marginal-tail parameter bounding the cut parameter of every status region. Then there is a label sequence for which the vectors `pre_k` of
-`comparator:prevector` are nonzero for `k ≥ 1` (`07-comparators.tex`, lines 130–140), and for
+inputs, with marginal-tail parameter bounding the cut parameter of every status region.
+Then there is a label sequence for which the vectors `pre_k` of `comparator:prevector` are
+nonzero for `k ≥ 1` (`07-comparators.tex`, lines 130–140), and for
 every total weight `W ≥ 1` with `a r₀² ≤ c_a` the actual rounds built from `pre` satisfy the
 conclusions `ScanInputs` of Proposition 7.4 (`06-transport.tex`, lines 377–433) and
 Proposition 8.1 (`07-comparators.tex`, lines 125–214). -/
