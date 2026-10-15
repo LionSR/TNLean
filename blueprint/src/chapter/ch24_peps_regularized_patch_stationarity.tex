@@ -193,6 +193,7 @@ Its marginals are those of the same final normalized vector defined in
 \begin{theorem}[The ordered list of regularized filters]
     \label{thm:peps_patch_factor_chain_list}
     \lean{TNLean.PEPS.map_filter_regularizedPatchFactorList_eq_chainList}
+    \leanok
     \uses{def:peps_ordered_patch_factor_list}
     Let $V$ be a set, let $n_v\in\N$, and let $D_j\subseteq V$ be finite
     for $0\leq j<m$. Write $\mathcal H_{D_j}=\ell^2(\prod_{v\in D_j}[n_v];\C)$.
@@ -211,6 +212,7 @@ Its marginals are those of the same final normalized vector defined in
     are empty when $m=0$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:peps_ordered_patch_factor_list}
     Applying a function to each entry commutes with reversing a finite list.
     The entry with index $j$ is $(D_j,K_j)$ on both sides.
