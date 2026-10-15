@@ -11,8 +11,8 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairDescendants
 
 For the repair stages with stopping scale `S_*`, the uniform repair induction
 asserts, at one constant `a₀` for all generations: isolated stars and the
-separation inequality at every generation, avoidance of the interiors of
-terminal squares from earlier generations, disjoint simultaneous removal
+separation inequality at every generation, avoidance of the closed
+terminal squares of earlier generations, disjoint simultaneous removal
 squares, same-label contacts of each replacement only at marks of the next
 generation, confinement of descendants to sup distance `2 d(S)`, and finite
 termination of each branch.
@@ -41,12 +41,12 @@ structure IsUniformRepairInduction (a₀ : ℝ) : Prop where
   /-- Every generation has isolated stars, with the separation inequality.
   Source: area-law Section 11, lines 473–478. -/
   hasIsolatedStars : ∀ j, (repairStage o Λ A C k₀ hC h₀ Sstar j).HasIsolatedStars a₀
-  /-- Every star avoids the interiors of terminal squares of earlier generations.
+  /-- Every star avoids the closed terminal squares of earlier generations.
   Source: area-law Section 11, lines 474–476 and 526–536. -/
   disjoint_terminal : ∀ j p,
     Disjoint (Metric.closedBall ((repairStage o Λ A C k₀ hC h₀ Sstar j).location p)
       (a₀ * (repairStage o Λ A C k₀ hC h₀ Sstar j).scale p))
-      (repairEarlierTerminalInteriors o Λ A C k₀ hC h₀ Sstar j)
+      (repairEarlierTerminalSquares o Λ A C k₀ hC h₀ Sstar j)
   /-- The simultaneous removal squares of one generation are disjoint.
   Source: area-law Section 11, line 478. -/
   disjoint_repairSquare : ∀ j p q, p ≠ q →

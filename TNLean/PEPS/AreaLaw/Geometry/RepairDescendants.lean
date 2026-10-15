@@ -12,7 +12,7 @@ A mark occurrence of the next generation remembers its parent occurrence, and
 a fresh replacement identifier remembers the parent occurrence at which it was
 born. Iterating the parent map gives the ancestor of a later mark at an earlier
 generation; the descendants of a mark are the marks and fresh births whose
-ancestor it is. The terminal squares created before a generation are collected
+ancestor it is. The closed terminal squares created before a generation are collected
 for the avoidance assertion of the repair induction.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
@@ -62,11 +62,13 @@ def repairRegionParent (j : ℕ) :
         (repairStage o Λ A C k₀ hC h₀ Sstar j).location
         (repairStage o Λ A C k₀ hC h₀ Sstar j).scale) from x)
 
-/-- The union of the interiors of terminal squares created before generation `j`.
-Source: area-law Section 11, lines 401–402 and 526–536. -/
-def repairEarlierTerminalInteriors (j : ℕ) : Set (ℝ × ℝ) :=
-  ⋃ i < j, repairTerminalInteriorSet (repairStage o Λ A C k₀ hC h₀ Sstar i).location
-    (repairStage o Λ A C k₀ hC h₀ Sstar i).scale Sstar
+/-- The union of the closed terminal squares created before generation `j`.
+Source: area-law Section 11, lines 398–402 and 526–536. -/
+def repairEarlierTerminalSquares (j : ℕ) : Set (ℝ × ℝ) :=
+  ⋃ i < j, ⋃ p : {p : (repairStage o Λ A C k₀ hC h₀ Sstar i).markIndex //
+      repairHalfSide ((repairStage o Λ A C k₀ hC h₀ Sstar i).scale p) < Sstar},
+    repairSquare ((repairStage o Λ A C k₀ hC h₀ Sstar i).location p.val)
+      ((repairStage o Λ A C k₀ hC h₀ Sstar i).scale p.val)
 
 end Stages
 

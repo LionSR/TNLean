@@ -281,7 +281,9 @@ generation's squares, including terminal ones, from every old region.
         TNLean.PEPS.AreaLaw.Geometry.exists_isRepairBirthSeparated_of_uniformRepairInductionStatement}
     \leanok
     \uses{thm:area_law_replacement_birth_separation_local,
-        lem:area_law_star_same_label_bound}
+        lem:area_law_star_same_label_bound,
+        def:area_law_uniform_repair_conclusion,
+        lem:area_law_repair_metric_choice}
     Assume the conclusion of the uniform repair induction of
     \cite[Section~11]{OpenAI2026AreaLaw}. There are a fixed $c_1>0$ and a
     threshold $T$ such that the following holds for every stopping scale
@@ -316,7 +318,8 @@ are not yet treated~\cite{gap:arealaw2d_birth_separation_scope}.
 % geometry:birth-separation, lines 573--582.
 \begin{lemma}[Birth-template separation]
     \label{lem:area_law_birth_separation}
-    \uses{thm:area_law_replacement_birth_separation_local}
+    \uses{thm:area_law_replacement_birth_separation_conditional,
+        lem:area_law_uniform_repair_induction}
     There is a fixed $c_1>0$ such that the following holds. Let $\mathcal B$
     be the closed birth region of an initial belt tile of side scale $u=t_k$,
     or of a replacement tile whose removal square has half-side $u$. Then its

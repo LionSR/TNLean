@@ -1,0 +1,190 @@
+\section{The uniform repair induction}
+\label{sec:area_law_repair_induction}
+
+We keep the recursive family $(\mathcal D_j)_{j\ge0}$ of
+Definition~\ref{def:area_law_repair_stage}, with stopping scale $S_*$.
+Distances are maximum-norm distances. The square
+$v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
+
+% Source: 10-geometry.tex, replacement instructions, lines 393--417;
+% geometry:repair-induction, lines 471--485 and 526--541.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{definition}[Ancestors and descendants]
+    \label{def:area_law_repair_ancestors}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairMarkParent,
+        TNLean.PEPS.AreaLaw.Geometry.repairMarkAncestor,
+        TNLean.PEPS.AreaLaw.Geometry.repairRegionParent,
+        TNLean.PEPS.AreaLaw.Geometry.repairEarlierTerminalSquares}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_children,
+        def:area_law_repair_successor_regions}
+    A mark occurrence $q$ of $\mathcal D_{j+1}$ is a pair of a nonterminal
+    parent occurrence $p$ of $\mathcal D_j$ and an offset; write
+    $\pi_j(q)=p$. For $n\ge0$ the ancestor at generation $i$ of a mark of
+    $\mathcal D_{i+n}$ is
+    \begin{align}
+        \alpha_{i,0} & =\mathrm{id},
+                     & \alpha_{i,n+1} & =\alpha_{i,n}\circ\pi_{i+n}.
+        \notag
+    \end{align}
+    A fresh identifier of $\mathcal D_{j+1}$ is born at one parent
+    occurrence of $\mathcal D_j$; retained old identifiers have no parent.
+    The descendants of a mark are the marks and fresh identifiers whose
+    ancestor it is. Finally, let $\mathcal E_j$ be the union of the
+    closed terminal squares of the generations $i<j$.
+\end{definition}
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 332--349, and
+% geometry:repair-induction, lines 471--485.
+\begin{definition}[Conclusion of the uniform repair induction]
+    \label{def:area_law_uniform_repair_conclusion}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.IsUniformRepairInduction,
+        TNLean.PEPS.AreaLaw.Geometry.UniformRepairInductionStatement}
+    \leanok
+    \uses{def:area_law_repair_ancestors,def:area_law_repair_square}
+    Let $a_0>0$. The recursive family satisfies the uniform repair
+    induction with constant $a_0$ when, for all generations $i,j$ and
+    $n\ge0$:
+    \begin{enumerate}
+        \item every mark $p$ of $\mathcal D_j$, of location $v_p$ and scale
+              $S_p$, has an isolated star of radius $a_0S_p$ in the current
+              regions of $\mathcal D_j$: inside $v_p+[-a_0S_p,a_0S_p]^2$
+              the frontiers are the rays from $v_p$ in the eight axis and
+              diagonal directions at which the identifier of the eight
+              elementary sectors changes, each sector lies in one
+              identifier, and consecutive sectors have equal labels exactly
+              when they have equal identifiers;
+        \item distinct marks $p\ne q$ of $\mathcal D_j$ satisfy
+              $\lVert v_p-v_q\rVert\ge a_0\max(S_p,S_q)$;
+        \item the star square of every mark of $\mathcal D_j$ is disjoint
+              from $\mathcal E_j$;
+        \item distinct marks of $\mathcal D_j$ have disjoint removal
+              squares;
+        \item if $x$ is a fresh identifier of $\mathcal D_{j+1}$ and
+              $y\ne x$ has the same label, then the closures of their
+              current regions meet only at mark locations of
+              $\mathcal D_{j+1}$;
+        \item every descendant mark of a mark $(v,S)$ of $\mathcal D_i$
+              lies within distance $2d(S)$ of $v$, and so does every birth
+              region of a descendant fresh identifier;
+        \item for every mark $p$ of $\mathcal D_i$ there is $n$ such that
+              no mark of $\mathcal D_{i+n}$ has ancestor $p$.
+    \end{enumerate}
+    The statement of the uniform repair induction asserts that there are
+    $a_0>0$ and $T$ such that for every $S_*\ge T$ and every width $C_0$
+    the family satisfies the uniform repair induction with constant $a_0$
+    whenever the lower layer index $k_0$ is sufficiently large.
+    Since there are finitely many marks, the fifth item implies that every
+    positive-length interface of a replacement with a distinct identifier
+    joins opposite labels.
+\end{definition}
+
+% Source: 10-geometry.tex, geometry:trim-margins, lines 380--394, and
+% geometry:repair-induction, lines 471--485 with lines 487--496 and
+% 516--542 of its proof.
+\begin{lemma}[Metric invariants of the repair]
+    \label{lem:area_law_repair_metric_invariants}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses,
+        TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.le_scale,
+        TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.separated,
+        TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.disjoint_repairSquare,
+        TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.dist_descendant_le,
+        TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.birth_descendant_subset,
+        TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.disjoint_earlierTerminalSquares,
+        TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.terminates}
+    \leanok
+    \uses{def:area_law_repair_ancestors,thm:area_law_repair_margins}
+    Let $0<a_0\le1$ and $S_*>0$, suppose $d(S)\le(a_0/1000)S$ for every
+    $S\ge S_*$, that every initial mark has scale at least $S_*$, and that
+    distinct initial marks satisfy the separation inequality with constant
+    $a_0$. Then every mark of every generation has scale at least $S_*$,
+    and items two, three, four, six and seven of
+    Definition~\ref{def:area_law_uniform_repair_conclusion} hold.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_margins}
+    Children of a parent of scale $S$ have scale $d(S)\ge S_*$ and lie
+    within distance $d(S)$ of it; distinct offsets are at distance at
+    least one. Two children of one parent are therefore at least
+    $d(S)\ge a_0d(S)$ apart. For children of distinct parents of scales
+    $S,T$ and $M=\max(S,T)$,
+    \begin{align}
+        a_0M-d(S)-d(T) & \ge\Bigl(1-\frac{2}{1000}\Bigr)a_0M
+        \ge a_0\max\bigl(d(S),d(T)\bigr),
+        \notag
+    \end{align}
+    which proves separation by induction on the generation. Disjointness
+    of the removal squares follows from $d(S)+d(T)<a_0M$. Since
+    $2d(S)\le S$, induction along a branch gives
+    $\lVert v_q-v\rVert+S_q\le2d(S)$ for every descendant $q$ of positive
+    generation of $(v,S)$; a fresh birth lies in the removal square of its
+    parent. Along a branch the scales at least halve, while they stay at
+    least $S_*$, so every branch terminates. Finally, let $p$ be a mark of
+    generation $j$ and $t$ a terminal mark of generation $i<j$. The
+    ancestor $a$ of $p$ at generation $i$ is nonterminal, so $a\ne t$, and
+    the star square of $p$ lies within distance $2d(S_a)$ of $v_a$. A
+    common point with the terminal square of $t$ would give
+    $a_0\max(S_a,S_t)\le2d(S_a)+d(S_t)\le(3a_0/1000)\max(S_a,S_t)$.
+\end{proof}
+
+% Source: 10-geometry.tex, geometry:trim-margins, lines 380--394, and
+% geometry:initial-stars, lines 336--339.
+\begin{lemma}[Choice of the stopping scale]
+    \label{lem:area_law_repair_metric_choice}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialRepairStage_scale_separated,
+        TNLean.PEPS.AreaLaw.Geometry.exists_repairMetricHypotheses}
+    \leanok
+    \uses{lem:area_law_repair_metric_invariants,def:area_law_repair_stage,
+        thm:area_law_uniform_separated_initial_marks}
+    For every $0<a_0\le1/4$ there is $T$ such that for every $S_*\ge T$
+    and every width $C_0$, the hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants} hold whenever $k_0$
+    is sufficiently large.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_margins,
+        thm:area_law_uniform_separated_initial_marks}
+    The margin holds for all large $S$. Initial scales are sides
+    $2^{\lfloor\zeta k\rfloor}$ of cells of layers $k\ge k_0$, hence at
+    least $S_*$ for $k_0$ large, and distinct initial marks are separated
+    by a quarter of the larger scale.
+\end{proof}
+
+% Source: 10-geometry.tex, geometry:repair-induction, lines 471--485.
+\begin{lemma}[Uniform repair induction]
+    \label{lem:area_law_uniform_repair_induction}
+    \uses{def:area_law_uniform_repair_conclusion,
+        lem:area_law_repair_metric_invariants,
+        lem:area_law_repair_metric_choice}
+    For a sufficiently small fixed choice of $a_0$ and the corresponding
+    threshold $S_*$, every active mark $(v,S)$ at every generation has a
+    terminal-square-free isolated star $v+[-a_0S,a_0S]^2$ with the
+    properties of the initial isolated-star lemma. Distinct active marks
+    satisfy the same separation inequality. The simultaneous removal
+    squares are disjoint. Each replacement has opposite labels across
+    every positive-length interface of distinct identifiers, and its
+    same-label contacts with old remnants or peer replacements occur only
+    at marks of the next generation. Every descendant mark and every
+    descendant birth region of a mark $(v,S)$ lies within sup distance
+    $2d(S)$ of $v$. Each branch terminates after finitely many
+    generations.
+\end{lemma}
+
+\begin{proof}
+    \uses{lem:area_law_repair_metric_invariants,
+        lem:area_law_repair_metric_choice}
+    The metric assertions are
+    Lemma~\ref{lem:area_law_repair_metric_invariants}. The squares of
+    radius $6d(S)$ about a parent lie in its star and avoid all other
+    removal squares, so each modification sees only its parent's radial
+    boundaries. After normalizing the removal square to $[-1,1]^2$, the
+    new boundaries lie on the eight radial rays and the four supporting
+    lines of the square, and the possible new marks are the nine points of
+    $\{-1,0,1\}^2$. This finite configuration gives the isolated stars of
+    the children with the same constant, and the label reversal gives the
+    contact assertion.
+\end{proof}
