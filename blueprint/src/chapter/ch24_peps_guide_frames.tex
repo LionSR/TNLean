@@ -252,8 +252,8 @@ outer sample.
     blocks around it.
 \end{proof}
 
-\begin{lemma}[The constants of the protocol and the separations of its steps]
-    \label{lem:peps_protocol_constants}
+\begin{theorem}[The constants of the protocol and the separations of its steps]
+    \label{thm:peps_protocol_constants}
     \lean{TNLean.PEPS.Approximation.patchRadius,
         TNLean.PEPS.Approximation.protocolPatchBound,
         TNLean.PEPS.Approximation.IsProtocolConstants,
@@ -291,7 +291,7 @@ outer sample.
         \item $18\le b$, every outer hole radius $2h_n$ is at most $B_0\log L$,
               and so is every outer patch radius $\nu s$ with $s\le K_0t$.
     \end{enumerate}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     The order is met by taking $K_0$ the larger of the given bound and $20$,
