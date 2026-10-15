@@ -184,12 +184,8 @@ theorem good_split_sampling_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T.Non
         ∑ c : ChargeChoices S.K S.M, if c g = (side, slot) then chargeWeight c else 0 := by
   have hrow (t : ℤ) (ht : t ∈ Finset.Icc (1 : ℤ) L) :
       (Finset.univ.filter fun x ↦ S.depth x = t).card ≤ S.n := by
-    have htnat : (t.toNat : ℤ) = t := by simp only [Finset.mem_Icc] at ht; omega
-    have ht1 : 1 ≤ t.toNat := by simp only [Finset.mem_Icc] at ht; omega
-    have htL : t.toNat ≤ L := by simp only [Finset.mem_Icc] at ht; omega
-    have hb := depthRow_ambientDepth_length_le_of_row_bound T hT
-      (Subtype.val : Site Λ → ℤ × ℤ) Subtype.val_injective hrows ht1 htL
-    simpa only [depthRow, Finset.length_toList, htnat, hdepth] using hb
+    simpa only [depthRow, Finset.length_toList] using
+      depthRow_length_le_of_ambientRows hT hdepth hrows ht
   have hball : S.ball i ⊆ S.A := by
     obtain ⟨y, hy⟩ := hsplit.2
     obtain ⟨hyb, hym⟩ := Finset.mem_inter.mp hy
