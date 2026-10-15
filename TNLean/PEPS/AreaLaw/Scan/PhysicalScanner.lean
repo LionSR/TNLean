@@ -100,7 +100,8 @@ Every gapped physical system at scale `n` with a collar scan at the source scale
 vector `Ωt` of the truncated Hamiltonian, with gap `g/2`, satisfying the marginal moment bound
 of Lemma 3.1 at every region, and a `ScanTruncation` built from it (its entropies, trace
 distance, typical mass and typical dimension are those of `Ω` and `Ωt`, and its marginal-tail
-parameter bounds the cut parameter of every status region), such that for every auxiliary dimensions, total weight `W ≥ 1`, and replica vectors `pre`,
+parameter bounds the cut parameter of every status region), such that for every auxiliary
+dimensions, total weight `W ≥ 1`, and replica vectors `pre`,
 whenever the actual rounds (with per-band weight `a = W/K`) satisfy the conclusions `ScanInputs`
 of Propositions 7.4 and 8.1 for `W` and the same truncation, the conclusions of Proposition 9.2
 hold: the comparator budgets, and for every `k ≥ 1` a charge round and a common parameter
