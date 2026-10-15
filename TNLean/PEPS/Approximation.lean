@@ -245,6 +245,7 @@ import TNLean.PEPS.Approximation.PartyTensorCoordinates
 import TNLean.PEPS.Approximation.PartyTensorMaps
 import TNLean.PEPS.Approximation.PartyWord
 import TNLean.PEPS.Approximation.PatchRewrite
+import TNLean.PEPS.Approximation.PatchRewriteCircuit
 import TNLean.PEPS.Approximation.PatchRewriteExpansion
 import TNLean.PEPS.Approximation.PatchRewriteMonomials
 import TNLean.PEPS.Approximation.PatchRewriteTruncation
@@ -411,4 +412,5 @@ import TNLean.PEPS.Approximation.WordSelectedOwnerLocalPart
 import TNLean.PEPS.Approximation.WordSelectedRestriction
 import TNLean.PEPS.Approximation.WordSelectivePartition
 import TNLean.PEPS.Approximation.WordStructuralCongruence
+import TNLean.PEPS.Approximation.WordSwapsMeet
 import TNLean.PEPS.Approximation.ZeroPartyGates

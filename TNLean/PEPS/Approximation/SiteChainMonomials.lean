@@ -119,8 +119,8 @@ theorem prod_map_one_kronecker {κ τ : Type} [Fintype κ] [DecidableEq κ] [Fin
 
 /-- **A product of monomial operators on one layout.** If each operator `A k` of a list is the
 operator of an allowed monomial on the layout `L`, in the coordinates `iso`, using only the
-parties of `S`, then so is the product `A k₁ ⋯ A k_r`, with the pair sources and pair effects
-added up. -/
+parties of `S` and moving a register of `S` at every exchange of tensor factors, then so is the
+product `A k₁ ⋯ A k_r`, with the pair sources and pair effects added up. -/
 theorem exists_chain_listProd {L : Layout Party} {κ : Type} [Fintype κ] [DecidableEq κ]
     (iso : Mem L ≃ₗᵢ[ℂ] EuclideanSpace ℂ κ) (S : Set Party) {γ : Type}
     (A : γ → Matrix κ κ ℂ) (src eff : γ → ℕ) : (ks : List γ) →
@@ -177,8 +177,9 @@ private theorem pairwise_zeroBlock {W : List ι} (hW : W.Nodup) :
 of which the owners `own` and `own'` agree, the product of the one-site zero blocks
 `|0⟩⟨0|_x`, `x ∈ W`, is the operator of an allowed monomial from the registers of a frame with
 owners `own` to those with owners `own'`, using only the owners of the sites of `W` before and
-after, with no pair source and no pair effect. At each site the register is contracted with
-`⟨0|` at its owner before and prepared as `|0⟩` at its owner after. -/
+after, with no pair source and no pair effect, moving a register of these owners at every
+exchange of tensor factors. At each site the register is contracted with `⟨0|` at its owner
+before and prepared as `|0⟩` at its owner after. -/
 theorem exists_zeroChain (l : List (Hole pos q Party)) (S : Set Party) :
     (W : List ι) → W.Nodup → (own own' : ι → Party) → (∀ x ∈ W, own x ∈ S ∧ own' x ∈ S) →
     (∀ x ∉ W, own x = own' x) →
@@ -241,8 +242,9 @@ sites whose owners lie in a set of at most two parties, all in `S`, and let `v`,
 vectors on the configurations of the group. There is a block with the sites outside the group as
 its complement, reading `v` and `w` on every configuration, whose operator
 `1_tags ⊗ |v⟩⟨w|_O ⊗ 1` is an allowed monomial on the registers of a frame, using only the
-parties of `S`, with at most one pair source and at most one pair effect: the sites of the group
-held by one owner form the part `T`, the others the part `U`.
+parties of `S` and moving a register of `S` at every exchange of tensor factors, with at most one
+pair source and at most one pair effect: the sites of the group held by one owner form the part
+`T`, the others the part `U`.
 
 Polynomial-PEPS manuscript, proof of Lemma 6.3, `05-frames.tex`, lines 306–313: a group vector
 is a normalized state or covector on one party, or a normalized bipartite one on its two

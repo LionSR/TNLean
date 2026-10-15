@@ -472,7 +472,9 @@ operator `1_tags ⊗ |v⟩⟨w|_{T ∪ U} ⊗ 1_E` is, in canonical coordinates,
 allowed monomial from the registers of the frame with owners `own` to those with owners `own'`
 that uses only `p_A`, `p_B`, `p_A'` and `p_B'`, with at most one normalized pair source, none
 when `p_A' = p_B'`, and at most one normalized pair effect, none when `p_A = p_B`. It groups
-the registers of `T` and of `U`, applies `rankOneChain`, and ungroups.
+the registers of `T` and of `U`, applies `rankOneChain`, and ungroups; every exchange of tensor
+factors moves a register of one of the four parties, so the monomial meets every selection of
+parties containing them.
 
 Polynomial-PEPS manuscript, proof of Lemma 6.3, `05-frames.tex`, lines 306–316: each group
 vector on at most two owners is a normalized pair state or effect, or a private map. -/
