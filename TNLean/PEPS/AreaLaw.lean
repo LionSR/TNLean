@@ -65,6 +65,7 @@ import TNLean.PEPS.AreaLaw.RegionalEntropyBridge
 import TNLean.PEPS.AreaLaw.RegionalEntropyContinuity
 import TNLean.PEPS.AreaLaw.RegionalReindex
 import TNLean.PEPS.AreaLaw.RegionalStates
+import TNLean.PEPS.AreaLaw.RegularizedPatchActualRegulatorTrace
 import TNLean.PEPS.AreaLaw.RegularizedPatchCoordinate
 import TNLean.PEPS.AreaLaw.RegularizedPatchDiagonalVariation
 import TNLean.PEPS.AreaLaw.RegularizedPatchInsertionTrace

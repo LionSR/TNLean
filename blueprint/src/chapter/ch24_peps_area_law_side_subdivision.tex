@@ -1,9 +1,8 @@
 \section{Opposing corners divide a side only at its midpoint}
 \label{sec:area_law_side_subdivision}
 
-The subdivisions induced by actual opposing cells follow from the
-common dyadic origin and neighboring-layer locality; see
-\cite[Section~11]{OpenAI2026AreaLaw}.
+The subdivisions induced by opposing cells follow from the common dyadic
+origin and neighboring-layer locality; see \cite[Section~11]{OpenAI2026AreaLaw}.
 
 % Source: 10-geometry.tex, lines 299--306 and 352--356. This proves
 % the possible subdivision points, not constancy of the opposing region.
@@ -13,7 +12,7 @@ common dyadic origin and neighboring-layer locality; see
     \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicCellCorner}
     \leanok
     \uses{def:area_law_dyadic_cells}
-    For origin $o$, natural exponent $\ell$, integer cell index $z$
+    For origin $o$, natural exponent $\ell$, integer cell index $z$,
     and $\varepsilon\in\{0,1\}^2$, the corresponding corner is
     $o+2^\ell(z+\varepsilon)$.
 \end{definition}
@@ -24,10 +23,10 @@ common dyadic origin and neighboring-layer locality; see
     \leanok
     \uses{def:area_law_cell_corner,def:area_law_cell_fan,
         def:area_law_fine_layer_indices}
-    Fix a common origin $o$, finite endpoint set $Z$ and integer
-    width $C_0\ge2$. Let $z$ and $w$ index actual fine cells of layers
+    Fix a common origin $o$, finite endpoint set $Z$, and integer
+    width $C_0\ge2$. Let $z$ and $w$ index fine cells of layers
     $k$ and $h$, respectively, with $k\ge50\,000\,000$. Write $[a,b]$
-    for any whole side of the cell indexed by $z$. If a corner $x$
+    for any side of the cell indexed by $z$. If a corner $x$
     of the cell indexed by $w$ belongs to $[a,b]$, then
     $x=a$, $x=(a+b)/2$, or $x=b$.
 \end{theorem}
@@ -37,12 +36,9 @@ common dyadic origin and neighboring-layer locality; see
         thm:area_law_local_layer_indices,thm:area_law_adjacent_fine_meshes,
         def:area_law_affine_mesh,thm:area_law_cell_fan_mark_vertices,
         thm:area_law_belt_marks_closed_cell}
-    The shared point belongs to both closed layers, so
-    $h\le k+1$ and $k\le h+1$. If $\ell_j$ is the fine exponent
-    of layer $j$, it follows that $\ell_k\le\ell_h+1$.
-    Put $t=2^{\ell_k}$. The integer coordinates of the opposing
-    corner place it on $o+(t/2)\mathbb Z^2$. Along the reference
-    side its varying coordinate, measured from $a$ in units of
-    $t/2$, is therefore an integer between $0$ and $2$. These
-    three integers give the two endpoints and the midpoint.
+    Because $x$ belongs to both closed layers, $|h-k|\le1$, and thus the fine
+    exponents satisfy $\ell_k\le\ell_h+1$. Put $t=2^{\ell_k}$. The corner $x$
+    lies in $o+(t/2)\mathbb Z^2$, so its coordinate along $[a,b]$, measured
+    from $a$ in units of $t/2$, is an integer in $\{0,1,2\}$, giving $a$,
+    $(a+b)/2$, or $b$.
 \end{proof}

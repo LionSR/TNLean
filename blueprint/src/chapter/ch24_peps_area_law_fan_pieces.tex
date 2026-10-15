@@ -2,9 +2,9 @@
 \label{sec:area_law_fan_pieces}
 
 A vector $(u_1,u_2)\in\R^2$ has an allowed direction if
-$u_1=0$, $u_2=0$, $u_1=u_2$ or $u_1=-u_2$.
-The following observation will be used for the radial segments of
-the elementary fans in \cite[Section~11]{OpenAI2026AreaLaw}.
+$u_1=0$, $u_2=0$, $u_1=u_2$, or $u_1=-u_2$.
+We apply this condition to the radial segments of the elementary fans in
+\cite[Section~11]{OpenAI2026AreaLaw}.
 
 \begin{theorem}[Allowed directions in an affine span]
     \label{thm:area_law_allowed_direction_affine_span}
@@ -12,12 +12,12 @@ the elementary fans in \cite[Section~11]{OpenAI2026AreaLaw}.
     \leanok
     Let $p,q\in\R^2$ and suppose that $q-p$ has an allowed direction.
     If $v,x\in\operatorname{aff}\{p,q\}$, then $x-v$ has an allowed
-    direction. The points $p,q$ may coincide.
+    direction.
 \end{theorem}
 \begin{proof}\leanok
     Write $v=(1-r)p+rq$ and $x=(1-s)p+sq$ with $r,s\in\R$.
-    Then $x-v=(s-r)(q-p)$. Each of the four equations defining an
-    allowed direction is preserved by real scalar multiplication.
+    Then $x-v=(s-r)(q-p)$, and each of the four linear equations defining
+    an allowed direction is preserved under scalar multiplication.
 \end{proof}
 
 \begin{theorem}[Allowed base and radial directions]
@@ -25,21 +25,19 @@ the elementary fans in \cite[Section~11]{OpenAI2026AreaLaw}.
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_base_and_radial_isAllowedSlope}
     \leanok
     \uses{def:area_law_cell_fan}
-    In an elementary fan, the vectors $b_i-a_i$ and $c-b_i$
-    have allowed directions.
-    Each side may be left whole or subdivided at its midpoint.
+    In an elementary fan, with each side of the cell either undivided or
+    subdivided at its midpoint, the vectors $b_i-a_i$ and $c-b_i$ have
+    allowed directions for every fan triangle $P_i=\operatorname{conv}\{c,a_i,b_i\}$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:area_law_template,def:area_law_cell_fan}
-    The fan triangle with vertices $c,a_i,b_i$ is an allowed polygonal piece.
-    Its edge directions include $b_i-a_i$ and $c-b_i$, so both have
-    one of the four prescribed slopes.
+    Each fan triangle with vertices $c,a_i,b_i$ is an allowed polygonal piece,
+    so its edge vectors $b_i-a_i$ and $c-b_i$ have slopes in
+    $\{0,\infty,1,-1\}$.
 \end{proof}
 
-For the next result, subdivide every side of the dyadic square at its
-midpoint. There are then eight triangles $P_i$ and eight radial segments
-$R_i=[c,b_i]$, with the notation of the preceding section.
-The plane carries the maximum norm.
+Now subdivide every side of the dyadic square at its midpoint, giving eight
+triangles $P_i$ and eight radial segments $R_i=[c,b_i]$.
 
 \begin{theorem}[Nonempty connected pieces after radial deletion]
     \label{thm:area_law_fan_cut_piece_connected}
@@ -52,7 +50,7 @@ The plane carries the maximum norm.
     \begin{align}
         \left(P_i\setminus\bigcup_{t\in A}R_t\right)\cap B_\infty(c,r)
     \end{align}
-    is nonempty and connected. The set $A$ may be empty.
+    is nonempty and connected.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_cell_fan_regularity,
@@ -60,15 +58,13 @@ The plane carries the maximum norm.
         thm:area_law_allowed_direction_affine_span,
         thm:area_law_fan_base_radial_directions,
         thm:area_law_fan_radial_union_deletion_convex}
-    The triangle $P_i$ is the closure of its interior and contains $c$.
-    Hence $B_\infty(c,r)$ contains a point $x$ of the interior of $P_i$.
-    The vector $x-c$ has none of the four allowed directions.
-    Each radial has an allowed direction, and so does every difference
-    of points in its affine span. Thus $x$ lies on no radial, proving
-    nonemptiness even when all eight radials are deleted.
+    Since $P_i=\overline{\operatorname{int}(P_i)}$ and $c\in P_i$, the ball
+    $B_\infty(c,r)$ contains a point $x\in\operatorname{int}(P_i)$.
+    The displacement $x-c$ has none of the four allowed directions, whereas
+    $y-c$ has an allowed direction for every point $y$ on any radial $R_t$.
+    Thus $x\notin R_t$ for all $t$, so the intersection is nonempty.
 
-    The triangle with the selected radials deleted is convex, as is
-    the ball. Their intersection is therefore a nonempty convex subset
-    of a real normed space. It is path connected and hence connected.
-    If $A$ is empty, no radial is deleted and the center is retained.
+    The triangle with the selected radials deleted is convex, as is the ball
+    $B_\infty(c,r)$. Their intersection is therefore a nonempty convex set,
+    hence connected.
 \end{proof}

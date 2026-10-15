@@ -221,7 +221,7 @@ theorem relativeCharacter_mul {L : LSymbol G X}
 /-- The forward fusion cochain whose joint gauge multiplier equals `L`. -/
 def factorFusionGauge (L : LSymbol G X) (ω : ScalarThreeCochain G) (x₀ : X) :
     ScalarCocycle G :=
-  fun g h ↦ blockFactor L ω x₀ g h / relativeCharacter L ω x₀ h
+  fun p ↦ blockFactor L ω x₀ p.1 p.2 / relativeCharacter L ω x₀ p.2
 
 /-- The forward action cochain whose joint gauge multiplier equals `L`. -/
 def factorActionGauge (L : LSymbol G X) : ActionTensorGauge G X :=

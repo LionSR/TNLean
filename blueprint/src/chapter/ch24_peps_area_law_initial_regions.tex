@@ -1,11 +1,11 @@
 \section{The initial family of regions}
 \label{sec:area_law_initial_regions}
 
-Fix an arbitrary origin $o\in\mathbb R^2$, a finite endpoint set
-$Z\subset\mathbb Z^2$, an integer width $C\ge 2$ and an initial layer
-$k_0\ge 50{,}000{,}000$. At each layer $k\ge k_0$, choose arbitrary
-residues $a_k,b_k$ modulo $2^{p_k-\ell_k}$. Retain the primary
-indices, belt cells, midpoint subdivisions and triangle colors of
+Fix an origin $o\in\mathbb R^2$, a finite endpoint set
+$Z\subset\mathbb Z^2$, an integer width $C\ge 2$, and an initial layer
+$k_0\ge 50{,}000{,}000$. At each layer $k\ge k_0$, choose residues
+$a_k,b_k$ modulo $2^{p_k-\ell_k}$. Retain the primary pitch indices, belt
+cells, midpoint subdivisions, and triangle colours of
 \cite[Section~11]{OpenAI2026AreaLaw}.
 
 % Source: 10-geometry.tex, prop:two-families, lines 154--177,
@@ -21,17 +21,14 @@ indices, belt cells, midpoint subdivisions and triangle colors of
         def:area_law_fan_runs}
     Let $G_k$ be the retained primary pitch indices and $B_k$ the
     belt-cell indices at layer $k$. For $z\in B_k$, let $\mathcal R_{k,z}$
-    be the runs of its colored fan. The identifier family is the
-    disjoint union
+    be the runs of its coloured fan. The index set of initial regions is
+    the disjoint union
     \begin{align}
         \mathcal I
          & =\{*\}\sqcup\coprod_{k\ge k_0}G_k
-        \sqcup\coprod_{k\ge k_0}\coprod_{z\in B_k}\mathcal R_{k,z}.
+        \sqcup\coprod_{k\ge k_0}\coprod_{z\in B_k}\mathcal R_{k,z},
     \end{align}
-    The symbol $*$ identifies the dummy region. A primary identifier
-    retains its layer and pitch index, including when its region has
-    disconnected pieces. A run identifier retains its layer and cell.
-    Distinct runs remain distinct even when their colors agree.
+    where $*$ indexes the dummy region.
 \end{definition}
 
 \begin{definition}[Closed birth regions]
@@ -41,8 +38,9 @@ indices, belt cells, midpoint subdivisions and triangle colors of
     \uses{def:area_law_initial_region_indices,def:area_law_dyadic_layers,
         def:area_law_primary_regions,def:area_law_fan_runs}
     Write $N_0=N_{k_0}$ for the initial half-open neighborhood,
-    $R_{k,J}$ for a primary birth region and $T_{k,z,R}$ for a belt-run
-    region. For $i\in\mathcal I$, define
+    $R_{k,J}$ for the primary birth region of index $J\in G_k$ at layer $k$,
+    and $T_{k,z,R}$ for the belt-run region of $R\in\mathcal R_{k,z}$.
+    For $i\in\mathcal I$, define the closed birth region
     \begin{align}
         X_i^0 & =
         \begin{cases}
@@ -58,7 +56,7 @@ indices, belt cells, midpoint subdivisions and triangle colors of
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialOpenRegion}
     \leanok
     \uses{def:area_law_initial_birth_regions}
-    The initial open region with identifier $i$ is
+    For $i\in\mathcal I$, the initial open region is
     $\operatorname{int}(X_i^0)$.
 \end{definition}
 
@@ -68,16 +66,16 @@ indices, belt cells, midpoint subdivisions and triangle colors of
     \leanok
     \uses{def:area_law_initial_region_indices,def:area_law_belt_fan_color,
         thm:area_law_fan_run_color}
-    Assign $\lambda(i)\in\mathbb Z/2\mathbb Z$ by
+    Define the family label $\lambda(i)\in\mathbb Z/2\mathbb Z$ by
     \begin{align}
         \lambda(i) & =
         \begin{cases}
             k_0-1,                                 & i=*,       \\
             k,                                     & i=(k,J),   \\
-            \text{the common triangle color in }R, & i=(k,z,R).
+            \text{the common triangle color in }R, & i=(k,z,R),
         \end{cases}
     \end{align}
-    Run-color constancy makes the last value well defined.
+    which is well defined by constancy of the triangle colour on each run.
 \end{definition}
 
 \begin{theorem}[Agreement with every constituent triangle]
@@ -85,14 +83,13 @@ indices, belt cells, midpoint subdivisions and triangle colors of
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegionColor_beltRun_eq}
     \leanok
     \uses{def:area_law_initial_region_colors}
-    If $e$ is any constituent triangle of a belt run $R$ in
-    layer $k$ and cell $z$, then $\lambda(k,z,R)$ equals the
-    color of $e$.
+    For every triangle $e$ of a belt run $R\in\mathcal R_{k,z}$, the region
+    label $\lambda(k,z,R)$ equals the colour of $e$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:area_law_initial_region_colors}
-    The run is the component containing $e$. By definition, $\lambda(k,z,R)$
-    is the color that this component carries, which is the color of $e$.
+    By definition, $\lambda(k,z,R)$ is the common colour of the triangles
+    in $R$.
 \end{proof}
 
 \begin{theorem}[Closed cover by the initial family]
@@ -109,12 +106,12 @@ indices, belt cells, midpoint subdivisions and triangle colors of
     \uses{thm:area_law_unique_fine_cell,
         thm:area_law_nonbelt_unique_primary,thm:area_law_fan_run_cover,
         def:area_law_initial_birth_regions}
-    Fix $x\in\mathbb R^2$. If $x\in N_0$, then
-    $x\in\overline{N_0}=X_*^0$. Otherwise fine-cell exhaustion gives
-    a fine cell at some layer $k\ge k_0$ containing $x$.
-    Its closure also contains $x$. If the cell is in the belt, its
-    closed square is covered by its run regions, so $x$ lies in one
-    $T_{k,z,R}$. If the cell is outside the belt, the unique retained
-    primary containing its closure also contains $x$. Each case places
-    $x$ in a birth region with an identifier.
+    Let $x\in\mathbb R^2$. If $x\in N_0$, then
+    $x\in\overline{N_0}=X_*^0$. If $x\notin N_0$, the fine-cell partition
+    gives $k\ge k_0$ and $z\in F_{k,\ell_k}$ with
+    $x\in C_{\ell_k,z}\subseteq\overline{C_{\ell_k,z}}$.
+    If $z\in B_k$, the belt-run regions $T_{k,z,R}$ cover
+    $\overline{C_{\ell_k,z}}$.
+    If $z\notin B_k$, $\overline{C_{\ell_k,z}}$ lies in a retained primary
+    region $R_{k,J}$.
 \end{proof}
