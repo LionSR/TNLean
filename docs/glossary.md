@@ -3452,8 +3452,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   bound $\sum_t |c_t|\le K C$ when each gate has at most $K$ monomials and
   $C\ge0$. `exists_one_le_isExpansionBounded_of_termwise_power_bounds` derives
   a polynomial coefficient-sum bound from polynomial bounds on counts and
-  individual coefficients. `IsTermwiseBounded.mono_coefficient` enlarges the
-  coefficient majorant on the same circuit, preserving its pair-effect bound.
+  individual coefficients.
 - **Caveat:** Local allowedness, contraction of the original operators, and
   approximation error are separate conditions. This predicate contains no
   coefficient-sum assumption or global density comparison.

@@ -47,9 +47,9 @@ The reduction of polynomial-dimensional messages is treated separately.
     If $U$ is evaluation of the prescribed original gate operators on the
     fixed chronology and $\psi$ is the product input, the original physical
     density is
-    \[
+    \begin{align}
         \rho=\operatorname{Tr}_{\mathrm{priv}}\lvert U\psi\rangle\langle U\psi\rvert.
-    \]
+    \end{align}
     No division by the output norm is made.
 \end{definition}
 
@@ -100,9 +100,9 @@ at the gate occurrences may be replaced independently.
     \uses{def:peps_fixed_chronology_original_operators}
     Let $U_{\mathcal C,G}$ denote evaluation using the assigned original
     operators, rather than the monomial sums. Then
-    \[
+    \begin{align}
         U_{\mathcal C[\mathcal L],G}=U_{\mathcal C,G}.
-    \]
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
@@ -175,31 +175,31 @@ at the gate occurrences may be replaced independently.
     At integer precision $q$, let $C_K(q),C_B(q)\ge0$ and $u(q),s(q)$ be the
     polynomial constants and degrees for monomial counts and absolute
     coefficient sums. For $p>0$, set
-    \[
+    \begin{align}
         t=\lceil p\rceil,
         \qquad q=n+t+\lceil16C_N\rceil.
-    \]
+    \end{align}
     There exist $C_p\ge0$ and an integer $\alpha_p>0$, chosen before the
     size or a particular construction, with the following property.
     Let $L\ge2$ and let the original normalized product input, finite private
     registers, original gate operators, and expansion lists satisfy
-    \[
+    \begin{align}
         N\le C_NL^n,\qquad
         K\le C_K(q)L^{u(q)},\qquad
         1\le B\le C_B(q)L^{s(q)},\qquad
         1\le D\le C_DL^d.
-    \]
+    \end{align}
     Here $N$ counts original gate occurrences, $K$ bounds the number of
     monomials in each list, $B$ bounds its absolute coefficient sum, and $D$
     bounds each intended physical dimension. Suppose that every local list
     approximates its original contraction to operator error at most $L^{-q}$,
-    each monomial has at most $r$ sources and effects, and each gate and each
+    each monomial has at most $r$ pair effects, and each gate and each
     party have arity and whole-lifetime participation at most $b$.
     The actual sampled nonempty-occurrence contraction $\Sigma$ satisfies
-    \[
+    \begin{align}
         \bigl\lVert |\gamma|^2\Sigma-\rho\bigr\rVert_1\le L^{-p},
         \qquad \dim\mathcal V_e\le C_pL^{\alpha_p}.
-    \]
+    \end{align}
     The original physical density $\rho$ is not normalized. The same actual
     source circuit and sample array define $\Sigma$ and all its virtual
     alphabets. There are at most $2b(b-1)$ incident links at each party, and
@@ -207,19 +207,19 @@ at the gate occurrences may be replaced independently.
     private dimensions or source Schmidt ranks is required.
 
     One explicit choice is obtained from
-    \[
+    \begin{align}
         C_S=\max\{1,C_N\tbinom b2\},\qquad
         C_X=C_K(q)\bigl(64C_N^2(rC_B(q))^2+2\bigr)^r,
-    \]
-    \[
+    \end{align}
+    \begin{align}
         C_k=64C_S^2\bigl(C_B(q)^{4b}C_D^4\bigr)^2+2,
         \qquad C_p=C_X^2+C_k,
-    \]
-    \[
+    \end{align}
+    \begin{align}
         \alpha_p=
         \max\{2(u(q)+2r(n+s(q)+t)),\,
         2(n+4bs(q)+4d+t)\}+t.
-    \]
+    \end{align}
 \end{theorem}
 \begin{proof}
     \leanok
@@ -246,10 +246,10 @@ at the gate occurrences may be replaced independently.
     Suppose that every gate involves at most $b$ parties and that each party
     participates in at most $b$ nonprivate gates over its whole lifetime.
     Assume fixed polynomial bounds
-    \[
+    \begin{align}
         N_L\le C_NL^n,\qquad d_{L,j}\le C_DL^d,
         \qquad C_N,C_D\ge0.
-    \]
+    \end{align}
     At every fixed integer precision $q$, suppose that there exist
     $r_q$, $C_K(q),C_C(q)\ge0$, and degrees $u(q),v(q)$, chosen before $L$,
     such that every size admits allowed monomial lists at the same original
@@ -259,26 +259,30 @@ at the gate occurrences may be replaced independently.
     original contraction to operator error at most $L^{-q}$.
 
     For every $p>0$ there exist $r_p$, $C_p\ge0$, and an integer
-    $\alpha_p>0$, all chosen before the size, such that every $L\ge2$ admits
-    an operator tensor network $\sigma_L$ with one node per original party,
+    $\alpha_p>0$, all chosen before the family member, such that every
+    index, of size $L\ge2$, admits an operator tensor network $\sigma_L$ with one node per original party,
     physical ket and bra legs of dimensions $d_{L,j}$, and
-    \[
+    \begin{align}
         \lVert\sigma_L-\rho_L\rVert_1\le L^{-p},
         \qquad \dim\mathcal V_e\le C_pL^{\alpha_p}.
-    \]
+    \end{align}
     There are at most $2b(b-1)$ incident virtual links at every node, and the
     two endpoints of every link participate in a common original gate.
     The operator $\rho_L$ is the actual original physical density, with its
     retained private registers traced out and without normalization.
     No bound is imposed on private dimensions beyond finiteness.
+    This is the approximate-expansion form of
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} for expansions without
+    messages, for families with at least one party at each index.
+    % Source: 04-compression.tex, lines 137--175 and 590--600.
 \end{theorem}
 \begin{proof}
     \leanok
     Enlarge the original count constant to $1+C_N$ and choose
-    \[
+    \begin{align}
         t=\lceil p\rceil,
         \qquad q=n+t+\lceil16(1+C_N)\rceil
-    \]
+    \end{align}
     before choosing a size. Availability at this precision fixes $r_p=r_q$
     and its polynomial constants. The coefficient sum is bounded by
     $C_K(q)C_C(q)L^{u(q)+v(q)}$; a majorant at least one is
