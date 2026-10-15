@@ -26,7 +26,6 @@ spectral mass, a supplied label sequence with the eventual mass bound, and
 common completed/pre-charge marginal moments. Its constant and copy threshold
 may depend on the fixed physical instance and supplied labels. The full
 Proposition 9.6 lower estimate, telescope and absorption remain separate.
-See `docs/paper-gaps/arealaw2d_actual_sharp_upper_scope.tex`.
 
 Source: OpenAI area-law manuscript, `07-comparators.tex`,
 `comparator:sharp-upper`, lines 383–418; `08-scanner.tex`, lines 416–474,
