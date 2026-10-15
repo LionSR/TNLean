@@ -198,6 +198,41 @@ outer sample.
     exchanges with the circuit of Theorem~\ref{thm:peps_frame_small_rewrite_gate}.
 \end{proof}
 
+\begin{lemma}[Patch data of supplied small-patch rewrites]
+    \label{lem:peps_guide_frame_patch_data}
+    \lean{TNLean.PEPS.EncodedFrame.IsSuppliedPatch,
+        TNLean.PEPS.EncodedFrame.IsSuppliedPatch.norm_act_proj_sub_le,
+        TNLean.PEPS.EncodedFrame.IsSuppliedPatch.card_tag_le,
+        TNLean.PEPS.EncodedFrame.IsSuppliedPatch.nonempty_tag,
+        TNLean.PEPS.Approximation.GuideFrameRewrite.IsSupplied,
+        TNLean.PEPS.Approximation.GuideFrameRewrite.IsSupplied.patchData,
+        TNLean.PEPS.Approximation.GuideFrameRewrite.PlaneConditions.exists_originalCircuit_of_isSupplied}
+    \leanok
+    \uses{lem:peps_adaptive_patch_supply, thm:peps_guide_frame_rewrite}
+    Let $\lVert\Omega\rVert=1$ and $L\ge2$, and let every additional patch and
+    every hole patch of a rewrite between frames of guides be a patch supplied
+    by the adaptive patch constraint with test exponent $60$ and constants
+    $C,c$, as at \cite[Section~7]{OpenAI2026PolynomialPEPS},
+    \texttt{06-geometry.tex}, lines 109--118. Let $C'\ge\max\{1,C\}$ and
+    $c'\ge c$ be natural numbers. Then every affected hole and every additional
+    patch has at most $C'L^{c'}$ tags, every additional patch and every old
+    affected hole has projector error at most $L^{-60}$ on $\Omega$, and every
+    hole of the old frame has at least one tag. Hence, under the plane
+    conditions and the counting bounds of
+    Theorem~\ref{thm:peps_guide_frame_rewrite}, the rewrite is a circuit with
+    at most one gate that is not private to one party, every participant a
+    specified party, and reference-vector error at most $(2b+1)L^{-20}$, the
+    constants $C,c$ of that theorem being $C',c'$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The error and the tag count are those of the supplied patches, with
+    $\max\{1,CL^c\}\le C'L^{c'}$ for $L\ge1$. A patch with empty outer sample has
+    its one identity tag. If a supplied patch with nonempty outer sample had no
+    tag, its cylinder sum would vanish, and its error on $\Omega$ would be
+    $\lVert\Omega\rVert=1>L^{-60}$.
+\end{proof}
+
 \begin{theorem}[Direct repaintings, resizes and point treatments as small-patch rewrites]
     \label{thm:peps_guide_frame_rewrite_events}
     \lean{TNLean.PEPS.Approximation.exists_directRepainting_planeConditions,
