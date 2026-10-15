@@ -215,18 +215,13 @@ Irreducibility of $D_i$ is not required.
     No coverage assumption on the regions is needed for these inclusions.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_copy_local_ranges,thm:peps_parent_support_copy_blocks,
-        thm:peps_parent_support_block_criterion}
-    Fix a region and the input and output exterior configurations.
-    The corresponding block of $M_m$ is a scalar times
-    $M_{R,\gamma}$: exterior edges give scalar factors, and crossing
-    edges additionally enforce equality of the exterior base labels.
-    Every such block carries the source regional range into the target
-    range by~(\ref{eq:peps_copy_local_ranges}).
-    Each target regional slice is a sum of these block images of
-    source slices, and so satisfies the target condition.
-    The adjoint block is the conjugate scalar times
-    $M_{R,\gamma}^\dagger$, proving the reverse inclusion.
+    \uses{thm:peps_oriented_copy_parent_inverses}
+    This is the case of
+    Theorem~\ref{thm:peps_oriented_copy_parent_inverses} in which no
+    edge is reversed: when every $o_e=0$, the oriented tensors
+    $A^{D,W_m,o}$ and $A^{D^{[m]},1,o}$ are the ordered tensors $A_m$
+    and $B_m$, and the oriented product of the bond maps $F_m$ is $M_m$.
+    Taking $m=d$ gives the dimension-multiplicity inclusions.
 \end{proof}
 
 \begin{theorem}[Exact inverses on the entire parent spaces]%
@@ -250,21 +245,15 @@ Irreducibility of $D_i$ is not required.
     These identities concern every parent vector, including for $m=d$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_copy_weight_products,thm:peps_parent_support_factor_ranges,
-        thm:peps_parent_support_retractions}
-    The source internal factors $\bigoplus_i\sqrt{m_i}D_i(g)$ lie
-    in the matching-sector inclusion range. The target internal
-    factors $\bigoplus_iD_i(g)\otimes I_{m_i}$ lie in $\operatorname{im}F_m$.
-    Fixing crossing physical labels therefore puts every internal
-    slice of a regional generator in the corresponding product range.
-    Linear extension gives the same property on its regional range.
-    For each edge, choose a parent region containing both endpoints;
-    its regional constraint places every global one-bond slice in
-    the required range. The product-range criterion then gives source
-    matching-sector support and target product-image support.
-    On these supports the product partial-isometry identities are
-    exactly~(\ref{eq:peps_copy_parent_inverses}). Applying $M_m^\dagger$
-    to $M_m\psi=M_m\psi'$ proves injectivity.
+    \uses{thm:peps_oriented_copy_parent_inverses}
+    Take every $o_e=0$ in
+    Theorem~\ref{thm:peps_oriented_copy_parent_inverses}. The oriented
+    tensors are then the ordered tensors $A_m$ and $B_m$, and the
+    identities~(\ref{eq:peps_oriented_copy_left_inverse})
+    and~(\ref{eq:peps_oriented_copy_right_inverse}) become
+    exactly~(\ref{eq:peps_copy_parent_inverses}), together with
+    injectivity on the source parent space.
+    Taking $m=d$ gives the dimension-multiplicity identities.
 \end{proof}
 
 \begin{theorem}[Canonical parent equivalence under copy restoration]%
@@ -293,11 +282,13 @@ Irreducibility of $D_i$ is not required.
     Taking $m=d$ gives canonical dimension-multiplicity restoration.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_copy_parent_inclusions,thm:peps_copy_parent_inverses,
+    \uses{thm:peps_oriented_copy_parent,thm:peps_copy_parent_inverses,
         thm:peps_region_parent_common_kernel}
-    The inclusions in~(\ref{eq:peps_copy_parent_inclusions}) and both
-    identities in~(\ref{eq:peps_copy_parent_inverses}) show that the
-    restrictions are mutually inverse. The dimension assertion follows.
+    Taking every $o_e=0$ in Theorem~\ref{thm:peps_oriented_copy_parent}
+    gives $M_m\mathcal P_{\mathcal R}(A_m)=\mathcal P_{\mathcal R}(B_m)$.
+    By Theorem~\ref{thm:peps_copy_parent_inverses}, $M_m$ is injective
+    on the source parent space and its restriction has inverse the
+    restriction of $M_m^\dagger$. The dimension assertion follows.
     Positivity identifies the Hamiltonian kernels with the common
     regional parent spaces, so the same map identifies those kernels.
 \end{proof}

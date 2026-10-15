@@ -1,0 +1,64 @@
+% Figure polypeps_gaussian_source_split.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. VIII B (pair sources become Gaussian links),
+% unnumbered display.
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/04-compression.tex:281-302
+% (eq. (5.6), compression-random-source) and 339-340 (fresh samples).
+% Formula: X = |eta><eta~| = E Xhat, Xhat = (1/k) sum_{j=1}^{k} U_j (x) V_j,
+% U_j = sum_{a,c} (lambda_a mu_c)^{1/4} g^{(j)}_{ac} |u_a><u~_c|,
+% V_j = sum_{b,d} (lambda_b mu_d)^{1/4} conj(g^{(j)}_{bd}) |v_b><v~_d|,
+% with eta = sum_a sqrt(lambda_a)|u_a>|v_a>, eta~ = sum_c sqrt(mu_c)|u~_c>|v~_c>
+% (Schmidt forms) and g^{(j)}_{ac} independent standard circular complex
+% Gaussians, E|g|^2 = 1. The identity E Xhat = X ((5.6)) is exact, so the
+% joiner is "= E" (J2); no bound on the sampled norms of U_j, V_j is claimed.
+% Fresh independent samples are taken for each slot location and each ordered
+% pair (xi, zeta) of ket and bra monomial labels at that gate ([S, 04:339-340]).
+% k is the note's k_G.
+% Ink-to-index: the top row is party P (u out, u~ in), the bottom row party Q
+% (v out, v~ in); the middle row is a spacer. The labels P and Q at the far
+% west name the rows once. Left: the cap <eta~| consumes (u~, v~) and the cup
+% |eta> prepares (u, v), not joined. Right: U_j at P and V_j at Q, black boxes
+% (owners are rows, not hues), joined by the green sample link j, a virtual
+% index of dimension k_G that is contracted: the sum over j is this
+% contraction, so the joiner carries only E and the factor 1/k (writing sum_j
+% in the joiner as well would sum twice). The one-wire boxes are too small to
+% inscribe a name at the label size, so U_j and V_j sit outside at size=l
+% (north and south, away from the link), never smaller than the wire names.
+% Every open leg runs one pitch to the panel edge. The wire names u, v, u~, v~
+% are set once, on the left panel; the right panel's rows are the same rows
+% (L4), and the column right after the joiner carries no label (L3).
+% Boundary signature: (phys:w)x2 out (u, v), (phys:e)x2 in (u~, v~) on both
+% sides; the link j is internal.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire}, cols=4, bonds=none]
+        \tn[at=(1,1), skin=none, name=gsSrcU, ports={180:physical:$u$, 0:physical}]{}
+        \tn[at=(3,1), skin=none, name=gsSrcV, ports={180:physical:$v$, 0:physical}]{}
+        \tn[at=(1,4), skin=none, name=gsEffU, ports={180:physical, 0:physical:$\widetilde u$}]{}
+        \tn[at=(3,4), skin=none, name=gsEffV, ports={180:physical, 0:physical:$\widetilde v$}]{}
+        \tnwire[route=arc, name=gsCup]{gsSrcU.0}{gsSrcV.0}
+        \tnwire[route=arc, name=gsCap]{gsEffU.180}{gsEffV.180}
+        \tnmark[form=label, label pos=w]{on gsCup 0.5}{$\lvert\eta\rangle$}
+        \tnmark[form=label, label pos=e]{on gsCap 0.5}{$\langle\widetilde\eta\rvert$}
+        \tnmark[form=label, label pos=w]{1.1 w of (1,1)}{$P$}
+        \tnmark[form=label, label pos=w]{1.1 w of (3,1)}{$Q$}
+    \end{tenkz}
+    $=\;\mathbb E\,\tfrac{1}{k_{\mathrm G}}$
+    \begin{tenkz}[rows={wire,wire,wire}, cols=3, bonds=none, size=l]
+        \tndeclare{species}{route}{hue=source:green!50!black}
+        \tn[at=(1,1), skin=none, name=gsWu, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), skin=none, name=gsWv, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,3), skin=none, name=gsEu, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,3), skin=none, name=gsEv, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,2), skin=box, size=l, name=gsU,
+            ports={180:physical, 0:physical, 270:virtual}]{U_j}
+        \tn[at=(3,2), skin=box, size=l, name=gsV,
+            ports={180:physical, 0:physical, 90:virtual}]{V_j}
+        \tnwire{gsWu.0}{gsU.180}
+        \tnwire{gsU.0}{gsEu.180}
+        \tnwire{gsWv.0}{gsV.180}
+        \tnwire{gsV.0}{gsEv.180}
+        \tnwire[species=route, name=gsLink]{gsU.270}{gsV.90}
+        \tnmark[form=label, label pos=e]{on gsLink 0.5}{$j\in[k_{\mathrm G}]$}
+    \end{tenkz}
+\end{tenkzequation}

@@ -30,14 +30,6 @@ open scoped BigOperators
 
 namespace TNLean.PEPS.AreaLaw
 
-/-- Membership in an ambient integer dilation, in coordinate inequalities. -/
-theorem mem_ambientDilation_iff {S : Finset (ℤ × ℤ)} {r : ℕ} {x : ℤ × ℤ} :
-    x ∈ ambientDilation S r ↔ ∃ p ∈ S,
-      p.1 - r ≤ x.1 ∧ x.1 ≤ p.1 + r ∧ p.2 - r ≤ x.2 ∧ x.2 ≤ p.2 + r := by
-  simp only [ambientDilation, Finset.mem_biUnion, Finset.product_eq_sprod,
-    Finset.mem_product, Finset.mem_Icc]
-  tauto
-
 /-- Dilation preserves inclusion without any connectedness assumption. -/
 theorem ambientDilation_mono {S U : Finset (ℤ × ℤ)} (h : S ⊆ U) (r : ℕ) :
     ambientDilation S r ⊆ ambientDilation U r := by

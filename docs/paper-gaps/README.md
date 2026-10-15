@@ -1151,6 +1151,17 @@ separation bounded by a fixed multiple of the endpoint scales, which the source
 derives from that proposition, and anchors on the padded grid, which comes from
 attaching each party to the anchor of its dyadic block.
 
+### Polynomial PEPS approximation: the distribution protocol
+
+[polypeps_prop71_consequences_interface.tex](polypeps_prop71_consequences_interface.tex)
+(scope restriction, open) records that Proposition 7.1 of the September 24, 2026
+polynomial PEPS manuscript is formalized only as the consequences that the
+assembly of Section 8 uses, and lists the omitted clauses: a party for every
+hierarchy square, the main and auxiliary copies of `Ω`, the frame factorization
+of the reference vectors with factors of norm at most one, the placement of
+additional parties at their repainting events, the pair-source and message
+counts before expansion, and the family of expansions of every fixed accuracy.
+
 ### Two-dimensional area law: the scanner estimate
 
 [arealaw2d_scanner_inputs.tex](arealaw2d_scanner_inputs.tex) records that

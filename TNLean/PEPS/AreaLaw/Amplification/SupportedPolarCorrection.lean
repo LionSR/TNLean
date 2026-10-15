@@ -180,6 +180,76 @@ theorem exists_supported_unitary_of_good_realization (S : Finset ι)
     rw [← WithLp.toLp_sub, ← hnorm, hcomp, ← hvec, hUe, WithLp.toLp_sub]
     simpa only [toEuclideanCLM_toLp] using hU
 
+/-- **A unitary acting away from a region.** Let `U` be a unitary acting on a set `S` disjoint
+from a region `X`, on a nonempty configuration space. Then `U = 1 ⊗ U₂` in the coordinates of
+`X` and its complement, for a unitary `U₂` on the complement.
+Source: `09-amplification.tex`, lines 547–550. -/
+theorem exists_one_kronecker_unitary_of_mem_supportedOperators [Nonempty (ι → Fin q)]
+    {X S : Finset ι} (hS : Disjoint (S : Set ι) (X : Set ι))
+    {U : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hU : U ∈ supportedOperators q (S : Set ι))
+    (hUu : Uᴴ * U = 1) :
+    ∃ U₂ : Matrix (FiniteProduct.Configuration (fun _ : ι => Fin q) Xᶜ)
+        (FiniteProduct.Configuration (fun _ : ι => Fin q) Xᶜ) ℂ,
+      U = ((1 : Matrix (FiniteProduct.Configuration (fun _ : ι => Fin q) X)
+        (FiniteProduct.Configuration (fun _ : ι => Fin q) X) ℂ) ⊗ₖ U₂).submatrix
+          (FiniteProduct.splitEquiv (fun _ : ι => Fin q) X)
+          (FiniteProduct.splitEquiv (fun _ : ι => Fin q) X) ∧ U₂ᴴ * U₂ = 1 := by
+  obtain ⟨U₂, hU₂⟩ := EncodedFrame.exists_one_kronecker_of_mem_supportedOperators hS hU
+  set e := FiniteProduct.splitEquiv (fun _ : ι => Fin q) X with he
+  have hUeq : U = ((1 : Matrix (FiniteProduct.Configuration (fun _ : ι => Fin q) X)
+      (FiniteProduct.Configuration (fun _ : ι => Fin q) X) ℂ) ⊗ₖ U₂).submatrix e e := by
+    rw [← hU₂]
+    simp [e]
+  refine ⟨U₂, hUeq, ?_⟩
+  have h1 : ((1 : Matrix (FiniteProduct.Configuration (fun _ : ι => Fin q) X)
+      (FiniteProduct.Configuration (fun _ : ι => Fin q) X) ℂ) ⊗ₖ
+        (U₂ᴴ * U₂)).submatrix e e = 1 := by
+    rw [← hUu, hUeq, conjTranspose_submatrix, submatrix_mul_equiv, conjTranspose_kronecker,
+      conjTranspose_one, ← mul_kronecker_mul, Matrix.one_mul]
+  have h2 : (1 : Matrix (FiniteProduct.Configuration (fun _ : ι => Fin q) X)
+      (FiniteProduct.Configuration (fun _ : ι => Fin q) X) ℂ) ⊗ₖ (U₂ᴴ * U₂) = 1 := by
+    simpa using congrArg (fun A => A.submatrix e.symm e.symm) h1
+  obtain ⟨c⟩ := ‹Nonempty (ι → Fin q)›
+  ext i j
+  have hij := congrFun (congrFun h2 ((e c).1, i)) ((e c).1, j)
+  simpa [kroneckerMap_apply, one_apply] using hij
+
+/-- A unit vector lives on a nonempty configuration space. -/
+theorem nonempty_of_norm_eq_one {φ : EuclideanSpace ℂ (ι → Fin q)} (hφ : ‖φ‖ = 1) :
+    Nonempty (ι → Fin q) := by
+  by_contra hne
+  rw [not_nonempty_iff] at hne
+  have hz : φ = 0 := by
+    ext c
+    exact (IsEmpty.false c).elim
+  rw [hz, norm_zero] at hφ
+  exact zero_ne_one hφ
+
+/-- **The entropy comparison for a unitary acting away from both regions.** Let `U` be a
+unitary acting on a region `S` disjoint from `X ∪ J`, and let `η` be a unit vector with
+`I_η(X : J) = 0`. Every unit vector `φ` then satisfies
+`I_φ(X : J) ≤ 8 √‖U φ - η‖ log(e dim X)`. Only the dimension of `X` enters.
+Source: `09-amplification.tex`, lines 547–555, and `02-information.tex`, lines 600–630. -/
+theorem mutualInformation_le_of_supported_unitary
+    {φ η : EuclideanSpace ℂ (ι → Fin q)} (hφ : ‖φ‖ = 1) (hη : ‖η‖ = 1)
+    {X J S : Finset ι} (hXJ : Disjoint X J) (hS : Disjoint (S : Set ι) ((X ∪ J : Finset ι) :
+      Set ι)) {U : Matrix (ι → Fin q) (ι → Fin q) ℂ} (hU : U ∈ supportedOperators q (S : Set ι))
+    (hUu : Uᴴ * U = 1)
+    (hprod : FiniteProduct.mutualInformation (fun _ : ι => Fin q) η X J = 0) :
+    FiniteProduct.mutualInformation (fun _ : ι => Fin q) φ X J ≤
+      8 * √‖WithLp.toLp 2 (U *ᵥ WithLp.ofLp φ) - η‖ *
+        Real.log (Real.exp 1 *
+          Fintype.card (FiniteProduct.Configuration (fun _ : ι => Fin q) X)) := by
+  have := nonempty_of_norm_eq_one hφ
+  obtain ⟨U₂, hUeq, hU₂u⟩ := exists_one_kronecker_unitary_of_mem_supportedOperators hS hU hUu
+  have h := FiniteProduct.mutualInformation_le_of_unitary_sub_le (fun _ : ι => Fin q) hφ hη
+    hXJ U₂ hU₂u hprod
+  have hφ' : toEuclideanCLM (n := ι → Fin q) (𝕜 := ℂ) U φ =
+      WithLp.toLp 2 (U *ᵥ WithLp.ofLp φ) := by
+    rw [← toEuclideanCLM_toLp, WithLp.toLp_ofLp]
+  rw [← hUeq, hφ'] at h
+  exact h
+
 /-- **The entropy comparison for a unitary acting away from both regions.** Let `U` be a
 unitary acting on a region `S` disjoint from `X ∪ J`, and let `η` be a unit vector with
 `I_η(X : J) = 0`. If `‖U φ - η‖ ≤ C₁ n^(-K/2)` with `K ≥ 4(M + 2)` and `log dim X ≤ C₂ n²`,
@@ -197,42 +267,16 @@ theorem mutualInformation_le_inv_pow_of_supported_unitary
       C₂ * (n : ℝ) ^ 2) :
     ∀ X' ⊆ X, FiniteProduct.mutualInformation (fun _ : ι => Fin q) φ X' J ≤
       8 * √C₁ * (1 + C₂) * ((n : ℝ) ^ M)⁻¹ := by
-  obtain ⟨U₂, hU₂⟩ := EncodedFrame.exists_one_kronecker_of_mem_supportedOperators hS hU
-  set e := FiniteProduct.splitEquiv (fun _ : ι => Fin q) (X ∪ J) with he
-  have hUeq : U = ((1 : Matrix (FiniteProduct.Configuration (fun _ : ι => Fin q) (X ∪ J))
-      (FiniteProduct.Configuration (fun _ : ι => Fin q) (X ∪ J)) ℂ)
-      ⊗ₖ U₂).submatrix e e := by
-    rw [← hU₂]
-    simp [e]
-  have hU₂u : U₂ᴴ * U₂ = 1 := by
-    have h1 : ((1 : Matrix (FiniteProduct.Configuration (fun _ : ι => Fin q) (X ∪ J))
-      (FiniteProduct.Configuration (fun _ : ι => Fin q) (X ∪ J)) ℂ) ⊗ₖ
-        (U₂ᴴ * U₂)).submatrix e e = 1 := by
-      rw [← hUu, hUeq, conjTranspose_submatrix, submatrix_mul_equiv, conjTranspose_kronecker,
-        conjTranspose_one, ← mul_kronecker_mul, Matrix.one_mul]
-    have h2 : (1 : Matrix (FiniteProduct.Configuration (fun _ : ι => Fin q) (X ∪ J))
-      (FiniteProduct.Configuration (fun _ : ι => Fin q) (X ∪ J)) ℂ) ⊗ₖ
-        (U₂ᴴ * U₂) = 1 := by
-      have := congrArg (fun A => A.submatrix e.symm e.symm) h1
-      simpa using this
-    have hne : Nonempty (ι → Fin q) := by
-      by_contra hne
-      rw [not_nonempty_iff] at hne
-      have hz : φ = 0 := by
-        ext c
-        exact (IsEmpty.false c).elim
-      rw [hz, norm_zero] at hφ
-      exact zero_ne_one hφ
-    obtain ⟨c⟩ := hne
-    ext i j
-    have hij := congrFun (congrFun h2 ((e c).1, i)) ((e c).1, j)
-    simpa [kroneckerMap_apply, one_apply] using hij
-  have t1 := FiniteProduct.mutualInformation_le_inv_pow_of_unitary_sub_le (fun _ : ι => Fin q) hφ hη
-    hXJ U₂
+  have := nonempty_of_norm_eq_one hφ
+  obtain ⟨U₂, hUeq, hU₂u⟩ := exists_one_kronecker_unitary_of_mem_supportedOperators hS hU hUu
+  have t1 := FiniteProduct.mutualInformation_le_inv_pow_of_unitary_sub_le (fun _ : ι => Fin q)
+    hφ hη hXJ U₂
   have t2 := t1 hU₂u hprod (C₁ := C₁) (C₂ := C₂) hn hK
-  have t3 := t2 ?_ hdim
-  · exact t3
-  · rw [← hUeq]
-    exact hδ
+  refine t2 ?_ hdim
+  have hφ' : toEuclideanCLM (n := ι → Fin q) (𝕜 := ℂ) U φ =
+      WithLp.toLp 2 (U *ᵥ WithLp.ofLp φ) := by
+    rw [← toEuclideanCLM_toLp, WithLp.toLp_ofLp]
+  rw [← hUeq, hφ']
+  exact hδ
 
 end TNLean.PEPS.AreaLaw

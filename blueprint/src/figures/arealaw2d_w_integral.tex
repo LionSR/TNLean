@@ -1,0 +1,62 @@
+% Figure arealaw2d_w_integral.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL App. D 2 (Lemma 17, the integral formula,
+% Eq. al:s6:integral), unnumbered display.
+% Source: arXiv OpenAI2026AreaLaw, sections/05-replicas.tex:305-320 (Lemma 6.2,
+% eq. (6.12) replicas:W-integral), drawn at k = 3 with t = a/2.
+% Formula: W_{Q,3} = int (sigma^{a/2})^{(x)3} d zeta_Q(sigma).
+% Ink-to-index: the three wires are Q^{(1)}, Q^{(2)}, Q^{(3)}, one copy of the
+% subsystem Q each (copies told apart by position); the left panel is the common
+% metric W_{Q,3} of (6.10) on Q^{(x)3}; the right panel is the same random sigma on
+% every copy. zeta_Q is a probability measure on positive definite subdensities
+% sigma on Q (Tr sigma <= 1) and does not depend on k. The integral sign is the
+% joiner (text), not ink. Wire names are written on the left panel only (far
+% side of the joiner). On the right the box name sigma^{a/2} is written once, at
+% pos=n of the top box (the station of W_{Q,3}); the east bracket in the empty
+% column 4 names the product (sigma^{a/2})^{(x)3}.
+% Boundary signature: (phys:w)x3, (phys:e)x3 in both panels (an operator).
+% Label macros: none.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=3, bonds=none, size=l]
+        \tn[at=(1,1), name=wiInA, skin=none, ports={180:physical:$Q^{(1)}$, 0:physical}]{}
+        \tn[at=(3,1), name=wiInB, skin=none, ports={180:physical:$Q^{(2)}$, 0:physical}]{}
+        \tn[at=(5,1), name=wiInC, skin=none, ports={180:physical:$Q^{(3)}$, 0:physical}]{}
+        \tn[at=(1,2), name=wiW, skin=box, wires=5, label pos=n,
+            ports={180@1:physical, 180@3:physical, 180@5:physical,
+                    0@1:physical, 0@3:physical, 0@5:physical}]{W_{Q,3}}
+        \tn[at=(1,3), name=wiOutA, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,3), name=wiOutB, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,3), name=wiOutC, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire{wiW.180@1}{wiInA.0}
+        \tnwire{wiW.180@3}{wiInB.0}
+        \tnwire{wiW.180@5}{wiInC.0}
+        \tnwire{wiOutA.180}{wiW.0@1}
+        \tnwire{wiOutB.180}{wiW.0@3}
+        \tnwire{wiOutC.180}{wiW.0@5}
+    \end{tenkz}
+    $\displaystyle\;=\int d\zeta_Q(\sigma)\;$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=4, bonds=none, size=l]
+        \tn[at=(1,1), name=wiInA, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), name=wiInB, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,1), name=wiInC, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,2), name=wiSa, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{\sigma^{a/2}}
+        \tn[at=(3,2), name=wiSb, skin=box,
+            ports={180:physical, 0:physical}]{}
+        \tn[at=(5,2), name=wiSc, skin=box,
+            ports={180:physical, 0:physical}]{}
+        \tn[at=(1,3), name=wiOutA, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,3), name=wiOutB, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,3), name=wiOutC, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire{wiSa.180}{wiInA.0}
+        \tnwire{wiSb.180}{wiInB.0}
+        \tnwire{wiSc.180}{wiInC.0}
+        \tnwire{wiOutA.180}{wiSa.0}
+        \tnwire{wiOutB.180}{wiSb.0}
+        \tnwire{wiOutC.180}{wiSc.0}
+        \tn[at=(1,4), name=wiGrpTop, skin=none]{}
+        \tn[at=(5,4), name=wiGrpBot, skin=none]{}
+        \tnmark[form=bracket, label pos=e]{(1,4) .. (5,4)}{$(\sigma^{a/2})^{\otimes3}$}
+    \end{tenkz}
+\end{tenkzequation}
