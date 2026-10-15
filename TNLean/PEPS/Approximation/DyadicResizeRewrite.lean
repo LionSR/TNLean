@@ -202,18 +202,16 @@ theorem exists_resize_planeConditions {N R u : ℝ} (hN : 0 < N) (hR : 0 < R) (h
     exact hcover p (mem_closedBall.2 (by linarith [(hscale c₀).2]))
   · intro z hz p₁ h₁ p₂ h₂ p₃ h₃
     refine hlabels holeOld (fun z => (hcenter z).1) htwoOld z hz p₁ p₂ p₃ fun p hp => ?_
-    have hp' : p ∈ G.outsideOld z := by
-      rcases hp with rfl | rfl | rfl
-      exacts [h₁, h₂, h₃]
+    have hp' : p ∈ G.outsideOld z :=
+      Set.insert_subset h₁ (Set.insert_subset h₂ (Set.singleton_subset_iff.2 h₃)) hp
     refine ⟨hp'.1, fun c hc => ?_⟩
     have := hp'.2 c (by change c ∈ U ∪ {c₀}; rw [hUA]; exact hc)
     change (holeOld c).scale ≤ dist p (holeOld c).center at this
     rwa [(hcenter c).1] at this
   · intro z hz p₁ h₁ p₂ h₂ p₃ h₃
     refine hlabels holeNew (fun z => (hcenter z).2) htwoNew z hz p₁ p₂ p₃ fun p hp => ?_
-    have hp' : p ∈ G.outsideNew z := by
-      rcases hp with rfl | rfl | rfl
-      exacts [h₁, h₂, h₃]
+    have hp' : p ∈ G.outsideNew z :=
+      Set.insert_subset h₁ (Set.insert_subset h₂ (Set.singleton_subset_iff.2 h₃)) hp
     refine ⟨hp'.1, fun c hc => ?_⟩
     have := hp'.2 c (by change c ∈ U ∪ {c₀}; rw [hUA]; exact hc)
     change (holeNew c).scale ≤ dist p (holeNew c).center at this

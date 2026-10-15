@@ -196,17 +196,15 @@ theorem exists_local_planeConditions {o : ℝ × ℝ} {ρ₀ ρ₁ ρ₂ r u : �
     exact hcover p (mem_closedBall.2 (by linarith [dist_triangle p a o, (hA' a ha).2]))
   · intro z hz p₁ h₁ p₂ h₂ p₃ h₃
     refine hlabels g H V hH htwo z hz p₁ p₂ p₃ fun p hp => ?_
-    have hp' : p ∈ G.outsideOld z := by
-      rcases hp with rfl | rfl | rfl
-      exacts [h₁, h₂, h₃]
+    have hp' : p ∈ G.outsideOld z :=
+      Set.insert_subset h₁ (Set.insert_subset h₂ (Set.singleton_subset_iff.2 h₃)) hp
     refine ⟨hp'.1, fun c hc => ?_⟩
     have := hp'.2 c (by change c ∈ U ∪ A; rw [hUA]; exact hc)
     rwa [(hhole c).1, (hhole c).2] at this
   · intro z hz p₁ h₁ p₂ h₂ p₃ h₃
     refine hlabels g' H' V' hH' htwo' z hz p₁ p₂ p₃ fun p hp => ?_
-    have hp' : p ∈ G.outsideNew z := by
-      rcases hp with rfl | rfl | rfl
-      exacts [h₁, h₂, h₃]
+    have hp' : p ∈ G.outsideNew z :=
+      Set.insert_subset h₁ (Set.insert_subset h₂ (Set.singleton_subset_iff.2 h₃)) hp
     refine ⟨hp'.1, fun c hc => ?_⟩
     have := hp'.2 c (by change c ∈ U ∪ A'; rw [hUA']; exact hc)
     change (hole c).scale ≤ dist p (hole c).center at this

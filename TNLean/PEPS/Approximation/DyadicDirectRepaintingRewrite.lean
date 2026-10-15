@@ -360,17 +360,15 @@ theorem exists_directRepainting_planeConditions {n r u : ℝ} (hn : 0 < n) (hr :
     exact hcover p ⟨a, hcB a (hA' a ha), hp⟩
   · intro z hz p₁ h₁ p₂ h₂ p₃ h₃
     refine hlabels g V hVc htwo z hz p₁ p₂ p₃ fun p hp => ?_
-    have hp' : p ∈ G.outsideOld z := by
-      rcases hp with rfl | rfl | rfl
-      exacts [h₁, h₂, h₃]
+    have hp' : p ∈ G.outsideOld z :=
+      Set.insert_subset h₁ (Set.insert_subset h₂ (Set.singleton_subset_iff.2 h₃)) hp
     refine ⟨hp'.1, fun c hc => ?_⟩
     have := hp'.2 c (by change c ∈ U ∪ A; rw [hUA]; exact hc)
     rwa [(hhole c).1, (hhole c).2] at this
   · intro z hz p₁ h₁ p₂ h₂ p₃ h₃
     refine hlabels g' V' hVc' htwo' z hz p₁ p₂ p₃ fun p hp => ?_
-    have hp' : p ∈ G.outsideNew z := by
-      rcases hp with rfl | rfl | rfl
-      exacts [h₁, h₂, h₃]
+    have hp' : p ∈ G.outsideNew z :=
+      Set.insert_subset h₁ (Set.insert_subset h₂ (Set.singleton_subset_iff.2 h₃)) hp
     refine ⟨hp'.1, fun c hc => ?_⟩
     have := hp'.2 c (by change c ∈ U ∪ A'; rw [hUA']; exact hc)
     rwa [(hhole c).1, (hhole c).2] at this
