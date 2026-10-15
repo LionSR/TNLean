@@ -1,4 +1,4 @@
-\section{Corrected source inputs and actual local outputs}
+\section{Corrected source inputs and local outputs}
 \label{sec:peps_corrected_input_frames}
 
 We construct the local input isometries and output expansion used in
@@ -9,7 +9,7 @@ We construct the local input isometries and output expansion used in
 Source occurrences retain their chronological positions, even when their
 endpoint parties coincide with those of another occurrence.
 A register list $L$ has memory $\mathcal H_L$; concatenation is identified
-with tensor product by the canonical isometry
+with tensor product by the concatenation isometry
 $\alpha_{L,M}\colon\mathcal H_{L+M}\to\mathcal H_L\otimes\mathcal H_M$.
 For a division of the parties into two classes, write $\Pi_L$ for the
 isometry gathering the two classes in their inherited orders.
@@ -49,7 +49,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     let $L_J$ be the concatenation of their two-register lists, and let
     $P_J(\eta)$ prepare the vectors $\eta_i$ in that order.
     Then $L_{J+K}=L_J+L_K$. Selecting positions by a predicate retains their
-    inherited order and their literal endpoint parties and spaces. The same
+    inherited order and their endpoint parties and spaces. The same
     layout is obtained by assigning zero vectors to these fixed spaces.
 \end{definition}
 
@@ -67,7 +67,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \begin{proof}
     \leanok
     \uses{def:peps_ordered_source_positions,thm:peps_register_identifications}
-    Induct on the list of positions. The induction step prepends the actual
+    Induct on the list of positions. The induction step prepends the
     source vector and identifies the unchanged spectator lists.
 \end{proof}
 
@@ -233,7 +233,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     fixed sources, and applying $V$. Its input is just $C+T$.
     The corresponding input vector is
     $\alpha_{C,T}^{-1}(\eta_C\otimes\eta_T)$.
-    For a partial circuit branch $\xi$, use its actual residual and its
+    For a partial circuit branch $\xi$, use its residual and its
     original fixed-source vectors; denote the resulting composition by
     $\widetilde V_\xi$.
 \end{definition}
@@ -248,14 +248,14 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     $\alpha_{C,T}^{-1}(\eta_C\otimes\eta_T)$ equals the original residual
     applied after full source preparation on $p_0(1)$, with the prescribed
     fixed vectors outside the free positions. The same identity holds for
-    every actual partial branch and every free-vector family.
+    every partial branch and every free-vector family.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:peps_prepared_reordered_word,thm:peps_source_scalar_preparation}
     First move the input preparation past the two free-source
     preparations. Apply the defining equality for $U$, then compose free
-    preparation with fixed preparation. Their composition is exactly full
+    preparation with fixed preparation. Their composition is full
     source preparation.
 \end{proof}
 
@@ -266,7 +266,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     The uniform corrected-input identity asserts the existence of one allowed,
     source-free $U$ such that the evaluation equality in
     Theorem~\ref{thm:peps_prepared_reordered_vector} holds for every partial
-    branch and every free-source family, using the actual residual and fixed
+    branch and every free-source family, using the residual and fixed
     vectors of that branch.
 \end{definition}
 
@@ -286,17 +286,17 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     branch and vector family.
 \end{proof}
 
-\begin{theorem}[Actual local factors of the rearranged composition]
+\begin{theorem}[Local factors of the rearranged composition]
     \label{thm:peps_reordered_local_factors}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.isTensorPartitioned_reordered_partial}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.isTensorPartitioned_prepared_reordered_partial}
     \leanok
     Suppose the circuit is allowed. After the common rearrangement, its
     selectively prepared residual factors across the affected/exterior
-    division into two actual allowed compositions with no sources and
+    division into two allowed compositions with no sources and
     operator norms at most one. If $p_0$ is also allowed and contains no
     sources, the same assertion holds after absorbing $p_0$; the free input
-    is then exactly $C+T$. The factorization holds on every free input vector.
+    is then $C+T$. The factorization holds on every free input vector.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -318,20 +318,20 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     $E$. Tensor the two endpoint isometries in the order of a list of source
     positions. Restricting this construction to a selected list gives an
     isometry from the Euclidean space indexed by the selected endpoint
-    coordinates into its actual register memory. Repeated endpoint parties
+    coordinates into its register memory. Repeated endpoint parties
     remain distinct tensor factors.
 \end{definition}
 
-\begin{theorem}[Columns are the actual prepared endpoint vectors]
+\begin{theorem}[Columns are the prepared endpoint vectors]
     \label{thm:peps_source_input_columns}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.matrixFrame_basis}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.sourcePositionsFrame_basis_prepare}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.selectedSourceFrame_basis}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.selectedSourceFrame_basis_prepare}
     \leanok
-    The column at a supplied endpoint assignment is the ordered tensor of its
-    literal endpoint columns. With an arbitrary spectator vector appended,
-    this column gives exactly preparation of those elementary pair vectors.
+    The column at a given endpoint assignment is the ordered tensor of its
+    endpoint columns. With an arbitrary spectator vector appended,
+    this column gives preparation of those elementary pair vectors.
     For a selected list, coordinates outside the selected positions make no
     contribution.
 \end{theorem}
@@ -339,7 +339,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     \leanok
     \uses{def:peps_source_input_isometries,thm:peps_ordered_source_preparation}
     Evaluate each matrix isometry on a coordinate basis vector. Induct on
-    the list using the canonical tensor-product basis and source preparation.
+    the list using the product basis and source preparation.
     Then reindex the selected coordinate assignments by the filtered list.
 \end{proof}
 
@@ -349,16 +349,16 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     \leanok
     Fix a partial branch $\xi$ and the original endpoint matrices $E_e,F_e$,
     each with orthonormal columns. For $I=\prod_{e\in S}(J_e\times J_e)$,
-    tensor their columns at the actual local labels of $\xi$, in the original
+    tensor their columns at the local labels of $\xi$, in the original
     occurrence order. Relabelling these registers by the affected side gives
     an isometry $Q_\xi\colon\ell^2(I)\to\mathcal H_C$.
 \end{definition}
 
-\begin{theorem}[Corrected coordinates preserve the exact source order]
+\begin{theorem}[Corrected coordinates preserve the source order]
     \label{thm:peps_corrected_source_columns}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.correctedSourceFrame_basis}
     \leanok
-    For every corrected coordinate $i\in I$, $Q_\xi e_i$ is the actual joint
+    For every corrected coordinate $i\in I$, $Q_\xi e_i$ is the joint
     corrected-source vector formed from the original $E_e,F_e$ columns at $i$.
     The coordinate correspondence is the bijection between selected partial
     positions and original occurrences in $S$.
@@ -373,17 +373,17 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     on the selected source vectors.
 \end{proof}
 
-\begin{definition}[The exact crossing-source vector]
+\begin{definition}[The crossing-source vector]
     \label{def:peps_actual_crossing_vector}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceCrossingVector}
     \leanok
     For branch $\xi$, let $\beta_\xi\in\mathcal H_{T_A}\otimes\mathcal H_{T_E}$
-    be the actual ordered tensor of its crossing sources, relabelled and
+    be the ordered tensor of its crossing sources, relabelled and
     partitioned into affected and exterior registers. Its two ambient
     memories depend on the fixed register lists, not on the branch vectors.
 \end{definition}
 
-\begin{theorem}[Schmidt isometries for the exact crossing vector]
+\begin{theorem}[Schmidt isometries for the crossing vector]
     \label{thm:peps_crossing_schmidt}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.norm_sourceCrossingVector}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_sourceCrossing_schmidt}
@@ -426,12 +426,12 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     The probabilities and isometries are chosen before $i$.
 \end{definition}
 
-\begin{theorem}[Construction of the actual input isometries]
+\begin{theorem}[Construction of the input isometries]
     \label{thm:peps_actual_schmidt_input_frames}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_correctedInputFrames}
     \leanok
-    For each actual partial branch and original endpoint matrices with
-    orthonormal columns, the corrected isometry $Q_\xi$ and exact crossing
+    For each partial branch and original endpoint matrices with
+    orthonormal columns, the corrected isometry $Q_\xi$ and crossing
     vector $\beta_\xi$ admit the representation
     (\ref{eq:peps_frames_input_schmidt}).
 \end{theorem}
@@ -441,7 +441,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     Tensor $Q_\xi$ with the affected isometry in
     (\ref{eq:peps_frames_crossing_schmidt}), and use the exterior isometry
     unchanged. The corrected registers all lie on the affected side, so
-    canonical concatenation identifies their targets with the two actual
+    concatenation identifies their targets with the two
     restrictions of $C+T$. Distribute the tensor product over the Schmidt
     sum.
 \end{proof}
@@ -451,7 +451,7 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     \lean{TNLean.PEPS.PairEffect.Word.HasSchmidtOutput}
     \leanok
     A family $z_i$ in the affected/exterior output tensor product has a
-    local-word Schmidt representation if there are actual allowed source-free
+    local-word Schmidt representation if there are allowed source-free
     compositions $D_A,D_E$, each of operator norm at most one, probabilities
     $\tau$, and linear input isometries $A,B$ such that
     \begin{align}
@@ -461,11 +461,11 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     All these choices precede the coordinate $i$.
 \end{definition}
 
-\begin{theorem}[Applying the two actual local factors]
+\begin{theorem}[Applying the two local factors]
     \label{thm:peps_local_schmidt_output}
     \lean{TNLean.PEPS.PairEffect.Word.hasSchmidtOutput_of_isTensorPartitioned}
     \leanok
-    If a composition factors into actual allowed source-free local words, and
+    If a composition factors into allowed source-free local words, and
     its inputs admit~(\ref{eq:peps_frames_input_schmidt}), then its outputs
     admit~(\ref{eq:peps_frames_output_schmidt}). The original register
     identifications are retained on both sides.
@@ -473,20 +473,20 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
 \begin{proof}
     \leanok
     \uses{def:peps_schmidt_input_frames,def:peps_schmidt_local_output}
-    Transport the input isometries along the canonical equal-list
-    identifications, apply the exact tensor-product factorization to
+    Transport the input isometries along the equal-list
+    identifications, apply the tensor-product factorization to
     (\ref{eq:peps_frames_input_schmidt}), and use linearity. The norm bounds
     come from allowedness of the two local words.
 \end{proof}
 
-\begin{definition}[The actual corrected-column input identity]
+\begin{definition}[The corrected-column input identity]
     \label{def:peps_corrected_schmidt_inputs}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.HasCorrectedSchmidtInputs}
     \leanok
     The corrected-column input identity asserts that one allowed source-free
     rearrangement, chosen before every branch and corrected coordinate,
     identifies the original partially prepared output with the absorbed
-    composition evaluated on the actual corrected-column vector tensor the
+    composition evaluated on the corrected-column vector tensor the
     original crossing vector.
 \end{definition}
 
@@ -505,10 +505,10 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     columns at corrected positions and the original source vectors elsewhere.
     Fixed positions are not corrected; crossing positions are not corrected
     either. Dependence only on selected positions therefore preserves the
-    literal crossing vector and every fixed source.
+    crossing vector and every fixed source.
 \end{proof}
 
-\begin{theorem}[Schmidt expansion of the actual partial output]
+\begin{theorem}[Schmidt expansion of the partial output]
     \label{thm:peps_actual_corrected_schmidt_output}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_correctedSchmidtOutput}
     \leanok
@@ -516,8 +516,8 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     orthonormal columns, and let $p_0$ be an allowed scalar-input composition
     containing no sources. For each partial branch $\xi$, replace precisely
     the corrected source vectors by their original endpoint columns at
-    $i\in I$, and use $p_0(1)$ as the original input. After the canonical owner
-    relabelling and affected/exterior output partition, this actual output
+    $i\in I$, and use $p_0(1)$ as the original input. After the owner
+    relabelling and affected/exterior output partition, this output
     has the representation~(\ref{eq:peps_frames_output_schmidt}).
     Thus the two local words, probabilities and linear input isometries are
     constructed from the circuit and are chosen before $i$.
@@ -526,9 +526,9 @@ Relabelling parties changes neither the order nor the Hilbert spaces.
     \leanok
     \uses{thm:peps_corrected_schmidt_input_identity,thm:peps_reordered_local_factors,thm:peps_actual_schmidt_input_frames,thm:peps_local_schmidt_output}
     Choose the common rearrangement from the corrected-column input
-    identity. Factor the actual absorbed composition into its two local words.
+    identity. Factor the absorbed composition into its two local words.
     Construct its input isometries from the corrected-source isometry and
-    exact crossing vector, then apply Theorem~\ref{thm:peps_local_schmidt_output}.
+    crossing vector, then apply Theorem~\ref{thm:peps_local_schmidt_output}.
     Finally substitute the original partial-output identity. This keeps the
     original occurrence-coordinate bijection and both owner relabellings.
 \end{proof}

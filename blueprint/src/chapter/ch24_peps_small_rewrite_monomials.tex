@@ -9,13 +9,13 @@ allowed by \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} on the registers of the
 frames, one register per site and per tag
 (Definition~\ref{def:peps_frame_registers}). The number of monomials is bounded
 by the number of branches times $k^{2m}$; it is polynomial in $L$ once the
-number of cylinder terms of each patch and each affected hole is and $m$,
+number of cylinder terms of each patch and each affected hole is polynomial in $L$ and $m$,
 $r_{\rm old}$, $r_{\rm new}$ and the specified list of parties are bounded,
-which is
+as shown in
 Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}.
 
 Throughout, $\Lambda$ is a finite set of sites, each with a raw register
-$\C^q$, and operators on $\mathcal H_\Lambda$ are written in the canonical
+$\C^q$, and operators on $\mathcal H_\Lambda$ are written in the
 coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 
 \begin{lemma}[A rank-one map on two registers with a change of owners]
@@ -241,7 +241,7 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
     For a branch $(a,s,b)$, contracting the tag registers of the affected old
     holes with $\bra b$ and preparing those of the affected new holes in
     $\ket a$, each at its tag owner, is an allowed monomial using only the
-    affected tag owners and no pair resource. In canonical coordinates it acts
+    affected tag owners and no pair resource. In these coordinates it acts
     as $\ket a\bra b\otimes\id$ on the affected tags and the raw registers,
     extended by the identity on the untouched tags, and placing a matrix $Y$ on
     the raw registers in this tag block equals this operator after
@@ -323,7 +323,7 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
     $\delta=L^{-a}$ when $D\le CL^c$ and $m$, $r_{\rm old}$ and
     $r_{\rm new}$ are bounded
     (Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}). The expansion is
-    stated in the canonical coordinates of the two frames, the tags of the
+    stated in the ordered coordinates of the two frames, with the tags of the
     untouched holes first.
 \end{theorem}
 

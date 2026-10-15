@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.PartyGateCircuit
+import TNLean.PEPS.Approximation.WordSwapsMeet
 
 /-!
 # Monomials that leave the other registers in place
@@ -57,32 +58,10 @@ theorem usesOnly_localPart {S : Set P} {ℓ ℓ' : Layout P} (w : Word ℓ ℓ')
   | frame r w ih =>
       exact ⟨(isReordering_moveHead r _ _).usesOnly S, ih hw⟩
 
-/-- Every exchange of tensor factors in the word moves a register of a selected party. -/
-def SwapsMeet (f : P → Bool) : {ℓ ℓ' : Layout P} → Word ℓ ℓ' → Prop
-  | _, _, id _ => True
-  | _, _, comp w w' => w.SwapsMeet f ∧ w'.SwapsMeet f
-  | _, _, localMap .. => True
-  | _, _, source .. => True
-  | _, _, swap r r' _ => f r.owner = true ∨ f r'.owner = true
-  | _, _, frame _ w => w.SwapsMeet f
-
-theorem swapsMeet_frameList (f : P → Bool) {ℓ ℓ' : Layout P} {w : Word ℓ ℓ'}
-    (hw : w.SwapsMeet f) : (ℓ₀ : Layout P) → (frameList ℓ₀ w).SwapsMeet f
-  | [] => hw
-  | _ :: ℓ₀ => swapsMeet_frameList f hw ℓ₀
-
 theorem swapsMeet_castInput (f : P → Bool) {ℓ ℓ' ℓ₁ : Layout P} {w : Word ℓ ℓ'}
     (hw : w.SwapsMeet f) (h : ℓ = ℓ₁) : (w.castInput h).SwapsMeet f := by
   cases h
   exact hw
-
-/-- Moving a register past selected registers meets the selection at every exchange. -/
-theorem swapsMeet_moveHead (f : P → Bool) (r : Reg P) :
-    (ℓ₀ tail : Layout P) → (∀ t ∈ ℓ₀, f t.owner = true) → (moveHead r ℓ₀ tail).SwapsMeet f
-  | [], _, _ => trivial
-  | t :: ℓ₀, tail, h =>
-      ⟨swapsMeet_moveHead f r ℓ₀ tail fun t' ht' => h t' (List.mem_cons_of_mem _ ht'),
-        Or.inl (h t List.mem_cons_self)⟩
 
 /-- Preparing the pair sources first keeps the condition when the sources join selected
 parties: the exchanges added by `localPart` move a register past fresh selected registers. -/
@@ -201,11 +180,6 @@ theorem complementPart_eval_heq_id (f : P → Bool) {ℓ ℓ' : Layout P} (w : W
 end Word
 
 namespace PartyChain
-
-/-- Every exchange of tensor factors in the monomial moves a register of a selected party. -/
-def SwapsMeet (f : P → Bool) : {ℓX ℓY : Layout P} → PartyChain ℓX ℓY → Prop
-  | _, _, final w => w.SwapsMeet f
-  | _, _, effect _ _ _ _ w _ rest => w.SwapsMeet f ∧ rest.SwapsMeet f
 
 private theorem castLayouts_eval_heq {ℓ ℓ' a b : Layout P} (w : Word ℓ ℓ') (h : ℓ = a)
     (h' : ℓ' = b) : HEq (w.castLayouts h h').eval w.eval :=

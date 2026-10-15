@@ -34,7 +34,7 @@
     \texttt{04-compression.tex}, lines 233--251.
 \end{definition}
 
-\begin{definition}[Canonical partitions and grouping]
+\begin{definition}[Register partitions and grouping]
     \label{def:peps_party_partition}
     \lean{TNLean.PEPS.PairEffect.Layout.restrict}
     \lean{TNLean.PEPS.PairEffect.Layout.restrict_nil}
@@ -276,7 +276,7 @@
 \end{proof}
 
 
-\begin{theorem}[Factorization by the actual singleton restrictions]
+\begin{theorem}[Factorization by singleton restrictions]
     \label{thm:peps_actual_singleton_factorization}
     \lean{TNLean.PEPS.PairEffect.Word.groupByPartyIso_eval_eq_tensorRestrictions}
     \leanok
@@ -286,14 +286,14 @@
     composition, and let $p_1,\ldots,p_s$ be a list of distinct
     parties containing every party named by $W$. This includes
     parties assigned scalar operations on empty memories. Let
-    $U_\ell,U_m$ be the canonical isometries grouping registers
+    $U_\ell,U_m$ be the isometries grouping registers
     in this party order. Then
     \begin{align}
         U_m W
          & =\left(\bigotimes_{j=1}^s W|_{\{p_j\}}\right)U_\ell.
         \label{eq:peps_actual_singleton_factorization}
     \end{align}
-    Thus each factor is the operator of the actual singleton
+    Thus each factor is the operator of the singleton
     restriction. No norm bound, nonvanishing condition or
     finite-dimensionality assumption on the register spaces is
     required. Zero maps and the empty party list are included.
@@ -315,9 +315,8 @@
     into $W|_{\{p\}}$ and $W|_{P\setminus\{p\}}$. Apply the induction hypothesis to
     the latter composition. For each remaining party $q\ne p$,
     its singleton factor agrees with $W|_{\{q\}}$ by
-    (\ref{eq:peps_singleton_after_excluded_party}). The canonical
+    (\ref{eq:peps_singleton_after_excluded_party}). The
     grouping isometries identify this split with the stated
     party order. Tensoring and composing the resulting operator
     identities proves (\ref{eq:peps_actual_singleton_factorization}).
-    No tensor factor is cancelled.
 \end{proof}

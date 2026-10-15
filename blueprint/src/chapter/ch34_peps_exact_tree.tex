@@ -89,19 +89,19 @@ to a vertex of any degree.
     \lean{TNLean.PEPS.ExactTreeRepresentation.singletonTensor,TNLean.PEPS.ExactTreeRepresentation.stateCoeff_singletonTensor,TNLean.PEPS.ExactTreeRepresentation.exists_exact_tensor,TNLean.PEPS.ExactTreeRepresentation.stateCoeff_of_isEmpty}
     \leanok
     \uses{thm:peps_exact_tree}
-    A connected graph with one vertex represents every coefficient function by
-    its single physical tensor. Thus every finite connected graph admits the
-    exact representation with positive bonds bounded by $q^{|V|}$.
-    For an empty vertex set, however, the contraction is the scalar one for
-    every tensor family.
+    A graph with a single vertex represents every coefficient function $\psi$
+    by its single physical tensor, so every finite connected graph with
+    $|V|\ge 1$ admits an exact PEPS representation with bond dimensions in
+    $[1, q^{|V|}]$. When $V$ is empty, the contraction equals $1$ for every
+    tensor family.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_exact_tree}
-    For one vertex $v$, set $A_v(i)=\psi(\sigma_i)$, where
-    $\sigma_i(v)=i$. The graph has no edges, so the contraction is
-    $A_v(\sigma(v))=\psi(\sigma)$. For no vertices there is one empty virtual
-    assignment, and its empty product is one.
+    For a single vertex $v$, set $A_v(i)=\psi(\sigma_i)$, where
+    $\sigma_i(v)=i$; since there are no edges, the contraction is
+    $A_v(\sigma(v))=\psi(\sigma)$. When $V$ is empty, the unique virtual
+    assignment has an empty product equal to $1$.
 \end{proof}
 
 \begin{theorem}[Connectivity of the open square grid]
@@ -109,16 +109,17 @@ to a vertex of any degree.
     \lean{TNLean.PEPS.squareLatticeGraph_eq_boxProd,TNLean.PEPS.squareLatticeGraph_preconnected,TNLean.PEPS.squareLatticeGraph_connected,TNLean.PEPS.squareLatticeGraph_connected_iff,TNLean.PEPS.squareLatticeVertex_nontrivial}
     \leanok
     The open $w\times h$ nearest-neighbor grid is the Cartesian product of the
-    path graphs on $w$ and $h$ vertices. It is connected exactly when $w,h>0$.
-    If $L\ge2$, its $L\times L$ vertex set has at least two elements.
+    path graphs on $w$ and $h$ vertices. It is connected if and only if
+    $w,h>0$, and for $L\ge2$ the $L\times L$ vertex set has at least two
+    elements.
 \end{theorem}
 \begin{proof}
     \leanok
-    The product adjacency condition says that one coordinate agrees and the
-    other differs by one. Each coordinate path is preconnected, and
-    preconnectedness is preserved by the Cartesian product. The vertex set is
-    nonempty exactly when both side lengths are positive. For $L\ge2$, the
-    vertices $(0,0)$ and $(1,0)$ are distinct.
+    Two vertices in the Cartesian product are adjacent when one coordinate
+    agrees and the other differs by one. Each coordinate path is preconnected,
+    and the Cartesian product of preconnected graphs is preconnected; the
+    vertex set is nonempty if and only if $w,h>0$. For $L\ge2$, the vertices
+    $(0,0)$ and $(1,0)$ are distinct.
 \end{proof}
 
 \begin{theorem}[Exact square-grid tensors and normalization]
@@ -127,37 +128,37 @@ to a vertex of any degree.
     \leanok
     \uses{thm:peps_exact_degenerate,thm:peps_square_connected}
     For $q,L\ge1$, every vector $\psi$ on the open $L\times L$ square grid
-    has an exact PEPS with $1\le D_e\le q^{L^2}$. For $L\ge2$, the dimensions
-    can be chosen as $q^{L^2}$ on a spanning tree and one off that tree.
-    If $\|\psi\|=1$, its contraction $\Phi$ satisfies
+    admits an exact PEPS with bond dimensions $1\le D_e\le q^{L^2}$ (and for
+    $L\ge2$, with $D_e=q^{L^2}$ on a spanning tree and $D_e=1$ off that tree).
+    If $\|\psi\|=1$, the contracted state $\Phi$ satisfies
     $\Phi=\psi$, $\|\Phi\|=1$, and
     $\|\|\Phi\|^{-1}\Phi-1\cdot\psi\|=0$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_exact_tree,thm:peps_exact_degenerate,thm:peps_square_connected}
-    The grid has $L^2$ vertices. Apply the connected-graph result and identify
-    equal coefficient functions with equal vectors in the physical Hilbert
-    space. For a unit input the normalization scalar is one.
+    Since the $L\times L$ grid is connected and has $L^2$ vertices, the
+    existence of the exact PEPS follows from the connected-graph representation.
+    When $\|\psi\|=1$, the contracted state $\Phi=\psi$ also has unit norm.
 \end{proof}
 
-\begin{theorem}[One prefactor for all small square sizes]
+\begin{theorem}[Uniform bond-dimension prefactor for small grids]
     \label{thm:peps_exact_small_sizes}
     \lean{TNLean.PEPS.ExactTreeRepresentation.exists_exact_square_tensor_bounded,TNLean.PEPS.ExactTreeRepresentation.exists_exact_square_tensor_polynomial,TNLean.PEPS.ExactTreeRepresentation.exists_exact_square_tensor_outer_power}
     \leanok
     \uses{thm:peps_exact_square}
     Fix $q\ge1$ and $L_0\in\N$. For every $0<L\le L_0$, every vector on the
-    open $L\times L$ square grid has an exact PEPS with positive bonds at most
-    $C_0=q^{L_0^2}$. This bound is independent of the vector and any Hamiltonian. For any $C\in\R$ and $r\ge0$, the enlarged prefactor $\max\{C,C_0\}$ gives $D_e\le\max\{C,C_0\}L^r$ throughout the same range. If $\chi>0$, then
-    $C_\chi=\max\{C,C_0^{1/\chi}\}$ gives
-    $D_e\le(C_\chi L^r)^\chi$ on this range as well.
+    open $L\times L$ square grid has an exact PEPS with bond dimensions
+    $1\le D_e\le C_0$, where $C_0=q^{L_0^2}$. Consequently, for any $C\in\R$
+    and $r\ge0$, the bond dimensions satisfy $D_e\le\max\{C,C_0\}L^r$, and for
+    any $\chi>0$, setting $C_\chi=\max\{C,C_0^{1/\chi}\}$ gives
+    $D_e\le(C_\chi L^r)^\chi$ for all $0<L\le L_0$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_exact_square}
-    Since $L^2\le L_0^2$ and $q\ge1$, the bound
-    $D_e\le q^{L^2}\le q^{L_0^2}$ follows. In particular the same constant
-    covers the manuscript's finite range $2\le L<L_0$. Since $L^r\ge1$, multiplying the enlarged nonnegative prefactor by $L^r$ preserves the bound. For the outer
-    power, $C_\chi L^r\ge C_0^{1/\chi}$; raising both nonnegative sides to
-    $\chi>0$ gives $(C_\chi L^r)^\chi\ge C_0$.
+    For $0<L\le L_0$ and $q\ge1$, one has $D_e\le q^{L^2}\le q^{L_0^2}=C_0$
+    (covering in particular the finite range $2\le L<L_0$). Since $L^r\ge1$,
+    $C_0\le\max\{C,C_0\}L^r$, and for $\chi>0$,
+    $C_0=(C_0^{1/\chi})^\chi\le(C_\chi L^r)^\chi$.
 \end{proof}

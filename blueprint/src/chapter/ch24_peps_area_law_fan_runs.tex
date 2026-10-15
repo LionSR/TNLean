@@ -24,7 +24,7 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
     \begin{align}
         T_R=\bigcup_{e\in R}P_e.
     \end{align}
-    Distinct components remain distinct identifiers, including when
+    Distinct components define distinct runs even when
     their colors agree.
 \end{definition}
 
@@ -78,8 +78,8 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRun_all_equal}
     \leanok
     \uses{def:area_law_fan_runs}
-    If every triangle has the same color, all triangles have the same
-    run identifier, and every run region is the whole closed square.
+    If every triangle has the same color, all triangles belong to a single
+    run whose region is the whole closed square $Q$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:area_law_fan_runs,thm:area_law_cell_fan_cover}

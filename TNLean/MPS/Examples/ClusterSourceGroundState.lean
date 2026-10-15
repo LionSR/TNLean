@@ -162,13 +162,6 @@ private lemma flipConfig_bijective {N : ℕ} (j : Fin N) :
     Function.Bijective (flipConfig j) :=
   (flipConfig_involutive j).bijective
 
-private lemma paritySign_ne_zero {N : ℕ} (s : Fin N → Fin 2) :
-    paritySign s ≠ 0 := by
-  simp only [paritySign]
-  apply Finset.prod_ne_zero_iff.mpr
-  intro i _
-  exact pow_ne_zero _ (by norm_num)
-
 private lemma paritySign_sq {N : ℕ} (s : Fin N → Fin 2) :
     paritySign s * paritySign s = 1 := by
   simp only [paritySign, ← Finset.prod_mul_distrib]

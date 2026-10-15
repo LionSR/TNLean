@@ -78,7 +78,7 @@ structure ConjugateProjectiveRepresentation (α : G →* SymmetryParity)
   map_mul' : ∀ g h,
     (X g : Matrix (Fin D) (Fin D) ℂ) *
         parityConjMatrix (α g) (X h : Matrix (Fin D) (Fin D) ℂ) =
-      (ω g h : ℂ) • (X (g * h) : Matrix (Fin D) (Fin D) ℂ)
+      (ω (g, h) : ℂ) • (X (g * h) : Matrix (Fin D) (Fin D) ℂ)
 
 namespace ConjugateProjectiveRepresentation
 
@@ -93,7 +93,7 @@ Multiplicative form of the virtual law in arXiv:2011.12127,
 theorem map_mul (g h : G) :
     (ρ.X g : Matrix (Fin D) (Fin D) ℂ) *
         parityConjMatrix (α g) (ρ.X h : Matrix (Fin D) (Fin D) ℂ) =
-      (ω g h : ℂ) • (ρ.X (g * h) : Matrix (Fin D) (Fin D) ℂ) :=
+      (ω (g, h) : ℂ) • (ρ.X (g * h) : Matrix (Fin D) (Fin D) ℂ) :=
   ρ.map_mul' g h
 
 omit ρ in
@@ -117,7 +117,7 @@ unit modulus as a separate representation hypothesis.
 Supporting algebra for arXiv:2011.12127,
 `Papers/2011.12127/TN-Review-main.tex`, lines 1124–1129. -/
 theorem factor_unitary (hD : 0 < D) (g h : G) :
-    star (ω g h : ℂ) * (ω g h : ℂ) = 1 := by
+    star (ω (g, h) : ℂ) * (ω (g, h) : ℂ) = 1 := by
   have hconj : parityConjMatrix (α g) (ρ.X h : Matrix (Fin D) (Fin D) ℂ) ∈
       Matrix.unitaryGroup (Fin D) ℂ := by
     rcases symmetryParity_cases (α g) with hp | hp
@@ -125,7 +125,7 @@ theorem factor_unitary (hD : 0 < D) (g h : G) :
     · simpa [hp] using Matrix.map_star_mem_unitaryGroup_iff.mpr (ρ.unitary h)
   have hprod := (Matrix.unitaryGroup (Fin D) ℂ).mul_mem (ρ.unitary g) hconj
   rw [ρ.map_mul] at hprod
-  exact scalar_unitary_of_smul hD (ω g h : ℂ) (ρ.X (g * h)) (ρ.unitary _) hprod
+  exact scalar_unitary_of_smul hD (ω (g, h) : ℂ) (ρ.X (g * h)) (ρ.unitary _) hprod
 
 /-- A scalar relating two unitary choices of a virtual gauge lies in U(1).
 Supporting algebra for arXiv:2011.12127,
@@ -145,8 +145,8 @@ normalization assumption.
 Multiplicative form of the associativity equation in arXiv:2011.12127,
 `Papers/2011.12127/TN-Review-main.tex`, lines 1124–1129. -/
 theorem cocycle_of_assoc (hD : 0 < D) (g h k : G) :
-    (ω (g * h) k : ℂ) * (ω g h : ℂ) =
-      parityConj (α g) (ω h k : ℂ) * (ω g (h * k) : ℂ) := by
+    (ω (g * h, k) : ℂ) * (ω (g, h) : ℂ) =
+      parityConj (α g) (ω (h, k) : ℂ) * (ω (g, h * k) : ℂ) := by
   have hassoc :
       ((ρ.X g : Matrix (Fin D) (Fin D) ℂ) *
           parityConjMatrix (α g) (ρ.X h : Matrix (Fin D) (Fin D) ℂ)) *
@@ -169,7 +169,7 @@ Multiplicative form of the two-cocycle equation in arXiv:2011.12127,
 `Papers/2011.12127/TN-Review-main.tex`, lines 1124–1129. -/
 theorem isMulCocycle₂ (hD : 0 < D) :
     letI := parityUnitsAction α
-    groupCohomology.IsMulCocycle₂ (Function.uncurry ω) := by
+    groupCohomology.IsMulCocycle₂ ω := by
   intro g h k
   apply Units.ext
   exact ρ.cocycle_of_assoc hD g h k
@@ -183,8 +183,8 @@ theorem factorSystem_rephase {ω' : ScalarCocycle G}
     (ξ : G → Units ℂ)
     (hξ : ∀ g, (ρ'.X g : Matrix (Fin D) (Fin D) ℂ) =
       (ξ g : ℂ) • (ρ.X g : Matrix (Fin D) (Fin D) ℂ)) (g h : G) :
-    ω' g h = ξ g * Units.map (parityConj (α g)).toMonoidHom (ξ h) /
-      ξ (g * h) * ω g h := by
+    ω' (g, h) = ξ g * Units.map (parityConj (α g)).toMonoidHom (ξ h) /
+      ξ (g * h) * ω (g, h) := by
   have heq := ρ'.map_mul g h
   simp only [hξ, parityConjMatrix_smul, Matrix.smul_mul, Matrix.mul_smul,
     ρ.map_mul, smul_smul] at heq
@@ -192,13 +192,13 @@ theorem factorSystem_rephase {ω' : ScalarCocycle G}
     (hM := (ρ.X (g * h)).isUnit) heq
   apply Units.ext
   simp only [Units.val_mul, Units.val_div_eq_div_val, Units.coe_map]
-  change (ω' g h : ℂ) = (ξ g : ℂ) * parityConj (α g) (ξ h : ℂ) /
-    (ξ (g * h) : ℂ) * (ω g h : ℂ)
+  change (ω' (g, h) : ℂ) = (ξ g : ℂ) * parityConj (α g) (ξ h : ℂ) /
+    (ξ (g * h) : ℂ) * (ω (g, h) : ℂ)
   rw [div_mul_eq_mul_div]
   apply (eq_div_iff (ξ (g * h)).ne_zero).2
   calc
-    (ω' g h : ℂ) * (ξ (g * h) : ℂ) =
-        (ξ g : ℂ) * (parityConj (α g) (ξ h : ℂ) * (ω g h : ℂ)) := by
+    (ω' (g, h) : ℂ) * (ξ (g * h) : ℂ) =
+        (ξ g : ℂ) * (parityConj (α g) (ξ h : ℂ) * (ω (g, h) : ℂ)) := by
           simpa only [mul_left_comm] using hscalar.symm
     _ = _ := by ring
 
@@ -268,9 +268,9 @@ noncomputable def parityUnitaryH1Class (β : G →* SymmetryParity) (φ : G → 
 Source: arXiv:2011.12127,
 `Papers/2011.12127/TN-Review-main.tex`, line 1129. -/
 noncomputable def parityUnitaryH2Class (α : G →* SymmetryParity)
-    (ω : G → G → unitary ℂ)
+    (ω : G × G → unitary ℂ)
     (hω : letI := parityUnitaryAction α;
-      groupCohomology.IsMulCocycle₂ (Function.uncurry ω)) :
+      groupCohomology.IsMulCocycle₂ ω) :
     groupCohomology.H2 (parityUnitaryCoefficientRepresentation α) :=
   letI := parityUnitaryAction α
   groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω)
@@ -286,18 +286,18 @@ Supporting algebra for arXiv:2011.12127,
 /-- The inclusion of U(1) into complex units preserves twisted cocycles.
 Supporting algebra for arXiv:2011.12127,
 `Papers/2011.12127/TN-Review-main.tex`, lines 1124–1129. -/
-theorem isMulCocycle₂_toUnits (α : G →* SymmetryParity) (ω : G → G → unitary ℂ)
+theorem isMulCocycle₂_toUnits (α : G →* SymmetryParity) (ω : G × G → unitary ℂ)
     (hω : letI := parityUnitaryAction α;
-      groupCohomology.IsMulCocycle₂ (Function.uncurry ω)) :
+      groupCohomology.IsMulCocycle₂ ω) :
     letI := parityUnitsAction α
-    groupCohomology.IsMulCocycle₂ (fun p : G × G => Unitary.toUnits (ω p.1 p.2)) := by
+    groupCohomology.IsMulCocycle₂ (fun p : G × G => Unitary.toUnits (ω p)) := by
   intro g h k
-  change Unitary.toUnits (ω (g * h) k) * Unitary.toUnits (ω g h) =
-    Units.map (parityConj (α g)).toMonoidHom (Unitary.toUnits (ω h k)) *
-      Unitary.toUnits (ω g (h * k))
+  change Unitary.toUnits (ω (g * h, k)) * Unitary.toUnits (ω (g, h)) =
+    Units.map (parityConj (α g)).toMonoidHom (Unitary.toUnits (ω (h, k))) *
+      Unitary.toUnits (ω (g, h * k))
   have heq := congrArg Unitary.toUnits (hω g h k)
-  change Unitary.toUnits (ω (g * h) k * ω g h) =
-    Unitary.toUnits (parityUnitary (α g) (ω h k) * ω g (h * k)) at heq
+  change Unitary.toUnits (ω (g * h, k) * ω (g, h)) =
+    Unitary.toUnits (parityUnitary (α g) (ω (h, k)) * ω (g, h * k)) at heq
   simpa only [map_mul, parityUnitary_toUnits] using heq
 
 /-- A unit-modulus complex unit, regarded as an element of U(1).
@@ -316,13 +316,13 @@ Supporting algebra for arXiv:2011.12127,
 Source: arXiv:2011.12127,
 `Papers/2011.12127/TN-Review-main.tex`, line 1129. -/
 theorem parityUnitaryH2Class_eq_of_isMulCoboundary₂ (α : G →* SymmetryParity)
-    (ω ω' : G → G → unitary ℂ)
+    (ω ω' : G × G → unitary ℂ)
     (hω : letI := parityUnitaryAction α;
-      groupCohomology.IsMulCocycle₂ (Function.uncurry ω))
+      groupCohomology.IsMulCocycle₂ ω)
     (hω' : letI := parityUnitaryAction α;
-      groupCohomology.IsMulCocycle₂ (Function.uncurry ω'))
+      groupCohomology.IsMulCocycle₂ ω')
     (h : letI := parityUnitaryAction α;
-      groupCohomology.IsMulCoboundary₂ (Function.uncurry (ω / ω'))) :
+      groupCohomology.IsMulCoboundary₂ (ω / ω')) :
     parityUnitaryH2Class α ω hω = parityUnitaryH2Class α ω' hω' := by
   let := parityUnitaryAction α
   apply (groupCohomology.H2π_eq_iff _ _).2
@@ -349,19 +349,19 @@ variable {α : G →* SymmetryParity} {D : ℕ}
 U(1). The scalar's unit modulus is derived from the matrix relation.
 Multiplicative form of the rephasing relation in arXiv:2011.12127,
 `Papers/2011.12127/TN-Review-main.tex`, line 1129. -/
-theorem isMulCoboundary₂_unitary_of_rephase {ω ω' : G → G → _root_.unitary ℂ}
-    (ρ : ConjugateProjectiveRepresentation α (fun g h => Unitary.toUnits (ω g h))
+theorem isMulCoboundary₂_unitary_of_rephase {ω ω' : G × G → _root_.unitary ℂ}
+    (ρ : ConjugateProjectiveRepresentation α (fun p => Unitary.toUnits (ω p))
       (D := D))
-    (ρ' : ConjugateProjectiveRepresentation α (fun g h => Unitary.toUnits (ω' g h))
+    (ρ' : ConjugateProjectiveRepresentation α (fun p => Unitary.toUnits (ω' p))
       (D := D)) (hD : 0 < D) (ξ : G → Units ℂ)
     (hξ : ∀ g, (ρ'.X g : Matrix (Fin D) (Fin D) ℂ) =
       (ξ g : ℂ) • (ρ.X g : Matrix (Fin D) (Fin D) ℂ)) :
     letI := parityUnitaryAction α
-    groupCohomology.IsMulCoboundary₂ (Function.uncurry (ω' / ω)) := by
+    groupCohomology.IsMulCoboundary₂ (ω' / ω) := by
   let ξu : G → _root_.unitary ℂ := fun g => unitaryScalar (ξ g) (ρ.rephase_unitary ρ' hD ξ hξ g)
   have hξu (g : G) : Unitary.toUnits (ξu g) = ξ g := Units.ext rfl
   refine ⟨ξu, fun g h => ?_⟩
-  change parityUnitary (α g) (ξu h) / ξu (g * h) * ξu g = ω' g h / ω g h
+  change parityUnitary (α g) (ξu h) / ξu (g * h) * ξu g = ω' (g, h) / ω (g, h)
   apply Unitary.toUnits_injective
   simp only [_root_.map_mul, map_div, parityUnitary_toUnits, hξu]
   rw [ρ.factorSystem_rephase ρ' hD ξ hξ]
@@ -372,17 +372,17 @@ second cohomology class. No unit-modulus assumption on the supplied scalars
 is needed, since both virtual representations are unitary.
 Source: arXiv:2011.12127,
 `Papers/2011.12127/TN-Review-main.tex`, line 1129. -/
-theorem parityUnitaryH2Class_eq_of_rephase {ω ω' : G → G → _root_.unitary ℂ}
-    (ρ : ConjugateProjectiveRepresentation α (fun g h => Unitary.toUnits (ω g h))
+theorem parityUnitaryH2Class_eq_of_rephase {ω ω' : G × G → _root_.unitary ℂ}
+    (ρ : ConjugateProjectiveRepresentation α (fun p => Unitary.toUnits (ω p))
       (D := D))
-    (ρ' : ConjugateProjectiveRepresentation α (fun g h => Unitary.toUnits (ω' g h))
+    (ρ' : ConjugateProjectiveRepresentation α (fun p => Unitary.toUnits (ω' p))
       (D := D)) (hD : 0 < D) (ξ : G → Units ℂ)
     (hξ : ∀ g, (ρ'.X g : Matrix (Fin D) (Fin D) ℂ) =
       (ξ g : ℂ) • (ρ.X g : Matrix (Fin D) (Fin D) ℂ))
     (hω : letI := parityUnitaryAction α;
-      groupCohomology.IsMulCocycle₂ (Function.uncurry ω))
+      groupCohomology.IsMulCocycle₂ ω)
     (hω' : letI := parityUnitaryAction α;
-      groupCohomology.IsMulCocycle₂ (Function.uncurry ω')) :
+      groupCohomology.IsMulCocycle₂ ω') :
     parityUnitaryH2Class α ω' hω' = parityUnitaryH2Class α ω hω :=
   parityUnitaryH2Class_eq_of_isMulCoboundary₂ α ω' ω hω' hω
     (ρ.isMulCoboundary₂_unitary_of_rephase ρ' hD ξ hξ)
