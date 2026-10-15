@@ -153,3 +153,47 @@ outer sample.
     point, so the outer samples at $n=1$ are empty and every hole projector is
     the identity.
 \end{proof}
+
+\begin{theorem}[Small-patch rewrites between frames of guides]
+    \label{thm:peps_guide_frame_rewrite}
+    \lean{TNLean.PEPS.Approximation.GuideFrameRewrite,
+        TNLean.PEPS.Approximation.GuideFrameRewrite.PlaneConditions,
+        TNLean.PEPS.Approximation.GuideFrameRewrite.PlaneConditions.conditions,
+        TNLean.PEPS.EncodedFrame.Frame.exists_permWord,
+        TNLean.PEPS.Approximation.GuideFrameRewrite.PlaneConditions.exists_originalCircuit}
+    \leanok
+    \uses{def:peps_guide_frame, lem:peps_guide_frame_tags,
+        thm:peps_frame_small_rewrite_gate}
+    Consider an old and a new guide with one assignment of parties to labels, a
+    finite set of untouched hole centers, finite sets of old and new affected
+    hole centers, hole patches of the two frames, finitely many additional
+    patches and a specified list of parties. The old frame is the frame of the
+    old guide with holes at the untouched and the old affected centers, and
+    similarly for the new frame. Suppose the following conditions in the plane.
+    The untouched holes have the same patches and the same incident labels in
+    the two guides. Every outer patch square and every affected outer hole
+    square is disjoint from every untouched outer hole square. The inner patch
+    squares cover every point at which the owner changes and every affected
+    outer hole square. In every outer patch square, the points outside the open
+    inner holes of a frame carry at most two labels of its guide. The owners on
+    the outer patch squares and on the affected outer hole squares, and the
+    affected tag holders, are specified parties. Then the four conditions of
+    \cite[Lemma~6.3]{OpenAI2026PolynomialPEPS} hold on the sampled sites. Under
+    the bounds of Theorem~\ref{thm:peps_frame_small_rewrite_gate}, the rewrite
+    is a circuit from the registers of the old frame to those of the new frame
+    with at most one gate that is not private to one party, every participant a
+    specified party, and reference-vector error at most $(2b+1)L^{-20}$.
+\end{theorem}
+
+\begin{proof}\leanok
+    A site lies in a sampled square exactly when its position lies in the
+    closed square, so each condition in the plane gives the corresponding
+    condition on the sites. A site outside the inner hole samples lies outside
+    the open inner hole squares, and a function that takes at most two values
+    on every three points takes at most two values. The frame form of
+    Lemma~6.3 lists the untouched holes first, while a frame of a guide lists
+    its holes in a fixed order of the centers; the two listings are identified
+    by exchanges of tag registers, which preserve norms and carry the
+    reference vector of one listing to that of the other. Compose these
+    exchanges with the circuit of Theorem~\ref{thm:peps_frame_small_rewrite_gate}.
+\end{proof}

@@ -163,6 +163,8 @@ import TNLean.PEPS.Approximation.GaussianSourceIntegrability
 import TNLean.PEPS.Approximation.GroundStateApproximation
 import TNLean.PEPS.Approximation.GroupTruncation
 import TNLean.PEPS.Approximation.GroupedBlockMap
+import TNLean.PEPS.Approximation.GuideFrameRewrite
+import TNLean.PEPS.Approximation.GuideFrameRewriteCircuit
 import TNLean.PEPS.Approximation.HoleEncoder
 import TNLean.PEPS.Approximation.HomogeneousOwnership
 import TNLean.PEPS.Approximation.IncidentGateLabels
