@@ -4376,6 +4376,33 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Logarithmic norm derivatives from squared norms — candidate (2026-10-15)
+
+- **Pattern:** Differentiate the squared norm, compose with the real logarithm,
+  and divide by two. Positivity of the original norm justifies the logarithm
+  and the subsequent cancellation.
+- **Seen:** `hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute`
+  and `exists_hasDerivAt_log_regularizedPatchObjective_exp_neg_uniform`, both in
+  `PEPS/AreaLaw/RegularizedPatchRadiusDerivative.lean`.
+- **Abstraction:** Both occurrences reuse `HasDerivAt.norm_sq` and `HasDerivAt.log`.
+  A third occurrence in another file would justify a helper for the logarithmic
+  norm derivative of a nonzero complex vector-valued function.
+- **Caveat:** The real inner-product instance must agree with the complex space;
+  positivity concerns the same vector whose derivative is being computed.
+
+### Applying an ordered matrix derivative to a vector — candidate (2026-10-15)
+
+- **Pattern:** Compose `Matrix.toEuclideanLin.toLinearMap` with
+  `LinearMap.applyₗ Ω` to apply a varying matrix to a fixed Euclidean vector.
+  Restrict scalars to ℝ and use finite-dimensional continuity for real derivatives.
+- **Seen:** `regularizedPatchInsertion` in `PEPS/AreaLaw/RegularizedPatchCoordinate.lean`
+  and `hasDerivAt_regularizedPatchOutput_exp_neg` in
+  `PEPS/AreaLaw/RegularizedPatchRadiusDerivative.lean`.
+- **Abstraction:** The proofs use the existing linear maps. A third occurrence
+  would justify a public continuous linear evaluation map for matrices.
+- **Caveat:** The ordered product remains noncommutative; differentiate the
+  continuous multilinear product and retain the original insertion indices.
+
 ### Continuity of an ordered regional filter product — candidate
 
 - **Pattern:** Prove continuity of each identity-extended local matrix power,
