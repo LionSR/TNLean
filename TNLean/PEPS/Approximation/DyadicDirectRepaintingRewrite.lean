@@ -286,15 +286,9 @@ theorem exists_directRepainting_planeConditions {n r u : ℝ} (hn : 0 < n) (hr :
   have hnearB : ∀ z ∈ G.centers, ∀ p, dist p (patch z).center ≤ 2 * (patch z).scale →
       ∃ b ∈ B, dist p b < 3 * u + 2 * r := by
     intro z hz p hp
-    obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hz
-    obtain ⟨y, ⟨b, hb, hyb⟩, hky⟩ := hnear k hk
-    rw [(hpatch _).1, (hpatch _).2] at hp
-    exact ⟨b, hb, by linarith [dist_triangle4 p (blockCorner u k) y b]⟩
-  have hcover : ∀ p ∈ K, ∃ z ∈ G.centers, dist p (patch z).center ≤ (patch z).scale := by
-    intro p hp
-    obtain ⟨k, hk, hpk⟩ := hcov p hp
-    exact ⟨blockCorner u k, Finset.mem_image_of_mem _ hk, by
-      rw [(hpatch _).1, (hpatch _).2]; exact hpk.le⟩
+    obtain ⟨y, ⟨b, hb, hyb⟩, hpy⟩ := exists_dist_lt_of_mem_image hpatch hnear z hz p hp
+    exact ⟨b, hb, by linarith [dist_triangle p y b]⟩
+  have hcover := exists_mem_image_dist_le_scale hpatch hcov
   have hparty : ∀ p, ∀ b ∈ B, dist p b < n → own (g p) ∈ G.parties ∧ own (g' p) ∈ G.parties := by
     intro p b hb hpb
     obtain ⟨Q, hQ, e⟩ := reading_mem_blockWindow hn hg hb hpb

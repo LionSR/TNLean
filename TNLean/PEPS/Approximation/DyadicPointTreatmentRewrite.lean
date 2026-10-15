@@ -12,7 +12,8 @@ import TNLean.PEPS.Approximation.LocalGuideRewrite
 
 A point treatment homogenizes an unmodified guide of the repainting of a block to one label on the
 open square of radius `t` about a further grid corner `Q₀` (`06-geometry.tex`, lines 328–339),
-and rewrites the frame by one small-patch rewrite over the treated square (lines 481–505). Every
+and rewrites the frame by one small-patch rewrite over the treated square (lines 481–505); the
+removal of the treatment is the reverse rewrite. Every
 true vertex of the reading of a treated guide is within `t` of `Q₀` or at distance at least
 `n - t` from it (`dist_le_or_le_dist_of_isTrueVertex_homogenize`), so the hole centers split as
 in the local rewrite of `TNLean.PEPS.Approximation.LocalGuideRewrite`, with `ρ₀ = ρ₁ = t` and
@@ -70,9 +71,10 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ �
 
 /-- **The point treatment satisfies the plane conditions of Lemma 6.3.** Let `g` be an unmodified
 guide of the repainting of the block `S` of side `n`, let `g₁` and `g₂` be the readings along `v`
-of `g` homogenized to `P` on the open squares of radius `t` about the grid corners of `M` and of
-`insert Q₀ M`, and let `V`, `V'` be finite sets of true vertices of `g₁`, `g₂` with the same
-points at distance at least `n - t` from `Q₀`. Let the holes have radius `r`, the patches radius
+of `g` homogenized to `L₀` on the open squares of radius `t` about the grid corners of `M₁` and
+of `M₂`, two sets that differ at most at `Q₀` (a treatment adds `Q₀`, its removal removes it),
+and let `V`, `V'` be finite sets of true vertices of `g₁`, `g₂` with the same points at distance
+at least `n - t` from `Q₀`. Let the holes have radius `r`, the patches radius
 `u`, with `2 t + 6 r + 3 u < n`. Suppose that `g₁` and `g₂` satisfy the two-owner condition for
 footprints of radius `2 u` in a set `W` containing the ball of radius `t + 2 r + 3 u` about `Q₀`,
 outside the open inner holes at sets of centers `H ⊆ V` and `H' ⊆ V'`, and that the list `P`
@@ -86,10 +88,11 @@ Polynomial-PEPS manuscript, `06-geometry.tex`, lines 328–339 and 481–505; Le
 theorem exists_pointTreatment_planeConditions {n t r u : ℝ} (hn : 0 < n) (ht : 0 < t)
     (hr : 0 < r) (hu : 0 < u) (hsep : 2 * t + 6 * r + 3 * u < n) {lab : ℤ × ℤ → κ}
     {S : ℤ × ℤ} {B : κ} {g : ℝ × ℝ → κ} (hg : (blockBaseline hn lab S B).IsUnmodifiedGuide g)
-    (M : Finset (ℤ × ℤ)) (Q₀ : ℤ × ℤ) (L₀ : κ) {v : ℝ × ℝ} {g₁ g₂ : ℝ × ℝ → κ}
-    (hg₁ : IsDisplacedReading g₁ (homogenize (⋃ Q ∈ M, ball (blockCorner n Q) t) L₀
+    {M₁ M₂ : Finset (ℤ × ℤ)} (Q₀ : ℤ × ℤ) (hM : ∀ Q, Q ≠ Q₀ → (Q ∈ M₁ ↔ Q ∈ M₂)) (L₀ : κ)
+    {v : ℝ × ℝ} {g₁ g₂ : ℝ × ℝ → κ}
+    (hg₁ : IsDisplacedReading g₁ (homogenize (⋃ Q ∈ M₁, ball (blockCorner n Q) t) L₀
       (shiftGuide (blockCorner n S) g)) v)
-    (hg₂ : IsDisplacedReading g₂ (homogenize (⋃ Q ∈ insert Q₀ M, ball (blockCorner n Q) t) L₀
+    (hg₂ : IsDisplacedReading g₂ (homogenize (⋃ Q ∈ M₂, ball (blockCorner n Q) t) L₀
       (shiftGuide (blockCorner n S) g)) v) (own : κ → Party) (ph : κ) (rank : κ → ℕ)
     {V V' : Finset (ℝ × ℝ)} (hV : ∀ c ∈ V, IsTrueVertex g₁ c) (hV' : ∀ c ∈ V', IsTrueVertex g₂ c)
     (hVV' : ∀ c, n - t ≤ dist c (blockCorner n Q₀) → (c ∈ V ↔ c ∈ V'))
@@ -125,25 +128,25 @@ theorem exists_pointTreatment_planeConditions {n t r u : ℝ} (hn : 0 < n) (ht :
     intro p hp
     by_contra hne
     have hcl := hg₁.ne_subset_closure hg₂ hne
-    have hsub : {x | homogenize (⋃ Q ∈ M, ball (blockCorner n Q) t) L₀
-        (shiftGuide (blockCorner n S) g) x ≠ homogenize (⋃ Q ∈ insert Q₀ M,
+    have hsub : {x | homogenize (⋃ Q ∈ M₁, ball (blockCorner n Q) t) L₀
+        (shiftGuide (blockCorner n S) g) x ≠ homogenize (⋃ Q ∈ M₂,
           ball (blockCorner n Q) t) L₀ (shiftGuide (blockCorner n S) g) x} ⊆
         closedBall (blockCorner n Q₀) t := by
       intro x hx
       by_contra hxc
       have hxb : x ∉ ball (blockCorner n Q₀) t := fun h => hxc (ball_subset_closedBall h)
       refine hx ?_
-      have hiff : x ∈ (⋃ Q ∈ M, ball (blockCorner n Q) t) ↔
-          x ∈ (⋃ Q ∈ insert Q₀ M, ball (blockCorner n Q) t) := by
-        simp only [mem_iUnion, Finset.mem_insert, exists_prop]
+      have hiff : x ∈ (⋃ Q ∈ M₁, ball (blockCorner n Q) t) ↔
+          x ∈ (⋃ Q ∈ M₂, ball (blockCorner n Q) t) := by
+        simp only [mem_iUnion, exists_prop]
         constructor
         · rintro ⟨Q, hQ, h⟩
-          exact ⟨Q, Or.inr hQ, h⟩
-        · rintro ⟨Q, hQ | hQ, h⟩
-          · subst hQ
-            exact absurd h hxb
-          · exact ⟨Q, hQ, h⟩
-      by_cases hx₁ : x ∈ (⋃ Q ∈ M, ball (blockCorner n Q) t)
+          have hQ₀ : Q ≠ Q₀ := fun e => hxb (e ▸ h)
+          exact ⟨Q, (hM Q hQ₀).1 hQ, h⟩
+        · rintro ⟨Q, hQ, h⟩
+          have hQ₀ : Q ≠ Q₀ := fun e => hxb (e ▸ h)
+          exact ⟨Q, (hM Q hQ₀).2 hQ, h⟩
+      by_cases hx₁ : x ∈ (⋃ Q ∈ M₁, ball (blockCorner n Q) t)
       · rw [homogenize_of_mem hx₁, homogenize_of_mem (hiff.1 hx₁)]
       · rw [homogenize_of_notMem hx₁, homogenize_of_notMem (fun h => hx₁ (hiff.2 h))]
     have := closure_minimal hsub isClosed_closedBall hcl
@@ -151,7 +154,7 @@ theorem exists_pointTreatment_planeConditions {n t r u : ℝ} (hn : 0 < n) (ht :
   obtain ⟨G, hG, h₁, h₂, h₃, h₄, h₅, h₆, h₇, h₈, h₉, h₁₀, h₁₁, h₁₂, h₁₃, h₁₄⟩ :=
     exists_local_planeConditions (pos := pos) (o := blockCorner n Q₀) (ρ₀ := t) (ρ₁ := t)
       (ρ₂ := n - t) hr hu ht.le (by rw [hmax]; linarith) hchange own ph rank
-      (fun c hc => hsplit M hg₁ c (hV c hc)) (fun c hc => hsplit _ hg₂ c (hV' c hc)) hVV'
+      (fun c hc => hsplit M₁ hg₁ c (hV c hc)) (fun c hc => hsplit _ hg₂ c (hV' c hc)) hVV'
       hole patch hhole hpatch hpV hpV' (by rw [hmax]; exact hW) hH hH' htwo htwo' P
       (fun p hp => hP p (by rw [hmax] at hp; exact hp)) hPt hPt'
   rw [hmax] at h₁₄

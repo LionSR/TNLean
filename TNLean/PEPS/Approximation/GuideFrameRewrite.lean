@@ -233,6 +233,32 @@ theorem mem_inner_iff {P : SquarePatch pos q} {x : ι} :
     x ∈ P.inner ↔ dist (pos x) P.center ≤ P.scale := by
   simp [SquarePatch.inner, squareSample]
 
+/-- **Patches on a net cover a set.** If every point of `K` is within `u` of a point of the net
+`u ℤ²` indexed by `s`, and the patch at each point has that point as center and radius `u`, then
+the inner squares of the patches at the points of the net cover `K`. -/
+theorem exists_mem_image_dist_le_scale {u : ℝ} {K : Set (ℝ × ℝ)} {s : Finset (ℤ × ℤ)}
+    {patch : ℝ × ℝ → SquarePatch pos q} (hpatch : ∀ z, (patch z).center = z ∧ (patch z).scale = u)
+    (hcov : ∀ y ∈ K, ∃ k ∈ s, dist y (blockCorner u k) < u) :
+    ∀ p ∈ K, ∃ z ∈ s.image (blockCorner u), dist p (patch z).center ≤ (patch z).scale := by
+  intro p hp
+  obtain ⟨k, hk, hpk⟩ := hcov p hp
+  exact ⟨blockCorner u k, Finset.mem_image_of_mem _ hk, by
+    rw [(hpatch _).1, (hpatch _).2]; exact hpk.le⟩
+
+/-- **Outer squares of patches near a set.** If every point of the net indexed by `s` is within
+`u` of `K`, the outer square of the patch, of radius `2 u`, at each such point lies within `3 u`
+of `K`. -/
+theorem exists_dist_lt_of_mem_image {u : ℝ} {K : Set (ℝ × ℝ)} {s : Finset (ℤ × ℤ)}
+    {patch : ℝ × ℝ → SquarePatch pos q} (hpatch : ∀ z, (patch z).center = z ∧ (patch z).scale = u)
+    (hnear : ∀ k ∈ s, ∃ y ∈ K, dist (blockCorner u k) y < u) :
+    ∀ z ∈ s.image (blockCorner u), ∀ p, dist p (patch z).center ≤ 2 * (patch z).scale →
+      ∃ y ∈ K, dist p y < 3 * u := by
+  intro z hz p hp
+  obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hz
+  obtain ⟨y, hy, hky⟩ := hnear k hk
+  rw [(hpatch _).1, (hpatch _).2] at hp
+  exact ⟨y, hy, by linarith [dist_triangle p (blockCorner u k) y]⟩
+
 namespace GuideFrameRewrite
 
 variable {κ Party : Type} (G : GuideFrameRewrite pos q κ Party)

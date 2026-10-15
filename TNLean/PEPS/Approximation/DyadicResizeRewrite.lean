@@ -135,15 +135,9 @@ theorem exists_resize_planeConditions {N R u : ℝ} (hN : 0 < N) (hR : 0 < R) (h
   have hnearc : ∀ z ∈ G.centers, ∀ p, dist p (patch z).center ≤ 2 * (patch z).scale →
       dist p c₀ < 3 * u + 2 * R := by
     intro z hz p hp
-    obtain ⟨k, hk, rfl⟩ := Finset.mem_image.1 hz
-    obtain ⟨y, hy, hky⟩ := hnear k hk
-    rw [(hpatch _).1, (hpatch _).2] at hp
-    linarith [dist_triangle4 p (blockCorner u k) y c₀, mem_closedBall.1 hy]
-  have hcover : ∀ p ∈ K, ∃ z ∈ G.centers, dist p (patch z).center ≤ (patch z).scale := by
-    intro p hp
-    obtain ⟨k, hk, hpk⟩ := hcov p hp
-    exact ⟨blockCorner u k, Finset.mem_image_of_mem _ hk, by
-      rw [(hpatch _).1, (hpatch _).2]; exact hpk.le⟩
+    obtain ⟨y, hy, hpy⟩ := exists_dist_lt_of_mem_image hpatch hnear z hz p hp
+    linarith [dist_triangle p y c₀, mem_closedBall.1 hy]
+  have hcover := exists_mem_image_dist_le_scale hpatch hcov
   have hparty : ∀ p, dist p c₀ < N → own (g p) ∈ G.parties := by
     intro p hp
     obtain ⟨R', hR', e⟩ := reading_mem_blockWindow hN hg hc₀S hp
