@@ -24,7 +24,7 @@
     same vectors at every positive length, so
     Theorem~\ref{thm:periodic_ft_equal_case_trace_preserving} gives
     multiplicity scalars $z_{j,q}$ with $z_{j,q}^{m_{\rho_j}}=1$ and a unitary
-    $Y$ with $Z_zP^i=YQ^iY^\dagger$. Transporting $Z_z$ back with $Y_A$ as in
+    $Y$ with $Z_zP^i=YQ^iY^\dagger$. Conjugating $Z_z$ back by $Y_A$ as in
     Theorem~\ref{thm:periodic_grouped_unitary} gives the scalars
     $c_{e(j,q)}=z_{j,q}$ and $W=Y_AYY_B^\dagger$. Each original block has
     the period of its representative, so $c_k^{m_k}=1$.
@@ -49,7 +49,7 @@
     \begin{align}
         \sum_iu^{i',i}A^i & =ZUA^{i'}U^\dagger. \notag
     \end{align}
-    Moreover $Z=\bigoplus_jz_j\Id$ with $z_j^{m_j}=1$, where $m_j$ is the
+    Here $Z=\bigoplus_jz_j\Id$ with $z_j^{m_j}=1$, where $m_j$ is the
     period of $A_j$. This is the symmetry corollary of
     \cite[lines~834--845]{DeLasCuevas2017Irreducible}; the diagonal form of
     the fixed points in irreducible form~II is not needed.
@@ -120,7 +120,7 @@
     rotation $A_{U(g)}$ of Definition~\ref{def:rotate_physical}.
     By Theorem~\ref{thm:irreducible_form_rotate_physical} the rotated
     tensor remains in irreducible form~II, and the on-site symmetry
-    hypothesis supplies the equality $\mc{V}(A) = \mc{V}(A_{U(g)})$.
+    hypothesis gives the equality $\mc{V}(A) = \mc{V}(A_{U(g)})$.
     Apply the periodic equal-case Fundamental Theorem
     (Theorem~\ref{thm:periodic_ft}) to obtain the asserted
     $\Z_{m_g}$-gauge equivalence.
@@ -147,7 +147,7 @@
               bond space: $Y_h\, Y_g = u(g, h)\, Y_{gh}$.
     \end{enumerate}
 
-    The source supplies the corresponding intertwining for a single local unitary.
+    The source proves the corresponding intertwining for a single local unitary.
     The group-indexed coherent choice and the projective multiplication law are
     additional assumptions: after proving the symmetry corollary, the source
     paper says that its consequences will be explored elsewhere. The injective
@@ -164,7 +164,7 @@
     \uses{def:periodic_projective_rigidity}
     Assume the periodic projective-rigidity hypothesis
     (Definition~\ref{def:periodic_projective_rigidity}) for the tensor $A$ and
-    the physical action $U$. Then the virtual gauge family supplied by that
+    the physical action $U$. Then the virtual gauge family from that
     hypothesis defines a projective representation of $G$ on the bond space:
     there exist a scalar $2$-cochain
     $\omega : G \times G \to \C^{\times}$ and virtual gauges
@@ -183,7 +183,7 @@
     projective multiplication law $X(g)X(h) = \omega(g,h)X(gh)$
     is then exactly the $(h^{-1}, g^{-1})$-instance of the factor-system
     identity, using $(gh)^{-1} = h^{-1}g^{-1}$. The intertwining
-    relation between $A$ and $\widetilde{A}_g$ transports unchanged.
+    relation between $A$ and $\widetilde{A}_g$ carries over unchanged.
 \end{proof}
 
 \begin{theorem}[Cocycle identity for the upgraded factor system]%
