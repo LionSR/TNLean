@@ -7769,3 +7769,19 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Notes:** Two occurrences in two files. The repair construction retains
   its explicit exterior-color argument, while the initial family uses the
   colors of its actual belt fan. Neither requires a representative of a run.
+
+### Actual completed and pre-charge terminal family — promoted (2026-10-14)
+
+- **Pattern:** form the finite family of completed and pre-charge histories
+  through one horizon, and map the actual fill and charge leaves to their
+  literal physical partitions.
+- **Seen:** `Scan/ActualRoughUpper.lean` and `Scan/ActualSharpUpper.lean`.
+- **Abstraction:** `CollarScan.ActualTerminals` in
+  `Scan/ActualTerminalPartitions.lean` owns the six extracted definitions
+  and leaf-partition identities. Definitions and proofs are unchanged;
+  the former private declarations are now shared.
+- **Notes:** The rough theorem and proof remain byte-identical. The sharp
+  comparison reuses its geometric and symmetric-coordinate identities but
+  changes the mathematical input to the common signed moment interval and
+  retains the actual weighted postselected entropy contribution. No custom
+  tactic, reduced hypothesis, or enlarged elaboration budget is introduced.

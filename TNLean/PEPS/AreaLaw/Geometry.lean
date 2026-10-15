@@ -97,6 +97,9 @@ import TNLean.PEPS.AreaLaw.Geometry.RectangleShellCounts
 import TNLean.PEPS.AreaLaw.Geometry.RectangleShellWeightedCover
 import TNLean.PEPS.AreaLaw.Geometry.RepairCurrentAssignments
 import TNLean.PEPS.AreaLaw.Geometry.RepairDepth
+import TNLean.PEPS.AreaLaw.Geometry.RepairDescendants
+import TNLean.PEPS.AreaLaw.Geometry.RepairInductionMetric
+import TNLean.PEPS.AreaLaw.Geometry.RepairInductionStatement
 import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementRegions
 import TNLean.PEPS.AreaLaw.Geometry.RepairStage
 import TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation
