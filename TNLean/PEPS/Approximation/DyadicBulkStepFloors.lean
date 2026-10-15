@@ -28,13 +28,16 @@ The frames enter only through the description of their sites in the source:
 * every hole is centered at a true vertex of the guide, with inner radius `h_n ≤ ε₀ t`
   (lines 106 and 368–373), so that its outer square has radius at most `2 ε₀ t`.
 
-Under these, no separation premise is left: the step lemmas below are conditional only on
-Proposition 3.4, through `IsAngularScale`.
+Here the guide is the one the plane floors are proved for: the surrounding guide of the change,
+homogenized on the treated squares of radius `t` (lines 357–360 and 389–390). Under these, no
+separation premise is left: the step lemmas below are conditional only on Proposition 3.4,
+through `IsAngularScale`. Identifying the frames of the dyadic protocol with these descriptions
+is left to the assembly of Proposition 7.1.
 
 ## Main results
 
-* `Frame.mem_image_vertexZone`: the outer hole sites of a frame whose holes are centered at true
-  vertices lie in the vertex zone.
+* `mem_image_vertexZone_of_mem_outerHoles`: the outer hole sites of a frame whose holes are
+  centered at true vertices lie in the vertex zone.
 * `bandBirth_step`, `bandDeath_step`: an edge birth or death of the repainting schedule.
 * `centralBirth_step`: the central birth.
 * `edgeExchange_step`: the lens exchange of an edge.
@@ -69,8 +72,8 @@ the translation by `-d`, at a true vertex of a guide `g`, with inner radius at m
 outer hole site is placed within `2 r` of a true vertex of `g`, translated by `d`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:368–373` and `400–405`. -/
-theorem Frame.mem_image_vertexZone {κ : Type*} (F : Frame pos q Party) {g : ℝ × ℝ → κ}
-    {r : ℝ} {d : ℝ × ℝ}
+theorem mem_image_vertexZone_of_mem_outerHoles {κ : Type*} (F : Frame pos q Party)
+    {g : ℝ × ℝ → κ} {r : ℝ} {d : ℝ × ℝ}
     (hholes : ∀ h ∈ F.holes, IsTrueVertex g (h.patch.center - d) ∧ h.patch.scale ≤ r)
     {x : ι} (hx : x ∈ F.outerHoles) : pos x ∈ (· + d) '' vertexZone g (2 * r) := by
   obtain ⟨p, hp, hxp⟩ := hx
@@ -98,6 +101,7 @@ private theorem card_cornerMarks_le (n : ℝ) (d : ℝ × ℝ) :
     (({(0, 0), (n, 0), (0, n), (n, n)} : Finset (ℝ × ℝ)).image (· + d)).card ≤ 4 :=
   Finset.card_image_le.trans (Finset.card_le_four)
 
+omit [NeZero q] in
 /-- The separation premise of a birth or death from the plane separation of the remaining
 changed region `X` from the other labels and the vertex zone `Z`. -/
 private theorem angularSeparation_birthEnv {F : Frame pos q Party} {T : Finset _} {P : Party}
@@ -125,7 +129,7 @@ of radius `t`, and let the block be placed at translation `d`. In an encoded fra
 sites of the open square, let `T` be a set of raw sites owned by `P∘`, outside every outer hole,
 of diameter at most `A₀ n`, placed in the remaining closed changed region. If the other owners
 are placed at the other labels of `G` and every hole is centered at a true vertex of `G` with
-inner radius at most `ε₀ t`, where `4 ε₀ ≤ a₀ / 2`, then the birth of `T` at `Q∘` is an
+inner radius at most `ε₀ t`, where `2 ε₀ ≤ a₀ / 2`, then the birth of `T` at `Q∘` is an
 allowed word using only `P∘` and `Q∘`, with at most one pair source and error `L^{-30}`.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:102–108`, `357–387` and
@@ -153,7 +157,7 @@ theorem bandBirth_step (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL : 
           (L : ℝ) ^ (-30 : ℤ) :=
   bulkBirth_step hD hL hΩ hpos F hTP hTH ((card_edgeMarks_le n e d).trans hm₀) htn hnL hdiam
     (angularSeparation_birthEnv (op.angularSeparation_bandUpdate ht htn hε e g d) ht ha hT hown
-      fun _ hx => F.mem_image_vertexZone hholes hx)
+      fun _ hx => mem_image_vertexZone_of_mem_outerHoles F hholes hx)
 
 /-- **An edge death from the plane floors, conditional on Proposition 3.4.** In the setting of
 `bandBirth_step`, with `F` the frame after the death, in which `T` is owned by `P∘`, the death
@@ -184,7 +188,7 @@ theorem bandDeath_step (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL : 
         F.regIso.symm (F.refVec Ω)‖ ≤ (L : ℝ) ^ (-30 : ℤ) :=
   bulkDeath_step hD hL hΩ hpos F hTP hTH ((card_edgeMarks_le n e d).trans hm₀) htn hnL hdiam
     (angularSeparation_birthEnv (op.angularSeparation_bandUpdate ht htn hε e g d) ht ha hT hown
-      fun _ hx => F.mem_image_vertexZone hholes hx)
+      fun _ hx => mem_image_vertexZone_of_mem_outerHoles F hholes hx)
 
 /-- **The central birth from the plane floors, conditional on Proposition 3.4.** In the setting
 of `bandBirth_step`, with `m₀ ≥ 4`, let `G` be the starting guide of the repainting of an
@@ -221,7 +225,7 @@ theorem centralBirth_step (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL
           (L : ℝ) ^ (-30 : ℤ) :=
   bulkBirth_step hD hL hΩ hpos F hTP hTH ((card_cornerMarks_le R.n d).trans hm₀) htn hnL hdiam
     (angularSeparation_birthEnv (R.angularSeparation_central ht htn hε d) ht ha hT hown
-      fun _ hx => F.mem_image_vertexZone hholes hx)
+      fun _ hx => mem_image_vertexZone_of_mem_outerHoles F hholes hx)
 
 /-- **The lens exchange of an edge from the plane floors, conditional on Proposition 3.4.** In
 the setting of `bandBirth_step`, with `0 < t`, let `G₁` and `G₂` be the main guide at the start
@@ -294,9 +298,9 @@ theorem edgeExchange_step (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀) (hL
     by_cases h₁ : F₁.owner x = C
     · exact Or.inr (hown₂ x fun h₂ => hZ ⟨h₁, h₂⟩)
     · exact Or.inl (hown₁ x h₁)
-  · obtain ⟨y, hy, he⟩ := F₁.mem_image_vertexZone hholes₁ hZ
+  · obtain ⟨y, hy, he⟩ := mem_image_vertexZone_of_mem_outerHoles F₁ hholes₁ hZ
     exact ⟨y, Or.inl (Or.inr (h2 ▸ hy)), he⟩
-  · obtain ⟨y, hy, he⟩ := F₂.mem_image_vertexZone hholes₂ hZ
+  · obtain ⟨y, hy, he⟩ := mem_image_vertexZone_of_mem_outerHoles F₂ hholes₂ hZ
     exact ⟨y, Or.inr (h2 ▸ hy), he⟩
 
 end TNLean.PEPS.Approximation
