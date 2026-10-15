@@ -240,11 +240,8 @@ import TNLean.PEPS.Approximation.OriginalCircuitGateMaps
 import TNLean.PEPS.Approximation.OriginalCircuitLift
 import TNLean.PEPS.Approximation.OriginalCircuitSequence
 import TNLean.PEPS.Approximation.OriginalCoefficientMajorant
-<<<<<<< HEAD
-import TNLean.PEPS.Approximation.OriginalProducerResources
-=======
 import TNLean.PEPS.Approximation.OriginalGateSamplePhysicalSum
->>>>>>> origin/main
+import TNLean.PEPS.Approximation.OriginalProducerResources
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates
 import TNLean.PEPS.Approximation.OwnerMemoryTransport
 import TNLean.PEPS.Approximation.OwnerOutputCoordinates
