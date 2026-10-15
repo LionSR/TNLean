@@ -147,7 +147,7 @@ variable {I : Type} [Fintype I] [LinearOrder I]
 open Classical in
 /-- The classical probability, at stage `s`, that the old history is not good
 (Lemma 9.1(4), `08-scanner.tex`, lines 212–215). -/
-def badOldWeight (S : CollarScan (Site Λ) I) (s : ℕ) : ℝ :=
+def badOldWeight {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I) (s : ℕ) : ℝ :=
   ∑ h : History S.K S.m S.M s, if S.IsGoodOldHistory h then 0 else historyWeight h
 
 /-- **Lemma 9.1 for the actual scan at one scale.** At scale `N`, with the scanner scales
