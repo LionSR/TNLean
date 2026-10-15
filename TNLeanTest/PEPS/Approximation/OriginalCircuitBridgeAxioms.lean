@@ -27,7 +27,7 @@ run_cmd do
       ``TNLean.PEPS.PairEffect.OriginalCircuit.canonicalGateMaps,
       ``TNLean.PEPS.PairEffect.OriginalCircuit.evalWithGateMaps_canonicalGateMaps,
       ``TNLean.PEPS.PairEffect.OriginalCircuit.isGateApproximation_zero_canonicalGateMaps,
-      ``TNLean.PEPS.PairEffect.OriginalCircuit.monomialCount_produce_le,
+      ``TNLean.PEPS.PairEffect.OriginalCircuit.monomialCount_produce_le_of_isMonomialBounded,
       ``TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_mono] do
     unless env.contains decl do
       throwError "Missing imported declaration {decl}"
