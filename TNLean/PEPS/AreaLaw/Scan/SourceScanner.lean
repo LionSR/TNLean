@@ -164,9 +164,10 @@ constant `C_e` there are constants, a charge-list constant `C₁ > 0` and a smal
 
 Let a gapped physical system and a collar scan satisfy the source hypotheses
 (`ScannerHypotheses`). Then the truncated Hamiltonian of Proposition 4.5 has a ground vector
-`Ω̃` with energy `Ẽ₀` and gap `g/2`; its typical window `E` of width `n^{3/5}` is nonempty;
-and there is a label sequence `λ_k` for which the vectors `pre_k` of `comparator:prevector`,
-with auxiliary dimension `d_* = |E|`, are nonzero for `k ≥ 1`. For every total weight
+`Ω̃` with energy `Ẽ₀ ≤ n^{-1000}` (lines 49–54) and gap `g/2`; its typical window `E` of
+width `n^{3/5}` is nonempty; and there is a label sequence `λ_k` for which the vectors
+`pre_k` of `comparator:prevector`, with auxiliary dimension `d_* = |E|`, are nonzero for
+`k ≥ 1`. For every total weight
 `W ≥ 1` with `a r₀² ≤ c_a`, the actual rounds of the scan built from `pre` satisfy:
 
 * (comparator parameters, lines 388–392) there are `B_sh ≤ C_b(nL^e + n)`,
@@ -193,6 +194,7 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
         fun Y ↦ cutBudget q S.graph (S.truncationSet (X.L n)) S.r₀ S.anchor Y
       ∃ (e : ℝ) (Ωt : StateSpace Λ q),
         IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ (X.L n) i) e Ωt (g / 2) ∧
+        e ≤ (n : ℝ) ^ (-1000 : ℝ) ∧
         let E := S.typicalWindow q Ωt T n
         let z := (reducedState_isHermitian Λ q Ωt (S.target T)).spectralRestrictionMass E
         ∃ (hm : 0 < S.m) (hM : 0 < S.M) (hd : 0 < E.card),
@@ -367,7 +369,7 @@ theorem scannerStatement_of_scanInputsSupply (X : ScannerExponents) (R : ℕ) {J
   have : NeZero (S.typicalWindow q Ωt T n).card := ⟨hd.ne'⟩
   obtain ⟨ell, hne, hW⟩ := hs Λ T hT h S E₀ Ω hyp' e Ωt htrgs hmom Tr hE0 hgap hSX hSXt hSQ
     hSQt htd hz hdstar hstat hm hM hd
-  refine ⟨e, Ωt, htrgs, hm, hM, hd, ell, hne, fun W hW1 ha ↦ ?_⟩
+  refine ⟨e, Ωt, htrgs, hE0 ▸ Tr.E0_le, hm, hM, hd, ell, hne, fun W hW1 ha ↦ ?_⟩
   obtain ⟨I⟩ := hW W hW1 ha
   obtain ⟨⟨hBsh, hBexc, hBmarg⟩, ρ, hρ, hsel⟩ :=
     hfin hm hM (fun _ ↦ (S.typicalWindow q Ωt T n).card) W hW1
