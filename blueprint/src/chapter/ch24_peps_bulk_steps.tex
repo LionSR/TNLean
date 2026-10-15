@@ -229,3 +229,76 @@ Definition~\ref{def:peps_capped_mark_distance}.
     sets and weakened from $a_0/2$ to $a$, gives the separation condition of
     Theorem~\ref{thm:peps_bulk_steps}.
 \end{proof}
+
+\begin{theorem}[Bulk changes of the repainting for the frames of the sampled guides, conditionally]
+    \label{thm:peps_bulk_steps_treated_frames}
+    \lean{TNLean.PEPS.Approximation.SquareEdge.endpointBlocks,
+        TNLean.PEPS.Approximation.cornerBlocks,
+        TNLean.PEPS.Approximation.homogenize_endpointBlocks,
+        TNLean.PEPS.Approximation.homogenize_cornerBlocks,
+        TNLean.PEPS.Approximation.preimage_edgeTreated,
+        TNLean.PEPS.Approximation.preimage_cornerTreated,
+        TNLean.PEPS.Approximation.homogenize_preimage_shiftGuide,
+        TNLean.PEPS.Approximation.isTrueVertex_shiftGuide_iff,
+        TNLean.PEPS.Approximation.IsDisplacedReading.sub_isTrueVertex,
+        TNLean.PEPS.Approximation.isTrueVertex_of_mem_treatedTrueVertices,
+        TNLean.PEPS.Approximation.guideFrame_holes_isTrueVertex,
+        TNLean.PEPS.Approximation.sub_mem_closure_ne_of_reading_ne,
+        TNLean.PEPS.Approximation.sub_mem_closure_ne_of_reading_ne_const,
+        TNLean.PEPS.Approximation.sub_mem_closure_ne_of_guideFrame_owner_ne,
+        TNLean.PEPS.Approximation.lensSample,
+        TNLean.PEPS.Approximation.mem_lensSample,
+        TNLean.PEPS.Approximation.AngularSeparation.closure_right,
+        TNLean.PEPS.Approximation.angularSeparation_birthEnv_guideFrame,
+        TNLean.PEPS.Approximation.bandBirth_step_guideFrame,
+        TNLean.PEPS.Approximation.bandDeath_step_guideFrame,
+        TNLean.PEPS.Approximation.centralBirth_step_guideFrame,
+        TNLean.PEPS.Approximation.edgeExchange_step_guideFrame}
+    \leanok
+    \uses{thm:peps_bulk_steps,lem:peps_bulk_separation_from_floors,
+        thm:peps_bulk_steps_from_floors}
+    In the setting of Theorem~\ref{thm:peps_bulk_steps_from_floors}, homogenizing
+    the guide of the repainted block on the open squares of radius $t$ about the
+    grid corners at the ends of an edge, or at the four corners of the block, is
+    homogenizing it on the treated squares of that operation and moving it to the
+    block. Let each frame be the encoded frame of the sampled guide: the owner of
+    a site is the party of the label read there after a small generic
+    displacement, common to all guides, and the holes sit at true vertices of the
+    sampled guide, centered there with inner radius at most $\epsilon_0t$. Then
+    the three descriptions of the frames hold.
+    \begin{enumerate}
+        \item Every hole is centered, moved back to the origin, at a true vertex
+              of the homogenized guide, with inner radius at most $\epsilon_0t$.
+        \item A site at which the sampled guides before and after a birth or
+              death differ lies, moved back, in the remaining closed changed
+              region; the sites of the lens are those placed in the translated
+              lens.
+        \item A site not owned by the party of a label $l$ lies, moved back, in
+              the closure of the positions of labels other than $l$.
+    \end{enumerate}
+    The third description holds in closure form only: on a boundary of a guide
+    the sampled label may differ from the label the guide assigns there. Since
+    the separation condition passes to the closure of the exterior, the bulk
+    changes of Theorem~\ref{thm:peps_bulk_steps_from_floors} hold for these
+    frames. For a birth or death the target may be any set of raw sites owned
+    by $P_\circ$, outside every outer hole and of diameter at most $A_0n$, at
+    which the sampled guides before and after the operation differ. For the
+    exchange the target is the one determined by the lens, the owners of the two
+    sheets and the classification of the holes, with $Y$ the sites placed in the
+    translated lens, and it is assumed to have diameter at most $A_0n$. No owner
+    map need be injective,
+    \texttt{06-geometry.tex}, lines 69--80, 102--125 and 328--445.
+\end{theorem}
+
+\begin{proof}\leanok
+    The open squares about the moved corners are the moved treated squares, and
+    homogenization commutes with the translation. A true vertex of a sampled
+    guide is a true vertex of the guide, and translation carries true vertices;
+    this gives the first description. Sampled labels differ only in the closure
+    of the region where the guides differ, which gives the second, and a sampled
+    label other than $l$ occurs only in the closure of the positions of other
+    labels, which gives the third. The separation condition of
+    Lemma~\ref{lem:peps_bulk_separation_from_floors} is a closed condition in the
+    exterior point, so it holds against the closure of the translated exterior,
+    and Theorem~\ref{thm:peps_bulk_steps} applies.
+\end{proof}
