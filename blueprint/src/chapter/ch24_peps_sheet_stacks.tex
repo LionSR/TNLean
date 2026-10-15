@@ -630,3 +630,75 @@ no holes, this is the normalization of $\Omega$.
     on the list of events. After the last change the stack is kept constant, by
     identity changes, so that every stage of the protocol has a change.
 \end{proof}
+
+\begin{definition}[The main frame between repaintings]
+    \label{def:peps_protocol_level_frame}
+    \lean{TNLean.PEPS.Approximation.sampleGuide,
+        TNLean.PEPS.Approximation.IsDisplacedReading.eq_sampleGuide,
+        TNLean.PEPS.Approximation.IsRayConstant.isDisplacedReading_sampleGuide,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_main,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_aux,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_mainAux,
+        TNLean.PEPS.Approximation.levelGuide,
+        TNLean.PEPS.Approximation.levelVertices,
+        TNLean.PEPS.Approximation.mem_levelVertices,
+        TNLean.PEPS.Approximation.levelFrame,
+        TNLean.PEPS.Approximation.levelFrame_eq,
+        TNLean.PEPS.Approximation.levelFrame_congr,
+        TNLean.PEPS.Approximation.pairwise_disjoint_levelHoles,
+        TNLean.PEPS.Approximation.isTrueVertex_levelGuide_insert_iff}
+    \leanok
+    \uses{def:peps_guide_frame, lem:peps_protocol_party_map_switch,
+        thm:peps_protocol_event_segments}
+    The sampled guide of a labelling of the plane is its reading after the displacement
+    $(1,1)$; every such reading is the sampled guide. Write the memory of the protocol as
+    the main frame followed by the frames of a fixed list of distinct auxiliary
+    indices; a bounded change of the main frame, of one auxiliary frame, or of the main
+    frame together with one auxiliary frame, is a bounded change of the memory. At a
+    stage of the pass to level $2^j$, the main frame is the encoded frame of the sampled
+    block guide of the level, with a hole at each of its true vertices, which are grid
+    corners of the level in the closed root square, carrying the patch supplied by the
+    adaptive patch constraint at its center and its radius. The frame depends on the
+    radii only at the true vertices. Outer squares of radius at most $r$ at distinct grid
+    corners are disjoint when $4r<2^j$, and repainting one block changes the true
+    vertices only at its four corners (\texttt{06-geometry.tex}, lines 69--125 and
+    507--511).
+\end{definition}
+
+\begin{theorem}[Direct repaintings and resizes as changes of the protocol]
+    \label{thm:peps_protocol_level_events}
+    \lean{TNLean.PEPS.Approximation.guideFrame_eq_of_owner_eq,
+        TNLean.PEPS.Approximation.rewriteGateBound,
+        TNLean.PEPS.Approximation.directRepainting_hasSourceBoundedChange,
+        TNLean.PEPS.Approximation.levelVertices_self,
+        TNLean.PEPS.Approximation.resizeRadius,
+        TNLean.PEPS.Approximation.DyadicJunction.rootNbr,
+        TNLean.PEPS.Approximation.resizeParty,
+        TNLean.PEPS.Approximation.eventUses_resizeParty,
+        TNLean.PEPS.Approximation.exists_resize_hasSourceBoundedChange}
+    \leanok
+    \uses{def:peps_protocol_level_frame, thm:peps_protocol_bounded_changes,
+        thm:peps_guide_frame_supplied_gates, thm:peps_dyadic_direct_repainting_constants}
+    At the constants of the protocol, the direct repainting of a square of side
+    $n=2^j\le K_0t$, with all holes of radius $h_n$, and the resize of the hole at a
+    grid corner of scale $j\ge1$ entering the level $2^{j-1}$, are changes of the memory,
+    with the auxiliary frames as spectators, that are bounded changes whose participants
+    the event uses, with at most $2b$ pair effects and $2b$ pair sources in each monomial
+    and error $(2b+1)L^{-20}$, for $b$ the number of patches of the small-patch
+    rewrites. For the resizes this holds for every mesh ratio below a threshold
+    depending only on $\epsilon_0$. A resize whose two radii agree, or whose corner is
+    not a true vertex, is the identity change. The guide of the root level has no true
+    vertex (\texttt{06-geometry.tex}, lines 91--133, 507--541 and 572--596).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_protocol_party_map_switch}
+    Between repaintings no site and no tag carries the placeholder, so the frame may be
+    read through any party map that agrees on the block labels. The direct repainting
+    reads it through the party map of the repainted square, whose labels near the square
+    are held by parties the repainting uses. The resize reads the placeholder as the
+    party of a block of the root square next to the junction, so that every party of
+    the nine blocks about the junction is a party the resize uses. The outer squares of
+    the holes, of radius at most $2\epsilon_0 n$ at distinct grid corners of side $n$,
+    are disjoint since $\epsilon_0<1/8$.
+\end{proof}
