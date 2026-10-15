@@ -15,7 +15,7 @@ Proposition 9.2: the transfer of the entropy input from `Ω` to `\widetilde Ω`,
 
 **Scope restriction (inputs as hypotheses):** the results of this module stated over `ScanData`
 are proved from its fields, which record the conclusions of Lemma 9.1, Propositions 7.4
-and 8.1, and Lemmas 2.1 and 2.3 for one scan rather than deriving them. Documented in
+and 8.1, and Lemmas 2.1 and 3.1 for one scan rather than deriving them. Documented in
 `docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
 
 ## Main results
@@ -257,7 +257,7 @@ lemma Bmarg_le_log_pow (hD : 1 ≤ X.D n) (hn : 1 ≤ n) (hlog : 1 ≤ Real.log 
     _ ≤ _ := by linarith
 
 /-- The terminal rough upper bound in terms of the target entropy and budget bounds `B`, `E`
-(lines 462–470, with `z ≥ 1/2` from Lemma 2.3, lines 411–414). -/
+(lines 462–470, with `z ≥ 1/2` from Lemma 3.1, lines 411–414). -/
 lemma terminalBound_le_of {B E : ℝ} (hB0 : 0 ≤ B) (hBsh : S.Bsh ≤ B) (hBexc : S.Bexc ≤ E)
     (hn : 2 ≤ n) :
     S.terminalBound ≤ 2 * (S.SXt + (n : ℝ) ^ (3 / 5 : ℝ) + 1) + 1 + S.W * (2 * B + E) := by

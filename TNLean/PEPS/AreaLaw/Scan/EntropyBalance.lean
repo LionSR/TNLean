@@ -149,17 +149,19 @@ theorem chargeDefect_le_choiceGainSum (r : Fin (X.rounds n)) (hr : IsChargeRound
   rw [Finset.mul_sum]
   refine Finset.sum_le_sum fun h _ ↦ ?_
   have hgain_int : Integrable ((S.round r).choiceGain h) ((S.round r).μOld k p h) :=
-    integrable_of_bounded (S.measurable_choiceGain r h) (S.choiceGain_nonneg r h)
-      (S.choiceGain_le r h)
+    integrable_of_bounded (S.histories.measurable_choiceGain r h)
+      (S.histories.choiceGain_nonneg r h)
+      (S.histories.choiceGain_le r h)
   split_ifs with hg
   · rw [mul_left_comm]
-    refine mul_le_mul_of_nonneg_left ?_ (S.w_nonneg r h)
+    refine mul_le_mul_of_nonneg_left ?_ (S.histories.w_nonneg r h)
     have hint : ∀ i, Integrable (fun θ ↦ if (S.round r).splitOld i h then
         (S.round r).etaOld i h θ else 0) ((S.round r).μOld k p h) := by
       intro i
       split_ifs
-      · exact integrable_of_bounded (S.measurable_etaOld r i h) (S.etaOld_nonneg r i h)
-          (S.etaOld_le r i h)
+      · exact integrable_of_bounded (S.histories.measurable_etaOld r i h)
+          (S.histories.etaOld_nonneg r i h)
+          (S.histories.etaOld_le r i h)
       · exact integrable_zero _ _ _
     calc κ.c / (n * X.D n) * ∑ i, (if (S.round r).splitOld i h then
             ∫ θ, (S.round r).etaOld i h θ ∂(S.round r).μOld k p h else 0)
@@ -171,9 +173,10 @@ theorem chargeDefect_le_choiceGainSum (r : Fin (X.rounds n)) (hr : IsChargeRound
           split_ifs <;> simp
       _ ≤ ∫ θ, (S.round r).choiceGain h θ ∂(S.round r).μOld k p h :=
           integral_mono ((integrable_finsetSum _ fun i _ ↦ hint i).const_mul _) hgain_int
-            fun θ ↦ S.sampling r hr h hg θ
+            fun θ ↦ S.histories.sampling r hr h hg θ
   · rw [mul_zero]
-    exact mul_nonneg (S.w_nonneg r h) (integral_nonneg (S.choiceGain_nonneg r h))
+    exact mul_nonneg (S.histories.w_nonneg r h) (integral_nonneg
+        (S.histories.choiceGain_nonneg r h))
 
 /-- The charge defect is nonnegative (lines 437–438). -/
 theorem chargeDefect_nonneg (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) :
@@ -182,9 +185,9 @@ theorem chargeDefect_nonneg (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) :
   unfold ScanRound.chargeDefect
   refine Finset.sum_nonneg fun h _ ↦ ?_
   split_ifs
-  · refine mul_nonneg (S.w_nonneg r h) (Finset.sum_nonneg fun i _ ↦ ?_)
+  · refine mul_nonneg (S.histories.w_nonneg r h) (Finset.sum_nonneg fun i _ ↦ ?_)
     split_ifs
-    · exact integral_nonneg (S.etaOld_nonneg r i h)
+    · exact integral_nonneg (S.histories.etaOld_nonneg r i h)
     · exact le_rfl
   · exact le_rfl
 
@@ -204,9 +207,9 @@ theorem chargeDefect_le (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) (hp : p ∈ I
     intro i h
     calc ∫ θ, (S.round r).etaOld i h θ ∂(S.round r).μOld k p h
         ≤ ∫ _θ, b ∂(S.round r).μOld k p h :=
-          integral_mono (integrable_of_bounded (S.measurable_etaOld r i h)
-            (S.etaOld_nonneg r i h) (S.etaOld_le r i h)) (integrable_const _)
-            (S.etaOld_le r i h)
+          integral_mono (integrable_of_bounded (S.histories.measurable_etaOld r i h)
+            (S.histories.etaOld_nonneg r i h) (S.histories.etaOld_le r i h)) (integrable_const _)
+            (S.histories.etaOld_le r i h)
       _ = b / 2 := by rw [integral_const, smul_eq_mul, S.μOld_real_univ r k p hp h]; ring
       _ ≤ b := by linarith
   calc (S.round r).chargeDefect k p
@@ -214,16 +217,16 @@ theorem chargeDefect_le (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) (hp : p ∈ I
         unfold ScanRound.chargeDefect
         refine Finset.sum_le_sum fun h _ ↦ ?_
         split_ifs
-        · refine mul_le_mul_of_nonneg_left ?_ (S.w_nonneg r h)
+        · refine mul_le_mul_of_nonneg_left ?_ (S.histories.w_nonneg r h)
           calc ∑ i, (if (S.round r).splitOld i h then
                 ∫ θ, (S.round r).etaOld i h θ ∂(S.round r).μOld k p h else 0)
               ≤ ∑ i, (if (S.round r).splitOld i h then b else 0) :=
                 Finset.sum_le_sum fun i _ ↦ by split_ifs <;> simp [hη]
             _ = (Finset.univ.filter fun i ↦ (S.round r).splitOld i h).card * b := by
                 rw [← Finset.sum_filter, Finset.sum_const, nsmul_eq_mul]
-            _ ≤ _ := mul_le_mul_of_nonneg_right (S.card_splitOld_le r h) hb0
-        · exact mul_nonneg (S.w_nonneg r h) (mul_nonneg hN0 hb0)
-    _ = _ := by rw [← Finset.sum_mul, S.sum_w, one_mul]
+            _ ≤ _ := mul_le_mul_of_nonneg_right (S.histories.card_splitOld_le r h) hb0
+        · exact mul_nonneg (S.histories.w_nonneg r h) (mul_nonneg hN0 hb0)
+    _ = _ := by rw [← Finset.sum_mul, S.histories.sum_w, one_mul]
 
 /-- The charge defect is interval integrable from its interior AE strong measurability,
 nonnegativity and bound (`08-scanner.tex`, lines 438–440, 457–490). The endpoint values do
@@ -272,7 +275,8 @@ theorem integratedChargeBound {C₁ : ℝ} (hn : ScaleFacts X n C₁) (k : ℕ) 
       have h1 := S.entropy_gain r k p hp
       have h2 : 0 ≤ k * X.a S.W n * (S.round r).choiceGainSum k p := by
         refine mul_nonneg (by positivity) (Finset.sum_nonneg fun h _ ↦ ?_)
-        exact mul_nonneg (S.w_nonneg r h) (integral_nonneg (S.choiceGain_nonneg r h))
+        exact mul_nonneg (S.histories.w_nonneg r h) (integral_nonneg
+            (S.histories.choiceGain_nonneg r h))
       simp only [err]
       linarith)
     (fun r hr ↦ S.logNormSq_succ r hr k)
