@@ -27,8 +27,9 @@ its changes.
   or whose radius does not change; there the resize is the identity change. This keeps the
   events indexed by the junctions. A square with `n ≤ K₀ t` is repainted directly by one
   small-patch rewrite (lines 507–527). A larger square is repainted by the edge construction
-  (lines 142–221): the central birth, then along each of the four edges the initialization of a fresh auxiliary
-  sheet, three auxiliary births, the lens exchange and four main births or deaths. Every bulk
+  (lines 142–221): the central birth, then along each of the four edges the initialization of
+  a fresh auxiliary sheet, three auxiliary births, the lens exchange and four main births or
+  deaths. Every bulk
   operation is preceded by the homogenization of each involved sheet at each of its marks and
   followed by its removal, one mark and one sheet at a time (lines 330–339, 495–496): four marks
   for the central birth and two for an edge operation, two sheets for the exchange and one
