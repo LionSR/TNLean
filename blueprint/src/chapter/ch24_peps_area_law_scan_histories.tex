@@ -2619,6 +2619,43 @@ The finite-leaf estimates below follow the charge-energy argument in
     quadratic term on the right-hand side of the moment bound.
 \end{proof}
 
+\begin{theorem}[Common moments for a prescribed truncated ground state]
+    \label{thm:al_scan_supplied_status_moments}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_suppliedTarget_statusMarginal_moment_bounds}
+    \leanok
+    \uses{thm:al_scan_common_status_budget}
+    Fix an integer $q\ge1$, the interaction range $R$, and $C_r\ge0$.
+    There exists $C_B>0$, independent of the finite domain, scanner,
+    and Hamiltonian, with the following property. Suppose the geometric
+    hypotheses of Theorem~\ref{thm:al_scan_common_status_budget} hold,
+    and set $\mathcal B=C_BnD(\log n)^{12}$. Then $\mathcal B\ge1$.
+    Let $\Omega$ be normalized, let $\Delta>0$, and let
+    $\widetilde\Omega$ be any ground state of the associated truncated
+    Hamiltonian with projector gap $g/2$, where $g>0$ is the normalized
+    value of $\Delta$ used to construct that Hamiltonian. Set
+    \begin{align}
+        C_0 & =512\mathrm e\,(2/g), \notag      \\
+        c_0 & =\frac{1}{32\sqrt{1+2/g}}. \notag
+    \end{align}
+    These constants are positive. For every completed status with
+    $s\le nm$, every pre-charge status with $s+1\le nm$, and each of
+    the five marginal regions $Q$ at that status, the eigenvalues $p_j$
+    of the reduced state of this same $\widetilde\Omega$ satisfy, for
+    every real $u$ with $|u|\le c_0/\sqrt{\mathcal B}$,
+    \begin{align}
+        \log\sum_{p_j>0}p_j^{1-u}
+         & \le uS_{\widetilde\Omega}(Q)+C_0\mathcal B u^2. \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_scan_common_status_budget,thm:al_scan_common_moment_interval}
+    Choose $C_B$ by Theorem~\ref{thm:al_scan_common_status_budget}.
+    Every indicated marginal has cut budget at most $\mathcal B$.
+    Apply Theorem~\ref{thm:al_scan_common_moment_interval} to each such
+    cut and the prescribed truncated ground state.
+\end{proof}
+
 \begin{theorem}[One truncated vector for all physical marginal inputs]
     \label{thm:al_scan_common_status_moments}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_statusMarginal_moment_bounds}

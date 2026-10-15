@@ -24,6 +24,42 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Scanner prevector coordinates and selected density — promoted (2026-10-15)
+
+- **Pattern:** Transfer nonvanishing, copy symmetry and a mean-energy
+  eigen-equation from global replica coordinates to augmented site coordinates;
+  then bound the selected normalized density using the rough endpoint estimate.
+- **Seen:** Three identical copies of each proof in `SourceChargeSelection.lean`,
+  `SourceRoughSelection.lean` and `SourceSelectedSharpComparison.lean`, under
+  `PEPS/AreaLaw/Scan/`.
+- **Abstraction:** `augmented_prevector_properties_of_global` in
+  `AugmentedReplicaPrevectorProperties.lean` and
+  `selected_density_of_rough_endpoint` in `RoughSelectionBudget.lean`.
+  All three comparisons use these shared declarations.
+- **Notes:** The coordinate result requires the supplied global eigen-equation
+  and a nonzero prevector, with no normalization, Hermiticity or positive
+  dimension assumption. The scalar result assumes positivity only for the
+  denominator factors in its statement. Both proof bodies and all seven
+  existing public theorem signatures are preserved.
+
+### Rough lower comparisons at a prescribed metric weight — promoted (2026-10-15)
+
+- **Pattern:** Prove the actual rough lower comparison and its vanishing
+  remainder for an arbitrary per-band weight, then specialize to total weight
+  four by substituting `a = 4 / K`.
+- **Seen:** The finite-copy comparison, remainder limit and supplied-prevector
+  comparison in `ActualRoughLower.lean`, `ActualRoughLowerRemainder.lean` and
+  `ActualRoughLowerPrevector.lean`, under `PEPS/AreaLaw/Scan/`.
+- **Abstraction:** `exists_actualScan_rough_lower_norm_of_weight`,
+  `tendsto_roughLowerRemainderAtWeight_of_label_dimension` and
+  `exists_actualScan_suppliedPrevector_rough_lower_of_weight` retain the weight
+  as a parameter. Each general proof occurs once, and the original
+  weight-four statements invoke these results.
+- **Notes:** The total weight is `a * K`; the lower comparison retains its
+  factor `a * K / 4`. The original remainder is the specialization of
+  `roughLowerRemainderAtWeight` at `4 / K`. Positivity of the band count
+  justifies this substitution. All original theorem signatures are preserved.
+
 ### Patch net covers in the plane conditions — promoted (2026-10-15)
 
 - **Pattern:** From `exists_netCover`, turn the cover of a set `K` by the net `u ℤ²` into a cover
@@ -7823,6 +7859,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Consumers:** `Scan/SourceRoughSelection.lean`,
   `Scan/SourceBootstrapEntropy.lean`, `Scan/SourceSelectedSharpComparison.lean`,
   `Scan/SourceSelectedSharpEnergy.lean`, `Scan/SourceSelectedSharpDensity.lean`,
+  `Scan/SourceSelectedDensity.lean`,
   `Scan/SourceActualInformation.lean`, and `Scan/SourceFinalInformation.lean`.
 - **Notes:** Positivity comes from the existing spectral-window witness; no
   nonzero-dimension hypothesis is added to any theorem.

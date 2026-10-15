@@ -1,0 +1,347 @@
+% Auxiliary statements for Proposition 9.2, not the complete scanner estimate.
+\section{Charge selection with an arbitrary fixed weight}
+\label{sec:arealaw-source-charge-selection}
+
+The construction below is an auxiliary step in the proof of
+\cite[Proposition~9.2]{OpenAI2026AreaLaw}. It retains the physical
+state and label sequence while allowing any positive total weight and
+any fixed interpolation interval contained in $(0,1)$.
+
+\begin{theorem}[Nonvanishing and the eigen-equation in augmented coordinates]
+    \label{thm:arealaw-augmented-prevector-properties}
+    \lean{TNLean.PEPS.AreaLaw.Scan.augmented_prevector_properties_of_global}
+    \leanok
+    \uses{def:al_scan_auxiliary_coordinates}
+    Let $V$ be finite, let $q,d,k\in\mathbb N$, let $\Omega$ be a complex
+    vector on the physical configurations, and let $\lambda$ be a label
+    of the symmetric group on $k$ copies. Let $v$ be the corresponding
+    physical Schmidt--Bell prevector in the global coordinates, and let
+    $\mathrm{pre}=Uv$ be its expression in the augmented site coordinates,
+    where $U$ is the coordinate isometry. For a physical matrix $H$, write
+    $H_{\rm glob}$ and $H_{\rm aug}$ for its replica mean, with identities
+    on the two auxiliary registers, in these two coordinate systems.
+    If $v\ne0$ and $H_{\rm glob}v=e v$ for a real $e$, then
+    \begin{align}
+        \mathrm{pre}            & \ne0,\notag                    \\
+        \mathrm{pre}            & \in\mathcal H_{\rm sym},\notag \\
+        H_{\rm aug}\mathrm{pre} & =e\,\mathrm{pre}.\notag
+    \end{align}
+    Here $\mathcal H_{\rm sym}$ is the subspace invariant under simultaneous
+    permutation of the copies. This coordinate statement is used in
+    \cite[Section~8, lines~130--153 and~421--438]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_augmented_prevector_symmetry,thm:al_scan_global_replica_energy}
+    The coordinate bijection preserves nonvanishing. The augmented
+    prevector is fixed by the simultaneous symmetry projection, so it
+    lies in its range. The coordinate identity
+    $H_{\rm aug}=UH_{\rm glob}U^{-1}$ gives
+    $H_{\rm aug}\mathrm{pre}=UH_{\rm glob}v=e\,\mathrm{pre}$.
+\end{proof}
+
+\begin{theorem}[Selected density from the rough norm difference]
+    \label{thm:arealaw-density-from-rough-endpoint}
+    \lean{TNLean.PEPS.AreaLaw.Scan.selected_density_of_rough_endpoint}
+    \leanok
+    \uses{def:arealaw-rough-endpoint-remainder}
+    Let $k,n,m,D,K$ be positive integers, let $d\in\mathbb N$, and let
+    $a,C_1,w>0$. Put $W=aK$ and $\rho=ka/(2(C_1+1)nD)$.
+    For real $A,B,T,b,c,C_i,C_b,\mathcal Q$, suppose
+    \begin{align}
+        \frac A k  & \leq B+R_k^{\rm end}(d,c,K,C_i),\notag  \\
+        b          & \leq C_b\log(k+2),\notag                \\
+        \mathcal Q & \leq\frac{A+2nm(kT+b)}{\rho nmw}.\notag
+    \end{align}
+    Then
+    \begin{align}
+        \frac{\mathcal Q}{KnD}
+         & \leq\frac{2(C_1+1)}{Wnmw}
+        \left[B+2nmT+R_k^{\rm end}(d,c,K,C_i+2nmC_b)\right].\notag
+    \end{align}
+    This is the scalar normalization of the selected charge in
+    \cite[Section~9, lines~457--490]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:arealaw-rough-selection-numerator,lem:arealaw-selected-density-normalization}
+    The rough norm difference and logarithmic error bounds give
+    $(A+2nm(kT+b))/k\leq B+2nmT+R_k^{\rm end}(d,c,K,C_i+2nmC_b)$.
+    Normalize the selected inequality by $KnD$, cancel the positive
+    factors in $\rho$, and use $aK=W$.
+\end{proof}
+
+\begin{theorem}[One physical state and label sequence for charge selection]
+    \label{thm:arealaw-source-charge-selection}
+    \lean{
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_density_energy}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:al_scan_actual_histories,
+        def:al_scan_actual_energy_terms}
+    Fix an integer $q\geq1$, an interaction range $R\in\mathbb N$, $J\geq0$,
+    $\Delta>0$, $C_T\geq0$, $C_1>0$, an integer anchor-multiplicity
+    bound $m_*\geq0$ with $3m_*\leq C_1$, and a real exponent $P$.
+    There are $C_{\rm tr},C_{\rm target},c_t>0$ and real
+    $C_{\rm ent},e_{\rm ent}$ with the following property. For every
+    scanner exponent tuple, there are $C\geq1$, $C_l\geq0$ and
+    $N\geq2$ before all the physical data and entropy inputs below.
+
+    Let $\Lambda,T\subset\mathbb Z^2$ be finite, with $T\ne\varnothing$,
+    and let $H$ be a range-$R$ Hamiltonian of interaction
+    bound $J$, with unit ground vector $\Omega$ and projector gap
+    $\Delta$. Use the actual induced graph, anchors belonging to their
+    interaction supports, and depth $d(x)=\operatorname{dist}_\infty(x,T)$.
+    For the scan on $A\subseteq\Lambda$, assume $n\geq N$ and the scales
+    \begin{align}
+        r_0 & =\lceil C_{\rm tr}(\log n)^2\rceil,\notag     \\
+        L   & =\lfloor n^{1-\ell}\rfloor,\notag             \\
+        m   & =\lfloor n^\mu\rfloor,\notag                  \\
+        D   & =\lceil n^\kappa\rceil,\notag                 \\
+        K   & =\left\lfloor\frac{L}{8m}\right\rfloor.\notag
+    \end{align}
+    The exponent conditions are $0<\ell<1$, $0<\kappa<\mu<1-\ell$,
+    $\nu>0$ and $0<e_{\rm in}<1$ with $\kappa\leq e_{\rm in}$.
+    The charge constant is $C_1$. Put $M=\lceil C_1nD\rceil$.
+    Suppose $|T|\leq C_Tn^2$, every
+    ambient dilation layer through depth $L$ has at most $n$ sites,
+    and at most $m_*$ interaction supports have any given anchor.
+    Every point of $T$ is at distance greater than $2L+10r_0$ from
+    every endpoint of a cut edge between $A$ and its complement.
+    Also suppose $2r_0\leq D$, $1\leq D$ and $4D\leq m$.
+    For arbitrary real $C_e,\eta$, assume
+    $S_\Omega(\{x\in A:0<d(x)\leq j\})\leq C_e(nL^\eta+n)$
+    for every integer $0\leq j\leq L$.
+
+    Put $X=A\cap T$ and $S_0=A\cap T_L$, where $T_L$ is the ambient
+    dilation of $T$. Let $g>0$ be the normalized amplified gap in
+    Theorem~\ref{thm:al_scan_target_typical_window}, and set
+    \begin{align}
+        \varepsilon_t & =\min\{n^{-1000},g/4\},\notag \\
+        w             & =n^{3/5},\notag               \\
+        \delta_t      & =n^{-100}.\notag
+    \end{align}
+    Then $m,M>0$, $K\geq8$, $8Km\leq L$, $|S_0|\leq(C_T+1)n^2$
+    and $X\subseteq S_0$. There is a unit ground vector
+    $\widetilde\Omega$ of the truncated Hamiltonian $\widetilde H$,
+    with energy $e_t$ and projector gap $g/2$, such that
+    \begin{align}
+        0\leq e_t    & \leq\varepsilon_t,\notag                 \\
+        \operatorname{dist}_{\rm tr}
+        (|\widetilde\Omega\rangle\langle\widetilde\Omega|,
+        |\Omega\rangle\langle\Omega|)
+                     & \leq\sqrt{2\varepsilon_t/g},\notag       \\
+        \mathcal B_X & \leq C_{\rm target}n(\log n)^{12}.\notag
+    \end{align}
+    Write $p_i$ for the target-marginal eigenvalues and
+    $S_X=S_{\widetilde\Omega}(X)$. Their surprisal tail outside width
+    $w$ has mass at most $\delta_t$. The typical set
+    $E=\{i:p_i>0,\ |{-\log p_i}-S_X|\leq w\}$ has cardinality $d>0$
+    and mass $z$ with $0<1-\delta_t\leq z\leq1$; every $i\in E$
+    obeys $\exp(-S_X-w)\leq p_i\leq\exp(-S_X+w)$.
+
+    Let $\psi$ be the normalized Schmidt vector restricted to $E$, and
+    let $S'$ be its auxiliary entropy. One sequence $\lambda_k$ and
+    its physical Schmidt--Bell prevectors $\mathrm{pre}_k$ satisfy
+    $\mathrm{pre}_k\ne0$ and $\|\mathrm{pre}_k\|\leq1$ for all $k>0$,
+    and $\log\dim\lambda_k-kS'=o(k)$. For all sufficiently large $k$,
+    \begin{align}
+        \|(I\otimes P_{\lambda_k})\psi^{\otimes k}\|^2
+         & \geq\frac1{2(k+1)^{d^2}}.\notag
+    \end{align}
+    The state $\widetilde\Omega$, the set $E$, the compressed vector $\psi$
+    and the sequences $(\lambda_k)$ and $(\mathrm{pre}_k)$ are fixed before $W$.
+    For any $W>0$, put $a=W/K$ and
+    $\ell_{\rm dim}=1+(2r_0+1)^2\log q$, and suppose
+    $a\ell_{\rm dim}\leq c_t$. Define
+    \begin{align}
+        B_{\rm sh}  & =C_e(nL^\eta+n)+n^{-247},\notag                      \\
+        B_{\rm rough}
+                    & =2\log d-\log z+
+        W\left(\frac{B_{\rm sh}}z+1+3nD\log q\right),\notag                \\
+        T_{\rm ent} & =C_{\rm ent}aK\,a^{1/4}\ell_{\rm dim}^{e_{\rm ent}}.
+        \label{eq:arealaw-charge-budgets}
+    \end{align}
+    There are nonnegative $C_b,c_U,c_R,C_i$, a sequence
+    $0\leq b_k\leq C_b\log(k+2)$, and $r_k\geq0$ tending to zero.
+    Write
+    \begin{align}
+        R_k^{\rm Bell}(d,c,K)
+         & =\frac{\log4+(d^2+cK)\log(k+2)}k,\notag \\
+        R_k^{\rm end}
+         & =R_k^{\rm Bell}(d,c_R,K)
+        +(C_i+2nmC_b)\frac{\log(k+2)}k.\notag
+    \end{align}
+    The remainders $R_k^{\rm Bell}$ and $R_k^{\rm end}$ tend to zero. For every fixed
+    $0<p_0<p_1<1$ and all sufficiently large $k$, there is a charge
+    round $s_k<nm$ and $p_k\in[p_0,p_1]$ with the following properties.
+    Let $\mathcal Q_k$ be the actual entropy defect at this charge, and
+    let $\mathcal M_k$ be its root metric at $p_k$. Define
+    \begin{align}
+        N_k^2 & =\|\mathcal M_k^{-1/4}\mathrm{pre}_k\|^2,\notag \\
+        v_k   & =\mathcal M_k^{-1/4}\mathrm{pre}_k/N_k,\notag   \\
+        \mu_k & =\operatorname{Re}\langle v_k,
+        \overline{\widetilde H}_k v_k\rangle.\notag
+    \end{align}
+    Here $N_k$ is the positive square root of $N_k^2$, whose positivity
+    is part of the conclusion, and $\overline{\widetilde H}_k$ is the
+    mean truncated physical Hamiltonian on the replicas, extended by the
+    identity on both auxiliary registers. Put
+    \begin{align}
+        \operatorname{cap}_k
+         & =CW^2n^\ell D^2(\log n)^{C_l}
+        \left[(1-p_k)\left(\frac{\mathcal Q_k}{KnD}\right)^{1/8}
+            +(1-p_k)n^{-P}+p_k\right].\notag
+    \end{align}
+    At this single point,
+    \begin{align}
+        \frac{\mathcal Q_k}{KnD}
+              & \leq\frac{2(C_1+1)}{Wnm(p_1-p_0)}
+        \left(B_{\rm rough}+2nmT_{\rm ent}+R_k^{\rm end}\right),\notag \\
+        \frac{\mu_k-e_t}{g/2}
+              & \leq\frac{e_t+\operatorname{cap}_k+r_k}{g/2},\notag    \\
+        N_k^2 & >0,\notag                                              \\
+        -\frac{\log N_k^2}{k}
+              & \leq B_{\rm rough}+R_k^{\rm Bell}(d,c_U,K).
+        \label{eq:arealaw-charge-selection}
+    \end{align}
+    The remainder sequences and their coefficients are chosen before the
+    interpolation interval. They may depend on the fixed physical instance
+    and weight; the selected round and parameter may depend on $k$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_scan_target_typical_window,thm:al_global_schmidt_bell_prevector,
+        thm:al_positive_prefix_entropy_transfer,thm:al_scan_actual_rough_upper,
+        thm:arealaw-physical-endpoint-loss,thm:arealaw-density-from-rough-endpoint,
+        thm:arealaw-augmented-prevector-properties,thm:arealaw-actual-selected-energy,
+        lem:arealaw-generic-charge-energy,lem:arealaw-generic-selected-energy,
+        lem:al_scanner_scale_facts,thm:area_law_band_count_growth,
+        lem:arealaw-rough-endpoint-remainder-limit}
+    Choose the truncation constants, then the energy coefficient and size
+    threshold for the given exponents. The target-window theorem gives
+    $\widetilde\Omega,E,z$; the common-label theorem gives
+    $\lambda_k$, its projected mass and its dimension asymptotic.
+    Entropy continuity transfers every original prefix bound to the same
+    truncated vector with the additive error $n^{-247}$.
+
+    Apply the rough upper estimate and the initial-to-final norm estimate
+    to this sequence. After fixing the finite physical instance, weight
+    and interval, intersect these two events with $k>0$.
+    The augmented-coordinate theorem preserves the nonzero symmetric
+    prevector and its mean-energy eigen-equation, so the charge selector
+    supplies one point with both the entropy-defect and normalized energy
+    inequalities. Apply Theorem~\ref{thm:arealaw-density-from-rough-endpoint},
+    with the accumulated logarithmic transport error, to obtain the first
+    inequality of~(\ref{eq:arealaw-charge-selection}). At this same selected
+    point, the generic coefficient bound replaces the transport-error term
+    in the normalized energy inequality by $\operatorname{cap}_k$.
+    The rough upper estimate supplies the last two conclusions at this charge.
+\end{proof}
+
+\begin{theorem}[Moment radii from marginal smallness]
+    \label{thm:arealaw-sharp-smallness}
+    \lean{TNLean.PEPS.AreaLaw.Scan.sharpSmallness_le_moment_radius}
+    \leanok
+    Let $B,a,c_0\in\mathbb R$. If $B\geq1$ and
+    $a\sqrt B\leq\min\{c_0,1\}/10$, then
+    $10a\leq c_0/\sqrt B$ and $10a\leq1$.
+    This is the elementary smallness implication used in
+    \cite[Proposition~9.2, sharp-comparison clause]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Since $\sqrt B\geq1$, it is positive. Multiplication of the smallness
+    inequality by $10$ gives $10a\sqrt B\leq\min\{c_0,1\}$.
+    Division by $\sqrt B$ yields the first bound and
+    $10a\leq1/\sqrt B\leq1$.
+\end{proof}
+
+% Auxiliary density consequence for Proposition 9.2.
+\begin{theorem}[Physical selected density for arbitrary scanner exponents]
+    \label{thm:arealaw-source-selected-density}
+    \lean{
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_source_density}
+    \leanok
+    \uses{thm:arealaw-source-charge-selection}
+    Fix integers $q\geq1$, $R\geq0$, and real $J\geq0$, $\Delta>0$, $C_T\geq0$,
+    $C_1>0$, an anchor-multiplicity bound $m_*\in\mathbb N$ with $3m_*\leq C_1$,
+    and a real exponent $P$. There are positive truncation constants
+    and $0<c\leq1/2$, chosen before the scanner exponents and entropy
+    coefficient. For every admissible exponent tuple
+    $(\ell,\mu,\kappa,\nu,e_{\rm in})$, there are $C\geq1$ and $C_l\geq0$.
+    For every $C_e\geq0$, there are $C_\delta>0$, $C_{l,\delta}\geq0$
+    and $N\geq2$, all chosen before the finite physical instance and $W$.
+
+    Use the original gapped Hamiltonian, nonempty target, actual distance
+    function, anchor multiplicity, layer-cardinality bound, cut clearance,
+    and rounded scales of Theorem~\ref{thm:arealaw-source-charge-selection}.
+    Suppose $n\geq N$, and put $X=A\cap T$. For every integer $0\leq j\leq L$,
+    assume
+    \begin{align}
+        S_\Omega(X) & \leq C_en^{1+e_{\rm in}},\notag    \\
+        S_\Omega(\{x\in A:0<d(x)\leq j\})
+                    & \leq C_e(nL^{e_{\rm in}}+n).\notag
+    \end{align}
+    Then $2r_0\leq D$, $1\leq D$, and $4D\leq m$. There is one truncated
+    vector $\widetilde\Omega$, typical set $E$, positive selected mass $z$,
+    and sequence of labels and physical Schmidt--Bell prevectors satisfying
+    all the state, projected-mass and dimension conclusions of
+    Theorem~\ref{thm:arealaw-source-charge-selection}, before $W$ is chosen.
+
+    For any $W\geq1$, set $a=W/K$, $\varepsilon=n^{-\nu}$, and assume
+    $ar_0^2\leq c$. With the same $B_{\rm rough}$ and $T_{\rm ent}$ as in
+    (\ref{eq:arealaw-charge-budgets}), with $\eta=e_{\rm in}$, one has
+    \begin{align}
+        B_{\rm rough}
+         & \leq (6C_e+13+6\log q)Wn^{1+e_{\rm in}},\notag \\
+        \delta_n
+         & :=C_\delta\varepsilon^{-1}
+        \left(n^{e_{\rm in}-\mu}+a^{1/4}(\log n)^{C_{l,\delta}}\right).
+        \label{eq:arealaw-source-density}
+    \end{align}
+    There is a nonnegative sequence $\rho_k\to0$ such that, for all
+    sufficiently large $k$, the same actual selected charge $s_k<nm$ and
+    parameter $p_k\in[\varepsilon/2,\varepsilon]$ satisfy
+    \begin{align}
+        \frac{\mathcal Q_k}{KnD} & \leq\delta_n+\rho_k.\notag
+    \end{align}
+    At this same point all four conclusions of
+    (\ref{eq:arealaw-charge-selection}) hold, with
+    $p_0=\varepsilon/2$ and $p_1=\varepsilon$. In particular, the actual
+    energy cap retains its literal density and truncation term, and the
+    filtered prevector has positive norm. Every remainder tends to zero
+    with the finite instance and $W$ fixed. The exponent conditions do not
+    require $\delta_n\to0$. The case $C_e=0$ is included.
+    This is the density consequence used in
+    \cite[Proposition~9.2, lines~475--490]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:arealaw-source-charge-selection,thm:scanner_rounded_admissibility,
+        thm:al_scan_radius_dimension_smallness,thm:al_scan_transport_coefficients_log,
+        thm:arealaw-target-entropy-transfer,lem:arealaw-source-rough-budget-power,
+        thm:arealaw-selected-density-delta}
+    Enlarge the size threshold so that the rounded scales are admissible,
+    $r_0\geq1$, $\log n\geq1$, and truncation changes each relevant entropy
+    by at most $n^{-247}$. The radius bound gives the transport smallness
+    required for the common state and label sequence. Since $\kappa\leq e_{\rm in}$,
+    the ceiling estimate gives $D\leq2n^{e_{\rm in}}$. The target entropy,
+    selected-mass estimate and logarithmic dimension bound therefore yield
+    the asserted rough-budget bound.
+
+    Write $G=C_{\rm ent}\ell_{\rm dim}^{e_{\rm ent}}$ and choose uniform
+    $C_t\geq1$, $C_{l,\delta}\geq0$ with
+    $G\leq C_t(\log n)^{C_{l,\delta}}$. If $C_s\geq1$ is the rounded-scale
+    constant, take
+    \begin{align}
+        C_\delta & =4(C_1+1)(6C_e+13+6\log q+2C_t)C_s,\notag   \\
+        \gamma   & =\frac{2(C_1+1)}{Wnm(\varepsilon/2)},\notag \\
+        \rho_k   & =|\gamma R_k^{\rm end}|.\notag
+    \end{align}
+    The identity $aK=W$ gives $T_{\rm ent}=GW a^{1/4}$. Apply the scalar
+    density estimate to the rough budget at the point already selected by
+    Theorem~\ref{thm:arealaw-source-charge-selection}. Its remaining term
+    is $\gamma R_k^{\rm end}\leq\rho_k$. The coefficient $\gamma$ is fixed
+    before $k\to\infty$, so $\rho_k\to0$. The energy and norm conclusions
+    at that point are unchanged.
+\end{proof}
