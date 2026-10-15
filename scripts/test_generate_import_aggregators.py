@@ -201,6 +201,57 @@ class ImportAggregatorGeneratorTests(unittest.TestCase):
             {"TNLean.Valid_Name2"},
         )
 
+    def test_malformed_generated_body_is_rejected_without_rewriting(self) -> None:
+        for body in (
+            "<<<<<<< HEAD\nimport TNLean.Foo.Leaf\n=======\n>>>>>>> other\n",
+            "import TNLean.0Invalid\n",
+            "import TNLean.Foo.Leaf\ndef unexpected := 1\n",
+        ):
+            with self.subTest(body=body), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                self.write(root, "TNLean/Foo/Leaf.lean", "def leaf := 1\n")
+                with contextlib.redirect_stdout(io.StringIO()):
+                    self.assertEqual(GENERATOR.update(root, check=False), 0)
+                aggregator = root / "TNLean/Foo.lean"
+                aggregator.write_text(
+                    GENERATOR.generated_notice("TNLean.Foo") + "\n" + body,
+                    encoding="utf-8",
+                )
+                # Reproduce the ancestor frontier obtained when the malformed
+                # generated file is incorrectly treated as handwritten.
+                root_aggregator = root / "TNLean.lean"
+                root_aggregator.write_text(
+                    root_aggregator.read_text(encoding="utf-8").replace(
+                        "import TNLean.Foo\n",
+                        "import TNLean.Foo\nimport TNLean.Foo.Leaf\n",
+                    ),
+                    encoding="utf-8",
+                )
+                before = {p: p.read_bytes() for p in root.rglob("*.lean")}
+                self.assertFalse(GENERATOR.is_generated(aggregator, root / "TNLean"))
+                for check in (True, False):
+                    output = io.StringIO()
+                    with contextlib.redirect_stdout(output):
+                        self.assertEqual(GENERATOR.update(root, check=check), 1)
+                    self.assertIn(
+                        "malformed generated aggregator: TNLean/Foo.lean",
+                        output.getvalue(),
+                    )
+                    self.assertEqual(
+                        {p: p.read_bytes() for p in root.rglob("*.lean")}, before
+                    )
+
+    def test_empty_repository_remains_idempotent(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            (root / "TNLean").mkdir()
+            with contextlib.redirect_stdout(io.StringIO()):
+                self.assertEqual(GENERATOR.update(root, check=False), 0)
+                before = (root / "TNLean.lean").read_bytes()
+                self.assertEqual(GENERATOR.update(root, check=False), 0)
+                self.assertEqual(GENERATOR.update(root, check=True), 0)
+            self.assertEqual((root / "TNLean.lean").read_bytes(), before)
+
     def test_check_rejects_out_of_date_output(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
             root = Path(temporary_directory)
