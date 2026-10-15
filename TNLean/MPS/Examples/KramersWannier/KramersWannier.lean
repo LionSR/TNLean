@@ -105,47 +105,19 @@ open MPSTensor
 
 /-! ### Normality of the two target blocks -/
 
-/-- If every matrix unit occurs in the range of a length-four family, that family is
-algebraically injective. -/
-private theorem isInjective_of_forall_mem_range_single
-    {A : Fin 4 → Matrix (Fin 2) (Fin 2) ℂ}
-    (h : ∀ p q : Fin 2, Matrix.single p q (1 : ℂ) ∈ Set.range A) :
-    Kraus.IsInjective A := by
-  exact Submodule.eq_top_of_forall_single_mem _ fun i j => Submodule.subset_span (h i j)
-
-private theorem shiftMPS_single_mem (p q : Fin 2) :
-    Matrix.single p q (1 : ℂ) ∈ Set.range shiftTensor.toMPSTensor := by
-  fin_cases p <;> fin_cases q
-  · exact ⟨0, by rw [shiftMPS_eq]; ext i j; fin_cases i <;> fin_cases j <;>
-      norm_num [shiftIntMPS, complexOfInt, Matrix.single_apply]⟩
-  · exact ⟨2, by rw [shiftMPS_eq]; ext i j; fin_cases i <;> fin_cases j <;>
-      norm_num [shiftIntMPS, complexOfInt, Matrix.single_apply]⟩
-  · exact ⟨1, by rw [shiftMPS_eq]; ext i j; fin_cases i <;> fin_cases j <;>
-      norm_num [shiftIntMPS, complexOfInt, Matrix.single_apply]⟩
-  · exact ⟨3, by rw [shiftMPS_eq]; ext i j; fin_cases i <;> fin_cases j <;>
-      norm_num [shiftIntMPS, complexOfInt, Matrix.single_apply]⟩
-
-private theorem flipShiftMPS_single_mem (p q : Fin 2) :
-    Matrix.single p q (1 : ℂ) ∈ Set.range flipShiftTensor.toMPSTensor := by
-  fin_cases p <;> fin_cases q
-  · exact ⟨2, by rw [flipShiftMPS_eq]; ext i j; fin_cases i <;> fin_cases j <;>
-      norm_num [flipShiftIntMPS, complexOfInt, Matrix.single_apply]⟩
-  · exact ⟨0, by rw [flipShiftMPS_eq]; ext i j; fin_cases i <;> fin_cases j <;>
-      norm_num [flipShiftIntMPS, complexOfInt, Matrix.single_apply]⟩
-  · exact ⟨3, by rw [flipShiftMPS_eq]; ext i j; fin_cases i <;> fin_cases j <;>
-      norm_num [flipShiftIntMPS, complexOfInt, Matrix.single_apply]⟩
-  · exact ⟨1, by rw [flipShiftMPS_eq]; ext i j; fin_cases i <;> fin_cases j <;>
-      norm_num [flipShiftIntMPS, complexOfInt, Matrix.single_apply]⟩
-
 /-- **The translation tensor is normal.** Its four letters are already the four matrix units of
 `M_2(ℂ)` (construction note, §1.2). -/
 theorem shiftMPS_isNormal : Kraus.IsNormal shiftTensor.toMPSTensor :=
-  Kraus.IsInjective.isNormal (isInjective_of_forall_mem_range_single shiftMPS_single_mem)
+  isNormal_of_complexOfRing_letter_eq_smul_single (Int.castRingHom ℂ) shiftIntMPS one_ne_zero
+    (fun a => by rw [shiftMPS_eq, one_smul]) ![![0, 2], ![1, 3]] (fun _ _ => 1)
+    (fun _ _ => by simp) (by decide)
 
 /-- **The flipped-translation tensor is normal.** Its four letters are already the four matrix
 units of `M_2(ℂ)` (construction note, §1.2). -/
 theorem flipShiftMPS_isNormal : Kraus.IsNormal flipShiftTensor.toMPSTensor :=
-  Kraus.IsInjective.isNormal (isInjective_of_forall_mem_range_single flipShiftMPS_single_mem)
+  isNormal_of_complexOfRing_letter_eq_smul_single (Int.castRingHom ℂ) flipShiftIntMPS one_ne_zero
+    (fun a => by rw [flipShiftMPS_eq, one_smul]) ![![2, 0], ![3, 1]] (fun _ _ => 1)
+    (fun _ _ => by simp) (by decide)
 
 /-! ### The stacked tensor of the square of the duality -/
 
@@ -185,10 +157,7 @@ def kwSquareTargets : (s : Fin 2) → MPSTensor 4 (kwSquareBlockDim s)
 
 private theorem complexOfInt_two_smul {m n : Type*} (M : Matrix m n ℤ) :
     complexOfInt ((2 : ℤ) • M) = (2 : ℂ) • complexOfInt M := by
-  ext i j
-  simp only [complexOfInt_apply, Matrix.smul_apply, smul_eq_mul]
-  push_cast
-  ring
+  simpa using complexOfInt_zsmul 2 M
 
 /-- The integer entries of the two target blocks. -/
 def kwSquareTargetsInt :
@@ -246,10 +215,7 @@ theorem kwSquareGaugeInvMat_mul : kwSquareGaugeInvMat * kwSquareGaugeMat = 1 := 
 def kwSquareOrd : BlockIndex kwSquareSlots 0 ≃ Fin 2 where
   toFun := Sum.elim (fun s => s.1) fun t => t.elim0
   invFun s := Sum.inl ⟨s, Finset.mem_univ s⟩
-  left_inv := by
-    rintro (s | t)
-    · rfl
-    · exact t.elim0
+  left_inv := by decide
   right_inv _ := rfl
 
 /-- The position in the flag of the first coordinate of each block. -/
