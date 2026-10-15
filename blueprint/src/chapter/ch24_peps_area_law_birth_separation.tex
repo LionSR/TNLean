@@ -15,8 +15,8 @@ midpoints are the points of $\{-1,0,1\}^2$.
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
 % geometry:angular-gap, lines 627--645.
-\begin{lemma}[Angular estimate in the maximum norm]
-    \label{lem:area_law_sup_angular_estimate}
+\begin{theorem}[Angular estimate in the maximum norm]
+    \label{thm:area_law_sup_angular_estimate}
     \lean{TNLean.PEPS.AreaLaw.Geometry.half_max_le_norm_smul_sub_smul,
         TNLean.PEPS.AreaLaw.Geometry.unitBox,
         TNLean.PEPS.AreaLaw.Geometry.one_le_norm_sub_of_disjoint_unitBox,
@@ -33,7 +33,7 @@ midpoints are the points of $\{-1,0,1\}^2$.
     $\|d-e\|\ge1$. If $\|d\|=1$, then $B(d)$ lies on the unit sphere; it is
     the closed elementary half-side containing $d$, or $d$ itself when $d$
     is one of the eight points of $\{-1,0,1\}^2\setminus\{0\}$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -50,8 +50,8 @@ midpoints are the points of $\{-1,0,1\}^2$.
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
 % geometry:birth-separation, lines 573--659.
-\begin{lemma}[Quarter sections of integer half-planes]
-    \label{lem:area_law_quarter_sections}
+\begin{theorem}[Quarter sections of integer half-planes]
+    \label{thm:area_law_quarter_sections}
     \lean{TNLean.PEPS.AreaLaw.Geometry.intHalfPlane,
         TNLean.PEPS.AreaLaw.Geometry.quarterRadialPoint,
         TNLean.PEPS.AreaLaw.Geometry.IsQuarterSectorial,
@@ -59,7 +59,7 @@ midpoints are the points of $\{-1,0,1\}^2$.
         TNLean.PEPS.AreaLaw.Geometry.IsQuarterSectorial.iUnion,
         TNLean.PEPS.AreaLaw.Geometry.IsQuarterSectorial.iInter}
     \leanok
-    \uses{lem:area_law_sup_angular_estimate}
+    \uses{thm:area_law_sup_angular_estimate}
     Call a set $P\subseteq\mathbb R^2$ quarter-sectorial at $q$ if, for
     $0<\|x-q\|\le1/4$, membership of $x$ in $P$ agrees with membership of
     $q+(x-q)/(4\|x-q\|)$, and if, for every unit vector $d$ with
@@ -68,7 +68,7 @@ midpoints are the points of $\{-1,0,1\}^2$.
     quarter-sectorial at $q$. Every closed half-plane
     $\{x:ax_1+bx_2\le n\}$ with $a,b,n\in\mathbb Z$ and $|a|+|b|\le2$ is
     quarter-sectorial at every point of $\mathbb Z^2$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -88,7 +88,7 @@ midpoints are the points of $\{-1,0,1\}^2$.
     \label{thm:area_law_contact_angular_estimate}
     \lean{TNLean.PEPS.AreaLaw.Geometry.half_max_le_norm_sub_of_isQuarterSectorial}
     \leanok
-    \uses{lem:area_law_sup_angular_estimate, lem:area_law_quarter_sections}
+    \uses{thm:area_law_sup_angular_estimate, thm:area_law_quarter_sections}
     Let $P,P'$ be quarter-sectorial at $q$, and suppose every common point
     $z\in P\cap P'$ with $\|z-q\|\le1/4$ equals $q$. Then every $x\in P$ and
     $y\in P'$ with $\|x-q\|,\|y-q\|\le1/4$ satisfy
@@ -105,7 +105,7 @@ midpoints are the points of $\{-1,0,1\}^2$.
     $q+d/4\in P$ and $q+e/4\in P'$. A common point of $B(d)$ and $B(e)$
     would give a common point of $P$ and $P'$ at distance $1/4$ from $q$.
     Thus the boxes are disjoint, $\|d-e\|\ge1$, and
-    \eqref{eq:area_law_sup_angular_estimate} applies.
+    (\ref{eq:area_law_sup_angular_estimate}) applies.
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 393--417
@@ -131,8 +131,8 @@ midpoints are the points of $\{-1,0,1\}^2$.
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
 % geometry:repair-induction, lines 497--504, and
 % geometry:birth-separation, lines 616--625.
-\begin{lemma}[Contacts in the normalized replacement fan]
-    \label{lem:area_law_normalized_fan_contacts}
+\begin{theorem}[Contacts in the normalized replacement fan]
+    \label{thm:area_law_normalized_fan_contacts}
     \lean{TNLean.PEPS.AreaLaw.Geometry.isQuarterSectorial_repairNormTriangle,
         TNLean.PEPS.AreaLaw.Geometry.isQuarterSectorial_repairExteriorTrapezoid,
         TNLean.PEPS.AreaLaw.Geometry.isCompact_repairNormTriangle,
@@ -141,18 +141,18 @@ midpoints are the points of $\{-1,0,1\}^2$.
         TNLean.PEPS.AreaLaw.Geometry.repairNormTriangle_inter_eq_zero,
         TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_region_subset_repairNormTriangle}
     \leanok
-    \uses{def:area_law_normalized_repair_fan, lem:area_law_quarter_sections}
+    \uses{def:area_law_normalized_repair_fan, thm:area_law_quarter_sections}
     The sets $LT_s$ and $E_s$ are compact and quarter-sectorial at every
     point of $\mathbb Z^2$. For distinct wedges $s\ne t$, every common point
     of $T_s$ and $E_t$ lies in $\mathbb Z^2$. If $s\ne t$ are not
     consecutive, then every common point of $T_s$ and $T_t$ is the center $0$. Every actual fan triangle of $Q$ lies in its
     triangle $T_s$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
     All facets have integer levels and coefficients with $|a|+|b|\le2$, so
-    Lemma~\ref{lem:area_law_quarter_sections} applies, and the sets are
+    Theorem~\ref{thm:area_law_quarter_sections} applies, and the sets are
     closed and bounded. The contact assertions are finitely many systems of
     linear inequalities, one for each pair of wedges. The actual triangle is
     the convex hull of its three vertices, each of which satisfies the three
@@ -195,7 +195,7 @@ midpoints are the points of $\{-1,0,1\}^2$.
         TNLean.PEPS.AreaLaw.Geometry.exists_repairSameLabel_dichotomy,
         TNLean.PEPS.AreaLaw.Geometry.exists_repairBirth_separation}
     \leanok
-    \uses{lem:area_law_normalized_fan_contacts,
+    \uses{thm:area_law_normalized_fan_contacts,
         thm:area_law_contact_dichotomy, thm:area_law_repair_margins,
         def:area_law_repair_children}
     There is $c_1>0$ with the following property. Let the exterior labels of
@@ -219,7 +219,7 @@ midpoints are the points of $\{-1,0,1\}^2$.
     triangle $T_s$, $s\in C$, and a set $E_t$ or $T_t$ in $W_C$. A wedge
     $t$ of different label is distinct from $s$, and a wedge of another run
     with the same label is neither $s$ nor consecutive to $s$, so
-    Lemma~\ref{lem:area_law_normalized_fan_contacts} gives the contact
+    Theorem~\ref{thm:area_law_normalized_fan_contacts} gives the contact
     hypothesis. The finitely many pairs give one $\eta\in(0,1]$; put
     $c_1=\min(\eta,1/4)$. If $\|y-v\|\ge2u$, then $\|x-y\|\ge u\ge
         u^{\rho_0}$. Otherwise rescale: either $\|x-y\|\ge\eta u$, or there
@@ -238,21 +238,21 @@ generation's squares, including terminal ones, from every old region.
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
 % geometry:initial-stars, lines 332--349; geometry:repair-induction,
 % lines 486--494; geometry:birth-separation, lines 584--615.
-\begin{lemma}[Same-label regions in an isolated star]
-    \label{lem:area_law_star_same_label_bound}
+\begin{theorem}[Same-label regions in an isolated star]
+    \label{thm:area_law_star_same_label_bound}
     \lean{TNLean.PEPS.AreaLaw.Geometry.interior_repairNormTriangle_inter_eq_empty,
         TNLean.PEPS.AreaLaw.Geometry.interior_repairCurrentFanTriangle_inter_eq_empty,
         TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar.exists_repairCurrentSectorAssignment_eq,
         TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar.exists_mem_repairExteriorTrapezoid}
     \leanok
-    \uses{lem:area_law_normalized_fan_contacts}
+    \uses{thm:area_law_normalized_fan_contacts}
     Let the closed square of half-side $\rho$ about $v$ be an isolated star
     of a labelled region family $(R_i)$, and let $u>0$ with $6u\le\rho$.
     The identifier chosen by the repair for each working wedge of half-side
     $6u$ is the identifier assigned to that wedge by the star. If
     $w\in R_i$ and $u<\|w-v\|<2u$, then $(w-v)/u$ lies in the exterior
     trapezoid $E_t$ of a wedge $t$ assigned to $i$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -280,7 +280,7 @@ generation's squares, including terminal ones, from every old region.
         TNLean.PEPS.AreaLaw.Geometry.exists_isRepairBirthSeparated_of_uniformRepairInductionStatement}
     \leanok
     \uses{thm:area_law_replacement_birth_separation_local,
-        lem:area_law_star_same_label_bound,
+        thm:area_law_star_same_label_bound,
         def:area_law_uniform_repair_conclusion,
         lem:area_law_repair_metric_choice}
     Assume the conclusion of the uniform repair induction of
@@ -300,7 +300,7 @@ generation's squares, including terminal ones, from every old region.
     with $u=d(S)\ge S_*\ge1$ to the final actual region $Y$ of the compared
     identifier. Near the parent mark, an older region lies in the isolated
     star of the mark and avoids its removal square, so
-    Lemma~\ref{lem:area_law_star_same_label_bound} places it in the exterior
+    Theorem~\ref{thm:area_law_star_same_label_bound} places it in the exterior
     trapezoids of the wedges of its label, which is opposite to the exterior
     label of the run. A peer at the same parent lies in the birth of another
     run with the same exterior label. A peer at another parent lies in that
@@ -310,7 +310,7 @@ generation's squares, including terminal ones, from every old region.
 \end{proof}
 
 This theorem covers the replacement births of
-Lemma~\ref{lem:area_law_birth_separation}. The births of initial belt tiles
+Theorem~\ref{thm:area_law_birth_separation}. The births of initial belt tiles
 are treated next, without any assumption beyond the construction.
 
 For an initial belt tile in a belt cell of side $u=t_k$, normalize that cell
@@ -345,7 +345,7 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
         TNLean.PEPS.AreaLaw.Geometry.exists_segment_subset_beltAtom_inter,
         TNLean.PEPS.AreaLaw.Geometry.beltAtom_axis_segments}
     \leanok
-    \uses{def:area_law_normalized_repair_fan, lem:area_law_quarter_sections}
+    \uses{def:area_law_normalized_repair_fan, thm:area_law_quarter_sections}
     Atoms are compact, convex and quarter-sectorial at every point of
     $\mathbb Z^2$, and the interior of an atom meets none of the lines
     (\ref{eq:area_law_belt_arrangement}).
@@ -365,7 +365,7 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     \leanok
     An atom is cut out by three half-planes of the arrangement, with integer
     coefficients and $|a|+|b|\le2$, so
-    Lemma~\ref{lem:area_law_quarter_sections} applies. Two nonparallel lines
+    Theorem~\ref{thm:area_law_quarter_sections} applies. Two nonparallel lines
     of the arrangement meet in an integer point, by Cramer's rule and the
     parity of the diagonal levels. In the interior of a normalized triangle
     $T_s$ the coordinates lie strictly between consecutive integers and
@@ -588,12 +588,12 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
 The isolated stars of the initial stage are proved in
 Theorem~\ref{thm:area_law_initial_stars}, so the last theorem applies without
 premise and gives
-Lemma~\ref{lem:area_law_birth_separation}~\cite{gap:arealaw2d_birth_separation_scope}.
+Theorem~\ref{thm:area_law_birth_separation}~\cite{gap:arealaw2d_birth_separation_scope}.
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
 % geometry:birth-separation, lines 573--582.
-\begin{lemma}[Birth-template separation]
-    \label{lem:area_law_birth_separation}
+\begin{theorem}[Birth-template separation]
+    \label{thm:area_law_birth_separation}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation}
     \leanok
     \uses{def:area_law_repair_stage}
@@ -606,7 +606,7 @@ Lemma~\ref{lem:area_law_birth_separation}~\cite{gap:arealaw2d_birth_separation_s
     $c_1u^{\rho_0}$. A peer means
     another initial belt tile, or another replacement born at the same
     generation, respectively.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
