@@ -1165,6 +1165,44 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     the finitely many templates.
 \end{proof}
 
+\begin{theorem}[The direct repainting at the constants of the protocol]
+    \label{thm:peps_dyadic_direct_repainting_constants}
+    \lean{TNLean.PEPS.Approximation.IsDirectRepaintingRatio,
+        TNLean.PEPS.Approximation.exists_isDirectRepaintingRatio,
+        TNLean.PEPS.Approximation.exists_isProtocolConstants_isDirectRepaintingRatio,
+        TNLean.PEPS.Approximation.IsDirectRepaintingRatio.hasTwoOwnerFootprints,
+        TNLean.PEPS.Approximation.directRepainting_step_of_protocolSeparations,
+        TNLean.PEPS.Approximation.IsProtocolConstants.directRepainting_step}
+    \leanok
+    \uses{thm:peps_dyadic_sampled_ratio, thm:peps_guide_frame_rewrite_events,
+        thm:peps_protocol_constants}
+    For $\epsilon_0>0$ and any $K_0$ there is $\nu'>0$ such that every
+    $\nu\in(0,\nu']$ serves as the ratio of Theorem~\ref{thm:peps_dyadic_sampled_ratio}
+    for the direct repaintings at levels $n\le K_0t$. This is a smallness condition on
+    $\nu$ given $K_0$ and $\epsilon_0$, so the constants of
+    Theorem~\ref{thm:peps_protocol_constants} can be chosen in the order
+    of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, \texttt{06-geometry.tex}, lines
+    559--570, with such a $\nu$.
+
+    Fix such constants and $t>0$ at which the separations of
+    Theorem~\ref{thm:peps_protocol_constants} hold, for instance $t=D\log L$ with
+    $L\ge2$. Let $0<n\le K_0t$, let the holes have radius $h_n=\epsilon_0\min(n,t)$ and
+    the patches radius $u=\nu n/2$, and let $b$ be the patch bound of
+    Theorem~\ref{thm:peps_protocol_constants}. For the readings after a generic
+    displacement of two guides uniform on the $n$-blocks that differ only on one block,
+    the two-owner conditions for footprints of radius $2u=\nu n$ assumed in
+    Theorem~\ref{thm:peps_guide_frame_rewrite_events} hold, and the direct repainting of
+    the block is one gate as there, with this $b$ and no further geometric condition
+    (lines 507--527 and 574--583).
+\end{theorem}
+
+\begin{proof}\leanok
+    Take $\nu'$ the ratio of Theorem~\ref{thm:peps_dyadic_sampled_ratio} for the direct
+    repaintings; the two-owner condition survives shrinking the footprint. The
+    separation $3u+4r<n$, the patch count and $18\le b$ are those of
+    Theorem~\ref{thm:peps_protocol_constants}.
+\end{proof}
+
 \begin{lemma}[Trivial holes at the last level]
     \label{lem:peps_dyadic_last_level}
     \lean{TNLean.PEPS.Approximation.IsCellCenter.notMem_closedBall_blockCorner}
@@ -1523,6 +1561,35 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     the block or a block label of the level. The new label of a block of the root square
     is the label of a square of the hierarchy, and so is every block label of the level
     other than the placeholder, by Theorem~\ref{thm:peps_dyadic_protocol_parties}.
+\end{proof}
+
+\begin{theorem}[Owners of the treated and directly repainted guides]
+    \label{thm:peps_dyadic_guide_owners}
+    \lean{TNLean.PEPS.Approximation.homogenize_mem,
+        TNLean.PEPS.Approximation.shiftGuide_mem,
+        TNLean.PEPS.Approximation.IsDisplacedReading.mem,
+        TNLean.PEPS.Approximation.blockGuide_mem_validLabels,
+        TNLean.PEPS.Approximation.blockRepainting_treated_mem_validLabels,
+        TNLean.PEPS.Approximation.guideFrame_owner_eq_iff}
+    \leanok
+    \uses{thm:peps_dyadic_repainting_valid_labels, def:peps_guide_frame}
+    At level $2^j$ with $j<k$, the block guides of the level take only the
+    placeholder label and labels of squares of the hierarchy; these are the guides
+    before and after a direct repainting. The guides of
+    Theorem~\ref{thm:peps_dyadic_repainting_valid_labels}, placed on a block and
+    homogenized on any set to such a label, take only such labels, and so does
+    every reading of such a guide after a small displacement. For a guide with
+    such labels, two sites of its encoded frame, with labels read as the parties
+    of a repainting, have the same raw owner exactly when they carry the same
+    label (\texttt{06-geometry.tex}, lines 82--100, 328--339 and 507--527).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_dyadic_repainting_valid_labels, thm:peps_dyadic_protocol_parties}
+    Homogenizing, placing and reading after a displacement take values among the
+    values of the guide and the new label. The map from labels to parties is
+    injective on the placeholder and the labels of the squares of the hierarchy,
+    by Theorem~\ref{thm:peps_dyadic_protocol_parties}.
 \end{proof}
 
 \begin{theorem}[Locality of the parties of an event]
