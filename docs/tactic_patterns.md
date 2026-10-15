@@ -24,6 +24,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Patch net covers in the plane conditions — promoted (2026-10-15)
+
+- **Pattern:** From `exists_netCover`, turn the cover of a set `K` by the net `u ℤ²` into a cover
+  by the inner squares of the patches at the net points, and bound the outer square of a patch at
+  a net point within `3 u` of `K`.
+- **Seen:** the direct repainting, the resize and the local rewrite, in
+  `DyadicDirectRepaintingRewrite.lean`, `DyadicResizeRewrite.lean` and `LocalGuideRewrite.lean`
+  under `TNLean/PEPS/Approximation/`.
+- **Abstraction:** `exists_mem_image_dist_le_scale` and `exists_dist_lt_of_mem_image` in
+  `GuideFrameRewrite.lean`.
+- **Notes:** The patches are assumed centered at their net points with radius `u`.
+
 ### Positional factors in reversed finite lists — promoted through Mathlib
 
 - **Pattern:** Recover an index of a factor in a reversed finite list, transfer
