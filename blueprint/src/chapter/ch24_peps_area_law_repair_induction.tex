@@ -342,7 +342,6 @@ by the strict inequalities.
 
 % Source: 10-geometry.tex, geometry:initial-stars, lines 332--349, and
 % geometry:repair-induction, lines 471--543.
-% Conditional entry; see docs/paper-gaps/arealaw2d_repair_induction_initial_stars.tex.
 \begin{theorem}[Uniform repair induction from the initial isolated stars]
     \label{thm:area_law_uniform_repair_induction_conditional}
     \lean{TNLean.PEPS.AreaLaw.Geometry.uniformRepairInductionStatement_of_initialIsolatedStars}
@@ -374,6 +373,8 @@ by the strict inequalities.
 % Source: 10-geometry.tex, geometry:repair-induction, lines 471--485.
 \begin{lemma}[Uniform repair induction]
     \label{lem:area_law_uniform_repair_induction}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.uniformRepairInductionStatement_holds}
+    \leanok
     \uses{def:area_law_uniform_repair_conclusion,
         thm:area_law_uniform_repair_induction_conditional,
         lem:area_law_repair_metric_invariants,
@@ -393,7 +394,9 @@ by the strict inequalities.
 \end{lemma}
 
 \begin{proof}
+    \leanok
     \uses{thm:area_law_uniform_repair_induction_conditional,
+        thm:area_law_initial_stars,
         lem:area_law_repair_metric_invariants,
         lem:area_law_repair_metric_choice}
     This is Theorem~\ref{thm:area_law_uniform_repair_induction_conditional}
