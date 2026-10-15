@@ -49,4 +49,32 @@ theorem RepairMetricHypotheses.exists_isEmpty_markIndex {a₀ : ℝ}
           ((h.scale_mul_two_pow_le 0 n q).trans
             (hB (Set.mem_range_self (repairMarkAncestor o Λ A C k₀ hC h₀ Sstar 0 n q)))))⟩⟩
 
+/-- Once an actual mark family is empty, every later mark family is empty.
+A later mark would have an ancestor in the empty generation.
+Source: area-law Section 11, child marks, lines 404–409, and
+`geometry:repair-induction`, termination argument, lines 538–541. -/
+theorem isEmpty_repairStage_markIndex_add (j n : ℕ)
+    (h : IsEmpty (𝔇 j).markIndex) : IsEmpty (𝔇 (j + n)).markIndex := by
+  exact
+    letI := h
+    Function.isEmpty (repairMarkAncestor o Λ A C k₀ hC h₀ Sstar j n)
+
+/-- The stopping-scale and lower-layer thresholds precede the finite domain
+and cut; each resulting repair has a common empty generation.
+Source: area-law Section 11, `geometry:trim-margins`, lines 380–394,
+initial marks, lines 325–363, and `geometry:repair-induction`, lines 538–541. -/
+theorem exists_uniform_isEmpty_repairStage_markIndex {a₀ : ℝ}
+    (ha₀ : 0 < a₀) (ha₀' : a₀ ≤ 1 / 4) :
+    ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+        (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
+          ∃ N : ℕ, IsEmpty (repairStage o Λ A C k₀ hC h₀ Sstar N).markIndex := by
+  exact
+    let ⟨T, hT⟩ := exists_repairMetricHypotheses ha₀ ha₀'
+    ⟨T, fun Sstar hSstar C ↦
+      let ⟨K, hK⟩ := hT Sstar hSstar C
+      ⟨K, fun o Λ A k₀ hC h₀ hk ↦
+        RepairMetricHypotheses.exists_isEmpty_markIndex o Λ A C k₀ hC h₀ Sstar
+          (hK o Λ A k₀ hC h₀ hk)⟩⟩
+
 end TNLean.PEPS.AreaLaw.Geometry
