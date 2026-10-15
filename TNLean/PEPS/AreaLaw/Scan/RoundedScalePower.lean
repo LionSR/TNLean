@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import Mathlib.Algebra.Order.Floor.Semiring
+import TNLean.Algebra.CeilScaling
 import Mathlib.Analysis.SpecialFunctions.Pow.Real
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
@@ -37,9 +37,8 @@ theorem floor_rpow_ceil_mul_rpow_le {C₂ η e : ℝ} (hC₂ : 0 ≤ C₂)
     (Nat.floor ((Nat.ceil (C₂ * (s : ℝ)) : ℝ) ^ η) : ℝ) ^ e ≤
       (C₂ + 1) ^ (η * e) * (s : ℝ) ^ (η * e) := by
   have hs₁ : (1 : ℝ) ≤ s := by exact_mod_cast hs
-  have hceil : (Nat.ceil (C₂ * (s : ℝ)) : ℝ) ≤ (C₂ + 1) * (s : ℝ) := by
-    have hlt := Nat.ceil_lt_add_one (mul_nonneg hC₂ (Nat.cast_nonneg s))
-    nlinarith
+  have hceil : (Nat.ceil (C₂ * (s : ℝ)) : ℝ) ≤ (C₂ + 1) * (s : ℝ) :=
+    Nat.ceil_le_add_one_mul_of_le_mul (mul_nonneg hC₂ (Nat.cast_nonneg s)) le_rfl hs₁
   have hfloor : (Nat.floor ((Nat.ceil (C₂ * (s : ℝ)) : ℝ) ^ η) : ℝ) ≤
       ((C₂ + 1) * (s : ℝ)) ^ η :=
     (Nat.floor_le (by positivity)).trans

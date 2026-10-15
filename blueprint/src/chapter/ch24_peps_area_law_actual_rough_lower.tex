@@ -13,6 +13,7 @@ region is $(Q_{jg}\cup Y_{jg})^c$.
 \begin{theorem}[Actual-root rough lower estimate]
     \label{thm:actual_scan_rough_lower_norm}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_rough_lower_norm}
+    \leanok
     Fix a finite physical site space, positive local and auxiliary
     dimensions $q,d$, and a band count $K\geq8$.
     Put $a=4/K$.
@@ -58,6 +59,7 @@ region is $(Q_{jg}\cup Y_{jg})^c$.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     The actual near and middle regions are disjoint and satisfy
     $Q_{jg}\cup Y_{jg}\subseteq Q_{j'h}$ for every $g<h$.
     Choose an isometry $Z$ onto simultaneous symmetry and express it in
@@ -86,6 +88,7 @@ region is $(Q_{jg}\cup Y_{jg})^c$.
 \begin{definition}[The same-label rough lower remainder]
     \label{def:actual_rough_lower_remainder}
     \lean{TNLean.PEPS.AreaLaw.Scan.roughLowerLabelDefect,TNLean.PEPS.AreaLaw.Scan.roughLowerRemainder}
+    \leanok
     For one supplied label sequence $\ell_k$ and a real $S'$, put
     $\varepsilon_k=2|\log\dim\ell_k-kS'|$ and use this
     $\varepsilon_k$ in (\ref{eq:actual_rough_lower_finite_remainder}).
@@ -94,16 +97,20 @@ region is $(Q_{jg}\cup Y_{jg})^c$.
 \begin{theorem}[The supplied labels satisfy the entropy condition]
     \label{thm:actual_rough_lower_label_defect}
     \lean{TNLean.PEPS.AreaLaw.Scan.roughLowerLabelDefect_label_bound}
+    \leanok
     For every $k$, $\varepsilon_k\geq0$ and
     $2kS'-\varepsilon_k\leq2\log\dim\ell_k$.
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{def:actual_rough_lower_remainder}
     Use $kS'-\log\dim\ell_k\leq|\log\dim\ell_k-kS'|$.
 \end{proof}
 
 \begin{theorem}[Vanishing rough remainder and a common threshold]
     \label{thm:actual_rough_lower_remainder_limit}
     \lean{TNLean.PEPS.AreaLaw.Scan.tendsto_roughLowerRemainder_of_label_dimension,TNLean.PEPS.AreaLaw.Scan.exists_roughLowerRemainder_threshold}
+    \leanok
     If $\log\dim\ell_k-kS'=o(k)$, then $R_k\to0$ for each fixed
     $K,c,C_f$.
     For every $\epsilon_{\rm rep}>0$, there is a threshold $k_0$ such
@@ -112,6 +119,8 @@ region is $(Q_{jg}\cup Y_{jg})^c$.
     interpolation parameter.
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{def:actual_rough_lower_remainder}
     The label premise gives $\varepsilon_k/k\to0$.
     Both shifted logarithms divided by $k$ tend to zero.
     Hence $r_k/k\to0$ and $|r_k|/k\to0$; the remaining terms of
@@ -124,6 +133,7 @@ region is $(Q_{jg}\cup Y_{jg})^c$.
 \begin{theorem}[Rough lower rate for the supplied physical sequence]
     \label{thm:actual_scan_supplied_prevector_rough_lower}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_suppliedPrevector_rough_lower}
+    \leanok
     Under the scanner and gap hypotheses of
     Theorem~\ref{thm:actual_scan_rough_lower_norm}, take the literal augmented
     physical replica prevector associated with one supplied sequence
@@ -140,6 +150,10 @@ region is $(Q_{jg}\cup Y_{jg})^c$.
     those in Theorem~\ref{thm:actual_scan_rough_lower_norm}.
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{thm:actual_scan_rough_lower_norm,
+        thm:actual_rough_lower_label_defect,
+        thm:actual_rough_lower_remainder_limit}
     The augmented coordinate equivalence preserves nonvanishing and
     norm.
     The literal replica prevector is fixed by simultaneous copy

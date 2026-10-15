@@ -247,6 +247,70 @@ original open square. We state the two models separately, following
     both cases.
 \end{proof}
 
+\begin{theorem}[Marginal trace norm from the full-system gap]
+    \label{thm:peps_gap_marginal_trace_norm}
+    \lean{FiniteProduct.re_trace_abs_reducedPure_sub_le_sqrt_energy}
+    \leanok
+    \uses{def:area_law_ground_entropy}
+    Let $\mathcal H=\bigotimes_{v\in V}\mathcal H_v$ be a finite tensor product
+    of finite-dimensional complex Hilbert spaces. Let $H$ be an operator on
+    $\mathcal H$ and let $E_0\in\R$. Suppose that $\Omega$ is a unit vector
+    and $\Delta>0$, with
+    \begin{align}
+        H\Omega & = E_0\Omega, \notag                         \\
+        H-E_0I  & \geq\Delta(I-|\Omega\rangle\langle\Omega|).
+        \label{eq:peps_gap_projector_bound}
+    \end{align}
+    For a unit vector $\phi$ and a region $X\subseteq V$, put
+    $\rho_X^\phi=\operatorname{Tr}_{V\setminus X}|\phi\rangle\langle\phi|$
+    and define $\rho_X^\Omega$ in the same way. Then
+    \begin{align}
+        \|\rho_X^\phi-\rho_X^\Omega\|_1
+         & \leq 2\sqrt{\frac{\operatorname{Re}\langle\phi,H\phi\rangle-E_0}{\Delta}}.
+        \label{eq:peps_gap_marginal_distance}
+    \end{align}
+    This is the gap-to-marginal estimate in the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L339-L365}{proof of Proposition 4.1}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:al_amp_pure_trace_distance}
+    Write $e=\operatorname{Re}\langle\phi,H\phi\rangle-E_0$.
+    Taking the expectation of~(\ref{eq:peps_gap_projector_bound}) in $\phi$ gives
+    $1-|\langle\Omega,\phi\rangle|^2\leq e/\Delta$.
+    Contractivity under partial trace and the trace norm formula for two pure
+    states give
+    \begin{align}
+        \|\rho_X^\phi-\rho_X^\Omega\|_1
+         & \leq\bigl\||\phi\rangle\langle\phi|-|\Omega\rangle\langle\Omega|\bigr\|_1
+        =2\sqrt{1-|\langle\Omega,\phi\rangle|^2}
+        \leq2\sqrt{e/\Delta}.
+    \end{align}
+\end{proof}
+
+\begin{theorem}[A sufficient energy bound for marginal approximation]
+    \label{thm:peps_gap_marginal_one_sixteenth}
+    \lean{FiniteProduct.re_trace_abs_reducedPure_sub_le_one_sixteenth_of_energy}
+    \leanok
+    \uses{thm:peps_gap_marginal_trace_norm}
+    Under the hypotheses of Theorem~\ref{thm:peps_gap_marginal_trace_norm}, suppose
+    in addition that
+    \begin{align}
+        \operatorname{Re}\langle\phi,H\phi\rangle-E_0\leq\frac{\Delta}{1024}.
+    \end{align}
+    Then, for every region $X\subseteq V$,
+    \begin{align}
+        \|\rho_X^\phi-\rho_X^\Omega\|_1\leq\frac1{16}.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_gap_marginal_trace_norm}
+    Since $\Delta>0$, the quotient of the excess energy by $\Delta$ is at
+    most $1/1024$. Theorem~\ref{thm:peps_gap_marginal_trace_norm} bounds the
+    full trace norm by $2\sqrt{1/1024}=1/16$.
+\end{proof}
+
 \begin{theorem}[Uniform finite-domain area law]
     \label{thm:openai_uniform_area_law}
     \uses{def:area_law_domain,def:area_law_hamiltonian,def:area_law_ground_entropy}
@@ -1091,7 +1155,8 @@ The proof of Proposition~9.6 of \cite{OpenAI2026AreaLaw} combines the scanner
 estimates with three steps that use no estimate of the scan: an exact entropy
 identity at each leaf, the transfer from the truncated to the original ground
 state, and the cut and size assertions of the proposition. The results below
-prove these steps; the information inequality itself is not proved here.
+prove these steps. Theorem~\ref{thm:area_law_sublinear_collar} combines
+them with the physical scanner estimates to prove the information inequality.
 
 \begin{definition}[Leaf quantities of the sharp comparisons]
     \label{def:area_law_collar_leaf_quantities}
@@ -1249,6 +1314,7 @@ state.
     \label{rem:peps_companion_area_law}
     \uses{thm:openai_uniform_area_law,cor:rectangles,
         thm:area_law_conditional_collar_two_families,
+        thm:area_law_sublinear_collar,thm:area_law_amplification,
         thm:square_hermitian_term_sum,thm:square_area_law_from_uniform,
         thm:rectangular_equal_side_entropy,thm:openai_square_area_law}
     Theorem~1.1 and Corollary~1.2 of \cite{OpenAI2026AreaLaw} give
@@ -1258,8 +1324,11 @@ state.
     constant $C(q,R,J,\Delta)$ serves every domain, interaction family and cut.
     Theorem~\ref{thm:area_law_conditional_collar_two_families} derives it from
     Propositions~9.6 and~11.2 of \cite{OpenAI2026AreaLaw}.
-    % Status: the uniform area law is not proved; only the derivation from
-    % Propositions 9.6 and 11.2 is. The passage to the square grid is proved.
+    The collar proposition is Theorem~\ref{thm:area_law_sublinear_collar};
+    amplification is Theorem~\ref{thm:area_law_amplification}.
+    % Status: the collar and amplification propositions are proved. The
+    % two-family decomposition of Proposition 11.2 remains an assumption, so
+    % the uniform area law is not proved. The passage to the square grid is proved.
     The site and edge terms of the
     original model need not be Hermitian individually. Replacing each by its
     Hermitian part keeps its support and norm bound and leaves the total
@@ -1293,7 +1362,8 @@ state.
 \begin{remark}[Templates and the sublinear collar bound]
     \label{rem:peps_companion_collar}
     \uses{def:area_law_template,def:area_law_collar_bound,
-        thm:area_law_collar_cut_bounds,thm:area_law_collar_bound_of_information}
+        thm:area_law_collar_cut_bounds,thm:area_law_collar_bound_of_information,
+        thm:area_law_sublinear_collar}
     Definition~\ref{def:area_law_template} states the templates of
     \cite[Definition~9.3]{OpenAI2026AreaLaw} with the printed conditions
     $n\ge C_{\rm tpl}N_0(s_0+1)$, $\operatorname{diam}_\infty T\le n$ and
@@ -1306,15 +1376,16 @@ state.
     threshold, $I_\Omega(X:\Gamma\setminus S_0)\le Cn^{1-\varepsilon}$,
     $|S_0|\le Cn^2$, and each of $X$, $S_0\setminus X$ and $S_0$ has at most $Cn$
     crossing edges.
-    % Status: Proposition 9.6 is assumed.
+    % Status: Proposition 9.6 is proved by thm:area_law_sublinear_collar.
     For $C_{\rm tpl}\ge24$ and $D_0\ge1$, which
     the standing choices of a large $C_{\rm tpl}$ and of $D_0>2R+10$ ensure, the
     size and crossing-edge assertions hold for every separated template
     (Theorem~\ref{thm:area_law_collar_cut_bounds}), so
     Theorem~\ref{thm:area_law_collar_bound_of_information} reduces the
-    proposition to the information inequality alone.
-    % Status: the size and crossing-edge bounds are proved; the information
-    % inequality is not.
+    proposition to the information inequality alone. This inequality,
+    together with the size and crossing-edge bounds, is
+    Theorem~\ref{thm:area_law_sublinear_collar}.
+    % Status: all assertions of Proposition 9.6 are proved.
 \end{remark}
 
 \begin{remark}[Amplification]
@@ -1338,8 +1409,8 @@ state.
     Its application in \cite[Proposition~3.1]{OpenAI2026PolynomialPEPS}, with
     $A=\Gamma$ and $M=1$, is Theorem~\ref{thm:peps_coarse_information_of_collar},
     which derives it from the sublinear collar bound.
-    % Status: amplification is proved; its application is proved assuming the
-    % sublinear collar bound.
+    % Status: amplification is proved; the collar premise of its application
+    % is supplied by thm:area_law_sublinear_collar.
 \end{remark}
 
 \begin{remark}[Two-family entropy cancellation]

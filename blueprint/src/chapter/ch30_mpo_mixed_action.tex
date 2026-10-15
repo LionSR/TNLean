@@ -108,7 +108,7 @@ $V_{q,\mu}$ has row $s$ and column $(\beta,l)$.
 \end{tenkzequation}
 % TENKZ-MIXED-ACTION-CROSS-END
 
-\begin{theorem}[Biorthogonality and transport of the bond weight]
+\begin{theorem}[Biorthogonality and commutation of the bond weight]
     \label{thm:mpo_mixed_action_weight}
     \lean{MPSTensor.MPOSymmetry.mixedEndpointAnalysis_mul_synthesis,
         MPSTensor.MPOSymmetry.mixedEndpointMPOAnalysis_mul_synthesis,
@@ -154,7 +154,7 @@ $V_{q,\mu}$ has row $s$ and column $(\beta,l)$.
     \uses{def:mpo_mixed_action_tensor,def:glm_boundary_decomposition}
     Under (\ref{eq:mpo_mix_action_retract}) and
     (\ref{eq:mpo_mix_action_input}), the constructed operator acts on
-    the actual mixed interpolation by an exact biorthogonal decomposition
+    the mixed interpolation by an exact biorthogonal decomposition
     into $m$ copies of that same tensor. For every $\gamma\in\R$,
     \begin{align}
         (T_{\mathrm{mix}}\cdot A(\gamma))^{rs}
@@ -274,8 +274,8 @@ multiplicity. There is no scalar normalization in the local identity.
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_action_exact,thm:glm_boundary_decomposition}
-    Apply trace transport to a nonempty word with identity boundary.
-    Each transported boundary is $V_\mu W_\mu=\Id_E$, so the $m$
+    Apply the boundary trace identity to a nonempty word with identity boundary.
+    Each resulting boundary is $V_\mu W_\mu=\Id_E$, so the $m$
     summands have the same trace. This gives the coefficient of
     (\ref{eq:mpo_mix_action_periodic}) for every physical configuration.
 \end{proof}

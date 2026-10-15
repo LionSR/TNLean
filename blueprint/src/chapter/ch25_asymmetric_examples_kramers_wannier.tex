@@ -139,14 +139,14 @@ of $I_N$.
 
 \subsubsection{Operator identities}
 
-Define the raw periodic operator $K_N$ by the ordinary virtual trace,
+Define the unnormalized periodic operator $K_N$ by the ordinary virtual trace,
 without dividing by the bond dimension:
 \begin{align}
     (K_N)_{ab}
      & =\tr(W^{a_0b_0}\cdots W^{a_{N-1}b_{N-1}}).
     \label{eq:asymex_kw_periodic}
 \end{align}
-We also write $D=K_N$ for this raw operator, retaining $D$ in the
+We also write $D=K_N$ for this unnormalized operator, retaining $D$ in the
 square identity below. The normalized operators will be denoted
 $\mathcal D_N$ and $U_N$, not $D$.
 
@@ -195,7 +195,7 @@ Unless indicated otherwise, site sums and products run over $I_N$.
         KWExample.kwTensor_mpo_not_isUnit}
     \leanok
     \uses{thm:asymex_kw_kernel}
-    For every $N>0$, the raw operator satisfies
+    For every $N>0$, the unnormalized operator satisfies
     $K_N\eta=\eta K_N=K_N$. If $\eta v=-v$, then $K_Nv=0$.
     In particular, $K_N$ is not invertible.
 \end{theorem}
@@ -206,7 +206,7 @@ Unless indicated otherwise, site sums and products run over $I_N$.
     This proves both absorption identities. For an odd vector,
     $K_Nv=K_N\eta v=-K_Nv$, so $K_Nv=0$.
     The nonzero vector $\ket{0}^{\otimes N}-\ket{1}^{\otimes N}$
-    has odd spin flip and witnesses noninvertibility.
+    has odd spin flip, so $K_N$ has a nontrivial kernel.
 \end{proof}
 
 \begin{lemma}[Local duality relations]
@@ -297,7 +297,7 @@ inverse of $K_N$ is involved.
         KWExample.kwTensor_mpo_mul_transpose}
     \leanok
     \uses{thm:asymex_kw_kernel, def:asymex_kw}
-    The raw operator satisfies
+    The unnormalized operator satisfies
     \begin{align}
         TK_N        & =K_NT,
         \notag                    \\
@@ -369,7 +369,7 @@ normalizations of the duality operator are
         KWExample.kwTensor_mpo_normalized_mul_conjTranspose}
     \leanok
     \uses{thm:asymex_kw_absorption, lem:asymex_kw_gram}
-    The kernel and image of the raw duality operator are
+    The kernel and image of the unnormalized duality operator are
     \begin{align}
         \ker K_N  & =\mathcal H_N^-,
         \notag                       \\
@@ -691,7 +691,7 @@ comparing this lattice relation with a size-independent fusion algebra.
 Positive length is essential in these calculations. At $N=1$,
 $K_1=\Id+X_0$ and $U_1=P_+$, consistently with the self-bond convention.
 The empty virtual word instead has trace $\tr\Id_2=2$, so extending
-the raw trace definition to $N=0$ would give $K_0=2$. Its square
+the unnormalized trace definition to $N=0$ would give $K_0=2$. Its square
 would be $4$, whereas the right-hand side of
 (\ref{eq:asymex_kw_fusion}) would be $2$.
 
@@ -1233,7 +1233,7 @@ $D^2=2^N(\Id+\eta)T$, where the non-trivial translation factor $T$ prevents the
 duality $D$ from closing in a fusion algebra with $\Id$ and $\eta$. In the
 framework of~\cite{Aasen2016Topological}, it is instead fused with the symmetry
 operators on either side and with its own return map.
-These relations are recorded below for the raw operator and derived at
+These relations are recorded below for the unnormalized operator and derived at
 the tensor level from the compression theorems, without computing a
 gauge.
 

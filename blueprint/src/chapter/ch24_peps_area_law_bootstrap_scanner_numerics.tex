@@ -10,6 +10,7 @@ original floor, ceiling and integer-division operations.
 \begin{definition}[The fixed bootstrap scanner exponents]
     \label{def:bootstrap_scanner_exponents}
     \lean{TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.scannerExponents}
+    \leanok
     Fix $0<e_0<1$ and put
     \begin{align}
         g_0  & =\frac{1-e_0}{2},
@@ -26,6 +27,7 @@ original floor, ceiling and integer-division operations.
     the changing entropy exponent of the bootstrap is kept separate.
 \end{definition}
 \begin{proof}
+    \leanok
     Since $0<g_0<1/2$ and
     $0<\kappa\leq\ell=g_0/100000<g_0$, one has
     $0<\kappa<\mu=1-g_0<1-\ell<1$.
@@ -51,6 +53,7 @@ Let $\ell_q(r)$ be the physical logarithmic-dimension bound for transport.
 \begin{theorem}[Fixed weight satisfies the actual transport condition]
     \label{thm:fixed_weight_four_transport_smallness}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_fixedWeightFour_transport_smallness}
+    \leanok
     Fix any scanner exponent tuple, an integer $q\geq1$, a coefficient
     $C_r\geq0$ and a threshold $c_t>0$.
     There is $N\geq2$, chosen before the system size or any finite
@@ -63,6 +66,10 @@ Let $\ell_q(r)$ be the physical logarithmic-dimension bound for transport.
     No sharp-comparison exponent margin is assumed.
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{thm:al_scan_dimension_cap_log_four,
+        thm:al_moment_band_power,
+        thm:area_law_band_count_growth}
     The scanner inequalities give $\alpha=1-\ell-\mu>0$.
     The rounded band count and physical dimension estimates supply fixed
     $C_K,C_d>0$ with
@@ -83,6 +90,7 @@ Let $\ell_q(r)$ be the physical logarithmic-dimension bound for transport.
 \begin{theorem}[Generic rounded scanner admissibility]
     \label{thm:scanner_rounded_admissibility}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_rounded_admissibility}
+    \leanok
     Fix any scanner exponent tuple and $C_r\geq0$.
     There is $N\geq2$, before all finite physical data, such that every
     $n\geq N$ satisfies
@@ -96,6 +104,9 @@ Let $\ell_q(r)$ be the physical logarithmic-dimension bound for transport.
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{thm:al_scan_status_scale_separation,
+        thm:area_law_band_count_growth}
     The rounded logarithmic radius obeys $2r_n=o(n^\kappa)$.
     Since $0<\kappa<\mu$, the rounded power scales eventually satisfy
     $1\leq D_n$ and $4D_n\leq m_n$.
