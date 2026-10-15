@@ -20,6 +20,14 @@ A single completed/pre-charge terminal family supplies the physical partitions
 for every actual interpolation tree, without changing histories or weights.
 The constant and replica threshold precede all times and interpolation parameters.
 
+**Scope restriction (fixed-instance supplied-label estimate):**
+`eventually_actualScan_suppliedPrevector_sharp_upper` assumes a positive target
+spectral mass, a supplied label sequence with the eventual mass bound, and
+common completed/pre-charge marginal moments. Its constant and copy threshold
+may depend on the fixed physical instance and supplied labels. The full
+Proposition 9.6 lower estimate, telescope and absorption remain separate.
+See `docs/paper-gaps/arealaw2d_actual_sharp_upper_scope.tex`.
+
 Source: OpenAI area-law manuscript, `07-comparators.tex`,
 `comparator:sharp-upper`, lines 383–418; `08-scanner.tex`, lines 416–474,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
@@ -596,6 +604,63 @@ private def sharpUpper_uniformCompressedAt
         Real.bellOverlapRemainder d c G k
 
 open Classical in
+/-- Name one fixed-copy QIC conclusion only after all uniform arguments have
+been introduced. The native spectral mass is kept throughout this conversion.
+Source: `07-comparators.tex`, lines 383–418, revision adc7f124. -/
+private theorem sharpUpper_uniformCompressedAt_of_qic
+    {q : ℕ} [NeZero q] {Λ : Finset (ℤ × ℤ)}
+    (Ωt : EuclideanSpace ℂ (Site Λ → Fin q)) (X : Finset (Site Λ))
+    (E : Finset (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q) X))
+    (a Kmom r c : ℝ) (k : ℕ) (ell : IrrepLabel (Equiv.Perm (Fin k))) :
+    let β := fun _ : Site Λ ↦ Fin q
+    let zQ := (FiniteProduct.reducedPure_posSemidef β Ωt X).isHermitian.spectralRestrictionMass E
+    (∀ (n : ℕ) (Z : Matrix (Config k
+        (addedSiteSpace (addedSiteSpace β (Fin E.card)) (Fin E.card))) (Fin n) ℂ),
+      Zᴴ * Z = 1 →
+      Z * Zᴴ = symProj (copyPerm ((o : Option (Option (Site Λ))) →
+        addedSiteSpace (addedSiteSpace β (Fin E.card)) (Fin E.card) o) k) →
+      ∀ (G : ℕ) {ι : Type} [Fintype ι] [DecidableEq ι]
+        (U Y : ι → Fin G → Finset (Site Λ)),
+      (∀ j g, Disjoint X (U j g)) → (∀ j g, Disjoint X (Y j g)) →
+      (∀ j g, Disjoint (U j g) (Y j g)) →
+      (∀ j j' g h, g < h → U j g ∪ Y j g ⊆ U j' h) →
+      (∀ j g (Q : Finset (Site Λ)), Q = U j g ∨ Q = U j g ∪ Y j g ∨ Q = Y j g →
+        ∀ v : ℝ, |v| ≤ r →
+          Real.log (Entropy.surprisalMoment
+            (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian.eigenvalues v) ≤
+            v * vonNeumannEntropy (FiniteProduct.reducedPure β Ωt Q)
+              (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian + Kmom * v ^ 2) →
+      ∀ (T : MeanTree ι) (s : ℝ), 2 * s ∈ Set.Icc (0 : ℝ) 1 →
+      let v : EuclideanSpace ℂ (Config k
+        (addedSiteSpace (addedSiteSpace β (Fin E.card)) (Fin E.card))) := WithLp.toLp 2
+        (replicaPrevector Ωt E.card k ell ∘
+          globalReplicaCopiesEquiv β (Fin E.card) (Fin E.card) k)
+      let W := replicaMetric
+        (addedSiteSpace (addedSiteSpace β (Fin E.card)) (Fin E.card)) (a / 2) k
+      let Q := fun j g ↦ insert (some none)
+        ((X ∪ U j g).image fun v ↦ some (some v))
+      let F := fun j g ↦ insert none
+        (((X ∪ (U j g ∪ Y j g))ᶜ).image fun v ↦ some (some v))
+      let ext := fun B : Finset (Site Λ) ↦ (B \ X).image fun v ↦ some (some v)
+      let A := fun j g ↦ ((W (Q j g))⁻¹ * (W (F j g))⁻¹ * W (ext (Y j g))) ^ 2
+      let M := (List.ofFn fun g ↦ T.eval (fun j ↦ Zᴴ * A j g * Z)).prod
+      let Nsq := ‖toEuclideanLin (M ^ (-s)) (toEuclideanLin Zᴴ v)‖ ^ 2
+      let S := fun Q : Finset (Site Λ) ↦ vonNeumannEntropy (FiniteProduct.reducedPure β Ωt Q)
+        (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian
+      0 < Nsq ∧ -Real.log Nsq / (k : ℝ) ≤
+        2 * Real.log (E.card : ℝ) - Real.log zQ +
+          2 * s * a * (∑ g, ∑ j, T.weight j *
+            (S (U j g) + S (U j g ∪ Y j g) - S (Y j g))) +
+          24 * s * G * Kmom * a ^ 2 - 2 * s * G * Real.log zQ +
+            Real.bellOverlapRemainder E.card c G k) →
+    sharpUpper_uniformCompressedAt Ωt X E.card zQ a Kmom r c k ell := by
+  classical
+  intro β zQ h
+  intro N Z hZ hZZ G ι instF instD U Y hXU hXY hUY hnest hmom tree s hs
+    v W Q F ext A M Nsq entropy
+  exact h N Z hZ hZZ G U Y hXU hXY hUY hnest hmom tree s hs
+
+open Classical in
 /-- Obtain the uniform QIC witness before specializing to the scan family.
 The selected state, spectral set, mass bound, and supplied labels are unchanged.
 Source: `07-comparators.tex`, lines 383–418, revision adc7f124. -/
@@ -631,8 +696,17 @@ private theorem eventually_sharpUpper_uniformCompressed
   have hzQ :
       0 < (FiniteProduct.reducedPure_posSemidef β Ωt X).isHermitian.spectralRestrictionMass E :=
     hz
-  exact FiniteProduct.eventually_suppliedReplicaPrevector_sharp_upper
-    (K := Kmom) β Ωt X E hΩt hzQ ha har ha1 ell hmass
+  have hzEq :
+      (FiniteProduct.reducedPure_posSemidef β Ωt X).isHermitian.spectralRestrictionMass E = z :=
+    rfl
+  have hqic := FiniteProduct.eventually_suppliedReplicaPrevector_sharp_upper
+    (K := Kmom) β Ωt X E hΩt hzQ ha har ha1 ell
+  obtain ⟨c, hc, hlim, hu⟩ := hqic hmass
+  refine ⟨c, hc, hlim, hu.mono ?_⟩
+  intro k hk
+  have hfixed := sharpUpper_uniformCompressedAt_of_qic Ωt X E a Kmom r c k (ell k) hk
+  exact Eq.mp (congrArg (fun mass : ℝ ↦
+    sharpUpper_uniformCompressedAt Ωt X E.card mass a Kmom r c k (ell k)) hzEq) hfixed
 
 open Classical in
 /-- Specialize one fixed-copy uniform comparison to the supplied terminal
@@ -640,7 +714,7 @@ family, using already typed geometric and marginal-moment hypotheses.
 Source: `07-comparators.tex`, lines 383–418; `08-scanner.tex`, lines 400–474,
 revision adc7f124. -/
 private theorem actualTerminal_sharpUpper_of_uniformCompressed
-    {q : ℕ} [NeZero q] {I : Type} [Fintype I] [LinearOrder I]
+    {q : ℕ} [NeZero q] {I : Type} [LinearOrder I]
     {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I) (X : Finset (Site Λ))
     (a Kmom r z c : ℝ) (Ωt : EuclideanSpace ℂ (Site Λ → Fin q)) (d k : ℕ)
     (ell : IrrepLabel (Equiv.Perm (Fin k)))

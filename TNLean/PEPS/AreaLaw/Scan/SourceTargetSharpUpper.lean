@@ -22,9 +22,11 @@ exponents and every physical instance. The integer threshold may depend on the
 fixed exponent margin. The supplied label sequence uses the same physical
 spectral restriction throughout the actual fill and charge estimates.
 
-**Scope restriction:** the positive weight-growth margin is explicit, and the
-vanishing replica remainder concerns each fixed physical instance. The full
-Proposition 9.6 lower estimate, telescope and absorption are not asserted here.
+**Scope restriction (source-scale moment margin):** the hypothesis
+`ω + (1 + F.kappa) / 2 < 1 - F.ell - F.mu` is stronger than the ordinary
+scanner exponent assumptions. The vanishing replica remainder concerns each
+fixed physical instance. The full Proposition 9.6 lower estimate, telescope
+and absorption are not asserted here.
 See `docs/paper-gaps/arealaw2d_actual_sharp_upper_scope.tex`.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
