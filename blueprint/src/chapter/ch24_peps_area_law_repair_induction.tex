@@ -262,3 +262,32 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     determine the child, which proves the stated injection and the
     first inequality. Since $F_0(p)=\{p\}$, induction gives the second.
 \end{proof}
+
+% Source: 10-geometry.tex, initial marks, lines 325--363, and
+% geometry:repair-induction, termination argument, lines 538--541.
+\begin{lemma}[A common empty generation]
+    \label{lem:area_law_repair_common_empty_generation}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.exists_isEmpty_markIndex}
+    \leanok
+    \uses{lem:area_law_repair_metric_invariants,
+        lem:area_law_repair_finite_marks}
+    Under the hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants}, there is a
+    generation $N\ge0$ for which $K_N=\varnothing$. The generation $N$
+    may depend on the initial family.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:area_law_repair_metric_invariants,
+        lem:area_law_repair_finite_marks}
+    Write $S_j(q)$ for the scale of a mark $q\in K_j$. The initial family
+    $K_0$ is finite, so choose $M\in\mathbb R$ with $S_0(p)\le M$ for
+    every $p\in K_0$. This also applies when $K_0$ is empty. Since
+    $S_*>0$, choose $N$ with $M<S_*2^N$. If $q\in K_N$, the lower scale
+    bound and the repeated halving estimate give
+    \begin{equation}
+        S_*2^N\le S_N(q)2^N
+        \le S_0\bigl(\alpha_{0,N}(q)\bigr)\le M,
+        \label{eq:area_law_repair_common_empty_contradiction}
+    \end{equation}
+    a contradiction.
+\end{proof}

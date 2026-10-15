@@ -103,6 +103,7 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairInductionMetric
 import TNLean.PEPS.AreaLaw.Geometry.RepairInductionStatement
 import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementRegions
 import TNLean.PEPS.AreaLaw.Geometry.RepairStage
+import TNLean.PEPS.AreaLaw.Geometry.RepairTermination
 import TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation
 import TNLean.PEPS.AreaLaw.Geometry.SegmentBallClipping
 import TNLean.PEPS.AreaLaw.Geometry.SideEndpoints
