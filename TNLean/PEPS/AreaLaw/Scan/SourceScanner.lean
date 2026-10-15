@@ -26,20 +26,23 @@ The hypotheses of the statement are those of the source:
 * the entropy inputs `scanner:entropy-input` for the original ground vector (lines 353–357);
 * `a r₀²` sufficiently small (line 359).
 
-Its conclusion is the source's: the truncated ground vector `Ω̃` of Proposition 4.5, the
-auxiliary systems of dimension `d_*` (the typical window of width `n^{3/5}`) and a label
-sequence for which the vectors `pre_k` of `comparator:prevector` are nonzero; the comparator
-parameters with `B_sh ≤ C(nL^e + n)`, `B_exc ≤ CnD` and `𝓑 ≤ CnD(log n)^C`; and, for every
-sufficiently large replica count `k`, a charge round and a common parameter
-`p_k ∈ [ε/2, ε]` satisfying the defect-energy bound `scanner:energy-output`
-(lines 361–384), with a remainder `o_k(1)` uniform over the selected round and parameter.
-The same round and parameter also satisfy the selected-density bound
+Its conclusion is the source's, with the coefficients changed as in the local fix below: the
+truncated ground vector `Ω̃` of Proposition 4.5, the auxiliary systems of dimension `d_*` (the
+typical window of width `n^{3/5}`) and a label sequence for which the vectors `pre_k` of
+`comparator:prevector` are nonzero; the comparator parameters with `B_sh ≤ C(nL^e + n)`,
+`B_exc ≤ CnD` and `𝓑 ≤ CnD(log n)^C`; and, for every sufficiently large replica count `k`,
+a charge round and a common parameter `p_k ∈ [ε/2, ε]` satisfying the defect-energy bound
+`scanner:energy-output` (lines 361–384), with a remainder `o_k(1)` uniform over the selected
+round and parameter. The same round and parameter also satisfy the selected-density bound
 `scanner:selected-density` of the proof (lines 484–487).
 
-**Reading of the constants:** in the conclusions, the source writes `C_e` for constants that
-may depend on the input constant `C_e` (line 396). The literal input constant cannot bound
-`B_sh`, since a partial last depth row adds `n log q` (line 404); the statement therefore
-takes the coefficients of `δ_n` and of `B_sh` existentially, like every other constant.
+**Local fix (coefficients of `B_sh` and `δ_n`):** the source bounds `B_sh` by
+`C_e(nL^e + n)` and puts `C_e` in front of `δ_n` (`08-scanner.tex`, lines 380–392), where
+`C_e` is the input constant of `scanner:entropy-input`. With that literal coefficient the
+shell bound fails, since a partial last depth row adds `n log q` (line 404); the source
+allows its constants to depend on `C_e` (line 396). `ScannerStatement` takes both
+coefficients as existential constants chosen after `C_e`. Documented in
+`docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
 
 ## Main definitions
 
@@ -94,7 +97,8 @@ structure ScannerHypotheses (X : ScannerExponents) (R : ℕ) (J Δ CT Ctr C₁ C
   graph_eq : S.graph = domainGraph Λ
   /-- Depth is the ambient sup-norm distance to the target (lines 14–15). -/
   depth_eq : S.depth = fun x ↦ ambientDepth T hT x.val
-  /-- Every designated support contains its anchor. -/
+  /-- Every designated support contains its anchor: `a_i ∈ X_i` (`03-quasilocal.tex`,
+  line 15; `01-preliminaries.tex`, line 94). -/
   anchor_mem : ∀ i, S.anchor i ∈ i.val
   /-- The target `X = A ∩ T` is nonempty (line 23). -/
   target_nonempty : (S.target T).Nonempty

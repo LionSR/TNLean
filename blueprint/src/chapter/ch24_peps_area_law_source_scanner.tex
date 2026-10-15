@@ -2,11 +2,14 @@
 \label{sec:al_scanner_source}
 
 This section states the scanner estimate \cite[Proposition~9.2]{OpenAI2026AreaLaw}
-with exactly the hypotheses of the source, and derives it from the
+with the hypotheses of the source, and derives it from the
 conclusions of transport \cite[Proposition~7.4]{OpenAI2026AreaLaw} and of the
 norm comparisons \cite[Proposition~8.1]{OpenAI2026AreaLaw} for the rounds of
-the actual scan. Those two conclusions are not yet derived, so the source
-proposition is not yet formalized.
+the actual scan. In the conclusion, the input constant $C_e$ in front of the
+shell bound and of $\delta_n$ is replaced by a constant depending on $C_e$,
+as recorded in~\cite{gap:arealaw2d_scanner_inputs}. The conclusions of
+Propositions~7.4 and~8.1 are not yet derived, so the source proposition is not
+yet formalized.
 
 % Source: 08-scanner.tex, prop:scanner, lines 349--397, with the scales and
 % test geometry of lines 21--59 and the entropy inputs of lines 353--357;
@@ -91,11 +94,14 @@ proposition is not yet formalized.
               $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$, where
               $\mathcal Q$ is the entropy cost of the old splits.
     \end{enumerate}
-    The source writes $C_e$ for the coefficients of $B_{\mathrm{sh}}$ and
-    $\delta_n$, and its constants may depend on the input constant
-    $C_e$. A partial last depth row adds $n\log q$ to the shell bound, so
-    these coefficients are constants depending on $C_e$, and the statement
-    takes them as such.
+    Besides the selected-density bound, which the source proves for the same
+    round and parameter, this differs from the printed conclusion only in the
+    coefficients of
+    $B_{\mathrm{sh}}$ and $\delta_n$, which the source writes as the input
+    constant $C_e$. A partial last depth row adds $n\log q$ to the shell
+    entropy, so the bound cannot hold with that literal coefficient; since the
+    source lets its constants depend on $C_e$, both coefficients are taken as
+    constants depending on $C_e$~\cite{gap:arealaw2d_scanner_inputs}.
 \end{definition}
 
 % Source: 08-scanner.tex, prop:scanner, lines 349--397; proof lines 399--533.

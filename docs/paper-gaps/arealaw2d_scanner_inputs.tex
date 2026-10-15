@@ -111,6 +111,28 @@ conclusions are the only remaining hypothesis.\footnote{Scanner estimate for
     the actual scan:
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.scanner_estimate_actualScan}.}
 
+\paragraph{The source statement and its coefficients.}
+Proposition~9.2 is also stated with exactly the source's hypotheses: the
+scales, $r_0=\lceil C\log^2n\rceil$, the test geometry with $X\ne\varnothing$,
+$\kappa\le e$, $q\ge2$, the entropy inputs with constant $C_e$, and
+$ar_0^2$ sufficiently small.\footnote{Source statement:
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.ScannerStatement}.}
+Its conclusion differs from the printed one in one point, a local fix. The
+source bounds the shell parameter by $B_{\mathrm{sh}}\le C_e(nL^e+n)$ and puts
+the same $C_e$ in front of $\delta_n$ (lines~380--392), where $C_e$ is the
+input constant of the entropy inputs. With that literal coefficient the shell
+bound fails: the matched prefixes are shells up to a partial last depth row,
+which adds $n\log q$ to the entropy (line~404), so the proof yields only
+$B_{\mathrm{sh}}\le C_e(nL^e+n)+n\log q+O(n^{-247})$. The source states that its
+constants may depend on $C_e$ (line~396), so the formal statement takes both
+coefficients as constants chosen after $C_e$, like every other constant of the
+conclusion. The statement is derived from the conclusions of Propositions~7.4
+and~8.1 for the actual rounds built from the comparator prevector, taken as
+one hypothesis.\footnote{Conditional proof:
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement_of_scanInputsSupply},
+    with hypothesis
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.ScanInputsSupply}.}
+
 \paragraph{What remains.}
 To obtain Proposition~9.2 unconditionally, it remains to supply that last
 hypothesis for the actual rounds: the conclusions of Proposition~7.4 for the
@@ -119,7 +141,8 @@ symmetric supplied vector, see Step~3, and must be matched to the record's
 form and constants), the construction of the initial Schmidt--Bell replica
 prevector from the target typical window, and the initial and terminal
 comparator norm bounds and comparator budgets of Proposition~8.1 for that
-prevector and the same truncated ground state $\widetilde\Omega$.
+prevector and the same truncated ground state $\widetilde\Omega$. Supplying
+it for every such scan proves the source statement above.
 
 \section{Step 1: Truncation trace distance and entropy continuity}
 
