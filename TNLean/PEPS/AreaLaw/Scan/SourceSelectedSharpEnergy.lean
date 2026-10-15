@@ -52,7 +52,6 @@ Replica thresholds may depend on the fixed physical instance and weight.
 The original entropy, geometry and transport-smallness premises remain
 explicit. Selection uses `[n^(-nu), 2*n^(-nu)]` and `P ≥ nu`; the fixed-instance
 replica remainder is retained in the energy bound.
-See `docs/paper-gaps/arealaw2d_source_selected_sharp_energy_scope.tex`.
 
 Source: `08-scanner.tex`, lines 353–357, 399–533 and 839–911. -/
 theorem exists_sourceTarget_selected_actualCharge_sharp_energy

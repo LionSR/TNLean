@@ -21,8 +21,7 @@ No selected-point, coefficient-cap or norm-comparison conclusion is a premise.
 The original-state prefix entropy input supplies the actual rough endpoint
 budget and an explicit selected-density bound. Transport smallness and geometric
 separation remain explicit. This does not prove the final density power, safe-box entropy
-bounds or Proposition 9.6. See
-`docs/paper-gaps/arealaw2d_source_selected_sharp_comparison_scope.tex`.
+bounds or Proposition 9.6.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `07-comparators.tex`, lines 130--153, 240--281 and 383--418;
@@ -134,7 +133,6 @@ remain explicit.
 The original positive-prefix entropy bound, scanner geometry and
 transport smallness remain explicit hypotheses. This endpoint proves the
 selected comparison and its density budget, without the final collar bound.
-See `docs/paper-gaps/arealaw2d_source_selected_sharp_comparison_scope.tex`.
 
 Source: `08-scanner.tex`, lines 400--533 and 839--911. -/
 theorem exists_sourceTarget_selected_actualCharge_sharp_comparison

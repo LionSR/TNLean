@@ -22,7 +22,6 @@ exponents and every physical instance. The threshold can depend on the fixed
 exponent margin. The physical witness is selected before the weight and before
 any label sequence, so both sharp consumers may use the same supplied sequence.
 No sharp comparison, selected-charge defect estimate or absorption is asserted.
-See `docs/paper-gaps/arealaw2d_target_sharp_moments_scope.tex`.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `07-comparators.tex`, lines 70–85, 383–418 and 550–651;
