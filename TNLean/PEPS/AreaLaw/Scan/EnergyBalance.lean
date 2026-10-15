@@ -301,13 +301,13 @@ variable {X : ScannerExponents} {κ : ScanConstants} {n : ℕ} (S : ScanData X �
 lemma integral_etaOld_rpow_nonneg (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) (i : S.ι)
     (h : (S.round r).H) :
     0 ≤ ∫ θ, (S.round r).etaOld i h θ ^ (1 / 8 : ℝ) ∂((S.round r).μOld k p h) :=
-  integral_nonneg fun θ ↦ Real.rpow_nonneg (S.etaOld_nonneg r i h θ) _
+  integral_nonneg fun θ ↦ Real.rpow_nonneg (S.histories.etaOld_nonneg r i h θ) _
 
 /-- New-leaf eighth-root integrals are nonnegative. -/
 lemma integral_etaNew_rpow_nonneg (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) (i : S.ι)
     (h : (S.round r).H) (c : (S.round r).Ch h) :
     0 ≤ ∫ θ, (S.round r).etaNew i h c θ ^ (1 / 8 : ℝ) ∂((S.round r).μNew k p h c) :=
-  integral_nonneg fun θ ↦ Real.rpow_nonneg (S.etaNew_nonneg r i h c θ) _
+  integral_nonneg fun θ ↦ Real.rpow_nonneg (S.histories.etaNew_nonneg r i h c θ) _
 
 open Classical in
 /-- The leaf sum of one term is nonnegative for `p ∈ (0, 1)`. -/
@@ -317,11 +317,12 @@ lemma termEnergy_nonneg (r : Fin (X.rounds n)) (k : ℕ) {p : ℝ} (hp : p ∈ I
   refine add_nonneg (Finset.sum_nonneg fun h _ ↦ ?_)
     (Finset.sum_nonneg fun h _ ↦ Finset.sum_nonneg fun c _ ↦ ?_)
   · split_ifs
-    · exact mul_nonneg (mul_nonneg (by linarith [hp.2]) (S.w_nonneg r h))
+    · exact mul_nonneg (mul_nonneg (by linarith [hp.2]) (S.histories.w_nonneg r h))
         (S.integral_etaOld_rpow_nonneg r k p i h)
     · exact le_rfl
   · split_ifs
-    · exact mul_nonneg (mul_nonneg (mul_nonneg hp.1.le (S.w_nonneg r h)) (S.q_nonneg r h c))
+    · exact mul_nonneg (mul_nonneg (mul_nonneg hp.1.le (S.histories.w_nonneg r h))
+        (S.histories.q_nonneg r h c))
         (S.integral_etaNew_rpow_nonneg r k p i h c)
     · exact le_rfl
 
@@ -337,9 +338,10 @@ lemma goodOld_le (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) (hp : p ∈ Ioo (0 :
       else 0) ≤ N * ((S.round r).chargeDefect k p / N) ^ (1 / 8 : ℝ) := by
   have := S.isFiniteMeasure_μOld r k p
   calc _ ≤ N ^ (7 / 8 : ℝ) * (S.round r).chargeDefect k p ^ (1 / 8 : ℝ) :=
-        (S.round r).goodOld_le_capacity k p (S.w_nonneg r) (S.sum_w r)
-          (S.μOld_real_univ r k p hp) (S.measurable_etaOld r) (S.etaOld_nonneg r)
-          (S.etaOld_le r) hN.le hcard
+        (S.round r).goodOld_le_capacity k p (S.histories.w_nonneg r) (S.histories.sum_w r)
+          (S.μOld_real_univ r k p hp) (S.histories.measurable_etaOld r)
+              (S.histories.etaOld_nonneg r)
+          (S.histories.etaOld_le r) hN.le hcard
     _ = _ := rpow_seven_eighths_mul_rpow_eq hN (S.chargeDefect_nonneg r k p)
 
 open Classical in
@@ -368,11 +370,12 @@ theorem energySum_le {C₁ : ℝ} (hn : ScaleFacts X n C₁) (r : Fin (X.rounds 
   have hW0 : 0 ≤ κ.C * X.D n / X.m n := by positivity
   have := S.isFiniteMeasure_μOld r k p
   have := S.isFiniteMeasure_μNew r k p
-  have hleaf := R.energySum_le_of_leaf_bounds k (Ioo_subset_Icc_self hp) (S.w_nonneg r)
-    (S.sum_w r) (S.q_nonneg r) (S.sum_q r) (S.μOld_real_univ r k p hp)
-    (S.μNew_real_univ r k p hp) (S.measurable_etaOld r) (S.etaOld_nonneg r)
-    (S.etaNew_nonneg r) hE0 hN.le hW0 (S.etaOld_le r) (S.etaNew_le r)
-    (S.card_splitOld_le r) (S.card_splitNew_le r) (S.splitWeight_le r p hp)
+  have hleaf := R.energySum_le_of_leaf_bounds k (Ioo_subset_Icc_self hp) (S.histories.w_nonneg r)
+    (S.histories.sum_w r) (S.histories.q_nonneg r) (S.histories.sum_q r) (S.μOld_real_univ r k p hp)
+    (S.μNew_real_univ r k p hp) (S.histories.measurable_etaOld r) (S.histories.etaOld_nonneg r)
+    (S.histories.etaNew_nonneg r) hE0 hN.le hW0 (S.histories.etaOld_le r) (S.histories.etaNew_le r)
+    (S.histories.card_splitOld_le r) (S.histories.card_splitNew_le r)
+        (S.histories.splitWeight_le r p hp)
   refine hleaf.trans ?_
   rw [mul_assoc (κ.C * X.D n / X.m n) N]
   refine mul_le_mul_of_nonneg_left ?_ hW0
@@ -381,8 +384,8 @@ theorem energySum_le {C₁ : ℝ} (hn : ScaleFacts X n C₁) (r : Fin (X.rounds 
     Real.rpow_nonneg (div_nonneg (S.chargeDefect_nonneg r k p) hN.le) _
   have hb0 : 0 ≤ R.badWeight := by
     unfold ScanRound.badWeight
-    exact Finset.sum_nonneg fun h _ ↦ by split_ifs; exacts [le_rfl, S.w_nonneg r h]
-  have hb := S.badWeight_le r
+    exact Finset.sum_nonneg fun h _ ↦ by split_ifs; exacts [le_rfl, S.histories.w_nonneg r h]
+  have hb := S.histories.badWeight_le r
   have hp1 : 0 ≤ 1 - p := by linarith [hp.2]
   have hNE : 0 ≤ N * E ^ (1 / 8 : ℝ) := mul_nonneg hN.le hE8
   rw [mul_assoc (1 - p), hgood]
