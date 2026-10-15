@@ -242,11 +242,13 @@ without asserting uniqueness or smooth dependence of a minimizer on $R$.
 \begin{theorem}[The logarithmic minimum]
     \label{thm:peps_regularized_patch_log_minimum}
     \lean{TNLean.PEPS.isLeast_log_regularizedPatchObjective}
+    \leanok
     \uses{def:peps_regularized_patch_minimum}
     Assume all $a_j\ge0$. Then $\log N$ is the attained minimum of
     $x\mapsto\log F(x)$ on $\mathcal D$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:peps_regularized_patch_minimum}
     Choose a feasible minimizer $x_*$. Then $F(x_*)=N>0$ and
     $N\le F(x)$ for every $x\in\mathcal D$. Monotonicity of the
