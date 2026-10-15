@@ -2083,17 +2083,17 @@ of the chosen first right inverse, or the complete set of pleasant properties.
 
 Assume from now until the end of this section that $G$ is finite and $d>0$.
 
-\begin{definition}[Unblocked MPU representation]
+\begin{definition}[Injective MPU representation]
     \label{def:mpug_raw_group_representation}
     \lean{MPOTensor.GroupFamily.IsRawRepresentation}
     \leanok
     \uses{def:injective, def:mpug_positive_mpu,
         def:mpug_group_representation}
-    An unblocked MPU representation is a dependent-bond family
+    An injective MPU representation is a dependent-bond family
     $\{\mathcal U_g\}_{g\in G}$ of injective matrix product unitaries on
     nonempty chains satisfying (\ref{eq:mpug_rep_identity}) and
-    (\ref{eq:mpug_rep_multiplication}) for all $g,h\in G$ and all $N\geq1$.
-    No simplicity hypothesis is imposed.
+    (\ref{eq:mpug_rep_multiplication}) for all $g,h\in G$ and all $N\geq1$,
+    without an assumed simplicity condition.
 \end{definition}
 
 \begin{definition}[Common simplicity length]
@@ -2117,7 +2117,8 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \uses{def:mpug_raw_group_representation,
         def:mpug_common_simple_length, def:mpug_group_representation,
         def:mpu_simple, def:mpdo_physical_blocking}
-    Let $\{\mathcal U_g\}_{g\in G}$ be an unblocked MPU representation. Then $L_*>0$,
+    Let $\{\mathcal U_g\}_{g\in G}$ be an injective MPU representation without
+    an assumed simplicity condition. Then $L_*>0$,
     and every $\mathcal U_g^{[L_*]}$ is simple. For every $K>0$, each further
     block $(\mathcal U_g^{[L_*]})^{[K]}$ is simple. Consequently the blocked
     family at length $L_*$ satisfies
@@ -2138,7 +2139,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     (\ref{eq:mpug_common_simple_length}). Simplicity holds at every later direct
     blocking, hence at the common length $L_*$. Nonempty-chain unitarity and
     injectivity are preserved by physical blocking. Reindexing the closed chain
-    at length $NL_*$ carries the identity and multiplication laws of the unblocked
+    at length $NL_*$ carries the identity and multiplication laws of the given
     representation to the blocked family. The length-$L_*$ family is therefore
     a group representation by simple injective MPUs. Applying
     Theorem~\ref{thm:mpug_common_blocking_representation} to this established
