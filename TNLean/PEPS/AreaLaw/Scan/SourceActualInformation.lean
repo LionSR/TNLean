@@ -38,6 +38,8 @@ namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter ActualTerminals
 
+set_option maxHeartbeats 400000 in
+-- Final kernel typechecking of the large nested `let`-telescope needs slightly above 200k heartbeats
 open Classical in
 /-- The actual physical collar information obeys the scalar sharp bound
 using one source witness and label sequence. Fixed physical constants
@@ -52,7 +54,7 @@ theorem exists_sourceTarget_actual_mutualInformation_bound
     (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
     (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁) (P : ℝ)
     (hP : (Exponents.scannerNu : ℝ) ≤ P) :
-    ∃ Ctr Ctarget CB ct Cent eent Cen een C Cl : ℝ,
+    ∃ Ctr Ctarget CB ct _Cent _eent _Cen _een C Cl : ℝ,
       0 < Ctr ∧ 0 < Ctarget ∧ 0 < CB ∧ 0 < ct ∧ 1 ≤ C ∧ 0 ≤ Cl ∧
       ∀ Ce : ℝ, 0 ≤ Ce → ∃ N : ℕ, 2 ≤ N ∧
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
@@ -81,7 +83,7 @@ theorem exists_sourceTarget_actual_mutualInformation_bound
               Ce * ((S.n : ℝ) *
                 ((⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ : ℕ) : ℝ) ^
                   (Exponents.boxError : ℝ) + S.n)) →
-          2 * S.r₀ ≤ S.D → ∀ (hDpos : 1 ≤ S.D) (hDm : 4 * S.D ≤ S.m),
+          2 * S.r₀ ≤ S.D → ∀ (_hDpos : 1 ≤ S.D) (_hDm : 4 * S.D ≤ S.m),
           ∃ (hm : 0 < S.m) (hM : 0 < S.M),
           let L := ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
           let X := S.A.filter fun x ↦ x.val ∈ T
@@ -125,8 +127,8 @@ theorem exists_sourceTarget_actual_mutualInformation_bound
               compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
             let Sent := vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
               (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
-            let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
-            let energy := S.actualEnergyTerms h Ω Δ L (fun _ ↦ d)
+            let _dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
+            let _energy := S.actualEnergyTerms h Ω Δ L (fun _ ↦ d)
             let σ := terminalPartition S (S.n * S.m)
             let near := fun j band ↦ receiving (σ j band) false
             let middleRegion := fun j band ↦ middle (σ j band)
@@ -140,14 +142,14 @@ theorem exists_sourceTarget_actual_mutualInformation_bound
             let gaps := (Finset.univ :
               Finset (terminalFamily S.K S.m S.M (S.n * S.m) × Fin S.K)).image
                 (fun j ↦ gpre j.1 j.2)
-            let gmax := (insert (0 : ℝ) gaps).max' (Finset.insert_nonempty _ _)
+            let _gmax := (insert (0 : ℝ) gaps).max' (Finset.insert_nonempty _ _)
             let tree := fun (s : Fin (S.n * S.m)) (p : ℝ) ↦
               ((S.actualChargeData hm hM s.val).tree
                 (Set.projIcc (0 : ℝ) 1 zero_le_one p)).map
                 (chargeTerminalIndex S.K S.m S.M (S.n * S.m) s)
-            let Gpre := fun s p ↦
+            let _Gpre := fun s p ↦
               (∑ band, ∑ j, (tree s p).weight j * gpre j band) / (S.K : ℝ)
-            let Gpost := fun s p ↦
+            let _Gpost := fun s p ↦
               (∑ band, ∑ j, (tree s p).weight j * gpost j band) / (S.K : ℝ)
             let St := regionalEntropy Λ q Ωt X
             let c := w - Real.log z
@@ -206,8 +208,7 @@ theorem exists_sourceTarget_actual_mutualInformation_bound
   intro E z
   obtain ⟨hwindow, hd, hpdata⟩ := hwdata
   refine ⟨hwindow, hd, ?_⟩
-  intro inst
-  letI : NeZero E.card := inst
+  let : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
   intro d ΩX ψ Sent dims energy σ near middleRegion gpre gpost gaps gmax tree Gpre Gpost
     St c Bpre continuity
   have hΩt : ‖Ωt‖ = 1 := (Matrix.isGappedGroundState_iff.mp htrgs).1
@@ -249,9 +250,15 @@ theorem exists_sourceTarget_actual_mutualInformation_bound
   have hδ : 0 ≤ (S.n : ℝ) ^ (-(1 / 2000 : ℝ)) + rem k / (g / 2) :=
     add_nonneg (Real.rpow_nonneg (Nat.cast_nonneg S.n) _)
       (div_nonneg (hrem0 k) (le_of_lt (div_pos hg (by norm_num))))
-  apply two_information_le_sharpInformationBound
+  have h1 : 2 * Sent + Gpre s p - Gpost s p ≤
+      2 * (2 * Real.log (d : ℝ) - Real.log z) / W + τ * Gpre s p +
+        2 * τ * Real.log (d : ℝ) + (3 + 1 / a) * Real.binEntropy τ +
+        37 * (C₀ * B) * a - Real.log z / a +
+        ((S.n : ℝ) ^ (-(1 / 2000 : ℝ)) + rem k / (g / 2)) / τ * max 0 (2 * Sent + gmax) +
+        2 * Real.bellOverlapRemainder d cU S.K k / W +
+        sharpLowerRemainder a cL Cf ell Sent k := hsharp τ hτ hτhalf
+  exact two_information_le_sharpInformationBound
     hWpos hτ hδ hSt hc hBpre hlogd hSent hGpre hgmax
-  · simpa only [add_assoc, sub_eq_add_neg] using hsharp τ hτ hτhalf
-  · exact hMI
+    (h1.trans_eq (by ring)) hMI
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

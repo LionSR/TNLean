@@ -140,18 +140,9 @@ theorem
       (fun j : Fin r => groundSpace (A j) N) ψ).mp (hLe hψ)
   have hψφ : ψ = ∑ j : Fin r, φ j := by
     simpa [Finsupp.sum_fintype] using hφsum.symm
-  refine ⟨φ, hφ, hψφ, ?_⟩
-  intro φ' hφ' hψφ'
-  apply funext
-  rw [iSupIndep_iff_finsetSum_eq_zero_imp_eq_zero] at hIndep
-  intro j
-  have hsum : ∑ i, (φ' i - φ i) = 0 := by
-    rw [Finset.sum_sub_distrib, ← hψφ', ← hψφ, sub_self]
-  have hmem : ∀ i : Fin r, i ∈ Finset.univ → φ' i - φ i ∈ groundSpace (A i) N := by
-    intro i _
-    exact Submodule.sub_mem _ (hφ' i) (hφ i)
-  have hzero := hIndep Finset.univ (fun i => φ' i - φ i) hmem hsum j (Finset.mem_univ j)
-  exact sub_eq_zero.mp hzero
+  refine ⟨φ, hφ, hψφ, fun φ' hφ' hψφ' => funext fun j => ?_⟩
+  exact (iSupIndep_iff_finsetSum_eq_imp_eq _).mp hIndep Finset.univ φ' φ
+    (fun i _ => ⟨hφ' i, hφ i⟩) (hψφ'.symm.trans hψφ) j (Finset.mem_univ j)
 
 /-- Under the source-shaped PGVWC07 hypotheses, a periodic vector of the block
 sum admits one block-diagonal open-boundary matrix. Its block components belong

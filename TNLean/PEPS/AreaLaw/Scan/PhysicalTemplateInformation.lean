@@ -31,7 +31,7 @@ noncomputable section
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
-open Geometry
+open TNLean.PEPS.AreaLaw.Geometry
 
 /-- Both final information powers for each separated template in the
 original physical gapped ground state. The physical safe-box bootstrap

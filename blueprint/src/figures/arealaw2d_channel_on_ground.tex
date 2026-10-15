@@ -1,0 +1,91 @@
+% Figure arealaw2d_channel_on_ground.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL App. C 5 (proof of Lemma 13, products along Poisson
+% clocks), unnumbered display.
+% Source: arXiv OpenAI2026AreaLaw, sections/09-amplification.tex:77-88
+% ((10.5), eq:amplification-channel-vector; the paper names the operator C,
+% the note B). For E_i(B) = G_i B G_i + K_i B K_i with G_i = (I - k_i)^{1/2},
+% K_i = k_i^{1/2} and k_i Omega = 0:
+%   G_i B G_i (Omega (x) xi) + K_i B K_i (Omega (x) xi) = G_i B (Omega (x) xi),
+% i.e. E_i(B)(Omega (x) xi) = G_i B (Omega (x) xi) for every operator B and
+% spectator vector xi.
+% Ink-to-index: the top wire is the physical system Lambda, the bottom wire
+% the spectator system. Omega (neutral box) and xi (complement box, an
+% auxiliary register) are two separate vectors on the east. Boxes are
+% operators acting right to left; B spans both wires; G_i and K_i act on the
+% physical wire, extended by the identity on the spectator. Every operator
+% name sits at label pos=n (one station, L1); the state names sit east.
+% Joiners: + adds two terms of equal signature and is not a relation. The =
+% carries the two facts it uses (J2): G_i Omega = Omega above it reduces the
+% first panel to the third, K_i Omega = 0 below it kills the second panel
+% (both by functional calculus from k_i Omega = 0). The vphantom only opens
+% vertical room between the facts and the sign.
+% Boundary signature: (phys:w, phys:w) in every panel.
+% Label macros: none.
+% Fit: C at 5.5mm (\tnshow[5.5mm]; fills the column, so 6mm does not fit and
+% the names are set north rather than inscribed).
+% Open legs: the physical leg west of the first G_i is about a quarter pitch
+% (J1 asks half a pitch); a pass-through column per panel would lengthen it but
+% wraps the display out of the column at 5mm (tested), so it stays.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none]
+        \tn[at=(1,4), name=chgOmega, skin=box, label pos=e, ports={180:physical}]{\Omega}
+        \tn[at=(2,4), name=chgXi, skin=box, label pos=e, species=complement,
+            ports={180:physical}]{\xi}
+        \tn[at=(1,3), name=chgGin, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{G_i}
+        \tn[at=(1,2), name=chgB, skin=box, label pos=n, wires=2,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{B}
+        \tn[at=(1,1), name=chgGout, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{G_i}
+        \tn[at=(2,1), name=chgSpecEnd, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tnwire{chgGin.0}{chgOmega.180}
+        \tnwire{chgB.0@1}{chgGin.180}
+        \tnwire{chgB.0@2}{chgXi.180}
+        \tnwire{chgGout.0}{chgB.180@1}
+        \tnwire{chgSpecEnd.0}{chgB.180@2}
+        \tnwire{open w}{chgGout.180}
+        \tnwire{open w}{chgSpecEnd.180}
+    \end{tenkz}
+    $+$
+    \begin{tenkz}[rows={wire,wire}, cols=4, bonds=none]
+        \tn[at=(1,4), name=chkOmega, skin=box, label pos=e, ports={180:physical}]{\Omega}
+        \tn[at=(2,4), name=chkXi, skin=box, label pos=e, species=complement,
+            ports={180:physical}]{\xi}
+        \tn[at=(1,3), name=chkKin, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{K_i}
+        \tn[at=(1,2), name=chkB, skin=box, label pos=n, wires=2,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{B}
+        \tn[at=(1,1), name=chkKout, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{K_i}
+        \tn[at=(2,1), name=chkSpecEnd, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tnwire{chkKin.0}{chkOmega.180}
+        \tnwire{chkB.0@1}{chkKin.180}
+        \tnwire{chkB.0@2}{chkXi.180}
+        \tnwire{chkKout.0}{chkB.180@1}
+        \tnwire{chkSpecEnd.0}{chkB.180@2}
+        \tnwire{open w}{chkKout.180}
+        \tnwire{open w}{chkSpecEnd.180}
+    \end{tenkz}
+    $\;\overset{G_i\Omega=\Omega}{\underset{K_i\Omega=0}{\vphantom{\big|}=}}\;$
+    \begin{tenkz}[rows={wire,wire}, cols=3, bonds=none]
+        \tn[at=(1,3), name=chrOmega, skin=box, label pos=e, ports={180:physical}]{\Omega}
+        \tn[at=(2,3), name=chrXi, skin=box, label pos=e, species=complement,
+            ports={180:physical}]{\xi}
+        \tn[at=(1,2), name=chrB, skin=box, label pos=n, wires=2,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{B}
+        \tn[at=(1,1), name=chrGout, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{G_i}
+        \tn[at=(2,1), name=chrSpecEnd, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tnwire{chrB.0@1}{chrOmega.180}
+        \tnwire{chrB.0@2}{chrXi.180}
+        \tnwire{chrGout.0}{chrB.180@1}
+        \tnwire{chrSpecEnd.0}{chrB.180@2}
+        \tnwire{open w}{chrGout.180}
+        \tnwire{open w}{chrSpecEnd.180}
+    \end{tenkz}
+\end{tenkzequation}

@@ -187,17 +187,11 @@ theorem state_designatedSplitIncidence_isTerminalSplit_domainGraph
   have hm : (S.ball i ∩ middle (S.state h g)).Nonempty := by
     simpa only [heq] using hs.2
   have hvar := S.abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT hgraph hdepth i
-  have hball : S.ball i ⊆ S.A := by
-    obtain ⟨y, hy⟩ := hm
-    obtain ⟨hyb, hym⟩ := Finset.mem_inter.mp hy
-    have hyn := (Finset.mem_filter.mp hym).2
-    have hyA := (initial_middle_depth S.A S.depth _ _
-      (S.bandState_unassigned g (h.1 g) k (fun t ↦ h.2 t g) y hyn).1 false).1
-    have hyL := (Finset.mem_Icc.mp (S.state_depth_bounds h g hL y hyn)).2
-    have hb := domainGraph_ball_subset_of_clearance Λ T hT S.A L S.r₀ hclear
-      ⟨y, hyA, by simpa only [hdepth] using hyL,
-        by simpa only [ball, Finset.mem_filter, Finset.mem_univ, true_and, hgraph] using hyb⟩
-    simpa only [ball, hgraph] using hb
+  have hball : S.ball i ⊆ S.A :=
+    ball_subset_of_middle_domainGraph hT S hgraph hdepth hclear _ i (fun y hyn ↦
+      ⟨(initial_middle_depth S.A S.depth _ _
+        (S.bandState_unassigned g (h.1 g) k (fun t ↦ h.2 t g) y hyn).1 false).1,
+        (Finset.mem_Icc.mp (S.state_depth_bounds h g hL y hyn)).2⟩) hm
   refine ⟨hs.2, hs.1, ?_, ?_⟩
   · apply Finset.disjoint_left.mpr
     intro x hx hxside
@@ -233,17 +227,8 @@ theorem old_designatedSplitIncidence_isTerminalSplit_domainGraph
   have hm : (S.ball i ∩ middle (S.oldChargeState h g)).Nonempty := by
     simpa only [heq] using hs.2
   have hvar := S.abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT hgraph hdepth i
-  have hball : S.ball i ⊆ S.A := by
-    obtain ⟨y, hy⟩ := hm
-    obtain ⟨hyb, hym⟩ := Finset.mem_inter.mp hy
-    have hyn := (Finset.mem_filter.mp hym).2
-    have hyA := (initial_middle_depth S.A S.depth _ _
-      (S.oldChargeState_initial_none h g y hyn) false).1
-    have hyL := (Finset.mem_Icc.mp (S.oldChargeState_depth_bounds h g hL y hyn)).2
-    have hb := domainGraph_ball_subset_of_clearance Λ T hT S.A L S.r₀ hclear
-      ⟨y, hyA, by simpa only [hdepth] using hyL,
-        by simpa only [ball, Finset.mem_filter, Finset.mem_univ, true_and, hgraph] using hyb⟩
-    simpa only [ball, hgraph] using hb
+  have hball := ball_subset_of_oldChargeState_middle_domainGraph hT S hgraph hdepth hclear
+    h g hL i hm
   refine ⟨hs.2, hs.1, ?_, ?_⟩
   · apply Finset.disjoint_left.mpr
     intro x hx hxside

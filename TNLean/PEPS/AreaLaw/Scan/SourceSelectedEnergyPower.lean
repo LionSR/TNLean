@@ -211,13 +211,14 @@ theorem eventually_final_selectedEnergy_le_rpow {C Cl g P : ℝ}
           (n : ℝ) ^ (-(1 / 2000 : ℝ)) := by
   have henergy : ∀ᶠ n : ℕ in atTop,
       (16 * C) * (n : ℝ) ^ (-111 / 125000 : ℝ) * Real.log (n : ℝ) ^ Cl ≤
-        (g / 4) * (n : ℝ) ^ (-(1 / 2000 : ℝ)) :=
-    eventually_energy_const_mul_rpow_log_rpow_le (16 * C) Cl
-      (-111 / 125000) (-1 / 2000) (g / 4)
-      (by positivity) (by norm_num) (by positivity)
+        (g / 4) * (n : ℝ) ^ (-(1 / 2000 : ℝ)) := by
+    simpa only [neg_div] using
+      eventually_energy_const_mul_rpow_log_rpow_le (16 * C) Cl
+        (-111 / 125000) (-1 / 2000) (g / 4)
+        (by positivity) (by norm_num) (by positivity)
   have hinitial : ∀ᶠ n : ℕ in atTop,
       (n : ℝ) ^ (-1000 : ℝ) ≤ (g / 4) * (n : ℝ) ^ (-(1 / 2000 : ℝ)) := by
-    simpa only [Real.rpow_zero, mul_one, one_mul] using
+    simpa only [Real.rpow_zero, mul_one, one_mul, neg_div] using
       eventually_energy_const_mul_rpow_log_rpow_le 1 0
         (-1000) (-1 / 2000) (g / 4)
         (by norm_num) (by norm_num) (by positivity)

@@ -48,7 +48,7 @@ theorem exists_uniform_boxEntropy_improvement
         ∀ r : ℕ, 1 ≤ r → boxEntropy q R J Δ D₀ r ≤
           C * (r : ℝ) ^ (1 + (1 - BootstrapParameters.ell e₀) * e) := by
   classical
-  letI : NeZero q := ⟨by omega⟩
+  let : NeZero q := ⟨by omega⟩
   have he₀pos : 0 < e₀ := lt_trans (by norm_num [Exponents.boxError]) he₀
   let F := BootstrapParameters.scannerExponents e₀ he₀pos he₀₁
   let multiplicity : ℕ := 2 ^ ((1 + 2 * R * (R + 1)) - 1)
@@ -72,7 +72,7 @@ theorem exists_uniform_boxEntropy_improvement
     positivity
   apply boxEntropy_power_le_of_large_rectangles hq hCrect hp N
   intro Λ h E₀ Ω hgs A Q hsafe hQN
-  letI : LinearOrder (AdmissibleSupport Λ R) :=
+  let : LinearOrder (AdmissibleSupport Λ R) :=
     LinearOrder.lift' (Fintype.equivFin (AdmissibleSupport Λ R))
       (Fintype.equivFin (AdmissibleSupport Λ R)).injective
   let S := rectangleBootstrapScanner Q A R F Ctr C₁
@@ -89,11 +89,14 @@ theorem exists_uniform_boxEntropy_improvement
   obtain ⟨htarget, hprefix⟩ := hentropy Λ q D₀ Ω hgs.1 A Q hT hsafe
     S.n (F.L S.n) hsn hLpos hL hbudget e he.le hphysical
   have htarget' : regionalEntropy Λ q Ω (S.A.filter fun x ↦ x.val ∈ Q.toFinset) ≤
-      Ce * (S.n : ℝ) ^ (1 + e) := by simpa only [hregion] using htarget
+      Ce * (S.n : ℝ) ^ (1 + e) := by
+    rw [hregion]
+    exact htarget
   have hprefix' : ∀ j : ℕ, j ≤ F.L S.n →
       regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
         Ce * ((S.n : ℝ) * (F.L S.n : ℝ) ^ e + S.n) := by
-    simpa only [hA, hdepth] using hprefix
+    rw [hA, hdepth]
+    exact hprefix
   have hresult := hsource e he hee₀ Λ Q.toFinset hT h S E₀ Ω hgs hgraph hanchor hnS
     rfl rfl rfl rfl rfl (by simpa only [one_mul] using hcard)
     hdepth hrows hmult hclear htarget' hprefix'

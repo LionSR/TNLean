@@ -184,25 +184,6 @@ def endpointLastEdgeCoreSupportES (A₀ : MPSTensor (D₀ * D₀) D₀)
   (endpointLastEdgeCoreMap A₀ ι).range.map
     (WithLp.linearEquiv 2 ℂ (endpointLastEdgeCfg ι D₀ → ℂ)).symm.toLinearMap
 
-private theorem map_conjugateEquiv_of_map_eq
-    {E F : Type*} [AddCommGroup E] [Module ℂ E] [AddCommGroup F] [Module ℂ F]
-    (U : E ≃ₗ[ℂ] F) (e : F ≃ₗ[ℂ] F) (S T : Submodule ℂ F)
-    (h : S.map e.toLinearMap = T) :
-    (S.map U.symm.toLinearMap).map (U.trans (e.trans U.symm)).toLinearMap =
-      T.map U.symm.toLinearMap := by
-  ext v
-  constructor
-  · rintro ⟨_, ⟨x, hx, rfl⟩, rfl⟩
-    refine ⟨e x, ?_, ?_⟩
-    · rw [← h]
-      exact ⟨x, hx, rfl⟩
-    · simp
-  · rintro ⟨y, hy, rfl⟩
-    rw [← h] at hy
-    obtain ⟨x, hx, rfl⟩ := hy
-    refine ⟨U.symm x, ⟨x, hx, rfl⟩, ?_⟩
-    simp
-
 /-- The first-edge Euclidean normalization carries the actual support
 exactly onto the common-core support.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
@@ -212,7 +193,7 @@ theorem map_firstEdgeNormalizationEquivES_actualSupport
     (mixedEndpointFirstEdgeSupportES A₀ A₁).map
       (firstEdgeNormalizationEquivES (D₁ := D₁) A₀ hA₀).toLinearMap =
       endpointFirstEdgeCoreSupportES A₀ (Fin D₀ ⊕ Fin D₁) := by
-  apply map_conjugateEquiv_of_map_eq
+  apply LinearEquiv.map_conj_map_symm_of_map_eq
     (WithLp.linearEquiv 2 ℂ (endpointFirstEdgeCfg (Fin D₀ ⊕ Fin D₁) D₀ → ℂ))
     (firstEdgeNormalizationEquiv A₀ hA₀)
   exact map_range_firstEdgePhysicalMap_actual_eq_core A₀ A₁ hA₀
@@ -225,7 +206,7 @@ theorem map_lastEdgeNormalizationEquivES_actualSupport
     (mixedEndpointLastEdgeSupportES A₀ A₁).map
       (lastEdgeNormalizationEquivES (D₁ := D₁) A₀ hA₀).toLinearMap =
       endpointLastEdgeCoreSupportES A₀ (Fin D₀ ⊕ Fin D₁) := by
-  apply map_conjugateEquiv_of_map_eq
+  apply LinearEquiv.map_conj_map_symm_of_map_eq
     (WithLp.linearEquiv 2 ℂ (endpointLastEdgeCfg (Fin D₀ ⊕ Fin D₁) D₀ → ℂ))
     (lastEdgeNormalizationEquiv A₀ hA₀)
   exact map_range_lastEdgePhysicalMap_actual_eq_core A₀ A₁ hA₀
@@ -311,40 +292,6 @@ theorem endpointLastEdgeCoreConstraintES_isSymmetricProjection
     (endpointLastEdgeCoreConstraintES A₀ ι).IsSymmetricProjection :=
   Submodule.isSymmetricProjection_starProjection _
 
-private theorem deformed_complementProjections_of_map_eq
-    {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
-    [FiniteDimensional ℂ E] [NormedAddCommGroup F] [InnerProductSpace ℂ F]
-    [FiniteDimensional ℂ F] (e : E ≃ₗ[ℂ] F) (S : Submodule ℂ E) (T : Submodule ℂ F)
-    (h : S.map e.toLinearMap = T) :
-    e.symm.deformedConstraintProjection Sᗮ.starProjection.toLinearMap =
-        Tᗮ.starProjection.toLinearMap ∧
-      e.deformedConstraintProjection Tᗮ.starProjection.toLinearMap =
-        Sᗮ.starProjection.toLinearMap := by
-  have hBackward : S.comap e.symm.toLinearMap = T := by
-    rw [← h]
-    ext v
-    constructor
-    · intro hv
-      exact ⟨e.symm v, hv, e.apply_symm_apply v⟩
-    · rintro ⟨w, hw, rfl⟩
-      simpa using hw
-  have hForward : T.comap e.toLinearMap = S := by
-    rw [← h]
-    ext v
-    constructor
-    · rintro ⟨w, hw, heq⟩
-      have hwv : w = v := e.injective heq
-      change w ∈ S at hw
-      change v ∈ S
-      exact hwv ▸ hw
-    · intro hv
-      exact ⟨v, hv, rfl⟩
-  constructor
-  · simp only [LinearEquiv.deformedConstraintProjection, Submodule.ker_starProjection,
-      Submodule.orthogonal_orthogonal, hBackward]
-  · simp only [LinearEquiv.deformedConstraintProjection, Submodule.ker_starProjection,
-      Submodule.orthogonal_orthogonal, hForward]
-
 /-- Deforming the actual first-edge constraint by the inverse normalization
 is exactly the common-core constraint. This orientation follows from the
 pulled-back-kernel definition of canonical deformation.
@@ -355,7 +302,7 @@ theorem firstEdgeNormalization_symm_deformed_actualConstraint_eq_core
     (firstEdgeNormalizationEquivES (D₁ := D₁) A₀ hA₀).symm.deformedConstraintProjection
         (mixedEndpointFirstEdgeConstraintES A₀ A₁) =
       endpointFirstEdgeCoreConstraintES A₀ (Fin D₀ ⊕ Fin D₁) :=
-  (deformed_complementProjections_of_map_eq _ _ _
+  (LinearEquiv.deformedConstraintProjection_orthogonal_of_map_eq _ _ _
     (map_firstEdgeNormalizationEquivES_actualSupport A₀ A₁ hA₀)).1
 
 /-- The corresponding inverse-normalization identity for the last edge.
@@ -366,7 +313,7 @@ theorem lastEdgeNormalization_symm_deformed_actualConstraint_eq_core
     (lastEdgeNormalizationEquivES (D₁ := D₁) A₀ hA₀).symm.deformedConstraintProjection
         (mixedEndpointLastEdgeConstraintES A₀ A₁) =
       endpointLastEdgeCoreConstraintES A₀ (Fin D₀ ⊕ Fin D₁) :=
-  (deformed_complementProjections_of_map_eq _ _ _
+  (LinearEquiv.deformedConstraintProjection_orthogonal_of_map_eq _ _ _
     (map_lastEdgeNormalizationEquivES_actualSupport A₀ A₁ hA₀)).1
 
 /-- In the direction used to transfer a core gap back to the actual first
@@ -378,7 +325,7 @@ theorem firstEdgeNormalization_deformed_coreConstraint_eq_actual
     (firstEdgeNormalizationEquivES (D₁ := D₁) A₀ hA₀).deformedConstraintProjection
         (endpointFirstEdgeCoreConstraintES A₀ (Fin D₀ ⊕ Fin D₁)) =
       mixedEndpointFirstEdgeConstraintES A₀ A₁ :=
-  (deformed_complementProjections_of_map_eq _ _ _
+  (LinearEquiv.deformedConstraintProjection_orthogonal_of_map_eq _ _ _
     (map_firstEdgeNormalizationEquivES_actualSupport A₀ A₁ hA₀)).2
 
 /-- The forward-normalization counterpart for the last edge.
@@ -389,7 +336,7 @@ theorem lastEdgeNormalization_deformed_coreConstraint_eq_actual
     (lastEdgeNormalizationEquivES (D₁ := D₁) A₀ hA₀).deformedConstraintProjection
         (endpointLastEdgeCoreConstraintES A₀ (Fin D₀ ⊕ Fin D₁)) =
       mixedEndpointLastEdgeConstraintES A₀ A₁ :=
-  (deformed_complementProjections_of_map_eq _ _ _
+  (LinearEquiv.deformedConstraintProjection_orthogonal_of_map_eq _ _ _
     (map_lastEdgeNormalizationEquivES_actualSupport A₀ A₁ hA₀)).2
 
 /-- The actual interior support in Euclidean coordinates.

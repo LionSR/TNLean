@@ -38,7 +38,8 @@ private theorem abs_entropy_sub_le_of_nested
   have hunion : R ∪ (T \ R) = T := by
     ext x
     simp only [Finset.mem_union, Finset.mem_sdiff]
-    exact ⟨fun h ↦ h.elim hRT And.left, fun h ↦ by by_cases hx : x ∈ R <;> tauto⟩
+    exact ⟨fun h ↦ h.elim (fun hx ↦ hRT hx) And.left,
+      fun h ↦ by by_cases hx : x ∈ R <;> tauto⟩
   have hdiff : T \ R ⊆ T ∆ R := by
     intro x hx
     exact Finset.mem_symmDiff.mpr (Or.inl (Finset.mem_sdiff.mp hx))
@@ -80,6 +81,7 @@ theorem terminalPartition_positiveEntropy_le
         3 * S.n * S.D ∧
       (positiveNearMiddle S.depth σ ∆ positiveDepthPrefix S.A S.depth (iF.val : ℤ)).card ≤
         3 * S.n * S.D := by
+    dsimp only [σ, terminalPartition]
     cases j with
     | inl j =>
       obtain ⟨hnear, hfar, _, _, hnearCard, hfarCard⟩ :=

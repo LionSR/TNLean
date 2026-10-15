@@ -73,6 +73,8 @@ No finiteness, normalization, or tensor assumption is used.
 
 namespace TNLean.Algebra
 
+open scoped TNLean.Algebra.ScalarCohomology
+
 variable {G : Type} {X : Type*} [Group G] [MulAction G X]
 
 namespace LSymbol
@@ -81,7 +83,7 @@ namespace LSymbol
 the trivial fusion-tensor gauge. This is the equivalence relation of arXiv:2203.12563,
 `gdgroup` (`REsubmission.tex` line 718), with the fusion gauge `β` fixed as at line 761. -/
 def ActionGaugeEquiv (L₁ L₂ : LSymbol G X) : Prop :=
-  ∃ γ : ActionTensorGauge G X, L₁ = gauge (fun _ _ ↦ 1) γ L₂
+  ∃ γ : ActionTensorGauge G X, L₁ = gauge (fun _ ↦ 1) γ L₂
 
 /-- Action-gauge equivalence is an equivalence relation. -/
 theorem actionGaugeEquiv_equivalence : Equivalence (ActionGaugeEquiv (G := G) (X := X)) where
@@ -104,7 +106,8 @@ basepoint and to stabilizer arguments is a scalar two-cocycle. -/
 theorem IsCompatible.isCocycle_restrict {L : LSymbol G X}
     (hL : IsCompatible L (fun _ _ _ ↦ 1)) (x₀ : X) :
     ScalarCocycle.IsCocycle
-      (fun a b : MulAction.stabilizer G x₀ ↦ L x₀ (a : G) (b : G)) := by
+      (fun p : MulAction.stabilizer G x₀ × MulAction.stabilizer G x₀ ↦
+        L x₀ (p.1 : G) (p.2 : G)) := by
   intro a b c
   have h := hL x₀ a b c
   rw [show (c : G) • x₀ = x₀ from MulAction.mem_stabilizer_iff.mp c.property, one_mul] at h
@@ -125,8 +128,8 @@ theorem exists_fusionGauge_eq_one_of_isTrivialGaugeClass_comap {ω : ScalarThree
     ∃ β : ScalarCocycle G, ∀ a b c : H, fusionGauge β ω a b c = 1 := by
   classical
   obtain ⟨β₀, hβ₀⟩ := hω
-  refine ⟨fun g h ↦ if hg : g ∈ H then if hh : h ∈ H then (β₀ ⟨g, hg⟩ ⟨h, hh⟩)⁻¹ else 1
-    else 1, fun a b c ↦ ?_⟩
+  refine ⟨fun p ↦ if hg : p.1 ∈ H then if hh : p.2 ∈ H then (β₀ (⟨p.1, hg⟩, ⟨p.2, hh⟩))⁻¹
+    else 1 else 1, fun a b c ↦ ?_⟩
   have hω₀ := congrFun (congrFun (congrFun hβ₀ a) b) c
   simp only [fusionGauge, coboundary, mul_one, comap_apply, Subgroup.coe_subtype] at hω₀
   simp only [fusionGauge, coboundary, a.property, b.property, c.property,
@@ -154,7 +157,7 @@ def reconstructedLSymbol (K : StabilizerRepresentatives G X x₀) (ω : ScalarTh
   fun x g₁ g₂ ↦
     ω (g₁ * g₂ * K.k x) (K.transitionElement g₂ x : G)⁻¹
           (K.transitionElement g₁ (g₂ • x) : G)⁻¹ *
-        ψ (K.transitionElement g₁ (g₂ • x)) (K.transitionElement g₂ x) /
+        ψ (K.transitionElement g₁ (g₂ • x), K.transitionElement g₂ x) /
       (ω g₁ (g₂ * K.k x) (K.transitionElement g₂ x : G)⁻¹ * ω g₁ g₂ (K.k x))
 
 /-- Equation (20) factors as its `ψ = 1` part times the L-symbol induced by `ψ`. -/
@@ -172,7 +175,7 @@ with the trivializing two-cochain equal to one. -/
 theorem reconstructedLSymbol_base (K : StabilizerRepresentatives G X x₀)
     {ω : ScalarThreeCochain G} (hH : ∀ a b c : MulAction.stabilizer G x₀, ω a b c = 1)
     (ψ : ScalarCocycle (MulAction.stabilizer G x₀)) (a b : MulAction.stabilizer G x₀) :
-    K.reconstructedLSymbol ω ψ x₀ (a : G) (b : G) = ψ a b := by
+    K.reconstructedLSymbol ω ψ x₀ (a : G) (b : G) = ψ (a, b) := by
   have hb : (b : G) • x₀ = x₀ := MulAction.mem_stabilizer_iff.mp b.property
   simp only [reconstructedLSymbol, hb, transitionElement_stabilizer, K.k_x₀, mul_one]
   have h₁ := hH (a * b) b⁻¹ a⁻¹
@@ -266,7 +269,7 @@ theorem gauge_reconstructedLSymbol_isCompatible (K : StabilizerRepresentatives G
   have h := (K.reconstructedLSymbol_isCompatible (hω.fusionGauge β) hβ hψ).gauge β⁻¹
     (fun _ _ ↦ 1)
   rwa [ScalarThreeCochain.fusionGauge_comp, mul_inv_cancel,
-    show (1 : ScalarCocycle G) = fun _ _ ↦ 1 from rfl,
+    show (1 : ScalarCocycle G) = fun _ ↦ 1 from rfl,
     ScalarThreeCochain.fusionGauge_one] at h
 
 /-- **Surjectivity for the trivial three-cochain.** Every L-symbol `R` compatible with the
@@ -278,8 +281,8 @@ This is the `ω = 1` case of the classification in arXiv:2203.12563, lines 749--
 theorem exists_actionGauge_eq_inducedLSymbol (K : StabilizerRepresentatives G X x₀)
     {R : LSymbol G X} (hR : LSymbol.IsCompatible R (fun _ _ _ ↦ 1)) :
     ∃ γ : ActionTensorGauge G X,
-      R = LSymbol.gauge (fun _ _ ↦ 1) γ
-        (K.inducedLSymbol (fun a b ↦ R x₀ (a : G) (b : G))) := by
+      R = LSymbol.gauge (fun _ ↦ 1) γ
+        (K.inducedLSymbol (fun p ↦ R x₀ (p.1 : G) (p.2 : G))) := by
   refine ⟨fun g x ↦ R x₀ (K.k (g • x)) (K.transitionElement g x) / R x₀ g (K.k x), ?_⟩
   funext x g h
   have hkx : K.k x • x₀ = x := K.k_smul_x₀ x
@@ -328,7 +331,7 @@ theorem isCompatible_iff_exists_actionGauge_mul_inducedLSymbol
     LSymbol.IsCompatible L ω ↔
       ∃ ψ : ScalarCocycle (MulAction.stabilizer G x₀), ψ.IsCocycle ∧
         ∃ γ : ActionTensorGauge G X,
-          L = LSymbol.gauge (fun _ _ ↦ 1) γ (L₀ * K.inducedLSymbol ψ) := by
+          L = LSymbol.gauge (fun _ ↦ 1) γ (L₀ * K.inducedLSymbol ψ) := by
   constructor
   · intro hL
     have hR := hL.mul_inv_one hL₀
@@ -365,7 +368,7 @@ theorem exists_actionGauge_eq_reconstructedLSymbol (K : StabilizerRepresentative
     (hL : LSymbol.IsCompatible L ω) :
     ∃ ψ : ScalarCocycle (MulAction.stabilizer G x₀), ψ.IsCocycle ∧
       ∃ γ : ActionTensorGauge G X,
-        L = LSymbol.gauge (fun _ _ ↦ 1) γ (K.reconstructedLSymbol ω ψ) := by
+        L = LSymbol.gauge (fun _ ↦ 1) γ (K.reconstructedLSymbol ω ψ) := by
   obtain ⟨ψ, hψ, γ, hγ⟩ :=
     (K.isCompatible_iff_exists_actionGauge_mul_inducedLSymbol
       (K.reconstructedLSymbol_one_isCompatible hω hH) L).1 hL
@@ -383,7 +386,7 @@ theorem exists_actionGauge_gauge_eq_reconstructedLSymbol
     ∃ ψ : ScalarCocycle (MulAction.stabilizer G x₀), ψ.IsCocycle ∧
       ∃ γ : ActionTensorGauge G X,
         LSymbol.gauge β (fun _ _ ↦ 1) L =
-          LSymbol.gauge (fun _ _ ↦ 1) γ
+          LSymbol.gauge (fun _ ↦ 1) γ
             (K.reconstructedLSymbol (ScalarThreeCochain.fusionGauge β ω) ψ) :=
   K.exists_actionGauge_eq_reconstructedLSymbol (hω.fusionGauge β) hβ
     (hL.gauge β (fun _ _ ↦ 1))
@@ -397,22 +400,58 @@ def solutionSetoid (ω : ScalarThreeCochain G) :
     fun h ↦ LSymbol.actionGaugeEquiv_equivalence.symm h,
     fun h₁₂ h₂₃ ↦ LSymbol.actionGaugeEquiv_equivalence.trans h₁₂ h₂₃⟩
 
-/-- The bijection from TNLean's concrete quotient of stabilizer cocycles onto the solution
+/-! ### The torsor under Mathlib's group cohomology
+
+The action of `H²(H, ℂˣ)` and the torsor bijection are stated for Mathlib's
+`groupCohomology.H2` for the trivial action of the stabilizer on `ℂˣ`. Privately, a class is
+handled through the stabilizer cocycles representing it: the quotient of the cocycles by
+equality of classes is identified with `H²(H, ℂˣ)` by `Setoid.quotientKerEquivOfSurjective`. -/
+
+/-- The class in Mathlib's `H²(H, ℂˣ)` of a two-cocycle on the stabilizer. -/
+private noncomputable def cocycleClass
+    (ψ : {ψ : ScalarCocycle (MulAction.stabilizer G x₀) // ψ.IsCocycle}) :
+    groupCohomology.H2 (Rep.ofMulDistribMulAction (MulAction.stabilizer G x₀) ℂˣ) :=
+  groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ ψ.2.isMulCocycle₂)
+
+private theorem cocycleClass_surjective :
+    Function.Surjective (cocycleClass (G := G) (x₀ := x₀)) := fun a ↦ by
+  obtain ⟨ψ, hψ, h⟩ := ScalarCocycle.exists_H2π_eq a
+  exact ⟨⟨ψ, hψ⟩, h⟩
+
+private theorem cocycleClass_eq_iff
+    (ψ₁ ψ₂ : {ψ : ScalarCocycle (MulAction.stabilizer G x₀) // ψ.IsCocycle}) :
+    cocycleClass ψ₁ = cocycleClass ψ₂ ↔ ψ₁.1.CohomologousTo ψ₂.1 :=
+  (ScalarCocycle.cohomologousTo_iff_H2π_eq ψ₁.2 ψ₂.2).symm
+
+/-- Stabilizer cocycles modulo equality of classes, identified with `H²(H, ℂˣ)`. -/
+private noncomputable def quotientEquivH2 :
+    Quotient (Setoid.ker (cocycleClass (G := G) (x₀ := x₀))) ≃
+      groupCohomology.H2 (Rep.ofMulDistribMulAction (MulAction.stabilizer G x₀) ℂˣ) :=
+  Setoid.quotientKerEquivOfSurjective _ cocycleClass_surjective
+
+private theorem quotientEquivH2_symm_cocycleClass
+    (ψ : {ψ : ScalarCocycle (MulAction.stabilizer G x₀) // ψ.IsCocycle}) :
+    (quotientEquivH2 (G := G) (x₀ := x₀)).symm (cocycleClass ψ) = Quotient.mk _ ψ :=
+  (Equiv.symm_apply_eq _).2 rfl
+
+/-- The bijection from stabilizer cocycles modulo equality of classes onto the solution
 classes, sending the class of `ψ` to the class of `L₀ · L[ψ]`. The public statement is
 `h2EquivSolutionClasses`, on Mathlib's `groupCohomology.H2`. -/
 private noncomputable def concreteH2EquivSolutionClasses (K : StabilizerRepresentatives G X x₀)
     {ω : ScalarThreeCochain G} {L₀ : LSymbol G X} (hL₀ : LSymbol.IsCompatible L₀ ω) :
-    H2 (MulAction.stabilizer G x₀) ≃ Quotient (solutionSetoid (X := X) ω) :=
+    Quotient (Setoid.ker (cocycleClass (G := G) (x₀ := x₀))) ≃
+      Quotient (solutionSetoid (X := X) ω) :=
   Equiv.ofBijective
-    (Quotient.map (sa := ScalarCocycle.IsCocycle.instSetoid) (sb := solutionSetoid ω)
+    (Quotient.map (sa := Setoid.ker cocycleClass) (sb := solutionSetoid ω)
       (fun ψ ↦ ⟨L₀ * K.inducedLSymbol ψ.1,
         ((K.isCompatible_iff_exists_actionGauge_mul_inducedLSymbol hL₀ _).2
           ⟨ψ.1, ψ.2, fun _ _ ↦ 1, (LSymbol.gauge_one _).symm⟩)⟩)
-      (fun _ _ h ↦ (K.actionGaugeEquiv_mul_inducedLSymbol_iff L₀ _ _).2 h))
+      (fun _ _ h ↦ (K.actionGaugeEquiv_mul_inducedLSymbol_iff L₀ _ _).2
+        ((cocycleClass_eq_iff _ _).1 h)))
     ⟨by
       rintro ⟨ψ₁⟩ ⟨ψ₂⟩ h
-      exact Quotient.sound ((K.actionGaugeEquiv_mul_inducedLSymbol_iff L₀ _ _).1
-        (Quotient.exact h)),
+      exact Quotient.sound ((cocycleClass_eq_iff _ _).2
+        ((K.actionGaugeEquiv_mul_inducedLSymbol_iff L₀ _ _).1 (Quotient.exact h))),
     by
       rintro ⟨L⟩
       obtain ⟨ψ, hψ, γ, hγ⟩ :=
@@ -422,13 +461,14 @@ private noncomputable def concreteH2EquivSolutionClasses (K : StabilizerRepresen
         funext x g h
         simp [LSymbol.gauge]⟩⟩⟩
 
-/-- The action of a class of TNLean's concrete quotient of stabilizer cocycles on action-gauge
-classes of solutions, `[ψ] · [L] = [L · L[ψ]]`, where `L[ψ]` is the induced L-symbol. The public
-action is `solutionAddAction`, of Mathlib's `groupCohomology.H2`. -/
-private def solutionAction (K : StabilizerRepresentatives G X x₀) {ω : ScalarThreeCochain G} :
-    H2 (MulAction.stabilizer G x₀) → Quotient (solutionSetoid (X := X) ω) →
-      Quotient (solutionSetoid (X := X) ω) :=
-  Quotient.map₂ (sa := ScalarCocycle.IsCocycle.instSetoid) (sb := solutionSetoid ω)
+/-- The action of a class of stabilizer cocycles on action-gauge classes of solutions,
+`[ψ] · [L] = [L · L[ψ]]`, where `L[ψ]` is the induced L-symbol. The public action is
+`solutionAddAction`, of Mathlib's `groupCohomology.H2`. -/
+private noncomputable def solutionAction (K : StabilizerRepresentatives G X x₀)
+    {ω : ScalarThreeCochain G} :
+    Quotient (Setoid.ker (cocycleClass (G := G) (x₀ := x₀))) →
+      Quotient (solutionSetoid (X := X) ω) → Quotient (solutionSetoid (X := X) ω) :=
+  Quotient.map₂ (sa := Setoid.ker cocycleClass) (sb := solutionSetoid ω)
     (sc := solutionSetoid ω)
     (fun ψ L ↦ ⟨L.1 * K.inducedLSymbol ψ.1, by
       have h := L.2.mul (K.inducedLSymbol_isCompatible ψ.2)
@@ -437,7 +477,8 @@ private def solutionAction (K : StabilizerRepresentatives G X x₀) {ω : Scalar
     (by
       rintro ψ₁ ψ₂ hψ L₁ L₂ ⟨γ₁, hγ₁⟩
       obtain ⟨γ₂, hγ₂⟩ :=
-        (K.cohomologousTo_iff_exists_actionGauge_inducedLSymbol_eq ψ₁.1 ψ₂.1).1 hψ
+        (K.cohomologousTo_iff_exists_actionGauge_inducedLSymbol_eq ψ₁.1 ψ₂.1).1
+          ((cocycleClass_eq_iff _ _).1 hψ)
       refine ⟨γ₁ * γ₂, ?_⟩
       change L₁.1 * K.inducedLSymbol ψ₁.1 = _
       rw [hγ₁, hγ₂]
@@ -447,27 +488,9 @@ private def solutionAction (K : StabilizerRepresentatives G X x₀) {ω : Scalar
       push_cast
       field_simp)
 
-/-! ### The torsor under Mathlib's group cohomology
-
-The action of `H²(H, ℂˣ)` and the torsor bijection are stated for Mathlib's
-`groupCohomology.H2` for the trivial action of the stabilizer on `ℂˣ`. The representative-level
-quotient machinery above is private and is transported along `h2EquivGroupCohomology`. -/
-
 section GroupCohomology
 
 variable {G X : Type} [Group G] [MulAction G X] {x₀ : X}
-
-/-- The inverse of `h2EquivGroupCohomology` on the class of a Mathlib cocycle is the class of
-the corresponding curried scalar cocycle. -/
-private theorem h2EquivGroupCohomology_symm_H2π {H : Type} [Group H]
-    (α : groupCohomology.cocycles₂ (scalarH2Representation H)) :
-    (h2EquivGroupCohomology H).symm (groupCohomology.H2π _ α) =
-      (Quotient.mk _ (ScalarCocycle.ofMathlibCocycle α) : H2 H) := by
-  refine (Equiv.symm_apply_eq _).2 ?_
-  change groupCohomology.H2π _ α = groupCohomology.H2π _
-    ((ScalarCocycle.representativesEquivMathlib H)
-      ((ScalarCocycle.representativesEquivMathlib H).symm α))
-  rw [Equiv.apply_symm_apply]
 
 /-- The additive action of Mathlib's `H²(H, ℂˣ)`, for the trivial action of the stabilizer
 `H` on `ℂˣ`, on action-gauge classes of L-symbols compatible with `ω`: the class of a cocycle
@@ -479,30 +502,40 @@ registered as a global instance; install it locally with `letI := K.solutionAddA
 @[instance_reducible]
 noncomputable def solutionAddAction (K : StabilizerRepresentatives G X x₀)
     (ω : ScalarThreeCochain G) :
-    AddAction (groupCohomology.H2 (scalarH2Representation (MulAction.stabilizer G x₀)))
+    AddAction
+      (groupCohomology.H2 (Rep.ofMulDistribMulAction (MulAction.stabilizer G x₀) ℂˣ))
       (Quotient (solutionSetoid (X := X) ω)) where
-  vadd a c := K.solutionAction ((h2EquivGroupCohomology _).symm a) c
+  vadd a c := K.solutionAction (quotientEquivH2.symm a) c
   zero_vadd c := by
     induction c using Quotient.ind with
     | _ L =>
-      change K.solutionAction _ _ = _
-      rw [← map_zero (CategoryTheory.ConcreteCategory.hom
-          (groupCohomology.H2π (scalarH2Representation (MulAction.stabilizer G x₀)))),
-        h2EquivGroupCohomology_symm_H2π]
+      have h1 : ScalarCocycle.IsCocycle
+          (1 : ScalarCocycle (MulAction.stabilizer G x₀)) :=
+        fun _ _ _ ↦ rfl
+      change K.solutionAction (quotientEquivH2.symm 0) _ = _
+      rw [← ScalarCocycle.H2π_one h1,
+        show groupCohomology.H2π _ _ = cocycleClass ⟨_, h1⟩ from rfl,
+        quotientEquivH2_symm_cocycleClass]
       refine congrArg (Quotient.mk _) (Subtype.ext ?_)
       funext x g h
-      simp only [inducedLSymbol, ScalarCocycle.ofMathlibCocycle, Pi.mul_apply]
+      simp only [inducedLSymbol, Pi.mul_apply]
       exact mul_one _
   add_vadd a b c := by
-    induction a using groupCohomology.H2_induction_on with | _ α =>
-    induction b using groupCohomology.H2_induction_on with | _ β =>
+    obtain ⟨α, rfl⟩ := cocycleClass_surjective a
+    obtain ⟨β, rfl⟩ := cocycleClass_surjective b
     induction c using Quotient.ind with | _ L =>
+    have hαβ : ScalarCocycle.IsCocycle (α.1 * β.1) := fun g h k ↦ by
+      simp only [Pi.mul_apply]
+      rw [mul_mul_mul_comm, α.2 g h k, β.2 g h k, mul_mul_mul_comm]
+    have hadd : cocycleClass α + cocycleClass β = cocycleClass ⟨_, hαβ⟩ := by
+      rw [cocycleClass, cocycleClass, cocycleClass, ← map_add]
+      rfl
     change K.solutionAction _ _ = K.solutionAction _ (K.solutionAction _ _)
-    rw [← map_add, h2EquivGroupCohomology_symm_H2π, h2EquivGroupCohomology_symm_H2π,
-      h2EquivGroupCohomology_symm_H2π]
+    rw [hadd, quotientEquivH2_symm_cocycleClass, quotientEquivH2_symm_cocycleClass,
+      quotientEquivH2_symm_cocycleClass]
     refine congrArg (Quotient.mk _) (Subtype.ext ?_)
     funext x g h
-    simp only [inducedLSymbol, ScalarCocycle.ofMathlibCocycle, Pi.mul_apply]
+    simp only [inducedLSymbol, Pi.mul_apply]
     refine (congrArg (L.1 x g h * ·) ?_).trans (mul_assoc _ _ _).symm
     exact mul_comm _ _
 
@@ -516,36 +549,36 @@ transitive on solution classes.
 Source: arXiv:2203.12563, `REsubmission.tex` line 761. -/
 noncomputable def h2EquivSolutionClasses (K : StabilizerRepresentatives G X x₀)
     {ω : ScalarThreeCochain G} {L₀ : LSymbol G X} (hL₀ : LSymbol.IsCompatible L₀ ω) :
-    groupCohomology.H2 (scalarH2Representation (MulAction.stabilizer G x₀)) ≃
+    groupCohomology.H2 (Rep.ofMulDistribMulAction (MulAction.stabilizer G x₀) ℂˣ) ≃
       Quotient (solutionSetoid (X := X) ω) :=
-  (h2EquivGroupCohomology _).symm.trans (K.concreteH2EquivSolutionClasses hL₀)
+  quotientEquivH2.symm.trans (K.concreteH2EquivSolutionClasses hL₀)
 
-/-- The bijection `h2EquivSolutionClasses` sends the class of a cocycle `α` to the class of
-`L₀ · L[α]`. -/
+/-- The bijection `h2EquivSolutionClasses` sends the class of a stabilizer cocycle `ψ` to the
+class of `L₀ · L[ψ]`. -/
 theorem h2EquivSolutionClasses_H2π (K : StabilizerRepresentatives G X x₀)
     {ω : ScalarThreeCochain G} {L₀ : LSymbol G X} (hL₀ : LSymbol.IsCompatible L₀ ω)
-    (α : groupCohomology.cocycles₂ (scalarH2Representation (MulAction.stabilizer G x₀))) :
-    K.h2EquivSolutionClasses hL₀ (groupCohomology.H2π _ α) =
-      Quotient.mk (solutionSetoid ω) ⟨L₀ * K.inducedLSymbol (ScalarCocycle.ofMathlibCocycle α).1,
+    {ψ : ScalarCocycle (MulAction.stabilizer G x₀)} (hψ : ψ.IsCocycle) :
+    K.h2EquivSolutionClasses hL₀
+        (groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hψ.isMulCocycle₂)) =
+      Quotient.mk (solutionSetoid ω) ⟨L₀ * K.inducedLSymbol ψ,
         ((K.isCompatible_iff_exists_actionGauge_mul_inducedLSymbol hL₀ _).2
-          ⟨_, (ScalarCocycle.ofMathlibCocycle α).2, fun _ _ ↦ 1,
-            (LSymbol.gauge_one _).symm⟩)⟩ := by
-  change K.concreteH2EquivSolutionClasses hL₀ ((h2EquivGroupCohomology _).symm _) = _
-  rw [h2EquivGroupCohomology_symm_H2π]
+          ⟨_, hψ, fun _ _ ↦ 1, (LSymbol.gauge_one _).symm⟩)⟩ := by
+  change K.concreteH2EquivSolutionClasses hL₀ (quotientEquivH2.symm (cocycleClass ⟨ψ, hψ⟩)) = _
+  rw [quotientEquivH2_symm_cocycleClass]
   rfl
 
 /-- The torsor bijection based at `L₀` is the orbit map of the class of `L₀` under
 `solutionAddAction`. -/
 theorem h2EquivSolutionClasses_apply (K : StabilizerRepresentatives G X x₀)
     {ω : ScalarThreeCochain G} {L₀ : LSymbol G X} (hL₀ : LSymbol.IsCompatible L₀ ω)
-    (a : groupCohomology.H2 (scalarH2Representation (MulAction.stabilizer G x₀))) :
+    (a : groupCohomology.H2 (Rep.ofMulDistribMulAction (MulAction.stabilizer G x₀) ℂˣ)) :
     letI := K.solutionAddAction ω
     K.h2EquivSolutionClasses hL₀ a = a +ᵥ Quotient.mk (solutionSetoid ω) ⟨L₀, hL₀⟩ := by
   let _ := K.solutionAddAction ω
-  induction a using groupCohomology.H2_induction_on with | _ α =>
-  rw [h2EquivSolutionClasses_H2π]
-  change _ = K.solutionAction _ _
-  rw [h2EquivGroupCohomology_symm_H2π]
+  obtain ⟨ψ, rfl⟩ := cocycleClass_surjective a
+  rw [cocycleClass, h2EquivSolutionClasses_H2π (hψ := ψ.2)]
+  change _ = K.solutionAction (quotientEquivH2.symm (cocycleClass ψ)) _
+  rw [quotientEquivH2_symm_cocycleClass]
   rfl
 
 /-- **The torsor of solutions under Mathlib's group cohomology.** The additive action of
@@ -557,7 +590,7 @@ Source: arXiv:2203.12563, `REsubmission.tex` line 761, "the solutions of `L|_H` 
 theorem existsUnique_vadd_eq (K : StabilizerRepresentatives G X x₀)
     {ω : ScalarThreeCochain G} (c₁ c₂ : Quotient (solutionSetoid (X := X) ω)) :
     letI := K.solutionAddAction ω
-    ∃! a : groupCohomology.H2 (scalarH2Representation (MulAction.stabilizer G x₀)),
+    ∃! a : groupCohomology.H2 (Rep.ofMulDistribMulAction (MulAction.stabilizer G x₀) ℂˣ),
       a +ᵥ c₁ = c₂ := by
   let _ := K.solutionAddAction ω
   induction c₁ using Quotient.ind with | _ L₀ =>

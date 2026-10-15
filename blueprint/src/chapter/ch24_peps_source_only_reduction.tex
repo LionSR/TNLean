@@ -36,16 +36,16 @@ dimensions.
     \leanok
     \uses{def:peps_party_layout,def:peps_party_monomial}
     For an ordered register list with spaces $H_1,\ldots,H_n$, choose
-    unit vectors $x_j\in H_j$ and put $x=x_1\otimes\cdots\otimes x_n$.
-    The empty tensor is the scalar $1$. Registers may instead be grouped
-    into one entire private memory for each party, so no factorization
-    inside a party's memory is required. Local preparation is the
-    isometry $z\mapsto zx$ from $\C$ to the input memory.
+    unit vectors $x_j\in H_j$ and set $x=x_1\otimes\cdots\otimes x_n$,
+    with the empty tensor equal to $1$. Registers may also be grouped
+    into a single private memory per party, without further internal
+    factorization. Local preparation is the isometry $z\mapsto zx$ from
+    $\C$ to the input memory.
 
-    Restricting to a set of owners selects the corresponding factors.
-    The canonical owner partition sends $x$ to $x_A\otimes x_{A^c}$;
-    each factor has norm one. Changing owner names leaves these vectors
-    unchanged under the canonical memory identification.
+    Restricting to a subset of owners $A$ selects the corresponding tensor
+    factors, splitting $x$ into unit vectors $x_A\otimes x_{A^c}$.
+    Relabeling owner names leaves these vectors unchanged under the induced
+    memory identification.
 \end{definition}
 
 \begin{definition}[Prepared sources and retained spectators]
@@ -79,20 +79,18 @@ dimensions.
     \lean{TNLean.PEPS.PairEffect.isPreparation_prepWord}
     \leanok
     \uses{def:peps_private_product_input,def:peps_party_monomial}
-    A source-only operation is composed from local contractions,
+    A source-only operation is a composition of local contractions,
     register permutations, and normalized pair-source preparations.
     A local vector $x$ is prepared by $y\mapsto x\otimes y$.
-    Preparing an ordered inventory of pair vectors gives the tensor
-    product of those vectors followed by the unchanged input.
-    Its norm is one when every pair vector has norm one.
+    Preparing an ordered list of pair vectors tensored with the input
+    produces a vector of norm one whenever every pair vector is a unit vector.
 
     For an operation $T$ and an additional register memory $R$, retaining
     $R$ means applying $I_R\otimes T$. Exchanging two register blocks
-    sends $r\otimes s\otimes y$ to $s\otimes r\otimes y$.
-    Equal register lists are identified by the canonical memory isometry.
-    These operations preserve the indicated vectors and introduce no
-    additional nonprivate gate. An allowed original monomial expansion
-    can consequently be replaced by its actual prepared-source expansion.
+    sends $r\otimes s\otimes y$ to $s\otimes r\otimes y$, and equal register
+    lists are identified by the natural memory isometry. These operations
+    introduce no additional nonprivate gates, allowing each allowed monomial
+    expansion to be replaced by its prepared-source expansion.
 \end{definition}
 
 \begin{definition}[Original distributed circuits]
@@ -113,13 +111,13 @@ dimensions.
     \leanok
     \uses{def:peps_party_layout,def:peps_party_monomial}
     An original circuit is an ordered composition of contractions on
-    owned registers. A private operation acts at one party. Every
-    nonprivate operation has a specified participating set and an
-    expansion $G_j=\sum_\xi c_{j,\xi}M_{j,\xi}$ into allowed monomials.
-    Registers outside the participating set are spectators.
-    Let $N$ denote the number of nonprivate occurrences. Fix $r$ and $S$
-    so that each original monomial has at most $r$ pair effects and
-    $\sum_\xi|c_{j,\xi}|\le S$ at every nonprivate occurrence.
+    owned registers. A private operation acts on a single party. Every
+    nonprivate operation has a specified participating set of parties and an
+    expansion $G_j=\sum_\xi c_{j,\xi}M_{j,\xi}$ into allowed monomials, with
+    registers outside the participating set acting as spectators.
+    Let $N$ denote the number of nonprivate gates, and fix $r$ and $S$
+    so that each monomial has at most $r$ pair effects and
+    $\sum_\xi|c_{j,\xi}|\le S$ at every nonprivate gate.
 \end{definition}
 
 \begin{theorem}[Common auxiliary vector and operator error]
@@ -133,16 +131,15 @@ dimensions.
     \leanok
     \uses{def:peps_original_circuit,cor:peps_pair_effects_rescaling}
     Let $T$ be the operator of an original circuit and let $\delta>0$.
-    Choose $m=\lceil(rS/\delta)^2\rceil+1$, using the original expansions.
-    Replacing each nonprivate operation by its rescaled source-only
-    expansion gives a contraction $\widetilde T$ and a normalized
-    auxiliary vector $\Gamma$ such that
+    With $m=\lceil(rS/\delta)^2\rceil+1$, replacing each nonprivate operation
+    by its rescaled source-only expansion yields a contraction $\widetilde T$
+    and a unit auxiliary vector $\Gamma$ such that
     \begin{align}
         \|\widetilde T-|\Gamma\rangle\otimes T\|\le 2\delta N.
         \label{eq:peps_circuit_effect_error}
     \end{align}
-    Each previously added auxiliary register is a spectator for all
-    subsequent original operations.
+    Each auxiliary register added at a gate acts as a spectator for all
+    subsequent operations.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -178,15 +175,14 @@ dimensions.
     \lean{TNLean.PEPS.PairEffect.gateMemoryMap_tmul}
     \lean{TNLean.PEPS.PairEffect.preparation_mapOwner_heq}
     \uses{cor:peps_pair_effects_rescaling}
-    Induct on the composition of the original operations. The ideal
+    We induct on the composition of operations in the circuit. The ideal
     replacement of each nonprivate gate is its original operator
-    tensored with that gate's fixed normalized auxiliary vector.
-    Their tensor product is $\Gamma$. Private contractions and
-    permutations contribute no error. In a composition, insert the
-    ideal intermediate operator and use contractivity to obtain
-    $e(T_2T_1)\le e(T_1)+e(T_2)$. Each replaced nonprivate occurrence
-    contributes at most $2\delta$, proving
-    (\ref{eq:peps_circuit_effect_error}).
+    tensored with that gate's unit auxiliary vector, and $\Gamma$ is the
+    tensor product of these auxiliary vectors. Private contractions and
+    permutations contribute no error. In a composition $T_2 T_1$, inserting
+    the ideal intermediate operator and using contractivity gives an additive
+    error bound. Since each replaced nonprivate gate contributes error at most
+    $2\delta$, (\ref{eq:peps_circuit_effect_error}) follows.
 \end{proof}
 
 \begin{theorem}[Preservation of participating parties]
@@ -196,11 +192,11 @@ dimensions.
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_participants_ne_one}
     \leanok
     \uses{def:peps_original_circuit}
-    The nonprivate occurrences of the original circuit correspond
-    bijectively to the expanded gates of the replacement. Corresponding
-    occurrences have exactly the same participating parties. Auxiliary
+    The nonprivate gates of the original circuit correspond
+    bijectively to the expanded gates of the replacement circuit, and
+    corresponding gates have the same set of participating parties. Auxiliary
     preparations and register permutations introduce no additional
-    expanded gate occurrences.
+    expanded gates.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -214,10 +210,11 @@ dimensions.
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.ofLocalWordLocationsEquivEmpty}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.participants_castLocationsEquiv}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.participants_frameListLocationsEquiv}
-    Induct on the circuit. An original nonprivate occurrence contributes
-    one replacement gate with the original participating set. Composition
-    joins the two occurrence sets, while spectator registers leave them
-    unchanged. Private operations and permutations contribute empty sets.
+    By induction on the circuit, each original nonprivate gate contributes
+    one replacement gate with the same participating set, while private
+    operations and permutations contribute none. Composition takes the
+    disjoint union of the gate sets, and adding spectator registers leaves
+    the participating sets unchanged.
 \end{proof}
 
 \begin{theorem}[Physical density error]
@@ -228,21 +225,20 @@ dimensions.
     \lean{TNLean.PEPS.PairEffect.sourceGateBudget_eq_of_pos}
     \leanok
     \uses{thm:peps_circuit_effect_error}
-    Fix a decomposition of the original output memory into physical and
-    discarded factors. For an input $x$ with $\|x\|\le1$, let $\rho$ be
-    the original physical density and let $\widetilde\rho$ be the
-    replacement density after also discarding its auxiliary registers.
-    Then
+    Decompose the original output memory into physical and discarded registers.
+    For an input $x$ with $\|x\|\le1$, let $\rho$ be the physical reduced
+    density operator of $Tx$ and let $\widetilde\rho$ be the physical reduced
+    density operator of $\widetilde Tx$ after tracing out the discarded and
+    auxiliary registers. Then
     \begin{align}
         \|\widetilde\rho-\rho\|_1\le4\delta N.
         \label{eq:peps_source_only_density_error}
     \end{align}
-    If $N\le M$ and $\varepsilon>0$, choose
-    $\delta=\varepsilon/(8\max\{1,M\})$. The density error is at most
-    $\varepsilon/2$. For $M>0$ this is precisely
-    $\delta=\varepsilon/(8M)$. The estimate applies in particular to a
-    tensor product of normalized vectors, one in each party's entire
-    private memory.
+    In particular, if $N\le M$ and $\varepsilon>0$, setting
+    $\delta=\varepsilon/(8\max\{1,M\})$ (which equals $\varepsilon/(8M)$ when
+    $M>0$) gives $\|\widetilde\rho-\rho\|_1\le\varepsilon/2$. This applies in
+    particular when $x$ is a tensor product of unit vectors, one in each
+    party's private memory.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -271,20 +267,19 @@ dimensions.
     \lean{TNLean.PEPS.PairEffect.sourceGateBudget_pos}
     \lean{TNLean.PEPS.PairEffect.sourceGateBudget_spec}
     \uses{thm:peps_circuit_effect_error}
-    Put $u=\widetilde T x$ and $v=\Gamma\otimes Tx$, expressed in the
-    common physical and discarded coordinates. Both norms are at most
-    one, and (\ref{eq:peps_circuit_effect_error}) gives
-    $\|u-v\|\le2\delta N$. For the final partial trace $\operatorname{Tr}_E$,
+    Set $u=\widetilde T x$ and $v=\Gamma\otimes Tx$. Both vectors have norm at
+    most one, and (\ref{eq:peps_circuit_effect_error}) gives
+    $\|u-v\|\le2\delta N$. Under the partial trace $\operatorname{Tr}_E$ over
+    the discarded and auxiliary registers,
     \begin{align}
         \|\operatorname{Tr}_E(|u\rangle\langle u|-|v\rangle\langle v|)\|_1
         \le(\|u\|+\|v\|)\|u-v\|\le4\delta N.
         \label{eq:peps_source_only_pure_error}
     \end{align}
-    Discarding the normalized factor $\Gamma$ leaves the original
-    physical density unchanged. This proves
-    (\ref{eq:peps_source_only_density_error}); substituting the chosen
-    budget and $N\le M$ gives the final bound. When $M=0$, one has $N=0$
-    and the error is zero.
+    Tracing out the unit vector $\Gamma$ from $|v\rangle\langle v|$ recovers
+    $\rho$, which proves (\ref{eq:peps_source_only_density_error}). Substituting
+    $\delta=\varepsilon/(8\max\{1,M\})$ and $N\le M$ gives the $\varepsilon/2$
+    bound.
 \end{proof}
 
 \begin{theorem}[Regional dimensions without padding]
@@ -296,18 +291,16 @@ dimensions.
         thm:peps_basis_physical_list_restriction,
         thm:peps_basis_physical_dimensions,
         thm:peps_basis_regional_readouts}
-    The actual physical memory selected by the original party set $A$
-    has dimension
+    The physical memory $\mathcal H_A$ of a subset of parties $A$ has dimension
     \begin{align}
         \dim\mathcal H_A=\prod_{p\in A}d_p\le D^{|A|}
         \label{eq:peps_family_regional_dimension}
     \end{align}
-    whenever $d_p\le D$ on $A$. The regional readout splits the same
-    original configuration into its restrictions to $A$ and its
-    complement, and discards the actual private memory. With this
-    readout, the original whole-party product input and the gate budget
-    of Theorem~\ref{thm:peps_source_only_density_error} give replacement
-    density error at most $\varepsilon/2$.
+    whenever $d_p\le D$ for all $p\in A$. Tracing out the physical registers of
+    $A^c$ together with the private and auxiliary memories yields a regional
+    replacement density within $\varepsilon/2$ of the original regional density
+    in trace norm, for the whole-party product input and error parameter
+    $\delta$ of Theorem~\ref{thm:peps_source_only_density_error}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -318,15 +311,12 @@ dimensions.
         thm:peps_basis_physical_list_restriction,
         def:peps_family_physical_output,
         thm:peps_basis_regional_readouts}
-    Selecting owned physical registers filters the original party
-    ordering. Its tensor basis is indexed by one choice of $d_p$ values
-    at each $p\in A$, so its cardinality is $\prod_{p\in A}d_p$.
-    Multiplying the local bounds gives
-    (\ref{eq:peps_family_regional_dimension}). Reindexing the full tensor
-    basis by the two restrictions of the original configuration gives
-    the regional isometry. Apply
-    Theorem~\ref{thm:peps_source_only_density_error} to this actual
-    partial trace.
+    The tensor basis of $\mathcal H_A$ is indexed by tuples with $d_p$ values
+    at each $p\in A$, giving (\ref{eq:peps_family_regional_dimension}).
+    Splitting the physical configuration into its restrictions to $A$ and $A^c$
+    defines the regional readout, and
+    Theorem~\ref{thm:peps_source_only_density_error} bounds the trace-norm
+    error under this partial trace.
 \end{proof}
 
 \begin{theorem}[Constant-dimensional regional density estimate]
@@ -334,21 +324,19 @@ dimensions.
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.rectangularTraceNorm_sourceOnly_regional_density_sub_le_half}
     \leanok
     \uses{def:peps_family_physical_output,thm:peps_source_only_density_error}
-    Suppose $d_p=d$ at every party and the actual discarded private memory
-    is finite-dimensional. For the original whole-party product input,
-    contraction circuit and positive error budget of
-    Theorem~\ref{thm:peps_source_only_density_error}, the regional readout
-    retains the original physical coordinates in $A$ and discards the
-    exterior physical and private coordinates. If the original gate count
-    is bounded by $M$, the resulting source-only replacement density has
-    trace-norm error at most $\varepsilon/2$.
+    Suppose $d_p=d$ at every party and the discarded private memory
+    is finite-dimensional. For the whole-party product input,
+    contraction circuit, and error parameter $\delta$ of
+    Theorem~\ref{thm:peps_source_only_density_error}, tracing out the physical
+    coordinates outside $A$ along with the private and auxiliary registers
+    yields a source-only replacement density on $A$ within $\varepsilon/2$ of
+    the original regional density in trace norm whenever $N\le M$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_source_only_density_error,def:peps_family_physical_output}
-    Specialize the physical dimension family to $d_p=d$, using the same
-    complete party ordering and its coverage. Apply the density-error
-    estimate to the resulting regional isometry and the original normalized
-    whole-party product vector.
+    Specialize the physical dimensions to $d_p=d$ and apply the density-error
+    estimate to the regional readout on $A$ and the normalized whole-party
+    product input.
 \end{proof}
 
 \begin{theorem}[Resources of the constructed source-only circuit]
@@ -369,25 +357,21 @@ dimensions.
     absolute coefficient sum at most $S$, and at most $r$ pair effects
     per monomial. Suppose also that each gate involves at most $b$
     parties and each party participates in at most $b$ nonprivate
-    occurrences over the entire circuit.
+    gates over the entire circuit.
 
-    With the stack length chosen above, each replacement gate has at
-    most $Km^r$ monomials and absolute coefficient sum at most $S$.
-    Moreover,
+    With $m=\lceil(rS/\delta)^2\rceil+1$, each replacement gate has at
+    most $Km^r$ monomials and absolute coefficient sum at most $S$, with
     \begin{align}
         m    & \le(rS/\delta)^2+2,                 \\
         Km^r & \le K\bigl((rS/\delta)^2+2\bigr)^r.
         \label{eq:peps_replacement_resource_bound}
     \end{align}
-    After combining sources on equal party pairs, a gate with $q$
-    participating parties has exactly $\binom q2$ common source slots,
-    including one-dimensional padding. Thus the entire replacement
-    has at most $N\binom b2$ source positions. Each party participates
-    in exactly as many expanded gate occurrences as originally, so
-    its bound $b$ over the entire circuit is preserved. At each actual
-    chronological occurrence, the branch cardinality and coefficient sum
-    satisfy the same bounds. The participation count is the number of
-    incident nonprivate occurrences, with repeated uses counted separately.
+    After combining sources on each unordered pair of parties, a gate with $q$
+    participating parties has $\binom q2$ pair-source slots (including trivial
+    one-dimensional slots), so the replacement circuit has at most
+    $N\binom b2$ source slots in total. Each party participates in the same
+    number of expanded gates as in the original circuit, at most $b$ in total
+    (counted with multiplicity).
 \end{theorem}
 
 \begin{proof}\leanok
@@ -415,20 +399,17 @@ dimensions.
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.IsExpansionBounded.at_gate}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.participationCount_eq_card_incidentGates}
     \uses{cor:peps_pair_effects_rescaling,thm:peps_replacement_participants}
-    Expanding the permutation averages preserves the absolute sum of
-    the original coefficients. The common rescaling has modulus
-    $(1+\delta)^{-1}\le1$, so it cannot increase that sum. The monomial
-    count is at most $Km^r$ by the gate expansion. The ceiling estimate
+    Expanding the cyclic insertion averages preserves the absolute sum of
+    the coefficients, and dividing by $1+\delta>1$ does not increase it.
+    Each gate expansion has at most $Km^r$ terms, and the ceiling bound
     gives (\ref{eq:peps_replacement_resource_bound}). Inducting on the
-    original chronology carries both bounds through composition and
-    retained spectators.
+    circuit carries both bounds through composition and spectator registers.
 
-    Each prepared gate has one common slot for every unordered pair of
-    distinct participating parties. Summing $\binom q2\le\binom b2$
-    over its $N$ occurrences bounds all source positions. The occurrence
-    correspondence of Theorem~\ref{thm:peps_replacement_participants}
-    restricts to a bijection on the occurrences involving any fixed
-    party, proving exact preservation of its count.
+    Each prepared gate has one slot for every unordered pair of distinct
+    participating parties, so summing $\binom q2\le\binom b2$ over the $N$
+    nonprivate gates bounds the total number of source slots. Finally, the
+    bijection of Theorem~\ref{thm:peps_replacement_participants} restricts to
+    the gates incident to any fixed party, preserving its participation count.
 \end{proof}
 
 % These statements establish the effect-elimination part of the proof of

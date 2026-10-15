@@ -36,7 +36,7 @@ open scoped Matrix.Norms.L2Operator
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
-open Geometry
+open TNLean.PEPS.AreaLaw.Geometry
 
 private theorem template_target_volume {Ctpl : ℝ} {n s₀ : ℕ}
     (T : Template Ctpl n s₀) (hC : 24 ≤ Ctpl) :
@@ -106,7 +106,7 @@ theorem exists_template_final_mutualInformation_of_boxEntropy
               2 * FiniteProduct.mutualInformation β Ω X S₀ᶜ ≤
                 C * (n : ℝ) ^ (1 - (Exponents.amplificationEpsilon : ℝ)) := by
   classical
-  letI : NeZero q := ⟨by omega⟩
+  let : NeZero q := ⟨by omega⟩
   let μ : ℕ := 2 ^ ((1 + 2 * R * (R + 1)) - 1)
   let C₁ : ℝ := 3 * (μ : ℝ)
   have hC₁ : 0 < C₁ := by dsimp [C₁, μ]; positivity
@@ -115,12 +115,12 @@ theorem exists_template_final_mutualInformation_of_boxEntropy
       hq R hJ hΔ (by norm_num : (0 : ℝ) ≤ 9) hC₁ μ le_rfl 1
       (by norm_num [Exponents.scannerNu])
   obtain ⟨Ce, hCe, hentropy⟩ := exists_template_final_source_entropy_bounds_of_boxEntropy
-    q R D₀ hq hD₀ hCbox hbox
+      q R D₀ hq hD₀ hCbox hbox
   obtain ⟨C, hC, Ns, hNs, hbound⟩ := hsource Ce hCe
   obtain ⟨Ng, _, hgeometry⟩ := exists_finalScanner_admissibility hCtr.le
   refine ⟨C, hC, max Ns Ng, hNs.trans (le_max_left _ _), ?_⟩
   intro n s₀ hn Λ h E₀ Ω hgs A T hsep hL
-  letI : LinearOrder (AdmissibleSupport Λ R) :=
+  let : LinearOrder (AdmissibleSupport Λ R) :=
     LinearOrder.lift' (Fintype.equivFin (AdmissibleSupport Λ R))
       (Fintype.equivFin (AdmissibleSupport Λ R)).injective
   let S := finalTemplateScanner T.nonempty A R n Ctr C₁
@@ -150,6 +150,12 @@ theorem exists_template_final_mutualInformation_of_boxEntropy
   have hinfo := hbound Λ T.points T.nonempty h S E₀ Ω hgs rfl hanchor hnS
     rfl rfl rfl rfl rfl (template_target_volume T hCtpl) rfl
     hrows hmult hclear htarget hprefix
-  simpa only [S, finalTemplateScanner_truncationSet, finalTemplateScanner] using hinfo
+  dsimp only at hinfo ⊢
+  have htr : S.truncationSet ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ =
+      A.filter fun x ↦ x.val ∈ ambientDilation T.points
+        ⌊(n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ :=
+    finalTemplateScanner_truncationSet T.nonempty A R n Ctr C₁ L
+  rw [htr] at hinfo
+  exact hinfo
 
 end TNLean.PEPS.AreaLaw.Scan

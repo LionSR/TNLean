@@ -63,6 +63,18 @@ def mixedEndpointFirstPhysicalIndex (D₁ : ℕ) (p : Fin (D₀ * D₀)) :
   mixedEndpointPhysicalIndex (.inl (finProdFinEquiv.symm p).1)
     (.inl (finProdFinEquiv.symm p).2)
 
+/-- The common physical encoding of two registers is injective. -/
+theorem mixedEndpointPhysicalIndex_eq_iff (a b a' b' : Fin D₀ ⊕ Fin D₁) :
+    mixedEndpointPhysicalIndex a b = mixedEndpointPhysicalIndex a' b' ↔ a = a' ∧ b = b' := by
+  simp only [mixedEndpointPhysicalIndex, Equiv.apply_eq_iff_eq, Prod.mk.injEq]
+
+/-- The inclusion of endpoint physical letters into the first diagonal sector is injective. -/
+theorem mixedEndpointFirstPhysicalIndex_injective :
+    Function.Injective (mixedEndpointFirstPhysicalIndex (D₀ := D₀) D₁) := by
+  intro p q hpq
+  have h := (mixedEndpointPhysicalIndex_eq_iff _ _ _ _).mp hpq
+  exact finProdFinEquiv.symm.injective (Prod.ext (Sum.inl.inj h.1) (Sum.inl.inj h.2))
+
 /-- The first rectangular letter: diagonal physical letters retain `A₀`,
 second-to-first letters are raw matrix units, and the second inner sector
 vanishes. The exterior row is the free spectator in the mixed sector.

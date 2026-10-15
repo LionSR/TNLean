@@ -119,19 +119,8 @@ theorem parentHamiltonianES_gap_of_openParentHamiltonianES_gap
         (zmodLocalTermES A R) m s x) = B (U x) := by
       have := LinearMap.congr_fun hConj (U x)
       simpa [U, B, G, W, i] using this
-    have hLeft :
-        (⟪ProjectionGeometry.cyclicWindowSum (zmodLocalTermES A R) m s x,
-          x⟫_ℂ).re = (⟪B (U x), U x⟫_ℂ).re := by
-      rw [← U.inner_map_map]
-      rw [hApply]
-    have hRight :
-        (⟪ProjectionGeometry.cyclicWindowSum (zmodLocalTermES A R) m s x,
-          ProjectionGeometry.cyclicWindowSum (zmodLocalTermES A R) m s x⟫_ℂ).re =
-          (⟪B (U x), B (U x)⟫_ℂ).re := by
-      rw [← U.inner_map_map]
-      rw [hApply]
-    rw [hLeft, hRight]
-    exact hFiber (U x)
+    have h := hFiber (U x)
+    rwa [← hApply, U.inner_map_map, U.inner_map_map] at h
   exact FrustrationFree.spectralGap_of_martingale_of_finiteDimensional hδ
     (parentHamiltonianES_isPositive A R N) (fun x ↦ by
       have hx := ProjectionGeometry.quadraticForm_sum_projections_of_cyclic_knabe

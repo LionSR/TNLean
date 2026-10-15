@@ -109,7 +109,9 @@ theorem exists_actualScan_rough_lower_norm
   let Y := fun j g => middle (σ j g)
   have hdisj : ∀ j g, Disjoint (Q j g) (Y j g) := fun j g => by
     simp only [Q, Y, receiving, middle]
-    exact Finset.disjoint_filter.mpr fun _ _ hx hy => by simp_all
+    exact Finset.disjoint_filter.mpr fun _ _ hx hy => by
+      have hfalse : (some false : Option Bool) = none := hx.symm.trans hy
+      cases hfalse
   have hnest : ∀ j j' g g', g < g' → Q j g ∪ Y j g ⊆ Q j' g' := fun
     | Sum.inl ⟨_, hist⟩, Sum.inl ⟨_, hist'⟩, g, g', hgg' =>
       S.state_near_middle_subset_later_near hist hist' g g' hgg'

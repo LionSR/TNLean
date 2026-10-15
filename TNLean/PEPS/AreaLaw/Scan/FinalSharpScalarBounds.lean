@@ -47,7 +47,7 @@ theorem finalSharp_neg_log_mass_le {n : ℕ} (hn : 2 ≤ n) {z : ℝ}
 
 /-- The elementary small-fraction entropy estimate, retaining the logarithm.
 It is used at the fixed source fraction `tau = n^(-1/4000)`. -/
-theorem finalSharp_binEntropy_le {t : ℝ} (ht : 0 < t) (htone : t < 1) :
+theorem finalSharp_binEntropy_le {t : ℝ} (_ht : 0 < t) (htone : t < 1) :
     Real.binEntropy t ≤ t * (1 - Real.log t) := by
   have hq : 0 < 1 - t := sub_pos.mpr htone
   have hlog := mul_le_mul_of_nonneg_right
@@ -80,7 +80,7 @@ theorem finalSharp_binary_cost_le {n : ℕ} (hn : 2 ≤ n) {a : ℝ}
     _ ≤ (3 + 1 / a) * ((n : ℝ) ^ (-(1 / 4000 : ℝ)) *
         (1 + Real.log (n : ℝ) / 4000)) := by
       apply mul_le_mul_of_nonneg_left _ (by positivity)
-      convert hentropy using 1 <;> ring
+      convert hentropy using 1; ring
     _ ≤ (4 * (n : ℝ) ^ (37497 / 50000 : ℝ)) *
         ((n : ℝ) ^ (-(1 / 4000 : ℝ)) *
           (1 + Real.log (n : ℝ) / 4000)) :=
@@ -106,7 +106,8 @@ theorem ScannerExponents.eventually_bandCount_le_rpow (X : ScannerExponents) :
   rw [← Real.rpow_add hnpos,
     show 1 - X.ell - X.mu + X.mu = 1 - X.ell by ring]
   nlinarith [mul_le_mul_of_nonneg_left hm (Nat.cast_nonneg (X.K n)),
-    mul_nonneg (Nat.cast_nonneg (X.K n)) (Nat.cast_nonneg (X.m n))]
+    mul_nonneg (show (0 : ℝ) ≤ X.K n from Nat.cast_nonneg _)
+      (show (0 : ℝ) ≤ X.m n from Nat.cast_nonneg _)]
 
 /-- The actual rounded source scales have the two required per-band bounds,
 and the prescribed final fraction is eventually at most one half. The fixed
@@ -178,7 +179,7 @@ theorem exists_finalSharp_scale_bounds :
         rw [← Real.rpow_add hnpos]
         norm_num [Exponents.scannerOmega]
   · rw [Real.rpow_neg hnpos.le, one_div]
-    exact inv_anti₀ (by norm_num) ht
+    simpa only [one_div] using inv_anti₀ (by norm_num) ht
 
 /-- The quantitative source trace budget has its actual fixed coefficient.
 The first limit is unrelated to this system-size estimate. -/

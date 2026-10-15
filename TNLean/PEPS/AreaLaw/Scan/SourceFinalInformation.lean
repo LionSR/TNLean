@@ -80,7 +80,7 @@ theorem exists_sourceTarget_finalScale_mutualInformation
               Ce * ((S.n : ℝ) *
                 ((⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ : ℕ) : ℝ) ^
                   (Exponents.boxError : ℝ) + S.n)) →
-          2 * S.r₀ ≤ S.D → ∀ (hDpos : 1 ≤ S.D) (hDm : 4 * S.D ≤ S.m),
+          2 * S.r₀ ≤ S.D → ∀ (_hDpos : 1 ≤ S.D) (_hDm : 4 * S.D ≤ S.m),
           let L := ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
           let X := S.A.filter fun x ↦ x.val ∈ T
           let β := fun _ : Site Λ ↦ Fin q
@@ -108,8 +108,7 @@ theorem exists_sourceTarget_finalScale_mutualInformation
     q hq Ce C₀ CB g (C_T + 1) hCe hC₀ hCB.le hg hCvol
   refine ⟨C, hC, max Ns (max Ne (max Nt Nsml)), hNs.trans (le_max_left _ _), ?_⟩
   intro Λ T _ hT h S E₀ Ω hgs hgraph hanchor hn hr hmScale hDScale hKScale
-    hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix hrD hDpos hDm
-  intro L X β
+    hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix hrD hDpos hDm L X β
   have hnS : Ns ≤ S.n := by omega
   have hnE : Ne ≤ S.n := by omega
   have hnT : Nt ≤ S.n := by omega
@@ -132,7 +131,7 @@ theorem exists_sourceTarget_finalScale_mutualInformation
     (regionalEntropy Λ q Ωt X) w
   let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
   obtain ⟨hwindow, hd, hpdata⟩ := hwdata
-  letI : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
+  let : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
   let St := regionalEntropy Λ q Ωt X
   let c := w - Real.log z
   let Bpre := 2 * St + 2 * Bsh + 6 * (S.n : ℝ) * (S.D : ℝ) * Real.log q
@@ -175,7 +174,9 @@ theorem exists_sourceTarget_finalScale_mutualInformation
   rw [← herrorEq] at hMI
   have hbudget : B ≤ CB * ((S.n : ℝ) *
       (Nat.ceil ((S.n : ℝ) ^ (Exponents.scannerKappa : ℝ)) : ℝ) *
-        Real.log (S.n : ℝ) ^ 12) := by simp only [B, hDScale]
+        Real.log (S.n : ℝ) ^ 12) := by
+    dsimp only [B]
+    rw [hDScale]
   have hscalar := hbound B St Bsh z t dlog hwindow.2.2.1 hwindow.2.2.2.1
     hwindow.2.1 hSt le_rfl hbudget htrace hdlog
   exact ⟨hMI.trans hscalar.1, hMI.trans hscalar.2⟩

@@ -1,0 +1,84 @@
+% Figure arealaw2d_move_and_restore.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. VI A (move and restore), Eq. al:s10:moverestore.
+% Source: arXiv OpenAI2026AreaLaw, sections/09-amplification.tex:322-346
+% (Schmidt expansion of Omega, amplification-swapped-state phi and
+% amplification-restored-state eta, eqs. (10.20)-(10.21)) 524-551 (R', hence U',
+% supported on s' and N_{2r}(S_0), never on e' or J; ||U'phi - eta|| <= C n^{-K/2},
+% K written m_* in the note).
+% Ink-to-index: rows from top to bottom (both panels) are the registers e', s' (copies of
+% H_X), the target X, the collar Y (S_0 = XY), Z'_near = N_{2r}(S_0) \ S_0,
+% and the remote J, drawn as all of Lambda \ N_{2r}(S_0) (any smaller J
+% in [S] is a part of this row). Omega = sum_{p_y>0} sqrt(p_y)|y>_X|omega_y>_{YZ'} is the
+% box on X..J (Z' = Z'_near J). Left panel phi: the X leg of Omega is routed
+% onto e' (relabelled), and X, s' hold blank kets |0> (grey dots).
+% Right panel eta = Omega (x) sum_{p_x>0} sqrt(p_x)|x>_{s'}|x>_{e'}: the
+% cup on e', s' carries the bead rho_X^{1/2} (diagonal in the eigenbasis).
+% Colour (shared-spec 4.1, H1 and H7): red (selected) is the X leg of Omega, the
+% index that moves: on the left the arc from Omega's top port to e' and the e'
+% stub, on the right the X wire into Omega. The e'-s' cup, its port stubs and the
+% blanks are grey (complement, auxiliary registers). arealaw2d_adjoint_cancellation
+% draws the same index red along its whole path.
+% The neutral bracket east of the right panel, labelled supp U', marks the rows U'
+% acts on: s', X, Y, Z'_near (never e' or J); U' itself is named only over the
+% arrow. The bracket sits in its own column (col 5), one column clear of the
+% Omega label (L2, B1).
+% Boundary signature: (phys:w)x6 in both panels; e', s' are auxiliary
+% (outline: aux:w) with the tenkz type physical.
+% Joiner: U' maps the left state to within C n^{-m_*/2} of the right state in
+% norm; "approx" is not an exact relation, but both panels carry the same
+% boundary signature, so the signature check stays on. The joiner keeps thin
+% spaces around the arrow and the approx sign; the display still fits the column
+% at 5mm.
+% Labels (shared-spec 4.1, L1, L3, L4): the row names stand once, west of the
+% left panel; the right panel shares its rows and repeats no name, so no wire
+% name follows the joiner. Size class l (picture key) sets Omega, the blanks
+% and the bead at the size of the row names.
+% Label macros: none.
+% Fit: C at 5mm (\tnshow[5mm]); with the right panel's names dropped, size=l
+% fits the column.
+% Related: arealaw2d_adjoint_cancellation (same rows, adjoint step);
+% Related: cup and bead idiom of ch26_mps_rfp_zero_correlation_length and
+% ch32_log_depth_fixed_point_pairs (generic MPS cups, labels wrong here); no
+% TNLean picture of the area-law comparators or amplification exists.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire}, cols=4, bonds=none, size=l]
+        \tn[at=(1,1), skin=none, species=selected, name=moveTipE, ports={180:physical:$e'$, 0:physical}]{}
+        \tn[at=(2,1), skin=dot, species=complement, name=moveBlankS, label pos=e,
+            ports={180:physical:$s'$}]{\ket{0}}
+        \tn[at=(3,1), skin=dot, species=complement, name=moveBlankX, label pos=e,
+            ports={180:physical:$X$}]{\ket{0}}
+        \tn[at=(4,1), skin=none, name=moveTipY, ports={180:physical:$Y$, 0:physical}]{}
+        \tn[at=(5,1), skin=none, name=moveTipZ, ports={180:physical:$Z'_{\rm near}$, 0:physical}]{}
+        \tn[at=(6,1), skin=none, name=moveTipJ, ports={180:physical:$J$, 0:physical}]{}
+        \tn[at=(1,2), skin=none, name=moveBend, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,4), skin=box, wires=4, name=moveState, label pos=e,
+            ports={180@1:physical, 180@2:physical, 180@3:physical, 180@4:physical}]{\Omega}
+        \tnwire[species=selected]{moveTipE.0}{moveBend.180}
+        \tnwire[route=arc, species=selected]{moveBend.0}{moveState.180@1}
+        \tnwire{moveTipY.0}{moveState.180@2}
+        \tnwire{moveTipZ.0}{moveState.180@3}
+        \tnwire{moveTipJ.0}{moveState.180@4}
+    \end{tenkz}
+    $\;\xrightarrow{\;U'\;}\;\approx\;$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire}, cols=5, bonds=none, size=l]
+        \tn[at=(1,1), skin=none, species=complement, name=restTipE, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), skin=none, species=complement, name=restTipS, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), skin=none, species=selected, name=restTipX, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,1), skin=none, name=restTipY, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,1), skin=none, name=restTipZ, ports={180:physical, 0:physical}]{}
+        \tn[at=(6,1), skin=none, name=restTipJ, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,3), skin=box, wires=4, name=restState, label pos=e,
+            ports={180@1:physical, 180@2:physical, 180@3:physical, 180@4:physical}]{\Omega}
+        \tnwire[route=arc, species=complement, name=restCup]{restTipE.0}{restTipS.0}
+        \tnwire[species=selected]{restTipX.0}{restState.180@1}
+        \tnwire{restTipY.0}{restState.180@2}
+        \tnwire{restTipZ.0}{restState.180@3}
+        \tnwire{restTipJ.0}{restState.180@4}
+        \tn[skin=dot, at=on restCup 0.5, label pos=e]{\rho_X^{1/2}}
+        \tn[at=(2,5), skin=none, name=restActsTop]{}
+        \tn[at=(5,5), skin=none, name=restActsBottom]{}
+        \tnmark[form=bracket, label pos=e]{(2,5) .. (5,5)}{\operatorname{supp}U'}
+    \end{tenkz}
+\end{tenkzequation}

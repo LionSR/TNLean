@@ -1,7 +1,7 @@
 \section{An opposing closed region for every elementary side}
 \label{sec:area_law_elementary_side_opponents}
 
-The actual plane cover supplies an opposing rectangle at the midpoint of
+The plane cover gives an opposing rectangle at the midpoint of
 each elementary segment. Corner exclusion extends this contact to
 containment of the whole segment; see
 \cite[Section~11]{OpenAI2026AreaLaw}.
@@ -18,9 +18,9 @@ containment of the whole segment; see
         def:area_law_fine_belt_scales,def:area_law_actual_side_mask}
     Fix a common origin $o\in\mathbb R^2$, finite endpoint set $Z$,
     integer width $C_0\ge2$ and natural indices $k_0\le k$ with
-    $k\ge50\,000\,000$. Let $z\in F_{k,\ell_k}$ be an actual
+    $k\ge50\,000\,000$. Let $z\in F_{k,\ell_k}$ be a
     fine-cell index, and let $e=[a_i,b_i]$ be any elementary
-    segment of $Q_{k,z}=Q_{\ell_k}(z)$ under its actual midpoint
+    segment of $Q_{k,z}=Q_{\ell_k}(z)$ under its midpoint
     subdivision relative to $k_0$. Then either
     \begin{align}
         e\subseteq\overline{N_{k_0}},
@@ -37,13 +37,13 @@ containment of the whole segment; see
         thm:area_law_fine_cells_disjoint,thm:area_law_dummy_layer_disjoint,
         thm:area_law_dummy_corner_elementary_side,
         thm:area_law_elementary_corner_endpoint,thm:area_law_dyadic_closures}
-    The reference fine cell is nonempty, so its actual layer
+    The reference fine cell is nonempty, so its layer
     membership implies $Z\ne\varnothing$. Put $x=(a_i+b_i)/2$ and
     take the points in the ball of radius $10\,2^{\ell_k}$ about
     $x$ that lie outside the closed reference cell. Their closure
     contains $x$, since $x$ belongs to a side of that square.
 
-    Every such point lies either in $N_{k_0}$ or in an actual
+    Every such point lies either in $N_{k_0}$ or in a
     fine cell of a layer $h\ge k_0$. Neighboring-layer locality
     restricts these latter indices to $k-1\le h\le k+1$.
     There are finitely many fine cells at these indices, and the
@@ -59,14 +59,9 @@ containment of the whole segment; see
     a boundary coordinate of that rectangle. If the rectangle
     failed to contain either end of $e$, a rectangle corner
     would lie strictly inside $e$. The corresponding dummy-corner
-    or actual fine-corner endpoint assertion excludes this.
+    or fine-corner endpoint theorem excludes this.
     Thus the selected closed rectangle contains the whole segment.
     A contributing dummy rectangle belongs to $\overline{N_{k_0}}$,
-    yielding the first alternative; a distinct actual fine cell
+    yielding the first alternative; a distinct fine cell
     yields the second.
 \end{proof}
-
-This assertion provides existence and whole-segment containment.
-The uniqueness assertion below identifies the opposing actual fine cell or
-dummy neighborhood. Consistent primary and fan-run labels and the
-isolated-star construction remain further obligations.

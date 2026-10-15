@@ -1,7 +1,11 @@
 % Figure al_scan_actual_histories.
 % Owner: chapter/ch24_peps_area_law_scan_histories.tex (def:al_scan_actual_histories).
-% Used by: gapped-2d-notes AL Sec. 9 (moving partitions); the note restates the
-% colour key: X blue, U green, Y orange, V grey.
+% Used by: gapped-2d-notes AL Sec. V C (scanning the collar), Fig. 6(a), with \tnlScD
+% set to D_{\rm ch}; in the note's legend colours: X red, U grey, Y violet, V blue.
+% Ink-to-index: none (geometry only); tints are the parts X, U, Y, V of A,
+% arrows the fills at the fronts, brackets the charge intervals.
+% Boundary signature: empty.
+% Label macros: \tnlScD{D}; the area-law note overrides it with D_{\rm ch}.
 \begin{tenkzequation}
     % Source: arXiv OpenAI2026AreaLaw, sections/08-scanner.tex:156--192
     % (figure scanner:figure), prose lines 92--130; fronts (scanner:fronts).
@@ -19,17 +23,23 @@
     % (last column of Y, j_F being oriented), fills toward smaller depth.
     % Brackets under rows 2 and 5: charge intervals. Near side: depths
     % [j_P-r_0, j_P+D]; far side: oriented depths [j_F-r_0, j_F+D], i.e.
-    % unsigned depths [-j_F-D, -j_F+r_0]; drawn with r_0=D=1 column.
+    % unsigned depths [-j_F-D, -j_F+r_0]; drawn with r_0=D=1 column. All four
+    % windows have width r_0+D; the label sits once, on the near window of band
+    % g+1, in the free row 6. Interval labels such as [j_P-r_0, j_P+D] do not
+    % fit the compact rows (they hit the band-(g+1) labels X, U, j_P), and a
+    % label on the far window of band g+1 would hit the axis label d.
+    % The axis tick 0 marks column 2 (depth zero).
     % Charges can assign sites inside these intervals, so the actual U,
     % Y, V need not be depth intervals.
     \tenkzkernel
     \begin{tenkz}[size=s, metrics=compact, rows={wire,wire,wire,wire,wire,wire,wire},
             cols=18, bonds=none]
-        \tndeclare{species}{target}{hue=source:blue}
-        \tndeclare{species}{near}{hue=source:green!50!black}
-        \tndeclare{species}{middle}{hue=source:orange!85!black}
-        \tndeclare{species}{far}{hue=source:gray}
+        \tndeclare{species}{target}{hue=source:red!65!black}
+        \tndeclare{species}{near}{hue=source:gray}
+        \tndeclare{species}{middle}{hue=source:violet!65!black}
+        \tndeclare{species}{far}{hue=source:blue!65!black}
         \tndeclare{species}{charge}{hue=source:black}
+        \providecommand{\tnlScD}{D}
         \tnmark[form=label, label pos=w]{(2,1)}{$g$}
         \tn[at=(2,2)]{} \tn[at=(2,3)]{} \tn[at=(2,4)]{} \tn[at=(2,5)]{}
         \tn[at=(2,6)]{} \tn[at=(2,7)]{} \tn[at=(2,8)]{} \tn[at=(2,9)]{}
@@ -60,9 +70,10 @@
         \tnmark[form=label, label pos=n]{on scanNearFrontH 0.5}{$j_P$}
         \tnwire[kind=string, dir=to, name=scanFarFrontH]{(4,17)}{(4,16)}
         \tnmark[form=label, label pos=n]{on scanFarFrontH 0.5}{$-j_F$}
-        \tnmark[form=bracket, species=charge, label pos=s]{(5,11) .. (5,13)}{}
+        \tnmark[form=bracket, species=charge, label pos=s]{(5,11) .. (5,13)}{$r_0+\tnlScD$}
         \tnmark[form=bracket, species=charge, label pos=s]{(5,16) .. (5,18)}{}
         \tnwire[kind=string, dir=to, name=scanDepthAxis]{(7,2)}{(7,18)}
+        \tnmark[form=label, label pos=s]{(7,2)}{$0$}
         \tnmark[form=label, label pos=e]{(7,18)}{$d$}
     \end{tenkz}
 \end{tenkzequation}

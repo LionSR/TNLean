@@ -35,6 +35,9 @@ namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open ActualTerminals
 
+attribute [local instance] sharpTreeRegionDecidableEq sharpTreeSiteDecidableEq
+  sharpTreeConfigDecidableEq
+
 local instance sharpUpper_originalConfigDecidableEq
     {V : Type} [Fintype V] [DecidableEq V] (q d k : ℕ) :
     DecidableEq (Config k
@@ -395,9 +398,9 @@ private theorem actualRoot_sharpUpper_of_compressed
     ∀ {Hist : Type} [DecidableEq Hist] {Choice : Hist → Type}
       [∀ h, DecidableEq (Choice h)]
       (D : ReplicaTransport.TransportData (Site Λ ⊕ Bool) S.K Hist Choice)
-      (hD : D.IsAdmissible) (hcomm : D.CrossBandCommute n (a / 2) k)
+      (_ : D.IsAdmissible) (_ : D.CrossBandCommute n (a / 2) k)
       (f : (Σ h, Option (Choice h)) → terminalFamily S.K S.m S.M (S.n * S.m))
-      (hparts : ∀ j g, D.leafPart j g = augmentedPartition (σ (f j) g)) (p : ℝ),
+      (_ : ∀ j g, D.leafPart j g = augmentedPartition (σ (f j) g)) (p : ℝ),
       let Nsq := Transport.filteredNormSq (D.rootPath n (a / 2) k p) pre
       let tree := (D.tree (Set.projIcc (0 : ℝ) 1 zero_le_one p)).map f
       let gpost := fun j g ↦ regionalEntropy Λ q Ωt (U j g) +
@@ -548,6 +551,215 @@ private theorem actualScan_sharpUpper_of_compressed
         (fun j g ↦ actualChargeData_leafPart_terminalPartition S hm hM (S.n * S.m) r j g)⟩
 
 open Classical in
+/-- The fixed-copy QIC comparison, still uniform in coordinates, bands,
+terminal labels, regions, weighted trees, and comparison powers.
+Source: `07-comparators.tex`, lines 383–418, revision adc7f124. -/
+private def sharpUpper_uniformCompressedAt
+    {q : ℕ} [NeZero q] {Λ : Finset (ℤ × ℤ)}
+    (Ωt : EuclideanSpace ℂ (Site Λ → Fin q)) (X : Finset (Site Λ))
+    (d : ℕ) (z a Kmom r c : ℝ) (k : ℕ)
+    (ell : IrrepLabel (Equiv.Perm (Fin k))) : Prop :=
+  let β := fun _ : Site Λ ↦ Fin q
+  ∀ (n : ℕ) (Z : Matrix (Config k (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d))) (Fin n) ℂ),
+  Zᴴ * Z = 1 →
+  Z * Zᴴ = symProj (copyPerm ((o : Option (Option (Site Λ))) →
+    addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d) o) k) →
+  ∀ (G : ℕ) {ι : Type} [Fintype ι] [DecidableEq ι]
+    (U Y : ι → Fin G → Finset (Site Λ)),
+  (∀ j g, Disjoint X (U j g)) → (∀ j g, Disjoint X (Y j g)) →
+  (∀ j g, Disjoint (U j g) (Y j g)) →
+  (∀ j j' g h, g < h → U j g ∪ Y j g ⊆ U j' h) →
+  (∀ j g (Q : Finset (Site Λ)), Q = U j g ∨ Q = U j g ∪ Y j g ∨ Q = Y j g →
+    ∀ v : ℝ, |v| ≤ r →
+      Real.log (Entropy.surprisalMoment
+        (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian.eigenvalues v) ≤
+        v * vonNeumannEntropy (FiniteProduct.reducedPure β Ωt Q)
+          (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian + Kmom * v ^ 2) →
+  ∀ (T : MeanTree ι) (s : ℝ), 2 * s ∈ Set.Icc (0 : ℝ) 1 →
+  let v : EuclideanSpace ℂ (Config k
+    (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d))) := WithLp.toLp 2
+    (replicaPrevector Ωt d k ell ∘
+      globalReplicaCopiesEquiv β (Fin d) (Fin d) k)
+  let W := replicaMetric (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)) (a / 2) k
+  let Q := fun j g ↦ insert (some none)
+    ((X ∪ U j g).image fun v ↦ some (some v))
+  let F := fun j g ↦ insert none
+    (((X ∪ (U j g ∪ Y j g))ᶜ).image fun v ↦ some (some v))
+  let ext := fun B : Finset (Site Λ) ↦ (B \ X).image fun v ↦ some (some v)
+  let A := fun j g ↦ ((W (Q j g))⁻¹ * (W (F j g))⁻¹ * W (ext (Y j g))) ^ 2
+  let M := (List.ofFn fun g ↦ T.eval (fun j ↦ Zᴴ * A j g * Z)).prod
+  let Nsq := ‖toEuclideanLin (M ^ (-s)) (toEuclideanLin Zᴴ v)‖ ^ 2
+  let S := fun Q : Finset (Site Λ) ↦ vonNeumannEntropy (FiniteProduct.reducedPure β Ωt Q)
+    (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian
+  0 < Nsq ∧ -Real.log Nsq / (k : ℝ) ≤
+    2 * Real.log (d : ℝ) - Real.log z +
+      2 * s * a * (∑ g, ∑ j, T.weight j *
+        (S (U j g) + S (U j g ∪ Y j g) - S (Y j g))) +
+      24 * s * G * Kmom * a ^ 2 - 2 * s * G * Real.log z +
+        Real.bellOverlapRemainder d c G k
+
+open Classical in
+/-- Name one fixed-copy QIC conclusion only after all uniform arguments have
+been introduced. The native spectral mass is kept throughout this conversion.
+Source: `07-comparators.tex`, lines 383–418, revision adc7f124. -/
+private theorem sharpUpper_uniformCompressedAt_of_qic
+    {q : ℕ} [NeZero q] {Λ : Finset (ℤ × ℤ)}
+    (Ωt : EuclideanSpace ℂ (Site Λ → Fin q)) (X : Finset (Site Λ))
+    (E : Finset (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q) X))
+    (a Kmom r c : ℝ) (k : ℕ) (ell : IrrepLabel (Equiv.Perm (Fin k))) :
+    let β := fun _ : Site Λ ↦ Fin q
+    let zQ := (FiniteProduct.reducedPure_posSemidef β Ωt X).isHermitian.spectralRestrictionMass E
+    (∀ (n : ℕ) (Z : Matrix (Config k
+        (addedSiteSpace (addedSiteSpace β (Fin E.card)) (Fin E.card))) (Fin n) ℂ),
+      Zᴴ * Z = 1 →
+      Z * Zᴴ = symProj (copyPerm ((o : Option (Option (Site Λ))) →
+        addedSiteSpace (addedSiteSpace β (Fin E.card)) (Fin E.card) o) k) →
+      ∀ (G : ℕ) {ι : Type} [Fintype ι] [DecidableEq ι]
+        (U Y : ι → Fin G → Finset (Site Λ)),
+      (∀ j g, Disjoint X (U j g)) → (∀ j g, Disjoint X (Y j g)) →
+      (∀ j g, Disjoint (U j g) (Y j g)) →
+      (∀ j j' g h, g < h → U j g ∪ Y j g ⊆ U j' h) →
+      (∀ j g (Q : Finset (Site Λ)), Q = U j g ∨ Q = U j g ∪ Y j g ∨ Q = Y j g →
+        ∀ v : ℝ, |v| ≤ r →
+          Real.log (Entropy.surprisalMoment
+            (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian.eigenvalues v) ≤
+            v * vonNeumannEntropy (FiniteProduct.reducedPure β Ωt Q)
+              (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian + Kmom * v ^ 2) →
+      ∀ (T : MeanTree ι) (s : ℝ), 2 * s ∈ Set.Icc (0 : ℝ) 1 →
+      let v : EuclideanSpace ℂ (Config k
+        (addedSiteSpace (addedSiteSpace β (Fin E.card)) (Fin E.card))) := WithLp.toLp 2
+        (replicaPrevector Ωt E.card k ell ∘
+          globalReplicaCopiesEquiv β (Fin E.card) (Fin E.card) k)
+      let W := replicaMetric
+        (addedSiteSpace (addedSiteSpace β (Fin E.card)) (Fin E.card)) (a / 2) k
+      let Q := fun j g ↦ insert (some none)
+        ((X ∪ U j g).image fun v ↦ some (some v))
+      let F := fun j g ↦ insert none
+        (((X ∪ (U j g ∪ Y j g))ᶜ).image fun v ↦ some (some v))
+      let ext := fun B : Finset (Site Λ) ↦ (B \ X).image fun v ↦ some (some v)
+      let A := fun j g ↦ ((W (Q j g))⁻¹ * (W (F j g))⁻¹ * W (ext (Y j g))) ^ 2
+      let M := (List.ofFn fun g ↦ T.eval (fun j ↦ Zᴴ * A j g * Z)).prod
+      let Nsq := ‖toEuclideanLin (M ^ (-s)) (toEuclideanLin Zᴴ v)‖ ^ 2
+      let S := fun Q : Finset (Site Λ) ↦ vonNeumannEntropy (FiniteProduct.reducedPure β Ωt Q)
+        (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian
+      0 < Nsq ∧ -Real.log Nsq / (k : ℝ) ≤
+        2 * Real.log (E.card : ℝ) - Real.log zQ +
+          2 * s * a * (∑ g, ∑ j, T.weight j *
+            (S (U j g) + S (U j g ∪ Y j g) - S (Y j g))) +
+          24 * s * G * Kmom * a ^ 2 - 2 * s * G * Real.log zQ +
+            Real.bellOverlapRemainder E.card c G k) →
+    sharpUpper_uniformCompressedAt Ωt X E.card zQ a Kmom r c k ell := by
+  intro β zQ h N Z hZ hZZ G ι instF instD U Y hXU hXY hUY hnest hmom tree s hs
+    v W Q F ext A M Nsq entropy
+  exact h N Z hZ hZZ G U Y hXU hXY hUY hnest hmom tree s hs
+
+open Classical in
+/-- Obtain the uniform QIC witness before specializing to the scan family.
+The selected state, spectral set, mass bound, and supplied labels are unchanged.
+Source: `07-comparators.tex`, lines 383–418, revision adc7f124. -/
+private theorem eventually_sharpUpper_uniformCompressed
+    {q : ℕ} [NeZero q] {Λ : Finset (ℤ × ℤ)} (X : Finset (Site Λ))
+    (a Kmom r : ℝ) (ha : 0 < a) (har : 6 * a ≤ r) (ha1 : 6 * a ≤ 1)
+    (Ωt : EuclideanSpace ℂ (Site Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
+    (E : Finset (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q) X))
+    (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))) :
+    let β := fun _ : Site Λ ↦ Fin q
+    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
+      (FiniteProduct.splitEquiv β X) Ωt
+    let z := Matrix.IsHermitian.spectralRestrictionMass
+      (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E
+    0 < z →
+    let d := E.card
+    let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x ↦
+      compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
+    (∀ᶠ k : ℕ in atTop,
+      (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
+        ‖WithLp.toLp 2
+          (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
+            (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
+            labelProj (copyPerm (Fin E.card) k) (ell k)) *ᵥ
+            (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
+              (Fin k → Fin E.card) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) →
+    ∃ c : ℝ, 0 ≤ c ∧
+      (∀ G : ℕ, Tendsto (Real.bellOverlapRemainder d c G) atTop (𝓝 0)) ∧
+      ∀ᶠ k : ℕ in atTop,
+        sharpUpper_uniformCompressedAt Ωt X d z a Kmom r c k (ell k) := by
+  intro β ΩX z hz d ψ hmass
+  have hzQ :
+      0 < (FiniteProduct.reducedPure_posSemidef β Ωt X).isHermitian.spectralRestrictionMass E :=
+    hz
+  have hzEq :
+      (FiniteProduct.reducedPure_posSemidef β Ωt X).isHermitian.spectralRestrictionMass E = z :=
+    rfl
+  have hqic := FiniteProduct.eventually_suppliedReplicaPrevector_sharp_upper
+    (K := Kmom) β Ωt X E hΩt hzQ ha har ha1 ell
+  obtain ⟨c, hc, hlim, hu⟩ := hqic hmass
+  refine ⟨c, hc, hlim, hu.mono ?_⟩
+  intro k hk
+  have hfixed := sharpUpper_uniformCompressedAt_of_qic Ωt X E a Kmom r c k (ell k) hk
+  exact Eq.mp (congrArg (fun mass : ℝ ↦
+    sharpUpper_uniformCompressedAt Ωt X E.card mass a Kmom r c k (ell k)) hzEq) hfixed
+
+open Classical in
+/-- Specialize one fixed-copy uniform comparison to the supplied terminal
+family, using already typed geometric and marginal-moment hypotheses.
+Source: `07-comparators.tex`, lines 383–418; `08-scanner.tex`, lines 400–474,
+revision adc7f124. -/
+private theorem actualTerminal_sharpUpper_of_uniformCompressed
+    {q : ℕ} [NeZero q] {I : Type} [LinearOrder I]
+    {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I) (X : Finset (Site Λ))
+    (a Kmom r z c : ℝ) (Ωt : EuclideanSpace ℂ (Site Λ → Fin q)) (d k : ℕ)
+    (ell : IrrepLabel (Equiv.Perm (Fin k)))
+    (U Y : terminalFamily S.K S.m S.M (S.n * S.m) → Fin S.K → Finset (Site Λ))
+    (hXU : ∀ j g, Disjoint X (U j g))
+    (hXY : ∀ j g, Disjoint X (Y j g))
+    (hUY : ∀ j g, Disjoint (U j g) (Y j g))
+    (hnest : ∀ j j' g g', g < g' → U j g ∪ Y j g ⊆ U j' g')
+    (hmomQ : ∀ j g (Q : Finset (Site Λ)),
+      Q = U j g ∨ Q = U j g ∪ Y j g ∨ Q = Y j g →
+      ∀ u : ℝ, |u| ≤ r →
+        Real.log (Entropy.surprisalMoment
+          (FiniteProduct.reducedPure_posSemidef
+            (fun _ : Site Λ ↦ Fin q) Ωt Q).isHermitian.eigenvalues u) ≤
+          u * vonNeumannEntropy (FiniteProduct.reducedPure (fun _ : Site Λ ↦ Fin q) Ωt Q)
+            (FiniteProduct.reducedPure_posSemidef (fun _ : Site Λ ↦ Fin q) Ωt Q).isHermitian +
+              Kmom * u ^ 2)
+    (hk : sharpUpper_uniformCompressedAt Ωt X d z a Kmom r c k ell) :
+    let β := fun _ : Site Λ ↦ Fin q
+    ∀ (N : ℕ) (ZO : Matrix (Config k
+      (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d))) (Fin N) ℂ),
+      ZOᴴ * ZO = 1 →
+      ZO * ZOᴴ = symProj (copyPerm ((o : Option (Option (Site Λ))) →
+        addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d) o) k) →
+      ∀ tree : MeanTree (terminalFamily S.K S.m S.M (S.n * S.m)),
+      let v : EuclideanSpace ℂ (Config k
+        (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d))) := WithLp.toLp 2
+          (replicaPrevector Ωt d k ell ∘ globalReplicaCopiesEquiv β (Fin d) (Fin d) k)
+      let W := replicaMetric (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)) (a / 2) k
+      let Q := fun j g ↦ insert (some none)
+        ((X ∪ U j g).image fun x ↦ some (some x))
+      let F := fun j g ↦ insert none
+        (((X ∪ (U j g ∪ Y j g))ᶜ).image fun x ↦ some (some x))
+      let ext := fun B : Finset (Site Λ) ↦ (B \ X).image fun x ↦ some (some x)
+      let A := fun j g ↦ ((W (Q j g))⁻¹ * (W (F j g))⁻¹ * W (ext (Y j g))) ^ 2
+      let M := (List.ofFn fun g ↦ tree.eval (fun j ↦ ZOᴴ * A j g * ZO)).prod
+      let Nsq := ‖toEuclideanLin (M ^ (-(1 / 4 : ℝ))) (toEuclideanLin ZOᴴ v)‖ ^ 2
+      let entropy := fun Q : Finset (Site Λ) ↦ vonNeumannEntropy
+        (FiniteProduct.reducedPure β Ωt Q)
+        (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian
+      0 < Nsq ∧ -Real.log Nsq / (k : ℝ) ≤
+        2 * Real.log (d : ℝ) - Real.log z +
+          2 * (1 / 4) * a * (∑ g, ∑ j, tree.weight j *
+            (entropy (U j g) + entropy (U j g ∪ Y j g) - entropy (Y j g))) +
+          24 * (1 / 4) * S.K * Kmom * a ^ 2 - 2 * (1 / 4) * S.K * Real.log z +
+            Real.bellOverlapRemainder d c S.K k := by
+  classical
+  intro β N ZO hZO hZOZO tree
+  exact hk N ZO hZO hZOZO S.K
+    (ι := terminalFamily S.K S.m S.M (S.n * S.m)) U Y
+    hXU hXY hUY hnest hmomQ tree (1 / 4) (by norm_num)
+
+open Classical in
 /-- Specialize the uniform QIC sharp estimate to the actual terminal regions.
 The constant and replica threshold precede every symmetric coordinate and
 terminal tree, and the original supplied label sequence is retained.
@@ -628,19 +840,19 @@ private theorem eventually_actualTerminal_compressed_sharp_upper
               Real.bellOverlapRemainder d c S.K k := by
   classical
   intro β ΩX z hz d ψ hmass σ U Y hUYeq hnest hUY hXY
-  have hzQ :
-      0 < (FiniteProduct.reducedPure_posSemidef β Ωt X).isHermitian.spectralRestrictionMass E :=
-    hz
+  have hXU : ∀ (j : terminalFamily S.K S.m S.M (S.n * S.m)) (g : Fin S.K),
+      Disjoint X (U j g) :=
+    fun j g ↦ (Finset.disjoint_union_right.mp (hXY j g)).1
+  have hXY' : ∀ (j : terminalFamily S.K S.m S.M (S.n * S.m)) (g : Fin S.K),
+      Disjoint X (Y j g) :=
+    fun j g ↦ (Finset.disjoint_union_right.mp (hXY j g)).2
   have hmomQ := actualTerminal_sharpUpper_moments S Kmom r Ωt hmom hUYeq
   obtain ⟨c, hc, hlim, hu⟩ :=
-    FiniteProduct.eventually_suppliedReplicaPrevector_sharp_upper
-      (K := Kmom) β Ωt X E hΩt hzQ ha har ha1 ell hmass
+    eventually_sharpUpper_uniformCompressed X a Kmom r ha har ha1 Ωt hΩt E ell hz hmass
   refine ⟨c, hc, hlim S.K, hu.mono ?_⟩
-  intro k hk N ZO hZO hZOZO tree
-  exact hk N ZO hZO hZOZO S.K U Y
-    (fun j g ↦ (Finset.disjoint_union_right.mp (hXY j g)).1)
-    (fun j g ↦ (Finset.disjoint_union_right.mp (hXY j g)).2)
-    hUY hnest hmomQ tree (1 / 4) (by norm_num)
+  intro k hk
+  exact actualTerminal_sharpUpper_of_uniformCompressed S X a Kmom r z c Ωt d k (ell k)
+    U Y hXU hXY' hUY hnest hmomQ hk
 
 open Classical in
 /-- The supplied-label sharp upper estimate at every actual fill and charge

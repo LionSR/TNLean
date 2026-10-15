@@ -17,7 +17,7 @@
 
 \title{Safe-Box Entropy and the Sublinear Collar Bound}
 \author{}
-\date{2026-10-14}
+\date{2026-10-15}
 
 \begin{document}
 \maketitle
@@ -85,9 +85,11 @@ Hamiltonian, ground vector $\Omega$, cut $A$, and template $T$.
 
 \section{The formal statement and hypothesis reduction}
 
-In the compiled formal development, the template mutual-information bound
-(\ref{eq:safe_box_collar_prop96}) is proved under the single unproved analytic
-hypothesis (\ref{eq:safe_box_collar_prop95}). Fix $q \ge 1$, $R \in \mathbb N$,
+In the formal development, the intermediate scanner modules carry the stage-by-stage
+analytic and scale hypotheses of the reduction to (\ref{eq:safe_box_collar_prop95}),
+and the safe-box bootstrap then proves (\ref{eq:safe_box_collar_prop95}) and
+discharges that hypothesis to establish (\ref{eq:safe_box_collar_prop96})
+unconditionally. Fix $q \ge 1$, $R \in \mathbb N$,
 $J \ge 0$, $\Delta > 0$, $D_0 \ge 1$, and a template constant
 $C_{\mathrm{tpl}} \ge 24$. Assuming (\ref{eq:safe_box_collar_prop95}) at
 $e_* = 2 \times 10^{-6}$, there exist $C > 0$ and $N \ge 2$ such that every
@@ -100,8 +102,9 @@ $L = \lfloor n^{1 - 1/100000}\rfloor \le s_0$ satisfies
     \le C n^{1 - 1/100000}.
     \label{eq:safe_box_collar_conditional_template}
 \end{align}
-All intermediate hypotheses of the scanner chain are eliminated in five steps
-leading to (\ref{eq:safe_box_collar_conditional_template}).\footnote{The
+All intermediate hypotheses of the scanner chain are reduced to
+(\ref{eq:safe_box_collar_prop95}) in five steps leading to
+(\ref{eq:safe_box_collar_conditional_template}).\footnote{The
     conditional template mutual-information theorem is
     \leanid{TNLean.PEPS.AreaLaw.Scan.exists_template_final_mutualInformation_of_boxEntropy},
     tracked in \href{https://github.com/LionSR/TNLean/issues/8756}{issue~8756}
@@ -296,17 +299,20 @@ multiplicity, and boundary clearance, reducing all hypotheses of
 (\ref{eq:safe_box_collar_conditional_template}) to
 (\ref{eq:safe_box_collar_prop95}).
 
-\section{Uncompiled candidate proof of Proposition~9.5}
+\section{The safe-box bootstrap and unconditional collar bound}
 
-A candidate unconditional proof of Proposition~9.5
-(\ref{eq:safe_box_collar_prop95}) and of the template mutual-information bound
-(\ref{eq:safe_box_collar_prop96}) has been written in the formal source, but it
-has not yet been compiled or kernel-checked.\footnote{The uncompiled candidate
-    declarations are
+Proposition~9.5 (\ref{eq:safe_box_collar_prop95}) and the template
+mutual-information bound (\ref{eq:safe_box_collar_prop96}) are proved
+unconditionally in \doclink{TNLean/PEPS/AreaLaw/Scan/PhysicalBoxBootstrap} and
+\doclink{TNLean/PEPS/AreaLaw/Scan/PhysicalTemplateInformation}, discharging the
+safe-box hypothesis that \doclink{TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy}
+and \doclink{TNLean/PEPS/AreaLaw/Scan/TemplateFinalInformation} take as an
+explicit premise.\footnote{The unconditional safe-box and template
+    mutual-information theorems are
     \leanid{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError} and
     \leanid{TNLean.PEPS.AreaLaw.Scan.exists_template_final_mutualInformation}.}
 
-In that candidate argument (\path{08-scanner.tex}, lines~681--805), given an
+In the formalized bootstrap argument (\path{08-scanner.tex}, lines~681--805), given an
 initial safe-box exponent $0 < e_0 < 1$, the bootstrap fixes
 $g_0 = (1 - e_0)/2$, $\mu = 1 - g_0$, $\nu = g_0/1000$, $\ell = \nu/100$,
 $\kappa = \min\{\ell, e_*/4\}$, and total band weight $W = 4$, with $a = 4/K$
@@ -355,17 +361,17 @@ implies $2L + 10r_0 \le D_0 s$ and $(D_0 + 1)L \le D_0 s$ for large $s$
     in \doclink{TNLean/PEPS/AreaLaw/Scan/ActualRoughLowerRemainder}.} Combining
 (\ref{eq:safe_box_collar_rough_lower}) with the rough upper bound at $W = 4$
 establishes the one-step improvement $e \mapsto (1 - \ell_0)e$ for
-$e_* < e \le e_0$, and finite iteration yields the candidate proof of
-(\ref{eq:safe_box_collar_prop95}).
+$e_* < e \le e_0$, and finite iteration proves
+(\ref{eq:safe_box_collar_prop95}) and hence (\ref{eq:safe_box_collar_prop96}).
 
 \section{Elimination}
 
-Compile and kernel-check the candidate proof of Proposition~9.5
-(\ref{eq:safe_box_collar_prop95}) and its composition with
-(\ref{eq:safe_box_collar_conditional_template}). Once compiled, this removes the
-safe-box entropy hypothesis from (\ref{eq:safe_box_collar_conditional_template})
-and, together with the already formalized geometric cut and volume bounds for
-the collar $S_0$, completes Proposition~9.6.
+Combine the unconditional mutual-information bound
+\leanid{TNLean.PEPS.AreaLaw.Scan.exists_template_final_mutualInformation}
+with the already formalized geometric cut and volume bounds for the collar
+$S_0$ into a single combined statement of Proposition~9.6, and discharge the
+safe-box hypothesis in downstream callers of
+(\ref{eq:safe_box_collar_conditional_template}).
 
 \bibliographystyle{alpha}
 \bibliography{references}

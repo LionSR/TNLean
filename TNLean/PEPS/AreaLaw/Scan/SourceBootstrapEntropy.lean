@@ -105,6 +105,9 @@ private theorem restored_entropy_le_of_selected_rough_comparisons
   norm_num only [show 2 * (3 : ℝ) = 6 by norm_num] at htyp
   linarith only [htyp, ht]
 
+set_option maxHeartbeats 400000 in
+-- Unpacking the nested let-telescope from the rough-comparison theorem and
+-- matching the rough selected-density principal bound requires extra heartbeats.
 open Classical in
 /-- The actual rough-only bootstrap improves the entropy exponent on the
 original target. The source entropy premises retain the current exponent;
@@ -202,7 +205,7 @@ theorem exists_sourceBootstrap_entropy_improvement
     (regionalEntropy Λ q Ωt X) w
   let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
   obtain ⟨hwindow, hd, hpdata⟩ := hwdata
-  letI : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
+  let : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
   let d := E.card
   let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (FiniteProduct.splitEquiv β X) Ωt
   let ψ : FiniteProduct.Configuration β Xᶜ × Fin d → ℂ := fun x ↦
@@ -228,7 +231,7 @@ theorem exists_sourceBootstrap_entropy_improvement
   have hcont := htarget S.n hnT Λ Ω Ωt hgs.1 hΩt X hXcard htrace
   have hSt : regionalEntropy Λ q Ωt X ≤
       Ce * (S.n : ℝ) ^ (1 + η) + (S.n : ℝ) ^ (-247 : ℝ) := by
-    linarith [(abs_le.mp hcont).2]
+    linarith only [htargetEntropy, (abs_le.mp hcont).2]
   have hlogd : |Real.log (d : ℝ) - regionalEntropy Λ q Ωt X| ≤ w - Real.log z :=
     (abs_log_card_and_selectedSchmidtEntropy_sub_le Ωt hΩt X E w hwindow.2.2.1
       (fun i hi ↦ (hwindow.2.2.2.2.2 i hi).2)).1
@@ -247,7 +250,7 @@ theorem exists_sourceBootstrap_entropy_improvement
     have hid : epsilon * (S.n : ℝ) ^ F.nu = 1 := by
       dsimp only [epsilon]
       rw [← Real.rpow_add hnpos, neg_add_cancel, Real.rpow_zero]
-    nlinarith [mul_le_mul_of_nonneg_left hpow hε.le]
+    linarith only [hε, hid, mul_le_mul_of_nonneg_left hpow hε.le]
   have hκη : F.kappa ≤ η :=
     (show BootstrapParameters.kappa e₀ ≤ (Exponents.boxError : ℝ) / 4 from
       min_le_right _ _).trans
@@ -286,10 +289,11 @@ theorem exists_sourceBootstrap_entropy_improvement
     apply hclosure η hκη (regionalEntropy Λ q Ωt X) (Real.log (d : ℝ)) z Bsh
       (Cent * logdim ^ eent) hwindow.2.2.1 hwindow.2.1 hSt hlogd le_rfl hG
       (roughEndpointRemainder d cR S.K (Ci + (2 * S.n * S.m : ℕ) * Cb)) hlimR
-    have hselected := hpoints epsilon (2 * epsilon) hε (by linarith) hε2
+    have hselected := hpoints epsilon (2 * epsilon) hε (by linarith only [hε]) hε2
     filter_upwards [hselected] with k hk
     obtain ⟨s, p, hp, hQ, hkeep⟩ := hk
-    refine ⟨s, p, hp, ?_, hkeep⟩
+    have hkeep' : keep k s p := hkeep
+    refine ⟨s, p, hp, ?_, hkeep'⟩
     have hKr : (0 : ℝ) < S.K := by exact_mod_cast (show 0 < S.K by omega)
     have hWa : a * (S.K : ℝ) = 4 := div_mul_cancel₀ 4 hKr.ne'
     have hrate : Cent * a * S.K * a ^ (1 / 4 : ℝ) * logdim ^ eent =
@@ -297,12 +301,23 @@ theorem exists_sourceBootstrap_entropy_improvement
       calc
         _ = (Cent * logdim ^ eent) * (a * S.K) * a ^ (1 / 4 : ℝ) := by ring
         _ = _ := by rw [hWa]
-    simpa only [hCeq, hrate, show 2 * epsilon - epsilon = epsilon by ring, mul_assoc] using hQ
+    have hQ' : density k s p ≤
+        2 * (S.C₁ + 1) / (4 * (S.n * S.m : ℕ) * (2 * epsilon - epsilon)) *
+          (Brough + (2 * S.n * S.m : ℕ) *
+              (Cent * a * S.K * a ^ (1 / 4 : ℝ) * logdim ^ eent) +
+            roughEndpointRemainder d cR S.K (Ci + (2 * S.n * S.m : ℕ) * Cb) k) := hQ
+    exact hQ'.trans_eq (by
+      rw [hCeq, hrate]
+      dsimp only [Brough, epsilon, a]
+      ring)
   let τ := (S.n : ℝ) ^ (-F.nu / 4)
   let Edef := (1 + (g / 2)⁻¹) * (S.n : ℝ) ^ (-F.nu / 2)
   obtain ⟨hτ, hτhalf, hsmallLoss⟩ := hloss S.n hnLoss
   have hrE : Tendsto (fun k ↦ rem k / (g / 2)) atTop (𝓝 0) := by
     simpa only [zero_div] using hrem.div_const (g / 2)
+  have hDScale' : S.D = ⌈(S.n : ℝ) ^ BootstrapParameters.kappa e₀⌉₊ := hDScale
+  have hKScale' : S.K = ⌊(S.n : ℝ) ^ (1 - BootstrapParameters.ell e₀)⌋₊ /
+      (8 * ⌊(S.n : ℝ) ^ BootstrapParameters.mu e₀⌋₊) := hKScale
   let P := fun (k : ℕ) (v δ : ℝ) ↦
     δ ≤ Edef + rem k / (g / 2) ∧
       v ≤ 2 * Real.log (d : ℝ) - Real.log z + 4 * Bsh / z +
@@ -316,7 +331,8 @@ theorem exists_sourceBootstrap_entropy_improvement
     have hQ0 : 0 ≤ density k s p := div_nonneg
       (S.actualChargeEntropyDefect_nonneg hm hM s.val dims energy ha.le k pre p) (by positivity)
     have henergyN := henergy S.n hnE η hηe₀
-    simp only [← hDScale, ← hmScale, ← hKScale] at henergyN
+    dsimp only at henergyN
+    simp only [← hKScale', ← hDScale'] at henergyN
     have hcapBound : (eigen + cap k s p) / (g / 2) ≤ Edef :=
       henergyN (density k s p) p eigen hQ0 hQ hp (hp.2.trans hε2.le)
         (he.trans (min_le_left _ _))
@@ -325,8 +341,7 @@ theorem exists_sourceBootstrap_entropy_improvement
           Edef + rem k / (g / 2) := by
         rw [add_div]; exact _root_.add_le_add hcapBound le_rfl
       exact hδcap.trans hb
-    · dsimp only [Brough] at hu
-      linarith only [hu]
+    · exact hu.trans_eq (by dsimp only [Brough]; ring)
   have hrestored := restored_entropy_le_of_selected_rough_comparisons
     Ω Ωt hΩt X E w τ a Edef Bsh
       (1 + 3 * (S.n : ℝ) * S.D * Real.log q) ((S.n : ℝ) ^ (-247 : ℝ))
@@ -335,7 +350,8 @@ theorem exists_sourceBootstrap_entropy_improvement
     (Real.bellOverlapRemainder d cU S.K) (roughLowerRemainder S.K cL Cf ell Sent)
     (fun k ↦ rem k / (g / 2)) hlimU hlimL hrE hcont hselectedP
   have hbudgetN := hbudget S.n hnB
-  simp only [← hmScale, ← hDScale, ← hKScale] at hbudgetN
+  dsimp only at hbudgetN
+  simp only [← hKScale', ← hDScale'] at hbudgetN
   exact hbudgetN η hη hηe₀ (regionalEntropy Λ q Ω X) z τ hwindow.2.2.1 hwindow.2.1
     hτ.le (hτhalf.le.trans (by norm_num)) hrestored
 

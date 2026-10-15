@@ -12,18 +12,17 @@
     \leanok
     \uses{def:area_law_initial_open_regions,def:area_law_dyadic_origin}
     Fix the origin $o=(\sqrt2,\sqrt3)$, a nonempty finite endpoint set,
-    integer width $C\ge 2$ and initial layer $k_0\ge 50{,}000{,}000$,
-    with arbitrary valid residue choices at each layer. Every
-    $v\in\mathbb Z^2$ belongs to exactly one actual initial open region
+    an integer width $C\ge 2$, and an initial layer $k_0\ge 50{,}000{,}000$,
+    with arbitrary residue choices at each layer. Every lattice point
+    $v\in\mathbb Z^2$ belongs to a unique initial open region
     $\operatorname{int}(X_i^0)$ of
     \cite[Section~11]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_initial_closed_cover,
         thm:area_law_initial_lattice_membership,thm:area_law_initial_open_disjoint}
-    Closed coverage gives an identifier $i$ with $v\in X_i^0$.
-    At a lattice point, birth membership agrees with open membership,
-    so $v\in\operatorname{int}(X_i^0)$. If another identifier $j$
-    has this property, pairwise disjointness of the open regions forces
-    $j=i$.
+    Since the closed birth regions cover the plane, $v\in X_i^0$ for some
+    $i\in\mathcal I$. Because $v\in\mathbb Z^2$, membership in $X_i^0$
+    implies $v\in\operatorname{int}(X_i^0)$. Pairwise disjointness of the
+    initial open regions gives uniqueness of $i$.
 \end{proof}

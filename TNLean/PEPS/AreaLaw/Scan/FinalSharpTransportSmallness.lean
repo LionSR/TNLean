@@ -56,7 +56,7 @@ theorem exists_finalSharp_transport_smallness
         (Cd * Real.log (n : ℝ) ^ 4) :=
       mul_le_mul_of_nonneg_right haUpper (mul_nonneg hCd.le (by positivity))
     _ = ct * ((Ca * Cd / ct) * (n : ℝ) ^ (-37497 / 50000 : ℝ) *
-        Real.log (n : ℝ) ^ 4) := by field_simp [hct.ne']; ring
+        Real.log (n : ℝ) ^ 4) := by field_simp [hct.ne']
     _ ≤ ct * 1 := mul_le_mul_of_nonneg_left hsmalln hct.le
     _ = ct := mul_one _
 

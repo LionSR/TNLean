@@ -59,7 +59,6 @@ theorem exists_actualScan_suppliedPrevector_rough_lower
         (fun k : ℕ => Real.log (ell k).dim - (k : ℝ) * Sent)
         (fun k : ℕ => (k : ℝ)) →
       let a := 4 / (Kband : ℝ)
-      let β := fun _ : Site Λ => Fin q
       let n := augmentedDimensions (V := Site Λ) q (fun _ => d)
       let pre : (k : ℕ) → Config k (fun v => Fin (n v)) → ℂ := fun k =>
         replicaPrevector Ωt d k (ell k) ∘ augmentedSumReplicaCopiesEquiv q d k
@@ -90,7 +89,8 @@ theorem exists_actualScan_suppliedPrevector_rough_lower
       Kband hKband
   refine ⟨c, Cf, hc, hCf, ?_⟩
   intro S hSK hm hM h Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos ell Sent hpre hdim
-    a β n pre
+    a n pre
+  let β := fun _ : Site Λ => Fin q
   refine ⟨tendsto_roughLowerRemainder_of_label_dimension ell Sent hdim Kband c Cf, ?_⟩
   intro k hk s p lower Dfill Dcharge
   let e := augmentedReplicaConfigurationEquiv (V := Site Λ) q d k

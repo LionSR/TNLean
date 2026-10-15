@@ -117,7 +117,7 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison
     {J Δ C_T C₁ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
     (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁) (P : ℝ) :
-    ∃ Ctr Ctarget ct Cent eent Cen een : ℝ,
+    ∃ Ctr Ctarget ct Cent eent _Cen _een : ℝ,
       0 < Ctr ∧ 0 < Ctarget ∧ 0 < ct ∧
       ∀ F : ScannerExponents, ∃ C Cl : ℝ, 1 ≤ C ∧ 0 ≤ Cl ∧
         ∃ N : ℕ, 2 ≤ N ∧
@@ -140,7 +140,7 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison
           (∀ j : ℕ, j ≤ F.L S.n →
             regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
               Ce * ((S.n : ℝ) * (F.L S.n : ℝ) ^ η + S.n)) →
-          2 * S.r₀ ≤ S.D → ∀ (hDpos : 1 ≤ S.D) (hDm : 4 * S.D ≤ S.m),
+          2 * S.r₀ ≤ S.D → ∀ (_hDpos : 1 ≤ S.D) (_hDm : 4 * S.D ≤ S.m),
           ∃ (hm : 0 < S.m) (hM : 0 < S.M),
           let L := F.L S.n
           let X := S.A.filter fun x ↦ x.val ∈ T
@@ -273,7 +273,7 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison
   have hK : 1 ≤ S.K := by omega
   have hKL : 8 * S.K * S.m ≤ L := by
     rw [hKScale, hmScale]
-    simpa only [ScannerExponents.K, mul_comm, mul_left_comm, mul_assoc] using
+    simpa only [ScannerExponents.K, _root_.mul_comm, _root_.mul_left_comm, _root_.mul_assoc] using
       Nat.div_mul_le_self (F.L S.n) (8 * F.m S.n)
   have hKScale' : S.K = F.L S.n / (8 * S.m) := by
     simpa only [ScannerExponents.K, ← hmScale] using hKScale
@@ -286,8 +286,7 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison
   intro E z
   have hd : 0 < E.card := Finset.card_pos.mpr hwindow.2.2.2.2.1
   refine ⟨hwindow, hd, ?_⟩
-  intro inst
-  letI : NeZero E.card := inst
+  let : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
   intro d ΩX ψ Sent dims energy
   have hρ : reducedState Λ q Ωt X =
       Matrix.partialTraceRight (Matrix.vecMulVec ΩX (star ΩX)) :=
@@ -295,7 +294,7 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison
       (FiniteProduct.reducedPure_eq_partialTrace β Ωt X)
   have hzEq :
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian.spectralRestrictionMass E =
-        z := by simp only [← hρ]
+        z := by simp only [z, ← hρ]
   have hz : 0 <
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian.spectralRestrictionMass E :=
     hzEq.symm ▸ hwindow.2.2.1
@@ -351,10 +350,18 @@ theorem exists_sourceTarget_selected_actualCharge_rough_comparison
     hselect pre k hk hsym hnonzero e heigen p₀ p₁ hp₀ hp₀₁ hp₁
   have hrate : Cent * (k : ℝ) * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent =
       (k : ℝ) * rate := by dsimp only [rate]; ring
+  dsimp only [ℓ] at hrate
+  have hQ' : S.actualChargeEntropyDefect hm hM s.val dims energy (a / 2) k (pre k) p ≤
+      (Real.log (Transport.filteredNormSq
+          (TransportData.rootPath dims (S.actualFillData hm hM 0) (a / 2) k 0) (pre k)) -
+        Real.log (Transport.filteredNormSq
+          (TransportData.rootPath dims (S.actualFillData hm hM (S.n * S.m)) (a / 2) k 0) (pre k)) +
+        (2 * S.n * S.m : ℕ) * ((k : ℝ) * rate + b k)) /
+      ((k : ℝ) * a * (1 / (2 * (S.C₁ + 1)) / (S.n * S.D)) * (S.n * S.m : ℕ) * (p₁ - p₀)) := by
+    simpa only [hrate] using hQ
   have hdensity := selected_density_of_rough_endpoint hk
     (show 0 < S.n by omega) hm (show 0 < S.D by omega) (show 0 < S.K by omega)
-    ha hCp (sub_pos.mpr hp₀₁) hWa cR Ci Cb hendK.2 (hb k) (by
-      simpa only [hrate] using hQ)
+    ha hCp (sub_pos.mpr hp₀₁) hWa cR Ci Cb hendK.2 (hb k) hQ'
   have hpInterior : p ∈ Set.Ioo (0 : ℝ) 1 :=
     ⟨hp₀.trans_le hp.1, hp.2.trans_lt hp₁⟩
   have hcoeff := hcoefficient (fun _ ↦ d) J h Ω Δ s.val

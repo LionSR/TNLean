@@ -81,6 +81,7 @@ theorem exists_bootstrap_restored_entropy_budget
   have hpre : S ≤ 8 * Ce * ((n : ℝ) * (L : ℝ) ^ e) +
       (8 * Ce + 12 * Real.log q) * ((n : ℝ) * D) +
       7 * (n : ℝ) ^ (3 / 5 : ℝ) + 6 * (Real.binEntropy τ / a) + 21 := by
+    simp only [mul_div_assoc] at hS
     nlinarith [mul_le_mul_of_nonneg_left hnD hCe]
   have hsum : S ≤ Cb * ((n : ℝ) * (L : ℝ) ^ e + (n : ℝ) * D +
       (n : ℝ) ^ (3 / 5 : ℝ) + Real.binEntropy τ / a + 1) := by
