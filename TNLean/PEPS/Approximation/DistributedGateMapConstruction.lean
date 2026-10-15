@@ -188,15 +188,14 @@ def toGateMapConstruction (C : DistributedConstruction P) : GateMapConstruction 
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 150–153 and 590–600. -/
 theorem physicalDensity_toGateMapConstruction (C : DistributedConstruction P) :
     C.toGateMapConstruction.physicalDensity = C.physicalDensity := by
-  have h : C.circuit.produce.evalWithGateMaps C.circuit.produce.expansionGateMaps =
+  have h : C.toGateMapConstruction.circuit.evalWithGateMaps C.toGateMapConstruction.gateMaps =
       C.circuit.eval := by
+    change C.circuit.produce.evalWithGateMaps C.circuit.produce.expansionGateMaps = _
     rw [EffectCircuit.evalWithGateMaps_expansionGateMaps, OriginalCircuit.eval_produce]
   unfold GateMapConstruction.physicalDensity physicalDensity
     EffectCircuit.physicalDensityWithGateMaps
-  change Matrix.partialTraceRight (Matrix.euclideanOuterProduct
-      (_ (C.circuit.produce.evalWithGateMaps C.circuit.produce.expansionGateMaps
-        C.input.vector)) _) = _
   rw [h]
+  rfl
 
 end DistributedConstruction
 
@@ -295,10 +294,12 @@ theorem exists_uniform_sampled_network
   refine ⟨_, _, _, _, _, _, _, _, _, _, T, herror, hdim, hinc, ?_⟩
   intro e j l hj hl
   obtain ⟨g, hjg, hlg⟩ := hlocal e j l hj hl
-  have hpart := (C₀ L).circuit.participants_produce
-    ((C₀ L).circuit.produceLocationsEquiv.symm g)
-  rw [Equiv.apply_symm_apply] at hpart
-  exact ⟨_, hpart ▸ hjg, hpart ▸ hlg⟩
+  change (C₀ L).circuit.produce.gateLocations at g
+  change j ∈ (C₀ L).circuit.produce.participants g at hjg
+  change l ∈ (C₀ L).circuit.produce.participants g at hlg
+  refine ⟨(C₀ L).circuit.produceLocationsEquiv.symm g, ?_⟩
+  rw [← OriginalCircuit.participants_produce, Equiv.apply_symm_apply]
+  exact ⟨hjg, hlg⟩
 
 /-- **Remark 5.3 for a family of distributed constructions.** Under the hypotheses of the
 compression theorem, suppose that the actual physical density `ρ_L` of every member lies within

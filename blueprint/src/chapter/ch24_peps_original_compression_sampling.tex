@@ -399,3 +399,101 @@ contraction of local tensors is a separate assertion.
     the real part. The upper bound $\operatorname{Tr}\rho\le1$ is
     Theorem~\ref{thm:peps_distributed_construction_density}.
 \end{proof}
+
+\begin{definition}[A distributed construction with the operators of its expansions]
+    \label{def:peps_distributed_construction_gate_maps}
+    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.toGateMapConstruction}
+    \leanok
+    \uses{def:peps_distributed_construction,def:peps_original_gate_construction}
+    A distributed construction determines a construction with prescribed
+    gate operators: the input, the private maps, the participating sets, the
+    physical outputs and the retained registers are kept, and the operator of
+    each nonprivate gate is the sum $\sum_\xi c_\xi M_\xi$ of its own
+    recorded monomial expansion.
+\end{definition}
+
+\begin{theorem}[The operators of the expansions keep the physical density]
+    \label{thm:peps_distributed_construction_gate_maps_density}
+    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_toGateMapConstruction}
+    \leanok
+    \uses{def:peps_distributed_construction_gate_maps,def:peps_distributed_construction_density,def:peps_original_gate_construction_density}
+    The construction of
+    Definition~\ref{def:peps_distributed_construction_gate_maps} has the
+    physical density of the original distributed construction.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Each recorded expansion sums to its gate, so evaluation with these
+    operators along the same chronology is the original circuit operator.
+    The input and the retained registers are unchanged.
+\end{proof}
+
+\begin{theorem}[Compression of a family of distributed constructions]
+    \label{thm:peps_distributed_construction_compression}
+    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network}
+    \leanok
+    \uses{thm:peps_uniform_approximate_operator_network,thm:peps_distributed_construction_gate_maps_density}
+    Let $(\mathcal C_i)_{i\in I}$ be a family of distributed constructions,
+    each index carrying a size $L=L_i\ge2$. Suppose that there are constants
+    $b,n,d,r,u,v$ and $C_N,C_D,C_K,C_C$, independent of the index, such that
+    every member has at most $C_NL^n$ nonprivate gates and physical
+    dimensions at most $C_DL^d$; every nonprivate gate involves at most $b$
+    parties and every party participates in at most $b$ nonprivate gates over
+    the whole construction; and the recorded expansion of every nonprivate
+    gate has at most $C_KL^u$ monomials, each with at most $r$ pair effects and
+    a coefficient of modulus at most $C_CL^v$. Then for every $p>0$ there are
+    $C_p\ge0$ and an integer $\alpha_p>0$, chosen before the family member,
+    such that every member admits an operator tensor network $\sigma_L$ with
+    one node per party, the physical ket and bra legs of that party, and
+    \begin{align}
+        \|\sigma_L-\rho_L\|_1\le L^{-p},\qquad \dim\mathcal V_e\le C_pL^{\alpha_p}
+    \end{align}
+    for the actual physical density $\rho_L$. Every node meets at most
+    $2b(b-1)$ virtual links, and the two endpoints of every link participate
+    in a common nonprivate gate of the original construction. This is
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} for distributed
+    constructions, whose recorded expansions consist of allowed monomials.
+    % Source: 04-compression.tex, lines 137--175.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Read every member with the operators of its own expansions. The recorded
+    expansions approximate these operators with error zero, hence at every
+    inverse-power accuracy, and keep the original monomial counts,
+    coefficients, gate occurrences and participating sets. Apply
+    Theorem~\ref{thm:peps_uniform_approximate_operator_network}, and use
+    Theorem~\ref{thm:peps_distributed_construction_gate_maps_density} to
+    identify the approximated density with $\rho_L$. Each gate occurrence of
+    the reading corresponds to a nonprivate gate of the original
+    construction with the same participants.
+\end{proof}
+
+\begin{theorem}[The compressed network and the retained norm]
+    \label{thm:peps_compression_retained_norm_network}
+    \lean{TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le}
+    \leanok
+    \uses{thm:peps_compression_retained_norm,thm:peps_distributed_construction_compression}
+    Under the hypotheses of
+    Theorem~\ref{thm:peps_distributed_construction_compression}, let
+    $\Omega_L$ be a unit vector with
+    $\|\rho_L-|\Omega_L\rangle\langle\Omega_L|\|_1\le\eta_L$ for every member.
+    Then for every $p>0$ there are constants, chosen before the family
+    member, such that every member admits an operator tensor network
+    $\sigma_L$ with the properties of
+    Theorem~\ref{thm:peps_distributed_construction_compression} and
+    \begin{align}
+        \|\sigma_L-|\Omega_L\rangle\langle\Omega_L|\|_1 & \le L^{-p}+\eta_L,                               \\
+        1-\eta_L                                        & \le\operatorname{Re}\operatorname{Tr}\rho_L\le1.
+    \end{align}
+    The density $\rho_L$ is not normalized, and $\sigma_L$ need be neither
+    positive nor Hermitian. This combines
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} with
+    \cite[Remark~5.3]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 137--175 and 602--611.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Apply Theorem~\ref{thm:peps_compression_retained_norm} to the network of
+    Theorem~\ref{thm:peps_distributed_construction_compression}, with
+    $\kappa=L^{-p}$.
+\end{proof}
