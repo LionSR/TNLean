@@ -77,9 +77,13 @@ assuming it.
 \end{theorem}
 \begin{proof}
     \uses{def:area_law_collar_bound,thm:peps_coarse_information_of_collar,
-        thm:peps_coarse_information_square}
-    Apply Theorem~\ref{thm:peps_coarse_information_square} with the sublinear
-    collar bound, Proposition~9.6 of \cite{OpenAI2026AreaLaw}.
+        thm:peps_coarse_information_square,lem:peps_box_union_of_intervals,
+        lem:peps_box_union_template}
+    By Lemma~\ref{lem:peps_box_union_of_intervals}, the lattice sample $T$ is
+    a union of at most $N_0$ boxes, and by
+    Lemma~\ref{lem:peps_box_union_template} so is each common translate.
+    Apply Theorem~\ref{thm:peps_coarse_information_square} to this union, with
+    the sublinear collar bound, Proposition~9.6 of \cite{OpenAI2026AreaLaw}.
 \end{proof}
 
 \begin{theorem}[Coarse information, assuming the sublinear collar bound]
