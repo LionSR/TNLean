@@ -13,10 +13,11 @@ On entering level `n`, the protocol of Proposition 7.1 resizes the main holes of
 guide uniform on the `2n`-blocks from the radius `h_{2n}` to the radius `h_n`, one hole at a time
 (`06-geometry.tex`, lines 529–541). The compactness observation gives one footprint ratio `ν` for
 the two-owner condition of these readings, at every intermediate configuration
-(`exists_resizing_footprintRatio_mixed_reading`). This file chooses the patches of radius
-`u = ν n`, so that `2 u = ν (2 n)`, and one bound `b₀` on the number of net patches, and so turns
-every such resize into one gate (`exists_resize_step_reading`), with the two-owner hypotheses of
-`resize_step` discharged.
+(`exists_resizing_footprintRatio_mixed_reading`), and so does every smaller ratio. For every
+ratio `ν` below a threshold `ν'`, as fixed by the protocol constants, this file takes the patches
+of radius `u = ν n`, so that `2 u = ν (2 n)`, and every `b` bounding the number of net patches,
+and so turns every such resize into one gate (`exists_resize_step_reading`), with the two-owner
+hypotheses of `resize_step` discharged.
 
 ## Main results
 
@@ -37,16 +38,17 @@ namespace TNLean.PEPS.Approximation
 
 open EncodedFrame PairEffect
 
-/-- **The resizes of a level as gates, with one footprint ratio.** Fix `0 < ε₀ ≤ 1/16`. There are
-a ratio `ν > 0` and a bound `b₀` such that, for every generic displacement `v`, every `0 < n < t`
+/-- **The resizes of a level as gates, with one footprint ratio.** Fix `0 < ε₀ ≤ 1/16`. There is
+a threshold `ν' > 0` such that, for every ratio `0 < ν ≤ ν'`, every generic displacement `v`, every
+`0 < n < t`
 and every reading `g` along `v` of a guide uniform on the `2n`-blocks, the resize of the hole at a
 grid corner `c₀` of the `2n`-grid, between hole patches centered at their points of radii `h_n`
 or `h_{2n}` that agree away from `c₀`, with patches of radius `ν n`, is a circuit as in
-`resize_step` for every `b ≥ b₀`.
+`resize_step` for every `b ≥ 9` with `(2 (4 ε₀ + ν) / ν + 1)² ≤ b`.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 102–133, 447–479, 529–541 and 559–570. -/
 theorem exists_resize_step_reading {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε₀ ≤ 1 / 16) :
-    ∃ ν > 0, ∃ b₀ : ℕ, ∀ {v : ℝ × ℝ}, IsGenericDisplacement v →
+    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {v : ℝ × ℝ}, IsGenericDisplacement v →
       ∀ {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
       {κ Party : Type} {n t : ℝ}, 0 < n → n < t → ∀ {lab : ℤ × ℤ → κ} {Q : ℤ × ℤ}
       {g : ℝ × ℝ → κ}, IsDisplacedReading g (blockGuide (2 * n) lab) v → ∀ (own : κ → Party)
@@ -67,7 +69,8 @@ theorem exists_resize_step_reading {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε�
           Disjoint (holeNew z).outer (holeNew z').outer)
         {C c b L : ℕ}, 1 ≤ L → (∀ z, Fintype.card (holeOld z).Tag ≤ C * L ^ c) →
       (∀ z, Fintype.card (holeNew z).Tag ≤ C * L ^ c) →
-      (∀ z, Fintype.card (patch z).Tag ≤ C * L ^ c) → b₀ ≤ b →
+      (∀ z, Fintype.card (patch z).Tag ≤ C * L ^ c) →
+      (2 * (4 * ε₀ + ν) / ν + 1) ^ 2 ≤ (b : ℝ) → 9 ≤ b →
       ∀ {Ω : EuclideanSpace ℂ (ι → Fin q)}, ‖Ω‖ ≤ 1 →
       (∀ z, ‖act (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
       (∀ z, ‖act (holeOld z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
@@ -88,13 +91,12 @@ theorem exists_resize_step_reading {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε�
             ((guideFrame pos q g own ph rank V holeNew hpNew).refVec Ω)‖ ≤
           (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by
   obtain ⟨ν₀, hν₀, H⟩ := exists_resizing_footprintRatio_mixed_reading.{0} hε
-  set ν := min ν₀ (1 / 4)
-  have hν : 0 < ν := lt_min hν₀ (by norm_num)
-  have hνle : ν ≤ 1 / 4 := min_le_right _ _
-  set b₀ : ℕ := max 9 ⌈(2 * (4 * ε₀ + ν) / ν + 1) ^ 2⌉₊
-  refine ⟨ν, hν, b₀, fun {v} hv {ι _ _ q _ pos κ Party n t} hn hnt {lab Q g} hg own ph rank
+  refine ⟨min ν₀ (1 / 4), lt_min hν₀ (by norm_num), fun ν hν hνν' {v} hv
+    {ι _ _ q _ pos κ Party n t} hn hnt {lab Q g} hg own ph rank
     {V} hV hc₀ hVc holeOld holeNew patch hcenter hscale hsame hpatch hpOld hpNew
-    {C c b L} hL hcOld hcNew hcPatch hb {Ω} hΩ hεp hεh htag => ?_⟩
+    {C c b L} hL hcOld hcNew hcPatch hb hb9 {Ω} hΩ hεp hεh htag => ?_⟩
+  have hνle : ν ≤ 1 / 4 := hνν'.trans (min_le_right _ _)
+  have hνν : ν ≤ ν₀ := hνν'.trans (min_le_left _ _)
   have hn2 : 0 < 2 * n := by positivity
   have hRle : ∀ r, r = holeRadius ε₀ n t ∨ r = holeRadius ε₀ (2 * n) t → r ≤ 2 * ε₀ * n := by
     rintro r (rfl | rfl) <;> simp only [holeRadius]
@@ -111,18 +113,16 @@ theorem exists_resize_step_reading {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε�
     obtain ⟨⟨h1, h2⟩, h3⟩ := hp p hp'
     refine ⟨⟨closedBall_subset_closedBall ?_ h1, by rwa [mul_one]⟩, by rwa [one_add_one_eq_two,
       mul_comm (2 * n) 2]⟩
-    nlinarith [min_le_left ν₀ (1 / 4)]
+    nlinarith
   have hb' : (2 * (2 * (2 * ε₀ * n) + ν * n) / (ν * n) + 1) ^ 2 ≤ (b : ℝ) := by
     have e : 2 * (2 * (2 * ε₀ * n) + ν * n) / (ν * n) = 2 * (4 * ε₀ + ν) / ν := by
       field_simp
       ring
-    rw [e]
-    refine (Nat.le_ceil _).trans ?_
-    exact_mod_cast (le_max_right _ _).trans hb
+    rwa [e]
   exact resize_step (R := 2 * ε₀ * n) hn2 (by positivity) (by positivity)
     (by nlinarith) hg own ph rank hV hc₀ hVc holeOld holeNew patch hcenter
     (fun z => ⟨hRle _ (hscale z).1, hRle _ (hscale z).2⟩) hsame hpatch
     (htwo holeOld fun z => (hscale z).1) (htwo holeNew fun z => (hscale z).2) hpOld hpNew hL
-    hcOld hcNew hcPatch hb' ((le_max_left _ _).trans hb) hΩ hεp hεh htag
+    hcOld hcNew hcPatch hb' hb9 hΩ hεp hεh htag
 
 end TNLean.PEPS.Approximation

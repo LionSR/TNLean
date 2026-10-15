@@ -385,11 +385,12 @@ outer sample.
         TNLean.PEPS.Approximation.exists_pointTreatment_step_reading}
     \leanok
     \uses{thm:peps_guide_frame_resize_treatment_gates}
-    Fix $0<\epsilon_0\le\tfrac1{16}$. There are a ratio $\nu>0$ and a bound
-    $b_0$, independent of the scales, such that for every generic small
-    displacement the following hold, with the bounds on the holes and the
-    patches of Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates} and
-    every $b\ge b_0$.
+    Fix $0<\epsilon_0\le\tfrac1{16}$. There is a threshold $\nu'>0$,
+    independent of the scales, such that for every ratio $0<\nu\le\nu'$ and
+    every generic small displacement the following hold, with the bounds on
+    the holes and the patches of
+    Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates} and every $b$
+    at least a bound depending only on $\epsilon_0$ and $\nu$.
     \begin{enumerate}
         \item For $0<n<t$, the resize of the hole at a grid corner of a reading
               of a guide uniform on the $2n$-blocks, between hole radii
@@ -411,8 +412,8 @@ outer sample.
     block guides at every intermediate radius, and one for the readings of the
     temporary guides near a corner of the block. Near a corner that is not a
     mark, the homogenization about the marks changes nothing, since the other
-    marks are at distance at least $n>8t$. Shrinking the ratio to at most
-    $\tfrac14$ keeps the two-owner condition and gives the separations required
+    marks are at distance at least $n>8t$. Every smaller ratio, at most
+    $\tfrac14$, keeps the two-owner condition and gives the separations required
     by Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates}. The number of
     net patches is then bounded by a constant depending only on $\epsilon_0$
     and the ratio.
