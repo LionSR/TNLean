@@ -53,10 +53,10 @@ used in \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
     configurations $x,y$. Neither density is normalized in this identity.
     For any matrix $M$ indexed by party configurations, put
     $M^E(x,y)=M(E^{-1}x,E^{-1}y)$. Then
-    \[
+    \begin{align}
         \|M^E-\rho_{\mathrm{protocol}}\|_1
-        =\|M-\rho_{\mathrm{party}}\|_1.
-    \]
+        & =\|M-\rho_{\mathrm{party}}\|_1.\notag
+    \end{align}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_original_exact_gate_maps, thm:peps_dyadic_protocol_operator_eval}
@@ -64,11 +64,11 @@ used in \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
     the actual final trajectory. Write $u$ for that vector in party physical
     coordinates and private coordinates. In site coordinates its value at
     $(x,a)$ is $u(E^{-1}x,a)$. Thus
-    \begin{align*}
+    \begin{align}
         \rho_{\mathrm{protocol}}(x,y)
-         & =\sum_a u(E^{-1}x,a)\overline{u(E^{-1}y,a)} \\
-         & =\rho_{\mathrm{party}}(E^{-1}x,E^{-1}y).
-    \end{align*}
+         & =\sum_a u(E^{-1}x,a)\overline{u(E^{-1}y,a)} \notag\\
+         & =\rho_{\mathrm{party}}(E^{-1}x,E^{-1}y).\notag
+    \end{align}
     This is the partial-trace identity under the product of $E$ with the
     identity on the private coordinates. Relabelling the rows and columns
     by a bijection commutes with subtraction and preserves the trace norm,
