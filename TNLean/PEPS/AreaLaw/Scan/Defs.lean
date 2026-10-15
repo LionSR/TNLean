@@ -250,6 +250,48 @@ structure ScaleFacts (X : ScannerExponents) (n : ℕ) (C₁ : ℝ) : Prop where
     n * (X.D n : ℝ) ^ 2 / (X.m n * X.K n) ≤ C₁ * (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2
 
 open Classical in
+/-- The conclusions of Lemma 9.1 (`scanner:histories`, `08-scanner.tex`, lines 195–221) for a
+family of rounds at scale `n`, together with the bounds on move entropies of lines 434–440:
+classical history and choice probabilities, the dilution and counting of split terms, the
+bad-history tail with the fixed power `M = 200`, good-history sampling at charge rounds, and the
+size of every move entropy. The constants are `C` (common upper constant), `C_l` (logarithmic
+power) and `c` (sampling constant). -/
+structure HistoryFacts (X : ScannerExponents) (n : ℕ) (C Cl c : ℝ) {ι Θ : Type} [Fintype ι]
+    [MeasurableSpace Θ] (round : Fin (X.rounds n) → ScanRound ι Θ) : Prop where
+  w_nonneg : ∀ r h, 0 ≤ (round r).w h
+  q_nonneg : ∀ r h c, 0 ≤ (round r).q h c
+  sum_w : ∀ r, ∑ h, (round r).w h = 1
+  sum_q : ∀ r h, ∑ c, (round r).q h c = 1
+  /-- Lemma 9.1(3): split weight at most `CD/m`. -/
+  splitWeight_le : ∀ r, ∀ p ∈ Set.Ioo (0 : ℝ) 1, ∀ i,
+    (round r).splitWeight p i ≤ C * X.D n / X.m n
+  /-- Lemma 9.1(2): at most `CKnD` split terms at every old leaf. -/
+  card_splitOld_le : ∀ r h, ((Finset.univ.filter fun i ↦ (round r).splitOld i h).card : ℝ) ≤
+    C * X.K n * n * X.D n
+  /-- Lemma 9.1(2): at most `CKnD` split terms at every new leaf. -/
+  card_splitNew_le : ∀ r h c,
+    ((Finset.univ.filter fun i ↦ (round r).splitNew i h c).card : ℝ) ≤ C * X.K n * n * X.D n
+  /-- Lemma 9.1(4) with the fixed tail power `M = 200`. -/
+  badWeight_le : ∀ r, (round r).badWeight ≤ (n : ℝ) ^ (-200 : ℝ)
+  /-- Lemma 9.1(4) and lines 442–444: on a good old history at a charge round each split term
+  is sampled with probability at least `c/(nD)`, and its move has entropy `η_{i,h}`. -/
+  sampling : ∀ r : Fin (X.rounds n), IsChargeRound r → ∀ h, (round r).good h → ∀ θ,
+    c / (n * X.D n) * ∑ i, (if (round r).splitOld i h then (round r).etaOld i h θ else 0) ≤
+      (round r).choiceGain h θ
+  /- Move entropies (lines 434–440). -/
+  etaOld_nonneg : ∀ r i h θ, 0 ≤ (round r).etaOld i h θ
+  etaOld_le : ∀ r i h θ, (round r).etaOld i h θ ≤ C * Real.log n ^ Cl
+  etaNew_nonneg : ∀ r i h c θ, 0 ≤ (round r).etaNew i h c θ
+  etaNew_le : ∀ r i h c θ, (round r).etaNew i h c θ ≤ C * Real.log n ^ Cl
+  measurable_etaOld : ∀ r i h, Measurable ((round r).etaOld i h)
+  measurable_etaNew : ∀ r i h c, Measurable ((round r).etaNew i h c)
+  choiceGain_nonneg : ∀ r h θ, 0 ≤ (round r).choiceGain h θ
+  measurable_choiceGain : ∀ r h, Measurable ((round r).choiceGain h)
+  /-- The choice-averaged gain sums one move entropy per band, each bounded by
+  `C (log n)^{C_l}` (lines 434–440), so it is at most `C K (log n)^{C_l}`. -/
+  choiceGain_le : ∀ r h θ, (round r).choiceGain h θ ≤ C * X.K n * Real.log n ^ Cl
+
+open Classical in
 /-- The finite data of the collar scan at scale `n`, for all replica counts `k`, together with
 the conclusions of the results that Proposition 9.2 uses (`08-scanner.tex`, lines 399–533).
 
@@ -350,39 +392,9 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   Cβ : ℝ
   β_nonneg : ∀ k, 0 ≤ β k
   β_le : ∀ k, β k ≤ Cβ * Real.log (k + 2)
-  /- Lemma 9.1 (`scanner:histories`, lines 195–221). -/
-  w_nonneg : ∀ r h, 0 ≤ (round r).w h
-  q_nonneg : ∀ r h c, 0 ≤ (round r).q h c
-  sum_w : ∀ r, ∑ h, (round r).w h = 1
-  sum_q : ∀ r h, ∑ c, (round r).q h c = 1
-  /-- Lemma 9.1(3): split weight at most `CD/m`. -/
-  splitWeight_le : ∀ r, ∀ p ∈ Set.Ioo (0 : ℝ) 1, ∀ i,
-    (round r).splitWeight p i ≤ κ.C * X.D n / X.m n
-  /-- Lemma 9.1(2): at most `CKnD` split terms at every old leaf. -/
-  card_splitOld_le : ∀ r h, ((Finset.univ.filter fun i ↦ (round r).splitOld i h).card : ℝ) ≤
-    κ.C * X.K n * n * X.D n
-  /-- Lemma 9.1(2): at most `CKnD` split terms at every new leaf. -/
-  card_splitNew_le : ∀ r h c,
-    ((Finset.univ.filter fun i ↦ (round r).splitNew i h c).card : ℝ) ≤ κ.C * X.K n * n * X.D n
-  /-- Lemma 9.1(4) with the fixed tail power `M = 200`. -/
-  badWeight_le : ∀ r, (round r).badWeight ≤ (n : ℝ) ^ (-200 : ℝ)
-  /-- Lemma 9.1(4) and lines 442–444: on a good old history at a charge round each split term
-  is sampled with probability at least `c/(nD)`, and its move has entropy `η_{i,h}`. -/
-  sampling : ∀ r : Fin (X.rounds n), IsChargeRound r → ∀ h, (round r).good h → ∀ θ,
-    κ.c / (n * X.D n) * ∑ i, (if (round r).splitOld i h then (round r).etaOld i h θ else 0) ≤
-      (round r).choiceGain h θ
-  /- Move entropies (lines 434–440). -/
-  etaOld_nonneg : ∀ r i h θ, 0 ≤ (round r).etaOld i h θ
-  etaOld_le : ∀ r i h θ, (round r).etaOld i h θ ≤ κ.C * Real.log n ^ κ.Cl
-  etaNew_nonneg : ∀ r i h c θ, 0 ≤ (round r).etaNew i h c θ
-  etaNew_le : ∀ r i h c θ, (round r).etaNew i h c θ ≤ κ.C * Real.log n ^ κ.Cl
-  measurable_etaOld : ∀ r i h, Measurable ((round r).etaOld i h)
-  measurable_etaNew : ∀ r i h c, Measurable ((round r).etaNew i h c)
-  choiceGain_nonneg : ∀ r h θ, 0 ≤ (round r).choiceGain h θ
-  measurable_choiceGain : ∀ r h, Measurable ((round r).choiceGain h)
-  /-- The choice-averaged gain sums one move entropy per band, each bounded by
-  `C (log n)^{C_l}` (lines 434–440), so it is at most `C K (log n)^{C_l}`. -/
-  choiceGain_le : ∀ r h θ, (round r).choiceGain h θ ≤ κ.C * X.K n * Real.log n ^ κ.Cl
+  /-- Lemma 9.1 (`scanner:histories`, lines 195–221) and the move-entropy bounds of
+  lines 434–440 for the rounds of this scan. -/
+  histories : HistoryFacts X n κ.C κ.Cl κ.c round
   /- Leaf measures: for `0 < p < 1`, `m_s(u) du dμ_σ` has mass `2s = 1/2`
   (`06-transport.tex`, lines 393–400; `08-scanner.tex`, line 440). -/
   isFiniteMeasure_μOld : ∀ r k p h, IsFiniteMeasure ((round r).μOld k p h)
