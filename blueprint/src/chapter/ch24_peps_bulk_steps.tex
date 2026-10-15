@@ -182,3 +182,50 @@ Definition~\ref{def:peps_capped_mark_distance}.
     $a_0/2$, with the outer-hole enlargement on each part of the exterior, and
     translate.
 \end{proof}
+
+\begin{theorem}[Bulk changes of the repainting from the plane floors, conditionally]
+    \label{thm:peps_bulk_steps_from_floors}
+    \lean{TNLean.PEPS.Approximation.mem_image_add_right_iff,
+        TNLean.PEPS.Approximation.Frame.mem_image_vertexZone,
+        TNLean.PEPS.Approximation.bandBirth_step,
+        TNLean.PEPS.Approximation.bandDeath_step,
+        TNLean.PEPS.Approximation.centralBirth_step,
+        TNLean.PEPS.Approximation.edgeExchange_step}
+    \leanok
+    \uses{thm:peps_bulk_steps,lem:peps_bulk_separation_from_floors}
+    In the setting of Theorem~\ref{thm:peps_bulk_steps}, let $t=D\log L$ with
+    $0\le t\le n$, let $a\le a_0/2$, and let $m_0\ge2$ for the edge operations
+    and $m_0\ge4$ for the central birth. Place the repainted block at a
+    translation $d$, and let the guides be homogenized on the treated squares of
+    radius $t$.
+    \begin{enumerate}
+        \item For an edge birth or death, or the central birth, with
+              $2\epsilon_0\le a_0/2$, let $T$ be raw sites owned by $P_\circ$,
+              outside every outer hole, of diameter at most $A_0n$, placed in the
+              remaining closed changed region. If the sites of other owners are
+              placed at positions of other labels of the surrounding guide, and
+              every hole is centered at a true vertex of that guide with inner
+              radius at most $\epsilon_0t$, the birth or death is the bounded
+              change of Theorem~\ref{thm:peps_bulk_steps}.
+        \item For the lens exchange of an edge, with $t>0$ and
+              $2\epsilon_0(a_0+1)\le a_0/2$, let $Y$ be the sites placed in the
+              lens. If the sites not held by $C$ on either sheet are placed at
+              labels of that sheet's guide other than $C_e$, every hole of either
+              sheet is centered at a true vertex of its guide with inner radius
+              at most $\epsilon_0t$, and $T$ has diameter at most $A_0n$, the
+              exchange is the bounded change of
+              Theorem~\ref{thm:peps_bulk_steps}.
+    \end{enumerate}
+    No separation condition remains among the hypotheses,
+    \texttt{06-geometry.tex}, lines 102--108 and 357--445.
+\end{theorem}
+
+\begin{proof}\leanok
+    An outer hole site lies within twice the inner radius of its center, hence
+    within $2\epsilon_0t$ of a true vertex. The target therefore lies in the
+    translated closed changed region, and the exterior in the translated union
+    of other labels and the vertex zone, or on the two sides of the translated
+    lens. Lemma~\ref{lem:peps_bulk_separation_from_floors}, restricted to these
+    sets and weakened from $a_0/2$ to $a$, gives the separation condition of
+    Theorem~\ref{thm:peps_bulk_steps}.
+\end{proof}
