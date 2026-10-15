@@ -71,6 +71,7 @@ import TNLean.PEPS.AreaLaw.RegularizedPatchInsertionTrace
 import TNLean.PEPS.AreaLaw.RegularizedPatchListCoordinates
 import TNLean.PEPS.AreaLaw.RegularizedPatchLogMinimum
 import TNLean.PEPS.AreaLaw.RegularizedPatchMarginal
+import TNLean.PEPS.AreaLaw.RegularizedPatchMinimizerDerivative
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimizerStationarity
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimumContinuity
