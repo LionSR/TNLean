@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.DyadicProtocolFinalReadout
 import TNLean.PEPS.Approximation.DyadicProtocolInitialStep
+import TNLean.PEPS.Approximation.OriginalCircuitChain
 import TNLean.PEPS.Approximation.OriginalCircuitSourceBound
 import TNLean.PEPS.Approximation.SheetStackChange
 
@@ -29,12 +30,6 @@ into a `DyadicProtocol` and proves the bounds `DyadicProtocol.IsDistributionProt
 
 The construction of these frames along the schedule is not done here.
 
-## Main definitions
-
-* `PairEffect.OriginalCircuit.chainLayout`, `PairEffect.OriginalCircuit.chainStep`,
-  `PairEffect.OriginalCircuit.chainVec`: one circuit, then a sequence of circuits, then one
-  more circuit, as a sequence of circuits on a sequence of layouts.
-
 ## Main results
 
 * `card_eventUses_le`: an event of the hierarchy uses at most `19` parties.
@@ -56,170 +51,9 @@ open Finset
 
 namespace TNLean.PEPS
 
-namespace PairEffect.OriginalCircuit
-
-variable {P : Type}
-
-/-! ### Three stages of circuits in a row -/
-
-/-- The layouts of a sequence of circuits made of a first circuit into `B 0`, the circuits from
-`B t` to `B (t + 1)` for `t < n`, and a last circuit from `B n` to `Z`, after which the layout
-stays `Z`. -/
-def chainLayout (A : Layout P) (B : ℕ → Layout P) (n : ℕ) (Z : Layout P) : ℕ → Layout P
-  | 0 => A
-  | t + 1 => if t ≤ n then B t else Z
-
-variable {A : Layout P} {B : ℕ → Layout P} {n : ℕ} {Z : Layout P}
-
-theorem chainLayout_succ_of_le {t : ℕ} (h : t ≤ n) : chainLayout A B n Z (t + 1) = B t := by
-  simp [chainLayout, h]
-
-theorem chainLayout_succ_of_lt {t : ℕ} (h : n < t) : chainLayout A B n Z (t + 1) = Z := by
-  simp [chainLayout, show ¬t ≤ n by omega]
-
-/-- The circuits of the sequence: the first circuit, the middle circuits, the last circuit, and
-then identities. -/
-def chainStep (c₀ : OriginalCircuit A (B 0)) (c : ∀ t, OriginalCircuit (B t) (B (t + 1)))
-    (e : OriginalCircuit (B n) Z) :
-    ∀ t, OriginalCircuit (chainLayout A B n Z t) (chainLayout A B n Z (t + 1))
-  | 0 => c₀.castLayouts rfl (chainLayout_succ_of_le (Nat.zero_le n)).symm
-  | t + 1 =>
-    if h : t < n then
-      (c t).castLayouts (chainLayout_succ_of_le h.le).symm (chainLayout_succ_of_le h).symm
-    else if h' : t = n then
-      e.castLayouts (by rw [chainLayout_succ_of_le h'.le, h']) (chainLayout_succ_of_lt (by omega)).symm
-    else
-      (OriginalCircuit.id Z).castLayouts (chainLayout_succ_of_lt (by omega)).symm
-        (chainLayout_succ_of_lt (by omega)).symm
-
-section Equations
-
-variable (c₀ : OriginalCircuit A (B 0)) (c : ∀ t, OriginalCircuit (B t) (B (t + 1)))
-  (e : OriginalCircuit (B n) Z)
-
-theorem chainStep_zero :
-    chainStep c₀ c e 0 =
-      c₀.castLayouts rfl (chainLayout_succ_of_le (A := A) (Z := Z) (Nat.zero_le n)).symm :=
-  rfl
-
-theorem chainStep_succ_of_lt {t : ℕ} (h : t < n) :
-    chainStep c₀ c e (t + 1) =
-      (c t).castLayouts (chainLayout_succ_of_le h.le).symm (chainLayout_succ_of_le h).symm := by
-  simp only [chainStep, h, dite_true]
-
-theorem chainStep_succ_self :
-    chainStep c₀ c e (n + 1) =
-      e.castLayouts (chainLayout_succ_of_le le_rfl).symm
-        (chainLayout_succ_of_lt (Nat.lt_succ_self n)).symm := by
-  simp only [chainStep, lt_irrefl, dite_false, dite_true]
-
-theorem chainStep_succ_of_gt {t : ℕ} (h : n < t) :
-    chainStep c₀ c e (t + 1) =
-      (OriginalCircuit.id Z).castLayouts (chainLayout_succ_of_lt h).symm
-        (chainLayout_succ_of_lt (h.trans (Nat.lt_succ_self t))).symm := by
-  simp only [chainStep, show ¬t < n by omega, show t ≠ n by omega, dite_false]
-
-end Equations
-
-/-- Every property of circuits holds for a circuit with its layouts identified with equal ones. -/
-theorem castLayouts_induction (Q : ∀ {a b : Layout P}, OriginalCircuit a b → Prop)
-    {a b a' b' : Layout P} {w : OriginalCircuit a b} (ha : a = a') (hb : b = b') (h : Q w) :
-    Q (w.castLayouts ha hb) := by
-  cases ha
-  cases hb
-  exact h
-
-/-- **Properties of the sequence of circuits.** A property, possibly depending on the position,
-that holds for the first circuit, the middle circuits, the last circuit and the identities holds
-for every circuit of the sequence. -/
-theorem chainStep_induction (Q : ℕ → ∀ {a b : Layout P}, OriginalCircuit a b → Prop)
-    {c₀ : OriginalCircuit A (B 0)} {c : ∀ t, OriginalCircuit (B t) (B (t + 1))}
-    {e : OriginalCircuit (B n) Z} (h₀ : Q 0 c₀) (hc : ∀ t < n, Q (t + 1) (c t))
-    (he : Q (n + 1) e) (hid : ∀ t, n < t → Q (t + 1) (OriginalCircuit.id Z)) :
-    ∀ t, Q t (chainStep c₀ c e t)
-  | 0 => by rw [chainStep_zero]; exact castLayouts_induction (Q 0) _ _ h₀
-  | t + 1 => by
-    rcases lt_trichotomy t n with h | rfl | h
-    · rw [chainStep_succ_of_lt c₀ c e h]
-      exact castLayouts_induction (Q (t + 1)) _ _ (hc t h)
-    · rw [chainStep_succ_self]
-      exact castLayouts_induction (Q (t + 1)) _ _ he
-    · rw [chainStep_succ_of_gt c₀ c e h]
-      exact castLayouts_induction (Q (t + 1)) _ _ (hid t h)
-
-/-- The vectors of the sequence: a vector `x₀` of `A`, vectors `y t` of `B t` for `t ≤ n`, and a
-vector `z` of `Z` from the stage `n + 2` on. -/
-def chainVec (x₀ : Mem A) (y : ∀ t, Mem (B t)) (z : Mem Z) :
-    ∀ t, Mem (chainLayout A B n Z t)
-  | 0 => x₀
-  | t + 1 =>
-    if h : t ≤ n then Layout.memCongr (chainLayout_succ_of_le h).symm (y t)
-    else Layout.memCongr (chainLayout_succ_of_lt (by omega)).symm z
-
-section Vectors
-
-variable (x₀ : Mem A) (y : ∀ t, Mem (B t)) (z : Mem Z)
-
-theorem chainVec_succ_of_le {t : ℕ} (h : t ≤ n) :
-    chainVec x₀ y z (t + 1) = Layout.memCongr (chainLayout_succ_of_le h).symm (y t) := by
-  simp only [chainVec, h, dite_true]
-
-theorem chainVec_succ_of_lt {t : ℕ} (h : n < t) :
-    chainVec x₀ y z (t + 1) = Layout.memCongr (chainLayout_succ_of_lt h).symm z := by
-  simp only [chainVec, show ¬t ≤ n by omega, dite_false]
-
-end Vectors
-
-theorem eval_castLayouts_memCongr {a b a' b' : Layout P} (w : OriginalCircuit a b) (ha : a = a')
-    (hb : b = b') (x : Mem a) :
-    (w.castLayouts ha hb).eval (Layout.memCongr ha x) = Layout.memCongr hb (w.eval x) := by
-  cases ha
-  cases hb
-  rfl
-
-theorem norm_memCongr_sub {a b : Layout P} (h : a = b) (x y : Mem a) :
-    ‖Layout.memCongr h x - Layout.memCongr h y‖ = ‖x - y‖ := by
-  rw [← map_sub, LinearIsometryEquiv.norm_map]
-
-/-- **Errors along the sequence.** If the first circuit takes `x₀` within `ε 0` of `y 0`, each
-middle circuit takes `y t` within `ε (t + 1)` of `y (t + 1)`, and the last circuit takes `y n`
-within `ε (n + 1)` of `z`, then every circuit of the sequence takes the vector of its stage within
-the corresponding error of the next one. -/
-theorem norm_chainStep_eval_sub_le {c₀ : OriginalCircuit A (B 0)}
-    {c : ∀ t, OriginalCircuit (B t) (B (t + 1))} {e : OriginalCircuit (B n) Z} {x₀ : Mem A}
-    {y : ∀ t, Mem (B t)} {z : Mem Z} (ε : ℕ → ℝ) (h₀ : ‖c₀.eval x₀ - y 0‖ ≤ ε 0)
-    (hc : ∀ t < n, ‖(c t).eval (y t) - y (t + 1)‖ ≤ ε (t + 1))
-    (he : ‖e.eval (y n) - z‖ ≤ ε (n + 1)) (hid : ∀ t, n < t → 0 ≤ ε (t + 1)) :
-    ∀ t, ‖(chainStep c₀ c e t).eval (chainVec x₀ y z t) - chainVec x₀ y z (t + 1)‖ ≤ ε t
-  | 0 => by
-    have h : (c₀.castLayouts rfl
-        (chainLayout_succ_of_le (A := A) (Z := Z) (Nat.zero_le n)).symm).eval x₀ = _ :=
-      eval_castLayouts_memCongr c₀ rfl _ x₀
-    rw [chainStep_zero, chainVec_succ_of_le x₀ y z (Nat.zero_le n)]
-    change ‖(c₀.castLayouts rfl _).eval x₀ - _‖ ≤ _
-    rw [h, norm_memCongr_sub]
-    exact h₀
-  | t + 1 => by
-    rcases lt_trichotomy t n with h | rfl | h
-    · rw [chainStep_succ_of_lt c₀ c e h, chainVec_succ_of_le x₀ y z h.le,
-        chainVec_succ_of_le x₀ y z h, eval_castLayouts_memCongr, norm_memCongr_sub]
-      exact hc t h
-    · rw [chainStep_succ_self, chainVec_succ_of_le x₀ y z le_rfl,
-        chainVec_succ_of_lt x₀ y z (Nat.lt_succ_self t), eval_castLayouts_memCongr,
-        norm_memCongr_sub]
-      exact he
-    · rw [chainStep_succ_of_gt c₀ c e h, chainVec_succ_of_lt x₀ y z h,
-        chainVec_succ_of_lt x₀ y z (h.trans (Nat.lt_succ_self t)), eval_castLayouts_memCongr,
-        norm_memCongr_sub]
-      change ‖z - z‖ ≤ _
-      rw [sub_self, norm_zero]
-      exact hid t h
-
-end PairEffect.OriginalCircuit
-
 namespace Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame PairEffect PairEffect.OriginalCircuit
 
 /-! ### The parties an event uses -/
 
@@ -234,7 +68,8 @@ Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, item 2, `06-geometr
 lines 29–30, and lines 585–596. -/
 theorem card_eventUses_le (e : ProtocolEvent k) :
     #{p : ProtocolParty k | EventUses e p} ≤ 19 := by
-  let g : ProtocolParty k → (ℕ × ℕ × ℕ) ⊕ Unit := Sum.elim (fun Q => .inl Q.toTriple) fun _ => .inr ()
+  let g : ProtocolParty k → (ℕ × ℕ × ℕ) ⊕ Unit :=
+    Sum.elim (fun Q => .inl Q.toTriple) fun _ => .inr ()
   have hg : Set.InjOn g {p | EventUses e p} := by
     rintro (Q | S) hp (Q' | S') hp' h
     · exact congrArg Sum.inl (DyadicSquare.toTriple_injective k (Sum.inl_injective h))
@@ -280,6 +115,250 @@ theorem card_eventUses_le (e : ProtocolEvent k) :
       · exact absurd (mem_filter.1 (mem_coe.1 hp)).2 Sum.inr_ne_inl
     · rw [card_disjSum, card_empty, add_zero]
       exact card_image_le.trans (by simp)
+
+/-! ### The assembled protocol -/
+
+/-- The padded side is at least every power of two below twice the side. -/
+theorem pow_le_paddedSide {L k : ℕ} (h : 2 ^ k < 2 * L) : 2 ^ k ≤ paddedSide L := by
+  have h1 : 2 ^ k < 2 ^ (Nat.clog 2 L + 1) := by
+    have := le_paddedSide L
+    rw [paddedSide] at this
+    rw [pow_succ]
+    omega
+  exact Nat.pow_le_pow_right two_pos (Nat.lt_succ_iff.1 ((Nat.pow_lt_pow_iff_right
+    (by norm_num)).1 h1))
+
+/-- Every register of a list of frames is finite-dimensional. -/
+theorem finiteDimensional_of_mem_stackRegs {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ}
+    {pos : ι → ℝ × ℝ} {Party : Type} :
+    ∀ (Fs : List (Frame pos q Party)), ∀ r ∈ stackRegs Fs [], FiniteDimensional ℂ r.space
+  | [], r, hr => absurd hr List.not_mem_nil
+  | F :: Fs, r, hr => by
+    rcases List.mem_append.1 hr with hr | hr
+    · rcases List.mem_append.1 hr with hr | hr
+      · have key : ∀ l : List (Hole pos q Party), ∀ r ∈ tagRegs l,
+            FiniteDimensional ℂ r.space := by
+          intro l
+          induction l with
+          | nil => intro r hr; exact absurd hr List.not_mem_nil
+          | cons h l ih =>
+            intro r hr
+            rcases List.mem_cons.1 hr with rfl | hr
+            · change FiniteDimensional ℂ (EuclideanSpace ℂ h.patch.Tag)
+              infer_instance
+            · exact ih r hr
+        exact key _ r hr
+      · obtain ⟨x, -, rfl⟩ := List.mem_map.1 hr
+        change FiniteDimensional ℂ (EuclideanSpace ℂ (Fin q))
+        infer_instance
+    · exact finiteDimensional_of_mem_stackRegs Fs r hr
+
+/-- The reference vector of equal lists of frames, across the identification of their
+registers. -/
+theorem memCongr_stackVec {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q]
+    {pos : ι → ℝ × ℝ} {Party : Type} (Ω : EuclideanSpace ℂ (ι → Fin q))
+    {Fs Fs' : List (Frame pos q Party)} (h : Fs = Fs') {ℓ : Layout Party} (ξ : Mem ℓ) :
+    Layout.memCongr (congrArg (stackRegs · ℓ) h) (stackVec Ω Fs ξ) = stackVec Ω Fs' ξ := by
+  subst h
+  rfl
+
+/-- **A protocol from a bounded trajectory of sheets.** Let `L ≥ 2` and `L ≤ 2 ^ k < 2 L`, let
+`‖Ω‖ = 1`, and let `st t` be lists of encoded frames on the parties of the hierarchy of
+`[0, 2 ^ k] ^ 2`, read at the cell centers, such that:
+
+* the frames of `st 0` have no holes, and each is held entirely by one party `holder F`;
+* for every change `t` of the schedule there is an original circuit `c t` from the registers of
+  `st t` to those of `st (t + 1)` that is a bounded change from the reference vector of `st t` to
+  that of `st (t + 1)`, with participants used by the event of the change, at most `r` pair
+  effects and at most `rs` pair sources per monomial, at most `K ≤ C L ^ kK` monomials and
+  coefficient sum, and error `ε ≤ C L⁻²⁰`;
+* at the end of the schedule the frames are `M :: Fs`, where the raw owner of every site in the
+  main frame `M` is its unit-square party and the holes of `M` are trivial, every hole of the
+  other sheets satisfies the frame constraint at accuracy `L⁻⁶⁰`, and the other sheets carry at
+  most `C L³` holes.
+
+If `C ≥ 5042`, there is a dyadic protocol with the bounds of
+`DyadicProtocol.IsDistributionProtocol` for `Ω`, the constants `C`, `b = 64 · 189`, `kK` and `r`,
+all of whose changes have at most `rs` pair sources per monomial. Its first change is the private
+initialization, then come the changes of the schedule, and its last change is the final
+regrouping into the physical registers.
+
+Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, `06-geometry.tex`, lines 12–53,
+and its proof, lines 572–681; Theorem 5.2, item 3, `04-compression.tex`, lines 143–147. -/
+theorem exists_isDistributionProtocol_of_frames {L q k : ℕ} [NeZero q] (hL : 2 ≤ L)
+    (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) (large : DyadicSquare k → Bool)
+    {Ω : StateSpace L q} (hΩ : ‖Ω‖ = 1)
+    (st : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)))
+    (holder : Frame (cellCenterPos L) q (ProtocolParty k) → ProtocolParty k)
+    (hraw : ∀ F ∈ st 0, F.holes = []) (hown : ∀ F ∈ st 0, ∀ x, F.owner x = holder F)
+    (c : ∀ t, OriginalCircuit (stackRegs (st t) []) (stackRegs (st (t + 1)) []))
+    {r rs K kK : ℕ} {C ε : ℝ}
+    (hc : ∀ t (ht : t < (protocolSchedule k large).length),
+      (c t).IsBoundedChange {p | EventUses ((protocolSchedule k large)[t]).1 p} r K ε
+        (framesVec Ω (st t)) (framesVec Ω (st (t + 1))))
+    (hsrc : ∀ t < (protocolSchedule k large).length, (c t).IsSourceBounded rs)
+    (M : Frame (cellCenterPos L) q (ProtocolParty k))
+    (Fs : List (Frame (cellCenterPos L) q (ProtocolParty k)))
+    (hfin : st (protocolSchedule k large).length = M :: Fs)
+    (hMown : ∀ v, M.owner v = .inl (unitSquare hkL v)) (hM : ∀ h ∈ M.holes, h.patch.outer = ∅)
+    (hε : ∀ F ∈ Fs, ∀ h ∈ F.holes, ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hholes : (Fs.map fun F => (F.holes.length : ℝ)).sum ≤ C * (L : ℝ) ^ 3)
+    (hC : 5042 ≤ C) (hK : (K : ℝ) ≤ C * (L : ℝ) ^ kK) (hεC : ε ≤ C / (L : ℝ) ^ 20) :
+    ∃ D : DyadicProtocol L q (ProtocolParty k),
+      D.IsDistributionProtocol Ω C (64 * 189) kK r ∧
+        ∀ t < D.changes, (D.step t).IsSourceBounded rs := by
+  classical
+  set sch := protocolSchedule k large with hsch
+  set n := sch.length with hn
+  obtain ⟨hx, c₀, h0, -, -, -, hev0⟩ :=
+    exists_originalCircuit_initial_of_holes_eq_nil hΩ (st 0) holder hraw hown
+  have hinj : Function.Injective M.owner := fun v w h => by
+    rw [hMown, hMown] at h
+    exact unitSquare_injective hkL (Sum.inl_injective h)
+  let d : ProtocolParty k → ℕ := fun p => if p ∈ Set.range M.owner then q else 1
+  have hd : ∀ x, d (M.owner x) = q := fun x => by simp [d]
+  have hd1 : ∀ p ∉ Set.range M.owner, d p = 1 := fun p hp => by simp only [d]; exact ite_eq_right hp
+  have hrange : Set.range (fun v => (.inl (unitSquare hkL v) : ProtocolParty k)) =
+      Set.range M.owner := congrArg Set.range (funext hMown).symm
+  let e := (readoutCircuit d M Fs [] hd hd1).castLayouts
+    (congrArg (stackRegs · []) hfin).symm rfl
+  have he0 : e.nonprivateCount = 0 := by
+    simp only [e, OriginalCircuit.nonprivateCount_castLayouts, nonprivateCount_readoutCircuit]
+  let D : DyadicProtocol L q (ProtocolParty k) :=
+    { placement := protocolPlacement k
+      initialSpace := fun p => framesSpace ((st 0).filter fun F => holder F = p)
+      finite_initialSpace := fun p => Layout.finiteDimensional_mem_of_registers _
+        (finiteDimensional_of_mem_stackRegs _)
+      initialVector := fun p => framesVec Ω ((st 0).filter fun F => holder F = p)
+      norm_initialVector := hx
+      changes := n + 2
+      layout := chainLayout (ProductInput.wholePartyLayout fun p =>
+        framesSpace ((st 0).filter fun F => holder F = p)) (fun t => stackRegs (st t) []) n
+        (familyPhysicalOutputLayout d (siteOrder M.owner) (readoutPrivate M Fs []))
+      layout_zero := rfl
+      step := chainStep c₀ c e
+      reference := chainVec (ProductInput.ofAllParties _ _ hx).vector
+        (fun t => framesVec Ω (st t)) (e.eval (framesVec Ω (st n)))
+      reference_zero := rfl
+      site := fun v => .inl (unitSquare hkL v)
+      site_injective := fun v w h => unitSquare_injective hkL (Sum.inl_injective h)
+      placement_site := fun v => ⟨rfl, rfl, rfl⟩
+      physicalDimension := d
+      physicalDimension_site := fun v => by rw [← hMown]; exact hd v
+      physicalDimension_eq_one := fun p hp => hd1 p (by rwa [← hrange])
+      physicalOrder := siteOrder M.owner
+      physicalOrder_nodup := nodup_siteOrder hinj
+      mem_physicalOrder := mem_siteOrder M.owner
+      privateOutput := readoutPrivate M Fs []
+      finite_privateOutput := fun r hr => by
+        rcases List.mem_append.1 hr with hr | hr
+        · exact finiteDimensional_of_mem_stackRegs [M] r
+            (List.mem_append_left _ (List.mem_append_left _ hr))
+        · exact finiteDimensional_of_mem_stackRegs Fs r hr
+      layout_changes := chainLayout_succ_of_lt (Nat.lt_succ_self n) }
+  -- the event of each change of the protocol
+  let ev : ℕ → ProtocolEvent k := fun t =>
+    if h : 0 < t ∧ t - 1 < n then (sch[t - 1]'h.2).1 else .inl (rootSquare k)
+  have hev : ∀ t (ht : t < n), ev (t + 1) = (sch[t]'ht).1 := fun t ht => by
+    simp only [ev, Nat.add_sub_cancel, Nat.succ_pos, ht, and_self, dite_true]
+  -- the properties of every change
+  have hQ := chainStep_induction (c₀ := c₀) (c := c) (e := e)
+    (fun t a b (w : OriginalCircuit a b) => w.nonprivateCount ≤ 1 ∧
+      (¬(0 < t ∧ t ≤ n) → w.nonprivateCount = 0) ∧
+      (∀ g, (↑(w.participants g) : Set (ProtocolParty k)) ⊆ {p | EventUses (ev t) p}) ∧
+      w.IsExpansionBounded r K ∧ w.IsMonomialBounded K ∧ w.IsSourceBounded rs)
+    ⟨h0.trans_le zero_le_one, fun _ => h0, participants_subset_of_nonprivateCount_eq_zero _ h0 _,
+      isExpansionBounded_of_nonprivateCount_eq_zero _ _ _ h0,
+      isMonomialBounded_of_nonprivateCount_eq_zero _ _ h0,
+      isSourceBounded_of_nonprivateCount_eq_zero h0 _⟩
+    (fun t ht => ⟨(hc t ht).nonprivateCount_le, fun h => absurd ⟨Nat.succ_pos t, ht⟩ h,
+      fun g => by rw [hev t ht]; exact (hc t ht).participants_subset g,
+      (hc t ht).isExpansionBounded, (hc t ht).isMonomialBounded, hsrc t ht⟩)
+    ⟨he0.trans_le zero_le_one, fun _ => he0, participants_subset_of_nonprivateCount_eq_zero _ he0 _,
+      isExpansionBounded_of_nonprivateCount_eq_zero _ _ _ he0,
+      isMonomialBounded_of_nonprivateCount_eq_zero _ _ he0,
+      isSourceBounded_of_nonprivateCount_eq_zero he0 _⟩
+    (fun t _ => ⟨zero_le_one, fun _ => rfl,
+      participants_subset_of_nonprivateCount_eq_zero _ rfl _,
+      isExpansionBounded_of_nonprivateCount_eq_zero _ _ _ rfl,
+      isMonomialBounded_of_nonprivateCount_eq_zero _ _ rfl,
+      isSourceBounded_of_nonprivateCount_eq_zero rfl _⟩)
+  have hL1 : (1 : ℝ) ≤ L := by exact_mod_cast (by omega : 1 ≤ L)
+  have hL0 : (0 : ℝ) < L := by linarith
+  have hC0 : 0 ≤ C := by linarith
+  -- the gates of the protocol belong to the changes of the schedule
+  have hgate : ∀ γ : D.Gate, 0 < (γ.1 : ℕ) ∧ (γ.1 : ℕ) - 1 < n := fun γ => by
+    by_contra h
+    have h' : ¬(0 < (γ.1 : ℕ) ∧ (γ.1 : ℕ) ≤ n) := fun h' => h ⟨h'.1, by omega⟩
+    exact (isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero _ ((hQ γ.1).2.1 h')).false γ.2
+  let chg : D.Gate → Fin n := fun γ => ⟨(γ.1 : ℕ) - 1, (hgate γ).2⟩
+  have hchg : ∀ t, #{γ | chg γ = t} ≤ 1 := fun t => by
+    refine card_le_one.2 fun γ hγ γ' hγ' => ?_
+    simp only [mem_filter, mem_univ, true_and, chg, Fin.ext_iff] at hγ hγ'
+    obtain ⟨⟨i, hi⟩, g⟩ := γ
+    obtain ⟨⟨i', hi'⟩, g'⟩ := γ'
+    have h1 := (hgate ⟨⟨i, hi⟩, g⟩).1
+    have h2 := (hgate ⟨⟨i', hi'⟩, g'⟩).1
+    dsimp only at hγ hγ' h1 h2
+    obtain rfl : i = i' := by omega
+    have hsub : Subsingleton (D.step i).nonprivateLocations :=
+      Fintype.card_le_one_iff_subsingleton.1
+        ((card_nonprivateLocations _).trans_le (hQ i).1)
+    rw [Subsingleton.elim g g']
+  refine ⟨D, ⟨?_, ?_, fun j r s => (protocolPlacement_blockBounded k j r s).trans (by norm_num),
+    ?_, fun t _ => (hQ t).1.trans (by norm_num), fun t _ g => ?_,
+    fun t _ => isMonomialBounded_mono _ (hQ t).2.2.2.2.1 (Nat.le_floor (by exact_mod_cast hK)),
+    fun t _ => isExpansionBounded_mono _ (hQ t).2.2.2.1 le_rfl hK, fun p => ?_,
+    fun t _ g p hp p' hp' => EventUses.scale_le ((hQ t).2.2.1 g hp) ((hQ t).2.2.1 g hp'),
+    fun t _ g p hp p' hp' => ?_, fun t _ => ?_, ?_⟩, fun t _ => (hQ t).2.2.2.2.2⟩
+  · exact fun p => ⟨((protocolPlacement_inGrid k) p).1.trans (pow_le_paddedSide hk2),
+      ((protocolPlacement_inGrid k) p).2.trans (pow_le_paddedSide hk2)⟩
+  · have h := three_mul_card_protocolParty_lt hk2
+    have h' : (3 * Fintype.card (ProtocolParty k) : ℝ) ≤ 32 * (L : ℝ) ^ 2 := by exact_mod_cast h.le
+    nlinarith [sq_nonneg (L : ℝ)]
+  · have h := length_protocolSchedule_le_cube hk2 large
+    have hL3 : (1 : ℝ) ≤ (L : ℝ) ^ 3 := one_le_pow₀ hL1
+    change ((n + 2 : ℕ) : ℝ) ≤ C * (L : ℝ) ^ 3
+    push_cast
+    nlinarith
+  · exact (card_le_card fun p hp => by
+      simpa using (hQ t).2.2.1 g (mem_coe.2 hp)).trans ((card_eventUses_le (ev t)).trans
+        (by norm_num))
+  · rw [DyadicProtocol.participation_eq_card]
+    exact participation_le_of_schedule chg hchg p _ fun γ hγ => by
+      have h := (hQ γ.1).2.2.1 γ.2 hγ
+      have hg := hgate γ
+      have : ev γ.1 = (sch[chg γ]).1 := by
+        simp only [ev, chg, hg, and_self, dite_true, Fin.getElem_fin]
+      rwa [this] at h
+  · have h := EventUses.anchor_dist_le ((hQ t).2.2.1 g hp) ((hQ t).2.2.1 g hp')
+    exact ⟨h.1.trans (Nat.mul_le_mul_right _ (by norm_num)),
+      h.2.trans (Nat.mul_le_mul_right _ (by norm_num))⟩
+  · refine (norm_chainStep_eval_sub_le (fun t => if 0 < t ∧ t ≤ n then ε else 0) ?_ ?_ ?_ ?_
+      t).trans ?_
+    · simp [hev0]
+    · intro t ht
+      simp only [Nat.succ_pos, true_and, show t + 1 ≤ n from ht, ite_true]
+      exact (hc t ht).norm_eval_sub_le
+    · simp
+    · intro t ht
+      simp [show ¬t + 1 ≤ n by omega]
+    · split_ifs
+      exacts [hεC, by positivity]
+  · have key : e.eval (framesVec Ω (st n)) =
+        (readoutCircuit d M Fs [] hd hd1).eval (stackVec Ω (M :: Fs) (1 : ℂ)) := by
+      have h1 := eval_castLayouts_memCongr (readoutCircuit d M Fs [] hd hd1)
+        (congrArg (stackRegs · []) hfin).symm rfl (stackVec Ω (M :: Fs) (1 : ℂ))
+      rw [memCongr_stackVec Ω hfin.symm] at h1
+      exact h1
+    refine D.exists_reference_changes_of_readoutCircuit M Fs [] hinj hM (fun v => (hMown v).symm)
+      rfl rfl hΩ (by omega) hε hholes norm_one ?_
+    have hz : D.reference D.changes = _ :=
+      chainVec_succ_of_lt (ProductInput.ofAllParties _ _ hx).vector
+        (fun t => framesVec Ω (st t)) (e.eval (framesVec Ω (st n))) (Nat.lt_succ_self n)
+    rw [hz]
+    exact eq_of_heq (((Layout.memCongr_apply_heq _ _).trans (Layout.memCongr_apply_heq _ _)).trans
+      ((heq_of_eq key).trans (Layout.memCongr_apply_heq _ _).symm))
 
 end Approximation
 
