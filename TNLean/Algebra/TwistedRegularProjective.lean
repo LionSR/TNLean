@@ -36,7 +36,7 @@ variable {G : Type} [Group G] [Fintype G] [DecidableEq G]
 
 /-- Pointwise inverse of a scalar two-cochain. -/
 def inverse (ω : ScalarCocycle G) : ScalarCocycle G :=
-  fun g h => (ω g h)⁻¹
+  fun p => (ω p)⁻¹
 
 omit [Fintype G] [DecidableEq G] in
 /-- Inverting a genuine scalar two-cocycle gives another cocycle. -/
@@ -50,8 +50,8 @@ omit [Group G] [Fintype G] [DecidableEq G] in
 /-- The circle-valued phase of the inverse cochain is the inverse of the
 original circle phase. -/
 theorem inverse_circlePhaseInclusion (ω : ScalarCocycle G) (g h : G) :
-    (inverse ω).circlePhaseInclusion g h =
-      (ω.circlePhaseInclusion g h)⁻¹ := by
+    (inverse ω).circlePhaseInclusion (g, h) =
+      (ω.circlePhaseInclusion (g, h))⁻¹ := by
   simp [inverse, ScalarCocycle.circlePhaseInclusion,
     ScalarCocycle.circlePhase, map_inv]
 
@@ -69,7 +69,7 @@ factor system `ω.circlePhaseInclusion⁻¹`. -/
 theorem twistedLeftRegularGL_mul {ω : ScalarCocycle G}
     (hω : ω.IsCocycle) (g h : G) :
     twistedLeftRegularGL ω g * twistedLeftRegularGL ω h =
-      Matrix.GeneralLinearGroup.scalar G (ω.circlePhaseInclusion g h)⁻¹ *
+      Matrix.GeneralLinearGroup.scalar G (ω.circlePhaseInclusion (g, h))⁻¹ *
         twistedLeftRegularGL ω (g * h) := by
   apply Units.ext
   simp only [Units.val_mul, twistedLeftRegularGL_coe,
@@ -84,7 +84,7 @@ left-regular convention of arXiv:2502.20257, lines 412–415. -/
 noncomputable def twistedLeftRegularProjective
     (ω : ScalarCocycle G) (hω : ω.IsCocycle) :
     ProjectiveRepresentation (D := Fintype.card G)
-      (fun g h => (ω.circlePhaseInclusion g h)⁻¹) where
+      (fun p => (ω.circlePhaseInclusion p)⁻¹) where
   X g := Units.map
     (Matrix.reindexAlgEquiv ℂ ℂ (Fintype.equivFin G)).toMonoidHom
     (ω.twistedLeftRegularGL g)
@@ -93,7 +93,7 @@ noncomputable def twistedLeftRegularProjective
         (ω.twistedLeftRegular g) *
       (Matrix.reindexAlgEquiv ℂ ℂ (Fintype.equivFin G))
         (ω.twistedLeftRegular h) =
-      (((ω.circlePhaseInclusion g h)⁻¹ : Units ℂ) : ℂ) •
+      (((ω.circlePhaseInclusion (g, h))⁻¹ : Units ℂ) : ℂ) •
         (Matrix.reindexAlgEquiv ℂ ℂ (Fintype.equivFin G))
           (ω.twistedLeftRegular (g * h))
     rw [← _root_.map_mul, ← map_smul]

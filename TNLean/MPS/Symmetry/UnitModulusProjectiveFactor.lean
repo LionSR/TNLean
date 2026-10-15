@@ -32,7 +32,7 @@ Source: arXiv:1010.3732, Section II.F.2, lines 886--921. -/
 theorem norm_factor_eq_one_of_unitary
     (ρ : TNLean.Algebra.ProjectiveRepresentation (D := D) ω)
     (hρ : ∀ g, (ρ.X g : Matrix (Fin D) (Fin D) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
-    (g h : G) : ‖(ω g h : ℂ)‖ = 1 := by
+    (g h : G) : ‖(ω (g, h) : ℂ)‖ = 1 := by
   have hnorm := congrArg (fun M : Matrix (Fin D) (Fin D) ℂ => ‖M‖) (ρ.map_mul g h)
   rw [CStarRing.norm_mem_unitary_mul _ (hρ g), CStarRing.norm_of_mem_unitary (hρ h),
     norm_smul, CStarRing.norm_of_mem_unitary (hρ (g * h)), mul_one] at hnorm
@@ -45,9 +45,9 @@ theorem circlePhaseInclusion_eq_of_unitary
     (ρ : TNLean.Algebra.ProjectiveRepresentation (D := D) ω)
     (hρ : ∀ g, (ρ.X g : Matrix (Fin D) (Fin D) ℂ) ∈ Matrix.unitaryGroup _ ℂ) :
     ω.circlePhaseInclusion = ω := by
-  funext g h
+  funext ⟨g, h⟩
   apply Units.ext
-  change (ω g h : ℂ) / ‖(ω g h : ℂ)‖ = (ω g h : ℂ)
+  change (ω (g, h) : ℂ) / ‖(ω (g, h) : ℂ)‖ = (ω (g, h) : ℂ)
   simp only [ρ.norm_factor_eq_one_of_unitary hρ g h, Complex.ofReal_one, div_one]
 
 /-- Two actual unitary projective representations with cohomologous

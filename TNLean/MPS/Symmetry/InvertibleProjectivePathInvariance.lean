@@ -41,14 +41,14 @@ Section II.F.2, lines 1000–1029. -/
 theorem continuous_projectiveFactor_of_invertibleMatrixPath
     {G : Type} [Group G] {D : ℕ} (hD : 0 < D)
     (V : unitInterval → G → Matrix (Fin D) (Fin D) ℂ)
-    (ω : unitInterval → G → G → Units ℂ)
+    (ω : unitInterval → G × G → Units ℂ)
     (hV : ∀ g, Continuous fun t => V t g)
     (hdet : ∀ t g, (V t g).det ≠ 0)
-    (hmul : ∀ t g h, V t g * V t h = (ω t g h : ℂ) • V t (g * h))
-    (g h : G) : Continuous fun t => (ω t g h : ℂ) := by
+    (hmul : ∀ t g h, V t g * V t h = (ω t (g, h) : ℂ) • V t (g * h))
+    (g h : G) : Continuous fun t => (ω t (g, h) : ℂ) := by
   let i : Fin D := ⟨0, hD⟩
   have hformula (t : unitInterval) :
-      (ω t g h : ℂ) =
+      (ω t (g, h) : ℂ) =
         (((V t g * V t h) * (V t (g * h)).adjugate) i i) /
           (V t (g * h)).det := by
     rw [hmul t g h, Matrix.smul_mul, Matrix.mul_adjugate]
@@ -74,11 +74,11 @@ theorem invertible_projectivePath_factor_endpoints_cohomologous
     (ω : unitInterval → TNLean.Algebra.ScalarCocycle G)
     (hV : ∀ g, Continuous fun t => V t g)
     (hdet : ∀ t g, (V t g).det ≠ 0)
-    (hmul : ∀ t g h, V t g * V t h = (ω t g h : ℂ) • V t (g * h)) :
+    (hmul : ∀ t g h, V t g * V t h = (ω t (g, h) : ℂ) • V t (g * h)) :
     (ω 1).CohomologousTo (ω 0) := by
   have hdetMul (t : unitInterval) (g h : G) :
       (V t g).det * (V t h).det =
-        (ω t g h : ℂ) ^ D * (V t (g * h)).det := by
+        (ω t (g, h) : ℂ) ^ D * (V t (g * h)).det := by
     have heq := congrArg Matrix.det (hmul t g h)
     simpa only [Matrix.det_mul, Matrix.det_smul, Fintype.card_fin] using heq
   exact projectiveFactor_endpoints_cohomologous_of_det_path hD ω

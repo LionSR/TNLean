@@ -1,10 +1,10 @@
 \section{Conditional entropy in a buffered rectangle}
 \label{sec:area_law_initial_buffer}
 
-This section formalizes~\cite[Lemma~3.2]{OpenAI2026AreaLaw} on the finite
-domains of Definition~\ref{def:area_law_hamiltonian}. An integer rectangle is
-a product of two finite nonempty integer intervals; its size is the larger
-number of sites along an axis, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
+We establish~\cite[Lemma~3.2]{OpenAI2026AreaLaw} on the finite domains of
+Definition~\ref{def:area_law_hamiltonian}. An integer rectangle is a product
+of two finite nonempty integer intervals; its size is the maximum of its side
+lengths, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
 
 \begin{definition}[Safe rectangles]
     \label{def:area_law_safe_rectangle}
@@ -30,10 +30,9 @@ number of sites along an axis, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
     \leanok
     \uses{def:area_law_hamiltonian}
     Let $A\subseteq\Lambda$ and let $Z$ be the set of endpoints of the edges
-    crossing $A$. For $D_0>2R+10$ a rectangle $Q$ is safe if its sup-norm
-    distance to $Z$ exceeds $D_0\operatorname{size}(Q)$, the distance to the
-    empty set being infinite. The physical region of an ambient rectangle $Q$
-    is $A\cap Q$.
+    crossing $A$. For $D_0>2R+10$, a rectangle $Q$ is safe if its sup-norm
+    distance to $Z$ exceeds $D_0\operatorname{size}(Q)$. The physical region of
+    an ambient rectangle $Q$ is $A\cap Q$.
 \end{definition}
 
 \begin{theorem}[Contours around a safe rectangle]

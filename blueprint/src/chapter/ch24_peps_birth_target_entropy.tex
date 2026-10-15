@@ -8,12 +8,12 @@
     \uses{def:area_law_ground_entropy,def:area_law_two_family_partition}
     Let $\Lambda\subset\mathbb Z^2$ be finite, let $q\ge1$ be an integer,
     and let $\Omega\in\bigotimes_{v\in\Lambda}\mathbb C^q$ be a unit vector.
-    Suppose
+    Suppose that
     \begin{align*}
         A=D\mathbin{\dot\cup}\bigcup_iX_i\subseteq\Lambda
     \end{align*}
-    is a finite ordered two-family partition, with labels
-    $f_i\in\{0,1\}$. For each piece, put
+    is a finite ordered two-family partition with labels
+    $f_i\in\{0,1\}$. For each piece $X_i$, set
     \begin{align*}
         P_i & =\bigcup_{j<i,\,f_j=f_i}X_j,
             & J_i                          & =(\Lambda\setminus A)\cup P_i.
@@ -21,55 +21,49 @@
     Let $Y_i\subseteq\Lambda$ be birth targets satisfying
     \begin{align*}
         X_i & \subseteq Y_i\subseteq A,
-            & Y_i\cap P_i               & =\varnothing.
+            & Y_i\cap P_i               & =\varnothing,
     \end{align*}
-    The birth targets need not be pairwise disjoint.
-    Let $n_i\in\mathbb N$, $c_D,c_S\in\mathbb R$ and $c_I\ge0$.
-    Suppose that, for every $i$,
+    and let $n_i\in\mathbb N$, $c_D,c_S\in\mathbb R$, and $c_I\ge0$ satisfy
     \begin{align*}
-        I_\Omega(Y_i:J_i) & \le c_I n_i^{-100}.
+        I_\Omega(Y_i:J_i) & \le c_I n_i^{-100}
     \end{align*}
-    Suppose also that
+    for every $i$, together with
     \begin{align*}
         |D| & \le c_D|\partial_\Lambda A|,
-            & \sum_i n_i^{-100}            & \le c_S|\partial_\Lambda A|.
+            & \sum_i n_i^{-100}            & \le c_S|\partial_\Lambda A|,
     \end{align*}
-    Here $I_\Omega(U:W)=S_\Omega(U)+S_\Omega(W)-S_\Omega(U\cup W)$
-    is ordinary mutual information of the actual regional reductions.
-    At a zero scale the weight is defined by $0^{-100}=0$;
-    only positive scales occur in the manuscript application.
+    where $I_\Omega(U:W)=S_\Omega(U)+S_\Omega(W)-S_\Omega(U\cup W)$
+    is the mutual information of the reduced states of $\Omega$, and a
+    zero scale carries the weight $0^{-100}=0$.
     Then
     \begin{align*}
         S_\Omega(A) & \le
         \left(c_D\log q+\frac{c_Ic_S}{2}\right)|\partial_\Lambda A|.
     \end{align*}
-    This is the conditional implication in the proof of
-    \cite[Theorem~1.1, lines~838--852 of Section~11]{OpenAI2026AreaLaw}.
-    For that application $Y_i=A\cap T_i$. The construction of the partition
-    and birth targets, the stated estimates, and the uniform choice of their
-    constants remain separate requirements for the full area law.
+    This is the deduction of the area-law bound from the birth-target
+    mutual-information estimates in the proof of
+    \cite[Theorem~1.1, lines~838--852 of Section~11]{OpenAI2026AreaLaw},
+    where $Y_i=A\cap T_i$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_boundary_assembly}
-    Since $Y_i\subseteq A$ and $Y_i\cap P_i=\varnothing$, the birth
-    target is disjoint from the entire subsystem $J_i$.
-    Discarding the part $Y_i\setminus X_i$ of its first system therefore gives
+    Since $Y_i\subseteq A$ and $Y_i\cap P_i=\varnothing$, the set $Y_i$ is
+    disjoint from $J_i$. Strong subadditivity (data processing under
+    discarding $Y_i\setminus X_i$) gives
     \begin{align*}
         I_\Omega(X_i:J_i) & \le I_\Omega(Y_i:J_i)
         \le c_I n_i^{-100}.
     \end{align*}
-    Put $\varepsilon_i=c_I n_i^{-100}$. Because $c_I\ge0$,
+    Setting $\varepsilon_i=c_I n_i^{-100}$ and using $c_I\ge0$ yields
     \begin{align*}
         \sum_i\varepsilon_i
          & =c_I\sum_i n_i^{-100}
         \le c_Ic_S|\partial_\Lambda A|.
     \end{align*}
-    Apply Theorem~\ref{thm:area_law_boundary_assembly} with error coefficient
-    $c_Ic_S$ and residual coefficient $c_D$. That estimate combines the
-    two-family cancellation of Theorem~\ref{thm:area_law_two_family_entropy}
-    with the regional dimension bound of
-    Theorem~\ref{thm:area_law_entropy_dimension}, and gives the claimed
-    coefficient.
+    Applying Theorem~\ref{thm:area_law_boundary_assembly} with error
+    coefficient $c_Ic_S$ and residual coefficient $c_D$, which combines
+    Theorem~\ref{thm:area_law_two_family_entropy} with
+    Theorem~\ref{thm:area_law_entropy_dimension}, gives the bound.
 \end{proof}
 
 \begin{theorem}[Boundary entropy from neighborhood information]
@@ -83,9 +77,7 @@
     partition, and set $P_i=\bigcup_{j<i,\,f_j=f_i}X_j$.
     Suppose that $X_i\subseteq Y_i\subseteq A$, $Y_i\subseteq N_i\subseteq\Lambda$,
     and $(\Lambda\setminus A)\cup P_i\subseteq\Lambda\setminus N_i$ for every $i$.
-    Let $n_i\in\mathbb N$, $c_D,c_S\in\mathbb R$ and $c_I\ge0$.
-    Suppose that the information estimate holds for every $i$, and that the
-    residual and scale sum satisfy the following bounds:
+    Let $n_i\in\mathbb N$, $c_D,c_S\in\mathbb R$, and $c_I\ge0$ satisfy
     \begin{align*}
         I_\Omega(Y_i:\Lambda\setminus N_i) & \le c_I n_i^{-100},          \\
         |D|                                & \le c_D|\partial_\Lambda A|, \\
@@ -96,23 +88,21 @@
         S_\Omega(A) & \le
         \left(c_D\log q+\frac{c_Ic_S}{2}\right)|\partial_\Lambda A|.
     \end{align*}
-    The zero-scale convention is $0^{-100}=0$; the manuscript application
-    uses positive scales. This is an auxiliary implication in
+    Here again a zero scale carries the weight $0^{-100}=0$.
+    This is the reduction from exterior-neighborhood mutual information to
+    boundary entropy in
     \cite[Theorem~1.1, lines~815--852 of Section~11]{OpenAI2026AreaLaw}.
-    The construction of the partition, the whole-union exclusion and the
-    information estimates, with uniformly chosen constants, remain separate
-    requirements for the full area law.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_birth_information_boundary}
     Put $J_i=(\Lambda\setminus A)\cup P_i$.
     Since $Y_i\subseteq N_i$ and $J_i\subseteq\Lambda\setminus N_i$,
-    $Y_i$ is disjoint from $J_i$ and in particular from $P_i$.
-    Discarding part of the second system gives
+    the sets $Y_i$ and $J_i$ are disjoint, and monotonicity of mutual
+    information under discarding $(\Lambda\setminus N_i)\setminus J_i$ gives
     \begin{align*}
         I_\Omega(Y_i:J_i) & \le I_\Omega(Y_i:\Lambda\setminus N_i)
         \le c_I n_i^{-100}.
     \end{align*}
-    Apply Theorem~\ref{thm:area_law_birth_information_boundary} to the same
-    partition, birth targets and original vector $\Omega$.
+    Theorem~\ref{thm:area_law_birth_information_boundary} then yields the
+    bound.
 \end{proof}

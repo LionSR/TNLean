@@ -1,11 +1,11 @@
 \section{Connected fan pieces in a smaller closed square}
 \label{sec:area_law_fan_closed_half}
 
-The following local assertions concern the eight-triangle fan used in the
+The following local properties concern the eight-triangle fan used in the
 initial-star construction of \cite[Section~11]{OpenAI2026AreaLaw}.
-The origin, dyadic exponent, cell index and binary coloring are arbitrary.
-The exponent zero and the empty change set are included; distinct runs
-carrying the same color remain distinct.
+Here the origin, dyadic exponent $\ell\ge 0$, cell index, and binary
+coloring are arbitrary, and distinct runs carrying the same color remain
+distinct.
 
 % Source: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a,
 % 10-geometry.tex, geometry:initial-stars, lines 352--370, and
@@ -26,8 +26,8 @@ carrying the same color remain distinct.
          & =S_i\cap\overline B_\infty(c,r/2)
         =(P_i\setminus L)\cap\overline B_\infty(c,r/2).
     \end{align}
-    The closed maximum-norm ball is the closed square of radius $r/2$.
-    The equality follows from
+    The closed maximum-norm ball is the closed square of radius $r/2$, and
+    the second equality follows from
     $\overline B_\infty(c,r/2)\subset B_\infty(c,r)$.
     When $A=\varnothing$, the center belongs to every $K_i$.
 \end{definition}
@@ -38,8 +38,7 @@ carrying the same color remain distinct.
     \leanok
     \uses{def:area_law_fan_closed_half_piece,def:area_law_fan_runs}
     If $i,j$ are consecutive perimeter positions with $f_i=f_j$, then
-    $K_i\cap K_j$ is nonempty. Either $j=\tau(i)$
-    or $i=\tau(j)$ is permitted, and the change set may be empty.
+    $K_i\cap K_j$ is nonempty.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -93,7 +92,7 @@ carrying the same color remain distinct.
     their colors agree. For any connected component $R$ of this graph,
     put $T_R=\bigcup_{i\in R}P_i$. Then
     $(T_R\setminus L)\cap\overline B_\infty(c,r/2)$ is nonempty
-    and connected. Components carrying the same color remain distinct.
+    and connected.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -111,12 +110,11 @@ carrying the same color remain distinct.
     gives
     \begin{align}
         (T_R\setminus L)\cap\overline B_\infty(c,r/2)
-         & =\bigcup_{i\in R}K_i.
+         & =\bigcup_{i\in R}K_i,
         \label{eq:area_law_closed_half_run}
     \end{align}
-    Hence the set on the left of~(\ref{eq:area_law_closed_half_run})
-    is nonempty and connected. If $A=\varnothing$, no radial is removed
-    and the center is retained.
+    so the set on the left of~(\ref{eq:area_law_closed_half_run})
+    is nonempty and connected.
 \end{proof}
 
 % Auxiliary to OpenAI, A two-dimensional area law from a global spectral gap,
@@ -129,10 +127,8 @@ carrying the same color remain distinct.
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRun_closedHalf_connectedComponents_equiv}
     \leanok
     \uses{def:area_law_fan_closed_half_piece,def:area_law_fan_runs}
-    Retain the arbitrary origin, natural exponent, cell index and binary
-    coloring of Definition~\ref{def:area_law_fan_closed_half_piece}.
-    With its center $c$, half-side $r$, triangles $P_i$ and deleted
-    radial union $L$, put
+    With the notation of Definition~\ref{def:area_law_fan_closed_half_piece},
+    put
     \begin{align}
         \Omega_{1/2} & =\overline B_\infty(c,r/2)\setminus L,
                      & T_R                                    & =\bigcup_{i\in R}P_i \qquad (R\in\mathcal R).
@@ -148,11 +144,9 @@ carrying the same color remain distinct.
          & \quad\Longleftrightarrow\quad x\in T_R.
         \label{eq:area_law_closed_half_fan_component_membership}
     \end{align}
-    The assertion includes exponent zero and an empty change set.
-    In the latter case the center is retained. Distinct runs carrying
-    the same color correspond to distinct connected components.
-    This is a local ingredient of the initial-star construction in
-    \cite[Section~11]{OpenAI2026AreaLaw}.
+    Distinct runs carrying the same color correspond to distinct
+    connected components; this provides the local component decomposition
+    for the initial-star construction in \cite[Section~11]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_fan_closed_half_run_connected,

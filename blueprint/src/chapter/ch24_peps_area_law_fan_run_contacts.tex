@@ -46,7 +46,7 @@ They require no assignment of labels outside the cell.
     \leanok
     \uses{def:area_law_fan_runs}
     Give the triangles of this fan arbitrary labels in $\{0,1\}$.
-    Let $R\ne T$ be two actual run identifiers, with regions $T_R,T_T$.
+    Let $R\ne T$ be two distinct runs, with regions $T_R,T_T$.
     If $T_R\cap T_T$ contains two distinct points, then every triangle
     in $R$ has a different label from every triangle in $T$.
 \end{theorem}
@@ -54,14 +54,9 @@ They require no assignment of labels outside the cell.
     \uses{thm:area_law_fan_triangle_contact,thm:area_law_fan_run_opposite,
         thm:area_law_fan_run_color}
     Choose a common point $x\ne c$. It belongs to triangles $P_i,P_j$
-    in the two runs. Their slots are distinct, and both triangles also
+    in the two runs. Their indices are distinct, and both triangles also
     contain $c$, so their intersection contains two distinct points.
     The preceding theorem gives endpoint adjacency. Distinct runs then
-    force the two labels to differ. Label constancy on each run gives
-    the assertion for every pair of constituent triangles.
+    force the two labels to differ, and label constancy on each run gives
+    the claim for every pair of constituent triangles.
 \end{proof}
-
-These assertions concern a single fan, whose triangles share one center.
-Across different cells, a shared nondegenerate segment must be distinguished
-from isolated common corners. The classification of global interfaces is a
-further part of the two-family construction.

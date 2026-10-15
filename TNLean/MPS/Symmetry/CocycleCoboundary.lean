@@ -79,14 +79,14 @@ theorem cohomologousTo_of_isInjective
   have h_mul₂ := ρ₂.map_mul g h
   rw [hρ₂_eq g, hρ₂_eq h, hρ₂_eq (g * h)] at h_mul₂
   rw [smul_mul_smul_comm, ρ₁.map_mul, smul_smul, smul_smul] at h_mul₂
-  have h_scalar_eq : (f (g⁻¹) : ℂ) * (f (h⁻¹) : ℂ) * (ω₁ g h : ℂ) =
-      (ω₂ g h : ℂ) * (f ((g * h)⁻¹) : ℂ) :=
+  have h_scalar_eq : (f (g⁻¹) : ℂ) * (f (h⁻¹) : ℂ) * (ω₁ (g, h) : ℂ) =
+      (ω₂ (g, h) : ℂ) * (f ((g * h)⁻¹) : ℂ) :=
     ProjectiveRepresentation.smul_eq_smul_cancel hD ⟨ρ₁.X (g * h), rfl⟩ h_mul₂
   have hne : (f ((g * h)⁻¹) : ℂ) ≠ 0 := Units.ne_zero _
   apply Units.val_injective
   simp only [Units.val_mul, Units.val_inv_eq_inv_val]
   rw [eq_comm] at h_scalar_eq
-  rw [← mul_inv_cancel_right₀ hne (ω₂ g h : ℂ), h_scalar_eq]
+  rw [← mul_inv_cancel_right₀ hne (ω₂ (g, h) : ℂ), h_scalar_eq]
   ring
 
 end MPSTensor
