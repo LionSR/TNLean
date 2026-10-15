@@ -170,6 +170,7 @@ import TNLean.PEPS.AreaLaw.Scan.SourceRoughBudgetPower
 import TNLean.PEPS.AreaLaw.Scan.SourceRoughSelection
 import TNLean.PEPS.AreaLaw.Scan.SourceRoundedInformation
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedDensity
+import TNLean.PEPS.AreaLaw.Scan.SourceSelectedEnergy
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedEnergyPower
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpComparison
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpDensity

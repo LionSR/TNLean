@@ -345,3 +345,86 @@ any fixed interpolation interval contained in $(0,1)$.
     before $k\to\infty$, so $\rho_k\to0$. The energy and norm conclusions
     at that point are unchanged.
 \end{proof}
+
+% Auxiliary density-to-energy consequence for Proposition 9.2.
+\begin{theorem}[Physical selected energy for arbitrary scanner exponents]
+    \label{thm:arealaw-source-selected-energy}
+    \lean{
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_source_density_energy}
+    \leanok
+    \uses{thm:arealaw-source-selected-density}
+    Under the hypotheses of Theorem~\ref{thm:arealaw-source-selected-density},
+    with the error exponent fixed at $P=100$, there are common coefficients
+    $C_\delta>0$ and $C_{l,\delta}\geq0$ for the density and energy bounds.
+    They and the size threshold are chosen after the scanner exponents and
+    $C_e\geq0$, but before the finite physical system and the total weight.
+    The constants $C\geq1$ and $C_l\geq0$ in the original energy bound are
+    retained separately.
+
+    The same truncated state $\widetilde\Omega$, typical set, selected mass,
+    label sequence and physical prevector sequence satisfy all conclusions
+    of that theorem before $W$ is chosen. For $W\geq1$, let $a=W/K$ and
+    assume $ar_0^2\leq c$. Put $\varepsilon=n^{-\nu}$ and
+    \begin{align}
+        \delta_n
+         & :=C_\delta\varepsilon^{-1}
+        \left(n^{e_{\rm in}-\mu}+a^{1/4}(\log n)^{C_{l,\delta}}\right).\notag
+    \end{align}
+    If $e$ is the truncated ground energy and $g/2$ its guaranteed gap, then
+    \begin{align}
+        \frac{e}{g/2} & \leq C_\delta n^{-1000}.\notag
+    \end{align}
+    There are nonnegative sequences $\rho_k,\rho_{E,k}\to0$ such that, for
+    every sufficiently large $k$, one charge round and one common parameter
+    $p_k\in[\varepsilon/2,\varepsilon]$ satisfy
+    \begin{align}
+        \frac{\mathcal Q_k}{KnD}
+         & \leq\delta_n+\rho_k,\notag                         \\
+        E_{{\rm def},k}
+         & \leq C_\delta W^2n^\ell D^2(\log n)^{C_{l,\delta}}
+        \left(\delta_n^{1/8}+\varepsilon+n^{-100}\right)
+        +C_\delta n^{-1000}+\rho_{E,k}.
+        \label{eq:arealaw-source-energy}
+    \end{align}
+    Here the defect is the actual normalized mean energy minus $e$, divided
+    by $g/2$. At the same point, the original density bound, original energy
+    bound, positive filtered norm and rough upper norm estimate remain valid.
+    Every replica remainder is uniform in the selected round and parameter
+    with the finite instance and $W$ fixed. The coefficient $C_\delta$ may
+    be positive when $C_e=0$.
+    This is the density-to-energy consequence used in
+    \cite[Proposition~9.2, lines~368--381 and 492--533]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:arealaw-source-selected-density,thm:arealaw-selected-energy-density,
+        thm:arealaw-selected-energy-vanishing-remainder}
+    Write $C_{\delta,0},C_{l,\delta,0}$ for the density coefficients and
+    $g_*=g/2$. Choose
+    \begin{align}
+        C_\delta     & =\max\{C_{\delta,0},(C+1)/g_*\},\notag \\
+        C_{l,\delta} & =\max\{C_{l,\delta,0},C_l\}.\notag
+    \end{align}
+    Increase the size threshold so that $\log n\geq1$. These enlargements
+    preserve the density estimate. Since $0\leq e\leq n^{-1000}$ and
+    $C_\delta\geq1/g_*$, they also give the displayed ground-energy bound.
+
+    With the finite physical system and $W$ fixed, put
+    \begin{align}
+        A          & =CW^2n^\ell D^2(\log n)^{C_l},\notag    \\
+        \rho_{E,k} & =\frac{A|\rho_k|^{1/8}+r_k}{g_*},\notag
+    \end{align}
+    where $r_k\geq0$ is the original additive energy remainder. Thus
+    $\rho_{E,k}\geq0$ and $\rho_{E,k}\to0$. At the previously selected
+    point, the scalar energy estimate gives
+    \begin{align}
+        E_{{\rm def},k}
+         & \leq\frac A{g_*}
+        \left(\delta_n^{1/8}+\varepsilon+n^{-100}\right)
+        +\frac e{g_*}+\rho_{E,k}.\notag
+    \end{align}
+    Enlarge $A/g_*$ using the common coefficient and logarithmic power,
+    and apply the ground-energy bound to obtain
+    (\ref{eq:arealaw-source-energy}). Neither the selected point nor any
+    physical state or label is changed.
+\end{proof}

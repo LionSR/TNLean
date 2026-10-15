@@ -102,6 +102,40 @@ Proposition~8.1 for that prevector, and assemble all fields of the scanner
 hypothesis record for the same physical prevector and truncated ground state
 $\widetilde\Omega$.
 
+\paragraph{The entropy input constant and the enlarged output constants.}
+The symbol $C_e$ is reused in the density and shell bounds of
+\path{08-scanner.tex}, lines~379--389, after the proof absorbs fixed factors
+and additive errors at lines~462--490. To distinguish these roles, let
+$C_e^{\mathrm{in}}\geq0$ denote the coefficient in the original entropy
+hypotheses. The transferred shell bound is retained in the form
+\begin{align}
+    B_{\mathrm{sh}}
+     &\leq C_e^{\mathrm{in}}(nL^e+n)+n^{-247}
+      \leq (C_e^{\mathrm{in}}+1)(nL^e+n),\notag
+\end{align}
+for $n\geq2$ and the stated scanner scales. The last inequality enlarges the
+coefficient; it does not discard the entropy-transfer error.
+
+The density coefficient is likewise chosen after $C_e^{\mathrm{in}}$, but
+before the finite physical system and the total weight. It is a positive
+constant $C_\delta=C_\delta(C_e^{\mathrm{in}})$, giving
+\begin{align}
+    \delta_n
+     &= C_\delta\epsilon^{-1}
+       \bigl(n^{e-\mu}+a^{1/4}(\log n)^{C_{\log}}\bigr).\notag
+\end{align}
+For example, the rough budget has coefficient
+$C_r=6C_e^{\mathrm{in}}+13+6\log q$, and the density conversion permits
+$C_\delta=4(C_1+1)(C_r+2C_t)C_s$, where $C_t\geq1$ bounds the fixed
+transport coefficient and $C_s\geq1$ bounds the rounded scales. A subsequent
+enlargement can serve both density and energy. These constants absorb the
+factor two from the interval $[\epsilon/2,\epsilon]$, the typical-width and
+mismatch terms, and the transport error. In particular, the conclusion for
+$C_e^{\mathrm{in}}=0$ does not assert a zero coefficient in $\delta_n$ or a
+zero transferred shell entropy. Reading the repeated symbol as the identical
+numerical coefficient would give a stronger statement that this argument does
+not establish. The input hypothesis remains $C_e^{\mathrm{in}}\geq0$.
+
 \section{Step 1: Truncation trace distance and entropy continuity}
 
 The paper states that the trace distance $t=\frac12\||\widetilde\Omega\rangle

@@ -7859,7 +7859,7 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Consumers:** `Scan/SourceRoughSelection.lean`,
   `Scan/SourceBootstrapEntropy.lean`, `Scan/SourceSelectedSharpComparison.lean`,
   `Scan/SourceSelectedSharpEnergy.lean`, `Scan/SourceSelectedSharpDensity.lean`,
-  `Scan/SourceSelectedDensity.lean`,
+  `Scan/SourceSelectedDensity.lean`, `Scan/SourceSelectedEnergy.lean`,
   `Scan/SourceActualInformation.lean`, and `Scan/SourceFinalInformation.lean`.
 - **Notes:** Positivity comes from the existing spectral-window witness; no
   nonzero-dimension hypothesis is added to any theorem.
@@ -7920,3 +7920,25 @@ spectral split → block extraction → MPV calculation → strict bounds
   selected-point estimates. No additional tactic is proposed.
 - **Notes:** No multiplication by `1 - p` is allowed before its sign is known.
   The scalar implication instead uses `1 - p ≤ 1` on nonnegative terms.
+
+### Unpacking the supplied target and its spectral data — rejected (2026-10-16)
+
+- **Pattern:** Introduce the named local definitions, unpack the truncated
+  ground-state and spectral-window witnesses, and pass these same witnesses
+  to the conclusion while continuing with their remaining properties.
+- **Seen:** The common witness block in `Scan/SourceActualInformation.lean:203`,
+  `Scan/SourceSelectedSharpDensity.lean:236`, and
+  `Scan/SourceSelectedSharpEnergy.lean:242`; the rough-density version in
+  `Scan/SourceSelectedDensity.lean:222` has a different tuple of conclusions.
+  `Scan/SourceSelectedEnergy.lean:214` retains the density witnesses directly.
+- **Abstraction:** The mathematical data already come from the shared source
+  comparison theorems. The nonzero-dimension consequence uses the promoted
+  `NeZero.of_pos`. No additional mathematical lemma is proposed for the
+  introductions and conjunction projections themselves.
+- **Notes:** The sharp versions carry the marginal budget and two regional
+  entropy families; the rough version omits these and has a different size
+  bound tuple. An identical short destructuring block is present, but a
+  tactic hiding these dependent witness choices would obscure which state
+  and labels are retained. A shared data interface should be considered only
+  if a subsequent mathematical theorem needs that interface independently;
+  it is not part of the present proof completion.
