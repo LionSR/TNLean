@@ -162,7 +162,8 @@ theorem exists_uniform_sampled_approximate_network_bounds
     intro j
     rw [w.participationCount_rescaledOriginal _ G hbudget j]
     exact hlifetime j
-  have hK_W := w.isMonomialBounded_rescaledOriginal _ G hbudget hmonomial
+  have hK_W := w.isMonomialBounded_rescaledOriginal
+    (sourceGateBudget_pos (half_pos hε) w.expandedGateCount).le G hbudget hmonomial
   have hdim := W.card_physicalFirstDensityAlphabet_le_power
     (familyPhysicalLayout physicalDim ps) priv K r w.expandedGateCount b b
     (B : ℝ) (D : ℝ) L (C_K q) C_N (C_B q) C_D
