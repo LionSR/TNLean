@@ -432,7 +432,6 @@ contraction of local tensors is a separate assertion.
     \label{thm:peps_distributed_construction_compression}
     \lean{TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network}
     \leanok
-    \uses{thm:peps_uniform_approximate_operator_network,thm:peps_distributed_construction_gate_maps_density}
     Let $(\mathcal C_i)_{i\in I}$ be a family of distributed constructions,
     each index carrying a size $L=L_i\ge2$. Suppose that there are constants
     $b,n,d,r,u,v$ and $C_N,C_D,C_K,C_C$, independent of the index, such that
@@ -450,13 +449,16 @@ contraction of local tensors is a separate assertion.
     \end{align}
     for the actual physical density $\rho_L$. Every node meets at most
     $2b(b-1)$ virtual links, and the two endpoints of every link participate
-    in a common nonprivate gate of the original construction. This is
-    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} for distributed
-    constructions, whose recorded expansions consist of allowed monomials.
+    in a common nonprivate gate of the original construction. This is the
+    case of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} without messages:
+    the recorded expansions of a distributed construction consist of allowed
+    monomials and carry no messages. The case of the theorem with messages is
+    not covered by this statement.
     % Source: 04-compression.tex, lines 137--175.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:peps_uniform_approximate_operator_network,thm:peps_distributed_construction_gate_maps_density}
     Read every member with the operators of its own expansions. The recorded
     expansions approximate these operators with error zero, hence at every
     inverse-power accuracy, and keep the original monomial counts,
@@ -472,7 +474,6 @@ contraction of local tensors is a separate assertion.
     \label{thm:peps_compression_retained_norm_network}
     \lean{TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le}
     \leanok
-    \uses{thm:peps_compression_retained_norm,thm:peps_distributed_construction_compression}
     Under the hypotheses of
     Theorem~\ref{thm:peps_distributed_construction_compression}, let
     $\Omega_L$ be a unit vector with
@@ -486,13 +487,14 @@ contraction of local tensors is a separate assertion.
         1-\eta_L                                        & \le\operatorname{Re}\operatorname{Tr}\rho_L\le1.
     \end{align}
     The density $\rho_L$ is not normalized, and $\sigma_L$ need be neither
-    positive nor Hermitian. This combines
-    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} with
+    positive nor Hermitian. This combines the case of
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} without messages with
     \cite[Remark~5.3]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 137--175 and 602--611.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:peps_compression_retained_norm,thm:peps_distributed_construction_compression}
     Apply Theorem~\ref{thm:peps_compression_retained_norm} to the network of
     Theorem~\ref{thm:peps_distributed_construction_compression}, with
     $\kappa=L^{-p}$.

@@ -14,7 +14,10 @@ Its gate operators are the sums of those expansions. Reading each gate as that o
 a construction with prescribed gate operators, with the same input, private operations,
 participating sets, physical outputs and physical density. Each expansion is exact, so it
 serves at every inverse-power accuracy, and the compression theorem (Theorem 5.2) applies to
-a family of distributed constructions with the uniform bounds of its statement.
+a family of distributed constructions with the uniform bounds of its statement. The expansions
+of a distributed construction consist of allowed monomials and carry no messages, so this is
+the case of Theorem 5.2 without messages; the case with messages is
+`GateMapConstruction.exists_uniform_message_sampled_network`.
 
 The output is a literal operator tensor network `σ`: one node per party, finite virtual
 links with uniformly polynomial alphabets, a constant bound on the number of links at a party,
@@ -35,7 +38,8 @@ the exterior scalar.
 * `TNLean.PEPS.PairEffect.DistributedConstruction.physicalDensity_toGateMapConstruction`:
   this reading keeps the physical density.
 * `TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network`:
-  Theorem 5.2 for a family of distributed constructions with their actual expansions.
+  the case of Theorem 5.2 without messages, for a family of distributed constructions with
+  their actual expansions.
 * `TNLean.PEPS.PairEffect.DistributedConstruction.exists_uniform_sampled_network_sub_pure_le`:
   Remark 5.3 for that family.
 
@@ -205,7 +209,7 @@ namespace TNLean.PEPS.PairEffect.DistributedConstruction
 open TNLean.PEPS.Approximation
 attribute [local instance] Classical.propDecidable
 
-/-- **Theorem 5.2 for distributed constructions with their actual expansions.** Consider a
+/-- **Theorem 5.2 without messages, for distributed constructions.** Consider a
 family of distributed constructions, indexed by `ι` with sizes `size L ≥ 2`, whose nonprivate
 gate count and physical dimensions are uniformly polynomial, whose nonprivate gates have at
 most `b` participants, whose parties participate in at most `b` nonprivate gates over the
