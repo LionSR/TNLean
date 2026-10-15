@@ -169,9 +169,7 @@ theorem mpo_reviewCZXTensor_eq_smul :
 theorem mpo_reviewCZXTensor_mem_unitaryGroup :
     MPOTensor.mpo reviewCZXTensor N ∈ Matrix.unitaryGroup (Fin N → Fin 2) ℂ := by
   rw [mpo_reviewCZXTensor]
-  refine Matrix.monomial_mem_unitaryGroup _ _ fun t ↦ ?_
-  rw [star_pow, star_neg, star_one, ← mul_pow]
-  simp
+  exact Matrix.monomial_mem_unitaryGroup _ _ fun t ↦ by simp [← mul_pow]
 
 /-- **`O(A)^2 = (-1)^N I`** at every positive length.
 
@@ -205,21 +203,10 @@ private theorem reviewCZX_single (i j : Fin 2) :
     ∃ a b c e : Fin 4, ∃ u v : ℂ, Matrix.single i j (1 : ℂ) =
       u • (reviewCZXTensor.toMPSTensor a * reviewCZXTensor.toMPSTensor b) +
         v • (reviewCZXTensor.toMPSTensor c * reviewCZXTensor.toMPSTensor e) := by
-  fin_cases i <;> fin_cases j
-  · refine ⟨1, 1, 1, 2, 1 / 2, 1 / 2, ?_⟩
-    rw [reviewCZXMPS_one, reviewCZXMPS_two, ← complexOfInt_mul, ← complexOfInt_mul]
-    ext a b
-    fin_cases a <;> fin_cases b <;> norm_num [Matrix.single_apply, complexOfInt, Matrix.mul_apply]
-  · refine ⟨1, 1, 1, 2, 1 / 2, -1 / 2, ?_⟩
-    rw [reviewCZXMPS_one, reviewCZXMPS_two, ← complexOfInt_mul, ← complexOfInt_mul]
-    ext a b
-    fin_cases a <;> fin_cases b <;> norm_num [Matrix.single_apply, complexOfInt, Matrix.mul_apply]
-  · refine ⟨2, 1, 2, 2, 1 / 2, -1 / 2, ?_⟩
-    rw [reviewCZXMPS_one, reviewCZXMPS_two, ← complexOfInt_mul, ← complexOfInt_mul]
-    ext a b
-    fin_cases a <;> fin_cases b <;> norm_num [Matrix.single_apply, complexOfInt, Matrix.mul_apply]
-  · refine ⟨2, 1, 2, 2, 1 / 2, 1 / 2, ?_⟩
-    rw [reviewCZXMPS_one, reviewCZXMPS_two, ← complexOfInt_mul, ← complexOfInt_mul]
+  fin_cases i <;> fin_cases j <;>
+    [refine ⟨1, 1, 1, 2, 1 / 2, 1 / 2, ?_⟩; refine ⟨1, 1, 1, 2, 1 / 2, -1 / 2, ?_⟩;
+      refine ⟨2, 1, 2, 2, 1 / 2, -1 / 2, ?_⟩; refine ⟨2, 1, 2, 2, 1 / 2, 1 / 2, ?_⟩] <;>
+  · rw [reviewCZXMPS_one, reviewCZXMPS_two, ← complexOfInt_mul, ← complexOfInt_mul]
     ext a b
     fin_cases a <;> fin_cases b <;> norm_num [Matrix.single_apply, complexOfInt, Matrix.mul_apply]
 

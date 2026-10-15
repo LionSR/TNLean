@@ -481,8 +481,7 @@ theorem kwTensor_mpo_transpose_mul [NeZero N] :
   rw [funext_iff]
   refine forall_congr' fun j => ?_
   simp only [Pi.zero_apply]
-  generalize c j = u, c (j + 1) = v, x j = w, x (j + 1) = z
-  revert u v w z; decide
+  generalize_decide c j, c (j + 1), x j, x (j + 1)
 
 /-- Project result: the companion fusion on the dual lattice, `K Kᵀ = 2^N (1 + η)`. The source
 says only that `D_σ` also maps the dual lattice back to the original
@@ -499,8 +498,7 @@ theorem kwTensor_mpo_mul_transpose [NeZero N] :
   refine Iff.trans ?_ (Fin.forall_sub_one_iff (P := fun i k => c k + x k = c i + x i))
   refine forall_congr' fun j => ?_
   simp only [Pi.zero_apply]
-  generalize c j = u, c (j - 1) = v, x j = w, x (j - 1) = z
-  revert u v w z; decide
+  generalize_decide c j, c (j - 1), x j, x (j - 1)
 
 /-- The kernel is real, so its adjoint is its transpose, `K† = Kᵀ`. -/
 theorem kwTensor_mpo_conjTranspose [NeZero N] :
@@ -802,8 +800,7 @@ theorem kwTensor_mpo_mulVec_plus [NeZero N] :
     (P := fun i k => a k + (0 : Fin N → Fin 2) k = a i + (0 : Fin N → Fin 2) i))
   refine forall_congr' fun j => ?_
   simp only [Pi.zero_apply, add_zero]
-  generalize a j = u, a (j - 1) = v
-  revert u v; decide
+  generalize_decide a j, a (j - 1)
 
 /-- Project result: **duality maps the ferromagnet to twice the paramagnet**, `K G = 2 P`,
 the companion of `kwTensor_mpo_mulVec_plus`. -/
