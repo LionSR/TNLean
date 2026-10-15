@@ -1,0 +1,49 @@
+\section{Characteristic lengths of the region births}
+\label{sec:area_law_repair_lengths}
+
+% Source: 10-geometry.tex, geometry:primary-scale, lines 709--721;
+% belt and replacement scanner scales, lines 732--740;
+% old and fresh identifiers, lines 398--409; birth order, lines 565--568.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{definition}[Characteristic birth lengths]
+    \label{def:area_law_repair_characteristic_length}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegionCharacteristicLength,
+        TNLean.PEPS.AreaLaw.Geometry.repairStageCharacteristicLength}
+    \uses{def:area_law_repair_stage}
+    For an initial identifier family, define its characteristic length
+    $\tau_0:I_0\to\mathbb R$ by
+    \begin{align}
+        \tau_0(i) & =
+        \begin{cases}
+            0,   & i\text{ is the dummy},                         \\
+            r_k, & i\text{ is a primary in layer }k,              \\
+            t_k, & i\text{ is an initial belt region in layer }k.
+        \end{cases}
+        \label{eq:area_law_initial_characteristic_length}
+    \end{align}
+    Here $r_k=2^k$ is the layer-cell side and $t_k$ is the fine-cell
+    side in layer $k$. The primary pitch side $s_k$ can be larger than
+    $r_k$; the characteristic length uses $r_k$.
+
+    Let $\mathcal D_j$ be the actual family of
+    Definition~\ref{def:area_law_repair_stage}, with identifier set
+    $I_j$. Start with the assignment above for its jointly chosen
+    initial family. Identify each old $i\in I_j$ with its retained
+    copy in $I_{j+1}$. A fresh identifier $q=(j+1,p,H)$ records its
+    parent mark $p$ and run $H$; write $S_p^{(j)}$ for that parent's
+    scale at stage $j$. For each old identifier and each fresh
+    identifier, respectively, define
+    \begin{align}
+        \tau_{j+1}(i)       & =\tau_j(i),    \\
+        \tau_{j+1}(j+1,p,H) & =d(S_p^{(j)}).
+        \label{eq:area_law_repair_characteristic_length}
+    \end{align}
+    A replacement with characteristic length $u$ has removal half-side
+    $u$ and scanner primitive scale $2u$, as in the scanner-scale
+    assignment of \cite[Section~11]{OpenAI2026AreaLaw}.
+
+    The dummy is omitted from the retained family, so its assigned
+    length will not be used. Birth order places primaries
+    first, initial belt regions second, and replacements by generation,
+    with arbitrary ties within each class.
+\end{definition}
