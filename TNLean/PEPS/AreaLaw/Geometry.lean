@@ -75,6 +75,7 @@ import TNLean.PEPS.AreaLaw.Geometry.InitialSectorComponents
 import TNLean.PEPS.AreaLaw.Geometry.InitialSectorCycle
 import TNLean.PEPS.AreaLaw.Geometry.InitialSectorRuns
 import TNLean.PEPS.AreaLaw.Geometry.InitialStarFrontiers
+import TNLean.PEPS.AreaLaw.Geometry.IsolatedStars
 import TNLean.PEPS.AreaLaw.Geometry.LatticeDyadicRect
 import TNLean.PEPS.AreaLaw.Geometry.LayerPartition
 import TNLean.PEPS.AreaLaw.Geometry.LocalLayers
@@ -96,6 +97,9 @@ import TNLean.PEPS.AreaLaw.Geometry.RectangleShellCounts
 import TNLean.PEPS.AreaLaw.Geometry.RectangleShellWeightedCover
 import TNLean.PEPS.AreaLaw.Geometry.RepairCurrentAssignments
 import TNLean.PEPS.AreaLaw.Geometry.RepairDepth
+import TNLean.PEPS.AreaLaw.Geometry.RepairDescendants
+import TNLean.PEPS.AreaLaw.Geometry.RepairInductionMetric
+import TNLean.PEPS.AreaLaw.Geometry.RepairInductionStatement
 import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementRegions
 import TNLean.PEPS.AreaLaw.Geometry.RepairStage
 import TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation
