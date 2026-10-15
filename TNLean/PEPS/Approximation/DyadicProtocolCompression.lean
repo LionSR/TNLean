@@ -11,7 +11,41 @@ import TNLean.PEPS.Approximation.UniformApproximateSampledNetwork
 /-!
 # Compression of the dyadic distribution protocol
 
-TEST
+Section 8.1 of the polynomial-PEPS manuscript applies Theorem 5.2 (`thm:compression`) at
+accuracy `L⁻⁵` to the protocol of Proposition 7.1 and obtains a party operator network `σ` with
+polynomial link dimensions and `‖σ - |Ω⟩⟨Ω|‖₁ ≤ C L⁻⁵` (`eq:compressed-density`,
+`07-assembly.tex:45–55`). This module carries out that step for the protocols of
+`LargeSizeDyadicProtocolConsequences`.
+
+The changes of a protocol are composed into one chronology, and the protocol is read as a
+distributed construction of Theorem 5.2 whose gate operators are the sums of their recorded
+monomial expansions. Its physical density is the physical density of the actual final vector.
+All protocols, over all sizes, Hamiltonians, and ground vectors, form one family with uniform
+polynomial bounds, so the constants of Theorem 5.2 are chosen before the family member, as in
+the order of constants of `07-assembly.tex:179–203`. The resulting distributed operator
+contraction is enumerated as a party network on the dyadic anchors of the protocol; the
+separation hypothesis of Lemma 8.2 follows from item 3 of Proposition 7.1, since every link joins
+two parties of a common gate.
+
+The hypothesis `LargeSizeDyadicProtocolConsequences` is not proved, so the final statement is a
+conditional form of Theorem 1.1.
+
+## Main results
+
+* `TNLean.PEPS.Approximation.DyadicProtocol.exists_partyNetwork_of_contractedOperator`: a
+  compressed density on the parties of a protocol gives an operator party network on dyadic
+  anchors with the hypotheses of Lemma 8.2.
+* `TNLean.PEPS.Approximation.largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences`:
+  the compressed dyadic operator network from the consequences of Proposition 7.1.
+* `TNLean.PEPS.Approximation.polynomialPEPSApproximation_of_largeSizeDyadicProtocolConsequences`:
+  Theorem 1.1 conditional on those consequences.
+
+## References
+
+* Polynomial-PEPS manuscript (Sept 24 2026), §8.1, `07-assembly.tex:9–63`; Theorem 5.2
+  `thm:compression`, `04-compression.tex:137–175`; Theorem 1.1 `thm:main`,
+  `00-introduction.tex:36–57`; immutable revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+  These are original proofs; no OpenAI Lean code is copied or adapted.
 -/
 
 noncomputable section
@@ -24,7 +58,8 @@ variable {P : Type}
 
 namespace EffectCircuit
 
-/-- The exact operator of every recorded gate occurrence: the sum of its own monomial list. -/
+/-- The exact operator of every recorded gate occurrence: the sum of its own monomial list.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–43. -/
 def exactGateMaps : {a b : Layout P} → (w : EffectCircuit a b) → w.GateMaps
   | _, _, .id _ => PUnit.unit
   | _, _, .comp w v => (exactGateMaps w, exactGateMaps v)
@@ -33,7 +68,9 @@ def exactGateMaps : {a b : Layout P} → (w : EffectCircuit a b) → w.GateMaps
   | _, _, .swap .. => PUnit.unit
   | _, _, .frame _ w => exactGateMaps w
 
-/-- The monomial lists already recorded at every gate occurrence. -/
+/-- The monomial lists already recorded at every gate occurrence.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–43 and
+590–600. -/
 def selfLists : {a b : Layout P} → (w : EffectCircuit a b) → w.GateLists
   | _, _, .id _ => PUnit.unit
   | _, _, .comp w v => (selfLists w, selfLists v)
@@ -42,7 +79,8 @@ def selfLists : {a b : Layout P} → (w : EffectCircuit a b) → w.GateLists
   | _, _, .swap .. => PUnit.unit
   | _, _, .frame _ w => selfLists w
 
-/-- Evaluating with the exact gate operators is the evaluation of the circuit. -/
+/-- Evaluating with the exact gate operators is the evaluation of the circuit.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–36. -/
 theorem evalWithGateMaps_exactGateMaps {a b : Layout P} (w : EffectCircuit a b) :
     w.evalWithGateMaps w.exactGateMaps = w.eval := by
   induction w with
@@ -54,7 +92,8 @@ theorem evalWithGateMaps_exactGateMaps {a b : Layout P} (w : EffectCircuit a b) 
   | swap => rfl
   | frame r w ih => exact congrArg (fun A ↦ A.lTensor r.space) ih
 
-/-- Transport a circuit along equalities of its input and output layouts. -/
+/-- Transport a circuit along equalities of its input and output layouts.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–36. -/
 def castLayouts {a a' b b' : Layout P} (ha : a = a') (hb : b = b') (w : EffectCircuit a b) :
     EffectCircuit a' b' :=
   ha ▸ hb ▸ w
@@ -65,6 +104,9 @@ namespace OriginalCircuit
 
 variable {a b : Layout P}
 
+/-- Each original gate is approximated, with any nonnegative error, by its own recorded
+expansion: its operator is the sum of that expansion.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–43 and 590–600. -/
 theorem isGateApproximation_produce (w : OriginalCircuit a b) {δ : ℝ} (hδ : 0 ≤ δ) :
     (w.produce.reexpand w.produce.selfLists).IsGateApproximation δ
       (w.produce.reexpandGateMaps w.produce.selfLists w.produce.exactGateMaps) := by
@@ -79,6 +121,9 @@ theorem isGateApproximation_produce (w : OriginalCircuit a b) {δ : ℝ} (hδ : 
   | swap => trivial
   | frame r w ih => exact ih
 
+/-- An absolute coefficient sum at most `S` bounds every individual coefficient by `S`, and the
+pair-effect count of every monomial is unchanged.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 143–149. -/
 theorem isTermwiseBounded_produce (w : OriginalCircuit a b) {r : ℕ} {S S' : ℝ}
     (h : w.IsExpansionBounded r S) (hS : S ≤ S') :
     (w.produce.reexpand w.produce.selfLists).IsTermwiseBounded r S' := by
@@ -94,6 +139,8 @@ theorem isTermwiseBounded_produce (w : OriginalCircuit a b) {r : ℕ} {S S' : �
   | swap => trivial
   | frame r w ih => exact ih h
 
+/-- The recorded expansions keep their monomial counts.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 143–149. -/
 theorem monomialCount_produce_le (w : OriginalCircuit a b) {K : ℕ}
     (h : w.IsMonomialBounded K) :
     ∀ g, (w.produce.reexpand w.produce.selfLists).monomialCount g ≤ K := by
@@ -110,12 +157,16 @@ theorem monomialCount_produce_le (w : OriginalCircuit a b) {K : ℕ}
 
 variable {a' b' : Layout P}
 
+/-- Transport along layout equalities keeps the number of nonprivate gates.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–142. -/
 theorem expandedGateCount_castLayouts_produce (ha : a = a') (hb : b = b')
     (w : OriginalCircuit a b) :
     (EffectCircuit.castLayouts ha hb w.produce).expandedGateCount = w.nonprivateCount := by
   subst ha hb
   exact w.expandedGateCount_produce
 
+/-- Every gate of the transported circuit has the participants of an original nonprivate gate.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 25–27 and 140–142. -/
 theorem exists_participants_castLayouts_produce (ha : a = a') (hb : b = b')
     (w : OriginalCircuit a b)
     (g : (EffectCircuit.castLayouts ha hb w.produce).gateLocations) :
@@ -127,6 +178,8 @@ theorem exists_participants_castLayouts_produce (ha : a = a') (hb : b = b')
   exact ⟨w.produceLocationsEquiv.symm g, by
     rw [← w.participants_produce, Equiv.apply_symm_apply]⟩
 
+/-- Transport along layout equalities keeps the lifetime participation of every party.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 140–142. -/
 theorem participationCount_castLayouts_produce (ha : a = a') (hb : b = b')
     (w : OriginalCircuit a b) (p : P) :
     Nat.card {g : (EffectCircuit.castLayouts ha hb w.produce).gateLocations //
@@ -137,6 +190,8 @@ theorem participationCount_castLayouts_produce (ha : a = a') (hb : b = b')
   exact Nat.card_congr (w.produceLocationsEquiv.subtypeEquiv fun g ↦ by
     rw [w.participants_produce]).symm
 
+/-- The transported circuit is approximated by its own recorded expansions with any nonnegative
+error. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 143–149 and 590–600. -/
 theorem isGateApproximation_castLayouts_produce (ha : a = a') (hb : b = b')
     (w : OriginalCircuit a b) {δ : ℝ} (hδ : 0 ≤ δ) :
     let W := EffectCircuit.castLayouts ha hb w.produce
@@ -145,6 +200,9 @@ theorem isGateApproximation_castLayouts_produce (ha : a = a') (hb : b = b')
   subst ha hb
   exact w.isGateApproximation_produce hδ
 
+/-- The transported recorded expansions have individual coefficients at most any bound on the
+original absolute coefficient sums.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 143–149. -/
 theorem isTermwiseBounded_castLayouts_produce (ha : a = a') (hb : b = b')
     (w : OriginalCircuit a b) {r : ℕ} {S S' : ℝ} (h : w.IsExpansionBounded r S) (hS : S ≤ S') :
     let W := EffectCircuit.castLayouts ha hb w.produce
@@ -152,6 +210,8 @@ theorem isTermwiseBounded_castLayouts_produce (ha : a = a') (hb : b = b')
   subst ha hb
   exact w.isTermwiseBounded_produce h hS
 
+/-- The transported recorded expansions keep the original monomial bound.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 143–149. -/
 theorem monomialCount_castLayouts_produce_le (ha : a = a') (hb : b = b')
     (w : OriginalCircuit a b) {K : ℕ} (h : w.IsMonomialBounded K) :
     let W := EffectCircuit.castLayouts ha hb w.produce
@@ -159,6 +219,9 @@ theorem monomialCount_castLayouts_produce_le (ha : a = a') (hb : b = b')
   subst ha hb
   exact w.monomialCount_produce_le h
 
+/-- The transported circuit, evaluated with its exact gate operators, is the original circuit
+read through the layout identifications.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–36. -/
 theorem evalWithGateMaps_castLayouts_produce (ha : a = a') (hb : b = b')
     (w : OriginalCircuit a b) (x : Mem a') :
     let W := EffectCircuit.castLayouts ha hb w.produce
@@ -178,11 +241,14 @@ open Finset TNLean.PEPS.PairEffect
 
 variable {L q : ℕ} {P : Type} [Fintype P] (D : DyadicProtocol L q P)
 
-/-- The first `n` changes of a protocol, composed into one chronology. -/
+/-- The first `n` changes of a protocol, composed into one chronology.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:25–32`. -/
 def chain : (n : ℕ) → OriginalCircuit (D.layout 0) (D.layout n)
   | 0 => .id _
   | n + 1 => .comp (chain n) (D.step n)
 
+/-- The composed changes take the initial vector to the actual vector at every stage.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:29–36`. -/
 theorem eval_chain_trajectory (n : ℕ) : (D.chain n).eval (D.trajectory 0) = D.trajectory n := by
   induction n with
   | zero => rfl
@@ -190,6 +256,8 @@ theorem eval_chain_trajectory (n : ℕ) : (D.chain n).eval (D.trajectory 0) = D.
       change (D.step n).eval ((D.chain n).eval (D.trajectory 0)) = _
       rw [ih]; rfl
 
+/-- The composed changes have the nonprivate gates of all changes.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:25–32`. -/
 theorem nonprivateCount_chain (n : ℕ) :
     (D.chain n).nonprivateCount = ∑ t ∈ range n, (D.step t).nonprivateCount := by
   induction n with
@@ -197,6 +265,8 @@ theorem nonprivateCount_chain (n : ℕ) :
   | succ n ih =>
       rw [sum_range_succ, ← ih]; rfl
 
+/-- The participation of a party in the composed changes is the sum over the changes.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:31–32`. -/
 theorem participationCount_chain (n : ℕ) (p : P) :
     (D.chain n).participationCount p = ∑ t ∈ range n, (D.step t).participationCount p := by
   induction n with
@@ -210,6 +280,8 @@ theorem participationCount_chain (n : ℕ) (p : P) :
       rw [Nat.card_congr Equiv.subtypeSum, Nat.card_sum]
       rfl
 
+/-- Every nonprivate gate of the composed changes is a nonprivate gate of one change.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:25–37`. -/
 theorem exists_participants_chain (n : ℕ) (g : (D.chain n).nonprivateLocations) :
     ∃ t < n, ∃ g' : (D.step t).nonprivateLocations,
       (D.chain n).participants g = (D.step t).participants g' := by
@@ -221,12 +293,16 @@ theorem exists_participants_chain (n : ℕ) (g : (D.chain n).nonprivateLocations
         exact ⟨t, by omega, g', h⟩
       · exact ⟨n, by omega, g, rfl⟩
 
+/-- The composed changes inherit the expansion bounds of every change.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:25–32`. -/
 theorem isExpansionBounded_chain {r : ℕ} {S : ℝ} (n : ℕ)
     (h : ∀ t < n, (D.step t).IsExpansionBounded r S) : (D.chain n).IsExpansionBounded r S := by
   induction n with
   | zero => trivial
   | succ n ih => exact ⟨ih fun t ht ↦ h t (by omega), h n (by omega)⟩
 
+/-- The composed changes inherit the monomial bounds of every change.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:25–32`. -/
 theorem isMonomialBounded_chain {K : ℕ} (n : ℕ)
     (h : ∀ t < n, (D.step t).IsMonomialBounded K) : (D.chain n).IsMonomialBounded K := by
   induction n with
@@ -234,7 +310,9 @@ theorem isMonomialBounded_chain {K : ℕ} (n : ℕ)
   | succ n ih => exact ⟨ih fun t ht ↦ h t (by omega), h n (by omega)⟩
 
 /-- The protocol, read as one distributed construction of Theorem 5.2 whose gate operators are
-the sums of their recorded monomial expansions. -/
+the sums of their recorded monomial expansions.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:45–49`, and Theorem 5.2,
+`04-compression.tex:137–151`. -/
 def toGateMapConstruction (hL : 0 < L) : GateMapConstruction P where
   nonemptyParties := ⟨D.site (⟨0, hL⟩, ⟨0, hL⟩)⟩
   initialSpace := D.initialSpace
@@ -250,11 +328,19 @@ def toGateMapConstruction (hL : 0 < L) : GateMapConstruction P where
   circuit := EffectCircuit.castLayouts D.layout_zero D.layout_changes (D.chain D.changes).produce
   gateMaps := EffectCircuit.exactGateMaps _
 
+/-- The configuration of the square read from the physical outputs of the parties: the site `v`
+carries the physical output of its unit-square party.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:48–51`. -/
 theorem physicalConfigEquiv_apply (f : (p : P) → Fin (D.physicalDimension p))
     (v : SquareLatticeVertex L L) :
     D.physicalConfigEquiv f v = Fin.cast (D.physicalDimension_site v) (f (D.site v)) := by
   simp only [physicalConfigEquiv]; rfl
 
+/-- The physical density of the protocol, read as a construction of Theorem 5.2, is the physical
+density of its actual final vector, with the party configurations identified with the
+configurations of the square.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:36–49`, and Theorem 5.2,
+`04-compression.tex:150–153`. -/
 theorem physicalDensity_toGateMapConstruction (hL : 0 < L) :
     (D.toGateMapConstruction hL).physicalDensity =
       D.physicalDensity.submatrix D.physicalConfigEquiv D.physicalConfigEquiv := by
@@ -289,7 +375,8 @@ theorem physicalDensity_toGateMapConstruction (hL : 0 < L) :
   ext x y
   simp
 
-/-- Every party has a positive physical dimension when `q` is positive. -/
+/-- Every party has a positive physical dimension when `q` is positive.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:48–51`. -/
 theorem physicalDimension_pos (hq : 0 < q) (p : P) : 0 < D.physicalDimension p := by
   by_cases hp : p ∈ Set.range D.site
   · obtain ⟨v, rfl⟩ := hp
@@ -299,12 +386,14 @@ theorem physicalDimension_pos (hq : 0 < q) (p : P) : 0 < D.physicalDimension p :
     exact one_pos
 
 /-- The physical coordinate of a party read from a local index in `Fin q`: the index itself at
-the unit-square party of a site, and the only coordinate elsewhere. -/
+the unit-square party of a site, and the only coordinate elsewhere.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:25–26` and `158–159`. -/
 def physicalOut (p : P) (i : Fin q) : Fin (D.physicalDimension p) :=
   ⟨i % D.physicalDimension p, Nat.mod_lt _ (D.physicalDimension_pos i.pos p)⟩
 
 /-- Reading every party at the fold of its anchor inverts the identification of the physical
-configurations of the parties with the configurations of the square. -/
+configurations of the parties with the configurations of the square.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:25–26` and `158–159`. -/
 theorem physicalOut_foldVertex (hL : 0 < L) (x : Configuration L q) :
     (fun p ↦ D.physicalOut p (x (foldVertex hL (D.placement.anchor p)))) =
       D.physicalConfigEquiv.symm x := by
@@ -332,7 +421,7 @@ Source: Polynomial-PEPS manuscript (Sept 24 2026), the conclusion of Theorem 5.2
 estimate `eq:protocol-density`, `07-assembly.tex:33–41`. -/
 theorem exists_partyNetwork_of_contractedOperator (hL : 0 < L) {Ω : StateSpace L q} {C : ℝ}
     {b k r : ℕ} (h : D.IsDistributionProtocol Ω C b k r) (hC : 0 ≤ C) (hΩ : ‖Ω‖ = 1)
-    [DecidableEq P] {Gate : Type} [DecidableEq Gate] (gates : Finset Gate)
+    {_ : DecidableEq P} {Gate : Type} {_ : DecidableEq Gate} (gates : Finset Gate)
     (participants : Gate → Finset P) (root : Gate → P)
     (hroot : ∀ g ∈ gates, root g ∈ participants g) (Label : Gate → Type)
     [∀ g, Fintype (Label g)] (m : ℕ) (c : (g : Gate) → Label g → ℂ)
@@ -340,9 +429,10 @@ theorem exists_partyNetwork_of_contractedOperator (hL : 0 < L) {Ω : StateSpace 
       (SampleAt gates participants p → Fin m) →
         Matrix (Fin (D.physicalDimension p)) (Fin (D.physicalDimension p)) ℂ)
     {ε C₁ : ℝ} {α deg : ℕ}
+    {ρ : Matrix ((p : P) → Fin (D.physicalDimension p)) ((p : P) → Fin (D.physicalDimension p)) ℂ}
+    (hρ : ρ = D.physicalDensity.submatrix D.physicalConfigEquiv D.physicalConfigEquiv)
     (herr : Matrix.rectangularTraceNorm
-      (contractedOperator gates participants root hroot Label m c T -
-        D.physicalDensity.submatrix D.physicalConfigEquiv D.physicalConfigEquiv) ≤ ε)
+      (contractedOperator gates participants root hroot Label m c T - ρ) ≤ ε)
     (hdim : ∀ e : Link gates participants root,
       (Fintype.card (alphabet gates participants root Label m e) : ℝ) ≤ C₁ * (L : ℝ) ^ α)
     (hinc : ∀ j, (incidentDistributedLinks gates participants root j).card ≤ deg)
@@ -357,6 +447,7 @@ theorem exists_partyNetwork_of_contractedOperator (hL : 0 < L) {Ω : StateSpace 
         (N.operatorCoeff (fun p ↦ foldVertex hL (D.placement.anchor p)) -
           Matrix.euclideanOuterProduct Ω Ω) ≤ ε + (2 * (C * C) + 2 * C) / (L : ℝ) ^ 10 := by
   classical
+  subst hρ
   set e := D.physicalConfigEquiv
   let N := toPartyNetwork gates participants root hroot Label m c T D.physicalOut D.physicalOut
   have hmem : ∀ ℓ : Link gates participants root,
@@ -407,7 +498,9 @@ open Finset TNLean.PEPS.PairEffect
 
 /-- A protocol with the bounds of §8 for fixed constants, on a square of some side `L ≥ 2`,
 together with its unit target vector. These instances form the family of constructions to which
-Theorem 5.2 is applied. -/
+Theorem 5.2 is applied.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `04-compression.tex:137–139` and
+`07-assembly.tex:45–49`. -/
 private structure ProtocolInstance (q : ℕ) (C : ℝ) (b k r : ℕ) where
   size : ℕ
   two_le : 2 ≤ size
@@ -418,14 +511,32 @@ private structure ProtocolInstance (q : ℕ) (C : ℝ) (b k r : ℕ) where
   norm_target : ‖target‖ = 1
   isDistributionProtocol : protocol.IsDistributionProtocol target C b k r
 
-attribute [instance] ProtocolInstance.fintype
+attribute [local instance] ProtocolInstance.fintype
 
+/-- The floor of a real number is at most its positive part. -/
 private theorem natCast_floor_le_max (x : ℝ) : (⌊x⌋₊ : ℝ) ≤ max x 0 := by
   rcases le_total 0 x with hx | hx
   · exact (Nat.floor_le hx).trans (le_max_left _ _)
   · rw [Nat.floor_eq_zero.mpr (hx.trans_lt one_pos)]
     simp
 
+/-- **The compressed dyadic operator network from the consequences of Proposition 7.1.** If,
+for every `q ≥ 2` and `J, Δ > 0`, every gapped ground vector of a square Hamiltonian of large
+side `L` has a dyadic distribution protocol with the bounds of §8, with constants chosen before
+`L`, the Hamiltonian, and the ground vector, then the compressed dyadic operator network of
+§8.1 exists for all large squares.
+
+The protocols for all sizes, Hamiltonians, and ground vectors form one family of distributed
+constructions with uniformly polynomial gate counts, constant arity and lifetime participation,
+physical dimensions at most `q`, and exact polynomial gate expansions. Theorem 5.2 at accuracy
+`L⁻⁵` gives one operator network per protocol, with constants fixed before the family member;
+the link dimensions are polynomial, every link joins two parties of a common gate, and the
+density error adds to the protocol estimate `‖ρ - |Ω⟩⟨Ω|‖₁ ≤ C L⁻¹⁰`. The separation hypothesis
+of Lemma 8.2 follows from item 3 of Proposition 7.1.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), §8.1, `07-assembly.tex:9–63`, with
+Theorem 5.2 `thm:compression`, `04-compression.tex:137–175`, and the order of constants of
+`07-assembly.tex:179–203`. -/
 theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences
     (hprot : LargeSizeDyadicProtocolConsequences) : LargeSizeDyadicOperatorNetwork := by
   intro q hq J Δ hJ hΔ
@@ -506,6 +617,57 @@ theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences
       (fun i ↦ i.Party) C₀ b 3 0 (max C 0 * b) q
       (mul_nonneg (le_max_right _ _) (Nat.cast_nonneg _)) (Nat.cast_nonneg _)
       hN₀ hphysical₀ harity₀ hlifetime₀ hExpansion 5 (by norm_num)
-  sorry
+  refine ⟨1 + (2 * (C * C) + 2 * C), C_p, α, b, 2 * b * (b - 1), b, L₀, ?_⟩
+  intro L hL hL₀ H E₀ Ω hΩ
+  obtain ⟨P, hP, D, hD⟩ := hall L hL hL₀ H E₀ Ω hΩ
+  let i : ProtocolInstance q C b k r := ⟨L, hL, P, D, Ω, hΩ.1, hD⟩
+  obtain ⟨lists, B, hB, hb, happrox, T, herr, hdim, hinc, hloc⟩ := hfam i
+  have hL0 : 0 < L := by omega
+  have hC : 0 ≤ C := by
+    have h1 : (1 : ℝ) ≤ Fintype.card P := by
+      exact_mod_cast Fintype.card_pos_iff.mpr ⟨D.site (⟨0, hL0⟩, ⟨0, hL0⟩)⟩
+    by_contra hneg
+    have := mul_nonpos_of_nonpos_of_nonneg (not_le.mp hneg).le (sq_nonneg (L : ℝ))
+    linarith [hD.card_le]
+  classical
+  obtain ⟨Λ, _, _, N, hdeg, hsep, hdimN, hnorm⟩ :=
+    D.exists_partyNetwork_of_contractedOperator hL0 hD hC hΩ.1 _ _ _ _ _ _ _ T
+      (D.physicalDensity_toGateMapConstruction hL0) herr hdim hinc (by
+        intro e j l hj hl
+        obtain ⟨g, hjg, hlg⟩ := hloc e j l hj hl
+        obtain ⟨g', hg'⟩ : ∃ g' : (D.chain D.changes).nonprivateLocations,
+            (C₀ i).circuit.participants g = _ :=
+          OriginalCircuit.exists_participants_castLayouts_produce _ _ _ g
+        obtain ⟨t, ht, g'', hg''⟩ := D.exists_participants_chain _ g'
+        refine ⟨t, ht, g'', ?_, ?_⟩
+        · rw [← hg'', ← hg']; exact hjg
+        · rw [← hg'', ← hg']; exact hlg)
+  refine ⟨P, Λ, hP, inferInstance, inferInstance, inferInstance, N, D.placement, hD.inGrid,
+    hD.blockBounded, hdeg, hsep, fun ℓ ↦ (hdimN ℓ).trans_eq (by rw [Real.rpow_natCast]), ?_⟩
+  have hx : (2 : ℝ) ≤ L := by exact_mod_cast hL
+  have hx5 : (0 : ℝ) < (L : ℝ) ^ 5 := by positivity
+  have hpow : (L : ℝ) ^ (-(5 : ℝ)) = 1 / (L : ℝ) ^ 5 := by
+    rw [Real.rpow_neg (by positivity), show (5 : ℝ) = ((5 : ℕ) : ℝ) by norm_num,
+      Real.rpow_natCast, one_div]
+  refine hnorm.trans ?_
+  change (L : ℝ) ^ (-(5 : ℝ)) + _ ≤ _
+  rw [hpow, add_div (1 : ℝ)]
+  have h10 : (L : ℝ) ^ 5 ≤ (L : ℝ) ^ 10 := pow_le_pow_right₀ (by linarith) (by norm_num)
+  have hnn : 0 ≤ 2 * (C * C) + 2 * C := by positivity
+  exact add_le_add le_rfl (div_le_div_of_nonneg_left hnn hx5 h10)
+
+/-- **Theorem 1.1 from the consequences of Proposition 7.1.** The existence, for all large
+squares, of dyadic distribution protocols with the bounds of §8 implies the uniform polynomial
+PEPS approximation of gapped square-grid ground states.
+
+This is a conditional form of Theorem 1.1: the hypothesis, a weakened form of Proposition 7.1,
+is not proved.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Theorem 1.1 `thm:main`,
+`00-introduction.tex:36–57`, and its proof in §8, `07-assembly.tex:9–214`. -/
+theorem polynomialPEPSApproximation_of_largeSizeDyadicProtocolConsequences
+    (h : LargeSizeDyadicProtocolConsequences) : PolynomialPEPSApproximation :=
+  polynomialPEPSApproximation_of_largeSizeDyadicOperatorNetwork
+    (largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences h)
 
 end TNLean.PEPS.Approximation
