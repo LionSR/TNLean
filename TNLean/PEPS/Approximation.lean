@@ -228,8 +228,11 @@ import TNLean.PEPS.Approximation.NoneSourceWordScalar
 import TNLean.PEPS.Approximation.NonemptyGateLabels
 import TNLean.PEPS.Approximation.NonincidentAllGateRestriction
 import TNLean.PEPS.Approximation.OriginalCircuit
+import TNLean.PEPS.Approximation.OriginalCircuitGateMaps
 import TNLean.PEPS.Approximation.OriginalCircuitLift
+import TNLean.PEPS.Approximation.OriginalCircuitSequence
 import TNLean.PEPS.Approximation.OriginalCoefficientMajorant
+import TNLean.PEPS.Approximation.OriginalProducerResources
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates
 import TNLean.PEPS.Approximation.OwnerMemoryTransport
 import TNLean.PEPS.Approximation.OwnerOutputCoordinates
