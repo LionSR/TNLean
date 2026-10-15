@@ -7077,6 +7077,10 @@ spectral split → block extraction → MPV calculation → strict bounds
   `List.ofFn_injective` for its region and exponent lists. These two projection
   comparisons occur in the same argument. The existing list lemmas and the
   objective-norm identity suffice; no additional tactic is introduced.
+  The clipped-spectrum application uses `List.mem_reverse` and
+  `List.forall_mem_ofFn_iff` twice to transfer positivity of exponents and
+  feasibility of densities to that same factor list. Both occurrences are
+  in `RegularizedPatchMinimizerClipping.lean`; the existing list lemmas suffice.
 
 
 ### Monotonicity of a regional-entropy supremum — candidate (2026-10-09)
