@@ -49,6 +49,13 @@ and sharp-comparison bounds. Fixed physical and transport constants precede
 the entropy coefficient; that coefficient precedes the size threshold.
 The label sequence precedes every admissible weight `1 ≤ W ≤ n^omega`.
 Replica thresholds may depend on the fixed physical instance and weight.
+
+**Scope restriction (source-selected density):**
+The original target and positive-prefix entropy bounds, scanner geometry
+and transport smallness remain explicit hypotheses. The conclusion is the
+selected-density estimate with the same sharp comparison.
+See `docs/paper-gaps/arealaw2d_source_selected_density_scope.tex`.
+
 Source: `08-scanner.tex`, lines 353–357, 399–533 and 839–911. -/
 theorem exists_sourceTarget_selected_actualCharge_sharp_density
     {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ)

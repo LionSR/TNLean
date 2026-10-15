@@ -117,6 +117,7 @@ import TNLean.PEPS.AreaLaw.Scan.RegionalMoveEntropy
 import TNLean.PEPS.AreaLaw.Scan.RoughSelectionBudget
 import TNLean.PEPS.AreaLaw.Scan.RoundedClearance
 import TNLean.PEPS.AreaLaw.Scan.RoundedScalePower
+import TNLean.PEPS.AreaLaw.Scan.ScanHistories
 import TNLean.PEPS.AreaLaw.Scan.Scanner
 import TNLean.PEPS.AreaLaw.Scan.SelectedChainProbability
 import TNLean.PEPS.AreaLaw.Scan.SelectedDensityPower

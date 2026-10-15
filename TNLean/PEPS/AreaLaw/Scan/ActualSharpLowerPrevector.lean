@@ -196,6 +196,12 @@ are precisely the nonzero/norm and little-o conclusions of the accepted physical
 prevector theorem; the auxiliary and symmetry equations are derived here.
 All physical marginal moments concern the same unit state used in the gap.
 The actual energy defect remains explicit at every interpolation.
+
+**Scope restriction (supplied-sequence lower rate):** The gap and original-state
+status moments are hypotheses, together with the supplied sequence's nonzero/norm
+and label-dimension conclusions. Its actual energy defect is retained; common-point
+comparison and final source-scale absorption are not established here. See
+`docs/paper-gaps/arealaw2d_actual_sharp_lower_scope.tex`.
 Source: `07-comparators.tex`, lines 130--153, 255--281 and 550--651;
 `08-scanner.tex`, lines 400--474, adc7f124. -/
 theorem exists_actualScan_suppliedPrevector_sharp_lower

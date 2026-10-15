@@ -726,3 +726,64 @@ This gives the contractions used in
     \uses{def:peps_source_sample_assignment_indices}
     Reindex the finite sum by the inverse bijection $T^{-1}$.
 \end{proof}
+
+
+\begin{theorem}[Number of the original shared samples]
+    \label{thm:peps_original_source_sample_count}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.length_allSourceSlots_eq_sum_pairSampleLabels}
+    \leanok
+    \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices,
+        thm:peps_source_pair_count}
+    Let $G$ be the nonempty participant occurrences of the original
+    chronological composition. For $g\in G$, write $C_g$ for its
+    participant set and $\mathcal E(C_g)$ for the unordered pairs of
+    distinct members of $C_g$. If $N$ is the number of original source
+    slots, then
+    \begin{align}
+        N & =\sum_{g\in G}|\mathcal E(C_g)|
+        =\sum_{g\in G}\binom{|C_g|}{2}.
+        \label{eq:peps_original_source_sample_count}
+    \end{align}
+    Repeated gate uses are counted as distinct occurrences.
+    Empty and singleton participant sets contribute no source slots.
+    This is an auxiliary count for
+    \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 342--417 and 568--588.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:peps_all_original_source_slots,def:peps_original_source_sample_indices,
+        thm:peps_source_pair_count}
+    The original ordered source slots are in bijection with the
+    disjoint union of the sets $\mathcal E(C_g)$. Take cardinalities
+    and sum over the original occurrences. The number of unordered
+    distinct pairs in $C_g$ is $\binom{|C_g|}{2}$.
+\end{proof}
+
+\begin{theorem}[Distributing the source averaging factor]
+    \label{thm:peps_original_source_sample_averaging}
+    \lean{TNLean.PEPS.PairEffect.SourceCircuit.inv_sampleSize_pow_allSourceSlots_eq_prod}
+    \leanok
+    \uses{thm:peps_original_source_sample_count}
+    With the notation of Theorem~\ref{thm:peps_original_source_sample_count},
+    for any nonnegative integer $k$,
+    \begin{align}
+        (k^{-1})^N & =\prod_{g\in G}(k^{-1})^{|\mathcal E(C_g)|}.
+        \label{eq:peps_original_source_sample_averaging}
+    \end{align}
+    The equality holds in $\C$, with $0^{-1}=0$ and zeroth powers
+    equal to $1$. It includes $k=0$ and an empty family of gates.
+    The scalar from empty participant occurrences remains separate.
+    This distributes one averaging factor to each gate-owned sample
+    in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+    % Source: 04-compression.tex, lines 568--588.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_original_source_sample_count}
+    Substitute (\ref{eq:peps_original_source_sample_count}) for $N$ and
+    use the product formula
+    for powers in a commutative monoid. No cancellation is required.
+\end{proof}

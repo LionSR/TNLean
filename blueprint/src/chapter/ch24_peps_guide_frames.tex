@@ -1,0 +1,155 @@
+\section{Encoded frames of guides}
+\label{sec:peps_guide_frames}
+The statements below set up the encoded frames used in the proof of
+Proposition~7.1 of \cite{OpenAI2026PolynomialPEPS}, September 24, 2026,
+\texttt{06-geometry.tex}, lines 62--125 and 669--672: the raw owners are read
+from a guide at the sampled sites, the holes sit at given centers with the
+patches supplied by Proposition~4.1 of the same source, and the tags are held by
+a canonical incident label. Proposition~4.1 itself is stated here and enters as
+a hypothesis; its proof is not part of this section.
+
+We keep the setting of Section~\ref{sec:peps_encoded_frames}. For square cylinder
+data with radii $r_1,\ldots,r_n$ and vectors $v_{j\ell}$, write
+\[
+    \Pi=\sum_{j=1}^{n}\sum_{\ell=1}^{d_j}
+    \bigl(\ket{v_{j\ell}}\bra{v_{j\ell}}\bigr)_{D_j}\otimes\id
+\]
+for the sum of the cylinder projectors, without the convention for an empty
+outer sample.
+
+\begin{definition}[Statement of the adaptive patch constraint]
+    \label{def:peps_adaptive_patch_constraint}
+    \lean{TNLean.PEPS.EncodedFrame.SquarePatch.cylSum,
+        TNLean.PEPS.EncodedFrame.HasAdaptivePatch,
+        TNLean.PEPS.EncodedFrame.AdaptivePatchSupply,
+        TNLean.PEPS.Approximation.latticePos,
+        TNLean.PEPS.Approximation.AdaptivePatchConstraint}
+    \leanok
+    \uses{def:peps_frame_square_patch}
+    Let $\Lambda_L=\{1,\ldots,L\}^2$ with its sites at their integer positions.
+    The adaptive patch constraint is the following assertion. Fix $q\ge2$,
+    $J,\Delta>0$, $B_0>0$ and $p>0$. There are constants $C,c>0$ such that for
+    every $L\ge2$, every square Hamiltonian with local bounds $J$ and every
+    unit ground vector $\Omega$ with gap $\Delta$, every center $z\in\R^2$ and
+    every $0<u\le B_0\log L$ admit square cylinder data at $(z,u)$ with
+    \[
+        \sum_{j}d_j\le CL^c,
+        \qquad
+        \lVert(\id-\Pi)\Omega\rVert\le L^{-p}.
+    \]
+    This is \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS},
+    \texttt{03-patches.tex}, lines 26--49, with the parameters of the main
+    theorem fixed as in \texttt{01-preliminaries.tex}, lines 3--10. The sum
+    $\Pi$ is an orthogonal projection supported on the sample of the square of
+    radius $2u$ because the cylinder projectors have orthogonal ranges.
+\end{definition}
+
+\begin{lemma}[Supplied patches]
+    \label{lem:peps_adaptive_patch_supply}
+    \lean{TNLean.PEPS.EncodedFrame.SquarePatch.proj_eq_cylSum,
+        TNLean.PEPS.EncodedFrame.SquarePatch.norm_act_proj_sub_le,
+        TNLean.PEPS.EncodedFrame.SquarePatch.card_tag_le_max,
+        TNLean.PEPS.EncodedFrame.SquarePatch.translate,
+        TNLean.PEPS.EncodedFrame.HasAdaptivePatch.translate,
+        TNLean.PEPS.EncodedFrame.patchAt,
+        TNLean.PEPS.EncodedFrame.norm_act_proj_patchAt_sub_le,
+        TNLean.PEPS.EncodedFrame.card_tag_patchAt_le,
+        TNLean.PEPS.Approximation.cellCenterPos,
+        TNLean.PEPS.Approximation.AdaptivePatchSupply.cellCenterPos,
+        TNLean.PEPS.Approximation.AdaptivePatchConstraint.supply_cellCenterPos}
+    \leanok
+    \uses{def:peps_adaptive_patch_constraint, def:peps_frame_hole_encoder}
+    If the outer sample of square cylinder data is nonempty, its projector
+    $P_{c,h}$ is $\Pi$; in all cases
+    $\lVert(\id-P_{c,h})\Omega\rVert\le\lVert(\id-\Pi)\Omega\rVert$ and the
+    number of tags is at most $\max\{1,\sum_jd_j\}$. Translating the site
+    positions and the center by one vector does not change the samples, so the
+    conclusion of the adaptive patch constraint is translation invariant. Hence,
+    if the adaptive patch constraint holds, then with the same constants it holds
+    on the sites placed at the cell centers $(i+\tfrac12,j+\tfrac12)$,
+    $0\le i,j<L$, as in \texttt{06-geometry.tex}, lines 62--63. Fixing one
+    supplied patch for each center and scale, the projector of the patch at
+    $(z,u)$ has error at most $L^{-p}$ on $\Omega$ and at most $\max\{1,CL^c\}$
+    tags. The patch depends only on the center and the scale, so a given center
+    and radius receive the same patch on every sheet, as required at
+    \texttt{06-geometry.tex}, lines 114--118.
+\end{lemma}
+
+\begin{proof}\leanok
+    With a nonempty outer sample the tags are the pairs $(j,\ell)$; with an
+    empty one the projector is the identity. A translation preserves sup-norm
+    distances.
+\end{proof}
+
+\begin{definition}[Canonical tag holder and the frame of a guide]
+    \label{def:peps_guide_frame}
+    \lean{TNLean.PEPS.Approximation.tagHolder,
+        TNLean.PEPS.Approximation.guideFrame}
+    \leanok
+    \uses{def:peps_dyadic_incident_labels, def:peps_frame}
+    Fix a ranking of the labels by natural numbers and a placeholder label. The
+    canonical tag holder of a point $c$ of a guide is the incident label at $c$
+    other than the placeholder of least rank. Given a guide read at the sites, an
+    assignment of parties to labels, a finite set $V$ of centers and a square
+    patch at each center, with pairwise disjoint outer samples, the frame of the
+    guide has the raw owner of a site equal to the party of the label read at its
+    position, and one hole at each center of $V$, carrying its patch, with tag
+    held by the party of the canonical tag holder. This is the frame described
+    in \cite[Section~7]{OpenAI2026PolynomialPEPS}, \texttt{06-geometry.tex},
+    lines 69--80 and 109--125.
+\end{definition}
+
+\begin{lemma}[Canonical tag holders]
+    \label{lem:peps_guide_frame_tags}
+    \lean{TNLean.PEPS.Approximation.isTagHolder_tagHolder,
+        TNLean.PEPS.Approximation.tagHolder_ne,
+        TNLean.PEPS.Approximation.rank_tagHolder_le,
+        TNLean.PEPS.Approximation.tagHolder_congr}
+    \leanok
+    \uses{def:peps_guide_frame, lem:peps_dyadic_tags}
+    At a true vertex the canonical tag holder is an incident label other than the
+    placeholder, and it has least rank among such labels. Guides with the same
+    incident labels at a point have the same canonical tag holder there, so the
+    tag of a hole accompanies it through every change that keeps the incident
+    labels, as at \texttt{06-geometry.tex}, lines 123--125.
+\end{lemma}
+
+\begin{proof}\leanok
+    A true vertex has an incident label other than the placeholder, so the set
+    of candidates is nonempty and has an element of least rank. The set of
+    candidates depends only on the incident labels.
+\end{proof}
+
+\begin{theorem}[Reference vectors of guide frames]
+    \label{thm:peps_guide_frame_norm}
+    \lean{TNLean.PEPS.Approximation.disjoint_outer_of_disjoint_closedBall,
+        TNLean.PEPS.Approximation.pairwise_disjoint_outer_patchAt,
+        TNLean.PEPS.Approximation.mem_holes_guideFrame,
+        TNLean.PEPS.Approximation.length_holes_guideFrame,
+        TNLean.PEPS.Approximation.one_sub_mul_le_norm_refVec_guideFrame,
+        TNLean.PEPS.Approximation.one_sub_mul_le_norm_refVec_guideFrame_patchAt,
+        TNLean.PEPS.Approximation.outer_eq_empty_of_isCellCenter,
+        TNLean.PEPS.Approximation.guideFrame_unitLevel}
+    \leanok
+    \uses{def:peps_guide_frame, thm:peps_frame_norm, lem:peps_adaptive_patch_supply}
+    Patches whose closed outer squares are disjoint in the plane have disjoint
+    outer samples. Let $\lVert\Omega\rVert=1$. If every patch at a center of $V$
+    has projector error at most $\varepsilon$ on $\Omega$, the reference vector of
+    the frame of a guide satisfies
+    $1-\lvert V\rvert\varepsilon\le\lVert\Omega_{\mathcal F}\rVert\le1$; with
+    supplied patches one may take $\varepsilon=L^{-p}$. If the sites lie at cell
+    centers, every center of $V$ is a corner of a unit block, and every outer
+    radius is less than $\tfrac12$, then every hole has empty physical outer
+    sample, the encoding is an isometry and
+    $\lVert\Omega_{\mathcal F}\rVert=\lVert\Omega\rVert$. This is the last level
+    $n=1$ of \texttt{06-geometry.tex}, lines 669--672, where
+    $2h_1\le2\epsilon_0<\tfrac12$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The first claim is the definition of the outer samples. The bound is
+    Theorem~\ref{thm:peps_frame_norm}, since the frame has $\lvert V\rvert$ holes.
+    A cell center is at sup distance at least $\tfrac12$ from every integer
+    point, so the outer samples at $n=1$ are empty and every hole projector is
+    the identity.
+\end{proof}

@@ -128,7 +128,15 @@ Both sharp remainders are uniform in that selected point.
 The original-state prefix entropy input is transferred to this same state
 and bounds the actual endpoint logarithms. The selector's density bound
 retains its vanishing remainder. Transport smallness and geometric inequalities
-remain explicit. Source: `08-scanner.tex`, lines 400--533 and 839--911. -/
+remain explicit.
+
+**Scope restriction (source-selected comparison):**
+The original positive-prefix entropy bound, scanner geometry and
+transport smallness remain explicit hypotheses. This endpoint proves the
+selected comparison and its density budget, without the final collar bound.
+See `docs/paper-gaps/arealaw2d_source_selected_sharp_comparison_scope.tex`.
+
+Source: `08-scanner.tex`, lines 400--533 and 839--911. -/
 theorem exists_sourceTarget_selected_actualCharge_sharp_comparison
     {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ)
     {J Δ C_T C₁ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)

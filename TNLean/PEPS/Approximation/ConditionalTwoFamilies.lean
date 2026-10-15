@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.TwoFamilies
+import TNLean.PEPS.AreaLaw.EntropyDimension
 import QICLean.Entropy.ConditionalTwoFamilies
 
 /-!
@@ -16,9 +16,15 @@ stated directly with the four already-defined regional entropies. No new state,
 partition, or conditional-information definition is introduced here.
 
 This is the entropy step in the proof of OpenAI's PEPS cell-information lemma,
-September 24, 2026, Lemma 3.2, `eq:info-tile-cost`. It does not prove the cell's
-geometric decomposition or its polylogarithmic counting estimate. These proofs
-are independently written; no upstream Lean proof text is reused.
+September 24, 2026, Lemma 3.2, `eq:info-tile-cost`. Its counting form charges each
+remainder site `2 log q` and each piece the common tile cost `C₂`; with no pieces
+it is the small-cell bound `I(G : C | B) ≤ 2 |G| log q`. It does not prove the
+cell's geometric decomposition or its polylogarithmic counting estimate. These
+proofs are independently written; no upstream Lean proof text is reused.
+
+Source: *Polynomial PEPS approximation of gapped square-grid ground states*,
+proof of Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`, lines 197–222 and
+310–311, revision `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 -/
 
 open scoped BigOperators
@@ -102,5 +108,53 @@ theorem regionalEntropy_conditional_le_residual_add_sum
       2 * regionalEntropy Λ q Ω P.residual + ∑ i, ε i := by
   simp only [regionalEntropy_eq_finiteProduct]
   exact P.conditionalMutualInformation_le_sum _ Ω hΩ B C hGB hGC hBC ε h₀ h₁
+
+/-- **Counting form of the conditional information bound.** If every piece of an
+ordered two-family partition of `G` has information at most `C₂` with its
+exterior and the earlier pieces of its family, then
+`I(G : C | B) ≤ 2 |D| log q + (number of pieces) C₂`, where `D` is the
+remainder. Each remainder site costs at most `2 log q`.
+Source: Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`, lines 197–222,
+`eq:info-tile-cost`. -/
+theorem regionalEntropy_conditional_le_card_residual_add_pieceCount
+    (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
+    (G B C : Finset (Site Λ)) (P : Geometry.OrderedTwoFamilyPartition G)
+    (hGB : Disjoint G B) (hGC : Disjoint G C) (hBC : Disjoint B C) (C₂ : ℝ)
+    (h₀ : ∀ i, P.family i = 0 →
+      FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω (P.piece i)
+        (C ∪ B ∪ P.earlierSameFamily i) ≤ C₂)
+    (h₁ : ∀ i, P.family i = 1 →
+      FiniteProduct.mutualInformation (fun _ : Site Λ ↦ Fin q) Ω (P.piece i)
+        ((G ∪ B)ᶜ ∪ P.earlierSameFamily i) ≤ C₂) :
+    regionalEntropy Λ q Ω (G ∪ B) + regionalEntropy Λ q Ω (C ∪ B) -
+        regionalEntropy Λ q Ω B - regionalEntropy Λ q Ω (G ∪ C ∪ B) ≤
+      2 * (P.residual.card : ℝ) * Real.log q + P.pieceCount * C₂ := by
+  have h := regionalEntropy_conditional_le_residual_add_sum Λ q Ω hΩ G B C P
+    hGB hGC hBC (fun _ ↦ C₂) h₀ h₁
+  have hD := regionalEntropy_le_card_mul_log Λ q Ω hΩ P.residual
+  simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul] at h
+  linarith
+
+/-- **Small-cell bound.** For a normalized pure state and pairwise-disjoint `G`,
+`B`, `C`, `I(G : C | B) ≤ 2 |G| log q`. This is the counting form for the
+partition of `G` with no pieces and remainder `G`.
+Source: Lemma 3.2 (`lem:cell-cmi`), `02-information.tex`, lines 310–311. -/
+theorem regionalEntropy_conditional_le_two_mul_card_mul_log
+    (Λ : Finset (ℤ × ℤ)) (q : ℕ) (Ω : StateSpace Λ q) (hΩ : ‖Ω‖ = 1)
+    (G B C : Finset (Site Λ))
+    (hGB : Disjoint G B) (hGC : Disjoint G C) (hBC : Disjoint B C) :
+    regionalEntropy Λ q Ω (G ∪ B) + regionalEntropy Λ q Ω (C ∪ B) -
+        regionalEntropy Λ q Ω B - regionalEntropy Λ q Ω (G ∪ C ∪ B) ≤
+      2 * (G.card : ℝ) * Real.log q := by
+  let P : Geometry.OrderedTwoFamilyPartition G :=
+    { pieceCount := 0
+      family := Fin.elim0
+      piece := Fin.elim0
+      residual := G
+      disjoint := fun i ↦ i.elim0
+      residual_disjoint := fun i ↦ i.elim0
+      cover := by simp }
+  simpa [P] using regionalEntropy_conditional_le_card_residual_add_pieceCount Λ q Ω hΩ
+    G B C P hGB hGC hBC 0 (fun i ↦ i.elim0) (fun i ↦ i.elim0)
 
 end TNLean.PEPS.AreaLaw

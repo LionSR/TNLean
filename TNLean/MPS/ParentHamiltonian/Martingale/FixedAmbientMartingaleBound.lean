@@ -23,6 +23,8 @@ open scoped BigOperators ComplexOrder
 
 namespace MPSTensor
 
+variable {d D : ℕ}
+
 /-- Before the first full interaction window fits, the fixed-ambient prefix
 Hamiltonian vanishes. -/
 theorem openPrefixParentHamiltonianES_eq_zero_of_lt
@@ -82,22 +84,8 @@ theorem openPrefixParentHamiltonianES_eq_openSuffixParentHamiltonianES_at_endpoi
         omega⟩
     rw [openPrefixParentHamiltonianES, Fintype.sum_subsingleton _ i']
   have hsuffix : openSuffixParentHamiltonianES A L L N L = localTermES A L i.1 := by
-    have hfilter :
-        Finset.univ.filter (fun j : NonwrappingStart L N =>
-          L - L ≤ j.1.val ∧ j.1.val + L ≤ L) = {i} := by
-      ext j
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and,
-        Finset.mem_singleton]
-      constructor
-      · intro hj
-        apply Subtype.ext
-        apply Fin.ext
-        change j.1.val = 0
-        omega
-      · intro hji
-        subst j
-        simp [i, iFin]
-    rw [openSuffixParentHamiltonianES, hfilter, Finset.sum_singleton]
+    simpa only [Nat.sub_self] using
+      openSuffixParentHamiltonianES_eq_localTermES A hL le_rfl hLN
   exact hprefix.trans hsuffix.symm
 
 /-- At the endpoint \(n=l\), the local ground projection is the next prefix

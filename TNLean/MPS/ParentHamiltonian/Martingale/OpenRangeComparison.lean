@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.Martingale.CyclicWindowOpenHamiltonian
 import TNLean.MPS.ParentHamiltonian.Martingale.OpenHamiltonian
+import TNLean.MPS.ParentHamiltonian.Martingale.EmbeddedC2
 import TNLean.MPS.ParentHamiltonian.Martingale.FiniteIntervalGapComparison
 import TNLean.MPS.ParentHamiltonian.Martingale.SpectatorOrder
 import TNLean.MPS.ParentHamiltonian.PrimitiveGaugeExistence
@@ -148,31 +149,6 @@ theorem sum_openSuffixParentHamiltonianES_full_window
     ∑ n ∈ Finset.Icc W N, openSuffixParentHamiltonianES A W W N n =
       openParentHamiltonianES A W N := by
   classical
-  have hSuffix (n : ℕ) (hn : n ∈ Finset.Icc W N) :
-      openSuffixParentHamiltonianES A W W N n =
-        localTermES A W (⟨n - W, by
-          have := Finset.mem_Icc.mp hn
-          omega⟩ : Fin N) := by
-    have hnBounds := Finset.mem_Icc.mp hn
-    let i : NonwrappingStart W N := ⟨⟨n - W, by omega⟩, by
-      change n - W + W ≤ N
-      omega⟩
-    have hfilter :
-        Finset.univ.filter (fun j : NonwrappingStart W N =>
-          n - W ≤ j.1.val ∧ j.1.val + W ≤ n) = {i} := by
-      ext j
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_singleton]
-      constructor
-      · intro hj
-        apply Subtype.ext
-        apply Fin.ext
-        change j.1.val = n - W
-        omega
-      · intro hji
-        subst j
-        change n - W ≤ n - W ∧ n - W + W ≤ n
-        omega
-    rw [openSuffixParentHamiltonianES, hfilter, Finset.sum_singleton]
   rw [openParentHamiltonianES]
   apply Finset.sum_bij (fun n hn =>
     (⟨⟨n - W, by
@@ -199,7 +175,8 @@ theorem sum_openSuffixParentHamiltonianES_full_window
       simp only
       omega
   · intro n hn
-    rw [hSuffix n hn]
+    have hn := Finset.mem_Icc.mp hn
+    exact openSuffixParentHamiltonianES_eq_localTermES A hW hn.1 hn.2
 
 /-- A positive comparison on one window bounds the longer-range open-chain
 Hamiltonian by the shorter-range one at every volume. Each short-range term

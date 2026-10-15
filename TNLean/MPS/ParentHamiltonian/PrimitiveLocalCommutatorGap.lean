@@ -159,39 +159,16 @@ theorem IsPrimitiveMPS.localCommutator_gap_of_open_gap
           (groundSpaceES A R)ᗮ.starProjection) X)).re := by
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
   let h := canonicalParentInteractionMatrix A R
-  let B (n : ℕ) := ((Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
-    (chainWindowOperator (N n) (n + (R - 1)) X)).toLinearMap
-  have hGround' : ∀ᶠ n in atTop,
-      ψ n ∈ LinearMap.ker (openParentHamiltonianES A R (N n)) := by
-    filter_upwards [hKernel, hGround] with n hn hg
-    simpa only [N, hn] using hg
-  have hNorm : Tendsto (fun n => ‖B n (ψ n)‖ ^ 2) atTop
-      (nhds (observableInsertionExpectation A ρ (Xᴴ * X)).re) := by
-    have hnorm := hP.bulkObservable_groundState_norm_sq_tendsto hρ X
-      (ℓ := fun n : ℕ => n + (R - 1)) (r := fun n => (R - 1) + n)
-      (tendsto_add_atTop_nat (R - 1))
-      (by simpa only [Nat.add_comm] using tendsto_add_atTop_nat (R - 1))
-    simp only [bulkObservable_eq_chainWindowOperator hk] at hnorm
-    exact hnorm ψ hGround hUnit
-  have hProjection : Tendsto (fun n =>
-      ‖(LinearMap.ker (openParentHamiltonianES A R (N n))).starProjection
-        (B n (ψ n))‖ ^ 2) atTop (nhds 0) := by
-    have hproj := hP.bulkObservable_groundSpace_projection_norm_sq_tendsto_zero hρ X
-      hcenter (ℓ := fun n : ℕ => n + (R - 1)) (r := fun n => (R - 1) + n)
-      (tendsto_add_atTop_nat (R - 1))
-      (by simpa only [Nat.add_comm] using tendsto_add_atTop_nat (R - 1))
-    simp only [bulkObservable_eq_chainWindowOperator hk] at hproj
-    apply (hproj ψ hGround (hUnit.mono fun _ hn => hn.le)).congr'
-    filter_upwards [hKernel] with n hn
-    simp only [B, N, hn, ContinuousLinearMap.coe_coe]
-  have hEnergy : Tendsto (fun n =>
-      (inner ℂ (((B n).adjoint.comp
-        ((openParentHamiltonianES A R (N n)).comp (B n) -
-          (B n).comp (openParentHamiltonianES A R (N n)))) (ψ n)) (ψ n)).re)
-      atTop (nhds (observableInsertionExpectation A ρ (localCommutatorObservable h X)).re) := by
-    have henergy := hP.localCommutatorObservable_expectation_tendsto hρ h X hR hk
-      N (fun n => by dsimp [N]; omega) ψ hGround hUnit
-    apply henergy.congr'
+  have hEnergy :
+      let B (n : ℕ) := ((Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
+        (bulkObservable X (n + (R - 1)) (R - 1 + n))).toLinearMap
+      Tendsto (fun n =>
+        (inner ℂ (((B n).adjoint.comp
+          ((openParentHamiltonianES A R (N n)).comp (B n) -
+            (B n).comp (openParentHamiltonianES A R (N n)))) (ψ n)) (ψ n)).re)
+        atTop (nhds (observableInsertionExpectation A ρ (localCommutatorObservable h X)).re) := by
+    apply (hP.localCommutatorObservable_expectation_tendsto hρ h X hR hk
+      N (fun n => by dsimp [N]; omega) ψ hGround hUnit).congr'
     filter_upwards [] with n
     have hH : Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ)
         (openInteractionMatrix h (N n)) =
@@ -200,12 +177,16 @@ theorem IsPrimitiveMPS.localCommutator_gap_of_open_gap
         (toEuclideanCLM_openInteractionMatrix_parentInteraction A hR (by dsimp [N]; omega))
     dsimp only
     rw [map_mul, map_sub, map_mul, map_mul, ← Matrix.star_eq_conjTranspose,
-      map_star, ContinuousLinearMap.star_eq_adjoint, hH]
+      map_star, ContinuousLinearMap.star_eq_adjoint, hH,
+      ← bulkObservable_eq_chainWindowOperator hk X (n + (R - 1)) (R - 1 + n)]
     rfl
-  exact FrustrationFree.commutator_gap_of_tendsto_ground_projection_zero
-    (fun n => openParentHamiltonianES A R (N n)) B ψ hγ
+  exact hP.commutator_gap_of_bulkObservable_energy_limit hρ X hcenter
+    (ℓ := fun n : ℕ => n + (R - 1)) (r := fun n => (R - 1) + n)
+    (tendsto_add_atTop_nat (R - 1))
+    (tendsto_atTop_mono (fun n => Nat.le_add_left n (R - 1)) tendsto_id)
+    (fun n => openParentHamiltonianES A R (N n)) ψ hγ
     (Eventually.of_forall fun n => openParentHamiltonianES_isPositive A R (N n))
-    hGap hGround' hNorm hProjection hEnergy
+    hGap hKernel hGround hUnit hEnergy
 
 /-- At every range at least \(D^4+1\), a normalized primitive sector obeys
 one positive local commutator bound for all centered local observables.
