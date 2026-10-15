@@ -7268,6 +7268,21 @@ spectral split → block extraction → MPV calculation → strict bounds
   common occurrence-wise description before adding another structural induction.
 
 
+- **Further use (2026-10-15):**
+  `OriginalCircuit.participationCount_castLayouts` in
+  `OriginalCircuitLayoutResources.lean` uses the same ordinary equality
+  elimination. The complete protocol's lifetime bound reuses
+  `OriginalCircuit.participationCount_sequence`; no new chronological
+  induction or custom tactic is introduced. The focused approximation scan finds
+  nine occurrences of the three-line equality-elimination proof, including
+  this helper; these continue the existing congruence decision rather than
+  introducing an additional structural induction. The generic
+  `forall_participants_castLayouts` also preserves arbitrary participating-set
+  properties; the complete protocol derives one common-stage witness by applying
+  the existing `forall_participants_sequence`, rather than repeating its induction. The
+  complete protocol's uniform monomial and expansion bounds likewise apply the
+  existing layout and sequence lemmas; no new structural induction is needed.
+
 ### Evaluation under equal register lists — promoted (2026-10-08)
 
 - **Pattern:** Apply a word whose input and output register lists have been

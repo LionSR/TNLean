@@ -124,6 +124,7 @@ import TNLean.PEPS.Approximation.DyadicPointTreatmentRewrite
 import TNLean.PEPS.Approximation.DyadicPointTreatmentStep
 import TNLean.PEPS.Approximation.DyadicProtocol
 import TNLean.PEPS.Approximation.DyadicProtocolChanges
+import TNLean.PEPS.Approximation.DyadicProtocolCircuitBounds
 import TNLean.PEPS.Approximation.DyadicProtocolConstants
 import TNLean.PEPS.Approximation.DyadicProtocolDensityCoordinates
 import TNLean.PEPS.Approximation.DyadicProtocolOriginalCircuit
@@ -241,6 +242,7 @@ import TNLean.PEPS.Approximation.NonincidentAllGateRestriction
 import TNLean.PEPS.Approximation.OrderedGateLabelPairSum
 import TNLean.PEPS.Approximation.OriginalCircuit
 import TNLean.PEPS.Approximation.OriginalCircuitGateMaps
+import TNLean.PEPS.Approximation.OriginalCircuitLayoutResources
 import TNLean.PEPS.Approximation.OriginalCircuitLift
 import TNLean.PEPS.Approximation.OriginalCircuitSequence
 import TNLean.PEPS.Approximation.OriginalCircuitSourceBound
