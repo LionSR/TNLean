@@ -237,8 +237,9 @@ at the gate occurrences may be replaced independently.
     \lean{TNLean.PEPS.PairEffect.GateMapConstruction.exists_uniform_approximate_sampled_network}
     \leanok
     \uses{thm:peps_uniform_prescribed_expansion_bounds,thm:peps_fixed_chronology_evaluation,thm:peps_fixed_chronology_participants,thm:peps_fixed_chronology_gate_count,thm:peps_fixed_chronology_lifetime,def:peps_original_gate_construction,thm:peps_effect_coefficient_majorant,thm:peps_distributed_operator_scalar_absorption}
-    Let $\mathcal C_L$ be a family of original distributed constructions indexed
-    by sizes $L\ge2$. The original party memories are finite-dimensional,
+    Let $(\mathcal C_i)_{i\in I}$ be a family of original distributed
+    constructions indexed by an arbitrary set $I$, and let each index carry
+    a size $L=L_i\ge2$. Several indices may share one size. The original party memories are finite-dimensional,
     the input is a product of normalized party vectors, and the original
     private maps, nonprivate gate operators, physical output order, and
     discarded registers are fixed before any precision is chosen.

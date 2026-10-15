@@ -139,7 +139,8 @@ occurrence and preserves the operator of that list exactly.
     \leanok
     \uses{thm:peps_uniform_approximate_operator_network,def:peps_original_gate_construction,thm:peps_message_expand_gate_approximation,thm:peps_message_expand_monomial_count,thm:peps_message_expand_termwise_bound,thm:homogeneous_ceiling_bound}
     Fix a family of original distributed constructions on finite nonempty
-    party sets at sizes $L\ge2$.
+    party sets, indexed by an arbitrary set, each index carrying a size
+    $L\ge2$; several indices may share one size.
     The original gate operators, private maps, participant embeddings, register
     layouts, and normalized product inputs are fixed before any precision is
     chosen. Every original gate and private operation is a contraction. Initial and discarded private spaces are finite-dimensional,
@@ -213,7 +214,8 @@ occurrence and preserves the operator of that list exactly.
     \leanok
     \uses{thm:peps_uniform_original_message_compression}
     Fix a family of original distributed constructions on finite nonempty
-    party sets at sizes $L\ge2$, with normalized product inputs and finite-dimensional original and
+    party sets, indexed by an arbitrary set with a size $L\ge2$ at each index,
+    with normalized product inputs and finite-dimensional original and
     discarded private memories. The original operators, private maps,
     participant embeddings, and chronological occurrences are fixed.
     Suppose that gate arity and whole-lifetime participation are at most $b$,
