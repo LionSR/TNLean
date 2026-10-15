@@ -24,6 +24,22 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Positional factors in reversed finite lists — promoted through Mathlib
+
+- **Pattern:** Recover an index of a factor in a reversed finite list, transfer
+  its indexed assumptions, and express descending nesting by the original
+  increasing index order.
+- **Seen:** `isPatchMinimizer_regularizedPatchFactorList` in
+  `PEPS/AreaLaw/RegularizedPatchListCoordinates.lean` and
+  `normalizedRegularizedPatchMarginal_stationarity_of_isMinOn` in
+  `PEPS/AreaLaw/RegularizedPatchMinimizerStationarity.lean`.
+- **Abstraction:** Existing `List.mem_reverse`, `List.mem_ofFn`,
+  `List.pairwise_reverse` and `List.pairwise_ofFn` give the positional
+  membership and order statements. The stationarity proof shares its local
+  index witness when transferring exponent and density assumptions.
+- **Notes:** No injectivity of the regions or factors is required; equal
+  regions retain independent positions in the minimizing comparison.
+
 ### Named comparison of arbitrary word evaluations — promoted (2026-10-14)
 
 - **Pattern:** Retain two constructed words and their own layouts in a named
