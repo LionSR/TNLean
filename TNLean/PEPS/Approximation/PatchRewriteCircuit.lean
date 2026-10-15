@@ -123,7 +123,7 @@ variable [DecidableEq Party] in
 exchange of tensor factors leaves the registers of the other parties in place. -/
 theorem fixesOutside_of_mem (hR : R.Conditions) (M : PartyChain R.oldFrame.regs R.newFrame.regs)
     (hU : M.UsesOnly (R.parties : Set Party))
-    (hM : ∀ f : Party → Bool, (∀ x ∈ R.parties, f x = true) → M.SwapsMeet f) :
+    (hM : M.SwapsMeetSet (R.parties : Set Party)) :
     M.FixesOutside R.parties (R.restrict_regs_eq hR) := by
   have hS : {p | decide (p ∈ R.parties) = true} = (R.parties : Set Party) := by
     ext

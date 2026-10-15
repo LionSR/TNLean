@@ -480,7 +480,7 @@ theorem exists_termChain (hR : R.Conditions) (β : R.Branch)
     (i : (v : Fin (R.branchSteps β).length ⊕ Fin (R.branchSteps β).length) → Fin (r v)) :
     ∃ (σ : ℂ) (M : PartyChain R.oldFrame.regs R.newFrame.regs), ‖σ‖ ≤ 1 ∧ M.IsAllowed ∧
       M.UsesOnly (R.parties : Set Party) ∧
-      (∀ f : Party → Bool, (∀ x ∈ R.parties, f x = true) → M.SwapsMeet f) ∧
+      M.SwapsMeetSet (R.parties : Set Party) ∧
       M.sourceCount ≤ 2 * R.patches.length ∧
       M.toEffectChain.effectCount ≤ 2 * R.patches.length ∧
       ∀ z, σ • R.newFrame.regIso (M.toEffectChain.eval z) =
@@ -589,7 +589,7 @@ theorem exists_allowed_monomial_approx (hR : R.Conditions) {δ : ℝ} (hδ : 0 <
         truncationRank (Fintype.card R.Branch) ((2 * R.patches.length : ℕ) : ℝ) δ ^
           (2 * R.patches.length) ∧
       (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
-        (∀ f : Party → Bool, (∀ x ∈ R.parties, f x = true) → p.2.SwapsMeet f) ∧
+        p.2.SwapsMeetSet (R.parties : Set Party) ∧
         p.2.sourceCount ≤ 2 * R.patches.length ∧
         p.2.toEffectChain.effectCount ≤ 2 * R.patches.length) ∧
       ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧ ‖Ma - R.rewrite‖ ≤ δ ∧
@@ -646,7 +646,7 @@ theorem exists_allowed_monomial_approx_of_card_le (hR : R.Conditions) {δ : ℝ}
           R.oldAffected.length) : ℕ) : ℝ) ((2 * R.patches.length : ℕ) : ℝ) δ ^
           (2 * R.patches.length) ∧
       (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
-        (∀ f : Party → Bool, (∀ x ∈ R.parties, f x = true) → p.2.SwapsMeet f) ∧
+        p.2.SwapsMeetSet (R.parties : Set Party) ∧
         p.2.sourceCount ≤ 2 * R.patches.length ∧
         p.2.toEffectChain.effectCount ≤ 2 * R.patches.length) ∧
       ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧ ‖Ma - R.rewrite‖ ≤ δ ∧
@@ -688,7 +688,7 @@ theorem exists_allowed_monomial_approx_polynomial (hR : R.Conditions) {C c b L :
       G.length ≤ (C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + ⌈a⌉₊)) ∧
       (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
-        (∀ f : Party → Bool, (∀ x ∈ R.parties, f x = true) → p.2.SwapsMeet f) ∧
+        p.2.SwapsMeetSet (R.parties : Set Party) ∧
         p.2.sourceCount ≤ 2 * b ∧
         p.2.toEffectChain.effectCount ≤ 2 * b) ∧
       ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧
@@ -763,7 +763,7 @@ theorem exists_allowed_monomial_approx_refVec (hR : R.Conditions) {C c b L : ℕ
       G.length ≤ (C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) ∧
       (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
-        (∀ f : Party → Bool, (∀ x ∈ R.parties, f x = true) → p.2.SwapsMeet f) ∧
+        p.2.SwapsMeetSet (R.parties : Set Party) ∧
         p.2.sourceCount ≤ 2 * b ∧
         p.2.toEffectChain.effectCount ≤ 2 * b) ∧
       ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧

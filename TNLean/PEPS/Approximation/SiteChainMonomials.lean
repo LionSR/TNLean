@@ -125,11 +125,11 @@ theorem exists_chain_listProd {L : Layout Party} {κ : Type} [Fintype κ] [Decid
     (iso : Mem L ≃ₗᵢ[ℂ] EuclideanSpace ℂ κ) (S : Set Party) {γ : Type}
     (A : γ → Matrix κ κ ℂ) (src eff : γ → ℕ) : (ks : List γ) →
     (∀ k ∈ ks, ∃ M : PartyChain L L, M.IsAllowed ∧ M.UsesOnly S ∧
-      (∀ f : Party → Bool, (∀ p ∈ S, f p = true) → M.SwapsMeet f) ∧ M.sourceCount ≤ src k ∧
+      M.SwapsMeetSet S ∧ M.sourceCount ≤ src k ∧
       M.toEffectChain.effectCount ≤ eff k ∧
       ∀ z, iso (M.toEffectChain.eval z) = act (A k) (iso z)) →
     ∃ M : PartyChain L L, M.IsAllowed ∧ M.UsesOnly S ∧
-      (∀ f : Party → Bool, (∀ p ∈ S, f p = true) → M.SwapsMeet f) ∧
+      M.SwapsMeetSet S ∧
       M.sourceCount ≤ (ks.map src).sum ∧ M.toEffectChain.effectCount ≤ (ks.map eff).sum ∧
       ∀ z, iso (M.toEffectChain.eval z) = act (ks.map A).prod (iso z)
   | [], _ => ⟨.final (.id L), trivial, trivial, fun _ _ => trivial, le_rfl, le_rfl, fun z => by
@@ -184,7 +184,7 @@ theorem exists_zeroChain (l : List (Hole pos q Party)) (S : Set Party) :
     (W : List ι) → W.Nodup → (own own' : ι → Party) → (∀ x ∈ W, own x ∈ S ∧ own' x ∈ S) →
     (∀ x ∉ W, own x = own' x) →
     ∃ M : PartyChain (layoutRegs q l own) (layoutRegs q l own'),
-      M.IsAllowed ∧ M.UsesOnly S ∧ (∀ f : Party → Bool, (∀ p ∈ S, f p = true) → M.SwapsMeet f) ∧
+      M.IsAllowed ∧ M.UsesOnly S ∧ M.SwapsMeetSet S ∧
       M.sourceCount = 0 ∧ M.toEffectChain.effectCount = 0 ∧
       ∀ z, layoutIso l own' (M.toEffectChain.eval z) =
         act ((1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ
@@ -256,7 +256,7 @@ theorem exists_groupBlock (l : List (Hole pos q Party)) (own : ι → Party) (S 
     ∃ b : RankOneBlock ι q, (∀ x, x ∈ b.E ↔ ¬O x) ∧ (∀ c, b.ketAt c = v fun x => c x.1) ∧
       (∀ c, b.braAt c = w fun x => c x.1) ∧
       ∃ M : PartyChain (layoutRegs q l own) (layoutRegs q l own),
-        M.IsAllowed ∧ M.UsesOnly S ∧ (∀ f : Party → Bool, (∀ p ∈ S, f p = true) → M.SwapsMeet f) ∧
+        M.IsAllowed ∧ M.UsesOnly S ∧ M.SwapsMeetSet S ∧
       M.sourceCount ≤ 1 ∧ M.toEffectChain.effectCount ≤ 1 ∧
         ∀ z, layoutIso l own (M.toEffectChain.eval z) =
           act ((1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ b.op) (layoutIso l own z) := by
@@ -324,7 +324,7 @@ theorem exists_braVertexBlock (l : List (Hole pos q Party)) (own : ι → Party)
       (∀ c, b.ketAt c = if ∀ x, O x → c x = 0 then 1 else 0) ∧
       (∀ c, f (fun x => c x.1) = s * star (b.braAt c)) ∧
       ∃ M : PartyChain (layoutRegs q l own) (layoutRegs q l own),
-        M.IsAllowed ∧ M.UsesOnly S ∧ (∀ f : Party → Bool, (∀ p ∈ S, f p = true) → M.SwapsMeet f) ∧
+        M.IsAllowed ∧ M.UsesOnly S ∧ M.SwapsMeetSet S ∧
       M.sourceCount ≤ (if ∃ x, O x then 1 else 0) ∧
         M.toEffectChain.effectCount ≤ (if ∃ x, O x then 1 else 0) ∧
         ∀ z, layoutIso l own (M.toEffectChain.eval z) =
@@ -368,7 +368,7 @@ theorem exists_ketVertexBlock (l : List (Hole pos q Party)) (own : ι → Party)
       (∀ c, b.braAt c = if ∀ x, O x → c x = 0 then 1 else 0) ∧
       (∀ c, f (fun x => c x.1) = s * b.ketAt c) ∧
       ∃ M : PartyChain (layoutRegs q l own) (layoutRegs q l own),
-        M.IsAllowed ∧ M.UsesOnly S ∧ (∀ f : Party → Bool, (∀ p ∈ S, f p = true) → M.SwapsMeet f) ∧
+        M.IsAllowed ∧ M.UsesOnly S ∧ M.SwapsMeetSet S ∧
       M.sourceCount ≤ (if ∃ x, O x then 1 else 0) ∧
         M.toEffectChain.effectCount ≤ (if ∃ x, O x then 1 else 0) ∧
         ∀ z, layoutIso l own (M.toEffectChain.eval z) =

@@ -485,7 +485,7 @@ theorem exists_rankOneBlock_chain [NeZero q] (l : List (Hole pos q Party)) (own 
     (hv : ‖b.ket‖ = 1) (hw : ‖b.bra‖ = 1) {S : Set Party} (hSA : pA ∈ S) (hSB : pB ∈ S)
     (hSA' : pA' ∈ S) (hSB' : pB' ∈ S) :
     ∃ M : PartyChain (layoutRegs q l own) (layoutRegs q l own'),
-      M.IsAllowed ∧ M.UsesOnly S ∧ (∀ f : Party → Bool, (∀ p ∈ S, f p = true) → M.SwapsMeet f) ∧
+      M.IsAllowed ∧ M.UsesOnly S ∧ M.SwapsMeetSet S ∧
       M.sourceCount ≤ 1 ∧ (pA' = pB' → M.sourceCount = 0) ∧
       M.toEffectChain.effectCount ≤ 1 ∧ (pA = pB → M.toEffectChain.effectCount = 0) ∧
       ∀ z, layoutIso l own' (M.toEffectChain.eval z) =

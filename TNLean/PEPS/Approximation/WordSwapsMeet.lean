@@ -21,7 +21,7 @@ condition holds as soon as the selection contains the owners of the moved regist
 
 ## Main definitions
 
-* `PairEffect.Word.SwapsMeet`, `PairEffect.PartyChain.SwapsMeet`.
+* `PairEffect.Word.SwapsMeet`, `PairEffect.PartyChain.SwapsMeet`, `PairEffect.PartyChain.SwapsMeetSet`.
 
 ## Main results
 
@@ -113,6 +113,11 @@ namespace PartyChain
 def SwapsMeet (f : P → Bool) : {ℓX ℓY : Layout P} → PartyChain ℓX ℓY → Prop
   | _, _, final w => w.SwapsMeet f
   | _, _, effect _ _ _ _ w _ rest => w.SwapsMeet f ∧ rest.SwapsMeet f
+
+/-- Every exchange of tensor factors in the monomial moves a register of a party of `S`, read
+for every Boolean selection containing `S`. -/
+def SwapsMeetSet (S : Set P) {ℓX ℓY : Layout P} (M : PartyChain ℓX ℓY) : Prop :=
+  ∀ f : P → Bool, (∀ p ∈ S, f p = true) → M.SwapsMeet f
 
 theorem swapsMeet_precomp (f : P → Bool) {ℓ₀ ℓX ℓY : Layout P} {w : Word ℓ₀ ℓX}
     (hw : w.SwapsMeet f) : {M : PartyChain ℓX ℓY} → M.SwapsMeet f → (M.precomp w).SwapsMeet f
