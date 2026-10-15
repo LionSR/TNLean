@@ -305,7 +305,8 @@ theorem pointTreatment_step [NeZero q] {n t r u : ℝ} (hn : 0 < n) (ht : 0 < t)
   obtain ⟨w, w₁, w₂, w₃, w₄, w₅⟩ := hG.exists_originalCircuit (C := C) (c := c) (b := b) hL
     (fun a _ => h₇ ▸ hcardHole a) (fun z _ => hcardPatch z) (fun a _ => hcardHole a)
     (by exact_mod_cast h₁₄.trans hb) hold hnew hparties hΩ (fun z _ => hεpatch z)
-    (fun a _ => hεhole a) (by rw [h₉]; exact ⟨_, mem_blockParties.2 (Or.inl rfl)⟩) (fun z _ => htag z)
+    (fun a _ => hεhole a) (by rw [h₉]; exact ⟨_, mem_blockParties.2 (Or.inl rfl)⟩)
+    (fun z _ => htag z)
   have e₂ : G.newFrame = guideFrame pos q G.new G.own G.ph G.rank V' G.holeOld hpV' :=
     guideFrame_congr h₁₁ h₇ _ _
   rw [← G.oldFrame_eq h₁₀ hpV, ← e₂]
