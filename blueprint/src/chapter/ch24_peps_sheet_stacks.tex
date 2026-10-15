@@ -535,3 +535,35 @@ no holes, this is the normalization of $\Omega$.
     The reference vectors are those of the sheets, so the errors are those of the
     changes, and the final reference vector is that of the final regrouping.
 \end{proof}
+
+\begin{theorem}[Joining the changes of the events]
+    \label{thm:peps_protocol_event_segments}
+    \lean{TNLean.PEPS.EncodedFrame.HasSourceBoundedChange,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_of_perm,
+        TNLean.PEPS.EncodedFrame.HasSourceBoundedChange.perm_left,
+        TNLean.PEPS.EncodedFrame.HasSourceBoundedChange.perm_right,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_liftOne,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_liftTwo,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_activate,
+        TNLean.PEPS.Approximation.exists_frames_of_segments,
+        TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_hasSourceBoundedChange}
+    \leanok
+    \uses{thm:peps_bounded_change_closure, thm:peps_protocol_from_bounded_trajectory}
+    Bounded changes of the sheets whose monomials have at most $r_s$ pair sources are
+    closed under reorderings of the sheets and under lifting a change of one sheet, or
+    of two adjacent sheets, to the whole stack. Let a list of events each carry a list of
+    changes, and let the sheets pass, during each event, from its starting stack to the
+    starting stack of the next event through as many such changes as the event has, with
+    participants used by the event. Then one sequence of stacks runs along the whole
+    schedule, each change with participants used by its event. If, moreover, the
+    remaining hypotheses of Theorem~\ref{thm:peps_protocol_from_bounded_trajectory} hold,
+    its conclusion follows (\texttt{06-geometry.tex}, lines 82--100, 127--131 and
+    572--681; \texttt{04-compression.tex}, lines 143--147).
+\end{theorem}
+
+\begin{proof}\leanok
+    The closure properties are those of bounded changes; reorderings and the lifts
+    add no pair source. The stacks of consecutive events are concatenated by induction
+    on the list of events. After the last change the stack is kept constant, by
+    identity changes, so that every stage of the protocol has a change.
+\end{proof}
