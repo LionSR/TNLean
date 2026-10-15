@@ -7,6 +7,12 @@ import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationRepair
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationAtoms
 import TNLean.PEPS.AreaLaw.Geometry.FanFrontiers
 import TNLean.PEPS.AreaLaw.Geometry.TemplatePolygons
+import TNLean.PEPS.AreaLaw.Geometry.AdjacentScales
+import TNLean.PEPS.AreaLaw.Geometry.CellSides
+import TNLean.PEPS.AreaLaw.Geometry.FanSideContacts
+import TNLean.PEPS.AreaLaw.Geometry.InitialRegionInterfaces
+import TNLean.PEPS.AreaLaw.Geometry.InitialRegionInteriors
+import TNLean.PEPS.AreaLaw.Geometry.InitialRegionRegularity
 
 /-!
 # Birth separation of the initial belt tiles
@@ -443,5 +449,79 @@ theorem add_mem_segment_of_odd {m₁ n₁ m₂ n₂ i j : ℤ}
     exact add_mem_uIcc_of_odd hio ⟨m₁, by ring⟩ ⟨m₂, by ring⟩ hx hσ
 
 end Reference
+
+/-! ### Initial regions near a belt cell -/
+
+section Core
+
+variable {o : ℝ × ℝ} {k₀ : ℕ} {Z : Finset (ℤ × ℤ)} {C : ℕ}
+  {a b : (k : ℕ) → Fin (2 ^ (pitchScaleIndex k - fineScaleIndex k))}
+  {hC : 2 ≤ C} {h₀ : 50000000 ≤ k₀}
+
+/-- The initial identifier of a run of a selected belt cell: an initial belt
+tile.
+Source: area-law Section 11, `prop:two-families`, lines 299–323. -/
+abbrev initialBeltRun (k : ℕ) (hk : k₀ ≤ k) (z : ℤ × ℤ)
+    (hz : z ∈ beltCellIndices (fineLayerIndices o k (fineScaleIndex k) Z C)
+      (2 ^ (pitchScaleIndex k - fineScaleIndex k)) (a k) (b k))
+    (R : CellFanRun o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z)
+      (beltCellFanColor o k₀ Z C a b k z hC h₀ hk hz)) :
+    InitialRegionIndex o k₀ Z C a b hC h₀ :=
+  .inr (.inr ⟨⟨k, hk⟩, ⟨z, hz⟩, R⟩)
+
+variable {k : ℕ} {hk : k₀ ≤ k} {z : ℤ × ℤ}
+  {hz : z ∈ beltCellIndices (fineLayerIndices o k (fineScaleIndex k) Z C)
+    (2 ^ (pitchScaleIndex k - fineScaleIndex k)) (a k) (b k)}
+
+theorem initialBeltRun_birth_subset_closure
+    (R : CellFanRun o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z)
+      (beltCellFanColor o k₀ Z C a b k z hC h₀ hk hz)) :
+    initialBirthRegion o k₀ Z C a b hC h₀ (initialBeltRun k hk z hz R) ⊆
+      closure (dyadicCell o (fineScaleIndex k) z) := by
+  change cellFanRunRegion _ _ _ _ _ R ⊆ _
+  rw [← cellFanRunRegions_cover]
+  exact Set.subset_iUnion (fun R ↦ cellFanRunRegion _ _ _ _ _ R) R
+
+theorem cellFanPolygon_subset_initialBeltRun_birth
+    {R : CellFanRun o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z)
+      (beltCellFanColor o k₀ Z C a b k z hC h₀ hk hz)}
+    {t : CellFanSlot (fineLayerSplitMask o k₀ k Z C z)} (ht : t ∈ R.supp) :
+    (cellFanPolygon o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z) t).region ⊆
+      initialBirthRegion o k₀ Z C a b hC h₀ (initialBeltRun k hk z hz R) :=
+  Set.subset_biUnion_of_mem (u := fun t ↦
+    (cellFanPolygon o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z) t).region) ht
+
+/-- An initial identifier whose open region meets the interior of a belt cell
+is a run of that cell.
+Source: area-law Section 11, `prop:two-families`, lines 299–323. -/
+theorem exists_eq_initialBeltRun_of_inter_interior (y : InitialRegionIndex o k₀ Z C a b hC h₀)
+    (h : (initialOpenRegion o k₀ Z C a b hC h₀ y ∩
+      interior (closure (dyadicCell o (fineScaleIndex k) z))).Nonempty) :
+    ∃ R, y = initialBeltRun k hk z hz R := by
+  obtain ⟨w, hwy, hwQ⟩ := h
+  have hwc := interior_subset hwQ
+  rw [← cellFanPolygons_cover o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z)] at hwc
+  obtain ⟨t, ht⟩ := Set.mem_iUnion.mp hwc
+  have hU : IsOpen (initialOpenRegion o k₀ Z C a b hC h₀ y ∩
+      interior (closure (dyadicCell o (fineScaleIndex k) z))) :=
+    isOpen_interior.inter isOpen_interior
+  have hne : (interior (cellFanPolygon o (fineScaleIndex k) z
+      (fineLayerSplitMask o k₀ k Z C z) t).region ∩ (initialOpenRegion o k₀ Z C a b hC h₀ y ∩
+      interior (closure (dyadicCell o (fineScaleIndex k) z)))).Nonempty := by
+    rw [← closure_inter_open_nonempty_iff hU, (cellFanPolygon_interior_nonempty_and_closure_eq
+      o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z) t).2]
+    exact ⟨w, ht, hwy, hwQ⟩
+  obtain ⟨w', hw'T, hw'y, -⟩ := hne
+  let R := (cellFanRunGraph o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z)
+    (beltCellFanColor o k₀ Z C a b k z hC h₀ hk hz)).connectedComponentMk t
+  have hw'x : w' ∈ initialOpenRegion o k₀ Z C a b hC h₀ (initialBeltRun k hk z hz R) :=
+    interior_mono (cellFanPolygon_subset_initialBeltRun_birth
+      ((SimpleGraph.ConnectedComponent.mem_supp_iff R t).mpr rfl)) hw'T
+  refine ⟨R, ?_⟩
+  by_contra hne
+  exact Set.disjoint_left.mp (initialOpenRegion_pairwise_disjoint o k₀ Z C a b hC h₀ hne)
+    hw'y hw'x
+
+end Core
 
 end TNLean.PEPS.AreaLaw.Geometry
