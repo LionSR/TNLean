@@ -185,6 +185,38 @@ theorem rectangularTraceNorm_protocol_density_sub_le (S : (t : ℕ) → E t →�
     _ ≤ 2 * (C_ch * C_step / (L : ℝ) ^ 10) + 2 * (C_hole / (L : ℝ) ^ 10) := by gcongr
     _ = (2 * (C_ch * C_step) + 2 * C_hole) / (L : ℝ) ^ 10 := by ring
 
+omit [DecidableEq a] in
+/-- The actual final protocol vector retains norm close to one, and its unnormalized
+physical density retains trace close to one. Both losses are bounded by the reference
+norm loss and the accumulated vector error, without a small-error hypothesis.
+
+The reference trajectory, contractions and step bounds are supplied; this result does
+not construct the distributed protocol. Source: Polynomial-PEPS manuscript (Sept 24
+2026), §8.1, `eq:reference-junk` and the paragraph following `eq:protocol-density`,
+`07-assembly.tex:18–51`, immutable revision
+`adc7f1241b42e322a6451854ab7e4b4c146bf78a`. This is an original consequence of the
+product-reference estimates; no OpenAI Lean code is copied or adapted. -/
+theorem protocol_norm_and_trace_deficit_le (S : (t : ℕ) → E t →ₗ[ℂ] E (t + 1))
+    (x r : (t : ℕ) → E t) {n L : ℕ} (hL : 1 ≤ L) {C_ch C_step C_hole : ℝ}
+    (hC_step : 0 ≤ C_step) (hC_hole : 0 ≤ C_hole) (hn : (n : ℝ) ≤ C_ch * (L : ℝ) ^ 3)
+    (hS : ∀ t < n, ∀ v, ‖S t v‖ ≤ ‖v‖) (hr₀ : ‖r 0‖ ≤ 1)
+    (hx₀ : x 0 = r 0) (hx : ∀ t < n, x (t + 1) = S t (x t))
+    (hstep : ∀ t < n, ‖S t (r t) - r (t + 1)‖ ≤ C_step / (L : ℝ) ^ 20)
+    (K : E n →ₗᵢ[ℂ] EuclideanSpace ℂ (a × b)) (Ω : EuclideanSpace ℂ a)
+    (Ξ : EuclideanSpace ℂ b) (hΩ : ‖Ω‖ = 1) (hΞ : ‖Ξ‖ ≤ 1)
+    (hlower : 1 - C_hole / (L : ℝ) ^ 57 ≤ ‖Ξ‖)
+    (href : K (r n) = Matrix.euclideanTensorVector Ω Ξ) :
+    1 - C_hole / (L : ℝ) ^ 57 - C_ch * C_step / (L : ℝ) ^ 17 ≤ ‖K (x n)‖ ∧
+      1 - (Matrix.partialTraceRight
+        (Matrix.euclideanOuterProduct (K (x n)) (K (x n)))).trace.re ≤
+        2 * (C_hole / (L : ℝ) ^ 57 + C_ch * C_step / (L : ℝ) ^ 17) := by
+  classical
+  obtain ⟨-, herror, -⟩ := rectangularTraceNorm_protocol_density_sub_le S x r hL hC_step
+    hC_hole hn hS hr₀ hx₀ hx hstep K Ω Ξ hΩ hΞ hlower href
+  exact ⟨Matrix.one_sub_le_norm_of_product_reference (K (x n)) Ω Ξ hΩ herror hlower,
+    Matrix.trace_deficit_partialTraceRight_le_of_product_reference
+      (K (x n)) Ω Ξ hΩ herror hlower⟩
+
 /-- **The compressed density estimate.** Under the hypotheses of
 `rectangularTraceNorm_protocol_density_sub_le`, every operator `σ` within `C_comp L⁻⁵` of the
 actual physical density `Tr_private |Ψ⟩⟨Ψ|`, as produced by the compression theorem with

@@ -378,6 +378,42 @@ of that work, which are not proved here.
     the triangle inequality through the actual physical density.
 \end{proof}
 
+\begin{lemma}[Retained norm and trace of the protocol]
+    \label{lem:peps_protocol_retained_norm}
+    \lean{TNLean.PEPS.Approximation.protocol_norm_and_trace_deficit_le}
+    Under the hypotheses of Theorem~\ref{thm:peps_protocol_density}, put
+    \begin{align}
+        \varepsilon & = C_{\rm ch}C_{\rm step}L^{-17}, &
+        \delta      & = C_{\rm hole}L^{-57},
+    \end{align}
+    and let $\Psi$ be the actual final vector in physical and private
+    coordinates. Its physical density
+    $\rho=\Tr_{\rm private}|\Psi\rangle\langle\Psi|$ satisfies
+    \begin{align}
+        \lVert\Psi\rVert & \geq 1-\delta-\varepsilon,  \\
+        1-\tr\rho        & \leq 2(\delta+\varepsilon).
+    \end{align}
+    These estimates require no upper bound on $\delta+\varepsilon$ and
+    no division by the norm of a vector. They are consequences of the
+    error and reference-norm bounds in
+    \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
+\end{lemma}
+
+\begin{proof}
+    \uses{thm:peps_protocol_density}
+    The reverse triangle inequality and $\lVert\Omega\rVert=1$ give
+    \begin{align}
+        \lVert\Psi\rVert
+         & \geq\lVert\Omega\otimes\Xi\rVert
+        -\lVert\Psi-\Omega\otimes\Xi\rVert
+        \geq1-\delta-\varepsilon.
+    \end{align}
+    Writing $s=\lVert\Psi\rVert$, one has $\tr\rho=s^2$ and
+    $1-s^2\leq2(1-s)$, since $(1-s)^2\geq0$. The first estimate
+    therefore gives $1-\tr\rho\leq2(\delta+\varepsilon)$, even when
+    $1-\delta-\varepsilon$ is negative.
+\end{proof}
+
 \subsection{Column selection after discarding a product reference}
 
 \begin{theorem}[A column from the actual compressed density]

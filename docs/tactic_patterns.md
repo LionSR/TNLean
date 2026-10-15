@@ -24,6 +24,29 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Ambient dilation in coordinate inequalities — promoted (2026-10-14)
+
+- **Pattern:** Expand the finite union of integer squares, their Cartesian
+  products and interval membership to obtain coordinate inequalities.
+- **Seen:** The original membership lemma in `Geometry/TemplateRows.lean`,
+  `Scan.ambientDepth_le_iff_mem_dilation` in `Scan/AmbientDepth.lean`, and
+  `exterior_union_subset_graphNeighborhood_compl_of_clearance` in
+  `GraphNeighborhoodCutClearance.lean`, under `TNLean/PEPS/AreaLaw/`.
+- **Abstraction:** The unchanged public `mem_ambientDilation_iff` now follows
+  `ambientDilation` in the basic `FiniteDomain.lean` module. The ambient-depth
+  equivalence and the whole-remote exclusion proof simplify with this lemma.
+  No alias, new tactic, global attribute or geometric hypothesis is added.
+- **Remaining occurrences:** Direct expansions remain in `BufferedRectangles.lean`
+  and `Geometry/DistanceLayers.lean`, `Geometry/DummyContacts.lean`,
+  `Geometry/DyadicExhaustion.lean` and `Geometry/DyadicLayers.lean`. They are
+  retained for a focused follow-up. The private dyadic-layer lemma has a
+  different absolute-value formulation and is not a duplicate declaration.
+- **Notes:** The helper allows every finite target and natural radius, including
+  the empty target and radius zero. The ambient-depth replacement removes one
+  proof line and preserves the statement and remaining proof. The relocated
+  helper and the production proofs passed the full project build, strict Lean
+  checks, the named standard-axiom test, and blueprint declaration checks.
+
 ### Finite virtual coordinates — promoted through Mathlib (2026-10-14)
 
 - **Pattern:** Enumerate each finite virtual alphabet independently, then
@@ -4380,6 +4403,21 @@ three-plaquette output measurement, and the routed reunion measurement.
 - **Caveat:** The ordered product remains noncommutative; differentiate the
   continuous multilinear product and retain the original insertion indices.
 
+### Continuity of an ordered regional filter product — candidate
+
+- **Pattern:** Prove continuity of each identity-extended local matrix power,
+  apply finite ordered-product continuity, and compose with evaluation on the
+  fixed vector and the norm.
+- **Seen:** `continuousOn_regularizedPatchObjective` in
+  `PEPS/AreaLaw/RegularizedPatchMinimum.lean` and the joint-continuity step in
+  `continuous_regularizedPatchMinimum_exp_neg` in
+  `PEPS/AreaLaw/RegularizedPatchMinimumContinuity.lean`.
+- **Abstraction:** Both proofs already use Mathlib's `continuousOn_list_prod`
+  or `continuous_list_prod`. A third occurrence may justify a shared theorem
+  for evaluation of a continuously varying ordered product.
+- **Notes:** The second proof varies the positive scalar shift and all feasible
+  regional densities together. Continuity in each variable separately would
+  not suffice for the compact-minimum argument.
 
 ### Removing subsingleton physical coordinates — candidate (2026-10-14)
 

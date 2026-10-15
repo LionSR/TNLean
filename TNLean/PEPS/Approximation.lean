@@ -34,6 +34,7 @@ import TNLean.PEPS.Approximation.ActualSourceLifetimeBound
 import TNLean.PEPS.Approximation.ActualSourcePolynomial
 import TNLean.PEPS.Approximation.ActualSourceRegisters
 import TNLean.PEPS.Approximation.ActualSourceSampling
+import TNLean.PEPS.Approximation.AdaptivePatchSupply
 import TNLean.PEPS.Approximation.AffectedOwners
 import TNLean.PEPS.Approximation.AffectedPhysicalDimension
 import TNLean.PEPS.Approximation.AllPartialGate
@@ -45,7 +46,9 @@ import TNLean.PEPS.Approximation.AngularAnnularCells
 import TNLean.PEPS.Approximation.AngularAnnularLayers
 import TNLean.PEPS.Approximation.AngularCellGeometry
 import TNLean.PEPS.Approximation.AngularGridCells
+import TNLean.PEPS.Approximation.AngularInformationBound
 import TNLean.PEPS.Approximation.AngularResetWidth
+import TNLean.PEPS.Approximation.AngularSeparationBridges
 import TNLean.PEPS.Approximation.ApproximateCircuitBudget
 import TNLean.PEPS.Approximation.ApproximateCircuitDensity
 import TNLean.PEPS.Approximation.ApproximateCircuitError
@@ -91,10 +94,12 @@ import TNLean.PEPS.Approximation.DistributedSourceComposition
 import TNLean.PEPS.Approximation.DyadicActiveLabelParties
 import TNLean.PEPS.Approximation.DyadicAnchors
 import TNLean.PEPS.Approximation.DyadicBlockFootprints
+import TNLean.PEPS.Approximation.DyadicBulkSteps
 import TNLean.PEPS.Approximation.DyadicChamberSampling
 import TNLean.PEPS.Approximation.DyadicEdgeBands
 import TNLean.PEPS.Approximation.DyadicFootprintScaling
 import TNLean.PEPS.Approximation.DyadicFootprintTemplates
+import TNLean.PEPS.Approximation.DyadicGuideFrames
 import TNLean.PEPS.Approximation.DyadicGuideReadings
 import TNLean.PEPS.Approximation.DyadicHierarchyCounts
 import TNLean.PEPS.Approximation.DyadicLargeRepaintingGates
@@ -102,6 +107,7 @@ import TNLean.PEPS.Approximation.DyadicLevelSchedule
 import TNLean.PEPS.Approximation.DyadicLifetimeIncidence
 import TNLean.PEPS.Approximation.DyadicPatchRewriteGates
 import TNLean.PEPS.Approximation.DyadicPointTreatment
+import TNLean.PEPS.Approximation.DyadicProtocol
 import TNLean.PEPS.Approximation.DyadicReadingFootprints
 import TNLean.PEPS.Approximation.DyadicRepaintingClearance
 import TNLean.PEPS.Approximation.DyadicRepaintingSchedule
@@ -170,9 +176,11 @@ import TNLean.PEPS.Approximation.IncidentSampledEndpointWord
 import TNLean.PEPS.Approximation.IncidentSampledPhysicalFactor
 import TNLean.PEPS.Approximation.IncidentSourceWord
 import TNLean.PEPS.Approximation.IncidentSourceWordComparison
+import TNLean.PEPS.Approximation.InformationReset
 import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
 import TNLean.PEPS.Approximation.LayoutExcludedOwners
 import TNLean.PEPS.Approximation.LayoutOwnerMap
+import TNLean.PEPS.Approximation.LayoutPartitionWord
 import TNLean.PEPS.Approximation.LocalPairSource
 import TNLean.PEPS.Approximation.LocalPartFrameListRestriction
 import TNLean.PEPS.Approximation.LocalPartRestrictionCongruence
@@ -185,6 +193,7 @@ import TNLean.PEPS.Approximation.MatrixAction
 import TNLean.PEPS.Approximation.MessageGateCircuit
 import TNLean.PEPS.Approximation.MessageGateExpansion
 import TNLean.PEPS.Approximation.MessageMonomial
+import TNLean.PEPS.Approximation.MonomialFixesOutside
 import TNLean.PEPS.Approximation.NetworkScalarAbsorption
 import TNLean.PEPS.Approximation.NoneResidualGate
 import TNLean.PEPS.Approximation.NoneResidualOperations
@@ -193,6 +202,7 @@ import TNLean.PEPS.Approximation.NoneSourceWordScalar
 import TNLean.PEPS.Approximation.NonemptyGateLabels
 import TNLean.PEPS.Approximation.NonincidentAllGateRestriction
 import TNLean.PEPS.Approximation.OriginalCircuit
+import TNLean.PEPS.Approximation.OriginalCircuitLift
 import TNLean.PEPS.Approximation.OriginalCoefficientMajorant
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates
 import TNLean.PEPS.Approximation.OwnerMemoryTransport
@@ -213,10 +223,13 @@ import TNLean.PEPS.Approximation.PartialSourceWordEvaluation
 import TNLean.PEPS.Approximation.PartitionOwnerNaturality
 import TNLean.PEPS.Approximation.PartyChain
 import TNLean.PEPS.Approximation.PartyChainComposition
+import TNLean.PEPS.Approximation.PartyChainRestriction
 import TNLean.PEPS.Approximation.PartyCoarseningFactorization
 import TNLean.PEPS.Approximation.PartyColumnRouting
 import TNLean.PEPS.Approximation.PartyFactorization
+import TNLean.PEPS.Approximation.PartyGateCircuit
 import TNLean.PEPS.Approximation.PartyGateComposition
+import TNLean.PEPS.Approximation.PartyGateOriginalCircuit
 import TNLean.PEPS.Approximation.PartyGroupedBasis
 import TNLean.PEPS.Approximation.PartyGrouping
 import TNLean.PEPS.Approximation.PartyGroupingTransport
@@ -263,6 +276,7 @@ import TNLean.PEPS.Approximation.PureSourceMatrix
 import TNLean.PEPS.Approximation.RankOneBlocks
 import TNLean.PEPS.Approximation.RegionalStates
 import TNLean.PEPS.Approximation.RegisterReordering
+import TNLean.PEPS.Approximation.ResetUnitary
 import TNLean.PEPS.Approximation.RestrictedMixedPhysicalTrace
 import TNLean.PEPS.Approximation.RoutedContraction
 import TNLean.PEPS.Approximation.SampledEndpointExteriorIdentity
@@ -285,6 +299,7 @@ import TNLean.PEPS.Approximation.SeparatedOutputCoordinates
 import TNLean.PEPS.Approximation.SeparatedPhysicalDensity
 import TNLean.PEPS.Approximation.SeparatedSchmidtOutput
 import TNLean.PEPS.Approximation.SheetSplitting
+import TNLean.PEPS.Approximation.SheetStack
 import TNLean.PEPS.Approximation.SheetSwapBoundaryExpansion
 import TNLean.PEPS.Approximation.SheetSwapConjugateSupport
 import TNLean.PEPS.Approximation.SheetSwapCorrection
@@ -366,6 +381,7 @@ import TNLean.PEPS.Approximation.SquareGridSource
 import TNLean.PEPS.Approximation.SquareHamiltonianHermitianTerms
 import TNLean.PEPS.Approximation.SquareLatticeConnectivity
 import TNLean.PEPS.Approximation.SupportedPhysicalBufferGaussian
+import TNLean.PEPS.Approximation.SupportedPolarUnitary
 import TNLean.PEPS.Approximation.SwappedSquareHamiltonianBoundary
 import TNLean.PEPS.Approximation.SwappedSquareHamiltonianInteraction
 import TNLean.PEPS.Approximation.TensorSchmidtIsometries
@@ -383,6 +399,7 @@ import TNLean.PEPS.Approximation.WordAppendTail
 import TNLean.PEPS.Approximation.WordAppendTailRestriction
 import TNLean.PEPS.Approximation.WordEvalComparison
 import TNLean.PEPS.Approximation.WordEvaluationTransport
+import TNLean.PEPS.Approximation.WordOriginalCircuit
 import TNLean.PEPS.Approximation.WordOwnerAppendTailTransport
 import TNLean.PEPS.Approximation.WordOwnerEvaluation
 import TNLean.PEPS.Approximation.WordOwnerMap
@@ -394,6 +411,7 @@ import TNLean.PEPS.Approximation.WordPermutation
 import TNLean.PEPS.Approximation.WordPermutationRestriction
 import TNLean.PEPS.Approximation.WordRestriction
 import TNLean.PEPS.Approximation.WordSelectedOwnerLocalPart
+import TNLean.PEPS.Approximation.WordSelectedRestriction
 import TNLean.PEPS.Approximation.WordSelectivePartition
 import TNLean.PEPS.Approximation.WordStructuralCongruence
 import TNLean.PEPS.Approximation.ZeroPartyGates
