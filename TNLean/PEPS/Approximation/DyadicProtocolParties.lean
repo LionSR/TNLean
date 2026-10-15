@@ -307,9 +307,9 @@ theorem participation_le_of_repaintingRewrites {k : ℕ} {Γ : Type*} [Fintype �
         J.2.1 J.2.2)
       (ev γ))
     (p : ProtocolParty k) (P : Γ → Prop) [DecidablePred P]
-    (hP : ∀ γ, P γ → match p with
-      | .inl Q => (.inl Q.toTriple : GuideLabel) ∈ (rw γ).parties guidePlaceholder
-      | .inr S => ev γ = .inl S.1) :
+    (hP : ∀ γ, P γ → Sum.elim
+      (fun Q => (.inl Q.toTriple : GuideLabel) ∈ (rw γ).parties guidePlaceholder)
+      (fun S => ev γ = .inl S.1) p) :
     #{γ | P γ} ≤ 64 * G := by
   rcases p with Q | S
   · exact card_gates_le_of_repaintingRewrites Sum.inl_injective inl_ne_guidePlaceholder ev hG rw
