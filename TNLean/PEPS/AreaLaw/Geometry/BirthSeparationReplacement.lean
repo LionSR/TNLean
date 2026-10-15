@@ -248,4 +248,100 @@ theorem exists_repairSameLabel_dichotomy :
     exact h (s, t, false) ⟨hst, hcons⟩ x hxs y
       (cellFanPolygon_region_subset_repairNormTriangle t hyt)
 
+/-! ### Separation after the following trim -/
+
+private theorem intPoint_mem_childOffsets {x : ℝ × ℝ} (hx : ‖x‖ ≤ 1) {i j : ℤ}
+    (h : ‖x - ((i : ℝ), (j : ℝ))‖ < 1 / 4) :
+    ∃ p : Fin 3 × Fin 3, repairChildOffset p = ((i : ℝ), (j : ℝ)) := by
+  rw [Prod.norm_def, Real.norm_eq_abs, Real.norm_eq_abs, max_le_iff] at hx
+  rw [Prod.norm_def, Real.norm_eq_abs, Real.norm_eq_abs, max_lt_iff] at h
+  simp only [Prod.fst_sub, Prod.snd_sub] at h
+  obtain ⟨⟨a₁, a₂⟩, ⟨b₁, b₂⟩⟩ := And.intro (abs_le.mp hx.1) (abs_le.mp hx.2)
+  obtain ⟨⟨c₁, c₂⟩, ⟨d₁, d₂⟩⟩ := And.intro (abs_lt.mp h.1) (abs_lt.mp h.2)
+  have hi₁ : (-2 : ℝ) < i := by linarith
+  have hi₂ : (i : ℝ) < 2 := by linarith
+  have hj₁ : (-2 : ℝ) < j := by linarith
+  have hj₂ : (j : ℝ) < 2 := by linarith
+  have ei₁ : -2 < i := by exact_mod_cast hi₁
+  have ei₂ : i < 2 := by exact_mod_cast hi₂
+  have ej₁ : -2 < j := by exact_mod_cast hj₁
+  have ej₂ : j < 2 := by exact_mod_cast hj₂
+  refine ⟨(⟨(i + 1).toNat, by omega⟩, ⟨(j + 1).toNat, by omega⟩), ?_⟩
+  simp only [repairChildOffset]
+  ext
+  · simp only
+    have h := Int.toNat_of_nonneg (show 0 ≤ i + 1 by omega)
+    have : (((i + 1).toNat : ℕ) : ℝ) = i + 1 := by exact_mod_cast h
+    linarith
+  · simp only
+    have h := Int.toNat_of_nonneg (show 0 ≤ j + 1 by omega)
+    have : (((j + 1).toNat : ℕ) : ℝ) = j + 1 := by exact_mod_cast h
+    linarith
+
+/-- **Birth separation of a replacement from its local comparison regions.**
+There is one fixed `c₁ > 0` with the following property. Let a replacement run
+`C` be born in the removal square of half-side `u ≥ 1` about `v`, and let `Y`
+be any set satisfying the two properties of a final actual region of an older
+or peer identifier of the same label: near the parent, in the open square of
+half-side `2u`, its rescaled points lie in the same-label bound; and it avoids
+the removal squares of the nine following marks `v + u q`, each of half-side
+`d(u)`. Then every point of the closed birth is at distance at least
+`c₁ u^ρ₀` from `Y`.
+Source: area-law Section 11, `geometry:birth-separation`, lines 573–659. -/
+theorem exists_repairBirth_separation :
+    ∃ c₁ > 0, ∀ {ι : Type*} (ξ : ι → Fin 2) (σ : RepairFanSlot → ι)
+      (C : RepairFanRun ξ σ) (v : ℝ × ℝ) {u : ℝ}, 1 ≤ u → ∀ Y : Set (ℝ × ℝ),
+      (∀ y ∈ Y, ‖y - v‖ < 2 * u → u⁻¹ • (y - v) ∈ repairSameLabelBound ξ σ C) →
+      (∀ y ∈ Y, ∀ p : Fin 3 × Fin 3, y ∉ repairSquare (v + u • repairChildOffset p) u) →
+      ∀ x ∈ (fun z ↦ v + u • z) '' repairNormRunRegion ξ σ C, ∀ y ∈ Y,
+        c₁ * u ^ (Exponents.rho : ℝ) ≤ ‖x - y‖ := by
+  obtain ⟨η, hη, hη1, h⟩ := exists_repairSameLabel_dichotomy
+  refine ⟨min η (1 / 4), lt_min hη (by norm_num), ?_⟩
+  intro ι ξ σ C v u hu Y hloc htrim x hx y hy
+  obtain ⟨x', hx', rfl⟩ := hx
+  have hu0 : 0 < u := by linarith
+  have hρ : u ^ (Exponents.rho : ℝ) ≤ u := by
+    calc u ^ (Exponents.rho : ℝ) ≤ u ^ (1 : ℝ) :=
+          Real.rpow_le_rpow_of_exponent_le hu rho_pos_lt_one.2.le
+      _ = u := Real.rpow_one u
+  have hρ0 : 0 ≤ u ^ (Exponents.rho : ℝ) := Real.rpow_nonneg hu0.le _
+  have hc : min η (1 / 4) ≤ 1 := (min_le_left _ _).trans hη1
+  have hx'n : ‖x'‖ ≤ 1 := by
+    simp only [repairNormRunRegion, cellFanRunRegion, Set.mem_iUnion] at hx'
+    obtain ⟨s, -, hs⟩ := hx'
+    simpa using norm_le_of_mem_repairNormTriangle
+      (cellFanPolygon_region_subset_repairNormTriangle s hs)
+  have hux : ‖u • x'‖ ≤ u := by
+    rw [norm_smul, Real.norm_eq_abs, abs_of_pos hu0]; nlinarith [norm_nonneg x']
+  by_cases hfar : 2 * u ≤ ‖y - v‖
+  · have : u ≤ ‖v + u • x' - y‖ := by
+      have := norm_sub_norm_le (y - v) (u • x')
+      rw [show y - v - u • x' = -(v + u • x' - y) by abel, norm_neg] at this
+      linarith
+    nlinarith [mul_le_mul_of_nonneg_right hc hρ0]
+  push Not at hfar
+  set y' := u⁻¹ • (y - v)
+  have hyy : y = v + u • y' := by
+    simp only [y', smul_smul, mul_inv_cancel₀ hu0.ne', one_smul]; abel
+  have hxy : v + u • x' - y = u • (x' - y') := by rw [hyy, smul_sub]; abel
+  have hnorm : ‖v + u • x' - y‖ = u * ‖x' - y'‖ := by
+    rw [hxy, norm_smul, Real.norm_eq_abs, abs_of_pos hu0]
+  rcases h ξ σ C x' hx' y' (hloc y hy hfar) with hd | ⟨i, j, hxq, hyq, hang⟩
+  · rw [hnorm]
+    calc min η (1 / 4) * u ^ (Exponents.rho : ℝ) ≤ η * u :=
+          mul_le_mul (min_le_left _ _) hρ hρ0 hη.le
+      _ ≤ ‖x' - y'‖ * u := mul_le_mul_of_nonneg_right hd hu0.le
+      _ = u * ‖x' - y'‖ := mul_comm _ _
+  · obtain ⟨p, hp⟩ := intPoint_mem_childOffsets hx'n hxq
+    have hout := htrim y hy p
+    simp only [repairSquare, Metric.mem_closedBall, dist_eq_norm, not_le] at hout
+    have hyq' : y - (v + u • repairChildOffset p) = u • (y' - ((i : ℝ), (j : ℝ))) := by
+      rw [hp, hyy, smul_sub]; abel
+    rw [hyq', norm_smul, Real.norm_eq_abs, abs_of_pos hu0] at hout
+    have hd := half_rpow_le_repairHalfSide hu0
+    rw [hnorm]
+    have : u * (‖y' - ((i : ℝ), (j : ℝ))‖ / 2) ≤ u * ‖x' - y'‖ :=
+      mul_le_mul_of_nonneg_left hang hu0.le
+    nlinarith [min_le_right η (1 / 4)]
+
 end TNLean.PEPS.AreaLaw.Geometry
