@@ -104,6 +104,7 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairChildCones
 import TNLean.PEPS.AreaLaw.Geometry.RepairChildStarStep
 import TNLean.PEPS.AreaLaw.Geometry.RepairChildStars
 import TNLean.PEPS.AreaLaw.Geometry.RepairCurrentAssignments
+import TNLean.PEPS.AreaLaw.Geometry.RepairCurrentRegions
 import TNLean.PEPS.AreaLaw.Geometry.RepairDepth
 import TNLean.PEPS.AreaLaw.Geometry.RepairDescendantCounts
 import TNLean.PEPS.AreaLaw.Geometry.RepairDescendants
