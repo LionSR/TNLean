@@ -98,6 +98,7 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairCurrentAssignments
 import TNLean.PEPS.AreaLaw.Geometry.RepairDepth
 import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementRegions
 import TNLean.PEPS.AreaLaw.Geometry.RepairStage
+import TNLean.PEPS.AreaLaw.Geometry.RepairStageSites
 import TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation
 import TNLean.PEPS.AreaLaw.Geometry.SegmentBallClipping
 import TNLean.PEPS.AreaLaw.Geometry.SideEndpoints
