@@ -271,4 +271,177 @@ theorem exists_beltAtom_subset_closure_dyadicCell (hℓ : ℓ ≤ ℓ' + 1) {p :
 
 end Pieces
 
+/-! ### The normalized reference cell -/
+
+section Reference
+
+variable {o : ℝ × ℝ} {ℓ : ℕ} {z : ℤ × ℤ}
+
+theorem beltNormalize_image_segment (a b : ℝ × ℝ) :
+    beltNormalize o ℓ z '' segment ℝ a b =
+      segment ℝ (beltNormalize o ℓ z a) (beltNormalize o ℓ z b) := by
+  ext q
+  constructor
+  · rintro ⟨_, ⟨θ₁, θ₂, h₁, h₂, h₁₂, rfl⟩, rfl⟩
+    exact ⟨θ₁, θ₂, h₁, h₂, h₁₂, (beltNormalize_combo h₁₂).symm⟩
+  · rintro ⟨θ₁, θ₂, h₁, h₂, h₁₂, rfl⟩
+    exact ⟨θ₁ • a + θ₂ • b, ⟨θ₁, θ₂, h₁, h₂, h₁₂, rfl⟩, beltNormalize_combo h₁₂⟩
+
+/-- The fan points of the reference cell in normalized coordinates. -/
+theorem beltNormalize_cellFanCenter_add (u : ℝ × ℝ) :
+    beltNormalize o ℓ z (cellFanCenter o ℓ z + ((2 : ℝ) ^ ℓ / 2) • u) =
+      (2 + 2 * u.1, 2 + 2 * u.2) := by
+  have hpos : (0 : ℝ) < (2 : ℝ) ^ ℓ := by positivity
+  ext
+  · rw [beltNormalize_fst]
+    simp only [cellFanCenter, Prod.fst_add, Prod.smul_fst, smul_eq_mul]
+    field_simp
+    ring
+  · rw [beltNormalize_snd]
+    simp only [cellFanCenter, Prod.snd_add, Prod.smul_snd, smul_eq_mul]
+    field_simp
+    ring
+
+private theorem cellFanSideVector_int (side : Fin 4) (k : ℤ) :
+    ∃ m n : ℤ, cellFanSideVector side k = ((m : ℝ), (n : ℝ)) := by
+  fin_cases side
+  · exact ⟨1, k, by simp [cellFanSideVector]⟩
+  · exact ⟨-k, 1, by simp [cellFanSideVector]⟩
+  · exact ⟨-1, -k, by simp [cellFanSideVector]⟩
+  · exact ⟨k, -1, by simp [cellFanSideVector]⟩
+
+/-- The endpoints of the elementary sides of the reference cell are, after
+normalization, points with even integer coordinates. -/
+theorem exists_beltNormalize_cellFanStart_eq (split : Fin 4 → Bool) (i : CellFanSlot split) :
+    ∃ m n : ℤ, beltNormalize o ℓ z (cellFanStart o ℓ z split i) =
+      (((2 * m : ℤ) : ℝ), ((2 * n : ℤ) : ℝ)) := by
+  obtain ⟨k, hk⟩ : ∃ k : ℤ, (if split i.1 then (i.2.val : ℝ) - 1 else -1) = k := by
+    split_ifs
+    · exact ⟨i.2.val - 1, by push_cast; ring⟩
+    · exact ⟨-1, by norm_num⟩
+  obtain ⟨m, n, hmn⟩ := cellFanSideVector_int i.1 k
+  refine ⟨1 + m, 1 + n, ?_⟩
+  rw [cellFanStart_eq, hk, beltNormalize_cellFanCenter_add, hmn]
+  push_cast; ext <;> simp <;> ring
+
+theorem exists_beltNormalize_cellFanEnd_eq (split : Fin 4 → Bool) (i : CellFanSlot split) :
+    ∃ m n : ℤ, beltNormalize o ℓ z (cellFanEnd o ℓ z split i) =
+      (((2 * m : ℤ) : ℝ), ((2 * n : ℤ) : ℝ)) := by
+  obtain ⟨k, hk⟩ : ∃ k : ℤ, (if split i.1 then (i.2.val : ℝ) else 1) = k := by
+    split_ifs
+    · exact ⟨i.2.val, by push_cast; ring⟩
+    · exact ⟨1, by norm_num⟩
+  obtain ⟨m, n, hmn⟩ := cellFanSideVector_int i.1 k
+  refine ⟨1 + m, 1 + n, ?_⟩
+  rw [cellFanEnd_eq, hk, beltNormalize_cellFanCenter_add, hmn]
+  push_cast; ext <;> simp <;> ring
+
+/-- A point whose normalized coordinates are even and lie in `[0, 4]` is one of
+the nine marks of the reference cell.
+Source: area-law Section 11, `geometry:initial-stars`, lines 325–330. -/
+theorem mem_beltCellMarks_of_beltNormalize_eq {v : ℝ × ℝ} {m n : ℤ} (hm : 0 ≤ m ∧ m ≤ 2)
+    (hn : 0 ≤ n ∧ n ≤ 2)
+    (h : beltNormalize o ℓ z v = (((2 * m : ℤ) : ℝ), ((2 * n : ℤ) : ℝ))) :
+    v ∈ beltCellMarks o ℓ z := by
+  classical
+  have hpos : (0 : ℝ) < (2 : ℝ) ^ ℓ := by positivity
+  let i : Fin 3 × Fin 3 := (⟨m.toNat, by omega⟩, ⟨n.toNat, by omega⟩)
+  have hmark : beltNormalize o ℓ z
+      (o.1 + (2 : ℝ) ^ ℓ * z.1 + (2 : ℝ) ^ ℓ * (i.1.val : ℝ) / 2,
+        o.2 + (2 : ℝ) ^ ℓ * z.2 + (2 : ℝ) ^ ℓ * (i.2.val : ℝ) / 2) =
+      (((2 * m : ℤ) : ℝ), ((2 * n : ℤ) : ℝ)) := by
+    have e₁ : ((i.1.val : ℕ) : ℝ) = m := by
+      simp only [i]; exact_mod_cast Int.toNat_of_nonneg hm.1
+    have e₂ : ((i.2.val : ℕ) : ℝ) = n := by
+      simp only [i]; exact_mod_cast Int.toNat_of_nonneg hn.1
+    ext
+    · rw [beltNormalize_fst, e₁]; push_cast; field_simp; ring
+    · rw [beltNormalize_snd, e₂]; push_cast; field_simp; ring
+  rw [← hmark] at h
+  rw [(beltNormalize o ℓ z).injective h]
+  exact Finset.mem_image.mpr ⟨i, Finset.mem_univ _, rfl⟩
+
+/-- The normalized reference cell is `[0, 4]²`. -/
+theorem beltNormalize_mem_Icc {v : ℝ × ℝ} (hv : v ∈ closure (dyadicCell o ℓ z)) :
+    (beltNormalize o ℓ z v).1 ∈ Set.Icc (0 : ℝ) 4 ∧ (beltNormalize o ℓ z v).2 ∈ Set.Icc (0 : ℝ) 4 := by
+  have hpos : (0 : ℝ) < (2 : ℝ) ^ ℓ := by positivity
+  rw [closure_dyadicCell] at hv
+  obtain ⟨⟨h₁, h₂⟩, h₃, h₄⟩ := hv
+  rw [beltNormalize_fst, beltNormalize_snd]
+  refine ⟨⟨?_, ?_⟩, ?_, ?_⟩
+  · apply mul_nonneg (by positivity); linarith
+  · rw [div_mul_eq_mul_div, div_le_iff₀ hpos]; nlinarith
+  · apply mul_nonneg (by positivity); linarith
+  · rw [div_mul_eq_mul_div, div_le_iff₀ hpos]; nlinarith
+
+private theorem add_mem_uIcc_of_odd {a b j : ℤ} (hj : Odd j) (ha : Even a) (hb : Even b)
+    (h : (j : ℝ) ∈ Set.uIcc (a : ℝ) (b : ℝ)) {σ : ℝ} (hσ : σ = 1 ∨ σ = -1) :
+    (j : ℝ) + σ ∈ Set.uIcc (a : ℝ) (b : ℝ) := by
+  rw [Set.mem_uIcc] at h ⊢
+  obtain ⟨r, hr⟩ := hj
+  obtain ⟨p, hp⟩ := ha
+  obtain ⟨q, hq⟩ := hb
+  rcases h with ⟨h₁, h₂⟩ | ⟨h₁, h₂⟩
+  · have a₁ : a ≤ j := by exact_mod_cast h₁
+    have a₂ : j ≤ b := by exact_mod_cast h₂
+    have b₁ : ((a : ℤ) : ℝ) ≤ ((j - 1 : ℤ) : ℝ) := by exact_mod_cast (by omega : a ≤ j - 1)
+    have b₂ : ((j + 1 : ℤ) : ℝ) ≤ ((b : ℤ) : ℝ) := by exact_mod_cast (by omega : j + 1 ≤ b)
+    push_cast at b₁ b₂
+    left
+    rcases hσ with rfl | rfl <;> constructor <;> linarith
+  · have a₁ : b ≤ j := by exact_mod_cast h₁
+    have a₂ : j ≤ a := by exact_mod_cast h₂
+    have b₁ : ((b : ℤ) : ℝ) ≤ ((j - 1 : ℤ) : ℝ) := by exact_mod_cast (by omega : b ≤ j - 1)
+    have b₂ : ((j + 1 : ℤ) : ℝ) ≤ ((a : ℤ) : ℝ) := by exact_mod_cast (by omega : j + 1 ≤ a)
+    push_cast at b₁ b₂
+    right
+    rcases hσ with rfl | rfl <;> constructor <;> linarith
+
+/-- On an axis-parallel segment between points with even integer coordinates,
+an integer point with an odd coordinate is the midpoint of a unit subsegment
+along the segment.
+Source: area-law Section 11, lines 299–310. -/
+theorem add_mem_segment_of_odd {m₁ n₁ m₂ n₂ i j : ℤ}
+    (hax : m₁ = m₂ ∨ n₁ = n₂)
+    (hq : ((i : ℝ), (j : ℝ)) ∈ segment ℝ (((2 * m₁ : ℤ) : ℝ), ((2 * n₁ : ℤ) : ℝ))
+      (((2 * m₂ : ℤ) : ℝ), ((2 * n₂ : ℤ) : ℝ)))
+    (hodd : ¬ (Even i ∧ Even j)) :
+    (Odd (i + j) ∧ ∀ σ : ℝ, (σ = 1 ∨ σ = -1) → ((i : ℝ) + σ, (j : ℝ)) ∈
+      segment ℝ (((2 * m₁ : ℤ) : ℝ), ((2 * n₁ : ℤ) : ℝ))
+        (((2 * m₂ : ℤ) : ℝ), ((2 * n₂ : ℤ) : ℝ))) ∨
+    (Odd (i + j) ∧ ∀ σ : ℝ, (σ = 1 ∨ σ = -1) → ((i : ℝ), (j : ℝ) + σ) ∈
+      segment ℝ (((2 * m₁ : ℤ) : ℝ), ((2 * n₁ : ℤ) : ℝ))
+        (((2 * m₂ : ℤ) : ℝ), ((2 * n₂ : ℤ) : ℝ))) := by
+  rcases hax with rfl | rfl
+  · -- a vertical segment
+    rw [← Prod.image_mk_segment_right, segment_eq_uIcc] at hq ⊢
+    obtain ⟨y, hy, hyq⟩ := hq
+    simp only [Prod.mk.injEq] at hyq
+    obtain ⟨hi, rfl⟩ := hyq
+    have hi' : i = 2 * m₁ := by exact_mod_cast hi.symm
+    have hie : Even i := ⟨m₁, by omega⟩
+    have hjo : Odd j := by
+      rcases Int.even_or_odd j with h | h
+      · exact absurd ⟨hie, h⟩ hodd
+      · exact h
+    right
+    refine ⟨hie.add_odd hjo, fun σ hσ ↦ ⟨(j : ℝ) + σ, ?_, by simp [hi]⟩⟩
+    exact add_mem_uIcc_of_odd hjo ⟨n₁, by ring⟩ ⟨n₂, by ring⟩ hy hσ
+  · -- a horizontal segment
+    rw [← Prod.image_mk_segment_left, segment_eq_uIcc] at hq ⊢
+    obtain ⟨x, hx, hxq⟩ := hq
+    simp only [Prod.mk.injEq] at hxq
+    obtain ⟨rfl, hj⟩ := hxq
+    have hj' : j = 2 * n₁ := by exact_mod_cast hj.symm
+    have hje : Even j := ⟨n₁, by omega⟩
+    have hio : Odd i := by
+      rcases Int.even_or_odd i with h | h
+      · exact absurd ⟨h, hje⟩ hodd
+      · exact h
+    left
+    refine ⟨hio.add_even hje, fun σ hσ ↦ ⟨(i : ℝ) + σ, ?_, by simp [hj]⟩⟩
+    exact add_mem_uIcc_of_odd hio ⟨m₁, by ring⟩ ⟨m₂, by ring⟩ hx hσ
+
+end Reference
+
 end TNLean.PEPS.AreaLaw.Geometry
