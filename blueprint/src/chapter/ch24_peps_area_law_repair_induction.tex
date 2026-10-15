@@ -14,7 +14,7 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairMarkParent,
         TNLean.PEPS.AreaLaw.Geometry.repairMarkAncestor,
         TNLean.PEPS.AreaLaw.Geometry.repairRegionParent,
-        TNLean.PEPS.AreaLaw.Geometry.repairEarlierTerminalInteriors}
+        TNLean.PEPS.AreaLaw.Geometry.repairEarlierTerminalSquares}
     \leanok
     \uses{def:area_law_repair_stage,def:area_law_repair_children,
         def:area_law_repair_successor_regions}
@@ -31,7 +31,7 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     occurrence of $\mathcal D_j$; retained old identifiers have no parent.
     The descendants of a mark are the marks and fresh identifiers whose
     ancestor it is. Finally, let $\mathcal E_j$ be the union of the
-    interiors of the terminal squares of the generations $i<j$.
+    closed terminal squares of the generations $i<j$.
 \end{definition}
 
 % Source: 10-geometry.tex, geometry:initial-stars, lines 332--349, and
@@ -90,7 +90,7 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
         TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.disjoint_repairSquare,
         TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.dist_descendant_le,
         TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.birth_descendant_subset,
-        TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.disjoint_earlierTerminalInteriors,
+        TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.disjoint_earlierTerminalSquares,
         TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.terminates}
     \leanok
     \uses{def:area_law_repair_ancestors,thm:area_law_repair_margins}

@@ -20,7 +20,7 @@ scale at least `S_*` and distinct initial marks satisfy
 * every descendant mark and every descendant birth region of a mark `(v, S)`
   lies within sup distance `2 d(S)` of `v`;
 * the isolated-star square `v + [-a₀ S, a₀ S]²` of every mark avoids the
-  interiors of the terminal squares of all earlier generations;
+  closed terminal squares of all earlier generations;
 * every branch terminates after finitely many generations.
 
 These are the assertions of the uniform repair induction that follow from
@@ -383,16 +383,16 @@ theorem terminates (i : ℕ) (p : (𝔇 i).markIndex) :
   rw [div_lt_iff₀ h.stop_pos] at hn
   linarith
 
-/-- The isolated-star square of every mark avoids the interiors of the
-terminal squares of all earlier generations.
+/-- The isolated-star square of every mark avoids the closed terminal
+squares of all earlier generations.
 Source: area-law Section 11, `geometry:repair-induction`, lines 474–476 and
 526–536. -/
-theorem disjoint_earlierTerminalInteriors (j : ℕ) (p : (𝔇 j).markIndex) :
+theorem disjoint_earlierTerminalSquares (j : ℕ) (p : (𝔇 j).markIndex) :
     Disjoint (Metric.closedBall ((𝔇 j).location p) (a₀ * (𝔇 j).scale p))
-      (repairEarlierTerminalInteriors o Λ A C k₀ hC h₀ Sstar j) := by
+      (repairEarlierTerminalSquares o Λ A C k₀ hC h₀ Sstar j) := by
   rw [Set.disjoint_left]
   intro x hxp hxt
-  simp only [repairEarlierTerminalInteriors, repairTerminalInteriorSet, Set.mem_iUnion] at hxt
+  simp only [repairEarlierTerminalSquares, Set.mem_iUnion] at hxt
   obtain ⟨i, hij, ⟨t, ht⟩, hx⟩ := hxt
   obtain ⟨n, rfl⟩ := Nat.exists_eq_add_of_lt hij
   set a := repairMarkAncestor o Λ A C k₀ hC h₀ Sstar i (n + 1) p
@@ -404,7 +404,7 @@ theorem disjoint_earlierTerminalInteriors (j : ℕ) (p : (𝔇 j).markIndex) :
   have hsep := h.separated i a t hat
   have hda := h.dist_ancestor_add_scale_le i n p
   have hxt' : dist x ((𝔇 i).location t) ≤ repairHalfSide ((𝔇 i).scale t) :=
-    Metric.mem_closedBall.mp (interior_subset hx)
+    Metric.mem_closedBall.mp hx
   have hxp' : dist x ((𝔇 (i + (n + 1))).location p) ≤ a₀ * (𝔇 (i + (n + 1))).scale p :=
     hxp
   have hstar : a₀ * (𝔇 (i + (n + 1))).scale p ≤ (𝔇 (i + (n + 1))).scale p :=
