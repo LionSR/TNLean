@@ -23,7 +23,9 @@ discharged.
 ## Main results
 
 * `Approximation.exists_pointTreatment_footprintRatio_homogenize_reading`.
-* `Approximation.exists_pointTreatment_step_reading`.
+* `Approximation.exists_pointTreatment_step_reading_isSourceBounded`,
+  `Approximation.exists_pointTreatment_step_reading`: with and without the bound of `2b` pair
+  sources in every monomial.
 
 ## References
 
@@ -95,6 +97,89 @@ theorem exists_pointTreatment_footprintRatio_homogenize_reading {ε₀ : ℝ} (h
 
 variable {κ Party : Type}
 
+/-- **The point treatments as gates, with one footprint ratio and their pair sources.** The
+conclusion of `exists_pointTreatment_step_reading`, together with the bound of `2b` pair sources
+in every monomial of each gate.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 328–339, 447–505 and 559–570; Theorem 5.2,
+item 3, `04-compression.tex`, lines 143–147. -/
+theorem exists_pointTreatment_step_reading_isSourceBounded {ε₀ : ℝ} (hε : 0 < ε₀)
+    (hε₀ : ε₀ ≤ 1 / 16) :
+    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {v : ℝ × ℝ}, IsGenericDisplacement v →
+      ∀ {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
+      {κ Party : Type} {n t : ℝ} (hn : 0 < n), 0 < t → 8 * t < n →
+      ∀ {lab : ℤ × ℤ → κ} {S : ℤ × ℤ} {B : κ} {g : ℝ × ℝ → κ},
+      (blockBaseline hn lab S B).IsUnmodifiedGuide g →
+      ∀ {M₁ M₂ : Finset (ℤ × ℤ)} (Q₀ : ℤ × ℤ), IsBlockCornerOf S Q₀ →
+      (∀ Q, Q ≠ Q₀ → (Q ∈ M₁ ↔ Q ∈ M₂)) → ∀ (L₀ : κ),
+      (L₀ = B ∨ ∃ R ∈ blockWindow 1, L₀ = lab (R + S)) → ∀ {g₁ g₂ : ℝ × ℝ → κ},
+      IsDisplacedReading g₁ (homogenize (⋃ Q ∈ M₁, ball (blockCorner n Q) t) L₀
+        (shiftGuide (blockCorner n S) g)) v →
+      IsDisplacedReading g₂ (homogenize (⋃ Q ∈ M₂, ball (blockCorner n Q) t) L₀
+        (shiftGuide (blockCorner n S) g)) v → ∀ (own : κ → Party) (ph : κ) (rank : κ → ℕ)
+      {V V' : Finset (ℝ × ℝ)}, (∀ c ∈ V, IsTrueVertex g₁ c) → (∀ c ∈ V', IsTrueVertex g₂ c) →
+      (∀ c ∈ closedBall (blockCorner n Q₀) (3 * t), IsTrueVertex g₁ c → c ∈ V) →
+      (∀ c ∈ closedBall (blockCorner n Q₀) (3 * t), IsTrueVertex g₂ c → c ∈ V') →
+      (∀ c, n - t ≤ dist c (blockCorner n Q₀) → (c ∈ V ↔ c ∈ V')) →
+      ∀ (hole patch : ℝ × ℝ → SquarePatch pos q),
+      (∀ z, (hole z).center = z ∧ (hole z).scale = ε₀ * t) →
+      (∀ z, (patch z).center = z ∧ (patch z).scale = ν * t / 2) →
+      ∀ (hpV : (V : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (hole z).outer (hole z').outer)
+        (hpV' : (V' : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (hole z).outer (hole z').outer)
+        {C c b L : ℕ}, 1 ≤ L → (∀ z, Fintype.card (hole z).Tag ≤ C * L ^ c) →
+      (∀ z, Fintype.card (patch z).Tag ≤ C * L ^ c) →
+      (2 * (2 + 4 * ε₀ + ν) / ν + 1) ^ 2 ≤ (b : ℝ) → 53 ≤ b →
+      ∀ {Ω : EuclideanSpace ℂ (ι → Fin q)}, ‖Ω‖ ≤ 1 →
+      (∀ z, ‖act (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
+      (∀ z, ‖act (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
+      (∀ z, Nonempty (hole z).Tag) →
+      ∃ w : OriginalCircuit (guideFrame pos q g₁ own ph rank V hole hpV).regs
+          (guideFrame pos q g₂ own ph rank V' hole hpV').regs,
+        w.nonprivateCount ≤ 1 ∧
+        (∀ γ, (↑(w.participants γ) : Set Party) ⊆ ↑(blockParties own lab S B)) ∧
+        w.IsExpansionBounded (2 * b) ((C + 1) ^ (3 * b) *
+          (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
+            L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) : ℕ) ∧
+        w.IsMonomialBounded ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
+          L ^ (3 * b * c + 4 * b * (3 * b * c + 30))) ∧
+        ‖w.eval ((guideFrame pos q g₁ own ph rank V hole hpV).regIso.symm
+            ((guideFrame pos q g₁ own ph rank V hole hpV).refVec Ω)) -
+          (guideFrame pos q g₂ own ph rank V' hole hpV').regIso.symm
+            ((guideFrame pos q g₂ own ph rank V' hole hpV').refVec Ω)‖ ≤
+          (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
+        w.IsSourceBounded (2 * b) := by
+  obtain ⟨ν₀, hν₀, H⟩ := exists_pointTreatment_footprintRatio_homogenize_reading hε
+  refine ⟨min ν₀ (1 / 4), lt_min hν₀ (by norm_num), fun ν hν hνν' {v} hv
+    {ι _ _ q _ pos κ Party n t} hn ht htn {lab S B g} hg
+    {M₁ M₂} Q₀ hQ₀ hM L₀ hL₀ {g₁ g₂} hg₁ hg₂ own ph rank {V V'} hV hV' hVc hVc' hVV'
+    hole patch hhole hpatch hpV hpV' {C c b L} hL hcHole hcPatch hb hb53 {Ω} hΩ hεp hεh htag => ?_⟩
+  have hνle : ν ≤ 1 / 4 := hνν'.trans (min_le_right _ _)
+  have hνν : ν ≤ ν₀ := hνν'.trans (min_le_left _ _)
+  have hQS : blockCorner n Q₀ ∈ closedBlock n S := by
+    obtain ⟨h1, h2⟩ := hQ₀
+    refine mem_closedSquare.2 ?_
+    simp only [blockCorner, Prod.fst_sub, Prod.snd_sub]
+    rcases h1 with h1 | h1 <;> rcases h2 with h2 | h2 <;> rw [h1, h2] <;> push_cast <;>
+      refine ⟨?_, ?_, ?_, ?_⟩ <;> nlinarith
+  have hW : closedBall (blockCorner n Q₀) (t + 2 * (ε₀ * t) + 3 * (ν * t / 2)) ⊆
+      closedBall (blockCorner n Q₀) (2 * t) :=
+    closedBall_subset_closedBall (by nlinarith)
+  have hδ : 2 * (ν * t / 2) ≤ ν * t := le_of_eq (by ring)
+  have hb' : (2 * (t + 2 * (ε₀ * t) + ν * t / 2) / (ν * t / 2) + 1) ^ 2 ≤ (b : ℝ) := by
+    have e : 2 * (t + 2 * (ε₀ * t) + ν * t / 2) / (ν * t / 2) = 2 * (2 + 4 * ε₀ + ν) / ν := by
+      field_simp
+      ring
+    rwa [e]
+  exact pointTreatment_step_isSourceBounded hn ht (by positivity) (by positivity) (by nlinarith)
+    hg Q₀ hQS hM L₀
+    hL₀ hg₁ hg₂ own ph rank hV hV' hVV' hole patch hhole hpatch hpV hpV' hW
+    (H := {c | c ∈ closedBall (blockCorner n Q₀) (3 * t) ∧ IsTrueVertex g₁ c})
+    (H' := {c | c ∈ closedBall (blockCorner n Q₀) (3 * t) ∧ IsTrueVertex g₂ c})
+    (fun c hc => hVc c hc.1 hc.2) (fun c hc => hVc' c hc.1 hc.2)
+    ((H ν hν hνν hv hn ht htn hg M₁ hQ₀ L₀ hL₀ g₁ hg₁).mono hδ)
+    ((H ν hν hνν hv hn ht htn hg M₂ hQ₀ L₀ hL₀ g₂ hg₂).mono hδ) hL hcHole hcPatch hb'
+    hb53 hΩ hεp hεh htag
+
 /-- **The point treatments as gates, with one footprint ratio.** Fix `0 < ε₀ ≤ 1/16`. There is a
 threshold `ν' > 0` such that, for every ratio `0 < ν ≤ ν'`, every generic displacement `v` and every
 `0 < t` with
@@ -148,35 +233,13 @@ theorem exists_pointTreatment_step_reading {ε₀ : ℝ} (hε : 0 < ε₀) (hε�
           (guideFrame pos q g₂ own ph rank V' hole hpV').regIso.symm
             ((guideFrame pos q g₂ own ph rank V' hole hpV').refVec Ω)‖ ≤
           (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by
-  obtain ⟨ν₀, hν₀, H⟩ := exists_pointTreatment_footprintRatio_homogenize_reading hε
-  refine ⟨min ν₀ (1 / 4), lt_min hν₀ (by norm_num), fun ν hν hνν' {v} hv
-    {ι _ _ q _ pos κ Party n t} hn ht htn {lab S B g} hg
+  obtain ⟨ν', hν', H⟩ := exists_pointTreatment_step_reading_isSourceBounded hε hε₀
+  refine ⟨ν', hν', fun ν hν hνν' {v} hv {ι _ _ q _ pos κ Party n t} hn ht htn {lab S B g} hg
     {M₁ M₂} Q₀ hQ₀ hM L₀ hL₀ {g₁ g₂} hg₁ hg₂ own ph rank {V V'} hV hV' hVc hVc' hVV'
     hole patch hhole hpatch hpV hpV' {C c b L} hL hcHole hcPatch hb hb53 {Ω} hΩ hεp hεh htag => ?_⟩
-  have hνle : ν ≤ 1 / 4 := hνν'.trans (min_le_right _ _)
-  have hνν : ν ≤ ν₀ := hνν'.trans (min_le_left _ _)
-  have hQS : blockCorner n Q₀ ∈ closedBlock n S := by
-    obtain ⟨h1, h2⟩ := hQ₀
-    refine mem_closedSquare.2 ?_
-    simp only [blockCorner, Prod.fst_sub, Prod.snd_sub]
-    rcases h1 with h1 | h1 <;> rcases h2 with h2 | h2 <;> rw [h1, h2] <;> push_cast <;>
-      refine ⟨?_, ?_, ?_, ?_⟩ <;> nlinarith
-  have hW : closedBall (blockCorner n Q₀) (t + 2 * (ε₀ * t) + 3 * (ν * t / 2)) ⊆
-      closedBall (blockCorner n Q₀) (2 * t) :=
-    closedBall_subset_closedBall (by nlinarith)
-  have hδ : 2 * (ν * t / 2) ≤ ν * t := le_of_eq (by ring)
-  have hb' : (2 * (t + 2 * (ε₀ * t) + ν * t / 2) / (ν * t / 2) + 1) ^ 2 ≤ (b : ℝ) := by
-    have e : 2 * (t + 2 * (ε₀ * t) + ν * t / 2) / (ν * t / 2) = 2 * (2 + 4 * ε₀ + ν) / ν := by
-      field_simp
-      ring
-    rwa [e]
-  exact pointTreatment_step hn ht (by positivity) (by positivity) (by nlinarith) hg Q₀ hQS hM L₀
-    hL₀ hg₁ hg₂ own ph rank hV hV' hVV' hole patch hhole hpatch hpV hpV' hW
-    (H := {c | c ∈ closedBall (blockCorner n Q₀) (3 * t) ∧ IsTrueVertex g₁ c})
-    (H' := {c | c ∈ closedBall (blockCorner n Q₀) (3 * t) ∧ IsTrueVertex g₂ c})
-    (fun c hc => hVc c hc.1 hc.2) (fun c hc => hVc' c hc.1 hc.2)
-    ((H ν hν hνν hv hn ht htn hg M₁ hQ₀ L₀ hL₀ g₁ hg₁).mono hδ)
-    ((H ν hν hνν hv hn ht htn hg M₂ hQ₀ L₀ hL₀ g₂ hg₂).mono hδ) hL hcHole hcPatch hb'
-    hb53 hΩ hεp hεh htag
+  obtain ⟨w, h₁, h₂, h₃, h₄, h₅, -⟩ := H ν hν hνν' hv hn ht htn hg Q₀ hQ₀ hM L₀ hL₀ hg₁ hg₂ own ph
+    rank hV hV' hVc hVc' hVV' hole patch hhole hpatch hpV hpV' hL hcHole hcPatch hb hb53 hΩ hεp hεh
+    htag
+  exact ⟨w, h₁, h₂, h₃, h₄, h₅⟩
 
 end TNLean.PEPS.Approximation
