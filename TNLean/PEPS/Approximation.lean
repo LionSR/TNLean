@@ -171,6 +171,7 @@ import TNLean.PEPS.Approximation.IncidentSampledEndpointWord
 import TNLean.PEPS.Approximation.IncidentSampledPhysicalFactor
 import TNLean.PEPS.Approximation.IncidentSourceWord
 import TNLean.PEPS.Approximation.IncidentSourceWordComparison
+import TNLean.PEPS.Approximation.InformationReset
 import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
 import TNLean.PEPS.Approximation.LayoutExcludedOwners
 import TNLean.PEPS.Approximation.LayoutOwnerMap
@@ -265,6 +266,7 @@ import TNLean.PEPS.Approximation.PureSourceMatrix
 import TNLean.PEPS.Approximation.RankOneBlocks
 import TNLean.PEPS.Approximation.RegionalStates
 import TNLean.PEPS.Approximation.RegisterReordering
+import TNLean.PEPS.Approximation.ResetUnitary
 import TNLean.PEPS.Approximation.RestrictedMixedPhysicalTrace
 import TNLean.PEPS.Approximation.RoutedContraction
 import TNLean.PEPS.Approximation.SampledEndpointExteriorIdentity
@@ -369,6 +371,7 @@ import TNLean.PEPS.Approximation.SquareGridSource
 import TNLean.PEPS.Approximation.SquareHamiltonianHermitianTerms
 import TNLean.PEPS.Approximation.SquareLatticeConnectivity
 import TNLean.PEPS.Approximation.SupportedPhysicalBufferGaussian
+import TNLean.PEPS.Approximation.SupportedPolarUnitary
 import TNLean.PEPS.Approximation.SwappedSquareHamiltonianBoundary
 import TNLean.PEPS.Approximation.SwappedSquareHamiltonianInteraction
 import TNLean.PEPS.Approximation.TensorSchmidtIsometries
