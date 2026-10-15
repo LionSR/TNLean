@@ -1,0 +1,55 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+\title{Birth-Template Separation for Replacements Only}
+\author{}
+\date{October 15, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source statement}
+
+Lemma~11.5 of~\cite{OpenAI2026AreaLaw} (\path{10-geometry.tex}, lines~573--582)
+asserts a fixed constant $c_1>0$ with the following property. Let
+$\mathcal B$ be the closed birth region either of an initial belt tile of side
+scale $u=t_k$, or of a replacement tile whose removal square has half-side $u$.
+Then $\mathcal B$ has distance at least $c_1u^{\rho_0}$ from the final actual
+region of every earlier or peer identifier of the same label. Its proof,
+lines~584--659, compares closed births with the older and peer regions after the
+removal step, uses a compactness argument away from contact marks and an angular
+estimate near them, and lets the following trim remove a square of radius
+comparable with $u^{\rho_0}$ about every contact mark.
+
+\section{The formal statement}
+
+The formalization proves the replacement half of the lemma, for the actual
+repair stages. Its only premise beyond the choice of the stopping scale is the
+conclusion of the uniform repair induction, Lemma~11.4 (lines~471--485), stated
+as a separate proposition.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.IsRepairBirthSeparated},
+\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_isRepairBirthSeparated_of_uniformRepairInductionStatement}.}
+The constant $c_1$ is fixed before the repair data. The separation is proved
+against every other identifier of the same generation with the same label,
+which contains the earlier and peer identifiers of the source.
+
+The births of initial belt tiles are not covered. For them the comparison is
+with the primary and belt closures at the initial stage; it requires the local
+classification of the initial belt arrangement around a reference cell rather
+than the fixed replacement fan used here.
+
+\section{What remains}
+
+The initial-belt half of Lemma~11.5 remains to be formalized. The normalized
+compactness and angular estimates already proved apply unchanged once the
+initial belt closures near a reference cell are written as finite unions of
+integer half-plane polygons, with the canonical sector assignment at the
+reference cell marks supplying the contacts.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}

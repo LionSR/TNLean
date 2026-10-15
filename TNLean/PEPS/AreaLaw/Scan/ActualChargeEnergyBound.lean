@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Scan.ActualScanMeasures
+import TNLean.PEPS.AreaLaw.Scan.ActualRoundSplits
 import TNLean.PEPS.AreaLaw.Scan.EnergyBalance
 import TNLean.PEPS.AreaLaw.Scan.SplitEntropyBound
 import TNLean.PEPS.AreaLaw.Scan.SplitCounting
@@ -39,24 +39,6 @@ open MeasureTheory Set TensorPower TensorPower.ReplicaTransport Entropy
 noncomputable section
 
 namespace TNLean.PEPS.AreaLaw.Scan
-
-open Classical in
-private theorem card_filter_le_sum_card {ι G B : Type*}
-    [Fintype ι] [Fintype G] [Fintype B]
-    (P : ι → Prop) (Q : G → B → ι → Prop)
-    (hPQ : ∀ i, P i → ∃ g b, Q g b i) :
-    (Finset.univ.filter P).card ≤ ∑ g, ∑ b, (Finset.univ.filter (Q g b)).card := by
-  calc
-    _ ≤ (Finset.univ.biUnion fun g ↦
-        Finset.univ.biUnion fun b ↦ Finset.univ.filter (Q g b)).card :=
-      Finset.card_le_card fun i hi ↦ by
-        obtain ⟨g, b, hQ⟩ := hPQ i (Finset.mem_filter.mp hi).2
-        exact Finset.mem_biUnion.mpr ⟨g, Finset.mem_univ _,
-          Finset.mem_biUnion.mpr ⟨b, Finset.mem_univ _,
-            Finset.mem_filter.mpr ⟨Finset.mem_univ _, hQ⟩⟩⟩
-    _ ≤ ∑ g, (Finset.univ.biUnion fun b ↦ Finset.univ.filter (Q g b)).card :=
-      Finset.card_biUnion_le
-    _ ≤ _ := Finset.sum_le_sum fun g _ ↦ Finset.card_biUnion_le
 
 namespace CollarScan
 
@@ -122,101 +104,24 @@ theorem actualCharge_energyError_le_domainGraph
       (historyMeanTree S.K S.m S.M hm hM s) (fun _ ↦ chargeChoiceTree S.K S.M hM)
       n hq (fun _ ↦ rfl) hL E (fun _ ↦ rfl)
   have hadm : D.IsAdmissible := S.actualChargeData_isAdmissible hm hM s
-  have hOldSplit (hist : History S.K S.m S.M s) (i : AdmissibleSupport Λ R)
-      (hi : Rd.splitOld i hist) :
-      ∃ g side, S.designatedSplitIncidence (S.oldChargeState hist g) L i side := by
-    change (⟨hist, none⟩ : Σ _ : History S.K S.m S.M s,
-      Option (ChargeChoices S.K S.M)) ∈ D.splitLeaves E i at hi
-    obtain ⟨g, hg⟩ := (Finset.mem_filter.mp hi).2
-    change ¬ (augmentedPartition (S.oldChargeState hist g)).Contains
-      ((designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
-        ⟨Sum.inl, Sum.inl_injective⟩) at hg
-    rcases S.old_designatedSupport_classification_domainGraph hT hgraph hdepth hist
-      (by omega) hs hr hDpos hD hL hrows hclear g i with hc | ⟨side, ht⟩
-    · exact (hg (augmentedPartition_contains_of_constant _ _ hc)).elim
-    · exact ⟨g, side, ht.2.1, ht.1⟩
-  have hNewSplit (hist : History S.K S.m S.M s) (c : ChargeChoices S.K S.M)
-      (i : AdmissibleSupport Λ R) (hi : Rd.splitNew i hist c) :
-      ∃ g side, S.designatedSplitIncidence (S.state (extendHistory hist c) g) L i side := by
-    change (⟨hist, some c⟩ : Σ _ : History S.K S.m S.M s,
-      Option (ChargeChoices S.K S.M)) ∈ D.splitLeaves E i at hi
-    obtain ⟨g, hg⟩ := (Finset.mem_filter.mp hi).2
-    change ¬ ((S.chargeTransportData (historyMeanTree S.K S.m S.M hm hM s)
-      (fun _ ↦ chargeChoiceTree S.K S.M hM)).new hist c g).Contains (E.support i) at hg
-    rw [S.chargeTransportData_new] at hg
-    rcases S.state_designatedSupport_classification_domainGraph hT hgraph hdepth
-      (extendHistory hist c) (by omega) hs hr hDpos hD hL hrows hclear g i with hc | ⟨side, ht⟩
-    · exact (hg (augmentedPartition_contains_of_constant _ _ hc)).elim
-    · exact ⟨g, side, ht.2.1, ht.1⟩
+  have hsupport : ∀ i, E.support i =
+      (designatedSupport S.graph (S.truncationSet L) S.r₀ (S.anchor i)).map
+        ⟨Sum.inl, Sum.inl_injective⟩ := fun _ ↦ rfl
   have hcardOld (hist : Rd.H) :
-      ((Finset.univ.filter fun i ↦ Rd.splitOld i hist).card : ℝ) ≤ A := by
-    have hc := (card_filter_le_sum_card (fun i ↦ Rd.splitOld i hist)
-      (fun g side i ↦ S.designatedSplitIncidence (S.oldChargeState hist g) L i side)
-      (hOldSplit hist)).trans
-      (S.sum_card_old_designatedSplitIncidence_le_domainGraph hT hgraph hdepth
-        hist hn hm2 hs hr hDpos hmargin hL hrows hmult hclear)
-    dsimp only [A]
-    exact_mod_cast hc
+      ((Finset.univ.filter fun i ↦ Rd.splitOld i hist).card : ℝ) ≤ A :=
+    S.actualChargeScanRound_card_splitOld_le hT hm hM n E a pre hgraph hdepth hsupport
+      hn hm2 hs hr hDpos hmargin hL hrows hclear hmult hist
   have hcardNew (hist : Rd.H) (c : Rd.Ch hist) :
-      ((Finset.univ.filter fun i ↦ Rd.splitNew i hist c).card : ℝ) ≤ A := by
-    have hc := (card_filter_le_sum_card (fun i ↦ Rd.splitNew i hist c)
-      (fun g side i ↦ S.designatedSplitIncidence (S.state (extendHistory hist c) g) L i side)
-      (hNewSplit hist c)).trans
-      (S.sum_card_state_designatedSplitIncidence_le_domainGraph hT hgraph hdepth
-        (extendHistory hist c) hn hm2 hs hr hDpos hmargin hL hrows hmult hclear)
-    dsimp only [A]
-    exact_mod_cast hc
+      ((Finset.univ.filter fun i ↦ Rd.splitNew i hist c).card : ℝ) ≤ A :=
+    S.actualChargeScanRound_card_splitNew_le hT hm hM n E a pre hgraph hdepth hsupport
+      hn hm2 hs hr hDpos hmargin hL hrows hclear hmult hist c
   have hw (hist : Rd.H) : Rd.w hist = historyWeight hist :=
     historyMeanTree_weight S.K S.m S.M hm hM s hist
   have hc (hist : Rd.H) (c : Rd.Ch hist) : Rd.q hist c = chargeWeight c :=
     chargeChoiceTree_weight S.K S.M hM c
-  have hsplit (i : AdmissibleSupport Λ R) : Rd.splitWeight p i ≤ 10 * (S.D : ℝ) / S.m := by
-    let oldEvent := fun hist : History S.K S.m S.M s ↦
-      ∃ g side, S.designatedSplitIncidence (S.oldChargeState hist g) L i side
-    let newEvent := fun hist : History S.K S.m S.M (s + 1) ↦
-      ∃ g side, S.designatedSplitIncidence (S.state hist g) L i side
-    have hold : (∑ hist, if Rd.splitOld i hist then (1 - p) * Rd.w hist else 0) ≤
-        (1 - p) * ∑ hist, if oldEvent hist then historyWeight hist else 0 := by
-      rw [Finset.mul_sum]
-      apply Finset.sum_le_sum
-      intro hist _
-      rw [hw]
-      by_cases hi : Rd.splitOld i hist
-      · simp only [hi, hOldSplit hist i hi, oldEvent, ↓reduceIte]
-        exact le_rfl
-      · simp only [hi, ↓reduceIte]
-        exact mul_nonneg (sub_nonneg.mpr hp.2.le) (by
-          split_ifs
-          · exact historyWeight_nonneg hist
-          · exact le_rfl)
-    have hnew : (∑ hist, ∑ c,
-        if Rd.splitNew i hist c then p * Rd.w hist * Rd.q hist c else 0) ≤
-        p * ∑ hist, if newEvent hist then historyWeight hist else 0 := by
-      have heq : (∑ hist : History S.K S.m S.M (s + 1),
-          if newEvent hist then historyWeight hist else 0) =
-          ∑ hist : History S.K S.m S.M s, ∑ c : ChargeChoices S.K S.M,
-            if newEvent (extendHistory hist c) then historyWeight hist * chargeWeight c else 0 := by
-        simpa only [mul_ite, _root_.mul_one, MulZeroClass.mul_zero] using
-          sum_historyWeight_mul_eq_sum_extendHistory
-            (fun hist ↦ if newEvent hist then (1 : ℝ) else 0)
-      rw [heq, Finset.mul_sum]
-      apply Finset.sum_le_sum
-      intro hist _
-      rw [Finset.mul_sum]
-      apply Finset.sum_le_sum
-      intro c _
-      rw [hw, hc]
-      by_cases hi : Rd.splitNew i hist c
-      · simp only [hi, hNewSplit hist c i hi, newEvent, ↓reduceIte]
-        exact le_of_eq (_root_.mul_assoc _ _ _)
-      · simp only [hi, ↓reduceIte]
-        exact mul_nonneg hp.1.le (by
-          split_ifs
-          · exact mul_nonneg (historyWeight_nonneg hist) (chargeWeight_nonneg c)
-          · exact le_rfl)
-    exact (add_le_add hold hnew).trans
-      (S.designated_split_mixture_dilution_domainGraph hT hgraph hdepth i
-        (by omega) hm hr hD hDpos hC hL hrows hclear hp.1.le hp.2.le)
+  have hsplit (i : AdmissibleSupport Λ R) : Rd.splitWeight p i ≤ 10 * (S.D : ℝ) / S.m :=
+    S.actualChargeScanRound_splitWeight_le hT hm hM n E a pre hgraph hdepth hsupport hC
+      (by omega) hs hr hDpos hD hL hrows hclear hp' i
   have hη0 (i : AdmissibleSupport Λ R)
       (j : Σ _ : History S.K S.m S.M s, Option (ChargeChoices S.K S.M))
       (θ : CoherentSphere (SiteConfig n)) : 0 ≤ D.splitEta E i j θ.1 :=

@@ -245,3 +245,235 @@ no holes, this is the normalization of $\Omega$.
     and the other factors, and its coordinates are $\Omega(c)$ times those of
     $\pi$. The norm bound is Theorem~\ref{thm:peps_sheet_stack_norm}.
 \end{proof}
+
+\begin{theorem}[The initial step of the dyadic protocol]
+    \label{thm:peps_dyadic_protocol_initial_step}
+    \lean{TNLean.PEPS.Approximation.DyadicProtocol.exists_originalCircuit_initial,
+        TNLean.PEPS.Approximation.rootSquare,
+        TNLean.PEPS.Approximation.initialFrames,
+        TNLean.PEPS.Approximation.length_initialFrames_le,
+        TNLean.PEPS.Approximation.rawHolder,
+        TNLean.PEPS.Approximation.mem_initialFrames,
+        TNLean.PEPS.Approximation.DyadicProtocol.exists_originalCircuit_initialFrames}
+    \leanok
+    \uses{def:peps_sheet_stack, def:peps_dyadic_protocol,
+        def:peps_dyadic_protocol_parties, def:peps_dyadic_protocol_schedule}
+    Let $L\ge1$ and $\lVert\Omega\rVert=1$. The initial sheets are the main copy of $\Omega$,
+    a frame without holes held entirely by the party of the root square, and one
+    copy for each change of the schedule that initializes an auxiliary sheet,
+    a frame without holes held entirely by the future owner of that copy; there
+    are at most $1+4(\#\text{squares}+\#\text{junctions})$ of them. Suppose that
+    the whole initial private memory of each party of a protocol is the memory
+    of the initial sheets it holds, and that its initial vector is the product of
+    their reference vectors. Then one private map per party followed by a
+    reordering of the sheets, with no nonprivate gate, carries the initial
+    reference vector of the protocol exactly to the reference vector of the
+    initial sheets. The future owners of the auxiliary copies are arbitrary
+    (\texttt{06-geometry.tex}, lines 21--23, 576, 649--652 and 658--667).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_sheet_raw_initialization, thm:peps_dyadic_protocol_schedule_counts}
+    Every initial sheet has no hole and is held by one party, so
+    Theorem~\ref{thm:peps_sheet_raw_initialization} applies; the initial layout of
+    the protocol is the layout of whole party memories, identified with the
+    memory of the frames of each party. The number of auxiliary copies is the
+    number of changes of the schedule that initialize an auxiliary sheet, at most
+    four for each square and junction.
+\end{proof}
+
+\begin{theorem}[The final step of the dyadic protocol]
+    \label{thm:peps_dyadic_protocol_final_step}
+    \lean{TNLean.PEPS.Approximation.DyadicProtocol.physicalDimension_eq_of_site_eq,
+        TNLean.PEPS.Approximation.DyadicProtocol.physicalDimension_eq_one_of_site_eq,
+        TNLean.PEPS.Approximation.DyadicProtocol.exists_reference_changes_of_readoutCircuit,
+        TNLean.PEPS.Approximation.unitSquare,
+        TNLean.PEPS.Approximation.toTriple_unitSquare,
+        TNLean.PEPS.Approximation.unitSquare_injective,
+        TNLean.PEPS.Approximation.isCellCenter_cellCenterPos,
+        TNLean.PEPS.Approximation.blockIndex_one_cellCenterPos,
+        TNLean.PEPS.Approximation.unitLevelFrame,
+        TNLean.PEPS.Approximation.unitLevelFrame_owner,
+        TNLean.PEPS.Approximation.unitLevelFrame_owner_injective,
+        TNLean.PEPS.Approximation.DyadicProtocol.exists_reference_changes_unitLevel}
+    \leanok
+    \uses{def:peps_final_regrouping, def:peps_guide_frame,
+        def:peps_dyadic_protocol_parties, def:peps_dyadic_protocol_schedule,
+        def:peps_dyadic_protocol}
+    Let $L\le 2^k<2L$ and $\lVert\Omega\rVert=1$. At the end of the last level
+    $n=1$ every unit block of the root square carries its own label, so the raw
+    owner of a site, at the cell center $(i+\frac12,j+\frac12)$, is the party of
+    its own unit square, and distinct sites have distinct owners. Let the holes of
+    the main frame sit at grid corners with patches of outer radius below
+    $\frac12$. Let the other sheets be frozen auxiliary frames, one for each
+    change of the schedule that initializes an auxiliary sheet, each with at most
+    as many holes as its final guide has true vertices and with patches supplied
+    by the adaptive patch constraint at accuracy $L^{-60}$, followed by idle registers with a
+    vector of norm one. If the unit-square party of every site of a protocol is
+    the party of its unit square, and its final layout and final reference vector
+    are those of the final regrouping of these sheets, then the readout of the
+    final reference vector is $\Omega\otimes\Xi$ with
+    $1-214\,L^{-57}\le\lVert\Xi\rVert\le1$. The frozen auxiliary frames and the
+    idle registers are otherwise arbitrary (\texttt{06-geometry.tex}, lines
+    43--51, 653--656 and 669--681).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_final_reference, thm:peps_guide_frame_norm,
+        lem:peps_guide_frame_patch_data, lem:peps_dyadic_frozen_hole_count,
+        thm:peps_dyadic_repainting_valid_labels}
+    A site at $(i+\frac12,j+\frac12)$ lies in the unit block $(i,j)$, which lies in
+    the root square and has been repainted to its own label; that label is held
+    by the party of the unit square $(i,j)$. By Theorem~\ref{thm:peps_guide_frame_norm}
+    every hole of the main frame has empty physical outer sample. Supplied patches
+    have projector error at most $L^{-60}$, and by
+    Lemma~\ref{lem:peps_dyadic_frozen_hole_count} the frozen auxiliary frames carry
+    at most $214\,L^3$ holes in total. Theorem~\ref{thm:peps_final_reference} gives
+    the readout.
+\end{proof}
+
+\begin{definition}[Bounded changes of the sheets]
+    \label{def:peps_bounded_change}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_mono,
+        TNLean.PEPS.PairEffect.OriginalCircuit.norm_eval_le_norm,
+        TNLean.PEPS.PairEffect.OriginalCircuit.IsBoundedChange,
+        TNLean.PEPS.EncodedFrame.HasBoundedChange}
+    \leanok
+    \uses{def:peps_sheet_stack}
+    An original circuit is a bounded change from a vector $x$ to a vector $y$, with
+    participants in a set $S$ and bounds $r$ and $K$ and error $\varepsilon$, if it
+    has at most one nonprivate gate, every participant of that gate lies in $S$,
+    every monomial of its expansion has at most $r$ pair effects, its coefficient
+    sum and its number of monomials are at most $K$, and it takes $x$ within
+    $\varepsilon$ of $y$. A bounded change of the sheets from the frames
+    $\mathcal F_1,\dots,\mathcal F_m$ to the frames
+    $\mathcal F'_1,\dots,\mathcal F'_{m'}$, followed by the same further registers
+    $\ell$ with vector $\xi$, is a bounded change between their memories from
+    $\Omega_{\mathcal F_1}\otimes\cdots\otimes\Omega_{\mathcal F_m}\otimes\xi$ to
+    $\Omega_{\mathcal F'_1}\otimes\cdots\otimes\Omega_{\mathcal F'_{m'}}\otimes\xi$.
+    These are the per-change requirements of items 2 and 4 of
+    \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} (\texttt{06-geometry.tex},
+    lines 25--41 and 572--583).
+\end{definition}
+
+\begin{theorem}[Operations that preserve bounded changes]
+    \label{thm:peps_bounded_change_closure}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.IsBoundedChange.mono,
+        TNLean.PEPS.PairEffect.OriginalCircuit.IsBoundedChange.comp_right,
+        TNLean.PEPS.PairEffect.OriginalCircuit.IsBoundedChange.comp_left,
+        TNLean.PEPS.PairEffect.OriginalCircuit.isBoundedChange_id,
+        TNLean.PEPS.PairEffect.Word.isBoundedChange_toOriginalCircuit,
+        TNLean.PEPS.PairEffect.PartyChain.isBoundedChange_toOriginalCircuit,
+        TNLean.PEPS.EncodedFrame.pairRef_eq_twoLayoutIso_symm,
+        TNLean.PEPS.EncodedFrame.HasBoundedChange.mono,
+        TNLean.PEPS.EncodedFrame.hasBoundedChange_of_perm,
+        TNLean.PEPS.EncodedFrame.hasBoundedChange_refl,
+        TNLean.PEPS.EncodedFrame.HasBoundedChange.perm_left,
+        TNLean.PEPS.EncodedFrame.HasBoundedChange.perm_right,
+        TNLean.PEPS.EncodedFrame.hasBoundedChange_liftOne,
+        TNLean.PEPS.EncodedFrame.hasBoundedChange_liftTwo,
+        TNLean.PEPS.EncodedFrame.hasBoundedChange_activate,
+        TNLean.PEPS.EncodedFrame.hasBoundedChange_perm_liftOne,
+        TNLean.PEPS.EncodedFrame.exists_isBoundedChange_of_frame_eq}
+    \leanok
+    \uses{def:peps_bounded_change, thm:peps_sheet_reordering, thm:peps_identity_change}
+    Let $\lVert\Omega\rVert\le1$ and $\lVert\xi\rVert\le1$.
+    \begin{enumerate}
+        \item A permutation of the sheets, and the change between equal frames, are
+              bounded changes with any participants, any bounds and any error
+              $\varepsilon\ge0$. A permutation of the sheets before or after a bounded
+              change gives a bounded change with the same data.
+        \item A bounded change of one frame $\mathcal F$ into $\mathcal F'$, from
+              $\Omega_{\mathcal F}$ to $\Omega_{\mathcal F'}$, is a bounded change of the
+              sheets $\mathcal F_1,\dots,\mathcal F,\dots,\mathcal F_m$ into
+              $\mathcal F_1,\dots,\mathcal F',\dots,\mathcal F_m$ with the same data; so
+              is a bounded change of two adjacent frames, from
+              $\Omega_{\mathcal F_1}\otimes\Omega_{\mathcal F_2}$ to
+              $\Omega_{\mathcal F'_1}\otimes\Omega_{\mathcal F'_2}$. In particular an idle
+              auxiliary copy can be moved next to the main sheet and then changed together
+              with it.
+        \item An allowed word using only the parties of $S$ with at most one pair source
+              is a bounded change with its own error, for every $r$ and every $K\ge1$. An
+              allowed chain using only the parties of $S$, without pair sources and with at
+              most one pair effect, is a bounded change for every $r\ge1$ and $K\ge1$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_sheet_reordering}
+    A permutation of the sheets is a word of exchanges, without nonprivate gate and
+    without error, and an original circuit is a contraction, so composing with it
+    does not increase the error. The spectator sheets of a lifted change have
+    reference vectors of norm at most one. A word becomes an original circuit with
+    one two-party gate for each pair source, and a chain one more gate for each pair
+    effect, each with a single monomial of coefficient one.
+\end{proof}
+
+\begin{theorem}[The operations of the protocol as bounded changes]
+    \label{thm:peps_protocol_bounded_changes}
+    \lean{TNLean.PEPS.Approximation.DyadicSquare.index,
+        TNLean.PEPS.Approximation.eventUses_labelParty_protocolLevelLabels,
+        TNLean.PEPS.Approximation.eventUses_labelParty_newParty,
+        TNLean.PEPS.Approximation.eventUses_labelParty_guidePlaceholder,
+        TNLean.PEPS.Approximation.abs_sub_le_one_of_mem_blockWindow,
+        TNLean.PEPS.Approximation.coe_subset_eventUses_of_window,
+        TNLean.PEPS.Approximation.coe_blockParties_subset_eventUses,
+        TNLean.PEPS.Approximation.IsProtocolConstants.lt_one_div_four_thousand,
+        TNLean.PEPS.Approximation.isBoundedChange_of_step,
+        TNLean.PEPS.Approximation.directRepainting_isBoundedChange,
+        TNLean.PEPS.Approximation.isBoundedChange_of_birth,
+        TNLean.PEPS.Approximation.isBoundedChange_of_death,
+        TNLean.PEPS.Approximation.isBoundedChange_of_exchange}
+    \leanok
+    \uses{thm:peps_bounded_change_closure, def:peps_dyadic_protocol_parties,
+        thm:peps_dyadic_direct_repainting_constants}
+    Read the labels of the guides of the repainting of a square $R$ as parties: a
+    block label by its block party and the placeholder label by the fresh placeholder
+    party of $R$. Then the labels of the nine blocks around $R$, at any stage of the
+    pass to its level, its new label and the placeholder are held by parties that the
+    repainting of $R$ uses. Consequently, at the constants of the protocol, the direct
+    repainting of $R$ is a bounded change of its frame whose participants are used by
+    the repainting, with error $(2b+1)L^{-20}$; and a point treatment, its removal, a
+    resize, a bulk birth or death, or a lens exchange, given in the form produced by
+    its step theorem, is a bounded change with participants among the parties of that
+    step theorem. A lens exchange has no nonprivate gate. Moreover the constants of the
+    protocol satisfy $\epsilon_0<1/4000$ (\texttt{06-geometry.tex}, lines 91--100,
+    328--541 and 559--596).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_dyadic_direct_repainting_constants}
+    The labels are those of the active-label invariant: a label of a block next to
+    $R$ is the placeholder or the label of a square whose block is next to $R$ or
+    contains such a block. The reference vector of two sheets in the coordinates of the
+    exchange is the product of their reference vectors. For the constants,
+    $2\epsilon_0(a_0+1)\le a_0/2$ with $a_0=1/5000$ gives
+    $\epsilon_0\le1/20004$.
+\end{proof}
+
+\begin{theorem}[Bounded changes along the schedule]
+    \label{thm:peps_protocol_bounded_trajectory}
+    \lean{TNLean.PEPS.EncodedFrame.exists_steps_of_hasBoundedChange,
+        TNLean.PEPS.Approximation.norm_trajectory_sub_stackVec_le,
+        TNLean.PEPS.Approximation.card_participation_le_of_eventUses}
+    \leanok
+    \uses{thm:peps_bounded_change_closure, def:peps_dyadic_protocol_schedule,
+        thm:peps_dyadic_protocol_lifetime}
+    Let a sequence of lists of frames, from any initial list to any final list, have
+    consecutive stages joined by bounded changes. Then the changes can be chosen once
+    and for all. If $2^k<2L$ with $L\ge1$, the changes are at most as many as those of
+    the schedule, and each has error at most $CL^{-20}$, then the actual vector,
+    started at the initial reference vector, stays within $5040\,CL^{-17}$ of the
+    reference vector. If each change of the schedule has at most one nonprivate gate,
+    whose participants are used by the event of the change, then every party
+    participates in at most $64\cdot189$ nonprivate gates (\texttt{06-geometry.tex},
+    lines 25--41 and 572--631).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_dyadic_protocol_lifetime}
+    The errors add up because every change is a contraction, and the schedule has at
+    most $5040L^3$ changes. Each change of the schedule carries at most one gate, so
+    each event carries at most $189$ gates, and the lifetime bound of the parties
+    applies.
+\end{proof}

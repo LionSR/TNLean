@@ -148,8 +148,8 @@ These are the canonical parent terms considered in
     invariant subspace, so the generated unital $*$-algebra preserves it.
     Apply Theorem~\ref{thm:glm_parent_invariant_star_algebra} to obtain
     $h_LO^L_{T,Y}=O^L_{T,Y}h_L$. The same orthogonal reduction gives
-    $P_LO^L_{T,Y}=O^L_{T,Y}P_L$. The canonical identification with
-    the Hilbert space of configurations gives the stated coordinate forms.
+    $P_LO^L_{T,Y}=O^L_{T,Y}P_L$. Identifying the configuration space
+    with the orthonormal basis gives the stated coordinate forms.
     Adjoining the ambient identity does not require a represented support
     projection to equal the ambient identity.
 \end{proof}
@@ -291,8 +291,8 @@ These are the canonical parent terms considered in
     Let $T=\bigoplus_a T_a$ be an unweighted finite direct sum compatible
     with $A$. If $0<L\leq N$ and $\mathcal R_L(T)^*=\mathcal R_L(T)$,
     then $[H_{L,N},O^N_{T_a,I}]=0$ for every $a$.
-    Adjoint closure is required only of the entire assembled boundary range;
-    taking adjoints may exchange labels.
+    Adjoint closure is required only of the full direct-sum boundary range;
+    taking adjoints may exchange summand labels.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -325,8 +325,8 @@ These are the canonical parent terms considered in
     Lemma~\ref{lem:ground_space_ne_top}. If $h_L=0$, its kernel
     would be the entire physical space, contradicting
     $\ker h_L=\mathcal S_A^L$ from
-    Lemma~\ref{lem:parent_interaction_es_kernel}. This nonzero property
-    is unchanged by the canonical identification of the two coordinate
+    Lemma~\ref{lem:parent_interaction_es_kernel}. This nonvanishing
+    is preserved by the unitary identification of the two coordinate
     spaces. The commutation assertion is
     Theorem~\ref{thm:glm_boundary_parent_periodic}.
 \end{proof}
@@ -358,8 +358,8 @@ These are the canonical parent terms considered in
     The set $J$ may be empty, and the physical and virtual dimensions
     may be zero, when the stated hypotheses hold. No identity $Q_n=I$ or relation
     $O^n_{T,Y_j}=(O^n_{T,X_j})^*$ is required.
-    These are consequences of the product normalization in
-    \cite[Appendix~B]{GarreRubio2023MPOSym} for actual boundary operators.
+    These identities follow from the product normalization in
+    \cite[Appendix~B]{GarreRubio2023MPOSym} for boundary operators.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -385,7 +385,7 @@ These are the canonical parent terms considered in
     \uses{thm:glm_boundary_projection_average}
     Under the hypotheses of
     Theorem~\ref{thm:glm_boundary_projection_average}, if $d^n>D^2$,
-    then $I-E_n(P_n)\ne0$. This asserts no nonzeroness of $E_n(h_n)$:
+    then $I-E_n(P_n)\ne0$. This does not imply $E_n(h_n)\ne0$:
     if $Q_n=P_n$, then $E_n(h_n)=0$.
 \end{theorem}
 \begin{proof}
@@ -410,8 +410,8 @@ Its normalization is $E(I)=Q$, so for the two-site support projection $P_2$,
 Theorem~\ref{thm:glm_boundary_projection_average} gives $E(P_2)=P_2$
 when its positive-length identity, injectivity, adjoint closure, and
 finite-family normalization hypotheses hold for this representation.
-The ambient complement then equals $h_2$, whereas the literal averaged
-parent is $Q-P_2$. The dimension inequality proves that $I-P_2$ is nonzero;
+The ambient complement then equals $h_2$, whereas the averaged
+parent $E(I-P_2)$ is $Q-P_2$. The dimension inequality proves that $I-P_2$ is nonzero;
 it does not prove that $Q-P_2$ is nonzero. Compatibility alone gives
 invariance of $\mathcal S_A^2$. The additional identity and normalization
 hypotheses must be established for the represented weak-Hopf unit and

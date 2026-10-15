@@ -153,19 +153,19 @@ produce the dyadic powers $\E_B^{2^n}$.
     \cite[Appendix~D, lines~2100--2107]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{definition}[One-letter MPS blocking witness]
+\begin{definition}[One-letter MPS blocking relation]
     \label{def:blocked_gauge_phase_fixed_point}
     \lean{MPSTensor.IsBlockedGaugePhaseFixedPoint}
     \leanok
     \uses{def:blocked_tensor, def:unit_gauge_phase_equiv}
-    A tensor $A$ with one physical component has a blocking witness if there
-    exist an invertible matrix $X$ and a scalar $\zeta$ with $|\zeta|=1$ such
-    that
+    A tensor $A$ with one physical component satisfies the one-letter MPS
+    blocking relation if there exist an invertible matrix $X$ and a scalar
+    $\zeta$ with $|\zeta|=1$ such that
     \begin{align}
         A & =\zeta X A^{[2]}X^{-1}.
         \notag
     \end{align}
-    % This MPS-level witness is sufficient but is not the source condition itself.
+    % This MPS-level relation is sufficient but is not the source condition itself.
 \end{definition}
 
 \begin{definition}[Doubled virtual gauge]
@@ -190,12 +190,12 @@ produce the dyadic powers $\E_B^{2^n}$.
     coordinates of the cube-phase tensor.
 \end{definition}
 
-\begin{theorem}[An MPS blocking witness gives the doubled-MPO condition]
+\begin{theorem}[The MPS blocking relation gives the doubled-MPO condition]
     \label{thm:blocked_gauge_phase_to_doubled_mpdo}
     \lean{MPSTensor.isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint}
     \leanok
     \uses{def:one_letter_mpdo_virtual_gauge_rfp, def:blocked_gauge_phase_fixed_point}
-    If $A = \zeta X A^{[2]} X^{-1}$ is a one-letter MPS blocking witness with $|\zeta|=1$, then the doubled tensor $M = A \otimes \overline{A}$ satisfies
+    If $A = \zeta X A^{[2]} X^{-1}$ satisfies the one-letter MPS blocking relation with $|\zeta|=1$, then the doubled tensor $M = A \otimes \overline{A}$ satisfies
     \begin{align}
         M & = (X \otimes \overline{X}) M^{[2]} (X \otimes \overline{X})^{-1},
         \notag
@@ -238,7 +238,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     The doubled MPO tensor generates positive semidefinite operators on every
     nonempty chain, is in CPSV canonical form, and has four scalar-block weights
     satisfying the source normalization convention. It also satisfies the
-    literal one-letter virtual-gauge condition in the source diagram, but its
+    one-letter virtual-gauge condition in the source diagram, but its
     transfer map is not idempotent. Hence the canonical-restricted pure-state
     equivalence claimed in
     \cite[Appendix~D, lines~2100--2107]{Cirac2016MPDO_arXiv} is false.
@@ -248,7 +248,7 @@ produce the dyadic powers $\E_B^{2^n}$.
     \uses{def:ft_perm_gl, lem:ft_perm_gl_identities, lem:ft_perm_matrix_conj_submatrix, def:cube_phase_swap_gauge, def:mpdo, lem:bond_dimension_one_identity_transfer_normal, def:cpsv_canonical_form, thm:blocked_gauge_phase_to_doubled_mpdo, thm:cpsv_canonical_form_flow_phase_obstruction}
     On every nonempty chain, $M=A\otimes\overline A$ generates the rank-one
     operator $\ketbra{V^{(N)}(A)}{V^{(N)}(A)}$, which is positive semidefinite.
-    Moreover, $M$ is the direct sum of four bond-one scalar blocks with weights
+    In addition, $M$ is the direct sum of four bond-one scalar blocks with weights
     $\mu_p\overline{\mu_q}$, where $\mu_0=1$ and $\mu_1=\omega$.
     Each block is normal and every weight has modulus one, proving both the CPSV
     canonical-form condition and its normalization.

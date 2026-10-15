@@ -205,3 +205,32 @@ theorem normalizedRegularizedPatchMarginal_eq_regionState_patchState
       (dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput regions a b Ω x))
 
 end TNLean.PEPS
+
+namespace TNLean.PEPS
+
+variable {V : Type*} [DecidableEq V]
+variable {n : V → ℕ} {m : ℕ}
+
+/-- Mapping the indexed patch factors to their inverse-power filters gives
+exactly the chain list in decreasing index order. Every occurrence of a region
+is retained. The identity holds for arbitrary regional matrices, exponents and
+shifts, including the empty list.
+
+Source: polynomial-PEPS Proposition 4.1, `03-patches.tex`, lines 68–99,
+`eq:patch-variational-problem`; revision
+`adc7f1241b42e322a6451854ab7e4b4c146bf78a`. -/
+theorem map_filter_regularizedPatchFactorList_eq_chainList
+    (D : ℕ → Finset V) (a : Fin m → ℝ) (b : ℝ)
+    (x : (j : Fin m) → Matrix (Entropy.RegionConfig n (D j))
+      (Entropy.RegionConfig n (D j)) ℂ) :
+    (regularizedPatchFactorList (fun j : Fin m ↦ D j) a x).map
+        (Entropy.PatchFactor.filter b) =
+      Entropy.chainList D
+        (fun j : Fin m ↦
+          (x j + b • (1 : Matrix (Entropy.RegionConfig n (D j))
+            (Entropy.RegionConfig n (D j)) ℂ)) ^ (-(a j) / 2))
+        (fun _ ↦ True) := by
+  simp [regularizedPatchFactorList, Entropy.chainList, Entropy.PatchFactor.filter,
+    List.ofFn_eq_map, List.map_reverse, List.map_map, Function.comp_def]
+
+end TNLean.PEPS
