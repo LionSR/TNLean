@@ -632,3 +632,47 @@ Its marginals are those of the same final normalized vector defined in
     $0\le F(x[s])=F(x)\le F(x[y])$. Squaring gives
     (\ref{eq:peps_patch_diagonal_minimum}).
 \end{proof}
+
+\begin{theorem}[Clipped spectra at a regularized patch minimum]
+    \label{thm:peps_patch_minimum_clipped}
+    \leanok
+    \lean{TNLean.PEPS.exists_unitary_diagonal_clipped_of_isMinOn_regularizedPatchObjective}
+    \uses{def:peps_regularized_patch_objective,def:peps_patch_canonical_marginal}
+    Let $X_0\subseteq\cdots\subseteq X_{m-1}$, let $a_j>0$ and $b>0$,
+    and let $\Omega$ be a unit vector. Suppose that $x\in\mathcal D$
+    minimizes $F$ on $\mathcal D$. Write $\rho_j$ for the marginal on $X_j$
+    of the normalized output $\Psi(x)/\|\Psi(x)\|$.
+    For every $j$, there are a unitary $U_j$, real families $s_j,p_j$,
+    and a scalar $0<\lambda_j\leq1$ such that
+    \begin{align}
+        x_j       & = U_j\operatorname{diag}(s_j)U_j^*, \notag \\
+        \rho_j    & = U_j\operatorname{diag}(p_j)U_j^*, \notag \\
+        s_{j,i}+b & = \max\{p_{j,i}/\lambda_j,b\}.
+        \label{eq:peps_minimum_clipped}
+    \end{align}
+    Repeated regions retain independent density variables.
+    This is the clipped spectral formula in the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L170-L200}{proof of Proposition 4.1}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_ordered_patch_minimizer,thm:peps_ordered_patch_marginal_coordinates,thm:peps_patch_marginal_expectation}
+    The indexed minimum gives a minimum over ordered factor lists by
+    Theorem~\ref{thm:peps_ordered_patch_minimizer}, and
+    Theorem~\ref{thm:peps_ordered_patch_marginal_coordinates} identifies their
+    normalized marginals. Stationarity of the ordered patch objective and the
+    first-order inequalities for normalized patch outputs in the companion
+    volume~\cite[``Stationarity of the ordered patch objective'' and
+        ``First-order inequalities for normalized patch outputs'']{QICLean2026Blueprint}
+    therefore give $x_j\rho_j=\rho_jx_j$ and
+    \begin{align}
+        \operatorname{Re}\tr\bigl(\rho_j(x_j+bI)^{-1}y\bigr)
+         & \leq \operatorname{Re}\tr\bigl(\rho_j(x_j+bI)^{-1}x_j\bigr)
+        \label{eq:peps_minimum_density_variation}
+    \end{align}
+    for every density matrix $y$ commuting with $x_j$.
+    Both $x_j$ and $\rho_j$ are positive semidefinite with trace one.
+    The clipped joint-eigenvalue theorem in the companion
+    volume~\cite[``Clipped joint eigenvalues'']{QICLean2026Blueprint}, applied
+    to~(\ref{eq:peps_minimum_density_variation}), gives
+    (\ref{eq:peps_minimum_clipped}) and $0<\lambda_j\leq1$.
+\end{proof}

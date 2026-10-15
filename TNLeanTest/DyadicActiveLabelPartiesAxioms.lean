@@ -27,6 +27,7 @@ run_cmd do
       ``TNLean.PEPS.Approximation.junctionUses_of_incidentLabels,
       ``TNLean.PEPS.Approximation.RepaintingUses.near,
       ``TNLean.PEPS.Approximation.JunctionUses.near,
+      ``TNLean.PEPS.Approximation.card_dyadicJunction_uses_le,
       ``TNLean.PEPS.Approximation.card_gates_le_of_uses] do
     unless env.contains decl do
       throwError "Missing declaration {decl}"
