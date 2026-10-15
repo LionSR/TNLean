@@ -9,6 +9,7 @@ and the \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b
 \begin{definition}[The radius exponent]
     \label{def:peps_patch_radius_exponent}
     \lean{TNLean.PEPS.regularizedPatchRadiusExponent}
+    \leanok
     For real constants $C_0,B_0,p,\kappa$, set
     \begin{align}
         R_0=\frac43\left[C_0\left(B_0+\frac1{\log2}\right)
@@ -17,9 +18,10 @@ and the \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b
     \end{align}
 \end{definition}
 
-\begin{theorem}[The radius and logarithmic remainder bounds]
+\begin{theorem}[Radius and remainder bounds]
     \label{thm:peps_patch_radius_bounds}
     \lean{TNLean.PEPS.regularizedPatchRadiusExponent_bounds}
+    \leanok
     Suppose that $C_0,B_0,p\ge0$, $\kappa>0$, $L\ge2$, and
     $u\le B_0\log L$. With $R_0$ as in
     (\ref{eq:peps_patch_radius_exponent}) and $R=R_0\log L$, one has $R_0>0$ and
@@ -30,6 +32,7 @@ and the \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:peps_patch_radius_exponent}
     Put $A=C_0(B_0+1/\log2)$. Since $\log L\ge\log2>0$,
     $1\le\log L/\log2$ and $C_0(1+u)\le A\log L$.
@@ -46,11 +49,13 @@ and the \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b
 \begin{theorem}[Absorbing the logarithmic cylinder count]
     \label{thm:peps_patch_count_polynomial}
     \lean{TNLean.PEPS.mul_rpow_le_succ_rpow_of_le_log}
+    \leanok
     Let $B_0\ge0$, $L\ge2$, $\alpha\in\R$, and $m\in\N$.
     If $m\le(B_0/2)\log L+1$, then
     $mL^\alpha\le(1+B_0/2)L^{\alpha+1}$.
 \end{theorem}
 \begin{proof}
+    \leanok
     The inequalities $\log L\le L$ and $1\le L$ give
     $(B_0/2)\log L+1\le(1+B_0/2)L$.
     Multiply by $L^\alpha\ge0$ and use $L^{\alpha+1}=L^\alpha L$.
