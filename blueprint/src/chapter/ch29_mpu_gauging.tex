@@ -7508,9 +7508,9 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         TNLean.Algebra.ScalarThreeCochain.cocyclesEquiv,
         TNLean.Algebra.ScalarThreeCochain.anomalyClass}
     \leanok
-    \uses{def:mpug_three_cocycle, def:mpug_h2_group_cohomology_comparison}
+    \uses{def:mpug_three_cocycle, thm:mpug_h2_group_cohomology_comparison}
     Give $\C^\times$ the trivial $G$-action and write it additively, as in
-    Definition~\ref{def:mpug_h2_group_cohomology_comparison}. A scalar
+    Theorem~\ref{thm:mpug_h2_group_cohomology_comparison}. A scalar
     $n$-cochain for $n=2,3$ is then an inhomogeneous $n$-cochain
     $G^n\to\C^\times$ of this representation, and conversely. Under this
     identification a scalar $3$-cocycle is an inhomogeneous $3$-cocycle, and
@@ -8285,7 +8285,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \end{proof}
 
 \begin{theorem}[Every class has a scalar cocycle representative]
-    \label{def:mpug_h2_group_cohomology_comparison}
+    \label{thm:mpug_h2_group_cohomology_comparison}
     \lean{TNLean.Algebra.ScalarCocycle.exists_H2π_eq}
     \leanok
     \uses{def:h2_cx, thm:mpug_h2_trivial_coefficients}
@@ -8419,7 +8419,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         TNLean.Algebra.circleH2ToComplexUnitsH2_surjective,
         TNLean.Algebra.circleH2EquivComplexUnitsH2}
     \leanok
-    \uses{def:mpug_h2_group_cohomology_comparison,
+    \uses{thm:mpug_h2_group_cohomology_comparison,
         thm:mpug_positive_generalized_cocycle}
     Let $G$ be finite, and give $U(1)$ and $\C^\times$ the trivial
     $G$-actions.  Inclusion of the unit circle induces an equivalence
@@ -9234,7 +9234,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         TNLean.Algebra.LSymbol.gauge_one_mul}
     \leanok
     \uses{thm:mpug_stabilizer_reconstruction, def:mpug_l_gauge,
-        def:mpug_h2_group_cohomology_comparison, def:cohomologous_to}
+        thm:mpug_h2_group_cohomology_comparison, def:cohomologous_to}
     Keep the setting of Theorem~\ref{thm:mpug_stabilizer_reconstruction},
     and call two $L$-symbols action-gauge equivalent when they differ by
     $(1,\gamma)\mathbin{\triangleright}$ for some action-tensor gauge
