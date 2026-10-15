@@ -463,3 +463,45 @@ outer sample.
     to the vertex. Since $t+2r+3u<n$, the owners within $t+2r+3u$ of the mark
     and the tag holders within $t$ of it are specified parties.
 \end{proof}
+
+\begin{theorem}[Resizes and point treatments with one footprint ratio]
+    \label{thm:peps_guide_frame_reading_gates}
+    \lean{TNLean.PEPS.Approximation.exists_resize_step_reading,
+        TNLean.PEPS.Approximation.homogenize_iUnion_eq_of_notMem,
+        TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_homogenize_reading,
+        TNLean.PEPS.Approximation.exists_pointTreatment_step_reading}
+    \leanok
+    \uses{thm:peps_guide_frame_resize_treatment_gates}
+    Fix $0<\epsilon_0\le\tfrac1{16}$. There is a threshold $\nu'>0$,
+    independent of the scales, such that for every ratio $0<\nu\le\nu'$ and
+    every generic small displacement the following hold, with the bounds on
+    the holes and the patches of
+    Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates} and every $b$
+    at least a bound depending only on $\epsilon_0$ and $\nu$.
+    \begin{enumerate}
+        \item For $0<n<t$, the resize of the hole at a grid corner of a reading
+              of a guide uniform on the $2n$-blocks, between hole radii
+              $\epsilon_0\min(n,t)$ and $\epsilon_0\min(2n,t)$, with patches of
+              radius $\nu n$, is one gate as in
+              Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates}
+              (\texttt{06-geometry.tex}, lines 529--541).
+        \item For $0<t$ and $8t<n$, the point treatment, or its removal, of a
+              corner of the repainted block, with holes of radius $\epsilon_0t$
+              at sets of true vertices containing those within $3t$ of the mark,
+              and patches of radius $\nu t/2$, is one gate as in
+              Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates}
+              (lines 481--505).
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}\leanok
+    The compactness observation gives one footprint ratio for the readings of
+    block guides at every intermediate radius, and one for the readings of the
+    temporary guides near a corner of the block. Near a corner that is not a
+    mark, the homogenization about the marks changes nothing, since the other
+    marks are at distance at least $n>8t$. Every smaller ratio, at most
+    $\tfrac14$, keeps the two-owner condition and gives the separations required
+    by Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates}. The number of
+    net patches is then bounded by a constant depending only on $\epsilon_0$
+    and the ratio.
+\end{proof}
