@@ -146,7 +146,7 @@ theorem repairChildParentCode_succ_of_inside_ne (e : Fin 3 × Fin 3) (m : Fin 8)
 in its parent wedge, and lies in the removal square or outside its interior
 according to its kind. Here `y = x - v` and `x - c = y - d e`.
 Source: area-law Section 11, `geometry:repair-induction`, lines 497–514. -/
-def RepairChildConeFacts (e : Fin 3 × Fin 3) (m : ℕ) (d : ℝ) (y : ℝ × ℝ) : Prop :=
+def IsRepairChildConeCompatible (e : Fin 3 × Fin 3) (m : ℕ) (d : ℝ) (y : ℝ × ℝ) : Prop :=
   (y - d • repairChildOffset e ∈ repairFanCone (repairSlotOfCode m) →
       y ∈ repairFanCone (repairSlotOfCode (repairChildParentCode e m))) ∧
     (y - d • repairChildOffset e ∈ repairFanOpenCone (repairSlotOfCode m) →
@@ -168,7 +168,7 @@ local macro "repair_child_cone_tac" : tactic => `(tactic| (
   simp only [Prod.fst_sub, Prod.snd_sub, Prod.smul_fst, Prod.smul_snd, smul_eq_mul,
     Real.norm_eq_abs, abs_lt] at hy
   obtain ⟨⟨h₁, h₂⟩, h₃, h₄⟩ := hy
-  simp only [RepairChildConeFacts, repairFanCone, repairFanOpenCone, Set.mem_ofPred_eq,
+  simp only [IsRepairChildConeCompatible, repairFanCone, repairFanOpenCone, Set.mem_ofPred_eq,
     repairFanStart_slotOfCode, repairFanDirection_slotOfCode, Prod.norm_def, Real.norm_eq_abs,
     max_le_iff, max_lt_iff, abs_le, abs_lt, not_and]
   fin_cases m <;>
@@ -177,66 +177,66 @@ local macro "repair_child_cone_tac" : tactic => `(tactic| (
     (repeat' (first | apply And.intro | intro _)) <;>
     linarith))
 
-private theorem repairChildConeFacts_00 : ∀ (m : Fin 8) {d : ℝ}, 0 < d →
+private theorem isRepairChildConeCompatible_00 : ∀ (m : Fin 8) {d : ℝ}, 0 < d →
     ∀ y : ℝ × ℝ, ‖y - d • repairChildOffset (0, 0)‖ < d / 2 →
-      RepairChildConeFacts (0, 0) m.val d y := by
+      IsRepairChildConeCompatible (0, 0) m.val d y := by
   repair_child_cone_tac
 
-private theorem repairChildConeFacts_01 : ∀ (m : Fin 8) {d : ℝ}, 0 < d →
+private theorem isRepairChildConeCompatible_01 : ∀ (m : Fin 8) {d : ℝ}, 0 < d →
     ∀ y : ℝ × ℝ, ‖y - d • repairChildOffset (0, 1)‖ < d / 2 →
-      RepairChildConeFacts (0, 1) m.val d y := by
+      IsRepairChildConeCompatible (0, 1) m.val d y := by
   repair_child_cone_tac
 
-private theorem repairChildConeFacts_02 : ∀ (m : Fin 8) {d : ℝ}, 0 < d →
+private theorem isRepairChildConeCompatible_02 : ∀ (m : Fin 8) {d : ℝ}, 0 < d →
     ∀ y : ℝ × ℝ, ‖y - d • repairChildOffset (0, 2)‖ < d / 2 →
-      RepairChildConeFacts (0, 2) m.val d y := by
+      IsRepairChildConeCompatible (0, 2) m.val d y := by
   repair_child_cone_tac
 
-private theorem repairChildConeFacts_10 : ∀ (m : Fin 8) {d : ℝ}, 0 < d →
+private theorem isRepairChildConeCompatible_10 : ∀ (m : Fin 8) {d : ℝ}, 0 < d →
     ∀ y : ℝ × ℝ, ‖y - d • repairChildOffset (1, 0)‖ < d / 2 →
-      RepairChildConeFacts (1, 0) m.val d y := by
+      IsRepairChildConeCompatible (1, 0) m.val d y := by
   repair_child_cone_tac
 
-private theorem repairChildConeFacts_11 : ∀ (m : Fin 8) {d : ℝ}, 0 < d →
+private theorem isRepairChildConeCompatible_11 : ∀ (m : Fin 8) {d : ℝ}, 0 < d →
     ∀ y : ℝ × ℝ, ‖y - d • repairChildOffset (1, 1)‖ < d / 2 →
-      RepairChildConeFacts (1, 1) m.val d y := by
+      IsRepairChildConeCompatible (1, 1) m.val d y := by
   repair_child_cone_tac
 
-private theorem repairChildConeFacts_12 : ∀ (m : Fin 8) {d : ℝ}, 0 < d →
+private theorem isRepairChildConeCompatible_12 : ∀ (m : Fin 8) {d : ℝ}, 0 < d →
     ∀ y : ℝ × ℝ, ‖y - d • repairChildOffset (1, 2)‖ < d / 2 →
-      RepairChildConeFacts (1, 2) m.val d y := by
+      IsRepairChildConeCompatible (1, 2) m.val d y := by
   repair_child_cone_tac
 
-private theorem repairChildConeFacts_20 : ∀ (m : Fin 8) {d : ℝ}, 0 < d →
+private theorem isRepairChildConeCompatible_20 : ∀ (m : Fin 8) {d : ℝ}, 0 < d →
     ∀ y : ℝ × ℝ, ‖y - d • repairChildOffset (2, 0)‖ < d / 2 →
-      RepairChildConeFacts (2, 0) m.val d y := by
+      IsRepairChildConeCompatible (2, 0) m.val d y := by
   repair_child_cone_tac
 
-private theorem repairChildConeFacts_21 : ∀ (m : Fin 8) {d : ℝ}, 0 < d →
+private theorem isRepairChildConeCompatible_21 : ∀ (m : Fin 8) {d : ℝ}, 0 < d →
     ∀ y : ℝ × ℝ, ‖y - d • repairChildOffset (2, 1)‖ < d / 2 →
-      RepairChildConeFacts (2, 1) m.val d y := by
+      IsRepairChildConeCompatible (2, 1) m.val d y := by
   repair_child_cone_tac
 
-private theorem repairChildConeFacts_22 : ∀ (m : Fin 8) {d : ℝ}, 0 < d →
+private theorem isRepairChildConeCompatible_22 : ∀ (m : Fin 8) {d : ℝ}, 0 < d →
     ∀ y : ℝ × ℝ, ‖y - d • repairChildOffset (2, 2)‖ < d / 2 →
-      RepairChildConeFacts (2, 2) m.val d y := by
+      IsRepairChildConeCompatible (2, 2) m.val d y := by
   repair_child_cone_tac
 
 /-- The child-wedge facts hold for every child, wedge and point of the open
 square of half-side `d / 2` about the child.
 Source: area-law Section 11, `geometry:repair-induction`, lines 497–514. -/
-theorem repairChildConeFacts_holds (e : Fin 3 × Fin 3) (m : Fin 8) {d : ℝ} (hd : 0 < d)
+theorem isRepairChildConeCompatible_holds (e : Fin 3 × Fin 3) (m : Fin 8) {d : ℝ} (hd : 0 < d)
     (y : ℝ × ℝ) (hy : ‖y - d • repairChildOffset e‖ < d / 2) :
-    RepairChildConeFacts e m.val d y := by
+    IsRepairChildConeCompatible e m.val d y := by
   fin_cases e
-  · exact repairChildConeFacts_00 m hd y hy
-  · exact repairChildConeFacts_01 m hd y hy
-  · exact repairChildConeFacts_02 m hd y hy
-  · exact repairChildConeFacts_10 m hd y hy
-  · exact repairChildConeFacts_11 m hd y hy
-  · exact repairChildConeFacts_12 m hd y hy
-  · exact repairChildConeFacts_20 m hd y hy
-  · exact repairChildConeFacts_21 m hd y hy
-  · exact repairChildConeFacts_22 m hd y hy
+  · exact isRepairChildConeCompatible_00 m hd y hy
+  · exact isRepairChildConeCompatible_01 m hd y hy
+  · exact isRepairChildConeCompatible_02 m hd y hy
+  · exact isRepairChildConeCompatible_10 m hd y hy
+  · exact isRepairChildConeCompatible_11 m hd y hy
+  · exact isRepairChildConeCompatible_12 m hd y hy
+  · exact isRepairChildConeCompatible_20 m hd y hy
+  · exact isRepairChildConeCompatible_21 m hd y hy
+  · exact isRepairChildConeCompatible_22 m hd y hy
 
 end TNLean.PEPS.AreaLaw.Geometry

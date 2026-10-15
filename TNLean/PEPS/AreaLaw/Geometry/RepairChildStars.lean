@@ -165,8 +165,9 @@ theorem repairChild_facts {v x : ℝ × ℝ} {d : ℝ} (hd : 0 < d) (e : Fin 3 �
   have hy : ‖x - v - d • repairChildOffset e‖ < d / 2 := by
     rw [sub_sub, ← dist_eq_norm]
     exact hx
-  have h := repairChildConeFacts_holds e ⟨repairSlotCode t, repairSlotCode_lt t⟩ hd (x - v) hy
-  simp only [RepairChildConeFacts, repairSlotOfCode_code, sub_sub] at h
+  have h := isRepairChildConeCompatible_holds e ⟨repairSlotCode t, repairSlotCode_lt t⟩ hd
+    (x - v) hy
+  simp only [IsRepairChildConeCompatible, repairSlotOfCode_code, sub_sub] at h
   exact h
 
 variable {v : ℝ × ℝ} {d : ℝ} {e : Fin 3 × Fin 3}

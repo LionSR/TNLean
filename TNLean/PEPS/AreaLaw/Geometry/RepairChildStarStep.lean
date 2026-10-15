@@ -103,7 +103,10 @@ theorem isIsolatedStar_repairChild {κ : Type*} {R : ι → Set (ℝ × ℝ)} {�
         Metric.ball (v + repairHalfSide S • repairChildOffset e) (repairHalfSide S / 2) =
       (R i \ Metric.closedBall v (repairHalfSide S)) ∩
         Metric.ball (v + repairHalfSide S • repairChildOffset e) (repairHalfSide S / 2))
-    (hR'fresh : ∀ H, R' (fresh H) = repairReplacementOpenRegion v S ξ σ H)
+    (hR'fresh : ∀ H, R' (fresh H) ∩
+        Metric.ball (v + repairHalfSide S • repairChildOffset e) (repairHalfSide S / 2) =
+      repairReplacementOpenRegion v S ξ σ H ∩
+        Metric.ball (v + repairHalfSide S • repairChildOffset e) (repairHalfSide S / 2))
     (hR'other : ∀ x, (∀ i, x ≠ old i) → (∀ H, x ≠ fresh H) → closure (R' x) ∩
         Metric.ball (v + repairHalfSide S • repairChildOffset e) (repairHalfSide S / 2) = ∅)
     (hξold : ∀ i, ξ' (old i) = ξ i)
@@ -185,7 +188,7 @@ theorem isIsolatedStar_repairChild {κ : Type*} {R : ι → Set (ℝ × ℝ)} {�
         exact not_sameRay_of_mem_repairFanOpenCone hwo hu
     by_cases hxf : ∃ H, x = fresh H
     · obtain ⟨H, rfl⟩ := hxf
-      rw [hR'fresh H]
+      rw [closure_inter_eq_of_inter_eq Metric.isOpen_ball (hR'fresh H)]
       ext z
       constructor
       · rintro ⟨hz, hzN⟩
@@ -257,7 +260,10 @@ theorem isIsolatedStar_repairChild {κ : Type*} {R : ι → Set (ℝ × ℝ)} {�
     · rw [hH] at ht
       subst ht
       obtain ⟨hin, hrun⟩ := (hτfresh t H).mp hH
-      rw [hR'fresh H]
+      suffices hz : z ∈ repairReplacementOpenRegion v S ξ σ H by
+        have hz' : z ∈ repairReplacementOpenRegion v S ξ σ H ∩ N := ⟨hz, hzN⟩
+        rw [← hR'fresh H] at hz'
+        exact hz'.1
       have hzd : ‖z - v‖ < d := by
         by_contra hle
         push Not at hle

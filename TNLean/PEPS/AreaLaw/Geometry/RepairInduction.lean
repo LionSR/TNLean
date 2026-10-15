@@ -31,6 +31,13 @@ namespace TNLean.PEPS.AreaLaw.Geometry
 
 /-- **Uniform repair induction**, from the conclusion of the initial
 isolated-star lemma.
+
+**Scope restriction (conditional on Lemma 11.3):** the source lemma is
+unconditional; here the conclusion of Lemma 11.3 for the initial stage,
+`InitialIsolatedStarsStatement`, is an explicit hypothesis and no other
+hypothesis is added. Documented in
+`docs/paper-gaps/arealaw2d_repair_induction_initial_stars.tex`; removed once
+Lemma 11.3 is proved and applied here.
 Source: area-law Section 11, `geometry:repair-induction`, lines 471–543. -/
 theorem uniformRepairInductionStatement_of_initialIsolatedStars
     (hinit : InitialIsolatedStarsStatement) : UniformRepairInductionStatement := by

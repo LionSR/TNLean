@@ -210,7 +210,7 @@ by the strict inequalities.
         TNLean.PEPS.AreaLaw.Geometry.isIsolatedStar_of_model,
         TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar.exists_model}
     \leanok
-    \uses{lem:area_law_repair_fan_cones}
+    \uses{lem:area_law_repair_fan_cones,def:area_law_isolated_star}
     Let $\tau$ assign identifiers to the eight wedges about $c$. The closed
     sector of $i$ is the union of the translated cones $c+K_s$ with
     $\tau(s)=i$, and the active rays are the rays from $c$ in the
@@ -240,8 +240,8 @@ by the strict inequalities.
 % Source: 10-geometry.tex, geometry:repair-induction, lines 497--514.
 \begin{lemma}[Wedges about a child]
     \label{lem:area_law_repair_child_cones}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairChildConeFacts,
-        TNLean.PEPS.AreaLaw.Geometry.repairChildConeFacts_holds,
+    \lean{TNLean.PEPS.AreaLaw.Geometry.IsRepairChildConeCompatible,
+        TNLean.PEPS.AreaLaw.Geometry.isRepairChildConeCompatible_holds,
         TNLean.PEPS.AreaLaw.Geometry.repairChildParentCode_succ_of_inside_eq,
         TNLean.PEPS.AreaLaw.Geometry.repairChildParentCode_succ_of_inside_ne,
         TNLean.PEPS.AreaLaw.Geometry.exists_outer_child_cone,
@@ -342,6 +342,7 @@ by the strict inequalities.
 
 % Source: 10-geometry.tex, geometry:initial-stars, lines 332--349, and
 % geometry:repair-induction, lines 471--543.
+% Conditional entry; see docs/paper-gaps/arealaw2d_repair_induction_initial_stars.tex.
 \begin{theorem}[Uniform repair induction from the initial isolated stars]
     \label{thm:area_law_uniform_repair_induction_conditional}
     \lean{TNLean.PEPS.AreaLaw.Geometry.uniformRepairInductionStatement_of_initialIsolatedStars}
@@ -349,7 +350,7 @@ by the strict inequalities.
     \uses{def:area_law_uniform_repair_conclusion,
         thm:area_law_repair_generation_step,
         lem:area_law_repair_metric_invariants,
-        lem:area_law_repair_metric_choice}
+        lem:area_law_repair_metric_choice,lem:area_law_isolated_star_mono}
     Suppose there is $a_1>0$ such that for every width $C_0$ and every
     sufficiently large $k_0$ the initial stage has isolated stars with
     constant $a_1$, as asserted by the initial isolated-star lemma. Then
