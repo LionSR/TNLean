@@ -389,7 +389,7 @@ theorem FusionData.isTrivialGaugeClass_omega_of_closed_fusion
         apply_eq_entrySum (fd.rightV g h k), hL, hR, smul_eq_mul,
         div_mul_cancel₀ _ (mul_ne_zero (hv _ _) (hv _ _))]
     rw [hLR, Matrix.smul_mul]
-  refine ⟨fun g h ↦ (Units.mk0 (v g h) (hv g h))⁻¹, funext fun g ↦ funext fun h ↦
+  refine ⟨fun p ↦ (Units.mk0 (v p.1 p.2) (hv p.1 p.2))⁻¹, funext fun g ↦ funext fun h ↦
     funext fun k ↦ Units.ext ?_⟩
   simp only [ScalarThreeCochain.fusionGauge, ScalarThreeCochain.coboundary, Units.val_mul,
     Units.val_div_eq_div_val, Units.val_inv_eq_inv_val, Units.val_mk0, mul_one,

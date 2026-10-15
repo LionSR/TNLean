@@ -84,14 +84,14 @@ virtual-path argument following the projective multiplication law. -/
 theorem continuous_projectiveFactor_of_unitaryMatrixPath
     {G : Type} [Group G] {D : ℕ} (hD : 0 < D)
     (V : unitInterval → G → Matrix (Fin D) (Fin D) ℂ)
-    (ω : unitInterval → G → G → Units ℂ)
+    (ω : unitInterval → G × G → Units ℂ)
     (hV : ∀ g, Continuous fun t => V t g)
     (hunitary : ∀ t g, V t g ∈ Matrix.unitaryGroup (Fin D) ℂ)
-    (hmul : ∀ t g h, V t g * V t h = (ω t g h : ℂ) • V t (g * h))
-    (g h : G) : Continuous fun t => (ω t g h : ℂ) := by
+    (hmul : ∀ t g h, V t g * V t h = (ω t (g, h) : ℂ) • V t (g * h))
+    (g h : G) : Continuous fun t => (ω t (g, h) : ℂ) := by
   let i : Fin D := ⟨0, hD⟩
   have hformula (t : unitInterval) :
-      (ω t g h : ℂ) = ((V t g * V t h) * (V t (g * h))ᴴ) i i := by
+      (ω t (g, h) : ℂ) = ((V t g * V t h) * (V t (g * h))ᴴ) i i := by
     rw [hmul t g h, Matrix.smul_mul]
     have hu : V t (g * h) * (V t (g * h))ᴴ = 1 := by
       simpa only [Matrix.star_eq_conjTranspose] using
@@ -112,10 +112,10 @@ theorem projectiveFactor_endpoints_cohomologous_of_det_path
     {G : Type} [Group G] {D : ℕ} (hD : 0 < D)
     (ω : unitInterval → TNLean.Algebra.ScalarCocycle G)
     (d : unitInterval → G → ℂ)
-    (hωcont : ∀ g h, Continuous fun t => (ω t g h : ℂ))
+    (hωcont : ∀ g h, Continuous fun t => (ω t (g, h) : ℂ))
     (hdcont : ∀ g, Continuous fun t => d t g)
     (hdnz : ∀ t g, d t g ≠ 0)
-    (hdet : ∀ t g h, d t g * d t h = (ω t g h : ℂ) ^ D * d t (g * h)) :
+    (hdet : ∀ t g h, d t g * d t h = (ω t (g, h) : ℂ) ^ D * d t (g * h)) :
     (ω 1).CohomologousTo (ω 0) := by
   have hroot (g : G) : ∃ β : unitInterval → ℂ,
       Continuous β ∧ (∀ t, β t ^ D = d t g) ∧ ∀ t, β t ≠ 0 :=
@@ -123,13 +123,13 @@ theorem projectiveFactor_endpoints_cohomologous_of_det_path
       (fun t => hdnz t g)
   choose β hβcont hβpow hβnz using hroot
   let η : unitInterval → G → G → ℂ := fun t g h =>
-    (ω t g h : ℂ) * β (g * h) t * (β g t * β h t)⁻¹
+    (ω t (g, h) : ℂ) * β (g * h) t * (β g t * β h t)⁻¹
   have hηpow (t : unitInterval) (g h : G) : η t g h ^ D = 1 := by
     have hdeteq : β g t ^ D * β h t ^ D =
-        (ω t g h : ℂ) ^ D * β (g * h) t ^ D := by
+        (ω t (g, h) : ℂ) ^ D * β (g * h) t ^ D := by
       simpa only [hβpow] using hdet t g h
     calc
-      η t g h ^ D = ((ω t g h : ℂ) ^ D * β (g * h) t ^ D) *
+      η t g h ^ D = ((ω t (g, h) : ℂ) ^ D * β (g * h) t ^ D) *
           (β g t ^ D * β h t ^ D)⁻¹ := by
         simp only [η, mul_pow, inv_pow, mul_assoc]
       _ = (β g t ^ D * β h t ^ D) *
@@ -153,9 +153,9 @@ theorem projectiveFactor_endpoints_cohomologous_of_det_path
   apply Units.ext
   have hc := hηeq g h
   dsimp only [η] at hc
-  change (ω 1 g h : ℂ) =
+  change (ω 1 (g, h) : ℂ) =
     (β g 1 / β g 0) * (β h 1 / β h 0) *
-      (β (g * h) 1 / β (g * h) 0)⁻¹ * (ω 0 g h : ℂ)
+      (β (g * h) 1 / β (g * h) 0)⁻¹ * (ω 0 (g, h) : ℂ)
   field_simp [hβnz g 0, hβnz h 0, hβnz (g * h) 1,
     hβnz g 1, hβnz h 1, hβnz (g * h) 0] at hc ⊢
   simpa only [mul_assoc, mul_comm, mul_left_comm] using hc.symm
@@ -174,7 +174,7 @@ theorem unitary_projectivePath_factor_endpoints_cohomologous
     (ω : unitInterval → TNLean.Algebra.ScalarCocycle G)
     (hV : ∀ g, Continuous fun t => V t g)
     (hunitary : ∀ t g, V t g ∈ Matrix.unitaryGroup (Fin D) ℂ)
-    (hmul : ∀ t g h, V t g * V t h = (ω t g h : ℂ) • V t (g * h)) :
+    (hmul : ∀ t g h, V t g * V t h = (ω t (g, h) : ℂ) • V t (g * h)) :
     (ω 1).CohomologousTo (ω 0) := by
   let d : unitInterval → G → ℂ := fun t g => (V t g).det
   have hdcont (g : G) : Continuous fun t => d t g :=
@@ -185,7 +185,7 @@ theorem unitary_projectivePath_factor_endpoints_cohomologous
         Matrix.mem_unitaryGroup_iff.mp (hunitary t g)
     exact Matrix.det_ne_zero_of_right_inverse hu
   have hdet (t : unitInterval) (g h : G) :
-      d t g * d t h = (ω t g h : ℂ) ^ D * d t (g * h) := by
+      d t g * d t h = (ω t (g, h) : ℂ) ^ D * d t (g * h) := by
     have heq := congrArg Matrix.det (hmul t g h)
     simpa only [d, Matrix.det_mul, Matrix.det_smul, Fintype.card_fin] using heq
   exact projectiveFactor_endpoints_cohomologous_of_det_path hD ω d
