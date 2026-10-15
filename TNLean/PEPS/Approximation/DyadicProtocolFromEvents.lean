@@ -92,4 +92,90 @@ theorem auxState_succ {X : Type*} {large : DyadicSquare k → Bool}
   simp only [auxState, take_succ_eventSchedule hi, List.mem_append, List.mem_singleton, hne',
     or_false]
 
+/-- An auxiliary index belongs to an event of the schedule. -/
+theorem mem_eventSchedule_of_mem_auxIndices {large : DyadicSquare k → Bool}
+    {x : ProtocolEvent k × RepaintOp} (hx : x ∈ auxIndices k large) :
+    x.1 ∈ eventSchedule k := by
+  obtain ⟨e, he, hx⟩ := List.mem_flatMap.1 (List.mem_filter.1 hx).1
+  obtain ⟨o, -, rfl⟩ := List.mem_map.1 hx
+  exact he
+
+/-- The squares repainted by the edge construction: those of side larger than `K₀ t`.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 135–140. -/
+def largeSquare (K₀ t : ℝ) (S : DyadicSquare k) : Bool :=
+  open Classical in decide (K₀ * t < (2 : ℝ) ^ (S.1 : ℕ))
+
+/-! ### The memory before each event -/
+
+section State
+
+variable {L q : ℕ} {Ω : StateSpace L q} {B₀ C c : ℝ}
+  (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
+  (R₀ : RepaintedSquare k) {ε₀ t : ℝ} (hε : 0 < ε₀) (ht : 0 < t)
+  (hB : ε₀ * t ≤ B₀ * Real.log L) (large : DyadicSquare k → Bool)
+  (frozen : ProtocolEvent k × RepaintOp → Frame (cellCenterPos L) q (ProtocolParty k))
+  (auxOwner : ProtocolEvent k × RepaintOp → ProtocolParty k)
+
+/-- **The memory before an event.** Before the event number `i`, the main frame followed by the
+auxiliary frames: the frozen frame of every auxiliary sheet whose repainting is done, and the idle
+raw copy, held by its future owner, of every other.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 21–23, 39–41 and 653–667. -/
+def protocolState (i : ℕ) : List (Frame (cellCenterPos L) q (ProtocolParty k)) :=
+  mainState P rank R₀ hε ht hB i ::
+    (auxIndices k large).map (auxState frozen (fun x => Frame.raw fun _ => auxOwner x) i)
+
+end State
+
+/-! ### The protocol -/
+
+/-- **The dyadic protocol from its large-scale repaintings.** Fix `0 < ε₀ ≤ 1/16`. There is a
+threshold `ν' > 0` such that for every mesh ratio `0 < ν ≤ ν'`, constants of the protocol with an
+admissible direct-repainting ratio, `L ≥ 2` with `L ≤ 2 ^ k < 2 L`, `‖Ω‖ = 1`, patches supplied
+by Proposition 4.1 at accuracy `L⁻⁶⁰`, frozen auxiliary frames and future owners of the auxiliary
+copies, the following holds. Suppose that each repainting of a square of side larger than `K₀ t`,
+`t = D log L`, passes the memory from its state before to its state after by `189` bounded changes
+whose participants the repainting uses, with the bounds of the small-patch rewrites, that the holes
+of the frozen frames satisfy the frame constraint at accuracy `L⁻⁶⁰` and number at most `C₁ L³`,
+and that `C₁` dominates the counts. Then there is a dyadic protocol with the bounds of §8, all of
+whose changes have at most `2 b` pair sources in each monomial.
+
+Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, `06-geometry.tex`, lines 12–53, and
+its proof, lines 82–241, 507–541 and 572–681. -/
+theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0 < ε₀)
+    (hε₀ : ε₀ ≤ 1 / 16) :
+    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {K₀ a D B₀ : ℝ},
+      IsProtocolConstants K₀ ε₀ ν a D B₀ → IsDirectRepaintingRatio K₀ ε₀ ν →
+      ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q} {C c : ℝ}
+        (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (hL : 2 ≤ L)
+        (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) (hΩ : ‖Ω‖ = 1) (rank : GuideLabel → ℕ)
+        (R₀ : RepaintedSquare k) (ht : 0 < D * Real.log L)
+        (hB : ε₀ * (D * Real.log L) ≤ B₀ * Real.log L)
+        (frozen : ProtocolEvent k × RepaintOp → Frame (cellCenterPos L) q (ProtocolParty k))
+        (auxOwner : ProtocolEvent k × RepaintOp → ProtocolParty k) {C' c' kK : ℕ} {C₁ : ℝ},
+      C ≤ C' → 1 ≤ C' → c ≤ c' →
+      (∀ i (hi : i < (eventSchedule k).length) (S : DyadicSquare k),
+        (eventSchedule k)[i] = .inl S → largeSquare K₀ (D * Real.log L) S = true →
+        ∃ seg : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)),
+          seg 0 = protocolState P rank R₀ hε ht hB (largeSquare K₀ (D * Real.log L)) frozen
+            auxOwner i ∧
+          seg 189 = protocolState P rank R₀ hε ht hB (largeSquare K₀ (D * Real.log L)) frozen
+            auxOwner (i + 1) ∧
+          ∀ j < 189, HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (ℓ := []) (1 : ℂ)
+            {p | EventUses (.inl S) p} (2 * protocolPatchBound ε₀ ν)
+            (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L) (2 * protocolPatchBound ε₀ ν)
+            ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹)) →
+      (∀ x ∈ auxIndices k (largeSquare K₀ (D * Real.log L)), ∀ h ∈ (frozen x).holes,
+        ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) →
+      (((auxIndices k (largeSquare K₀ (D * Real.log L))).map fun x =>
+        ((frozen x).holes.length : ℝ)).sum ≤ C₁ * (L : ℝ) ^ 3) →
+      5042 ≤ C₁ → (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L : ℝ) ≤ C₁ * (L : ℝ) ^ kK →
+      (2 * protocolPatchBound ε₀ ν + 1 : ℝ) ≤ C₁ →
+      ∃ D' : DyadicProtocol L q (ProtocolParty k),
+        D'.IsDistributionProtocol Ω C₁ (64 * 189) kK (2 * protocolPatchBound ε₀ ν) ∧
+          ∀ t < D'.changes, (D'.step t).IsSourceBounded (2 * protocolPatchBound ε₀ ν) := by
+  obtain ⟨ν', hν', Hres⟩ := exists_resize_hasSourceBoundedChange (B₀ := 0) hε hε₀
+  sorry
+
 end TNLean.PEPS.Approximation
