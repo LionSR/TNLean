@@ -106,6 +106,7 @@ import TNLean.PEPS.Approximation.DyadicBulkSeparation
 import TNLean.PEPS.Approximation.DyadicBulkStepFloors
 import TNLean.PEPS.Approximation.DyadicBulkSteps
 import TNLean.PEPS.Approximation.DyadicChamberSampling
+import TNLean.PEPS.Approximation.DyadicDirectRepaintingConstants
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingRewrite
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingStep
 import TNLean.PEPS.Approximation.DyadicEdgeBands
@@ -113,6 +114,7 @@ import TNLean.PEPS.Approximation.DyadicFootprintScaling
 import TNLean.PEPS.Approximation.DyadicFootprintTemplates
 import TNLean.PEPS.Approximation.DyadicFrozenHoleCount
 import TNLean.PEPS.Approximation.DyadicGuideFrames
+import TNLean.PEPS.Approximation.DyadicGuideOwners
 import TNLean.PEPS.Approximation.DyadicGuideReadings
 import TNLean.PEPS.Approximation.DyadicHierarchyCounts
 import TNLean.PEPS.Approximation.DyadicLargeRepaintingGates
@@ -341,6 +343,9 @@ import TNLean.PEPS.Approximation.SeparatedSchmidtOutput
 import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.PEPS.Approximation.SheetStack
 import TNLean.PEPS.Approximation.SheetStackEndpoints
+import TNLean.PEPS.Approximation.SheetStackRawInitial
+import TNLean.PEPS.Approximation.SheetStackReadout
+import TNLean.PEPS.Approximation.SheetStackReadoutCircuit
 import TNLean.PEPS.Approximation.SheetSwapBoundaryExpansion
 import TNLean.PEPS.Approximation.SheetSwapConjugateSupport
 import TNLean.PEPS.Approximation.SheetSwapCorrection
