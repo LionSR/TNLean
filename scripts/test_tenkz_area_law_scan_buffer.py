@@ -39,20 +39,41 @@ SCAN_FRONTS = {
     "scanFarFrontH": ("(4,17)", "(4,16)", "-j_F"),
 }
 # Charge intervals with r_0 = D = 1 column: near [j_P-r_0, j_P+D],
-# far unsigned [-j_F-D, -j_F+r_0].
-SCAN_BRACKETS = ["(2,5) .. (2,7)", "(2,10) .. (2,12)",
-                 "(5,11) .. (5,13)", "(5,16) .. (5,18)"]
+# far unsigned [-j_F-D, -j_F+r_0]. All have width r_0+D, labelled once (on the
+# near window of band g+1, the only station that clears the other labels);
+# D goes through the label macro \tnlScD (the area-law note writes D_ch).
+SCAN_BRACKETS = [("(2,5) .. (2,7)", ""), ("(2,10) .. (2,12)", ""),
+                 ("(5,11) .. (5,13)", r"$r_0+\tnlScD$"), ("(5,16) .. (5,18)", "")]
+SCAN_LABEL_DEFAULTS = {r"\tnlScD": "D"}
+# Species keep their names; the hues are the area-law note's legend (shared-spec
+# 4.1, H4): X red, U grey, Y violet, V blue.
+SCAN_HUES = {"target": "red!65!black", "near": "gray",
+             "middle": "violet!65!black", "far": "blue!65!black"}
 
+# The dilation labels go through label macros whose defaults are the blueprint
+# notation; the area-law note overrides them with the radii d, d'.
 BUFFER_CONTOURS = [
-    ("(4,4) .. (5,5)", "Q_0"), ("(3,3) .. (6,6)", "Q_0^{+d}"),
-    ("(2,2) .. (7,7)", "Q_0^{+d'}"), ("(1,1) .. (8,8)", "Q"),
+    ("(4,4) .. (5,5)", "Q_0"), ("(3,3) .. (6,6)", r"\tnlBcD"),
+    ("(2,2) .. (7,7)", r"\tnlBcDp"), ("(1,1) .. (8,8)", "Q"),
 ]
+BUFFER_LABEL_DEFAULTS = {r"\tnlBcD": "Q_0^{+d}", r"\tnlBcDp": "Q_0^{+d'}"}
 BUFFER_SUPPORTS = ["(2,4), (3,4)", "(1,6), (2,6)"]
 
 
 def block(source: str, start: str, end: str) -> str:
     assert start in source, start
     return source.split(start, 1)[1].split(end, 1)[0]
+
+
+def check_label_defaults(unit: str, defaults: dict[str, str]) -> None:
+    """Each label macro is provided once, with its blueprint default, before use."""
+    for macro, default in defaults.items():
+        declaration = "\\providecommand{" + macro + "}{" + default + "}"
+        assert unit.count("\\providecommand{" + macro + "}") == 1, ("one default", macro)
+        assert declaration in unit, ("label default changed", macro)
+        uses = [m.start() for m in re.finditer(re.escape(macro) + r"(?![A-Za-z])", unit)]
+        assert uses and uses[0] == unit.index(declaration) + len("\\providecommand{"), (
+            "label macro used before its default", macro)
 
 
 def units_of(entry: str) -> list[str]:
@@ -105,9 +126,18 @@ def check_scan(source: str) -> str:
         assert cell(wires[near][1])[1] > cell(wires[near][0])[1], "near fill increases depth"
         assert cell(wires[far][1])[1] < cell(wires[far][0])[1], "far fill decreases depth"
     brackets = re.findall(
-        r"\\tnmark\[form=bracket, species=charge, label pos=s\]\{([^}]+)\}\{\}", unit)
+        r"\\tnmark\[form=bracket, species=charge, label pos=s\]\{([^}]+)\}"
+        r"\{((?:\$[^$]*\$)?)\}", unit)
     assert brackets == SCAN_BRACKETS, ("charge intervals changed", brackets)
+    for sel, _ in SCAN_BRACKETS:
+        (_, a), (_, b) = span(sel)
+        assert b - a == 2, ("window width r_0+D with r_0=D=1 column", sel)
+    check_label_defaults(unit, SCAN_LABEL_DEFAULTS)
+    hues = dict(re.findall(r"\\tndeclare\{species\}\{(\w+)\}\{hue=source:([^}]+)\}", unit))
+    for species, hue in SCAN_HUES.items():
+        assert hues.get(species) == hue, ("legend hue", species, hues.get(species))
     assert "\\tnwire[kind=string, dir=to, name=scanDepthAxis]{(7,2)}{(7,18)}" in unit
+    assert r"\tnmark[form=label, label pos=s]{(7,2)}{$0$}" in unit, "depth-zero tick"
     assert r"\tnmark[form=label, label pos=e]{(7,18)}{$d$}" in unit
     for phrase in ("Not to scale", "unsigned depth", "boundary signature is empty",
                    "sections/08-scanner.tex"):
@@ -127,6 +157,9 @@ def check_buffer(source: str) -> str:
         r"\\tnmark\[form=enclosure(?:, species=\w+)?(?:, tint)?, label pos=\w+\]"
         r"\{([^}]+)\}\{\$([^$]+)\$\}", unit)
     assert contours == BUFFER_CONTOURS, ("nested contours changed", contours)
+    check_label_defaults(unit, BUFFER_LABEL_DEFAULTS)
+    assert r"\tndeclare{species}{support}{hue=source:violet!65!black}" in unit, (
+        "supports are violet (shared-spec 4.1, H3)")
     (r0, c0), (r1, c1) = span(BUFFER_CONTOURS[0][0])
     d, d_prime, radius = 1, 2, 1
     assert d + radius <= d_prime
@@ -159,6 +192,9 @@ def check_rejected_mutations(scan: str, buffer: str) -> None:
         ("name=scanFarFrontG]{(1,11)}{(1,10)}", "name=scanFarFrontG]{(1,10)}{(1,11)}"),
         ("{on scanFarFrontG 0.5}{$-j_F$}", "{on scanFarFrontG 0.5}{$j_F$}"),
         ("{(2,5) .. (2,7)}{}", "{(2,6) .. (2,7)}{}"),
+        ("{(5,11) .. (5,13)}{$r_0+\\tnlScD$}", "{(5,11) .. (5,13)}{}"),
+        ("\\providecommand{\\tnlScD}{D}", "\\providecommand{\\tnlScD}{D_{\\rm ch}}"),
+        ("{species}{target}{hue=source:red!65!black}", "{species}{target}{hue=source:blue}"),
     ):
         assert old in scan, old
         try:
@@ -167,7 +203,8 @@ def check_rejected_mutations(scan: str, buffer: str) -> None:
             continue
         raise AssertionError(("scanner mutation accepted", old))
     for old, new in (
-        ("{(3,3) .. (6,6)}{$Q_0^{+d}$}", "{(3,3) .. (6,7)}{$Q_0^{+d}$}"),
+        ("{(3,3) .. (6,6)}{$\\tnlBcD$}", "{(3,3) .. (6,7)}{$\\tnlBcD$}"),
+        ("\\providecommand{\\tnlBcDp}{Q_0^{+d'}}", "\\providecommand{\\tnlBcDp}{+d'}"),
         ("{{(1,6), (2,6)}}", "{{(1,6), (1,7)}}"),
         ("{{(2,4), (3,4)}}", "{{(2,4), (4,4)}}"),
     ):
@@ -221,7 +258,7 @@ def main() -> int:
              "buffer-contours": check_buffer(buffer)}
     check_rejected_mutations(scan, buffer)
     print("PASS: depth partition, fronts, charge intervals, nested dilations, "
-          "split supports, seven rejected mutations")
+          "split supports, label defaults, legend hues, eleven rejected mutations")
     if args.source_only:
         print("NOT RUN: SVG rendering and event-stream audit (--source-only)")
     elif args.output_dir:

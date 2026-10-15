@@ -1,0 +1,134 @@
+% Figure arealaw2d_pinned_metric.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL App. F 4 (the Bell pin, restricted metric), unnumbered
+% stacked display.
+% Source: arXiv OpenAI2026AreaLaw, sections/07-comparators.tex:100-109 (P=CXU, F=RV,
+% A_{j,g}=(W_P^{-1}W_F^{-1}W_Y)^2) and 286-316 (eqs. (8.16)-(8.18), comparator:pinned-metric).
+% Formula: on the pinned vector Phi_{XC}^{(x)k} (x) pi_R^lambda psi^{(x)k},
+% W_{CXU}^{-1} W_{RV}^{-1} W_Y = W_U^{-1} W_{RV}^{-1} W_Y = W_U^{-1} W_{UY}^{-1} W_Y,
+% so A_{j,g} restricts to (W_U^{-1}W_{UY}^{-1}W_Y)^2 (8.18). A is the square of this one
+% column of factors (each column maps the pinned range into itself), so one column is drawn.
+% Ink-to-index: rows from top to bottom (all panels) are C, X, U, -, Y, -, V, R, with blank
+% rows 4 and 6 (no wire); every wire is the bundle of all k copies (copies told apart by
+% position, not drawn). The cup on C, X with bead d_*^{-1/2} is Phi_{XC} in every copy,
+% Phi_{XC}^{(x)k}; the tall box on U, Y, V, R is pi_R^{lambda_k} psi^{(x)k} (psi has no leg
+% on C or X; the label projector on R is central, so this vector lies in Sym^k(RUYV)).
+% The one-wire boxes W_U^{-1}, W_Y also cover the blank row below their wire (no port
+% there) so that their names are inscribed; they act on one wire only.
+% The factors stand in the order of the formula, west to east, read right to left; in
+% panels 1 and 2 they act on disjoint wires and commute, so they share one column.
+% First = (fixed): fixed-factor identity (05-replicas.tex:436-449, arealaw2d_fixed_factor)
+% with phi = Phi_{XC}: W_{CXU}^{-1} acts as W_U^{-1}; the cup passes untouched.
+% Second = (compl.): every W_Q preserves simultaneous permutations, so the vector entering
+% W_{RV}^{-1} is in Sym^k(RUYV), where complementary label projectors agree
+% (05-replicas.tex:100): W_{RV}^{-1} acts as W_{UY}^{-1}; rows V and R then run straight.
+% Colour (shared-spec 4.1, H1, H7): R is complement grey (auxiliary register), as in
+% arealaw2d_bell_pin; C stays black, so the cup C-X has one colour, as in bell_pin (the
+% plan's grey C would split the cup's colour). Red (selected) is the factor each = changes:
+% W_U^{-1} in panel 2, W_{UY}^{-1} in panel 3.
+% Labels (L1, L3, L4): register names once, west of panel 1; operator names inscribed;
+% the state and the bead are the same in every panel and are named once, east of panel 3,
+% where no joiner follows.
+% Boundary signature: (phys:w)x6 in every panel, rows C, X, U, Y, V, R.
+% Label macros: none.
+% Fit: W at 6mm (\tnwide[6mm]); below 6mm the operator names no longer fit their boxes.
+% Related: arealaw2d_fixed_factor (the identity of the first =), arealaw2d_replica_metric
+% (the unpinned leaf metric), arealaw2d_bell_pin (the pin itself); none draws the restriction.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire}, cols=6, bonds=none, size=l]
+        \tn[at=(1,1), skin=none, name=pmOneC, ports={180:physical:$\mathsf C$, 0:physical}]{}
+        \tn[at=(2,1), skin=none, name=pmOneX, ports={180:physical:$X$, 0:physical}]{}
+        \tn[at=(3,1), skin=none, name=pmOneU, ports={180:physical:$U$, 0:physical}]{}
+        \tn[at=(5,1), skin=none, name=pmOneY, ports={180:physical:$Y$, 0:physical}]{}
+        \tn[at=(7,1), skin=none, name=pmOneV, ports={180:physical:$V$, 0:physical}]{}
+        \tn[at=(8,1), skin=none, species=complement, name=pmOneR, ports={180:physical:$\mathsf R$, 0:physical}]{}
+        \tn[at=(1,2), skin=box, wires=3, wide=3, name=pmOneP,
+            ports={180@1:physical, 180@2:physical, 180@3:physical,
+                    0@1:physical, 0@2:physical, 0@3:physical}]{W_{\mathsf CXU}^{-1}}
+        \tn[at=(5,2), skin=box, wires=2, wide=2, name=pmOneW,
+            ports={180@1:physical, 0@1:physical}]{W_Y}
+        \tn[at=(7,2), skin=box, wires=2, wide=2, name=pmOneF,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{W_{\mathsf RV}^{-1}}
+        \tn[at=(1,5), skin=none, name=pmOneCupC, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,5), skin=none, name=pmOneCupX, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,6), skin=box, wires=6, name=pmOnePsi,
+            ports={180@1:physical, 180@3:physical, 180@5:physical, 180@6:physical}]{}
+        \tnwire[route=arc, name=pmOneCup]{pmOneCupC.0}{pmOneCupX.0}
+        \tn[skin=dot, at=on pmOneCup 0.5]{}
+        \tnwire{pmOneC.0}{pmOneP.180@1}
+        \tnwire{pmOneX.0}{pmOneP.180@2}
+        \tnwire{pmOneU.0}{pmOneP.180@3}
+        \tnwire{pmOneY.0}{pmOneW.180@1}
+        \tnwire{pmOneV.0}{pmOneF.180@1}
+        \tnwire[species=complement]{pmOneR.0}{pmOneF.180@2}
+        \tnwire{pmOneP.0@1}{pmOneCupC.180}
+        \tnwire{pmOneP.0@2}{pmOneCupX.180}
+        \tnwire{pmOneP.0@3}{pmOnePsi.180@1}
+        \tnwire{pmOneW.0@1}{pmOnePsi.180@3}
+        \tnwire{pmOneF.0@1}{pmOnePsi.180@5}
+        \tnwire[species=complement]{pmOneF.0@2}{pmOnePsi.180@6}
+    \end{tenkz}
+    $\;\overset{\text{fixed}}{=}\;$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire}, cols=5, bonds=none, size=l]
+        \tn[at=(1,1), skin=none, name=pmTwoC, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), skin=none, name=pmTwoX, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), skin=none, name=pmTwoU, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,1), skin=none, name=pmTwoY, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,1), skin=none, name=pmTwoV, ports={180:physical, 0:physical}]{}
+        \tn[at=(8,1), skin=none, species=complement, name=pmTwoR, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,2), skin=box, wires=2, wide=2, species=selected, name=pmTwoP,
+            ports={180@1:physical, 0@1:physical}]{W_U^{-1}}
+        \tn[at=(5,2), skin=box, wires=2, wide=2, name=pmTwoW,
+            ports={180@1:physical, 0@1:physical}]{W_Y}
+        \tn[at=(7,2), skin=box, wires=2, wide=2, name=pmTwoF,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{W_{\mathsf RV}^{-1}}
+        \tn[at=(1,4), skin=none, name=pmTwoCupC, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,4), skin=none, name=pmTwoCupX, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,5), skin=box, wires=6, name=pmTwoPsi,
+            ports={180@1:physical, 180@3:physical, 180@5:physical, 180@6:physical}]{}
+        \tnwire[route=arc, name=pmTwoCup]{pmTwoCupC.0}{pmTwoCupX.0}
+        \tn[skin=dot, at=on pmTwoCup 0.5]{}
+        \tnwire{pmTwoC.0}{pmTwoCupC.180}
+        \tnwire{pmTwoX.0}{pmTwoCupX.180}
+        \tnwire{pmTwoU.0}{pmTwoP.180@1}
+        \tnwire{pmTwoY.0}{pmTwoW.180@1}
+        \tnwire{pmTwoV.0}{pmTwoF.180@1}
+        \tnwire[species=complement]{pmTwoR.0}{pmTwoF.180@2}
+        \tnwire{pmTwoP.0@1}{pmTwoPsi.180@1}
+        \tnwire{pmTwoW.0@1}{pmTwoPsi.180@3}
+        \tnwire{pmTwoF.0@1}{pmTwoPsi.180@5}
+        \tnwire[species=complement]{pmTwoF.0@2}{pmTwoPsi.180@6}
+    \end{tenkz}
+    $\;\overset{\text{compl.}}{=}\;$
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire,wire,wire,wire}, cols=8, bonds=none, size=l]
+        \tn[at=(1,1), skin=none, name=pmThrC, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,1), skin=none, name=pmThrX, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,1), skin=none, name=pmThrU, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,1), skin=none, name=pmThrY, ports={180:physical, 0:physical}]{}
+        \tn[at=(7,1), skin=none, name=pmThrV, ports={180:physical, 0:physical}]{}
+        \tn[at=(8,1), skin=none, species=complement, name=pmThrR, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,2), skin=box, wires=2, wide=2, name=pmThrP,
+            ports={180@1:physical, 0@1:physical}]{W_U^{-1}}
+        \tn[at=(3,4), skin=box, wires=3, wide=2, species=selected, name=pmThrF,
+            ports={180@1:physical, 180@3:physical, 0@1:physical, 0@3:physical}]{W_{UY}^{-1}}
+        \tn[at=(5,6), skin=box, wires=2, wide=2, name=pmThrW,
+            ports={180@1:physical, 0@1:physical}]{W_Y}
+        \tn[at=(1,7), skin=none, name=pmThrCupC, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,7), skin=none, name=pmThrCupX, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,8), skin=box, wires=6, name=pmThrPsi, label pos=e,
+            ports={180@1:physical, 180@3:physical, 180@5:physical, 180@6:physical}]{\pi_{\mathsf R}^{\lambda_k}\psi^{\otimes k}}
+        \tnwire[route=arc, name=pmThrCup]{pmThrCupC.0}{pmThrCupX.0}
+        \tn[skin=dot, at=on pmThrCup 0.5, label pos=e]{d_*^{-1/2}}
+        \tnwire{pmThrC.0}{pmThrCupC.180}
+        \tnwire{pmThrX.0}{pmThrCupX.180}
+        \tnwire{pmThrU.0}{pmThrP.180@1}
+        \tnwire{pmThrY.0}{pmThrF.180@3}
+        \tnwire{pmThrV.0}{pmThrPsi.180@5}
+        \tnwire[species=complement]{pmThrR.0}{pmThrPsi.180@6}
+        \tnwire{pmThrP.0@1}{pmThrF.180@1}
+        \tnwire{pmThrF.0@1}{pmThrPsi.180@1}
+        \tnwire{pmThrF.0@3}{pmThrW.180@1}
+        \tnwire{pmThrW.0@1}{pmThrPsi.180@3}
+    \end{tenkz}
+\end{tenkzequation}

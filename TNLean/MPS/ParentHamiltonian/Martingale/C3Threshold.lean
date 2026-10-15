@@ -72,6 +72,17 @@ private theorem tendsto_sqrt_succ_mul_pow_of_lt_one {r : ℝ}
       (tendsto_self_mul_const_pow_of_lt_one hr hr_lt_one).add
         (tendsto_pow_atTop_nhds_zero_of_lt_one hr hr_lt_one)
 
+private theorem tendsto_fnw_quotient
+    {c lam : ℝ} (hlam : 0 ≤ lam) (hlam_lt_one : lam < 1) :
+    Tendsto (fun n : ℕ => c * (1 + c * lam ^ n) / (1 - c * lam ^ n)) atTop (𝓝 c) := by
+  have hpow := tendsto_pow_atTop_nhds_zero_of_lt_one hlam hlam_lt_one
+  have h := ((tendsto_const_nhds (x := c)).mul ((tendsto_const_nhds (x := (1 : ℝ))).add
+    ((tendsto_const_nhds (x := c)).mul hpow))).div
+    ((tendsto_const_nhds (x := (1 : ℝ))).sub ((tendsto_const_nhds (x := c)).mul hpow))
+    (by simp : (1 : ℝ) - c * 0 ≠ 0)
+  simp only [mul_zero, add_zero, sub_zero, mul_one, div_one] at h
+  exact h
+
 private theorem tendsto_fnw_coefficient_mul_sqrt
     {c lam : ℝ} (hlam : 0 ≤ lam) (hlam_lt_one : lam < 1) :
     Tendsto
@@ -79,46 +90,19 @@ private theorem tendsto_fnw_coefficient_mul_sqrt
         c * lam ^ n * (1 + c * lam ^ n) / (1 - c * lam ^ n) *
           Real.sqrt ((n + 1 : ℕ) : ℝ))
       atTop (𝓝 0) := by
-  have hpow : Tendsto (fun n : ℕ => lam ^ n) atTop (𝓝 0) :=
-    tendsto_pow_atTop_nhds_zero_of_lt_one hlam hlam_lt_one
-  have hsqrt := tendsto_sqrt_succ_mul_pow_of_lt_one hlam hlam_lt_one
-  have hden : Tendsto (fun n : ℕ => 1 - c * lam ^ n) atTop (𝓝 1) := by
-    have h : Tendsto (fun n : ℕ => 1 - c * lam ^ n) atTop (𝓝 (1 - c * 0)) :=
-      tendsto_const_nhds.sub (tendsto_const_nhds.mul hpow)
-    simpa using h
-  have hnum : Tendsto (fun n : ℕ => c * (1 + c * lam ^ n)) atTop (𝓝 c) := by
-    have h : Tendsto (fun n : ℕ => c * (1 + c * lam ^ n)) atTop (𝓝 (c * (1 + c * 0))) :=
-      tendsto_const_nhds.mul (tendsto_const_nhds.add (tendsto_const_nhds.mul hpow))
-    simpa using h
-  have hquot :
-      Tendsto (fun n : ℕ => c * (1 + c * lam ^ n) / (1 - c * lam ^ n)) atTop (𝓝 c) := by
-    have h := hnum.div hden one_ne_zero
-    rw [div_one] at h
-    exact h
-  have hprod := hsqrt.mul hquot
-  rw [zero_mul] at hprod
-  exact hprod.congr fun n ↦ by ring
+  have h := (tendsto_sqrt_succ_mul_pow_of_lt_one hlam hlam_lt_one).mul
+    (tendsto_fnw_quotient (c := c) hlam hlam_lt_one)
+  rw [zero_mul] at h
+  exact h.congr fun n ↦ by ring
 
 private theorem tendsto_fnw_coefficient
     {c lam : ℝ} (hlam : 0 ≤ lam) (hlam_lt_one : lam < 1) :
     Tendsto (fun n : ℕ => c * lam ^ n * (1 + c * lam ^ n) / (1 - c * lam ^ n))
       atTop (𝓝 0) := by
-  have hpow : Tendsto (fun n : ℕ => lam ^ n) atTop (𝓝 0) :=
-    tendsto_pow_atTop_nhds_zero_of_lt_one hlam hlam_lt_one
-  have hden : Tendsto (fun n : ℕ => 1 - c * lam ^ n) atTop (𝓝 1) := by
-    have h : Tendsto (fun n : ℕ => 1 - c * lam ^ n) atTop (𝓝 (1 - c * 0)) :=
-      tendsto_const_nhds.sub (tendsto_const_nhds.mul hpow)
-    simpa using h
-  have hnum :
-      Tendsto (fun n : ℕ => c * lam ^ n * (1 + c * lam ^ n)) atTop (𝓝 0) := by
-    have h : Tendsto (fun n : ℕ => c * lam ^ n * (1 + c * lam ^ n)) atTop
-        (𝓝 (c * 0 * (1 + c * 0))) :=
-      (tendsto_const_nhds.mul hpow).mul
-        (tendsto_const_nhds.add (tendsto_const_nhds.mul hpow))
-    simpa using h
-  have h := hnum.div hden one_ne_zero
-  rw [zero_div] at h
-  exact h
+  have h := (tendsto_pow_atTop_nhds_zero_of_lt_one hlam hlam_lt_one).mul
+    (tendsto_fnw_quotient (c := c) hlam hlam_lt_one)
+  rw [zero_mul] at h
+  exact h.congr fun n ↦ by ring
 
 /-- The individual-block error in Nachtergaele,
 arXiv:cond-mat/9410110, display `boundAm` (lines 2401--2412), tends to zero

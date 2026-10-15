@@ -20,7 +20,14 @@ external documents (the diagrammatic notes) typeset from the same source.
 - **Macros.** Only tenkz, `macros/diagrams.tex`, amsmath/amssymb, `\ket`,
   `\bra`, `\C`, `\spn`, and the figure's own `\tnl<Tag><Role>` label macros.
   Declare each label macro with `\providecommand` as the first lines of every
-  picture body that uses it; the default is the blueprint's original literal.
+  picture body that uses it; the default is the blueprint's original literal
+  (empty for a hook the blueprint does not print, such as the panel letters
+  `\tnlPanelA`-`\tnlPanelC` of `polypeps_small_patch_branch`). A declaration
+  added to an existing figure ends in `%`: the line end otherwise becomes a
+  space that shifts the tenkz layout. A figure that no chapter inputs may also
+  put a label macro in a joiner of its `tenkzequation` (for example
+  `\tnlCsArrow` in `polypeps_compression_shape`), declared in the
+  `tenkzequation` body before the first picture.
 - **Use.** Chapters write the literal `\input{figures/<name>}` on its own line
   inside the entry, never inside a `tenkzequation`. External documents load
   `\usepackage{tnleanfigures}` and write `\tnfigure{<name>}`.

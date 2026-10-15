@@ -60,18 +60,6 @@ def mixedEndpointEdgePhysicalCfg (k : MixedEndpointEdgePosition) :
   | .last => fun (q, (c, e)) =>
       ![mixedEndpointFirstPhysicalIndex D₁ q, mixedEndpointPhysicalIndex (.inl c) e]
 
-private theorem physicalIndex_eq_iff
-    (a b c e : Fin D₀ ⊕ Fin D₁) :
-    mixedEndpointPhysicalIndex a b = mixedEndpointPhysicalIndex c e ↔ a = c ∧ b = e := by
-  simp [mixedEndpointPhysicalIndex]
-
-private theorem firstPhysicalIndex_injective :
-    Function.Injective (mixedEndpointFirstPhysicalIndex (D₀ := D₀) D₁) := by
-  intro p q h
-  have hpq := (physicalIndex_eq_iff _ _ _ _).mp h
-  apply finProdFinEquiv.symm.injective
-  exact Prod.ext (Sum.inl.inj hpq.1) (Sum.inl.inj hpq.2)
-
 /-- None of the three smaller-edge encodings loses a coordinate.
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem mixedEndpointEdgePhysicalCfg_injective (k : MixedEndpointEdgePosition) :
@@ -82,23 +70,23 @@ theorem mixedEndpointEdgePhysicalCfg_injective (k : MixedEndpointEdgePosition) :
       have h₀ := congrFun h 0
       have h₁ := congrFun h 1
       have hab : a = a' ∧ b = b' := by
-        simpa [mixedEndpointEdgePhysicalCfg, physicalIndex_eq_iff] using h₀
-      have hq : q = q' := firstPhysicalIndex_injective (by
+        simpa [mixedEndpointEdgePhysicalCfg, mixedEndpointPhysicalIndex_eq_iff] using h₀
+      have hq : q = q' := mixedEndpointFirstPhysicalIndex_injective (by
         simpa [mixedEndpointEdgePhysicalCfg] using h₁)
       rcases hab with ⟨rfl, rfl⟩
       subst q'
       rfl
   | interior =>
       intro σ τ h
-      exact funext fun i => firstPhysicalIndex_injective (congrFun h i)
+      exact funext fun i => mixedEndpointFirstPhysicalIndex_injective (congrFun h i)
   | last =>
       rintro ⟨q, ⟨c, e⟩⟩ ⟨q', ⟨c', e'⟩⟩ h
       have h₀ := congrFun h 0
       have h₁ := congrFun h 1
-      have hq : q = q' := firstPhysicalIndex_injective (by
+      have hq : q = q' := mixedEndpointFirstPhysicalIndex_injective (by
         simpa [mixedEndpointEdgePhysicalCfg] using h₀)
       have hce : c = c' ∧ e = e' := by
-        simpa [mixedEndpointEdgePhysicalCfg, physicalIndex_eq_iff] using h₁
+        simpa [mixedEndpointEdgePhysicalCfg, mixedEndpointPhysicalIndex_eq_iff] using h₁
       rcases hce with ⟨rfl, rfl⟩
       subst q'
       rfl
@@ -219,8 +207,8 @@ theorem mem_range_mixedEndpointEdgePhysicalCfg_iff
       · rintro ⟨⟨⟨a', b'⟩, q⟩, h⟩
         have h₀ := congrFun h 0
         have h₁ := congrFun h 1
-        simp only [mixedEndpointEdgePhysicalCfg, Matrix.cons_val_zero,
-          Matrix.cons_val_one, mixedEndpointFirstPhysicalIndex, physicalIndex_eq_iff] at h₀ h₁
+        simp only [mixedEndpointEdgePhysicalCfg, Matrix.cons_val_zero, Matrix.cons_val_one,
+          mixedEndpointFirstPhysicalIndex, mixedEndpointPhysicalIndex_eq_iff] at h₀ h₁
         exact ⟨⟨b', h₀.2.symm⟩, ⟨_, h₁.1.symm⟩, ⟨_, h₁.2.symm⟩⟩
       · rintro ⟨⟨b₀, rfl⟩, ⟨c₀, rfl⟩, ⟨e₀, rfl⟩⟩
         exact ⟨((a, b₀), finProdFinEquiv (c₀, e₀)), by
@@ -230,8 +218,8 @@ theorem mem_range_mixedEndpointEdgePhysicalCfg_iff
       · rintro ⟨⟨q, ⟨c', e'⟩⟩, h⟩
         have h₀ := congrFun h 0
         have h₁ := congrFun h 1
-        simp only [mixedEndpointEdgePhysicalCfg, Matrix.cons_val_zero,
-          Matrix.cons_val_one, mixedEndpointFirstPhysicalIndex, physicalIndex_eq_iff] at h₀ h₁
+        simp only [mixedEndpointEdgePhysicalCfg, Matrix.cons_val_zero, Matrix.cons_val_one,
+          mixedEndpointFirstPhysicalIndex, mixedEndpointPhysicalIndex_eq_iff] at h₀ h₁
         exact ⟨⟨_, h₀.2.symm⟩, ⟨c', h₁.1.symm⟩, ⟨_, h₀.1.symm⟩⟩
       · rintro ⟨⟨b₀, rfl⟩, ⟨c₀, rfl⟩, ⟨a₀, rfl⟩⟩
         exact ⟨(finProdFinEquiv (a₀, b₀), (c₀, e)), by
@@ -241,8 +229,8 @@ theorem mem_range_mixedEndpointEdgePhysicalCfg_iff
       · rintro ⟨σ, h⟩
         have h₀ := congrFun h 0
         have h₁ := congrFun h 1
-        simp only [mixedEndpointEdgePhysicalCfg, Matrix.cons_val_zero,
-          Matrix.cons_val_one, mixedEndpointFirstPhysicalIndex, physicalIndex_eq_iff] at h₀ h₁
+        simp only [mixedEndpointEdgePhysicalCfg, Matrix.cons_val_zero, Matrix.cons_val_one,
+          mixedEndpointFirstPhysicalIndex, mixedEndpointPhysicalIndex_eq_iff] at h₀ h₁
         exact ⟨⟨_, h₀.2.symm⟩, ⟨_, h₁.1.symm⟩, ⟨_, h₀.1.symm⟩, ⟨_, h₁.2.symm⟩⟩
       · rintro ⟨⟨b₀, rfl⟩, ⟨c₀, rfl⟩, ⟨a₀, rfl⟩, ⟨e₀, rfl⟩⟩
         refine ⟨![finProdFinEquiv (a₀, b₀), finProdFinEquiv (c₀, e₀)], ?_⟩
@@ -429,10 +417,7 @@ private theorem edgeAdjoint_comp_twoSiteBoundaryMapSum
         (twoSiteBoundaryMapSum A₀ A₁) =
       (WithLp.linearEquiv 2 ℂ (mixedEndpointEdgeCfg D₀ D₁ k → ℂ)).symm.toLinearMap.comp
         (mixedEndpointEdgeBoundaryMap A₀ A₁ k) := by
-  apply LinearMap.ext
-  intro X
-  apply PiLp.ext
-  intro ξ
+  ext X ξ
   rw [LinearMap.comp_apply, mixedEndpointEdgeLinearIsometry_adjoint_apply,
     edgePhysicalCfg_eq_activeCfg, twoSiteBoundaryMapSum_apply_activeCfg]
   cases k <;> rfl

@@ -44,6 +44,8 @@ block of the hierarchy is in `TNLean.PEPS.Approximation.DyadicLevelSchedule`.
 
 * Polynomial-PEPS manuscript (Sept 24 2026), §7, `06-geometry.tex`: the edge construction
   (lines 155–241) and Lemma 7.2 `lem:geometry-angular` (lines 254–319).
+
+Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
 namespace TNLean.PEPS.Approximation

@@ -73,6 +73,35 @@ theorem ker_sum_deformedConstraintProjection {ι : Type*} [Fintype ι]
     WeightedPositiveKernel.ker_sum_eq_iInf hP, Submodule.comap_iInf]
   simp only [ker_deformedConstraintProjection]
 
+/-- If \(e\) carries \(S\) onto \(T\), deforming the projection onto \(S^\perp\) by
+\(e^{-1}\) gives the projection onto \(T^\perp\), and deforming the projection onto
+\(T^\perp\) by \(e\) gives back the projection onto \(S^\perp\). -/
+theorem deformedConstraintProjection_orthogonal_of_map_eq
+    (e : E ≃ₗ[ℂ] F) (S : Submodule ℂ E) (T : Submodule ℂ F)
+    (h : S.map e.toLinearMap = T) :
+    e.symm.deformedConstraintProjection Sᗮ.starProjection.toLinearMap =
+        Tᗮ.starProjection.toLinearMap ∧
+      e.deformedConstraintProjection Tᗮ.starProjection.toLinearMap =
+        Sᗮ.starProjection.toLinearMap := by
+  constructor
+  · simp only [deformedConstraintProjection, Submodule.ker_starProjection,
+      Submodule.orthogonal_orthogonal, Submodule.comap_equiv_eq_map_symm, symm_symm, h]
+  · have hsymm := (Submodule.map_symm_eq_iff e).mpr h
+    simp only [deformedConstraintProjection, Submodule.ker_starProjection,
+      Submodule.orthogonal_orthogonal, Submodule.comap_equiv_eq_map_symm, hsymm]
+
+/-- If \(e(S)=T\), then the conjugate \(U^{-1}eU\) carries \(U^{-1}(S)\) onto
+\(U^{-1}(T)\). -/
+theorem map_conj_map_symm_of_map_eq {M N : Type*} [AddCommGroup M] [Module ℂ M]
+    [AddCommGroup N] [Module ℂ N] (U : M ≃ₗ[ℂ] N) (e : N ≃ₗ[ℂ] N) (S T : Submodule ℂ N)
+    (h : S.map e.toLinearMap = T) :
+    (S.map U.symm.toLinearMap).map (U.trans (e.trans U.symm)).toLinearMap =
+      T.map U.symm.toLinearMap := by
+  rw [← Submodule.map_comp]
+  have heq : (U.trans (e.trans U.symm)).toLinearMap.comp U.symm.toLinearMap =
+      U.symm.toLinearMap.comp e.toLinearMap := by ext; simp
+  rw [heq, Submodule.map_comp, h]
+
 end LinearEquiv
 
 private theorem symmetricProjection_eq_orthogonal_ker_projection

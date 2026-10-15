@@ -81,6 +81,11 @@ interpolations. The physical gap and both label equations concern the same
 supplied state and prevector. The defect is computed from the literal actual
 mean energy, and normalization is proved for that same filtered vector.
 The finite maximum includes zero, so no positive band-count premise is needed.
+
+**Scope restriction (conditional actual-root lower bound):** The physical gap,
+marginal moments and auxiliary-label data are inputs, and the actual energy
+defect is retained. Common-point comparison and final source-scale absorption
+are not established here. See `docs/paper-gaps/arealaw2d_actual_sharp_lower_scope.tex`.
 Source: `07-comparators.tex`, lines 550--651; `08-scanner.tex`, lines
 371--384, 416--451 and 755--769, revision adc7f124. -/
 theorem exists_actualScan_sharp_lower_norm

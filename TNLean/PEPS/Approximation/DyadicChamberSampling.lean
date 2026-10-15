@@ -35,6 +35,8 @@ Distances are ambient sup distances: `ℝ × ℝ` carries the maximum metric.
 * Polynomial-PEPS manuscript (Sept 24 2026), §7, `06-geometry.tex`: guides, their open polygonal
   chambers and the tie convention (lines 69–80), the edge construction (lines 142–241), and
   Lemma 7.2 `lem:geometry-angular` (lines 243–319).
+
+Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
 namespace TNLean.PEPS.Approximation
