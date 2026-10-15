@@ -57,19 +57,14 @@ preparation of matrix product states.
     depth $T$ and states prepared in depth $T$ are defined in the same way for
     every bond geometry.
 
-    The chain is a ring with sites $1,\dots,N$: the neighbouring pairs are
-    $\{k,k+1\}$ with indices modulo $N$; for $N=1$ the only pair is $\{1\}$,
-    and for $N=2$ both pairs are $\{1,2\}$. The open chain has the pairs
-    $\{k,k+1\}$ with $k<N$. An operator
-    \emph{acts on} a set of sites $X$ if it
-    lies in $\MN{d}^{\otimes X}\otimes\mathbb 1$, the span of the products
-    $\bigotimes_i m_i$ with $m_i=\mathbb 1$ for $i\notin X$.
-
-    Acting on a set of sites needs no geometry: for any finite set of sites
-    $I$ and $X\subseteq I$, an operator on $(\C^d)^{\otimes I}$ acts on $X$ if
-    it lies in the span of the products $\bigotimes_{i\in I}m_i$ with
-    $m_i=\mathbb 1$ for $i\notin X$. The chain of $N$ sites is the case
-    $I=\{1,\dots,N\}$.
+    The chain of $N$ sites is a ring with sites $1,\dots,N$ and neighbouring
+    pairs $\{k,k+1\}$ (indices modulo $N$); for $N=1$ the only pair is $\{1\}$,
+    and for $N=2$ both pairs equal $\{1,2\}$. The open chain has the pairs
+    $\{k,k+1\}$ with $k<N$. For any finite set of sites $I$ and $X\subseteq I$,
+    an operator on $(\C^d)^{\otimes I}$ \emph{acts on} $X$ if it lies in
+    $\MN{d}^{\otimes X}\otimes\mathbb 1$, the span of the products
+    $\bigotimes_{i\in I}m_i$ with $m_i=\mathbb 1$ for $i\notin X$. The chain of
+    $N$ sites is the case $I=\{1,\dots,N\}$.
 \end{definition}
 
 \begin{definition}[Pairing local coordinates]
@@ -77,10 +72,10 @@ preparation of matrix product states.
     \lean{QuantumCircuit.sitePairConfigurationEquiv}
     \leanok
     Let $I$ be a finite set of sites and let $d,e\geq0$ be integers. At each
-    site identify $(a,b)\in\{0,\dots,d-1\}\times\{0,\dots,e-1\}$ with
-    $ea+b\in\{0,\dots,de-1\}$. Applied at every site, this gives a bijection
-    $p$ from pairs of configurations to configurations of local dimension
-    $de$.
+    site, identify $(a,b)\in\{0,\dots,d-1\}\times\{0,\dots,e-1\}$ with
+    $ea+b\in\{0,\dots,de-1\}$. Applied sitewise, this gives a bijection
+    $p$ from pairs of configurations on $I$ to configurations of local
+    dimension $de$.
 \end{definition}
 
 \begin{theorem}[Support of a tensor product on paired sites]
@@ -89,19 +84,19 @@ preparation of matrix product states.
     \leanok
     \uses{def:qc_local_circuit,def:qc_site_pair_coordinates}
     Let $S,T\subseteq I$. If $A$ on $(\C^d)^{\otimes I}$ is supported on
-    $S$ and $B$ on $(\C^e)^{\otimes I}$ is supported on $T$, then the matrix
-    $A\otimes B$, expressed in the coordinates $p$, is supported on
-    $S\cup T$ in $(\C^{de})^{\otimes I}$. This is the support identification
-    for the doubled local interactions in \cite{OpenAI2026PolynomialPEPS},
+    $S$ and $B$ on $(\C^e)^{\otimes I}$ is supported on $T$, then
+    $A\otimes B$, expressed in the paired coordinates $p$, is supported on
+    $S\cup T$ in $(\C^{de})^{\otimes I}$. This identifies the support of the
+    doubled local interactions in \cite{OpenAI2026PolynomialPEPS},
     \texttt{02-information.tex}, lines 416--424 and 513--524.
 \end{theorem}
 
 \begin{proof}\leanok
     By bilinearity, it suffices to consider
-    $A=\bigotimes_i A_i$ and $B=\bigotimes_i B_i$, with $A_i=\mathbb 1$ off $S$
-    and $B_i=\mathbb 1$ off $T$. Pairing the local coordinates identifies their
-    tensor product with $\bigotimes_i(A_i\otimes B_i)$. Every factor outside
-    $S\cup T$ is the identity.
+    $A=\bigotimes_i A_i$ and $B=\bigotimes_i B_i$, with $A_i=\mathbb 1$ outside $S$
+    and $B_i=\mathbb 1$ outside $T$. Pairing the local coordinates identifies
+    $A\otimes B$ with $\bigotimes_i(A_i\otimes B_i)$, whose factor at every site
+    outside $S\cup T$ is the identity.
 \end{proof}
 
 \begin{definition}[Light cone of a bond geometry]

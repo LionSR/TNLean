@@ -50,29 +50,26 @@ in the sup metric, so $d_\infty(x,y)=\max\{|x_1-y_1|,|x_2-y_2|\}$.
     \begin{align}
         d_\infty(x,z_*) & \le 2(C_0+1)2^k.
     \end{align}
-    In particular, the existence of such an $x$ implies $Z\ne\varnothing$.
     Writing $d_\infty(x,Z)=\inf_{z\in Z}d_\infty(x,z)$, one obtains
     \begin{align}
         C_0 2^k & \le d_\infty(x,Z) \le 2(C_0+1)2^k.
     \end{align}
     This is the layer-distance estimate in
-    \cite[Section~11]{OpenAI2026AreaLaw}. Empty layers are allowed.
+    \cite[Section~11]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_dyadic_closures,thm:area_law_dyadic_indices,
         thm:area_law_dyadic_cell_distance}
-    The closure of the layer is a finite union of closed scale-$k$ cells.
-    A layer index lies outside $P_k$, so it differs from every occupied
+    The closure of $D_k$ is a finite union of closed scale-$k$ cells.
+    Every layer index lies outside $P_k$ and so differs from every occupied
     index in at least one coordinate by more than $C_0$. Applying the
-    closed-cell lower bound to the cell containing $z$ proves the first
+    closed-cell lower bound to the cell containing $z$ gives the first
     inequality.
 
-    The inclusion $D_k\subseteq N_{k+1}$ persists after taking closures.
-    A closed cell in $N_{k+1}$ has an index within $C_0$ of an occupied
-    index. Choose a point $z_*$ of $Z$ in the latter cell and apply the
-    closed-cell upper bound at scale $k+1$. Its side length is $2^{k+1}$,
-    giving the second inequality. The infimum is bounded below by the
-    first inequality and above by the distance to $z_*$.
+    Since $\overline{D_k}\subseteq\overline{N_{k+1}}$, the point $x$ lies in a
+    closed scale-$(k+1)$ cell whose index is within $C_0$ of an occupied index.
+    Choosing $z_*\in Z$ in that occupied cell and applying the closed-cell
+    upper bound at scale $k+1$ gives the second inequality.
 \end{proof}
 
 % Source: geometry:nonadjacent in Section 11.
@@ -92,18 +89,14 @@ in the sup metric, so $d_\infty(x,y)=\max\{|x_1-y_1|,|x_2-y_2|\}$.
         \frac{C_0-1}{2}2^h & \le d_\infty(x,y).
     \end{align}
     This is the nonadjacent-layer estimate in
-    \cite[Section~11]{OpenAI2026AreaLaw}. The last lower bound is positive
-    under the source's choice $C_0\ge2$. Both inequalities hold for every
-    $C_0\ge0$, including when the stated lower bound is nonpositive.
+    \cite[Section~11]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_dyadic_layer_distance}
-    Choose $z\in Z$ with $d_\infty(x,z)\le2(C_0+1)2^k$. The endpoint
-    lower bound gives $d_\infty(y,z)\ge C_0 2^h$. The triangle inequality
-    proves the first assertion. If $h\ge k+2$, then $4\cdot2^k\le2^h$,
-    and hence
+    Choose $z\in Z$ with $d_\infty(x,z)\le2(C_0+1)2^k$. Since
+    $d_\infty(y,z)\ge C_0 2^h$, the triangle inequality gives the first bound.
+    When $h\ge k+2$, $4\cdot2^k\le2^h$, so
     \begin{align}
         C_0 2^h-2(C_0+1)2^k & \ge \frac{C_0-1}{2}2^h.
     \end{align}
-    This proves the second assertion.
 \end{proof}

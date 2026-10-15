@@ -9,7 +9,7 @@ on $\operatorname{ran}E_v$: for some $c_v>0$,
 $T_v^*T_v=c_vE_v$. This is the regular-representation condition of
 \cite[Definition~6.1]{Schuch2010PEPS}, allowing a positive normalization.
 Write $T_R=\bigotimes_{v\in R}T_v$ and
-$\mathcal S_R$ for the actual open-boundary PEPS range on $R$.
+$\mathcal S_R$ for the open-boundary PEPS range on $R$.
 The physical local interaction is $h_R=I-\Pi_{\mathcal S_R}$.
 
 \begin{definition}[Coordinate orthogonal projectors]%
@@ -86,7 +86,7 @@ notation below.
     \uses{def:peps_regional_operator_extension}
     Let $V$ be any finite ordered site set with finite alphabets $Y_v$,
     and choose bijections $e_v:Y_v\to[n_v]$, where
-    $[n]=\{k\in\N:k<n\}$, so $[0]=\varnothing$.
+    $[n]=\{k\in\N:k<n\}$.
     Write $\mathcal H_X=\C^{\prod_{v\in X}Y_v}$.
     For $X\subseteq V$, let $E_X$ be the induced unitary coordinate
     relabelling, so $E_X\ket{(y_v)_{v\in X}}=
@@ -106,8 +106,6 @@ notation below.
     The extension on the right of~(\ref{eq:peps_lift_basis_relabelling})
     uses the relabelled bases. Equivalently,
     $E_V(\widehat K_X\xi)=\widehat{E_XKE_X^*}_XE_V\xi$.
-    No Hermiticity or normalization is required; the identities include
-    empty regions, empty alphabets, and empty site sets.
 
     Put $C=V\setminus X$ and $K'=E_XKE_X^*$.
     Write $I'_C$ for the identity in the relabelled complementary basis.
@@ -328,7 +326,7 @@ notation below.
         TNLean.PEPS.regularRegionRight_eq_internalMultiplier,
         TNLean.PEPS.restrictRegularRegionHalfEdges_assemble}
     \leanok
-    Let $\mathcal S_R^0$ be the range of the canonical regular open-region
+    Let $\mathcal S_R^0$ be the range of the virtual regular open-region
     matrix. Define $\widehat{\mathcal S}_R^0$ by requiring every complementary
     slice $x_\tau$ to lie in $\mathcal S_R^0$.
     Extend a regional gauge by $1$ outside $R$, and retain an edge multiplier
@@ -340,7 +338,7 @@ notation below.
     regional action unchanged.
 \end{definition}
 
-\begin{theorem}[The commuting product is the actual range projector]%
+\begin{theorem}[The commuting product is the virtual range projector]%
     \label{thm:peps_regular_actual_projector}
     \lean{TNLean.PEPS.mem_regularGlobalRegionRange_iff_invariant_flat,
         TNLean.PEPS.regularGlobalRegionConstraint_mulVec_eq_self_iff_mem_range,
@@ -362,7 +360,6 @@ notation below.
                         & [\widehat{P_R^0},\widehat{P_S^0}]                    & =0.
         \label{eq:peps_actual_virtual_projection}
     \end{align}
-    No condition is placed on the exterior half-edge labels.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_regional_range_invariant_flat,
@@ -374,7 +371,7 @@ notation below.
     Apply the regional invariant-and-flat characterization to each slice.
     The actions in Definition~\ref{def:peps_ambient_regular_range} leave that
     slice's exterior label unchanged. The fixed space of the commuting product
-    $Q_R$ is therefore exactly $\widehat{\mathcal S}_R^0$.
+    $Q_R$ is therefore $\widehat{\mathcal S}_R^0$.
     Both $Q_R$ and $\widehat{P_R^0}$ are orthogonal projections onto this
     subspace, so they are equal. Commutation of $Q_R,Q_S$ gives the last identity.
 \end{proof}
@@ -422,7 +419,7 @@ notation below.
 \begin{proof}\leanok
     \uses{thm:peps_scaled_partial_isometry_projector_transport,thm:peps_projection_range_unique,
         thm:peps_regional_range_invariant_flat}
-    The physical product map takes each canonical open-region column to the
+    The physical product map takes each virtual open-region column to the
     original tensor's column with the same boundary labels. Their spans give
     $\mathcal S_R=T_R(\mathcal S_R^0)$.
     Every vector in $\mathcal S_R^0$ is fixed by the product of local regular
@@ -449,8 +446,7 @@ notation below.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_physical_regional_projector,thm:peps_projection_range_unique}
-    The constant function $1$ is a nonzero invariant vector, even when the
-    incident-leg set is empty; hence $E_v\ne0$.
+    The constant function $1$ is a nonzero invariant vector, so $E_v\ne0$.
     The Gram identity gives $L_vT_v=E_v$, and $T_vE_v=T_v$ gives
     $J_vT_v=T_v$ and $J_v^2=J_v$. The scalar $c_v$ is real, so $J_v^*=J_v$.
     If $J_v=0$, then $T_v=J_vT_v=0$, contradicting $L_vT_v=E_v\ne0$.
@@ -529,7 +525,7 @@ notation below.
     $FJ_U=0$ and then $D=0$.
 \end{proof}
 
-\begin{theorem}[Canonical interactions are complementary projections]%
+\begin{theorem}[Regional parent interactions are complementary projections]%
     \label{thm:peps_canonical_complement_projection}
     \lean{TNLean.PEPS.canonicalRegionParentInteraction_isStarProjection,
         TNLean.PEPS.canonicalRegionParentInteraction_eq_one_sub_rangeProjector,
@@ -537,7 +533,7 @@ notation below.
         TNLean.PEPS.dependentRegionOperatorLift_one_sub}
     \leanok
     \uses{def:peps_coordinate_projector,def:peps_regional_operator_extension}
-    For any graph PEPS tensor, its canonical regional interaction is an
+    For any graph PEPS tensor, its regional parent interaction is an
     orthogonal projector with $h_R=I-\Pi_{\mathcal S_R}$.
     Its extension to the physical configuration space agrees with the
     region/complement extension under the natural coordinate identification;
@@ -559,7 +555,7 @@ notation below.
     \leanok
     \uses{thm:peps_canonical_complement_projection}
     For locally regular $G$-isometric tensors on a finite simple graph,
-    the actual canonical regional range projectors and parent interactions
+    the regional range projectors and parent interactions
     commute for arbitrary regions $R,S\subseteq V$:
     \begin{align}
         [\widehat P_R,\widehat P_S] & =0, &
@@ -568,19 +564,15 @@ notation below.
     \end{align}
     This is the finite-simple-graph form of the commuting-parent conclusion
     of \cite[Theorem~6.12]{Schuch2010PEPS}. Regions may overlap arbitrarily.
-    Periodic presentations with self-loops or parallel bonds require their
-    own contraction conventions.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_nonzero_site_images,thm:peps_physical_regional_projector,
         thm:peps_regular_actual_projector,thm:peps_product_transport_commutation,
         thm:peps_canonical_complement_projection}
-    Local $G$-isometry supplies $L_v,J_v$ with $T_vL_v=J_v\ne0$ and
+    Local $G$-isometry gives $L_v,J_v$ with $T_vL_v=J_v\ne0$ and
     $J_RP_R=P_R$. Equation~(\ref{eq:peps_physical_projector_transport})
     gives $P_RT_R=T_RP_R^0$, and
     (\ref{eq:peps_actual_virtual_projection}) gives commuting virtual extensions.
     Apply Theorem~\ref{thm:peps_product_transport_commutation} with $A_v=T_v$.
     Finally $[I-\widehat P_R,I-\widehat P_S]=[\widehat P_R,\widehat P_S]=0$.
-    The complementary-factor argument applies in the full physical space,
-    even when the site maps have proper images.
 \end{proof}

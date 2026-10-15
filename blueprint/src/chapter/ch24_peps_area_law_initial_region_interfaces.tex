@@ -1,9 +1,9 @@
-\section{Colors across initial interfaces}
+\section{Colors across initial region boundaries}
 \label{sec:area_law_initial_region_interfaces}
 
-Retain the actual initial identifiers, closed birth regions $X_i^0$ and
+Retain the initial region indices, closed birth regions $X_i^0$, and
 colors $\lambda(i)$ of \cite[Section~11]{OpenAI2026AreaLaw}. The origin,
-finite endpoint set and valid residue choices are arbitrary, with
+finite endpoint set, and valid residue choices are arbitrary, with
 $C\ge 2$ and $k_0\ge 50{,}000{,}000$.
 
 % Source: 10-geometry.tex, prop:two-families, lines 172--177,
@@ -17,13 +17,12 @@ $C\ge 2$ and $k_0\ge 50{,}000{,}000$.
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegionColor_ne_of_segment_subset_inter}
     \leanok
     \uses{def:area_law_initial_birth_regions,def:area_law_initial_region_colors}
-    Let $i\ne j$ be actual initial identifiers. If $u,v\in\mathbb R^2$
+    Let $i\ne j$ be distinct initial region indices. If $u,v\in\mathbb R^2$
     are distinct and their entire closed segment satisfies
     \begin{align}
         [u,v] & \subseteq X_i^0\cap X_j^0,
     \end{align}
     then $\lambda(i)\ne\lambda(j)$.
-    No nonemptiness condition on the endpoint set is required.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_initial_run_color,
@@ -34,15 +33,17 @@ $C\ge 2$ and $k_0\ge 50{,}000{,}000$.
         thm:area_law_local_layer_indices,
         thm:area_law_dummy_contact_index,
         thm:area_law_primary_diameter_separation}
-    For an interface involving a belt run and a primary or the dummy,
-    the corresponding run-interface theorem gives opposite colors.
-    The color of a run agrees with every constituent triangle.
-    The same argument handles runs in different indexed cells.
-    If two distinct runs lie in one cell, the shared segment supplies
-    two distinct common points; the fan-run contact theorem gives
-    opposite colors.
+    When the shared segment meets a belt run and either a primary region or
+    the dummy region, Theorems~\ref{thm:area_law_belt_run_primary_interface}
+    and~\ref{thm:area_law_belt_run_dummy_interface} give opposite colors,
+    since a run has the same color as each of its constituent triangles
+    (Theorem~\ref{thm:area_law_initial_run_color}).
+    Theorem~\ref{thm:area_law_belt_runs_interface_colors} handles runs in
+    distinct indexed cells. If two distinct runs lie in the same cell, the
+    shared segment contains two distinct common points, and
+    Theorem~\ref{thm:area_law_fan_run_geometric_contact} gives opposite colors.
 
-    Let primaries $i=(k,J)$ and $j=(h,K)$ with $k\le h$ share a point
+    Let primary regions $i=(k,J)$ and $j=(h,K)$ with $k\le h$ share a point
     $x$. They lie in neighboring closed layers, so $h\in\{k,k+1\}$. If
     $h=k$, then $J\ne K$, and positive separation gives some $t>0$ with
     \begin{align}
@@ -52,13 +53,12 @@ $C\ge 2$ and $k_0\ge 50{,}000{,}000$.
     \begin{align}
         \lambda(j)=k+1\ne k=\lambda(i)\quad\text{in }\mathbb Z/2\mathbb Z.
     \end{align}
-    A primary $i=(k,J)$ contacting the dummy lies in layer $k=k_0$, so
+    A primary region $i=(k,J)$ meeting the dummy region lies in layer $k=k_0$, so
     \begin{align}
         \lambda(i)=k_0\ne k_0-1=\lambda(*)\quad\text{in }\mathbb Z/2\mathbb Z.
     \end{align}
-    Two dummy identifiers cannot be distinct. These cases exhaust the
-    identifier family.
+    Two dummy indices cannot be distinct, and these cases exhaust all pairs.
 \end{proof}
 
-The hypothesis retains the whole segment. Two isolated common corners of
-possibly disconnected regions do not constitute such an interface.
+The hypothesis requires a nondegenerate segment in $X_i^0\cap X_j^0$;
+isolated common corners of regions do not force opposite colors.

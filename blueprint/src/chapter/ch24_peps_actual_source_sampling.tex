@@ -1,28 +1,27 @@
-\section{Sampling the actual source circuit}
+\section{Sampling the source circuit}
 \label{sec:peps_actual_source_sampling}
 
-We complete the Gaussian sampling estimate for an actual source-only circuit in
+This section completes the Gaussian sampling estimate for a source-only circuit in
 \cite[proof of Theorem 5.2]{OpenAI2026PolynomialPEPS}.
 % Source: 04-compression.tex, lines 342--558.
-The source occurrences, local branch labels, physical registers,
-and discarded registers are those of the original circuit. The sampled physical
-quantity is an operator; positivity is not asserted. The tensor-network
-representation of that operator is a separate statement.
+The circuit retains its source occurrences, local branch labels, physical registers,
+and discarded registers. The sampled physical output is an operator that need not be
+positive; its tensor-network representation is proved separately.
 
-\begin{theorem}[Finite memories of the discarded registers]
+\begin{theorem}[Finite-dimensional spaces of discarded registers]
     \label{thm:peps_finite_register_memories}
     \lean{TNLean.PEPS.PairEffect.Layout.finiteDimensional_mem_of_registers,TNLean.PEPS.PairEffect.Layout.finiteDimensional_mem_restrict_mapOwner_mapOwner}
     \leanok
     Let $R$ be a finite ordered list of registers, each with a finite-dimensional
-    complex Hilbert space. Its tensor-product memory is finite dimensional.
-    The same is true after relabelling owners twice and selecting either side
-    of any division of the resulting owners. Zero-dimensional register spaces
-    are allowed.
+    complex Hilbert space. Their tensor product is finite-dimensional, and
+    remains so after relabelling register parties twice and restricting to either
+    side of any partition of the resulting parties.
 \end{theorem}
 \begin{proof}
     \leanok
-    Induct on the register list, using finite dimensionality of tensor products.
-    Relabelling changes no register space, and selection retains a sublist.
+    Induct on the register list, using finite-dimensionality of tensor products.
+    Relabelling parties does not change the underlying Hilbert spaces, and
+    restricting to one side of a partition selects a sublist of registers.
 \end{proof}
 
 \begin{definition}[Orthonormal coordinates of selected discarded registers]
@@ -31,9 +30,9 @@ representation of that operator is a separate statement.
     \lean{TNLean.PEPS.PairEffect.Layout.restrictedDiscardBasis}
     \leanok
     Under the assumptions of Theorem~\ref{thm:peps_finite_register_memories},
-    choose an orthonormal basis of the selected memory indexed by the integers
-    from zero to one less than its dimension. The registerwise finite-dimensional
-    assumption supplies this basis; no dimension bound is required.
+    choose an orthonormal basis of the restricted register space indexed by
+    $\{0,\ldots,d-1\}$, where $d$ is its dimension. Finite-dimensionality of
+    each register gives this basis without any uniform dimension bound.
 \end{definition}
 
 \begin{definition}[Exterior physical coordinates]
@@ -43,48 +42,47 @@ representation of that operator is a separate statement.
     \leanok
     Let $P$ be the finite set of parties, listed without repetition, and
     let party $p$ have physical dimension $d_p$. For $A\subseteq P$, the
-    tensor product of the original coordinate bases outside $A$ is indexed
-    by $\prod_{p\notin A}\{0,\ldots,d_p-1\}$. Transport this basis through
-    the canonical owner identifications to the actual exterior physical
-    memory. This is an orthonormal basis of that memory.
+    tensor product of the physical coordinate bases outside $A$ is indexed
+    by $\prod_{p\notin A}\{0,\ldots,d_p-1\}$. Transporting this basis through
+    the party identifications gives an orthonormal basis of the exterior physical
+    space.
 \end{definition}
 
-\begin{theorem}[Exact exterior physical dimension]
+\begin{theorem}[Exterior physical dimension]
     \label{thm:peps_exterior_family_physical_dimension}
     \lean{TNLean.PEPS.PairEffect.finrank_exteriorFamilyPhysicalLayout}
     \leanok
-    The dimension of the actual exterior physical memory after the two
-    owner identifications is $\prod_{p\notin A}d_p$.
+    The dimension of the exterior physical space after the two
+    party identifications is $\prod_{p\notin A}d_p$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:peps_exterior_family_physical_basis}
-    Count the coordinate indices of the exterior orthonormal basis.
+    Count the indices of the orthonormal basis from the preceding definition.
 \end{proof}
 
-\begin{theorem}[Expected norm of an actual partial branch]
+\begin{theorem}[Expected norm of a partial branch]
     \label{thm:peps_actual_gaussian_branch}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.integrable_actualGaussianBranch_and_integral_le}
     \leanok
-    Let $W$ be an allowed circuit with output memory consisting of physical
-    registers followed by discarded registers. Fix a set $S$ of original
+    Let $W$ be an allowed circuit whose output registers consist of physical
+    registers followed by discarded registers. Fix a set $S$ of
     source occurrences and let $A(S)$ be their endpoint parties. Let $p_0$
-    be an allowed scalar-input composition containing no sources, and fix
-    two actual partial branches $\xi,\zeta$ for $A(S)$.
+    be an allowed scalar-input preparation containing no sources, and fix
+    two partial branches $\xi,\zeta$ for $A(S)$.
 
-    At every original occurrence and local branch label, let the two
-    endpoint matrices have orthonormal columns, and let the source weights
-    be nonnegative with sum one. Choose orthonormal bases for the affected
-    and exterior physical memories, indexed by $X,Y$, and for the affected
-    and exterior discarded memories, indexed by $D,E$. These four bases,
-    transported through the two owner relabellings and canonical register
-    partitions, determine bases of the original physical and discarded
-    memories.
+    At every source occurrence and local branch label, suppose the two
+    endpoint matrices have orthonormal columns and the source weights
+    are nonnegative with sum one. Choose orthonormal bases for the affected
+    and exterior physical spaces, indexed by $X$ and $Y$, and for the affected
+    and exterior discarded spaces, indexed by $D$ and $E$. Under the party
+    relabellings and register partitions, these four bases determine bases of
+    the full physical and discarded spaces.
 
-    For $k>0$, let $M_{\xi,\zeta}(\omega)$ be the actual Gaussian partial
-    branch operator on the input $p_0(1)$, traced over the discarded memory
-    in these bases. Then its trace norm is integrable for the original
-    source Gaussian law and
+    For $k>0$, let $M_{\xi,\zeta}(\omega)$ be the Gaussian partial-branch
+    operator on the input $p_0(1)$, traced over the discarded space
+    in these bases. Then $\|M_{\xi,\zeta}\|_1$ is integrable with respect to
+    the source Gaussian law and
     \begin{align}
         \mathbb E\,\|M_{\xi,\zeta}\|_1
          & \leq |X|^2 k^{-|S|/2}.
@@ -94,169 +92,160 @@ representation of that operator is a separate statement.
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_corrected_schmidt_output,thm:peps_gaussian_separated_physical_bound,thm:peps_local_schmidt_output_coordinates,def:peps_separated_physical_density,thm:peps_gaussian_branch_density_bound}
-    Construct the actual local-word Schmidt output representation
-    independently for $\xi$ and $\zeta$. Denote their separated ket and
+    Construct the local Schmidt output representation
+    independently for $\xi$ and $\zeta$, and denote their separated ket and
     bra outputs by $\Psi_u$ and $\Phi_v$, as in
     Definition~\ref{def:peps_separated_physical_density}.
-    At each original occurrence $s\in S$, let $\xi_s,\zeta_s$ be the
+    At each occurrence $s\in S$, let $\xi_s,\zeta_s$ be the
     selected local labels and let $\delta_s^{\xi_s,\zeta_s}(\omega)$ be
     the centered correction in Schmidt coordinates. For assignments
-    $u,v$ of pairs of Schmidt indices at these occurrences, put
+    $u,v$ of pairs of Schmidt indices on $S$, set
     \begin{align}
         Z^{\xi,\zeta}_{u,v}(\omega)
          & =\prod_{s\in S}
         \bigl(\delta_s^{\xi_s,\zeta_s}(\omega)\bigr)_{u_s,v_s}.
         \label{eq:peps_actual_branch_coefficients}
     \end{align}
-    The canonical output-coordinate identities identify each original
-    prepared output vector with the separated coordinates of those
-    local words. Reindex both corrected-coordinate sums by the original
-    occurrences in $S$. Tracing both discarded memories gives
+    The output-coordinate identities match each prepared output vector
+    with the separated coordinates of the corresponding local words. Reindexing
+    both corrected-coordinate sums over $S$ and tracing out the discarded
+    registers gives
     \begin{align}
         M_{\xi,\zeta}(\omega)
          & =\operatorname{tr}_{\mathrm{disc}}
         \sum_{u,v}Z^{\xi,\zeta}_{u,v}(\omega)
         |\Psi_u\rangle\langle\Phi_v|
-        =M\bigl(Z^{\xi,\zeta}(\omega)\bigr).
+        =M\bigl(Z^{\xi,\zeta}(\omega)\bigr),
         \label{eq:peps_actual_branch_identification}
     \end{align}
-    Here $M(z)$ is the operator in
-    Definition~\ref{def:peps_separated_physical_density}, and
-    $\operatorname{tr}_{\mathrm{disc}}$ traces both discarded memories.
-    Apply Theorem~\ref{thm:peps_gaussian_separated_physical_bound}
+    where $M(z)$ is the operator in
+    Definition~\ref{def:peps_separated_physical_density} and
+    $\operatorname{tr}_{\mathrm{disc}}$ traces out both discarded spaces.
+    Applying Theorem~\ref{thm:peps_gaussian_separated_physical_bound}
     to~(\ref{eq:peps_actual_branch_identification}) with the coefficients
-    in~(\ref{eq:peps_actual_branch_coefficients}) to obtain integrability
+    in~(\ref{eq:peps_actual_branch_coefficients}) gives integrability
     and~(\ref{eq:peps_actual_branch_bound}).
 \end{proof}
 
-\begin{theorem}[Expected norm of the actual corrected term]
+\begin{theorem}[Expected norm of the corrected term]
     \label{thm:peps_actual_corrected_source_bound}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.integral_actualCorrectedSourceTerm_le}
     \leanok
-    Let $W$ be an allowed circuit, with output registers consisting of
+    Let $W$ be an allowed circuit whose output registers consist of
     physical registers followed by discarded registers. Let $p_0$ be an
-    allowed scalar-input composition containing no sources, and use
-    $|p_0(1)\rangle\langle p_0(1)|$ as the input. Fix a set $S$ of original
-    source occurrences and actual Schmidt decompositions of every source
-    vector, with nonnegative weights of sum one and orthonormal endpoint
+    allowed source-free scalar-input preparation, with input state
+    $|p_0(1)\rangle\langle p_0(1)|$. Fix a set $S$ of
+    source occurrences and Schmidt decompositions of every source
+    vector, with nonnegative weights summing to one and orthonormal endpoint
     columns.
 
     Let $A(S)$ be the endpoint parties of $S$. Choose orthonormal bases of
-    the affected and exterior physical memories and of the affected and
-    exterior discarded memories after the canonical owner identifications.
-    Write $X$ for the affected physical basis index. For $k>0$, the actual
-    physical corrected term $F_S$, in any original physical and discarded
-    orthonormal bases, satisfies
+    the affected and exterior physical spaces and of the affected and
+    exterior discarded spaces under the party identifications, and write $X$
+    for the index set of the affected physical basis. For $k>0$, the
+    physical corrected term $F_S$, in any orthonormal bases of the physical and
+    discarded spaces, satisfies
     \begin{align}
         \mathbb E\,\|F_S\|_1
          & \leq
         \left(\sum_{\xi,\zeta}
         |c_{\xi}\overline{c_{\zeta}}|\right)
-        |X|^2 k^{-|S|/2}.
+        |X|^2 k^{-|S|/2},
         \label{eq:peps_actual_corrected_bound}
     \end{align}
-    Here $\xi,\zeta$ are the actual partial choices at gate occurrences
-    touching $A(S)$, and $c_\xi,c_\zeta$ are their original coefficients.
+    where $\xi,\zeta$ range over the partial branch choices at gate occurrences
+    meeting $A(S)$ and $c_\xi,c_\zeta$ are their branch coefficients.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_gaussian_branch,thm:peps_physical_corrected_basis_invariance,thm:peps_gaussian_branch_density_bound}
-    Express the actual corrected term in the bases adapted to $A(S)$.
-    Trace norm is unchanged by these physical and discarded basis changes.
-    Expand the term into its actual partial branches, apply the expectation
-    triangle inequality with the factors
-    $|c_\xi\overline{c_\zeta}|$, and use
-    Theorem~\ref{thm:peps_actual_gaussian_branch} for every pair. The
-    integrability needed to pass through the finite sums follows from the
-    original Gaussian coefficient products. Factor the common bound out
-    of the sum.
+    Write $F_S$ in the bases adapted to $A(S)$, which leaves the trace norm
+    unchanged. Expand $F_S$ into partial branches, apply the triangle inequality
+    inside the expectation with weights $|c_\xi\overline{c_\zeta}|$, and bound
+    each pair by Theorem~\ref{thm:peps_actual_gaussian_branch}. Finite sums of
+    products of Gaussian entries are integrable, so expectation commutes with
+    the sum.
 \end{proof}
 
-\begin{theorem}[Corrected-term bound from whole-lifetime participation]
+\begin{theorem}[Corrected-term bound from circuit participation]
     \label{thm:peps_actual_source_lifetime_bound}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.integral_actualCorrectedSourceTerm_le_lifetime}
     \leanok
     Let the finite set of parties be listed without repetition, with one
-    physical register of dimension $d_p$ at each party. Assume every
-    discarded register is finite dimensional; no upper bound on these
-    dimensions is imposed. Let $W$ be an allowed circuit and let $p_0$
-    be an allowed source-free scalar-input preparation.
+    physical register of dimension $d_p$ at each party $p$, and assume every
+    discarded register is finite-dimensional. Let $W$ be an allowed circuit and
+    $p_0$ an allowed source-free scalar-input preparation.
 
     Suppose each party participates in at most $b$ gate occurrences over
-    the whole circuit. At every gate occurrence, suppose the sum of the
-    absolute values of its branch coefficients is at most $B$, and suppose
-    $d_p\leq D$ at every party, where $B,D\geq1$. Fix actual normalized
-    Schmidt decompositions of all source vectors. Then for every set $S$
-    of original source occurrences and every $k>0$, in arbitrary original
-    input, physical output and discarded orthonormal coordinates,
+    the circuit, the sum of absolute branch coefficients at each gate occurrence
+    is at most $B\geq1$, and $d_p\leq D$ for all $p$ with $D\geq1$. Fix normalized
+    Schmidt decompositions of all source vectors. For every set $S$
+    of source occurrences and every $k>0$, in any orthonormal bases of the
+    input, physical output, and discarded spaces,
     \begin{align}
         \mathbb E\,\|F_S\|_1
          & \leq
-        \bigl(B^{4b}D^4\bigr)^{|S|} k^{-|S|/2}.
+        \bigl(B^{4b}D^4\bigr)^{|S|} k^{-|S|/2},
         \label{eq:peps_actual_lifetime_bound}
     \end{align}
-    The input is $|p_0(1)\rangle\langle p_0(1)|$ and the expectation is
-    with respect to the original source Gaussian law.
+    for the input $|p_0(1)\rangle\langle p_0(1)|$ under the source Gaussian law.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_corrected_source_bound,thm:peps_actual_source_lifetime_cost,thm:peps_affected_original_dimensions,def:peps_exterior_family_physical_basis,def:peps_restricted_discard_basis}
-    Use the original affected and complementary physical tensor bases.
-    Finite dimensionality of each discarded register supplies the two
-    regional discarded bases. Their dimensions do not enter
-    (\ref{eq:peps_actual_corrected_bound}). The squared affected physical
-    dimension is $\prod_{p\in A(S)}d_p^2$. The whole-lifetime incidence
-    estimate bounds the product of this quantity with the actual ket--bra
-    coefficient sum by $\bigl(B^{4b}D^4\bigr)^{|S|}$. Multiply by the
-    nonnegative factor $k^{-|S|/2}$.
+    Take the product physical bases on $A(S)$ and its complement, together with
+    orthonormal bases on the two parts of the finite-dimensional discarded space.
+    The discarded dimensions do not enter~(\ref{eq:peps_actual_corrected_bound}),
+    and the squared affected physical dimension is $|X|^2=\prod_{p\in A(S)}d_p^2$.
+    Since each of the at most $2|S|$ parties in $A(S)$ participates in at most
+    $b$ gates, the product of $|X|^2$ with the ket--bra coefficient sum is at most
+    $\bigl(B^{4b}D^4\bigr)^{|S|}$. Multiplying by $k^{-|S|/2}$ gives the result.
 \end{proof}
 
-\begin{theorem}[Choosing one sample from corrected-term estimates]
+\begin{theorem}[Choosing one sample from corrected-term bounds]
     \label{thm:peps_source_sample_choice_conditional}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_sampledSourceMatrix_error_le_of_integral_bound}
     \leanok
-    Fix a source-only circuit with finite input, physical-output and
-    discarded-output orthonormal coordinates, and an arbitrary input matrix.
-    Fix endpoint data reproducing every original source vector, with
-    nonnegative source weights. Let $N$ be the number of original source
-    occurrences, let $Q\geq0$, and let $0<\varepsilon\leq1$. Put
+    Fix a source-only circuit with finite orthonormal bases on the input,
+    physical output, and discarded output spaces, and an input matrix.
+    Fix endpoint matrices and nonnegative source weights reproducing every source
+    vector. Let $N$ be the number of source occurrences, let $Q\geq0$, and let
+    $0<\varepsilon\leq1$. Set
     \[
         k=\left\lceil\left(\frac{8\max(1,N)Q}{\varepsilon}\right)^2\right\rceil+1.
     \]
-    Suppose that for every nonempty set $S$ of original source occurrences,
+    If every nonempty set $S$ of source occurrences satisfies
     \[
-        \mathbb E\,\|F_S\|_1\leq Q^{|S|}k^{-|S|/2}.
+        \mathbb E\,\|F_S\|_1\leq Q^{|S|}k^{-|S|/2},
     \]
-    Then there is one actual global Gaussian sample for which the sampled
-    physical operator differs from the original physical operator in trace norm
+    then there exists a global Gaussian sample for which the sampled
+    physical operator differs from the exact physical operator in trace norm
     by at most $\varepsilon/4$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_source_sample_count_bound,thm:peps_sampled_error_integral_bound,def:peps_source_sample_count}
-    Integrability follows from the finite Gaussian expressions for the actual
-    source corrections. The exact nonempty-subset expansion bounds the mean
-    error by the sum of the displayed expectations. Choose a sample with error
-    at most that sum, and apply the scalar sample-count estimate. This implication
-    assumes the corrected-term estimates; the preceding circuit estimate
-    supplies them in the application below.
+    Expanding the difference between the sampled and exact operators over
+    nonempty subsets $S$ bounds the expected trace-norm error by
+    $\sum_{S\neq\varnothing}\mathbb E\,\|F_S\|_1$. By the choice of $k$, this sum
+    is at most $\varepsilon/4$, so some sample realization achieves error at most
+    $\varepsilon/4$.
 \end{proof}
 
-\begin{theorem}[A single sample for the actual source circuit]
+\begin{theorem}[A single sample for the source circuit]
     \label{thm:peps_actual_source_sampling}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_sourceSample_lifetime_error_le}
     \leanok
     Let $W$ be an allowed circuit on a finite set of parties, listed without
     repetition, with physical output $\bigotimes_p\mathbb C^{d_p}$ followed
-    by discarded registers. Every discarded register is finite dimensional,
-    with no bound imposed on its dimension. Let $p_0$ be an allowed
-    scalar-input composition containing no sources, and use
-    $|p_0(1)\rangle\langle p_0(1)|$ as input.
+    by finite-dimensional discarded registers. Let $p_0$ be an allowed
+    source-free scalar-input preparation, with input
+    $|p_0(1)\rangle\langle p_0(1)|$.
 
-    Suppose every party participates in at most $b$ gate occurrences over
-    the whole circuit, every gate has sum of absolute branch coefficients
-    at most $B$, and $d_p\leq D$, where $B,D\geq1$. Let $N$ be the number
-    of original source occurrences. For $0<\varepsilon\leq1$, put
+    Suppose every party participates in at most $b$ gate occurrences, every gate
+    has sum of absolute branch coefficients at most $B\geq1$, and $d_p\leq D$
+    with $D\geq1$. Let $N$ be the number of source occurrences. For
+    $0<\varepsilon\leq1$, set
     \begin{align}
         Q & = B^{4b}D^4,
           & k            & = \left\lceil
@@ -264,72 +253,64 @@ representation of that operator is a separate statement.
         \right\rceil+1.
         \label{eq:peps_actual_sample_count}
     \end{align}
-    There are normalized Schmidt data for every original source occurrence
-    and local branch label, and one global Gaussian sample $\omega$ using
-    $k$ samples for each original occurrence and ordered local label pair,
-    such that
+    Then there exist normalized Schmidt decompositions for every source occurrence
+    and local branch label, and a global Gaussian sample $\omega$ of size $k$ per
+    occurrence and ordered local label pair, such that
     \begin{align}
-        \|\widehat\rho(\omega)-\rho\|_1 & \leq \varepsilon/4.
+        \|\widehat\rho(\omega)-\rho\|_1 & \leq \varepsilon/4,
         \label{eq:peps_actual_sample_error}
     \end{align}
-    Here $\rho$ is the original physical output operator, and
-    $\widehat\rho(\omega)$ is obtained by replacing each mixed source
-    operator by its averaged Gaussian operator and tracing the original
-    discarded registers. The conclusion holds in arbitrary original input,
-    physical and discarded orthonormal coordinates.
+    where $\rho$ is the physical output operator and $\widehat\rho(\omega)$ is
+    obtained by replacing each mixed source operator with its $k$-sample Gaussian
+    average and tracing out the discarded registers.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_source_lifetime_bound,thm:peps_local_schmidt_sources,thm:peps_source_sample_choice_conditional}
-    Choose the Schmidt data of all original source occurrences and local
-    labels once. For every nonempty corrected set $S$, the actual lifetime
-    estimate gives $\mathbb E\|F_S\|_1\leq Q^{|S|}k^{-|S|/2}$.
-    The subset expansion and integrability of the Gaussian corrections
-    give a single sample whose error is at most the sum of these expectations.
-    The choice~(\ref{eq:peps_actual_sample_count}) bounds that sum by
-    $\varepsilon/4$. The same sample supplies all source replacements in
-    (\ref{eq:peps_actual_sample_error}).
+    Choose normalized Schmidt decompositions for all source vectors. For every
+    nonempty set $S$ of source occurrences, the circuit participation bound gives
+    $\mathbb E\,\|F_S\|_1\leq Q^{|S|}k^{-|S|/2}$. With $k$ given
+    by~(\ref{eq:peps_actual_sample_count}), the conditional sampling theorem yields
+    a realization $\omega$ satisfying~(\ref{eq:peps_actual_sample_error}).
 \end{proof}
 
-\begin{theorem}[Explicit power bounds for the sample count]
+\begin{theorem}[Power bounds for the sample count]
     \label{thm:peps_source_sampling_polynomial}
     \lean{TNLean.PEPS.Approximation.sourceSamplingCount_lt_of_power_bounds,TNLean.PEPS.Approximation.sourceSamplingCount_lt_inv_pow,TNLean.PEPS.Approximation.sourceSamplingCount_lt_of_gate_power_bounds}
     \leanok
-    Let $L\geq1$, $Q\geq0$, $\varepsilon>0$, and suppose
+    Let $L\geq1$, $Q\geq0$, and $\varepsilon>0$, and suppose
     \[
         N\leq C_NL^n,\qquad Q\leq C_QL^q,\qquad
         \varepsilon^{-1}\leq C_\varepsilon L^p,
     \]
-    where $n,q,p$ are nonnegative integers, $C_N\geq1$, and $C_Q\geq0$.
-    For the sample count above,
+    for nonnegative integers $n,q,p$ and constants $C_N\geq1$ and $C_Q\geq0$.
+    Then the sample count satisfies
     \[
         k<\bigl(64C_N^2C_Q^2C_\varepsilon^2+2\bigr)
         L^{2(n+q+p)}.
     \]
-    At $\varepsilon=L^{-p}$ one may take $C_\varepsilon=1$.
-    In particular, if $B,D\geq0$, $B\leq C_BL^m$, $D\leq C_DL^r$,
-    and $C_B\geq0$, then $Q=B^{4b}D^4$ gives
+    When $\varepsilon=L^{-p}$, one may take $C_\varepsilon=1$.
+    In particular, if $0\leq B\leq C_BL^m$ and $0\leq D\leq C_DL^r$ with
+    $C_B\geq0$, then $Q=B^{4b}D^4$ gives
     \[
         k<\bigl[64C_N^2(C_B^{4b}C_D^4)^2+2\bigr]
         L^{2(n+4bm+4r+p)}.
     \]
-    These inequalities include the case of no source occurrences.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:peps_source_sample_count}
-    The source bound also bounds $\max(1,N)$ because $C_NL^n\geq1$.
-    Substitute the three power bounds into the defining square and use
-    $k<(8\max(1,N)Q/\varepsilon)^2+2$. Since the resulting power of $L$
-    is at least one, the additive constant is absorbed by the displayed
-    coefficient. For $Q=B^{4b}D^4$, multiply the two power estimates.
+    Since $C_NL^n\geq1$, we have $\max(1,N)\leq C_NL^n$. Substituting the three
+    power bounds into $k<(8\max(1,N)Q/\varepsilon)^2+2$ and using
+    $L^{2(n+q+p)}\geq1$ gives the first inequality; setting $Q=B^{4b}D^4$ gives
+    the second.
 \end{proof}
 
-\begin{theorem}[Polynomial sampling for arbitrary real accuracy exponents]
+\begin{theorem}[Polynomial sampling for real accuracy exponents]
     \label{thm:peps_actual_source_polynomial}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.exists_sourceSample_polynomial_error_le}
     \leanok
-    Under the circuit and input assumptions of
+    Under the assumptions of
     Theorem~\ref{thm:peps_actual_source_sampling}, let $L\geq1$ and suppose
     \begin{align}
         N & \leq C_N L^n,
@@ -337,37 +318,33 @@ representation of that operator is a separate statement.
           & D             & \leq C_D L^r,
         \label{eq:peps_actual_resource_powers}
     \end{align}
-    where $n,m,r$ are nonnegative integers, $C_N\geq1$, and $C_B\geq0$.
-    Fix any real accuracy exponent $p$, and let
-    $q=\max(0,\lceil p\rceil)$. Choose exactly the sample count
-    (\ref{eq:peps_actual_sample_count}) at accuracy $L^{-q}$.
-    This positive integer satisfies
+    for nonnegative integers $n,m,r$ and constants $C_N\geq1$ and $C_B\geq0$.
+    For any real exponent $p$, set $q=\max(0,\lceil p\rceil)$ and define $k$
+    by~(\ref{eq:peps_actual_sample_count}) at accuracy $\varepsilon=L^{-q}$.
+    Then
     \begin{align}
         k & < \left[64C_N^2\bigl(C_B^{4b}C_D^4\bigr)^2+2\right]
-        L^{2(n+4bm+4r+q)}.
+        L^{2(n+4bm+4r+q)},
         \label{eq:peps_actual_polynomial_count}
     \end{align}
-    There are actual global Schmidt data and a sample at this same $k$
-    for which $\|\widehat\rho-\rho\|_1\leq L^{-p}/4$.
-    In particular this covers every real $p>0$ prescribed in the source.
+    and there exist Schmidt decompositions and a sample of size $k$
+    satisfying $\|\widehat\rho-\rho\|_1\leq L^{-p}/4$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_actual_source_sampling,thm:peps_source_sampling_polynomial,def:peps_source_sample_count}
-    Since $L\geq1$ and $q\geq p$, the accuracy $L^{-q}$ belongs to $(0,1]$
-    and satisfies $L^{-q}\leq L^{-p}$. Apply the actual sampling theorem
-    at $L^{-q}$, retaining its Schmidt data and its sample. The scalar
-    sample-count estimate applied to~(\ref{eq:peps_actual_resource_powers})
-    gives~(\ref{eq:peps_actual_polynomial_count}) for that exact integer.
+    Since $L\geq1$ and $q\geq p\vee 0$, the accuracy $\varepsilon=L^{-q}$ lies in
+    $(0,1]$ and satisfies $L^{-q}\leq L^{-p}$. Applying the sampling theorem at
+    $\varepsilon=L^{-q}$ and bounding $k$ via~(\ref{eq:peps_actual_resource_powers})
+    yields~(\ref{eq:peps_actual_polynomial_count}) and the error bound.
 \end{proof}
-\begin{theorem}[Polynomial stack length at the circuit error budget]
+\begin{theorem}[Polynomial stack length at the per-gate error]
     \label{thm:peps_effect_stack_polynomial}
     \lean{TNLean.PEPS.PairEffect.stackLength_sourceGateBudget_eq}
     \lean{TNLean.PEPS.PairEffect.stackLength_sourceGateBudget_lt_of_power_bounds}
     \leanok
-    Let $r,N$ be nonnegative integers, let $S$ be real, and let $\varepsilon>0$.
-    Use the per-gate error budget
-    $\delta=\varepsilon/(8\max(1,N))$. The chosen stack length is exactly
+    Let $r,N$ be nonnegative integers, let $S\in\mathbb R$, and let $\varepsilon>0$.
+    For the per-gate error $\delta=\varepsilon/(8\max(1,N))$, the stack length is
     \begin{align}
         m & = \left\lceil(rS/\delta)^2\right\rceil+1
         = \left\lceil
@@ -375,68 +352,60 @@ representation of that operator is a separate statement.
         \right\rceil+1.
         \label{eq:peps_effect_stack_count}
     \end{align}
-    Suppose $L\geq1$, $N\leq C_NL^n$ and $0\leq S\leq C_SL^s$, where
-    $C_N\geq1$, $C_S\geq0$, and $n,s,p$ are nonnegative integers. At
-    $\varepsilon=L^{-p}$, put $H=64C_N^2(rC_S)^2+2$. Then
-    $m<H L^{2(n+s+p)}$.
+    If $L\geq1$, $N\leq C_NL^n$, and $0\leq S\leq C_SL^s$ with
+    $C_N\geq1$, $C_S\geq0$, and nonnegative integers $n,s,p$, then at
+    $\varepsilon=L^{-p}$ we have $m<H L^{2(n+s+p)}$ with
+    $H=64C_N^2(rC_S)^2+2$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_source_sampling_polynomial,def:peps_source_sample_count}
-    Substitute the per-gate budget into the stack-length formula. It is
-    the same ceiling expression as the source sample count, with cost
-    $rS$. Apply the inverse-power sample-count estimate to
-    $rS\leq rC_SL^s$.
+    Substituting $\delta=\varepsilon/(8\max(1,N))$ into the stack-length formula
+    gives the same ceiling expression as the sample count with $Q=rS$. The
+    power bound on $k$ with $rS\leq rC_SL^s$ then gives $m<H L^{2(n+s+p)}$.
 \end{proof}
 
-\begin{theorem}[Polynomial number of actual replacement monomials]
+\begin{theorem}[Polynomial number of replacement monomials]
     \label{thm:peps_effect_replacement_polynomial}
     \lean{TNLean.PEPS.PairEffect.replacementMonomialBound_le_of_power_bounds}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_branchLabels_replacement_le_power}
     \leanok
-    Under the preceding power bounds, let $K$ be a nonnegative integer and
-    suppose $K\leq C_KL^a$, with
-    $C_K\geq0$ and $a$ a nonnegative integer. Then
+    Under the preceding power bounds, let $K$ be a nonnegative integer satisfying
+    $K\leq C_KL^a$ with $C_K\geq0$ and a nonnegative integer $a$. Then
     \begin{align}
         K m^r & \leq C_K H^r L^{a+2r(n+s+p)}.
         \label{eq:peps_effect_monomial_count}
     \end{align}
-    If every original nonprivate gate has at most $K$ monomials, at most
-    $r$ pair effects in each monomial, and absolute coefficient sum at
-    most $S$, every gate occurrence of the actual source-only replacement
-    has at most the number in~(\ref{eq:peps_effect_monomial_count}) of
-    branch labels. Original occurrences remain distinct. The bound also
-    includes empty gate expansions and $r=0$.
+    In particular, if every nonprivate gate of the circuit has at most $K$
+    monomials, each with at most $r$ pair effects, and absolute coefficient sum at
+    most $S$, then every gate occurrence of the source-only replacement has at most
+    the number of branch labels in~(\ref{eq:peps_effect_monomial_count}).
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:peps_effect_stack_polynomial,thm:peps_source_only_resources}
-    Raise the nonnegative stack bound to the fixed integer power $r$ and
-    multiply by the bound for $K$. The replacement construction has at
-    most $Km^r$ monomials at each original gate occurrence; inserted
-    private operations and register permutations introduce no expanded
-    gates. Apply this bound at the chosen occurrence.
+    Raise $m\leq HL^{2(n+s+p)}$ to the power $r$ and multiply by $K\leq C_KL^a$.
+    Replacing up to $r$ pair effects in each of the at most $K$ monomials by a
+    stack of length $m$ produces at most $Km^r$ branch labels per gate occurrence.
 \end{proof}
 
-\begin{theorem}[The actual sampled physical sum on the recorded input]
+\begin{theorem}[Sampled physical operator as a sum of party tensor products]
     \label{thm:peps_actual_pure_sampled_physical_sum}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.physicalSourceReplacedDensity_pure_sampled_eq_scalar_smul_physicalSum}
     \leanok
     \uses{thm:peps_actual_pure_physical_source_replacement,
         thm:peps_actual_source_column_physical_trace,thm:peps_actual_sampled_physical_scalar,
         def:peps_selected_physical_private_basis}
-    Let $\psi$ be the recorded original product input. Use the original
-    physical basis, with dimensions $d_p$, and any finite orthonormal
-    reference basis of the original private output memory. Choose arbitrary
-    finite orthonormal local source-input bases and private output bases,
-    and construct the local physical/private bases as in
+    Let $\psi$ be the product input state. Fix the product physical basis with
+    local dimensions $d_p$ and an orthonormal basis of the private output space.
+    Choose orthonormal bases of the local source-input and private output spaces,
+    and form the grouped local physical-and-private bases as in
     Definition~\ref{def:peps_selected_physical_private_basis}.
-    Let $c_\xi$ be the actual chronological choice coefficients and let
-    $\lambda_W$ be the original empty-party gate scalar.
-    For the actual sampled source matrices, write
-    $\widehat\rho_{\mathrm{phys},\psi}(\widehat X)$ for the source-replaced
-    physical operator. If $n$ is the number of original source occurrences,
-    then
+    Let $c_\xi$ be the chronological branch coefficients and let
+    $\lambda_W$ be the scalar factor from gates with no participating parties.
+    For the sampled source matrices $\widehat X$, write
+    $\widehat\rho_{\mathrm{phys},\psi}(\widehat X)$ for the resulting physical
+    operator. If $n$ is the number of source occurrences, then
     \begin{align}
         \widehat\rho_{\mathrm{phys},\psi}(\widehat X)
          & =k^{-n}\lambda_W\overline{\lambda_W}
@@ -444,17 +413,10 @@ representation of that operator is a separate statement.
         \sum_{j\in[k]^n}\bigotimes_{p\in\mathcal P}M_{\xi,\zeta,j,p},
         \label{eq:peps_actual_pure_sampled_physical_sum}
     \end{align}
-    where $M_{\xi,\zeta,j,p}$ is the actual local mixed physical trace of
-    Theorem~\ref{thm:peps_actual_sampled_physical_scalar} at the selected
-    owner of $p$. Each $j$ is one complete assignment on the original
-    source occurrences, identified with their chronological slots; the
-    same assignment is used at both endpoints and in every party factor.
-    The ket and bra choices $\xi,\zeta$ are independent.
-    The scalar may vanish, and no division or normalization is performed.
-    Empty source inventories, empty party sets, zero-dimensional memories
-    and $k=0$ are included, with the finite-sum and reciprocal conventions
-    already used for the sampled source matrices. This is an identity for
-    the original physical operator in
+    where $M_{\xi,\zeta,j,p}$ is the local mixed physical trace of
+    Theorem~\ref{thm:peps_actual_sampled_physical_scalar} at party $p$, and each
+    $j\in[k]^n$ assigns a sample index to every source occurrence. This is the
+    party-factored expansion of the sampled physical operator in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 279--355, 409--434 and 565--588.
 \end{theorem}
@@ -463,16 +425,14 @@ representation of that operator is a separate statement.
     \leanok
     \uses{thm:peps_actual_pure_physical_source_replacement,
         thm:peps_actual_source_column_physical_trace,thm:peps_actual_sampled_physical_scalar}
-    Expand the source-replaced operator into its independent ket and bra
-    choice sums by
+    Expand the sampled operator over independent ket and bra branch choices
+    $\xi,\zeta$ by
     Theorem~\ref{thm:peps_actual_pure_physical_source_replacement}.
-    For each mixed term,
-    Theorem~\ref{thm:peps_actual_source_column_physical_trace} changes the
-    original reference private basis to the constructed grouped basis
-    without changing the physical partial trace. Separating retained and
-    discarded coordinates and identifying the retained configurations
-    with the original physical configurations commute with that trace.
-    Apply Theorem~\ref{thm:peps_actual_sampled_physical_scalar} termwise,
-    then distribute the common scalar over the two finite choice sums.
-    This gives (\ref{eq:peps_actual_pure_sampled_physical_sum}).
+    For each pair $(\xi,\zeta)$,
+    Theorem~\ref{thm:peps_actual_source_column_physical_trace} replaces the
+    private output basis by the party-grouped basis without changing the partial
+    trace over the private registers. Applying
+    Theorem~\ref{thm:peps_actual_sampled_physical_scalar} term by term factors
+    each sample $j\in[k]^n$ across the parties $p\in\mathcal P$ and yields
+    (\ref{eq:peps_actual_pure_sampled_physical_sum}).
 \end{proof}

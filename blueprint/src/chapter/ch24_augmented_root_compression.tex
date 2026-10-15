@@ -5,42 +5,41 @@ configuration bijection $e_k:\mathcal X_I^k\to\mathcal X_J^k$.
 Write $\mathcal U_k:\C^{\mathcal X_I^k}\to\C^{\mathcal X_J^k}$
 for the unitary $(\mathcal U_k f)(x)=f(e_k^{-1}x)$.
 The physical dimension is $q$, and both auxiliary dimensions are $d$.
-All replica metrics use the dimension of the same full one-copy system.
+All replica metrics use the dimension of the full one-copy system.
 
 \begin{theorem}[Band matrices in the original coordinates]
     \label{thm:al_augmented_band_coordinates}
     \lean{TNLean.PEPS.AreaLaw.Scan.bandMetric_submatrix_augmentedReplicaConfigurationEquiv}
     \leanok
     \uses{def:al_scan_auxiliary_coordinates}
-    Suppose $V$ is finite, $q,d,k\ge0$ are integers and $t\in\R$.
+    Let $V$ be finite, let $q,d,k\ge0$ be integers, and let $t\in\R$.
     For any three regions $P,Y,F\subseteq J$, put
-    $P_I=a^{-1}(P)$, $Y_I=a^{-1}(Y)$ and $F_I=a^{-1}(F)$.
+    $P_I=a^{-1}(P)$, $Y_I=a^{-1}(Y)$, and $F_I=a^{-1}(F)$.
     Define
     \begin{align*}
         A_J(P,Y,F)       & =\bigl((W^J_{P,k})^{-1}(W^J_{F,k})^{-1}W^J_{Y,k}\bigr)^2,       \\
         A_I(P_I,Y_I,F_I) & =\bigl((W^I_{P_I,k})^{-1}(W^I_{F_I,k})^{-1}W^I_{Y_I,k}\bigr)^2.
     \end{align*}
     Then $A_J(P,Y,F)=\mathcal U_k A_I(P_I,Y_I,F_I)\mathcal U_k^*$.
-    The regions need not form a partition. Empty coordinate spaces and
-    zero replicas are included; inverses have the usual total matrix convention.
+    The regions $P,Y,F$ need not partition $J$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:al_augmented_replica_metric_coordinates}
-    Transport each of the three replica metrics by the same unitary.
-    Matrix inverses and products are preserved by this conjugation,
-    giving the identity after squaring.
+    Conjugation by $\mathcal U_k$ transports each of the three replica metrics
+    from $I$ to $J$. Since unitary conjugation commutes with matrix inversion
+    and multiplication, the identity follows after squaring.
 \end{proof}
 
-\begin{theorem}[The same compressed root and filtered vector]
+\begin{theorem}[Compressed root and filtered vector in original coordinates]
     \label{thm:al_augmented_root_compression}
     \lean{TNLean.PEPS.AreaLaw.Scan.rootPath_augmented_compressed_bandProduct}
     \leanok
-    Let $q,d>0$, $t\ge0$, and let $D$ be admissible transport data on $J$
-    with $K$ bands. Thus its history and conditional weights are positive,
-    its old regions partition $J$, and every move transfers a part of the
-    old middle region to one side. Assume cross-band commutation on the
-    symmetric replica space. Fix $k,N\ge0$, $p\in\R$, and a supplied
+    Let $q,d>0$ and $t\ge0$, and let $D$ be admissible transport data on $J$
+    with $K$ bands: its history and conditional weights are positive, its
+    initial regions partition $J$, and every move transfers a subset of the
+    middle region to one side. Assume that the band metrics commute on the
+    symmetric replica space. Fix $k,N\ge0$, $p\in\R$, and a
     matrix $Z:\C^N\to\C^{\mathcal X_J^k}$ satisfying
     \begin{align*}
         Z^*Z & =I,     \\
@@ -49,10 +48,10 @@ All replica metrics use the dimension of the same full one-copy system.
     where $\Pi_k$ is the symmetric projection.
     Let $v\in\C^{\mathcal X_J^k}$ satisfy $\Pi_kv=v$.
 
-    Let $T$ be the original transport tree at the parameter $p$ clamped
-    to $[0,1]$. For each of its terminal labels $j$ and bands $g$, pull
-    back the actual partition $(P_{j,g},Y_{j,g},F_{j,g})$ through $a$,
-    and let $A^I_{j,g}$ be its band matrix in the original coordinates.
+    Let $T$ be the transport tree at the parameter $p$ clamped
+    to $[0,1]$. For each terminal label $j$ and band $g$, pull
+    back the partition $(P_{j,g},Y_{j,g},F_{j,g})$ along $a$,
+    and let $A^I_{j,g}$ be its band matrix in the coordinates $I$.
     Put $Z_I=\mathcal U_k^*Z$, $v_I=\mathcal U_k^*v$, and
     \begin{align}
         B_{j,g} & =Z_I^*A^I_{j,g}Z_I,\nonumber                         \\
@@ -60,8 +59,8 @@ All replica metrics use the dimension of the same full one-copy system.
         w       & =M^{-1/4}Z_I^*v_I.
         \label{eq:al_augmented_compressed_product}
     \end{align}
-    The product in (\ref{eq:al_augmented_compressed_product}) has the
-    original band order. Write $L(p)$ for the actual transport root.
+    The product in (\ref{eq:al_augmented_compressed_product}) is taken in the
+    band order $g=0,\ldots,K-1$. Write $L(p)$ for the transport root on $J$.
     Then $M$ is positive definite, and for every $r\in\R$,
     \begin{align}
         L(p)Z              & =ZM,\nonumber      \\
@@ -71,23 +70,21 @@ All replica metrics use the dimension of the same full one-copy system.
                            & =Z\frac{w}{\|w\|}.
         \label{eq:al_augmented_filtered_vector}
     \end{align}
-    A zero denominator gives the zero vector. No nonzero-vector premise
-    is needed for these equalities.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:al_augmented_band_coordinates}
-    The coordinate identity gives
+    The coordinate relation between $A^I_{j,g}$ and $A^J_{j,g}$ gives
     $Z_I^*A^I_{j,g}Z_I=Z^*A^J_{j,g}Z$ and $Z_I^*v_I=Z^*v$.
-    Apply the compressed-root identity to the same supplied $Z$ and
-    the same clamped tree. It gives positivity of $M$ and $L(p)Z=ZM$.
-    Positivity of the actual terminal inputs also gives positivity of
-    $L(p)$. Functional calculus therefore yields $L(p)^rZ=ZM^r$.
+    The compressed-root identity for $Z$ and the clamped tree $T$
+    implies that $M$ is positive definite and $L(p)Z=ZM$.
+    Because the terminal band matrices are positive definite, $L(p)$ is
+    positive definite as well, and functional calculus yields $L(p)^rZ=ZM^r$.
 
     Since $ZZ^*v=\Pi_kv=v$, setting $r=-1/4$ gives
-    $L(p)^{-1/4}v=Zw$. The isometry identity $Z^*Z=I$ preserves the
-    norm. Dividing by that common norm proves the last identity in
-    (\ref{eq:al_augmented_filtered_vector}), including the zero case.
-    This is the same filtering normalization as in
+    $L(p)^{-1/4}v=Zw$. The isometry condition $Z^*Z=I$ gives
+    $\|L(p)^{-1/4}v\|=\|w\|$, and dividing by this common norm yields
+    (\ref{eq:al_augmented_filtered_vector}).
+    This matches the filtering normalization in
     \cite[Section~7]{OpenAI2026AreaLaw}.
 \end{proof}

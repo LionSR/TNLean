@@ -28,8 +28,8 @@
 \begin{proof}
     \leanok
     \uses{lem:qc_site_expectation_properties,lem:al_site_expectation_order}
-    The expectation is complex linear, preserves Hermiticity, and contracts
-    the operator norm. The theorem ``Projected evolution approximates
+    The expectation is complex linear, preserves Hermiticity, and is a
+    contraction in the operator norm. The theorem ``Projected evolution approximates
     the explicit product'' in \cite{QICLean2026Blueprint} therefore
     constructs a single unitary path with the stated derivative,
     uniqueness, and comparison estimate.
@@ -42,6 +42,5 @@
     evolution'' in \cite{QICLean2026Blueprint} gives that $U(t)$ commutes
     with $B$, by the conservation identity $U(t)^*BU(t)=B$ and unitarity.
     The commutant characterization of the supported-operator algebra
-    shows that $U(t)$ acts on $K$. This argument concerns the same path
-    for every real time, including negative times.
+    shows that $U(t)$ acts on $K$ for every real time $t$.
 \end{proof}

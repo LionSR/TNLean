@@ -28,7 +28,7 @@
     Choose the threshold so that the ratio is less than $1/(C_2+1)$.
     The floor and ceiling estimates then give $4L+20r_0<s$.
     Also $n\ge1$ and $1-\ell>0$ imply $L\ge1$.
-    Since $D_0\ge1$, these inequalities imply both stated budgets.
+    Since $D_0\ge1$, these inequalities imply both stated bounds.
 \end{proof}
 
 \begin{theorem}[Safe selected shell cells]
@@ -38,10 +38,8 @@
     \uses{def:area_law_safe_rectangle,def:area_law_capped_dyadic_partition,
         def:area_template_dyadic_rectangle}
     For the rounded scales of
-    Theorem~\ref{thm:area_law_rounded_clearance}, one threshold precedes
-    every finite physical domain, cut, integer $D_0\ge1$ and safe parent
-    rectangle $Q$ of size $s$. For all parent sizes beyond that threshold,
-    whenever $j\le L$ and $2^{K_{\rm cap}}\le L$, every square selected
+    Theorem~\ref{thm:area_law_rounded_clearance} and all parent sizes
+    $s\ge S$, whenever $j\le L$ and $2^{K_{\rm cap}}\le L$, every square selected
     by the capped dyadic partition of $Q^{+j}\setminus Q$ is safe, and
     every parent site has sup-norm distance strictly greater than
     $2L+10r_0$ from every crossing-edge endpoint.
@@ -49,11 +47,12 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_rounded_clearance,thm:area_law_rectangle_shell_safe_cells}
-    Beyond the threshold, the first rounded budget reads
+    For $s\ge S$, the first bound of Theorem~\ref{thm:area_law_rounded_clearance} reads
     \begin{align}
         D_0L+L & =(D_0+1)L\le D_0s,
     \end{align}
     so Theorem~\ref{thm:area_law_rectangle_shell_safe_cells} makes every
-    selected square safe. Native parent safety is strict,
-    so the second rounded budget gives the asserted strict endpoint clearance.
+    selected square safe. Because safety of $Q$ gives strict distance
+    $>D_0s$, the second bound $2L+10r_0\le D_0s$ yields the asserted
+    strict endpoint clearance.
 \end{proof}

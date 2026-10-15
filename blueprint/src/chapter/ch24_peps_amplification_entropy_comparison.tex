@@ -25,22 +25,23 @@ Ancillary systems are included by enlarging $V$.
     \lean{TNLean.PEPS.AreaLaw.traceDistance_vecMulVec_le_norm_sub,
         FiniteProduct.traceDistance_reducedPure_le}
     \leanok
-    For unit vectors $\psi,\varphi$ of a finite-dimensional space,
+    For unit vectors $\psi,\varphi$ in a finite-dimensional Hilbert space,
     \begin{align*}
         \tfrac12\bigl\||\psi\rangle\langle\psi|
         -|\varphi\rangle\langle\varphi|\bigr\|_1 & \le\|\psi-\varphi\|.
     \end{align*}
-    For unit vectors of $\mathcal H$ the reduced states on every region
-    $R\subseteq V$ are no farther apart in trace distance than the two pure
-    states.
+    For unit vectors $\psi,\varphi\in\mathcal H$ and every region
+    $R\subseteq V$, the trace distance between $\rho_{\psi,R}$ and
+    $\rho_{\varphi,R}$ is at most the trace distance between
+    $|\psi\rangle\langle\psi|$ and $|\varphi\rangle\langle\varphi|$.
 \end{lemma}
 \begin{proof}\leanok
-    The trace distance of the two pure states is
+    The trace distance between the two pure states is
     $\sqrt{1-|\langle\psi,\varphi\rangle|^2}$. With
     $t=|\langle\psi,\varphi\rangle|\le1$ we have
     $1-t^2\le2-2t\le2-2\Re\langle\psi,\varphi\rangle
         =\|\psi-\varphi\|^2$.
-    Partial trace contracts trace distance.
+    The partial trace contracts trace distance.
 \end{proof}
 
 \begin{lemma}[A unitary away from a region]
@@ -57,10 +58,10 @@ Ancillary systems are included by enlarging $V$.
 \end{lemma}
 \begin{proof}\leanok
     The reduced state of $(I_R\otimes U)\varphi$ is the partial trace over
-    $V\setminus R$ of $(I\otimes U)|\varphi\rangle\langle\varphi|(I\otimes
-        U)^\dagger$. Cyclicity of the partial trace in the traced factor and
-    $U^\dagger U=I$ remove $U$. The mutual information of $X$ and $J$ is a
-    function of the reduced state on $X\cup J$.
+    $V\setminus R$ of $(I_R\otimes U)|\varphi\rangle\langle\varphi|(I_R\otimes
+        U)^\dagger$. Cyclicity of the partial trace on $\mathcal H_{V\setminus R}$
+    and $U^\dagger U=I$ eliminate $U$. The mutual information of $X$ and $J$
+    depends only on the reduced state on $X\cup J$.
 \end{proof}
 
 \begin{lemma}[Continuity against a product reduction]
@@ -73,14 +74,13 @@ Ancillary systems are included by enlarging $V$.
     \begin{align*}
         I_\psi(X:J) & \le 8\sqrt{\|\psi-\eta\|}\,\log(e\dim\mathcal H_X).
     \end{align*}
-    Only the dimension of $\mathcal H_X$ enters.
 \end{lemma}
 \begin{proof}\leanok
     Apply \cite[Lemma~2.1]{OpenAI2026AreaLaw} to $S(X)$ and $S(X|J)$ for the
     joint reduced states on $X\cup J$, and use $I(X:J)=S(X)-S(X|J)$. The two
-    moduli sum to $8\sqrt\delta\log(e\dim\mathcal H_X)$, where $\delta$ is the
-    trace distance of the joint reductions. By
-    Lemma~\ref{lem:al_amp_pure_trace_distance}, $\delta\le\|\psi-\eta\|$.
+    continuity bounds sum to $8\sqrt\delta\log(e\dim\mathcal H_X)$, where
+    $\delta$ is the trace distance between the joint reductions on $X\cup J$.
+    By Lemma~\ref{lem:al_amp_pure_trace_distance}, $\delta\le\|\psi-\eta\|$.
 \end{proof}
 
 \begin{theorem}[Entropy comparison after the local unitary]
@@ -95,14 +95,14 @@ Ancillary systems are included by enlarging $V$.
     \begin{align*}
         I_\varphi(X:J) & \le 8\sqrt\delta\,\log(e\dim\mathcal H_X).
     \end{align*}
-    This is the comparison in the final part of the proof of
+    This is the comparison in the final step of the proof of
     \cite[Proposition~10.2]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
-    The vector $(I\otimes U)\varphi$ is a unit vector with the same mutual
-    information $I(X:J)$ as $\varphi$, by
-    Lemma~\ref{lem:al_amp_unitary_complement}. Apply
-    Lemma~\ref{lem:al_amp_continuity_product} to it and $\eta$.
+    By Lemma~\ref{lem:al_amp_unitary_complement}, the unit vector
+    $(I_{X\cup J}\otimes U)\varphi$ has the same mutual information $I(X:J)$ as
+    $\varphi$. Apply Lemma~\ref{lem:al_amp_continuity_product} to
+    $(I_{X\cup J}\otimes U)\varphi$ and $\eta$.
 \end{proof}
 
 \begin{theorem}[Polynomial decay of the amplified information]
@@ -123,11 +123,12 @@ Ancillary systems are included by enlarging $V$.
     \cite[Proposition~10.2]{OpenAI2026AreaLaw} satisfies this condition.
 \end{theorem}
 \begin{proof}\leanok
-    The square root of $C_1n^{-K/2}$ is $\sqrt{C_1}\,n^{-K/4}$, and
-    $\log(e\dim\mathcal H_X)\le1+C_2n^2\le(1+C_2)n^2$ since $n\ge1$.
-    Multiply the two bounds. Since $\log\dim\mathcal H_X\ge0$, the constant
-    $C_2$ is nonnegative, and $2-K/4\le-M$ gives $n^{2-K/4}\le n^{-M}$.
-    Discarding part of $X$ does not increase mutual information.
+    Since $\log\dim\mathcal H_X\ge0$ and $n\ge1$, we have $C_2\ge0$ and
+    $\log(e\dim\mathcal H_X)\le1+C_2n^2\le(1+C_2)n^2$. Multiplying by
+    $\sqrt\delta\le\sqrt{C_1}\,n^{-K/4}$ gives the first bound. When
+    $K\ge4(M+2)$, we have $2-K/4\le-M$ and hence $n^{2-K/4}\le n^{-M}$.
+    Restricting from $X$ to $X'\subseteq X$ does not increase mutual
+    information.
 \end{proof}
 
 \input{chapter/ch24_peps_amplification_proof}

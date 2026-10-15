@@ -33,9 +33,8 @@
 \begin{proof}
     \leanok
     \uses{def:peps_square_edge_correspondence}
-    Every edge retains its dimension and its two endpoints. The empty maximum is
-    zero. For a real threshold $B\ge0$, compare natural dimensions with
-    $\lfloor B\rfloor$.
+    Every edge retains its dimension and its two endpoints. For a real
+    threshold $B\ge0$, compare integer dimensions with $\lfloor B\rfloor$.
 \end{proof}
 
 \begin{theorem}[Number of square-lattice edges]
@@ -52,7 +51,7 @@
     Orient every horizontal edge to the right and every vertical edge upward.
     Each edge is determined by its initial vertex and its orientation.
     There are $L^2$ vertices and two orientations, so the edge set injects
-    into a set of cardinality $2L^2$. This argument also includes $L=0,1$.
+    into a set of cardinality $2L^2$.
 \end{proof}
 
 \begin{theorem}[Regional density and entropy]
@@ -93,22 +92,22 @@
     \uses{def:peps_square_local_presentations}
     Fix a target vector $\Omega$. The physical-first approximation constraint asks
     for positive $D_e\le CL^c$, a nonzero contraction $\Phi$, and a phase $\theta$
-    with $\|\|\Phi\|^{-1}\Phi-e^{i\theta}\Omega\|\le L^{-1}$. The virtual-first
-    phase-error predicate concerns vectors only: for vectors $x,\Omega$ and
-    $\varepsilon\in\mathbb R$ it asks for a phase $\theta$ that minimizes the
+    with $\|\|\Phi\|^{-1}\Phi-e^{i\theta}\Omega\|\le L^{-1}$. In the virtual-first
+    presentation, the phase-error condition for vectors $x,\Omega$ and
+    $\varepsilon\in\mathbb R$ asks for a phase $\theta$ that minimizes the
     normalized error of $x$ against $e^{i\varphi}\Omega$ over all real $\varphi$ and
-    attains error at most $\varepsilon$. Bond-dimension bounds and nonvanishing of
-    the contraction are separate hypotheses in that presentation.
+    attains error at most $\varepsilon$; bond-dimension bounds and nonvanishing of
+    the contraction are stated separately.
 \end{definition}
 
-\begin{theorem}[Transfer of supplied approximation witnesses]
+\begin{theorem}[Transfer of PEPS approximations]
     \label{thm:peps_square_approximation_transfer}
     \lean{TNLean.PEPS.Approximation.phaseErrorAtMost_vectorTensorToGraphTensor,TNLean.PEPS.Approximation.hasPEPSApproximation_of_pinned,TNLean.PEPS.Approximation.hasPEPSApproximation_of_vector,TNLean.PEPS.Approximation.hasPEPSApproximation_of_vector_max}
     \leanok
     \uses{def:peps_source_approximation_constraints,thm:peps_square_vector_error,thm:peps_square_bonds_boundary}
-    For every target vector $\Omega$, an approximation witness in either source
+    For every target vector $\Omega$, a PEPS approximation in either source
     presentation gives a graph PEPS on the original open square with the same positive dimensions, bound $CL^c$,
-    and error $L^{-1}$. The entire minimizing-phase condition is preserved for the
+    and error $L^{-1}$. The minimizing-phase condition is also preserved in the
     virtual-first presentation.
 \end{theorem}
 \begin{proof}

@@ -18,7 +18,7 @@ contraction of local tensors is a separate assertion.
     memory $H_p$ and a unit vector $x_p\in H_p$. It also specifies a physical
     dimension $d_p$, an ordering of the parties without repetition, a finite
     ordered collection $R$ of finite-dimensional private output registers,
-    and an actual contraction circuit
+    and a contraction circuit
     \begin{align}
         W:\bigotimes_{p\in P}H_p
         \longrightarrow
@@ -47,7 +47,7 @@ contraction of local tensors is a separate assertion.
         \bigl(|W\psi\rangle\langle W\psi|\bigr),
     \end{align}
     expressed in the physical coordinates indexed by the original parties.
-    The private trace uses a finite orthonormal basis of the actual retained
+    The private trace uses a finite orthonormal basis of the retained
     registers. No normalization by $\|W\psi\|$ is performed.
 \end{definition}
 
@@ -57,7 +57,7 @@ contraction of local tensors is a separate assertion.
         TNLean.PEPS.PairEffect.DistributedConstruction.trace_physicalDensity_le_one}
     \leanok
     \uses{def:peps_distributed_construction_density}
-    The actual physical density of a distributed construction is positive
+    The physical density of a distributed construction is positive
     semidefinite and satisfies $\operatorname{Tr}\rho\leq1$.
 \end{theorem}
 \begin{proof}
@@ -68,7 +68,7 @@ contraction of local tensors is a separate assertion.
     contraction and $\|\psi\|=1$, giving the asserted bound.
 \end{proof}
 
-\begin{theorem}[A fixed inverse power meets the actual gate budget]
+\begin{theorem}[A fixed inverse power meets the per-gate error tolerance]
     \label{thm:peps_fixed_power_gate_budget}
     \lean{TNLean.PEPS.PairEffect.inversePower_le_sourceGateBudget_half}
     \leanok
@@ -90,7 +90,7 @@ contraction of local tensors is a separate assertion.
     and divide by its positive denominator.
 \end{proof}
 
-\begin{theorem}[Using the original local approximation budget]
+\begin{theorem}[Monotonicity in the local approximation tolerance]
     \label{thm:peps_original_approximation_budget}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsGateApproximation.mono}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.isGateApproximation_budget_of_power_bound}
@@ -98,7 +98,7 @@ contraction of local tensors is a separate assertion.
     Increasing the permitted local approximation error preserves the original
     operators, approximate monomial lists and all contraction and allowedness
     conditions. Consequently, under the preceding count assumptions, gate
-    expansions available at accuracy $L^{-q}$ satisfy the local budget
+    expansions available at accuracy $L^{-q}$ satisfy the local error tolerance
     $L^{-p}/(16\max\{1,M\})$ required to reserve one quarter of the final
     physical error for this approximation step.
 \end{theorem}
@@ -144,7 +144,7 @@ contraction of local tensors is a separate assertion.
     of all its gate expansions. Any larger integer is also such a bound.
     Suppose its monomials contain at most $r$ pair effects and the absolute
     coefficient sum at every gate is at most $B$. For any positive
-    replacement accuracy, every gate of the actual source replacement,
+    replacement accuracy, every gate of the source replacement,
     with the physical output registers placed first, has absolute branch
     coefficient sum at most $B$.
 \end{theorem}
@@ -168,14 +168,14 @@ contraction of local tensors is a separate assertion.
     register is finite-dimensional. Suppose that the original nonprivate
     gate count is at most $M$, each party participates in at most $\ell$
     nonprivate occurrences, and the original expansion bounds hold with
-    effect budget $r$ and coefficient-sum bound $B\ge1$. Let $D\ge1$
+    pair-effect bound $r$ and coefficient-sum bound $B\ge1$. Let $D\ge1$
     satisfy $d_p\le D$ for every $p$.
 
     Fix finite orthonormal coordinates on the whole initial memory.
     Fix $0<\varepsilon\le1$. Set
     $\delta=\varepsilon/(8\max\{1,M\})$, and form the physical-first
     replacement $R$ using the corresponding prepared stack length.
-    Let $\mathcal E_R$ be its actual source occurrences and
+    Let $\mathcal E_R$ be its source occurrences and
     $N_R=|\mathcal E_R|$. Choose
     \begin{align}
         Q & =B^{4\ell}D^4, &
@@ -184,7 +184,7 @@ contraction of local tensors is a separate assertion.
         \right\rceil+1.
         \label{eq:peps_original_sample_count}
     \end{align}
-    There exist Schmidt data for every actual source and branch, and
+    There exist Schmidt data for every source and branch, and
     one Gaussian sample array $\omega$, such that the sampled physical
     operator $\widehat\rho_R(\omega)$ satisfies
     \begin{align}
@@ -213,7 +213,7 @@ contraction of local tensors is a separate assertion.
     individual private-register assumption suffices for all discarded
     registers of $R$.
 
-    Apply Theorem~\ref{thm:peps_actual_source_sampling} to this actual
+    Apply Theorem~\ref{thm:peps_actual_source_sampling} to this
     circuit, preparation, and discarded memory. It gives original-source
     Schmidt data and one sample $\omega$ with
     $\|\widehat\rho_R(\omega)-\rho_R\|_1\le\varepsilon/4$.
@@ -234,7 +234,7 @@ contraction of local tensors is a separate assertion.
     dimension bounds. Let the physical dimension at each party be at most
     $D\ge1$.
 
-    Fix $0<\varepsilon\le1$. Suppose the actual monomial list for each original
+    Fix $0<\varepsilon\le1$. Suppose the monomial list for each original
     nonprivate gate approximates that gate in operator norm within
     $\delta_a=\varepsilon/(16\max(1,M))$. Its monomials are allowed, each has at
     most $r$ pair effects, and its absolute coefficient sum is at most $B\ge1$.
@@ -250,7 +250,7 @@ contraction of local tensors is a separate assertion.
         Q & =B^{4\ell}D^4,                                                            &
         k & =\left\lceil\left(\frac{8\max(1,N)Q}{\varepsilon}\right)^2\right\rceil+1,
     \end{align}
-    there are normalized Schmidt data for these actual sources and a Gaussian
+    there are normalized Schmidt data for these sources and a Gaussian
     sample of size $k$ whose sampled physical operator $\widehat\rho$ satisfies
     $\|\widehat\rho-\rho_G\|_1\le\varepsilon$. Here $\rho_G$ is the physical
     density computed from the original gate operators, with all private
@@ -262,7 +262,7 @@ contraction of local tensors is a separate assertion.
     The input coordinates are obtained from finite-dimensionality of the
     original party memories. Rescaling preserves the original gate
     occurrences and participating sets, and does not increase the coefficient
-    sums or pair-effect counts. The actual sampling theorem applied to $W$
+    sums or pair-effect counts. Theorem~\ref{thm:peps_sampled_original_density} applied to $W$
     therefore gives $\|\widehat\rho-\rho_W\|_1\le3\varepsilon/4$ with the
     stated replacement and sample counts. The local approximation estimate
     gives $\|\rho_W-\rho_G\|_1\le4M\delta_a\le\varepsilon/4$. Thus
@@ -286,10 +286,10 @@ contraction of local tensors is a separate assertion.
         0\leq B\leq C_BL^s,\qquad 0\leq D\leq C_DL^d,
     \end{align}
     where $C_K,C_B\geq0$, $C_N\geq1$, and $u,n,s,d,p$ are nonnegative
-    integers. Use the per-gate budget
+    integers. Use the per-gate error tolerance
     $\delta=L^{-p}/(8\max(1,N))$, and let $R$ be the resulting source
     replacement, with the physical output registers ordered first.
-    For any nonnegative integer $\tau$, choose the actual sample count
+    For any nonnegative integer $\tau$, choose the sample count
     \begin{align}
         k=\left\lceil
         \bigl(8\max(1,\lvert\operatorname{Sources}(R)\rvert)
@@ -306,7 +306,7 @@ contraction of local tensors is a separate assertion.
                          & a_{\mathrm{sam}}                     & =2(n+4\tau s+4d+p).
     \end{align}
     For every retained set of gate occurrences, every root assignment,
-    and every corresponding star or sample link $e$, its actual alphabet
+    and every corresponding star or sample link $e$, its link alphabet
     $\mathcal A_e$ satisfies
     \begin{align}
         \lvert\mathcal A_e\rvert
@@ -322,8 +322,8 @@ contraction of local tensors is a separate assertion.
     \leanok
     \uses{thm:peps_physical_first_branch_polynomial,thm:peps_physical_first_sample_polynomial,thm:peps_source_alphabet_polynomial}
     Theorem~\ref{thm:peps_physical_first_branch_polynomial} gives at most
-    $C_{\mathrm{br}}L^{a_{\mathrm{br}}}$ actual branches per gate.
-    There are at most $N\binom b2$ actual source occurrences, so the
+    $C_{\mathrm{br}}L^{a_{\mathrm{br}}}$ branches per gate.
+    There are at most $N\binom b2$ source occurrences, so the
     estimate of Theorem~\ref{thm:peps_physical_first_sample_polynomial}
     gives $k<C_{\mathrm{sam}}L^{a_{\mathrm{sam}}}$.
     A star alphabet has cardinality equal to the square of its gate's
@@ -378,7 +378,7 @@ contraction of local tensors is a separate assertion.
     This is \cite[Remark~5.3]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 602--611.
     The compression of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
-    approximates the actual physical density $\rho$ of a distributed
+    approximates the physical density $\rho$ of a distributed
     construction, which need not have trace one, and does not normalize it.
     Let $\sigma$ be any operator with $\|\sigma-\rho\|_1\le\kappa$; it need be
     neither positive nor Hermitian. If $\Omega$ is a unit vector with
@@ -387,7 +387,7 @@ contraction of local tensors is a separate assertion.
         \|\sigma-|\Omega\rangle\langle\Omega|\|_1       & \le\kappa+\eta, \\
         1-\eta\le\operatorname{Re}\operatorname{Tr}\rho & \le1.
     \end{align}
-    No bound on private dimensions or on Schmidt ranks of supplied pair
+    No bound on private dimensions or on Schmidt ranks of the pair
     vectors enters. The compression theorem is used only through its error
     estimate $\|\sigma-\rho\|_1\le\kappa$.
 \end{theorem}
