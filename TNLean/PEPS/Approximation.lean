@@ -34,6 +34,7 @@ import TNLean.PEPS.Approximation.ActualSourceLifetimeBound
 import TNLean.PEPS.Approximation.ActualSourcePolynomial
 import TNLean.PEPS.Approximation.ActualSourceRegisters
 import TNLean.PEPS.Approximation.ActualSourceSampling
+import TNLean.PEPS.Approximation.AdaptivePatchSupply
 import TNLean.PEPS.Approximation.AffectedOwners
 import TNLean.PEPS.Approximation.AffectedPhysicalDimension
 import TNLean.PEPS.Approximation.AllPartialGate
@@ -95,6 +96,7 @@ import TNLean.PEPS.Approximation.DyadicChamberSampling
 import TNLean.PEPS.Approximation.DyadicEdgeBands
 import TNLean.PEPS.Approximation.DyadicFootprintScaling
 import TNLean.PEPS.Approximation.DyadicFootprintTemplates
+import TNLean.PEPS.Approximation.DyadicGuideFrames
 import TNLean.PEPS.Approximation.DyadicGuideReadings
 import TNLean.PEPS.Approximation.DyadicHierarchyCounts
 import TNLean.PEPS.Approximation.DyadicLargeRepaintingGates
