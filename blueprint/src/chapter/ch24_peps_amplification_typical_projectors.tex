@@ -5,11 +5,10 @@
 
 \section{Typical projectors for the amplification}
 
-The proof of the amplification proposition of
+The proof of the amplification proposition in
 \cite[Section~10]{OpenAI2026AreaLaw} begins with three spectral
-projections, one for each of the cuts $X$, $Y$ and $S_0$. This section
-constructs them from the marginal tail bound and bounds the probability
-that each one fails. The rest of that proof is not treated here.
+projections on the cuts $X$, $Y$, and $S_0$. We construct these projections
+from the marginal tail bound and bound the failure probability of each.
 
 \begin{definition}[Typical projection of a cut]
     \label{def:al_amp_typical_projection}
@@ -17,9 +16,10 @@ that each one fails. The rest of that proof is not treated here.
     \leanok
     \uses{def:area_law_ground_entropy}
     Let $\Omega$ be a vector on a finite induced lattice domain $\Lambda$,
-    let $A\subseteq\Lambda$, and let $w$ be real. Write
+    let $A\subseteq\Lambda$, and let $w\in\mathbb R$. Write
     $\rho_A=\sum_jp_j|e_j\rangle\langle e_j|$ for an eigendecomposition
-    of the reduced state. The typical projection of $A$ at width $w$ is
+    of the reduced state $\rho_A$ of $\Omega$ on $A$. The typical projection
+    of $A$ at width $w$ is
     \begin{align*}
         P_A^w=\sum_{j:\,p_j>0,\ |-\log p_j-S_\Omega(A)|\le w}
         |e_j\rangle\langle e_j|.
@@ -31,9 +31,9 @@ that each one fails. The rest of that proof is not treated here.
     \lean{TNLean.PEPS.AreaLaw.typicalProjection_failure_le_surprisalTail}
     \leanok
     \uses{def:al_amp_typical_projection, thm:area_law_marginal_tails}
-    Let $\Omega$ be a unit vector, $A\subseteq\Lambda$ and $w$ real. Then
-    $P_A^w$ is an orthogonal projection commuting with $\rho_A$. Every
-    selected eigenvalue satisfies $p_j>0$ and
+    Let $\Omega$ be a unit vector, $A\subseteq\Lambda$, and $w\in\mathbb R$.
+    Then $P_A^w$ is an orthogonal projection commuting with $\rho_A$. Every
+    retained eigenvalue satisfies $p_j>0$ and
     $\mathrm e^{-S_\Omega(A)-w}\le p_j\le\mathrm e^{-S_\Omega(A)+w}$.
     With $K$ as in Theorem~\ref{thm:area_law_marginal_tails},
     \begin{align*}
@@ -41,11 +41,11 @@ that each one fails. The rest of that proof is not treated here.
     \end{align*}
 \end{theorem}
 \begin{proof}\leanok
-    The projection is diagonal in the eigenbasis of $\rho_A$, so
-    $\operatorname{tr}(\rho_AP_A^w)$ is the sum of the selected
-    eigenvalues. The eigenvalues sum to one, and an eigenvalue is
-    omitted only if it vanishes or its surprisal lies more than $w$ from
-    $S_\Omega(A)$.
+    Since $P_A^w$ is diagonal in the eigenbasis of $\rho_A$, the trace
+    $\operatorname{tr}(\rho_AP_A^w)$ is the sum of the retained
+    eigenvalues. Because $\operatorname{tr}\rho_A=1$ and an eigenvalue
+    contributes to $1-\operatorname{tr}(\rho_AP_A^w)$ only when $p_j>0$
+    and $|-\log p_j-S_\Omega(A)|>w$, the stated tail bound holds.
 \end{proof}
 
 \begin{theorem}[Failure probability of a typical projection]
@@ -53,8 +53,8 @@ that each one fails. The rest of that proof is not treated here.
     \lean{TNLean.PEPS.AreaLaw.exists_typicalProjection_failure_le_stretchedExp}
     \leanok
     \uses{def:al_amp_typical_projection}
-    Fix $q\ge1$, a range $R$, a strength $J\ge0$, a gap $\Delta>0$ and
-    $C_0\ge0$. There are constants $C,c>0$ with the following property.
+    Fix $q\ge1$, a range $R$, a strength $J\ge0$, a gap $\Delta>0$, and
+    $C_0\ge0$. There exist constants $C,c>0$ with the following property.
     Let $n\ge1$, let $H$ be a range-$R$ interaction of strength $J$ on a
     finite induced lattice domain $\Lambda$, and let $\Omega$ be a unit
     ground vector with full-system gap $\Delta$. Then every cut
@@ -68,13 +68,13 @@ that each one fails. The rest of that proof is not treated here.
     \uses{thm:area_law_marginal_tails, thm:area_law_tail_parameter,
         thm:al_amp_typical_projection_cut}
     Let $C_1$ be the constant of Theorem~\ref{thm:area_law_tail_parameter}
-    and put $\vartheta=J/\Delta$. Then
+    and set $\vartheta=J/\Delta$. Then
     $\mathcal B_A\le C_1(1+C_0n)\le C_1(1+C_0)n$. By
     Theorem~\ref{thm:al_amp_typical_projection_cut} and
     (\ref{eq:area_law_marginal_tail}) at $w=n^{3/5}$, the failure
     probability is at most
     $2\mathrm e^{\mathrm e/2}\exp(-n^{3/5}/(32\sqrt{(1+\vartheta)\mathcal B_A}))$.
-    Since $n^{3/5}/\sqrt{n}=n^{1/10}$, this is at most
+    Since $n^{3/5}/\sqrt{n}=n^{1/10}$, this bound is at most
     $2\mathrm e^{\mathrm e/2}\exp(-cn^{1/10})$ with
     $c=1/(32\sqrt{(1+\vartheta)C_1(1+C_0)})$.
 \end{proof}
@@ -85,31 +85,30 @@ that each one fails. The rest of that proof is not treated here.
         TNLean.PEPS.AreaLaw.exists_typicalProjectors_three_cuts}
     \leanok
     \uses{def:al_amp_typical_projection}
-    Fix $q$, $R$, $J$, $\Delta$ and $C_0$ as in
+    Fix $q$, $R$, $J$, $\Delta$, and $C_0$ as in
     Theorem~\ref{thm:al_amp_typical_failure}, and an integer $K\ge0$.
-    There is a threshold $N$, depending only on these data, such that the
-    following holds for every $n\ge N$, every such $\Lambda$, $H$ and
-    $\Omega$, and every three cuts $X$, $Y$, $S_0$ with at most $C_0n$
-    crossing edges each. Put $w=n^{3/5}$ and
-    $P_X=P_X^w$, $T_Y=P_Y^w$, $Q_{S_0}=P_{S_0}^w$. Each of these is an
-    orthogonal projection commuting with its reduced state, its selected
-    eigenvalues are positive and lie in
-    $[\mathrm e^{-S_\Omega(A)-w},\mathrm e^{-S_\Omega(A)+w}]$ for its cut
-    $A$, and each fails with probability at most
+    There exists a threshold $N$, depending only on these parameters, such
+    that for every $n\ge N$, every such $\Lambda$, $H$, and $\Omega$, and
+    every three cuts $X$, $Y$, $S_0$ with at most $C_0n$ crossing edges
+    each, the projections $P_X=P_X^w$, $T_Y=P_Y^w$, and $Q_{S_0}=P_{S_0}^w$
+    at width $w=n^{3/5}$ are orthogonal projections commuting with their
+    respective reduced states, retain only positive eigenvalues in
+    $[\mathrm e^{-S_\Omega(A)-w},\mathrm e^{-S_\Omega(A)+w}]$ for each cut
+    $A\in\{X,Y,S_0\}$, and each satisfy a failure bound of at most
     \begin{align*}
         \delta=n^{-2K}.
     \end{align*}
-    This is the construction of \cite[Section~10]{OpenAI2026AreaLaw}
+    This is the projector construction in \cite[Section~10]{OpenAI2026AreaLaw}
     preceding the Schmidt expansion of $\Omega$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_amp_typical_failure, thm:al_amp_typical_projection_cut}
-    The bound $C\exp(-cn^{1/10})$ of
-    Theorem~\ref{thm:al_amp_typical_failure} is eventually at most
-    $n^{-2K}$, because $x^{20K}\mathrm e^{-cx}\to0$ as $x\to\infty$.
-    Take $x=n^{1/10}$ and apply
-    Theorem~\ref{thm:al_amp_typical_projection_cut} to each of the three
-    cuts.
+    Since $x^{20K}\mathrm e^{-cx}\to0$ as $x\to\infty$, setting $x=n^{1/10}$
+    shows that the bound $C\exp(-cn^{1/10})$ of
+    Theorem~\ref{thm:al_amp_typical_failure} is at most $n^{-2K}$ for all
+    sufficiently large $n$. Applying
+    Theorem~\ref{thm:al_amp_typical_projection_cut} to each of the three cuts
+    gives the result.
 \end{proof}
 
 \input{chapter/ch24_peps_amplification_restoring_operator}

@@ -100,7 +100,7 @@ no bound on the spectator dimension occurs.
     monomial proves the operator identity, allowedness and the exact count.
 \end{proof}
 
-\begin{theorem}[The literal finite expansion of a message]
+\begin{theorem}[The finite expansion of a message]
     \label{thm:peps_message_expansion_count}
     \lean{TNLean.PEPS.PairEffect.gate_toGate_eq_sum}
     \lean{TNLean.PEPS.PairEffect.PartyGate.transfer}
@@ -110,9 +110,9 @@ no bound on the spectator dimension occurs.
     \lean{TNLean.PEPS.PairEffect.PartyGate.eval_transfer}
     \leanok
     The finite expansion consisting of the message summands, each with
-    coefficient one, has exactly $\dim H$ terms and absolute coefficient sum
+    coefficient one, has $\dim H$ terms and absolute coefficient sum
     $\dim H$. Every term is allowed and has no pair effect. The operator of
-    this actual expansion is exactly the transmitted identity operator.
+    this expansion is the transmitted identity operator.
     For $\dim H=0$ the expansion is empty and represents the zero operator
     on the zero space.
 \end{theorem}
@@ -155,7 +155,7 @@ no bound on the spectator dimension occurs.
 \begin{proof}
     \leanok
     \uses{thm:peps_compose_actual_monomials}
-    Distribute the two finite operator sums and use the exact operator
+    Distribute the two finite operator sums and use the operator
     identity for monomial composition. Counting the ordered pairs gives
     the length formula. Since $|c_jd_k|=|c_j||d_k|$, the coefficient
     sums multiply. The local contractions and pair effects remain in
@@ -191,9 +191,9 @@ no bound on the spectator dimension occurs.
     \lean{TNLean.PEPS.PairEffect.MessageMonomial.isAllowed_effectCount_expand}
     \lean{TNLean.PEPS.PairEffect.MessageMonomial.expansion_size}
     \leanok
-    The expansion $\mathcal E(M)$ evaluates exactly to the original
+    The expansion $\mathcal E(M)$ evaluates to the original
     monomial. If $M$ is allowed, every term is an allowed existing
-    monomial with exactly $r_M$ pair effects, and
+    monomial with $r_M$ pair effects, and
     \begin{align}
         |\mathcal E(M)|
         =\sum_{(c,N)\in\mathcal E(M)}|c|
@@ -210,7 +210,7 @@ no bound on the spectator dimension occurs.
     monomial for each basis vector and introduces no pair effect.
     Composition multiplies the list lengths and absolute coefficient
     sums, adds the original effect counts, and preserves the evaluated
-    operator. Induction over the actual monomial gives the assertions.
+    operator. Induction over the monomial gives the assertions.
 \end{proof}
 
 \begin{theorem}[Polynomial cost of boundedly many messages]
@@ -231,7 +231,7 @@ no bound on the spectator dimension occurs.
     \leanok
     \uses{thm:peps_message_expansion}
     Bound each factor in~(\ref{eq:peps_message_expansion_size}) by $D$.
-    Since $D\geq1$, replacing the actual message count by $m$ can only
+    Since $D\geq1$, replacing the message count by $m$ can only
     increase this upper bound. Substitute
     $D=C_D L^v$ for the final assertion.
 \end{proof}
@@ -312,10 +312,10 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
 \begin{proof}
     \uses{thm:peps_message_expansion}
     \leanok
-    A monomial with message dimensions $d_{j,t}$ has exactly $q_j$
+    A monomial with message dimensions $d_{j,t}$ has $q_j$
     coordinate choices, and the absolute coefficient sum of its expansion
     is $q_j$. Multiplication by $c_j$ scales this sum by $|c_j|$.
-    Summing proves the exact formulas. The inequalities follow from
+    Summing proves the formulas. The inequalities follow from
     $q_j\le D^{m_j}\le D^m$ and $\sum_j|c_j|\le KC$.
 \end{proof}
 
@@ -338,7 +338,7 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
         TNLean.PEPS.PairEffect.MessageGate.participants_toOriginalCircuit}
     \leanok
     \uses{def:peps_message_gate_circuit}
-    The constructed gate's operator is the canonical relabelling of
+    The constructed gate's operator is the relabelling of
     $G_L\otimes I$. It has one nonprivate occurrence, with participant
     set $\iota(C)$.
 \end{theorem}
@@ -348,7 +348,7 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
     The expanded list has the original operator, so adjoining the spectator
     identity and relabelling the participant registers gives the stated
     operator. Its norm bound follows from equality of the expanded and
-    original operators. The construction inserts exactly one nonprivate
+    original operators. The construction inserts one nonprivate
     occurrence with the prescribed participant embedding.
 \end{proof}
 
@@ -369,6 +369,6 @@ normalized pair sources and effects, and finite-dimensional transfers, as in
     \leanok
     \uses{thm:peps_message_gate_eval,thm:peps_message_gate_size}
     Apply the effect-count preservation and the two size estimates to the
-    actual expanded list used in the gate. The ceiling converts its real
+    expanded list used in the gate. The ceiling converts its real
     upper bound into an integer bound.
 \end{proof}

@@ -33,7 +33,7 @@ namespace ScalarCocycle
 /-- The complex coefficient of the canonical circle-valued representative of
 `ω`. -/
 abbrev phase (ω : ScalarCocycle G) (g h : G) : ℂ :=
-  (ω.circlePhase g h : ℂ)
+  (ω.circlePhase (g, h) : ℂ)
 
 /-- The circle phase of a scalar cocycle satisfies the complex-valued cocycle
 equation. -/
@@ -41,11 +41,11 @@ theorem phase_isCocycle {ω : ScalarCocycle G} (hω : ω.IsCocycle) (g h k : G) 
     ω.phase g h * ω.phase (g * h) k =
       ω.phase g (h * k) * ω.phase h k := by
   have hc := ω.circlePhase_isMulCocycle₂ hω g h k
-  change ω.circlePhase (g * h) k * ω.circlePhase g h =
-    ω.circlePhase h k * ω.circlePhase g (h * k) at hc
+  change ω.circlePhase (g * h, k) * ω.circlePhase (g, h) =
+    ω.circlePhase (h, k) * ω.circlePhase (g, h * k) at hc
   have hcℂ := congrArg (fun z : Circle ↦ z.1) hc
-  change (ω.circlePhase (g * h) k : ℂ) * (ω.circlePhase g h : ℂ) =
-    (ω.circlePhase h k : ℂ) * (ω.circlePhase g (h * k) : ℂ) at hcℂ
+  change (ω.circlePhase (g * h, k) : ℂ) * (ω.circlePhase (g, h) : ℂ) =
+    (ω.circlePhase (h, k) : ℂ) * (ω.circlePhase (g, h * k) : ℂ) at hcℂ
   simpa only [mul_comm] using hcℂ
 
 omit [Group G] in

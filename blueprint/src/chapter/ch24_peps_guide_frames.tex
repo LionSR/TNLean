@@ -198,6 +198,41 @@ outer sample.
     exchanges with the circuit of Theorem~\ref{thm:peps_frame_small_rewrite_gate}.
 \end{proof}
 
+\begin{lemma}[Patch data of supplied small-patch rewrites]
+    \label{lem:peps_guide_frame_patch_data}
+    \lean{TNLean.PEPS.EncodedFrame.IsSuppliedPatch,
+        TNLean.PEPS.EncodedFrame.IsSuppliedPatch.norm_act_proj_sub_le,
+        TNLean.PEPS.EncodedFrame.IsSuppliedPatch.card_tag_le,
+        TNLean.PEPS.EncodedFrame.IsSuppliedPatch.nonempty_tag,
+        TNLean.PEPS.Approximation.GuideFrameRewrite.IsSupplied,
+        TNLean.PEPS.Approximation.GuideFrameRewrite.IsSupplied.patchData,
+        TNLean.PEPS.Approximation.GuideFrameRewrite.PlaneConditions.exists_originalCircuit_of_isSupplied}
+    \leanok
+    \uses{lem:peps_adaptive_patch_supply, thm:peps_guide_frame_rewrite}
+    Let $\lVert\Omega\rVert=1$ and $L\ge2$, and let every additional patch and
+    every hole patch of a rewrite between frames of guides be a patch supplied
+    by the adaptive patch constraint with test exponent $60$ and constants
+    $C,c$, as at \cite[Section~7]{OpenAI2026PolynomialPEPS},
+    \texttt{06-geometry.tex}, lines 109--118. Let $C'\ge\max\{1,C\}$ and
+    $c'\ge c$ be natural numbers. Then every affected hole and every additional
+    patch has at most $C'L^{c'}$ tags, every additional patch and every old
+    affected hole has projector error at most $L^{-60}$ on $\Omega$, and every
+    hole of the old frame has at least one tag. Hence, under the plane
+    conditions and the counting bounds of
+    Theorem~\ref{thm:peps_guide_frame_rewrite}, the rewrite is a circuit with
+    at most one gate that is not private to one party, every participant a
+    specified party, and reference-vector error at most $(2b+1)L^{-20}$, the
+    constants $C,c$ of that theorem being $C',c'$.
+\end{lemma}
+
+\begin{proof}\leanok
+    The error and the tag count are those of the supplied patches, with
+    $\max\{1,CL^c\}\le C'L^{c'}$ for $L\ge1$. A patch with empty outer sample has
+    its one identity tag. If a supplied patch with nonempty outer sample had no
+    tag, its cylinder sum would vanish, and its error on $\Omega$ would be
+    $\lVert\Omega\rVert=1>L^{-60}$.
+\end{proof}
+
 \begin{theorem}[Direct repaintings, resizes and point treatments as small-patch rewrites]
     \label{thm:peps_guide_frame_rewrite_events}
     \lean{TNLean.PEPS.Approximation.exists_directRepainting_planeConditions,
@@ -252,6 +287,58 @@ outer sample.
     blocks around it.
 \end{proof}
 
+\begin{theorem}[The constants of the protocol and the separations of its steps]
+    \label{thm:peps_protocol_constants}
+    \lean{TNLean.PEPS.Approximation.patchRadius,
+        TNLean.PEPS.Approximation.protocolPatchBound,
+        TNLean.PEPS.Approximation.IsProtocolConstants,
+        TNLean.PEPS.Approximation.exists_isProtocolConstants,
+        TNLean.PEPS.Approximation.ProtocolSeparations,
+        TNLean.PEPS.Approximation.IsProtocolConstants.protocolSeparations,
+        TNLean.PEPS.Approximation.IsProtocolConstants.eventually_protocolSeparations}
+    \leanok
+    \uses{thm:peps_guide_frame_rewrite_events, lem:peps_dyadic_small_radius,
+        lem:peps_dyadic_choice_K0}
+    Fix the constants in the order of~\cite[Section~7]{OpenAI2026PolynomialPEPS},
+    \texttt{06-geometry.tex}, lines 559--570: after the clearance constant $a_0$
+    of the band templates, choose $K_0\ge20$, then $\epsilon_0>0$ with
+    $2\epsilon_0(a_0+1)\le a_0/2$, then $\nu>0$ with $2\epsilon_0+3\nu<1$, then
+    $0<a\le a_0/2$, then $D>0$, and finally $B_0\ge K_0D$. Any further
+    conditions of the same kind, each a largeness condition on $K_0$ or $B_0$, a
+    smallness condition on $\epsilon_0$, $\nu$ or $a$, or the existence of a
+    positive $D$ for each positive $a$, and each depending only on the earlier
+    constants, can be met in this order.
+
+    Let $t=D\log L$ with $L\ge2$, let $r=h_n=\epsilon_0\min(n,t)$ be the hole
+    radius at scale $n$, let $u=\nu s/2$ be the inner patch radius at scale $s$,
+    so that $2u=\nu s$, and let
+    $b=\max\bigl(18,\lceil((4+8\epsilon_0+2\nu)/\nu+1)^2\rceil\bigr)$. Then
+    the separations of Theorem~\ref{thm:peps_guide_frame_rewrite_events} hold at
+    every scale at once:
+    \begin{enumerate}
+        \item for a direct repainting at level $n>0$, with $s=n$:
+              $3u+4r<n$ and $(2(n/2+2r+u)/u+1)^2\le b$;
+        \item for the resize of a hole of a guide uniform on the $N$-blocks,
+              with $R=h_N$ and $s=N$: $4R+3u<N$ and $(2(2R+u)/u+1)^2\le b$;
+        \item for a point treatment at a level $n>K_0t$, with $s=t$:
+              $2t+6r+3u<n$, $\max(t,t+2r)+3u+4r<n-t$ and
+              $(2(t+2r+u)/u+1)^2\le b$;
+        \item $18\le b$, every outer hole radius $2h_n$ is at most $B_0\log L$,
+              and so is every outer patch radius $\nu s$ with $s\le K_0t$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}\leanok
+    The order is met by taking $K_0$ the larger of the given bound and $20$,
+    and each of $\epsilon_0$, $\nu$ and $a$ the smaller of the given bound and
+    a fixed small number. For the separations, $h_n\le\epsilon_0n$,
+    $h_n\le\epsilon_0t$, and $h_n=\epsilon_0t$ when $t\le n$. Then
+    $3u+4r\le(3\nu/2+4\epsilon_0)n<n$, and similarly for the resize. For a
+    point treatment $(2+6\epsilon_0+3\nu/2)t<20t\le K_0t<n$. Each patch count
+    is the square of a number at most $(4+8\epsilon_0+2\nu)/\nu+1$. Finally
+    $2h_n\le t\le K_0t\le B_0\log L$ and $\nu s\le K_0t$.
+\end{proof}
+
 \begin{lemma}[True vertices of a level guide]
     \label{lem:peps_level_true_vertices}
     \lean{TNLean.PEPS.Approximation.levelTrueVertices,
@@ -270,4 +357,109 @@ outer sample.
     A true vertex of the reading is a true vertex of the guide, hence a grid
     corner. Near a grid corner outside this range the reading carries only
     labels of blocks outside the root square, which are all the placeholder.
+\end{proof}
+
+\begin{lemma}[True vertices of a temporary guide]
+    \label{lem:peps_treated_true_vertices}
+    \lean{TNLean.PEPS.Approximation.rimFinset,
+        TNLean.PEPS.Approximation.card_rimFinset_le,
+        TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.eq_of_notMem_thickening,
+        TNLean.PEPS.Approximation.treatedTrueVertices,
+        TNLean.PEPS.Approximation.mem_treatedTrueVertices,
+        TNLean.PEPS.Approximation.mem_insert_rimFinset_of_isTrueVertex,
+        TNLean.PEPS.Approximation.reading_homogenize_eq_of_lt_dist,
+        TNLean.PEPS.Approximation.isTrueVertex_reading_homogenize_iff}
+    \leanok
+    \uses{lem:peps_level_true_vertices}
+    Let $2t<n$, let the labels of the level be the placeholder on every block
+    outside the root square of $M\times M$ blocks, and let $S$ be a block of
+    the root square. Consider an unmodified guide of the repainting of $S$,
+    homogenized to one label on the open squares of radius $t$ about finitely
+    many grid corners, the marks, and its reading along a small displacement
+    (\texttt{06-geometry.tex}, lines 328--351).
+    \begin{enumerate}
+        \item Every true vertex of the reading is a grid corner $(na,nb)$ with
+              $0\le a,b\le M+1$ or a point of the rim pattern of a mark, which
+              has at most $52$ points. The true vertices therefore form a finite
+              set, the set of hole centers of the frame of the temporary guide.
+        \item A true vertex within $t$ of a mark is the mark or a point of its
+              rim pattern; there are at most $53$ of them.
+        \item If two sets of marks differ at most at one mark, the two readings
+              agree at every point at distance more than $t$ from it, and have
+              the same true vertices there.
+    \end{enumerate}
+\end{lemma}
+
+\begin{proof}\leanok
+    By the true-vertex dichotomy for treated guides, a true vertex is a grid
+    corner or lies on the rim of a treated square, in the rim pattern of its
+    mark. Outside the $n/2$-neighbourhood of the square, an unmodified guide is
+    the starting guide or the uniform auxiliary label. Near a grid corner
+    outside the box, the starting guide carries only labels of blocks outside
+    the root square, which are the placeholder; so the homogenized guide carries
+    at most two labels there and the corner is not a true vertex. Distinct grid
+    corners are at distance at least $n$, and a rim point of another mark is at
+    distance at least $n-t>t$ from the given mark. Away from the closed square of
+    radius $t$ about the mark the two homogenized guides coincide, so their
+    readings agree near every such point.
+\end{proof}
+
+\begin{theorem}[Resizes and point treatments as one gate]
+    \label{thm:peps_guide_frame_resize_treatment_gates}
+    \lean{TNLean.PEPS.Approximation.resize_step,
+        TNLean.PEPS.Approximation.RepaintingBaseline.IsUnmodifiedGuide.apply_mem,
+        TNLean.PEPS.Approximation.shiftGuide_mem_blockLabels,
+        TNLean.PEPS.Approximation.reading_mem_blockLabels,
+        TNLean.PEPS.Approximation.tagHolder_mem_blockLabels,
+        TNLean.PEPS.Approximation.blockParties,
+        TNLean.PEPS.Approximation.mem_blockParties,
+        TNLean.PEPS.Approximation.card_blockParties_le,
+        TNLean.PEPS.Approximation.pointTreatment_step}
+    \leanok
+    \uses{thm:peps_guide_frame_rewrite_events, lem:peps_treated_true_vertices}
+    Assume the bounds of Theorem~\ref{thm:peps_frame_small_rewrite_gate} on the
+    holes and the patches: at most $CL^c$ cylinder terms, error at most
+    $L^{-60}$ on $\Omega$ with $\lVert\Omega\rVert\le1$, and a tag for every
+    hole.
+    \begin{enumerate}
+        \item In the setting of the resize in
+              Theorem~\ref{thm:peps_guide_frame_rewrite_events}, with $b$ at
+              least $9$ and the number of net patches, the resize is a circuit
+              as in Theorem~\ref{thm:peps_guide_frame_rewrite} from the frame
+              with the old hole patches to the frame with the new ones, whose
+              participants lie among the parties of the labels of the nine
+              blocks around the block below and to the left of the resized
+              corner.
+        \item Every value of an unmodified guide of a repainting is a value of
+              its starting guide, the old label, the final label $B$ or a
+              label across an edge. For the repainting of a block $S$ of a
+              block guide, the labels of a treated guide within $n$ of the
+              closed block $S$, and its tag holders there, are therefore $B$ or
+              labels of the nine blocks around $S$, provided the homogenizing
+              label is one of these.
+        \item In the setting of the point treatment in
+              Theorem~\ref{thm:peps_guide_frame_rewrite_events}, for a mark at a
+              corner of $S$, a homogenizing label as in the second item, and $b$
+              at least $53$ and the number of net patches, the point treatment
+              or its removal is a circuit as in
+              Theorem~\ref{thm:peps_guide_frame_rewrite}, whose participants lie
+              among the at most ten parties of $B$ and of the nine blocks around
+              $S$ (\texttt{06-geometry.tex}, lines 481--505).
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}\leanok
+    The plane conditions of Theorem~\ref{thm:peps_guide_frame_rewrite_events}
+    give the circuit of Theorem~\ref{thm:peps_guide_frame_rewrite}, between the
+    frames of the rewrite, which are the frames of the guides with holes at the
+    given centers. For the resize there is one affected hole in each frame and
+    at most nine specified parties. For a point treatment the affected holes are
+    true vertices within $t$ of the mark, at most $53$ of them by
+    Lemma~\ref{lem:peps_treated_true_vertices}. The unmodified guides are built
+    from the starting guide by band updates with normal words, whose letters
+    are the old, final and neighbouring labels, so the second item follows; a
+    point within $n$ of the closed block lies in one of the nine blocks around
+    it, and a tag holder is a label of the reading at points arbitrarily close
+    to the vertex. Since $t+2r+3u<n$, the owners within $t+2r+3u$ of the mark
+    and the tag holders within $t$ of it are specified parties.
 \end{proof}
