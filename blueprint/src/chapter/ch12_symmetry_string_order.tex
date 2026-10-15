@@ -99,12 +99,12 @@ virtual-boundary nondecay and virtual local covariance.
     \notready
     \uses{def:mpv}
     For the periodic length-$L$ matrix product vector $|\Psi_L(A)\rangle$, the
-    source quantity is literally
+    source quantity is
     \begin{align}
         R_L(u) & :=\langle\Psi_L(A)|u^{\otimes L}|\Psi_L(A)\rangle.
         \label{eq:symmetry_source_periodic_RL}
     \end{align}
-    For the raw periodic matrix product vector, this overlap is
+    For the unnormalized periodic matrix product vector, this overlap is
     $\operatorname{Tr}(\mathcal E_u^L)$. Dividing by its squared norm gives
     $\operatorname{Tr}(\mathcal E_u^L)/\operatorname{Tr}(\mathcal E^L)$ at
     nonzero lengths. The stationary-boundary functional is instead a
@@ -179,7 +179,7 @@ virtual-boundary nondecay and virtual local covariance.
     \cite[display~SOP, lines~114--121]{PerezGarcia2008StringOrder}, which
     prints only $u\ne\Id$. A scalar twist $u=-\Id$ with identity endpoints
     gives $S_N=(-1)^N$ for every normalized unital tensor. The correction
-    and the distinction from the literal source condition are recorded in
+    and the distinction from the printed source condition are recorded in
     \cite{gap:pgwsvc08_string_order_virtual_boundary}.
 \end{definition}
 
@@ -201,8 +201,8 @@ virtual-boundary nondecay and virtual local covariance.
     \end{align}
     Hence $|\mu|=1$ preserves the fixed-endpoint positive-limit condition.
     If $\E_A(\Id)=\Id$ and $\tr\Lambda=1$, then
-    $S_N(\Id,\Id,\mu\Id)=\mu^N$. Thus $u=-\Id$ satisfies the literal
-    nonidentity-twist condition whenever $d>0$.
+    $S_N(\Id,\Id,\mu\Id)=\mu^N$. Thus $u=-\Id$ satisfies the
+    nonidentity-twist condition $u\ne\Id$ whenever $d>0$.
     Under the simple-peripheral purity property, a scalar unitary twist
     possessing a nonzero fixed twisted eigenmatrix must instead be the
     identity.
@@ -233,7 +233,7 @@ virtual-boundary nondecay and virtual local covariance.
          & =e^{i(\theta-\theta_j)}\widetilde A_jV^\dagger.
         \label{eq:pgwsvc08_lemma1_condition}
     \end{align}
-    Moreover, $\E_u$ has at most one eigenvalue of modulus one.
+    In addition, $\E_u$ has at most one eigenvalue of modulus one.
 \end{lemma}
 
 \begin{proof}
@@ -278,7 +278,7 @@ virtual-boundary nondecay and virtual local covariance.
     \notready
     \uses{def:has_physical_string_order, lem:pgwsvc08_twisted_spectral_radius}
     Theorem~1 of~\cite{PerezGarcia2008StringOrder} states the following with
-    the literal source condition $u\ne\Id$ on the string-order side.
+    the printed source condition $u\ne\Id$ on the string-order side.
     A pure finitely correlated state has such string order if and only if
     there exist a unitary $\widetilde u\ne\Id$, a virtual matrix $V$,
     and physical indices $n,m$ such that
@@ -289,7 +289,7 @@ virtual-boundary nondecay and virtual local covariance.
     \end{align}
     This printed assertion is distinct from the explicitly projective
     convention in Definition~\ref{def:has_physical_string_order}.
-    The literal assertion is false: Example~\ref{ex:string_order_scalar_phase_tensor}
+    This unmodified assertion is false: Example~\ref{ex:string_order_scalar_phase_tensor}
     satisfies its string-order condition but has no nonidentity fixed twist.
     The scalar-phase obstruction and the explicit counterexample are recorded
     in~\cite{gap:pgwsvc08_string_order_scalar_phase}.
@@ -361,7 +361,7 @@ virtual-boundary nondecay and virtual local covariance.
     Set $u_0=\mu^{-1}u$. This is unitary and remains nonscalar, since
     $u_0=c\Id$ would imply $u=(\mu c)\Id$. Its eigenmatrix is fixed.
     Conversely a fixed eigenmatrix is a peripheral eigenmatrix with
-    $\mu=1$, so the same endpoint criterion supplies the endpoints.
+    $\mu=1$, so the same endpoint criterion gives the endpoints.
 \end{proof}
 
 \input{chapter/ch12_symmetry_stationary_physical_density}
@@ -396,7 +396,7 @@ virtual-boundary nondecay and virtual local covariance.
     By Lemma~\ref{lem:canonical_fixed_space_irreducible}, the source purity
     hypothesis makes $\E_A$ irreducible.
     If $\rho(\E_u)=1$, Theorem~\ref{thm:irreducible_twisted_spectral_radius}
-    supplies a unitary $V$ and a phase $\mu$ satisfying
+    gives a unitary $V$ and a phase $\mu$ satisfying
     $B_i=\sum_j u_{ij}A_j=\mu VA_iV^\dagger$.
     Lemma~\ref{lem:irreducible_twisted_transfer_reduction} then gives
     $V^\dagger\Lambda V=\Lambda$ for the faithful normalized stationary
@@ -878,8 +878,8 @@ virtual-boundary nondecay and virtual local covariance.
     Then virtual local covariance holds if and only if there exist a unitary
     $V \in \MN{D}$ and a phase $\mu$ with $|\mu|=1$ such that
     $\E_u(V) = \mu V$.
-    By Theorem~\ref{thm:twisted_transfer_spectral_radius_le_one}, this witness
-    form is equivalent to the peripheral-spectrum condition $\rho(\E_u)=1$.
+    By Theorem~\ref{thm:twisted_transfer_spectral_radius_le_one}, this
+    eigenmatrix condition is equivalent to the peripheral-spectrum condition $\rho(\E_u)=1$.
 \end{theorem}
 
 \begin{proof}

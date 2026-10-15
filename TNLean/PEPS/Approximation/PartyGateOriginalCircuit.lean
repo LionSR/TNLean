@@ -11,9 +11,11 @@ import TNLean.PEPS.Approximation.PartyGateCircuit
 
 This file completes `TNLean.PEPS.Approximation.PartyGateCircuit`: a sum `∑_ξ c_ξ M_ξ` of
 allowed monomials that use only the parties of a finite set `S` and fix the other registers is
-an original circuit with at most one nonprivate gate, whose participants lie in `S`
-(`PartyGate.exists_originalCircuit`). The coefficients, the number of monomials and the pair
-effects of each monomial are kept, so the expansion bounds of Theorem 5.2 transfer.
+an original circuit with at most one nonprivate gate, whose participants lie in `S`: the circuit
+`gateCircuit` has the operator of the sum (`eval_gateCircuit`). The coefficients, the number of
+monomials and the pair effects of each monomial are kept, so the expansion bounds of Theorem 5.2
+transfer. The resulting existence statement, together with the bound on pair sources, is
+`PartyGate.exists_originalCircuit` in `TNLean.PEPS.Approximation.PartyGateSourceBound`.
 
 ## References
 
@@ -400,59 +402,5 @@ theorem eval_gateCircuit (S : Finset P) (hS₀ : S.Nonempty) {ℓ ℓ' : Layout 
       erw [memCongr_self_symm_apply]
       rw [eval_coreGateCircuit_appendIso_symm, memCongr_append_right,
         Layout.eval_unpartitionWord_appendIso_symm]
-
-/-- **A sum of monomials using a list of parties is one gate of these parties.** Let
-`G = ∑_ξ c_ξ M_ξ` be a contraction expanded into allowed monomials, each of which uses only the
-parties of a nonempty finite set `S` and leaves the other registers in place. Then `G` is an
-original circuit with at most one nonprivate gate, whose participants lie in `S`. Its expansion
-has the coefficients and the monomials of `G`, restricted to the registers of `S`, so the
-pair-effect and coefficient bounds of `G` and its number of monomials are kept. If `S` has a
-single party, the circuit is a private map of that party.
-
-The memory is assumed nonzero; this excludes registers of dimension zero, on which every
-operator vanishes. Polynomial-PEPS manuscript, `04-compression.tex`, lines 21–43 and 199–208,
-and `06-geometry.tex`, lines 574–583. -/
-theorem PartyGate.exists_originalCircuit (S : Finset P) (hS₀ : S.Nonempty) {ℓ ℓ' : Layout P}
-    (h : Layout.restrict (fun p ↦ !decide (p ∈ S)) ℓ = Layout.restrict (fun p ↦ !decide (p ∈ S)) ℓ')
-    (G : PartyGate ℓ ℓ') (hA : ∀ m ∈ G, m.2.IsAllowed) (hF : ∀ m ∈ G, m.2.FixesOutside S h)
-    (hN : ‖gate (toGate G)‖ ≤ 1) (hne : Nontrivial (Mem ℓ)) :
-    ∃ c : OriginalCircuit ℓ ℓ', c.eval = gate (toGate G) ∧ c.nonprivateCount ≤ 1 ∧
-      (∀ g, (↑(c.participants g) : Set P) ⊆ ↑S) ∧
-      (∀ (r : ℕ) (s : ℝ), (∀ m ∈ G, m.2.toEffectChain.effectCount ≤ r) →
-        (G.map fun m => ‖m.1‖).sum ≤ s → c.IsExpansionBounded r s) ∧
-      c.IsMonomialBounded G.length := by
-  have hU : ∀ m ∈ G, m.2.UsesOnly {p | decide (p ∈ S) = true} := fun m hm => (hF m hm).1
-  have hFx : ∀ m (hm : m ∈ G),
-      (m.2.complementPart (fun p ↦ decide (p ∈ S)) (hU m hm)).eval =
-        isoL (Layout.memCongr h) := fun m hm => (hF m hm).2
-  have hN' := norm_gate_selectedGate_le S h G hU hFx hN hne
-  have hP := Layout.isReordering_partitionWord (fun p ↦ decide (p ∈ S)) ℓ
-  have hQ := Layout.isReordering_unpartitionWord (fun p ↦ decide (p ∈ S)) ℓ'
-  refine ⟨gateCircuit S hS₀ h G hA hU hN', eval_gateCircuit S hS₀ h G hA hU hFx hN', ?_, ?_,
-    ?_, ?_⟩
-  · simp only [gateCircuit, OriginalCircuit.nonprivateCount,
-      Word.nonprivateCount_toOriginalCircuit_of_isReordering hP,
-      Word.nonprivateCount_toOriginalCircuit_of_isReordering hQ,
-      OriginalCircuit.nonprivateCount_castLayouts, zero_add, add_zero]
-    exact nonprivateCount_coreGateCircuit_le S hS₀ G hA hU hN' _
-  · intro g
-    rcases g with g | g | g
-    · exact Word.participants_toOriginalCircuit_subset _ _ (hP.usesOnly _) g
-    · exact OriginalCircuit.participants_castLayouts_subset _ _ _
-        (participants_coreGateCircuit_subset S hS₀ G hA hU hN' _) g
-    · exact Word.participants_toOriginalCircuit_subset _ _ (hQ.usesOnly _) g
-  · intro r s hr hs
-    exact ⟨Word.isExpansionBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
-        hP.sourceCount_eq r s,
-      OriginalCircuit.isExpansionBounded_castLayouts _ _ _
-        (isExpansionBounded_coreGateCircuit S hS₀ G hA hU hN' _ hr hs),
-      Word.isExpansionBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
-        hQ.sourceCount_eq r s⟩
-  · exact ⟨Word.isMonomialBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
-        hP.sourceCount_eq _,
-      OriginalCircuit.isMonomialBounded_castLayouts _ _ _
-        (isMonomialBounded_coreGateCircuit S hS₀ G hA hU hN' _),
-      Word.isMonomialBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
-        hQ.sourceCount_eq _⟩
 
 end TNLean.PEPS.PairEffect

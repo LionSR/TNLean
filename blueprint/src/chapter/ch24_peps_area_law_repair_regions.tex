@@ -63,10 +63,8 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
                    & U(v,S,H)       & =\operatorname{int}B(v,S,H).
         \label{eq:area_law_repair_birth}
     \end{align}
-    The birth is the affine image of the entire closed triangle union.
-    A run whose angle exceeds $\pi$ retains this union. The interior is
-    taken after the union, so a common radial edge is not deleted from
-    its constituent triangles before taking the interior.
+    The birth region is the affine image of the closed triangle union $T_H$,
+    and its interior is taken after forming the union.
 \end{definition}
 
 % Source: 10-geometry.tex, lines 404--407; geometry:repair-induction,
@@ -121,7 +119,6 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
         Q_K & =\bigcup_{p\in K}Q(v_p,S_p).
         \label{eq:area_law_repair_indices}
     \end{align}
-    A new identifier retains its generation, parent occurrence and run.
     With old and new identifiers distinguished by this disjoint union,
     for each $i\in I$ and each new identifier
     $q=(j+1,p,H)$, define
@@ -134,10 +131,9 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
              & \xi'_q         & =1-\lambda_{\sigma_p}(H).
         \label{eq:area_law_repair_successor}
     \end{align}
-    Every old current region loses the same union of closed squares,
-    including the squares with $d(S_p)<S_*$. Old identifiers, births
-    and colors retain their values. Only parents in $K_+$ contribute
-    replacement regions; equality $d(S_p)=S_*$ is included.
+    Every old current region loses the full union $Q_K$ of closed squares,
+    including those with $d(S_p)<S_*$, while only parents in $K_+$ contribute
+    replacement regions.
 \end{definition}
 
 % Source: 10-geometry.tex, terminal cuts and child marks, lines 398--409;
@@ -162,17 +158,16 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
                             & S'_{(j+1,p,\omega)}        & =d(S_p).
         \label{eq:area_law_repair_next_marks}
     \end{align}
-    The offsets give the center, four corners and four side midpoints
-    of a parent's square. Each nonterminal parent contributes all nine
-    occurrences, including when its fan has only one run. A terminal
-    parent contributes neither replacements nor next-generation marks.
-    Different occurrences retain their indices when their locations agree.
+    The offsets $\omega\in P$ give the center, four corners, and four side
+    midpoints of a parent's square. Each nonterminal parent contributes nine
+    child marks, whereas a terminal parent contributes neither replacement
+    regions nor child marks.
 \end{definition}
 
 % Source: 10-geometry.tex, initial choices, lines 212--233 and 325--363;
 % replacement instructions, lines 393--417; geometry:repair-induction,
 % lines 471--514; current regions and remembered births, lines 558--561.
-\begin{definition}[The actual recursive family]
+\begin{definition}[The recursive repair family]
     \label{def:area_law_repair_stage}
     \lean{TNLean.PEPS.AreaLaw.Geometry.RepairStage,
         TNLean.PEPS.AreaLaw.Geometry.initialRepairStage,

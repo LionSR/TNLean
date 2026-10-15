@@ -6,13 +6,13 @@ A register has an owner in a set $P$ and a complex inner product space.
 For a finite ordered register list $a$, let $M(a)$ be its
 right-associated tensor memory, with $M(\varnothing)=\C$ and a
 terminal factor $\C$. Write $ab$ for concatenation, and
-$J_{a,b}:M(ab)\longrightarrow M(a)\otimes M(b)$ for its canonical
+$J_{a,b}:M(ab)\longrightarrow M(a)\otimes M(b)$ for the concatenation
 isometry. For a selection $f:P\to\{0,1\}$, let $a_f$ retain the
 registers with $f(p)=1$, in their original order, and write
-$\bar f=1-f$. The canonical partition isometry is
+$\bar f=1-f$. The partition isometry is
 $U_f^a:M(a)\longrightarrow M(a_f)\otimes M(a_{\bar f})$.
-Equal register lists are identified by their canonical isometries,
-denoted $E_{a=b}$. All tensor products below retain these conventions.
+Equal register lists are identified by the natural isometry
+$E_{a=b}$. All tensor products below retain these conventions.
 
 \begin{theorem}[Equality identifications of tensor memories]
     \label{thm:peps_basis_memory_equalities}
@@ -195,8 +195,7 @@ tensor product of their identity maps.
     Write $G_{\mathbf p,a}$ for the isometry that successively
     collects the registers of each party in the prescribed order.
     Then $G_{\mathbf p,a}x$ and $G_{\mathbf p,b}y$ agree under
-    the equality of their grouped register lists. The list need not contain parties absent from
-    the register memories.
+    the equality of their grouped register lists.
 \end{theorem}
 
 \begin{proof}
@@ -226,8 +225,6 @@ tensor product of their identity maps.
         G_{(p,\mathbf p),a}(U_p^a)^{-1}(x\otimes y)
          & =x\otimes E G_{\mathbf p,a_{\bar p}}y.
     \end{align}
-    The list need not contain parties absent from $a$; its tail
-    may be empty. No dimension or nonvanishing condition is imposed.
 \end{theorem}
 
 \begin{proof}
@@ -247,15 +244,11 @@ tensor product of their identity maps.
     \uses{def:peps_party_partition}
     Let $(q,\mathbf q)$ be an ordered list of distinct parties, and let
     $a$ be a register list whose owners all belong to $\mathbf q$.
-    Under the canonical identifications $a_q=\varnothing$ and
+    Under the identifications $a_q=\varnothing$ and
     $a_{\bar q}=a$, every $x\in M(a)$ satisfies
     \begin{align}
         G_{(q,\mathbf q),a}x=1\otimes G_{\mathbf q,a}x.
     \end{align}
-    The register spaces are arbitrary, the list $\mathbf q$ may be empty,
-    and the identity also holds for the zero vector. Both grouped
-    memories retain their terminal scalar factor; for an empty tail
-    the right side is $1\otimes x$ with $x\in\C$.
     This is the empty exterior factor used in the proof of
     Theorem~5.2 of \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
@@ -466,7 +459,7 @@ excluded explicitly.
     basis of these registers by this bijection. Its indices are
     assignments $x_p\in[d_p]$ for $p\in A$.
     Transport along the physical-list restriction identity to obtain
-    bases on the actual memories selected by $A$. The common-dimension
+    bases on the memories selected by $A$. The common-dimension
     case is obtained by setting $d_p=d$.
 \end{definition}
 
@@ -490,9 +483,6 @@ excluded explicitly.
     of regional configurations and the selected memory dimension are $d^{|A|}$.
     If $D$ is a nonnegative integer and $d_p\le D$ for every
     $p\in A$, the selected memory dimension is at most $D^{|A|}$.
-    Empty products have value $1$,
-    including when $A$ is empty. If $d_p=0$ for some $p\in A$,
-    the regional dimension is zero.
 \end{theorem}
 
 \begin{proof}
@@ -553,7 +543,7 @@ excluded explicitly.
     Evaluate the reindexed product-basis coordinates at
     $(s,(t,i))$. This is the original product-basis coordinate at
     $(s\sqcup t,i)$. The coordinate map is an isometry, which gives
-    the operator-norm bound, also for a zero-dimensional domain.
+    the operator-norm bound.
 \end{proof}
 
 \subsubsection{Ordered party tensor coordinates}
@@ -583,7 +573,6 @@ $M(a_{p_0})\otimes\cdots\otimes M(a_{p_{m-1}})\otimes\C$.
          & =\langle b_p(x_0),u\rangle
         \langle B^{\mathbf p}_{x_{\rm tail}},v\rangle.
     \end{align}
-    The list may have repetitions and may omit parties.
 \end{theorem}
 
 \begin{proof}
@@ -615,7 +604,6 @@ $M(a_{p_0})\otimes\cdots\otimes M(a_{p_{m-1}})\otimes\C$.
     $(y(p_0),\ldots,y(p_{m-1}))$. In these labelled bases the matrix
     entry at $(x,y)$ equals
     $\prod_{p\in P}\langle c_p(x_p),A_pb_p(y_p)\rangle$.
-    No contraction bound on the local maps is imposed.
 \end{theorem}
 
 \begin{proof}
@@ -634,7 +622,7 @@ These are the tensor-coordinate identities used in
 565--588.
 
 
-\begin{theorem}[Matrix entries of actual party restrictions]
+\begin{theorem}[Matrix entries of party restrictions]
     \label{thm:peps_actual_party_word_entries}
     \lean{TNLean.PEPS.PairEffect.Word.partyGroupedBasis_repr_eval,
         TNLean.PEPS.PairEffect.Word.partyGroupedBasis_matrix_eval}
@@ -646,7 +634,7 @@ These are the tensor-coordinate identities used in
     bases $(b_p(i))_{i\in I_p}$ and $(c_p(j))_{j\in J_p}$ of its
     input and output memories. Let $B_y,C_x$ be the corresponding
     product basis columns, transported to the original register
-    orders by the inverse canonical grouping isometries. Then
+    orders by the inverse grouping isometries. Then
     \begin{align}
         \langle C_x,WB_y\rangle
          & =\prod_{p\in P}
@@ -654,9 +642,7 @@ These are the tensor-coordinate identities used in
         \label{eq:peps_actual_party_word_entries}
     \end{align}
     Thus the matrix of $W$ is the product of the matrices of its
-    actual singleton restrictions. The two families of bases may be
-    chosen independently. Zero maps, scalar operations on empty
-    memories, and empty coordinate sets are included.
+    singleton restrictions.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -688,10 +674,6 @@ These are the tensor-coordinate identities used in
          & =\bigotimes_{p\in P}(A_pX_pB_p^\dagger).
         \label{eq:peps_actual_party_mixed_matrix}
     \end{align}
-    The middle matrix is the matrix of the actual composition $U$;
-    its product form is a consequence of its restrictions.
-    No positivity, normalization, norm bound or nonvanishing
-    hypothesis is imposed on these compositions.
 \end{theorem}
 
 \begin{proof}\leanok

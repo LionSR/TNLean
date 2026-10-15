@@ -89,7 +89,7 @@ ingredients in \cite[Sections~2 and~4]{OpenAI2026AreaLaw}.
 The exact ambient cardinality and its graph-ball consequences are given in
 Theorem~\ref{thm:area_diamond_count}.
 
-\section{Original-support budgets}
+\section{Original-support weights}
 
 \begin{theorem}[Supports containing a specified site]
     \label{thm:area_support_count}
@@ -143,7 +143,7 @@ Theorem~\ref{thm:area_diamond_count}.
     \leanok
     A support meeting $S$ is counted at least once on the right; all
     additional occurrences have nonnegative weight. Interchange the
-    two finite sums, then apply the site budget.
+    two finite sums, then apply the site bound.
 \end{proof}
 
 \begin{definition}[Interaction-chain weight]
@@ -167,7 +167,7 @@ Theorem~\ref{thm:area_diamond_count}.
     \lean{TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_pow}
     \leanok
     Suppose the original weights are nonnegative, every original support
-    has cardinality at most $v$, and every site budget is at most $b\ge0$.
+    has cardinality at most $v$, and every site weight sum is at most $b\ge0$.
     Then $W_n(X)\le(vb)^n$ for each $X\in\mathcal F$.
 \end{theorem}
 \begin{proof}

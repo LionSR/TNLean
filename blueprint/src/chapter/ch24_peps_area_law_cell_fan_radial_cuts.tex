@@ -1,20 +1,20 @@
 \section{Radial incidence and convexity in an elementary fan}
 \label{sec:area_law_fan_radial_incidence_convexity}
 
-Let $o\in\R^2$, $\ell\in\N$ and $z\in\Z^2$ be arbitrary, and let
-$Q=o+2^\ell(z+[0,1]^2)$ be the corresponding closed dyadic square.
-Write $c$ for its center. On each side choose either the whole side or
-its two midpoint halves. Orient the perimeter counterclockwise, and
-orient each chosen base accordingly. Let $\mathcal E$ index the resulting
-ordered bases $[a_i,b_i]$, and put
+Let $o\in\R^2$, $\ell\in\N$, and $z\in\Z^2$, and let
+$Q=o+2^\ell(z+[0,1]^2)$ be the corresponding closed dyadic square with
+center $c$. On each side of $Q$, take either the full side or its two
+midpoint halves, oriented counterclockwise along $\partial Q$. Let
+$\mathcal E$ index the resulting directed perimeter segments $[a_i,b_i]$,
+and set
 \begin{align}
     P_i & =\operatorname{conv}\{c,a_i,b_i\}, \\
     R_i & =[c,b_i].
 \end{align}
 These are the triangles and radial segments of the elementary fan in
-\cite[Section~11]{OpenAI2026AreaLaw}. All endpoints satisfy
-$\|b_i-c\|_\infty=2^\ell/2>0$, and the directed rays determined by
-$b_i-c$, for $i\in\mathcal E$, are pairwise distinct.
+\cite[Section~11]{OpenAI2026AreaLaw}. Every endpoint satisfies
+$\|b_i-c\|_\infty=2^\ell/2>0$, and the directed rays in direction
+$b_i-c$ for $i\in\mathcal E$ are pairwise distinct.
 
 % Source: 10-geometry.tex, prop:two-families, lines 299--323,
 % and geometry:initial-stars, lines 333--370;
@@ -37,26 +37,23 @@ $b_i-c$, for $i\in\mathcal E$, are pairwise distinct.
 \begin{proof}\leanok
     \uses{thm:area_law_fan_triangle_contact,
         thm:area_law_cell_fan_end_same_ray}
-    The segment $R_t$ is contained in $P_t$ by convexity. If $t=i$,
-    this proves the reverse implication. If $b_t=a_i$, then
-    $R_t=[c,a_i]\subseteq P_i$, which gives the other reverse case.
+    By convexity, $R_t=[c,b_t]\subseteq P_t$. If $t=i$, then $x\in P_i$; if
+    $b_t=a_i$, then $R_t=[c,a_i]\subseteq P_i$.
 
-    Conversely, suppose $x\in P_i$ and $t\ne i$. The distinct points
-    $c,x$ belong to $P_t\cap P_i$. The classification of contacts
-    between distinct fan triangles therefore gives either $b_t=a_i$,
-    as required, or
+    Conversely, suppose $x\in P_i$ and $t\ne i$. Then $P_t\cap P_i$ contains
+    the distinct points $c$ and $x$, so the classification of contacts
+    between distinct fan triangles gives either $b_t=a_i$ or
     \begin{align}
         b_i         & =a_t, \\
         P_t\cap P_i & =R_i.
     \end{align}
-    In the second case $x\in R_t\cap R_i$ and $x\ne c$. Thus there
-    are $u,v>0$ with
+    In the second case, $x\in R_t\cap R_i\setminus\{c\}$, so there exist
+    $u,v>0$ with
     \begin{align}
         x-c & =u(b_t-c)=v(b_i-c).
     \end{align}
-    The two endpoint vectors consequently determine the same directed
-    ray. Distinctness of these directed rays gives $t=i$, contradicting
-    the assumption. This proves~(\ref{eq:fan_radial_incidence}).
+    Thus $b_t-c$ and $b_i-c$ define the same directed ray, forcing $t=i$, a
+    contradiction. This proves~(\ref{eq:fan_radial_incidence}).
 \end{proof}
 
 \begin{theorem}[Affine basis of an elementary fan triangle]
@@ -64,18 +61,16 @@ $b_i-c$, for $i\in\mathcal E$, are pairwise distinct.
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_exists_affineBasis}
     \leanok
     \uses{def:area_law_cell_fan}
-    For every $i\in\mathcal E$, the ordered triple $(c,a_i,b_i)$
+    For every $i\in\mathcal E$, the triple $(c,a_i,b_i)$
     is an affine basis of $\R^2$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_cell_fan_regularity}
-    The triangle $P_i$ has nonempty interior. Its affine span is
-    therefore the whole plane. The vector space parallel to that
-    affine span has dimension $2$. Since there are three vertices,
-    they are affinely independent and form an affine basis.
+    Since $P_i$ has nonempty interior, its affine span is $\R^2$, so its three
+    vertices $(c,a_i,b_i)$ are affinely independent and span $\R^2$.
 \end{proof}
 
-\begin{theorem}[Convexity after removal of a radial]
+\begin{theorem}[Convexity after removing a radial segment]
     \label{thm:area_law_fan_radial_deletion_convex}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_sdiff_radial_convex}
     \leanok
@@ -85,8 +80,7 @@ $b_i-c$, for $i\in\mathcal E$, are pairwise distinct.
 \begin{proof}\leanok
     \uses{thm:area_law_fan_noncentral_radial_incidence,
         thm:area_law_fan_triangle_affine_basis}
-    Every $R_t$ contains $c$. Applying~(\ref{eq:fan_radial_incidence})
-    away from $c$ therefore gives the exact alternatives
+    Since $c\in R_t$, (\ref{eq:fan_radial_incidence}) implies
     \begin{align}
         P_i\cap R_t & =
         \begin{cases}
@@ -96,13 +90,9 @@ $b_i-c$, for $i\in\mathcal E$, are pairwise distinct.
         \end{cases}
         \label{eq:fan_radial_face_cases}
     \end{align}
-    The three vertices of $P_i$ form an affine basis by the preceding
-    theorem. Let
-    $\lambda_0,\lambda_1,\lambda_2$ be the barycentric coordinates for
-    $c,a_i,b_i$, respectively. On $P_i$ these coordinates are
-    nonnegative, sum to $1$, and reconstruct each point as
-    $x=\lambda_0(x)c+\lambda_1(x)a_i+\lambda_2(x)b_i$.
-    It follows that
+    Let $\lambda_0,\lambda_1,\lambda_2$ be the barycentric coordinates on
+    $\R^2$ with respect to the affine basis $(c,a_i,b_i)$. On $P_i$ these
+    coordinates are nonnegative and sum to $1$, so
     \begin{align}
         P_i\setminus[c,b_i]
          & =P_i\cap\{x:\lambda_1(x)>0\},              \\
@@ -112,30 +102,26 @@ $b_i-c$, for $i\in\mathcal E$, are pairwise distinct.
          & =P_i\cap\{x:\lambda_1(x)+\lambda_2(x)>0\}.
         \label{eq:fan_radial_convex_deletions}
     \end{align}
-    Each set in~(\ref{eq:fan_radial_convex_deletions}) is convex,
-    being the intersection of a triangle with a strict affine
-    half-plane. Hence~(\ref{eq:fan_radial_face_cases}) shows that
-    $P_i\setminus R_t$ is convex for every $t\in\mathcal E$.
+    Each set in~(\ref{eq:fan_radial_convex_deletions}) is the intersection of
+    $P_i$ with an open half-plane and is therefore convex; by~(\ref{eq:fan_radial_face_cases}),
+    $P_i\setminus R_t$ is convex.
 \end{proof}
 
-\begin{theorem}[Convexity after removal of any family of radials]
+\begin{theorem}[Convexity after removing a family of radial segments]
     \label{thm:area_law_fan_radial_union_deletion_convex}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_sdiff_radials_convex}
     \leanok
     \uses{def:area_law_cell_fan}
     For every $i\in\mathcal E$ and every subset $A\subseteq\mathcal E$,
     the set $P_i\setminus\bigcup_{t\in A}R_t$ is convex.
-    The set $A$ may be empty.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_fan_radial_deletion_convex}
-    By the preceding theorem, $P_i\setminus R_t$ is convex for every
-    $t\in\mathcal E$. Moreover,
+    Write
     \begin{align}
         P_i\setminus\bigcup_{t\in A}R_t
          & =P_i\cap\bigcap_{t\in A}(P_i\setminus R_t).
     \end{align}
-    The intersection of convex sets is convex. When $A=\varnothing$,
-    the bounded intersection is the whole plane, so the last expression
-    is $P_i$; no exclusion of the center is made in this case.
+    Since $P_i$ and each $P_i\setminus R_t$ are convex, their intersection is
+    convex.
 \end{proof}

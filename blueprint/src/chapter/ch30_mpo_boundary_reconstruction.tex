@@ -124,7 +124,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
     expansions gives (\ref{eq:glm_boundary_matrix_reconstruct}).
 \end{proof}
 
-\begin{theorem}[Exact reconstruction from boundary transport]
+\begin{theorem}[Exact reconstruction from a boundary map]
     \label{thm:glm_boundary_reverse}
     \lean{MPSTensor.exists_biorthogonalDecomposition_of_nonUnitalAlgHom,
         MPSTensor.exists_biorthogonalDecomposition_of_boundaryTransport,
@@ -309,8 +309,8 @@ The product and scalar operations on $\mathcal D$ are componentwise.
     \leanok
     \uses{thm:glm_boundary_zipper_identities}
     The identities (\ref{eq:glm_boundary_zipper_reconstruction}) and
-    (\ref{eq:glm_boundary_zipper_identities}), together with the supplied
-    simultaneous left inverse, give the required family.
+    (\ref{eq:glm_boundary_zipper_identities}), together with the given
+    simultaneous left inverse, define the required family.
 \end{proof}
 
 \begin{theorem}[Blocking preserves the exact fusion maps]
@@ -338,7 +338,7 @@ The product and scalar operations on $\mathcal D$ are componentwise.
     % only its simultaneous-left-inverse assertion is used here.
     Induction on each nonempty word cancels intermediate analysis-synthesis
     pairs. Physical blocking commutes with stacking the two MPOs.
-    A common simultaneous word span supplies the labelled block left
+    A common simultaneous word span gives the labelled block left
     inverse after blocking, and
     Definition~\ref{def:glm_boundary_zipper_family} applies.
 \end{proof}
@@ -371,8 +371,8 @@ Theorem~\ref{thm:mpdo_complete_zipper_printed_fmove} satisfies
 $S_RP=S_L$. Its inverse $Q$ satisfies $H_L=QH_R$ and is the
 $F$-symbol of \cite{GarreRubio2023MPOSym} when the printed upper indices
 index rows. Thus the inverse-oriented indexed equation in
-Theorem~\ref{thm:mpdo_complete_zipper_fusion_pentagon} supplies that
-source's pentagon. Under the synthesis-basis gauges of
+Theorem~\ref{thm:mpdo_complete_zipper_fusion_pentagon} gives that
+pentagon identity. Under the synthesis-basis gauges of
 Theorem~\ref{thm:mpdo_complete_zipper_fmatrix_gauge},
 $P'=G_R^{-1}PG_L$ and $Q'=G_L^{-1}QG_R$.
 The common final-bond identity factor is suppressed in these formulas.
@@ -541,7 +541,7 @@ The common final-bond identity factor is suppressed in these formulas.
     \lean{MPOTensor.IsBoundaryClosed.exists_isNIMRep_of_isBoundaryCompatible}
     \uses{def:glm_boundary_closedness,def:mpo_symmetric_family,
         def:fusion_character_nimrep}
-    For unweighted block assemblies of separated positive-dimensional
+    For unweighted direct sums of separated positive-dimensional
     injective operator and state blocks, arbitrary-boundary closedness
     and compatibility produce natural multiplicities $N_{ab}^c$ and
     $M_{ax}^y$ satisfying the periodic expansions
@@ -555,6 +555,6 @@ The common final-bond identity factor is suppressed in these formulas.
     \uses{thm:glm_boundary_source_decomposition,thm:glm_boundary_periodic_expansions,
         thm:glm_boundary_fusion_associative,thm:glm_boundary_action_nimrep}
     Construct the exact pairwise fusion and action decompositions.
-    Trace them and apply the preceding coefficient comparisons to their
-    actual natural-number multiplicities.
+    Take traces and apply the preceding coefficient comparisons to the
+    resulting natural-number multiplicities.
 \end{proof}

@@ -76,9 +76,9 @@ theorem ProjectiveRepresentation.continuous_factor_family
     {T : Type*} {G : Type} [TopologicalSpace T] [Group G] {D : ℕ} (hD : 0 < D)
     (ω : T → ScalarCocycle G) (ρ : ∀ t, ProjectiveRepresentation (D := D) (ω t))
     (hρ : ∀ g, Continuous fun t => ((ρ t).X g : Matrix (Fin D) (Fin D) ℂ))
-    (g h : G) : Continuous fun t => (ω t g h : ℂ) := by
+    (g h : G) : Continuous fun t => (ω t (g, h) : ℂ) := by
   let i : Fin D := ⟨0, hD⟩
-  have hformula (t : T) : (ω t g h : ℂ) =
+  have hformula (t : T) : (ω t (g, h) : ℂ) =
       ((((ρ t).X g : Matrix (Fin D) (Fin D) ℂ) * (ρ t).X h *
         ((ρ t).X (g * h) : Matrix (Fin D) (Fin D) ℂ).adjugate) i i) /
           ((ρ t).X (g * h) : Matrix (Fin D) (Fin D) ℂ).det := by

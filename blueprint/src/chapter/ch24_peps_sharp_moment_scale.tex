@@ -1,8 +1,8 @@
 \subsection{Rounded weights in the marginal-moment interval}
 
 Fix exponents $0<\ell_{\rm s}<1$, $0<\kappa<\mu<1-\ell_{\rm s}$,
-$\nu>0$, and $0<e<1$ with $\kappa\le e$. For integer $n\ge1$, use
-the scales of \cite[Section~9, lines~32--41]{OpenAI2026AreaLaw}:
+$\nu>0$, and $0<e<1$ with $\kappa\le e$. For each integer $n\ge1$, define
+the integer scales of \cite[Section~9, lines~32--41]{OpenAI2026AreaLaw}:
 \begin{align}
     L & =\lfloor n^{1-\ell_{\rm s}}\rfloor, \\
     m & =\lfloor n^\mu\rfloor,              \\
@@ -10,7 +10,7 @@ the scales of \cite[Section~9, lines~32--41]{OpenAI2026AreaLaw}:
     D & =\lceil n^\kappa\rceil.
     \label{eq:al_moment_rounded_scales}
 \end{align}
-Set $\alpha=1-\ell_{\rm s}-\mu>0$. Only these three exponents enter
+Set $\alpha=1-\ell_{\rm s}-\mu>0$. Only $\ell_{\rm s}$, $\mu$, and $\kappa$ enter
 (\ref{eq:al_moment_rounded_scales}).
 
 \begin{theorem}[Quantitative growth of the integer band count]
@@ -22,96 +22,91 @@ Set $\alpha=1-\ell_{\rm s}-\mu>0$. Only these three exponents enter
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:al_scanner_scale_facts}
-    The numerical scale estimates give positive $m,K,D$ and
-    $nD^2/(mK)\le C_Kn^{\ell_{\rm s}}D^2$.
-    Cancel $D^2$, multiply by $mK$, and use $m\le n^\mu$ to obtain
+    The scale estimates give $m,K,D\ge 1$ and
+    $nD^2/(mK)\le C_Kn^{\ell_{\rm s}}D^2$ for large $n$.
+    Canceling $D^2$, multiplying by $mK$, and using $m\le n^\mu$ yields
     \begin{align}
         n & \le C_Kn^{\ell_{\rm s}}mK
         \le C_KK n^{\ell_{\rm s}+\mu}.
     \end{align}
-    Dividing by the positive last power gives the assertion.
+    Dividing by $n^{\ell_{\rm s}+\mu}$ gives $n^\alpha\le C_K K$.
 \end{proof}
 
-\begin{theorem}[Square root of the rounded marginal budget]
+\begin{theorem}[Square root of the rounded marginal scale]
     \label{thm:al_moment_sqrt_budget}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.sqrt_budget_le}
     \leanok
-    Let $n\ge1$, $C_B\ge0$ and $B\in\mathbb R$ satisfy
+    Let $n\ge1$, $C_B\ge0$, and $B\in\mathbb R$ satisfy
     $B\le C_BnD(\log n)^{12}$. Then
     \begin{align}
-        \sqrt B & \le\sqrt{2C_B}\,n^{(1+\kappa)/2}(\log n)^6.
+        \sqrt B & \le\sqrt{2C_B}\,n^{(1+\kappa)/2}(\log n)^6,
     \end{align}
-    The real square root is zero on negative arguments.
+    with $\sqrt B = 0$ when $B\le 0$.
 \end{theorem}
 \begin{proof}\leanok
     Since $n^\kappa\ge1$, rounding gives
-    $D\le n^\kappa+1\le2n^\kappa$. Thus
-    $B\le2C_Bn^{1+\kappa}(\log n)^{12}$. The right side is the
-    square of the asserted nonnegative upper bound.
+    $D\le n^\kappa+1\le2n^\kappa$, and hence
+    $B\le2C_Bn^{1+\kappa}(\log n)^{12}$. Taking square roots gives the bound.
 \end{proof}
 
-\begin{theorem}[One threshold for every bounded weight and budget]
+\begin{theorem}[Uniform threshold for bounded weights and marginal scales]
     \label{thm:al_moment_weight_smallness}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.eventually_mul_a_sqrt_budget_le,
         TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_a_le_moment_radius}
     \leanok
-    Fix $\omega\in\mathbb R$, $C_B,A\ge0$ and $c>0$. Assume the strict
-    margin
+    Fix $\omega\in\mathbb R$, $C_B,A\ge0$, and $c>0$, and assume that
     \begin{align}
         \delta & =\alpha-\omega-(1+\kappa)/2>0.
         \label{eq:al_moment_margin}
     \end{align}
-    There is an integer $N\ge2$, chosen before $n,W,B$, such that every
-    $n\ge N$ has $K\ge1$ and the following property. For every
-    $0\le W\le n^\omega$ and real $B\le C_BnD(\log n)^{12}$,
-    put $a=W/K$. Then $Aa\sqrt B\le c$. If also $B\ge1$, then
+    There is an integer $N\ge2$ such that for every $n\ge N$, one has $K\ge1$,
+    and for every $0\le W\le n^\omega$ and $B\le C_BnD(\log n)^{12}$,
+    setting $a=W/K$ yields $Aa\sqrt B\le c$. If in addition $B\ge1$, then
     $Aa\le c/\sqrt B$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_moment_band_power,thm:al_moment_sqrt_budget}
-    Choose $C_K$ before the scale. Theorems~\ref{thm:al_moment_band_power}
-    and~\ref{thm:al_moment_sqrt_budget} give
+    Theorems~\ref{thm:al_moment_band_power}
+    and~\ref{thm:al_moment_sqrt_budget} give, with $C_K$ as above,
     \begin{align}
         Aa\sqrt B
-         & \le AC_K\sqrt{2C_B}\,n^{-\delta}(\log n)^6.
+         & \le AC_K\sqrt{2C_B}\,n^{-\delta}(\log n)^6
         \label{eq:al_moment_smallness}
     \end{align}
-    Since $\delta>0$, the fixed multiple of $(\log n)^6$ is
-    $o(n^\delta)$. Choose one threshold making the right side of
-    (\ref{eq:al_moment_smallness}) at most $c$. This choice is independent
-    of $W$ and $B$. For $B\ge1$, division by $\sqrt B>0$ proves the
-    interval bound.
+    for all large $n$. Since $\delta>0$, the right-hand side of
+    (\ref{eq:al_moment_smallness}) tends to $0$ as $n\to\infty$, so it is at
+    most $c$ for all $n\ge N$, uniformly in $W$ and $B$. When $B\ge1$, dividing
+    by $\sqrt B$ gives $Aa\le c/\sqrt B$.
 \end{proof}
 
-\begin{theorem}[Every fixed multiple at the final collar scales]
+\begin{theorem}[Moment-radius bound at the final collar scales]
     \label{thm:al_moment_final_scales}
     \lean{TNLean.PEPS.AreaLaw.Scan.final_scanner_moment_margin,
         TNLean.PEPS.AreaLaw.Scan.exists_final_a_le_moment_radius}
     \leanok
-    Use the final parameters of
-    \cite[Section~9, lines~839--865]{OpenAI2026AreaLaw}:
+    For the final parameters of
+    \cite[Section~9, lines~839--865]{OpenAI2026AreaLaw},
     \begin{align}
         \ell_{\rm s} & =1/100000,                  \\
         \mu          & =1/4,                       \\
         \kappa       & =1/1000000,                 \\
         \omega       & =1/20000,                   \\
-        \nu          & =1/1000,\qquad e=2/1000000.
+        \nu          & =1/1000,\qquad e=2/1000000,
     \end{align}
-    Their exact margin is
+    the exponent margin is
     \begin{align}
         1-\ell_{\rm s}-\mu-\omega-(1+\kappa)/2
          & =499879/2000000>0.
     \end{align}
-    Fix $C_B\ge0$, $c>0$ and $t\in\mathbb R$. There is $N\ge2$ such
-    that, for every $n\ge N$, the literal rounded scales in
-    (\ref{eq:al_moment_rounded_scales}) have $K\ge1$ and, with
+    For any $C_B\ge0$, $c>0$, and $t\in\mathbb R$, there is $N\ge2$ such
+    that for every $n\ge N$, the rounded scales in
+    (\ref{eq:al_moment_rounded_scales}) satisfy $K\ge1$ and, with
     $a=n^\omega/K$, every $1\le B\le C_BnD(\log n)^{12}$ satisfies
     $|ta|\le c/\sqrt B$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_moment_weight_smallness}
-    Rational arithmetic gives the displayed positive margin and all
-    stated exponent inequalities. Apply
-    Theorem~\ref{thm:al_moment_weight_smallness} with $A=|t|$ and
-    $W=n^\omega$. Since $a\ge0$, one has $|ta|=|t|a$.
+    Direct computation gives the positive margin and the required exponent
+    inequalities. Apply Theorem~\ref{thm:al_moment_weight_smallness} with
+    $A=|t|$ and $W=n^\omega$, using $|ta|=|t|a$ for $a\ge0$.
 \end{proof}

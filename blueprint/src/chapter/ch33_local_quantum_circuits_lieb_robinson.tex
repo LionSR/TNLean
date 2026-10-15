@@ -38,7 +38,7 @@ commutator vanishes exactly.
     \label{aux:restricted-commutator-evaluation}
     \lean{QuantumCircuit.norm_heisenberg_commutator_le_heisenbergCommutatorNorm}\leanok
     \uses{aux:restricted-commutator-norm}
-    For $A\in\mathcal A_X$, one has
+    For $A\in\mathcal A_X$,
     $\|[\tau_t(A),B]\|\leq C_B(X,t)\|A\|$.
 \end{lemma}
 \begin{proof}\leanok
@@ -71,7 +71,7 @@ commutator vanishes exactly.
     \label{aux:restricted-initial-commutator-bound}
     \lean{QuantumCircuit.heisenbergCommutatorNorm_zero_le}\leanok
     \uses{aux:restricted-commutator-norm}
-    For arbitrary $H,B,X$, one has $C_B(X,0)\leq2\|B\|$.
+    For arbitrary $H,B,X$, $C_B(X,0)\leq2\|B\|$.
 \end{lemma}
 \begin{proof}\leanok
     Use $\|AB-BA\|\leq2\|A\|\|B\|$.

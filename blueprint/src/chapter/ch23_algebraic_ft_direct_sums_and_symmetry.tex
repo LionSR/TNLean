@@ -188,8 +188,8 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     \lean{MPSTensor.sameMPV₂_toTensorFromBlocks_perm}\leanok
     \uses{def:block_diagonal_tensor, def:same_mpv2}
     The $\mathrm{SameMPV}_2$ family of a weighted block-diagonal tensor is
-    invariant under permuting the block index set and transporting the weights
-    correspondingly.
+    invariant under permuting the block index set and reindexing the weights
+    accordingly.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -203,7 +203,7 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
     \uses{def:block_diagonal_tensor, def:same_mpv2}
     If two block-dimension families agree pointwise, the corresponding
     weighted block-diagonal tensors generate the same $\mathrm{SameMPV}_2$
-    family after transporting the blocks across the dimension equalities.
+    family after identifying the blocks along the dimension equalities.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -248,7 +248,7 @@ specialization needed here; no additional formal declaration is required.
 \begin{lemma}[Canonical-form tensor agrees with block sum]\label{lem:canonical_toTensor_eq}
     \lean{MPSTensor.CanonicalForm.toTensor_eq_toTensorFromBlocks}\leanok
     \uses{def:block_diagonal_tensor}
-    For a canonical-form record $C$, the assembled tensor $T_C$ is
+    For a canonical-form record $C$, the tensor $T_C$ is
     definitionally equal to the weighted block-diagonal tensor
     $\bigoplus_k \mu_k^C\, A_k^C$,
     where $\mu_k^C$ are the block weights and $A_k^C$ are the block tensors

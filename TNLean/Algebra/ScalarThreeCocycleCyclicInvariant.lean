@@ -59,12 +59,12 @@ both telescopes. No normalization of `β` is needed. -/
 theorem cyclicInvariant_coboundary (β : ScalarCocycle G) {g : G} {n : ℕ} (hg : g ^ n = 1) :
     cyclicInvariant (coboundary β) g n = 1 := by
   have hterm : ∀ k : ℕ, coboundary β g (g ^ k) g =
-      (β g (g ^ (k + 1)) / β g (g ^ k)) * (β (g ^ (k + 1)) g / β (g ^ k) g)⁻¹ := by
+      (β (g, g ^ (k + 1)) / β (g, g ^ k)) * (β (g ^ (k + 1), g) / β (g ^ k, g))⁻¹ := by
     intro k
     simp only [coboundary, div_eq_mul_inv, mul_inv_rev, inv_inv, ← pow_succ, ← pow_succ']
     simp only [mul_comm, mul_left_comm, mul_assoc]
   simp only [cyclicInvariant, hterm, Finset.prod_mul_distrib, Finset.prod_inv_distrib,
-    Finset.prod_range_div (fun k ↦ β g (g ^ k)), Finset.prod_range_div (fun k ↦ β (g ^ k) g),
+    Finset.prod_range_div (fun k ↦ β (g, g ^ k)), Finset.prod_range_div (fun k ↦ β (g ^ k, g)),
     hg, pow_zero, div_self', inv_one, mul_one]
 
 /-- **Gauge invariance of the cyclic invariant.** If `g ^ n = 1`, every fusion-tensor gauge
@@ -113,7 +113,7 @@ stabilizer `H` of a block `x₀` trivializes `ω|_H` through `pentagongroups`. -
 theorem isTrivialGaugeClass_comap_of_isCompatible {L : LSymbol G X} {ω : ScalarThreeCochain G}
     (hL : IsCompatible L ω) (x : X) (f : H →* G) (hfix : ∀ a, f a • x = x) :
     IsTrivialGaugeClass (comap f ω) := by
-  refine ⟨fun a b ↦ L x (f a) (f b), ?_⟩
+  refine ⟨fun p ↦ L x (f p.1) (f p.2), ?_⟩
   funext a b c
   have h := hL x (f a) (f b) (f c)
   rw [hfix c] at h
