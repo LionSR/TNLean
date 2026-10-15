@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Sirui Lu
 -/
 import Mathlib.Data.Matrix.Basis
-import TNLean.MPS.Core.NormalityFromTwoWords
 import TNLean.MPS.FundamentalTheorem.Reduction.ExplicitGauge
 import TNLean.MPS.MPDO.OperatorProduct
 
@@ -130,62 +129,15 @@ theorem negIdentityMPS_eq (a : Fin 4) :
 
 /-! ### Normality of the bond-two tensor -/
 
-private theorem czxIntMPS_mul_two_two : czxIntMPS 2 * czxIntMPS 2 = !![1, 0; 1, 0] := by decide
-
-private theorem czxIntMPS_mul_one_two : czxIntMPS 1 * czxIntMPS 2 = !![1, 0; -1, 0] := by decide
-
-private theorem czxIntMPS_mul_two_one : czxIntMPS 2 * czxIntMPS 1 = !![0, 1; 0, 1] := by decide
-
-private theorem czxIntMPS_mul_one_one : czxIntMPS 1 * czxIntMPS 1 = !![0, -1; 0, 1] := by decide
-
-private theorem czxMPS_mul_two_two : czxMPS 2 * czxMPS 2 = complexOfInt !![1, 0; 1, 0] := by
-  simp only [czxMPS_eq]
-  rw [← complexOfInt_mul, czxIntMPS_mul_two_two]
-
-private theorem czxMPS_mul_one_two : czxMPS 1 * czxMPS 2 = complexOfInt !![1, 0; -1, 0] := by
-  simp only [czxMPS_eq]
-  rw [← complexOfInt_mul, czxIntMPS_mul_one_two]
-
-private theorem czxMPS_mul_two_one : czxMPS 2 * czxMPS 1 = complexOfInt !![0, 1; 0, 1] := by
-  simp only [czxMPS_eq]
-  rw [← complexOfInt_mul, czxIntMPS_mul_two_one]
-
-private theorem czxMPS_mul_one_one : czxMPS 1 * czxMPS 1 = complexOfInt !![0, -1; 0, 1] := by
-  simp only [czxMPS_eq]
-  rw [← complexOfInt_mul, czxIntMPS_mul_one_one]
-
-/-- Each matrix unit is a half-sum or a half-difference of two length-two words. -/
-private theorem single_zero_zero : Matrix.single (0 : Fin 2) (0 : Fin 2) (1 : ℂ) =
-    (1 / 2 : ℂ) • (czxMPS 2 * czxMPS 2) + (1 / 2 : ℂ) • (czxMPS 1 * czxMPS 2) := by
-  rw [czxMPS_mul_two_two, czxMPS_mul_one_two]
-  ext a b
-  fin_cases a <;> fin_cases b <;> norm_num [Matrix.single_apply, complexOfInt]
-
-private theorem single_one_zero : Matrix.single (1 : Fin 2) (0 : Fin 2) (1 : ℂ) =
-    (1 / 2 : ℂ) • (czxMPS 2 * czxMPS 2) + (-1 / 2 : ℂ) • (czxMPS 1 * czxMPS 2) := by
-  rw [czxMPS_mul_two_two, czxMPS_mul_one_two]
-  ext a b
-  fin_cases a <;> fin_cases b <;> norm_num [Matrix.single_apply, complexOfInt]
-
-private theorem single_zero_one : Matrix.single (0 : Fin 2) (1 : Fin 2) (1 : ℂ) =
-    (1 / 2 : ℂ) • (czxMPS 2 * czxMPS 1) + (-1 / 2 : ℂ) • (czxMPS 1 * czxMPS 1) := by
-  rw [czxMPS_mul_two_one, czxMPS_mul_one_one]
-  ext a b
-  fin_cases a <;> fin_cases b <;> norm_num [Matrix.single_apply, complexOfInt]
-
-private theorem single_one_one : Matrix.single (1 : Fin 2) (1 : Fin 2) (1 : ℂ) =
-    (1 / 2 : ℂ) • (czxMPS 2 * czxMPS 1) + (1 / 2 : ℂ) • (czxMPS 1 * czxMPS 1) := by
-  rw [czxMPS_mul_two_one, czxMPS_mul_one_one]
-  ext a b
-  fin_cases a <;> fin_cases b <;> norm_num [Matrix.single_apply, complexOfInt]
-
 /-- **The bond-two tensor of the note is normal.** Its length-two words span the full
-two-by-two matrix algebra (construction note, `ex:p5ft-czx`). -/
-theorem czxMPS_isNormal : Kraus.IsNormal czxMPS := by
-  refine MPSTensor.isNormal_of_single_eq_two_words czxMPS fun i j => ?_
-  fin_cases i <;> fin_cases j
-  exacts [⟨2, 2, 1, 2, _, _, single_zero_zero⟩, ⟨2, 1, 1, 1, _, _, single_zero_one⟩,
-    ⟨2, 2, 1, 2, _, _, single_one_zero⟩, ⟨2, 1, 1, 1, _, _, single_one_one⟩]
+two-by-two matrix algebra (construction note, `ex:p5ft-czx`): twice each matrix unit is the sum
+or the difference of `M² M²` and `M¹ M²` (first column) or of `M² M¹` and `M¹ M¹` (second
+column). -/
+theorem czxMPS_isNormal : Kraus.IsNormal czxMPS :=
+  isNormal_of_complexOfRing_smul_single (Int.castRingHom ℂ) czxIntMPS czxMPS_eq
+    (by norm_num : 0 < 2) (fun _ j k => ![![2, 1] k, ![2, 1] j])
+    (fun i j => ![1, (-1) ^ (i + j : ℕ)])
+    (c := 2) (by norm_num) (by decide)
 
 /-! ### The stacked product tensor of Example D -/
 
