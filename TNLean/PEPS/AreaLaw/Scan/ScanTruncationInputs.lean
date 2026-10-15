@@ -292,7 +292,8 @@ theorem exists_scanTruncation (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
       Bmarg_le := by
         rw [hSD]
         have : (0 : ℝ) ≤ (S.n : ℝ) * X.D S.n * Real.log (S.n : ℝ) ^ 12 := by positivity
-        nlinarith }, rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl, fun k hist band ↦ hstatus k hist band⟩
+        nlinarith },
+    rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl, rfl, fun k hist band ↦ hstatus k hist band⟩
 
 end CollarScan
 
