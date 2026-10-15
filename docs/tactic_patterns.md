@@ -7517,3 +7517,28 @@ spectral split → block extraction → MPV calculation → strict bounds
   changes the mathematical input to the common signed moment interval and
   retains the actual weighted postselected entropy contribution. No custom
   tactic, reduced hypothesis, or enlarged elaboration budget is introduced.
+
+### Explicit identities for rounded scales — candidate (2026-10-15)
+
+- **Pattern:** State the defining natural-number equalities for rounded scales
+  before rewriting scalar estimates that use those scales. Rewrite the
+  quotient defining the number of bands before its window-length numerator.
+- **Seen:** The energy and error-budget estimates in
+  `Scan/SourceBootstrapEntropy.lean` (two occurrences in one module).
+- **Abstraction:** Retain the local equalities until reuse in another module
+  warrants a shared lemma. No additional tactic is needed.
+- **Notes:** Explicit types keep the physical hypotheses out of the arithmetic
+  simplification. This is below the promotion threshold.
+
+### Nonzero dimensions from positive spectral cardinality — promoted (2026-10-15)
+
+- **Pattern:** Obtain the nonzero dimension instance from a proved positive
+  cardinality of the selected spectral set.
+- **Abstraction:** Use Mathlib's `NeZero.of_pos`, rather than repeating the
+  nonzero-cardinality constructor argument.
+- **Consumers:** `Scan/SourceRoughSelection.lean`,
+  `Scan/SourceBootstrapEntropy.lean`, `Scan/SourceSelectedSharpComparison.lean`,
+  `Scan/SourceSelectedSharpEnergy.lean`, `Scan/SourceSelectedSharpDensity.lean`,
+  `Scan/SourceActualInformation.lean`, and `Scan/SourceFinalInformation.lean`.
+- **Notes:** Positivity comes from the existing spectral-window witness; no
+  nonzero-dimension hypothesis is added to any theorem.

@@ -94,7 +94,7 @@ theorem finalSharpError_le_powerEnvelope
     {n L : ℕ} (hn : 2 ≤ n) (hL : L ≤ n)
     {a Ce C₀ CB Ca Ctr Cdim B St Bsh z lq t dlog : ℝ}
     (ha : 0 < a) (hCe : 0 ≤ Ce) (hC₀ : 0 ≤ C₀) (hCB : 0 ≤ CB)
-    (hCa : 0 ≤ Ca) (hCtr : 0 ≤ Ctr) (hCdim : 0 ≤ Cdim) (hlq : 0 ≤ lq)
+    (_hCa : 0 ≤ Ca) (hCtr : 0 ≤ Ctr) (hCdim : 0 ≤ Cdim) (hlq : 0 ≤ lq)
     (haUpper : a ≤ Ca * (n : ℝ) ^ (-37497 / 50000 : ℝ))
     (haInv : 1 / a ≤ (n : ℝ) ^ (37497 / 50000 : ℝ))
     (hz : 0 < z) (hzupper : z ≤ 1)

@@ -54,7 +54,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy
     (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
     (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁) (P : ℝ)
     (hP : (Exponents.scannerNu : ℝ) ≤ P) :
-    ∃ Ctr Ctarget CB ct Cent eent Cen een C Cl : ℝ,
+    ∃ Ctr Ctarget CB ct _Cent _eent _Cen _een C Cl : ℝ,
       0 < Ctr ∧ 0 < Ctarget ∧ 0 < CB ∧ 0 < ct ∧ 1 ≤ C ∧ 0 ≤ Cl ∧
       ∀ Ce : ℝ, 0 ≤ Ce → ∃ N : ℕ, 2 ≤ N ∧
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
@@ -83,7 +83,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy
               Ce * ((S.n : ℝ) *
                 ((⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ : ℕ) : ℝ) ^
                   (Exponents.boxError : ℝ) + S.n)) →
-          2 * S.r₀ ≤ S.D → ∀ (hDpos : 1 ≤ S.D) (hDm : 4 * S.D ≤ S.m),
+          2 * S.r₀ ≤ S.D → ∀ (_hDpos : 1 ≤ S.D) (_hDm : 4 * S.D ≤ S.m),
           ∃ (hm : 0 < S.m) (hM : 0 < S.M),
           let L := ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
           let X := S.A.filter fun x ↦ x.val ∈ T
@@ -94,7 +94,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy
           let δtail := (S.n : ℝ) ^ (-100 : ℝ)
           let B := CB * ((S.n : ℝ) * S.D * Real.log (S.n : ℝ) ^ 12)
           let C₀ := 512 * Real.exp 1 * (2 / g)
-          let Bsh := Ce * ((S.n : ℝ) * (L : ℝ) ^ (Exponents.boxError : ℝ) + S.n) +
+          let _Bsh := Ce * ((S.n : ℝ) * (L : ℝ) ^ (Exponents.boxError : ℝ) + S.n) +
             (S.n : ℝ) ^ (-247 : ℝ)
           1 ≤ S.K ∧ 8 * S.K * S.m ≤ L ∧ 1 ≤ B ∧
           ((S.truncationSet L).card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 ∧
@@ -245,8 +245,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy
   intro E z
   obtain ⟨hwindow, hd, hpdata⟩ := hwdata
   refine ⟨hwindow, hd, ?_⟩
-  intro inst
-  letI : NeZero E.card := inst
+  have : NeZero E.card := NeZero.of_pos hd
   intro d ΩX ψ Sent dims energy σ near middleRegion gpre gpost gaps gmax tree Gpre Gpost
   have hΩt : ‖Ωt‖ = 1 := (Matrix.isGappedGroundState_iff.mp htrgs).1
   have hXcard : (X.card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 :=
@@ -279,7 +278,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy
     have hid : εp * (S.n : ℝ) ^ (Exponents.scannerNu : ℝ) = 1 := by
       dsimp only [εp]
       rw [← Real.rpow_add hnpos, neg_add_cancel, Real.rpow_zero]
-    nlinarith [mul_le_mul_of_nonneg_left hpow hεp.le]
+    linarith only [hid, mul_le_mul_of_nonneg_left hpow hεp.le]
   have hℓ1 : 1 ≤ ℓ := by
     have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
     dsimp only [ℓ, transportLogDimBound]
@@ -329,7 +328,10 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy
       calc
         _ = (Cent * ℓ ^ eent) * (a * S.K) * a ^ (1 / 4 : ℝ) := by ring
         _ = _ := by rw [hWa]
-    simpa only [hCeq, hrate, show 2 * εp - εp = εp by ring, mul_assoc] using hQ
+    simp only [a, ℓ] at hrate
+    rw [hrate] at hQ
+    simpa only [density, hCeq, show 2 * εp - εp = εp by ring,
+      _root_.mul_assoc] using hQ
   filter_upwards [hstrong] with k hk
   obtain ⟨s, p, hp, hQ, hδ0, hδcap, hsharp⟩ := hk
   have ha : 0 ≤ a := by dsimp only [a]; positivity

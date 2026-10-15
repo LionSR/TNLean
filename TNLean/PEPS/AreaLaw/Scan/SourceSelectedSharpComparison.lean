@@ -133,7 +133,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_comparison
     {J Δ C_T C₁ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
     (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
     (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁) (P : ℝ) :
-    ∃ Ctr Ctarget CB ct Cent eent Cen een C Cl : ℝ,
+    ∃ Ctr Ctarget CB ct Cent eent _Cen _een C Cl : ℝ,
       0 < Ctr ∧ 0 < Ctarget ∧ 0 < CB ∧ 0 < ct ∧ 1 ≤ C ∧ 0 ≤ Cl ∧
       ∃ N : ℕ, 2 ≤ N ∧
         ∀ (Λ T : Finset (ℤ × ℤ)) [LinearOrder (AdmissibleSupport Λ R)]
@@ -160,7 +160,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_comparison
             regionalEntropy Λ q Ω (positiveDepthPrefix S.A S.depth (j : ℤ)) ≤
               Ce * ((S.n : ℝ) *
                 ((⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊ : ℕ) : ℝ) ^ η + S.n)) →
-          2 * S.r₀ ≤ S.D → ∀ (hDpos : 1 ≤ S.D) (hDm : 4 * S.D ≤ S.m),
+          2 * S.r₀ ≤ S.D → ∀ (_hDpos : 1 ≤ S.D) (_hDm : 4 * S.D ≤ S.m),
           ∃ (hm : 0 < S.m) (hM : 0 < S.M),
           let L := ⌊(S.n : ℝ) ^ (1 - (Exponents.scannerEll : ℝ))⌋₊
           let X := S.A.filter fun x ↦ x.val ∈ T
@@ -323,8 +323,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_comparison
   intro E z
   have hd : 0 < E.card := Finset.card_pos.mpr hwindow.2.2.2.2.1
   refine ⟨hwindow, hd, ?_⟩
-  intro inst
-  letI : NeZero E.card := inst
+  have : NeZero E.card := NeZero.of_pos hd
   intro d ΩX ψ Sent dims energy σ near middleRegion gpre gpost gaps gmax tree Gpre Gpost
   have hρ : reducedState Λ q Ωt X =
       Matrix.partialTraceRight (Matrix.vecMulVec ΩX (star ΩX)) :=
@@ -332,7 +331,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_comparison
       (FiniteProduct.reducedPure_eq_partialTrace β Ωt X)
   have hzEq :
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian.spectralRestrictionMass E =
-        z := by simp only [← hρ]
+        z := by simp only [← hρ, z]
   have hz : 0 <
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian.spectralRestrictionMass E :=
     hzEq.symm ▸ hwindow.2.2.1
@@ -379,7 +378,8 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_comparison
     hselect pre k hk hsym hnonzero e heigen p₀ p₁ hp₀ hp₀₁ hp₁
   have hrate : Cent * (k : ℝ) * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent =
       (k : ℝ) * rate := by dsimp only [rate]; ring
-  have hdensity := selected_density_of_rough_endpoint hk
+  simp only [a, ℓ] at hrate
+  have hdensity := selected_density_of_rough_endpoint (rate := rate) hk
     (show 0 < S.n by omega) hm (show 0 < S.D by omega) (show 0 < S.K by omega)
     ha hCp (sub_pos.mpr hp₀₁) hWa cR Ci Cb hendK.2 (hb k) (by
       simpa only [hrate] using hQ)
@@ -394,6 +394,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_comparison
   have hmassLoss := mul_le_mul_of_nonneg_right
     (div_le_div_of_nonneg_right hcap hτ.le) (le_max_left (0 : ℝ) (2 * Sent + gmax))
   have hcomparison := (hsharpK s p).2.2 τ hτ hτhalf
-  linarith only [hcomparison, hmassLoss]
+  exact hcomparison.trans
+    (_root_.add_le_add (_root_.add_le_add (_root_.add_le_add le_rfl hmassLoss) le_rfl) le_rfl)
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan
