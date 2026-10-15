@@ -3109,6 +3109,149 @@ The finite-leaf estimates below follow the charge-energy argument in
     and hence $4(D+2r_0)\le12D\le m$.
 \end{proof}
 
+% Source: 08-scanner.tex, Lemma 9.1 (lines 195--221) and lines 431--444.
+\begin{theorem}[The history estimates of Lemma 9.1 for the actual rounds]
+    \label{thm:al_scan_actual_history_facts}
+    \lean{TNLean.PEPS.AreaLaw.Scan.HistoryFacts,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualScanRound,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_card_splitOld_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillScanRound_card_splitOld_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeScanRound_splitWeight_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualFillScanRound_splitWeight_le,
+        TensorPower.ReplicaTransport.moveEta_le_two_mul_logDim,
+        TensorPower.ReplicaTransport.TransportData.choiceEntropySymbol_le_of_logDim_move_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.historyFacts_actualScanRound,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_historyFacts_actualScanRound}
+    \leanok
+    \uses{def:al_scan_actual_round_family,thm:al_scan_designated_dilution,
+        thm:al_scan_split_count,thm:al_scan_uniform_bad_old,
+        thm:al_scan_designated_sampling}
+    Fix scanner exponents, an interaction range $R$, a local dimension $q$, and
+    coefficients $C_r>0$ and $C_T\ge0$. There are constants $C$, $c>0$ and
+    $C_1>0$, and the logarithmic power $C_l=4$, chosen before the scale, such
+    that for all sufficiently large $n$ the following holds. Take a physical
+    collar scan at the scales \eqref{eq:al_scan_uniform_tail_scales} of
+    \cite[Section~9]{OpenAI2026AreaLaw}, with $r_0=\lceil C_r(\log n)^2\rceil$,
+    charge-list constant $C_1$, every label anchored in its support, and the
+    test geometry: $|T|\le C_Tn^2$, ambient rows of at most $n$ sites through
+    depth $L$, and cut clearance greater than $2L+10r_0$. Order its $2nm$
+    rounds with the fill first, so round $j$ is the fill or the charge after
+    $\lfloor j/2\rfloor$ completed pairs. For any energy terms whose designated
+    supports are the truncated $r_0$-supports, any auxiliary dimensions and any
+    replica vectors, every round satisfies:
+    \begin{enumerate}
+        \item the history and conditional-choice weights are probabilities;
+        \item for every common parameter $0<p<1$ and every term, the terminal
+              probabilities on which it splits sum to at most $CD/m$;
+        \item at most $CKnD$ terms split at every old or new leaf;
+        \item the old histories that are not good have probability at most
+              $n^{-200}$;
+        \item at a charge round, on a good old history, the choice-averaged move
+              entropy dominates $c/(nD)$ times the sum of the split entropies
+              $\eta_{i,h}$;
+        \item every split entropy is nonnegative, measurable and at most
+              $C(\log n)^{C_l}$, and the choice-averaged move entropy is
+              nonnegative, measurable and at most $CK(\log n)^{C_l}$.
+    \end{enumerate}
+    These are the conclusions of \cite[Lemma~9.1]{OpenAI2026AreaLaw}, and of
+    the move-entropy bounds in the proof of Proposition~9.2, in the form in
+    which that proof uses them. The bad-history tail is stated with the fixed
+    power $200$ used there, rather than for every fixed power as in the lemma.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:al_scan_actual_round_family,thm:al_scan_designated_dilution,
+        thm:al_scan_split_count,thm:al_scan_uniform_bad_old,
+        thm:al_scan_designated_sampling}
+    Separate fill and charge rounds. A term splits at a leaf only when its
+    designated support meets the receiving side and the middle of some band,
+    so the split count is at most the number of designated split incidences,
+    which is at most $10KnD\mathfrak m$, where $\mathfrak m=2^{2R(R+1)}$
+    bounds the labels sharing an anchor. The common-parameter mixture of the
+    old and new incidence probabilities is at most $10D/m$. The bad old
+    history probability at each stage is at most the probability of a history
+    that is bad at some completed prefix, which is at most $n^{-200}$ for
+    large $n$. Sampling holds with $c=[2(C_1+1)]^{-1}$ once
+    $C_1\ge3\mathfrak m$ and $2r_0\le D$, which holds for large $n$ since
+    $r_0=O((\log n)^2)$. A valid move of a subsystem $x$ has entropy at most
+    $2\log(e\dim x)$; the moved sets and split supports lie in $r_0$-balls, so
+    every entropy is at most $2(1+(2r_0+1)^2\log q)\le
+        2(1+(2C_r+3)^2\log q)(\log n)^4$ once $\log n\ge1$, and each of the $K$
+    bands contributes one probability average to the choice-averaged entropy.
+\end{proof}
+
+% Source: 08-scanner.tex, lines 21--59 and 399--414; Lemmas 2.1 and 3.1.
+\begin{theorem}[The truncation inputs of the scanner for one physical system]
+    \label{thm:al_scan_truncation_inputs}
+    \lean{TNLean.PEPS.AreaLaw.Scan.ScanTruncation,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.target,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.shell,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.shell_subset_truncationSet,
+        TNLean.PEPS.AreaLaw.Scan.abs_log_card_sub_le_of_window,
+        TNLean.PEPS.AreaLaw.Scan.sqrt_truncationError_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_scanTruncation}
+    \leanok
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_target_typical_window,
+        thm:al_lattice_crossing_budget,thm:al_scan_common_status_budget,
+        thm:al_scan_status_scale_separation,thm:area_law_regional_entropy_continuity}
+    Fix scanner exponents, an interaction range $R$, an interaction bound
+    $J\ge0$, a gap $\Delta>0$ and a target-size coefficient $C_T\ge0$, and put
+    $g=\Delta/\max\{1,J(\|f_{1,\Delta/2}\|_1+1)\}$. There is a truncation
+    coefficient $C_r>0$, and for every local dimension $q$ a constant $C_0$,
+    such that the following holds for every choice of the scanner constants
+    with dimension $q$, gap $g$ and common constant $C\ge C_0$, and every
+    sufficiently large $n$. Let $\Omega$ be a gapped ground vector, with gap
+    $\Delta$, of a Hamiltonian on $\Lambda$ with range $R$ and bound $J$, and
+    take a collar scan at the scales of \cite[Section~9]{OpenAI2026AreaLaw}
+    with $r_0=\lceil C_r(\log n)^2\rceil$ and every label anchored in its
+    support, under the test geometry of \cite[Section~9]{OpenAI2026AreaLaw}:
+    $|T|\le C_Tn^2$, at most $n$ sites in every ambient layer
+    $T_d\setminus T_{d-1}$ with $1\le d\le L$, and ambient distance greater
+    than $2L+10r_0$ from $T$ to every endpoint of a boundary edge of $A$; and
+    under the entropy inputs
+    \begin{align}
+        S_\Omega(X)   & \le C_en^{1+e},                    &
+        S_\Omega(Q_j) & \le C_e(nL^e+n)\quad(0\le j\le L),
+    \end{align}
+    where $X=A\cap T$ and $Q_j=A\cap(T_j\setminus T)$. Then one unit ground
+    vector $\widetilde\Omega$ of the truncated Hamiltonian, with energy
+    $0\le e\le n^{-1000}$ and gap $g/2$, has the following properties:
+    \begin{enumerate}
+        \item its trace distance $t$ from $\Omega$ is at most $Cn^{-500}$;
+        \item $|S_{\widetilde\Omega}(Y)-S_\Omega(Y)|\le
+                  C\sqrt t\,(1+Cn^2\log q)$ for $Y=X$ and for every $Q_j$
+              with $j\le L$;
+        \item the typical set $E$ of the target marginal at width
+              $w=n^{3/5}$ is nonempty, its mass $z$ satisfies
+              $1-n^{-100}\le z\le1$, and
+              $|\log|E|-S_{\widetilde\Omega}(X)|\le w+|\log z|$;
+        \item the marginal moment bound of \cite[Lemma~3.1]{OpenAI2026AreaLaw}
+              holds at every region, with its cut parameter, and a number
+              $\mathcal B\le CnD(\log n)^{12}$ bounds the cut parameter of
+              every completed and pre-charge status region of the scan.
+    \end{enumerate}
+    These are the inputs of the proof of \cite[Proposition~9.2]{OpenAI2026AreaLaw}
+    supplied by Proposition~4.5 and Lemmas~2.1 and~3.1, for the same truncated
+    ground vector.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_target_typical_window,
+        thm:al_lattice_crossing_budget,thm:al_scan_common_status_budget,
+        thm:al_scan_status_scale_separation,thm:area_law_regional_entropy_continuity}
+    Take the truncated ground vector of Proposition~4.5 for the compact
+    collar, which satisfies the moment and tail bounds of Lemma~3.1 at every
+    region. Its trace distance is at most
+    $\sqrt{2\min(n^{-1000},g/4)/g}\le\sqrt{2/g}\,n^{-500}$. The target and
+    every shell of depth at most $L$ lie in the compact collar, which has at
+    most $(C_T+1)n^2$ sites, so Lemma~2.1 gives the entropy transfer. The
+    target boundary has at most $4n$ edges, so its cut parameter is at most a
+    constant times $n(\log n)^{12}$, and the tail bound at width $n^{3/5}$ is
+    at most $n^{-100}$ for large $n$. Every typical eigenvalue lies in
+    $[\mathrm e^{-S-w},\mathrm e^{-S+w}]$, so
+    $|E|\mathrm e^{-S-w}\le z\le|E|\mathrm e^{-S+w}$, which gives the
+    estimate for $\log|E|$. The status budgets are those of
+    Theorem~\ref{thm:al_scan_common_status_budget}.
+\end{proof}
+
 \begin{theorem}[Uniform charge energy at the rounded scales]
     \label{thm:al_scan_actual_charge_energy_decay}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_actualCharge_energy_threshold}
