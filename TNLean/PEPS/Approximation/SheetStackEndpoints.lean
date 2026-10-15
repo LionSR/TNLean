@@ -158,6 +158,22 @@ theorem exists_originalCircuit_stackVec_of_perm (Ω : EuclideanSpace ℂ (ι →
       hw.sourceCount_eq K, fun ξ => ?_⟩
   rw [Word.eval_toOriginalCircuit, he]
 
+/-! ### Identity changes -/
+
+/-- **The identity change.** A change that leaves the frame unchanged, such as a birth or death
+with empty target or the resize of a hole whose radius does not change, is the original circuit
+without operations: it has no nonprivate gate and no reference error. It is kept as a change so
+that the counts of changes per event do not depend on the geometry. Polynomial-PEPS manuscript,
+`06-geometry.tex`, lines 432–438 and 529–541. -/
+theorem exists_originalCircuit_of_frame_eq (Ω : EuclideanSpace ℂ (ι → Fin q))
+    {F F' : Frame pos q Party} (h : F = F') :
+    ∃ c : OriginalCircuit F.regs F'.regs, c.nonprivateCount = 0 ∧
+      (∀ (S : Set Party) g, (↑(c.participants g) : Set Party) ⊆ S) ∧
+      (∀ r s, c.IsExpansionBounded r s) ∧ (∀ K, c.IsMonomialBounded K) ∧
+      c.eval (F.regRef Ω) = F'.regRef Ω := by
+  subst h
+  exact ⟨.id _, rfl, fun _ g => (nomatch g), fun _ _ => trivial, fun _ => trivial, rfl⟩
+
 /-! ### The initial private maps -/
 
 omit [Fintype ι] [DecidableEq ι] in

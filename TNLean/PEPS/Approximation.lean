@@ -110,6 +110,7 @@ import TNLean.PEPS.Approximation.DyadicLifetimeIncidence
 import TNLean.PEPS.Approximation.DyadicPatchRewriteGates
 import TNLean.PEPS.Approximation.DyadicPointTreatment
 import TNLean.PEPS.Approximation.DyadicProtocol
+import TNLean.PEPS.Approximation.DyadicProtocolOwners
 import TNLean.PEPS.Approximation.DyadicProtocolParties
 import TNLean.PEPS.Approximation.DyadicProtocolSchedule
 import TNLean.PEPS.Approximation.DyadicReadingFootprints
@@ -305,6 +306,7 @@ import TNLean.PEPS.Approximation.SeparatedPhysicalDensity
 import TNLean.PEPS.Approximation.SeparatedSchmidtOutput
 import TNLean.PEPS.Approximation.SheetSplitting
 import TNLean.PEPS.Approximation.SheetStack
+import TNLean.PEPS.Approximation.SheetStackEndpoints
 import TNLean.PEPS.Approximation.SheetSwapBoundaryExpansion
 import TNLean.PEPS.Approximation.SheetSwapConjugateSupport
 import TNLean.PEPS.Approximation.SheetSwapCorrection
