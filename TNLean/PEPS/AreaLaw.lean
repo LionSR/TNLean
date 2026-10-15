@@ -56,7 +56,10 @@ import TNLean.PEPS.AreaLaw.NestedCylinderOrthogonalization
 import TNLean.PEPS.AreaLaw.PositiveConstraints
 import TNLean.PEPS.AreaLaw.ProductGroundState
 import TNLean.PEPS.AreaLaw.QuasilocalRoots
+import TNLean.PEPS.AreaLaw.RectangularBoundary
 import TNLean.PEPS.AreaLaw.RectangularDomain
+import TNLean.PEPS.AreaLaw.RectangularHamiltonian
+import TNLean.PEPS.AreaLaw.RectangularSpecialization
 import TNLean.PEPS.AreaLaw.RegionOperatorLocalization
 import TNLean.PEPS.AreaLaw.RegionalEntropyBridge
 import TNLean.PEPS.AreaLaw.RegionalEntropyContinuity
