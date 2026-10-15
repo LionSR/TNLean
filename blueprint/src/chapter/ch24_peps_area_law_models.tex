@@ -927,6 +927,26 @@ original open square. We state the two models separately, following
     assumed in this definition.
 \end{definition}
 
+\begin{theorem}[Inverse images of ordered two-family partitions]
+    \label{thm:peps_two_family_partition_inverse_image}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.earlierSameFamily_comap,
+        TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.card_residual_comap_le,
+        TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.comap}
+    \uses{def:area_law_two_family_partition}
+    Let $A\subseteq V$ be finite, with an ordered two-family partition
+    whose residual is $D$ and pieces $P_i$. If $W$ is finite and $f:W\to V$, then $f^{-1}(A)$ has
+    the partition with residual $f^{-1}(D)$ and pieces $f^{-1}(P_i)$,
+    retaining the same labels, families and order. Inverse images commute
+    with the union of all earlier pieces in a given family. If $f$ is
+    injective, the residual cardinality does not increase.
+\end{theorem}
+\begin{proof}
+    Inverse images preserve disjointness and unions. The family and order
+    conditions concern only the retained labels, so they are unchanged.
+    The final cardinality bound follows by restricting the injection $f$
+    to the residual set. Empty inverse-image pieces retain their labels.
+\end{proof}
+
 \begin{theorem}[Exact exponent gaps]
     \label{thm:area_law_exponent_gaps}
     \lean{
@@ -1091,7 +1111,8 @@ The proof of Proposition~9.6 of \cite{OpenAI2026AreaLaw} combines the scanner
 estimates with three steps that use no estimate of the scan: an exact entropy
 identity at each leaf, the transfer from the truncated to the original ground
 state, and the cut and size assertions of the proposition. The results below
-prove these steps; the information inequality itself is not proved here.
+give these identities. The full collar bound is
+Theorem~\ref{thm:area_law_sublinear_collar}.
 
 \begin{definition}[Leaf quantities of the sharp comparisons]
     \label{def:area_law_collar_leaf_quantities}
@@ -1293,7 +1314,8 @@ state.
 \begin{remark}[Templates and the sublinear collar bound]
     \label{rem:peps_companion_collar}
     \uses{def:area_law_template,def:area_law_collar_bound,
-        thm:area_law_collar_cut_bounds,thm:area_law_collar_bound_of_information}
+        thm:area_law_collar_cut_bounds,thm:area_law_collar_bound_of_information,
+        thm:area_law_sublinear_collar}
     Definition~\ref{def:area_law_template} states the templates of
     \cite[Definition~9.3]{OpenAI2026AreaLaw} with the printed conditions
     $n\ge C_{\rm tpl}N_0(s_0+1)$, $\operatorname{diam}_\infty T\le n$ and
@@ -1306,15 +1328,15 @@ state.
     threshold, $I_\Omega(X:\Gamma\setminus S_0)\le Cn^{1-\varepsilon}$,
     $|S_0|\le Cn^2$, and each of $X$, $S_0\setminus X$ and $S_0$ has at most $Cn$
     crossing edges.
-    % Status: Proposition 9.6 is assumed.
+    % Status: Proposition 9.6 is proved for the stated real clearance and template constants.
     For $C_{\rm tpl}\ge24$ and $D_0\ge1$, which
     the standing choices of a large $C_{\rm tpl}$ and of $D_0>2R+10$ ensure, the
     size and crossing-edge assertions hold for every separated template
     (Theorem~\ref{thm:area_law_collar_cut_bounds}), so
     Theorem~\ref{thm:area_law_collar_bound_of_information} reduces the
     proposition to the information inequality alone.
-    % Status: the size and crossing-edge bounds are proved; the information
-    % inequality is not.
+    Theorem~\ref{thm:area_law_sublinear_collar} proves all these assertions
+    for every real $D_0>2R+10$ and $C_{\rm tpl}\ge24$.
 \end{remark}
 
 \begin{remark}[Amplification]
@@ -1372,7 +1394,7 @@ state.
 \begin{remark}[The adaptation to a cell]
     \label{rem:peps_companion_cell}
     \uses{thm:peps_labelled_conditional_entropy,
-        thm:peps_cell_two_family_partition}
+        thm:peps_cell_two_family_partition,thm:peps_cell_conditional_information_from_gap}
     The appendix states that \cite[Lemma~3.2]{OpenAI2026PolynomialPEPS}
     adapts the ordering of Lemma~11.1 of \cite{OpenAI2026AreaLaw} to a cell
     with arbitrary exterior conditioning, and that this adaptation is proved in
@@ -1381,8 +1403,8 @@ state.
     partition of a cell is Theorem~\ref{thm:peps_cell_two_family_partition}.
     Neither obtains a conditional information bound by conditioning a
     mutual-information inequality.
-    % Status: both ingredients are proved; their combination into the full
-    % statement of the lemma is not yet stated.
+    Together these give the cell estimate of
+    Theorem~\ref{thm:peps_cell_conditional_information_from_gap}.
 \end{remark}
 
 \begin{theorem}[Sublinear information across a template collar]

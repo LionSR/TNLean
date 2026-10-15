@@ -7840,3 +7840,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   choice of coefficient and its positivity proof if a third use appears.
 - **Notes:** Two occurrences in two modules, below the promotion threshold.
   The coefficient is chosen before every real clearance and finite instance.
+
+### Relabeling finite-product information through regional entropies — candidate (2026-10-15)
+
+- **Pattern:** Expand mutual or conditional mutual information, move finite-region
+  unions through the site bijection, and apply the existing regional entropy
+  relabeling theorem to each term.
+- **Seen:** `finiteProductMutualInformation_relabel` in
+  `PEPS/Approximation/CoarseInformation.lean` and
+  `exists_cell_conditionalMutualInformation_le_square_of_sublinearCollarBound` in
+  `PEPS/Approximation/SquareCellConditionalInformation.lean`.
+- **Abstraction:** Both occurrences use `finiteProductEntropy_relabel` and
+  `Finset.map_union`. A third occurrence would justify a separate conditional
+  mutual-information relabeling theorem; no new abstraction is needed here.
+- **Caveat:** The state and all regions must use the same site equivalence.
+  No normalization assumption is required for the entropy identity itself.
