@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.DyadicProtocolBoundaryStates
+import TNLean.PEPS.Approximation.DyadicProtocolFinalReadout
 
 /-!
 # The main frame from one event to the next
@@ -346,6 +347,68 @@ theorem mainState_zero (hk : 1 ≤ k) (hkL : L ≤ 2 ^ k) :
       rfl
     · simp only [guideFrame, hV, Finset.toList_empty, List.map_nil]
       rfl
+
+/-- The outer squares of the holes of the last main frame are disjoint when `4 ε₀ < 1`. -/
+theorem finalMain_pairwise (hε4 : 4 * ε₀ < 1) :
+    ((levelVertices k 0 univ : Finset (ℝ × ℝ)) : Set (ℝ × ℝ)).Pairwise fun z z' =>
+      Disjoint (suppliedPatch P (fun _ => holeRadius ε₀ 1 t)
+          (fun _ => holeRadius_mem hε ht hB one_pos) z).outer
+        (suppliedPatch P (fun _ => holeRadius ε₀ 1 t)
+          (fun _ => holeRadius_mem hε ht hB one_pos) z').outer :=
+  pairwise_disjoint_levelHoles P _ (r := ε₀)
+    (fun _ => by simpa using holeRadius_le_mul (n := (1 : ℝ)) (t := t) hε.le)
+    (by rw [pow_zero]; linarith)
+
+/-- **The last main frame.** After the last event, every site, at its cell center, is read as the
+label of its own unit square, held by the party of that unit square, when `L ≤ 2 ^ k` and
+`4 ε₀ < 1`.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 48–51 and 669–673. -/
+theorem finalMain_owner (hkL : L ≤ 2 ^ k) (hε4 : 4 * ε₀ < 1) (v : SquareLatticeVertex L L) :
+    (finalMain (q := q) P rank R₀ hε ht hB).owner v = .inl (unitSquare hkL v) := by
+  rw [finalMain, levelFrame_eq P rank R₀ (finalMain_pairwise P hε ht hB hε4), guideFrame_owner]
+  have hU : IsOpen (Ioo ((v.1 : ℕ) : ℝ) ((v.1 : ℕ) + 1) ×ˢ Ioo ((v.2 : ℕ) : ℝ) ((v.2 : ℕ) + 1)) :=
+    isOpen_Ioo.prod isOpen_Ioo
+  have hp : cellCenterPos L v ∈ Ioo ((v.1 : ℕ) : ℝ) ((v.1 : ℕ) + 1) ×ˢ
+      Ioo ((v.2 : ℕ) : ℝ) ((v.2 : ℕ) + 1) := by
+    simp only [cellCenterPos, mem_prod, mem_Ioo]
+    refine ⟨⟨?_, ?_⟩, ?_, ?_⟩ <;> linarith
+  have hl : ∀ y ∈ Ioo ((v.1 : ℕ) : ℝ) ((v.1 : ℕ) + 1) ×ˢ Ioo ((v.2 : ℕ) : ℝ) ((v.2 : ℕ) + 1),
+      blockGuide ((2 : ℝ) ^ (0 : ℕ)) (protocolLevelLabels k 0 univ) y =
+        .inl (unitSquare hkL v).toTriple := by
+    classical
+    intro y hy
+    obtain ⟨⟨a1, a2⟩, a3, a4⟩ := hy
+    have hb : blockIndex ((2 : ℝ) ^ (0 : ℕ)) y = (((v.1 : ℕ) : ℤ), ((v.2 : ℕ) : ℤ)) := by
+      simp only [blockIndex, pow_zero, div_one]
+      refine Prod.ext (Int.floor_eq_iff.2 ⟨?_, ?_⟩) (Int.floor_eq_iff.2 ⟨?_, ?_⟩) <;>
+        push_cast <;> linarith
+    have hin : InRoot ((2 : ℤ) ^ (k - 0)) (((v.1 : ℕ) : ℤ), ((v.2 : ℕ) : ℤ)) := by
+      have h1 : ((v.1 : ℕ) : ℤ) < 2 ^ k := by exact_mod_cast lt_of_lt_of_le v.1.isLt hkL
+      have h2 : ((v.2 : ℕ) : ℤ) < 2 ^ k := by exact_mod_cast lt_of_lt_of_le v.2.isLt hkL
+      simp only [Nat.sub_zero]
+      exact ⟨by positivity, h1, by positivity, h2⟩
+    simp only [blockGuide, hb, protocolLevelLabels, levelLabels, hin, mem_univ, ite_true,
+      newParty, Int.toNat_natCast, toTriple_unitSquare]
+  rw [levelGuide_eq_of_mem_open hU hp hl, labelParty_toTriple]
+
+/-- **The holes of the last main frame are trivial.** When `4 ε₀ < 1`, every hole of the main
+frame after the last event, at a corner of a unit square with outer radius `2 h_1 < 1/2`, has an
+empty physical outer square.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 669–672. -/
+theorem finalMain_holes [NeZero q] (hε4 : 4 * ε₀ < 1) :
+    ∀ h ∈ (finalMain (q := q) P rank R₀ hε ht hB).holes, h.patch.outer = ∅ := by
+  classical
+  rw [finalMain, levelFrame_eq P rank R₀ (finalMain_pairwise P hε ht hB hε4)]
+  refine (guideFrame_unitLevel (fun x => isCellCenter_cellCenterPos x)
+    (fun z _ => suppliedPatch_center P _ z) (fun z hz => ?_) (fun z _ => ?_)).1
+  · simp only [levelTrueVertices, Finset.mem_filter, Finset.mem_image, pow_zero] at hz
+    obtain ⟨⟨Q, -, rfl⟩, -⟩ := hz
+    exact ⟨Q, rfl⟩
+  · rw [suppliedPatch_scale]
+    have := holeRadius_le_mul (n := (1 : ℝ)) (t := t) hε.le
+    linarith
 
 end Transitions
 
