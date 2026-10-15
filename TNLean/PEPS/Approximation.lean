@@ -99,6 +99,7 @@ import TNLean.PEPS.Approximation.DyadicBlockFootprints
 import TNLean.PEPS.Approximation.DyadicBulkSteps
 import TNLean.PEPS.Approximation.DyadicChamberSampling
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingRewrite
+import TNLean.PEPS.Approximation.DyadicDirectRepaintingSourceBound
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingStep
 import TNLean.PEPS.Approximation.DyadicEdgeBands
 import TNLean.PEPS.Approximation.DyadicFootprintScaling
@@ -216,6 +217,7 @@ import TNLean.PEPS.Approximation.NonemptyGateLabels
 import TNLean.PEPS.Approximation.NonincidentAllGateRestriction
 import TNLean.PEPS.Approximation.OriginalCircuit
 import TNLean.PEPS.Approximation.OriginalCircuitLift
+import TNLean.PEPS.Approximation.OriginalCircuitSourceBound
 import TNLean.PEPS.Approximation.OriginalCoefficientMajorant
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates
 import TNLean.PEPS.Approximation.OwnerMemoryTransport
@@ -243,6 +245,7 @@ import TNLean.PEPS.Approximation.PartyFactorization
 import TNLean.PEPS.Approximation.PartyGateCircuit
 import TNLean.PEPS.Approximation.PartyGateComposition
 import TNLean.PEPS.Approximation.PartyGateOriginalCircuit
+import TNLean.PEPS.Approximation.PartyGateSourceBound
 import TNLean.PEPS.Approximation.PartyGroupedBasis
 import TNLean.PEPS.Approximation.PartyGrouping
 import TNLean.PEPS.Approximation.PartyGroupingTransport
