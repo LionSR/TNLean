@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import Mathlib.Analysis.SpecialFunctions.Log.Basic
 import TNLean.PEPS.Approximation.DyadicPointTreatment
 
 /-!
@@ -253,7 +254,7 @@ theorem protocolSeparations (h : IsProtocolConstants K₀ ε₀ ν a D B₀) {�
     have hu := patchRadius_pos hν hn
     refine ⟨hr0, hu, two_mul_patchRadius _ _, ?_, ?_⟩
     · unfold patchRadius; nlinarith
-    · refine sq_le_protocolPatchBound (by positivity) (add_le_add_right ?_ 1)
+    · refine sq_le_protocolPatchBound (by positivity) (add_le_add ?_ le_rfl)
       rw [div_le_div_iff₀ hu hν]
       unfold patchRadius at hu ⊢
       nlinarith [mul_le_mul_of_nonneg_left hr hν.le, mul_pos hν hn]
@@ -263,7 +264,7 @@ theorem protocolSeparations (h : IsProtocolConstants K₀ ε₀ ν a D B₀) {�
     have hu := patchRadius_pos hν hN
     refine ⟨hr0, hu, two_mul_patchRadius _ _, ?_, ?_⟩
     · unfold patchRadius; nlinarith
-    · refine sq_le_protocolPatchBound (by positivity) (add_le_add_right ?_ 1)
+    · refine sq_le_protocolPatchBound (by positivity) (add_le_add ?_ le_rfl)
       rw [div_le_div_iff₀ hu hν]
       unfold patchRadius at hu ⊢
       nlinarith [mul_le_mul_of_nonneg_left hr hν.le, mul_pos hν hN]
@@ -277,7 +278,7 @@ theorem protocolSeparations (h : IsProtocolConstants K₀ ε₀ ν a D B₀) {�
       rw [hr]; unfold patchRadius; nlinarith
     refine ⟨hr0, hu, two_mul_patchRadius _ _, hsep, ?_, ?_⟩
     · rw [max_eq_right (by linarith)]; linarith
-    · refine sq_le_protocolPatchBound (by positivity) (add_le_add_right (le_of_eq ?_) 1)
+    · refine sq_le_protocolPatchBound (by positivity) (add_le_add (le_of_eq ?_) le_rfl)
       rw [hr, patchRadius]
       field_simp
       ring
