@@ -3190,19 +3190,24 @@ The finite-leaf estimates below follow the charge-energy argument in
         TNLean.PEPS.AreaLaw.Scan.sqrt_truncationError_le,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_scanTruncation}
     \leanok
-    \uses{thm:al_scan_target_typical_window,thm:al_scan_common_status_budget,
-        thm:area_law_regional_entropy_continuity}
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_target_typical_window,
+        thm:al_lattice_crossing_budget,thm:al_scan_common_status_budget,
+        thm:al_scan_status_scale_separation,thm:area_law_regional_entropy_continuity}
     Fix scanner exponents, an interaction range $R$, an interaction bound
     $J\ge0$, a gap $\Delta>0$ and a target-size coefficient $C_T\ge0$, and put
     $g=\Delta/\max\{1,J(\|f_{1,\Delta/2}\|_1+1)\}$. There is a truncation
     coefficient $C_r>0$, and for every local dimension $q$ a constant $C_0$,
     such that the following holds for every choice of the scanner constants
-    with dimension $q$, gap $g$ and common constant at least $C_0$, and every
+    with dimension $q$, gap $g$ and common constant $C\ge C_0$, and every
     sufficiently large $n$. Let $\Omega$ be a gapped ground vector, with gap
     $\Delta$, of a Hamiltonian on $\Lambda$ with range $R$ and bound $J$, and
     take a collar scan at the scales of \cite[Section~9]{OpenAI2026AreaLaw}
     with $r_0=\lceil C_r(\log n)^2\rceil$ and every label anchored in its
-    support, under the test geometry and the entropy inputs
+    support, under the test geometry of \cite[Section~9]{OpenAI2026AreaLaw}:
+    $|T|\le C_Tn^2$, at most $n$ sites in every ambient layer
+    $T_d\setminus T_{d-1}$ with $1\le d\le L$, and ambient distance greater
+    than $2L+10r_0$ from $T$ to every endpoint of a boundary edge of $A$; and
+    under the entropy inputs
     \begin{align}
         S_\Omega(X)   & \le C_en^{1+e},                    &
         S_\Omega(Q_j) & \le C_e(nL^e+n)\quad(0\le j\le L),
@@ -3211,27 +3216,27 @@ The finite-leaf estimates below follow the charge-energy argument in
     vector $\widetilde\Omega$ of the truncated Hamiltonian, with energy
     $0\le e\le n^{-1000}$ and gap $g/2$, has the following properties:
     \begin{enumerate}
-        \item its trace distance $t$ from $\Omega$ is at most $C_0n^{-500}$;
+        \item its trace distance $t$ from $\Omega$ is at most $Cn^{-500}$;
         \item $|S_{\widetilde\Omega}(Y)-S_\Omega(Y)|\le
-                  C_0\sqrt t\,(1+C_0n^2\log q)$ for $Y=X$ and for every $Q_j$
+                  C\sqrt t\,(1+Cn^2\log q)$ for $Y=X$ and for every $Q_j$
               with $j\le L$;
         \item the typical set $E$ of the target marginal at width
               $w=n^{3/5}$ is nonempty, its mass $z$ satisfies
               $1-n^{-100}\le z\le1$, and
               $|\log|E|-S_{\widetilde\Omega}(X)|\le w+|\log z|$;
         \item the marginal moment bound of \cite[Lemma~3.1]{OpenAI2026AreaLaw}
-              holds at every region, with its cut parameter, and the number
-              $\mathcal B=C_BnD(\log n)^{12}$, with $C_B\le C_0$, bounds the
-              cut parameter of every completed and pre-charge status region
-              of the scan.
+              holds at every region, with its cut parameter, and a number
+              $\mathcal B\le CnD(\log n)^{12}$ bounds the cut parameter of
+              every completed and pre-charge status region of the scan.
     \end{enumerate}
     These are the inputs of the proof of \cite[Proposition~9.2]{OpenAI2026AreaLaw}
     supplied by Proposition~4.5 and Lemmas~2.1 and~3.1, for the same truncated
     ground vector.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:al_scan_target_typical_window,thm:al_scan_common_status_budget,
-        thm:area_law_regional_entropy_continuity}
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_target_typical_window,
+        thm:al_lattice_crossing_budget,thm:al_scan_common_status_budget,
+        thm:al_scan_status_scale_separation,thm:area_law_regional_entropy_continuity}
     Take the truncated ground vector of Proposition~4.5 for the compact
     collar, which satisfies the moment and tail bounds of Lemma~3.1 at every
     region. Its trace distance is at most
