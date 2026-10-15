@@ -189,3 +189,26 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     the children with the same constant, and the label reversal gives the
     contact assertion.
 \end{proof}
+
+% Source: 10-geometry.tex, child marks, lines 404--409 and 506--514;
+% geometry:descendant-count, lines 670--681.
+\begin{lemma}[A child is determined by its parent and offset]
+    \label{lem:area_law_repair_parent_offset}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairMarkOffset,
+        TNLean.PEPS.AreaLaw.Geometry.repairMarkParent_repairMarkOffset_injective}
+    \leanok
+    \uses{def:area_law_repair_ancestors,def:area_law_repair_terminal_children}
+    For a child occurrence $q$ at generation $j+1$, let
+    $e_j(q)\in\{0,1,2\}^2$ index its centered offset
+    $e_j(q)-(1,1)$. The map
+    \begin{equation}
+        q\longmapsto\bigl(\pi_j(q),e_j(q)\bigr)
+        \label{eq:area_law_repair_parent_offset}
+    \end{equation}
+    is injective.
+\end{lemma}
+\begin{proof}\leanok
+    At generation $j+1$, a child occurrence is indexed by a nonterminal
+    parent and one of the nine centered offsets. Equality of the parent
+    and offset therefore gives equality of the child occurrences.
+\end{proof}
