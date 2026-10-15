@@ -1,6 +1,19 @@
+/-
+Copyright (c) 2026 TNLean contributors. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: TNLean contributors
+-/
+
 import TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartitionComap
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
+
+/-!
+# Inverse images of ordered two-family partitions: axiom checks
+
+The imported declarations use only propositional extensionality, classical
+choice, and quotient soundness.
+-/
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
