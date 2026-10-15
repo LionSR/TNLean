@@ -47,6 +47,7 @@ import TNLean.PEPS.Approximation.AngularAnnularLayers
 import TNLean.PEPS.Approximation.AngularCellGeometry
 import TNLean.PEPS.Approximation.AngularGridCells
 import TNLean.PEPS.Approximation.AngularInformationBound
+import TNLean.PEPS.Approximation.AngularInformationGeometry
 import TNLean.PEPS.Approximation.AngularResetWidth
 import TNLean.PEPS.Approximation.AngularSeparationBridges
 import TNLean.PEPS.Approximation.ApproximateCircuitBudget

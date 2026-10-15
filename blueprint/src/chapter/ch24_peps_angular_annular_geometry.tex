@@ -572,6 +572,63 @@ in the September 24, 2026 polynomial-PEPS manuscript.
     Apply Theorem~\ref{thm:peps_angular_reset_uniform_width} with $c=a'/3$.
 \end{proof}
 
+\begin{theorem}[Clearance of the closed ambient cell]
+    \label{thm:peps_selected_cell_closure_clearance}
+    \lean{TNLean.PEPS.Approximation.AngularGrid.selected_cell_closure_clearance}
+    \uses{def:peps_angular_grid}
+    Let $s,r,b\in\mathbb R$, and use the coordinate inequalities of
+    Definition~\ref{def:peps_angular_grid} to define the cells $Q_i$.
+    Let $U$ be the union of the cells meeting $A^{+r}$, and suppose that
+    $Q_i$ is one of these selected cells. If
+    $\operatorname{dist}_\infty(x,y)\ge b$ for every $x\in U$ and $y\in C$,
+    the same inequality holds for every $x\in\overline{Q_i}$ and $y\in C$.
+    This gives the closed-cell separation required in
+    \cite[Lemma~3.2 and Proposition~3.4]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    \uses{def:peps_angular_grid}
+    Fix $y\in C$. Every point of $Q_i$ belongs to $U$, so its distance
+    from $y$ is at least $b$. The set
+    $\{x:\operatorname{dist}_\infty(x,y)\ge b\}$ is closed.
+    It therefore contains $\overline{Q_i}$.
+\end{proof}
+
+\begin{theorem}[Membership in a selected cell]
+    \label{thm:peps_selected_cell_owner}
+    \lean{TNLean.PEPS.Approximation.AngularGrid.mem_selectedRegion_iff_touches_owner}
+    \uses{def:peps_angular_grid}
+    For a grid of side $s>0$, a point $x$ belongs to $U_{s,r}(A)$
+    if and only if its cell index $\iota(x)$ belongs to $I_{s,r}(A)$.
+\end{theorem}
+\begin{proof}
+    \uses{thm:peps_grid_ownership,def:peps_angular_grid}
+    If $x$ lies in a selected cell $Q_i$, uniqueness of the cell index
+    gives $i=\iota(x)$. Conversely, $x\in Q_{\iota(x)}$, so selection
+    of this cell implies membership in the selected union.
+\end{proof}
+
+\begin{theorem}[Physical and integer sup distances]
+    \label{thm:peps_physical_integer_sup_distance}
+    \lean{TNLean.PEPS.Approximation.dist_sitePosition_eq_supDist}
+    \uses{def:peps_angular_information_bound}
+    Let $L\in\mathbb N$ and let $x,y\in\{0,\ldots,L-1\}^2$.
+    Their physical positions are $x+(1,1)$ and $y+(1,1)$, and
+    \begin{align}
+        \operatorname{dist}_\infty(x+(1,1),y+(1,1))
+         & =\max\{|x_1-y_1|,|x_2-y_2|\}.
+        \notag
+    \end{align}
+    This identifies the distances in the geometric construction with
+    those in the information reset of
+    \cite[Lemma~3.3]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    \uses{def:peps_angular_information_bound}
+    Subtracting the coordinates cancels the common translation.
+    The maximum of the two absolute coordinate differences is the
+    integer sup distance, viewed as a real number.
+\end{proof}
+
 % Completion markers concern only the geometric and numerical statements above.
 % Conditional cell information, the physical reset and the information
 % induction are separate open obligations; see the accompanying scope note.
