@@ -245,6 +245,7 @@ theorem finalSharpError_le_powerEnvelope
       37 * (C₀ * B) * a - Real.log z / a + 2 * c +
         16 * Real.sqrt t * dlog ≤ _
   unfold finalSharpPowerEnvelope
+  rw [neg_div] at hmassLog
   linarith only [hhead, hmassCost, hbinary, hmoment, hmassLog, hc, htrace]
 
 end TNLean.PEPS.AreaLaw.Scan

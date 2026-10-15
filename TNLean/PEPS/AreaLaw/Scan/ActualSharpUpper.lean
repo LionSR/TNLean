@@ -11,6 +11,7 @@ import TNLean.PEPS.AreaLaw.Scan.AugmentedReplicaPrevectorProperties
 import TNLean.PEPS.AreaLaw.TwoFamilies
 import QICLean.Algebra.ProjectionRangeIsometry
 import QICLean.Representation.ReplicaPrevectorSharpUpper
+import Mathlib.Tactic.Trace
 
 /-!
 # A sharp upper estimate along the actual fill and charge trees
@@ -624,10 +625,13 @@ theorem eventually_actualScan_suppliedPrevector_sharp_upper
         (0 < Ncharge ∧ -Real.log Ncharge / (k : ℝ) ≤
           bound (((S.actualChargeData hm hM s).tree p₀).map
             (chargeTerminalIndex S.K S.m S.M (S.n * S.m) step))) := by
+  trace "ActualSharpUpper: proof entry"
   classical
   intro X β ΩX z hz d n pre ψ hmass
+  trace "ActualSharpUpper: parameters introduced"
   obtain ⟨hUYeq, hnest, hUY, hXY, hregions⟩ :=
     actualTerminal_sharpUpper_geometry hT S hdepth L hL
+  trace "ActualSharpUpper: terminal geometry"
   have hzQ :
       0 < (FiniteProduct.reducedPure_posSemidef β Ωt X).isHermitian.spectralRestrictionMass E :=
     hz
@@ -635,14 +639,18 @@ theorem eventually_actualScan_suppliedPrevector_sharp_upper
     (Finset.nonempty_iff_ne_empty.mpr fun hE ↦ by
       simp [hE, Matrix.IsHermitian.spectralRestrictionMass] at hzQ)
   let : NeZero d := ⟨Nat.ne_of_gt hd⟩
+  trace "ActualSharpUpper: positive auxiliary dimension"
   let U := fun j g ↦ positiveNear S.depth (terminalPartition S (S.n * S.m) j g)
   let Y := fun j g ↦ middle (terminalPartition S (S.n * S.m) j g)
   have hmomQ := actualTerminal_sharpUpper_moments S Kmom r Ωt hmom hUYeq
+  trace "ActualSharpUpper: terminal moments"
   obtain ⟨c, hc, hlim, hu⟩ :=
     FiniteProduct.eventually_suppliedReplicaPrevector_sharp_upper
       (K := Kmom) β Ωt X E hΩt hzQ ha har ha1 ell hmass
+  trace "ActualSharpUpper: generic uniform bound"
   refine ⟨c, hc, hlim S.K, hu.mono fun k hk s hs p ↦ ?_⟩
   intro σ gpost p₀ bound step Nfill Ncharge
+  trace "ActualSharpUpper: final actual-root comparison"
   exact actualScan_sharpUpper_of_compressed (q := q) (d := d) S hm hM X a Kmom z c ha Ωt
     k (ell k) hUYeq hXY hregions
     (fun N ZO hZO hZOZO tree ↦ hk N ZO hZO hZOZO S.K U Y
