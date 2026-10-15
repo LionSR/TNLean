@@ -901,23 +901,34 @@ pair sources with the same constant.
     \label{thm:peps_frame_small_rewrite_gate_sources}
     \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_originalCircuit_refVec_isSourceBounded,
         TNLean.PEPS.Approximation.GuideFrameRewrite.PlaneConditions.exists_originalCircuit_isSourceBounded,
-        TNLean.PEPS.Approximation.directRepainting_step_isSourceBounded}
+        TNLean.PEPS.Approximation.directRepainting_step_isSourceBounded,
+        TNLean.PEPS.Approximation.resize_step_isSourceBounded,
+        TNLean.PEPS.Approximation.pointTreatment_step_isSourceBounded,
+        TNLean.PEPS.Approximation.exists_resize_step_reading_isSourceBounded,
+        TNLean.PEPS.Approximation.exists_pointTreatment_step_reading_isSourceBounded}
     \leanok
-    \uses{thm:peps_frame_small_rewrite_gate, lem:peps_party_gate_source_bound}
+    \uses{thm:peps_frame_small_rewrite_gate, lem:peps_party_gate_source_bound,
+        thm:peps_guide_frame_rewrite_events,
+        thm:peps_guide_frame_resize_treatment_gates,
+        thm:peps_guide_frame_reading_gates}
     In the setting of Theorem~\ref{thm:peps_frame_small_rewrite_gate}, the
     circuit can be chosen to satisfy, besides the conclusions of that
     theorem, the pair-source bound with constant $2b$. The same holds for the
-    rewrites between frames of guides and for the direct repainting of a
-    block in the dyadic protocol of
-    \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}. Hence every monomial of
+    rewrites between frames of guides and, in the dyadic protocol of
+    \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}, for the direct
+    repainting of a block, the resize of a hole and the point treatment of a
+    mark, including their forms with one footprint ratio
+    (Theorems~\ref{thm:peps_guide_frame_resize_treatment_gates}
+    and~\ref{thm:peps_guide_frame_reading_gates}). Hence every monomial of
     these gates has at most $2b$ pair sources and at most $2b$ pair effects.
 \end{theorem}
 
 \begin{proof}\leanok
     Each monomial of the expansion of
-    Theorem~\ref{thm:peps_frame_small_rewrite_polynomial} has at most $2m\le
-        2b$ normalized pair sources, one for each patch vertex with open output
-    legs. Lemma~\ref{lem:peps_party_gate_source_bound} keeps this bound on
+    Theorem~\ref{thm:peps_frame_small_rewrite_polynomial} has at most
+    $2m\le 2b$ normalized pair sources, one for each patch vertex with open
+    output legs. Lemma~\ref{lem:peps_party_gate_source_bound} keeps this bound on
     the gate. The rewrites between frames of guides compose this gate with
-    exchanges of tag registers, which contain no gate.
+    exchanges of tag registers, which contain no gate. The direct repainting,
+    the resizes and the point treatments are such rewrites.
 \end{proof}
