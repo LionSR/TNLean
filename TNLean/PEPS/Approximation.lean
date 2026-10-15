@@ -139,6 +139,7 @@ import TNLean.PEPS.Approximation.DyadicProtocolParties
 import TNLean.PEPS.Approximation.DyadicProtocolRetainedNorm
 import TNLean.PEPS.Approximation.DyadicProtocolSchedule
 import TNLean.PEPS.Approximation.DyadicProtocolSegments
+import TNLean.PEPS.Approximation.DyadicProtocolStack
 import TNLean.PEPS.Approximation.DyadicProtocolTrajectory
 import TNLean.PEPS.Approximation.DyadicReadingFootprints
 import TNLean.PEPS.Approximation.DyadicRepaintingClearance
