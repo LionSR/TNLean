@@ -702,3 +702,88 @@ no holes, this is the normalization of $\Omega$.
     the holes, of radius at most $2\epsilon_0 s$ at distinct grid corners of blocks of
     side $s$, are disjoint since $4\epsilon_0<1$.
 \end{proof}
+
+\begin{theorem}[The main frame along the schedule]
+    \label{thm:peps_protocol_main_frame_schedule}
+    \lean{TNLean.PEPS.Approximation.ProtocolEvent.two_le_rank,
+        TNLean.PEPS.Approximation.ProtocolEvent.rank_le,
+        TNLean.PEPS.Approximation.exists_isScheduled_rank,
+        TNLean.PEPS.Approximation.mem_take_of_rank_lt,
+        TNLean.PEPS.Approximation.rank_le_of_mem_take,
+        TNLean.PEPS.Approximation.rank_getElem_succ_le,
+        TNLean.PEPS.Approximation.exists_index_of_isTrueVertex_levelGuide,
+        TNLean.PEPS.Approximation.resizedCorners,
+        TNLean.PEPS.Approximation.repaintedBlocks,
+        TNLean.PEPS.Approximation.levelFrame_eq_of_levelGuide_eq,
+        TNLean.PEPS.Approximation.levelGuide_eq_univ,
+        TNLean.PEPS.Approximation.levelGuide_succ_univ,
+        TNLean.PEPS.Approximation.eventMain,
+        TNLean.PEPS.Approximation.finalMain,
+        TNLean.PEPS.Approximation.mainState,
+        TNLean.PEPS.Approximation.eventMain_inr_succ,
+        TNLean.PEPS.Approximation.eventMain_inl_succ,
+        TNLean.PEPS.Approximation.mainState_zero,
+        TNLean.PEPS.Approximation.finalMain_owner,
+        TNLean.PEPS.Approximation.finalMain_holes}
+    \leanok
+    \uses{def:peps_protocol_level_frame, def:peps_dyadic_protocol_schedule}
+    Let $k\ge1$. Every rank from $2$ to $2k+1$ is the rank of an event, consecutive events
+    have equal or consecutive ranks, and the events before a given one are those of
+    smaller rank and some of its own. Before each event let the main frame be: for a
+    resize at a junction of scale $j$, the frame of the guide uniform on the
+    $2^j$-blocks, whose holes at the corners already resized at that scale have radius
+    $h_{2^{j-1}}$ and the others radius $h_{2^j}$; for a repainting of a square of level
+    $2^j$, the frame of the guide of that level with the squares already repainted at
+    that level, all holes of radius $h_{2^j}$; after the last event, the frame of the
+    unit squares. The true vertices of these guides are grid corners of the closed root
+    square. Then a resize leaves the frame before the next event with its own corner
+    resized, a repainting leaves the frame before the next event with its own square
+    repainted, the first frame is the raw copy at the root party, and in the last frame
+    every site is held by its unit-square party and every hole has an empty outer
+    square when $4\epsilon_0<1$ (\texttt{06-geometry.tex}, lines 21--23, 82--133 and
+    658--673).
+\end{theorem}
+
+\begin{proof}\leanok
+    The ranks of the events cover the range, so no rank is skipped. When the next event
+    has a larger rank, every event of the current rank is done: after the last resize of
+    a scale all its corners are resized and the guide uniform on its blocks is the guide
+    at the start of the next level; after the last repainting of a level every block of
+    the root square is repainted. Two frames of equal guides with radii agreeing at the
+    true vertices are equal.
+\end{proof}
+
+\begin{theorem}[The dyadic protocol from its large-scale repaintings]
+    \label{thm:peps_protocol_from_large_repaintings}
+    \lean{TNLean.PEPS.Approximation.auxIndices,
+        TNLean.PEPS.Approximation.exists_large_of_mem_auxIndices,
+        TNLean.PEPS.Approximation.auxState,
+        TNLean.PEPS.Approximation.auxState_succ,
+        TNLean.PEPS.Approximation.largeSquare,
+        TNLean.PEPS.Approximation.protocolState,
+        TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_largeRepaintings}
+    \leanok
+    \uses{thm:peps_protocol_main_frame_schedule, thm:peps_protocol_level_events,
+        thm:peps_protocol_event_segments}
+    Fix $0<\epsilon_0\le1/16$. There is a mesh threshold such that for every smaller mesh
+    ratio, constants of the protocol, $L\ge2$ with $L\le2^k<2L$ and patches supplied by
+    the adaptive patch constraint, the following holds. Let the memory before each event
+    be the main frame followed by one frame for each auxiliary sheet of the schedule,
+    frozen if its repainting is done and an idle raw copy held by its future owner
+    otherwise. Suppose that each repainting of a square of side larger than $K_0t$ passes
+    the memory from its state before to its state after through $189$ bounded changes
+    with the bounds of the small-patch rewrites and participants used by the repainting,
+    and that the frozen frames satisfy the frame constraint at accuracy $L^{-60}$ with at
+    most $C_1L^3$ holes. Then there is a protocol with the assembly bounds of
+    Definition~\ref{def:peps_dyadic_protocol} for the constant $C_1$, provided $C_1$
+    dominates the counts. This is not Proposition~\ref{prop:peps_dyadic_protocol}: the
+    large-scale repaintings are assumed here (\texttt{06-geometry.tex}, lines 82--241,
+    507--541 and 572--681).
+\end{theorem}
+
+\begin{proof}\leanok
+    Resizes and direct repaintings change only the main frame, by one small-patch
+    rewrite, and freeze no auxiliary sheet. The changes of the events are joined along
+    the schedule, starting from the raw copies and ending with the frame of the unit
+    squares and the frozen frames.
+\end{proof}
