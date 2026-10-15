@@ -203,6 +203,7 @@ class ImportAggregatorGeneratorTests(unittest.TestCase):
 
     def test_malformed_generated_body_is_rejected_without_rewriting(self) -> None:
         for body in (
+            "",
             "<<<<<<< HEAD\nimport TNLean.Foo.Leaf\n=======\n>>>>>>> other\n",
             "import TNLean.0Invalid\n",
             "import TNLean.Foo.Leaf\ndef unexpected := 1\n",

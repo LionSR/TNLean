@@ -102,7 +102,10 @@ def malformed_generated_aggregators(repository_root: Path) -> list[str]:
         ):
             continue
         # An empty repository has a canonical root aggregator with no imports.
-        if content == f"{generated_notice(expected_module)}\n":
+        if (
+            path == repository_root / "TNLean.lean"
+            and content == f"{generated_notice(expected_module)}\n"
+        ):
             continue
         _, error = pure_import_modules(content)
         if error is not None:
