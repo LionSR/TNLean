@@ -1,0 +1,329 @@
+\section{Separation of births from earlier actual regions}
+\label{sec:area_law_birth_separation}
+
+A replacement born at a mark is compared with the final actual regions of
+the older and peer identifiers of the same label, not with their births. The
+comparison near the mark is reduced to a fixed normalized square, where a
+compactness argument handles points away from the marks and an explicit
+angular estimate handles points near a mark. The trim that follows the birth
+then removes a square of radius comparable with $u^{\rho_0}$ about every mark
+from every compared region.
+
+Throughout, $\|\cdot\|$ is the maximum norm on $\mathbb R^2$. Normalize a
+removal square to $Q=[-1,1]^2$, so that its center, corners and side
+midpoints are the points of $\{-1,0,1\}^2$.
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:angular-gap, lines 627--645.
+\begin{lemma}[Angular estimate in the maximum norm]
+    \label{lem:area_law_sup_angular_estimate}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.half_max_le_norm_smul_sub_smul,
+        TNLean.PEPS.AreaLaw.Geometry.unitBox,
+        TNLean.PEPS.AreaLaw.Geometry.one_le_norm_sub_of_disjoint_unitBox,
+        TNLean.PEPS.AreaLaw.Geometry.norm_eq_one_of_mem_unitBox}
+    \leanok
+    Let $d,e$ be unit vectors with $\|d-e\|\ge1$ and let $r,s\ge0$. Then
+    \begin{align}
+        \|rd-se\| & \ge\tfrac12\max(r,s).
+        \label{eq:area_law_sup_angular_estimate}
+    \end{align}
+    For $d\in\mathbb R^2$ let $B(d)$ be the box with opposite corners
+    $(\lfloor d_1\rfloor,\lfloor d_2\rfloor)$ and
+    $(\lceil d_1\rceil,\lceil d_2\rceil)$. If $B(d)\cap B(e)=\emptyset$, then
+    $\|d-e\|\ge1$. If $\|d\|=1$, then $B(d)$ lies on the unit sphere; it is
+    the closed elementary half-side containing $d$, or $d$ itself when $d$
+    is one of the eight points of $\{-1,0,1\}^2\setminus\{0\}$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Assume $s\le r$ and put $D=\|rd-se\|$. The reverse triangle inequality
+    gives $D\ge r-s$, and
+    $r\le r\|d-e\|\le D+(r-s)$ gives $D\ge s$. Hence $D\ge\max(r-s,s)\ge
+        r/2$. If $\|d-e\|<1$, then each coordinate satisfies
+    $\lfloor d_i\rfloor\le\lceil e_i\rceil$ and
+    $\lfloor e_i\rfloor\le\lceil d_i\rceil$, so the point with coordinates
+    $\max(\lfloor d_i\rfloor,\lfloor e_i\rfloor)$ lies in both boxes. A unit
+    vector has an integer coordinate of absolute value one, which the box
+    fixes, while the other coordinate stays in $[-1,1]$.
+\end{proof}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:birth-separation, lines 573--659.
+\begin{lemma}[Quarter sections of integer half-planes]
+    \label{lem:area_law_quarter_sections}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.intHalfPlane,
+        TNLean.PEPS.AreaLaw.Geometry.quarterRadialPoint,
+        TNLean.PEPS.AreaLaw.Geometry.IsQuarterSectorial,
+        TNLean.PEPS.AreaLaw.Geometry.isQuarterSectorial_intHalfPlane,
+        TNLean.PEPS.AreaLaw.Geometry.IsQuarterSectorial.iUnion,
+        TNLean.PEPS.AreaLaw.Geometry.IsQuarterSectorial.iInter}
+    \leanok
+    \uses{lem:area_law_sup_angular_estimate}
+    Call a set $P\subseteq\mathbb R^2$ quarter-sectorial at $q$ if, for
+    $0<\|x-q\|\le1/4$, membership of $x$ in $P$ agrees with membership of
+    $q+(x-q)/(4\|x-q\|)$, and if, for every unit vector $d$ with
+    $q+d/4\in P$, also $q+e/4\in P$ for every $e\in B(d)$. Arbitrary unions
+    and intersections of sets quarter-sectorial at $q$ are
+    quarter-sectorial at $q$. Every closed half-plane
+    $\{x:ax_1+bx_2\le n\}$ with $a,b,n\in\mathbb Z$ and $|a|+|b|\le2$ is
+    quarter-sectorial at every point of $\mathbb Z^2$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    Put $f(x)=ax_1+bx_2-n$ and $k=f(q)\in\mathbb Z$. On the closed
+    quarter-square about $q$, $|f(x)-k|\le(|a|+|b|)/4\le1/2$. If $k\ne0$,
+    membership is therefore constant there. If $k=0$, then $f(q+w)=aw_1+bw_2$
+    is homogeneous, so membership is unchanged along rays from $q$. On an
+    open elementary half-side, say $d=(\pm1,t)$ with $m<t<m+1$ and
+    $m\in\{-1,0\}$, the integer bound $|a|+|b|\le2$ excludes a sign change of
+    $\pm a+bt$, so a homogeneous inequality at $d$ persists at both endpoints
+    $t=m,m+1$ and hence on $B(d)$.
+\end{proof}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:angular-gap, lines 627--645.
+\begin{theorem}[Angular estimate at a contact mark]
+    \label{thm:area_law_contact_angular_estimate}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.half_max_le_norm_sub_of_isQuarterSectorial}
+    \leanok
+    \uses{lem:area_law_sup_angular_estimate, lem:area_law_quarter_sections}
+    Let $P,P'$ be quarter-sectorial at $q$, and suppose every common point
+    $z\in P\cap P'$ with $\|z-q\|\le1/4$ equals $q$. Then every $x\in P$ and
+    $y\in P'$ with $\|x-q\|,\|y-q\|\le1/4$ satisfy
+    \begin{align}
+        \|x-y\| & \ge\tfrac12\max(\|x-q\|,\|y-q\|).
+        \label{eq:area_law_contact_angular_estimate}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    If $x=q$ or $y=q$ the bound is immediate. Otherwise write
+    $x=q+rd$ and $y=q+se$ with unit vectors $d,e$. Radial extension puts
+    $q+d/4\in P$ and $q+e/4\in P'$. A common point of $B(d)$ and $B(e)$
+    would give a common point of $P$ and $P'$ at distance $1/4$ from $q$.
+    Thus the boxes are disjoint, $\|d-e\|\ge1$, and
+    \eqref{eq:area_law_sup_angular_estimate} applies.
+\end{proof}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 393--417
+% and geometry:birth-separation, lines 606--625.
+\begin{definition}[Normalized replacement fan and exterior trapezoids]
+    \label{def:area_law_normalized_repair_fan}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairSlotFacets,
+        TNLean.PEPS.AreaLaw.Geometry.repairNormTriangle,
+        TNLean.PEPS.AreaLaw.Geometry.repairExteriorTrapezoid,
+        TNLean.PEPS.AreaLaw.Geometry.RepairSlotConsecutive}
+    \leanok
+    \uses{def:area_law_repair_square}
+    For each of the eight elementary wedges $s$ of $Q$, let $o_s$ be the
+    outward unit normal of its side and let $T_s$ be the closed triangle
+    joining the center to its side segment. For $L\in\{1,2\}$, $LT_s$ is cut
+    out by $o_s\cdot x\le L$ and the two homogeneous inequalities of its
+    radial edges. The exterior trapezoid of $s$ is
+    $E_s=\{x\in2T_s:o_s\cdot x\ge1\}$, the part of $2T_s$ outside the open
+    square $\operatorname{int}Q$. Two wedges are consecutive when they share
+    a radial edge.
+\end{definition}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:repair-induction, lines 497--504, and
+% geometry:birth-separation, lines 616--625.
+\begin{lemma}[Contacts in the normalized replacement fan]
+    \label{lem:area_law_normalized_fan_contacts}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.isQuarterSectorial_repairNormTriangle,
+        TNLean.PEPS.AreaLaw.Geometry.isQuarterSectorial_repairExteriorTrapezoid,
+        TNLean.PEPS.AreaLaw.Geometry.isCompact_repairNormTriangle,
+        TNLean.PEPS.AreaLaw.Geometry.isCompact_repairExteriorTrapezoid,
+        TNLean.PEPS.AreaLaw.Geometry.repairNormTriangle_inter_exteriorTrapezoid,
+        TNLean.PEPS.AreaLaw.Geometry.repairNormTriangle_inter_eq_zero,
+        TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_region_subset_repairNormTriangle}
+    \leanok
+    \uses{def:area_law_normalized_repair_fan, lem:area_law_quarter_sections}
+    The sets $LT_s$ and $E_s$ are compact and quarter-sectorial at every
+    point of $\mathbb Z^2$. For distinct wedges $s\ne t$, every common point
+    of $T_s$ and $E_t$ lies in $\mathbb Z^2$. If $s\ne t$ are not
+    consecutive, then every common point of $T_s$ and $T_t$ is the center $0$. Every actual fan triangle of $Q$ lies in its
+    triangle $T_s$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    All facets have integer levels and coefficients with $|a|+|b|\le2$, so
+    Lemma~\ref{lem:area_law_quarter_sections} applies, and the sets are
+    closed and bounded. The contact assertions are finitely many systems of
+    linear inequalities, one for each pair of wedges. The actual triangle is
+    the convex hull of its three vertices, each of which satisfies the three
+    inequalities.
+\end{proof}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:birth-separation, lines 616--645.
+\begin{theorem}[Compactness away from the marks]
+    \label{thm:area_law_contact_dichotomy}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_pos_le_norm_sub_away_from_intPoints,
+        TNLean.PEPS.AreaLaw.Geometry.exists_pos_contact_dichotomy,
+        TNLean.PEPS.AreaLaw.Geometry.exists_pos_forall_of_finite}
+    \leanok
+    \uses{thm:area_law_contact_angular_estimate}
+    Let $X,Y$ be compact, quarter-sectorial at every point of
+    $\mathbb Z^2$, and suppose $X\cap Y\subseteq\mathbb Z^2$. There is
+    $\eta>0$ such that for all $x\in X$ and $y\in Y$, either
+    $\|x-y\|\ge\eta$, or there is $q\in\mathbb Z^2$ with
+    $\|x-q\|,\|y-q\|<1/4$ and $\|x-y\|\ge\|y-q\|/2$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The pairs $(x,y)\in X\times Y$ that do not lie together in an open
+    quarter-square about a point of $\mathbb Z^2$ form a compact set. If it
+    is nonempty, $\|x-y\|$ attains a minimum there. A zero minimum would give
+    a common point $x=y\in\mathbb Z^2$, which lies in its own open
+    quarter-square. Pairs inside such a square about $q$ meet only at $q$
+    there, and Theorem~\ref{thm:area_law_contact_angular_estimate} applies.
+\end{proof}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:birth-separation, lines 573--659.
+\begin{theorem}[Birth separation of a replacement from local comparison
+        regions]
+    \label{thm:area_law_replacement_birth_separation_local}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairNormRunRegion,
+        TNLean.PEPS.AreaLaw.Geometry.repairSameLabelBound,
+        TNLean.PEPS.AreaLaw.Geometry.exists_repairSameLabel_dichotomy,
+        TNLean.PEPS.AreaLaw.Geometry.exists_repairBirth_separation}
+    \leanok
+    \uses{lem:area_law_normalized_fan_contacts,
+        thm:area_law_contact_dichotomy, thm:area_law_repair_margins,
+        def:area_law_repair_children}
+    There is $c_1>0$ with the following property. Let the exterior labels of
+    the eight wedges be given, let $C$ be one of their maximal cyclic runs of
+    equal label, and let $B_C=\bigcup_{s\in C}T_s$. Let $W_C$ be the union
+    of the exterior trapezoids $E_t$ of the wedges whose label differs from
+    that of $C$, together with the sets $B_{C'}$ of the other runs $C'$ with
+    the label of $C$. Let $v\in\mathbb R^2$ and $u\ge1$, and let $Y$ be a
+    set such that
+    \begin{enumerate}
+        \item every $y\in Y$ with $\|y-v\|<2u$ satisfies
+              $(y-v)/u\in W_C$;
+        \item $Y$ avoids the nine squares $Q(v+up,u)$, $p\in\{-1,0,1\}^2$.
+    \end{enumerate}
+    Then $\|x-y\|\ge c_1u^{\rho_0}$ for all $x\in v+uB_C$ and $y\in Y$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply Theorem~\ref{thm:area_law_contact_dichotomy} to each pair of a
+    triangle $T_s$, $s\in C$, and a set $E_t$ or $T_t$ in $W_C$. A wedge
+    $t$ of different label is distinct from $s$, and a wedge of another run
+    with the same label is neither $s$ nor consecutive to $s$, so
+    Lemma~\ref{lem:area_law_normalized_fan_contacts} gives the contact
+    hypothesis. The finitely many pairs give one $\eta\in(0,1]$; put
+    $c_1=\min(\eta,1/4)$. If $\|y-v\|\ge2u$, then $\|x-y\|\ge u\ge
+        u^{\rho_0}$. Otherwise rescale: either $\|x-y\|\ge\eta u$, or there
+    is a mark $q=v+up$ with $\|x-y\|\ge\|y-q\|/2$, where $p$ lies in
+    $\{-1,0,1\}^2$ because $\|(x-v)/u\|\le1$. The second hypothesis and
+    Theorem~\ref{thm:area_law_repair_margins} give
+    $\|y-q\|>d(u)\ge u^{\rho_0}/2$.
+\end{proof}
+
+The two hypotheses on $Y$ are the properties of the final actual region of
+an older or peer identifier of the same label. The first is the local
+description supplied by the isolated star of the parent mark, after its
+removal square has been cut out; the second is the removal of the next
+generation's squares, including terminal ones, from every old region.
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:initial-stars, lines 332--349; geometry:repair-induction,
+% lines 486--494; geometry:birth-separation, lines 584--615.
+\begin{lemma}[Same-label regions in an isolated star]
+    \label{lem:area_law_star_same_label_bound}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.interior_repairNormTriangle_inter_eq_empty,
+        TNLean.PEPS.AreaLaw.Geometry.interior_repairCurrentFanTriangle_inter_eq_empty,
+        TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar.exists_repairCurrentSectorAssignment_eq,
+        TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar.exists_mem_repairExteriorTrapezoid}
+    \leanok
+    \uses{lem:area_law_normalized_fan_contacts}
+    Let the closed square of half-side $\rho$ about $v$ be an isolated star
+    of a labelled region family $(R_i)$, and let $u>0$ with $6u\le\rho$.
+    The identifier chosen by the repair for each working wedge of half-side
+    $6u$ is the identifier assigned to that wedge by the star. If
+    $w\in R_i$ and $u<\|w-v\|<2u$, then $(w-v)/u$ lies in the exterior
+    trapezoid $E_t$ of a wedge $t$ assigned to $i$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The interior of a fan triangle meets no other fan triangle of the same
+    half-side, because it satisfies both radial inequalities strictly. A
+    point of the nonempty interior of the working triangle of $t$ lies in
+    the region chosen for $t$, hence in a star triangle of a wedge assigned
+    to that region; this wedge must be $t$. For the second assertion, the
+    star writes $\overline{R_i}$ near $v$ as the union of the triangles of
+    the wedges assigned to $i$. Clipping to half-side $2u$ and rescaling
+    gives a point of $2T_t$ of norm greater than one; in the cone of $t$
+    the norm is $o_t\cdot x$.
+\end{proof}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:birth-separation, lines 573--659, from
+% geometry:repair-induction, lines 471--485.
+\begin{theorem}[Birth separation of replacements, given the uniform repair
+        induction]
+    \label{thm:area_law_replacement_birth_separation_conditional}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairRegionLift,
+        TNLean.PEPS.AreaLaw.Geometry.repairFinalRegion,
+        TNLean.PEPS.AreaLaw.Geometry.IsRepairBirthSeparated,
+        TNLean.PEPS.AreaLaw.Geometry.exists_isRepairBirthSeparated_of_isUniformRepairInduction,
+        TNLean.PEPS.AreaLaw.Geometry.exists_isRepairBirthSeparated_of_uniformRepairInductionStatement}
+    \leanok
+    \uses{thm:area_law_replacement_birth_separation_local,
+        lem:area_law_star_same_label_bound,
+        def:area_law_uniform_repair_conclusion,
+        lem:area_law_repair_metric_choice}
+    Assume the conclusion of the uniform repair induction of
+    \cite[Section~11]{OpenAI2026AreaLaw}. There are a fixed $c_1>0$ and a
+    threshold $T$ such that the following holds for every stopping scale
+    $S_*\ge T$, every layer width, and every sufficiently large lower layer
+    index. Define the final actual region of an identifier as the
+    intersection of its current regions over all later generations. Let a
+    replacement be born at a parent mark of scale $S$. Then its closed birth
+    has distance at least $c_1d(S)^{\rho_0}$ from the final actual region of
+    every other identifier of its generation with the same label.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    Apply Theorem~\ref{thm:area_law_replacement_birth_separation_local}
+    with $u=d(S)\ge S_*\ge1$ to the final actual region $Y$ of the compared
+    identifier. Near the parent mark, an older region lies in the isolated
+    star of the mark and avoids its removal square, so
+    Lemma~\ref{lem:area_law_star_same_label_bound} places it in the exterior
+    trapezoids of the wedges of its label, which is opposite to the exterior
+    label of the run. A peer at the same parent lies in the birth of another
+    run with the same exterior label. A peer at another parent lies in that
+    parent's removal square, at distance at least $2u$ from the mark by the
+    separation of marks and the removal margins. Finally, the next
+    generation removes the squares $Q(v+up,u)$ from every region.
+\end{proof}
+
+This theorem covers the replacement births of
+Lemma~\ref{lem:area_law_birth_separation}; the births of initial belt tiles
+are not yet treated~\cite{gap:arealaw2d_birth_separation_scope}.
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:birth-separation, lines 573--582.
+\begin{lemma}[Birth-template separation]
+    \label{lem:area_law_birth_separation}
+    \uses{thm:area_law_replacement_birth_separation_conditional,
+        lem:area_law_uniform_repair_induction}
+    There is a fixed $c_1>0$ such that the following holds. Let $\mathcal B$
+    be the closed birth region of an initial belt tile of side scale $u=t_k$,
+    or of a replacement tile whose removal square has half-side $u$. Then its
+    distance from the final actual region of every earlier or peer
+    identifier of the same label is at least $c_1u^{\rho_0}$. A peer means
+    another initial belt tile, or another replacement born at the same
+    generation, respectively.
+\end{lemma}

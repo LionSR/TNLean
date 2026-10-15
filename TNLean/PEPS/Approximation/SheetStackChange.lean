@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.ApproximateCircuitError
+import TNLean.PEPS.Approximation.OriginalProducerResources
 import TNLean.PEPS.Approximation.SampledOriginalCircuit
 import TNLean.PEPS.Approximation.SheetStackReadoutCircuit
 import TNLean.PEPS.Approximation.TwoSheetRegisters
@@ -61,19 +62,6 @@ namespace PairEffect
 variable {P : Type}
 
 namespace OriginalCircuit
-
-/-- Increasing the pair-effect bound and the coefficient bound preserves the original expansion
-condition. Source: polynomial-PEPS, `04-compression.tex`, lines 199–208. -/
-theorem isExpansionBounded_mono {a b : Layout P} (w : OriginalCircuit a b) {r r' : ℕ}
-    {s s' : ℝ} (h : w.IsExpansionBounded r s) (hr : r ≤ r') (hs : s ≤ s') :
-    w.IsExpansionBounded r' s' := by
-  induction w with
-  | id => trivial
-  | comp w v ihw ihv => exact ⟨ihw h.1, ihv h.2⟩
-  | privateMap => trivial
-  | nonprivateGate => exact ⟨fun m hm => (h.1 m hm).trans hr, h.2.trans hs⟩
-  | swap => trivial
-  | frame _ w ih => exact ih h
 
 /-- An original circuit does not increase the norm of a vector. -/
 theorem norm_eval_le_norm {a b : Layout P} (w : OriginalCircuit a b) (v : Mem a) :

@@ -155,10 +155,227 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     by a quarter of the larger scale.
 \end{proof}
 
+\subsection{The induction step}
+\label{sec:area_law_repair_induction_step}
+
+Index the eight elementary triangles of $[-1,1]^2$ cyclically, and let the
+triangle $s$ have initial direction $a_s$ and final direction $b_s$, so
+that $b_s=a_{s+1}$. With $a\times b=a_1b_2-a_2b_1$ we have
+$a_s\times b_s=1$. The closed cone of $s$ is
+$K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and its open cone is given
+by the strict inequalities.
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 340--348, and
+% geometry:repair-induction, lines 506--514.
+\begin{lemma}[Cones of the normalized fan]
+    \label{lem:area_law_repair_fan_cones}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairFanCone,
+        TNLean.PEPS.AreaLaw.Geometry.repairFanOpenCone,
+        TNLean.PEPS.AreaLaw.Geometry.exists_mem_repairFanCone,
+        TNLean.PEPS.AreaLaw.Geometry.eq_zero_of_mem_repairFanCone,
+        TNLean.PEPS.AreaLaw.Geometry.mem_repairFanCone_inter_next_iff,
+        TNLean.PEPS.AreaLaw.Geometry.norm_eq_of_mem_repairFanCone,
+        TNLean.PEPS.AreaLaw.Geometry.mem_repairCurrentFanTriangle_iff,
+        TNLean.PEPS.AreaLaw.Geometry.interior_repairCurrentFanTriangle,
+        TNLean.PEPS.AreaLaw.Geometry.mem_closure_openCone_inter}
+    \leanok
+    \uses{def:area_law_repair_fan}
+    Every vector lies in some closed cone. Two cones $K_s,K_u$ with
+    $s\ne u$ and $u\ne s\pm1$ meet only at the origin, and
+    $K_s\cap K_{s+1}$ is the ray of $b_s$. On $K_s$ the sup norm equals
+    $y\times b_s+a_s\times y$. Hence the closed triangle of half-side
+    $r>0$ about $c$ is $\{x:x-c\in K_s,\ \lVert x-c\rVert\le r\}$, its
+    interior is given by the open cone and $\lVert x-c\rVert<r$, and every
+    point of a translated closed cone in an open set $N$ is a limit of
+    points of the translated open cone in $N$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The cone conditions are two linear inequalities with integer
+    coefficients, and the assertions reduce to finitely many linear
+    comparisons. A point $y$ with $y\times b=0$ equals $(a\times y)\,b$
+    when $a\times b=1$. The triangle is the convex hull of $0,a_s,b_s$, whose
+    barycentric coordinates are $y\times b_s$ and $a_s\times y$. For the
+    approximation move from $x$ in the direction $a_s+b_s$.
+\end{proof}
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 340--349.
+\begin{lemma}[Isolated stars and local radial models]
+    \label{lem:area_law_star_local_model}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairSectorSet,
+        TNLean.PEPS.AreaLaw.Geometry.repairActiveRaySet,
+        TNLean.PEPS.AreaLaw.Geometry.isOpen_repairSectorSet_diff,
+        TNLean.PEPS.AreaLaw.Geometry.mem_repairActiveRaySet_of_mem_two,
+        TNLean.PEPS.AreaLaw.Geometry.isIsolatedStar_of_model,
+        TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar.exists_model}
+    \leanok
+    \uses{lem:area_law_repair_fan_cones,def:area_law_isolated_star}
+    Let $\tau$ assign identifiers to the eight wedges about $c$. The closed
+    sector of $i$ is the union of the translated cones $c+K_s$ with
+    $\tau(s)=i$, and the active rays are the rays from $c$ in the
+    directions $b_s$ with $\tau(s)\ne\tau(s+1)$. Suppose that in the open
+    square of radius $\rho'>\rho>0$ about $c$ the closure of every region
+    is its closed sector, every region contains its closed sector with the
+    active rays removed, and consecutive wedges have equal labels exactly
+    when they have equal identifiers. Then the closed square of radius
+    $\rho$ about $c$ is an isolated star. Conversely, an isolated star of
+    radius $\rho$ has this description in the open square of radius
+    $\rho$, with the region interiors in place of the regions.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:area_law_repair_fan_cones}
+    A closed sector minus the active rays is open: near such a point only
+    cones containing it occur, and these carry one identifier, since a
+    common point of two cones with different identifiers lies on an active
+    ray. A point on an active ray between $s$ and $s+1$ lies in the closure
+    of the region of $\tau(s)$; were it interior to that region, nearby
+    points of the open cone of $s+1$ would lie in that region, against the
+    closure description. The remaining assertions follow from the cone
+    descriptions of the triangles.
+\end{proof}
+
+% Source: 10-geometry.tex, geometry:repair-induction, lines 497--514.
+\begin{lemma}[Wedges about a child]
+    \label{lem:area_law_repair_child_cones}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.IsRepairChildConeCompatible,
+        TNLean.PEPS.AreaLaw.Geometry.isRepairChildConeCompatible_holds,
+        TNLean.PEPS.AreaLaw.Geometry.repairChildParentCode_succ_of_inside_eq,
+        TNLean.PEPS.AreaLaw.Geometry.repairChildParentCode_succ_of_inside_ne,
+        TNLean.PEPS.AreaLaw.Geometry.exists_outer_child_cone,
+        TNLean.PEPS.AreaLaw.Geometry.exists_inner_child_cone}
+    \leanok
+    \uses{lem:area_law_repair_fan_cones,def:area_law_repair_children}
+    Let $d>0$, $e\in\{-1,0,1\}^2$ and $c=v+de$. For a noncentral child let
+    $k$ be the wedge whose final direction is $e$, and for a child wedge
+    $t$ put $r=t-k\bmod 8$. Its parent wedge is $k+1$ if $1\le r\le4$ and
+    $k$ otherwise; it lies inside the removal square if $3\le r\le6$ at a
+    side midpoint and if $4\le r\le5$ at a corner. At the center every
+    child wedge is inside, with the parent wedge of the same index. In the
+    open square of half-side $d/2$ about $c$ every child cone lies in its
+    parent cone, inner child cones lie in $v+[-d,d]^2$, outer ones avoid
+    its interior, and the corresponding strict statements hold for open
+    cones. Consecutive child wedges of the same kind have equal or adjacent
+    parent wedges, and of different kinds equal parent wedges.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    In the open square of half-side $d/2$ about a noncentral child the
+    only parent ray is the one through the child. Each assertion is a
+    finite family of linear inequalities in the coordinates of $x-v$ and
+    $d$, checked wedge by wedge.
+\end{proof}
+
+% Source: 10-geometry.tex, lines 393--417, and geometry:repair-induction,
+% lines 497--514.
+\begin{theorem}[Isolated stars at the children of one repair]
+    \label{thm:area_law_repair_child_stars}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairChildAssignment,
+        TNLean.PEPS.AreaLaw.Geometry.isIsolatedStar_repairChild}
+    \leanok
+    \uses{lem:area_law_star_local_model,lem:area_law_repair_child_cones,
+        def:area_law_repair_birth}
+    Let a parent $(v,S)$ with $d=d(S)$ have a local radial model with
+    wedge assignment $\sigma$ in the open square of radius $r\ge3d/2$
+    about $v$. Let a labelled family agree, in the open square of
+    half-side $d/2$ about a child $c=v+de$, with the old regions minus
+    $v+[-d,d]^2$, keeping their labels, and with the interiors of the
+    transported replacement runs of $\sigma$, with the opposite labels.
+    Then $c$ has an isolated star of every radius $\rho<d/2$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:area_law_star_local_model,lem:area_law_repair_child_cones}
+    Give each outer child wedge the old identifier of its parent wedge and
+    each inner one the replacement run of its parent wedge. A point of an
+    open outer child cone lies in the open parent cone, off the parent rays
+    and outside the removal square, so in the remnant; a point of an open
+    inner child cone lies in the interior of the replacement triangle.
+    Conversely, approximating by points of open parent cones places every
+    point of a remnant or replacement in a child cone of the right kind.
+    A parent ray between wedges of different identifiers, and a side of the
+    removal square, lie on child rays between child wedges of different
+    identifiers. Labels: across a parent ray they are the parent's labels or
+    their reversals, and across a side they are opposite by construction.
+    Lemma~\ref{lem:area_law_star_local_model} concludes.
+\end{proof}
+
+% Source: 10-geometry.tex, geometry:repair-induction, lines 479--514.
+\begin{theorem}[One generation of the repair]
+    \label{thm:area_law_repair_generation_step}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairCurrentSectorAssignment_eq,
+        TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.isIsolatedStar_succ,
+        TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.contact_subset_marks}
+    \leanok
+    \uses{thm:area_law_repair_child_stars,lem:area_law_repair_metric_invariants,
+        def:area_law_repair_current_assignment,def:area_law_repair_stage}
+    Under the hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants} with $a_0\le1/4$,
+    suppose every mark of $\mathcal D_j$ has an isolated star of radius
+    $a_0$ times its scale. Then the assignment read from the current
+    regions in the working square of half-side $6d(S)$ is the wedge
+    assignment of the star, every mark of $\mathcal D_{j+1}$ has an
+    isolated star of radius $a_0$ times its scale, and a replacement meets
+    a distinct identifier of the same label only at marks of
+    $\mathcal D_{j+1}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_child_stars,lem:area_law_repair_metric_invariants}
+    The working square lies in the parent star, so the chosen identifier
+    of each working wedge contains an open wedge point and is the star's.
+    Removal squares of other marks avoid the open square of half-side
+    $2d(S)$ about a parent, so near each child the next family is the one
+    of Theorem~\ref{thm:area_law_repair_child_stars}, with radius
+    $a_0d(S)<d(S)/2$. For the contacts, a replacement lies in its removal
+    square; it meets an old remnant only on the boundary of that square, a
+    peer replacement only along the parent fan, and replacements of other
+    parents not at all. Two different cones meet at the center or on a
+    common ray, and the labels exclude the common rays except at the
+    center, corners and side midpoints.
+\end{proof}
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 332--349, and
+% geometry:repair-induction, lines 471--543.
+% Conditional entry; see docs/paper-gaps/arealaw2d_repair_induction_initial_stars.tex.
+\begin{theorem}[Uniform repair induction from the initial isolated stars]
+    \label{thm:area_law_uniform_repair_induction_conditional}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.uniformRepairInductionStatement_of_initialIsolatedStars}
+    \leanok
+    \uses{def:area_law_uniform_repair_conclusion,
+        thm:area_law_repair_generation_step,
+        lem:area_law_repair_metric_invariants,
+        lem:area_law_repair_metric_choice,lem:area_law_isolated_star_mono}
+    Suppose there is $a_1>0$ such that for every width $C_0$ and every
+    sufficiently large $k_0$ the initial stage has isolated stars with
+    constant $a_1$, as asserted by the initial isolated-star lemma. Then
+    the statement of the uniform repair induction holds.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_generation_step,
+        lem:area_law_repair_metric_invariants,
+        lem:area_law_repair_metric_choice}
+    Put $a_0=\min(a_1,1/4)$ and take $S_*$ and $k_0$ as in
+    Lemma~\ref{lem:area_law_repair_metric_choice}. The initial isolated
+    stars persist for the smaller constant. By induction,
+    Theorem~\ref{thm:area_law_repair_generation_step} gives isolated stars
+    with constant $a_0$ at every generation, and the contact assertion.
+    The other assertions are
+    Lemma~\ref{lem:area_law_repair_metric_invariants}.
+\end{proof}
+
 % Source: 10-geometry.tex, geometry:repair-induction, lines 471--485.
 \begin{lemma}[Uniform repair induction]
     \label{lem:area_law_uniform_repair_induction}
     \uses{def:area_law_uniform_repair_conclusion,
+        thm:area_law_uniform_repair_induction_conditional,
         lem:area_law_repair_metric_invariants,
         lem:area_law_repair_metric_choice}
     For a sufficiently small fixed choice of $a_0$ and the corresponding
@@ -176,9 +393,11 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
 \end{lemma}
 
 \begin{proof}
-    \uses{lem:area_law_repair_metric_invariants,
+    \uses{thm:area_law_uniform_repair_induction_conditional,
+        lem:area_law_repair_metric_invariants,
         lem:area_law_repair_metric_choice}
-    The metric assertions are
+    This is Theorem~\ref{thm:area_law_uniform_repair_induction_conditional}
+    combined with the initial isolated-star lemma. The metric assertions are
     Lemma~\ref{lem:area_law_repair_metric_invariants}. The squares of
     radius $6d(S)$ about a parent lie in its star and avoid all other
     removal squares, so each modification sees only its parent's radial

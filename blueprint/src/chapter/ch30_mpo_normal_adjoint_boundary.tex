@@ -16,7 +16,7 @@ the physical indices are exchanged, while the virtual indices retain
 their order. At $N=0$ the contraction is the scalar $\tr X$.
 
 The algebraic arbitrary-boundary closedness of
-\cite[Section~2]{GarreRubio2023MPOSym} does not supply a physical
+\cite[Section~2]{GarreRubio2023MPOSym} does not provide a physical
 adjoint operation. The periodic adjoint identity below is an explicit
 additional hypothesis, consistent with the extra physical symmetry
 structure considered in \cite[Section~5]{GarreRubio2023MPOSym}.
@@ -42,7 +42,7 @@ structure considered in \cite[Section~5]{GarreRubio2023MPOSym}.
     is $\overline X$, without a virtual transpose.
 \end{proof}
 
-\begin{theorem}[Boundary transport through a two-sided similarity]
+\begin{theorem}[Boundary transformation under a two-sided similarity]
     \label{thm:glm_boundary_similarity}
     \lean{MPOTensor.mpoWithBoundary_eq_of_conj}
     \leanok
@@ -197,10 +197,10 @@ $B=V_a\overline XW_a$.
 \end{tenkzequation}
 % TENKZ-NORMAL-ADJOINT-BOUNDARY-END
 
-\subsection{Literal block sums and canonical parents}
+\subsection{Direct-sum blocks and canonical parents}
 
 Let the labels be $a=0,\ldots,r-1$, put $\chi=\sum_a\chi_a$, and take
-the literal unweighted block sum $T^{ij}=\bigoplus_aT_a^{ij}$.
+the unweighted block sum $T^{ij}=\bigoplus_aT_a^{ij}$.
 Write $J_a:\C^{\chi_a}\to\bigoplus_b\C^{\chi_b}$ for its coordinate
 inclusions and $X_{aa}=J_a^\dagger XJ_a$ for the diagonal blocks of an
 arbitrary $X\in\MN{\chi}$.
@@ -233,7 +233,7 @@ arbitrary $X\in\MN{\chi}$.
     multiple of the identity in that summand.
 \end{definition}
 
-\begin{definition}[Adjoint transport on the whole boundary space]
+\begin{definition}[Adjoint action on the whole boundary space]
     \label{def:glm_block_adjoint_transport}
     \lean{MPOTensor.blockSumAdjointBoundary}
     \leanok
@@ -275,7 +275,7 @@ arbitrary $X\in\MN{\chi}$.
         (O^N_{T,X})^\dagger & =O^N_{T,\mathcal B(X)}.
         \label{eq:glm_normal_block_adjoint}
     \end{align}
-    In particular the literal block sum is boundary adjoint closed.
+    In particular the block sum is boundary adjoint closed.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:glm_normal_adjoint_gauge,thm:glm_adjoint_block_diagonal,
@@ -300,7 +300,7 @@ arbitrary $X\in\MN{\chi}$.
     \leanok
     \uses{def:glm_boundary_closedness,def:glm_periodic_adjoint_family,def:normal}
     Under the hypotheses of Theorem~\ref{thm:glm_normal_block_adjoint},
-    let the literal block sum $T$ be boundary compatible with a state
+    let the block sum $T$ be boundary compatible with a state
     tensor $A$. Let $P_{A,L}$ be the orthogonal projection onto its
     length-$L$ arbitrary-boundary state space and let $H_{A,L,N}$ be the
     periodic canonical parent formed by all cyclic translates of
@@ -324,7 +324,7 @@ arbitrary $X\in\MN{\chi}$.
     $T$ and extracts $O^N_{T_a}$. Cutting at each cyclic window, including
     wrapping windows, therefore gives commutation with every translated
     local parent term. Theorem~\ref{thm:glm_boundary_parent_blocks}
-    gives this commutation criterion for the literal block sum.
+    gives this commutation criterion for the block sum.
     Applying it with the derived adjoint closure proves
     (\ref{eq:glm_normal_adjoint_parent}).
 \end{proof}
@@ -426,7 +426,7 @@ physical $*$-representation or weak-Hopf assumptions discussed in
     The exact identities (\ref{eq:glm_counterexample_local}) give
     one-copy biorthogonal fusion and action decompositions with both
     analysis and synthesis maps equal to $1$.
-    Boundary transport therefore multiplies the two scalar boundaries.
+    The boundary map therefore multiplies the two scalar boundaries.
     Explicitly, contraction gives $O^N_{T,x}=xP^{\otimes N}$ and
     $\psi^N_{A,y}=y\ket{0}^{\otimes N}$; idempotence and the fixed-vector
     identity give (\ref{eq:glm_counterexample_boundary}).

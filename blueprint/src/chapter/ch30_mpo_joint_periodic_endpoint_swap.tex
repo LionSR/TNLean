@@ -33,7 +33,7 @@ preserved.
     $(U_Nv)_\sigma=v_{e\circ\sigma}$.
 \end{definition}
 
-\begin{theorem}[Reflection of the actual family and joint support]
+\begin{theorem}[Reflection of the mixed family and joint support]
     \label{thm:mpo_joint_endpoint_swap_support}
     \lean{MPSTensor.MPOSymmetry.jointMixedEndpointBase_swap,
         MPSTensor.MPOSymmetry.bondInterpolationMatrix_reflect_swap,
@@ -75,7 +75,7 @@ preserved.
     by the same isometry, giving the parent interaction identity.
 \end{proof}
 
-\begin{theorem}[Transport of the periodic Hamiltonian and component vectors]
+\begin{theorem}[Conjugation of the periodic Hamiltonian and component vectors]
     \label{thm:mpo_joint_endpoint_swap_periodic}
     \lean{MPSTensor.periodicInteractionHamiltonianES_physicalReindex_conj,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_eq_conj_reflect_swap,
@@ -106,7 +106,7 @@ preserved.
     cross-label overlap.
 \end{proof}
 
-\begin{theorem}[The actual second endpoint and a common bound for both endpoints]
+\begin{theorem}[The second endpoint and a common bound for both endpoints]
     \label{thm:mpo_joint_both_periodic_endpoints}
     \lean{MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_groundSpace_one_eq_actual,
         MPSTensor.MPOSymmetry.jointMixedEndpoint_periodic_groundSpace_endpoints_eq_actual,
@@ -126,7 +126,7 @@ preserved.
     $\|H'_N(1)v\|\ge\delta_1\|v\|$ whenever $v\perp\ker H'_N(1)$.
     Positivity of the first endpoint dimensions is unnecessary here.
 
-    If also $D_0^x>0$ for every block, the actual component-span identity
+    If also $D_0^x>0$ for every block, the component-span identity
     holds at both endpoints, and one $\delta_*>0$ satisfies
     \begin{align}
         \|H'_N(\gamma)v\|\ge\delta_*\|v\|
@@ -144,7 +144,7 @@ preserved.
     Apply Theorem~\ref{thm:mpo_joint_periodic_gap} to $(A_1,A_0)$.
     Its required positive dimensions are precisely $D_1^x$.
     Conjugacy sends the reversed kernel to the original kernel; it also
-    sends the reversed component span to the actual span in
+    sends the reversed component span to the span in
     (\ref{eq:mpo_joint_right_periodic_kernel}). If $v$ is orthogonal to the
     original kernel, then $U_N^{-1}v$ is orthogonal to the reversed kernel:
     for every reversed kernel vector $z$,

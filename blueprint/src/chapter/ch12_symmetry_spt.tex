@@ -204,7 +204,7 @@ of the virtual projective representation.
     bond-conjugation covariance is preserved by the entire interpolation.
 \end{proof}
 
-\begin{theorem}[Physical transport of virtual covariance]
+\begin{theorem}[Physical embedding of virtual covariance]
     \label{thm:spt_embedding_covariance}
     \lean{MPSTensor.continuous_rotatePhysical,
         MPSTensor.gaugeEquiv_rotatePhysical_of_intertwiner}
@@ -215,7 +215,7 @@ of the virtual projective representation.
     Suppose physical operators $U$ and $V$ obey $VE=EU$, and an
     invertible bond matrix $X$ satisfies $(UA)^i=XA^iX^{-1}$.
     Then $(V(EA))^i=X(EA)^iX^{-1}$.
-    This transports the covariance into the common physical space of
+    This carries the covariance into the common physical space of
     \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{theorem}
 
@@ -259,8 +259,8 @@ of the virtual projective representation.
     Continuity is preserved by physical rotation. Because $E^\dagger E=I$,
     every original letter is a linear combination of the embedded letters,
     so the embedded family is injective. The intertwining identity
-    transports virtual covariance. The canonical injective-path theorem
-    then supplies continuity of the parent projections, norm at most one,
+    carries over virtual covariance. The canonical injective-path theorem
+    then gives continuity of the parent projections, norm at most one,
     and a positive gap uniform in the parameter and every ring length
     $N\ge2$. Apply this construction to the polar family and use its
     endpoint identities to obtain the second path.
@@ -464,7 +464,7 @@ of the virtual projective representation.
     the full-window embedding at the origin is the identity.
 \end{proof}
 
-\begin{theorem}[The actual spectator interaction is the isometric extension]
+\begin{theorem}[The three-sector spectator interaction is the isometric extension]
     \label{thm:spt_spectator_bond_transport}
     \lean{MPSTensor.commonFixedPointInclusion_eq_coordinateInclusion,
         MPSTensor.physicalSpectatorBondInteraction_eq_isometricInteractionExtension}
@@ -476,7 +476,7 @@ of the virtual projective representation.
     $I-(Q\otimes Q)(I-h_B)(Q\otimes Q)^\dagger$, where
     $h_B$ is the independent-bond interaction on the active physical space.
     No positivity or projection assumption on $B$ is required.
-    This identifies the actual coordinates of the unused-state penalty
+    This identifies the coordinates of the unused-state penalty
     in \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{theorem}
 
@@ -500,7 +500,7 @@ of the virtual projective representation.
     the periodic sums of $h$ and its extension satisfy
     $H'_NE_N=E_NH_N$.
     The same identity holds for each local translate; it also holds
-    for the raw local conjugation $ThT^\dagger$ on the included chain.
+    for the unpenalized local conjugation $ThT^\dagger$ on the included chain.
     Every nonzero zero mode $\psi$ of $H_N$ therefore gives a nonzero
     zero mode $E_N\psi$ of $H'_N$, so zero belongs to its spectrum.
 \end{theorem}
@@ -520,8 +520,8 @@ of the virtual projective representation.
     \leanok
     \uses{def:spt_isometric_interaction_extension}
     Let $E$ be a physical isometry. The canonical two-site parent
-    of $EA$ is exactly the isometric interaction extension of the
-    canonical parent of $A$. Moreover, extension preserves local
+    of $EA$ is the isometric interaction extension of the
+    canonical parent of $A$. In addition, extension preserves local
     operator inequalities: $h\le k$ implies $h'\le k'$.
 \end{theorem}
 
@@ -533,7 +533,7 @@ of the virtual projective representation.
     whenever $k-h$ is positive.
 \end{proof}
 
-\begin{theorem}[Exact ground-space transport for commuting projections]
+\begin{theorem}[Exact ground-space image for commuting projections]
     \label{thm:spt_isometric_interaction_ground_space}
     \lean{Matrix.range_toEuclideanLin_singleKrausMap_of_isometry,
         MPSTensor.interactionHamiltonian_ker_eq_range_groundProduct,
@@ -553,7 +553,7 @@ of the virtual projective representation.
         \notag
     \end{align}
     In particular, a prescribed ground space $\operatorname{span}\{\psi\}$
-    is transported to $\operatorname{span}\{E_N\psi\}$.
+    maps to $\operatorname{span}\{E_N\psi\}$.
     The unused-state penalty introduces no additional zero modes.
 \end{theorem}
 
@@ -744,7 +744,7 @@ of the virtual projective representation.
     \uses{thm:spt_common_physical_endpoints,
         thm:spt_common_physical_polar_endpoints, def:spt_embedded_injective_path}
     Embed each polar deformation by its fixed physical isometry.
-    Its intertwining identity transports symmetry, and the exact polar
+    Its intertwining identity carries over symmetry, and the exact polar
     endpoint identifies the normalized fixed-point canonical parent.
 \end{proof}
 
@@ -777,9 +777,9 @@ of the virtual projective representation.
     \end{align}
     Since $\tr\Lambda>0$, $r=1$. The boundary-state theorem makes any
     virtual gauge $X$ a nonzero scalar multiple $cW$ of a unitary $W$.
-    The scalar cancels in conjugation. On-site symmetry supplies a gauge
+    The scalar cancels in conjugation. On-site symmetry gives a gauge
     for each group element by the injective fundamental theorem, and the
-    preceding argument supplies the unitary choices.
+    preceding argument gives the unitary choices.
 \end{proof}
 
 \begin{theorem}[Prepared polar path from an on-site symmetric injective tensor]
@@ -813,7 +813,7 @@ of the virtual projective representation.
     Perron normalization gives $B$ by nonzero rescaling and virtual gauge.
     Both operations preserve the local MPS spaces, hence all canonical
     parent interactions; they also preserve on-site symmetry and
-    injectivity. The preceding theorem supplies unitary virtual covariance
+    injectivity. The preceding theorem gives unitary virtual covariance
     for $B$. Apply the symmetric polar-path construction and replace its
     final interaction by the equal canonical interaction of $A$.
 \end{proof}
@@ -837,7 +837,7 @@ of the virtual projective representation.
 \begin{proof}\leanok
     Conjugation preserves the projective multiplication law and commutes
     with physical twisting. Scalar rescaling also commutes with twisting.
-    Apply gauge independence on $B$ to compare the transported
+    Apply gauge independence on $B$ to compare the conjugated
     representation with any other choice.
 \end{proof}
 
@@ -1032,7 +1032,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Let $\lambda$ witness $\omega_1\sim\omega_0$, so that
+    Choose $\lambda$ with
     $\omega_1(g,h)=\lambda_g\lambda_h\lambda_{gh}^{-1}\omega_0(g,h)$, and put
     $\psi_g=\lambda_g/|\lambda_g|$.  The unit-phase map $z\mapsto z/|z|$ is
     multiplicative, so
@@ -1126,7 +1126,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     It depends continuously on a continuous injective family.
     Replacing the letters of $A$ by gauge-equivalent letters of $B$
     in this expansion defines their virtual conjugation action,
-    also continuously. This supplies the inverse of the injective
+    also continuously. This gives the inverse of the injective
     tensor map used in \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{theorem}
 
@@ -1236,7 +1236,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $c_N(g)=\chi(g)^N$.
     When $A(g)$ and $B$ have the same bond dimension, the tensors
     $\chi(g)B$ and $A(g)$ have equal periodic vectors at all lengths,
-    including length one. This supplies the one-site phase gauge in
+    including length one. This gives the one-site phase gauge in
     \cite[Appendix~B]{Schuch2011Phases} from rings of length at least two.
 \end{theorem}
 
@@ -1285,7 +1285,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 
     The prescribed common physical embeddings of the two original tensor
     spaces have orthogonal ranges. This holds for arbitrary original
-    tensors, without injectivity or symmetry assumptions, and supplies
+    tensors, without injectivity or symmetry assumptions, and gives
     the orthogonal endpoint summands required by
     \cite[Section~II.C.2]{Schuch2011Phases}.
 \end{theorem}
@@ -1372,7 +1372,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     representative with the same positive-length periodic rays.
     Its finite-chain ground eigenspaces are precisely those periodic
     MPS lines. The ground-state certificate itself requires no
-    virtual representation; symmetry is supplied by the physical path.
+    virtual representation; symmetry comes from the physical path.
     This verifies the exact MPS interpolation in
     \cite[Section~II.F.2]{Schuch2011Phases} in the stated setting.
 \end{theorem}
@@ -1403,7 +1403,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     identity. Summing over its translates gives the result.
 \end{proof}
 
-\begin{theorem}[Aligning actual unitary virtual factors]
+\begin{theorem}[Aligning unitary virtual factors]
     \label{thm:spt_unitary_factor_alignment}
     \lean{TNLean.Algebra.ProjectiveRepresentation.norm_factor_eq_one_of_unitary,
         TNLean.Algebra.ProjectiveRepresentation.circlePhaseInclusion_eq_of_unitary,
@@ -1543,13 +1543,13 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     If $0\le A\le B$ and $\ker A\subseteq\ker B$, positivity implies
     equality of the two kernels. Every ordered affine combination has
     the same kernel and least energy zero. Keep its MPS tensor constant.
-    At the two joins these tensors agree literally with the endpoint
+    At the two joins these tensors coincide with the endpoint
     tensors of the bond interpolation. Concatenate the three exact
     ground realizations; the endpoint equations follow from their
     common parameterization.
 \end{proof}
 
-\begin{theorem}[Cohomologous unitary factors give an actual common-space path]
+\begin{theorem}[Cohomologous unitary factors give a common-space path]
     \label{thm:spt_common_physical_injective_path}
     \lean{MPSTensor.commonPhysicalInjectiveGappedPath,
         MPSTensor.rotatePhysical_covariance_of_circle_rephase,
@@ -1559,7 +1559,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     Let two one-site injective tensors of positive bond dimension have
     unitary physical representations and unitary virtual projective
     representations giving their adjoint tensor covariances. If the
-    actual virtual factor systems are cohomologous, then the canonical
+    virtual factor systems are cohomologous, then the canonical
     two-site parents of their prescribed common physical images are
     joined by a symmetric uniformly gapped interaction path.
     The embeddings retain both entire original physical spaces.
@@ -1574,7 +1574,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \uses{thm:spt_common_physical_polar_endpoints,
         thm:spt_common_physical_fixed_point_path,
         thm:spt_unitary_factor_alignment}
-    A unit-circle rephasing aligns the actual factors and cancels out
+    A unit-circle rephasing aligns the factors and cancels out
     of adjoint tensor covariance. The two common physical polar paths
     therefore reach the prescribed included fixed-point tensors.
     Join their canonical parents by the common-space fixed-point path,
@@ -1623,16 +1623,16 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     action is the original action under this identification, and inclusion
     of the blocked tensor gives exactly the original included tensor.
     Isometry, orthogonality, and covariance are preserved by the same
-    reindexing. The supplied path and ground realization therefore give
+    reindexing. The given path and ground realization therefore provide
     all the required data.
 \end{proof}
 
-\begin{theorem}[Unitary preparation of an actual virtual implementation]
+\begin{theorem}[Unitary preparation of a virtual implementation]
     \label{thm:spt_exact_phase_unitary_preparation}
     \lean{MPSTensor.rotatePhysical_covariance_of_unitary_virtual_action,
         MPSTensor.exists_unitary_covariant_preparation_with_virtual_class}
     \leanok
-    Let an injective tensor of positive bond dimension have an actual
+    Let an injective tensor of positive bond dimension have an
     invertible virtual projective implementation of its exact physical
     symmetry. A nonzero scalar rescaling and a bond change of basis give
     an injective tensor with a unitary virtual implementation in the
@@ -1641,7 +1641,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 
 \begin{proof}\leanok
     \uses{thm:spt_prepared_polar_virtual_class}
-    The actual virtual implementation gives invariance of every periodic
+    The virtual implementation gives invariance of every periodic
     vector. Apply the prepared polar construction preserving its virtual
     class. At its injective endpoint the virtual matrices are unitary;
     their inverses are therefore their adjoints.
@@ -1750,7 +1750,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     with the same parameter changes as the physical path.
 \end{proof}
 
-\begin{theorem}[Cohomologous actual virtual factors give the independent exact MPS phase]
+\begin{theorem}[Cohomologous virtual factors give the independent exact MPS phase]
     \label{thm:spt_exact_phase_forward}
     \lean{MPSTensor.isSameExactMPSGappedPhase_of_unitary_common_factor,
         MPSTensor.isSameExactMPSGappedPhase_of_unitary_cohomologous,
@@ -1758,7 +1758,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \leanok
     \uses{def:spt_exact_mps_gapped_phase}
     Let $A_0,A_1$ be one-site injective tensors of positive bond dimension
-    with unitary physical actions. Suppose actual invertible virtual
+    with unitary physical actions. Suppose invertible virtual
     projective representations implement their exact tensor symmetries.
     If their factor systems are cohomologous, the tensors satisfy the
     independent exact MPS phase condition. The whole endpoint physical
@@ -1805,7 +1805,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{theorem}
 
 \begin{proof}\leanok
-    The nonzero periodic vectors depend continuously on the raw tensors.
+    The nonzero periodic vectors depend continuously on the ambient tensors.
     Commutation with the Hamiltonian preserves its unique ground line.
     The eigenvalue on this line depends continuously on the vector and
     belongs to the fixed finite symmetry spectrum; it is therefore
@@ -1842,7 +1842,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     $c_2$ and $c_3$ of the fixed finite-chain ground lines are independent
     of the path parameter. The ratio $c_3/c_2$ determines the same one-site
     character for each minimal representative, irrespective of dimension.
-    The fundamental theorem supplies its length-one symmetry as well.
+    The fundamental theorem gives its length-one symmetry as well.
     Transfer these identities back through equality of periodic rays,
     and remove the common character from the physical action.
 \end{proof}
@@ -1874,7 +1874,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
         thm:spt_physical_character_twist,
         thm:spt_tensor_path_class_invariance}
     The chain characters are independent of the path parameter.
-    Their ratio $c_3/c_2$ supplies one site character for every tensor.
+    Their ratio $c_3/c_2$ gives one site character for every tensor.
     Remove it from the physical action, lift the resulting exact tensor
     symmetry to continuous virtual matrices, and apply the determinant
     argument. Gauge uniqueness compares arbitrary endpoint choices.
@@ -2133,7 +2133,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     from associativity of matrix multiplication and injectivity of $E$.
 \end{proof}
 
-\begin{theorem}[Local continuous algebra from a raw tensor family]
+\begin{theorem}[Local continuous algebra from an ambient tensor family]
     \label{thm:spt_trace_quotient_continuous_algebra}
     \lean{Matrix.exists_local_continuous_traceQuotientAlgebra}
     \leanok
@@ -2176,7 +2176,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     neighborhood can be chosen so that the quotient product also has
     a continuous two-sided unit $u(t)$. The same pointwise normalized
     identifications with the minimal matrix algebra remain available.
-    No continuous unit is supplied as a hypothesis.
+    No continuous unit is assumed.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2423,7 +2423,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     exactly the same factor system $\omega$.
     This is the algebraic restriction in
     \cite[Appendix~C]{Schuch2011Phases}. The invariant bond subspace
-    is supplied here; deriving it continuously from the physical gap
+    is given here; deriving it continuously from the physical gap
     remains a separate problem, recorded in
     \cite{gap:spc11_spt_interpolation_upper_range}.
 \end{theorem}
@@ -2526,7 +2526,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     family of trace one. Choose pointwise isometric support frames
     $K(t):\C^{D(t)}\to\C^k$ and put
     $A^i(t)=K(t)^\dagger B^i(t)K(t)$.
-    Suppose the actual unitary virtual actions of $A(t)$ implement a
+    Suppose the unitary virtual actions of $A(t)$ implement a
     fixed exact physical symmetry and commute with
     $K(t)^\dagger\sigma(t)K(t)$.
     If $A(t_0)$ is one-site injective, the virtual factor systems at
@@ -2545,7 +2545,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     isometric frame $J(t)$. This corner lies in the support of
     $\sigma(t)$ and is invariant under each individually extended virtual
     matrix. Thus $K(t)^\dagger J(t)$ is an invariant isometric frame in
-    the actual minimal bond space. Its compression is the continuous
+    the minimal bond space. Its compression is the continuous
     tensor $J(t)^\dagger B(t)J(t)$, which equals $A(t_0)$ at the base.
     Apply local cohomology invariance under pointwise compression.
 \end{proof}
@@ -2657,7 +2657,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     Let $T$ be a topological space and let $B(t)$, $t\in T$, be a
     continuous tensor family of fixed bond dimension. Let
     $\sigma(t)\geq0$ be trace-one and adjoint stationary.
-    Let the actual minimal tensors be support compressions of $B(t)$,
+    Let the minimal tensors be support compressions of $B(t)$,
     with unitary projective actions implementing a fixed exact physical
     symmetry. Suppose the compressed tensor at $t_0$ is one-site injective.
     If $\sigma$ is continuous and unique among trace-one stationary
@@ -2677,7 +2677,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
         thm:spt_supported_frame_comparison,
         thm:spt_local_invariant_compression}
     Compression preserves stationary uniqueness. Exact physical covariance
-    then forces each actual virtual action to commute with the compressed
+    then forces each virtual action to commute with the compressed
     density. Apply the spectral-corner argument on the open neighborhood.
     In the unital case, first construct the local unique continuous
     density and identify the given pointwise stationary choice with it.
@@ -2725,7 +2725,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \end{align}
     In fact, any pointwise choice of positive trace-one Perron matrices
     is continuous. This is a consequence of positive-map
-    Perron--Frobenius theory, applied to the supplied tensor family
+    Perron--Frobenius theory, applied to the given tensor family
     \cite[Theorem~6.3]{Wolf2012Quantum}.
 \end{theorem}
 
@@ -2782,7 +2782,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \end{align}
     This density is unique among all trace-one fixed matrices.
     The one-dimensional fixed-space property is derived, rather than
-    assumed. These are local canonical data for the supplied tensor
+    assumed. These are local canonical data for the given tensor
     family; reconstruction from a physical uniform gap remains separate
     \cite{gap:spc11_spt_interpolation_upper_range}.
 \end{theorem}
@@ -2913,7 +2913,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
         Matrix.finrank_range_rightMul_of_matrixAlgebra}
     \leanok
     In $\MN{D}$ the left ideal $\MN{D}E_{ii}$ has
-    dimension $D$. The same holds after transport by any algebra
+    dimension $D$. The same holds under any algebra
     isomorphism.
 \end{theorem}
 \begin{proof}\leanok
@@ -2925,7 +2925,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \label{thm:spt_continuous_trace_quotient_primitive}
     \lean{Matrix.exists_local_continuous_traceQuotientPrimitive}
     \leanok
-    Suppose a continuous raw tensor family has two-site and three-site
+    Suppose a continuous ambient tensor family has two-site and three-site
     traces proportional, with nonzero factors, to those of pointwise
     injective tensors of constant positive bond dimension $D$.
     Its locally reconstructed trace-quotient algebra admits a continuous
@@ -2939,7 +2939,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
         thm:spt_continuous_nearby_idempotent,
         thm:spt_primitive_left_ideal_dimension, thm:spt_idempotent_rank}
     In the base matrix algebra choose a diagonal matrix unit and
-    transport it to the quotient. Keep its coordinates fixed and
+    pass it to the quotient. Keep its coordinates fixed and
     correct its left-regular action to a nearby idempotent.
     The generated-algebra property places the correction in the
     left-regular representation. Apply it to the continuously chosen
@@ -2976,7 +2976,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \begin{proof}\leanok
     Associativity makes the left ideal invariant and gives
     $JL(x)v=\mu(x,Jv)$. This action is multiplicative and unital.
-    Composing with the inverse of the supplied algebra identification
+    Composing with the inverse of the given algebra identification
     gives a unital endomorphism of the full matrix algebra.
     The Skolem--Noether theorem makes it an inner conjugation.
 \end{proof}
@@ -3032,7 +3032,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \label{thm:spt_positive_ray_finite_traces}
     \lean{MPSTensor.exists_nonzero_two_three_trace_scalars_of_samePositiveMpvRay}
     \leanok
-    If a raw tensor and a one-site injective tensor of positive bond
+    If an ambient tensor and a one-site injective tensor of positive bond
     dimension have the same periodic rays at every positive length,
     their two-site and three-site word traces are proportional by
     nonzero scalars $\alpha_2$ and $\alpha_3$.
@@ -3063,7 +3063,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     The pointwise tensors, scalar factors, and gauges need not be
     continuous. This is a reconstruction at constant minimal
     dimension; the two trace identities alone make no assertion about
-    the raw tensor's longer periodic rays.
+    the ambient tensor's longer periodic rays.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:spt_continuous_trace_quotient_primitive,
@@ -3082,12 +3082,12 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
     \label{thm:spt_continuous_minimal_ray_realization}
     \lean{MPSTensor.exists_local_continuous_minimalTensor_of_samePositiveMpvRay}
     \leanok
-    Suppose the continuous raw family $B(t)$ has, at every parameter,
+    Suppose the continuous ambient family $B(t)$ has, at every parameter,
     the same positive-length periodic rays as a pointwise one-site
     injective tensor $A(t)$ of a fixed positive bond dimension.
     Locally those same rays admit continuous one-site injective
     representatives of that bond dimension. No continuity of the
-    supplied pointwise representatives is assumed.
+    given pointwise representatives is assumed.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:spt_positive_ray_finite_traces,
@@ -3482,7 +3482,7 @@ canonical realization is inferred from a physical spectral gap here.
     $[\omega_t]=[\omega_{t_0}]$ for all $t$ in some neighborhood of $t_0$.
     The stationary matrices, full support frames, and virtual
     representations are not required to be continuous. The ambient
-    tensors and their supported covariance are supplied assumptions;
+    tensors and their supported covariance are assumed;
     this statement does not construct them from a physical gap.
 \end{theorem}
 
@@ -3983,7 +3983,7 @@ Hamiltonian gap remains separate
     same characteristic polynomial as the original endomorphism, so
     $\sigma(\mathcal E_A)\subseteq\sigma(\mathcal E_B)$.
     The bound $q<1$ excludes every peripheral eigenvalue other than one,
-    while the identity supplies the eigenvalue one.
+    while the identity has eigenvalue one.
 \end{proof}
 
 
@@ -4261,7 +4261,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     $\chi(g)^{-1}U_g$ has exact inverse-index virtual covariance on $A_t$,
     and $\omega_s$ and $\omega_t$ are cohomologous for all $s,t\in[0,1]$.
     No continuous choice of the tensors, stationary densities, or virtual
-    matrices is required. The uniform transfer bound is supplied explicitly;
+    matrices is required. The uniform transfer bound is assumed explicitly;
     this statement does not derive it from the Hamiltonian gap.
 \end{theorem}
 
@@ -4290,7 +4290,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 \end{lemma}
 \begin{proof}\leanok
     Conjugate to a trace-preserving tensor, apply the quantum Wielandt bound,
-    and transport the spanning statement through the bond conjugation.
+    and carry the spanning statement through the bond conjugation.
 \end{proof}
 
 \begin{lemma}[Bounded bond dimension and common physical blocking]
@@ -4362,7 +4362,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 \begin{proof}\leanok
     \uses{thm:spc_aux_compact_minimal_sequence_class}
     A sequence approaching $t_0$ on which the conclusion fails has a
-    subsequence with constant bond dimension. Transport both tensors and
+    subsequence with constant bond dimension. Transfer both tensors and
     virtual matrices to that fixed dimension and apply the preceding theorem.
 \end{proof}
 
@@ -4390,7 +4390,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     $0\le q<1$ on all transfer eigenvalues different from $1$. Then their
     virtual factor systems are locally cohomologous to that at $t_0$.
     Neither minimal tensors nor stationary densities need be chosen
-    continuously. The uniform transfer bound is a supplied hypothesis.
+    continuously. The uniform transfer bound is an explicit hypothesis.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:spc_aux_bounded_minimal_local_class,
@@ -4447,7 +4447,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     $V_B$ and gives the asserted cohomology relation.
 \end{proof}
 
-\begin{theorem}[Unitary virtual transport between unital tensors]
+\begin{theorem}[Unitary virtual transfer between unital tensors]
     \label{thm:spc_aux_unitary_gauge_virtual_transport}
     \lean{MPSTensor.exists_unitary_virtualRep_of_unital_gaugePhaseEquiv}
     \leanok
@@ -4467,7 +4467,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     replaces the bond gauge by a unitary $W$, giving
     $B^i=cWA^iW^\dagger$. The representation $WV(g)W^\dagger$ is unitary,
     retains the factor $\omega$, and satisfies the required covariance
-    by transport through the scalar and bond gauge.
+    under the scalar and bond gauge.
 \end{proof}
 
 \begin{definition}[Unitary on-site action after blocking]
@@ -4588,7 +4588,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     for $B_n$ and $V_n$.
     Then $\omega_n\sim\omega_0$ for all sufficiently large $n$.
     No continuity of the virtual representations or of $\sigma_n$ is required.
-    The transfer bound and periodic-span equality are supplied hypotheses;
+    The transfer bound and periodic-span equality are explicit hypotheses;
     this is an auxiliary reduction for
     \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
 \end{theorem}
@@ -4605,7 +4605,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
         thm:spc_aux_topological_stationary_support_class}
     Injectivity makes $\E_A$ irreducible. Since $\E_A(I)=I$,
     Perron--Frobenius theory makes its fixed space one-dimensional,
-    and unital normalization supplies a positive definite matrix
+    and unital normalization gives a positive definite matrix
     $\Lambda$ with $\E_A^\dagger(\Lambda)=\Lambda$.
     The two periodic norms tend to one. Equality of their eventual spans
     therefore gives a unit overlap limit. Stationary-support identification,
@@ -4613,7 +4613,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     shows that $E=D$ and that $C$ is gauge equivalent to $A$ up to a nonzero
     scalar. In particular, $C$ is injective. The fixed-space hypothesis gives
     uniqueness of the normalized adjoint stationary matrix, and support
-    preparation makes $C$ unital. Unitary gauge transport supplies a virtual
+    preparation makes $C$ unital. Unitary gauge transfer gives a virtual
     action on $C$ with exactly the factor $\omega_0$.
 
     Adjoin the limiting point to the sequence. The ambient tensors form a
@@ -4626,7 +4626,7 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 \end{proof}
 
 
-\begin{theorem}[Endpoint cohomology for a supplied unital family]
+\begin{theorem}[Endpoint cohomology for a given unital family]
     \label{thm:spt_unital_supported_path_class}
     \lean{TNLean.Algebra.ScalarCocycle.cohomologousTo_of_eventually_at_all_points,
         MPSTensor.cohomologousTo_of_continuous_unital_supported_family}
@@ -4656,7 +4656,7 @@ the construction below
 is the dimer fixed point that the printed claims describe
 \cite{gap:rmp_spt_fixed_point_tensor}.  The source starts from a 2-cocycle alone.
 Most results below take a projective representation with that factor system as
-given; for a finite group, the twisted regular representation on $\C^G$ supplies
+given; for a finite group, the twisted regular representation on $\C^G$ provides
 one whose factor system lies in the class of the cocycle
 (Theorem~\ref{thm:spt_fixed_point_from_cocycle},
 \cite{gap:rmp_spt_fixed_point_supplied_representation}). The symmetry retains
@@ -5302,7 +5302,7 @@ and the regrouping of physical registers into bonds.
     Conjugate $H_N(\gamma)$ by the incoming-bond unitary $P_N$. In the
     original physical-site coordinates, the resulting Hamiltonian
     $P_NH_N(\gamma)P_N^*$ varies continuously with $\gamma$, has the
-    transported product vector $P_N\widehat\omega(\gamma)^{\otimes N}$
+    transformed product vector $P_N\widehat\omega(\gamma)^{\otimes N}$
     as its unique ground line, and satisfies
     \begin{align}
         \langle v,(P_NH_N(\gamma)P_N^*)^2v\rangle
@@ -5878,7 +5878,7 @@ and the regrouping of physical registers into bonds.
 
 \begin{proof}\leanok
     Comparing orthogonal projections gives $h_t\leq p_B$.
-    In the isometric restriction case, transport a boundary matrix
+    In the isometric restriction case, send a boundary matrix
     $X$ to $VXV^\dagger$ and use the weighted-tensor annihilation.
     The bond Hamiltonian's kernel is the line spanned by the periodic
     vector of $A_t$, hence also by that of $B$. The canonical parent
@@ -6175,7 +6175,7 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     Block to an odd length $L$ at which the tensor is injective.  The blocked tensor
     is symmetric under the $L$-fold Kronecker powers, and the powers of
     $i\sigma_x$ and $i\sigma_z$ anticommute because $L$ is odd.  The fundamental
-    theorem supplies virtual gauges for both, which
+    theorem gives virtual gauges for both, which
     Theorem~\ref{thm:anticommuting_physical_obstruction} rules out.  The source
     argues instead through the alternation of integer and half-integer virtual
     spins.
