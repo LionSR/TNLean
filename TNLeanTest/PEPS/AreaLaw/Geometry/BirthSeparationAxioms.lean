@@ -8,6 +8,7 @@ import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationRepair
 /-! Standard-axiom audit for birth separation of replacements. -/
 
 set_option linter.mathlibStandardSet true
+set_option linter.style.longLine false
 
 /-- The explicit angular constant `1/2` at a contact mark: a concrete instance. -/
 example : max (1 : ℝ) 0 / 2 ≤ ‖(1 : ℝ) • ((1 : ℝ), (0 : ℝ)) - (0 : ℝ) • ((0 : ℝ), (1 : ℝ))‖ := by
