@@ -310,14 +310,286 @@ generation's squares, including terminal ones, from every old region.
 \end{proof}
 
 This theorem covers the replacement births of
-Lemma~\ref{lem:area_law_birth_separation}; the births of initial belt tiles
-are not yet treated~\cite{gap:arealaw2d_birth_separation_scope}.
+Lemma~\ref{lem:area_law_birth_separation}. The births of initial belt tiles
+are treated next, without any assumption beyond the construction.
+
+For an initial belt tile in a belt cell of side $u=t_k$, normalize that cell
+to $[0,4]^2$, so that lengths are measured in units of $u/4$. The cells of
+the same and adjacent layers have sides $2$, $4$ or $8$ and corners in
+$(2\mathbb Z)^2$, and all their sides and fan edges lie on the lines
+\begin{align}
+    x_1=m,\qquad x_2=m,\qquad x_1+x_2=2m,\qquad x_1-x_2=2m,
+    \qquad m\in\mathbb Z.
+    \label{eq:area_law_belt_arrangement}
+\end{align}
+Two of these lines that are not parallel meet in a point of
+$\mathbb Z^2$. The faces of this arrangement are the translates
+$A_{c,s}=(2c_1+1,2c_2+1)+T_s$, $c\in\mathbb Z^2$, of the eight triangles of
+Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:initial-stars, lines 352--359, and geometry:birth-separation,
+% lines 597--625.
+\begin{lemma}[Atoms of the normalized belt arrangement]
+    \label{lem:area_law_belt_atoms}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.IsBeltArrangementPoint,
+        TNLean.PEPS.AreaLaw.Geometry.IsBeltFacet,
+        TNLean.PEPS.AreaLaw.Geometry.exists_int_eq_of_isBeltFacet,
+        TNLean.PEPS.AreaLaw.Geometry.beltAtomCenter,
+        TNLean.PEPS.AreaLaw.Geometry.beltAtom,
+        TNLean.PEPS.AreaLaw.Geometry.isCompact_beltAtom,
+        TNLean.PEPS.AreaLaw.Geometry.isQuarterSectorial_beltAtom,
+        TNLean.PEPS.AreaLaw.Geometry.not_isBeltArrangementPoint_of_mem_interior,
+        TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_ray,
+        TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_subset,
+        TNLean.PEPS.AreaLaw.Geometry.exists_segment_subset_beltAtom_inter,
+        TNLean.PEPS.AreaLaw.Geometry.beltAtom_axis_segments}
+    \leanok
+    \uses{def:area_law_normalized_repair_fan, lem:area_law_quarter_sections}
+    Atoms are compact, convex and quarter-sectorial at every point of
+    $\mathbb Z^2$, and the interior of an atom meets none of the lines
+    \eqref{eq:area_law_belt_arrangement}.
+    \begin{enumerate}
+        \item Let $P$ be closed and convex with nonempty interior, and let its
+              frontier lie on the lines \eqref{eq:area_law_belt_arrangement}.
+              Then every point of $P$ lies in an atom contained in $P$.
+        \item Two atoms with a common point outside $\mathbb Z^2$ share a
+              nondegenerate segment.
+        \item If $q\in\mathbb Z^2$ has $q_1+q_2$ odd, then every atom
+              containing $q$ contains a segment $[q,q+\sigma e_1]$ and a
+              segment $[q,q+\tau e_2]$ with $\sigma,\tau\in\{\pm1\}$.
+    \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    An atom is cut out by three half-planes of the arrangement, with integer
+    coefficients and $|a|+|b|\le2$, so
+    Lemma~\ref{lem:area_law_quarter_sections} applies. Two nonparallel lines
+    of the arrangement meet in an integer point, by Cramer's rule and the
+    parity of the diagonal levels. In the interior of a normalized triangle
+    $T_s$ the coordinates lie strictly between consecutive integers and
+    $x_1\pm x_2$ strictly between consecutive even integers.
+    For (1), pick $c$ in the interior of $P$ and $q\in P$. A ray from $q$ stays
+    for a short time in one atom, because the atoms of a square of side two
+    are finitely many closed convex sets covering it. This atom meets the
+    interior of $P$ near $q$. Its interior is connected and avoids the
+    frontier of $P$, so it lies in the interior of $P$. For (2), all facets of
+    the two atoms that are tight at a common point outside $\mathbb Z^2$ lie
+    on one line, which therefore carries a segment of both atoms. For (3),
+    such a point is the midpoint of a side of its square of side two, and
+    each of the four atoms at it has both axis edges at it.
+\end{proof}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:birth-separation, lines 597--645.
+\begin{theorem}[Uniform dichotomy for atoms]
+    \label{thm:area_law_belt_atom_dichotomy}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_pos_common_contact_dichotomy,
+        TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_dichotomy}
+    \leanok
+    \uses{lem:area_law_belt_atoms}
+    There is $\eta\in(0,1]$ such that for any two atoms $A,B$ with
+    $A\cap B\subseteq\mathbb Z^2$, and all $x\in A$, $y\in B$, either
+    $\|x-y\|\ge\eta$, or there is a common point $q\in A\cap B$ with
+    $\|x-q\|,\|y-q\|<1/4$ and $\|x-y\|\ge\|y-q\|/2$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_contact_angular_estimate}
+    For one pair, the pairs of points that do not lie together in an open
+    quarter-square about a common point of $A$ and $B$ form a compact set,
+    on which $\|x-y\|$ has a positive minimum; inside such a square about
+    $q$, Theorem~\ref{thm:area_law_contact_angular_estimate} applies. Up to a
+    translation by an even integer vector, which preserves the arrangement,
+    only finitely many pairs of atoms come within distance one of each
+    other.
+\end{proof}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:birth-separation, lines 592--604, with the scale comparison,
+% lines 193--207.
+\begin{lemma}[Initial regions near a belt cell]
+    \label{lem:area_law_belt_cell_local_atoms}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellOrigin,
+        TNLean.PEPS.AreaLaw.Geometry.beltNormalize,
+        TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_subset_cellFanPolygon,
+        TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_subset_closure_dyadicCell,
+        TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_subset_initialBirthRegion}
+    \leanok
+    \uses{lem:area_law_belt_atoms, def:area_law_initial_birth_regions}
+    Normalize a belt cell of layer $k$ to $[0,4]^2$. Every fan triangle and
+    every closed fine cell of a layer $h$ with fine scale index at least that
+    of layer $k$ minus one becomes a set as in item (1) of
+    Lemma~\ref{lem:area_law_belt_atoms}. Consequently, if $p$ lies in the
+    closed cell and $w$ lies in the closed birth region of a primary or of a
+    belt tile, with $\|p-w\|<t_k$, then the normalized point $w$ lies in an
+    atom contained in the normalized birth region.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_local_layer_indices, thm:area_law_adjacent_fine_meshes,
+        thm:area_law_primary_fine_cell_cover,
+        thm:area_law_fan_frontier_primitives, thm:area_law_cell_fan_cover,
+        thm:area_law_cell_fan_regularity}
+    The corners of the cells of fine scale index at least that of layer $k$
+    minus one become points of $(2\mathbb Z)^2$, their centers integer
+    points, and their sides and radial edges segments of the lines
+    \eqref{eq:area_law_belt_arrangement}. A fan triangle has frontier on its
+    cell boundary and its radial segments. A point within $t_k$ of the
+    reference cell belongs only to the same or an adjacent layer, whose fine
+    scale index differs by at most one. A primary is the union of the closures
+    of its nonbelt fine cells, and a belt tile the union of its fan triangles.
+\end{proof}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:birth-separation, lines 606--615, with the belt construction,
+% lines 299--330.
+\begin{lemma}[Contacts of an initial belt tile]
+    \label{lem:area_law_initial_belt_contacts}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialBeltRun,
+        TNLean.PEPS.AreaLaw.Geometry.exists_eq_initialBeltRun_of_inter_interior,
+        TNLean.PEPS.AreaLaw.Geometry.not_segment_subset_initialBirthRegion_inter,
+        TNLean.PEPS.AreaLaw.Geometry.add_mem_segment_of_odd,
+        TNLean.PEPS.AreaLaw.Geometry.mem_beltCellMarks_of_beltNormalize_eq,
+        TNLean.PEPS.AreaLaw.Geometry.beltNormalize_symm_mem_beltCellMarks}
+    \leanok
+    \uses{lem:area_law_belt_cell_local_atoms, def:area_law_belt_cell_marks}
+    Let $x$ be an initial belt tile of a belt cell, and let $y\ne x$ be an
+    initial identifier of the same label. If a point of $\mathbb Z^2$, in
+    coordinates normalized at the cell, lies in the birth region of $x$ and in
+    an atom contained in the normalized birth region of $y$, then it is the
+    normalized position of one of the nine marks of the cell.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_initial_interface_colors, thm:area_law_initial_open_disjoint,
+        thm:area_law_initial_birth_regularity, thm:area_law_fan_run_geometric_contact,
+        thm:area_law_square_frontier_side, thm:area_law_fan_own_side_contact}
+    By Theorem~\ref{thm:area_law_initial_interface_colors}, $x$ and $y$ share
+    no nondegenerate segment. If the open region of $y$ meets the open cell,
+    it meets the interior of a fan triangle there, so $y$ is another run of
+    the cell, and two distinct runs of the same label meet only at the
+    center. Otherwise the closed birth region of $y$ avoids the open cell and
+    the contact lies on a side of the cell, hence on the elementary side of a
+    fan triangle of $x$, whose endpoints have even normalized coordinates. If
+    both normalized coordinates of the contact are even, it is a mark. If one
+    is odd, the contact is the midpoint of a unit subsegment of that
+    elementary side, and item (3) of Lemma~\ref{lem:area_law_belt_atoms}
+    gives a unit segment of that subsegment inside the atom of $y$, a shared
+    nondegenerate segment.
+\end{proof}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:birth-separation, lines 573--659.
+\begin{theorem}[Birth separation of an initial belt tile from local
+        comparison regions]
+    \label{thm:area_law_initial_belt_birth_separation_local}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_initialBeltRun_birth_separation}
+    \leanok
+    \uses{def:area_law_initial_birth_regions, def:area_law_initial_open_regions,
+        def:area_law_belt_cell_marks}
+    There is $c_1>0$ with the following property. Let $x$ be an initial belt
+    tile in a belt cell of side $u=t_k$, and let $y$ be a primary or an
+    initial belt tile, distinct from $x$, of the same label. Let $Y$ be a
+    subset of the open region of $y$ whose points have distance greater than
+    $u^{\rho_0}/4$ from each of the nine marks of the cell. Then every point
+    of the closed birth region of $x$ has distance at least $c_1u^{\rho_0}$
+    from $Y$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_belt_atom_dichotomy, lem:area_law_belt_cell_local_atoms,
+        lem:area_law_initial_belt_contacts, lem:area_law_belt_atoms}
+    Put $c_1=\min(\eta/4,1/8)$ with $\eta$ from
+    Theorem~\ref{thm:area_law_belt_atom_dichotomy}. If $\|p-w\|\ge u$ there is
+    nothing to prove, since $u\ge u^{\rho_0}$. Otherwise the normalized points
+    $p$ and $w$ lie in atoms $A$ and $B$ contained in the normalized birth
+    regions of $x$ and $y$. By item (2) of
+    Lemma~\ref{lem:area_law_belt_atoms} and the absence of shared segments,
+    $A\cap B\subseteq\mathbb Z^2$. Either $\|p-w\|\ge\eta u/4$, or there is a
+    common integer point $q$ with $\|p-w\|\ge\|w-v\|/2$ for the point $v$ of
+    the plane at $q$. By Lemma~\ref{lem:area_law_initial_belt_contacts}, $v$
+    is a mark of the cell, so $\|w-v\|>u^{\rho_0}/4$.
+\end{proof}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:birth-separation, lines 573--659, with the order of
+% identifiers, lines 563--571.
+\begin{theorem}[Birth separation of the initial belt tiles]
+    \label{thm:area_law_initial_belt_birth_separation}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.InitialRegionIndex.beltScaleIndex,
+        TNLean.PEPS.AreaLaw.Geometry.IsInitialBirthSeparated,
+        TNLean.PEPS.AreaLaw.Geometry.exists_isInitialBirthSeparated}
+    \leanok
+    \uses{def:area_law_repair_stage}
+    There is a fixed $c_1>0$ such that the following holds for every finite
+    domain, cut, origin, layer width, lower layer index and stopping scale.
+    Let $\mathcal B$ be the closed birth region of an initial belt tile of
+    side scale $u=t_k$. Then its distance from the final actual region of
+    every primary and of every other initial belt tile with the same label is
+    at least $c_1u^{\rho_0}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_initial_belt_birth_separation_local,
+        thm:area_law_uniform_separated_initial_marks, thm:area_law_repair_margins,
+        thm:area_law_local_layer_indices, thm:area_law_adjacent_fine_meshes}
+    The final actual region of $y$ lies in its open initial region and avoids
+    every removal square of the first generation. The nine marks of the cell
+    are initial marks. The scale $S$ assigned to such a mark is the side of an
+    incident selected belt cell, which belongs to the same or an adjacent
+    layer, so $S\ge u/2$ and
+    $d(S)\ge S^{\rho_0}/2\ge u^{\rho_0}/4$ by
+    Theorem~\ref{thm:area_law_repair_margins}. Apply
+    Theorem~\ref{thm:area_law_initial_belt_birth_separation_local}.
+\end{proof}
+
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:birth-separation, lines 573--659, from
+% geometry:repair-induction, lines 471--485.
+\begin{theorem}[Birth-template separation, given the uniform repair
+        induction]
+    \label{thm:area_law_birth_separation_conditional}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.IsInitialBirthSeparated.mono,
+        TNLean.PEPS.AreaLaw.Geometry.IsRepairBirthSeparated.mono,
+        TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_uniformRepairInductionStatement}
+    \leanok
+    \uses{def:area_law_uniform_repair_conclusion}
+    Assume the conclusion of the uniform repair induction of
+    \cite[Section~11]{OpenAI2026AreaLaw}. One fixed $c_1>0$ and a threshold
+    $T$ serve both theorems above: for every stopping scale $S_*\ge T$,
+    every layer width and every sufficiently large lower layer index, the
+    conclusions of
+    Theorems~\ref{thm:area_law_replacement_birth_separation_conditional}
+    and~\ref{thm:area_law_initial_belt_birth_separation} hold with $c_1$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_replacement_birth_separation_conditional,
+        thm:area_law_initial_belt_birth_separation}
+    Take the smaller of the two constants; both lower bounds remain valid for
+    a smaller constant.
+\end{proof}
+
+Together the last three theorems give
+Lemma~\ref{lem:area_law_birth_separation} once the uniform repair induction
+is proved; until then the replacement half rests on its
+conclusion~\cite{gap:arealaw2d_birth_separation_scope}.
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
 % geometry:birth-separation, lines 573--582.
 \begin{lemma}[Birth-template separation]
     \label{lem:area_law_birth_separation}
     \uses{thm:area_law_replacement_birth_separation_conditional,
+        thm:area_law_initial_belt_birth_separation,
+        thm:area_law_birth_separation_conditional,
         lem:area_law_uniform_repair_induction}
     There is a fixed $c_1>0$ such that the following holds. Let $\mathcal B$
     be the closed birth region of an initial belt tile of side scale $u=t_k$,

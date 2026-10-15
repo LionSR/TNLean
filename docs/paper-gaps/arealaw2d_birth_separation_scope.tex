@@ -5,7 +5,7 @@
 \input{command}
 \providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
 \providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
-\title{Birth-Template Separation for Replacements Only}
+\title{Birth-Template Separation and the Uniform Repair Induction}
 \author{}
 \date{October 15, 2026}
 \begin{document}
@@ -27,27 +27,37 @@ comparable with $u^{\rho_0}$ about every contact mark.
 
 \section{The formal statement}
 
-The formalization proves the replacement half of the lemma, for the actual
-repair stages. Its only premise beyond the choice of the stopping scale is the
-conclusion of the uniform repair induction, Lemma~11.4 (lines~471--485), stated
-as a separate proposition.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.IsRepairBirthSeparated},
-\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_isRepairBirthSeparated_of_uniformRepairInductionStatement}.}
-The constant $c_1$ is fixed before the repair data. The separation is proved
-against every other identifier of the same generation with the same label,
-which contains the earlier and peer identifiers of the source.
+The formalization proves both halves of the lemma for the actual repair
+stages, with one constant $c_1$ fixed before all data.
 
-The births of initial belt tiles are not covered. For them the comparison is
-with the primary and belt closures at the initial stage; it requires the local
-classification of the initial belt arrangement around a reference cell rather
-than the fixed replacement fan used here.
+\emph{Initial belt tiles.} The closed birth of every initial belt tile of side
+$u=t_k$ has distance at least $c_1u^{\rho_0}$ from the final actual region of
+every primary and of every other initial belt tile with the same label, for
+every domain, cut, origin, layer width, lower layer index and stopping
+scale.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.IsInitialBirthSeparated},
+\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_isInitialBirthSeparated}.} No premise
+is used: near the reference cell the primary and belt closures are finite
+unions of elementary triangles of one fixed line arrangement, so the finitely
+many local patterns of the source become finitely many pairs of such
+triangles, and the contacts are marks of the cell by the belt construction.
+
+\emph{Replacements.} Its only premise beyond the choice of the stopping scale is
+the conclusion of the uniform repair induction, Lemma~11.4
+(lines~471--485), stated as a separate
+proposition.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.IsRepairBirthSeparated},
+\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_isRepairBirthSeparated_of_uniformRepairInductionStatement}.}
+The separation is proved against every other identifier of the same
+generation with the same label, which contains the earlier and peer
+identifiers of the source.
+
+Given that premise, one constant serves both
+halves.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_uniformRepairInductionStatement}.}
 
 \section{What remains}
 
-The initial-belt half of Lemma~11.5 remains to be formalized. The normalized
-compactness and angular estimates already proved apply unchanged once the
-initial belt closures near a reference cell are written as finite unions of
-integer half-plane polygons, with the canonical sector assignment at the
-reference cell marks supplying the contacts.
+The replacement half rests on the conclusion of Lemma~11.4. Once that lemma is
+proved for the actual repair stages, the combined statement is Lemma~11.5 with
+the source's hypotheses, and this note can be closed.
 
 \bibliographystyle{alpha}
 \bibliography{references}
