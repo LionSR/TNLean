@@ -22,7 +22,8 @@ the gate has at most as many pair sources as the corresponding `M_ξ`
 * `PairEffect.Word.sourceCount_selectedPart`, `PairEffect.PartyChain.sourceCount_selectedPart`.
 * `PairEffect.Word.sourceCount_mapOwner_le`, `PairEffect.PartyChain.sourceCount_mapOwner_le`.
 * `PairEffect.isSourceBounded_gateCircuit`.
-* `PairEffect.PartyGate.exists_originalCircuit_isSourceBounded`.
+* `PairEffect.PartyGate.exists_originalCircuit_isSourceBounded`,
+  `PairEffect.PartyGate.exists_originalCircuit`.
 
 ## References
 
@@ -195,5 +196,29 @@ theorem PartyGate.exists_originalCircuit_isSourceBounded (S : Finset P) (hS₀ :
         (isMonomialBounded_coreGateCircuit S hS₀ G hA hU hN' _),
       Word.isMonomialBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
         hQ.sourceCount_eq _⟩
+
+/-- **A sum of monomials using a list of parties is one gate of these parties.** Let
+`G = ∑_ξ c_ξ M_ξ` be a contraction expanded into allowed monomials, each of which uses only the
+parties of a nonempty finite set `S` and leaves the other registers in place. Then `G` is an
+original circuit with at most one nonprivate gate, whose participants lie in `S`. Its expansion
+has the coefficients and the monomials of `G`, restricted to the registers of `S`, so the
+pair-effect and coefficient bounds of `G` and its number of monomials are kept. If `S` has a
+single party, the circuit is a private map of that party.
+
+The memory is assumed nonzero; this excludes registers of dimension zero, on which every
+operator vanishes. Polynomial-PEPS manuscript, `04-compression.tex`, lines 21–43 and 199–208,
+and `06-geometry.tex`, lines 574–583. -/
+theorem PartyGate.exists_originalCircuit (S : Finset P) (hS₀ : S.Nonempty) {ℓ ℓ' : Layout P}
+    (h : Layout.restrict (fun p ↦ !decide (p ∈ S)) ℓ = Layout.restrict (fun p ↦ !decide (p ∈ S)) ℓ')
+    (G : PartyGate ℓ ℓ') (hA : ∀ m ∈ G, m.2.IsAllowed) (hF : ∀ m ∈ G, m.2.FixesOutside S h)
+    (hN : ‖gate (toGate G)‖ ≤ 1) (hne : Nontrivial (Mem ℓ)) :
+    ∃ c : OriginalCircuit ℓ ℓ', c.eval = gate (toGate G) ∧ c.nonprivateCount ≤ 1 ∧
+      (∀ g, (↑(c.participants g) : Set P) ⊆ ↑S) ∧
+      (∀ (r : ℕ) (s : ℝ), (∀ m ∈ G, m.2.toEffectChain.effectCount ≤ r) →
+        (G.map fun m => ‖m.1‖).sum ≤ s → c.IsExpansionBounded r s) ∧
+      c.IsMonomialBounded G.length := by
+  obtain ⟨c, h₁, h₂, h₃, h₄, h₅, -⟩ :=
+    PartyGate.exists_originalCircuit_isSourceBounded S hS₀ h G hA hF hN hne
+  exact ⟨c, h₁, h₂, h₃, h₄, h₅⟩
 
 end TNLean.PEPS.PairEffect

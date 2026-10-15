@@ -104,7 +104,6 @@ import TNLean.PEPS.Approximation.DyadicBulkSteps
 import TNLean.PEPS.Approximation.DyadicChamberSampling
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingConstants
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingRewrite
-import TNLean.PEPS.Approximation.DyadicDirectRepaintingSourceBound
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingStep
 import TNLean.PEPS.Approximation.DyadicEdgeBands
 import TNLean.PEPS.Approximation.DyadicFootprintScaling
@@ -132,7 +131,6 @@ import TNLean.PEPS.Approximation.DyadicProtocolSchedule
 import TNLean.PEPS.Approximation.DyadicReadingFootprints
 import TNLean.PEPS.Approximation.DyadicRepaintingClearance
 import TNLean.PEPS.Approximation.DyadicRepaintingSchedule
-import TNLean.PEPS.Approximation.DyadicResizePointSourceBound
 import TNLean.PEPS.Approximation.DyadicResizeReadingStep
 import TNLean.PEPS.Approximation.DyadicResizeRewrite
 import TNLean.PEPS.Approximation.DyadicResizeStep
