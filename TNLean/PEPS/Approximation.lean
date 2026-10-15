@@ -128,6 +128,7 @@ import TNLean.PEPS.Approximation.DyadicRoutingPEPS
 import TNLean.PEPS.Approximation.DyadicSampledGuides
 import TNLean.PEPS.Approximation.DyadicSmallPatchCovers
 import TNLean.PEPS.Approximation.DyadicTrueVertices
+import TNLean.PEPS.Approximation.DyadicTwoOwnerFootprints
 import TNLean.PEPS.Approximation.DyadicUnmodifiedVertices
 import TNLean.PEPS.Approximation.EffectCircuitDensity
 import TNLean.PEPS.Approximation.EffectCircuitError

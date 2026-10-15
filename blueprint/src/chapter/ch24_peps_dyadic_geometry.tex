@@ -1165,6 +1165,65 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     the finitely many templates.
 \end{proof}
 
+\begin{theorem}[The two-owner footprints of the protocol steps]
+    \label{thm:peps_dyadic_two_owner_footprints}
+    \lean{TNLean.PEPS.Approximation.IsFootprintRatio,
+        TNLean.PEPS.Approximation.exists_isFootprintRatio,
+        TNLean.PEPS.Approximation.exists_isProtocolConstants_isFootprintRatio,
+        TNLean.PEPS.Approximation.IsFootprintRatio.hasTwoOwnerFootprints_directRepainting,
+        TNLean.PEPS.Approximation.IsFootprintRatio.twoOwner_resize,
+        TNLean.PEPS.Approximation.homogenize_iUnion_eq_of_notMem,
+        TNLean.PEPS.Approximation.IsFootprintRatio.hasTwoOwnerFootprints_pointTreatment,
+        TNLean.PEPS.Approximation.exists_directRepainting_planeConditions_of_isFootprintRatio,
+        TNLean.PEPS.Approximation.exists_resize_planeConditions_of_isFootprintRatio,
+        TNLean.PEPS.Approximation.exists_pointTreatment_planeConditions_of_isFootprintRatio}
+    \leanok
+    \uses{thm:peps_dyadic_sampled_ratio, thm:peps_guide_frame_rewrite_events,
+        thm:peps_protocol_constants}
+    For $\epsilon_0>0$ and any $K_0$ there is $\nu'>0$ such that every
+    $\nu\in(0,\nu']$ serves as the ratio of Theorem~\ref{thm:peps_dyadic_sampled_ratio}
+    for the point treatment, for the direct repaintings at levels $n\le K_0t$ and for the
+    resizes at levels $n<t$. This is a smallness condition on $\nu$ given $K_0$ and
+    $\epsilon_0$, so the constants of Theorem~\ref{thm:peps_protocol_constants} can be
+    chosen in the order of~\cite[Section~7]{OpenAI2026PolynomialPEPS},
+    \texttt{06-geometry.tex}, lines 559--570, with such a $\nu$.
+
+    Fix such constants and $t>0$ at which the separations of
+    Theorem~\ref{thm:peps_protocol_constants} hold, let the holes at scale $n$ have
+    radius $h_n=\epsilon_0\min(n,t)$ and let the patches at scale $s$ have radius
+    $u=\nu s/2$. For readings after a generic displacement, the two-owner conditions for
+    footprints of radius $2u=\nu s$ assumed in
+    Theorem~\ref{thm:peps_guide_frame_rewrite_events} hold, so its three conclusions
+    hold without them:
+    \begin{enumerate}
+        \item for a direct repainting at a level $0<n\le K_0t$, with $s=n$, about every
+              block (lines 507--527);
+        \item for the resize of a hole at a grid corner of a reading of a guide uniform
+              on the $2n$-blocks, $0<n<t$, with $s=2n$ and $N=2n$, when every hole radius
+              is $h_n$ or $h_{2n}$; this covers the intermediate configurations
+              (lines 529--541);
+        \item for the point treatment, or its removal, of a corner $Q_0$ of the block of
+              a repainting at a level $n>K_0t$, with $s=t$, where the treated guides are
+              homogenized to a label of one of the nine blocks around the block, and the
+              hole centers include the true vertices within $3t$ of $Q_0$
+              (lines 328--339 and 481--505).
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}\leanok
+    Take $\nu'$ the least of the three ratios of
+    Theorem~\ref{thm:peps_dyadic_sampled_ratio}; the two-owner condition survives
+    shrinking the footprint. For the direct repainting and the resize the footprint
+    radius is $\nu n$, respectively $\nu(2n)$, with working sets and hole centers as
+    in Theorem~\ref{thm:peps_guide_frame_rewrite_events}. Near a mark $Q_0$ with
+    $8t<n$, the other treated squares are at distance more than $4t$, so on the open
+    square of radius $4t$ about $Q_0$ the treated guide is the guide treated at $Q_0$
+    alone if $Q_0$ is treated, and the untreated guide otherwise; either way it is an
+    injective relabelling of a scaled template. The working set, the closed square of
+    radius $2t$, contains the closed square of radius $t+2h_n+3u$, since $h_n=\epsilon_0
+        t$ and $2\epsilon_0+3\nu<1$, and $8t<n$ follows from $K_0\ge20$.
+\end{proof}
+
 \begin{lemma}[Trivial holes at the last level]
     \label{lem:peps_dyadic_last_level}
     \lean{TNLean.PEPS.Approximation.IsCellCenter.notMem_closedBall_blockCorner}
