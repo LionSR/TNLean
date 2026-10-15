@@ -510,3 +510,41 @@ by the strict inequalities.
     \end{equation}
     a contradiction.
 \end{proof}
+
+% Source: 10-geometry.tex, child marks, lines 404--409, and
+% geometry:repair-induction, termination argument, lines 538--541.
+\begin{lemma}[Emptiness persists after termination]
+    \label{lem:area_law_repair_empty_persistence}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.isEmpty_repairStage_markIndex_add}
+    \uses{def:area_law_repair_ancestors}
+    If $K_j=\varnothing$, then $K_{j+n}=\varnothing$ for every $n\ge0$.
+    This assertion needs no metric hypothesis.
+\end{lemma}
+\begin{proof}
+    The ancestor map sends every mark of $K_{j+n}$ to a mark of $K_j$.
+    A map into the empty set has empty domain.
+\end{proof}
+
+% Source: 10-geometry.tex, initial marks, lines 325--363,
+% geometry:trim-margins, lines 380--394, and geometry:repair-induction,
+% termination argument, lines 538--541.
+\begin{lemma}[Thresholds for a common empty generation]
+    \label{lem:area_law_repair_uniform_empty_thresholds}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_isEmpty_repairStage_markIndex}
+    \uses{lem:area_law_repair_metric_choice,
+        lem:area_law_repair_common_empty_generation}
+    Fix $0<a_0\le1/4$. There is $T$ such that for every $S_*\ge T$ and
+    every width $C_0$ there is $K$ with the following property. For every
+    finite domain and cut, and every admissible lower layer index
+    $k_0\ge K$, some generation $N\ge0$ satisfies $K_N=\varnothing$.
+    The thresholds $T$ and $K$ precede the choice of domain and cut;
+    the generation $N$ may depend on them.
+\end{lemma}
+\begin{proof}
+    \uses{lem:area_law_repair_metric_choice,
+        lem:area_law_repair_common_empty_generation}
+    Choose $T$ and then $K$ by
+    Lemma~\ref{lem:area_law_repair_metric_choice}. For each resulting
+    repair, Lemma~\ref{lem:area_law_repair_common_empty_generation}
+    gives a common empty generation.
+\end{proof}
