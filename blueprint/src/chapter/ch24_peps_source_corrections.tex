@@ -44,7 +44,7 @@ no bound on private dimensions is imposed.
     \uses{def:peps_source_substitution}
     Original vectors recover $W(\nu)=W$ and the original partial branches.
     Suppose $\eta_{e,\alpha}=\nu_{e,\alpha}$ whenever the owning gate
-    of $e$ does not touch $\mathcal A$. If $J_a,J_b$ are the canonical
+    of $e$ does not touch $\mathcal A$. If $J_a,J_b$ are the
     owner-identification isometries, then
     \begin{align}
         J_b W(\eta)
@@ -54,7 +54,7 @@ no bound on private dimensions is imposed.
     \end{align}
     In particular, (\ref{eq:peps_substitution_partial}) holds for
     $\nu[S\leftarrow\eta]$ if every position in $S$ has an endpoint
-    in $\mathcal A$. The substituted vectors need not be normalized.
+    in $\mathcal A$.
 \end{theorem}
 
 \begin{proof}
@@ -85,13 +85,13 @@ no bound on private dimensions is imposed.
     final specialization.
 \end{proof}
 
-\begin{definition}[The canonical remaining operations]
+\begin{definition}[Remaining operations after source extraction]
     \label{def:peps_canonical_source_residual}
     \lean{TNLean.PEPS.PairEffect.Word.residualInSlots}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialResidual}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_partial_fixed_layout}
-    Moving the actual sources of a word to its initial registers
+    Moving the prepared sources of a word to its initial registers
     leaves a specified composition of its original remaining operations.
     Identify its source-register list with any equal prescribed list.
     Denote the resulting composition by $V$.
@@ -99,7 +99,7 @@ no bound on private dimensions is imposed.
     positions $\mathcal E_{\mathcal A}$ and write $V_{\mathcal A,\xi}$.
 \end{definition}
 
-\begin{theorem}[Recovery by the canonical remaining operations]
+\begin{theorem}[Recovery from the remaining operations]
     \label{thm:peps_canonical_source_recovery}
     \lean{TNLean.PEPS.PairEffect.Word.sources_residualInSlots}
     \lean{TNLean.PEPS.PairEffect.Word.isAllowed_residualInSlots}
@@ -112,7 +112,7 @@ no bound on private dimensions is imposed.
     \uses{def:peps_canonical_source_residual}
     The composition $V$ has no pair sources. It is allowed if the
     original word is allowed. Whenever a preparation in the prescribed
-    positions has exactly the original ordered source inventory,
+    positions has the original ordered source inventory,
     $VP_\eta$ is the original word operator.
     Consequently the allowed partial branches satisfy
     \begin{align}
@@ -144,8 +144,8 @@ no bound on private dimensions is imposed.
     $W_{\mathcal A,\xi}(\eta)$ has the same retained positions and
     has vector $\eta_{e_i,\xi_{g_i}}$ at position $i$.
     If every source with both endpoints outside $\mathcal A$ retains
-    its original vector, the canonical remaining composition is
-    literally $V_{\mathcal A,\xi}$, independently of the retained
+    its original vector, the remaining composition is
+    $V_{\mathcal A,\xi}$, independently of the retained
     vectors. Thus
     \begin{align}
         V_{\mathcal A,\xi}P_{\eta_\xi}
@@ -158,13 +158,13 @@ no bound on private dimensions is imposed.
 \begin{proof}
     \leanok
     \uses{thm:peps_partial_source_order,thm:peps_canonical_source_recovery}
-    Induction preserves the complete ordered source records.
+    Induction preserves the complete ordered source list.
     Surviving pair preparations change only their vectors. A source
     whose endpoints are both exterior becomes a local preparation;
     the stated condition keeps that local operation unchanged.
     All other remaining operations agree. Hence
-    $W_{\mathcal A,\xi}(\eta)$ has canonical remaining composition
-    $V_{\mathcal A,\xi}$ and exact ordered inventory $\eta_\xi$.
+    $W_{\mathcal A,\xi}(\eta)$ has remaining composition
+    $V_{\mathcal A,\xi}$ and ordered inventory $\eta_\xi$.
     Theorem~\ref{thm:peps_canonical_source_recovery}, applied to this
     word, replaces $\nu_\xi$ by $\eta_\xi$ in
     (\ref{eq:peps_canonical_recovery}) and gives
@@ -273,7 +273,7 @@ no bound on private dimensions is imposed.
         K_{\mathcal A,\xi;S,a}\rho K_{\mathcal A,\zeta;S,b}^{\dagger}.
         \label{eq:peps_corrected_partial}
     \end{align}
-    Each $K$ is the matrix of the canonical remaining composition
+    Each $K$ is the matrix of the remaining composition $V_{\mathcal A,\xi}$
     applied to the indicated basis preparations, with the original
     locally selected vectors at every unselected retained position.
 \end{theorem}
@@ -287,7 +287,7 @@ no bound on private dimensions is imposed.
     (\ref{eq:peps_weighted_density_sum}). If a selected label disagrees
     with the branch label, its source vector is zero. Multilinearity
     of preparation makes the corresponding matrix zero. Otherwise the
-    substitution is exactly the prescribed basis preparation, by
+    substitution is the prescribed basis preparation, by
     (\ref{eq:peps_substituted_recovery}). Summing the local-label
     conditions leaves (\ref{eq:peps_corrected_partial}). Selected
     positions at the same gate impose the same label; the coefficient
@@ -314,7 +314,7 @@ no bound on private dimensions is imposed.
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.partialCoordinateBasisMatrix_reindex}
     \leanok
     \uses{def:peps_selected_retained_positions,thm:peps_canonical_substitution_recovery}
-    Under this bijection, $K_{\mathcal A,\xi;S,a}$ is exactly the
+    Under this bijection, $K_{\mathcal A,\xi;S,a}$ is the
     prepared matrix of $V_{\mathcal A,\xi}$ with the corresponding
     basis vectors at $S_{\mathcal A}$ and original source vectors elsewhere.
 \end{theorem}
@@ -345,14 +345,13 @@ index sets.
     \uses{thm:peps_prepared_density_components}
     Suppose $\eta_i=\sum_a r_i(a)u_i(a_1)\otimes v_i(a_2)$ and
     $\zeta_i=\sum_b s_i(b)u'_i(b_1)\otimes v'_i(b_2)$.
-    With $X_i=r_i s_i^\dagger$, the actual prepared matrices satisfy
+    With $X_i=r_i s_i^\dagger$, the prepared matrices satisfy
     \begin{align}
         \mathcal C_{H_{V,V'}}(X)
          & =K_V(\eta)\rho K_{V'}(\zeta)^\dagger.
         \label{eq:peps_prepared_contraction}
     \end{align}
-    No spanning or normalization condition is needed for these finite
-    expansions. In particular the identity holds for the coordinate
+    In particular the identity holds for the coordinate
     vectors of arbitrary sources in independently chosen endpoint
     orthonormal bases.
 \end{theorem}
@@ -368,7 +367,7 @@ index sets.
     \label{def:peps_prepared_source_replacement}
     \lean{TNLean.PEPS.PairEffect.Word.sourceOperatorDensity}
     \leanok
-    For actual remaining compositions $V_\xi$ and weights $c_\xi$,
+    For remaining compositions $V_\xi$ and weights $c_\xi$,
     define
     \begin{align}
         \mathcal R(Y)
@@ -378,7 +377,6 @@ index sets.
     \end{align}
     Source matrices may depend on both branch labels; ket and bra
     endpoint-coordinate sets may vary with their respective branch labels.
-    The matrices need not be positive or Hermitian.
 \end{definition}
 \begin{theorem}[The prepared corrected-subset identity]
     \label{thm:peps_prepared_subset_identity}
@@ -464,7 +462,7 @@ index sets.
         thm:peps_selected_source_contraction}
     Apply (\ref{eq:peps_selected_contraction}) to each partial ket--bra
     pair and reindex its selected coordinates along the bijection
-    $S_{\mathcal A}\to S$. The resulting expression is exactly
+    $S_{\mathcal A}\to S$. The resulting expression is
     (\ref{eq:peps_corrected_partial}).
 \end{proof}
 
@@ -476,8 +474,7 @@ index sets.
     \uses{def:peps_partial_fixed_positions}
     Taking every party to be affected retains every original source
     position. Its ordered enumeration is a bijection
-    $\{0,\ldots,r-1\}\to\mathcal E$. No finiteness assumption on the
-    set of parties is needed.
+    $\{0,\ldots,r-1\}\to\mathcal E$.
 \end{definition}
 \begin{theorem}[Reindexing nonempty source subsets]
     \label{thm:peps_all_source_subsets}
@@ -501,8 +498,8 @@ index sets.
     \uses{def:peps_prepared_source_replacement,def:peps_all_original_source_slots}
     Put $X_{e,\alpha,\beta}=\ketbra{\nu_{e,\alpha}}{\nu_{e,\beta}}$.
     To define $\widehat\rho(Y)$, take all parties to be affected in
-    (\ref{eq:peps_prepared_replacement}), use the actual canonical
-    remaining compositions, and assign at position $e_i$ the matrix
+    (\ref{eq:peps_prepared_replacement}), use the
+    remaining compositions $V_\xi$, and assign at position $e_i$ the matrix
     $Y_{e_i,\xi_{g_i},\zeta_{g_i}}$. Thus $\widehat\rho(Y)$ is defined
     directly by local source-operator replacement, independently of
     any corrected-subset formula.
@@ -545,7 +542,7 @@ index sets.
     Suppose the final ordered register list is the physical list
     followed by the discarded list. Choose finite orthonormal bases
     of both memories and their tensor-product basis on the full
-    output, transported through the canonical append isometry.
+    output, transported through the append isometry.
     Define
     \begin{align}
         \rho_{\mathrm{phys}}            & :=\operatorname{Tr}_{\mathrm{disc}}(M\rho M^\dagger), \\
@@ -582,7 +579,7 @@ index sets.
 
 \subsection{Preparing the original private input}
 
-\begin{definition}[The actual source-to-output composition]
+\begin{definition}[The source-to-output composition]
     \label{def:peps_actual_private_preparation}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourcePrivatePreparation}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_sourcePrivatePreparation}
@@ -594,33 +591,32 @@ index sets.
     let $\psi\in\mathcal H_a$ be its recorded private product input, and let
     $\xi$ choose a monomial at every gate that meets a party. Write
     $\mathcal H_S$ for its fixed source-register memory and $V_\xi$ for
-    its canonical remaining operations when every party is selected.
-    Relabel private owners by the canonical owner identification.
+    its remaining operations when every party is selected.
+    Relabel private owners by the owner identification.
 
     Extend the recorded preparation of $\psi$ by the identity on
     $\mathcal H_S$, obtaining
     $P_\psi:\mathcal H_S\otimes\C\to\mathcal H_S\otimes\mathcal H_a$.
-    The actual source-to-output composition is $T_\xi=V_\xi P_\psi$.
+    The source-to-output composition is $T_\xi=V_\xi P_\psi$.
     Both compositions contain no pair-source preparations. This uses the
     private input and fixed source spaces of
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \texttt{04-compression.tex}, lines 137--139 and 246--267.
 \end{definition}
 
-\begin{theorem}[Action of the actual private preparation]
+\begin{theorem}[Action of the private preparation]
     \label{thm:peps_actual_private_preparation}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_sourcePrivatePreparation_tmul}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.eval_partialSourceWord_tmul}
     \leanok
     \uses{def:peps_actual_private_preparation}
-    With the canonical append and owner identifications understood,
+    With the append and owner identifications understood,
     every $y\in\mathcal H_S$ satisfies
     \begin{align}
         P_\psi(y\otimes1) & =y\otimes\psi,
         \label{eq:peps_actual_private_preparation} \\
         T_\xi(y\otimes1)  & =V_\xi(y\otimes\psi).
     \end{align}
-    The vector $y$ may be zero or correlated between different source registers.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -631,5 +627,5 @@ index sets.
     is the relabelled vector $\psi$. Then compose with $V_\xi$.
     The source lists of the recorded preparation and $V_\xi$ are empty;
     extending by untouched registers, relabelling owners, and composing
-    preserve that assertion.
+    preserve that property.
 \end{proof}

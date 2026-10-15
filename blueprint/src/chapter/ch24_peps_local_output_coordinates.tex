@@ -1,12 +1,11 @@
 \section{Physical coordinates of the two local outputs}
 \label{sec:peps_local_output_coordinates}
 
-We use the actual physical and discarded register lists in the regional
-decomposition of \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
+We describe the physical and discarded register coordinates used in the
+regional decomposition of \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
 % Source: 04-compression.tex, lines 409--480, at
 % adc7f1241b42e322a6451854ab7e4b4c146bf78a.
-All coordinate bases in this
-section are finite orthonormal bases. The private dimensions are unrestricted.
+All coordinate bases in this section are finite orthonormal bases.
 
 \begin{definition}[Bases adapted to the party partition]
     \label{def:peps_partition_output_bases}
@@ -15,19 +14,18 @@ section are finite orthonormal bases. The private dimensions are unrestricted.
     \uses{def:peps_party_partition,
         def:peps_basis_partition_bases,
         def:peps_basis_partition_output_coordinates}
-    Write the output as a physical register list followed by a discarded
-    register list. Partition each list into the affected and exterior owners.
-    Choose orthonormal bases $(a_x)$ and $(e_y)$ of the two physical memories,
-    and $(d_i)$ and $(f_j)$ of the two discarded memories. Transport their
-    tensor products by the canonical register permutations. This gives
-    a basis with coordinates $((x,y),(i,j))$ in physical/discard order,
-    and a basis with coordinates $((x,i),(y,j))$ in affected/exterior order.
+    Write the output register list as a physical register list followed by a
+    discarded register list, and partition each list into affected and exterior
+    party registers. Choose orthonormal bases $(a_x)$ and $(e_y)$ of the
+    affected and exterior physical memories, and $(d_i)$ and $(f_j)$ of the
+    affected and exterior discarded memories. Transporting their tensor
+    products by the corresponding register permutations gives an orthonormal
+    basis indexed by $((x,y),(i,j))$ in physical/discarded order and an
+    orthonormal basis indexed by $((x,i),(y,j))$ in affected/exterior order.
 
-    On the affected memory, the output isometry sends
-    $a_x\otimes d_i$ to $e_x\otimes d_i$, where $(e_x)$ is the standard
-    coordinate basis. The exterior isometry is defined in the same way.
-    If a register list is identified with its physical/discard concatenation,
-    these maps include the canonical identification of equal lists.
+    On the affected memory, the output isometry sends $a_x\otimes d_i$ to
+    $e_x\otimes d_i$, where $(e_x)$ is the standard basis, and the exterior
+    output isometry is defined analogously.
 \end{definition}
 
 \begin{theorem}[Regrouping physical and discarded coordinates]
@@ -38,23 +36,21 @@ section are finite orthonormal bases. The private dimensions are unrestricted.
         thm:peps_basis_memory_equalities,
         thm:peps_basis_partition_coordinates,
         thm:peps_basis_partition_output_coordinates}
-    For every output vector $z$, its coordinate at $((x,y),(i,j))$
-    in physical/discard order is its coordinate at $((x,i),(y,j))$
-    after the affected/exterior partition. The affected output isometry
-    preserves the pair $(x,i)$ of coordinates, and similarly on the exterior.
+    For every output vector $z$, its coordinate at $((x,y),(i,j))$ in
+    physical/discarded order equals its coordinate at $((x,i),(y,j))$ after
+    the affected/exterior partition. The affected and exterior output
+    isometries preserve the coordinate pairs $(x,i)$ and $(y,j)$, respectively.
     For $v\in\C^X\otimes D$, taking the partial inner product with $e_x$
-    and then the $d_i$ coordinate gives exactly the $(x,i)$ coordinate of $v$.
+    followed by the $d_i$-coordinate recovers the $(x,i)$-coordinate of $v$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_partition_output_bases}
-    On an elementary basis tensor the two orders are
-    $(a_x\otimes e_y)\otimes(d_i\otimes f_j)$ and
-    $(a_x\otimes d_i)\otimes(e_y\otimes f_j)$.
-    The canonical partition sends the first to the second. Taking inner
-    products with an arbitrary $z$ gives the coordinate identity because
-    the partition is isometric. Partial inner products give the stated
-    coordinate projection first on elementary tensors and then by linearity.
+    The register permutation maps $(a_x\otimes e_y)\otimes(d_i\otimes f_j)$ to
+    $(a_x\otimes d_i)\otimes(e_y\otimes f_j)$. Since this map is unitary,
+    taking inner products with $z$ gives the coordinate equality, and
+    linearity extends the partial-inner-product identity from elementary
+    tensors to all $v\in\C^X\otimes D$.
 \end{proof}
 
 \begin{theorem}[Output coordinates under owner relabelling]
@@ -64,20 +60,20 @@ section are finite orthonormal bases. The private dimensions are unrestricted.
     \leanok
     \uses{thm:peps_partition_output_coordinates,
         thm:peps_basis_owner_coordinates}
-    Relabel owners by any map, or successively by two maps. Transport the
-    physical and discarded bases by the corresponding memory isometries.
-    Every physical/discard coordinate of the original vector equals the
-    same coordinate of the relabelled vector. In particular, partitioning
-    after the two relabellings gives the coordinate order
-    $((x,i),(y,j))$ described above. No injectivity of the owner maps is needed.
+    Under any owner relabelling (or composition of two owner relabellings),
+    transporting the physical and discarded bases by the induced memory
+    isometries preserves every physical/discarded coordinate of an output
+    vector. Partitioning into affected and exterior registers after the two
+    relabellings therefore gives the coordinates $((x,i),(y,j))$ described
+    above.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_partition_output_coordinates}
-    Owner relabelling preserves the ordered register spaces and commutes
-    with concatenation. Its isometry therefore sends each transported
-    physical/discard basis tensor to the original tensor. Preserve inner
-    products, apply this twice, and then apply the partition identity.
+    Owner relabelling leaves the underlying register spaces unchanged and
+    commutes with list concatenation, so its memory isometry preserves inner
+    products with the transported basis vectors. Applying this twice and then
+    applying the partition coordinate identity gives the claim.
 \end{proof}
 
 \begin{theorem}[Coordinates of a local Schmidt expansion]
@@ -86,15 +82,14 @@ section are finite orthonormal bases. The private dimensions are unrestricted.
     \lean{TNLean.PEPS.PairEffect.Layout.mapOwner_mapOwner_coordinates_eq_separated}
     \leanok
     \uses{thm:peps_owner_output_coordinates}
-    Let $V,W$ be the two actual local output maps, let $F,G$ be input
-    isometries, and suppose that the affected/exterior partition of an
-    output vector $z_k$ is
+    Let $V,W$ be the two local output maps, let $F,G$ be input isometries, and
+    suppose that the affected/exterior partition of an output vector $z_k$ is
     \begin{align}
         \sum_t\sqrt{\tau_t}\,
         VF e_{(k,t)}\otimes WG e_t.
         \label{eq:peps_local_schmidt_output_vector}
     \end{align}
-    In the partition-adapted physical/discard bases, the coordinate of $z_k$
+    In the partition-adapted physical/discarded bases, the coordinate of $z_k$
     at $((x,y),(i,j))$ is
     \begin{align}
         \sum_t\sqrt{\tau_t}\,
@@ -102,20 +97,20 @@ section are finite orthonormal bases. The private dimensions are unrestricted.
         \langle f_j,C_{y,W}G e_t\rangle,
         \label{eq:peps_local_schmidt_output_coordinate}
     \end{align}
-    where $C_{x,V}$ and $C_{y,W}$ are the physical-coordinate projections
-    of the two local outputs. The same identity holds for the original
-    output before either of the two owner relabellings, in the transported
-    bases. This identity does not require contractivity or normalization
-    in addition to the displayed vector equality.
+    where $C_{x,V}$ and $C_{y,W}$ are the physical-coordinate projections of
+    $V$ and $W$. The same formula holds before either of the two owner
+    relabellings in the transported bases.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_partition_output_coordinates,thm:peps_owner_output_coordinates}
     Substitute (\ref{eq:peps_local_schmidt_output_vector}) into the partition
-    coordinate identity. Linearity gives the sum over $t$, and the tensor
-    inner product gives the product of the two discarded coordinates.
-    The partial-inner-product identity identifies these coordinates with
-    $C_{x,V}$ and $C_{y,W}$. Transport the bases back through the two owner maps.
+    coordinate identity. By linearity and the factorization of the inner
+    product on tensor products, the $((x,i),(y,j))$ coordinate of each summand
+    is the product of its $(x,i)$ and $(y,j)$ coordinates, which equal
+    $\langle d_i,C_{x,V}F e_{(k,t)}\rangle$ and
+    $\langle f_j,C_{y,W}G e_t\rangle$. Transporting the bases across the two
+    owner relabellings gives the final claim.
 \end{proof}
 
 \begin{theorem}[Original physical dimensions after the two owner maps]
@@ -126,20 +121,20 @@ section are finite orthonormal bases. The private dimensions are unrestricted.
     \leanok
     \uses{thm:peps_family_regional_dimensions,
         def:peps_basis_owner_restriction}
-    Let the original parties form a finite list without repetitions,
-    containing every party. Party $p$ has physical space $\C^{d_p}$.
-    Relabel affected parties individually, identify all exterior parties,
-    and then map owners to the two sides. The selected physical memory
-    is canonically isometric to the original memory on that side.
-    For an affected set $A$, its actual orthonormal coordinates are indexed
-    by assignments $s_p\in\{0,\ldots,d_p-1\}$ for $p\in A$, and its
-    dimension is $\prod_{p\in A}d_p$.
+    Let the parties be listed without repetition, with physical space
+    $\C^{d_p}$ at party $p$. For an affected subset $A$ of parties, relabel
+    the parties in $A$ individually, collapse all parties outside $A$ to a
+    single exterior label, and then map the labels to the two sides of the
+    bipartition. The physical memory selected on the affected side is
+    isometric to $\bigotimes_{p\in A}\C^{d_p}$, with orthonormal basis indexed
+    by tuples $(s_p)_{p\in A}\in\prod_{p\in A}\{0,\ldots,d_p-1\}$ and dimension
+    $\prod_{p\in A}d_p$.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_family_regional_dimensions}
-    Selecting after relabelling is the same as relabelling the registers
-    selected by the composite owner test. For the two stated owner maps,
-    that test is exactly membership in $A$. Transport the original regional
-    tensor basis through these isometries and count its assignments.
+    Filtering registers by side after the composite owner relabelling selects
+    precisely the physical registers of parties $p\in A$. Transporting the
+    regional tensor-product basis through these isometries gives the basis and
+    dimension $\prod_{p\in A}d_p$.
 \end{proof}

@@ -502,9 +502,9 @@ open TNLean.Algebra in
 /-- The AKLT factor system on `Z₂ × Z₂`: `ω(g, h) = (-1)^{(g₁ + g₂) h₁}`, the
 value `-1` when `g₁ + g₂ = 1` and `h₁ = 1`, and `1` otherwise. -/
 def akltOmega : ScalarCocycle (Multiplicative (ZMod 2 × ZMod 2)) :=
-  fun g h =>
-    if (Multiplicative.toAdd g).1 + (Multiplicative.toAdd g).2 = 1 ∧
-        (Multiplicative.toAdd h).1 = 1 then -1 else 1
+  fun p =>
+    if (Multiplicative.toAdd p.1).1 + (Multiplicative.toAdd p.1).2 = 1 ∧
+        (Multiplicative.toAdd p.2).1 = 1 then -1 else 1
 
 /-- The virtual action of the explicit AKLT projective representation:
 `1 ↦ I`, `(1,0) ↦ iσy`, `(0,1) ↦ σz`, `(1,1) ↦ iσy σz`. -/
@@ -513,7 +513,7 @@ def akltRepX (g : Multiplicative (ZMod 2 × ZMod 2)) : GL (Fin 2) ℂ :=
     (if (Multiplicative.toAdd g).2 = 0 then 1 else akltGaugeZ)
 
 private lemma akltOmega_apply_val (g h : Multiplicative (ZMod 2 × ZMod 2)) :
-    (akltOmega g h : ℂ) =
+    (akltOmega (g, h) : ℂ) =
       if (Multiplicative.toAdd g).1 + (Multiplicative.toAdd g).2 = 1 ∧
           (Multiplicative.toAdd h).1 = 1 then -1 else 1 := by
   rw [akltOmega]; split <;> simp

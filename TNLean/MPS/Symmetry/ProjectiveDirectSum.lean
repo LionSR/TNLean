@@ -43,7 +43,7 @@ def ProjectiveRepresentation.directSum {G : Type} [Group G]
   map_mul' g h := by
     change (Matrix.reindexAlgEquiv ℂ ℂ finSumFinEquiv) _ *
       (Matrix.reindexAlgEquiv ℂ ℂ finSumFinEquiv) _ =
-      (ω g h : ℂ) • (Matrix.reindexAlgEquiv ℂ ℂ finSumFinEquiv) _
+      (ω (g, h) : ℂ) • (Matrix.reindexAlgEquiv ℂ ℂ finSumFinEquiv) _
     rw [← _root_.map_mul, ← map_smul]
     congr 1
     simp [sumGL, Matrix.fromBlocks_multiply, ρ₀.map_mul, ρ₁.map_mul,

@@ -54,19 +54,19 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     These inequalities are equivalent to $\|x-c\|_\infty\le r$.
 \end{proof}
 
-\begin{theorem}[Fan vertices are actual cell marks]
+\begin{theorem}[Fan vertices are cell marks]
     \label{thm:area_law_cell_fan_mark_vertices}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_vertices_mem_beltCellMarks}
     \leanok
     \uses{def:area_law_cell_fan,def:area_law_belt_cell_marks}
     The center and both endpoints of every elementary segment belong
-    to the actual nine-point mark set $M_{\ell,z}$ of the same cell.
+    to the nine-point mark set $M_{\ell,z}$ of the same cell.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan,def:area_law_belt_cell_marks}
     The center has relative coordinates $(1/2,1/2)$. Every segment
     endpoint is a corner or side midpoint, so both relative coordinates
-    are among $0,1/2,1$.
+    belong to $\{0,1/2,1\}$.
 \end{proof}
 
 \begin{theorem}[Number of fan triangles]
@@ -87,7 +87,7 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygons_cover}
     \leanok
     \uses{def:area_law_cell_fan}
-    The closed fan triangles cover exactly the closed dyadic square:
+    The closed fan triangles cover the closed dyadic square:
     \begin{align}
         Q=\bigcup_e P_e.
     \end{align}
@@ -96,8 +96,8 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     \uses{def:area_law_cell_fan}
     Every point of $Q$ lies on the segment from $c$ to some point of the
     perimeter. Every perimeter point belongs to an elementary segment,
-    so it is in the corresponding fan triangle. Conversely, every
-    vertex lies in $Q$, and convexity keeps the triangle in $Q$.
+    so it lies in the corresponding fan triangle. Conversely, every
+    vertex lies in $Q$, and convexity keeps each triangle in $Q$.
 \end{proof}
 
 \begin{theorem}[Intersections of fan triangles]
@@ -111,13 +111,13 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
         =\{c\}\cup\bigcup_{u\in e\cap e'}[c,u].
     \end{align}
     Thus a shared perimeter endpoint gives a shared radial segment,
-    while disjoint elementary segments give intersection $\{c\}$.
+    while disjoint elementary segments intersect only at $c$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan}
-    A point different from $c$ determines its unique perimeter endpoint
-    on the outward ray from $c$. It belongs to both triangles exactly
-    when that endpoint lies in both elementary segments. The center
+    A point different from $c$ determines a unique perimeter point
+    on the ray from $c$. It belongs to both triangles if and only if
+    that perimeter point lies in $e\cap e'$. The center $c$
     belongs to every triangle.
 \end{proof}
 
@@ -138,7 +138,7 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     These are the coordinate indices of the shifted pitch square.
 \end{definition}
 
-\begin{theorem}[Closed-cell containment in an actual primary]
+\begin{theorem}[Closed-cell containment in a primary birth region]
     \label{thm:area_law_nonbelt_primary_containment}
     \lean{TNLean.PEPS.AreaLaw.Geometry.closure_nonbeltCell_subset_primaryBirthRegion}
     \leanok
@@ -147,7 +147,7 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     Fix an origin $o$, finite endpoint set $Z$, layer index $k$ and
     nonnegative integer width $C_0$. Suppose that $\ell\le k$ and
     $\ell\le p$. Choose residues $0\le a,b<m=2^{p-\ell}$, and let $z$
-    index an actual fine cell in this layer that is omitted by both
+    index a fine cell in layer $k$ that is omitted by both
     selected belt residues. Its closed square satisfies
     \begin{align}
         \overline{Q_\ell(z)}\subseteq
@@ -159,31 +159,30 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     \uses{def:area_law_nonbelt_pitch_index,def:area_law_primary_regions,
         thm:area_law_fine_cell_containment,thm:area_law_dyadic_closures}
     Since neither residue is selected, each shifted coordinate remainder
-    lies between $1$ and $m-1$. The open fine-cell interior consequently
-    lies strictly inside the indicated pitch interior and belongs to the
-    actual layer. Its closure is the whole closed fine square. Taking
-    closures gives the inclusion, including when a fine-cell side
-    touches a pitch-interior boundary.
+    lies between $1$ and $m-1$. The open fine-cell interior therefore
+    lies inside $I_{a,b}(j(z))$ and belongs to $D_k$.
+    Its closure is $\overline{Q_\ell(z)}$, so taking closures gives the
+    inclusion even when a side of the fine cell meets the boundary of $I_{a,b}(j(z))$.
 \end{proof}
 
-\begin{theorem}[Unique actual primary identifier]
+\begin{theorem}[Unique primary identifier]
     \label{thm:area_law_nonbelt_unique_primary}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_unique_primary_of_nonbeltCell}
     \leanok
     \uses{thm:area_law_nonbelt_primary_containment,
         def:area_law_primary_pitch_indices}
-    Under the preceding hypotheses, there is exactly one retained
-    primary pitch index whose birth region contains the whole closed
-    fine square. This index is $j(z)$.
+    Under the preceding hypotheses, there is a unique retained
+    primary pitch index whose birth region contains $\overline{Q_\ell(z)}$,
+    namely $j(z)$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_nonbelt_primary_containment,
         thm:area_law_primary_pitch_membership,thm:area_law_primary_diameter_separation}
-    The open fine square is nonempty and lies in the actual
-    layer--pitch intersection, so the pitch index is retained.
-    If two different primary birth regions contained this square,
-    an interior point would belong to both. Their positive same-layer
-    separation rules this out.
+    The open fine square is nonempty and lies in $D_k\cap I_{a,b}(j(z))$,
+    so the pitch index $j(z)$ is retained.
+    If two distinct primary birth regions contained $\overline{Q_\ell(z)}$,
+    an interior point would belong to both, contradicting their positive
+    separation within the layer.
 \end{proof}
 
 % Source: 10-geometry.tex, prop:two-families, lines 299--323,
@@ -197,17 +196,17 @@ choice of subdivisions; see \cite[Section~11]{OpenAI2026AreaLaw}.
     \uses{def:area_law_cell_fan}
     For any origin, natural exponent $\ell$, integer cell index and
     optional midpoint subdivisions, let $c$ be the cell center and
-    $e=[a_e,b_e]$ an actual elementary base. Every $x\in e$ satisfies
+    $e=[a_e,b_e]$ an elementary base. Every $x\in e$ satisfies
     \begin{align}
         \|x-c\|_\infty & =\frac{2^\ell}{2}.
     \end{align}
-    This is the actual base-radius identity in the fan construction
+    This is the base-radius identity in the fan construction
     of \cite[Section~11]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan}
     In the affine parametrization of a side, one relative coordinate
     is $\pm2^\ell/2$ and the other is $(2^\ell/2)u$ with $|u|\le1$.
-    The whole side and either midpoint half all satisfy this bound.
-    The maximum of the two absolute coordinates is therefore $2^\ell/2$.
+    The whole side and either midpoint half satisfy this bound, so
+    the maximum of the two absolute coordinates is $2^\ell/2$.
 \end{proof}

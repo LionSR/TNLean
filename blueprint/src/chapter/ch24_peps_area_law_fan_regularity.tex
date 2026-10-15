@@ -1,10 +1,10 @@
-\section{Interiors of actual fan triangles}
+\section{Interiors of fan triangles}
 \label{sec:area_law_fan_regularity}
 
-Fix an arbitrary origin $o\in\mathbb R^2$, natural dyadic exponent $\ell$
-and integer cell index $z\in\mathbb Z^2$. Choose any optional midpoint
+Fix an origin $o\in\mathbb R^2$, a natural dyadic exponent $\ell$
+and an integer cell index $z\in\mathbb Z^2$. Choose any midpoint
 subdivisions of the four sides. Write $c$ for the cell center and
-$P_e=\operatorname{conv}\{c,a_e,b_e\}$ for each actual fan triangle;
+$P_e=\operatorname{conv}\{c,a_e,b_e\}$ for each fan triangle;
 see \cite[Section~11]{OpenAI2026AreaLaw}.
 
 % Source: 10-geometry.tex, prop:two-families, lines 299--323,
@@ -16,7 +16,7 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_interior_nonempty_and_closure_eq}
     \leanok
     \uses{def:area_law_cell_fan}
-    Every actual fan triangle satisfies
+    Every fan triangle satisfies
     \begin{align}
         \operatorname{int}(P_e)            & \ne\varnothing, \\
         \overline{\operatorname{int}(P_e)} & =P_e.

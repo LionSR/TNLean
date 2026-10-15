@@ -27,11 +27,12 @@ bounds the replica defect energy produced by a collar scan at scale $n$. Let
 $X$ be the target region, $Q_j$ the collar shells, $L$ the collar length, $m$
 the band spacing, $K$ the number of bands, $D$ the charge depth, $r_0$ the
 Hamiltonian truncation radius, $W$ the total weight with per-band weight
-$a=W/K$, and $\ell,\kappa,\mu$ the fixed scanner exponents. Assuming the
+$a=W/K$, and $\ell,\kappa,\mu,\nu$ the fixed scanner exponents, with
+$\nu>0$ and $\epsilon=n^{-\nu}$. Assuming the
 inductive entropy bounds $S_\Omega(X)\le C_en^{1+e}$ and
 $S_\Omega(Q_j)\le C_e(nL^e+n)$ for the ground state $\Omega$, Proposition~9.2
-asserts that for every $\epsilon>0$ and every sufficiently large replica count
-$k$, some charge round and some interpolation parameter
+asserts that for every sufficiently large replica count $k$, some charge round
+and some interpolation parameter
 $p_k\in[\epsilon/2,\epsilon]$ satisfy the defect-energy bound
 \[
     E_{\mathrm{def},k}\le Cn^\ell D^2W^2(\log n)^C
@@ -51,7 +52,7 @@ incidence dilution, bad-history tail bounds, and band nesting (Lemma~9.1);
 (3)~applying the replica transport inequalities along each fill and charge
 round (Proposition~7.4);
 (4)~bounding the marginal log-moment generating functions, typical-window
-masses, and initial/terminal comparator norms (Lemma~3.1, Lemma~2.3, and
+masses, and initial/terminal comparator norms (Lemma~3.1 and
 Proposition~8.1); and
 (5)~telescoping the logarithmic norm over all $2nm$ rounds to select a charge
 round and parameter $p_k$ with $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$ and
@@ -71,15 +72,27 @@ $O(n^{-248})$ and is bounded by $n^{-247}$ for large $n$ (rather than
 $n^{-248}$ with coefficient $1$), and the logarithmic factor in $\mathcal B$ is
 tracked with the explicit exponent $12$ (from $(\log n)^4$ crossings times
 $(\log n)^8$ squared log-dimension) in place of an unspecified constant $C$.
-Substantial parts of Steps~(1)--(4) are also proved separately for the
-concrete collar scan, as detailed in the sections below: the trace-distance and
-continuity arithmetic (Step~1); the classical scan-history process, splitting
-sampling, dilution, $n^{-200}$ bad-history tail, band nesting, and cut-edge
-bounds (Step~2); the history mean trees, cross-band metric commutation,
-Fourier--coherent leaf measures, parameter integrability, $2nm$-round entropy
-telescope, and H\"older charge-energy bound for a given symmetric replica
-prevector (Step~3); and the truncated ground state $(e,\widetilde\Omega)$,
-status marginal moment bounds, and target typical window (Step~4).
+Substantial parts of Steps~(1)--(4), and the charge-round estimates entering
+Step~(5), are also proved separately for the concrete collar scan, as detailed
+in the sections below: the trace-distance and continuity arithmetic (Step~1);
+the classical scan-history process, splitting sampling, dilution, $n^{-200}$
+bad-history tail, band nesting, and cut-edge bounds (Step~2); the history mean
+trees, cross-band metric commutation, Fourier--coherent leaf measures,
+parameter integrability, and $2nm$-round entropy telescope (Step~3); the
+truncated ground state $(e,\widetilde\Omega)$, status marginal moment bounds,
+and target typical window (Step~4); and the H\"older charge-energy bound for a
+given symmetric replica prevector (Step~5).
+For the actual rounds of a physical collar scan, the conclusions of Lemma~9.1
+in the form in which the deduction uses them (history and choice
+probabilities, the $CD/m$ dilution and $CKnD$ count of split terms, the
+$n^{-200}$ bad-history tail, sampling on good histories, and the move-entropy
+bounds of lines~431--444) are derived from the scan geometry at the source
+scales for all sufficiently large $n$, with constants chosen before the
+domain, Hamiltonian, scan and replica vectors.\footnote{Lemma~9.1 for the
+    actual rounds:
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_historyFacts_actualScanRound}.}
+These conclusions form a separate sub-record of the hypothesis record, which
+this result supplies whenever the rounds of the record are the actual rounds.
 
 \paragraph{What remains.}
 To eliminate the hypothesis record and obtain Proposition~9.2 unconditionally,
@@ -116,35 +129,7 @@ satisfies, for all sufficiently large $n$,
 Setting $A=C$ in (\ref{eq:arealaw2d_scanner_inputs_continuity_cost}) yields the
 shell-entropy continuity bound used in the scanner deduction.
 
-\section{Step 2: Replica transport and parameter regularity}
-
-In Proposition~7.4 (\path{06-transport.tex}, lines~393--400), the transported
-leaf states are normalized density matrices for interior parameters $0<p<1$, so
-their combined Fourier--coherent measures have total mass $1/2$ on $(0,1)$,
-whereas at $p=1$ (for old leaves, where $(1-p)w_h=0$) and $p=0$ (for new leaves,
-where $pw_hq_{c\mid h}=0$) the leaf weights and transported measures vanish.
-Accordingly, the scanner hypothesis record requires the mass-$1/2$ identity only
-for $0<p<1$; because $\{0,1\}$ has Lebesgue measure zero, interior bounds and
-almost-everywhere measurability suffice for integrating over $[0,1]$.
-
-Parameter integrability of the old-state Fourier--coherent integral is proved
-from the transported expectation formula. For a continuous real coherent symbol
-$F$ on the unit sphere with coherent average $A_F$, Hermiticity of
-$Q_F=(A_F+A_F^\dagger)/2$ and positivity of the state $\rho$ give
-\begin{align}
-    \operatorname{Re}\operatorname{Tr}(\rho Q_F)
-    =\operatorname{Re}\operatorname{Tr}(\rho A_F)
-    =\mathcal H_\rho(F).
-    \label{eq:arealaw2d_scanner_inputs_coherent_hermitian}
-\end{align}
-Measurability in $p$ and the pointwise bound $|J_h(F)|\le\|Q_F\|/2$ imply
-interval integrability on $[0,1]$ for each leaf and hence for finite weighted
-sums over good histories.\footnote{Integrability declarations:
-    \leanid{TensorPower.ReplicaTransport.TransportData.intervalIntegrable_oldFourierCoherentIntegral},
-    \leanid{TensorPower.ReplicaTransport.TransportData.intervalIntegrable_sum_oldFourierCoherentIntegral},
-    and \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.intervalIntegrable_actualChargeEntropyDefect}.}
-
-\section{Step 3: Scan history geometry, sampling, and replica rounds}
+\section{Steps 2 and 3: Scan histories, sampling, and replica rounds}
 
 \paragraph{Classical scan histories, sampling, and bad-history tails (Lemma~9.1).}
 The finite history process of independent uniform offsets, deterministic row
@@ -290,43 +275,35 @@ require only interval integrability of the scalar defect.\footnote{One-round
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_integral_bound_domainGraph}
     and \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_integral_bound_domainGraph}.}
 
-\section{Step 4: Charge-round energy and H\"older accounting}
+\section{Step 3: Leaf masses and parameter regularity}
 
-For the finite-leaf energy error $\mathcal E_k(p)$ of~\cite{OpenAI2026AreaLaw}
-(\path{08-scanner.tex}, lines~416--440 and~492--511) in charge round $s+1\le nm$
-under $n\ge2$, $1\le D$, $r_0\le D$, $4(D+2r_0)\le m$, $8Km\le L$, and anchor
-multiplicity at most $\mathfrak m$, set $A=10KnD\mathfrak m$,
-$\ell=1+(2r_0+1)^2\log q$, and let $b=\sum_{h\text{ not good}}w_h$ be the
-bad-old-history probability. For any nonzero symmetric replica vector $\psi_k$
-and $0<p<1$, H\"older's inequality and the $10D/m$ dilution bound yield
-\begin{align}
-    \mathcal E_k(p)&\le\frac{10D}{m}
-    \left((1-p)A^{7/8}\mathcal Q_k(p)^{1/8}
-    +\frac{A(2\ell)^{1/8}}2\bigl((1-p)b+p\bigr)\right).
-    \label{eq:arealaw2d_scanner_inputs_charge_energy}
-\end{align}
-At the scanner exponents $\ell_{\mathrm{sc}}=10^{-5}$, $\kappa=10^{-6}$, and
-$\mu_{\mathrm{sc}}=1/4$, the bad-history tail bound replaces $b$ in
-(\ref{eq:arealaw2d_scanner_inputs_charge_energy}) by $n^{-P}$ for any fixed
-$P$ and all sufficiently large $n$.\footnote{Charge-round energy bounds:
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_energyError_le_domainGraph},
-    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_badOldHistory_threshold}, and
-    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_actualCharge_energy_threshold}.}
-Absorbing the transport prefactors $|C_{\mathrm{en}}|a^2\ell^{e_{\mathrm{en}}}$
-with $a=W/K$ into a power of $\log n$ then gives, for all $n\ge N$,
-\begin{align}
-    |C_{\mathrm{en}}|a^2\ell^{e_{\mathrm{en}}}\mathcal E_k(p)
-    &\le C W^2 n^{\ell_{\mathrm{sc}}}D^2(\log n)^{C_l}
-    \left((1-p)\left(\frac{\mathcal Q_k(p)}{KnD}\right)^{1/8}
-    +(1-p)n^{-P}+p\right),
-    \label{eq:arealaw2d_scanner_inputs_charge_coefficients}
-\end{align}
-matching the energy-error functional of lines~507--511 prior to round
-selection.\footnote{Defect nonnegativity and normalized energy coefficients:
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_nonneg} and
-    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_actualCharge_energy_coefficients}.}
+In Proposition~7.4 (\path{06-transport.tex}, lines~393--400), the transported
+leaf states are normalized density matrices for interior parameters $0<p<1$, so
+their combined Fourier--coherent measures have total mass $1/2$ on $(0,1)$,
+whereas at $p=1$ (for old leaves, where $(1-p)w_h=0$) and $p=0$ (for new leaves,
+where $pw_hq_{c\mid h}=0$) the leaf weights and transported measures vanish.
+Accordingly, the scanner hypothesis record requires the mass-$1/2$ identity only
+for $0<p<1$; because $\{0,1\}$ has Lebesgue measure zero, interior bounds and
+almost-everywhere measurability suffice for integrating over $[0,1]$.
 
-\section{Step 5: Truncated ground state, marginal tails, and typical window}
+Parameter integrability of the old-state Fourier--coherent integral is proved
+from the transported expectation formula. For a continuous real coherent symbol
+$F$ on the unit sphere with coherent average $A_F$, Hermiticity of
+$Q_F=(A_F+A_F^\dagger)/2$ and positivity of the state $\rho$ give
+\begin{align}
+    \operatorname{Re}\operatorname{Tr}(\rho Q_F)
+    =\operatorname{Re}\operatorname{Tr}(\rho A_F)
+    =\mathcal H_\rho(F).
+    \label{eq:arealaw2d_scanner_inputs_coherent_hermitian}
+\end{align}
+Measurability in $p$ and the pointwise bound $|J_h(F)|\le\|Q_F\|/2$ imply
+interval integrability on $[0,1]$ for each leaf and hence for finite weighted
+sums over good histories.\footnote{Integrability declarations:
+    \leanid{TensorPower.ReplicaTransport.TransportData.intervalIntegrable_oldFourierCoherentIntegral},
+    \leanid{TensorPower.ReplicaTransport.TransportData.intervalIntegrable_sum_oldFourierCoherentIntegral},
+    and \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.intervalIntegrable_actualChargeEntropyDefect}.}
+
+\section{Step 4: Truncated ground state, marginal tails, and typical window}
 
 \paragraph{Truncated ground state and status marginal moments.}
 The log-moment generating function and spectral tail bounds
@@ -423,6 +400,42 @@ satisfy it with margin $499879/2000000$ at $W=n^{1/20000}$.\footnote{Moment-radi
     scale bounds:
     \leanid{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_a_le_moment_radius}
     and \leanid{TNLean.PEPS.AreaLaw.Scan.exists_final_a_le_moment_radius}.}
+
+\section{Step 5: Charge-round energy and H\"older accounting}
+
+For the finite-leaf energy error $\mathcal E_k(p)$ of~\cite{OpenAI2026AreaLaw}
+(\path{08-scanner.tex}, lines~416--440 and~492--511) in charge round $s+1\le nm$
+under $n\ge2$, $1\le D$, $r_0\le D$, $4(D+2r_0)\le m$, $8Km\le L$, and anchor
+multiplicity at most $\mathfrak m$, set $A=10KnD\mathfrak m$,
+$\ell=1+(2r_0+1)^2\log q$, and let $b=\sum_{h\text{ not good}}w_h$ be the
+bad-old-history probability. For any nonzero symmetric replica vector $\psi_k$
+and $0<p<1$, H\"older's inequality and the $10D/m$ dilution bound yield
+\begin{align}
+    \mathcal E_k(p)&\le\frac{10D}{m}
+    \left((1-p)A^{7/8}\mathcal Q_k(p)^{1/8}
+    +\frac{A(2\ell)^{1/8}}2\bigl((1-p)b+p\bigr)\right).
+    \label{eq:arealaw2d_scanner_inputs_charge_energy}
+\end{align}
+At the scanner exponents $\ell_{\mathrm{sc}}=10^{-5}$, $\kappa=10^{-6}$, and
+$\mu_{\mathrm{sc}}=1/4$, the bad-history tail bound replaces $b$ in
+(\ref{eq:arealaw2d_scanner_inputs_charge_energy}) by $n^{-P}$ for any fixed
+$P$ and all sufficiently large $n$.\footnote{Charge-round energy bounds:
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_energyError_le_domainGraph},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_badOldHistory_threshold}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_actualCharge_energy_threshold}.}
+Absorbing the transport prefactors $|C_{\mathrm{en}}|a^2\ell^{e_{\mathrm{en}}}$
+with $a=W/K$ into a power of $\log n$ then gives, for all $n\ge N$,
+\begin{align}
+    |C_{\mathrm{en}}|a^2\ell^{e_{\mathrm{en}}}\mathcal E_k(p)
+    &\le C W^2 n^{\ell_{\mathrm{sc}}}D^2(\log n)^{C_l}
+    \left((1-p)\left(\frac{\mathcal Q_k(p)}{KnD}\right)^{1/8}
+    +(1-p)n^{-P}+p\right),
+    \label{eq:arealaw2d_scanner_inputs_charge_coefficients}
+\end{align}
+matching the energy-error functional of lines~507--511 prior to round
+selection.\footnote{Defect nonnegativity and normalized energy coefficients:
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_nonneg} and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_actualCharge_energy_coefficients}.}
 
 \section{Effect on the paper and what remains}
 

@@ -333,9 +333,9 @@ $\mu$ labels.
     Choose the preceding theorem's label sequence once and retain its
     initial vector, mass bound and dimension asymptotic. Positive selected
     mass gives $d>0$. The initial vector's symmetry and auxiliary equations
-    supply the hypotheses of the rough lower comparison at $t=2/K$ and
+    give the hypotheses of the rough lower comparison at $t=2/K$ and
     inverse-power exponent $1/4$. Apply the numerical coefficient-three
-    estimate to its same normalized vector and energy defect.
+    estimate to its normalized vector and energy defect.
     The signed definition of $\varepsilon_k$ gives the exact label equality.
     The dimension asymptotic gives $\varepsilon_k/k\to0$; the remaining
     logarithmic terms are also sublinear. Hence $R_k\to0$.
@@ -352,16 +352,16 @@ $\mu$ labels.
     $C_1$, truncated Hamiltonian $\widetilde H$, ground energy $e$ and unit
     ground vector $\widetilde\Omega$ satisfy all of its support,
     perturbation, gap and distance conclusions. For every region $X$ and
-    every positive-mass selection of the actual reduced spectrum of
-    $\widetilde\Omega$, this same vector also supplies the sequence and
+    every positive-mass selection of the reduced spectrum of
+    $\widetilde\Omega$, this vector also gives the sequence and
     all the conclusions of Theorem~\ref{thm:al_global_schmidt_bell_prevector},
     with $H=\widetilde H$ and $E=e$.
 \end{theorem}
 \begin{proof}\leanok
-    First choose the constant and witnesses of
+    First choose the constant $C_1$ and ground state $\widetilde\Omega$ from
     Theorem~\ref{thm:al_truncation}. Apply
-    Theorem~\ref{thm:al_global_schmidt_bell_prevector} to their exact ground
-    vector and energy equation, separately for each spectral selection.
+    Theorem~\ref{thm:al_global_schmidt_bell_prevector} to $\widetilde\Omega$
+    and its ground-state equation, separately for each spectral selection.
 \end{proof}
 
 For $X\subseteq S_0$ let $b_X$ be the number of edges with exactly one endpoint
@@ -369,7 +369,7 @@ in $X$, let $\mathcal C_X$ be the labels whose designated support meets both
 $X$ and its complement, and put $d_i=q^{|\widetilde X_i|}$ and
 $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
 
-\begin{theorem}[Crossing count and cut budget]
+\begin{theorem}[Crossing count and cut parameter]
     \label{thm:al_crossing_budget}
     \lean{TNLean.PEPS.AreaLaw.cutEdges, TNLean.PEPS.AreaLaw.componentFinset,
         TNLean.PEPS.AreaLaw.designatedSupport, TNLean.PEPS.AreaLaw.crossingLabels,
@@ -385,13 +385,13 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
     \leanok
     \uses{thm:al_truncation}
     Each truncated term $\widetilde h_i$ acts on its designated support
-    $\widetilde X_i$. Every support in $\mathcal C_X$ is a ball of radius exactly $r_0$,
+    $\widetilde X_i$. Every support in $\mathcal C_X$ is a ball of radius $r_0$,
     $|\mathcal C_X|\le2\mu K_b(r_0+1)^2b_X$, $\log d_i\le K_b(r_0+1)^2\log q$
     for $i\in\mathcal C_X$, and $\mathcal B_X\le C(1+b_X)(r_0+1)^6$. If moreover
     $r_0=\lceil C_1(\log n)^2\rceil$, $n\ge2$, $D\ge1$ and $b_X\le C_2nD$, then
     $\mathcal B_X\le C'nD(\log n)^{12}$. If $S_0$ is empty every constraint is
     retained and no label crosses a cut contained in $S_0$; constraints whose
-    anchors cannot reach $S_0$ are always retained exactly.
+    anchors cannot reach $S_0$ are always retained without truncation.
 \end{theorem}
 \begin{proof}\leanok
     A support meeting $X\subseteq S_0$ has an anchor at finite distance; if
@@ -405,7 +405,7 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
 
 % Exact-budget identities preserve the original finite label family.
 % These identities do not assert the lattice-specialized budget producer.
-\begin{theorem}[Exact cut budget and complementary cuts]
+\begin{theorem}[Cut parameter and complementary cuts]
     \label{thm:al_exact_cut_budget}
     \lean{TNLean.PEPS.AreaLaw.cutBudget_eq_cutLogBudget,
         TNLean.PEPS.AreaLaw.crossingLabels_compl,
@@ -421,8 +421,8 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
     $S_0\subseteq V$. Use the designated supports $\widetilde X_i$ of
     Theorem~\ref{thm:al_crossing_budget}. For every cut $X\subseteq V$, let
     $\mathcal C_X$ consist of the original labels whose designated support
-    meets both $X$ and $V\setminus X$. Then the geometric budget is exactly
-    the supported-family budget in \cite[Lemma~3.1]{OpenAI2026AreaLaw}:
+    meets both $X$ and $V\setminus X$. Then $\mathcal B_X$ coincides with
+    the cut parameter in \cite[Lemma~3.1]{OpenAI2026AreaLaw}:
     \begin{align}
         \mathcal B_X
          & =1+\sum_{i\in\mathcal C_X}
@@ -438,8 +438,8 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
 \end{theorem}
 \begin{proof}\leanok
     The crossing conditions on each original label agree, and
-    $\prod_{v\in\widetilde X_i}q=q^{|\widetilde X_i|}$. Exchanging the two
-    sides of the cut exchanges the two witnesses of crossing. Every
+    $\prod_{v\in\widetilde X_i}q=q^{|\widetilde X_i|}$. Exchanging $X$ and
+    $V\setminus X$ leaves the crossing condition unchanged. Every
     summand is a square, and the empty and full cuts have no crossing labels.
 \end{proof}
 
@@ -469,14 +469,14 @@ only on the parameters named below.
     (Theorem~\ref{thm:area_law_crossing_supports}), at most $\mu_R$ labels share an
     anchor, and the pairs $(u,v)$ of adjacent sites with $u\in X$ and
     $v\notin X$ number at most $|\partial_\Lambda X|$. The sphere bound, the
-    diameter and size bounds for supports and the site budget are
-    Lemma~\ref{lem:area_domain_graph_counts}.
+    diameter and size bounds for supports and the per-site norm bound are
+    given in Lemma~\ref{lem:area_domain_graph_counts}.
 \end{theorem}
 \begin{proof}\leanok
     Adjacent sites are at ambient $\ell^1$ distance one, so a graph ball lies in
-    an ambient lattice ball and the exact diamond count applies. Supports and
+    an ambient lattice ball and the diamond count applies. Supports and
     anchors are counted
-    by the interaction budgets of Theorem~\ref{thm:area_diamond_budget}, and
+    by Theorem~\ref{thm:area_diamond_budget}, and
     every label anchored at $x$ has a support containing $x$. The map
     $(u,v)\mapsto\{u,v\}$ is injective on the pairs crossing $X$.
 \end{proof}
@@ -504,7 +504,7 @@ only on the parameters named below.
 \end{theorem}
 \begin{proof}\leanok
     Apply Theorem~\ref{thm:al_positive_replacement} with $v_R$, $b_0=\mu_RJ$ and
-    sphere growth $2(d+1)^2$, whose hypotheses on the graph are supplied by
+    sphere growth $2(d+1)^2$; the graph hypotheses follow from
     Lemma~\ref{lem:area_domain_graph_counts}.
 \end{proof}
 
@@ -557,7 +557,7 @@ only on the parameters named below.
 \begin{proof}\leanok
     The gapped ground vector gives $H\Omega=E_0\Omega$ and
     $H-E_0I\ge\Delta(I-P_\Omega)$. Apply Theorem~\ref{thm:al_truncation} with
-    $v_R$ sites per support, site budget $\mu_RJ$ and sphere growth
+    $v_R$ sites per support, per-site norm bound $\mu_RJ$ and sphere growth
     $2(d+1)^2$ from Lemma~\ref{lem:area_domain_graph_counts}, and ball growth
     $2(d+1)^2$ and at most $\mu_R$ labels per anchor from
     Theorem~\ref{thm:al_lattice_counts}. For every $\psi$ with
@@ -568,7 +568,7 @@ only on the parameters named below.
     Theorem~\ref{thm:area_law_ground_eigenspace}.
 \end{proof}
 
-\begin{theorem}[Crossing count and cut budget on an induced lattice domain]
+\begin{theorem}[Crossing count and cut parameter on an induced lattice domain]
     \label{thm:al_lattice_crossing_budget}
     \lean{TNLean.PEPS.AreaLaw.exists_latticeCrossingBudget,
         TNLean.PEPS.AreaLaw.exists_latticeCutBudget_le_log}
@@ -587,12 +587,12 @@ only on the parameters named below.
     For $C_1,C_2\ge0$ there is $C$, depending only on
     $q,R,C_1,C_2$, such that $r_0=\lceil C_1(\log n)^2\rceil$, $n\ge2$,
     $D\ge1$ and $b_X\le C_2nD$ imply $\mathcal B_X\le CnD(\log n)^{12}$. This
-    is the crossing count and cut budget of Proposition~4.5 of
+    is the crossing count and cut parameter bound of Proposition~4.5 of
     \cite{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     Apply Theorem~\ref{thm:al_crossing_budget} with $K_b=2$ and $\mu=\mu_R$,
-    whose hypotheses are supplied by Theorem~\ref{thm:al_lattice_counts}; the
+    whose hypotheses follow from Theorem~\ref{thm:al_lattice_counts}; the
     ordered cut edges are counted by $|\partial_\Lambda X|$. The second bound
     inserts $r_0=\lceil C_1(\log n)^2\rceil$ into the third inequality.
 \end{proof}
@@ -617,7 +617,7 @@ $D=\lceil n^\kappa\rceil$, $m=\lfloor n^\mu\rfloor$, $\epsilon=n^{-\nu}$ and
 $\delta_n=C\epsilon^{-1}(n^{e-\mu}+a^{1/4}(\log n)^{C})$. The statement below
 takes as hypotheses, for one scan at scale $n$, the conclusions of the scan
 histories (Lemma~9.1), of transport (Proposition~7.4), of the comparators
-(Proposition~8.1), of continuity (Lemma~2.1) and of tails (Lemma~2.3); it is
+(Proposition~8.1), of continuity (Lemma~2.1) and of tails (Lemma~3.1); it is
 therefore Proposition~9.2 restricted to those conclusions, not the source
 proposition itself, which remains open until the scan data are constructed.
 The finite transported measures are required to have mass $1/2$ only for
@@ -754,8 +754,8 @@ integrability on the closed interval.
     \leanok
     There are constants, independent of $W$ and depending only on the exponents and on the constants of
     the inputs, such that for all sufficiently large $n$ and every scan at scale
-    $n$ satisfying the conclusions of Lemmas~9.1, 2.1, 2.3 and
-    Propositions~7.4, 8.1, the comparator budgets
+    $n$ satisfying the conclusions of Lemmas~9.1, 2.1, 3.1 and
+    Propositions~7.4, 8.1, the comparator bounds
     $B_{\mathrm{sh}}\le C(nL^e+n)$, $B_{\mathrm{exc}}\le CnD$ and
     $\mathcal B\le CnD(\log n)^{C}$ hold, and there is a remainder $\rho_k\to0$, uniform over the selected
     round and parameter, such that for every $k\ge1$ some charge round and
@@ -793,10 +793,10 @@ integrability on the closed interval.
     two endpoint values do not change the integral. The integral comparison
     retains continuity of the logarithmic norm on $[0,1]$, its derivative
     at every interior point, and the pointwise gain inequality. Matching
-    successive endpoint values give the telescoped entropy budget.
+    successive endpoint values give the telescoped entropy bound.
     Write $T$ for the charge rounds, so $|T|=nm$, and let
     $\mathcal Q_{r,k}(p)$ be the defect in round $r$. With
-    $c_k=KnD(\delta_n+\rho_k)$, the normalized entropy budget gives
+    $c_k=KnD(\delta_n+\rho_k)$, the normalized entropy bound gives
     \begin{align}
         \sum_{r\in T}\int_{\epsilon/2}^{\epsilon}\mathcal Q_{r,k}(p)\,dp
         \le |T|\frac{\epsilon}{2}c_k.
@@ -818,7 +818,7 @@ integrability on the closed interval.
     energies of the old good leaves by $N(\mathcal Q/N)^{1/8}$, the new and
     bad leaves contribute at most $\epsilon$ and $n^{-200}$ times the total
     weight, and the gap of the copied Hamiltonian converts the energy into the
-    defect energy. The budgets follow from these entropy estimates and
+    defect energy. The comparator bounds follow from these entropy estimates and
     the crossing count, which gives the logarithmic
     power $12$ for the marginal parameter.
 \end{proof}
