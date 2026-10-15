@@ -37,7 +37,8 @@ proposition is not yet formalized.
     constant $C_1$; the test geometry $|T|\le C_Tn^2$,
     $|T_j\setminus T_{j-1}|\le n$ for $1\le j\le L$, and ambient distance
     greater than $2L+10r_0$ from $T$ to every endpoint of a boundary edge of
-    $A$ holds; and, with $X=A\cap T$ and $Q_j=A\cap(T_j\setminus T)$,
+    $A$ holds; the target $X=A\cap T$ is nonempty; and, with
+    $Q_j=A\cap(T_j\setminus T)$,
     \begin{align}
         S_\Omega(X)   & \le C_en^{1+e},  &
         S_\Omega(Q_j) & \le C_e(nL^e+n),
@@ -86,6 +87,9 @@ proposition is not yet formalized.
               \end{align}
               where
               $\delta_n=C\epsilon^{-1}(n^{e-\mu}+a^{1/4}(\log n)^{C})$.
+              The same round and parameter satisfy
+              $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$, where
+              $\mathcal Q$ is the entropy cost of the old splits.
     \end{enumerate}
     The source writes $C_e$ for the coefficients of $B_{\mathrm{sh}}$ and
     $\delta_n$, and its constants may depend on the input constant

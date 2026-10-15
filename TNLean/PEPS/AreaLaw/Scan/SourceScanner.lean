@@ -22,7 +22,7 @@ The hypotheses of the statement are those of the source:
 * the local dimension `q ≥ 2`, the standing assumption of `01-preliminaries.tex`, line 121;
 * a gapped physical system and a collar scan at the scales `scanner:scales`
   (lines 32–41), with `r₀ = ⌈C log² n⌉` (line 49) and the charge list of lines 127–130;
-* the test geometry `scanner:test-geometry` (lines 43–48), with `X = A ∩ T` nonempty (line 24);
+* the test geometry `scanner:test-geometry` (lines 43–48), with `X = A ∩ T` nonempty (line 23);
 * the entropy inputs `scanner:entropy-input` for the original ground vector (lines 353–357);
 * `a r₀²` sufficiently small (line 359).
 
@@ -33,6 +33,8 @@ parameters with `B_sh ≤ C(nL^e + n)`, `B_exc ≤ CnD` and `𝓑 ≤ CnD(log n)
 sufficiently large replica count `k`, a charge round and a common parameter
 `p_k ∈ [ε/2, ε]` satisfying the defect-energy bound `scanner:energy-output`
 (lines 361–384), with a remainder `o_k(1)` uniform over the selected round and parameter.
+The same round and parameter also satisfy the selected-density bound
+`scanner:selected-density` of the proof (lines 484–487).
 
 **Reading of the constants:** in the conclusions, the source writes `C_e` for constants that
 may depend on the input constant `C_e` (line 396). The literal input constant cannot bound
@@ -94,6 +96,8 @@ structure ScannerHypotheses (X : ScannerExponents) (R : ℕ) (J Δ CT Ctr C₁ C
   depth_eq : S.depth = fun x ↦ ambientDepth T hT x.val
   /-- Every designated support contains its anchor. -/
   anchor_mem : ∀ i, S.anchor i ∈ i.val
+  /-- The target `X = A ∩ T` is nonempty (line 23). -/
+  target_nonempty : (S.target T).Nonempty
   /-- `n` padded slots per depth row (line 87). -/
   n_eq : S.n = n
   /-- `m = ⌊n^μ⌋` (line 35). -/
@@ -156,7 +160,8 @@ with auxiliary dimension `d_* = |E|`, are nonzero for `k ≥ 1`. For every total
   where `B_sh`, `B_exc` give the rough upper comparison `comparator:rough-upper` at the last
   endpoint of the scan with a remainder `o_k(1)`;
 * (energy, `scanner:energy-output`) there is a remainder `ρ_k → 0` such that for every
-  sufficiently large `k` some charge round and some `p_k ∈ [ε/2, ε]` satisfy
+  sufficiently large `k` some charge round and some `p_k ∈ [ε/2, ε]` satisfy the selected
+  density bound `𝒬(p_k)/(KnD) ≤ δ_n + ρ_k` (`scanner:selected-density`, lines 484–487) and
   `E_def,k ≤ C n^ℓ D² W² (log n)^{C_l} (δ_n^{1/8} + ε + n^{-100}) + C n^{-1000} + ρ_k`, with
   `δ_n = C_δ ε^{-1}(n^{e-μ} + a^{1/4}(log n)^{C_{lδ}})`.
 
@@ -208,6 +213,8 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
                       2 * (1 / 4) * W * (2 * Bsh / z + 2 * Bexc) + ρ k) ∧
             ∃ ρ : ℕ → ℝ, Tendsto ρ atTop (𝓝 0) ∧ ∀ᶠ k : ℕ in atTop,
               ∃ r ∈ X.chargeRounds n, ∃ p ∈ Icc (X.eps n / 2) (X.eps n),
+                (round r).chargeDefect k p / (X.K n * n * X.D n) ≤
+                    X.delta W Cδ Clδ n + ρ k ∧
                 ((round r).meanEnergy k p - e) / (g / 2) ≤
                   C * (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2 * W ^ 2 * Real.log n ^ Cl *
                       (X.delta W Cδ Clδ n ^ (1 / 8 : ℝ) + X.eps n +
@@ -354,8 +361,8 @@ theorem scannerStatement_of_scanInputsSupply (X : ScannerExponents) (R : ℕ) {J
     eventually_atTop.mpr ⟨1, fun k hk r hr ↦ ?_⟩⟩, ρ, hρ, eventually_atTop.mpr ⟨1, fun k hk ↦ ?_⟩⟩
   · have := I.logNormSq_final r hr k hk
     rwa [hdstar, hz] at this
-  · obtain ⟨r, hr, p, hp, -, hE⟩ := hsel k hk
-    refine ⟨r, hr, p, hp, ?_⟩
+  · obtain ⟨r, hr, p, hp, hQ, hE⟩ := hsel k hk
+    refine ⟨r, hr, p, hp, hQ, ?_⟩
     rwa [hE0, hgap] at hE
 
 end CollarScan
