@@ -10,7 +10,7 @@
 \date{October 15, 2026}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source statement}
 
@@ -33,8 +33,9 @@ stages, with one constant $c_1$ fixed before all data.
 \emph{Initial belt tiles.} The closed birth of every initial belt tile of side
 $u=t_k$ has distance at least $c_1u^{\rho_0}$ from the final actual region of
 every primary and of every other initial belt tile with the same label, for
-every domain, cut, origin, layer width, lower layer index and stopping
-scale.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.IsInitialBirthSeparated},
+every domain, cut, origin, layer width $C_0\ge2$, lower layer index
+$k_0\ge50{,}000{,}000$ and stopping scale; these are the standing restrictions
+of the initial construction.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.IsInitialBirthSeparated},
 \leanid{TNLean.PEPS.AreaLaw.Geometry.exists_isInitialBirthSeparated}.} No premise
 is used: near the reference cell the primary and belt closures are finite
 unions of elementary triangles of one fixed line arrangement, so the finitely
@@ -57,11 +58,16 @@ initial isolated-star lemma, Lemma~11.3 (lines~332--349), for the jointly
 chosen initial stage, so the combined statement also follows from
 that.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_initialIsolatedStars}.}
 
-\section{What remains}
+\section{Resolution}
 
-The replacement half rests on the conclusion of Lemma~11.3 for the jointly
-chosen initial stage. Once that statement is proved, the combined statement is
-Lemma~11.5 with the source's hypotheses, and this note can be closed.
+The conclusion of Lemma~11.3 for the jointly chosen initial stage is now
+proved, with $a_0=1/128$.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.initialIsolatedStarsStatement_holds}.}
+The combined statement therefore holds without premise: one constant $c_1>0$
+and a threshold $T$ serve both halves for every stopping scale $S_*\ge T$,
+every layer width and every sufficiently large lower layer index. These are the
+standing choices of large $S_*$ and $k_0$ under which Lemma~11.4 and Lemma~11.5
+are stated in the source.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation}.}
+This is Lemma~11.5 with the source's hypotheses, and the gap is resolved.
 
 \bibliographystyle{alpha}
 \bibliography{references}

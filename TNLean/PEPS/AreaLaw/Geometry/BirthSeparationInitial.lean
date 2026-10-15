@@ -16,6 +16,7 @@ import TNLean.PEPS.AreaLaw.Geometry.InitialRegionInterfaces
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegionInteriors
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegionRegularity
 import TNLean.PEPS.AreaLaw.Geometry.TemplateRows
+import TNLean.PEPS.AreaLaw.Geometry.InitialStars
 
 /-!
 # Birth separation of the initial belt tiles
@@ -621,5 +622,22 @@ theorem exists_birthSeparation_of_initialIsolatedStars
             IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ :=
   exists_birthSeparation_of_uniformRepairInductionStatement
     (uniformRepairInductionStatement_of_initialIsolatedStars h)
+
+
+/-- **Birth-template separation** (Lemma 11.5). One fixed `c₁ > 0` serves both
+cases of the lemma, for every sufficiently large stopping scale and lower layer
+index, as in the standing choices of the repair induction: the closed birth of an
+initial belt tile of side `u = t_k`, or of a replacement whose removal square has
+half-side `u`, is at distance at least `c₁ u^ρ₀` from the final actual region of
+every earlier or peer identifier of the same label.
+Source: area-law Section 11, `geometry:birth-separation`, lines 573–582, with
+the proof in lines 584–659. -/
+theorem exists_birthSeparation :
+    ∃ c₁ > 0, ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+        (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
+          IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ ∧
+            IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ :=
+  exists_birthSeparation_of_initialIsolatedStars initialIsolatedStarsStatement_holds
 
 end TNLean.PEPS.AreaLaw.Geometry

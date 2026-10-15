@@ -584,24 +584,36 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     a smaller constant.
 \end{proof}
 
-Together the last three theorems give
-Lemma~\ref{lem:area_law_birth_separation} once the isolated stars of the
-initial stage are supplied; until then the replacement half rests on that
-conclusion~\cite{gap:arealaw2d_birth_separation_scope}.
+The isolated stars of the initial stage are proved in
+Theorem~\ref{thm:area_law_initial_stars}, so the last theorem applies without
+premise and gives
+Lemma~\ref{lem:area_law_birth_separation}~\cite{gap:arealaw2d_birth_separation_scope}.
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
 % geometry:birth-separation, lines 573--582.
 \begin{lemma}[Birth-template separation]
     \label{lem:area_law_birth_separation}
-    \uses{thm:area_law_replacement_birth_separation_conditional,
-        thm:area_law_initial_belt_birth_separation,
-        thm:area_law_birth_separation_conditional,
-        lem:area_law_uniform_repair_induction}
-    There is a fixed $c_1>0$ such that the following holds. Let $\mathcal B$
-    be the closed birth region of an initial belt tile of side scale $u=t_k$,
-    or of a replacement tile whose removal square has half-side $u$. Then its
-    distance from the final actual region of every earlier or peer
-    identifier of the same label is at least $c_1u^{\rho_0}$. A peer means
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation}
+    \leanok
+    \uses{def:area_law_repair_stage}
+    There is a fixed $c_1>0$ such that the following holds, for the stopping
+    scale $S_*$ and the lower layer $k_0$ chosen sufficiently large as in the
+    construction. Let $\mathcal B$ be the closed birth region of an initial
+    belt tile of side scale $u=t_k$, or of a replacement tile whose removal
+    square has half-side $u$. Then its distance from the final actual region
+    of every earlier or peer identifier of the same label is at least
+    $c_1u^{\rho_0}$. A peer means
     another initial belt tile, or another replacement born at the same
     generation, respectively.
 \end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_birth_separation_conditional,
+        thm:area_law_initial_stars}
+    The isolated stars of the initial stage give the conclusion of the
+    uniform repair induction, and
+    Theorem~\ref{thm:area_law_birth_separation_conditional} then gives one
+    constant for both kinds of birth, for every sufficiently large stopping
+    scale and lower layer index.
+\end{proof}
