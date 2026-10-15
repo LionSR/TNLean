@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Scan.PhysicalTemplateInformation
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpDensity
+import TNLean.PEPS.AreaLaw.Scan.SourceTargetSharpUpper
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
@@ -16,6 +17,7 @@ run_cmd do
   let declarations := #[
     ``CollarScan.eventually_actualCharge_suppliedPrevector_sharp_comparison,
     ``CollarScan.eventually_actualScan_suppliedPrevector_sharp_upper,
+    ``CollarScan.exists_truncated_target_actualSharpUpper,
     ``exists_finalSharp_transport_smallness,
     ``CollarScan.exists_sourceTarget_selected_actualCharge_rough_comparison,
     ``CollarScan.exists_sourceBootstrap_entropy_improvement,

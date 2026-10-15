@@ -125,7 +125,6 @@ theorem eventually_exists_selected_actualCharge_sharp_comparison
   have hweight : W / (S.K : ℝ) = a := by
     dsimp only [W]
     field_simp [hKr.ne']
-    <;> ring
   filter_upwards [hcomparison, eventually_gt_atTop 0] with k hcomparisonK hk
   obtain ⟨s, p, hp, hQ, henergy⟩ := hselected k hk
   have hcap : δ k s p ≤ (e₀ + cap k s p + rem k) / (g / 2) := by
