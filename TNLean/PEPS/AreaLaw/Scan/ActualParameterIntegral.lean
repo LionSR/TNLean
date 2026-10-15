@@ -41,10 +41,8 @@ theorem aestronglyMeasurable_actualChargeEntropyDefect
   let D := S.actualChargeData hm hM k
   let F (h : History S.K S.m S.M k) (θ : SiteConfig n → ℂ) :=
     ∑ i, D.splitEta E i ⟨h, none⟩ ((EuclideanSpace.equiv _ ℂ).symm θ)
-  have hF (h : History S.K S.m S.M k) : Continuous (F h) := by
-    unfold F TransportData.splitEta
-    exact continuous_finsetSum _ fun i _ => continuous_finsetSum _ fun g _ =>
-      continuous_splitBandEta _ _
+  have hF (h : History S.K S.m S.M k) : Continuous (F h) :=
+    continuous_finsetSum _ fun i _ => D.continuous_splitEta n E i _
   exact D.aestronglyMeasurable_sum_oldFourierCoherentIntegral n
     (S.actualChargeData_isAdmissible hm hM k) ht
     (S.chargeTransportData_crossBandCommute _ _ n ht r) pre
@@ -62,10 +60,8 @@ theorem intervalIntegrable_actualChargeEntropyDefect
   let D := S.actualChargeData hm hM k
   let F (h : History S.K S.m S.M k) (θ : SiteConfig n → ℂ) :=
     ∑ i, D.splitEta E i ⟨h, none⟩ ((EuclideanSpace.equiv _ ℂ).symm θ)
-  have hF (h : History S.K S.m S.M k) : Continuous (F h) := by
-    unfold F TransportData.splitEta
-    exact continuous_finsetSum _ fun i _ => continuous_finsetSum _ fun g _ =>
-      continuous_splitBandEta _ _
+  have hF (h : History S.K S.m S.M k) : Continuous (F h) :=
+    continuous_finsetSum _ fun i _ => D.continuous_splitEta n E i _
   exact D.intervalIntegrable_sum_oldFourierCoherentIntegral n
     (S.actualChargeData_isAdmissible hm hM k) ht
     (S.chargeTransportData_crossBandCommute _ _ n ht r) pre

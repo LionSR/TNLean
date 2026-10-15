@@ -138,21 +138,6 @@ theorem split_interval_band_unique {g g' r r' k a b : ℕ} {z : ℤ}
   all_goals rcases hg with hg | hg <;> nlinarith
 
 omit [Fintype I] [LinearOrder I] in
-private theorem domainGraph_row_bound {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
-    {L : ℕ} (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
-      (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (x : Site Λ) (hx : S.depth x ∈ Finset.Icc (1 : ℤ) L) :
-    (depthRow S.depth (S.depth x)).length ≤ S.n := by
-  have ht := Finset.mem_Icc.mp hx
-  have htnat : ((S.depth x).toNat : ℤ) = S.depth x := by omega
-  have hb := depthRow_ambientDepth_length_le_of_row_bound T hT
-    (Subtype.val : Site Λ → ℤ × ℤ) Subtype.val_injective hrows
-    (show 1 ≤ (S.depth x).toNat by omega) (show (S.depth x).toNat ≤ L by omega)
-  rw [← hdepth] at hb
-  simpa only [htnat] using hb
-
-omit [Fintype I] [LinearOrder I] in
 private theorem domainGraph_split_ball_subset {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
     (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
     (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {L : ℕ}
@@ -194,7 +179,8 @@ theorem old_split_anchor_bounds_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T
       (S.oldChargeState_initial_none h g x hx) false).1,
       (Finset.mem_Icc.mp (S.oldChargeState_depth_bounds h g hL x hx)).2⟩
   · intro x hx
-    exact domainGraph_row_bound hT S hdepth hrows x (S.oldChargeState_depth_bounds h g hL x hx)
+    exact depthRow_length_le_of_ambientRows hT hdepth hrows
+      (S.oldChargeState_depth_bounds h g hL x hx)
 
 /-- The same geometric interval holds for every completed actual history,
 including the new leaves after arbitrary charges. -/
@@ -219,7 +205,8 @@ theorem state_split_anchor_bounds_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT :
       (S.bandState_unassigned g (h.1 g) k (fun t ↦ h.2 t g) x hx).1 false).1,
       (Finset.mem_Icc.mp (S.state_depth_bounds h g hL x hx)).2⟩
   · intro x hx
-    exact domainGraph_row_bound hT S hdepth hrows x (S.state_depth_bounds h g hL x hx)
+    exact depthRow_length_le_of_ambientRows hT hdepth hrows
+      (S.state_depth_bounds h g hL x hx)
 
 end CollarScan
 
