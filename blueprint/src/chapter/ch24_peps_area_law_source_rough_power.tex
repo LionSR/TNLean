@@ -79,6 +79,82 @@
     their sum.  The remainder coefficient is unchanged.
 \end{proof}
 
+% Source: OpenAI2026AreaLaw, Proposition 9.2, sections/08-scanner.tex,
+% lines 349--397 and 480--533. Ordinary module and imported axiom checks passed.
+\begin{theorem}[Selected density at arbitrary scanner exponents]
+    \label{thm:arealaw-selected-density-delta}
+    \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.selectedDensity_budget_le_delta}
+    \leanok
+    Adopt the exponents and rounded scales of
+    Lemma~\ref{lem:al_scanner_scale_facts}, and suppose its estimates
+    hold with constant $C_s\geq1$. Let $W,C_1>0$, put $a=W/K$,
+    and suppose $C_r,C_t\geq0$ and
+    \begin{align}
+        B & \leq C_rWn^{1+e},       \\
+        G & \leq C_t(\log n)^{C_l}.
+    \end{align}
+    Set
+    \begin{align}
+        c        & =\frac{2(C_1+1)}{Wnm(\epsilon/2)}, \\
+        C_\delta & =4(C_1+1)(C_r+2C_t)C_s.
+    \end{align}
+    Then, for every real $R$,
+    \begin{align}
+        c\bigl(B+2nm\,GW a^{1/4}+R\bigr)
+         & \leq C_\delta\epsilon^{-1}
+        \bigl(n^{e-\mu}+a^{1/4}(\log n)^{C_l}\bigr)+cR.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:al_scanner_scale_facts,lem:arealaw-selected-density-principal}
+    Apply Lemma~\ref{lem:arealaw-selected-density-principal} with
+    interpolation length $\epsilon/2$. Use $n^e/m\leq C_sn^{e-\mu}$
+    on the first principal term. The second is nonnegative, so it is
+    at most $C_s$ times itself. The coefficient of $R$ is unchanged.
+\end{proof}
+
+\begin{theorem}[Energy from the selected density]
+    \label{thm:arealaw-selected-energy-density}
+    \lean{TNLean.PEPS.AreaLaw.Scan.selectedEnergy_le_of_density_le_add}
+    \leanok
+    Let $d,\delta,\rho,A,t\geq0$, let $g>0$, and suppose
+    $d\leq\delta+\rho$ and $0\leq p\leq\epsilon$. If
+    \begin{align}
+        E & \leq\frac{e+A((1-p)d^{1/8}+(1-p)t+p)+r}{g},
+    \end{align}
+    then
+    \begin{align}
+        E & \leq\frac A g(\delta^{1/8}+\epsilon+t)
+        +\frac e g+\frac{A\rho^{1/8}+r}{g}.
+    \end{align}
+    No sign assumption is made on $e,r$ or $E$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The inequality $(\delta+\rho)^{1/8}\leq\delta^{1/8}+\rho^{1/8}$
+    bounds the eighth root of $d$. Since $1-p\leq1$, the two
+    nonnegative terms multiplied by $1-p$ are at most themselves.
+    Use $p\leq\epsilon$, multiply by $A$, and divide by $g$.
+\end{proof}
+
+\begin{theorem}[Vanishing selected-energy remainder]
+    \label{thm:arealaw-selected-energy-remainder}
+    \lean{TNLean.PEPS.AreaLaw.Scan.tendsto_selectedEnergy_remainder}
+    \leanok
+    Fix $A\in\mathbb R$ and $g>0$. If $\rho_k\to0$ and $r_k\to0$, then
+    \begin{align}
+        \frac{A|\rho_k|^{1/8}+r_k}{g} & \longrightarrow0.
+    \end{align}
+    The coefficients are fixed before this limit is taken.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Absolute value and the eighth root are continuous at zero.
+    Multiplication by $A$, addition and division by the fixed $g$
+    preserve the limit.
+\end{proof}
+
 \begin{theorem}[Ordered-limit closure at the selected point]
     \label{thm:arealaw-selected-density-power}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_final_selectedDensity_le}
