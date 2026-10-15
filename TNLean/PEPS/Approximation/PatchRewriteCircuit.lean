@@ -139,9 +139,9 @@ memory of the registers of `F_old` be nonzero. There are a contraction `M_30` wi
 `‖M_30 - M‖ ≤ L^{-30}` and `‖M_30 Ω_{F_old} - Ω_{F_new}‖ ≤ (2b + 1) L^{-20}`, and an original
 circuit from the registers of `F_old` to those of `F_new` whose operator is `M_30` in canonical
 coordinates. It has at most one nonprivate gate, every participant of each of its gates lies in
-the specified list, and its gate expansion has at most `K L^e` allowed monomials, each with at
-most `2b` normalized pair effects, and coefficients of total modulus at most `K L^e`, with `K`
-and `e` as in `exists_allowed_monomial_approx_polynomial` for `a = 30`.
+the specified list of at most `b` parties, and its gate expansion has at most `K L^e` allowed
+monomials, each with at most `2b` normalized pair effects, and coefficients of total modulus at
+most `K L^e`, with `K` and `e` as in `exists_allowed_monomial_approx_polynomial` for `a = 30`.
 
 Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 188–218;
 original circuits, `04-compression.tex`, lines 21–43; the gates of Proposition 7.1,
@@ -151,7 +151,7 @@ theorem exists_originalCircuit_refVec (hR : R.Conditions) {C c b L : ℕ}
     (hpatch : ∀ P ∈ R.patches, Fintype.card P.Tag ≤ C * L ^ c)
     (hold : ∀ h ∈ R.oldAffected, Fintype.card h.patch.Tag ≤ C * L ^ c)
     (hm : R.patches.length ≤ b) (hrold : R.oldAffected.length ≤ b)
-    (hrnew : R.newAffected.length ≤ b)
+    (hrnew : R.newAffected.length ≤ b) (hparties : R.parties.card ≤ b)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
     (hεpatch : ∀ P ∈ R.patches, ‖act P.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
     (hεold : ∀ h ∈ R.oldAffected, ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
@@ -167,8 +167,9 @@ theorem exists_originalCircuit_refVec (hR : R.Conditions) {C c b L : ℕ}
       w.IsMonomialBounded ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + 30))) := by
   classical
-  obtain ⟨G, hG, hGp, Ma, hMa1, hMa, href, hz⟩ := R.exists_allowed_monomial_approx_refVec hR hL
-    hnew hpatch hold hm hrold hrnew hΩ hεpatch hεold
+  obtain ⟨-, G, hG, hGp, Ma, hMa1, hMa, href, hz⟩ :=
+    R.exists_allowed_monomial_approx_refVec hR hL hnew hpatch hold hm hrold hrnew hparties hΩ
+      hεpatch hεold
   have hsum : ∀ (z : Mem R.oldFrame.regs) (K : PartyGate R.oldFrame.regs R.newFrame.regs),
       R.newFrame.regIso (gate (toGate K) z) =
         (K.map fun p => p.1 • R.newFrame.regIso (p.2.toEffectChain.eval z)).sum := by

@@ -660,10 +660,11 @@ theorem exists_allowed_monomial_approx_of_card_le (hR : R.Conditions) {δ : ℝ}
 /-- **Lemma 6.3, second assertion: the polynomial count.** Let `L ≥ 1`, and suppose that every
 affected hole and every additional patch has at most `C L^c` cylinder terms (the standing bound
 `∑_j d_j ≤ C L^c` on the projectors chosen in the frame construction) and that there are at most
-`b` additional patches, at most `b` affected old holes and at most `b` affected new holes. For
-every real `a`, the canonical contraction `M` admits a contraction `M_a` with
-`‖M_a - M‖ ≤ L^{-a}` and an expansion `M_a = ∑_t c_t M_t` into at most `K L^e` monomials allowed
-by Theorem 5.2, all participating parties lying in the specified list of condition (iv), each
+`b` additional patches, at most `b` affected old holes, at most `b` affected new holes and at
+most `b` parties in the specified list of condition (iv). For every real `a`, the canonical
+contraction `M` admits a contraction `M_a` with `‖M_a - M‖ ≤ L^{-a}` and an expansion
+`M_a = ∑_t c_t M_t` into at most `K L^e` monomials allowed by Theorem 5.2, all participating
+parties lying in the specified list of condition (iv), of at most `b` parties, each
 monomial moving a register of that list at every exchange of tensor factors and having at most
 `2b` normalized pair sources and at most `2b` normalized pair effects, and with `|c_t| ≤ 1`. Here
 `K = (C + 1)^{3b} (16 b² (C + 1)^{6b} + 1)^{2b}` and `e = 3bc + 4b(3bc + ⌈a⌉)` depend only on
@@ -683,8 +684,8 @@ theorem exists_allowed_monomial_approx_polynomial (hR : R.Conditions) {C c b L :
     (hpatch : ∀ P ∈ R.patches, Fintype.card P.Tag ≤ C * L ^ c)
     (hold : ∀ h ∈ R.oldAffected, Fintype.card h.patch.Tag ≤ C * L ^ c)
     (hm : R.patches.length ≤ b) (hrold : R.oldAffected.length ≤ b)
-    (hrnew : R.newAffected.length ≤ b) (a : ℝ) :
-    ∃ G : PartyGate R.oldFrame.regs R.newFrame.regs,
+    (hrnew : R.newAffected.length ≤ b) (hparties : R.parties.card ≤ b) (a : ℝ) :
+    R.parties.card ≤ b ∧ ∃ G : PartyGate R.oldFrame.regs R.newFrame.regs,
       G.length ≤ (C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + ⌈a⌉₊)) ∧
       (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
@@ -730,7 +731,7 @@ theorem exists_allowed_monomial_approx_polynomial (hR : R.Conditions) {C c b L :
       ring
     rw [this, add_mul, one_mul]
     exact Nat.add_le_add_left hP _
-  refine ⟨G, ?_, fun p hp => ?_, rest⟩
+  refine ⟨hparties, G, ?_, fun p hp => ?_, rest⟩
   · refine hG.trans ((Nat.mul_le_mul hN ((Nat.pow_le_pow_left hk _).trans
       (Nat.pow_le_pow_right (Nat.succ_pos _) (Nat.mul_le_mul_left 2 hm)))).trans ?_)
     calc B ^ (3 * b) * (X ^ 2 + 1) ^ (2 * b)
@@ -746,7 +747,7 @@ additional patch projector and every affected old-hole projector has error at mo
 accuracy fixed for all applications of Proposition 4.1 in the frame construction. The choice
 `a = 30` gives a contraction `M_30` with `‖M_30 - M‖ ≤ L^{-30}`, expanded into at most
 `K L^e` allowed monomials whose participating parties lie in the specified list of
-condition (iv), and with `‖M_30 Ω_{F_old} - Ω_{F_new}‖ ≤ (2b + 1) L^{-20}`.
+condition (iv), of at most `b` parties, and with `‖M_30 Ω_{F_old} - Ω_{F_new}‖ ≤ (2b + 1) L^{-20}`.
 
 Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 188–218; the
 accuracy `ε = L^{-60}`, lines 21–25 (`eq:frame-epsilon`); proof lines 343–344. -/
@@ -755,11 +756,11 @@ theorem exists_allowed_monomial_approx_refVec (hR : R.Conditions) {C c b L : ℕ
     (hpatch : ∀ P ∈ R.patches, Fintype.card P.Tag ≤ C * L ^ c)
     (hold : ∀ h ∈ R.oldAffected, Fintype.card h.patch.Tag ≤ C * L ^ c)
     (hm : R.patches.length ≤ b) (hrold : R.oldAffected.length ≤ b)
-    (hrnew : R.newAffected.length ≤ b)
+    (hrnew : R.newAffected.length ≤ b) (hparties : R.parties.card ≤ b)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
     (hεpatch : ∀ P ∈ R.patches, ‖act P.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
     (hεold : ∀ h ∈ R.oldAffected, ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) :
-    ∃ G : PartyGate R.oldFrame.regs R.newFrame.regs,
+    R.parties.card ≤ b ∧ ∃ G : PartyGate R.oldFrame.regs R.newFrame.regs,
       G.length ≤ (C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) ∧
       (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
@@ -776,14 +777,14 @@ theorem exists_allowed_monomial_approx_refVec (hR : R.Conditions) {C c b L : ℕ
   have hrpow : (L : ℝ) ^ (-(30 : ℝ)) = ((L : ℝ) ^ 30)⁻¹ := by
     rw [Real.rpow_neg (Nat.cast_nonneg _)]
     exact_mod_cast congrArg Inv.inv (Real.rpow_natCast (L : ℝ) 30)
-  obtain ⟨G, hG, hGp, Ma, hMa1, hMa, hz⟩ := R.exists_allowed_monomial_approx_polynomial
-    hR hL hnew hpatch hold hm hrold hrnew 30
+  obtain ⟨-, G, hG, hGp, Ma, hMa1, hMa, hz⟩ := R.exists_allowed_monomial_approx_polynomial
+    hR hL hnew hpatch hold hm hrold hrnew hparties 30
   rw [h30] at hG
   rw [hrpow] at hMa
   have hLr : (1 : ℝ) ≤ L := by exact_mod_cast hL
   have hL0 : (0 : ℝ) < L := by linarith
   have href := R.norm_act_refVec_sub_le_of_approx hR.avoidsUntouched hΩ hεpatch hεold hMa
-  refine ⟨G, hG, hGp, Ma, hMa1, hMa, href.trans ?_, hz⟩
+  refine ⟨hparties, G, hG, hGp, Ma, hMa1, hMa, href.trans ?_, hz⟩
   have h60 : ((L : ℝ) ^ 60)⁻¹ ≤ ((L : ℝ) ^ 20)⁻¹ :=
     inv_anti₀ (by positivity) (pow_le_pow_right₀ hLr (by norm_num))
   have h30' : ((L : ℝ) ^ 30)⁻¹ ≤ ((L : ℝ) ^ 20)⁻¹ :=
