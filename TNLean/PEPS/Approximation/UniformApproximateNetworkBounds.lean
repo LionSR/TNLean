@@ -182,7 +182,7 @@ theorem exists_uniform_sampled_approximate_network_bounds
   refine ⟨_, hω.trans hsmall, ?_, hinc, ?_⟩
   · intro e
     exact (hdim e).trans (mul_le_mul_of_nonneg_left
-      (pow_le_pow_right₀ hLone (Nat.le_add_right a t)) (by dsimp [C, C_sample]; positivity))
+      (pow_le_pow_right₀ hLone (Nat.le_add_right a t)) (by positivity))
   · intro e j l hj hl
     obtain ⟨g, hjg, hlg⟩ := hlocal e j l hj hl
     refine ⟨w.rescaledLocationsEquiv _ G hbudget g, ?_⟩
