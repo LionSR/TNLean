@@ -19,7 +19,7 @@ The finite counting statements below are those used in the proof of
     \lean{TNLean.PEPS.Approximation.correctedParties}
     \lean{TNLean.PEPS.Approximation.mem_correctedParties}
     \leanok
-    For a finite set $S$ of source positions, define $A_S=\bigcup_{e\in S}E_e$. Membership means that $p$ is an endpoint of some position $e\in S$. No monomial label is selected by $S$.
+    For a finite set $S$ of source positions, define $A_S=\bigcup_{e\in S}E_e$, the set of parties that are endpoints of some position $e\in S$.
 \end{definition}
 
 \begin{definition}[Lifetime gate incidence]
@@ -78,7 +78,7 @@ The finite counting statements below are those used in the proof of
     \label{thm:compression_affected_gate_count}
     \lean{TNLean.PEPS.Approximation.card_gatesTouching_correctedParties_le}
     \leanok
-    If $|G(p)|\le b$ for every $p\in A_S$, then $|\Gamma(A_S)|\le2b|S|$. This includes touching gates with no selected position of their own.
+    If $|G(p)|\le b$ for every $p\in A_S$, then $|\Gamma(A_S)|\le2b|S|$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -95,7 +95,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{proof}\leanok
     \uses{def:compression_corrected_parties,def:compression_touching_gates}
-    The party $a_e$ belongs to $A_S$ and participates in $o(e)$, giving the required witness.
+    Since $e\in S$, the party $a_e$ belongs to $A_S$; since $a_e\in P_{o(e)}$, the gate $o(e)$ belongs to $\Gamma(A_S)$.
 \end{proof}
 
 \begin{theorem}[Exterior gates avoid corrected parties]
@@ -107,7 +107,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{proof}\leanok
     \uses{def:compression_touching_gates}
-    A common party would witness $g\in\Gamma(A)$, a contradiction.
+    Any party in $P_g\cap A$ would place $g$ in $\Gamma(A)$, a contradiction.
 \end{proof}
 
 \begin{definition}[Pair-sample labels]
@@ -243,7 +243,7 @@ The finite counting statements below are those used in the proof of
     \label{thm:compression_gate_two_endpoints}
     \lean{TNLean.PEPS.Approximation.card_gateLinkParties}
     \leanok
-    For every $t\in T(P,r)$, $|F(r,t)|=2$. Root membership in $P$ is not needed for this count.
+    For every $t\in T(P,r)$, $|F(r,t)|=2$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -274,7 +274,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{proof}\leanok
     \uses{thm:compression_gate_locality,def:compression_distributed_links}
-    The gate tag witnesses $g\in G$, and gate-local endpoint locality supplies both participant memberships.
+    The gate tag gives $g\in G$, and gate-local endpoint locality gives $V(\ell)\subseteq P_g$.
 \end{proof}
 
 \begin{theorem}[Two endpoints of each distributed link]
@@ -336,7 +336,7 @@ The finite counting statements below are those used in the proof of
     \label{def:compression_position_choice_cost}
     \lean{TNLean.PEPS.Approximation.correctedPositionChoiceCost}
     \leanok
-    For finite gate label sets $\Xi_g$, nonnegative weights $a_{g,\xi}$ and intended physical dimensions $n_p\in\mathbb N$, define\begin{align}\mathcal C(S)=\left(\prod_{g\in\Gamma(A_S)}W(\Xi_g,a_g)\right)\left(\prod_{p\in A_S}n_p^2\right).\label{eq:compression_incidence_choice_cost}\end{align}Exterior gate coefficients and exterior physical dimensions are absent from these products.
+    For finite gate label sets $\Xi_g$, nonnegative weights $a_{g,\xi}$, and physical dimensions $n_p\in\mathbb N$, define\begin{align}\mathcal C(S)=\left(\prod_{g\in\Gamma(A_S)}W(\Xi_g,a_g)\right)\left(\prod_{p\in A_S}n_p^2\right).\label{eq:compression_incidence_choice_cost}\end{align}
 \end{definition}
 
 \begin{theorem}[Corrected-position weighted choice bound]

@@ -1,10 +1,9 @@
 \section{Removal squares and repair children}
 \label{sec:area_law_simultaneous_repair}
 
-The removal step in \cite[Section~11]{OpenAI2026AreaLaw} takes place
-before replacement regions are created. Every old region loses the same
-union of closed squares, including squares whose interiors will be left
-unassigned at the stopping scale.
+In the recursive repair of \cite[Section~11]{OpenAI2026AreaLaw}, each
+removal step deletes a union of closed squares from all existing regions
+before any replacement regions are adjoined.
 
 % Source: 10-geometry.tex, geometry:trim-radius, lines 380--399;
 % geometry:birth-separation, lines 584--591.
@@ -16,15 +15,14 @@ unassigned at the stopping scale.
         TNLean.PEPS.AreaLaw.Geometry.repairSquare}
     \leanok
     \uses{thm:area_law_exponent_gaps}
-    Retain the fixed exponent $\rho_0=(1+\beta)/2$. For a positive
-    parent scale $S$ and a mark $v\in\mathbb R^2$, define
+    Retain the fixed exponent $\rho_0=(1+\beta)/2$. For a parent scale
+    $S>0$ and a center $v\in\mathbb R^2$, define the dyadic half-side and
+    removal square by
     \begin{align}
         d(S)   & =2^{\lfloor\rho_0\log_2 S\rfloor}, &
         Q(v,S) & =v+[-d(S),d(S)]^2.
         \label{eq:area_law_repair_square}
     \end{align}
-    The floor and the exponent are integers. Equivalently, $Q(v,S)$
-    is the closed ball of radius $d(S)$ for the maximum metric.
 \end{definition}
 
 % Source: 10-geometry.tex, geometry:trim-margins, lines 386--391.
@@ -43,10 +41,11 @@ unassigned at the stopping scale.
         \tfrac12S^{\rho_0}\le d(S)\le S^{\rho_0},
         \label{eq:area_law_repair_margins}
     \end{equation}
-    and $d(S)<S$ whenever $S>1$. For every $a_0>0$ there is $S_0$ such
-    that every $S\ge S_0$ satisfies $d(S)\le a_0S/1000$. Hence a stopping
-    scale $S_*$ with the margins of \cite[Section~11]{OpenAI2026AreaLaw}
-    exists and may be taken as large as required.
+    and $d(S)<S$ whenever $S>1$. For every $a_0>0$ there exists $S_0$ such
+    that $d(S)\le a_0S/1000$ for all $S\ge S_0$. Hence a stopping
+    scale $S_*$ satisfying the margin conditions of
+    \cite[Section~11]{OpenAI2026AreaLaw} exists and may be chosen
+    arbitrarily large.
 \end{theorem}
 
 \begin{proof}
@@ -55,9 +54,8 @@ unassigned at the stopping scale.
     Put $x=\rho_0\log_2 S$, so that $S^{\rho_0}=2^x$ and
     $d(S)=2^{\lfloor x\rfloor}$. The inequalities
     $\lfloor x\rfloor\le x<\lfloor x\rfloor+1$ give
-    \eqref{eq:area_law_repair_margins}. The exponent gaps give
-    $\rho_0<1$, so $S^{\rho_0}<S$ for $S>1$. Finally
-    $S^{\rho_0}=S^{\rho_0-1}S$ and $S^{\rho_0-1}\to0$ as $S\to\infty$.
+    \eqref{eq:area_law_repair_margins}. Since $\rho_0<1$, $S^{\rho_0}<S$
+    for $S>1$, and $S^{\rho_0}/S=S^{\rho_0-1}\to0$ as $S\to\infty$.
 \end{proof}
 
 \begin{definition}[Simultaneous old-region remnants]
@@ -66,17 +64,15 @@ unassigned at the stopping scale.
         TNLean.PEPS.AreaLaw.Geometry.simultaneousRepairRemnants}
     \leanok
     \uses{def:area_law_repair_square}
-    Let $(v_j,S_j)_{j\in J}$ be a finite family of marks, each with a
-    location $v_j\in\mathbb R^2$ and a positive assigned scale $S_j$;
-    distinct indices may share a location. Let $(R_i)_{i\in I}$ be
-    the current actual regions of the old identifiers. Set
+    Let $(v_j,S_j)_{j\in J}$ be a finite family of marks with centers
+    $v_j\in\mathbb R^2$ and scales $S_j>0$, and let $(R_i)_{i\in I}$ be
+    a family of regions in $\mathbb R^2$. Define the removal set and the trimmed
+    remnants by
     \begin{align}
         Q_J  & =\bigcup_{j\in J}Q(v_j,S_j), &
         R'_i & =R_i\setminus Q_J.
         \label{eq:area_law_simultaneous_remnants}
     \end{align}
-    This formula applies to every $i\in I$. The labels and remembered
-    birth regions retain their values at the removal step.
 \end{definition}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
@@ -91,30 +87,26 @@ unassigned at the stopping scale.
         TNLean.PEPS.AreaLaw.Geometry.repairChildScale}
     \leanok
     \uses{def:area_law_repair_square}
-    Let $(v_i,S_i)_{i\in I}$ be the current parent family, with
-    $v_i\in\mathbb R^2$ and $S_i>0$, and retain the stopping threshold
-    $S_*$. Set $I_+=\{i\in I:d(S_i)\ge S_*\}$ and
-    $P=\{-1,0,1\}^2$. The next children are indexed by $I_+\times P$.
-    For each $(i,p)\in I_+\times P$, their locations and assigned scales are
+    Let $(v_i,S_i)_{i\in I}$ be a family of parent marks with
+    $v_i\in\mathbb R^2$ and $S_i>0$, and fix a stopping threshold $S_*$.
+    Set $I_+=\{i\in I:d(S_i)\ge S_*\}$ and $P=\{-1,0,1\}^2$. The child
+    marks are indexed by $I_+\times P$, with centers and scales
     \begin{align}
         v'_{i,p} & =v_i+d(S_i)p, & S'_{i,p} & =d(S_i).
         \label{eq:area_law_repair_children}
     \end{align}
-    These offsets give the center, corners and side midpoints of
-    $Q(v_i,S_i)$. Each child retains its parent and offset as indices;
-    coincident locations do not identify these indices. A parent with
-    $d(S_i)<S_*$ contributes no children, and its square is terminal.
-    This is the marking rule of \cite[Section~11]{OpenAI2026AreaLaw}.
+    As $p$ ranges over $P$, the points $v'_{i,p}$ are the center, corners,
+    and side midpoints of $Q(v_i,S_i)$. A parent with $d(S_i)<S_*$ is
+    terminal and produces no children. This is the child-marking rule of
+    \cite[Section~11]{OpenAI2026AreaLaw}.
 \end{definition}
 
 \subsection{Depth and descendant count of a repair branch}
 \label{sec:area_law_repair_depth}
 
-Every child of a parent of scale $S$ receives the scale $d(S)$. The marks
-of generation $j$ descended from one initial mark of scale $S$ therefore
-all have the scale $d^{j}(S)$, the $j$-fold iterate of $d$, and each
-generation has at most $9^j$ marks. The following estimates concern these
-iterated scales only; they do not construct the replacements.
+Each child of a parent of scale $S$ has scale $d(S)$. Thus the generation-$j$
+descendants of an initial mark of scale $S$ all have scale $d^{j}(S)$, and
+generation $j$ contains at most $9^j$ marks.
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 668--686;
 % OpenAI2026PolynomialPEPS, Lemma 3.2, 02-information.tex, lines 302--311.
@@ -128,33 +120,28 @@ iterated scales only; they do not construct the replacements.
         TNLean.PEPS.AreaLaw.Geometry.forall_le_iterate_of_le_iterate}
     \leanok
     Let $0<\rho<1$ and $S_*>1$, and let $f$ satisfy $0<f(u)\le u^{\rho}$
-    for every $u\ge S_*$. A recursion from a scale $S>0$ passes from
-    generation $i$ to generation $i+1$ only when $f^{i}(S)\ge S_*$. If the
-    generations $0,\dots,m-1$ have scale at least $S_*$, then
-    $\log f^{i}(S)\le\rho^{i}\log S$ for $i\le m$, and there is a constant
-    $C>0$, independent of $S$ and $m$, with
+    for every $u\ge S_*$. If a scale $S>0$ satisfies $f^{i}(S)\ge S_*$ for
+    $0\le i<m$, then $\log f^{i}(S)\le\rho^{i}\log S$ for $0\le i\le m$,
+    and there exists a constant $C>0$, independent of $S$ and $m$, such that
     \begin{align}
         m & \le C+C\log\log(S+e).
         \notag
     \end{align}
-    For every $b\ge0$ there is moreover $C>0$ with
+    For every $b\ge0$ there also exists $C>0$ such that
     $\sum_{j=0}^{m}b^{j}\le C\bigl(\log(S+e)\bigr)^{C}$ under the same
-    condition. If $0<f(u)\le u^{\rho}$ for every $u>0$ and $S_*\ge1$, a
-    generation of scale at least $S_*$ has all earlier generations of scale
-    at least $S_*$.
+    hypothesis. If $0<f(u)\le u^{\rho}$ for all $u>0$ and $S_*\ge1$, then
+    $f^{m}(S)\ge S_*$ implies $f^{i}(S)\ge S_*$ for all $0\le i\le m$.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    Induction on $i$ gives the logarithmic bound. If $m\ge1$, then
-    $0<\log S_*\le\rho^{m-1}\log S$, so $\log S>0$ and
-    $(m-1)\log(1/\rho)\le\log\log S-\log\log S_*$; moreover
-    $\log\log S\le\log\log(S+e)$, which is nonnegative. For the count, with
-    $B=b+2$ the sum is at most $B^{m+1}$, and the depth bound gives
-    $B^{m+1}\le B^{C+1}\bigl(\log(S+e)\bigr)^{C\log B}$. Enlarging the
-    exponent only increases a power of a number at least one. For the last
-    assertion, a scale $x<S_*$ has $f(x)\le x^{\rho}<S_*^{\rho}\le S_*$, so
-    once a generation falls below $S_*$ all later ones do.
+    Induction on $i$ gives $\log f^{i}(S)\le\rho^{i}\log S$. If $m\ge1$,
+    then $0<\log S_*\le\rho^{m-1}\log S$, so $\log S>0$ and
+    $(m-1)\log(1/\rho)\le\log\log S-\log\log S_*\le\log\log(S+e)-\log\log S_*$.
+    For the geometric sum, set $B=b+2$; then
+    $\sum_{j=0}^{m}b^{j}\le B^{m+1}\le B^{C+1}\bigl(\log(S+e)\bigr)^{C\log B}$.
+    For the final claim, if $x<S_*$ then $f(x)\le x^{\rho}<S_*^{\rho}\le S_*$,
+    so once $f^{i}(S)<S_*$ all subsequent iterates remain below $S_*$.
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 668--675.
@@ -171,8 +158,8 @@ iterated scales only; they do not construct the replacements.
         \log d^{j}(S) & \le\rho_0^{j}\log S.
         \label{eq:area_law_repair_depth_log}
     \end{align}
-    For every $S_*>1$ there is a constant $C>0$ such that, for every $S>0$
-    and every $j\ge0$ with $d^{j}(S)\ge S_*$,
+    For every $S_*>1$ there exists a constant $C>0$ such that every $S>0$
+    and $j\ge0$ with $d^{j}(S)\ge S_*$ satisfy
     \begin{align}
         j & \le C+C\log\log\bigl(e^{e}+S\bigr).
     \end{align}
@@ -181,13 +168,12 @@ iterated scales only; they do not construct the replacements.
 \begin{proof}
     \leanok
     \uses{thm:area_law_repair_margins, thm:area_law_power_recursion_depth}
-    The half-side $d(S)$ is a power of two and $d(S)\le S^{\rho_0}$, so
-    $\log d(S)\le\rho_0\log S$. Induction on $j$ gives
-    (\ref{eq:area_law_repair_depth_log}). Since $0<d(u)\le u^{\rho_0}$ for
-    every $u>0$, Theorem~\ref{thm:area_law_power_recursion_depth} shows that
-    if $d^{j}(S)\ge S_*$, then all generations $0,\dots,j$ have scale at least
-    $S_*$, and it bounds $j+1$ by $C+C\log\log(S+e)$. Finally
-    $\log\log(S+e)\le\log\log(e^{e}+S)$.
+    Since $0<d(u)\le u^{\rho_0}$ for all $u>0$, we have
+    $\log d(S)\le\rho_0\log S$, and induction on $j$ gives
+    (\ref{eq:area_law_repair_depth_log}). If $d^{j}(S)\ge S_*$,
+    Theorem~\ref{thm:area_law_power_recursion_depth} shows that
+    $d^{i}(S)\ge S_*$ for all $0\le i\le j$ and bounds $j+1$ by
+    $C+C\log\log(S+e)\le C+C\log\log(e^{e}+S)$.
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 676--686,
@@ -198,26 +184,25 @@ iterated scales only; they do not construct the replacements.
         TNLean.PEPS.AreaLaw.Geometry.exists_repair_descendant_count_layer_bound}
     \leanok
     \uses{def:area_law_repair_square}
-    For every $S_*>1$ there is a constant $C>0$ such that, for every $S>0$
-    and every $m\ge0$ with $d^{m}(S)\ge S_*$,
+    For every $S_*>1$ there exists a constant $C>0$ such that every $S>0$
+    and $m\ge0$ with $d^{m}(S)\ge S_*$ satisfy
     \begin{align}
         \sum_{j=0}^{m}9^{j} & \le C\bigl(\log(S+2)\bigr)^{C}.
     \end{align}
-    For every $M>0$ there is moreover a constant $C>0$, depending only on
-    $S_*$ and $M$, such that the same sum is at most $C(k+1)^{C}$ whenever
-    $S\le M2^{k}$ for a nonnegative integer $k$.
+    For every $M>0$ there also exists a constant $C>0$, depending only on
+    $S_*$ and $M$, such that $\sum_{j=0}^{m}9^{j}\le C(k+1)^{C}$ whenever
+    $S\le M2^{k}$ for an integer $k\ge0$.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:area_law_power_recursion_depth}
-    If $d^{m}(S)\ge S_*$, all generations $0,\dots,m$ have scale at least
-    $S_*$, by Theorem~\ref{thm:area_law_power_recursion_depth}; in particular
-    $S\ge S_*>1$. The same theorem with $b=9$ bounds the sum by
+    If $d^{m}(S)\ge S_*$, Theorem~\ref{thm:area_law_power_recursion_depth}
+    with $b=9$ gives $S\ge S_*>1$ and bounds $\sum_{j=0}^{m}9^{j}$ by
     $C\bigl(\log(S+e)\bigr)^{C}$. Since $S+e\le e(S+2)$ and
-    $\log(S+2)\ge1$, we have $\log(S+e)\le2\log(S+2)$, and enlarging the
-    constant gives the first assertion. For the second assertion,
-    $S+2\le(M+2)2^{k}$ gives $\log(S+2)\le(\log(M+2)+1)(k+1)$.
+    $\log(S+2)\ge1$, we have $\log(S+e)\le2\log(S+2)$, which gives the first
+    bound. When $S\le M2^{k}$, $S+2\le(M+2)2^{k}$ and hence
+    $\log(S+2)\le(\log(M+2)+1)(k+1)$.
 \end{proof}
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex, lines 761--768,
@@ -226,7 +211,7 @@ iterated scales only; they do not construct the replacements.
     \label{thm:area_law_fine_clearance}
     \lean{TNLean.PEPS.AreaLaw.Geometry.eventually_fine_clearance}
     \leanok
-    Let $c_1>0$ and $C_B\ge0$. Every sufficiently large real number $u$
+    Let $c_1>0$ and $C_B\ge0$. Every sufficiently large $u\in\mathbb R$
     satisfies
     \begin{align}
         c_1u^{\rho_0} & >2\lceil C_Bu\rceil^{\beta}.
@@ -236,7 +221,7 @@ iterated scales only; they do not construct the replacements.
 \begin{proof}
     \leanok
     \uses{thm:area_law_exponent_gaps}
-    For $u\ge1$, $\lceil C_Bu\rceil\le(C_B+1)u$, so the right side is at
-    most $2(C_B+1)^{\beta}u^{\beta}$. The exponent gaps give $\beta<\rho_0$,
-    and $u^{\beta-\rho_0}$ tends to zero.
+    For $u\ge1$, $\lceil C_Bu\rceil\le(C_B+1)u$, so
+    $2\lceil C_Bu\rceil^{\beta}\le2(C_B+1)^{\beta}u^{\beta}$. Since
+    $\beta<\rho_0$, we have $u^{\beta-\rho_0}\to0$ as $u\to\infty$.
 \end{proof}

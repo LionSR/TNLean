@@ -120,9 +120,9 @@ theorem star_fusionGauge (β : ScalarCocycle G) (ω : ScalarThreeCochain G) :
 values. -/
 theorem coboundary_modulusUnit_pos (β : ScalarCocycle G) (g h k : G) :
     ∃ r : ℝ, 0 < r ∧
-      (coboundary (fun a b => modulusUnit (β a b)) g h k : ℂ) = r := by
-  refine ⟨‖(β g (h * k) : ℂ)‖ * ‖(β h k : ℂ)‖ /
-      (‖(β g h : ℂ)‖ * ‖(β (g * h) k : ℂ)‖), ?_, ?_⟩
+      (coboundary (fun p => modulusUnit (β p)) g h k : ℂ) = r := by
+  refine ⟨‖(β (g, h * k) : ℂ)‖ * ‖(β (h, k) : ℂ)‖ /
+      (‖(β (g, h) : ℂ)‖ * ‖(β (g * h, k) : ℂ)‖), ?_, ?_⟩
   · have := fun u : Units ℂ => norm_pos_iff.2 u.ne_zero
     exact div_pos (mul_pos (this _) (this _)) (mul_pos (this _) (this _))
   simp [coboundary, modulusUnit]
@@ -135,22 +135,22 @@ This is the scalar content of arXiv:2203.12563, lines 873--891, written in the
 orientation of `fusionGauge`. -/
 theorem star_fusionGauge_phaseRoot {β : ScalarCocycle G} {ω : ScalarThreeCochain G}
     (hω : fusionGauge β ω = star ω) :
-    star (fusionGauge (fun g h => phaseRoot (β g h)) ω) =
-      fusionGauge (fun g h => phaseRoot (β g h)) ω := by
-  set s : ScalarCocycle G := fun g h => phaseRoot (β g h)
-  set N : ScalarCocycle G := fun g h => modulusUnit (β g h)
+    star (fusionGauge (fun p => phaseRoot (β p)) ω) =
+      fusionGauge (fun p => phaseRoot (β p)) ω := by
+  set s : ScalarCocycle G := fun p => phaseRoot (β p)
+  set N : ScalarCocycle G := fun p => modulusUnit (β p)
   have hβ : β = s * s * N := by
-    funext g h
-    exact (phaseRoot_mul_phaseRoot_mul_modulusUnit (β g h)).symm
+    funext ⟨g, h⟩
+    exact (phaseRoot_mul_phaseRoot_mul_modulusUnit (β (g, h))).symm
   have hs : star s = s⁻¹ := by
-    funext g h
-    exact star_phaseRoot (β g h)
+    funext ⟨g, h⟩
+    exact star_phaseRoot (β (g, h))
   have hstar : star (fusionGauge s ω) = fusionGauge N (fusionGauge s ω) := by
     rw [star_fusionGauge, hs, ← hω, hβ, fusionGauge_comp, fusionGauge_comp]
     congr 1
-    funext g h
+    funext ⟨g, h⟩
     simp only [Pi.mul_apply, Pi.inv_apply]
-    rw [mul_right_comm _ (N g h), mul_inv_cancel_right]
+    rw [mul_right_comm _ (N (g, h)), mul_inv_cancel_right]
   funext g h k
   have hpt := congrFun (congrFun (congrFun hstar g) h) k
   simp only [Pi.star_apply] at hpt
@@ -195,9 +195,9 @@ prefactor. -/
 theorem gauge_modulusUnit_pos (β : ScalarCocycle G) (γ : ActionTensorGauge G X)
     (x : X) (g h : G) :
     ∃ r : ℝ, 0 < r ∧
-      (((modulusUnit (γ (g * h) x) * modulusUnit (β g h)) /
+      (((modulusUnit (γ (g * h) x) * modulusUnit (β (g, h))) /
         (modulusUnit (γ g (h • x)) * modulusUnit (γ h x)) : Units ℂ) : ℂ) = r := by
-  refine ⟨‖(γ (g * h) x : ℂ)‖ * ‖(β g h : ℂ)‖ /
+  refine ⟨‖(γ (g * h) x : ℂ)‖ * ‖(β (g, h) : ℂ)‖ /
       (‖(γ g (h • x) : ℂ)‖ * ‖(γ h x : ℂ)‖), ?_, ?_⟩
   · have := fun u : Units ℂ => norm_pos_iff.2 u.ne_zero
     exact div_pos (mul_pos (this _) (this _)) (mul_pos (this _) (this _))
@@ -208,30 +208,30 @@ gauge by `(β, γ)` maps `L` to its complex conjugate, then the joint gauge by
 the unimodular square roots of the phases of `β` and `γ` makes `L` real. -/
 theorem star_gauge_phaseRoot {β : ScalarCocycle G} {γ : ActionTensorGauge G X}
     {L : LSymbol G X} (hL : gauge β γ L = star L) :
-    star (gauge (fun g h => phaseRoot (β g h)) (fun g x => phaseRoot (γ g x)) L) =
-      gauge (fun g h => phaseRoot (β g h)) (fun g x => phaseRoot (γ g x)) L := by
-  set s : ScalarCocycle G := fun g h => phaseRoot (β g h)
-  set N : ScalarCocycle G := fun g h => modulusUnit (β g h)
+    star (gauge (fun p => phaseRoot (β p)) (fun g x => phaseRoot (γ g x)) L) =
+      gauge (fun p => phaseRoot (β p)) (fun g x => phaseRoot (γ g x)) L := by
+  set s : ScalarCocycle G := fun p => phaseRoot (β p)
+  set N : ScalarCocycle G := fun p => modulusUnit (β p)
   set t : ActionTensorGauge G X := fun g x => phaseRoot (γ g x)
   set M : ActionTensorGauge G X := fun g x => modulusUnit (γ g x)
   have hβ : β = s * s * N := by
-    funext g h
-    exact (phaseRoot_mul_phaseRoot_mul_modulusUnit (β g h)).symm
+    funext ⟨g, h⟩
+    exact (phaseRoot_mul_phaseRoot_mul_modulusUnit (β (g, h))).symm
   have hγ : γ = t * t * M := by
     funext g x
     exact (phaseRoot_mul_phaseRoot_mul_modulusUnit (γ g x)).symm
   have hs : star s = s⁻¹ := by
-    funext g h
-    exact star_phaseRoot (β g h)
+    funext ⟨g, h⟩
+    exact star_phaseRoot (β (g, h))
   have ht : star t = t⁻¹ := by
     funext g x
     exact star_phaseRoot (γ g x)
   have hstar : star (gauge s t L) = gauge N M (gauge s t L) := by
     rw [star_gauge, hs, ht, ← hL, hβ, hγ, gauge_comp, gauge_comp]
     congr 1
-    · funext g h
+    · funext ⟨g, h⟩
       simp only [Pi.mul_apply, Pi.inv_apply]
-      rw [mul_right_comm _ (N g h), mul_inv_cancel_right]
+      rw [mul_right_comm _ (N (g, h)), mul_inv_cancel_right]
     · funext g x
       simp only [Pi.mul_apply, Pi.inv_apply]
       rw [mul_right_comm _ (M g x), mul_inv_cancel_right]
@@ -285,7 +285,7 @@ theorem star_apply_eq_gauge_one_apply {E : Type*} [AddCommGroup E] [Module ℂ E
     {γ : ActionTensorGauge G X} {L : LSymbol G X} {x : X} {g h : G} {T P : E}
     (hT : T ≠ 0) (hconj : P = (star (L x g h : ℂ)) • T)
     (hdisp : ((γ h x : ℂ) * γ g (h • x)) • P = ((L x g h : ℂ) * γ (g * h) x) • T) :
-    star (L x g h) = gauge (fun _ _ => 1) γ L x g h := by
+    star (L x g h) = gauge (fun _ => 1) γ L x g h := by
   rw [hconj, smul_smul] at hdisp
   have hscalar := smul_left_injective ℂ hT hdisp
   apply Units.ext
@@ -307,7 +307,7 @@ The local correction is recorded at `LSymbol.star_apply_eq_gauge_one_apply`. -/
 theorem phase_sq_eq_of_gauge_eq_star {β : ScalarCocycle G} {γ : ActionTensorGauge G X}
     {L : LSymbol G X} (hL : gauge β γ L = star L) (x : X) (g h : G) :
     ((L x g h : ℂ) / (‖(L x g h : ℂ)‖ : ℂ)) ^ 2 =
-      ((γ g (h • x) * γ h x / (γ (g * h) x * β g h) : Units ℂ) : ℂ) := by
+      ((γ g (h • x) * γ h x / (γ (g * h) x * β (g, h)) : Units ℂ) : ℂ) := by
   have hpt := congrArg Units.val (congrFun (congrFun (congrFun hL x) g) h)
   simp only [gauge, Units.val_mul, Units.val_div_eq_div_val, Pi.star_apply,
     Units.coe_star] at hpt
@@ -319,7 +319,7 @@ theorem phase_sq_eq_of_gauge_eq_star {β : ScalarCocycle G} {γ : ActionTensorGa
   have h1 : (γ g (h • x) : ℂ) ≠ 0 := Units.ne_zero _
   have h2 : (γ h x : ℂ) ≠ 0 := Units.ne_zero _
   have h3 : (γ (g * h) x : ℂ) ≠ 0 := Units.ne_zero _
-  have h4 : (β g h : ℂ) ≠ 0 := Units.ne_zero _
+  have h4 : (β (g, h) : ℂ) ≠ 0 := Units.ne_zero _
   simp only [Units.val_mul, Units.val_div_eq_div_val]
   rw [← hpt] at hsq
   field_simp

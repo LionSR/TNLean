@@ -12,9 +12,10 @@ import Mathlib.LinearAlgebra.Matrix.GeneralLinearGroup.Defs
 This file introduces a concrete notion of projective representation for matrix-valued
 virtual symmetries:
 
-* `ScalarCocycle G` is a function `G × G → ℂˣ` (implemented as `Units ℂ`).
+* `ScalarCocycle G` is a function `G × G → ℂˣ` (implemented as `Units ℂ`), the
+  uncurried form of Mathlib's inhomogeneous two-cochains.
 * `ProjectiveRepresentation ω` is a map `X : G → GL(D, ℂ)` satisfying
-  `X g * X h = ω g h • X (g * h)` at the matrix level.
+  `X g * X h = ω (g, h) • X (g * h)` at the matrix level.
 * `ProjectiveRepresentation.cocycle_of_assoc` derives the standard 2-cocycle identity
   from associativity of matrix multiplication.
 
@@ -27,7 +28,7 @@ namespace TNLean
 namespace Algebra
 
 /-- A concrete multiplicative scalar 2-cochain on a group. -/
-abbrev ScalarCocycle (G : Type) := G → G → Units ℂ
+abbrev ScalarCocycle (G : Type) := G × G → Units ℂ
 
 /-- Restriction (pullback) of a scalar 2-cochain along a group homomorphism `f : K →* G`:
 `(f^* ω)(a, b) = ω(f a, f b)`. The three-cochain analogue is `ScalarThreeCochain.comap`. Both
@@ -36,12 +37,12 @@ agree with Mathlib's restriction `groupCohomology.cochainsMap f` of inhomogeneou
 `ScalarThreeCochain.toInhomogeneousCochain_comap`). -/
 def ScalarCocycle.comap {G K : Type} [Group G] [Group K] (f : K →* G) (ω : ScalarCocycle G) :
     ScalarCocycle K :=
-  fun a b ↦ ω (f a) (f b)
+  fun p ↦ ω (f p.1, f p.2)
 
 /-- Evaluate a restricted cochain by applying the homomorphism to both arguments. -/
 @[simp]
 theorem ScalarCocycle.comap_apply {G K : Type} [Group G] [Group K] (f : K →* G)
-    (ω : ScalarCocycle G) (a b : K) : ω.comap f a b = ω (f a) (f b) := rfl
+    (ω : ScalarCocycle G) (a b : K) : ω.comap f (a, b) = ω (f a, f b) := rfl
 
 section Group
 
@@ -56,7 +57,7 @@ structure ProjectiveRepresentation (ω : ScalarCocycle G) where
   map_mul' :
     ∀ g h : G,
       ((X g : Matrix (Fin D) (Fin D) ℂ) * (X h : Matrix (Fin D) (Fin D) ℂ)) =
-        (ω g h : ℂ) • (X (g * h) : Matrix (Fin D) (Fin D) ℂ)
+        (ω (g, h) : ℂ) • (X (g * h) : Matrix (Fin D) (Fin D) ℂ)
 
 namespace ProjectiveRepresentation
 
@@ -65,47 +66,47 @@ variable {ω : ScalarCocycle G} (ρ : ProjectiveRepresentation (D := D) ω)
 /-- The projective multiplication law, restated as a lemma. -/
 lemma map_mul (g h : G) :
     ((ρ.X g : Matrix (Fin D) (Fin D) ℂ) * (ρ.X h : Matrix (Fin D) (Fin D) ℂ)) =
-      (ω g h : ℂ) • (ρ.X (g * h) : Matrix (Fin D) (Fin D) ℂ) :=
+      (ω (g, h) : ℂ) • (ρ.X (g * h) : Matrix (Fin D) (Fin D) ℂ) :=
   ρ.map_mul' g h
 
 /-- Left-associated triple product in terms of the cocycle. -/
 lemma mul_assoc_left_scalar (g h k : G) :
     (((ρ.X g : Matrix (Fin D) (Fin D) ℂ) * (ρ.X h : Matrix (Fin D) (Fin D) ℂ)) *
         (ρ.X k : Matrix (Fin D) (Fin D) ℂ)) =
-      ((ω g h : ℂ) * (ω (g * h) k : ℂ)) •
+      ((ω (g, h) : ℂ) * (ω (g * h, k) : ℂ)) •
         (ρ.X ((g * h) * k) : Matrix (Fin D) (Fin D) ℂ) := by
   calc
     (((ρ.X g : Matrix (Fin D) (Fin D) ℂ) * (ρ.X h : Matrix (Fin D) (Fin D) ℂ)) *
         (ρ.X k : Matrix (Fin D) (Fin D) ℂ))
-        = ((ω g h : ℂ) • (ρ.X (g * h) : Matrix (Fin D) (Fin D) ℂ)) *
+        = ((ω (g, h) : ℂ) • (ρ.X (g * h) : Matrix (Fin D) (Fin D) ℂ)) *
             (ρ.X k : Matrix (Fin D) (Fin D) ℂ) := by rw [map_mul]
-    _ = (ω g h : ℂ) •
+    _ = (ω (g, h) : ℂ) •
           (((ρ.X (g * h) : Matrix (Fin D) (Fin D) ℂ) *
             (ρ.X k : Matrix (Fin D) (Fin D) ℂ))) := by
             simp
-    _ = (ω g h : ℂ) • ((ω (g * h) k : ℂ) •
+    _ = (ω (g, h) : ℂ) • ((ω (g * h, k) : ℂ) •
           (ρ.X ((g * h) * k) : Matrix (Fin D) (Fin D) ℂ)) := by rw [map_mul]
-    _ = ((ω g h : ℂ) * (ω (g * h) k : ℂ)) •
+    _ = ((ω (g, h) : ℂ) * (ω (g * h, k) : ℂ)) •
           (ρ.X ((g * h) * k) : Matrix (Fin D) (Fin D) ℂ) := by simp [mul_smul]
 
 /-- Right-associated triple product in terms of the cocycle. -/
 lemma mul_assoc_right_scalar (g h k : G) :
     ((ρ.X g : Matrix (Fin D) (Fin D) ℂ) *
         ((ρ.X h : Matrix (Fin D) (Fin D) ℂ) * (ρ.X k : Matrix (Fin D) (Fin D) ℂ))) =
-      ((ω g (h * k) : ℂ) * (ω h k : ℂ)) •
+      ((ω (g, h * k) : ℂ) * (ω (h, k) : ℂ)) •
         (ρ.X (g * (h * k)) : Matrix (Fin D) (Fin D) ℂ) := by
   calc
     ((ρ.X g : Matrix (Fin D) (Fin D) ℂ) *
         ((ρ.X h : Matrix (Fin D) (Fin D) ℂ) * (ρ.X k : Matrix (Fin D) (Fin D) ℂ)))
         = (ρ.X g : Matrix (Fin D) (Fin D) ℂ) *
-            ((ω h k : ℂ) • (ρ.X (h * k) : Matrix (Fin D) (Fin D) ℂ)) := by rw [map_mul]
-    _ = (ω h k : ℂ) •
+            ((ω (h, k) : ℂ) • (ρ.X (h * k) : Matrix (Fin D) (Fin D) ℂ)) := by rw [map_mul]
+    _ = (ω (h, k) : ℂ) •
           ((ρ.X g : Matrix (Fin D) (Fin D) ℂ) *
             (ρ.X (h * k) : Matrix (Fin D) (Fin D) ℂ)) := by
             simp
-    _ = (ω h k : ℂ) • ((ω g (h * k) : ℂ) •
+    _ = (ω (h, k) : ℂ) • ((ω (g, h * k) : ℂ) •
           (ρ.X (g * (h * k)) : Matrix (Fin D) (Fin D) ℂ)) := by rw [map_mul]
-    _ = ((ω g (h * k) : ℂ) * (ω h k : ℂ)) •
+    _ = ((ω (g, h * k) : ℂ) * (ω (h, k) : ℂ)) •
           (ρ.X (g * (h * k)) : Matrix (Fin D) (Fin D) ℂ) := by
           simp [smul_smul, mul_comm]
 
@@ -117,7 +118,7 @@ lemma smul_eq_smul_cancel {a b : ℂ} {M : Matrix (Fin D) (Fin D) ℂ}
 
 /-- Associativity forces the cocycle condition (for `D > 0`). -/
 theorem cocycle_of_assoc (ρ : ProjectiveRepresentation (D := D) ω) (hD : 0 < D) (g h k : G) :
-    (ω g h : ℂ) * (ω (g * h) k : ℂ) = (ω g (h * k) : ℂ) * (ω h k : ℂ) := by
+    (ω (g, h) : ℂ) * (ω (g * h, k) : ℂ) = (ω (g, h * k) : ℂ) * (ω (h, k) : ℂ) := by
   have hAssoc :
       (((ρ.X g : Matrix (Fin D) (Fin D) ℂ) * (ρ.X h : Matrix (Fin D) (Fin D) ℂ)) *
           (ρ.X k : Matrix (Fin D) (Fin D) ℂ)) =
@@ -127,24 +128,24 @@ theorem cocycle_of_assoc (ρ : ProjectiveRepresentation (D := D) ω) (hD : 0 < D
   have hLeft := ρ.mul_assoc_left_scalar g h k
   have hRight := ρ.mul_assoc_right_scalar g h k
   have hScalars :
-      ((ω g h : ℂ) * (ω (g * h) k : ℂ)) •
+      ((ω (g, h) : ℂ) * (ω (g * h, k) : ℂ)) •
           (ρ.X ((g * h) * k) : Matrix (Fin D) (Fin D) ℂ) =
-        ((ω g (h * k) : ℂ) * (ω h k : ℂ)) •
+        ((ω (g, h * k) : ℂ) * (ω (h, k) : ℂ)) •
           (ρ.X (g * (h * k)) : Matrix (Fin D) (Fin D) ℂ) := by
     calc
-      ((ω g h : ℂ) * (ω (g * h) k : ℂ)) •
+      ((ω (g, h) : ℂ) * (ω (g * h, k) : ℂ)) •
           (ρ.X ((g * h) * k) : Matrix (Fin D) (Fin D) ℂ)
           = (((ρ.X g : Matrix (Fin D) (Fin D) ℂ) * (ρ.X h : Matrix (Fin D) (Fin D) ℂ)) *
               (ρ.X k : Matrix (Fin D) (Fin D) ℂ)) := hLeft.symm
       _ = ((ρ.X g : Matrix (Fin D) (Fin D) ℂ) *
             ((ρ.X h : Matrix (Fin D) (Fin D) ℂ) * (ρ.X k : Matrix (Fin D) (Fin D) ℂ))) :=
             hAssoc
-      _ = ((ω g (h * k) : ℂ) * (ω h k : ℂ)) •
+      _ = ((ω (g, h * k) : ℂ) * (ω (h, k) : ℂ)) •
             (ρ.X (g * (h * k)) : Matrix (Fin D) (Fin D) ℂ) := hRight
   have hScalars' :
-      ((ω g h : ℂ) * (ω (g * h) k : ℂ)) •
+      ((ω (g, h) : ℂ) * (ω (g * h, k) : ℂ)) •
           (ρ.X ((g * h) * k) : Matrix (Fin D) (Fin D) ℂ) =
-        ((ω g (h * k) : ℂ) * (ω h k : ℂ)) •
+        ((ω (g, h * k) : ℂ) * (ω (h, k) : ℂ)) •
           (ρ.X ((g * h) * k) : Matrix (Fin D) (Fin D) ℂ) := by
     simpa [mul_assoc] using hScalars
   exact smul_eq_smul_cancel (D := D) hD (hM := by
