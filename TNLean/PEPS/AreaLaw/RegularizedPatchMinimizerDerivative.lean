@@ -51,6 +51,7 @@ theorem hasDerivAt_log_regularizedPatchObjective_exp_neg_of_isMinOn
             regions a (Real.exp (-R)) Ω x (regions j) *
             (Real.exp (-R) • (x j + Real.exp (-R) • 1) ^ (-1 : ℝ)))).re) R := by
   apply hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute
+    (Out := fun v ↦ Fin (n v))
     regions hnested a (fun j ↦ (ha j).le) Ω hΩ x hx R
   intro _j k _hjk
   exact commute_filter_normalizedRegularizedPatchMarginal_of_isMinOn
