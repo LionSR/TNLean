@@ -90,10 +90,10 @@ theorem trace_regularizedPatchRegulator_le_quarter_of_isMinOn
     let σ : Matrix (Entropy.RegionConfig n (regions j))
         (Entropy.RegionConfig n (regions j)) ℂ :=
       Entropy.regionState (regions j) (dependentGlobalConfigIsometry Ω)
-    ∀ (hS : _root_.vonNeumannEntropy σ
+    _root_.vonNeumannEntropy σ
         (Entropy.regionState_posSemidef (regions j)
-          (dependentGlobalConfigIsometry Ω)).isHermitian ≤ C * (1 + u))
-      (hd : (CFC.abs (ρ - σ)).trace.re ≤ 1 / 16),
+          (dependentGlobalConfigIsometry Ω)).isHermitian ≤ C * (1 + u) →
+      (CFC.abs (ρ - σ)).trace.re ≤ 1 / 16 →
       (Real.exp (-R) •
         (ρ * (x j + Real.exp (-R) • (1 : Matrix (Entropy.RegionConfig n (regions j))
           (Entropy.RegionConfig n (regions j)) ℂ))⁻¹)).trace.re ≤ 1 / 4 := by
