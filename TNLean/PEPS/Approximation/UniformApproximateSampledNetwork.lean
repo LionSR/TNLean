@@ -38,6 +38,15 @@ Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–175,
 
 noncomputable section
 open scoped Matrix ComplexConjugate NNReal
+
+/-- A polynomial bound with a real constant `C` persists with the positive part
+`max C 0`, at every nonnegative base. This removes sign conditions on the
+polynomial constants of polynomial-PEPS Theorem 5.2, `04-compression.tex`,
+lines 133–175. -/
+theorem TNLean.PEPS.Approximation.mul_pow_le_max_zero_mul_pow (C : ℝ) {x : ℝ}
+    (hx : 0 ≤ x) (k : ℕ) : C * x ^ k ≤ max C 0 * x ^ k :=
+  mul_le_mul_of_nonneg_right (le_max_left _ _) (pow_nonneg hx _)
+
 namespace TNLean.PEPS.PairEffect.GateMapConstruction
 open TNLean.PEPS.Approximation
 attribute [local instance] Classical.propDecidable
@@ -173,10 +182,10 @@ theorem exists_uniform_approximate_sampled_network
   let hcover := C.mem_physicalOrder
   have hLone : 1 ≤ (size L) := le_trans (by norm_num) hL
   obtain ⟨lists, K, htermwise₀, hmonomial, hK₀, happrox⟩ := hLists L
-  have hpow : ∀ (c : ℝ) (m : ℕ), c * (size L) ^ m ≤ max c 0 * (size L) ^ m :=
-    fun c m ↦ mul_le_mul_of_nonneg_right (le_max_left _ _) (by positivity)
-  have htermwise := htermwise₀.mono_coefficient (hpow C_C₀ v)
-  have hK : (K : ℝ) ≤ C_K * (size L) ^ u := hK₀.trans (hpow C_K₀ u)
+  have hL0 : 0 ≤ size L := zero_le_one.trans hLone
+  have htermwise := htermwise₀.mono_coefficient (mul_pow_le_max_zero_mul_pow C_C₀ hL0 v)
+  have hK : (K : ℝ) ≤ C_K * (size L) ^ u :=
+    hK₀.trans (mul_pow_le_max_zero_mul_pow C_K₀ hL0 u)
   let w := ref.reexpand lists
   let G := ref.reexpandGateMaps lists Goriginal
   obtain ⟨B, hB, hb, hBB⟩ :=

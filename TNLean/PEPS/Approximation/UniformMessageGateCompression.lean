@@ -167,12 +167,12 @@ theorem exists_uniform_message_sampled_network
     refine ⟨r, 1 + A, Ccoeff, u + z * m, u + v + z * m, ?_⟩
     intro L
     obtain ⟨lists, K, hresources₀, hK₀, happrox⟩ := hLists L
-    have hpow : ∀ (c : ℝ) (k : ℕ), c * (size L) ^ k ≤ max c 0 * (size L) ^ k :=
-      fun c k ↦ mul_le_mul_of_nonneg_right (le_max_left _ _)
-        (pow_nonneg ((by norm_num : (0 : ℝ) ≤ 2).trans (hsize L)) _)
-    have hresources := (hresources₀.mono_dimension (hpow C_M₀ z)).mono_coefficient
-      (hpow C_C₀ v)
-    have hK : (K : ℝ) ≤ C_K * (size L) ^ u := hK₀.trans (hpow C_K₀ u)
+    have hL0 : 0 ≤ size L := (by norm_num : (0 : ℝ) ≤ 2).trans (hsize L)
+    have hresources :=
+      (hresources₀.mono_dimension (mul_pow_le_max_zero_mul_pow C_M₀ hL0 z)).mono_coefficient
+        (mul_pow_le_max_zero_mul_pow C_C₀ hL0 v)
+    have hK : (K : ℝ) ≤ C_K * (size L) ^ u :=
+      hK₀.trans (mul_pow_le_max_zero_mul_pow C_K₀ hL0 u)
     let w := (C₀ L).circuit
     let D := (1 + C_M) * (size L) ^ z
     let C := C_C * (size L) ^ v

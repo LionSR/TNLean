@@ -613,7 +613,7 @@ theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences
     refine ⟨r, max C 0, max C 0, k, k, fun i ↦ ?_⟩
     have hD := i.isDistributionProtocol
     have hpow : C * (size i) ^ k ≤ max C 0 * (size i) ^ k :=
-      mul_le_mul_of_nonneg_right (le_max_left _ _) (pow_nonneg (by linarith [hsize i]) _)
+      mul_pow_le_max_zero_mul_pow C (by linarith [hsize i]) k
     refine ⟨(C₀ i).circuit.selfLists, ⌊C * (size i) ^ k⌋₊, ?_, ?_, ?_, ?_⟩
     · exact OriginalCircuit.isTermwiseBounded_castLayouts_produce _ _ _
         (i.protocol.isExpansionBounded_chain _ hD.expansionBounded) hpow
