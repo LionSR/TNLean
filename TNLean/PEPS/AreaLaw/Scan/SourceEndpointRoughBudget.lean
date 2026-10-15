@@ -43,13 +43,13 @@ theorem exists_source_actualScan_suppliedPrevector_endpoint_budget
       ∀ {I : Type} [Fintype I] [LinearOrder I]
         {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
         (S : CollarScan (Site Λ) I), N ≤ S.n →
-        ∀ (hgraph : S.graph = domainGraph Λ)
-          (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
+        ∀ (_hgraph : S.graph = domainGraph Λ)
+          (_hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
           (hm : 0 < S.m) (hM : 0 < S.M)
-          (a : ℝ) (ha : 0 < a) (hr : S.r₀ ≤ S.D)
-          (hDpos : 1 ≤ S.D) (hD : 4 * S.D ≤ S.m)
-          (L : ℕ) (hL : 8 * S.K * S.m ≤ L)
-          (hrows : ∀ j : ℕ, 1 ≤ j → j ≤ L →
+          (a : ℝ) (_ha : 0 < a) (_hr : S.r₀ ≤ S.D)
+          (_hDpos : 1 ≤ S.D) (_hD : 4 * S.D ≤ S.m)
+          (L : ℕ) (_hL : 8 * S.K * S.m ≤ L)
+          (_hrows : ∀ j : ℕ, 1 ≤ j → j ≤ L →
             (ambientDilation T j \ ambientDilation T (j - 1)).card ≤ S.n)
           (Ω Ωt : StateSpace Λ q), ‖Ω‖ = 1 → ‖Ωt‖ = 1 →
           ((S.truncationSet L).card : ℝ) ≤ Cvol * (S.n : ℝ) ^ 2 →
