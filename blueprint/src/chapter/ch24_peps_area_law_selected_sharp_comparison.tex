@@ -1,0 +1,138 @@
+\section{Sharp subtraction at the actual selected charge}
+\label{sec:arealaw-selected-sharp-comparison}
+
+All terminal sums in this section retain the weights of the actual mapped
+charge mean tree. Fix its physical state, spectral set and supplied common
+auxiliary label sequence. For the near and middle regions $Q_{jg},Y_{jg}$
+of a terminal partition, write $U_{jg}$ for the positive-depth part of
+$Q_{jg}$ and put
+\begin{align}
+    g^{\rm pre}_{jg}
+                 & =S(Q_{jg})+S((Q_{jg}\cup Y_{jg})^c)-S(Y_{jg}),\nonumber   \\
+    g^{\rm post}_{jg}
+                 & =S(U_{jg})+S(U_{jg}\cup Y_{jg})-S(Y_{jg}),\nonumber       \\
+    G_{\rm pre}  & =\frac1K\sum_g\sum_jw_jg^{\rm pre}_{jg},                &
+    G_{\rm post} & =\frac1K\sum_g\sum_jw_jg^{\rm post}_{jg}.
+    \label{eq:arealaw-selected-terminal-averages}
+\end{align}
+The maximum $g_{\max}$ is over zero and every pre-gap in the full finite
+terminal family. Set $M=\max\{0,2S'+g_{\max}\}$, where $S'$ is the
+entropy of the actual selected auxiliary marginal.
+
+\begin{theorem}[Quarter-power subtraction]
+    \label{thm:arealaw-sharp-comparison-subtraction}
+    \lean{TNLean.PEPS.AreaLaw.Scan.sharp_comparison_subtraction}
+    Let $a,W,\tau>0$. Suppose the same scalar rate $R$ satisfies
+    \begin{align}
+        \frac W2\left[2S'+(1-\tau)G_{\rm pre}-2\tau D
+            -(3+1/a)h(\tau)-25K_{\rm mom}a-\frac\delta\tau M\right]-r_-
+          & \le R,\nonumber              \\
+        R & \le2D-Z+\frac W2G_{\rm post}
+        +6WK_{\rm mom}a-\frac W{2a}Z+r_+.
+        \label{eq:arealaw-sharp-scalar-premises}
+    \end{align}
+    Then
+    \begin{align}
+        2S'+G_{\rm pre}-G_{\rm post}
+        \le{} & \frac{2(2D-Z)}W+\tau G_{\rm pre}+2\tau D
+        +(3+1/a)h(\tau)+37K_{\rm mom}a-\frac Za\nonumber \\
+              & +\frac\delta\tau M+\frac{2(r_++r_-)}W.
+        \label{eq:arealaw-sharp-scalar-subtraction}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    Subtract the two rates and divide by $W/2>0$. The upper quadratic
+    contribution becomes $12K_{\rm mom}a$, giving $25+12=37$.
+\end{proof}
+
+\begin{theorem}[Uniform same-prevector actual charge comparison]
+    \label{thm:arealaw-actual-sharp-comparison}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.eventually_actualCharge_suppliedPrevector_sharp_comparison}
+    Fix a unit physical truncated ground vector with energy $e$ and
+    positive gap $\gamma$, the original reference state defining its
+    truncated terms, and a target set $E$ of positive spectral mass $z$.
+    Let $d=|E|>0$, $K>0$, $W=aK$ and $a>0$. Suppose the literal scanner
+    has the target depth, positive window and charge-slot counts, and
+    $8Km\le L$. Every completed and pre-charge status marginal of this
+    same vector satisfies the common moment estimate with parameters
+    $K_{\rm mom}\ge0,r$, and $10a\le r,1$.
+
+    The supplied physical label sequence has nonzero initial vectors of
+    norm at most one, the polynomial selected-state projection mass,
+    and $\log\dim\lambda_k-kS'=o(k)$. Then nonnegative constants for
+    the upper and lower replica remainders can be chosen before all
+    charge stages and parameters. Eventually in $k$, at every actual
+    charge stage and every real interpolation parameter, the filtered
+    norm is positive, $\delta=(\mu-e)/\gamma\ge0$, and for every
+    $0<\tau\le1/2$,
+    \begin{align}
+        2S'+G_{\rm pre}-G_{\rm post}
+        \le{} & \frac{2(2\log d-\log z)}W+\tau G_{\rm pre}+2\tau\log d
+        +(3+1/a)h(\tau)+37K_{\rm mom}a-\frac{\log z}a\nonumber         \\
+              & +\frac\delta\tau M+\frac{2R_+(k)}W+R_-(k),
+        \label{eq:arealaw-actual-sharp-comparison}
+    \end{align}
+    where both $R_+(k)$ and $R_-(k)$ tend to zero at fixed physical
+    data and weight. The same exact terminal tree appears on both sides.
+\end{theorem}
+\begin{proof}
+    The factor-ten assumptions imply the upper factor-six assumptions.
+    Apply the actual upper and lower theorems to the same prevector.
+    Sum over the $K$ bands, use $W=aK$, and apply
+    Theorem~\ref{thm:arealaw-sharp-comparison-subtraction} with
+    $r_+=R_+(k)$ and $r_-=WR_-(k)/2$.
+\end{proof}
+
+\begin{theorem}[Energy at the selected actual charge]
+    \label{thm:arealaw-actual-selected-energy}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_selection_energy_domainGraph}
+    Under the actual selector's physical graph, anchor, layer,
+    multiplicity, clearance, separation and transport-smallness
+    hypotheses, one common error sequence $r_k\ge0$, $r_k\to0$, works
+    before all supplied symmetric nonzero initial vectors and all
+    intervals $[p_0,p_1]\subset(0,1)$. If the same initial vector is an
+    eigenvector of the augmented truncated copy mean with energy $e$,
+    the literal selected point also satisfies
+    \begin{align}
+        \delta_k=\frac{\mu_k-e}{g/2}
+                                          & \le\frac{e+C_{\rm en}a^2\ell_{\dim}^{e_{\rm en}}
+        \operatorname{error}_k+r_k}{g/2}, &
+        g                                 & =\frac\Delta{\operatorname{positiveNormalization}(1,\Delta/2,J)}.
+        \label{eq:arealaw-selected-actual-energy}
+    \end{align}
+    Its selected charge-defect bound is unchanged.
+\end{theorem}
+\begin{proof}
+    The same charge is the odd round $2s+1$ in the finite-family
+    transport theorem. Its energy clause gives $\mu_k\le2e+$error.
+    Subtract one copy of $e$ and divide by the positive gap $g/2$.
+\end{proof}
+
+\begin{theorem}[Density cap and conditional selected comparison]
+    \label{thm:arealaw-selected-sharp-composition}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_defect_le_of_density_energy_bound}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.eventually_exists_selected_actualCharge_sharp_comparison}
+    Suppose the selector--energy conclusion, the accepted coefficient
+    conclusion and the uniform sharp comparison are supplied for the
+    same physical data. Define
+    \begin{align}
+        \operatorname{cap}_k
+        =CW^2n^{1/100000}D^2(\log n)^{C_\ell}
+        \left[(1-p_k)\left(\frac{\mathcal Q_k}{KnD}\right)^{1/8}
+            +(1-p_k)n^{-P}+p_k\right].
+        \label{eq:arealaw-selected-sharp-density-cap}
+    \end{align}
+    Then the same selected point obeys
+    $\delta_k\le(e+\operatorname{cap}_k+r_k)/(g/2)$.
+    This upper bound can replace $\delta$ in
+    (\ref{eq:arealaw-actual-sharp-comparison}).
+\end{theorem}
+\begin{proof}
+    The actual energy error is nonnegative, so replacing $C_{\rm en}$
+    by $|C_{\rm en}|$ only increases its contribution. Apply the
+    coefficient bound at the unchanged point. Finally $M/\tau\ge0$.
+\end{proof}
+
+The last theorem is a conditional composition. The following source
+consumer instantiates all three inputs from one physical witness.
+The final-scale entropy and power estimates remain explicit obligations.
