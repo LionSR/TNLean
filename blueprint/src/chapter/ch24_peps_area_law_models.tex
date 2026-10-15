@@ -927,6 +927,26 @@ original open square. We state the two models separately, following
     assumed in this definition.
 \end{definition}
 
+\begin{theorem}[Inverse images of ordered two-family partitions]
+    \label{thm:peps_two_family_partition_inverse_image}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.earlierSameFamily_comap,
+        TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.card_residual_comap_le,
+        TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.comap}
+    \uses{def:area_law_two_family_partition}
+    Let $A\subseteq V$ be finite, with an ordered two-family partition
+    whose residual is $D$ and pieces $P_i$. If $W$ is finite and $f:W\to V$, then $f^{-1}(A)$ has
+    the partition with residual $f^{-1}(D)$ and pieces $f^{-1}(P_i)$,
+    retaining the same labels, families and order. Inverse images commute
+    with the union of all earlier pieces in a given family. If $f$ is
+    injective, the residual cardinality does not increase.
+\end{theorem}
+\begin{proof}
+    Inverse images preserve disjointness and unions. The family and order
+    conditions concern only the retained labels, so they are unchanged.
+    The final cardinality bound follows by restricting the injection $f$
+    to the residual set. Empty inverse-image pieces retain their labels.
+\end{proof}
+
 \begin{theorem}[Exact exponent gaps]
     \label{thm:area_law_exponent_gaps}
     \lean{
