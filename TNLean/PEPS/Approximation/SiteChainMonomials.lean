@@ -119,26 +119,29 @@ theorem prod_map_one_kronecker {κ τ : Type} [Fintype κ] [DecidableEq κ] [Fin
 
 /-- **A product of monomial operators on one layout.** If each operator `A k` of a list is the
 operator of an allowed monomial on the layout `L`, in the coordinates `iso`, using only the
-parties of `S`, then so is the product `A k₁ ⋯ A k_r`, with the pair sources and pair effects
-added up. -/
+parties of `S` and moving a register of `S` at every exchange of tensor factors, then so is the
+product `A k₁ ⋯ A k_r`, with the pair sources and pair effects added up. -/
 theorem exists_chain_listProd {L : Layout Party} {κ : Type} [Fintype κ] [DecidableEq κ]
     (iso : Mem L ≃ₗᵢ[ℂ] EuclideanSpace ℂ κ) (S : Set Party) {γ : Type}
     (A : γ → Matrix κ κ ℂ) (src eff : γ → ℕ) : (ks : List γ) →
-    (∀ k ∈ ks, ∃ M : PartyChain L L, M.IsAllowed ∧ M.UsesOnly S ∧ M.sourceCount ≤ src k ∧
+    (∀ k ∈ ks, ∃ M : PartyChain L L, M.IsAllowed ∧ M.UsesOnly S ∧
+      M.SwapsMeetSet S ∧ M.sourceCount ≤ src k ∧
       M.toEffectChain.effectCount ≤ eff k ∧
       ∀ z, iso (M.toEffectChain.eval z) = act (A k) (iso z)) →
-    ∃ M : PartyChain L L, M.IsAllowed ∧ M.UsesOnly S ∧ M.sourceCount ≤ (ks.map src).sum ∧
-      M.toEffectChain.effectCount ≤ (ks.map eff).sum ∧
+    ∃ M : PartyChain L L, M.IsAllowed ∧ M.UsesOnly S ∧
+      M.SwapsMeetSet S ∧
+      M.sourceCount ≤ (ks.map src).sum ∧ M.toEffectChain.effectCount ≤ (ks.map eff).sum ∧
       ∀ z, iso (M.toEffectChain.eval z) = act (ks.map A).prod (iso z)
-  | [], _ => ⟨.final (.id L), trivial, trivial, le_rfl, le_rfl, fun z => by
+  | [], _ => ⟨.final (.id L), trivial, trivial, fun _ _ => trivial, le_rfl, le_rfl, fun z => by
       simp only [List.map_nil, List.prod_nil, act_one]
       rfl⟩
   | k :: ks, h => by
-      obtain ⟨M, h₁, h₂, h₃, h₄, h₅⟩ :=
+      obtain ⟨M, h₁, h₂, h₆, h₃, h₄, h₅⟩ :=
         exists_chain_listProd iso S A src eff ks fun k' hk' => h k' (List.mem_cons_of_mem _ hk')
-      obtain ⟨Mk, k₁, k₂, k₃, k₄, k₅⟩ := h k List.mem_cons_self
+      obtain ⟨Mk, k₁, k₂, k₆, k₃, k₄, k₅⟩ := h k List.mem_cons_self
       obtain ⟨a₁, a₂, a₃, a₄⟩ := PartyChain.append_props S M Mk h₁ h₂ k₁ k₂
-      refine ⟨M.append Mk, a₁, a₂, ?_, ?_, fun z => ?_⟩
+      refine ⟨M.append Mk, a₁, a₂, fun f hf => PartyChain.swapsMeet_append f (h₆ f hf) (k₆ f hf),
+        ?_, ?_, fun z => ?_⟩
       · rw [a₃, List.map_cons, List.sum_cons]
         omega
       · rw [a₄, List.map_cons, List.sum_cons]
@@ -174,29 +177,31 @@ private theorem pairwise_zeroBlock {W : List ι} (hW : W.Nodup) :
 of which the owners `own` and `own'` agree, the product of the one-site zero blocks
 `|0⟩⟨0|_x`, `x ∈ W`, is the operator of an allowed monomial from the registers of a frame with
 owners `own` to those with owners `own'`, using only the owners of the sites of `W` before and
-after, with no pair source and no pair effect. At each site the register is contracted with
-`⟨0|` at its owner before and prepared as `|0⟩` at its owner after. -/
+after, with no pair source and no pair effect, moving a register of these owners at every
+exchange of tensor factors. At each site the register is contracted with `⟨0|` at its owner
+before and prepared as `|0⟩` at its owner after. -/
 theorem exists_zeroChain (l : List (Hole pos q Party)) (S : Set Party) :
     (W : List ι) → W.Nodup → (own own' : ι → Party) → (∀ x ∈ W, own x ∈ S ∧ own' x ∈ S) →
     (∀ x ∉ W, own x = own' x) →
     ∃ M : PartyChain (layoutRegs q l own) (layoutRegs q l own'),
-      M.IsAllowed ∧ M.UsesOnly S ∧ M.sourceCount = 0 ∧ M.toEffectChain.effectCount = 0 ∧
+      M.IsAllowed ∧ M.UsesOnly S ∧ M.SwapsMeetSet S ∧
+      M.sourceCount = 0 ∧ M.toEffectChain.effectCount = 0 ∧
       ∀ z, layoutIso l own' (M.toEffectChain.eval z) =
         act ((1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ
           ((W.map (zeroBlock (q := q))).map RankOneBlock.op).prod) (layoutIso l own z)
   | [], _, own, own', _, hown => by
       obtain rfl : own = own' := funext fun x => hown x List.not_mem_nil
-      refine ⟨.final (.id _), trivial, trivial, rfl, rfl, fun z => ?_⟩
+      refine ⟨.final (.id _), trivial, trivial, fun _ _ => trivial, rfl, rfl, fun z => ?_⟩
       simp only [List.map_nil, List.prod_nil, one_kronecker_one, act_one]
       rfl
   | x :: W, hW, own, own', hS, hown => by
       have hxW : x ∉ W := (List.nodup_cons.mp hW).1
       set mid : ι → Party := fun y => if y ∈ W then own' y else own y with hmid
-      obtain ⟨M, h₁, h₂, h₃, h₄, h₅⟩ := exists_zeroChain l S W (List.nodup_cons.mp hW).2 own mid
+      obtain ⟨M, h₁, h₂, h₆, h₃, h₄, h₅⟩ := exists_zeroChain l S W (List.nodup_cons.mp hW).2 own mid
         (fun y hy => ⟨(hS y (List.mem_cons_of_mem _ hy)).1, by
           simpa [hmid, hy] using (hS y (List.mem_cons_of_mem _ hy)).2⟩)
         (fun y hy => by simp [hmid, hy])
-      obtain ⟨Mx, k₁, k₂, k₃, k₃', k₄, k₄', k₅⟩ := exists_rankOneBlock_chain l mid own'
+      obtain ⟨Mx, k₁, k₂, k₆, k₃, k₃', k₄, k₄', k₅⟩ := exists_rankOneBlock_chain l mid own'
         (zeroBlock x) (pA := own x) (pB := own x) (pA' := own' x) (pB' := own' x)
         (fun y hy => by
           obtain rfl : y = x := Finset.mem_singleton.mp hy
@@ -213,8 +218,8 @@ theorem exists_zeroChain (l : List (Hole pos q Party)) (S : Set Party) :
         (norm_zeroPair _ _) (norm_zeroPair _ _) (hS x List.mem_cons_self).1
         (hS x List.mem_cons_self).1 (hS x List.mem_cons_self).2 (hS x List.mem_cons_self).2
       obtain ⟨a₁, a₂, a₃, a₄⟩ := PartyChain.append_props S M Mx h₁ h₂ k₁ k₂
-      refine ⟨M.append Mx, a₁, a₂, by rw [a₃, h₃, k₃' rfl], by rw [a₄, h₄, k₄' rfl],
-        fun z => ?_⟩
+      refine ⟨M.append Mx, a₁, a₂, fun f hf => PartyChain.swapsMeet_append f (h₆ f hf) (k₆ f hf),
+        by rw [a₃, h₃, k₃' rfl], by rw [a₄, h₄, k₄' rfl], fun z => ?_⟩
       rw [PartyChain.eval_append, ContinuousLinearMap.comp_apply, k₅, h₅, ← act_mul,
         ← mul_kronecker_mul, one_mul, List.map_cons, List.map_cons, List.prod_cons]
 
@@ -237,8 +242,9 @@ sites whose owners lie in a set of at most two parties, all in `S`, and let `v`,
 vectors on the configurations of the group. There is a block with the sites outside the group as
 its complement, reading `v` and `w` on every configuration, whose operator
 `1_tags ⊗ |v⟩⟨w|_O ⊗ 1` is an allowed monomial on the registers of a frame, using only the
-parties of `S`, with at most one pair source and at most one pair effect: the sites of the group
-held by one owner form the part `T`, the others the part `U`.
+parties of `S` and moving a register of `S` at every exchange of tensor factors, with at most one
+pair source and at most one pair effect: the sites of the group held by one owner form the part
+`T`, the others the part `U`.
 
 Polynomial-PEPS manuscript, proof of Lemma 6.3, `05-frames.tex`, lines 306–313: a group vector
 is a normalized state or covector on one party, or a normalized bipartite one on its two
@@ -250,7 +256,8 @@ theorem exists_groupBlock (l : List (Hole pos q Party)) (own : ι → Party) (S 
     ∃ b : RankOneBlock ι q, (∀ x, x ∈ b.E ↔ ¬O x) ∧ (∀ c, b.ketAt c = v fun x => c x.1) ∧
       (∀ c, b.braAt c = w fun x => c x.1) ∧
       ∃ M : PartyChain (layoutRegs q l own) (layoutRegs q l own),
-        M.IsAllowed ∧ M.UsesOnly S ∧ M.sourceCount ≤ 1 ∧ M.toEffectChain.effectCount ≤ 1 ∧
+        M.IsAllowed ∧ M.UsesOnly S ∧ M.SwapsMeetSet S ∧
+      M.sourceCount ≤ 1 ∧ M.toEffectChain.effectCount ≤ 1 ∧
         ∀ z, layoutIso l own (M.toEffectChain.eval z) =
           act ((1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ b.op) (layoutIso l own z) := by
   classical
@@ -280,11 +287,11 @@ theorem exists_groupBlock (l : List (Hole pos q Party)) (own : ι → Party) (S 
   have hTE : Disjoint T E := Finset.disjoint_left.mpr fun x hxT hxE =>
     (Finset.mem_filter.mp hxE).2 (hT x hxT)
   let b : RankOneBlock ι q := ⟨T, E, hTE, vk, vb⟩
-  obtain ⟨M, m₁, m₂, m₃, -, m₄, -, m₅⟩ := exists_rankOneBlock_chain l own own b
+  obtain ⟨M, m₁, m₂, m₆, m₃, -, m₄, -, m₅⟩ := exists_rankOneBlock_chain l own own b
     (pA := pA) (pB := pB) (pA' := pA) (pB' := pB) (fun x hx => (Finset.mem_filter.mp hx).2.2)
     hB (fun x hx => (Finset.mem_filter.mp hx).2.2) hB (fun _ _ => rfl) (hvk.trans hv)
     (hvb.trans hw) (hS x₀ hx₀) hpB (hS x₀ hx₀) hpB
-  exact ⟨b, fun x => by simp [b, E], hvk', hvb', M, m₁, m₂, m₃, m₄, m₅⟩
+  exact ⟨b, fun x => by simp [b, E], hvk', hvb', M, m₁, m₂, m₆, m₃, m₄, m₅⟩
 
 /-- The basis vector of the zero configuration of a group of sites, the analogue of `zeroVec`
 and `zeroPair` on the configurations of the group. -/
@@ -317,7 +324,8 @@ theorem exists_braVertexBlock (l : List (Hole pos q Party)) (own : ι → Party)
       (∀ c, b.ketAt c = if ∀ x, O x → c x = 0 then 1 else 0) ∧
       (∀ c, f (fun x => c x.1) = s * star (b.braAt c)) ∧
       ∃ M : PartyChain (layoutRegs q l own) (layoutRegs q l own),
-        M.IsAllowed ∧ M.UsesOnly S ∧ M.sourceCount ≤ (if ∃ x, O x then 1 else 0) ∧
+        M.IsAllowed ∧ M.UsesOnly S ∧ M.SwapsMeetSet S ∧
+      M.sourceCount ≤ (if ∃ x, O x then 1 else 0) ∧
         M.toEffectChain.effectCount ≤ (if ∃ x, O x then 1 else 0) ∧
         ∀ z, layoutIso l own (M.toEffectChain.eval z) =
           act ((1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ b.op) (layoutIso l own z) := by
@@ -328,16 +336,17 @@ theorem exists_braVertexBlock (l : List (Hole pos q Party)) (own : ι → Party)
       rw [orthonormal_iff_ite]
       intro _ _
       simp [inner_self_eq_norm_sq_to_K, hf]
-    obtain ⟨b, hbE, hbK, hbB, M, m₁, m₂, m₃, m₄, m₅⟩ := exists_groupBlock l own S O hne
+    obtain ⟨b, hbE, hbK, hbB, M, m₁, m₂, m₆, m₃, m₄, m₅⟩ := exists_groupBlock l own S O hne
       ⟨P, hP, fun x hx => (hPO x hx).1⟩ (fun x hx => (hPO x hx).2) (zeroGroupVec O)
       (WholeGroup.conjFamily (fun _ : Unit => f) ()) (norm_zeroGroupVec O)
       ((WholeGroup.orthonormal_conjFamily hfo).1 ())
     refine ⟨b, 1, by simp, hbE, fun c => by rw [hbK, zeroGroupVec_apply], fun c => ?_, M, m₁,
-      m₂, by simpa [hne] using m₃, by simpa [hne] using m₄, m₅⟩
+      m₂, m₆, by simpa [hne] using m₃, by simpa [hne] using m₄, m₅⟩
     rw [hbB]
     simp [WholeGroup.conjFamily]
   · refine ⟨emptyBlock, f fun x => (0 : ι → Fin q) x.1, ?_, fun x => ?_, fun c => ?_,
-      fun c => ?_, .final (.id _), trivial, trivial, Nat.zero_le _, Nat.zero_le _, fun z => ?_⟩
+      fun c => ?_, .final (.id _), trivial, trivial, fun _ _ => trivial, Nat.zero_le _,
+      Nat.zero_le _, fun z => ?_⟩
     · rw [← hf]
       exact PiLp.norm_apply_le f _
     · simpa [emptyBlock] using fun h => hne ⟨x, h⟩
@@ -359,20 +368,22 @@ theorem exists_ketVertexBlock (l : List (Hole pos q Party)) (own : ι → Party)
       (∀ c, b.braAt c = if ∀ x, O x → c x = 0 then 1 else 0) ∧
       (∀ c, f (fun x => c x.1) = s * b.ketAt c) ∧
       ∃ M : PartyChain (layoutRegs q l own) (layoutRegs q l own),
-        M.IsAllowed ∧ M.UsesOnly S ∧ M.sourceCount ≤ (if ∃ x, O x then 1 else 0) ∧
+        M.IsAllowed ∧ M.UsesOnly S ∧ M.SwapsMeetSet S ∧
+      M.sourceCount ≤ (if ∃ x, O x then 1 else 0) ∧
         M.toEffectChain.effectCount ≤ (if ∃ x, O x then 1 else 0) ∧
         ∀ z, layoutIso l own (M.toEffectChain.eval z) =
           act ((1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ b.op) (layoutIso l own z) := by
   classical
   by_cases hne : ∃ x, O x
   · obtain ⟨P, hP, hPO⟩ := hO hne
-    obtain ⟨b, hbE, hbK, hbB, M, m₁, m₂, m₃, m₄, m₅⟩ := exists_groupBlock l own S O hne
+    obtain ⟨b, hbE, hbK, hbB, M, m₁, m₂, m₆, m₃, m₄, m₅⟩ := exists_groupBlock l own S O hne
       ⟨P, hP, fun x hx => (hPO x hx).1⟩ (fun x hx => (hPO x hx).2) f (zeroGroupVec O) hf
       (norm_zeroGroupVec O)
     refine ⟨b, 1, by simp, hbE, fun c => by rw [hbB, zeroGroupVec_apply], fun c => by
-      rw [hbK, one_mul], M, m₁, m₂, by simpa [hne] using m₃, by simpa [hne] using m₄, m₅⟩
+      rw [hbK, one_mul], M, m₁, m₂, m₆, by simpa [hne] using m₃, by simpa [hne] using m₄, m₅⟩
   · refine ⟨emptyBlock, f fun x => (0 : ι → Fin q) x.1, ?_, fun x => ?_, fun c => ?_,
-      fun c => ?_, .final (.id _), trivial, trivial, Nat.zero_le _, Nat.zero_le _, fun z => ?_⟩
+      fun c => ?_, .final (.id _), trivial, trivial, fun _ _ => trivial, Nat.zero_le _,
+      Nat.zero_le _, fun z => ?_⟩
     · rw [← hf]
       exact PiLp.norm_apply_le f _
     · simpa [emptyBlock] using fun h => hne ⟨x, h⟩

@@ -56,7 +56,7 @@ is injective and which lies in a non-trivial symmetry-protected topological
   string order and local symmetry for finitely correlated states
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators TNLean.Algebra.ScalarCohomology
 open Matrix Finset MPSTensor
 
 noncomputable section
@@ -454,7 +454,7 @@ projective representation of `Z₂ × Z₂` on the bond space.  Its factor syste
 `clusterOmega` sends `(g, h)` to `-1` exactly when the second component of `g`
 and the first component of `h` are both nonzero, the standard commutator cocycle
 `(-1)^{g₂ h₁}`.  Its commutator phase on the two generators is `-1`, so by
-`isNontrivialClass_of_commPhase_ne_one` its class is the non-trivial element of
+`H2π_ne_zero_of_commPhase_ne_one` its class is the non-trivial element of
 `H²(Z₂ × Z₂, ℂˣ) = Z₂`. -/
 
 open TNLean.Algebra in
@@ -533,8 +533,10 @@ lemma cluster_commPhase_eq_neg_one :
 open TNLean.Algebra in
 /-- The cluster factor system represents the non-trivial element of
 `H²(Z₂ × Z₂, ℂˣ) = Z₂`: the cluster state is a non-trivial SPT phase. -/
-theorem cluster_isNontrivialSPT : ScalarCocycle.IsNontrivialClass clusterOmega := by
-  refine ScalarCocycle.isNontrivialClass_of_commPhase_ne_one
+theorem cluster_isNontrivialSPT :
+    groupCohomology.H2π _
+      (groupCohomology.cocyclesOfIsMulCocycle₂ clusterOmega_isCocycle.isMulCocycle₂) ≠ 0 := by
+  refine ScalarCocycle.H2π_ne_zero_of_commPhase_ne_one clusterOmega_isCocycle
     (g := Multiplicative.ofAdd (1, 0)) (h := Multiplicative.ofAdd (0, 1)) ?_ ?_
   · rfl
   · rw [cluster_commPhase_eq_neg_one]
