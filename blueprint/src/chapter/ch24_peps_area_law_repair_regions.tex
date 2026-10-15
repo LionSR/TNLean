@@ -285,3 +285,60 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
         \label{eq:area_law_repair_terminal_interiors}
     \end{align}
 \end{definition}
+
+% Source: 10-geometry.tex, actual regions and dummy exclusion, lines 558--568;
+% final restriction to the cut, lines 777--789.
+\begin{definition}[Lattice sites in the current regions]
+    \label{def:area_law_repair_region_sites}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairStage.regionSites,
+        TNLean.PEPS.AreaLaw.Geometry.RepairStage.RetainedRegionIndex}
+    \leanok
+    \uses{def:area_law_repair_stage}
+    Let $\mathcal D$ be a stage with current regions $(R_i)_{i\in I}$
+    and distinguished identifier $*$. For a finite cut $A\subseteq\Lambda$,
+    define
+    \begin{align}
+        X_i(A) & = A\cap R_i,
+               & I_A          & = \{i\in I\setminus\{*\}:X_i(A)\ne\varnothing\}.
+        \label{eq:area_law_repair_region_sites}
+    \end{align}
+    Here lattice sites are identified with their points in $\mathbb R^2$.
+    Every $X_i(A)$ is finite. All sites of one identifier are retained
+    together, including when its current region is disconnected.
+\end{definition}
+
+% Source: 10-geometry.tex, final lattice partition, lines 558--561;
+% geometry:bad-sites, lines 694--707.
+\begin{definition}[Exceptional lattice sites]
+    \label{def:area_law_repair_exceptional_sites}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStageExceptionalSites}
+    \leanok
+    \uses{def:area_law_repair_region_sites,
+        def:area_law_repair_terminal_interiors}
+    For the actual recursive family and any generation $N$, define
+    \begin{align}
+        D_N(A)
+         & = A\cap\bigl(R_{*_N}^{(N)}\cup\mathcal E_{\mathrm{term}}\bigr).
+        \label{eq:area_law_repair_exceptional_sites}
+    \end{align}
+    The terminal contribution is accumulated over all generations.
+    The use of $D_N(A)$ as the exceptional part of the final partition
+    requires the repair induction, exclusion of lattice sites from the
+    interfaces, and a generation after all terminal removals have been
+    performed.
+\end{definition}
+
+% Source: 10-geometry.tex, finiteness after restriction to the cut,
+% lines 777--780.
+\begin{lemma}[Finiteness of the retained identifiers]
+    \label{lem:area_law_repair_region_sites_finite}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairStage.finite_retainedRegionIndex}
+    \leanok
+    \uses{def:area_law_repair_region_sites}
+    If the current regions $(R_i)_{i\in I}$ are pairwise disjoint,
+    then $I_A$ is finite for every finite cut $A$.
+\end{lemma}
+\begin{proof}\leanok
+    The nonempty sets $X_i(A)$ with $i\in I_A$ are pairwise disjoint
+    subsets of the finite set $A$. Their index set is therefore finite.
+\end{proof}

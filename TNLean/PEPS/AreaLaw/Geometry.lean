@@ -114,6 +114,7 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairInductionMetric
 import TNLean.PEPS.AreaLaw.Geometry.RepairInductionStatement
 import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementRegions
 import TNLean.PEPS.AreaLaw.Geometry.RepairStage
+import TNLean.PEPS.AreaLaw.Geometry.RepairStageSites
 import TNLean.PEPS.AreaLaw.Geometry.RepairStageStars
 import TNLean.PEPS.AreaLaw.Geometry.RepairStarModel
 import TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation
