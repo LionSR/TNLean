@@ -103,7 +103,7 @@ no holes, this is the normalization of $\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_frame_norm}
+    \uses{thm:peps_sheet_initialization, thm:peps_frame_norm}
     Without holes the product of the hole projectors is the identity, so
     $\lVert\Omega_{\mathcal F}\rVert=\lVert\Omega\rVert=1$, and the norm of a product
     of reference vectors is the product of their norms.
@@ -162,7 +162,16 @@ no holes, this is the normalization of $\Omega$.
     \lean{TNLean.PEPS.EncodedFrame.trivialTag,
         TNLean.PEPS.EncodedFrame.physVec,
         TNLean.PEPS.EncodedFrame.freshMap,
+        TNLean.PEPS.EncodedFrame.freshMap_apply,
+        TNLean.PEPS.EncodedFrame.norm_freshMap_le,
         TNLean.PEPS.EncodedFrame.renameMap,
+        TNLean.PEPS.EncodedFrame.renameMap_tmul,
+        TNLean.PEPS.EncodedFrame.norm_renameMap_le,
+        TNLean.PEPS.EncodedFrame.finOneOf,
+        TNLean.PEPS.EncodedFrame.nonprivateCount_freshCircuit,
+        TNLean.PEPS.EncodedFrame.nonprivateCount_siteCircuit,
+        TNLean.PEPS.EncodedFrame.mem_nonsiteParties,
+        TNLean.PEPS.EncodedFrame.nonsiteParties_dim,
         TNLean.PEPS.EncodedFrame.freshCircuit,
         TNLean.PEPS.EncodedFrame.siteCircuit,
         TNLean.PEPS.EncodedFrame.nonsiteParties,
