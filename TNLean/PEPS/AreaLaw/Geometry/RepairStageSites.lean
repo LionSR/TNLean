@@ -57,6 +57,7 @@ def repairStageExceptionalSites (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))
   A.filter (fun x ↦ integerPoint x.val ∈
     D.current D.dummy ∪ repairTerminalInteriors o Λ A C k₀ hC h₀ Sstar)
 
+open scoped Classical in
 /-- Pairwise disjoint current regions have only finitely many non-dummy
 identifiers meeting a finite cut. No finiteness of the ambient identifier
 family is required.
