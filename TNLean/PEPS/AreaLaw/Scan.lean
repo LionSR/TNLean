@@ -36,7 +36,6 @@ import TNLean.PEPS.AreaLaw.Scan.ActualRoundParameterIntegral
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundSplits
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport
 import TNLean.PEPS.AreaLaw.Scan.ActualScanMeasures
-<<<<<<< HEAD
 import TNLean.PEPS.AreaLaw.Scan.ActualSelectedChargeDensityEnergy
 import TNLean.PEPS.AreaLaw.Scan.ActualSelectedChargeEnergy
 import TNLean.PEPS.AreaLaw.Scan.ActualSelectedCollarInformation
@@ -51,11 +50,6 @@ import TNLean.PEPS.AreaLaw.Scan.ActualTerminalCollarGeometry
 import TNLean.PEPS.AreaLaw.Scan.ActualTerminalEntropyBounds
 import TNLean.PEPS.AreaLaw.Scan.ActualTerminalPartitions
 import TNLean.PEPS.AreaLaw.Scan.ActualTerminalPrefixEntropy
-=======
-import TNLean.PEPS.AreaLaw.Scan.ActualSharpPrevector
-import TNLean.PEPS.AreaLaw.Scan.ActualSharpUpper
-import TNLean.PEPS.AreaLaw.Scan.ActualTerminalPartitions
->>>>>>> 74ecad48c409da176dc3e49ccd2bd9dd0462c9d9
 import TNLean.PEPS.AreaLaw.Scan.ActualTransportEstimates
 import TNLean.PEPS.AreaLaw.Scan.AmbientDepth
 import TNLean.PEPS.AreaLaw.Scan.AncestryCover
@@ -176,10 +170,7 @@ import TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpComparison
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpDensity
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpEnergy
 import TNLean.PEPS.AreaLaw.Scan.SourceStatusMarginalMoments
-<<<<<<< HEAD
 import TNLean.PEPS.AreaLaw.Scan.SourceTargetSharpMoments
-=======
->>>>>>> 74ecad48c409da176dc3e49ccd2bd9dd0462c9d9
 import TNLean.PEPS.AreaLaw.Scan.SourceTargetSharpUpper
 import TNLean.PEPS.AreaLaw.Scan.SplitCounting
 import TNLean.PEPS.AreaLaw.Scan.SplitEntropyBound
