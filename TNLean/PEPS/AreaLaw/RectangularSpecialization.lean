@@ -17,8 +17,11 @@ the ground vector, and the cut. The conclusion uses native configuration
 entropy and the actual native edge and vertex boundaries, for every `q ≥ 1`.
 Zero sides, one-site rectangles, strips, and empty boundaries are included.
 
-The uniform area law remains an explicit, substantive premise: this module
-proves the reduction and does not assert the unconditional Corollary 1.2.
+**Scope restriction (conditional area law):** The implication
+`UniformAreaLaw.rectangularEntropyAreaLaw` retains the uniform finite-domain
+area law as an explicit, substantive premise. It proves the reduction and does
+not assert the unconditional Corollary 1.2. This restriction is documented in
+`docs/paper-gaps/arealaw2d_rectangular_specialization_scope.tex`.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Theorem 1.1 and Corollary 1.2 (`cor:rectangles`), and
