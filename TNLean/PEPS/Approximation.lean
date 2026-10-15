@@ -160,6 +160,7 @@ import TNLean.PEPS.Approximation.DyadicSampledGuides
 import TNLean.PEPS.Approximation.DyadicSmallPatchCovers
 import TNLean.PEPS.Approximation.DyadicSuppliedPatchSteps
 import TNLean.PEPS.Approximation.DyadicTreatedFrameDescriptions
+import TNLean.PEPS.Approximation.DyadicTreatedFrames
 import TNLean.PEPS.Approximation.DyadicTreatedTrueVertices
 import TNLean.PEPS.Approximation.DyadicTrueVertices
 import TNLean.PEPS.Approximation.DyadicUnmodifiedVertices
