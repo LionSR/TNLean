@@ -175,7 +175,114 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
       ∃ D' : DyadicProtocol L q (ProtocolParty k),
         D'.IsDistributionProtocol Ω C₁ (64 * 189) kK (2 * protocolPatchBound ε₀ ν) ∧
           ∀ t < D'.changes, (D'.step t).IsSourceBounded (2 * protocolPatchBound ε₀ ν) := by
-  obtain ⟨ν', hν', Hres⟩ := exists_resize_hasSourceBoundedChange (B₀ := 0) hε hε₀
-  sorry
+  obtain ⟨ν', hν', Hres⟩ := exists_resize_hasSourceBoundedChange (k := k) hε hε₀
+  refine ⟨ν', hν', fun ν hν hνν' {K₀ a D B₀} hc hm {L q} _ {Ω C c} P hL hkL hk2 hΩ rank R₀ ht hB
+    frozen auxOwner {C' c' kK C₁} hC hC' hcc hlarge hfε hfh hC₁ hK hεC => ?_⟩
+  classical
+  have hk : 1 ≤ k := by
+    by_contra h
+    have : k = 0 := by omega
+    subst this
+    simp at hk2
+    omega
+  set t := D * Real.log L with ht_def
+  set large := largeSquare (k := k) K₀ t with hlarge_def
+  set b := protocolPatchBound ε₀ ν with hb_def
+  set st := protocolState P rank R₀ hε ht hB large frozen auxOwner with hst_def
+  set idle : ProtocolEvent k × RepaintOp → Frame (cellCenterPos L) q (ProtocolParty k) :=
+    fun x => Frame.raw fun _ => auxOwner x
+  have hε0 : (0 : ℝ) ≤ (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by positivity
+  -- the changes of each event
+  have hseg : ∀ i (hi : i < (eventSchedule k).length),
+      ∃ seg : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)), seg 0 = st i ∧
+        seg (eventOps large ((eventSchedule k)[i])).length = st (i + 1) ∧
+        ∀ j < (eventOps large ((eventSchedule k)[i])).length,
+          HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (ℓ := []) (1 : ℂ)
+            {p | EventUses ((eventSchedule k)[i]) p} (2 * b) (rewriteGateBound C' c' b L)
+            (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) := by
+    intro i hi
+    -- one change between the states before and after the event
+    have hone : HasSourceBoundedChange Ω (st i) (st (i + 1)) (ℓ := []) (1 : ℂ)
+        {p | EventUses ((eventSchedule k)[i]) p} (2 * b) (rewriteGateBound C' c' b L)
+        (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) →
+        (eventOps large ((eventSchedule k)[i])).length = 1 →
+        ∃ seg : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)), seg 0 = st i ∧
+          seg (eventOps large ((eventSchedule k)[i])).length = st (i + 1) ∧
+          ∀ j < (eventOps large ((eventSchedule k)[i])).length,
+            HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (ℓ := []) (1 : ℂ)
+              {p | EventUses ((eventSchedule k)[i]) p} (2 * b) (rewriteGateBound C' c' b L)
+              (2 * b) ((2 * b + 1) * ((L : ℝ) ^ 20)⁻¹) := fun h h1 =>
+      ⟨fun j => if j = 0 then st i else st (i + 1), by simp, by rw [h1]; simp, fun j hj => by
+        rw [h1] at hj
+        obtain rfl : j = 0 := by omega
+        simpa using h⟩
+    rcases he : (eventSchedule k)[i] with S | J
+    · by_cases hlS : large S = true
+      · obtain ⟨seg, h0, h1, h2⟩ := hlarge i hi S he hlS
+        refine ⟨seg, h0, ?_, ?_⟩
+        · simp only [eventOps, hlS, ite_true, length_largeRepaintingOps]; exact h1
+        · simp only [eventOps, hlS, ite_true, length_largeRepaintingOps]; exact h2
+      · have hS : (S.1 : ℕ) < k := by
+          have := isScheduled_getElem hi; rw [he] at this; exact this
+        have hKS : (2 : ℝ) ^ (S.1 : ℕ) ≤ K₀ * t := by
+          by_contra h
+          exact hlS (by simp only [hlarge_def, largeSquare, decide_eq_true_eq]; exact not_le.1 h)
+        rw [← he]
+        refine hone ?_ (by simp [he, eventOps, hlS])
+        have haux := auxState_succ frozen idle hi (large := large) fun S' h => by
+          rw [he] at h; obtain rfl := Sum.inl_injective h; simpa using hlS
+        simp only [hst_def, protocolState]
+        rw [haux, mainState_of_lt _ _ _ _ _ _ hi, he, ← eventMain_inl_succ P rank R₀ hε ht hB hk hi he]
+        simp only [eventMain]
+        exact directRepainting_hasSourceBoundedChange hc hm hL hkL hΩ P rank R₀ ⟨S, hS⟩
+          hKS _ _ hC hC' hcc _
+    · have hJ0 : 0 < (J.1 : ℕ) := by
+        have := isScheduled_getElem hi; rw [he] at this; exact this
+      rw [← he]
+      refine hone ?_ (by simp [he, eventOps])
+      have haux := auxState_succ frozen idle hi (large := large) fun S' h => by
+        rw [he] at h; exact absurd h Sum.inr_ne_inl
+      simp only [hst_def, protocolState]
+      rw [haux, mainState_of_lt _ _ _ _ _ _ hi, he, ← eventMain_inr_succ P rank R₀ hε ht hB hk hi he]
+      simp only [eventMain]
+      exact Hres ν hν hνν' hc hL hkL hΩ P rank R₀ J hJ0 _ _ _ hC hC' hcc _
+  -- the trajectory
+  choose seg hseg0 hsegm hsegs using hseg
+  obtain ⟨tr, htr0, htrm, htrs⟩ := exists_frames_of_segments (Ω := Ω) (ℓ := []) (ξ := (1 : ℂ))
+    (fun e : ProtocolEvent k => {p | EventUses e p}) (eventOps large) (eventSchedule k) st
+    (fun i => if h : i < (eventSchedule k).length then seg i h else fun _ => st i)
+    (fun i => by split_ifs with h; exacts [hseg0 i h, rfl])
+    (fun i hi => by simp only [hi, dite_true]; exact hsegm i hi)
+    (fun i hi j hj => by simp only [hi, dite_true]; exact hsegs i hi j hj)
+  -- the endpoints
+  have hall : ∀ x ∈ auxIndices k large, x.1 ∈ (eventSchedule k).take (eventSchedule k).length :=
+    fun x hx => by rw [List.take_length]; exact mem_eventSchedule_of_mem_auxIndices hx
+  have hfin : tr (protocolSchedule k large).length = finalMain P rank R₀ hε ht hB ::
+      (auxIndices k large).map frozen := by
+    change tr ((eventSchedule k).flatMap fun e => (eventOps large e).map (e, ·)).length = _
+    rw [htrm, hst_def, protocolState, mainState_of_le _ _ _ _ _ _ le_rfl]
+    congr 1
+    exact List.map_congr_left fun x hx => by simp only [auxState, hall x hx, ite_true]
+  have hst0 : tr 0 = Frame.raw (fun _ => .inl (rootSquare k)) :: (auxIndices k large).map idle := by
+    rw [htr0, hst_def, protocolState, mainState_zero P rank R₀ hε ht hB hk hkL]
+    congr 1
+  have hL0 : 0 < L := by omega
+  have hε4 : 4 * ε₀ < 1 := by have := hc.ε₀_lt; linarith
+  refine exists_isDistributionProtocol_of_hasSourceBoundedChange hL hkL hk2 large hΩ tr
+    (fun F => F.owner (⟨0, hL0⟩, ⟨0, hL0⟩)) (fun F hF => ?_) (fun F hF x => ?_)
+    (fun t ht => htrs t ht) _ _ hfin
+    (finalMain_owner P rank R₀ hε ht hB hkL hε4) (finalMain_holes P rank R₀ hε ht hB hε4)
+    (fun F hF h hh => ?_) (by simpa [List.map_map, Function.comp_def] using hfh) hC₁ hK
+    (by rw [div_eq_mul_inv]; gcongr)
+  · rw [hst0] at hF
+    rcases List.mem_cons.1 hF with rfl | hF
+    · rfl
+    · obtain ⟨x, -, rfl⟩ := List.mem_map.1 hF; rfl
+  · rw [hst0] at hF
+    rcases List.mem_cons.1 hF with rfl | hF
+    · rfl
+    · obtain ⟨x, -, rfl⟩ := List.mem_map.1 hF; rfl
+  · obtain ⟨x, hx, rfl⟩ := List.mem_map.1 hF
+    exact hfε x hx h hh
 
 end TNLean.PEPS.Approximation
