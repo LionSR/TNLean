@@ -220,10 +220,10 @@ Its marginals are those of the same final normalized vector defined in
 \end{proof}
 
 % Source: polynomial-PEPS Proposition 4.1, 03-patches.tex, lines 91--99.
-% Completion marks await verification of the public declaration.
 \begin{theorem}[Canonical coordinates for the normalized output]
     \label{thm:peps_ordered_patch_normalized_coordinates}
     \lean{TNLean.PEPS.dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput}
+    \leanok
     \uses{def:peps_ordered_patch_factor_list,def:peps_patch_canonical_marginal,
         def:peps_regularized_patch_minimum}
     Retain arbitrary matrices $x_j$, real exponents $a_j$, a real shift $b$,
@@ -234,6 +234,7 @@ Its marginals are those of the same final normalized vector defined in
     Then $J\widehat\Psi=\widehat{\widetilde\Psi}$.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:peps_ordered_patch_output_coordinates}
     Linearity and preservation of the norm give
     \begin{align*}
@@ -248,6 +249,7 @@ Its marginals are those of the same final normalized vector defined in
 \begin{theorem}[Regional marginals in the ordered coordinates]
     \label{thm:peps_ordered_patch_marginal_coordinates}
     \lean{TNLean.PEPS.normalizedRegularizedPatchMarginal_eq_regionState_patchState}
+    \leanok
     \uses{thm:peps_ordered_patch_normalized_coordinates,def:peps_patch_canonical_marginal}
     For the same arbitrary data and every region $R\subseteq V$, the canonical
     marginal of the normalized ordered output satisfies
@@ -259,6 +261,7 @@ Its marginals are those of the same final normalized vector defined in
     The identity includes the empty region and a vanishing output.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:peps_ordered_patch_normalized_coordinates,thm:peps_patch_basis_relabelling}
     Apply the regional coordinate identity with the identity relabelling at
     every site. The normalized vectors agree by
