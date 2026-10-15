@@ -206,9 +206,9 @@ They require no numerical bound on a private register dimension.
     owner set. For $q\in Q$, let $R_W(q)$ be the ordered sublist of source
     registers owned by $q$, and let $H_q=\mathcal H_{R_W(q)}$ be its
     tensor-product memory. Choose an orthonormal basis
-    \[
+    \begin{align}
         (b_{q,i})_{0\le i<\dim_{\C}H_q}
-    \]
+    \end{align}
     of $H_q$. This is a finite basis of the actual selected memory.
 \end{definition}
 
@@ -224,9 +224,9 @@ They require no numerical bound on a private register dimension.
     $Q=P\sqcup\{*\}$. For $q\in Q$, let $G(q)$ be the ordered sublist
     of the relabelled registers owned by $q$, and put
     $K_q=\mathcal H_{G(q)}$. Choose an orthonormal basis
-    \[
+    \begin{align}
         (c_{q,j})_{0\le j<\dim_{\C}K_q}
-    \]
+    \end{align}
     of $K_q$. Relabelling leaves every register space unchanged, and
     selection preserves finite dimensionality of the tensor-product
     memory, so this basis requires only the stated per-register
@@ -259,9 +259,9 @@ on the private memory dimensions.
     most $M$ and that each party participates in at most $\ell$ such
     occurrences. Let $B,D\geq1$, with $d_p\leq D$ for every party.
     Fix $0<\varepsilon\leq1$ and put
-    \[
+    \begin{align}
         \delta_a=\frac{\varepsilon}{16\max\{1,M\}}.
-    \]
+    \end{align}
     Suppose the actual monomial list at each gate is supplied at this
     accuracy: its monomials are allowed, each contains at most $r$ pair
     effects, their absolute coefficient sum is at most $B$, and their
@@ -274,21 +274,21 @@ on the private memory dimensions.
 
     Rescale every monomial list by $(1+\delta_a)^{-1}$ to obtain the
     original contraction circuit $W$. Set
-    \[
+    \begin{align}
         \delta_e=\frac{\varepsilon}{8\max\{1,M\}},
         \qquad
         m=\left\lceil\left(\frac{rB}{\delta_e}\right)^2\right\rceil+1,
-    \]
+    \end{align}
     and form its actual physical-first source replacement $R$ with stack
     length $m$. If $N_R$ is the number of actual source occurrences in
     $R$, set
-    \[
+    \begin{align}
         Q=B^{4\ell}D^4,
         \qquad
         k=\left\lceil
         \left(\frac{8\max\{1,N_R\}Q}{\varepsilon}\right)^2
         \right\rceil+1.
-    \]
+    \end{align}
     Choose the local source and discarded-memory orthonormal bases of
     Definitions~\ref{def:peps_all_party_local_source_basis} and
     \ref{def:peps_all_party_local_discard_basis}. The discarded list is
@@ -306,19 +306,19 @@ on the private memory dimensions.
     Theorem~\ref{thm:peps_actual_sampled_distributed_contraction}. Its gate
     labels are ordered ket and bra branch pairs, and the coefficient at
     a nonempty occurrence $g$ is
-    \[
+    \begin{align}
         c_g(\xi,\zeta)
         =k^{-\binom{|C_g|}{2}}
         a_g(\xi)\overline{a_g(\zeta)}.
-    \]
+    \end{align}
     Every source sample assignment is common to its two endpoints.
     Let $\lambda_R$ be the scalar contributed by the empty-participant
     gate occurrences and put $\gamma_R=\lambda_R\overline{\lambda_R}$.
     Then
-    \[
+    \begin{align}
         \bigl\|\gamma_R\mathcal C_R(\omega)-\rho_G\bigr\|_1
         \leq\varepsilon,
-    \]
+    \end{align}
     where $\rho_G$ is the physical partial trace of the original
     chronological output on $\psi$, evaluated with the original
     operators $G_g$ and expressed in the original party-labelled
