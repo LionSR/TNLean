@@ -134,13 +134,15 @@ theorem exists_rectangleBootstrapScanner_geometry (F : ScannerExponents)
   have hnEq : S.n = 24 * Q.size := by
     change Nat.ceil ((24 : ℝ) * (Q.size : ℝ)) = 24 * Q.size
     simpa only [Nat.cast_mul, Nat.cast_ofNat] using
-      (show Nat.ceil (((24 * Q.size : ℕ) : ℝ)) = 24 * Q.size by simp)
+      (show Nat.ceil (((24 * Q.size : ℕ) : ℝ)) = 24 * Q.size from Nat.ceil_natCast _)
   have hn24 : 24 * Q.size ≤ S.n := hnEq.ge
   have hsn : Q.size ≤ S.n := by omega
   have hsize : (Q.toFinset.card : ℝ) ≤ (S.n : ℝ) ^ 2 := by
     exact_mod_cast (rectangleBootstrap_card_le Q).trans (Nat.pow_le_pow_left hsn 2)
   have hanchor : ∀ i, S.anchor i ∈ i.val := fun i ↦ i.property.1.choose_spec
   have hbudget : D₀ * F.L S.n + F.L S.n ≤ D₀ * Q.size := by
+    change D₀ * F.L (Nat.ceil ((24 : ℝ) * Q.size)) +
+      F.L (Nat.ceil ((24 : ℝ) * Q.size)) ≤ D₀ * Q.size
     simpa only [add_mul, one_mul] using (hbudgets D₀ hD₀).1
   refine ⟨rectangleBootstrap_nonempty Q, rfl, rfl, hnEq, hsn, rfl, hanchor,
     fun x ↦ card_anchor_fiber_le S.anchor hanchor x,
