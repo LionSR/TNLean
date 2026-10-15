@@ -20,6 +20,9 @@ from the uniform guide only in the band of one edge (lines 653–655).
 
 This file proves the count of lines 653–656:
 
+* the lens exchange leaves on the auxiliary sheet the auxiliary guide with the word
+  `auxWordExchanged`;
+
 * every true vertex of an auxiliary guide is an endpoint of its edge, so each frozen auxiliary
   sheet has at most two holes, in the coordinates of the repainted square and after translating
   it to its block;
@@ -35,6 +38,8 @@ Distances are ambient sup distances: `ℝ × ℝ` carries the maximum metric.
 
 ## Main results
 
+* `TNLean.PEPS.Approximation.RepaintingBaseline.lensExchange_auxGuide`: the auxiliary guide
+  after the lens exchange.
 * `TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_auxGuide_subset`: the true vertices
   of an auxiliary guide lie at the two endpoints of its edge.
 * `TNLean.PEPS.Approximation.RepaintingBaseline.ncard_isTrueVertex_shiftGuide_auxGuide_le`: at
@@ -57,6 +62,62 @@ Independently formalized from the manuscript; no upstream Lean proof text is reu
 namespace TNLean.PEPS.Approximation
 
 open Set
+
+/-! ### The auxiliary sheet after the lens exchange -/
+
+/-- **The exchanged auxiliary word.** On the band coordinate, taking the starting main word
+`C | A | B` on the lens `-7 < x < -7/2` and the auxiliary word elsewhere gives the word
+`C | A | B | C` at interfaces `-3, -2, -1` left on the auxiliary sheet.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:190–212`. -/
+theorem lens_exchange_auxWord {ι : Type*} (A B C : ι) (x : ℝ) :
+    (if -7 < x ∧ x < -7 / 2 then edgeStartWord A B C x else auxWord A B C x) =
+      auxWordExchanged A B C x := by
+  by_cases h : -7 < x ∧ x < -7 / 2
+  · simp only [h, and_self, ↓reduceIte]
+    obtain ⟨h1, h2⟩ := h
+    simp only [edgeStartWord, auxWordExchanged, bandWord]
+    split_ifs <;> first | rfl | (exfalso; linarith)
+  · simp only [h, ↓reduceIte]
+    have h' : x ≤ -7 ∨ -7 / 2 ≤ x := by
+      rcases le_or_gt x (-7) with h1 | h1
+      · exact Or.inl h1
+      · exact Or.inr (le_of_not_gt fun h2 => h ⟨h1, h2⟩)
+    simp only [auxWord, auxWordExchanged, bandWord]
+    rcases h' with h' | h' <;> split_ifs <;> first | rfl | (exfalso; linarith)
+
+namespace RepaintingBaseline
+
+variable {ι : Type*} (R : RepaintingBaseline ι)
+
+open Classical in
+/-- **The auxiliary sheet after the lens exchange.** Exchanging the starting main guide and the
+auxiliary guide on the lens `Y` leaves on the auxiliary sheet the auxiliary guide with the word
+`auxWordExchanged` on the band of `e`. With the point treatment of the exchange removed, this is
+the final guide of the auxiliary sheet, which is then retired.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:198–214, 620–624`. -/
+theorem lensExchange_auxGuide (E : List SquareEdge) (e : SquareEdge) :
+    (fun p => if p ∈ edgeLens R.n e then
+        R.mainGuide E e (edgeStartWord R.oldLabel R.finalLabel (R.nbrLabel e)) p
+      else R.auxGuide e (auxWord R.oldLabel R.finalLabel (R.nbrLabel e)) p) =
+      R.auxGuide e (auxWordExchanged R.oldLabel R.finalLabel (R.nbrLabel e)) := by
+  funext p
+  have hYB : edgeLens R.n e ⊆ edgeBand R.n e (-8) 2 := edgeBand_mono (by norm_num) (by norm_num)
+  by_cases hb : p ∈ edgeBand R.n e (-8) 2
+  · obtain ⟨s1, s2, -, -⟩ := mem_edgeBand_iff_bandCoord.1 hb
+    have hY : p ∈ edgeLens R.n e ↔ -7 < bandCoord R.n e p ∧ bandCoord R.n e p < -7 / 2 := by
+      rw [edgeLens, mem_edgeBand_iff_bandCoord]
+      exact ⟨fun h => ⟨h.2.2.1, h.2.2.2⟩, fun h => ⟨s1, s2, h.1, h.2⟩⟩
+    rw [auxGuide, auxGuide, bandUpdate_of_mem hb, bandUpdate_of_mem hb, ← lens_exchange_auxWord]
+    by_cases h : p ∈ edgeLens R.n e
+    · simp only [h, hY.1 h, and_self, ↓reduceIte, mainGuide, bandUpdate_of_mem hb]
+    · have h' : ¬(-7 < bandCoord R.n e p ∧ bandCoord R.n e p < -7 / 2) := mt hY.2 h
+      simp only [h, h', ↓reduceIte]
+  · have hY : p ∉ edgeLens R.n e := fun h => hb (hYB h)
+    simp only [hY, ↓reduceIte, auxGuide, bandUpdate_of_notMem hb]
+
+end RepaintingBaseline
 
 /-! ### Holes of one frozen auxiliary sheet -/
 
@@ -107,7 +168,9 @@ end RepaintingBaseline
 /-! ### All frozen auxiliary sheets of the schedule -/
 
 /-- The final guide of a frozen auxiliary sheet: the auxiliary guide of the edge `e` of a
-repainting `R`, with the word left by the lens exchange, translated by `o` to the block.
+repainting `R`, with the word left by the lens exchange, translated by `o` to the block. By
+`RepaintingBaseline.lensExchange_auxGuide` this is the guide that the lens exchange leaves on the
+auxiliary sheet.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:193–214, 620–624`. -/
 noncomputable def frozenAuxGuide {ι : Type*} (R : RepaintingBaseline ι) (o : ℝ × ℝ)
