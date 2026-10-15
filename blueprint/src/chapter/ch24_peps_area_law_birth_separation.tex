@@ -422,8 +422,10 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     Normalize a belt cell of layer $k$ to $[0,4]^2$. Every fan triangle and
     every closed fine cell of a layer $h$ with fine scale index at least that
     of layer $k$ minus one becomes a set as in item (1) of
-    Theorem~\ref{thm:area_law_belt_atoms}. Consequently, if $p$ lies in the
-    closed cell and $w$ lies in the closed birth region of a primary or of a
+    Theorem~\ref{thm:area_law_belt_atoms}. For the initial construction, take
+    a width $C_0\ge2$, a lower layer $k_0\ge50{,}000{,}000$, and
+    $k\ge k_0$. If $p$ lies in the closed cell and $w$ lies in the closed
+    birth region of a primary or of a
     belt tile, with $\|p-w\|<t_k$, then the normalized point $w$ lies in an
     atom contained in the normalized birth region.
 \end{theorem}
@@ -457,8 +459,10 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
         TNLean.PEPS.AreaLaw.Geometry.beltNormalize_symm_mem_beltCellMarks}
     \leanok
     \uses{thm:area_law_belt_cell_local_atoms, def:area_law_belt_cell_marks}
-    Let $x$ be an initial belt tile of a belt cell, and let $y\ne x$ be an
-    initial identifier of the same label. If a point of $\mathbb Z^2$, in
+    In the initial construction, fix a width $C_0\ge2$ and a lower layer
+    $k_0\ge50{,}000{,}000$. Let $x$ be an initial belt tile in a belt cell of
+    layer $k\ge k_0$, and let $y\ne x$ be an initial identifier of the same
+    label. If a point of $\mathbb Z^2$, in
     coordinates normalized at the cell, lies in the birth region of $x$ and in
     an atom contained in the normalized birth region of $y$, then it is the
     normalized position of one of the nine marks of the cell.
