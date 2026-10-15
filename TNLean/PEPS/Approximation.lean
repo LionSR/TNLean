@@ -400,6 +400,7 @@ import TNLean.PEPS.Approximation.SquareGridColumn
 import TNLean.PEPS.Approximation.SquareGridContraction
 import TNLean.PEPS.Approximation.SquareGridSource
 import TNLean.PEPS.Approximation.SquareHamiltonianHermitianTerms
+import TNLean.PEPS.Approximation.SquareInteractionSupport
 import TNLean.PEPS.Approximation.SquareLatticeConnectivity
 import TNLean.PEPS.Approximation.SupportedPhysicalBufferGaussian
 import TNLean.PEPS.Approximation.SupportedPolarUnitary
