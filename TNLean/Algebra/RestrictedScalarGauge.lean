@@ -34,7 +34,7 @@ namespace ScalarCocycle
 normalized and `β(g,g⁻¹) = 1` for every `g`. This is arXiv:2502.20257, lines
 2050--2053. -/
 def IsInverseNormalized (β : ScalarCocycle G) : Prop :=
-  β.IsNormalized ∧ ∀ g, β g g⁻¹ = 1
+  β.IsNormalized ∧ ∀ g, β (g, g⁻¹) = 1
 
 /-- The identity fusion scalar is inverse-normalized. -/
 @[simp]
@@ -90,20 +90,20 @@ instance : Inv (RestrictedFusionGauge G) := ⟨inv⟩
 instance : Group (RestrictedFusionGauge G) where
   mul_assoc β₁ β₂ β₃ := by
     apply RestrictedFusionGauge.ext
-    funext g h
-    exact mul_assoc (β₁.beta g h) (β₂.beta g h) (β₃.beta g h)
+    funext ⟨g, h⟩
+    exact mul_assoc (β₁.beta (g, h)) (β₂.beta (g, h)) (β₃.beta (g, h))
   one_mul β := by
     apply RestrictedFusionGauge.ext
-    funext g h
-    exact one_mul (β.beta g h)
+    funext ⟨g, h⟩
+    exact one_mul (β.beta (g, h))
   mul_one β := by
     apply RestrictedFusionGauge.ext
-    funext g h
-    exact mul_one (β.beta g h)
+    funext ⟨g, h⟩
+    exact mul_one (β.beta (g, h))
   inv_mul_cancel β := by
     apply RestrictedFusionGauge.ext
-    funext g h
-    exact inv_mul_cancel (β.beta g h)
+    funext ⟨g, h⟩
+    exact inv_mul_cancel (β.beta (g, h))
 
 /-- The identity restricted fusion gauge acts trivially on scalar 3-cochains. -/
 @[simp]

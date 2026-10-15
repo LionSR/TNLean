@@ -16,7 +16,7 @@ nonintegral.
     Set $o=(\sqrt 2,\sqrt 3)\in\mathbb R^2$.
 \end{definition}
 
-\begin{theorem}[Four nonintegrality assertions]
+\begin{theorem}[Nonintegrality of the origin coordinates]
     \label{thm:area_law_dyadic_origin_nonintegral}
     \lean{TNLean.PEPS.AreaLaw.Geometry.dyadicOrigin_nonintegral}
     \leanok
@@ -28,8 +28,8 @@ nonintegral.
     Squaring positive rational bounds gives
     $4/3<\sqrt 2<2$ and $5/3<\sqrt 3<2$; also
     $\sqrt 2<\sqrt 3$. Thus $o_1,o_2\in(1,2)$,
-    $o_1+o_2\in(3,4)$ and $o_1-o_2\in(-1,0)$.
-    No integer lies strictly between consecutive integers.
+    $o_1+o_2\in(3,4)$ and $o_1-o_2\in(-1,0)$,
+    and no integer lies strictly between consecutive integers.
 \end{proof}
 
 \begin{theorem}[Integer-translated supporting lines avoid the lattice]
@@ -49,6 +49,6 @@ nonintegral.
 \begin{proof}\leanok
     \uses{thm:area_law_dyadic_origin_nonintegral}
     If $x\in\mathbb Z^2$ satisfies one of these equations, subtracting
-    $m$ expresses the corresponding coordinate, sum or difference of
-    $o$ as an integer. Each possibility contradicts nonintegrality.
+    $m$ expresses $o_1$, $o_2$, $o_1+o_2$ or $o_1-o_2$ as an integer,
+    which is impossible since none of them is an integer.
 \end{proof}

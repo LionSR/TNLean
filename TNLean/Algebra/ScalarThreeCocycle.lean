@@ -52,7 +52,7 @@ is the identity. This standard condition is sufficient for its coboundary to
 preserve normalized 3-cochains; `isNormalized_coboundary_iff` records the exact
 weaker condition. -/
 def IsNormalized (β : ScalarCocycle G) : Prop :=
-  (∀ g, β 1 g = 1) ∧ (∀ g, β g 1 = 1)
+  (∀ g, β (1, g) = 1) ∧ (∀ g, β (g, 1) = 1)
 
 end ScalarCocycle
 
@@ -88,7 +88,7 @@ def IsNormalized (ω : ScalarThreeCochain G) : Prop :=
 The factor order is exactly arXiv:2502.20257, `eq:omegagauge`, induced by the
 fusion-tensor scalar freedom in `eq:scalar_fus_ten`. -/
 def coboundary (β : ScalarCocycle G) : ScalarThreeCochain G :=
-  fun g h k => (β g (h * k) * β h k) / (β g h * β (g * h) k)
+  fun g h k => (β (g, h * k) * β (h, k)) / (β (g, h) * β (g * h, k))
 
 /-- The fusion-tensor scalar gauge action from arXiv:2502.20257,
 `eq:omegagauge`: `ω ↦ dβ · ω`. -/
@@ -99,7 +99,7 @@ def fusionGauge (β : ScalarCocycle G) (ω : ScalarThreeCochain G) :
 /-- The trivial scalar 2-cochain acts identically. -/
 @[simp]
 theorem fusionGauge_one (ω : ScalarThreeCochain G) :
-    fusionGauge (fun _ _ => 1) ω = ω := by
+    fusionGauge (fun _ => 1) ω = ω := by
   funext g h k
   simp [fusionGauge, coboundary]
 
@@ -140,10 +140,10 @@ both identity axes agree with one constant. Normalizing that constant to one is
 sufficient but not necessary. -/
 theorem isNormalized_coboundary_iff (β : ScalarCocycle G) :
     IsNormalized (coboundary β) ↔
-      ∃ c : Units ℂ, (∀ g, β 1 g = c) ∧ (∀ g, β g 1 = c) := by
+      ∃ c : Units ℂ, (∀ g, β (1, g) = c) ∧ (∀ g, β (g, 1) = c) := by
   constructor
   · rintro ⟨hleft, hmiddle, -⟩
-    refine ⟨β 1 1, fun g => ?_, fun g => ?_⟩
+    refine ⟨β (1, 1), fun g => ?_, fun g => ?_⟩
     · exact div_eq_one.mp (by simpa [coboundary] using hleft 1 g)
     · exact (div_eq_one.mp (by simpa [coboundary] using hmiddle g 1)).symm
   · rintro ⟨c, hleft, hright⟩
@@ -185,7 +185,7 @@ namespace CohomologousTo
 
 /-- Cohomologous-to is reflexive. -/
 theorem refl (ω : ScalarThreeCochain G) : CohomologousTo ω ω :=
-  ⟨fun _ _ => 1, fusionGauge_one ω⟩
+  ⟨fun _ => 1, fusionGauge_one ω⟩
 
 /-- Cohomologous-to is symmetric. -/
 theorem symm {ω η : ScalarThreeCochain G} (h : CohomologousTo ω η) :
@@ -244,7 +244,7 @@ theorem exists_isNormalized_cohomologousTo {ω : ScalarThreeCochain G}
     have he : ω 1 1 1 * 1 = ω 1 1 1 * ω 1 1 1 := by
       simpa only [mul_one] using hmid 1 1
     exact (mul_left_cancel he).symm
-  let β : ScalarCocycle G := fun g h ↦ ω g 1 1 / ω 1 1 h
+  let β : ScalarCocycle G := fun p ↦ ω p.1 1 1 / ω 1 1 p.2
   refine ⟨fusionGauge β ω, hw.fusionGauge β, ?_, ⟨β, rfl⟩⟩
   constructor
   · intro g h

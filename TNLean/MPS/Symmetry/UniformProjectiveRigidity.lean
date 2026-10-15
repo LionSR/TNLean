@@ -279,13 +279,13 @@ private theorem cohomologous_of_projective_intertwiner
   have hm := ρ₁.map_mul g h
   rw [hEq g, hEq h, hEq (g * h), smul_mul_smul_comm,
     ρ₂.map_mul, smul_smul, smul_smul] at hm
-  have hs : (f g : ℂ) * (f h : ℂ) * (ω₀ g h : ℂ) =
-      (ω₁ g h : ℂ) * (f (g * h) : ℂ) :=
+  have hs : (f g : ℂ) * (f h : ℂ) * (ω₀ (g, h) : ℂ) =
+      (ω₁ (g, h) : ℂ) * (f (g * h) : ℂ) :=
     ProjectiveRepresentation.smul_eq_smul_cancel (NeZero.pos D)
       (ρ₂.X (g * h)).isUnit hm
   apply Units.val_injective
   simp only [Units.val_mul, Units.val_inv_eq_inv_val]
-  rw [← mul_inv_cancel_right₀ (Units.ne_zero (f (g * h))) (ω₁ g h : ℂ), ← hs]
+  rw [← mul_inv_cancel_right₀ (Units.ne_zero (f (g * h))) (ω₁ (g, h) : ℂ), ← hs]
   ring
 
 

@@ -7,7 +7,7 @@ The source replacement of
 $\mathcal A\otimes(\mathcal H\otimes\mathcal E)$, where $\mathcal A$
 contains the retained auxiliary registers, $\mathcal H$ contains the
 original physical registers, and $\mathcal E$ contains the original
-discarded private registers. Write $\tau$ for the canonical isometry
+discarded private registers. Write $\tau$ for the factor-exchange isometry
 from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
 
 \begin{definition}[Physical-first replacement]
@@ -78,8 +78,7 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
     Every auxiliary register constructed by the source replacement is
     finite-dimensional. If every original discarded private register is
     finite-dimensional, the same holds for every register of
-    $\mathcal A\otimes\mathcal E$ and for their tensor product. No
-    numerical bound on private dimensions is required.
+    $\mathcal A\otimes\mathcal E$ and for their tensor product.
 \end{theorem}
 
 \begin{proof}
@@ -121,7 +120,6 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
         |z\rangle\langle z|.
         \label{eq:peps_physical_first_trace}
     \end{align}
-    This identity holds for every vector, without a normalization premise.
 \end{theorem}
 
 \begin{proof}
@@ -153,7 +151,7 @@ from this memory to $\mathcal H\otimes(\mathcal A\otimes\mathcal E)$.
     Let $W$ be an original circuit with at most $M$ nonprivate gates,
     satisfying the original expansion bounds. Set
     $\delta=\varepsilon/(8\max\{1,M\})$ for $\varepsilon>0$, and
-    construct its replacement $R$ using this budget. For a pure input
+    construct its replacement $R$ with accuracy parameter $\delta$. For a pure input
     $\psi$ with $\|\psi\|\le1$, let $\rho_W$ be the original physical
     output state. In the source-replacement expression for $R_{\rm phys}$,
     insert the exact operator of each original pair source. The resulting
