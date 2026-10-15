@@ -3497,6 +3497,8 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   by K C D^m and retains the original pair-effect bound.
   `IsMessageResourceBounded.mono_dimension` enlarges the dimension bound on
   the same original message lists.
+  `IsTermwiseBounded.mono_coefficient` enlarges the coefficient majorant of
+  a termwise bound on the same circuit, preserving its pair-effect bound.
 - **Caveat:** This predicate does not impose allowedness or contraction; these
   belong to `IsMessageGateApproximation`. It bounds individual coefficients,
   rather than assuming a bound on their sum. It has no private-memory or
