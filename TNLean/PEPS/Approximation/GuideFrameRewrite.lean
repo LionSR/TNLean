@@ -104,6 +104,17 @@ structure GuideFrameRewrite (pos : ι → ℝ × ℝ) (q : ℕ) (κ Party : Type
   pairwise_new : ((untouched ∪ newAffected : Finset (ℝ × ℝ)) : Set (ℝ × ℝ)).Pairwise
     fun z z' => Disjoint (holeNew z).outer (holeNew z').outer
 
+/-- The frame of a guide depends only on its set of centers and its patches. -/
+theorem guideFrame_congr {κ Party : Type} {g : ℝ × ℝ → κ} {own : κ → Party}
+    {ph : κ} {rank : κ → ℕ} {V V' : Finset (ℝ × ℝ)} {patch patch' : ℝ × ℝ → SquarePatch pos q}
+    (h : V = V') (hp : patch = patch')
+    (hV : (V : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (patch z).outer (patch z').outer)
+    (hV' : (V' : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (patch' z).outer (patch' z').outer) :
+    guideFrame pos q g own ph rank V patch hV = guideFrame pos q g own ph rank V' patch' hV' := by
+  subst h hp
+  rfl
+
+
 namespace GuideFrameRewrite
 
 variable {κ Party : Type} (G : GuideFrameRewrite pos q κ Party)
@@ -142,6 +153,18 @@ theorem perm_newFrame_holes :
       G.newAffected.toList.map (G.holeAt G.new G.holeNew)) := by
   rw [← List.map_append]
   exact (perm_toList_union G.disjoint_untouched_new).map _
+
+theorem oldFrame_eq {V : Finset (ℝ × ℝ)} (h : G.untouched ∪ G.oldAffected = V)
+    (hV : (V : Set (ℝ × ℝ)).Pairwise fun z z' =>
+      Disjoint (G.holeOld z).outer (G.holeOld z').outer) :
+    G.oldFrame = guideFrame pos q G.old G.own G.ph G.rank V G.holeOld hV :=
+  guideFrame_congr h rfl _ _
+
+theorem newFrame_eq {V : Finset (ℝ × ℝ)} (h : G.untouched ∪ G.newAffected = V)
+    (hV : (V : Set (ℝ × ℝ)).Pairwise fun z z' =>
+      Disjoint (G.holeNew z).outer (G.holeNew z').outer) :
+    G.newFrame = guideFrame pos q G.new G.own G.ph G.rank V G.holeNew hV :=
+  guideFrame_congr h rfl _ _
 
 /-- Condition (v): the untouched holes are the same in the two guides. -/
 def UntouchedAgree : Prop :=

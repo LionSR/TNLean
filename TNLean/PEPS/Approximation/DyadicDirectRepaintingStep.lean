@@ -19,7 +19,6 @@ most `(2b + 1) L^{-20}` (`directRepainting_step`).
 
 ## Main results
 
-* `Approximation.guideFrame_congr`: the frame of a guide depends on its set of centers only.
 * `Approximation.directRepainting_step`.
 
 ## References
@@ -37,16 +36,6 @@ namespace TNLean.PEPS.Approximation
 open EncodedFrame PairEffect
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ} {κ Party : Type}
-
-/-- The frame of a guide depends only on its set of centers and its patches. -/
-theorem guideFrame_congr {g : ℝ × ℝ → κ} {own : κ → Party} {ph : κ} {rank : κ → ℕ}
-    {V V' : Finset (ℝ × ℝ)} {patch patch' : ℝ × ℝ → SquarePatch pos q} (h : V = V')
-    (hp : patch = patch')
-    (hV : (V : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (patch z).outer (patch z').outer)
-    (hV' : (V' : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (patch' z).outer (patch' z').outer) :
-    guideFrame pos q g own ph rank V patch hV = guideFrame pos q g own ph rank V' patch' hV' := by
-  subst h hp
-  rfl
 
 /-- **The direct repainting of a block as one gate.** In the setting of
 `exists_directRepainting_planeConditions`, suppose moreover that every hole and every patch has
@@ -109,8 +98,7 @@ theorem directRepainting_step [NeZero q] {n r u : ℝ} (hn : 0 < n) (hr : 0 < r)
     (fun a _ => hhn ▸ hcardHole a) (fun z _ => hcardPatch z) (fun a _ => hcardHole a)
     (by exact_mod_cast hN.trans hb) (hA.trans (by omega)) (hA'.trans (by omega))
     (hP.trans hb18) hΩ (fun z _ => hεpatch z) (fun a _ => hεhole a) hP₀ (fun z _ => htag z)
-  have e₁ : G.oldFrame = guideFrame pos q G.old G.own G.ph G.rank V G.holeOld hpV :=
-    guideFrame_congr hUA rfl _ _
+  have e₁ := G.oldFrame_eq hUA hpV
   have e₂ : G.newFrame = guideFrame pos q G.new G.own G.ph G.rank V' G.holeOld hpV' :=
     guideFrame_congr hUA' hhn _ _
   rw [← e₁, ← e₂]
