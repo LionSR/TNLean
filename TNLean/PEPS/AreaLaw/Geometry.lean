@@ -101,6 +101,7 @@ import TNLean.PEPS.AreaLaw.Geometry.QuotientIntervals
 import TNLean.PEPS.AreaLaw.Geometry.RectangleMixedSquares
 import TNLean.PEPS.AreaLaw.Geometry.RectangleShellCounts
 import TNLean.PEPS.AreaLaw.Geometry.RectangleShellWeightedCover
+import TNLean.PEPS.AreaLaw.Geometry.RepairBirthRank
 import TNLean.PEPS.AreaLaw.Geometry.RepairChildCones
 import TNLean.PEPS.AreaLaw.Geometry.RepairChildStarStep
 import TNLean.PEPS.AreaLaw.Geometry.RepairChildStars
