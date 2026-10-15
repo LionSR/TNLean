@@ -24,6 +24,22 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Positional factors in reversed finite lists — promoted through Mathlib
+
+- **Pattern:** Recover an index of a factor in a reversed finite list, transfer
+  its indexed assumptions, and express descending nesting by the original
+  increasing index order.
+- **Seen:** `isPatchMinimizer_regularizedPatchFactorList` in
+  `PEPS/AreaLaw/RegularizedPatchListCoordinates.lean` and
+  `normalizedRegularizedPatchMarginal_stationarity_of_isMinOn` in
+  `PEPS/AreaLaw/RegularizedPatchMinimizerStationarity.lean`.
+- **Abstraction:** Existing `List.mem_reverse`, `List.mem_ofFn`,
+  `List.pairwise_reverse` and `List.pairwise_ofFn` give the positional
+  membership and order statements. The stationarity proof shares its local
+  index witness when transferring exponent and density assumptions.
+- **Notes:** No injectivity of the regions or factors is required; equal
+  regions retain independent positions in the minimizing comparison.
+
 ### Ambient dilation in coordinate inequalities — promoted (2026-10-14)
 
 - **Pattern:** Expand the finite union of integer squares, their Cartesian
@@ -7150,8 +7166,8 @@ spectral split → block extraction → MPV calculation → strict bounds
   transport the actual regional lift through the existing configuration
   equivalence and pair its pure state by the existing partial trace.
 - **Seen:** `PEPS/AreaLaw/RegularizedPatchCoordinate`,
-  `RegularizedPatchStationarity`, `RegularizedPatchMarginal`, and
-  `RegularizedPatchDiagonalVariation`.
+  `RegularizedPatchStationarity`, `RegularizedPatchMarginal`,
+  `RegularizedPatchDiagonalVariation`, and `RegularizedPatchListCoordinates`.
 - **Abstraction:** the coordinate module factors the insertion linear map once;
   the marginal module exposes one full-region/global configuration isometry and
   one arbitrary-complex expectation theorem. Existing real-power covariance,
@@ -7163,8 +7179,18 @@ spectral split → block extraction → MPV calculation → strict bounds
   No custom tactic or new optimizer/state structure is justified. Keep the
   actual product order and complex inner-product orientation explicit; neither
   trace-duality nor descending commutation is inferred by this pattern.
-  The scoped AreaLaw scan found no exact repeated tactic blocks at the default
-  thresholds.
+  The ordered-output identity uses `map_list_prod` and
+  `Matrix.submatrix_mulVec_equiv` directly. Its local equality-instance argument
+  generalizes the matrix power over the decision procedure before identifying
+  the procedures by subsingleton elimination; this avoids rewriting through
+  a dependent functional-calculus term. This argument occurs once.
+  The scoped AreaLaw scan on 2026-10-14 found no repeated tactic block in the
+  new ordered-output module at the default thresholds.
+  The positional minimizer comparison reconstructs the reversed competitor
+  with `List.equivSigmaTuple.symm.surjective`, then uses
+  `List.ofFn_injective` for its region and exponent lists. These two projection
+  comparisons occur in the same argument. The existing list lemmas and the
+  objective-norm identity suffice; no additional tactic is introduced.
 
 
 ### Monotonicity of a regional-entropy supremum — candidate (2026-10-09)
