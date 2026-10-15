@@ -121,6 +121,7 @@ import TNLean.PEPS.Approximation.DyadicLargeRepaintingGates
 import TNLean.PEPS.Approximation.DyadicLevelSchedule
 import TNLean.PEPS.Approximation.DyadicLevelTrueVertices
 import TNLean.PEPS.Approximation.DyadicLifetimeIncidence
+import TNLean.PEPS.Approximation.DyadicOwnerSwitch
 import TNLean.PEPS.Approximation.DyadicPatchRewriteGates
 import TNLean.PEPS.Approximation.DyadicPointTreatment
 import TNLean.PEPS.Approximation.DyadicPointTreatmentReadingStep
