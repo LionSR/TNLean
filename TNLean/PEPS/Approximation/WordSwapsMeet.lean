@@ -21,7 +21,8 @@ condition holds as soon as the selection contains the owners of the moved regist
 
 ## Main definitions
 
-* `PairEffect.Word.SwapsMeet`, `PairEffect.PartyChain.SwapsMeet`, `PairEffect.PartyChain.SwapsMeetSet`.
+* `PairEffect.Word.SwapsMeet`, `PairEffect.PartyChain.SwapsMeet`,
+  `PairEffect.PartyChain.SwapsMeetSet`.
 
 ## Main results
 
