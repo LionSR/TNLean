@@ -144,7 +144,7 @@ theorem chargeDefect_le_choiceGainSum (r : Fin (X.rounds n)) (hr : IsChargeRound
     κ.c / (n * X.D n) * (S.round r).chargeDefect k p ≤ (S.round r).choiceGainSum k p := by
   classical
   have hc : 0 ≤ κ.c / (n * X.D n) := div_nonneg κ.c_pos.le (by positivity)
-  have := S.isFiniteMeasure_μOld r k p
+  have := S.inputs.isFiniteMeasure_μOld r k p
   unfold ScanRound.chargeDefect ScanRound.choiceGainSum
   rw [Finset.mul_sum]
   refine Finset.sum_le_sum fun h _ ↦ ?_
@@ -202,7 +202,7 @@ theorem chargeDefect_le (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) (hp : p ∈ I
   have hN0 : 0 ≤ κ.C * X.K n * n * X.D n := by
     have := κ.one_le_C
     positivity
-  have := fun h ↦ S.isFiniteMeasure_μOld r k p h
+  have := fun h ↦ S.inputs.isFiniteMeasure_μOld r k p h
   have hη : ∀ i h, ∫ θ, (S.round r).etaOld i h θ ∂(S.round r).μOld k p h ≤ b := by
     intro i h
     calc ∫ θ, (S.round r).etaOld i h θ ∂(S.round r).μOld k p h
@@ -210,7 +210,7 @@ theorem chargeDefect_le (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) (hp : p ∈ I
           integral_mono (integrable_of_bounded (S.histories.measurable_etaOld r i h)
             (S.histories.etaOld_nonneg r i h) (S.histories.etaOld_le r i h)) (integrable_const _)
             (S.histories.etaOld_le r i h)
-      _ = b / 2 := by rw [integral_const, smul_eq_mul, S.μOld_real_univ r k p hp h]; ring
+      _ = b / 2 := by rw [integral_const, smul_eq_mul, S.inputs.μOld_real_univ r k p hp h]; ring
       _ ≤ b := by linarith
   calc (S.round r).chargeDefect k p
       ≤ ∑ h, (S.round r).w h * (κ.C * X.K n * n * X.D n * b) := by
@@ -235,7 +235,7 @@ theorem intervalIntegrable_chargeDefect (r : Fin (X.rounds n)) (k : ℕ) :
     IntervalIntegrable ((S.round r).chargeDefect k) volume 0 1 := by
   apply (intervalIntegrable_iff_integrableOn_Icc_of_le zero_le_one).2
   rw [integrableOn_Icc_iff_integrableOn_Ioo]
-  refine ⟨S.aestronglyMeasurable_chargeDefect r k,
+  refine ⟨S.inputs.aestronglyMeasurable_chargeDefect r k,
     HasFiniteIntegral.restrict_of_bounded
       (C := κ.C * X.K n * n * X.D n * (κ.C * Real.log n ^ κ.Cl)) (by simp) ?_⟩
   refine (ae_restrict_iff' measurableSet_Ioo).2 (Filter.Eventually.of_forall fun p hp ↦ ?_)
@@ -255,16 +255,18 @@ theorem integratedChargeBound {C₁ : ℝ} (hn : ScaleFacts X n C₁) (k : ℕ) 
     positivity
   have heps := hn.eps_pos
   have heps1 := hn.eps_lt_one
-  set err : ℝ := κ.C * k * X.a S.W n * X.K n * X.a S.W n ^ (1 / 4 : ℝ) * Real.log n ^ κ.Cl + S.β k
+  set err : ℝ :=
+    κ.C * k * X.a S.W n * X.K n * X.a S.W n ^ (1 / 4 : ℝ) * Real.log n ^ κ.Cl + S.inputs.β k
   have key := sum_integral_le_of_deriv (fun r ↦ (S.round r).logNormSq k)
     (fun r ↦ (S.round r).chargeDefect k) (X.chargeRounds n)
     (coef := k * X.a S.W n * (κ.c / (n * X.D n))) (err := err) (α := X.eps n / 2)
     (β := X.eps n) (by positivity) (by linarith)
-    (by linarith) (by positivity) hR (fun r ↦ S.continuousOn_logNormSq r k)
-    (fun r ↦ S.differentiableOn_logNormSq r k) (fun r p _ ↦ S.chargeDefect_nonneg r k p)
-    (fun r ↦ S.aestronglyMeasurable_chargeDefect r k) ⟨_, fun r p hp ↦ S.chargeDefect_le r k p hp⟩
+    (by linarith) (by positivity) hR (fun r ↦ S.inputs.continuousOn_logNormSq r k)
+    (fun r ↦ S.inputs.differentiableOn_logNormSq r k) (fun r p _ ↦ S.chargeDefect_nonneg r k p)
+    (fun r ↦ S.inputs.aestronglyMeasurable_chargeDefect r k)
+    ⟨_, fun r p hp ↦ S.chargeDefect_le r k p hp⟩
     (fun r hr p hp ↦ by
-      have h1 := S.entropy_gain r k p hp
+      have h1 := S.inputs.entropy_gain r k p hp
       have h2 := S.chargeDefect_le_choiceGainSum r (Finset.mem_filter.1 hr).2 k p
       have h3 : k * X.a S.W n * (κ.c / (n * X.D n) * (S.round r).chargeDefect k p) ≤
           k * X.a S.W n * (S.round r).choiceGainSum k p :=
@@ -272,16 +274,16 @@ theorem integratedChargeBound {C₁ : ℝ} (hn : ScaleFacts X n C₁) (k : ℕ) 
       simp only [err]
       linarith)
     (fun r p hp ↦ by
-      have h1 := S.entropy_gain r k p hp
+      have h1 := S.inputs.entropy_gain r k p hp
       have h2 : 0 ≤ k * X.a S.W n * (S.round r).choiceGainSum k p := by
         refine mul_nonneg (by positivity) (Finset.sum_nonneg fun h _ ↦ ?_)
         exact mul_nonneg (S.histories.w_nonneg r h) (integral_nonneg
             (S.histories.choiceGain_nonneg r h))
       simp only [err]
       linarith)
-    (fun r hr ↦ S.logNormSq_succ r hr k)
-  have hinit := S.logNormSq_init ⟨0, hR⟩ rfl k
-  have hfin := S.logNormSq_final ⟨X.rounds n - 1, Nat.sub_lt hR one_pos⟩
+    (fun r hr ↦ S.inputs.logNormSq_succ r hr k)
+  have hinit := S.inputs.logNormSq_init ⟨0, hR⟩ rfl k
+  have hfin := S.inputs.logNormSq_final ⟨X.rounds n - 1, Nat.sub_lt hR one_pos⟩
     (by simp only; omega) k hk
   rw [div_le_iff₀ hk0] at hfin
   unfold IntegratedChargeBound terminalBound

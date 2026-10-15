@@ -222,7 +222,8 @@ variable {n : ℕ} (S : ScanData X κ n)
 
 /-- The terminal rough upper bound in terms of the target entropy and budget bounds `B`, `E`
 (lines 462–470, with `z ≥ 1/2` from Lemma 3.1, lines 411–414). -/
-lemma terminalBound_le_of {B E : ℝ} (hB0 : 0 ≤ B) (hBsh : S.Bsh ≤ B) (hBexc : S.Bexc ≤ E)
+lemma terminalBound_le_of {B E : ℝ} (hB0 : 0 ≤ B) (hBsh : S.inputs.Bsh ≤ B)
+    (hBexc : S.inputs.Bexc ≤ E)
     (hn : 2 ≤ n) :
     S.terminalBound ≤ 2 * (S.SXt + (n : ℝ) ^ (3 / 5 : ℝ) + 1) + 1 + S.W * (2 * B + E) := by
   have hn2 : (2 : ℝ) ≤ n := by exact_mod_cast hn
@@ -245,12 +246,12 @@ lemma terminalBound_le_of {B E : ℝ} (hB0 : 0 ≤ B) (hBsh : S.Bsh ≤ B) (hBex
   have hd := S.log_dstar_le
   have hd' := le_abs_self (Real.log S.dstar - S.SXt)
   rw [S.width_eq] at hd
-  have hBz : S.Bsh / S.z ≤ 2 * B := by
+  have hBz : S.inputs.Bsh / S.z ≤ 2 * B := by
     rw [div_le_iff₀ hz0]; nlinarith
   have hW : 0 ≤ S.W := by linarith [S.one_le_W]
-  have hWB : S.W * (S.Bsh / S.z + S.Bexc) ≤ S.W * (2 * B + E) := by gcongr
+  have hWB : S.W * (S.inputs.Bsh / S.z + S.inputs.Bexc) ≤ S.W * (2 * B + E) := by gcongr
   have : S.terminalBound = 2 * Real.log S.dstar - Real.log S.z +
-      S.W * (S.Bsh / S.z + S.Bexc) := by
+      S.W * (S.inputs.Bsh / S.z + S.inputs.Bexc) := by
     unfold terminalBound; ring
   rw [this]
   linarith
@@ -263,8 +264,8 @@ scan data, `B_sh ≤ C (n L^e + n)`, `B_exc ≤ C n D`, `𝓑 ≤ C n D (log n)^
 `2 log d_* - log z + 2sW(2B_sh/z + 2B_exc) ≤ C W n^{1+e}`. -/
 theorem exists_budgets (X : ScannerExponents) (κ : ScanConstants) :
     ∃ C Cl : ℝ, ∀ᶠ n in atTop, ∀ S : ScanData X κ n,
-      S.Bsh ≤ C * (n * (X.L n : ℝ) ^ X.e + n) ∧
-      S.Bexc ≤ C * n * X.D n ∧
+      S.inputs.Bsh ≤ C * (n * (X.L n : ℝ) ^ X.e + n) ∧
+      S.inputs.Bexc ≤ C * n * X.D n ∧
       S.Bmarg ≤ C * n * X.D n * Real.log n ^ Cl ∧
       S.terminalBound ≤ C * S.W * (n : ℝ) ^ (1 + X.e) := by
   obtain ⟨C₁, hC₁⟩ := eventually_scaleFacts X
@@ -298,19 +299,19 @@ theorem exists_budgets (X : ScannerExponents) (κ : ScanConstants) :
   have hnLe : (n : ℝ) * (X.L n : ℝ) ^ X.e ≤ (n : ℝ) ^ (1 + X.e) := by
     rw [hNsplit]; gcongr
   have hshell0 : 0 ≤ (n : ℝ) * (X.L n : ℝ) ^ X.e + n := by positivity
-  have hBsh : S.Bsh ≤ C1 * (n * (X.L n : ℝ) ^ X.e + n) := by
-    obtain ⟨j, hj, hB⟩ := S.Bsh_le
+  have hBsh : S.inputs.Bsh ≤ C1 * (n * (X.L n : ℝ) ^ X.e + n) := by
+    obtain ⟨j, hj, hB⟩ := S.inputs.Bsh_le
     have := hSQ S j hj
     have h0 : 0 ≤ (n : ℝ) * (X.L n : ℝ) ^ X.e := by positivity
     have : Real.log κ.q * n ≤ Real.log κ.q * ((n : ℝ) * (X.L n : ℝ) ^ X.e + n) := by
       gcongr; linarith
     rw [hC1]; nlinarith
-  have hBexc : S.Bexc ≤ C2 * (n * X.D n) := by
-    have := S.Bexc_le
+  have hBexc : S.inputs.Bexc ≤ C2 * (n * X.D n) := by
+    have := S.inputs.Bexc_le
     rw [hC2]; nlinarith
   refine ⟨?_, ?_, ?_, ?_⟩
   · exact hBsh.trans (mul_le_mul_of_nonneg_right (by linarith) hshell0)
-  · calc S.Bexc ≤ C2 * (n * X.D n) := hBexc
+  · calc S.inputs.Bexc ≤ C2 * (n * X.D n) := hBexc
       _ ≤ (C1 + C2 + C3 + (2 * κ.Ce + 7 + 4 * C1 + C2 * C₁)) * (n * X.D n) :=
           mul_le_mul_of_nonneg_right (by linarith) (by linarith)
       _ = _ := by ring
@@ -328,10 +329,10 @@ theorem exists_budgets (X : ScannerExponents) (κ : ScanConstants) :
     have hw : (n : ℝ) ^ (3 / 5 : ℝ) ≤ N :=
       Real.rpow_le_rpow_of_exponent_le hn1 (by linarith [X.e_pos])
     have hB0 : 0 ≤ C1 * (2 * N) := by positivity
-    have hBsh' : S.Bsh ≤ C1 * (2 * N) := hBsh.trans (by gcongr; linarith)
-    have hBexc' : S.Bexc ≤ C2 * C₁ * N := by
+    have hBsh' : S.inputs.Bsh ≤ C1 * (2 * N) := hBsh.trans (by gcongr; linarith)
+    have hBexc' : S.inputs.Bexc ≤ C2 * C₁ * N := by
       have hD := hF.D_le
-      calc S.Bexc ≤ C2 * (n * X.D n) := hBexc
+      calc S.inputs.Bexc ≤ C2 * (n * X.D n) := hBexc
         _ ≤ C2 * (n * (C₁ * (n : ℝ) ^ X.e)) := by gcongr
         _ = C2 * C₁ * N := by simp only [N, hNsplit]; ring
     have h := S.terminalBound_le_of hB0 hBsh' hBexc' hF.two_le_n
