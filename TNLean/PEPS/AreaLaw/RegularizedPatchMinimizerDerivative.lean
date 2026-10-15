@@ -46,7 +46,8 @@ theorem hasDerivAt_log_regularizedPatchObjective_exp_neg_of_isMinOn
         (regularizedPatchObjective regions a (Real.exp (-r)) Ω x))
       (∑ j, (a j / 2) *
         (Matrix.trace
-          (normalizedRegularizedPatchMarginal regions a (Real.exp (-R)) Ω x (regions j) *
+          (normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
+            regions a (Real.exp (-R)) Ω x (regions j) *
             (Real.exp (-R) • (x j + Real.exp (-R) • 1) ^ (-1 : ℝ)))).re) R := by
   apply hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute
     regions hnested a (fun j ↦ (ha j).le) Ω hΩ x hx R
