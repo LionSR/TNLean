@@ -1220,11 +1220,12 @@ the area-law companion \cite{OpenAI2026AreaLaw}, which are listed in
 ground vector $\Omega$ of the full system; no subregion is assigned a gap of its
 own. The remarks below compare each listed result with the statement of this
 chapter that expresses it. No statement below adds a hypothesis to the
-printed one.
+printed one. The appendix also records that the companion takes its replica
+limit at each fixed finite instance; this concerns the companion's proof of
+the collar bound, and the statements below concern only the original one-copy
+state.
 % Proof status of each statement (proved or assumed) is tracked in
-% docs/formalization/openai-area-law-peps.md, not in displayed prose. The appendix also records that the companion takes its replica limit at
-each fixed finite instance; this concerns the companion's proof of the collar
-bound, and the statements below concern only the original one-copy state.
+% docs/formalization/openai-area-law-peps.md, not in displayed prose.
 
 \begin{remark}[Model, metric and entropy]
     \label{rem:peps_companion_model}
@@ -1284,9 +1285,10 @@ bound, and the statements below concern only the original one-copy state.
     Theorem~\ref{thm:al_lattice_positive_replacement} states this for every
     choice of anchors $a_i\in X_i$, with constants depending only on
     $k,R,J,\Delta$ and under the weaker condition $J\ge0$.
-    % Status: proved. Its tail estimate is stated for
-    conditional expectation onto every induced-graph ball. At most $2^{2R(R+1)}$ labels share an anchor, by
+    Its tail estimate is stated for conditional expectation onto every
+    induced-graph ball. At most $2^{2R(R+1)}$ labels share an anchor, by
     Theorem~\ref{thm:al_lattice_counts}.
+    % Status: proved.
 \end{remark}
 
 \begin{remark}[Templates and the sublinear collar bound]
