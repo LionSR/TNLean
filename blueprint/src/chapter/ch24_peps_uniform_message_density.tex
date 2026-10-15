@@ -5,6 +5,23 @@ The original gate operators, private operations, and physical output are fixed
 throughout. Expanding a message changes the monomial list at its original gate
 occurrence and preserves the operator of that list exactly.
 
+\begin{theorem}[Homogeneous ceiling bound]
+    \label{thm:homogeneous_ceiling_bound}
+    \lean{Nat.ceil_le_add_one_mul_of_le_mul}
+    \leanok
+    Let $x,A,s$ be real numbers with $0\le x$, $x\le As$, and $s\ge1$. Then
+    \begin{align}
+        \lceil x\rceil\le(A+1)s.
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    The ceiling estimate gives
+    \begin{align}
+        \lceil x\rceil\le x+1\le As+1\le As+s=(A+1)s.
+    \end{align}
+\end{proof}
+
 \begin{definition}[Message expansions at the original gate occurrences]
     \label{def:peps_message_gate_lists}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.MessageGateLists}

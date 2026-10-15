@@ -560,20 +560,3 @@ set is required.
     by $\mu$. Distribute this scalar through both finite sums and
     commute it with each gate coefficient. No division is used.
 \end{proof}
-
-\begin{theorem}[Homogeneous ceiling bound]
-    \label{thm:homogeneous_ceiling_bound}
-    \lean{Nat.ceil_le_add_one_mul_of_le_mul}
-    \leanok
-    Let $x,A,s$ be real numbers with $0\le x$, $x\le As$, and $s\ge1$. Then
-    \begin{align}
-        \lceil x\rceil\le(A+1)s.
-    \end{align}
-\end{theorem}
-\begin{proof}
-    \leanok
-    The ceiling estimate gives
-    \begin{align}
-        \lceil x\rceil\le x+1\le As+1\le As+s=(A+1)s.
-    \end{align}
-\end{proof}
