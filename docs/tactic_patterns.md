@@ -4367,7 +4367,7 @@ three-plaquette output measurement, and the routed reunion measurement.
   for evaluation of a continuously varying ordered product.
 - **Notes:** The second proof varies the positive scalar shift and all feasible
   regional densities together. Continuity in each variable separately would
-  not suffice for the compact-minimum argument. Lean verification is pending.
+  not suffice for the compact-minimum argument.
 
 ### Upper endpoint of a scanner band — candidate (2026-10-12)
 

@@ -18,10 +18,12 @@ also follows directly from compactness.
 \begin{lemma}[Continuity of the norm minimum]
     \label{lem:peps_regularized_patch_minimum_continuous}
     \lean{TNLean.PEPS.continuous_regularizedPatchMinimum_exp_neg}
+    \leanok
     \uses{def:peps_regularized_patch_minimum}
     For arbitrary real weights $a_j$, the function $N:\R\to\R$ is continuous.
 \end{lemma}
 \begin{proof}
+    \leanok
     \uses{lem:peps_regularized_patch_compact_continuous}
     For every feasible tuple $x$ and real $R$, the matrix
     $x_j+e^{-R}I_{X_j}$ is positive definite. Its fixed real power varies
@@ -35,10 +37,12 @@ also follows directly from compactness.
 \begin{corollary}[Continuity of the logarithmic minimum]
     \label{cor:peps_regularized_patch_log_minimum_continuous}
     \lean{TNLean.PEPS.continuous_log_regularizedPatchMinimum_exp_neg}
+    \leanok
     \uses{def:peps_regularized_patch_minimum}
     If $a_j\ge0$ for every $j$, then $R\mapsto\log N(R)$ is continuous on $\R$.
 \end{corollary}
 \begin{proof}
+    \leanok
     \uses{lem:peps_regularized_patch_minimum_continuous,thm:peps_regularized_patch_minimum}
     The minimum is continuous and strictly positive at every real radius.
     Composition with the logarithm gives the assertion.
