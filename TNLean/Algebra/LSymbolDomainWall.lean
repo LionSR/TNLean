@@ -71,7 +71,7 @@ theorem prod_div_eq_inv_cyclicInvariant {L : LSymbol G X} {ω : ScalarThreeCocha
 
 /-- The ratio `L^y_{a,b} / L^z_{a,b}` on the subgroup fixing `y` and `z`. -/
 def ratioCocycle (L : LSymbol G X) (y z : X) : ScalarCocycle (fixingSubgroup G ({y, z} : Set X)) :=
-  fun a b ↦ L y a b / L z a b
+  fun p ↦ L y p.1 p.2 / L z p.1 p.2
 
 /-- **The L-symbol ratio is a two-cocycle on the subgroup fixing two blocks** (arXiv:2405.00439,
 `Papers/2405.00439/MPU-DW.tex` lines 2028--2034): if `L` is compatible with `ω`, then
@@ -97,7 +97,7 @@ theorem ratioCocycle_isCocycle {L : LSymbol G X} {ω : ScalarThreeCochain G}
 `TNLean.Algebra.ScalarCocycle.isCocycle_iff_isMulCocycle₂`. -/
 theorem ratioCocycle_isMulCocycle₂ {L : LSymbol G X} {ω : ScalarThreeCochain G}
     (hL : IsCompatible L ω) (y z : X) :
-    groupCohomology.IsMulCocycle₂ (Function.uncurry (ratioCocycle L y z)) :=
+    groupCohomology.IsMulCocycle₂ (ratioCocycle L y z) :=
   (ScalarCocycle.isCocycle_iff_isMulCocycle₂ _).mp (ratioCocycle_isCocycle hL y z)
 
 /-- **The interchange product over the source's range.** For normalized L-symbols the factor
