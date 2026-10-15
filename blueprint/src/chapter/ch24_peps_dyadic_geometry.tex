@@ -1487,6 +1487,35 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     other than the placeholder, by Theorem~\ref{thm:peps_dyadic_protocol_parties}.
 \end{proof}
 
+\begin{theorem}[Owners of the treated and directly repainted guides]
+    \label{thm:peps_dyadic_guide_owners}
+    \lean{TNLean.PEPS.Approximation.homogenize_mem,
+        TNLean.PEPS.Approximation.shiftGuide_mem,
+        TNLean.PEPS.Approximation.IsDisplacedReading.mem,
+        TNLean.PEPS.Approximation.blockGuide_mem_validLabels,
+        TNLean.PEPS.Approximation.blockRepainting_treated_mem_validLabels,
+        TNLean.PEPS.Approximation.guideFrame_owner_eq_iff}
+    \leanok
+    \uses{thm:peps_dyadic_repainting_valid_labels, def:peps_guide_frame}
+    At level $2^j$ with $j<k$, the block guides of the level take only the
+    placeholder label and labels of squares of the hierarchy; these are the guides
+    before and after a direct repainting. The guides of
+    Theorem~\ref{thm:peps_dyadic_repainting_valid_labels}, placed on a block and
+    homogenized on any set to such a label, take only such labels, and so does
+    every reading of such a guide after a small displacement. For a guide with
+    such labels, two sites of its encoded frame, with labels read as the parties
+    of a repainting, have the same raw owner exactly when they carry the same
+    label (\texttt{06-geometry.tex}, lines 82--100, 328--339 and 507--527).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_dyadic_protocol_parties}
+    Homogenizing, placing and reading after a displacement take values among the
+    values of the guide and the new label. The map from labels to parties is
+    injective on the placeholder and the labels of the squares of the hierarchy,
+    by Theorem~\ref{thm:peps_dyadic_protocol_parties}.
+\end{proof}
+
 \begin{theorem}[Locality of the parties of an event]
     \label{thm:peps_dyadic_protocol_locality}
     \lean{TNLean.PEPS.Approximation.EventUses.scale_le, TNLean.PEPS.Approximation.EventUses.anchor_dist_le}

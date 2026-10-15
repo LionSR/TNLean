@@ -133,3 +133,84 @@ no holes, this is the normalization of $\Omega$.
     $1-a\le x\le1$ and $(1-b)z\le y\le z$ one has
     $xy=y-(1-x)y\ge y-az\ge(1-a-b)z$; induct over the frames.
 \end{proof}
+
+\begin{definition}[The final regrouping]
+    \label{def:peps_final_regrouping}
+    \lean{TNLean.PEPS.EncodedFrame.trivialTag,
+        TNLean.PEPS.EncodedFrame.physVec,
+        TNLean.PEPS.EncodedFrame.freshMap,
+        TNLean.PEPS.EncodedFrame.renameMap,
+        TNLean.PEPS.EncodedFrame.freshCircuit,
+        TNLean.PEPS.EncodedFrame.siteCircuit,
+        TNLean.PEPS.EncodedFrame.nonsiteParties,
+        TNLean.PEPS.EncodedFrame.siteOrder,
+        TNLean.PEPS.EncodedFrame.readoutPrivate,
+        TNLean.PEPS.EncodedFrame.readoutCircuit}
+    \leanok
+    \uses{def:peps_sheet_stack}
+    Let the main frame $\mathcal M$ be the first sheet of the memory, with an
+    injective raw owner. The final regrouping moves the raw registers of
+    $\mathcal M$ in front of its tag registers, renames the raw register of each
+    site, by a private map at its party, as the physical register of that party,
+    and lets every party without a site prepare a physical register of dimension
+    one by a private map. The physical registers are listed in the order of the
+    sites, followed by the parties without a site; the private registers are the
+    tags of $\mathcal M$ followed by the registers of the other sheets and of the
+    idle copies (\texttt{06-geometry.tex}, lines 48--51 and 669--681).
+\end{definition}
+
+\begin{theorem}[The final reference vector]
+    \label{thm:peps_final_reference}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero,
+        TNLean.PEPS.PairEffect.OriginalCircuit.participants_subset_of_nonprivateCount_eq_zero,
+        TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_of_nonprivateCount_eq_zero,
+        TNLean.PEPS.PairEffect.OriginalCircuit.isMonomialBounded_of_nonprivateCount_eq_zero,
+        TNLean.PEPS.EncodedFrame.eq_trivialTag,
+        TNLean.PEPS.EncodedFrame.rawProd_trivialTag,
+        TNLean.PEPS.EncodedFrame.Frame.regRef_of_outer_eq_empty,
+        TNLean.PEPS.EncodedFrame.familyPhysicalListBasis_eq_physVec,
+        TNLean.PEPS.EncodedFrame.familyLabelledPhysicalBasis_eq_physVec,
+        TNLean.PEPS.EncodedFrame.eval_freshCircuit,
+        TNLean.PEPS.EncodedFrame.eval_siteCircuit,
+        TNLean.PEPS.EncodedFrame.nodup_siteOrder,
+        TNLean.PEPS.EncodedFrame.mem_siteOrder,
+        TNLean.PEPS.EncodedFrame.nonprivateCount_readoutCircuit,
+        TNLean.PEPS.EncodedFrame.eval_readoutCircuit_stackVec,
+        TNLean.PEPS.EncodedFrame.readout_eval_readoutCircuit_stackVec,
+        TNLean.PEPS.EncodedFrame.exists_readoutCircuit_norm,
+        TNLean.PEPS.Approximation.DyadicProtocol.physicalConfigEquiv_apply_val,
+        TNLean.PEPS.Approximation.DyadicProtocol.readout_eq_euclideanTensorVector}
+    \leanok
+    \uses{def:peps_final_regrouping, thm:peps_sheet_stack_norm,
+        def:peps_dyadic_protocol}
+    The final regrouping has no nonprivate gate. Let every hole of the main frame
+    $\mathcal M$ have empty physical outer sample, let the physical dimension be
+    $q$ at the party of every site and one at every other party, and read the
+    physical configurations of the parties as configurations of the sites. Then,
+    for every $\Omega$ and every vector $\xi$ of the idle registers, the
+    physical-private coordinates of the regrouped reference vector
+    $\Omega_{\mathcal M}\otimes\Omega_{\mathcal F_1}\otimes\cdots\otimes
+        \Omega_{\mathcal F_m}\otimes\xi$ are those of $\Omega\otimes\Xi$, where $\Xi$
+    is the vector of the private registers and
+    $\lVert\Xi\rVert=\lVert\Omega_{\mathcal F_1}\otimes\cdots\otimes
+        \Omega_{\mathcal F_m}\otimes\xi\rVert$. If moreover
+    $\lVert\Omega\rVert=\lVert\xi\rVert=1$, every hole of the other frames
+    satisfies $\lVert(\id-P)\Omega\rVert\le L^{-60}$ and the other frames have at
+    most $CL^3$ holes in total, then $1-CL^{-57}\le\lVert\Xi\rVert\le1$. The bound
+    on the number of holes is a hypothesis here. For a protocol whose final layout
+    is the output of the regrouping, the readout of the protocol is then
+    $\Omega\otimes\Xi$ (\texttt{06-geometry.tex}, lines 43--51 and 669--681).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_frame_norm}
+    A hole with empty outer sample has only the identity tag, with identity raw
+    part, so $\Omega_{\mathcal M}=\sum_c\Omega(c)\,\lvert\tau_0\rangle\otimes
+        \lvert c\rangle$. On a basis vector $\lvert c\rangle$ of the raw registers, the
+    exchanges move $\lvert c\rangle$ to the front, the renaming sends it to the
+    physical basis vector of $c$, and the fresh registers add the basis vector of
+    the one-point coordinate. By linearity, the regrouped vector is
+    $\sum_c\Omega(c)\,\lvert c\rangle\otimes\pi$, with $\pi$ the product of the tags
+    and the other factors, and its coordinates are $\Omega(c)$ times those of
+    $\pi$. The norm bound is Theorem~\ref{thm:peps_sheet_stack_norm}.
+\end{proof}
