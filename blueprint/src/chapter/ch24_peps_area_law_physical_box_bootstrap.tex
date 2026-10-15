@@ -6,8 +6,6 @@ September 24 manuscript.  Its input is a uniform safe-box estimate at the
 current exponent, and its conclusion is an improved exponent in the
 original state.  The finite-dimensional replica limit is taken before
 changing the physical size.  No sharp marginal-moment estimate is used.
-All assertions below are unmarked pending kernel validation of this batch
-and its inherited scanner dependencies.
 
 \begin{lemma}[Generic physical charge-energy coefficient]
     \label{lem:arealaw-generic-charge-energy}
@@ -246,7 +244,7 @@ and its inherited scanner dependencies.
     \label{thm:arealaw-physical-box-fixed-exponent}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError}
     For $q\geq1$, $R\in\mathbb N$, $J\geq0$ and $\Delta>0$, there is
-    $C>0$ before every $D_0>2R+10$ and every positive integer $r$ such that
+    $C>0$ before every integer $D_0>2R+10$ and every positive integer $r$ such that
     \begin{align}
         F_{\rm box}(r) & \leq Cr^{1+e_*}, & e_* & =2\cdot10^{-6}.
         \label{eq:arealaw-physical-box-fixed-exponent}
@@ -261,7 +259,85 @@ and its inherited scanner dependencies.
     box estimate is an input of this argument.
 \end{proof}
 
+For a real safety parameter $D_0>2R+10$, write
+$F_{\mathrm{box},D_0}(r)$ for the supremum in
+\cite[Section~3, before Proposition~3.3]{OpenAI2026AreaLaw}, with this
+fixed safety parameter. The estimate in
+\cite[Proposition~9.5]{OpenAI2026AreaLaw} is
+$F_{\mathrm{box},D_0}(r)\leq Cr^{1+e_*}$ for every integer $r\geq1$,
+where $e_*=2\cdot10^{-6}$ and $C$ depends only on $q,R,J,\Delta$.
+The following gives its pointwise formulation, uniformly over all such
+real safety parameters.
+
+\begin{theorem}[Improved entropy bound for safe rectangles]
+    \label{thm:arealaw-physical-safe-rectangle-real}
+    \lean{TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_boxError}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:area_law_ground_entropy,
+        def:area_law_safe_rectangle}
+    Fix integers $q\geq1$ and $R\geq0$, a term norm bound $J\geq0$,
+    and a gap $\Delta>0$. There is $C>0$, depending only on
+    $q,R,J,\Delta$, such that the following holds simultaneously for
+    every real $D_0>2R+10$.
+
+    Let $\Lambda\subseteq\mathbb Z^2$ be any finite domain, let $H$
+    be an interaction Hamiltonian of range $R$ with term norms at most
+    $J$, and let $\Omega$ be a normalized eigenvector of energy $E_0$
+    satisfying the full-system projector-gap inequality with gap
+    $\Delta$. Let $A\subseteq\Lambda$, and let $Z$ be the endpoints of
+    the edges of the induced lattice graph crossing $A$.
+    If $Q$ is a product of two finite nonempty integer intervals and
+    every $t\in Q$ and $z\in Z$ satisfy
+    $D_0\operatorname{size}(Q)<\|t-z\|_\infty$, then
+    \begin{align}
+        S_\Omega(A\cap Q)
+         & \leq C\operatorname{size}(Q)^{1+e_*},
+         & e_*                                   & =2\cdot10^{-6}.
+        \label{eq:arealaw-physical-real-box}
+    \end{align}
+    Here size counts sites along the longer axis, and $A\cap Q$
+    contains only physical sites of $\Lambda$. Empty domains, empty
+    cuts, empty physical intersections, disconnected domains, and
+    domains with holes are permitted. If $Z$ is empty, the safety
+    condition is vacuous, agreeing with distance to the empty set
+    being infinite.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:arealaw-physical-box-fixed-exponent,
+        thm:arealaw-box-clearance-comparison,
+        lem:arealaw-box-supremum-powers}
+    Put $d=2R+10$. The integer safe-box estimate supplies $C_b>0$,
+    depending only on $q,R,J,\Delta$, such that
+    $F_{\mathrm{box},d+1}(r)\leq C_b r^{1+e_*}$ for every integer
+    $r\geq1$. Since $d\geq3$, the safety comparison gives
+    \begin{align}
+        F_{\mathrm{box},d}(r)
+         & \leq C r^{1+e_*},
+         & C                 & =4C_b+4\log q+1>0.
+        \label{eq:arealaw-physical-real-box-constant}
+    \end{align}
+    This constant is chosen before $D_0$ and every finite physical
+    instance. A rectangle safe at real parameter $D_0>d$ is also
+    $d$-safe: for every $t\in Q$ and $z\in Z$,
+    $d\operatorname{size}(Q)\leq D_0\operatorname{size}(Q)
+        <\|t-z\|_\infty$.
+    Set $s=\operatorname{size}(Q)\geq1$. The bound by the safe-box
+    supremum for the same $H,\Omega,A,Q$ and
+    (\ref{eq:arealaw-physical-real-box-constant}) give
+    $S_\Omega(A\cap Q)\leq F_{\mathrm{box},d}(s)
+        \leq Cs^{1+e_*}$.
+\end{proof}
+
+To recover the supremum formulation, fix a real $D_0>2R+10$ and an
+integer $r\geq1$. Every entropy in its defining family is bounded by
+$Cs^{1+e_*}\leq Cr^{1+e_*}$, where $s=\operatorname{size}(Q)\leq r$;
+here $C>0$ and $1+e_*>0$. Taking the supremum gives
+$F_{\mathrm{box},D_0}(r)\leq Cr^{1+e_*}$, with the same constant
+uniformly in $D_0$. Conversely, the supremum estimate at
+$r=\operatorname{size}(Q)\geq1$ bounds each admissible rectangle
+entropy and gives (\ref{eq:arealaw-physical-real-box}). Thus the two
+formulations have exactly the same uniformity and hypotheses.
+
 The immutable source is
 \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L681-L805}{Proposition 9.5 and its proof, lines 681--805}.
-These statements do not establish Proposition 9.6, repair-tree
-Proposition 11.2, or the final area-law integration.
+The collar bound is Theorem~\ref{thm:area_law_sublinear_collar}.

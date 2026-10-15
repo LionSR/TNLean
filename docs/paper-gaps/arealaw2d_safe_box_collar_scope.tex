@@ -17,11 +17,11 @@
 
 \title{Safe-Box Entropy and the Sublinear Collar Bound}
 \author{}
-\date{2026-10-14}
+\date{2026-10-15}
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source propositions}
 
@@ -37,7 +37,9 @@ $R \in \mathbb N$, an interaction norm bound $J \ge 0$, and a spectral gap
 $\Delta > 0$. Consider a finite lattice domain $\Lambda \subset \mathbb Z^2$, a
 local Hamiltonian on $\Lambda$ with those parameters and ground energy $e_0$,
 a unit ground vector $\Omega$, and a subset $A \subseteq \Lambda$ with cut
-boundary $\partial A$ in the induced graph on $\Lambda$. For any region
+boundary $\partial A$ in the induced graph on $\Lambda$. Write $Z$ for
+the set of endpoints of these cut edges, and interpret distance to the cut
+as distance to $Z$, with distance to the empty set equal to infinity. For any region
 $Y \subseteq \Lambda$, write $S_\Omega(Y)$ for the von Neumann entropy of the
 reduced density matrix of $\Omega$ on $Y$.
 
@@ -85,10 +87,13 @@ Hamiltonian, ground vector $\Omega$, cut $A$, and template $T$.
 
 \section{The formal statement and hypothesis reduction}
 
-In the compiled formal development, the template mutual-information bound
-(\ref{eq:safe_box_collar_prop96}) is proved under the single unproved analytic
-hypothesis (\ref{eq:safe_box_collar_prop95}). Fix $q \ge 1$, $R \in \mathbb N$,
-$J \ge 0$, $\Delta > 0$, $D_0 \ge 1$, and a template constant
+The conditional template mutual-information theorem derives
+(\ref{eq:safe_box_collar_prop96}) from the analytic estimate
+(\ref{eq:safe_box_collar_prop95}). The latter is now proved independently,
+so it is not an additional hypothesis of the physical collar theorem.
+For the conditional argument, fix $q \ge 1$, $R \in \mathbb N$,
+$J \ge 0$, $\Delta > 0$, $D_0\in\mathbb N$ with $D_0 \ge 1$,
+and a template constant
 $C_{\mathrm{tpl}} \ge 24$. Assuming (\ref{eq:safe_box_collar_prop95}) at
 $e_* = 2 \times 10^{-6}$, there exist $C > 0$ and $N \ge 2$ such that every
 finite instance with $n \ge N$,
@@ -296,17 +301,16 @@ multiplicity, and boundary clearance, reducing all hypotheses of
 (\ref{eq:safe_box_collar_conditional_template}) to
 (\ref{eq:safe_box_collar_prop95}).
 
-\section{Uncompiled candidate proof of Proposition~9.5}
+\section{The physical safe-box bootstrap}
 
-A candidate unconditional proof of Proposition~9.5
-(\ref{eq:safe_box_collar_prop95}) and of the template mutual-information bound
-(\ref{eq:safe_box_collar_prop96}) has been written in the formal source, but it
-has not yet been compiled or kernel-checked.\footnote{The uncompiled candidate
-    declarations are
-    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError} and
-    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_template_final_mutualInformation}.}
+The physical safe-box estimate is proved first for integer clearance.
+For fixed $q,R,J,\Delta$, a single $C_b>0$ works for every integer
+$d>2R+10$ and every positive integer scale.\footnote{The theorem is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError}.}
+Its composition with the conditional template theorem gives the original-state
+information bound at integer clearance, without assuming an entropy estimate.
 
-In that candidate argument (\path{08-scanner.tex}, lines~681--805), given an
+In the bootstrap argument (\path{08-scanner.tex}, lines~681--805), given an
 initial safe-box exponent $0 < e_0 < 1$, the bootstrap fixes
 $g_0 = (1 - e_0)/2$, $\mu = 1 - g_0$, $\nu = g_0/1000$, $\ell = \nu/100$,
 $\kappa = \min\{\ell, e_*/4\}$, and total band weight $W = 4$, with $a = 4/K$
@@ -355,17 +359,57 @@ implies $2L + 10r_0 \le D_0 s$ and $(D_0 + 1)L \le D_0 s$ for large $s$
     in \doclink{TNLean/PEPS/AreaLaw/Scan/ActualRoughLowerRemainder}.} Combining
 (\ref{eq:safe_box_collar_rough_lower}) with the rough upper bound at $W = 4$
 establishes the one-step improvement $e \mapsto (1 - \ell_0)e$ for
-$e_* < e \le e_0$, and finite iteration yields the candidate proof of
-(\ref{eq:safe_box_collar_prop95}).
+$e_* < e \le e_0$, and finite iteration yields the integer-clearance safe-box estimate.
 
-\section{Elimination}
+\section{Arbitrary real clearance}
 
-Compile and kernel-check the candidate proof of Proposition~9.5
-(\ref{eq:safe_box_collar_prop95}) and its composition with
-(\ref{eq:safe_box_collar_conditional_template}). Once compiled, this removes the
-safe-box entropy hypothesis from (\ref{eq:safe_box_collar_conditional_template})
-and, together with the already formalized geometric cut and volume bounds for
-the collar $S_0$, completes Proposition~9.6.
+The source allows every real $D_0>2R+10$, whereas the safe-box bootstrap
+uses integer clearance. Put $d=2R+10$. The integer estimate at $d+1$
+can be transferred to $d$ without changing the domain, Hamiltonian, or
+ground vector. Indeed, partition a $d$-safe rectangle of size $s\geq2$
+into at most four rectangles of size at most $\lceil s/2\rceil$.
+Since $d\geq10$, one has
+$(d+1)\lceil s/2\rceil\leq ds$, so each child is $(d+1)$-safe.
+Subadditivity and the volume bound for the remaining small sizes give
+\begin{align}
+    F_{\mathrm{box},d}(r)
+     & \leq C_w r^{1+e_*},
+       & C_w & =4C_b+4\log q+1.
+    \label{eq:safe_box_collar_clearance}
+\end{align}
+Here $C_b$ is the physical coefficient at clearance $d+1$; neither it nor
+$C_w$ depends on the subsequently chosen real $D_0$.
+
+Every rectangle satisfying the source's strict distance inequality at
+$D_0>d$ is $d$-safe. Thus (\ref{eq:safe_box_collar_clearance}) gives
+$S_\Omega(A\cap Q)\leq C_w\operatorname{size}(Q)^{1+e_*}$ for every
+such rectangle. This pointwise statement is equivalent to
+(\ref{eq:safe_box_collar_prop95}): for rectangles of size at most $r$,
+monotonicity of the positive power bounds every entropy by $C_wr^{1+e_*}$;
+conversely, take $r=\operatorname{size}(Q)\geq1$. The formal theorem
+states the pointwise bound and introduces neither a second notion of safety
+nor another entropy supremum.\footnote{The clearance comparison is
+    \leanid{TNLean.PEPS.AreaLaw.boxEntropy_power_le_of_succ_clearance};
+    the real-clearance conclusion is
+    \leanid{TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_boxError}.}
+
+For Proposition~9.6, apply the conditional template information theorem
+at the integer clearance $d$ with (\ref{eq:safe_box_collar_clearance}).
+It supplies $C_m>0$ and a common threshold before every finite physical
+instance. A template separated at $4D_0s_0$ is also separated at $4ds_0$.
+Consequently the information bound applies to the same original vector
+and the unchanged regions $X=A\cap T$ and $S_0=A\cap T_L$.
+Dividing its coefficient by two gives
+$I_\Omega(X:\Lambda\setminus S_0)\leq(C_m/2)n^{1-1/100000}$.
+The cut and volume bounds then supply all clauses of the sublinear
+collar bound with the single coefficient $\max(C_m/2,10)$.\footnote{The
+    theorem is \leanid{TNLean.PEPS.AreaLaw.sublinearCollarBound_real}.}
+This holds for every real $D_0>2R+10$ and $C_{\mathrm{tpl}}\geq24$,
+with no assumed safe-box estimate or mutual-information inequality.
+
+This resolves the safe-box and collar restrictions described here.
+The two-family repair construction of Proposition~11.2 and its use in
+Theorem~1.1 remain separate mathematical requirements.
 
 \bibliographystyle{alpha}
 \bibliography{references}

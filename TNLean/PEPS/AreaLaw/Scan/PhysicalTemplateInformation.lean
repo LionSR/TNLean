@@ -15,10 +15,11 @@ conclusion concerns the same original gapped ground state and literal
 template regions. The source template separation and collar scale condition
 remain explicit; no safe-box estimate or scanner certificate is assumed.
 
-This additive theorem leaves the accepted cut/volume packaging unchanged.
-Its imported physical source chain still requires validation and integration;
-it does not establish the repair-tree construction or the full area law.
-See `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
+**Scope restriction (integer clearance):** The safety parameter in this
+module is a natural number. The arbitrary real-clearance collar theorem is
+proved in `TNLean.PEPS.AreaLaw.PhysicalCollarInformation`; the comparison
+removing this restriction is recorded in
+`docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, Proposition 9.5, lines 681--805, and the information
@@ -31,7 +32,7 @@ noncomputable section
 
 namespace TNLean.PEPS.AreaLaw.Scan
 
-open Geometry
+open _root_.TNLean.PEPS.AreaLaw.Geometry
 
 /-- Both final information powers for each separated template in the
 original physical gapped ground state. The physical safe-box bootstrap

@@ -7556,3 +7556,16 @@ spectral split → block extraction → MPV calculation → strict bounds
   `Scan/SourceActualInformation.lean`, and `Scan/SourceFinalInformation.lean`.
 - **Notes:** Positivity comes from the existing spectral-window witness; no
   nonzero-dimension hypothesis is added to any theorem.
+
+### Physical safe-box bounds at the minimal integer clearance — candidate (2026-10-15)
+
+- **Pattern:** Apply the physical entropy bound at clearance `d + 1`, with
+  `d = 2 * R + 10`, and transfer it to `d` using the rectangle-subdivision
+  comparison before treating an arbitrary real clearance.
+- **Seen:** `PEPS/AreaLaw/PhysicalSafeBox.lean` and
+  `PEPS/AreaLaw/PhysicalCollarInformation.lean`.
+- **Abstraction:** The comparison itself is already a theorem. A common
+  physical estimate at clearance `2 * R + 10` would remove the repeated
+  choice of coefficient and its positivity proof if a third use appears.
+- **Notes:** Two occurrences in two modules, below the promotion threshold.
+  The coefficient is chosen before every real clearance and finite instance.

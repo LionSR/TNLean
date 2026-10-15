@@ -1144,3 +1144,57 @@ prove these steps; the information inequality itself is not proved here.
     Take the constant $\max(C,10)$; the remaining assertions are those of
     Theorem~\ref{thm:area_law_collar_cut_bounds}.
 \end{proof}
+
+\begin{theorem}[Sublinear information across a template collar]
+    \label{thm:area_law_sublinear_collar}
+    \lean{TNLean.PEPS.AreaLaw.sublinearCollarBound_real}
+    \leanok
+    \uses{def:area_law_collar_bound}
+    Fix $q,R\in\mathbb N$ with $q\geq1$, real parameters $J\geq0$
+    and $\Delta>0$, and real template constants $D_0>2R+10$ and
+    $C_{\mathrm{tpl}}\geq24$. There are $C\in\mathbb R$ and
+    $N\in\mathbb N$, chosen before all the following finite data.
+    Let $\Lambda$ be a finite induced square-lattice domain, let $H$ be
+    an admissible Hamiltonian with parameters $(q,R,J)$, and let
+    $\Omega$ be its normalized ground vector at energy $E_0$ with
+    full-system projector gap $\Delta$. Let $A\subseteq\Lambda$ and
+    let $Z$ be the endpoints of its cut edges. For every template $T$
+    with parameters $(C_{\mathrm{tpl}},n,s_0)$ satisfying $n\geq N$,
+    $\operatorname{dist}_\infty(T,Z)>4D_0s_0$, and
+    $L=\lfloor n^{1-1/100000}\rfloor\leq s_0$, put $X=A\cap T$ and
+    $S_0=A\cap T_L$. Then
+    \begin{align}
+        I_\Omega(X:\Lambda\setminus S_0)
+              & \leq Cn^{1-1/100000}, \\
+        |S_0| & \leq Cn^2,
+    \end{align}
+    and each of $X$, $S_0$, and $S_0\setminus X$ has at most $Cn$
+    crossing edges in $\Lambda$.
+    This is~\cite[Proposition~9.6]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:arealaw-physical-box-fixed-exponent,
+        thm:arealaw-box-clearance-comparison,
+        thm:template-final-information,
+        thm:area_law_collar_bound_of_information}
+    Put $d=2R+10$. The physical safe-box bound at the integer clearance
+    $d+1$ supplies $C_b>0$ at exponent $1+e_*$, where
+    $e_*=2\cdot10^{-6}$. The clearance comparison gives
+    \begin{align}
+        F_{\mathrm{box},d}(r)
+         & \leq (4C_b+4\log q+1)r^{1+e_*}
+    \end{align}
+    at every positive integer scale. Apply the conditional template
+    information theorem at clearance $d$, which requires only $d\geq1$.
+    It gives $C_m>0$ and a threshold, before all finite instances, for
+    which $2I_\Omega(X:\Lambda\setminus S_0)\leq C_m n^{1-1/100000}$.
+    The hypothesis $D_0>d$ ensures that every template separated at
+    the prescribed real clearance $D_0$ is also separated at $d$.
+    The estimate therefore applies to the same original vector and
+    the unchanged regions $X$ and $S_0$.
+
+    Divide the information coefficient by two and apply
+    Theorem~\ref{thm:area_law_collar_bound_of_information}. The single
+    constant $\max(C_m/2,10)$ also bounds the three cuts and the
+    collar cardinality, with the same threshold.
+\end{proof}
