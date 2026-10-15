@@ -34,6 +34,29 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     closed terminal squares of the generations $i<j$.
 \end{definition}
 
+% Source: 10-geometry.tex, child scales, lines 404--409;
+% geometry:descendant-count, lines 670--681.
+\begin{lemma}[Scales of descendants]
+    \label{lem:area_law_repair_descendant_scales}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_scale_eq_iterate}
+    \leanok
+    \uses{def:area_law_repair_ancestors,def:area_law_repair_terminal_children}
+    Write $S_j$ for the scale function on the marks of $\mathcal D_j$,
+    and let $d^{[n]}$ denote the $n$-fold iterate of the removal
+    half-side map. For $i,n\ge0$ and every mark $q$ of
+    $\mathcal D_{i+n}$,
+    \begin{equation}
+        S_{i+n}(q)=d^{[n]}\bigl(S_i(\alpha_{i,n}(q))\bigr).
+        \label{eq:area_law_repair_descendant_scales}
+    \end{equation}
+\end{lemma}
+\begin{proof}\leanok
+    The case $n=0$ is the identity. For a mark $q$ of
+    $\mathcal D_{i+n+1}$, put $p=\pi_{i+n}(q)$. Its scale is
+    $d(S_{i+n}(p))$. Apply the induction hypothesis to $p$ and use
+    $\alpha_{i,n+1}(q)=\alpha_{i,n}(p)$.
+\end{proof}
+
 % Source: 10-geometry.tex, geometry:initial-stars, lines 332--349, and
 % geometry:repair-induction, lines 471--485.
 \begin{definition}[Conclusion of the uniform repair induction]
