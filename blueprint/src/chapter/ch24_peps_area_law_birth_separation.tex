@@ -330,8 +330,8 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
 % geometry:initial-stars, lines 352--359, and geometry:birth-separation,
 % lines 597--625.
-\begin{lemma}[Atoms of the normalized belt arrangement]
-    \label{lem:area_law_belt_atoms}
+\begin{theorem}[Atoms of the normalized belt arrangement]
+    \label{thm:area_law_belt_atoms}
     \lean{TNLean.PEPS.AreaLaw.Geometry.IsBeltArrangementPoint,
         TNLean.PEPS.AreaLaw.Geometry.IsBeltFacet,
         TNLean.PEPS.AreaLaw.Geometry.exists_int_eq_of_isBeltFacet,
@@ -348,10 +348,10 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     \uses{def:area_law_normalized_repair_fan, lem:area_law_quarter_sections}
     Atoms are compact, convex and quarter-sectorial at every point of
     $\mathbb Z^2$, and the interior of an atom meets none of the lines
-    \eqref{eq:area_law_belt_arrangement}.
+    (\ref{eq:area_law_belt_arrangement}).
     \begin{enumerate}
         \item Let $P$ be closed and convex with nonempty interior, and let its
-              frontier lie on the lines \eqref{eq:area_law_belt_arrangement}.
+              frontier lie on the lines (\ref{eq:area_law_belt_arrangement}).
               Then every point of $P$ lies in an atom contained in $P$.
         \item Two atoms with a common point outside $\mathbb Z^2$ share a
               nondegenerate segment.
@@ -359,7 +359,7 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
               containing $q$ contains a segment $[q,q+\sigma e_1]$ and a
               segment $[q,q+\tau e_2]$ with $\sigma,\tau\in\{\pm1\}$.
     \end{enumerate}
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -388,7 +388,7 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_pos_common_contact_dichotomy,
         TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_dichotomy}
     \leanok
-    \uses{lem:area_law_belt_atoms}
+    \uses{thm:area_law_belt_atoms}
     There is $\eta\in(0,1]$ such that for any two atoms $A,B$ with
     $A\cap B\subseteq\mathbb Z^2$, and all $x\in A$, $y\in B$, either
     $\|x-y\|\ge\eta$, or there is a common point $q\in A\cap B$ with
@@ -410,23 +410,23 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
 % geometry:birth-separation, lines 592--604, with the scale comparison,
 % lines 193--207.
-\begin{lemma}[Initial regions near a belt cell]
-    \label{lem:area_law_belt_cell_local_atoms}
+\begin{theorem}[Initial regions near a belt cell]
+    \label{thm:area_law_belt_cell_local_atoms}
     \lean{TNLean.PEPS.AreaLaw.Geometry.beltCellOrigin,
         TNLean.PEPS.AreaLaw.Geometry.beltNormalize,
         TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_subset_cellFanPolygon,
         TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_subset_closure_dyadicCell,
         TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_subset_initialBirthRegion}
     \leanok
-    \uses{lem:area_law_belt_atoms, def:area_law_initial_birth_regions}
+    \uses{thm:area_law_belt_atoms, def:area_law_initial_birth_regions}
     Normalize a belt cell of layer $k$ to $[0,4]^2$. Every fan triangle and
     every closed fine cell of a layer $h$ with fine scale index at least that
     of layer $k$ minus one becomes a set as in item (1) of
-    Lemma~\ref{lem:area_law_belt_atoms}. Consequently, if $p$ lies in the
+    Theorem~\ref{thm:area_law_belt_atoms}. Consequently, if $p$ lies in the
     closed cell and $w$ lies in the closed birth region of a primary or of a
     belt tile, with $\|p-w\|<t_k$, then the normalized point $w$ lies in an
     atom contained in the normalized birth region.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -437,7 +437,7 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     The corners of the cells of fine scale index at least that of layer $k$
     minus one become points of $(2\mathbb Z)^2$, their centers integer
     points, and their sides and radial edges segments of the lines
-    \eqref{eq:area_law_belt_arrangement}. A fan triangle has frontier on its
+    (\ref{eq:area_law_belt_arrangement}). A fan triangle has frontier on its
     cell boundary and its radial segments. A point within $t_k$ of the
     reference cell belongs only to the same or an adjacent layer, whose fine
     scale index differs by at most one. A primary is the union of the closures
@@ -447,8 +447,8 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
 % geometry:birth-separation, lines 606--615, with the belt construction,
 % lines 299--330.
-\begin{lemma}[Contacts of an initial belt tile]
-    \label{lem:area_law_initial_belt_contacts}
+\begin{theorem}[Contacts of an initial belt tile]
+    \label{thm:area_law_initial_belt_contacts}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialBeltRun,
         TNLean.PEPS.AreaLaw.Geometry.exists_eq_initialBeltRun_of_inter_interior,
         TNLean.PEPS.AreaLaw.Geometry.not_segment_subset_initialBirthRegion_inter,
@@ -456,13 +456,13 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
         TNLean.PEPS.AreaLaw.Geometry.mem_beltCellMarks_of_beltNormalize_eq,
         TNLean.PEPS.AreaLaw.Geometry.beltNormalize_symm_mem_beltCellMarks}
     \leanok
-    \uses{lem:area_law_belt_cell_local_atoms, def:area_law_belt_cell_marks}
+    \uses{thm:area_law_belt_cell_local_atoms, def:area_law_belt_cell_marks}
     Let $x$ be an initial belt tile of a belt cell, and let $y\ne x$ be an
     initial identifier of the same label. If a point of $\mathbb Z^2$, in
     coordinates normalized at the cell, lies in the birth region of $x$ and in
     an atom contained in the normalized birth region of $y$, then it is the
     normalized position of one of the nine marks of the cell.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -478,7 +478,7 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     fan triangle of $x$, whose endpoints have even normalized coordinates. If
     both normalized coordinates of the contact are even, it is a mark. If one
     is odd, the contact is the midpoint of a unit subsegment of that
-    elementary side, and item (3) of Lemma~\ref{lem:area_law_belt_atoms}
+    elementary side, and item (3) of Theorem~\ref{thm:area_law_belt_atoms}
     gives a unit segment of that subsegment inside the atom of $y$, a shared
     nondegenerate segment.
 \end{proof}
@@ -505,17 +505,17 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_belt_atom_dichotomy, lem:area_law_belt_cell_local_atoms,
-        lem:area_law_initial_belt_contacts, lem:area_law_belt_atoms}
+    \uses{thm:area_law_belt_atom_dichotomy, thm:area_law_belt_cell_local_atoms,
+        thm:area_law_initial_belt_contacts, thm:area_law_belt_atoms}
     Put $c_1=\min(\eta/4,1/8)$ with $\eta$ from
     Theorem~\ref{thm:area_law_belt_atom_dichotomy}. If $\|p-w\|\ge u$ there is
     nothing to prove, since $u\ge u^{\rho_0}$. Otherwise the normalized points
     $p$ and $w$ lie in atoms $A$ and $B$ contained in the normalized birth
     regions of $x$ and $y$. By item (2) of
-    Lemma~\ref{lem:area_law_belt_atoms} and the absence of shared segments,
+    Theorem~\ref{thm:area_law_belt_atoms} and the absence of shared segments,
     $A\cap B\subseteq\mathbb Z^2$. Either $\|p-w\|\ge\eta u/4$, or there is a
     common integer point $q$ with $\|p-w\|\ge\|w-v\|/2$ for the point $v$ of
-    the plane at $q$. By Lemma~\ref{lem:area_law_initial_belt_contacts}, $v$
+    the plane at $q$. By Theorem~\ref{thm:area_law_initial_belt_contacts}, $v$
     is a mark of the cell, so $\|w-v\|>u^{\rho_0}/4$.
 \end{proof}
 
