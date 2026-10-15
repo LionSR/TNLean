@@ -35,7 +35,7 @@ factor system. No normalization of the cochain is assumed.
 Supporting regular construction for the virtual law and fixed-point existence in arXiv:2011.12127,
 `Papers/2011.12127/TN-Review-main.tex`, lines 1124–1129 and 1147. -/
 def conjugateLeftRegular (ω : ScalarCocycle G) (g : G) : Matrix G G ℂ :=
-  Matrix.monomial (Equiv.mulLeft g) fun h => (ω g h : ℂ)
+  Matrix.monomial (Equiv.mulLeft g) fun h => (ω (g, h) : ℂ)
 
 omit [Fintype G] in
 /-- The regular matrix sends the basis vector at `y` to `ω(g,y)` times the
@@ -43,7 +43,7 @@ basis vector at `g*y`.
 Supporting regular construction for the virtual law and fixed-point existence in arXiv:2011.12127,
 `Papers/2011.12127/TN-Review-main.tex`, lines 1124–1129 and 1147. -/
 theorem conjugateLeftRegular_apply (ω : ScalarCocycle G) (g x y : G) :
-    conjugateLeftRegular ω g x y = if x = g * y then (ω g y : ℂ) else 0 := rfl
+    conjugateLeftRegular ω g x y = if x = g * y then (ω (g, y) : ℂ) else 0 := rfl
 
 /-- Conjugation of a monomial matrix conjugates its phases.
 Supporting regular construction for the virtual law and fixed-point existence in arXiv:2011.12127,
@@ -62,9 +62,9 @@ Supporting regular construction for the virtual law and fixed-point existence in
 `Papers/2011.12127/TN-Review-main.tex`, lines 1124–1129 and 1147. -/
 theorem conjugateLeftRegular_mul (α : G →* SymmetryParity) (ω : ScalarCocycle G)
     (hω : letI := parityUnitsAction α;
-      groupCohomology.IsMulCocycle₂ (Function.uncurry ω)) (g h : G) :
+      groupCohomology.IsMulCocycle₂ ω) (g h : G) :
     conjugateLeftRegular ω g * parityConjMatrix (α g) (conjugateLeftRegular ω h) =
-      (ω g h : ℂ) • conjugateLeftRegular ω (g * h) := by
+      (ω (g, h) : ℂ) • conjugateLeftRegular ω (g * h) := by
   simp only [conjugateLeftRegular, parityConjMatrix_monomial,
     Matrix.monomial_mul_monomial, Matrix.smul_monomial]
   have hperm : Equiv.mulLeft g * Equiv.mulLeft h = Equiv.mulLeft (g * h) := by
@@ -74,15 +74,15 @@ theorem conjugateLeftRegular_mul (α : G →* SymmetryParity) (ω : ScalarCocycl
   congr 1
   funext k
   have hk := congrArg (fun z : Units ℂ => (z : ℂ)) (hω g h k)
-  change (ω (g * h) k : ℂ) * (ω g h : ℂ) =
-    parityConj (α g) (ω h k : ℂ) * (ω g (h * k) : ℂ) at hk
+  change (ω (g * h, k) : ℂ) * (ω (g, h) : ℂ) =
+    parityConj (α g) (ω (h, k) : ℂ) * (ω (g, h * k) : ℂ) at hk
   simpa only [Equiv.coe_mulLeft, Pi.smul_apply, smul_eq_mul, mul_comm] using hk.symm
 
 /-- Unit-modulus phases make every regular matrix unitary.
 Supporting regular construction for the virtual law and fixed-point existence in arXiv:2011.12127,
 `Papers/2011.12127/TN-Review-main.tex`, lines 1124–1129 and 1147. -/
 theorem conjugateLeftRegular_mem_unitaryGroup (ω : ScalarCocycle G)
-    (hunit : ∀ g h, star (ω g h : ℂ) * (ω g h : ℂ) = 1) (g : G) :
+    (hunit : ∀ g h, star (ω (g, h) : ℂ) * (ω (g, h) : ℂ) = 1) (g : G) :
     conjugateLeftRegular ω g ∈ Matrix.unitaryGroup G ℂ :=
   Matrix.monomial_mem_unitaryGroup _ _ (hunit g)
 
@@ -90,14 +90,14 @@ theorem conjugateLeftRegular_mem_unitaryGroup (ω : ScalarCocycle G)
 Supporting regular construction for the virtual law and fixed-point existence in arXiv:2011.12127,
 `Papers/2011.12127/TN-Review-main.tex`, lines 1124–1129 and 1147. -/
 noncomputable def conjugateLeftRegularGL (ω : ScalarCocycle G)
-    (hunit : ∀ g h, star (ω g h : ℂ) * (ω g h : ℂ) = 1) (g : G) : GL G ℂ :=
+    (hunit : ∀ g h, star (ω (g, h) : ℂ) * (ω (g, h) : ℂ) = 1) (g : G) : GL G ℂ :=
   Unitary.toUnits ⟨conjugateLeftRegular ω g, conjugateLeftRegular_mem_unitaryGroup ω hunit g⟩
 
 /-- The invertible regular matrix has the original regular entries.
 Supporting regular construction for the virtual law and fixed-point existence in arXiv:2011.12127,
 `Papers/2011.12127/TN-Review-main.tex`, lines 1124–1129 and 1147. -/
 @[simp] theorem conjugateLeftRegularGL_coe (ω : ScalarCocycle G)
-    (hunit : ∀ g h, star (ω g h : ℂ) * (ω g h : ℂ) = 1) (g : G) :
+    (hunit : ∀ g h, star (ω (g, h) : ℂ) * (ω (g, h) : ℂ) = 1) (g : G) :
     (conjugateLeftRegularGL ω hunit g : Matrix G G ℂ) = conjugateLeftRegular ω g := rfl
 
 /-- Every unit-modulus twisted cocycle of a finite group is realized by a
@@ -108,8 +108,8 @@ Supporting regular construction for the virtual law and fixed-point existence in
 noncomputable def conjugateRegularRepresentation (α : G →* SymmetryParity)
     (ω : ScalarCocycle G)
     (hω : letI := parityUnitsAction α;
-      groupCohomology.IsMulCocycle₂ (Function.uncurry ω))
-    (hunit : ∀ g h, star (ω g h : ℂ) * (ω g h : ℂ) = 1) :
+      groupCohomology.IsMulCocycle₂ ω)
+    (hunit : ∀ g h, star (ω (g, h) : ℂ) * (ω (g, h) : ℂ) = 1) :
     ConjugateProjectiveRepresentation α ω (D := Fintype.card G) where
   X g := Units.map (Matrix.reindexAlgEquiv ℂ ℂ (Fintype.equivFin G)).toMonoidHom
     (conjugateLeftRegularGL ω hunit g)
@@ -121,7 +121,7 @@ noncomputable def conjugateRegularRepresentation (α : G →* SymmetryParity)
     let e := Matrix.reindexAlgEquiv ℂ ℂ (Fintype.equivFin G)
     change e (conjugateLeftRegular ω g) *
       parityConjMatrix (α g) (e (conjugateLeftRegular ω h)) =
-      (ω g h : ℂ) • e (conjugateLeftRegular ω (g * h))
+      (ω (g, h) : ℂ) • e (conjugateLeftRegular ω (g * h))
     have he : parityConjMatrix (α g) (e (conjugateLeftRegular ω h)) =
         e (parityConjMatrix (α g) (conjugateLeftRegular ω h)) := rfl
     rw [he, ← map_mul, conjugateLeftRegular_mul α ω hω, map_smul]
@@ -131,12 +131,12 @@ unitary realization, without any normalization or representative change.
 Supporting regular construction for the virtual law and fixed-point existence in arXiv:2011.12127,
 `Papers/2011.12127/TN-Review-main.tex`, lines 1124–1129 and 1147. -/
 noncomputable def conjugateRegularUnitaryRepresentation (α : G →* SymmetryParity)
-    (ω : G → G → unitary ℂ)
+    (ω : G × G → unitary ℂ)
     (hω : letI := parityUnitaryAction α;
-      groupCohomology.IsMulCocycle₂ (Function.uncurry ω)) :
-    ConjugateProjectiveRepresentation α (fun g h => Unitary.toUnits (ω g h))
+      groupCohomology.IsMulCocycle₂ ω) :
+    ConjugateProjectiveRepresentation α (fun p => Unitary.toUnits (ω p))
       (D := Fintype.card G) :=
-  conjugateRegularRepresentation α (fun g h => Unitary.toUnits (ω g h))
-    (isMulCocycle₂_toUnits α ω hω) (fun g h => Unitary.coe_star_mul_self (ω g h))
+  conjugateRegularRepresentation α (fun p => Unitary.toUnits (ω p))
+    (isMulCocycle₂_toUnits α ω hω) (fun g h => Unitary.coe_star_mul_self (ω (g, h)))
 
 end TNLean.Algebra

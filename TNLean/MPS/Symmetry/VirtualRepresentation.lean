@@ -120,12 +120,12 @@ theorem exists_projectiveRepresentation_of_virtual_covariance
     rcases gauge_unique_up_to_scalar hA (hX (g * h)) (hProd g h) with ⟨u, hu⟩
     refine ⟨u, ?_⟩
     simpa [Matrix.GeneralLinearGroup.coe_mul] using hu
-  choose ω hω using fun g h => hScalar (h⁻¹) (g⁻¹)
+  choose ω hω using fun p : G × G => hScalar (p.2⁻¹) (p.1⁻¹)
   let ρ : ProjectiveRepresentation (D := D) ω := {
     X := fun g => X (g⁻¹)
     map_mul' := by
       intro g h
-      simpa [mul_inv_rev] using hω g h
+      simpa [mul_inv_rev] using hω (g, h)
   }
   refine ⟨ω, ρ, fun _ => rfl, ?_⟩
   intro g i
@@ -170,8 +170,8 @@ theorem virtual_rep_of_symmetric_injective_cocycle
         (∀ g i, twistedTensor A U g i =
           (ρ.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i * invMat (ρ.X (g⁻¹))) ∧
         ∀ g h k : G,
-          (ω g h : ℂ) * (ω (g * h) k : ℂ) =
-            (ω g (h * k) : ℂ) * (ω h k : ℂ) := by
+          (ω (g, h) : ℂ) * (ω (g * h, k) : ℂ) =
+            (ω (g, h * k) : ℂ) * (ω (h, k) : ℂ) := by
   rcases virtual_rep_of_symmetric_injective A hA U hSymm with ⟨ω, ρ, hρ⟩
   refine ⟨ω, ρ, hρ, ?_⟩
   intro g h k

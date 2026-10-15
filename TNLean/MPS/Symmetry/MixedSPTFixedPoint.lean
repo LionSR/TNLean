@@ -184,7 +184,7 @@ theorem mixedSptAction_mul [NeZero D]
     have hc := congrArg (fun z : unitary ℂ => (z : ℂ)) hu
     simpa only [Submonoid.coe_mul, parityUnitary_coe, mul_comm] using hc
   simp only [mixedSptAction, map_mul, hphase]
-  exact (mixedSptMatrix_mul _ _ _ _ _ (ω g h : ℂ) _ _ _
+  exact (mixedSptMatrix_mul _ _ _ _ _ (ω (g, h) : ℂ) _ _ _
     (ρ.map_mul g h) (ρ.factor_unitary (Nat.pos_of_ne_zero (NeZero.ne D)) g h)).symm
 
 /-- The identity symmetry acts identically on the physical dimer.
@@ -289,16 +289,16 @@ Dimer consequence of gauge uniqueness and the coboundary relation in arXiv:2011.
 `Papers/2011.12127/TN-Review-main.tex`, eq:XAX=B (lines 1084–1086) and line 1129. -/
 theorem parityUnitaryH2Class_eq_of_mixedSptSymmetry
     {G : Type} [Group G] [NeZero D] (t r : G →* SymmetryParity)
-    {ω ω' : G → G → unitary ℂ}
+    {ω ω' : G × G → unitary ℂ}
     (ρ : ConjugateProjectiveRepresentation (t * r)
-      (fun g h => Unitary.toUnits (ω g h)) (D := D))
+      (fun p => Unitary.toUnits (ω p)) (D := D))
     (ρ' : ConjugateProjectiveRepresentation (t * r)
-      (fun g h => Unitary.toUnits (ω' g h)) (D := D))
+      (fun p => Unitary.toUnits (ω' p)) (D := D))
     (φ : G → unitary ℂ)
     (hω : letI := parityUnitaryAction (t * r);
-      groupCohomology.IsMulCocycle₂ (Function.uncurry ω))
+      groupCohomology.IsMulCocycle₂ ω)
     (hω' : letI := parityUnitaryAction (t * r);
-      groupCohomology.IsMulCocycle₂ (Function.uncurry ω'))
+      groupCohomology.IsMulCocycle₂ ω')
     (hρ' : IsMixedSymmetric (sptFixedPointTensor D) t r (mixedSptAction t r ρ φ)
       (fun g => (φ g : ℂ)) (fun g => (ρ'.X g : Matrix (Fin D) (Fin D) ℂ))) :
     parityUnitaryH2Class (t * r) ω' hω' = parityUnitaryH2Class (t * r) ω hω := by
@@ -313,12 +313,12 @@ has exactly the prescribed character and virtual factor system.
 Fixed-point existence claim of arXiv:2011.12127,
 `Papers/2011.12127/TN-Review-main.tex`, lines 1147–1157, using the corrected dimer tensor. -/
 theorem exists_mixed_spt_fixedPoint {G : Type} [Group G] [Fintype G]
-    (t r : G →* SymmetryParity) (ω : G → G → unitary ℂ) (φ : G → unitary ℂ)
+    (t r : G →* SymmetryParity) (ω : G × G → unitary ℂ) (φ : G → unitary ℂ)
     (hω : letI := parityUnitaryAction (t * r);
-      groupCohomology.IsMulCocycle₂ (Function.uncurry ω))
+      groupCohomology.IsMulCocycle₂ ω)
     (hφ : letI := parityUnitaryAction t; groupCohomology.IsMulCocycle₁ φ) :
     ∃ ρ : ConjugateProjectiveRepresentation (t * r)
-        (fun g h => Unitary.toUnits (ω g h)) (D := Fintype.card G),
+        (fun p => Unitary.toUnits (ω p)) (D := Fintype.card G),
       Kraus.IsInjective (sptFixedPointTensor (Fintype.card G)) ∧
       IsTransferIdempotent (sptFixedPointTensor (Fintype.card G)) ∧
       Module.finrank ℂ (LinearMap.range

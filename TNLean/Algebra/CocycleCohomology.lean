@@ -9,7 +9,7 @@ import TNLean.Algebra.ProjectiveRepresentation
 /-!
 # Scalar 2-cocycles and Mathlib's `H²(G, ℂˣ)`
 
-The factor system `ω : G → G → ℂˣ` of a projective representation satisfies the
+The factor system `ω : G × G → ℂˣ` of a projective representation satisfies the
 multiplicative 2-cocycle equation.  Its class lives in Mathlib's degree-two group
 cohomology `groupCohomology.H2 (Rep.ofMulDistribMulAction G ℂˣ)`, for the trivial
 action of `G` on `ℂˣ`; the class of a cocycle `ω` is
@@ -61,12 +61,12 @@ variable {D : ℕ}
 /-- Two cocycles `ω₁` and `ω₂` are cohomologous if their ratio is a coboundary,
 i.e., `ω₁(g,h) = φ(g) * φ(h) * φ(g*h)⁻¹ * ω₂(g,h)` for some `φ : G → ℂˣ`. -/
 def ScalarCocycle.CohomologousTo (ω₁ ω₂ : ScalarCocycle G) : Prop :=
-  ∃ φ : G → Units ℂ, ∀ g h, ω₁ g h = φ g * φ h * (φ (g * h))⁻¹ * ω₂ g h
+  ∃ φ : G → Units ℂ, ∀ g h, ω₁ (g, h) = φ g * φ h * (φ (g * h))⁻¹ * ω₂ (g, h)
 
-/-- A scalar 2-cochain `ω : G → G → ℂˣ` satisfies the multiplicative 2-cocycle condition if
-`ω g h * ω (g * h) k = ω g (h * k) * ω h k` for all `g h k : G`. -/
+/-- A scalar 2-cochain `ω : G × G → ℂˣ` satisfies the multiplicative 2-cocycle condition if
+`ω (g, h) * ω (g * h, k) = ω (g, h * k) * ω (h, k)` for all `g h k : G`. -/
 def ScalarCocycle.IsCocycle (ω : ScalarCocycle G) : Prop :=
-  ∀ g h k : G, ω g h * ω (g * h) k = ω g (h * k) * ω h k
+  ∀ g h k : G, ω (g, h) * ω (g * h, k) = ω (g, h * k) * ω (h, k)
 
 /-- A scalar cochain cohomologous to a genuine cocycle satisfies the cocycle equation. -/
 theorem ScalarCocycle.IsCocycle.of_cohomologousTo {ω₁ ω₂ : ScalarCocycle G}
@@ -76,9 +76,9 @@ theorem ScalarCocycle.IsCocycle.of_cohomologousTo {ω₁ ω₂ : ScalarCocycle G
   simp only [hφ]
   calc
     _ = (φ a * φ b * φ c * (φ (a * (b * c)))⁻¹) *
-        (ω₂ a b * ω₂ (a * b) c) := by simp [mul_assoc, mul_comm, mul_left_comm]
+        (ω₂ (a, b) * ω₂ (a * b, c)) := by simp [mul_assoc, mul_comm, mul_left_comm]
     _ = (φ a * φ b * φ c * (φ (a * (b * c)))⁻¹) *
-        (ω₂ a (b * c) * ω₂ b c) := by rw [hω₂ a b c]
+        (ω₂ (a, b * c) * ω₂ (b, c)) := by rw [hω₂ a b c]
     _ = _ := by simp [mul_assoc, mul_comm, mul_left_comm]
 
 /-- Every projective representation of positive bond dimension has a genuine 2-cocycle
@@ -89,10 +89,10 @@ theorem ScalarCocycle.isCocycle_of_projRep
     {ω : ScalarCocycle G} (ρ : ProjectiveRepresentation (D := D) ω) (hD : 0 < D) :
     ScalarCocycle.IsCocycle ω := by
   intro g h k
-  have hℂ : (ω g h : ℂ) * (ω (g * h) k : ℂ) = (ω g (h * k) : ℂ) * (ω h k : ℂ) :=
+  have hℂ : (ω (g, h) : ℂ) * (ω (g * h, k) : ℂ) = (ω (g, h * k) : ℂ) * (ω (h, k) : ℂ) :=
     ρ.cocycle_of_assoc (D := D) hD g h k
-  have hUcoe : ((ω g h * ω (g * h) k : Units ℂ) : ℂ) =
-      ((ω g (h * k) * ω h k : Units ℂ) : ℂ) := by
+  have hUcoe : ((ω (g, h) * ω (g * h, k) : Units ℂ) : ℂ) =
+      ((ω (g, h * k) * ω (h, k) : Units ℂ) : ℂ) := by
     push_cast; exact hℂ
   exact Units.ext hUcoe
 
@@ -111,8 +111,8 @@ theorem symm {ω₁ ω₂ : ScalarCocycle G} (h : CohomologousTo ω₁ ω₂) :
   refine ⟨fun g => (φ g)⁻¹, fun g h => ?_⟩
   simp only [inv_inv]
   rw [hφ g h]
-  rw [show (φ g)⁻¹ * (φ h)⁻¹ * (φ (g * h)) * (φ g * φ h * (φ (g * h))⁻¹ * ω₂ g h) =
-    ((φ g)⁻¹ * φ g) * ((φ h)⁻¹ * φ h) * (φ (g * h) * (φ (g * h))⁻¹) * ω₂ g h from by
+  rw [show (φ g)⁻¹ * (φ h)⁻¹ * (φ (g * h)) * (φ g * φ h * (φ (g * h))⁻¹ * ω₂ (g, h)) =
+    ((φ g)⁻¹ * φ g) * ((φ h)⁻¹ * φ h) * (φ (g * h) * (φ (g * h))⁻¹) * ω₂ (g, h) from by
     simp only [mul_assoc, mul_comm, mul_left_comm]]
   simp
 
@@ -180,40 +180,40 @@ def scalarRepresentationRes {K : Type} [Group K] (f : K →* G) :
   intro g
   rfl
 
-/-- The curried scalar 2-cocycle equation is Mathlib's uncurried multiplicative
+/-- The scalar 2-cocycle equation, in the source's orientation, is Mathlib's multiplicative
 2-cocycle equation for the trivial action on `ℂˣ`.
 
 This fixes the equation orientation in the comparison used for
 arXiv:2502.20257, lines 1927--1931. -/
 theorem ScalarCocycle.isCocycle_iff_isMulCocycle₂ (ω : ScalarCocycle G) :
-    ω.IsCocycle ↔ groupCohomology.IsMulCocycle₂ (Function.uncurry ω) := by
+    ω.IsCocycle ↔ groupCohomology.IsMulCocycle₂ ω := by
   constructor
   · intro h g k j
-    change ω (g * k) j * ω g k = ω k j * ω g (k * j)
+    change ω (g * k, j) * ω (g, k) = ω (k, j) * ω (g, k * j)
     simpa only [mul_comm] using h g k j
   · intro h g k j
     have h' := h g k j
-    change ω (g * k) j * ω g k = ω k j * ω g (k * j) at h'
+    change ω (g * k, j) * ω (g, k) = ω (k, j) * ω (g, k * j) at h'
     simpa only [mul_comm] using h'
 
 /-- A scalar cocycle is a Mathlib multiplicative 2-cocycle for the trivial action. -/
 theorem ScalarCocycle.IsCocycle.isMulCocycle₂ {ω : ScalarCocycle G} (hω : ω.IsCocycle) :
-    groupCohomology.IsMulCocycle₂ (Function.uncurry ω) :=
+    groupCohomology.IsMulCocycle₂ ω :=
   (ScalarCocycle.isCocycle_iff_isMulCocycle₂ ω).mp hω
 
 /-- Two scalar cochains are cohomologous precisely when their pointwise ratio is a
 Mathlib multiplicative 2-coboundary for the trivial action on `ℂˣ`. -/
 theorem ScalarCocycle.cohomologousTo_iff_isMulCoboundary₂_div (ω₁ ω₂ : ScalarCocycle G) :
-    ω₁.CohomologousTo ω₂ ↔ groupCohomology.IsMulCoboundary₂ (Function.uncurry (ω₁ / ω₂)) := by
+    ω₁.CohomologousTo ω₂ ↔ groupCohomology.IsMulCoboundary₂ (ω₁ / ω₂) := by
   constructor
   · rintro ⟨φ, hφ⟩
     refine ⟨φ, fun g h ↦ ?_⟩
-    change φ h / φ (g * h) * φ g = ω₁ g h / ω₂ g h
+    change φ h / φ (g * h) * φ g = ω₁ (g, h) / ω₂ (g, h)
     rw [hφ g h, mul_div_cancel_right, div_mul_eq_mul_div, mul_comm (φ h), div_eq_mul_inv]
   · rintro ⟨φ, hφ⟩
     refine ⟨φ, fun g h ↦ ?_⟩
     have h' := hφ g h
-    change φ h / φ (g * h) * φ g = ω₁ g h / ω₂ g h at h'
+    change φ h / φ (g * h) * φ g = ω₁ (g, h) / ω₂ (g, h) at h'
     rw [eq_div_iff_mul_eq'] at h'
     rw [← h', div_mul_eq_mul_div, mul_comm (φ h), div_eq_mul_inv]
 
@@ -235,7 +235,7 @@ theorem ScalarCocycle.cohomologousTo_iff_H2π_eq {ω₁ ω₂ : ScalarCocycle G}
 
 /-- The class of the constant cocycle `1` is zero. -/
 theorem ScalarCocycle.H2π_one
-    (h : ScalarCocycle.IsCocycle (fun _ _ ↦ (1 : Units ℂ) : ScalarCocycle G)) :
+    (h : ScalarCocycle.IsCocycle (1 : ScalarCocycle G)) :
     groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
       (groupCohomology.cocyclesOfIsMulCocycle₂ h.isMulCocycle₂) = 0 := by
   have : groupCohomology.cocyclesOfIsMulCocycle₂ h.isMulCocycle₂ = 0 := rfl
@@ -245,10 +245,10 @@ theorem ScalarCocycle.H2π_one
 class in Mathlib's `H²(G, ℂˣ)` is zero. -/
 theorem ScalarCocycle.cohomologousTo_one_iff_H2π_eq_zero {ω : ScalarCocycle G}
     (hω : ω.IsCocycle) :
-    ω.CohomologousTo (fun _ _ ↦ 1) ↔
+    ω.CohomologousTo 1 ↔
       groupCohomology.H2π (Rep.ofMulDistribMulAction G ℂˣ)
         (groupCohomology.cocyclesOfIsMulCocycle₂ hω.isMulCocycle₂) = 0 := by
-  have h1 : ScalarCocycle.IsCocycle (fun _ _ ↦ (1 : Units ℂ) : ScalarCocycle G) :=
+  have h1 : ScalarCocycle.IsCocycle (1 : ScalarCocycle G) :=
     fun _ _ _ ↦ rfl
   rw [ScalarCocycle.cohomologousTo_iff_H2π_eq hω h1, ScalarCocycle.H2π_one h1]
 
@@ -260,7 +260,7 @@ theorem ScalarCocycle.exists_H2π_eq
       groupCohomology.H2π _ (groupCohomology.cocyclesOfIsMulCocycle₂ hω.isMulCocycle₂) = x := by
   induction x using groupCohomology.H2_induction_on with
   | h α =>
-    refine ⟨fun g h ↦ Additive.toMul (α (g, h)),
+    refine ⟨fun p ↦ Additive.toMul (α p),
       (ScalarCocycle.isCocycle_iff_isMulCocycle₂ _).mpr
         (groupCohomology.isMulCocycle₂_of_mem_cocycles₂ (G := G) (M := Units ℂ)
           (fun p ↦ α p) α.property), ?_⟩
@@ -276,12 +276,12 @@ invariant detecting the non-trivial element of `H²(Z₂ × Z₂, ℂˣ) = Z₂`
 
 /-- The commutator phase `ω(g,h) · ω(h,g)⁻¹` of a scalar 2-cocycle. -/
 def ScalarCocycle.commPhase (ω : ScalarCocycle G) (g h : G) : Units ℂ :=
-  ω g h * (ω h g)⁻¹
+  ω (g, h) * (ω (h, g))⁻¹
 
 omit [Group G] in
 /-- The trivial cocycle has commutator phase `1`. -/
 lemma ScalarCocycle.commPhase_one (g h : G) :
-    ScalarCocycle.commPhase (G := G) (fun _ _ => (1 : Units ℂ)) g h = 1 := by
+    ScalarCocycle.commPhase (G := G) 1 g h = 1 := by
   simp [ScalarCocycle.commPhase]
 
 /-- The commutator phase at a commuting pair is invariant under coboundary
