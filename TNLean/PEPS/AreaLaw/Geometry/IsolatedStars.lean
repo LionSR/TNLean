@@ -242,6 +242,11 @@ theorem RepairStage.HasIsolatedStars.mono {D : RepairStage} {a₀ a₀' : ℝ}
 positive constant `a₀`, independent of the domain, cut, origin and layer, such
 that for each width factor `C` the initial stage has isolated stars with
 constant `a₀` for every sufficiently large lower scale `k₀`.
+
+This is the specialization of the source lemma to the belt residues chosen
+jointly in `initialRepairStage`, in the form used by the repair induction. The
+source lemma quantifies over all admissible residues; its statement for
+arbitrary residues is proved separately for the initial mark family.
 Source: area-law Section 11, `geometry:initial-stars`, lines 332–349. -/
 def InitialIsolatedStarsStatement : Prop :=
   ∃ a₀ : ℝ, 0 < a₀ ∧ ∀ C : ℕ, ∃ K : ℕ, ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ))

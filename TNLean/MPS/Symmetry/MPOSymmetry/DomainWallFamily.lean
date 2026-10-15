@@ -191,7 +191,7 @@ theorem mul_eq_of_fixed (hB : ad.IsDomainWallFamily e B) (hA : ∀ x, Kraus.IsNo
     (hperm : ∀ g x, CarriesMPV (F.tensor g) (A x) (A (g • x))) {y z : X}
     (a b : fixingSubgroup G ({y, z} : Set X)) :
     B a y z * B b y z =
-      (LSymbol.ratioCocycle (ad.lSymbol fd) y z a b : ℂ) * B (a * b : G) y z := by
+      (LSymbol.ratioCocycle (ad.lSymbol fd) y z (a, b) : ℂ) * B (a * b : G) y z := by
   have h := hB.mul_eq fd hA hperm a b y z
   rw [((mem_fixingSubgroup_iff G).mp b.2) y (by simp),
     ((mem_fixingSubgroup_iff G).mp b.2) z (by simp)] at h

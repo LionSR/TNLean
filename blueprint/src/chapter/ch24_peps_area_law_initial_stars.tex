@@ -1,0 +1,79 @@
+\section{Isolated stars of the initial mesh}
+\label{sec:area_law_initial_stars}
+
+We use the normalized fan of Definition~\ref{def:area_law_repair_fan},
+with its eight triangles $T_s$, $s\in J$, the final endpoint $b_s$ of
+segment $s$, and the counterclockwise successor $\tau$ of
+Definition~\ref{def:area_law_cell_fan_successor}. For $v\in\mathbb R^2$
+and $\rho>0$ put $W_s(v,\rho)=\{v+\rho x:x\in T_s\}$ and
+$Q_\rho(v)=v+[-\rho,\rho]^2$. Distances are maximum-norm distances.
+The endpoints $b_s$ are the eight nonzero vectors with coordinates in
+$\{-1,0,1\}$, that is, the axis and diagonal directions.
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 332--349;
+% geometry:repair-induction, lines 471--485.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{definition}[Isolated star]
+    \label{def:area_law_isolated_star}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairFanDirection,
+        TNLean.PEPS.AreaLaw.Geometry.repairFanDirection_mem,
+        TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar,
+        TNLean.PEPS.AreaLaw.Geometry.RepairStage.HasIsolatedStars,
+        TNLean.PEPS.AreaLaw.Geometry.InitialIsolatedStarsStatement}
+    \leanok
+    \uses{def:area_law_repair_fan,def:area_law_repair_current_assignment,
+        def:area_law_cell_fan_successor,def:area_law_repair_stage}
+    Let $(R_i)_{i\in I}$ be open regions with colors
+    $\xi:I\to\{0,1\}$. The square $Q_\rho(v)$ is an isolated star of
+    this family when there is $\sigma:J\to I$ with the following
+    properties.
+    \begin{enumerate}
+        \item For every $s$, $\operatorname{int}W_s(v,\rho)\subseteq
+                  R_{\sigma(s)}$.
+        \item For every $i$,
+              $\overline{R_i}\cap Q_\rho(v)
+                  =\bigcup_{\sigma(s)=i}W_s(v,\rho)$.
+        \item For every $x\in Q_\rho(v)$, the point $x$ lies on some
+              frontier $\partial R_i$ if and only if $x-v$ is a
+              nonnegative multiple of $b_s$ for some $s$ with
+              $\sigma(s)\ne\sigma(\tau(s))$.
+        \item For every $s$, $\xi(\sigma(s))=\xi(\sigma(\tau(s)))$ if
+              and only if $\sigma(s)=\sigma(\tau(s))$.
+        \item If $\sigma(s)=\sigma(\tau(s))$ for every $s$, then
+              $Q_\rho(v)\subseteq R_i$ for some $i$.
+    \end{enumerate}
+    The rays in the third property are the active rays. A run of
+    triangles between consecutive active rays has one identifier, so it
+    lies in one region together with its seams. A stage
+    $\mathcal D$ has isolated stars with constant $a_0$ when
+    $\operatorname{dist}(v_p,v_q)\ge a_0\max(S_p,S_q)$ for distinct
+    occurrences $p\ne q$, and $Q_{a_0S_p}(v_p)$ is an isolated star of
+    the current regions for every occurrence $p$. The initial-star
+    assertion for the recursive family states that there is $a_0>0$ such
+    that, for every width $C_0$, the initial stage has isolated stars
+    with constant $a_0$ whenever $k_0$ is large enough.
+\end{definition}
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 340--349;
+% geometry:repair-induction, lines 486--494.
+\begin{lemma}[Shrinking an isolated star]
+    \label{lem:area_law_isolated_star_mono}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairCurrentFanTriangle_inter_closedBall,
+        TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar.mono,
+        TNLean.PEPS.AreaLaw.Geometry.RepairStage.HasIsolatedStars.mono}
+    \leanok
+    \uses{def:area_law_isolated_star}
+    For $0<\rho'\le\rho$ one has
+    $W_s(v,\rho)\cap Q_{\rho'}(v)=W_s(v,\rho')$. Hence an isolated star
+    $Q_\rho(v)$ gives an isolated star $Q_{\rho'}(v)$ with the same
+    assignment. If every scale of a stage is positive, isolated stars
+    with constant $a_0$ give isolated stars with every constant
+    $a_0'\in(0,a_0]$.
+\end{lemma}
+\begin{proof}\leanok
+    A point of $T_s$ is $ux$ with $u\in[0,1]$ and $x$ on the outer side,
+    where $|x|=1$. Thus $v+\rho ux$ lies in $Q_{\rho'}(v)$ exactly when
+    $\rho u\le\rho'$, that is, when it equals $v+\rho'u'x$ with
+    $u'=\rho u/\rho'\in[0,1]$. The five properties restrict to the
+    smaller square by this identity.
+\end{proof}

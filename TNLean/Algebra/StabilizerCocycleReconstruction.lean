@@ -83,7 +83,7 @@ namespace LSymbol
 the trivial fusion-tensor gauge. This is the equivalence relation of arXiv:2203.12563,
 `gdgroup` (`REsubmission.tex` line 718), with the fusion gauge `β` fixed as at line 761. -/
 def ActionGaugeEquiv (L₁ L₂ : LSymbol G X) : Prop :=
-  ∃ γ : ActionTensorGauge G X, L₁ = gauge (fun _ _ ↦ 1) γ L₂
+  ∃ γ : ActionTensorGauge G X, L₁ = gauge (fun _ ↦ 1) γ L₂
 
 /-- Action-gauge equivalence is an equivalence relation. -/
 theorem actionGaugeEquiv_equivalence : Equivalence (ActionGaugeEquiv (G := G) (X := X)) where
@@ -106,7 +106,8 @@ basepoint and to stabilizer arguments is a scalar two-cocycle. -/
 theorem IsCompatible.isCocycle_restrict {L : LSymbol G X}
     (hL : IsCompatible L (fun _ _ _ ↦ 1)) (x₀ : X) :
     ScalarCocycle.IsCocycle
-      (fun a b : MulAction.stabilizer G x₀ ↦ L x₀ (a : G) (b : G)) := by
+      (fun p : MulAction.stabilizer G x₀ × MulAction.stabilizer G x₀ ↦
+        L x₀ (p.1 : G) (p.2 : G)) := by
   intro a b c
   have h := hL x₀ a b c
   rw [show (c : G) • x₀ = x₀ from MulAction.mem_stabilizer_iff.mp c.property, one_mul] at h
@@ -127,8 +128,8 @@ theorem exists_fusionGauge_eq_one_of_isTrivialGaugeClass_comap {ω : ScalarThree
     ∃ β : ScalarCocycle G, ∀ a b c : H, fusionGauge β ω a b c = 1 := by
   classical
   obtain ⟨β₀, hβ₀⟩ := hω
-  refine ⟨fun g h ↦ if hg : g ∈ H then if hh : h ∈ H then (β₀ ⟨g, hg⟩ ⟨h, hh⟩)⁻¹ else 1
-    else 1, fun a b c ↦ ?_⟩
+  refine ⟨fun p ↦ if hg : p.1 ∈ H then if hh : p.2 ∈ H then (β₀ (⟨p.1, hg⟩, ⟨p.2, hh⟩))⁻¹
+    else 1 else 1, fun a b c ↦ ?_⟩
   have hω₀ := congrFun (congrFun (congrFun hβ₀ a) b) c
   simp only [fusionGauge, coboundary, mul_one, comap_apply, Subgroup.coe_subtype] at hω₀
   simp only [fusionGauge, coboundary, a.property, b.property, c.property,
@@ -156,7 +157,7 @@ def reconstructedLSymbol (K : StabilizerRepresentatives G X x₀) (ω : ScalarTh
   fun x g₁ g₂ ↦
     ω (g₁ * g₂ * K.k x) (K.transitionElement g₂ x : G)⁻¹
           (K.transitionElement g₁ (g₂ • x) : G)⁻¹ *
-        ψ (K.transitionElement g₁ (g₂ • x)) (K.transitionElement g₂ x) /
+        ψ (K.transitionElement g₁ (g₂ • x), K.transitionElement g₂ x) /
       (ω g₁ (g₂ * K.k x) (K.transitionElement g₂ x : G)⁻¹ * ω g₁ g₂ (K.k x))
 
 /-- Equation (20) factors as its `ψ = 1` part times the L-symbol induced by `ψ`. -/
@@ -174,7 +175,7 @@ with the trivializing two-cochain equal to one. -/
 theorem reconstructedLSymbol_base (K : StabilizerRepresentatives G X x₀)
     {ω : ScalarThreeCochain G} (hH : ∀ a b c : MulAction.stabilizer G x₀, ω a b c = 1)
     (ψ : ScalarCocycle (MulAction.stabilizer G x₀)) (a b : MulAction.stabilizer G x₀) :
-    K.reconstructedLSymbol ω ψ x₀ (a : G) (b : G) = ψ a b := by
+    K.reconstructedLSymbol ω ψ x₀ (a : G) (b : G) = ψ (a, b) := by
   have hb : (b : G) • x₀ = x₀ := MulAction.mem_stabilizer_iff.mp b.property
   simp only [reconstructedLSymbol, hb, transitionElement_stabilizer, K.k_x₀, mul_one]
   have h₁ := hH (a * b) b⁻¹ a⁻¹
@@ -268,7 +269,7 @@ theorem gauge_reconstructedLSymbol_isCompatible (K : StabilizerRepresentatives G
   have h := (K.reconstructedLSymbol_isCompatible (hω.fusionGauge β) hβ hψ).gauge β⁻¹
     (fun _ _ ↦ 1)
   rwa [ScalarThreeCochain.fusionGauge_comp, mul_inv_cancel,
-    show (1 : ScalarCocycle G) = fun _ _ ↦ 1 from rfl,
+    show (1 : ScalarCocycle G) = fun _ ↦ 1 from rfl,
     ScalarThreeCochain.fusionGauge_one] at h
 
 /-- **Surjectivity for the trivial three-cochain.** Every L-symbol `R` compatible with the
@@ -280,8 +281,8 @@ This is the `ω = 1` case of the classification in arXiv:2203.12563, lines 749--
 theorem exists_actionGauge_eq_inducedLSymbol (K : StabilizerRepresentatives G X x₀)
     {R : LSymbol G X} (hR : LSymbol.IsCompatible R (fun _ _ _ ↦ 1)) :
     ∃ γ : ActionTensorGauge G X,
-      R = LSymbol.gauge (fun _ _ ↦ 1) γ
-        (K.inducedLSymbol (fun a b ↦ R x₀ (a : G) (b : G))) := by
+      R = LSymbol.gauge (fun _ ↦ 1) γ
+        (K.inducedLSymbol (fun p ↦ R x₀ (p.1 : G) (p.2 : G))) := by
   refine ⟨fun g x ↦ R x₀ (K.k (g • x)) (K.transitionElement g x) / R x₀ g (K.k x), ?_⟩
   funext x g h
   have hkx : K.k x • x₀ = x := K.k_smul_x₀ x
@@ -330,7 +331,7 @@ theorem isCompatible_iff_exists_actionGauge_mul_inducedLSymbol
     LSymbol.IsCompatible L ω ↔
       ∃ ψ : ScalarCocycle (MulAction.stabilizer G x₀), ψ.IsCocycle ∧
         ∃ γ : ActionTensorGauge G X,
-          L = LSymbol.gauge (fun _ _ ↦ 1) γ (L₀ * K.inducedLSymbol ψ) := by
+          L = LSymbol.gauge (fun _ ↦ 1) γ (L₀ * K.inducedLSymbol ψ) := by
   constructor
   · intro hL
     have hR := hL.mul_inv_one hL₀
@@ -367,7 +368,7 @@ theorem exists_actionGauge_eq_reconstructedLSymbol (K : StabilizerRepresentative
     (hL : LSymbol.IsCompatible L ω) :
     ∃ ψ : ScalarCocycle (MulAction.stabilizer G x₀), ψ.IsCocycle ∧
       ∃ γ : ActionTensorGauge G X,
-        L = LSymbol.gauge (fun _ _ ↦ 1) γ (K.reconstructedLSymbol ω ψ) := by
+        L = LSymbol.gauge (fun _ ↦ 1) γ (K.reconstructedLSymbol ω ψ) := by
   obtain ⟨ψ, hψ, γ, hγ⟩ :=
     (K.isCompatible_iff_exists_actionGauge_mul_inducedLSymbol
       (K.reconstructedLSymbol_one_isCompatible hω hH) L).1 hL
@@ -385,7 +386,7 @@ theorem exists_actionGauge_gauge_eq_reconstructedLSymbol
     ∃ ψ : ScalarCocycle (MulAction.stabilizer G x₀), ψ.IsCocycle ∧
       ∃ γ : ActionTensorGauge G X,
         LSymbol.gauge β (fun _ _ ↦ 1) L =
-          LSymbol.gauge (fun _ _ ↦ 1) γ
+          LSymbol.gauge (fun _ ↦ 1) γ
             (K.reconstructedLSymbol (ScalarThreeCochain.fusionGauge β ω) ψ) :=
   K.exists_actionGauge_eq_reconstructedLSymbol (hω.fusionGauge β) hβ
     (hL.gauge β (fun _ _ ↦ 1))
@@ -509,7 +510,7 @@ noncomputable def solutionAddAction (K : StabilizerRepresentatives G X x₀)
     induction c using Quotient.ind with
     | _ L =>
       have h1 : ScalarCocycle.IsCocycle
-          (fun _ _ ↦ (1 : Units ℂ) : ScalarCocycle (MulAction.stabilizer G x₀)) :=
+          (1 : ScalarCocycle (MulAction.stabilizer G x₀)) :=
         fun _ _ _ ↦ rfl
       change K.solutionAction (quotientEquivH2.symm 0) _ = _
       rw [← ScalarCocycle.H2π_one h1,

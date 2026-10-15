@@ -924,7 +924,7 @@ original open square. We state the two models separately, following
     finite order induces the order within each family. For a piece $X_i$ in
     family $f$, the earlier same-family region is
     $\bigcup_{j<i,\,f(j)=f}X_j$. No size, separation, or information bound is
-    part of this partition data; those are additional mathematical assertions.
+    assumed in this definition.
 \end{definition}
 
 \begin{theorem}[Exact exponent gaps]
@@ -1061,7 +1061,7 @@ original open square. We state the two models separately, following
     there is one $C\ge0$ such that $S_\Omega(A)\le C|\partial_\Lambda A|$ for
     every finite induced domain, every admissible Hamiltonian with a gapped
     ground vector $\Omega$, and every $A\subseteq\Lambda$. This proves
-    Theorem~1.1 of \cite{OpenAI2026AreaLaw} only conditionally on the three
+    Theorem~1.1 of \cite{OpenAI2026AreaLaw} conditionally on the three
     propositions.
 \end{theorem}
 \begin{proof}
@@ -1073,7 +1073,7 @@ original open square. We state the two models separately, following
     constant $C_1$, apply amplification with $C_0=\max(C_1,1)$ and $M=100$,
     and choose the scale threshold so that every admissible radius satisfies
     $L_n+2r<n^\beta$. Apply the two-family decomposition with $n_*$ at least
-    these thresholds. For each piece, the collar bound supplies the hypotheses
+    these thresholds. For each piece, the collar bound gives the hypotheses
     of amplification for $T_i$. Since $L_{n_i}<n_i^\beta$, the cut clearance
     $\operatorname{dist}_\infty(T_i,Z)>2n_i^\beta$ gives
     $N_{2r_i}^\Lambda(S_i)\subseteq A$. A walk of length at most $2r_i$ from
@@ -1197,9 +1197,8 @@ prove these steps; the information inequality itself is not proved here.
     Let $C_{\rm tpl}\ge24$ and $D_0\ge1$. Suppose there are $C$ and $N$ such
     that, in the setting of Definition~\ref{def:area_law_collar_bound},
     $I_\Omega(X:\Lambda\setminus S_0)\le Cn^{1-\varepsilon}$ whenever $n\ge N$.
-    Then the sublinear collar bound holds for $D_0,C_{\rm tpl}$. This assumes
-    the information inequality of Proposition~9.6 of \cite{OpenAI2026AreaLaw};
-    it is not a proof of that proposition.
+    Then the sublinear collar bound holds for $D_0,C_{\rm tpl}$. This reduces
+    Proposition~9.6 of \cite{OpenAI2026AreaLaw} to its information inequality.
 \end{theorem}
 \begin{proof}
     \leanok

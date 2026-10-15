@@ -3,14 +3,14 @@
 
 Fix the ordered pair slots of Definition~\ref{def:peps_source_slots},
 with halfspaces $U_e,V_e$, and write $\mathcal S$ for their joint
-register space. All tensor products below use this order and its
-canonical associativity identifications. The slot set and all finite
+register space. All tensor products below use this order and the
+standard associativity identifications. The slot set and all finite
 index sets may be empty. These are the source-coordinate identities
 used in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \texttt{04-compression.tex}, lines 279--355.
 
 % This section proves exact preparation, matrix, and density identities.
-% It does not assert that the actual Schmidt decomposition has yet been
+% It does not assert that the Schmidt decomposition has yet been
 % substituted into the finite-family identities. Gaussian moment estimates,
 % simultaneous source replacement, and the circuit trace-norm error bound
 % remain separate from these statements. No tag here certifies all of
@@ -38,7 +38,7 @@ used in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.PEPS.PairEffect.SourceInventory.eval_prepareSlots_sum_smul}
     \leanok
     \uses{def:peps_joint_source_vector}
-    For every original memory $\mathcal H$, the actual source
+    For every original memory $\mathcal H$, the source
     preparation satisfies
     $Q_{\eta,\mathcal H}x=\Phi(\eta)\otimes x$.
     In particular, let $J_e$ be finite, let $d_e:J_e\to\C$, and let
@@ -54,8 +54,8 @@ used in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 
 \begin{proof}\leanok
     \uses{def:peps_joint_source_vector,def:peps_source_inventory}
-    Induction on the source list identifies $\Phi(\eta)$ with its
-    actual joint vector: the empty list contributes $1$, and the
+    Induction on the source list identifies $\Phi(\eta)$ with the
+    prepared joint vector: the empty list contributes $1$, and the
     induction step prepares $\eta_e$ in front of the remaining
     sources. Changing to the fixed register layout preserves this
     identity and its tensor product with $x$.
@@ -120,7 +120,7 @@ used in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     in each slot.
 \end{proof}
 
-\begin{definition}[Density coefficients of actual branches]
+\begin{definition}[Density coefficients of prepared branches]
     \label{def:peps_prepared_density_coefficient}
     \lean{TNLean.PEPS.PairEffect.Word.preparedDensityCoefficient}
     \leanok

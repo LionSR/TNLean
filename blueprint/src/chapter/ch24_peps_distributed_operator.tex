@@ -42,7 +42,7 @@ the finite-dimensional density application uses finite ones.
     Let $S=\bigsqcup_{g\in G}\{\{p,q\}\subseteq P_g:p\ne q\}$, retaining the gate occurrence in each position. Put $S_p=\{s\in S:p\in s\}$. Positions do not depend on chosen monomial branches.
 \end{definition}
 
-\begin{definition}[Actual star and sample edges]
+\begin{definition}[Star and sample edges]
     \label{def:compression_operator_edges}
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.starLink}
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.sampleLink}
@@ -56,7 +56,7 @@ the finite-dimensional density application uses finite ones.
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.tgt}
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.endpoints_eq}
     \leanok
-    Orient a star from $r_g$ to $q$. Choose an ordered representative $(s^-,s^+)$ of each sample pair and orient its edge accordingly. For every $\ell\in\mathcal L$, write $u_\ell,v_\ell$ for these endpoints. Then $\{u_\ell,v_\ell\}$ is exactly the already specified party endpoint set of $\ell$.
+    Orient a star from $r_g$ to $q$. Choose an ordered representative $(s^-,s^+)$ of each sample pair and orient its edge accordingly. For every $\ell\in\mathcal L$, write $u_\ell,v_\ell$ for these endpoints. Then $\{u_\ell,v_\ell\}$ is the party endpoint set of $\ell$.
 \end{definition}
 
 \begin{definition}[Party incidences]
@@ -67,7 +67,7 @@ the finite-dimensional density application uses finite ones.
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.starGateAt}
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.rootGateAt}
     \leanok
-    Put $I_p=\{\ell\in\mathcal L:p\in\{u_\ell,v_\ell\}\}$. The star $(g,\mathrm{star},q)$ belongs to $I_p$ when $p=r_g$ or $p=q$; either case gives $g\in G_p$. Every $g$ belongs to $G_{r_g}$. A sample position in $S_p$ supplies its sample edge in $I_p$.
+    Put $I_p=\{\ell\in\mathcal L:p\in\{u_\ell,v_\ell\}\}$. The star $(g,\mathrm{star},q)$ belongs to $I_p$ when $p=r_g$ or $p=q$; either case gives $g\in G_p$. Every $g$ belongs to $G_{r_g}$. A sample position in $S_p$ gives its sample edge in $I_p$.
 \end{definition}
 
 \begin{definition}[Virtual alphabets]
@@ -101,7 +101,7 @@ the finite-dimensional density application uses finite ones.
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.restrictSamples}
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.localSamples}
     \leanok
-    A global sample assignment is $j\in J_k^S$, whose restriction to $S_p$ is $j_p$. A local virtual assignment $\eta_p$ supplies the sample assignment $j(\eta_p)_s=\eta_p(g,\mathrm{sample},s)$ for $s\in S_p$.
+    A global sample assignment is $j\in J_k^S$, whose restriction to $S_p$ is $j_p$. A local virtual assignment $\eta_p$ gives the sample assignment $j(\eta_p)_s=\eta_p(g,\mathrm{sample},s)$ for $s\in S_p$.
 \end{definition}
 
 \begin{definition}[Shared virtual labels]
@@ -141,7 +141,7 @@ the finite-dimensional density application uses finite ones.
     \label{def:compression_operator_local_tensor}
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.localTensor}
     \leanok
-    Let $X_p,Y_p$ be the output and input alphabets. Supply arbitrary rectangular matrices $T_p(\xi_p,j_p):Y_p\to X_p$. Define the local tensor by
+    Let $X_p,Y_p$ be the output and input alphabets, and fix arbitrary rectangular matrices $T_p(\xi_p,j_p):Y_p\to X_p$. Define the local tensor by
     \begin{align}
         A_p(\eta_p;x_p,y_p)
          & =\sum_{\xi_p\in\prod_{g\in G_p}\Lambda_g}
@@ -164,7 +164,7 @@ the finite-dimensional density application uses finite ones.
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.gateLabelsOfConfig}
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.samplesOfConfig}
     \leanok
-    For a globally consistent configuration, define $\kappa_g=\xi_{r_g}(g)$ and let $j_s$ be the virtual label on the actual sample edge of $s$.
+    For a globally consistent configuration, define $\kappa_g=\xi_{r_g}(g)$ and let $j_s$ be the virtual label on the sample edge of $s$.
 \end{definition}
 
 \begin{theorem}[Every participant agrees with the root]
@@ -176,7 +176,7 @@ the finite-dimensional density application uses finite ones.
 
 \begin{proof}\leanok
     \uses{def:compression_operator_consistency,def:compression_operator_recovery}
-    If $p=r_g$ this is the definition of $\kappa_g$. Otherwise $(g,\mathrm{star},p)$ is an actual star edge, and consistency at its two endpoints gives $\xi_p(g)=\eta_{(g,\mathrm{star},p)}=\xi_{r_g}(g)$.
+    If $p=r_g$ this is the definition of $\kappa_g$. Otherwise $(g,\mathrm{star},p)$ is a star edge, and consistency at its two endpoints gives $\xi_p(g)=\eta_{(g,\mathrm{star},p)}=\xi_{r_g}(g)$.
 \end{proof}
 
 \begin{theorem}[Recovery of every virtual label]
@@ -209,7 +209,7 @@ the finite-dimensional density application uses finite ones.
     \label{thm:compression_operator_diagonal_reader}
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.endpointLabels_diagonal}
     \leanok
-    If both endpoints of each edge carry the same global label $\eta_\ell$, then the labels read at $p$ are exactly $\eta_p$.
+    If both endpoints of each edge carry the same global label $\eta_\ell$, then the labels read at $p$ are $\eta_p$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -221,7 +221,7 @@ the finite-dimensional density application uses finite ones.
     \label{thm:compression_operator_shared_samples}
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.localSamples_sharedLinkLabels}
     \leanok
-    The sample labels read from $\eta(\kappa,j)_p$ are exactly $j_p$.
+    The sample labels read from $\eta(\kappa,j)_p$ are $j_p$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -238,7 +238,7 @@ the finite-dimensional density application uses finite ones.
 
 \begin{proof}\leanok
     \uses{def:compression_operator_root_coefficients}
-    Regroup the gate product by the fibers of $g\mapsto r_g$. Every active gate has precisely one root.
+    Regroup the gate product by the fibers of $g\mapsto r_g$. Every active gate has a unique root.
 \end{proof}
 
 \begin{definition}[Endpoint form of the local tensor]
@@ -259,7 +259,7 @@ the finite-dimensional density application uses finite ones.
     \label{thm:compression_operator_link_sum}
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_eq_linkSum}
     \leanok
-    The actual identity-bond contraction satisfies
+    The identity-bond contraction satisfies
     \begin{align}
         \sigma(x,y)
          & =\sum_{\eta\in\prod_{\ell\in\mathcal L}D_\ell}
@@ -270,14 +270,14 @@ the finite-dimensional density application uses finite ones.
 
 \begin{proof}\leanok
     \uses{def:compression_operator_operator,thm:compression_operator_diagonal_reader}
-    The identity matrix on each edge forces its two endpoint labels to coincide. Reindex the remaining diagonal assignments by one label per edge; the endpoint reader then yields $\eta_p$. No dimension factor is introduced.
+    The identity matrix on each edge forces its two endpoint labels to coincide. Reindex the remaining diagonal assignments by one label per edge; the endpoint reader then yields $\eta_p$.
 \end{proof}
 
 \begin{theorem}[Exact branch and sample evaluation]
     \label{thm:compression_operator_branch_sum}
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.contractedOperator_eq_branchSampleSum}
     \leanok
-    The constructed operator has the exact entries
+    The constructed operator has entries
     \begin{align}
         \sigma(x,y)
          & =\sum_{\kappa\in\prod_{g\in G}\Lambda_g}
@@ -290,7 +290,7 @@ the finite-dimensional density application uses finite ones.
 
 \begin{proof}\leanok
     \uses{thm:compression_operator_link_sum,def:compression_operator_local_tensor,def:compression_operator_configuration_bijection,thm:compression_operator_shared_samples,thm:compression_operator_coefficient_product}
-    Expand the product of the local sums in~(\ref{eq:compression_operator_link_sum}) using~(\ref{eq:compression_operator_local_tensor}). The consistency indicators restrict the sum to globally consistent configurations. Reindex by the proved bijection with $(\kappa,j)$, then use the shared-sample identity and the root-coefficient product identity.
+    Expand the product of the local sums in~(\ref{eq:compression_operator_link_sum}) using~(\ref{eq:compression_operator_local_tensor}). The consistency indicators restrict the sum to globally consistent configurations. Reindex by the bijection with $(\kappa,j)$, then use the shared-sample identity and the root-coefficient product identity.
 \end{proof}
 
 \begin{theorem}[Rectangular matrix form of exact evaluation]
@@ -334,7 +334,7 @@ the finite-dimensional density application uses finite ones.
 
 \begin{proof}\leanok
     \uses{thm:compression_operator_alphabet_card}
-    A star edge inherits the supplied bound at its tagged active gate; a sample edge has dimension exactly $k$.
+    A star edge inherits the given bound at its active gate, and a sample edge has dimension $k$.
 \end{proof}
 
 \begin{definition}[Density-branch coefficient]
