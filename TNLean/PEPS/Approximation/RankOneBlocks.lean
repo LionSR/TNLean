@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.FrameBoundedChanges
+import TNLean.PEPS.Approximation.WordSwapsMeet
 
 /-!
 # Rank-one operators on blocks of sites as allowed monomials
@@ -102,6 +102,13 @@ theorem append_props {ℓZ : Layout P} (S : Set P) : {ℓX ℓY : Layout P} →
           (rest.toEffectChain.effectCount + 1) + _
         rw [h₄]
         omega
+
+/-- Composing two monomials meeting a selection gives a monomial meeting it. -/
+theorem swapsMeet_append (f : P → Bool) {ℓZ : Layout P} : {ℓX ℓY : Layout P} →
+    {M : PartyChain ℓX ℓY} → {M' : PartyChain ℓY ℓZ} → M.SwapsMeet f → M'.SwapsMeet f →
+      (M.append M').SwapsMeet f
+  | _, _, final _, _, hM, hM' => swapsMeet_precomp f hM hM'
+  | _, _, effect _ _ _ _ _ _ rest, _, hM, hM' => ⟨hM.1, swapsMeet_append f (M := rest) hM.2 hM'⟩
 
 end TNLean.PEPS.PairEffect.PartyChain
 
@@ -262,6 +269,20 @@ theorem rankOneChain_props (pA pB pA' pB' : P) {v w : EuclideanSpace ℂ (α × 
     exact hb.2.2.2.1
   · rw [rankOneChain, h₄]
     exact hb.2.2.2.2 h
+
+omit [DecidableEq α] [DecidableEq β] in
+/-- The rank-one chain exchanges no tensor factors, so it meets every selection. -/
+theorem swapsMeet_rankOneChain (f : P → Bool) (pA pB pA' pB' : P) (v w : EuclideanSpace ℂ (α × β))
+    (ℓ : Layout P) : (rankOneChain pA pB pA' pB' v w ℓ).SwapsMeet f := by
+  have hk : (ketWord pA' pB' v ℓ).SwapsMeet f := by
+    unfold ketWord
+    split_ifs <;> trivial
+  have hb : (braChain pA pB w ℓ).SwapsMeet f := by
+    unfold braChain
+    split_ifs
+    · trivial
+    · exact ⟨trivial, trivial⟩
+  exact PartyChain.swapsMeet_postcomp f hk hb
 
 end TNLean.PEPS.PairEffect
 
@@ -462,7 +483,8 @@ theorem exists_rankOneBlock_chain [NeZero q] (l : List (Hole pos q Party)) (own 
     (hv : ‖b.ket‖ = 1) (hw : ‖b.bra‖ = 1) {S : Set Party} (hSA : pA ∈ S) (hSB : pB ∈ S)
     (hSA' : pA' ∈ S) (hSB' : pB' ∈ S) :
     ∃ M : PartyChain (layoutRegs q l own) (layoutRegs q l own'),
-      M.IsAllowed ∧ M.UsesOnly S ∧ M.sourceCount ≤ 1 ∧ (pA' = pB' → M.sourceCount = 0) ∧
+      M.IsAllowed ∧ M.UsesOnly S ∧ (∀ f : Party → Bool, (∀ p ∈ S, f p = true) → M.SwapsMeet f) ∧
+      M.sourceCount ≤ 1 ∧ (pA' = pB' → M.sourceCount = 0) ∧
       M.toEffectChain.effectCount ≤ 1 ∧ (pA = pB → M.toEffectChain.effectCount = 0) ∧
       ∀ z, layoutIso l own' (M.toEffectChain.eval z) =
         act ((1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ b.op) (layoutIso l own z) := by
@@ -488,8 +510,14 @@ theorem exists_rankOneBlock_chain [NeZero q] (l : List (Hole pos q Party)) (own 
     change 0 + (Mm.sourceCount + (Word.sourceCount _ + Word.sourceCount _)) = _
     rw [r.sourceCount_eq, u₃]
     simp
-  refine ⟨(Mm.postcomp tail).precomp G, q₁, q₂, hsrc ▸ m₃, fun h => hsrc ▸ m₃' h,
+  refine ⟨(Mm.postcomp tail).precomp G, q₁, q₂, fun f hf => ?_, hsrc ▸ m₃, fun h => hsrc ▸ m₃' h,
     (q₄.trans p₄) ▸ m₄, fun h => (q₄.trans p₄) ▸ m₄' h, fun z => ?_⟩
+  · exact PartyChain.swapsMeet_precomp f
+      (swapsMeet_groupWord f own nodup_sites mem_sites _ hA hB (hf _ hSA) (hf _ hSB))
+      (PartyChain.swapsMeet_postcomp f (w := tail)
+        ⟨swapsMeet_relabelRest f own own' mem_sites b.disj hE _ _ _,
+          swapsMeet_ungroupWord f own' nodup_sites mem_sites _ hA' hB' (hf _ hSA') (hf _ hSB')⟩
+        (swapsMeet_rankOneChain f pA pB pA' pB' b.ket b.bra _))
   · rw [PartyChain.eval_precomp, PartyChain.eval_postcomp]
     exact layoutIso_place l own own' b.disj hA hB hA' hB' hE Mm.toEffectChain.eval _
       (pairHeadIso_rankOneChain pA pB pA' pB' b.ket b.bra _) z

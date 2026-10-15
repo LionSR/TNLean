@@ -272,6 +272,34 @@ theorem tagChangeWord_props (U A A' : List (Hole pos q Party)) (b : TagSpace A) 
   simp only [tagChangeWord, Word.sourceCount, s.sourceCount_eq, m.sourceCount_eq,
     Word.sourceCount_frameList, b₃, k₃]
 
+theorem swapsMeet_tagBraWord (f : Party → Bool) (tail : Layout Party) :
+    (l : List (Hole pos q Party)) → (b : TagSpace l) → (tagBraWord l b tail).SwapsMeet f
+  | [], _ => trivial
+  | _ :: l, b => ⟨trivial, swapsMeet_tagBraWord f tail l b.2⟩
+
+theorem swapsMeet_tagKetWord (f : Party → Bool) (tail : Layout Party) :
+    (l : List (Hole pos q Party)) → (a : TagSpace l) → (tagKetWord l a tail).SwapsMeet f
+  | [], _ => trivial
+  | _ :: l, a => ⟨swapsMeet_tagKetWord f tail l a.2, trivial⟩
+
+theorem swapsMeet_tagSplit (f : Party → Bool) (tail : Layout Party) :
+    (l₁ l₂ : List (Hole pos q Party)) → (tagSplit l₁ l₂ tail).SwapsMeet f
+  | [], _ => trivial
+  | _ :: l₁, l₂ => swapsMeet_tagSplit f tail l₁ l₂
+
+theorem swapsMeet_tagMerge (f : Party → Bool) (tail : Layout Party) :
+    (l₁ l₂ : List (Hole pos q Party)) → (tagMerge l₁ l₂ tail).SwapsMeet f
+  | [], _ => trivial
+  | _ :: l₁, l₂ => swapsMeet_tagMerge f tail l₁ l₂
+
+/-- The tag maps of a branch exchange no tensor factors, so they meet every selection. -/
+theorem swapsMeet_tagChangeWord (f : Party → Bool) (U A A' : List (Hole pos q Party))
+    (b : TagSpace A) (a : TagSpace A') (own : ι → Party) :
+    (tagChangeWord U A A' b a own).SwapsMeet f :=
+  ⟨swapsMeet_tagSplit f _ _ _,
+    Word.swapsMeet_frameList f (swapsMeet_tagBraWord f _ A b) _,
+    Word.swapsMeet_frameList f (swapsMeet_tagKetWord f _ A' a) _, swapsMeet_tagMerge f _ _ _⟩
+
 end Tags
 
 /-! ### Branches of the rewrite on the registers of the frames -/
@@ -450,7 +478,9 @@ theorem exists_termChain (hR : R.Conditions) (β : R.Branch)
     (he : ∀ v, Orthonormal ℂ (e v))
     (i : (v : Fin (R.branchSteps β).length ⊕ Fin (R.branchSteps β).length) → Fin (r v)) :
     ∃ (σ : ℂ) (M : PartyChain R.oldFrame.regs R.newFrame.regs), ‖σ‖ ≤ 1 ∧ M.IsAllowed ∧
-      M.UsesOnly (R.parties : Set Party) ∧ M.sourceCount ≤ 2 * R.patches.length ∧
+      M.UsesOnly (R.parties : Set Party) ∧
+      (∀ f : Party → Bool, (∀ x ∈ R.parties, f x = true) → M.SwapsMeet f) ∧
+      M.sourceCount ≤ 2 * R.patches.length ∧
       M.toEffectChain.effectCount ≤ 2 * R.patches.length ∧
       ∀ z, σ • R.newFrame.regIso (M.toEffectChain.eval z) =
         act (R.liftBranch β (termOp (R.branchChain β) e i)) (R.oldFrame.regIso z) := by
@@ -462,30 +492,30 @@ theorem exists_termChain (hR : R.Conditions) (β : R.Branch)
         obtain ⟨P, hP, hPx⟩ := R.exists_owners_of_isOpen_inl hR β j
         exact ⟨P, hP, fun x hx => ⟨(hPx x hx).1, (hPx x hx).2.1⟩⟩)
       (e (.inl j) (i (.inl j))) ((he _).1 _)
-  choose B sB hsB hBE hBK hBB MB hMB₁ hMB₂ hMB₃ hMB₄ hMB₅ using hbra
+  choose B sB hsB hBE hBK hBB MB hMB₁ hMB₂ hMB₆ hMB₃ hMB₄ hMB₅ using hbra
   have hket := fun j : Fin (R.branchSteps β).length =>
     exists_ketVertexBlock (q := q) l R.ownerNew S (IsOpen (R.branchChain β) (.inr j))
       (fun _ => by
         obtain ⟨P, hP, hPx⟩ := R.exists_owners_of_isOpen_inr hR β j
         exact ⟨P, hP, fun x hx => ⟨(hPx x hx).1, (hPx x hx).2.2⟩⟩)
       (e (.inr j) (i (.inr j))) ((he _).1 _)
-  choose K sK hsK hKE hKB hKK MK hMK₁ hMK₂ hMK₃ hMK₄ hMK₅ using hket
+  choose K sK hsK hKE hKB hKK MK hMK₁ hMK₂ hMK₆ hMK₃ hMK₄ hMK₅ using hket
   set W := (sites ι).filter fun x => decide (¬Untouched (R.branchChain β) x) with hWdef
   have hWn : W.Nodup := nodup_sites.filter _
   have hW : ∀ x, x ∈ W ↔ ¬Untouched (R.branchChain β) x := fun x => by simp [hWdef, mem_sites]
-  obtain ⟨M₁, a₁, a₂, a₃, a₄, a₅⟩ := exists_chain_listProd (layoutIso l R.ownerOld) S
+  obtain ⟨M₁, a₁, a₂, a₆, a₃, a₄, a₅⟩ := exists_chain_listProd (layoutIso l R.ownerOld) S
     (fun j => (1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ (B j).op)
     (fun j => if ∃ x, IsOpen (R.branchChain β) (.inl j) x then 1 else 0)
     (fun j => if ∃ x, IsOpen (R.branchChain β) (.inl j) x then 1 else 0)
-    (List.finRange _) fun j _ => ⟨MB j, hMB₁ j, hMB₂ j, hMB₃ j, hMB₄ j, hMB₅ j⟩
-  obtain ⟨M₂, b₁, b₂, b₃, b₄, b₅⟩ := exists_zeroChain l S W hWn R.ownerOld R.ownerNew
+    (List.finRange _) fun j _ => ⟨MB j, hMB₁ j, hMB₂ j, hMB₆ j, hMB₃ j, hMB₄ j, hMB₅ j⟩
+  obtain ⟨M₂, b₁, b₂, b₆, b₃, b₄, b₅⟩ := exists_zeroChain l S W hWn R.ownerOld R.ownerNew
     (fun x hx => R.owners_mem_parties_of_not_untouched hR β ((hW x).mp hx))
     (fun x hx => R.ownerOld_eq_ownerNew_of_untouched hR β (by simpa [hW] using hx))
-  obtain ⟨M₃, c₁, c₂, c₃, c₄, c₅⟩ := exists_chain_listProd (layoutIso l R.ownerNew) S
+  obtain ⟨M₃, c₁, c₂, c₆, c₃, c₄, c₅⟩ := exists_chain_listProd (layoutIso l R.ownerNew) S
     (fun j => (1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ (K j).op)
     (fun j => if ∃ x, IsOpen (R.branchChain β) (.inr j) x then 1 else 0)
     (fun j => if ∃ x, IsOpen (R.branchChain β) (.inr j) x then 1 else 0)
-    (List.finRange _) fun j _ => ⟨MK j, hMK₁ j, hMK₂ j, hMK₃ j, hMK₄ j, hMK₅ j⟩
+    (List.finRange _) fun j _ => ⟨MK j, hMK₁ j, hMK₂ j, hMK₆ j, hMK₃ j, hMK₄ j, hMK₅ j⟩
   set Wt := tagChangeWord R.untouched R.oldAffected R.newAffected β.2.2 β.1 R.ownerNew
   obtain ⟨t₁, t₂, t₃⟩ := tagChangeWord_props R.untouched R.oldAffected R.newAffected β.2.2 β.1
     R.ownerNew (S := S) (fun h hh => hR.tag_owners_mem h (List.mem_append_left _ hh))
@@ -499,8 +529,10 @@ theorem exists_termChain (hR : R.Conditions) (β : R.Branch)
     rw [← List.ofFn_eq_map, List.sum_ofFn]
   have hcount := R.card_open_vertices_le hR β
   rw [hsum] at a₃ a₄ c₃ c₄
-  refine ⟨(∏ j, sB j) * ∏ j, sK j, ((M₁.append M₂).append M₃).postcomp Wt, ?_, f₁, f₂, ?_, ?_,
-    fun z => ?_⟩
+  refine ⟨(∏ j, sB j) * ∏ j, sK j, ((M₁.append M₂).append M₃).postcomp Wt, ?_, f₁, f₂,
+    fun g hg => PartyChain.swapsMeet_postcomp g (swapsMeet_tagChangeWord g _ _ _ _ _ _)
+      (PartyChain.swapsMeet_append g (PartyChain.swapsMeet_append g (a₆ g hg) (b₆ g hg))
+        (c₆ g hg)), ?_, ?_, fun z => ?_⟩
   · rw [norm_mul, norm_prod, norm_prod]
     calc _ ≤ (1 : ℝ) * 1 := mul_le_mul
           (Finset.prod_le_one₀ (fun _ _ => norm_nonneg _) fun j _ => hsB j)
@@ -555,13 +587,14 @@ theorem exists_allowed_monomial_approx (hR : R.Conditions) {δ : ℝ} (hδ : 0 <
         truncationRank (Fintype.card R.Branch) ((2 * R.patches.length : ℕ) : ℝ) δ ^
           (2 * R.patches.length) ∧
       (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
+        (∀ f : Party → Bool, (∀ x ∈ R.parties, f x = true) → p.2.SwapsMeet f) ∧
         p.2.sourceCount ≤ 2 * R.patches.length ∧
         p.2.toEffectChain.effectCount ≤ 2 * R.patches.length) ∧
       ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧ ‖Ma - R.rewrite‖ ≤ δ ∧
         ∀ z, (G.map fun p => p.1 • R.newFrame.regIso (p.2.toEffectChain.eval z)).sum =
           act Ma (R.oldFrame.regIso z) := by
   obtain ⟨r, e, c, -, he, hc, hcard, h1, h2⟩ := R.exists_contractive_approx hR hδ
-  choose σ M hσ hM₁ hM₂ hM₃ hM₄ hM₅ using fun (β : R.Branch)
+  choose σ M hσ hM₁ hM₂ hM₆ hM₃ hM₄ hM₅ using fun (β : R.Branch)
     (ii : (v : Fin (R.branchSteps β).length ⊕ Fin (R.branchSteps β).length) → Fin (r β v)) =>
       R.exists_termChain hR β (e β) (he β) ii
   set a : ℂ := (((1 + δ / 2)⁻¹ : ℝ) : ℂ) with ha
@@ -579,7 +612,7 @@ theorem exists_allowed_monomial_approx (hR : R.Conditions) {δ : ℝ} (hδ : 0 <
       _ = _ := by rw [Finset.sum_const, Finset.card_univ, smul_eq_mul]
   · intro p hp
     obtain ⟨t, -, rfl⟩ := List.mem_map.mp hp
-    refine ⟨?_, hM₁ _ _, hM₂ _ _, hM₃ _ _, hM₄ _ _⟩
+    refine ⟨?_, hM₁ _ _, hM₂ _ _, hM₆ _ _, hM₃ _ _, hM₄ _ _⟩
     rw [norm_mul, norm_mul]
     calc _ ≤ (1 : ℝ) * 1 * 1 := mul_le_mul (mul_le_mul hna (hc _ _) (norm_nonneg _) zero_le_one)
           (hσ _ _) (norm_nonneg _) (by norm_num)
@@ -611,6 +644,7 @@ theorem exists_allowed_monomial_approx_of_card_le (hR : R.Conditions) {δ : ℝ}
           R.oldAffected.length) : ℕ) : ℝ) ((2 * R.patches.length : ℕ) : ℝ) δ ^
           (2 * R.patches.length) ∧
       (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
+        (∀ f : Party → Bool, (∀ x ∈ R.parties, f x = true) → p.2.SwapsMeet f) ∧
         p.2.sourceCount ≤ 2 * R.patches.length ∧
         p.2.toEffectChain.effectCount ≤ 2 * R.patches.length) ∧
       ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧ ‖Ma - R.rewrite‖ ≤ δ ∧
@@ -652,7 +686,8 @@ theorem exists_allowed_monomial_approx_polynomial (hR : R.Conditions) {C c b L :
       G.length ≤ (C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + ⌈a⌉₊)) ∧
       (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (P : Set Party) ∧
-        p.2.sourceCount ≤ 2 * b ∧ p.2.toEffectChain.effectCount ≤ 2 * b) ∧
+        (∀ f : Party → Bool, (∀ x ∈ P, f x = true) → p.2.SwapsMeet f) ∧ p.2.sourceCount ≤ 2 * b ∧
+        p.2.toEffectChain.effectCount ≤ 2 * b) ∧
       ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧
         ‖Ma - R.rewrite‖ ≤ (L : ℝ) ^ (-a) ∧
         ∀ z, (G.map fun p => p.1 • R.newFrame.regIso (p.2.toEffectChain.eval z)).sum =
@@ -699,8 +734,8 @@ theorem exists_allowed_monomial_approx_polynomial (hR : R.Conditions) {C c b L :
         ≤ B ^ (3 * b) * ((16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) *
             L ^ (2 * (3 * b * c + ⌈a⌉₊))) ^ (2 * b) := by gcongr
       _ = _ := by rw [hBdef, mul_pow (C + 1) (L ^ c), mul_pow _ (L ^ _)]; ring
-  · obtain ⟨h₁, h₂, h₃, h₄, h₅⟩ := hGp p hp
-    exact ⟨h₁, h₂, h₃, h₄.trans (by omega), h₅.trans (by omega)⟩
+  · obtain ⟨h₁, h₂, h₃, h₆, h₄, h₅⟩ := hGp p hp
+    exact ⟨h₁, h₂, h₃, h₆, h₄.trans (by omega), h₅.trans (by omega)⟩
 
 /-- **Lemma 6.3, the bounded change with reference-vector error `O(L^{-20})`.** In the setting of
 `exists_allowed_monomial_approx_polynomial`, let `Ω` be a vector with `‖Ω‖ ≤ 1` on which every
@@ -725,7 +760,8 @@ theorem exists_allowed_monomial_approx_refVec (hR : R.Conditions) {C c b L : ℕ
       G.length ≤ (C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) ∧
       (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (P : Set Party) ∧
-        p.2.sourceCount ≤ 2 * b ∧ p.2.toEffectChain.effectCount ≤ 2 * b) ∧
+        (∀ f : Party → Bool, (∀ x ∈ P, f x = true) → p.2.SwapsMeet f) ∧ p.2.sourceCount ≤ 2 * b ∧
+        p.2.toEffectChain.effectCount ≤ 2 * b) ∧
       ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧
         ‖Ma - R.rewrite‖ ≤ ((L : ℝ) ^ 30)⁻¹ ∧
         ‖act Ma (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω‖ ≤
