@@ -80,6 +80,7 @@ import TNLean.PEPS.AreaLaw.Geometry.InitialSectorComponents
 import TNLean.PEPS.AreaLaw.Geometry.InitialSectorCycle
 import TNLean.PEPS.AreaLaw.Geometry.InitialSectorRuns
 import TNLean.PEPS.AreaLaw.Geometry.InitialStarFrontiers
+import TNLean.PEPS.AreaLaw.Geometry.InitialStars
 import TNLean.PEPS.AreaLaw.Geometry.IsolatedStars
 import TNLean.PEPS.AreaLaw.Geometry.LatticeDyadicRect
 import TNLean.PEPS.AreaLaw.Geometry.LayerPartition
