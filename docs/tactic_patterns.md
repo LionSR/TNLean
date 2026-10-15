@@ -4285,6 +4285,21 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Receiving and middle regions — candidate (2026-10-15)
+
+- **Pattern:** Apply `Finset.disjoint_filter.mpr` and derive the impossible equality
+  `some false = none` from the two prescribed values of the partition function.
+- **Seen:** `CollarScan.actualTerminal_sharpLower_geometry` in
+  `TNLean/PEPS/AreaLaw/Scan/ActualSharpLower.lean` and the receiving/middle
+  disjointness step in `ActualRoughLower.lean`.
+- **Abstraction:** Mathlib's `Set.pairwiseDisjoint_filter` states that distinct
+  fibres of a function are disjoint. It is a candidate replacement for both
+  local equality contradictions; `Finset.disjoint_filter` supplies the current
+  finite-set step.
+- **Notes:** Two occurrences in two files; below the promotion threshold.
+  The typed contradiction avoids simplifying the surrounding entropy and
+  representation-theoretic hypotheses.
+
 ### Upper endpoint of a scanner band — candidate (2026-10-12)
 
 - **Pattern:** Use the band index bound, the offset bound and $8Km\le L$

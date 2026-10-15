@@ -395,9 +395,9 @@ private theorem actualRoot_sharpUpper_of_compressed
     ∀ {Hist : Type} [DecidableEq Hist] {Choice : Hist → Type}
       [∀ h, DecidableEq (Choice h)]
       (D : ReplicaTransport.TransportData (Site Λ ⊕ Bool) S.K Hist Choice)
-      (hD : D.IsAdmissible) (hcomm : D.CrossBandCommute n (a / 2) k)
+      (_hD : D.IsAdmissible) (_hcomm : D.CrossBandCommute n (a / 2) k)
       (f : (Σ h, Option (Choice h)) → terminalFamily S.K S.m S.M (S.n * S.m))
-      (hparts : ∀ j g, D.leafPart j g = augmentedPartition (σ (f j) g)) (p : ℝ),
+      (_hparts : ∀ j g, D.leafPart j g = augmentedPartition (σ (f j) g)) (p : ℝ),
       let Nsq := Transport.filteredNormSq (D.rootPath n (a / 2) k p) pre
       let tree := (D.tree (Set.projIcc (0 : ℝ) 1 zero_le_one p)).map f
       let gpost := fun j g ↦ regionalEntropy Λ q Ωt (U j g) +
@@ -548,181 +548,6 @@ private theorem actualScan_sharpUpper_of_compressed
         (fun j g ↦ actualChargeData_leafPart_terminalPartition S hm hM (S.n * S.m) r j g)⟩
 
 open Classical in
-/-- The dependent proposition in the actual-terminal sharp upper estimate.
-This temporary definition separates formation of the statement from elaboration
-of its proof; it asserts no estimate.
-Source: `07-comparators.tex`, lines 383–418; `08-scanner.tex`, lines 400–474,
-revision adc7f124. -/
-private def actualTerminalCompressedSharpUpperStatement
-    {q : ℕ} [NeZero q] {I : Type} [Fintype I] [LinearOrder I]
-    {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I) (X : Finset (Site Λ))
-    (a Kmom r : ℝ) (ha : 0 < a) (har : 6 * a ≤ r) (ha1 : 6 * a ≤ 1)
-    (Ωt : EuclideanSpace ℂ (Site Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
-    (E : Finset (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q) X))
-    (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)))
-    (hmom : ∀ (s : ℕ) (hist : History S.K S.m S.M s) (g : Fin S.K),
-      (s ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state hist g),
-        ∀ u : ℝ, |u| ≤ r →
-          Real.log (Entropy.surprisalMoment
-            (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-            u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2) ∧
-      (s + 1 ≤ S.n * S.m →
-        ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState hist g),
-          ∀ u : ℝ, |u| ≤ r →
-            Real.log (Entropy.surprisalMoment
-              (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-              u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2)) : Prop :=
-    let β := fun _ : Site Λ ↦ Fin q
-    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-      (FiniteProduct.splitEquiv β X) Ωt
-    let z := Matrix.IsHermitian.spectralRestrictionMass
-      (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E
-    0 < z →
-    let d := E.card
-    let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x ↦
-      compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
-    (∀ᶠ k : ℕ in atTop,
-      (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
-        ‖WithLp.toLp 2
-          (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
-            (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
-            labelProj (copyPerm (Fin E.card) k) (ell k)) *ᵥ
-            (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
-              (Fin k → Fin E.card) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) →
-    let σ := terminalPartition S (S.n * S.m)
-    let U := fun j g ↦ positiveNear S.depth (σ j g)
-    let Y := fun j g ↦ middle (σ j g)
-    (∀ j g, U j g ∪ Y j g = positiveNearMiddle S.depth (σ j g)) →
-    (∀ j j' g g', g < g' → U j g ∪ Y j g ⊆ U j' g') →
-    (∀ j g, Disjoint (U j g) (Y j g)) →
-    (∀ j g, Disjoint X (U j g ∪ Y j g)) →
-    ∃ c : ℝ, 0 ≤ c ∧
-      Tendsto (Real.bellOverlapRemainder d c S.K) atTop (𝓝 0) ∧
-      ∀ᶠ k : ℕ in atTop,
-      ∀ (N : ℕ) (ZO : Matrix (Config k
-        (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d))) (Fin N) ℂ),
-        ZOᴴ * ZO = 1 →
-        ZO * ZOᴴ = symProj (copyPerm ((o : Option (Option (Site Λ))) →
-          addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d) o) k) →
-        ∀ tree : MeanTree (terminalFamily S.K S.m S.M (S.n * S.m)),
-        let v : EuclideanSpace ℂ (Config k
-          (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d))) := WithLp.toLp 2
-            (replicaPrevector Ωt d k (ell k) ∘ globalReplicaCopiesEquiv β (Fin d) (Fin d) k)
-        let W := replicaMetric (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)) (a / 2) k
-        let Q := fun j g ↦ insert (some none)
-          ((X ∪ U j g).image fun x ↦ some (some x))
-        let F := fun j g ↦ insert none
-          (((X ∪ (U j g ∪ Y j g))ᶜ).image fun x ↦ some (some x))
-        let ext := fun B : Finset (Site Λ) ↦ (B \ X).image fun x ↦ some (some x)
-        let A := fun j g ↦ ((W (Q j g))⁻¹ * (W (F j g))⁻¹ * W (ext (Y j g))) ^ 2
-        let M := (List.ofFn fun g ↦ tree.eval (fun j ↦ ZOᴴ * A j g * ZO)).prod
-        let Nsq := ‖toEuclideanLin (M ^ (-(1 / 4 : ℝ))) (toEuclideanLin ZOᴴ v)‖ ^ 2
-        let entropy := fun Q : Finset (Site Λ) ↦ vonNeumannEntropy
-          (FiniteProduct.reducedPure β Ωt Q)
-          (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian
-        0 < Nsq ∧ -Real.log Nsq / (k : ℝ) ≤
-          2 * Real.log (d : ℝ) - Real.log z +
-            2 * (1 / 4) * a * (∑ g, ∑ j, tree.weight j *
-              (entropy (U j g) + entropy (U j g ∪ Y j g) - entropy (Y j g))) +
-            24 * (1 / 4) * S.K * Kmom * a ^ 2 - 2 * (1 / 4) * S.K * Real.log z +
-              Real.bellOverlapRemainder d c S.K k
-
-open Classical in
-/-- Specialize the uniform QIC sharp estimate to the actual terminal regions.
-The constant and replica threshold precede every symmetric coordinate and
-terminal tree, and the original supplied label sequence is retained.
-Source: `07-comparators.tex`, lines 383–418; `08-scanner.tex`, lines 400–474,
-revision adc7f124. -/
-private theorem eventually_actualTerminal_compressed_sharp_upper
-    {q : ℕ} [NeZero q] {I : Type} [Fintype I] [LinearOrder I]
-    {Λ : Finset (ℤ × ℤ)} (S : CollarScan (Site Λ) I) (X : Finset (Site Λ))
-    (a Kmom r : ℝ) (ha : 0 < a) (har : 6 * a ≤ r) (ha1 : 6 * a ≤ 1)
-    (Ωt : EuclideanSpace ℂ (Site Λ → Fin q)) (hΩt : ‖Ωt‖ = 1)
-    (E : Finset (FiniteProduct.Configuration (fun _ : Site Λ ↦ Fin q) X))
-    (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)))
-    (hmom : ∀ (s : ℕ) (hist : History S.K S.m S.M s) (g : Fin S.K),
-      (s ≤ S.n * S.m → ∀ Q ∈ statusMarginalRegions S.depth (S.state hist g),
-        ∀ u : ℝ, |u| ≤ r →
-          Real.log (Entropy.surprisalMoment
-            (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-            u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2) ∧
-      (s + 1 ≤ S.n * S.m →
-        ∀ Q ∈ statusMarginalRegions S.depth (S.oldChargeState hist g),
-          ∀ u : ℝ, |u| ≤ r →
-            Real.log (Entropy.surprisalMoment
-              (reducedState_isHermitian Λ q Ωt Q).eigenvalues u) ≤
-              u * regionalEntropy Λ q Ωt Q + Kmom * u ^ 2)) :
-    let β := fun _ : Site Λ ↦ Fin q
-    let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ
-      (FiniteProduct.splitEquiv β X) Ωt
-    let z := Matrix.IsHermitian.spectralRestrictionMass
-      (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian E
-    0 < z →
-    let d := E.card
-    let ψ : FiniteProduct.Configuration β Xᶜ × Fin E.card → ℂ := fun x ↦
-      compressedTypicalPureState ΩX E ((Finset.equivFin E).symm x.2, x.1)
-    (∀ᶠ k : ℕ in atTop,
-      (2 * (((k + 1) ^ (E.card ^ 2) : ℕ) : ℝ))⁻¹ ≤
-        ‖WithLp.toLp 2
-          (((1 : Matrix (Fin k → FiniteProduct.Configuration β Xᶜ)
-            (Fin k → FiniteProduct.Configuration β Xᶜ) ℂ) ⊗ₖ
-            labelProj (copyPerm (Fin E.card) k) (ell k)) *ᵥ
-            (fun x : (Fin k → FiniteProduct.Configuration β Xᶜ) ×
-              (Fin k → Fin E.card) ↦ ∏ i, ψ (x.1 i, x.2 i)))‖ ^ 2) →
-    let σ := terminalPartition S (S.n * S.m)
-    let U := fun j g ↦ positiveNear S.depth (σ j g)
-    let Y := fun j g ↦ middle (σ j g)
-    (∀ j g, U j g ∪ Y j g = positiveNearMiddle S.depth (σ j g)) →
-    (∀ j j' g g', g < g' → U j g ∪ Y j g ⊆ U j' g') →
-    (∀ j g, Disjoint (U j g) (Y j g)) →
-    (∀ j g, Disjoint X (U j g ∪ Y j g)) →
-    ∃ c : ℝ, 0 ≤ c ∧
-      Tendsto (Real.bellOverlapRemainder d c S.K) atTop (𝓝 0) ∧
-      ∀ᶠ k : ℕ in atTop,
-      ∀ (N : ℕ) (ZO : Matrix (Config k
-        (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d))) (Fin N) ℂ),
-        ZOᴴ * ZO = 1 →
-        ZO * ZOᴴ = symProj (copyPerm ((o : Option (Option (Site Λ))) →
-          addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d) o) k) →
-        ∀ tree : MeanTree (terminalFamily S.K S.m S.M (S.n * S.m)),
-        let v : EuclideanSpace ℂ (Config k
-          (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d))) := WithLp.toLp 2
-            (replicaPrevector Ωt d k (ell k) ∘ globalReplicaCopiesEquiv β (Fin d) (Fin d) k)
-        let W := replicaMetric (addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)) (a / 2) k
-        let Q := fun j g ↦ insert (some none)
-          ((X ∪ U j g).image fun x ↦ some (some x))
-        let F := fun j g ↦ insert none
-          (((X ∪ (U j g ∪ Y j g))ᶜ).image fun x ↦ some (some x))
-        let ext := fun B : Finset (Site Λ) ↦ (B \ X).image fun x ↦ some (some x)
-        let A := fun j g ↦ ((W (Q j g))⁻¹ * (W (F j g))⁻¹ * W (ext (Y j g))) ^ 2
-        let M := (List.ofFn fun g ↦ tree.eval (fun j ↦ ZOᴴ * A j g * ZO)).prod
-        let Nsq := ‖toEuclideanLin (M ^ (-(1 / 4 : ℝ))) (toEuclideanLin ZOᴴ v)‖ ^ 2
-        let entropy := fun Q : Finset (Site Λ) ↦ vonNeumannEntropy
-          (FiniteProduct.reducedPure β Ωt Q)
-          (FiniteProduct.reducedPure_posSemidef β Ωt Q).isHermitian
-        0 < Nsq ∧ -Real.log Nsq / (k : ℝ) ≤
-          2 * Real.log (d : ℝ) - Real.log z +
-            2 * (1 / 4) * a * (∑ g, ∑ j, tree.weight j *
-              (entropy (U j g) + entropy (U j g ∪ Y j g) - entropy (Y j g))) +
-            24 * (1 / 4) * S.K * Kmom * a ^ 2 - 2 * (1 / 4) * S.K * Real.log z +
-              Real.bellOverlapRemainder d c S.K k := by
-  classical
-  intro β ΩX z hz d ψ hmass σ U Y hUYeq hnest hUY hXY
-  have hzQ :
-      0 < (FiniteProduct.reducedPure_posSemidef β Ωt X).isHermitian.spectralRestrictionMass E :=
-    hz
-  have hmomQ := actualTerminal_sharpUpper_moments S Kmom r Ωt hmom hUYeq
-  obtain ⟨c, hc, hlim, hu⟩ :=
-    FiniteProduct.eventually_suppliedReplicaPrevector_sharp_upper
-      (K := Kmom) β Ωt X E hΩt hzQ ha har ha1 ell hmass
-  refine ⟨c, hc, hlim S.K, hu.mono ?_⟩
-  intro k hk N ZO hZO hZOZO tree
-  exact hk N ZO hZO hZOZO S.K U Y
-    (fun j g ↦ (Finset.disjoint_union_right.mp (hXY j g)).1)
-    (fun j g ↦ (Finset.disjoint_union_right.mp (hXY j g)).2)
-    hUY hnest hmomQ tree (1 / 4) (by norm_num)
-
-open Classical in
 /-- The supplied-label sharp upper estimate at every actual fill and charge
 root. The entropy contribution uses the actual terminal-tree weights, and the
 quadratic moment cost is retained. The per-band weight is `a`, the metric
@@ -810,11 +635,19 @@ theorem eventually_actualScan_suppliedPrevector_sharp_upper
     (Finset.nonempty_iff_ne_empty.mpr fun hE ↦ by
       simp [hE, Matrix.IsHermitian.spectralRestrictionMass] at hzQ)
   let : NeZero d := ⟨Nat.ne_of_gt hd⟩
-  obtain ⟨c, hc, hlim, hu⟩ := eventually_actualTerminal_compressed_sharp_upper
-    S X a Kmom r ha har ha1 Ωt hΩt E ell hmom hz hmass hUYeq hnest hUY hXY
-  refine ⟨c, hc, hlim, hu.mono fun k hk s hs p ↦ ?_⟩
+  let U := fun j g ↦ positiveNear S.depth (terminalPartition S (S.n * S.m) j g)
+  let Y := fun j g ↦ middle (terminalPartition S (S.n * S.m) j g)
+  have hmomQ := actualTerminal_sharpUpper_moments S Kmom r Ωt hmom hUYeq
+  obtain ⟨c, hc, hlim, hu⟩ :=
+    FiniteProduct.eventually_suppliedReplicaPrevector_sharp_upper
+      (K := Kmom) β Ωt X E hΩt hzQ ha har ha1 ell hmass
+  refine ⟨c, hc, hlim S.K, hu.mono fun k hk s hs p ↦ ?_⟩
   intro σ gpost p₀ bound step Nfill Ncharge
   exact actualScan_sharpUpper_of_compressed (q := q) (d := d) S hm hM X a Kmom z c ha Ωt
-    k (ell k) hUYeq hXY hregions hk s hs p
+    k (ell k) hUYeq hXY hregions
+    (fun N ZO hZO hZOZO tree ↦ hk N ZO hZO hZOZO S.K U Y
+      (fun j g ↦ (Finset.disjoint_union_right.mp (hXY j g)).1)
+      (fun j g ↦ (Finset.disjoint_union_right.mp (hXY j g)).2)
+      hUY hnest hmomQ tree (1 / 4) (by norm_num)) s hs p
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan
