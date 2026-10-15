@@ -73,7 +73,7 @@ private theorem cellFanEnd_sub_eq_smul_repairFanDirection (v : ℝ × ℝ) (ℓ 
     cellFanEnd (v.1 - (2 : ℝ) ^ ℓ / 2, v.2 - (2 : ℝ) ^ ℓ / 2) ℓ (0, 0)
         (fun _ ↦ true) s - v =
       ((2 : ℝ) ^ ℓ / 2) • repairFanDirection s := by
-  show _ = _ • cellFanEnd (-1, -1) 1 (0, 0) (fun _ ↦ true) s
+  change _ = _ • cellFanEnd (-1, -1) 1 (0, 0) (fun _ ↦ true) s
   rw [cellFanEnd_eq, cellFanEnd_eq]
   ext <;> simp [cellFanCenter]
 
