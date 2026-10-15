@@ -1404,9 +1404,18 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 
 \begin{proof}\leanok
     \uses{thm:peps_dyadic_hierarchy_counts}
-    The schedule sorts the events by their position in the level order, so it contains
-    each event once. The schedule of changes lists the changes of each event in turn,
-    so its length is at most $189$ times the number of squares and junctions, and
+    The schedule sorts the scheduled events by their position in the level order, so it
+    contains each of them once. A bulk operation lists its homogenizations, one for
+    each of its $m$ marks and $\sigma$ sheets, then the operation, then the removals,
+    so it has $2m\sigma+1$ changes: nine for the central birth and for the exchange,
+    and five for each other bulk operation. An edge has one initialization, three
+    auxiliary births, the exchange and four main steps, so $1+15+9+20=45$ changes, and
+    a large-scale repainting has $9+4\cdot45=189$; a direct repainting and a resize
+    have one change. The only initializations are those of the edges, one for each, so
+    an event has at most four. The schedule of changes lists the changes of each event
+    in turn, and each event occurs once, so at most $189$ changes belong to an event and
+    the length is at most $189$ times the number of squares and junctions; likewise for
+    four times the initializations. Finally
     Theorem~\ref{thm:peps_dyadic_hierarchy_counts} with $M=189$ gives
     $3\cdot189\,(\#\text{squares}+\#\text{junctions})\le80\cdot189\,L^3$.
 \end{proof}
@@ -1434,8 +1443,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{thm:peps_dyadic_protocol_parties}
     \lean{TNLean.PEPS.Approximation.DyadicSquare.toTriple_injective, TNLean.PEPS.Approximation.DyadicSquare.ofTriple_toTriple, TNLean.PEPS.Approximation.protocolPlacement_inGrid, TNLean.PEPS.Approximation.protocolPlacement_blockBounded, TNLean.PEPS.Approximation.card_protocolParty_le, TNLean.PEPS.Approximation.three_mul_card_protocolParty_lt, TNLean.PEPS.Approximation.inl_ne_guidePlaceholder, TNLean.PEPS.Approximation.labelParty_toTriple, TNLean.PEPS.Approximation.labelParty_guidePlaceholder, TNLean.PEPS.Approximation.labelParty_injOn, TNLean.PEPS.Approximation.levelLabels_mem_validLabels}
     \leanok
-    \uses{def:peps_dyadic_protocol_parties, thm:peps_dyadic_hierarchy_counts,
-        lem:peps_dyadic_active_labels}
+    \uses{def:peps_dyadic_protocol_parties}
     Every party lies in the padded square $[0,2^k]^2$, at most two parties are attached
     to any square, and there are at most twice as many parties as squares; if
     $2^k<2L$ there are fewer than $32L^2/3$ parties. During a repainting, distinct
@@ -1446,9 +1454,14 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 \end{theorem}
 
 \begin{proof}\leanok
-    A block of side $2^j$ with index below $2^{k-j}$ ends before $2^j\cdot2^{k-j}=2^k$.
-    The parties at a square are its block party and its placeholder. The count follows
-    from Theorem~\ref{thm:peps_dyadic_hierarchy_counts}. A block of the root square at
+    \uses{thm:peps_dyadic_hierarchy_counts}
+    A block of side $2^j$ with index $r<2^{k-j}$ ends at $2^j(r+1)\le2^j\cdot2^{k-j}=2^k$.
+    The parties at a square are its block party and its placeholder, since a square is
+    determined by its scale and block indices. The count follows from
+    Theorem~\ref{thm:peps_dyadic_hierarchy_counts}. During the repainting of $S$, the
+    label of a square $Q$ is held by the block party of $Q$, and a square is recovered
+    from its label, so distinct squares give distinct block parties; the placeholder
+    label is held by the placeholder party of $S$, which is not a block party. A block of the root square at
     level $2^j$ has indices below $2^{k-j}$, and its parent has scale $j+1\le k$ and
     indices below $2^{k-j-1}$.
 \end{proof}
