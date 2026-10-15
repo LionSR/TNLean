@@ -118,6 +118,8 @@ import TNLean.PEPS.Approximation.DyadicGuideOwners
 import TNLean.PEPS.Approximation.DyadicGuideReadings
 import TNLean.PEPS.Approximation.DyadicHierarchyCounts
 import TNLean.PEPS.Approximation.DyadicLargeRepaintingGates
+import TNLean.PEPS.Approximation.DyadicLevelEvents
+import TNLean.PEPS.Approximation.DyadicLevelFrames
 import TNLean.PEPS.Approximation.DyadicLevelSchedule
 import TNLean.PEPS.Approximation.DyadicLevelTrueVertices
 import TNLean.PEPS.Approximation.DyadicLifetimeIncidence
