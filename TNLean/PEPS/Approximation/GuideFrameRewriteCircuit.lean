@@ -149,8 +149,6 @@ theorem PlaneConditions.exists_originalCircuit (h : G.PlaneConditions) {C c b L 
           G.newFrame.regIso.symm (G.newFrame.refVec Ω)‖ ≤ (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by
   set R := G.toSmallPatchRewrite h.untouched_agree
   have hR := h.conditions
-  have hlen : ∀ s : Finset (ℝ × ℝ), ∀ f : ℝ × ℝ → Hole pos q Party,
-      (s.toList.map f).length = s.card := fun s f => by simp
   have hne : Nontrivial (Mem R.oldFrame.regs) := R.oldFrame.nontrivial_mem_regs fun h' hh' => by
     rcases List.mem_append.1 hh' with hh' | hh' <;> obtain ⟨z, hz, rfl⟩ := List.mem_map.1 hh'
     · exact htag z (Finset.mem_union_left _ (Finset.mem_toList.1 hz))
