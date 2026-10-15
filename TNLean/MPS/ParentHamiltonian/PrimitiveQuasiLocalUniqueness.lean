@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.ParentHamiltonian.BoundaryObservableCompression
 import TNLean.MPS.ParentHamiltonian.LocalObservableQuasiLocalState
+import TNLean.MPS.ParentHamiltonian.QuasiLocalCommutatorLocality
 import TNLean.QCA.StateSpace
 import TNLean.QCA.QuasiLocalInterval
 import Mathlib.Analysis.CStarAlgebra.GelfandNaimarkSegal
@@ -137,19 +138,6 @@ theorem norm_quasiLocalState_interval_sub_scalar_le_projection_compression
   exact NonUnitalStarAlgHom.norm_map
     CStarMatrix.ofMatrixStarAlgEquiv (EquivLike.injective _)
       (p * X * p - c • p)
-
-private theorem quasiLocalIntervalObservable_bulkObservable (a : ℤ) (k b c : ℕ)
-    (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
-    quasiLocalIntervalObservable d (a - b) ((b + k) + c) (bulkObservable X b c) =
-      quasiLocalIntervalObservable d a k X := by
-  have hb : intervalCoordinates d (a - b) ((b + k) + c)
-      (localInclusion (finiteChainRegion_subset_expanded a k b c)
-        ((intervalCoordinates d a k).symm X)) = bulkObservable X b c := by
-    simpa only [StarAlgEquiv.apply_symm_apply] using
-      intervalCoordinates_localInclusion_eq_bulkObservable d a k b c
-        ((intervalCoordinates d a k).symm X)
-  rw [← hb, quasiLocalIntervalObservable_apply, StarAlgEquiv.symm_apply_apply,
-    quasiLocalObservable_localInclusion, ← quasiLocalIntervalObservable_apply]
 
 /-- Every normalized positive state supported in all finite-interval primitive
 MPS spaces has the prescribed insertion expectations on every local interval.

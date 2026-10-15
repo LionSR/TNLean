@@ -1,0 +1,54 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\input{command}
+
+\begin{document}
+\gapnote{scope-restriction}{open}
+
+\section*{Scope of the angular annular geometry}
+
+The geometric part of Proposition 3.4 of the September 24, 2026
+polynomial-PEPS manuscript uses the ambient maximum metric on the real
+plane. The source is \texttt{02-information.tex}, lines 662--744, at
+revision \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
+
+The candidate supplies dyadic scales, the literal outer, intermediate and
+final layers, their cumulative separation, actual translated grid cells,
+a uniform finite count of the newly selected cells, containment of the old
+group, and physical core buffers. The capped marked-point distance is
+defined to equal $n$ when the marked set is empty. At depth zero the sole
+layer is all of $X$. Every enlargement is performed in the ambient plane
+before intersecting with the physical domain.
+
+The finite-cover arguments use only the source diameter bound
+$\operatorname{diam}_{\infty}(X)\le A_0n$ and the bound $|\mathcal V|\le m_0$.
+For $R=\max\{A_0,2\}$, a sufficient cell bound is
+\begin{align*}
+ (m_0+1)\left(2\left\lceil\frac{R+3a'/2}{d}\right\rceil_{+}+3\right)^2.
+\end{align*}
+It is independent of the marked-point locations, the grid origin, the
+scale, the shapes of the layers and the physical domain. No estimate for
+the size of the old group is needed.
+
+The following obligations remain open:
+\begin{itemize}
+\item Conditional mutual information of one cell, Lemma 3.2, tracked by
+  \href{https://github.com/LionSR/TNLean/issues/9340}{issue 9340}.
+\item The physical information reset, Lemma 3.3, tracked by
+  \href{https://github.com/LionSR/TNLean/issues/9341}{issue 9341}.
+\item Combining these analytic inputs with the cell additions and the
+  reset at each scale to obtain the mutual-information invariant and
+  Proposition 3.4, tracked by
+  \href{https://github.com/LionSR/TNLean/issues/8766}{issue 8766}.
+\end{itemize}
+The accepted uniform numerical reset-width estimate is reused at
+$c_*=a'/3$. It is not a proof of either analytic input.
+
+% The geometric declarations passed hosted compilation, strict checks and
+% declaration synchronization at f5ea6fe33a5745904b18d70431b4153ed78c1978.
+% Completion markers concern only those geometric and numerical statements;
+% the analytic obligations above remain open.
+
+\end{document}
