@@ -102,6 +102,8 @@ import TNLean.PEPS.Approximation.DyadicLevelSchedule
 import TNLean.PEPS.Approximation.DyadicLifetimeIncidence
 import TNLean.PEPS.Approximation.DyadicPatchRewriteGates
 import TNLean.PEPS.Approximation.DyadicPointTreatment
+import TNLean.PEPS.Approximation.DyadicProtocolParties
+import TNLean.PEPS.Approximation.DyadicProtocolSchedule
 import TNLean.PEPS.Approximation.DyadicReadingFootprints
 import TNLean.PEPS.Approximation.DyadicRepaintingClearance
 import TNLean.PEPS.Approximation.DyadicRepaintingSchedule
