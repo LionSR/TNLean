@@ -248,9 +248,9 @@ theorem bandBirth_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
     refine guideFrame_eq_changeOwner (fun x => ?_) (fun z hz => ?_)
     · by_cases hx : fb (cellCenterPos L x) = fa (cellCenterPos L x)
       · have : x ∉ T := by simp [T, hx]
-        rw [if_neg this, hx]
+        rw [ite_eq_right this, hx]
       · have : x ∈ T := by simp [T, hx]
-        rw [if_pos this, (hkey _ hx).2]
+        rw [ite_eq_left this, (hkey _ hx).2]
     · exact (tagHolder_congr (hinc z ((hmb z).1 hz))).symm
   rw [hFb, hFa, hafter]
   obtain ⟨w, hw, hu, hs, herr⟩ := bandBirth_step_guideFrame (L := L) (hole := suppliedPatch P _ hr)
@@ -284,6 +284,123 @@ theorem bandBirth_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
   refine ⟨w.toOriginalCircuit hw, (Word.isBoundedChange_toOriginalCircuit hw hu hs hK
     (by exact herr)).mono ?_ le_rfl le_rfl le_rfl,
     w.isSourceBounded_toOriginalCircuit_of_one_le hw hrs⟩
+  rintro x (rfl | rfl)
+  exacts [hPS, hQS]
+
+/-- **A death along an edge as a change of a treated sheet, conditional on Proposition 3.4.** At
+the constants of the protocol, in the repainting of a square `R` of side `n = 2 ^ j > K₀ t`,
+`t = D log L`, let an elementary death removing the label `Q` change the guide
+`bandUpdate n e op.before g₀` of a sheet into `bandUpdate n e op.after g₀`, both unmodified guides
+of the repainting, with the surrounding guide the guide after. If the parties of the surrounding
+label and of `Q` lie in `S`, then passing from the frame of the guide before, treated about the
+endpoints of `e`, to that of the guide after is a bounded change with participants in `S`, with
+at most one pair source and error `L⁻³⁰`.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 183–221, 328–387 and 440–445; Lemma 6.5
+`lem:birth`, `05-frames.tex`. -/
+theorem bandDeath_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
+    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀)
+    (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hk2 : 2 ^ k < 2 * L)
+    (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
+    (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
+    (done : Set (ℤ × ℤ)) {op : BandOperation GuideLabel} {Q : GuideLabel} (hop : op.InsertsOne Q)
+    (hdeath : op.surrounding = op.after) (e : SquareEdge) {g₀ : ℝ × ℝ → GuideLabel}
+    (hgb : (blockBaseline (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
+      (protocolLevelLabels k R.1.1 done) R.1.index
+      (newParty Sum.inl R.1.1 R.1.index)).IsUnmodifiedGuide
+        (bandUpdate ((2 : ℝ) ^ (R.1.1 : ℕ)) e op.before g₀))
+    (hga : (blockBaseline (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
+      (protocolLevelLabels k R.1.1 done) R.1.index
+      (newParty Sum.inl R.1.1 R.1.index)).IsUnmodifiedGuide
+        (bandUpdate ((2 : ℝ) ^ (R.1.1 : ℕ)) e op.after g₀))
+    (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧ ε₀ * (D * Real.log L) ≤ B₀ * Real.log L)
+    {S : Set (ProtocolParty k)} (hPS : labelParty R op.label ∈ S) (hQS : labelParty R Q ∈ S)
+    {r K rs : ℕ} (hr1 : 1 ≤ r) (hK : 1 ≤ K) (hrs : 1 ≤ rs) :
+    HasFrameChange Ω
+      (treatedFrame (q := q) P rank R hr (e.endpointBlocks R.1.index) op.label
+        (bandUpdate ((2 : ℝ) ^ (R.1.1 : ℕ)) e op.before g₀))
+      (treatedFrame (q := q) P rank R hr (e.endpointBlocks R.1.index) op.label
+        (bandUpdate ((2 : ℝ) ^ (R.1.1 : ℕ)) e op.after g₀)) S r K rs ((L : ℝ) ^ (-30 : ℤ)) := by
+  classical
+  set n : ℝ := (2 : ℝ) ^ (R.1.1 : ℕ) with hn_def
+  set t := D * Real.log L with ht_def
+  set d := blockCorner n R.1.index with hd_def
+  have hn : 0 < n := by positivity
+  have hℓ : 0 < Real.log L := Real.log_pos (by exact_mod_cast hL)
+  have ht : 0 < t := mul_pos hc.D_pos hℓ
+  have htn : t ≤ n := by nlinarith [hc.twenty_le_K₀]
+  have hε2 : 2 * ε₀ ≤ angularConstant / 2 := by
+    have := hc.ε₀_small; have := hc.ε₀_pos; nlinarith [angularConstant_pos]
+  obtain ⟨hfb, hmb, hdb, hFb⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done hgb
+    (e.endpointBlocks R.1.index) op.label hr
+  obtain ⟨hfa, hma, hda, hFa⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done hga
+    (e.endpointBlocks R.1.index) op.label hr
+  rw [homogenize_endpointBlocks] at hfb hfa
+  set fb := treatedGuide R.1.1 R.1.index t (e.endpointBlocks R.1.index) op.label
+    (bandUpdate n e op.before g₀)
+  set fa := treatedGuide R.1.1 R.1.index t (e.endpointBlocks R.1.index) op.label
+    (bandUpdate n e op.after g₀)
+  obtain ⟨hV, hinc, hTfar, hTdiam⟩ := op.treated_frame_facts (ε₀ := ε₀) hop ht htn
+    (by linarith [angularConstant_pos]) e g₀ d hfb hfa
+  have hfs : IsDisplacedReading fa (shiftGuide d (homogenize (edgeTreated n e t) op.label
+      (bandUpdate n e op.surrounding g₀))) ((1 : ℝ), (1 : ℝ)) := by rw [hdeath]; exact hfa
+  have hkey : ∀ p, fb p ≠ fa p → fa p = op.label ∧ fb p = Q := fun p hp => by
+    obtain ⟨h1, h2, -⟩ := op.readings_of_ne hop ht htn e g₀ d hfb hfa hfs hp
+    refine ⟨h1, ?_⟩
+    rcases h2 with h2 | h2
+    · exact absurd (h2.trans h1.symm) hp
+    · exact h2
+  set Vb := treatedVertices k R.1.1 t (e.endpointBlocks R.1.index) fb
+  set Va := treatedVertices k R.1.1 t (e.endpointBlocks R.1.index) fa
+  have hVV : Vb = Va := Finset.ext fun z => by rw [hma, hmb, hV]
+  set T : Finset (SquareLatticeVertex L L) :=
+    Finset.univ.filter fun x => fb (cellCenterPos L x) ≠ fa (cellCenterPos L x)
+  have hbefore : guideFrame (cellCenterPos L) q fb (labelParty R) guidePlaceholder rank Vb
+      (suppliedPatch P _ hr) hdb =
+      (guideFrame (cellCenterPos L) q fa (labelParty R) guidePlaceholder rank Va
+        (suppliedPatch P _ hr) hda).changeOwner T (labelParty R Q) := by
+    rw [guideFrame_congr_guide (g' := fb) (hV' := by rw [← hVV]; exact hdb) rfl hVV
+      (fun _ _ => rfl)]
+    refine guideFrame_eq_changeOwner (fun x => ?_) (fun z hz => ?_)
+    · by_cases hx : fb (cellCenterPos L x) = fa (cellCenterPos L x)
+      · have : x ∉ T := by simp [T, hx]
+        rw [ite_eq_right this, hx]
+      · have : x ∈ T := by simp [T, hx]
+        rw [ite_eq_left this, (hkey _ hx).2]
+    · exact tagHolder_congr (hinc z ((hV z).2 ((hma z).1 hz)))
+  rw [hFb, hFa, hbefore]
+  obtain ⟨M, hM, hu, hs, hf, herr⟩ := bandDeath_step_guideFrame (L := L)
+    (hole := suppliedPatch P _ hr)
+    (V := Va) (hV := hda) (own := labelParty R) (ph := guidePlaceholder) (rank := rank)
+    hD hLL hΩ (fun v => cellCenterPos_eq_sitePosition_add v) hm₀ hc.a_le op e g₀ d
+    ((1 : ℝ), (1 : ℝ)) ht.le htn (le_mul_of_one_le_left (by positivity) hA₀ |>.trans' (by
+      have hk : (R.1.1 : ℕ) + 1 ≤ k := R.2
+      have h1 : n * 2 ≤ 2 ^ k := by
+        rw [hn_def, ← pow_succ]; exact pow_le_pow_right₀ (by norm_num) hk
+      have h2 : (2 : ℝ) ^ k < 2 * L := by exact_mod_cast hk2
+      linarith)) hε2 hfs hfb hfa (fun z hz => (hma z).1 hz)
+    (fun z _ => ⟨suppliedPatch_center P hr z, by simp [ht_def]⟩) (T := T) (Q := labelParty R Q)
+    (fun x hx => by
+      have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
+      rw [(hkey _ hx').1])
+    (Set.disjoint_left.2 fun x hx hxo => by
+      have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
+      obtain ⟨p, hp, hxp⟩ := hxo
+      obtain ⟨hl, hhl, rfl⟩ := List.mem_map.1 hp
+      obtain ⟨z, hz, rfl⟩ := mem_holes_guideFrame.1 hhl
+      have hd : dist (cellCenterPos L x) z ≤ 2 * (ε₀ * t) := by
+        simpa [SquarePatch.outer, squareSample] using hxp
+      have := hTfar z ((hV z).2 ((hma z).1 hz)) _ hx'
+      rw [dist_comm] at this
+      linarith)
+    (fun x hx y hy => by
+      have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
+      have hy' : fb (cellCenterPos L y) ≠ fa (cellCenterPos L y) := by simpa [T] using hy
+      exact (hTdiam _ _ hx' hy').trans (le_mul_of_one_le_left hn.le hA₀))
+    (fun x hx => by simpa [T] using hx)
+  refine ⟨M.toOriginalCircuit hM, (PartyChain.isBoundedChange_toOriginalCircuit hM hu hs hf hr1 hK
+    (by exact herr)).mono ?_ le_rfl le_rfl le_rfl,
+    M.isSourceBounded_toOriginalCircuit_of_one_le hM hrs⟩
   rintro x (rfl | rfl)
   exacts [hPS, hQS]
 
