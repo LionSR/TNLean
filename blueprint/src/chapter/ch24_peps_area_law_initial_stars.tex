@@ -18,7 +18,8 @@ $\{-1,0,1\}$, that is, the axis and diagonal directions.
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairFanDirection,
         TNLean.PEPS.AreaLaw.Geometry.repairFanDirection_mem,
         TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar,
-        TNLean.PEPS.AreaLaw.Geometry.RepairStage.HasIsolatedStars}
+        TNLean.PEPS.AreaLaw.Geometry.RepairStage.HasIsolatedStars,
+        TNLean.PEPS.AreaLaw.Geometry.InitialIsolatedStarsStatement}
     \leanok
     \uses{def:area_law_repair_fan,def:area_law_repair_current_assignment,
         def:area_law_cell_fan_successor,def:area_law_repair_stage}
@@ -47,7 +48,10 @@ $\{-1,0,1\}$, that is, the axis and diagonal directions.
     $\mathcal D$ has isolated stars with constant $a_0$ when
     $\operatorname{dist}(v_p,v_q)\ge a_0\max(S_p,S_q)$ for distinct
     occurrences $p\ne q$, and $Q_{a_0S_p}(v_p)$ is an isolated star of
-    the current regions for every occurrence $p$.
+    the current regions for every occurrence $p$. The initial-star
+    assertion for the recursive family states that there is $a_0>0$ such
+    that, for every width $C_0$, the initial stage has isolated stars
+    with constant $a_0$ whenever $k_0$ is large enough.
 \end{definition}
 
 % Source: 10-geometry.tex, geometry:initial-stars, lines 340--349;
@@ -111,7 +115,6 @@ $\{-1,0,1\}$, that is, the axis and diagonal directions.
     \label{lem:area_law_initial_stars}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialMarks_isolatedStars,
         TNLean.PEPS.AreaLaw.Geometry.initialRepairStage_hasIsolatedStars,
-        TNLean.PEPS.AreaLaw.Geometry.InitialIsolatedStarsStatement,
         TNLean.PEPS.AreaLaw.Geometry.initialIsolatedStarsStatement_holds}
     \leanok
     \uses{thm:area_law_initial_mark_isolated_star,
