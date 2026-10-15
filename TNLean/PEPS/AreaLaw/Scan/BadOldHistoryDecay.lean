@@ -86,20 +86,8 @@ theorem eventually_split_counting_scale_separation {Cr ell kappa mu : ℝ}
     hratio] with n hstatus hratio
   dsimp only at hstatus ⊢
   obtain ⟨hn, hr, hD, _, hL⟩ := hstatus
-  have hnR : (1 : ℝ) ≤ n := by exact_mod_cast (show 1 ≤ n by omega)
-  have hnpos : (0 : ℝ) < n := zero_lt_one.trans_le hnR
-  have hpow : (1 : ℝ) ≤ (n : ℝ) ^ kappa := Real.one_le_rpow hnR hkappa.le
-  have hceil : (⌈(n : ℝ) ^ kappa⌉₊ : ℝ) ≤ (n : ℝ) ^ kappa + 1 :=
-    (Nat.ceil_lt_add_one (Real.rpow_nonneg (Nat.cast_nonneg n) _)).le
-  have hmul : (n : ℝ) ^ mu = (n : ℝ) ^ kappa * (n : ℝ) ^ (mu - kappa) := by
-    rw [← Real.rpow_add hnpos]
-    congr 1
-    ring
-  have hmargin : 12 * ⌈(n : ℝ) ^ kappa⌉₊ ≤ ⌊(n : ℝ) ^ mu⌋₊ := by
-    apply Nat.le_floor
-    push_cast
-    rw [hmul]
-    nlinarith [mul_le_mul_of_nonneg_left hratio (zero_le_one.trans hpow)]
+  have hmargin : 12 * ⌈(n : ℝ) ^ kappa⌉₊ ≤ ⌊(n : ℝ) ^ mu⌋₊ :=
+    mul_ceil_rpow_le_floor_rpow (by omega) hkappa.le (by push_cast; linarith)
   exact ⟨hn, hr, hD, by omega, hL⟩
 
 open Classical in

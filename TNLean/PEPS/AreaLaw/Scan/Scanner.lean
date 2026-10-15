@@ -17,7 +17,7 @@ comparator budgets.
 
 **Scope restriction (inputs as hypotheses):** the conclusions of Lemma 9.1
 (`scanner:histories`), Proposition 7.4 (`prop:transport`), Proposition 8.1
-(`prop:comparators`), Lemma 2.1 (`lem:continuity`) and Lemma 2.3 (`lem:tail`) for the concrete
+(`prop:comparators`), Lemma 2.1 (`lem:continuity`) and Lemma 3.1 (`lem:tail`) for the concrete
 scan are the fields of `ScanData`; this module proves the step of the source from those
 conclusions to Proposition 9.2. The theorem becomes the source statement once a `ScanData` is
 constructed from the scan geometry and the transported states. Documented in
@@ -52,7 +52,7 @@ exponents and on the constants `κ` of the inputs. They do not depend on the tot
 `scanner:final-parameters` (line 843). -/
 theorem scanner_estimate (X : ScannerExponents) (κ : ScanConstants) :
     ∃ Cb Clb C Cl Cδ : ℝ, ∀ᶠ n in atTop, ∀ S : ScanData X κ n,
-      (S.Bsh ≤ Cb * (n * (X.L n : ℝ) ^ X.e + n) ∧ S.Bexc ≤ Cb * n * X.D n ∧
+      (S.inputs.Bsh ≤ Cb * (n * (X.L n : ℝ) ^ X.e + n) ∧ S.inputs.Bexc ≤ Cb * n * X.D n ∧
         S.Bmarg ≤ Cb * n * X.D n * Real.log n ^ Clb) ∧
       ∃ ρ : ℕ → ℝ, Tendsto ρ atTop (𝓝 0) ∧ ∀ k, 1 ≤ k →
         ∃ r ∈ X.chargeRounds n, ∃ p ∈ Icc (X.eps n / 2) (X.eps n),
@@ -75,12 +75,12 @@ theorem scanner_estimate (X : ScannerExponents) (κ : ScanConstants) :
   have hρ8 : Tendsto (fun k ↦ ρ k ^ (1 / 8 : ℝ)) atTop (𝓝 0) := by
     simpa [Real.zero_rpow (by norm_num : (1 / 8 : ℝ) ≠ 0)] using
       hρ.rpow_const (p := (1 / 8 : ℝ)) (Or.inr (by norm_num))
-  refine ⟨fun k ↦ ρ k + Λ * (S.rem k + ρ k ^ (1 / 8 : ℝ)), ?_, ?_⟩
-  · simpa using hρ.add ((S.tendsto_rem.add hρ8).const_mul Λ)
+  refine ⟨fun k ↦ ρ k + Λ * (S.inputs.rem k + ρ k ^ (1 / 8 : ℝ)), ?_, ?_⟩
+  · simpa using hρ.add ((S.inputs.tendsto_rem.add hρ8).const_mul Λ)
   intro k hk
   obtain ⟨r, hr, p, hp, hQ⟩ := hρsel k hk (S.integratedChargeBound hfacts k hk)
-  have hextra : 0 ≤ Λ * (S.rem k + ρ k ^ (1 / 8 : ℝ)) :=
-    mul_nonneg hΛ (add_nonneg (S.rem_nonneg k) (Real.rpow_nonneg (hρ0 k) _))
+  have hextra : 0 ≤ Λ * (S.inputs.rem k + ρ k ^ (1 / 8 : ℝ)) :=
+    mul_nonneg hΛ (add_nonneg (S.inputs.rem_nonneg k) (Real.rpow_nonneg (hρ0 k) _))
   refine ⟨r, hr, p, hp, by linarith, ?_⟩
   have := hΛE r k p (ρ k) hp (hρ0 k) hQ
   linarith [hρ0 k]

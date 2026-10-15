@@ -1,0 +1,88 @@
+\section{Source-power density at the same actual charge point}
+\label{sec:arealaw-source-selected-density}
+
+\begin{theorem}[A source-small density and the unchanged sharp comparison]
+    \label{thm:arealaw-source-selected-sharp-density}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_sharp_density}
+    Fix the local dimension, interaction radius, interaction and positive
+    spectral-gap bounds, a nonnegative target-volume coefficient, a positive
+    scanner coefficient $C_1$, and the anchor multiplicity controlled by
+    $C_1/3$.  Fix also the energy-tail exponent $P$.
+    There are positive source constants $C_{\rm tr},C_{\rm target},C_B,c_t$,
+    real transport coefficients and exponents, and cap constants
+    $C\geq1$, $C_l\geq0$, chosen before every entropy coefficient $C_e\geq0$.  For each such $C_e$
+    there is a size threshold before the finite physical data.
+
+    Let $\Omega$ be the original unit gapped ground state of the supplied
+    finite-domain local Hamiltonian.  The scanner uses the literal domain
+    graph, anchors in their original interaction supports and ambient depth
+    from the nonempty target set $T$.  Impose the source quadratic target
+    size, whole-row layer counts, anchor multiplicity, collar clearance and
+    literal rounded scales.  Retain the geometric premises
+    $2r_0\leq D$ and $4D\leq m$.  Write
+    $X=A\cap T$, $L=\lfloor n^{1-\ell}\rfloor$, and let $e_{\mathrm{box}}$
+    be the final source box-error exponent.  Assume the original entropy bounds
+    \begin{align}
+        S(\Omega_X) & \leq C_en^{1+e_{\mathrm{box}}},\nonumber                \\
+        S(\Omega_{\{0<\mathrm{depth}\leq j\}\cap A})
+                    & \leq C_e(nL^{e_{\mathrm{box}}}+n)\qquad(0\leq j\leq L).
+    \end{align}
+    Then there is one truncated ground state $\widetilde\Omega$, one
+    target spectral window $E$ of mass $z$, and one physical Schmidt--Bell
+    label sequence before every weight $1\leq W\leq n^\omega$.
+    They retain the source gap, energy, trace, cut-budget and window bounds.
+
+    Set $a=W/K$ and retain the transport smallness premise
+    $a\,\mathrm{transportLogDimBound}(q,r_0)\leq c_t$.
+    For each such fixed weight, eventually in replica number $k$ there is
+    an actual charge point $(s,p)$ with
+    \begin{align}
+        p                    & \in[n^{-\nu},2n^{-\nu}], &
+        \frac{Q_k(s,p)}{KnD} & \leq n^{-\nu}.
+        \label{eq:arealaw-source-selected-density-power}
+    \end{align}
+    Here $Q_k$ is the literal actual charge entropy defect of the same
+    supplied prevector.  At this unchanged point all the previous actual
+    energy and sharp-comparison conclusions hold.  In particular, writing
+    $e_0$ for the truncated ground energy and $g/2$ for its physical gap,
+    \begin{align}
+        0\leq\delta_k(s,p)
+         & :=\frac{\mu_k(s,p)-e_0}{g/2}
+        \leq\frac{e_0+\mathrm{cap}_k(s,p)+\mathrm{rem}_k}{g/2},\nonumber \\
+        \mathrm{cap}_k(s,p)
+         & :=CW^2n^\ell D^2(\log n)^{C_l}
+        \left((1-p)\left(\frac{Q_k(s,p)}{KnD}\right)^{1/8}
+        +(1-p)n^{-P}+p\right).
+    \end{align}
+    The full sharp inequality keeps the same mapped terminal weights,
+    label entropy, physical gap, loss $37K_{\rm mom}a$, mass term and both
+    replica remainders.  Its auxiliary parameter remains universally
+    quantified over $0<\tau\leq1/2$ at this same point.
+\end{theorem}
+\begin{proof}
+    Invoke the source selected-comparison theorem once.  The retained
+    containment $X\subseteq\mathrm{truncationSet}(L)$ and its quadratic
+    volume bound allow target entropy transfer at the supplied trace
+    distance.  The original target bound therefore gives
+    $S(\widetilde\Omega_X)\leq C_en^{1+e_{\mathrm{box}}}+n^{-247}$.
+    The full same-$E$ eigenvalue window gives
+    $|\log|E|-S(\widetilde\Omega_X)|\leq n^{3/5}-\log z$.
+    The original prefix bound has already supplied the endpoint rough
+    budget for these same labels.
+
+    Bound the fixed transport coefficient by $C_t(\log n)^{C_l'}$
+    using the literal rounded logarithmic radius.  Enlarge the size
+    threshold for this cap, the target transfer and the numerical density
+    bound.  The inequality $n^\nu\geq4$ makes the displayed interval
+    strictly interior.  Its width is $n^{-\nu}$ and $aK=W$, so the
+    raw selected-density bound is exactly the input to the ordered-limit
+    closure.  Apply that closure, retaining the energy and all sharp
+    comparisons as attached propositions at the original point.
+\end{proof}
+
+The entropy coefficient and all fixed cap coefficients precede the enlarged
+size threshold.  The state, spectral set and label sequence precede the
+weight; each replica threshold is chosen only after the physical system
+and weight are fixed.  No limit interchange or new point selection is used.
+Transport smallness, the source geometric hypotheses, final energy
+absorption, the entropy telescope and the final area law remain separate.

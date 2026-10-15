@@ -8,7 +8,8 @@ import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
 /-! Audit the ordered patch output, objective, minimization comparison and
-normalization and regional marginals under the canonical configuration identification. -/
+normalization and regional marginals under the canonical configuration identification,
+and the corresponding ordered filter list. -/
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
@@ -16,7 +17,8 @@ run_cmd do
       ``TNLean.PEPS.regularizedPatchObjective_eq_norm_patchOutput,
       ``TNLean.PEPS.isPatchMinimizer_regularizedPatchFactorList,
       ``TNLean.PEPS.dependentGlobalConfigIsometry_normalizedRegularizedPatchOutput,
-      ``TNLean.PEPS.normalizedRegularizedPatchMarginal_eq_regionState_patchState] do
+      ``TNLean.PEPS.normalizedRegularizedPatchMarginal_eq_regionState_patchState,
+      ``TNLean.PEPS.map_filter_regularizedPatchFactorList_eq_chainList] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

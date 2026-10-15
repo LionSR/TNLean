@@ -1,0 +1,110 @@
+\section{Principal density at the rounded scanner scales}
+\label{sec:arealaw-source-density-scale}
+
+The principal entropy-defect density of
+\cite[Section~9, lines~380--384]{OpenAI2026AreaLaw} is a fixed multiple of
+$\varepsilon^{-1}(n^{e-\mu}+a^{1/4}(\log n)^{C_\ell})$.
+The rounded expression before the estimate of the window scale has
+$n^e/m$ in place of $n^{e-\mu}$. Both terms have a strict power margin
+at the final scanner exponents.
+
+\begin{theorem}[Uniform decay of the rounded principal density]
+    \label{thm:arealaw-source-density-scale}
+    \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.eventually_principalDensity_le_rpow,TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_principalDensity_le_rpow}
+    Fix scanner exponents satisfying
+    $0<\ell<1$, $0<\kappa<\mu<1-\ell$, $\nu>0$,
+    $0<e<1$ and $\kappa\leq e$.
+    Fix $C\geq0$ and $C_\ell,\omega,r\in\mathbb R$, and suppose
+    \begin{align}
+        e-\mu+\nu                       & <-r, &
+        \frac{\omega-(1-\ell-\mu)}4+\nu & <-r.
+        \label{eq:density_scale_margins}
+    \end{align}
+    There is an integer $N\geq2$, depending only on these fixed
+    quantities, with the following property. For every integer $n\geq N$,
+    retain the scales
+    \begin{align}
+        L           & =\lfloor n^{1-\ell}\rfloor,             &
+        m           & =\lfloor n^\mu\rfloor,                  &
+        K           & =\left\lfloor\frac{L}{8m}\right\rfloor, &
+        \varepsilon & =n^{-\nu}.
+        \label{eq:density_scale_scales}
+    \end{align}
+    Then $K\geq1$, and every $1\leq W\leq n^\omega$, with $a=W/K$,
+    satisfies
+    \begin{align}
+        \frac C\varepsilon
+        \left(\frac{n^e}{m}+a^{1/4}(\log n)^{C_\ell}\right)
+         & \leq n^{-r}.
+        \label{eq:density_scale_bound}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    The rounded scale estimates give fixed constants $C_m,C_K\geq1$
+    such that, for all sufficiently large $n$,
+    \begin{align}
+        \frac{n^e}{m}  & \leq C_m n^{e-\mu}, &
+        n^{1-\ell-\mu} & \leq C_KK.
+        \label{eq:density_scale_rounded}
+    \end{align}
+    The weight bound and $K>0$ imply
+    $a\leq C_Kn^{\omega-(1-\ell-\mu)}$, hence
+    $a^{1/4}\leq C_K^{1/4}n^{(\omega-(1-\ell-\mu))/4}$.
+    Every fixed logarithmic power is smaller than any positive power:
+    for $A\geq0$ and $p<q$, eventually
+    $A n^p(\log n)^{C_\ell}\leq\tfrac12 n^q$.
+    Apply this with $q=-r-\nu$ to the two terms bounded in
+    (\ref{eq:density_scale_rounded}), using respectively coefficients
+    $CC_m$ and $CC_K^{1/4}$ and logarithmic powers $0$ and $C_\ell$.
+    The strict inequalities in (\ref{eq:density_scale_margins}) give
+    the required gaps. Adding the two half-bounds and dividing by
+    $\varepsilon=n^{-\nu}>0$ gives (\ref{eq:density_scale_bound}).
+\end{proof}
+
+\begin{theorem}[Exact final density margins]
+    \label{thm:arealaw-source-density-margins}
+    \lean{TNLean.PEPS.AreaLaw.Scan.final_principalDensity_margins}
+    For the source's final parameters
+    $e=2/1000000$, $\mu=1/4$, $\nu=1/1000$,
+    $\ell=1/100000$ and $\omega=1/20000$, the two gaps at $r=\nu$ are
+    \begin{align}
+        -\nu-(e-\mu+\nu) & =\frac{123999}{500000}, &
+        -\nu-\left(\frac{\omega-(1-\ell-\mu)}4+\nu\right)
+                         & =\frac{37097}{200000}.
+        \label{eq:density_scale_final_gaps}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    Substitute the displayed rational values and simplify.
+\end{proof}
+
+\begin{theorem}[Final rounded principal density]
+    \label{thm:arealaw-source-density-final}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_final_principalDensity_le_rpow}
+    Fix $C\geq0$ and $C_\ell\in\mathbb R$. At the final scanner
+    parameters there is an integer threshold $N\geq2$ such that,
+    for every $n\geq N$ and every $1\leq W\leq n^{1/20000}$,
+    the literal rounded scales in (\ref{eq:density_scale_scales})
+    satisfy $K\geq1$ and
+    \begin{align}
+        \frac{C}{n^{-1/1000}}
+        \left(\frac{n^{2/1000000}}{m}
+        +\left(\frac WK\right)^{1/4}(\log n)^{C_\ell}\right)
+         & \leq n^{-1/1000}.
+        \label{eq:density_scale_final_bound}
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \uses{thm:arealaw-source-density-scale}
+    Exact rational arithmetic verifies (\ref{eq:density_scale_margins})
+    with $r=\nu$, as quantified in (\ref{eq:density_scale_final_gaps}).
+    Apply Theorem~\ref{thm:arealaw-source-density-scale} with
+    $\kappa=1/1000000$.
+\end{proof}
+
+The estimate concerns only the displayed principal density. To control
+an actual selected entropy defect, its comparison with this density and
+the decay of any additional terms must also be established.

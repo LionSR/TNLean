@@ -617,7 +617,7 @@ $D=\lceil n^\kappa\rceil$, $m=\lfloor n^\mu\rfloor$, $\epsilon=n^{-\nu}$ and
 $\delta_n=C\epsilon^{-1}(n^{e-\mu}+a^{1/4}(\log n)^{C})$. The statement below
 takes as hypotheses, for one scan at scale $n$, the conclusions of the scan
 histories (Lemma~9.1), of transport (Proposition~7.4), of the comparators
-(Proposition~8.1), of continuity (Lemma~2.1) and of tails (Lemma~2.3); it is
+(Proposition~8.1), of continuity (Lemma~2.1) and of tails (Lemma~3.1); it is
 therefore Proposition~9.2 restricted to those conclusions, not the source
 proposition itself, which remains open until the scan data are constructed.
 The finite transported measures are required to have mass $1/2$ only for
@@ -754,7 +754,7 @@ integrability on the closed interval.
     \leanok
     There are constants, independent of $W$ and depending only on the exponents and on the constants of
     the inputs, such that for all sufficiently large $n$ and every scan at scale
-    $n$ satisfying the conclusions of Lemmas~9.1, 2.1, 2.3 and
+    $n$ satisfying the conclusions of Lemmas~9.1, 2.1, 3.1 and
     Propositions~7.4, 8.1, the comparator bounds
     $B_{\mathrm{sh}}\le C(nL^e+n)$, $B_{\mathrm{exc}}\le CnD$ and
     $\mathcal B\le CnD(\log n)^{C}$ hold, and there is a remainder $\rho_k\to0$, uniform over the selected
@@ -819,8 +819,52 @@ integrability on the closed interval.
     bad leaves contribute at most $\epsilon$ and $n^{-200}$ times the total
     weight, and the gap of the copied Hamiltonian converts the energy into the
     defect energy. The comparator bounds follow from these entropy estimates and
-    the crossing count, which gives the logarithmic
-    power $12$ for the marginal parameter.
+    the recorded bound $\mathcal B\le CnD(\log n)^{12}$ for the marginal
+    parameter.
+\end{proof}
+
+\begin{theorem}[Scanner estimate for the actual scan from the transport and comparator inputs]
+    \label{thm:al_scanner_actual_scan}
+    \lean{TNLean.PEPS.AreaLaw.Scan.ScanInputs,
+        TNLean.PEPS.AreaLaw.Scan.HistoryFacts.mono,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.scanner_estimate_actualScan}
+    \leanok
+    \uses{thm:al_scanner_from_inputs,thm:al_scan_actual_history_facts,
+        thm:al_scan_truncation_inputs}
+    Fix scanner exponents, an interaction range $R$, a bound $J\ge0$, a gap
+    $\Delta>0$ and a target-size coefficient $C_T\ge0$. There are a truncation
+    coefficient $C_r$ and, for every local dimension $q$, constants $C_0>0$,
+    $c_0>0$ and $C_1>0$ such that for all scanner constants with dimension $q$,
+    normalized gap $g$, common constant at least $C_0$, logarithmic power at
+    least $4$ and sampling constant at most $c_0$, there are constants for which
+    the following holds for all sufficiently large $n$. Let $\Omega$ be a gapped
+    ground vector of a Hamiltonian on $\Lambda$, and take a collar scan at the
+    scales of \cite[Section~9]{OpenAI2026AreaLaw} with
+    $r_0=\lceil C_r(\log n)^2\rceil$ and charge-list constant $C_1$, under the
+    test geometry and the entropy inputs of \cite[Proposition~9.2]{OpenAI2026AreaLaw}.
+    Then there is one ground vector $\widetilde\Omega$ of the truncated
+    Hamiltonian, with gap $g/2$ and the properties listed in
+    Theorem~\ref{thm:al_scan_truncation_inputs}, such that for all auxiliary dimensions, every
+    total weight $W\ge1$ and all replica vectors: if the actual rounds of the
+    scan, with per-band weight $a=W/K$, satisfy the conclusions of
+    Propositions~7.4 and~8.1 for $W$ and $\widetilde\Omega$, then the
+    conclusions of Theorem~\ref{thm:al_scanner_from_inputs} hold for these
+    rounds.
+
+    This is Proposition~9.2 with the conclusions of Propositions~7.4 and~8.1
+    for the actual rounds as its only hypothesis beyond the source's; it is not
+    the source proposition.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scanner_from_inputs,thm:al_scan_actual_history_facts,
+        thm:al_scan_truncation_inputs}
+    Theorem~\ref{thm:al_scan_truncation_inputs} supplies $\widetilde\Omega$ and
+    the truncation inputs, and Theorem~\ref{thm:al_scan_actual_history_facts}
+    the history inputs for the actual rounds. The history conclusions persist
+    for a larger common constant, a larger logarithmic power once $\log n\ge1$,
+    and a smaller sampling constant. Together with the assumed conclusions of
+    Propositions~7.4 and~8.1 they form the input data of
+    Theorem~\ref{thm:al_scanner_from_inputs}, which gives the conclusions.
 \end{proof}
 
 \input{chapter/ch24_peps_sharp_moment_scale}
