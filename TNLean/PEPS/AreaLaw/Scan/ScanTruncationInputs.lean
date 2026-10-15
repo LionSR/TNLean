@@ -13,9 +13,9 @@ import TNLean.PEPS.AreaLaw.RegionalEntropyContinuity
 
 For one physical system at scale `n` (a gapped Hamiltonian with ground vector `Ω`, a
 target and a collar scan at the source scales, under the source test geometry and the
-entropy inputs of Proposition 9.2) a single truncated ground vector `Ω̃` supplies every
+entropy inputs of Proposition 9.2) a single truncated ground vector `Ωt` supplies every
 field of `ScanTruncation`: the ground energy and gap of the truncated Hamiltonian
-(Proposition 4.5), the transfer of the target and shell entropies from `Ω` to `Ω̃`
+(Proposition 4.5), the transfer of the target and shell entropies from `Ω` to `Ωt`
 (Lemma 2.1), the target typical window of width `n^{3/5}` (Lemma 3.1), and a common
 marginal-tail parameter bounding the cut parameter of every status region of the scan.
 The same vector also satisfies the marginal moment bound of Lemma 3.1 at every region.
@@ -119,10 +119,10 @@ constants `κ` with local dimension `q`, normalized gap `g = Δ / max(1, J(‖f�
 `κ.C ≥ C₀`, and every sufficiently large `n`: every gapped physical system with a collar
 scan at the source scales, under the source test geometry and the source entropy inputs
 `S_Ω(X) ≤ C_e n^{1+e}` and `S_Ω(Q_j) ≤ C_e(nL^e + n)` (`scanner:entropy-input`), has one
-ground vector `Ω̃` of the truncated Hamiltonian, with gap `g/2`, satisfying the marginal
+ground vector `Ωt` of the truncated Hamiltonian, with gap `g/2`, satisfying the marginal
 moment bound of Lemma 3.1 at every region, together with a `ScanTruncation` whose energy,
 gap, entropies, trace distance, typical mass and typical dimension are those of `Ω` and
-`Ω̃`, and whose marginal-tail parameter bounds the cut parameter of every completed and
+`Ωt`, and whose marginal-tail parameter bounds the cut parameter of every completed and
 pre-charge status region of the scan.
 
 Source: `08-scanner.tex`, lines 21–59 and 399–414; Lemma 2.1, Lemma 3.1 and
