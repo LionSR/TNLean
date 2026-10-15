@@ -1,0 +1,34 @@
+\section{Physical configurations at carrying parties}
+
+\begin{theorem}[The full physical configuration bijection]
+    \label{thm:peps_physical_site_configurations}
+    \lean{TNLean.PEPS.Approximation.bijective_party_configuration_map}
+    \leanok
+    Let $P$ and $V$ be sets of parties and sites, let $A$ be a physical
+    coordinate alphabet, and let $X_p$ be the coordinate alphabet of party
+    $p$. Assign a site $a_p\in V$ to each party and a carrying party $r_v\in P$
+    to each site, with $a_{r_v}=v$.
+    Supply readouts $f_p:A\to X_p$ such that $f_{r_v}$ is bijective at every
+    site $v$ and $X_p$ has at most one element when $p$ is not a carrying
+    party. Then the full configuration map
+    \begin{align}
+        \Phi:A^V\longrightarrow\prod_{p\in P}X_p,
+        \qquad \Phi(x)_p & = f_p(x_{a_p})
+        \label{eq:peps_physical_configuration_map}
+    \end{align}
+    is bijective. The site assignment need not be injective.
+    Applied to the physical outputs at unit parties, this is an auxiliary
+    coordinate identification for the assembly in
+    \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    The inverse reads each carrying party:
+    \begin{align}
+        \Psi(y)_v & = f_{r_v}^{-1}(y_{r_v}).
+        \label{eq:peps_physical_configuration_inverse}
+    \end{align}
+    Since $a_{r_v}=v$, the identities $\Psi\Phi(x)=x$ and
+    $\Phi\Psi(y)_{r_v}=y_{r_v}$ follow from the inverse equations for
+    $f_{r_v}$. At every other party, both coordinates lie in the same
+    subsingleton alphabet, so $\Phi\Psi(y)_p=y_p$ there as well.
+\end{proof}

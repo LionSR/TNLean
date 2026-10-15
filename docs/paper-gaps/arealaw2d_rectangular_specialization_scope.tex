@@ -1,0 +1,92 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\input{command}
+\title{Rectangular and Vertex-Boundary Reduction to the Uniform Area Law}
+\author{}
+\date{October 14, 2026}
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source statement}
+
+Fix a local dimension $q\ge1$, an interaction norm bound $J>0$, and a spectral
+gap $\Delta>0$. Corollary~1.2 of~\cite{OpenAI2026AreaLaw} states a uniform
+entanglement-entropy bound for every subset of a finite rectangular lattice, in
+both edge-boundary and vertex-boundary forms. Let
+$V=\{0,\ldots,w-1\}\times\{0,\ldots,h-1\}$ be the rectangular grid of width $w$
+and height $h$ with open nearest-neighbor edge set $E$. Consider a Hamiltonian
+$H=\sum_{v\in V} h_v+\sum_{e\in E} h_e$, where each term $h_v$ or $h_e$ is
+supported on its site $v$ or edge $e$ and has operator norm at most $J$. Only
+Hermiticity of the sum $H=H^*$ is required, because replacing each term by
+$(h_i+h_i^*)/2$ leaves $H$ unchanged without increasing the norm of any term.
+Let $\Omega$ be a unit ground state of $H$ with ground energy $E_0$ satisfying
+$H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$. For any region
+$A\subseteq V$, let $S_\Omega(A)$ denote the von Neumann entropy of the reduced
+state on $A$, let $\partial_V A$ be the set of edges in $E$ between $A$ and
+$V\setminus A$, let $\partial_{\rm in}A$ be the set of vertices in $A$ adjacent
+to $V\setminus A$, and let $Z_A$ be the set of vertices incident to
+$\partial_V A$. Corollary~1.2 asserts that there is a constant
+$C=C(q,1,J,\Delta)$, chosen before the side lengths $w,h$, the terms $h_v,h_e$,
+the state $\Omega$, and the region $A$, such that
+\begin{align}
+ S_\Omega(A)&\le C|\partial_V A|,
+ &S_\Omega(A)&\le4C|\partial_{\rm in}A|,
+ &S_\Omega(A)&\le2C|Z_A|.
+ \label{eq:rectangular_scope_bounds}
+\end{align}
+Empty boundaries are allowed, and for $q=1$ or $V=\emptyset$ every entropy
+vanishes.\footnote{Source: \texttt{openai/math} revision
+\texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}, area-law
+\texttt{00-introduction.tex}, lines 12--85, and
+\texttt{01-preliminaries.tex}, lines 118--132. The total-Hermiticity convention
+is also stated in the polynomial-PEPS manuscript, \texttt{00-introduction.tex},
+lines 36--49.}
+
+\section{What is proved and the extra hypothesis}
+
+The formalization proves that Theorem~1.1 of the paper (the uniform area law on
+arbitrary finite subsets of $\mathbb Z^2$) implies Corollary~1.2, taking
+Theorem~1.1 as an explicit hypothesis. To reduce the rectangular lattice to the
+general $\mathbb Z^2$ setting, the formal proof embeds $V$ into $\mathbb Z^2$,
+replaces each site and edge term by its Hermitian part on the corresponding
+singleton or pair support in $\mathbb Z^2$, and sets the interaction to zero on
+all other supports. Under the configuration isometry $U$ between the two
+Hilbert spaces, the embedded Hamiltonian equals $UHU^*$. The proof establishes
+that $U$ preserves the unit ground vector, the spectral gap $\Delta$, the
+regional entropy $S_\Omega(A)$, and the cardinalities of $\partial_V A$,
+$\partial_{\rm in}A$, and $Z_A$, and derives the vertex-boundary inequalities in
+(\ref{eq:rectangular_scope_bounds}) from the degree bound of the rectangular
+grid.\footnote{Declarations:
+\leanid{TNLean.PEPS.AreaLaw.RectangularHamiltonian.toAreaLawHamiltonian},
+\leanid{TNLean.PEPS.AreaLaw.RectangularHamiltonian.toAreaLawHamiltonian_operator},
+\leanid{TNLean.PEPS.AreaLaw.RectangularHamiltonian.isGappedGroundState_toAreaLawHamiltonian},
+\leanid{TNLean.PEPS.AreaLaw.regionalEntropy_rectangleAreaLawState},
+\leanid{TNLean.PEPS.AreaLaw.card_edgeBoundary_rectangular},
+\leanid{TNLean.PEPS.AreaLaw.card_innerBoundary_rectangular}, and
+\leanid{TNLean.PEPS.AreaLaw.card_endpointBoundary_rectangular}.}
+
+Consequently, Corollary~1.2 is proved conditionally on the uniform
+finite-domain area law of Theorem~1.1, rather than unconditionally from the
+lattice Hamiltonian hypotheses alone.\footnote{Declarations:
+\leanid{TNLean.PEPS.AreaLaw.UniformAreaLaw},
+\leanid{TNLean.PEPS.AreaLaw.UniformAreaLaw.rectangularEntropyAreaLaw}, and
+\leanid{TNLean.PEPS.AreaLaw.RectangularEntropyAreaLaw}.}
+Setting $w=h=L$ recovers the square-grid area-law statement used by the
+polynomial-PEPS construction without further assumptions.\footnote{Declaration:
+\leanid{TNLean.PEPS.AreaLaw.RectangularEntropyAreaLaw.squareEntropyAreaLaw}.}
+
+\section{Effect on the paper and what remains}
+
+This note records a stage of the formalization, not a flaw in the paper: the
+deduction of Corollary~1.2 from Theorem~1.1 is complete and introduces no
+extra geometric or physical conditions. What remains is to complete the
+formal proof of the uniform finite-domain area law (Theorem~1.1) from the
+spectral-gap hypotheses, including the region construction and collar
+amplification.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+\end{document}

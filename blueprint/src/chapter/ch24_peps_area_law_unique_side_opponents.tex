@@ -48,9 +48,9 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
         def:area_law_fine_belt_scales,def:area_law_actual_side_mask}
     Fix a common origin $o\in\mathbb R^2$, finite endpoint set $Z$,
     integer width $C_0\ge2$ and natural indices $k_0\le k$ with
-    $k\ge50\,000\,000$. Let $z\in F_{k,\ell_k}$ index an actual fine
+    $k\ge50\,000\,000$. Let $z\in F_{k,\ell_k}$ index a fine
     cell. For any elementary segment $e=[a_i,b_i]$ of this cell under
-    its actual midpoint subdivision relative to $k_0$, consider the
+    its midpoint subdivision relative to $k_0$, consider the
     identifiers
     \begin{align}
         \mathcal I=\{\star\}\sqcup
@@ -80,7 +80,7 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
     nondegenerate and lies on one side of the reference square, so
     $x$ is interior to that side in its tangential coordinate.
 
-    Suppose first that two distinct actual fine cells contain the
+    Suppose first that two distinct fine cells contain the
     whole segment in their closures. Their interiors and the interior
     of the reference cell are pairwise disjoint. Neither opposing
     square can have a corner at $x$, since an opposing corner on an
@@ -103,18 +103,13 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
     Interchanging the coordinates handles a horizontal elementary
     segment.
 
-    If both the dummy neighborhood and a distinct actual fine cell
+    If both the dummy neighborhood and a distinct fine cell
     contain the segment, the finite union defining the dummy
-    neighborhood supplies a contributing closed coarse cell
+    neighborhood gives a contributing closed coarse cell
     containing $x$. Its interior is disjoint from both fine-cell
     interiors because their layer indices are at least $k_0$.
     A dummy corner on the elementary segment is again an endpoint,
     so $x$ is not such a corner. The same three-rectangle argument
-    gives a contradiction. Thus the existing opposing identifier
+    gives a contradiction. Thus the opposing identifier
     is unique.
 \end{proof}
-
-These assertions identify the opposing actual fine cell or dummy
-neighborhood. Their composition with primary identifiers and fan-run
-labels, the isolated-star construction and the complete two-family
-partition remain further obligations.

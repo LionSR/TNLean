@@ -1,0 +1,154 @@
+\section{Coarse information outside a sublinear collar}
+
+The first information estimate of \cite[Section~3]{OpenAI2026PolynomialPEPS}
+concerns the lattice sample $T$ of a bounded union of rectangles. Its proof
+reads $T$ as a template of the area-law companion, with the whole domain as
+the cut, and then applies the sublinear collar bound and its amplification.
+The collar bound is not yet available, so the result below is proved
+assuming it.
+
+\begin{definition}[Bounded unions of lattice boxes]
+    \label{def:peps_box_union}
+    \lean{TNLean.PEPS.Approximation.IsBoxUnion}
+    \leanok
+    A finite set $T\subseteq\mathbb Z^2$ is a union of at most $N_0$ boxes when
+    there are $k\le N_0$ and points $\ell_a,h_a\in\mathbb Z^2$ with
+    $T=\bigcup_{a<k}[\ell_a,h_a]$, where $[\ell,h]$ is the set of lattice
+    points $x$ with $\ell\le x\le h$ in both coordinates. A box may be empty.
+\end{definition}
+
+\begin{lemma}[Lattice samples of rectangles]
+    \label{lem:peps_box_union_of_intervals}
+    \lean{TNLean.PEPS.Approximation.isBoxUnion_of_ordConnected}
+    \leanok
+    \uses{def:peps_box_union}
+    Let $I_a,J_a\subseteq\mathbb R$, $a<k\le N_0$, be intervals, each of
+    which may be open, closed or half-open. If a finite set $T$ is the set of
+    lattice points of $\bigcup_a I_a\times J_a$, then $T$ is a union of at most
+    $N_0$ boxes.
+\end{lemma}
+\begin{proof}
+    \leanok
+    The integers in a real interval form an interval of integers. If both
+    integer intervals of $I_a\times J_a$ are nonempty, they are bounded by the
+    finiteness of $T$, so each is the closed interval between its infimum and
+    supremum. Otherwise the sample of $I_a\times J_a$ is empty, and an empty
+    box replaces it.
+\end{proof}
+
+\begin{lemma}[Translations and templates]
+    \label{lem:peps_box_union_template}
+    \lean{TNLean.PEPS.Approximation.IsBoxUnion.translate,
+        TNLean.PEPS.Approximation.IsBoxUnion.exists_template}
+    \leanok
+    \uses{def:peps_box_union,def:area_law_template}
+    A translate of a union of at most $N_0$ boxes is again such a union. Let
+    $T$ be a nonempty union of at most $N_0$ boxes with sup-norm diameter at
+    most $D$. If $D+1\le s_0$, $D\le n$ and
+    $\max(C_{\rm tpl},0)N_0(s_0+1)\le n$, then $T$ is a template with
+    parameters $(n,s_0)$ whose pieces are closed rectangles.
+\end{lemma}
+\begin{proof}
+    \leanok
+    A nonempty box $[\ell,h]$ is the lattice sample of the closed rectangle
+    with corners $\ell-(\tfrac14,\tfrac14)$ and $h+(\tfrac14,\tfrac14)$, whose
+    diameter is at most $D+\tfrac12$. An empty box is the lattice sample of the
+    square $[-\tfrac14,-\tfrac18]^2$. The template inequalities are the
+    hypotheses.
+\end{proof}
+
+\begin{theorem}[Coarse information outside a sublinear collar]
+    \label{thm:peps_coarse_information}
+    \uses{def:peps_box_union,def:polynomial_peps_model,
+        thm:peps_coarse_information_of_collar}
+    Fix an integer $N_0\ge1$ and a constant $A_0\ge1$. There are $\beta<1$,
+    $C<\infty$ and $u_0<\infty$ such that the following holds. Let $u\ge u_0$
+    and let $T$ be the full ambient lattice sample of a union of at most $N_0$
+    axis-parallel rectangles, with $\operatorname{diam}_\infty T\le A_0u$. For
+    every physical set $E\subseteq\Lambda$ with
+    $\operatorname{dist}_\infty(E,T)>u^\beta$,
+    \begin{align*}
+        I_\Omega(\Lambda\cap T:E) & \le C.
+    \end{align*}
+    The same holds for every subset of $\Lambda\cap T$ in the first argument,
+    for rectangles with consistently assigned open or closed sides, and after a
+    common translation of the lattice coordinates. This is
+    Proposition~3.1 of \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}
+    \uses{def:area_law_collar_bound,thm:peps_coarse_information_of_collar,
+        thm:peps_coarse_information_square,lem:peps_box_union_of_intervals,
+        lem:peps_box_union_template}
+    By Lemma~\ref{lem:peps_box_union_of_intervals}, the lattice sample $T$ is
+    a union of at most $N_0$ boxes, and by
+    Lemma~\ref{lem:peps_box_union_template} so is each common translate.
+    Apply Theorem~\ref{thm:peps_coarse_information_square} to this union, with
+    the sublinear collar bound, Proposition~9.6 of \cite{OpenAI2026AreaLaw}.
+\end{proof}
+
+\begin{theorem}[Coarse information, assuming the sublinear collar bound]
+    \label{thm:peps_coarse_information_of_collar}
+    \lean{TNLean.PEPS.Approximation.coarse_mutualInformation_le_of_sublinearCollarBound}
+    \leanok
+    \uses{def:peps_box_union,def:area_law_collar_bound,
+        thm:area_law_amplification,lem:peps_box_union_template,
+        thm:area_law_uniform_collar_threshold}
+    Fix $q,R,J$ and $\Delta>0$, and assume the sublinear collar bound for some
+    template constants $D_0,C_{\rm tpl}$. Fix $N_0$ and $A_0$. There are
+    $\beta<1$, $C$ and $u_0$ with the following property. Let $u\ge u_0$, let
+    $\Omega$ be a unit ground vector with full-system gap $\Delta$ of an
+    admissible Hamiltonian of range $R$ and bound $J$ on a finite induced
+    domain $\Lambda$, and let $T$ be a union of at most $N_0$ boxes with
+    $\operatorname{diam}_\infty T\le A_0u$. Then $I_\Omega(X:E)\le C$ for every
+    $X\subseteq\Lambda\cap T$ and every $E\subseteq\Lambda$ with
+    $\operatorname{dist}_\infty(E,T)>u^\beta$. The constants are chosen before
+    $u$, $\Lambda$, the Hamiltonian, $T$, $X$ and $E$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:peps_box_union_template}
+    Take $\beta=\beta_0$. If $T$ is empty, so is $X$, and the information
+    vanishes. Otherwise put $A=\max(A_0,1)$, $s_0=\lceil Au\rceil+1$ and
+    $n=\lceil c_1(Au+3)\rceil$ with
+    $c_1=(\max(C_{\rm tpl},0)+1)(N_0+1)$. Then $T$ is a template with
+    parameters $(n,s_0)$, and $u\le n\le Ku$ with $K=c_1(A+4)$ once $u\ge2$.
+    The cut is $A=\Lambda$, whose crossing-edge endpoint set is empty, so the
+    template is separated from it. When $u^\varepsilon\ge K$,
+    \begin{align*}
+        n^{1-\varepsilon}\le K^{1-\varepsilon}u^{1-\varepsilon}
+        \le u^\varepsilon u^{1-\varepsilon}=u\le s_0,
+    \end{align*}
+    so the collar bound applies and supplies every hypothesis of the
+    amplification bound with $M=1$ and the common constant $\max(C,1)$. Its
+    radius $r$ satisfies
+    $\lfloor n^{1-\varepsilon}\rfloor+2r<K^{-\beta_0}n^{\beta_0}\le u^{\beta_0}$
+    at all large $n$. A walk of length at most $2r$ moves by at most $2r$ in
+    sup norm, so every point of the graph neighborhood $N_{2r}(S_0)$ lies within
+    $\lfloor n^{1-\varepsilon}\rfloor+2r$ of $T$. Hence $E$ avoids
+    $N_{2r}(S_0)$, and $I_\Omega(X:E)\le C_1n^{-1}\le\max(C_1,0)$.
+\end{proof}
+
+\begin{theorem}[Coarse information on the square grid, assuming the collar bound]
+    \label{thm:peps_coarse_information_square}
+    \lean{TNLean.PEPS.Approximation.coarse_mutualInformation_le_square_of_sublinearCollarBound,
+        TNLean.PEPS.Approximation.finiteProductMutualInformation_relabel}
+    \leanok
+    \uses{thm:peps_coarse_information_of_collar,def:polynomial_peps_model,
+        lem:peps_box_union_template}
+    Fix $q$, $J>0$ and $\Delta>0$, and assume the sublinear collar bound at
+    range one. Fix $N_0$ and $A_0$. There are $\beta<1$, $C$ and $u_0$ such
+    that for every $u\ge u_0$, every open square grid with a Hamiltonian of the
+    model, every unit ground vector $\Omega$ with full-system gap $\Delta$,
+    every translation $c\in\mathbb Z^2$ of the lattice coordinates, every union
+    $T$ of at most $N_0$ boxes with $\operatorname{diam}_\infty T\le A_0u$,
+    every set $X$ of sites whose translated coordinates lie in $T$, and every
+    set $E$ of sites whose translated coordinates are at distance greater than
+    $u^\beta$ from $T$, one has $I_\Omega(X:E)\le C$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Translate $T$ by $-c$ and place the Hamiltonian on the integer rectangle.
+    The ground vector, the gap, and the entropies of relabelled regions are
+    preserved, so mutual information is preserved as well. Apply
+    Theorem~\ref{thm:peps_coarse_information_of_collar}.
+\end{proof}

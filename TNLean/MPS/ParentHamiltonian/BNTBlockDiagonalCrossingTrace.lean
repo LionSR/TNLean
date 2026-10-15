@@ -249,21 +249,12 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_boundary
     else
       (0 : Fin d)
   have hρ : (List.ofFn fun k : Fin (N - L) =>
-      τ ⟨i.val + L - N + k.val, by omega⟩) = List.ofFn ρ := by
-    apply List.ext_getElem
-    · simp
-    · intro n hn₁ hn₂
-      simp only [List.getElem_ofFn]
-      have hn : n < N - L := by
-        simpa using hn₂
-      have htail :
-          i.val + L ≤ i.val + L - N + n + N ∧
-            (⟨i.val + L - N + n, by omega⟩ : Fin N) < i := by
-        constructor
-        · omega
-        · change i.val + L - N + n < i.val
-          omega
-      simp [τ, htail]
+      τ ⟨i.val + L - N + k.val, by omega⟩) = List.ofFn ρ :=
+    List.ofFn_inj.mpr (funext fun k => by
+      have htail : i.val + L - N ≤ i.val + L - N + k.val ∧
+          i.val + L - N + k.val < i.val := ⟨by omega, by omega⟩
+      simp only [τ, dite_eq_left htail]
+      exact congrArg ρ (Fin.ext (by simp)))
   have hmem :
       (∑ j : Fin r,
           cyclicRestrictₗ hN L i τ
@@ -283,26 +274,15 @@ theorem blockDiagonal_boundary_crossing_trace_decomposition_of_boundary
       β ⟨k.val - (N - i.val), by omega⟩
   have hHead :
       (List.ofFn fun k : Fin (i.val + L - N) =>
-        σ ⟨N - i.val + k.val, by omega⟩) = List.ofFn β := by
-    apply List.ext_getElem
-    · simp
-    · intro n hn₁ hn₂
-      simp only [List.getElem_ofFn]
-      have hnot : ¬N - i.val + n < N - i.val := by omega
-      simp [σ, hnot]
+        σ ⟨N - i.val + k.val, by omega⟩) = List.ofFn β :=
+    List.ofFn_inj.mpr (funext fun k => by simp [σ])
   have hMiddle :
       (List.ofFn fun k : Fin (N - L) =>
         τ ⟨i.val + L - N + k.val, by omega⟩) = List.ofFn ρ := hρ
   have hTail :
       (List.ofFn fun k : Fin (N - i.val) =>
-        σ ⟨k.val, by omega⟩) = List.ofFn w := by
-    apply List.ext_getElem
-    · simp
-    · intro n hn₁ hn₂
-      simp only [List.getElem_ofFn]
-      have hlt : n < N - i.val := by
-        simpa using hn₁
-      simp [σ, hlt]
+        σ ⟨k.val, by omega⟩) = List.ofFn w :=
+    List.ofFn_inj.mpr (funext fun k => by simp [σ])
   simpa [hHead, hMiddle, hTail, Matrix.mul_assoc] using hTrace σ
 
 /-- A fixed block-diagonal boundary representation gives fixed-tail boundary
@@ -449,27 +429,16 @@ theorem blockDiagonal_boundary_crossing_pgvwc_comparison_of_sum_mem_iSup
       β ⟨k.val - (N - i.val), by omega⟩
   have hHead :
       (List.ofFn fun k : Fin (i.val + L - N) =>
-        σ ⟨N - i.val + k.val, by omega⟩) = List.ofFn β := by
-    apply List.ext_getElem
-    · simp
-    · intro n hn₁ hn₂
-      simp only [List.getElem_ofFn]
-      have hnot : ¬N - i.val + n < N - i.val := by omega
-      simp [σ, hnot]
+        σ ⟨N - i.val + k.val, by omega⟩) = List.ofFn β :=
+    List.ofFn_inj.mpr (funext fun k => by simp [σ])
   have hMiddle :
       (List.ofFn fun k : Fin (N - L) =>
         τ ⟨i.val + L - N + k.val, by omega⟩) = List.ofFn ρ := by
     rfl
   have hTail :
       (List.ofFn fun k : Fin (N - i.val) =>
-        σ ⟨k.val, by omega⟩) = List.ofFn w := by
-    apply List.ext_getElem
-    · simp
-    · intro n hn₁ hn₂
-      simp only [List.getElem_ofFn]
-      have hlt : n < N - i.val := by
-        simpa using hn₁
-      simp [σ, hlt]
+        σ ⟨k.val, by omega⟩) = List.ofFn w :=
+    List.ofFn_inj.mpr (funext fun k => by simp [σ])
   simpa [hHead, hMiddle, hTail, Matrix.mul_assoc] using hTrace σ
 
 /-- Fixed boundary-crossing \(C^j,D^j\) comparison gives local block membership.

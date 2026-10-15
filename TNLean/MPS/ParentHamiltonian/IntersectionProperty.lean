@@ -209,56 +209,6 @@ theorem groundSpace_inRightGround (A : MPSTensor d D) (L : ℕ)
 
 /-! ### Injectivity of the ground-space map -/
 
-/-- For an injective tensor, the ground-space map is injective for any \(L ≥ 1\).
-
-**Proof sketch**: It suffices to show \(Γ_L(X)=0 → X=0\).
-If \(\operatorname{tr}(A^σ X) = 0\) for all words \(σ\) of length \(L\), and the set
-\(\{A^σ\}\) spans \(M_D(ℂ)\) (which holds for \(L ≥ 1\) by the injectivity hypothesis),
-then nondegeneracy of the trace pairing gives \(X = 0\). -/
-theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : Kraus.IsInjective A)
-    {L : ℕ} (hL : 0 < L) :
-    Function.Injective (groundSpaceMap A L) := by
-  have hker : (groundSpaceMap A L).ker = ⊥ := by
-    apply (LinearMap.ker_eq_bot').2
-    intro X hX
-    have hword1 : Kraus.wordSpan A 1 = ⊤ := by
-      have hRange :
-          Set.range (fun σ : Fin 1 → Fin d => Kraus.evalWord A (List.ofFn σ)) =
-            Set.range A := by
-        ext M
-        constructor
-        · rintro ⟨σ, rfl⟩
-          exact ⟨σ 0, by simp [Kraus.evalWord]⟩
-        · rintro ⟨i, rfl⟩
-          exact ⟨fun _ => i, by simp [Kraus.evalWord]⟩
-      change Submodule.span ℂ
-        (Set.range fun σ : Fin 1 → Fin d => Kraus.evalWord A (List.ofFn σ)) = ⊤
-      rw [hRange]
-      exact hA
-    have hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ Kraus.wordSpan A 1 := by
-      rw [hword1]
-      exact Submodule.mem_top
-    have hwordL : Kraus.wordSpan A L = ⊤ := by
-      have hmono : Kraus.wordSpan A 1 ≤ Kraus.wordSpan A L :=
-        Kraus.wordSpan_mono'_of_one_mem_wordSpan_one A hone (by omega)
-      exact eq_top_iff.mpr (by simpa [hword1] using hmono)
-    have hφ :
-        (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulRight ℂ X) = 0 := by
-      apply LinearMap.ext_on_range
-        (v := fun σ : Fin L → Fin d => Kraus.evalWord A (List.ofFn σ))
-      · simpa [Kraus.wordSpan, Kraus.wordSpan] using hwordL
-      · intro σ
-        simpa [groundSpaceMap_apply, Matrix.traceLinearMap_apply] using
-          congrArg (fun ψ => ψ σ) hX
-    exact (Matrix.ext_iff_trace_mul_right (A := X) (B := 0)).2 fun N => by
-      have hNX : Matrix.trace (N * X) = 0 := by
-        simpa [Matrix.traceLinearMap_apply] using congrArg (fun f => f N) hφ
-      calc
-        Matrix.trace (X * N) = Matrix.trace (N * X) := Matrix.trace_mul_comm X N
-        _ = 0 := hNX
-        _ = Matrix.trace (0 * N) := by simp
-  exact LinearMap.ker_eq_bot.mp hker
-
 /-- If words of length \(L\) span the full matrix algebra, then `groundSpaceMap A L`
 has trivial kernel. -/
 theorem groundSpaceMap_injective_of_wordSpan_eq_top {A : MPSTensor d D}
@@ -278,11 +228,40 @@ theorem groundSpaceMap_injective_of_wordSpan_eq_top {A : MPSTensor d D}
     exact (Matrix.ext_iff_trace_mul_right (A := X) (B := 0)).2 fun N => by
       have hNX : Matrix.trace (N * X) = 0 := by
         simpa [Matrix.traceLinearMap_apply] using congrArg (fun f => f N) hφ
-      calc
-        Matrix.trace (X * N) = Matrix.trace (N * X) := Matrix.trace_mul_comm X N
-        _ = 0 := hNX
-        _ = Matrix.trace (0 * N) := by simp
+      rw [Matrix.trace_mul_comm, hNX, Matrix.zero_mul, Matrix.trace_zero]
   exact LinearMap.ker_eq_bot.mp hker
+
+/-- For an injective tensor, the ground-space map is injective for any \(L ≥ 1\).
+
+**Proof sketch**: It suffices to show \(Γ_L(X)=0 → X=0\).
+If \(\operatorname{tr}(A^σ X) = 0\) for all words \(σ\) of length \(L\), and the set
+\(\{A^σ\}\) spans \(M_D(ℂ)\) (which holds for \(L ≥ 1\) by the injectivity hypothesis),
+then nondegeneracy of the trace pairing gives \(X = 0\). -/
+theorem groundSpaceMap_injective {A : MPSTensor d D} (hA : Kraus.IsInjective A)
+    {L : ℕ} (hL : 0 < L) :
+    Function.Injective (groundSpaceMap A L) := by
+  have hword1 : Kraus.wordSpan A 1 = ⊤ := by
+    have hRange :
+        Set.range (fun σ : Fin 1 → Fin d => Kraus.evalWord A (List.ofFn σ)) =
+          Set.range A := by
+      ext M
+      constructor
+      · rintro ⟨σ, rfl⟩
+        exact ⟨σ 0, by simp [Kraus.evalWord]⟩
+      · rintro ⟨i, rfl⟩
+        exact ⟨fun _ => i, by simp [Kraus.evalWord]⟩
+    change Submodule.span ℂ
+      (Set.range fun σ : Fin 1 → Fin d => Kraus.evalWord A (List.ofFn σ)) = ⊤
+    rw [hRange]
+    exact hA
+  have hone : (1 : Matrix (Fin D) (Fin D) ℂ) ∈ Kraus.wordSpan A 1 := by
+    rw [hword1]
+    exact Submodule.mem_top
+  have hwordL : Kraus.wordSpan A L = ⊤ := by
+    have hmono : Kraus.wordSpan A 1 ≤ Kraus.wordSpan A L :=
+      Kraus.wordSpan_mono'_of_one_mem_wordSpan_one A hone (by omega)
+    exact eq_top_iff.mpr (by simpa [hword1] using hmono)
+  exact groundSpaceMap_injective_of_wordSpan_eq_top hwordL
 
 /-- Block injectivity at length \(L₀\) makes the map \(Γ_{L₀}\) injective. -/
 theorem groundSpaceMap_injective_of_isNBlkInjective {A : MPSTensor d D}

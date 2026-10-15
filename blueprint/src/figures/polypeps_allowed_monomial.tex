@@ -1,0 +1,87 @@
+% Figure polypeps_allowed_monomial.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. III A (Definition 2, allowed monomials), unnumbered
+% display.
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/04-compression.tex:32-45
+% (allowed monomial, messages); local maps named B_P, B_Q after the B_{g,P,xi}
+% of eq. (5.4), 04-compression.tex:234-245.
+% Formula: M = <eta'|_{pq} (B'_P (x) B_Q) (|eta>_{pq} (x) B_P (x) id), a word of
+% local contractions, one pair source and one pair effect between parties P
+% and Q; p, q are the pair registers held by P and Q.
+% Ink-to-index: rows top to bottom are P's memory, P's half p of the pair,
+% (spacer), Q's half q of the pair, Q's memory. Each party is the dashed red
+% party contour (the \partyglyph of tn2d.sty), named once by the label P or Q
+% just west of its contour; the boxes inside a contour are that party's local
+% contractions and carry no hue. All three boxes are wide=2 so that their
+% names are inscribed at one size; B_P is two wires tall for the same reason,
+% but its only legs are on P's memory (row 2 east of the cup carries no
+% register yet). The cup eta is the preparation of a normalized vector shared
+% by P and Q (pair source); the cap <eta'| is the contraction by a normalized
+% bra shared by P and Q (pair effect). Cup and cap are the only ink that leaves a
+% contour: each crosses both contours, exactly as in \sourceglyph and
+% \effectglyph. The memory wires cross their own contour at the panel ends
+% only (registers enter and leave the picture). Every contour crossing is
+% declared as an under-crossing, so the build raises no TKZ-CROSS-TOUCHALL.
+% The labels eta and <eta'| sit inside their bowls, in the channel between
+% the two contours, so no label touches a contour (L2).
+% Action runs right to left from the inputs.
+% Boundary signature: (phys:e)x2 in (P and Q memory), (phys:w)x2 out; the
+% pair registers p, q are internal (created by eta, consumed by <eta'|).
+% Order: B_P; eta; B_Q and B'_P (they commute, so they share columns);
+% <eta'|. The outline's order (P box, source, Q box, effect, P box) is changed
+% so that P also acts on its half of the pair before the effect; any order is
+% an allowed monomial.
+% A transferred polynomial-dimensional message is the expansion
+% sum_a |a>_recv <a|_send, stated in prose, not drawn.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=12, bonds=none, size=l]
+        \tn[at=(1,1), skin=none, name=monoOutP, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,1), skin=none, name=monoOutQ, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,3), skin=none, name=monoEffP, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,3), skin=none, name=monoEffQ, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,5), skin=box, wide=2, wires=2, name=monoBPp,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{B_P'}
+        \tn[at=(4,5), skin=box, wide=2, wires=2, name=monoBQ,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{B_Q}
+        \tn[at=(2,7), skin=none, name=monoSrcP, ports={180:physical, 0:physical}]{}
+        \tn[at=(4,7), skin=none, name=monoSrcQ, ports={180:physical, 0:physical}]{}
+        \tn[at=(1,9), skin=box, wide=2, wires=2, name=monoBP,
+            ports={180@1:physical, 0@1:physical}]{B_P}
+        \tn[at=(1,12), skin=none, name=monoInP, ports={180:physical, 0:physical}]{}
+        \tn[at=(5,12), skin=none, name=monoInQ, ports={180:physical, 0:physical}]{}
+        \tnwire[name=monoWestP]{monoOutP.0}{monoBPp.180@1}
+        \tnwire[name=monoWestQ]{monoOutQ.0}{monoBQ.180@2}
+        \tnwire[route=arc, name=monoEffect]{monoEffP.180}{monoEffQ.180}
+        \tnwire[name=monoRegP]{monoEffP.0}{monoBPp.180@2}
+        \tnwire[name=monoRegQ]{monoEffQ.0}{monoBQ.180@1}
+        \tnwire{monoBPp.0@1}{monoBP.180@1}
+        \tnwire{monoBPp.0@2}{monoSrcP.180}
+        \tnwire{monoBQ.0@1}{monoSrcQ.180}
+        \tnwire[name=monoEastQ]{monoBQ.0@2}{monoInQ.180}
+        \tnwire[name=monoEastP]{monoBP.0@1}{monoInP.180}
+        \tnwire[route=arc, name=monoSource]{monoSrcP.0}{monoSrcQ.0}
+        \tnmark[form=label, label pos=w]{on monoSource 0.5}{$\eta$}
+        \tnmark[form=label, label pos=e]{on monoEffect 0.5}{$\langle\eta'\rvert$}
+        \tnmark[form=label, label pos=n]{on monoRegP 0.5}{$p$}
+        \tnmark[form=label, label pos=s]{on monoRegQ 0.5}{$q$}
+        \tnwire[kind=string, closed, route=orth, stroke=dashed, species=selected,
+            name=monoPartyP,
+            cross={under at crossing of monoPartyP and monoWestP,
+                    under at crossing of monoPartyP and monoEastP,
+                    under at crossing of monoPartyP and monoEffect,
+                    under at crossing of monoPartyP and monoSource},
+            via={0.58 n of 0.5 w of (1,2), 0.58 n of (1,11),
+                    0.58 s of (2,11), 0.58 s of 0.5 w of (2,2)}]
+        \tnwire[kind=string, closed, route=orth, stroke=dashed, species=selected,
+            name=monoPartyQ,
+            cross={under at crossing of monoPartyQ and monoWestQ,
+                    under at crossing of monoPartyQ and monoEastQ,
+                    under at crossing of monoPartyQ and monoEffect,
+                    under at crossing of monoPartyQ and monoSource},
+            via={0.58 n of 0.5 w of (4,2), 0.58 n of (4,11),
+                    0.58 s of (5,11), 0.58 s of 0.5 w of (5,2)}]
+        \tnmark[form=label, label pos=w]{0.5 s of 0.5 w of (1,2)}{$P$}
+        \tnmark[form=label, label pos=w]{0.5 s of 0.5 w of (4,2)}{$Q$}
+    \end{tenkz}
+\end{tenkzequation}

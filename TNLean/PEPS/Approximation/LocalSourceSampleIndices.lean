@@ -57,4 +57,3 @@ def partialSlotSampleEquiv {a b : Layout P} (w : SourceCircuit a b) (p : P) :
   simp only [partySelector, decide_eq_true_eq]
 
 end TNLean.PEPS.PairEffect.SourceCircuit
-

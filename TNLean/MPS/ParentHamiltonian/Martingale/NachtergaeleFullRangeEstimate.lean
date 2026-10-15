@@ -214,6 +214,12 @@ private theorem enpsi2
   rw [hre] at hsecond
   linarith
 
+/-- Dividing the condition \(\gamma x\le y\) by \(2c\gamma\). -/
+private theorem one_div_two_mul_le_of_mul_le {γ c x y : ℝ} (hγ : 0 < γ) (hc : 0 < c)
+    (h : γ * x ≤ y) : 1 / (2 * c) * x ≤ 1 / (2 * c * γ) * y :=
+  calc 1 / (2 * c) * x = 1 / (2 * c * γ) * (γ * x) := by field_simp
+    _ ≤ 1 / (2 * c * γ) * y := mul_le_mul_of_nonneg_left h (by positivity)
+
 private theorem enpsi2_of_c2_c3
     (G : NestedGroundProjections (E := E)) (Q : ℕ → E →ₗ[ℂ] E)
     (localHamiltonian : ℕ → E →ₗ[ℂ] E)
@@ -236,47 +242,16 @@ private theorem enpsi2_of_c2_c3
       (c₂ / 2) *
         ‖∑ m ∈ Finset.Icc (n - l) n, G.martingaleDifference m v‖ ^ 2 := by
   have hbase := enpsi2 G Q N n l hn v hzero hv hQ hcomm hc₁ hc₂
-  have hC2' :
-      (1 / (2 * c₁)) *
-          ‖((LinearMap.id : E →ₗ[ℂ] E) - Q n) v‖ ^ 2 ≤
-        (1 / (2 * c₁ * γ)) * (⟪localHamiltonian n v, v⟫_ℂ).re := by
-    calc
-      (1 / (2 * c₁)) *
-          ‖((LinearMap.id : E →ₗ[ℂ] E) - Q n) v‖ ^ 2 =
-          (1 / (2 * c₁ * γ)) *
-            (γ * ‖((LinearMap.id : E →ₗ[ℂ] E) - Q n) v‖ ^ 2) := by
-              field_simp [hc₁.ne', hγ.ne']
-      _ ≤ (1 / (2 * c₁ * γ)) * (⟪localHamiltonian n v, v⟫_ℂ).re :=
-        mul_le_mul_of_nonneg_left hC2 (by positivity)
+  have hC2' := one_div_two_mul_le_of_mul_le hγ hc₁ hC2
   have hC3' :
       (1 / (2 * c₂)) * ‖Q n (G.martingaleDifference n v)‖ ^ 2 ≤
         (1 / (2 * c₂)) *
           (ε ^ 2 * ‖G.martingaleDifference n v‖ ^ 2) :=
     mul_le_mul_of_nonneg_left hC3 (by positivity)
-  calc
-    ‖G.martingaleDifference n v‖ ^ 2 ≤
-        (1 / (2 * c₁)) *
-            ‖((LinearMap.id : E →ₗ[ℂ] E) - Q n) v‖ ^ 2 +
-          (c₁ / 2) * ‖G.martingaleDifference n v‖ ^ 2 +
-        (1 / (2 * c₂)) * ‖Q n (G.martingaleDifference n v)‖ ^ 2 +
-          (c₂ / 2) *
-            ‖∑ m ∈ Finset.Icc (n - l) n,
-              G.martingaleDifference m v‖ ^ 2 := hbase
-    _ ≤ (1 / (2 * c₁ * γ)) * (⟪localHamiltonian n v, v⟫_ℂ).re +
-        (c₁ / 2 + ε ^ 2 / (2 * c₂)) *
-          ‖G.martingaleDifference n v‖ ^ 2 +
-        (c₂ / 2) *
-          ‖∑ m ∈ Finset.Icc (n - l) n,
-            G.martingaleDifference m v‖ ^ 2 := by
-      calc
-        _ ≤ (1 / (2 * c₁ * γ)) * (⟪localHamiltonian n v, v⟫_ℂ).re +
-            (c₁ / 2) * ‖G.martingaleDifference n v‖ ^ 2 +
-          (1 / (2 * c₂)) *
-            (ε ^ 2 * ‖G.martingaleDifference n v‖ ^ 2) +
-            (c₂ / 2) *
-              ‖∑ m ∈ Finset.Icc (n - l) n,
-                G.martingaleDifference m v‖ ^ 2 := by linarith
-        _ = _ := by ring
+  have hsplit : (c₁ / 2 + ε ^ 2 / (2 * c₂)) * ‖G.martingaleDifference n v‖ ^ 2 =
+      (c₁ / 2) * ‖G.martingaleDifference n v‖ ^ 2 +
+        (1 / (2 * c₂)) * (ε ^ 2 * ‖G.martingaleDifference n v‖ ^ 2) := by ring
+  linarith
 
 private theorem enpsi_of_c2_c3_zero
     (G : NestedGroundProjections (E := E)) (Q : ℕ → E →ₗ[ℂ] E)
@@ -300,18 +275,7 @@ private theorem enpsi_of_c2_c3_zero
   have hfirst := re_inner_le_weighted_norm_sq
     (((LinearMap.id : E →ₗ[ℂ] E) - Q n) v)
     (G.martingaleDifference n v) hc₁
-  have hC2' :
-      (1 / (2 * c₁)) *
-          ‖((LinearMap.id : E →ₗ[ℂ] E) - Q n) v‖ ^ 2 ≤
-        (1 / (2 * c₁ * γ)) * (⟪localHamiltonian n v, v⟫_ℂ).re := by
-    calc
-      (1 / (2 * c₁)) *
-          ‖((LinearMap.id : E →ₗ[ℂ] E) - Q n) v‖ ^ 2 =
-          (1 / (2 * c₁ * γ)) *
-            (γ * ‖((LinearMap.id : E →ₗ[ℂ] E) - Q n) v‖ ^ 2) := by
-              field_simp [hc₁.ne', hγ.ne']
-      _ ≤ (1 / (2 * c₁ * γ)) * (⟪localHamiltonian n v, v⟫_ℂ).re :=
-        mul_le_mul_of_nonneg_left hC2 (by positivity)
+  have hC2' := one_div_two_mul_le_of_mul_le hγ hc₁ hC2
   linarith
 
 /-- Threshold form of the summation in the proof of Nachtergaele's Theorem
@@ -719,18 +683,8 @@ theorem norm_lower_bound_of_nachtergaele_c1_c3_full_range
   apply spectralGap_of_martingale_of_finiteDimensional hgap hH
   apply operator_inequality_of_energy_lower_bound hgap hH
   intro v hv
-  apply energy_lower_bound_of_nachtergaele_c1_c3_full_range G Q localHamiltonian H
-    N l v hzero
-  · rwa [hground]
-  · exact hγ
-  · exact hd
-  · exact hε
-  · exact hεlt
-  · exact hQ
-  · exact hcomm
-  · exact hC1
-  · exact hC2
-  · exact hC3
+  exact energy_lower_bound_of_nachtergaele_c1_c3_full_range G Q localHamiltonian H
+    N l v hzero (by rwa [hground]) hγ hd hε hεlt hQ hcomm hC1 hC2 hC3
 
 end NestedGroundProjections
 

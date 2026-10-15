@@ -303,7 +303,7 @@ def sptFixedPointAction (ρ : ProjectiveRepresentation (D := D) ω) (φ : G →*
   toFun g := φ g • Matrix.reindexAlgEquiv ℂ ℂ finProdFinEquiv (sptKron (sptGauge ρ g))
   map_one' := by
     have h1 : (ρ.X 1 : Matrix (Fin D) (Fin D) ℂ) =
-        (ω 1 1 : ℂ) • ((1 : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
+        (ω (1, 1) : ℂ) • ((1 : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
       have := congrArg (· * (((ρ.X 1)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
         (ρ.map_mul 1 1)
       simpa [Matrix.mul_assoc, Matrix.smul_mul] using this
@@ -312,7 +312,7 @@ def sptFixedPointAction (ρ : ProjectiveRepresentation (D := D) ω) (φ : G →*
     rw [smul_mul_smul_comm, ← map_mul (Matrix.reindexAlgEquiv ℂ ℂ finProdFinEquiv),
       sptKron_mul, map_mul φ]
     congr 2
-    refine (sptKron_eq_of_eq_smul (c := (ω h⁻¹ g⁻¹ : ℂ)) ?_).symm
+    refine (sptKron_eq_of_eq_smul (c := (ω (h⁻¹, g⁻¹) : ℂ)) ?_).symm
     rw [sptGauge, sptGauge, sptGauge, mul_inv_rev, Units.val_mul]
     exact ρ.map_mul _ _
 

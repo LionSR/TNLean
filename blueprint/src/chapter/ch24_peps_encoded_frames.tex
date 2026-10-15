@@ -788,3 +788,36 @@ norm of matrices, rectangular ones included.
     does not restrict the owners inside the inner holes
     \cite{gap:polypeps_small_rewrite_monomials}.
 \end{proof}
+
+\begin{theorem}[Small-patch rewrite as one gate]
+    \label{thm:peps_frame_small_rewrite_gate}
+    \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_originalCircuit_refVec}
+    \leanok
+    \uses{thm:peps_frame_small_rewrite_polynomial}
+    In the setting of Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}
+    with $a=30$, suppose that the specified list of at most $b$ parties is nonempty and
+    that the memory of the registers of $\mathcal F_{\rm old}$ is nonzero.
+    Then the contraction $M_{30}$ is the operator of a circuit from the
+    registers of $\mathcal F_{\rm old}$ to those of $\mathcal F_{\rm new}$
+    with at most one gate that is not private to one party. Every party taking
+    part in a gate of the circuit lies in the specified list, and the
+    expansion of the gate into monomials allowed by
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} has at most
+    $K L^e$ terms, each with at most $2b$ normalized pair effects, and
+    coefficients of total modulus at most $K L^e$, with $K$ and $e$ as in
+    Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}. This is the form
+    in which the changes of \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}
+    are composed (\texttt{06-geometry.tex}, lines 574--583).
+\end{theorem}
+
+\begin{proof}\leanok
+    The registers held by parties outside the specified list are the same in
+    the two frames: every affected tag is held by a specified party, and a
+    raw register whose owner changes lies in a patch footprint, where both
+    owners are specified. Each monomial of the expansion uses only specified
+    parties, and every exchange of tensor factors in it moves a register of a
+    specified party, because the registers are moved only to bring the
+    registers of the acting parties together. Hence each monomial acts as the
+    identity on the other registers, and the sum of the monomials, restricted
+    to the registers of the specified parties, is one gate of these parties.
+\end{proof}

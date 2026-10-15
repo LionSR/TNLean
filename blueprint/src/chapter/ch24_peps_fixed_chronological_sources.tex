@@ -2,7 +2,7 @@
 
 We now place the sources of every partial branch in the same ordered
 register spaces. The order is inherited from the original gate
-occurrences, before any branch labels are chosen. This supplies the
+occurrences, before any branch labels are chosen. This gives the
 common free inputs used in the two separated contractions in
 \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
 \texttt{04-compression.tex}, lines 342--434.
@@ -73,8 +73,8 @@ common free inputs used in the two separated contractions in
         \qquad 0\leq i<r,
     \end{align}
     and an allowed composition $V_\xi$ containing no pair sources,
-    such that the actual ordered source list of the partial branch
-    consists exactly of these vectors at the reference positions.
+    such that the ordered source list of the partial branch
+    consists of these vectors at the reference positions.
     If $P_{\eta_\xi}$ prepares them and leaves the original input
     registers unchanged, then
     \begin{align}
@@ -92,8 +92,8 @@ common free inputs used in the two separated contractions in
     \uses{thm:peps_partial_source_inventory,thm:peps_partial_fixed_layout,
         thm:peps_source_preparation,thm:peps_common_source_lists}
     Equal ordered layouts identify the two halfspaces at each source
-    position. Transport the actual normalized source vectors along
-    these identifications. The resulting reference list is exactly
+    position. Transport the normalized source vectors along
+    these identifications. The resulting reference list is
     the branch's source inventory. The source-preparation theorem
     moves this inventory to the initial registers and gives an allowed
     remaining composition containing no sources. Its exact recovery
@@ -131,7 +131,7 @@ common free inputs used in the two separated contractions in
     \leanok
     \uses{def:peps_partial_original_source_vector,thm:peps_partial_fixed_preparation}
     Every retained source belongs to a touched gate. All vectors
-    $\nu_{e,\alpha}$ have norm one. The actual source record at a
+    $\nu_{e,\alpha}$ have norm one. The source record at a
     retained position is its original endpoint pair, grouped by
     affected ownership, together with
     $\eta^{\mathrm{orig}}_{\xi,i}$ in the fixed halfspaces.
@@ -158,13 +158,13 @@ common free inputs used in the two separated contractions in
     in the fixed preparation gives the final assertion.
 \end{proof}
 
-\begin{theorem}[Two contractions for the actual sources]
+\begin{theorem}[Two contractions for the prepared sources]
     \label{thm:peps_actual_source_selective_partition}
     \lean{TNLean.PEPS.PairEffect.Word.exists_selective_partition_of_word}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_selective_partition}
     Let $W$ be an allowed composition and divide its parties into two
-    sides. Choose a set of free positions in its actual ordered source
+    sides. Choose a set of free positions in its ordered source
     list, containing every source that crosses the division. Let
     $P_{\mathrm{fix}}$ prepare the original source vectors at the
     remaining positions. There are an allowed composition $V$
@@ -179,7 +179,7 @@ common free inputs used in the two separated contractions in
     Here $J_{\mathrm{free}}$ and $J_{\mathrm{out}}$ group the input
     and output registers by side. The equality holds on the entire
     free input space. The maps $V,A_+,A_-$ can be chosen before any
-    vectors are supplied at the free source positions.
+    vectors are chosen at the free source positions.
 
     More precisely, for every family $\zeta$ of vectors at those
     positions, let $P_\zeta^{\mathrm{free}}$ prepare that family and
@@ -198,7 +198,7 @@ common free inputs used in the two separated contractions in
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_selective_preparation_recovery,
         thm:peps_selective_partition}
-    Enumerate the actual source list in its original halfspaces.
+    Enumerate the source list in its original halfspaces.
     The source-preparation theorem gives $W=VP_\eta$ with $V$
     allowed and containing no sources. Every fixed source is internal
     to one side and its original vector has norm one. Apply selective
@@ -245,8 +245,8 @@ common free inputs used in the two separated contractions in
 \begin{proof}
     \leanok
     Induct on the chronological composition. At a touched gate both
-    choices are the same label transported along the same type
-    identification; at an untouched gate the choice set has one element.
+    choices record the same local label; at an untouched gate the
+    choice set is a singleton.
 \end{proof}
 
 \begin{theorem}[Labels visible at one party]

@@ -185,20 +185,9 @@ private theorem evalWord_cyclicCfg_cons {A : MPSTensor d D}
           omega
         simpa [cfg, tail, head, comp, hkC, hsucc] using hwin
   have htail : List.ofFn tail = List.ofFn comp ++ List.ofFn head := by
-    apply List.ext_getElem
-    · simp only [List.length_ofFn, List.length_append]
-      omega
-    · intro k hk1 hk2
-      simp only [List.length_ofFn] at hk1
-      simp only [List.getElem_ofFn]
-      by_cases hkC : k < M + 1 - L
-      · rw [List.getElem_append_left (by simpa using hkC)]
-        rw [List.getElem_ofFn]
-        simp [tail, comp, head, hkC]
-      · rw [List.getElem_append_right (by simpa [List.length_ofFn] using hkC)]
-        rw [List.getElem_ofFn]
-        simp only [List.length_ofFn]
-        simp [tail, comp, head, hkC]
+    rw [List.ofFn_congr (show M = (M + 1 - L) + (L - 1) by omega), List.ofFn_add]
+    refine congrArg₂ (· ++ ·) (List.ofFn_inj.mpr (funext fun k => ?_))
+      (List.ofFn_inj.mpr (funext fun k => ?_)) <;> simp [tail, comp, head]
   rw [show List.ofFn cfg = List.ofFn (Fin.cons (σ_w ⟨L - 1, by omega⟩) tail) by rw [hcons]]
   rw [evalWord_ofFn_cons, htail, Kraus.evalWord_append]
   simp [comp, head, Matrix.mul_assoc]
@@ -373,17 +362,8 @@ theorem wrapping_window_mirror_compatibility_of_isNBlkInjective
     · congr 1
       change A j = A ((@Fin.snoc L₀ (fun _ => Fin d) σ_head j) (Fin.last L₀))
       rw [Fin.snoc_last]
-    · congr 1
-      apply List.ext_getElem
-      · simp [List.length_ofFn]
-      · intro k hk1 hk2
-        simp only [List.length_ofFn] at hk1
-        simp only [List.getElem_ofFn]
-        have hcast : (⟨k, Nat.lt_trans hk1 (Nat.lt_succ_self L₀)⟩ : Fin (L₀ + 1)) =
-            Fin.castSucc ⟨k, hk1⟩ := by
-              ext
-              simp [Fin.castSucc]
-        rw [hcast, Fin.snoc_castSucc]
+    · exact congrArg _ (List.ofFn_inj.mpr (funext fun k =>
+        (Fin.snoc_castSucc (α := fun _ => Fin d) (p := σ_head) (x := j) k).symm))
   rw [hfactor'] at key
   rw [evalWord_ofFn_snoc] at key
   have key' :

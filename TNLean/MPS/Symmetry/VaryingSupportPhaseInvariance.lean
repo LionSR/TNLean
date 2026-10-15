@@ -89,7 +89,7 @@ theorem ProjectiveRepresentation.exists_unitary_compression
       intro g h
       change (Jᴴ * (ρ.X g : Matrix (Fin D) (Fin D) ℂ) * J) *
         (Jᴴ * (ρ.X h : Matrix (Fin D) (Fin D) ℂ) * J) =
-        (ω g h : ℂ) • (Jᴴ * (ρ.X (g * h) : Matrix (Fin D) (Fin D) ℂ) * J)
+        (ω (g, h) : ℂ) • (Jᴴ * (ρ.X (g * h) : Matrix (Fin D) (Fin D) ℂ) * J)
       rw [Matrix.isometry_compression_mul_of_commute J hJ _ _ (hComm g), ρ.map_mul]
       simp only [Matrix.mul_smul, Matrix.smul_mul]
   }

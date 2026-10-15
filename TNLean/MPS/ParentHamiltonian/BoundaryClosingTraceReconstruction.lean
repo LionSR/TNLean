@@ -119,9 +119,7 @@ theorem closure_property_boundary_block_window_trace_eq_of_groundSpaceMap
               (⟨M, by omega⟩ : Fin (M + 1)) (τOfComplement ν) ψ =
             groundSpaceMap A (L₀ + 1) Y := by
     intro ν
-    have hmem := hLocal (⟨M, by omega⟩ : Fin (M + 1)) (τOfComplement ν)
-    rw [groundSpace, LinearMap.mem_range] at hmem
-    obtain ⟨Y, hY⟩ := hmem
+    obtain ⟨Y, hY⟩ := hLocal (⟨M, by omega⟩ : Fin (M + 1)) (τOfComplement ν)
     exact ⟨Y, hY.symm⟩
   choose Y hY using hLocalWitness
   refine ⟨Y, ?_⟩
@@ -149,34 +147,16 @@ theorem closure_property_boundary_block_window_trace_eq_of_groundSpaceMap
               exact Nat.lt_of_lt_of_eq k.isLt hlen
             exact Nat.succ_lt_succ hk'⟩) =
         List.ofFn α := by
-    apply List.ext_getElem
-    · simp only [List.length_ofFn]
-      omega
-    · intro k hk₁ hk₂
-      simp only [List.length_ofFn] at hk₁ hk₂
-      simp only [List.getElem_ofFn]
-      have hidx : (⟨k + 1, by
-          have hlen : L₀ + 1 - 1 = L₀ := by omega
-          have hk' : k < L₀ := by
-            exact Nat.lt_of_lt_of_eq hk₁ hlen
-          exact Nat.succ_lt_succ hk'⟩ : Fin (L₀ + 1)) =
-          (⟨k, hk₂⟩ : Fin L₀).succ := by
-        ext
-        simp
-      rw [hidx, Fin.cons_succ]
+    rw [List.ofFn_congr (show L₀ + 1 - 1 = L₀ by omega)]
+    exact List.ofFn_inj.mpr (funext fun k => Fin.cons_succ (α := fun _ => Fin d) j α k)
   have hcomp :
       List.ofFn (fun k : Fin (M + 1 - (L₀ + 1)) =>
           τOfComplement ν ⟨k.val + (L₀ + 1) - 1, by omega⟩) =
-        List.ofFn ν := by
-    apply List.ext_getElem
-    · simp only [List.length_ofFn]
-    · intro k hk₁ hk₂
-      simp only [List.length_ofFn] at hk₁
-      simp only [List.getElem_ofFn]
-      simp [τOfComplement]
-      split_ifs with hkM
-      · congr 1
-      · omega
+        List.ofFn ν :=
+    List.ofFn_inj.mpr (funext fun k => by
+      simp only [τOfComplement]
+      rw [dite_eq_left ⟨by omega, by omega⟩]
+      exact congrArg ν (Fin.ext (by simp)))
   rw [htail, hcomp] at hTrace
   rw [evalWord_ofFn_cons] at hTrace
   calc
@@ -288,9 +268,7 @@ theorem closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSp
           cyclicRestrictₗ (show 0 < M + 1 by omega) (L₀ + 1) i τ ψ =
             groundSpaceMap A (L₀ + 1) Y := by
     intro i τ
-    have hmem := hLocal i τ
-    rw [groundSpace, LinearMap.mem_range] at hmem
-    obtain ⟨Y, hY⟩ := hmem
+    obtain ⟨Y, hY⟩ := hLocal i τ
     exact ⟨Y, hY.symm⟩
   choose YAt hYAt using hLocalWitness
   let Y : (Fin (M + 1 - (L₀ + 1)) → Fin d) → Matrix (Fin D) (Fin D) ℂ :=
@@ -352,13 +330,7 @@ theorem closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSp
     have hα_eval :
         Kraus.evalWord A (List.ofFn α) = A α₀ * Kraus.evalWord A (List.ofFn αTail) := by
       let α' : Fin ((L₀ - 1) + 1) → Fin d := fun i => α ⟨i.val, by omega⟩
-      have hαlist : List.ofFn α = List.ofFn α' := by
-        apply List.ext_getElem
-        · simp only [List.length_ofFn]
-          omega
-        · intro n hn₁ hn₂
-          simp only [List.length_ofFn] at hn₁ hn₂
-          simp only [List.getElem_ofFn, α']
+      have hαlist : List.ofFn α = List.ofFn α' := List.ofFn_congr (by omega) α
       have htail : α' ∘ Fin.succ = αTail := by
         ext r
         simp [α', αTail]
@@ -381,74 +353,18 @@ theorem closure_property_boundary_block_window_trace_evalWord_mul_eq_of_groundSp
             List.ofFn (fun r : Fin (L₀ - 1) =>
               ρ ⟨M + 1 - L₀ + r.val, by omega⟩) =
           List.ofFn full := by
-        rw [← List.ofFn_fin_append]
-        apply List.ext_getElem
-        · simp only [List.length_ofFn]
-          omega
-        · intro n hn₁ hn₂
-          simp only [List.length_ofFn] at hn₁ hn₂
-          simp only [List.getElem_ofFn]
-          by_cases hnLeft : n < M + 1 - (L₀ + 1)
-          · let i : Fin (M + 1 - (L₀ + 1)) := ⟨n, hnLeft⟩
-            have hidx :
-                (⟨n, hn₁⟩ :
-                  Fin ((M + 1 - (L₀ + 1)) + (L₀ - 1))) =
-                  Fin.castAdd (L₀ - 1) i := by
-              ext
-              simp [i]
-            rw [hidx, Fin.append_left]
-          · let i : Fin (L₀ - 1) :=
-              ⟨n - (M + 1 - (L₀ + 1)), by omega⟩
-            have hidx :
-                (⟨n, hn₁⟩ :
-                  Fin ((M + 1 - (L₀ + 1)) + (L₀ - 1))) =
-                  Fin.natAdd (M + 1 - (L₀ + 1)) i := by
-              ext
-              simp [i]
-              omega
-            rw [hidx, Fin.append_right]
-            congr 1
-            ext
-            simp [i]
-            omega
+        rw [List.ofFn_congr (show M - 1 = (M + 1 - (L₀ + 1)) + (L₀ - 1) by omega) full,
+          List.ofFn_add]
+        exact congrArg₂ (· ++ ·) rfl (List.ofFn_inj.mpr (funext fun r =>
+          congrArg ρ (Fin.ext (by simp; omega))))
       have hRightList :
           List.ofFn αTail ++ List.ofFn ν = List.ofFn full := by
-        rw [← List.ofFn_fin_append]
-        apply List.ext_getElem
-        · simp only [List.length_ofFn]
-          omega
-        · intro n hn₁ hn₂
-          simp only [List.length_ofFn] at hn₁ hn₂
-          simp only [List.getElem_ofFn]
-          by_cases hnAlpha : n < L₀ - 1
-          · let i : Fin (L₀ - 1) := ⟨n, hnAlpha⟩
-            have hidx :
-                (⟨n, hn₁⟩ :
-                  Fin ((L₀ - 1) + (M + 1 - (L₀ + 1)))) =
-                  Fin.castAdd (M + 1 - (L₀ + 1)) i := by
-              ext
-              simp [i]
-            rw [hidx, Fin.append_left]
-            simpa [full, i] using (congr_fun hHeadρ i).symm
-          · let k : Fin (M + 1 - (L₀ + 1)) :=
-              ⟨n - (L₀ - 1), by omega⟩
-            have hidx :
-                (⟨n, hn₁⟩ :
-                  Fin ((L₀ - 1) + (M + 1 - (L₀ + 1)))) =
-                  Fin.natAdd (L₀ - 1) k := by
-              ext
-              simp [k]
-              omega
-            rw [hidx, Fin.append_right]
-            have hcomp := hρComp k
-            have hsite :
-                (⟨k.val + L₀, by omega⟩ : Fin (M + 1)) =
-                  ⟨n + 1, by omega⟩ := by
-              ext
-              simp [k]
-              omega
-            rw [hsite] at hcomp
-            simpa [full, k] using hcomp.symm
+        rw [List.ofFn_congr (show M - 1 = (L₀ - 1) + (M + 1 - (L₀ + 1)) by omega) full,
+          List.ofFn_add]
+        exact congrArg₂ (· ++ ·)
+          (List.ofFn_inj.mpr (funext fun r => (congr_fun hHeadρ r).symm))
+          (List.ofFn_inj.mpr (funext fun k =>
+            (hρComp k).symm.trans (congrArg ρ (Fin.ext (by simp; omega)))))
       rw [← Kraus.evalWord_append, ← Kraus.evalWord_append, hLeftList, hRightList]
     calc
       X * Kraus.evalWord A (List.ofFn α) * Kraus.evalWord A (List.ofFn ν)

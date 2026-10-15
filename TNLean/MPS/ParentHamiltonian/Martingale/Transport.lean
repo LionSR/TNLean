@@ -255,20 +255,9 @@ private theorem scalar_sum_comm {α β : Type*} [Fintype α] [Fintype β]
     (F : α → β → ℂ) (p : α → ℂ) (q : β → ℂ) :
     (∑ a, (∑ b, F a b * q b) * p a) =
       ∑ b, (∑ a, F a b * p a) * q b := by
-  calc
-    (∑ a, (∑ b, F a b * q b) * p a)
-        = ∑ a, ∑ b, F a b * q b * p a := by
-      simp_rw [Finset.sum_mul]
-    _ = ∑ b, ∑ a, F a b * q b * p a := by
-      rw [Finset.sum_comm]
-    _ = ∑ b, ∑ a, F a b * p a * q b := by
-      refine Finset.sum_congr rfl ?_
-      intro b _
-      refine Finset.sum_congr rfl ?_
-      intro a _
-      ring
-    _ = ∑ b, (∑ a, F a b * p a) * q b := by
-      simp_rw [Finset.sum_mul]
+  simp_rw [Finset.sum_mul]
+  rw [Finset.sum_comm]
+  simp_rw [mul_right_comm]
 
 private theorem separateLinearMap_apply_commute
     {α β : Type*} [Finite α] [Finite β]
@@ -349,34 +338,15 @@ private theorem cyclicRestrictES_adjoint_apply {N : ℕ} (hN : 0 < N) {L : ℕ}
     ((cyclicRestrictES (d := d) hN L i τ).adjoint v) σ =
       if SameOutsideWindow (L := L) i σ τ then v (extractWindow L i σ) else 0 := by
   classical
-  by_cases hστ : SameOutsideWindow (L := L) i σ τ
-  · calc
-      ((cyclicRestrictES (d := d) hN L i τ).adjoint v) σ
-          = ⟪EuclideanSpace.single σ (1 : ℂ),
-              (cyclicRestrictES (d := d) hN L i τ).adjoint v⟫_ℂ := by
-              simpa using (EuclideanSpace.inner_single_left σ (1 : ℂ)
-                ((cyclicRestrictES (d := d) hN L i τ).adjoint v)).symm
-      _ = ⟪cyclicRestrictES (d := d) hN L i τ
-              (EuclideanSpace.single σ (1 : ℂ)), v⟫_ℂ := by
-            rw [LinearMap.adjoint_inner_right]
-      _ = ⟪EuclideanSpace.single (extractWindow L i σ) (1 : ℂ), v⟫_ℂ := by
-            rw [cyclicRestrictES_single_of_sameOutsideWindow hN hLN i σ τ hστ]
-      _ = if SameOutsideWindow (L := L) i σ τ then v (extractWindow L i σ) else 0 := by
-            simpa [hστ] using
-              (EuclideanSpace.inner_single_left (extractWindow L i σ) (1 : ℂ) v)
-  · calc
-      ((cyclicRestrictES (d := d) hN L i τ).adjoint v) σ
-          = ⟪EuclideanSpace.single σ (1 : ℂ),
-              (cyclicRestrictES (d := d) hN L i τ).adjoint v⟫_ℂ := by
-              simpa using (EuclideanSpace.inner_single_left σ (1 : ℂ)
-                ((cyclicRestrictES (d := d) hN L i τ).adjoint v)).symm
-      _ = ⟪cyclicRestrictES (d := d) hN L i τ
-              (EuclideanSpace.single σ (1 : ℂ)), v⟫_ℂ := by
-            rw [LinearMap.adjoint_inner_right]
-      _ = ⟪0, v⟫_ℂ := by
-            rw [cyclicRestrictES_single_of_not_sameOutsideWindow hN i σ τ hστ]
-      _ = if SameOutsideWindow (L := L) i σ τ then v (extractWindow L i σ) else 0 := by
-            simp [hστ]
+  have h : ((cyclicRestrictES (d := d) hN L i τ).adjoint v) σ =
+      ⟪cyclicRestrictES (d := d) hN L i τ (EuclideanSpace.single σ (1 : ℂ)), v⟫_ℂ := by
+    rw [← LinearMap.adjoint_inner_right]
+    simpa using (EuclideanSpace.inner_single_left σ (1 : ℂ)
+      ((cyclicRestrictES (d := d) hN L i τ).adjoint v)).symm
+  split_ifs with hστ
+  · rw [h, cyclicRestrictES_single_of_sameOutsideWindow hN hLN i σ τ hστ]
+    simpa using EuclideanSpace.inner_single_left (extractWindow L i σ) (1 : ℂ) v
+  · rw [h, cyclicRestrictES_single_of_not_sameOutsideWindow hN i σ τ hστ, inner_zero_left]
 
 /-- Evaluate a transported local term through the cyclic restriction to its window. -/
 @[simp] theorem localTermES_apply {N : ℕ} (A : MPSTensor d D) (L : ℕ) (i : Fin N)

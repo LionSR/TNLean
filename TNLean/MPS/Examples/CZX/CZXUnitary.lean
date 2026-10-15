@@ -132,9 +132,7 @@ theorem mpo_czxTensor :
 theorem mpo_czxTensor_mem_unitaryGroup :
     MPOTensor.mpo czxTensor N ∈ Matrix.unitaryGroup (Fin N → Fin 2) ℂ := by
   rw [mpo_czxTensor]
-  refine Matrix.monomial_mem_unitaryGroup _ _ fun t ↦ ?_
-  rw [star_pow, star_neg, star_one, ← mul_pow]
-  simp
+  exact Matrix.monomial_mem_unitaryGroup _ _ fun t ↦ by simp [← mul_pow]
 
 /-! ### The square of the operator -/
 

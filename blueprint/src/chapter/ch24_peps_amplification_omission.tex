@@ -44,15 +44,15 @@ with their multiplicities. All norms are operator norms.
         TNLean.PEPS.AreaLaw.channelWordOmissionDefect_append_sub_le}
     \leanok
     Suppose $0\le k_i\le\mathbb 1$ for every label. Every $\mathcal E_w$ is
-    linear and contracts the norm of differences, and
-    $0\le D_P(w;B)\le2\|B\|$. Appending a label $i$ to $w$ raises the defect
-    by at most $0$ when $P(i)$ holds, and by at most
+    linear and contractive on differences, and
+    $0\le D_P(w;B)\le2\|B\|$. Appending a label $i$ to $w$ does not increase
+    the defect when $P(i)$ holds, and increases it by at most
     $\|(\mathcal E_i-\mathrm{id})(\mathcal E_{w|_P}(B))\|$ otherwise.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_channel_word_norm,thm:al_root_channel_contraction,
         thm:al_channel_word_append}
-    Linearity holds letter by letter, and contraction follows from
+    Linearity holds letter by letter, and contractivity follows from
     Theorem~\ref{thm:al_channel_word_norm} applied to a difference. Put
     $A=\mathcal E_w(B)$ and $R=\mathcal E_{w|_P}(B)$. A retained letter acts
     on both, so the new defect is $\|\mathcal E_i(A-R)\|\le\|A-R\|$. An omitted
@@ -288,8 +288,8 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Theorem~\ref{thm:al_lattice_counts}.
 \begin{proof}\leanok
     \uses{thm:al_graph_channel_omission,thm:al_component_support_of_tail,
         thm:al_lattice_counts}
-    Theorem~\ref{thm:al_component_support_of_tail} supplies the component
-    support, and the largest distance in the domain is a common cutoff.
+    Theorem~\ref{thm:al_component_support_of_tail} gives the component
+    support, and the largest distance in the domain serves as a common cutoff.
     Apply Theorem~\ref{thm:al_graph_channel_omission} with $K=2$.
 \end{proof}
 
@@ -309,8 +309,8 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Theorem~\ref{thm:al_lattice_counts}.
         \mathbb E\|(D-D_{\rm ret})B(\Omega\otimes\xi)\|
         \le At|S|\|B\|e^{vt-\gamma r^\alpha}.
     \end{align*}
-    This is the omission estimate of the local constraint products lemma.
-    The source takes $S$ nonempty and $r\ge1$; neither is needed.
+    This is the omission estimate of the local constraint products lemma;
+    the paper assumes $S\ne\varnothing$ and $r\ge1$, neither of which is needed here.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_domain_channel_omission,thm:al_channel_word_vector_difference}
@@ -339,4 +339,48 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Theorem~\ref{thm:al_lattice_counts}.
     Theorem~\ref{thm:al_lattice_positive_replacement} gives the positivity,
     the zero vector $\Omega$ and the tails, and
     Theorem~\ref{thm:al_lattice_counts} bounds the anchor multiplicity.
+\end{proof}
+
+\subsection{The local constraint products lemma}
+
+\begin{theorem}[Local constraint products]
+    \label{thm:al_local_constraint_products}
+    \lean{TNLean.PEPS.AreaLaw.exists_domainLocalConstraintProducts}
+    \leanok
+    Let $C,\mu\ge0$, $c>0$ and $0<\alpha\le1$. There are $A\ge0$ and
+    $\gamma,v>0$ with the following property. Let $0\le k_i\le\mathbb 1$ be
+    finitely many operators on a finite domain $\Lambda\subseteq\Z^2$ with its
+    induced graph, anchored at $a_i$ with at most $\mu$ labels per site, and
+    with $\|k_i-E_{i,l}k_i\|\le Ce^{-cl^\alpha}$ for every $l\ge0$, where
+    $E_{i,l}$ is the conditional expectation onto $N_l(a_i)$. Put
+    $G_i=(\mathbb 1-k_i)^{1/2}$ and $G_{i,r}=(\mathbb 1-E_{i,r}k_i)^{1/2}$.
+    Fix $S\subseteq\Lambda$, an integer $r\ge0$ and $t\ge0$. At each label run
+    an independent rate-one Poisson clock on $[0,t]$. On each realization, in
+    occurrence order with later factors on the left, let $D$ be the product of
+    all $G_i$, let $D_{\rm ret}$ retain only the events with
+    $d_\Lambda(a_i,S)\le r$, and let $L$ be the same retained product with
+    each $G_i$ replaced by $G_{i,r}$. Then
+    \begin{align*}
+        \mathbb E\|D_{\rm ret}-L\|\le At|S|(1+r)^2e^{-\gamma r^\alpha},
+    \end{align*}
+    and every $L$ is a contraction supported on $N_{2r}(S)$. If moreover
+    $k_i\Omega=0$ for a unit vector $\Omega$ and $B$ acts on $S$ and a finite
+    spectator system, then for every unit spectator vector $\xi$,
+    \begin{align*}
+        \mathbb E\|(D-D_{\rm ret})B(\Omega\otimes\xi)\|
+        \le At|S|\|B\|e^{vt-\gamma r^\alpha}.
+    \end{align*}
+    All three products are read off the same clock realization, and the
+    constants depend only on $C,c,\alpha,\mu$. This is
+    \cite[Lemma~10.1]{OpenAI2026AreaLaw}, without the assumptions that $S$ is
+    nonempty and $r\ge1$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_domain_product_truncation,thm:al_domain_constraint_omission}
+    The retained product over the retained events of a full word is the
+    product over the retained letters of that word, in the same order. The
+    first estimate and the support clause are
+    Theorem~\ref{thm:al_domain_product_truncation}, and the second is
+    Theorem~\ref{thm:al_domain_constraint_omission}; take the larger of the
+    two prefactors and the smaller of the two decay rates.
 \end{proof}
