@@ -256,8 +256,8 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.mem_initialFrames,
         TNLean.PEPS.Approximation.DyadicProtocol.exists_originalCircuit_initialFrames}
     \leanok
-    \uses{thm:peps_sheet_raw_initialization, def:peps_dyadic_protocol,
-        def:peps_dyadic_protocol_parties, thm:peps_dyadic_protocol_schedule_counts}
+    \uses{def:peps_sheet_stack, def:peps_dyadic_protocol,
+        def:peps_dyadic_protocol_parties, def:peps_dyadic_protocol_schedule}
     Let $L\ge1$ and $\lVert\Omega\rVert=1$. The initial sheets are the main copy of $\Omega$,
     a frame without holes held entirely by the party of the root square, and one
     copy for each change of the schedule that initializes an auxiliary sheet,
@@ -297,9 +297,8 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.unitLevelFrame_owner_injective,
         TNLean.PEPS.Approximation.DyadicProtocol.exists_reference_changes_unitLevel}
     \leanok
-    \uses{thm:peps_final_reference, thm:peps_guide_frame_norm,
-        lem:peps_guide_frame_patch_data, lem:peps_dyadic_frozen_hole_count,
-        def:peps_dyadic_protocol_parties, thm:peps_dyadic_repainting_valid_labels,
+    \uses{def:peps_final_regrouping, def:peps_guide_frame,
+        def:peps_dyadic_protocol_parties, def:peps_dyadic_protocol_schedule,
         def:peps_dyadic_protocol}
     Let $L\le 2^k<2L$ and $\lVert\Omega\rVert=1$. At the end of the last level
     $n=1$ every unit block of the root square carries its own label, so the raw
@@ -321,7 +320,8 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{proof}\leanok
     \uses{thm:peps_final_reference, thm:peps_guide_frame_norm,
-        lem:peps_guide_frame_patch_data, lem:peps_dyadic_frozen_hole_count}
+        lem:peps_guide_frame_patch_data, lem:peps_dyadic_frozen_hole_count,
+        thm:peps_dyadic_repainting_valid_labels}
     A site at $(i+\frac12,j+\frac12)$ lies in the unit block $(i,j)$, which lies in
     the root square and has been repainted to its own label; that label is held
     by the party of the unit square $(i,j)$. By Theorem~\ref{thm:peps_guide_frame_norm}
