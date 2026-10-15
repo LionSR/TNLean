@@ -220,42 +220,6 @@ theorem SQt_le (X : ScannerExponents) (κ : ScanConstants) :
 
 variable {n : ℕ} (S : ScanData X κ n)
 
-/-- The marginal parameter: `𝓑 ≤ C' n D (log n)^{12}` once `log n ≥ 1` (lines 405–409). -/
-lemma Bmarg_le_log_pow (hD : 1 ≤ X.D n) (hn : 1 ≤ n) (hlog : 1 ≤ Real.log n) :
-    S.Bmarg ≤ (1 + κ.C * (κ.C + 2) ^ 6 * (1 + κ.C * Real.log κ.q) ^ 2) *
-      (n * X.D n * Real.log n ^ 12) := by
-  have hlq := log_q_nonneg κ
-  have hC := κ.one_le_C
-  have hR1 : (1 : ℝ) ≤ S.r0 + 1 := by simp
-  have hR : (S.r0 + 1 : ℝ) ≤ (κ.C + 2) * Real.log n ^ 2 := by
-    have := S.r0_le
-    have : 1 ≤ Real.log n ^ 2 := one_le_pow₀ hlog
-    nlinarith
-  have hR2 : ((S.r0 : ℝ) + 1) ^ 2 ≤ (κ.C + 2) ^ 2 * Real.log n ^ 4 := by
-    calc ((S.r0 : ℝ) + 1) ^ 2 ≤ ((κ.C + 2) * Real.log n ^ 2) ^ 2 := by gcongr
-      _ = _ := by ring
-  have hcc : (S.crossCount : ℝ) ≤ κ.C * n * X.D n * ((κ.C + 2) ^ 2 * Real.log n ^ 4) :=
-    S.crossCount_le.trans (by gcongr)
-  have hin : 1 + κ.C * ((S.r0 : ℝ) + 1) ^ 2 * Real.log κ.q ≤
-      (1 + κ.C * Real.log κ.q) * ((κ.C + 2) ^ 2 * Real.log n ^ 4) := by
-    have h1 : (1 : ℝ) ≤ ((S.r0 : ℝ) + 1) ^ 2 := one_le_pow₀ hR1
-    have h2 : 0 ≤ κ.C * Real.log κ.q := by positivity
-    calc 1 + κ.C * ((S.r0 : ℝ) + 1) ^ 2 * Real.log κ.q
-        = 1 + κ.C * Real.log κ.q * ((S.r0 : ℝ) + 1) ^ 2 := by ring
-      _ ≤ (1 + κ.C * Real.log κ.q) * ((S.r0 : ℝ) + 1) ^ 2 := by nlinarith
-      _ ≤ _ := by gcongr
-  have hin0 : 0 ≤ 1 + κ.C * ((S.r0 : ℝ) + 1) ^ 2 * Real.log κ.q := by positivity
-  have hnD : (1 : ℝ) ≤ n * X.D n := one_le_mul_of_one_le_of_one_le (by exact_mod_cast hn)
-    (by exact_mod_cast hD)
-  have hbig : (1 : ℝ) ≤ n * X.D n * Real.log n ^ 12 :=
-    one_le_mul_of_one_le_of_one_le hnD (one_le_pow₀ hlog)
-  calc S.Bmarg ≤ 1 + S.crossCount * (1 + κ.C * (S.r0 + 1) ^ 2 * Real.log κ.q) ^ 2 := S.Bmarg_le
-    _ ≤ 1 + κ.C * n * X.D n * ((κ.C + 2) ^ 2 * Real.log n ^ 4) *
-          ((1 + κ.C * Real.log κ.q) * ((κ.C + 2) ^ 2 * Real.log n ^ 4)) ^ 2 := by gcongr
-    _ = 1 + κ.C * (κ.C + 2) ^ 6 * (1 + κ.C * Real.log κ.q) ^ 2 *
-          (n * X.D n * Real.log n ^ 12) := by ring
-    _ ≤ _ := by linarith
-
 /-- The terminal rough upper bound in terms of the target entropy and budget bounds `B`, `E`
 (lines 462–470, with `z ≥ 1/2` from Lemma 3.1, lines 411–414). -/
 lemma terminalBound_le_of {B E : ℝ} (hB0 : 0 ≤ B) (hBsh : S.Bsh ≤ B) (hBexc : S.Bexc ≤ E)
@@ -309,15 +273,12 @@ theorem exists_budgets (X : ScannerExponents) (κ : ScanConstants) :
   have hCe := κ.Ce_pos
   obtain ⟨C1, hC1⟩ : ∃ c : ℝ, c = κ.Ce + 1 + Real.log κ.q := ⟨_, rfl⟩
   obtain ⟨C2, hC2⟩ : ∃ c : ℝ, c = 1 + κ.C * Real.log κ.q := ⟨_, rfl⟩
-  obtain ⟨C3, hC3⟩ : ∃ c : ℝ,
-    c = 1 + κ.C * (κ.C + 2) ^ 6 * (1 + κ.C * Real.log κ.q) ^ 2 := ⟨_, rfl⟩
+  obtain ⟨C3, hC3⟩ : ∃ c : ℝ, c = κ.C := ⟨_, rfl⟩
   have hC10 : 0 ≤ C1 := by rw [hC1]; positivity
   have hC20 : 1 ≤ C2 := by rw [hC2]; nlinarith
-  have hC30 : 0 ≤ C3 := by rw [hC3]; positivity
+  have hC30 : 0 ≤ C3 := by rw [hC3]; linarith
   refine ⟨C1 + C2 + C3 + (2 * κ.Ce + 7 + 4 * C1 + C2 * C₁), 12, ?_⟩
-  filter_upwards [hC₁, ScanData.SXt_le X κ, ScanData.SQt_le X κ,
-    (Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop).eventually_ge_atTop 1]
-    with n hF hSX hSQ hlog S
+  filter_upwards [hC₁, ScanData.SXt_le X κ, ScanData.SQt_le X κ] with n hF hSX hSQ S
   have hW := S.one_le_W
   have hC₁1 := hF.one_le_C₁
   have hC40 : 0 ≤ 2 * κ.Ce + 7 + 4 * C1 + C2 * C₁ := by positivity
@@ -357,7 +318,7 @@ theorem exists_budgets (X : ScannerExponents) (κ : ScanConstants) :
       exact_mod_cast Real.rpow_natCast _ 12]
     have hpos : 0 ≤ (n : ℝ) * X.D n * Real.log n ^ 12 := by positivity
     calc S.Bmarg ≤ C3 * (n * X.D n * Real.log n ^ 12) := by
-          rw [hC3]; exact S.Bmarg_le_log_pow hF.one_le_D (by have := hF.two_le_n; omega) hlog
+          rw [hC3]; linarith [S.Bmarg_le]
       _ ≤ (C1 + C2 + C3 + (2 * κ.Ce + 7 + 4 * C1 + C2 * C₁)) *
             (n * X.D n * Real.log n ^ 12) :=
           mul_le_mul_of_nonneg_right (by linarith) hpos
