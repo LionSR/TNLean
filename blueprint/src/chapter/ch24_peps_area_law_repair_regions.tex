@@ -228,6 +228,51 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     current regions before simultaneous removal.
 \end{definition}
 
+% Source: 10-geometry.tex, retained identifiers, lines 398--409;
+% comparisons with later actual regions, lines 584--591.
+\begin{definition}[Inclusions between generations]
+    \label{def:area_law_repair_inclusions}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairNextOldInclusion,
+        TNLean.PEPS.AreaLaw.Geometry.repairStageOldInclusion}
+    \leanok
+    \uses{def:area_law_repair_stage}
+    Let $I_j$ be the identifier family at generation $j$ of the actual
+    repair sequence. The map $\iota_{j,j+1}:I_j\to I_{j+1}$ is the
+    inclusion of the retained identifiers. Define the maps between later
+    generations recursively by
+    \begin{align}
+        \iota_{j,j} & =\operatorname{id}_{I_j},
+                    & \iota_{j,j+\ell+1}
+                        & =\iota_{j+\ell,j+\ell+1}\circ\iota_{j,j+\ell}.
+        \label{eq:area_law_repair_inclusions}
+    \end{align}
+\end{definition}
+
+% Source: 10-geometry.tex, ordering before geometry:birth-separation,
+% lines 565--571. The dummy is excluded from the physical order.
+\begin{definition}[Birth rank]
+    \label{def:area_law_repair_birth_rank}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegionBirthRank,
+        TNLean.PEPS.AreaLaw.Geometry.repairStageBirthRank}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions}
+    Assign rank zero to initial primary identifiers and rank one to
+    initial belt identifiers. Give the dummy rank zero as a convention.
+    Write $\operatorname{rk}_j:I_j\to\mathbb N$ for the rank at generation $j$.
+    For an old identifier $i\in I_j$ and a fresh replacement identifier
+    $q\in I_{j+1}$, define
+    \begin{align}
+        \operatorname{rk}_{j+1}(\iota_{j,j+1}(i))
+            & =\operatorname{rk}_j(i),
+        & \operatorname{rk}_{j+1}(q) & =j+2.
+        \label{eq:area_law_repair_birth_rank}
+    \end{align}
+    The dummy is excluded from the physical order. Birth rank prescribes
+    the order of the birth classes; ties within each class may be broken
+    arbitrarily, as prescribed before
+    \cite[Lemma~11.5]{OpenAI2026AreaLaw}.
+\end{definition}
+
 % Source: 10-geometry.tex, terminal interiors, lines 398--409;
 % open actual regions and closed birth regions, lines 558--561.
 % This set is not identified with the full exceptional remainder, which
