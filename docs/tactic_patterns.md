@@ -4381,6 +4381,21 @@ three-plaquette output measurement, and the routed reunion measurement.
   continuous multilinear product and retain the original insertion indices.
 
 
+### Removing subsingleton physical coordinates — candidate (2026-10-14)
+
+- **Pattern:** In an inverse configuration map, prove equality at noncarrying
+  coordinates using the subsingleton property of their physical alphabet.
+- **Seen:** The exterior coordinate in `SelectedPhysicalConfigurations.lean`
+  and the complement of the designated owners in `PartyPhysicalCoordinates.lean`,
+  both under `PEPS/Approximation/`.
+- **Abstraction:** Both cases already use Mathlib's `Subsingleton.elim`.
+  The one-owner-per-site theorem supplies the complete dependent configuration
+  bijection; no additional closing tactic is proposed.
+- **Notes:** Subsingleton physical coordinates retain their scalar tensor
+  factors. No local tensor is assumed to equal one. The actual protocol must
+  supply the hypotheses of the owner-coordinate theorem.
+
+
 ### Upper endpoint of a scanner band — candidate (2026-10-12)
 
 - **Pattern:** Use the band index bound, the offset bound and $8Km\le L$

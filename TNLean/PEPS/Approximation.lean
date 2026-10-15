@@ -226,6 +226,7 @@ import TNLean.PEPS.Approximation.PartyLocalMaps
 import TNLean.PEPS.Approximation.PartyOutputCoordinates
 import TNLean.PEPS.Approximation.PartyPartition
 import TNLean.PEPS.Approximation.PartyPartitionAppend
+import TNLean.PEPS.Approximation.PartyPhysicalCoordinates
 import TNLean.PEPS.Approximation.PartyProductConjugation
 import TNLean.PEPS.Approximation.PartyProductPartialTrace
 import TNLean.PEPS.Approximation.PartyProductScalar
