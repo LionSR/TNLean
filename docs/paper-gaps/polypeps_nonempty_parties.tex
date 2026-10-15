@@ -11,57 +11,55 @@
 \maketitle
 \gapnote{local-correction}{resolved}
 
-Theorem~5.2 of the September 24, 2026 polynomial-PEPS manuscript concerns
-compression to an operator tensor network with one node per party
-\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
-The statement does not explicitly require the party set to be nonempty.
-The formalization adopts this requirement once, in the definition of a
-\emph{distributed construction}. It is the intended convention needed by
-the scalar-absorption step of the proof, rather than an assertion that the
-printed statement includes this qualifier.
+\section{The source theorem}
 
-\paragraph{The scalar boundary case.}
-The preliminaries state that empty tensor products have dimension one
-(\texttt{01-preliminaries.tex}, lines 5--7)
-\cite[preliminaries]{OpenAI2026PolynomialPEPS}.
-Accordingly, a circuit on no parties can still act on $\mathbb C$ by a scalar
-contraction $c$. Starting from the empty product input $1$, its physical
-density is the scalar $|c|^2$. An operator tensor network with no nodes or
-links contracts to the empty product $1$. These are different when, for
-example, $c=1/2$; their absolute difference is $3/4$.
-Thus the literal zero-party reading does not imply approximation to
-arbitrarily small error by a network having exactly one node per party.
-No zero-party compression theorem is asserted.
-
-\paragraph{The adopted convention.}
-A distributed construction has a finite nonempty set of parties.
-The original memories are finite-dimensional, the initial vector is a
-product of normalized party vectors, and the circuit retains the private
-output registers until the final trace, exactly as in
-\texttt{04-compression.tex}, lines 17--30 and 137--151
-\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.
-No additional bound is imposed on private dimensions.
-The network construction chooses local tensors at existing parties and
-absorbs scalar coefficients and averaging factors into them
-(lines 565--578) \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
-In particular, the scalar contributed by a gate with no
-participating parties can be absorbed at any existing party, without
-introducing a node or a virtual link.
-
-The general circuit definition remains unrestricted: gates with no
-participating parties, their chronological occurrences, and their scalar
-contributions are all retained. Only the definition of a distributed construction carries the
-nonempty-party convention; it is not repeated as a hypothesis of each
-subsequent theorem. The spatial families used for
-square grids of side length $L\geq2$ already have a nonempty party set,
-so this convention does not change those applications.
-
-\paragraph{Source.}
-The cited source is the manuscript at
+Theorem~5.2 of the September~24, 2026 polynomial-PEPS manuscript compresses the
+output density operator of a distributed quantum circuit into an operator
+tensor network with one node per
+party~\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}.\footnote{The cited source
+is the manuscript at
 \href{https://github.com/openai/math/tree/adc7f1241b42e322a6451854ab7e4b4c146bf78a}{\texttt{openai/math@adc7f1241b42}},
 \emph{Polynomial PEPS approximation of gapped square-grid ground states},
-the preliminaries and the section on distributed density compression
-\cite{OpenAI2026PolynomialPEPS}.
+the preliminaries and the section on distributed density
+compression~\cite{OpenAI2026PolynomialPEPS}.}
+The printed statement of Theorem~5.2 does not explicitly state that the finite
+set of parties is nonempty.
+
+In the degenerate case of an empty party set, the theorem fails as printed. The
+preliminaries specify that an empty tensor product has dimension
+one~\cite[preliminaries]{OpenAI2026PolynomialPEPS} (\texttt{01-preliminaries.tex},
+lines 5--7). A circuit on zero parties can still apply a scalar contraction
+$c\in\mathbb C$ with $|c|\le 1$ to $\mathbb C$. Starting from the empty product
+vector $1\in\mathbb C$, the resulting reduced density operator on $\mathbb C$
+is $|c|^2$, whereas an operator tensor network with zero nodes and zero links
+evaluates to the empty product $1$. For $c=1/2$, the two operators differ by
+$|1 - 1/4| = 3/4$ and cannot be made arbitrarily close.
+
+\section{The formal convention}
+
+The formalization builds the nonemptiness of the party set into the definition
+of a distributed construction. All other features match the paper: each party
+holds a finite-dimensional memory, the initial state is a tensor product of
+normalized party vectors, and the circuit retains the private output registers
+until the final partial trace~\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
+(\texttt{04-compression.tex}, lines 17--30 and 137--151). No upper bound is
+imposed on the private register dimensions.
+
+In the proof of Theorem~5.2, the tensor-network construction places local
+tensors at the parties and absorbs scalar coefficients and averaging weights
+into them~\cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}
+(lines 565--578). Having at least one party guarantees a node that can absorb
+these scalars, including any scalar factor produced by a gate with no
+participating parties. The circuit definition itself remains unrestricted and
+allows zero-party gates.
+
+\section{Effect on the paper and what remains}
+
+Because the nonemptiness condition is part of the definition of a distributed
+construction, it is not repeated as a separate hypothesis on downstream
+theorems. Every application in the paper acts on a square grid of side length
+$L\ge 2$, where the party set is nonempty, so the convention does not affect
+any downstream result. Nothing remains open.
 
 \bibliographystyle{alpha}
 \bibliography{references}
