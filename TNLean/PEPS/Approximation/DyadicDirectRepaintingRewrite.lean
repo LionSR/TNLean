@@ -202,7 +202,8 @@ ball of radius `2 n` about the corner of `S`, outside the open inner holes of ra
 true vertices within `3 n`. Then there is a rewrite between the frames of `g` with holes at `V`
 and of `g'` with holes at `V'`, with patches on a net over the block and the affected outer holes,
 satisfying the plane conditions of Lemma 6.3. It has at most four affected holes in each frame,
-at most `(2 (n / 2 + 2 r + u) / u + 1)²` patches and at most `18` specified parties.
+at most `(2 (n / 2 + 2 r + u) / u + 1)²` patches, and a nonempty list of at most `18` specified
+parties, each the party of the old or the new label of one of the nine blocks around `S`.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 507–527; Lemma 6.3 `lem:small-rewrite`,
 `05-frames.tex`, lines 188–207. -/
@@ -227,7 +228,9 @@ theorem exists_directRepainting_planeConditions {n r u : ℝ} (hn : 0 < n) (hr :
       G.own = own ∧ G.ph = ph ∧ G.rank = rank ∧ G.holeOld = hole ∧ G.holeNew = hole ∧
       G.patch = patch ∧ G.untouched ∪ G.oldAffected = V ∧ G.untouched ∪ G.newAffected = V' ∧
       G.oldAffected.card ≤ 4 ∧ G.newAffected.card ≤ 4 ∧
-      (G.centers.card : ℝ) ≤ (2 * (n / 2 + 2 * r + u) / u + 1) ^ 2 ∧ G.parties.card ≤ 18 := by
+      (G.centers.card : ℝ) ≤ (2 * (n / 2 + 2 * r + u) / u + 1) ^ 2 ∧ G.parties.card ≤ 18 ∧
+      G.parties.Nonempty ∧
+      ∀ x ∈ G.parties, ∃ Q ∈ nineBlocks S, x = own (lab Q) ∨ x = own (lab' Q) := by
   classical
   set B := closedBlock n S
   set K : Set (ℝ × ℝ) := {p | ∃ y ∈ B, dist p y ≤ 2 * r}
@@ -329,7 +332,7 @@ theorem exists_directRepainting_planeConditions {n r u : ℝ} (hn : 0 < n) (hr :
         exact fun c hc => h2 c (hW c hc.1 hc.2)
     exact htw z p₁ p₂ p₃ (mem p₁ (by simp)) (mem p₂ (by simp)) (mem p₃ (by simp))
   refine ⟨G, ⟨?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_, ?_⟩, rfl, rfl, rfl, rfl, rfl, rfl, rfl,
-    rfl, hUA, hUA', ?_, ?_, ?_, ?_⟩
+    rfl, hUA, hUA', ?_, ?_, ?_, ?_, ?_, ?_⟩
   · -- the untouched holes agree
     intro c hc
     refine ⟨rfl, incidentLabels_congr (reading_eventuallyEq hn hlab hg hg' fun hcB' => ?_)⟩
@@ -411,5 +414,12 @@ theorem exists_directRepainting_planeConditions {n r u : ℝ} (hn : 0 < n) (hr :
     have h2 := Finset.card_image_le (s := nineBlocks S) (f := lab')
     rw [card_nineBlocks] at h1 h2
     omega
+  · exact ⟨own (lab S), Finset.mem_image_of_mem _ (Finset.mem_union_left _
+      (Finset.mem_image_of_mem _ (by simp [nineBlocks])))⟩
+  · intro x hx
+    obtain ⟨l, hl, rfl⟩ := Finset.mem_image.1 hx
+    rcases Finset.mem_union.1 hl with hl | hl <;> obtain ⟨Q, hQ, rfl⟩ := Finset.mem_image.1 hl
+    · exact ⟨Q, hQ, Or.inl rfl⟩
+    · exact ⟨Q, hQ, Or.inr rfl⟩
 
 end TNLean.PEPS.Approximation
