@@ -203,7 +203,9 @@ outer sample.
     \lean{TNLean.PEPS.Approximation.exists_directRepainting_planeConditions,
         TNLean.PEPS.Approximation.directRepainting_step,
         TNLean.PEPS.Approximation.exists_resize_planeConditions,
-        TNLean.PEPS.Approximation.exists_local_planeConditions}
+        TNLean.PEPS.Approximation.exists_local_planeConditions,
+        TNLean.PEPS.Approximation.dist_le_or_le_dist_of_isTrueVertex_homogenize,
+        TNLean.PEPS.Approximation.exists_pointTreatment_planeConditions}
     \leanok
     \uses{thm:peps_guide_frame_rewrite}
     The plane conditions of Theorem~\ref{thm:peps_guide_frame_rewrite} hold in
@@ -223,7 +225,12 @@ outer sample.
               two guides agree outside a ball of radius $\rho_0$, the affected
               holes lie within $\rho_1$ of its center and the untouched ones at
               distance at least $\rho_2$, with
-              $\max(\rho_0,\rho_1+2r)+3u+4r<\rho_2$.
+              $\max(\rho_0,\rho_1+2r)+3u+4r<\rho_2$. For the point treatment of
+              a grid corner $Q_0$ of the repainting of a block, every true vertex of
+              a treated guide is within $t$ of $Q_0$ or at distance at least $n-t$
+              from it, since it is a grid corner or lies on the rim of a treated
+              square, so one may take $\rho_0=\rho_1=t$ and $\rho_2=n-t$ when
+              $2t+6r+3u<n$.
     \end{enumerate}
     In each case the two-owner condition near the event, for footprints of
     radius $2u$, is a hypothesis; for the readings it is the footprint-ratio
