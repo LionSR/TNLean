@@ -129,6 +129,8 @@ import TNLean.PEPS.Approximation.DyadicPointTreatmentStep
 import TNLean.PEPS.Approximation.DyadicProtocol
 import TNLean.PEPS.Approximation.DyadicProtocolChanges
 import TNLean.PEPS.Approximation.DyadicProtocolConstants
+import TNLean.PEPS.Approximation.DyadicProtocolFinalReadout
+import TNLean.PEPS.Approximation.DyadicProtocolInitialStep
 import TNLean.PEPS.Approximation.DyadicProtocolOwners
 import TNLean.PEPS.Approximation.DyadicProtocolParties
 import TNLean.PEPS.Approximation.DyadicProtocolRetainedNorm
@@ -233,6 +235,7 @@ import TNLean.PEPS.Approximation.LocalTransferExpansion
 import TNLean.PEPS.Approximation.MatrixAction
 import TNLean.PEPS.Approximation.MessageGateCircuit
 import TNLean.PEPS.Approximation.MessageGateExpansion
+import TNLean.PEPS.Approximation.MessageGateLists
 import TNLean.PEPS.Approximation.MessageMonomial
 import TNLean.PEPS.Approximation.MonomialFixesOutside
 import TNLean.PEPS.Approximation.NetworkScalarAbsorption
@@ -447,6 +450,8 @@ import TNLean.PEPS.Approximation.TwoSheetExchange
 import TNLean.PEPS.Approximation.TwoSheetRegisters
 import TNLean.PEPS.Approximation.UniformApproximateNetworkBounds
 import TNLean.PEPS.Approximation.UniformApproximateSampledNetwork
+import TNLean.PEPS.Approximation.UniformExactMessageCompression
+import TNLean.PEPS.Approximation.UniformMessageGateCompression
 import TNLean.PEPS.Approximation.UnitMemoryCoordinates
 import TNLean.PEPS.Approximation.UnitPairSource
 import TNLean.PEPS.Approximation.UnivDensityPairContraction
