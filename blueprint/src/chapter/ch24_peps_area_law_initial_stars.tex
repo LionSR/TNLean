@@ -113,21 +113,20 @@ $\{-1,0,1\}$, that is, the axis and diagonal directions.
 
 % Source: 10-geometry.tex, geometry:initial-stars, lines 325--349, with
 % the proof in lines 351--370.
-\begin{lemma}[Isolated stars of the initial mesh]
-    \label{lem:area_law_initial_stars}
+\begin{theorem}[Isolated stars of the initial mesh]
+    \label{thm:area_law_initial_stars}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialMarks_isolatedStars,
         TNLean.PEPS.AreaLaw.Geometry.initialRepairStage_hasIsolatedStars,
         TNLean.PEPS.AreaLaw.Geometry.initialIsolatedStarsStatement_holds}
     \leanok
-    \uses{thm:area_law_initial_mark_isolated_star,
-        thm:area_law_fine_layer_mark_separation,
-        thm:area_law_least_incident_mark_scales,def:area_law_repair_stage}
+    \uses{def:area_law_repair_stage}
     Put $a_0=1/128$. Fix an origin, a finite endpoint set, a width
     $C_0\ge2$, a lower layer $k_0\ge50{,}000{,}000$ and arbitrary valid
-    residues at every layer. Let $M$ be the set of deduplicated marks of
-    the selected belt cells in the layers $k\ge k_0$. Give each $v\in M$
-    a positive scale $S_v$ equal to the side of some selected belt cell
-    that marks $v$, for instance the smallest such side. Then:
+    residues at every layer. Let $M$ be any set of marks of selected
+    belt cells in the layers $k\ge k_0$, and give each $v\in M$ a
+    positive scale $S_v$ equal to the side of some selected belt cell
+    that marks $v$; for instance, $M$ may be the set of all such marks,
+    each with the smallest such side. Then:
     \begin{enumerate}
         \item distinct marks $v,w$ satisfy
               $\operatorname{dist}(v,w)\ge a_0\max(S_v,S_w)$;
@@ -136,8 +135,11 @@ $\{-1,0,1\}$, that is, the axis and diagonal directions.
     \end{enumerate}
     In particular, for every finite domain and cut, the initial stage
     of the recursive family has isolated stars with constant $a_0$.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
+    \uses{thm:area_law_initial_mark_isolated_star,
+        thm:area_law_fine_layer_mark_separation,
+        thm:area_law_uniform_separated_initial_marks}
     Let $S_v=t_k$ be realized by a selected belt cell of layer $k$. The
     star is the preceding theorem applied to that cell, since
     $a_0S_v=t_k/128$. For the separation, distinct marks of actual fine
