@@ -30,6 +30,37 @@ open scoped ComplexOrder MatrixOrder Matrix.Norms.L2Operator
 
 namespace TNLean.PEPS
 
+/-- The original-state entropy and distance bounds control the regulator for
+arbitrary finite matrices, without commutation of the spectral projection.
+Source: polynomial-PEPS manuscript, `03-patches.tex`, lines 362–418. -/
+private theorem trace_shiftedRegulator_le_quarter_of_entropy_distance
+    {ι : Type*} [Fintype ι] [DecidableEq ι] {x ρ σ : Matrix ι ι ℂ}
+    (hx : x.PosSemidef) (hρ : ρ.PosSemidef) (hσ : σ.PosSemidef)
+    (hρ1 : ρ.trace = 1) (hσ1 : σ.trace = 1) (hcomm : Commute ρ x)
+    {C u R : ℝ} (hC : 0 < C) (hu : 0 ≤ u)
+    (hR : (16 * C + Real.log 8) * (1 + u) ≤ R)
+    (hS : _root_.vonNeumannEntropy σ hσ.isHermitian ≤ C * (1 + u))
+    (hd : (CFC.abs (ρ - σ)).trace.re ≤ 1 / 16)
+    (hρx : ρ ≤ x + Real.exp (-R) • (1 : Matrix ι ι ℂ)) :
+    (Real.exp (-R) •
+      (ρ * (x + Real.exp (-R) • (1 : Matrix ι ι ℂ))⁻¹)).trace.re ≤ 1 / 4 := by
+  have hspec := hσ.spectralProjectionGE_exp_entropy_bounds hσ1
+    (mul_pos hC (by linarith)) (by norm_num : (0 : ℝ) < 16) hS
+  let Q := Matrix.spectralProjectionGE σ (Real.exp (-16 * (C * (1 + u))))
+  have hQ : IsStarProjection Q :=
+    hσ.isHermitian.isStarProjection_spectralProjectionGE _
+  have hσtail : ((1 - Q) * σ).trace.re ≤ 1 / 16 := hspec.2
+  have hdist : Matrix.traceDistance ρ σ ≤ 1 / 32 := by
+    change (CFC.abs (ρ - σ)).trace.re / 2 ≤ 1 / 32
+    have hd' : (CFC.abs (ρ - σ)).trace.re ≤ 1 / 16 := hd
+    linarith
+  have htail : ((1 - Q) * ρ).trace.re ≤ 1 / 8 := by
+    have ht := Matrix.re_trace_mul_sub_le_traceDistance hρ.isHermitian hσ.isHermitian
+      (hρ1.trans hσ1.symm) hQ.one_sub.nonneg (sub_le_self _ hQ.nonneg)
+    linarith
+  exact hx.trace_shiftedRegulator_le_quarter hρ hcomm hu hR hρx hQ
+    (by simpa only [mul_assoc] using hspec.1) htail
+
 variable {V : Type*} [Fintype V] [LinearOrder V]
 variable {n : V → ℕ} {m : ℕ}
 
@@ -81,21 +112,7 @@ theorem trace_regularizedPatchRegulator_le_quarter_of_isMinOn
     norm_num
   have hstat := normalizedRegularizedPatchMarginal_stationarity_of_isMinOn
     regions hnested a ha (Real.exp_pos (-R)) Ω x hx hmin j
-  have hspec := hσ.spectralProjectionGE_exp_entropy_bounds hσ1
-    (mul_pos hC (by linarith)) (by norm_num : (0 : ℝ) < 16) hS
-  let Q := Matrix.spectralProjectionGE σ (Real.exp (-16 * (C * (1 + u))))
-  have hQ : IsStarProjection Q :=
-    hσ.isHermitian.isStarProjection_spectralProjectionGE _
-  have hσtail : ((1 - Q) * σ).trace.re ≤ 1 / 16 := hspec.2
-  have hdist : Matrix.traceDistance ρ σ ≤ 1 / 32 := by
-    change (CFC.abs (ρ - σ)).trace.re / 2 ≤ 1 / 32
-    have hd' : (CFC.abs (ρ - σ)).trace.re ≤ 1 / 16 := hd
-    linarith
-  have htail : ((1 - Q) * ρ).trace.re ≤ 1 / 8 := by
-    have ht := Matrix.re_trace_mul_sub_le_traceDistance hρ.isHermitian hσ.isHermitian
-      (hρ1.trans hσ1.symm) hQ.one_sub.nonneg (sub_le_self _ hQ.nonneg)
-    linarith
-  exact (hx j).1.trace_shiftedRegulator_le_quarter hρ hstat.1.symm hu hR hstat.2 hQ
-    (by simpa only [mul_assoc] using hspec.1) htail
+  exact trace_shiftedRegulator_le_quarter_of_entropy_distance
+    (hx j).1 hρ hσ hρ1 hσ1 hstat.1.symm hC hu hR hS hd hstat.2
 
 end TNLean.PEPS
