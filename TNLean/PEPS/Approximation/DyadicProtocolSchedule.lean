@@ -330,4 +330,48 @@ theorem card_filter_event_le (k : ℕ) (large : DyadicSquare k → Bool) (e : Pr
         simp [ne_of_mem_of_not_mem hb hl.1]
     · simpa using ih hl.2
 
+/-! ### Auxiliary sheets -/
+
+/-- The change initializing an auxiliary sheet.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex, lines 185–186`. -/
+def RepaintOp.IsAuxInit : RepaintOp → Bool
+  | .auxInit _ => true
+  | _ => false
+
+/-- A bulk operation initializes no auxiliary sheet. -/
+theorem BulkOp.countP_isAuxInit_ops (o : BulkOp) : o.ops.countP RepaintOp.IsAuxInit = 0 := by
+  simp [BulkOp.ops, List.countP_eq_zero, RepaintOp.IsAuxInit]
+
+/-- An edge initializes one auxiliary sheet. -/
+theorem countP_isAuxInit_edgeOps (e : SquareEdge) : (edgeOps e).countP RepaintOp.IsAuxInit = 1 := by
+  simp [edgeOps, List.countP_cons, List.countP_append, BulkOp.countP_isAuxInit_ops,
+    RepaintOp.IsAuxInit]
+
+/-- An event initializes at most four auxiliary sheets. -/
+theorem countP_isAuxInit_eventOps_le {k : ℕ} (large : DyadicSquare k → Bool)
+    (e : ProtocolEvent k) : (eventOps large e).countP RepaintOp.IsAuxInit ≤ 4 := by
+  rcases e with S | J
+  · simp only [eventOps]
+    split_ifs
+    · simp [largeRepaintingOps, BulkOp.countP_isAuxInit_ops,
+        countP_isAuxInit_edgeOps, SquareEdge.list]
+    · simp [RepaintOp.IsAuxInit]
+  · simp [eventOps, RepaintOp.IsAuxInit]
+
+/-- **Auxiliary sheets.** The schedule initializes at most four auxiliary sheets for each square
+and junction, `O(L ^ 2)` in all.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex, lines 576, 649–652`:
+“four auxiliary sheets at most per repainting”. -/
+theorem countP_isAuxInit_protocolSchedule_le (k : ℕ) (large : DyadicSquare k → Bool) :
+    (protocolSchedule k large).countP (fun x => x.2.IsAuxInit) ≤
+      4 * (Fintype.card (DyadicSquare k) + Fintype.card (DyadicJunction k)) := by
+  rw [protocolSchedule, List.countP_flatMap]
+  refine (List.sum_le_length_nsmul _ 4 fun n hn => ?_).trans ?_
+  · obtain ⟨e, -, rfl⟩ := List.mem_map.1 hn
+    simpa [List.countP_map, Function.comp_def] using countP_isAuxInit_eventOps_le large e
+  · rw [List.length_map, smul_eq_mul, mul_comm]
+    exact Nat.mul_le_mul_left _ (length_eventSchedule_le k)
+
 end TNLean.PEPS.Approximation

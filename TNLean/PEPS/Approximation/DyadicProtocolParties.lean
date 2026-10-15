@@ -316,6 +316,36 @@ theorem participation_le_of_repaintingRewrites {k : ℕ} {Γ : Type*} [Fintype �
       hrw Q.toTriple P hP
   · exact participation_le_of_eventUses ev hG (.inr S) P hP
 
+/-- **Gates of one event.** If each change of the schedule has at most `b` gates, then at most
+`189 b` gates belong to any one event.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex, lines 572–577`. -/
+theorem card_gates_event_le {k : ℕ} {large : DyadicSquare k → Bool} {Γ : Type*} [Fintype Γ]
+    (chg : Γ → Fin (protocolSchedule k large).length) {b : ℕ}
+    (hb : ∀ t, #{γ | chg γ = t} ≤ b) (e : ProtocolEvent k) :
+    #{γ | ((protocolSchedule k large)[chg γ]).1 = e} ≤ 189 * b := by
+  classical
+  refine (card_le_mul_card_image_of_maps_to (f := chg)
+    (t := univ.filter fun t : Fin (protocolSchedule k large).length =>
+      ((protocolSchedule k large)[t]).1 = e) (fun γ hγ => by simpa using hγ) b
+    fun t _ => (card_le_card fun γ hγ => by simp_all).trans (hb t)).trans ?_
+  rw [mul_comm]
+  exact Nat.mul_le_mul_right _ (card_filter_event_le k large e)
+
+/-- **Lifetime participation along the schedule.** If each change of the schedule has at most
+`b` gates and every gate in which the party `p` participates belongs to an event that uses `p`,
+then `p` participates in at most `64 · 189 b` gates.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), Proposition 7.1 `prop:protocol`, item 2,
+`06-geometry.tex, lines 31–32`, and lines 572–631. -/
+theorem participation_le_of_schedule {k : ℕ} {large : DyadicSquare k → Bool} {Γ : Type*}
+    [Fintype Γ] (chg : Γ → Fin (protocolSchedule k large).length) {b : ℕ}
+    (hb : ∀ t, #{γ | chg γ = t} ≤ b) (p : ProtocolParty k) (P : Γ → Prop) [DecidablePred P]
+    (hP : ∀ γ, P γ → EventUses ((protocolSchedule k large)[chg γ]).1 p) :
+    #{γ | P γ} ≤ 64 * (189 * b) :=
+  participation_le_of_eventUses (fun γ => ((protocolSchedule k large)[chg γ]).1)
+    (card_gates_event_le chg hb) p P hP
+
 /-! ### Locality of the parties of an event -/
 
 /-- A party used by the repainting of the square `S` of scale `j'` has scale `j'` or `j' + 1`,
