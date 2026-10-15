@@ -197,3 +197,50 @@ outer sample.
     reference vector of one listing to that of the other. Compose these
     exchanges with the circuit of Theorem~\ref{thm:peps_frame_small_rewrite_gate}.
 \end{proof}
+
+\begin{theorem}[Direct repaintings, resizes and point treatments as small-patch rewrites]
+    \label{thm:peps_guide_frame_rewrite_events}
+    \lean{TNLean.PEPS.Approximation.exists_directRepainting_planeConditions,
+        TNLean.PEPS.Approximation.directRepainting_step,
+        TNLean.PEPS.Approximation.exists_resize_planeConditions,
+        TNLean.PEPS.Approximation.exists_local_planeConditions}
+    \leanok
+    \uses{thm:peps_guide_frame_rewrite}
+    The plane conditions of Theorem~\ref{thm:peps_guide_frame_rewrite} hold in
+    the following three cases, with the patches on a square net of mesh $u$.
+    \begin{enumerate}
+        \item Direct repainting \cite[Section~7]{OpenAI2026PolynomialPEPS},
+              \texttt{06-geometry.tex}, lines 507--527. The two guides are the
+              readings of guides uniform on the $n$-blocks that differ only on
+              one block, with holes of radius $r$ at their true vertices and
+              $3u+4r<n$. The affected holes are those at the corners of the
+              block, and the specified parties are those of the labels of the
+              nine blocks around it.
+        \item Resize, lines 529--541. The guide is a reading of a guide
+              uniform on the $N$-blocks. Only the hole at one grid corner
+              changes, all radii are at most $R$, and $4R+3u<N$.
+        \item Local rewrite, such as a point treatment, lines 481--505. The
+              two guides agree outside a ball of radius $\rho_0$, the affected
+              holes lie within $\rho_1$ of its center and the untouched ones at
+              distance at least $\rho_2$, with
+              $\max(\rho_0,\rho_1+2r)+3u+4r<\rho_2$.
+    \end{enumerate}
+    In each case the two-owner condition near the event, for footprints of
+    radius $2u$, is a hypothesis; for the readings it is the footprint-ratio
+    theorems of Section~\ref{sec:peps_dyadic_geometry} with $2u=\nu n$. In the
+    first case the rewrite is a circuit as in
+    Theorem~\ref{thm:peps_guide_frame_rewrite}, between the frames with holes at
+    the true vertices, whose participants lie among at most $18$ parties.
+\end{theorem}
+
+\begin{proof}\leanok
+    Readings of two guides differ only in the closure of the set where the
+    guides differ, so the owner changes only on the closed block, or in the
+    closed ball of radius $\rho_0$. The net covers that set and the affected
+    outer holes. An outer patch square lies within $3u$ of the covered set,
+    while every untouched hole is at distance at least $n$, $N$ or $\rho_2$
+    from it, which gives the avoidance. The two-owner condition applies because
+    every hole center of the frame near the event is one of its centers, and a
+    point within $n$ of a closed block carries the label of one of the nine
+    blocks around it.
+\end{proof}

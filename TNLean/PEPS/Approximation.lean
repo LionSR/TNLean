@@ -93,6 +93,8 @@ import TNLean.PEPS.Approximation.DyadicActiveLabelParties
 import TNLean.PEPS.Approximation.DyadicAnchors
 import TNLean.PEPS.Approximation.DyadicBlockFootprints
 import TNLean.PEPS.Approximation.DyadicChamberSampling
+import TNLean.PEPS.Approximation.DyadicDirectRepaintingRewrite
+import TNLean.PEPS.Approximation.DyadicDirectRepaintingStep
 import TNLean.PEPS.Approximation.DyadicEdgeBands
 import TNLean.PEPS.Approximation.DyadicFootprintScaling
 import TNLean.PEPS.Approximation.DyadicFootprintTemplates
@@ -108,6 +110,7 @@ import TNLean.PEPS.Approximation.DyadicProtocol
 import TNLean.PEPS.Approximation.DyadicReadingFootprints
 import TNLean.PEPS.Approximation.DyadicRepaintingClearance
 import TNLean.PEPS.Approximation.DyadicRepaintingSchedule
+import TNLean.PEPS.Approximation.DyadicResizeRewrite
 import TNLean.PEPS.Approximation.DyadicRimPatterns
 import TNLean.PEPS.Approximation.DyadicRouting
 import TNLean.PEPS.Approximation.DyadicRoutingPEPS
@@ -180,6 +183,7 @@ import TNLean.PEPS.Approximation.LayoutEqualityCoordinates
 import TNLean.PEPS.Approximation.LayoutExcludedOwners
 import TNLean.PEPS.Approximation.LayoutOwnerMap
 import TNLean.PEPS.Approximation.LayoutPartitionWord
+import TNLean.PEPS.Approximation.LocalGuideRewrite
 import TNLean.PEPS.Approximation.LocalPairSource
 import TNLean.PEPS.Approximation.LocalPartFrameListRestriction
 import TNLean.PEPS.Approximation.LocalPartRestrictionCongruence
