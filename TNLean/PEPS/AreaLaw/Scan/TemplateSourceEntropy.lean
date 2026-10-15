@@ -24,7 +24,7 @@ use is required. The physical specialization consumes the literal uniform
 `boxEntropy` estimate at `Exponents.boxError` and leaves the original ground
 vector unchanged. It does not derive that improved exponent from the initial
 one, construct a scanner, or prove Proposition 9.5 or 9.6.
-See `docs/paper-gaps/arealaw2d_template_source_entropy_scope.tex`.
+See `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, `08-scanner.tex`, lines 353--357, 574--590, 641--667

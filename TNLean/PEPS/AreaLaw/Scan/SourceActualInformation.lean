@@ -21,7 +21,7 @@ remainders sent to zero at fixed physical data, weight and smoothing parameter.
 The original target and positive-prefix entropy hypotheses, scanner geometry
 and transport smallness remain explicit. No safe-box entropy conclusion or
 final size-power estimate is assumed or claimed. See
-`docs/paper-gaps/arealaw2d_source_actual_information_scope.tex`.
+`docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 353--357, 399--533 and 839--941, revision

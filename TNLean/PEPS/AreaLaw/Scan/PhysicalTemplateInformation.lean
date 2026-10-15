@@ -18,7 +18,7 @@ remain explicit; no safe-box estimate or scanner certificate is assumed.
 This additive theorem leaves the accepted cut/volume packaging unchanged.
 Its imported physical source chain still requires validation and integration;
 it does not establish the repair-tree construction or the full area law.
-See `docs/paper-gaps/arealaw2d_physical_template_information_scope.tex`.
+See `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, Proposition 9.5, lines 681--805, and the information

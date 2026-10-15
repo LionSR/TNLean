@@ -20,7 +20,7 @@ The target and positive-prefix source entropy bounds, scanner construction,
 layer bounds, scale separation, anchor multiplicity and geometric clearance
 remain explicit antecedents. This theorem does not construct a scanner or
 safe-box entropy input and does not claim Proposition 9.6 or the full area law.
-See `docs/paper-gaps/arealaw2d_source_final_information_scope.tex`.
+See `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 353--357, 399--533 and 839--941, revision

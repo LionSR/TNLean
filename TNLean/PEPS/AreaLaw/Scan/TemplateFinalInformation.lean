@@ -21,7 +21,7 @@ state and literal template regions appear in the conclusion.
 This theorem does not derive the improved safe-box exponent and does not
 claim an unconditional Proposition 9.6 or the full area law. It leaves the
 already accepted cut/volume packaging theorem unchanged.
-See `docs/paper-gaps/arealaw2d_template_final_information_scope.tex`.
+See `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 32--58, 571--590 and 808--944, revision
