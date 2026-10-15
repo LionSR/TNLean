@@ -172,6 +172,51 @@ and its inherited scanner dependencies.
     supremum is at most $(C+N^2\log q+1)r^p$.
 \end{lemma}
 
+\begin{theorem}[Reducing the safety parameter]
+    \label{thm:arealaw-box-clearance-comparison}
+    \lean{TNLean.PEPS.AreaLaw.boxEntropy_power_le_of_succ_clearance}
+    \leanok
+    \uses{def:area_law_box_entropy}
+    Fix $q,R\in\mathbb N$ with $q\geq1$ and $J,\Delta\in\mathbb R$.
+    Write $F_{\mathrm{box},D}$ for the safe-box entropy at safety
+    parameter $D$, with the same fixed physical parameters
+    $q,R,J,\Delta$. Let $D\in\mathbb N$ satisfy $D\geq3$, and let
+    $C,p\geq0$. Suppose that
+    $F_{\mathrm{box},D+1}(r)\leq Cr^p$ for every integer $r\geq1$.
+    Then, for every integer $r\geq1$,
+    \begin{align}
+        F_{\mathrm{box},D}(r)
+         & \leq (4C+4\log q+1)r^p.
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_box_children,lem:arealaw-box-supremum-small-sizes}
+    Fix a physical instance and a $D$-safe rectangle $Q$ of size
+    $s\geq2$, and put $r=\lceil s/2\rceil$.
+    Theorem~\ref{thm:area_law_box_children}, with $M=2$, partitions $Q$
+    into at most four disjoint child rectangles $Q_i$ of size at most
+    $r$. Since $D\geq3$ and $s\geq2$, one has $(D+1)r\leq Ds$.
+    Each child lies in $Q$, so its points have distance greater than
+    $Ds\geq(D+1)\operatorname{size}(Q_i)$ from every cut endpoint.
+    Thus each child is $(D+1)$-safe.
+
+    The physical regions $A\cap Q_i$ partition $A\cap Q$.
+    For the same normalized ground vector $\Omega$ on the original
+    domain, subadditivity and the assumed bound give
+    \begin{align}
+        S_\Omega(A\cap Q)
+         & \leq \sum_i S_\Omega(A\cap Q_i)
+        \leq \sum_i Cs^p
+        \leq 4Cs^p.
+    \end{align}
+    Apply Lemma~\ref{lem:arealaw-box-supremum-small-sizes} with
+    coefficient $4C$, exponent $p$, and cutoff $N=2$. The volume
+    estimate supplies the correction $N^2\log q=4\log q$ for smaller
+    sizes. Taking the supremum over the same physical family gives
+    the asserted coefficient $4C+4\log q+1$ at every positive integer
+    scale.
+\end{proof}
+
 \begin{theorem}[Uniform physical one-step improvement]
     \label{thm:arealaw-physical-box-step}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_uniform_boxEntropy_improvement}

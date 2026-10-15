@@ -7517,3 +7517,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   changes the mathematical input to the common signed moment interval and
   retains the actual weighted postselected entropy contribution. No custom
   tactic, reduced hypothesis, or enlarged elaboration budget is introduced.
+
+### Safe-box child entropy partitions — candidate (2026-10-15)
+
+- **Pattern:** Identify a rectangle region with the disjoint union of its
+  child regions, then apply finite-product entropy subadditivity to the
+  original normalized vector.
+- **Seen:** `TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean` and
+  `TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean`.
+- **Abstraction:** The geometric partition and the entropy inequality already
+  have separate lemmas. If a third use appears, a lemma for the entropy of
+  the rectangle partition would remove the repeated union and disjointness
+  arguments.
+- **Notes:** Two occurrences in two files, below the promotion threshold.
+  The physical domain and vector remain the same on every child.

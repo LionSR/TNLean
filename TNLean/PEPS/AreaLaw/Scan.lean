@@ -81,6 +81,7 @@ import TNLean.PEPS.AreaLaw.Scan.BootstrapRoundedClearance
 import TNLean.PEPS.AreaLaw.Scan.BootstrapScannerExponents
 import TNLean.PEPS.AreaLaw.Scan.BootstrapSelectedEnergy
 import TNLean.PEPS.AreaLaw.Scan.BootstrapTypicalBudget
+import TNLean.PEPS.AreaLaw.Scan.BoxClearanceComparison
 import TNLean.PEPS.AreaLaw.Scan.BoxEntropySupremum
 import TNLean.PEPS.AreaLaw.Scan.Budgets
 import TNLean.PEPS.AreaLaw.Scan.ChargeAncestry
