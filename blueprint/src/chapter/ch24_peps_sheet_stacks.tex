@@ -1,0 +1,132 @@
+\section{The memory of several sheets}
+\label{sec:peps_sheet_stacks}
+In the protocol of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} the memory
+holds the main sheet, the active auxiliary sheets, the frozen auxiliary sheets
+and the copies of $\Omega$ not yet in use. Every copy of $\Omega$, including the
+main copy at the root, is initialized privately at its future owner, and the
+reference vector at every stage is the tensor product of the reference vectors
+of the encoded frames of the sheets, every factor of norm at most one
+(\texttt{06-geometry.tex}, lines 653--681). This section collects the
+bookkeeping of this memory: the initial private maps, the reorderings of the
+sheets, the changes that leave a frame unchanged, and the norm of the reference
+vector. None of these results uses a hypothesis on $\Omega$ beyond its norm.
+
+\begin{definition}[The memory of several sheets]
+    \label{def:peps_sheet_stack}
+    \lean{TNLean.PEPS.EncodedFrame.stackRegs,
+        TNLean.PEPS.EncodedFrame.SheetStack,
+        TNLean.PEPS.EncodedFrame.Frame.regRef,
+        TNLean.PEPS.EncodedFrame.stackVec,
+        TNLean.PEPS.EncodedFrame.framesVec}
+    \leanok
+    \uses{def:peps_frame_registers}
+    For a list of encoded frames $\mathcal F_1,\dots,\mathcal F_m$ and a list $\ell$
+    of further registers, the memory of the sheets is the tensor product of the
+    registers of the frames, in order, followed by those of $\ell$. For a vector
+    $\xi$ of the registers of $\ell$, the reference vector of the sheets is
+    $\Omega_{\mathcal F_1}\otimes\cdots\otimes\Omega_{\mathcal F_m}\otimes\xi$.
+\end{definition}
+
+\begin{lemma}[Reordering the sheets]
+    \label{lem:peps_sheet_reordering}
+    \lean{TNLean.PEPS.EncodedFrame.stackRegs_append,
+        TNLean.PEPS.EncodedFrame.stackVec_append,
+        TNLean.PEPS.EncodedFrame.exists_reordering_stackVec,
+        TNLean.PEPS.EncodedFrame.exists_originalCircuit_stackVec_of_perm}
+    \leanok
+    \uses{def:peps_sheet_stack}
+    Let $\mathcal F'_1,\dots,\mathcal F'_m$ be a permutation of the frames
+    $\mathcal F_1,\dots,\mathcal F_m$. There is a word of exchanges of tensor
+    factors from the memory of the first list, followed by $\ell$, to that of the
+    second list, followed by $\ell$, which carries the reference vector of the first
+    list to that of the second for every vector $\xi$ of $\ell$. As an original
+    circuit it has no nonprivate gate. In particular an auxiliary sheet can be moved
+    next to the main sheet before a lens exchange.
+\end{lemma}
+
+\begin{proof}\leanok
+    Induct on the permutation. Prepending a common frame frames the word by its
+    registers, and two adjacent frames are interchanged by exchanging their two
+    blocks of registers.
+\end{proof}
+
+\begin{lemma}[The initial private maps]
+    \label{lem:peps_sheet_initialization}
+    \lean{TNLean.PEPS.EncodedFrame.framesSpace,
+        TNLean.PEPS.EncodedFrame.splitMap,
+        TNLean.PEPS.EncodedFrame.splitMap_tmul_one,
+        TNLean.PEPS.EncodedFrame.norm_splitMap_le,
+        TNLean.PEPS.EncodedFrame.splitCircuit,
+        TNLean.PEPS.EncodedFrame.nonprivateCount_splitCircuit,
+        TNLean.PEPS.EncodedFrame.isExpansionBounded_splitCircuit,
+        TNLean.PEPS.EncodedFrame.isMonomialBounded_splitCircuit,
+        TNLean.PEPS.EncodedFrame.participants_splitCircuit_subset,
+        TNLean.PEPS.EncodedFrame.eval_splitCircuit,
+        TNLean.PEPS.EncodedFrame.exists_originalCircuit_initial}
+    \leanok
+    \uses{lem:peps_sheet_reordering}
+    Let every frame of a list be held entirely by one party: all its registers,
+    raw and tag, belong to that party. Give each party, as its whole initial private
+    memory, the registers of its frames in the order of the list, and as its
+    initial vector the product of their reference vectors, assumed of norm one.
+    Then one private map per party, followed by a reordering of the frames, carries
+    the product of the initial vectors of all parties exactly to the reference
+    vector of the list. The resulting circuit has no nonprivate gate. This is the
+    pure product initialization of \texttt{06-geometry.tex}, lines 658--662.
+\end{lemma}
+
+\begin{proof}\leanok
+    Each private map identifies the whole memory of a party with the memory of its
+    frames. The concatenation, over the parties, of their lists of frames is a
+    permutation of the list: a frame occurs in the list of its party exactly as
+    often as in the list. Lemma~\ref{lem:peps_sheet_reordering} reorders the
+    frames.
+\end{proof}
+
+\begin{lemma}[Changes that leave a frame unchanged]
+    \label{lem:peps_identity_change}
+    \lean{TNLean.PEPS.EncodedFrame.exists_originalCircuit_of_frame_eq,
+        TNLean.PEPS.EncodedFrame.Frame.changeOwner_empty,
+        TNLean.PEPS.Approximation.emptyTarget_step}
+    \leanok
+    \uses{def:peps_sheet_stack}
+    A change between equal frames, such as a birth or death whose raw target is
+    empty or the resize of a hole whose radius does not change, is the circuit
+    without operations: it has no nonprivate gate and carries the reference vector
+    of the frame to itself. Changing the owner of an empty set of raw registers
+    leaves a frame unchanged (\texttt{06-geometry.tex}, lines 432--438 and
+    529--541).
+\end{lemma}
+
+\begin{proof}\leanok
+    Immediate.
+\end{proof}
+
+\begin{theorem}[The norm of the reference vector of several sheets]
+    \label{thm:peps_sheet_stack_norm}
+    \lean{TNLean.PEPS.EncodedFrame.one_sub_mul_le_norm_stackVec,
+        TNLean.PEPS.EncodedFrame.one_sub_div_pow_le_norm_stackVec}
+    \leanok
+    \uses{def:peps_sheet_stack,thm:peps_frame_norm}
+    Let $\lVert\Omega\rVert=1$, and let every hole of every frame
+    $\mathcal F_1,\dots,\mathcal F_m$ satisfy
+    $\lVert(\id-P)\Omega\rVert\le\varepsilon$. If the frames have $r$ holes in
+    total, then
+    \[
+        (1-r\varepsilon)\lVert\xi\rVert
+        \le\lVert\Omega_{\mathcal F_1}\otimes\cdots\otimes
+        \Omega_{\mathcal F_m}\otimes\xi\rVert .
+    \]
+    In particular, if $\varepsilon=L^{-60}$, $r\le CL^3$ and
+    $\lVert\xi\rVert=1$, the reference vector has norm between $1-CL^{-57}$ and
+    $1$. The bound $r\le CL^3$ on the total number of holes is a hypothesis here;
+    in the source it is the count of frozen auxiliary holes,
+    \texttt{06-geometry.tex}, lines 653--656 and 674--678.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:peps_frame_norm}, the frame $\mathcal F_i$ with $r_i$ holes
+    has $1-r_i\varepsilon\le\lVert\Omega_{\mathcal F_i}\rVert\le1$. For
+    $1-a\le x\le1$ and $(1-b)z\le y\le z$ one has
+    $xy=y-(1-x)y\ge y-az\ge(1-a-b)z$; induct over the frames.
+\end{proof}
