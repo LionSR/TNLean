@@ -191,6 +191,7 @@ import TNLean.PEPS.AreaLaw.Scan.StrongSelectedDensityPower
 import TNLean.PEPS.AreaLaw.Scan.SubsystemDimension
 import TNLean.PEPS.AreaLaw.Scan.SubsystemDimensionScale
 import TNLean.PEPS.AreaLaw.Scan.SubsystemSize
+import TNLean.PEPS.AreaLaw.Scan.SuppliedTargetNormAttachment
 import TNLean.PEPS.AreaLaw.Scan.SuppliedTargetStatusMoments
 import TNLean.PEPS.AreaLaw.Scan.SupportClassification
 import TNLean.PEPS.AreaLaw.Scan.SupportCompatibility
