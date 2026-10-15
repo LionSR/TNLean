@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Circuit.Channel.PortMatching
 import TNLean.MPS.Preparation.Staircase
 
 /-!
@@ -73,28 +74,6 @@ theorem blockInputCfg_injective (hd : 0 < d) {r₁ q : ℕ} (hq : r₁ + r₁ �
     convert this using 2 <;> ext <;> simp
 
 /-! ### Permutations of sites -/
-
-theorem permOp_mul {n : ℕ} (τ₁ τ₂ : Equiv.Perm (Fin n)) :
-    permOp (d := d) (τ₁ * τ₂) = permOp τ₁ * permOp τ₂ := by
-  ext x y
-  simp only [permOp, of_apply, mul_apply, ite_mul, one_mul, zero_mul]
-  rw [Finset.sum_ite_eq' Finset.univ (x ∘ τ₁)]
-  simp only [Finset.mem_univ, ite_true, Equiv.Perm.coe_mul]
-  rfl
-
-@[simp] theorem permOp_one {n : ℕ} : permOp (d := d) (1 : Equiv.Perm (Fin n)) = 1 := by
-  ext x y
-  simp only [permOp, of_apply, Equiv.Perm.coe_one, Function.comp_id, one_apply, eq_comm]
-
-/-- A SWAP of two sites of the open chain of `n` sites is a product of at most `2n` gates on
-neighbouring sites. -/
-theorem isPairProduct_permOp_swap {n : ℕ} (i i' : Fin n) :
-    IsPairProduct d n (2 * n) (permOp (Equiv.swap i i')) := by
-  by_cases h : i = i'
-  · rw [h, Equiv.swap_self, ← Equiv.Perm.one_def, permOp_one]
-    exact IsPairProduct.one _
-  · rw [permOp_swap_eq_embedOp h]
-    exact isPairProduct_embedOp_pairSites h (permOp_mem_unitary _)
 
 /-- The permutation exchanging the sites `i` and `a + i` for every `i < j`. -/
 def routePerm (n a : ℕ) : ℕ → Equiv.Perm (Fin n)

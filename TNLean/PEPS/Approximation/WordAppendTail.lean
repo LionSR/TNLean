@@ -57,7 +57,7 @@ def exchangeTwo (a b : Layout P) : Word (a ++ b) (b ++ a) :=
     (congrArg (b ++ ·) (List.append_nil a))
 
 /-- The two-list exchange interchanges the corresponding tensor factors. -/
-private theorem eval_exchangeTwo (a b : Layout P) (x : Mem a) (y : Mem b) :
+theorem eval_exchangeTwo (a b : Layout P) (x : Mem a) (y : Mem b) :
     (exchangeTwo a b).eval ((appendIso a b).symm (x ⊗ₜ y)) =
       (appendIso b a).symm (y ⊗ₜ x) := by
   rw [exchangeTwo, eval_castLayouts]

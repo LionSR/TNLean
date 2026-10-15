@@ -7508,9 +7508,9 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         TNLean.Algebra.ScalarThreeCochain.cocyclesEquiv,
         TNLean.Algebra.ScalarThreeCochain.anomalyClass}
     \leanok
-    \uses{def:mpug_three_cocycle, def:mpug_h2_group_cohomology_comparison}
+    \uses{def:mpug_three_cocycle, thm:mpug_h2_group_cohomology_comparison}
     Give $\C^\times$ the trivial $G$-action and write it additively, as in
-    Definition~\ref{def:mpug_h2_group_cohomology_comparison}. A scalar
+    Theorem~\ref{thm:mpug_h2_group_cohomology_comparison}. A scalar
     $n$-cochain for $n=2,3$ is then an inhomogeneous $n$-cochain
     $G^n\to\C^\times$ of this representation, and conversely. Under this
     identification a scalar $3$-cocycle is an inhomogeneous $3$-cocycle, and
@@ -7527,7 +7527,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \label{thm:mpug_h3_group_cohomology}
     \lean{TNLean.Algebra.groupCohomology_π_eq_zero_iff,
         TNLean.Algebra.scalarRepresentationEquiv_ofMul_eq_zero_iff,
-        TNLean.Algebra.scalarH2Representation_ρ_apply,
+        TNLean.Algebra.ScalarCohomology.ofMulDistribMulAction_ρ_apply,
         TNLean.Algebra.ScalarThreeCochain.d_toInhomogeneousCochain,
         TNLean.Algebra.ScalarThreeCochain.isCocycle_iff_d_eq_zero,
         TNLean.Algebra.ScalarCocycle.d_toInhomogeneousCochain_apply,
@@ -8243,15 +8243,13 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     the identity, composition, and inverse assertions.
 \end{proof}
 
-\begin{theorem}[Cocycles and coboundaries for trivial coefficients]
+\begin{theorem}[Cocycles and classes for trivial coefficients]
     \label{thm:mpug_h2_trivial_coefficients}
     \lean{TNLean.Algebra.ScalarCocycle.isCocycle_iff_isMulCocycle₂,
-        TNLean.Algebra.ScalarCocycle.isCoboundary_iff_isMulCoboundary₂,
-        TNLean.Algebra.ScalarCocycle.cohomologousTo_iff_isCoboundary_div,
-        TNLean.Algebra.ScalarCocycle.isCoboundary_iff_mem_mathlibCoboundaries,
+        TNLean.Algebra.ScalarCocycle.IsCocycle.isMulCocycle₂,
         TNLean.Algebra.ScalarCocycle.cohomologousTo_iff_H2π_eq}
     \leanok
-    \uses{def:is_coboundary, def:cohomologous_to, def:is_cocycle}
+    \uses{def:is_coboundary, def:cohomologous_to, def:is_cocycle, def:h2_cx}
     Let $G$ act trivially on $\C^\times$, and let
     $f(g,h)=\omega(g,h)$. The multiplicative cocycle equation
     \begin{align}
@@ -8259,14 +8257,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
          & =f(h,k)f(g,hk)
         \label{eq:mpug_h2_cocycle_comparison}
     \end{align}
-    is equivalent to Definition~\ref{def:is_cocycle}. Likewise, the
-    multiplicative coboundary equation
-    \begin{align}
-        \frac{\varphi(h)}{\varphi(gh)}\varphi(g)
-         & =f(g,h)
-        \label{eq:mpug_h2_coboundary_comparison}
-    \end{align}
-    is equivalent to Definition~\ref{def:is_coboundary}.
+    is equivalent to Definition~\ref{def:is_cocycle}.
 
     If $\pi$ denotes the canonical map from multiplicative $2$-cocycles to
     degree-two group cohomology, then for any two cocycles $\omega_1$ and
@@ -8281,64 +8272,60 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:is_coboundary, def:cohomologous_to, def:is_cocycle}
+    \uses{def:is_coboundary, def:cohomologous_to, def:is_cocycle,
+        thm:coboundary_iff_cohomologous_one}
     Since $\C^\times$ is commutative,
     (\ref{eq:mpug_h2_cocycle_comparison}) is obtained from the cocycle
-    equation by interchanging the two factors on each side, and
-    (\ref{eq:mpug_h2_coboundary_comparison}) is obtained from
-    $\varphi(g)\varphi(h)\varphi(gh)^{-1}$ by reordering its factors.
-    Equivalence $\omega_1\sim\omega_2$ holds when
-    $\omega_1\omega_2^{-1}$ is a coboundary. In additive notation this ratio
-    is the difference of the corresponding cochains, so the quotient
-    criterion for $\pi$ gives
+    equation by interchanging the two factors on each side.
+    By Lemma~\ref{thm:coboundary_iff_cohomologous_one},
+    $\omega_1\sim\omega_2$ holds when $\omega_1\omega_2^{-1}$ is a
+    coboundary. In additive notation this ratio is the difference of the
+    corresponding cochains, so the quotient criterion for $\pi$ gives
     (\ref{eq:mpug_h2_class_comparison}).
 \end{proof}
 
-\begin{definition}[Comparison with low-degree group cohomology]
-    \label{def:mpug_h2_group_cohomology_comparison}
-    \lean{TNLean.Algebra.h2EquivGroupCohomology,
-        TNLean.Algebra.ScalarCocycle.trivialMulDistribMulAction,
-        TNLean.Algebra.scalarH2Representation,
-        TNLean.Algebra.ScalarCocycle.toMathlibCocycle,
-        TNLean.Algebra.ScalarCocycle.ofMathlibCocycle,
-        TNLean.Algebra.ScalarCocycle.representativesEquivMathlib,
-        TNLean.Algebra.h2ToGroupCohomology,
-        TNLean.Algebra.h2ToGroupCohomology_injective,
-        TNLean.Algebra.h2ToGroupCohomology_surjective}
+\begin{theorem}[Every class has a scalar cocycle representative]
+    \label{thm:mpug_h2_group_cohomology_comparison}
+    \lean{TNLean.Algebra.ScalarCocycle.exists_H2π_eq}
     \leanok
     \uses{def:h2_cx, thm:mpug_h2_trivial_coefficients}
-    Give $\C^\times$ the trivial $G$-action. Currying and uncurrying identify
-    the cocycle representatives in Definition~\ref{def:h2_cx} with the
-    multiplicative representatives in the inhomogeneous cochain complex.
-    By (\ref{eq:mpug_h2_class_comparison}), this correspondence induces a
-    canonical equivalence
+    Give $\C^\times$ the trivial $G$-action. Every element of
+    $H^2\bigl(G,\C^\times_{\mathrm{triv}}\bigr)$ is the class $\pi(\omega)$ of
+    a scalar $2$-cocycle $\omega$. Together with
+    (\ref{eq:mpug_h2_class_comparison}), the classes are the scalar
+    $2$-cocycles modulo $\sim$:
     \begin{align}
         Z^2(G,\C^\times)/{\sim}
          & \simeq H^2\bigl(G,\C^\times_{\mathrm{triv}}\bigr).
         \label{eq:mpug_h2_equivalence}
     \end{align}
-    The left-hand side is the quotient already defined in
-    Definition~\ref{def:h2_cx}; no additional quotient is introduced.
     This is the $H^2(H,\C^\times)$ appearing in the pair $(H,\psi)$ in
     \cite[lines~1927--1931]{FrancoRubio2025MPUGauging}.
-    % Reuse boundary: the right-hand side is Mathlib's low-degree H2 for
-    % Rep.ofMulDistribMulAction with the explicit trivial action.
-\end{definition}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_h2_trivial_coefficients}
+    Currying and uncurrying identify a multiplicative representative
+    $f:G\times G\to\C^\times$ in the inhomogeneous cochain complex with a
+    scalar $2$-cochain, and by (\ref{eq:mpug_h2_cocycle_comparison}) the
+    cocycle conditions agree.
+\end{proof}
 
 \begin{definition}[Pullback of scalar cohomology]
     \label{def:mpug_h2_pullback}
     \lean{TNLean.Algebra.ScalarCocycle.comap,
         TNLean.Algebra.ScalarCocycle.comap_apply,
-        TNLean.Algebra.H2.comap,
-        TNLean.Algebra.H2.comap_mk}
+        TNLean.Algebra.ScalarCocycle.mapCocycles₂_cocyclesOfIsMulCocycle₂,
+        TNLean.Algebra.ScalarCocycle.map_H2π}
     \leanok
     \uses{def:h2_cx}
     Let $f:K\to G$ be a group homomorphism. For a scalar $2$-cochain
     $\omega:G\times G\to\C^\times$, define
     $(f^*\omega)(a,b)=\omega(f(a),f(b))$.
-    The induced pullback map
-    $f^*:H^2(G,\C^\times)\to H^2(K,\C^\times)$ is defined by
-    $f^*[\omega]=[f^*\omega]$.
+    The restriction map
+    $f^*:H^2(G,\C^\times)\to H^2(K,\C^\times)$ induced by $f$, with the
+    identity of $\C^\times$ as coefficient map, satisfies
+    $f^*[\omega]=[f^*\omega]$ for every $2$-cocycle $\omega$.
 \end{definition}
 
 \begin{theorem}[Pullback preserves cocycles and cohomology]
@@ -8389,7 +8376,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 % No U(1) restriction naturality or tensor-level block-independence claim.
 \begin{theorem}[Exact extension of a subgroup cocycle]
     \label{thm:mpug_h2_exact_extension}
-    \lean{TNLean.Algebra.H2.mem_range_comap_subtype_iff,
+    \lean{TNLean.Algebra.ScalarCocycle.H2π_mem_range_map_subtype_iff,
         TNLean.Algebra.ScalarCocycle.IsCocycle.coboundary_mul}
     \leanok
     \uses{def:mpug_h2_pullback, def:is_cocycle}
@@ -8425,7 +8412,6 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \label{thm:mpug_circle_complex_units_h2}
     \lean{TNLean.Algebra.Complex.div_toUnits_unitsPhase,
         TNLean.Algebra.ScalarCocycle.circlePhase_isMulCocycle₂,
-        TNLean.Algebra.ScalarCocycle.positiveResidual_isCoboundary,
         TNLean.Algebra.ScalarCocycle.cohomologousTo_circlePhaseInclusion,
         TNLean.Algebra.ScalarCocycle.circlePhaseMathlibCocycle,
         TNLean.Algebra.ScalarCocycle.H2π_map_circlePhaseMathlibCocycle,
@@ -8433,7 +8419,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         TNLean.Algebra.circleH2ToComplexUnitsH2_surjective,
         TNLean.Algebra.circleH2EquivComplexUnitsH2}
     \leanok
-    \uses{def:mpug_h2_group_cohomology_comparison,
+    \uses{thm:mpug_h2_group_cohomology_comparison,
         thm:mpug_positive_generalized_cocycle}
     Let $G$ be finite, and give $U(1)$ and $\C^\times$ the trivial
     $G$-actions.  Inclusion of the unit circle induces an equivalence
@@ -9248,7 +9234,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         TNLean.Algebra.LSymbol.gauge_one_mul}
     \leanok
     \uses{thm:mpug_stabilizer_reconstruction, def:mpug_l_gauge,
-        def:mpug_h2_group_cohomology_comparison, def:cohomologous_to}
+        thm:mpug_h2_group_cohomology_comparison, def:cohomologous_to}
     Keep the setting of Theorem~\ref{thm:mpug_stabilizer_reconstruction},
     and call two $L$-symbols action-gauge equivalent when they differ by
     $(1,\gamma)\mathbin{\triangleright}$ for some action-tensor gauge

@@ -108,3 +108,128 @@
     $\log(s+e)\le\log(e^{2}s)=2+\log s\le2(1+\log s)$, which converts the
     count in $\log(s+e)$ into one in $1+\log s$.
 \end{proof}
+
+% Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
+% lines 152--158 and 224--300.
+\begin{lemma}[One active square of the cell recursion]
+    \label{lem:peps_cell_active_square}
+    \lean{TNLean.PEPS.Approximation.CellPartition.IsChamberSquare,
+        TNLean.PEPS.Approximation.CellPartition.holes,
+        TNLean.PEPS.Approximation.CellPartition.tile,
+        TNLean.PEPS.Approximation.CellPartition.IsChamberSquare.colour_eq_of_ne,
+        TNLean.PEPS.Approximation.CellPartition.IsChamberSquare.lt_dist_of_mem_tile,
+        TNLean.PEPS.Approximation.CellPartition.IsChamberSquare.isRectUnion_tileSample,
+        TNLean.PEPS.Approximation.CellPartition.IsChamberSquare.isChamberSquare_child}
+    \leanok
+    Label every point of the plane as allowed or as forbidden of colour $0$
+    or $1$; boundaries of chambers and squares follow one common half-open
+    convention. Let $Q$ be a square of side $u$ with at most five vertical and
+    five horizontal lines, including its sides, distinct parallel lines at
+    least $u/8$ apart, such that the labels are constant on their chambers in
+    the radius-$u$ neighbourhood of $Q$. Let $t>0$ with $1000t\le u$. Reserve
+    the square of radius $4t$ about every line intersection within distance
+    $10t$ of $Q$. Then:
+    \begin{enumerate}
+        \item a point of $Q$ outside the reserved squares sees within distance
+              $t$ at most one label different from its own;
+        \item let the tile of family $1$ consist of the allowed points of $Q$
+              outside the reserved squares within distance $t$ of colour $0$,
+              and the tile of family $0$ of the remaining such points; every
+              point of the tile of family $i$ is at distance greater than $t$
+              from every point of colour $i$;
+        \item the lattice points of each tile form a union of at most $66^2$
+              closed lattice rectangles;
+        \item each reserved square, with the lines at offsets
+              $0,\pm t,\pm4t$ from its centre, again satisfies the hypothesis
+              on $Q$ with side $8t$, for the labels obtained by giving each
+              tile the colour of its family.
+    \end{enumerate}
+\end{lemma}
+\begin{proof}\leanok
+    A label change between two points within distance $t$ of a point $p$ is
+    caused by a line within distance $t$ of $p$. Two distinct parallel such
+    lines would be at most $2t<u/8$ apart, and lines of both orientations
+    would meet within distance $t$ of $p$, inside a reserved square. Hence all
+    label changes near $p$ come from one line, which gives the first claim,
+    and the second follows from it. If two points lie in one chamber of the
+    lines shifted by $\pm t$, clamping a point near the first into the
+    $t$-neighbourhood of the second keeps its chamber; so the distance test is
+    constant on chambers of the old lines, their translates by $\pm t$, and
+    the sides of the reserved squares, and a set constant on chambers inside a
+    half-open square has a rectangular lattice sample. In the radius-$12t$
+    neighbourhood of a reserved square, the only old lines are the two
+    through its centre and no other reserved square appears, so the new
+    labels there are constant on the chambers of the lines at offsets
+    $0,\pm t,\pm4t$.
+\end{proof}
+
+% Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
+% lines 181--188 and 227--300.
+\begin{lemma}[Generations of the cell recursion]
+    \label{lem:peps_cell_generation_invariant}
+    \lean{TNLean.PEPS.Approximation.CellPartition.Generation.next,
+        TNLean.PEPS.Approximation.CellPartition.Generation.IsValid,
+        TNLean.PEPS.Approximation.CellPartition.Generation.IsValid.next,
+        TNLean.PEPS.Approximation.CellPartition.initialGeneration_isValid,
+        TNLean.PEPS.Approximation.CellPartition.pairwise_pieceList}
+    \leanok
+    \uses{lem:peps_cell_active_square}
+    A generation consists of a common side $u$, finitely many active squares of
+    side $u$ at mutual distance greater than $10u$, each satisfying the
+    hypothesis of Lemma~\ref{lem:peps_cell_active_square}, and labels for which
+    every allowed point lies in an active square. Initially the only active
+    square is one cell of a grid of side $s$, which is allowed, while every
+    other cell carries a forbidden colour; this is a generation for every
+    choice of exterior colours. If $1000u^{\gamma}\le u$, giving every tile
+    built with $t=u^{\gamma}$ the colour of its family and taking the reserved
+    squares as active squares of side $8u^{\gamma}$ yields again a generation.
+    Listing the tiles by generation and then by active square, they are
+    pairwise disjoint, and every point of a tile is at distance greater than
+    $u^{\gamma}$ of its generation from every earlier tile of its family.
+\end{lemma}
+\begin{proof}\leanok
+    Children of one parent are centred at intersections at least $u/8$ apart in
+    one coordinate, and children of different parents lie within $14u^{\gamma}$
+    of parents more than $10u$ apart; both separations exceed $80u^{\gamma}$.
+    The chamber invariant passes to the children by
+    Lemma~\ref{lem:peps_cell_active_square}, since near a parent only that
+    parent's tiles change labels. An allowed point left in an active square
+    lies in no tile, hence in a reserved square. A tile keeps the colour of its
+    family afterwards, so later tiles of the same family clear it by the
+    second claim of Lemma~\ref{lem:peps_cell_active_square}; tiles of one
+    generation in different active squares are more than $10u$ apart.
+\end{proof}
+
+% Source: OpenAI2026PolynomialPEPS, Lemma 3.2 (lem:cell-cmi), 02-information.tex,
+% lines 181--196 and 224--311.
+\begin{theorem}[Two-family partition of a cell]
+    \label{thm:peps_cell_two_family_partition}
+    \lean{TNLean.PEPS.Approximation.CellPartition.exists_cell_twoFamily_partition}
+    \leanok
+    \uses{lem:peps_cell_generation_invariant, thm:peps_cell_generation_count,
+        def:area_law_two_family_partition}
+    Fix $\gamma<1$ and $u_0$. There are $u_*\ge u_0$ with $u_*>1$ and constants
+    $C,K$ with the following property. Tile the plane by an axis-parallel grid
+    of squares of side $s\ge1$, choose one cell, and give every other cell a
+    forbidden colour $0$ or $1$. The lattice sample of the chosen cell has an
+    ordered two-family partition in which every piece has a scale
+    $u\in[u_*,s]$ such that the piece is a union of at most $66^2$ closed
+    lattice rectangles of sup diameter at most $u$, and every point of the
+    piece is at sup distance greater than $u^{\gamma}$ from every lattice point
+    of an exterior cell whose colour is the family of the piece and from every
+    earlier piece of the same family. The pieces and the remainder sites
+    number at most $C(1+\log s)^{K}$ in total.
+\end{theorem}
+\begin{proof}\leanok
+    Run the recursion of Lemma~\ref{lem:peps_cell_generation_invariant} from
+    the chosen cell until the side drops below $u_*$, where $u_*$ is so large
+    that $1000u^{\gamma}\le u$ and $8u^{\gamma}\le u^{\gamma'}$ for $u\ge u_*$,
+    with $\gamma<\gamma'<1$ and $\gamma'>0$. By
+    Theorem~\ref{thm:peps_cell_generation_count} this happens after finitely
+    many generations. The tiles of all generations are the pieces, and the
+    sites still allowed are the remainder. Each active square has at most
+    $25$ children, so there are at most $25^{g}$ active squares in generation
+    $g$, two tiles per active square, and at most $(u_*+1)^2$ lattice points
+    in a terminal square. Theorem~\ref{thm:peps_cell_generation_count} with
+    branching bound $25$ bounds the total.
+\end{proof}

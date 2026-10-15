@@ -77,10 +77,7 @@ private theorem commute_periodicLocalInteractionES_diagonal {d R N : ℕ}
       (periodicLocalInteractionES h i) := by
   classical
   apply (commute_iff_eq _ _).mpr
-  apply LinearMap.ext
-  intro v
-  apply PiLp.ext
-  intro σ
+  ext v σ
   let e := cyclicActiveBlockConfigEquiv d R hRN i
   let w : EuclideanSpace ℂ (Cfg d R) :=
     WithLp.toLp 2 fun ω => v (e.symm (ω, (e σ).2))
@@ -131,10 +128,7 @@ theorem periodicLocalInteractionES_commute_siteDiagonal {d R N : ℕ}
     rw [hsite]
     simp only [cyclicActiveBlockConfigEquiv_symm_apply_spectator]
     apply (commute_iff_eq _ _).mpr
-    apply LinearMap.ext
-    intro v
-    apply PiLp.ext
-    intro ω
+    ext v ω
     simp only [Module.End.mul_apply, Matrix.toEuclideanLin_diagonal_apply]
     have hconst : Matrix.toEuclideanLin (Matrix.diagonal fun _ : Cfg d R => f (s r)) v =
         f (s r) • v := by
@@ -287,10 +281,7 @@ theorem mixedEndpointOpenActiveProjection_isSymmetricProjection :
     (mixedEndpointOpenActiveProjection D₀ D₁ N).IsSymmetricProjection := by
   classical
   constructor
-  · apply LinearMap.ext
-    intro v
-    apply PiLp.ext
-    intro σ
+  · ext v σ
     simp only [Module.End.mul_apply, mixedEndpointOpenActiveProjection_apply]
     split <;> simp_all
   · apply Matrix.isSymmetric_toEuclideanLin_iff.mpr

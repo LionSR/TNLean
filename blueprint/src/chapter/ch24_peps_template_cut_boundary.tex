@@ -142,3 +142,34 @@ assumption is imposed on $\Lambda$ or $A$.
     endpoint of depth at most $L+R$, contrary to the hypothesis.
     Thus $x\in A$; the depth bound at $x$ gives $x\in T_{L+R}$.
 \end{proof}
+
+\begin{theorem}[Exclusion of the exterior and a remote union]
+    \label{thm:area_law_graph_neighborhood_remote_exclusion}
+    \lean{TNLean.PEPS.AreaLaw.exterior_union_subset_graphNeighborhood_compl_of_clearance}
+    \leanok
+    \uses{def:area_law_domain,def:area_law_cell_counts}
+    Let $\Lambda,T\subset\mathbb Z^2$ be finite, let $A,J\subseteq\Lambda$,
+    and let $L,R\in\mathbb N$. Let $Z_A$ be the set of endpoints of
+    the physical cut edges. Suppose $\|t-z\|_\infty>L+R$ for every
+    $t\in T$ and $z\in Z_A$, and $\|t-x\|_\infty>L+R$ for every
+    $t\in T$ and $x\in J$.
+    Put $S=A\cap(T+[-L,L]^2_{\mathbb Z})$. Then
+    \begin{align*}
+        (\Lambda\setminus A)\cup J
+         & \subseteq\Lambda\setminus N_R^\Lambda(S).
+    \end{align*}
+    Here $N_R^\Lambda$ is the closed graph neighbourhood in the induced
+    domain. The assertion permits disconnected domains and empty targets.
+    In the application to \cite[Theorem~1.1, lines~825--838 of
+        Section~11]{OpenAI2026AreaLaw}, $J$ is the whole union of earlier
+    actual pieces of the same family.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_graph_neighborhood_cut_clearance}
+    By Theorem~\ref{thm:area_law_graph_neighborhood_cut_clearance},
+    every $x\in N_R^\Lambda(S)$ belongs to $A$ and to
+    $T+[-(L+R),L+R]^2_{\mathbb Z}$. Thus it lies outside
+    $\Lambda\setminus A$. The dilation supplies a point $t\in T$
+    with $\|t-x\|_\infty\le L+R$, so the strict clearance from $J$
+    implies $x\notin J$. Both parts of the union are therefore excluded.
+\end{proof}
