@@ -29,7 +29,9 @@ singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
     $M=AB^{\mathsf T}$, and let $u_i$ be the normalized images $Mw_i$ when
     $Mw_i\ne0$. The $i$th singular value of $M$ is
     $\langle u_i, A(B^{\mathsf T}w_i)\rangle
-        =\langle A^{*}u_i, B^{\mathsf T}w_i\rangle
+        =\langle A^{*}u_i, B^{\mathsf T}w_i\rangle$, so by the
+    Cauchy--Schwarz inequality it is at most
+    $\lvert\langle A^{*}u_i, B^{\mathsf T}w_i\rangle\rvert
         \le\lVert A^{*}u_i\rVert\,\lVert B^{\mathsf T}w_i\rVert$.
     Summing over $i$ and applying the Cauchy--Schwarz inequality gives
     $\lVert M\rVert_1\le(\sum_i\lVert A^{*}u_i\rVert^2)^{1/2}(\sum_i\lVert B^{\mathsf T}w_i\rVert^2)^{1/2}
@@ -42,8 +44,8 @@ singular values and $\lVert M\rVert_2$ for its Hilbert--Schmidt norm.
     \leanok
     \uses{def:peps_group_nuclear_norm}
     Let $M$ be a finite complex matrix and $k\ge0$ an integer. There exists an
-    orthonormal family of at most $k$ vectors in the column space of $M$
-    whose orthogonal projection $Q$ satisfies
+    orthonormal family of at most $k$ vectors in $\mathbb C^n$, where $n$ is
+    the number of columns of $M$, whose orthogonal projection $Q$ satisfies
     $(k+1)\lVert M-MQ\rVert_2^2\le\lVert M\rVert_1^2$. If $M$ has at most $k$
     columns, then $MQ=M$.
 \end{lemma}

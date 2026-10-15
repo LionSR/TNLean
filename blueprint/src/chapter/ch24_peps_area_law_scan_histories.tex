@@ -1483,7 +1483,8 @@ The following finite construction follows
     \begin{align}
         \log\|M_{0,k}(0)^{-1/4}\xi\|^2\le C\log(k+2),
     \end{align}
-    where $M_{0,k}(0)$ is the initial fill root with band exponent $a/2$.
+    where $M_{0,k}(0)$ is the initial fill root with band exponent $a/2$
+    and $\log0$ is read as $0$, so that the bound is trivial for $\xi=0$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:al_scan_actual_fill_transport,thm:al_scan_actual_fill_admission}
@@ -3004,6 +3005,8 @@ The finite-leaf estimates below follow the charge-energy argument in
         -\log (N^{\mathrm{fill}}_{nm,k,\mathrm{pre}})^2.
         \label{eq:al_scan_actual_telescope}
     \end{align}
+    Here $\log0$ is read as $0$, so the identity also holds for
+    $\mathrm{pre}=0$, where every term vanishes.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_scan_actual_fill_endpoints}

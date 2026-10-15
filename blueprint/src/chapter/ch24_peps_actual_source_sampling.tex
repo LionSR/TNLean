@@ -415,8 +415,10 @@ positive; its tensor-network representation is proved separately.
     \end{align}
     where $M_{\xi,\zeta,j,p}$ is the local mixed physical trace of
     Theorem~\ref{thm:peps_actual_sampled_physical_scalar} at party $p$, and each
-    $j\in[k]^n$ assigns a sample index to every source occurrence. This is the
-    party-factored expansion of the sampled physical operator in
+    $j\in[k]^n$ assigns a sample index to every source occurrence. The case
+    $k=0$ is included with the convention $0^{-1}=0$: if $n\ge1$ both sides
+    vanish, since $[0]^n$ is empty, and if $n=0$ the factor $k^{-n}$ equals $1$.
+    This is the party-factored expansion of the sampled physical operator in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 279--355, 409--434 and 565--588.
 \end{theorem}

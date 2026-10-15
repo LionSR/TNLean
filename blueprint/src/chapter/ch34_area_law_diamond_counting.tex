@@ -85,10 +85,12 @@
     \leanok
     \uses{thm:area_diamond_count,thm:area_support_count,
         thm:area_chain_growth}
-    Every support $X\in\mathcal F$ containing $a$ lies in the graph ball of
-    radius $R$ around $a$, which has at most $v_R$ sites (and the empty support
-    also has at most $v_R$ sites). Deleting $a$ injects the family of supports
-    containing $a$ into the subsets of the remaining at most $v_R-1$ sites,
+    A nonempty support $X\in\mathcal F$ lies in the graph ball of radius $R$
+    around any of its sites, and such a ball has at most $v_R$ sites; the empty
+    support has no sites. Hence every support has at most $v_R$ sites. Now fix
+    a site $a$. Every support containing $a$ lies in the ball of radius $R$
+    around $a$, so deleting $a$ injects the family of supports containing $a$
+    into the subsets of the remaining at most $v_R-1$ sites,
     giving at most $\mu_R$ supports. Bounding each term by $J$
     gives~(\ref{eq:area_diamond_site}), and applying the chain-growth bound with
     $v=v_R$ and $b=\mu_RJ$ yields (\ref{eq:area_diamond_chain}). Since
@@ -208,7 +210,7 @@ single support, and $G$ need not be finite or connected.
     The right-hand side of~(\ref{eq:area_chain_exponential}) equals
     $\kappa^n e^{\mu((n+1)R-D)}$. When $D\le(n+1)R$, the exponential factor is
     at least $1$ and $T_n^y(X)\le W_n(X)\le\kappa^n$; when $D>(n+1)R$,
-    $T_n^y(X)=0$ while the right-hand side is positive.
+    $T_n^y(X)=0$ while the right-hand side is nonnegative.
 \end{proof}
 
 \begin{definition}[Interaction-chain series]
