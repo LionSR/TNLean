@@ -185,11 +185,7 @@ theorem commutes_block_words_of_commutes_long_words_of_isNBlkInjective
     intro ω
     let ω' : Fin m → Fin d := fun i => ω (Fin.cast hmEq.symm i)
     have hω' := hComm ω'
-    have hlist : List.ofFn ω' = List.ofFn ω := by
-      apply List.ext_getElem
-      · simp [ω', hmEq]
-      · intro i h1 h2
-        simp [ω', Fin.cast]
+    have hlist : List.ofFn ω' = List.ofFn ω := (List.ofFn_congr hmEq ω).symm
     simpa [ω', hlist] using hω'
   have hCompat : ∀ τ : Fin (m - L₀) → Fin d,
       ∃ Yτ : Matrix (Fin D) (Fin D) ℂ,

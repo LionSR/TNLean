@@ -152,11 +152,8 @@ theorem not_isStrongSymmetry_sigmaXX_one :
 Project result: strong symmetry of the family (arXiv:2504.16985, line 182) fails at `N = 1`
 (`not_isStrongSymmetry_sigmaXX_one`). -/
 theorem not_isStrongMPOSymmetry_sigmaXX (c : Unit → ℕ → ℂ) :
-    ¬ IsStrongMPOSymmetry (fun _ : Unit => onSite sigmaXX) R 1 c := by
-  intro h
-  simp only [IsStrongMPOSymmetry, mpoWithBoundary_one] at h
-  have h1 := h () 1 one_pos
-  rw [mpo_onSite] at h1
-  exact not_isStrongSymmetry_sigmaXX_one ⟨c () 1, h1⟩
+    ¬ IsStrongMPOSymmetry (fun _ : Unit => onSite sigmaXX) R 1 c :=
+  fun h => not_isStrongSymmetry_sigmaXX_one ⟨c () 1, by
+    simpa only [IsStrongMPOSymmetry, mpoWithBoundary_one, mpo_onSite] using h () 1 one_pos⟩
 
 end MPOTensor.RescalingStableLengthDependentRFP

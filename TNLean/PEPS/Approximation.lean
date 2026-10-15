@@ -109,6 +109,7 @@ import TNLean.PEPS.Approximation.DyadicDirectRepaintingStep
 import TNLean.PEPS.Approximation.DyadicEdgeBands
 import TNLean.PEPS.Approximation.DyadicFootprintScaling
 import TNLean.PEPS.Approximation.DyadicFootprintTemplates
+import TNLean.PEPS.Approximation.DyadicFrozenHoleCount
 import TNLean.PEPS.Approximation.DyadicGuideFrames
 import TNLean.PEPS.Approximation.DyadicGuideReadings
 import TNLean.PEPS.Approximation.DyadicHierarchyCounts
@@ -119,7 +120,9 @@ import TNLean.PEPS.Approximation.DyadicLifetimeIncidence
 import TNLean.PEPS.Approximation.DyadicPatchRewriteGates
 import TNLean.PEPS.Approximation.DyadicPointTreatment
 import TNLean.PEPS.Approximation.DyadicPointTreatmentRewrite
+import TNLean.PEPS.Approximation.DyadicPointTreatmentStep
 import TNLean.PEPS.Approximation.DyadicProtocol
+import TNLean.PEPS.Approximation.DyadicProtocolConstants
 import TNLean.PEPS.Approximation.DyadicProtocolOwners
 import TNLean.PEPS.Approximation.DyadicProtocolParties
 import TNLean.PEPS.Approximation.DyadicProtocolSchedule
@@ -127,11 +130,13 @@ import TNLean.PEPS.Approximation.DyadicReadingFootprints
 import TNLean.PEPS.Approximation.DyadicRepaintingClearance
 import TNLean.PEPS.Approximation.DyadicRepaintingSchedule
 import TNLean.PEPS.Approximation.DyadicResizeRewrite
+import TNLean.PEPS.Approximation.DyadicResizeStep
 import TNLean.PEPS.Approximation.DyadicRimPatterns
 import TNLean.PEPS.Approximation.DyadicRouting
 import TNLean.PEPS.Approximation.DyadicRoutingPEPS
 import TNLean.PEPS.Approximation.DyadicSampledGuides
 import TNLean.PEPS.Approximation.DyadicSmallPatchCovers
+import TNLean.PEPS.Approximation.DyadicTreatedTrueVertices
 import TNLean.PEPS.Approximation.DyadicTrueVertices
 import TNLean.PEPS.Approximation.DyadicUnmodifiedVertices
 import TNLean.PEPS.Approximation.EffectCircuitDensity
@@ -185,6 +190,7 @@ import TNLean.PEPS.Approximation.GaussianSourceIntegrability
 import TNLean.PEPS.Approximation.GroundStateApproximation
 import TNLean.PEPS.Approximation.GroupTruncation
 import TNLean.PEPS.Approximation.GroupedBlockMap
+import TNLean.PEPS.Approximation.GuideFramePatchData
 import TNLean.PEPS.Approximation.GuideFrameRewrite
 import TNLean.PEPS.Approximation.GuideFrameRewriteCircuit
 import TNLean.PEPS.Approximation.HoleEncoder

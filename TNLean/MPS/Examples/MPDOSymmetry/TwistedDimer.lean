@@ -280,12 +280,9 @@ theorem not_isStrongSymmetry_flipXX_one :
 
 /-- **The family is not strongly `X_L X_R`-symmetric**, for any eigenvalues. -/
 theorem not_isStrongMPOSymmetry_flipXX (c : Unit → ℕ → ℂ) :
-    ¬ IsStrongMPOSymmetry (fun _ : Unit => onSite flipXX) T 1 c := by
-  intro h
-  simp only [IsStrongMPOSymmetry, mpoWithBoundary_one] at h
-  have h1 := h () 1 one_pos
-  rw [mpo_onSite] at h1
-  exact not_isStrongSymmetry_flipXX_one ⟨c () 1, h1⟩
+    ¬ IsStrongMPOSymmetry (fun _ : Unit => onSite flipXX) T 1 c :=
+  fun h => not_isStrongSymmetry_flipXX_one ⟨c () 1, by
+    simpa only [IsStrongMPOSymmetry, mpoWithBoundary_one, mpo_onSite] using h () 1 one_pos⟩
 
 /-- **No strong `Z_F` symmetry at one site.**
 
@@ -305,11 +302,8 @@ theorem not_isStrongSymmetry_sigmaZF_one :
 
 /-- **The family is not strongly `Z_F`-symmetric**, for any eigenvalues. -/
 theorem not_isStrongMPOSymmetry_sigmaZF (c : Unit → ℕ → ℂ) :
-    ¬ IsStrongMPOSymmetry (fun _ : Unit => onSite sigmaZF) T 1 c := by
-  intro h
-  simp only [IsStrongMPOSymmetry, mpoWithBoundary_one] at h
-  have h1 := h () 1 one_pos
-  rw [mpo_onSite] at h1
-  exact not_isStrongSymmetry_sigmaZF_one ⟨c () 1, h1⟩
+    ¬ IsStrongMPOSymmetry (fun _ : Unit => onSite sigmaZF) T 1 c :=
+  fun h => not_isStrongSymmetry_sigmaZF_one ⟨c () 1, by
+    simpa only [IsStrongMPOSymmetry, mpoWithBoundary_one, mpo_onSite] using h () 1 one_pos⟩
 
 end MPOTensor.TwistedDimer

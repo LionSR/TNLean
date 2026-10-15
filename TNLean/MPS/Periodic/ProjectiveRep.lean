@@ -130,7 +130,7 @@ theorem cor_4_1_projective_rep
               twistedTensor A U g i *
               (((ρ.X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
   obtain ⟨Y, u, hY, hmul⟩ := hRigidity
-  refine ⟨fun g h => u (h⁻¹) (g⁻¹),
+  refine ⟨fun p => u (p.2⁻¹) (p.1⁻¹),
     { X := fun g => Y (g⁻¹)
       map_mul' := by
         intro g h

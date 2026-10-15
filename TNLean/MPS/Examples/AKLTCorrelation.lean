@@ -57,14 +57,6 @@ The AKLT transfer map fixes the identity (`aklt_transferMap_one`) and scales eac
 of the three Pauli matrices by `-1/3`.  These four matrices form a basis of
 `M₂(ℂ)`, so the spectrum is `{1, -1/3, -1/3, -1/3}`. -/
 
-/-- `(√3)² = 3` as a complex equation. -/
-private lemma aklt_sqrt3_sq : (↑(Real.sqrt 3) : ℂ) ^ 2 = 3 :=
-  Complex.ofReal_sqrt_sq 3 (by positivity)
-
-/-- `(√2)² = 2` as a complex equation. -/
-private lemma aklt_sqrt2_sq : (↑(Real.sqrt 2) : ℂ) ^ 2 = 2 :=
-  Complex.ofReal_sqrt_sq 2 (by positivity)
-
 /-- `σz = diag(1, -1)` is an eigenvector of the AKLT transfer map with eigenvalue
 `-1/3`. -/
 theorem aklt_transferMap_sigmaZ :
@@ -82,7 +74,7 @@ theorem aklt_transferMap_sigmaZ :
       neg_cons, neg_zero, Matrix.neg_empty, neg_mul, neg_neg] <;>
     field_simp <;>
     ring_nf <;>
-    norm_num [aklt_sqrt3_sq, aklt_sqrt2_sq]
+    norm_num [Complex.ofReal_sqrt_sq 3 (by norm_num), Complex.ofReal_sqrt_sq 2 (by norm_num)]
 
 /-- `σx = !![0, 1; 1, 0]` is an eigenvector of the AKLT transfer map with
 eigenvalue `-1/3`. -/
@@ -101,7 +93,7 @@ theorem aklt_transferMap_sigmaX :
       neg_cons, neg_zero, Matrix.neg_empty, neg_mul] <;>
     field_simp <;>
     ring_nf <;>
-    norm_num [aklt_sqrt3_sq, aklt_sqrt2_sq]
+    norm_num [Complex.ofReal_sqrt_sq 3 (by norm_num), Complex.ofReal_sqrt_sq 2 (by norm_num)]
 
 /-- `σy = !![0, -i; i, 0]` is an eigenvector of the AKLT transfer map with
 eigenvalue `-1/3`.  The off-diagonal entries come only from `A⁰ = (1/√3) σz`,
@@ -121,7 +113,7 @@ theorem aklt_transferMap_sigmaY :
       neg_cons, neg_zero, Matrix.neg_empty, neg_mul, neg_neg] <;>
     field_simp <;>
     ring_nf <;>
-    norm_num [aklt_sqrt3_sq, aklt_sqrt2_sq]
+    norm_num [Complex.ofReal_sqrt_sq 3 (by norm_num), Complex.ofReal_sqrt_sq 2 (by norm_num)]
 
 /-! ### Spectrum and correlation length -/
 
