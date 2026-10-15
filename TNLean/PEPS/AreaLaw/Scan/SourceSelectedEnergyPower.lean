@@ -21,11 +21,10 @@ one threshold works for every admissible scalar datum. An initial error at
 most `n^(-1000)` is absorbed as well. An additional replica remainder is
 retained additively after division by `g/2`; its decay is not assumed here.
 
-**Scope restriction (numerical energy bound):** the density and the energy
+The density and the energy
 comparison at a common selected charge point are not constructed here.
 The scalar theorem does not assert a physical defect bound, the remaining
-sharp comparison, or the area law. See
-`docs/paper-gaps/arealaw2d_source_selected_energy_power_scope.tex`.
+sharp comparison, or the area law.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 492--511 (charge energy), lines 839--865

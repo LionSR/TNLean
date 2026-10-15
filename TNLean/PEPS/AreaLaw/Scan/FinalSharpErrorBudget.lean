@@ -20,7 +20,7 @@ fixed physical instance before this scalar expression is used.
 
 Source: OpenAI area-law manuscript, `08-scanner.tex`, lines 839--942,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
-See `docs/paper-gaps/arealaw2d_final_sharp_scalar_scope.tex`.
+See `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 -/
 
 namespace TNLean.PEPS.AreaLaw.Scan

@@ -16,7 +16,7 @@ supply them after increasing a single uniform physical-size threshold.
 The physical scanner, template and target/prefix entropy hypotheses remain
 explicit. This result does not construct the safe-box entropy input and
 is not the unconditional collar theorem or the full area law.
-See `docs/paper-gaps/arealaw2d_source_rounded_information_scope.tex`.
+See `docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, lines 32--58 and 808--941, revision

@@ -25,7 +25,7 @@ lines 681--805, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
 Original formalization from the manuscript; no upstream Lean proof text reused.
 
 Validation and inherited-dependency scope:
-`docs/paper-gaps/arealaw2d_physical_box_bootstrap_scope.tex`.
+`docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex`.
 -/
 
 noncomputable section
