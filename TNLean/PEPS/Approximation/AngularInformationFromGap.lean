@@ -16,6 +16,8 @@ angular information theorem. No area-law or collar estimate is assumed.
 
 Source: polynomial-PEPS manuscript, Proposition 3.4, `02-information.tex`, lines 635–785,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+
+Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
 namespace TNLean.PEPS.Approximation

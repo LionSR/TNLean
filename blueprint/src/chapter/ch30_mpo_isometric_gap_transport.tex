@@ -116,7 +116,7 @@ $E^\dagger$, so their coefficients are complex conjugated as in
         thm:spt_sector_bond_gap,thm:spt_isometric_parent_interaction,
         thm:spt_periodic_hamiltonian_order}
     The interaction $B$ is the isometric extension of zero and is an
-    orthogonal projection. Apply the exact kernel transport for
+    orthogonal projection. Apply the exact kernel relation for
     commuting projections to the zero interaction and $B$; the original
     zero Hamiltonian has the whole chain as its kernel. This gives
     (\ref{eq:mpo_isometry_penalty_kernel}). The commuting-projection
@@ -144,7 +144,7 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
     \label{eq:mpo_isometry_norm_split}
 \end{align}
 
-\begin{theorem}[Kernel transport from a strict complementary bound]
+\begin{theorem}[Kernel preservation from a strict complementary bound]
     \label{thm:mpo_isometry_abstract_kernel}
     \lean{LinearIsometry.ker_eq_map_of_intertwines_of_inactive_bound}
     \leanok
@@ -210,7 +210,7 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
 
 \subsection{Periodic ground spaces and gap bounds}
 
-\begin{theorem}[Exact ground-space transport for positive interactions]
+\begin{theorem}[Exact ground-space image for positive interactions]
     \label{thm:mpo_isometry_positive_kernel}
     \lean{MPSTensor.isometricInteractionExtension_ker_eq_map_of_posSemidef,
         MPSTensor.isometricInteractionExtension_ker_eq_span_of_posSemidef}
@@ -230,13 +230,13 @@ Every $v\in\mathcal F$ has the orthogonal decomposition
         thm:mpo_isometry_inactive_bound,thm:mpo_isometry_abstract_kernel}
     The tensor power $W_N$ is an isometry, and the periodic
     intertwining identity is $H'_NW_N=W_NH_N$.
-    Theorem~\ref{thm:mpo_isometry_inactive_bound} supplies the strict
+    Theorem~\ref{thm:mpo_isometry_inactive_bound} gives the strict
     complementary bound with $c=1$. Apply
     Theorem~\ref{thm:mpo_isometry_abstract_kernel}. The image of a
     span is the span of the image, giving the final assertion.
 \end{proof}
 
-\begin{theorem}[Gap transport with a unit unused-space penalty]
+\begin{theorem}[Gap preservation with a unit unused-space penalty]
     \label{thm:mpo_isometry_positive_gap}
     \lean{MPSTensor.isometricInteractionExtension_quadratic_gap,
         MPSTensor.isometricInteractionExtension_norm_gap,
@@ -429,10 +429,10 @@ These assertions require no symmetry of the endpoint tensors.
 \end{proof}
 
 The off-diagonal blocks in (\ref{eq:mpo_arbitrary_endpoint_blocks})
-are retained by the actual tensor path. The endpoint identities
+remain present along the tensor path. The endpoint identities
 (\ref{eq:mpo_arbitrary_endpoint_vectors}) compare periodic vectors;
-they do not identify the raw bond-$D$ tensors with the bond-$D_p$
-original tensors.
+they do not identify the unprojected bond-$D$ tensors with the
+original bond-$D_p$ tensors.
 
 \subsection{The continuous positive interaction}
 
@@ -563,7 +563,7 @@ original tensors.
     The support-coordinate theorem gives the nonzero periodic vector
     of $\mathcal B(\gamma)$ and its exact ground line.
     The coordinate identity identifies its Euclidean Hamiltonian with
-    $H_{\gamma,N}$. Isometric kernel transport gives
+    $H_{\gamma,N}$. The isometric kernel relation gives
     $\ker\widetilde H_{\gamma,N}=J^{\otimes N}(\ker H_{\gamma,N})$.
     Physical mixing takes the support-coordinate vector to
     $\ket{V^{(N)}(\widetilde A(\gamma))}$. Since $J^{\otimes N}$ is

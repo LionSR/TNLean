@@ -12,8 +12,11 @@ A fixed logarithmic lower scale makes the information reset width smaller than
 one third of the available annular width. Both constants are chosen before the
 system size and scale.
 
-Source: polynomial-PEPS manuscript, `02-information.tex`, lines 745–778,
+Source: polynomial-PEPS manuscript, Proposition 3.4 (`prop:angular`),
+`02-information.tex`, lines 745–778,
 revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+
+Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
 namespace TNLean.PEPS.Approximation
