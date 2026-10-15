@@ -7855,3 +7855,17 @@ spectral split → block extraction → MPV calculation → strict bounds
   mutual-information relabeling theorem; no new abstraction is needed here.
 - **Caveat:** The state and all regions must use the same site equivalence.
   No normalization assumption is required for the entropy identity itself.
+
+### Integer lattice distances in the real plane — candidate (2026-10-15)
+
+- **Pattern:** Express the real coercion of the integer sup distance as the
+  product metric between the corresponding real coordinate pairs, using
+  `Prod.dist_eq`, `Real.dist_eq` and integer cast lemmas. A common real
+  translation cancels by `dist_add_right`.
+- **Seen:** The local distance identities in
+  `PEPS/Approximation/CellConditionalInformation.lean` and
+  `coarse_mutualInformation_le_translated_square` in
+  `PEPS/Approximation/CoarseInformationFromGap.lean`.
+- **Abstraction:** Two occurrences in two modules. A third use should promote
+  the cast identity to a geometric lemma; the translation cancellation already
+  uses Mathlib's standard identity.
