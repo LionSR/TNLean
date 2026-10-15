@@ -272,6 +272,34 @@ theorem tagChangeWord_props (U A A' : List (Hole pos q Party)) (b : TagSpace A) 
   simp only [tagChangeWord, Word.sourceCount, s.sourceCount_eq, m.sourceCount_eq,
     Word.sourceCount_frameList, b₃, k₃]
 
+theorem swapsMeet_tagBraWord (f : Party → Bool) (tail : Layout Party) :
+    (l : List (Hole pos q Party)) → (b : TagSpace l) → (tagBraWord l b tail).SwapsMeet f
+  | [], _ => trivial
+  | _ :: l, b => ⟨trivial, swapsMeet_tagBraWord f tail l b.2⟩
+
+theorem swapsMeet_tagKetWord (f : Party → Bool) (tail : Layout Party) :
+    (l : List (Hole pos q Party)) → (a : TagSpace l) → (tagKetWord l a tail).SwapsMeet f
+  | [], _ => trivial
+  | _ :: l, a => ⟨swapsMeet_tagKetWord f tail l a.2, trivial⟩
+
+theorem swapsMeet_tagSplit (f : Party → Bool) (tail : Layout Party) :
+    (l₁ l₂ : List (Hole pos q Party)) → (tagSplit l₁ l₂ tail).SwapsMeet f
+  | [], _ => trivial
+  | _ :: l₁, l₂ => swapsMeet_tagSplit f tail l₁ l₂
+
+theorem swapsMeet_tagMerge (f : Party → Bool) (tail : Layout Party) :
+    (l₁ l₂ : List (Hole pos q Party)) → (tagMerge l₁ l₂ tail).SwapsMeet f
+  | [], _ => trivial
+  | _ :: l₁, l₂ => swapsMeet_tagMerge f tail l₁ l₂
+
+/-- The tag maps of a branch exchange no tensor factors, so they meet every selection. -/
+theorem swapsMeet_tagChangeWord (f : Party → Bool) (U A A' : List (Hole pos q Party))
+    (b : TagSpace A) (a : TagSpace A') (own : ι → Party) :
+    (tagChangeWord U A A' b a own).SwapsMeet f :=
+  ⟨swapsMeet_tagSplit f _ _ _,
+    Word.swapsMeet_frameList f (swapsMeet_tagBraWord f _ A b) _,
+    Word.swapsMeet_frameList f (swapsMeet_tagKetWord f _ A' a) _, swapsMeet_tagMerge f _ _ _⟩
+
 end Tags
 
 /-! ### Branches of the rewrite on the registers of the frames -/
@@ -432,8 +460,9 @@ Lemma 6.3, let `(a, s, b)` be a branch and let a unit vector be chosen on every 
 its network (one of the orthonormal families of the whole-group truncation). Then the product
 term placed in the tag block, `|a⟩⟨b| ⊗ T ⊗ 1`, is `σ` times the operator of an allowed monomial
 from the registers of `F_old` to those of `F_new`, one register per site and per tag, with
-`|σ| ≤ 1`. The monomial uses only the specified parties and has at most `2m` normalized pair
-sources and at most `2m` normalized pair effects. It consumes the open inputs of each patch bra
+`|σ| ≤ 1`. The monomial uses only the specified parties, moves a register of a specified party at
+every exchange of tensor factors, and has at most `2m` normalized pair sources and at most `2m`
+normalized pair effects. It consumes the open inputs of each patch bra
 by its normalized covector at their at most two old owners, contracts every touched raw register
 with `⟨0|` at its old owner and prepares `|0⟩` at its new owner, prepares the open outputs of each
 patch ket by its normalized vector at their at most two new owners, and replaces the affected
@@ -450,7 +479,9 @@ theorem exists_termChain (hR : R.Conditions) (β : R.Branch)
     (he : ∀ v, Orthonormal ℂ (e v))
     (i : (v : Fin (R.branchSteps β).length ⊕ Fin (R.branchSteps β).length) → Fin (r v)) :
     ∃ (σ : ℂ) (M : PartyChain R.oldFrame.regs R.newFrame.regs), ‖σ‖ ≤ 1 ∧ M.IsAllowed ∧
-      M.UsesOnly (R.parties : Set Party) ∧ M.sourceCount ≤ 2 * R.patches.length ∧
+      M.UsesOnly (R.parties : Set Party) ∧
+      M.SwapsMeetSet (R.parties : Set Party) ∧
+      M.sourceCount ≤ 2 * R.patches.length ∧
       M.toEffectChain.effectCount ≤ 2 * R.patches.length ∧
       ∀ z, σ • R.newFrame.regIso (M.toEffectChain.eval z) =
         act (R.liftBranch β (termOp (R.branchChain β) e i)) (R.oldFrame.regIso z) := by
@@ -462,30 +493,30 @@ theorem exists_termChain (hR : R.Conditions) (β : R.Branch)
         obtain ⟨P, hP, hPx⟩ := R.exists_owners_of_isOpen_inl hR β j
         exact ⟨P, hP, fun x hx => ⟨(hPx x hx).1, (hPx x hx).2.1⟩⟩)
       (e (.inl j) (i (.inl j))) ((he _).1 _)
-  choose B sB hsB hBE hBK hBB MB hMB₁ hMB₂ hMB₃ hMB₄ hMB₅ using hbra
+  choose B sB hsB hBE hBK hBB MB hMB₁ hMB₂ hMB₆ hMB₃ hMB₄ hMB₅ using hbra
   have hket := fun j : Fin (R.branchSteps β).length =>
     exists_ketVertexBlock (q := q) l R.ownerNew S (IsOpen (R.branchChain β) (.inr j))
       (fun _ => by
         obtain ⟨P, hP, hPx⟩ := R.exists_owners_of_isOpen_inr hR β j
         exact ⟨P, hP, fun x hx => ⟨(hPx x hx).1, (hPx x hx).2.2⟩⟩)
       (e (.inr j) (i (.inr j))) ((he _).1 _)
-  choose K sK hsK hKE hKB hKK MK hMK₁ hMK₂ hMK₃ hMK₄ hMK₅ using hket
+  choose K sK hsK hKE hKB hKK MK hMK₁ hMK₂ hMK₆ hMK₃ hMK₄ hMK₅ using hket
   set W := (sites ι).filter fun x => decide (¬Untouched (R.branchChain β) x) with hWdef
   have hWn : W.Nodup := nodup_sites.filter _
   have hW : ∀ x, x ∈ W ↔ ¬Untouched (R.branchChain β) x := fun x => by simp [hWdef, mem_sites]
-  obtain ⟨M₁, a₁, a₂, a₃, a₄, a₅⟩ := exists_chain_listProd (layoutIso l R.ownerOld) S
+  obtain ⟨M₁, a₁, a₂, a₆, a₃, a₄, a₅⟩ := exists_chain_listProd (layoutIso l R.ownerOld) S
     (fun j => (1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ (B j).op)
     (fun j => if ∃ x, IsOpen (R.branchChain β) (.inl j) x then 1 else 0)
     (fun j => if ∃ x, IsOpen (R.branchChain β) (.inl j) x then 1 else 0)
-    (List.finRange _) fun j _ => ⟨MB j, hMB₁ j, hMB₂ j, hMB₃ j, hMB₄ j, hMB₅ j⟩
-  obtain ⟨M₂, b₁, b₂, b₃, b₄, b₅⟩ := exists_zeroChain l S W hWn R.ownerOld R.ownerNew
+    (List.finRange _) fun j _ => ⟨MB j, hMB₁ j, hMB₂ j, hMB₆ j, hMB₃ j, hMB₄ j, hMB₅ j⟩
+  obtain ⟨M₂, b₁, b₂, b₆, b₃, b₄, b₅⟩ := exists_zeroChain l S W hWn R.ownerOld R.ownerNew
     (fun x hx => R.owners_mem_parties_of_not_untouched hR β ((hW x).mp hx))
     (fun x hx => R.ownerOld_eq_ownerNew_of_untouched hR β (by simpa [hW] using hx))
-  obtain ⟨M₃, c₁, c₂, c₃, c₄, c₅⟩ := exists_chain_listProd (layoutIso l R.ownerNew) S
+  obtain ⟨M₃, c₁, c₂, c₆, c₃, c₄, c₅⟩ := exists_chain_listProd (layoutIso l R.ownerNew) S
     (fun j => (1 : Matrix (TagSpace l) (TagSpace l) ℂ) ⊗ₖ (K j).op)
     (fun j => if ∃ x, IsOpen (R.branchChain β) (.inr j) x then 1 else 0)
     (fun j => if ∃ x, IsOpen (R.branchChain β) (.inr j) x then 1 else 0)
-    (List.finRange _) fun j _ => ⟨MK j, hMK₁ j, hMK₂ j, hMK₃ j, hMK₄ j, hMK₅ j⟩
+    (List.finRange _) fun j _ => ⟨MK j, hMK₁ j, hMK₂ j, hMK₆ j, hMK₃ j, hMK₄ j, hMK₅ j⟩
   set Wt := tagChangeWord R.untouched R.oldAffected R.newAffected β.2.2 β.1 R.ownerNew
   obtain ⟨t₁, t₂, t₃⟩ := tagChangeWord_props R.untouched R.oldAffected R.newAffected β.2.2 β.1
     R.ownerNew (S := S) (fun h hh => hR.tag_owners_mem h (List.mem_append_left _ hh))
@@ -499,8 +530,10 @@ theorem exists_termChain (hR : R.Conditions) (β : R.Branch)
     rw [← List.ofFn_eq_map, List.sum_ofFn]
   have hcount := R.card_open_vertices_le hR β
   rw [hsum] at a₃ a₄ c₃ c₄
-  refine ⟨(∏ j, sB j) * ∏ j, sK j, ((M₁.append M₂).append M₃).postcomp Wt, ?_, f₁, f₂, ?_, ?_,
-    fun z => ?_⟩
+  refine ⟨(∏ j, sB j) * ∏ j, sK j, ((M₁.append M₂).append M₃).postcomp Wt, ?_, f₁, f₂,
+    fun g hg => PartyChain.swapsMeet_postcomp g (swapsMeet_tagChangeWord g _ _ _ _ _ _)
+      (PartyChain.swapsMeet_append g (PartyChain.swapsMeet_append g (a₆ g hg) (b₆ g hg))
+        (c₆ g hg)), ?_, ?_, fun z => ?_⟩
   · rw [norm_mul, norm_prod, norm_prod]
     calc _ ≤ (1 : ℝ) * 1 := mul_le_mul
           (Finset.prod_le_one₀ (fun _ _ => norm_nonneg _) fun j _ => hsB j)
@@ -538,8 +571,9 @@ Lemma 6.3, for every `δ > 0` (for instance `δ = L^{-a}`) let `N` be the number
 the number of additional patches and `k = ⌈(4 N m / δ)²⌉ + 1`. There are a contraction `M_δ` with
 `‖M_δ - M‖ ≤ δ` and an expansion `M_δ = ∑_t c_t M_t` into at most `N k^{2m}` monomials `M_t` from
 the registers of `F_old` to those of `F_new` (one register per site and per tag, each held by its
-owner), each allowed in the sense of Theorem 5.2, using only the specified parties, with at most
-`2m` normalized pair sources and at most `2m` normalized pair effects, and with coefficients
+owner), each allowed in the sense of Theorem 5.2, using only the specified parties and moving a
+register of a specified party at every exchange of tensor factors, with at most `2m` normalized
+pair sources and at most `2m` normalized pair effects, and with coefficients
 `|c_t| ≤ 1`. The expansion is read in canonical coordinates.
 
 With `norm_act_refVec_sub_le_of_approx` and `rewrite_error_le_inv_pow_twenty`, the choice
@@ -555,13 +589,14 @@ theorem exists_allowed_monomial_approx (hR : R.Conditions) {δ : ℝ} (hδ : 0 <
         truncationRank (Fintype.card R.Branch) ((2 * R.patches.length : ℕ) : ℝ) δ ^
           (2 * R.patches.length) ∧
       (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
+        p.2.SwapsMeetSet (R.parties : Set Party) ∧
         p.2.sourceCount ≤ 2 * R.patches.length ∧
         p.2.toEffectChain.effectCount ≤ 2 * R.patches.length) ∧
       ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧ ‖Ma - R.rewrite‖ ≤ δ ∧
         ∀ z, (G.map fun p => p.1 • R.newFrame.regIso (p.2.toEffectChain.eval z)).sum =
           act Ma (R.oldFrame.regIso z) := by
   obtain ⟨r, e, c, -, he, hc, hcard, h1, h2⟩ := R.exists_contractive_approx hR hδ
-  choose σ M hσ hM₁ hM₂ hM₃ hM₄ hM₅ using fun (β : R.Branch)
+  choose σ M hσ hM₁ hM₂ hM₆ hM₃ hM₄ hM₅ using fun (β : R.Branch)
     (ii : (v : Fin (R.branchSteps β).length ⊕ Fin (R.branchSteps β).length) → Fin (r β v)) =>
       R.exists_termChain hR β (e β) (he β) ii
   set a : ℂ := (((1 + δ / 2)⁻¹ : ℝ) : ℂ) with ha
@@ -579,7 +614,7 @@ theorem exists_allowed_monomial_approx (hR : R.Conditions) {δ : ℝ} (hδ : 0 <
       _ = _ := by rw [Finset.sum_const, Finset.card_univ, smul_eq_mul]
   · intro p hp
     obtain ⟨t, -, rfl⟩ := List.mem_map.mp hp
-    refine ⟨?_, hM₁ _ _, hM₂ _ _, hM₃ _ _, hM₄ _ _⟩
+    refine ⟨?_, hM₁ _ _, hM₂ _ _, hM₆ _ _, hM₃ _ _, hM₄ _ _⟩
     rw [norm_mul, norm_mul]
     calc _ ≤ (1 : ℝ) * 1 * 1 := mul_le_mul (mul_le_mul hna (hc _ _) (norm_nonneg _) zero_le_one)
           (hσ _ _) (norm_nonneg _) (by norm_num)
@@ -611,6 +646,7 @@ theorem exists_allowed_monomial_approx_of_card_le (hR : R.Conditions) {δ : ℝ}
           R.oldAffected.length) : ℕ) : ℝ) ((2 * R.patches.length : ℕ) : ℝ) δ ^
           (2 * R.patches.length) ∧
       (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
+        p.2.SwapsMeetSet (R.parties : Set Party) ∧
         p.2.sourceCount ≤ 2 * R.patches.length ∧
         p.2.toEffectChain.effectCount ≤ 2 * R.patches.length) ∧
       ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧ ‖Ma - R.rewrite‖ ≤ δ ∧
@@ -628,8 +664,9 @@ affected hole and every additional patch has at most `C L^c` cylinder terms (the
 most `b` parties in the specified list of condition (iv). For every real `a`, the canonical
 contraction `M` admits a contraction `M_a` with `‖M_a - M‖ ≤ L^{-a}` and an expansion
 `M_a = ∑_t c_t M_t` into at most `K L^e` monomials allowed by Theorem 5.2, all participating
-parties lying in one fixed list `P` of at most `b` parties, each monomial with at most `2b`
-normalized pair sources and at most `2b` normalized pair effects, and with `|c_t| ≤ 1`. Here
+parties lying in the specified list of condition (iv), of at most `b` parties, each
+monomial moving a register of that list at every exchange of tensor factors and having at most
+`2b` normalized pair sources and at most `2b` normalized pair effects, and with `|c_t| ≤ 1`. Here
 `K = (C + 1)^{3b} (16 b² (C + 1)^{6b} + 1)^{2b}` and `e = 3bc + 4b(3bc + ⌈a⌉)` depend only on
 `C`, `c`, `b` and `a`. The expansion is read in canonical coordinates, the tags of the untouched
 holes first, as in the canonical identification of tag orderings of the source.
@@ -648,11 +685,13 @@ theorem exists_allowed_monomial_approx_polynomial (hR : R.Conditions) {C c b L :
     (hold : ∀ h ∈ R.oldAffected, Fintype.card h.patch.Tag ≤ C * L ^ c)
     (hm : R.patches.length ≤ b) (hrold : R.oldAffected.length ≤ b)
     (hrnew : R.newAffected.length ≤ b) (hparties : R.parties.card ≤ b) (a : ℝ) :
-    ∃ P : Finset Party, P.card ≤ b ∧ ∃ G : PartyGate R.oldFrame.regs R.newFrame.regs,
+    R.parties.card ≤ b ∧ ∃ G : PartyGate R.oldFrame.regs R.newFrame.regs,
       G.length ≤ (C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + ⌈a⌉₊)) ∧
-      (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (P : Set Party) ∧
-        p.2.sourceCount ≤ 2 * b ∧ p.2.toEffectChain.effectCount ≤ 2 * b) ∧
+      (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
+        p.2.SwapsMeetSet (R.parties : Set Party) ∧
+        p.2.sourceCount ≤ 2 * b ∧
+        p.2.toEffectChain.effectCount ≤ 2 * b) ∧
       ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧
         ‖Ma - R.rewrite‖ ≤ (L : ℝ) ^ (-a) ∧
         ∀ z, (G.map fun p => p.1 • R.newFrame.regIso (p.2.toEffectChain.eval z)).sum =
@@ -692,23 +731,23 @@ theorem exists_allowed_monomial_approx_polynomial (hR : R.Conditions) {C c b L :
       ring
     rw [this, add_mul, one_mul]
     exact Nat.add_le_add_left hP _
-  refine ⟨R.parties, hparties, G, ?_, fun p hp => ?_, rest⟩
+  refine ⟨hparties, G, ?_, fun p hp => ?_, rest⟩
   · refine hG.trans ((Nat.mul_le_mul hN ((Nat.pow_le_pow_left hk _).trans
       (Nat.pow_le_pow_right (Nat.succ_pos _) (Nat.mul_le_mul_left 2 hm)))).trans ?_)
     calc B ^ (3 * b) * (X ^ 2 + 1) ^ (2 * b)
         ≤ B ^ (3 * b) * ((16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) *
             L ^ (2 * (3 * b * c + ⌈a⌉₊))) ^ (2 * b) := by gcongr
       _ = _ := by rw [hBdef, mul_pow (C + 1) (L ^ c), mul_pow _ (L ^ _)]; ring
-  · obtain ⟨h₁, h₂, h₃, h₄, h₅⟩ := hGp p hp
-    exact ⟨h₁, h₂, h₃, h₄.trans (by omega), h₅.trans (by omega)⟩
+  · obtain ⟨h₁, h₂, h₃, h₆, h₄, h₅⟩ := hGp p hp
+    exact ⟨h₁, h₂, h₃, h₆, h₄.trans (by omega), h₅.trans (by omega)⟩
 
 /-- **Lemma 6.3, the bounded change with reference-vector error `O(L^{-20})`.** In the setting of
 `exists_allowed_monomial_approx_polynomial`, let `Ω` be a vector with `‖Ω‖ ≤ 1` on which every
 additional patch projector and every affected old-hole projector has error at most `L^{-60}`, the
 accuracy fixed for all applications of Proposition 4.1 in the frame construction. The choice
 `a = 30` gives a contraction `M_30` with `‖M_30 - M‖ ≤ L^{-30}`, expanded into at most
-`K L^e` allowed monomials whose participating parties lie in one fixed list of at most `b`
-parties, and with `‖M_30 Ω_{F_old} - Ω_{F_new}‖ ≤ (2b + 1) L^{-20}`.
+`K L^e` allowed monomials whose participating parties lie in the specified list of
+condition (iv), of at most `b` parties, and with `‖M_30 Ω_{F_old} - Ω_{F_new}‖ ≤ (2b + 1) L^{-20}`.
 
 Polynomial-PEPS manuscript, Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 188–218; the
 accuracy `ε = L^{-60}`, lines 21–25 (`eq:frame-epsilon`); proof lines 343–344. -/
@@ -721,11 +760,13 @@ theorem exists_allowed_monomial_approx_refVec (hR : R.Conditions) {C c b L : ℕ
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
     (hεpatch : ∀ P ∈ R.patches, ‖act P.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
     (hεold : ∀ h ∈ R.oldAffected, ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹) :
-    ∃ P : Finset Party, P.card ≤ b ∧ ∃ G : PartyGate R.oldFrame.regs R.newFrame.regs,
+    R.parties.card ≤ b ∧ ∃ G : PartyGate R.oldFrame.regs R.newFrame.regs,
       G.length ≤ (C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
         L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) ∧
-      (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (P : Set Party) ∧
-        p.2.sourceCount ≤ 2 * b ∧ p.2.toEffectChain.effectCount ≤ 2 * b) ∧
+      (∀ p ∈ G, ‖p.1‖ ≤ 1 ∧ p.2.IsAllowed ∧ p.2.UsesOnly (R.parties : Set Party) ∧
+        p.2.SwapsMeetSet (R.parties : Set Party) ∧
+        p.2.sourceCount ≤ 2 * b ∧
+        p.2.toEffectChain.effectCount ≤ 2 * b) ∧
       ∃ Ma : Matrix R.newFrame.Layout R.oldFrame.Layout ℂ, ‖Ma‖ ≤ 1 ∧
         ‖Ma - R.rewrite‖ ≤ ((L : ℝ) ^ 30)⁻¹ ∧
         ‖act Ma (R.oldFrame.refVec Ω) - R.newFrame.refVec Ω‖ ≤
@@ -736,14 +777,14 @@ theorem exists_allowed_monomial_approx_refVec (hR : R.Conditions) {C c b L : ℕ
   have hrpow : (L : ℝ) ^ (-(30 : ℝ)) = ((L : ℝ) ^ 30)⁻¹ := by
     rw [Real.rpow_neg (Nat.cast_nonneg _)]
     exact_mod_cast congrArg Inv.inv (Real.rpow_natCast (L : ℝ) 30)
-  obtain ⟨P, hP, G, hG, hGp, Ma, hMa1, hMa, hz⟩ := R.exists_allowed_monomial_approx_polynomial
+  obtain ⟨-, G, hG, hGp, Ma, hMa1, hMa, hz⟩ := R.exists_allowed_monomial_approx_polynomial
     hR hL hnew hpatch hold hm hrold hrnew hparties 30
   rw [h30] at hG
   rw [hrpow] at hMa
   have hLr : (1 : ℝ) ≤ L := by exact_mod_cast hL
   have hL0 : (0 : ℝ) < L := by linarith
   have href := R.norm_act_refVec_sub_le_of_approx hR.avoidsUntouched hΩ hεpatch hεold hMa
-  refine ⟨P, hP, G, hG, hGp, Ma, hMa1, hMa, href.trans ?_, hz⟩
+  refine ⟨hparties, G, hG, hGp, Ma, hMa1, hMa, href.trans ?_, hz⟩
   have h60 : ((L : ℝ) ^ 60)⁻¹ ≤ ((L : ℝ) ^ 20)⁻¹ :=
     inv_anti₀ (by positivity) (pow_le_pow_right₀ hLr (by norm_num))
   have h30' : ((L : ℝ) ^ 30)⁻¹ ≤ ((L : ℝ) ^ 20)⁻¹ :=
