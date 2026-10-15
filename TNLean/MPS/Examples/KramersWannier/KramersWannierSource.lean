@@ -38,9 +38,9 @@ on the paramagnetic and ferromagnetic states (the module
 the periodic states of `plusTensor` and `ghz`); and, for the rescaled operator
 `𝖣 = 2^{-(N+1)/2} Kᵀ`, the local relations and the algebra that Seiberg–Shao print for
 their operator, read in the Hadamard-rotated basis. The module
-`TNLean.MPS.Examples.KramersWannier.KramersWannierCircuit` identifies `𝖣` with the Hadamard image of their
-circuit (lines 2431–2437), with scalar one, and their `T_Ising` with `Tᵀ`, which transfers these
-relations to the circuit.
+`TNLean.MPS.Examples.KramersWannier.KramersWannierCircuit` identifies `𝖣` with the Hadamard
+image of their circuit (lines 2431–2437), with scalar one, and their `T_Ising` with `Tᵀ`, which
+transfers these relations to the circuit.
 
 **Conventions.** The kernel of `K` is `2^{N/2}` times the kernel of `D_σ` under
 `h'_{j+1/2} ↦ a j` (output) and `h_j ↦ b j` (input), so that `μ^r_{j+1/2}` acts on output site
