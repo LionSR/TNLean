@@ -43,7 +43,8 @@ theorem hasDerivAt_log_regularizedPatchObjective_exp_neg_of_isMinOn
       (regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions) x) :
     HasDerivAt
       (fun r : ℝ ↦ Real.log
-        (regularizedPatchObjective regions a (Real.exp (-r)) Ω x))
+        (regularizedPatchObjective (Out := fun v ↦ Fin (n v))
+          regions a (Real.exp (-r)) Ω x))
       (∑ j, (a j / 2) *
         (Matrix.trace
           (normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
