@@ -471,13 +471,14 @@ outer sample.
         TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_homogenize_reading,
         TNLean.PEPS.Approximation.exists_pointTreatment_step_reading}
     \leanok
-    \uses{thm:peps_guide_frame_resize_treatment_gates}
-    Fix $0<\epsilon_0\le\tfrac1{16}$. There is a threshold $\nu'>0$,
-    independent of the scales, such that for every ratio $0<\nu\le\nu'$ and
-    every generic small displacement the following hold, with the bounds on
-    the holes and the patches of
+    \uses{thm:peps_guide_frame_resize_treatment_gates,
+        thm:peps_dyadic_sampled_ratio}
+    Fix $0<\epsilon_0\le\tfrac1{16}$. Each of the following two statements
+    holds with its own threshold $\nu'>0$, independent of the scales: for
+    every ratio $0<\nu\le\nu'$ and every generic small displacement, with
+    the bounds on the holes and the patches of
     Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates} and every $b$
-    at least a bound depending only on $\epsilon_0$ and $\nu$.
+    at least an explicit bound depending only on $\epsilon_0$ and $\nu$,
     \begin{enumerate}
         \item For $0<n<t$, the resize of the hole at a grid corner of a reading
               of a guide uniform on the $2n$-blocks, between hole radii
@@ -487,8 +488,9 @@ outer sample.
               (\texttt{06-geometry.tex}, lines 529--541).
         \item For $0<t$ and $8t<n$, the point treatment, or its removal, of a
               corner of the repainted block, with holes of radius $\epsilon_0t$
-              at sets of true vertices containing those within $3t$ of the mark,
-              and patches of radius $\nu t/2$, is one gate as in
+              at sets of true vertices of the two readings that contain those
+              within $3t$ of the mark and agree at distance at least $n-t$ from
+              it, and patches of radius $\nu t/2$, is one gate as in
               Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates}
               (lines 481--505).
     \end{enumerate}
