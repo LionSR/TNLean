@@ -391,6 +391,24 @@ private theorem trace_vecMulVec_kronecker_one {A Z : Type*} [Fintype A]
       (partialTraceRight (vecMulVec ψ.ofLp (star ψ.ofLp)) * N).trace :=
   (trace_partialTraceRight_mul N _).symm
 
+/-- A projection `P` on `X ⊗ Y` moves the restoring vector by at most `√δ` when its
+mass `t = tr(ρ P)` against the reduced density satisfies `1 - Re t ≤ δ`. -/
+private theorem norm_kronecker_one_restoringVector_sub_le (Ω : StateSpace Λ q)
+    (hΩ : ‖Ω‖ = 1) (X Y : Finset (Site Λ)) (hXY : Disjoint X Y) {δ : ℝ}
+    {P : Matrix (RegionalConfiguration q X × RegionalConfiguration q Y)
+      (RegionalConfiguration q X × RegionalConfiguration q Y) ℂ}
+    (hP : IsStarProjection P) {t : ℂ}
+    (ht : t = (Entropy.restoringReducedDensity (restoringVector Ω X Y hXY) * P).trace)
+    (hδ : 1 - t.re ≤ δ) :
+    ‖WithLp.toLp 2 ((P ⊗ₖ (1 : Matrix (RegionalConfiguration q (X ∪ Y)ᶜ)
+          (RegionalConfiguration q (X ∪ Y)ᶜ) ℂ)) *ᵥ
+          (restoringVector Ω X Y hXY).ofLp) - restoringVector Ω X Y hXY‖ ≤ √δ := by
+  have hsq := norm_projection_mulVec_sub_sq
+    (isStarProjection_kronecker hP (IsStarProjection.one _)) (restoringVector Ω X Y hXY)
+  rw [norm_restoringVector Ω hΩ X Y hXY, trace_vecMulVec_kronecker_one] at hsq
+  rw [← Entropy.restoringReducedDensity, ← ht] at hsq
+  exact Real.le_sqrt_of_sq_le (by rw [hsq]; linarith)
+
 /-- **First failure bound of `eq:amplification-adjoint-error`.** In the eigenbasis of
 `ρ_X`, the typical projection `P_X` is the selected coordinate projection. It moves the
 restoring vector by at most `√δ` when `1 - tr(ρ_X P_X) ≤ δ`.
@@ -407,32 +425,18 @@ theorem norm_selectedProjection_restoringVector_sub_le (Ω : StateSpace Λ q)
           (restoringVector Ω X Y hXY).ofLp) - restoringVector Ω X Y hXY‖ ≤ √δ := by
   set E := Entropy.typicalSet (reducedState_isHermitian Λ q Ω X).eigenvalues
     (regionalEntropy Λ q Ω X) w
-  set I₂ := (1 : Matrix (RegionalConfiguration q Y) (RegionalConfiguration q Y) ℂ)
-  set I₃ := (1 : Matrix (RegionalConfiguration q (X ∪ Y)ᶜ)
-    (RegionalConfiguration q (X ∪ Y)ᶜ) ℂ)
   have hP : IsStarProjection (Entropy.restoringSelectedProjection E) :=
     ⟨Entropy.restoringSelectedProjection_mul_self E,
       Entropy.restoringSelectedProjection_isHermitian E⟩
-  have hPP := isStarProjection_kronecker
-    (isStarProjection_kronecker hP (IsStarProjection.one (Matrix (RegionalConfiguration q Y)
-      (RegionalConfiguration q Y) ℂ)))
-    (IsStarProjection.one (Matrix (RegionalConfiguration q (X ∪ Y)ᶜ)
-      (RegionalConfiguration q (X ∪ Y)ᶜ) ℂ))
-  have hmass : (reducedState Λ q Ω X * typicalProjection Λ q Ω X w).trace =
-      (vecMulVec (restoringVector Ω X Y hXY).ofLp (star (restoringVector Ω X Y hXY).ofLp) *
-        ((Entropy.restoringSelectedProjection E ⊗ₖ I₂) ⊗ₖ I₃)).trace := by
-    rw [trace_vecMulVec_kronecker_one (restoringVector Ω X Y hXY)]
-    change _ = (Entropy.restoringReducedDensity (restoringVector Ω X Y hXY) * _).trace
-    rw [← trace_partialTraceRight_mul (Entropy.restoringSelectedProjection E),
-      partialTraceRight_restoringReducedDensity_restoringVector, typicalProjection,
-      trace_mul_spectralSelection, Entropy.restoringSelectedProjection,
-      diagonal_mul_diagonal, trace_diagonal, IsHermitian.spectralRestrictionMass]
-    push_cast
-    simp only [mul_ite, mul_one, mul_zero]
-    rw [Finset.sum_ite_mem, Finset.univ_inter]
-  have hsq := norm_projection_mulVec_sub_sq hPP (restoringVector Ω X Y hXY)
-  rw [norm_restoringVector Ω hΩ X Y hXY, ← hmass] at hsq
-  exact Real.le_sqrt_of_sq_le (by rw [hsq]; linarith)
+  refine norm_kronecker_one_restoringVector_sub_le Ω hΩ X Y hXY
+    (isStarProjection_kronecker hP (IsStarProjection.one _)) ?_ hδ
+  rw [← trace_partialTraceRight_mul (Entropy.restoringSelectedProjection E),
+    partialTraceRight_restoringReducedDensity_restoringVector, typicalProjection,
+    trace_mul_spectralSelection, Entropy.restoringSelectedProjection,
+    diagonal_mul_diagonal, trace_diagonal, IsHermitian.spectralRestrictionMass]
+  push_cast
+  simp only [mul_ite, mul_one, mul_zero]
+  rw [Finset.sum_ite_mem, Finset.univ_inter]
 
 /-- **Second failure bound of `eq:amplification-adjoint-error`.** The typical projection
 `T_Y` moves the restoring vector by at most `√δ` when `1 - tr(ρ_Y T_Y) ≤ δ`.
@@ -445,25 +449,11 @@ theorem norm_typicalProjection_restoringVector_sub_le (Ω : StateSpace Λ q)
         (1 : Matrix (RegionalConfiguration q (X ∪ Y)ᶜ)
           (RegionalConfiguration q (X ∪ Y)ᶜ) ℂ)) *ᵥ
           (restoringVector Ω X Y hXY).ofLp) - restoringVector Ω X Y hXY‖ ≤ √δ := by
-  set I₁ := (1 : Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ)
-  set I₃ := (1 : Matrix (RegionalConfiguration q (X ∪ Y)ᶜ)
-    (RegionalConfiguration q (X ∪ Y)ᶜ) ℂ)
-  have hT := (typicalProjection_failure_le_surprisalTail Ω hΩ Y w).1
-  have hPP := isStarProjection_kronecker
-    (isStarProjection_kronecker (IsStarProjection.one (Matrix (RegionalConfiguration q X)
-      (RegionalConfiguration q X) ℂ)) hT)
-    (IsStarProjection.one (Matrix (RegionalConfiguration q (X ∪ Y)ᶜ)
-      (RegionalConfiguration q (X ∪ Y)ᶜ) ℂ))
-  have hmass : (reducedState Λ q Ω Y * typicalProjection Λ q Ω Y w).trace =
-      (vecMulVec (restoringVector Ω X Y hXY).ofLp (star (restoringVector Ω X Y hXY).ofLp) *
-        ((I₁ ⊗ₖ typicalProjection Λ q Ω Y w) ⊗ₖ I₃)).trace := by
-    rw [trace_vecMulVec_kronecker_one (restoringVector Ω X Y hXY)]
-    change _ = (Entropy.restoringReducedDensity (restoringVector Ω X Y hXY) * _).trace
-    rw [← trace_partialTraceLeft_mul,
-      partialTraceLeft_restoringReducedDensity_restoringVector]
-  have hsq := norm_projection_mulVec_sub_sq hPP (restoringVector Ω X Y hXY)
-  rw [norm_restoringVector Ω hΩ X Y hXY, ← hmass] at hsq
-  exact Real.le_sqrt_of_sq_le (by rw [hsq]; linarith)
+  refine norm_kronecker_one_restoringVector_sub_le Ω hΩ X Y hXY
+    (isStarProjection_kronecker (IsStarProjection.one _)
+      (typicalProjection_failure_le_surprisalTail Ω hΩ Y w).1) ?_ hδ
+  rw [← trace_partialTraceLeft_mul,
+    partialTraceLeft_restoringReducedDensity_restoringVector]
 
 /-- The cut projection is the typical projection of `S₀ = X ∪ Y` conjugated into the
 eigenbasis of `ρ_X`. -/
@@ -537,34 +527,22 @@ theorem norm_restoringCutProjection_restoringVector_sub_le (Ω : StateSpace Λ q
           (RegionalConfiguration q (X ∪ Y)ᶜ) ℂ)) *ᵥ
           (restoringVector Ω X Y hXY).ofLp) - restoringVector Ω X Y hXY‖ ≤ √δ := by
   obtain ⟨hW, hWW, -⟩ := eigen_kronecker_unitary Ω X Y
-  have hPP := isStarProjection_kronecker
-    (restoringCutProjection_isStarProjection_commute Ω hΩ X Y hXY w).1
-    (IsStarProjection.one (Matrix (RegionalConfiguration q (X ∪ Y)ᶜ)
-      (RegionalConfiguration q (X ∪ Y)ᶜ) ℂ))
+  refine norm_kronecker_one_restoringVector_sub_le Ω hΩ X Y hXY
+    (restoringCutProjection_isStarProjection_commute Ω hΩ X Y hXY w).1 ?_ hδ
   set e := (FiniteProduct.unionEquiv (fun _ : Site Λ ↦ Fin q) X Y hXY).symm
   set W := (((reducedState_isHermitian Λ q Ω X).eigenvectorUnitary :
     Matrix (RegionalConfiguration q X) (RegionalConfiguration q X) ℂ)ᴴ ⊗ₖ
     (1 : Matrix (RegionalConfiguration q Y) (RegionalConfiguration q Y) ℂ))
-  have hmass : (reducedState Λ q Ω (X ∪ Y) * typicalProjection Λ q Ω (X ∪ Y) w).trace =
-      (vecMulVec (restoringVector Ω X Y hXY).ofLp (star (restoringVector Ω X Y hXY).ofLp) *
-        (restoringCutProjection Ω X Y hXY w ⊗ₖ
-          (1 : Matrix (RegionalConfiguration q (X ∪ Y)ᶜ)
-            (RegionalConfiguration q (X ∪ Y)ᶜ) ℂ))).trace := by
-    rw [trace_vecMulVec_kronecker_one (restoringVector Ω X Y hXY)]
-    change _ = (Entropy.restoringReducedDensity (restoringVector Ω X Y hXY) * _).trace
-    rw [restoringReducedDensity_restoringVector, restoringCutProjection_eq, ← hW]
-    change _ = (W * _ * Wᴴ * (W * _ * Wᴴ)).trace
-    have hWW' : Wᴴ * W = 1 := by rw [hW]; exact hWW
-    rw [show W * (reducedState Λ q Ω (X ∪ Y)).submatrix e e * Wᴴ *
-        (W * (typicalProjection Λ q Ω (X ∪ Y) w).submatrix e e * Wᴴ) =
-        W * ((reducedState Λ q Ω (X ∪ Y)).submatrix e e * (Wᴴ * W) *
-          (typicalProjection Λ q Ω (X ∪ Y) w).submatrix e e) * Wᴴ by
-          simp only [Matrix.mul_assoc],
-      hWW', Matrix.mul_one, trace_mul_cycle, hWW', Matrix.one_mul, submatrix_mul_equiv,
-      trace_submatrix_equiv]
-  have hsq := norm_projection_mulVec_sub_sq hPP (restoringVector Ω X Y hXY)
-  rw [norm_restoringVector Ω hΩ X Y hXY, ← hmass] at hsq
-  exact Real.le_sqrt_of_sq_le (by rw [hsq]; linarith)
+  rw [restoringReducedDensity_restoringVector, restoringCutProjection_eq, ← hW]
+  change _ = (W * _ * Wᴴ * (W * _ * Wᴴ)).trace
+  have hWW' : Wᴴ * W = 1 := by rw [hW]; exact hWW
+  rw [show W * (reducedState Λ q Ω (X ∪ Y)).submatrix e e * Wᴴ *
+      (W * (typicalProjection Λ q Ω (X ∪ Y) w).submatrix e e * Wᴴ) =
+      W * ((reducedState Λ q Ω (X ∪ Y)).submatrix e e * (Wᴴ * W) *
+        (typicalProjection Λ q Ω (X ∪ Y) w).submatrix e e) * Wᴴ by
+        simp only [Matrix.mul_assoc],
+    hWW', Matrix.mul_one, trace_mul_cycle, hWW', Matrix.one_mul, submatrix_mul_equiv,
+    trace_submatrix_equiv]
 
 /-- **Mutual information as an entropy combination.** For disjoint `X, Y` with
 `S₀ = X ∪ Y` and `Z' = Λ ∖ S₀`, purity gives `I_Ω(X : Z') = S(X) + S(S₀) - S(Y)`.

@@ -25,20 +25,6 @@ open scoped symmDiff
 
 variable {I : Type*} [Fintype I] [LinearOrder I]
 
-omit [Fintype I] [LinearOrder I] in
-private theorem physical_row_bound {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
-    {L : ℕ} (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
-      (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (d : ℤ) (hd : d ∈ Finset.Icc (1 : ℤ) L) :
-    (depthRow S.depth d).length ≤ S.n := by
-  have hc : (d.toNat : ℤ) = d := by have := Finset.mem_Icc.mp hd; omega
-  have hb := depthRow_ambientDepth_length_le_of_row_bound T hT
-    (Subtype.val : Site Λ → ℤ × ℤ) Subtype.val_injective hrows
-    (show 1 ≤ d.toNat by have := Finset.mem_Icc.mp hd; omega)
-    (show d.toNat ≤ L by have := Finset.mem_Icc.mp hd; omega)
-  simpa only [← hdepth, hc] using hb
-
 /-- Actual completed lattice histories have deterministic nested-prefix
 comparisons with at most `3nD` changed sites. Full near sets and the entropy
 regions with the fixed target removed obey the same bound. -/
@@ -68,20 +54,17 @@ theorem state_prefix_approximation_domainGraph
       3 * S.n * S.D := by
   have hb := S.prefix_uncertainty_rows h.1 g hn hk hr hDpos hD hL
   have hs := S.state_prefix_sandwich h g hn hk hr hDpos hD
-    (fun x hx ↦ physical_row_bound hT S hdepth hrows _ (S.state_depth_bounds h g hL x hx))
+    (fun x hx ↦ depthRow_length_le_of_ambientRows hT hdepth hrows
+      (S.state_depth_bounds h g hL x hx))
     (abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT S hgraph hdepth)
   apply prefix_sandwich_card_bounds S.A S.depth (S.state h g)
     (S.front g (h.1 g) k false) (S.front g (h.1 g) k true) S.n S.D S.r₀ hr hDpos hs
   · intro d hd
-    have hdi := Finset.mem_Icc.mp hd
-    have hp := physical_row_bound hT S hdepth hrows d
-      (Finset.mem_Icc.mpr ⟨hb.1.1.trans hdi.1, hdi.2.trans hb.1.2⟩)
-    simpa only [depthRow, Finset.length_toList] using hp
+    simpa only [depthRow, Finset.length_toList] using
+      depthRow_length_le_of_ambientRows hT hdepth hrows (Finset.Icc_subset_Icc hb.1.1 hb.1.2 hd)
   · intro d hd
-    have hdi := Finset.mem_Icc.mp hd
-    have hp := physical_row_bound hT S hdepth hrows d
-      (Finset.mem_Icc.mpr ⟨hb.2.1.trans hdi.1, hdi.2.trans hb.2.2⟩)
-    simpa only [depthRow, Finset.length_toList] using hp
+    simpa only [depthRow, Finset.length_toList] using
+      depthRow_length_le_of_ambientRows hT hdepth hrows (Finset.Icc_subset_Icc hb.2.1 hb.2.2 hd)
 
 /-- Actual pre-charge lattice histories have deterministic nested-prefix
 comparisons with at most `3nD` changed sites. Full near sets and the entropy
@@ -112,20 +95,17 @@ theorem oldChargeState_prefix_approximation_domainGraph
       3 * S.n * S.D := by
   have hb := S.prefix_uncertainty_rows h.1 g hn hk hr hDpos hD hL
   have hs := S.oldChargeState_prefix_sandwich h g hn hk hr hDpos hD
-    (fun x hx ↦ physical_row_bound hT S hdepth hrows _ (S.oldChargeState_depth_bounds h g hL x hx))
+    (fun x hx ↦ depthRow_length_le_of_ambientRows hT hdepth hrows
+      (S.oldChargeState_depth_bounds h g hL x hx))
     (abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT S hgraph hdepth)
   apply prefix_sandwich_card_bounds S.A S.depth (S.oldChargeState h g)
     (S.front g (h.1 g) (k + 1) false) (S.front g (h.1 g) (k + 1) true) S.n S.D S.r₀ hr hDpos hs
   · intro d hd
-    have hdi := Finset.mem_Icc.mp hd
-    have hp := physical_row_bound hT S hdepth hrows d
-      (Finset.mem_Icc.mpr ⟨hb.1.1.trans hdi.1, hdi.2.trans hb.1.2⟩)
-    simpa only [depthRow, Finset.length_toList] using hp
+    simpa only [depthRow, Finset.length_toList] using
+      depthRow_length_le_of_ambientRows hT hdepth hrows (Finset.Icc_subset_Icc hb.1.1 hb.1.2 hd)
   · intro d hd
-    have hdi := Finset.mem_Icc.mp hd
-    have hp := physical_row_bound hT S hdepth hrows d
-      (Finset.mem_Icc.mpr ⟨hb.2.1.trans hdi.1, hdi.2.trans hb.2.2⟩)
-    simpa only [depthRow, Finset.length_toList] using hp
+    simpa only [depthRow, Finset.length_toList] using
+      depthRow_length_le_of_ambientRows hT hdepth hrows (Finset.Icc_subset_Icc hb.2.1 hb.2.2 hd)
 
 end CollarScan
 end TNLean.PEPS.AreaLaw.Scan

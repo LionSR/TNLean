@@ -287,6 +287,58 @@ outer sample.
     blocks around it.
 \end{proof}
 
+\begin{theorem}[The constants of the protocol and the separations of its steps]
+    \label{thm:peps_protocol_constants}
+    \lean{TNLean.PEPS.Approximation.patchRadius,
+        TNLean.PEPS.Approximation.protocolPatchBound,
+        TNLean.PEPS.Approximation.IsProtocolConstants,
+        TNLean.PEPS.Approximation.exists_isProtocolConstants,
+        TNLean.PEPS.Approximation.ProtocolSeparations,
+        TNLean.PEPS.Approximation.IsProtocolConstants.protocolSeparations,
+        TNLean.PEPS.Approximation.IsProtocolConstants.eventually_protocolSeparations}
+    \leanok
+    \uses{thm:peps_guide_frame_rewrite_events, lem:peps_dyadic_small_radius,
+        lem:peps_dyadic_choice_K0}
+    Fix the constants in the order of~\cite[Section~7]{OpenAI2026PolynomialPEPS},
+    \texttt{06-geometry.tex}, lines 559--570: after the clearance constant $a_0$
+    of the band templates, choose $K_0\ge20$, then $\epsilon_0>0$ with
+    $2\epsilon_0(a_0+1)\le a_0/2$, then $\nu>0$ with $2\epsilon_0+3\nu<1$, then
+    $0<a\le a_0/2$, then $D>0$, and finally $B_0\ge K_0D$. Any further
+    conditions of the same kind, each a largeness condition on $K_0$ or $B_0$, a
+    smallness condition on $\epsilon_0$, $\nu$ or $a$, or the existence of a
+    positive $D$ for each positive $a$, and each depending only on the earlier
+    constants, can be met in this order.
+
+    Let $t=D\log L$ with $L\ge2$, let $r=h_n=\epsilon_0\min(n,t)$ be the hole
+    radius at scale $n$, let $u=\nu s/2$ be the inner patch radius at scale $s$,
+    so that $2u=\nu s$, and let
+    $b=\max\bigl(18,\lceil((4+8\epsilon_0+2\nu)/\nu+1)^2\rceil\bigr)$. Then
+    the separations of Theorem~\ref{thm:peps_guide_frame_rewrite_events} hold at
+    every scale at once:
+    \begin{enumerate}
+        \item for a direct repainting at level $n>0$, with $s=n$:
+              $3u+4r<n$ and $(2(n/2+2r+u)/u+1)^2\le b$;
+        \item for the resize of a hole of a guide uniform on the $N$-blocks,
+              with $R=h_N$ and $s=N$: $4R+3u<N$ and $(2(2R+u)/u+1)^2\le b$;
+        \item for a point treatment at a level $n>K_0t$, with $s=t$:
+              $2t+6r+3u<n$, $\max(t,t+2r)+3u+4r<n-t$ and
+              $(2(t+2r+u)/u+1)^2\le b$;
+        \item $18\le b$, every outer hole radius $2h_n$ is at most $B_0\log L$,
+              and so is every outer patch radius $\nu s$ with $s\le K_0t$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}\leanok
+    The order is met by taking $K_0$ the larger of the given bound and $20$,
+    and each of $\epsilon_0$, $\nu$ and $a$ the smaller of the given bound and
+    a fixed small number. For the separations, $h_n\le\epsilon_0n$,
+    $h_n\le\epsilon_0t$, and $h_n=\epsilon_0t$ when $t\le n$. Then
+    $3u+4r\le(3\nu/2+4\epsilon_0)n<n$, and similarly for the resize. For a
+    point treatment $(2+6\epsilon_0+3\nu/2)t<20t\le K_0t<n$. Each patch count
+    is the square of a number at most $(4+8\epsilon_0+2\nu)/\nu+1$. Finally
+    $2h_n\le t\le K_0t\le B_0\log L$ and $\nu s\le K_0t$.
+\end{proof}
+
 \begin{lemma}[True vertices of a level guide]
     \label{lem:peps_level_true_vertices}
     \lean{TNLean.PEPS.Approximation.levelTrueVertices,
@@ -410,4 +462,48 @@ outer sample.
     it, and a tag holder is a label of the reading at points arbitrarily close
     to the vertex. Since $t+2r+3u<n$, the owners within $t+2r+3u$ of the mark
     and the tag holders within $t$ of it are specified parties.
+\end{proof}
+
+\begin{theorem}[Resizes and point treatments with one footprint ratio]
+    \label{thm:peps_guide_frame_reading_gates}
+    \lean{TNLean.PEPS.Approximation.exists_resize_step_reading,
+        TNLean.PEPS.Approximation.homogenize_iUnion_eq_of_notMem,
+        TNLean.PEPS.Approximation.exists_pointTreatment_footprintRatio_homogenize_reading,
+        TNLean.PEPS.Approximation.exists_pointTreatment_step_reading}
+    \leanok
+    \uses{thm:peps_guide_frame_resize_treatment_gates,
+        thm:peps_dyadic_sampled_ratio}
+    Fix $0<\epsilon_0\le\tfrac1{16}$. Each of the following two statements
+    holds with its own threshold $\nu'>0$, independent of the scales: for
+    every ratio $0<\nu\le\nu'$ and every generic small displacement, with
+    the bounds on the holes and the patches of
+    Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates} and every $b$
+    at least an explicit bound depending only on $\epsilon_0$ and $\nu$,
+    \begin{enumerate}
+        \item For $0<n<t$, the resize of the hole at a grid corner of a reading
+              of a guide uniform on the $2n$-blocks, between hole radii
+              $\epsilon_0\min(n,t)$ and $\epsilon_0\min(2n,t)$, with patches of
+              radius $\nu n$, is one gate as in
+              Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates}
+              (\texttt{06-geometry.tex}, lines 529--541).
+        \item For $0<t$ and $8t<n$, the point treatment, or its removal, of a
+              corner of the repainted block, with holes of radius $\epsilon_0t$
+              at sets of true vertices of the two readings that contain those
+              within $3t$ of the mark and agree at distance at least $n-t$ from
+              it, and patches of radius $\nu t/2$, is one gate as in
+              Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates}
+              (lines 481--505).
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}\leanok
+    The compactness observation gives one footprint ratio for the readings of
+    block guides at every intermediate radius, and one for the readings of the
+    temporary guides near a corner of the block. Near a corner that is not a
+    mark, the homogenization about the marks changes nothing, since the other
+    marks are at distance at least $n>8t$. Every smaller ratio, at most
+    $\tfrac14$, keeps the two-owner condition and gives the separations required
+    by Theorem~\ref{thm:peps_guide_frame_resize_treatment_gates}. The number of
+    net patches is then bounded by a constant depending only on $\epsilon_0$
+    and the ratio.
 \end{proof}

@@ -375,7 +375,9 @@ by the strict inequalities.
 \begin{lemma}[Uniform repair induction]
     \label{lem:area_law_uniform_repair_induction}
     \uses{def:area_law_uniform_repair_conclusion,
-        thm:area_law_uniform_repair_induction_conditional}
+        thm:area_law_uniform_repair_induction_conditional,
+        lem:area_law_repair_metric_invariants,
+        lem:area_law_repair_metric_choice}
     For a sufficiently small fixed choice of $a_0$ and the corresponding
     threshold $S_*$, every active mark $(v,S)$ at every generation has a
     terminal-square-free isolated star $v+[-a_0S,a_0S]^2$ with the
@@ -391,7 +393,9 @@ by the strict inequalities.
 \end{lemma}
 
 \begin{proof}
-    \uses{thm:area_law_uniform_repair_induction_conditional}
+    \uses{thm:area_law_uniform_repair_induction_conditional,
+        lem:area_law_repair_metric_invariants,
+        lem:area_law_repair_metric_choice}
     This is Theorem~\ref{thm:area_law_uniform_repair_induction_conditional}
     combined with the initial isolated-star lemma. The metric assertions are
     Lemma~\ref{lem:area_law_repair_metric_invariants}. The squares of
