@@ -522,6 +522,176 @@ theorem exists_eq_initialBeltRun_of_inter_interior (y : InitialRegionIndex o k�
   exact Set.disjoint_left.mp (initialOpenRegion_pairwise_disjoint o k₀ Z C a b hC h₀ hne)
     hw'y hw'x
 
+/-- Two distinct initial identifiers of the same label share no nondegenerate
+segment.
+Source: area-law Section 11, `prop:two-families`, lines 299–323. -/
+theorem not_segment_subset_initialBirthRegion_inter {x y : InitialRegionIndex o k₀ Z C a b hC h₀}
+    (hyx : y ≠ x) (hcol : initialRegionColor o k₀ Z C a b hC h₀ y =
+      initialRegionColor o k₀ Z C a b hC h₀ x) {p q : ℝ × ℝ} (hpq : p ≠ q)
+    (hx : segment ℝ p q ⊆ initialBirthRegion o k₀ Z C a b hC h₀ x)
+    (hy : segment ℝ p q ⊆ initialBirthRegion o k₀ Z C a b hC h₀ y) : False :=
+  initialRegionColor_ne_of_segment_subset_inter o k₀ Z C a b hC h₀ y x hyx p q hpq
+    (fun _ hw ↦ ⟨hy hw, hx hw⟩) hcol
+
+/-- **Contacts are marks of the belt cell.** Let `x` be an initial belt tile of
+a cell `Q`, let `y` be a distinct initial identifier of the same label, and let
+`q` be an integer point, in the coordinates normalized at `Q`, lying in the
+birth of `x` and in an atom contained in the normalized birth of `y`. Then `q`
+is the normalized position of one of the nine marks of `Q`.
+Source: area-law Section 11, `geometry:birth-separation`, lines 606–615, with
+the belt construction, lines 299–330. -/
+theorem beltNormalize_symm_mem_beltCellMarks
+    {R : CellFanRun o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z)
+      (beltCellFanColor o k₀ Z C a b k z hC h₀ hk hz)}
+    {y : InitialRegionIndex o k₀ Z C a b hC h₀} (hyx : y ≠ initialBeltRun k hk z hz R)
+    (hcol : initialRegionColor o k₀ Z C a b hC h₀ y =
+      initialRegionColor o k₀ Z C a b hC h₀ (initialBeltRun k hk z hz R))
+    {c : ℤ × ℤ} {s : RepairFanSlot}
+    (hB : beltAtom c s ⊆ beltNormalize o (fineScaleIndex k) z ''
+      initialBirthRegion o k₀ Z C a b hC h₀ y)
+    {i j : ℤ} (hqB : ((i : ℝ), (j : ℝ)) ∈ beltAtom c s)
+    (hvx : (beltNormalize o (fineScaleIndex k) z).symm ((i : ℝ), (j : ℝ)) ∈
+      initialBirthRegion o k₀ Z C a b hC h₀ (initialBeltRun k hk z hz R)) :
+    (beltNormalize o (fineScaleIndex k) z).symm ((i : ℝ), (j : ℝ)) ∈
+      beltCellMarks o (fineScaleIndex k) z := by
+  set N := beltNormalize o (fineScaleIndex k) z
+  set v := N.symm ((i : ℝ), (j : ℝ)) with hv
+  have hNv : N v = ((i : ℝ), (j : ℝ)) := N.apply_symm_apply _
+  have hvy : v ∈ initialBirthRegion o k₀ Z C a b hC h₀ y := by
+    obtain ⟨v', hv', he⟩ := hB hqB
+    rw [hv, ← he, N.symm_apply_apply]
+    exact hv'
+  have hvQ := initialBeltRun_birth_subset_closure R hvx
+  by_cases hint : v ∈ interior (closure (dyadicCell o (fineScaleIndex k) z))
+  · -- `y` is another run of the cell
+    have hmeet : (initialOpenRegion o k₀ Z C a b hC h₀ y ∩
+        interior (closure (dyadicCell o (fineScaleIndex k) z))).Nonempty := by
+      rw [initialBirthRegion_eq_closure_initialOpenRegion] at hvy
+      obtain ⟨w, hw₁, hw₂⟩ := mem_closure_iff.mp hvy _ isOpen_interior hint
+      exact ⟨w, hw₂, hw₁⟩
+    obtain ⟨R', rfl⟩ := exists_eq_initialBeltRun_of_inter_interior (hk := hk) (hz := hz) y hmeet
+    have hRR' : R' ≠ R := fun h ↦ hyx (h ▸ rfl)
+    by_cases hc : v = cellFanCenter o (fineScaleIndex k) z
+    · rw [hc]
+      refine mem_beltCellMarks_of_beltNormalize_eq (m := 1) (n := 1) (by norm_num) (by norm_num) ?_
+      have := beltNormalize_cellFanCenter_add (o := o) (ℓ := fineScaleIndex k) (z := z) 0
+      simp only [smul_zero, add_zero] at this
+      rw [this]; norm_num
+    · exfalso
+      have hcenter (S : CellFanRun o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z)
+          (beltCellFanColor o k₀ Z C a b k z hC h₀ hk hz)) :
+          cellFanCenter o (fineScaleIndex k) z ∈
+            initialBirthRegion o k₀ Z C a b hC h₀ (initialBeltRun k hk z hz S) := by
+        obtain ⟨t, ht⟩ := S.nonempty_supp
+        exact cellFanPolygon_subset_initialBeltRun_birth ht
+          (subset_convexHull ℝ _ (Set.mem_insert _ _))
+      have hnt : (cellFanRunRegion o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z)
+          (beltCellFanColor o k₀ Z C a b k z hC h₀ hk hz) R' ∩
+          cellFanRunRegion o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z)
+          (beltCellFanColor o k₀ Z C a b k z hC h₀ hk hz) R).Nontrivial :=
+        ⟨v, ⟨hvy, hvx⟩, _, ⟨hcenter R', hcenter R⟩, hc⟩
+      have hne := cellFanRunRegions_contact_colors_ne o (fineScaleIndex k) z
+        (fineLayerSplitMask o k₀ k Z C z) (beltCellFanColor o k₀ Z C a b k z hC h₀ hk hz)
+        R' R hRR' hnt
+      obtain ⟨t', ht'⟩ := R'.nonempty_supp
+      obtain ⟨t, ht⟩ := R.nonempty_supp
+      apply hne t' ht' t ht
+      rw [← initialRegionColor_beltRun_eq o k₀ Z C a b hC h₀ k z hk hz R' t' ht',
+        ← initialRegionColor_beltRun_eq o k₀ Z C a b hC h₀ k z hk hz R t ht]
+      exact hcol
+  · -- the contact lies on the boundary of the cell
+    have hfr : v ∈ frontier (dyadicCell o (fineScaleIndex k) z) :=
+      ⟨hvQ, fun h ↦ hint (interior_mono subset_closure h)⟩
+    obtain ⟨side, hside⟩ := exists_dyadicCellSide_of_mem_frontier o (fineScaleIndex k) z v hfr
+    obtain ⟨t, ht, hvt⟩ := Set.mem_iUnion₂.mp hvx
+    have hseg : v ∈ segment ℝ
+        (cellFanStart o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z) t)
+        (cellFanEnd o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z) t) := by
+      have h := cellFanPolygon_inter_dyadicCellSide o (fineScaleIndex k) z
+        (fineLayerSplitMask o k₀ k Z C z) t side
+      exact (h.subset ⟨hvt, hside⟩).1
+    obtain ⟨m₁, n₁, hS⟩ := exists_beltNormalize_cellFanStart_eq (o := o)
+      (ℓ := fineScaleIndex k) (z := z) (fineLayerSplitMask o k₀ k Z C z) t
+    obtain ⟨m₂, n₂, hE⟩ := exists_beltNormalize_cellFanEnd_eq (o := o)
+      (ℓ := fineScaleIndex k) (z := z) (fineLayerSplitMask o k₀ k Z C z) t
+    have hTseg : segment ℝ
+        (N (cellFanStart o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z) t))
+        (N (cellFanEnd o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z) t)) ⊆
+        N '' initialBirthRegion o k₀ Z C a b hC h₀ (initialBeltRun k hk z hz R) := by
+      rw [← beltNormalize_image_segment]
+      refine Set.image_mono (Set.Subset.trans ?_ (cellFanPolygon_subset_initialBeltRun_birth ht))
+      apply (convex_convexHull ℝ _).segment_subset
+      · exact subset_convexHull ℝ _ (Set.mem_insert_of_mem _ (Set.mem_insert _ _))
+      · exact subset_convexHull ℝ _ (Set.mem_insert_of_mem _
+          (Set.mem_insert_of_mem _ (Set.mem_singleton _)))
+    have hqseg : ((i : ℝ), (j : ℝ)) ∈ segment ℝ
+        (N (cellFanStart o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z) t))
+        (N (cellFanEnd o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z) t)) := by
+      rw [← beltNormalize_image_segment, ← hNv]
+      exact Set.mem_image_of_mem _ hseg
+    rw [hS, hE] at hTseg hqseg
+    have hax : m₁ = m₂ ∨ n₁ = n₂ := by
+      rcases (cellFan_elementary_geometry o (fineScaleIndex k) z
+        (fineLayerSplitMask o k₀ k Z C z) t).2 with ⟨h, -⟩ | ⟨h, -⟩
+      · left
+        have h' := congrArg Prod.fst hS
+        have h'' := congrArg Prod.fst hE
+        rw [beltNormalize_fst] at h' h''
+        rw [h] at h'
+        have : ((2 * m₁ : ℤ) : ℝ) = ((2 * m₂ : ℤ) : ℝ) := h'.symm.trans h''
+        have := Int.cast_injective this
+        omega
+      · right
+        have h' := congrArg Prod.snd hS
+        have h'' := congrArg Prod.snd hE
+        rw [beltNormalize_snd] at h' h''
+        rw [h] at h'
+        have : ((2 * n₁ : ℤ) : ℝ) = ((2 * n₂ : ℤ) : ℝ) := h'.symm.trans h''
+        have := Int.cast_injective this
+        omega
+    by_cases heven : Even i ∧ Even j
+    · obtain ⟨⟨m, hm⟩, ⟨n, hn⟩⟩ := heven
+      obtain ⟨⟨h₁, h₂⟩, h₃, h₄⟩ := beltNormalize_mem_Icc hvQ
+      rw [hNv] at h₁ h₂ h₃ h₄
+      simp only at h₁ h₂ h₃ h₄
+      rw [hm] at h₁ h₂
+      rw [hn] at h₃ h₄
+      push_cast at h₁ h₂ h₃ h₄
+      have a₁ : (0 : ℝ) ≤ m := by linarith
+      have a₂ : (m : ℝ) ≤ 2 := by linarith
+      have a₃ : (0 : ℝ) ≤ n := by linarith
+      have a₄ : (n : ℝ) ≤ 2 := by linarith
+      refine mem_beltCellMarks_of_beltNormalize_eq (m := m) (n := n)
+        ⟨by exact_mod_cast a₁, by exact_mod_cast a₂⟩ ⟨by exact_mod_cast a₃, by exact_mod_cast a₄⟩
+        ?_
+      rw [hNv, hm, hn]; push_cast; ring_nf
+    · exfalso
+      rcases add_mem_segment_of_odd hax hqseg heven with ⟨hodd, hσ⟩ | ⟨hodd, hσ⟩
+      · obtain ⟨⟨σ, hσ₁, hBseg⟩, -⟩ := beltAtom_axis_segments hodd hqB
+        have h₁ : segment ℝ ((i : ℝ), (j : ℝ)) ((i : ℝ) + σ, (j : ℝ)) ⊆
+            N '' initialBirthRegion o k₀ Z C a b hC h₀ (initialBeltRun k hk z hz R) :=
+          ((convex_segment _ _).segment_subset hqseg (hσ σ hσ₁)).trans hTseg
+        have hne : N.symm ((i : ℝ), (j : ℝ)) ≠ N.symm ((i : ℝ) + σ, (j : ℝ)) := by
+          intro h
+          have h' := congrArg Prod.fst (N.symm.injective h)
+          simp only at h'
+          rcases hσ₁ with rfl | rfl <;> linarith
+        exact not_segment_subset_initialBirthRegion_inter hyx hcol hne
+          (segment_symm_subset_of_subset_image h₁)
+          (segment_symm_subset_of_subset_image (hBseg.trans hB))
+      · obtain ⟨-, ⟨σ, hσ₁, hBseg⟩⟩ := beltAtom_axis_segments hodd hqB
+        have h₁ : segment ℝ ((i : ℝ), (j : ℝ)) ((i : ℝ), (j : ℝ) + σ) ⊆
+            N '' initialBirthRegion o k₀ Z C a b hC h₀ (initialBeltRun k hk z hz R) :=
+          ((convex_segment _ _).segment_subset hqseg (hσ σ hσ₁)).trans hTseg
+        have hne : N.symm ((i : ℝ), (j : ℝ)) ≠ N.symm ((i : ℝ), (j : ℝ) + σ) := by
+          intro h
+          have h' := congrArg Prod.snd (N.symm.injective h)
+          simp only at h'
+          rcases hσ₁ with rfl | rfl <;> linarith
+        exact not_segment_subset_initialBirthRegion_inter hyx hcol hne
+          (segment_symm_subset_of_subset_image h₁)
+          (segment_symm_subset_of_subset_image (hBseg.trans hB))
+
 end Core
 
 end TNLean.PEPS.AreaLaw.Geometry
