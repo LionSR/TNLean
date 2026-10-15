@@ -1,0 +1,144 @@
+\section{The scanner estimate with the source hypotheses}
+\label{sec:al_scanner_source}
+
+This section states the scanner estimate \cite[Proposition~9.2]{OpenAI2026AreaLaw}
+with exactly the hypotheses of the source, and derives it from the
+conclusions of transport \cite[Proposition~7.4]{OpenAI2026AreaLaw} and of the
+norm comparisons \cite[Proposition~8.1]{OpenAI2026AreaLaw} for the rounds of
+the actual scan. Those two conclusions are not yet derived, so the source
+proposition is not yet formalized.
+
+% Source: 08-scanner.tex, prop:scanner, lines 349--397, with the scales and
+% test geometry of lines 21--59 and the entropy inputs of lines 353--357;
+% 07-comparators.tex, comparator:typical-set and comparator:prevector,
+% lines 37--47 and 125--140; 01-preliminaries.tex, line 121 (q >= 2).
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{definition}[Statement of the scanner estimate]
+    \label{def:al_scanner_source_statement}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.ScannerHypotheses,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.typicalWindow,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.scanPrevector,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.ScannerStatement}
+    \leanok
+    \uses{thm:al_scan_truncation_inputs}
+    Fix exponents $0<\ell<1$, $0<\kappa<\mu<1-\ell$, $0<e<1$ with
+    $\kappa\le e$, and $\nu>0$; an interaction range $R$, a bound $J$, a gap
+    $\Delta$ and a target-size coefficient $C_T$. Put
+    $g=\Delta/\max\{1,J(\|f_{1,\Delta/2}\|_1+1)\}$, and at scale $n$ put
+    $L=\lfloor n^{1-\ell}\rfloor$, $m=\lfloor n^\mu\rfloor$,
+    $K=\lfloor L/(8m)\rfloor$, $D=\lceil n^\kappa\rceil$,
+    $\epsilon=n^{-\nu}$ and $a=W/K$.
+
+    The source hypotheses at scale $n$, with constants $C_r$, $C_1$ and
+    $C_e$, are the following. The vector $\Omega$ is a ground vector, with
+    gap $\Delta$, of a Hamiltonian on $\Lambda$ with range $R$ and bound $J$;
+    the collar scan of a finite target $T$ has $n$ slots in every depth row,
+    the scales above, $r_0=\lceil C_r(\log n)^2\rceil$ and charge-list
+    constant $C_1$; the test geometry $|T|\le C_Tn^2$,
+    $|T_j\setminus T_{j-1}|\le n$ for $1\le j\le L$, and ambient distance
+    greater than $2L+10r_0$ from $T$ to every endpoint of a boundary edge of
+    $A$ holds; and, with $X=A\cap T$ and $Q_j=A\cap(T_j\setminus T)$,
+    \begin{align}
+        S_\Omega(X)   & \le C_en^{1+e},  &
+        S_\Omega(Q_j) & \le C_e(nL^e+n),
+    \end{align}
+    for $0\le j\le L$.
+
+    For a unit vector $\widetilde\Omega$ let $E$ be the typical set of its
+    target marginal at width $n^{3/5}$, with mass $z$ and size
+    $d_*=|E|$. For a sequence of labels $\lambda_k$ put
+    $\mathrm{pre}_k=\pi_R^{\lambda_k}
+        (\widetilde\Omega\otimes\mathrm{Bell}_{CR})^{\otimes k}$, with
+    auxiliary systems $C,R$ of dimension $d_*$.
+
+    The statement of the scanner estimate asserts that there is $C_r>0$
+    such that for every local dimension $q\ge2$ and every $C_e$ there are
+    constants, a charge-list constant $C_1>0$ and $c_a>0$ with the following
+    property for every sufficiently large $n$. Under the source hypotheses,
+    the truncated Hamiltonian has a ground vector $\widetilde\Omega$ with
+    energy $\widetilde E_0$ and gap $g/2$, its typical set is nonempty, and
+    there are labels $\lambda_k$ with $\mathrm{pre}_k\ne0$ for $k\ge1$ such
+    that for every $W\ge1$ with $ar_0^2\le c_a$ the rounds of the scan built
+    from $\mathrm{pre}$ satisfy two assertions.
+    \begin{enumerate}
+        \item There are $B_{\mathrm{sh}}\le C(nL^e+n)$,
+              $B_{\mathrm{exc}}\le CnD$ and
+              $\mathcal B\le CnD(\log n)^{C}$. Here $\mathcal B$ bounds the
+              marginal-tail parameter of every status cut, $\widetilde\Omega$
+              satisfies the marginal moment bound at every region, and at the
+              last endpoint of the scan
+              \begin{align}
+                  -\frac{\log N^2}{k} & \le 2\log d_*-\log z
+                  +2sW\Bigl(\frac{2B_{\mathrm{sh}}}{z}
+                  +2B_{\mathrm{exc}}\Bigr)+o_k(1),
+              \end{align}
+              with $s=1/4$.
+        \item There is $\rho_k\to0$ such that for every sufficiently large
+              $k$ some charge round and some $p_k\in[\epsilon/2,\epsilon]$
+              satisfy
+              \begin{align}
+                  \frac{\langle v_k,\overline{\widetilde H}v_k\rangle
+                      -\widetilde E_0}{g/2}
+                   & \le Cn^\ell D^2W^2(\log n)^{C}
+                  \bigl(\delta_n^{1/8}+\epsilon+n^{-100}\bigr)
+                  +Cn^{-1000}+\rho_k,
+                  \label{eq:al_scanner_source_energy}
+              \end{align}
+              where
+              $\delta_n=C\epsilon^{-1}(n^{e-\mu}+a^{1/4}(\log n)^{C})$.
+    \end{enumerate}
+    The source writes $C_e$ for the coefficients of $B_{\mathrm{sh}}$ and
+    $\delta_n$, and its constants may depend on the input constant
+    $C_e$. A partial last depth row adds $n\log q$ to the shell bound, so
+    these coefficients are constants depending on $C_e$, and the statement
+    takes them as such.
+\end{definition}
+
+% Source: 08-scanner.tex, prop:scanner, lines 349--397; proof lines 399--533.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Not yet formalized: the conclusions of Propositions 7.4 and 8.1 for the
+% actual rounds are still to be derived.
+\begin{theorem}[The scanner estimate]
+    \label{thm:al_scanner_source}
+    \uses{def:al_scanner_source_statement,thm:al_scanner_source_from_inputs}
+    The statement of the scanner estimate in
+    Definition~\ref{def:al_scanner_source_statement} holds whenever
+    $J\ge0$, $\Delta>0$ and $C_T\ge0$. This is
+    \cite[Proposition~9.2]{OpenAI2026AreaLaw}.
+\end{theorem}
+
+% Source: 08-scanner.tex, lines 349--533; 06-transport.tex, prop:transport,
+% lines 377--433; 07-comparators.tex, prop:comparators, lines 125--214.
+\begin{theorem}[Scanner estimate from the transport and comparator conclusions]
+    \label{thm:al_scanner_source_from_inputs}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.ScanInputsSupply,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement_of_scanInputsSupply}
+    \leanok
+    \uses{def:al_scanner_source_statement,thm:al_scanner_actual_scan}
+    Let $J\ge0$, $\Delta>0$ and $C_T\ge0$. Suppose that, for every $C_r>0$,
+    every $q\ge2$, every $C_1>0$ and every $C_e$, there are thresholds for
+    the common constant and the logarithmic power and a constant $c_a>0$
+    such that the following holds for all scanner constants above the
+    thresholds and all sufficiently large $n$. Under the source hypotheses,
+    for every ground vector $\widetilde\Omega$ of the truncated Hamiltonian
+    with gap $g/2$ satisfying the marginal moment bound, there are labels
+    $\lambda_k$ with $\mathrm{pre}_k\ne0$ for $k\ge1$ such that for every
+    $W\ge1$ with $ar_0^2\le c_a$ the rounds of the scan built from
+    $\mathrm{pre}$ satisfy the conclusions of
+    \cite[Propositions~7.4 and~8.1]{OpenAI2026AreaLaw}. Then the statement
+    of the scanner estimate holds.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:al_scanner_actual_scan,thm:al_scan_truncation_inputs}
+    Take $C_r$ and the constants of
+    Theorem~\ref{thm:al_scanner_actual_scan}, and choose the common constant
+    and the logarithmic power above both sets of thresholds. Replacing
+    $C_e$ by $\max\{C_e,1\}$ keeps the entropy inputs. For large $n$ one has
+    $m\ge1$, $D\ge1$ and $\lceil C_1nD\rceil\ge1$, and the typical set is
+    nonempty by Theorem~\ref{thm:al_scan_truncation_inputs}. The assumed conclusions of
+    Propositions~7.4 and~8.1 complete the input of
+    Theorem~\ref{thm:al_scanner_actual_scan}, whose conclusions give the
+    comparator bounds and the defect-energy bound for all $k\ge1$.
+\end{proof}
