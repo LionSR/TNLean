@@ -1637,3 +1637,141 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     Theorem~\ref{thm:peps_dyadic_lifetime_parties} bounds the number of such gates by
     $64G$.
 \end{proof}
+
+\subsection{The consequences of Proposition 7.1 used in the assembly}
+\label{sec:peps_dyadic_protocol}
+
+The following definition records the consequences
+of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} (\texttt{06-geometry.tex},
+lines 12--53) that the assembly of Section~8 uses, as a statement about
+distributed constructions in the sense of
+Definition~\ref{def:peps_distributed_construction} whose chronology is cut into
+changes. It is weaker than the proposition, whose omitted clauses are listed
+below and in~\cite{gap:polypeps_prop71_consequences_interface}. The statement
+is not proved here.
+
+\begin{definition}[Dyadic distribution protocols and the bounds used in the assembly]
+    \label{def:peps_dyadic_protocol}
+    \lean{TNLean.PEPS.Approximation.DyadicProtocol,
+        TNLean.PEPS.Approximation.DyadicProtocol.input,
+        TNLean.PEPS.Approximation.DyadicProtocol.trajectory,
+        TNLean.PEPS.Approximation.DyadicProtocol.physicalConfigEquiv,
+        TNLean.PEPS.Approximation.DyadicProtocol.readout,
+        TNLean.PEPS.Approximation.DyadicProtocol.physicalDensity,
+        TNLean.PEPS.Approximation.DyadicProtocol.participation,
+        TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol,
+        TNLean.PEPS.Approximation.LargeSizeDyadicProtocolConsequences}
+    \leanok
+    \uses{def:peps_distributed_construction, def:peps_original_circuit,
+        def:peps_dyadic_hv_routing}
+    A dyadic distribution protocol on the square of side $L$ with local
+    dimension $q$ consists of a finite set $P$ of parties, each attached to a
+    dyadic square by its scale and block indices, a finite-dimensional private
+    memory $H_p$ and a unit vector $x_p\in H_p$ for each party, a number $n$ of
+    changes, a register layout $M_t$ of the memory at each stage $t\le n$, and
+    for each $t<n$ a contraction circuit $W_t\colon M_t\to M_{t+1}$ whose
+    nonprivate gates carry their monomial expansions and their participating
+    parties. The first memory is $\bigotimes_pH_p$, and the last consists of one
+    physical register of dimension $d_p$ for each party, followed by the private
+    registers to be discarded. Each genuine site $v$ has its own party, attached
+    to the unit square with address $v$, with $d_p=q$; every other party has
+    $d_p=1$. Finally there is a reference vector $r_t\in M_t$ at each stage, with
+    $r_0=\bigotimes_px_p$. The actual vector is $\Psi_0=r_0$ and
+    $\Psi_{t+1}=W_t\Psi_t$.
+
+    For constants $C$, $b$, $k$, $r$ and a unit vector $\Omega$, the protocol
+    satisfies the assembly bounds if the following hold.
+    \begin{enumerate}
+        \item Every party is attached to a square of the padded hierarchy,
+              there are at most $CL^2$ parties, and at most $b$ of them are
+              attached to any square.
+        \item There are at most $CL^3$ changes. Each change has at most $b$
+              nonprivate gates, each involving at most $b$ parties. Every
+              nonprivate gate is a sum of at most $CL^k$ monomials with
+              absolute coefficient sum at most $CL^k$ and at most $r$ pair
+              effects in each monomial. Every party participates in at most
+              $b$ nonprivate gates over the whole schedule.
+        \item Two parties of a nonprivate gate have equal or adjacent scales,
+              and their addresses differ in each coordinate by at most $b$
+              times the side of the square of either party.
+        \item $\lVert W_tr_t-r_{t+1}\rVert\le CL^{-20}$ for every $t<n$, and in
+              the physical and private coordinates of the last memory
+              $r_n=\Omega\otimes\Xi$ with $1-CL^{-57}\le\lVert\Xi\rVert\le1$.
+    \end{enumerate}
+    The assembly assertion is that for every $q\ge2$ and $J,\Delta>0$ there are
+    constants $C$, $b$, $k$, $r$ and $L_0$, chosen before the size, the
+    Hamiltonian and the ground vector, such that for every $L\ge\max\{2,L_0\}$
+    and every $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$ there is a protocol
+    with these bounds.
+
+    These bounds and this assertion are the consequences
+    of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} used in Section~8, not
+    the proposition itself. They omit the following clauses of the source: a
+    party for every square of the hierarchy, including the root
+    (\texttt{06-geometry.tex}, lines 64--67), since the bounds above constrain
+    the parties of each square only from above; one party holding the main
+    copy of $\Omega$ and the auxiliary copies initialized privately at their
+    designated parties (lines 22--23); the factorization of every reference
+    vector into the main and auxiliary encoded frames with all factors of norm
+    at most one (lines 39--41); the scale and address of each additional party
+    at its repainting event (lines 36--37); the bounds on pair sources and
+    messages of each monomial before expansion
+    from~\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, item~3; and expansions
+    of every fixed inverse-power accuracy, in place of the single instantiated
+    contraction of each change used here.
+\end{definition}
+
+\begin{proposition}[Distribution through a dyadic hierarchy]
+    \label{prop:peps_dyadic_protocol}
+    \uses{def:peps_dyadic_protocol}
+    For every $q\ge2$ and $J,\Delta>0$ there are constants, uniform in the
+    Hamiltonian and in $L$, such that for every sufficiently large $L$ and every
+    $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$ there is a protocol that
+    distributes $\Omega$ through the padded dyadic hierarchy with all four items
+    of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}, applied with patch and
+    information power $60$ (\texttt{07-assembly.tex}, line 11). In particular,
+    the assembly assertion of Definition~\ref{def:peps_dyadic_protocol} holds;
+    the proposition also carries the clauses listed there as omitted.
+\end{proposition}
+
+\begin{theorem}[Consequences of the assembly bounds]
+    \label{thm:peps_dyadic_protocol_consequences}
+    \lean{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.rectangularTraceNorm_physicalDensity_sub_le,
+        TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.separationBounded,
+        TNLean.PEPS.Approximation.DyadicProtocol.participation_eq_card,
+        TNLean.PEPS.Approximation.DyadicProtocol.participation_le_of_uses}
+    \leanok
+    \uses{def:peps_dyadic_protocol, def:peps_dyadic_used_parties}
+    Let a protocol satisfy the assembly bounds of
+    Definition~\ref{def:peps_dyadic_protocol} with $C\ge0$, on a square of side
+    $L\ge1$, for a unit vector $\Omega$. These bounds omit the clauses
+    of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} listed there: a party
+    for every square of the hierarchy, the copies of $\Omega$, the frame
+    factorization of the reference vectors, the placement of additional
+    parties, the pair-source and message counts, and the expansions of every
+    fixed accuracy; none of them is used below. Then:
+    \begin{enumerate}
+        \item the physical density of the actual final vector satisfies
+              $\lVert\Tr_{\rm private}|\Psi_n\rangle\langle\Psi_n|
+                  -|\Omega\rangle\langle\Omega|\rVert_1\le(2C^2+2C)L^{-10}$;
+        \item every party network whose links join two parties of a common
+              nonprivate gate has link anchors differing in each coordinate by
+              at most $b$ times the side of either endpoint square.
+    \end{enumerate}
+    Moreover, for every protocol, let the nonprivate gates belong to the
+    repaintings and junction resizes of the hierarchy, at most $G$ to each. If a
+    party represents a block party that participates only in gates of events using
+    it, in the sense of Definition~\ref{def:peps_dyadic_used_parties}, it
+    participates in at most $64G$ nonprivate gates.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_protocol_density, thm:peps_dyadic_lifetime_parties}
+    The changes are contractions, $\lVert r_0\rVert=1$, and the actual and
+    reference vectors agree at the first stage, so the first item is
+    Theorem~\ref{thm:peps_protocol_density} with
+    $C_{\rm ch}=C_{\rm step}=C_{\rm hole}=C$. The second is the address bound of
+    item~3 applied to the two endpoints of a link. For the last, the participation
+    of a party is the number of nonprivate gates of all changes in which it
+    participates, and Theorem~\ref{thm:peps_dyadic_lifetime_parties} bounds it.
+\end{proof}

@@ -1,0 +1,99 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{The Consequences of the Distribution Protocol Used in the Assembly}
+\author{}
+\date{2026-10-15}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{open}
+
+\section{The source proposition}
+
+Proposition~7.1 of the polynomial PEPS approximation manuscript of
+September~24, 2026~\cite{OpenAI2026PolynomialPEPS} (\path{06-geometry.tex},
+lines~12--53, at revision \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a})
+asserts, for all sufficiently large $L$ and with constants uniform in the
+Hamiltonian and in $L$, a protocol that distributes the ground vector $\Omega$
+through the padded dyadic hierarchy. Its four items describe the parties and
+the product initialization; the changes, their gates and the lifetime
+participation of each party; the scales and addresses of the parties of a
+gate; and the reference vectors, ending at $\Omega\otimes\Xi$.
+
+\section{What is formalized}
+
+The formal statement records only the consequences of the proposition that
+the assembly of Section~8 uses. A protocol is a distributed construction in
+the sense of Theorem~5.2 whose chronology is cut into changes, with a dyadic
+attachment of its parties and a reference vector $r_t$ at every stage, with
+$r_0$ equal to the initial product vector. The bounds are: at most $CL^2$
+parties, each attached to a square of the padded hierarchy, at most $b$ to
+any square; at most $CL^3$ changes, each with at most $b$ nonprivate gates of
+at most $b$ parties, each gate a sum of at most $CL^k$ monomials with
+absolute coefficient sum at most $CL^k$ and at most $r$ pair effects per
+monomial; lifetime participation at most $b$; equal or adjacent scales and
+addresses at distance at most $b$ times either side for two parties of a
+gate; $\lVert W_tr_t-r_{t+1}\rVert\le CL^{-20}$; and
+$r_n=\Omega\otimes\Xi$ with $1-CL^{-57}\le\lVert\Xi\rVert\le1$. From these
+bounds the density estimate of Section~8.1, the separation hypothesis of
+Lemma~8.2 and the lifetime count of $64G$ gates per block party are
+proved.\footnote{The bounds are
+\leanid{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol};
+the existence statement is
+\leanid{TNLean.PEPS.Approximation.LargeSizeDyadicProtocolConsequences}.}
+
+\section{Omitted clauses}
+
+The following clauses of the source are not part of the formal statement.
+\begin{enumerate}
+\item Every square of the hierarchy, including the root, carries a party
+  (lines~64--67). The formal placement bounds the parties of each square
+  from above only.
+\item One party holds the main copy of $\Omega$, and every auxiliary copy is
+  initialized privately at its designated party (lines~22--23). The formal
+  initialization is an arbitrary product of normalized party vectors.
+\item Each reference vector is formed from the main encoded frame and the
+  auxiliary encoded frames, and all its factors have norm at most one
+  (lines~39--41). The per-change error and the endpoint identities do not
+  imply that the intermediate reference vectors have norm at most one.
+\item Each additional party takes the scale and address of its repainting
+  event (lines~36--37).
+\item Theorem~5.2, item~3 (\path{04-compression.tex}, lines~143--147), also
+  bounds the pair sources and the messages of each monomial before their
+  expansion. Only pair effects are counted formally.
+\item The source allows expansions accurate to any fixed inverse power of
+  $L$. The formal statement fixes one instantiated contraction per change and
+  bounds its reference error by $CL^{-20}$.
+\end{enumerate}
+None of these clauses enters the density estimate, the separation
+hypothesis or the lifetime count. The bounded messages and the bounded
+replacement slots that the compression step needs are derived separately,
+from the message expansion and from the nonprivate gate count and arity.
+The formal statement is therefore a weakening of Proposition~7.1, not the
+proposition; the source proposition remains unformalized.
+
+\section{Elimination}
+
+Construct a richer certificate of the protocol that carries the omitted
+clauses: the map from hierarchy squares to their parties, the registers of
+the main and auxiliary copies of $\Omega$, the frame factorization of every
+reference vector with its norm bounds, the placement of each additional party
+at its repainting event, and the counts of pair sources and messages before
+expansion, for every fixed accuracy. Prove Proposition~7.1 for that
+certificate, and obtain the present statement by forgetting the extra data.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
