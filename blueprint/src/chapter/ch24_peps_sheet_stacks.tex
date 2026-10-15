@@ -246,8 +246,8 @@ no holes, this is the normalization of $\Omega$.
     $\pi$. The norm bound is Theorem~\ref{thm:peps_sheet_stack_norm}.
 \end{proof}
 
-\begin{lemma}[The initial step of the dyadic protocol]
-    \label{lem:peps_dyadic_protocol_initial_step}
+\begin{theorem}[The initial step of the dyadic protocol]
+    \label{thm:peps_dyadic_protocol_initial_step}
     \lean{TNLean.PEPS.Approximation.DyadicProtocol.exists_originalCircuit_initial,
         TNLean.PEPS.Approximation.rootSquare,
         TNLean.PEPS.Approximation.initialFrames,
@@ -258,7 +258,7 @@ no holes, this is the normalization of $\Omega$.
     \leanok
     \uses{thm:peps_sheet_raw_initialization, def:peps_dyadic_protocol,
         def:peps_dyadic_protocol_parties, thm:peps_dyadic_protocol_schedule_counts}
-    Let $\lVert\Omega\rVert=1$. The initial sheets are the main copy of $\Omega$,
+    Let $L\ge1$ and $\lVert\Omega\rVert=1$. The initial sheets are the main copy of $\Omega$,
     a frame without holes held entirely by the party of the root square, and one
     copy for each change of the schedule that initializes an auxiliary sheet,
     a frame without holes held entirely by the future owner of that copy; there
@@ -270,7 +270,7 @@ no holes, this is the normalization of $\Omega$.
     reference vector of the protocol exactly to the reference vector of the
     initial sheets. The future owners of the auxiliary copies are arbitrary
     (\texttt{06-geometry.tex}, lines 21--23, 576, 649--652 and 658--667).
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_sheet_raw_initialization, thm:peps_dyadic_protocol_schedule_counts}
@@ -282,8 +282,8 @@ no holes, this is the normalization of $\Omega$.
     four for each square and junction.
 \end{proof}
 
-\begin{lemma}[The final step of the dyadic protocol]
-    \label{lem:peps_dyadic_protocol_final_step}
+\begin{theorem}[The final step of the dyadic protocol]
+    \label{thm:peps_dyadic_protocol_final_step}
     \lean{TNLean.PEPS.Approximation.DyadicProtocol.physicalDimension_eq_of_site_eq,
         TNLean.PEPS.Approximation.DyadicProtocol.physicalDimension_eq_one_of_site_eq,
         TNLean.PEPS.Approximation.DyadicProtocol.exists_reference_changes_of_readoutCircuit,
@@ -317,7 +317,7 @@ no holes, this is the normalization of $\Omega$.
     $1-214\,L^{-57}\le\lVert\Xi\rVert\le1$. The frozen auxiliary frames and the
     idle registers are otherwise arbitrary (\texttt{06-geometry.tex}, lines
     43--51, 653--656 and 669--681).
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_final_reference, thm:peps_guide_frame_norm,
