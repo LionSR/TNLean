@@ -1467,22 +1467,20 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     indices below $2^{k-j-1}$.
 \end{proof}
 
-\begin{lemma}[Labels inside a repainting]
-    \label{lem:peps_dyadic_repainting_valid_labels}
+\begin{theorem}[Labels inside a repainting]
+    \label{thm:peps_dyadic_repainting_valid_labels}
     \lean{TNLean.PEPS.Approximation.protocolLevelLabels, TNLean.PEPS.Approximation.newParty_mem_validLabels, TNLean.PEPS.Approximation.blockRepainting_mem_validLabels}
     \leanok
-    \uses{def:peps_dyadic_protocol_parties, lem:peps_dyadic_active_labels}
+    \uses{def:peps_dyadic_protocol_parties}
     In the repainting of a block of the root square at level $2^j$ with $j<k$, every
     value of the main guide after the central birth and any completed edges, and of
     every main or auxiliary guide of an edge construction, is the placeholder label or
-    the label of a square of the hierarchy. Hence, during any repainting, two values of
-    these guides are held by the same party exactly when they are the same label, and
-    the owners of the frames of these guides are read from their labels
-    (\texttt{06-geometry.tex}, lines 82--100 and 585--609).
-\end{lemma}
+    the label of a square of the hierarchy (\texttt{06-geometry.tex}, lines 82--100 and
+    585--609).
+\end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_dyadic_protocol_parties}
+    \uses{lem:peps_dyadic_active_labels, thm:peps_dyadic_protocol_parties}
     By Lemma~\ref{lem:peps_dyadic_active_labels} every such value is the new label of
     the block or a block label of the level. The new label of a block of the root square
     is the label of a square of the hierarchy, and so is every block label of the level
