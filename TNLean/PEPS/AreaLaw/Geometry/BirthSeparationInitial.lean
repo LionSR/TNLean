@@ -846,4 +846,115 @@ theorem exists_initialBeltRun_birth_separation :
       nlinarith
     linarith
 
+/-! ### The actual initial stage -/
+
+/-- The fine scale index of an initial belt tile; the other initial identifiers
+have none. Its side is `t_k = 2 ^ fineScaleIndex k`.
+Source: area-law Section 11, `prop:two-families`, lines 299–323. -/
+def InitialRegionIndex.beltScaleIndex {o : ℝ × ℝ} {k₀ : ℕ} {Z : Finset (ℤ × ℤ)} {C : ℕ}
+    {a b : (k : ℕ) → Fin (2 ^ (pitchScaleIndex k - fineScaleIndex k))}
+    {hC : 2 ≤ C} {h₀ : 50000000 ≤ k₀} : InitialRegionIndex o k₀ Z C a b hC h₀ → Option ℕ
+  | .inr (.inr ⟨k, _, _⟩) => some (fineScaleIndex k.val)
+  | _ => none
+
+section Stages
+
+variable (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ)
+  (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ)
+
+local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar
+
+/-- **Birth separation of the initial belt tiles** with constant `c₁`: the closed
+birth of every initial belt tile of side `u = t_k` is at distance at least
+`c₁ u^ρ₀` from the final actual region of every earlier or peer identifier of
+the same label, that is, of every primary and every other initial belt tile.
+The dummy is excluded from the order of identifiers.
+Source: area-law Section 11, `geometry:birth-separation`, lines 573–582, with
+the order of identifiers, lines 563–571. -/
+def IsInitialBirthSeparated (c₁ : ℝ) : Prop :=
+  ∀ (x y : (𝔇 0).regionIndex) (ℓ : ℕ), InitialRegionIndex.beltScaleIndex x = some ℓ →
+    y ≠ x → y ≠ (𝔇 0).dummy → (𝔇 0).color y = (𝔇 0).color x →
+    ∀ p ∈ (𝔇 0).birth x, ∀ w ∈ repairFinalRegion o Λ A C k₀ hC h₀ Sstar 0 y,
+      c₁ * ((2 : ℝ) ^ ℓ) ^ (Exponents.rho : ℝ) ≤ dist p w
+
+end Stages
+
+private theorem quarter_rpow_le_repairHalfSide {u S : ℝ} (hu : 1 ≤ u) (hS : u / 2 ≤ S) :
+    u ^ (Exponents.rho : ℝ) / 4 ≤ repairHalfSide S := by
+  have hu0 : 0 < u := by linarith
+  have hS0 : 0 < S := by linarith
+  have h₁ := half_rpow_le_repairHalfSide hS0
+  have h₂ : (u / 2) ^ (Exponents.rho : ℝ) ≤ S ^ (Exponents.rho : ℝ) :=
+    Real.rpow_le_rpow (by positivity) hS rho_pos_lt_one.1.le
+  have h₃ : (2 : ℝ) ^ (Exponents.rho : ℝ) ≤ 2 := by
+    calc (2 : ℝ) ^ (Exponents.rho : ℝ) ≤ 2 ^ (1 : ℝ) :=
+          Real.rpow_le_rpow_of_exponent_le (by norm_num) rho_pos_lt_one.2.le
+      _ = 2 := Real.rpow_one 2
+  have h₄ : (u / 2) ^ (Exponents.rho : ℝ) =
+      u ^ (Exponents.rho : ℝ) / 2 ^ (Exponents.rho : ℝ) :=
+    Real.div_rpow hu0.le (by norm_num) _
+  have h₅ : 0 < (2 : ℝ) ^ (Exponents.rho : ℝ) := by positivity
+  have h₆ : u ^ (Exponents.rho : ℝ) / 2 ≤ (u / 2) ^ (Exponents.rho : ℝ) := by
+    rw [h₄, div_le_div_iff₀ (by norm_num) h₅]
+    nlinarith [Real.rpow_nonneg hu0.le (Exponents.rho : ℝ)]
+  linarith
+
+/-- **Birth-template separation of the initial belt tiles.** There is one fixed
+`c₁ > 0` such that, for all domains, cuts, origins, layer widths, lower layer
+indices and stopping scales, the closed birth of every initial belt tile of
+side `u = t_k` has distance at least `c₁ u^ρ₀` from the final actual region of
+every primary and every other initial belt tile with the same label.
+Source: area-law Section 11, `geometry:birth-separation`, lines 573–659, for
+the births of initial belt tiles. -/
+theorem exists_isInitialBirthSeparated :
+    ∃ c₁ > 0, ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (C k₀ : ℕ)
+      (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (Sstar : ℝ),
+      IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ := by
+  obtain ⟨c₁, hc₁, hcore⟩ := exists_initialBeltRun_birth_separation
+  refine ⟨c₁, hc₁, fun o Λ A C k₀ hC h₀ Sstar x y ℓ hx hyx hyd hcol p hp w hw ↦ ?_⟩
+  let h := (Classical.choose_spec exists_uniform_separated_initial_marks).2 o Λ A C k₀ hC h₀
+  let hb := Classical.choose_spec h
+  let hab := Classical.choose_spec hb
+  let hM := hab.2.2
+  have hMmem := (Classical.choose_spec hM).1
+  have hspec := Classical.choose_spec (Classical.choose_spec hM).2.2
+  obtain ⟨⟩ | ⟨⟩ | ⟨⟨k, hk⟩, ⟨z, hz⟩, R⟩ := x
+  · cases hx
+  · cases hx
+  obtain rfl : fineScaleIndex k = ℓ := Option.some_injective _ hx
+  refine hcore o k₀ (boundaryEndpoints Λ A) C _ _ hC h₀ k hk z hz R y hyx hyd hcol
+    (repairFinalRegion o Λ A C k₀ hC h₀ Sstar 0 y)
+    (fun w' hw' ↦ (repairFinalRegion_subset_remnant o Λ A C k₀ hC h₀ Sstar 0 y hw').1)
+    ?_ p hp w hw
+  intro v hv w' hw'
+  have hrem := (repairFinalRegion_subset_remnant o Λ A C k₀ hC h₀ Sstar 0 y hw').2
+  have hvM : v ∈ Classical.choose hM :=
+    (hMmem v).mpr ⟨k, hk, Finset.mem_biUnion.mpr ⟨z, hz, hv⟩⟩
+  have hout : w' ∉ repairSquare v ((initialRepairStage o Λ A C k₀ hC h₀).scale ⟨v, hvM⟩) :=
+    fun h ↦ hrem (Set.mem_iUnion.mpr ⟨⟨v, hvM⟩, h⟩)
+  obtain ⟨-, k', z', hk', hz', hv', hSv⟩ := hspec.1 ⟨v, hvM⟩
+  change w' ∉ repairSquare v (Classical.choose (Classical.choose_spec hM).2.2 ⟨v, hvM⟩) at hout
+  rw [hSv, repairSquare, Metric.mem_closedBall, not_le] at hout
+  have hvk : v ∈ closure (dyadicLayer o k (boundaryEndpoints Λ A) C) :=
+    closure_mono (dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices o k (fineScaleIndex k)
+      _ C z (fineScaleIndex_le k) (Finset.mem_of_mem_filter z hz))
+      (beltCellMarks_subset_closure_dyadicCell o (fineScaleIndex k) z hv)
+  have hvk' : v ∈ closure (dyadicLayer o k' (boundaryEndpoints Λ A) C) :=
+    closure_mono (dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices o k' (fineScaleIndex k')
+      _ C z' (fineScaleIndex_le k') (Finset.mem_of_mem_filter z' hz'))
+      (beltCellMarks_subset_closure_dyadicCell o (fineScaleIndex k') z' hv')
+  obtain ⟨h₁, h₂⟩ := dyadicLayer_nearby_indices o k k' _ C v v hC (h₀.trans hk) hvk hvk'
+    (by rw [dist_self]; positivity)
+  have hℓ : fineScaleIndex k ≤ fineScaleIndex k' + 1 := by
+    rcases (show k' + 1 = k ∨ k ≤ k' by omega) with rfl | hkk
+    · rcases fineScaleIndex_succ k' with e | e <;> omega
+    · have := fineScaleIndex_mono hkk; omega
+  have hS : (2 : ℝ) ^ fineScaleIndex k / 2 ≤ (2 : ℝ) ^ fineScaleIndex k' := by
+    have : (2 : ℝ) ^ fineScaleIndex k ≤ (2 : ℝ) ^ (fineScaleIndex k' + 1) :=
+      pow_le_pow_right₀ (by norm_num) hℓ
+    rw [pow_succ] at this
+    linarith
+  have := quarter_rpow_le_repairHalfSide (one_le_pow₀ (by norm_num : (1 : ℝ) ≤ 2)) hS
+  linarith
+
 end TNLean.PEPS.AreaLaw.Geometry
