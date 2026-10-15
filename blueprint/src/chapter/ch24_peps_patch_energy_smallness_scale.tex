@@ -1,0 +1,35 @@
+\section{Choice of the patch energy parameter}
+\label{sec:peps_patch_energy_choice}
+
+The patch energy estimate has the form
+$\langle\phi,H\phi\rangle-E_0\le C_E\kappa^2$, where
+$C_E=36q^2J$ depends only on the fixed physical parameters.
+The following scalar choice is made before the regions, radius and minimizing
+densities are chosen. It does not establish the energy estimate itself.
+
+\begin{lemma}[A uniformly small energy parameter]
+    \label{lem:peps_patch_energy_parameter_choice}
+    \lean{Real.exists_pos_le_half_mul_sq_le_div_1024}
+    Let $C_E\ge0$ and $\Delta>0$. There exists $\kappa>0$ such that
+    \begin{align*}
+        \kappa\le\frac12,
+        \qquad C_E\kappa^2\le\frac{\Delta}{1024}.
+    \end{align*}
+    The choice depends only on $C_E$ and $\Delta$.
+\end{lemma}
+\begin{proof}
+    If $C_E=0$, take $\kappa=1/2$.
+    If $C_E>0$, take
+    \begin{align*}
+        \kappa=\min\left\{\frac12,
+        \sqrt{\frac{\Delta}{1024C_E}}\right\}.
+    \end{align*}
+    Both entries of the minimum are positive. The first gives
+    $\kappa\le1/2$, and the second gives
+    $C_E\kappa^2\le\Delta/1024$.
+\end{proof}
+
+This is the parameter choice in
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L339-L365}{the patch construction}.
+The conversion of a proved excess-energy bound into marginal trace-norm
+bounds uses the original full-system gap and is a separate result.
