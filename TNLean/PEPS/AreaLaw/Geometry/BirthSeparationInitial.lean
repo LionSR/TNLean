@@ -224,7 +224,8 @@ private theorem isClosed_cellFanPolygon_region (split : Fin 4 → Bool)
     (i : CellFanSlot split) : IsClosed (cellFanPolygon o ℓ' w split i).region := by
   change IsClosed (convexHull ℝ {cellFanCenter o ℓ' w, cellFanStart o ℓ' w split i,
     cellFanEnd o ℓ' w split i})
-  exact (((Set.finite_singleton _).insert _).insert _).isClosed_convexHull
+  exact (((Set.finite_singleton (cellFanEnd o ℓ' w split i)).insert
+    (cellFanStart o ℓ' w split i)).insert (cellFanCenter o ℓ' w)).isClosed_convexHull ℝ
 
 /-- **Atoms in a fan triangle.** After normalization at a fine cell of scale
 `ℓ`, every point of a fan triangle of a cell of scale `ℓ' ≥ ℓ - 1` lies in an
