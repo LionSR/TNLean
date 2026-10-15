@@ -1454,7 +1454,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{thm:peps_dyadic_protocol_locality}
     \lean{TNLean.PEPS.Approximation.EventUses.scale_le, TNLean.PEPS.Approximation.EventUses.anchor_dist_le}
     \leanok
-    \uses{def:peps_dyadic_protocol_parties, lem:peps_dyadic_address_locality}
+    \uses{def:peps_dyadic_protocol_parties}
     Two parties used by one event have equal or adjacent scales, and in each coordinate
     their addresses differ by at most $12$ times the side of the square of either
     party. This is the locality of~\cite[Proposition~7.1,
@@ -1462,7 +1462,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_dyadic_lifetime_parties}
+    \uses{lem:peps_dyadic_address_locality}
     A party used by the repainting of a square $S$ of scale $j$ owns a block of side
     $2^j$ adjacent to $S$ or its parent, or is the placeholder of $S$; by
     Lemma~\ref{lem:peps_dyadic_address_locality} its address is within $3\cdot2^{j+1}$
