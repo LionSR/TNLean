@@ -46,7 +46,9 @@ import TNLean.PEPS.Approximation.AngularAnnularCells
 import TNLean.PEPS.Approximation.AngularAnnularLayers
 import TNLean.PEPS.Approximation.AngularCellGeometry
 import TNLean.PEPS.Approximation.AngularGridCells
+import TNLean.PEPS.Approximation.AngularInformationBound
 import TNLean.PEPS.Approximation.AngularResetWidth
+import TNLean.PEPS.Approximation.AngularSeparationBridges
 import TNLean.PEPS.Approximation.ApproximateCircuitBudget
 import TNLean.PEPS.Approximation.ApproximateCircuitDensity
 import TNLean.PEPS.Approximation.ApproximateCircuitError
@@ -92,6 +94,7 @@ import TNLean.PEPS.Approximation.DistributedSourceComposition
 import TNLean.PEPS.Approximation.DyadicActiveLabelParties
 import TNLean.PEPS.Approximation.DyadicAnchors
 import TNLean.PEPS.Approximation.DyadicBlockFootprints
+import TNLean.PEPS.Approximation.DyadicBulkSteps
 import TNLean.PEPS.Approximation.DyadicChamberSampling
 import TNLean.PEPS.Approximation.DyadicEdgeBands
 import TNLean.PEPS.Approximation.DyadicFootprintScaling
