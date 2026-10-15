@@ -34,11 +34,6 @@ noncomputable section
 
 variable {D₀ D₁ N : ℕ}
 
-private theorem diagonal_apply {ι : Type*} [Fintype ι] [DecidableEq ι]
-    (f : ι → ℂ) (v : EuclideanSpace ℂ ι) (i : ι) :
-    Matrix.toEuclideanLin (Matrix.diagonal f) v i = f i * v i := by
-  simp [Matrix.toEuclideanLin, Matrix.toLpLin_apply, Matrix.mulVec_diagonal]
-
 /-- Every chain row selector commutes with each actual translated local
 interaction, before summing the open Hamiltonian. -/
 theorem mixedEndpointChainRowSector_commute_localInteraction
@@ -72,21 +67,15 @@ theorem mixedEndpointOpenInnerPenalty_commute_localInteraction
   intro j _
   have hcol : periodicLocalInteractionES (mixedEndpointColumnSector D₀ D₁ 0) j.1 =
       mixedEndpointChainColumnSector D₀ D₁ j.1 := by
-    apply LinearMap.ext
-    intro v
-    apply PiLp.ext
-    intro σ
+    ext v σ
     simp [mixedEndpointColumnSector, mixedEndpointChainColumnSector,
-      periodicLocalInteractionES_diagonal_apply hN, diagonal_apply,
+      periodicLocalInteractionES_diagonal_apply hN, Matrix.toEuclideanLin_diagonal_apply,
       extractWindow, Nat.mod_eq_of_lt j.1.isLt]
   have hrow : periodicLocalInteractionES (mixedEndpointRowSector D₀ D₁ 1) j.1 =
       mixedEndpointChainRowSector D₀ D₁ (cyclicForwardSite j.1 1) := by
-    apply LinearMap.ext
-    intro v
-    apply PiLp.ext
-    intro σ
+    ext v σ
     simp [mixedEndpointRowSector, mixedEndpointChainRowSector,
-      periodicLocalInteractionES_diagonal_apply hN, diagonal_apply,
+      periodicLocalInteractionES_diagonal_apply hN, Matrix.toEuclideanLin_diagonal_apply,
       extractWindow, cyclicForwardSite]
   rw [hcol, hrow]
   exact ((Commute.one_left _).sub_left
@@ -130,10 +119,7 @@ private theorem localExtension_isSymmetricProjection {d R L : ℕ}
     (hh : h.IsSymmetricProjection) (hRL : R ≤ L) (i : Fin L) :
     (periodicLocalInteractionES h i).IsSymmetricProjection := by
   refine ⟨?_, (periodicLocalInteractionES_isPositive hh.isPositive i).isSymmetric⟩
-  apply LinearMap.ext
-  intro v
-  apply PiLp.ext
-  intro σ
+  ext v σ
   let e := cyclicActiveBlockConfigEquiv d R hRL i
   let w : EuclideanSpace ℂ (Cfg d R) :=
     WithLp.toLp 2 fun ω => v (e.symm (ω, (e σ).2))
@@ -186,10 +172,7 @@ theorem mixedEndpointActiveLinearIsometry_adjoint_apply
 theorem mixedEndpointActiveLinearIsometry_adjoint_comp :
     (mixedEndpointActiveLinearIsometry D₀ D₁ N).toLinearMap.adjoint ∘ₗ
         (mixedEndpointActiveLinearIsometry D₀ D₁ N).toLinearMap = LinearMap.id := by
-  apply LinearMap.ext
-  intro v
-  apply PiLp.ext
-  intro ξ
+  ext v ξ
   rw [LinearMap.comp_apply, mixedEndpointActiveLinearIsometry_adjoint_apply]
   exact mixedEndpointActiveInclusion_apply_active v ξ
 
@@ -200,10 +183,7 @@ theorem mixedEndpointActiveLinearIsometry_comp_adjoint :
         (mixedEndpointActiveLinearIsometry D₀ D₁ N).toLinearMap.adjoint =
       mixedEndpointOpenActiveProjection D₀ D₁ (N + 1 + 1) := by
   classical
-  apply LinearMap.ext
-  intro v
-  apply PiLp.ext
-  intro σ
+  ext v σ
   change mixedEndpointActiveInclusion D₀ D₁ N
       ((mixedEndpointActiveLinearIsometry D₀ D₁ N).toLinearMap.adjoint v) σ =
     mixedEndpointOpenActiveProjection D₀ D₁ (N + 1 + 1) v σ

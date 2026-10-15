@@ -30,65 +30,6 @@ namespace QuantumCircuit
 
 variable {d n : ℕ}
 
-/-- A two-level single-site rotation or phase with at most `k` controls is
-an exact product of at most `4 * n * 3 ^ k` neighboring two-qudit gates.
-Derived synthesis estimate for Section 5 of
-`docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
-theorem isPairProduct_ctrlOp_le_exponential (hd : 0 < d) (hn : 2 ≤ n) (k : ℕ) :
-    ∀ S : Finset (Fin n), S.card ≤ k → ∀ t, t ∉ S → ∀ (c : (Fin n → Fin d)) (α β : Fin d),
-      α ≠ β → ∀ g, IsSpecialTwo g →
-        IsPairProduct d n (4 * n * 3 ^ k) (ctrlOp S c t (twoLevel α β g)) := by
-  induction k with
-  | zero =>
-    refine fun S hS t _ c α β hαβ g hg => ?_
-    rw [Nat.le_zero, Finset.card_eq_zero] at hS
-    subst hS
-    rw [ctrlOp_empty]
-    exact isPairProduct_of_mem_supportedOperators_card_le_two hd hn
-      (T := {t}) (by simp) (siteOp_mem_unitary t (twoLevel_mem_unitary hαβ hg.mem_unitary))
-      (by simpa using siteOp_mem_supportedOperators t _) |>.mono (by simp; omega)
-  | succ k ih =>
-    let K := 4 * n * 3 ^ k
-    have hK := ih
-    intro S hS t ht c α β hαβ g hg
-    rcases Nat.lt_or_ge k S.card with hk | hk
-    swap
-    · exact (hK S hk t ht c α β hαβ g hg).mono (by
-        have hp := Nat.one_le_pow k 3 (by norm_num)
-        rw [pow_succ]
-        nlinarith)
-    obtain ⟨s, hs⟩ : S.Nonempty := Finset.card_pos.mp (by omega)
-    set S' := S.erase s
-    have hS' : S'.card ≤ k := by rw [Finset.card_erase_of_mem hs]; omega
-    have hsS' : s ∉ S' := Finset.notMem_erase s S
-    have htS' : t ∉ S' := fun h => ht (Finset.mem_of_mem_erase h)
-    have hst : s ≠ t := fun h => ht (h ▸ hs)
-    obtain ⟨g₁, g₂, hg₁, hg₂, rfl⟩ := hg.exists_commutator
-    have hV := twoLevel_mem_unitary hαβ hg₁.mem_unitary
-    have hW := twoLevel_mem_unitary (ι := Fin d) hαβ hg₂
-    have heq : twoLevel α β (g₁ * g₂ * star g₁ * star g₂) =
-        twoLevel α β g₁ * twoLevel α β g₂ * star (twoLevel α β g₁) *
-          star (twoLevel α β g₂) := by
-      rw [star_eq_conjTranspose (twoLevel α β g₁), star_eq_conjTranspose (twoLevel α β g₂),
-        twoLevel_conjTranspose, twoLevel_conjTranspose, twoLevel_mul hαβ, twoLevel_mul hαβ,
-        twoLevel_mul hαβ]; rfl
-    rw [heq, ← Finset.insert_erase hs, ctrlOp_insert_commutator htS' hst c hV hW]
-    have hsingle : ∀ u : Matrix (Fin d) (Fin d) ℂ, u ∈ unitary (Matrix (Fin d) (Fin d) ℂ) →
-        IsPairProduct d n (2 * n) (ctrlOp {s} c t u) := fun u hu =>
-      isPairProduct_of_mem_supportedOperators_card_le_two hd hn (T := {t, s})
-        (Finset.card_le_two) (ctrlOp_mem_unitary (by simpa using Ne.symm hst) c hu)
-        (by simpa using ctrlOp_mem_supportedOperators {s} c t u)
-    have h1 := hK S' hS' t htS' c α β hαβ g₁ hg₁
-    have h2 : IsPairProduct d n K (ctrlOp S' c t (star (twoLevel α β g₁))) := by
-      rw [star_eq_conjTranspose, twoLevel_conjTranspose]
-      exact hK S' hS' t htS' c α β hαβ _ hg₁.conjTranspose
-    have := ((h1.mul (hsingle _ hW)).mul h2).mul (hsingle _ (Unitary.star_mem hW))
-    exact this.mono (by
-      have hp := Nat.one_le_pow k 3 (by norm_num)
-      dsimp [K]
-      rw [pow_succ]
-      nlinarith)
-
 /-- Every two-level rotation or phase on `n` sites has an exact
 neighboring-pair decomposition of length at most
 `(2 * n + 1) * (4 * n * 3 ^ n)`. No auxiliary sites are added.
@@ -96,77 +37,8 @@ Derived synthesis estimate for Section 5 of
 `docs/audits/2026-10-02_mpu_rank_two_circuits.tex`. -/
 theorem isPairProduct_twoLevel_le_exponential (hd : 0 < d) (hn : 2 ≤ n) :
     ∀ a b : (Fin n → Fin d), a ≠ b → ∀ g, IsSpecialTwo g →
-      IsPairProduct d n ((2 * n + 1) * (4 * n * 3 ^ n)) (twoLevel a b g) := by
-  let K₁ := 4 * n * 3 ^ n
-  have hK₁ := isPairProduct_ctrlOp_le_exponential hd hn n
-  -- configurations differing at exactly one site
-  have hone : ∀ (a : (Fin n → Fin d)) (t : Fin n) (β : Fin d), β ≠ a t → ∀ g, IsSpecialTwo g →
-      IsPairProduct d n K₁ (twoLevel a (Function.update a t β) g) := by
-    intro a t β hβ g hg
-    rw [twoLevel_update_eq_ctrlOp a t hβ g]
-    exact hK₁ _ ((Finset.card_le_univ _).trans (by simp)) t (by simp) a (a t) β
-      (Ne.symm hβ) g hg
-  have key : ∀ h : ℕ, ∀ a b : (Fin n → Fin d), hammingDist a b = h + 1 → ∀ g, IsSpecialTwo g →
-      IsPairProduct d n ((2 * h + 1) * K₁) (twoLevel a b g) := by
-    intro h
-    induction h with
-    | zero =>
-      intro a b hab g hg
-      obtain ⟨t, ht⟩ := Finset.card_eq_one.mp hab
-      have hb : b = Function.update a t (b t) := by
-        funext i
-        by_cases hi : i = t
-        · subst hi; simp
-        · rw [Function.update_of_ne hi]
-          by_contra h'
-          have : i ∈ Finset.univ.filter fun i => a i ≠ b i := by simp [Ne.symm h']
-          rw [ht] at this
-          exact hi (Finset.mem_singleton.mp this)
-      have hbt : b t ≠ a t := by
-        have : t ∈ Finset.univ.filter fun i => a i ≠ b i := by rw [ht]; simp
-        simpa [eq_comm] using this
-      rw [hb]
-      simpa using hone a t (b t) hbt g hg
-    | succ h ih =>
-      intro a b hab g hg
-      obtain ⟨t, ht⟩ : (Finset.univ.filter fun i => a i ≠ b i).Nonempty :=
-        Finset.card_pos.mp (by unfold hammingDist at hab; omega)
-      have hat : a t ≠ b t := (Finset.mem_filter.mp ht).2
-      set c := Function.update b t (a t) with hc
-      have hfilter : (Finset.univ.filter fun i => a i ≠ c i) =
-          (Finset.univ.filter fun i => a i ≠ b i).erase t := by
-        ext i
-        simp only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_erase, hc]
-        by_cases hi : i = t
-        · subst hi; simp
-        · simp [hi]
-      have hac' : hammingDist a c = h + 1 := by
-        unfold hammingDist
-        rw [hfilter, Finset.card_erase_of_mem ht]
-        unfold hammingDist at hab
-        omega
-      have hac : a ≠ c := hammingDist_pos.mp (by omega)
-      have hbc : b ≠ c := fun h' => by
-        have := congrFun h' t
-        rw [hc, Function.update_self] at this
-        exact hat this.symm
-      have hab' : a ≠ b := fun h' => by rw [h'] at hat; exact hat rfl
-      have hcb : b = Function.update c t (b t) := by
-        rw [hc, Function.update_idem, Function.update_eq_self]
-      have hT : IsPairProduct d n K₁ (twoLevel c b quarterTwo) := by
-        have hbt : b t ≠ c t := by rw [hc, Function.update_self]; exact Ne.symm hat
-        rw [hcb]
-        simpa using hone c t (b t) hbt _ quarterTwo_isSpecialTwo
-      rw [twoLevel_conj_quarterTwo hab' hac hbc g]
-      have := (hT.star.mul (ih a c hac' g hg)).mul hT
-      refine this.mono (le_of_eq ?_)
-      ring
-  intro a b hab g hg
-  obtain ⟨h, hh⟩ : ∃ h, hammingDist a b = h + 1 :=
-    ⟨hammingDist a b - 1, by have := hammingDist_pos.mpr hab; omega⟩
-  refine (key h a b hh g hg).mono (Nat.mul_le_mul_right _ ?_)
-  have := (hammingDist_le_card_fintype (x := a) (y := b)).trans_eq (Fintype.card_fin n)
-  omega
+      IsPairProduct d n ((2 * n + 1) * (4 * n * 3 ^ n)) (twoLevel a b g) :=
+  isPairProduct_twoLevel_of_ctrlOp (isPairProduct_ctrlOp_le_exponential hd hn n)
 
 /-- Explicit neighboring-pair gate count obtained from controlled rotations
 and Givens elimination. Derived synthesis estimate for Section 5 of

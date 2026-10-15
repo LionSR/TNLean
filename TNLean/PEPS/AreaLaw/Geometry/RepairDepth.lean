@@ -3,6 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.AreaLaw.Geometry.PowerScaleDepth
 import TNLean.PEPS.AreaLaw.Geometry.SimultaneousRepair
 import Mathlib.Analysis.Complex.ExponentialBounds
 
@@ -23,6 +24,8 @@ The module also proves the scalar threshold `geometry:fine-clearance`: for fixed
 `c₁ > 0` and `C_B ≥ 0`, every sufficiently large `u` satisfies
 `c₁ u ^ ρ₀ > 2 ⌈C_B u⌉ ^ β`, because `ρ₀ > β`.
 
+The depth and descendant counts are the repair-branch instances of the
+power-contracting recursion bounds of `TNLean.PEPS.AreaLaw.Geometry.PowerScaleDepth`.
 These are scalar estimates about the iterated removal half-side. They do not
 construct the repairs or verify the isolated-star induction.
 
@@ -84,30 +87,18 @@ theorem log_repairHalfSide_iterate_le {S : ℝ} (hS : 0 < S) (j : ℕ) :
           mul_le_mul_of_nonneg_left ih rho_pos_lt_one.1.le
       _ = (Exponents.rho : ℝ) ^ (j + 1) * Real.log S := by ring
 
-/-- If a generation of a branch from the positive scale `S` still has scale at least
-`S_* > 1`, then the logarithm of `S` dominates `ρ₀ ^ (-j)` times that of `S_*`.
-In particular the initial scale exceeds one. -/
-private theorem log_le_of_le_repairHalfSide_iterate {Sstar S : ℝ} (hSstar : 1 < Sstar)
-    (hS : 0 < S) {j : ℕ} (hj : Sstar ≤ repairHalfSide^[j] S) :
-    Real.log Sstar ≤ (Exponents.rho : ℝ) ^ j * Real.log S ∧ 0 < Real.log S := by
-  have h1 : Real.log Sstar ≤ (Exponents.rho : ℝ) ^ j * Real.log S :=
-    (Real.log_le_log (by linarith) hj).trans (log_repairHalfSide_iterate_le hS j)
-  refine ⟨h1, ?_⟩
-  by_contra h
-  have hρj : 0 ≤ (Exponents.rho : ℝ) ^ j := pow_nonneg rho_pos_lt_one.1.le j
-  have : (Exponents.rho : ℝ) ^ j * Real.log S ≤ 0 :=
-    mul_nonpos_of_nonneg_of_nonpos hρj (not_lt.mp h)
-  linarith [Real.log_pos hSstar]
+/-- The repair half-side contracts every positive scale to at most its `ρ₀`-th power. -/
+private theorem repairHalfSide_pos_le_rpow (u : ℝ) (hu : 0 < u) :
+    0 < repairHalfSide u ∧ repairHalfSide u ≤ u ^ (Exponents.rho : ℝ) :=
+  ⟨repairHalfSide_pos u, repairHalfSide_le_rpow hu⟩
 
-/-- `log log (e^e + S) ≥ 1` for every nonnegative `S`. -/
-private theorem one_le_log_log_exp_exp_add {S : ℝ} (hS : 0 ≤ S) :
-    1 ≤ Real.log (Real.log (Real.exp (Real.exp 1) + S)) := by
-  have he : Real.exp 1 ≤ Real.log (Real.exp (Real.exp 1) + S) := by
-    calc Real.exp 1 = Real.log (Real.exp (Real.exp 1)) := (Real.log_exp _).symm
-      _ ≤ Real.log (Real.exp (Real.exp 1) + S) :=
-        Real.log_le_log (Real.exp_pos _) (by linarith)
-  calc (1 : ℝ) = Real.log (Real.exp 1) := (Real.log_exp 1).symm
-    _ ≤ _ := Real.log_le_log (Real.exp_pos 1) he
+/-- A generation of a repair branch at scale at least `S_* > 1` has only ancestors
+at scale at least `S_*`. -/
+private theorem forall_lt_le_repairHalfSide_iterate {Sstar S : ℝ} (hSstar : 1 < Sstar)
+    (hS : 0 < S) {m : ℕ} (hm : Sstar ≤ repairHalfSide^[m] S) :
+    ∀ i < m + 1, Sstar ≤ repairHalfSide^[i] S := fun i hi ↦
+  forall_le_iterate_of_le_iterate repairHalfSide_pos_le_rpow rho_pos_lt_one.1
+    rho_pos_lt_one.2.le hSstar.le hS hm i (Nat.lt_succ_iff.mp hi)
 
 /-- **Depth of a repair branch.** For a stopping scale `S_* > 1` there is a constant
 `C` such that, along the branch from any positive initial scale `S`, every
@@ -117,35 +108,20 @@ Source: Section 11, `10-geometry.tex`, lines 670–675. -/
 theorem exists_repair_depth_bound {Sstar : ℝ} (hSstar : 1 < Sstar) :
     ∃ C : ℝ, 0 < C ∧ ∀ S : ℝ, 0 < S → ∀ j : ℕ, Sstar ≤ repairHalfSide^[j] S →
       (j : ℝ) ≤ C + C * Real.log (Real.log (Real.exp (Real.exp 1) + S)) := by
-  have hρ := rho_pos_lt_one
-  set c : ℝ := -Real.log (Exponents.rho : ℝ) with hc_def
-  have hc : 0 < c := neg_pos.mpr (Real.log_neg hρ.1 hρ.2)
-  set a : ℝ := Real.log (Real.log Sstar)
-  refine ⟨(|a| + 1) / c, by positivity, fun S hS j hj => ?_⟩
-  obtain ⟨h1, hlogS⟩ := log_le_of_le_repairHalfSide_iterate hSstar hS hj
-  have h2 : a ≤ (j : ℝ) * Real.log (Exponents.rho : ℝ) + Real.log (Real.log S) := by
-    have := Real.log_le_log (Real.log_pos hSstar) h1
-    rwa [Real.log_mul (pow_ne_zero _ hρ.1.ne') hlogS.ne', Real.log_pow] at this
-  set L : ℝ := Real.log (Real.log (Real.exp (Real.exp 1) + S))
-  have hL : Real.log (Real.log S) ≤ L :=
-    Real.log_le_log hlogS
-      (Real.log_le_log hS (by linarith [Real.exp_pos (Real.exp 1)]))
-  have hL1 : 1 ≤ L := one_le_log_log_exp_exp_add hS.le
-  have key : (j : ℝ) * c ≤ (|a| + 1) * (1 + L) := by
-    nlinarith [neg_abs_le a, abs_nonneg a]
-  calc (j : ℝ) ≤ (|a| + 1) * (1 + L) / c := (le_div_iff₀ hc).mpr key
-    _ = (|a| + 1) / c + (|a| + 1) / c * L := by ring
-
-/-- For `S ≥ 0`, `log (e^e + S) ≤ e + log (S + 2)`. -/
-private theorem log_exp_exp_add_le {S : ℝ} (hS : 0 ≤ S) :
-    Real.log (Real.exp (Real.exp 1) + S) ≤ Real.exp 1 + Real.log (S + 2) := by
-  have hE : 1 ≤ Real.exp (Real.exp 1) := Real.one_le_exp (Real.exp_pos 1).le
-  calc Real.log (Real.exp (Real.exp 1) + S)
-      ≤ Real.log (Real.exp (Real.exp 1) * (S + 2)) :=
-        Real.log_le_log (by positivity) (by nlinarith)
-    _ = Real.exp 1 + Real.log (S + 2) := by
-        rw [Real.log_mul (Real.exp_pos _).ne' (by positivity : (0 : ℝ) < S + 2).ne',
-          Real.log_exp]
+  obtain ⟨C, hC, hdepth⟩ := exists_iterate_depth_bound
+    (fun u hu ↦ repairHalfSide_pos_le_rpow u (by linarith)) rho_pos_lt_one.1
+    rho_pos_lt_one.2 hSstar
+  refine ⟨C, hC, fun S hS j hj => ?_⟩
+  have h := hdepth S hS (j + 1) (forall_lt_le_repairHalfSide_iterate hSstar hS hj)
+  have hlog : Real.log (Real.log (S + Real.exp 1)) ≤
+      Real.log (Real.log (Real.exp (Real.exp 1) + S)) := by
+    have he : Real.exp 1 ≤ Real.exp (Real.exp 1) := by
+      have := Real.add_one_le_exp (Real.exp 1)
+      linarith
+    exact Real.log_le_log (by linarith [one_le_log_add_exp_one hS.le])
+      (Real.log_le_log (by positivity) (by linarith))
+  push_cast at h
+  linarith [mul_le_mul_of_nonneg_left hlog hC.le]
 
 /-- **Descendant count of an initial mark** (`geometry:descendant-count`). For a
 stopping scale `S_* > 1` there is a constant `C > 0` such that, for every positive
@@ -156,58 +132,24 @@ Source: Section 11, `10-geometry.tex`, lines 670–682. -/
 theorem exists_repair_descendant_count_bound {Sstar : ℝ} (hSstar : 1 < Sstar) :
     ∃ C : ℝ, 0 < C ∧ ∀ S : ℝ, 0 < S → ∀ m : ℕ, Sstar ≤ repairHalfSide^[m] S →
       ∑ j ∈ Finset.range (m + 1), (9 : ℝ) ^ j ≤ C * Real.log (S + 2) ^ C := by
-  obtain ⟨C₁, hC₁, hdepth⟩ := exists_repair_depth_bound hSstar
-  set p : ℝ := C₁ * Real.log 9 with hp_def
-  have hlog9 : 0 < Real.log 9 := Real.log_pos (by norm_num)
-  have hp : 0 ≤ p := by positivity
-  set K : ℝ := (9 : ℝ) ^ (C₁ + 1) * (4 : ℝ) ^ p with hK_def
-  have hK : 0 < K := by positivity
-  refine ⟨max K p, lt_max_of_lt_left hK, fun S hS m hm => ?_⟩
-  have hS1 : 1 < S := by
-    have := (log_le_of_le_repairHalfSide_iterate hSstar hS hm).2
-    by_contra h
-    linarith [Real.log_nonpos hS.le (not_lt.mp h)]
-  set ℓ : ℝ := Real.log (Real.exp (Real.exp 1) + S) with hℓ_def
-  set x : ℝ := Real.log (S + 2) with hx_def
-  have hx1 : 1 ≤ x := by
-    calc (1 : ℝ) = Real.log (Real.exp 1) := (Real.log_exp 1).symm
-      _ ≤ x := Real.log_le_log (Real.exp_pos 1)
-          (by linarith [Real.exp_one_lt_three])
-  have hℓpos : 0 < ℓ := Real.log_pos (by linarith [Real.one_le_exp (Real.exp_pos 1).le])
-  have hℓx : ℓ ≤ 4 * x := by
-    have := log_exp_exp_add_le hS.le
+  obtain ⟨C, hC, hcount⟩ := exists_iterate_generation_count_bound
+    (fun u hu ↦ repairHalfSide_pos_le_rpow u (by linarith)) rho_pos_lt_one.1
+    rho_pos_lt_one.2 hSstar (b := 9) (by norm_num)
+  refine ⟨max (C * 2 ^ C) C, lt_max_of_lt_right hC, fun S hS m hm => ?_⟩
+  have hall := forall_lt_le_repairHalfSide_iterate hSstar hS hm
+  have hS0 : Sstar ≤ S := by simpa using hall 0 (Nat.succ_pos m)
+  have hm' : ∀ i < m, Sstar ≤ repairHalfSide^[i] S := fun i hi ↦ hall i (by omega)
+  set y : ℝ := Real.log (S + 2)
+  have hy1 : 1 ≤ y := by
+    rw [Real.le_log_iff_exp_le (by linarith)]
     linarith [Real.exp_one_lt_three]
-  -- the geometric sum
-  have hsum : ∑ j ∈ Finset.range (m + 1), (9 : ℝ) ^ j ≤ (9 : ℝ) ^ (m + 1) := by
-    rw [geom_sum_eq (by norm_num : (9 : ℝ) ≠ 1)]
-    have : (0 : ℝ) ≤ 9 ^ (m + 1) := by positivity
-    rw [div_le_iff₀ (by norm_num)]
+  have hxy : Real.log (S + Real.exp 1) ≤ 2 * y := by
+    have : Real.log (S + Real.exp 1) ≤ Real.log (Real.exp 1 * (S + 2)) :=
+      Real.log_le_log (by positivity) (by nlinarith [Real.add_one_le_exp (1 : ℝ)])
+    rw [Real.log_mul (Real.exp_pos 1).ne' (by linarith), Real.log_exp] at this
     linarith
-  -- the depth bound in the exponent
-  have hmC : ((m : ℝ) + 1) ≤ (C₁ + 1) + C₁ * Real.log ℓ := by
-    have := hdepth S hS m hm
-    linarith
-  have hpow : (9 : ℝ) ^ (m + 1) ≤ K * x ^ p := by
-    calc (9 : ℝ) ^ (m + 1) = (9 : ℝ) ^ (((m : ℝ) + 1)) := by
-          rw [← Real.rpow_natCast]; push_cast; rfl
-      _ ≤ (9 : ℝ) ^ ((C₁ + 1) + C₁ * Real.log ℓ) :=
-          Real.rpow_le_rpow_of_exponent_le (by norm_num) hmC
-      _ = (9 : ℝ) ^ (C₁ + 1) * ℓ ^ p := by
-          rw [Real.rpow_add (by norm_num)]
-          congr 1
-          rw [Real.rpow_def_of_pos (by norm_num), Real.rpow_def_of_pos hℓpos, hp_def]
-          ring_nf
-      _ ≤ (9 : ℝ) ^ (C₁ + 1) * (4 * x) ^ p := by
-          gcongr
-      _ = K * x ^ p := by
-          rw [Real.mul_rpow (by norm_num) (by linarith), hK_def]
-          ring
-  have hxp : x ^ p ≤ x ^ max K p := Real.rpow_le_rpow_of_exponent_le hx1 (le_max_right _ _)
-  calc ∑ j ∈ Finset.range (m + 1), (9 : ℝ) ^ j ≤ K * x ^ p := hsum.trans hpow
-    _ ≤ K * x ^ max K p := by gcongr
-    _ ≤ max K p * x ^ max K p := by
-        gcongr
-        exact le_max_left _ _
+  exact (hcount S hS m hm').trans (mul_rpow_le_max_mul_rpow hC
+    (Real.log_nonneg (by linarith [Real.add_one_le_exp (1 : ℝ)])) hxy hy1)
 
 /-- **Descendant count at layer `k`.** If the initial scale is at most `M 2 ^ k`,
 the descendant count of `geometry:descendant-count` is at most `C (k + 1) ^ C`,

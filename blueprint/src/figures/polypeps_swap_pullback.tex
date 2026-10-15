@@ -1,0 +1,94 @@
+% Figure polypeps_swap_pullback.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP Sec. IV B (proof sketch of Lemma 4, the key identity,
+% default letters), Eq. eq:pullback; PP App. E 2 (proof of Lemma 7, the buffer
+% correction D_U, relabelled through the Sp macros), unnumbered display.
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/02-information.tex:400-404
+% (W = (V^dagger tensor V^dagger) F_{b_R} (V tensor V)); reused for
+% sections/05-frames.tex, eq. (6.17) (D_U = (V^{tensor 2})^dagger F_{B_T}
+% V^{tensor 2}).
+% Formula: W = (V^dagger tensor V^dagger) F_{b_R} (V tensor V), a Hermitian
+% contraction on the two copies of Q; the auxiliary spaces b_R, b_C have
+% disappeared from its legs.
+% Ink-to-index: every wire is a physical index.  Copies are told apart by
+% position: copy 1 is rows 1-2, copy 2 is rows 3-4.  In the right panel V on
+% the east takes the Q leg of each copy to (b_C, b_R); the b_R wires (rows 2
+% and 3, next to each other so that only they cross) are exchanged between
+% the copies, which is F_{b_R}; the b_C wires (rows 1 and 4) run straight; V^dagger
+% on the west returns each copy to Q.  The b_R wires are drawn selected (red:
+% the swap that matters) from V to V^dagger, and the crossing carries the one
+% label F_{b_R} (through \tnlSpAuxLeft, so the PP Sec. 7 override still
+% applies); the b_C labels sit mid-run on the outer side of each copy.  The
+% inkless atoms of columns 4 and 5 only carry the b_R wires horizontally into
+% and out of the crossing (identity, no tensor).  The left panel is the box W
+% on the two Q legs, at the same rows 1 and 4.  W stays two columns wide: at
+% wide=1 tenkz sets its name beside the glyph (the equation's box-name measure
+% is V^dagger), so the name would leave the box (rule L1).  Its Q labels
+% stand on the west (the far side from the joiner), and the right panel names
+% the east Q legs; all four are label marks beyond the open ends (rule L2).
+% The F label is set 0.3 pitch east of the crossing so it clears the arms.
+% Crossing: the two b_R strings cross once; the order is the drawing's (a swap
+% has no braiding).
+% Action right to left: V tensor V, then the swap, then V^dagger tensor V^dagger.
+% Boundary signature: (phys:w) x 2 and (phys:e) x 2 on both sides of the
+% equality (Q of copy 1 at the top, Q of copy 2 at the bottom).
+% Label macros: \tnlSpBox{W}, \tnlSpMid{Q}, \tnlSpAuxLeft{b_R},
+% Label macros: \tnlSpAuxRight{b_C};
+% PP Sec. 7 overrides them with D_U, U, \mathcal B_T, \mathcal B_E.
+% Related: polypeps_swap_purity (the closed overlap z built from the same
+% swap); polypeps_exchange_swaps keeps D_U as a box.  This is the only figure
+% that inks the inside of W or D_U.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=2, bonds=none, size=l]
+        \providecommand{\tnlSpBox}{W}
+        \providecommand{\tnlSpMid}{Q}
+        \tn[at=(1,1), name=pullBox, skin=box, wide=2, wires=4,
+            ports={180@1:physical, 180@4:physical,
+                    0@1:physical, 0@4:physical}]{\tnlSpBox}
+        \tnwire[name=pullOutWA]{open w}{pullBox.180@1}
+        \tnwire[name=pullOutWB]{open w}{pullBox.180@4}
+        \tnwire{pullBox.0@1}{open e}
+        \tnwire{pullBox.0@4}{open e}
+        \tnmark[form=label, label pos=w]{on pullOutWA 0}{$\tnlSpMid$}
+        \tnmark[form=label, label pos=w]{on pullOutWB 0}{$\tnlSpMid$}
+    \end{tenkz}
+    $=$
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=8, bonds=none, size=l]
+        \providecommand{\tnlSpMid}{Q}
+        \providecommand{\tnlSpAuxLeft}{b_R}
+        \providecommand{\tnlSpAuxRight}{b_C}
+        \tn[at=(1,7), name=pullIsoA, skin=box, wide=2, wires=2,
+            ports={0@1:physical, 180@1:physical, 180@2:physical}]{V}
+        \tn[at=(3,7), name=pullIsoB, skin=box, wide=2, wires=2,
+            ports={0@2:physical, 180@1:physical, 180@2:physical}]{V}
+        \tn[at=(1,1), name=pullAdjA, skin=box, wide=2, wires=2,
+            ports={180@1:physical, 0@1:physical, 0@2:physical}]{V^\dagger}
+        \tn[at=(3,1), name=pullAdjB, skin=box, wide=2, wires=2,
+            ports={180@2:physical, 0@1:physical, 0@2:physical}]{V^\dagger}
+        \tn[at=(2,5), name=pullEastA, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,5), name=pullEastB, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(2,4), name=pullWestA, skin=none, ports={180:physical, 0:physical}]{}
+        \tn[at=(3,4), name=pullWestB, skin=none, ports={180:physical, 0:physical}]{}
+        \tnwire[name=pullStraightA]{pullIsoA.180@1}{pullAdjA.0@1}
+        \tnwire[name=pullStraightB]{pullIsoB.180@2}{pullAdjB.0@2}
+        \tnwire[name=pullAuxA, species=selected]{pullIsoA.180@2}{pullEastA.0}
+        \tnwire[name=pullAuxB, species=selected]{pullIsoB.180@1}{pullEastB.0}
+        \tnwire[name=pullSwapDown, species=selected]{pullEastA.180}{pullWestB.0}
+        \tnwire[name=pullSwapUp, species=selected,
+            cross={over at crossing of pullSwapUp and pullSwapDown}]
+        {pullEastB.180}{pullWestA.0}
+        \tnwire[species=selected]{pullWestA.180}{pullAdjA.0@2}
+        \tnwire[species=selected]{pullWestB.180}{pullAdjB.0@1}
+        \tnwire{open w}{pullAdjA.180@1}
+        \tnwire{open w}{pullAdjB.180@2}
+        \tnwire[name=pullOutEA]{pullIsoA.0@1}{open e}
+        \tnwire[name=pullOutEB]{pullIsoB.0@2}{open e}
+        \tnmark[form=label, label pos=e]{on pullOutEA 1}{$\tnlSpMid$}
+        \tnmark[form=label, label pos=e]{on pullOutEB 1}{$\tnlSpMid$}
+        \tnmark[form=label, label pos=n]{on pullStraightA 0.5}{$\tnlSpAuxRight$}
+        \tnmark[form=label, label pos=s]{on pullStraightB 0.5}{$\tnlSpAuxRight$}
+        \tnmark[form=label, species=selected, label pos=e]
+        {0.3 e of crossing of pullSwapUp and pullSwapDown}{$F_{\tnlSpAuxLeft}$}
+    \end{tenkz}
+\end{tenkzequation}

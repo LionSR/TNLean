@@ -111,10 +111,7 @@ theorem mixedEndpointActiveFirstEdgePlacement_commute_lastBoundaryMap
     Commute (mixedEndpointActiveLastBoundaryMapES (D₁ := D₁) F (N + 1))
       (mixedEndpointActiveEdgePlacement (.first : MixedEndpointActiveEdgeSite N) T) := by
   apply (commute_iff_eq _ _).mpr
-  apply LinearMap.ext
-  intro v
-  apply PiLp.ext
-  rintro ⟨a, ⟨b, σ, c⟩, e⟩
+  ext v ⟨a, ⟨b, σ, c⟩, e⟩
   change lastBoundaryCoordinateMap F
       (fun r => mixedEndpointActiveEdgePlacement (.first : MixedEndpointActiveEdgeSite N)
         T v (a, (b, σ, r.1), r.2)) (c, e) =
@@ -147,10 +144,7 @@ theorem mixedEndpointActiveLastEdgePlacement_commute_firstBoundaryMap
     Commute (mixedEndpointActiveFirstBoundaryMapES (D₁ := D₁) F (N + 1))
       (mixedEndpointActiveEdgePlacement (.last : MixedEndpointActiveEdgeSite N) T) := by
   apply (commute_iff_eq _ _).mpr
-  apply LinearMap.ext
-  intro v
-  apply PiLp.ext
-  rintro ⟨a, ⟨b, σ, c⟩, e⟩
+  ext v ⟨a, ⟨b, σ, c⟩, e⟩
   change firstBoundaryCoordinateMap F
       (fun r => mixedEndpointActiveEdgePlacement (.last : MixedEndpointActiveEdgeSite N)
         T v (r.1, (r.2, σ, c), e)) (a, b) =
@@ -188,10 +182,7 @@ theorem mixedEndpointActiveInteriorEdgePlacement_commute_boundaryMaps
   let f := cyclicActiveBlockConfigEquiv (D₀ * D₀) 2 (by have := i.2; omega) i.1
   constructor
   · apply (commute_iff_eq _ _).mpr
-    apply LinearMap.ext
-    intro v
-    apply PiLp.ext
-    rintro ⟨a, ⟨b, σ, c⟩, e⟩
+    ext v ⟨a, ⟨b, σ, c⟩, e⟩
     change firstBoundaryCoordinateMap F
         (fun r => mixedEndpointActiveEdgePlacement (.interior i) T v
           (r.1, (r.2, σ, c), e)) (a, b) =
@@ -217,10 +208,7 @@ theorem mixedEndpointActiveInteriorEdgePlacement_commute_boundaryMaps
       (congrArg (fun w => T w (f σ).1)
         (interiorEdgeFiber_firstBoundaryMap i F v a e b c (f σ).2).symm)
   · apply (commute_iff_eq _ _).mpr
-    apply LinearMap.ext
-    intro v
-    apply PiLp.ext
-    rintro ⟨a, ⟨b, σ, c⟩, e⟩
+    ext v ⟨a, ⟨b, σ, c⟩, e⟩
     change lastBoundaryCoordinateMap F
         (fun r => mixedEndpointActiveEdgePlacement (.interior i) T v
           (a, (b, σ, r.1), r.2)) (c, e) =
@@ -486,10 +474,7 @@ private theorem edgePlacement_isSymmetricProjection
     (hT : T.IsSymmetricProjection) :
     (mixedEndpointActiveEdgePlacement p T).IsSymmetricProjection := by
   constructor
-  · apply LinearMap.ext
-    intro v
-    apply PiLp.ext
-    intro ξ
+  · ext v ξ
     simp only [Module.End.mul_apply, mixedEndpointActiveEdgePlacement_apply,
       edgeFiber_placement]
     exact congrArg (fun L =>

@@ -27,12 +27,8 @@ open scoped BigOperators ComplexOrder InnerProductSpace Matrix
 
 namespace MPSTensor
 
-private theorem euclidean_sum_apply {ι κ : Type*}
-    (s : Finset ι) (v : ι → EuclideanSpace ℂ κ) (k : κ) :
-    (∑ i ∈ s, v i) k = ∑ i ∈ s, v i k := by
-  exact map_sum (PiLp.projₗ (𝕜 := ℂ) 2 (fun _ : κ => ℂ) k) v s
-
-private theorem diagonal_toEuclideanLin_apply {ι : Type*} [Fintype ι]
+/-- A diagonal matrix acts on Euclidean coordinates by pointwise multiplication. -/
+theorem _root_.Matrix.toEuclideanLin_diagonal_apply {ι : Type*} [Fintype ι]
     [DecidableEq ι] (f : ι → ℂ) (v : EuclideanSpace ℂ ι) (i : ι) :
     Matrix.toEuclideanLin (Matrix.diagonal f) v i = f i * v i := by
   simp [Matrix.toEuclideanLin, Matrix.toLpLin_apply, Matrix.mulVec_diagonal]
@@ -81,10 +77,7 @@ private theorem commute_periodicLocalInteractionES_diagonal {d R N : ℕ}
       (periodicLocalInteractionES h i) := by
   classical
   apply (commute_iff_eq _ _).mpr
-  apply LinearMap.ext
-  intro v
-  apply PiLp.ext
-  intro σ
+  ext v σ
   let e := cyclicActiveBlockConfigEquiv d R hRN i
   let w : EuclideanSpace ℂ (Cfg d R) :=
     WithLp.toLp 2 fun ω => v (e.symm (ω, (e σ).2))
@@ -93,11 +86,11 @@ private theorem commute_periodicLocalInteractionES_diagonal {d R N : ℕ}
       Matrix.toEuclideanLin (Matrix.diagonal fun ω => f (e.symm (ω, (e σ).2))) w := by
     apply PiLp.ext
     intro ω
-    simp only [diagonal_toEuclideanLin_apply]
+    simp only [Matrix.toEuclideanLin_diagonal_apply]
     rfl
   have hc := congrArg (fun T => T w (e σ).1) (hf (e σ).2).eq
-  simp only [Module.End.mul_apply, diagonal_toEuclideanLin_apply] at hc
-  simp only [Module.End.mul_apply, diagonal_toEuclideanLin_apply,
+  simp only [Module.End.mul_apply, Matrix.toEuclideanLin_diagonal_apply] at hc
+  simp only [Module.End.mul_apply, Matrix.toEuclideanLin_diagonal_apply,
     periodicLocalInteractionES_apply_fiber h hRN]
   change f σ * h w (e σ).1 = h _ (e σ).1
   rw [hw]
@@ -135,16 +128,13 @@ theorem periodicLocalInteractionES_commute_siteDiagonal {d R N : ℕ}
     rw [hsite]
     simp only [cyclicActiveBlockConfigEquiv_symm_apply_spectator]
     apply (commute_iff_eq _ _).mpr
-    apply LinearMap.ext
-    intro v
-    apply PiLp.ext
-    intro ω
-    simp only [Module.End.mul_apply, diagonal_toEuclideanLin_apply]
+    ext v ω
+    simp only [Module.End.mul_apply, Matrix.toEuclideanLin_diagonal_apply]
     have hconst : Matrix.toEuclideanLin (Matrix.diagonal fun _ : Cfg d R => f (s r)) v =
         f (s r) • v := by
       apply PiLp.ext
       intro τ
-      simp only [diagonal_toEuclideanLin_apply, PiLp.smul_apply, smul_eq_mul]
+      simp only [Matrix.toEuclideanLin_diagonal_apply, PiLp.smul_apply, smul_eq_mul]
     simp only [hconst, map_smul, PiLp.smul_apply, smul_eq_mul]
 
 namespace MPOSymmetry
@@ -231,7 +221,7 @@ theorem mixedEndpointOpenInnerPenalty_apply (hN : 2 ≤ N)
     mixedEndpointOpenInnerPenalty D₀ D₁ N v σ =
       (mixedEndpointOpenInnerViolationCount D₀ D₁ N σ : ℂ) * v σ := by
   classical
-  simp only [mixedEndpointOpenInnerPenalty, LinearMap.sum_apply, euclidean_sum_apply,
+  simp only [mixedEndpointOpenInnerPenalty, LinearMap.sum_apply, WithLp.ofLp_sum, Finset.sum_apply,
     LinearMap.add_apply, LinearMap.sub_apply, Module.End.one_apply, PiLp.add_apply,
     PiLp.sub_apply, mixedEndpointColumnSector, mixedEndpointRowSector,
     periodicLocalInteractionES_diagonal_apply hN]
@@ -291,10 +281,7 @@ theorem mixedEndpointOpenActiveProjection_isSymmetricProjection :
     (mixedEndpointOpenActiveProjection D₀ D₁ N).IsSymmetricProjection := by
   classical
   constructor
-  · apply LinearMap.ext
-    intro v
-    apply PiLp.ext
-    intro σ
+  · ext v σ
     simp only [Module.End.mul_apply, mixedEndpointOpenActiveProjection_apply]
     split <;> simp_all
   · apply Matrix.isSymmetric_toEuclideanLin_iff.mpr
@@ -522,13 +509,13 @@ theorem mixedEndpointOpenInnerPenalty_commute_openInteractionHamiltonianES
       mixedEndpointChainColumnSector D₀ D₁ i.1 := by
     ext v σ
     simp [mixedEndpointColumnSector, mixedEndpointChainColumnSector,
-      periodicLocalInteractionES_diagonal_apply hN, diagonal_toEuclideanLin_apply,
+      periodicLocalInteractionES_diagonal_apply hN, Matrix.toEuclideanLin_diagonal_apply,
       extractWindow, Nat.mod_eq_of_lt i.1.isLt]
   have hrow : periodicLocalInteractionES (mixedEndpointRowSector D₀ D₁ 1) i.1 =
       mixedEndpointChainRowSector D₀ D₁ (cyclicForwardSite i.1 1) := by
     ext v σ
     simp [mixedEndpointRowSector, mixedEndpointChainRowSector,
-      periodicLocalInteractionES_diagonal_apply hN, diagonal_toEuclideanLin_apply,
+      periodicLocalInteractionES_diagonal_apply hN, Matrix.toEuclideanLin_diagonal_apply,
       extractWindow, cyclicForwardSite]
   rw [hcol, hrow]
   exact ((Commute.one_left _).sub_left

@@ -39,7 +39,7 @@ and proves its key properties.
 * RMP review (arXiv:2011.12127) Section III.A
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators TNLean.Algebra.ScalarCohomology
 open Matrix Finset MPSTensor
 
 noncomputable section
@@ -589,8 +589,10 @@ lemma aklt_commPhase_eq_neg_one :
 open TNLean.Algebra in
 /-- The AKLT factor system represents the non-trivial element of
 `H²(Z₂ × Z₂, ℂˣ) = Z₂`: the AKLT state is a non-trivial SPT phase. -/
-theorem aklt_isNontrivialSPT : ScalarCocycle.IsNontrivialClass akltOmega := by
-  refine ScalarCocycle.isNontrivialClass_of_commPhase_ne_one
+theorem aklt_isNontrivialSPT :
+    groupCohomology.H2π _
+      (groupCohomology.cocyclesOfIsMulCocycle₂ akltOmega_isCocycle.isMulCocycle₂) ≠ 0 := by
+  refine ScalarCocycle.H2π_ne_zero_of_commPhase_ne_one akltOmega_isCocycle
     (g := Multiplicative.ofAdd (1, 0)) (h := Multiplicative.ofAdd (0, 1)) ?_ ?_
   · rfl
   · rw [aklt_commPhase_eq_neg_one]

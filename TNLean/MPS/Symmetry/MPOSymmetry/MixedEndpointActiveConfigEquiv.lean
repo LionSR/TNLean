@@ -28,19 +28,6 @@ noncomputable section
 
 variable {D₀ D₁ N : ℕ}
 
-private theorem physicalIndex_eq_iff
-    (a b a' b' : Fin D₀ ⊕ Fin D₁) :
-    mixedEndpointPhysicalIndex a b = mixedEndpointPhysicalIndex a' b' ↔
-      a = a' ∧ b = b' := by
-  simp only [mixedEndpointPhysicalIndex, Equiv.apply_eq_iff_eq, Prod.mk.injEq]
-
-private theorem firstPhysicalIndex_injective :
-    Function.Injective (mixedEndpointFirstPhysicalIndex (D₀ := D₀) D₁) := by
-  intro p q hpq
-  have h := (physicalIndex_eq_iff _ _ _ _).mp hpq
-  apply finProdFinEquiv.symm.injective
-  exact Prod.ext (Sum.inl.inj h.1) (Sum.inl.inj h.2)
-
 /-- The explicit active physical encoding loses no boundary or bulk
 coordinate. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem mixedEndpointActivePhysicalCfg_injective :
@@ -49,10 +36,10 @@ theorem mixedEndpointActivePhysicalCfg_injective :
   have hcons := Fin.cons_inj.mp h
   have hsnoc := Fin.snoc_inj.mp hcons.2
   have hab : a = a' ∧ b = b' := by
-    simpa only [physicalIndex_eq_iff, Sum.inl.injEq] using hcons.1
+    simpa only [mixedEndpointPhysicalIndex_eq_iff, Sum.inl.injEq] using hcons.1
   have hce : c = c' ∧ e = e' := by
-    simpa only [physicalIndex_eq_iff, Sum.inl.injEq] using hsnoc.2
-  have hσ : σ = σ' := funext fun k => firstPhysicalIndex_injective (congrFun hsnoc.1 k)
+    simpa only [mixedEndpointPhysicalIndex_eq_iff, Sum.inl.injEq] using hsnoc.2
+  have hσ : σ = σ' := funext fun k => mixedEndpointFirstPhysicalIndex_injective (congrFun hsnoc.1 k)
   rcases hab with ⟨rfl, rfl⟩
   rcases hce with ⟨rfl, rfl⟩
   subst σ'

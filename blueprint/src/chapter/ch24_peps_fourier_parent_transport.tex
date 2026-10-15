@@ -130,54 +130,26 @@ Every open contraction retains its full virtual boundary coefficient.
 
 \subsection{Exterior blocks and complete kernels}
 
-\begin{definition}[Exterior crossing coefficients]%
-    \label{def:peps_fourier_exterior_coefficient}
-    \lean{TNLean.PEPS.graphBoundaryExteriorCoordinateCoefficient}
-    \leanok
-    For fixed exterior crossing configurations $\gamma_X,\gamma_Y$,
-    define
-    \begin{align}
-        c_{\partial R}(\gamma_Y,\gamma_X)
-        =\prod_{f=(t,h)\in\partial E_R}
-        \begin{cases}
-            Q(\gamma_{Y,f},\gamma_{X,f}),            & t\in R, \\
-            \overline{Q(\gamma_{Y,f},\gamma_{X,f})}, & h\in R.
-        \end{cases}
-        \label{eq:peps_fourier_exterior_coefficient}
-    \end{align}
-    The exterior endpoint has the complementary orientation to the
-    retained regional endpoint.
-\end{definition}
-
 \begin{theorem}[The actual global Fourier blocks preserve local ranges]%
     \label{thm:peps_fourier_exterior_blocks}
-    \lean{TNLean.PEPS.mixedPhysicalProductMatrix_boundary_coordinates,
-        TNLean.PEPS.regionOperatorBlock_graphNumberedBondMatrix_coordinates_maps,
+    \lean{TNLean.PEPS.regionOperatorBlock_graphNumberedBondMatrix_coordinates_maps,
         TNLean.PEPS.graphNumberedBondMatrix_coordinates_maps_regionParentGroundSpace}
     \leanok
-    \uses{def:peps_fourier_exterior_coefficient}
+    \uses{def:peps_fourier_regional_matrix}
     Let $\mathcal Q$ be $\bigotimes_{f\in E}B(Q)$ in numbered site
     coordinates. For fixed input and output exterior configurations,
-    its regional matrix block is the product of the scalar from
-    wholly exterior bonds, the coefficient
-    (\ref{eq:peps_fourier_exterior_coefficient}), and $Q_R$ in numbered
-    regional coordinates. The same factorization holds for the
-    mixed product of its crossing and internal matrices before numbering.
-    Hence every block maps $\mathcal G_R(U)$ into $\mathcal G_R(L)$,
-    and $\mathcal Q\mathcal P_{\mathcal R}(U)
+    its regional matrix block maps $\mathcal G_R(U)$ into
+    $\mathcal G_R(L)$. Hence
+    $\mathcal Q\mathcal P_{\mathcal R}(U)
         \subseteq\mathcal P_{\mathcal R}(L)$ for any region family.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_fourier_regional_ranges,thm:peps_parent_support_bond_blocks,
-        thm:peps_parent_support_open_coordinates,thm:peps_parent_support_block_criterion}
-    Fixing one endpoint in
-    $B(Q)_{(y_h,y_t),(x_h,x_t)}=Q_{y_h,x_h}\overline{Q_{y_t,x_t}}$
-    extracts exactly the exterior scalar and leaves $Q_f$ on the
-    regional endpoint. Multiplying over edges gives the block formula.
-    Theorem~\ref{thm:peps_fourier_regional_ranges} gives each local
-    range inclusion. Every output slice is a sum over exterior input
-    configurations of these block images, so all parent constraints
-    are preserved.
+    \uses{thm:peps_oriented_coordinate_blocks}
+    This is the case of
+    Theorem~\ref{thm:peps_oriented_coordinate_blocks} in which no edge
+    is reversed. When every $o_e=0$, each $Q_e$ equals $Q$, so the
+    oriented global coordinate matrix is $\mathcal Q$, and the oriented
+    averaging tensors are the ordered ones.
 \end{proof}
 
 \begin{theorem}[Canonical parents in different representation coordinates]%
@@ -207,17 +179,17 @@ Every open contraction retains its full virtual boundary coefficient.
     No vertex or edge coverage assumption is needed.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:peps_fourier_exterior_blocks,
-        thm:peps_fourier_reverse_coordinates,
-        thm:peps_fourier_product_composition,thm:peps_region_parent_common_kernel}
-    Regroup the numbered physical coordinates by edges.
-    Composition of the global products reduces to
-    $B(Q)B(Q^\dagger)=B(QQ^\dagger)=I$ at each edge.
-    Reversing the order proves injectivity when $Q^\dagger Q=I$.
-    Theorem~\ref{thm:peps_fourier_reverse_coordinates} supplies both
-    cancellations and the representation identity for $Q^\dagger$.
-    Apply Theorem~\ref{thm:peps_fourier_exterior_blocks} in both
-    directions and restrict the inverse operations to the parent spaces.
+    \uses{thm:peps_oriented_global_coordinate_inverse,
+        thm:peps_oriented_coordinate_parent,thm:peps_region_parent_common_kernel}
+    Take every $o_e=0$ in
+    Theorems~\ref{thm:peps_oriented_global_coordinate_inverse}
+    and~\ref{thm:peps_oriented_coordinate_parent}. Then the oriented
+    global coordinate matrix is $\mathcal Q$ and the oriented averaging
+    tensors are the ordered ones, which gives the inverse identities,
+    injectivity, and the equality of parent spaces.
+    Restricting $\mathcal Q$ to the source parent space is therefore
+    injective with image the target parent space, which gives the
+    isomorphism and equality of dimensions.
     Positivity identifies the Hamiltonian kernels with those spaces.
 \end{proof}
 
