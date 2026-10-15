@@ -558,7 +558,8 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     \label{thm:area_law_birth_separation_conditional}
     \lean{TNLean.PEPS.AreaLaw.Geometry.IsInitialBirthSeparated.mono,
         TNLean.PEPS.AreaLaw.Geometry.IsRepairBirthSeparated.mono,
-        TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_uniformRepairInductionStatement}
+        TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_uniformRepairInductionStatement,
+        TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_initialIsolatedStars}
     \leanok
     \uses{def:area_law_uniform_repair_conclusion}
     Assume the conclusion of the uniform repair induction of
@@ -568,6 +569,8 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     conclusions of
     Theorems~\ref{thm:area_law_replacement_birth_separation_conditional}
     and~\ref{thm:area_law_initial_belt_birth_separation} hold with $c_1$.
+    The same holds under the conclusion of the initial isolated-star lemma,
+    from which the uniform repair induction follows.
 \end{theorem}
 
 \begin{proof}
@@ -579,8 +582,8 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
 \end{proof}
 
 Together the last three theorems give
-Lemma~\ref{lem:area_law_birth_separation} once the uniform repair induction
-is proved; until then the replacement half rests on its
+Lemma~\ref{lem:area_law_birth_separation} once the isolated stars of the
+initial stage are supplied; until then the replacement half rests on that
 conclusion~\cite{gap:arealaw2d_birth_separation_scope}.
 
 % Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
