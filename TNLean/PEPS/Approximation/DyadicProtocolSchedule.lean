@@ -22,8 +22,11 @@ its changes.
   the lifetime count `card_gates_le_of_uses`. The list `eventSchedule k` contains every such
   event once, ordered by descending level, with the resizes of a level before its repaintings.
 * An event is cut into changes (`RepaintOp`). A resize is one small-patch rewrite (lines
-  529–541), and a square with `n ≤ K₀ t` is repainted directly by one small-patch rewrite
-  (lines 507–527). A larger square is repainted by the edge construction (lines 142–221): the
+  529–541). Every grid corner of positive scale gets its resize event, also a corner that is
+  not a true vertex of the guide (such as a corner of the root square) and so carries no hole,
+  or whose radius does not change; there the resize is the identity change. This keeps the
+  events indexed by the junctions. A square with `n ≤ K₀ t` is repainted directly by one
+  small-patch rewrite (lines 507–527). A larger square is repainted by the edge construction (lines 142–221): the
   central birth, then along each of the four edges the initialization of a fresh auxiliary
   sheet, three auxiliary births, the lens exchange and four main births or deaths. Every bulk
   operation is preceded by the homogenization of each involved sheet at each of its marks and
@@ -235,7 +238,8 @@ theorem length_largeRepaintingOps : largeRepaintingOps.length = 189 := by
     SquareEdge.list]
 
 /-- The changes of an event: the large-scale repainting or the direct repainting of a square, and
-the single resize at a junction.
+the single resize at a junction. At a junction that carries no hole, or whose radius does not
+change, the resize is the identity change.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex, lines 137–140, 507–541`. -/
 def eventOps {k : ℕ} (large : DyadicSquare k → Bool) : ProtocolEvent k → List RepaintOp

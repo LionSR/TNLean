@@ -1369,7 +1369,9 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     grid corner of scale $j+1\ge1$, performed on entering level $2^j$. The events are
     performed by descending level, and within a level the resizes precede the
     repaintings; the order of the blocks within a level is arbitrary. A resize and a
-    direct repainting are one change each. A large-scale repainting consists of the
+    direct repainting are one change each; at a grid corner that carries no hole, such
+    as a corner of the root square, or whose radius does not change, the resize is the
+    identity change. A large-scale repainting consists of the
     central birth and then, along each of the four edges, the initialization of a fresh
     auxiliary sheet, three auxiliary births, the lens exchange and four main births or
     deaths. Each of these bulk operations is preceded by the homogenization of each
@@ -1386,7 +1388,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     \label{thm:peps_dyadic_protocol_schedule_counts}
     \lean{TNLean.PEPS.Approximation.mem_eventSchedule, TNLean.PEPS.Approximation.nodup_eventSchedule, TNLean.PEPS.Approximation.pairwise_rank_eventSchedule, TNLean.PEPS.Approximation.length_eventSchedule_le, TNLean.PEPS.Approximation.BulkOp.length_ops, TNLean.PEPS.Approximation.length_edgeOps, TNLean.PEPS.Approximation.length_largeRepaintingOps, TNLean.PEPS.Approximation.length_eventOps_le, TNLean.PEPS.Approximation.length_protocolSchedule_le, TNLean.PEPS.Approximation.length_protocolSchedule_le_cube, TNLean.PEPS.Approximation.card_filter_event_le, TNLean.PEPS.Approximation.RepaintOp.IsAuxInit, TNLean.PEPS.Approximation.BulkOp.countP_isAuxInit_ops, TNLean.PEPS.Approximation.countP_isAuxInit_edgeOps, TNLean.PEPS.Approximation.countP_isAuxInit_eventOps_le, TNLean.PEPS.Approximation.countP_isAuxInit_protocolSchedule_le}
     \leanok
-    \uses{def:peps_dyadic_protocol_schedule, thm:peps_dyadic_hierarchy_counts}
+    \uses{def:peps_dyadic_protocol_schedule}
     Every scheduled event, that is every repainting of a non-root square and every
     resize at a junction of positive scale, occurs exactly once in the schedule, in
     the order of the definition, and no other event occurs. A
@@ -1401,6 +1403,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_dyadic_hierarchy_counts}
     The schedule sorts the events by their position in the level order, so it contains
     each event once. The schedule of changes lists the changes of each event in turn,
     so its length is at most $189$ times the number of squares and junctions, and
