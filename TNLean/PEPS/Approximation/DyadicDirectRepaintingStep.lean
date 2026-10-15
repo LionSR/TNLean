@@ -51,9 +51,9 @@ theorem guideFrame_congr {g : ℝ × ℝ → κ} {own : κ → Party} {ph : κ} 
 /-- **The direct repainting of a block as one gate.** In the setting of
 `exists_directRepainting_planeConditions`, suppose moreover that every hole and every patch has
 at most `C L^c` cylinder terms and error at most `L^{-60}` on `Ω`, with `‖Ω‖ ≤ 1`, that every hole
-has a tag, and that `b` bounds the number `(2 (n / 2 + 2 r + u) / u + 1)²` of net patches and the
-four affected holes. There is a set of at most `18` parties, those of the labels of the nine
-blocks around `S`, and an original circuit from the registers of the frame of `g` with holes at
+has a tag, and that `b` is at least `18` and the number `(2 (n / 2 + 2 r + u) / u + 1)²` of net
+patches. There is a set of at most `18` parties, those of the labels of the nine blocks around `S`,
+and an original circuit from the registers of the frame of `g` with holes at
 `V` to those of the frame of `g'` with holes at `V'`, with at most one nonprivate gate, all
 participants in that set, expansion bounds as in
 `GuideFrameRewrite.PlaneConditions.exists_originalCircuit`, and reference-vector error at most
@@ -82,7 +82,7 @@ theorem directRepainting_step [NeZero q] {n r u : ℝ} (hn : 0 < n) (hr : 0 < r)
     (hpV' : (V' : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (hole z).outer (hole z').outer)
     {C c b L : ℕ} (hL : 1 ≤ L) (hcardHole : ∀ z, Fintype.card (hole z).Tag ≤ C * L ^ c)
     (hcardPatch : ∀ z, Fintype.card (patch z).Tag ≤ C * L ^ c)
-    (hb : (2 * (n / 2 + 2 * r + u) / u + 1) ^ 2 ≤ b) (hb4 : 4 ≤ b)
+    (hb : (2 * (n / 2 + 2 * r + u) / u + 1) ^ 2 ≤ b) (hb18 : 18 ≤ b)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
     (hεpatch : ∀ z, ‖act (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
     (hεhole : ∀ z, ‖act (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
@@ -107,8 +107,8 @@ theorem directRepainting_step [NeZero q] {n r u : ℝ} (hn : 0 < n) (hr : 0 < r)
   subst ho hn' how hph hrk hho hpt
   obtain ⟨w, h₁, h₂, h₃, h₄, h₅⟩ := hG.exists_originalCircuit (C := C) (c := c) (b := b) hL
     (fun a _ => hhn ▸ hcardHole a) (fun z _ => hcardPatch z) (fun a _ => hcardHole a)
-    (by exact_mod_cast hN.trans hb) (hA.trans hb4) (hA'.trans hb4) hΩ (fun z _ => hεpatch z)
-    (fun a _ => hεhole a) hP₀ (fun z _ => htag z)
+    (by exact_mod_cast hN.trans hb) (hA.trans (by omega)) (hA'.trans (by omega))
+    (hP.trans hb18) hΩ (fun z _ => hεpatch z) (fun a _ => hεhole a) hP₀ (fun z _ => htag z)
   have e₁ : G.oldFrame = guideFrame pos q G.old G.own G.ph G.rank V G.holeOld hpV :=
     guideFrame_congr hUA rfl _ _
   have e₂ : G.newFrame = guideFrame pos q G.new G.own G.ph G.rank V' G.holeOld hpV' :=

@@ -114,7 +114,8 @@ variable {G : GuideFrameRewrite pos q κ Party} [NeZero q]
 
 /-- **A small-patch rewrite between frames of guides as one gate.** Under the plane conditions
 of Lemma 6.3, suppose that every affected hole and every additional patch has at most `C L^c`
-cylinder terms, that there are at most `b` additional patches, `b` old and `b` new affected holes,
+cylinder terms, that there are at most `b` additional patches, `b` old and `b` new affected holes
+and `b` specified parties,
 that `‖Ω‖ ≤ 1` and every additional patch and every old affected hole has error at most
 `L^{-60}` on `Ω`, that the specified list of parties is nonempty and that every hole of the old
 frame has a tag. Then there is an original circuit from the registers of the old frame to those
@@ -132,6 +133,7 @@ theorem PlaneConditions.exists_originalCircuit (h : G.PlaneConditions) {C c b L 
     (hpatch : ∀ z ∈ G.centers, Fintype.card (G.patch z).Tag ≤ C * L ^ c)
     (hold : ∀ a ∈ G.oldAffected, Fintype.card (G.holeOld a).Tag ≤ C * L ^ c)
     (hm : G.centers.card ≤ b) (hrold : G.oldAffected.card ≤ b) (hrnew : G.newAffected.card ≤ b)
+    (hparties : G.parties.card ≤ b)
     {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
     (hεpatch : ∀ z ∈ G.centers, ‖act (G.patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
     (hεold : ∀ a ∈ G.oldAffected, ‖act (G.holeOld a).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
@@ -162,7 +164,7 @@ theorem PlaneConditions.exists_originalCircuit (h : G.PlaneConditions) {C c b L 
       (fun h' hh' => by obtain ⟨a, ha, rfl⟩ := List.mem_map.1 hh'
                         exact hold a (Finset.mem_toList.1 ha))
       (by simpa [R, toSmallPatchRewrite] using hm) (by simpa [R, toSmallPatchRewrite] using hrold)
-      (by simpa [R, toSmallPatchRewrite] using hrnew) hΩ
+      (by simpa [R, toSmallPatchRewrite] using hrnew) hparties hΩ
       (fun P hP => by obtain ⟨z, hz, rfl⟩ := List.mem_map.1 hP
                       exact hεpatch z (Finset.mem_toList.1 hz))
       (fun h' hh' => by obtain ⟨a, ha, rfl⟩ := List.mem_map.1 hh'
