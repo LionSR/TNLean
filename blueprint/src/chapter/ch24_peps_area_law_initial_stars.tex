@@ -58,12 +58,14 @@ $\{-1,0,1\}$, that is, the axis and diagonal directions.
 % geometry:repair-induction, lines 486--494.
 \begin{lemma}[Shrinking an isolated star]
     \label{lem:area_law_isolated_star_mono}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.repairCurrentFanTriangle_inter_closedBall,
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanPolygon_region_eq_image,
+        TNLean.PEPS.AreaLaw.Geometry.repairCurrentFanTriangle_inter_closedBall,
         TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar.mono,
         TNLean.PEPS.AreaLaw.Geometry.RepairStage.HasIsolatedStars.mono}
     \leanok
     \uses{def:area_law_isolated_star}
-    For $0<\rho'\le\rho$ one has
+    The closed triangle of the fan of half-side $\rho$ centered at $v$
+    with slot $s$ is $W_s(v,\rho)$. For $0<\rho'\le\rho$ one has
     $W_s(v,\rho)\cap Q_{\rho'}(v)=W_s(v,\rho')$. Hence an isolated star
     $Q_\rho(v)$ gives an isolated star $Q_{\rho'}(v)$ with the same
     assignment. If every scale of a stage is positive, isolated stars
