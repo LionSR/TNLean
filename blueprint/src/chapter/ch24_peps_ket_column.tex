@@ -367,9 +367,10 @@ the small-patch rewrite lemma, and the compression theorem.
     the triangle inequality through $\Tr_{\rm private}|\Psi\rangle\langle\Psi|$.
 \end{proof}
 
-\begin{lemma}[Retained norm and trace of the protocol]
-    \label{lem:peps_protocol_retained_norm}
+\begin{theorem}[Retained norm and trace of the protocol]
+    \label{thm:peps_protocol_retained_norm}
     \lean{TNLean.PEPS.Approximation.protocol_norm_and_trace_deficit_le}
+    \leanok
     Under the hypotheses of Theorem~\ref{thm:peps_protocol_density}, put
     \begin{align}
         \varepsilon & = C_{\rm ch}C_{\rm step}L^{-17}, &
@@ -386,9 +387,9 @@ the small-patch rewrite lemma, and the compression theorem.
     no division by the norm of a vector. They are consequences of the
     error and reference-norm bounds in
     \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
-\end{lemma}
+\end{theorem}
 
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_protocol_density}
     The reverse triangle inequality and $\lVert\Omega\rVert=1$ give
     \begin{align}

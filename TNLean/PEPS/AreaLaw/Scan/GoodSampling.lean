@@ -47,6 +47,38 @@ theorem abs_depth_sub_anchor_le_domainGraph_of_mem_ball
     simpa only [ball, Finset.mem_filter, Finset.mem_univ, true_and, hgraph] using hy
   simpa only [hdepth, abs_sub_comm] using abs_ambientDepth_sub_le_domainGraph T hT hball
 
+omit [Fintype I] [LinearOrder I] in
+/-- A charge ball in the induced physical graph that meets the cut `A` at depth at most `L`
+lies wholly in `A`, under the clearance of the target from the cut endpoints.
+Source: `08-scanner.tex`, lines 225–233. -/
+theorem ball_subset_of_mem_ball_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {L : ℕ}
+    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+    {i : I} {y : Site Λ} (hyb : y ∈ S.ball i) (hyA : y ∈ S.A) (hyL : S.depth y ≤ L) :
+    S.ball i ⊆ S.A := by
+  have hb := domainGraph_ball_subset_of_clearance Λ T hT S.A L S.r₀ hclear
+    ⟨y, hyA, by simpa only [hdepth] using hyL,
+      by simpa only [ball, Finset.mem_filter, Finset.mem_univ, true_and, hgraph] using hyb⟩
+  simpa only [ball, hgraph] using hb
+
+omit [Fintype I] [LinearOrder I] in
+/-- A charge ball meeting the middle of a partition lies in `A`, once every middle site lies
+in `A` at depth at most `L`. Source: `08-scanner.tex`, lines 225–233. -/
+theorem ball_subset_of_middle_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
+    (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {L : ℕ}
+    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+    (σ : PhysicalPartition (Site Λ)) (i : I)
+    (hmiddle : ∀ x, σ x = none → x ∈ S.A ∧ S.depth x ≤ L)
+    (hsplit : (S.ball i ∩ middle σ).Nonempty) : S.ball i ⊆ S.A := by
+  obtain ⟨y, hy⟩ := hsplit
+  obtain ⟨hyb, hym⟩ := Finset.mem_inter.mp hy
+  obtain ⟨hyA, hyL⟩ := hmiddle y (Finset.mem_filter.mp hym).2
+  exact ball_subset_of_mem_ball_domainGraph hT S hgraph hdepth hclear hyb hyA hyL
+
 variable (S : CollarScan V I)
 
 /-- Goodness is the actual assigned-site lead bound. Doubling gives exactly the
@@ -152,6 +184,20 @@ theorem oldChargeState_depth_bounds {k L : ℕ} (h : History S.K S.m S.M k)
   rw [Finset.mem_Icc]
   constructor <;> omega
 
+/-- A charge ball meeting the actual old middle of a band lies in `A`.
+Source: `08-scanner.tex`, lines 225–233. -/
+theorem ball_subset_of_oldChargeState_middle_domainGraph {Λ T : Finset (ℤ × ℤ)}
+    (hT : T.Nonempty) (S : CollarScan (Site Λ) I) (hgraph : S.graph = domainGraph Λ)
+    (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val) {k L : ℕ}
+    (hclear : ∀ t ∈ T, ∀ z ∈ Geometry.boundaryEndpoints Λ S.A,
+      ((2 * L + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
+    (h : History S.K S.m S.M k) (g : Fin S.K) (hL : 8 * S.K * S.m ≤ L) (i : I)
+    (hsplit : (S.ball i ∩ middle (S.oldChargeState h g)).Nonempty) : S.ball i ⊆ S.A :=
+  ball_subset_of_middle_domainGraph hT S hgraph hdepth hclear _ i
+    (fun x hx ↦ ⟨(initial_middle_depth S.A S.depth _ _
+      (S.oldChargeState_initial_none h g x hx) false).1,
+      (Finset.mem_Icc.mp (S.oldChargeState_depth_bounds h g hL x hx)).2⟩) hsplit
+
 /-- Good split balls in the induced physical graph are selected with the exact
 side-slot probability, and their old middle part is the actual history extension's
 move. Only the manuscript's ambient row bound is used for row padding; graph-ball
@@ -184,23 +230,10 @@ theorem good_split_sampling_domainGraph {Λ T : Finset (ℤ × ℤ)} (hT : T.Non
         ∑ c : ChargeChoices S.K S.M, if c g = (side, slot) then chargeWeight c else 0 := by
   have hrow (t : ℤ) (ht : t ∈ Finset.Icc (1 : ℤ) L) :
       (Finset.univ.filter fun x ↦ S.depth x = t).card ≤ S.n := by
-    have htnat : (t.toNat : ℤ) = t := by simp only [Finset.mem_Icc] at ht; omega
-    have ht1 : 1 ≤ t.toNat := by simp only [Finset.mem_Icc] at ht; omega
-    have htL : t.toNat ≤ L := by simp only [Finset.mem_Icc] at ht; omega
-    have hb := depthRow_ambientDepth_length_le_of_row_bound T hT
-      (Subtype.val : Site Λ → ℤ × ℤ) Subtype.val_injective hrows ht1 htL
-    simpa only [depthRow, Finset.length_toList, htnat, hdepth] using hb
-  have hball : S.ball i ⊆ S.A := by
-    obtain ⟨y, hy⟩ := hsplit.2
-    obtain ⟨hyb, hym⟩ := Finset.mem_inter.mp hy
-    have hynone : S.oldChargeState h g y = none := (Finset.mem_filter.mp hym).2
-    have hyA := (initial_middle_depth S.A S.depth _ _
-      (S.oldChargeState_initial_none h g y hynone) false).1
-    have hydepth := (Finset.mem_Icc.mp (S.oldChargeState_depth_bounds h g hL y hynone)).2
-    have hb := domainGraph_ball_subset_of_clearance Λ T hT S.A L S.r₀ hclear
-      ⟨y, hyA, by simpa only [hdepth] using hydepth,
-        by simpa only [ball, Finset.mem_filter, Finset.mem_univ, true_and, hgraph] using hyb⟩
-    simpa only [ball, hgraph] using hb
+    simpa only [depthRow, Finset.length_toList] using
+      depthRow_length_le_of_ambientRows hT hdepth hrows ht
+  have hball := ball_subset_of_oldChargeState_middle_domainGraph hT S hgraph hdepth hclear
+    h g hL i hsplit.2
   have hanchor := S.good_split_anchor_bounds h g side i (by omega) hr hgood hball
     (fun x hx ↦ by
       simpa only [depthRow, Finset.length_toList] using

@@ -42,17 +42,8 @@ theorem bandState_has_chargeAncestry_domainGraph
   apply S.bandState_has_chargeAncestry g r choices _ k side x hxA hx
   intro t i _ hmeet
   let h : History S.K S.m S.M t := (fun _ ↦ r, fun j _ ↦ choices j)
-  obtain ⟨y, hy⟩ := hmeet
-  obtain ⟨hyball, hymid⟩ := Finset.mem_inter.mp hy
-  have hynone : S.oldChargeState h g y = none := (Finset.mem_filter.mp hymid).2
-  have hyA := (initial_middle_depth S.A S.depth _ _
-    (S.oldChargeState_initial_none h g y hynone) false).1
-  have hydepth := (Finset.mem_Icc.mp (S.oldChargeState_depth_bounds h g hL y hynone)).2
-  have hygraph : (domainGraph Λ).edist (S.anchor i) y ≤ (S.r₀ : ℕ∞) := by
-    simpa only [ball, Finset.mem_filter, Finset.mem_univ, true_and, hgraph] using hyball
-  have hsub := domainGraph_ball_subset_of_clearance Λ T hT S.A L S.r₀ hclear
-    ⟨y, hyA, by simpa only [hdepth] using hydepth, hygraph⟩
-  simpa only [ball, hgraph] using hsub
+  exact ball_subset_of_oldChargeState_middle_domainGraph hT S hgraph hdepth hclear h g hL i
+    hmeet
 
 /-- Possible bad endpoints lie in the actual initial collar of the chosen color.
 No cardinality of the ambient physical domain or its far exterior enters this set. -/
