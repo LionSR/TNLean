@@ -4376,6 +4376,22 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Continuity of an ordered regional filter product — candidate
+
+- **Pattern:** Prove continuity of each identity-extended local matrix power,
+  apply finite ordered-product continuity, and compose with evaluation on the
+  fixed vector and the norm.
+- **Seen:** `continuousOn_regularizedPatchObjective` in
+  `PEPS/AreaLaw/RegularizedPatchMinimum.lean` and the joint-continuity step in
+  `continuous_regularizedPatchMinimum_exp_neg` in
+  `PEPS/AreaLaw/RegularizedPatchMinimumContinuity.lean`.
+- **Abstraction:** Both proofs already use Mathlib's `continuousOn_list_prod`
+  or `continuous_list_prod`. A third occurrence may justify a shared theorem
+  for evaluation of a continuously varying ordered product.
+- **Notes:** The second proof varies the positive scalar shift and all feasible
+  regional densities together. Continuity in each variable separately would
+  not suffice for the compact-minimum argument.
+
 ### Removing subsingleton physical coordinates — candidate (2026-10-14)
 
 - **Pattern:** In an inverse configuration map, prove equality at noncarrying
