@@ -7,6 +7,7 @@ import TNLean.PEPS.Approximation.GateMapConstruction
 import TNLean.PEPS.Approximation.UniformApproximateNetworkBounds
 import TNLean.PEPS.Approximation.EffectCircuitTermwiseCoefficientBounds
 import TNLean.PEPS.Approximation.DistributedContractionScalar
+import TNLean.PEPS.Approximation.MessageGateLists
 
 /-!
 # Uniform operator networks from approximate expansions of original gates
@@ -51,15 +52,14 @@ theorem exists_uniform_approximate_sampled_network
     {ι : Type*} (size : ι → ℝ) (hsize : ∀ i, 2 ≤ size i)
     (P : ι → Type) [∀ L, Fintype (P L)]
     (C₀ : ∀ L, GateMapConstruction (P L))
-    (b n d : ℕ) (C_N C_D : ℝ) (hCN : 0 ≤ C_N) (hCD : 0 ≤ C_D)
+    (b n d : ℕ) (C_N C_D : ℝ)
     (hN₀ : ∀ L, ((C₀ L).circuit.expandedGateCount : ℝ) ≤ C_N * (size L) ^ n)
     (hphysical₀ : ∀ L j, ((C₀ L).physicalDimension j : ℝ) ≤ C_D * (size L) ^ d)
     (harity₀ : ∀ L g, ((C₀ L).circuit.participants g).card ≤ b)
     (hlifetime₀ : ∀ L j,
       Nat.card {g : (C₀ L).circuit.gateLocations //
         j ∈ (C₀ L).circuit.participants g} ≤ b)
-    (hExpansionAvailability : ∀ q : ℕ, ∃ (r : ℕ) (C_K C_C : ℝ) (u v : ℕ),
-      0 ≤ C_K ∧ 0 ≤ C_C ∧ ∀ L,
+    (hExpansionAvailability : ∀ q : ℕ, ∃ (r : ℕ) (C_K C_C : ℝ) (u v : ℕ), ∀ L,
         ∃ (lists : (C₀ L).circuit.GateLists) (K : ℕ),
           ((C₀ L).circuit.reexpand lists).IsTermwiseBounded r (C_C * (size L) ^ v) ∧
           (∀ g, ((C₀ L).circuit.reexpand lists).monomialCount g ≤ K) ∧
@@ -67,7 +67,7 @@ theorem exists_uniform_approximate_sampled_network
           ((C₀ L).circuit.reexpand lists).IsGateApproximation ((size L) ^ q)⁻¹
             ((C₀ L).circuit.reexpandGateMaps lists (C₀ L).gateMaps))
     (p : ℝ) (hp : 0 < p) :
-    let countC := 1 + C_N
+    let countC := 1 + max C_N 0
     let t := ⌈p⌉₊
     let q := n + t + ⌈16 * countC⌉₊
     ∃ (r : ℕ) (C_p : ℝ) (α : ℕ), 0 ≤ C_p ∧ 0 < α ∧ ∀ L,
@@ -81,14 +81,14 @@ theorem exists_uniform_approximate_sampled_network
       let ref := C.circuit
       let Goriginal := C.gateMaps
       let hL : 2 ≤ (size L) := hsize L
-      let D : ℝ≥0 := ⟨(1 + C_D) * (size L) ^ d, by positivity⟩
+      let D : ℝ≥0 := ⟨(1 + max C_D 0) * (size L) ^ d, by positivity⟩
       ∃ lists : ref.GateLists,
         let w := ref.reexpand lists
         let G := ref.reexpandGateMaps lists Goriginal
         let hNre : (w.expandedGateCount : ℝ) ≤ countC * (size L) ^ n := by
           rw [ref.expandedGateCount_reexpand lists]
           exact (hN₀ L).trans (mul_le_mul_of_nonneg_right
-            (le_add_of_nonneg_left zero_le_one) (by positivity))
+            ((le_max_left _ _).trans (le_add_of_nonneg_left zero_le_one)) (by positivity))
         ∃ (B : ℝ≥0) (_ : 1 ≤ B)
           (hb : w.IsExpansionBounded r (B : ℝ))
           (happrox : w.IsGateApproximation ((size L) ^ q)⁻¹ G),
@@ -102,7 +102,8 @@ theorem exists_uniform_approximate_sampled_network
           simpa only [Real.rpow_neg (by linarith [hsize L] : 0 ≤ (size L)),
             Real.rpow_natCast] using
             w.isGateApproximation_budget_of_power_bound G (size L) countC (t : ℝ)
-              w.expandedGateCount n (hsize L) (by dsimp [countC]; linarith) hNre hprecision
+              w.expandedGateCount n (hsize L) (by dsimp [countC]; linarith [le_max_right C_N 0])
+              hNre hprecision
         let W := w.rescaledOriginal (sourceGateBudget_pos (half_pos hε) _).le G hbudget
         let hbW := w.isExpansionBounded_rescaledOriginal
           (sourceGateBudget_pos (half_pos hε) _).le G hbudget hb
@@ -151,13 +152,17 @@ theorem exists_uniform_approximate_sampled_network
               ∃ g : ref.gateLocations, j ∈ ref.participants g ∧ l ∈ ref.participants g) := by
   classical
   intro countC t q
-  obtain ⟨r, C_K, C_C, u, v, hCK, hCC, hLists⟩ := hExpansionAvailability q
+  obtain ⟨r, C_K₀, C_C₀, u, v, hLists⟩ := hExpansionAvailability q
+  let C_K := max C_K₀ 0
+  let C_C := max C_C₀ 0
+  have hCK : 0 ≤ C_K := le_max_right _ _
+  have hCC : 0 ≤ C_C := le_max_right _ _
   let C_B := 1 + C_K * C_C
   let s := u + v
   have hCB : 0 ≤ C_B := add_nonneg zero_le_one (mul_nonneg hCK hCC)
   obtain ⟨C_p, α, hC, hα, hfamily⟩ :=
     EffectCircuit.exists_uniform_sampled_approximate_network_bounds
-      r b n d countC (1 + C_D) (by dsimp [countC]; linarith)
+      r b n d countC (1 + max C_D 0) (by dsimp [countC]; linarith [le_max_right C_N 0])
       (fun _ ↦ C_K) (fun _ ↦ C_B) (fun _ ↦ u) (fun _ ↦ s)
       (fun _ ↦ hCK) (fun _ ↦ hCB) p hp
   refine ⟨r, C_p, α, hC, hα, ?_⟩
@@ -167,7 +172,11 @@ theorem exists_uniform_approximate_sampled_network
   let hps := C.physicalOrder_nodup
   let hcover := C.mem_physicalOrder
   have hLone : 1 ≤ (size L) := le_trans (by norm_num) hL
-  obtain ⟨lists, K, htermwise, hmonomial, hK, happrox⟩ := hLists L
+  obtain ⟨lists, K, htermwise₀, hmonomial, hK₀, happrox⟩ := hLists L
+  have hpow : ∀ (c : ℝ) (m : ℕ), c * (size L) ^ m ≤ max c 0 * (size L) ^ m :=
+    fun c m ↦ mul_le_mul_of_nonneg_right (le_max_left _ _) (by positivity)
+  have htermwise := htermwise₀.mono_coefficient (hpow C_C₀ v)
+  have hK : (K : ℝ) ≤ C_K * (size L) ^ u := hK₀.trans (hpow C_K₀ u)
   let w := ref.reexpand lists
   let G := ref.reexpandGateMaps lists Goriginal
   obtain ⟨B, hB, hb, hBB⟩ :=
@@ -177,7 +186,7 @@ theorem exists_uniform_approximate_sampled_network
   have hNre : (w.expandedGateCount : ℝ) ≤ countC * (size L) ^ n := by
     rw [ref.expandedGateCount_reexpand lists]
     exact (hN₀ L).trans (mul_le_mul_of_nonneg_right
-      (le_add_of_nonneg_left zero_le_one) (by positivity))
+      ((le_max_left _ _).trans (le_add_of_nonneg_left zero_le_one)) (by positivity))
   have harity : ∀ g, (w.participants g).card ≤ b := by
     intro g
     rw [ref.participants_reexpand lists g]
@@ -187,14 +196,14 @@ theorem exists_uniform_approximate_sampled_network
     rw [ref.participationCount_reexpand lists j]
     exact hlifetime₀ L j
   have hD : 1 ≤ D := by
-    change (1 : ℝ) ≤ (1 + C_D) * (size L) ^ d
+    change (1 : ℝ) ≤ (1 + max C_D 0) * (size L) ^ d
     exact one_le_mul_of_one_le_of_one_le
-      (le_add_of_nonneg_right hCD) (one_le_pow₀ hLone)
+      (le_add_of_nonneg_right (le_max_right _ _)) (one_le_pow₀ hLone)
   have hphysical : ∀ j, (physicalDim j : ℝ≥0) ≤ D := by
     intro j
     change (physicalDim j : ℝ) ≤ (D : ℝ)
     exact (hphysical₀ L j).trans (mul_le_mul_of_nonneg_right
-      (le_add_of_nonneg_left zero_le_one) (by positivity))
+      ((le_max_left _ _).trans (le_add_of_nonneg_left zero_le_one)) (by positivity))
   obtain ⟨T, herror, hdim, hinc, hlocal⟩ := hfamily (size L) hL (P L)
     H hH x hx physicalDim ps hps hcover priv w G K B D hB hD
     hb hmonomial harity hlifetime hphysical hpriv hK hNre hBB le_rfl happrox

@@ -48,7 +48,7 @@ theorem exists_uniform_message_sampled_network
     {ι : Type*} (size : ι → ℝ) (hsize : ∀ i, 2 ≤ size i)
     (P : ι → Type) [∀ L, Fintype (P L)]
     (C₀ : ∀ L, GateMapConstruction (P L))
-    (b n d : ℕ) (C_N C_D : ℝ) (hCN : 0 ≤ C_N) (hCD : 0 ≤ C_D)
+    (b n d : ℕ) (C_N C_D : ℝ)
     (hN₀ : ∀ L, ((C₀ L).circuit.expandedGateCount : ℝ) ≤ C_N * (size L) ^ n)
     (hphysical₀ : ∀ L j, ((C₀ L).physicalDimension j : ℝ) ≤ C_D * (size L) ^ d)
     (harity₀ : ∀ L g, ((C₀ L).circuit.participants g).card ≤ b)
@@ -56,8 +56,7 @@ theorem exists_uniform_message_sampled_network
       Nat.card {g : (C₀ L).circuit.gateLocations //
         j ∈ (C₀ L).circuit.participants g} ≤ b)
     (hMessageAvailability : ∀ q : ℕ,
-      ∃ (r m : ℕ) (C_K C_C C_M : ℝ) (u v z : ℕ),
-        0 ≤ C_K ∧ 0 ≤ C_C ∧ 0 ≤ C_M ∧ ∀ L,
+      ∃ (r m : ℕ) (C_K C_C C_M : ℝ) (u v z : ℕ), ∀ L,
           ∃ (lists : (C₀ L).circuit.MessageGateLists) (K : ℕ),
             (C₀ L).circuit.IsMessageResourceBounded r m K
               (C_M * (size L) ^ z) (C_C * (size L) ^ v) lists ∧
@@ -65,7 +64,7 @@ theorem exists_uniform_message_sampled_network
             (C₀ L).circuit.IsMessageGateApproximation ((size L) ^ q)⁻¹
               lists (C₀ L).gateMaps)
     (p : ℝ) (hp : 0 < p) :
-    let countC := 1 + C_N
+    let countC := 1 + max C_N 0
     let t := ⌈p⌉₊
     let q := n + t + ⌈16 * countC⌉₊
     ∃ (r : ℕ) (C_p : ℝ) (α : ℕ), 0 ≤ C_p ∧ 0 < α ∧ ∀ L,
@@ -79,14 +78,14 @@ theorem exists_uniform_message_sampled_network
       let ref := C.circuit
       let Goriginal := C.gateMaps
       let hL : 2 ≤ (size L) := hsize L
-      let D : ℝ≥0 := ⟨(1 + C_D) * (size L) ^ d, by positivity⟩
+      let D : ℝ≥0 := ⟨(1 + max C_D 0) * (size L) ^ d, by positivity⟩
       ∃ lists : ref.GateLists,
         let w := ref.reexpand lists
         let G := ref.reexpandGateMaps lists Goriginal
         let hNre : (w.expandedGateCount : ℝ) ≤ countC * (size L) ^ n := by
           rw [ref.expandedGateCount_reexpand lists]
           exact (hN₀ L).trans (mul_le_mul_of_nonneg_right
-            (le_add_of_nonneg_left zero_le_one) (by positivity))
+            ((le_max_left _ _).trans (le_add_of_nonneg_left zero_le_one)) (by positivity))
         ∃ (B : ℝ≥0) (_ : 1 ≤ B)
           (hb : w.IsExpansionBounded r (B : ℝ))
           (happrox : w.IsGateApproximation ((size L) ^ q)⁻¹ G),
@@ -100,7 +99,8 @@ theorem exists_uniform_message_sampled_network
           simpa only [Real.rpow_neg (by linarith [hsize L] : 0 ≤ (size L)),
             Real.rpow_natCast] using
             w.isGateApproximation_budget_of_power_bound G (size L) countC (t : ℝ)
-              w.expandedGateCount n (hsize L) (by dsimp [countC]; linarith) hNre hprecision
+              w.expandedGateCount n (hsize L) (by dsimp [countC]; linarith [le_max_right C_N 0])
+              hNre hprecision
         let W := w.rescaledOriginal (sourceGateBudget_pos (half_pos hε) _).le G hbudget
         let hbW := w.isExpansionBounded_rescaledOriginal
           (sourceGateBudget_pos (half_pos hε) _).le G hbudget hb
@@ -148,8 +148,7 @@ theorem exists_uniform_message_sampled_network
               l ∈ distributedLinkParties (SourceCircuit.sourceGateRoot R) e.1 →
               ∃ g : ref.gateLocations, j ∈ ref.participants g ∧ l ∈ ref.participants g) := by
   classical
-  have hExpandedAvailability : ∀ q : ℕ, ∃ (r : ℕ) (C_K C_C : ℝ) (u v : ℕ),
-      0 ≤ C_K ∧ 0 ≤ C_C ∧ ∀ L,
+  have hExpandedAvailability : ∀ q : ℕ, ∃ (r : ℕ) (C_K C_C : ℝ) (u v : ℕ), ∀ L,
         ∃ (lists : (C₀ L).circuit.GateLists) (K : ℕ),
           ((C₀ L).circuit.reexpand lists).IsTermwiseBounded r (C_C * (size L) ^ v) ∧
           (∀ g, ((C₀ L).circuit.reexpand lists).monomialCount g ≤ K) ∧
@@ -157,14 +156,23 @@ theorem exists_uniform_message_sampled_network
           ((C₀ L).circuit.reexpand lists).IsGateApproximation ((size L) ^ q)⁻¹
             ((C₀ L).circuit.reexpandGateMaps lists (C₀ L).gateMaps) := by
     intro q
-    obtain ⟨r, m, C_K, C_C, C_M, u, v, z, hCK, hCC, hCM, hLists⟩ :=
-      hMessageAvailability q
+    obtain ⟨r, m, C_K₀, C_C₀, C_M₀, u, v, z, hLists⟩ := hMessageAvailability q
+    let C_K := max C_K₀ 0
+    let C_C := max C_C₀ 0
+    let C_M := max C_M₀ 0
+    have hCC : 0 ≤ C_C := le_max_right _ _
+    have hCM : 0 ≤ C_M := le_max_right _ _
     let A := C_K * (1 + C_M) ^ m
     let Ccoeff := C_K * C_C * (1 + C_M) ^ m
-    refine ⟨r, 1 + A, Ccoeff, u + z * m, u + v + z * m,
-      by dsimp [A]; positivity, by dsimp [Ccoeff]; positivity, ?_⟩
+    refine ⟨r, 1 + A, Ccoeff, u + z * m, u + v + z * m, ?_⟩
     intro L
-    obtain ⟨lists, K, hresources, hK, happrox⟩ := hLists L
+    obtain ⟨lists, K, hresources₀, hK₀, happrox⟩ := hLists L
+    have hpow : ∀ (c : ℝ) (k : ℕ), c * (size L) ^ k ≤ max c 0 * (size L) ^ k :=
+      fun c k ↦ mul_le_mul_of_nonneg_right (le_max_left _ _)
+        (pow_nonneg ((by norm_num : (0 : ℝ) ≤ 2).trans (hsize L)) _)
+    have hresources := (hresources₀.mono_dimension (hpow C_M₀ z)).mono_coefficient
+      (hpow C_C₀ v)
+    have hK : (K : ℝ) ≤ C_K * (size L) ^ u := hK₀.trans (hpow C_K₀ u)
     let w := (C₀ L).circuit
     let D := (1 + C_M) * (size L) ^ z
     let C := C_C * (size L) ^ v
@@ -196,7 +204,7 @@ theorem exists_uniform_message_sampled_network
         _ = _ := by dsimp [C, D, Ccoeff]; rw [mul_pow, pow_add, pow_add, pow_mul]; ring
     exact ⟨expanded, K', hterm.mono_coefficient hcoeffPower, hcount,
       hceilPower, w.isGateApproximation_expandMessageGateLists lists (C₀ L).gateMaps happrox⟩
-  exact exists_uniform_approximate_sampled_network size hsize P C₀ b n d C_N C_D hCN hCD
+  exact exists_uniform_approximate_sampled_network size hsize P C₀ b n d C_N C_D
     hN₀ hphysical₀ harity₀ hlifetime₀ hExpandedAvailability p hp
 
 end TNLean.PEPS.PairEffect.GateMapConstruction

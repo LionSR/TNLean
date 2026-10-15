@@ -121,6 +121,23 @@ theorem IsMessageResourceBounded.mono_dimension {a b : Layout P}
   | swap => trivial
   | frame r w ih => exact ih h
 
+/-- Enlarging the coefficient bound preserves the same original lists,
+monomial counts, message dimensions and pair-effect bounds.
+Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–175. -/
+theorem IsMessageResourceBounded.mono_coefficient {a b : Layout P}
+    {w : EffectCircuit a b} {lists : w.MessageGateLists} {r m K : ℕ} {D C C' : ℝ}
+    (h : w.IsMessageResourceBounded r m K D C lists) (hC : C ≤ C') :
+    w.IsMessageResourceBounded r m K D C' lists := by
+  induction w with
+  | id => trivial
+  | comp w v ihw ihv => exact ⟨ihw h.1, ihv h.2⟩
+  | localMap => trivial
+  | gate =>
+      exact ⟨h.1, fun term hterm ↦
+        ⟨(h.2 term hterm).1, (h.2 term hterm).2.1.trans hC, (h.2 term hterm).2.2⟩⟩
+  | swap => trivial
+  | frame r w ih => exact ih h
+
 /-- Enlarging an individual coefficient majorant preserves the original
 pair-effect bound and the actual ordered monomial lists.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–175. -/
