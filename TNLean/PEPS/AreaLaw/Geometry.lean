@@ -105,6 +105,7 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairChildStarStep
 import TNLean.PEPS.AreaLaw.Geometry.RepairChildStars
 import TNLean.PEPS.AreaLaw.Geometry.RepairCurrentAssignments
 import TNLean.PEPS.AreaLaw.Geometry.RepairDepth
+import TNLean.PEPS.AreaLaw.Geometry.RepairDescendantCounts
 import TNLean.PEPS.AreaLaw.Geometry.RepairDescendants
 import TNLean.PEPS.AreaLaw.Geometry.RepairFanCones
 import TNLean.PEPS.AreaLaw.Geometry.RepairInduction
@@ -114,6 +115,7 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementRegions
 import TNLean.PEPS.AreaLaw.Geometry.RepairStage
 import TNLean.PEPS.AreaLaw.Geometry.RepairStageStars
 import TNLean.PEPS.AreaLaw.Geometry.RepairStarModel
+import TNLean.PEPS.AreaLaw.Geometry.RepairTermination
 import TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation
 import TNLean.PEPS.AreaLaw.Geometry.SegmentBallClipping
 import TNLean.PEPS.AreaLaw.Geometry.SideEndpoints
