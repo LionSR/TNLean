@@ -109,11 +109,10 @@ the subsequent separation and second-moment arguments.
     The coefficient of the partial branch is
     $c_\xi=\prod_{g:\,C_g\cap\mathcal A\neq\varnothing}c_{g,\xi_g}$,
     and its weighted sum is $\sum_{\xi\in\Xi_{\mathcal A}}c_\xi W_\xi$.
-    An untouched gate has one partial choice with coefficient one,
-    even if its original branch set is empty.
+    An untouched gate has a single partial choice with coefficient one.
 \end{definition}
 
-\begin{theorem}[Allowed partial branches and their actual sources]
+\begin{theorem}[Allowed partial branches and their retained sources]
     \label{thm:peps_partial_source_inventory}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.isAllowed_partialWord}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.expandedSources}
@@ -125,8 +124,8 @@ the subsequent separation and second-moment arguments.
     allowed. Its source list is obtained from the chosen sources of
     the touched gates by retaining exactly those with at least one
     endpoint in $\mathcal A$, and then grouping the exterior owners.
-    Each retained source has its original endpoint spaces and vector.
-    The order and multiplicity of the source occurrences are preserved.
+    Each retained source has its original endpoint spaces and vector,
+    and the order and multiplicity of the source occurrences are preserved.
 \end{theorem}
 
 \begin{proof}
@@ -148,14 +147,13 @@ the subsequent separation and second-moment arguments.
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.expandedEval_mapOwner}
     \leanok
     \uses{def:peps_partial_source_choices}
-    Let $I_a,I_b$ be the canonical isometries identifying the input
+    Let $I_a,I_b$ be the isometries identifying the input
     and output memories with their grouped-owner memories. Then
     \begin{align}
         \left(\sum_{\xi\in\Xi_{\mathcal A}}c_\xi W_\xi\right)I_a
          & = I_bW.
         \label{eq:peps_partial_source_evaluation}
     \end{align}
-    The private operations need not be contractions for this identity.
 \end{theorem}
 
 \begin{proof}
@@ -250,7 +248,7 @@ the subsequent separation and second-moment arguments.
         \label{eq:peps_partial_source_density}
     \end{align}
     In each summand, the untouched gates retain their complete
-    operators. The matrix $\rho$ need not be positive or normalized.
+    operators.
 \end{theorem}
 
 \begin{proof}
@@ -278,7 +276,7 @@ the subsequent separation and second-moment arguments.
     \leanok
     \uses{def:peps_source_circuit_positions,def:peps_partial_source_choices}
     The positions $\mathcal E$ admit a fixed exhaustive ordered list
-    without repetitions, in the preparation order of the actual
+    without repetitions, in the preparation order of the
     composition. Consecutive compositions list the later composition's
     positions first; the original slot order within a gate is retained.
     Each position $e$ has fixed halfspaces $\C^{u_e}$ and $\C^{v_e}$.
@@ -299,7 +297,7 @@ the subsequent separation and second-moment arguments.
     lists preserves uniqueness. At a gate, list its prescribed slots.
     The participant injection preserves their distinct endpoints, and
     grouping owners removes a slot exactly when both endpoints are
-    exterior. The remaining fields are its prescribed spaces and
-    vector. Removing vectors from these records leaves a layout
+    exterior. Each retained position carries its prescribed spaces and
+    branch vector, so the register layout is
     determined solely by the original positions and $\mathcal A$.
 \end{proof}

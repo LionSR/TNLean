@@ -1,12 +1,12 @@
-\section{Active radial interfaces near an initial mark}
+\section{Active radial boundaries near an initial mark}
 \label{sec:area_law_initial_active_rays}
 
 Fix an arbitrary origin $o\in\mathbb R^2$, a finite endpoint set
-$Z\subset\mathbb Z^2$, an integer width $C\ge2$ and an initial layer
+$Z\subset\mathbb Z^2$, an integer width $C\ge2$, and an initial layer
 $k_0\ge50{,}000{,}000$. Choose arbitrary valid pitch residues at every
-layer. Let $\mathcal I$ be the actual initial identifiers, let $X_i^0$
+layer. Let $\mathcal I$ be the set of initial region indices, let $X_i^0$
 be their closed birth regions, and put $U_i=\operatorname{int}(X_i^0)$.
-Let $k\ge k_0$, let $z\in F_{k,\ell_k}$ be an actual fine-cell index,
+Let $k\ge k_0$, let $z\in F_{k,\ell_k}$ be a fine-cell index,
 and let $v$ be one of the nine marks of its defining cell.
 Put $\ell=\ell_k-5$ and $r=2^\ell/2=t_k/64$.
 
@@ -14,7 +14,7 @@ Join $v$ to the eight elementary bases of the all-midpoint fan in
 $\overline B_\infty(v,r)$. Let $\mathcal J$ index those bases, write
 $P_s$ for the corresponding closed triangle, and write $b_s^-$ and
 $b_s^+$ for its initial and final base endpoints in the perimeter
-orientation. Let $\sigma:\mathcal J\to\mathcal I$ be the unique actual
+orientation. Let $\sigma:\mathcal J\to\mathcal I$ be the unique sector
 assignment of Theorem~\ref{thm:area_law_actual_sector_assignment}.
 Thus, for every $i\in\mathcal I$,
 \begin{align}
@@ -25,7 +25,7 @@ Thus, for every $i\in\mathcal I$,
 An oriented neighboring pair $(s,t)$ is active when
 $b_s^+=b_t^-$ and $\sigma(s)\ne\sigma(t)$.
 Let $\mathcal A$ be the set of such pairs. This describes the radial
-interfaces in the local construction of
+boundaries in the local construction of
 \cite[Section~11]{OpenAI2026AreaLaw}.
 
 % Source: 10-geometry.tex, geometry:initial-stars, lines 333--370,
@@ -34,7 +34,7 @@ interfaces in the local construction of
 % These are the open-radius and closed-half-radius local assertions.
 % No full isolated-star theorem or active-ray enumeration is asserted.
 
-\begin{theorem}[Actual frontiers and active radial segments]
+\begin{theorem}[Region boundaries and active radial segments]
     \label{thm:area_law_initial_active_radial}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_frontier_near_mark_iff_active_radial}
     \leanok
@@ -46,9 +46,9 @@ interfaces in the local construction of
          & \quad\Longleftrightarrow\quad
         \exists(s,t)\in\mathcal A,\quad x\in[v,b_s^+].
     \end{align}
-    In the picture below each triangle carries its identifier $\sigma(s)$;
+    In the picture below each triangle carries its index $\sigma(s)$;
     the solid radial segments are the active ones, and they are exactly the
-    frontier points of the birth regions inside the open square.
+    boundary points of the birth regions inside the open square.
     \input{figures/area_law_initial_active_radial}
 \end{theorem}
 \begin{proof}\leanok
@@ -68,28 +68,28 @@ interfaces in the local construction of
     $\overline B_\infty(v,r)$.
     By~(\ref{eq:active_radial_decomposition}), $X_i^0$ and $E_i$
     agree on a neighborhood of every point of $B_\infty(v,r)$.
-    Their interior membership therefore agrees there. An identifier
+    Their interior membership therefore agrees there. An index
     outside $K$ has no birth-region point in this neighborhood.
 
     Suppose that $x\in\partial X_i^0$ and $x\ne v$.
-    The finite-cover frontier theorem gives a different identifier
-    $j\in K$ with $x\in E_i\cap E_j$; its outer-frontier alternative
+    The finite-cover frontier bound gives a distinct index
+    $j\in K$ with $x\in E_i\cap E_j$; its outer-boundary alternative
     is excluded by $x\in B_\infty(v,r)$.
     Choose $s,t\in\mathcal J$ with $\sigma(s)=i$, $\sigma(t)=j$
     and $x\in P_s\cap P_t$.
     Both triangles also contain $v$, so their intersection is
-    nontrivial. The actual triangle-contact theorem gives, after
+    nontrivial. The fan-triangle contact classification gives, after
     interchanging $s$ and $t$ if necessary,
     $b_s^+=b_t^-$ and $P_s\cap P_t=[v,b_s^+]$.
     Since $i\ne j$, this pair is active.
 
     If $x=v$ and no pair is active, every adjacent pair has the same
-    assigned identifier. The no-active theorem then places the smaller
-    closed square in one actual open region $U_j$.
-    A point of $U_j$ is on no birth frontier: it is interior to $X_j^0$,
+    assigned index, which places the smaller
+    closed square in a single open region $U_j$.
+    A point of $U_j$ lies on no birth-region boundary: it is interior to $X_j^0$,
     and disjointness of the open regions, together with
     $X_i^0=\overline{U_i}$, excludes membership in $X_i^0$ for $i\ne j$.
-    Thus a frontier point at $v$ forces an active pair, whose radial
+    Thus a boundary point at $v$ forces an active pair, whose radial
     segment contains $v$.
 
     Conversely, let $(s,t)\in\mathcal A$ and $x\in[v,b_s^+]$.
@@ -98,7 +98,7 @@ interfaces in the local construction of
     and its radial join with $v$ belongs to both triangles.
     By~(\ref{eq:active_radial_decomposition}),
     $x\in X_{\sigma(s)}^0\cap X_{\sigma(t)}^0$.
-    Since the two identifiers are different,
+    Since the two indices are distinct,
     $U_{\sigma(s)}$ is disjoint from
     $X_{\sigma(t)}^0=\overline{U_{\sigma(t)}}$.
     Hence $x\notin U_{\sigma(s)}$ and
@@ -132,14 +132,14 @@ interfaces in the local construction of
 % revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % This is the local closed-half-radius assertion for arbitrary valid shifts.
 
-\begin{theorem}[Actual frontiers as restricted directed rays]
+\begin{theorem}[Region boundaries as restricted directed rays]
     \label{thm:area_law_initial_active_ray_closed}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_frontier_small_closedBall_iff_active_ray}
     \leanok
     \uses{thm:area_law_actual_sector_assignment,
         def:area_law_initial_birth_regions,def:area_law_cell_fan_successor}
     Retain the origin, endpoint set, width, initial layer, arbitrary
-    valid pitch residues, actual cell and mark fixed above.
+    valid pitch residues, fine cell, and mark fixed above.
     Let $\tau$ be the perimeter successor, and put
     \begin{align}
         \mathcal A_* & =\{s\in\mathcal J:\sigma(s)\ne\sigma(\tau(s))\},
@@ -154,8 +154,8 @@ interfaces in the local construction of
         \label{eq:area_law_initial_active_ray_closed}
     \end{align}
     Each ray includes $v$. If $\mathcal A_*$ is empty, the right-hand
-    union is empty and there is no birth frontier in this closed square.
-    Identifiers may occur in several separated sectors; the change set
+    union is empty and no birth-region boundary meets this closed square.
+    Indices may occur in several separated sectors; the change set
     records successive sectors without identifying such occurrences.
 \end{theorem}
 \begin{proof}\leanok
@@ -164,10 +164,10 @@ interfaces in the local construction of
         thm:area_law_cell_fan_radial_ray_restriction}
     Endpoint adjacency is exactly the successor relation, so the active
     pairs are $(s,\tau(s))$ with $s\in\mathcal A_*$.
-    The closed radial description therefore identifies the frontier
+    The active radial description on the smaller closed square therefore identifies the boundary
     points with the segments $[v,b_s^+]$ at these changes.
     Since $\overline B_\infty(v,r/2)\subseteq\overline B_\infty(v,r)$,
-    the radial restriction theorem replaces each segment by $R_s$
+    restricting each radial segment to the square replaces $[v,b_s^+]$ by $R_s$
     throughout the smaller closed square. This includes the center,
     and proves~\eqref{eq:area_law_initial_active_ray_closed}.
 \end{proof}

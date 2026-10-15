@@ -68,12 +68,12 @@ theorem ProjectiveRepresentation.finrank_eigenspace_ne_one_of_commute
   refine (ScalarCocycle.cohomologousTo_one_iff_H2π_eq_zero hω).mp
     ⟨fun g => Units.mk0 (c g) (hc0 g), fun g h => ?_⟩
   apply Units.ext
-  simp only [Units.val_mul, Units.val_mk0, Units.val_inv_eq_inv_val, mul_one]
+  simp only [Units.val_mul, Units.val_mk0, Units.val_inv_eq_inv_val, Pi.one_apply, mul_one]
   have hmul := congrArg (fun M : Matrix (Fin D) (Fin D) ℂ => M.mulVec (v : Fin D → ℂ))
     (ρ.map_mul g h)
   simp only [← Matrix.mulVec_mulVec, hcv, Matrix.mulVec_smul, Matrix.smul_mulVec,
     smul_smul] at hmul
-  have hωc : (ω g h : ℂ) * c (g * h) = c h * c g := by
+  have hωc : (ω (g, h) : ℂ) * c (g * h) = c h * c g := by
     by_contra hne
     apply hv0'
     have := sub_eq_zero.mpr hmul

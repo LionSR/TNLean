@@ -44,15 +44,15 @@ with their multiplicities. All norms are operator norms.
         TNLean.PEPS.AreaLaw.channelWordOmissionDefect_append_sub_le}
     \leanok
     Suppose $0\le k_i\le\mathbb 1$ for every label. Every $\mathcal E_w$ is
-    linear and contracts the norm of differences, and
-    $0\le D_P(w;B)\le2\|B\|$. Appending a label $i$ to $w$ raises the defect
-    by at most $0$ when $P(i)$ holds, and by at most
+    linear and contractive on differences, and
+    $0\le D_P(w;B)\le2\|B\|$. Appending a label $i$ to $w$ does not increase
+    the defect when $P(i)$ holds, and increases it by at most
     $\|(\mathcal E_i-\mathrm{id})(\mathcal E_{w|_P}(B))\|$ otherwise.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_channel_word_norm,thm:al_root_channel_contraction,
         thm:al_channel_word_append}
-    Linearity holds letter by letter, and contraction follows from
+    Linearity holds letter by letter, and contractivity follows from
     Theorem~\ref{thm:al_channel_word_norm} applied to a difference. Put
     $A=\mathcal E_w(B)$ and $R=\mathcal E_{w|_P}(B)$. A retained letter acts
     on both, so the new defect is $\|\mathcal E_i(A-R)\|\le\|A-R\|$. An omitted
@@ -288,8 +288,8 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Theorem~\ref{thm:al_lattice_counts}.
 \begin{proof}\leanok
     \uses{thm:al_graph_channel_omission,thm:al_component_support_of_tail,
         thm:al_lattice_counts}
-    Theorem~\ref{thm:al_component_support_of_tail} supplies the component
-    support, and the largest distance in the domain is a common cutoff.
+    Theorem~\ref{thm:al_component_support_of_tail} gives the component
+    support, and the largest distance in the domain serves as a common cutoff.
     Apply Theorem~\ref{thm:al_graph_channel_omission} with $K=2$.
 \end{proof}
 
@@ -309,8 +309,8 @@ satisfy $|N_l(x)|\le2(l+1)^2$ by Theorem~\ref{thm:al_lattice_counts}.
         \mathbb E\|(D-D_{\rm ret})B(\Omega\otimes\xi)\|
         \le At|S|\|B\|e^{vt-\gamma r^\alpha}.
     \end{align*}
-    This is the omission estimate of the local constraint products lemma.
-    The source takes $S$ nonempty and $r\ge1$; neither is needed.
+    This is the omission estimate of the local constraint products lemma;
+    the paper assumes $S\ne\varnothing$ and $r\ge1$, neither of which is needed here.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_domain_channel_omission,thm:al_channel_word_vector_difference}

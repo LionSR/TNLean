@@ -37,7 +37,7 @@ graph, no ambient distance is substituted.
 \end{proof}
 
 Let $q>0$, $\mathcal H=(\C^q)^{\otimes I}$, and let
-$\mathcal K=\C^J$ for an arbitrary finite set $J$, possibly empty.
+$\mathcal K=\C^J$ for a finite set $J$.
 For a physical operator $A$, put
 $\widehat A=A\otimes\mathbb 1_{\mathcal K}$.
 Write $E_X$ for the normalized partial-trace expectation onto
@@ -52,7 +52,6 @@ For a positive contraction $k$ on $\mathcal H$, define its root channel by
 The local channels are $\mathcal E_{k,l}=\mathcal E_{E_{N_l(a)}(k)}$.
 Their shells are $\Delta_0=\mathcal E_{k,0}-\mathrm{id}$ and
 $\Delta_{l+1}=\mathcal E_{k,l+1}-\mathcal E_{k,l}$.
-Observables $B$ on $\mathcal H\otimes\mathcal K$ need not be Hermitian.
 
 \begin{theorem}[Exact component localization]
     \label{thm:qc_component_channel_stabilization}
@@ -81,7 +80,6 @@ Observables $B$ on $\mathcal H\otimes\mathcal K$ need not be Hermitian.
 
 For a real sequence $\varepsilon_l$, put $b_0=2$ and
 $b_{l+1}=4(\sqrt{\varepsilon_{l+1}}+\sqrt{\varepsilon_l})$.
-Here the real square root is zero on negative inputs.
 Write $d_y(B)$ for the physical-site oscillation of
 Definition~\ref{def:qc_site_oscillation}.
 
@@ -98,8 +96,7 @@ Definition~\ref{def:qc_site_oscillation}.
          & \le d_y(B)+2\sum_{0\le l\le n,\ d_G(a,y)\le l}
         b_l\sum_{z\in N_l(a)}d_z(B).
     \end{align}
-    The coefficient has no factor depending on $\dim\mathcal K$.
-    This is the finite-radius consequence of exact component support in
+    This is the finite-radius consequence of component support in
     \cite{OpenAI2026AreaLaw}, before choosing a decaying error bound.
 \end{theorem}
 \begin{proof}
@@ -110,8 +107,8 @@ Definition~\ref{def:qc_site_oscillation}.
     regions $N_l(a)$. It gives the right side of
     (\ref{eq:qc_component_increment}) with
     $d_y(\mathcal E_{k,n}(B))$ on the left.
-    Exact component localization identifies this local channel with
-    $\mathcal E_k$, and $y\in N_l(a)$ is precisely $d_G(a,y)\le l$.
+    Component localization identifies this local channel with
+    $\mathcal E_k$, and $y\in N_l(a)$ is $d_G(a,y)\le l$.
 \end{proof}
 
 \begin{theorem}[No increase across components]

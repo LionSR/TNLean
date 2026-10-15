@@ -190,7 +190,7 @@ theorem exists_continuous_projectiveRepresentation_of_isOnSiteSymmetric
     ∃ ω : unitInterval → ScalarCocycle G,
     ∃ ρ : ∀ t, ProjectiveRepresentation (D := D) (ω t),
       (∀ g, Continuous fun t => ((ρ t).X g : Matrix (Fin D) (Fin D) ℂ)) ∧
-      (∀ g h, Continuous fun t => (ω t g h : ℂ)) ∧
+      (∀ g h, Continuous fun t => (ω t (g, h) : ℂ)) ∧
       ∀ t g i, twistedTensor (A t) U g i =
         ((ρ t).X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A t i *
           ((((ρ t).X (g⁻¹))⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by

@@ -5,7 +5,7 @@ The connected pieces of
 Theorem~\ref{thm:area_law_fan_cut_piece_connected} meet across every
 retained adjacency by
 Theorem~\ref{thm:area_law_fan_inactive_radial_intersection}.
-The following gluing assertion applies to the runs of
+This glues the pieces along each run of
 Definition~\ref{def:area_law_fan_runs} in the fan construction of
 \cite[Section~11]{OpenAI2026AreaLaw}.
 
@@ -14,36 +14,30 @@ Definition~\ref{def:area_law_fan_runs} in the fan construction of
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegion_cut_inter_ball_isConnected}
     \leanok
     \uses{def:area_law_fan_cut_piece,def:area_law_fan_runs}
-    Consider the arbitrary fan, coloring and retained pieces $S_i$ of
+    Consider the fan, colouring, cut set $L$ of active radials, and pieces
+    $S_i=(P_i\setminus L)\cap B_\infty(c,r)$ of
     Definition~\ref{def:area_law_fan_cut_piece}.
-    Retain the adjacency between consecutive triangles precisely when
-    their colors agree. For each connected component $R$ of this graph,
+    Join consecutive triangles $P_i$ and $P_j$ by an edge whenever their
+    colours agree. For each connected component $R$ of this graph,
     put $T_R=\bigcup_{i\in R}P_i$. Then
     $(T_R\setminus L)\cap B_\infty(c,r)$ is nonempty and connected.
-    The change set $A$ may be empty. Components with the same color
-    remain distinct runs.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:area_law_fan_cut_piece,def:area_law_fan_runs,
         thm:area_law_fan_cut_piece_connected,
         thm:area_law_fan_inactive_radial_intersection}
-    Each retained piece $S_i$ is nonempty and connected by
+    Each piece $S_i$ is nonempty and connected by
     Theorem~\ref{thm:area_law_fan_cut_piece_connected}.
-    A retained edge joins consecutive triangles with equal colors, so
+    Every edge of $R$ joins consecutive triangles of the same colour, so
     Theorem~\ref{thm:area_law_fan_inactive_radial_intersection} gives
-    $S_i\cap S_j\ne\varnothing$ along every such edge.
+    $S_i\cap S_j\ne\varnothing$ along that edge.
 
-    The component $R$ is nonempty, and any two of its vertices are
-    joined by a finite path of retained edges within $R$.
-    Gluing the connected sets along these paths shows that
-    $\bigcup_{i\in R}S_i$ is connected. It is nonempty because $R$
-    contains a vertex and every $S_i$ is nonempty.
-    Distributing deletion and intersection over the union gives
+    Because $R$ is a connected component, it is nonempty and any two of
+    its vertices are joined by a finite path of edges in $R$.
+    Therefore $\bigcup_{i\in R}S_i$ is nonempty and connected, and
     \begin{align}
         (T_R\setminus L)\cap B_\infty(c,r)
          & =\bigcup_{i\in R}S_i.
     \end{align}
-    This proves the assertion. If $A$ is empty, no radial is removed
-    and the center is retained.
 \end{proof}

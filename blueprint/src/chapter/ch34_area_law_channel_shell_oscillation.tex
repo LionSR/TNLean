@@ -2,7 +2,6 @@
 % openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
 % This leaf proves the local-channel and physical shell-oscillation steps.
 % It does not assert Lemma 10.1, a one-event increment, or clock propagation.
-% Public declarations: LocalRootChannels and ChannelShellOscillation.
 
 \section{Local root channels and physical shell oscillations}
 \label{sec:al_channel_shell_oscillation}
@@ -133,8 +132,8 @@ in $K$ and averages the sites in $I\setminus K$.
     Apply~(\ref{eq:al_shell_root_bound}) to $(G,G_K)$ and $(R,R_K)$
     to obtain~(\ref{eq:al_shell_localization_error}). The triangle
     inequality through $\mathcal E(B)$ gives
-    (\ref{eq:al_shell_two_region_error}). The hypotheses themselves
-    imply $\varepsilon_K,\varepsilon_L\ge0$.
+    (\ref{eq:al_shell_two_region_error}). Since norms are nonnegative,
+    $\varepsilon_K,\varepsilon_L\ge0$.
 \end{proof}
 
 \begin{theorem}[Fixing the regional commutant and intertwining commutators]
