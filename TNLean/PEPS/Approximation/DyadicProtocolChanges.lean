@@ -281,11 +281,13 @@ theorem isBoundedChange_of_exchange {F₁ F₂ F₁' F₂' : Frame pos q Party} 
         (twoLayoutIso _ _ F₁'.owner F₂'.owner).symm
           (EuclideanSpace.vecKron (F₁'.refVec Ω) (F₂'.refVec Ω))‖ ≤ ε) :
     ∃ c : OriginalCircuit (F₁.regs ++ F₂.regs) (F₁'.regs ++ F₂'.regs),
-      c.IsBoundedChange S r K ε (pairRef F₁ F₂ Ω) (pairRef F₁' F₂' Ω) := by
+      c.nonprivateCount = 0 ∧
+        c.IsBoundedChange S r K ε (pairRef F₁ F₂ Ω) (pairRef F₁' F₂' Ω) := by
   obtain ⟨w, hw, hu, hs, he⟩ := h
   rw [← pairRef_eq_twoLayoutIso_symm, ← pairRef_eq_twoLayoutIso_symm] at he
-  refine ⟨_, (Word.isBoundedChange_toOriginalCircuit hw hu ((le_of_eq hs).trans zero_le_one) hK
-    he).mono ?_ le_rfl le_rfl le_rfl⟩
+  refine ⟨_, (w.nonprivateCount_toOriginalCircuit hw).trans hs,
+    (Word.isBoundedChange_toOriginalCircuit hw hu ((le_of_eq hs).trans zero_le_one) hK
+      he).mono ?_ le_rfl le_rfl le_rfl⟩
   rintro x rfl
   exact hC
 
