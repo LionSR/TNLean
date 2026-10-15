@@ -46,7 +46,7 @@ the interpolation scale are arbitrary.
 
 open scoped BigOperators
 open Filter Set MeasureTheory
-open TensorPower TensorPower.ReplicaTransport
+open TensorPower TensorPower.ReplicaTransport Entropy
 
 noncomputable section
 
@@ -79,6 +79,7 @@ namespace TransportData
 variable {K : ℕ} {H : Type*} [Fintype H] [DecidableEq H] {C : H → Type*}
   [∀ h, Fintype (C h)] [∀ h, DecidableEq (C h)] (D : TransportData V K H C)
 
+omit [Fintype H] in
 /-- The choice-averaged move entropy is at most `2Kℓ` when every move has logarithmic
 dimension at most `ℓ`: each band contributes one probability average of move entropies
 (`08-scanner.tex`, lines 434–440). -/
@@ -118,13 +119,15 @@ def actualScanRound (j : ℕ) : ScanRound I (CoherentSphere (SiteConfig n)) :=
   if IsChargeRound j then S.actualChargeScanRound hm hM (j / 2) n E a pre
   else S.actualFillScanRound hm hM (j / 2) n E a pre
 
+/-- An odd round of the actual scan is its charge round. -/
 theorem actualScanRound_of_charge {j : ℕ} (hj : IsChargeRound j) :
-    S.actualScanRound hm hM n E a pre j = S.actualChargeScanRound hm hM (j / 2) n E a pre :=
-  if_pos hj
+    S.actualScanRound hm hM n E a pre j = S.actualChargeScanRound hm hM (j / 2) n E a pre := by
+  simp only [actualScanRound, hj, ↓reduceIte]
 
+/-- An even round of the actual scan is its fill round. -/
 theorem actualScanRound_of_fill {j : ℕ} (hj : ¬IsChargeRound j) :
-    S.actualScanRound hm hM n E a pre j = S.actualFillScanRound hm hM (j / 2) n E a pre :=
-  if_neg hj
+    S.actualScanRound hm hM n E a pre j = S.actualFillScanRound hm hM (j / 2) n E a pre := by
+  simp only [actualScanRound, hj, ↓reduceIte]
 
 /-- Prove a property of an actual round from the corresponding charge and fill rounds. -/
 theorem actualScanRound_cases (P : ScanRound I (CoherentSphere (SiteConfig n)) → Prop) (j : ℕ)
@@ -142,6 +145,11 @@ namespace CollarScan
 variable {I : Type} [Fintype I] [LinearOrder I]
 
 open Classical in
+/-- The classical probability, at stage `s`, that the old history is not good
+(Lemma 9.1(4), `08-scanner.tex`, lines 212–215). -/
+def badOldWeight (S : CollarScan (Site Λ) I) (s : ℕ) : ℝ :=
+  ∑ h : History S.K S.m S.M s, if S.IsGoodOldHistory h then 0 else historyWeight h
+
 /-- **Lemma 9.1 for the actual scan at one scale.** At scale `N`, with the scanner scales
 `n = N`, `m = ⌊N^μ⌋`, `K = ⌊L/(8m)⌋`, `D = ⌈N^κ⌉` and `L = ⌊N^{1-ℓ}⌋`, the actual rounds
 satisfy every conclusion of Lemma 9.1 used by Proposition 9.2, together with the move-entropy
@@ -171,11 +179,10 @@ theorem historyFacts_actualScanRound (X : ScannerExponents) (N : ℕ)
       ((2 * X.L N + 10 * S.r₀ : ℕ) : ℤ) < ambientSupDistance t z)
     {μ : ℕ} (hmult : ∀ x, (Finset.univ.filter fun i ↦ S.anchor i = x).card ≤ μ)
     (hC₁ : 3 * (μ : ℝ) ≤ S.C₁) (hC₁pos : 0 < S.C₁)
-    (hbad : ∀ s ≤ S.n * S.m, (∑ h : History S.K S.m S.M s,
-      if S.IsGoodOldHistory h then 0 else historyWeight h) ≤ (N : ℝ) ^ (-200 : ℝ))
+    (hbad : ∀ s ≤ S.n * S.m, S.badOldWeight s ≤ (N : ℝ) ^ (-200 : ℝ))
     {C Cl c : ℝ} (hC10 : 10 ≤ C) (hCμ : 10 * (μ : ℝ) ≤ C)
     (hCη : 2 * transportLogDimBound q S.r₀ ≤ C * Real.log N ^ Cl)
-    (hc0 : 0 ≤ c) (hc : c ≤ 1 / (2 * (S.C₁ + 1))) :
+    (hc : c ≤ 1 / (2 * (S.C₁ + 1))) :
     HistoryFacts X N C Cl c (fun r ↦ S.actualScanRound hm hM dims E a pre r.val) := by
   -- Every round index is a completed-pair count inside the physical horizon.
   have hstage (r : Fin (X.rounds N)) : r.val / 2 + 1 ≤ S.n * S.m := by
@@ -186,9 +193,8 @@ theorem historyFacts_actualScanRound (X : ScannerExponents) (N : ℕ)
       linarith [Nat.mul_assoc 2 N (X.m N)]
     omega
   have hL : 8 * S.K * S.m ≤ X.L N := by
-    rw [hSK, hSm, ScannerExponents.K]
-    simpa only [mul_comm, mul_left_comm, mul_assoc] using
-      Nat.div_mul_le_self (X.L N) (8 * X.m N)
+    rw [hSK, hSm]
+    exact eight_mul_bandCount_mul_le (X.L N) (X.m N)
   have hn0 : 0 < S.n := by omega
   have hm2 : 2 ≤ S.m := by omega
   have hD : 4 * S.D ≤ S.m := by omega
@@ -253,20 +259,20 @@ theorem historyFacts_actualScanRound (X : ScannerExponents) (N : ℕ)
   refine
     { w_nonneg := fun r ↦ S.actualScanRound_cases hm hM dims E a pre
         (fun R ↦ ∀ h, 0 ≤ R.w h) r.val
-        (fun _ h ↦ Matrix.MeanTree.weight_nonneg _ h)
-        (fun _ h ↦ Matrix.MeanTree.weight_nonneg _ h)
+        (fun _ h ↦ (historyMeanTree S.K S.m S.M hm hM _).weight_nonneg h)
+        (fun _ h ↦ (historyMeanTree S.K S.m S.M hm hM _).weight_nonneg h)
       q_nonneg := fun r ↦ S.actualScanRound_cases hm hM dims E a pre
         (fun R ↦ ∀ h c, 0 ≤ R.q h c) r.val
-        (fun _ h c ↦ Matrix.MeanTree.weight_nonneg _ c)
-        (fun _ h c ↦ Matrix.MeanTree.weight_nonneg _ c)
+        (fun _ h c ↦ (chargeChoiceTree S.K S.M hM).weight_nonneg c)
+        (fun _ h c ↦ fillChoiceTree.weight_nonneg c)
       sum_w := fun r ↦ S.actualScanRound_cases hm hM dims E a pre
         (fun R ↦ ∑ h, R.w h = 1) r.val
-        (fun _ ↦ Matrix.MeanTree.sum_weight _)
-        (fun _ ↦ Matrix.MeanTree.sum_weight _)
+        (fun _ ↦ (historyMeanTree S.K S.m S.M hm hM (r.val / 2)).sum_weight)
+        (fun _ ↦ (historyMeanTree S.K S.m S.M hm hM (r.val / 2)).sum_weight)
       sum_q := fun r ↦ S.actualScanRound_cases hm hM dims E a pre
         (fun R ↦ ∀ h, ∑ c, R.q h c = 1) r.val
-        (fun _ h ↦ Matrix.MeanTree.sum_weight _)
-        (fun _ h ↦ Matrix.MeanTree.sum_weight _)
+        (fun _ h ↦ (chargeChoiceTree S.K S.M hM).sum_weight)
+        (fun _ h ↦ fillChoiceTree.sum_weight)
       splitWeight_le := fun r ↦ S.actualScanRound_cases hm hM dims E a pre
         (fun R ↦ ∀ p ∈ Ioo (0 : ℝ) 1, ∀ i, R.splitWeight p i ≤ C * X.D N / X.m N) r.val
         (fun _ p hp i ↦ (S.actualChargeScanRound_splitWeight_le hT hm hM dims E a pre hgraph
@@ -275,7 +281,7 @@ theorem historyFacts_actualScanRound (X : ScannerExponents) (N : ℕ)
         (fun _ p hp i ↦ (S.actualFillScanRound_splitWeight_le hT hm hM dims E a pre hgraph
           hdepth hsupport hC₁pos hn0 (hstage r) hr1 hDpos hD hL hrows hclear
           ⟨hp.1.le, hp.2.le⟩ i).trans hsplitC)
-      card_splitOld_le := fun r ↦ S.actualScanRound_cases hm hM dims E a pre
+      card_splitOld_le := open Classical in fun r ↦ S.actualScanRound_cases hm hM dims E a pre
         (fun R ↦ ∀ h, ((Finset.univ.filter fun i ↦ R.splitOld i h).card : ℝ) ≤
           C * X.K N * N * X.D N) r.val
         (fun _ h ↦ (S.actualChargeScanRound_card_splitOld_le hT hm hM dims E a pre hgraph
@@ -284,7 +290,7 @@ theorem historyFacts_actualScanRound (X : ScannerExponents) (N : ℕ)
         (fun _ h ↦ (S.actualFillScanRound_card_splitOld_le hT hm hM dims E a pre hgraph
           hdepth hsupport (by omega) hm2 (hstage r) hr1 hDpos hmargin hL hrows hclear hmult
           h).trans hcardC)
-      card_splitNew_le := fun r ↦ S.actualScanRound_cases hm hM dims E a pre
+      card_splitNew_le := open Classical in fun r ↦ S.actualScanRound_cases hm hM dims E a pre
         (fun R ↦ ∀ h c, ((Finset.univ.filter fun i ↦ R.splitNew i h c).card : ℝ) ≤
           C * X.K N * N * X.D N) r.val
         (fun _ h c ↦ (S.actualChargeScanRound_card_splitNew_le hT hm hM dims E a pre hgraph
@@ -296,12 +302,21 @@ theorem historyFacts_actualScanRound (X : ScannerExponents) (N : ℕ)
       badWeight_le := fun r ↦ S.actualScanRound_cases hm hM dims E a pre
         (fun R ↦ R.badWeight ≤ (N : ℝ) ^ (-200 : ℝ)) r.val
         (fun _ ↦ by
-          simpa only [ScanRound.badWeight, transportScanRound, actualChargeScanRound,
-            actualChargeData, historyMeanTree_weight] using hbad _ (by linarith [hstage r]))
+          refine le_of_eq_of_le ?_ (hbad (r.val / 2) (by have := hstage r; omega))
+          simp only [ScanRound.badWeight, transportScanRound, actualChargeScanRound,
+            actualChargeData, chargeTransportData, historyMeanTree_weight, badOldWeight]
+          refine Finset.sum_congr
+            (Finset.ext fun _ ↦ iff_of_true (Finset.mem_univ _) (Finset.mem_univ _)) fun h _ ↦ ?_
+          by_cases hg : S.IsGoodOldHistory h <;> simp [hg])
         (fun _ ↦ by
-          simpa only [ScanRound.badWeight, transportScanRound, actualFillScanRound,
-            actualFillData, historyMeanTree_weight] using hbad _ (by linarith [hstage r]))
-      sampling := fun r hr' ↦ by
+          refine le_of_eq_of_le ?_ (hbad (r.val / 2) (by have := hstage r; omega))
+          simp only [ScanRound.badWeight, transportScanRound, actualFillScanRound,
+            actualFillData, fillTransportData, historyMeanTree_weight, badOldWeight]
+          refine Finset.sum_congr
+            (Finset.ext fun _ ↦ iff_of_true (Finset.mem_univ _) (Finset.mem_univ _)) fun h _ ↦ ?_
+          by_cases hg : S.IsGoodOldHistory h <;> simp [hg])
+      sampling := open Classical in fun r hr' ↦ by
+        classical
         rw [show S.actualScanRound hm hM dims E a pre r.val =
           S.actualChargeScanRound hm hM (r.val / 2) dims E a pre from
           S.actualScanRound_of_charge hm hM dims E a pre hr']
@@ -379,7 +394,8 @@ theorem two_mul_transportLogDimBound_le {q : ℕ} (hq : 1 ≤ q) {Ctr : ℝ} (hC
       2 * (1 + (2 * Ctr + 3) ^ 2 * Real.log q) * Real.log N ^ (4 : ℝ) := by
   have hlog : 1 ≤ Real.log N := by
     rw [Real.le_log_iff_exp_le (by positivity)]
-    exact (Real.exp_one_lt_d9.le.trans (by norm_num)).trans (by exact_mod_cast hN)
+    exact (Real.exp_one_lt_d9.le.trans (by norm_num : (2.7182818286 : ℝ) ≤ 3)).trans
+      (by exact_mod_cast hN)
   have hlq : 0 ≤ Real.log q := Real.log_nonneg (by exact_mod_cast hq)
   have hr : (⌈Ctr * Real.log N ^ 2⌉₊ : ℝ) ≤ Ctr * Real.log N ^ 2 + 1 :=
     (Nat.ceil_lt_add_one (by positivity)).le
@@ -397,7 +413,6 @@ theorem two_mul_transportLogDimBound_le {q : ℕ} (hq : 1 ≤ q) {Ctr : ℝ} (hC
   unfold transportLogDimBound
   nlinarith [mul_le_mul_of_nonneg_right hrad hlq]
 
-open Classical in
 /-- **Lemma 9.1 for the actual scan at the source scales.** The constants `C`, `C_l = 4`,
 `c` and the charge-list constant `C₁` are chosen before the scale, from the interaction
 range `R`, the local dimension `q`, the truncation-radius coefficient and the target-size
@@ -450,13 +465,14 @@ theorem exists_historyFacts_actualScanRound (X : ScannerExponents) (R : ℕ) {q 
     card_anchor_fiber_le S.anchor hanchor x
   have hr2 : 2 * S.r₀ ≤ S.D := by
     have hceil : (N : ℝ) ^ X.kappa ≤ (X.D N : ℝ) := Nat.le_ceil _
-    have : (2 * S.r₀ : ℝ) ≤ X.D N := by rw [hSr]; push_cast; linarith
+    have : (2 * S.r₀ : ℝ) ≤ X.D N := by rw [hSr]; linarith
     rw [hSD]; exact_mod_cast this
-  have hbad : ∀ s ≤ S.n * S.m, (∑ h : History S.K S.m S.M s,
-      if S.IsGoodOldHistory h then 0 else historyWeight h) ≤ (N : ℝ) ^ (-200 : ℝ) := by
+  have hbad : ∀ s ≤ S.n * S.m, S.badOldWeight s ≤ (N : ℝ) ^ (-200 : ℝ) := by
     intro s hs
+    unfold badOldWeight
     have hM' : S.M = ⌈C₁ * N * S.D⌉₊ := by simp only [CollarScan.M, chargeSlotCount, hSC, hSn]
-    refine (S.sum_historyWeight_bad_old_le_bad_through hM (by rwa [hSn] at hs)).trans ?_
+    refine (S.sum_historyWeight_bad_old_le_bad_through (N := N * S.m) hM
+      (by rw [hSn] at hs; exact hs)).trans ?_
     exact htail _ Λ T hT S hSn hSm (by rw [hSK, hSm]; rfl) hSD hSr hM' hTcard hgraph hdepth
         (by simpa only [ScannerExponents.L] using hclear)
         (by simpa only [ScannerExponents.L] using hrows) hmult
@@ -464,8 +480,8 @@ theorem exists_historyFacts_actualScanRound (X : ScannerExponents) (R : ℕ) {q 
     hSn hSm hSK hSD hgraph hdepth (by omega) hr2 (by rw [hSD]; exact hDpos)
     (by rw [hSD, hSm, hSr]; exact hmargin) hrows hclear hmult
     (by rw [hSC]; dsimp only [C₁]; linarith) (by rw [hSC]; exact hC₁) hbad
-    ((le_max_left _ _).trans' (le_max_left _ _)) ((le_max_right _ _).trans' (le_max_left _ _))
-    ?_ (by positivity) (by rw [hSC])
+    ((le_max_left 10 _).trans (le_max_left _ _)) ((le_max_right 10 _).trans (le_max_left _ _))
+    ?_ (by rw [hSC])
   rw [hSr]
   refine (two_mul_transportLogDimBound_le hq hCtr.le hN3).trans ?_
   exact mul_le_mul_of_nonneg_right (le_max_right _ _)

@@ -321,7 +321,8 @@ lemma termEnergy_nonneg (r : Fin (X.rounds n)) (k : ℕ) {p : ℝ} (hp : p ∈ I
         (S.integral_etaOld_rpow_nonneg r k p i h)
     · exact le_rfl
   · split_ifs
-    · exact mul_nonneg (mul_nonneg (mul_nonneg hp.1.le (S.histories.w_nonneg r h)) (S.histories.q_nonneg r h c))
+    · exact mul_nonneg (mul_nonneg (mul_nonneg hp.1.le (S.histories.w_nonneg r h))
+        (S.histories.q_nonneg r h c))
         (S.integral_etaNew_rpow_nonneg r k p i h c)
     · exact le_rfl
 
@@ -338,7 +339,8 @@ lemma goodOld_le (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) (hp : p ∈ Ioo (0 :
   have := S.isFiniteMeasure_μOld r k p
   calc _ ≤ N ^ (7 / 8 : ℝ) * (S.round r).chargeDefect k p ^ (1 / 8 : ℝ) :=
         (S.round r).goodOld_le_capacity k p (S.histories.w_nonneg r) (S.histories.sum_w r)
-          (S.μOld_real_univ r k p hp) (S.histories.measurable_etaOld r) (S.histories.etaOld_nonneg r)
+          (S.μOld_real_univ r k p hp) (S.histories.measurable_etaOld r)
+              (S.histories.etaOld_nonneg r)
           (S.histories.etaOld_le r) hN.le hcard
     _ = _ := rpow_seven_eighths_mul_rpow_eq hN (S.chargeDefect_nonneg r k p)
 
@@ -372,7 +374,8 @@ theorem energySum_le {C₁ : ℝ} (hn : ScaleFacts X n C₁) (r : Fin (X.rounds 
     (S.histories.sum_w r) (S.histories.q_nonneg r) (S.histories.sum_q r) (S.μOld_real_univ r k p hp)
     (S.μNew_real_univ r k p hp) (S.histories.measurable_etaOld r) (S.histories.etaOld_nonneg r)
     (S.histories.etaNew_nonneg r) hE0 hN.le hW0 (S.histories.etaOld_le r) (S.histories.etaNew_le r)
-    (S.histories.card_splitOld_le r) (S.histories.card_splitNew_le r) (S.histories.splitWeight_le r p hp)
+    (S.histories.card_splitOld_le r) (S.histories.card_splitNew_le r)
+        (S.histories.splitWeight_le r p hp)
   refine hleaf.trans ?_
   rw [mul_assoc (κ.C * X.D n / X.m n) N]
   refine mul_le_mul_of_nonneg_left ?_ hW0

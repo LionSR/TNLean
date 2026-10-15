@@ -149,7 +149,8 @@ theorem chargeDefect_le_choiceGainSum (r : Fin (X.rounds n)) (hr : IsChargeRound
   rw [Finset.mul_sum]
   refine Finset.sum_le_sum fun h _ ↦ ?_
   have hgain_int : Integrable ((S.round r).choiceGain h) ((S.round r).μOld k p h) :=
-    integrable_of_bounded (S.histories.measurable_choiceGain r h) (S.histories.choiceGain_nonneg r h)
+    integrable_of_bounded (S.histories.measurable_choiceGain r h)
+      (S.histories.choiceGain_nonneg r h)
       (S.histories.choiceGain_le r h)
   split_ifs with hg
   · rw [mul_left_comm]
@@ -158,7 +159,8 @@ theorem chargeDefect_le_choiceGainSum (r : Fin (X.rounds n)) (hr : IsChargeRound
         (S.round r).etaOld i h θ else 0) ((S.round r).μOld k p h) := by
       intro i
       split_ifs
-      · exact integrable_of_bounded (S.histories.measurable_etaOld r i h) (S.histories.etaOld_nonneg r i h)
+      · exact integrable_of_bounded (S.histories.measurable_etaOld r i h)
+          (S.histories.etaOld_nonneg r i h)
           (S.histories.etaOld_le r i h)
       · exact integrable_zero _ _ _
     calc κ.c / (n * X.D n) * ∑ i, (if (S.round r).splitOld i h then
@@ -173,7 +175,8 @@ theorem chargeDefect_le_choiceGainSum (r : Fin (X.rounds n)) (hr : IsChargeRound
           integral_mono ((integrable_finsetSum _ fun i _ ↦ hint i).const_mul _) hgain_int
             fun θ ↦ S.histories.sampling r hr h hg θ
   · rw [mul_zero]
-    exact mul_nonneg (S.histories.w_nonneg r h) (integral_nonneg (S.histories.choiceGain_nonneg r h))
+    exact mul_nonneg (S.histories.w_nonneg r h) (integral_nonneg
+        (S.histories.choiceGain_nonneg r h))
 
 /-- The charge defect is nonnegative (lines 437–438). -/
 theorem chargeDefect_nonneg (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) :
@@ -272,7 +275,8 @@ theorem integratedChargeBound {C₁ : ℝ} (hn : ScaleFacts X n C₁) (k : ℕ) 
       have h1 := S.entropy_gain r k p hp
       have h2 : 0 ≤ k * X.a S.W n * (S.round r).choiceGainSum k p := by
         refine mul_nonneg (by positivity) (Finset.sum_nonneg fun h _ ↦ ?_)
-        exact mul_nonneg (S.histories.w_nonneg r h) (integral_nonneg (S.histories.choiceGain_nonneg r h))
+        exact mul_nonneg (S.histories.w_nonneg r h) (integral_nonneg
+            (S.histories.choiceGain_nonneg r h))
       simp only [err]
       linarith)
     (fun r hr ↦ S.logNormSq_succ r hr k)

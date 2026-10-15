@@ -51,7 +51,7 @@ incidence dilution, bad-history tail bounds, and band nesting (Lemma~9.1);
 (3)~applying the replica transport inequalities along each fill and charge
 round (Proposition~7.4);
 (4)~bounding the marginal log-moment generating functions, typical-window
-masses, and initial/terminal comparator norms (Lemma~3.1, Lemma~2.3, and
+masses, and initial/terminal comparator norms (Lemma~3.1 and
 Proposition~8.1); and
 (5)~telescoping the logarithmic norm over all $2nm$ rounds to select a charge
 round and parameter $p_k$ with $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$ and
@@ -80,6 +80,17 @@ Fourier--coherent leaf measures, parameter integrability, $2nm$-round entropy
 telescope, and H\"older charge-energy bound for a given symmetric replica
 prevector (Step~3); and the truncated ground state $(e,\widetilde\Omega)$,
 status marginal moment bounds, and target typical window (Step~4).
+For the actual rounds of a physical collar scan, the conclusions of Lemma~9.1
+in the form in which the deduction uses them (history and choice
+probabilities, the $CD/m$ dilution and $CKnD$ count of split terms, the
+$n^{-200}$ bad-history tail, sampling on good histories, and the move-entropy
+bounds of lines~431--444) are derived from the scan geometry at the source
+scales for all sufficiently large $n$, with constants chosen before the
+domain, Hamiltonian, scan and replica vectors.\footnote{Lemma~9.1 for the
+    actual rounds:
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_historyFacts_actualScanRound}.}
+These conclusions form a separate sub-record of the hypothesis record, which
+this result supplies whenever the rounds of the record are the actual rounds.
 
 \paragraph{What remains.}
 To eliminate the hypothesis record and obtain Proposition~9.2 unconditionally,

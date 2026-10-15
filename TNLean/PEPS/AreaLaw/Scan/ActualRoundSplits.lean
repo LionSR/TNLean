@@ -64,6 +64,7 @@ variable {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty) (S : CollarScan (Site Λ
   (n : Site Λ ⊕ Bool → ℕ) [∀ v, NeZero (n v)] (E : EnergyTerms (Site Λ ⊕ Bool) n I)
   (a : ℝ) (pre : (k : ℕ) → Config k (fun v => Fin (n v)) → ℂ)
 
+open Classical in
 /-- At an old leaf of an actual charge round, a split term has a designated split
 incidence with the old pre-charge partition of some band (`08-scanner.tex`, lines 431–437). -/
 theorem actualChargeScanRound_splitOld_incidence
@@ -90,6 +91,7 @@ theorem actualChargeScanRound_splitOld_incidence
   · exact (hg (augmentedPartition_contains_of_constant _ _ hc)).elim
   · exact ⟨g, side, ht.2.1, ht.1⟩
 
+open Classical in
 /-- At a new leaf of an actual charge round, a split term has a designated split
 incidence with the completed partition after the charge (`06-transport.tex`,
 lines 336–352). -/
@@ -118,6 +120,7 @@ theorem actualChargeScanRound_splitNew_incidence
   · exact (hg (augmentedPartition_contains_of_constant _ _ hc)).elim
   · exact ⟨g, side, ht.2.1, ht.1⟩
 
+open Classical in
 /-- At an old leaf of an actual fill round, a split term has a designated split
 incidence with the completed partition of some band. -/
 theorem actualFillScanRound_splitOld_incidence
@@ -144,6 +147,7 @@ theorem actualFillScanRound_splitOld_incidence
   · exact (hg (augmentedPartition_contains_of_constant _ _ hc)).elim
   · exact ⟨g, side, ht.2.1, ht.1⟩
 
+open Classical in
 /-- At a new leaf of an actual fill round, a split term has a designated split
 incidence with the next pre-charge partition of some band. -/
 theorem actualFillScanRound_splitNew_incidence
@@ -171,6 +175,7 @@ theorem actualFillScanRound_splitNew_incidence
   · exact (hg (augmentedPartition_contains_of_constant _ _ hc)).elim
   · exact ⟨g, side, ht.2.1, ht.1⟩
 
+open Classical in
 /-- At most `10 K n D μ` terms split at an old leaf of an actual charge round, where `μ`
 bounds the number of labels sharing an anchor (Lemma 9.1(2), `08-scanner.tex`, line 207). -/
 theorem actualChargeScanRound_card_splitOld_le
@@ -196,6 +201,7 @@ theorem actualChargeScanRound_card_splitOld_le
     (S.sum_card_old_designatedSplitIncidence_le_domainGraph hT hgraph hdepth
       hist hn hm2 hs hr hDpos hmargin hL hrows hmult hclear)
 
+open Classical in
 /-- At most `10 K n D μ` terms split at a new leaf of an actual charge round
 (Lemma 9.1(2), `08-scanner.tex`, line 207). -/
 theorem actualChargeScanRound_card_splitNew_le
@@ -221,6 +227,7 @@ theorem actualChargeScanRound_card_splitNew_le
     (S.sum_card_state_designatedSplitIncidence_le_domainGraph hT hgraph hdepth
       (extendHistory hist c) hn hm2 hs hr hDpos hmargin hL hrows hmult hclear)
 
+open Classical in
 /-- At most `10 K n D μ` terms split at an old leaf of an actual fill round
 (Lemma 9.1(2), `08-scanner.tex`, line 207). -/
 theorem actualFillScanRound_card_splitOld_le
@@ -246,6 +253,7 @@ theorem actualFillScanRound_card_splitOld_le
     (S.sum_card_state_designatedSplitIncidence_le_domainGraph hT hgraph hdepth
       hist hn hm2 (by omega) hr hDpos hmargin hL hrows hmult hclear)
 
+open Classical in
 /-- At most `10 K n D μ` terms split at a new leaf of an actual fill round
 (Lemma 9.1(2), `08-scanner.tex`, line 207). -/
 theorem actualFillScanRound_card_splitNew_le
@@ -363,7 +371,6 @@ theorem actualFillScanRound_splitWeight_le
     ∃ g side, S.designatedSplitIncidence (S.oldChargeState hist g) L i side
   have hw (hist : Rd.H) : Rd.w hist = historyWeight hist :=
     historyMeanTree_weight S.K S.m S.M hm hM s hist
-  have hc (hist : Rd.H) (c : Rd.Ch hist) : Rd.q hist c = 1 := fillChoiceTree_weight
   have hold : (∑ hist, if Rd.splitOld i hist then (1 - p) * Rd.w hist else 0) ≤
       (1 - p) * ∑ hist, if oldEvent hist then historyWeight hist else 0 := by
     rw [Finset.mul_sum]
@@ -383,7 +390,10 @@ theorem actualFillScanRound_splitWeight_le
       p * ∑ hist, if newEvent hist then historyWeight hist else 0 := by
     rw [Finset.mul_sum]
     refine Finset.sum_le_sum fun hist _ ↦ ?_
-    rw [Fintype.sum_unique, hw, hc]
+    change (∑ c : Unit, if Rd.splitNew i hist c then p * Rd.w hist * Rd.q hist c else 0) ≤ _
+    rw [Fintype.sum_unique]
+    change (if Rd.splitNew i hist () then p * Rd.w hist * 1 else 0) ≤ _
+    rw [hw]
     by_cases hi : Rd.splitNew i hist ()
     · simp only [hi, S.actualFillScanRound_splitNew_incidence hT hm hM n E a pre hgraph
         hdepth hsupport hn hs hr hDpos hD hL hrows hclear hi, newEvent, ↓reduceIte,

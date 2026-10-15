@@ -25,7 +25,7 @@ The charge defect needs only AE strong measurability in the interior: its existi
 then gives interval integrability, which suffices for the telescope and exact averaging.
 
 **Scope restriction (inputs as hypotheses):** `ScanData` takes the conclusions of Lemma 9.1,
-Propositions 7.4 and 8.1, and Lemmas 2.1 and 2.3 for one scan as fields instead of deriving them
+Propositions 7.4 and 8.1, and Lemmas 2.1 and 3.1 for one scan as fields instead of deriving them
 from the scan geometry and the transported states. Results over `ScanData` retain this
 restriction; a physical construction must supply the fields for the same original and
 truncated ground vectors. Documented in
@@ -357,7 +357,7 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   dstar_pos : 0 < dstar
   z_pos : 0 < z
   z_le_one : z ≤ 1
-  /-- Width `n^{3/5}` has failure mass at most `n^{-100}` (Lemma 2.3, lines 411–414). -/
+  /-- Width `n^{3/5}` has failure mass at most `n^{-100}` (Lemma 3.1, lines 411–414). -/
   one_sub_le_z : 1 - (n : ℝ) ^ (-100 : ℝ) ≤ z
   /-- `comparator:typical-entropies`. -/
   log_dstar_le : |Real.log dstar - SXt| ≤ width + |Real.log z|
@@ -378,7 +378,7 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   /-- Status cuts have `O(nD)` edges, each crossing anchor lies within `r₀` of one
   (lines 405–408). -/
   crossCount_le : (crossCount : ℝ) ≤ κ.C * n * X.D n * (r0 + 1) ^ 2
-  /-- The marginal-tail parameter `𝓑` of Lemma 2.3 (`lem:tail`). -/
+  /-- The marginal-tail parameter `𝓑` of Lemma 3.1 (`lem:tail`). -/
   Bmarg : ℝ
   /-- `𝓑 = 1 + ∑ log²(e dᵢ)` with `dᵢ ≤ q^{C(1+r₀)²}` (lines 406–409). -/
   Bmarg_le : Bmarg ≤ 1 + crossCount * (1 + κ.C * (r0 + 1) ^ 2 * Real.log κ.q) ^ 2
