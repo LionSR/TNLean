@@ -140,13 +140,15 @@ occurrence and preserves the operator of that list exactly.
     \label{thm:peps_uniform_original_message_compression}
     \lean{TNLean.PEPS.PairEffect.GateMapConstruction.exists_uniform_message_sampled_network}
     \leanok
-    \uses{thm:peps_uniform_approximate_operator_network,def:peps_original_gate_construction,thm:peps_message_expand_gate_approximation,thm:peps_message_expand_monomial_count,thm:peps_message_expand_termwise_bound,thm:homogeneous_ceiling_bound}
+    \uses{def:peps_original_gate_construction,def:peps_message_gate_lists,def:peps_message_gate_approximation,def:peps_message_gate_resources}
     Fix a family of original distributed constructions on finite nonempty
     party sets, indexed by an arbitrary set, each index carrying a size
     $L\ge2$; several indices may share one size.
     The original gate operators, private maps, participant embeddings, register
     layouts, and normalized product inputs are fixed before any precision is
-    chosen. Every original gate and private operation is a contraction. Initial and discarded private spaces are finite-dimensional,
+    chosen. Every original gate and private operation is a contraction, and
+    every nonprivate gate occurrence has a participant set of size other than
+    one; a map acting on one party is a private operation. Initial and discarded private spaces are finite-dimensional,
     without a numerical dimension bound. Suppose that the original gate count
     and intended physical dimensions satisfy
     \begin{align}
@@ -187,6 +189,7 @@ occurrence and preserves the operator of that list exactly.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:peps_uniform_approximate_operator_network,thm:peps_message_expand_gate_approximation,thm:peps_message_expand_monomial_count,thm:peps_message_expand_termwise_bound,thm:peps_message_gate_bounds_mono,thm:homogeneous_ceiling_bound}
     Fix $p$ and choose $q=n+\lceil p\rceil+\lceil16(1+C_N)\rceil$ before
     choosing a size. All expansion constants at this precision are then fixed.
     Expand each bounded message in a finite orthonormal basis of its actual
@@ -220,7 +223,7 @@ occurrence and preserves the operator of that list exactly.
     \label{thm:peps_uniform_exact_original_message_compression}
     \lean{TNLean.PEPS.PairEffect.GateMapConstruction.exists_uniform_exact_message_sampled_network}
     \leanok
-    \uses{thm:peps_uniform_original_message_compression}
+    \uses{def:peps_original_gate_construction,def:peps_message_gate_lists,def:peps_message_gate_approximation,def:peps_message_gate_resources}
     Fix a family of original distributed constructions on finite nonempty
     party sets, indexed by an arbitrary set with a size $L\ge2$ at each index,
     with normalized product inputs and finite-dimensional original and
@@ -239,7 +242,8 @@ occurrence and preserves the operator of that list exactly.
     monomials, each individual coefficient has norm at most $C_CL^v$, and each
     monomial contains at most $r$ pair effects and $m$ messages. Every actual
     transferred register has dimension at most $C_ML^z$. The original gates
-    and private maps are contractions.
+    and private maps are contractions, and every nonprivate gate occurrence
+    has a participant set of size other than one.
 
     For every $p>0$, there exist $r_p$, $C_p\ge0$, and an integer
     $\alpha_p>0$, all chosen before the family member, such that every
@@ -264,6 +268,7 @@ occurrence and preserves the operator of that list exactly.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:peps_uniform_original_message_compression,thm:peps_message_gate_bounds_mono}
     For every fixed integer precision $q$, each exact expansion has local
     error zero, hence error at most $L^{-q}$. The same lists, bounded effect
     and message counts, and polynomial resource constants therefore satisfy

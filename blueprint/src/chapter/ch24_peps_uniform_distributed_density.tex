@@ -252,11 +252,14 @@ at the gate occurrences may be replaced independently.
     \end{align}
     At every fixed integer precision $q$, suppose that there exist
     $r_q$, $C_K(q),C_C(q)\ge0$, and degrees $u(q),v(q)$, chosen before $L$,
-    such that every size admits allowed monomial lists at the same original
+    such that every index admits allowed monomial lists at the same original
     occurrences. The list at each gate has at most $C_K(q)L^{u(q)}$ monomials;
     each individual coefficient has norm at most $C_C(q)L^{v(q)}$;
     each monomial has at most $r_q$ pair effects; and each list approximates its
-    original contraction to operator error at most $L^{-q}$.
+    original contraction to operator error at most $L^{-q}$. The original
+    private maps and gate operators are contractions, and every nonprivate
+    gate occurrence has a participant set of size other than one; a map
+    acting on one party is a private map.
 
     For every $p>0$ there exist $r_p$, $C_p\ge0$, and an integer
     $\alpha_p>0$, all chosen before the family member, such that every
