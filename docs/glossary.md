@@ -3448,6 +3448,26 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   approximate-expansion case and composition with the quantum/sampling results
   remain open in [#8769](https://github.com/LionSR/TNLean/issues/8769).
 
+### Individual coefficients and pair-effect counts
+
+- **Declaration:** `TNLean.PEPS.PairEffect.EffectCircuit.IsTermwiseBounded r C`.
+- **Defined in:** `TNLean/PEPS/Approximation/EffectCircuitTermwiseCoefficientBounds.lean`.
+- **Meaning:** Every monomial in each prescribed nonprivate gate expansion has
+  at most $r$ pair effects and scalar coefficient of norm at most $C$.
+  Composition combines these conditions on the two chronological subcircuits;
+  adjoining a spectator register preserves them.
+- **Source:** Polynomial-PEPS Theorem 5.2, assumption 3 and the approximate
+  expansion clause, `04-compression.tex:143–149,199–208,590–600`, revision
+  `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+- **Sanctioned bridge:** `isExpansionBounded_of_isTermwiseBounded` derives the
+  bound $\sum_t |c_t|\le K C$ when each gate has at most $K$ monomials and
+  $C\ge0$. `exists_one_le_isExpansionBounded_of_termwise_power_bounds` derives
+  a polynomial coefficient-sum bound from polynomial bounds on counts and
+  individual coefficients.
+- **Caveat:** Local allowedness, contraction of the original operators, and
+  approximation error are separate conditions. This predicate contains no
+  coefficient-sum assumption or global density comparison.
+
 ## Nested regional cylinders
 
 ### `TNLean.PEPS.dependentRegionCylinder`

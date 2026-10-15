@@ -3422,6 +3422,27 @@ three-plaquette output measurement, and the routed reunion measurement.
   `OrthogonalBlockError.lean` were later deleted, when the orthogonal-block bound
   became a corollary of the repeated-overlapping bound.
 
+### Final comparison after restricted simplification — promoted (2026-10-14)
+
+- **Pattern:** simplify a supplied equality with a fixed list of lemmas, then
+  compare its result with the goal when ordinary definition unfolding is
+  needed to identify coordinate aliases or an equivalence's forward function.
+- **Seen:** four final comparisons in
+  `PEPS/Approximation/IncidentSampledPhysicalFactor.lean`,
+  `PEPS/Approximation/IncidentPureSampledPhysicalSum.lean`,
+  `PEPS/Approximation/SourceNetworkDimensions.lean`, and
+  `PEPS/Approximation/OriginalGateSamplePhysicalSum.lean`.
+- **Abstraction:** reuse Lean's existing `simpa only [...] using! h`. Its
+  simplification is identical to `simpa only [...] using h`; only the final
+  comparison uses default transparency. The pinned implementation is
+  `Lean/Elab/Tactic/Simpa.lean`, lines 50–54 and 168–177.
+- **Refactor:** all four occurrences use the existing command directly. No
+  helper lemma, simp set, macro, option increase, or compatibility alias is
+  introduced.
+- **Notes:** the supplied equality and the goal must already describe the
+  same mathematical objects after the stated rewrites. This command does not
+  repair incompatible index data or prove an additional hypothesis.
+
 ## Completed refactors
 
 ### Literal one- and two-bond assignment specialization — resolved (2026-10-02)
