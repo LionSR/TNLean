@@ -160,32 +160,39 @@ theorem eventually_actualCharge_suppliedPrevector_sharp_comparison
   obtain ⟨_, _, hδ, hLower⟩ := (hlower k hk s p).2
   refine ⟨hN, hδ, ?_⟩
   intro τ hτ hτhalf
-  have hpreSum : (∑ g, ∑ j, tree.weight j * gpre j g) = (S.K : ℝ) * Gpre := by
-    dsimp only [Gpre]
-    field_simp [hKr.ne']
-    <;> ring
-  have hpostSum : (∑ g, ∑ j, tree.weight j * gpost j g) = (S.K : ℝ) * Gpost := by
-    dsimp only [Gpost]
-    field_simp [hKr.ne']
-    <;> ring
+  have hpreSum : (∑ g, ∑ j, tree.weight j * gpre j g) = (S.K : ℝ) * Gpre :=
+    (mul_div_cancel₀ _ hKr.ne').symm
+  have hpostSum : (∑ g, ∑ j, tree.weight j * gpost j g) = (S.K : ℝ) * Gpost :=
+    (mul_div_cancel₀ _ hKr.ne').symm
   let rate := -Real.log (Transport.filteredNormSq (D.rootPath dims (a / 2) k p) (pre k)) /
     (k : ℝ)
   let rU := Real.bellOverlapRemainder d cU S.K k
   let rL := sharpLowerRemainder a cL Cf ell Sent k
   have hupperRate : rate ≤ 2 * Real.log (d : ℝ) - Real.log z + W / 2 * Gpost +
       6 * W * Kmom * a - W / (2 * a) * Real.log z + rU := by
+    have hcoeff : W / (2 * a) = (S.K : ℝ) / 2 := by
+      dsimp only [W]
+      field_simp [ha.ne']
+    change rate ≤ 2 * Real.log (d : ℝ) - Real.log z +
+      (a / 2) * (∑ g, ∑ j, tree.weight j * gpost j g) +
+        6 * (S.K : ℝ) * Kmom * a ^ 2 - (S.K : ℝ) / 2 * Real.log z + rU at hU
+    rw [hpostSum] at hU
+    rw [hcoeff]
     convert hU using 1
-    rw [hpostSum]
     dsimp only [W]
-    field_simp [ha.ne']
-    <;> ring
+    ring
   have hlowerRate : W / 2 *
       (2 * Sent + (1 - τ) * Gpre - 2 * τ * Real.log (d : ℝ) -
         (3 + 1 / a) * Real.binEntropy τ - 25 * Kmom * a -
           δ / τ * max 0 (2 * Sent + gmax)) - W / 2 * rL ≤ rate := by
-    convert hLower τ hτ hτhalf using 1
+    have hLowerτ := hLower τ hτ hτhalf
+    change (a / 2) * (∑ g,
+      (2 * Sent + (1 - τ) * (∑ j, tree.weight j * gpre j g) -
+        τ * (2 * Real.log (d : ℝ)) - (3 + 1 / a) * Real.binEntropy τ -
+          25 * Kmom * a - δ / τ * max 0 (2 * Sent + gmax) - rL)) ≤ rate at hLowerτ
+    convert hLowerτ using 1
     simp only [Finset.sum_sub_distrib, Finset.sum_add_distrib, Finset.sum_const,
-      Fintype.card_fin, nsmul_eq_mul, ← Finset.mul_sum]
+      Finset.card_univ, Fintype.card_fin, nsmul_eq_mul, ← Finset.mul_sum]
     rw [hpreSum]
     dsimp only [W]
     ring
@@ -194,7 +201,6 @@ theorem eventually_actualCharge_suppliedPrevector_sharp_comparison
     rate rU (W / 2 * rL) hlowerRate hupperRate
   have hremainders : 2 * (rU + W / 2 * rL) / W = 2 * rU / W + rL := by
     field_simp [hW.ne']
-    <;> ring
   simpa only [hremainders, rU, rL, add_assoc] using hcompare
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

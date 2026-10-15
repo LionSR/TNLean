@@ -173,18 +173,11 @@ theorem exists_sourceBootstrap_entropy_improvement
     hNs.trans (le_max_left _ _), ?_⟩
   intro η hη hηe₀ Λ T _ hT h S E₀ Ω hgs hgraph hanchor hn hr hmScale hDScale hKScale
     hCeq hsize hdepth hrows hmult hclear htargetEntropy hprefix
-  have hnS : Ns ≤ S.n := by omega
-  have hnD : Nd ≤ S.n := by omega
-  have hnE : Ne ≤ S.n := by omega
-  have hnT : Nt ≤ S.n := by omega
-  have hnA : Na ≤ S.n := by omega
-  have hnSmall : Nsmall ≤ S.n := by omega
-  have hnLoss : Nloss ≤ S.n := by omega
-  have hnB : Nb ≤ S.n := by omega
-  have hnI : Ni ≤ S.n := by omega
-  have hnLog : Nl ≤ S.n := by omega
+  have hthresholds := hn
+  simp only [max_le_iff] at hthresholds
+  obtain ⟨hnS, hnD, hnE, hnT, hnA, hnSmall, hnLoss, hnB, hnI, hnLog⟩ := hthresholds
   have hn2 : 2 ≤ S.n := hNs.trans hnS
-  have hn1 : (1 : ℝ) ≤ S.n := by exact_mod_cast (show 1 ≤ S.n by omega)
+  have hn1 : (1 : ℝ) ≤ S.n := by exact_mod_cast ((by decide : 1 ≤ 2).trans hn2)
   have hnpos : (0 : ℝ) < S.n := zero_lt_one.trans_le hn1
   have hadm := hadmissible S.n hnA
   simp only [← hmScale, ← hDScale, ← hKScale, ← hr] at hadm
@@ -193,6 +186,12 @@ theorem exists_sourceBootstrap_entropy_improvement
     hr hmScale hDScale hKScale hCeq hsize hdepth hrows hmult hclear
     Ce η hprefix hrD hDpos hDm
   let L := F.L S.n
+  have hDExplicit : S.D = Nat.ceil ((S.n : ℝ) ^ BootstrapParameters.kappa e₀) :=
+    hDScale
+  have hKExplicit : S.K =
+      Nat.floor ((S.n : ℝ) ^ (1 - BootstrapParameters.ell e₀)) /
+        (8 * Nat.floor ((S.n : ℝ) ^ BootstrapParameters.mu e₀)) := hKScale
+  have hLExplicit : L = Nat.floor ((S.n : ℝ) ^ (1 - BootstrapParameters.ell e₀)) := rfl
   let X := S.A.filter fun x ↦ x.val ∈ T
   let β := fun _ : Site Λ ↦ Fin q
   let w := (S.n : ℝ) ^ (3 / 5 : ℝ)
@@ -202,7 +201,7 @@ theorem exists_sourceBootstrap_entropy_improvement
     (regionalEntropy Λ q Ωt X) w
   let z := (reducedState_isHermitian Λ q Ωt X).spectralRestrictionMass E
   obtain ⟨hwindow, hd, hpdata⟩ := hwdata
-  letI : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
+  let : NeZero E.card := NeZero.of_pos hd
   let d := E.card
   let ΩX := LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ (FiniteProduct.splitEquiv β X) Ωt
   let ψ : FiniteProduct.Configuration β Xᶜ × Fin d → ℂ := fun x ↦
@@ -247,7 +246,7 @@ theorem exists_sourceBootstrap_entropy_improvement
     have hid : epsilon * (S.n : ℝ) ^ F.nu = 1 := by
       dsimp only [epsilon]
       rw [← Real.rpow_add hnpos, neg_add_cancel, Real.rpow_zero]
-    nlinarith [mul_le_mul_of_nonneg_left hpow hε.le]
+    linarith only [hid, mul_le_mul_of_nonneg_left hpow hε.le]
   have hκη : F.kappa ≤ η :=
     (show BootstrapParameters.kappa e₀ ≤ (Exponents.boxError : ℝ) / 4 from
       min_le_right _ _).trans
@@ -297,7 +296,10 @@ theorem exists_sourceBootstrap_entropy_improvement
       calc
         _ = (Cent * logdim ^ eent) * (a * S.K) * a ^ (1 / 4 : ℝ) := by ring
         _ = _ := by rw [hWa]
-    simpa only [hCeq, hrate, show 2 * epsilon - epsilon = epsilon by ring, mul_assoc] using hQ
+    simp only [a, logdim] at hrate
+    rw [hrate] at hQ
+    simpa only [density, hCeq, show 2 * epsilon - epsilon = epsilon by ring,
+      _root_.mul_assoc] using hQ
   let τ := (S.n : ℝ) ^ (-F.nu / 4)
   let Edef := (1 + (g / 2)⁻¹) * (S.n : ℝ) ^ (-F.nu / 2)
   obtain ⟨hτ, hτhalf, hsmallLoss⟩ := hloss S.n hnLoss
@@ -316,7 +318,8 @@ theorem exists_sourceBootstrap_entropy_improvement
     have hQ0 : 0 ≤ density k s p := div_nonneg
       (S.actualChargeEntropyDefect_nonneg hm hM s.val dims energy ha.le k pre p) (by positivity)
     have henergyN := henergy S.n hnE η hηe₀
-    simp only [← hDScale, ← hmScale, ← hKScale] at henergyN
+    dsimp only at henergyN
+    rw [← hDExplicit, ← hKExplicit] at henergyN
     have hcapBound : (eigen + cap k s p) / (g / 2) ≤ Edef :=
       henergyN (density k s p) p eigen hQ0 hQ hp (hp.2.trans hε2.le)
         (he.trans (min_le_left _ _))
@@ -326,7 +329,7 @@ theorem exists_sourceBootstrap_entropy_improvement
         rw [add_div]; exact _root_.add_le_add hcapBound le_rfl
       exact hδcap.trans hb
     · dsimp only [Brough] at hu
-      linarith only [hu]
+      simpa only [mul_add, mul_div_assoc, add_assoc] using hu
   have hrestored := restored_entropy_le_of_selected_rough_comparisons
     Ω Ωt hΩt X E w τ a Edef Bsh
       (1 + 3 * (S.n : ℝ) * S.D * Real.log q) ((S.n : ℝ) ^ (-247 : ℝ))
@@ -334,8 +337,13 @@ theorem exists_sourceBootstrap_entropy_improvement
     hτ hτhalf ha (by positivity) hsmallLoss
     (Real.bellOverlapRemainder d cU S.K) (roughLowerRemainder S.K cL Cf ell Sent)
     (fun k ↦ rem k / (g / 2)) hlimU hlimL hrE hcont hselectedP
+  change regionalEntropy Λ q Ω X ≤
+    7 * (w - Real.log z) - Real.log z + 4 * Bsh / z +
+      4 * (1 + 3 * (S.n : ℝ) * S.D * Real.log q) +
+        6 * Real.binEntropy τ / a + (S.n : ℝ) ^ (-247 : ℝ) at hrestored
   have hbudgetN := hbudget S.n hnB
-  simp only [← hmScale, ← hDScale, ← hKScale] at hbudgetN
+  dsimp only at hbudgetN
+  rw [← hKExplicit, ← hDExplicit, ← hLExplicit] at hbudgetN
   exact hbudgetN η hη hηe₀ (regionalEntropy Λ q Ω X) z τ hwindow.2.2.1 hwindow.2.1
     hτ.le (hτhalf.le.trans (by norm_num)) hrestored
 
