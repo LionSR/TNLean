@@ -62,12 +62,8 @@ theorem exists_uniform_exact_message_sampled_network
       let C := C₀ L
       let H := C.initialSpace
       let hH := C.finite_initialSpace
-      let x := C.initialVector
-      let hx := C.norm_initialVector
       let physicalDim := C.physicalDimension
       let ps := C.physicalOrder
-      let hps := C.physicalOrder_nodup
-      let hcover := C.mem_physicalOrder
       let priv := C.privateOutput
       let hpriv := C.finite_privateOutput
       let ref := C.circuit
@@ -81,29 +77,28 @@ theorem exists_uniform_exact_message_sampled_network
           rw [ref.expandedGateCount_reexpand lists]
           exact (hN₀ L).trans (mul_le_mul_of_nonneg_right
             (le_add_of_nonneg_left zero_le_one) (by positivity))
-        ∃ (B : ℝ≥0) (hB : 1 ≤ B)
+        ∃ (B : ℝ≥0) (_ : 1 ≤ B)
           (hb : w.IsExpansionBounded r (B : ℝ))
           (happrox : w.IsGateApproximation ((L : ℝ) ^ q)⁻¹ G),
         let ε := ((L : ℝ) ^ t)⁻¹
         let hε : 0 < ε := by positivity
-        let hεone : ε ≤ 1 := inv_le_one_of_one_le₀ (one_le_pow₀ (by linarith))
         let hbudget : w.IsGateApproximation
             (sourceGateBudget (ε / 2) w.expandedGateCount) G := by
           have hprecision : w.IsGateApproximation
               ((L : ℝ) ^ (n + ⌈(t : ℝ)⌉₊ + ⌈16 * countC⌉₊))⁻¹ G := by
             simpa only [Nat.ceil_natCast] using happrox
-          simpa only [Real.rpow_neg (by linarith : 0 ≤ (L : ℝ)), Real.rpow_natCast] using
+          simpa only [Real.rpow_neg (by linarith [L.property] : 0 ≤ (L : ℝ)),
+            Real.rpow_natCast] using
             w.isGateApproximation_budget_of_power_bound G (L : ℝ) countC (t : ℝ)
-              w.expandedGateCount n (by assumption) (by dsimp [countC]; linarith) hNre hprecision
+              w.expandedGateCount n L.property (by dsimp [countC]; linarith) hNre hprecision
         let W := w.rescaledOriginal (sourceGateBudget_pos (half_pos hε) _).le G hbudget
         let hbW := w.isExpansionBounded_rescaledOriginal
           (sourceGateBudget_pos (half_pos hε) _).le G hbudget hb
-        let δ := sourceGateBudget ε w.expandedGateCount
         let R := W.produce.physicalFirstReplacement (sourceGateBudget_pos hε w.expandedGateCount)
           (familyPhysicalLayout physicalDim ps) priv W.isAllowed_produce
           ((W.isExpansionBounded_produce_iff r (B : ℝ)).mpr hbW)
         let k := sourceSamplingCount (Fintype.card R.sourceLocations)
-          ((B : ℝ) ^ (4 * b) * (D : ℝ) ^ 4) ε
+          ((B : ℝ) ^ (4 * b) * (D : ℝ) ^ (4 : ℕ)) ε
         letI := ProductInput.finiteDimensional_wholePartyMem H hH
         letI := Layout.finiteDimensional_mem_of_registers priv hpriv
         ∃ T : (j : P L) → DistributedOperatorContraction.GateLabelsAt

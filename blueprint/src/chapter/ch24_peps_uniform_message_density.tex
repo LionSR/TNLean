@@ -8,12 +8,14 @@ occurrence and preserves the operator of that list exactly.
 \begin{theorem}[Homogeneous ceiling bound]
     \label{thm:homogeneous_ceiling_bound}
     \lean{Nat.ceil_le_add_one_mul_of_le_mul}
+    \leanok
     Let $x,A,s$ be real numbers with $0\le x$, $x\le As$, and $s\ge1$. Then
     \begin{align}
         \lceil x\rceil\le(A+1)s.
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     The ceiling estimate gives
     \begin{align}
         \lceil x\rceil\le x+1\le As+1\le As+s=(A+1)s.
@@ -24,6 +26,7 @@ occurrence and preserves the operator of that list exactly.
     \label{def:peps_message_gate_lists}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.MessageGateLists}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.expandMessageGateLists}
+    \leanok
     At each original nonprivate gate occurrence, prescribe a finite ordered
     sum of monomials containing finite-dimensional messages. Replace each
     message by its orthonormal-basis expansion and compose these expansions
@@ -35,6 +38,7 @@ occurrence and preserves the operator of that list exactly.
 \begin{definition}[Local approximation by message-containing monomials]
     \label{def:peps_message_gate_approximation}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageGateApproximation}
+    \leanok
     Fix one original operator at every nonprivate gate occurrence. A
     prescribed message-containing expansion is a local approximation with
     budget $\delta$ if the original gate and each private operation are
@@ -47,6 +51,7 @@ occurrence and preserves the operator of that list exactly.
 \begin{definition}[Original monomial and message bounds]
     \label{def:peps_message_gate_resources}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageResourceBounded}
+    \leanok
     Bounds $(r,m,K,D,C)$ mean that every prescribed original gate expansion
     contains at most $K$ monomials, and each monomial contains at most $r$
     pair effects and at most $m$ messages, has scalar coefficient of modulus
@@ -60,12 +65,14 @@ occurrence and preserves the operator of that list exactly.
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageGateApproximation.mono}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageResourceBounded.mono_dimension}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsTermwiseBounded.mono_coefficient}
+    \leanok
     Increasing the local approximation budget or the message-dimension
     bound preserves the corresponding conditions on the same original
     lists and operators. Likewise, increasing an individual coefficient
     bound preserves its monomial pair-effect bound.
 \end{theorem}
 \begin{proof}
+    \leanok
     Each local inequality remains valid by transitivity. Apply this fact
     separately at every original gate occurrence.
 \end{proof}
@@ -73,6 +80,7 @@ occurrence and preserves the operator of that list exactly.
 \begin{theorem}[Message expansion preserves each local approximation]
     \label{thm:peps_message_expand_gate_approximation}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.isGateApproximation_expandMessageGateLists}
+    \leanok
     \uses{def:peps_message_gate_lists,def:peps_message_gate_approximation}
     A prescribed local approximation with budget $\delta$ remains a local
     approximation with the same budget after every message is expanded.
@@ -80,6 +88,7 @@ occurrence and preserves the operator of that list exactly.
     original participating set is retained at the same occurrence.
 \end{theorem}
 \begin{proof}
+    \leanok
     Each message expansion evaluates exactly to the original transfer and
     preserves allowedness. Thus the local operator sum and its error against
     the prescribed original operator are unchanged. Private operations and
@@ -89,6 +98,7 @@ occurrence and preserves the operator of that list exactly.
 \begin{theorem}[Term counts after bounded message expansion]
     \label{thm:peps_message_expand_monomial_count}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.monomialCount_expandMessageGateLists_le}
+    \leanok
     \uses{def:peps_message_gate_resources}
     Suppose the original bounds are $(r,m,K,D,C)$ and $D\geq1$. After
     expanding messages, each same original nonprivate gate occurrence
@@ -96,6 +106,7 @@ occurrence and preserves the operator of that list exactly.
     expansions and zero-dimensional messages.
 \end{theorem}
 \begin{proof}
+    \leanok
     A monomial with at most $m$ messages contributes at most $D^m$ terms.
     Sum this estimate over its at most $K$ original monomials and round
     upward to obtain the integer bound. Chronological composition and
@@ -105,6 +116,7 @@ occurrence and preserves the operator of that list exactly.
 \begin{theorem}[Individual coefficient bounds after message expansion]
     \label{thm:peps_message_expand_termwise_bound}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.isTermwiseBounded_expandMessageGateLists}
+    \leanok
     \uses{def:peps_message_gate_resources,def:peps_message_gate_approximation}
     Suppose the original bounds are $(r,m,K,D,C)$ with $D\geq1$ and
     $C\geq0$, and the monomials satisfy the local approximation conditions.
@@ -114,6 +126,7 @@ occurrence and preserves the operator of that list exactly.
     no bound on the original coefficient sum is an additional hypothesis.
 \end{theorem}
 \begin{proof}
+    \leanok
     The absolute coefficient sum of an expanded gate is at most $KCD^m$,
     by summing the original individual bounds and the message-dimension
     factors. Each individual modulus is bounded by that nonnegative sum.
@@ -123,6 +136,7 @@ occurrence and preserves the operator of that list exactly.
 \begin{theorem}[Uniform compression of original message-containing gates]
     \label{thm:peps_uniform_original_message_compression}
     \lean{TNLean.PEPS.PairEffect.GateMapConstruction.exists_uniform_message_sampled_network}
+    \leanok
     \uses{thm:peps_uniform_approximate_operator_network,def:peps_original_gate_construction,thm:peps_message_expand_gate_approximation,thm:peps_message_expand_monomial_count,thm:peps_message_expand_termwise_bound,thm:homogeneous_ceiling_bound}
     Fix a family of original distributed constructions on finite nonempty
     party sets at sizes $L\ge2$.
@@ -163,6 +177,7 @@ occurrence and preserves the operator of that list exactly.
     count define the contraction and all its virtual alphabets.
 \end{theorem}
 \begin{proof}
+    \leanok
     Fix $p$ and choose $q=n+\lceil p\rceil+\lceil16(1+C_N)\rceil$ before
     choosing a size. All expansion constants at this precision are then fixed.
     Expand each bounded message in a finite orthonormal basis of its actual
@@ -195,6 +210,7 @@ occurrence and preserves the operator of that list exactly.
 \begin{theorem}[Uniform compression of exact original message expansions]
     \label{thm:peps_uniform_exact_original_message_compression}
     \lean{TNLean.PEPS.PairEffect.GateMapConstruction.exists_uniform_exact_message_sampled_network}
+    \leanok
     \uses{thm:peps_uniform_original_message_compression}
     Fix a family of original distributed constructions on finite nonempty
     party sets at sizes $L\ge2$, with normalized product inputs and finite-dimensional original and
@@ -232,6 +248,7 @@ occurrence and preserves the operator of that list exactly.
     private-dimension or source Schmidt-rank bound is required.
 \end{theorem}
 \begin{proof}
+    \leanok
     For every fixed integer precision $q$, each exact expansion has local
     error zero, hence error at most $L^{-q}$. The same lists, bounded effect
     and message counts, and polynomial resource constants therefore satisfy

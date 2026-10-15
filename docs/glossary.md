@@ -3477,7 +3477,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   operators, under the occurrence-preserving gate assignment.
 - **Caveat:** The predicate states local errors. It assumes no whole-circuit
   norm estimate or comparison between physical densities. A zero budget
-  expresses exact local equality. The new bridges await Lean verification.
+  expresses exact local equality.
 
 ### Counts and dimensions before expanding messages
 
@@ -3501,7 +3501,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 - **Caveat:** This predicate does not impose allowedness or contraction; these
   belong to `IsMessageGateApproximation`. It bounds individual coefficients,
   rather than assuming a bound on their sum. It has no private-memory or
-  source-Schmidt-rank dimension bound. The new bridges await Lean verification.
+  source-Schmidt-rank dimension bound.
 
 ## Nested regional cylinders
 
