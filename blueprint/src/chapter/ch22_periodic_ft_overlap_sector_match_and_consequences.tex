@@ -624,7 +624,7 @@
         \notag
     \end{align}
     and, conversely, every $B_k$ has such a partner in the first family.
-    Moreover, whenever the overlap between $A_j$ and $B_k$ does not tend to
+    Whenever the overlap between $A_j$ and $B_k$ does not tend to
     zero, the two blocks have equal bond dimension and there are an invertible
     matrix $Y$ and a scalar $\zeta$ with $|\zeta|=1$ such that, for every
     physical index $i$,
@@ -675,7 +675,7 @@
     Interchanging $A$ and $B$, inverting the nonzero scalars $c_N$, and using
     conjugate symmetry of the mixed overlap gives the converse assertion. For
     any non-decaying pair, the periodic overlap dichotomy excludes its decay
-    alternative and supplies the repeated-block relation.
+    alternative and gives the repeated-block relation.
 \end{proof}
 
 \begin{theorem}[Non-decaying mixed overlaps for spectrally periodic bases]
@@ -746,8 +746,8 @@
     Theorem~\ref{thm:periodic_multiplicity_nondecaying_overlap} with the
     singleton coefficients $\mu_j^N$ and $\nu_k^N$.  Their nonvanishing at
     every length replaces the geometric-extrapolation step.  Equality with the
-    two scalar-weight direct sums transports the positive-length
-    proportionality relation to the corresponding block-diagonal tensors.
+    two scalar-weight direct sums carries the positive-length
+    proportionality relation over to the corresponding block-diagonal tensors.
 \end{proof}
 
 \begin{theorem}[Finite matching from the periodic overlap dichotomy]
@@ -818,7 +818,7 @@
     those periods gives the matching.
 \end{proof}
 
-\begin{theorem}[Proportional Fundamental Theorem, periods supplied]%
+\begin{theorem}[Proportional Fundamental Theorem, periods given]%
     \label{thm:periodic_ft_proportional_supplied_periods}
     \lean{MPSTensor.fundamentalTheorem_periodic_proportional_sectorDecomposition}
     \leanok
@@ -833,7 +833,7 @@
     \uses{thm:repeated_blocks_period_eq, thm:periodic_conditional_block_matching, thm:periodic_spectral_multiplicity_nondecaying_overlap}
     \leanok
     Theorem~\ref{thm:periodic_spectral_multiplicity_nondecaying_overlap}
-    supplies non-decaying partners in both directions and classifies every
+    gives non-decaying partners in both directions and classifies every
     such pair as repeated. Applying
     Theorem~\ref{thm:periodic_conditional_block_matching} gives a bijection
     $\pi\colon J\to K$ of repeated pairs. Finally,
@@ -980,7 +980,7 @@
     space with $YY^\dagger=I$ and $Y^\dagger Y=I$, satisfying
     $T^i=YP^iY^\dagger$ for every physical index $i$.
     In particular, $V^{(N)}(T)_\sigma=V^{(N)}(P)_\sigma$ at every positive length.
-    The same $Y$ transports multiplicity scalars: for all scalars $c_{j,q}$,
+    The same $Y$ conjugates multiplicity scalars: for all scalars $c_{j,q}$,
     with $Z_c=\bigoplus_j\operatorname{diag}(c_{j,0},\ldots,c_{j,n_j-1})\otimes\Id$,
     \begin{align}
         \bigoplus_kc_{e^{-1}(k)}\mu_kA_k^i & =Y\,Z_cP^i\,Y^\dagger. \notag
@@ -1014,7 +1014,7 @@
     and likewise $Y^\dagger Y=\Id$. Replacing $\mu_{e(j,q)}$ by
     $c_{j,q}\mu_{e(j,q)}$ and $\mu'_{j,q}$ by $c_{j,q}\mu'_{j,q}$ leaves the
     blockwise relations and $Y$ unchanged; since $Z_cP^i$ is the block sum with
-    weights $c_{j,q}\mu'_{j,q}$, this gives the transport of $Z_c$.
+    weights $c_{j,q}\mu'_{j,q}$, this gives the relation for $Z_c$.
     The same bijection and the equality of matched
     block dimensions give equality of total dimensions.
     The phases have modulus one, so the individual weight moduli are
