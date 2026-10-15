@@ -257,7 +257,9 @@ theorem exists_truncated_target_actualSharpUpper {q : ℕ} [NeZero q]
       (FiniteProduct.reducedPure_eq_partialTrace β Ωt X)
   have hzEq :
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian.spectralRestrictionMass E =
-        z := by simp only [← hρ]
+        z := by
+    dsimp only [z]
+    simp only [← hρ]
   have hupper := eventually_actualScan_suppliedPrevector_sharp_upper hT S hdepth
     hmpos hM a (C₀ * B) (c₀ / Real.sqrt B) ha haRadius haOne L hKL Ωt htrgs.1
     E ell hmom (hzEq.symm ▸ hwindow.2.2.1) hmass

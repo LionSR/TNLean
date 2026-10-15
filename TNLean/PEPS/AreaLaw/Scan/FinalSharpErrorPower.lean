@@ -81,7 +81,7 @@ independent of `C0`, `CB` and `Ca`; their effect enters the threshold. -/
 theorem eventually_finalSharp_powerEnvelope_le
     {Ce C₀ CB Ca Ctr Cdim lq : ℝ}
     (hCe : 0 ≤ Ce) (hC₀ : 0 ≤ C₀) (hCB : 0 ≤ CB) (hCa : 0 ≤ Ca)
-    (hCtr : 0 ≤ Ctr) (hCdim : 0 ≤ Cdim) (hlq : 0 ≤ lq) :
+    (_hCtr : 0 ≤ Ctr) (hCdim : 0 ≤ Cdim) (hlq : 0 ≤ lq) :
     ∀ᶠ n : ℕ in atTop,
       finalSharpPowerEnvelope Ce C₀ CB Ca Ctr Cdim lq n ≤
         (20 * Ce + 62 + 24 * lq + 16 * Real.sqrt Ctr * (1 + Cdim)) *
