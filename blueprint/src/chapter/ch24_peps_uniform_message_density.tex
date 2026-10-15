@@ -89,6 +89,7 @@ occurrence and preserves the operator of that list exactly.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:peps_message_gate_eval}
     Each message expansion evaluates exactly to the original transfer and
     preserves allowedness. Thus the local operator sum and its error against
     the prescribed original operator are unchanged. Private operations and
@@ -107,6 +108,7 @@ occurrence and preserves the operator of that list exactly.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:peps_message_gate_size}
     A monomial with at most $m$ messages contributes at most $D^m$ terms.
     Sum this estimate over its at most $K$ original monomials and round
     upward to obtain the integer bound. Chronological composition and
@@ -127,6 +129,7 @@ occurrence and preserves the operator of that list exactly.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{thm:peps_message_gate_eval,thm:peps_message_gate_size}
     The absolute coefficient sum of an expanded gate is at most $KCD^m$,
     by summing the original individual bounds and the message-dimension
     factors. Each individual modulus is bounded by that nonnegative sum.
@@ -146,10 +149,10 @@ occurrence and preserves the operator of that list exactly.
     chosen. Every original gate and private operation is a contraction. Initial and discarded private spaces are finite-dimensional,
     without a numerical dimension bound. Suppose that the original gate count
     and intended physical dimensions satisfy
-    \[
+    \begin{align}
         N_L\le C_NL^n,\qquad d_{L,j}\le C_DL^d,
         \qquad C_N,C_D\ge0,
-    \]
+    \end{align}
     and that gate arity and whole-lifetime participation are at most $b$.
 
     At every fixed integer precision $q$, suppose that there exist
@@ -165,10 +168,10 @@ occurrence and preserves the operator of that list exactly.
     For every $p>0$, there exist $r_p$, $C_p\ge0$, and an integer
     $\alpha_p>0$, all chosen before $L$, such that every size admits a literal
     operator tensor network $\sigma_L$ satisfying
-    \[
+    \begin{align}
         \lVert\sigma_L-\rho_L\rVert_1\le L^{-p},
         \qquad \dim\mathcal V_e\le C_pL^{\alpha_p}.
-    \]
+    \end{align}
     The network has one node for each original party and the ket and bra legs
     of that party's intended physical output. Every node has at most
     $2b(b-1)$ incident virtual links, and both endpoints of every link occur
@@ -176,6 +179,11 @@ occurrence and preserves the operator of that list exactly.
     is the full original physical output, with its private registers traced
     out and without normalization. The same actual source circuit and sample
     count define the contraction and all its virtual alphabets.
+    This is the uniform compression of
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} together with its
+    approximate-expansion clause, for families with at least one party at
+    each index.
+    % Source: 04-compression.tex, lines 132--175 and 590--600.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -188,19 +196,19 @@ occurrence and preserves the operator of that list exactly.
     Put $D_M=(1+C_M(q))L^{z(q)}\ge1$. If $K$ is the original monomial cap,
     the expanded count is at most $KD_M^{m_q}$. An integer cap and a uniform
     polynomial bound are
-    \[
+    \begin{align}
         K'=\left\lceil KD_M^{m_q}\right\rceil,
         \qquad
         K'\le\bigl(1+C_K(q)(1+C_M(q))^{m_q}\bigr)
         L^{u(q)+z(q)m_q}.
-    \]
+    \end{align}
     The expanded absolute coefficient sum is at most
     $KC_C(q)L^{v(q)}D_M^{m_q}$. Each individual expanded coefficient is bounded
     by this nonnegative sum, hence by
-    \[
+    \begin{align}
         C_K(q)C_C(q)(1+C_M(q))^{m_q}
         L^{u(q)+v(q)+z(q)m_q}.
-    \]
+    \end{align}
     These are derived bounds; the pair-effect count is unchanged. Apply the
     uniform operator-network theorem to the resulting lists. Exact preservation
     of the original operators and occurrences ensures that its physical error
@@ -220,10 +228,10 @@ occurrence and preserves the operator of that list exactly.
     participant embeddings, and chronological occurrences are fixed.
     Suppose that gate arity and whole-lifetime participation are at most $b$,
     and that the original gate counts and intended physical dimensions satisfy
-    \[
+    \begin{align}
         N_L\le C_NL^n,\qquad d_{L,j}\le C_DL^d,
         \qquad C_N,C_D\ge0.
-    \]
+    \end{align}
     Let $r,m$, $C_K,C_C,C_M\ge0$, and degrees $u,v,z$ be fixed independently
     of size and requested accuracy. At every size, suppose that each original
     gate has an exact allowed message-containing expansion on its original
@@ -234,12 +242,13 @@ occurrence and preserves the operator of that list exactly.
     and private maps are contractions.
 
     For every $p>0$, there exist $r_p$, $C_p\ge0$, and an integer
-    $\alpha_p>0$, all chosen before the size, such that every $L\ge2$ admits
-    a literal operator tensor network $\sigma_L$ with
-    \[
+    $\alpha_p>0$, all chosen before the family member, such that every
+    index, of size $L\ge2$, admits a literal operator tensor network
+    $\sigma_L$ with
+    \begin{align}
         \lVert\sigma_L-\rho_L\rVert_1\le L^{-p},
         \qquad \dim\mathcal V_e\le C_pL^{\alpha_p}.
-    \]
+    \end{align}
     The network has one node per original party and the ket and bra legs of
     that party's intended physical output. Every node has at most $2b(b-1)$
     incident virtual links, and the two endpoints of every link participate
@@ -248,6 +257,10 @@ occurrence and preserves the operator of that list exactly.
     traced out and without normalization. The same actual source circuit and
     sample count define the contraction and its virtual alphabets. No numerical
     private-dimension or source Schmidt-rank bound is required.
+    This is \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} for exact
+    message-containing expansions, for families with at least one party at
+    each index.
+    % Source: 04-compression.tex, lines 132--175.
 \end{theorem}
 \begin{proof}
     \leanok
