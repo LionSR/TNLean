@@ -938,11 +938,14 @@ jobs:
         run: python3 scripts/test_run_diagram_tests.py
 
       - name: Test blueprint diagrams
+        id: diagram-tests
         if: env.TEX_CHANGED == 'true'
         run: python3 scripts/run_diagram_tests.py --output-dir "$RUNNER_TEMP/diagram-tests"
 
-      - name: Preserve rendered diagrams for review
-        if: success() && env.TEX_CHANGED == 'true'
+      - name: Preserve rendered diagrams and diagnostics for review
+        if: >-
+          !cancelled() && env.TEX_CHANGED == 'true' &&
+          (steps.diagram-tests.outcome == 'success' || steps.diagram-tests.outcome == 'failure')
         uses: actions/upload-artifact@v7
         with:
           name: diagram-tests-${{ github.sha }}
