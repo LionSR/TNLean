@@ -100,7 +100,9 @@ structure ScannerHypotheses (X : ScannerExponents) (R : ℕ) (J Δ CT Ctr C₁ C
     {q : ℕ} (Λ T : Finset (ℤ × ℤ)) (hT : T.Nonempty) (h : LocalHamiltonian Λ q R J)
     (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)) (E₀ : ℝ) (Ω : StateSpace Λ q) :
     Prop where
-  /-- `Ω` is a ground vector of `h` with gap `Δ`. -/
+  /-- `Ω` is a ground vector of `h` with gap `Δ`: the original ground vector of the standing
+  setting (`01-preliminaries.tex`, lines 4–5), to which the entropy inputs refer
+  (`08-scanner.tex`, lines 343–347). -/
   groundState : IsGappedGroundState Λ q h.operator E₀ Ω Δ
   /-- Interaction supports use the graph metric of `Λ` (lines 15–16). -/
   graph_eq : S.graph = domainGraph Λ
