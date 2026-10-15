@@ -93,6 +93,7 @@ import TNLean.PEPS.Approximation.CorrectedSourcePartition
 import TNLean.PEPS.Approximation.DistributedConstruction
 import TNLean.PEPS.Approximation.DistributedConstructionData
 import TNLean.PEPS.Approximation.DistributedContractionScalar
+import TNLean.PEPS.Approximation.DistributedGateMapConstruction
 import TNLean.PEPS.Approximation.DistributedLifetime
 import TNLean.PEPS.Approximation.DistributedLinks
 import TNLean.PEPS.Approximation.DistributedOperatorContraction
