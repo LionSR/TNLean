@@ -75,7 +75,7 @@ for `|+⟩ = -i(|-1⟩+|+1⟩)/√2`. Documented in
   states in antiferromagnets*, Phys. Rev. Lett. 59, 799 (1987)
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators TNLean.Algebra.ScalarCohomology
 open Matrix Finset
 
 noncomputable section
@@ -282,7 +282,8 @@ theorem akltTensorRMP_virtual_projRep :
     (∀ g i, twistedTensor akltTensorRMP akltZ2Z2Action g i *
         ((akltProjRep.X g : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) =
       ((akltProjRep.X g : GL (Fin 2) ℂ) : Matrix (Fin 2) (Fin 2) ℂ) * akltTensorRMP i) ∧
-    TNLean.Algebra.ScalarCocycle.IsNontrivialClass akltOmega := by
+    groupCohomology.H2π _
+      (groupCohomology.cocyclesOfIsMulCocycle₂ akltOmega_isCocycle.isMulCocycle₂) ≠ 0 := by
   refine ⟨fun g i => ?_, aklt_isNontrivialSPT⟩
   change twistedTensor akltTensorRMP akltZ2Z2Action g i * (akltRepX g : Matrix _ _ ℂ) =
     (akltRepX g : Matrix _ _ ℂ) * akltTensorRMP i
