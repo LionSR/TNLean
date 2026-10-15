@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationRepair
+import TNLean.PEPS.AreaLaw.Geometry.RepairInduction
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationAtoms
 import TNLean.PEPS.AreaLaw.Geometry.FanFrontiers
 import TNLean.PEPS.AreaLaw.Geometry.TemplatePolygons
@@ -994,5 +995,22 @@ theorem exists_birthSeparation_of_uniformRepairInductionStatement
   obtain ⟨K, hK⟩ := hT Sstar hS C
   exact ⟨K, fun o Λ A k₀ hC h₀ hk ↦ ⟨(hI o Λ A C k₀ hC h₀ Sstar).mono (min_le_right _ _),
     (hK o Λ A k₀ hC h₀ hk).mono (min_le_left _ _)⟩⟩
+
+/-- **Birth-template separation, from Lemma 11.3.** If the jointly chosen initial
+stage has isolated stars (the conclusion of Lemma 11.3 used by Lemma 11.4), one
+fixed `c₁ > 0` serves both cases of the birth-separation lemma, for every
+sufficiently large stopping scale and lower layer index.
+Source: area-law Section 11, `geometry:birth-separation`, lines 573–659, from
+`geometry:initial-stars`, lines 332–349, and `geometry:repair-induction`,
+lines 471–543. -/
+theorem exists_birthSeparation_of_initialIsolatedStars
+    (h : InitialIsolatedStarsStatement) :
+    ∃ c₁ > 0, ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+        (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
+          IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ ∧
+            IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ :=
+  exists_birthSeparation_of_uniformRepairInductionStatement
+    (uniformRepairInductionStatement_of_initialIsolatedStars h)
 
 end TNLean.PEPS.AreaLaw.Geometry

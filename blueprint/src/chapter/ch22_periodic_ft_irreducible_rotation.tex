@@ -83,7 +83,7 @@
 \end{lemma}
 \begin{proof}\leanok
     Conjugation by $X\mapsto CXC^\dagger$ gives a linear equivalence of the
-    matrix space.  Transporting eigenvectors through this equivalence preserves
+    matrix space.  Carrying eigenvectors across this equivalence preserves
     every eigenvalue and hence the unit-circle eigenvalue set.
 \end{proof}
 
@@ -256,7 +256,7 @@
     where each block $A_j$ is a left-canonical $m_j$-periodic tensor. The
     defining relation is
     $\ket{V^{(N)}(A)}=\ket{V^{(N)}(\widehat A)}$ for every $N\geq0$, rather
-    than literal equality of the tensors $A$ and $\widehat A$. In particular,
+    than entrywise equality of the tensors $A$ and $\widehat A$. In particular,
     it includes the empty word and hence equality of the bond-dimension traces.
     The source comparison is at positive physical lengths and permits the
     irreducible-form representative to have smaller bond dimension
@@ -268,7 +268,7 @@
     % tensors is introduced later, at lines 287--303, and is not part of this
     % definition.
     This is a normalized matrix-product-vector representation of the source
-    irreducible form, whose displayed decomposition is a literal tensor
+    irreducible form, whose displayed decomposition is a direct tensor
     equality and whose periodic blocks are only required to have irreducible
     transfer maps of spectral radius one. It extends the normal canonical form
     (Definition~\ref{def:is_normal_canonical_form}),
@@ -283,8 +283,8 @@
     Let $A^i=\bigoplus_j\mu_j A_j^i$ be a normal canonical block family with
     nonzero complex weights. Replacing $\mu_j$ by $|\mu_j|$ and $A_j$ by
     $(\mu_j/|\mu_j|)A_j$ gives the positive-weight irreducible form convention
-    and does not change the MPV family. The corresponding irreducible-form
-    witness has all periods equal to~$1$. This is the period-one part of the statement in
+    and does not change the MPV family. All blocks in the resulting irreducible-form
+    decomposition have period~$1$. This is the period-one part of the statement in
     \cite[Section~II]{DeLasCuevas2017Irreducible} that normal tensors are
     periodic tensors with period~$1$.
 \end{remark}
@@ -435,6 +435,6 @@ follows.
 
 \begin{proof}\leanok
     Apply the assumed periodic equal-case theorem to $A$ and $B$.  Its
-    $Z$-gauge conclusion supplies $m$, $Y$, and $Z$ with the three displayed
+    $Z$-gauge conclusion gives $m$, $Y$, and $Z$ with the three displayed
     identities by Definition~\ref{def:z_gauge_equiv}.
 \end{proof}
