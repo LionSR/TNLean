@@ -1,0 +1,76 @@
+\section{The chronological operator of a dyadic protocol}
+\label{sec:peps_dyadic_protocol_circuit}
+
+The changes of a supplied protocol determine its actual final vector before
+any distributed compression is applied. The following identities record this
+composition, including all private registers. They are the ordered products
+used in \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
+
+\begin{definition}[Protocol operator]
+    \label{def:peps_dyadic_protocol_operator}
+    \leanok
+    \uses{def:peps_dyadic_protocol, def:peps_original_chronology_composite}
+    \lean{TNLean.PEPS.Approximation.DyadicProtocol.originalCircuit}
+    Let $W_t:\mathcal H_{A_t}\to\mathcal H_{A_{t+1}}$, $0\le t<T$,
+    be the changes of a dyadic protocol. Let $I_0$ identify the initial memory
+    with the product of the original party memories, and let $I_T$ identify
+    the final memory with the physical registers followed by the private
+    registers. The protocol operator is $I_T W^{[T]} I_0^{-1}$.
+\end{definition}
+
+\begin{theorem}[Evaluation on the actual trajectory]
+    \label{thm:peps_dyadic_protocol_operator_eval}
+    \leanok
+    \uses{def:peps_dyadic_protocol_operator}
+    \lean{TNLean.PEPS.Approximation.DyadicProtocol.eval_sequence_eq_trajectory}
+    \lean{TNLean.PEPS.Approximation.DyadicProtocol.eval_originalCircuit}
+    If $x$ is the original product input and
+    $\Psi_0=I_0^{-1}x$, $\Psi_{t+1}=W_t\Psi_t$, then
+    $W^{[t]}I_0^{-1}x=\Psi_t$ at every stage. In particular,
+    $(I_T W^{[T]}I_0^{-1})x=I_T\Psi_T$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_original_chronology_composition}
+    The stage identity follows by induction from
+    $W^{[0]}=1$ and $W^{[t+1]}=W_tW^{[t]}$.
+    Applying $I_T$ to the final-stage identity gives the asserted output.
+\end{proof}
+
+\begin{theorem}[Physical density in site coordinates]
+    \label{thm:peps_dyadic_protocol_density_coordinates}
+    \leanok
+    \uses{def:peps_dyadic_protocol, def:peps_dyadic_protocol_operator,
+        def:peps_original_recorded_gate_maps}
+    \lean{TNLean.PEPS.Approximation.DyadicProtocol.reindex_original_physicalDensity}
+    \lean{TNLean.PEPS.Approximation.DyadicProtocol.rectangularTraceNorm_reindex_sub_physicalDensity}
+    Let $\rho_{\mathrm{party}}$ be the physical density obtained by evaluating
+    the original protocol circuit on its product input and tracing out its
+    private registers. Let $E$ be the physical configuration bijection from
+    party configurations to configurations of the square. Then the actual
+    protocol density satisfies
+    $\rho_{\mathrm{protocol}}(x,y)
+        =\rho_{\mathrm{party}}(E^{-1}x,E^{-1}y)$ for every pair of square
+    configurations $x,y$. Neither density is normalized in this identity.
+    For any matrix $M$ indexed by party configurations, put
+    $M^E(x,y)=M(E^{-1}x,E^{-1}y)$. Then
+    \[
+        \|M^E-\rho_{\mathrm{protocol}}\|_1
+        =\|M-\rho_{\mathrm{party}}\|_1.
+    \]
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_original_exact_gate_maps, thm:peps_dyadic_protocol_operator_eval}
+    The recorded gate sums evaluate to the original circuit, whose output is
+    the actual final trajectory. Write $u$ for that vector in party physical
+    coordinates and private coordinates. In site coordinates its value at
+    $(x,a)$ is $u(E^{-1}x,a)$. Thus
+    \begin{align*}
+        \rho_{\mathrm{protocol}}(x,y)
+         & =\sum_a u(E^{-1}x,a)\overline{u(E^{-1}y,a)} \\
+         & =\rho_{\mathrm{party}}(E^{-1}x,E^{-1}y).
+    \end{align*}
+    This is the partial-trace identity under the product of $E$ with the
+    identity on the private coordinates. Relabelling the rows and columns
+    by a bijection commutes with subtraction and preserves the trace norm,
+    which gives the final identity.
+\end{proof}
