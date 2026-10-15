@@ -3444,7 +3444,6 @@ three-plaquette output measurement, and the routed reunion measurement.
   Mathlib's multiplicative ceiling bound uses a reciprocal-ceiling threshold
   and is not the homogeneous estimate used here. No custom tactic is added.
 
-
 ### Final comparison after restricted simplification — promoted (2026-10-14)
 
 - **Pattern:** simplify a supplied equality with a fixed list of lemmas, then
