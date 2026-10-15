@@ -296,9 +296,9 @@ of selected reductions is again such a family, not that every family arises
 this way. -/
 noncomputable def smul (R : F.ReductionFamily)
     (β : TNLean.Algebra.ScalarCocycle G) : F.ReductionFamily where
-  V g h := (β g h : ℂ)⁻¹ • R.V g h
-  W g h := (β g h : ℂ) • R.W g h
-  isReduction g h := (R.isReduction g h).reciprocal_smul (β g h).ne_zero
+  V g h := (β (g, h) : ℂ)⁻¹ • R.V g h
+  W g h := (β (g, h) : ℂ) • R.W g h
+  isReduction g h := (R.isReduction g h).reciprocal_smul (β (g, h)).ne_zero
 
 /-- The reciprocal scalar rescaling preserves the exterior identity
 `eq:fusion_1` for the same buffer length, in both directions: the two scalars
@@ -310,7 +310,7 @@ theorem hasExteriorBufferLength_smul (R : F.ReductionFamily)
   unfold HasExteriorBufferLength
   refine forall_congr' fun g ↦ forall_congr' fun h ↦ ?_
   exact MPSTensor.IsReductionExteriorBufferLength.reciprocal_smul_iff
-    (β g h).ne_zero
+    (β (g, h)).ne_zero
 
 /-- The reciprocal scalar rescaling commutes with physical blocking: blocking
 acts on the tensors only, and the rescaling acts on the reduction matrices

@@ -78,30 +78,30 @@ theorem Complex.div_toUnits_unitsPhase (z : Units ℂ) :
 
 /-- The pointwise unit phase of a complex-unit-valued scalar two-cochain. -/
 noncomputable def ScalarCocycle.circlePhase (ω : ScalarCocycle G) :
-    G → G → Circle :=
-  fun g h ↦ Complex.unitsPhase (ω g h)
+    G × G → Circle :=
+  fun p ↦ Complex.unitsPhase (ω p)
 
 /-- Include the pointwise unit phase of a scalar two-cochain back into
 `ℂˣ`. -/
 noncomputable def ScalarCocycle.circlePhaseInclusion (ω : ScalarCocycle G) :
     ScalarCocycle G :=
-  fun g h ↦ Circle.toUnits (ω.circlePhase g h)
+  fun p ↦ Circle.toUnits (ω.circlePhase p)
 
 /-- The positive radial part left after dividing a scalar two-cochain by its
 pointwise unit phase, regarded as an L-symbol over one block. -/
 noncomputable def ScalarCocycle.positiveResidual (ω : ScalarCocycle G) :
     LSymbol G PUnit.{1} :=
-  fun _ g h ↦ ω g h / ω.circlePhaseInclusion g h
+  fun _ g h ↦ ω (g, h) / ω.circlePhaseInclusion (g, h)
 
 /-- Taking pointwise unit phase preserves the scalar cocycle equation. -/
 theorem ScalarCocycle.circlePhase_isMulCocycle₂ {ω : ScalarCocycle G}
     (hω : ω.IsCocycle) :
     @groupCohomology.IsMulCocycle₂ G Circle _ _
       (Circle.trivialMulDistribMulAction (G := G)).toSMul
-      (Function.uncurry ω.circlePhase) := by
+      ω.circlePhase := by
   intro g h k
-  change Complex.unitsPhase (ω (g * h) k) * Complex.unitsPhase (ω g h) =
-    Complex.unitsPhase (ω h k) * Complex.unitsPhase (ω g (h * k))
+  change Complex.unitsPhase (ω (g * h, k)) * Complex.unitsPhase (ω (g, h)) =
+    Complex.unitsPhase (ω (h, k)) * Complex.unitsPhase (ω (g, h * k))
   simpa only [map_mul, mul_comm] using congrArg Complex.unitsPhase (hω g h k)
 
 /-- The radial residual of a scalar cocycle is a generalized cocycle on the
@@ -125,7 +125,7 @@ subgroup of `ℂˣ`. -/
 theorem ScalarCocycle.positiveResidual_isPositiveValued (ω : ScalarCocycle G) :
     LSymbol.IsPositiveValued ω.positiveResidual := by
   intro x g h
-  exact ⟨PositiveUnits.norm (ω g h), (Complex.div_toUnits_unitsPhase (ω g h)).symm⟩
+  exact ⟨PositiveUnits.norm (ω (g, h)), (Complex.div_toUnits_unitsPhase (ω (g, h))).symm⟩
 
 /-- Every `ℂˣ`-valued scalar cocycle of a finite group is cohomologous to the
 inclusion of its pointwise `U(1)` phase.
@@ -144,7 +144,7 @@ theorem ScalarCocycle.cohomologousTo_circlePhaseInclusion [Finite G]
     (positiveResidual_isPositiveValued ω)
   refine ⟨fun g ↦ χ g PUnit.unit, fun g h ↦ ?_⟩
   have hχApply := congrFun (congrFun (congrFun hχ PUnit.unit) g) h
-  change ω g h / ω.circlePhaseInclusion g h =
+  change ω (g, h) / ω.circlePhaseInclusion (g, h) =
     χ g PUnit.unit * χ h PUnit.unit / χ (g * h) PUnit.unit at hχApply
   rw [div_eq_iff_eq_mul] at hχApply
   rw [hχApply, div_eq_mul_inv]

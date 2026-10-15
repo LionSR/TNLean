@@ -2,7 +2,7 @@
 \label{sec:area_law_belt_marks}
 
 The belt construction marks each cell at its center, corners and side
-midpoints. We first count these actual points for a finite family of cells
+midpoints. We first count these points for a finite family of cells
 at one scale, as in \cite[Section~11]{OpenAI2026AreaLaw}.
 Coincident points contribute only once to the union.
 
@@ -45,7 +45,7 @@ Coincident points contribute only once to the union.
 \begin{proof}\leanok
     \uses{thm:area_law_dyadic_closures}
     Each coordinate of $e/2$ lies in $[0,1]$, so both coordinates
-    of the mark lie in the corresponding closed cell intervals.
+    of each mark lie in the corresponding closed cell intervals.
 \end{proof}
 
 \begin{theorem}[Exact cell-mark count]
@@ -53,11 +53,11 @@ Coincident points contribute only once to the union.
     \lean{TNLean.PEPS.AreaLaw.Geometry.card_beltCellMarks}
     \leanok
     \uses{def:area_law_belt_cell_marks}
-    For every origin, scale and cell index, $|M_{\ell,z}|=9$.
+    For every origin $o$, scale $\ell$ and cell index $z$, $|M_{\ell,z}|=9$.
 \end{theorem}
 \begin{proof}\leanok
-    The side $2^\ell$ is positive. Thus distinct elements of
-    $\{0,1,2\}^2$ give distinct points, and there are nine such elements.
+    Since $2^\ell>0$, distinct elements of $\{0,1,2\}^2$ yield distinct points,
+    and there are nine such elements.
 \end{proof}
 
 \begin{theorem}[Count of the union of marks]
@@ -65,7 +65,7 @@ Coincident points contribute only once to the union.
     \lean{TNLean.PEPS.AreaLaw.Geometry.card_beltMarks_le}
     \leanok
     \uses{def:area_law_belt_marks}
-    For every finite cell-index set $F$, including the empty set,
+    For every finite cell-index set $F\subset\mathbb Z^2$,
     \begin{align}
         |M_\ell(F)| & \le9|F|.
     \end{align}
@@ -73,18 +73,18 @@ Coincident points contribute only once to the union.
 \begin{proof}\leanok
     \uses{thm:area_law_belt_cell_mark_count}
     The cardinality of a finite union is at most the sum of the
-    cardinalities of its members. Each member has nine points.
+    cardinalities of its members, each of which has nine points.
 \end{proof}
 
-\begin{theorem}[Sparse shifts bound the actual marks]
+\begin{theorem}[Sparse shifts bound the belt marks]
     \label{thm:area_law_sparse_belt_marks}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_sparse_dyadic_belt_marks_shift}
     \leanok
     \uses{def:area_law_belt_marks,def:area_law_belt_cells,
         def:area_law_fine_layer_indices,def:area_law_fine_belt_scales}
-    Let $F_k(a,b)$ be the actual belt-cell indices in the refined
-    layer for the selected coordinate residues $a,b$. There is a pair
-    of residues such that
+    Let $F_k(a,b)$ be the belt-cell indices in the refined
+    layer for coordinate residues $a,b$. There is a pair
+    of residues $(a,b)$ such that
     \begin{align}
         |M_{\ell_k}(F_k(a,b))|
          & \le576(2C_0+1)^2|\partial_\Lambda A|\,2^{-\delta_0 k/2}.
@@ -93,6 +93,7 @@ Coincident points contribute only once to the union.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_belt_mark_count,thm:area_law_sparse_dyadic_belts}
-    Choose the pair of residues supplied by the sparse-belt estimate,
-    then multiply its cell count by nine. The coefficient is $9\cdot64=576$.
+    Choose the sparse-belt pair of residues $(a,b)$
+    and multiply the belt-cell count by $9$. The coefficient is
+    $9\cdot64=576$.
 \end{proof}

@@ -75,20 +75,14 @@ open scoped BigOperators Matrix
 namespace Z2Z2Condensation
 open MPSTensor MPOTensor
 
+private theorem gmul_gmul_self (g a : Fin 4) : gmul g (gmul g a) = a := by decide +revert
+
 /-- Bitwise translation of every site by the group label `g`. -/
 def physicalShift (g : Fin 4) (N : ℕ) : Equiv.Perm (Fin N → Fin 4) where
   toFun t n := gmul g (t n)
   invFun t n := gmul g (t n)
-  left_inv t := by
-    funext n
-    change gmul g (gmul g (t n)) = t n
-    generalize t n = a
-    fin_cases g <;> fin_cases a <;> rfl
-  right_inv t := by
-    funext n
-    change gmul g (gmul g (t n)) = t n
-    generalize t n = a
-    fin_cases g <;> fin_cases a <;> rfl
+  left_inv t := funext fun n => gmul_gmul_self g (t n)
+  right_inv t := funext fun n => gmul_gmul_self g (t n)
 
 /-- The outgoing bond records the second input bit for bond-two tensors. -/
 def physicalBond : (g : Fin 4) → Fin 4 → Fin (bondDim g)
@@ -147,9 +141,7 @@ theorem mpo_symTensor_mulVec_single (g : Fin 4) (t : Fin N → Fin 4) :
 theorem mpo_symTensor_mem_unitaryGroup (g : Fin 4) :
     mpo (symTensor g) N ∈ Matrix.unitaryGroup (Fin N → Fin 4) ℂ := by
   rw [mpo_symTensor]
-  refine Matrix.monomial_mem_unitaryGroup _ _ fun t ↦ ?_
-  rw [star_pow, star_neg, star_one, ← mul_pow]
-  simp
+  exact Matrix.monomial_mem_unitaryGroup _ _ fun t ↦ by simp [← mul_pow]
 
 /-- Every symmetry tensor is a positive-length matrix product unitary. -/
 theorem symTensor_isMPUPos (g : Fin 4) : IsMPUPos (symTensor g) := by
