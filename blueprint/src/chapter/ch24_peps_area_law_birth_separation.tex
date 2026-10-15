@@ -309,6 +309,31 @@ generation's squares, including terminal ones, from every old region.
     generation removes the squares $Q(v+up,u)$ from every region.
 \end{proof}
 
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% geometry:birth-separation, lines 573--659.
+\begin{theorem}[Birth separation of replacements]
+    \label{thm:area_law_replacement_birth_separation}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_isRepairBirthSeparated}
+    \leanok
+    \uses{thm:area_law_replacement_birth_separation_conditional,
+        thm:area_law_uniform_repair_induction}
+    The conclusion of
+    Theorem~\ref{thm:area_law_replacement_birth_separation_conditional} holds
+    without assumption: there are a fixed $c_1>0$ and a threshold $T$ such
+    that, for every stopping scale $S_*\ge T$, every layer width and every
+    sufficiently large lower layer index, a replacement born at a parent mark
+    of scale $S$ has distance at least $c_1d(S)^{\rho_0}$ from the final
+    actual region of every other identifier of its generation with the same
+    label.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    The uniform repair induction holds by
+    Theorem~\ref{thm:area_law_uniform_repair_induction}; apply
+    Theorem~\ref{thm:area_law_replacement_birth_separation_conditional}.
+\end{proof}
+
 This theorem covers the replacement births of
 Lemma~\ref{lem:area_law_birth_separation}; the births of initial belt tiles
 are not yet treated~\cite{gap:arealaw2d_birth_separation_scope}.

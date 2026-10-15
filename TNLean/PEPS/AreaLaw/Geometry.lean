@@ -19,6 +19,7 @@ import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationAngular
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationFan
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationRepair
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationReplacement
+import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationReplacementHolds
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationStar
 import TNLean.PEPS.AreaLaw.Geometry.CappedDyadicEntropyCover
 import TNLean.PEPS.AreaLaw.Geometry.CappedDyadicPartition
