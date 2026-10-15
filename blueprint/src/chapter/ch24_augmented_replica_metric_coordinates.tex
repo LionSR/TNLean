@@ -1,15 +1,15 @@
 \section{Replica metrics in augmented site coordinates}
 
-Write $I=V\sqcup\{C,R\}$ for the sites obtained by adjoining $C$ and
-then $R$, and write $J=V\sqcup\{\mathrm{false},\mathrm{true}\}$.
-Let $a:I\to J$ fix each physical site and send $C$ to
+Write $I=V\sqcup\{C,R\}$ for the site set obtained by adjoining the two
+auxiliary registers $C$ and $R$ to the physical sites $V$, and write
+$J=V\sqcup\{\mathrm{false},\mathrm{true}\}$.
+Let $a:I\to J$ fix each site of $V$ and send $C$ to
 $\mathrm{false}$ and $R$ to $\mathrm{true}$.
-The physical coordinates have $q$ values and both auxiliary coordinates
-have $d$ values. Denote their configuration spaces by $\mathcal X_I$
-and $\mathcal X_J$. The coordinate bijection
-$e_0:\mathcal X_I\to\mathcal X_J$ preserves every coordinate value;
-let $e_k:\mathcal X_I^k\to\mathcal X_J^k$ apply $e_0$ to each copy.
-These are the augmented coordinates used for the physical energy.
+Each physical site in $V$ has local dimension $q$ and each auxiliary
+register has dimension $d$. Denote the resulting single-copy configuration
+spaces by $\mathcal X_I$ and $\mathcal X_J$. Relabelling sites along $a$
+induces a bijection $e_0:\mathcal X_I\to\mathcal X_J$ and, on $k$ replicas,
+the coordinatewise bijection $e_k:\mathcal X_I^k\to\mathcal X_J^k$.
 
 \begin{theorem}[Subsystem permutations in augmented coordinates]
     \label{thm:al_augmented_subsystem_action}
@@ -18,41 +18,41 @@ These are the augmented coordinates used for the physical energy.
     \uses{def:al_scan_auxiliary_coordinates}
     Let $V$ be a set, let $q,d,k\ge0$ be integers, and let $Q\subseteq I$
     be finite. For $\sigma\in S_k$, write $\rho_Q(\sigma)$ for the
-    permutation that permutes the copies at the sites in $Q$ and fixes
-    all other coordinates. Then, for every $x\in\mathcal X_I^k$,
+    operator that permutes the $k$ replicas at the sites in $Q$ and fixes
+    all other sites. Then, for every $x\in\mathcal X_I^k$,
     \begin{align*}
         e_k\bigl(\rho_Q(\sigma)x\bigr)=\rho_{a(Q)}(\sigma)e_k(x).
     \end{align*}
-    No finiteness assumption on $V$ is needed.
 \end{theorem}
 \begin{proof}\leanok
-    At the site $a(i)$ and copy $j$, both sides have the value of $x$
-    at site $i$ and copy $\sigma^{-1}(j)$ if $i\in Q$, and at copy $j$
-    otherwise. The equivalence $i\in Q\iff a(i)\in a(Q)$ gives the
-    identity at every coordinate.
+    At site $a(i)$ and replica $j$, both sides take the value of $x$
+    at site $i$ and replica $\sigma^{-1}(j)$ when $i\in Q$, and at replica $j$
+    otherwise. Since $a$ is bijective, $i\in Q$ if and only if
+    $a(i)\in a(Q)$, so the two configurations agree at every coordinate.
 \end{proof}
 
 \begin{theorem}[Replica metrics in augmented coordinates]
     \label{thm:al_augmented_replica_metric_coordinates}
     \lean{TNLean.PEPS.AreaLaw.Scan.replicaMetric_submatrix_augmentedReplicaConfigurationEquiv}
     \leanok
-    Suppose now that $V$ is finite. Put
-    $N=|\mathcal X_I|=|\mathcal X_J|$, and use the replica weight
-    $w_{k,N,t}(\lambda)$ for the full one-copy dimension $N$.
-    For every real $t$, every $k\ge0$ and every $Q\subseteq I$, the
-    two replica metrics satisfy
+    Suppose that $V$ is finite. Put
+    $N=|\mathcal X_I|=|\mathcal X_J|$, and form the replica metrics on
+    $\mathcal X_I^k$ and $\mathcal X_J^k$ with the weight
+    $w_{k,N,t}(\lambda)$ at the full single-copy dimension $N$.
+    For every real $t$, every integer $k\ge0$, and every $Q\subseteq I$,
     \begin{align*}
         W^{J}_{a(Q),k}(x,y)=W^{I}_{Q,k}\bigl(e_k^{-1}x,e_k^{-1}y\bigr).
     \end{align*}
-    The weights on both sides use $N$, including when a coordinate
-    space is empty. The assertion also includes $k=0$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_augmented_subsystem_action}
-    The one-copy bijection gives equality of the full dimensions and
-    hence equality of the label weights. The subsystem identity transports
-    each permutation matrix, and therefore each group-algebra element and
-    label projector. Summing the transported projectors with the same
-    weights proves the displayed metric identity. This is the coordinate
-    identification used in \cite[Sections~5--8]{OpenAI2026AreaLaw}.
+    The bijection $e_0$ gives $|\mathcal X_I|=|\mathcal X_J|=N$, so the
+    weights $w_{k,N,t}(\lambda)$ coincide on both spaces. By the subsystem
+    permutation identity, conjugation by $e_k$
+    transports each permutation matrix $\rho_Q(\sigma)$ to
+    $\rho_{a(Q)}(\sigma)$, and therefore transports each Young-symmetrizer
+    projector on $Q$ to the corresponding projector on $a(Q)$. Summing
+    these projectors with the common weights $w_{k,N,t}(\lambda)$ gives
+    the stated equality, which relates the two coordinate conventions in
+    \cite[Sections~5--8]{OpenAI2026AreaLaw}.
 \end{proof}

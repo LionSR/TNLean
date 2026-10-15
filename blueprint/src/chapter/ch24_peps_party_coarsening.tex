@@ -25,7 +25,7 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \uses{def:peps_party_registers}
     If $\ell=((p_1,H_1),\ldots,(p_n,H_n))$ is a register list,
     let $\ell^f=((f(p_1),H_1),\ldots,(f(p_n),H_n))$.
-    Empty lists and concatenation are preserved. The canonical isometry
+    Empty lists and concatenation are preserved. The owner-relabelling isometry
     $R_{f,\ell}:\mathcal H_\ell\to\mathcal H_{\ell^f}$ is the
     tensor product of the identities on the original register spaces.
     On the empty list it is the identity of $\C$, and on an elementary
@@ -45,7 +45,7 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \leanok
     \uses{def:peps_owner_layout}
     Write $C_{\ell,m}:\mathcal H_{\ell m}\to
-        \mathcal H_\ell\otimes\mathcal H_m$ for the canonical
+        \mathcal H_\ell\otimes\mathcal H_m$ for the
     concatenation isometry. Under the identification
     $(\ell m)^f=\ell^f m^f$, for $x\in\mathcal H_\ell$
     and $y\in\mathcal H_m$ one has
@@ -132,7 +132,7 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     For $q\in Q$ and $\eta\in U\otimes V$, prepare two fresh
     registers $U,V$ at the single owner $q$ by the local map
     $c\mapsto\eta\otimes c$ from $\C$ to
-    $U\otimes(V\otimes\C)$, with the canonical associativity
+    $U\otimes(V\otimes\C)$, with the associativity
     identification. Tensor this map with the identity on all spectator
     registers.
 \end{definition}
@@ -144,7 +144,7 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \leanok
     \uses{def:peps_internal_pair_preparation}
     The operation in Definition~\ref{def:peps_internal_pair_preparation}
-    maps a spectator vector $x$ to $\eta\otimes x$, under canonical
+    maps a spectator vector $x$ to $\eta\otimes x$, under tensor-product
     associativity. If $\|\eta\|=1$, it is an allowed local operation
     and creates no pair source between distinct owners.
 \end{theorem}
@@ -162,7 +162,7 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \lean{TNLean.PEPS.PairEffect.Word.mapOwner}
     \leanok
     \uses{def:peps_owner_layout,def:peps_internal_pair_preparation}
-    Let $F:\mathcal H_\ell\to\mathcal H_{\ell'}$ be an actual
+    Let $F:\mathcal H_\ell\to\mathcal H_{\ell'}$ be a
     composition of local maps, pair preparations, exchanges, and
     operations beside untouched registers. Its composition $F^f$ on
     the new owners is defined in the same chronological order.
@@ -188,7 +188,7 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
         \label{eq:peps_owner_composition}
     \end{align}
     This identity does not require norm bounds. If $F$ is allowed,
-    then $F^f$ is allowed. Its pair-source list is exactly $S_f$,
+    then $F^f$ is allowed. Its pair-source list is $S_f$,
     where $S$ is the pair-source list of $F$.
 \end{theorem}
 
@@ -229,7 +229,7 @@ systems in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
          & =(A_+\otimes A_-)J_{f,\ell}.
         \label{eq:peps_internal_source_factorization}
     \end{align}
-    The two compositions are the actual restrictions of $F^f$ to
+    The two compositions are the restrictions of $F^f$ to
     the two owners.
 \end{theorem}
 

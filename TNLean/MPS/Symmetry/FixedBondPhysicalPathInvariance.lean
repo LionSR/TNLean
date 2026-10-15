@@ -282,7 +282,7 @@ theorem ExactMPSGroundPath.exists_continuous_virtual_data_of_isInjective
     ∃ ρ : ∀ t, ProjectiveRepresentation (D := Q.bondDimension) (ω t),
       (∀ g, Continuous fun t =>
         ((ρ t).X g : Matrix (Fin Q.bondDimension) (Fin Q.bondDimension) ℂ)) ∧
-      (∀ g h, Continuous fun t => (ω t g h : ℂ)) ∧
+      (∀ g h, Continuous fun t => (ω t (g, h) : ℂ)) ∧
       (∀ (t : unitInterval) g i, twistedTensor (Q.tensor t)
         ((Matrix.unitaryGroup (Fin d) ℂ).subtype.comp (physicalCharacterUntwist χ hχ U)) g i =
         ((ρ t).X (g⁻¹) : Matrix (Fin Q.bondDimension) (Fin Q.bondDimension) ℂ) * Q.tensor t i *

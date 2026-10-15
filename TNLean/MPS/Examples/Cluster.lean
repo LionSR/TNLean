@@ -56,7 +56,7 @@ is injective and which lies in a non-trivial symmetry-protected topological
   string order and local symmetry for finitely correlated states
 -/
 
-open scoped Matrix BigOperators
+open scoped Matrix BigOperators TNLean.Algebra.ScalarCohomology
 open Matrix Finset MPSTensor
 
 noncomputable section
@@ -454,15 +454,15 @@ projective representation of `Z₂ × Z₂` on the bond space.  Its factor syste
 `clusterOmega` sends `(g, h)` to `-1` exactly when the second component of `g`
 and the first component of `h` are both nonzero, the standard commutator cocycle
 `(-1)^{g₂ h₁}`.  Its commutator phase on the two generators is `-1`, so by
-`isNontrivialClass_of_commPhase_ne_one` its class is the non-trivial element of
+`H2π_ne_zero_of_commPhase_ne_one` its class is the non-trivial element of
 `H²(Z₂ × Z₂, ℂˣ) = Z₂`. -/
 
 open TNLean.Algebra in
 /-- The cluster factor system on `Z₂ × Z₂`: `ω(g, h) = (-1)^{g₂ h₁}`, the value
 `-1` when `(g₂, h₁) = (1, 1)` and `1` otherwise. -/
 def clusterOmega : ScalarCocycle (Multiplicative (ZMod 2 × ZMod 2)) :=
-  fun g h =>
-    if (Multiplicative.toAdd g).2 = 1 ∧ (Multiplicative.toAdd h).1 = 1 then -1 else 1
+  fun p =>
+    if (Multiplicative.toAdd p.1).2 = 1 ∧ (Multiplicative.toAdd p.2).1 = 1 then -1 else 1
 
 /-- The virtual action of the explicit cluster projective representation:
 `1 ↦ I`, `(1,0) ↦ σz`, `(0,1) ↦ σx`, `(1,1) ↦ σz σx`. -/
@@ -471,7 +471,7 @@ def clusterRepX (g : Multiplicative (ZMod 2 × ZMod 2)) : GL (Fin 2) ℂ :=
     (if (Multiplicative.toAdd g).2 = 0 then 1 else clusterGaugeX)
 
 private lemma clusterOmega_apply_val (g h : Multiplicative (ZMod 2 × ZMod 2)) :
-    (clusterOmega g h : ℂ) =
+    (clusterOmega (g, h) : ℂ) =
       if (Multiplicative.toAdd g).2 = 1 ∧ (Multiplicative.toAdd h).1 = 1 then -1 else 1 := by
   rw [clusterOmega]; split <;> simp
 
@@ -533,8 +533,10 @@ lemma cluster_commPhase_eq_neg_one :
 open TNLean.Algebra in
 /-- The cluster factor system represents the non-trivial element of
 `H²(Z₂ × Z₂, ℂˣ) = Z₂`: the cluster state is a non-trivial SPT phase. -/
-theorem cluster_isNontrivialSPT : ScalarCocycle.IsNontrivialClass clusterOmega := by
-  refine ScalarCocycle.isNontrivialClass_of_commPhase_ne_one
+theorem cluster_isNontrivialSPT :
+    groupCohomology.H2π _
+      (groupCohomology.cocyclesOfIsMulCocycle₂ clusterOmega_isCocycle.isMulCocycle₂) ≠ 0 := by
+  refine ScalarCocycle.H2π_ne_zero_of_commPhase_ne_one clusterOmega_isCocycle
     (g := Multiplicative.ofAdd (1, 0)) (h := Multiplicative.ofAdd (0, 1)) ?_ ?_
   · rfl
   · rw [cluster_commPhase_eq_neg_one]

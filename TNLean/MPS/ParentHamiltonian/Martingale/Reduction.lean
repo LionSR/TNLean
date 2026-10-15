@@ -477,26 +477,12 @@ theorem parentHamiltonianES_gap_bound_of_cyclic_window_overlap_anticommutator
   · intro N hLN i
     exact cyclicWindowsOverlap_card_le hLN hL i
   · intro N hLN j
-    have hset :
-        ((Finset.univ.erase j).filter (fun i => cyclicWindowsOverlap N L i j)) =
-          ((Finset.univ.erase j).filter (fun i => cyclicWindowsOverlap N L j i)) := by
-      ext i
-      simp only [Finset.mem_filter, Finset.mem_erase, Finset.mem_univ, and_true]
-      rw [cyclicWindowsOverlap_comm N L i j]
-    rw [hset]
-    exact cyclicWindowsOverlap_card_le hLN hL j
+    simpa only [cyclicWindowsOverlap_comm N L _ j] using cyclicWindowsOverlap_card_le hLN hL j
   · intro N hLN i j _hij hnot v
-    have hnonneg₁ :
-        0 ≤ (⟪localTermES A L i v, localTermES A L j v⟫_ℂ).re :=
-      localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap A (by omega) hnot v
-    have hnot_symm : ¬ cyclicWindowsOverlap N L j i := by
-      intro hji
-      exact hnot ((cyclicWindowsOverlap_comm N L i j).mpr hji)
-    have hnonneg₂ :
-        0 ≤ (⟪localTermES A L j v, localTermES A L i v⟫_ℂ).re :=
-      localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap A (by omega)
-        hnot_symm v
-    linarith
+    exact add_nonneg
+      (localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap A (by omega) hnot v)
+      (localTermES_re_inner_nonneg_of_not_cyclicWindowsOverlap A (by omega)
+        (fun h => hnot ((cyclicWindowsOverlap_comm N L i j).mpr h)) v)
 
 open Classical in
 /-- Combined martingale criterion for a finite family of symmetric projections.

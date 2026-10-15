@@ -9,11 +9,11 @@
 
 Let $I,J$ be finite sets, let $q\in\N$, and put
 $\mathcal H=(\C^q)^{\otimes I}$ and $\mathcal K=\C^J$.
-The spectator dimension may be zero. Let $F$ be a set of event labels,
+Let $F$ be a set of event labels,
 and write $\mathcal E_i$ for the full spectator root map associated
 with the physical matrix $k_i$, as in
 Definition~\ref{def:al_local_root_channel}.
-All input operators are arbitrary complex matrices on
+All input operators are complex matrices on
 $\mathcal H\otimes\mathcal K$, with the Euclidean operator norm.
 Write $wi$ for the word obtained by appending a single label $i$ to
 the right of a finite word $w$.
@@ -74,7 +74,6 @@ the right of a finite word $w$.
         \label{eq:al_word_relabel}
         \mathcal E_{f(w)}(B) & =\widetilde{\mathcal E}_w(B).
     \end{align}
-    The map $f$ may identify distinct labels.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -107,7 +106,6 @@ the right of a finite word $w$.
     \end{align}
     This is the finite composition identity in
     \cite[Section~10]{OpenAI2026AreaLaw}.
-    Neither vector need be normalized, and $B$ need not be Hermitian.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -236,8 +234,7 @@ $S\subseteq I$, then~(\ref{eq:al_word_empty}) gives
     \end{align}
     Every oscillation on the right is evaluated at the same current
     observable $B_w$. Labels with the same anchor remain distinct
-    summands. The estimate holds for arbitrary finite spectators
-    and arbitrary complex initial operators $B_0$.
+    summands.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -283,7 +280,7 @@ $w=(i_0,\ldots,i_{m-1})$ the probability
     \nu_t(\{w\}) & =e^{-|F|t}\frac{t^m}{m!}.
 \end{align}
 These masses sum to one. The empty alphabet has only the empty word,
-whose mass is one. In this section, $B_w$ always denotes the actual
+whose mass is one. In this section, $B_w$ denotes the
 composition~(\ref{eq:al_word_composition}), and expectations are taken
 with respect to $\nu_t$.
 
@@ -334,8 +331,6 @@ In particular, $H_{\varnothing}=0$.
          & \le e^{vt}\,2\|B\|\,H_S(y).
     \end{align}
     If $d_G(y,S)=\infty$, then $d_y(B_w)=0$ for every word $w$.
-    The input $B$ may be non-Hermitian and the spectator space may
-    have dimension zero.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -369,7 +364,7 @@ In particular, $H_{\varnothing}=0$.
     \leanok
     Under the effect, component support, tail and cutoff hypotheses
     of Theorem~\ref{thm:al_channel_word_kernel_increment}, put
-    $\beta=c/(4\cdot2^\alpha)$ and use the actual kernel
+    $\beta=c/(4\cdot2^\alpha)$ and use the kernel
     $\mathsf A^{(N)}$ with $D=2(2+8\sqrt C e^{c/2})$ and $b=c/2$.
     Suppose its weighted rows satisfy
     (\ref{eq:al_poisson_weighted_rows}) for some $v\ge0$.
@@ -382,8 +377,8 @@ In particular, $H_{\varnothing}=0$.
     \uses{thm:al_actual_channel_kernel_domination,
         thm:al_graph_event_kernel_nonneg,thm:al_graph_kernel_disconnected,
         thm:al_channel_poisson_kernel_growth}
-    Theorem~\ref{thm:al_actual_channel_kernel_domination} supplies
-    (\ref{eq:al_poisson_physical_increment}) for the actual kernel.
+    Theorem~\ref{thm:al_actual_channel_kernel_domination} gives
+    (\ref{eq:al_poisson_physical_increment}) for the kernel $\mathsf A^{(N)}$.
     The kernel is nonnegative and has no entries between distinct
     components. Apply
     Theorem~\ref{thm:al_channel_poisson_kernel_growth}.
@@ -401,7 +396,7 @@ In particular, $H_{\varnothing}=0$.
     Take any local dimension $q>0$, finite lattice domain $\Lambda$,
     Hamiltonian, anchors and gapped ground vector satisfying the
     hypotheses of Theorem~\ref{thm:al_lattice_channel_uniform_bounds}.
-    Retain any subfamily $F_P$ of its event labels, and use its actual
+    Retain any subfamily $F_P$ of its event labels, and use its
     positive constraints $k_i$, formed from the original Hamiltonian.
     Put $\alpha=p/(p+1)$ and $\beta=c/(4\cdot2^\alpha)$.
     For every finite spectator, support $S\subseteq\Lambda$,
@@ -414,9 +409,8 @@ In particular, $H_{\varnothing}=0$.
     \end{align}
     The oscillation is integrable. It vanishes at every word when
     the component of $y$ does not meet $S$. The same $c,v$ work for
-    all domains, local dimensions, retained families, spectators
-    and initial operators, including empty retained families and
-    empty supports.
+    all domains, local dimensions, retained families, spectators,
+    and initial operators.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -429,7 +423,7 @@ In particular, $H_{\varnothing}=0$.
     $N$ to be the maximum component radius of its anchors, with
     maximum zero for the empty family. That theorem gives both
     (\ref{eq:al_poisson_physical_increment}) and
-    (\ref{eq:al_poisson_weighted_rows}) for the actual finite
+    (\ref{eq:al_poisson_weighted_rows}) for the finite
     event kernel. The kernel is nonnegative and zero between
     components, so Theorem~\ref{thm:al_channel_poisson_kernel_growth}
     gives~(\ref{eq:al_poisson_lattice_decay}) and the remaining

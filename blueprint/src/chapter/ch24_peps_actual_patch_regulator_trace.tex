@@ -1,0 +1,50 @@
+\section{The regulator trace at a patch minimum}
+\label{sec:peps_actual_patch_regulator_trace}
+
+Use the finite local coordinates, nested regions, and positive weights
+$a_j>0$ of Theorem~\ref{thm:peps_actual_patch_minimum_stationarity}, and suppose now
+that $\|\Omega\|=1$. Write $b=e^{-R}$ and let $x$ be a feasible minimum
+of the same ordered norm objective. For an index $j$, let $\sigma_j$ be
+the marginal of the original vector $\Omega$ on $X_j$, and let $\rho_j$
+be the marginal of the normalized minimizing output, and set
+$T_j=b\rho_j(x_j+bI_{X_j})^{-1}$.
+The next implication isolates the spectral estimate in the
+\href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L362-L418}{regulator argument}.
+The entropy and distance bounds are explicit assumptions; deriving them
+from the physical area law and Hamiltonian gap remains a separate step.
+
+\begin{theorem}[Regulator trace from the original marginal]
+    \label{thm:peps_actual_patch_regulator_trace}
+    \lean{TNLean.PEPS.trace_regularizedPatchRegulator_le_quarter_of_isMinOn}
+    \leanok
+    Let $C>0$, $u\ge0$, and
+    $R\ge(16C+\log8)(1+u)$. Suppose that
+    $S(\sigma_j)\le C(1+u)$ and
+    $\|\rho_j-\sigma_j\|_1\le\tfrac1{16}$.
+    Then $\operatorname{tr}T_j\le\tfrac14$.
+    The trace norm here is the full trace norm.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_actual_patch_minimum_stationarity}
+    Both marginals are density matrices. At
+    $Q_j=\mathbf1_{[e^{-16C(1+u)},\infty)}(\sigma_j)$, the entropy bound gives
+    \begin{align}
+        \operatorname{rank}Q_j\le e^{16C(1+u)},\qquad
+        \operatorname{tr}((I-Q_j)\sigma_j)\le\frac1{16}.
+    \end{align}
+    The expectation difference of any effect is bounded by half the full
+    trace-norm distance. Thus
+    $\operatorname{tr}((I-Q_j)\rho_j)\le\tfrac1{16}+\tfrac1{32}\le\tfrac18$.
+    Stationarity at the actual minimum gives
+    $[x_j,\rho_j]=0$ and $\rho_j\le x_j+bI_{X_j}$, hence
+    $0\le T_j\le bI_{X_j}$ and $T_j\le\rho_j$. Consequently
+    \begin{align}
+        \operatorname{tr}T_j
+         & \le b\operatorname{rank}Q_j+
+        \operatorname{tr}((I-Q_j)\rho_j)
+        \le\frac18+\frac18=\frac14.
+    \end{align}
+    The spectral projection is always that of the original marginal;
+    it need not commute with $\rho_j$ or $T_j$.
+\end{proof}

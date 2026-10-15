@@ -347,6 +347,14 @@ theorem norm_inverseGram_comp_leftBoundaryMapES_adjoint_le_sqrt
   rw [inverseGram_leftBoundaryMapES_eq_fiberwise_inverseGram A K L h]
   exact norm_boundaryFiberwiseMap_le _ _
 
+/-- Submultiplicativity of the operator norm, with bounds on both factors. -/
+private theorem norm_comp_le_of_le {E F G : Type*}
+    [SeminormedAddCommGroup E] [SeminormedAddCommGroup F] [SeminormedAddCommGroup G]
+    [NormedSpace ℂ E] [NormedSpace ℂ F] [NormedSpace ℂ G]
+    {f : F →L[ℂ] G} {g : E →L[ℂ] F} {a b : ℝ} (hf : ‖f‖ ≤ a) (hg : ‖g‖ ≤ b) :
+    ‖f.comp g‖ ≤ a * b :=
+  (f.opNorm_comp_le g).trans (mul_le_mul hf hg (norm_nonneg _) ((norm_nonneg _).trans hf))
+
 /-- Raw operator-norm bound for the tail finite-Gram correction. -/
 theorem c3TailFiniteGramCorrectionES_norm_le [NeZero D]
     (A : MPSTensor d D) (K l : ℕ)
@@ -379,31 +387,12 @@ theorem c3TailFiniteGramCorrectionES_norm_le [NeZero D]
     (groundSpaceMapES A (K + l + 1)) hFull).comp
       (groundSpaceMapES A (K + l + 1)).adjoint
   change ‖Ptail.comp (E.comp (J.comp Pfull))‖ ≤ _
-  calc
-    ‖Ptail.comp (E.comp (J.comp Pfull))‖ ≤
-        ‖Ptail‖ * ‖E.comp (J.comp Pfull)‖ :=
-      ContinuousLinearMap.opNorm_comp_le _ _
-    _ ≤ ‖Ptail‖ * (‖E‖ * ‖J.comp Pfull‖) := by
-      gcongr
-      exact ContinuousLinearMap.opNorm_comp_le _ _
-    _ ≤ ‖Ptail‖ * (‖E‖ * (‖J‖ * ‖Pfull‖)) := by
-      gcongr
-      exact ContinuousLinearMap.opNorm_comp_le _ _
-    _ = ‖Ptail‖ * ‖E‖ * ‖J‖ * ‖Pfull‖ := by ring
-    _ ≤ Real.sqrt ‖ContinuousLinearMap.inverseGram
-          (groundSpaceMapES A (l + 1)) hLocalTail‖ *
-        ‖groundSpaceGram A (l + 1) - Matrix.gramReshuffle
-          (fixedPointProj ρ (ne_of_gt hρ.trace_pos))‖ *
-        ‖tailVirtualMapES A K‖ *
-        Real.sqrt ‖ContinuousLinearMap.inverseGram
-          (groundSpaceMapES A (K + l + 1)) hFull‖ := by
-      dsimp only [Ptail, E, J, Pfull]
-      rw [ContinuousLinearMap.norm_inverseGram_comp_adjoint_eq_sqrt]
-      gcongr
-      · exact norm_tailBoundaryMapES_comp_inverseGram_le_sqrt
-          A K (l + 1) hLocalTail
-      · exact norm_boundaryFiberwiseMap_le _ _
-    _ = _ := by ring
+  refine (norm_comp_le_of_le
+    (norm_tailBoundaryMapES_comp_inverseGram_le_sqrt A K (l + 1) hLocalTail)
+    (norm_comp_le_of_le (norm_boundaryFiberwiseMap_le _ _)
+      (norm_comp_le_of_le le_rfl
+        (ContinuousLinearMap.norm_inverseGram_comp_adjoint_eq_sqrt _ _).le))).trans_eq ?_
+  ring
 
 /-- Raw operator-norm bound for the full inverse-Gram correction. -/
 theorem c3FullInverseGramCorrectionES_norm_le [NeZero D]
@@ -441,41 +430,14 @@ theorem c3FullInverseGramCorrectionES_norm_le [NeZero D]
       (groundSpaceMapES A (K + l + 1)).adjoint
   change ‖Ptail.comp (Ktail.comp (J.comp (Iinf.comp
     (Efull.comp Pfull))))‖ ≤ _
-  calc
-    _ ≤ ‖Ptail‖ * ‖Ktail.comp (J.comp (Iinf.comp
-          (Efull.comp Pfull)))‖ :=
-      ContinuousLinearMap.opNorm_comp_le _ _
-    _ ≤ ‖Ptail‖ * (‖Ktail‖ * ‖J.comp (Iinf.comp
-          (Efull.comp Pfull))‖) := by
-      gcongr
-      exact ContinuousLinearMap.opNorm_comp_le _ _
-    _ ≤ ‖Ptail‖ * (‖Ktail‖ * (‖J‖ * ‖Iinf.comp
-          (Efull.comp Pfull)‖)) := by
-      gcongr
-      exact ContinuousLinearMap.opNorm_comp_le _ _
-    _ ≤ ‖Ptail‖ * (‖Ktail‖ * (‖J‖ * (‖Iinf‖ *
-          ‖Efull.comp Pfull‖))) := by
-      gcongr
-      exact ContinuousLinearMap.opNorm_comp_le _ _
-    _ ≤ ‖Ptail‖ * (‖Ktail‖ * (‖J‖ * (‖Iinf‖ *
-          (‖Efull‖ * ‖Pfull‖)))) := by
-      gcongr
-      exact ContinuousLinearMap.opNorm_comp_le _ _
-    _ = ‖Ptail‖ * ‖Ktail‖ * ‖J‖ * ‖Iinf‖ * ‖Efull‖ * ‖Pfull‖ := by ring
-    _ ≤ Real.sqrt ‖ContinuousLinearMap.inverseGram
-          (groundSpaceMapES A (l + 1)) hLocalTail‖ * ‖Kinf‖ *
-        ‖tailVirtualMapES A K‖ * ‖Ring.inverse Kinf‖ *
-        ‖groundSpaceGram A (K + l + 1) - Kinf‖ *
-        Real.sqrt ‖ContinuousLinearMap.inverseGram
-          (groundSpaceMapES A (K + l + 1)) hFull‖ := by
-      dsimp only [Ptail, Ktail, J, Iinf, Efull, Pfull]
-      -- Reverse the Gram difference only inside its norm to match the stated error.
-      rw [norm_sub_rev, ContinuousLinearMap.norm_inverseGram_comp_adjoint_eq_sqrt]
-      gcongr
-      · exact norm_tailBoundaryMapES_comp_inverseGram_le_sqrt
-          A K (l + 1) hLocalTail
-      · exact norm_boundaryFiberwiseMap_le _ _
-    _ = _ := by ring
+  -- Reverse the Gram difference only inside its norm to match the stated error.
+  refine (norm_comp_le_of_le
+    (norm_tailBoundaryMapES_comp_inverseGram_le_sqrt A K (l + 1) hLocalTail)
+    (norm_comp_le_of_le (norm_boundaryFiberwiseMap_le _ _)
+      (norm_comp_le_of_le le_rfl (norm_comp_le_of_le le_rfl
+        (norm_comp_le_of_le (norm_sub_rev _ _).le
+          (ContinuousLinearMap.norm_inverseGram_comp_adjoint_eq_sqrt _ _).le))))).trans_eq ?_
+  ring
 
 /-- Raw operator-norm bound for the left finite-Gram correction. -/
 theorem c3LeftFiniteGramCorrectionES_norm_le [NeZero D]
@@ -517,48 +479,15 @@ theorem c3LeftFiniteGramCorrectionES_norm_le [NeZero D]
           (leftBoundaryMapES A (K + l) 1).adjoint
   change ‖Ptail.comp (Ktail.comp (Jtail.comp (Iinf.comp
     (JleftAdj.comp (Eleft.comp Pleft)))))‖ ≤ _
-  calc
-    _ ≤ ‖Ptail‖ * ‖Ktail.comp (Jtail.comp (Iinf.comp
-          (JleftAdj.comp (Eleft.comp Pleft))))‖ :=
-      ContinuousLinearMap.opNorm_comp_le _ _
-    _ ≤ ‖Ptail‖ * (‖Ktail‖ * ‖Jtail.comp (Iinf.comp
-          (JleftAdj.comp (Eleft.comp Pleft)))‖) := by
-      gcongr
-      exact ContinuousLinearMap.opNorm_comp_le _ _
-    _ ≤ ‖Ptail‖ * (‖Ktail‖ * (‖Jtail‖ * ‖Iinf.comp
-          (JleftAdj.comp (Eleft.comp Pleft))‖)) := by
-      gcongr
-      exact ContinuousLinearMap.opNorm_comp_le _ _
-    _ ≤ ‖Ptail‖ * (‖Ktail‖ * (‖Jtail‖ * (‖Iinf‖ *
-          ‖JleftAdj.comp (Eleft.comp Pleft)‖))) := by
-      gcongr
-      exact ContinuousLinearMap.opNorm_comp_le _ _
-    _ ≤ ‖Ptail‖ * (‖Ktail‖ * (‖Jtail‖ * (‖Iinf‖ *
-          (‖JleftAdj‖ * ‖Eleft.comp Pleft‖)))) := by
-      gcongr
-      exact ContinuousLinearMap.opNorm_comp_le _ _
-    _ ≤ ‖Ptail‖ * (‖Ktail‖ * (‖Jtail‖ * (‖Iinf‖ *
-          (‖JleftAdj‖ * (‖Eleft‖ * ‖Pleft‖))))) := by
-      gcongr
-      exact ContinuousLinearMap.opNorm_comp_le _ _
-    _ = ‖Ptail‖ * ‖Ktail‖ * ‖Jtail‖ * ‖Iinf‖ * ‖JleftAdj‖ *
-        ‖Eleft‖ * ‖Pleft‖ := by ring
-    _ ≤ Real.sqrt ‖ContinuousLinearMap.inverseGram
-          (groundSpaceMapES A (l + 1)) hLocalTail‖ * ‖Kinf‖ *
-        ‖tailVirtualMapES A K‖ * ‖Ring.inverse Kinf‖ *
-        ‖leftVirtualMapES A 1‖ * ‖groundSpaceGram A (K + l) - Kinf‖ *
-        Real.sqrt ‖ContinuousLinearMap.inverseGram
-          (groundSpaceMapES A (K + l)) hLocalLeft‖ := by
-      dsimp only [Ptail, Ktail, Jtail, Iinf, JleftAdj, Eleft, Pleft]
-      rw [LinearIsometryEquiv.norm_map
-        (ContinuousLinearMap.adjoint (𝕜 := ℂ))]
-      gcongr
-      · exact norm_tailBoundaryMapES_comp_inverseGram_le_sqrt
-          A K (l + 1) hLocalTail
-      · exact norm_boundaryFiberwiseMap_le _ _
-      · exact norm_boundaryFiberwiseMap_le _ _
-      · exact norm_inverseGram_comp_leftBoundaryMapES_adjoint_le_sqrt
-          A (K + l) 1 hLocalLeft
-    _ = _ := by ring
+  refine (norm_comp_le_of_le
+    (norm_tailBoundaryMapES_comp_inverseGram_le_sqrt A K (l + 1) hLocalTail)
+    (norm_comp_le_of_le (norm_boundaryFiberwiseMap_le _ _)
+      (norm_comp_le_of_le le_rfl (norm_comp_le_of_le le_rfl
+        (norm_comp_le_of_le (LinearIsometryEquiv.norm_map
+          (ContinuousLinearMap.adjoint (𝕜 := ℂ)) (leftVirtualMapES A 1)).le
+          (norm_comp_le_of_le (norm_boundaryFiberwiseMap_le _ _)
+            (norm_inverseGram_comp_leftBoundaryMapES_adjoint_le_sqrt
+              A (K + l) 1 hLocalLeft))))))).trans_eq ?_
+  ring
 
 end MPSTensor

@@ -1,0 +1,393 @@
+\section{The memory of several sheets}
+\label{sec:peps_sheet_stacks}
+In the protocol of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} the memory
+holds the main sheet, the active auxiliary sheets, the frozen auxiliary sheets
+and the copies of $\Omega$ not yet in use. Every copy of $\Omega$, including the
+main copy at the root, is initialized privately at its future owner, and the
+reference vector at every stage is the tensor product of the reference vectors
+of the encoded frames of the sheets, every factor of norm at most one
+(\texttt{06-geometry.tex}, lines 653--681). This section collects the
+bookkeeping of this memory: the initial private maps, the reorderings of the
+sheets, the changes that leave a frame unchanged, and the norm of the reference
+vector. The initialization assumes that the product of the reference vectors of the
+frames of each party has norm one; for the raw frames of the initial memory, which have
+no holes, this is the normalization of $\Omega$.
+
+\begin{definition}[The memory of several sheets]
+    \label{def:peps_sheet_stack}
+    \lean{TNLean.PEPS.EncodedFrame.stackRegs,
+        TNLean.PEPS.EncodedFrame.SheetStack,
+        TNLean.PEPS.EncodedFrame.Frame.regRef,
+        TNLean.PEPS.EncodedFrame.stackVec,
+        TNLean.PEPS.EncodedFrame.framesVec}
+    \leanok
+    \uses{def:peps_frame_registers}
+    For a list of encoded frames $\mathcal F_1,\dots,\mathcal F_m$ and a list $\ell$
+    of further registers, the memory of the sheets is the tensor product of the
+    registers of the frames, in order, followed by those of $\ell$. For a vector
+    $\xi$ of the registers of $\ell$, the reference vector of the sheets is
+    $\Omega_{\mathcal F_1}\otimes\cdots\otimes\Omega_{\mathcal F_m}\otimes\xi$.
+\end{definition}
+
+\begin{theorem}[Reordering the sheets]
+    \label{thm:peps_sheet_reordering}
+    \lean{TNLean.PEPS.EncodedFrame.stackRegs_append,
+        TNLean.PEPS.EncodedFrame.stackVec_append,
+        TNLean.PEPS.EncodedFrame.exists_reordering_stackVec,
+        TNLean.PEPS.EncodedFrame.exists_originalCircuit_stackVec_of_perm}
+    \leanok
+    \uses{def:peps_sheet_stack}
+    Let $\mathcal F'_1,\dots,\mathcal F'_m$ be a permutation of the frames
+    $\mathcal F_1,\dots,\mathcal F_m$. There is a word of exchanges of tensor
+    factors from the memory of the first list, followed by $\ell$, to that of the
+    second list, followed by $\ell$, which carries the reference vector of the first
+    list to that of the second for every vector $\xi$ of $\ell$. As an original
+    circuit it has no nonprivate gate. In particular an auxiliary sheet can be moved
+    next to the main sheet before a lens exchange.
+\end{theorem}
+
+\begin{proof}\leanok
+    Induct on the permutation. Prepending a common frame frames the word by its
+    registers, and two adjacent frames are interchanged by exchanging their two
+    blocks of registers.
+\end{proof}
+
+\begin{theorem}[The initial private maps]
+    \label{thm:peps_sheet_initialization}
+    \lean{TNLean.PEPS.EncodedFrame.framesSpace,
+        TNLean.PEPS.EncodedFrame.splitMap,
+        TNLean.PEPS.EncodedFrame.splitMap_tmul_one,
+        TNLean.PEPS.EncodedFrame.norm_splitMap_le,
+        TNLean.PEPS.EncodedFrame.splitCircuit,
+        TNLean.PEPS.EncodedFrame.nonprivateCount_splitCircuit,
+        TNLean.PEPS.EncodedFrame.isExpansionBounded_splitCircuit,
+        TNLean.PEPS.EncodedFrame.isMonomialBounded_splitCircuit,
+        TNLean.PEPS.EncodedFrame.participants_splitCircuit_subset,
+        TNLean.PEPS.EncodedFrame.eval_splitCircuit,
+        TNLean.PEPS.EncodedFrame.exists_originalCircuit_initial}
+    \leanok
+    \uses{def:peps_sheet_stack}
+    Let every frame of a list be held entirely by one party: all its registers,
+    raw and tag, belong to that party. Give each party, as its whole initial private
+    memory, the registers of its frames in the order of the list, and as its
+    initial vector the product of their reference vectors, assumed of norm one.
+    Then one private map per party, followed by a reordering of the frames, carries
+    the product of the initial vectors of all parties exactly to the reference
+    vector of the list. The resulting circuit has no nonprivate gate. This is the
+    pure product initialization of \texttt{06-geometry.tex}, lines 658--662.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_sheet_reordering}
+    Each private map identifies the whole memory of a party with the memory of its
+    frames. The concatenation, over the parties, of their lists of frames is a
+    permutation of the list: a frame occurs in the list of its party exactly as
+    often as in the list. Theorem~\ref{thm:peps_sheet_reordering} reorders the
+    frames.
+\end{proof}
+
+\begin{theorem}[The initial step from raw copies]
+    \label{thm:peps_sheet_raw_initialization}
+    \lean{TNLean.PEPS.EncodedFrame.Frame.norm_refVec_of_holes_eq_nil,
+        TNLean.PEPS.EncodedFrame.norm_framesVec_of_holes_eq_nil,
+        TNLean.PEPS.EncodedFrame.exists_originalCircuit_initial_of_holes_eq_nil}
+    \leanok
+    \uses{thm:peps_sheet_initialization}
+    A frame without holes has reference vector of norm $\lVert\Omega\rVert$. Let
+    $\lVert\Omega\rVert=1$ and let every frame of the list have no hole and be held
+    entirely by one party: the main copy at the root and the auxiliary copies at
+    their future owners. Then the product of the reference vectors of the frames of
+    every party has norm one, and the initial private maps of
+    Theorem~\ref{thm:peps_sheet_initialization} apply (\texttt{06-geometry.tex},
+    lines 658--667).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_sheet_initialization, thm:peps_frame_norm}
+    Without holes the product of the hole projectors is the identity, so
+    $\lVert\Omega_{\mathcal F}\rVert=\lVert\Omega\rVert=1$, and the norm of a product
+    of reference vectors is the product of their norms.
+\end{proof}
+
+\begin{theorem}[Changes that leave a frame unchanged]
+    \label{thm:peps_identity_change}
+    \lean{TNLean.PEPS.EncodedFrame.exists_originalCircuit_of_frame_eq,
+        TNLean.PEPS.EncodedFrame.Frame.changeOwner_empty,
+        TNLean.PEPS.Approximation.emptyTarget_step}
+    \leanok
+    \uses{def:peps_sheet_stack}
+    A change between equal frames, such as a birth or death whose raw target is
+    empty or the resize of a hole whose radius does not change, is the circuit
+    without operations: it has no nonprivate gate and carries the reference vector
+    of the frame to itself. Changing the owner of an empty set of raw registers
+    leaves a frame unchanged (\texttt{06-geometry.tex}, lines 432--438 and
+    529--541).
+\end{theorem}
+
+\begin{proof}\leanok
+    Immediate.
+\end{proof}
+
+\begin{theorem}[The norm of the reference vector of several sheets]
+    \label{thm:peps_sheet_stack_norm}
+    \lean{TNLean.PEPS.EncodedFrame.one_sub_mul_le_norm_stackVec,
+        TNLean.PEPS.EncodedFrame.one_sub_div_pow_le_norm_stackVec}
+    \leanok
+    \uses{def:peps_sheet_stack,thm:peps_frame_norm}
+    Let $\lVert\Omega\rVert=1$, and let every hole of every frame
+    $\mathcal F_1,\dots,\mathcal F_m$ satisfy
+    $\lVert(\id-P)\Omega\rVert\le\varepsilon$. If the frames have $r$ holes in
+    total, then
+    \begin{align*}
+        (1-r\varepsilon)\lVert\xi\rVert
+         & \le\lVert\Omega_{\mathcal F_1}\otimes\cdots\otimes
+        \Omega_{\mathcal F_m}\otimes\xi\rVert .
+    \end{align*}
+    In particular, if $\varepsilon=L^{-60}$, $r\le CL^3$ and
+    $\lVert\xi\rVert=1$, the reference vector has norm between $1-CL^{-57}$ and
+    $1$. The bound $r\le CL^3$ on the total number of holes is a hypothesis here;
+    in the source it is the count of frozen auxiliary holes,
+    \texttt{06-geometry.tex}, lines 653--656 and 674--678.
+\end{theorem}
+
+\begin{proof}\leanok
+    By Theorem~\ref{thm:peps_frame_norm}, the frame $\mathcal F_i$ with $r_i$ holes
+    has $1-r_i\varepsilon\le\lVert\Omega_{\mathcal F_i}\rVert\le1$. For
+    $1-a\le x\le1$ and $(1-b)z\le y\le z$ one has
+    $xy=y-(1-x)y\ge y-az\ge(1-a-b)z$; induct over the frames.
+\end{proof}
+
+\begin{definition}[The final regrouping]
+    \label{def:peps_final_regrouping}
+    \lean{TNLean.PEPS.EncodedFrame.trivialTag,
+        TNLean.PEPS.EncodedFrame.physVec,
+        TNLean.PEPS.EncodedFrame.freshMap,
+        TNLean.PEPS.EncodedFrame.freshMap_apply,
+        TNLean.PEPS.EncodedFrame.norm_freshMap_le,
+        TNLean.PEPS.EncodedFrame.renameMap,
+        TNLean.PEPS.EncodedFrame.renameMap_tmul,
+        TNLean.PEPS.EncodedFrame.norm_renameMap_le,
+        TNLean.PEPS.EncodedFrame.finOneOf,
+        TNLean.PEPS.EncodedFrame.nonprivateCount_freshCircuit,
+        TNLean.PEPS.EncodedFrame.nonprivateCount_siteCircuit,
+        TNLean.PEPS.EncodedFrame.mem_nonsiteParties,
+        TNLean.PEPS.EncodedFrame.nonsiteParties_dim,
+        TNLean.PEPS.EncodedFrame.freshCircuit,
+        TNLean.PEPS.EncodedFrame.siteCircuit,
+        TNLean.PEPS.EncodedFrame.nonsiteParties,
+        TNLean.PEPS.EncodedFrame.siteOrder,
+        TNLean.PEPS.EncodedFrame.readoutPrivate,
+        TNLean.PEPS.EncodedFrame.readoutCircuit}
+    \leanok
+    \uses{def:peps_sheet_stack}
+    Let the main frame $\mathcal M$ be the first sheet of the memory. The final regrouping moves the raw registers of
+    $\mathcal M$ in front of its tag registers, renames the raw register of each
+    site, by a private map at its party, as the physical register of that party,
+    and lets every party without a site prepare a physical register of dimension
+    one by a private map. The physical registers are listed in the order of the
+    sites, followed by the parties without a site; the private registers are the
+    tags of $\mathcal M$ followed by the registers of the other sheets and of the
+    idle copies (\texttt{06-geometry.tex}, lines 48--51 and 669--681).
+\end{definition}
+
+\begin{theorem}[The final reference vector]
+    \label{thm:peps_final_reference}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isEmpty_nonprivateLocations_of_nonprivateCount_eq_zero,
+        TNLean.PEPS.PairEffect.OriginalCircuit.participants_subset_of_nonprivateCount_eq_zero,
+        TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_of_nonprivateCount_eq_zero,
+        TNLean.PEPS.PairEffect.OriginalCircuit.isMonomialBounded_of_nonprivateCount_eq_zero,
+        TNLean.PEPS.EncodedFrame.eq_trivialTag,
+        TNLean.PEPS.EncodedFrame.rawProd_trivialTag,
+        TNLean.PEPS.EncodedFrame.Frame.regRef_of_outer_eq_empty,
+        TNLean.PEPS.EncodedFrame.familyPhysicalListBasis_eq_physVec,
+        TNLean.PEPS.EncodedFrame.familyLabelledPhysicalBasis_eq_physVec,
+        TNLean.PEPS.EncodedFrame.eval_freshCircuit,
+        TNLean.PEPS.EncodedFrame.eval_siteCircuit,
+        TNLean.PEPS.EncodedFrame.nodup_siteOrder,
+        TNLean.PEPS.EncodedFrame.mem_siteOrder,
+        TNLean.PEPS.EncodedFrame.nonprivateCount_readoutCircuit,
+        TNLean.PEPS.EncodedFrame.eval_readoutCircuit_stackVec,
+        TNLean.PEPS.EncodedFrame.readout_eval_readoutCircuit_stackVec,
+        TNLean.PEPS.EncodedFrame.exists_readoutCircuit_norm,
+        TNLean.PEPS.Approximation.DyadicProtocol.physicalConfigEquiv_apply_val,
+        TNLean.PEPS.Approximation.DyadicProtocol.readout_eq_euclideanTensorVector}
+    \leanok
+    \uses{def:peps_final_regrouping, def:peps_dyadic_protocol}
+    The final regrouping has no nonprivate gate. Let the raw owner of the main frame $\mathcal M$ be
+    injective, and let every hole of the main frame
+    $\mathcal M$ have empty physical outer sample, let the physical dimension be
+    $q$ at the party of every site and one at every other party, and read the
+    physical configurations of the parties as configurations of the sites. Then,
+    for every $\Omega$ and every vector $\xi$ of the idle registers, the
+    physical-private coordinates of the regrouped reference vector
+    $\Omega_{\mathcal M}\otimes\Omega_{\mathcal F_1}\otimes\cdots\otimes
+        \Omega_{\mathcal F_m}\otimes\xi$ are those of $\Omega\otimes\Xi$, where $\Xi$
+    is the vector of the private registers and
+    $\lVert\Xi\rVert=\lVert\Omega_{\mathcal F_1}\otimes\cdots\otimes
+        \Omega_{\mathcal F_m}\otimes\xi\rVert$. If moreover
+    $\lVert\Omega\rVert=\lVert\xi\rVert=1$, every hole of the other frames
+    satisfies $\lVert(\id-P)\Omega\rVert\le L^{-60}$ and the other frames have at
+    most $CL^3$ holes in total, then $1-CL^{-57}\le\lVert\Xi\rVert\le1$. The bound
+    on the number of holes is a hypothesis here. For a protocol whose final layout
+    is the output of the regrouping, the readout of the protocol is then
+    $\Omega\otimes\Xi$ (\texttt{06-geometry.tex}, lines 43--51 and 669--681).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_sheet_stack_norm}
+    A hole with empty outer sample has only the identity tag, with identity raw
+    part, so $\Omega_{\mathcal M}=\sum_c\Omega(c)\,\lvert\tau_0\rangle\otimes
+        \lvert c\rangle$. On a basis vector $\lvert c\rangle$ of the raw registers, the
+    exchanges move $\lvert c\rangle$ to the front, the renaming sends it to the
+    physical basis vector of $c$, and the fresh registers add the basis vector of
+    the one-point coordinate. By linearity, the regrouped vector is
+    $\sum_c\Omega(c)\,\lvert c\rangle\otimes\pi$, with $\pi$ the product of the tags
+    and the other factors, and its coordinates are $\Omega(c)$ times those of
+    $\pi$. The norm bound is Theorem~\ref{thm:peps_sheet_stack_norm}.
+\end{proof}
+
+\begin{definition}[Bounded changes of the sheets]
+    \label{def:peps_bounded_change}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_mono,
+        TNLean.PEPS.PairEffect.OriginalCircuit.norm_eval_le_norm,
+        TNLean.PEPS.PairEffect.OriginalCircuit.IsBoundedChange,
+        TNLean.PEPS.EncodedFrame.HasBoundedChange}
+    \leanok
+    \uses{def:peps_sheet_stack}
+    An original circuit is a bounded change from a vector $x$ to a vector $y$, with
+    participants in a set $S$ and bounds $r$ and $K$ and error $\varepsilon$, if it
+    has at most one nonprivate gate, every participant of that gate lies in $S$,
+    every monomial of its expansion has at most $r$ pair effects, its coefficient
+    sum and its number of monomials are at most $K$, and it takes $x$ within
+    $\varepsilon$ of $y$. A bounded change of the sheets from the frames
+    $\mathcal F_1,\dots,\mathcal F_m$ to the frames
+    $\mathcal F'_1,\dots,\mathcal F'_{m'}$, followed by the same further registers
+    $\ell$ with vector $\xi$, is a bounded change between their memories from
+    $\Omega_{\mathcal F_1}\otimes\cdots\otimes\Omega_{\mathcal F_m}\otimes\xi$ to
+    $\Omega_{\mathcal F'_1}\otimes\cdots\otimes\Omega_{\mathcal F'_{m'}}\otimes\xi$.
+    These are the per-change requirements of items 2 and 4 of
+    \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} (\texttt{06-geometry.tex},
+    lines 25--41 and 572--583).
+\end{definition}
+
+\begin{theorem}[Operations that preserve bounded changes]
+    \label{thm:peps_bounded_change_closure}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.IsBoundedChange.mono,
+        TNLean.PEPS.PairEffect.OriginalCircuit.IsBoundedChange.comp_right,
+        TNLean.PEPS.PairEffect.OriginalCircuit.IsBoundedChange.comp_left,
+        TNLean.PEPS.PairEffect.OriginalCircuit.isBoundedChange_id,
+        TNLean.PEPS.PairEffect.Word.isBoundedChange_toOriginalCircuit,
+        TNLean.PEPS.PairEffect.PartyChain.isBoundedChange_toOriginalCircuit,
+        TNLean.PEPS.EncodedFrame.pairRef_eq_twoLayoutIso_symm,
+        TNLean.PEPS.EncodedFrame.HasBoundedChange.mono,
+        TNLean.PEPS.EncodedFrame.hasBoundedChange_of_perm,
+        TNLean.PEPS.EncodedFrame.hasBoundedChange_refl,
+        TNLean.PEPS.EncodedFrame.HasBoundedChange.perm_left,
+        TNLean.PEPS.EncodedFrame.HasBoundedChange.perm_right,
+        TNLean.PEPS.EncodedFrame.hasBoundedChange_liftOne,
+        TNLean.PEPS.EncodedFrame.hasBoundedChange_liftTwo,
+        TNLean.PEPS.EncodedFrame.hasBoundedChange_activate,
+        TNLean.PEPS.EncodedFrame.hasBoundedChange_perm_liftOne,
+        TNLean.PEPS.EncodedFrame.exists_isBoundedChange_of_frame_eq}
+    \leanok
+    \uses{def:peps_bounded_change, thm:peps_sheet_reordering, thm:peps_identity_change}
+    Let $\lVert\Omega\rVert\le1$ and $\lVert\xi\rVert\le1$.
+    \begin{enumerate}
+        \item A permutation of the sheets, and the change between equal frames, are
+              bounded changes with any participants, any bounds and any error
+              $\varepsilon\ge0$. A permutation of the sheets before or after a bounded
+              change gives a bounded change with the same data.
+        \item A bounded change of one frame $\mathcal F$ into $\mathcal F'$, from
+              $\Omega_{\mathcal F}$ to $\Omega_{\mathcal F'}$, is a bounded change of the
+              sheets $\mathcal F_1,\dots,\mathcal F,\dots,\mathcal F_m$ into
+              $\mathcal F_1,\dots,\mathcal F',\dots,\mathcal F_m$ with the same data; so
+              is a bounded change of two adjacent frames, from
+              $\Omega_{\mathcal F_1}\otimes\Omega_{\mathcal F_2}$ to
+              $\Omega_{\mathcal F'_1}\otimes\Omega_{\mathcal F'_2}$. In particular an idle
+              auxiliary copy can be moved next to the main sheet and then changed together
+              with it.
+        \item An allowed word using only the parties of $S$ with at most one pair source
+              is a bounded change with its own error, for every $r$ and every $K\ge1$. An
+              allowed chain using only the parties of $S$, without pair sources and with at
+              most one pair effect, is a bounded change for every $r\ge1$ and $K\ge1$.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_sheet_reordering}
+    A permutation of the sheets is a word of exchanges, without nonprivate gate and
+    without error, and an original circuit is a contraction, so composing with it
+    does not increase the error. The spectator sheets of a lifted change have
+    reference vectors of norm at most one. A word becomes an original circuit with
+    one two-party gate for each pair source, and a chain one more gate for each pair
+    effect, each with a single monomial of coefficient one.
+\end{proof}
+
+\begin{theorem}[The operations of the protocol as bounded changes]
+    \label{thm:peps_protocol_bounded_changes}
+    \lean{TNLean.PEPS.Approximation.DyadicSquare.index,
+        TNLean.PEPS.Approximation.eventUses_labelParty_protocolLevelLabels,
+        TNLean.PEPS.Approximation.eventUses_labelParty_newParty,
+        TNLean.PEPS.Approximation.eventUses_labelParty_guidePlaceholder,
+        TNLean.PEPS.Approximation.abs_sub_le_one_of_mem_blockWindow,
+        TNLean.PEPS.Approximation.coe_subset_eventUses_of_window,
+        TNLean.PEPS.Approximation.coe_blockParties_subset_eventUses,
+        TNLean.PEPS.Approximation.IsProtocolConstants.lt_one_div_four_thousand,
+        TNLean.PEPS.Approximation.isBoundedChange_of_step,
+        TNLean.PEPS.Approximation.directRepainting_isBoundedChange,
+        TNLean.PEPS.Approximation.isBoundedChange_of_birth,
+        TNLean.PEPS.Approximation.isBoundedChange_of_death,
+        TNLean.PEPS.Approximation.isBoundedChange_of_exchange}
+    \leanok
+    \uses{thm:peps_bounded_change_closure, def:peps_dyadic_protocol_parties,
+        thm:peps_dyadic_direct_repainting_constants}
+    Read the labels of the guides of the repainting of a square $R$ as parties: a
+    block label by its block party and the placeholder label by the fresh placeholder
+    party of $R$. Then the labels of the nine blocks around $R$, at any stage of the
+    pass to its level, its new label and the placeholder are held by parties that the
+    repainting of $R$ uses. Consequently, at the constants of the protocol, the direct
+    repainting of $R$ is a bounded change of its frame whose participants are used by
+    the repainting, with error $(2b+1)L^{-20}$; and a point treatment, its removal, a
+    resize, a bulk birth or death, or a lens exchange, given in the form produced by
+    its step theorem, is a bounded change with participants among the parties of that
+    step theorem. A lens exchange has no nonprivate gate. Moreover the constants of the
+    protocol satisfy $\epsilon_0<1/4000$ (\texttt{06-geometry.tex}, lines 91--100,
+    328--541 and 559--596).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_dyadic_direct_repainting_constants}
+    The labels are those of the active-label invariant: a label of a block next to
+    $R$ is the placeholder or the label of a square whose block is next to $R$ or
+    contains such a block. The reference vector of two sheets in the coordinates of the
+    exchange is the product of their reference vectors. For the constants,
+    $2\epsilon_0(a_0+1)\le a_0/2$ with $a_0=1/5000$ gives
+    $\epsilon_0\le1/20004$.
+\end{proof}
+
+\begin{theorem}[Bounded changes along the schedule]
+    \label{thm:peps_protocol_bounded_trajectory}
+    \lean{TNLean.PEPS.EncodedFrame.exists_steps_of_hasBoundedChange,
+        TNLean.PEPS.Approximation.norm_trajectory_sub_stackVec_le,
+        TNLean.PEPS.Approximation.card_participation_le_of_eventUses}
+    \leanok
+    \uses{thm:peps_bounded_change_closure, def:peps_dyadic_protocol_schedule,
+        thm:peps_dyadic_protocol_lifetime}
+    Let a sequence of lists of frames, from any initial list to any final list, have
+    consecutive stages joined by bounded changes. Then the changes can be chosen once
+    and for all. If $2^k<2L$ with $L\ge1$, the changes are at most as many as those of
+    the schedule, and each has error at most $CL^{-20}$, then the actual vector,
+    started at the initial reference vector, stays within $5040\,CL^{-17}$ of the
+    reference vector. If each change of the schedule has at most one nonprivate gate,
+    whose participants are used by the event of the change, then every party
+    participates in at most $64\cdot189$ nonprivate gates (\texttt{06-geometry.tex},
+    lines 25--41 and 572--631).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_dyadic_protocol_lifetime}
+    The errors add up because every change is a contraction, and the schedule has at
+    most $5040L^3$ changes. Each change of the schedule carries at most one gate, so
+    each event carries at most $189$ gates, and the lifetime bound of the parties
+    applies.
+\end{proof}

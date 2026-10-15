@@ -1,10 +1,10 @@
-\section{Subdivisions determined by actual corners}
+\section{Subdivisions determined by opposing corners}
 \label{sec:area_law_actual_side_mask}
 
-The opposing corners determine the subdivisions used in the cell fans;
-see \cite[Section~11]{OpenAI2026AreaLaw}. Retain the common origin, endpoint
-set and dyadic layers, and fix a lower index $k_0$. All actual fine cells
-at indices at least $k_0$ participate in this construction.
+Opposing fine-cell corners determine which sides are subdivided in the cell
+fans of \cite[Section~11]{OpenAI2026AreaLaw}. Fix the origin $o$, the finite
+endpoint set, the dyadic layers, and an initial layer index $k_0$. Every fine
+cell in a layer $k\ge k_0$ participates in this subdivision rule.
 
 % Source: 10-geometry.tex, lines 299--310. Dummy-neighborhood corners
 % and opposing-region constancy are separate assertions.
@@ -19,15 +19,15 @@ at indices at least $k_0$ participate in this construction.
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_endpoints_lineMap}
     \leanok
     \uses{def:area_law_cell_fan}
-    Fix an arbitrary origin $o\in\mathbb R^2$, a natural exponent
-    $\ell$, and a signed integer cell index $z\in\mathbb Z^2$.
-    Choose any optional midpoint subdivisions of the cell sides.
-    Write $A_s,B_s$ for the ordered whole-side endpoints, and put
+    Fix an origin $o\in\mathbb R^2$, a natural exponent
+    $\ell$, and a cell index $z\in\mathbb Z^2$.
+    Choose an optional midpoint subdivision of each side of the cell.
+    Write $A_s,B_s$ for the counterclockwise endpoints of side $s$, and set
     $L_s(u)=(1-u)A_s+uB_s$.
-    Let $\varepsilon_s\in\{0,1\}$ record whether side $s$ is divided.
-    Index its elementary segments by $h=0$ when $\varepsilon_s=0$,
+    Let $\varepsilon_s\in\{0,1\}$ record whether side $s$ is subdivided,
+    and index its elementary segments by $h=0$ when $\varepsilon_s=0$
     and by $h\in\{0,1\}$ when $\varepsilon_s=1$.
-    Their initial and final endpoints satisfy
+    The initial and final endpoints of segment $(s,h)$ are
     \begin{align}
         a_{s,h}      & =L_s(\alpha_{s,h}), &
         b_{s,h}      & =L_s(\beta_{s,h}),      \\
@@ -45,13 +45,12 @@ at indices at least $k_0$ participate in this construction.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan}
-    Parametrize the whole side by a signed coordinate $u\in[-1,1]$.
-    Its affine parameter is $(u+1)/2$.
-    For an undivided side the initial and final signed coordinates are
-    $-1$ and $1$, giving parameters $0$ and $1$.
-    For half $h$ of a divided side they are $h-1$ and $h$, giving
-    parameters $h/2$ and $(h+1)/2$. The defining side coordinates give
-    the asserted ordered endpoint identities.
+    Parametrize side $s$ by a signed coordinate $u\in[-1,1]$, with affine
+    parameter $(u+1)/2\in[0,1]$.
+    An undivided side has initial and final signed coordinates $-1$ and $1$,
+    giving affine parameters $0$ and $1$.
+    Half $h\in\{0,1\}$ of a subdivided side has signed coordinates $h-1$
+    and $h$, giving affine parameters $h/2$ and $(h+1)/2$.
 \end{proof}
 
 \begin{theorem}[Geometry of an elementary side]
@@ -60,48 +59,47 @@ at indices at least $k_0$ participate in this construction.
         TNLean.PEPS.AreaLaw.Geometry.cellFan_elementary_segment_subset_whole}
     \leanok
     \uses{def:area_law_cell_fan}
-    Fix any dyadic cell and optional midpoint subdivision. Let $[a,b]$
-    be a whole side and $[u,v]$ one of its elementary segments, ordered
-    counterclockwise. One of the following descriptions applies:
-    the side is undivided and $(u,v)=(a,b)$; the side is divided and
-    $(u,v)=(a,(a+b)/2)$; or the side is divided and
-    $(u,v)=((a+b)/2,b)$. In every case $[u,v]\subseteq[a,b]$.
+    Fix a dyadic cell and an optional midpoint subdivision of each side.
+    Let $[a,b]$ be a side ordered counterclockwise and $[u,v]$ one of its
+    elementary segments. Either the side is undivided and $(u,v)=(a,b)$,
+    or the side is subdivided and $(u,v)$ is $(a,(a+b)/2)$ or
+    $((a+b)/2,b)$. In all cases $[u,v]\subseteq[a,b]$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_indexed_side_interpolation}
-    In the affine parametrization of the whole side by $[0,1]$, the
-    elementary endpoints have parameters $0,1$ for an undivided side,
-    $0,1/2$ for the first half, and $1/2,1$ for the second half.
-    Each resulting interval belongs to $[0,1]$.
+    In the affine parametrization of $[a,b]$ by $[0,1]$, the endpoints
+    $(u,v)$ have parameters $(0,1)$ for an undivided side,
+    $(0,1/2)$ for the first half, and $(1/2,1)$ for the second half.
+    Each interval is contained in $[0,1]$.
 \end{proof}
 
-\begin{definition}[The actual midpoint subdivision]
+\begin{definition}[Midpoint subdivision by opposing corners]
     \label{def:area_law_actual_side_mask}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayerSplitMask}
     \leanok
     \uses{def:area_law_cell_fan,def:area_law_cell_corner,
         def:area_law_fine_layer_indices}
     For the fine cell indexed by $z$ in layer $k$, write $[a_s,b_s]$
-    for its whole side $s$. Set $\varepsilon_s=1$ if the midpoint
+    for side $s$. Set $\varepsilon_s=1$ if the midpoint
     $(a_s+b_s)/2$ is a corner of some fine cell in a layer $h\ge k_0$,
-    and $\varepsilon_s=0$ otherwise. The elementary segments are the
-    whole side if $\varepsilon_s=0$, and its two midpoint halves if
-    $\varepsilon_s=1$.
+    and $\varepsilon_s=0$ otherwise. The elementary segments of side $s$
+    are $[a_s,b_s]$ when $\varepsilon_s=0$, and its two halves
+    $[a_s,(a_s+b_s)/2]$ and $[(a_s+b_s)/2,b_s]$ when $\varepsilon_s=1$.
 \end{definition}
 
-\begin{theorem}[Witnesses for a divided side]
+\begin{theorem}[Criterion for a divided side]
     \label{thm:area_law_actual_side_mask_iff}
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayerSplitMask_eq_true_iff}
     \leanok
     \uses{def:area_law_actual_side_mask}
-    Side $s$ of the fine cell indexed by $z$ in layer $k$ is divided if
-    and only if there are a layer $h\ge k_0$, an index $w\in F_{h,\ell_h}$
-    and a corner $\varepsilon\in\{0,1\}^2$ such that the corner
+    Side $s$ of the fine cell indexed by $z$ in layer $k$ is subdivided if
+    and only if there exist a layer $h\ge k_0$, an index $w\in F_{h,\ell_h}$,
+    and a corner index $\varepsilon\in\{0,1\}^2$ such that corner
     $\varepsilon$ of the fine cell $w$ equals $(a_s+b_s)/2$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:area_law_actual_side_mask}
-    This is the defining condition of $\varepsilon_s$.
+    This is the defining condition for $\varepsilon_s=1$.
 \end{proof}
 
 \begin{theorem}[Opposing corners are elementary endpoints]
@@ -109,24 +107,23 @@ at indices at least $k_0$ participate in this construction.
     \lean{TNLean.PEPS.AreaLaw.Geometry.fineLayer_corner_on_elementarySide}
     \leanok
     \uses{def:area_law_actual_side_mask}
-    Suppose that $C_0\ge2$, $k\ge50\,000\,000$, and $z$ indexes an
-    actual fine cell of layer $k$. Let $w$ index an actual fine cell of
-    any layer $h\ge k_0$. If a corner of the cell indexed by $w$ belongs
-    to an elementary segment of the reference cell under the actual
-    midpoint subdivision, then it is an endpoint of that segment.
+    Suppose that $C_0\ge2$, $k\ge50\,000\,000$, and $z\in F_{k,\ell_k}$
+    indexes a fine cell of layer $k$. Let $w\in F_{h,\ell_h}$ index a fine
+    cell of a layer $h\ge k_0$. If a corner of the cell indexed by $w$ lies
+    on an elementary segment of the cell indexed by $z$ under the midpoint
+    subdivision, then that corner is an endpoint of the elementary segment.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_corner_side_subdivision,def:area_law_actual_side_mask,
         thm:area_law_elementary_side_geometry}
-    Every elementary segment lies on its whole side. The whole-side
-    assertion gives its start, midpoint or end as the only possible
-    opposing corners. For an undivided side, a corner at the midpoint
-    would be a witness requiring subdivision. For either midpoint half,
-    the opposite endpoint of the whole side lies outside that half.
-    The remaining two possibilities are exactly its endpoints.
+    Every elementary segment lies on its full side $[a_s,b_s]$, so any corner
+    of cell $w$ on $[a_s,b_s]$ is $a_s$, $(a_s+b_s)/2$, or $b_s$. If side $s$
+    is undivided, the midpoint $(a_s+b_s)/2$ cannot be a corner of cell $w$ by
+    definition of the subdivision rule. If side $s$ is subdivided, each
+    half-side excludes the opposite endpoint of $[a_s,b_s]$ and has the
+    remaining two points as its endpoints.
 \end{proof}
 
-The source takes the lower index $k_0$ sufficiently large without fixing a
-value \cite[Section~11]{OpenAI2026AreaLaw}. The bound $k\ge50\,000\,000$ is
-one admissible explicit choice of that threshold, so the statement above
-implies the qualitative assertion for all sufficiently large layers.
+The paper takes the initial layer index $k_0$ sufficiently large without
+fixing a numerical value \cite[Section~11]{OpenAI2026AreaLaw}; the threshold
+$k\ge50\,000\,000$ is an explicit choice.

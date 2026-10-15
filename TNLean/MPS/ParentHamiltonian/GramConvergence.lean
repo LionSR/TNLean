@@ -127,15 +127,9 @@ theorem IsPrimitiveMPS.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
           exact hP.fixedPoint_ne_zero
             ((Matrix.PosSemidef.trace_eq_zero_iff hP.fixedPoint_psd).1 h)))‖ ^ 2 ≤
         (D : ℝ) ^ 3 * (C * r ^ n) ^ 2 := by
-  have htr : trace ρ ≠ 0 := by
-    intro h
-    exact hP.fixedPoint_ne_zero
-      ((Matrix.PosSemidef.trace_eq_zero_iff hP.fixedPoint_psd).1 h)
-  have hTP : IsTracePreservingMap (Kraus.transferMap A) := by
-    intro X
-    exact Kraus.isTracePreservingMap_mapLM_of_isTP A hP.norm X
   exact MPSTensor.groundSpaceGram_sub_fixedPointProj_norm_sq_le_geometric
-    A ρ htr hTP hP.fixedPoint_is_fixed hP.complementary_transfer_map_gap
+    A ρ _ (Kraus.isTracePreservingMap_mapLM_of_isTP A hP.norm) hP.fixedPoint_is_fixed
+    hP.complementary_transfer_map_gap
 
 /-- The ground-space Gram operators of a primitive MPS tensor converge to the reshuffled
 fixed-point projection. -/
@@ -148,14 +142,8 @@ theorem IsPrimitiveMPS.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
           intro h
           exact hP.fixedPoint_ne_zero
             ((Matrix.PosSemidef.trace_eq_zero_iff hP.fixedPoint_psd).1 h))))) := by
-  have htr : trace ρ ≠ 0 := by
-    intro h
-    exact hP.fixedPoint_ne_zero
-      ((Matrix.PosSemidef.trace_eq_zero_iff hP.fixedPoint_psd).1 h)
-  have hTP : IsTracePreservingMap (Kraus.transferMap A) := by
-    intro X
-    exact Kraus.isTracePreservingMap_mapLM_of_isTP A hP.norm X
   exact MPSTensor.groundSpaceGram_tendsto_gramReshuffle_fixedPointProj
-    A ρ htr hTP hP.fixedPoint_is_fixed hP.complementary_transfer_map_gap
+    A ρ _ (Kraus.isTracePreservingMap_mapLM_of_isTP A hP.norm) hP.fixedPoint_is_fixed
+    hP.complementary_transfer_map_gap
 
 end MPSTensor

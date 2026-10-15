@@ -39,7 +39,7 @@ theorem ProjectiveRepresentation.norm_factorSystem
     {G : Type} [Group G] {D : ℕ} [NeZero D] {ω : ScalarCocycle G}
     (ρ : ProjectiveRepresentation (D := D) ω)
     (hρ : ∀ g, (ρ.X g : Matrix (Fin D) (Fin D) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
-    (g h : G) : ‖(ω g h : ℂ)‖ = 1 := by
+    (g h : G) : ‖(ω (g, h) : ℂ)‖ = 1 := by
   have hp := CStarRing.norm_of_mem_unitary
     ((Matrix.unitaryGroup (Fin D) ℂ).mul_mem (hρ g) (hρ h))
   rwa [ρ.map_mul, norm_smul, CStarRing.norm_of_mem_unitary (hρ (g * h)),
@@ -52,9 +52,9 @@ theorem ProjectiveRepresentation.circlePhaseInclusion_eq
     (ρ : ProjectiveRepresentation (D := D) ω)
     (hρ : ∀ g, (ρ.X g : Matrix (Fin D) (Fin D) ℂ) ∈ Matrix.unitaryGroup _ ℂ) :
     ω.circlePhaseInclusion = ω := by
-  funext g h
+  funext ⟨g, h⟩
   apply Units.ext
-  change (ω g h : ℂ) / ‖(ω g h : ℂ)‖ = (ω g h : ℂ)
+  change (ω (g, h) : ℂ) / ‖(ω (g, h) : ℂ)‖ = (ω (g, h) : ℂ)
   simp only [ρ.norm_factorSystem hρ, Complex.ofReal_one, div_one]
 
 /-- Unitary virtual actions with cohomologous factor systems can be rephased

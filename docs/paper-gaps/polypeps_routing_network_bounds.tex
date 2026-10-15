@@ -21,66 +21,63 @@
 
 \section{The source lemma}
 
-Lemma~8.2 of the polynomial PEPS approximation manuscript of September~24,
-2026~\cite{OpenAI2026PolynomialPEPS} (\path{07-assembly.tex},
-lines~122--127) states, with no hypotheses, that the links of the party
-network can be routed on the padded grid $\{0,\ldots,N-1\}^2$ with constant
-edge congestion, and that after reflection into the genuine $L\times L$ grid
-the congestion is still constant and the physical output coordinates are
-unchanged. The lemma concerns one specific network: the party network built
-by the distribution protocol of Proposition~7.1 (\path{06-geometry.tex},
-lines~12--53), with its parties attached to the anchors of the dyadic blocks
-(\path{07-assembly.tex}, lines~103--114). The proof (lines~128--162) uses
-four properties of that network:
+Fix an $L\times L$ square lattice $\{0,\ldots,L-1\}^2$ and its dyadically
+padded grid $\{0,\ldots,N-1\}^2$. Lemma~8.2 of the September~24, 2026
+polynomial-PEPS manuscript~\cite{OpenAI2026PolynomialPEPS}
+(\path{07-assembly.tex}, lines~122--127) states that the virtual links of the
+party tensor network can be routed along nearest-neighbor paths on the padded
+grid $\{0,\ldots,N-1\}^2$ with constant edge congestion, and that folding the
+padded grid back into $\{0,\ldots,L-1\}^2$ by reflection preserves constant
+congestion and leaves the physical output coordinates unchanged.
+
+In the paper, Lemma~8.2 is stated without explicit hypotheses because it refers
+to the specific party network produced by the distribution protocol of
+Proposition~7.1 (\path{06-geometry.tex}, lines~12--53), whose parties are
+placed at the anchor vertices of the dyadic blocks (\path{07-assembly.tex},
+lines~103--114). The proof of Lemma~8.2 (lines~128--162) uses four properties
+of that network:
 \begin{enumerate}
-\item every anchor lies on the padded grid (lines~113--114);
-\item at most a bounded number $B$ of parties is attached to any dyadic block
-  (lines~113--114, from item~1 of Proposition~7.1);
-\item every party has at most a bounded number $\Delta$ of incident links
+\item every block anchor lies on the padded grid $\{0,\ldots,N-1\}^2$
+  (lines~113--114);
+\item each dyadic block has at most $B$ attached parties (lines~113--114, from
+  item~1 of Proposition~7.1);
+\item each party is incident to at most $\Delta$ virtual links
   (lines~140--141, from item~2 of Proposition~7.1);
-\item the anchors of the two endpoints of every link are at distance at most
-  $c$ times either endpoint scale, for a fixed $c$ (lines~130--132, from
-  item~3 of Proposition~7.1).
+\item for every virtual link, the $\ell_\infty$-distance between the anchors of
+  its two endpoint parties is at most $c$ times either endpoint's dyadic scale
+  (lines~130--132, from item~3 of Proposition~7.1).
 \end{enumerate}
-Proposition~7.1 also gives that the two endpoint scales of every link are
-equal or adjacent; the congestion bound does not use this.
+Proposition~7.1 also guarantees that the two endpoint scales of every link are
+equal or adjacent, though the congestion bound does not need that property.
 
-\section{The formal statement}
+\section{What is proved and the extra hypotheses}
 
-Proposition~7.1 is not yet formalized, so no formal party network of the
-protocol exists to which the lemma could refer. The formal statements are
-therefore made for an arbitrary party network with parties attached to
-dyadic blocks, and the four properties above are hypotheses: the anchors lie
-on the padded grid, at most $B$ parties per block, at most $\Delta$ links per
-party, and link separation at most $c$ times either endpoint scale. Under
-these hypotheses the padded congestion is at most $2(2c+1)B\Delta$, the
-folded congestion is at most $8(2c+1)B\Delta$, and the routed network is
-exactly a PEPS on the open $L\times L$ square lattice with bond dimension at
-most $\max(D,1)^{8(2c+1)B\Delta}$ when every link has dimension at most
-$D$.\footnote{The padded bounds are
+Because Proposition~7.1 is not yet formalized, the specific party network of
+the protocol is not yet constructed in Lean. Instead, Lemma~8.2 is proved for
+an arbitrary party network whose parties are assigned to dyadic blocks and satisfy
+properties 1--4 as explicit hypotheses. Under those four hypotheses, the edge
+congestion on the padded grid is at most $2(2c+1)B\Delta$, the edge congestion
+after folding onto $\{0,\ldots,L-1\}^2$ is at most $8(2c+1)B\Delta$, and if
+every virtual link has dimension at most $D$, the folded network forms a
+projected entangled pair state (PEPS) on the open $L\times L$ square grid with
+bond dimension at most
+$\max(D,1)^{8(2c+1)B\Delta}$.\footnote{The padded congestion bounds are
 \leanid{TNLean.PEPS.Approximation.DyadicPlacement.load_horizontal_le} and
 \leanid{TNLean.PEPS.Approximation.DyadicPlacement.load_vertical_le}; the
-folded bound is
+folded congestion bound is
 \leanid{TNLean.PEPS.Approximation.foldedRouting_card_traversal_le}; the PEPS
-assembly is
+construction is
 \leanid{TNLean.PEPS.Approximation.exists_squarePEPS_of_dyadicRouting}.}
 
-The constants depend only on $B$, $\Delta$ and $c$, as in the source. The
-formal statements are a conditional form of Lemma~8.2, valid for every party
-network with the four properties; the lemma for the network of the source is
-the special case in which the four properties hold.
+\section{Effect on the paper and what remains}
 
-\section{Elimination}
-
-Formalize Proposition~7.1 and the attachment of its parties to the anchors
-of the dyadic blocks of the padded hierarchy. The two sources of the four
-properties are then discharged separately. Property~1, that every anchor
-lies on the padded grid, follows from the attachment itself
-(\path{07-assembly.tex}, lines~113--114) and is not a clause of
-Proposition~7.1. Properties~2--4, the block, degree and separation bounds,
-follow from items~1--3 of Proposition~7.1, with constants uniform in the
-Hamiltonian and in $L$. Applying the conditional statements to that network
-then gives Lemma~8.2 as stated.
+The routing argument itself is complete, and its congestion constants depend
+only on $B$, $\Delta$, and $c$, as in the paper. What remains is to formalize
+Proposition~7.1 and the placement of its parties at the dyadic block anchors.
+Property~1 will then follow from the anchor placement (\path{07-assembly.tex},
+lines~113--114), and properties 2--4 will follow from items 1--3 of
+Proposition~7.1 with constants $B$, $\Delta$, and $c$ independent of $L$ and the
+Hamiltonian.
 
 \bibliographystyle{alpha}
 \bibliography{references}

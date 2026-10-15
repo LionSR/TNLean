@@ -1,0 +1,66 @@
+% Figure tn2d_nested_filter_product.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL Sec. IV B (Lemma 5, the filtered norm N), Eq. al:s4:N;
+% PP Sec. V B (the first-head expansion, Proposition 3), Eq. pp:s5:filterdiag.
+% Source: arXiv OpenAI2026AreaLaw, sections/02-initial.tex:336-352 (N = ||L_m ... L_1 Omega||,
+% Lemma 3.2); arXiv OpenAI2026PolynomialPEPS, sections/03-patches.tex:58-95 ((4.2),
+% M(R,x) = L_m ... L_1 on nested squares X_j = X(r_j)).
+% Formula: L_3 L_2 L_1 Omega = (L_3 (x) I)(L_2 (x) I)(L_1 (x) I) Omega, each L_j
+% extended by the identity off X_j; drawn for m = 3.
+% Ink-to-index: the four wires, top to bottom, carry the tensor factors H_{X_1},
+% H_{X_2 \ X_1}, H_{X_3 \ X_2}, H_{Lambda \ X_3} of H_Lambda; nesting is
+% X_1 subset X_2 subset X_3 (in PP the samples may coincide). The west side names
+% the sets, not the shells: wire 1 is labelled X_1, the bracket at col 3 groups
+% wires 1-2 as X_2, the bracket at col 1 groups wires 1-3 as X_3, and wire 4 is
+% labelled Lambda \ X_3; so wire j is the shell X_j \ X_{j-1}. Each L_j is a
+% positive operator on H_{X_j}, so its box spans exactly the wires of X_j's bracket
+% and acts as the identity on the others. Action begins at Omega on the east:
+% L_1 first, then L_2, then L_3. No two filters are assumed to commute.
+% In AL the target X = X_0, contained in X_1, is not drawn separately.
+% Row 4 carries no filter: its cell (4,5) is an undrawn identity (skin=none), placed
+% only so that its open leg starts on the same west line as the other three. The
+% inkless atoms at (1,1), (3,1), (1,3), (2,3) only anchor the two brackets.
+% Labels: every box name sits at label pos=n at size l (one station, rule L1); a
+% one-wire box is too short to inscribe its name at that size.
+% Contractions: seven internal physical wires. Open legs: four, on the west.
+% Boundary signature: (phys:w) x 4.
+% Label macros: none (both papers write L_j, X_j, Omega, Lambda).
+% Related: peps_regularized_patch_objective display in
+% chapter/ch24_peps_regularized_patch_minimum.tex shows only the repeated region
+% X_0 = X_1 and asserts no nesting, so it cannot stand in for this picture.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=8, bonds=none, size=l]
+        \tn[at=(1,1), skin=none]{}
+        \tn[at=(3,1), skin=none]{}
+        \tn[at=(1,3), skin=none]{}
+        \tn[at=(2,3), skin=none]{}
+        \tn[at=(1,5), name=filterthree, skin=box, label pos=n, wires=3,
+            ports={180@1:physical, 180@2:physical, 180@3:physical,
+                    0@1:physical, 0@2:physical, 0@3:physical}]{L_3}
+        \tn[at=(4,5), name=passfour, skin=none,
+            ports={180:physical, 0:physical}]{}
+        \tn[at=(1,6), name=filtertwo, skin=box, label pos=n, wires=2,
+            ports={180@1:physical, 180@2:physical, 0@1:physical, 0@2:physical}]{L_2}
+        \tn[at=(1,7), name=filterone, skin=box, label pos=n,
+            ports={180:physical, 0:physical}]{L_1}
+        \tn[at=(1,8), name=groundstate, skin=box, label pos=n, wires=4,
+            ports={180@1:physical, 180@2:physical, 180@3:physical,
+                    180@4:physical}]{\Omega}
+        \tnwire[name=outone]{open w}{filterthree.180@1}
+        \tnwire[name=outtwo]{open w}{filterthree.180@2}
+        \tnwire[name=outthree]{open w}{filterthree.180@3}
+        \tnwire[name=outfour]{open w}{passfour.180}
+        \tnwire{filterthree.0@1}{filtertwo.180@1}
+        \tnwire{filterthree.0@2}{filtertwo.180@2}
+        \tnwire{filterthree.0@3}{groundstate.180@3}
+        \tnwire{passfour.0}{groundstate.180@4}
+        \tnwire{filtertwo.0@1}{filterone.180}
+        \tnwire{filtertwo.0@2}{groundstate.180@2}
+        \tnwire{filterone.0}{groundstate.180@1}
+        \tnmark[form=label, label pos=w]{on outone 0}{$X_1$}
+        \tnmark[form=bracket, label pos=w]{(1,3) .. (2,3)}{$X_2$}
+        \tnmark[form=bracket, label pos=w]{(1,1) .. (3,1)}{$X_3$}
+        \tnmark[form=label, label pos=w]{on outfour 0}{$\Lambda\setminus X_3$}
+    \end{tenkz}
+\end{center}

@@ -19,6 +19,7 @@ import TNLean.MPS.Preparation.SecondOrderOverlap
 import QICLean.Channel.KrausMap
 import Mathlib.Analysis.SpecificLimits.Basic
 import TNLean.MPS.Core.BlockingTransfer
+import TNLean.MPS.Symmetry.FixedLineLimitSimplicity
 
 /-!
 # Uniform lower bounds for periodic MPS norms
@@ -38,7 +39,6 @@ squared norm at least one half. A single physical blocking therefore makes every
 positive ring nonzero. These are auxiliary transfer-spectrum statements; no
 implication from a physical Hamiltonian gap to their hypotheses is asserted.
 -/
-
 
 /-!
 # Uniform periodic tensor norm estimates from transfer spectra
@@ -92,73 +92,6 @@ private theorem norm_trace_pow_le_of_spectrum_norm_le
     simpa only [norm_pow] using
       pow_le_pow_left₀ (norm_nonneg w) (hspec w hw) (n + 1)
 
-
-set_option relaxedAutoImplicit false
-set_option maxSynthPendingDepth 3
-set_option linter.mathlibStandardSet true
-
-private theorem fixedLine_eq_maxGenEigenspace_of_simple
-    {V : Type*} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
-    (f : V →ₗ[ℂ] V) (v : V) (hv : v ≠ 0) (hfv : f v = v)
-    (hSimple : f.charpoly.rootMultiplicity 1 = 1) :
-    Submodule.span ℂ {v} = Module.End.maxGenEigenspace f 1 := by
-  apply Submodule.eq_of_le_of_finrank_eq
-  · exact (Submodule.span_singleton_le_iff_mem ..).mpr
-      (Module.End.eigenspace_le_maxGenEigenspace
-        (Module.End.mem_eigenspace_iff.mpr (by simpa only [one_smul] using hfv)))
-  · rw [finrank_span_singleton hv,
-      LinearMap.finrank_maxGenEigenspace_eq, hSimple]
-
-private theorem spectrum_fixedLineQuotient_subset
-    {V : Type*} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
-    (f : V →ₗ[ℂ] V) (v : V) (hv : v ≠ 0) (hfv : f v = v)
-    (hSimple : f.charpoly.rootMultiplicity 1 = 1)
-    (hp : Submodule.span ℂ {v} ≤ (Submodule.span ℂ {v}).comap f) :
-    spectrum ℂ ((Submodule.span ℂ {v}).mapQ (Submodule.span ℂ {v}) f hp) ⊆
-      spectrum ℂ f \ {1} := by
-  let p : Submodule ℂ V := Submodule.span ℂ {v}
-  intro z hz
-  obtain ⟨u, hu⟩ := (Module.End.hasEigenvalue_iff_mem_spectrum.mpr hz).exists_hasEigenvector
-  obtain ⟨x, rfl⟩ := p.mkQ_surjective u
-  have hrel : p.mkQ (f x - z • x) = 0 := by
-    rw [map_sub, map_smul]
-    exact sub_eq_zero.mpr (by
-      simpa only [Submodule.mkQ_apply, Submodule.mapQ_apply] using hu.apply_eq_smul)
-  have hmem : f x - z • x ∈ p := by
-    simpa only [Submodule.mkQ_apply, Submodule.Quotient.mk_eq_zero] using hrel
-  obtain ⟨c, hc⟩ := Submodule.mem_span_singleton.mp hmem
-  have hz1 : z ≠ 1 := by
-    rintro rfl
-    simp only [one_smul] at hc
-    have hxGen : x ∈ Module.End.maxGenEigenspace f 1 :=
-      (Module.End.mem_maxGenEigenspace f 1 x).mpr ⟨2, by
-        simp only [pow_two, Module.End.mul_apply, LinearMap.sub_apply,
-          Module.End.one_apply, one_smul, ← hc,
-          map_smul, hfv, sub_self, smul_zero]⟩
-    exact hu.2 ((Submodule.Quotient.mk_eq_zero p).mpr
-      ((fixedLine_eq_maxGenEigenspace_of_simple f v hv hfv hSimple).ge hxGen))
-  have hcoef : c + c / (z - 1) = z * (c / (z - 1)) := by
-    field_simp [sub_ne_zero.mpr hz1]
-    ring
-  have hfCorr : f (x + (c / (z - 1)) • v) = z • (x + (c / (z - 1)) • v) := by
-    simp only [map_add, map_smul, hfv, smul_add, smul_smul]
-    rw [sub_eq_iff_eq_add.mp hc.symm, add_comm (c • v) (z • x), add_assoc,
-      ← add_smul, hcoef]
-  have hvQ : p.mkQ v = 0 := (Submodule.Quotient.mk_eq_zero p).mpr
-    (Submodule.mem_span_singleton_self v)
-  have hCorr : x + (c / (z - 1)) • v ≠ 0 := fun hzero => hu.2 (by
-    simpa only [map_add, map_smul, hvQ, smul_zero, add_zero, map_zero] using
-      congrArg p.mkQ hzero)
-  exact ⟨Module.End.hasEigenvalue_iff_mem_spectrum.mp
-    (Module.End.hasEigenvalue_of_hasEigenvector
-      ⟨Module.End.mem_eigenspace_iff.mpr hfCorr, hCorr⟩),
-    by simpa only [Set.mem_singleton_iff] using hz1⟩
-
-
-set_option relaxedAutoImplicit false
-set_option maxSynthPendingDepth 3
-set_option linter.mathlibStandardSet true
-
 /-- Wolf Proposition 6.2 identifies geometric and algebraic multiplicity at one
 for a positive unital map. -/
 theorem simple_fixedEigenvalue_of_unital_positive
@@ -175,10 +108,6 @@ theorem simple_fixedEigenvalue_of_unital_positive
     rw [LinearMap.sub_apply, LinearMap.smul_apply, Module.End.one_apply] at h
     exact Module.End.mem_eigenspace_iff.mpr (sub_eq_zero.mp h)
   rw [← LinearMap.finrank_maxGenEigenspace_eq, hEq, hDim]
-
-set_option relaxedAutoImplicit false
-set_option maxSynthPendingDepth 3
-set_option linter.mathlibStandardSet true
 
 /-- A fixed nonzero vector contributes one to every trace power; the remaining
 contribution is the trace power of the quotient by its line. -/
@@ -215,7 +144,6 @@ private theorem LinearMap.trace_pow_eq_one_add_trace_fixedLineQuotient
   congr 2
   exact Submodule.mapQ_pow p hp N
 
-
 private theorem norm_trace_pow_sub_one_le_of_simple_fixedVector
     {V : Type*} [AddCommGroup V] [Module ℂ V] [FiniteDimensional ℂ V]
     (f : V →ₗ[ℂ] V) (v : V) (hv : v ≠ 0) (hfv : f v = v)
@@ -223,13 +151,11 @@ private theorem norm_trace_pow_sub_one_le_of_simple_fixedVector
     (hspec : ∀ z ∈ spectrum ℂ f, z ≠ 1 → ‖z‖ ≤ q) (N : ℕ) :
     ‖LinearMap.trace ℂ V (f ^ N) - 1‖ ≤ (Module.finrank ℂ V - 1 : ℕ) * q ^ N := by
   let p : Submodule ℂ V := Submodule.span ℂ {v}
-  have hp : p ≤ p.comap f := (Submodule.span_singleton_le_iff_mem ..).mpr (by
-    change f v ∈ p
-    rw [hfv]
-    exact Submodule.mem_span_singleton_self v)
+  have hp : p ≤ p.comap f := LinearMap.span_singleton_le_comap_of_apply_eq_self f v hfv
   have hquot : ∀ z ∈ spectrum ℂ (p.mapQ p f hp), ‖z‖ ≤ q := by
     intro z hz
-    obtain ⟨hzf, hz1⟩ := spectrum_fixedLineQuotient_subset f v hv hfv hSimple hp hz
+    obtain ⟨hzf, hz1⟩ :=
+      LinearMap.spectrum_mapQ_span_singleton_subset_of_simple f v hv hfv hSimple hp hz
     exact hspec z hzf (by simpa only [Set.mem_singleton_iff] using hz1)
   have hdim : Module.finrank ℂ (V ⧸ p) = Module.finrank ℂ V - 1 := by
     have h := p.finrank_quotient_add_finrank

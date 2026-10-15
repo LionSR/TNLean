@@ -108,11 +108,8 @@ private theorem designatedSupport_not_near_far_domainGraph
       (truncationRadius_eq_of_mem_crossingLabels hnear hcross).2.2
   rw [heq] at hxD hyD
   have hxcompact := Finset.mem_filter.mp (hnear hxP)
-  have hball : S.ball i ⊆ S.A := by
-    have hb := domainGraph_ball_subset_of_clearance Λ T hT S.A L S.r₀ hclear
-      ⟨x, hxcompact.1, by simpa only [hdepth] using hxcompact.2,
-        by simpa only [ball, Finset.mem_filter, Finset.mem_univ, true_and, hgraph] using hxD⟩
-    simpa only [ball, hgraph] using hb
+  have hball := ball_subset_of_mem_ball_domainGraph hT S hgraph hdepth hclear hxD
+    hxcompact.1 hxcompact.2
   have hxl := hlead false x hxcompact.1 hxσ
   have hyl := hlead true y (hball hyD) hyσ
   have hxv := abs_le.mp (abs_depth_sub_anchor_le_domainGraph_of_mem_ball hT S hgraph hdepth i x hxD)

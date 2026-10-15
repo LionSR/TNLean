@@ -3310,7 +3310,8 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.rectRegion` | The physical region `A ∩ Q` of an ambient rectangle | Area-law `02-initial.tex`, lines 232–233; sites of `Q` missing from the domain or from `A` are absent. |
 | `TNLean.PEPS.AreaLaw.boxEntropy` | The supremum `F_box(r)` of `S_Ω(A ∩ Q)` over all domains, admissible Hamiltonians with gapped ground vectors, cuts, and safe rectangles of size at most `r`, at fixed `q, R, J, Δ, D₀` | Area-law Proposition 3.3 (`prop:initial-box`), `02-initial.tex`, lines 590–594; a real supremum, bounded above by `r² log q` for `q ≥ 1` and estimated in `exists_boxEntropy_le_rpow`. |
 | `TNLean.PEPS.AreaLaw.skewSymbol` | The scalar `f(t) = ⟨θ, ρ_P^{[t]} ρ_Y^{[-t]} h ρ_P^{[-t]} ρ_Y^{[t]} θ⟩` for regions `P, Y` of a finite domain, with `ρ^{[s]}` the real power of a regional state taken as zero on its kernel | Area-law Lemma 5.3 (`lem:skew`), `04-conditional.tex`, lines 495–500; equal to QICLean's marked scalar symbol by `skewSymbol_eq_markedScalarSymbol`, with the lemma itself in `skewSymbol_skew_le`. |
-| `TNLean.PEPS.AreaLaw.Scan.ScanData` | The finite data of the collar scan at one scale for all replica counts, with the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and Lemmas 2.1 and 2.3 for that scan as fields | Area-law Proposition 9.2 (`prop:scanner`), `08-scanner.tex`, lines 399–533; the inputs are hypotheses and are not derived from the scan geometry, so results over `ScanData` are Proposition 9.2 restricted to them, as recorded in `docs/paper-gaps/arealaw2d_scanner_inputs.tex`. |
+| `TNLean.PEPS.AreaLaw.Scan.ScanData` | The finite data of the collar scan at one scale for all replica counts, with the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and Lemmas 2.1 and 3.1 for that scan as fields | Area-law Proposition 9.2 (`prop:scanner`), `08-scanner.tex`, lines 399–533; the inputs are hypotheses and are not derived from the scan geometry, so results over `ScanData` are Proposition 9.2 restricted to them, as recorded in `docs/paper-gaps/arealaw2d_scanner_inputs.tex`. |
+| `TNLean.PEPS.AreaLaw.Scan.CollarScan.HistoryProperties`, `TNLean.PEPS.AreaLaw.Scan.eventually_historyProperties` | The four assertions of Lemma 9.1 for an actual collar scan, with explicit constants: splitting designated supports are graph `r₀`-balls inside `A` that terminally split one band on one side, distinct-band metrics commute on the symmetric replica space, assigned leads are at most `j + D + r₀`, prefix comparisons differ by `3nD` sites, status cuts have at most `40nD` edges, at most `10bKnD` terms split, split probabilities are at most `10D/m`, bad histories have probability at most `n^(-p)`, and good-history sampling has probability at least `1/(2(C₁+1)nD)`. The theorem proves them at the source scales for all sufficiently large `n`. | Area-law Lemma 9.1 (`scanner:histories`), `08-scanner.tex`, lines 195–347; hypotheses are `scanner:scales`, `scanner:test-geometry`, a bound `b` on labels per anchor and the padding condition `3b ≤ C₁`. The threshold is chosen before the domain, cut, target, labels and scanner; all probabilities are classical history weights. |
 | `TNLean.PEPS.Approximation.SquareHamiltonian` | Bounded supported site and edge terms on the original open square, with Hermitian total sum | Polynomial-PEPS `eq:model`; individual Hermiticity is not assumed. |
 | `TNLean.PEPS.Approximation.HasPEPSApproximation` | Nonzero native PEPS, positive polynomially bounded bonds, and normalized global error at most the inverse side length, up to phase | Polynomial-PEPS Theorem 1.1; a predicate defining the desired approximation. |
 | `TNLean.PEPS.Approximation.PolynomialPEPSApproximation` | Constants chosen before every square size, Hamiltonian, and ground vector | Polynomial-PEPS Theorem 1.1; a target proposition, not a proved theorem. |
@@ -3326,8 +3327,38 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.Geometry.template_layer_card_le` | Each ambient dilation layer has at most `n` sites for `Ctpl ≥ 24` and `1 ≤ j ≤ s₀` | Geometric depth-layer part of Lemma 9.4, derived from the actual polygon model; no added row regularity. See [validation status](formalization/template-rows.md). |
 | `TNLean.PEPS.AreaLaw.ambientBoundary` | Unordered ambient nearest-neighbor crossing edges, using the existing finite-domain boundary on a one-step enclosure | Exact ambient edges, distinct from physical cut intersections; [boundary proof status](formalization/template-boundary.md). |
 | `TNLean.PEPS.AreaLaw.Geometry.template_cut_boundary_card_le` | Physical unordered crossing edges of `A ∩ T_j` number at most `4n`; the core and shell have bounds `4n` and `8n` | Lemma 9.4; avoidance is derived from actual separation for `D₀ ≥ 1`, `Ctpl ≥ 24`, and `j ≤ s₀`. [Validation status](formalization/template-cut-boundary.md). |
+| `TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar` | An assignment of the eight elementary triangles of the closed square of half-side ρ about v to region identifiers. Each open triangle lies in its region, and each region closure meets the square in exactly its triangles. The frontiers in the square are exactly the directed axis and diagonal rays at changes of identifier. Successive triangles have equal labels exactly when their identifiers agree, and without a change the square lies in one region | Area-law `geometry:initial-stars`, lines 340–349; definition only. Shrinking the half-side preserves it (`IsIsolatedStar.mono`). |
+| `TNLean.PEPS.AreaLaw.Geometry.RepairStage.HasIsolatedStars` | Mark occurrences of a repair stage separated by `a₀` times the larger scale, each with an isolated star of half-side `a₀ S` in the current regions | Area-law `geometry:initial-stars` and `geometry:repair-induction`, lines 332–349 and 471–485; definition only, with shrinking of `a₀` for positive scales. Holding it at every generation is Lemma 11.4. |
+| `TNLean.PEPS.AreaLaw.Geometry.InitialIsolatedStarsStatement` | One positive `a₀` such that the jointly chosen initial repair stage has isolated stars with constant `a₀` for all large `k₀` | The specialization of Lemma 11.3 (`geometry:initial-stars`) to the residues chosen in `initialRepairStage`, which Lemma 11.4 consumes. It is a statement here, not a theorem; the source lemma itself quantifies over all admissible belt residues. |
+| `TNLean.PEPS.AreaLaw.Geometry.IsUniformRepairInduction`, `UniformRepairInductionStatement` | For the actual repair stages, one constant `a₀` giving at every generation isolated stars and separated marks, star squares avoiding earlier closed terminal squares, disjoint removal squares, same-label contacts of replacements only at next-generation marks, descendants within `2 d(S)`, and finite termination of each branch; the statement asks for this for small `a₀`, large `S_*` and large `k₀` | Area-law Lemma 11.4 (`geometry:repair-induction`), lines 471–485; conclusion only. The metric items are proved by `RepairMetricHypotheses`; the star and contact items remain open. |
+| `TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses` | The scale margin `d(S) ≤ (a₀/1000) S` above `S_*`, initial scales at least `S_*`, and initial separation with constant `0 < a₀ ≤ 1` | Area-law `geometry:trim-margins` and the first item of Lemma 11.3; discharged by `exists_repairMetricHypotheses` for `a₀ ≤ 1/4`, large `S_*` and large `k₀`. |
 
 ## Distributed PEPS compression: finite incidence and choice costs
+
+### Equality of selected remaining operations
+
+- **Declaration:** `TNLean.PEPS.PairEffect.Word.IsSelectedLocalPartComparison`.
+- **Defined in:** `TNLean/PEPS/Approximation/AllPartySingletonComparison.lean`.
+- **Meaning:** For a Boolean owner selector and two chronological words, the
+  predicate is the heterogeneous equality of their remaining evaluations after
+  restriction to the selected owners. Each word's local part keeps its actual
+  ordered source registers as inputs and supplies its own source-free proof.
+  The two original input and output lists may differ; selected list identities
+  are supplied separately when deriving a comparison.
+- **Source:** OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
+  states*, September 24, 2026, proof of Theorem 5.2,
+  `04-compression.tex:351–434,565–588`,
+  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L351-L434).
+- **Sanctioned bridges:** In `TNLean.PEPS.PairEffect.SourceCircuit`,
+  `isSelectedLocalPartComparison_partialWord_all_gate` derives this comparison
+  for the actual all-party gate word and its lifted singleton projection.
+  `restrict_partialWord_all_localPart_eval_heq_singleton_projection` gives the
+  corresponding selected-operator identity for the whole original chronology.
+  Both retain the supplied branch choice, original source dimensions and
+  spectator registers.
+- **Caveat:** This predicate compares operators. Allowedness and factorization
+  of the complete physical density require separate results; no equivalence
+  with either is asserted. No norm or nonvanishing condition is imposed.
 
 ### Corrected source positions and whole-lifetime gate participation
 
@@ -3715,3 +3746,29 @@ source's Proposition 4.1.
   typical entropy and auxiliary dimension remain separate proof obligations.
   Those substitutions must already occur in the additive budgets; no uniform
   replica convergence rate over physical scales is supplied or needed.
+
+### Comparison of chronological word evaluations
+
+- **Declaration:** `TNLean.PEPS.PairEffect.Word.IsEvalComparison`.
+- **Defined in:** `TNLean/PEPS/Approximation/WordEvalComparison.lean`.
+- **Meaning:** For two chronological words, possibly with different owner types
+  and register lists, the predicate is literally heterogeneous equality of
+  their evaluations. Each word retains its actual input and output space.
+- **Source:** OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
+  states*, September 24, 2026, proof of Theorem 5.2,
+  `04-compression.tex:253–267,351–434,565–588`,
+  [immutable manuscript](https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/04-compression.tex#L253-L267).
+- **Sanctioned bridges:** `Word.IsEvalComparison.eval_eq` gives ordinary evaluation
+  equality for words on the same input and output layouts.
+  `Word.isEvalComparison_of_eval_eq` gives the converse for those fixed layouts,
+  taking both words explicitly. The prepared-source,
+  sampled-endpoint and physical-coordinate comparisons derive this predicate
+  from their actual word comparison results.
+- **Caveats:** This compares the full evaluations of the supplied words. It
+  neither imposes allowedness, contractions, source normalization or absence of
+  sources, nor supplies equality after an arbitrary restriction to owners.
+  It is not the selected-local-part comparison predicate. No equivalence with
+  physical-density equality, factorization or locality is asserted.
+- **Verification:** The predicate and both fixed-layout bridges passed the
+  hosted Lean build and their named axiom checks at commit
+  `c05b1ee03e2d24d1f93390ada1aa7b7912b0cfba`.

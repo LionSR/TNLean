@@ -849,6 +849,69 @@ original open square. We state the two models separately, following
     This is Definition~9.3 of \cite{OpenAI2026AreaLaw}.
 \end{definition}
 
+\begin{definition}[Rectangle templates, unions and omitted pieces]
+    \label{def:area_law_template_instances}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.ofIntRect,
+        TNLean.PEPS.AreaLaw.Geometry.Template.ofIntRect,
+        TNLean.PEPS.AreaLaw.Geometry.Template.union,
+        TNLean.PEPS.AreaLaw.Geometry.Template.omitEmpty
+    }
+    \leanok
+    \uses{def:area_law_template}
+    \begin{enumerate}
+        \item Let $C_{\rm tpl}\ge1$ and $C_{\rm tpl}(s_0+1)\le n$. An integer
+              rectangle $Q=([x_0,x_1]\times[y_0,y_1])\cap\mathbb Z^2$ with at
+              most $s_0$ sites along each axis, including a thin rectangle of
+              one row or one column, defines the template with the single piece
+              $P=[x_0,x_1+\tfrac12]\times[y_0,y_1+\tfrac12]$.
+        \item For templates $T$ and $T'$ with parameters $(n,s_0)$ and $N_0$
+              and $N_0'$ pieces, with $C_{\rm tpl}(N_0+N_0')(s_0+1)\le n$ and
+              $\operatorname{diam}_\infty(T\cup T')\le n$, the union template
+              $T\cup T'$ has the pieces of $T$ followed by those of $T'$. The
+              union need not be connected.
+        \item For $C_{\rm tpl}\ge0$, the template obtained from $T$ by deleting
+              the pieces with $P_a\cap\mathbb Z^2=\varnothing$ has the same
+              point set.
+    \end{enumerate}
+\end{definition}
+
+\begin{lemma}[Properties of rectangle templates and omitted pieces]
+    \label{lem:area_law_template_instances}
+    \lean{
+        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.region_ofIntRect,
+        TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.mem_toFinset_iff_integerPoint_mem_ofIntRect,
+        TNLean.PEPS.AreaLaw.Geometry.Template.points_ofIntRect,
+        TNLean.PEPS.AreaLaw.Geometry.Template.pieceCount_ofIntRect,
+        TNLean.PEPS.AreaLaw.Geometry.Template.isSeparated_ofIntRect_of_isSafe,
+        TNLean.PEPS.AreaLaw.Geometry.Template.points_union,
+        TNLean.PEPS.AreaLaw.Geometry.Template.pieceCount_union,
+        TNLean.PEPS.AreaLaw.Geometry.Template.points_omitEmpty,
+        TNLean.PEPS.AreaLaw.Geometry.Template.sample_omitEmpty_nonempty,
+        TNLean.PEPS.AreaLaw.Geometry.Template.pieceCount_omitEmpty_le
+    }
+    \leanok
+    \uses{def:area_law_template_instances}
+    The piece $P$ of a rectangle template is nondegenerate with horizontal and
+    vertical sides, and $P\cap\mathbb Z^2=Q$, so the rectangle template is
+    $Q$ with one piece. The union template has point set $T\cup T'$ and
+    $N_0+N_0'$ pieces, and omitting empty pieces keeps the point set. If every endpoint of a crossing
+    edge of the cut has sup-norm distance more than $D|Q|$ from $Q$, where
+    $|Q|$ is the larger side, and $4D_0s_0\le D|Q|$, then the rectangle
+    template is separated from the cut. After empty pieces are omitted, every
+    sampled piece is nonempty and the number of pieces does not increase.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The sup-norm diameter of $P$ is at most $|Q|-\tfrac12\le s_0$, and an
+    integer $a$ satisfies $a\le b+\tfrac12$ exactly when $a\le b$. The
+    diameter of $Q$ is less than $s_0\le n$. The clearance assumption gives
+    $\operatorname{dist}_\infty(Q,Z)>D|Q|\ge4D_0s_0$. At least one piece of a
+    template is nonempty because the template is nonempty, and decreasing
+    $N_0$ preserves $C_{\rm tpl}N_0(s_0+1)\le n$ when $C_{\rm tpl}\ge0$.
+\end{proof}
+
 \begin{definition}[Ordered two-family partition]
     \label{def:area_law_two_family_partition}
     \lean{
@@ -861,7 +924,7 @@ original open square. We state the two models separately, following
     finite order induces the order within each family. For a piece $X_i$ in
     family $f$, the earlier same-family region is
     $\bigcup_{j<i,\,f(j)=f}X_j$. No size, separation, or information bound is
-    part of this partition data; those are additional mathematical assertions.
+    assumed in this definition.
 \end{definition}
 
 \begin{theorem}[Exact exponent gaps]
@@ -998,7 +1061,7 @@ original open square. We state the two models separately, following
     there is one $C\ge0$ such that $S_\Omega(A)\le C|\partial_\Lambda A|$ for
     every finite induced domain, every admissible Hamiltonian with a gapped
     ground vector $\Omega$, and every $A\subseteq\Lambda$. This proves
-    Theorem~1.1 of \cite{OpenAI2026AreaLaw} only conditionally on the three
+    Theorem~1.1 of \cite{OpenAI2026AreaLaw} conditionally on the three
     propositions.
 \end{theorem}
 \begin{proof}
@@ -1010,7 +1073,7 @@ original open square. We state the two models separately, following
     constant $C_1$, apply amplification with $C_0=\max(C_1,1)$ and $M=100$,
     and choose the scale threshold so that every admissible radius satisfies
     $L_n+2r<n^\beta$. Apply the two-family decomposition with $n_*$ at least
-    these thresholds. For each piece, the collar bound supplies the hypotheses
+    these thresholds. For each piece, the collar bound gives the hypotheses
     of amplification for $T_i$. Since $L_{n_i}<n_i^\beta$, the cut clearance
     $\operatorname{dist}_\infty(T_i,Z)>2n_i^\beta$ gives
     $N_{2r_i}^\Lambda(S_i)\subseteq A$. A walk of length at most $2r_i$ from
@@ -1134,9 +1197,8 @@ prove these steps; the information inequality itself is not proved here.
     Let $C_{\rm tpl}\ge24$ and $D_0\ge1$. Suppose there are $C$ and $N$ such
     that, in the setting of Definition~\ref{def:area_law_collar_bound},
     $I_\Omega(X:\Lambda\setminus S_0)\le Cn^{1-\varepsilon}$ whenever $n\ge N$.
-    Then the sublinear collar bound holds for $D_0,C_{\rm tpl}$. This assumes
-    the information inequality of Proposition~9.6 of \cite{OpenAI2026AreaLaw};
-    it is not a proof of that proposition.
+    Then the sublinear collar bound holds for $D_0,C_{\rm tpl}$. This reduces
+    Proposition~9.6 of \cite{OpenAI2026AreaLaw} to its information inequality.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -1144,6 +1206,184 @@ prove these steps; the information inequality itself is not proved here.
     Take the constant $\max(C,10)$; the remaining assertions are those of
     Theorem~\ref{thm:area_law_collar_cut_bounds}.
 \end{proof}
+
+% Source: OpenAI2026PolynomialPEPS, Appendix A (app:companion),
+% 08-companion-interface.tex, lines 10--111, revision
+% openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\section{Companion area-law inputs}
+\label{sec:peps_companion_inputs}
+
+The proof of Theorem~\ref{thm:openai_polynomial_peps} uses several results of
+the area-law companion \cite{OpenAI2026AreaLaw}, which are listed in
+\cite[Appendix~A]{OpenAI2026PolynomialPEPS}. All of them concern the original
+ground vector $\Omega$ of the full system; no subregion is assigned a gap of its
+own. The remarks below compare each listed result with the statement of this
+chapter that expresses it. No statement below adds a hypothesis to the
+printed one. The appendix also records that the companion takes its replica
+limit at each fixed finite instance; this concerns the companion's proof of
+the collar bound, and the statements below concern only the original one-copy
+state.
+% Proof status of each statement (proved or assumed) is tracked in
+% docs/formalization/openai-area-law-peps.md, not in displayed prose.
+
+\begin{remark}[Model, metric and entropy]
+    \label{rem:peps_companion_model}
+    \uses{def:area_law_domain,def:area_law_hamiltonian,
+        def:area_law_ground_entropy,thm:area_law_ground_eigenspace}
+    The companion allows every finite induced domain $\Gamma\subset\mathbb Z^2$
+    with local dimension $q$, and one Hermitian term $h_X$ with
+    $\|h_X\|\le J$ for each nonempty support $X$ of induced-graph diameter at
+    most $R$. It assumes a unit ground vector $\Omega$ with
+    $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, and its entropies use
+    natural logarithms \cite[Appendix~A]{OpenAI2026PolynomialPEPS}.
+    Definitions~\ref{def:area_law_domain}, \ref{def:area_law_hamiltonian}
+    and~\ref{def:area_law_ground_entropy} state exactly this model: zero terms
+    are allowed, the domain need not be connected, norms are operator norms,
+    and entropy is the von Neumann entropy with natural logarithms. Uniqueness
+    of the ground vector up to phase is not a separate hypothesis. It follows
+    from the gap inequality by Theorem~\ref{thm:area_law_ground_eigenspace}.
+    % Status: proved.
+\end{remark}
+
+\begin{remark}[The area law and its square-grid specialization]
+    \label{rem:peps_companion_area_law}
+    \uses{thm:openai_uniform_area_law,cor:rectangles,
+        thm:area_law_conditional_collar_two_families,
+        thm:square_hermitian_term_sum,thm:square_area_law_from_uniform,
+        thm:rectangular_equal_side_entropy,thm:openai_square_area_law}
+    Theorem~1.1 and Corollary~1.2 of \cite{OpenAI2026AreaLaw} give
+    Proposition~2.1 of \cite{OpenAI2026PolynomialPEPS}, with $\Gamma$ the
+    $L\times L$ grid and $R=1$. Theorem~\ref{thm:openai_uniform_area_law}
+    states the uniform finite-domain area law with the printed quantifiers: one
+    constant $C(q,R,J,\Delta)$ serves every domain, interaction family and cut.
+    Theorem~\ref{thm:area_law_conditional_collar_two_families} derives it from
+    Propositions~9.6 and~11.2 of \cite{OpenAI2026AreaLaw}.
+    % Status: the uniform area law is not proved; only the derivation from
+    % Propositions 9.6 and 11.2 is. The passage to the square grid is proved.
+    The site and edge terms of the
+    original model need not be Hermitian individually. Replacing each by its
+    Hermitian part keeps its support and norm bound and leaves the total
+    Hamiltonian unchanged (Theorem~\ref{thm:square_hermitian_term_sum}).
+    Theorem~\ref{thm:square_area_law_from_uniform} then specializes the uniform
+    area law to the square at range one with $C_A(q,J,\Delta)=C(q,1,J,\Delta)$,
+    and Theorem~\ref{thm:rectangular_equal_side_entropy} gives the same
+    conclusion through the rectangle corollary, giving Proposition~2.1
+    (Theorem~\ref{thm:openai_square_area_law}) from the uniform area law.
+    % Status: Proposition 2.1 is assumed, through the uniform area law.
+\end{remark}
+
+\begin{remark}[Positive replacement]
+    \label{rem:peps_companion_positive_replacement}
+    \uses{thm:al_lattice_positive_replacement,thm:al_lattice_counts}
+    For every integer $k\ge1$ and $\alpha=k/(k+1)$, the appendix uses positive
+    contractions $k_i$ at the original anchors, of uniformly bounded anchor
+    multiplicity, with $k_i\Omega=0$,
+    $\sum_ik_i\ge c_*^{-1}(H-E_0I)\ge(\Delta/c_*)(I-|\Omega\rangle\langle\Omega|)$
+    and $\|k_i-\mathbb E_{N_r(a_i)}k_i\|\le Ce^{-cr^\alpha}$ for every integer
+    $r\ge0$ \cite[Proposition~4.3]{OpenAI2026AreaLaw}.
+    Theorem~\ref{thm:al_lattice_positive_replacement} states this for every
+    choice of anchors $a_i\in X_i$, with constants depending only on
+    $k,R,J,\Delta$ and under the weaker condition $J\ge0$.
+    Its tail estimate is stated for conditional expectation onto every
+    induced-graph ball. At most $2^{2R(R+1)}$ labels share an anchor, by
+    Theorem~\ref{thm:al_lattice_counts}.
+    % Status: proved.
+\end{remark}
+
+\begin{remark}[Templates and the sublinear collar bound]
+    \label{rem:peps_companion_collar}
+    \uses{def:area_law_template,def:area_law_collar_bound,
+        thm:area_law_collar_cut_bounds,thm:area_law_collar_bound_of_information}
+    Definition~\ref{def:area_law_template} states the templates of
+    \cite[Definition~9.3]{OpenAI2026AreaLaw} with the printed conditions
+    $n\ge C_{\rm tpl}N_0(s_0+1)$, $\operatorname{diam}_\infty T\le n$ and
+    $\operatorname{dist}_\infty(T,Z_A)>4D_0s_0$; the polygons are read as
+    nondegenerate \cite{gap:arealaw2d_nondegenerate_templates}.
+    Definition~\ref{def:area_law_collar_bound} states the sublinear collar
+    bound, Proposition~9.6 of \cite{OpenAI2026AreaLaw}, with
+    $\varepsilon=10^{-5}$, $\ell=\lfloor n^{1-\varepsilon}\rfloor\le s_0$,
+    $X=A\cap T$ and $S_0=A\cap T_\ell$: at every scale beyond a uniform
+    threshold, $I_\Omega(X:\Gamma\setminus S_0)\le Cn^{1-\varepsilon}$,
+    $|S_0|\le Cn^2$, and each of $X$, $S_0\setminus X$ and $S_0$ has at most $Cn$
+    crossing edges.
+    % Status: Proposition 9.6 is assumed.
+    For $C_{\rm tpl}\ge24$ and $D_0\ge1$, which
+    the standing choices of a large $C_{\rm tpl}$ and of $D_0>2R+10$ ensure, the
+    size and crossing-edge assertions hold for every separated template
+    (Theorem~\ref{thm:area_law_collar_cut_bounds}), so
+    Theorem~\ref{thm:area_law_collar_bound_of_information} reduces the
+    proposition to the information inequality alone.
+    % Status: the size and crossing-edge bounds are proved; the information
+    % inequality is not.
+\end{remark}
+
+\begin{remark}[Amplification]
+    \label{rem:peps_companion_amplification}
+    \uses{def:area_law_amplification_bound,thm:area_law_amplification,
+        thm:area_law_uniform_collar_threshold,
+        thm:peps_coarse_information_of_collar}
+    Definition~\ref{def:area_law_amplification_bound} states
+    Proposition~10.2 of \cite{OpenAI2026AreaLaw} as printed in the appendix:
+    from the three collar bounds with a common constant $C_0$, for every integer
+    $M\ge1$ and every sufficiently large $n$, a radius
+    $r\le C_Mn^{(1-\varepsilon)/\alpha}$ with $I_\Omega(X':E)\le C_Mn^{-M}$ for
+    every $X'\subseteq X$ and every $E\subseteq\Gamma\setminus N_{2r}(S_0)$,
+    and $N_{2r}(S_0)\subseteq A$ when
+    $\operatorname{dist}_\infty(T,Z_A)>\ell+n^{\beta_0}$, where
+    $\beta_0=1-2\cdot10^{-6}$. The exponent $\alpha=p/(p+1)$ is fixed with
+    $p=10^6$, an admissible choice for the requirement $\alpha>1-10^{-6}$.
+    The remaining assertion $\ell+2r=o(n^{\beta_0})$ follows from the radius
+    bound (Theorem~\ref{thm:area_law_uniform_collar_threshold}). The bound
+    holds for every gap $\Delta>0$ (Theorem~\ref{thm:area_law_amplification}).
+    Its application in \cite[Proposition~3.1]{OpenAI2026PolynomialPEPS}, with
+    $A=\Gamma$ and $M=1$, is Theorem~\ref{thm:peps_coarse_information_of_collar},
+    which derives it from the sublinear collar bound.
+    % Status: amplification is proved; its application is proved assuming the
+    % sublinear collar bound.
+\end{remark}
+
+\begin{remark}[Two-family entropy cancellation]
+    \label{rem:peps_companion_two_family_entropy}
+    \uses{thm:area_law_two_family_entropy}
+    For a pure state and an ordered partition
+    $A=D\mathbin{\dot\cup}\bigcup_iX_i$ into two labelled families, the bounds
+    $I(X_i:A^c\cup\bigcup_{j<i,\,f_j=f_i}X_j)\le\delta_i$ give
+    $S(A)\le S(D)+\frac12\sum_i\delta_i$
+    \cite[Lemma~11.1]{OpenAI2026AreaLaw}.
+    Theorem~\ref{thm:area_law_two_family_entropy} states this for a unit vector
+    in any finite tensor product of finite-dimensional spaces.
+    % Status: proved.
+\end{remark}
+
+\begin{remark}[Two families with separated birth templates]
+    \label{rem:peps_companion_two_families}
+    \uses{def:area_law_two_family_decomposition}
+    Definition~\ref{def:area_law_two_family_decomposition} states
+    Proposition~11.2 of \cite{OpenAI2026AreaLaw} as printed in the appendix:
+    for every cut with $b=|\partial_\Gamma A|>0$ and every lower scale $n_*$, a
+    partition with $|D|\le Cb$, nonempty pieces $X_i\subseteq A\cap T_i$,
+    separated templates with $n_i\ge n_*$ and
+    $\lfloor n_i^{1-\varepsilon}\rfloor\le s_i$, both clearances
+    $2n_i^{\beta_0}$, and $\sum_in_i^{-100}\le Cb$, with $C$ depending only on
+    $n_*$ and the template constants.
+    % Status: Proposition 11.2 is assumed; it is not proved.
+\end{remark}
+
+\begin{remark}[The adaptation to a cell]
+    \label{rem:peps_companion_cell}
+    \uses{thm:peps_labelled_conditional_entropy,
+        thm:peps_cell_two_family_partition}
+    The appendix states that \cite[Lemma~3.2]{OpenAI2026PolynomialPEPS}
+    adapts the ordering of Lemma~11.1 of \cite{OpenAI2026AreaLaw} to a cell
+    with arbitrary exterior conditioning, and that this adaptation is proved in
+    the approximation article rather than imported. Its entropy estimate is
+    Theorem~\ref{thm:peps_labelled_conditional_entropy}, and its two-family
+    partition of a cell is Theorem~\ref{thm:peps_cell_two_family_partition}.
+    Neither obtains a conditional information bound by conditioning a
+    mutual-information inequality.
+    % Status: both ingredients are proved; their combination into the full
+    % statement of the lemma is not yet stated.
+\end{remark}
 
 \begin{theorem}[Sublinear information across a template collar]
     \label{thm:area_law_sublinear_collar}

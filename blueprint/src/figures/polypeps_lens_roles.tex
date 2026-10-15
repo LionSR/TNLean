@@ -1,0 +1,80 @@
+% Figure polypeps_lens_roles.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP App. F 1 (auxiliary sheet and lens), Fig. 16(a).
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/06-geometry.tex:185-214
+% (eqs. (7.3) geometry-aux-word, (7.4) geometry-lens, (7.5) geometry-main-word)
+% and 290-299 (lens thresholds in common-C sectors); the sets are those of
+% Lemma 6.6, sections/05-frames.tex:466-472 (eqs. (6.14)-(6.15)) with P_o = C.
+% Formula: before the exchange the main word is C on x<0 (then A, B at 0, 1)
+% and the auxiliary word is C|B|A|C|A|B|C at -6,...,-1, so the non-common-C
+% positions are Z = (-6,-4) u (-3,-1) u (0,inf).  With Y = (-7,-7/2):
+% T = Z cap Y = (-6,-4), E = Z \ Y = (-3,-1) u (0,inf), U = complement of Z =
+% (-inf,-6) u (-4,-3) u (-1,0), and Y cap U = (-7,-6) u (-4,-7/2).
+% Ink-to-index: column c is the half-unit interval (-8+(c-1)/2, -8+c/2) of
+% the normal ratio x at one parallel coordinate, as in
+% peps_dyadic_normal_words; the top labels are the values of x at column
+% boundaries.  One tinted enclosure per set: T (cols 5-8) selected (red, the
+% set whose sheets are swapped), E (cols 11-14 and 17-20, drawn to x=2)
+% secondary (blue, the far party), U (cols 1-4, 9-10, 15-16) collar (violet,
+% the buffer held by C on both sheets); a gap between two tints is an
+% interface, a single value of x.  The lens Y is the red dotted rectangle
+% (four sides of one closed string) whose vertical sides stand at x=-7 and
+% x=-7/2, inside the U intervals; the violet parts inside it are Y cap U,
+% labelled once (on (-7,-6)), where C undoes the swap privately.  Set labels
+% stand north of the strip, Y south of its rectangle.  Atoms are glyphless
+% place holders; there are no index wires.
+% Boundary signature: empty (geometry, no tensor contraction).
+% Not to scale in the parallel coordinate: only x is drawn; holes at the band
+% ends (zeta = 0, n) are not on this section.
+% Related: peps_dyadic_normal_words (the words themselves, row (2) carries
+% the lens as a red contour); this figure adds the partition T, U, E of
+% Lemma 6.6 on one section.
+\begin{tenkzequation}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire}, cols=20, bonds=none, size=s]
+        \tn[at=(1,1), name=lensTick1, skin=none]{}
+        \tnmark[form=label]{0.5 w of lensTick1}{$-8$}
+        \tn[at=(1,4), name=lensTick4, skin=none]{}
+        \tnmark[form=label]{0.5 e of lensTick4}{$-6$}
+        \tn[at=(1,8), name=lensTick8, skin=none]{}
+        \tnmark[form=label]{0.5 e of lensTick8}{$-4$}
+        \tn[at=(1,12), name=lensTick12, skin=none]{}
+        \tnmark[form=label]{0.5 e of lensTick12}{$-2$}
+        \tn[at=(1,16), name=lensTick16, skin=none]{}
+        \tnmark[form=label]{0.5 e of lensTick16}{$0$}
+        \tn[at=(1,20), name=lensTick20, skin=none]{}
+        \tnmark[form=label]{0.5 e of lensTick20}{$2$}
+        \tn[at=(3,1), skin=none]{}
+        \tn[at=(3,2), skin=none]{}
+        \tn[at=(3,3), skin=none]{}
+        \tn[at=(3,4), skin=none]{}
+        \tn[at=(3,5), skin=none]{}
+        \tn[at=(3,6), skin=none]{}
+        \tn[at=(3,7), skin=none]{}
+        \tn[at=(3,8), skin=none]{}
+        \tn[at=(3,9), skin=none]{}
+        \tn[at=(3,10), skin=none]{}
+        \tn[at=(3,11), skin=none]{}
+        \tn[at=(3,12), skin=none]{}
+        \tn[at=(3,13), skin=none]{}
+        \tn[at=(3,14), skin=none]{}
+        \tn[at=(3,15), skin=none]{}
+        \tn[at=(3,16), skin=none]{}
+        \tn[at=(3,17), skin=none]{}
+        \tn[at=(3,18), skin=none]{}
+        \tn[at=(3,19), skin=none]{}
+        \tn[at=(3,20), skin=none]{}
+        \tnmark[form=enclosure, species=collar, tint]
+        {(3,1) .. (3,20) - (3,5) .. (3,8) - (3,11) .. (3,14) - (3,17) .. (3,20)}{}
+        \tnmark[form=enclosure, species=selected, tint]{(3,5) .. (3,8)}{}
+        \tnmark[form=enclosure, species=secondary, tint]{(3,11) .. (3,20) - (3,15) .. (3,16)}{}
+        \tnmark[form=label, species=collar, label pos=n]{0.8 n of midway (3,1) and (3,2)}{$U$}
+        \tnmark[form=label, species=collar, label pos=n]{0.8 n of 0.7 e of (3,3)}{$Y\cap U$}
+        \tnmark[form=label, species=selected, label pos=n]{0.8 n of midway (3,6) and (3,7)}{$T$}
+        \tnmark[form=label, species=secondary, label pos=n]{0.8 n of midway (3,12) and (3,13)}{$E$}
+        \tnwire[kind=string, species=selected, stroke=dotted, closed, route=orth, name=lensY,
+            via={0.55 n of 0.5 e of (3,2), 0.55 n of 0.5 e of (3,9),
+                    0.55 s of 0.5 e of (3,9), 0.55 s of 0.5 e of (3,2)}]
+        \tnmark[form=label, species=selected, label pos=s]{0.55 s of midway (3,6) and (3,7)}{$Y$}
+    \end{tenkz}
+\end{tenkzequation}

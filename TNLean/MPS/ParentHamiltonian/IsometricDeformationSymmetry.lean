@@ -84,13 +84,7 @@ theorem parentInteractionES_commute_onSiteTensorPow_of_invariant {d D : ℕ}
     simp [Matrix.toEuclideanLin, Matrix.toLpLin_one]
   have hinner (x y : EuclideanSpace ℂ (Cfg d L)) :
       inner ℂ (T x) (T y) = inner ℂ x y := by
-    have hy : T.adjoint (T y) = y := by
-      simpa only [LinearMap.comp_apply, Module.End.one_apply] using
-        congrArg (fun f ↦ f y) hadj
-    calc
-      inner ℂ (T x) (T y) = inner ℂ x (T.adjoint (T y)) :=
-        (LinearMap.adjoint_inner_right T x (T y)).symm
-      _ = inner ℂ x y := by rw [hy]
+    rw [← LinearMap.adjoint_inner_right, ← LinearMap.comp_apply, hadj, Module.End.one_apply]
   let I := T.isometryOfInner hinner
   have hG : G.map I.toLinearMap = G := by
     simpa only [I, LinearMap.isometryOfInner_toLinearMap] using
