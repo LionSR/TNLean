@@ -31,7 +31,7 @@
     \leanok
     If $x\in A$, the crossing condition forces $y\notin A$;
     otherwise it forces $y\in A$. A function on a singleton is determined
-    by its value at the unique point, including when the alphabet is empty.
+    by its value at that point.
 \end{proof}
 
 \begin{theorem}[Crossing supports and unordered edges]
@@ -53,12 +53,9 @@
 \begin{proof}
     \leanok
     \uses{thm:area_law_crossing_inside_endpoint}
-    Choose any linear order on $\Lambda$ and write each edge in increasing
-    endpoint order. Forgetting this order maps crossing edge indices to
-    unordered boundary edges. Equality of unordered pairs either identifies
-    both endpoints or swaps them; the swap contradicts their strict order.
-    Every boundary edge has an increasing ordering, so this map is bijective.
-    The configuration count follows from the unique inside endpoint.
+    Every crossing support is an edge in $\partial_\Lambda A$, so
+    $|C(A)|=|\partial_\Lambda A|$, and $S_i\cap A$ is a singleton with $q$
+    configurations.
 \end{proof}
 
 \begin{theorem}[Exact weighted crossing sum]

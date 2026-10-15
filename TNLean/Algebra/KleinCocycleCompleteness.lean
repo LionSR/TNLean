@@ -185,7 +185,7 @@ theorem isTrivialGaugeClass_of_klein_diagonal_eq_one
     exact (a * e / b).ne_zero (by simpa [h] using hz.symm)
   let x := Units.mk0 z hz0
   have hx : x ^ 2 = a * e / b := Units.ext hz
-  let β : ScalarCocycle (Multiplicative (ZMod 2 × ZMod 2)) := fun g h ↦
+  let β : ScalarCocycle (Multiplicative (ZMod 2 × ZMod 2)) := fun ⟨g, h⟩ ↦
     if g = ka then
       if h = ka then x * d / (c * f) else if h = kb then 1 / c
       else if h = kc then x * a * d / f else 1
