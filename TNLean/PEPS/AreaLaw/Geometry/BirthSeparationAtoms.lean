@@ -425,4 +425,318 @@ theorem exists_beltAtom_subset {P : Set (ℝ × ℝ)} (hP : IsClosed P) (hconv :
     _ ⊆ closure (interior P) := closure_mono hsub
     _ ⊆ P := closure_minimal interior_subset hP
 
+/-! ### Common points of atoms -/
+
+/-- At a point of a finite intersection of arrangement half-planes that is not
+an integer point, the intersection contains a nondegenerate segment through
+that point: all facets tight at the point lie on one line.
+Source: area-law Section 11, `geometry:birth-separation`, lines 597–625. -/
+theorem exists_segment_subset_iInter_intHalfPlane {ι : Type*} [Finite ι]
+    (F : ι → ℤ × ℤ × ℤ) (hF : ∀ i, IsBeltFacet (F i)) {z : ℝ × ℝ}
+    (hz : ∀ i, z ∈ intHalfPlane (F i).1 (F i).2.1 (F i).2.2)
+    (hzZ : ∀ i j : ℤ, z ≠ ((i : ℝ), (j : ℝ))) :
+    ∃ a b : ℝ × ℝ, a ≠ b ∧
+      segment ℝ a b ⊆ ⋂ i, intHalfPlane (F i).1 (F i).2.1 (F i).2.2 := by
+  obtain ⟨d, hd0, hd⟩ : ∃ d : ℝ × ℝ, d ≠ 0 ∧ ∀ i,
+      ((F i).1 : ℝ) * z.1 + (F i).2.1 * z.2 = (F i).2.2 →
+        ((F i).1 : ℝ) * d.1 + (F i).2.1 * d.2 = 0 := by
+    by_cases hT : ∃ i₀, ((F i₀).1 : ℝ) * z.1 + (F i₀).2.1 * z.2 = (F i₀).2.2
+    · obtain ⟨i₀, hi₀⟩ := hT
+      refine ⟨(-((F i₀).2.1 : ℝ), ((F i₀).1 : ℝ)), ?_, fun i hi ↦ ?_⟩
+      · intro h
+        apply isBeltFacet_ne_zero (hF i₀)
+        have h₁ := congrArg Prod.fst h
+        have h₂ := congrArg Prod.snd h
+        simp only [Prod.fst_zero, Prod.snd_zero, neg_eq_zero] at h₁ h₂
+        simp [h₁, h₂]
+      · by_contra hne
+        have hdet : (F i).1 * (F i₀).2.1 - (F i₀).1 * (F i).2.1 ≠ 0 := by
+          intro h0
+          apply hne
+          have h0' : (((F i).1 * (F i₀).2.1 - (F i₀).1 * (F i).2.1 : ℤ) : ℝ) = 0 := by
+            exact_mod_cast h0
+          push_cast at h0'
+          linarith
+        obtain ⟨p, q, hpq⟩ := exists_int_eq_of_isBeltFacet (hF i) (hF i₀) hdet hi hi₀
+        exact hzZ p q hpq
+    · push_neg at hT
+      exact ⟨(1, 0), by simp, fun i hi ↦ (hT i hi).elim⟩
+  have hev : ∀ᶠ t in 𝓝 (0 : ℝ), ∀ i, z + t • d ∈ intHalfPlane (F i).1 (F i).2.1 (F i).2.2 := by
+    rw [eventually_all]
+    intro i
+    by_cases hti : ((F i).1 : ℝ) * z.1 + (F i).2.1 * z.2 = (F i).2.2
+    · refine Eventually.of_forall fun t ↦ ?_
+      simp only [intHalfPlane, Set.mem_setOf_eq, Prod.fst_add, Prod.snd_add, Prod.smul_fst,
+        Prod.smul_snd, smul_eq_mul]
+      have h := hd i hti
+      have : ((F i).1 : ℝ) * (z.1 + t * d.1) + (F i).2.1 * (z.2 + t * d.2) =
+          (((F i).1 : ℝ) * z.1 + (F i).2.1 * z.2) + t * (((F i).1 : ℝ) * d.1 + (F i).2.1 * d.2) := by
+        ring
+      rw [this, hti, h, mul_zero, add_zero]
+    · have hlt : ((F i).1 : ℝ) * z.1 + (F i).2.1 * z.2 < (F i).2.2 := lt_of_le_of_ne (hz i) hti
+      have hcont : Continuous (fun t : ℝ ↦
+          ((F i).1 : ℝ) * (z + t • d).1 + (F i).2.1 * (z + t • d).2) := by fun_prop
+      have hlim := (hcont.tendsto 0).eventually (gt_mem_nhds (by simpa using hlt))
+      filter_upwards [hlim] with t ht
+      exact ht.le
+  obtain ⟨ε, hε, hball⟩ := Metric.eventually_nhds_iff.mp hev
+  have hmem (t : ℝ) (ht : |t| < ε) :
+      z + t • d ∈ ⋂ i, intHalfPlane (F i).1 (F i).2.1 (F i).2.2 :=
+    Set.mem_iInter.mpr (hball (by simpa [Real.dist_eq] using ht))
+  refine ⟨z + (-(ε / 2)) • d, z + (ε / 2) • d, ?_, ?_⟩
+  · intro h
+    have h' : ε • d = (z + (ε / 2) • d) - (z + (-(ε / 2)) • d) := by module
+    rw [← h, sub_self, smul_eq_zero] at h'
+    rcases h' with h' | h'
+    · exact hε.ne' h'
+    · exact hd0 h'
+  · apply (convex_iInter fun i ↦ convex_intHalfPlane _ _ _).segment_subset
+    · exact hmem _ (by rw [abs_neg, abs_of_pos (by linarith)]; linarith)
+    · exact hmem _ (by rw [abs_of_pos (by linarith)]; linarith)
+
+/-- **Common points of two atoms.** Two atoms sharing a point that is not an
+integer point share a nondegenerate segment.
+Source: area-law Section 11, `geometry:birth-separation`, lines 597–625. -/
+theorem exists_segment_subset_beltAtom_inter {c c' : ℤ × ℤ} {s s' : RepairFanSlot}
+    {z : ℝ × ℝ} (hz : z ∈ beltAtom c s) (hz' : z ∈ beltAtom c' s')
+    (hzZ : ∀ i j : ℤ, z ≠ ((i : ℝ), (j : ℝ))) :
+    ∃ a b : ℝ × ℝ, a ≠ b ∧ segment ℝ a b ⊆ beltAtom c s ∩ beltAtom c' s' := by
+  rw [beltAtom_eq_iInter] at hz hz'
+  obtain ⟨a, b, hab, hseg⟩ := exists_segment_subset_iInter_intHalfPlane
+    (Sum.elim (beltAtomFacet c s) (beltAtomFacet c' s'))
+    (by rintro (i | i) <;> exact isBeltFacet_beltAtomFacet _ _ i)
+    (by rintro (i | i)
+        · exact Set.mem_iInter.mp hz i
+        · exact Set.mem_iInter.mp hz' i) hzZ
+  refine ⟨a, b, hab, fun x hx ↦ ?_⟩
+  have h := Set.mem_iInter.mp (hseg hx)
+  rw [beltAtom_eq_iInter, beltAtom_eq_iInter]
+  exact ⟨Set.mem_iInter.mpr fun i ↦ h (Sum.inl i), Set.mem_iInter.mpr fun i ↦ h (Sum.inr i)⟩
+
+private theorem repairNormTriangle_axis {s : RepairFanSlot} {α β : ℤ} (hodd : Odd (α + β))
+    (h : ((α : ℝ), (β : ℝ)) ∈ repairNormTriangle 1 s) :
+    (∃ σ : ℝ, (σ = 1 ∨ σ = -1) ∧ ((α : ℝ) + σ, (β : ℝ)) ∈ repairNormTriangle 1 s) ∧
+      ∃ σ : ℝ, (σ = 1 ∨ σ = -1) ∧ ((α : ℝ), (β : ℝ) + σ) ∈ repairNormTriangle 1 s := by
+  have hn := norm_le_of_mem_repairNormTriangle h
+  rw [Prod.norm_def, Real.norm_eq_abs, Real.norm_eq_abs, max_le_iff, abs_le, abs_le] at hn
+  obtain ⟨⟨a₁, a₂⟩, b₁, b₂⟩ := hn
+  simp only [Int.cast_one] at a₁ a₂ b₁ b₂
+  have ha₁ : -1 ≤ α := by exact_mod_cast a₁
+  have ha₂ : α ≤ 1 := by exact_mod_cast a₂
+  have hb₁ : -1 ≤ β := by exact_mod_cast b₁
+  have hb₂ : β ≤ 1 := by exact_mod_cast b₂
+  obtain ⟨r, hr⟩ := hodd
+  have hα : α = -1 ∨ α = 0 ∨ α = 1 := by omega
+  have hβ : β = -1 ∨ β = 0 ∨ β = 1 := by omega
+  obtain ⟨⟨h₁, h₂⟩, h₃⟩ := h
+  rcases s with ⟨k, l⟩
+  have hh := And.intro h₁ (And.intro h₂ h₃)
+  clear h₁ h₂ h₃
+  simp only [intHalfPlane, Set.mem_ofPred_eq] at hh
+  rcases hα with rfl | rfl | rfl <;> rcases hβ with rfl | rfl | rfl <;>
+    (try (exfalso; omega)) <;>
+    fin_cases k <;> fin_cases l
+  all_goals norm_num [repairSlotFacets] at hh
+  all_goals try simp [repairNormTriangle, intHalfPlane, repairSlotFacets, or_and_right, exists_or]
+  all_goals try norm_num
+
+/-- **Axis segments at a contact of opposite parity.** An atom through an
+integer point whose coordinates have odd sum contains a horizontal and a
+vertical unit segment issuing from that point.
+Source: area-law Section 11, `geometry:birth-separation`, lines 597–625. -/
+theorem beltAtom_axis_segments {c : ℤ × ℤ} {s : RepairFanSlot} {i j : ℤ}
+    (hodd : Odd (i + j)) (hq : ((i : ℝ), (j : ℝ)) ∈ beltAtom c s) :
+    (∃ σ : ℝ, (σ = 1 ∨ σ = -1) ∧
+      segment ℝ ((i : ℝ), (j : ℝ)) ((i : ℝ) + σ, (j : ℝ)) ⊆ beltAtom c s) ∧
+    ∃ σ : ℝ, (σ = 1 ∨ σ = -1) ∧
+      segment ℝ ((i : ℝ), (j : ℝ)) ((i : ℝ), (j : ℝ) + σ) ⊆ beltAtom c s := by
+  have key (p : ℝ × ℝ) : p ∈ beltAtom c s ↔
+      (p.1 - ((2 * c.1 + 1 : ℤ) : ℝ), p.2 - ((2 * c.2 + 1 : ℤ) : ℝ)) ∈ repairNormTriangle 1 s :=
+    Iff.rfl
+  have hodd' : Odd ((i - (2 * c.1 + 1)) + (j - (2 * c.2 + 1))) := by
+    obtain ⟨r, hr⟩ := hodd
+    exact ⟨r - c.1 - c.2 - 1, by omega⟩
+  have hmem : (((i - (2 * c.1 + 1) : ℤ) : ℝ), ((j - (2 * c.2 + 1) : ℤ) : ℝ)) ∈
+      repairNormTriangle 1 s := by
+    have h := (key _).mp hq
+    push_cast at h ⊢
+    exact h
+  obtain ⟨⟨σ, hσ, h₁⟩, ⟨τ, hτ, h₂⟩⟩ := repairNormTriangle_axis hodd' hmem
+  refine ⟨⟨σ, hσ, (convex_beltAtom c s).segment_subset hq ?_⟩,
+    ⟨τ, hτ, (convex_beltAtom c s).segment_subset hq ?_⟩⟩
+  · rw [key]
+    push_cast at h₁ ⊢
+    convert h₁ using 2
+    ring
+  · rw [key]
+    push_cast at h₂ ⊢
+    convert h₂ using 2
+    ring
+
+/-! ### The uniform dichotomy for atoms -/
+
+private theorem eq_of_norm_sub_intPoint_le_quarter {i j i' j' : ℤ}
+    (h : ‖((i : ℝ), (j : ℝ)) - ((i' : ℝ), (j' : ℝ))‖ ≤ 1 / 4) : i = i' ∧ j = j' := by
+  rw [Prod.norm_def, Real.norm_eq_abs, Real.norm_eq_abs, max_le_iff] at h
+  simp only [Prod.fst_sub, Prod.snd_sub] at h
+  obtain ⟨h₁, h₂⟩ := h
+  have a₁ : |((i - i' : ℤ) : ℝ)| < 1 := by push_cast; linarith
+  have a₂ : |((j - j' : ℤ) : ℝ)| < 1 := by push_cast; linarith
+  rw [← Int.cast_abs] at a₁ a₂
+  have b₁ : |i - i'| < 1 := by exact_mod_cast a₁
+  have b₂ : |j - j'| < 1 := by exact_mod_cast a₂
+  have c₁ := abs_lt.mp b₁
+  have c₂ := abs_lt.mp b₂
+  omega
+
+/-- **Contact dichotomy at common points.** Two compact sets, quarter-sectorial at
+every integer point and meeting only in integer points, have a constant `η > 0`
+such that each pair of their points is at distance at least `η`, or lies in the
+open quarter-square about a common point `q` of the two sets, where the angular
+estimate `‖x - y‖ ≥ ‖y - q‖ / 2` holds.
+Source: area-law Section 11, `geometry:birth-separation`, lines 616–645. -/
+theorem exists_pos_common_contact_dichotomy {X Y : Set (ℝ × ℝ)}
+    (hX : IsCompact X) (hY : IsCompact Y)
+    (hXs : ∀ i j : ℤ, IsQuarterSectorial ((i : ℝ), (j : ℝ)) X)
+    (hYs : ∀ i j : ℤ, IsQuarterSectorial ((i : ℝ), (j : ℝ)) Y)
+    (hXY : ∀ z ∈ X, z ∈ Y → ∃ i j : ℤ, z = ((i : ℝ), (j : ℝ))) :
+    ∃ η > 0, ∀ x ∈ X, ∀ y ∈ Y, η ≤ ‖x - y‖ ∨ ∃ q ∈ X ∩ Y,
+      ‖x - q‖ < 1 / 4 ∧ ‖y - q‖ < 1 / 4 ∧ ‖y - q‖ / 2 ≤ ‖x - y‖ := by
+  set K : Set ((ℝ × ℝ) × (ℝ × ℝ)) := (X ×ˢ Y) ∩ ⋂ q ∈ X ∩ Y,
+    {p | ¬ (‖p.1 - q‖ < 1 / 4 ∧ ‖p.2 - q‖ < 1 / 4)}
+  have hKc : IsCompact K := by
+    refine (hX.prod hY).inter_right (isClosed_biInter fun q _ ↦ ?_)
+    refine IsOpen.isClosed_compl ?_
+    exact (isOpen_lt (continuous_norm.comp (continuous_fst.sub continuous_const))
+      continuous_const).inter
+      (isOpen_lt (continuous_norm.comp (continuous_snd.sub continuous_const)) continuous_const)
+  have hnear : ∀ x ∈ X, ∀ y ∈ Y, (x, y) ∉ K → ∃ q ∈ X ∩ Y,
+      ‖x - q‖ < 1 / 4 ∧ ‖y - q‖ < 1 / 4 ∧ ‖y - q‖ / 2 ≤ ‖x - y‖ := by
+    intro x hx y hy hK
+    have : ∃ q ∈ X ∩ Y, ‖x - q‖ < 1 / 4 ∧ ‖y - q‖ < 1 / 4 := by
+      by_contra hne
+      push_neg at hne
+      exact hK ⟨⟨hx, hy⟩, Set.mem_iInter₂.mpr fun q hq h ↦
+        absurd (hne q hq h.1) (not_le.mpr h.2)⟩
+    obtain ⟨q, hq, hxq, hyq⟩ := this
+    refine ⟨q, hq, hxq, hyq, ?_⟩
+    obtain ⟨i, j, rfl⟩ := hXY q hq.1 hq.2
+    have hcontact : ∀ z ∈ X, z ∈ Y → ‖z - ((i : ℝ), (j : ℝ))‖ ≤ 1 / 4 →
+        z = ((i : ℝ), (j : ℝ)) := by
+      intro z hzX hzY hz
+      obtain ⟨i', j', rfl⟩ := hXY z hzX hzY
+      obtain ⟨rfl, rfl⟩ := eq_of_norm_sub_intPoint_le_quarter hz
+      rfl
+    have := half_max_le_norm_sub_of_isQuarterSectorial (hXs i j) (hYs i j) hcontact hx hy
+      hxq.le hyq.le
+    linarith [le_max_right ‖x - ((i : ℝ), (j : ℝ))‖ ‖y - ((i : ℝ), (j : ℝ))‖]
+  rcases K.eq_empty_or_nonempty with hK | hK
+  · refine ⟨1, one_pos, fun x hx y hy ↦ Or.inr (hnear x hx y hy (by rw [hK]; exact id))⟩
+  obtain ⟨p, hp, hmin⟩ := hKc.exists_isMinOn hK
+    (continuous_norm.comp (continuous_fst.sub continuous_snd)).continuousOn
+  refine ⟨‖p.1 - p.2‖, ?_, fun x hx y hy ↦ ?_⟩
+  · refine norm_pos_iff.mpr fun h0 ↦ ?_
+    have he : p.1 = p.2 := sub_eq_zero.mp h0
+    have := Set.mem_iInter₂.mp hp.2 p.1 ⟨hp.1.1, he ▸ hp.1.2⟩
+    apply this
+    rw [← he]; simp
+  · by_cases hxy : (x, y) ∈ K
+    · exact Or.inl (hmin hxy)
+    · exact Or.inr (hnear x hx y hy hxy)
+
+private def beltAtomOffset (δ : Fin 3 × Fin 3) : ℤ × ℤ :=
+  ((δ.1 : ℤ) - 1, (δ.2 : ℤ) - 1)
+
+private theorem mem_beltAtom_iff_sub (c : ℤ × ℤ) (s : RepairFanSlot) (p : ℝ × ℝ) :
+    p ∈ beltAtom c s ↔ p - (((2 * c.1 : ℤ) : ℝ), ((2 * c.2 : ℤ) : ℝ)) ∈ beltAtom 0 s := by
+  rw [← mem_beltAtom_add_iff, zero_add]
+
+/-- **The uniform dichotomy for atoms.** There is one `η ∈ (0, 1]` such that,
+for any two atoms meeting only in integer points, each pair of their points is
+at distance at least `η`, or lies in the open quarter-square about a common
+point `q` of the two atoms, where `‖x - y‖ ≥ ‖y - q‖ / 2`. Only finitely many
+relative positions of two atoms occur within distance `η`.
+Source: area-law Section 11, `geometry:birth-separation`, lines 597–645. -/
+theorem exists_beltAtom_dichotomy :
+    ∃ η > 0, η ≤ 1 ∧ ∀ (c c' : ℤ × ℤ) (s s' : RepairFanSlot),
+      (∀ z ∈ beltAtom c s, z ∈ beltAtom c' s' → ∃ i j : ℤ, z = ((i : ℝ), (j : ℝ))) →
+      ∀ x ∈ beltAtom c s, ∀ y ∈ beltAtom c' s', η ≤ ‖x - y‖ ∨
+        ∃ q ∈ beltAtom c s ∩ beltAtom c' s',
+          ‖x - q‖ < 1 / 4 ∧ ‖y - q‖ < 1 / 4 ∧ ‖y - q‖ / 2 ≤ ‖x - y‖ := by
+  let P : RepairFanSlot × RepairFanSlot × (Fin 3 × Fin 3) → ℝ → Prop := fun p η ↦
+    (∀ z ∈ beltAtom 0 p.1, z ∈ beltAtom (beltAtomOffset p.2.2) p.2.1 →
+      ∃ i j : ℤ, z = ((i : ℝ), (j : ℝ))) →
+    ∀ x ∈ beltAtom 0 p.1, ∀ y ∈ beltAtom (beltAtomOffset p.2.2) p.2.1, η ≤ ‖x - y‖ ∨
+      ∃ q ∈ beltAtom 0 p.1 ∩ beltAtom (beltAtomOffset p.2.2) p.2.1,
+        ‖x - q‖ < 1 / 4 ∧ ‖y - q‖ < 1 / 4 ∧ ‖y - q‖ / 2 ≤ ‖x - y‖
+  have hP : ∀ p, ∃ η > 0, ∀ η' > 0, η' ≤ η → P p η' := by
+    rintro ⟨s, s', δ⟩
+    by_cases hV : ∀ z ∈ beltAtom 0 s, z ∈ beltAtom (beltAtomOffset δ) s' →
+        ∃ i j : ℤ, z = ((i : ℝ), (j : ℝ))
+    · obtain ⟨η, hη, h⟩ := exists_pos_common_contact_dichotomy (isCompact_beltAtom 0 s)
+        (isCompact_beltAtom _ s') (isQuarterSectorial_beltAtom 0 s)
+        (isQuarterSectorial_beltAtom _ s') hV
+      refine ⟨η, hη, fun η' _ hη' _ x hx y hy ↦ ?_⟩
+      exact (h x hx y hy).imp_left hη'.trans
+    · exact ⟨1, one_pos, fun _ _ _ hV' ↦ (hV hV').elim⟩
+  obtain ⟨η, hη, hη1, h⟩ := exists_pos_forall_of_finite hP
+  refine ⟨η, hη, hη1, fun c c' s s' hV x hx y hy ↦ ?_⟩
+  have hxc := norm_sub_beltAtomCenter_le hx
+  have hyc := norm_sub_beltAtomCenter_le hy
+  rw [Prod.norm_def, Real.norm_eq_abs, Real.norm_eq_abs, max_le_iff] at hxc hyc
+  simp only [Prod.fst_sub, Prod.snd_sub, beltAtomCenter] at hxc hyc
+  push_cast at hxc hyc
+  by_cases hfar : c'.1 - c.1 ≤ -2 ∨ 2 ≤ c'.1 - c.1 ∨ c'.2 - c.2 ≤ -2 ∨ 2 ≤ c'.2 - c.2
+  · left
+    have h₁ : |x.1 - y.1| ≤ ‖x - y‖ := by simpa using norm_fst_le (x - y)
+    have h₂ : |x.2 - y.2| ≤ ‖x - y‖ := by simpa using norm_snd_le (x - y)
+    have e₁ := le_abs_self (x.1 - y.1)
+    have e₂ := neg_abs_le (x.1 - y.1)
+    have e₃ := le_abs_self (x.2 - y.2)
+    have e₄ := neg_abs_le (x.2 - y.2)
+    obtain ⟨a₁, a₂⟩ := abs_le.mp hxc.1
+    obtain ⟨a₃, a₄⟩ := abs_le.mp hxc.2
+    obtain ⟨b₁, b₂⟩ := abs_le.mp hyc.1
+    obtain ⟨b₃, b₄⟩ := abs_le.mp hyc.2
+    rcases hfar with hf | hf | hf | hf
+    · have : (c'.1 : ℝ) - c.1 ≤ -2 := by exact_mod_cast hf
+      linarith
+    · have : (2 : ℝ) ≤ c'.1 - c.1 := by exact_mod_cast hf
+      linarith
+    · have : (c'.2 : ℝ) - c.2 ≤ -2 := by exact_mod_cast hf
+      linarith
+    · have : (2 : ℝ) ≤ c'.2 - c.2 := by exact_mod_cast hf
+      linarith
+  push_neg at hfar
+  obtain ⟨f₁, f₂, f₃, f₄⟩ := hfar
+  let δ : Fin 3 × Fin 3 := (⟨(c'.1 - c.1 + 1).toNat, by omega⟩, ⟨(c'.2 - c.2 + 1).toNat, by omega⟩)
+  have hδ : c' = beltAtomOffset δ + c := by
+    simp only [beltAtomOffset, δ, Prod.ext_iff, Prod.fst_add, Prod.snd_add]
+    constructor <;> omega
+  set v : ℝ × ℝ := (((2 * c.1 : ℤ) : ℝ), ((2 * c.2 : ℤ) : ℝ))
+  have hx' : x - v ∈ beltAtom 0 s := (mem_beltAtom_iff_sub c s x).mp hx
+  have hy' : y - v ∈ beltAtom (beltAtomOffset δ) s' := by
+    rw [hδ, mem_beltAtom_add_iff] at hy; exact hy
+  have hV' : ∀ z ∈ beltAtom 0 s, z ∈ beltAtom (beltAtomOffset δ) s' →
+      ∃ i j : ℤ, z = ((i : ℝ), (j : ℝ)) := by
+    intro z hz hz'
+    have h₁ : z + v ∈ beltAtom c s := by
+      rw [mem_beltAtom_iff_sub, add_sub_cancel_right]; exact hz
+    have h₂ : z + v ∈ beltAtom c' s' := by
+      rw [hδ, mem_beltAtom_add_iff, add_sub_cancel_right]; exact hz'
+    obtain ⟨i, j, hij⟩ := hV _ h₁ h₂
+    refine ⟨i - 2 * c.1, j - 2 * c.2, ?_⟩
+    rw [show z = z + v - v by abel, hij]
+    ext <;> simp [v]
+  rcases h (s, s', δ) hV' _ hx' _ hy' with hd | ⟨q, ⟨hq₁, hq₂⟩, hxq, hyq, hang⟩
+  · left; simpa using hd
+  · right
+    refine ⟨q + v, ⟨?_, ?_⟩, ?_, ?_, ?_⟩
+    · rw [mem_beltAtom_iff_sub, add_sub_cancel_right]; exact hq₁
+    · rw [hδ, mem_beltAtom_add_iff, add_sub_cancel_right]; exact hq₂
+    · rw [show x - (q + v) = x - v - q by abel]; exact hxq
+    · rw [show y - (q + v) = y - v - q by abel]; exact hyq
+    · rw [show y - (q + v) = y - v - q by abel, show x - y = x - v - (y - v) by abel]
+      exact hang
+
 end TNLean.PEPS.AreaLaw.Geometry
