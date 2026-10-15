@@ -321,8 +321,8 @@ Definitions~\ref{def:is_coboundary} and~\ref{def:cohomologous_to}.
 \end{proof}
 
 
-\begin{lemma}[Cohomologous cochains differ by a coboundary]%
-    \label{lem:coboundary_iff_cohomologous_one}
+\begin{theorem}[Cohomologous cochains differ by a coboundary]%
+    \label{thm:coboundary_iff_cohomologous_one}
     \lean{TNLean.Algebra.ScalarCocycle.cohomologousTo_iff_isMulCoboundary₂_div}
     \leanok
     \uses{def:is_coboundary, def:cohomologous_to}
@@ -330,7 +330,7 @@ Definitions~\ref{def:is_coboundary} and~\ref{def:cohomologous_to}.
     the pointwise ratio $\omega_1\omega_2^{-1}$ is a coboundary. In
     particular, $\omega$ is a coboundary if and only if $\omega \sim \Id$,
     where $\Id(g,h)=1$ for all $g,h$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok\uses{def:is_coboundary, def:cohomologous_to}
     Divide both sides of (\ref{eq:symmetry_cohomologous}) by

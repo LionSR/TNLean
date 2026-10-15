@@ -657,15 +657,28 @@ witnesses non-triviality of the class.
 \end{proof}
 
 \begin{definition}[Non-trivial cohomology class]\label{def:nontrivial_class}
+    \mathlibok % Mathlib: groupCohomology.H2π applied to the cocycle is nonzero.
+    \uses{def:cohomologous_to, def:h2_cx}
+    A factor system $\omega$ that is a $2$-cocycle has a \emph{non-trivial
+        class} when $[\omega]\neq 0$ in $H^2(G,\C^{\times})$.
+\end{definition}
+
+\begin{theorem}[The trivial class]\label{thm:trivial_class}
     \lean{TNLean.Algebra.ScalarCocycle.H2π_one,
         TNLean.Algebra.ScalarCocycle.cohomologousTo_one_iff_H2π_eq_zero}
     \leanok
     \uses{def:cohomologous_to, def:h2_cx}
-    A factor system $\omega$ that is a $2$-cocycle has a \emph{non-trivial
-        class} when $[\omega]\neq 0$ in $H^2(G,\C^{\times})$. The class of the
-    constant cocycle $1$ is zero, and $[\omega]=0$ exactly when $\omega$ is
-    cohomologous to $1$.
-\end{definition}
+    The class of the constant cocycle $1$ is zero, and $[\omega]=0$ exactly
+    when $\omega$ is cohomologous to $1$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:mpug_h2_trivial_coefficients}
+    The constant cocycle $1$ is the identity of the group of cocycles, so its
+    class is zero. By (\ref{eq:mpug_h2_class_comparison}) of
+    Theorem~\ref{thm:mpug_h2_trivial_coefficients}, $\omega\sim1$ exactly
+    when $[\omega]=[1]=0$.
+\end{proof}
 
 \begin{theorem}[Commutator-phase non-triviality test]\label{thm:nontrivial_of_comm_phase}
     \lean{TNLean.Algebra.ScalarCocycle.H2π_ne_zero_of_commPhase_ne_one}
@@ -675,7 +688,7 @@ witnesses non-triviality of the class.
     pair $g,h$, then $\omega$ has a non-trivial class.
 \end{theorem}
 
-\begin{proof}\leanok\uses{thm:comm_phase_invariant}
+\begin{proof}\leanok\uses{thm:comm_phase_invariant, thm:trivial_class}
     The trivial cocycle has commutator phase $1$ at every pair, so by
     Theorem~\ref{thm:comm_phase_invariant} and
     (\ref{eq:symmetry_comm_phase_invariance}), any cocycle cohomologous to it
