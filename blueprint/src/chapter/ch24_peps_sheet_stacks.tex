@@ -409,8 +409,8 @@ no holes, this is the normalization of $\Omega$.
     effect, each with a single monomial of coefficient one.
 \end{proof}
 
-\begin{lemma}[Switching the party map between repaintings]
-    \label{lem:peps_protocol_party_map_switch}
+\begin{theorem}[Switching the party map between repaintings]
+    \label{thm:peps_protocol_party_map_switch}
     \lean{TNLean.PEPS.Approximation.labelParty_eq_of_ne_guidePlaceholder,
         TNLean.PEPS.Approximation.guideFrame_labelParty_eq,
         TNLean.PEPS.Approximation.exists_isBoundedChange_labelParty_switch,
@@ -436,7 +436,7 @@ no holes, this is the normalization of $\Omega$.
     party map may be switched, and the fresh placeholder party of a repainting owns no
     site and no tag of the frame before and after that repainting
     (\texttt{06-geometry.tex}, lines 82--100, 119--125 and 627--630).
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     A label of a square of the hierarchy is held by its block party for every
@@ -648,7 +648,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.pairwise_disjoint_levelHoles,
         TNLean.PEPS.Approximation.isTrueVertex_levelGuide_insert_iff}
     \leanok
-    \uses{def:peps_guide_frame, lem:peps_protocol_party_map_switch,
+    \uses{def:peps_guide_frame, thm:peps_protocol_party_map_switch,
         thm:peps_protocol_event_segments}
     The sampled guide of a labelling of the plane is its reading after the displacement
     $(1,1)$; every such reading is the sampled guide. Write the memory of the protocol as
@@ -692,7 +692,7 @@ no holes, this is the normalization of $\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:peps_protocol_party_map_switch}
+    \uses{thm:peps_protocol_party_map_switch}
     Between repaintings no site and no tag carries the placeholder, so the frame may be
     read through any party map that agrees on the block labels. The direct repainting
     reads it through the party map of the repainted square, whose labels near the square
