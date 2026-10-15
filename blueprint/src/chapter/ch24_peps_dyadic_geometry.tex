@@ -1359,6 +1359,136 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     gates by $4G\cdot4^2=64G$.
 \end{proof}
 
+\begin{definition}[Events and changes of the protocol schedule]
+    \label{def:peps_dyadic_protocol_schedule}
+    \lean{TNLean.PEPS.Approximation.ProtocolEvent, TNLean.PEPS.Approximation.ProtocolEvent.level, TNLean.PEPS.Approximation.ProtocolEvent.IsScheduled, TNLean.PEPS.Approximation.ProtocolEvent.rank, TNLean.PEPS.Approximation.eventSchedule, TNLean.PEPS.Approximation.BulkOp, TNLean.PEPS.Approximation.BulkOp.marks, TNLean.PEPS.Approximation.BulkOp.sheets, TNLean.PEPS.Approximation.RepaintOp, TNLean.PEPS.Approximation.BulkOp.treated, TNLean.PEPS.Approximation.BulkOp.ops, TNLean.PEPS.Approximation.SquareEdge.list, TNLean.PEPS.Approximation.edgeOps, TNLean.PEPS.Approximation.largeRepaintingOps, TNLean.PEPS.Approximation.eventOps, TNLean.PEPS.Approximation.protocolSchedule}
+    \leanok
+    \uses{def:peps_dyadic_hierarchy}
+    An event of the protocol on the hierarchy of $[0,2^k]^2$ is the repainting of a
+    square of scale $j<k$, performed at level $2^j$, or the resize of the hole at a
+    grid corner of scale $j+1\ge1$, performed on entering level $2^j$. The events are
+    performed by descending level, and within a level the resizes precede the
+    repaintings; the order of the blocks within a level is arbitrary. A resize and a
+    direct repainting are one change each; at a grid corner that carries no hole, such
+    as a corner of the root square, or whose radius does not change, the resize is the
+    identity change. A large-scale repainting consists of the
+    central birth and then, along each of the four edges, the initialization of a fresh
+    auxiliary sheet, three auxiliary births, the lens exchange and four main births or
+    deaths. Each of these bulk operations is preceded by the homogenization of each
+    involved sheet at each of its marks, one mark and one sheet at a time, and followed
+    by the removal of these homogenizations; the central birth has four marks and the
+    edge operations two, and the exchange involves two sheets and the others one. This
+    is the schedule of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}
+    (\texttt{06-geometry.tex}, lines 82--100, 127--131, 142--221, 328--339 and
+    507--541), with the set of squares repainted by the large-scale construction left
+    as a parameter.
+\end{definition}
+
+\begin{theorem}[Counts of the protocol schedule]
+    \label{thm:peps_dyadic_protocol_schedule_counts}
+    \lean{TNLean.PEPS.Approximation.mem_eventSchedule, TNLean.PEPS.Approximation.nodup_eventSchedule, TNLean.PEPS.Approximation.pairwise_rank_eventSchedule, TNLean.PEPS.Approximation.length_eventSchedule_le, TNLean.PEPS.Approximation.BulkOp.length_ops, TNLean.PEPS.Approximation.length_edgeOps, TNLean.PEPS.Approximation.length_largeRepaintingOps, TNLean.PEPS.Approximation.length_eventOps_le, TNLean.PEPS.Approximation.length_protocolSchedule_le, TNLean.PEPS.Approximation.length_protocolSchedule_le_cube, TNLean.PEPS.Approximation.card_filter_event_le, TNLean.PEPS.Approximation.RepaintOp.IsAuxInit, TNLean.PEPS.Approximation.BulkOp.countP_isAuxInit_ops, TNLean.PEPS.Approximation.countP_isAuxInit_edgeOps, TNLean.PEPS.Approximation.countP_isAuxInit_eventOps_le, TNLean.PEPS.Approximation.countP_isAuxInit_protocolSchedule_le}
+    \leanok
+    \uses{def:peps_dyadic_protocol_schedule}
+    Every scheduled event, that is every repainting of a non-root square and every
+    resize at a junction of positive scale, occurs exactly once in the schedule, in
+    the order of the definition, and no other event occurs. A
+    bulk operation with $m$ marks on $\sigma$ sheets has $2m\sigma+1$ changes, an edge
+    has $45$, and a large-scale repainting $189$; so every event has at most $189$
+    changes, at most $189$ changes of the schedule belong to any one event, and if
+    $2^k<2L$ the schedule has at most $5040L^3$ changes. Every event initializes at
+    most four auxiliary sheets, so the schedule initializes at most four times as many
+    auxiliary sheets as there are squares and junctions. This is the bound on the
+    number of changes in~\cite[Proposition~7.1, item~2]{OpenAI2026PolynomialPEPS} for
+    this schedule.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_dyadic_hierarchy_counts}
+    The schedule sorts the scheduled events by their position in the level order, so it
+    contains each of them once. A bulk operation lists its homogenizations, one for
+    each of its $m$ marks and $\sigma$ sheets, then the operation, then the removals,
+    so it has $2m\sigma+1$ changes: nine for the central birth and for the exchange,
+    and five for each other bulk operation. An edge has one initialization, three
+    auxiliary births, the exchange and four main steps, so $1+15+9+20=45$ changes, and
+    a large-scale repainting has $9+4\cdot45=189$; a direct repainting and a resize
+    have one change. The only initializations are those of the edges, one for each, so
+    an event has at most four. The schedule of changes lists the changes of each event
+    in turn, and each event occurs once, so at most $189$ changes belong to an event and
+    the length is at most $189$ times the number of squares and junctions, and the
+    number of initializations at most four times that number. Finally
+    Theorem~\ref{thm:peps_dyadic_hierarchy_counts} with $M=189$ gives
+    $3\cdot189\,(\#\text{squares}+\#\text{junctions})\le80\cdot189\,L^3$.
+\end{proof}
+
+\begin{definition}[Parties of the protocol and their labels]
+    \label{def:peps_dyadic_protocol_parties}
+    \lean{TNLean.PEPS.Approximation.DyadicSquare.toTriple, TNLean.PEPS.Approximation.DyadicSquare.ofTriple, TNLean.PEPS.Approximation.RepaintedSquare, TNLean.PEPS.Approximation.ProtocolParty, TNLean.PEPS.Approximation.ProtocolParty.square, TNLean.PEPS.Approximation.protocolPlacement, TNLean.PEPS.Approximation.GuideLabel, TNLean.PEPS.Approximation.guidePlaceholder, TNLean.PEPS.Approximation.validLabels, TNLean.PEPS.Approximation.labelParty, TNLean.PEPS.Approximation.EventUses}
+    \leanok
+    \uses{def:peps_dyadic_protocol_schedule, def:peps_dyadic_used_parties}
+    The parties of the protocol are a block party for every square of the hierarchy
+    and a placeholder party for the repainting of every non-root square, the fresh
+    additional party that represents the exterior label during that repainting. Every
+    party is attached to its square: a placeholder has the scale and address of the
+    square whose repainting it serves. The guides carry the block labels $(j,r,s)$ and
+    one placeholder label. During the repainting of $S$, the label of a square of the
+    hierarchy is held by its block party and the placeholder label by the placeholder
+    party of $S$. A block party is used by the repaintings and junction resizes that
+    use its block (Definition~\ref{def:peps_dyadic_used_parties}), and the placeholder
+    party of $S$ only by the repainting of $S$. This follows~\cite[Proposition~7.1,
+        item~1]{OpenAI2026PolynomialPEPS} and \texttt{06-geometry.tex}, lines 91--100
+    and 627--643.
+\end{definition}
+
+\begin{theorem}[Parties of the protocol]
+    \label{thm:peps_dyadic_protocol_parties}
+    \lean{TNLean.PEPS.Approximation.DyadicSquare.toTriple_injective, TNLean.PEPS.Approximation.DyadicSquare.ofTriple_toTriple, TNLean.PEPS.Approximation.protocolPlacement_inGrid, TNLean.PEPS.Approximation.protocolPlacement_blockBounded, TNLean.PEPS.Approximation.card_protocolParty_le, TNLean.PEPS.Approximation.three_mul_card_protocolParty_lt, TNLean.PEPS.Approximation.inl_ne_guidePlaceholder, TNLean.PEPS.Approximation.labelParty_toTriple, TNLean.PEPS.Approximation.labelParty_guidePlaceholder, TNLean.PEPS.Approximation.labelParty_injOn, TNLean.PEPS.Approximation.levelLabels_mem_validLabels}
+    \leanok
+    \uses{def:peps_dyadic_protocol_parties}
+    Every party lies in the padded square $[0,2^k]^2$, at most two parties are attached
+    to any square, and there are at most twice as many parties as squares; if
+    $2^k<2L$ there are fewer than $32L^2/3$ parties. During a repainting, distinct
+    labels of squares of the hierarchy and the placeholder label are held by distinct
+    parties. At every level $2^j$ with $j<k$, every block label of the level is the
+    placeholder label or the label of a square of the hierarchy. These are the counts
+    of~\cite[Proposition~7.1, item~1]{OpenAI2026PolynomialPEPS} for these parties.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_dyadic_hierarchy_counts}
+    A block of side $2^j$ with index $r<2^{k-j}$ ends at $2^j(r+1)\le2^j\cdot2^{k-j}=2^k$.
+    The parties at a square are its block party and, for a non-root square, its
+    placeholder, since a square is
+    determined by its scale and block indices. The count follows from
+    Theorem~\ref{thm:peps_dyadic_hierarchy_counts}. During the repainting of $S$, the
+    label of a square $Q$ is held by the block party of $Q$, and a square is recovered
+    from its label, so distinct squares give distinct block parties; the placeholder
+    label is held by the placeholder party of $S$, which is not a block party. A block of the root square at
+    level $2^j$ has indices below $2^{k-j}$, and its parent has scale $j+1\le k$ and
+    indices below $2^{k-j-1}$.
+\end{proof}
+
+\begin{theorem}[Locality of the parties of an event]
+    \label{thm:peps_dyadic_protocol_locality}
+    \lean{TNLean.PEPS.Approximation.EventUses.scale_le, TNLean.PEPS.Approximation.EventUses.anchor_dist_le}
+    \leanok
+    \uses{def:peps_dyadic_protocol_parties}
+    Two parties used by one event have equal or adjacent scales, and in each coordinate
+    their addresses differ by at most $12$ times the side of the square of either
+    party. This is the locality of~\cite[Proposition~7.1,
+        item~3]{OpenAI2026PolynomialPEPS} for the parties an event uses.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_dyadic_address_locality}
+    A party used by the repainting of a square $S$ of scale $j$ owns a block of side
+    $2^j$ adjacent to $S$ or its parent, or is the placeholder of $S$; by
+    Lemma~\ref{lem:peps_dyadic_address_locality} its address is within $3\cdot2^{j+1}$
+    of the address of $S$ in each coordinate, and its scale is $j$ or $j+1$. A party
+    used by the resize at a junction of scale $j$ owns one of the four blocks at the
+    corner, so its address is within $3\cdot2^{j+1}$ of the address of a fixed block
+    there. The triangle inequality gives $12\cdot2^j$.
+\end{proof}
+
 \begin{definition}[Patch data of a guide rewrite]
     \label{def:peps_dyadic_guide_patch_rewrite}
     \lean{TNLean.PEPS.Approximation.GuidePatchRewrite, TNLean.PEPS.Approximation.GuidePatchRewrite.footprint, TNLean.PEPS.Approximation.GuidePatchRewrite.parties, TNLean.PEPS.Approximation.GuidePatchRewrite.IsJunctionResize, TNLean.PEPS.Approximation.GuidePatchRewrite.IsDirectRepainting}
@@ -1636,6 +1766,34 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     participates is one of an event that uses the party, and
     Theorem~\ref{thm:peps_dyadic_lifetime_parties} bounds the number of such gates by
     $64G$.
+\end{proof}
+
+\begin{theorem}[Lifetime participation of the protocol parties]
+    \label{thm:peps_dyadic_protocol_lifetime}
+    \lean{TNLean.PEPS.Approximation.participation_le_of_eventUses, TNLean.PEPS.Approximation.participation_le_of_repaintingRewrites, TNLean.PEPS.Approximation.card_gates_event_le, TNLean.PEPS.Approximation.participation_le_of_schedule}
+    \leanok
+    \uses{def:peps_dyadic_protocol_parties, def:peps_dyadic_guide_patch_rewrite,
+        def:peps_dyadic_local_guides}
+    Let the gates of a schedule belong to events, at most $G$ gates to each. If every
+    gate in which a party participates belongs to an event that uses the party, then the
+    party participates in at most $64G$ gates. In particular this holds when each gate
+    carries the patch data of its event, a block party participates in a gate only when
+    its label is a party of the gate's patch data, and a placeholder party only in
+    gates of its own repainting. The bound is conditional on this hypothesis on the
+    gates; it is a conditional form of the bounded lifetime participation
+    of~\cite[Proposition~7.1, item~2]{OpenAI2026PolynomialPEPS}. If the gates belong
+    to the changes of the protocol schedule, at most $b$ to each change, then at most
+    $189b$ belong to each event, and the bound is $64\cdot189b$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_dyadic_lifetime_parties, thm:peps_dyadic_large_repainting_lifetime,
+        thm:peps_dyadic_protocol_schedule_counts}
+    For a block party this is Theorem~\ref{thm:peps_dyadic_lifetime_parties}, or
+    Theorem~\ref{thm:peps_dyadic_large_repainting_lifetime} for the patch data. A
+    placeholder party participates only in gates of one event, at most $G\le64G$.
+    Along the schedule, Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts} gives at
+    most $189$ changes for each event.
 \end{proof}
 
 \subsection{The consequences of Proposition 7.1 used in the assembly}
