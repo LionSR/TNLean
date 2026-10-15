@@ -34,8 +34,8 @@ complex conjugate. The bond dimension must be nonzero. -/
 theorem factor_mul_star_eq_one_of_unitary [NeZero D₀]
     (ρ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω₀)
     (hρ : ∀ g, (ρ.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
-    (g h : G) : (ω₀ g h : ℂ) * star (ω₀ g h : ℂ) = 1 := by
-  change (ω₀ g h : ℂ) * (starRingEnd ℂ) (ω₀ g h : ℂ) = 1
+    (g h : G) : (ω₀ (g, h) : ℂ) * star (ω₀ (g, h) : ℂ) = 1 := by
+  change (ω₀ (g, h) : ℂ) * (starRingEnd ℂ) (ω₀ (g, h) : ℂ) = 1
   rw [Complex.mul_conj', ρ.norm_factor_eq_one_of_unitary hρ g h,
     Complex.ofReal_one, one_pow]
 
@@ -62,7 +62,7 @@ theorem homMatrix_mul
     (ρ₀ : TNLean.Algebra.ProjectiveRepresentation (D := D₀) ω₀)
     (ρ₁ : TNLean.Algebra.ProjectiveRepresentation (D := D₁) ω₁) (g h : G) :
     homMatrix ρ₀ ρ₁ g * homMatrix ρ₀ ρ₁ h =
-      (star (ω₀ g h : ℂ) * (ω₁ g h : ℂ)) • homMatrix ρ₀ ρ₁ (g * h) := by
+      (star (ω₀ (g, h) : ℂ) * (ω₁ (g, h) : ℂ)) • homMatrix ρ₀ ρ₁ (g * h) := by
   simp only [homMatrix]
   rw [← Matrix.mul_kronecker_mul]
   have hMap :
@@ -81,14 +81,14 @@ private theorem homFactor_mul_star_eq_one [NeZero D₀] [NeZero D₁]
     (h₀ : ∀ g, (ρ₀.X g : Matrix (Fin D₀) (Fin D₀) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (h₁ : ∀ g, (ρ₁.X g : Matrix (Fin D₁) (Fin D₁) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (g h : G) :
-    (star (ω₀ g h : ℂ) * (ω₁ g h : ℂ)) *
-      star (star (ω₀ g h : ℂ) * (ω₁ g h : ℂ)) = 1 := by
+    (star (ω₀ (g, h) : ℂ) * (ω₁ (g, h) : ℂ)) *
+      star (star (ω₀ (g, h) : ℂ) * (ω₁ (g, h) : ℂ)) = 1 := by
   simp only [star_mul, star_star]
   calc
-    (star (ω₀ g h : ℂ) * (ω₁ g h : ℂ)) *
-        (star (ω₁ g h : ℂ) * (ω₀ g h : ℂ)) =
-        ((ω₀ g h : ℂ) * star (ω₀ g h : ℂ)) *
-          ((ω₁ g h : ℂ) * star (ω₁ g h : ℂ)) := by ac_rfl
+    (star (ω₀ (g, h) : ℂ) * (ω₁ (g, h) : ℂ)) *
+        (star (ω₁ (g, h) : ℂ) * (ω₀ (g, h) : ℂ)) =
+        ((ω₀ (g, h) : ℂ) * star (ω₀ (g, h) : ℂ)) *
+          ((ω₁ (g, h) : ℂ) * star (ω₁ (g, h) : ℂ)) := by ac_rfl
     _ = 1 := by
       rw [ρ₀.factor_mul_star_eq_one_of_unitary h₀,
         ρ₁.factor_mul_star_eq_one_of_unitary h₁, mul_one]

@@ -40,7 +40,7 @@ basepoint:
 `Lˣ_{g,h} = ψ(t_k(g,h • x), t_k(h,x))`. -/
 def inducedLSymbol (K : StabilizerRepresentatives G X x₀)
     (ψ : ScalarCocycle (MulAction.stabilizer G x₀)) : LSymbol G X :=
-  fun x g h ↦ ψ (K.transitionElement g (h • x)) (K.transitionElement h x)
+  fun x g h ↦ ψ (K.transitionElement g (h • x), K.transitionElement h x)
 
 /-- A stabilizer cocycle induces an L-symbol compatible with the trivial scalar
 three-cochain. This is the `ω = 1` scalar specialization of arXiv:2203.12563,
@@ -60,7 +60,7 @@ recovers the original cocycle representative. -/
 theorem inducedLSymbol_base (K : StabilizerRepresentatives G X x₀)
     (ψ : ScalarCocycle (MulAction.stabilizer G x₀))
     (h₁ h₂ : MulAction.stabilizer G x₀) :
-    K.inducedLSymbol ψ x₀ (h₁ : G) (h₂ : G) = ψ h₁ h₂ := by
+    K.inducedLSymbol ψ x₀ (h₁ : G) (h₂ : G) = ψ (h₁, h₂) := by
   simp only [inducedLSymbol]
   rw [show (h₂ : G) • x₀ = x₀ from MulAction.mem_stabilizer_iff.mp h₂.property]
   simp [K.transitionElement_stabilizer]
@@ -76,9 +76,9 @@ existing action-tensor gauge relation between their induced L-symbols. -/
 theorem inducedLSymbol_eq_gauge (K : StabilizerRepresentatives G X x₀)
     {ψ₁ ψ₂ : ScalarCocycle (MulAction.stabilizer G x₀)}
     (φ : MulAction.stabilizer G x₀ → Units ℂ)
-    (hφ : ∀ a b, ψ₁ a b = φ a * φ b * (φ (a * b))⁻¹ * ψ₂ a b) :
+    (hφ : ∀ a b, ψ₁ (a, b) = φ a * φ b * (φ (a * b))⁻¹ * ψ₂ (a, b)) :
     K.inducedLSymbol ψ₁ =
-      LSymbol.gauge (fun _ _ ↦ 1) (K.inducedActionGauge φ)
+      LSymbol.gauge (fun _ ↦ 1) (K.inducedActionGauge φ)
         (K.inducedLSymbol ψ₂) := by
   funext x g h
   simp only [inducedLSymbol, LSymbol.gauge, inducedActionGauge, mul_one]
@@ -94,7 +94,7 @@ theorem cohomologousTo_iff_exists_actionGauge_inducedLSymbol_eq
     ScalarCocycle.CohomologousTo ψ₁ ψ₂ ↔
       ∃ γ : ActionTensorGauge G X,
         K.inducedLSymbol ψ₁ =
-          LSymbol.gauge (fun _ _ ↦ 1) γ (K.inducedLSymbol ψ₂) := by
+          LSymbol.gauge (fun _ ↦ 1) γ (K.inducedLSymbol ψ₂) := by
   constructor
   · rintro ⟨φ, hφ⟩
     exact ⟨K.inducedActionGauge φ, K.inducedLSymbol_eq_gauge φ hφ⟩

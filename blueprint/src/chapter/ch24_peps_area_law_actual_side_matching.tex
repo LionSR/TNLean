@@ -1,10 +1,10 @@
-\section{Matching elementary sides under the actual subdivision}
+\section{Matching elementary sides under midpoint subdivision}
 \label{sec:area_law_actual_side_matching}
 
-When two actual fine cells have a common side segment, their midpoint
-choices must agree on that segment. The following statement applies to
-each elementary segment under the subdivision determined by all actual
-corners at or above the fixed lower index; see
+When two fine cells share a side segment, their midpoint subdivisions
+agree on that segment. The theorem below establishes this matching for
+every elementary segment under the subdivision determined by all cell
+corners at or above a fixed layer index $k_0$; see
 \cite[Section~11]{OpenAI2026AreaLaw}.
 
 % Source: 10-geometry.tex, lines 299--306 and 352--356,
@@ -21,15 +21,15 @@ corners at or above the fixed lower index; see
     Fix a common origin $o\in\mathbb R^2$, finite endpoint set $Z$,
     integer width $C_0\ge2$ and natural indices $k_0,k,h$ with
     $k\ge50\,000\,000$ and $k_0\le k,h$.
-    Let $z\in F_{k,\ell_k}$ and $w\in F_{h,\ell_h}$ be actual
+    Let $z\in F_{k,\ell_k}$ and $w\in F_{h,\ell_h}$ be
     fine-cell indices with $(k,z)\ne(h,w)$, and write
     $Q_{k,z}=Q_{\ell_k}(z)$ and $Q_{h,w}=Q_{\ell_h}(w)$.
-    Let $[a_i,b_i]$ be any elementary segment of the reference cell
-    under its actual midpoint subdivision relative to $k_0$.
+    Let $[a_i,b_i]$ be any elementary segment of $Q_{k,z}$
+    under its midpoint subdivision relative to $k_0$.
     Suppose that
     $[a_i,b_i]\cap\overline{Q_{h,w}}$ contains two distinct points.
-    Then there is an elementary segment $[a_j,b_j]$ of the other
-    cell under its actual midpoint subdivision relative to $k_0$
+    Then there is an elementary segment $[a_j,b_j]$ of $Q_{h,w}$
+    under its midpoint subdivision relative to $k_0$
     such that
     \begin{align}
         s(j) & =s(i)+2\pmod4,       \\
@@ -41,40 +41,37 @@ corners at or above the fixed lower index; see
     \uses{thm:area_law_fine_cell_contact,thm:area_law_elementary_side_geometry,
         def:area_law_actual_side_mask,thm:area_law_elementary_corner_endpoint,
         thm:area_law_unsplit_side_endpoints,thm:area_law_adjacent_fine_meshes}
-    The closed-cell contact is either a whole side of each cell or
-    a whole side of the smaller cell equal to a midpoint half of a
-    side of the larger cell. Contact containing two distinct points
-    identifies the facing side of the reference cell: two different
-    sides of the same square meet in at most one point.
+    The intersection $\overline{Q_{k,z}}\cap\overline{Q_{h,w}}$ is either
+    a full side of each cell or a full side of the smaller cell equal to
+    one half of a side of the larger cell. Because the contact contains
+    two distinct points and two distinct sides of a square meet in at most
+    one point, it determines the facing side of $Q_{k,z}$.
 
-    In the whole-side case, the two whole sides have the same
-    midpoint. Their subdivision conditions therefore have exactly
-    the same corner witnesses. If they are undivided, the whole
-    sides match. If they are divided, the first half on one side
-    matches the second half on the opposite side, and conversely.
+    When the two sides have equal length, they share the same midpoint
+    and therefore the same incident corners at layers $\ge k_0$. If
+    neither is subdivided, the whole sides match; if both are subdivided,
+    the first half of one side matches the second half of the opposite
+    side, and conversely.
 
-    In the unequal-size case, a corner of the smaller cell is the
-    midpoint of the larger side. The smaller cell lies at or above
-    $k_0$, so this corner forces the larger side to be divided.
-    The smaller side is undivided. Indeed, a corner at its midpoint
-    would lie strictly inside the corresponding elementary half
-    of the larger side, contrary to the elementary-corner endpoint
-    assertion. That assertion is applicable to the larger cell:
-    its layer is at least that of the smaller cell, so the required
-    late-layer bound follows from the reference bound whenever the
-    reference cell is the smaller one.
+    When the cells have unequal sizes, a corner of the smaller cell lies
+    at the midpoint of the larger side. Since the smaller cell belongs to
+    a layer $\ge k_0$, this corner forces the larger side to be subdivided.
+    The smaller side is undivided: a corner at its midpoint would lie
+    strictly inside the corresponding half of the larger side,
+    contradicting the elementary-endpoint bound
+    applied to the larger cell (whose layer index is at least $\min(k,h)$
+    and whose scale is at least $t_k$, so the late-layer bound holds).
 
-    Hence the whole smaller side matches the appropriate half of
-    the larger side. When the reference cell is larger, contact
-    containing two distinct points selects that half, since the
-    two halves meet only at their midpoint. Finally, counterclockwise
-    traversal of opposite facing sides gives the reversed endpoint
-    equalities.
+    Hence the whole smaller side matches the corresponding half of the
+    larger side. When $Q_{k,z}$ is the larger cell, contact in two
+    distinct points selects that half, since the two halves meet only at
+    their midpoint. Counterclockwise orientation along opposite facing
+    sides reverses the endpoints, giving $a_i=b_j$ and $b_i=a_j$.
 \end{proof}
 
-Theorem~\ref{thm:area_law_elementary_side_opponent} supplies an opposing
+Theorem~\ref{thm:area_law_elementary_side_opponent} gives an opposing
 closed region for every elementary segment, and
 Theorem~\ref{thm:area_law_unique_elementary_side_opponent} proves that its
-actual fine-cell or dummy identifier is unique. Consistent region labels
-and the isolated-star construction remain further steps in the
+fine-cell or exterior identifier is unique. Consistent region labels
+and the isolated-star construction are established separately in the
 two-family argument.

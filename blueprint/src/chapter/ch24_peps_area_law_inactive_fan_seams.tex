@@ -1,30 +1,28 @@
-The connected elementary pieces of
-Theorem~\ref{thm:area_law_fan_cut_piece_connected} arise from fan triangles
-whose base and radial directions are prescribed by
-Theorem~\ref{thm:area_law_fan_base_radial_directions}.
-The following assertion concerns the radial contacts described in
-Theorem~\ref{thm:area_law_fan_triangle_contact}.
+The connected pieces of Theorem~\ref{thm:area_law_fan_cut_piece_connected}
+are formed from fan triangles whose base and radial directions are given by
+Theorem~\ref{thm:area_law_fan_base_radial_directions} and whose radial
+contacts are described in Theorem~\ref{thm:area_law_fan_triangle_contact}.
 
 \begin{definition}[Retained fan pieces]
     \label{def:area_law_fan_cut_piece}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanCutPiece}
     \leanok
     \uses{def:area_law_cell_fan,def:area_law_cell_fan_successor}
-    Let $o\in\R^2$, $\ell\in\N$ and $z\in\Z^2$ be arbitrary, and let
-    $Q=o+2^\ell(z+[0,1]^2)$ be the corresponding closed dyadic square.
-    Write $c$ for its center and $r=2^\ell/2>0$ for its half-side.
+    Let $o\in\R^2$, $\ell\in\N$ and $z\in\Z^2$, and let
+    $Q=o+2^\ell(z+[0,1]^2)$ be the corresponding closed dyadic square
+    with center $c$ and half-side $r=2^\ell/2>0$.
     Subdivide each side at its midpoint and write
     $P_i=\operatorname{conv}\{c,a_i,b_i\}$ for the eight fan triangles,
     indexed in perimeter order by $\mathcal J$.
-    Let $\tau$ be the cyclic successor and assign arbitrary colors
+    Let $\tau$ be the cyclic successor on $\mathcal J$ and assign colors
     $f_i\in\{0,1\}$. Define
     \begin{align}
         A   & =\{t\in\mathcal J:f_t\ne f_{\tau(t)}\}, \\
         L   & =\bigcup_{t\in A}[c,b_t],               \\
-        S_i & =(P_i\setminus L)\cap B_\infty(c,r).
+        S_i & =(P_i\setminus L)\cap B_\infty(c,r),
     \end{align}
-    Here $B_\infty(c,r)$ is the open maximum-norm ball.
-    The sets $S_i$ are the retained fan pieces. The change set $A$
+    where $B_\infty(c,r)$ is the open maximum-norm ball.
+    The sets $S_i$ are the retained fan pieces; the change set $A$
     may be empty. This is the local radial deletion used in the
     initial-star construction of \cite[Section~11]{OpenAI2026AreaLaw}.
 \end{definition}
@@ -36,9 +34,8 @@ Theorem~\ref{thm:area_law_fan_triangle_contact}.
     \uses{def:area_law_fan_cut_piece,def:area_law_fan_runs}
     Let $S_i$ be the retained pieces of
     Definition~\ref{def:area_law_fan_cut_piece}.
-    If $i,j$ are consecutive perimeter positions and $f_i=f_j$, then
-    $S_i\cap S_j$ is nonempty. Here either $j=\tau(i)$ or
-    $i=\tau(j)$ is permitted. The change set $A$ may be empty.
+    If $i,j\in\mathcal J$ satisfy $j=\tau(i)$ or $i=\tau(j)$ and $f_i=f_j$, then
+    $S_i\cap S_j$ is nonempty.
 \end{theorem}
 \begin{proof}
     \leanok

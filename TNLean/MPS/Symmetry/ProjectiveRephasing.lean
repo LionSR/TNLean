@@ -29,7 +29,7 @@ Section II.F.2, lines 886–929. -/
 def ProjectiveRepresentation.rephase {ω : ScalarCocycle G}
     (ρ : ProjectiveRepresentation (D := D) ω) (φ : G → Units ℂ) :
     ProjectiveRepresentation (D := D)
-      (fun g h => φ g * φ h * (φ (g * h))⁻¹ * ω g h) where
+      (fun p => φ p.1 * φ p.2 * (φ (p.1 * p.2))⁻¹ * ω p) where
   X g := Matrix.GeneralLinearGroup.scalar (Fin D) (φ g) * ρ.X g
   map_mul' := by
     intro g h
@@ -43,7 +43,7 @@ def ProjectiveRepresentation.rephase {ω : ScalarCocycle G}
               ((ρ.X g : Matrix (Fin D) (Fin D) ℂ) *
                 (ρ.X h : Matrix (Fin D) (Fin D) ℂ)) := by
               simp only [Matrix.smul_mul, Matrix.mul_smul, smul_smul, mul_comm]
-      _ = ((φ g : ℂ) * (φ h : ℂ) * (φ (g * h) : ℂ)⁻¹ * (ω g h : ℂ)) •
+      _ = ((φ g : ℂ) * (φ h : ℂ) * (φ (g * h) : ℂ)⁻¹ * (ω (g, h) : ℂ)) •
           ((φ (g * h) : ℂ) •
             (ρ.X (g * h) : Matrix (Fin D) (Fin D) ℂ)) := by
           rw [ρ.map_mul]
@@ -99,19 +99,19 @@ theorem ProjectiveRepresentation.exists_unitary_rephase_of_cohomologous
   obtain ⟨φ, hφ⟩ := h
   let ψ : G → Circle := fun g => Complex.unitsPhase (φ g)
   have hphase : ∀ g k,
-      ω₁.circlePhaseInclusion g k =
+      ω₁.circlePhaseInclusion (g, k) =
         Circle.toUnits (ψ g) * Circle.toUnits (ψ k) *
-          (Circle.toUnits (ψ (g * k)))⁻¹ * ω₀.circlePhaseInclusion g k := by
+          (Circle.toUnits (ψ (g * k)))⁻¹ * ω₀.circlePhaseInclusion (g, k) := by
     intro g k
     have hc := congrArg Complex.unitsPhase (hφ g k)
     simp only [Complex.unitsPhase.map_mul, Complex.unitsPhase.map_inv] at hc
     have hu := congrArg Circle.toUnits hc
     simpa only [ScalarCocycle.circlePhaseInclusion, ScalarCocycle.circlePhase,
       ψ, Circle.toUnits.map_mul, Circle.toUnits.map_inv] using hu
-  have heq : (fun g k => Circle.toUnits (ψ g) * Circle.toUnits (ψ k) *
-      (Circle.toUnits (ψ (g * k)))⁻¹ * ω₀.circlePhaseInclusion g k) =
+  have heq : (fun p : G × G => Circle.toUnits (ψ p.1) * Circle.toUnits (ψ p.2) *
+      (Circle.toUnits (ψ (p.1 * p.2)))⁻¹ * ω₀.circlePhaseInclusion p) =
       ω₁.circlePhaseInclusion := by
-    funext g k
+    funext ⟨g, k⟩
     exact (hphase g k).symm
   rw [← heq]
   refine ⟨ρ₀.rephase (fun g => Circle.toUnits (ψ g)), ψ, ?_, ?_⟩
