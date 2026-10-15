@@ -61,6 +61,7 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
     \label{thm:peps_coarse_information}
     \lean{TNLean.PEPS.Approximation.coarse_mutualInformation_le_square,
         TNLean.PEPS.Approximation.coarse_mutualInformation_le_translated_square}
+    \leanok
     \uses{def:peps_box_union,def:polynomial_peps_model,
         thm:peps_coarse_information_of_collar,thm:area_law_sublinear_collar}
     Fix an integer $N_0\ge1$ and a constant $A_0\ge1$. There are $\beta<1$,
@@ -78,6 +79,7 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
     Proposition~3.1 of \cite{OpenAI2026PolynomialPEPS}.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{def:area_law_collar_bound,thm:area_law_sublinear_collar,
         thm:peps_coarse_information_of_collar,
         thm:peps_coarse_information_square,lem:peps_box_union_of_intervals,
@@ -161,6 +163,7 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
 \begin{theorem}[Coarse information on finite induced domains]
     \label{thm:peps_coarse_information_finite_domain}
     \lean{TNLean.PEPS.Approximation.coarse_mutualInformation_le}
+    \leanok
     \uses{def:peps_box_union,def:area_law_hamiltonian}
     Fix integers $q\ge1$, $R\ge0$ and $N_0\ge0$, real numbers
     $J\ge0$, $\Delta>0$ and $A_0$. There are $\beta<1$, $C$ and $u_0$
@@ -175,6 +178,7 @@ Hamiltonian and its full-system gap. Conditional forms are stated separately.
     rectangle union and physical regions. Empty sampled regions are included.
 \end{theorem}
 \begin{proof}
+    \leanok
     \uses{thm:peps_coarse_information_of_collar,thm:area_law_sublinear_collar}
     In the physical collar theorem take $D_0=2R+11$ and $C_{\rm tpl}=24$.
     Apply Theorem~\ref{thm:peps_coarse_information_of_collar}. Its cut is the

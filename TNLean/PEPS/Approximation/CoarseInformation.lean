@@ -29,7 +29,8 @@ The auxiliary theorem `coarse_mutualInformation_le_of_sublinearCollarBound` reta
 sublinear collar bound as an explicit premise. The physical collar estimate is proved in
 `TNLean.PEPS.AreaLaw.PhysicalCollarInformation`. The theorems of
 `CoarseInformationFromGap` discharge this premise for the original Hamiltonian and gap
-parameters, including arbitrary common real translations of the coordinates. The reductions here are used by
+parameters, including arbitrary common real translations of the coordinates. The reductions here
+are used by
 `CellConditionalInformationFromGap` for Lemma 3.2 and by `AngularInformationFromGap` for
 Proposition 3.4 of the polynomial-PEPS manuscript.
 
