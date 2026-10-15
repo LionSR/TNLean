@@ -206,13 +206,13 @@ guide, with inner radius at most `r`.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:106, 109–118, 368–373`. -/
 theorem guideFrame_holes_isTrueVertex (hf : IsDisplacedReading f (shiftGuide d G) v)
     (hVf : ∀ c ∈ V, IsTrueVertex f c) {r : ℝ}
-    (hhole : ∀ z, (hole z).center = z ∧ (hole z).scale ≤ r) :
+    (hhole : ∀ z ∈ V, (hole z).center = z ∧ (hole z).scale ≤ r) :
     ∀ hl ∈ (guideFrame pos q f own ph rank V hole hV).holes,
       IsTrueVertex G (hl.patch.center - d) ∧ hl.patch.scale ≤ r := by
   intro hl hhl
   obtain ⟨z, hz, rfl⟩ := mem_holes_guideFrame.1 hhl
-  refine ⟨?_, (hhole z).2⟩
-  rw [(hhole z).1]
+  refine ⟨?_, (hhole z hz).2⟩
+  rw [(hhole z hz).1]
   exact hf.sub_isTrueVertex (hVf z hz)
 
 /-- The centers of the true-vertex set of a temporary guide are true vertices of it. -/
@@ -273,7 +273,7 @@ at most `r`. If the plane separation of the remaining changed region `X` from th
 placed in `X`, is separated from the exterior of the birth of the party of `l`. -/
 theorem angularSeparation_birthEnv_guideFrame {G f : ℝ × ℝ → κ} {d v : ℝ × ℝ}
     (hf : IsDisplacedReading f (shiftGuide d G) v) (hVf : ∀ z ∈ V, IsTrueVertex f z) {r : ℝ}
-    (hhole : ∀ z, (hole z).center = z ∧ (hole z).scale ≤ r) {X : Set (ℝ × ℝ)} {l : κ}
+    (hhole : ∀ z ∈ V, (hole z).center = z ∧ (hole z).scale ≤ r) {X : Set (ℝ × ℝ)} {l : κ}
     {n t a' : ℝ} {W : Finset (ℝ × ℝ)}
     (hsep : AngularSeparation ((· + d) '' X) ((· + d) '' ({z | G z ≠ l} ∪ vertexZone G (2 * r)))
       n t a' W)
@@ -333,7 +333,7 @@ theorem bandBirth_step_guideFrame (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L
     (hfa : IsDisplacedReading fa (shiftGuide d (homogenize (edgeTreated n e (D * Real.log L))
       op.label (bandUpdate n e op.after g))) v)
     (hVf : ∀ z ∈ V, IsTrueVertex f z)
-    (hhole : ∀ z, (hole z).center = z ∧ (hole z).scale ≤ ε₀ * (D * Real.log L))
+    (hhole : ∀ z ∈ V, (hole z).center = z ∧ (hole z).scale ≤ ε₀ * (D * Real.log L))
     {T : Finset (SquareLatticeVertex L L)} {Q : Party}
     (hTP : ∀ x ∈ T, own (f (pos x)) = own op.label)
     (hTH : Disjoint (T : Set _) (guideFrame pos q f own ph rank V hole hV).outerHoles)
@@ -373,7 +373,7 @@ theorem bandDeath_step_guideFrame (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L
     (hfa : IsDisplacedReading fa (shiftGuide d (homogenize (edgeTreated n e (D * Real.log L))
       op.label (bandUpdate n e op.after g))) v)
     (hVf : ∀ z ∈ V, IsTrueVertex f z)
-    (hhole : ∀ z, (hole z).center = z ∧ (hole z).scale ≤ ε₀ * (D * Real.log L))
+    (hhole : ∀ z ∈ V, (hole z).center = z ∧ (hole z).scale ≤ ε₀ * (D * Real.log L))
     {T : Finset (SquareLatticeVertex L L)} {Q : Party}
     (hTP : ∀ x ∈ T, own (f (pos x)) = own op.label)
     (hTH : Disjoint (T : Set _) (guideFrame pos q f own ph rank V hole hV).outerHoles)
@@ -414,7 +414,7 @@ theorem centralBirth_step_guideFrame (hD : IsAngularScale q J Δ a A₀ m₀ 60 
     (hfa : IsDisplacedReading fa (shiftGuide d
       (homogenize (cornerTreated R.n (D * Real.log L)) R.oldLabel R.centralGuide)) v)
     (hVf : ∀ z ∈ V, IsTrueVertex f z)
-    (hhole : ∀ z, (hole z).center = z ∧ (hole z).scale ≤ ε₀ * (D * Real.log L))
+    (hhole : ∀ z ∈ V, (hole z).center = z ∧ (hole z).scale ≤ ε₀ * (D * Real.log L))
     {T : Finset (SquareLatticeVertex L L)} {Q : Party}
     (hTP : ∀ x ∈ T, own (f (pos x)) = own R.oldLabel)
     (hTH : Disjoint (T : Set _) (guideFrame pos q f own ph rank V hole hV).outerHoles)
@@ -459,7 +459,8 @@ theorem edgeExchange_step_guideFrame (hD : IsAngularScale q J Δ a A₀ m₀ 60 
     {hV₁ : (V₁ : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (hole z).outer (hole z').outer}
     {hV₂ : (V₂ : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (hole z).outer (hole z').outer}
     (hVf₁ : ∀ z ∈ V₁, IsTrueVertex f₁ z) (hVf₂ : ∀ z ∈ V₂, IsTrueVertex f₂ z)
-    (hhole : ∀ z, (hole z).center = z ∧ (hole z).scale ≤ ε₀ * (D * Real.log L))
+    (hhole₁ : ∀ z ∈ V₁, (hole z).center = z ∧ (hole z).scale ≤ ε₀ * (D * Real.log L))
+    (hhole₂ : ∀ z ∈ V₂, (hole z).center = z ∧ (hole z).scale ≤ ε₀ * (D * Real.log L))
     (out : Hole pos q Party → Bool)
     (hout : ∀ h ∈ (guideFrame pos q f₁ own ph rank V₁ hole hV₁).holes ++
         (guideFrame pos q f₂ own ph rank V₂ hole hV₂).holes, out h = true →
@@ -519,10 +520,10 @@ theorem edgeExchange_step_guideFrame (hD : IsAngularScale q J Δ a A₀ m₀ 60 
         (sub_mem_closure_ne_of_guideFrame_owner_ne hf₂ fun h₂ => hZ ⟨h₁, h₂⟩)
     · exact closure_mono (fun p hp => Or.inl hp) (sub_mem_closure_ne_of_guideFrame_owner_ne hf₁ h₁)
   · obtain ⟨y, hy, he⟩ := mem_image_vertexZone_of_mem_outerHoles _
-      (guideFrame_holes_isTrueVertex hf₁ hVf₁ hhole) hZ
+      (guideFrame_holes_isTrueVertex hf₁ hVf₁ hhole₁) hZ
     exact ⟨y, Or.inl (Or.inr (h2 ▸ hy)), he⟩
   · obtain ⟨y, hy, he⟩ := mem_image_vertexZone_of_mem_outerHoles _
-      (guideFrame_holes_isTrueVertex hf₂ hVf₂ hhole) hZ
+      (guideFrame_holes_isTrueVertex hf₂ hVf₂ hhole₂) hZ
     exact ⟨y, Or.inr (h2 ▸ hy), he⟩
 
 end TNLean.PEPS.Approximation
