@@ -461,8 +461,8 @@ open TNLean.Algebra in
 /-- The cluster factor system on `Z₂ × Z₂`: `ω(g, h) = (-1)^{g₂ h₁}`, the value
 `-1` when `(g₂, h₁) = (1, 1)` and `1` otherwise. -/
 def clusterOmega : ScalarCocycle (Multiplicative (ZMod 2 × ZMod 2)) :=
-  fun g h =>
-    if (Multiplicative.toAdd g).2 = 1 ∧ (Multiplicative.toAdd h).1 = 1 then -1 else 1
+  fun p =>
+    if (Multiplicative.toAdd p.1).2 = 1 ∧ (Multiplicative.toAdd p.2).1 = 1 then -1 else 1
 
 /-- The virtual action of the explicit cluster projective representation:
 `1 ↦ I`, `(1,0) ↦ σz`, `(0,1) ↦ σx`, `(1,1) ↦ σz σx`. -/
@@ -471,7 +471,7 @@ def clusterRepX (g : Multiplicative (ZMod 2 × ZMod 2)) : GL (Fin 2) ℂ :=
     (if (Multiplicative.toAdd g).2 = 0 then 1 else clusterGaugeX)
 
 private lemma clusterOmega_apply_val (g h : Multiplicative (ZMod 2 × ZMod 2)) :
-    (clusterOmega g h : ℂ) =
+    (clusterOmega (g, h) : ℂ) =
       if (Multiplicative.toAdd g).2 = 1 ∧ (Multiplicative.toAdd h).1 = 1 then -1 else 1 := by
   rw [clusterOmega]; split <;> simp
 

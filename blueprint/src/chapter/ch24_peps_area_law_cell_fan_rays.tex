@@ -36,12 +36,11 @@ These are the directions from a cell center in the fan construction of
 \begin{proof}\leanok
     \uses{thm:area_law_cell_fan_base_radius,
         thm:area_law_cell_fan_final_endpoint_injective}
-    The two vectors have the same positive norm $r=2^\ell/2$.
+    The vectors $b_i-c$ and $b_j-c$ have the same positive norm $r=2^\ell/2$.
     If $b_j-c=\lambda(b_i-c)$ with $\lambda>0$, homogeneity of the
-    norm gives $r=\lambda r$, hence $\lambda=1$. Thus $b_i=b_j$.
-    Injectivity of final endpoints gives $i=j$.
-    Conversely, equal indices give equal vectors, so the positive
-    multiple $\lambda=1$ proves that they have the same direction.
+    norm gives $r=\lambda r$, hence $\lambda=1$ and $b_i=b_j$.
+    Injectivity of the final endpoints
+    then gives $i=j$. The converse is immediate.
 \end{proof}
 
 \begin{definition}[Directed ray of an elementary base]
@@ -54,9 +53,7 @@ These are the directions from a cell center in the fan construction of
     \begin{align}
         \rho(i) & =[b_i-c]\in\mathcal R.
     \end{align}
-    The positive common radius makes every vector in this definition
-    nonzero. Only positive multiples are identified: $[u]\ne[-u]$
-    for every $u\ne0$.
+    Since $\|b_i-c\|_\infty=2^\ell/2>0$, the vector $b_i-c$ is nonzero.
 \end{definition}
 
 \begin{theorem}[Injectivity of the directed-ray assignment]
@@ -68,9 +65,8 @@ These are the directions from a cell center in the fan construction of
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:area_law_cell_fan_ray,thm:area_law_cell_fan_end_same_ray}
-    Equality of the two ray classes means that their nonzero
-    representatives have the same direction. The endpoint-direction
-    equivalence then gives equality of their indices.
+    Equality $\rho(i)=\rho(j)$ means $b_i-c\sim b_j-c$, which is equivalent
+    to $i=j$.
 \end{proof}
 
 % Source: 10-geometry.tex, geometry:initial-stars, lines 333--370,
@@ -84,7 +80,7 @@ These are the directions from a cell center in the fan construction of
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFan_mem_radial_iff_sameRay_of_mem_closedBall}
     \leanok
     \uses{def:area_law_cell_fan,thm:area_law_cell_fan_base_radius}
-    Let $o\in\R^2$, $\ell\in\N$ and $z\in\Z^2$ be arbitrary.
+    Let $o\in\R^2$, $\ell\in\N$ and $z\in\Z^2$.
     Let $c$ be the center of the closed dyadic square
     $Q=o+2^\ell(z+[0,1]^2)$, and choose independently on each side
     either the whole side or its two midpoint halves.
@@ -95,25 +91,20 @@ These are the directions from a cell center in the fan construction of
         [c,b_s]\cap\overline B_\infty(c,r)
          & =R_s\cap\overline B_\infty(c,r).
     \end{align}
-    Here the full ray $R_s$ includes its center $c$, and the assertion
-    also holds when $\ell=0$. This is the local restriction of a radial
-    direction used in the initial-star construction of
-    \cite[Section~11]{OpenAI2026AreaLaw}.
+    This is the local restriction of a radial direction used in the
+    initial-star construction of \cite[Section~11]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_cell_fan_base_radius}
     Every point of $[c,b_s]$ belongs to $R_s$.
     Conversely, let $x\in R_s$ satisfy $\|x-c\|_\infty\le r$.
-    The points lie on the same directed line from $c$, so either
+    Since $x$ and $b_s$ lie on the same ray from $c$, either
     $x\in[c,b_s]$ or $b_s\in[c,x]$.
-    In the second case, distance addition along the segment gives
+    In the second case, additivity of the norm along the segment gives
     \begin{align}
         \|x-c\|_\infty
          & =\|b_s-c\|_\infty+\|x-b_s\|_\infty
         =r+\|x-b_s\|_\infty.
     \end{align}
-    The radius bound forces $\|x-b_s\|_\infty=0$, hence $x=b_s$.
-    This proves the reverse inclusion. Distance addition along a
-    segment is valid in the maximum norm and requires no strict
-    convexity.
+    Thus $\|x-b_s\|_\infty=0$ and $x=b_s\in[c,b_s]$.
 \end{proof}

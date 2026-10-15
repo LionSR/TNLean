@@ -3,7 +3,7 @@
 
 The sparse shifts may be chosen in every distance layer. Their cell counts
 have a summable geometric bound, so only finitely many layers contribute
-belt cells. We can therefore form the finite union of their actual marked
+belt cells. We can therefore form the finite union of their marked
 points and assign to each point its smallest incident cell side; see
 \cite[Section~11]{OpenAI2026AreaLaw}.
 
@@ -21,7 +21,7 @@ points and assign to each point its smallest incident cell side; see
         def:area_law_fine_belt_scales}
     For every finite domain $\Lambda$, cut $A$, origin $o$ and
     nonnegative integer $C_0$, there are coordinate residues $a_k,b_k$
-    at every scale. Write $F_k$ for their actual belt-cell index set.
+    at every scale. Write $F_k$ for their belt-cell index set.
     These choices satisfy
     \begin{align}
         |F_k| & \le64(2C_0+1)^2|\partial_\Lambda A|\,2^{-\delta_0 k/2}
@@ -47,7 +47,7 @@ points and assign to each point its smallest incident cell side; see
     There is a positive constant $B$ such that, for every finite domain,
     cut, origin, nonnegative integer $C_0$ and lower index $k_0$, one can
     choose the residues from the preceding theorem and a finite set $M$
-    of actual marks with
+    of marks with
     \begin{align}
         x\in M
             & \quad\Longleftrightarrow\quad
@@ -61,8 +61,8 @@ points and assign to each point its smallest incident cell side; see
 \begin{proof}\leanok
     \uses{thm:area_law_finite_sparse_belt_family,thm:area_law_belt_mark_count,
         thm:area_law_polynomial_finite_sums}
-    Let $B_0>0$ be the uniform finite-sum budget for the zero polynomial
-    exponent, and take $B=576B_0$. Form the union of the actual marks
+    Let $B_0>0$ be the uniform finite-sum constant for the zero polynomial
+    exponent, and take $B=576B_0$. Form the union of the marks
     over the finite support restricted to $k\ge k_0$. Its membership is
     exactly the stated condition. A finite union has at most the sum of
     the individual cardinalities, and each cell contributes at most
@@ -85,7 +85,7 @@ points and assign to each point its smallest incident cell side; see
         def:area_law_fine_belt_scales}
     Fix an origin $o$ and a finite endpoint set $Z$, and form all layers
     from these data with $C_0\ge2$. Let $k,h\ge50{,}000{,}000$. If $x$ and $y$ are
-    distinct marks of actual fine-layer cells in layers $k$ and $h$,
+    distinct marks of fine-layer cells in layers $k$ and $h$,
     respectively, then
     \begin{align}
         \operatorname{dist}_\infty(x,y)\ge\frac14\max(t_k,t_h),
@@ -99,7 +99,7 @@ points and assign to each point its smallest incident cell side; see
         thm:area_law_belt_marks_quarter_mesh,thm:area_law_affine_mesh_point_separation,
         thm:area_law_fine_cell_containment}
     Suppose that the distance is less than $t_k/4$. Each mark is in the
-    closure of its actual layer. Layer locality forces $k\le h+1$.
+    closure of its layer. Layer locality forces $k\le h+1$.
     Monotonicity and the adjacent-scale estimate give
     $\ell_k\le\ell_h+1$, so both marks lie on the translated mesh of
     spacing $t_k/4$. Distinct mesh points cannot be closer than this
@@ -140,7 +140,7 @@ points and assign to each point its smallest incident cell side; see
     There is $B>0$ such that, for every finite domain, cut, origin,
     integer $C_0\ge2$ and lower index $k_0\ge50{,}000{,}000$, there are
     sparse residues with the per-layer estimates and finite support,
-    the exact finite union $M$ of their actual marks above $k_0$, and a
+    the finite union $M$ of their marks above $k_0$, and a
     positive side $s(v)$ for each $v\in M$, satisfying
     \begin{align}
         |M| & \le B(2C_0+1)^2|\partial_\Lambda A|,     \\
@@ -148,8 +148,8 @@ points and assign to each point its smallest incident cell side; see
             & \ge\frac14\max(s(v),s(w))\qquad(v\ne w).
     \end{align}
     For each $v$, some selected belt cell in a layer $k\ge k_0$ has $v$
-    as an actual mark and side $s(v)=t_k$. Every selected belt cell in a layer $h\ge k_0$ that has $v$ as one
-    of its actual marks has side at least $s(v)$.
+    as a mark and side $s(v)=t_k$. Every selected belt cell in a layer $h\ge k_0$ that has $v$ as one
+    of its marks has side at least $s(v)$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:area_law_uniform_initial_mark_count,
@@ -159,6 +159,6 @@ points and assign to each point its smallest incident cell side; see
     construction. For each point of $M$, take the least layer index
     admitting an incident selected cell. The fine-cell exponent is
     nondecreasing, so this gives a positive smallest incident side.
-    Apply fine-layer mark separation to the two witnessing cells.
+    Apply fine-layer mark separation to the two cells realizing $s(v)$ and $s(w)$.
     When $M$ is empty the assignment and pairwise condition are empty.
 \end{proof}

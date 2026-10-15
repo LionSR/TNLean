@@ -14,42 +14,42 @@
     $q\ge1$, and let $H$ be a range-$R$ interaction of strength $J\ge0$.
     Suppose that $\Omega$ is a unit ground vector of energy $E_0$ with
     full-system gap $\Delta>0$. Fix an integer $p\ge1$, and let
-    $k_i=|M_i|/c_*$ be its exact positive constraints from
+    $k_i=|M_i|/c_*$ be the positive constraints from
     Theorem~\ref{thm:al_lattice_positive_replacement}. Put
-    $g=\Delta/c_*$, $P_\Omega=|\Omega\rangle\langle\Omega|$ and
+    $g=\Delta/c_*$, $P_\Omega=|\Omega\rangle\langle\Omega|$, and
     $G_i=(I-k_i)^{1/2}$.
 
-    For $t\ge0$, let $\mu_t$ be the probability law of independent
-    Poisson counts of mean $t$ for the interaction labels, followed by
-    a uniformly ordered word with those counts. For a chronological word
+    For $t\ge0$, let $\mu_t$ be the law of a word $w$ obtained by drawing
+    independent Poisson$(\,t\,)$ multiplicities for the interaction labels
+    and ordering the resulting multiset uniformly at random. For a word
     $w=(i_0,\ldots,i_{m-1})$, set
     $D_w=G_{i_{m-1}}\cdots G_{i_0}$ and $D_{\varnothing}=I$.
     For every finite-dimensional spectator space $\mathcal K$ and every
     $\zeta\in\mathcal H_\Lambda\otimes\mathcal K$, put
-    $\xi=((I-P_\Omega)\otimes I)\zeta$. The squared norm
+    $\xi=((I-P_\Omega)\otimes I)\zeta$. Then
     $\|(D_w\otimes I)\xi\|^2$ is integrable and satisfies
     \begin{align*}
         \int\|(D_w\otimes I)\xi\|^2\,d\mu_t(w)
         \le e^{-gt}\|\xi\|^2.
     \end{align*}
-    This is the fixed-time excited-state estimate in
+    This is the fixed-time excited-state decay estimate in
     \cite[Section~10]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}\leanok
-    The exact positive replacement gives $k_i\Omega=0$, $k_i\le I$
-    and $\sum_i k_i\ge g(I-P_\Omega)$. Each $G_i$ fixes $\Omega$
-    and preserves its orthogonal complement. On that complement its
-    squared-norm loss is $\langle\xi,k_i\xi\rangle$. Summing over
-    labels gives a loss of at least $g\|\xi\|^2$. Let $N$ be the
-    number of interaction labels. If $g>N$, the inequalities
-    $\sum_i k_i\le NI$ and $\sum_i k_i\ge g(I-P_\Omega)$ force
-    the orthogonal complement of $\Omega$ to be zero, so $\xi=0$
-    and the conclusion is immediate. Otherwise $N-g\ge0$.
-    The sum of the squared norms over all words of length $m$
-    is then at most $(N-g)^m\|\xi\|^2$. Multiplying by the
-    Poisson-word mass $e^{-Nt}t^m/m!$ and summing over $m$
-    gives $e^{-Nt}e^{(N-g)t}=e^{-gt}$, with the identity on the
-    spectator throughout.
+    The positive constraints satisfy $0\le k_i\le I$, $k_i\Omega=0$,
+    and $\sum_i k_i\ge g(I-P_\Omega)$. Each operator $G_i\otimes I$ fixes
+    $\Omega\otimes\mathcal K$ and preserves its orthogonal complement. On
+    that complement,
+    $\|\xi\|^2-\|(G_i\otimes I)\xi\|^2=\langle\xi,(k_i\otimes I)\xi\rangle$.
+    Let $N$ be the number of interaction labels. Summing over all $N$
+    labels gives $\sum_i\|(G_i\otimes I)\xi\|^2\le(N-g)\|\xi\|^2$.
+    If $g>N$, the inequalities $\sum_i k_i\le NI$ and
+    $\sum_i k_i\ge g(I-P_\Omega)$ force $I-P_\Omega=0$, so $\xi=0$
+    and the bound holds trivially. Otherwise $N-g\ge0$, and induction on
+    the word length $m$ gives
+    $\sum_{|w|=m}\|(D_w\otimes I)\xi\|^2\le(N-g)^m\|\xi\|^2$.
+    Multiplying by the Poisson-word probability $e^{-Nt}t^m/m!$ and
+    summing over $m\ge0$ yields $e^{-Nt}e^{(N-g)t}\|\xi\|^2=e^{-gt}\|\xi\|^2$.
 \end{proof}
 
 \input{chapter/ch24_peps_amplification_truncation}
