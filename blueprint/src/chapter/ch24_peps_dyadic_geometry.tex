@@ -1956,8 +1956,8 @@ is not proved here.
     participates, and Theorem~\ref{thm:peps_dyadic_lifetime_parties} bounds it.
 \end{proof}
 
-\begin{lemma}[Retained norm of a protocol with the assembly bounds]
-    \label{lem:peps_dyadic_protocol_retained_norm}
+\begin{theorem}[Retained norm of a protocol with the assembly bounds]
+    \label{thm:peps_dyadic_protocol_retained_norm}
     \lean{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.retained_norm_and_trace_le}
     \leanok
     \uses{def:peps_dyadic_protocol}
@@ -1974,7 +1974,7 @@ is not proved here.
     is the sense in which the protocol does not rely on renormalizing an
     exponentially small success amplitude
     \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{lem:peps_protocol_retained_norm}
