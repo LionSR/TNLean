@@ -182,12 +182,7 @@ theorem isBeltFacet_beltAtomFacet (c : ℤ × ℤ) (s : RepairFanSlot) (i : Fin 
     IsBeltFacet (beltAtomFacet c s i) := by
   rcases s with ⟨k, j⟩
   fin_cases k <;> fin_cases j <;> fin_cases i <;>
-    simp [beltAtomFacet, repairSlotFacets, IsBeltFacet] <;>
-    first
-    | (refine ⟨-(c.1 + c.2 + 1), ?_⟩; omega)
-    | (refine ⟨c.1 + c.2 + 1, ?_⟩; omega)
-    | (refine ⟨c.1 - c.2, ?_⟩; omega)
-    | (refine ⟨c.2 - c.1, ?_⟩; omega)
+    simp [beltAtomFacet, repairSlotFacets, IsBeltFacet, parity_simps, Int.odd_mul]
 
 theorem isClosed_beltAtom (c : ℤ × ℤ) (s : RepairFanSlot) : IsClosed (beltAtom c s) := by
   rw [beltAtom_eq_iInter]; exact isClosed_iInter fun _ ↦ isClosed_intHalfPlane _ _ _
@@ -459,18 +454,19 @@ theorem exists_segment_subset_iInter_intHalfPlane {ι : Type*} [Finite ι]
           linarith
         obtain ⟨p, q, hpq⟩ := exists_int_eq_of_isBeltFacet (hF i) (hF i₀) hdet hi hi₀
         exact hzZ p q hpq
-    · push_neg at hT
+    · push Not at hT
       exact ⟨(1, 0), by simp, fun i hi ↦ (hT i hi).elim⟩
   have hev : ∀ᶠ t in 𝓝 (0 : ℝ), ∀ i, z + t • d ∈ intHalfPlane (F i).1 (F i).2.1 (F i).2.2 := by
     rw [eventually_all]
     intro i
     by_cases hti : ((F i).1 : ℝ) * z.1 + (F i).2.1 * z.2 = (F i).2.2
     · refine Eventually.of_forall fun t ↦ ?_
-      simp only [intHalfPlane, Set.mem_setOf_eq, Prod.fst_add, Prod.snd_add, Prod.smul_fst,
+      simp only [intHalfPlane, Set.mem_ofPred_eq, Prod.fst_add, Prod.snd_add, Prod.smul_fst,
         Prod.smul_snd, smul_eq_mul]
       have h := hd i hti
       have : ((F i).1 : ℝ) * (z.1 + t * d.1) + (F i).2.1 * (z.2 + t * d.2) =
-          (((F i).1 : ℝ) * z.1 + (F i).2.1 * z.2) + t * (((F i).1 : ℝ) * d.1 + (F i).2.1 * d.2) := by
+          (((F i).1 : ℝ) * z.1 + (F i).2.1 * z.2) +
+            t * (((F i).1 : ℝ) * d.1 + (F i).2.1 * d.2) := by
         ring
       rw [this, hti, h, mul_zero, add_zero]
     · have hlt : ((F i).1 : ℝ) * z.1 + (F i).2.1 * z.2 < (F i).2.2 := lt_of_le_of_ne (hz i) hti
@@ -537,8 +533,7 @@ private theorem repairNormTriangle_axis {s : RepairFanSlot} {α β : ℤ} (hodd 
     (try (exfalso; omega)) <;>
     fin_cases k <;> fin_cases l
   all_goals norm_num [repairSlotFacets] at hh
-  all_goals try simp [repairNormTriangle, intHalfPlane, repairSlotFacets, or_and_right, exists_or]
-  all_goals try norm_num
+  all_goals simp [repairNormTriangle, intHalfPlane, repairSlotFacets, or_and_right, exists_or]
 
 /-- **Axis segments at a contact of opposite parity.** An atom through an
 integer point whose coordinates have odd sum contains a horizontal and a
@@ -615,7 +610,7 @@ theorem exists_pos_common_contact_dichotomy {X Y : Set (ℝ × ℝ)}
     intro x hx y hy hK
     have : ∃ q ∈ X ∩ Y, ‖x - q‖ < 1 / 4 ∧ ‖y - q‖ < 1 / 4 := by
       by_contra hne
-      push_neg at hne
+      push Not at hne
       exact hK ⟨⟨hx, hy⟩, Set.mem_iInter₂.mpr fun q hq h ↦
         absurd (hne q hq h.1) (not_le.mpr h.2)⟩
     obtain ⟨q, hq, hxq, hyq⟩ := this
@@ -707,7 +702,7 @@ theorem exists_beltAtom_dichotomy :
       linarith
     · have : (2 : ℝ) ≤ c'.2 - c.2 := by exact_mod_cast hf
       linarith
-  push_neg at hfar
+  push Not at hfar
   obtain ⟨f₁, f₂, f₃, f₄⟩ := hfar
   let δ : Fin 3 × Fin 3 := (⟨(c'.1 - c.1 + 1).toNat, by omega⟩, ⟨(c'.2 - c.2 + 1).toNat, by omega⟩)
   have hδ : c' = beltAtomOffset δ + c := by

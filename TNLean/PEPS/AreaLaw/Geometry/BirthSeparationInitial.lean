@@ -176,9 +176,15 @@ private theorem exists_cellFanEnd_eq (split : Fin 4 → Bool) (j : CellFanSlot s
   obtain ⟨side, i⟩ := j
   by_cases hs : split side
   · have hi : i.val < 2 := by simpa [hs] using i.isLt
-    simp only [hs, if_true]
+    simp only [hs, ite_true]
     rcases (show i.val = 0 ∨ i.val = 1 by omega) with h | h <;> simp [h]
   · simp [hs]
+
+private theorem cellFanSideVector_cases (side : Fin 4) {τ : ℝ} (hτ : τ = 0 ∨ τ = 1) :
+    (cellFanSideVector side τ).2 = 0 ∨ (cellFanSideVector side τ).1 = 0 ∨
+      (cellFanSideVector side τ).1 = (cellFanSideVector side τ).2 ∨
+      (cellFanSideVector side τ).1 = -(cellFanSideVector side τ).2 := by
+  fin_cases side <;> rcases hτ with rfl | rfl <;> simp [cellFanSideVector]
 
 /-- Points of the radial segments of a fan of an adjacent or coarser scale lie,
 after normalization, on lines of the belt arrangement. -/
@@ -192,7 +198,7 @@ theorem isBeltArrangementPoint_of_mem_radial (hℓ : ℓ ≤ ℓ' + 1) (split : 
   rw [hend, segment_eq_image'] at hp
   obtain ⟨θ, -, rfl⟩ := hp
   set v := cellFanSideVector j.1 τ with hv
-  show IsBeltArrangementPoint (beltNormalize o ℓ z
+  change IsBeltArrangementPoint (beltNormalize o ℓ z
     (cellFanCenter o ℓ' w + θ • (cellFanCenter o ℓ' w + ((2 : ℝ) ^ ℓ' / 2) • v -
       cellFanCenter o ℓ' w)))
   rw [add_sub_cancel_left]
@@ -210,21 +216,15 @@ theorem isBeltArrangementPoint_of_mem_radial (hℓ : ℓ ≤ ℓ' + 1) (split : 
     linear_combination ((w.2 : ℝ) + 1 / 2 + θ * v.2 / 2) * hH - (z.2 : ℝ) * hQ
   generalize beltNormalize o ℓ z (cellFanCenter o ℓ' w + θ • (((2 : ℝ) ^ ℓ' / 2) • v)) = P
     at e₁ e₂ ⊢
-  obtain ⟨side, i⟩ := j
-  simp only at hv
-  rcases hτ with rfl | rfl <;> fin_cases side <;>
-    simp [hv, cellFanSideVector] at e₁ e₂ <;>
-    first
-    | exact Or.inl ⟨2 * 2 ^ (ℓ' + 1 - ℓ) * w.1 + 2 ^ (ℓ' + 1 - ℓ) - 4 * z.1, by
-        rw [e₁]; push_cast; linear_combination⟩
-    | exact Or.inr (Or.inl ⟨2 * 2 ^ (ℓ' + 1 - ℓ) * w.2 + 2 ^ (ℓ' + 1 - ℓ) - 4 * z.2, by
-        rw [e₂]; push_cast; linear_combination⟩)
-    | exact Or.inr (Or.inr (Or.inl
-        ⟨2 ^ (ℓ' + 1 - ℓ) * (w.1 + w.2 + 1) - 2 * (z.1 + z.2), by
-          rw [e₁, e₂]; push_cast; linear_combination⟩))
-    | exact Or.inr (Or.inr (Or.inr
-        ⟨2 ^ (ℓ' + 1 - ℓ) * (w.1 - w.2) - 2 * (z.1 - z.2), by
-          rw [e₁, e₂]; push_cast; linear_combination⟩))
+  rcases cellFanSideVector_cases j.1 hτ with h | h | h | h <;> rw [← hv] at h
+  · refine Or.inr (Or.inl ⟨2 * 2 ^ (ℓ' + 1 - ℓ) * w.2 + 2 ^ (ℓ' + 1 - ℓ) - 4 * z.2, ?_⟩)
+    rw [e₂, h]; push_cast; ring
+  · refine Or.inl ⟨2 * 2 ^ (ℓ' + 1 - ℓ) * w.1 + 2 ^ (ℓ' + 1 - ℓ) - 4 * z.1, ?_⟩
+    rw [e₁, h]; push_cast; ring
+  · refine Or.inr (Or.inr (Or.inr ⟨2 ^ (ℓ' + 1 - ℓ) * (w.1 - w.2) - 2 * (z.1 - z.2), ?_⟩))
+    rw [e₁, e₂, h]; push_cast; ring
+  · refine Or.inr (Or.inr (Or.inl ⟨2 ^ (ℓ' + 1 - ℓ) * (w.1 + w.2 + 1) - 2 * (z.1 + z.2), ?_⟩))
+    rw [e₁, e₂, h]; push_cast; ring
 
 private theorem isClosed_cellFanPolygon_region (split : Fin 4 → Bool)
     (i : CellFanSlot split) : IsClosed (cellFanPolygon o ℓ' w split i).region := by
@@ -369,7 +369,8 @@ theorem mem_beltCellMarks_of_beltNormalize_eq {v : ℝ × ℝ} {m n : ℤ} (hm :
 
 /-- The normalized reference cell is `[0, 4]²`. -/
 theorem beltNormalize_mem_Icc {v : ℝ × ℝ} (hv : v ∈ closure (dyadicCell o ℓ z)) :
-    (beltNormalize o ℓ z v).1 ∈ Set.Icc (0 : ℝ) 4 ∧ (beltNormalize o ℓ z v).2 ∈ Set.Icc (0 : ℝ) 4 := by
+    (beltNormalize o ℓ z v).1 ∈ Set.Icc (0 : ℝ) 4 ∧
+      (beltNormalize o ℓ z v).2 ∈ Set.Icc (0 : ℝ) 4 := by
   have hpos : (0 : ℝ) < (2 : ℝ) ^ ℓ := by positivity
   rw [closure_dyadicCell] at hv
   obtain ⟨⟨h₁, h₂⟩, h₃, h₄⟩ := hv
@@ -956,5 +957,41 @@ theorem exists_isInitialBirthSeparated :
     linarith
   have := quarter_rpow_le_repairHalfSide (one_le_pow₀ (by norm_num : (1 : ℝ) ≤ 2)) hS
   linarith
+
+theorem IsInitialBirthSeparated.mono {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
+    {C k₀ : ℕ} {hC : 2 ≤ C} {h₀ : 50000000 ≤ k₀} {Sstar c c' : ℝ}
+    (h : IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c) (hc : c' ≤ c) :
+    IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c' :=
+  fun x y ℓ hx hyx hyd hcol p hp w hw ↦
+    (mul_le_mul_of_nonneg_right hc (Real.rpow_nonneg (by positivity) _)).trans
+      (h x y ℓ hx hyx hyd hcol p hp w hw)
+
+theorem IsRepairBirthSeparated.mono {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)}
+    {C k₀ : ℕ} {hC : 2 ≤ C} {h₀ : 50000000 ≤ k₀} {Sstar c c' : ℝ}
+    (h : IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c) (hc : c' ≤ c) :
+    IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c' :=
+  fun j x y m hxm hyx hcol p hp w hw ↦
+    (mul_le_mul_of_nonneg_right hc (Real.rpow_nonneg (repairHalfSide_pos _).le _)).trans
+      (h j x y m hxm hyx hcol p hp w hw)
+
+/-- **Birth-template separation, from Lemma 11.4.** If the uniform repair
+induction holds, one fixed `c₁ > 0` serves both cases of the birth-separation
+lemma: the births of the initial belt tiles and the births of the replacements,
+for every sufficiently large stopping scale and lower layer index.
+Source: area-law Section 11, `geometry:birth-separation`, lines 573–659, from
+`geometry:repair-induction`, lines 471–485. -/
+theorem exists_birthSeparation_of_uniformRepairInductionStatement
+    (h : UniformRepairInductionStatement) :
+    ∃ c₁ > 0, ∃ T : ℝ, ∀ Sstar, T ≤ Sstar → ∀ C : ℕ, ∃ K : ℕ,
+      ∀ (o : ℝ × ℝ) (Λ : Finset (ℤ × ℤ)) (A : Finset (Site Λ)) (k₀ : ℕ)
+        (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀), K ≤ k₀ →
+          IsInitialBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ ∧
+            IsRepairBirthSeparated o Λ A C k₀ hC h₀ Sstar c₁ := by
+  obtain ⟨c₂, hc₂, T, hT⟩ := exists_isRepairBirthSeparated_of_uniformRepairInductionStatement h
+  obtain ⟨c₃, hc₃, hI⟩ := exists_isInitialBirthSeparated
+  refine ⟨min c₂ c₃, lt_min hc₂ hc₃, T, fun Sstar hS C ↦ ?_⟩
+  obtain ⟨K, hK⟩ := hT Sstar hS C
+  exact ⟨K, fun o Λ A k₀ hC h₀ hk ↦ ⟨(hI o Λ A C k₀ hC h₀ Sstar).mono (min_le_right _ _),
+    (hK o Λ A k₀ hC h₀ hk).mono (min_le_left _ _)⟩⟩
 
 end TNLean.PEPS.AreaLaw.Geometry
