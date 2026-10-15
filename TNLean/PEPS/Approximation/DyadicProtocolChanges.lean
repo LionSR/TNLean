@@ -180,8 +180,8 @@ theorem isBoundedChange_of_step {F F' : Frame pos q Party} {P : Finset Party} (h
 the direct repainting of a square `R` of level `n ≤ K₀ t`, from the reading of the level labels
 with the blocks of `done` repainted to the reading with `R` repainted as well, with raw owners
 read through the party map of `R` and the fresh placeholder party of `R`, is a bounded change whose
-participants are used by the repainting, with error `(2 b + 1) L⁻²⁰` for
-`b = protocolPatchBound ε₀ ν`.
+participants are used by the repainting, with error `(2 b + 1) L⁻²⁰` and at most `2 b` pair
+sources in each monomial for `b = protocolPatchBound ε₀ ν`.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 91–100, 507–527, 559–570 and 572–596;
 Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 188–218. -/
@@ -219,12 +219,14 @@ theorem directRepainting_isBoundedChange {K₀ ε₀ ν a D B₀ : ℝ}
             4 * protocolPatchBound ε₀ ν * (3 * protocolPatchBound ε₀ ν * c + 30)))
         ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹)
         ((guideFrame pos q g (labelParty R) guidePlaceholder rank V hole hpV).regRef Ω)
-        ((guideFrame pos q g' (labelParty R) guidePlaceholder rank V' hole hpV').regRef Ω) := by
-  obtain ⟨P, -, hP, h⟩ := hc.directRepainting_step hm hL hn hK hv
+        ((guideFrame pos q g' (labelParty R) guidePlaceholder rank V' hole hpV').regRef Ω) ∧
+      w.IsSourceBounded (2 * protocolPatchBound ε₀ ν) := by
+  obtain ⟨P, -, hP, w, h₁, h₂, h₃, h₄, h₅, h₆⟩ := hc.directRepainting_step hm hL hn hK hv
     (fun Q hQ => levelLabels_insert_of_ne _ _ _ _ hQ) hg hg' (labelParty R) guidePlaceholder
     rank hV hV' hVc hVc' hVV' hole patch hhole hpatch hpV hpV' hcardHole hcardPatch hΩ hεpatch
     hεhole htag
-  exact isBoundedChange_of_step (coe_subset_eventUses_of_window R done _ hP) (by exact_mod_cast h)
+  exact ⟨w, ⟨h₁, fun γ => (h₂ γ).trans (coe_subset_eventUses_of_window R done _ hP),
+    by exact_mod_cast h₃, h₄, h₅⟩, h₆⟩
 
 /-- **A birth as a bounded change.** The conclusion of the step theorems of the bulk births
 (`bandBirth_step`, `centralBirth_step`): an allowed word using only the old and the new owner
