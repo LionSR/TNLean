@@ -212,3 +212,20 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     parent and one of the nine centered offsets. Equality of the parent
     and offset therefore gives equality of the child occurrences.
 \end{proof}
+
+% Source: 10-geometry.tex, initial marks, lines 325--363, and child marks,
+% lines 404--409 and 506--514.
+\begin{lemma}[Finitely many marks at each generation]
+    \label{lem:area_law_repair_finite_marks}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.finite_repairStage_markIndex}
+    \leanok
+    \uses{def:area_law_repair_stage,lem:area_law_repair_parent_offset}
+    For every generation $j\ge0$, the mark family $K_j$ is finite.
+\end{lemma}
+\begin{proof}\leanok
+    \uses{lem:area_law_repair_parent_offset}
+    The initial mark family is the selected finite set $M$. If $K_j$ is
+    finite, the parent and offset map of
+    Lemma~\ref{lem:area_law_repair_parent_offset} injects $K_{j+1}$ into
+    the finite set $K_j\times\{0,1,2\}^2$. Induction proves the claim.
+\end{proof}

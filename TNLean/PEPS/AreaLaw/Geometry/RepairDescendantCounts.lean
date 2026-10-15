@@ -10,7 +10,8 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairDescendants
 
 Each child occurrence retains its parent and one of the nine centered
 offsets. These data determine the occurrence, independently of geometric
-separation of the mark locations.
+separation of the mark locations. Since the initial mark set is finite,
+every actual generation has finitely many mark occurrences.
 
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 September 24, 2026, Section 11, child marks, lines 404–409 and 506–514;
@@ -43,5 +44,18 @@ theorem repairMarkParent_repairMarkOffset_injective (j : ℕ) :
     Prod.ext (Subtype.ext (q.1.property.trans r.1.property.symm))
       (Prod.ext (Subtype.ext (congrArg Prod.fst h))
         (congrArg (fun z : (𝔇 j).markIndex × (Fin 3 × Fin 3) ↦ z.2) h))
+
+/-- The actual mark carrier is finite at every generation, without any
+metric hypotheses on the repair.
+Source: area-law Section 11, initial marks, lines 325–363, and child marks,
+lines 404–409 and 506–514. -/
+theorem finite_repairStage_markIndex (j : ℕ) : Finite (𝔇 j).markIndex := by
+  exact Nat.rec (motive := fun j ↦ Finite (𝔇 j).markIndex) (by
+    dsimp only [repairStage, initialRepairStage]
+    infer_instance)
+    (fun j ih ↦
+      letI := ih
+      Finite.of_injective _
+        (repairMarkParent_repairMarkOffset_injective o Λ A C k₀ hC h₀ Sstar j)) j
 
 end TNLean.PEPS.AreaLaw.Geometry
