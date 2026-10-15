@@ -134,10 +134,8 @@ theorem actualChargeEntropyDefect_le_entropyGain_domainGraph
   have hAdm : D.IsAdmissible := S.actualChargeData_isAdmissible hm0 hM k
   have hcomm : D.CrossBandCommute n t r :=
     S.chargeTransportData_crossBandCommute _ _ n ht r
-  have hF (h : History S.K S.m S.M k) : Continuous (F h) := by
-    unfold F TransportData.splitEta
-    exact continuous_finsetSum _ fun i _ => continuous_finsetSum _ fun g _ =>
-      continuous_splitBandEta _ _
+  have hF (h : History S.K S.m S.M k) : Continuous (F h) :=
+    continuous_finsetSum _ fun i _ => D.continuous_splitEta n E i _
   change α * (∑ h, if S.IsGoodOldHistory h then
       historyWeight h * D.oldFourierCoherentIntegral n t r pre p h (F h) else 0) ≤
     D.entropyGain n t r pre p
