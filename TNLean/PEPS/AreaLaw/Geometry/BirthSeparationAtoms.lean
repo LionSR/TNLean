@@ -144,7 +144,8 @@ Source: area-law Section 11, `geometry:birth-separation`, lines 597–604. -/
 def beltAtom (c : ℤ × ℤ) (s : RepairFanSlot) : Set (ℝ × ℝ) :=
   {p | p - beltAtomCenter c ∈ repairNormTriangle 1 s}
 
-/-- The three facets of an atom, with levels shifted to its center. -/
+/-- The three facets of an atom, with levels shifted to its center.
+Source: area-law Section 11, `geometry:birth-separation`, lines 597–604. -/
 def beltAtomFacet (c : ℤ × ℤ) (s : RepairFanSlot) : Fin 3 → ℤ × ℤ × ℤ
   | 0 => ((repairSlotFacets s).1.1, (repairSlotFacets s).1.2,
       1 + (repairSlotFacets s).1.1 * (2 * c.1 + 1) + (repairSlotFacets s).1.2 * (2 * c.2 + 1))

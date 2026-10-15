@@ -13,6 +13,7 @@ import TNLean.PEPS.AreaLaw.Geometry.FanSideContacts
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegionInterfaces
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegionInteriors
 import TNLean.PEPS.AreaLaw.Geometry.InitialRegionRegularity
+import TNLean.PEPS.AreaLaw.Geometry.TemplateRows
 
 /-!
 # Birth separation of the initial belt tiles
@@ -64,7 +65,8 @@ section Normalize
 
 variable (o : ℝ × ℝ) (ℓ : ℕ) (z : ℤ × ℤ)
 
-/-- The lower left corner of the fine cell of scale `ℓ` and index `z`. -/
+/-- The lower left corner of the fine cell of scale `ℓ` and index `z`.
+Source: area-law Section 11, `geometry:birth-separation`, lines 592–604. -/
 def beltCellOrigin : ℝ × ℝ := (o.1 + (2 : ℝ) ^ ℓ * z.1, o.2 + (2 : ℝ) ^ ℓ * z.2)
 
 /-- The normalization sending the fine cell of scale `ℓ` and index `z` to
@@ -141,7 +143,8 @@ private theorem scale_self : 4 / (2 : ℝ) ^ ℓ * (2 : ℝ) ^ ℓ = 4 := by
   field_simp
 
 /-- Frontier points of a fine cell of an adjacent or coarser scale lie, after
-normalization, on lines of the belt arrangement. -/
+normalization, on lines of the belt arrangement.
+Source: area-law Section 11, `geometry:birth-separation`, lines 597–604. -/
 theorem isBeltArrangementPoint_of_mem_frontier_dyadicCell (hℓ : ℓ ≤ ℓ' + 1) {p : ℝ × ℝ}
     (hp : p ∈ frontier (dyadicCell o ℓ' w)) :
     IsBeltArrangementPoint (beltNormalize o ℓ z p) := by
@@ -187,7 +190,8 @@ private theorem cellFanSideVector_cases (side : Fin 4) {τ : ℝ} (hτ : τ = 0 
   fin_cases side <;> rcases hτ with rfl | rfl <;> simp [cellFanSideVector]
 
 /-- Points of the radial segments of a fan of an adjacent or coarser scale lie,
-after normalization, on lines of the belt arrangement. -/
+after normalization, on lines of the belt arrangement.
+Source: area-law Section 11, `geometry:birth-separation`, lines 597–604. -/
 theorem isBeltArrangementPoint_of_mem_radial (hℓ : ℓ ≤ ℓ' + 1) (split : Fin 4 → Bool)
     (j : CellFanSlot split) {p : ℝ × ℝ}
     (hp : p ∈ segment ℝ (cellFanCenter o ℓ' w) (cellFanEnd o ℓ' w split j)) :
@@ -227,11 +231,8 @@ theorem isBeltArrangementPoint_of_mem_radial (hℓ : ℓ ≤ ℓ' + 1) (split : 
     rw [e₁, e₂, h]; push_cast; ring
 
 private theorem isClosed_cellFanPolygon_region (split : Fin 4 → Bool)
-    (i : CellFanSlot split) : IsClosed (cellFanPolygon o ℓ' w split i).region := by
-  change IsClosed (convexHull ℝ {cellFanCenter o ℓ' w, cellFanStart o ℓ' w split i,
-    cellFanEnd o ℓ' w split i})
-  exact (((Set.finite_singleton (cellFanEnd o ℓ' w split i)).insert
-    (cellFanStart o ℓ' w split i)).insert (cellFanCenter o ℓ' w)).isClosed_convexHull ℝ
+    (i : CellFanSlot split) : IsClosed (cellFanPolygon o ℓ' w split i).region :=
+  (cellFanPolygon o ℓ' w split i).isCompact_region.isClosed
 
 /-- **Atoms in a fan triangle.** After normalization at a fine cell of scale
 `ℓ`, every point of a fan triangle of a cell of scale `ℓ' ≥ ℓ - 1` lies in an
@@ -694,7 +695,7 @@ theorem beltNormalize_symm_mem_beltCellMarks
           (segment_symm_subset_of_subset_image (hBseg.trans hB))
 
 /-- Every point of the birth of an initial identifier other than the dummy that
-lies within one fine side of a point of a belt cell lies in an atom, in the
+lies within one fine side of a point of a fine cell of layer `k` lies in an atom, in the
 coordinates normalized at that cell, contained in the normalized birth.
 Source: area-law Section 11, `geometry:birth-separation`, lines 592–604, with
 `geometry:nonadjacent` and the scale comparison, lines 193–207. -/
@@ -788,7 +789,7 @@ theorem exists_initialBeltRun_birth_separation :
   obtain ⟨η, hη, hη1, hdich⟩ := exists_beltAtom_dichotomy
   refine ⟨min (η / 4) (1 / 8), lt_min (by positivity) (by norm_num), ?_⟩
   intro o k₀ Z C a b hC h₀ k hk z hz R y hyx hyd hcol Y hY htrim p hp w hw
-  set u : ℝ := (2 : ℝ) ^ fineScaleIndex k with hu
+  set u : ℝ := (2 : ℝ) ^ fineScaleIndex k
   set N := beltNormalize o (fineScaleIndex k) z
   have hu1 : 1 ≤ u := one_le_pow₀ (by norm_num)
   have hu0 : 0 < u := by linarith
