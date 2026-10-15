@@ -135,7 +135,8 @@ or the difference of `M² M²` and `M¹ M²` (first column) or of `M² M¹` and 
 column). -/
 theorem czxMPS_isNormal : Kraus.IsNormal czxMPS :=
   isNormal_of_complexOfRing_smul_single (Int.castRingHom ℂ) czxIntMPS czxMPS_eq
-    (by norm_num : 0 < 2) (fun _ j k => ![![2, 1] k, ![2, 1] j]) (fun i j => ![1, (-1) ^ (i + j : ℕ)])
+    (by norm_num : 0 < 2) (fun _ j k => ![![2, 1] k, ![2, 1] j])
+    (fun i j => ![1, (-1) ^ (i + j : ℕ)])
     (c := 2) (by norm_num) (by decide)
 
 /-! ### The stacked product tensor of Example D -/
