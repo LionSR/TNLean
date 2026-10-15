@@ -96,6 +96,7 @@ import TNLean.PEPS.Approximation.DistributedSourceComposition
 import TNLean.PEPS.Approximation.DyadicActiveLabelParties
 import TNLean.PEPS.Approximation.DyadicAnchors
 import TNLean.PEPS.Approximation.DyadicBlockFootprints
+import TNLean.PEPS.Approximation.DyadicBulkSeparation
 import TNLean.PEPS.Approximation.DyadicBulkSteps
 import TNLean.PEPS.Approximation.DyadicChamberSampling
 import TNLean.PEPS.Approximation.DyadicEdgeBands

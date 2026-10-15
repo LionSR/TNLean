@@ -147,3 +147,38 @@ Definition~\ref{def:peps_capped_mark_distance}.
     Lemma~\ref{lem:peps_angular_separation_checks} applies. This is the
     application of the two lemmas in \texttt{06-geometry.tex}, lines 357--445.
 \end{proof}
+
+\begin{lemma}[The separation premise from the logarithmic floors]
+    \label{lem:peps_bulk_separation_from_floors}
+    \lean{TNLean.PEPS.Approximation.vertexZone,
+        TNLean.PEPS.Approximation.half_angularConstant_le,
+        TNLean.PEPS.Approximation.BandOperation.angularSeparation_bandUpdate,
+        TNLean.PEPS.Approximation.RepaintingBaseline.angularSeparation_central,
+        TNLean.PEPS.Approximation.RepaintingBaseline.floor_exchange_frontier}
+    \leanok
+    \uses{lem:peps_angular_separation_checks,lem:peps_dyadic_floor,
+        lem:peps_dyadic_birth_enlargement,lem:peps_dyadic_hole_enlargement}
+    Let $0\le t\le n$, let $a_0$ be the clearance constant of the repainting
+    schedule, and let the involved guides be homogenized on the treated squares of
+    radius $t$. For an edge birth or death, with the two endpoints of the edge as
+    marked points, and for the central birth, with the four corners of the block,
+    the closure of the remaining changed region and the union of the positions of
+    other labels in the surrounding guide with the points within $2\epsilon_0t$ of
+    its true vertices satisfy the angular separation condition with constant
+    $a_0/2$ and floor $t$, provided $2\epsilon_0\le a_0/2$. For the lens exchange,
+    with $t>0$ and $2\epsilon_0(a_0+1)\le a_0/2$, every point of the closure of the
+    positions that are not common $C_e$, and every point within $2\epsilon_0t$ of
+    a true vertex of either sheet, satisfies
+    $a_0/2\cdot\max\{t,\min(n,d_{\mathcal V})\}\le\operatorname{dist}_\infty(\cdot,z)$
+    for every point $z$ of the boundary of the lens. All three statements persist
+    under a common translation of the sets, the marked points and the lens. This is
+    the separation premise of Theorem~\ref{thm:peps_bulk_steps} in the plane,
+    \texttt{06-geometry.tex}, lines 357--426.
+\end{lemma}
+
+\begin{proof}\leanok
+    Rewrite the capped mark distance of the marked points as
+    $\min(n,d_{\mathcal V})$, combine the logarithmic floor, weakened from $a_0$ to
+    $a_0/2$, with the outer-hole enlargement on each part of the exterior, and
+    translate.
+\end{proof}
