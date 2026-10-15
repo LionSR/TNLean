@@ -240,3 +240,35 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
         \label{eq:area_law_repair_terminal_interiors}
     \end{align}
 \end{definition}
+
+% Source: 10-geometry.tex, geometry:trim-radius, lines 393--399.
+\begin{lemma}[Closed removal sets]
+    \label{lem:area_law_repair_removal_closed}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.isClosed_repairRemovalSet}
+    \uses{def:area_law_repair_square,def:area_law_simultaneous_remnants}
+    For a finite family $K$ of mark occurrences, the removal set
+    $Q_K=\bigcup_{p\in K}Q(v_p,S_p)$ is closed.
+\end{lemma}
+\begin{proof}
+    Each removal square is closed, and the union is finite.
+\end{proof}
+
+% Source: 10-geometry.tex, replacement instructions, lines 393--417;
+% remembered closed births and current regions, lines 558--561.
+\begin{lemma}[Current regions remain inside their births]
+    \label{lem:area_law_repair_current_birth_containment}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_current_subset_birth}
+    \uses{def:area_law_repair_stage,def:area_law_repair_successor_regions}
+    At every generation $j\ge0$, each current region is contained in its
+    remembered birth:
+    \begin{equation}
+        R_i^{(j)}\subseteq B_i^{(j)}\qquad(i\in I_j).
+        \label{eq:area_law_repair_current_birth_containment}
+    \end{equation}
+\end{lemma}
+\begin{proof}
+    Initially the current region is the interior of its birth. An old
+    current region only decreases when removal squares are cut out, and
+    its birth is retained. A fresh current region is again the interior
+    of its own birth. Induction on the generation proves the claim.
+\end{proof}
