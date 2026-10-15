@@ -492,9 +492,11 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     \leanok
     \uses{def:area_law_initial_birth_regions, def:area_law_initial_open_regions,
         def:area_law_belt_cell_marks}
-    There is $c_1>0$ with the following property. Let $x$ be an initial belt
-    tile in a belt cell of side $u=t_k$, and let $y$ be a primary or an
-    initial belt tile, distinct from $x$, of the same label. Let $Y$ be a
+    There is $c_1>0$ with the following property. Fix an origin, a finite
+    endpoint set, a width $C_0\ge2$, a lower layer $k_0\ge50{,}000{,}000$
+    and arbitrary valid residues at every layer. Let $x$ be an initial belt
+    tile in a belt cell of side $u=t_k$ with $k\ge k_0$, and let $y$ be a
+    primary or an initial belt tile, distinct from $x$, of the same label. Let $Y$ be a
     subset of the open region of $y$ whose points have distance greater than
     $u^{\rho_0}/4$ from each of the nine marks of the cell. Then every point
     of the closed birth region of $x$ has distance at least $c_1u^{\rho_0}$
@@ -528,7 +530,8 @@ Definition~\ref{def:area_law_normalized_repair_fan}; we call them atoms.
     \leanok
     \uses{def:area_law_repair_stage}
     There is a fixed $c_1>0$ such that the following holds for every finite
-    domain, cut, origin, layer width, lower layer index and stopping scale.
+    domain, cut, origin, layer width $C_0\ge2$, lower layer index
+    $k_0\ge50{,}000{,}000$ and stopping scale.
     Let $\mathcal B$ be the closed birth region of an initial belt tile of
     side scale $u=t_k$. Then its distance from the final actual region of
     every primary and of every other initial belt tile with the same label is
