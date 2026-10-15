@@ -82,23 +82,22 @@ theorem trace_regularizedPatchRegulator_le_quarter_of_isMinOn
       (regularizedPatchObjective (Out := fun v ↦ Fin (n v))
         regions a (Real.exp (-R)) Ω)
       (regularizedPatchDomain (Out := fun v ↦ Fin (n v)) regions) x)
-    (j : Fin m)
-    (hS : _root_.vonNeumannEntropy
-      (Entropy.regionState (regions j) (dependentGlobalConfigIsometry Ω))
-      (Entropy.regionState_posSemidef (regions j)
-        (dependentGlobalConfigIsometry Ω)).isHermitian ≤ C * (1 + u))
-    (hd : (CFC.abs
-      (normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
-        regions a (Real.exp (-R)) Ω x (regions j) -
-        Entropy.regionState (regions j) (dependentGlobalConfigIsometry Ω))).trace.re ≤ 1 / 16) :
-    (Real.exp (-R) •
-      (normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
-          regions a (Real.exp (-R)) Ω x (regions j) *
-        (x j + Real.exp (-R) • (1 : Matrix (Entropy.RegionConfig n (regions j))
+    (j : Fin m) :
+    let ρ : Matrix (Entropy.RegionConfig n (regions j))
+        (Entropy.RegionConfig n (regions j)) ℂ :=
+      normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
+        regions a (Real.exp (-R)) Ω x (regions j)
+    let σ : Matrix (Entropy.RegionConfig n (regions j))
+        (Entropy.RegionConfig n (regions j)) ℂ :=
+      Entropy.regionState (regions j) (dependentGlobalConfigIsometry Ω)
+    ∀ (hS : _root_.vonNeumannEntropy σ
+        (Entropy.regionState_posSemidef (regions j)
+          (dependentGlobalConfigIsometry Ω)).isHermitian ≤ C * (1 + u))
+      (hd : (CFC.abs (ρ - σ)).trace.re ≤ 1 / 16),
+      (Real.exp (-R) •
+        (ρ * (x j + Real.exp (-R) • (1 : Matrix (Entropy.RegionConfig n (regions j))
           (Entropy.RegionConfig n (regions j)) ℂ))⁻¹)).trace.re ≤ 1 / 4 := by
-  let ρ := normalizedRegularizedPatchMarginal (Out := fun v ↦ Fin (n v))
-    regions a (Real.exp (-R)) Ω x (regions j)
-  let σ := Entropy.regionState (regions j) (dependentGlobalConfigIsometry Ω)
+  intro ρ σ hS hd
   have hρ : ρ.PosSemidef :=
     normalizedRegularizedPatchMarginal_posSemidef regions a (Real.exp (-R)) Ω x (regions j)
   have hρ1 : ρ.trace = 1 :=
