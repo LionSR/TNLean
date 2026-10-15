@@ -28,7 +28,7 @@ The hypotheses of the statement are those of the source:
 
 Its conclusion is the source's, with the coefficients changed as in the local fix below and
 the comparisons restricted as in the scope restriction below: the truncated ground vector
-`Ω̃` of Proposition 4.5, the auxiliary systems of dimension `d_*` (the typical window of
+`Ωt` of Proposition 4.5, the auxiliary systems of dimension `d_*` (the typical window of
 width `n^{3/5}`) and a label sequence for which the vectors `pre_k` of `comparator:prevector`
 are nonzero; the comparator parameters with `B_sh ≤ C(nL^e + n)`,
 `B_exc ≤ CnD` and `𝓑 ≤ CnD(log n)^C`; and, for every sufficiently large replica count `k`,
@@ -139,14 +139,14 @@ structure ScannerHypotheses (X : ScannerExponents) (R : ℕ) (J Δ CT Ctr C₁ C
   entropy_shell : ∀ j ≤ X.L n,
     regionalEntropy Λ q Ω (S.shell T j) ≤ Ce * (n * (X.L n : ℝ) ^ X.e + n)
 
-/-- The typical Schmidt set of the target for `Ω̃` with width `n^{3/5}`
+/-- The typical Schmidt set of the target for `Ωt` with width `n^{3/5}`
 (`comparator:typical-set`, `07-comparators.tex`, lines 37–47; `08-scanner.tex`, line 362). -/
 def typicalWindow {Λ : Finset (ℤ × ℤ)} {I : Type*} (S : CollarScan (Site Λ) I) (q : ℕ)
     (Ωt : StateSpace Λ q) (T : Finset (ℤ × ℤ)) (n : ℕ) :=
   Entropy.typicalSet (reducedState_isHermitian Λ q Ωt (S.target T)).eigenvalues
     (regionalEntropy Λ q Ωt (S.target T)) ((n : ℝ) ^ (3 / 5 : ℝ))
 
-/-- The vectors `pre_k = π_R^{λ_k}(Ω̃ ⊗ Bell_{CR})^{⊗k}` of `comparator:prevector`
+/-- The vectors `pre_k = π_R^{λ_k}(Ωt ⊗ Bell_{CR})^{⊗k}` of `comparator:prevector`
 (`07-comparators.tex`, lines 130–140), with auxiliary systems of dimension `d`, in the
 coordinates of the scan. -/
 def scanPrevector {Λ : Finset (ℤ × ℤ)} (q d : ℕ) (Ωt : StateSpace Λ q)
@@ -164,7 +164,7 @@ constant `C_e` there are constants, a charge-list constant `C₁ > 0` and a smal
 
 Let a gapped physical system and a collar scan satisfy the source hypotheses
 (`ScannerHypotheses`). Then the truncated Hamiltonian of Proposition 4.5 has a ground vector
-`Ω̃` with energy `Ẽ₀ ≤ n^{-1000}` (lines 49–54) and gap `g/2`; its typical window `E` of
+`Ωt` with energy `Et₀ ≤ n^{-1000}` (lines 49–54) and gap `g/2`; its typical window `E` of
 width `n^{3/5}` is nonempty; and there is a label sequence `λ_k` for which the vectors
 `pre_k` of `comparator:prevector`, with auxiliary dimension `d_* = |E|`, are nonzero for
 `k ≥ 1`. For every total weight
@@ -172,7 +172,7 @@ width `n^{3/5}` is nonempty; and there is a label sequence `λ_k` for which the 
 
 * (comparator parameters, lines 388–392) there are `B_sh ≤ C_b(nL^e + n)`,
   `B_exc ≤ C_b nD` and `𝓑 ≤ C_b nD(log n)^{C_{lb}}`, where `𝓑` bounds the marginal-tail
-  parameter of every status cut and `Ω̃` satisfies the marginal moment bound of Lemma 3.1, and
+  parameter of every status cut and `Ωt` satisfies the marginal moment bound of Lemma 3.1, and
   where `B_sh`, `B_exc` give the rough upper comparison `comparator:rough-upper` at the last
   endpoint of the scan with a remainder `o_k(1)`;
 * (energy, `scanner:energy-output`) there is a remainder `ρ_k → 0` such that for every
@@ -181,7 +181,7 @@ width `n^{3/5}` is nonempty; and there is a label sequence `λ_k` for which the 
   `E_def,k ≤ C n^ℓ D² W² (log n)^{C_l} (δ_n^{1/8} + ε + n^{-100}) + C n^{-1000} + ρ_k`, with
   `δ_n = C_δ ε^{-1}(n^{e-μ} + a^{1/4}(log n)^{C_{lδ}})`.
 
-The defect energy divides by the lower bound `g/2` of the gap `g̃` (line 54). -/
+The defect energy divides by the lower bound `g/2` of the gap `gt` (line 54). -/
 def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
   ∃ Ctr : ℝ, 0 < Ctr ∧ ∀ (q : ℕ) [NeZero q], 2 ≤ q → ∀ Ce : ℝ,
     ∃ C₁ Cb Clb C Cl Cδ Clδ ca : ℝ, 0 < C₁ ∧ 0 < ca ∧ ∀ᶠ n : ℕ in atTop,
@@ -244,7 +244,7 @@ truncation coefficient, local dimension `q ≥ 2`, charge-list constant and entr
 constant there are thresholds for the common constant and logarithmic power and a smallness
 threshold `c_a > 0` such that, for all scanner constants above the thresholds and all
 sufficiently large `n`, the following holds for every physical system and collar scan under
-the source hypotheses. Let `Ω̃` be a ground vector of the truncated Hamiltonian with gap
+the source hypotheses. Let `Ωt` be a ground vector of the truncated Hamiltonian with gap
 `g/2` satisfying the marginal moment bound of Lemma 3.1, and let `Tr` record its truncation
 inputs, with marginal-tail parameter bounding the cut parameter of every status region.
 Then there is a label sequence for which the vectors `pre_k` of `comparator:prevector` are
