@@ -48,6 +48,42 @@ theorem IsParentInteraction.ker_openInteractionHamiltonianES_eq_ker_openParentHa
     (by simpa only [Complex.ofReal_one, one_smul] using (hComparison N).1)
     (by simpa only [Complex.ofReal_one, one_smul] using (hComparison N).2)).symm
 
+/-- Along unit ground vectors, the commutator energies of an open interaction
+with a bulk observable converge to the insertion expectation of the local
+commutator observable. Source: Nachtergaele, arXiv:cond-mat/9410110,
+Section 6, lines 2649--2675. -/
+theorem IsPrimitiveMPS.openInteraction_commutator_energy_tendsto
+    [NeZero D] {A : MPSTensor d D} {ρ : Matrix (Fin D) (Fin D) ℂ}
+    (hP : IsPrimitiveMPS A ρ) (hρ : ρ.PosDef)
+    (h : Matrix (Cfg d R) (Cfg d R) ℂ)
+    (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R) (hk : 0 < k)
+    (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((n + (R - 1) + k) + (R - 1 + n))))
+    (hGround : ∀ᶠ n in atTop,
+      ψ n ∈ groundSpaceES A ((n + (R - 1) + k) + (R - 1 + n)))
+    (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1) :
+    let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
+    let H (n : ℕ) := openInteractionHamiltonianES (Matrix.toEuclideanLin h) (N n)
+    let B (n : ℕ) := ((Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
+      (bulkObservable X (n + (R - 1)) (R - 1 + n))).toLinearMap
+    Tendsto (fun n =>
+      (inner ℂ (((B n).adjoint.comp ((H n).comp (B n) - (B n).comp (H n)))
+        (ψ n)) (ψ n)).re) atTop
+      (nhds (observableInsertionExpectation A ρ (localCommutatorObservable h X)).re) := by
+  intro N H B
+  apply (hP.localCommutatorObservable_expectation_tendsto hρ h X hR hk
+    N (fun n => by dsimp [N]; omega) ψ hGround hUnit).congr'
+  filter_upwards [] with n
+  have hH : Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ)
+      (openInteractionMatrix h (N n)) = (H n).toContinuousLinearMap :=
+    congrArg LinearMap.toContinuousLinearMap
+      (openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix
+        h hR (by dsimp [N]; omega)).symm
+  dsimp only
+  rw [map_mul, map_sub, map_mul, map_mul, ← Matrix.star_eq_conjTranspose,
+    map_star, ContinuousLinearMap.star_eq_adjoint, hH,
+    ← bulkObservable_eq_chainWindowOperator hk X (n + (R - 1)) (R - 1 + n)]
+  rfl
+
 /-- The local commutator inequality for a positive open interaction follows
 from its eventual kernel identity and uniform norm gap. Tensor convergence
 derives the energy, excitation norm, and ground-projection limits.
@@ -77,26 +113,7 @@ theorem IsPrimitiveMPS.localCommutator_gap_of_openInteraction_gap
       (observableInsertionExpectation A ρ (localCommutatorObservable h X)).re := by
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
   let H (n : ℕ) := openInteractionHamiltonianES (Matrix.toEuclideanLin h) (N n)
-  have hEnergy :
-      let B (n : ℕ) := ((Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ))
-        (bulkObservable X (n + (R - 1)) (R - 1 + n))).toLinearMap
-      Tendsto (fun n =>
-        (inner ℂ (((B n).adjoint.comp ((H n).comp (B n) - (B n).comp (H n)))
-          (ψ n)) (ψ n)).re) atTop
-        (nhds (observableInsertionExpectation A ρ (localCommutatorObservable h X)).re) := by
-    apply (hP.localCommutatorObservable_expectation_tendsto hρ h X hR hk
-      N (fun n => by dsimp [N]; omega) ψ hGround hUnit).congr'
-    filter_upwards [] with n
-    have hH : Matrix.toEuclideanCLM (n := Cfg d (N n)) (𝕜 := ℂ)
-        (openInteractionMatrix h (N n)) = (H n).toContinuousLinearMap :=
-      congrArg LinearMap.toContinuousLinearMap
-        (openInteractionHamiltonianES_eq_toEuclideanLin_openInteractionMatrix
-          h hR (by dsimp [N]; omega)).symm
-    dsimp only
-    rw [map_mul, map_sub, map_mul, map_mul, ← Matrix.star_eq_conjTranspose,
-      map_star, ContinuousLinearMap.star_eq_adjoint, hH,
-      ← bulkObservable_eq_chainWindowOperator hk X (n + (R - 1)) (R - 1 + n)]
-    rfl
+  have hEnergy := hP.openInteraction_commutator_energy_tendsto hρ h X hR hk ψ hGround hUnit
   exact hP.commutator_gap_of_bulkObservable_energy_limit hρ X hcenter
     (ℓ := fun n : ℕ => n + (R - 1)) (r := fun n => (R - 1) + n)
     (tendsto_add_atTop_nat (R - 1))
