@@ -244,3 +244,23 @@ outer sample.
     point within $n$ of a closed block carries the label of one of the nine
     blocks around it.
 \end{proof}
+
+\begin{lemma}[True vertices of a level guide]
+    \label{lem:peps_level_true_vertices}
+    \lean{TNLean.PEPS.Approximation.levelTrueVertices,
+        TNLean.PEPS.Approximation.mem_levelTrueVertices}
+    \leanok
+    \uses{def:peps_guide_frame}
+    Let a guide be uniform on the $n$-blocks and carry the placeholder on every
+    block outside the root square of $M\times M$ blocks. Then every true vertex
+    of its reading along a small displacement is a grid corner $(na,nb)$ with
+    $0\le a,b\le M+1$. The true vertices therefore form a finite set, the set of
+    hole centers of the frame of the guide (\texttt{06-geometry.tex}, lines
+    62--67 and 109--118).
+\end{lemma}
+
+\begin{proof}\leanok
+    A true vertex of the reading is a true vertex of the guide, hence a grid
+    corner. Near a grid corner outside this range the reading carries only
+    labels of blocks outside the root square, which are all the placeholder.
+\end{proof}
