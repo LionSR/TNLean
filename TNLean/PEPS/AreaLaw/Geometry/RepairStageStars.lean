@@ -121,9 +121,6 @@ theorem eq_add_smul_of_sameRay {v z : ℝ × ℝ} {d : ℝ} {s : RepairFanSlot}
   subst this
   rw [hzt, add_sub_cancel]
 
-private theorem fin_two_ne_one_sub' (x : Fin 2) : x ≠ 1 - x := by
-  fin_cases x <;> decide
-
 section Stages
 
 variable {o : ℝ × ℝ} {Λ : Finset (ℤ × ℤ)} {A : Finset (Site Λ)} {C k₀ : ℕ}
@@ -306,7 +303,7 @@ theorem RepairMetricHypotheses.contact_subset_marks (j : ℕ)
     rw [hcolx, hcoly, ← hs, hσ] at hcol
     have hus : u ≠ s := by
       rintro rfl
-      exact fin_two_ne_one_sub' _ hcol.symm
+      exact fin_two_ne_one_sub_self _ hcol.symm
     have hz0 : z - v ≠ 0 := by
       intro h0
       rw [h0, norm_zero] at hzn

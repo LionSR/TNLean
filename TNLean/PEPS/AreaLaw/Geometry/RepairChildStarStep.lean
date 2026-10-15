@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.RepairChildStars
-import TNLean.PEPS.AreaLaw.Geometry.RepairDepth
+import TNLean.PEPS.AreaLaw.Geometry.RepairInductionMetric
 
 /-!
 # One repair step preserves isolated stars at the children
@@ -82,11 +82,9 @@ theorem mem_repairReplacementBirthRegion_iff {ξ : ι → Fin 2} {σ : RepairFan
       exact inv_mul_le_one_of_le₀ hwn hd.le
     · rw [smul_smul, mul_inv_cancel₀ hd.ne', one_smul, add_sub_cancel]
 
-private theorem norm_repairChildOffset_le' (e : Fin 3 × Fin 3) : ‖repairChildOffset e‖ ≤ 1 := by
-  obtain ⟨a, b⟩ := e
-  fin_cases a <;> fin_cases b <;> norm_num [repairChildOffset, Prod.norm_def]
-
-private theorem fin_two_ne_one_sub (x : Fin 2) : x ≠ 1 - x := by
+/-- A binary label differs from its reversal.
+Auxiliary to area-law Section 11, lines 404–407. -/
+theorem fin_two_ne_one_sub_self (x : Fin 2) : x ≠ 1 - x := by
   fin_cases x <;> decide
 
 /-- **Isolated stars at the children of one repair.**
@@ -122,7 +120,7 @@ theorem isIsolatedStar_repairChild {κ : Type*} {R : ι → Set (ℝ × ℝ)} {�
     rw [Metric.mem_ball] at hx ⊢
     have h1 : dist c v ≤ d := by
       rw [hc, dist_eq_norm, add_sub_cancel_left, norm_smul, Real.norm_of_nonneg hd.le]
-      exact mul_le_of_le_one_right hd.le (norm_repairChildOffset_le' e)
+      exact mul_le_of_le_one_right hd.le (norm_repairChildOffset_le e)
     linarith [dist_triangle x c v]
   -- Values of the child assignment.
   have hτold : ∀ t i, τ t = old i ↔
@@ -370,7 +368,7 @@ theorem isIsolatedStar_repairChild {κ : Type*} {R : ι → Set (ℝ × ℝ)} {�
           (hτfresh _ _).mpr ⟨hin_next.trans hk', by rw [hp]⟩
         rw [h1, h2, hξold, hξfresh]
         simp only [repairReplacementColor, repairFanRunExteriorColor_runOf]
-        exact iff_of_false (fin_two_ne_one_sub _) (hdisj _ _)
+        exact iff_of_false (fin_two_ne_one_sub_self _) (hdisj _ _)
       · have hk' : repairChildInside e ((m.val + 1) % 8) = false := by
           cases h : repairChildInside e ((m.val + 1) % 8)
           · rfl
@@ -381,6 +379,6 @@ theorem isIsolatedStar_repairChild {κ : Type*} {R : ι → Set (ℝ × ℝ)} {�
           (hτold _ _).mpr ⟨hin_next.trans hk', by rw [hp]⟩
         rw [h1, h2, hξold, hξfresh]
         simp only [repairReplacementColor, repairFanRunExteriorColor_runOf]
-        exact iff_of_false (fun h ↦ fin_two_ne_one_sub _ h.symm) (fun h ↦ hdisj _ _ h.symm)
+        exact iff_of_false (fun h ↦ fin_two_ne_one_sub_self _ h.symm) (fun h ↦ hdisj _ _ h.symm)
 
 end TNLean.PEPS.AreaLaw.Geometry
