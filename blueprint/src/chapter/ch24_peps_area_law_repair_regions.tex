@@ -69,19 +69,16 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
 
 % Source: 10-geometry.tex, lines 404--417 and 486--514;
 % closed births and open current regions, lines 558--561.
-\begin{lemma}[Disjoint replacement regions at one parent]
-    \label{lem:area_law_repair_replacement_disjoint}
+\begin{theorem}[Disjoint replacement regions at one parent]
+    \label{thm:area_law_repair_replacement_disjoint}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairReplacementOpenRegion_pairwise_disjoint}
     \leanok
     \uses{def:area_law_repair_birth,thm:area_law_fan_run_disjoint_interiors}
     Fix a center $v$, a scale $S$ and an exterior assignment.
-    Distinct runs $H\ne K$ give disjoint current replacement regions:
-    \begin{equation}
-        U(v,S,H)\cap U(v,S,K)=\varnothing.
-        \label{eq:area_law_repair_replacement_disjoint}
-    \end{equation}
+    Distinct runs $H\ne K$ give disjoint current replacement regions,
+    $U(v,S,H)\cap U(v,S,K)=\varnothing$.
     The assertion includes distinct runs of the same color and reflex runs.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The map $x\mapsto v+d(S)x$ is a homeomorphism since $d(S)>0$.
     A homeomorphism carries the interior of a set to the interior of its
