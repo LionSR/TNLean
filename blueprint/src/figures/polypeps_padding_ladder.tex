@@ -1,0 +1,76 @@
+% Figure polypeps_padding_ladder.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes PP App. C 4 (proof of Proposition 1, the step and the reset
+% of one annular layer), Fig. 12(a).
+% Source: arXiv OpenAI2026PolynomialPEPS, sections/02-information.tex:676-746
+% (proof of prop:angular: eq:info-cumulative-separation (3.19), the invariant
+% (3.20), R, C and the initial group, eq:info-cell-clearance (3.21), and the
+% cores R_0 = Lambda cap A_j^{+a's}, C_0 = Lambda cap E^{+a's} of the reset, at
+% distance >= a's/2 from the complements of R and C). The paper's a' and d are
+% the note's \bar a and c_cell.
+% Ink-to-index: a 1-D cross-section, one line from A_old to E; there are no tensors
+% or open indices. All rows use the same column scale: one column is one cell of
+% side c_cell s, and \bar a s is 4 columns. Each ladder row draws one pair of sets
+% as runs of dots inside its contour, named at the row's ends. Row 2 is the line
+% itself: A_old (cols 1-2, red tint), the new layer (cols 3-6, teal tint), so A_j
+% is cols 1-6, and E (cols 24-26, blue tint); dist(A_j, E) = 18 columns = (a/2)s
+% (bracket under row 2, (3.19)). Row 4: the cores R_0 = A_j^{+\bar as} (cols 1-10,
+% red contour) and C_0 = E^{+\bar as} (cols 20-26, blue contour). Row 6: the
+% initial group R_init (cols 1-9, dashed grey), the cells touching A_old^{+1.5\bar
+% as} (which ends at col 8); it lies in A_old^{+2\bar as} = cols 1-10, the padding
+% of the preceding scale. Row 8: R (cols 1-13, black), the cells touching
+% A_j^{+1.5\bar as} (which ends at col 12), and C = E^{+1.5\bar as} (cols 18-26,
+% black). Brackets: core depth, from R_0's east end to R's east end, >= \bar as/2
+% (row 7; the same holds for C_0 inside C, cols 18-19); clearance between R and C,
+% cols 13 to 18, = 5 columns = (a/2 - 3\bar a - c_cell)s = 18 - 12 - 1 columns,
+% which is (3.21) with equality at this scale (row 9).
+% Colours as in polypeps_annular_chain (A_old red, new cells teal, initial group
+% dashed grey, R_0 red contour, C_0 blue contour, E blue).
+% Not to scale: \bar a < min(a/100, 1/100) and c_cell < \bar a/4; the drawing has
+% c_cell = \bar a/4 (1 column against 4), the boundary case, and a/2 = 4.5 \bar a,
+% so a real clearance is nearly all of dist(A_j, E); this is a 1-D cut of a 2-D
+% picture, and the cells are ambient squares.
+% Label macros: none.
+% Boundary signature: empty.
+% Fit: full width (\tnwide[4.5mm], size=s, about 162 x 44 mm). The plan's single
+% row of nested contours at 3 mm was tried and rejected: five contours sharing a
+% west end and three overlapping top brackets are unreadable (shared-spec 4.1 S3,
+% B1), and 3 mm is below the 4.5 mm lattice floor (P1).
+% Related: polypeps_annular_chain (the same step on the 2-D cell grid, with the
+% chain-rule order of the new cells; it draws no distances), polypeps_conical_clearance
+% (the separation hypothesis of Proposition II).
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[size=s, rows={wire,wire,wire,wire,wire,wire,wire,wire,wire}, cols=26,
+            bonds=none]
+        \tndeclare{species}{fam0}{hue=source:teal}
+        % Rows 1, 5 and 9 are blank; rows 3, 7 and 9 carry the inkless bracket anchors.
+        \tn[at=(3,6), skin=none]{} \tn[at=(3,24), skin=none]{}
+        \tn[at=(7,10), skin=none]{} \tn[at=(7,13), skin=none]{}
+        \tn[at=(9,13), skin=none]{} \tn[at=(9,18), skin=none]{}
+        % Row 2: the line through A_old, the new layer and E (every site a dot).
+        \tn[at=(2,1), skin=dot]{} \tn[at=(2,2), skin=dot]{} \tn[at=(2,3), skin=dot]{} \tn[at=(2,4), skin=dot]{} \tn[at=(2,5), skin=dot]{} \tn[at=(2,6), skin=dot]{} \tn[at=(2,7), skin=dot]{} \tn[at=(2,8), skin=dot]{} \tn[at=(2,9), skin=dot]{} \tn[at=(2,10), skin=dot]{} \tn[at=(2,11), skin=dot]{} \tn[at=(2,12), skin=dot]{} \tn[at=(2,13), skin=dot]{} \tn[at=(2,14), skin=dot]{} \tn[at=(2,15), skin=dot]{} \tn[at=(2,16), skin=dot]{} \tn[at=(2,17), skin=dot]{} \tn[at=(2,18), skin=dot]{} \tn[at=(2,19), skin=dot]{} \tn[at=(2,20), skin=dot]{} \tn[at=(2,21), skin=dot]{} \tn[at=(2,22), skin=dot]{} \tn[at=(2,23), skin=dot]{} \tn[at=(2,24), skin=dot]{} \tn[at=(2,25), skin=dot]{} \tn[at=(2,26), skin=dot]{}
+        % Row 4: the cores R_0, C_0; row 6: the initial group; row 8: R and C.
+        \tn[at=(4,1), skin=dot]{} \tn[at=(4,2), skin=dot]{} \tn[at=(4,3), skin=dot]{} \tn[at=(4,4), skin=dot]{} \tn[at=(4,5), skin=dot]{} \tn[at=(4,6), skin=dot]{} \tn[at=(4,7), skin=dot]{} \tn[at=(4,8), skin=dot]{} \tn[at=(4,9), skin=dot]{} \tn[at=(4,10), skin=dot]{}
+        \tn[at=(4,20), skin=dot]{} \tn[at=(4,21), skin=dot]{} \tn[at=(4,22), skin=dot]{} \tn[at=(4,23), skin=dot]{} \tn[at=(4,24), skin=dot]{} \tn[at=(4,25), skin=dot]{} \tn[at=(4,26), skin=dot]{}
+        \tn[at=(6,1), skin=dot]{} \tn[at=(6,2), skin=dot]{} \tn[at=(6,3), skin=dot]{} \tn[at=(6,4), skin=dot]{} \tn[at=(6,5), skin=dot]{} \tn[at=(6,6), skin=dot]{} \tn[at=(6,7), skin=dot]{} \tn[at=(6,8), skin=dot]{} \tn[at=(6,9), skin=dot]{}
+        \tn[at=(8,1), skin=dot]{} \tn[at=(8,2), skin=dot]{} \tn[at=(8,3), skin=dot]{} \tn[at=(8,4), skin=dot]{} \tn[at=(8,5), skin=dot]{} \tn[at=(8,6), skin=dot]{} \tn[at=(8,7), skin=dot]{} \tn[at=(8,8), skin=dot]{} \tn[at=(8,9), skin=dot]{} \tn[at=(8,10), skin=dot]{} \tn[at=(8,11), skin=dot]{} \tn[at=(8,12), skin=dot]{} \tn[at=(8,13), skin=dot]{}
+        \tn[at=(8,18), skin=dot]{} \tn[at=(8,19), skin=dot]{} \tn[at=(8,20), skin=dot]{} \tn[at=(8,21), skin=dot]{} \tn[at=(8,22), skin=dot]{} \tn[at=(8,23), skin=dot]{} \tn[at=(8,24), skin=dot]{} \tn[at=(8,25), skin=dot]{} \tn[at=(8,26), skin=dot]{}
+        \tnmark[form=enclosure, species=selected, tint, label pos=n]{(2,1) .. (2,2)}{$A_{\rm old}$}
+        \tnmark[form=enclosure, species=fam0, tint, label pos=n]{(2,3) .. (2,6)}{$\text{new layer}$}
+        \tnmark[form=enclosure, species=secondary, tint, label pos=n]{(2,24) .. (2,26)}{$E$}
+        \tnmark[form=enclosure, species=selected]{(4,1) .. (4,10)}{}
+        \tnmark[form=enclosure, species=secondary]{(4,20) .. (4,26)}{}
+        \tnmark[form=enclosure, species=complement]{(6,1) .. (6,9)}{}
+        \tnmark[form=enclosure, species=neutral]{(8,1) .. (8,13)}{}
+        \tnmark[form=enclosure, species=neutral]{(8,18) .. (8,26)}{}
+        \tnmark[form=label, species=selected, label pos=w]{0.6 w of (4,1)}{$R_0=A_j^{+\bar as}$}
+        \tnmark[form=label, species=complement, label pos=w]{0.6 w of (6,1)}{$R_{\rm init}\subseteq A_{\rm old}^{+2\bar as}$}
+        \tnmark[form=label, label pos=w]{0.6 w of (8,1)}{$R\supseteq A_j^{+1.5\bar as}$}
+        \tnmark[form=label, species=secondary, label pos=e]{0.6 e of (4,26)}{$C_0=E^{+\bar as}$}
+        \tnmark[form=label, label pos=e]{0.6 e of (8,26)}{$C=E^{+1.5\bar as}$}
+        \tnmark[form=bracket, label pos=s]{(3,6) .. (3,24)}{$\ge\frac a2\,s$}
+        \tnmark[form=bracket, label pos=n]{(7,10) .. (7,13)}{$\ge\bar as/2$}
+        \tnmark[form=bracket, label pos=s]{(9,13) .. (9,18)}{$\ge(\frac a2-3\bar a-c_{\rm cell})s$}
+    \end{tenkz}
+\end{center}

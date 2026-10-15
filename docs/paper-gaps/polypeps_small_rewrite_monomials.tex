@@ -23,199 +23,144 @@
 
 \section{The source lemma}
 
-Lemma~6.3 of the polynomial PEPS approximation manuscript of September~24,
-2026~\cite{OpenAI2026PolynomialPEPS} (\path{05-frames.tex}, lines~188--219)
-considers old and new one-sheet
-encoded frames that agree outside boundedly many affected holes, and $m$
-additional square patches satisfying four conditions: (i) the patch outer
-squares and the affected holes avoid the outer footprints of the untouched
-holes; (ii) the patch inner squares cover every site whose raw owner changes
-and the whole outer footprint of every affected hole; (iii) in each patch
-outer square, the sites outside the old inner holes have at most two old
-owners, and the sites outside the new inner holes have at most two new owners;
-(iv) all involved raw owners and affected tag owners belong to a specified
-bounded list of parties. The lemma asserts:
+Lemma~6.3 of the September~24, 2026 polynomial-PEPS
+manuscript~\cite{OpenAI2026PolynomialPEPS} (\path{05-frames.tex},
+lines~188--219) relates two one-sheet encoded frames $\mathcal F_{\rm old}$ and
+$\mathcal F_{\rm new}$ on an $L\times L$ lattice that agree outside a bounded
+number of affected holes ($r_{\rm old}$ old holes and $r_{\rm new}$ new holes)
+and are covered by $m$ square patches with cylinder projectors $P_1,\dots,P_m$
+of accuracy $\varepsilon>0$. The lemma assumes four geometric and ownership
+conditions: (i) the patch outer squares and the affected holes are disjoint
+from the outer footprints of all untouched holes; (ii) the patch inner squares
+cover every site whose raw owner changes and the entire outer footprint of
+every affected hole; (iii) in each patch outer square, the sites outside the
+old inner holes have at most two old raw owners, and the sites outside the new
+inner holes have at most two new raw owners; and (iv) all raw owners in the
+patch outer squares and all affected tag owners belong to a fixed bounded list
+of parties. With $K_{\rm old},K_{\rm new}$ denoting the frame encodings and
+$\Omega_{\mathcal F_{\rm old}},\Omega_{\mathcal F_{\rm new}}$ the encoded
+reference vectors, Lemma~6.3 asserts:
 \begin{enumerate}
-\item the canonical map $M=K_{\rm new}P_m\cdots P_1K_{\rm old}^{\dagger}$ is a
-  contraction with
+\item the transition operator
+  $M=K_{\rm new}P_m\cdots P_1K_{\rm old}^{\dagger}$ is a contraction satisfying
   $\|M\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\|
    \le(m+r_{\rm old})\varepsilon$;
-\item for every fixed $a>0$, $M$ has a contractive approximation $M_a$ with
-  $\|M_a-M\|\le L^{-a}$ and a polynomial expansion into monomials allowed by
-  Theorem~5.2, using only the specified parties.
+\item for every fixed exponent $a>0$, $M$ admits a contractive approximation
+  $M_a$ with $\|M_a-M\|\le L^{-a}$ that expands into a polynomial number of
+  monomials allowed by Theorem~5.2 using only the specified parties.
 \end{enumerate}
 
-\section{What the formal statement covers}
+\section{What is proved}
 
-The first assertion is formalized with exactly the source hypotheses, for
-frames whose tags are listed in any order; the reference error uses only
-condition~(i).\footnote{%
+Both parts of Lemma~6.3 are proved in Lean under the paper's hypotheses.
+
+First, part~1 is proved for arbitrary tag orderings using only condition~(i):
+because the encodings of holes with disjoint outer footprints commute,
+reordering the tag registers to place the untouched holes first in both frames
+is a basis permutation that intertwines the frame encodings and preserves the
+operator norm and reference-vector error.\footnote{%
 \leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_rewrite_le_one_and_refVec_sub_le},
 \leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.norm_rewrite_refVec_sub_le}, and, for
 arbitrary tag orderings,
 \leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_norm_le_one_and_refVec_sub_le_of_perm}.}
-For the second assertion the following steps of the proof
-(\path{05-frames.tex}, lines~254--341) are formalized: the exact expansion of
-$M$ into complete branches and the count of branches; the site-level wire
-classification of every branch, for every choice of cylinder terms, including
-unequal radii, holes and patches with empty outer sample (whose identity term
-selects the empty square), and overlapping patches and holes; the summation of
-branchwise errors; the choice of the truncation rank $k$; and the final
-rescaling by $1+\tfrac12L^{-a}$.
 
-The residual network of a branch is also formalized. For a branch $(a,s,b)$,
-the raw operator $B_aC_sA_b^\dagger$ is an ordered product of rank-one
-operators $\ket{k}\bra{b}_S\otimes\mathbb{1}$: the encodings $\ket0\bra{u'_r}$ of the
-affected new holes, the patch terms $\ket{w_i}\bra{w_i}$, and the decodings
-$\ket{u_t}\bra0$ of the affected old holes. Every such product is the
-contraction of the network whose vertices are the bras and the kets of the
-factors, kept distinct, and whose wires join the output of a ket at a site to
-the next bra containing that site; open input legs are those of bras at sites
-reached by no earlier ket, open output legs those of kets at sites met by no
-later bra, the legs of the product zero vectors are fixed to $0$, and sites in
-no factor are passed through.\footnote{%
+Second, the proof of part~2 (\path{05-frames.tex}, lines~254--341) is
+formalized through the branch expansion, residual wire network, Schmidt
+truncation, and register-level monomial decomposition. Expanding the hole
+encoders $K_{\rm new}$, the patch projectors $P_m\cdots P_1$, and the decoders
+$K_{\rm old}^\dagger$ into their rank-one cylinder terms expresses $M$ as a sum
+over $N$ branches $\beta=(a,s,b)$. In each branch, the sheet operator
+$B_aC_sA_b^\dagger$ is an ordered product of rank-one operators
+$\ket{k}\bra{b}_S\otimes\mathbb{1}$ coming from the new-hole encodings
+$\ket0\bra{u'_r}$, the patch projectors $\ket{w_i}\bra{w_i}$, and the old-hole
+decodings $\ket{u_t}\bra0$. This product equals the contraction of a directed
+wire network whose vertices are the individual bras and kets of the factors and
+whose wires connect each ket output at a site to the next bra acting on that
+site.\footnote{%
 \leanid{TNLean.PEPS.SiteChain.chainOp_apply}.}
-No wire joins a vertex to itself and every vertex tensor is normalized, so
-Lemma~6.2 applies with one group per vertex. An operator read off from a tensor
-on the open-leg groups is that tensor, reshaped as a matrix, tensored with the
-identity on the untouched sites, so its operator norm is at most the
-Hilbert--Schmidt norm of the tensor, with no factor depending on the site
-dimensions.\footnote{%
-\leanid{TNLean.PEPS.SiteChain.norm_approxOp_le},
+Because no wire connects a vertex to itself and every vertex vector is
+normalized, the tree-network Schmidt truncation (Lemma~6.2) applies with one
+open-leg group per vertex, bounding the operator norm of the residual error by
+its Hilbert--Schmidt norm independently of the local site dimensions.\footnote{%
+\leanid{TNLean.PEPS.SiteChain.norm_approxOp_le} and
 \leanid{TNLean.PEPS.SiteChain.exists_chainOp_truncation}.}
-Under the four conditions only the patch bras and kets have open legs, so there
-are at most $g=2m$ groups; the open inputs of a patch bra have at most two old
-owners and the open outputs of a patch ket at most two new owners, all in the
-specified list. Hence every branch is approximated within $2m/\sqrt k$ by at most
-$k^{2m}$ product terms with coefficients of modulus at most one, and for every
-$\delta>0$ (for instance $\delta=L^{-a}$) the rescaled sum
+By conditions (i)--(iv), only the $2m$ patch bras and kets carry open legs, and
+each open-leg group is owned by at most two old or two new parties from the
+specified list. Truncating each internal wire to rank $k$ approximates each
+branch within $2m/\sqrt k$ by at most $k^{2m}$ rank-one product terms
+$T_{\beta,i}$ with coefficients $|c_{\beta,i}|\le 1$, so for any $\delta>0$ the
+rescaled operator
 $M_\delta=(1+\tfrac12\delta)^{-1}\sum_\beta\ket a\bra b\otimes
-\bigl(\sum_ic_{\beta,i}T_{\beta,i}\bigr)\otimes\mathbb{1}$ is a contraction with
-$\|M_\delta-M\|\le\delta$.\footnote{%
-\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_branch_truncation},
+\bigl(\sum_ic_{\beta,i}T_{\beta,i}\bigr)\otimes\mathbb{1}$ is a contraction
+satisfying $\|M_\delta-M\|\le\delta$.\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_branch_truncation} and
 \leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_contractive_approx}.}
-Each product term $T_{\beta,i}$ is an explicit tensor product of normalized
-vectors on the open output groups of the patch kets, normalized covectors on the
-open input groups of the patch bras, product zero vectors on the selected hole
-squares, and identities.
 
-The last reading of the proof (lines~306--316), that each product term
-together with the tag basis vectors is the operator of a monomial allowed by
-Theorem~5.2, is also formalized. The registers of a frame are listed as the
-source has them, one raw register per site and one register per tag, each held
-by its owner, and their tensor product is identified with the canonical
-coordinates in which the rewrite acts.\footnote{%
+To express each term $\ket a\bra b\otimes T_{\beta,i}\otimes\mathbb{1}$ as an
+allowed monomial on the frame registers (lines~306--316), the formalization
+uses the site-and-tag register layout (lines~74--75 and~84--85), with one raw
+register per site and one register per tag held by its owner.\footnote{%
 \leanid{TNLean.PEPS.EncodedFrame.layoutRegs},
-\leanid{TNLean.PEPS.EncodedFrame.layoutIso},
+\leanid{TNLean.PEPS.EncodedFrame.layoutIso}, and
 \leanid{TNLean.PEPS.EncodedFrame.layoutIso_layoutVec}.}
-For a branch $(a,s,b)$ and one unit vector on every open-leg group, the product
-term in the tag block, $\ket a\bra b\otimes T\otimes\mathbb{1}$, is a scalar of
-modulus at most one times the operator of the following monomial from the
-registers of $\mathcal F_{\rm old}$ to those of $\mathcal F_{\rm new}$:
+Up to a scalar of modulus at most one, each branch term is realized by the
+composition of:
 \begin{enumerate}
-\item on the open input legs of each patch bra, the normalized covector of the
-  term, contracted at the at most two old owners of these legs (a normalized
-  pair effect, or a private map when there is one owner), the registers then
-  being prepared in $\ket0$ at the same owners;
-\item at every site of a selected patch or hole square, the bra $\bra0$ at the
-  old owner and the ket $\ket0$ at the new owner; this imposes the zero bras of
-  the old-hole decoders and transfers the reset raw register to its new owner;
-\item on the open output legs of each patch ket, the bra $\bra0$ at the at most
-  two new owners followed by the normalized vector of the term (a normalized pair
-  source, or a private map);
-\item the bra $\bra b$ on the affected old tags and the ket $\ket a$ on the
-  affected new tags, each at its tag owner.
+\item on the open input legs of each patch bra, a normalized pair effect (or
+  single-party contraction) across the at most two old owners, followed by
+  preparing $\ket0$ at those owners;
+\item at every site of a selected patch or hole square, contracting with $\bra0$
+  at the old owner and preparing $\ket0$ at the new owner (lines~258--268);
+\item on the open output legs of each patch ket, contracting with $\bra0$ at
+  the at most two new owners and preparing the normalized pair source (or
+  single-party state) of the term;
+\item contracting with $\bra b$ on the affected old tags and preparing $\ket a$
+  on the affected new tags at their tag owners.
 \end{enumerate}
-Every other register is untouched; a site in no selected square keeps its owner
-by condition~(ii). Each group block is placed on the registers of the frame by
-exchanges of tensor factors and unitaries grouping the registers of each owner.
-The monomial uses only the specified parties and has at most $2m$ normalized
-pair sources and at most $2m$ normalized pair effects, one of each per patch
-vertex with open legs; a vertex without open legs contributes a scalar of
-modulus at most one.\footnote{%
+All other sites lie outside the selected squares and retain their owners by
+condition~(ii). Each monomial uses only the specified parties and at most $2m$
+normalized pair sources and $2m$ normalized pair effects.\footnote{%
 \leanid{TNLean.PEPS.EncodedFrame.exists_rankOneBlock_chain},
 \leanid{TNLean.PEPS.SiteChain.termOp_eq_smul_prod},
-\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_termChain}.}
-Hence $M_\delta$ is a sum of allowed monomials on the registers of the frames,
-with coefficients of modulus at most one.\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_termChain}, and
 \leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx}.}
 
-The polynomial count is formalized as well. The formal statement gives at most
-$Nk^{2m}$ monomials with $k=\lceil(4Nm/\delta)^2\rceil+1$, where $N$ is the
-number of branches; when every affected hole and every patch has at most $D$
-cylinder terms, $N\le D^{\,r_{\rm new}+m+r_{\rm old}}$ and the count is at most
-$D^{E}k'^{2m}$ with $E=r_{\rm new}+m+r_{\rm old}$ and
-$k'=\lceil(4D^{E}m/\delta)^2\rceil+1$.\footnote{%
-\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.card_branch_le},
+Finally, with $k=\lceil(4Nm/\delta)^2\rceil+1$, the expansion has at most
+$Nk^{2m}$ monomials; if each affected hole and patch has at most $D$ cylinder
+terms, then $N\le D^E$ with $E=r_{\rm new}+m+r_{\rm old}$, giving at most
+$D^E k'^{2m}$ monomials with
+$k'=\lceil(4D^Em/\delta)^2\rceil+1$.\footnote{%
+\leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.card_branch_le} and
 \leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_of_card_le}.}
-The source's bound $N\le L^{C_1}$ (lines~331--332) and its total $Nk^{g_0}$
-(lines~341--342) use two standing bounds of the setting: (a) the projectors of
-every hole and every patch are sums of $\sum_jd_j$ cylinder projectors, with
-$\sum_jd_j$ bounded by one fixed power of $L$
-(\path{05-frames.tex}, lines~34--46, applied to the patch projectors at
-lines~254--256); and (b) $m$, $r_{\rm old}$ and $r_{\rm new}$ are bounded, by
-the hypotheses of the lemma (lines~189--192), and so is the specified list of
-parties of condition~(iv) (line~204). With $\sum_jd_j\le CL^{c}$,
-$m,r_{\rm old},r_{\rm new}\le b$, at most $b$ specified parties, $L\ge1$ and
-$\delta=L^{-a}$, the formal count
-is at most
+In the paper's setting, each hole and patch projector is a sum of $\sum_j d_j\le
+CL^c$ cylinder projectors (\path{05-frames.tex}, lines~34--46 and
+lines~254--256, giving $N\le L^{C_1}$ and $Nk^{g_0}$ at lines~331--332 and
+341--342), while $m,r_{\rm old},r_{\rm new}\le b$ and the party list of
+condition~(iv) has at most $b$ parties (lines~189--192 and line~204). Setting
+$\delta=L^{-a}$ for $L\ge 1$ bounds the total monomial count by
 \begin{align}
   (C+1)^{3b}\bigl(16b^2(C+1)^{6b}+1\bigr)^{2b}\,
   L^{3bc+4b(3bc+\lceil a\rceil)},
   \label{eq:polypeps_small_rewrite_monomials_count}
 \end{align}
-a polynomial in $L$ whose coefficient and degree depend only on $C$, $c$, $b$
-and $a$, and the participating parties of all monomials lie in one fixed list
-of at most $b$ parties, as the bounded change of Theorem~5.2 requires.\footnote{%
+which is polynomial in $L$ with degree and coefficient depending only on
+$C,c,b,a$.\footnote{%
 \leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_polynomial}.}
-When moreover $\|\Omega\|\le1$ and every additional patch projector and every
-affected old-hole projector has error at most the accuracy $\varepsilon=L^{-60}$
-fixed for the frame construction (lines~21--25), the choice $a=30$ gives the
-count~\eqref{eq:polypeps_small_rewrite_monomials_count} with $\lceil a\rceil=30$
-and the reference-vector error
-$\|M_{30}\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\|
-\le L^{-30}+2bL^{-60}\le(2b+1)L^{-20}$, the final assertion of the
-lemma.\footnote{%
+When $\|\Omega\|\le 1$, $\varepsilon=L^{-60}$ (lines~21--25), and $a=30$, the
+count is bounded by~\eqref{eq:polypeps_small_rewrite_monomials_count} with
+$\lceil a\rceil=30$ and the reference-vector error satisfies
+$\|M_{30}\Omega_{\mathcal F_{\rm old}}-\Omega_{\mathcal F_{\rm new}}\|\le
+L^{-30}+2bL^{-60}\le(2b+1)L^{-20}$.\footnote{%
 \leanid{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_allowed_monomial_approx_refVec}.}
-The bound on the participating parties cannot be derived from
-conditions~(i)--(iii) alone. Every site of a selected hole square, including
-the sites of the inner hole, receives a zero bra at its old owner and a zero
-ket at its new owner (lines~258--268), and condition~(iii) restricts the owners
-only outside the inner holes; an inner hole of side of order $\log L$ may have
-of order $\log^2L$ distinct raw owners. The bound is the boundedness of the
-list in condition~(iv), which the formal statement carries as the hypothesis
-that the list has at most $b$ members.
-Bound (a) is a choice made in the source's setting, so it enters the formal
-statement as a hypothesis on the cylinder data of the rewrite; that the choice
-can be made is Proposition~4.1, which is a separate result.
 
-Two differences in form remain, and neither changes the statement. Each formal
-monomial has at most $2m$ normalized pair sources and $2m$ normalized pair
-effects, one of each per patch vertex with open legs, since the zero side of a
-two-owner block is also prepared and contracted as a pair vector; the source
-counts one per open-leg group, and Theorem~5.2 asks only for a bounded number.
-The expansion into monomials is stated in the canonical coordinates in which
-the tags of the untouched holes come first in both frames, as the source
-compares frames after the canonical identification of tag orderings
-(lines~74--75 and~84--85).
+\section{Effect on the paper and what remains}
 
-The formal frames record the pairwise disjointness of the physical outer
-footprints of holes rather than of the outer squares in the plane; the source
-condition implies the formal one, so this is a generalization. The rewrite is
-constructed in canonical coordinates in which the tags of the untouched holes
-come first in both frames. Since the encodings of holes with disjoint
-footprints commute, moving every tag to the new position of its hole is a
-relabelling of the tag basis that carries one encoding to the other; along it
-the canonical rewrite becomes a contraction between frames with arbitrary tag
-orderings, with the same reference error. This is the canonical identification
-of tag orderings of Definition~6.1, and it is formalized.
-
-\section{Resolution}
-
-Both assertions of Lemma~6.3 are formalized with the source's hypotheses and
-the standing bounds of its setting. The scope restriction recorded in earlier
-versions of this note, first the reading of the product terms as allowed
-monomials and then the polynomial count, is removed.
+The earlier scope restriction---which stopped at the operator-level product
+expansion before constructing the register-level monomials and the polynomial
+count---is resolved. Both
+assertions of Lemma~6.3 are proved under the paper's hypotheses and the
+standing cylinder-count bound $\sum_j d_j\le CL^c$ (which comes from
+Proposition~4.1). Nothing in Lemma~6.3 remains open.
 
 \bibliographystyle{alpha}
 \bibliography{references}

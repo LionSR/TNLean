@@ -83,8 +83,7 @@ theorem ambientDepth_le_iff_mem_dilation (T : Finset (ℤ × ℤ)) (hT : T.Nonem
     (x : ℤ × ℤ) (r : ℕ) :
     ambientDepth T hT x ≤ r ↔ x ∈ ambientDilation T r := by
   rw [ambientDepth, Finset.inf'_le_iff]
-  simp only [ambientSupDistance, max_le_iff, abs_le, ambientDilation,
-    Finset.mem_biUnion, Finset.product_eq_sprod, Finset.mem_product, Finset.mem_Icc]
+  simp only [ambientSupDistance, max_le_iff, abs_le, mem_ambientDilation_iff]
   constructor <;> rintro ⟨y, hy, h⟩ <;> exact ⟨y, hy, by omega⟩
 
 /-- A positive-depth row is exactly one ambient dilation layer.

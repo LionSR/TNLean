@@ -50,30 +50,23 @@ theorem ofFn_eq_boundary_crossing_tail_append_head {α : Type*} {L N : ℕ}
       List.ofFn (fun k : Fin (N - i.val) => σ ⟨k.val, by omega⟩) ++
         List.ofFn (fun k : Fin (i.val + L - N) =>
           σ ⟨N - i.val + k.val, by omega⟩) := by
-  apply List.ext_getElem
-  · simp [List.length_ofFn]
-    omega
-  · intro k hk₁ hk₂
-    have hkL : k < L := by
-      simpa only [List.length_ofFn] using hk₁
-    simp only [List.getElem_ofFn]
-    by_cases hkTail : k < N - i.val
-    · rw [List.getElem_append_left]
-      · have htail :
-            (List.ofFn (fun k : Fin (N - i.val) =>
-              σ ⟨k.val, by omega⟩))[k]'(by
-                simpa [List.length_ofFn] using hkTail) = σ ⟨k, hkL⟩ := by
-            simp only [List.getElem_ofFn]
-        rw [htail]
-      · simpa [List.length_ofFn] using hkTail
-    · rw [List.getElem_append_right]
-      · simp only [List.getElem_ofFn]
-        congr 1
-        ext
-        simp [List.length_ofFn]
-        omega
-      · simpa [List.length_ofFn] using
-          (show N - i.val ≤ k by omega)
+  rw [List.ofFn_congr (show L = (N - i.val) + (i.val + L - N) by omega), List.ofFn_add]
+  rfl
+
+/-- A site at cyclic offset \(o<L\) from \(i\) carries the window letter \(\sigma_o\). -/
+private theorem cyclicCfg_apply_of_offset {N L : ℕ} (hN : 0 < N) (i k : Fin N)
+    (σ : Fin L → Fin d) (τ : Fin N → Fin d) {o : ℕ}
+    (ho : (k.val + N - i.val) % N = o) (hoL : o < L) :
+    cyclicCfg hN L i σ τ k = σ ⟨o, hoL⟩ := by
+  subst ho
+  simp [cyclicCfg, hoL]
+
+/-- A site at cyclic offset at least \(L\) from \(i\) carries the outside letter. -/
+private theorem cyclicCfg_apply_of_le_offset {N L : ℕ} (hN : 0 < N) (i k : Fin N)
+    (σ : Fin L → Fin d) (τ : Fin N → Fin d)
+    (ho : L ≤ (k.val + N - i.val) % N) :
+    cyclicCfg hN L i σ τ k = τ k := by
+  simp [cyclicCfg, not_lt.mpr ho]
 
 /-- Coefficients of a boundary-crossing cyclic restriction.
 
@@ -122,84 +115,20 @@ theorem blockDiagonal_boundary_cyclicRestrict_component_apply_crossing
     σ ⟨k.val, by omega⟩
   have hcfg :
       List.ofFn (cyclicCfg hN L i σ τ) = headWord ++ (middleWord ++ tailWord) := by
-    apply List.ext_getElem
-    · simp [headWord, middleWord, tailWord, List.length_ofFn]
-      omega
-    · intro k hk₁ hk₂
-      have hkN : k < N := by
-        simpa only [List.length_ofFn] using hk₁
-      simp only [List.getElem_ofFn]
-      by_cases hkHead : k < i.val + L - N
-      · have hoff : (k + N - i.val) % N = N - i.val + k := by
-          have hsum : k + N - i.val = N - i.val + k := by omega
-          rw [hsum]
-          exact Nat.mod_eq_of_lt (by omega)
-        have hoffLt : (k + N - i.val) % N < L := by
-          rw [hoff]
-          omega
-        rw [cyclicCfg, dite_eq_left hoffLt]
-        rw [List.getElem_append_left]
-        · have hhead :
-              headWord[k]'(by simpa [headWord, List.length_ofFn] using hkHead) =
-                σ ⟨N - i.val + k, by omega⟩ := by
-            simp only [headWord, List.getElem_ofFn]
-          rw [hhead]
-          exact congrArg σ (Fin.ext hoff)
-        · simpa [headWord, List.length_ofFn] using hkHead
-      · by_cases hkMiddle : k < i.val
-        · have hoff : (k + N - i.val) % N = k + N - i.val := by
-            exact Nat.mod_eq_of_lt (by omega)
-          have hoffNot : ¬(k + N - i.val) % N < L := by
-            rw [hoff]
-            omega
-          rw [cyclicCfg, dite_eq_right hoffNot]
-          rw [List.getElem_append_right]
-          · rw [List.getElem_append_left]
-            · have hidx :
-                  k - headWord.length < middleWord.length := by
-                simp [headWord, middleWord, List.length_ofFn]
-                omega
-              have hmiddle :
-                  middleWord[k - headWord.length]'hidx = τ ⟨k, hkN⟩ := by
-                simp only [middleWord, List.getElem_ofFn]
-                congr 1
-                ext
-                simp [headWord, List.length_ofFn]
-                omega
-              rw [hmiddle]
-            · simp [headWord, middleWord, List.length_ofFn]
-              omega
-          · simp [headWord, List.length_ofFn]
-            omega
-        · have hi_le_k : i.val ≤ k := by omega
-          have hoff : (k + N - i.val) % N = k - i.val := by
-            have hsum : k + N - i.val = k - i.val + N := by omega
-            rw [hsum, Nat.add_mod_right]
-            exact Nat.mod_eq_of_lt (by omega)
-          have hoffLt : (k + N - i.val) % N < L := by
-            rw [hoff]
-            omega
-          rw [cyclicCfg, dite_eq_left hoffLt]
-          rw [List.getElem_append_right]
-          · rw [List.getElem_append_right]
-            · have hidx :
-                  k - headWord.length - middleWord.length < tailWord.length := by
-                simp [headWord, middleWord, tailWord, List.length_ofFn]
-                omega
-              have htail :
-                  tailWord[k - headWord.length - middleWord.length]'hidx =
-                    σ ⟨k - i.val, by omega⟩ := by
-                simp only [tailWord, List.getElem_ofFn]
-                congr 1
-                ext
-                simp [headWord, middleWord, List.length_ofFn]
-                omega
-              rw [htail]
-              exact congrArg σ (Fin.ext hoff)
-            · simp [headWord, middleWord, List.length_ofFn]
-              omega
-          · simp [headWord, List.length_ofFn]
-            omega
+    rw [List.ofFn_congr (show N = (i.val + L - N) + ((N - L) + (N - i.val)) by omega),
+      List.ofFn_add, List.ofFn_add]
+    refine congrArg₂ (· ++ ·) (List.ofFn_inj.mpr (funext fun k => ?_))
+      (congrArg₂ (· ++ ·) (List.ofFn_inj.mpr (funext fun k => ?_))
+        (List.ofFn_inj.mpr (funext fun k => ?_)))
+    · refine cyclicCfg_apply_of_offset hN i _ σ τ (Nat.mod_eq_of_lt ?_ |>.trans ?_) _ <;>
+        simp <;> omega
+    · rw [cyclicCfg_apply_of_le_offset hN i _ σ τ]
+      · rfl
+      · rw [Nat.mod_eq_of_lt] <;> simp <;> omega
+    · refine cyclicCfg_apply_of_offset hN i _ σ τ ?_ _
+      have hwrap : ∀ x : ℕ, x = k.val + N → x % N = k.val := fun x hx => by
+        rw [hx, Nat.add_mod_right, Nat.mod_eq_of_lt (by omega)]
+      exact hwrap _ (by simp; omega)
   simp only [groundSpaceMap_apply, cyclicRestrictₗ_apply]
   rw [hcfg, Kraus.evalWord_append, Kraus.evalWord_append]
   simp [headWord, middleWord, tailWord, Matrix.mul_assoc]

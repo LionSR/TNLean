@@ -96,7 +96,9 @@ theorem graphChannelEventKernel_eq_zero_of_not_reachable
   simp [graphChannelEventKernel, hempty]
 
 /-- The anchors whose balls of radius `l` contain `y` number at most `μ` times the size of the
-ball of radius `l` about `y`. -/
+ball of radius `l` about `y`.
+Source: area law, `09-amplification.tex`, lines 152–154, the anchor-label count in the
+weighted-row estimate. -/
 theorem card_graphBall_anchors_le (G : SimpleGraph ι) (a : κ → ι)
     {μ : ℝ} (hfiber : ∀ x, ((Finset.univ.filter fun i : κ => a i = x).card : ℝ) ≤ μ)
     (y : ι) (l : ℕ) :

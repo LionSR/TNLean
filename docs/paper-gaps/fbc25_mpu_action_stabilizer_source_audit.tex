@@ -550,8 +550,10 @@ The existing library separates the following layers.
           deliberately assert neither existence of action tensors nor their
           attachment to an MPU.
 
-    \item \leanid{TNLean.Algebra.H2} is the quotient of genuine
-          $\mathbb C^\times$-valued $2$-cocycles by coboundary equivalence.
+    \item $H^2(H,\mathbb C^\times)$ is Mathlib's
+          \leanid{groupCohomology.H2} of the trivial representation on
+          $\mathbb C^\times$, whose classes are the $2$-cocycles modulo
+          coboundary equivalence.
           Its coefficient type is \leanid{Units}\,$\mathbb C$; despite prose in
           some module comments using $U(1)$, the implemented coefficient
           group matches the $\mathbb C^\times$ notation of the cited papers.

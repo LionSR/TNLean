@@ -1,0 +1,56 @@
+% Figure arealaw2d_split_terms.
+% Owner: none (note-only figure).
+% Used by: gapped-2d-notes AL App. E 3 (split terms), Fig. 14(b).
+% Source: arXiv OpenAI2026AreaLaw, sections/06-transport.tex:336-357 (designated supports
+% D_i, written X_i in the note; split of i at leaf j; x = D_i cap Y; J_i).
+% Abstract schematic of the hypotheses: one terminal partition in two bands g, g', each a
+% partition P, Y, F of the same sites; the bands are depth-separated, not to scale; one
+% admissible configuration.
+% Ink-to-index: none (geometry only). Columns are sites (one line of the system); row 2
+% is band g, row 4 band g'; rows 1, 3, 5 are empty. Tints: P neutral grey, Y collar
+% violet, F secondary blue (the scan colours of AL Sec. 9: P = XU grey, F = RV blue; X
+% itself is not drawn). Band g: P_g = cols 1-3, Y_g = cols 4-6, F_g = cols 7-16. Band g':
+% P_{g'} = cols 1-10, Y_{g'} = cols 11-13, F_{g'} = cols 14-16. Grey contours spanning
+% rows 1-5 are three designated supports (they reach one row beyond each band, through
+% blank cells, so that their edges do not run along the part contours, S3): X_a = cols
+% 3-4 meets P_g and Y_g (split in band g) and lies in P_{g'}; X_b = cols 8-9 lies in F_g
+% and in P_{g'} (never split); X_c = cols 13-14 lies in F_g and meets Y_{g'} and F_{g'}
+% (split in band g'). Each split meets Y and exactly one of P, F, in one band only, as
+% the hypothesis requires. The red dots (selected) are x = X_i cap Y of the two splits:
+% (2,4) and (4,13).
+% Labels: part names north of band g and south of band g'; band names west; support
+% names east of their contours, in the empty row 3.
+% Boundary signature: empty.
+% Not to scale: bands are annuli at depths 8m apart; supports are r_0-balls.
+% Label macros: none.
+% Fit: C at 4.5mm (\tnshow[4.5mm], about 78 mm wide).
+% Related: al_scan_actual_histories (bands against depth, no supports); \straddleglyph
+% (one split support, the glyph in the same sentence). Neither shows the
+% one-band-only condition.
+\begin{center}
+    \tenkzkernel
+    \begin{tenkz}[rows={wire,wire,wire,wire,wire}, cols=16, bonds=none, size=s]
+        \tn[at=(2,1), skin=dot]{} \tn[at=(2,2), skin=dot]{} \tn[at=(2,3), skin=dot]{} \tn[at=(2,4), skin=dot, species=selected, size=l]{}
+        \tn[at=(2,5), skin=dot]{} \tn[at=(2,6), skin=dot]{} \tn[at=(2,7), skin=dot]{} \tn[at=(2,8), skin=dot]{}
+        \tn[at=(2,9), skin=dot]{} \tn[at=(2,10), skin=dot]{} \tn[at=(2,11), skin=dot]{} \tn[at=(2,12), skin=dot]{}
+        \tn[at=(2,13), skin=dot]{} \tn[at=(2,14), skin=dot]{} \tn[at=(2,15), skin=dot]{} \tn[at=(2,16), skin=dot]{}
+        \tn[at=(4,1), skin=dot]{} \tn[at=(4,2), skin=dot]{} \tn[at=(4,3), skin=dot]{} \tn[at=(4,4), skin=dot]{}
+        \tn[at=(4,5), skin=dot]{} \tn[at=(4,6), skin=dot]{} \tn[at=(4,7), skin=dot]{} \tn[at=(4,8), skin=dot]{}
+        \tn[at=(4,9), skin=dot]{} \tn[at=(4,10), skin=dot]{} \tn[at=(4,11), skin=dot]{} \tn[at=(4,12), skin=dot]{}
+        \tn[at=(4,13), skin=dot, species=selected, size=l]{} \tn[at=(4,14), skin=dot]{} \tn[at=(4,15), skin=dot]{} \tn[at=(4,16), skin=dot]{}
+        \tnmark[form=enclosure, species=neutral, tint, label pos=n]{(2,1) .. (2,3)}{$P_g$}
+        \tnmark[form=enclosure, species=collar, tint, label pos=n]{(2,4) .. (2,6)}{$Y_g$}
+        \tnmark[form=enclosure, species=secondary, tint, label pos=n]{(2,7) .. (2,16)}{$F_g$}
+        \tnmark[form=enclosure, species=neutral, tint, label pos=s]{(4,1) .. (4,10)}{$P_{g'}$}
+        \tnmark[form=enclosure, species=collar, tint, label pos=s]{(4,11) .. (4,13)}{$Y_{g'}$}
+        \tnmark[form=enclosure, species=secondary, tint, label pos=s]{(4,14) .. (4,16)}{$F_{g'}$}
+        \tn[at=(1,3), skin=none]{} \tn[at=(1,4), skin=none]{} \tn[at=(3,3), skin=none]{} \tn[at=(3,4), skin=none]{} \tn[at=(5,3), skin=none]{} \tn[at=(5,4), skin=none]{}
+        \tn[at=(1,8), skin=none]{} \tn[at=(1,9), skin=none]{} \tn[at=(3,8), skin=none]{} \tn[at=(3,9), skin=none]{} \tn[at=(5,8), skin=none]{} \tn[at=(5,9), skin=none]{}
+        \tn[at=(1,13), skin=none]{} \tn[at=(1,14), skin=none]{} \tn[at=(3,13), skin=none]{} \tn[at=(3,14), skin=none]{} \tn[at=(5,13), skin=none]{} \tn[at=(5,14), skin=none]{}
+        \tnmark[form=enclosure, label pos=e]{(1,3) .. (5,4)}{$\mathcal X_a$}
+        \tnmark[form=enclosure, label pos=e]{(1,8) .. (5,9)}{$\mathcal X_b$}
+        \tnmark[form=enclosure, label pos=e]{(1,13) .. (5,14)}{$\mathcal X_c$}
+        \tnmark[form=label, label pos=w]{(2,1)}{$g$}
+        \tnmark[form=label, label pos=w]{(4,1)}{$g'$}
+    \end{tenkz}
+\end{center}
