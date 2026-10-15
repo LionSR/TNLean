@@ -23,20 +23,6 @@ namespace CollarScan
 
 variable {I : Type*} [Fintype I] [LinearOrder I]
 
-omit [Fintype I] [LinearOrder I] in
-private theorem physical_row_bound {Λ T : Finset (ℤ × ℤ)} (hT : T.Nonempty)
-    (S : CollarScan (Site Λ) I) (hdepth : S.depth = fun x ↦ ambientDepth T hT x.val)
-    {L : ℕ} (hrows : ∀ d : ℕ, 1 ≤ d → d ≤ L →
-      (ambientDilation T d \ ambientDilation T (d - 1)).card ≤ S.n)
-    (d : ℤ) (hd : d ∈ Finset.Icc (1 : ℤ) L) :
-    (Finset.univ.filter fun x ↦ S.depth x = d).card ≤ S.n := by
-  have hdn : ((d.toNat : ℕ) : ℤ) = d := by have := Finset.mem_Icc.mp hd; omega
-  have hb := depthRow_ambientDepth_length_le_of_row_bound T hT
-    (Subtype.val : Site Λ → ℤ × ℤ) Subtype.val_injective hrows
-    (show 1 ≤ d.toNat by have := Finset.mem_Icc.mp hd; omega)
-    (show d.toNat ≤ L by have := Finset.mem_Icc.mp hd; omega)
-  simpa only [depthRow, Finset.length_toList, hdn, hdepth] using hb
-
 open Classical in
 omit [LinearOrder I] in
 private theorem sum_card_incidence_le
@@ -74,7 +60,8 @@ private theorem sum_card_incidence_le
       (j - S.r₀) (j + (S.D + 2 * S.r₀ : ℕ)) S.n μ
       (fun d hd ↦ bandChargeInterval_row_bound S.depth hn hm g.isLt (offset g).isLt ht
         (show S.r₀ ≤ S.D + 2 * S.r₀ by omega) hmargin hL
-        (physical_row_bound hT S hdepth hrows) side hd) hmult
+        (fun d hd ↦ by simpa only [depthRow, Finset.length_toList] using
+          depthRow_length_le_of_ambientRows hT hdepth hrows hd) side hd) hmult
     have hlen : (j + (S.D + 2 * S.r₀ : ℕ) - (j - S.r₀) + 1).toNat ≤ 5 * S.D := by
       push_cast
       omega
