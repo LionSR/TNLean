@@ -7,12 +7,13 @@ import TNLean.PEPS.AreaLaw.RegularizedPatchRadiusDerivative
 import Lean.Elab.Command
 import Lean.Util.CollectAxioms
 
-/-! Audit the ordered output derivative and its conditional logarithmic norm formula. -/
+/-! Audit the ordered output derivative and the logarithmic norm derivative formulas. -/
 
 run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   for decl in #[``TNLean.PEPS.hasDerivAt_regularizedPatchOutput_exp_neg,
-      ``TNLean.PEPS.hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute] do
+      ``TNLean.PEPS.hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute,
+      ``TNLean.PEPS.exists_hasDerivAt_log_regularizedPatchObjective_exp_neg_uniform] do
     unless (← Lean.getEnv).contains decl do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl

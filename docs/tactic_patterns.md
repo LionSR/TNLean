@@ -4353,6 +4353,20 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Logarithmic norm derivatives from squared norms — candidate (2026-10-15)
+
+- **Pattern:** Differentiate the squared norm, compose with the real logarithm,
+  and divide by two. Positivity of the original norm justifies the logarithm
+  and the subsequent cancellation.
+- **Seen:** `hasDerivAt_log_regularizedPatchObjective_exp_neg_of_outer_commute`
+  and `exists_hasDerivAt_log_regularizedPatchObjective_exp_neg_uniform`, both in
+  `PEPS/AreaLaw/RegularizedPatchRadiusDerivative.lean`.
+- **Abstraction:** Both occurrences reuse `HasDerivAt.norm_sq` and `HasDerivAt.log`.
+  A third occurrence in another file would justify a helper for the logarithmic
+  norm derivative of a nonzero complex vector-valued function.
+- **Caveat:** The real inner-product instance must agree with the complex space;
+  positivity concerns the same vector whose derivative is being computed.
+
 ### Applying an ordered matrix derivative to a vector — candidate (2026-10-15)
 
 - **Pattern:** Compose `Matrix.toEuclideanLin.toLinearMap` with
