@@ -1955,3 +1955,31 @@ is not proved here.
     of a party is the number of nonprivate gates of all changes in which it
     participates, and Theorem~\ref{thm:peps_dyadic_lifetime_parties} bounds it.
 \end{proof}
+
+\begin{lemma}[Retained norm of a protocol with the assembly bounds]
+    \label{lem:peps_dyadic_protocol_retained_norm}
+    \lean{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.retained_norm_and_trace_le}
+    \leanok
+    \uses{def:peps_dyadic_protocol}
+    Let a protocol satisfy the assembly bounds of
+    Definition~\ref{def:peps_dyadic_protocol} with $C\ge0$, on a square of side
+    $L\ge1$, for a unit vector $\Omega$. Then the actual final vector $\Psi_n$
+    and its physical density
+    $\rho=\Tr_{\rm private}|\Psi_n\rangle\langle\Psi_n|$ satisfy
+    \begin{align}
+        \lVert\Psi_n\rVert & \ge1-CL^{-57}-C^2L^{-17},             &
+        1-\tr\rho          & \le2\left(CL^{-57}+C^2L^{-17}\right).
+    \end{align}
+    No upper bound on the losses is assumed, and no vector is renormalized; this
+    is the sense in which the protocol does not rely on renormalizing an
+    exponentially small success amplitude
+    \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{lem:peps_protocol_retained_norm}
+    As in the proof of Theorem~\ref{thm:peps_dyadic_protocol_consequences}, the
+    hypotheses of Theorem~\ref{thm:peps_protocol_density} hold with
+    $C_{\rm ch}=C_{\rm step}=C_{\rm hole}=C$, and
+    Lemma~\ref{lem:peps_protocol_retained_norm} gives both estimates.
+\end{proof}
