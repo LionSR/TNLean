@@ -64,7 +64,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     \leanok
     \uses{def:peps_source_register_operator_word,def:peps_joint_source_vector}
     Let $u_i\in U_i$ and $v_i\in V_i$. In the original register order, the
-    actual endpoint word satisfies
+    endpoint word satisfies
     \[
         Z_R\left(\bigotimes_i(u_i\otimes v_i)\right)
         =\bigotimes_i(A_i u_i\otimes B_i v_i).
@@ -79,7 +79,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     Induct on the ordered source list. At the first pair, the two recorded
     endpoint operations send $u_0\otimes v_0$ to
     $A_0u_0\otimes B_0v_0$, leaving the remaining registers unchanged.
-    Apply the induction hypothesis to those registers. The canonical
+    Apply the induction hypothesis to those registers. The tensor-product
     association and register identifications preserve the original order.
 \end{proof}
 
@@ -116,7 +116,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     \leanok
     Let $b=(b_j)_{j\in I}$ be an orthonormal basis of a finite-dimensional
     complex inner product space. For a matrix $M$, define $T_b(M)$ by
-    $T_b(M)b_j=\sum_i M_{ij}b_i$. Its matrix in $b$ is exactly $M$.
+    $T_b(M)b_j=\sum_i M_{ij}b_i$. Its matrix in $b$ is $M$.
     The matrix may be arbitrary, and the coordinate set may be empty.
 \end{definition}
 
@@ -160,7 +160,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
          & =k^{-n}\sum_{j:\{0,\ldots,n-1\}\to\{0,\ldots,k-1\}} Z_j,
         \label{eq:peps_endpoint_average}
     \end{align}
-    where $Z_j$ is the actual endpoint operator with maps constructed from
+    where $Z_j$ is the endpoint operator with maps constructed from
     $L_{i,j(i)},H_{i,j(i)}$. The same assignment $j(i)$ is used at both
     endpoints. The algebraic identity includes $k=0$, with $0^{-1}=0$,
     and $n=0$, with the empty assignment contributing the scalar identity.
@@ -170,7 +170,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     \uses{thm:peps_endpoint_operator_coordinates}
     Substitute the endpoint-coordinate formula and distribute the product
     of finite sums. One choice of a summand at every original slot gives
-    exactly one global assignment $j$.
+    one global assignment $j$.
 \end{proof}
 
 \begin{theorem}[Matrices in orthonormal coordinates]
@@ -213,23 +213,23 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     is omitted in either restriction. At a selected endpoint the two maps
     agree by hypothesis. Tensoring with the unchanged spectator identities
     and composing with the inductive equality preserves equality. The
-    canonical identifications of the fixed register lists are the same on
+    identifications of the fixed register lists are the same on
     both sides.
 \end{proof}
 
 
-\begin{theorem}[Restriction and canonical register identification]
+\begin{theorem}[Restriction and register-list identification]
     \label{thm:peps_party_restriction_canonical_layouts}
     \lean{TNLean.PEPS.PairEffect.Word.restrict_castLayouts}
     \leanok
     \uses{thm:peps_party_restriction,thm:peps_basis_memory_equalities}
     Let a source-free chronological operator act between two ordered
-    register lists. Canonically identify these with equal input and output
+    register lists. Identify these with equal input and output
     lists, and retain the registers and local operations selected by $f$.
     The result is the same as first making the restriction and then
-    canonically identifying the selected input and output lists.
-    The equalities of register lists supply the identifications; no new
-    isometry is chosen. This is the canonical transport used in
+    identifying the selected input and output lists.
+    The equalities of register lists give the identifications; no new
+    isometry is chosen. This is the register transport used in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
     % Source: 04-compression.tex, lines 233--251, 279--309 and 565--588.
 \end{theorem}
@@ -254,11 +254,11 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     occurrences consists of a sample index $j(e)$ and a family of
     Gaussian coordinates $\omega_{e,\alpha,\beta,s,p,q}$
     (Definition~\ref{def:peps_source_gaussian_law}) at each source $e$;
-    write $U_{\xi,\zeta,j,\omega}$ for the actual sampled source-input
+    write $U_{\xi,\zeta,j,\omega}$ for the sampled source-input
     word of Definition~\ref{def:peps_actual_sampled_endpoint_word} built
     from it. Let $(j,\omega)$ and $(j',\omega')$ be two sample
     assignments. Suppose that, whenever $f$ selects at least one endpoint
-    of a source $e$, with actual branch pair $(\alpha,\beta)$ chosen by
+    of a source $e$, with branch pair $(\alpha,\beta)$ chosen by
     $(\xi,\zeta)$ at $e$,
     \begin{align}
         j(e)=j'(e)
@@ -267,7 +267,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
         \quad\text{for all }s,p,q.
         \label{eq:peps_actual_sampled_endpoint_locality_agreement}
     \end{align}
-    Then the actual sampled source-input words have equal restrictions:
+    Then the sampled source-input words have equal restrictions:
     \begin{align}
         U_{\xi,\zeta,j,\omega}|_f
          & =U_{\xi,\zeta,j',\omega'}|_f.
@@ -291,7 +291,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     endpoint, since by~(\ref{eq:peps_actual_sampled_endpoint_locality_agreement})
     their sample index and Gaussian array agree there.
     Apply Theorem~\ref{thm:peps_source_register_operator_local_congruence}.
-    The canonical identification with the actual source-input register
+    The identification with the source-input register
     list preserves this equality by
     Theorem~\ref{thm:peps_party_restriction_canonical_layouts}.
 \end{proof}
@@ -303,11 +303,11 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     \uses{thm:peps_selected_physical_private_basis_grouped,
         thm:peps_selected_physical_basis_grouped,def:peps_selected_physical_configurations}
     Let $H$ be the original physical memory and $G$ the original retained
-    private memory. Use the prescribed selected-party order and the actual
+    private memory. Use the prescribed selected-party order and the
     grouped physical/private basis $B$. Let $\chi$ separate the two
     coordinate families and remove the exterior singleton coordinate.
-    Identify the original output memory with $H\otimes G$ by its canonical
-    append isometry. For $v,t\in H\otimes G$, let $b_v,b_t$ denote their actual grouped
+    Identify the original output memory with $H\otimes G$ by its
+    append isometry. For $v,t\in H\otimes G$, let $b_v,b_t$ denote their grouped
     coordinates after relabelling owners. Fix the original physical basis
     and any finite orthonormal reference basis of $G$, with product
     readout $J$. Then
@@ -332,7 +332,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     product of the original physical basis and the grouped private basis
     transported to $G$. The append and owner isometries preserve these
     coordinates. Thus each mixed outer product has the claimed product
-    coordinates. Changing only the private basis by its actual unitary
+    coordinates. Changing only the private basis by its unitary
     matrix $V$ conjugates that product by $I\otimes V$; the partial trace
     removes this conjugation. This gives
     (\ref{eq:peps_original_physical_mixed_trace}).
@@ -346,8 +346,8 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     \leanok
     \uses{def:peps_distributed_construction_density,
         thm:peps_selected_physical_private_trace}
-    For a distributed construction, let $v$ be its actual original
-    circuit output and let $b_v$ be its actual grouped coordinates.
+    For a distributed construction, let $v$ be its original
+    circuit output and let $b_v$ be its grouped coordinates.
     In the notation of Theorem~\ref{thm:peps_selected_physical_private_trace},
     its original physical density satisfies
     $\rho=\operatorname{tr}_{\mathrm{private}}((b_vb_v^\dagger)^\chi)$.
@@ -373,7 +373,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     owners. Write $\ell|_f$ for the retained list, in its original order.
     Let $S_{a,b;t}$ exchange the successive blocks $a,b$ in front of the
     tail $t$, preserving the order within each block and leaving the tail unchanged.
-    After the canonical identifications of the selected input and output
+    After the identifications of the selected input and output
     register lists, its restricted operator satisfies
     \begin{align}
         (S_{a,b;t})|_f
@@ -399,7 +399,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     register through the first block, followed by the exchange of the
     remaining blocks, gives (\ref{eq:peps_restricted_block_exchange}).
     An erased first register instead contributes the identity before
-    the inductive exchange. The canonical list identifications preserve
+    the inductive exchange. The list identifications preserve
     each composition.
 \end{proof}
 
@@ -413,7 +413,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     Let $W:a\to b$ be a source-free chronological composition, let $t$
     be a spectator list, and let $f$ select owners. Write $W_t$ for
     extension by spectators as in Definition~\ref{def:peps_append_spectators}.
-    Under the canonical identifications of the retained concatenations,
+    Under the identifications of the retained concatenations,
     $(W_t)|_f=(W|_f)_{t|_f}$. The retained spectator memory is thus
     unchanged beside the restricted composition. The input, output and
     spectator memories may be arbitrary, including empty lists and
@@ -431,7 +431,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     Apply this identity and
     Theorem~\ref{thm:peps_party_restriction_exchange_blocks} to the
     initial exchange, the framed composition and the final exchange
-    defining $W_t$. The canonical identifications of the concatenated
+    defining $W_t$. The identifications of the concatenated
     register lists preserve their composition.
 \end{proof}
 
@@ -463,7 +463,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     Theorem~\ref{thm:peps_append_spectators_restriction}.
     The operator formula in Theorem~\ref{thm:peps_append_spectators}
     then tensors the scalar identity with the retained spectator
-    identity. Canonical concatenation identifications give the identity
+    identity. The concatenation identifications give the identity
     on the retained spectator memory.
 \end{proof}
 
@@ -477,7 +477,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     Let $a=a'$, $b=b'$ and $c=c'$ be equalities of ordered register
     lists. Let $U:a\to b$, $V:b\to c$, $U':a'\to b'$ and
     $V':b'\to c'$ be chronological compositions whose operators
-    satisfy $U=U'$ and $V=V'$ under the canonical memory
+    satisfy $U=U'$ and $V=V'$ under the memory
     identifications. Then $V\circ U=V'\circ U'$ under those
     identifications. Likewise, if $U:a\to b$ and $U':a'\to b'$
     have equal operators under $a=a'$ and $b=b'$, adjoining the
@@ -513,7 +513,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     inventory, and let $f$ select owners. Denote by $L(W)$ its local
     part, obtained by moving its source preparations before the other
     operations as in Theorem~\ref{thm:peps_source_preparation}.
-    Under the canonical identification of the empty source prefix,
+    Under the identification of the empty source prefix,
     $(L(W))|_f=W|_f$. The selected input and output memories are
     arbitrary; no contraction or normalization assumption is imposed.
     This is an auxiliary register identity for
@@ -544,7 +544,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     Let $r$ be a register, let $s,t$ be ordered register lists, and
     let $f$ select owners with $s|_f$ empty. Move $r$ through the
     prefix $s$, from $srt$ to $rst$, leaving $t$ unchanged.
-    After restriction and the canonical identification of both
+    After restriction and the identification of both
     retained lists with $(rt)|_f$, this move is
     $\Id_{\mathcal H_{(rt)|_f}}$. The moving register may be retained
     or erased, and the retained tail is arbitrary.
@@ -559,7 +559,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     If $r$ is retained, its restricted move is through the empty
     retained prefix, hence is the identity on $r(t|_f)$.
     If $r$ is erased, its restricted move is the identity on
-    $s|_f\,t|_f=t|_f$. The canonical list identifications give the
+    $s|_f\,t|_f=t|_f$. The list identifications give the
     asserted identity in both cases.
 \end{proof}
 
@@ -573,7 +573,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     ordered source-register list $s$. Let $f$ select owners such
     that $s|_f$ is empty, and let $t$ be any spectator list.
     Write $F_t(W)$ for $W$ framed in front by the registers of $t$,
-    and $L(W):sa\to b$ for its local part. Under the canonical
+    and $L(W):sa\to b$ for its local part. Under the
     identifications of the retained register lists,
     \begin{align}
         (L(F_t(W)))|_f
@@ -598,7 +598,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     The source registers are erased, so the restricted move is the
     identity by Theorem~\ref{thm:peps_erased_prefix_register_move}.
     If $r$ is retained, frame the inductive identity by $r$; otherwise
-    erase it. Compatibility with composition and the canonical list
+    erase it. Compatibility with composition and the list
     identifications gives (\ref{eq:peps_local_part_framing}).
 \end{proof}
 
@@ -610,7 +610,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     \uses{thm:peps_basis_memory_equalities,thm:peps_party_restriction}
     Let $a=a'$ be an equality of ordered register lists. The identity
     operators on $\mathcal H_a$ and $\mathcal H_{a'}$ agree under
-    the canonical memory identification. Moreover, let $W:a\to b$
+    the memory identification. Moreover, let $W:a\to b$
     be source-free and let $f$ select owners. Replacing its input
     list by the equal list $a'$ before restriction gives the same
     selected operator as restricting $W$ directly, under the induced
@@ -638,7 +638,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     Fix $p\in\mathcal P$ with $\gamma(c)\ne p$ for every $c\in C$.
     Extend $U^\gamma$ by an arbitrary spectator list $t$, obtaining
     $(U^\gamma)_t$, and move its source preparations to the beginning.
-    The local part then satisfies, under the canonical retained-list
+    The local part then satisfies, under the retained-list
     identifications,
     \begin{align}
         \bigl(L((U^\gamma)_t)\bigr)|_p
@@ -673,7 +673,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     When taking the local part of either chronological composition,
     the additional source prefix is erased. Its framing contributes
     no selected register. Compose the three identity operators under
-    the canonical list identifications to obtain
+    the list identifications to obtain
     (\ref{eq:peps_sourced_spectator_exclusion}).
 \end{proof}
 
@@ -686,7 +686,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     Let $U:a\to b$ be an arbitrary chronological composition and
     let $p\notin\mathcal P(U)$, where $\mathcal P(U)$ includes the
     owners of its registers and the named parties of its local
-    operations. Let $t$ be any spectator list. Under the canonical
+    operations. Let $t$ be any spectator list. Under the
     retained-list identifications, the local part of the spectator
     extension satisfies $(L(U_t))|_p=\Id_{\mathcal H_{t|_p}}$.
     The source inventory may be nonempty, and the retained spectator
@@ -732,14 +732,14 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     thus $g(p)$ is the retained copy of $p$.
     For any partial choice $\xi$ for this gate as in
     Definition~\ref{def:peps_partial_source_choices}, let $V_\xi$
-    be its actual partial composition, including the spectators and
+    be its partial composition, including the spectators and
     the owner map $g$. Its local part satisfies
     \begin{align}
         (L(V_\xi))|_{g(p)}
          & =\Id_{\mathcal H_{(t^g)|_{g(p)}}}
         \label{eq:peps_all_gate_nonincident}
     \end{align}
-    under the canonical retained-list identifications. If $C$ is
+    under the retained-list identifications. If $C$ is
     nonempty, $\xi$ is an original branch label. If $C$ is empty,
     the gate is untouched and has its unique partial choice, even
     when $\Xi$ is empty. The spectator memory is arbitrary, including
@@ -756,7 +756,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
         thm:peps_source_free_local_part_restriction,
         def:peps_grouped_block_map,thm:peps_party_restriction,
         thm:peps_party_restriction_canonical_layouts}
-    If $C$ is nonempty, the literal partial composition is the
+    If $C$ is nonempty, the partial composition is the
     chosen prepared branch relabelled by $\gamma$, extended by $t$,
     and then relabelled by $g$. Move the last relabelling through
     the spectator extension using
@@ -764,7 +764,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     Its core has participating parties in $g(\gamma(C))$, which
     excludes $g(p)$. Apply
     Theorem~\ref{thm:peps_absent_party_spectator_identity}.
-    If $C$ is empty, the literal partial composition retains the
+    If $C$ is empty, the partial composition retains the
     complete gate as a local operation at the exterior owner $*$.
     It has no sources. Its local part preserves its restriction,
     and restriction to $g(p)$ erases this exterior operation while
@@ -781,7 +781,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     Let $W:a\to b$ be a source-free chronological composition,
     let $t$ be an arbitrary spectator list, and let $f$ select owners.
     Write $F_t(W)$ for $W$ framed in front by the registers of $t$.
-    Under the canonical identifications of the retained concatenations,
+    Under the identifications of the retained concatenations,
     $(F_t(W))|_f=F_{t|_f}(W|_f)$.
     The input, output and retained spectator memories are arbitrary,
     including empty lists and zero-dimensional spaces.
@@ -832,7 +832,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
         thm:peps_identity_input_identification}
     The local part of $V\circ W$ frames $L(W)$ by the later
     source-register list $s_V$, then applies $L(V)$, with the
-    canonical input identification. Restriction retains exactly
+    input identification. Restriction retains
     $s_V|_f$ in that framing.
     Equality of the selected source lists, original input and
     intermediate lists, and selected earlier local parts therefore
@@ -911,7 +911,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     (\ref{eq:peps_selected_local_part_framing}).
 \end{proof}
 
-\begin{theorem}[Local dependence on supplied incident choices]
+\begin{theorem}[Local dependence on given incident choices]
     \label{thm:peps_all_branch_incident_locality}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.restrict_partialWord_all_localPart_eval_heq_of_projectAllChoices_eq}
     \leanok
@@ -922,12 +922,12 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     and local operations on the original parties $P$, and fix $p\in P$.
     Select all original parties and let $g:P\to P\sqcup\{*\}$
     be the resulting owner map. Let $V_\xi$ and $V_\zeta$ be the
-    actual partial compositions corresponding to two supplied choices
+    partial compositions corresponding to two given choices
     $\xi,\zeta\in\Xi_P$. If their incident projections agree,
     $\pi_{\{p\}}\xi=\pi_{\{p\}}\zeta$, then
     $(L(V_\xi))|_{g(p)}=(L(V_\zeta))|_{g(p)}$
-    under the canonical identifications of the retained input and
-    output register lists. Both full choices are supplied; no choice
+    under the identifications of the retained input and
+    output register lists. Both full choices are given; no choice
     of a label at an unused occurrence is required.
     This is an auxiliary locality identity for the chronological
     contraction in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS}.
@@ -940,8 +940,8 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
         thm:peps_selected_local_part_composition,
         thm:peps_selected_local_part_framing,
         thm:peps_all_gate_nonincident_identity}
-    Every supplied all-party branch has the same ordered source-register
-    list in the canonical slot spaces. Restricting this list therefore
+    Every given all-party branch has the same ordered source-register
+    list in the fixed slot spaces. Restricting this list therefore
     gives the same selected source prefix for $\xi$ and $\zeta$.
     Induct on the chronological composition. Identity operations,
     local maps and register exchanges carry no branch choice.
@@ -951,7 +951,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     using equality of the two selected source lists. Framing is
     handled by Theorem~\ref{thm:peps_selected_local_part_framing}.
     At a gate incident to $p$, projected choices preserve its
-    original label, so both supplied choices specify the same
+    original label, so both given choices specify the same
     branch. At a nonincident gate, both selected local parts are
     the identity on precisely the retained spectators by
     Theorem~\ref{thm:peps_all_gate_nonincident_identity}. The latter
@@ -970,7 +970,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     lists, and let $f$ select owners. Write $M_r(s,t):srt\to rst$
     for the chronological move of $r$ through the prefix $s$.
     If $f$ selects the owner of $r$, then the restricted operator
-    is $M_r(s|_f,t|_f)$ under the canonical retained-list identifications.
+    is $M_r(s|_f,t|_f)$ under the retained-list identifications.
     If $f$ erases the owner of $r$, then the restricted operator
     is $\Id_{\mathcal H_{(s|_f)(t|_f)}}$.
     The retained prefix and tail are arbitrary, including nonempty
@@ -1012,7 +1012,7 @@ in the order~(\ref{eq:peps_source_register_order}), with a final scalar factor.
     \end{align*}
     Both operators have input memory
     $\mathcal H_{(s_W|_f)(a|_f)}$ and output memory
-    $\mathcal H_{b|_f}$ under the canonical register-list
+    $\mathcal H_{b|_f}$ under the register-list
     identifications. The selected source prefix is retained and
     may be nonempty. Pair sources and arbitrary local maps are
     permitted. This is an auxiliary framing identity for

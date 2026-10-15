@@ -3,7 +3,7 @@
 The scale choice in \cite[Section~9, lines~32--41]{OpenAI2026AreaLaw} and
 its use in the proof of Proposition~9.5, lines~693--729, require a collar
 whose depth is small compared with the rectangle size. The following
-numerical estimates supply a sufficient clearance budget.
+numerical estimates give the required clearance.
 
 \begin{theorem}[A rounded sublinear collar is at most half the side length]
     \label{thm:area_law_rounded_collar_half}
@@ -29,7 +29,7 @@ numerical estimates supply a sufficient clearance budget.
     \end{align}
 \end{proof}
 
-\begin{theorem}[A scalar budget for collar clearance]
+\begin{theorem}[A linear bound for collar clearance]
     \label{thm:area_law_collar_scalar_clearance}
     \lean{TNLean.PEPS.AreaLaw.Scan.mul_collar_add_collar_le_of_two_mul_le}
     \leanok
@@ -73,7 +73,7 @@ numerical estimates supply a sufficient clearance budget.
     is at least one, so $L_s\ge1$. For every $s\ge N$, one also has
     $2L_s\le s$. For each $D_0\ge1$,
     Theorem~\ref{thm:area_law_collar_scalar_clearance} now gives the
-    asserted budget without changing $N$.
+    claimed bound without changing $N$.
 \end{proof}
 
 % These are auxiliary numerical statements, not Proposition 9.5 itself.
