@@ -12,20 +12,20 @@ densities are chosen. It does not establish the energy estimate itself.
     \lean{Real.exists_pos_le_half_mul_sq_le_div_1024}
     \leanok
     Let $C_E\ge0$ and $\Delta>0$. There exists $\kappa>0$ such that
-    \begin{align*}
+    \begin{align}
         \kappa\le\frac12,
-        \qquad C_E\kappa^2\le\frac{\Delta}{1024}.
-    \end{align*}
+        \qquad C_E\kappa^2\le\frac{\Delta}{1024}.\notag
+    \end{align}
     The choice depends only on $C_E$ and $\Delta$.
 \end{lemma}
 \begin{proof}
     \leanok
     If $C_E=0$, take $\kappa=1/2$.
     If $C_E>0$, take
-    \begin{align*}
+    \begin{align}
         \kappa=\min\left\{\frac12,
-        \sqrt{\frac{\Delta}{1024C_E}}\right\}.
-    \end{align*}
+        \sqrt{\frac{\Delta}{1024C_E}}\right\}.\notag
+    \end{align}
     Both entries of the minimum are positive. The first gives
     $\kappa\le1/2$, and the second gives
     $C_E\kappa^2\le\Delta/1024$.
