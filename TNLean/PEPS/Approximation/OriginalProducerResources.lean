@@ -27,7 +27,8 @@ variable {P : Type}
 /-- Every actual produced gate occurrence retains its original monomial-list bound.
 The producer preserves the original occurrences; no bounds on private memories enter.
 Source: polynomial-PEPS Theorem 5.2, 04-compression.tex, lines 143–149 and 199–208. -/
-theorem monomialCount_produce_le {a b : Layout P} (w : OriginalCircuit a b) {K : ℕ} :
+theorem monomialCount_produce_le_of_isMonomialBounded
+    {a b : Layout P} (w : OriginalCircuit a b) {K : ℕ} :
     w.IsMonomialBounded K → ∀ g : w.produce.gateLocations,
       w.produce.monomialCount g ≤ K := by
   induction w with
