@@ -21,38 +21,36 @@
 
 \section{The source definition}
 
-Definition~9.3 of the two-dimensional area-law manuscript of September~24,
-2026~\cite{OpenAI2026AreaLaw} (\path{08-scanner.tex}, lines~546--564) defines
-a template with parameters $(n,s_0)$ as a nonempty finite set
-$T\subset\mathbb Z^2$ of the form
+Definition~9.3 of the September~24, 2026 two-dimensional area-law
+manuscript~\cite{OpenAI2026AreaLaw} (\path{08-scanner.tex}, lines~546--564)
+defines a template with scale parameters $(n,s_0)$ and template constant
+$C_{\rm tpl}$ as a nonempty finite set $T\subset\mathbb Z^2$ of the form
 \[
   T=\bigcup_{a=1}^{N_0}(P_a\cap\mathbb Z^2),
   \qquad n\ge C_{\rm tpl}N_0(s_0+1),
   \qquad \operatorname{diam}_\infty T\le n,
 \]
-with $N_0\ge1$, where each $P_a$ is a closed convex rectangle or triangle of
-sup-norm diameter at most $s_0$, all of whose sides have slope
-$0,\infty,1$ or $-1$.
+with $N_0\ge1$, where each piece $P_a\subset\mathbb R^2$ is a closed convex
+rectangle or triangle of $\ell_\infty$-diameter at most $s_0$ whose sides have
+slope $0,\infty,1$, or $-1$.
 
-\section{The convention}
+\section{The formal convention}
 
-The words rectangle and triangle are read in their ordinary sense: a triangle
-has three noncollinear vertices, and a rectangle has two nonzero orthogonal
-adjacent sides. A literal reading that also admitted a segment or a point as a
-degenerate rectangle or triangle is not intended by the source. Its remark
-after the definition (lines~566--569) states that the estimates use the
-pieces only through their number $N_0$ and their sizes. The nonemptiness of
-$T$ and the bound $N_0\ge1$ are printed in the source and are not part of the
-convention.
+In the formalization, a triangle has three noncollinear vertices and a
+rectangle has two orthogonal adjacent sides of positive
+length.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon}.}
+Line segments and single points are excluded as degenerate polygons. The
+nonemptiness of $T$ and the inequality $N_0\ge1$ are already explicit in the
+paper. Because nondegeneracy is built into the definition of a template
+polygon, downstream theorems need no separate nondegeneracy hypothesis.
 
-The convention is built into the definition of the permitted
-polygons.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon}.}
-No downstream statement carries a separate nondegeneracy hypothesis.
+\section{Effect on the paper and what remains}
 
-\section{Effect}
-
-The convention is a reading of the source's words, not an additional
-hypothesis on any theorem, and no elimination is planned.
+As the remark after Definition~9.3 notes (lines~566--569), the paper's
+estimates use the pieces $P_a$ only through their count $N_0$ and their
+diameters. Excluding degenerate polygons matches the intended meaning of
+``rectangle'' and ``triangle'' without affecting any theorem in the paper.
+Nothing remains open.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -10,44 +10,56 @@
 \maketitle
 \gapnote{scope-restriction}{open}
 
-\section{Source statement}
+\section{The source statement}
 
-For fixed $q\ge1$ and $J,\Delta>0$, Corollary 1.2 of
-\cite{OpenAI2026AreaLaw} asserts a uniform entropy bound for every subset
-of a finite rectangular lattice, and the two vertex-boundary forms.
-Let $V=\{0,\ldots,w-1\}\times\{0,\ldots,h-1\}$ with open
-nearest-neighbor edges. Write $H=\sum_v h_v+\sum_e h_e$, where each term
-has its designated support and operator norm at most $J$.
-Only $H=H^*$ is needed: replacing a term by $(h_i+h_i^*)/2$ leaves the
-sum unchanged and does not increase its norm.
-For a unit ground vector of energy $E_0$ satisfying
-$H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$, the source conclusion is
+Fix a local dimension $q\ge1$, an interaction norm bound $J>0$, and a spectral
+gap $\Delta>0$. Corollary~1.2 of~\cite{OpenAI2026AreaLaw} states a uniform
+entanglement-entropy bound for every subset of a finite rectangular lattice, in
+both edge-boundary and vertex-boundary forms. Let
+$V=\{0,\ldots,w-1\}\times\{0,\ldots,h-1\}$ be the rectangular grid of width $w$
+and height $h$ with open nearest-neighbor edge set $E$. Consider a Hamiltonian
+$H=\sum_{v\in V} h_v+\sum_{e\in E} h_e$, where each term $h_v$ or $h_e$ is
+supported on its site $v$ or edge $e$ and has operator norm at most $J$. Only
+Hermiticity of the sum $H=H^*$ is required, because replacing each term by
+$(h_i+h_i^*)/2$ leaves $H$ unchanged without increasing the norm of any term.
+Let $\Omega$ be a unit ground state of $H$ with ground energy $E_0$ satisfying
+$H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$. For any region
+$A\subseteq V$, let $S_\Omega(A)$ denote the von Neumann entropy of the reduced
+state on $A$, let $\partial_V A$ be the set of edges in $E$ between $A$ and
+$V\setminus A$, let $\partial_{\rm in}A$ be the set of vertices in $A$ adjacent
+to $V\setminus A$, and let $Z_A$ be the set of vertices incident to
+$\partial_V A$. Corollary~1.2 asserts that there is a constant
+$C=C(q,1,J,\Delta)$, chosen before the side lengths $w,h$, the terms $h_v,h_e$,
+the state $\Omega$, and the region $A$, such that
 \begin{align}
  S_\Omega(A)&\le C|\partial_V A|,
  &S_\Omega(A)&\le4C|\partial_{\rm in}A|,
  &S_\Omega(A)&\le2C|Z_A|.
  \label{eq:rectangular_scope_bounds}
 \end{align}
-The same $C=C(q,1,J,\Delta)$ is chosen before the side lengths, matrices,
-vector and cut. Empty boundaries are allowed. For $q=1$ or an empty
-physical domain the source explicitly states that every entropy vanishes.
-\footnote{Immutable source: \texttt{openai/math} revision
+Empty boundaries are allowed, and for $q=1$ or $V=\emptyset$ every entropy
+vanishes.\footnote{Source: \texttt{openai/math} revision
 \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}, area-law
 \texttt{00-introduction.tex}, lines 12--85, and
-\texttt{01-preliminaries.tex}, lines 118--132. The Hermitian-total model is
-also explicit in the polynomial-PEPS paper, \texttt{00-introduction.tex},
+\texttt{01-preliminaries.tex}, lines 118--132. The total-Hermiticity convention
+is also stated in the polynomial-PEPS manuscript, \texttt{00-introduction.tex},
 lines 36--49.}
 
-\section{Established reduction and remaining premise}
+\section{What is proved and the extra hypothesis}
 
-The rectangular interaction construction uses the native site and undirected
-edge families directly. Singleton and pair supports are injective labels.
-The Hermitian parts are placed on their corresponding integer-domain
-supports, with zero at every other admissible support.
-The resulting sum is exactly $UHU^*$ for the canonical configuration
-isometry $U$; the unit vector, gap, regional entropy and all three boundary
-cardinalities are transported by proved identities.
-\footnote{Declarations:
+The formalization proves that Theorem~1.1 of the paper (the uniform area law on
+arbitrary finite subsets of $\mathbb Z^2$) implies Corollary~1.2, taking
+Theorem~1.1 as an explicit hypothesis. To reduce the rectangular lattice to the
+general $\mathbb Z^2$ setting, the formal proof embeds $V$ into $\mathbb Z^2$,
+replaces each site and edge term by its Hermitian part on the corresponding
+singleton or pair support in $\mathbb Z^2$, and sets the interaction to zero on
+all other supports. Under the configuration isometry $U$ between the two
+Hilbert spaces, the embedded Hamiltonian equals $UHU^*$. The proof establishes
+that $U$ preserves the unit ground vector, the spectral gap $\Delta$, the
+regional entropy $S_\Omega(A)$, and the cardinalities of $\partial_V A$,
+$\partial_{\rm in}A$, and $Z_A$, and derives the vertex-boundary inequalities in
+(\ref{eq:rectangular_scope_bounds}) from the degree bound of the rectangular
+grid.\footnote{Declarations:
 \leanid{TNLean.PEPS.AreaLaw.RectangularHamiltonian.toAreaLawHamiltonian},
 \leanid{TNLean.PEPS.AreaLaw.RectangularHamiltonian.toAreaLawHamiltonian_operator},
 \leanid{TNLean.PEPS.AreaLaw.RectangularHamiltonian.isGappedGroundState_toAreaLawHamiltonian},
@@ -56,27 +68,24 @@ cardinalities are transported by proved identities.
 \leanid{TNLean.PEPS.AreaLaw.card_innerBoundary_rectangular}, and
 \leanid{TNLean.PEPS.AreaLaw.card_endpointBoundary_rectangular}.}
 
-The current theorem derives~(\ref{eq:rectangular_scope_bounds}) from the
-uniform finite-domain area law as an explicit analytic premise.
-It does not derive that premise from the physical hypotheses alone.
-Thus this is the implication from Theorem 1.1 to Corollary 1.2, rather than
-an unconditional proof of the corollary. No assumption supplies the desired
-coordinate identities or an entropy inequality for the specific rectangle.
-\footnote{Declarations:
+Consequently, Corollary~1.2 is proved conditionally on the uniform
+finite-domain area law of Theorem~1.1, rather than unconditionally from the
+lattice Hamiltonian hypotheses alone.\footnote{Declarations:
 \leanid{TNLean.PEPS.AreaLaw.UniformAreaLaw},
 \leanid{TNLean.PEPS.AreaLaw.UniformAreaLaw.rectangularEntropyAreaLaw}, and
 \leanid{TNLean.PEPS.AreaLaw.RectangularEntropyAreaLaw}.}
-
-The remaining step is to prove the uniform finite-domain area law from its
-source hypotheses and apply this reduction. The existing square-grid
-entropy statement is recovered by setting both side lengths equal, without
-altering that statement or supplying any new analytic hypothesis.
-\footnote{Declaration:
+Setting $w=h=L$ recovers the square-grid area-law statement used by the
+polynomial-PEPS construction without further assumptions.\footnote{Declaration:
 \leanid{TNLean.PEPS.AreaLaw.RectangularEntropyAreaLaw.squareEntropyAreaLaw}.}
-This reduction does not establish the polynomial-PEPS approximation theorem,
-the region construction, collar amplification, or the source's unconditional
-area law. The established rectangular consequences remain conditional
-on the uniform finite-domain entropy bound.
+
+\section{Effect on the paper and what remains}
+
+This note records a stage of the formalization, not a flaw in the paper: the
+deduction of Corollary~1.2 from Theorem~1.1 is complete and introduces no
+extra geometric or physical conditions. What remains is to complete the
+formal proof of the uniform finite-domain area law (Theorem~1.1) from the
+spectral-gap hypotheses, including the region construction and collar
+amplification.
 
 \bibliographystyle{alpha}
 \bibliography{references}
