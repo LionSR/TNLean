@@ -692,6 +692,158 @@ theorem beltNormalize_symm_mem_beltCellMarks
           (segment_symm_subset_of_subset_image h₁)
           (segment_symm_subset_of_subset_image (hBseg.trans hB))
 
+/-- Every point of the birth of an initial identifier other than the dummy that
+lies within one fine side of a point of a belt cell lies in an atom, in the
+coordinates normalized at that cell, contained in the normalized birth.
+Source: area-law Section 11, `geometry:birth-separation`, lines 592–604, with
+`geometry:nonadjacent` and the scale comparison, lines 193–207. -/
+theorem exists_beltAtom_subset_initialBirthRegion
+    (hk' : k₀ ≤ k) (hzF : z ∈ fineLayerIndices o k (fineScaleIndex k) Z C)
+    (y : InitialRegionIndex o k₀ Z C a b hC h₀) (hyd : y ≠ .inl ())
+    {p w : ℝ × ℝ} (hp : p ∈ closure (dyadicCell o (fineScaleIndex k) z))
+    (hw : w ∈ initialBirthRegion o k₀ Z C a b hC h₀ y)
+    (hpw : dist p w < (2 : ℝ) ^ fineScaleIndex k) :
+    ∃ c s, beltNormalize o (fineScaleIndex k) z w ∈ beltAtom c s ∧
+      beltAtom c s ⊆ beltNormalize o (fineScaleIndex k) z ''
+        initialBirthRegion o k₀ Z C a b hC h₀ y := by
+  have hpL : p ∈ closure (dyadicLayer o k Z C) :=
+    closure_mono (dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices o k (fineScaleIndex k)
+      Z C z (fineScaleIndex_le k) hzF) hp
+  have hscale : ∀ h, w ∈ closure (dyadicLayer o h Z C) →
+      fineScaleIndex k ≤ fineScaleIndex h + 1 := by
+    intro h hwL
+    have hnear : dist p w < 10 * (2 : ℝ) ^ fineScaleIndex k := by
+      have : (0 : ℝ) < (2 : ℝ) ^ fineScaleIndex k := by positivity
+      linarith
+    obtain ⟨h₁, h₂⟩ := dyadicLayer_nearby_indices o k h Z C p w hC (h₀.trans hk') hpL hwL hnear
+    rcases (show h + 1 = k ∨ k ≤ h by omega) with rfl | hkh
+    · rcases fineScaleIndex_succ h with e | e <;> omega
+    · have := fineScaleIndex_mono hkh; omega
+  rcases y with ⟨⟩ | (⟨h, J⟩ | ⟨h, w', R'⟩)
+  · exact absurd rfl hyd
+  · change w ∈ primaryBirthRegion o h.val (fineScaleIndex h.val) (pitchScaleIndex h.val) Z C
+      (a h.val).val (b h.val).val J.val at hw
+    have hrw := primaryBirthRegion_eq_iUnion_nonbeltCell_closure o h.val (fineScaleIndex h.val)
+      (pitchScaleIndex h.val) Z C (a h.val) (b h.val) J.val (fineScaleIndex_le h.val)
+      ((fineScaleIndex_le h.val).trans (le_pitchScaleIndex h.val))
+    rw [hrw] at hw
+    obtain ⟨w', hw'F, hw'⟩ := Set.mem_iUnion₂.mp hw
+    have hw'L : w ∈ closure (dyadicLayer o h.val Z C) :=
+      closure_mono (dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices o h.val
+        (fineScaleIndex h.val) Z C w' (fineScaleIndex_le h.val)
+        (Finset.mem_filter.mp hw'F).1) hw'
+    obtain ⟨c, s, h₁, h₂⟩ := exists_beltAtom_subset_closure_dyadicCell (o := o) (z := z)
+      (hscale h.val hw'L) hw'
+    refine ⟨c, s, h₁, h₂.trans (Set.image_mono ?_)⟩
+    change _ ⊆ primaryBirthRegion o h.val (fineScaleIndex h.val) (pitchScaleIndex h.val) Z C
+      (a h.val).val (b h.val).val J.val
+    rw [hrw]
+    exact Set.subset_biUnion_of_mem (u := fun w' ↦ closure (dyadicCell o (fineScaleIndex h.val) w'))
+      hw'F
+  · change w ∈ cellFanRunRegion _ _ _ _ _ R' at hw
+    obtain ⟨t, ht, hwt⟩ := Set.mem_iUnion₂.mp hw
+    have hw'F : w'.val ∈ fineLayerIndices o h.val (fineScaleIndex h.val) Z C :=
+      Finset.mem_of_mem_filter _ w'.property
+    have hwc : w ∈ closure (dyadicCell o (fineScaleIndex h.val) w'.val) := by
+      rw [← cellFanPolygons_cover o (fineScaleIndex h.val) w'.val
+        (fineLayerSplitMask o k₀ h.val Z C w'.val)]
+      exact Set.mem_iUnion.mpr ⟨t, hwt⟩
+    have hw'L : w ∈ closure (dyadicLayer o h.val Z C) :=
+      closure_mono (dyadicCell_subset_dyadicLayer_of_mem_fineLayerIndices o h.val
+        (fineScaleIndex h.val) Z C w'.val (fineScaleIndex_le h.val) hw'F) hwc
+    obtain ⟨c, s, h₁, h₂⟩ := exists_beltAtom_subset_cellFanPolygon (o := o) (z := z)
+      (hscale h.val hw'L) _ t hwt
+    refine ⟨c, s, h₁, h₂.trans (Set.image_mono ?_)⟩
+    exact Set.subset_biUnion_of_mem (u := fun t ↦ (cellFanPolygon o (fineScaleIndex h.val) w'.val
+      (fineLayerSplitMask o k₀ h.val Z C w'.val) t).region) ht
+
 end Core
+
+/-- **Birth separation of an initial belt tile from its comparison regions.**
+There is one fixed `c₁ > 0` with the following property. Let `x` be an initial
+belt tile in a belt cell of side `u = t_k`, and let `y` be another initial
+identifier of the same label other than the dummy: a primary or another initial
+belt tile. Let `Y` lie in the open region of `y` and avoid, at sup distance
+`u^ρ₀ / 4`, the nine marks of the cell, as the first trim guarantees. Then every
+point of the closed birth of `x` has distance at least `c₁ u^ρ₀` from `Y`.
+Source: area-law Section 11, `geometry:birth-separation`, lines 573–659. -/
+theorem exists_initialBeltRun_birth_separation :
+    ∃ c₁ > 0, ∀ (o : ℝ × ℝ) (k₀ : ℕ) (Z : Finset (ℤ × ℤ)) (C : ℕ)
+      (a b : (k : ℕ) → Fin (2 ^ (pitchScaleIndex k - fineScaleIndex k)))
+      (hC : 2 ≤ C) (h₀ : 50000000 ≤ k₀) (k : ℕ) (hk : k₀ ≤ k) (z : ℤ × ℤ)
+      (hz : z ∈ beltCellIndices (fineLayerIndices o k (fineScaleIndex k) Z C)
+        (2 ^ (pitchScaleIndex k - fineScaleIndex k)) (a k) (b k))
+      (R : CellFanRun o (fineScaleIndex k) z (fineLayerSplitMask o k₀ k Z C z)
+        (beltCellFanColor o k₀ Z C a b k z hC h₀ hk hz))
+      (y : InitialRegionIndex o k₀ Z C a b hC h₀),
+      y ≠ initialBeltRun k hk z hz R → y ≠ .inl () →
+      initialRegionColor o k₀ Z C a b hC h₀ y =
+        initialRegionColor o k₀ Z C a b hC h₀ (initialBeltRun k hk z hz R) →
+      ∀ Y ⊆ initialOpenRegion o k₀ Z C a b hC h₀ y,
+      (∀ v ∈ beltCellMarks o (fineScaleIndex k) z, ∀ w ∈ Y,
+        ((2 : ℝ) ^ fineScaleIndex k) ^ (Exponents.rho : ℝ) / 4 < dist w v) →
+      ∀ p ∈ initialBirthRegion o k₀ Z C a b hC h₀ (initialBeltRun k hk z hz R), ∀ w ∈ Y,
+        c₁ * ((2 : ℝ) ^ fineScaleIndex k) ^ (Exponents.rho : ℝ) ≤ dist p w := by
+  obtain ⟨η, hη, hη1, hdich⟩ := exists_beltAtom_dichotomy
+  refine ⟨min (η / 4) (1 / 8), lt_min (by positivity) (by norm_num), ?_⟩
+  intro o k₀ Z C a b hC h₀ k hk z hz R y hyx hyd hcol Y hY htrim p hp w hw
+  set u : ℝ := (2 : ℝ) ^ fineScaleIndex k with hu
+  set N := beltNormalize o (fineScaleIndex k) z
+  have hu1 : 1 ≤ u := one_le_pow₀ (by norm_num)
+  have hu0 : 0 < u := by linarith
+  have hρ : u ^ (Exponents.rho : ℝ) ≤ u := by
+    calc u ^ (Exponents.rho : ℝ) ≤ u ^ (1 : ℝ) :=
+          Real.rpow_le_rpow_of_exponent_le hu1 rho_pos_lt_one.2.le
+      _ = u := Real.rpow_one u
+  have hρ0 : 0 ≤ u ^ (Exponents.rho : ℝ) := Real.rpow_nonneg hu0.le _
+  have hc₁ : min (η / 4) (1 / 8) * u ^ (Exponents.rho : ℝ) ≤ u ^ (Exponents.rho : ℝ) / 8 :=
+    by nlinarith [min_le_right (η / 4) (1 / 8)]
+  have hnorm (p q : ℝ × ℝ) : ‖N p - N q‖ = 4 / u * dist p q := by
+    rw [norm_beltNormalize_sub, dist_eq_norm]
+  by_cases hfar : u ≤ dist p w
+  · nlinarith
+  push Not at hfar
+  -- the atom of the belt tile
+  obtain ⟨t, ht, hpt⟩ := Set.mem_iUnion₂.mp hp
+  obtain ⟨cA, sA, hpA, hA⟩ := exists_beltAtom_subset_cellFanPolygon (o := o) (z := z)
+    (ℓ := fineScaleIndex k) (ℓ' := fineScaleIndex k) (by omega) _ t hpt
+  have hAx : beltAtom cA sA ⊆ N '' initialBirthRegion o k₀ Z C a b hC h₀
+      (initialBeltRun k hk z hz R) :=
+    hA.trans (Set.image_mono (cellFanPolygon_subset_initialBeltRun_birth ht))
+  -- the atom of the comparison region
+  have hwy : w ∈ initialBirthRegion o k₀ Z C a b hC h₀ y := interior_subset (hY hw)
+  obtain ⟨cB, sB, hwB, hBy⟩ := exists_beltAtom_subset_initialBirthRegion hk
+    (Finset.mem_of_mem_filter z hz) y hyd (initialBeltRun_birth_subset_closure R hp) hwy hfar
+  -- the two atoms meet only in integer points
+  have hAB : ∀ q ∈ beltAtom cA sA, q ∈ beltAtom cB sB → ∃ i j : ℤ, q = ((i : ℝ), (j : ℝ)) := by
+    intro q hqA hqB
+    by_contra hne
+    push Not at hne
+    obtain ⟨a', b', hab, hseg⟩ := exists_segment_subset_beltAtom_inter hqA hqB hne
+    exact not_segment_subset_initialBirthRegion_inter hyx hcol (N.symm.injective.ne hab)
+      (segment_symm_subset_of_subset_image (hseg.trans (Set.inter_subset_left.trans hAx)))
+      (segment_symm_subset_of_subset_image (hseg.trans (Set.inter_subset_right.trans hBy)))
+  rcases hdich cA cB sA sB hAB (N p) hpA (N w) hwB with hd | ⟨q, ⟨hqA, hqB⟩, -, -, hang⟩
+  · -- far from every contact
+    rw [hnorm] at hd
+    have : η * u ≤ 4 * dist p w := by
+      have := mul_le_mul_of_nonneg_right hd hu0.le
+      rwa [show 4 / u * dist p w * u = 4 * dist p w by field_simp] at this
+    nlinarith [min_le_left (η / 4) (1 / 8)]
+  · -- near a contact, which is a mark of the cell
+    obtain ⟨i, j, rfl⟩ := hAB q hqA hqB
+    have hvx : N.symm ((i : ℝ), (j : ℝ)) ∈
+        initialBirthRegion o k₀ Z C a b hC h₀ (initialBeltRun k hk z hz R) := by
+      obtain ⟨v', hv', he⟩ := hAx hqA
+      rw [← he, N.symm_apply_apply]
+      exact hv'
+    have hmark := beltNormalize_symm_mem_beltCellMarks hyx hcol hBy hqB hvx
+    have hgap := htrim _ hmark w hw
+    have hq : ((i : ℝ), (j : ℝ)) = N (N.symm ((i : ℝ), (j : ℝ))) := (N.apply_symm_apply _).symm
+    rw [hq, hnorm, hnorm] at hang
+    have : dist w (N.symm ((i : ℝ), (j : ℝ))) / 2 ≤ dist p w := by
+      have h4 : 0 < 4 / u := by positivity
+      nlinarith
+    linarith
 
 end TNLean.PEPS.AreaLaw.Geometry
