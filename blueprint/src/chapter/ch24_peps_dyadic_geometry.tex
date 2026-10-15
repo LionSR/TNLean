@@ -1420,6 +1420,35 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     $3\cdot189\,(\#\text{squares}+\#\text{junctions})\le80\cdot189\,L^3$.
 \end{proof}
 
+\begin{lemma}[Holes of the frozen auxiliary sheets]
+    \label{lem:peps_dyadic_frozen_hole_count}
+    \lean{TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_auxGuide_subset, TNLean.PEPS.Approximation.RepaintingBaseline.ncard_isTrueVertex_auxGuide_le, TNLean.PEPS.Approximation.RepaintingBaseline.ncard_isTrueVertex_shiftGuide_auxGuide_le, TNLean.PEPS.Approximation.frozenAuxGuide, TNLean.PEPS.Approximation.ncard_isTrueVertex_frozenAuxGuide_le, TNLean.PEPS.Approximation.sum_frozenHoles_le, TNLean.PEPS.Approximation.sum_frozenHoles_le_cube}
+    \leanok
+    \uses{thm:peps_dyadic_protocol_schedule_counts, lem:peps_dyadic_unmodified_vertices}
+    Every true vertex of the guide of the auxiliary sheet of an edge, with any of the
+    auxiliary words, is one of the two endpoints of that edge. Hence a frozen
+    auxiliary sheet, whose final guide is the auxiliary guide of its edge with the word
+    left by the lens exchange, translated to its block, has at most two true vertices
+    and so carries at most two holes. Assign to each initialization of an auxiliary
+    sheet in the schedule any repainting, block and edge. Then the frozen sheets carry
+    in all at most eight holes for each square and junction of the hierarchy, and if
+    $2^k<2L$ at most $214L^3$ holes. This is the count of frozen auxiliary holes
+    of~\cite[Section~7]{OpenAI2026PolynomialPEPS}, lines 653--656, used for the final
+    reference vector at lines 676--678.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{thm:peps_dyadic_hierarchy_counts}
+    By Lemma~\ref{lem:peps_dyadic_unmodified_vertices} the auxiliary guide takes at most
+    two labels near every point other than the endpoints of its edge, and such a point
+    is not a true vertex. Translation is a homeomorphism, so it carries true vertices
+    to true vertices and preserves their number. Each initialization contributes at
+    most two holes, and by Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts} there
+    are at most four initializations for each square and junction. Finally
+    Theorem~\ref{thm:peps_dyadic_hierarchy_counts} with $M=8$ gives
+    $3\cdot8\,(\#\text{squares}+\#\text{junctions})\le640\,L^3$.
+\end{proof}
+
 \begin{definition}[Parties of the protocol and their labels]
     \label{def:peps_dyadic_protocol_parties}
     \lean{TNLean.PEPS.Approximation.DyadicSquare.toTriple, TNLean.PEPS.Approximation.DyadicSquare.ofTriple, TNLean.PEPS.Approximation.RepaintedSquare, TNLean.PEPS.Approximation.ProtocolParty, TNLean.PEPS.Approximation.ProtocolParty.square, TNLean.PEPS.Approximation.protocolPlacement, TNLean.PEPS.Approximation.GuideLabel, TNLean.PEPS.Approximation.guidePlaceholder, TNLean.PEPS.Approximation.validLabels, TNLean.PEPS.Approximation.labelParty, TNLean.PEPS.Approximation.EventUses}

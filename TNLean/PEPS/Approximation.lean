@@ -101,6 +101,7 @@ import TNLean.PEPS.Approximation.DyadicChamberSampling
 import TNLean.PEPS.Approximation.DyadicEdgeBands
 import TNLean.PEPS.Approximation.DyadicFootprintScaling
 import TNLean.PEPS.Approximation.DyadicFootprintTemplates
+import TNLean.PEPS.Approximation.DyadicFrozenHoleCount
 import TNLean.PEPS.Approximation.DyadicGuideFrames
 import TNLean.PEPS.Approximation.DyadicGuideReadings
 import TNLean.PEPS.Approximation.DyadicHierarchyCounts
