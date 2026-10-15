@@ -43,7 +43,7 @@
         h e_G & =e_G \quad (h\in G),                  &
         e_G^2 & =\frac{1}{|G|}\sum_{h\in G}h e_G=e_G.
     \end{align}
-    Applying the linear representation and transporting back to matrices gives
+    Applying the linear representation and passing back to matrices gives
     $P_\rho^2=P_\rho$.
     Unitarity gives $\rho(g)^\dagger=\rho(g^{-1})$. Since inversion permutes
     $G$,
@@ -525,7 +525,7 @@ not the Hermitian adjoint $A^\dagger=(A^*)^{\mathsf T}$.
         |\sigma_g|              & =1, \\
         \sigma_g\sigma_{g^{-1}} & =1.
     \end{align}
-    If $g^{-1}=g$, the chosen gauge at $g^{-1}$, transported to the
+    If $g^{-1}=g$, the chosen gauge at $g^{-1}$, written in the
     bond coordinates at $g$, equals $T_g$. Thus the same chosen scalar
     satisfies $T_gT_g^*=\sigma_g\mathbf 1$, and
     $\sigma_g\in\{1,-1\}$. These are
@@ -550,7 +550,7 @@ not the Hermitian adjoint $A^\dagger=(A^*)^{\mathsf T}$.
     The unit-modulus and inverse-pair conclusions follow from
     Theorems~\ref{thm:mpug_unitary_entrywise_scalar_phase}
     and~\ref{thm:mpug_unitary_entrywise_paired_scalars}. If $g^{-1}=g$,
-    transporting the chosen gauge along this equality gives $T_g$ itself
+    rewriting the chosen gauge along this equality gives $T_g$ itself
     in the current bond coordinates. Substitution in
     (\ref{eq:mpug_dagger_inverse_scalar}) gives
     $T_gT_g^*=\sigma_g\mathbf 1$ with the same chosen scalar. Apply
@@ -781,7 +781,7 @@ properties of \cite[lines~5342--5350]{FrancoRubio2025MPUGauging}.
     \end{align}
     This is the first algebraic construction of
     \cite[lines~5390--5432]{FrancoRubio2025MPUGauging}, with the
-    gauge chosen from the representation rather than supplied separately.
+    gauge chosen from the representation rather than given separately.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpug_involutive_adjoint_gauge,
@@ -843,7 +843,7 @@ decomposition is asserted here.
     dimension $D$ in canonical form II. Suppose that $T$ is unitary on
     $\C^D$ and that $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$
     for every $0\leq i,j<d$. Then $\ell=r=d$, and the resulting bijection
-    of $\{0,\ldots,\ell-1\}$ with $\{0,\ldots,d-1\}$ carries the raw
+    of $\{0,\ldots,\ell-1\}$ with $\{0,\ldots,d-1\}$ carries the
     source-cut index to the physical index. Neither the phase relation
     $T\overline T=\sigma I_D$, nor simplicity of $\mathcal U^\dagger$, nor
     a further virtual gauge enters. This is the self-inverse case of
@@ -874,7 +874,7 @@ decomposition is asserted here.
         \widetilde L & =\widetilde X^\dagger(I_d\otimes\rho),           \\
         K            & =\widetilde L X\colon\C^\ell\longrightarrow\C^r.
     \end{align}
-    Here $\widetilde L$ is the weighted left inverse supplied by
+    Here $\widetilde L$ is the weighted left inverse given by
     $\widetilde X^\dagger(I_d\otimes\rho)\widetilde X=I_r$.
     The definition retains the weight $\rho$ and requires no adjoint gauge
     relation.
@@ -949,7 +949,7 @@ decomposition is asserted here.
         thm:mpug_inverse_cut_right_inverse, thm:mpu_source_factorizations,
         thm:mpu_source_factor_normalizations, thm:mpu_source_factor_right_inverses}
     The two first-cut factorizations give
-    $XY=\widetilde X\widetilde Y$. Their actual one-sided inverses satisfy
+    $XY=\widetilde X\widetilde Y$. Their one-sided inverses satisfy
     $\widetilde L\widetilde X=I_r$, $LX=I_\ell$, $YR=I_\ell$, and
     $\widetilde Y\widetilde Z=I_r$. Apply
     Theorem~\ref{thm:mpug_factorization_comparison} first with
@@ -1208,7 +1208,7 @@ decomposition is asserted here.
         thm:mpug_inverse_cut_comparison_unitary,
         thm:mpug_inverse_cut_unitary_consequences}
     The representation makes $\mathcal U_g$ simple.
-    Theorem~\ref{thm:mpug_involutive_adjoint_gauge} supplies
+    Theorem~\ref{thm:mpug_involutive_adjoint_gauge} gives
     $(\mathcal U_g^\dagger)^{ij}=T_g^\dagger\mathcal U_g^{ij}T_g$ for
     every physical pair. For the same chosen scalar $\sigma_g$,
     Theorem~\ref{thm:mpug_dagger_inverse_scalar} gives
@@ -1218,7 +1218,7 @@ decomposition is asserted here.
     $\rho_g$. No new gauge, scalar, or simplicity assumption is needed.
 \end{proof}
 
-\subsection{The compatible decomposition and its literal gates}
+\subsection{The compatible decomposition and its second-cut gates}
 
 The candidate decomposition in
 \cite[lines~5390--5487]{FrancoRubio2025MPUGauging} yields source factors and
@@ -1278,7 +1278,7 @@ pleasant properties or the truncated-chain identity asserted in that passage.
         \widehat Y_2 & =Y_2,                   \\
         \widehat Z_2 & =Z_2.
     \end{align}
-    Thus only the first intermediate coordinate is transported. For
+    Thus only the first intermediate coordinate is reindexed. For
     physical--virtual indices $a$, virtual--physical indices $b$, and
     $0\leq l<\ell$, their coordinates are
     \begin{align}
@@ -1290,7 +1290,7 @@ pleasant properties or the truncated-chain identity asserted in that passage.
     first isometry, the ordinary second isometry, and the two right-inverse
     identities at the same weight $\rho$. This is the candidate construction
     of \cite[lines~5390--5432]{FrancoRubio2025MPUGauging}, with its
-    normalization supplied by the comparison argument at lines~5444--5487.
+    normalization established by the comparison argument at lines~5444--5487.
 \end{definition}
 \begin{proof}\leanok
     \uses{def:mpug_inverse_cut_rank_equiv, def:mpug_inverse_cut_factors,
@@ -1302,7 +1302,7 @@ pleasant properties or the truncated-chain identity asserted in that passage.
     $XY=M_1(\mathcal U)$, $X^\dagger WX=I_\ell$, and $YY^\dagger=I_\ell$;
     the last follows because the right inverse $B^\dagger X_2$ of $Y$
     is $Y^\dagger$, where $B=T^{\mathsf T}\otimes I_d$.
-    Transporting along $P_e$ gives
+    Reindexing along $P_e$ gives
     \begin{align}
         \widehat X_1\widehat Y_1
          & =XP_e^\dagger P_eY=XY=M_1(\mathcal U), \\
@@ -1311,11 +1311,11 @@ pleasant properties or the truncated-chain identity asserted in that passage.
         \widehat Y_1\widehat Z_1
          & =P_eYY^\dagger P_e^\dagger=I_r.
     \end{align}
-    Evaluating the transported matrices at $e(l)$ gives the coordinate
+    Evaluating the reindexed matrices at $e(l)$ gives the coordinate
     formulas, since $e^{-1}(e(l))=l$.
 \end{proof}
 
-\begin{theorem}[Unitary transport of the first source factors]
+\begin{theorem}[Unitary change of basis for the first source factors]
     \label{thm:mpug_inverse_source_unitary_transport}
     \lean{MPOTensor.inverseCompatibleSourceFactors_unitary_transport,
         MPOTensor.inverseCompatibleSourceFactors_gram_eq}
@@ -1352,10 +1352,10 @@ pleasant properties or the truncated-chain identity asserted in that passage.
         \widehat Y_1^\dagger\widehat Y_1
          & =\widetilde Y_1^\dagger\widetilde Y_1.
     \end{align}
-    This is the transport of the comparison in
+    This is the basis change of the comparison in
     \cite[lines~5432--5443]{FrancoRubio2025MPUGauging}, after its
     unitarity is established at lines~5444--5487. It asserts no
-    transport formula for the chosen first right inverse and no
+    transformation formula for the chosen first right inverse and no
     further pleasant properties.
 \end{theorem}
 \begin{proof}\leanok
@@ -1415,7 +1415,7 @@ pleasant properties or the truncated-chain identity asserted in that passage.
          & =\delta_{p,q}.
     \end{align}
     These are the physical closures of
-    \cite[lines~869--917]{FrancoRubio2025MPUGauging}, transported as in
+    \cite[lines~869--917]{FrancoRubio2025MPUGauging}, transferred as in
     lines~5486--5487. Simplicity of $\mathcal U^\dagger$ is not required.
 \end{theorem}
 \begin{proof}\leanok
@@ -1457,7 +1457,7 @@ pleasant properties or the truncated-chain identity asserted in that passage.
                                          & =\frac{d}{\ell}I_\ell.
     \end{align}
     These are the rank normalizations of
-    \cite[lines~1064--1119]{FrancoRubio2025MPUGauging}, transported at
+    \cite[lines~1064--1119]{FrancoRubio2025MPUGauging}, transferred at
     lines~5486--5487. The adjoint-simplicity hypothesis is retained.
 \end{theorem}
 \begin{proof}\leanok
@@ -1465,7 +1465,7 @@ pleasant properties or the truncated-chain identity asserted in that passage.
         thm:mpug_source_y_one_normalization,
         thm:mpug_source_y_two_normalization,
         def:mpug_inverse_compatible_source_factors}
-    Let $\widetilde Y_1,Y_2$ be the original factors. Unitary transport
+    Let $\widetilde Y_1,Y_2$ be the original factors. The unitary change of basis
     gives $\widehat Y_1=C^\dagger\widetilde Y_1$ with $C^\dagger C=I_r$.
     Conjugating the original scalar Gram matrix yields
     \begin{align}
@@ -1501,7 +1501,7 @@ pleasant properties or the truncated-chain identity asserted in that passage.
          & =\frac{\ell}{d}\delta_{i,j}.
     \end{align}
     These are the physical left-factor closures of
-    \cite[lines~1120--1162]{FrancoRubio2025MPUGauging}, transported at
+    \cite[lines~1120--1162]{FrancoRubio2025MPUGauging}, transferred at
     lines~5486--5487. The canonical weight is not replaced by the identity.
 \end{theorem}
 \begin{proof}\leanok
@@ -1527,13 +1527,13 @@ pleasant properties or the truncated-chain identity asserted in that passage.
 \end{proof}
 
 These six identities concern only the stated closures and normalizations.
-They do not assert movement identities, truncated-gate identities, transport
+They do not assert movement identities, truncated-gate identities, transformation
 of the chosen first right inverse, or the complete set of pleasant properties.
 
 \subsection{Movement gates of the inverse-compatible source factors}
 
 
-\begin{theorem}[Transport of the movement gates]
+\begin{theorem}[Transformation of the movement gates]
     \label{thm:mpug_inverse_movement_transport}
     \lean{MPOTensor.inverseCompatibleSourceFactors_movement_transport}
     \leanok
@@ -1564,7 +1564,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     The right gate has row order $(\text{physical},\text{first rank})$
     and column order $(\text{first rank},\text{physical})$; no leg
     permutation occurs. These are the crossed contractions of
-    \cite[lines~811--869]{FrancoRubio2025MPUGauging}, transported by the
+    \cite[lines~811--869]{FrancoRubio2025MPUGauging}, conjugated by the
     unitary comparison as in \cite[lines~5486--5487]{FrancoRubio2025MPUGauging}.
 \end{theorem}
 \begin{proof}\leanok
@@ -1587,7 +1587,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     (\ref{eq:mpug_inverse_movement_transport}).
 \end{proof}
 
-\begin{theorem}[Unitarity of the transported movement gates]
+\begin{theorem}[Unitarity of the compatible movement gates]
     \label{thm:mpug_inverse_movement_unitary}
     \lean{MPOTensor.inverseCompatibleSourceFactors_movement_isUnitaryBetween}
     \leanok
@@ -1613,17 +1613,17 @@ of the chosen first right inverse, or the complete set of pleasant properties.
         thm:matrix_unitary_between_kronecker}
     Theorem~\ref{thm:mpug_inverse_source_unitary_transport} makes $C$
     unitary, and Theorem~\ref{thm:mpug_staircase_gates_unitary} makes the
-    chosen gates $w_L(S_0),w_R(S_0)$ unitary. The transport theorem
+    chosen gates $w_L(S_0),w_R(S_0)$ unitary. The preceding theorem
     leaves the left gate unchanged. For the right gate, use
     (\ref{eq:mpug_inverse_movement_transport}). The two outer factors of
     $(I_d\otimes C^\dagger)w_R(S_0)(C\otimes I_d)$ are unitary by
     Theorem~\ref{thm:matrix_unitary_between_kronecker}; the middle factor
     $w_R(S_0)$ is already unitary. Their composition is the right gate. This is the movement-gate consequence
-    of the comparison transport in
+    of the comparison identity in
     \cite[lines~5486--5487]{FrancoRubio2025MPUGauging}.
 \end{proof}
 
-\begin{definition}[Literal gates on the common second-cut space]
+\begin{definition}[Gates on the common second-cut space]
     \label{def:mpug_inverse_compatible_gates}
     \lean{MPOTensor.inverseCompatibleU, MPOTensor.inverseCompatibleV}
     \leanok
@@ -1642,12 +1642,12 @@ of the chosen first right inverse, or the complete set of pleasant properties.
         (v_{\mathrm{new}})_{(i,j),(l,s)}
          & =\sum_{\beta=0}^{D-1}X_{(i,\beta),l}(X_2)_{(\beta,j),s}.
     \end{align}
-    These are the literal contractions of the candidate factors, before
-    transporting a rank coordinate. They are the new gates in
+    These are the direct contractions of the candidate factors, before
+    reindexing a rank coordinate. They are the new gates in
     \cite[lines~5486--5487]{FrancoRubio2025MPUGauging}.
 \end{definition}
 
-\begin{theorem}[Comparison transport of the new left gate]
+\begin{theorem}[Comparison relation for the new left gate]
     \label{thm:mpug_inverse_new_u_transport}
     \lean{MPOTensor.inverseCompatibleU_eq_comparisonJ_mul_sourceU}
     \leanok
@@ -1661,7 +1661,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     $r=\operatorname{rank}M_1(\mathcal U)$ and
     $\ell=\operatorname{rank}M_2(\mathcal U)$. Then
     $u_{\mathrm{new}}=(I_\ell\otimes J)u$.
-    This is the comparison transport in
+    This is the comparison relation in
     \cite[lines~5432--5443 and 5486--5487]{FrancoRubio2025MPUGauging};
     it does not require $J=K^\dagger$ or gate unitarity.
 \end{theorem}
@@ -1679,7 +1679,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Comparison transport of the new right gate]
+\begin{theorem}[Comparison relation for the new right gate]
     \label{thm:mpug_inverse_new_v_transport}
     \lean{MPOTensor.inverseCompatibleV_eq_sourceV_mul_comparisonK}
     \leanok
@@ -1692,7 +1692,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     its weighted comparison. Put $r=\operatorname{rank}M_1(\mathcal U)$
     and $\ell=\operatorname{rank}M_2(\mathcal U)$. Then
     $v_{\mathrm{new}}=v(K\otimes I_\ell)$.
-    This is the comparison transport used in
+    This is the comparison relation used in
     \cite[lines~5432--5443 and 5486--5487]{FrancoRubio2025MPUGauging}.
 \end{theorem}
 \begin{proof}\leanok
@@ -1718,14 +1718,14 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     positive-definite matrix $\rho$. Suppose that $T$ is unitary,
     $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
     physical pair, and $T\overline T=\sigma I_D$ for $\sigma\in\C$.
-    The literal gates of Definition~\ref{def:mpug_inverse_compatible_gates}
+    The gates of Definition~\ref{def:mpug_inverse_compatible_gates}
     are unitary between $\C^d\otimes\C^d$ and
     $\C^\ell\otimes\C^\ell$, and satisfy
     $u_{\mathrm{new}}=\sigma v_{\mathrm{new}}^\dagger$.
     This is the new-gate conclusion of
     \cite[lines~5440--5487]{FrancoRubio2025MPUGauging}. The equality uses
     the common second-cut coordinate space, not the differently ordered
-    rank spaces of the gates formed after transporting the first factors.
+    rank spaces of the gates formed after reindexing the first factors.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpug_inverse_new_u_transport, thm:mpug_inverse_new_v_transport,
@@ -1766,7 +1766,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     $g^{-1}=g$ and give $\mathcal U_g$ a canonical-form-II presentation.
     Use its chosen gauge $T_g$ and scalar $\sigma_g$ from
     Theorems~\ref{thm:mpug_dagger_inverse_gauge}
-    and~\ref{thm:mpug_dagger_inverse_scalar}. The literal new gates of
+    and~\ref{thm:mpug_dagger_inverse_scalar}. The new gates of
     $\mathcal U_g,T_g$ are unitary and satisfy
     $u_{\mathrm{new},g}=\sigma_g v_{\mathrm{new},g}^\dagger$ on the
     common second-cut rank-pair space. Canonical form II is needed only
@@ -1778,7 +1778,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
 \begin{proof}\leanok
     \uses{def:mpug_group_representation, thm:mpug_involutive_adjoint_gauge,
         thm:mpug_dagger_inverse_scalar, thm:mpug_inverse_new_gates_unitary_phase}
-    The representation supplies simplicity at $g$. Its chosen gauge and
+    The representation gives simplicity at $g$. Its chosen gauge and
     scalar satisfy
     \begin{align}
         (\mathcal U_g^\dagger)^{ij}
@@ -1839,7 +1839,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \cite[line~5344]{FrancoRubio2025MPUGauging} assumes, is here a
     consequence of the canonical-form-II presentation at $g$, establishing
     the properties labelled \emph{eq:MPUnice2}--\emph{eq:MPUnice4} in
-    \cite[lines~1064--1162]{FrancoRubio2025MPUGauging}, transported as at
+    \cite[lines~1064--1162]{FrancoRubio2025MPUGauging}, transferred as at
     lines~5486--5487.
 \end{theorem}
 \begin{proof}\leanok
@@ -1848,7 +1848,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
         thm:mpug_inverse_source_x_physical, ThmFund1,
         thm:mpu_physical_adjoint_source_ranks,
         def:mpug_adjoint_canonical_boundaries}
-    The representation supplies simplicity of $\mathcal U_g$, and its
+    The representation gives simplicity of $\mathcal U_g$, and its
     chosen gauge and scalar satisfy
     $(\mathcal U_g^\dagger)^{ij}=T_g^\dagger\mathcal U_g^{ij}T_g$ and
     $T_g\overline{T_g}=\sigma_gI_{D_g}$ by
@@ -1923,7 +1923,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
         def:mpo_eval_word, def:mpug_inverse_compatible_gates}
     Let $\mathcal U$ be an MPO tensor of dimensions $d,D$ and $T$ a
     unitary virtual matrix. Take the second source factors $X_2,Y_2$
-    and the raw candidates $X=(I_d\otimes\overline T)Y_2^\dagger$,
+    and the candidates $X=(I_d\otimes\overline T)Y_2^\dagger$,
     $Y=X_2^\dagger(T^{\mathsf T}\otimes I_d)$. Put
     $\ell=\operatorname{rank}M_2(\mathcal U)$ and
     $\Omega_N=\{0,\ldots,d-1\}^{\{0,\ldots,N-1\}}$ for $N\geq0$.
@@ -1947,7 +1947,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     endpoint contractions extending
     \cite[lines~5444--5487]{FrancoRubio2025MPUGauging}.
     With $\varnothing$ the unique empty configuration, the zero-length
-    entries recover the literal new gates:
+    entries recover the new gates:
     \begin{align}
         (A_0)_{(l,(\varnothing,s)),(a,(\varnothing,b))}
          & =(u_{\mathrm{new}})_{(l,s),(a,b)}, \\
@@ -1978,7 +1978,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     $A_N=\sigma B_N^\dagger$. The scalar occurs once, independently of
     $N$. Adjointing exchanges the physical configurations without reversing
     either word or inserting an additional swap. No canonical form,
-    simplicity, comparison matrix, or rank transport is required.
+    simplicity, comparison matrix, or rank reindexing is required.
     This is an all-word local extension of
     \cite[lines~5444--5487]{FrancoRubio2025MPUGauging}, not the final
     truncated-chain sewing identity.
@@ -2043,7 +2043,7 @@ of the chosen first right inverse, or the complete set of pleasant properties.
     \uses{def:mpug_common_blocking}
     Let $L>0$. The commonly blocked family
     $\{\mathcal U_g^{[L]}\}_{g\in G}$ is again a group representation by simple
-    injective MPUs. Under the canonical identification of blocked
+    injective MPUs. Under the identification of blocked
     configurations with words of length $NL$,
     \begin{align}
         O_N(\mathcal U_g^{[L]})
@@ -2083,13 +2083,13 @@ of the chosen first right inverse, or the complete set of pleasant properties.
 
 Assume from now until the end of this section that $G$ is finite and $d>0$.
 
-\begin{definition}[Raw MPU representation]
+\begin{definition}[Unblocked MPU representation]
     \label{def:mpug_raw_group_representation}
     \lean{MPOTensor.GroupFamily.IsRawRepresentation}
     \leanok
     \uses{def:injective, def:mpug_positive_mpu,
         def:mpug_group_representation}
-    A raw MPU representation is a dependent-bond family
+    An unblocked MPU representation is a dependent-bond family
     $\{\mathcal U_g\}_{g\in G}$ of injective matrix product unitaries on
     nonempty chains satisfying (\ref{eq:mpug_rep_identity}) and
     (\ref{eq:mpug_rep_multiplication}) for all $g,h\in G$ and all $N\geq1$.
@@ -2117,7 +2117,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \uses{def:mpug_raw_group_representation,
         def:mpug_common_simple_length, def:mpug_group_representation,
         def:mpu_simple, def:mpdo_physical_blocking}
-    Let $\{\mathcal U_g\}_{g\in G}$ be a raw MPU representation. Then $L_*>0$,
+    Let $\{\mathcal U_g\}_{g\in G}$ be an unblocked MPU representation. Then $L_*>0$,
     and every $\mathcal U_g^{[L_*]}$ is simple. For every $K>0$, each further
     block $(\mathcal U_g^{[L_*]})^{[K]}$ is simple. Consequently the blocked
     family at length $L_*$ satisfies
@@ -2138,7 +2138,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     (\ref{eq:mpug_common_simple_length}). Simplicity holds at every later direct
     blocking, hence at the common length $L_*$. Nonempty-chain unitarity and
     injectivity are preserved by physical blocking. Reindexing the closed chain
-    at length $NL_*$ carries the identity and multiplication laws of the raw
+    at length $NL_*$ carries the identity and multiplication laws of the unblocked
     representation to the blocked family. The length-$L_*$ family is therefore
     a group representation by simple injective MPUs. Applying
     Theorem~\ref{thm:mpug_common_blocking_representation} to this established
@@ -2368,7 +2368,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     $B_{g,h}^{[L]}$ to $A_{g,h}^{[L]}$, and the pairing
     (\ref{eq:mpug_pair_tensors_block}), obtained from the commutation of
     blocking with the doubled-index view and with the product tensor,
-    transports it to the blocked representation.  For the last assertion,
+    transfers it to the blocked representation.  For the last assertion,
     choose a family of selected reductions by
     Theorem~\ref{thm:mpug_pair_reductions_exist}, take $L$ to be its common
     buffer length, and apply
@@ -2544,7 +2544,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \end{align}
     This is the scalar phase conclusion following
     \cite[lines~1557--1562]{FrancoRubio2025MPUGauging} once the matrix relation
-    has been supplied.
+    holds.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -2713,7 +2713,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     line~3157 with $\sigma_g(U^L_{g^{-1}})^\dagger$ for
     $\sigma_g\in\{1,-1\}$.  Both displayed networks are therefore nonzero.  A
     vanishing intervening factor would make its entire network zero, so taking
-    the factors on these sides as the $B_i$ supplies $B_i\ne 0$ at both
+    the factors on these sides as the $B_i$ gives $B_i\ne 0$ at both
     applications.  This nondegeneracy condition is recorded in
     \cite{gap:fbc25_alternating_network_nondegeneracy}.
 \end{theorem}
@@ -3344,7 +3344,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \cite[lines~2062--2099]{FrancoRubio2025MPUGauging}, between the
     displayed input and output spaces. The scope restriction is recorded
     in \cite{gap:fbc25_truncated_symmetry_endpoint_unitarity_scope}.
-    Neither simplicity of the physical adjoint nor unitarity of supplied
+    Neither simplicity of the physical adjoint nor unitarity of given
     gates is assumed. The assertion does not identify each endpoint
     source space with a physical site, specialize to a finite-group
     family, prove agreement with a global symmetry on interior
@@ -3385,7 +3385,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     one parity of bulk lengths.
 \end{proof}
 
-\begin{theorem}[Unitary coordinate transport of the endpoint contraction]
+\begin{theorem}[Unitary coordinate change for the endpoint contraction]
     \label{thm:mpug_inverse_truncation_transport}
     \lean{MPOTensor.inverseCompatibleSourceFactors_truncatedSymmetry_apply,
         MPOTensor.inverseCompatibleSourceFactors_truncatedSymmetry_eq}
@@ -3427,7 +3427,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \end{align}
     Only the right source coordinate changes. Here $N$ counts bulk
     sites and the total source length is $N+2$, including both endpoints.
-    This applies the comparison transport of
+    This applies the comparison transformation of
     \cite[lines~5432--5487]{FrancoRubio2025MPUGauging} to the endpoint
     contraction at lines~2062--2099. No simplicity assumption on the
     physical adjoint is needed.
@@ -3471,7 +3471,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     $\Omega_N$ is the set of length-$N$ physical configurations and
     $r,\ell$ are the first and second cut ranks. The case $N=0$ has
     total length two. No simplicity assumption on the physical adjoint
-    is needed. This transports the unitarity assertion following the
+    is needed. This transfers the unitarity assertion following the
     endpoint diagram of \cite[lines~2062--2099]{FrancoRubio2025MPUGauging},
     using its comparison argument at lines~5486--5487.
 \end{theorem}
@@ -3483,7 +3483,7 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     Theorem~\ref{thm:matrix_unitary_between_kronecker},
     $Q_N=I_\ell\otimes(I_{\Omega_N}\otimes C^\dagger)$ is unitary.
     The chosen-source contraction $U_0^{N+2}$ is unitary by
-    Theorem~\ref{thm:mpug_truncated_symmetry_unitary}, and the transport
+    Theorem~\ref{thm:mpug_truncated_symmetry_unitary}, and the preceding
     theorem gives $\widehat U^{N+2}=Q_NU_0^{N+2}$. Hence
     \begin{align}
         (\widehat U^{N+2})^\dagger\widehat U^{N+2}
@@ -3495,10 +3495,10 @@ Assume from now until the end of this section that $G$ is finite and $d>0$.
     \end{align}
 \end{proof}
 
-These are coordinate transport and unitarity statements, not the final
+These are coordinate-change and unitarity statements, not the final
 truncated-chain sewing identity or a finite-group physical-action assertion.
 
-\begin{theorem}[Raw endpoint unitarity by rank-coordinate transport]
+\begin{theorem}[Endpoint unitarity by rank-coordinate reindexing]
     \label{thm:mpug_inverse_word_unitary}
     \lean{MPOTensor.inverseCompatibleWordA_eq_reindex_truncatedSymmetry,
         MPOTensor.inverseCompatibleWordA_isUnitaryBetween}
@@ -3517,33 +3517,33 @@ truncated-chain sewing identity or a finite-group physical-action assertion.
     $e\colon\{0,\ldots,\ell-1\}\to\{0,\ldots,r-1\}$ of
     Definition~\ref{def:mpug_inverse_cut_rank_equiv}.
     For every $N\geq0$, let $\Omega_N$ be the length-$N$ physical
-    configurations. The raw and packaged source spaces and the physical
+    configurations. The second-cut and packaged source spaces and the physical
     space are, with right association,
     \begin{align}
-        \mathcal R_N^{\mathrm{raw}}
+        \mathcal R_N^{\mathrm{src}}
                      & =\C^\ell\otimes(\C^{\Omega_N}\otimes\C^\ell), \\
         \mathcal R_N^{\mathrm{pkg}}
                      & =\C^\ell\otimes(\C^{\Omega_N}\otimes\C^r),    \\
         \mathcal H_N & =\C^d\otimes(\C^{\Omega_N}\otimes\C^d).
     \end{align}
     Let $E_N(l,(p,s))=(l,(p,e(s)))$, and let
-    $P_{E_N}\colon\mathcal R_N^{\mathrm{raw}}\to\mathcal R_N^{\mathrm{pkg}}$
+    $P_{E_N}\colon\mathcal R_N^{\mathrm{src}}\to\mathcal R_N^{\mathrm{pkg}}$
     be its permutation matrix. If $\widehat U^{N+2}$ is the endpoint
-    contraction of the inverse-compatible source factors, then the raw
+    contraction of the inverse-compatible source factors, then the
     matrix $A_N$ of Definition~\ref{def:mpug_inverse_word_endpoints} satisfies
     \begin{align}
         A_N & =P_{E_N}^\dagger\widehat U^{N+2}.
     \end{align}
-    Equivalently, for raw source indices $l,s$, configurations $p,q$, and
+    Equivalently, for second-cut source indices $l,s$, configurations $p,q$, and
     physical indices $a,b$,
     \begin{align}
         (A_N)_{(l,(p,s)),(a,(q,b))}
          & =(\widehat U^{N+2})_{(l,(p,e(s))),(a,(q,b))}.
     \end{align}
-    Thus $A_N\colon\mathcal H_N\to\mathcal R_N^{\mathrm{raw}}$ is
-    unitary. This transports only the right endpoint back along $e^{-1}$;
+    Thus $A_N\colon\mathcal H_N\to\mathcal R_N^{\mathrm{src}}$ is
+    unitary. This reindexes only the right endpoint back along $e^{-1}$;
     no spatial permutation is introduced. The total source length is
-    $N+2$, so $N=0$ has total length two. This is coordinate transport
+    $N+2$, so $N=0$ has total length two. This is coordinate reindexing
     of the endpoint construction in
     \cite[lines~2062--2099 and 5390--5487]{FrancoRubio2025MPUGauging}.
 \end{theorem}
@@ -3562,7 +3562,7 @@ truncated-chain sewing identity or a finite-group physical-action assertion.
     Hence $A_N=P_{E_N}^\dagger\widehat U^{N+2}$.
     Theorem~\ref{thm:mpug_inverse_truncation_unitary} makes
     $\widehat U^{N+2}$ unitary. Since $E_N$ is a bijection, its permutation
-    matrix satisfies $P_{E_N}^\dagger P_{E_N}=I_{\mathcal R_N^{\mathrm{raw}}}$
+    matrix satisfies $P_{E_N}^\dagger P_{E_N}=I_{\mathcal R_N^{\mathrm{src}}}$
     and $P_{E_N}P_{E_N}^\dagger=I_{\mathcal R_N^{\mathrm{pkg}}}$, so both Gram
     products collapse:
     \begin{align}
@@ -3573,7 +3573,7 @@ truncated-chain sewing identity or a finite-group physical-action assertion.
         A_NA_N^\dagger
          & =P_{E_N}^\dagger\widehat U^{N+2}(\widehat U^{N+2})^\dagger P_{E_N}
         =P_{E_N}^\dagger P_{E_N}
-        =I_{\mathcal R_N^{\mathrm{raw}}}.
+        =I_{\mathcal R_N^{\mathrm{src}}}.
     \end{align}
 \end{proof}
 
@@ -3587,16 +3587,16 @@ truncated-chain sewing identity or a finite-group physical-action assertion.
     form II. Suppose that $T$ is unitary, that
     $(\mathcal U^\dagger)^{ij}=T^\dagger\mathcal U^{ij}T$ for every
     physical pair, and that $T\overline T=\sigma I_D$ for $\sigma\in\C$.
-    For every bulk length $N\geq0$, take the raw endpoint matrices
-    $A_N\colon\mathcal H_N\to\mathcal R_N^{\mathrm{raw}}$ and
-    $B_N\colon\mathcal R_N^{\mathrm{raw}}\to\mathcal H_N$ of
+    For every bulk length $N\geq0$, take the endpoint matrices
+    $A_N\colon\mathcal H_N\to\mathcal R_N^{\mathrm{src}}$ and
+    $B_N\colon\mathcal R_N^{\mathrm{src}}\to\mathcal H_N$ of
     Definition~\ref{def:mpug_inverse_word_endpoints}, where
     $\mathcal H_N=\C^d\otimes(\C^{\Omega_N}\otimes\C^d)$ and
-    $\mathcal R_N^{\mathrm{raw}}=\C^\ell\otimes(\C^{\Omega_N}\otimes\C^\ell)$.
+    $\mathcal R_N^{\mathrm{src}}=\C^\ell\otimes(\C^{\Omega_N}\otimes\C^\ell)$.
     Here $\Omega_N$ is the set of length-$N$ physical configurations and
     $\ell$ is the second-cut rank. Then
     \begin{align}
-        A_NB_N & =\sigma I_{\mathcal R_N^{\mathrm{raw}}}, \\
+        A_NB_N & =\sigma I_{\mathcal R_N^{\mathrm{src}}}, \\
         B_NA_N & =\sigma I_{\mathcal H_N}.
     \end{align}
     There is a single phase, independent of $N$; the total source length
@@ -3619,7 +3619,7 @@ truncated-chain sewing identity or a finite-group physical-action assertion.
     Unitarity of $A_N$ now gives
     \begin{align}
         A_NB_N & =\sigma A_NA_N^\dagger
-        =\sigma I_{\mathcal R_N^{\mathrm{raw}}}, \\
+        =\sigma I_{\mathcal R_N^{\mathrm{src}}}, \\
         B_NA_N & =\sigma A_N^\dagger A_N
         =\sigma I_{\mathcal H_N}.
     \end{align}
@@ -3813,7 +3813,7 @@ the disjoint complement of the first.
          & =\left((A_nB_n)\otimes I_{\Omega_m}\right)C_{n,m}.
     \end{align}
     Theorem~\ref{thm:mpug_inverse_word_phase_cancellation} gives
-    $A_nB_n=\sigma I$ on the raw source space, and the scalar passes
+    $A_nB_n=\sigma I$ on the second-cut source space, and the scalar passes
     through the Kronecker product. The cancellation used is the one on
     the source space, not the reverse product $B_nA_n$.
 \end{proof}
@@ -3844,7 +3844,7 @@ the disjoint complement of the first.
     \uses{thm:mpug_simple_canonical_boundary_contractions,
         thm:mpu_all_later_simple_blockings}
     Theorem~\ref{thm:mpug_simple_canonical_boundary_contractions}
-    supplies the two-letter insertion identity with the recorded canonical
+    gives the two-letter insertion identity with the recorded canonical
     boundaries $(\Phi|_{(a,b)}=\delta_{a,b}$ and
     $|\rho)_{(a,b)}=\rho_{ba}$. Applying
     Theorem~\ref{thm:mpu_all_later_simple_blockings} to this fixed pair
@@ -4023,7 +4023,7 @@ Definition~\ref{def:mpug_group_representation}.
     \begin{align}
         (K_1^\dagger K_1)\otimes(K_2^\dagger K_2)=\mathbf 1.
     \end{align}
-    Theorem~\ref{thm:mpug_kronecker_identity_factors} supplies a nonzero
+    Theorem~\ref{thm:mpug_kronecker_identity_factors} gives a nonzero
     $c\in\C$ such that
     $K_1^\dagger K_1=c\mathbf 1$ and
     $K_2^\dagger K_2=c^{-1}\mathbf 1$. Positivity of the first Gram matrix
@@ -4103,10 +4103,10 @@ Definition~\ref{def:mpug_group_representation}.
         def:mpu_physical_adjoint_cfii_data,
         thm:mpu_physical_adjoint_normalized_flattening,
         thm:cpsv_map_star_transfer_fixed_point}
-    Physical adjunction preserves periodic unitarity and transports the
+    Physical adjunction preserves periodic unitarity and conjugates the
     canonical blocks without changing their dimensions. Writing
     $\mathcal E_{\mathcal U}$ for the transfer map of $\mathcal U$, the
-    transported fixed-point equation is
+    conjugated fixed-point equation is
     \begin{align}
         \mathcal E_{\mathcal U^\dagger}(\rho)
          & =\overline{\mathcal E_{\mathcal U}(\overline\rho)}
@@ -4114,7 +4114,7 @@ Definition~\ref{def:mpug_group_representation}.
         =\overline\rho=\rho,
     \end{align}
     using $\overline\rho=\rho$ and $\mathcal E_{\mathcal U}(\rho)=\rho$. The transfer map is invariant under the physical-index permutation, so the
-    transported data share the same fixed matrix.
+    conjugated data share the same fixed matrix.
 \end{proof}
 
 \begin{theorem}[Canonical boundary contractions]
@@ -4125,7 +4125,7 @@ Definition~\ref{def:mpug_group_representation}.
     \discussion{7317}
     \uses{def:mpu_canonical_form_ii, def:mpu_simple, def:mpu_double_layer}
     Let $\mathcal U$ be a simple MPU with a canonical-form-II presentation
-    and recorded fixed matrix $\rho$. Let $W$ be its raw double layer,
+    and recorded fixed matrix $\rho$. Let $W$ be its unnormalized double layer,
     put $(\Phi|_{(a,b)}=\delta_{a,b}$ and
     $|\rho)_{(a,b)}=\rho_{ba}$. For all physical indices $i,j,k,l$,
     \begin{align}
@@ -4144,7 +4144,7 @@ Definition~\ref{def:mpug_group_representation}.
     \uses{thm:mpu_canonical_form_ii_transfer_stabilization,
         thm:mpu_supplied_projector_simple2,
         thm:mpu_all_later_simple_blockings}
-    Aligning the simplicity witnesses with the canonical fixed pair using
+    Aligning the simplicity fixed vectors with the canonical fixed pair using
     the stabilized normalized transfer power gives~(\ref{eq:mpug_simple_canonical_split}) and
     $(\Phi|W^{ij}|\rho)=\delta_{ij}$. Contracting~(\ref{eq:mpug_simple_canonical_split}) on
     the left with $(\Phi|$ yields~(\ref{eq:mpug_simple_canonical_bdry_left}); contracting on the right with $|\rho)$ yields~(\ref{eq:mpug_simple_canonical_bdry_right}).
@@ -4158,7 +4158,7 @@ Definition~\ref{def:mpug_group_representation}.
         def:mpdo_physical_adjoint, def:mpu_double_layer}
     Let $\mathcal U$ be an MPU with a canonical-form-II presentation and
     recorded fixed matrix $\rho$. Assume that $\mathcal U^\dagger$ is
-    simple. Let $W_\dagger$ be the raw double layer of
+    simple. Let $W_\dagger$ be the unnormalized double layer of
     $\mathcal U^\dagger$, put $(\Phi|_{(a,b)}=\delta_{a,b}$ and
     $|\rho)_{(a,b)}=\rho_{ba}$. For all physical indices $i,j,k,l$,
     \begin{align}
@@ -4175,7 +4175,7 @@ Definition~\ref{def:mpug_group_representation}.
 \begin{proof}\leanok
     \uses{def:mpug_adjoint_canonical_boundaries,
         thm:mpug_simple_canonical_boundary_contractions}
-    Transport the canonical presentation to $\mathcal U^\dagger$ with
+    Pass the canonical presentation to $\mathcal U^\dagger$ with
     the same $\rho$, then apply
     Theorem~\ref{thm:mpug_simple_canonical_boundary_contractions}
     using the assumed simplicity of $\mathcal U^\dagger$.
@@ -4465,7 +4465,7 @@ space of $(MN)P$.
     For $(V^L,W^L)$, tensor the reduction $(F^<_{g,h},F^>_{g,h})$ with the
     identity on the third factor and compose with $(F^<_{gh,k},F^>_{gh,k})$.
     For $(V^R,W^R)$, tensor $(F^<_{h,k},F^>_{h,k})$ with the identity on the
-    first factor, compose with $(F^<_{g,hk},F^>_{g,hk})$, and transport along
+    first factor, compose with $(F^<_{g,hk},F^>_{g,hk})$, and conjugate by
     the associator $\mathsf a$; all three steps are
     Lemma~\ref{thm:mpug_reduction_composition}.
 \end{proof}
@@ -5804,7 +5804,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
          & =c_{AB}c_{BA}\braket{\psi_A}{\psi_A}.
         \notag
     \end{align}
-    If moreover $g$ is an involution of a normal representation, then
+    If in addition $g$ is an involution of a normal representation, then
     $c_{AB}c_{BA}=\omega(g,g,g)\,\omega(g,e,g)$. This is the detection of the
     anomaly of \cite[Section~V]{GarreRubioSchuch2024DomainWall} restricted to
     unitaries whose two ordered products on $\ket{\psi_A}$ agree with the
@@ -5828,7 +5828,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
 
 \subsection{Normalization of the first source factor}
 
-\begin{theorem}[The raw first-cut contraction]
+\begin{theorem}[The unsimplified first-cut contraction]
     \label{thm:mpug_raw_first_cut_contraction}
     \lean{MPOTensor.sourceCutM₁_adjointSimpleContraction_raw}
     \leanok
@@ -6005,7 +6005,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         def:mpdo_physical_adjoint, def:mpu_source_weight}
     Let $\mathcal U$ be an MPU in canonical form II with recorded fixed
     matrix $\rho$, and let $X_2,Y_2$ be its chosen second source factors.
-    Set $W=I_d\otimes\rho$ and let $s_\dagger$ be the raw contraction of
+    Set $W=I_d\otimes\rho$ and let $s_\dagger$ be the contraction of
     Definition~\ref{def:mpug_adjoint_simple_contraction}, applied to
     $\mathcal U^\dagger$ and this same $\rho$. Then
     \begin{align}
@@ -6057,7 +6057,7 @@ $T$ write $(T\cdot e)^i=\sum_j T^{ij}\otimes e^j$.
         thm:mpu_physical_adjoint_source_cuts,
         thm:mpu_source_factorizations, thm:mpu_source_factor_normalizations,
         thm:mpu_source_factor_right_inverses}
-    Transport canonical form II to $\mathcal U^\dagger$ with the same
+    Pass canonical form II to $\mathcal U^\dagger$ with the same
     $\rho$. Theorem~\ref{thm:mpug_adjoint_simple_scalar} gives
     $s_\dagger=\varepsilon\mathcal U^\dagger$, since physical adjunction
     is involutive and both required simplicity hypotheses hold.
@@ -6338,7 +6338,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
 
 \subsection{Uniqueness of the source decompositions}
 
-\begin{theorem}[Transport of the source contraction]
+\begin{theorem}[Transformation of the source contraction]
     \label{thm:mpug_source_contraction_transport}
     \lean{MPOTensor.sourceU_contraction_transport}
     \leanok
@@ -6943,7 +6943,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     (\ref{eq:mpug_completion_exists}), hence a member of $\mathfrak C(D)$.
 \end{proof}
 
-\begin{theorem}[Transport identity for a completion]
+\begin{theorem}[Comparison identity for a completion]
     \label{thm:mpug_completion_transport}
     \lean{TNLean.Algebra.DefectMaps.IsCompletion.mulVec_eq_prescribed,
         TNLean.Algebra.DefectMaps.IsCompletion.mulVec_eq_mulVec,
@@ -6970,7 +6970,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         \lambda_{a,b}^{c,d}\ket{\xi} & =\ket{\eta}.
         \label{eq:mpug_completion_transport}
     \end{align}
-    Taking $(c,d)=T_g(a,b)$ gives the transport identity used for the
+    Taking $(c,d)=T_g(a,b)$ gives the comparison identity used for the
     modified Gauss laws of~\cite[lines~4325--4335]{FrancoRubio2025MPUGauging}.
 \end{theorem}
 
@@ -7217,7 +7217,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     matter slices of $\ket{\Psi_\beta}$ and $\ket{\Psi_\alpha}$ over that
     window in $\mathcal K_{ag,g^{-1}b}$ and $\mathcal K_{a,b}$, and exact
     covariance~(\ref{eq:mpug_exact_defect_covariance}) relates them, so the
-    transport identity~(\ref{eq:mpug_completion_transport}) turns that vector
+    comparison identity~(\ref{eq:mpug_completion_transport}) turns that vector
     into $\ket{\Psi_\alpha}$. Identifying the label configuration $\beta$ with
     $\alpha$ through the bijection $T_{j,g}$ is the reindexing of the sum
     over gauge-label configurations in~(\ref{eq:mpug_gauged_vector}). Averaging~(\ref{eq:mpug_universal_invariant_vector})
@@ -8347,7 +8347,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     If $\omega_1(g,h)=\varphi(g)\varphi(h)\varphi(gh)^{-1}\omega_2(g,h)$,
     set $\eta=\varphi\circ f$. Substituting $g=f(a)$ and $h=f(b)$ gives
     $(f^*\omega_1)(a,b)=\eta(a)\eta(b)\eta(ab)^{-1}(f^*\omega_2)(a,b)$,
-    so $\eta$ witnesses the required cohomology relation.
+    so $\eta$ gives the required cohomology relation.
 \end{proof}
 
 \begin{lemma}[Restriction is the inhomogeneous restriction map]
@@ -8486,7 +8486,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         \label{eq:mpug_twisted_regular_matrices}
     \end{align}
     The source uses a $U(1)$-valued cocycle $\Omega$; taking $\Omega=\phi$
-    gives exactly the leg and inverse conventions in
+    gives the leg and inverse conventions in
     \cite[lines~412--418]{FrancoRubio2025MPUGauging}.
 \end{definition}
 
@@ -8662,8 +8662,8 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \uses{def:mpug_l_gauge, def:mpug_block_independence_factor}
     These are the four scalar $L$-symbol properties used in the proof of the
     source proposition. Write
-    $L'=(\beta,\gamma)\mathbin{\triangleright}L$ for a joint scalar gauge of a
-    supplied $L$-symbol. The four properties are, respectively, the existence
+    $L'=(\beta,\gamma)\mathbin{\triangleright}L$ for a joint scalar gauge of an
+    $L$-symbol. The four properties are, respectively, the existence
     of $\beta$ and $\gamma$ such that
     \begin{align}
         (L')^x_{g,h}       & =1
@@ -8833,7 +8833,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \uses{def:mpug_block_independence_gauge_forms,
         thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
         thm:mpug_block_independence_inverse_gauge}
-    Let $L$ be a supplied $L$-symbol compatible with a scalar $3$-cochain,
+    Let $L$ be an $L$-symbol compatible with a scalar $3$-cochain,
     and suppose that $\mathsf X$ is nonempty. A joint scalar gauge trivializes
     $L$ if and only if a joint scalar gauge makes $L^x_{g,h}$ independent of
     $x$.
@@ -8860,7 +8860,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \uses{def:mpug_block_independence_gauge_forms,
         thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
         thm:mpug_block_independence_inverse_gauge}
-    Let $L$ be a supplied $L$-symbol compatible with a scalar $3$-cochain,
+    Let $L$ be an $L$-symbol compatible with a scalar $3$-cochain,
     and suppose that $\mathsf X$ is nonempty. A joint scalar gauge trivializes
     $L$ if and only if a joint scalar gauge makes every
     $\ell^x_{a,b;r}$ equal to $1$.
@@ -8884,7 +8884,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     \uses{def:mpug_block_independence_gauge_forms,
         thm:mpug_l_gauge_composition, thm:mpug_l_gauge_preservation,
         thm:mpug_block_independence_inverse_gauge}
-    Let $L$ be a supplied $L$-symbol compatible with a scalar $3$-cochain,
+    Let $L$ be an $L$-symbol compatible with a scalar $3$-cochain,
     and suppose that $\mathsf X$ is nonempty. A joint scalar gauge trivializes
     $L$ if and only if a joint scalar gauge makes $\ell^x_{a,b;r}$ independent
     of $x$.
@@ -8909,7 +8909,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
         thm:mpug_trivial_iff_block_constant,
         thm:mpug_trivial_iff_trivial_ell,
         thm:mpug_trivial_iff_block_independent}
-    Let $L$ be a supplied $L$-symbol compatible with a scalar $3$-cochain,
+    Let $L$ be an $L$-symbol compatible with a scalar $3$-cochain,
     and suppose that $\mathsf X$ is nonempty. The four scalar gauge
     properties (\ref{eq:mpug_block_form_trivial}),
     (\ref{eq:mpug_block_form_constant}),
@@ -8931,7 +8931,7 @@ $\mathcal U^\dagger$; no additional boundary or Gram identities are assumed.
     three properties with the first.
 \end{proof}
 
-For a supplied compatible scalar $L$-symbol,
+For a compatible scalar $L$-symbol,
 Theorem~\ref{thm:mpug_block_independence_four_forms} establishes the
 algebraic equivalence among its four scalar gauge properties; the corresponding
 tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
@@ -8981,7 +8981,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
 \end{theorem}
 
 \begin{proof}\leanok
-    Transitivity supplies one element carrying $x_0$ to each $x$; choose the
+    Transitivity gives one element carrying $x_0$ to each $x$; choose the
     identity at $x=x_0$. Acting with (\ref{eq:mpug_stabilizer_transition}) on
     $x_0$ gives
     $k_{gx}^{-1}g(k_xx_0)=k_{gx}^{-1}(gx)=x_0$.
@@ -9029,7 +9029,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         L[\psi_1]=(1,\gamma)\mathbin{\triangleright}L[\psi_2].
         \label{eq:mpug_induced_cohomology_iff}
     \end{align}
-    If the cohomology relation is witnessed by
+    If the cohomology relation is given by
     $\varphi\colon H\to\C^\times$, with
     \begin{align}
         \psi_1(a,b)
@@ -9888,7 +9888,7 @@ tensor-level bridge to an underlying MPS--MPU pair is not asserted here.
         (h^{-1},g^{-1},g,g^{-1}),\quad
         (g,g^{-1},g,g^{-1}).
     \end{align}
-    The last identity at $g$, $h$, and $gh$ supplies
+    The last identity at $g$, $h$, and $gh$ gives
     (\ref{eq:mpug_sigma_inverse}) in the three required places.
 \end{proof}
 
@@ -10127,7 +10127,7 @@ $\sigma(s)$ in the setting of \cite[lines~5207--5338]{FrancoRubio2025MPUGauging}
         A_0\oplus A_1 & =A
         \label{eq:mpug_ghz_blocked_cluster_direct_sum}
     \end{align}
-    after the canonical identification of the direct-sum and product bond
+    after identifying the direct-sum and product bond
     coordinates. The local orthogonality is the observation at
     \cite[line~4481]{FrancoRubio2025MPUGauging}.
     % The theorem does not construct the Z4 x Z2 action, its virtual action
@@ -10218,7 +10218,7 @@ $\sigma(s)$ in the setting of \cite[lines~5207--5338]{FrancoRubio2025MPUGauging}
     Substitute $A_x^{(p,q)}=\delta_{p,x}C^q$ into
     (\ref{eq:mpug_ghz_cluster_block_covariance}). For each of the eight group
     elements and two block labels, matrix multiplication gives the displayed
-    table. Hermiticity and $V_{g,x}^2=\Id$ turn forward transport of the
+    table. Hermiticity and $V_{g,x}^2=\Id$ turn the forward action on the
     physical index into the stated conjugation identity.
     Finally, $ZX=iY$, so the only phase needed to compare the restriction
     with $Z^bX^a$ is $-i$ when $a=b=1$.
@@ -10240,7 +10240,7 @@ $N\geq3$ blocked sites, answering the scaling question of
 \cite[lines~5198--5204]{FrancoRubio2025MPUGauging} for this tuple only. The
 displayed tuple is not identified with a member of the full physical
 completion class of the CZX defect data; that identification requires the
-three defect domains and maps, which the displayed matrices do not supply.
+three defect domains and maps, which the displayed matrices do not specify.
 
 \subsection{Monomial operators and their common fixed space}
 
@@ -10412,7 +10412,7 @@ three defect domains and maps, which the displayed matrices do not supply.
     $v\mapsto(v_{(x,0)})_{x\in X_0}$.
 
     $E$ is injective. If $v\in\mathcal V(T)$ vanishes at one point of a
-    fiber, the transport relation and the connectivity statement of
+    fiber, the edge relation and the connectivity statement of
     Theorem~\ref{thm:mpug_hypercube_potential} make it vanish on the whole
     fiber. On a fiber with trivial holonomy, $v$ therefore vanishes as soon
     as $v_{(x,0)}=0$. On a fiber where (\ref{eq:mpug_trivial_holonomy})
@@ -10430,7 +10430,7 @@ three defect domains and maps, which the displayed matrices do not supply.
     Theorem~\ref{thm:mpug_hypercube_potential} for the invertible phases
     $\gamma\mapsto\varphi_j(x,\gamma)$, and set
     $v_{(x,\gamma)}=w_x\Phi_x(\gamma)$ there and $v=0$ on the other fibers.
-    The potential relation is the transport relation, so $v\in\mathcal V(T)$,
+    The potential relation is the edge relation, so $v\in\mathcal V(T)$,
     and $\Phi_x(0)=1$ gives $Ev=w$.
 
     Hence $\dim\mathcal V(T)=\dim\C^{X_0}=\#X_0$. For the relabelling
@@ -10895,7 +10895,7 @@ three defect domains and maps, which the displayed matrices do not supply.
         d_l=\operatorname{rank}M_2(B) & =4.
     \end{align}
     Thus the four-dimensional legs in
-    \cite[lines~4559--4659]{FrancoRubio2025MPUGauging} have the actual
+    \cite[lines~4559--4659]{FrancoRubio2025MPUGauging} have the
     source-cut dimensions.
 \end{theorem}
 
@@ -10961,7 +10961,7 @@ three defect domains and maps, which the displayed matrices do not supply.
         (\widehat Z_2)_{(i,\beta),e_l^{-1}(k)}
          & =\tfrac12\overline{(\widehat Y_2)_{e_l^{-1}(k),(i,\beta)}}.
     \end{align}
-    In particular, transport preserves the Pauli orientation $Y_{\beta t}$
+    In particular, pulling back preserves the Pauli orientation $Y_{\beta t}$
     in the first factor of
     \cite[lines~4611--4659]{FrancoRubio2025MPUGauging}.
     % This is an explicit SourceFactors witness, not an equality with the
@@ -10973,7 +10973,7 @@ three defect domains and maps, which the displayed matrices do not supply.
     \uses{thm:mpug_czx_displayed_cuts, thm:mpug_czx_displayed_grams,
         thm:mpug_czx_displayed_normalizations, def:mpug_czx_displayed_factors,
         def:mpug_czx_displayed_right_inverses}
-    Transport the cut factorizations and inverse identities along the
+    Pull back the cut factorizations and inverse identities along the
     two index bijections. Products, conjugate transposes, and identities
     are preserved. The weighted first normalization and the ordinary
     second normalization therefore hold in the source-rank coordinates.
@@ -11003,9 +11003,9 @@ three defect domains and maps, which the displayed matrices do not supply.
         \widehat X_1 & =AY_2^\dagger,  \\
         \widehat Y_1 & =X_2^\dagger B.
     \end{align}
-    With $\rho=I_2/2$, define the raw and the density-weighted comparisons
+    With $\rho=I_2/2$, define the unweighted and the density-weighted comparisons
     \begin{align}
-        K_{\mathrm{raw}} & =X_1^\dagger\widehat X_1,                 \\
+        K_{\mathrm{unw}} & =X_1^\dagger\widehat X_1,                 \\
         K_\rho           & =X_1^\dagger(I_4\otimes\rho)\widehat X_1.
     \end{align}
     These are the candidates and the comparison of
@@ -11043,16 +11043,16 @@ three defect domains and maps, which the displayed matrices do not supply.
     \uses{def:mpug_czx_displayed_comparison}
     On the displayed factors,
     \begin{align}
-        K_{\mathrm{raw}}        & =-2I_4,
+        K_{\mathrm{unw}}        & =-2I_4,
         \label{eq:mpug_czx_raw_comparison}      \\
         K_\rho                  & =-I_4,
         \label{eq:mpug_czx_weighted_comparison} \\
         Y_1\widehat Y_1^\dagger & =-I_4.
         \label{eq:mpug_czx_right_overlap}
     \end{align}
-    Consequently $K_{\mathrm{raw}}^\dagger K_{\mathrm{raw}}=4I_4$, so
-    $K_{\mathrm{raw}}$ is not unitary, and
-    $K_{\mathrm{raw}}\neq Y_1\widehat Y_1^\dagger$: the unweighted left
+    Consequently $K_{\mathrm{unw}}^\dagger K_{\mathrm{unw}}=4I_4$, so
+    $K_{\mathrm{unw}}$ is not unitary, and
+    $K_{\mathrm{unw}}\neq Y_1\widehat Y_1^\dagger$: the unweighted left
     overlap and the right overlap of
     \cite[lines~5438--5441]{FrancoRubio2025MPUGauging} disagree on these
     factors.
@@ -11087,7 +11087,7 @@ three defect domains and maps, which the displayed matrices do not supply.
         Y_1 & =K_\rho\widehat Y_1.
     \end{align}
     The weight is the one carried by the normalization of the first left
-    factor. This calculation concerns the explicit displayed witness of
+    factor. This calculation concerns the explicit displayed factors of
     Definition~\ref{def:mpug_czx_displayed_factors}, not choice-selected
     factors, so the unequal overlaps of
     Theorem~\ref{thm:mpug_czx_comparison_coordinates} diagnose the
@@ -11185,7 +11185,7 @@ three defect domains and maps, which the displayed matrices do not supply.
     \uses{def:mpug_czx_exact_tensor, def:mpug_czx_blocked_ghz, def:mpv}
     Let $B$ be the once-blocked CZX tensor, with both output $Z$ gates and
     the unnormalized Hadamard weights, and let $N>0$.
-    Transport the matrix product vector of the two-site-blocked GHZ tensor
+    Reindex the matrix product vector of the two-site-blocked GHZ tensor
     $A^{[2]}$ by the alphabet bijection $\varphi(2a+b)=(a,b)$:
     \begin{align}
         \psi_N(s) & =V^{(N)}(A^{[2]})_{(\varphi(s_1),\ldots,\varphi(s_N))},
@@ -11235,7 +11235,7 @@ unbuffered defect formulas.
     \leanok
     \uses{def:mpug_czx_exact_tensor, def:mpug_ghz_blocked_cluster_tensor,
         def:blocked_tensor}
-    For $x\in\{0,1\}$, let $A_x$ be the actual two-site block of the
+    For $x\in\{0,1\}$, let $A_x$ be the two-site block of the
     bond-one GHZ sector, with physical indices identified by
     $\varphi(2a+b)=(a,b)$. Thus $A_x^i=\delta_{i,3x}$.
     Write $B^{i,j}$ for the CZX tensor and define
@@ -11396,7 +11396,7 @@ unbuffered defect formulas.
     \uses{def:mpug_czx_acted_sectors, def:mpug_czx_printed_action_pair}
     For $x\in\{0,1\}$, define $V_x=p_xC_x$ and retain $W_x=q_x$.
     This is the local replacement of \cite{gap:fbc25_czx_action_empty_word},
-    not the literal printed pair. In coordinates $V_0=(i,-i)$ and
+    not the printed pair. In coordinates $V_0=(i,-i)$ and
     $V_1=(1,1)$, so neither is a scalar multiple of the corresponding
     printed row. No replacement in an unbuffered defect formula is asserted.
 \end{definition}
@@ -11507,7 +11507,7 @@ unbuffered defect formulas.
         def:mpug_czx_exact_tensor, threeMPU, def:mpo_to_mps,
         def:mps_rectangular_reduction,
         def:mps_reduction_exterior_buffer_length}
-    Let $B$ be the doubled-index tensor of the actual product
+    Let $B$ be the doubled-index tensor of the product
     $\mathcal U_g\cdot\mathcal U_g$
     (Definition~\ref{def:mpdo_operator_product} applied to
     Definition~\ref{def:mpug_czx_exact_tensor} with itself, viewed
@@ -11588,7 +11588,7 @@ unbuffered defect formulas.
     \end{align}
 \end{proof}
 
-\subsection{Literal fusion--action coordinate contractions}
+\subsection{Printed fusion--action coordinate contractions}
 
 The contractions below evaluate the printed action pair and right fusion
 cap of \cite[lines~4671--4694]{FrancoRubio2025MPUGauging} in fixed product-bond
@@ -11677,7 +11677,7 @@ block label, or physical gate is changed.
     displayed above.
 \end{proof}
 
-\begin{definition}[Literal fusion--action coefficient]
+\begin{definition}[Printed fusion--action coefficient]
     \label{def:mpug_czx_fusion_action_coefficient}
     \lean{MPOTensor.CZX.fusionActionCoefficient}
     \leanok
@@ -11693,12 +11693,12 @@ block label, or physical gate is changed.
     The one-by-one matrix on the right is identified with its sole entry.
 \end{definition}
 
-\begin{theorem}[Values of the literal coefficient]
+\begin{theorem}[Values of the printed coefficient]
     \label{thm:mpug_czx_fusion_action_coefficient_coordinates}
     \lean{MPOTensor.CZX.fusionActionCoefficient_coordinates}
     \leanok
     \uses{def:mpug_czx_fusion_action_coefficient}
-    The literal coefficients satisfy $c_0=1$ and $c_1=-1$.
+    The printed coefficients satisfy $c_0=1$ and $c_1=-1$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpug_czx_supported_letter_coordinates,
@@ -11727,7 +11727,7 @@ block label, or physical gate is changed.
     \uses{def:mpug_czx_sequential_action_bra,
         def:mpug_czx_sequential_action_ket, def:mpug_czx_fusion_action_letter,
         def:mpug_czx_fusion_action_coefficient, def:mpug_czx_fusion_caps}
-    For each $x\in\{0,1\}$, the literal rows, columns, and supported
+    For each $x\in\{0,1\}$, the printed rows, columns, and supported
     product letter satisfy
     \begin{align}
         P_xB_xQ_x & =1, & B_xW & =c_xB_xQ_x, & B_x^2 & =B_x.
@@ -11843,7 +11843,7 @@ block label, or physical gate is changed.
     \end{align}
     Each site index in $\{0,1,2,3\}$ is read as the pair of matter bits
     $(m^{(1)},m^{(2)})$ with $m^{(1)}$ the leading binary digit, and the
-    four-qubit operators are transported to the two-site matter space by
+    four-qubit operators are reindexed to the two-site matter space by
     this identification.
     % Source anchor: arXiv:2502.20257, lines 4503--5183 (CZX model and modified
     % fusion operator).
@@ -11888,7 +11888,7 @@ block label, or physical gate is changed.
         \label{eq:mpug_czx_tilde_lambda_action}
     \end{align}
     the exponents satisfy $f(\overline x)=e(x)+1$ and
-    $e(\overline x)=f(x)+1$. After transport to the two-site matter coordinates,
+    $e(\overline x)=f(x)+1$. After reindexing to the two-site matter coordinates,
     $w$ and $\tilde\lambda$ are unitary.
 \end{theorem}
 
@@ -12250,7 +12250,7 @@ block label, or physical gate is changed.
     operator; decoding the two-site window at $j$ into the bits of the sites
     $j$ and $j+1$ identifies its permutation with $\sigma_j$ and its phase
     with $i^{q_j(s)}$. Finally
-    Theorem~\ref{thm:mpug_czx_orbit_classification} transports both to the
+    Theorem~\ref{thm:mpug_czx_orbit_classification} reindexes both to the
     fiber coordinates.
 \end{proof}
 
@@ -12365,7 +12365,7 @@ eigenspace dimension differs at three and four blocked sites.
     \end{align}
     with
     $\tilde\lambda R_\star\ket{x}=-i(-1)^{f(x)+r_\star(x)}\ket{\overline x}$;
-    after transport to the two-site matter coordinates it is unitary. It has the
+    after reindexing to the two-site matter coordinates it is unitary. It has the
     same action as $R^{\mathrm{CZX}}$ on that defect subspace. The four defect
     domains and prescribed maps of
     Definition~\ref{def:mpug_czx_defect_maps} determine a four-sector
@@ -12546,7 +12546,7 @@ eigenspace dimension differs at three and four blocked sites.
     operator; the permutation part is that of
     Theorem~\ref{thm:mpug_czx_placed_operators}, and decoding the two-site
     window at $j$ identifies the phase with $i^{q^\star_j(s)}$. Finally
-    Theorem~\ref{thm:mpug_czx_orbit_classification} transports both to the
+    Theorem~\ref{thm:mpug_czx_orbit_classification} reindexes both to the
     fiber coordinates.
 \end{proof}
 
@@ -12720,7 +12720,7 @@ subspaces and prescribed maps are evaluated by finite contraction in
     hence is a unit vector.
 \end{proof}
 
-\begin{lemma}[Transported monomial operators on the computational basis]
+\begin{lemma}[Reindexed monomial operators on the computational basis]
     \label{lem:mpug_czx_matter_monomial_action}
     \lean{MPOTensor.CZX.matterKet,
         MPOTensor.CZX.matterMatrix_monomial_mulVec_matterKet}
@@ -12729,7 +12729,7 @@ subspaces and prescribed maps are evaluated by finite contraction in
         def:mpug_czx_defect_vectors}
     Write $\ket{x}$ for the computational basis vector of the two-site matter
     space attached to $x\in\mathbb F_2^4$ by the qubit numbering of
-    Definition~\ref{def:mpug_czx_defect_vectors}. After transport to that
+    Definition~\ref{def:mpug_czx_defect_vectors}. After reindexing to that
     space a monomial four-qubit operator still acts on the computational basis
     by its phase and its permutation, so that for every $x\in\mathbb F_2^4$
     \begin{align}
@@ -12740,7 +12740,7 @@ subspaces and prescribed maps are evaluated by finite contraction in
 
 \begin{proof}\leanok
     \uses{thm:mpug_monomial_matrix_laws, def:mpug_czx_circuit_tuple}
-    Transport is the simultaneous relabelling of rows and columns along the
+    Reindexing is the simultaneous relabelling of rows and columns along the
     qubit numbering. It carries $M(\sigma,\varphi)$ to the monomial matrix of
     the relabelled permutation and phase, and carries the basis vector of $x$
     to $\ket{x}$, so reading (\ref{eq:mpug_monomial_matrix}) in the new labels
@@ -12859,7 +12859,7 @@ subspaces and prescribed maps are evaluated by finite contraction in
         D_{a,b} & =\sum_{x\in\mathbb F_2}\ketbra{v(e,ab,x)}{v(a,b,x)}
         \label{eq:mpug_czx_prescribed_map}
     \end{align}
-    of the two-site matter space. It is assembled from the defect vectors
+    of the two-site matter space. It is formed from the defect vectors
     (\ref{eq:mpug_czx_v_ee})--(\ref{eq:mpug_czx_v_gg}) and not from the
     circuits $w$ and $\tilde\lambda$ of
     Definition~\ref{def:mpug_czx_circuit_tuple}.

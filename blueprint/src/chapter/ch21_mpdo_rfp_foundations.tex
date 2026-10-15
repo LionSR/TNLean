@@ -18,7 +18,7 @@
     condition of \cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{definition}[Literal physical-trace idempotence]
+\begin{definition}[Physical-trace idempotence]
     \label{def:mpo_physical_trace_idempotence}
     \lean{MPOTensor.IsPhysicalTraceIdempotent}
     \leanok
@@ -29,16 +29,16 @@
         \mathcal T_M^2 & = \mathcal T_M.
         \notag
     \end{align}
-    This is the literal fixed-tensor condition of
+    This is the fixed-tensor condition of
     \cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[Equation for literal physical-trace idempotence]
+\begin{theorem}[Equation for physical-trace idempotence]
     \label{thm:mpo_physical_trace_idempotence_iff}
     \lean{MPOTensor.isPhysicalTraceIdempotent_iff}
     \leanok
     \uses{def:mpo_physical_trace_idempotence}
-    An MPO tensor satisfies literal physical-trace idempotence if and only if
+    An MPO tensor has idempotent physical-trace transfer if and only if
     $\mathcal T_M^2=\mathcal T_M$.
 \end{theorem}
 
@@ -77,8 +77,8 @@
     \leanok
     \uses{def:mpo_physical_trace_idempotence,
         def:mpdo_periodic_two_point_correlation}
-    Let $M$ be an MPO tensor satisfying the literal zero-correlation-length
-    condition. Fix $O_1,O_2$ and a middle gap $g_{\mathrm{mid}}\geq0$.
+    Let $M$ be an MPO tensor satisfying the zero-correlation-length
+    condition $\mathcal T_M^2=\mathcal T_M$. Fix $O_1,O_2$ and a middle gap $g_{\mathrm{mid}}\geq0$.
     For two positive wrapping gaps
     $g_{\mathrm{wrap}},g'_{\mathrm{wrap}}>0$,
     \begin{align}
@@ -108,8 +108,8 @@
     \leanok
     \uses{def:mpo_physical_trace_idempotence,
         def:mpdo_periodic_two_point_correlation}
-    Let $M$ be an MPO tensor satisfying the literal zero-correlation-length
-    condition. Fix $O_1,O_2$. For two pairs of positive complementary gaps
+    Let $M$ be an MPO tensor satisfying the zero-correlation-length
+    condition $\mathcal T_M^2=\mathcal T_M$. Fix $O_1,O_2$. For two pairs of positive complementary gaps
     $g_{\mathrm{mid}},g_{\mathrm{wrap}}>0$ and
     $g'_{\mathrm{mid}},g'_{\mathrm{wrap}}>0$,
     \begin{align}
@@ -146,7 +146,7 @@
         \notag
     \end{align}
     This scale-invariant condition excludes the zero transfer while remaining
-    invariant under positive rescaling of $M$, extending the literal $\lambda=1$
+    invariant under positive rescaling of $M$, extending the $\lambda=1$
     diagram of \cite[Definition~4.2]{Cirac2016MPDO_arXiv}
     \cite{gap:cpsv16_zcl_canonical_form_normalization}.
 \end{definition}
@@ -167,13 +167,13 @@
     Definition~\ref{def:mpo_source_zcl}.
 \end{proof}
 
-\begin{theorem}[Literal idempotence gives the up-to-scalar physical-trace
+\begin{theorem}[Physical-trace idempotence gives the up-to-scalar physical-trace
         relation]
     \label{thm:mpo_source_zcl_of_physical_trace_idempotent}
     \lean{MPOTensor.IsPhysicalTraceIdempotent.isSourceZCL}
     \leanok
     \uses{def:mpo_source_zcl, def:mpo_physical_trace_idempotence}
-    If $\mathcal T_M\ne0$ and $M$ has literal physical-trace idempotence, then $M$
+    If $\mathcal T_M\ne0$ and $M$ has idempotent physical-trace transfer, then $M$
     satisfies the nonzero up-to-scalar physical-trace relation.
 \end{theorem}
 
@@ -205,7 +205,7 @@
         \tn[skin=mpo]{M} & \tn[skin=mpo]{M}
     \end{tenkz}
 \end{center}
-This is the literal identity in
+This is the identity in
 \cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv};
 Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
@@ -409,7 +409,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     Let $K$ be the bond-two MPO tensor of
     Theorem~\ref{thm:kato_deformed_mpdo_fixed_tensor_obstruction}, and let
     $A_K$ be its doubled-index MPS tensor, an MPS tensor with four physical
-    symbols. Then $A_K$ is in literal CPSV canonical form: every letter is
+    symbols. Then $A_K$ is in CPSV canonical form: every letter is
     the weighted direct sum
     $A_K^{(i,j)}=\mu_0A_0^{(i,j)}\oplus\mu_1A_1^{(i,j)}$ for
     $i,j\in\{0,1\}$, with weights and bond-one normal tensors
@@ -421,7 +421,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         A_1^{(i,j)} & =(-1)^i\,\frac{\delta_{ij}}{\sqrt2}.
         \notag
     \end{align}
-    Moreover, $K$ saturates the area law: for every $N\geq2$ and every
+    In addition, $K$ saturates the area law: for every $N\geq2$ and every
     $1\leq L<N$, the reduced state of the first $L$ sites is maximally
     mixed,
     \begin{align}
@@ -434,7 +434,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         =N\log2-S_N^{(N)}(K)$ is constant in $L$, giving
     $I_1=I_2=\cdots=I_{\lfloor N/2\rfloor}$.
     Consequently, there is a bond-two MPO tensor whose doubled-index MPS
-    tensor is in literal CPSV canonical form, which generates an MPDO, whose
+    tensor is in CPSV canonical form, which generates an MPDO, whose
     physical-trace transfer is idempotent, which saturates the area law, and
     which is not a renormalization fixed point in the sense of
     Definition~\ref{def:is_rfp_via_ts}.
@@ -458,7 +458,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     $\sum_{i,j}A_k^{(i,j)}\,\overline{A_k^{(i,j)}}=1$, hence has identity
     transfer map and is a normal tensor by
     Lemma~\ref{lem:bond_dimension_one_identity_transfer_normal}. The
-    weighted direct sum of positive-dimensional normal blocks is in literal
+    weighted direct sum of positive-dimensional normal blocks is in
     CPSV canonical form by Definition~\ref{def:cpsv_canonical_form}.
 
     Since $\tr\rho_N(K)=1$, the normalized state is $\rho_N(K)$ itself.
@@ -473,7 +473,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     $1\leq L<\lfloor N/2\rfloor$, so $K$ saturates the area law by
     Definition~\ref{def:is_sal}.
 
-    Theorem~\ref{thm:kato_deformed_mpdo_fixed_tensor_obstruction} supplies
+    Theorem~\ref{thm:kato_deformed_mpdo_fixed_tensor_obstruction} establishes
     the remaining three properties: $K$ generates an MPDO, its
     physical-trace transfer is idempotent, and it is not a renormalization
     fixed point. Together with canonical form and area-law saturation, this
@@ -660,7 +660,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
 \begin{proof}\leanok
     \uses{thm:prfp_is_lpdo, thm:lpdo_is_mpdo}
-    Apply Theorem~\ref{thm:lpdo_is_mpdo} to the local purification supplied by
+    Apply Theorem~\ref{thm:lpdo_is_mpdo} to the local purification given by
     Theorem~\ref{thm:prfp_is_lpdo}.
 \end{proof}
 
@@ -684,7 +684,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
     induced transfer map is $\tfrac12\cdot\id$ and
     $\E_M\circ\E_M=\tfrac14\cdot\id\neq\E_M$. The trace contraction has
     dropped the leading eigenvalue from $1$ to $\tfrac12$. By contrast, the
-    physical-trace transfer is $1$ and hence is literally idempotent. Thus this
+    physical-trace transfer is $1$ and hence is idempotent. Thus this
     example separates doubled-index idempotence from the paper's
     physical-trace condition.
 \end{proof}
@@ -783,7 +783,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
         \mathcal T_M^2 & = \mathcal T_M.
         \notag
     \end{align}
-    This establishes the forward implication from PRFP to literal zero
+    This establishes the forward implication from PRFP to zero
     correlation length \cite[Theorem~4.4]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
@@ -854,7 +854,7 @@ Definition~\ref{def:mpo_source_zcl} permits the positive factor $\lambda$.
 
 \begin{proof}\leanok
     \uses{thm:prfp_physical_trace_idempotent, thm:mpo_source_zcl_of_physical_trace_idempotent}
-    Theorem~\ref{thm:prfp_physical_trace_idempotent} gives literal
+    Theorem~\ref{thm:prfp_physical_trace_idempotent} gives physical-trace
     idempotence, and the nonzero hypothesis gives the scalar-one case of
     Definition~\ref{def:mpo_source_zcl}.
 \end{proof}

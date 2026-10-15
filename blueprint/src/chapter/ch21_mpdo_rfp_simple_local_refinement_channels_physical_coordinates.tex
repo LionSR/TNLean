@@ -3,7 +3,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalTMap}
     \leanok
     \uses{def:mpdo_physical_sector_t_map, def:mpdo_physical_sector_closure_coordinates}
-    Transporting $\mathcal T$ through the canonical two-site and three-site
+    Conjugating $\mathcal T$ by the canonical two-site and three-site
     coordinate identifications gives a channel
     $\widehat{\mathcal T}:\MN{q^2}\longrightarrow\MN{q^3}$, where all
     multiple physical indices are associated to the right.
@@ -40,7 +40,7 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_sector_t_closure_identity}
-    Transport the sector-coordinate identity through the inverse three-site
+    Rewrite the sector-coordinate identity through the inverse three-site
     coordinate identification.
 \end{proof}
 
@@ -49,7 +49,7 @@
     \lean{MPOTensor.PhysicalSectorFactorization.NeighboringTraceFactorization.physicalSMap}
     \leanok
     \uses{def:mpdo_physical_sector_s_map, def:mpdo_physical_sector_closure_coordinates}
-    Transporting $\mathcal S$ through the canonical three-site and two-site
+    Conjugating $\mathcal S$ by the canonical three-site and two-site
     coordinate identifications gives a channel
     $\widehat{\mathcal S}:\MN{q^3}\longrightarrow\MN{q^2}$.
 \end{definition}
@@ -81,7 +81,7 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_physical_sector_s_closure_identity}
-    Transport the sector-coordinate identity through the inverse two-site
+    Rewrite the sector-coordinate identity through the inverse two-site
     coordinate identification.
 \end{proof}
 
@@ -408,7 +408,7 @@
     indices as four physical indices. The one-site and two-site closures of
     $\widehat{\mathcal K}^{[2]}$ thereby become respectively
     $\widehat{\mathcal K}_2(X)$ and $\widehat{\mathcal K}_4(X)$.
-    Transporting the two channels through these permutation identifications
+    Conjugating the two channels by these permutation identifications
     preserves complete positivity and trace, and the two closure identities
     give the required equations in Definition~\ref{def:is_rfp_via_ts}.
 \end{proof}
@@ -442,14 +442,14 @@
     $\mathcal K^{[2]}$ is a renormalization fixed point in the sense of
     Definition~\ref{def:is_rfp_via_ts}. This is the conditional channel
     construction of \cite[Proposition~C.7]{Cirac2016MPDO_arXiv} for one
-    supplied factorization. It does not extend to the printed all-BNT
+    given factorization. It does not extend to the printed all-BNT
     implication \cite[Theorem~4.9, (iv)$\Rightarrow$(v)]
     {Cirac2016MPDO_arXiv}: condition~(iv) constrains each BNT representative
-    but not its raw repeated-copy weights, and that implication is refuted by
+    but not its unnormalized repeated-copy weights, and that implication is refuted by
     Theorem~\ref{thm:mpdo_theorem49_iv_to_v_counterexample}. After condition
     (ii) has forced equal copy weights and their common values have been
     absorbed, these one-factorization channels can be inputs to the
-    projector-controlled channel construction when one factorization is supplied
+    projector-controlled channel construction when one factorization is given
     for each representative. The printed route obtains those factorizations
     from the false Proposition~C.12, so this conditional theorem does not prove
     the bare implication (ii)$\Rightarrow$(v). It also does not exclude
@@ -458,8 +458,8 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_blocked_sector_coordinate_tensor_is_rfp_via_ts}
-    Transport the refinement and coarse-graining channels for
-    $\widehat{\mathcal K}^{[2]}$ through the two-site and four-site tensor
+    Conjugate the refinement and coarse-graining channels for
+    $\widehat{\mathcal K}^{[2]}$ by the two-site and four-site tensor
     powers of the physical isometry, as in
     (\ref{eq:mpdo_physical_isometry_transport}). These unitary congruences
     preserve complete positivity and trace, while the corresponding closure
@@ -614,7 +614,7 @@
     of the blocked input. On one blocked site the corresponding projection is
     $P_s\otimes I$; on two blocked sites it acts on the first original site
     and as the identity on the remaining three. For every virtual boundary
-    $X$, the boundary supplied to sector $s$ is the sum of the diagonal copy
+    $X$, the boundary assigned to sector $s$ is the sum of the diagonal copy
     blocks of $G^{-1}XG$ over that representative. The same boundary is used
     in the length-two and length-four identities. This is the conditional
     composition underlying \cite[Appendix~C.2, lines~1646--1665 and
@@ -625,7 +625,7 @@
 \begin{proof}\leanok
     \uses{thm:mpdo_absorbed_representative_boundary_decomposition}
     Write $\mathcal C_N(A,X)$ for the length-$N$ closure of $A$ with boundary
-    $X$, and write $B_s(X)$ for the boundary supplied to representative $s$.
+    $X$, and write $B_s(X)$ for the boundary assigned to representative $s$.
     At both relevant lengths the boundary decomposition gives
     \begin{align}
         \mathcal C_N(K,X)
@@ -674,7 +674,7 @@
     are equal. Hence $\sum_sP_s=I$, and
     Theorem~\ref{thm:mpdo_absorbed_bnt_channel_assembly} applies directly.
     Assume from now on that the physical dimension is positive. Fixed basis
-    vectors witness that the two output spaces are nonempty; normalizing
+    vectors show that the two output spaces are nonempty; normalizing
     their identity matrices gives maximally mixed density matrices
     $\rho_2\in\MN{q^2}$ and $\rho_4\in\MN{q^4}$.
 
@@ -691,7 +691,7 @@
     for every virtual boundary $X$.
 
     By hypothesis every $\mathcal K_s^{[2]}$ carries trace-preserving
-    completely positive maps $\mathcal S_s,\mathcal T_s$ witnessing its
+    completely positive maps $\mathcal S_s,\mathcal T_s$ realizing its
     fixed-point property. Sum these channels after compression by the
     matching first-site projection,
     $\mathcal S_{\mathrm{act}}(Y)=\sum_s\mathcal S_s(P_{s,4}YP_{s,4})$ and
@@ -776,7 +776,7 @@
     identities, Corollary~\ref{cor:mpdo_common_weight_bnt_layer_supports}
     gives pairwise orthogonal two-sided outer physical supports, realizing
     the projection onto each local subspace in the closing proof of the
-    source. Each supplied trace factorization gives a blocked channel pair
+    source. Each given trace factorization yields a blocked channel pair
     for its representative by
     Theorem~\ref{thm:mpdo_blocked_original_tensor_is_rfp_via_ts}. The
     projector-controlled combination of these pairs across the outer
@@ -825,9 +825,9 @@
          & =\mathcal K_N^A(X)
         \notag
     \end{align}
-    for every virtual boundary $X$. This is a general conditional transport
+    for every virtual boundary $X$. This is a general conditional recovery
     construction: it applies after an isometric physical embedding has been
-    supplied. It neither constructs nor implies the refinement channel asserted
+    given. It neither constructs nor implies the refinement channel asserted
     in Proposition~C.15.
 \end{lemma}
 
@@ -863,7 +863,7 @@
     canonical form, is simple in the sense of Definition~4.7, and is in biCF.
     Its two normal representatives occur once with coefficients $\mu$ and $1$,
     where $0<|\mu|<1$, so the paper's global normalization convention holds.
-    The tensor saturates the area law and has literal zero correlation length,
+    The tensor saturates the area law and has unscaled zero correlation length,
     \begin{align}
         \mathcal T_K^2 & =\mathcal T_K.
         \notag
@@ -910,11 +910,11 @@
          & =V^{\otimes N}\mathcal K_N^A(X)(V^{\otimes N})^\dagger.
         \label{eq:mpdo_counterexample_embedded_physical}
     \end{align}
-    Lemma~\ref{lem:mpdo_sitewise_physical_recovery} supplies a
+    Lemma~\ref{lem:mpdo_sitewise_physical_recovery} gives a
     trace-preserving completely positive left inverse to (\ref{eq:mpdo_counterexample_embedded_physical}).
     Therefore a refinement map for the ambient tensor would descend to one of
     the two forbidden maps above. Finally, the refinement map of an RFP
-    structure for $K^{[2]}$, transported from blocked coordinates, would give
+    structure for $K^{[2]}$, rewritten from blocked coordinates, would give
     the forbidden two-to-four map for $K$.
 \end{proof}
 

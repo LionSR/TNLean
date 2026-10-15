@@ -371,7 +371,7 @@ without sector projections.
     lift $B=V^{\otimes 2}B_P(V^{\otimes 2})^*$ is positive, its cyclic translates
     commute pairwise on every such ambient chain, and
     $(P\otimes P)B(P\otimes P)=B$.
-    Moreover, for every $N\geq2$ one has the exact identity
+    For every $N\geq2$, one also has the exact identity
     \begin{align}
         \rho^{(N)}(K)
          & =\prod_{i=0}^{N-1}B_{i,i+1}.
@@ -382,7 +382,7 @@ without sector projections.
 \begin{proof}\leanok
     Theorem~\ref{thm:mpdo_physical_support_restriction_sal} gives SAL for the
     injective restricted tensor, so
-    \cite[Proposition~C.8]{Cirac2016MPDO_arXiv} supplies its positive bond. Since
+    \cite[Proposition~C.8]{Cirac2016MPDO_arXiv} gives its positive bond. Since
     $V^*V=\Id$, positivity is preserved under conjugation by $V^{\otimes 2}$. Also,
     $V^{\otimes 2}(V^{\otimes 2})^*=P\otimes P$; multiplying the lifted bond
     by this projection on either side therefore leaves it unchanged.
@@ -450,7 +450,7 @@ without sector projections.
 \begin{proof}\leanok
     For $N\geq2$, the sector operator is a positive scalar multiple of a
     product of commuting positive bonds, hence is positive semidefinite. The
-    one-site hypothesis supplies the only remaining positive chain length.
+    one-site hypothesis covers the only remaining positive chain length.
 \end{proof}
 
 \begin{definition}[Exactly realized orthogonal commuting sector products]
@@ -538,10 +538,10 @@ without sector projections.
     The positive neighboring operators determine the positive commuting bond
     on this restricted space. Conjugating by $V_x^{\otimes2}$ preserves
     positivity and commutativity, gives the displayed support equation, and
-    transports every nonempty periodic product exactly.
+    carries every nonempty periodic product to the ambient space.
 \end{proof}
 
-\begin{theorem}[SAL supplies orthogonally supported BNT sector products]
+\begin{theorem}[SAL gives orthogonally supported BNT sector products]
     \label{thm:mpdo_bnt_sector_sal_commuting_family}
     \lean{MPOTensor.nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL}
     \leanok
@@ -903,7 +903,7 @@ without sector projections.
 
 \begin{proof}\leanok
     Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_marginal_support}
-    supplies the support of every nonempty marginal. Applying
+    establishes the support of every nonempty marginal. Applying
     Theorem~\ref{thm:mpdo_proportional_local_orthogonal_sum_sal}, its
     sector weights contain the outer scalar $c_N$, while the inner scalars
     $a_{x,N}$ have already disappeared under sector normalization.
@@ -1013,7 +1013,7 @@ without sector projections.
     one-letter span and the nonzero absorbed weights give one-site injectivity
     by Theorem~\ref{thm:mpdo_bnt_physical_support_restriction}. Ambient source
     zero correlation length descends to every $K_x$ by
-    Theorem~\ref{thm:mpdo_absorbed_bnt_sector_zcl}. Finally, the supplied
+    Theorem~\ref{thm:mpdo_absorbed_bnt_sector_zcl}. Finally, the assumed
     positive-length sector-decomposition identity gives
     $\rho^{(N)}(M)=\sum_x n_x\rho^{(N)}(K_x)$ for every $N>0$, so
     Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_zcl_sal}
@@ -1028,8 +1028,8 @@ without sector projections.
     Let $M$ have a nonempty basis-of-normal-tensors decomposition with
     positive copy numbers $n_x$ and copy-independent weights $\mu_x$. Put
     $K_x=\mu_xA_x$, and suppose that the decomposition generates the same
-    positive-length matrix product vectors as $M$. If an independently
-    supplied orthogonally supported commuting sector family realizes the
+    positive-length matrix product vectors as $M$. If an
+    orthogonally supported commuting sector family realizes the
     tensors $K_x$, and every $K_x$ satisfies SAL, then $M$ satisfies SAL.
 \end{corollary}
 
@@ -1062,7 +1062,7 @@ without sector projections.
 \begin{proof}\leanok
     Apply
     Theorem~\ref{thm:mpdo_orthogonal_commuting_sectors_gsnnch} to the
-    positive-length BNT decomposition. Its coefficients are exactly the
+    positive-length BNT decomposition. Its coefficients are the
     copy numbers $n_x$ after the common weights have been absorbed.
 \end{proof}
 
@@ -1087,12 +1087,12 @@ without sector projections.
 \end{corollary}
 
 \begin{proof}\leanok
-    Theorem~\ref{thm:mpdo_bnt_sector_sal_commuting_family} supplies the
+    Theorem~\ref{thm:mpdo_bnt_sector_sal_commuting_family} gives the
     orthogonally supported commuting sector products. Apply
     Corollary~\ref{cor:mpdo_bnt_orthogonal_commuting_sectors_gsnnch}.
 \end{proof}
 
-\begin{lemma}[Cyclic-shift transport of an embedded local operator]
+\begin{lemma}[Cyclic-shift action on an embedded local operator]
     \label{lem:mpdo_gsnnch_shift_transport}
     \lean{MPOTensor.embedLocalOperator_submatrix_rotateConfig}
     \leanok
@@ -1128,7 +1128,7 @@ without sector projections.
     Translates with disjoint windows commute because they act on disjoint
     sites, and two length-two windows overlap only when their starting sites
     coincide or are cyclic neighbors. For the neighboring pairs, applying the
-    transport identity of Lemma~\ref{lem:mpdo_gsnnch_shift_transport} $p$
+    cyclic-shift identity of Lemma~\ref{lem:mpdo_gsnnch_shift_transport} $p$
     times to the neighboring commutation
     $[\tau_0(B^{(x)}),\tau_1(B^{(x)})]=0$ of
     Definition~\ref{def:mpdo_source_gsnnch} gives
@@ -1204,7 +1204,7 @@ without sector projections.
 \end{lemma}
 
 \begin{proof}\leanok
-    By the transport identity of Lemma~\ref{lem:mpdo_gsnnch_shift_transport},
+    By Lemma~\ref{lem:mpdo_gsnnch_shift_transport},
     the cyclic shift carries each translate $\tau_j(B^{(x)})$ to
     $\tau_{j+1}(B^{(x)})$, so it permutes the factors of each sector product
     cyclically. All factors commute by
