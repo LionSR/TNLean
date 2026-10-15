@@ -1520,8 +1520,8 @@ left multiplication, right vector $b$ and left functional the trace.
     At step $j$, increment temporary coordinate $j$ modulo $d$ when
     data coordinate $j$ is zero and either $j=0$ or the preceding
     temporary coordinate is one. This is a reversible permutation
-    on the full register. Put $c_d=38(d^3)^6+1$; a step has gate
-    count $4ac_d$ after routing.
+    on the full register. Put $c_d=38(d^3)^6+1$; a step uses at
+    most $4ac_d$ gates after routing.
 \end{definition}
 
 \begin{theorem}[Conjunction on the entire logical space]
