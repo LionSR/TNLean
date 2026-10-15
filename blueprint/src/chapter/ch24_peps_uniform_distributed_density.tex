@@ -8,6 +8,7 @@ The reduction of polynomial-dimensional messages is treated separately.
 \begin{definition}[Original input and output data]
     \label{def:peps_original_construction_data}
     \lean{TNLean.PEPS.PairEffect.DistributedConstructionData}
+    \leanok
     Fix a finite nonempty party set, a finite-dimensional original memory at
     each party, a normalized vector in each memory, one intended physical
     output register at each party in a fixed order, and finite-dimensional
@@ -21,6 +22,7 @@ The reduction of polynomial-dimensional messages is treated separately.
 \begin{definition}[Original construction with prescribed gate operators]
     \label{def:peps_original_gate_construction}
     \lean{TNLean.PEPS.PairEffect.GateMapConstruction}
+    \leanok
     \uses{def:peps_original_construction_data,def:peps_approximate_original_operators}
     Equip the original input and output data with a fixed chronology and an
     original operator at each nonprivate gate occurrence. The reference
@@ -31,6 +33,7 @@ The reduction of polynomial-dimensional messages is treated separately.
 \begin{definition}[Product input of an original gate construction]
     \label{def:peps_original_gate_construction_input}
     \lean{TNLean.PEPS.PairEffect.GateMapConstruction.input}
+    \leanok
     \uses{def:peps_original_gate_construction}
     The original input is the tensor product of the recorded normalized
     party vectors.
@@ -39,6 +42,7 @@ The reduction of polynomial-dimensional messages is treated separately.
 \begin{definition}[Physical density of the prescribed original gates]
     \label{def:peps_original_gate_construction_density}
     \lean{TNLean.PEPS.PairEffect.GateMapConstruction.physicalDensity}
+    \leanok
     \uses{def:peps_original_gate_construction_input,def:peps_original_gate_density}
     If $U$ is evaluation of the prescribed original gate operators on the
     fixed chronology and $\psi$ is the product input, the original physical
@@ -60,6 +64,7 @@ at the gate occurrences may be replaced independently.
 \begin{definition}[Monomial lists on a fixed chronology]
     \label{def:peps_fixed_chronology_lists}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.GateLists}
+    \leanok
     \uses{def:peps_approximate_original_operators}
     An expansion family consists of one finite monomial list $\mathcal L_g$
     on the original local input and output spaces of each nonprivate gate
@@ -70,6 +75,7 @@ at the gate occurrences may be replaced independently.
 \begin{definition}[Reexpansion of a fixed chronology]
     \label{def:peps_fixed_chronology_reexpansion}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.reexpand}
+    \leanok
     \uses{def:peps_fixed_chronology_lists}
     Write $\mathcal C[\mathcal L]$ for the circuit obtained by replacing the
     list at each nonprivate occurrence $g$ by $\mathcal L_g$. Every private map,
@@ -80,6 +86,7 @@ at the gate occurrences may be replaced independently.
 \begin{definition}[Original operators after reexpansion]
     \label{def:peps_fixed_chronology_original_operators}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.reexpandGateMaps}
+    \leanok
     \uses{def:peps_fixed_chronology_reexpansion,def:peps_approximate_original_operators}
     Assign to the occurrence corresponding to $g$ in
     $\mathcal C[\mathcal L]$ precisely the original operator $G_g$.
@@ -89,6 +96,7 @@ at the gate occurrences may be replaced independently.
 \begin{theorem}[Original-operator evaluation is unchanged]
     \label{thm:peps_fixed_chronology_evaluation}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.evalWithGateMaps_reexpand}
+    \leanok
     \uses{def:peps_fixed_chronology_original_operators}
     Let $U_{\mathcal C,G}$ denote evaluation using the assigned original
     operators, rather than the monomial sums. Then
@@ -97,6 +105,7 @@ at the gate occurrences may be replaced independently.
     \]
 \end{theorem}
 \begin{proof}
+    \leanok
     Induct on chronological composition. A gate uses the same $G_g$ on its
     original local spaces. Private operations, swaps, and spectator tensor
     factors are identical on both sides.
@@ -105,6 +114,7 @@ at the gate occurrences may be replaced independently.
 \begin{definition}[Correspondence of original occurrences]
     \label{def:peps_fixed_chronology_occurrences}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.reexpandLocationsEquiv}
+    \leanok
     \uses{def:peps_fixed_chronology_reexpansion}
     There is a bijection $E_{\mathcal L}$ from the nonprivate gate occurrences
     of $\mathcal C[\mathcal L]$ to those of $\mathcal C$. It is the identity at
@@ -115,12 +125,14 @@ at the gate occurrences may be replaced independently.
 \begin{theorem}[The prescribed participant sets are unchanged]
     \label{thm:peps_fixed_chronology_participants}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.participants_reexpand}
+    \leanok
     \uses{def:peps_fixed_chronology_occurrences}
     If $\mathcal P_g$ is the prescribed participating set of an original gate,
     the participating set at an occurrence $g'$ of the reexpanded circuit is
     $\mathcal P_{E_{\mathcal L}(g')}$.
 \end{theorem}
 \begin{proof}
+    \leanok
     The owner embedding at each gate is retained. Induction preserves this
     identity under chronological composition and spectator tensor factors.
 \end{proof}
@@ -128,11 +140,13 @@ at the gate occurrences may be replaced independently.
 \begin{theorem}[The original gate count is unchanged]
     \label{thm:peps_fixed_chronology_gate_count}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.expandedGateCount_reexpand}
+    \leanok
     \uses{def:peps_fixed_chronology_occurrences}
     Reexpansion leaves the number of nonprivate gate occurrences unchanged,
     including occurrences with an empty monomial list.
 \end{theorem}
 \begin{proof}
+    \leanok
     A gate contributes one occurrence and a private operation contributes zero.
     The count is additive under chronological composition.
 \end{proof}
@@ -140,11 +154,13 @@ at the gate occurrences may be replaced independently.
 \begin{theorem}[Whole-lifetime participation is unchanged]
     \label{thm:peps_fixed_chronology_lifetime}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.participationCount_reexpand}
+    \leanok
     \uses{thm:peps_fixed_chronology_participants,def:compression_lifetime_gates}
     For every party $p$, the number of nonprivate gates in which $p$
     participates is identical in $\mathcal C[\mathcal L]$ and $\mathcal C$.
 \end{theorem}
 \begin{proof}
+    \leanok
     Restrict $E_{\mathcal L}$ to the occurrences containing $p$, using
     preservation of the participating sets, and take cardinalities.
 \end{proof}
@@ -152,6 +168,7 @@ at the gate occurrences may be replaced independently.
 \begin{theorem}[Uniform sampled bounds at one prescribed precision]
     \label{thm:peps_uniform_prescribed_expansion_bounds}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.exists_uniform_sampled_approximate_network_bounds}
+    \leanok
     \uses{thm:peps_fixed_power_gate_budget,thm:peps_approximate_sampled_distributed_error,thm:peps_actual_physicalFirst_density_polynomial,thm:peps_actual_physicalFirst_density_incidence,thm:peps_actual_physicalFirst_density_locality}
     Fix the arity and lifetime bound $b$, the monomial effect bound
     $r$, and original resource constants $C_N\ge1$, $C_D$, $n$, and $d$.
@@ -205,6 +222,7 @@ at the gate occurrences may be replaced independently.
     \]
 \end{theorem}
 \begin{proof}
+    \leanok
     The fixed precision meets the local gate budget for target error
     $\epsilon=L^{-t}$. Sampling gives error at most $\epsilon\le L^{-p}$.
     The exact contraction identity uses the same source circuit and sample
@@ -217,6 +235,7 @@ at the gate occurrences may be replaced independently.
 \begin{theorem}[Uniform operator networks from approximate original gate expansions]
     \label{thm:peps_uniform_approximate_operator_network}
     \lean{TNLean.PEPS.PairEffect.GateMapConstruction.exists_uniform_approximate_sampled_network}
+    \leanok
     \uses{thm:peps_uniform_prescribed_expansion_bounds,thm:peps_fixed_chronology_evaluation,thm:peps_fixed_chronology_participants,thm:peps_fixed_chronology_gate_count,thm:peps_fixed_chronology_lifetime,def:peps_original_gate_construction,thm:peps_effect_coefficient_majorant,thm:peps_distributed_operator_scalar_absorption}
     Let $\mathcal C_L$ be a family of original distributed constructions indexed
     by sizes $L\ge2$. The original party memories are finite-dimensional,
@@ -253,6 +272,7 @@ at the gate occurrences may be replaced independently.
     No bound is imposed on private dimensions beyond finiteness.
 \end{theorem}
 \begin{proof}
+    \leanok
     Enlarge the original count constant to $1+C_N$ and choose
     \[
         t=\lceil p\rceil,
