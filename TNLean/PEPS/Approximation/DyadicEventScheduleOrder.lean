@@ -46,15 +46,16 @@ theorem two_le_rank {e : ProtocolEvent k} (he : e.IsScheduled) : 2 ≤ e.rank :=
     simp only [rank, level, Sum.elim_inr]
     omega
 
-/-- A scheduled event has rank at most `2 k + 1`. -/
+/-- Every event has rank at most `2 k + 1`. -/
 theorem rank_le (e : ProtocolEvent k) : e.rank ≤ 2 * k + 1 := by
   rcases e with S | J <;> simp only [rank, level, Sum.elim_inl, Sum.elim_inr] <;> omega
 
-/-- The rank of a repainting is odd and that of a resize is even. -/
+/-- The rank `2 (k - j) + 1` of the repainting of a square of level `2 ^ j`. -/
 theorem rank_inl (S : DyadicSquare k) :
     ProtocolEvent.rank (Sum.inl S : ProtocolEvent k) = 2 * (k - S.1) + 1 :=
   rfl
 
+/-- The rank `2 (k - (j - 1))` of the resize at a junction of scale `j`. -/
 theorem rank_inr (J : DyadicJunction k) :
     ProtocolEvent.rank (Sum.inr J : ProtocolEvent k) = 2 * (k - ((J.1 : ℕ) - 1)) := by
   simp [rank, level]
