@@ -168,33 +168,29 @@ theorem eventually_actualCharge_suppliedPrevector_sharp_comparison
     (k : ℝ)
   let rU := Real.bellOverlapRemainder d cU S.K k
   let rL := sharpLowerRemainder a cL Cf ell Sent k
-  have hWa : W / (2 * a) = (S.K : ℝ) / 2 := by
-    dsimp only [W]
-    calc a * (S.K : ℝ) / (2 * a) = a * ((S.K : ℝ) / 2) / a := by ring
-      _ = (S.K : ℝ) / 2 := mul_div_cancel_left₀ _ ha.ne'
   have hupperRate : rate ≤ 2 * Real.log (d : ℝ) - Real.log z + W / 2 * Gpost +
       6 * W * Kmom * a - W / (2 * a) * Real.log z + rU := by
-    refine hU.trans_eq ?_
-    change 2 * Real.log (d : ℝ) - Real.log z +
-        (a / 2) * (∑ g, ∑ j, tree.weight j * gpost j g) +
-          6 * (S.K : ℝ) * Kmom * a ^ 2 - (S.K : ℝ) / 2 * Real.log z + rU = _
-    rw [hpostSum, hWa]
+    have hcoeff : W / (2 * a) = (S.K : ℝ) / 2 := by
+      dsimp only [W]
+      field_simp [ha.ne']
+    change rate ≤ 2 * Real.log (d : ℝ) - Real.log z +
+      (a / 2) * (∑ g, ∑ j, tree.weight j * gpost j g) +
+        6 * (S.K : ℝ) * Kmom * a ^ 2 - (S.K : ℝ) / 2 * Real.log z + rU at hU
+    rw [hpostSum] at hU
+    rw [hcoeff]
+    convert hU using 1
     dsimp only [W]
     ring
   have hlowerRate : W / 2 *
       (2 * Sent + (1 - τ) * Gpre - 2 * τ * Real.log (d : ℝ) -
         (3 + 1 / a) * Real.binEntropy τ - 25 * Kmom * a -
           δ / τ * max 0 (2 * Sent + gmax)) - W / 2 * rL ≤ rate := by
-    refine (?_ : _ = _).trans_le (hLower τ hτ hτhalf)
-    change W / 2 *
-        (2 * Sent + (1 - τ) * Gpre - 2 * τ * Real.log (d : ℝ) -
-          (3 + 1 / a) * Real.binEntropy τ - 25 * Kmom * a -
-            δ / τ * max 0 (2 * Sent + gmax)) - W / 2 * rL =
-      (a / 2) * (∑ g : Fin S.K,
-        (2 * Sent + (1 - τ) * (∑ j, tree.weight j * gpre j g) -
-          τ * (2 * Real.log (d : ℝ)) -
-          (3 + 1 / a) * Real.binEntropy τ - 25 * Kmom * a -
-            δ / τ * max 0 (2 * Sent + gmax) - rL))
+    have hLowerτ := hLower τ hτ hτhalf
+    change (a / 2) * (∑ g,
+      (2 * Sent + (1 - τ) * (∑ j, tree.weight j * gpre j g) -
+        τ * (2 * Real.log (d : ℝ)) - (3 + 1 / a) * Real.binEntropy τ -
+          25 * Kmom * a - δ / τ * max 0 (2 * Sent + gmax) - rL)) ≤ rate at hLowerτ
+    convert hLowerτ using 1
     simp only [Finset.sum_sub_distrib, Finset.sum_add_distrib, Finset.sum_const,
       Finset.card_univ, Fintype.card_fin, nsmul_eq_mul, ← Finset.mul_sum]
     rw [hpreSum]
@@ -204,8 +200,7 @@ theorem eventually_actualCharge_suppliedPrevector_sharp_comparison
     (Real.log (d : ℝ)) (Real.log z) Kmom δ (max 0 (2 * Sent + gmax))
     rate rU (W / 2 * rL) hlowerRate hupperRate
   have hremainders : 2 * (rU + W / 2 * rL) / W = 2 * rU / W + rL := by
-    calc 2 * (rU + W / 2 * rL) / W = 2 * rU / W + W * rL / W := by ring
-      _ = 2 * rU / W + rL := by rw [mul_div_cancel_left₀ _ hW.ne']
+    field_simp [hW.ne']
   simpa only [hremainders, rU, rL, add_assoc] using hcompare
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

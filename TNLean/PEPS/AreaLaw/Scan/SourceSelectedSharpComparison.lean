@@ -323,7 +323,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_comparison
   intro E z
   have hd : 0 < E.card := Finset.card_pos.mpr hwindow.2.2.2.2.1
   refine ⟨hwindow, hd, ?_⟩
-  let : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
+  have : NeZero E.card := NeZero.of_pos hd
   intro d ΩX ψ Sent dims energy σ near middleRegion gpre gpost gaps gmax tree Gpre Gpost
   have hρ : reducedState Λ q Ωt X =
       Matrix.partialTraceRight (Matrix.vecMulVec ΩX (star ΩX)) :=
@@ -331,7 +331,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_comparison
       (FiniteProduct.reducedPure_eq_partialTrace β Ωt X)
   have hzEq :
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian.spectralRestrictionMass E =
-        z := by simp only [z, ← hρ]
+        z := by simp only [← hρ, z]
   have hz : 0 <
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian.spectralRestrictionMass E :=
     hzEq.symm ▸ hwindow.2.2.1
@@ -378,8 +378,8 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_comparison
     hselect pre k hk hsym hnonzero e heigen p₀ p₁ hp₀ hp₀₁ hp₁
   have hrate : Cent * (k : ℝ) * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent =
       (k : ℝ) * rate := by dsimp only [rate]; ring
-  dsimp only [a, ℓ] at hrate
-  have hdensity := selected_density_of_rough_endpoint hk
+  simp only [a, ℓ] at hrate
+  have hdensity := selected_density_of_rough_endpoint (rate := rate) hk
     (show 0 < S.n by omega) hm (show 0 < S.D by omega) (show 0 < S.K by omega)
     ha hCp (sub_pos.mpr hp₀₁) hWa cR Ci Cb hendK.2 (hb k) (by
       simpa only [hrate] using hQ)
@@ -391,28 +391,10 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_comparison
     hΔ W Cen een C Cl P (rem k) e hW.le pre k p henergy hcoeff
   refine ⟨s, p, hp, hdensity, (hsharpK s p).2.1, hcap, ?_⟩
   intro τ hτ hτhalf
-  have hmassLoss :
-      ((S.actualChargeScanRound hm hM s.val dims energy a pre).meanEnergy k p - e) /
-        (g / 2) / τ * max 0 (2 * Sent + gmax) ≤
-      ((e + (C * W ^ 2 * (S.n : ℝ) ^ (Exponents.scannerEll : ℝ) *
-        (S.D : ℝ) ^ 2 * (Real.log S.n) ^ Cl *
-          ((1 - p) * (S.actualChargeEntropyDefect hm hM s.val dims energy
-            (a / 2) k (pre k) p / (S.K * S.n * S.D : ℝ)) ^ (1 / 8 : ℝ) +
-            (1 - p) * (S.n : ℝ) ^ (-P) + p)) + rem k) / (g / 2)) / τ *
-        max 0 (2 * Sent + gmax) :=
-    mul_le_mul_of_nonneg_right
-      (div_le_div_of_nonneg_right hcap hτ.le) (le_max_left (0 : ℝ) (2 * Sent + gmax))
-  have hcomparison :
-      2 * Sent + Gpre s p - Gpost s p ≤
-        2 * (2 * Real.log (d : ℝ) - Real.log z) / W +
-          τ * Gpre s p + 2 * τ * Real.log (d : ℝ) +
-          (3 + 1 / a) * Real.binEntropy τ + 37 * (C₀ * B) * a -
-          Real.log z / a +
-          ((S.actualChargeScanRound hm hM s.val dims energy a pre).meanEnergy k p - e) /
-            (g / 2) / τ * max 0 (2 * Sent + gmax) +
-          2 * Real.bellOverlapRemainder d cU S.K k / W +
-          sharpLowerRemainder a cL Cf ell Sent k :=
-    (hsharpK s p).2.2 τ hτ hτhalf
-  linarith only [hcomparison, hmassLoss]
+  have hmassLoss := mul_le_mul_of_nonneg_right
+    (div_le_div_of_nonneg_right hcap hτ.le) (le_max_left (0 : ℝ) (2 * Sent + gmax))
+  have hcomparison := (hsharpK s p).2.2 τ hτ hτhalf
+  exact hcomparison.trans
+    (_root_.add_le_add (_root_.add_le_add (_root_.add_le_add le_rfl hmassLoss) le_rfl) le_rfl)
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

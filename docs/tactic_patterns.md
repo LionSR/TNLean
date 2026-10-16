@@ -7805,3 +7805,74 @@ spectral split → block extraction → MPV calculation → strict bounds
   changes the mathematical input to the common signed moment interval and
   retains the actual weighted postselected entropy contribution. No custom
   tactic, reduced hypothesis, or enlarged elaboration budget is introduced.
+
+### Receiving and middle regions — candidate (2026-10-15)
+
+- **Pattern:** Apply `Finset.disjoint_filter.mpr` and derive the impossible equality
+  `some false = none` from the two prescribed values of the partition function.
+- **Seen:** `CollarScan.actualTerminal_sharpLower_geometry` in
+  `TNLean/PEPS/AreaLaw/Scan/ActualSharpLower.lean` and the receiving/middle
+  disjointness step in `ActualRoughLower.lean`.
+- **Abstraction:** Mathlib's `Set.pairwiseDisjoint_filter` states that distinct
+  fibres of a function are disjoint. It is a candidate replacement for both
+  local equality contradictions; `Finset.disjoint_filter` supplies the current
+  finite-set step.
+- **Notes:** Two occurrences in two files; below the promotion threshold.
+  The typed contradiction avoids simplifying the surrounding entropy and
+  representation-theoretic hypotheses.
+
+
+### Safe-box child entropy partitions — candidate (2026-10-15)
+
+- **Pattern:** Identify a rectangle region with the disjoint union of its
+  child regions, then apply finite-product entropy subadditivity to the
+  original normalized vector.
+- **Seen:** `TNLean/PEPS/AreaLaw/InitialBoxEstimate.lean` and
+  `TNLean/PEPS/AreaLaw/Scan/BoxClearanceComparison.lean`.
+- **Abstraction:** The geometric partition and the entropy inequality already
+  have separate lemmas. If a third use appears, a lemma for the entropy of
+  the rectangle partition would remove the repeated union and disjointness
+  arguments.
+- **Notes:** Two occurrences in two files, below the promotion threshold.
+  The physical domain and vector remain the same on every child.
+
+
+### Explicit identities for rounded scales — candidate (2026-10-15)
+
+- **Pattern:** State the defining natural-number equalities for rounded scales
+  before rewriting scalar estimates that use those scales. Rewrite the
+  quotient defining the number of bands before its window-length numerator.
+- **Seen:** The energy and error-budget estimates in
+  `Scan/SourceBootstrapEntropy.lean` (two occurrences in one module).
+- **Abstraction:** Retain the local equalities until reuse in another module
+  warrants a shared lemma. No additional tactic is needed.
+- **Notes:** Explicit types keep the physical hypotheses out of the arithmetic
+  simplification. This is below the promotion threshold.
+
+
+### Nonzero dimensions from positive spectral cardinality — promoted (2026-10-15)
+
+- **Pattern:** Obtain the nonzero dimension instance from a proved positive
+  cardinality of the selected spectral set.
+- **Abstraction:** Use Mathlib's `NeZero.of_pos`, rather than repeating the
+  nonzero-cardinality constructor argument.
+- **Consumers:** `Scan/SourceRoughSelection.lean`,
+  `Scan/SourceBootstrapEntropy.lean`, `Scan/SourceSelectedSharpComparison.lean`,
+  `Scan/SourceSelectedSharpEnergy.lean`, `Scan/SourceSelectedSharpDensity.lean`,
+  `Scan/SourceActualInformation.lean`, and `Scan/SourceFinalInformation.lean`.
+- **Notes:** Positivity comes from the existing spectral-window witness; no
+  nonzero-dimension hypothesis is added to any theorem.
+
+
+### Physical safe-box bounds at the minimal integer clearance — candidate (2026-10-15)
+
+- **Pattern:** Apply the physical entropy bound at clearance `d + 1`, with
+  `d = 2 * R + 10`, and transfer it to `d` using the rectangle-subdivision
+  comparison before treating an arbitrary real clearance.
+- **Seen:** `PEPS/AreaLaw/PhysicalSafeBox.lean` and
+  `PEPS/AreaLaw/PhysicalCollarInformation.lean`.
+- **Abstraction:** The comparison itself is already a theorem. A common
+  physical estimate at clearance `2 * R + 10` would remove the repeated
+  choice of coefficient and its positivity proof if a third use appears.
+- **Notes:** Two occurrences in two modules, below the promotion threshold.
+  The coefficient is chosen before every real clearance and finite instance.

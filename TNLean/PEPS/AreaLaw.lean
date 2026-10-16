@@ -54,6 +54,8 @@ import TNLean.PEPS.AreaLaw.LatticeCounts
 import TNLean.PEPS.AreaLaw.LocalHamiltonian
 import TNLean.PEPS.AreaLaw.MarginalTails
 import TNLean.PEPS.AreaLaw.NestedCylinderOrthogonalization
+import TNLean.PEPS.AreaLaw.PhysicalCollarInformation
+import TNLean.PEPS.AreaLaw.PhysicalSafeBox
 import TNLean.PEPS.AreaLaw.PositiveConstraints
 import TNLean.PEPS.AreaLaw.ProductGroundState
 import TNLean.PEPS.AreaLaw.QuasilocalRoots

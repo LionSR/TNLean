@@ -22,6 +22,10 @@ exponents and every physical instance. The integer threshold may depend on the
 fixed exponent margin. The supplied label sequence uses the same physical
 spectral restriction throughout the actual fill and charge estimates.
 
+The positive weight-growth margin is explicit, and the
+vanishing replica remainder concerns each fixed physical instance. The full
+Proposition 9.6 lower estimate, telescope and absorption are not asserted here.
+
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `07-comparators.tex`, `comparator:sharp-upper`, lines 383–418;
 `08-scanner.tex`, lines 32–58, 400–474 and 859–865, revision

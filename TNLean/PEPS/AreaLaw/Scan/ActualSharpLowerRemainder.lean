@@ -13,7 +13,10 @@ The supplied Schmidt--Bell sequence has logarithmic label dimension equal
 to k times the selected-state entropy up to o(k). Its absolute discrepancy
 therefore supplies the lower label defect, with no new label choice.
 The complete explicit polynomial and label error in the actual sharp lower
-estimate, divided by ak, tends to zero for each fixed physical instance.
+estimate, divided by ak, tends to zero for each fixed physical instance with a > 0.
+The real-valued definition uses totalized division: at a = 0 or k = 0 its
+value is zero. Those values do not represent the physical remainder, whose
+use in the actual sharp lower estimate always has a > 0 and k > 0.
 
 Source: OpenAI area-law manuscript, `07-comparators.tex`, lines 130--153,
 255--281 and 585--651, revision adc7f124.
@@ -47,7 +50,8 @@ theorem sharpLowerLabelDefect_label_bound
   linarith only [h]
 
 /-- The exact lower error after division by ak. The same label defect is
-used in the finite-copy actual-root bound.
+used in the finite-copy actual-root bound, where a > 0 and k > 0.
+At a = 0 or k = 0 the definition is zero by totalized real division.
 Source: `07-comparators.tex`, lines 585--651, adc7f124. -/
 def sharpLowerRemainder (a c Cf : ℝ)
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))) (Sent : ℝ) (k : ℕ) : ℝ :=
@@ -59,6 +63,10 @@ def sharpLowerRemainder (a c Cf : ℝ)
 /-- The exact little-o label conclusion of the physical prevector theorem
 implies that its complete lower remainder vanishes. All physical dimensions,
 the weight and the polynomial constants are fixed before the replica limit.
+The statement holds for every real a under totalized division, including
+its identically zero extension at a = 0. The physical application uses
+only a > 0 and positive copy counts; no zero-denominator physical quotient
+is asserted.
 Source: `07-comparators.tex`, lines 255--281 and 585--651, adc7f124. -/
 theorem tendsto_sharpLowerRemainder_of_label_dimension
     (ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k))) (Sent : ℝ)
