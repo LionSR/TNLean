@@ -63,17 +63,17 @@ theorem IsDisplacedReading.eq_piecewise (hY : IsOpen Y) (hU : IsOpen U) (hYU : f
     obtain ⟨ε, e1, e2, hmem⟩ :=
       ((hg p).and ((hf₂ p).and (tendsto_add_smul_nhdsGT p _ hV))).exists
     have hmem' : p + ε • ((1 : ℝ), (1 : ℝ)) - d ∈ Y := hmem
-    rw [if_pos hpY, e1, e2]
+    rw [ite_eq_left hpY, e1, e2]
     simp only [shiftGuide, hmem', ite_true]
-  · rw [if_neg hpY]
+  · rw [ite_eq_right hpY]
     by_cases hpU : p - d ∈ U
     · have hV : (fun x => x - d) ⁻¹' U ∈ 𝓝 p := (hU.preimage hcont).mem_nhds hpU
-      obtain ⟨ε, e1, e2, e3, hmem⟩ :=
-        ((hg p).and ((hf₁ p).and ((hf₂ p).and (tendsto_add_smul_nhdsGT p _ hV)))).exists
+      obtain ⟨ε, e1, e2, hmem⟩ :=
+        ((hg p).and ((hf₁ p).and (tendsto_add_smul_nhdsGT p _ hV))).exists
       have hmem' : p + ε • ((1 : ℝ), (1 : ℝ)) - d ∈ U := hmem
       rw [e1, e2]
       simp only [shiftGuide]
-      split_ifs <;> rw [h₁U _ hmem'] <;> first | rw [h₂U _ hmem'] | rfl
+      split_ifs <;> simp only [h₁U _ hmem', h₂U _ hmem']
     · have hcl : p - d ∉ closure Y := fun h =>
         hpU (hYU ⟨h, by rwa [hY.interior_eq]⟩)
       have hV : (fun x => x - d) ⁻¹' (closure Y)ᶜ ∈ 𝓝 p :=
@@ -163,6 +163,7 @@ theorem HasPairChange.reorder {Ω : EuclideanSpace ℂ (ι → Fin q)} {F₁ F�
   rw [← heval]
   exact hc.comp_right e he0 (hE _) hM
 
+omit [NeZero q] in
 open Classical in
 /-- **The holes after an exchange of two guide frames.** Let `f₁, f₂` both be `C` on an open set
 containing the boundary of `Y'`, and keep the holes of the frame of `f₁` centered outside `Y'` and
@@ -219,5 +220,185 @@ theorem guideFrame_exchange_holes_perm {κ : Type*} {C : κ} {f₁ f₂ : ℝ ×
     tauto
 
 end PairChanges
+
+section Exchange
+
+variable {k q : ℕ} [NeZero q] {J Δ a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
+  {h : SquareHamiltonian L q J} {E₀ : ℝ} {Ω : StateSpace L q} {ε₀ B₀ C c : ℝ}
+
+/-- **The lens exchange for the frames of sampled guides, conditional on Proposition 3.4.** For a
+repainting baseline `Bl` and an edge `e`, let `fm` and `fa` read, moved by `d`, the starting main
+guide and the auxiliary guide, both homogenized to `C_e` about the endpoints of `e`, and `gm`,
+`ga` the main guide with the first main word and the auxiliary guide with the exchanged auxiliary
+word, homogenized in the same way. Let the four frames carry holes at their true vertices with the
+supplied patches of radius `ε₀ t`. Then passing from the frames of `fm, fa` to those of `gm, ga`
+is a bounded change of the two sheets with participants in any set containing the party of `C_e`,
+without pair sources and with error `4 L⁻³⁰`.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 183–221, 389–430 and 440–445; Lemma 6.6
+`lem:exchange`, `05-frames.tex`. -/
+theorem edgeExchange_hasPairChange_of (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀')
+    (hLL : L₀' ≤ L) (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀)
+    (ha : a ≤ angularConstant / 2) (Bl : RepaintingBaseline GuideLabel) (E : List SquareEdge)
+    (e : SquareEdge) (d : ℝ × ℝ) (ht : 0 < D * Real.log L) (htn : D * Real.log L ≤ Bl.n)
+    (hnL : Bl.n ≤ A₀ * L) (hε : 2 * ε₀ * (angularConstant + 1) ≤ angularConstant / 2)
+    {fm fa gm ga : ℝ × ℝ → GuideLabel}
+    (hfm : IsDisplacedReading fm (shiftGuide d (Bl.treatedStartMain (D * Real.log L) E e))
+      ((1 : ℝ), (1 : ℝ)))
+    (hfa : IsDisplacedReading fa (shiftGuide d (Bl.treatedAux (D * Real.log L) e))
+      ((1 : ℝ), (1 : ℝ)))
+    (hgm : IsDisplacedReading gm (shiftGuide d (homogenize (edgeTreated Bl.n e (D * Real.log L))
+      (Bl.nbrLabel e) (Bl.mainGuide E e (mainWordOne Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e)))))
+      ((1 : ℝ), (1 : ℝ)))
+    (hga : IsDisplacedReading ga (shiftGuide d (homogenize (edgeTreated Bl.n e (D * Real.log L))
+      (Bl.nbrLabel e) (Bl.auxGuide e (auxWordExchanged Bl.oldLabel Bl.finalLabel
+        (Bl.nbrLabel e))))) ((1 : ℝ), (1 : ℝ)))
+    {Vm Va Wm Wa : Finset (ℝ × ℝ)} (hVm : ∀ z, z ∈ Vm ↔ IsTrueVertex fm z)
+    (hVa : ∀ z, z ∈ Va ↔ IsTrueVertex fa z) (hWm : ∀ z, z ∈ Wm ↔ IsTrueVertex gm z)
+    (hWa : ∀ z, z ∈ Wa ↔ IsTrueVertex ga z)
+    (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L)
+    (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧ ε₀ * (D * Real.log L) ≤ B₀ * Real.log L)
+    (hdm : (Vm : Set (ℝ × ℝ)).Pairwise fun z z' =>
+      Disjoint (suppliedPatch P _ hr z).outer (suppliedPatch P _ hr z').outer)
+    (hda : (Va : Set (ℝ × ℝ)).Pairwise fun z z' =>
+      Disjoint (suppliedPatch P _ hr z).outer (suppliedPatch P _ hr z').outer)
+    (hdm' : (Wm : Set (ℝ × ℝ)).Pairwise fun z z' =>
+      Disjoint (suppliedPatch P _ hr z).outer (suppliedPatch P _ hr z').outer)
+    (hda' : (Wa : Set (ℝ × ℝ)).Pairwise fun z z' =>
+      Disjoint (suppliedPatch P _ hr z).outer (suppliedPatch P _ hr z').outer)
+    (own : GuideLabel → ProtocolParty k) (rank : GuideLabel → ℕ) {S : Set (ProtocolParty k)}
+    (hCS : own (Bl.nbrLabel e) ∈ S) {r K rs : ℕ} (hK : 1 ≤ K) :
+    HasPairChange Ω
+      (guideFrame (cellCenterPos L) q fm own guidePlaceholder rank Vm (suppliedPatch P _ hr) hdm)
+      (guideFrame (cellCenterPos L) q fa own guidePlaceholder rank Va (suppliedPatch P _ hr) hda)
+      (guideFrame (cellCenterPos L) q gm own guidePlaceholder rank Wm (suppliedPatch P _ hr) hdm')
+      (guideFrame (cellCenterPos L) q ga own guidePlaceholder rank Wa (suppliedPatch P _ hr) hda')
+      S r K rs (4 * (L : ℝ) ^ (-30 : ℤ)) := by
+  classical
+  set t := D * Real.log L with ht_def
+  set Y := edgeLens Bl.n e with hY_def
+  set U := thickening (angularConstant * t) (frontier Y) with hU_def
+  have hδ : 0 < angularConstant * t := mul_pos angularConstant_pos ht
+  have hYo : IsOpen Y := isOpen_edgeBand _ _ _ _
+  have hUo : IsOpen U := isOpen_thickening
+  have hYU : frontier Y ⊆ U := self_subset_thickening hδ _
+  have hcorr : ∀ p ∈ U, Bl.treatedStartMain t E e p = Bl.nbrLabel e ∧
+      Bl.treatedAux t e p = Bl.nbrLabel e := fun p hp => Bl.exchange_corridor htn E e hp
+  -- the guides after the exchange are the treated guides pieced along the lens
+  have hpm : homogenize (edgeTreated Bl.n e t) (Bl.nbrLabel e)
+      (Bl.mainGuide E e (mainWordOne Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e))) =
+      fun p => if p ∈ Y then Bl.treatedAux t e p else Bl.treatedStartMain t E e p := by
+    rw [← Bl.lensExchange_mainGuide E e]
+    funext p
+    simp only [homogenize, RepaintingBaseline.treatedAux, RepaintingBaseline.treatedStartMain]
+    split_ifs <;> rfl
+  have hpa : homogenize (edgeTreated Bl.n e t) (Bl.nbrLabel e)
+      (Bl.auxGuide e (auxWordExchanged Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e))) =
+      fun p => if p ∈ Y then Bl.treatedStartMain t E e p else Bl.treatedAux t e p := by
+    rw [← Bl.lensExchange_auxGuide E e]
+    funext p
+    simp only [homogenize, RepaintingBaseline.treatedAux, RepaintingBaseline.treatedStartMain]
+    split_ifs <;> rfl
+  rw [hpm] at hgm
+  rw [hpa] at hga
+  have hgm' := IsDisplacedReading.eq_piecewise hYo hUo hYU (fun p hp => (hcorr p hp).1)
+    (fun p hp => (hcorr p hp).2) hfm hfa hgm
+  have hga' := IsDisplacedReading.eq_piecewise hYo hUo hYU (fun p hp => (hcorr p hp).2)
+    (fun p hp => (hcorr p hp).1) hfa hfm hga
+  -- the same at the level of the readings
+  set Y' : Set (ℝ × ℝ) := Homeomorph.subRight d ⁻¹' Y with hY'_def
+  set U' : Set (ℝ × ℝ) := Homeomorph.subRight d ⁻¹' U with hU'_def
+  have hU'o : IsOpen U' := hUo.preimage (Homeomorph.subRight d).continuous
+  have hYU' : frontier Y' ⊆ U' := by
+    rw [hY'_def, ← Homeomorph.preimage_frontier]
+    exact preimage_mono hYU
+  have hfmU : ∀ p ∈ U', fm p = Bl.nbrLabel e := fun p hp =>
+    hfm.eq_of_mem_open hUo (fun x hx => (hcorr x hx).1) hp
+  have hfaU : ∀ p ∈ U', fa p = Bl.nbrLabel e := fun p hp =>
+    hfa.eq_of_mem_open hUo (fun x hx => (hcorr x hx).2) hp
+  have hgm'' : gm = fun p => if p ∈ Y' then fa p else fm p := hgm'
+  have hga'' : ga = fun p => if p ∈ Y' then fm p else fa p := hga'
+  -- each hole lies on one side of the lens boundary
+  set Gm := guideFrame (cellCenterPos L) q fm own guidePlaceholder rank Vm (suppliedPatch P _ hr)
+    hdm
+  set Ga := guideFrame (cellCenterPos L) q fa own guidePlaceholder rank Va (suppliedPatch P _ hr)
+    hda
+  have hside : ∀ hl ∈ Gm.holes ++ Ga.holes, ∃ z, hl.patch = suppliedPatch P _ hr z ∧
+      (closedBall (z - d) (2 * ε₀ * t) ⊆ Y ∨ closedBall (z - d) (2 * ε₀ * t) ⊆ Yᶜ) := by
+    intro hl hhl
+    rcases List.mem_append.1 hhl with hhl | hhl
+    · obtain ⟨z, hz, rfl⟩ := mem_holes_guideFrame.1 hhl
+      exact ⟨z, rfl, Bl.outerHole_subset_or_subset_compl ht htn hε E e
+        (Or.inl (hfm.sub_isTrueVertex ((hVm z).1 hz)))⟩
+    · obtain ⟨z, hz, rfl⟩ := mem_holes_guideFrame.1 hhl
+      exact ⟨z, rfl, Bl.outerHole_subset_or_subset_compl ht htn hε E e
+        (Or.inr (hfa.sub_isTrueVertex ((hVa z).1 hz)))⟩
+  have hball : ∀ z (x : SquareLatticeVertex L L), x ∈ (suppliedPatch P _ hr z).outer →
+      cellCenterPos L x - d ∈ closedBall (z - d) (2 * ε₀ * t) := fun z x hx => by
+    rw [mem_outer_iff, suppliedPatch_center, suppliedPatch_scale] at hx
+    rw [mem_closedBall, dist_sub_right]
+    linarith
+  have hcen : ∀ z, z - d ∈ closedBall (z - d) (2 * ε₀ * t) := fun z =>
+    mem_closedBall_self (by have := (hr 0).1; nlinarith)
+  set out : Hole (cellCenterPos L) q (ProtocolParty k) → Bool :=
+    fun hl => decide (hl.patch.center - d ∉ Y)
+  have hout : ∀ hl ∈ Gm.holes ++ Ga.holes, out hl = true →
+      Disjoint (hl.patch.outer : Set (SquareLatticeVertex L L))
+        (lensSample (cellCenterPos L) Bl.n e d) := by
+    intro hl hhl ho
+    obtain ⟨z, hpz, hs⟩ := hside hl hhl
+    have hz : z - d ∉ Y := by simpa [out, hpz] using ho
+    have hs' : closedBall (z - d) (2 * ε₀ * t) ⊆ Yᶜ := hs.resolve_left fun h => hz (h (hcen z))
+    rw [hpz]
+    exact Set.disjoint_left.2 fun x hx hxY =>
+      hs' (hball z x hx) ((mem_lensSample x).1 (Finset.mem_coe.1 hxY))
+  have hin : ∀ hl ∈ Gm.holes ++ Ga.holes, out hl = false →
+      (hl.patch.outer : Set (SquareLatticeVertex L L)) ⊆
+        lensSample (cellCenterPos L) Bl.n e d := by
+    intro hl hhl ho
+    obtain ⟨z, hpz, hs⟩ := hside hl hhl
+    have hz : z - d ∈ Y := by simpa [out, hpz] using ho
+    have hs' : closedBall (z - d) (2 * ε₀ * t) ⊆ Y := hs.resolve_right fun h => h (hcen z) hz
+    rw [hpz]
+    exact fun x hx => Finset.mem_coe.2 ((mem_lensSample x).2 (hs' (hball z x hx)))
+  obtain ⟨w, hw, hu, hs, herr⟩ := edgeExchange_step_guideFrame hD hLL hΩ
+    (fun v => cellCenterPos_eq_sitePosition_add v) hm₀ ha Bl E e d ((1 : ℝ), (1 : ℝ)) ht htn
+    hnL hε hfm hfa (V₁ := Vm) (V₂ := Va) (hV₁ := hdm) (hV₂ := hda) (fun z hz => (hVm z).1 hz)
+    (fun z hz => (hVa z).1 hz) (fun z _ => ⟨suppliedPatch_center P hr z, by simp⟩)
+    (fun z _ => ⟨suppliedPatch_center P hr z, by simp⟩) out hout hin (fun x hx y hy => by
+      have hx' := ((TwoSheetExchange.mem_tSet_iff _ _ x).1 hx).1
+      have hy' := ((TwoSheetExchange.mem_tSet_iff _ _ y).1 hy).1
+      have hxY := (mem_lensSample x).1 hx'
+      have hyY := (mem_lensSample y).1 hy'
+      have := dist_le_of_mem_closure_edgeLens (s := edgeLens Bl.n e) subset_rfl
+        (subset_closure hxY) (subset_closure hyY)
+      rw [dist_sub_right] at this
+      exact this.trans (le_mul_of_one_le_left Bl.n_pos.le hA₀))
+  rw [← pairRef_eq_twoLayoutIso_symm, ← pairRef_eq_twoLayoutIso_symm] at herr
+  have h0 : (w.toOriginalCircuit hw).nonprivateCount = 0 :=
+    (w.nonprivateCount_toOriginalCircuit hw).trans hs
+  have hpair : HasPairChange Ω Gm Ga _ _ S r K rs (4 * (L : ℝ) ^ (-30 : ℤ)) :=
+    ⟨w.toOriginalCircuit hw, (Word.isBoundedChange_toOriginalCircuit hw hu (by omega) hK
+      herr).mono (by rintro x rfl; exact hCS) le_rfl le_rfl le_rfl,
+      OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero h0 rs⟩
+  have hout' : ∀ z o, out ⟨suppliedPatch P _ hr z, o⟩ = decide (z ∉ Y') := fun z o => by
+    simp [out, Y']
+  refine hpair.reorder ?_ ?_ ?_ ?_
+  · funext x
+    rw [guideFrame_owner, hgm'']
+    simp only [TwoSheetExchange.ofFrames, mem_lensSample, guideFrame_owner]
+    by_cases hx : cellCenterPos L x - d ∈ Y <;> simp [hx, Y'] <;> intro h' <;>
+      first | exact absurd hx h' | exact absurd h' hx
+  · rw [hgm'']
+    exact guideFrame_exchange_holes_perm hU'o hYU' hfmU hfaU hVm hVa (hgm'' ▸ hWm) out hout'
+  · funext x
+    rw [guideFrame_owner, hga'']
+    simp only [TwoSheetExchange.ofFrames, mem_lensSample, guideFrame_owner]
+    by_cases hx : cellCenterPos L x - d ∈ Y <;> simp [hx, Y'] <;> intro h' <;>
+      first | exact absurd hx h' | exact absurd h' hx
+  · rw [hga'']
+    exact guideFrame_exchange_holes_perm hU'o hYU' hfaU hfmU hVa hVm (hga'' ▸ hWa) out hout'
+
+end Exchange
 
 end TNLean.PEPS.Approximation
