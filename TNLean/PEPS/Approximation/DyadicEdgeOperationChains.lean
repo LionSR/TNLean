@@ -111,18 +111,18 @@ theorem isStepChain_auxBirths (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀'
     Or.inr (Or.inr (Or.inr (Or.inr ⟨e, W, hW, rfl⟩)))
   have h₁ := isStepChain_bandOperation hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done
     (auxBirthB_insertsOne Bl.finalLabel (Bl.nbrLabel e)) hC hB e
-    (g₀ := fun _ => Bl.nbrLabel e) (hU _ (by simp [auxWords, auxBirthB, auxBirthA, auxBirthC]))
-    (hU _ (by simp [auxWords, auxBirthB, auxBirthA, auxBirthC])) hr hb
+    (g₀ := fun _ => Bl.nbrLabel e) (hU _ (Or.inl rfl))
+    (hU _ (Or.inr (Or.inl rfl))) hr hb
     hK hpt
   have h₂ := isStepChain_bandOperation hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done
     (auxBirthA_insertsOne Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e)) hB hA e
-    (g₀ := fun _ => Bl.nbrLabel e) (hU _ (by simp [auxWords, auxBirthB, auxBirthA, auxBirthC]))
-    (hU _ (by simp [auxWords, auxBirthB, auxBirthA, auxBirthC])) hr hb
+    (g₀ := fun _ => Bl.nbrLabel e) (hU _ (Or.inr (Or.inl rfl)))
+    (hU _ (Or.inr (Or.inr (Or.inl rfl)))) hr hb
     hK hpt
   have h₃ := isStepChain_bandOperation hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done
     (auxBirthC_insertsOne Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e)) hA hC e
-    (g₀ := fun _ => Bl.nbrLabel e) (hU _ (by simp [auxWords, auxBirthB, auxBirthA, auxBirthC]))
-    (hU _ (by simp [auxWords, auxBirthB, auxBirthA, auxBirthC])) hr hb
+    (g₀ := fun _ => Bl.nbrLabel e) (hU _ (Or.inr (Or.inr (Or.inl rfl))))
+    (hU _ (Or.inr (Or.inr (Or.inr (Or.inl rfl))))) hr hb
     hK hpt
   simp only [treatedFrame_empty_congr P rank R _ L₀] at h₁ h₂ h₃
   exact (h₁.trans h₂).trans h₃
@@ -159,23 +159,23 @@ theorem isStepChain_mainSteps (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀'
     Or.inr (Or.inr (Or.inr (Or.inl ⟨E, e, W, hW, rfl⟩)))
   have h₁ := isStepChain_bandOperation hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done
     (mainDeathC_insertsOne Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e)) hA hC e
-    (g₀ := Bl.completedGuide E) (hU _ (by simp [mainWords, mainDeathC, mainDeathA, mainBirthC, mainDeathB]))
-    (hU _ (by simp [mainWords, mainDeathC, mainDeathA, mainBirthC, mainDeathB])) hr hb
+    (g₀ := Bl.completedGuide E) (hU _ (Or.inr (Or.inl rfl)))
+    (hU _ (Or.inr (Or.inr (Or.inl rfl)))) hr hb
     hK hpt
   have h₂ := isStepChain_bandOperation hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done
     (mainDeathA_insertsOne Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e)) hB hA e
-    (g₀ := Bl.completedGuide E) (hU _ (by simp [mainWords, mainDeathC, mainDeathA, mainBirthC, mainDeathB]))
-    (hU _ (by simp [mainWords, mainDeathC, mainDeathA, mainBirthC, mainDeathB])) hr hb
+    (g₀ := Bl.completedGuide E) (hU _ (Or.inr (Or.inr (Or.inl rfl))))
+    (hU _ (Or.inr (Or.inr (Or.inr (Or.inl rfl))))) hr hb
     hK hpt
   have h₃ := isStepChain_bandOperation hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done
     (mainBirthC_insertsOne Bl.finalLabel (Bl.nbrLabel e)) hB hC e
-    (g₀ := Bl.completedGuide E) (hU _ (by simp [mainWords, mainDeathC, mainDeathA, mainBirthC, mainDeathB]))
-    (hU _ (by simp [mainWords, mainDeathC, mainDeathA, mainBirthC, mainDeathB])) hr hb
+    (g₀ := Bl.completedGuide E) (hU _ (Or.inr (Or.inr (Or.inr (Or.inl rfl)))))
+    (hU _ (Or.inr (Or.inr (Or.inr (Or.inr (Or.inl rfl)))))) hr hb
     hK hpt
   have h₄ := isStepChain_bandOperation hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done
     (mainDeathB_insertsOne Bl.finalLabel (Bl.nbrLabel e)) hC hB e
-    (g₀ := Bl.completedGuide E) (hU _ (by simp [mainWords, mainDeathC, mainDeathA, mainBirthC, mainDeathB]))
-    (hU _ (by simp [mainWords, mainDeathC, mainDeathA, mainBirthC, mainDeathB])) hr hb
+    (g₀ := Bl.completedGuide E) (hU _ (Or.inr (Or.inr (Or.inr (Or.inr (Or.inl rfl))))))
+    (hU _ (Or.inr (Or.inr (Or.inr (Or.inr (Or.inr rfl)))))) hr hb
     hK hpt
   simp only [treatedFrame_empty_congr P rank R _ L₀] at h₁ h₂ h₃ h₄
   exact ((h₁.trans h₂).trans h₃).trans h₄
