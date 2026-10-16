@@ -307,7 +307,8 @@ theorem treatedFrame_completedGuide_eq_levelFrame {K₀ ε₀ ν a D : ℝ}
   obtain ⟨-, hmem, hd, hF⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done
     (Or.inr (Or.inr (Or.inl ⟨E, rfl⟩))) ∅ L₀ hr
   have hV : treatedVertices k R.1.1 t ∅ (treatedGuide R.1.1 R.1.index t ∅ L₀
-      ((repaintBaseline R done).completedGuide E)) = levelVertices k R.1.1 (insert R.1.index done) :=
+      ((repaintBaseline R done).completedGuide E)) =
+        levelVertices k R.1.1 (insert R.1.index done) :=
     Finset.ext fun z => by rw [hmem, mem_levelVertices, hg]
   have hpatch : ∀ z, suppliedPatch P (fun _ => ε₀ * t) hr z =
       suppliedPatch P (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) t) hρ z := fun z =>
