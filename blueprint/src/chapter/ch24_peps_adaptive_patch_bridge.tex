@@ -5,8 +5,8 @@ Proposition~4.1 of \cite{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex},
 lines 563--603: a vector in the sum of nested cylinder spaces is turned into
 square cylinder data at the same radii.
 
-\begin{lemma}[Square samples in integer coordinates]
-    \label{lem:peps_square_sample_integer_coordinates}
+\begin{theorem}[Square samples in integer coordinates]
+    \label{thm:peps_square_sample_integer_coordinates}
     \lean{TNLean.PEPS.Approximation.squareSample_integerCoordinates,
         TNLean.PEPS.Approximation.integerCoordinates_add_one_eq_latticePos}
     \leanok
@@ -17,7 +17,7 @@ square cylinder data at the same radii.
     Translating the integer positions of the open $L\times L$ square, which
     start at zero, by $(1,1)$ gives the lattice positions of
     \cite{OpenAI2026PolynomialPEPS}, \texttt{00-introduction.tex}, lines 21--25.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
@@ -25,8 +25,8 @@ square cylinder data at the same radii.
     The sup-norm distance is the larger of the two coordinate distances.
 \end{proof}
 
-\begin{lemma}[Square patches from nested cylinders]
-    \label{lem:peps_square_patch_of_nested_cylinders}
+\begin{theorem}[Square patches from nested cylinders]
+    \label{thm:peps_square_patch_of_nested_cylinders}
     \lean{TNLean.PEPS.EncodedFrame.exists_squarePatch_of_mem_iSup_dependentRegionCylinder}
     \leanok
     Let $0<u$ and let $u\le r_1\le\cdots\le r_m\le2u$. For each $j$ let $S_j$ be
@@ -40,7 +40,7 @@ square cylinder data at the same radii.
     \]
     where $\Pi$ is the sum of the cylinder projectors. No assumption is made on
     repeated radii, zero subspaces or an empty family.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
     \leanok
