@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Chain.Basic
+import TNLean.MPS.AreaLaw.Basic
 import TNLean.PEPS.AreaLaw.InitialBuffer
 
 /-!
@@ -33,7 +33,9 @@ boundary-proportional budgets of the two-dimensional buffer lemma.
   subsets of a window.
 -/
 
-namespace TNLean.PEPS.AreaLaw.Chain
+open TNLean.PEPS.AreaLaw
+
+namespace TNLean.MPS.AreaLaw
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ}
 
@@ -143,4 +145,4 @@ theorem supportDim_le_real (hq : 1 ≤ q) (X : AdmissibleSupport Λ R) :
     (Entropy.supportDim (fun _ : Site Λ ↦ q) X.1 : ℝ) ≤ (q : ℝ) ^ (1 + 2 * R * (R + 1)) := by
   exact_mod_cast supportDim_le hq X
 
-end TNLean.PEPS.AreaLaw.Chain
+end TNLean.MPS.AreaLaw

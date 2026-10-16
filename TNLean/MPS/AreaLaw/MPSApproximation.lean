@@ -3,10 +3,10 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Chain.AreaLaw
-import TNLean.PEPS.AreaLaw.Chain.OpenMPSRank
-import TNLean.PEPS.AreaLaw.Chain.SequentialTruncation
-import TNLean.PEPS.AreaLaw.Chain.Transport
+import TNLean.MPS.AreaLaw.AreaLaw
+import TNLean.MPS.AreaLaw.OpenMPSRank
+import TNLean.MPS.AreaLaw.SequentialTruncation
+import TNLean.MPS.AreaLaw.Transport
 
 /-!
 # Polynomial matrix product state approximation on a chain
@@ -33,7 +33,9 @@ produces the matrix product state.
 
 open Matrix
 
-namespace TNLean.PEPS.AreaLaw.Chain
+open TNLean.PEPS.AreaLaw
+
+namespace TNLean.MPS.AreaLaw
 
 variable {q R : ℕ} {J Δ : ℝ}
 
@@ -47,7 +49,7 @@ theorem IsOpenMPS.smul {L q D : ℕ} {ψ : (Fin L → Fin q) → ℂ} (h : IsOpe
     IsOpenMPS L q D fun x ↦ c * ψ x := by
   obtain ⟨A, vL, vR, hψ⟩ := h
   refine ⟨A, vL, c • vR, fun x ↦ ?_⟩
-  show c * ψ x = _
+  change c * ψ x = _
   rw [hψ x, Matrix.mulVec_smul, dotProduct_smul, smul_eq_mul]
 
 /-- The square root `√(2 e^{e/2})` of the prefactor of the marginal tail bound. -/
@@ -156,8 +158,8 @@ theorem exists_isChainMPS_norm_sub_le (hq : 1 ≤ q) (hJ : 0 ≤ J) (hΔ : 0 < �
     have hsA : 0 < Real.sqrt ((1 + J / Δ) *
         cutLogBudget (chainDomain L) q R (interval (chainDomain L) 0 ((k : ℤ) - 1))) := by
       apply Real.sqrt_pos.mpr
-      have : (1 : ℝ) ≤ cutLogBudget (chainDomain L) q R (interval (chainDomain L) 0 ((k : ℤ) - 1)) :=
-        hB1
+      have : (1 : ℝ) ≤
+          cutLogBudget (chainDomain L) q R (interval (chainDomain L) 0 ((k : ℤ) - 1)) := hB1
       nlinarith
     have hsle : Real.sqrt ((1 + J / Δ) *
         cutLogBudget (chainDomain L) q R (interval (chainDomain L) 0 ((k : ℤ) - 1))) ≤ s :=
@@ -272,4 +274,4 @@ theorem chainBondDimension_le_mul_rpow {L : ℕ} (hL : 1 ≤ L) :
   refine (Nat.floor_le (Real.exp_pos _).le).trans (le_of_eq ?_)
   rw [Real.exp_add, hexpw, mul_assoc]
 
-end TNLean.PEPS.AreaLaw.Chain
+end TNLean.MPS.AreaLaw

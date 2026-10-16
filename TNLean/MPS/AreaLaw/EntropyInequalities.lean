@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Chain.Basic
+import TNLean.MPS.AreaLaw.Basic
 import TNLean.PEPS.AreaLaw.EdgeBoundaryCalculus
 import TNLean.PEPS.AreaLaw.TwoFamilies
 import TNLean.PEPS.AreaLaw.EntropyDimension
@@ -37,7 +37,9 @@ on a finite domain, specialized to the chain of `L` sites.
   law on a chain to interval regions.
 -/
 
-namespace TNLean.PEPS.AreaLaw.Chain
+open TNLean.PEPS.AreaLaw
+
+namespace TNLean.MPS.AreaLaw
 
 section Purity
 
@@ -243,4 +245,4 @@ theorem regionalEntropy_le_mul_card_edgeBoundary_of_intervals {L q : ℕ}
 
 end Chain
 
-end TNLean.PEPS.AreaLaw.Chain
+end TNLean.MPS.AreaLaw

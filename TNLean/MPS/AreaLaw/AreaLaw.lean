@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Chain.BufferDiscount
-import TNLean.PEPS.AreaLaw.Chain.EntropyInequalities
+import TNLean.MPS.AreaLaw.BufferDiscount
+import TNLean.MPS.AreaLaw.EntropyInequalities
 
 /-!
 # The one-dimensional area law from a global gap
@@ -33,7 +33,9 @@ needed.
   and Lemma 2.1 (reductions).
 -/
 
-namespace TNLean.PEPS.AreaLaw.Chain
+open TNLean.PEPS.AreaLaw
+
+namespace TNLean.MPS.AreaLaw
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
 
@@ -220,4 +222,4 @@ theorem chainUniformAreaLaw :
   refine (regionalEntropy_le_mul_card_edgeBoundary hq hJ.le hΔ h hgs A).trans ?_
   exact mul_le_mul_of_nonneg_right hle (Nat.cast_nonneg _)
 
-end TNLean.PEPS.AreaLaw.Chain
+end TNLean.MPS.AreaLaw

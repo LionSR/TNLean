@@ -27,7 +27,9 @@ one-row domains, the chain of `L` consecutive sites, and the interval regions of
   global gap* (`docs/notes/one_dimensional_note`), Section 2, the setting.
 -/
 
-namespace TNLean.PEPS.AreaLaw.Chain
+open TNLean.PEPS.AreaLaw
+
+namespace TNLean.MPS.AreaLaw
 
 /-- A one-row domain: every site lies on the horizontal axis. -/
 def IsOneRow (Λ : Finset (ℤ × ℤ)) : Prop := ∀ p ∈ Λ, p.2 = 0
@@ -112,4 +114,4 @@ noncomputable def chainSiteEquiv (L : ℕ) : Fin L ≃ Site (chainDomain L) :=
 @[simp]
 theorem chainSiteEquiv_apply_fst (L : ℕ) (k : Fin L) : ((chainSiteEquiv L k).1).1 = k := rfl
 
-end TNLean.PEPS.AreaLaw.Chain
+end TNLean.MPS.AreaLaw

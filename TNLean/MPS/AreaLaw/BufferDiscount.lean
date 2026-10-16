@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Chain.Domain
+import TNLean.MPS.AreaLaw.Domain
 
 /-!
 # The buffered discount with a constant-width buffer
@@ -18,7 +18,7 @@ prefix norm comparison and Schmidt pinning) is `Entropy.two_mul_condEntropy_le` 
 exactly as for the two-dimensional buffer lemma. This module supplies its hypotheses on a
 chain: the nested shells `X_j = X^{+(j+1)(R+1)}`, which are intervals, the single-split
 property, the constant crossing budget `N_R` and cut budget `B_R` of
-`TNLean.PEPS.AreaLaw.Chain.Domain`, and the uniform weights `a_j = 2/m` of total mass two.
+`TNLean.MPS.AreaLaw.Domain`, and the uniform weights `a_j = 2/m` of total mass two.
 
 ## Main results
 
@@ -37,7 +37,9 @@ property, the constant crossing budget `N_R` and cut budget `B_R` of
 open Matrix
 open scoped Matrix.Norms.L2Operator
 
-namespace TNLean.PEPS.AreaLaw.Chain
+open TNLean.PEPS.AreaLaw
+
+namespace TNLean.MPS.AreaLaw
 
 variable {Λ : Finset (ℤ × ℤ)} {q R : ℕ} {J Δ : ℝ}
 
@@ -310,4 +312,4 @@ theorem two_mul_condEntropy_interval_le (hΛ : IsOneRow Λ) (hq : 1 ≤ q) (hJ :
   simp only [chainDiscountConst]
   linarith
 
-end TNLean.PEPS.AreaLaw.Chain
+end TNLean.MPS.AreaLaw

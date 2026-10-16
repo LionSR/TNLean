@@ -21,20 +21,20 @@ are explicit, and the area-law constant is linear in $1+J/\Delta$.
 \begin{definition}[Chains, intervals and buffers]
     \label{def:chain_domain}
     \lean{
-        TNLean.PEPS.AreaLaw.Chain.IsOneRow,
-        TNLean.PEPS.AreaLaw.Chain.chainDomain,
-        TNLean.PEPS.AreaLaw.Chain.mem_chainDomain,
-        TNLean.PEPS.AreaLaw.Chain.isOneRow_chainDomain,
-        TNLean.PEPS.AreaLaw.Chain.card_chainDomain,
-        TNLean.PEPS.AreaLaw.Chain.interval,
-        TNLean.PEPS.AreaLaw.Chain.mem_interval,
-        TNLean.PEPS.AreaLaw.Chain.card_interval_le,
-        TNLean.PEPS.AreaLaw.Chain.chainSite,
-        TNLean.PEPS.AreaLaw.Chain.chainSiteEquiv,
-        TNLean.PEPS.AreaLaw.Chain.rowRect,
-        TNLean.PEPS.AreaLaw.Chain.rectRegion_rowRect_dilate,
-        TNLean.PEPS.AreaLaw.Chain.edgeBoundary_univ,
-        TNLean.PEPS.AreaLaw.Chain.isSafe_univ
+        TNLean.MPS.AreaLaw.IsOneRow,
+        TNLean.MPS.AreaLaw.chainDomain,
+        TNLean.MPS.AreaLaw.mem_chainDomain,
+        TNLean.MPS.AreaLaw.isOneRow_chainDomain,
+        TNLean.MPS.AreaLaw.card_chainDomain,
+        TNLean.MPS.AreaLaw.interval,
+        TNLean.MPS.AreaLaw.mem_interval,
+        TNLean.MPS.AreaLaw.card_interval_le,
+        TNLean.MPS.AreaLaw.chainSite,
+        TNLean.MPS.AreaLaw.chainSiteEquiv,
+        TNLean.MPS.AreaLaw.rowRect,
+        TNLean.MPS.AreaLaw.rectRegion_rowRect_dilate,
+        TNLean.MPS.AreaLaw.edgeBoundary_univ,
+        TNLean.MPS.AreaLaw.isSafe_univ
     }
     \leanok
     \uses{def:area_law_domain}
@@ -51,13 +51,13 @@ are explicit, and the area-law constant is linear in $1+J/\Delta$.
 \begin{lemma}[Interactions split by an interval]
     \label{lem:chain_crossing_count}
     \lean{
-        TNLean.PEPS.AreaLaw.Chain.exists_mem_ends_of_splits_interval,
-        TNLean.PEPS.AreaLaw.Chain.chainCrossConst,
-        TNLean.PEPS.AreaLaw.Chain.card_crossingTerms_interval_le,
-        TNLean.PEPS.AreaLaw.Chain.chainBudgetConst,
-        TNLean.PEPS.AreaLaw.Chain.one_le_chainBudgetConst,
-        TNLean.PEPS.AreaLaw.Chain.cutLogBudget_interval_le,
-        TNLean.PEPS.AreaLaw.Chain.supportDim_le_real
+        TNLean.MPS.AreaLaw.exists_mem_ends_of_splits_interval,
+        TNLean.MPS.AreaLaw.chainCrossConst,
+        TNLean.MPS.AreaLaw.card_crossingTerms_interval_le,
+        TNLean.MPS.AreaLaw.chainBudgetConst,
+        TNLean.MPS.AreaLaw.one_le_chainBudgetConst,
+        TNLean.MPS.AreaLaw.cutLogBudget_interval_le,
+        TNLean.MPS.AreaLaw.supportDim_le_real
     }
     \leanok
     \uses{def:chain_domain, def:area_law_hamiltonian}
@@ -91,17 +91,17 @@ are explicit, and the area-law constant is linear in $1+J/\Delta$.
 \begin{lemma}[Buffered discount on a chain]
     \label{lem:chain_buffer_discount}
     \lean{
-        TNLean.PEPS.AreaLaw.Chain.chainEnergyThreshold,
-        TNLean.PEPS.AreaLaw.Chain.chainTailThreshold,
-        TNLean.PEPS.AreaLaw.Chain.chainShellCount,
-        TNLean.PEPS.AreaLaw.Chain.four_le_chainShellCount,
-        TNLean.PEPS.AreaLaw.Chain.chainEnergyThreshold_le_chainShellCount,
-        TNLean.PEPS.AreaLaw.Chain.chainTailThreshold_le_chainShellCount,
-        TNLean.PEPS.AreaLaw.Chain.chainDiscountConst,
-        TNLean.PEPS.AreaLaw.Chain.chainBuffer,
-        TNLean.PEPS.AreaLaw.Chain.disjoint_interval_chainBuffer,
-        TNLean.PEPS.AreaLaw.Chain.card_chainBuffer_le,
-        TNLean.PEPS.AreaLaw.Chain.two_mul_condEntropy_interval_le
+        TNLean.MPS.AreaLaw.chainEnergyThreshold,
+        TNLean.MPS.AreaLaw.chainTailThreshold,
+        TNLean.MPS.AreaLaw.chainShellCount,
+        TNLean.MPS.AreaLaw.four_le_chainShellCount,
+        TNLean.MPS.AreaLaw.chainEnergyThreshold_le_chainShellCount,
+        TNLean.MPS.AreaLaw.chainTailThreshold_le_chainShellCount,
+        TNLean.MPS.AreaLaw.chainDiscountConst,
+        TNLean.MPS.AreaLaw.chainBuffer,
+        TNLean.MPS.AreaLaw.disjoint_interval_chainBuffer,
+        TNLean.MPS.AreaLaw.card_chainBuffer_le,
+        TNLean.MPS.AreaLaw.two_mul_condEntropy_interval_le
     }
     \leanok
     \uses{def:chain_domain, def:area_law_hamiltonian, def:area_law_ground_entropy}
@@ -142,12 +142,12 @@ are explicit, and the area-law constant is linear in $1+J/\Delta$.
 \begin{lemma}[Araki--Lieb and the area law from interval bounds]
     \label{lem:chain_entropy_inequalities}
     \lean{
-        TNLean.PEPS.AreaLaw.Chain.regionalEntropy_compl,
-        TNLean.PEPS.AreaLaw.Chain.regionalEntropy_union_le,
-        TNLean.PEPS.AreaLaw.Chain.regionalEntropy_le_union_add,
-        TNLean.PEPS.AreaLaw.Chain.adj_chainDomain_iff,
-        TNLean.PEPS.AreaLaw.Chain.exists_interval_subset_edgeBoundary_sdiff_ssubset,
-        TNLean.PEPS.AreaLaw.Chain.regionalEntropy_le_mul_card_edgeBoundary_of_intervals
+        TNLean.MPS.AreaLaw.regionalEntropy_compl,
+        TNLean.MPS.AreaLaw.regionalEntropy_union_le,
+        TNLean.MPS.AreaLaw.regionalEntropy_le_union_add,
+        TNLean.MPS.AreaLaw.adj_chainDomain_iff,
+        TNLean.MPS.AreaLaw.exists_interval_subset_edgeBoundary_sdiff_ssubset,
+        TNLean.MPS.AreaLaw.regionalEntropy_le_mul_card_edgeBoundary_of_intervals
     }
     \leanok
     \uses{def:chain_domain, def:area_law_ground_entropy}
@@ -175,18 +175,18 @@ are explicit, and the area-law constant is linear in $1+J/\Delta$.
 \begin{theorem}[Theorem A: the one-dimensional area law]
     \label{thm:chain_area_law}
     \lean{
-        TNLean.PEPS.AreaLaw.Chain.interval_eq_empty,
-        TNLean.PEPS.AreaLaw.Chain.regionalEntropy_empty,
-        TNLean.PEPS.AreaLaw.Chain.chainIntervalEntropyBound,
-        TNLean.PEPS.AreaLaw.Chain.chainDiscountConst_nonneg,
-        TNLean.PEPS.AreaLaw.Chain.chainIntervalEntropyBound_nonneg,
-        TNLean.PEPS.AreaLaw.Chain.regionalEntropy_interval_le,
-        TNLean.PEPS.AreaLaw.Chain.chainShellConst,
-        TNLean.PEPS.AreaLaw.Chain.chainShellCount_le,
-        TNLean.PEPS.AreaLaw.Chain.chainAreaLawConst,
-        TNLean.PEPS.AreaLaw.Chain.chainIntervalEntropyBound_le,
-        TNLean.PEPS.AreaLaw.Chain.regionalEntropy_le_mul_card_edgeBoundary,
-        TNLean.PEPS.AreaLaw.Chain.chainUniformAreaLaw
+        TNLean.MPS.AreaLaw.interval_eq_empty,
+        TNLean.MPS.AreaLaw.regionalEntropy_empty,
+        TNLean.MPS.AreaLaw.chainIntervalEntropyBound,
+        TNLean.MPS.AreaLaw.chainDiscountConst_nonneg,
+        TNLean.MPS.AreaLaw.chainIntervalEntropyBound_nonneg,
+        TNLean.MPS.AreaLaw.regionalEntropy_interval_le,
+        TNLean.MPS.AreaLaw.chainShellConst,
+        TNLean.MPS.AreaLaw.chainShellCount_le,
+        TNLean.MPS.AreaLaw.chainAreaLawConst,
+        TNLean.MPS.AreaLaw.chainIntervalEntropyBound_le,
+        TNLean.MPS.AreaLaw.regionalEntropy_le_mul_card_edgeBoundary,
+        TNLean.MPS.AreaLaw.chainUniformAreaLaw
     }
     \leanok
     \uses{def:chain_domain, def:area_law_hamiltonian, def:area_law_ground_entropy}
@@ -224,13 +224,13 @@ are explicit, and the area-law constant is linear in $1+J/\Delta$.
 \begin{definition}[Open-boundary matrix product states and cut matrices]
     \label{def:chain_open_mps}
     \lean{
-        TNLean.PEPS.AreaLaw.Chain.leftBlock,
-        TNLean.PEPS.AreaLaw.Chain.mem_leftBlock,
-        TNLean.PEPS.AreaLaw.Chain.cutMatrix,
-        TNLean.PEPS.AreaLaw.Chain.cutMatrix_apply,
-        TNLean.PEPS.AreaLaw.Chain.IsOpenMPS,
-        TNLean.PEPS.AreaLaw.Chain.IsOpenMPS.smul,
-        TNLean.PEPS.AreaLaw.Chain.IsChainMPS
+        TNLean.MPS.AreaLaw.leftBlock,
+        TNLean.MPS.AreaLaw.mem_leftBlock,
+        TNLean.MPS.AreaLaw.cutMatrix,
+        TNLean.MPS.AreaLaw.cutMatrix_apply,
+        TNLean.MPS.AreaLaw.IsOpenMPS,
+        TNLean.MPS.AreaLaw.IsOpenMPS.smul,
+        TNLean.MPS.AreaLaw.IsChainMPS
     }
     \leanok
     \uses{def:chain_domain}
@@ -252,15 +252,15 @@ are explicit, and the area-law constant is linear in $1+J/\Delta$.
     \label{lem:chain_mps_of_cut_rank}
     \lean{
         Submodule.exists_fin_span_of_finrank_le,
-        TNLean.PEPS.AreaLaw.Chain.glueLeft,
-        TNLean.PEPS.AreaLaw.Chain.sliceMatrix,
-        TNLean.PEPS.AreaLaw.Chain.sliceMatrix_apply,
-        TNLean.PEPS.AreaLaw.Chain.rank_sliceMatrix_le,
-        TNLean.PEPS.AreaLaw.Chain.sliceSpace,
-        TNLean.PEPS.AreaLaw.Chain.finrank_sliceSpace_le,
-        TNLean.PEPS.AreaLaw.Chain.glueLeft_snoc,
-        TNLean.PEPS.AreaLaw.Chain.slice_mem_sliceSpace,
-        TNLean.PEPS.AreaLaw.Chain.isOpenMPS_of_cutMatrix_rank_le
+        TNLean.MPS.AreaLaw.glueLeft,
+        TNLean.MPS.AreaLaw.sliceMatrix,
+        TNLean.MPS.AreaLaw.sliceMatrix_apply,
+        TNLean.MPS.AreaLaw.rank_sliceMatrix_le,
+        TNLean.MPS.AreaLaw.sliceSpace,
+        TNLean.MPS.AreaLaw.finrank_sliceSpace_le,
+        TNLean.MPS.AreaLaw.glueLeft_snoc,
+        TNLean.MPS.AreaLaw.slice_mem_sliceSpace,
+        TNLean.MPS.AreaLaw.isOpenMPS_of_cutMatrix_rank_le
     }
     \leanok
     \uses{def:chain_open_mps}
@@ -292,18 +292,18 @@ are explicit, and the area-law constant is linear in $1+J/\Delta$.
         Entropy.trace_regionState_eq_one,
         Matrix.PosSemidef.trace_complement_spectralProjectionGE_le_surprisalTail,
         Matrix.PosSemidef.rank_spectralProjectionGE_exp_le,
-        TNLean.PEPS.AreaLaw.Chain.cutMatrix_localLift,
-        TNLean.PEPS.AreaLaw.Chain.rank_cutMatrix_localLift_le,
-        TNLean.PEPS.AreaLaw.Chain.rank_cutMatrix_zero_le,
-        TNLean.PEPS.AreaLaw.Chain.rank_cutMatrix_le_one_of_le,
-        TNLean.PEPS.AreaLaw.Chain.LeftBlockMatrix,
-        TNLean.PEPS.AreaLaw.Chain.cutTruncation,
-        TNLean.PEPS.AreaLaw.Chain.sequentialTruncation,
-        TNLean.PEPS.AreaLaw.Chain.leftBlock_mono,
-        TNLean.PEPS.AreaLaw.Chain.norm_sub_sequentialTruncation_le,
-        TNLean.PEPS.AreaLaw.Chain.exists_sequentialTruncation_eq_localLift,
-        TNLean.PEPS.AreaLaw.Chain.rank_cutMatrix_sequentialTruncation_le,
-        TNLean.PEPS.AreaLaw.Chain.exists_sequentialTruncation
+        TNLean.MPS.AreaLaw.cutMatrix_localLift,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_localLift_le,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_zero_le,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_le_one_of_le,
+        TNLean.MPS.AreaLaw.LeftBlockMatrix,
+        TNLean.MPS.AreaLaw.cutTruncation,
+        TNLean.MPS.AreaLaw.sequentialTruncation,
+        TNLean.MPS.AreaLaw.leftBlock_mono,
+        TNLean.MPS.AreaLaw.norm_sub_sequentialTruncation_le,
+        TNLean.MPS.AreaLaw.exists_sequentialTruncation_eq_localLift,
+        TNLean.MPS.AreaLaw.rank_cutMatrix_sequentialTruncation_le,
+        TNLean.MPS.AreaLaw.exists_sequentialTruncation
     }
     \leanok
     \uses{def:chain_open_mps}
@@ -337,19 +337,19 @@ are explicit, and the area-law constant is linear in $1+J/\Delta$.
         Matrix.IsHermitian.sum_eigenvalues_eq_roots_sum,
         Matrix.IsHermitian.sum_eigenvalues_reindex,
         Matrix.IsHermitian.sum_eigenvalues_congr,
-        TNLean.PEPS.AreaLaw.Chain.chainConfigEquiv,
-        TNLean.PEPS.AreaLaw.Chain.chainTransport,
-        TNLean.PEPS.AreaLaw.Chain.chainTransport_apply,
-        TNLean.PEPS.AreaLaw.Chain.chainTransport_symm_apply,
-        TNLean.PEPS.AreaLaw.Chain.chainSiteEquiv_mem_leftBlock_iff,
-        TNLean.PEPS.AreaLaw.Chain.leftBlockSiteEquiv,
-        TNLean.PEPS.AreaLaw.Chain.leftBlockComplementSiteEquiv,
-        TNLean.PEPS.AreaLaw.Chain.leftBlockConfigEquiv,
-        TNLean.PEPS.AreaLaw.Chain.leftBlockComplementConfigEquiv,
-        TNLean.PEPS.AreaLaw.Chain.cutEquiv_symm_comp_chainSiteEquiv_symm,
-        TNLean.PEPS.AreaLaw.Chain.regionState_chainTransport,
-        TNLean.PEPS.AreaLaw.Chain.regionEntropy_chainTransport,
-        TNLean.PEPS.AreaLaw.Chain.surprisalTail_chainTransport
+        TNLean.MPS.AreaLaw.chainConfigEquiv,
+        TNLean.MPS.AreaLaw.chainTransport,
+        TNLean.MPS.AreaLaw.chainTransport_apply,
+        TNLean.MPS.AreaLaw.chainTransport_symm_apply,
+        TNLean.MPS.AreaLaw.chainSiteEquiv_mem_leftBlock_iff,
+        TNLean.MPS.AreaLaw.leftBlockSiteEquiv,
+        TNLean.MPS.AreaLaw.leftBlockComplementSiteEquiv,
+        TNLean.MPS.AreaLaw.leftBlockConfigEquiv,
+        TNLean.MPS.AreaLaw.leftBlockComplementConfigEquiv,
+        TNLean.MPS.AreaLaw.cutEquiv_symm_comp_chainSiteEquiv_symm,
+        TNLean.MPS.AreaLaw.regionState_chainTransport,
+        TNLean.MPS.AreaLaw.regionEntropy_chainTransport,
+        TNLean.MPS.AreaLaw.surprisalTail_chainTransport
     }
     \leanok
     \uses{def:chain_domain, def:chain_open_mps, def:area_law_ground_entropy}
@@ -370,16 +370,16 @@ are explicit, and the area-law constant is linear in $1+J/\Delta$.
 \begin{theorem}[Theorem B: polynomial matrix product state approximation]
     \label{thm:chain_mps_approximation}
     \lean{
-        TNLean.PEPS.AreaLaw.Chain.tailPrefactorRoot,
-        TNLean.PEPS.AreaLaw.Chain.tailPrefactorRoot_pos,
-        TNLean.PEPS.AreaLaw.Chain.tailPrefactorRoot_sq,
-        TNLean.PEPS.AreaLaw.Chain.one_lt_tailPrefactorRoot,
-        TNLean.PEPS.AreaLaw.Chain.chainTruncationWidth,
-        TNLean.PEPS.AreaLaw.Chain.chainTruncationWidth_nonneg,
-        TNLean.PEPS.AreaLaw.Chain.exp_neg_chainTruncationWidth,
-        TNLean.PEPS.AreaLaw.Chain.chainBondDimension,
-        TNLean.PEPS.AreaLaw.Chain.exists_isChainMPS_norm_sub_le,
-        TNLean.PEPS.AreaLaw.Chain.chainBondDimension_le_mul_rpow
+        TNLean.MPS.AreaLaw.tailPrefactorRoot,
+        TNLean.MPS.AreaLaw.tailPrefactorRoot_pos,
+        TNLean.MPS.AreaLaw.tailPrefactorRoot_sq,
+        TNLean.MPS.AreaLaw.one_lt_tailPrefactorRoot,
+        TNLean.MPS.AreaLaw.chainTruncationWidth,
+        TNLean.MPS.AreaLaw.chainTruncationWidth_nonneg,
+        TNLean.MPS.AreaLaw.exp_neg_chainTruncationWidth,
+        TNLean.MPS.AreaLaw.chainBondDimension,
+        TNLean.MPS.AreaLaw.exists_isChainMPS_norm_sub_le,
+        TNLean.MPS.AreaLaw.chainBondDimension_le_mul_rpow
     }
     \leanok
     \uses{def:chain_domain, def:chain_open_mps, def:area_law_hamiltonian,

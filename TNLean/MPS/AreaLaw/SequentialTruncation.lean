@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Chain.OpenMPS
+import TNLean.MPS.AreaLaw.OpenMPS
 import QICLean.Entropy.FilterOptimizer
 import QICLean.Entropy.RegionEntropy
 import QICLean.Entropy.SpectralTail
@@ -180,7 +180,7 @@ theorem PosSemidef.rank_spectralProjectionGE_exp_le (hρ : ρ.PosSemidef) (hρ1 
 
 end Matrix
 
-namespace TNLean.PEPS.AreaLaw.Chain
+namespace TNLean.MPS.AreaLaw
 
 variable {L q : ℕ}
 
@@ -361,4 +361,4 @@ theorem exists_sequentialTruncation (ψ : EuclideanSpace ℂ (Fin L → Fin q))
     rw [hi']
     exact hterm _
 
-end TNLean.PEPS.AreaLaw.Chain
+end TNLean.MPS.AreaLaw

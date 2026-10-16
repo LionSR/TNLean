@@ -95,6 +95,7 @@ spectral results, and channel-generic Kraus/Wielandt APIs. See
 | **4** | `MPS/FundamentalTheorem/`, `MPS/Symmetry/` | Single-block FT, gauge equivalence, on-site/virtual symmetries, cocycle coboundary |
 | **5** | `MPS/BNT/`, `MPS/CanonicalForm/`, `MPS/Structure/`, `MPS/Irreducible/`, `MPS/Periodic/`, `MPS/FundamentalTheorem/Multi/` | Multi-block assembly, BNT canonical forms, permutation rigidity, periodic tensors |
 | **5b** | `MPS/RFP/` | Renormalization fixed-point scaffolding |
+| **5c** | `MPS/AreaLaw/` | One-dimensional area law and polynomial matrix product state approximation for gapped chains, on the one-row domains of `PEPS/AreaLaw/` |
 | **6** | `Wielandt/` | Tensor-typed span-growth, primitivity, and Wielandt consequences built on QICLean |
 
 **Other modules**: `Circuit/` (local quantum circuits on qudit chains, namespace `QuantumCircuit`, used by the log-depth preparation of `MPS/Preparation/`; it imports nothing from `MPS/`), `PiAlgebra/` (pi-algebra FT variants), `PEPS/` (two-dimensional fundamental-theorem development for torus, cycle, and normal-tensor routes), `MPS/MPDO/` (density operator foundations), `QCA/` (quasi-local and cellular-automaton layer), `Spectral/` (MPS-specific transfer-operator gap and overlap-decay results), and `Archive/` (legacy, excluded from root imports).

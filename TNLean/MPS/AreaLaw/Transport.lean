@@ -3,8 +3,8 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Chain.Basic
-import TNLean.PEPS.AreaLaw.Chain.OpenMPS
+import TNLean.MPS.AreaLaw.Basic
+import TNLean.MPS.AreaLaw.OpenMPS
 import TNLean.PEPS.AreaLaw.RegionalEntropyBridge
 import QICLean.Analysis.SurprisalMoment
 
@@ -67,7 +67,9 @@ theorem sum_eigenvalues_congr {A B : Matrix n n ℂ} (hA : A.IsHermitian) (hB : 
 
 end Matrix.IsHermitian
 
-namespace TNLean.PEPS.AreaLaw.Chain
+open TNLean.PEPS.AreaLaw
+
+namespace TNLean.MPS.AreaLaw
 
 /-- The relabeling of configurations of the chain of `L` sites along the enumeration of
 its sites. -/
@@ -190,4 +192,4 @@ theorem surprisalTail_chainTransport {L q : ℕ} (Ω : StateSpace (chainDomain L
     (Matrix.IsHermitian.sum_eigenvalues_reindex (reducedState_isHermitian _ _ _ _)
       (leftBlockConfigEquiv L q k).symm fun p ↦ if w < |-Real.log p - S| then p else 0)
 
-end TNLean.PEPS.AreaLaw.Chain
+end TNLean.MPS.AreaLaw

@@ -31,7 +31,7 @@ sites as columns; its rank is the Schmidt rank across the cut.
 
 open Matrix
 
-namespace TNLean.PEPS.AreaLaw.Chain
+namespace TNLean.MPS.AreaLaw
 
 variable {L q : ℕ}
 
@@ -66,4 +66,4 @@ def IsOpenMPS (L q D : ℕ) (ψ : (Fin L → Fin q) → ℂ) : Prop :=
   ∃ (A : Fin L → Fin q → Matrix (Fin D) (Fin D) ℂ) (vL vR : Fin D → ℂ),
     ∀ x, ψ x = vL ⬝ᵥ ((List.ofFn fun i ↦ A i (x i)).prod *ᵥ vR)
 
-end TNLean.PEPS.AreaLaw.Chain
+end TNLean.MPS.AreaLaw

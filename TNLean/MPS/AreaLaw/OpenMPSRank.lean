@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.AreaLaw.Chain.OpenMPS
+import TNLean.MPS.AreaLaw.OpenMPS
 
 /-!
 # Matrix product states from cut ranks
@@ -47,7 +47,7 @@ theorem Submodule.exists_fin_span_of_finrank_le {K M : Type*} [Field K] [AddComm
   rw [LinearMap.pi_apply_eq_sum_univ g]
   simp
 
-namespace TNLean.PEPS.AreaLaw.Chain
+namespace TNLean.MPS.AreaLaw
 
 variable {L q : ℕ}
 
@@ -176,4 +176,4 @@ theorem isOpenMPS_of_cutMatrix_rank_le {L q D : ℕ} (ψ : EuclideanSpace ℂ (F
     rw [dotProduct_mulVec, ← key L x]
     simp [dotProduct, mul_comm]
 
-end TNLean.PEPS.AreaLaw.Chain
+end TNLean.MPS.AreaLaw
