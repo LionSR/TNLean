@@ -130,19 +130,20 @@ theorem treatedFrame_spec {K₀ ε₀ ν a D : ℝ} (hc : IsProtocolConstants K�
     (hg : (blockBaseline (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
       (protocolLevelLabels k R.1.1 done) R.1.index
       (newParty Sum.inl R.1.1 R.1.index)).IsUnmodifiedGuide g)
-    (M : Finset (ℤ × ℤ)) (L₀ : GuideLabel)
-    (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧ ε₀ * (D * Real.log L) ≤ B₀ * Real.log L) :
+    (M : Finset (ℤ × ℤ)) (L₀ : GuideLabel) :
     IsDisplacedReading (treatedGuide R.1.1 R.1.index (D * Real.log L) M L₀ g)
       (homogenize (⋃ Q ∈ M, ball (blockCorner ((2 : ℝ) ^ (R.1.1 : ℕ)) Q) (D * Real.log L)) L₀
         (shiftGuide (blockCorner ((2 : ℝ) ^ (R.1.1 : ℕ)) R.1.index) g)) ((1 : ℝ), (1 : ℝ)) ∧
     (∀ z, z ∈ treatedVertices k R.1.1 (D * Real.log L) M
         (treatedGuide R.1.1 R.1.index (D * Real.log L) M L₀ g) ↔
       IsTrueVertex (treatedGuide R.1.1 R.1.index (D * Real.log L) M L₀ g) z) ∧
-    ∃ h, treatedFrame (q := q) P rank R hr M L₀ g =
+    ∃ h, treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL) M L₀ g =
       guideFrame (cellCenterPos L) q (treatedGuide R.1.1 R.1.index (D * Real.log L) M L₀ g)
         (labelParty R) guidePlaceholder rank
         (treatedVertices k R.1.1 (D * Real.log L) M
-          (treatedGuide R.1.1 R.1.index (D * Real.log L) M L₀ g)) (suppliedPatch P _ hr) h := by
+          (treatedGuide R.1.1 R.1.index (D * Real.log L) M L₀ g))
+        (suppliedPatch P _ (hc.treatedRadius_bounds hL)) h := by
+  have hr := hc.treatedRadius_bounds hL
   classical
   set n : ℝ := (2 : ℝ) ^ (R.1.1 : ℕ) with hn_def
   set t := D * Real.log L with ht_def
@@ -217,9 +218,9 @@ theorem exists_pointTreatment_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε
     {M M'} Q₀ hQ₀ hM L₀ hL₀ {C' c'} hC hC' hcc => ?_⟩
   classical
   have hr := hc.treatedRadius_bounds hL
-  obtain ⟨hfM, hmemM, hdM, hFM⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done hg M L₀ hr
+  obtain ⟨hfM, hmemM, hdM, hFM⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done hg M L₀
   obtain ⟨hfM', hmemM', hdM', hFM'⟩ :=
-    treatedFrame_spec (q := q) P rank R hc hL hlarge done hg M' L₀ hr
+    treatedFrame_spec (q := q) P rank R hc hL hlarge done hg M' L₀
   set n : ℝ := (2 : ℝ) ^ (R.1.1 : ℕ) with hn_def
   set t := D * Real.log L with ht_def
   have hn : 0 < n := by positivity
