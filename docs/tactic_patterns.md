@@ -4589,6 +4589,25 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Treated-to-level frame equality — candidate (2026-10-16)
+
+- **Pattern:** Identify true vertices from a guide equality, replace the constant
+  treated radius by the equal level radius, transport disjointness, and change
+  the reference party map.
+- **Seen:** Two occurrences in one file: `levelFrame_eq_treatedFrame_guide`
+  and `treatedFrame_completedGuide_eq_levelFrame` in
+  `TNLean/PEPS/Approximation/DyadicTreatedFrameBoundary.lean`.
+- **Abstraction:** The private `treatedFrame_eq_levelFrame_of_guide_eq` takes
+  the baseline stage, the output stage, an unmodified guide and its equality
+  with the level guide. Both endpoint proofs use it.
+- **Notes:** This private, single-file extraction is below the promotion
+  threshold of three occurrences across two files. It shares the two proofs
+  without a global tactic or attribute; all existing endpoint hypotheses
+  and directions are retained.
+  Affine perturbation avoidance also reuses `eventually_add_ne`, which uses
+  public Mathlib neighborhood lemmas; the similarly named chamber-sampling
+  helper is private to its module.
+
 ### Treated birth and death preamble — candidate (2026-10-16)
 
 - **Pattern:** the common setup of a treated birth or death: the scales `n`, `t`, the block
