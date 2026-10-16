@@ -77,6 +77,7 @@ import TNLean.PEPS.AreaLaw.RegularizedPatchMinimizerClipping
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimizerStationarity
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimumContinuity
+import TNLean.PEPS.AreaLaw.RegularizedPatchRadiusChoice
 import TNLean.PEPS.AreaLaw.RegularizedPatchRadiusDerivative
 import TNLean.PEPS.AreaLaw.RegularizedPatchStationarity
 import TNLean.PEPS.AreaLaw.RotatedChainRule
