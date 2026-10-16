@@ -27,11 +27,11 @@ the root party (`mainState_zero`).
 
 noncomputable section
 
-open Set Metric
+open Set
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame
 
 variable {k : ℕ}
 
