@@ -8273,3 +8273,20 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** `TNLean/PEPS/AreaLaw/Geometry/RepairRankZeroAncestry.lean:78`, `:87`, and `:98`, in `repairStage_birth_oldInclusion`, `repairStage_color_oldInclusion`, and `repairStageCharacteristicLength_oldInclusion` respectively. The source-text scan finds exactly these three occurrences.
 - **Abstraction:** The existing natural-number recursor already expresses the shared induction in one line. No further helper or tactic is proposed.
 - **Notes:** These are three occurrences in one file. They do not meet the promotion threshold of three occurrences across at least two files; the alternative threshold for longer repeated blocks also does not apply.
+
+### Uniform padding constants for buffered rectangles — candidate
+
+- **Pattern:** Choose a real threshold as the maximum of the normalization,
+  energy, and tail thresholds. Choose the padding constant by taking the
+  natural ceiling of an exponential expression, then obtain the entropy
+  constant from the same choices before introducing the clearance parameter
+  and the physical data.
+- **Occurrences:** `exists_condEntropy_le_initialBuffer` in
+  `TNLean/PEPS/AreaLaw/InitialBuffer.lean` and
+  `exists_condEntropy_le_initialBuffer_real` in
+  `TNLean/PEPS/AreaLaw/InitialBufferReal.lean`.
+- **Possible next abstraction:** If a third proof needs the same choices,
+  first consider an existence lemma for the numerical padding and entropy
+  constants and their inequalities. The constants must remain uniform in
+  the clearance and physical data. These are two occurrences across two
+  files; no promotion or proof refactor is proposed.
