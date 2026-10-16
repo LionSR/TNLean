@@ -52,7 +52,7 @@ the fusion-then-action maps. Their entries are
     \label{eq:mpo_mix_fusion_tree}                                     \\
     Q_{p,ck\mu} & =V^A_{p,c;k}(V^F_{p,ab;c\mu}\otimes\Id_{E_p}).\notag
 \end{align}
-The actual comparison matrix $L_p$, with rows $P_{ab}$ and columns
+The comparison matrix $L_p$, with rows $P_{ab}$ and columns
 $Q_{ab}$, is determined by
 $H_{p,ij}R_{p,ck\mu}=(L_p)_{ij,ck\mu}\Id_{E_p}$.
 Its entries are equivalently the trace of this product divided by $D_p$.
@@ -75,7 +75,7 @@ change of basis.
                 & R_{p,q}                               & =\sum_{i\in P_{ab}}(L_p)_{iq}S_{p,i}.
         \label{eq:mpo_mix_fusion_l}
     \end{align}
-    Suppose the actual matrices agree, $L_0=L_1$, for the selected
+    Suppose $L_0=L_1$ for the selected
     pair $a,b$. Then every rectangular matrix $X:E_1\to E_0$ satisfies
     \begin{align}
         \sum_{i\in P_{ab}}S_{0,i}XH_{1,i}
@@ -234,7 +234,7 @@ change of basis.
     (\ref{eq:mpo_mix_fusion_tree}) and commuting scalar factors gives
     exactly (\ref{eq:mpo_mix_fusion_entry}). Reverse the two ends for
     $p=1,q=0$. Every remaining sector is zero by the definitions.
-    Theorem~\ref{thm:mpo_mixed_fusion_maps} supplies biorthogonality.
+    Theorem~\ref{thm:mpo_mixed_fusion_maps} gives biorthogonality.
 \end{proof}
 
 % TENKZ-MIXED-FUSION-LOCAL-BEGIN
@@ -366,7 +366,7 @@ The restriction $n>0$ is essential: an empty word is the identity
 on $K_a\otimes K_b$, whereas
 $\sum_{c,\mu}\widetilde W_{ab;c\mu}\widetilde V_{ab;c\mu}$
 vanishes on the unmatched sectors and need not be the ambient identity.
-The equality $L_0=L_1$ is an assumption about the chosen actual
+The equality $L_0=L_1$ is an assumption about the chosen
 comparison matrices. It does not follow here from equivalence of
 $L$-symbols under changes of basis; this restriction relative to the
 source's gauge alignment of equivalent $L$-symbol classes is recorded in
@@ -374,7 +374,7 @@ source's gauge alignment of equivalent $L$-symbol classes is recorded in
 for (\ref{eq:mpo_mix_fusion_exact}) or
 (\ref{eq:mpo_mix_fusion_periodic}). The construction in
 \cite[Section~5]{GarreRubio2023MPOSym} also asks for common $F$-symbols
-when asserting coherent recoupling. Inheritance of the actual mixed
+when asserting coherent recoupling. Inheritance of the mixed
 $L$-symbols, coherent $F$-symbols, injectivity of the mixed operator,
 closure under physical adjoints, Hamiltonian symmetry, and the full
 symmetric-phase classification are separate assertions.

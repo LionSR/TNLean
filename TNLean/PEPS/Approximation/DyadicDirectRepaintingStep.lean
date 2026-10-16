@@ -19,7 +19,8 @@ most `(2b + 1) L^{-20}` (`directRepainting_step`).
 
 ## Main results
 
-* `Approximation.directRepainting_step`.
+* `Approximation.directRepainting_step_isSourceBounded`, `Approximation.directRepainting_step`:
+  with and without the bound of `2b` pair sources in every monomial.
 
 ## References
 
@@ -36,6 +37,69 @@ namespace TNLean.PEPS.Approximation
 open EncodedFrame PairEffect
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ} {κ Party : Type}
+
+/-- **The direct repainting of a block as one gate, with its pair sources.** The conclusion of
+`directRepainting_step`, together with the bound of `2b` pair sources in every monomial of the
+gate; `2b` is also the bound on its pair effects.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 507–527 and 574–583; Lemma 6.3
+`lem:small-rewrite`, `05-frames.tex`, lines 188–218; Theorem 5.2, item 3, `04-compression.tex`,
+lines 143–147. -/
+theorem directRepainting_step_isSourceBounded [NeZero q] {n r u : ℝ} (hn : 0 < n) (hr : 0 < r)
+    (hu : 0 < u) (hsep : 3 * u + 4 * r < n) {lab lab' : ℤ × ℤ → κ} {S : ℤ × ℤ}
+    (hlab : ∀ Q, Q ≠ S → lab' Q = lab Q) {v : ℝ × ℝ} {g g' : ℝ × ℝ → κ}
+    (hg : IsDisplacedReading g (blockGuide n lab) v)
+    (hg' : IsDisplacedReading g' (blockGuide n lab') v) (own : κ → Party) (ph : κ)
+    (rank : κ → ℕ) {V V' : Finset (ℝ × ℝ)} (hV : ∀ c ∈ V, IsTrueVertex g c)
+    (hV' : ∀ c ∈ V', IsTrueVertex g' c)
+    (hVc : ∀ c ∈ closedBall (blockCorner n S) (3 * n), IsTrueVertex g c → c ∈ V)
+    (hVc' : ∀ c ∈ closedBall (blockCorner n S) (3 * n), IsTrueVertex g' c → c ∈ V')
+    (hVV' : ∀ c ∉ squareCorners n S, (c ∈ V ↔ c ∈ V'))
+    (hole patch : ℝ × ℝ → SquarePatch pos q)
+    (hhole : ∀ z, (hole z).center = z ∧ (hole z).scale = r)
+    (hpatch : ∀ z, (patch z).center = z ∧ (patch z).scale = u)
+    (htwo : HasTwoOwnerFootprints g (closedBall (blockCorner n S) (2 * n))
+      {c | c ∈ closedBall (blockCorner n S) (3 * n) ∧ IsTrueVertex g c} r (2 * u))
+    (htwo' : HasTwoOwnerFootprints g' (closedBall (blockCorner n S) (2 * n))
+      {c | c ∈ closedBall (blockCorner n S) (3 * n) ∧ IsTrueVertex g' c} r (2 * u))
+    (hpV : (V : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (hole z).outer (hole z').outer)
+    (hpV' : (V' : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (hole z).outer (hole z').outer)
+    {C c b L : ℕ} (hL : 1 ≤ L) (hcardHole : ∀ z, Fintype.card (hole z).Tag ≤ C * L ^ c)
+    (hcardPatch : ∀ z, Fintype.card (patch z).Tag ≤ C * L ^ c)
+    (hb : (2 * (n / 2 + 2 * r + u) / u + 1) ^ 2 ≤ b) (hb18 : 18 ≤ b)
+    {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
+    (hεpatch : ∀ z, ‖act (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hεhole : ∀ z, ‖act (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (htag : ∀ z, Nonempty (hole z).Tag) :
+    ∃ P : Finset Party, P.card ≤ 18 ∧
+      (∀ x ∈ P, ∃ R ∈ blockWindow 1, x = own (lab (R + S)) ∨ x = own (lab' (R + S))) ∧
+      ∃ w : OriginalCircuit (guideFrame pos q g own ph rank V hole hpV).regs
+        (guideFrame pos q g' own ph rank V' hole hpV').regs,
+      w.nonprivateCount ≤ 1 ∧ (∀ γ, (↑(w.participants γ) : Set Party) ⊆ ↑P) ∧
+      w.IsExpansionBounded (2 * b) ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^
+        (2 * b) * L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) : ℕ) ∧
+      w.IsMonomialBounded ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
+        L ^ (3 * b * c + 4 * b * (3 * b * c + 30))) ∧
+      ‖w.eval ((guideFrame pos q g own ph rank V hole hpV).regIso.symm
+          ((guideFrame pos q g own ph rank V hole hpV).refVec Ω)) -
+        (guideFrame pos q g' own ph rank V' hole hpV').regIso.symm
+          ((guideFrame pos q g' own ph rank V' hole hpV').refVec Ω)‖ ≤
+        (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
+      w.IsSourceBounded (2 * b) := by
+  obtain ⟨G, hG, ho, hn', how, hph, hrk, hho, hhn, hpt, hUA, hUA', hA, hA', hN, hP, hP₀,
+    hdesc⟩ := exists_directRepainting_planeConditions (Party := Party) hn hr hu hsep hlab hg hg'
+      own ph rank hV hV' hVc hVc' hVV' hole patch hhole hpatch htwo htwo'
+  subst ho hn' how hph hrk hho hpt
+  obtain ⟨w, h₁, h₂, h₃, h₄, h₅, h₆⟩ := hG.exists_originalCircuit_isSourceBounded (C := C)
+    (c := c) (b := b) hL (fun a _ => hhn ▸ hcardHole a) (fun z _ => hcardPatch z)
+    (fun a _ => hcardHole a) (by exact_mod_cast hN.trans hb) (hA.trans (by omega))
+    (hA'.trans (by omega)) (hP.trans hb18) hΩ (fun z _ => hεpatch z) (fun a _ => hεhole a) hP₀
+    (fun z _ => htag z)
+  have e₁ := G.oldFrame_eq hUA hpV
+  have e₂ : G.newFrame = guideFrame pos q G.new G.own G.ph G.rank V' G.holeOld hpV' :=
+    guideFrame_congr hUA' hhn _ _
+  rw [← e₁, ← e₂]
+  exact ⟨G.parties, hP, hdesc, w, h₁, h₂, h₃, h₄, h₅, h₆⟩
 
 /-- **The direct repainting of a block as one gate.** In the setting of
 `exists_directRepainting_planeConditions`, suppose moreover that every hole and every patch has
@@ -90,18 +154,9 @@ theorem directRepainting_step [NeZero q] {n r u : ℝ} (hn : 0 < n) (hr : 0 < r)
         (guideFrame pos q g' own ph rank V' hole hpV').regIso.symm
           ((guideFrame pos q g' own ph rank V' hole hpV').refVec Ω)‖ ≤
         (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by
-  obtain ⟨G, hG, ho, hn', how, hph, hrk, hho, hhn, hpt, hUA, hUA', hA, hA', hN, hP, hP₀,
-    hdesc⟩ := exists_directRepainting_planeConditions (Party := Party) hn hr hu hsep hlab hg hg'
-      own ph rank hV hV' hVc hVc' hVV' hole patch hhole hpatch htwo htwo'
-  subst ho hn' how hph hrk hho hpt
-  obtain ⟨w, h₁, h₂, h₃, h₄, h₅⟩ := hG.exists_originalCircuit (C := C) (c := c) (b := b) hL
-    (fun a _ => hhn ▸ hcardHole a) (fun z _ => hcardPatch z) (fun a _ => hcardHole a)
-    (by exact_mod_cast hN.trans hb) (hA.trans (by omega)) (hA'.trans (by omega))
-    (hP.trans hb18) hΩ (fun z _ => hεpatch z) (fun a _ => hεhole a) hP₀ (fun z _ => htag z)
-  have e₁ := G.oldFrame_eq hUA hpV
-  have e₂ : G.newFrame = guideFrame pos q G.new G.own G.ph G.rank V' G.holeOld hpV' :=
-    guideFrame_congr hUA' hhn _ _
-  rw [← e₁, ← e₂]
-  exact ⟨G.parties, hP, hdesc, w, h₁, h₂, h₃, h₄, h₅⟩
+  obtain ⟨P, h₁, h₂, w, h₃, h₄, h₅, h₆, h₇, -⟩ := directRepainting_step_isSourceBounded hn hr hu
+    hsep hlab hg hg' own ph rank hV hV' hVc hVc' hVV' hole patch hhole hpatch htwo htwo' hpV hpV'
+    hL hcardHole hcardPatch hb hb18 hΩ hεpatch hεhole htag
+  exact ⟨P, h₁, h₂, w, h₃, h₄, h₅, h₆, h₇⟩
 
 end TNLean.PEPS.Approximation

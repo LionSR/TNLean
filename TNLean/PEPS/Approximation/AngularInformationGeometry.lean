@@ -16,8 +16,12 @@ For physical lattice sites, the real maximum metric equals the integer sup
 distance used by the information reset.
 
 Source: polynomial-PEPS manuscript, `00-introduction.tex`, lines 21–25,
-and `02-information.tex`, lines 168–175, 334–353, and 694–745, revision
+and `02-information.tex`, Lemma 3.2 (`lem:cell-cmi`), the information
+reset (`lem:reset`), and Proposition 3.4 (`prop:angular`),
+lines 168–175, 334–353, and 694–745, revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+
+Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
 namespace TNLean.PEPS.Approximation.AngularGrid

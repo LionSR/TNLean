@@ -242,7 +242,7 @@ target tensor differ by a scalar multiple.
     \lean{MPSTensor.gauge_ratio_isScalar}
     \leanok
     \uses{lem:gauge_ratio_commutes, def:injective, lem:center_scalar}
-    Under the same hypotheses, if $A$ is additionally injective, then
+    Under the same hypotheses, if $A$ is also injective, then
     $Y^{-1} X = \lambda \Id_D$ for some scalar $\lambda \in \C$.
 \end{lemma}
 
@@ -316,7 +316,7 @@ Definitions~\ref{def:is_coboundary} and~\ref{def:cohomologous_to}.
 \begin{proof}\leanok\uses{def:cohomologous_to}
     Reflexivity: take $\varphi=1$.
     Symmetry: replace $\varphi$ by $\varphi^{-1}$.
-    Transitivity: compose the witnesses $\varphi$ and $\psi$ pointwise
+    Transitivity: compose the cochains $\varphi$ and $\psi$ pointwise
     in (\ref{eq:symmetry_cohomologous}).
 \end{proof}
 

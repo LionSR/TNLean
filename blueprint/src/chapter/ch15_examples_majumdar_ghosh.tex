@@ -38,14 +38,14 @@ $\ket{10}-\ket{01}$.
     The review prints the tensor
     $A=\bigl[\ket0{\bigl[(02|+(20|\bigr]}+\ket1{\bigl[(12|+(21|\bigr]}\bigr]\otimes Y$
     \cite[Appendix~A, ``The Majumdar-Ghosh model'']{Cirac2021Matrix}. Read
-    literally, with $(ab|$ the bra $E_{ab}$ of the pair of virtual indices and
+    directly, with $(ab|$ the bra $E_{ab}$ of the pair of virtual indices and
     $\otimes$ the Kronecker product, it is the tensor
     $\widetilde A^i=B^i\otimes Y\in\MN{6}$ on the bond
     $\C^3\otimes\C^2\cong\C^6$, with $Y$ as in~(\ref{eq:mg_singlet_matrix}).
 \end{definition}
 
 The periodic coefficients are traces of products of these matrices.
-The literal reading above and the singlet-bond reading have different
+The direct reading above and the singlet-bond reading have different
 periodic vectors; their relation and the source ambiguity are recorded in
 \cite{gap:rmp_majumdar_ghosh_tensor_gap} and
 Theorem~\ref{thm:majumdar_ghosh_review_mpv}.
@@ -234,7 +234,7 @@ level $0$ and the normalized singlet as pair amplitude.
     and $Y_{ab}/\sqrt2$; each covering is a product of $N/2$ amplitudes.
 \end{proof}
 
-\begin{theorem}[The literal review tensor does not give the dimer superposition]%
+\begin{theorem}[The printed review tensor does not give the dimer superposition]%
     \label{thm:majumdar_ghosh_review_mpv}
     \lean{MPSTensor.majumdarGhoshReview_mpv_eq,
         MPSTensor.majumdarGhoshReview_mpv_ne_smul,
@@ -357,7 +357,7 @@ level $0$ and the normalized singlet as pair amplitude.
 \end{proof}
 
 \begin{remark}\label{rem:majumdar_ghosh_bond_dimension}
-    Read literally, the valence-bond formula of \cite{Cirac2021Matrix}
+    Read directly, the valence-bond formula of \cite{Cirac2021Matrix}
     specifies the six-dimensional tensor of
     Definition~\ref{def:majumdar_ghosh_review_tensor}, which by
     Theorem~\ref{thm:majumdar_ghosh_review_mpv} gives coverings by

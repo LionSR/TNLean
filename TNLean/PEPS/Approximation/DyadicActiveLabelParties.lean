@@ -29,10 +29,12 @@ the `2 ^ j'`-block `Q` is its new party `(j', Q)` or the old party of its parent
 * the labels a repainting uses: the labels of the blocks that differ from the repainted square by
   at most one in each index (the labels `A`, `B`, `C_e` of its edge diagrams and the four labels
   at each corner) are owned by its *used parties*; the labels incident at a grid corner of a
-  block guide, among them its tag holder, are those of the four blocks at the corner, the parties
-  a junction resize uses;
-* a used party of a repainting or a junction resize is near it, at distance constant `c = 0` in
-  the sense of `TNLean.PEPS.Approximation.DyadicSquare.Near`;
+  block guide, among them its tag holder, are those of the four blocks at the corner. A junction
+  resize uses the parties of the nine blocks around the block below and to the left of the
+  corner, which contain these four and every label that the resize step reads;
+* a used party of a repainting is near it, at distance constant `c = 0` in the sense of
+  `TNLean.PEPS.Approximation.DyadicSquare.Near`, and a used party of a junction resize at
+  distance constant `c = 1`; a block party is used by at most nine junction resizes;
 * hence the lifetime bound: if every repainting and every junction resize consists of at most `G`
   gates and each gate involves only parties its event uses, every block party participates in at
   most `64 G` gates.
@@ -84,12 +86,18 @@ def RepaintingUses (j' r' s' : ℕ) (x : ℕ × ℕ × ℕ) : Prop :=
   ∃ q t : ℕ, q ≤ r' + 1 ∧ r' ≤ q + 1 ∧ t ≤ s' + 1 ∧ s' ≤ t + 1 ∧ OwnsLevelBlock j' (q, t) x
 
 /-- The block parties used by the resize of the hole at the grid corner `(2 ^ j u, 2 ^ j v)` of
-the guide uniform on `2 ^ j`-blocks: the parties of the four blocks at the corner.
+the guide uniform on `2 ^ j`-blocks: the parties of the nine blocks of side `2 ^ j` whose
+indices differ by at most one in each coordinate from those of the block `(u - 1, v - 1)` below
+and to the left of the corner. These contain the four blocks at the corner, and they are the
+blocks whose labels the resize step reads (`resize_step`).
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), “Resizing uses the current block labels near
 its junction”, `06-geometry.tex:127–131, 594`. -/
 def JunctionUses (j u v : ℕ) (x : ℕ × ℕ × ℕ) : Prop :=
-  x.1 = j ∧ x.2.1 ≤ u ∧ u ≤ x.2.1 + 1 ∧ x.2.2 ≤ v ∧ v ≤ x.2.2 + 1
+  x.1 = j ∧ x.2.1 ≤ u ∧ u ≤ x.2.1 + 2 ∧ x.2.2 ≤ v ∧ v ≤ x.2.2 + 2
+
+instance (j u v : ℕ) : DecidablePred (JunctionUses j u v) := fun _ => by
+  unfold JunctionUses; infer_instance
 
 /-- The block parties used by the repainting of a square of the hierarchy. -/
 def DyadicSquare.Uses {k : ℕ} (S : DyadicSquare k) (x : ℕ × ℕ × ℕ) : Prop :=
@@ -98,6 +106,9 @@ def DyadicSquare.Uses {k : ℕ} (S : DyadicSquare k) (x : ℕ × ℕ × ℕ) : P
 /-- The block parties used by the resize at a junction of the hierarchy. -/
 def DyadicJunction.Uses {k : ℕ} (P : DyadicJunction k) (x : ℕ × ℕ × ℕ) : Prop :=
   JunctionUses P.1 P.2.1 P.2.2 x
+
+instance {k : ℕ} (x : ℕ × ℕ × ℕ) : DecidablePred fun P : DyadicJunction k => P.Uses x :=
+  fun P => inferInstanceAs (Decidable (JunctionUses P.1 P.2.1 P.2.2 x))
 
 /-! ### The invariant in party form -/
 
@@ -271,25 +282,54 @@ theorem RepaintingUses.near {j' r' s' j r s : ℕ} (h : RepaintingUses j' r' s' 
     · have := pow_mul_le_of_le (j := j') (show 2 * (t / 2) ≤ s' + 1 by omega); linarith
 
 /-- **Near junctions.** A party used by the resize at the grid corner `(2 ^ j' u, 2 ^ j' v)` has
-scale `j'`, and the corner is near its block, at distance constant zero.
+scale `j'`, and the corner is near its block, at distance constant one.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:594, 615–618`. -/
 theorem JunctionUses.near {j' u v j r s : ℕ} (h : JunctionUses j' u v (j, r, s)) :
-    j' ≤ j ∧ j ≤ j' + 1 ∧ CornerNear j r j' u 0 ∧ CornerNear j s j' v 0 := by
+    j' ≤ j ∧ j ≤ j' + 1 ∧ CornerNear j r j' u (2 ^ j) ∧ CornerNear j s j' v (2 ^ j) := by
   obtain ⟨hj, h1, h2, h3, h4⟩ := h
   dsimp only at hj h1 h2 h3 h4
   subst hj
-  exact ⟨le_rfl, Nat.le_succ _, ⟨by simpa using pow_mul_le_of_le h2,
-    by simpa using Nat.mul_le_mul_left (2 ^ j) h1⟩, by simpa using pow_mul_le_of_le h4,
-    by simpa using Nat.mul_le_mul_left (2 ^ j) h3⟩
+  have key : ∀ {a b : ℕ}, a ≤ b → b ≤ a + 2 → CornerNear j a j b (2 ^ j) := fun h₁ h₂ =>
+    ⟨by have := Nat.mul_le_mul_left (2 ^ j) h₂; rw [mul_add] at this; omega,
+      (Nat.mul_le_mul_left (2 ^ j) h₁).trans (Nat.le_add_right _ _)⟩
+  exact ⟨le_rfl, Nat.le_succ _, key h1 h2, key h3 h4⟩
+
+/-- **Junctions using a party.** A block party is used by the resizes of at most nine junctions
+of the hierarchy, at every depth `k`: those of its own scale whose indices exceed its block
+indices by at most two.
+
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `06-geometry.tex:594, 615–618`. -/
+theorem card_dyadicJunction_uses_le (k : ℕ) (x : ℕ × ℕ × ℕ) :
+    (univ.filter fun J : DyadicJunction k => J.Uses x).card ≤ 9 := by
+  obtain ⟨j, r, s⟩ := x
+  have h := card_le_card_of_injOn (s := univ.filter fun J : DyadicJunction k => J.Uses (j, r, s))
+    (t := range 3 ×ˢ range 3) (fun J => ((J.2.1 : ℕ) - r, (J.2.2 : ℕ) - s)) ?_ ?_
+  · simpa using h
+  · intro J hJ
+    obtain ⟨-, h1, h2, h3, h4⟩ := (mem_filter.1 (mem_coe.1 hJ)).2
+    dsimp only at h1 h2 h3 h4
+    exact mem_coe.2 (mem_product.2 ⟨mem_range.2 (by dsimp only; omega),
+      mem_range.2 (by dsimp only; omega)⟩)
+  · rintro ⟨j₁, a₁, b₁⟩ h₁ ⟨j₂, a₂, b₂⟩ h₂ he
+    obtain ⟨e₁, h₁₁, h₁₂, h₁₃, h₁₄⟩ := (mem_filter.1 (mem_coe.1 h₁)).2
+    obtain ⟨e₂, h₂₁, h₂₂, h₂₃, h₂₄⟩ := (mem_filter.1 (mem_coe.1 h₂)).2
+    simp only [Prod.mk.injEq] at he
+    dsimp only at e₁ e₂ h₁₁ h₁₂ h₁₃ h₁₄ h₂₁ h₂₂ h₂₃ h₂₄
+    obtain rfl : j₁ = j₂ := Fin.ext (e₁.symm.trans e₂)
+    obtain rfl : a₁ = a₂ := Fin.ext (by omega)
+    obtain rfl : b₁ = b₂ := Fin.ext (by omega)
+    rfl
 
 /-! ### Lifetime participation -/
 
 /-- **Bounded lifetime participation.** Let the gates `Γ` of a schedule on the hierarchy of
 `[0, 2 ^ k] ^ 2` belong to repaintings and junction resizes, `ev γ`, with at most `G` gates for
 each. If every gate in which the block party `x` participates belongs to a repainting or junction
-resize that uses `x`, then `x` participates in at most `64 G` gates. The bound depends only on
-`G`, not on `k` or the party.
+resize that uses `x`, then `x` participates in at most `64 G` gates: at most `32` repaintings
+near its block (`card_dyadicSquare_near_le` with `c = 0`) and at most `9` junction resizes
+(`card_dyadicJunction_uses_le`) use it. The bound depends only on `G`, not on `k` or the
+party.
 
 That a gate involves only parties its event uses is the hypothesis here; the gates of the protocol
 are not constructed. The used parties are those of the labels the event reads: the block labels
@@ -305,14 +345,22 @@ theorem card_gates_le_of_uses {k : ℕ} {Γ : Type*} [Fintype Γ]
     (hP : ∀ γ, P γ → Sum.elim (fun S => S.Uses x) (fun J => J.Uses x) (ev γ)) :
     (univ.filter P).card ≤ 64 * G := by
   obtain ⟨j, r, s⟩ := x
-  have := card_gates_le_of_near ev hG j r s 0 P fun γ hγ => by
-    have h := hP γ hγ
+  set T := (univ.filter (DyadicSquare.Near (k := k) j r s 0)).disjSum
+    (univ.filter fun J : DyadicJunction k => J.Uses (j, r, s))
+  have hT : T.card ≤ 64 := by
+    rw [card_disjSum]
+    have := card_dyadicSquare_near_le k j r s 0
+    have := card_dyadicJunction_uses_le k (j, r, s)
+    omega
+  have hmaps : ∀ γ ∈ univ.filter P, ev γ ∈ T := by
+    intro γ hγ
+    have h := hP γ (mem_filter.1 hγ).2
     rcases hev : ev γ with S | J <;> rw [hev] at h
     · obtain ⟨h1, h2, h3, h4⟩ := RepaintingUses.near h
-      exact ⟨h1, h2, by simpa using h3, by simpa using h4⟩
-    · obtain ⟨h1, h2, h3, h4⟩ := JunctionUses.near h
-      exact ⟨h1, h2, by simpa using h3, by simpa using h4⟩
-  norm_num at this
-  linarith
+      simpa [T, DyadicSquare.Near] using ⟨h1, h2, h3, h4⟩
+    · simpa [T] using h
+  refine (card_le_mul_card_image_of_maps_to hmaps G fun e _ => ?_).trans ?_
+  · exact (Finset.card_le_card (monotone_filter_left _ (filter_subset _ _))).trans (hG e)
+  · rw [mul_comm]; exact Nat.mul_le_mul_right G hT
 
 end TNLean.PEPS.Approximation

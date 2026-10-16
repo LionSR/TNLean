@@ -64,7 +64,7 @@ any fixed interpolation interval contained in $(0,1)$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:arealaw-rough-selection-numerator,lem:arealaw-selected-density-normalization}
+    \uses{thm:arealaw-rough-selection-numerator,thm:arealaw-selected-density-normalization}
     The rough norm difference and logarithmic error bounds give
     $(A+2nm(kT+b))/k\leq B+2nmT+R_k^{\rm end}(d,c,K,C_i+2nmC_b)$.
     Normalize the selected inequality by $KnD$, cancel the positive
@@ -214,9 +214,9 @@ any fixed interpolation interval contained in $(0,1)$.
         thm:al_positive_prefix_entropy_transfer,thm:al_scan_actual_rough_upper,
         thm:arealaw-physical-endpoint-loss,thm:arealaw-density-from-rough-endpoint,
         thm:arealaw-augmented-prevector-properties,thm:arealaw-actual-selected-energy,
-        lem:arealaw-generic-charge-energy,lem:arealaw-generic-selected-energy,
+        thm:arealaw-generic-charge-energy,thm:arealaw-generic-selected-energy,
         lem:al_scanner_scale_facts,thm:area_law_band_count_growth,
-        lem:arealaw-rough-endpoint-remainder-limit}
+        thm:arealaw-rough-endpoint-remainder-limit}
     Choose the truncation constants, then the energy coefficient and size
     threshold for the given exponents. The target-window theorem gives
     $\widetilde\Omega,E,z$; the common-label theorem gives
@@ -319,7 +319,7 @@ any fixed interpolation interval contained in $(0,1)$.
     \leanok
     \uses{thm:arealaw-source-charge-selection,thm:scanner_rounded_admissibility,
         thm:al_scan_radius_dimension_smallness,thm:al_scan_transport_coefficients_log,
-        thm:arealaw-target-entropy-transfer,lem:arealaw-source-rough-budget-power,
+        thm:arealaw-target-entropy-transfer,thm:arealaw-source-rough-budget-power,
         thm:arealaw-selected-density-delta}
     Enlarge the size threshold so that the rounded scales are admissible,
     $r_0\geq1$, $\log n\geq1$, and truncation changes each relevant entropy

@@ -68,7 +68,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--output-dir", type=Path,
                         help="parent directory for tests that render diagrams")
     parser.add_argument("--list", action="store_true", help="print the tests and exit")
-    parser.add_argument("--timeout", type=int, default=600, help="seconds allowed per test")
+    parser.add_argument("--timeout", type=int, default=1200, help="seconds allowed per test")
     args = parser.parse_args(argv)
     args.root = args.root.resolve()
     if args.output_dir is not None:

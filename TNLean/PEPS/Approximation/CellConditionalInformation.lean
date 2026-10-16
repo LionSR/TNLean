@@ -25,6 +25,8 @@ is an explicit premise of this intermediate result. For positive local dimension
 nonnegative interaction bound and positive spectral gap, the physical collar theorem
 supplies the range-one estimate with clearance 13 and template constant 24. See
 `docs/paper-gaps/polypeps_angular_annular_geometry_scope.tex`.
+
+Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
 noncomputable section

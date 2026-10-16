@@ -11,6 +11,7 @@ is $A\cap Q$; it may be empty even though the ambient rectangle is not.
 \begin{definition}[The actual rectangle scanner]
     \label{def:rectangle_bootstrap_scanner}
     \lean{TNLean.PEPS.AreaLaw.Scan.rectangleBootstrapScanner}
+    \leanok
     Fix scanner exponents and real coefficients $C_r,C_1$.
     Put $T=Q\cap\mathbb Z^2$ and $n=\lceil24s\rceil=24s$.
     Use the actual induced domain graph, the supplied cut $A$, and
@@ -31,6 +32,7 @@ is $A\cap Q$; it may be empty even though the ambient rectangle is not.
 \begin{theorem}[Weak-rectangle scanner geometry]
     \label{thm:rectangle_bootstrap_scanner_geometry}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_rectangleBootstrapScanner_geometry}
+    \leanok
     Fix scanner exponents and $C_r\geq0$.
     There is a threshold $N\geq1$ before the finite domain, cut,
     rectangle, interaction range, charge coefficient and safety
@@ -57,6 +59,7 @@ is $A\cap Q$; it may be empty even though the ambient rectangle is not.
     and the truncation set at every $L'$ is exactly $A\cap Q^{+L'}$.
 \end{theorem}
 \begin{proof}
+    \leanok
     The lower-left corner belongs to $T$, and the product cardinality
     gives $|T|\leq s^2\leq n^2$ independently of aspect ratio.
     For $1\leq r\leq L\leq s$, the native rectangle layer bound gives

@@ -7,7 +7,7 @@ $\sigma$ are positive semidefinite with trace one, and
 $R_\sigma(X)=\operatorname{Tr}(X)\sigma$.
 The ordered exponential estimates below are sufficient hypotheses; the
 qualitative convergence definition in the inhomogeneous paragraph
-of~\cite{Malz2024Preparation} does not supply them.
+of~\cite{Malz2024Preparation} does not yield them.
 The rectangular extension is given in Section~\ref{sec:ldp_rectangular}.
 
 \begin{theorem}[Ordered perturbations of varying references]
@@ -97,7 +97,7 @@ $\operatorname{Tr}(\sigma_j)=1$, even when $\sigma_j$ is singular.
     \lean{MPSPreparation.exists_norm_polarPos_sub_le_sqrt_transferMatrix,
         MPSPreparation.exists_norm_trace_prod_polarPos_sub_one_le_varying_reference}
     \leanok
-    There are constants depending only on $D$ such that, if each actual
+    There are constants depending only on $D$ such that, if each
     block transfer matrix differs from its reset reference by at most
     $\delta$, its positive polar factor differs from
     $(\sqrt{\sigma_j})^\mathsf T\otimes I$ by at most $K_D\sqrt\delta$.
@@ -126,7 +126,7 @@ $\operatorname{Tr}(\sigma_j)=1$, even when $\sigma_j$ is singular.
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_varying_reference}
     \leanok
     Fix $d,D$ with $d>0$, and $K,r>0$. For every positive ring length let
-    $A_{N,i}$ be actual tensors and $\sigma_{N,i}$ density matrices on
+    $A_{N,i}$ be site tensors and $\sigma_{N,i}$ density matrices on
     the common bond space. Suppose every positive nonwrapping interval
     starting at $a$ and of length $\ell$ satisfies
     \begin{align}

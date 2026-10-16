@@ -33,7 +33,8 @@ among them (`pointTreatment_step`).
 
 * `Approximation.RepaintingBaseline.IsUnmodifiedGuide.apply_mem`.
 * `Approximation.reading_mem_blockLabels`, `Approximation.tagHolder_mem_blockLabels`.
-* `Approximation.pointTreatment_step`.
+* `Approximation.pointTreatment_step_isSourceBounded`, `Approximation.pointTreatment_step`: with
+  and without the bound of `2b` pair sources in every monomial.
 
 ## References
 
@@ -221,6 +222,92 @@ open EncodedFrame PairEffect
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} {pos : ι → ℝ × ℝ}
 
+/-- **The point treatment of a mark as one gate, with its pair sources.** The conclusion of
+`pointTreatment_step`, together with the bound of `2b` pair sources in every monomial of the gate.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 481–505 and 574–583; Lemma 6.3
+`lem:small-rewrite`, `05-frames.tex`, lines 188–218; Theorem 5.2, item 3, `04-compression.tex`,
+lines 143–147. -/
+theorem pointTreatment_step_isSourceBounded [NeZero q] {n t r u : ℝ} (hn : 0 < n) (ht : 0 < t)
+    (hr : 0 < r) (hu : 0 < u) (hsep : 2 * t + 6 * r + 3 * u < n) {lab : ℤ × ℤ → κ} {S : ℤ × ℤ}
+    {B : κ}
+    {g : ℝ × ℝ → κ} (hg : (blockBaseline hn lab S B).IsUnmodifiedGuide g)
+    {M₁ M₂ : Finset (ℤ × ℤ)} (Q₀ : ℤ × ℤ) (hQ₀ : blockCorner n Q₀ ∈ closedBlock n S)
+    (hM : ∀ Q, Q ≠ Q₀ → (Q ∈ M₁ ↔ Q ∈ M₂)) (L₀ : κ)
+    (hL₀ : L₀ = B ∨ ∃ R ∈ blockWindow 1, L₀ = lab (R + S)) {v : ℝ × ℝ} {g₁ g₂ : ℝ × ℝ → κ}
+    (hg₁ : IsDisplacedReading g₁ (homogenize (⋃ Q ∈ M₁, ball (blockCorner n Q) t) L₀
+      (shiftGuide (blockCorner n S) g)) v)
+    (hg₂ : IsDisplacedReading g₂ (homogenize (⋃ Q ∈ M₂, ball (blockCorner n Q) t) L₀
+      (shiftGuide (blockCorner n S) g)) v) (own : κ → Party) (ph : κ) (rank : κ → ℕ)
+    {V V' : Finset (ℝ × ℝ)} (hV : ∀ c ∈ V, IsTrueVertex g₁ c) (hV' : ∀ c ∈ V', IsTrueVertex g₂ c)
+    (hVV' : ∀ c, n - t ≤ dist c (blockCorner n Q₀) → (c ∈ V ↔ c ∈ V'))
+    (hole patch : ℝ × ℝ → SquarePatch pos q)
+    (hhole : ∀ z, (hole z).center = z ∧ (hole z).scale = r)
+    (hpatch : ∀ z, (patch z).center = z ∧ (patch z).scale = u)
+    (hpV : (V : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (hole z).outer (hole z').outer)
+    (hpV' : (V' : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (hole z).outer (hole z').outer)
+    {W H H' : Set (ℝ × ℝ)} (hW : closedBall (blockCorner n Q₀) (t + 2 * r + 3 * u) ⊆ W)
+    (hH : ∀ c ∈ H, c ∈ V) (hH' : ∀ c ∈ H', c ∈ V')
+    (htwo : HasTwoOwnerFootprints g₁ W H r (2 * u))
+    (htwo' : HasTwoOwnerFootprints g₂ W H' r (2 * u))
+    {C c b L : ℕ} (hL : 1 ≤ L) (hcardHole : ∀ z, Fintype.card (hole z).Tag ≤ C * L ^ c)
+    (hcardPatch : ∀ z, Fintype.card (patch z).Tag ≤ C * L ^ c)
+    (hb : (2 * (t + 2 * r + u) / u + 1) ^ 2 ≤ b) (hb53 : 53 ≤ b)
+    {Ω : EuclideanSpace ℂ (ι → Fin q)} (hΩ : ‖Ω‖ ≤ 1)
+    (hεpatch : ∀ z, ‖act (patch z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (hεhole : ∀ z, ‖act (hole z).proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹)
+    (htag : ∀ z, Nonempty (hole z).Tag) :
+    ∃ w : OriginalCircuit (guideFrame pos q g₁ own ph rank V hole hpV).regs
+        (guideFrame pos q g₂ own ph rank V' hole hpV').regs,
+      w.nonprivateCount ≤ 1 ∧
+      (∀ γ, (↑(w.participants γ) : Set Party) ⊆ ↑(blockParties own lab S B)) ∧
+      w.IsExpansionBounded (2 * b) ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^
+        (2 * b) * L ^ (3 * b * c + 4 * b * (3 * b * c + 30)) : ℕ) ∧
+      w.IsMonomialBounded ((C + 1) ^ (3 * b) * (16 * b ^ 2 * (C + 1) ^ (6 * b) + 1) ^ (2 * b) *
+        L ^ (3 * b * c + 4 * b * (3 * b * c + 30))) ∧
+      ‖w.eval ((guideFrame pos q g₁ own ph rank V hole hpV).regIso.symm
+          ((guideFrame pos q g₁ own ph rank V hole hpV).refVec Ω)) -
+        (guideFrame pos q g₂ own ph rank V' hole hpV').regIso.symm
+          ((guideFrame pos q g₂ own ph rank V' hole hpV').refVec Ω)‖ ≤
+        (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ ∧
+      w.IsSourceBounded (2 * b) := by
+  have htn : 2 * t < n := by linarith
+  have hP : ∀ p, dist p (blockCorner n Q₀) ≤ t + 2 * r + 3 * u →
+      own (g₁ p) ∈ blockParties own lab S B ∧ own (g₂ p) ∈ blockParties own lab S B :=
+    fun p hp => ⟨own_mem_blockParties (reading_mem_blockLabels hn hg _ hL₀ hg₁ hQ₀
+      (by linarith)), own_mem_blockParties (reading_mem_blockLabels hn hg _ hL₀ hg₂ hQ₀
+      (by linarith))⟩
+  obtain ⟨G, hG, h₁, h₂, h₃, h₄, h₅, h₆, h₇, h₈, h₉, h₁₀, h₁₁, h₁₂, h₁₃, h₁₄⟩ :=
+    exists_pointTreatment_planeConditions hn ht hr hu hsep hg Q₀ hM L₀ hg₁ hg₂ own ph rank hV hV'
+      hVV' hole patch hhole hpatch hpV hpV' hW hH hH' htwo htwo' _ hP
+      (fun a ha hd => own_mem_blockParties (tagHolder_mem_blockLabels hn hg _ hL₀ hg₁ rank ph
+        (hV a ha) hQ₀ (by linarith)))
+      (fun a ha hd => own_mem_blockParties (tagHolder_mem_blockLabels hn hg _ hL₀ hg₂ rank ph
+        (hV' a ha) hQ₀ (by linarith)))
+  have hsub : G.oldAffected ⊆ insert (blockCorner n Q₀) (rimFinset (blockCorner n Q₀) t) :=
+    fun a ha => mem_insert_rimFinset_of_isTrueVertex hn ht.le htn hg M₁ L₀ hg₁ Q₀
+      (hV a (h₁₀ ▸ Finset.mem_union_right _ ha)) (h₁₂ a ha)
+  have hsub' : G.newAffected ⊆ insert (blockCorner n Q₀) (rimFinset (blockCorner n Q₀) t) :=
+    fun a ha => mem_insert_rimFinset_of_isTrueVertex hn ht.le htn hg M₂ L₀ hg₂ Q₀
+      (hV' a (h₁₁ ▸ Finset.mem_union_right _ ha)) (h₁₃ a ha)
+  have hcard := (Finset.card_insert_le (blockCorner n Q₀) (rimFinset (blockCorner n Q₀) t)).trans
+    (Nat.succ_le_succ (card_rimFinset_le (blockCorner n Q₀) t))
+  have hold : G.oldAffected.card ≤ b := (Finset.card_le_card hsub).trans (hcard.trans hb53)
+  have hnew : G.newAffected.card ≤ b := (Finset.card_le_card hsub').trans (hcard.trans hb53)
+  subst h₁ h₂ h₃ h₄ h₅ h₆ h₈
+  have hparties : G.parties.card ≤ b :=
+    h₉ ▸ (card_blockParties_le _ _ _ _).trans (by omega)
+  obtain ⟨w, w₁, w₂, w₃, w₄, w₅, w₆⟩ := hG.exists_originalCircuit_isSourceBounded (C := C)
+    (c := c) (b := b) hL
+    (fun a _ => h₇ ▸ hcardHole a) (fun z _ => hcardPatch z) (fun a _ => hcardHole a)
+    (by exact_mod_cast h₁₄.trans hb) hold hnew hparties hΩ (fun z _ => hεpatch z)
+    (fun a _ => hεhole a) (by rw [h₉]; exact ⟨_, mem_blockParties.2 (Or.inl rfl)⟩)
+    (fun z _ => htag z)
+  have e₂ : G.newFrame = guideFrame pos q G.new G.own G.ph G.rank V' G.holeOld hpV' :=
+    guideFrame_congr h₁₁ h₇ _ _
+  rw [← G.oldFrame_eq h₁₀ hpV, ← e₂]
+  exact ⟨w, w₁, h₉ ▸ w₂, w₃, w₄, w₅, w₆⟩
+
 /-- **The point treatment of a mark as one gate.** In the setting of
 `exists_pointTreatment_planeConditions`, let the mark `Q₀` be a corner of the closed block `S`,
 and the homogenizing label `L₀` be `B` or the label of one of the nine blocks around `S`. Suppose
@@ -276,40 +363,9 @@ theorem pointTreatment_step [NeZero q] {n t r u : ℝ} (hn : 0 < n) (ht : 0 < t)
         (guideFrame pos q g₂ own ph rank V' hole hpV').regIso.symm
           ((guideFrame pos q g₂ own ph rank V' hole hpV').refVec Ω)‖ ≤
         (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by
-  have htn : 2 * t < n := by linarith
-  have hP : ∀ p, dist p (blockCorner n Q₀) ≤ t + 2 * r + 3 * u →
-      own (g₁ p) ∈ blockParties own lab S B ∧ own (g₂ p) ∈ blockParties own lab S B :=
-    fun p hp => ⟨own_mem_blockParties (reading_mem_blockLabels hn hg _ hL₀ hg₁ hQ₀
-      (by linarith)), own_mem_blockParties (reading_mem_blockLabels hn hg _ hL₀ hg₂ hQ₀
-      (by linarith))⟩
-  obtain ⟨G, hG, h₁, h₂, h₃, h₄, h₅, h₆, h₇, h₈, h₉, h₁₀, h₁₁, h₁₂, h₁₃, h₁₄⟩ :=
-    exists_pointTreatment_planeConditions hn ht hr hu hsep hg Q₀ hM L₀ hg₁ hg₂ own ph rank hV hV'
-      hVV' hole patch hhole hpatch hpV hpV' hW hH hH' htwo htwo' _ hP
-      (fun a ha hd => own_mem_blockParties (tagHolder_mem_blockLabels hn hg _ hL₀ hg₁ rank ph
-        (hV a ha) hQ₀ (by linarith)))
-      (fun a ha hd => own_mem_blockParties (tagHolder_mem_blockLabels hn hg _ hL₀ hg₂ rank ph
-        (hV' a ha) hQ₀ (by linarith)))
-  have hsub : G.oldAffected ⊆ insert (blockCorner n Q₀) (rimFinset (blockCorner n Q₀) t) :=
-    fun a ha => mem_insert_rimFinset_of_isTrueVertex hn ht.le htn hg M₁ L₀ hg₁ Q₀
-      (hV a (h₁₀ ▸ Finset.mem_union_right _ ha)) (h₁₂ a ha)
-  have hsub' : G.newAffected ⊆ insert (blockCorner n Q₀) (rimFinset (blockCorner n Q₀) t) :=
-    fun a ha => mem_insert_rimFinset_of_isTrueVertex hn ht.le htn hg M₂ L₀ hg₂ Q₀
-      (hV' a (h₁₁ ▸ Finset.mem_union_right _ ha)) (h₁₃ a ha)
-  have hcard := (Finset.card_insert_le (blockCorner n Q₀) (rimFinset (blockCorner n Q₀) t)).trans
-    (Nat.succ_le_succ (card_rimFinset_le (blockCorner n Q₀) t))
-  have hold : G.oldAffected.card ≤ b := (Finset.card_le_card hsub).trans (hcard.trans hb53)
-  have hnew : G.newAffected.card ≤ b := (Finset.card_le_card hsub').trans (hcard.trans hb53)
-  subst h₁ h₂ h₃ h₄ h₅ h₆ h₈
-  have hparties : G.parties.card ≤ b :=
-    h₉ ▸ (card_blockParties_le _ _ _ _).trans (by omega)
-  obtain ⟨w, w₁, w₂, w₃, w₄, w₅⟩ := hG.exists_originalCircuit (C := C) (c := c) (b := b) hL
-    (fun a _ => h₇ ▸ hcardHole a) (fun z _ => hcardPatch z) (fun a _ => hcardHole a)
-    (by exact_mod_cast h₁₄.trans hb) hold hnew hparties hΩ (fun z _ => hεpatch z)
-    (fun a _ => hεhole a) (by rw [h₉]; exact ⟨_, mem_blockParties.2 (Or.inl rfl)⟩)
-    (fun z _ => htag z)
-  have e₂ : G.newFrame = guideFrame pos q G.new G.own G.ph G.rank V' G.holeOld hpV' :=
-    guideFrame_congr h₁₁ h₇ _ _
-  rw [← G.oldFrame_eq h₁₀ hpV, ← e₂]
-  exact ⟨w, w₁, h₉ ▸ w₂, w₃, w₄, w₅⟩
+  obtain ⟨w, h₁, h₂, h₃, h₄, h₅, -⟩ := pointTreatment_step_isSourceBounded hn ht hr hu hsep hg Q₀
+    hQ₀ hM L₀ hL₀ hg₁ hg₂ own ph rank hV hV' hVV' hole patch hhole hpatch hpV hpV' hW hH hH' htwo
+    htwo' hL hcardHole hcardPatch hb hb53 hΩ hεpatch hεhole htag
+  exact ⟨w, h₁, h₂, h₃, h₄, h₅⟩
 
 end TNLean.PEPS.Approximation

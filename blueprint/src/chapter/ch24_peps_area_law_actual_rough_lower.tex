@@ -229,6 +229,7 @@ $W=4$. Their hypothesis $K\geq8$ gives $0<a\leq1/2$.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{def:actual_rough_lower_remainder}
     Use $kS'-\log\dim\ell_k\leq|\log\dim\ell_k-kS'|$.
 \end{proof}
 
@@ -245,7 +246,7 @@ $W=4$. Their hypothesis $K\geq8$ gives $0<a\leq1/2$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:actual_rough_weight_remainder_limit}
+    \uses{thm:actual_rough_weight_remainder_limit,def:actual_rough_lower_remainder}
     Set $a=4/K$ in Theorem~\ref{thm:actual_rough_weight_remainder_limit}.
     Convergence gives the common threshold for every positive error allowance.
 \end{proof}
@@ -271,7 +272,8 @@ $W=4$. Their hypothesis $K\geq8$ gives $0<a\leq1/2$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:actual_supplied_rough_lower_weight}
+    \uses{thm:actual_supplied_rough_lower_weight,thm:actual_scan_rough_lower_norm,
+        thm:actual_rough_lower_label_defect,thm:actual_rough_lower_remainder_limit}
     Apply Theorem~\ref{thm:actual_supplied_rough_lower_weight} with $a=4/K$.
     The hypothesis $K\geq8$ gives $0<a\leq1/2$, and $aK/4=1$.
     The label sequence, physical vectors and remainder are unchanged.

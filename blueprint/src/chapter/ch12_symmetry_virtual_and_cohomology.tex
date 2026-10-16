@@ -618,7 +618,7 @@ second cohomology group $H^2(G,\C^{\times})$ of cocycles modulo coboundaries.
 
 For an abelian symmetry group, the antisymmetric commutator phase is invariant
 under a change of cocycle representative, so a value different from $1$
-witnesses non-triviality of the class.
+establishes non-triviality of the class.
 
 \begin{definition}[Commutator phase]\label{def:comm_phase}
     \lean{TNLean.Algebra.ScalarCocycle.commPhase}
@@ -640,7 +640,7 @@ witnesses non-triviality of the class.
 \begin{proof}\leanok\uses{def:comm_phase, def:cohomologous_to}
     Write
     $\omega_1(g,h)=\varphi(g)\varphi(h)\varphi(gh)^{-1}\omega_2(g,h)$
-    for a coboundary witness $\varphi$. Substituting into the ratio and using
+    for a cochain $\varphi$. Substituting into the ratio and using
     $gh=hg$ and the commutativity of $\C^{\times}$ gives
     \begin{align}
         \beta_{\omega_1}(g,h)

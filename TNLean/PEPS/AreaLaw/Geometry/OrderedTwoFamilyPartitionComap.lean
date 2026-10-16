@@ -16,6 +16,8 @@ changing the earlier pieces of either family.
 Source: OpenAI, *Polynomial PEPS approximation of gapped square-grid ground
 states*, proof of Lemma 3.2, `02-information.tex`, lines 197–222, revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+
+Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
 namespace TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition

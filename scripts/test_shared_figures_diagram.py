@@ -41,19 +41,23 @@ Checks:
   discovering runner ``scripts/run_diagram_tests.py`` needs no flag).
 
 The static checks are also run on a synthetic figure and on mutations of it,
-each of which must be rejected.
+each of which must be rejected. With ``--output-dir``, each compile chunk keeps
+its source, progress record and TeX diagnostics for CI artifact collection.
 """
 
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 import shutil
 import subprocess
 import sys
 import tempfile
+import time
 from concurrent.futures import ThreadPoolExecutor
+from contextlib import ExitStack
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -648,6 +652,7 @@ def compile_contract(
     engine: str,
     require: bool,
     jobs: int,
+    output_dir: Path | None = None,
 ) -> list[str]:
     """Compile the note contract; return findings (empty on success or skip)."""
 
@@ -694,32 +699,80 @@ def compile_contract(
     count = max(1, min(jobs, len(names)))
     pdftotext = shutil.which("pdftotext")
     chunks = [names[i::count] for i in range(count)]
-    with tempfile.TemporaryDirectory(prefix="tnleanfigures-contract-") as tmp:
-        root = Path(tmp)
+    with ExitStack() as stack:
+        if output_dir is None:
+            root = Path(stack.enter_context(
+                tempfile.TemporaryDirectory(prefix="tnleanfigures-contract-")
+            ))
+        else:
+            output_dir = output_dir.resolve()
+            output_dir.mkdir(parents=True, exist_ok=True)
+            # A fresh directory prevents a previous PDF/log from masquerading
+            # as this execution's output. Do not clean it on failure or timeout.
+            root = Path(tempfile.mkdtemp(prefix="contract-", dir=output_dir))
 
         def compile_chunk(index: int) -> tuple[list[str], str, int | None]:
             chunk = chunks[index]
             work = root / f"part{index}"
             work.mkdir()
+            started = time.monotonic()
+            metadata = {
+                "engine": engine,
+                "figures": chunk,
+                "override_figures": [name for name in chunk if labels.get(name)],
+                "override_label_count": sum(len(labels.get(name, ())) for name in chunk),
+            }
+
+            def progress(stage: str, **details: object) -> None:
+                elapsed = time.monotonic() - started
+                metadata.update(stage=stage, elapsed_seconds=elapsed, **details)
+                # Keep the previous complete record if an outer timeout kills
+                # this process while it is writing the next stage.
+                status = work / "status.tmp"
+                status.write_text(json.dumps(metadata, indent=2) + "\n", encoding="utf-8")
+                status.replace(work / "status.json")
+                print(f"NOTE: contract part {index + 1}/{count} {stage}"
+                      f" after {elapsed:.3f}s; figures={','.join(chunk)};"
+                      f" diagnostics={work}", flush=True)
+
             (work / "contract.tex").write_text(contract_document(chunk, labels), encoding="utf-8")
-            run = subprocess.run(
-                [exe, "-interaction=nonstopmode", "-halt-on-error", "contract.tex"],
-                cwd=work, env=env, check=False, text=True, errors="replace",
-                stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=1800,
-            )
+            tex_output = work / "tex.stdout.log"
+            progress("tex-start")
+            try:
+                # The child writes directly to a persistent file. In particular,
+                # the outer runner's SIGKILL cannot discard a parent pipe buffer.
+                with tex_output.open("w", encoding="utf-8") as stdout:
+                    run = subprocess.run(
+                        [exe, "-interaction=nonstopmode", "-halt-on-error", "contract.tex"],
+                        cwd=work, env=env, check=False, text=True, errors="replace",
+                        stdout=stdout, stderr=subprocess.STDOUT, timeout=1800,
+                    )
+            except (OSError, subprocess.TimeoutExpired) as error:
+                progress("tex-error", error=str(error))
+                return [f"note-contract compile with {engine} failed: {error};"
+                        f" diagnostics: {work}"], "", None
+            progress("tex-finished", tex_returncode=run.returncode)
             if run.returncode or not (work / "contract.pdf").is_file():
-                tail = "\n".join(run.stdout.splitlines()[-40:])
+                tail = "\n".join(tex_output.read_text(
+                    encoding="utf-8", errors="replace"
+                ).splitlines()[-40:])
+                progress("tex-failed")
                 return [
                     f"note-contract compile with {engine} failed (exit {run.returncode})"
-                    f" on {', '.join(chunk)}:\n{tail}"
+                    f" on {', '.join(chunk)}; diagnostics: {work}:\n{tail}"
                 ], "", None
             log = (work / "contract.log").read_text(encoding="utf-8", errors="replace")
             if pdftotext is None:
+                progress("complete", pdftotext="unavailable")
                 return [], log, None
-            text = subprocess.run(
-                [pdftotext, "contract.pdf", "-"], cwd=work, check=False, text=True,
-                errors="replace", stdout=subprocess.PIPE,
-            ).stdout
+            progress("pdftotext-start")
+            with (work / "pdftotext.stdout.txt").open("w", encoding="utf-8") as stdout:
+                text_run = subprocess.run(
+                    [pdftotext, "contract.pdf", "-"], cwd=work, check=False, text=True,
+                    errors="replace", stdout=stdout,
+                )
+            text = (work / "pdftotext.stdout.txt").read_text(encoding="utf-8", errors="replace")
+            progress("complete", pdftotext_returncode=text_run.returncode)
             return [], log, text.count(OVERRIDE)
 
         with ThreadPoolExecutor(max_workers=count) as pool:
@@ -740,7 +793,7 @@ def compile_contract(
     used = re.findall(r"\(([^()\s]*(?:tenkz|tikz-tensor-networks)\.sty)", results[0][1])
     print(f"PASS: note contract compiled with {engine} in {count} parallel documents:"
           f" {len(names)} figures, {sum(1 for n in names if labels.get(n))} overridden;"
-          f" tenkz from {used[0] if used else 'unknown'}")
+          f" tenkz from {used[0] if used else 'unknown'}", flush=True)
     return []
 
 
@@ -753,6 +806,8 @@ def main() -> int:
                         help="fail instead of skipping when the compile cannot run"
                         " with the pinned tenkz (the default under GitHub Actions)")
     parser.add_argument("--no-compile", action="store_true", help="static checks only")
+    parser.add_argument("--output-dir", type=Path,
+                        help="preserve per-chunk source, progress and TeX diagnostics")
     parser.add_argument("--jobs", type=int, default=os.cpu_count() or 1,
                         help="documents compiled in parallel (default: the CPU count)")
     args = parser.parse_args()
@@ -766,11 +821,11 @@ def main() -> int:
             print(f"FAIL: {failure}", file=sys.stderr)
         return 1
     print(f"PASS: {len(names)} shared figures, hosts and tnleanfigures.sty pass the static checks;"
-          f" {len(MUTATIONS) + len(JOINER_MUTATIONS) + 2} mutations rejected")
+          f" {len(MUTATIONS) + len(JOINER_MUTATIONS) + 2} mutations rejected", flush=True)
     if args.no_compile:
         return 0
     compile_failures = compile_contract(
-        src, names, labels, args.engine, args.require_tex, args.jobs
+        src, names, labels, args.engine, args.require_tex, args.jobs, args.output_dir
     )
     for failure in compile_failures:
         print(f"FAIL: {failure}", file=sys.stderr)

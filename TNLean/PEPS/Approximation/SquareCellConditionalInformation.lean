@@ -21,6 +21,8 @@ it does not supply the collar estimate. See
 
 Source: polynomial-PEPS manuscript, `02-information.tex`, Lemma 3.2,
 lines 163–178, and Proposition 3.4, lines 688–737.
+
+Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
 noncomputable section

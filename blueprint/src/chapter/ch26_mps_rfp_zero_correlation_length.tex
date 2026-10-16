@@ -215,7 +215,7 @@
     \end{align}
     Then $P$ satisfies the auxiliary BNT sector hypotheses,
     $A=\mathcal A(P)$, and $A$ and $\mathcal A(P)$ generate the same
-    matrix-product vectors. Moreover, the singleton family $(C)$ is a physical
+    matrix-product vectors. The singleton family $(C)$ is a physical
     BNT zero-correlation-length family for $A$, while
     \begin{align}
         \E_A^2 & \neq\E_A.
@@ -393,7 +393,7 @@
     $\E_{j,j'}=0$.
 \end{proof}
 
-\begin{theorem}[Basis direct sum is in literal CPSV canonical form]%
+\begin{theorem}[Basis direct sum is in CPSV canonical form]%
     \label{thm:bnt_cf_basis_direct_sum_is_cpsv_cf}
     \lean{MPSTensor.IsBNTCanonicalForm.isCPSVCanonicalForm_basisDirectSum}
     \leanok
@@ -675,7 +675,7 @@
 \begin{proof}\leanok
     \uses{thm:bnt_rank_one_observables_sharp_length, lem:zcl_direct_sum_sector_calculus}
     Choose the trace-one stationary state $\rho_j$ of $\E_{A_j}$. Simultaneous
-    block injectivity supplies observables with inserted maps
+    block injectivity gives observables with inserted maps
     \begin{align}
         \E_{O_1} & =\ket{\rho_j}\!\bra{u},
                  &
@@ -832,7 +832,7 @@
     observables require no additional hypotheses. In the general canonical
     form of \cite[equations~(1252) and~(1256)]{Cirac2016MPDO_arXiv}, observable
     insertions must also cover repeated-copy sectors with their respective
-    weights. Furthermore, the source argument infers from $\E_j^2\ne\E_j$ the
+    weights. In addition, the source argument infers from $\E_j^2\ne\E_j$ the
     existence of an eigenvalue $\lambda$ with $0<|\lambda|<1$, which omits
     non-idempotent channels whose non-trivial Jordan blocks occur at eigenvalue
     zero. At multiplicity one,
