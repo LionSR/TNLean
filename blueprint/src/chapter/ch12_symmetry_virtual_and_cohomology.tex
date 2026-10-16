@@ -62,9 +62,9 @@ gauge transformations form a projective representation on the bond space.
 \end{lemma}
 
 \begin{proof}\leanok\uses{def:twisted_tensor}
-    Expand both sides of (\ref{eq:symmetry_twist_composition}) using
-    (\ref{eq:symmetry_twisted_tensor}) and $U(gh)=U(g)\,U(h)$, then swap
-    the order of summation.
+    Expanding both sides of (\ref{eq:symmetry_twist_composition}) via
+    (\ref{eq:symmetry_twisted_tensor}) and $U(gh)=U(g)\,U(h)$ and swapping
+    the summation order yields the identity.
 \end{proof}
 
 \begin{lemma}[Identity twist]\label{lem:twisted_tensor_one}
@@ -223,8 +223,8 @@ gauge transformations form a projective representation on the bond space.
             \tn[skin=ring]{X(g)^{-1}}
         \end{tenkz}.
     \end{tenkzequation}
-    Apply Lemma~\ref{lem:gauge_equiv_twisted} to obtain $X(g)$, then
-    set $\varphi(g)=1$ in (\ref{eq:symmetry_virtual_equation}).
+    Lemma~\ref{lem:gauge_equiv_twisted} provides $X(g)$, and setting
+    $\varphi(g)=1$ yields (\ref{eq:symmetry_virtual_equation}).
 \end{proof}
 
 \begin{lemma}[Gauge uniqueness up to scalar]\label{lem:gauge_unique_up_to_scalar}
@@ -335,12 +335,11 @@ gauge transformations form a projective representation on the bond space.
 \end{lemma}
 
 \begin{proof}\leanok\uses{def:projective_rep}
-    Expand $\rho(g)\,(\rho(h)\rho(k))$ and
-    $(\rho(g)\rho(h))\rho(k)$ using the projective multiplication law
-    (\ref{eq:symmetry_projective_law}) and equate the results via matrix
-    associativity. The hypothesis $D > 0$ allows cancellation of the
-    invertible matrix factor, giving
-    (\ref{eq:symmetry_cocycle_identity}).
+    Expanding $\rho(g)\,(\rho(h)\rho(k))$ and
+    $(\rho(g)\rho(h))\rho(k)$ with the projective multiplication law
+    (\ref{eq:symmetry_projective_law}) and equating the results by matrix
+    associativity relates the scalar factors; since $D > 0$, cancelling the
+    invertible matrix factor gives (\ref{eq:symmetry_cocycle_identity}).
 \end{proof}
 
 \begin{lemma}[Projective representation from chosen virtual covariance]
@@ -351,15 +350,15 @@ gauge transformations form a projective representation on the bond space.
         lem:twisted_tensor_mul}
     Let $A$ be injective and let invertible matrices $X_g$ implement the
     physical twists, $U_g(A)=X_g A X_g^{-1}$. Then $\rho(g)=X_{g^{-1}}$
-    is a projective representation for some scalar factor system $\omega$.
-    Thus chosen unitary matrices give a unitary projective representation
+    is a projective representation for some scalar factor system $\omega$,
+    so chosen unitary matrices give a unitary projective representation
     \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{lemma}
 
 \begin{proof}\leanok
     The twist composition law makes $X_hX_g$ and $X_{gh}$ implement the same
-    twist. Gauge uniqueness gives a nonzero scalar relating them. Reindex
-    by inversion to obtain the projective multiplication law.
+    twist, so gauge uniqueness gives a nonzero scalar relating them, and
+    reindexing by inversion yields the projective multiplication law.
 \end{proof}
 
 \begin{theorem}[Virtual representation theorem for injective MPS]%

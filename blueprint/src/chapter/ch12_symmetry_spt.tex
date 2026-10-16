@@ -4284,13 +4284,14 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 \begin{lemma}[A common injective blocking length]
     \label{lem:spc_aux_normal_fourth_power_blocking}
     \lean{MPSTensor.IsNormalTensor.isNBlkInjective_pow_four}\leanok
-    For a normalized normal tensor of bond dimension $D$, products of length
-    $D^4$ span the full matrix algebra. Source context: arXiv:1606.00608,
-    lines 318--344, and the quantum Wielandt bound.
+    As used in arXiv:1606.00608, lines 318--344, and the quantum Wielandt
+    bound, for a normalized normal tensor of bond dimension $D$, products of
+    length $D^4$ span the full matrix algebra.
 \end{lemma}
 \begin{proof}\leanok
-    Conjugate to a trace-preserving tensor, apply the quantum Wielandt bound,
-    and carry the spanning statement through the bond conjugation.
+    Conjugating to a trace-preserving tensor, applying the quantum Wielandt
+    bound, and carrying the spanning statement through the bond conjugation
+    proves the claim.
 \end{proof}
 
 \begin{lemma}[Bounded bond dimension and common physical blocking]
@@ -4301,17 +4302,17 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     blocked tensor is injective.
 \end{lemma}
 \begin{proof}\leanok
-    Use injectivity at length $D^4$ and preservation of the spanning property
-    at every larger length.
+    Injectivity at length $D^4$ and preservation of the spanning property
+    at every larger length give injectivity at length $M^4$.
 \end{proof}
 
 \begin{lemma}[Algebraic simplicity of the fixed eigenvalue]
     \label{lem:spc_aux_positive_unital_simple_fixed_eigenvalue}
     \lean{simple_fixedEigenvalue_of_unital_positive}\leanok
-    Let $T$ be a positive unital linear map on $M_D(\mathbb C)$, with $D>0$.
-    If its fixed space is one-dimensional, the eigenvalue $1$ has algebraic
-    multiplicity one. This is the fixed-eigenvalue consequence of Wolf,
-    Proposition 6.2.
+    As the fixed-eigenvalue consequence of Wolf, Proposition 6.2, let $T$ be
+    a positive unital linear map on $M_D(\mathbb C)$, with $D>0$: if its fixed
+    space is one-dimensional, the eigenvalue $1$ has algebraic multiplicity
+    one.
 \end{lemma}
 \begin{proof}\leanok
     A positive unital map has no nontrivial Jordan block on the unit circle.
@@ -4362,8 +4363,9 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
 \begin{proof}\leanok
     \uses{thm:spc_aux_compact_minimal_sequence_class}
     A sequence approaching $t_0$ on which the conclusion fails has a
-    subsequence with constant bond dimension. Transfer both tensors and
-    virtual matrices to that fixed dimension and apply the preceding theorem.
+    subsequence with constant bond dimension; transferring both tensors and
+    virtual matrices to that fixed dimension and applying the preceding
+    theorem gives the contradiction.
 \end{proof}
 
 \begin{lemma}[Positive-length rays under physical blocking]
@@ -4375,7 +4377,8 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     length, for every $L>0$.
 \end{lemma}
 \begin{proof}\leanok
-    Reindex configurations and apply the original ray equality at length $NL$.
+    Reindexing configurations and applying the original ray equality at
+    length $NL$ yields the blocked ray equality.
 \end{proof}
 
 \begin{theorem}[Normal realizations of bounded dimension]
@@ -4396,10 +4399,10 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     \uses{thm:spc_aux_bounded_minimal_local_class,
         lem:spc_aux_bounded_normal_fourth_power_blocking,
         lem:spc_aux_positive_ray_blocking,thm:spc_aux_blocked_unitary_covariance}
-    Block $M^4$ sites. Normality and the quantum Wielandt bound imply
+    Blocking $M^4$ sites, normality and the quantum Wielandt bound imply
     injectivity at every parameter. Blocking preserves the virtual factor
-    system and unitality, and changes the spectral bound to $q^{M^4}<1$.
-    Apply the bounded-dimension local theorem.
+    system and unitality, and changes the spectral bound to $q^{M^4}<1$, so
+    the bounded-dimension local theorem applies.
 \end{proof}
 
 
@@ -4411,12 +4414,12 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     \lean{MPSTensor.normalized_adjoint_fixed_unique_of_transfer_fixed_finrank_one}
     \leanok
     \uses{def:transfer_map}
-    Let $B$ have arbitrary finite bond dimension and
-    $\dim_{\C}\ker(\E_B-\Id)=1$.
+    As an auxiliary identity for
+    \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}, let $B$ have
+    arbitrary finite bond dimension and $\dim_{\C}\ker(\E_B-\Id)=1$.
     If $\E_B^*(\sigma)=\sigma$, $\E_B^*(Z)=Z$, and
-    $\tr\sigma=\tr Z=1$, then $Z=\sigma$.
-    Positivity and unitality are not required. This is an auxiliary identity
-    for \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
+    $\tr\sigma=\tr Z=1$, then $Z=\sigma$, without requiring positivity or
+    unitality.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:spc_aux_adjoint_fixed_dimension}
@@ -4431,13 +4434,13 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     \leanok
     \uses{def:gauge_phase_equiv, def:projective_rep,
         def:cohomologous_to}
-    Let $A,B$ have the same positive bond dimension, with $A$ injective,
+    Following \cite[Section~II.F.2 and Appendix~C]{Schuch2011Phases}, let
+    $A,B$ have the same positive bond dimension, with $A$ injective,
     and suppose $B^i=cXA^iX^{-1}$ for $c\ne0$ and $X$ invertible.
     Let a physical group representation $U$ have virtual projective
     representations $V_A,V_B$ with factors $\omega_A,\omega_B$ satisfying
     $\sum_jU(g)_{ij}A^j=V_A(g^{-1})A^iV_A(g^{-1})^{-1}$ and the
     corresponding identity for $B$. Then $\omega_B\sim\omega_A$.
-    Source context: \cite[Section~II.F.2 and Appendix~C]{Schuch2011Phases}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:spt_virtual_class_gauge_preparation}
@@ -4452,14 +4455,14 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     \lean{MPSTensor.exists_unitary_virtualRep_of_unital_gaugePhaseEquiv}
     \leanok
     \uses{def:gauge_phase_equiv, def:projective_rep}
-    Let $A,B$ have the same positive bond dimension, be unital, and be
+    Following \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}, let
+    $A,B$ have the same positive bond dimension, be unital, and be
     gauge equivalent up to a nonzero scalar, with $A$ injective.
     Suppose a unitary physical group representation $U$ has a unitary
     projective virtual action $V$ on $A$, with factor $\omega$, satisfying
     $\sum_jU(g)_{ij}A^j=V(g^{-1})A^iV(g^{-1})^\dagger$.
     Then $B$ admits a unitary projective virtual action with exactly the
     factor $\omega$ and the same covariance identity.
-    Source context: \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:pgvwc07_intertwiner_unitary, thm:spt_virtual_class_gauge_preparation}
@@ -4490,12 +4493,12 @@ arbitrary finite set of sites in Section~\ref{sec:qc_lieb_robinson}.
     \lean{MPSTensor.rotatePhysical_blockTensor_of_unitary_virtual_covariance}
     \leanok
     \uses{def:spc_aux_block_unitary_action, def:blocked_tensor, def:projective_rep}
-    Suppose a unitary physical group representation $U$ and a unitary
+    Following \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}, suppose
+    a unitary physical group representation $U$ and a unitary
     projective virtual representation $V$, with factor $\omega$, satisfy
     $\sum_jU(g)_{ij}A^j=V(g^{-1})A^iV(g^{-1})^\dagger$.
     For every $L\geq0$, the same $V$ implements the covariance of $A^{[L]}$
     under $U^{[L]}$. In particular, its factor remains exactly $\omega$.
-    Source context: \cite[Appendix~C, lines~2653--2717]{Schuch2011Phases}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:twisted_tensor_block_gauge}
@@ -6004,8 +6007,9 @@ $\E_A$ itself is used, describes the same spectrum.
     \uses{thm:virtual_gauge_fixes_boundary_state,
         lem:projective_commutant_eigenspace}
     Every $\rho(g)$ is the virtual gauge of $U(g^{-1})$ and commutes with $\Lambda$
-    by Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}; apply
-    Lemma~\ref{lem:projective_commutant_eigenspace}.
+    by Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}, so
+    Lemma~\ref{lem:projective_commutant_eigenspace} excludes one-dimensional
+    eigenspaces.
 \end{proof}
 
 \begin{theorem}[Even degeneracy for anticommuting gauges]
@@ -6025,8 +6029,9 @@ $\E_A$ itself is used, describes the same spectrum.
     \uses{thm:virtual_gauge_fixes_boundary_state,
         lem:even_finrank_of_anticommute}
     Both gauges commute with $\Lambda$ by
-    Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}; apply
-    Lemma~\ref{lem:even_finrank_of_anticommute}.
+    Theorem~\ref{thm:virtual_gauge_fixes_boundary_state}, so
+    Lemma~\ref{lem:even_finrank_of_anticommute} gives even dimension on every
+    eigenspace.
 \end{proof}
 
 \subsection{Time reversal, reflection, and symmetry obstructions}
@@ -6071,8 +6076,9 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     \uses{lem:involution_index_of_twice}
     Conjugating the relation and substituting it into itself gives
     $A^i=|\zeta|^2(X\bar X)^\dagger A^i(X\bar X)$, because the doubled on-site
-    action is $P\bar P=\Id$.  Apply Lemma~\ref{lem:involution_index_of_twice}; the
-    phase $\zeta$ is nonzero because $A$ has a nonzero letter.
+    action is $P\bar P=\Id$; since $A$ has a nonzero letter, $\zeta$ is
+    nonzero and Lemma~\ref{lem:involution_index_of_twice} yields the sign
+    invariance.
 \end{proof}
 
 \begin{theorem}[Reflection index]
@@ -6089,8 +6095,8 @@ forces to be a scalar \cite[Section~III.A]{Cirac2021Matrix}.
     \uses{lem:involution_index_of_twice}
     Transposing the relation and substituting it into itself gives
     $A^i=\zeta^2(X\bar X)^\dagger A^i(X\bar X)$, since
-    $X^{T}X^\dagger=(X\bar X)^\dagger$ and $(X^\dagger)^{T}=\bar X$.  Apply
-    Lemma~\ref{lem:involution_index_of_twice}.
+    $X^{T}X^\dagger=(X\bar X)^\dagger$ and $(X^\dagger)^{T}=\bar X$, so
+    Lemma~\ref{lem:involution_index_of_twice} applies.
 \end{proof}
 
 \begin{theorem}[Kramers obstruction]

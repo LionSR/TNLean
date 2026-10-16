@@ -38,8 +38,9 @@
     \lean{MPSTensor.IsBNTLocallyOrthogonal}
     \leanok
     \uses{def:mixed_transfer_rect}
-    Let $(A_j)_j$ be a basis of normal tensors. The
-    family is \emph{locally orthogonal} if for every pair of distinct
+    Following the mixed-sector condition of
+    \cite[Definition~3.5]{Cirac2016MPDO_arXiv}, a basis of normal tensors
+    $(A_j)_j$ is \emph{locally orthogonal} if for every pair of distinct
     components $j\ne j'$,
     \begin{align}
         \E_{j,j'}
@@ -62,8 +63,6 @@
         \end{tenkz}
         $ = 0.$
     \end{center}
-    This is the mixed-sector condition of
-    \cite[Definition~3.5]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
 \begin{definition}[Virtual-insertion auxiliary BNT condition]%
@@ -117,12 +116,12 @@
     \lean{MPSTensor.IsPhysicalBNTZCL}
     \leanok
     \uses{def:bnt_cpsv, def:source_physical_cid, def:is_bnt_locally_orthogonal}
-    A basis of normal tensors $(A_j)_j$ for $A$ has \emph{physical BNT zero
-        correlation length} if the generated matrix product states have physical
-    correlations independent of distance for all disjoint regions
+    Following \cite[Definition~3.6]{Cirac2016MPDO_arXiv}, a basis of normal
+    tensors $(A_j)_j$ for $A$ has \emph{physical BNT zero correlation length}
+    if the generated matrix product states have physical correlations
+    independent of distance for all disjoint regions
     (Definition~\ref{def:source_physical_cid}) and the components $(A_j)_j$ are
-    locally orthogonal (Definition~\ref{def:is_bnt_locally_orthogonal}). This is
-    \cite[Definition~3.6]{Cirac2016MPDO_arXiv}.
+    locally orthogonal (Definition~\ref{def:is_bnt_locally_orthogonal}).
 \end{definition}
 
 % CPSV16 Theorem 3.8 (`TheoremZCLPure`), lines 498--503 and 1248--1268, and
@@ -362,9 +361,9 @@
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:is_positive_gap_physical_cid_of_physical_cid}
-    Follows from Lemma~\ref{lem:is_positive_gap_physical_cid_of_physical_cid}
-    by restricting the physical distance-independence condition to positive
-    complementary gaps.
+    Lemma~\ref{lem:is_positive_gap_physical_cid_of_physical_cid} yields the
+    implication by restricting the physical distance-independence condition to
+    positive complementary gaps.
 \end{proof}
 
 \begin{theorem}[Direct-sum RFP implies positive-gap BNT zero correlation length]%
@@ -450,17 +449,17 @@
     \uses{def:is_positive_gap_bnt_zcl, def:sector_bnt_cf, def:mps_transfer_idempotence}
     Let $P$ be an auxiliary BNT sector decomposition with distinct basis
     tensors $(A_j)_j$, and
-    let $A=\bigoplus_j A_j$ be their multiplicity-one direct sum. If $A$ is a
-    renormalization fixed point ($\E_A^2 = \E_A$), then $A$ has positive-gap
-    BNT zero correlation length: its physical correlations are independent of
-    separation whenever both complementary gaps are positive, and for all
-    distinct BNT components $j\ne j'$,
+    let $A=\bigoplus_j A_j$ be their multiplicity-one direct sum. In the
+    positive-gap, multiplicity-one formulation of
+    \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}, if $A$ is a renormalization fixed
+    point ($\E_A^2 = \E_A$), then $A$ has positive-gap BNT zero correlation
+    length: its physical correlations are independent of separation whenever
+    both complementary gaps are positive, and for all distinct BNT components
+    $j\ne j'$,
     \begin{align}
         \E_{j,j'} & =0.
         \notag
     \end{align}
-    This establishes the positive-gap, multiplicity-one formulation of
-    \cite[Theorem~3.8]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:bnt_cf_basis_is_bnt_for_direct_sum, thm:is_positive_gap_bnt_zcl_of_is_rfp_direct_sum}
@@ -498,12 +497,12 @@
         MPSTensor.exists_physicalObservableTransfer_mul_of_mem_span}
     \leanok
     \uses{def:physical_observable_transfer}
-    Let $M,N$ belong to the span of the length-$L$ words of a tensor $A$.
-    There is an operator $O$ on $L$ physical sites whose inserted transfer
-    map satisfies $\E_O(X)=MXN^\dagger$ for every virtual matrix $X$.
-    This is the two-sided multiplication used in the observable choices of
+    Let $M,N$ belong to the span of the length-$L$ words of a tensor $A$. As
+    used in the observable choices of
     \cite[Appendix~C]{Cirac2017MPDO_AnnPhys} and
-    \cite[Lemma~2]{Malz2024Preparation}.
+    \cite[Lemma~2]{Malz2024Preparation}, there is an operator $O$ on $L$
+    physical sites whose inserted transfer map implements the two-sided
+    multiplication $\E_O(X)=MXN^\dagger$ for every virtual matrix $X$.
 \end{theorem}
 \begin{proof}\leanok
     Write $M=\sum_\sigma c_\sigma A^\sigma$ and
@@ -535,8 +534,9 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:bnt_word_tuple_simultaneous_inverse, thm:physical_observable_word_span_mul}
-    Apply Theorem~\ref{thm:bnt_word_tuple_simultaneous_inverse} independently
-    to the left and right word evaluations. The observable with coefficients
+    Applying Theorem~\ref{thm:bnt_word_tuple_simultaneous_inverse}
+    independently to the left and right word evaluations shows that the
+    observable with coefficients
     \begin{align}
         O_{\tau,\sigma}
          & =C_{(j,a,b),\sigma}\,
@@ -556,18 +556,20 @@
     \uses{def:sector_bnt_cf, def:physical_observable_transfer, thm:bnt_sector_supported_physical_observable}
     Let $P$ be an auxiliary BNT sector decomposition of total bond dimension
     $D$, and let $A=\bigoplus_j A_j$ be the direct sum of its basis tensors.
-    There exists a length $L\leq3D^5$ such that, for every basis sector $j$
-    and every $R,l\in\MN{D_j}$, a physical observable on $L$ sites realizes the
-    sector-supported insertion (\ref{eq:zcl_sector_rank_one}). This establishes
-    the multiplicity-one case of the block-injective observable construction
-    in \cite[proof of Theorem~3.8, lines~1252--1256]{Cirac2016MPDO_arXiv}.
+    Establishing the multiplicity-one case of the block-injective observable
+    construction in
+    \cite[proof of Theorem~3.8, lines~1252--1256]{Cirac2016MPDO_arXiv}, there
+    exists a length $L\leq3D^5$ such that, for every basis sector $j$ and every
+    $R,l\in\MN{D_j}$, a physical observable on $L$ sites realizes the
+    sector-supported insertion (\ref{eq:zcl_sector_rank_one}).
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:sharp_bnt_block_separation, thm:bnt_sector_supported_physical_observable}
     Theorem~\ref{thm:sharp_bnt_block_separation} gives a positive
     $L\leq3D^5$ for which the simultaneous word evaluations span the product
-    matrix algebra. Apply
-    Theorem~\ref{thm:bnt_sector_supported_physical_observable} at this length.
+    matrix algebra, so applying
+    Theorem~\ref{thm:bnt_sector_supported_physical_observable} at this length
+    yields the observable.
 \end{proof}
 
 \begin{lemma}[Sector compression calculus for the direct sum]%
@@ -708,10 +710,10 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:positive_gap_bnt_rank_one_probe_expectation, thm:direct_sum_transfer_idempotent_iff_pairwise_mixed}
-    Fix $j$ and arbitrary $u,v\in\MN{D_j}$. Apply positive-gap CID to the
-    observables of
-    Lemma~\ref{lem:positive_gap_bnt_rank_one_probe_expectation}, comparing
-    complementary gaps $(1,2)$ and $(2,1)$. This gives
+    For any fixed sector $j$ and arbitrary $u,v\in\MN{D_j}$, applying
+    positive-gap CID to the observables of
+    Lemma~\ref{lem:positive_gap_bnt_rank_one_probe_expectation} at
+    complementary gaps $(1,2)$ and $(2,1)$ gives
     \begin{align}
         \tr\!\left(u\E_{A_j}(v)\right)
         =\tr\!\left(u\E_{A_j}^2(v)\right).
@@ -766,9 +768,10 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:positive_gap_bnt_zcl_unconditional_converse, lem:is_positive_gap_bnt_zcl_of_source_bnt_zcl}
-    Physical correlation independence includes all positive-gap
-    configurations. Restrict to those configurations and apply
-    Theorem~\ref{thm:positive_gap_bnt_zcl_unconditional_converse}.
+    Since physical correlation independence includes all positive-gap
+    configurations, restricting to those configurations and applying
+    Theorem~\ref{thm:positive_gap_bnt_zcl_unconditional_converse} yields
+    $\E_A^2=\E_A$.
 \end{proof}
 
 \begin{theorem}[Positive-gap BNT zero correlation length gives commuting

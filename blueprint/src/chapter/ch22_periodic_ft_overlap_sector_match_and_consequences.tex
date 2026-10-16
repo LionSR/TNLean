@@ -259,7 +259,7 @@
     periodic tensors, in the sense that no two are related by a gauge
     transformation and a unit-modulus scalar, whose periods divide a common
     positive integer $p$,
-    there is $N_0$ such that for every $N \ge N_0$, the map
+    there is $N_0$ such that for every $N \ge N_0$, the linear combination map
     \begin{align}
         \Phi_N\colon\C^J & \longrightarrow(\C^d)^{\otimes pN},
         \notag                                                 \\
@@ -267,9 +267,9 @@
         \sum_{j\in J}c_j\ket{V^{(pN)}(A_j)}
         \notag
     \end{align}
-    Following \cite[lines~589--609]{DeLasCuevas2017Irreducible}, this
-    establishes linear independence of the periodic vectors
-    (\cite{gap:dccsp17_periodic_overlap_route_alignment}).
+    is injective, so following \cite[lines~589--609]{DeLasCuevas2017Irreducible}
+    (\cite{gap:dccsp17_periodic_overlap_route_alignment}) the periodic vectors
+    $\{\ket{V^{(pN)}(A_j)}\}_{j\in J}$ are linearly independent.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -295,11 +295,10 @@
         \notag
     \end{align}
     are linearly independent. Since $\ket{V^{(N)}(A_j)}$ vanishes unless
-    $m_j\mid N$, this is the assertion of
-    \cite[lines~604--608]{DeLasCuevas2017Irreducible} that beyond some length
-    the non-zero members of the family are independent, in the form used in
-    the proof of the equal case at
-    \cite[lines~677--679]{DeLasCuevas2017Irreducible}.
+    $m_j\mid N$, this divisibility condition isolates the non-zero members of
+    the family and establishes their linear independence beyond length $N_0$,
+    as required at \cite[lines~604--608]{DeLasCuevas2017Irreducible} and in
+    the equal-case proof at \cite[lines~677--679]{DeLasCuevas2017Irreducible}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -325,9 +324,9 @@
     Let $A$ be the tensor of a sector decomposition, with representatives
     $A_j$ and multiplicity entries $\mu_{j,q}$. At every length $N$, the
     nonzero vectors among $\{\ket{V_N(A_j)}\}_j$ span $\ket{V_N(A)}$.
-    This proves the spanning assertion in
-    \cite[Proposition~3.3, lines~604--608]{DeLasCuevas2017Irreducible}; this
-    assertion does not require periodicity or normalization of the blocks.
+    This establishes the spanning property in
+    \cite[Proposition~3.3, lines~604--608]{DeLasCuevas2017Irreducible} without
+    assuming periodicity or normalization of the blocks.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -757,12 +756,10 @@
     Let $\{A_j\}_{j\in J}$ and $\{B_k\}_{k\in K}$ be finite pairwise
     non-repeated families. Suppose every tensor in either family has a tensor
     in the other family whose mixed overlap does not tend to zero, and every
-    such non-decaying pair is repeated. Then there is a bijection
+    such non-decaying pair is repeated. Then, as in the finite matching step of
+    \cite[Theorem~3.4]{DeLasCuevas2017Irreducible}, there is a bijection
     $\pi\colon J\to K$ such that $A_j$ and $B_{\pi(j)}$ are repeated for every
     $j\in J$.
-
-    This is the finite matching step of
-    \cite[Theorem~3.4]{DeLasCuevas2017Irreducible}.
 \end{theorem}
 \begin{proof}\leanok
     Choose a non-decaying partner $f(j)\in K$ for every $j\in J$. If
@@ -800,12 +797,11 @@
         A_j^i & =\xi_jY_jB_{\pi(j)}^iY_j^{-1}.
         \notag
     \end{align}
-    Each $B_k$ occurs for exactly one $j$. This is
-    \cite[Theorem~3.4, lines~613--623]{DeLasCuevas2017Irreducible}.
-
-    This theorem matches the bases of periodic tensors, leaving the
-    multiplicity matrices unconstrained. The periods $m_j$ and $n_k$ are
-    derived from the transfer maps
+    Each $B_k$ occurs for exactly one $j$. As in
+    \cite[Theorem~3.4, lines~613--623]{DeLasCuevas2017Irreducible}, this
+    matches the bases of periodic tensors while leaving the multiplicity
+    matrices unconstrained, with the periods $m_j$ and $n_k$ determined
+    directly by the peripheral spectra of the transfer maps
     (\cite[lines~257--258]{DeLasCuevas2017Irreducible}).
 \end{theorem}
 \begin{proof}
@@ -853,9 +849,9 @@
     vectors are proportional by a nonzero scalar at every positive length,
     then $A$ and $B$ are repeated blocks. In particular, this holds when
     $V^{(N)}(B)_\sigma=\zeta^N V^{(N)}(A)_\sigma$ for a fixed $\zeta\ne0$.
-    Left-canonical periodic blocks satisfy the spectral-radius-one
-    hypothesis automatically.
-    This is the single-block case of \cite[Theorem~3.4]{DeLasCuevas2017Irreducible}.
+    This single-block case of \cite[Theorem~3.4]{DeLasCuevas2017Irreducible}
+    applies directly to left-canonical periodic blocks, which satisfy the
+    spectral-radius-one hypothesis automatically.
 \end{theorem}
 
 \begin{proof}
@@ -887,9 +883,10 @@
         A_{e(j,q)}^i
         =\xi_{j,q}U_{j,q}A_{\rho_j}^iU_{j,q}^{\dagger}.
     \end{align}
-    More generally, any two repeated left-canonical periodic blocks admit
-    such a unitary similarity. These are the blockwise identifications in
-    \cite[Section~2.1 and the paragraph following Theorem~3.4]{DeLasCuevas2017Irreducible}.
+    More generally, as in \cite[Section~2.1 and the paragraph following
+        Theorem~3.4]{DeLasCuevas2017Irreducible}, any two repeated left-canonical
+    periodic blocks are related by a unitary similarity and a unit-modulus
+    phase.
 \end{theorem}
 
 \begin{proof}
@@ -1039,10 +1036,10 @@
     with pairwise non-repeated left-canonical periodic basis blocks and
     unit-modulus multiplicities. If $V^{(N)}(T)=V^{(N)}(Q)$ for every positive $N$,
     then $|\mu_k|=1$ for every $k$.
-    This is the normalization consequence needed in the corrected forward
-    direction of \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}; the
-    trace-preservation correction is recorded in
-    \cite{gap:dccsp17_thm41_forward_trace_preservation}.
+    In the corrected forward direction of
+    \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}
+    (\cite{gap:dccsp17_thm41_forward_trace_preservation}), this identity
+    forces every ungrouped block weight to have unit modulus.
 \end{theorem}
 
 \begin{proof}

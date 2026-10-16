@@ -72,14 +72,14 @@ and set $\tau_0(M)=0$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Expand the product over the three independent sector choices.
-    A nonzero summand requires all three contracted sectors and
-    both external sectors to agree, proving
+    Expanding the product over the three independent sector choices
+    requires all three contracted sectors and both external sectors to
+    agree for a nonzero summand, proving
     (\ref{eq:mpo_mix_symbols_triple_product}). Summing its diagonal
     gives (\ref{eq:mpo_mix_symbols_triple_trace}). For $n>0$,
     $n\tau_n(M)=\tr(M)$ by cancellation; for $n=0$, both sides are
-    zero. Substitute this identity in
-    (\ref{eq:mpo_mix_symbols_triple_trace}) and normalize to obtain
+    zero. Substituting this identity in
+    (\ref{eq:mpo_mix_symbols_triple_trace}) and normalizing yields
     (\ref{eq:mpo_mix_symbols_triple_weight}).
 \end{proof}
 
@@ -125,12 +125,13 @@ and set $\tau_0(M)=0$.
     Expanding (\ref{eq:mpo_mix_symbols_action_trees}) over the internal
     direct-sum coordinate gives zero unless all three incoming legs
     and the outgoing leg have the same sector $p$. On that sector,
-    the expansion is exactly $H_{p,ij}$ or $R_{p,ck\mu}$.
+    the expansion is $H_{p,ij}$ or $R_{p,ck\mu}$.
     Theorem~\ref{thm:mpo_mixed_triple_trace} therefore gives
     (\ref{eq:mpo_mix_symbols_l_cross}) and, after taking normalized
-    traces, (\ref{eq:mpo_mix_symbols_l_weight}). If $L_0=L_1$ and
-    $D_0+D_1>0$, cancel the total dimension. If $D_0+D_1=0$,
-    both spaces are zero and all three normalized-trace matrices vanish.
+    traces, (\ref{eq:mpo_mix_symbols_l_weight}). When $L_0=L_1$ and
+    $D_0+D_1>0$, cancelling the total dimension gives $\widetilde L=L_0$;
+    when $D_0+D_1=0$, both spaces are zero and all three normalized-trace
+    matrices vanish.
 \end{proof}
 
 Put $C_{ij,ck\mu}=\widetilde H_{ij}\widetilde R_{ck\mu}$.
@@ -200,9 +201,9 @@ state at either end.
         \label{eq:mpo_mix_symbols_f_trace}
     \end{align}
     The right trees use the same associativity identification as the
-    left trees. The matrix has left-analysis rows $(e,\mu,\nu)$ and
-    right-synthesis columns $(f,\lambda,\sigma)$, as in
-    \cite[Section~2]{GarreRubio2023MPOSym}. Define the mixed trees and
+    left trees. As in \cite[Section~2]{GarreRubio2023MPOSym}, the matrix
+    has left-analysis rows $(e,\mu,\nu)$ and right-synthesis columns
+    $(f,\lambda,\sigma)$. Define the mixed trees and
     $\widetilde F$ by the same formulas with mixed fusion maps.
     In the ordered direct-sum bases, an entry of a mixed fusion
     analysis or synthesis map equals its $p$ entry when its three

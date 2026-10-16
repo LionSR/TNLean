@@ -59,8 +59,9 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 \begin{proof}
     \leanok
     \uses{thm:ft_single}
-    Apply the single-block Fundamental Theorem
-    (Theorem~\ref{thm:ft_single}) to each block independently.
+    Applying the single-block Fundamental Theorem
+    (Theorem~\ref{thm:ft_single}) to each block independently yields the
+    per-block gauge equivalences.
 \end{proof}
 
 \begin{lemma}[Per-block same MPV implies global same MPV]\label{lem:block_to_global_mpv}
@@ -94,10 +95,9 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 \end{lemma}
 
 \begin{proof}\leanok\uses{lem:multi_block_ft}
-    Apply the per-block single-block Fundamental Theorem
-    (Lemma~\ref{lem:multi_block_ft}) to obtain blockwise gauge
-    equivalences from injectivity and equality of MPV families, then
-    combine them into a global gauge for the block-diagonal tensors.
+    The per-block Fundamental Theorem (Lemma~\ref{lem:multi_block_ft})
+    produces blockwise gauge equivalences from injectivity and equality of
+    MPV families, which then combine into a global block-diagonal gauge.
 \end{proof}
 
 \begin{remark}[Block-diagonal gauge from matched blocks]
@@ -154,8 +154,8 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 \begin{proof}
     \leanok
     \uses{lem:fundamentalTheorem_multiBlock_full}
-    Extract the gauge matrix from the per-block part of
-    Lemma~\ref{lem:fundamentalTheorem_multiBlock_full} for each block.
+    The per-block part of Lemma~\ref{lem:fundamentalTheorem_multiBlock_full}
+    provides the required invertible gauge matrix $X_k$ on each block.
 \end{proof}
 
 \begin{lemma}[Product-algebra decomposition of per-block MPV equality]%
@@ -177,8 +177,9 @@ Theorem~\ref{thm:sector_bnt_equal_global_gauge}.
 \begin{proof}
     \leanok
     \uses{thm:piAlgEquiv_decomposition}
-    Apply Theorem~\ref{thm:piAlgEquiv_decomposition} to the product-algebra
-    automorphism built from the per-block linear extensions.
+    Theorem~\ref{thm:piAlgEquiv_decomposition} applied to the product-algebra
+    automorphism built from the per-block linear extensions yields the block
+    permutation and inner conjugations.
 \end{proof}
 
 \subsection{MPV invariance under reindexing}%
@@ -272,9 +273,9 @@ specialization needed here; no additional formal declaration is required.
 
 \begin{proof}\leanok
     \uses{lem:canonical_toTensor_eq, lem:multi_block_global}
-    Rewrite $T_C$ as a weighted block-diagonal tensor via
-    Lemma~\ref{lem:canonical_toTensor_eq}, then apply the multi-block
-    global gauge-equivalence lemma
+    Rewriting $T_C$ as a weighted block-diagonal tensor via
+    Lemma~\ref{lem:canonical_toTensor_eq} reduces the claim to the
+    multi-block global gauge-equivalence lemma
     (Lemma~\ref{lem:multi_block_global}).
 \end{proof}
 
