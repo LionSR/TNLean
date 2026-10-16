@@ -14,6 +14,7 @@ import TNLean.PEPS.AreaLaw.Geometry.AllowedSlopeAffineLine
 import TNLean.PEPS.AreaLaw.Geometry.AmbientBoundary
 import TNLean.PEPS.AreaLaw.Geometry.BeltFanColors
 import TNLean.PEPS.AreaLaw.Geometry.BeltMarks
+import TNLean.PEPS.AreaLaw.Geometry.BeltReplacementTemplates
 import TNLean.PEPS.AreaLaw.Geometry.BeltRunInterfaces
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationAngular
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationAtoms
