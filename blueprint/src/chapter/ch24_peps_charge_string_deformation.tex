@@ -1,4 +1,4 @@
-\begin{theorem}[Literal weighted contractions under vertex gauges]
+\begin{theorem}[Weighted contractions under vertex gauges]
     \label{thm:peps_regular_weighted_gauge_transport}
     \lean{TNLean.PEPS.graphInsertedBondNetwork_diagonal_vertexGauge,
         TNLean.PEPS.regularWeightedOpenRegionWeight_vertexGauge,
@@ -16,12 +16,12 @@
         (L\eta)_e=\ell_{t(e)}\eta_e,\qquad
         \theta'_e=\ell_{t(e)}^{-1}\theta_e.
     \]
-    The actual weighted open coefficient satisfies
+    The weighted open coefficient satisfies
     \[
         \Psi_R(u,F;\theta)=\Psi_R(u',F\circ L;\theta').
     \]
     The weight $F$ may correlate several edges. For independent diagonal
-    edge weights, the same equality holds for the actual closed contraction
+    edge weights, the same equality holds for the closed contraction
     with bond matrices $U_{u_e}\operatorname{diag}(f_e)$; the new weight is
     $f'_e(t)=f_e(\ell_{t(e)}t)$.
 
@@ -32,7 +32,7 @@
         \chi(p\eta_1^{-1}\eta_0)
         \longmapsto\chi(p\eta_1^{-1}k^{-1}\eta_0).
     \]
-    These are auxiliary actual contraction identities for
+    These are auxiliary contraction identities for
     \cite{Schuch2010PEPS}, lines 2505--2535 and 2560--2581.
     No expansion of character diagonals into group matrices is required.
 \end{theorem}
@@ -53,10 +53,10 @@
     horizontal bond joining $(x+1,y+1)$ to $(x+2,y+1)$.
     This is the central charge diagonal in
     \cite{Schuch2010PEPS}, lines 2569--2581 and the virtual charge--flux
-    deformation figure. Its orientation is the actual ordered edge orientation.
+    deformation figure. Its orientation is the ordered edge orientation.
 \end{definition}
 
-\begin{theorem}[The literal native charge--flux deformation]
+\begin{theorem}[The native charge--flux deformation]
     \label{thm:peps_torus_charge_string_deformation}
     \lean{TNLean.PEPS.torusSweptStringChargeEdge_tail_mem,
         TNLean.PEPS.IsGIsometric.graphInsertedBondNetwork_torusChargeStringDeformation}
@@ -65,10 +65,10 @@
         def:peps_torus_charge_string_edge,
         thm:peps_torus_swept_string_transport}
     Let the torus periods satisfy $w\geq5$ and $H\geq4$, and let the native
-    four-leg tensor be regular $G$-isometric. Use the literal initial flux
+    four-leg tensor be regular $G$-isometric. Use the initial flux
     string $u^{(0)}$ with label $k$ and no second flux string. Insert the
     diagonal $\operatorname{diag}(\chi(pt))$ on $e_c$ and unit weights
-    on the other bonds. Its actual original-spin contraction equals the
+    on the other bonds. Its original-spin contraction equals the
     contraction with the swept string $u^{(j)}$, for either displayed
     sweep $j=1,2$, and with diagonal
     \[
@@ -78,14 +78,14 @@
     including both periodic seams, and for every scalar function $\chi$.
     When $\chi$ is a character its type is unchanged.
 
-    This is the actual gauge-presentation identity of the virtual figure
+    This is the gauge-presentation identity of the virtual figure
     in \cite{Schuch2010PEPS}, lines 2560--2581. It does not by itself
     identify a physical crossing route or a reunion experiment with a braid.
 \end{theorem}
 \begin{proof}\leanok
     Both endpoints of $e_c$ belong to each displayed swept set.
     Thus its tail gauge is $k^{-1}$ in either native orientation.
-    Native regular $G$-isometry supplies local translation invariance.
+    Native regular $G$-isometry gives local translation invariance.
     Apply the weighted gauge identity with all other diagonal weights equal
-    to one and the actual swept bond assignment.
+    to one and the swept bond assignment.
 \end{proof}

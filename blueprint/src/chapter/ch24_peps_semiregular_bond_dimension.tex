@@ -13,7 +13,7 @@
         =\sum_i d_i\le |G|.
         \label{eq:peps_single_copy_bond_dimension}
     \end{align}
-    Moreover, $D_{\mathrm{single}}<|G|$ if and only if some $d_i>1$.
+    In particular, $D_{\mathrm{single}}<|G|$ if and only if some $d_i>1$.
     These are the dimension formulas in
     \cite[Section~7]{Schuch2010PEPS}.
 \end{theorem}
@@ -26,7 +26,7 @@
     sums agree.
 \end{proof}
 
-\begin{theorem}[Bond dimensions of the actual finite-torus physical equivalence]%
+\begin{theorem}[Bond dimensions of the finite-torus physical equivalence]%
     \label{thm:peps_torus_multiplicity_one_bond_dimensions}
     \lean{TNLean.PEPS.exists_isometric_multiplicityOneSemiRegular_torusState_bondDimensions}
     \leanok
@@ -35,7 +35,7 @@
         thm:peps_semiregular_dimension_bound,
         thm:peps_weighted_torus_norm}
     For every finite group and every torus with positive periods, the
-    multiplicity-one semi-regular representation, actual weighted torus
+    multiplicity-one semi-regular representation, weighted torus
     state, and ambient local physical isometry of the finite-torus
     equivalence theorem can be chosen with
     \begin{align}
@@ -45,16 +45,16 @@
     The same virtual space has smallest dimension among all complex
     finite-dimensional semi-regular representations: every such representation
     $\sigma$ on $H$ satisfies $D_{\mathrm{single}}\le\dim H$.
-    The actual weighted state is nonzero and has squared norm $|G|^{N+1}$,
+    The weighted state is nonzero and has squared norm $|G|^{N+1}$,
     where $N$ is the number of torus sites.
     The reduction is strict if and only if some $d_i>1$. All irreducible
     representations, their dimensions, and the physical transformation
-    are obtained from the group, with no supplied enumeration or Fourier
+    are obtained from the group, with no prior enumeration or Fourier
     decomposition. This is the dimension statement for the finite-torus
     realization of \cite[Section~7]{Schuch2010PEPS}.
 \end{theorem}
 \begin{proof}\leanok
-    Take the actual physical-equivalence witnesses. Their Fourier matrix
+    Take the data from the physical-equivalence theorem. Their Fourier matrix
     satisfies $Q^\dagger Q=I$, and the regular intertwining identity
     at the group identity gives $QQ^\dagger=I$. Thus its two coordinate
     sets have the same cardinality, giving $|G|=\sum_i d_i^2$.

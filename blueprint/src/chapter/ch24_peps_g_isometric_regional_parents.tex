@@ -9,7 +9,7 @@ on $\operatorname{ran}E_v$: for some $c_v>0$,
 $T_v^*T_v=c_vE_v$. This is the regular-representation condition of
 \cite[Definition~6.1]{Schuch2010PEPS}, allowing a positive normalization.
 Write $T_R=\bigotimes_{v\in R}T_v$ and
-$\mathcal S_R$ for the actual open-boundary PEPS range on $R$.
+$\mathcal S_R$ for the open-boundary PEPS range on $R$.
 The physical local interaction is $h_R=I-\Pi_{\mathcal S_R}$.
 
 \begin{definition}[Coordinate orthogonal projectors]%
@@ -340,7 +340,7 @@ notation below.
     regional action unchanged.
 \end{definition}
 
-\begin{theorem}[The commuting product is the actual range projector]%
+\begin{theorem}[The commuting product is the regional range projector]%
     \label{thm:peps_regular_actual_projector}
     \lean{TNLean.PEPS.mem_regularGlobalRegionRange_iff_invariant_flat,
         TNLean.PEPS.regularGlobalRegionConstraint_mulVec_eq_self_iff_mem_range,
@@ -379,7 +379,7 @@ notation below.
     subspace, so they are equal. Commutation of $Q_R,Q_S$ gives the last identity.
 \end{proof}
 
-\begin{theorem}[Projectors transported by scaled partial isometries]%
+\begin{theorem}[Projectors conjugated by scaled partial isometries]%
     \label{thm:peps_scaled_partial_isometry_projector_transport}
     \lean{TNLean.PEPS.isStarProjection_smul_mul_mul_conjTranspose_of_gram,
         TNLean.PEPS.smul_mul_mul_conjTranspose_mul_of_gram,
@@ -559,7 +559,7 @@ notation below.
     \leanok
     \uses{thm:peps_canonical_complement_projection}
     For locally regular $G$-isometric tensors on a finite simple graph,
-    the actual canonical regional range projectors and parent interactions
+    the canonical regional range projectors and parent interactions
     commute for arbitrary regions $R,S\subseteq V$:
     \begin{align}
         [\widehat P_R,\widehat P_S] & =0, &
@@ -575,7 +575,7 @@ notation below.
     \uses{thm:peps_nonzero_site_images,thm:peps_physical_regional_projector,
         thm:peps_regular_actual_projector,thm:peps_product_transport_commutation,
         thm:peps_canonical_complement_projection}
-    Local $G$-isometry supplies $L_v,J_v$ with $T_vL_v=J_v\ne0$ and
+    Local $G$-isometry yields $L_v,J_v$ with $T_vL_v=J_v\ne0$ and
     $J_RP_R=P_R$. Equation~(\ref{eq:peps_physical_projector_transport})
     gives $P_RT_R=T_RP_R^0$, and
     (\ref{eq:peps_actual_virtual_projection}) gives commuting virtual extensions.

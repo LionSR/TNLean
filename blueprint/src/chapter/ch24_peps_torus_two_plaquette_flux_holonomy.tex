@@ -14,12 +14,12 @@
     Both bonds are ordered upward. For $g\in G$, let $u_0$ assign $g$ to
     $e_0$, and let $u_1$ assign $g$ to both $e_0,e_1$; all other bonds carry
     the identity. For the counterclockwise plaquette walks based at $(0,0)$
-    and $(1,0)$, their actual holonomies satisfy
+    and $(1,0)$, their holonomies satisfy
     \begin{align}
         (H_L(u_0),H_R(u_0)) & =(g^{-1},1), &
         (H_L(u_1),H_R(u_1)) & =(1,g^{-1}).
     \end{align}
-    These literal bond assignments equal the tree-cycle assignments used by
+    These bond assignments equal the tree-cycle assignments used by
     the fixed two-cycle unitary. Thus the operation removes the left
     plaquette flux and places the same flux on the right plaquette.
     This is the endpoint calculation for the finite-torus instance
@@ -28,15 +28,15 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Each ordered vertical bond is traversed upward with transport $g$ and
-    downward with transport $g^{-1}$. The left plaquette traverses the middle
-    bond upward and the left bond downward. Each successive transport
+    Each ordered vertical bond is traversed upward with bond value $g$ and
+    downward with bond value $g^{-1}$. The left plaquette traverses the middle
+    bond upward and the left bond downward. Each successive step factor
     multiplies on the left, so its extended holonomy is $g^{-1}g=1$.
     The right plaquette traverses the middle bond downward, so its extended
     holonomy is $g^{-1}$. The initial values follow by retaining only the
     left insertion. The other sides carry the identity.
     The ordered endpoints of the two non-tree bonds are exactly the two
     specified upward vertical bonds; the tree-cycle assignment is the identity
-    on every remaining bond. Hence these evaluations apply to the actual
+    on every remaining bond. Hence these evaluations apply to the
     assignments in the physical operation.
 \end{proof}

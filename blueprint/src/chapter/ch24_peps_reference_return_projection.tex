@@ -15,24 +15,24 @@
         U_R(QU)=U_R(Q)U_R(U).\notag
     \end{align}
     In particular, Hermitian idempotents on the two references extend to
-    Hermitian idempotents on the actual canonical block coordinates.
+    Hermitian idempotents on the canonical block coordinates.
     This is an auxiliary form of the accessible-register measurement in
     \cite[Section~6.6]{Schuch2010PEPS}, source lines 2582--2615.
 \end{theorem}
 \begin{proof}\leanok
-    The extension is $Q\otimes I$ transported through two coordinate
+    The extension is $Q\otimes I$ conjugated through two coordinate
     equivalences. Kronecker multiplication and reindexing preserve both
     the adjoint and composition.
 \end{proof}
 
-\begin{theorem}[Return projection inside the actual correlated bond sum]
+\begin{theorem}[Return projection inside the correlated bond sum]
     \label{thm:peps_reference_return_actual_column}
     \lean{TNLean.PEPS.regularRegionChargeReferenceMatrix_mulVec_braided}
     \leanok
     Retain the same region and two references. Let $\chi$ be the character
     of a unitary irreducible representation of dimension $d$. For $p,k\in G$,
-    let $B_k(\alpha,\theta)$ be the actual untwisted canonical open contraction
-    with the literal correlated bond weight
+    let $B_k(\alpha,\theta)$ be the untwisted canonical open contraction
+    with the correlated bond weight
     \begin{align}
          & \chi\bigl(p\eta_{e_1}^{-1}k^{-1}\eta_{e_0}\bigr).\notag
     \end{align}
@@ -55,12 +55,12 @@
         thm:peps_literal_pair_return_projection,
         thm:peps_regular_weighted_projector_coordinates,
         thm:peps_regular_untwisted_physical_charge_motion}
-    The actual weighted coordinate formula writes the column as a sum over
+    The weighted coordinate formula writes the column as a sum over
     the common root translation $x$. The two incident labels are
     $x^{-1}a_0,x^{-1}a_1$, so the weight is
     $\chi(pa_1^{-1}xk^{-1}x^{-1}a_0)$. The boundary and cycle constraints,
     and every other retained coordinate, are independent of $a_0,a_1$.
-    Apply the raw pair-return identity to each summand. Its scalar
+    Apply the unnormalized pair-return identity to each summand. Its scalar
     $\chi(k^{-1})/d$ is independent of $x$ and therefore leaves the original
     boundary sum intact.
 \end{proof}
