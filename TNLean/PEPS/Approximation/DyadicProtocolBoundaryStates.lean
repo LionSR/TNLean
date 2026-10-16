@@ -98,8 +98,7 @@ def repaintedBlocks (k i j : ℕ) : Set (ℤ × ℤ) :=
 
 theorem take_succ_eventSchedule {i : ℕ} (hi : i < (eventSchedule k).length) :
     (eventSchedule k).take (i + 1) = (eventSchedule k).take i ++ [(eventSchedule k)[i]] := by
-  rw [List.take_add_one, List.getElem?_eq_getElem hi]
-  rfl
+  exact (List.take_concat_get' _ _ hi).symm
 
 theorem resizedCorners_succ_inr {i : ℕ} (hi : i < (eventSchedule k).length) {J : DyadicJunction k}
     (he : (eventSchedule k)[i] = .inr J) :
