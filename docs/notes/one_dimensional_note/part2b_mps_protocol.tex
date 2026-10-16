@@ -134,7 +134,7 @@ not needed in one dimension.
 Here is the schedule. Divide the chain into consecutive blocks of $t$
 sites, where $t=20w$ and $w$ is the logarithmic separation of
 Lemma~\ref{lem:logsep}; the last block is whatever is left over, of length
-less than $3t$. At the start, a single party $R_0$ holds everything. At
+between $3t$ and $4t$. At the start, a single party $R_0$ holds everything. At
 step $k$ the picture is
 \[
  P_1\,|\,P_2\,|\cdots|\,P_k\,|\,R_k ,
@@ -223,8 +223,8 @@ the whole construction by a single death of the band into $B$.
 \end{construction}
 
 \begin{lemma}[The band dissolution is a bounded change]\label{lem:band}
-For all sufficiently large $L$, each of the nine moves in
-Construction~\ref{con:band} satisfies the information hypothesis of
+For all sufficiently large $L$, each of the eight moves (seven births or
+deaths and one exchange) in Construction~\ref{con:band} satisfies the information hypothesis of
 Lemma~\ref{lem:birth} or Lemma~\ref{lem:exchange} with exponent $2p=24$,
 so that the construction is a bounded change on the parties $A,B,C$ with
 total reference-vector error at most $12L^{-12}$. Afterwards the main
@@ -241,7 +241,8 @@ third has changed region $(-4,-3)$ inside $(-5,-2)$, distance $1$. The
 auxiliary word is now $C|B|A|C|A|B|C$ at $-6,-5,-4,-3,-2,-1$.
 (ii) The main sheet is $C$ on $x<0$ and the auxiliary sheet is $C$ on
 $x<-6$, $(-4,-3)$ and $x>-1$. Hence $Z\cap Y=(-6,-4)$ (auxiliary $B$ and
-$A$) and $Z\setminus Y=(-3,-1)\cup[0,\infty)$, at distance $1$ from $T$.
+$A$) and $Z\setminus Y=(-3,-1)\cup[0,\infty)$, together with $x\le-8$ if $C$
+owns nothing beyond $x=-8$, at distance at least $1$ from $T$.
 After the exchange the main sheet inside $Y$ carries the auxiliary
 assignment, giving $C|B|A|C|A|B$ at $-6,-5,-4,0,1$; the auxiliary sheet
 inside $Y$ is $C$.
@@ -251,7 +252,8 @@ distance $1$. The $A$ band $(-5,1)$ is surrounded by $B$ on
 $(-6,-5)\cup(1,2)$; non-$B$ sites after the death are $x\le-6$ and $x\ge2$,
 distance $1$. The birth of $C$ on $(-3,0)$ inside $B$ has non-$B$ sites
 at distance $\ge2$. The death of $(-6,-3)$ into $C$ has non-$C$ sites
-$x\ge0$ at distance $3$. The counts of moves and parties are as stated;
+$x\ge0$ at distance $3$ and, if $C$ owns nothing beyond $x=-8$, sites
+$x\le-8$ at distance $2$. The counts of moves and parties are as stated;
 each birth or death costs at most $L^{-12}$ and the exchange at most
 $4L^{-12}$.
 \end{proof}
@@ -275,7 +277,7 @@ At the end set $P_{k_*+1}=R_{k_*}$, which owns exactly the last block.
 For all sufficiently large $L$, Construction~\ref{con:sweep} is a
 distributed construction with the following properties.
 \begin{enumerate}[leftmargin=2em]
-\item There are $2k_*+2\le 2L$ parties. The initial vector is a product by
+\item There are $2k_*+1\le 2L$ parties. The initial vector is a product by
 party: $R_0$ holds $\Om$, and every auxiliary copy of $\Om$ is initialized
 privately at the party $C$ of its band dissolution.
 \item There are at most $20k_*\le 2L$ non-private gates. Each involves at
@@ -304,14 +306,14 @@ $t-w$). For (4), $C=P_{k+1}$ owns $[a+w,a+t-1]$ of length $19w\ge8w$ and
 $B=R_{k+1}$ owns $[a+t+w,L]$ of length at least $3t-w\ge2w$. After (4)
 the word is $P_1|\cdots|P_{k+1}|R_{k+1}$. The parties are $R_0,\dots,R_{k_*}$
 and $P_1,\dots,P_{k_*}$, with $P_{k_*+1}=R_{k_*}$. The number of moves per
-step is at most $2+2\cdot9=20$, so at most $20k_*$ in total, and the last
+step is at most $2+2\cdot8=18\le20$, so at most $20k_*$ in total, and the last
 block has length in $[3t,4t)$.
 
 Participation: $R_k$ takes part in steps $k-1$ (as the born party in (1)
 and as $B$ in (4)) and $k$ (as $P_\circ$ in (1), (2) and as $A$ in (3),
 (4)); $P_k$ takes part in step $k-1$ (born in (2), $B$ in (3), $C$ in (4))
-and step $k$ ($C$ in (3)). Each band dissolution has nine moves and an
-exchange that is private; so no party exceeds $2\cdot(2+2\cdot9)=40$ gates.
+and step $k$ ($C$ in (3)). Each band dissolution has seven births or deaths and one
+exchange, which is private; so no party exceeds $2\cdot(2+2\cdot8)=36\le40$ gates.
 Every birth or death is a single gate on two parties with one shared
 vector or covector, and every exchange consists of private gates only.
 
@@ -487,10 +489,12 @@ bounded degree, and link dimensions at most $C_1L^{r}$. By
 Lemma~\ref{lem:column} some column is a nonzero ket network $v$ with the
 same links and $\min_\theta\norm{v/\norm v-\e^{i\theta}\Om}\le4L^{-5}\le L^{-1}$.
 
-Placement. Attach $P_i$ to block $B_i$ and $R_k$ to block $B_{k+1}$. Two
-parties sharing a gate are, by the proof of Proposition~\ref{prop:sweep},
-among $\{P_k,P_{k+1},R_k,R_{k+1}\}$ for some $k$, hence attached to blocks
-at most two apart. A bond between blocks $i$ and $i+1$ is therefore
+Placement. Attach $P_i$ to block $B_i$ and $R_k$ to block $B_{k+1}$, and
+contract the two nodes attached to a block into one node (their mutual
+links cross no block bond). Two parties sharing a gate are, by the proof of
+Proposition~\ref{prop:sweep}, among $\{P_k,P_{k+1},R_k,R_{k+1}\}$ for some
+$k$, hence attached to the same or adjacent blocks; the bound below allows
+blocks up to two apart. A bond between blocks $i$ and $i+1$ is therefore
 crossed only by links incident to parties attached to blocks
 $i-1,\dots,i+2$; there are at most $8$ such parties, each of degree at most
 $5\cdot40$ (at most two star links and three sample links per three-party
