@@ -409,6 +409,31 @@ no holes, this is the normalization of $\Omega$.
     effect, each with a single monomial of coefficient one.
 \end{proof}
 
+\begin{theorem}[Frames under maps agreeing off the placeholder]
+    \label{thm:peps_guide_frame_owner_agreement}
+    \lean{TNLean.PEPS.Approximation.guideFrame_eq_of_owner_eq}
+    \leanok
+    \uses{def:peps_guide_frame, def:peps_dyadic_protocol_parties}
+    Fix the hierarchy, the sites, their positions and the local configuration size.
+    Let $g$ be a guide taking only valid labels, with no placeholder label at any
+    site. Let $\rho,\rho'$ be any two maps from guide labels to protocol parties such
+    that
+    $\rho(\ell)=\rho'(\ell)$ for every valid non-placeholder label $\ell$.
+    Fix the same ranking of labels, a finite set $V$ of true vertices of $g$, and
+    the same square patches with pairwise disjoint physical outer samples at
+    distinct centers in $V$. Then the encoded frames of $g$ read through
+    $\rho$ and $\rho'$ are equal.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_guide_frame, lem:peps_guide_frame_tags, lem:peps_dyadic_tags}
+    The raw owners agree at every site because its label is not the placeholder.
+    The canonical tag holder at each true vertex is a valid non-placeholder
+    label, by Lemmas~\ref{lem:peps_guide_frame_tags}
+    and~\ref{lem:peps_dyadic_tags}. Thus the tag owners also agree. The site
+    owners and the list of holes are equal, so the frames are equal.
+\end{proof}
+
 \begin{theorem}[Switching the party map between repaintings]
     \label{thm:peps_protocol_party_map_switch}
     \lean{TNLean.PEPS.Approximation.labelParty_eq_of_ne_guidePlaceholder,
@@ -439,6 +464,8 @@ no holes, this is the normalization of $\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_guide_frame_owner_agreement, thm:peps_dyadic_guide_owners,
+        lem:peps_dyadic_sampled_guides, thm:peps_bounded_change_closure}
     A label of a square of the hierarchy is held by its block party for every
     repainting. The tag holder at a true vertex is an incident label other than the
     placeholder. A point of the root square lies in a block of the root square at
@@ -687,8 +714,7 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{theorem}[Direct repaintings and resizes as changes of the protocol]
     \label{thm:peps_protocol_level_events}
-    \lean{TNLean.PEPS.Approximation.guideFrame_eq_of_owner_eq,
-        TNLean.PEPS.Approximation.rewriteGateBound,
+    \lean{TNLean.PEPS.Approximation.rewriteGateBound,
         TNLean.PEPS.Approximation.directRepainting_hasSourceBoundedChange,
         TNLean.PEPS.Approximation.levelVertices_self,
         TNLean.PEPS.Approximation.resizeRadius,
@@ -712,7 +738,7 @@ no holes, this is the normalization of $\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_protocol_party_map_switch}
+    \uses{thm:peps_protocol_party_map_switch, thm:peps_guide_frame_owner_agreement}
     Between repaintings no site and no tag carries the placeholder, so the frame may be
     read through any party map that agrees on the block labels. The direct repainting
     reads it through the party map of the repainted square, whose labels near the square
