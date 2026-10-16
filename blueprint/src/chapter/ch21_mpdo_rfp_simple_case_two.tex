@@ -6,7 +6,7 @@
         weighted_basis_physTraceTransfer_sq_of_literal_ZCL}
     \leanok
     \uses{def:mpo_physical_trace_idempotence, def:mpdo_doubled_phys_trace_transfer, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise}
-    Suppose a tensor satisfying the literal zero-correlation-length equation
+    Suppose a tensor satisfying the unscaled zero-correlation-length equation
     is gauge equivalent, through block-diagonal copy gauges, to a sector
     decomposition. Every copy satisfies
     \begin{align}
@@ -31,7 +31,7 @@
     \lean{MPOTensor.weight_copy_independent_of_isPhysicalTraceIdempotent}
     \leanok
     \uses{def:mpo_physical_trace_idempotence, def:mpdo_doubled_phys_trace_transfer, lem:mpdo_doubled_phys_trace_transfer_to_mps, lem:mpdo_doubled_phys_trace_transfer_blockwise, lem:mpdo_simple_blockwise_zcl_equation}
-    Let a tensor satisfying the literal zero-correlation-length equation be
+    Let a tensor satisfying the unscaled zero-correlation-length equation be
     gauge equivalent, through block-diagonal copy gauges, to a sector
     decomposition whose basis elements all have non-nilpotent physical-trace
     transfer. Then the weights do not depend on the copy index:
@@ -40,7 +40,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Literal zero correlation length states
+    Unscaled zero correlation length states
     $\mathcal T_M^{2}=\mathcal T_M$. If
     $\mathcal T_M=X\mathcal T_SX^{-1}$ is the block-diagonal gauge to the
     transfer of the sector decomposition, then conjugation gives
@@ -77,7 +77,7 @@
 
 \begin{proof}\leanok
     Apply Theorem~\ref{thm:mpdo_simple_weight_copy_independent} to the
-    witness supplied by the simple canonical-form predicate.
+    sector decomposition given by the simple canonical-form condition.
 \end{proof}
 
 \begin{lemma}[Scale-invariant blockwise zero-correlation-length equation]
@@ -139,7 +139,7 @@
 
 \begin{proof}\leanok
     Apply Theorem~\ref{thm:mpdo_scale_invariant_weight_copy_independent} to the
-    witness supplied by the simple canonical-form predicate.
+    sector decomposition given by the simple canonical-form condition.
 \end{proof}
 
 \begin{definition}[Common sector weight and absorbed representative]
@@ -245,7 +245,7 @@
 \begin{proof}\leanok
     Since $\mathcal B_j$ is not nilpotent, every positive power of
     $\mathcal B_j$ is nonzero; in particular, one common positive power has a
-    nonzero entry for every $j$. The preceding theorem supplies the nonzero
+    nonzero entry for every $j$. The preceding theorem gives the nonzero
     coefficient at length $L+3$. Therefore its product with the selected
     entry of $\mathcal B_j^L$ is nonzero.
 \end{proof}

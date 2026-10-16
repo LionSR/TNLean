@@ -183,12 +183,12 @@
     \end{align}
 \end{proof}
 
-\begin{lemma}[Contraction of the assembled vertical tensor]
+\begin{lemma}[Contraction of the direct-sum vertical tensor]
     \label{lem:mpdo_vertical_bond_contraction_assembled}
     \lean{MPOTensor.contractBondMatrix_verticalAssembledTensor}
     \leanok
     \uses{lem:mpdo_bond_contraction_block_sum}
-    The contraction of the assembled vertical tensor is the weighted block
+    The contraction of the direct-sum vertical tensor is the weighted block
     diagonal of the sector contractions:
     \begin{align}
         \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)(X)
@@ -199,7 +199,7 @@
 
 \begin{proof}\leanok
     Applying Lemma~\ref{lem:mpdo_bond_contraction_block_sum} to the block form
-    $\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ of the assembled tensor gives
+    $\bigoplus_\alpha\mu_\alpha\otimes M_\alpha$ of the direct-sum tensor gives
     \begin{align}
         \left(\bigoplus_\alpha\mu_\alpha\otimes M_\alpha\right)(X)
          & =\bigoplus_\alpha\mu_\alpha\otimes M_\alpha(X).
@@ -414,7 +414,7 @@
     yet been composed with them.
 \end{definition}
 
-\begin{theorem}[Action of the transported physical maps]
+\begin{theorem}[Action of the vertical-coordinate physical maps]
     \label{thm:mpdo_vertical_coordinate_map_transport}
     \lean{MPOTensor.transportTToVerticalCoordinates_contractBondMatrix}
     \lean{MPOTensor.transportSToVerticalCoordinates_contractBondMatrix}
@@ -684,7 +684,7 @@
 % Local fix (zero-sector complement): the transported maps come from
 % arXiv:1606.00608, Appendix C.4, lines 1955--1980, but the corrective trace-loss
 % statement is recorded in docs/paper-gaps/cpgsv17_vertical_isometry_zero_sector.tex.
-\begin{theorem}[Positivity and trace loss of the transported sector maps]
+\begin{theorem}[Positivity and trace loss of the vertical-sector maps]
     \label{thm:mpdo_transported_vertical_sector_trace_loss}
     \lean{MPOTensor.transportedVerticalSectorT_posSemidef}
     \lean{MPOTensor.transportedVerticalSectorS_posSemidef}
@@ -719,7 +719,7 @@
     \end{align}
     respectively.
 
-    The condition on vanishing trace loss characterizes when the transported
+    The condition on vanishing trace loss characterizes when the vertical-sector
     maps preserve the total sector trace.
 \end{theorem}
 

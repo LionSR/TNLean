@@ -1,9 +1,10 @@
 \section{Stronger density and the paper energy rate at one charge point}
 \label{sec:arealaw-source-selected-energy}
 
-\begin{lemma}[Eight-nu density margins]
-    \label{lem:arealaw-eight-nu-density-margins}
+\begin{theorem}[Eight-nu density margins]
+    \label{thm:arealaw-eight-nu-density-margins}
     \lean{TNLean.PEPS.AreaLaw.Scan.final_eightNuDensity_margins}
+    \leanok
     At the final source exponents, the exact slacks for density rate
     $8\nu=1/125$, with interval exponent still equal to $\nu$, are
     \begin{align}
@@ -11,14 +12,16 @@
         -8\nu-\left(\frac{\omega-(1-\ell-\mu)}4+\nu\right)
                           & =\frac{35697}{200000}.
     \end{align}
-\end{lemma}
+\end{theorem}
 \begin{proof}
+    \leanok
     Substitute the exact rational final exponents.
 \end{proof}
 
 \begin{theorem}[Principal density at the stronger rate]
     \label{thm:arealaw-principal-density-eight-nu}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_final_principalDensity_le_eightNu}
+    \leanok
     For every fixed $C\geq0$ and real $C_l$, there is a threshold before
     $n$ and $W$ such that the literal floor and natural-division scales
     obey $K\geq1$ and, uniformly over $1\leq W\leq n^\omega$,
@@ -28,6 +31,8 @@
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{thm:arealaw-source-density-scale}
     Apply the arbitrary-rate rounded-scale theorem with rate $8\nu$ and
     the two strict margins above.  No scanner, entropy or selection input
     is used in this numerical statement.
@@ -36,6 +41,7 @@
 \begin{theorem}[Unchanged interval and stronger selected density]
     \label{thm:arealaw-selected-density-eight-nu}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_final_selectedDensity_le_eightNu}
+    \leanok
     Under the same explicit target-mass, target-entropy, selected-dimension,
     shell-entropy and logarithmic-cap hypotheses as the modular selected
     density theorem, retain its raw selected budget and interval denominator
@@ -45,6 +51,10 @@
     already attached to that point.
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{thm:arealaw-principal-density-eight-nu,
+        thm:arealaw-source-rough-budget-power,
+        thm:arealaw-selected-density-principal}
     Apply the preceding numerical bound at twice the required coefficient.
     This leaves $\eta/2$ for the principal term.  For each fixed physical
     system and weight, its scaled replica remainder is eventually at most
@@ -55,6 +65,7 @@
 \begin{theorem}[Paper-rate actual energy and sharp comparison]
     \label{thm:arealaw-source-selected-sharp-energy}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_sharp_energy}
+    \leanok
     Use the same original gapped-ground-state, graph, anchor, depth,
     whole-row geometry, target-volume, clearance and literal scale premises
     as the concrete source-density theorem.  Fix $C_1>0$ and its anchor
@@ -90,6 +101,14 @@
     literal, including the loss $37K_{\mathrm{mom}}a$.
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{thm:arealaw-source-selected-sharp-comparison,
+        thm:arealaw-target-entropy-transfer,
+        thm:area_law_selected_schmidt_entropy_bounds,
+        thm:al_scan_transport_coefficients_log,
+        thm:arealaw-selected-density-eight-nu,
+        thm:al_scan_actual_charge_energy_coefficients,
+        thm:arealaw-selected-energy-decay}
     Invoke the raw source selected-comparison theorem once and transfer
     the original target entropy to its same truncated state.  The same
     spectral window supplies the selected-dimension estimate.  Apply the

@@ -763,25 +763,42 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.protocolState,
         TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_largeRepaintings}
     \leanok
-    \uses{thm:peps_protocol_main_frame_schedule, thm:peps_protocol_level_events,
-        thm:peps_protocol_event_segments}
-    Fix $0<\epsilon_0\le1/16$. There is a mesh threshold such that for every smaller mesh
-    ratio, constants of the protocol, $L\ge2$ with $L\le2^k<2L$ and patches supplied by
-    the adaptive patch constraint, the following holds. Let the memory before each event
-    be the main frame followed by one frame for each auxiliary sheet of the schedule,
-    frozen if its repainting is done and an idle raw copy held by its future owner
-    otherwise. Suppose that each repainting of a square of side larger than $K_0t$ passes
-    the memory from its state before to its state after through $189$ bounded changes
-    with the bounds of the small-patch rewrites and participants used by the repainting,
-    and that the frozen frames satisfy the frame constraint at accuracy $L^{-60}$ with at
-    most $C_1L^3$ holes. Then there is a protocol with the assembly bounds of
-    Definition~\ref{def:peps_dyadic_protocol} for the constant $C_1$, provided $C_1$
-    dominates the counts. This is not Proposition~\ref{prop:peps_dyadic_protocol}: the
-    large-scale repaintings are assumed here (\texttt{06-geometry.tex}, lines 82--241,
-    507--541 and 572--681).
+    \uses{def:peps_dyadic_protocol, def:peps_adaptive_patch_constraint,
+        thm:peps_protocol_constants, thm:peps_dyadic_direct_repainting_constants}
+    Fix $k\in\N$ and $0<\epsilon_0\le1/16$. There is a mesh threshold $\nu'>0$
+    such that for every $0<\nu\le\nu'$, constants of the protocol with an
+    admissible direct-repainting ratio, $q\ge1$, $L\ge2$ with $L\le2^k<2L$,
+    $\lVert\Omega\rVert=1$ and patches supplied by the adaptive patch constraint
+    with constants $B_0,C,c$ at accuracy $L^{-60}$, the following holds. Put
+    $t=D\log L$ and let $b$ be the patch bound of
+    Theorem~\ref{thm:peps_protocol_constants}. Let $C',c',k'\in\N$ with
+    $C\le C'$, $1\le C'$ and $c\le c'$, and set
+    \begin{align}
+        K & =(C'+1)^{3b}\bigl(16b^2(C'+1)^{6b}+1\bigr)^{2b}
+        L^{3bc'+4b(3bc'+30)}.
+        \label{eq:peps_protocol_rewrite_bound}
+    \end{align}
+    Let the memory before each event be the main frame followed by one frame for
+    each auxiliary sheet of the schedule, frozen if its repainting is done and
+    an idle raw copy held by its future owner otherwise. Suppose that each
+    repainting of a square of side larger than $K_0t$ passes the memory from its
+    state before to its state after through $189$ bounded changes, each with at
+    most $2b$ pair effects and $2b$ pair sources in each monomial, at most $K$
+    monomials and coefficient sum, error at most $(2b+1)L^{-20}$, and
+    participants used by the repainting. Suppose also that the frozen frames
+    satisfy the frame constraint at accuracy $L^{-60}$ and together carry at
+    most $C_1L^3$ holes. If $5042\le C_1$, $K\le C_1L^{k'}$ and $2b+1\le C_1$,
+    there is a protocol with the assembly bounds of
+    Definition~\ref{def:peps_dyadic_protocol} for the constants $C_1$,
+    $64\cdot189$, $k'$ and $2b$, all of whose changes have at most $2b$ pair
+    sources in each monomial. This is not
+    Proposition~\ref{prop:peps_dyadic_protocol}: the large-scale repaintings are
+    assumed here (\texttt{06-geometry.tex}, lines 82--241, 507--541 and 572--681).
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_protocol_main_frame_schedule, thm:peps_protocol_level_events,
+        thm:peps_protocol_event_segments}
     Resizes and direct repaintings change only the main frame, by one small-patch
     rewrite, and freeze no auxiliary sheet. The changes of the events are joined along
     the schedule, starting from the raw copies and ending with the frame of the unit

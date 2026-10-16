@@ -10,7 +10,9 @@ may depend on that margin, while the geometric constants do not.
 \begin{theorem}[Common moments at the target scales]
     \label{thm:arealaw-target-sharp-moments}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_sharp_moments}
-    Fix the local dimension, interaction parameters and a coefficient
+    \leanok
+    Fix a local dimension $q\geq1$, an interaction radius $R\in\mathbb N$,
+    an interaction bound $J\geq0$, a gap $\Delta>0$ and a coefficient
     $C_T\geq0$ for the target-size bound.  There are positive constants
     $C_{\rm tr},C_{\rm target},C_B$ with the following property.
     For fixed scanner exponents and a real weight exponent $\omega$ satisfying
@@ -23,7 +25,7 @@ may depend on that margin, while the geometric constants do not.
     gap $\Delta>0$, for the finite-domain local Hamiltonian.  The scanner
     graph is the induced domain graph, its depth is the target's ambient
     depth, and each anchor belongs to its original admissible support.
-    Suppose $n\geq N$, the target has size at most $C_Tn^2$, its ambient
+    Suppose $n\geq N$, the target is nonempty with size at most $C_Tn^2$, its ambient
     layers have size at most $n$, and the target clearance is greater than
     $2L+10r_0$.  Retain the literal scales
     \begin{align}
@@ -88,6 +90,12 @@ may depend on that margin, while the geometric constants do not.
 \end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{thm:al_scan_target_typical_window,
+        thm:al_scan_common_status_budget,
+        thm:al_scan_status_scale_separation,
+        thm:al_moment_weight_smallness,
+        thm:al_scan_common_moment_interval}
     Choose the truncation and target-budget constants from the quantitative
     target window, then the common status-budget constant.  The rounded
     scale separation and the positive margin in

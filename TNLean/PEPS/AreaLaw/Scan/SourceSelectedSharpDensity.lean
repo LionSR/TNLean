@@ -239,7 +239,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_density
   intro E z
   obtain ⟨hwindow, hd, hpdata⟩ := hwdata
   refine ⟨hwindow, hd, ?_⟩
-  let : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
+  have : NeZero E.card := NeZero.of_pos hd
   intro d ΩX ψ Sent dims energy σ near middleRegion gpre gpost gaps gmax tree Gpre Gpost
   have hΩt : ‖Ωt‖ = 1 := (Matrix.isGappedGroundState_iff.mp htrgs).1
   have hXcard : (X.card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 :=
@@ -298,16 +298,9 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_density
     calc
       _ = (Cent * ℓ ^ eent) * (a * S.K) * a ^ (1 / 4 : ℝ) := by ring
       _ = _ := by rw [hWa]
-  have hQ' : S.actualChargeEntropyDefect hm hM s.val dims energy (a / 2) k (pre k) p /
-      (S.K * S.n * S.D : ℝ) ≤
-    (2 * (S.C₁ + 1) / (W * ((S.n * S.m : ℕ) : ℝ) * (2 * εp - εp))) *
-      ((2 * Real.log (d : ℝ) - Real.log z + W *
-        (Bsh / z + (1 + 3 * (S.n : ℝ) * (S.D : ℝ) * Real.log (q : ℝ)))) +
-        (2 * S.n * S.m : ℕ) * (Cent * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent) +
-          roughEndpointRemainder d cR S.K (Ci + (2 * S.n * S.m : ℕ) * Cb) k) := hQ
-  refine hQ'.trans_eq ?_
-  rw [hCeq, hrate, show 2 * εp - εp = εp by ring]
-  dsimp only [εp, a]
-  ring
+  simp only [a, ℓ] at hrate
+  rw [hrate] at hQ
+  simpa only [hCeq, show 2 * εp - εp = εp by ring,
+    _root_.mul_assoc] using hQ
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

@@ -133,7 +133,7 @@
     The ordinary neighboring contraction is the case $P=I$.
 \end{definition}
 
-\begin{definition}[Virtual-matrix transport of a physical-sector factorization]
+\begin{definition}[Virtual-matrix transformation of a physical-sector factorization]
     \label{def:mpdo_physical_sector_factorization_virtual_matrices}
     \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualMatrices}
     \leanok
@@ -162,12 +162,12 @@
     \cite[Appendix~C.2, lines~1381--1439]{Cirac2016MPDO_arXiv}.
 \end{definition}
 
-\begin{theorem}[Neighboring operators under virtual-matrix transport]
+\begin{theorem}[Neighboring operators under virtual-matrix transformation]
     \label{thm:mpdo_physical_sector_factorization_virtual_matrices_neighbor}
     \lean{MPOTensor.PhysicalSectorFactorization.ofVirtualMatrices_neighboringOperator}
     \leanok
     \uses{def:mpdo_minimal_neighboring_operator, def:mpdo_matrix_weighted_neighboring_operator, def:mpdo_physical_sector_factorization_virtual_matrices}
-    The neighboring operators of the transported factorization satisfy
+    The neighboring operators of the transformed factorization satisfy
     \begin{align}
         \eta^L_{k,h}
          & =\eta^K_{k,h}(YX).
@@ -243,8 +243,8 @@
         V_sV_s^\dagger     & =P_s, \notag         \\
         V_s^\dagger A^iV_s & =\mu_s A_s^i. \notag
     \end{align}
-    Here $P_s$ is the corresponding block projection, transported to the
-    flattened coordinates.  Moreover,
+    Here $P_s$ is the corresponding block projection in the
+    flattened coordinates.  In addition,
     \begin{align}
         A^iV_s          & =V_s(\mu_sA_s^i), \notag         \\
         V_s^\dagger A^i & =(\mu_sA_s^i)V_s^\dagger. \notag
@@ -261,7 +261,7 @@
     dependent direct sum, let $Q_s$ be the corresponding unflattened block
     projection, and let $e$ flatten the direct-sum coordinates.  Thus $V_s$
     is the reindexing of $E_s$, while $P_s$ is the reindexing of $Q_s$.
-    Multiplicativity of reindexing transports
+    Multiplicativity of reindexing carries
     \begin{align}
         E_s^\dagger E_s & =1, \notag \\
         E_sE_s^\dagger  & =Q_s
@@ -305,7 +305,7 @@
 \begin{proof}
     \leanok
     \uses{thm:mpdo_physical_sector_factorization_virtual_matrices_neighbor}
-    Apply the virtual-matrix transport identity with $X=V^\dagger$ and $Y=V$.
+    Apply the virtual-matrix transformation identity with $X=V^\dagger$ and $Y=V$.
 \end{proof}
 
 \begin{theorem}[Virtual-gauge invariance of physical-sector factorizations]
@@ -318,7 +318,7 @@
     \uses{def:mpdo_physical_sector_factorization, def:mpdo_minimal_neighboring_operator, def:mpdo_physical_sector_factorization_virtual_matrices}
     Suppose that two MPO tensors of the same virtual dimension differ by an
     invertible virtual gauge $X$.  The induced factorization is precisely the
-    virtual-matrix transport by $X$ and $X^{-1}$.  Thus every physical-sector
+    virtual-matrix transformation by $X$ and $X^{-1}$.  Thus every physical-sector
     factorization of the first tensor induces one of the second tensor with
     the same physical decomposition and the same neighboring operators.  In
     particular, positive semidefiniteness of all neighboring operators is
@@ -531,13 +531,13 @@
     Lemma~\ref{lem:mpdo_sector_tensor_left_zero_of_weight_zero}.
 \end{proof}
 
-\begin{corollary}[SAL gives a raw physical-sector factorization]
+\begin{corollary}[SAL gives an algebraic physical-sector factorization]
     \label{cor:mpdo_sal_raw_physical_sector_factorization}
     \lean{MPOTensor.nonempty_physicalSectorFactorization_of_isSAL}
     \leanok
     \uses{thm:mpdo_four_site_sal_eta_structure, thm:mpdo_normalized_four_site_tail_entry_ne_zero, def:mpdo_inverse_map_physical_sector_factorization}
     Every injective MPO tensor satisfying SAL admits a physical-sector
-    factorization. This is only the raw algebraic factorization from Lemma C.4
+    factorization. This is only the algebraic factorization from Lemma C.4
     and equations \texttt{formK} and \texttt{etarl}; coherent positivity of
     the neighboring operators, recurrence, and primitivity are not part of
     this conclusion.
@@ -633,7 +633,7 @@
 \begin{proof}
     \leanok
     \uses{cor:mpdo_sal_raw_physical_sector_factorization, thm:mpdo_conjugated_chain_congruence, thm:mpdo_physical_sector_chain_decomposition}
-    Choose the raw physical-sector factorization supplied by SAL. The physical
+    Choose the algebraic physical-sector factorization given by SAL. The physical
     basis change sends the positive $N$-site MPO to a positive congruence.
     Each cyclic neighboring product is a diagonal sector compression of this
     congruence and is therefore positive semidefinite.
@@ -941,8 +941,8 @@
     \end{align}
     if and only if ${\cal K}^V$ admits one.  The same sector spaces, tensors
     $l_k,r_k$, neighboring operators $\eta_{k,h}$, and numbers $a_k,b_h$ may
-    be used on both sides.  This invariance is project-derived; the data being
-    transported are those of
+    be used on both sides.  This invariance is project-derived; the
+    transformed data are those of
     \cite[Theorem~4.9(iv) and Appendix~C.2, lines~1381--1450]
     {Cirac2016MPDO_arXiv}, but the equivalence itself is not stated there.
 \end{theorem}
@@ -1014,7 +1014,7 @@
     \uses{thm:mpdo_physical_sector_factorization_gauge, thm:mpdo_neighboring_trace_factorization_physical_basis_invariant}
     For the virtual gauge $L^i=XK^iX^{-1}$, write
     $\eta^K_{k,h}(M)$ for the neighboring contraction with $M$ inserted
-    between the transported virtual factors.  Their composition is
+    between the conjugated virtual factors.  Their composition is
     $X^{-1}X$, and hence
     \begin{align}
         \eta^L_{k,h}
@@ -1023,7 +1023,7 @@
         =\eta^K_{k,h}.
         \notag
     \end{align}
-    The families $a_k$ and $b_h$ are retained literally, together with their
+    The families $a_k$ and $b_h$ are retained unchanged, together with their
     positivity, trace, and normalization identities.  The reverse implication
     uses the inverse gauge.
 

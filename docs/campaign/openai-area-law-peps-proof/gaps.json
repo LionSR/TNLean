@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-10-14T18:30:00Z",
+  "reviewedAt": "2026-10-16T04:15:00Z",
   "entries": [
     {
       "id": "docs/paper-gaps/oai26_peps_patch_stationarity_gap.tex",
@@ -309,22 +309,26 @@
       "id": "docs/paper-gaps/polypeps_angular_annular_geometry_scope.tex",
       "repo": "TNLean",
       "kind": "narrower",
-      "status": "open",
+      "status": "resolved",
       "paper": "peps",
       "result": "Proposition 3.4, angular mutual-information decay",
       "issue": 8766,
       "prs": {
         "TNLean": [
-          9372
+          9372,
+          9463,
+          9467,
+          9469,
+          9470
         ]
       },
       "title": "Annular decomposition and cell counts for angular separation",
-      "summary": "The dyadic annular decomposition, cell-count bound, and reset-width estimate of Proposition 3.4 are proved; the quantum mutual-information steps remain open.",
+      "summary": "Proposition 3.4 is proved with the paper's hypotheses: the annular geometry, the single-cell and reset estimates, and their combination across scales.",
       "context": "Proposition 3.4 bounds the mutual information between two regions separated by a buffer whose width grows linearly away from finitely many marked corners and stays above a large multiple of log <i>L</i>.",
       "claims": "For a planar region <i>X</i> ⊂ ℝ<sup>2</sup> of ℓ<sub>∞</sub>-diameter diam<sub>∞</sub>(<i>X</i>) ≤ <i>A</i><sub>0</sub><i>n</i> at scale <i>n</i> &gt; 0 relative to a set 𝒱 ⊂ ℝ<sup>2</sup> of at most <i>m</i><sub>0</sub> marked points with angular clearance parameter <i>a</i>′ &gt; 0, the proof decomposes <i>X</i> across dyadic scales by the capped ℓ<sub>∞</sub>-distance min{<i>n</i>, <i>d</i><sub>𝒱</sub>(<i>y</i>)} to 𝒱. It covers each scale by translated grid cells of side length <i>d</i> times the dyadic scale and alternates single-cell additions (Lemma 3.2) with information resets across buffers of relative width <i>c</i><sub>*</sub> = <i>a</i>′/3 (Lemma 3.3).",
-      "found": "The formalization constructs the dyadic scales, the outer, intermediate, and final annular layers at each scale, their cumulative ℓ<sub>∞</sub>-separation, the covering by translated grid cells, the containment of the previous scale's group, and the physical core buffers. Every neighborhood enlargement is taken in ℝ<sup>2</sup> before intersecting with the lattice domain, and when 𝒱 = ∅ the capped distance min{<i>n</i>, <i>d</i><sub>𝒱</sub>(<i>y</i>)} is set to <i>n</i> so that at depth zero the sole layer is all of <i>X</i>. With <i>R</i> = max{<i>A</i><sub>0</sub>, 2}, the number of grid cells newly adjoined at a dyadic scale is at most (<i>m</i><sub>0</sub> + 1)(2⌈(<i>R</i> + 3<i>a</i>′/2)/<i>d</i>⌉<sub>+</sub> + 3)<sup>2</sup>, uniformly in the marked-point locations, the grid origin, the dyadic scale, the layer shapes, and the lattice domain, and the reset-width estimate holds at <i>c</i><sub>*</sub> = <i>a</i>′/3. Still assumed: the single-cell conditional mutual-information bound (Lemma 3.2), the information reset (Lemma 3.3), and their combination across scales to complete Proposition 3.4.",
-      "impact": "No. The geometric decomposition and cell-count bounds match the paper's construction with no additional hypotheses.",
-      "plan": "Prove Lemmas 3.2 and 3.3 and combine them with the dyadic cell additions and resets to complete Proposition 3.4."
+      "found": "The formalization constructs the dyadic scales, the outer, intermediate, and final annular layers at each scale, their cumulative ℓ<sub>∞</sub>-separation, the covering by translated grid cells, the containment of the previous scale's group, and the physical core buffers. Every neighborhood enlargement is taken in ℝ<sup>2</sup> before intersecting with the lattice domain, and when 𝒱 = ∅ the capped distance min{<i>n</i>, <i>d</i><sub>𝒱</sub>(<i>y</i>)} is set to <i>n</i> so that at depth zero the sole layer is all of <i>X</i>. With <i>R</i> = max{<i>A</i><sub>0</sub>, 2}, the number of grid cells newly adjoined at a dyadic scale is at most (<i>m</i><sub>0</sub> + 1)(2⌈(<i>R</i> + 3<i>a</i>′/2)/<i>d</i>⌉<sub>+</sub> + 3)<sup>2</sup>, uniformly in the marked-point locations, the grid origin, the dyadic scale, the layer shapes, and the lattice domain, and the reset-width estimate holds at <i>c</i><sub>*</sub> = <i>a</i>′/3. The single-cell estimate (Lemma 3.2) and the reset (Lemma 3.3) are proved on the original square grid, and the annular induction restores the error to <i>L</i><sup>−<i>p</i></sup> at every scale with no factor depending on the number of scales. The collar input comes from the now unconditional Proposition 9.6, so the deduction assumes neither an area law nor a separate information bound.",
+      "impact": "No. The proof follows the paper's construction with no additional hypotheses.",
+      "plan": "None for this proposition."
     },
     {
       "id": "docs/paper-gaps/polypeps_prop71_consequences_interface.tex",
@@ -346,6 +350,55 @@
       "found": "Proposition 7.1 is not yet proved. Instead, the formalization states the subset of its conclusions used in Section 8: a distributed construction of <i>n</i> changes with parties attached to squares of the padded hierarchy and reference vectors <i>r<sub>t</sub></i> for 0 ≤ <i>t</i> ≤ <i>n</i> starting from a product vector <i>r</i><sub>0</sub>, such that for constants <i>C</i> &gt; 0 and <i>b</i>, <i>k</i>, <i>r</i> ∈ ℕ there are at most <i>CL</i><sup>2</sup> parties in total and at most <i>b</i> per square; at most <i>CL</i><sup>3</sup> changes, each with at most <i>b</i> nonprivate gates on at most <i>b</i> parties, and at most <i>b</i> changes per party over its lifetime; each gate is a sum of at most <i>CL<sup>k</sup></i> monomials with absolute coefficient sum at most <i>CL<sup>k</sup></i> and at most <i>r</i> pair effects per monomial; any two parties in a gate have equal or adjacent dyadic scales and grid addresses separated by at most <i>b</i> times either scale; and the contractions <i>W<sub>t</sub></i> satisfy ‖<i>W<sub>t</sub>r<sub>t</sub></i> − <i>r</i><sub><i>t</i>+1</sub>‖ ≤ <i>CL</i><sup>−20</sup>, <i>r<sub>n</sub></i> = Ω ⊗ Ξ, and 1 − <i>CL</i><sup>−57</sup> ≤ ‖Ξ‖ ≤ 1. From these bounds, the formalization proves the gate-density estimate of Section 8.1, the link-separation hypothesis of Lemma 8.2, and the lifetime bound of at most 64<i>G</i> gates per block party when each change has at most <i>G</i> gates. Six further clauses of Proposition 7.1 not needed in Section 8 — such as nonemptiness of every hierarchy square, explicit frame factorization and unit-norm bounds on intermediate <i>r<sub>t</sub></i>, and pre-expansion pair-source and message counts for arbitrary inverse-power accuracy — are omitted from this consequence predicate. Still assumed: Proposition 7.1 itself.",
       "impact": "No. The six omitted clauses are not used in Section 8, and proving Proposition 7.1 will give the stated bounds.",
       "plan": "Formalize and prove the full statement of Proposition 7.1 and deduce the Section 8 hypothesis by projection."
+    },
+    {
+      "id": "docs/paper-gaps/arealaw2d_safe_box_collar_scope.tex",
+      "repo": "TNLean",
+      "kind": "narrower",
+      "status": "resolved",
+      "paper": "area",
+      "result": "Propositions 9.5 and 9.6, safe-box entropy and the sublinear collar bound",
+      "issue": 8756,
+      "prs": {
+        "TNLean": [
+          9356,
+          9357,
+          9359,
+          9459,
+          9463
+        ]
+      },
+      "title": "Safe-box entropy and the sublinear collar bound",
+      "summary": "Both propositions are proved with the paper's hypotheses, for every real safety parameter <i>D</i><sub>0</sub> &gt; 2<i>R</i> + 10.",
+      "context": "Proposition 9.5 bounds the entropy of the ground state on rectangles far from the cut, and Proposition 9.6 uses that bound to show that the region inside a template shares only sublinear information with everything outside its collar. Together they feed the repair argument of Theorem 1.1.",
+      "claims": "Proposition 9.5: with <i>e</i><sub>*</sub> = 2·10<sup>−6</sup>, there is <i>C</i><sub>box</sub> depending only on <i>q</i>, <i>R</i>, <i>J</i>, Δ such that <i>S</i><sub>Ω</sub>(<i>A</i> ∩ <i>Q</i>) ≤ <i>C</i><sub>box</sub> size(<i>Q</i>)<sup>1+<i>e</i><sub>*</sub></sup> for every rectangle <i>Q</i> at ℓ<sub>∞</sub> distance more than <i>D</i><sub>0</sub> size(<i>Q</i>) from the cut. The paper proves it by iterating the exponent improvement <i>e</i> ↦ (1 − ℓ<sub>0</sub>)<i>e</i> from an initial exponent <i>e</i><sub>0</sub> &lt; 1. Proposition 9.6: for a template <i>T</i> at scale <i>n</i> with collar depth <i>L</i> = ⌊<i>n</i><sup>1−10<sup>−5</sup></sup>⌋, 2<i>I</i><sub>Ω</sub>(<i>X</i> : Λ ∖ <i>S</i><sub>0</sub>) ≤ <i>C n</i><sup>1−10<sup>−5</sup></sup>, with <i>C</i> chosen before the domain, Hamiltonian, ground state, cut and template.",
+      "found": "Lean first proved Proposition 9.6 assuming the bound of Proposition 9.5. It then proved Proposition 9.5 itself: the bootstrap runs at integer clearance, using the rough lower norm comparison at total band weight 4 because the sharp comparison's moment condition fails at the bootstrap scales. A subdivision of each safe rectangle into at most four smaller ones transfers the bound to every real clearance <i>D</i><sub>0</sub> &gt; 2<i>R</i> + 10. With that, Proposition 9.6 holds without the assumption.",
+      "impact": "No. The paper's argument goes through. Lean runs the bootstrap at integer clearance and recovers every real clearance by a short subdivision.",
+      "plan": "None for these propositions. They now feed the two-family decomposition and Theorem 1.1."
+    },
+    {
+      "id": "docs/paper-gaps/arealaw2d_birth_separation_scope.tex",
+      "repo": "TNLean",
+      "kind": "narrower",
+      "status": "resolved",
+      "paper": "area",
+      "result": "Lemma 11.5, birth-template separation",
+      "issue": 9338,
+      "prs": {
+        "TNLean": [
+          9426,
+          9435,
+          9465,
+          9474
+        ]
+      },
+      "title": "Birth-template separation of belt tiles and replacements",
+      "summary": "Lemma 11.5 is proved with the paper's hypotheses, after the isolated-star lemma it depends on was proved.",
+      "context": "The repair construction of Theorem 1.1 replaces tiles of a mesh. Lemma 11.5 ensures that each newly born region stays a fixed power-law distance from the regions of the same label born before it, which keeps the two families of templates separated.",
+      "claims": "There is <i>c</i><sub>1</sub> &gt; 0 such that the closed birth region of an initial belt tile of side <i>u</i> = <i>t<sub>k</sub></i>, or of a replacement tile whose removal square has half-side <i>u</i>, lies at distance at least <i>c</i><sub>1</sub><i>u</i><sup>ρ<sub>0</sub></sup> from the final region of every earlier or peer identifier with the same label.",
+      "found": "Lean proves the belt-tile half outright: near a reference cell the regions are unions of triangles of one fixed line arrangement, so the paper's local patterns reduce to finitely many pairs of triangles. The replacement half was first proved from the conclusion of the uniform repair induction (Lemma 11.4), which in turn follows from the initial isolated-star lemma (Lemma 11.3). Lemma 11.3 is now proved with <i>a</i><sub>0</sub> = 1/128, so one constant <i>c</i><sub>1</sub> serves both halves for every large stopping scale, every layer width <i>C</i><sub>0</sub> ≥ 2 and every lower layer index <i>k</i><sub>0</sub> ≥ 50,000,000, as in the paper.",
+      "impact": "No. The separation holds as the paper states it.",
+      "plan": "None for this lemma. It feeds the two ordered families of separated regions (issue #8758)."
     }
   ],
   "checked": [
