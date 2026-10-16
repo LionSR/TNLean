@@ -55,10 +55,14 @@ outer sample.
         TNLean.PEPS.EncodedFrame.norm_act_proj_patchAt_sub_le,
         TNLean.PEPS.EncodedFrame.card_tag_patchAt_le,
         TNLean.PEPS.Approximation.cellCenterPos,
+        TNLean.PEPS.Approximation.cellCenterPos_eq_sitePosition_add,
         TNLean.PEPS.Approximation.AdaptivePatchSupply.cellCenterPos,
         TNLean.PEPS.Approximation.AdaptivePatchConstraint.supply_cellCenterPos}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint, def:peps_frame_hole_encoder}
+    \uses{def:peps_adaptive_patch_constraint,
+        def:peps_frame_hole_encoder,
+        def:peps_angular_information_bound,
+        def:peps_squareLatticeCoordinateRegions}
     If the outer sample of square cylinder data is nonempty, its projector
     $P_{c,h}$ is $\Pi$; in all cases
     $\lVert(\id-P_{c,h})\Omega\rVert\le\lVert(\id-\Pi)\Omega\rVert$ and the
@@ -73,12 +77,16 @@ outer sample.
     tags. The patch depends only on the center and the scale, so a given center
     and radius receive the same patch on every sheet, as required at
     \texttt{06-geometry.tex}, lines 114--118.
+    For every natural $L$ and every site of the $L\times L$ lattice,
+    its cell-center position is its integer site position minus $(1/2,1/2)$.
 \end{lemma}
 
 \begin{proof}\leanok
     With a nonempty outer sample the tags are the pairs $(j,\ell)$; with an
     empty one the projector is the identity. A translation preserves sup-norm
     distances.
+    The coordinate identity is the pointwise form of the translation between
+    integer lattice positions and cell centers.
 \end{proof}
 
 \begin{definition}[Canonical tag holder and the frame of a guide]
@@ -98,6 +106,28 @@ outer sample.
     in \cite[Section~7]{OpenAI2026PolynomialPEPS}, \texttt{06-geometry.tex},
     lines 69--80 and 109--125.
 \end{definition}
+
+\begin{theorem}[Guide frames with equal patches at their centers]
+    \label{thm:peps_guide_frame_patch_congruence}
+    \lean{TNLean.PEPS.Approximation.guideFrame_congr_patch,
+        TNLean.PEPS.Approximation.guideFrame_congr}
+    \leanok
+    \uses{def:peps_guide_frame}
+    Fix finite physical sites, their positions and local dimension, a guide,
+    an assignment of owners to labels, a placeholder and a label ranking.
+    Two patch families on the same finite set $V$ of hole centers give equal
+    guide frames if they agree at every point of $V$ and each family has
+    pairwise disjoint outer physical samples. In particular, equal sets of
+    centers and equal patch functions give equal guide frames, with the same
+    remaining data, regardless of the chosen disjointness witnesses.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_guide_frame}
+    The raw owners agree. The lists of holes agree term by term, since every
+    center receives the same patch and canonical tag holder. Equality of
+    center sets and patch functions gives the second conclusion by the first.
+\end{proof}
 
 \begin{lemma}[Canonical tag holders]
     \label{lem:peps_guide_frame_tags}
@@ -152,6 +182,33 @@ outer sample.
     A cell center is at sup distance at least $\tfrac12$ from every integer
     point, so the outer samples at $n=1$ are empty and every hole projector is
     the identity.
+\end{proof}
+
+\begin{lemma}[Sites separated from the holes of a guide]
+    \label{lem:peps_guide_frame_outer_holes_disjoint}
+    \lean{TNLean.PEPS.Approximation.disjoint_outerHoles_guideFrame}
+    \leanok
+    \uses{def:peps_frame_square_patch, def:peps_frame_rewrite_data,
+        def:peps_guide_frame}
+    Let $I$ be a finite set of sites with positions $p_x\in\mathbb R^2$, and
+    let $q$ be any natural local dimension. Fix any guide, owner map,
+    placeholder label and ranking of the labels. Let $V$ be a finite indexing
+    set of plane points, and assign a square patch $P_z$ to each $z\in V$,
+    with pairwise-disjoint outer samples. Write $c_z$ and $r_z$ for the center
+    and scale of $P_z$; the center $c_z$ need not equal its index $z$.
+    For any set $T\subseteq I$, if
+    $2r_z<\operatorname{dist}(c_z,p_x)$ for every $z\in V$ and $x\in T$,
+    then $T$ is disjoint from the union of the outer samples of all holes
+    of the guide frame.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:peps_frame_square_patch, def:peps_frame_rewrite_data,
+        thm:peps_guide_frame_norm}
+    Every hole is the patch assigned to some $z\in V$. A site in its outer
+    sample satisfies $\operatorname{dist}(p_x,c_z)\le2r_z$, contradicting
+    the strict separation when $x\in T$. Thus each outer sample is disjoint
+    from $T$, and taking their union proves the claim.
 \end{proof}
 
 \begin{theorem}[Small-patch rewrites between frames of guides]
@@ -535,8 +592,12 @@ outer sample.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:peps_guide_frame_patch_data}
+    \uses{lem:peps_guide_frame_patch_data, lem:peps_adaptive_patch_supply,
+        thm:peps_frame_small_rewrite_gate_sources}
     The supplied patch at a center depends only on the center and the radius, so
     the old and new holes agree where their radii do. A supplied patch has at most
-    $C'L^{c'}$ tags, error at most $L^{-60}$ on $\Omega$, and a tag.
+    $C'L^{c'}$ tags, error at most $L^{-60}$ on $\Omega$, and a tag. These data
+    discharge the patch hypotheses of the source-bounded reading-step results in
+    Theorem~\ref{thm:peps_frame_small_rewrite_gate_sources}. The same gates retain
+    at most $2b$ pair sources in every monomial.
 \end{proof}

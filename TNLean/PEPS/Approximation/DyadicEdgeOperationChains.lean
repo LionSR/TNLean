@@ -84,8 +84,8 @@ theorem isStepChain_auxBirths (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀'
   exact (h₁.trans h₂).trans h₃
 
 /-- **The four operations of the main sheet, conditional on Proposition 3.4.** At the constants
-of the protocol, in the repainting of a square `R` of side `n = 2 ^ j > K₀ t`, after the lens
-exchange along an edge `e ∉ E` the main sheet passes from the main guide with the first main word
+of the protocol, in the repainting of a square `R` of side `n = 2 ^ j > K₀ t`, for any edge
+list `E` and edge `e`, the main sheet passes from the main guide with the first main word
 to the guide with `e` completed by `20` bounded changes with the bounds of the small-patch
 rewrites; its frames at both ends are treated at no mark.
 

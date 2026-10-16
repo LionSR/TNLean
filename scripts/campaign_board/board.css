@@ -260,6 +260,7 @@ details.resolved > summary .muted { font-size: 13.5px; }
 .k-error { color: var(--s-bad); background: var(--s-bad-bg); border-color: var(--s-bad); }
 .k-missing-step { color: var(--s-draft); background: var(--s-draft-bg); border-color: var(--s-draft); }
 .k-narrower { color: var(--s-review); background: var(--s-review-bg); border-color: var(--s-review); }
+.k-local-correction { color: var(--muted); background: var(--soft); border-color: var(--line); }
 .k-convention { color: var(--muted); background: var(--soft); border-color: var(--line); }
 .checked { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 13px; }
 .checked li::before { content: "✓ "; color: var(--s-done); font-weight: 600; }

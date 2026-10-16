@@ -42,14 +42,17 @@ namespace IsStepChain
 
 variable {α β : Type*} {Rel : α → α → Prop} {Rel' : β → β → Prop} {a b c : α} {m n : ℕ}
 
-theorem refl (a : α) : IsStepChain Rel 0 a a :=
+/-- Every state has a chain of zero steps to itself. -/
+lemma refl (a : α) : IsStepChain Rel 0 a a :=
   ⟨fun _ => a, rfl, rfl, fun _ hj => absurd hj (Nat.not_lt_zero _)⟩
 
+/-- A related pair gives a chain of one step. -/
 theorem single (h : Rel a b) : IsStepChain Rel 1 a b := by
   refine ⟨fun j => if j = 0 then a else b, rfl, rfl, fun j hj => ?_⟩
   obtain rfl : j = 0 := by omega
   simpa using h
 
+/-- Concatenate chains with a common endpoint, adding their lengths. -/
 theorem trans (h₁ : IsStepChain Rel m a b) (h₂ : IsStepChain Rel n b c) :
     IsStepChain Rel (m + n) a c := by
   obtain ⟨s₁, a₁, b₁, h₁⟩ := h₁
@@ -70,11 +73,13 @@ theorem trans (h₁ : IsStepChain Rel m a b) (h₂ : IsStepChain Rel n b c) :
           show j + 1 - m = j - m + 1 by omega]
         exact h₂ _ (by omega)
 
+/-- A relation-preserving map sends a chain to a chain of the same length. -/
 theorem map (f : α → β) (hf : ∀ x y, Rel x y → Rel' (f x) (f y)) (h : IsStepChain Rel n a b) :
     IsStepChain Rel' n (f a) (f b) := by
   obtain ⟨s, h₀, h₁, h⟩ := h
   exact ⟨f ∘ s, by simp [h₀], by simp [h₁], fun j hj => hf _ _ (h j hj)⟩
 
+/-- Replacing the length by an equal natural number preserves a chain. -/
 theorem cast_length {n' : ℕ} (h : IsStepChain Rel n a b) (hn : n = n') :
     IsStepChain Rel n' a b :=
   hn ▸ h
@@ -107,12 +112,15 @@ theorem untreat {ι : Type*} [DecidableEq ι] (T : Finset ι → α) (marks : Li
 remove the marks again: `2 m + 1` steps for `m` marks.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 328–339. -/
-theorem treatOperate {ι : Type*} [DecidableEq ι] (T T' : Finset ι → α) (marks : List ι)
+theorem treat_operate {ι : Type*} [DecidableEq ι] (T T' : Finset ι → α) (marks : List ι)
     (h : ∀ M, ∀ Q ∈ marks, Rel (T M) (T (insert Q M)))
     (hb : Rel (T marks.toFinset) (T' marks.toFinset))
     (h' : ∀ M, ∀ Q ∈ marks, Rel (T' (insert Q M)) (T' M)) :
     IsStepChain Rel (2 * marks.length + 1) (T ∅) (T' ∅) :=
   ((treat T marks h).trans (single hb) |>.trans (untreat T' marks h')).cast_length (by ring)
+
+/-- Compatibility name for the chain of treatments, one operation, and reverse treatments. -/
+alias treatOperate := treat_operate
 
 end IsStepChain
 

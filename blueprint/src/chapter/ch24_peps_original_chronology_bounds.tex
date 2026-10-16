@@ -1,0 +1,102 @@
+\section{Composition and exact expansions of original circuits}
+\label{sec:peps_original_chronology_bounds}
+
+The application of distributed compression to a dyadic protocol uses the
+actual ordered composition of its changes. The following elementary identities
+retain the original occurrences and local expansions. They are the chronological
+comparisons used in Proposition~7.1 and in the assembly argument of
+\cite{OpenAI2026PolynomialPEPS}; they do not construct the protocol.
+
+\begin{definition}[Chronological composite]
+    \label{def:peps_original_chronology_composite}
+    \leanok
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.sequence}
+    For original distributed circuits
+    $W_t:\mathcal H_{A_t}\to\mathcal H_{A_{t+1}}$, define
+    $W^{[0]}=1$ and $W^{[t+1]}=W_tW^{[t]}$.
+\end{definition}
+
+\begin{theorem}[Chronological composition]
+    \label{thm:peps_original_chronology_composition}
+    \leanok
+    \uses{def:peps_original_chronology_composite}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.eval_sequence_zero}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.eval_sequence_succ}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_sequence}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.nonprivateCount_sequence}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.forall_participants_sequence}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isMonomialBounded_sequence}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participationCount_comp}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participationCount_sequence}
+    Let $W_t:\mathcal H_{A_t}\to\mathcal H_{A_{t+1}}$, $0\le t<T$,
+    be original distributed circuits.
+    The composite acts by the ordered product: for
+    $v\in\mathcal H_{A_0}$, $W^{[0]}v=v$ and
+    $W^{[t+1]}v=W_t\bigl(W^{[t]}v\bigr)$.
+    Write $N(W)$ for the number of nonprivate occurrences in $W$, and
+    $n_p(W)$ for the number involving a fixed party $p$. Then
+    \begin{align}
+        N(W^{[T]})   & =\sum_{t<T}N(W_t),   \notag \\
+        n_p(W^{[T]}) & =\sum_{t<T}n_p(W_t).\notag
+    \end{align}
+    Every property of the participating set that holds at every original
+    occurrence also holds at every occurrence of the composite. If the original
+    monomial lists have at most $K$ terms, at most $r$ pair effects per term,
+    and coefficient sum at most $S$, the same bounds hold in the composite.
+    Occurrences are retained separately even when their local operators agree.
+\end{theorem}
+\begin{proof}\leanok
+    Induct on the number of stages. Appending the last circuit applies
+    $W_t$ after $W^{[t]}$, which is the evaluation identity. Its occurrences are the disjoint union of the
+    preceding occurrences and those of the last stage, with the same
+    participating sets and monomial lists. Both counting identities and the
+    stated bounds follow.
+\end{proof}
+
+\begin{definition}[Recorded local operators]
+    \label{def:peps_original_recorded_gate_maps}
+    \leanok
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.canonicalGateMaps}
+    At every nonprivate occurrence of an original distributed circuit $W$,
+    prescribe its recorded monomial sum as the local operator. Write
+    $\widehat W$ for the operator obtained by evaluating the chronology of $W$
+    with these prescribed local operators.
+\end{definition}
+
+\begin{theorem}[Exact local operator sums]
+    \label{thm:peps_original_exact_gate_maps}
+    \leanok
+    \uses{def:peps_original_recorded_gate_maps}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.evalWithGateMaps_canonicalGateMaps}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isGateApproximation_zero_canonicalGateMaps}
+    For every original distributed circuit $W$, $\widehat W=W$, including the
+    private operations. Every local approximation error is zero; the
+    original contraction and pair-effect conditions are retained.
+\end{theorem}
+\begin{proof}\leanok
+    At a nonprivate occurrence with monomial list $L$, the prescribed operator
+    is $\sum_{m\in L}m$, which is the original gate, so $\widehat W=W$ for a
+    single gate and its local error $\bigl\|\sum_{m\in L}m-\sum_{m\in L}m\bigr\|$
+    vanishes. If $\widehat U=U$ and $\widehat V=V$, then
+    $\widehat{VU}=\widehat V\,\widehat U=VU$ and
+    $\widehat{1\otimes U}=1\otimes\widehat U=1\otimes U$; private operations
+    and exchanges of registers are evaluated unchanged. Induction over the
+    circuit gives $\widehat W=W$ and the zero local error assertion.
+\end{proof}
+
+\begin{theorem}[Original monomial and expansion bounds]
+    \label{thm:peps_original_produced_resource_bounds}
+    \leanok
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.monomialCount_produce_le_of_isMonomialBounded}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_mono}
+    If every original monomial list has at most $K$ terms, then every
+    corresponding produced occurrence has at most $K$ terms. If an original
+    circuit has pair-effect bound $r$ and coefficient-sum bound $S$, then
+    bounds $r'\ge r$ and $S'\ge S$ also bound that circuit.
+\end{theorem}
+\begin{proof}\leanok
+    The original lists are unchanged at each occurrence. Their length bound
+    gives the first assertion. For the second, enlarge the pair-effect bound
+    in each monomial and the coefficient-sum bound by transitivity.
+    Composition and spectator identities preserve these assertions.
+\end{proof}

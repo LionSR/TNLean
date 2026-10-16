@@ -46,20 +46,24 @@ def SquareEdge.endpointList : SquareEdge → ℤ × ℤ → List (ℤ × ℤ)
   | .top, S => [S + (0, 1), S + (1, 1)]
   | .left, S => [S, S + (0, 1)]
 
+/-- The set of the four listed corners is the block corner set. -/
 theorem toFinset_cornerList (S : ℤ × ℤ) : (cornerList S).toFinset = cornerBlocks S := by
   ext Q
   simp [cornerList, cornerBlocks]
 
+/-- The set of the two listed endpoints is the edge endpoint set. -/
 theorem SquareEdge.toFinset_endpointList (e : SquareEdge) (S : ℤ × ℤ) :
     (e.endpointList S).toFinset = e.endpointBlocks S := by
   ext Q
   cases e <;> simp [SquareEdge.endpointList, SquareEdge.endpointBlocks]
 
+/-- Every listed corner is a corner of the block. -/
 theorem isBlockCornerOf_of_mem_cornerList {S Q : ℤ × ℤ} (h : Q ∈ cornerList S) :
     IsBlockCornerOf S Q := by
   simp only [cornerList, List.mem_cons, List.not_mem_nil, or_false] at h
   rcases h with rfl | rfl | rfl | rfl <;> simp [IsBlockCornerOf]
 
+/-- Every listed edge endpoint is a corner of the block. -/
 theorem SquareEdge.isBlockCornerOf_of_mem_endpointList {e : SquareEdge} {S Q : ℤ × ℤ}
     (h : Q ∈ e.endpointList S) : IsBlockCornerOf S Q :=
   isBlockCornerOf_of_mem_cornerList (by
@@ -128,10 +132,12 @@ theorem isHomogenizing_oldLabel (done : Set (ℤ × ℤ)) :
     IsLocalLabel R done (repaintBaseline R done).oldLabel :=
   Or.inr ⟨0, by decide, by simp [repaintBaseline, blockBaseline]⟩
 
+/-- The final label of the repainting is a local label. -/
 theorem isHomogenizing_finalLabel (done : Set (ℤ × ℤ)) :
     IsLocalLabel R done (repaintBaseline R done).finalLabel :=
   Or.inl rfl
 
+/-- The label across any edge of the repainting is a local label. -/
 theorem isHomogenizing_nbrLabel (done : Set (ℤ × ℤ)) (e : SquareEdge) :
     IsLocalLabel R done ((repaintBaseline R done).nbrLabel e) := by
   refine Or.inr ⟨e.nbrBlock (0, 0), nbrBlock_zero_mem_blockWindow e, ?_⟩
@@ -160,7 +166,7 @@ theorem isStepChain_sheetOperation {ε₀ t : ℝ}
   classical
   have hdiff : ∀ (M : Finset (ℤ × ℤ)) Q₀ Q, Q ≠ Q₀ → (Q ∈ M ↔ Q ∈ insert Q₀ M) :=
     fun M Q₀ Q hQ => by simp [hQ]
-  refine IsStepChain.treatOperate (fun M => treatedFrame (q := q) P rank R hr M L₀ g)
+  refine IsStepChain.treat_operate (fun M => treatedFrame (q := q) P rank R hr M L₀ g)
     (fun M => treatedFrame (q := q) P rank R hr M L₀ g') marks
     (fun M Q hQ => hpt hg Q (hmarks Q hQ) (hdiff M Q) L₀ hL₀) hb
     (fun M Q hQ => hpt hg' Q (hmarks Q hQ) (fun Q' hQ' => (hdiff M Q Q' hQ').symm) L₀ hL₀)
