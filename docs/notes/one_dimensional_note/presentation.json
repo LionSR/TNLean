@@ -2,7 +2,7 @@
   "pageTitle": "One-dimensional collar-free route · TNLean notes",
   "eyebrow": "TNLean notes · one dimension",
   "heading": "A one-dimensional area law and a matrix product state approximation from a global spectral gap",
-  "lede": "The two September 2026 manuscripts prove an entanglement area law and a polynomial PEPS approximation for gapped spin systems on the square lattice, assuming only that the full Hamiltonian has a spectral gap. This page runs their arguments on a chain. The area law collapses to one short section of the first manuscript; the tensor-network theorem survives as a left-to-right sweep instead of a dyadic hierarchy. Every stage is told twice: in words, then precisely.",
+  "lede": "The two September 2026 manuscripts prove an entanglement area law and a polynomial PEPS approximation for gapped spin systems on the square lattice, assuming only that the full Hamiltonian has a spectral gap. This page runs their arguments on a chain. The area law collapses to one short section of the first manuscript; the tensor-network theorem survives as a left-to-right sweep instead of a dyadic hierarchy. Every stage is told twice: in words, then precisely. Theorems A and B are formalized in Lean 4 (TNLean, modules TNLean/PEPS/AreaLaw/Chain/) with explicit constants; Theorem B by the two-line route.",
   "stamp": [
     "Companion to <span class=\"mono\">docs/notes/one_dimensional_note/one_dimensional_area_law_and_mps.pdf</span>",
     "Diagrams drawn with tenkz and quantikz, as on the campaign board"

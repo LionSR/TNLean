@@ -229,6 +229,17 @@ dimension at most $CL^{c}$ such that
 The constants never depend on $\Lam$, on $A$, or on the particular
 Hamiltonian. No gap for a restricted Hamiltonian, no frustration
 freeness, no translation invariance is assumed.
+
+\paragraph{Formalization.}
+Theorems~\ref{thm:A} and~\ref{thm:B}, with explicit constants, are
+formalized in Lean~4 in the TNLean modules \texttt{TNLean/PEPS/AreaLaw/Chain/}
+(blueprint chapter ``The one-dimensional area law and matrix product state
+approximation''). The formal constants differ from those printed here in the
+count of split interactions and in the shell width, as recorded in
+\texttt{docs/formalization/one-dimensional-chain.md}; Theorem~\ref{thm:B} is
+formalized by the two-line route of Section~\ref{sec:shortcut} only, and the
+protocol route of Part~\ref{part:mps} is not formalized.
+
 \notepart{The one-dimensional area law}{part:arealaw}
 
 \section{Setting, reductions, and counting}\label{sec:setting}
