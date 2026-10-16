@@ -14,7 +14,6 @@ and two deaths, a birth and a death on the main sheet after it (`06-geometry.tex
 183–221). With their point treatments these are `15` and `20` changes of one sheet. This file
 assembles the two chains, conditional on Proposition 3.4 through `IsAngularScale`.
 
-* `auxBirthB_insertsOne`, …, `mainDeathB_insertsOne` : the label each operation introduces;
 * `isStepChain_auxBirths` : the three auxiliary births;
 * `isStepChain_mainSteps` : the four operations of the main sheet.
 
