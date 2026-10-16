@@ -15,6 +15,7 @@ marks, one mark at a time, and followed by the removal of these homogenizations
 the central birth and for the elementary births and deaths along an edge, with the bounds of the
 small-patch rewrites of the protocol.
 
+* `IsLocalLabel` : the final label of `R` or the label of a block next to `R`;
 * `IsPointTreatable` : the point treatments of a repainting are bounded changes, as provided by
   `exists_pointTreatment_hasSourceBoundedChange`;
 * `isStepChain_centralBirth` : the `9` changes of the central birth;
@@ -89,27 +90,19 @@ theorem four_mul_zpow_neg_thirty_le {L : ℕ} (hL : 1 ≤ L) {b : ℕ} (hb : 2 �
   have hb' : (2 : ℝ) ≤ b := by exact_mod_cast hb
   nlinarith
 
-section Bounds
-
-variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
-  {Party : Type} {Ω : EuclideanSpace ℂ (ι → Fin q)} {S : Set Party} {r K rs : ℕ} {ε ε' : ℝ}
-
-theorem HasFrameChange.mono_error {F F' : Frame pos q Party}
-    (h : HasFrameChange Ω F F' S r K rs ε) (hε : ε ≤ ε') : HasFrameChange Ω F F' S r K rs ε' :=
-  let ⟨w, hw, hs⟩ := h
-  ⟨w, hw.mono subset_rfl le_rfl le_rfl hε, hs⟩
-
-theorem HasPairChange.mono_error {F₁ F₂ F₁' F₂' : Frame pos q Party}
-    (h : HasPairChange Ω F₁ F₂ F₁' F₂' S r K rs ε) (hε : ε ≤ ε') :
-    HasPairChange Ω F₁ F₂ F₁' F₂' S r K rs ε' :=
-  let ⟨w, hw, hs⟩ := h
-  ⟨w, hw.mono subset_rfl le_rfl le_rfl hε, hs⟩
-
-end Bounds
-
 /-! ### Chains of one sheet -/
 
-variable {k : ℕ} {L q : ℕ} [NeZero q] {Ω : StateSpace L q} {B₀ C c : ℝ}
+variable {k : ℕ}
+
+/-- A label used by the repainting of `R` at the stage `done`: its final label or the label of a
+block next to `R`, possibly `R` itself.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 585–596. -/
+def IsLocalLabel (R : RepaintedSquare k) (done : Set (ℤ × ℤ)) (l : GuideLabel) : Prop :=
+  l = newParty Sum.inl R.1.1 R.1.index ∨
+    ∃ R' ∈ blockWindow 1, l = protocolLevelLabels k R.1.1 done (R' + R.1.index)
+
+variable {L q : ℕ} [NeZero q] {Ω : StateSpace L q} {B₀ C c : ℝ}
   (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
   (R : RepaintedSquare k)
 
@@ -125,30 +118,22 @@ def IsPointTreatable {ε₀ t : ℝ} (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * t ∧
   ∀ {g : ℝ × ℝ → GuideLabel}, (repaintBaseline R done).IsUnmodifiedGuide g →
     ∀ {M M' : Finset (ℤ × ℤ)} (Q₀ : ℤ × ℤ), IsBlockCornerOf R.1.index Q₀ →
       (∀ Q, Q ≠ Q₀ → (Q ∈ M ↔ Q ∈ M')) → ∀ L₀ : GuideLabel,
-      (L₀ = newParty Sum.inl R.1.1 R.1.index ∨
-        ∃ R' ∈ blockWindow 1, L₀ = protocolLevelLabels k R.1.1 done (R' + R.1.index)) →
+      IsLocalLabel R done L₀ →
       HasFrameChange Ω (treatedFrame (q := q) P rank R hr M L₀ g)
         (treatedFrame P rank R hr M' L₀ g) S r K rs ε
 
 /-- The labels of the repainting of `R` that may homogenize: the final label, the old label and
 the labels across the edges. -/
 theorem isHomogenizing_oldLabel (done : Set (ℤ × ℤ)) :
-    (repaintBaseline R done).oldLabel = newParty Sum.inl R.1.1 R.1.index ∨
-      ∃ R' ∈ blockWindow 1,
-        (repaintBaseline R done).oldLabel = protocolLevelLabels k R.1.1 done (R' + R.1.index) :=
+    IsLocalLabel R done (repaintBaseline R done).oldLabel :=
   Or.inr ⟨0, by decide, by simp [repaintBaseline, blockBaseline]⟩
 
 theorem isHomogenizing_finalLabel (done : Set (ℤ × ℤ)) :
-    (repaintBaseline R done).finalLabel = newParty Sum.inl R.1.1 R.1.index ∨
-      ∃ R' ∈ blockWindow 1,
-        (repaintBaseline R done).finalLabel = protocolLevelLabels k R.1.1 done (R' + R.1.index) :=
+    IsLocalLabel R done (repaintBaseline R done).finalLabel :=
   Or.inl rfl
 
 theorem isHomogenizing_nbrLabel (done : Set (ℤ × ℤ)) (e : SquareEdge) :
-    (repaintBaseline R done).nbrLabel e = newParty Sum.inl R.1.1 R.1.index ∨
-      ∃ R' ∈ blockWindow 1,
-        (repaintBaseline R done).nbrLabel e =
-          protocolLevelLabels k R.1.1 done (R' + R.1.index) := by
+    IsLocalLabel R done ((repaintBaseline R done).nbrLabel e) := by
   refine Or.inr ⟨e.nbrBlock (0, 0), nbrBlock_zero_mem_blockWindow e, ?_⟩
   change protocolLevelLabels k R.1.1 done (e.nbrBlock R.1.index) = _
   congr 1
@@ -166,8 +151,7 @@ theorem isStepChain_sheetOperation {ε₀ t : ℝ}
     (hpt : IsPointTreatable P rank R hr done S r K rs ε) {g g' : ℝ × ℝ → GuideLabel}
     (hg : (repaintBaseline R done).IsUnmodifiedGuide g)
     (hg' : (repaintBaseline R done).IsUnmodifiedGuide g') {L₀ : GuideLabel}
-    (hL₀ : L₀ = newParty Sum.inl R.1.1 R.1.index ∨
-      ∃ R' ∈ blockWindow 1, L₀ = protocolLevelLabels k R.1.1 done (R' + R.1.index))
+    (hL₀ : IsLocalLabel R done L₀)
     (marks : List (ℤ × ℤ)) (hmarks : ∀ Q ∈ marks, IsBlockCornerOf R.1.index Q)
     (hb : HasFrameChange Ω (treatedFrame (q := q) P rank R hr marks.toFinset L₀ g)
       (treatedFrame P rank R hr marks.toFinset L₀ g') S r K rs ε) :

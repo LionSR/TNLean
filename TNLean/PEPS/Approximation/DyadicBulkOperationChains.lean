@@ -16,7 +16,6 @@ the marks, the bulk step, and the removal of the treatments (`06-geometry.tex`, 
 328–339). This file assembles these chains, conditional on Proposition 3.4 through
 `IsAngularScale`, with the bounds of the small-patch rewrites of the protocol.
 
-* `IsLocalLabel` : the final label of `R` or the label of a block next to `R`;
 * `isStepChain_centralBirth` : the central birth;
 * `isStepChain_bandOperation` : an elementary birth or death along an edge.
 
@@ -35,14 +34,6 @@ open EncodedFrame PairEffect
 
 variable {k q : ℕ} [NeZero q] {J Δ a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
   {h : SquareHamiltonian L q J} {E₀ : ℝ} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
-
-/-- A label used by the repainting of `R` at the stage `done`: its final label or the label of a
-block next to `R`, possibly `R` itself.
-
-Polynomial-PEPS manuscript, `06-geometry.tex`, lines 585–596. -/
-def IsLocalLabel (R : RepaintedSquare k) (done : Set (ℤ × ℤ)) (l : GuideLabel) : Prop :=
-  l = newParty Sum.inl R.1.1 R.1.index ∨
-    ∃ R' ∈ blockWindow 1, l = protocolLevelLabels k R.1.1 done (R' + R.1.index)
 
 /-- The party of a local label is used by the repainting. -/
 theorem IsLocalLabel.eventUses {R : RepaintedSquare k} {done : Set (ℤ × ℤ)} {l : GuideLabel}
