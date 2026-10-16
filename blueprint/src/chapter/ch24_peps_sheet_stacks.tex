@@ -1331,7 +1331,15 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{proof}\leanok
     \uses{thm:peps_protocol_party_map_switch, thm:peps_protocol_level_frame_facts,
-        lem:peps_dyadic_schedule_guides, lem:peps_dyadic_active_labels}
+        lem:peps_dyadic_schedule_guides, lem:peps_dyadic_active_labels,
+        thm:peps_guide_frame_supplied_gates, lem:peps_dyadic_floor,
+        lem:peps_dyadic_sampled_guides, lem:peps_dyadic_incident_change,
+        def:peps_protocol_treated_frame, thm:peps_protocol_level_events,
+        thm:peps_protocol_constants, def:peps_dyadic_block_guide,
+        def:peps_dyadic_edge_band, def:peps_dyadic_schedule,
+        def:peps_dyadic_normal_words, thm:peps_dyadic_repainting_valid_labels,
+        def:peps_guide_frame, def:peps_frame,
+        def:peps_dyadic_used_parties, def:peps_protocol_level_frame}
     Without marks the treated guide is the reading of the guide placed on $R$. The
     starting guide placed on $R$ is the block guide of the level. The completed guide
     agrees with the block guide of the level with $R$ repainted off the boundary of
