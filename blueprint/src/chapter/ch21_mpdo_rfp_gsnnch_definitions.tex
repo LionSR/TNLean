@@ -85,8 +85,9 @@ without sector projections.
 \end{theorem}
 
 \begin{proof}\leanok
-    Take one sector, its one-site projection to be the identity, its
-    multiplicity to be one, and its bond to be the given bond.
+    Taking a single sector with one-site projection equal to the identity,
+    multiplicity one, and bond equal to the given bond yields the
+    explicit GSNNCH decomposition.
 \end{proof}
 
 \begin{definition}[Restriction to an orthogonal physical sector]
@@ -199,9 +200,9 @@ without sector projections.
 
 \begin{proof}\leanok
     \lean{Matrix.partialTraceRight_kronecker_conj_of_right_isometry}
-    Let $X$ denote the operator before conjugation.  Reindex the chain into its
-    first $L$ and final $K$ sites.  The sitewise matrix becomes
-    $V^{\otimes L}\otimes V^{\otimes K}$.  Since
+    Let $X$ denote the operator before conjugation. Reindexing the chain into
+    its first $L$ and final $K$ sites factors the sitewise matrix as
+    $V^{\otimes L}\otimes V^{\otimes K}$. Since
     $(V^{\otimes K})^*V^{\otimes K}=I$, the partial trace satisfies
     \begin{align}
          & \tr_K\!\left[
@@ -493,7 +494,8 @@ without sector projections.
 \end{definition}
 
 \begin{proof}\leanok
-    Take $a_{x,N}=1$ for every sector $x$ and every $N\geq2$.
+    Choosing $a_{x,N}=1$ for every sector $x$ and every $N\geq2$ yields the
+    proportional realization.
 \end{proof}
 
 \begin{theorem}[Positive factorizations on orthogonal physical restrictions]
@@ -515,21 +517,20 @@ without sector projections.
     Write $\mathcal K_x=V_x\mathcal K_{x,P_x}V_x^*$ for the restriction to
     the range of $P_x$. If every $\mathcal K_{x,P_x}$ admits a physical-sector
     factorization whose neighboring operators are positive semidefinite, then
-    there are positive bonds $B^{(x)}$ such that
+    there are positive bonds $B^{(x)}$ forming an orthogonally supported
+    family of commuting sector products such that
     \begin{align}
         (P_x\otimes P_x)B^{(x)}(P_x\otimes P_x)
-         & =B^{(x)}
+         & =B^{(x)},
         \notag
     \end{align}
-    and all translates of each $B^{(x)}$ commute pairwise. For every
+    all translates of each $B^{(x)}$ commute pairwise, and for every
     $N\geq2$,
     \begin{align}
         \rho^{(N)}(\mathcal K_x)
          & =\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
         \notag
     \end{align}
-    Thus these bonds form an orthogonally supported family of commuting
-    sector products.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -548,8 +549,10 @@ without sector projections.
     \uses{thm:mpdo_bnt_physical_support_restriction, thm:mpdo_physical_support_restriction_bond, thm:mpdo_bnt_sector_projection_resolution, def:mpdo_orthogonal_commuting_sector_family}
     Suppose that the BNT physical projectors $P_x$ have been selected and
     that every common-weight-absorbed representative $\mathcal K_x$
-    satisfies SAL. Then there are positive two-site bonds $B^{(x)}$ such
-    that the projections $P_x$ are pairwise orthogonal,
+    satisfies SAL. Then there are positive two-site bonds $B^{(x)}$ forming an
+    orthogonally supported family of commuting sector products with
+    normalization scalar one such that the projections $P_x$ are pairwise
+    orthogonal,
     \begin{align}
         (P_x\otimes P_x)B^{(x)}(P_x\otimes P_x)
          & =B^{(x)},
@@ -562,19 +565,16 @@ without sector projections.
          & =\prod_{i=0}^{N-1}\tau_i(B^{(x)}).
         \notag
     \end{align}
-    Thus the absorbed BNT representatives have an orthogonally supported
-    family of commuting sector products with normalization scalar one.
 \end{theorem}
 
 \begin{proof}\leanok
-    Restrict $\mathcal K_x$ isometrically to the range of $P_x$. The
-    restricted tensor is injective and satisfies SAL, so
+    Restricting $\mathcal K_x$ isometrically to the range of $P_x$ yields an
+    injective restricted tensor satisfying SAL, so
     \cite[Proposition~C.8]{Cirac2016MPDO_arXiv} gives its positive commuting
-    bond product. Apply
-    Theorem~\ref{thm:mpdo_physical_support_restriction_bond} in every sector.
-    The lifted bond is supported on $P_x\otimes P_x$ and realizes
-    $\mathcal K_x$ exactly. The BNT projector construction gives
-    $P_xP_y=0$ for $x\ne y$, which completes the sector family.
+    bond product. By Theorem~\ref{thm:mpdo_physical_support_restriction_bond}
+    in every sector, the lifted bond is supported on $P_x\otimes P_x$ and
+    realizes $\mathcal K_x$ exactly, while the BNT projector construction gives
+    $P_xP_y=0$ for $x\ne y$ to complete the sector family.
 \end{proof}
 
 \begin{theorem}[Orthogonal commuting sector products give the GSNNCH form]
@@ -631,14 +631,14 @@ without sector projections.
 \end{theorem}
 
 \begin{proof}\leanok
-    Fix $N\geq2$. Replace the bond in sector $x$ by
+    For each $N\geq2$, replacing the bond in sector $x$ by
     \begin{align}
         \widetilde B^{(x)}_N
-         & =\left(\frac{c_x(N)}{n_x}\right)^{1/N}B^{(x)}.
+         & =\left(\frac{c_x(N)}{n_x}\right)^{1/N}B^{(x)}
         \notag
     \end{align}
-    This bond is positive, has the same support, and its translates commute.
-    Its periodic product is
+    produces a positive bond with the same support and commuting translates,
+    whose periodic product satisfies
     \begin{align}
         n_x\prod_{i=0}^{N-1}\tau_i(\widetilde B^{(x)}_N)
          & =c_x(N)\prod_{i=0}^{N-1}\tau_i(B^{(x)})
@@ -682,15 +682,15 @@ without sector projections.
 \end{theorem}
 
 \begin{proof}\leanok
-    For fixed $N$, put
+    For fixed $N$, defining
     \begin{align}
         S_N & =\sum_x n_x\rho^{(N)}(K_x),
         \notag                                    \\
         p_x & =\frac{c_N n_x\tr(\rho^{(N)}(K_x))}
-        {\tr(\rho^{(N)}(M))}.
+        {\tr(\rho^{(N)}(M))}
         \notag
     \end{align}
-    Trace linearity and $\rho^{(N)}(M)=c_NS_N$ give
+    combines with trace linearity and $\rho^{(N)}(M)=c_NS_N$ to give
     \begin{align}
         \tr(\rho^{(N)}(M))^{-1}\rho^{(N)}(M)
          & =\tr(S_N)^{-1}S_N
@@ -700,7 +700,7 @@ without sector projections.
     Thus the common positive scalar cancels from the normalized chain and from
     every marginal.
 
-    Put $Q_x=P_x\otimes\Id^{\otimes(L-1)}$. The support identity gives
+    With $Q_x=P_x\otimes\Id^{\otimes(L-1)}$, the support identity gives
     $Q_x\widehat\rho_{x,N,L}=\widehat\rho_{x,N,L}$, while $P_xP_y=0$ for
     $x\ne y$ gives $Q_xQ_y=0$. The entropy of a nonempty marginal is therefore
     \begin{align}
@@ -723,9 +723,13 @@ without sector projections.
     \lean{MPOTensor.isSAL_of_localOrthogonalSum}
     \leanok
     \uses{def:is_sal, def:mpdo_vertical_one_site_actions}
-    Let $\{K_x\}_{x=0}^{g-1}$ be a nonempty finite family of MPO tensors,
-    let $n_x$ be positive natural numbers, and let $P_x$ be pairwise
-    orthogonal one-site projections. Suppose that, for every $N>0$,
+    Formalizing the conditional final inference in
+    \cite[Appendix~C.2, lines~1801--1808]{Cirac2016MPDO_arXiv} where
+    sectorwise SAL is assumed explicitly (see
+    \cite{gap:cpsv16_commuting_form_to_sal}), let $\{K_x\}_{x=0}^{g-1}$ be a
+    nonempty finite family of MPO tensors, let $n_x$ be positive natural
+    numbers, and let $P_x$ be pairwise orthogonal one-site projections.
+    Suppose that, for every $N>0$,
     \begin{align}
         \rho^{(N)}(M)
          & =\sum_{x=0}^{g-1}n_x\rho^{(N)}(K_x).
@@ -742,17 +746,13 @@ without sector projections.
         \notag
     \end{align}
     If every $K_x$ satisfies SAL, then $M$ satisfies SAL.
-
-    This formalizes the conditional final inference in
-    \cite[Appendix~C.2, lines~1801--1808]{Cirac2016MPDO_arXiv}, where
-    sectorwise SAL is assumed explicitly; see
-    \cite{gap:cpsv16_commuting_form_to_sal}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpdo_proportional_local_orthogonal_sum_sal}
-    Take $c_N=1$ in
-    Theorem~\ref{thm:mpdo_proportional_local_orthogonal_sum_sal}.
+    Specializing
+    Theorem~\ref{thm:mpdo_proportional_local_orthogonal_sum_sal} to $c_N=1$
+    yields the result.
 \end{proof}
 
 \begin{theorem}[Proportional commuting sector products have normalized-chain support]
@@ -832,8 +832,8 @@ without sector projections.
 
 \begin{proof}\leanok
     \uses{thm:mpdo_proportional_orthogonal_commuting_sector_normalized_support}
-    Write $\operatorname{Tr}_{L+1,\ldots,N}$ for the partial trace over the
-    final $N-L$ sites. By definition,
+    With $\operatorname{Tr}_{L+1,\ldots,N}$ denoting the partial trace over
+    the final $N-L$ sites, by definition
     \begin{align}
         \widehat\rho_{x,N,L}
          & =\operatorname{Tr}_{L+1,\ldots,N}
@@ -880,8 +880,9 @@ without sector projections.
 
 \begin{proof}\leanok
     \uses{thm:mpdo_proportional_orthogonal_commuting_sector_marginal_support}
-    Apply Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_marginal_support}
-    with $a_{x,N}=1$.
+    Specializing
+    Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_marginal_support}
+    to $a_{x,N}=1$ gives the marginal support identity.
 \end{proof}
 
 \begin{theorem}[Proportional orthogonal commuting sector sums preserve SAL]
@@ -928,8 +929,9 @@ without sector projections.
 
 \begin{proof}\leanok
     \uses{def:mpdo_orthogonal_commuting_sector_family_to_proportional, thm:mpdo_proportional_orthogonal_commuting_sector_sum_sal}
-    Take $a_{x,N}=c_N=1$ in
-    Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_sum_sal}.
+    Specializing
+    Theorem~\ref{thm:mpdo_proportional_orthogonal_commuting_sector_sum_sal}
+    to $a_{x,N}=c_N=1$ yields the result.
 \end{proof}
 
 % Source: arXiv:1606.00608, Appendix C.2, Proposition `4to2`, lines
@@ -985,24 +987,23 @@ without sector projections.
         isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_proportionalSectors_of_isSourceZCL}
     \leanok
     \uses{def:mpo_tensor, def:sector_weight_data, def:global_gauge_of_blocks, def:same_mpv2_pos, def:blockwise_product_word_span, def:mpdo_doubled_phys_trace_transfer, def:mpdo_common_sector_weight_absorption, def:mpdo_proportional_orthogonal_commuting_sector_family, def:mpo_source_zcl, def:is_sal}
-    Let $S$ be a nonempty sector decomposition with representatives $A_x$,
-    positive copy numbers $n_x$, and nonzero copy weights. Suppose its total
-    bond dimension equals that of an MPO tensor $M$, and a block-diagonal gauge
-    reconstructs $M$ from the tensor associated with $S$. Suppose also that
-    this tensor has the same matrix product vectors as $M$ at every positive
-    length, that all copy weights over $A_x$ have a common value $\mu_x$, and
-    that the physical-trace transfer of every $A_x$ is nonnilpotent. Assume
-    that the one-letter tuples $(A_x^i)_x$ span the full product of the
-    representative matrix algebras, and put $K_x=\mu_xA_x$.
+    Establishing \cite[Proposition~C.14]{Cirac2016MPDO_arXiv} with the
+    ambient zero-correlation-length and one-site positivity hypotheses made
+    explicit (see \cite{gap:cpsv16_commuting_form_to_sal}), let $S$ be a
+    nonempty sector decomposition with representatives $A_x$, positive copy
+    numbers $n_x$, and nonzero copy weights. Suppose its total bond dimension
+    equals that of an MPO tensor $M$, and a block-diagonal gauge reconstructs
+    $M$ from the tensor associated with $S$. Suppose also that this tensor has
+    the same matrix product vectors as $M$ at every positive length, that all
+    copy weights over $A_x$ have a common value $\mu_x$, and that the
+    physical-trace transfer of every $A_x$ is nonnilpotent. Assume that the
+    one-letter tuples $(A_x^i)_x$ span the full product of the representative
+    matrix algebras, and define $K_x=\mu_xA_x$.
 
     Suppose that the tensors $K_x$ form a proportionally realized orthogonal
     commuting sector family and that each one-site operator
     $\rho^{(1)}(K_x)$ is positive semidefinite. If $M$ has source zero
     correlation length, then $M$ satisfies SAL.
-
-    This establishes \cite[Proposition~C.14]{Cirac2016MPDO_arXiv} with the
-    ambient zero-correlation-length and one-site positivity hypotheses made
-    explicit; see \cite{gap:cpsv16_commuting_form_to_sal}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1026,17 +1027,18 @@ without sector projections.
     \leanok
     \uses{cor:mpdo_orthogonal_commuting_sector_sum_sal, def:same_mpv2_pos}
     Let $M$ have a nonempty basis-of-normal-tensors decomposition with
-    positive copy numbers $n_x$ and copy-independent weights $\mu_x$. Put
-    $K_x=\mu_xA_x$, and suppose that the decomposition generates the same
+    positive copy numbers $n_x$ and copy-independent weights $\mu_x$. With
+    $K_x=\mu_xA_x$, suppose that the decomposition generates the same
     positive-length matrix product vectors as $M$. If an
     orthogonally supported commuting sector family realizes the
     tensors $K_x$, and every $K_x$ satisfies SAL, then $M$ satisfies SAL.
 \end{corollary}
 
 \begin{proof}\leanok
-    The positive-length canonical-form identity gives
-    $\rho^{(N)}(M)=\sum_x n_x\rho^{(N)}(K_x)$.
-    Apply Corollary~\ref{cor:mpdo_orthogonal_commuting_sector_sum_sal}.
+    Since the positive-length canonical-form identity gives
+    $\rho^{(N)}(M)=\sum_x n_x\rho^{(N)}(K_x)$,
+    Corollary~\ref{cor:mpdo_orthogonal_commuting_sector_sum_sal} applies
+    directly.
 \end{proof}
 
 \begin{corollary}[Orthogonal BNT sector products give the GSNNCH form]
@@ -1046,23 +1048,23 @@ without sector projections.
     \uses{def:same_mpv2_pos, thm:mpdo_orthogonal_commuting_sectors_gsnnch}
     Let $M$ be an MPO tensor and let its BNT canonical form have normal
     representatives $A_x$, copy numbers $n_x$, and copy-independent weights
-    $\mu_x$. Put $\mathcal K_x=\mu_xA_x$, and assume that this canonical form
+    $\mu_x$. With $\mathcal K_x=\mu_xA_x$, assume that this canonical form
     generates the same matrix product vectors as $M$ at every positive length.
     If the representatives $\mathcal K_x$ have orthogonally supported
     commuting sector products, then
     \begin{align}
         \rho^{(N)}(M)
-         & =\sum_x n_x\rho^{(N)}(\mathcal K_x).
+         & =\sum_x n_x\rho^{(N)}(\mathcal K_x),
         \notag
     \end{align}
-    Hence the BNT copy numbers $n_x$ are the natural multiplicities of the
+    so the BNT copy numbers $n_x$ are the natural multiplicities of the
     explicit GSNNCH form.
 \end{corollary}
 
 \begin{proof}\leanok
-    Apply
+    Applying
     Theorem~\ref{thm:mpdo_orthogonal_commuting_sectors_gsnnch} to the
-    positive-length BNT decomposition. Its coefficients are the
+    positive-length BNT decomposition identifies its coefficients with the
     copy numbers $n_x$ after the common weights have been absorbed.
 \end{proof}
 
@@ -1073,23 +1075,24 @@ without sector projections.
     \uses{def:same_mpv2_pos, thm:mpdo_bnt_sector_sal_commuting_family, cor:mpdo_bnt_orthogonal_commuting_sectors_gsnnch}
     Let $M$ be an MPO tensor and let its BNT canonical form have normal
     representatives $A_x$, copy numbers $n_x$, and copy-independent weights
-    $\mu_x$. Put $\mathcal K_x=\mu_xA_x$, and assume that this canonical form
-    generates the same matrix product vectors as $M$ at every positive length.
-    Equivalently, for every $N>0$,
+    $\mu_x$. With $\mathcal K_x=\mu_xA_x$, assume that this canonical form
+    generates the same matrix product vectors as $M$ at every positive length,
+    or equivalently, for every $N>0$,
     \begin{align}
         \rho^{(N)}(M)
          & =\sum_x n_x\rho^{(N)}(\mathcal K_x).
         \notag
     \end{align}
     Under the BNT projector-selection hypotheses, if every $\mathcal K_x$
-    satisfies SAL, then $M$ has the source GSNNCH form. Its outer sectors are
-    the BNT sectors and its natural multiplicities are the copy numbers $n_x$.
+    satisfies SAL, then $M$ has the source GSNNCH form with the BNT sectors as
+    outer sectors and the copy numbers $n_x$ as natural multiplicities.
 \end{corollary}
 
 \begin{proof}\leanok
     Theorem~\ref{thm:mpdo_bnt_sector_sal_commuting_family} gives the
-    orthogonally supported commuting sector products. Apply
-    Corollary~\ref{cor:mpdo_bnt_orthogonal_commuting_sectors_gsnnch}.
+    orthogonally supported commuting sector products, and
+    Corollary~\ref{cor:mpdo_bnt_orthogonal_commuting_sectors_gsnnch} then
+    concludes.
 \end{proof}
 
 \begin{lemma}[Cyclic-shift action on an embedded local operator]

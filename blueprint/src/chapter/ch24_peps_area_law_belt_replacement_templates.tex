@@ -1,0 +1,134 @@
+\section{Templates of belt tiles and replacements}
+\label{sec:area_law_belt_replacement_templates}
+
+The belt tiles and the replacements of \cite[Section~11]{OpenAI2026AreaLaw}
+have templates in the sense of Definition~\ref{def:area_law_template}. A belt
+tile of a layer $k$ has side scale $u=t_k$ and is a run of the fan of its fine
+cell. A replacement whose removal square has half-side $u=d(S)$ is the image of
+a run of the normalized eight-triangle fan on $[-1,1]^2$ under
+$x\mapsto v+ux$. Its triangles join the center of the removal square to its
+corners and side midpoints. Such a run may have angle greater than $\pi$, and
+it may be the whole square. Throughout, a lattice point of the region supplies
+the nonemptiness required of a template; the templates are used only for
+regions that meet the cut. For replacements the stopping scale satisfies $S_*\ge1$. Both
+restrictions are recorded in~\cite{gap:arealaw2d_belt_replacement_template_scope}.
+
+% Source: 10-geometry.tex, lines 731--740, with the fan runs of lines
+% 299--318, the replacement instructions of lines 393--417 and the order of
+% constants, lines 756--762; Definition 9.3 in 08-scanner.tex, lines 546--564.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\begin{theorem}[A transported normalized fan run]
+    \label{thm:area_law_centered_fan_run_image}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRunGraph_centered,
+        TNLean.PEPS.AreaLaw.Geometry.cellFanRunRegion_centered_image}
+    \leanok
+    \uses{def:area_law_fan_runs,lem:area_law_isolated_star_mono}
+    Let $c\in\mathbb R^2$ and $\ell\in\mathbb N$, and consider the closed
+    dyadic square of side $2^\ell$ centered at $c$. For the same midpoint
+    subdivisions and colors, the run graph of its fan equals the run graph
+    of the normalized fan on $[-1,1]^2$. The image of a normalized run under
+    $x\mapsto c+2^{\ell-1}x$ is the union of the corresponding run of the
+    fan of that square.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{lem:area_law_isolated_star_mono}
+    The map $x\mapsto c+2^{\ell-1}x$ is injective. It carries the start and
+    end of each normalized elementary side segment to those of the actual
+    one. Hence two triangles share a segment endpoint in one fan exactly
+    when they do in the other, and the run graphs agree. The map also
+    carries each normalized triangle onto the actual triangle with the same
+    index, and images commute with unions.
+\end{proof}
+
+\begin{theorem}[Templates of initial belt tiles]
+    \label{thm:area_law_belt_templates}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialBelt_exists_template}
+    \leanok
+    \uses{thm:area_law_fan_run_template,def:area_law_initial_birth_regions,
+        def:area_law_fine_belt_scales}
+    Let $C_{\mathrm{tpl}}\ge1$ and $C_B\ge16C_{\mathrm{tpl}}$. Let a belt tile
+    of a layer $k$ contain a lattice point, and put $u=t_k$. Then there is a
+    template $T$ with parameters $s_0=u$ and $n=\lceil C_Bu\rceil$,
+    consisting of at most eight closed fan triangles, whose points are
+    exactly the lattice points of the tile.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_fan_run_template}
+    The birth region of the tile is a run of the fan of a fine cell of side
+    $t_k$. Apply Theorem~\ref{thm:area_law_fan_run_template}.
+\end{proof}
+
+\begin{theorem}[Templates of replacements]
+    \label{thm:area_law_replacement_templates}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_nat_eq_repairHalfSide,
+        TNLean.PEPS.AreaLaw.Geometry.repairReplacementBirthRegion_exists_template,
+        TNLean.PEPS.AreaLaw.Geometry.repairReplacement_exists_template}
+    \leanok
+    \uses{thm:area_law_fan_run_template,thm:area_law_centered_fan_run_image,
+        def:area_law_repair_birth,def:area_law_repair_square,
+        def:area_law_repair_stage,def:area_law_repair_ancestors}
+    Let $S_*\ge1$, $C_{\mathrm{tpl}}\ge1$ and $C_B\ge32C_{\mathrm{tpl}}$.
+    Let a replacement of some generation have parent mark of scale $S$ and
+    removal half-side $u=d(S)$, and let its birth region contain a lattice
+    point. Then there is a template $T$ with parameters $s_0=2u$ and
+    $n=\lceil C_Bu\rceil$, consisting of at most eight triangles from the
+    center of the removal square to its corners and side midpoints, whose
+    points are exactly the lattice points of the birth region. This includes
+    a wide sector and a homogeneous square.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_fan_run_template,thm:area_law_centered_fan_run_image}
+    The parent is not terminal, so $u\ge S_*\ge1$. Since $u$ is an integer
+    power of two, $u=2^m$ with $m\in\mathbb N$. By
+    Theorem~\ref{thm:area_law_centered_fan_run_image} with $\ell=m+1$, the
+    birth region is a run of the fan of the square of side $2u$ centered
+    at the parent mark. Theorem~\ref{thm:area_law_fan_run_template}, applied
+    with the constant $C_B/2\ge16C_{\mathrm{tpl}}$, gives a template with
+    $s_0=2^{m+1}=2u$ and $n=\lceil(C_B/2)2u\rceil=\lceil C_Bu\rceil$.
+\end{proof}
+
+\begin{theorem}[One scale constant for belt tiles and replacements]
+    \label{thm:area_law_belt_replacement_templates}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_belt_replacement_templates}
+    \leanok
+    \uses{thm:area_law_belt_templates,thm:area_law_replacement_templates}
+    For every $C_{\mathrm{tpl}}\ge1$ there is $C_B>0$, depending only on
+    $C_{\mathrm{tpl}}$ and fixed before $S_*$ and $k_0$, such that every
+    belt tile and every replacement meeting the lattice has a template as
+    in Theorems~\ref{thm:area_law_belt_templates}
+    and~\ref{thm:area_law_replacement_templates}. In particular each of
+    these templates satisfies
+    \begin{align}
+        n                            & \ge C_{\mathrm{tpl}}N_0(s_0+1), &
+        \operatorname{diam}_\infty T & \le n,
+    \end{align}
+    with $N_0\le8$ pieces.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_belt_templates,thm:area_law_replacement_templates}
+    Take $C_B=32C_{\mathrm{tpl}}$.
+\end{proof}
+
+\begin{theorem}[The dilation count is small]
+    \label{thm:area_law_belt_replacement_scale_limit}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.eventually_beltReplacementScaleLimit}
+    \leanok
+    For every real $C_B$ and every $\varepsilon>0$, every sufficiently
+    large $u$ satisfies
+    \begin{align}
+        L=\bigl\lfloor\lceil C_Bu\rceil^{1-\ell}\bigr\rfloor & \le\varepsilon u.
+    \end{align}
+    Thus $L=o(u)$ for the belt and replacement scanner scale
+    $n=\lceil C_Bu\rceil$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Put $B=\max\{C_B,0\}+1$. For $u\ge1$ we have $\lceil C_Bu\rceil\le Bu$,
+    so $L\le B^{1-\ell}u^{-\ell}u$. Since $\ell>0$, the factor $u^{-\ell}$ is
+    eventually at most $\varepsilon/B^{1-\ell}$.
+\end{proof}

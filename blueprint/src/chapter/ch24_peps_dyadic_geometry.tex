@@ -713,10 +713,25 @@ source's sampled guides with these readings and state Lemma~7.2 for them.
 
 \begin{theorem}[No changed true vertex in the bulk operations]
     \label{thm:peps_dyadic_no_changed_vertex}
-    \lean{TNLean.PEPS.Approximation.BandOperation.InsertsOne, TNLean.PEPS.Approximation.edgeOperations_insertsOne, TNLean.PEPS.Approximation.angularConstant_mul_le_mul_max, TNLean.PEPS.Approximation.BandOperation.treated_surrounding_eq, TNLean.PEPS.Approximation.disjoint_closedBall_of_forall_le_dist, TNLean.PEPS.Approximation.BandOperation.isTrueVertex_treated, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_central_treated, TNLean.PEPS.Approximation.RepaintingBaseline.treatedStartMain, TNLean.PEPS.Approximation.RepaintingBaseline.treatedAux, TNLean.PEPS.Approximation.RepaintingBaseline.exchange_corridor, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_exchange_treated}
+    \lean{TNLean.PEPS.Approximation.BandOperation.InsertsOne,
+        TNLean.PEPS.Approximation.auxBirthB_insertsOne,
+        TNLean.PEPS.Approximation.auxBirthA_insertsOne,
+        TNLean.PEPS.Approximation.auxBirthC_insertsOne,
+        TNLean.PEPS.Approximation.mainDeathC_insertsOne,
+        TNLean.PEPS.Approximation.mainDeathA_insertsOne,
+        TNLean.PEPS.Approximation.mainBirthC_insertsOne,
+        TNLean.PEPS.Approximation.mainDeathB_insertsOne,
+        TNLean.PEPS.Approximation.edgeOperations_insertsOne, TNLean.PEPS.Approximation.angularConstant_mul_le_mul_max, TNLean.PEPS.Approximation.BandOperation.treated_surrounding_eq, TNLean.PEPS.Approximation.disjoint_closedBall_of_forall_le_dist, TNLean.PEPS.Approximation.BandOperation.isTrueVertex_treated, TNLean.PEPS.Approximation.RepaintingBaseline.central_treated_mem, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_central_treated, TNLean.PEPS.Approximation.RepaintingBaseline.treatedStartMain, TNLean.PEPS.Approximation.RepaintingBaseline.treatedAux, TNLean.PEPS.Approximation.RepaintingBaseline.exchange_corridor, TNLean.PEPS.Approximation.RepaintingBaseline.isTrueVertex_exchange_treated}
     \leanok
     \uses{lem:peps_dyadic_floor, lem:peps_dyadic_incident_change, def:peps_dyadic_schedule}
-    Let $0<t\le n$. Each of the seven births and deaths of an edge construction
+    For a repainting baseline of side $n$ and any real $t\le n$, let $g_0$ and
+    $g_1$ be its starting and central guides homogenized to the old label $A$ on
+    the open corner squares of radius $t$. If a point $p$ is at distance
+    strictly less than $a_0t$ from some point where $g_0\ne g_1$, then
+    $g_0(p)=A$ and $g_1(p)\in\{A,B\}$, where $B$ is the final label. Since
+    $a_0>0$, this assertion is vacuous for $t\le0$.
+
+    Now let $0<t\le n$. Each of the seven births and deaths of an edge construction
     introduces a single label: at every changed normal ratio the words before and
     after take only the surrounding label and one further label. Homogenize the
     guides of an elementary birth or death, the central birth included, to its

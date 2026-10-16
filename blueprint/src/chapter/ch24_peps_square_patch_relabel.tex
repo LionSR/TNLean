@@ -1,0 +1,52 @@
+\section{Relabelling the sites of a square patch}
+\label{sec:peps_square_patch_relabel}
+
+\begin{theorem}[Relabelled square patches]
+    \label{thm:peps_square_patch_relabel}
+    \lean{TNLean.PEPS.EncodedFrame.SquarePatch.exists_relabel,
+        TNLean.PEPS.EncodedFrame.HasAdaptivePatch.relabel}
+    \leanok
+    Let $e\colon V\to W$ be a bijection of finite site sets, and give each site
+    $w\in W$ the position of $e^{-1}(w)$. Square cylinder data on $V$ at $(z,u)$
+    give square cylinder data on $W$ at $(z,u)$ with the same radii and the same
+    inside dimensions, whose sum of cylinder projectors is the transport of the
+    original sum along the configuration bijection induced by $e$. Consequently
+    the conclusion of the adaptive patch constraint at $(z,u)$ for a vector
+    $\Omega$ on $V$ holds, with the same dimension bound and error, for the
+    transported vector on $W$. No nonemptiness condition is imposed on the
+    sites or samples.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:peps_frame_square_patch, def:peps_adaptive_patch_constraint}
+    Since the site $w$ has the position of $e^{-1}(w)$, the sample of every
+    square on $W$ is the image $e(D)$ of the sample $D$ of the same square on
+    $V$. For a finite set $D\subseteq V$ let $U_D$ be the unitary that carries a
+    configuration $\sigma\colon D\to[q]$ to $\sigma\circ e^{-1}$ on $e(D)$, so
+    that
+    \begin{align}
+        U_V=U_{D}\otimes U_{V\setminus D}.
+    \end{align}
+    Give the transported data the radii $r_j$, the samples $e(D_j)$ and the
+    vectors $v'_{j\ell}=U_{D_j}v_{j\ell}$, which are unit vectors. Then
+    \begin{align}
+        U_V\Bigl(\bigl(\ket{v_{j\ell}}\bra{v_{j\ell}}\bigr)_{D_j}\otimes\id\Bigr)
+        U_V^{*}
+        =\bigl(\ket{v'_{j\ell}}\bra{v'_{j\ell}}\bigr)_{e(D_j)}\otimes\id,
+    \end{align}
+    so the transported cylinder projectors still have mutually orthogonal
+    ranges, and their sum is
+    \begin{align}
+        \Pi'=U_V\,\Pi\,U_V^{*}.
+    \end{align}
+    Because $U_V$ is unitary,
+    \begin{align}
+        \bigl\lVert(\id-\Pi')U_V\Omega\bigr\rVert
+        =\bigl\lVert U_V(\id-\Pi)\Omega\bigr\rVert
+        =\bigl\lVert(\id-\Pi)\Omega\bigr\rVert,
+    \end{align}
+    while the radii and the dimensions $d_j$ are unchanged. This gives both
+    assertions (\cite{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex}, lines
+    24--49 and 563--603).
+\end{proof}

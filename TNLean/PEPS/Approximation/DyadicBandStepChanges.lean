@@ -240,7 +240,7 @@ theorem bandBirth_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
         (bandUpdate ((2 : ℝ) ^ (R.1.1 : ℕ)) e op.after g₀)) S r K rs ((L : ℝ) ^ (-30 : ℤ)) := by
   have hr := hc.treatedRadius_bounds hL
   classical
-  set n : ℝ := (2 : ℝ) ^ (R.1.1 : ℕ) with hn_def
+  set n : ℝ := (2 : ℝ) ^ (R.1.1 : ℕ)
   set t := D * Real.log L with ht_def
   set d := blockCorner n R.1.index with hd_def
   have hn : 0 < n := by positivity
@@ -276,40 +276,25 @@ theorem bandBirth_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
   have hafter : guideFrame (cellCenterPos L) q fa (labelParty R) guidePlaceholder rank Va
       (suppliedPatch P _ hr) hda =
       (guideFrame (cellCenterPos L) q fb (labelParty R) guidePlaceholder rank Vb
-        (suppliedPatch P _ hr) hdb).changeOwner T (labelParty R Q) := by
-    rw [guideFrame_congr_guide (g' := fa) (hV' := by rw [← hVV]; exact hda) rfl hVV
-      (fun _ _ => rfl)]
-    refine guideFrame_eq_changeOwner (fun x => ?_) (fun z hz => ?_)
-    · by_cases hx : fb (cellCenterPos L x) = fa (cellCenterPos L x)
-      · have : x ∉ T := by simp [T, hx]
-        rw [ite_eq_right this, hx]
-      · have : x ∈ T := by simp [T, hx]
-        rw [ite_eq_left this, (hkey _ hx).2]
-    · exact (tagHolder_congr (hinc z ((hmb z).1 hz))).symm
+        (suppliedPatch P _ hr) hdb).changeOwner T (labelParty R Q) :=
+    guideFrame_eq_changeOwner_of_ne (fun x => by simp [T]) hVV (fun x hx => (hkey _ hx).2)
+      fun z hz => (hinc z ((hmb z).1 hz)).symm
   rw [hFb, hFa, hafter]
   obtain ⟨w, hw, hu, hs, herr⟩ := bandBirth_step_guideFrame (L := L) (hole := suppliedPatch P _ hr)
     (V := Vb) (hV := hdb) (own := labelParty R) (ph := guidePlaceholder) (rank := rank)
     hD hLL hΩ (fun v => cellCenterPos_eq_sitePosition_add v) hm₀ hc.a_le op e g₀ d
-    ((1 : ℝ), (1 : ℝ)) ht.le htn (le_mul_of_one_le_left (by positivity) hA₀ |>.trans' (by
-      have hk : (R.1.1 : ℕ) + 1 ≤ k := R.2
-      have h1 : n * 2 ≤ 2 ^ k := by
-        rw [hn_def, ← pow_succ]; exact pow_le_pow_right₀ (by norm_num) hk
-      have h2 : (2 : ℝ) ^ k < 2 * L := by exact_mod_cast hk2
-      linarith)) hε2 hfs hfb hfa (fun z hz => (hmb z).1 hz)
+    ((1 : ℝ), (1 : ℝ)) ht.le htn
+    (le_mul_of_one_le_left (by positivity) hA₀ |>.trans' (R.side_le hk2))
+    hε2 hfs hfb hfa (fun z hz => (hmb z).1 hz)
     (fun z _ => ⟨suppliedPatch_center P hr z, by simp [ht_def]⟩) (T := T) (Q := labelParty R Q)
     (fun x hx => by
       have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
       rw [(hkey _ hx').1])
-    (Set.disjoint_left.2 fun x hx hxo => by
+    (disjoint_outerHoles_guideFrame (g := fb) (V := Vb) (hV := hdb)
+      (T := (T : Set _)) fun z hz x hx => by
       have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
-      obtain ⟨p, hp, hxp⟩ := hxo
-      obtain ⟨hl, hhl, rfl⟩ := List.mem_map.1 hp
-      obtain ⟨z, hz, rfl⟩ := mem_holes_guideFrame.1 hhl
-      have hd : dist (cellCenterPos L x) z ≤ 2 * (ε₀ * t) := by
-        simpa [SquarePatch.outer, squareSample] using hxp
-      have := hTfar z ((hmb z).1 hz) _ hx'
-      rw [dist_comm] at this
-      linarith)
+      simpa only [suppliedPatch_center, suppliedPatch_scale, mul_assoc] using
+        hTfar z ((hmb z).1 hz) _ hx')
     (fun x hx y hy => by
       have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
       have hy' : fb (cellCenterPos L y) ≠ fa (cellCenterPos L y) := by simpa [T] using hy
@@ -365,7 +350,7 @@ theorem bandDeath_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
         (bandUpdate ((2 : ℝ) ^ (R.1.1 : ℕ)) e op.after g₀)) S r K rs ((L : ℝ) ^ (-30 : ℤ)) := by
   have hr := hc.treatedRadius_bounds hL
   classical
-  set n : ℝ := (2 : ℝ) ^ (R.1.1 : ℕ) with hn_def
+  set n : ℝ := (2 : ℝ) ^ (R.1.1 : ℕ)
   set t := D * Real.log L with ht_def
   set d := blockCorner n R.1.index with hd_def
   have hn : 0 < n := by positivity
@@ -401,41 +386,26 @@ theorem bandDeath_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
   have hbefore : guideFrame (cellCenterPos L) q fb (labelParty R) guidePlaceholder rank Vb
       (suppliedPatch P _ hr) hdb =
       (guideFrame (cellCenterPos L) q fa (labelParty R) guidePlaceholder rank Va
-        (suppliedPatch P _ hr) hda).changeOwner T (labelParty R Q) := by
-    rw [guideFrame_congr_guide (g' := fb) (hV' := by rw [← hVV]; exact hdb) rfl hVV
-      (fun _ _ => rfl)]
-    refine guideFrame_eq_changeOwner (fun x => ?_) (fun z hz => ?_)
-    · by_cases hx : fb (cellCenterPos L x) = fa (cellCenterPos L x)
-      · have : x ∉ T := by simp [T, hx]
-        rw [ite_eq_right this, hx]
-      · have : x ∈ T := by simp [T, hx]
-        rw [ite_eq_left this, (hkey _ hx).2]
-    · exact tagHolder_congr (hinc z ((hV z).2 ((hma z).1 hz)))
+        (suppliedPatch P _ hr) hda).changeOwner T (labelParty R Q) :=
+    guideFrame_eq_changeOwner_of_ne (fun x => by simp [T, ne_comm]) hVV
+      (fun x hx => (hkey _ (Ne.symm hx)).2) fun z hz => hinc z ((hV z).2 ((hma z).1 hz))
   rw [hFb, hFa, hbefore]
   obtain ⟨M, hM, hu, hs, hf, herr⟩ := bandDeath_step_guideFrame (L := L)
     (hole := suppliedPatch P _ hr)
     (V := Va) (hV := hda) (own := labelParty R) (ph := guidePlaceholder) (rank := rank)
     hD hLL hΩ (fun v => cellCenterPos_eq_sitePosition_add v) hm₀ hc.a_le op e g₀ d
-    ((1 : ℝ), (1 : ℝ)) ht.le htn (le_mul_of_one_le_left (by positivity) hA₀ |>.trans' (by
-      have hk : (R.1.1 : ℕ) + 1 ≤ k := R.2
-      have h1 : n * 2 ≤ 2 ^ k := by
-        rw [hn_def, ← pow_succ]; exact pow_le_pow_right₀ (by norm_num) hk
-      have h2 : (2 : ℝ) ^ k < 2 * L := by exact_mod_cast hk2
-      linarith)) hε2 hfs hfb hfa (fun z hz => (hma z).1 hz)
+    ((1 : ℝ), (1 : ℝ)) ht.le htn
+    (le_mul_of_one_le_left (by positivity) hA₀ |>.trans' (R.side_le hk2))
+    hε2 hfs hfb hfa (fun z hz => (hma z).1 hz)
     (fun z _ => ⟨suppliedPatch_center P hr z, by simp [ht_def]⟩) (T := T) (Q := labelParty R Q)
     (fun x hx => by
       have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
       rw [(hkey _ hx').1])
-    (Set.disjoint_left.2 fun x hx hxo => by
+    (disjoint_outerHoles_guideFrame (g := fa) (V := Va) (hV := hda)
+      (T := (T : Set _)) fun z hz x hx => by
       have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
-      obtain ⟨p, hp, hxp⟩ := hxo
-      obtain ⟨hl, hhl, rfl⟩ := List.mem_map.1 hp
-      obtain ⟨z, hz, rfl⟩ := mem_holes_guideFrame.1 hhl
-      have hd : dist (cellCenterPos L x) z ≤ 2 * (ε₀ * t) := by
-        simpa [SquarePatch.outer, squareSample] using hxp
-      have := hTfar z ((hV z).2 ((hma z).1 hz)) _ hx'
-      rw [dist_comm] at this
-      linarith)
+      simpa only [suppliedPatch_center, suppliedPatch_scale, mul_assoc] using
+        hTfar z ((hV z).2 ((hma z).1 hz)) _ hx')
     (fun x hx y hy => by
       have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
       have hy' : fb (cellCenterPos L y) ≠ fa (cellCenterPos L y) := by simpa [T] using hy
