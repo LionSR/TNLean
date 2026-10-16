@@ -135,7 +135,7 @@ def _latex_document(unit_source: str) -> str:
 % macros/common (its theorem numbering references the chapter counter).
 \newcounter{{chapter}}
 \input{{macros/common}}
-\usepackage{{tenkz}}
+\usepackage{{tikz-tensor-networks}}
 \input{{macros/diagrams}}
 \begin{{document}}
 {unit_source}

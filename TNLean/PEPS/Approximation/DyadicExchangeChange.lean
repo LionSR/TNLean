@@ -119,6 +119,19 @@ def HasPairChange (Ω : EuclideanSpace ℂ (ι → Fin q)) (F₁ F₂ F₁' F₂
   ∃ w : OriginalCircuit (F₁.regs ++ F₂.regs) (F₁'.regs ++ F₂'.regs),
     w.IsBoundedChange S r K ε (pairRef F₁ F₂ Ω) (pairRef F₁' F₂' Ω) ∧ w.IsSourceBounded rs
 
+section Bounds
+
+variable {Ω : EuclideanSpace ℂ (ι → Fin q)} {S : Set Party} {r K rs : ℕ} {ε ε' : ℝ}
+
+/-- A change of two frames remains bounded when its error bound is enlarged. -/
+lemma HasPairChange.mono_error {F₁ F₂ F₁' F₂' : Frame pos q Party}
+    (h : HasPairChange Ω F₁ F₂ F₁' F₂' S r K rs ε) (hε : ε ≤ ε') :
+    HasPairChange Ω F₁ F₂ F₁' F₂' S r K rs ε' :=
+  let ⟨w, hw, hs⟩ := h
+  ⟨w, hw.mono subset_rfl le_rfl le_rfl hε, hs⟩
+
+end Bounds
+
 /-- **Reordering the holes after a change of two frames.** The holes of an encoded frame are
 listed in a fixed order of their tags; frames with the same ownership assignment and the same
 holes in another order are related by a reordering of tensor factors. So a change into `N₁, N₂`

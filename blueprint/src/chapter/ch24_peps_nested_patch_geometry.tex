@@ -254,3 +254,39 @@ physical sites; they are not the boundaries of the ambient real squares.
 \end{proof}
 % The uniform quadratic sum establishes a geometric coefficient only. It
 % does not identify this sum with a Hamiltonian energy increment.
+
+\begin{theorem}[Entropy of the selected squares under the square area law]
+    \label{thm:peps_nested_patch_entropy}
+    \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLaw.exists_nestedPatch_entropy_le}
+    \leanok
+    \uses{def:square_entropy_area_law,def:polynomial_peps_model,
+        def:area_law_ground_entropy,def:square_area_law_state,
+        def:peps_nested_patches}
+    Assume the square-grid entropy area law. Let $q\ge2$ be an integer and
+    $J,\Delta>0$. There is a constant $C_S\ge1$ with the following property.
+    For every $L$, every original square Hamiltonian $H$ with interaction
+    bound $J$, every unit vector $\Omega$ and real $E_0$ with
+    $H\Omega=E_0\Omega$ and $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$,
+    every centre $c$, every $u\ge0$, and every $0\le j<m$, the nested patch
+    $K_j$ in the integer square of side $L$ satisfies
+    \begin{align}
+        S_{U\Omega}(K_j) & \le C_S(1+u).
+        \label{eq:peps_nested_patch_entropy}
+    \end{align}
+    The constant is chosen before $L$, $H$, $\Omega$, $c$ and $u$. The area
+    law is a hypothesis here; its derivation from the spectral gap is the
+    separate rectangular specialization of the finite-domain area law,
+    which is not yet established. This is the
+    entropy bound in the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L362-L374}{proof of Proposition 4.1}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:finite_product_entropy_relabel,thm:square_edge_boundary_card,
+        thm:peps_nested_patch_sizes}
+    Let $C_A\ge0$ be the area-law constant and put
+    $C_S=\max\{1,16C_A\}$. Transport $K_j$ to the original grid. The entropy
+    and the edge boundary are unchanged by the site relabelling, so the area
+    law gives $S_{U\Omega}(K_j)\le C_A|\partial_\Lambda K_j|$. The boundary
+    bound $|\partial_\Lambda K_j|\le16u+4\le16(1+u)$ completes the proof.
+\end{proof}
