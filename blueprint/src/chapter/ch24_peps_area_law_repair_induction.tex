@@ -130,6 +130,50 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     $a_0\max(S_a,S_t)\le2d(S_a)+d(S_t)\le(3a_0/1000)\max(S_a,S_t)$.
 \end{proof}
 
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% prop:two-families, lines 154--177, 212--218 and 299--323;
+% replacement instructions, lines 393--417; geometry:repair-induction,
+% lines 478 and 486--514.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Auxiliary consequence under the stated metric hypotheses; no coverage assertion.
+\begin{theorem}[Disjoint current regions at every generation]
+    \label{thm:area_law_repair_current_disjoint}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.current_pairwise_disjoint}
+    \leanok
+    \uses{def:area_law_repair_stage,lem:area_law_repair_metric_invariants}
+    Let $\mathcal D_j$ be the actual repair family of
+    \cite[Section~11]{OpenAI2026AreaLaw}, with current
+    regions $R_i^{(j)}$ and marks $p\in K_j$ of locations $v_p^{(j)}$
+    and scales $S_p^{(j)}$. Assume the metric hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants}: $0<a_0\le1$,
+    $S_*>0$, $d(S)\le(a_0/1000)S$ for every $S\ge S_*$, and
+    $S_p^{(0)}\ge S_*$ for every $p\in K_0$. Suppose also that
+    distinct initial marks $p,q\in K_0$ satisfy
+    \begin{align}
+        \lVert v_p^{(0)}-v_q^{(0)}\rVert
+         & \ge a_0\max\bigl(S_p^{(0)},S_q^{(0)}\bigr).\notag
+    \end{align}
+    Then, for every generation $j\ge0$ and all distinct $i,k\in I_j$,
+    $R_i^{(j)}\cap R_k^{(j)}=\varnothing$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:area_law_initial_open_disjoint,
+        lem:area_law_repair_metric_invariants,def:area_law_repair_birth,
+        thm:area_law_repair_next_disjoint}
+    Induct on $j$. At $j=0$, apply
+    Theorem~\ref{thm:area_law_initial_open_disjoint} to the same
+    jointly chosen belt residues that define $\mathcal D_0$.
+    Suppose the current regions at generation $j$ are pairwise
+    disjoint. By Lemma~\ref{lem:area_law_repair_metric_invariants},
+    distinct parent removal squares at this generation are disjoint.
+    Each fresh current region satisfies
+    $U(v_p^{(j)},S_p^{(j)},H)\subseteq
+        B(v_p^{(j)},S_p^{(j)},H)\subseteq Q(v_p^{(j)},S_p^{(j)})$.
+    Theorem~\ref{thm:area_law_repair_next_disjoint} now gives pairwise
+    disjointness at generation $j+1$.
+\end{proof}
+
 % Source: 10-geometry.tex, geometry:trim-margins, lines 380--394, and
 % geometry:initial-stars, lines 336--339.
 \begin{lemma}[Choice of the stopping scale]
@@ -505,14 +549,14 @@ by the strict inequalities.
 
 % Source: 10-geometry.tex, child marks, lines 404--409, and
 % geometry:repair-induction, termination argument, lines 538--541.
-\begin{lemma}[Emptiness persists after termination]
-    \label{lem:area_law_repair_empty_persistence}
+\begin{theorem}[Emptiness persists after termination]
+    \label{thm:area_law_repair_empty_persistence}
     \lean{TNLean.PEPS.AreaLaw.Geometry.isEmpty_repairStage_markIndex_add}
     \leanok
     \uses{def:area_law_repair_ancestors}
     If $K_j=\varnothing$, then $K_{j+n}=\varnothing$ for every $n\ge0$.
     This assertion needs no metric hypothesis.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     The ancestor map sends every mark of $K_{j+n}$ to a mark of $K_j$.
     A map into the empty set has empty domain.
@@ -521,24 +565,24 @@ by the strict inequalities.
 % Source: 10-geometry.tex, initial marks, lines 325--363,
 % geometry:trim-margins, lines 380--394, and geometry:repair-induction,
 % termination argument, lines 538--541.
-\begin{lemma}[Thresholds for a common empty generation]
-    \label{lem:area_law_repair_uniform_empty_thresholds}
+\begin{theorem}[Thresholds for a common empty generation]
+    \label{thm:area_law_repair_uniform_empty_thresholds}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_isEmpty_repairStage_markIndex}
     \leanok
     \uses{lem:area_law_repair_metric_choice,
-        lem:area_law_repair_common_empty_generation}
+        thm:area_law_repair_common_empty_generation}
     Fix $0<a_0\le1/4$. There is $T$ such that for every $S_*\ge T$ and
     every width $C_0$ there is $K$ with the following property. For every
     finite domain and cut, and every admissible lower layer index
     $k_0\ge K$, some generation $N\ge0$ satisfies $K_N=\varnothing$.
     The thresholds $T$ and $K$ precede the choice of domain and cut;
     the generation $N$ may depend on them.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{lem:area_law_repair_metric_choice,
-        lem:area_law_repair_common_empty_generation}
+        thm:area_law_repair_common_empty_generation}
     Choose $T$ and then $K$ by
     Lemma~\ref{lem:area_law_repair_metric_choice}. For each resulting
-    repair, Lemma~\ref{lem:area_law_repair_common_empty_generation}
+    repair, Theorem~\ref{thm:area_law_repair_common_empty_generation}
     gives a common empty generation.
 \end{proof}

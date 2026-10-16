@@ -449,6 +449,52 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     $R_i^{(j)}$.
 \end{proof}
 
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% replacement instructions, lines 398--409; final actual regions,
+% lines 558--561; comparison with earlier actual regions, lines 584--591.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Auxiliary consequence of the existing retained-region construction.
+\begin{theorem}[Earlier final regions at an empty generation]
+    \label{thm:area_law_repair_final_current_later_empty}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairFinalRegion_eq_current_oldInclusion_of_isEmpty}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions}
+    Let $\mathcal D_j$ be the actual repair family of
+    \cite[Section~11]{OpenAI2026AreaLaw}, with identifier sets
+    $I_j$, mark sets $K_j$, and current regions $R_i^{(j)}$.
+    For $i\in I_j$, write $R_i^{(\infty,j)}$ for the intersection of
+    its retained current regions over all later generations.
+    Let $j,n\ge0$ and suppose $K_{j+n}=\varnothing$. Then every
+    $i\in I_j$ satisfies
+    \begin{align}
+        R_i^{(\infty,j)} & =R_{\iota_{j,j+n}(i)}^{(j+n)}.\notag
+    \end{align}
+    The case $n=0$ is included.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:area_law_repair_inclusions,
+        thm:area_law_repair_current_inclusion_subset,
+        thm:area_law_repair_current_inclusion_add,
+        thm:area_law_repair_final_current_empty}
+    Put $A_m=R_{\iota_{j,j+m}(i)}^{(j+m)}$. By
+    Theorems~\ref{thm:area_law_repair_current_inclusion_subset}
+    and~\ref{thm:area_law_repair_current_inclusion_add}, the sequence
+    $(A_m)_{m\ge0}$ is decreasing. Removing its first $n$ terms
+    therefore does not change its intersection. The successive-inclusion
+    identity identifies the remaining intersection with the final region
+    of $\iota_{j,j+n}(i)$ at generation $j+n$. Thus
+    \begin{align}
+        R_i^{(\infty,j)}
+         & =\bigcap_{m\ge0}A_m=\bigcap_{m\ge0}A_{n+m}\notag \\
+         & =R_{\iota_{j,j+n}(i)}^{(\infty,j+n)}
+        =R_{\iota_{j,j+n}(i)}^{(j+n)}.\notag
+    \end{align}
+    The last equality is
+    Theorem~\ref{thm:area_law_repair_final_current_empty}, since
+    $K_{j+n}=\varnothing$.
+\end{proof}
+
 % Source: 10-geometry.tex, ordering before geometry:birth-separation,
 % lines 565--571. The dummy is excluded from the physical order.
 \begin{definition}[Birth rank]
@@ -510,8 +556,8 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{def:area_law_repair_terminal_children,lem:area_law_repair_empty_persistence}
-    By Lemma~\ref{lem:area_law_repair_empty_persistence}, every mark set
+    \uses{def:area_law_repair_terminal_children,thm:area_law_repair_empty_persistence}
+    By Theorem~\ref{thm:area_law_repair_empty_persistence}, every mark set
     from generation $N$ onward is empty, so each corresponding
     terminal-interior contribution is an empty union. Removing these
     contributions from the defining union gives the identity. When
@@ -519,32 +565,32 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
 \end{proof}
 
 % Source: 10-geometry.tex, geometry:trim-radius, lines 393--399.
-\begin{lemma}[Closed removal sets]
-    \label{lem:area_law_repair_removal_closed}
+\begin{theorem}[Closed removal sets]
+    \label{thm:area_law_repair_removal_closed}
     \lean{TNLean.PEPS.AreaLaw.Geometry.isClosed_repairRemovalSet}
     \leanok
     \uses{def:area_law_repair_square,def:area_law_simultaneous_remnants}
     For a finite family $K$ of mark occurrences, the removal set
     $Q_K=\bigcup_{p\in K}Q(v_p,S_p)$ is closed.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     Each removal square is closed, and the union is finite.
 \end{proof}
 
 % Source: 10-geometry.tex, replacement instructions, lines 393--417;
 % remembered closed births and current regions, lines 558--561.
-\begin{lemma}[Current regions remain inside their births]
-    \label{lem:area_law_repair_current_birth_containment}
+\begin{theorem}[Current regions remain inside their births]
+    \label{thm:area_law_repair_current_birth_containment}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_current_subset_birth}
     \leanok
     \uses{def:area_law_repair_stage,def:area_law_repair_successor_regions}
     At every generation $j\ge0$, each current region is contained in its
     remembered birth:
-    \begin{equation}
-        R_i^{(j)}\subseteq B_i^{(j)}\qquad(i\in I_j).
+    \begin{align}
+        R_i^{(j)} & \subseteq B_i^{(j)}\qquad(i\in I_j).
         \label{eq:area_law_repair_current_birth_containment}
-    \end{equation}
-\end{lemma}
+    \end{align}
+\end{theorem}
 \begin{proof}\leanok
     Initially the current region is the interior of its birth. An old
     current region only decreases when removal squares are cut out, and
@@ -567,11 +613,11 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
 
 \begin{proof}\leanok
     \uses{def:area_law_initial_open_regions,
-        def:area_law_repair_successor_regions,lem:area_law_repair_finite_marks,
-        lem:area_law_repair_removal_closed}
+        def:area_law_repair_successor_regions,thm:area_law_repair_finite_marks,
+        thm:area_law_repair_removal_closed}
     Induct on $j$. Initial current regions are interiors. By
-    Lemma~\ref{lem:area_law_repair_finite_marks}, the mark family at each
-    generation is finite, so Lemma~\ref{lem:area_law_repair_removal_closed}
+    Theorem~\ref{thm:area_law_repair_finite_marks}, the mark family at each
+    generation is finite, so Theorem~\ref{thm:area_law_repair_removal_closed}
     makes its removal union closed. Subtracting this union from an old
     open current region leaves an open set. Every fresh current region
     is the interior of its birth region and is therefore open.
@@ -597,6 +643,38 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     Every $X_i(A)$ is finite. All sites of one identifier are retained
     together, including when its current region is disconnected.
 \end{definition}
+
+% Source: 10-geometry.tex, initial dummy region, lines 172--177;
+% geometry:bad-sites, lines 694--707.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Counting surviving dummy sites]
+    \label{thm:area_law_repair_dummy_sites_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.card_repairStage_dummySites_le}
+    \leanok
+    \uses{def:area_law_repair_region_sites}
+    Fix the actual repair family with initial layer index $k_0$ and
+    neighborhood width $C_0$. Write $*_j$ for its dummy identifier at
+    generation $j$, and let $b=|\partial_\Lambda A|$. For every $j\ge0$,
+    \begin{align}
+        |X_{*_j}(A)|
+         & \le 2\bigl(2(C_0+1)2^{k_0}+1\bigr)^2 b.\notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:area_law_neighborhood_endpoint_distance,
+        thm:area_law_cell_counts}
+    The dummy keeps its initial closed birth $\overline{N_{k_0}}$ at
+    every generation, and its current region is contained in that birth.
+    Put $r=(C_0+1)2^{k_0}$ and let $Z$ be the
+    boundary endpoint set. Every surviving dummy site lies within sup
+    distance $r$ of a point of $Z$. Each such integer neighborhood has
+    $(2r+1)^2$ sites. Hence
+    \begin{align}
+        |X_{*_j}(A)| & \le (2r+1)^2|Z|\le 2(2r+1)^2b.\notag
+    \end{align}
+    Restricting the ambient sites to $A$ can only decrease the count.
+\end{proof}
 
 % Source: 10-geometry.tex, final lattice partition, lines 558--561;
 % geometry:bad-sites, lines 694--707.
