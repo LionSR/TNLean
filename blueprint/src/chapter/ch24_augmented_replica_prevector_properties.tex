@@ -19,6 +19,27 @@ For $\Omega\in\mathbb C^X$ and an irreducible representation $\lambda$ of $S_k$,
 \end{align*}
 where $U_k$ is the $k$-fold tensor power of the unnormalized maximally entangled pair on $D\times D$, following the conventions of \cite[Section~7]{OpenAI2026AreaLaw}.
 
+\begin{theorem}[Norm and nonvanishing under the site identification]
+    \label{thm:al_augmented_prevector_norm}
+    \lean{TNLean.PEPS.AreaLaw.Scan.norm_augmentedReplicaPrevector_eq_global,
+        TNLean.PEPS.AreaLaw.Scan.augmentedReplicaPrevector_ne_zero_iff_global}
+    \leanok
+    \uses{def:al_scan_auxiliary_coordinates}
+    Let $\mathcal X_{VCR}$ be the one-copy configuration space of the
+    physical sites and the two auxiliary registers, and let
+    $G_k:\mathcal X_{VCR}^k\to X^k\times(D^k\times D^k)$ be the canonical
+    coordinate bijection. Put $\zeta_{k,\lambda}=v_{k,\lambda}\circ G_k$.
+    Then $\|\xi_{k,\lambda}\|_2=\|\zeta_{k,\lambda}\|_2$, and
+    $\xi_{k,\lambda}\ne0$ if and only if $\zeta_{k,\lambda}\ne0$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    The site identification is a bijection, so reindexing the sum of
+    squared absolute values preserves the Euclidean norm. A vector is
+    zero if and only if its norm is zero.
+\end{proof}
+
+
 \begin{theorem}[Full copy symmetry of the augmented initial vector]
     \label{thm:al_augmented_prevector_symmetry}
     \lean{TNLean.PEPS.AreaLaw.Scan.symProj_mulVec_augmentedReplicaPrevector}
