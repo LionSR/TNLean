@@ -24,6 +24,17 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Owner change of a sampled guide frame — promoted (2026-10-16)
+
+- **Pattern:** the frame of a reading equals the frame of another reading with
+  the owners of the differing sites handed to one label, from equal true
+  vertices, equal incident labels and the label at the differing sites
+  (`06-geometry.tex`, lines 375–387).
+- **Seen:** the band birth and death of `DyadicBandStepChanges.lean` and the
+  central birth of `DyadicCentralBirthChange.lean`.
+- **Abstraction:** `TNLean.PEPS.Approximation.guideFrame_eq_changeOwner_of_ne`
+  (`Approximation/DyadicBulkFrames.lean`); the three call sites use it.
+
 ### Scanner prevector coordinates and selected density — promoted (2026-10-15)
 
 - **Pattern:** Transfer nonvanishing, copy symmetry and a mean-energy

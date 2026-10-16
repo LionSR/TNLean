@@ -98,4 +98,26 @@ theorem guideFrame_eq_changeOwner {ι κ Party : Type*} [Fintype ι] [DecidableE
   · simp only [guideFrame]
     exact List.map_congr_left fun z hz => by rw [htag z (Finset.mem_toList.1 hz)]
 
+/-- **The frame after a change of the sampled guide on a set of sites.** Let the readings `g`
+and `g'` have the same true vertices `V`, with the same incident labels there, and let `g'` take
+the label `Q` at every site where the two differ. Then the encoded frame of `g'` is the encoded
+frame of `g` with the owners of those sites changed to the party of `Q`.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 375–387. -/
+theorem guideFrame_eq_changeOwner_of_ne {ι κ Party : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
+    {pos : ι → ℝ × ℝ} {g g' : ℝ × ℝ → κ} {own : κ → Party} {ph : κ} {rank : κ → ℕ}
+    {V V' : Finset (ℝ × ℝ)} {patch : ℝ × ℝ → SquarePatch pos q}
+    {hV : (V : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (patch z).outer (patch z').outer}
+    {hV' : (V' : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (patch z).outer (patch z').outer}
+    {T : Finset ι} (hT : ∀ x, x ∈ T ↔ g (pos x) ≠ g' (pos x)) (hVV : V' = V) {Q : κ}
+    (hkey : ∀ x, g (pos x) ≠ g' (pos x) → g' (pos x) = Q)
+    (hinc : ∀ z ∈ V, incidentLabels g' z = incidentLabels g z) :
+    guideFrame pos q g' own ph rank V' patch hV' =
+      (guideFrame pos q g own ph rank V patch hV).changeOwner T (own Q) := by
+  subst hVV
+  refine guideFrame_eq_changeOwner (fun x => ?_) (fun z hz => tagHolder_congr (hinc z hz))
+  by_cases hx : g (pos x) = g' (pos x)
+  · rw [ite_eq_right fun h => (hT x).1 h hx, hx]
+  · rw [ite_eq_left ((hT x).2 hx), hkey x hx]
+
 end TNLean.PEPS.Approximation
