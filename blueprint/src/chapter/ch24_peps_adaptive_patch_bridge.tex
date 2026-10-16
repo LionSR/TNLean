@@ -37,28 +37,52 @@ square cylinder data at the same radii.
     $S_j\otimes\mathcal H_{D_j^c}$, then for every vector $\Omega$ there are
     square cylinder data at $(z,u)$ with the radii $r_1,\ldots,r_m$, with
     $\sum_jd_j\le\sum_j\dim S_j$, and with
-    \[
+    \begin{align}
         \lVert(\id-\Pi)\Omega\rVert\le\lVert\Omega-v\rVert ,
-    \]
+    \end{align}
     where $\Pi$ is the sum of the cylinder projectors. No assumption is made on
     repeated radii, zero subspaces or an empty family.
 \end{theorem}
 
 \begin{proof}
     \leanok
-    \uses{def:peps_nested_cylinder_images,
+    \uses{def:peps_frame_square_patch,
+        def:peps_adaptive_patch_constraint,
+        def:peps_nested_cylinder_images,
+        thm:peps_nested_cylinder_orthogonalization,
         thm:peps_nested_cylinder_projector_sum,
         thm:peps_cylinder_projector,
+        thm:peps_regional_extension_algebra,
         def:peps_hole_encoder,
         thm:peps_coordinate_reset_gram,
         def:peps_coordinate_projector,
         def:peps_patch_canonical_marginal}
-    Orthogonalize the nested cylinder spaces: the $j$-th innovation space is
-    the part of $S_j\otimes\mathcal H_{D_j^c}$ orthogonal to the earlier
-    cylinders, and an orthonormal basis of it supplies the vectors $v_{j\ell}$.
-    The innovation dimensions add up to at most $\sum_j\dim S_j$. The
-    resulting cylinder projectors have orthogonal ranges, their sum $\Pi$ is
-    the orthogonal projection onto the sum of the cylinder spaces, and $v$ lies
-    in its range, so $\lVert(\id-\Pi)\Omega\rVert\le\lVert\Omega-v\rVert$
+    Write $P_X$ for the orthogonal projection onto a subspace $X$. Let $W_j$ be
+    the sum of the earlier spaces extended to $D_j$, that is, the span of the
+    ranges of $P_{S_i}\otimes\id_{D_j\setminus D_i}$ for $i<j$, a subspace of
+    $\mathcal H_{D_j}$. The $j$-th innovation is the projected image, formed
+    inside $\mathcal H_{D_j}$,
+    \begin{align}
+        T_j=(\id-P_{W_j})S_j ,
+    \end{align}
+    which need not equal $S_j\cap W_j^{\perp}$. Being an image of $S_j$, it
+    satisfies $\dim T_j\le\dim S_j$. Let $d_j=\dim T_j$, and let
+    $v_{j1},\ldots,v_{jd_j}$ be an orthonormal basis of $T_j$. The
+    cylindrical extensions
+    $\bigl(\ket{v_{j\ell}}\bra{v_{j\ell}}\bigr)_{D_j}\otimes\id$
+    have mutually orthogonal ranges, and these ranges span the sum of the
+    cylinder spaces $S_j\otimes\mathcal H_{D_j^c}$. Hence
+    \begin{align}
+        \Pi=\sum_{j=1}^{m}\sum_{\ell=1}^{d_j}
+        \bigl(\ket{v_{j\ell}}\bra{v_{j\ell}}\bigr)_{D_j}\otimes\id
+    \end{align}
+    is the orthogonal projection onto that sum. Since $v$ lies in its range,
+    \begin{align}
+        \lVert(\id-\Pi)\Omega\rVert
+        =\lVert(\id-\Pi)(\Omega-v)\rVert
+        \le\lVert\Omega-v\rVert ,
+        \qquad
+        \sum_jd_j\le\sum_j\dim S_j
+    \end{align}
     (\texttt{03-patches.tex}, lines 563--603).
 \end{proof}
