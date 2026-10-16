@@ -236,7 +236,7 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
           ← eventMain_inl_succ P rank R₀ hε ht hB hk hi he]
         simp only [eventMain]
         exact directRepainting_hasSourceBoundedChange hc hm hL hkL hΩ P rank R₀ ⟨S, hS⟩
-          hKS _ _ hC hC' hcc _
+          hKS _ hC hC' hcc _
     · have hJ0 : 0 < (J.1 : ℕ) := by
         have := isScheduled_getElem hi; rw [he] at this; exact this
       rw [← he]
@@ -247,7 +247,7 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
       rw [haux, mainState_of_lt _ _ _ _ _ _ hi, he,
         ← eventMain_inr_succ P rank R₀ hε ht hB hk hi he]
       simp only [eventMain]
-      exact Hres ν hν hνν' hc hL hkL hΩ P rank R₀ J hJ0 _ _ _ hC hC' hcc _
+      exact Hres ν hν hνν' hc hL hkL hΩ P rank R₀ J hJ0 _ hC hC' hcc _
   -- the trajectory
   choose seg hseg0 hsegm hsegs using hseg
   obtain ⟨tr, htr0, htrm, htrs⟩ := exists_frames_of_segments (Ω := Ω) (ℓ := []) (ξ := (1 : ℂ))

@@ -16,9 +16,9 @@ changes of the events into one trajectory of the sheets, and turns such a trajec
 protocol with the bounds of §8.
 
 * `exists_frames_of_segments` : if the sheets pass, during each event, from its starting stack to
-  the starting stack of the next event by bounded changes whose participants the event uses, then
-  there is one sequence of stacks along the whole schedule whose consecutive stages are joined by
-  such changes.
+  the starting stack of the next event by bounded changes with at most `rs` pair sources in each
+  monomial, whose participants the event uses, then one sequence of stacks along the whole schedule
+  has its consecutive stages joined by such source-bounded changes.
 * `exists_isDistributionProtocol_of_hasSourceBoundedChange` : the form of
   `exists_isDistributionProtocol_of_frames` in which each change of the schedule is only known to
   exist.
@@ -43,10 +43,11 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : �
 
 /-- **Joining the changes of the events.** Let `es` be a list of events, each with a list of
 changes `ops e`, and let `b i` be the stack of sheets at the start of the event number `i`. If,
-for each event, stacks `seg i j` lead from `b i` to `b (i + 1)` through as many bounded changes as
-the event has changes, with participants in `U` of the event, then one sequence of stacks leads
-from `b 0` to the stack after the last event, and its change number `t` has its participants in
-`U` of the event of the change number `t` of the schedule.
+for each event, stacks `seg i j` lead from `b i` to `b (i + 1)` through as many bounded changes
+with at most `rs` pair sources in each monomial as the event has changes, with participants in `U`
+of the event, then one sequence of stacks leads from `b 0` to the stack after the last event. Its
+change number `t` has the same pair-source bound and participants in `U` of the event of the change
+number `t` of the schedule.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 82–100, 127–131 and 572–583. -/
 theorem exists_frames_of_segments {E α : Type*} (U : E → Set Party) (ops : E → List α) :
