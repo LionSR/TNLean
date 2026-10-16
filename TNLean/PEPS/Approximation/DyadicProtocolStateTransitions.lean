@@ -27,15 +27,20 @@ the root party (`mainState_zero`).
 
 noncomputable section
 
-open Set Metric
+open Set
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame
 
 variable {k : ℕ}
 
 /-! ### Events of the schedule -/
+
+/-- An event equal to an entry of the schedule is scheduled. -/
+private theorem isScheduled_of_getElem_eq {i : ℕ} (hi : i < (eventSchedule k).length)
+    {e : ProtocolEvent k} (he : (eventSchedule k)[i] = e) : e.IsScheduled :=
+  he ▸ isScheduled_getElem hi
 
 /-- The square of level `j < k` with block indices `Q` in the root square. -/
 def squareOfIndex {j : ℕ} (hj : j < k) {Q : ℤ × ℤ} (hQ : InRoot ((2 : ℤ) ^ (k - j)) Q) :
@@ -137,8 +142,7 @@ theorem eventMain_inr_succ (hk : 1 ≤ k) {i : ℕ} (hi : i < (eventSchedule k).
           (insert (blockCorner ((2 : ℝ) ^ (J.1 : ℕ)) J.index) (resizedCorners k i J.1)))
         (resizeRadius_mem hε ht hB (by positivity) _) =
       mainState (q := q) P rank R₀ hε ht hB (i + 1) := by
-  have hJ0 : 0 < (J.1 : ℕ) := by
-    have := isScheduled_getElem hi; rw [he] at this; exact this
+  have hJ0 : 0 < (J.1 : ℕ) := isScheduled_of_getElem_eq hi he
   have hJk := Nat.lt_succ_iff.1 J.1.isLt
   have hrJ : ((eventSchedule k)[i]).rank = 2 * (k - ((J.1 : ℕ) - 1)) := by
     rw [he, ProtocolEvent.rank_inr]
@@ -197,8 +201,7 @@ theorem inRoot_subset_repaintedBlocks {i : ℕ} (hi : i < (eventSchedule k).leng
       ((eventSchedule k)[i]).rank < ((eventSchedule k)[i + 1]).rank) :
     {Q | InRoot ((2 : ℤ) ^ (k - (S.1 : ℕ))) Q} ⊆ repaintedBlocks k (i + 1) S.1 := by
   intro Q hQ
-  have hS : (S.1 : ℕ) < k := by
-    have := isScheduled_getElem hi; rw [he] at this; exact this
+  have hS : (S.1 : ℕ) < k := isScheduled_of_getElem_eq hi he
   refine ⟨squareOfIndex hS hQ, ?_, rfl, (squareOfIndex_index hS hQ).symm⟩
   have hsch : ProtocolEvent.IsScheduled (Sum.inl (squareOfIndex hS hQ) : ProtocolEvent k) := by
     change (S.1 : ℕ) < k; exact hS
@@ -223,8 +226,7 @@ theorem eventMain_inl_succ (hk : 1 ≤ k) {i : ℕ} (hi : i < (eventSchedule k).
         (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (S.1 : ℕ)) t)
         (fun _ => holeRadius_mem hε ht hB (by positivity)) =
       mainState (q := q) P rank R₀ hε ht hB (i + 1) := by
-  have hS : (S.1 : ℕ) < k := by
-    have := isScheduled_getElem hi; rw [he] at this; exact this
+  have hS : (S.1 : ℕ) < k := isScheduled_of_getElem_eq hi he
   have hrS : ((eventSchedule k)[i]).rank = 2 * (k - (S.1 : ℕ)) + 1 := by
     rw [he, ProtocolEvent.rank_inl]
   rw [← repaintedBlocks_succ_inl hi he]
@@ -307,8 +309,7 @@ theorem mainState_zero (hk : 1 ≤ k) (hkL : L ≤ 2 ^ k) :
   rw [mainState_of_lt _ _ _ _ _ _ h0]
   rcases he : (eventSchedule k)[0] with S | J
   · rw [he, ProtocolEvent.rank_inl] at hr; omega
-  · have hJ0 : 0 < (J.1 : ℕ) := by
-      have := isScheduled_getElem h0; rw [he] at this; exact this
+  · have hJ0 : 0 < (J.1 : ℕ) := isScheduled_of_getElem_eq h0 he
     rw [he, ProtocolEvent.rank_inr] at hr
     have hJk := Nat.lt_succ_iff.1 J.1.isLt
     have hJ : (J.1 : ℕ) = k := by omega

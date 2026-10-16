@@ -256,6 +256,124 @@ any fixed interpolation interval contained in $(0,1)$.
     $10a\leq1/\sqrt B\leq1$.
 \end{proof}
 
+\begin{theorem}[Uniform comparisons for a prescribed physical charge state]
+    \label{thm:arealaw-supplied-target-norm-bounds}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_suppliedTarget_actualCharge_norm_bounds}
+    \leanok
+    \uses{thm:al_scan_common_status_budget,def:actual_sharp_lower_remainder}
+    Fix $q\geq1$, an interaction range $R\in\mathbb N$, and $C_r>0$.
+    There exists $C_B>0$, depending only on these parameters, with the
+    following property. Assume the geometric hypotheses of
+    Theorem~\ref{thm:al_scan_common_status_budget}, with $K,m,M>0$ and
+    $r_0=\lceil C_r(\log n)^2\rceil$. Put
+    $\mathcal B=C_BnD(\log n)^{12}$; then $\mathcal B\geq1$.
+    Let $H$ be a local Hamiltonian of range $R$, let $\Omega$ be a unit
+    vector, and let $\Delta>0$. For the associated truncated Hamiltonian,
+    prescribe a ground vector $\widetilde\Omega$
+    of energy $e_t$ and projector gap $g/2$, where $g$ is the normalized
+    gap used in the truncation. Set
+    \begin{align}
+        C_0 & =512\mathrm e\,(2/g),\notag      \\
+        c_0 & =\frac{1}{32\sqrt{1+2/g}}.\notag
+    \end{align}
+
+    At $X=A\cap T$, prescribe a spectral set $E$ of cardinality $d>0$
+    and mass $z>0$. Let $\psi$ be its normalized Schmidt truncation,
+    with the retained factor relabelled by $\mathbb C^d$, and let $S'$
+    be the entropy of that factor. Prescribe labels $\lambda_k$ and
+    $\mathrm{pre}_k=\pi_R^{\lambda_k}
+        (\widetilde\Omega\otimes\mathrm{Bell}_{CR})^{\otimes k}$.
+    Assume $\mathrm{pre}_k\ne0$ and $\|\mathrm{pre}_k\|\leq1$ for $k>0$,
+    the eventual projected-mass bound
+    $\|(I\otimes\pi_R^{\lambda_k})\psi^{\otimes k}\|^2
+        \geq[2(k+1)^{d^2}]^{-1}$, and
+    $\log\dim\lambda_k-kS'=o(k)$.
+
+    Fix $W\geq1$, put $a=W/K$, and assume $ar_0^2\leq1/2$.
+    At each charge round $s<nm$ and real parameter $p$, let $\mathcal M_k$
+    be its actual metric with band exponent $a/2$, using $p$ projected
+    onto $[0,1]$. Write
+    \begin{align}
+        N_k^2 & =\|\mathcal M_k^{-1/4}\mathrm{pre}_k\|^2,\notag \\
+        v_k   & =\mathcal M_k^{-1/4}\mathrm{pre}_k/N_k,\notag   \\
+        D_k   & =\frac{\operatorname{Re}\langle v_k,
+            \overline{\widetilde H}_k v_k\rangle-e_t}{g/2}.\notag
+    \end{align}
+    The mean physical Hamiltonian is extended by the identity on the
+    auxiliary factors. There are $c_R,C_{f,R}\geq0$, fixed before $k,s,p$,
+    such that the remainder $R_k^{(a)}$ in
+    (\ref{eq:actual_rough_weight_label_remainder}) tends to zero and,
+    for every $k>0$, one has $N_k^2>0$, $\|v_k\|=1$ and $D_k\geq0$.
+    For every $0<\tau\leq1/2$,
+    \begin{align}
+        \frac W4\left[4S'
+            -6\left(\tau\log d+\frac{h(\tau)}a\right)
+            -3\frac{D_k}{\tau}\max\{0,2S'\}\right]-R_k^{(a)}
+         & \leq-\frac{\log N_k^2}{k}.
+        \label{eq:arealaw-supplied-rough-lower}
+    \end{align}
+    Here $h$ is binary entropy.
+
+    Suppose in addition that $a\sqrt{\mathcal B}\leq\min\{c_0,1\}/10$.
+    For each terminal $j$ and band $b$, let $Q_{jb}$ be its physical
+    receiving region, $Y_{jb}$ its middle region, and $U_{jb}$ its
+    positive-depth near region. Define
+    \begin{align}
+        G^-_{jb} & =S_{\widetilde\Omega}(Q_{jb})
+        +S_{\widetilde\Omega}((Q_{jb}\cup Y_{jb})^c)
+        -S_{\widetilde\Omega}(Y_{jb}),\notag                         \\
+        G^+_{jb} & =S_{\widetilde\Omega}(U_{jb})
+        +S_{\widetilde\Omega}(U_{jb}\cup Y_{jb})
+        -S_{\widetilde\Omega}(Y_{jb}),\notag                         \\
+        G_*      & =\max\bigl(\{0\}\cup\{G^-_{jb}:j,b\}\bigr).\notag
+    \end{align}
+    Let $w_j$ be the weights of the actual charge tree at $(s,p)$.
+    There are $c_U,c_L,C_{f,L}\geq0$, fixed before $k,s,p,\tau$, such that
+    $R_k^+=[\log4+(d^2+c_UK)\log(k+2)]/k\to0$ and the remainder
+    $R_k^-$ of Definition~\ref{def:actual_sharp_lower_remainder}, with
+    coefficients $c_L,C_{f,L}$, tends to zero. For all sufficiently large
+    $k$, simultaneously for every $s<nm$, every real $p$ and every
+    $0<\tau\leq1/2$, set
+    \begin{align}
+        L_b & =2S'+(1-\tau)\sum_jw_jG^-_{jb}
+        -2\tau\log d-(3+1/a)h(\tau)-25C_0\mathcal B a.\notag
+    \end{align}
+    Then
+    \begin{align}
+        -\frac{\log N_k^2}{k}
+         & \leq2\log d-\log z+\frac a2\sum_b\sum_jw_jG^+_{jb}
+        +6KC_0\mathcal B a^2-\frac K2\log z+R_k^+,\notag      \\
+        \frac a2\sum_b\left[L_b
+            -\frac{D_k}{\tau}\max\{0,2S'+G_*\}-R_k^-\right]
+         & \leq-\frac{\log N_k^2}{k}.
+        \label{eq:arealaw-supplied-sharp-bounds}
+    \end{align}
+    The supplied state, spectral set and labels are unchanged in all three
+    estimates. This is the uniform comparison step used in
+    \cite[Proposition~9.2, lines~386--395]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_scan_supplied_status_moments,thm:actual_supplied_rough_lower_weight,
+        thm:arealaw-sharp-smallness,thm:al_actual_sharp_upper,
+        thm:actual_scan_supplied_prevector_sharp_lower}
+    Choose $C_B$ uniformly in the finite domain and scanner, then apply
+    the common moment estimate to the prescribed truncated ground vector. Since $C_r>0$ and $n\geq2$, one has $r_0\geq1$;
+    hence $ar_0^2\leq1/2$ implies $0<a\leq1/2$.
+    Apply the rough lower comparison to the supplied label sequence.
+    Its coordinate isometries preserve the same prevector and physical energy.
+
+    Under the additional sharp smallness condition,
+    Theorem~\ref{thm:arealaw-sharp-smallness} gives
+    $10a\leq c_0/\sqrt{\mathcal B}$ and $10a\leq1$.
+    The common moment estimate therefore supplies both sharp comparisons
+    with quadratic coefficient $C_0\mathcal B$. Apply them to the same
+    spectral set and labels. Intersect the eventual upper estimate with
+    $k>0$, and apply the lower estimate, which holds for every positive $k$.
+    Their constants and remainders are independent of the charge round
+    and interpolation parameter.
+\end{proof}
+
 % Auxiliary density consequence for Proposition 9.2.
 \begin{theorem}[Physical selected density for arbitrary scanner exponents]
     \label{thm:arealaw-source-selected-density}

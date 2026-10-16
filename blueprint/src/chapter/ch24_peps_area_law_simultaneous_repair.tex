@@ -58,6 +58,26 @@ before any replacement regions are adjoined.
     for $S>1$, and $S^{\rho_0}/S=S^{\rho_0-1}\to0$ as $S\to\infty$.
 \end{proof}
 
+% Source: 10-geometry.tex, geometry:trim-radius, lines 380--385;
+% integral recursion and supporting lines, lines 545--558.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Integral removal half-sides]
+    \label{thm:area_law_repair_halfside_integral}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_natCast_repairHalfSide}
+    \leanok
+    \uses{def:area_law_repair_square}
+    For every real parent scale $S\ge1$, there is $n\in\mathbb N$
+    such that $d(S)=n$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_margins}
+    Since $\rho_0>0$ and $\log_2 S\ge0$, the integer
+    $m=\lfloor\rho_0\log_2 S\rfloor$ is nonnegative.
+    Thus $d(S)=2^m$ is a natural number.
+\end{proof}
+
 \begin{definition}[Simultaneous old-region remnants]
     \label{def:area_law_simultaneous_remnants}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairRemovalSet,

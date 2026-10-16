@@ -17,10 +17,11 @@ this order used to follow the main guide along the schedule, for `k ≥ 1`:
 
 * every rank from `2` to `2 k + 1` is the rank of some event (`exists_isScheduled_rank`), and the
   ranks of the events lie in that range (`two_le_rank`, `rank_le`);
-* consecutive events have equal or consecutive ranks (`rank_getElem_succ_le`), the first event has
-  rank `2` and the last rank `2 k + 1`;
+* consecutive events have equal or consecutive ranks (`rank_getElem_succ_le`);
 * the events before the event number `i` are those of smaller rank and some of its own rank
   (`mem_take_of_rank_lt`, `rank_le_of_mem_take`).
+
+The first- and last-rank results are proved in `DyadicProtocolStateTransitions`.
 
 ## References
 
@@ -29,8 +30,6 @@ this order used to follow the main guide along the schedule, for `k ≥ 1`:
 -/
 
 namespace TNLean.PEPS.Approximation
-
-open Finset
 
 variable {k : ℕ}
 
