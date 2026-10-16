@@ -31,11 +31,11 @@ square cylinder data at the same radii.
     \lean{TNLean.PEPS.EncodedFrame.exists_squarePatch_of_mem_iSup_dependentRegionCylinder}
     \leanok
     \uses{def:peps_frame_square_patch, def:peps_regional_cylinder}
-    Let $0<u$ and let $u\le r_1\le\cdots\le r_m\le2u$. For each $j$ let $S_j$ be
+    Let $0<u$ and let $u\le r_0\le\cdots\le r_{m-1}\le2u$. For each $j$ let $S_j$ be
     a subspace of the Hilbert space of the sample $D_j$ of the square of radius
     $r_j$ about $z$. If a vector $v$ lies in the sum of the cylinder spaces
     $S_j\otimes\mathcal H_{D_j^c}$, then for every vector $\Omega$ there are
-    square cylinder data at $(z,u)$ with the radii $r_1,\ldots,r_m$, with
+    square cylinder data at $(z,u)$ with the radii $r_0,\ldots,r_{m-1}$, with
     $\sum_jd_j\le\sum_j\dim S_j$, and with
     \begin{align}
         \lVert(\id-\Pi)\Omega\rVert\le\lVert\Omega-v\rVert ,
@@ -67,13 +67,13 @@ square cylinder data at the same radii.
     \end{align}
     which need not equal $S_j\cap W_j^{\perp}$. Being an image of $S_j$, it
     satisfies $\dim T_j\le\dim S_j$. Let $d_j=\dim T_j$, and let
-    $v_{j1},\ldots,v_{jd_j}$ be an orthonormal basis of $T_j$. The
+    $v_{j0},\ldots,v_{j,d_j-1}$ be an orthonormal basis of $T_j$. The
     cylindrical extensions
     $\bigl(\ket{v_{j\ell}}\bra{v_{j\ell}}\bigr)_{D_j}\otimes\id$
     have mutually orthogonal ranges, and these ranges span the sum of the
     cylinder spaces $S_j\otimes\mathcal H_{D_j^c}$. Hence
     \begin{align}
-        \Pi=\sum_{j=1}^{m}\sum_{\ell=1}^{d_j}
+        \Pi=\sum_{j=0}^{m-1}\sum_{\ell=0}^{d_j-1}
         \bigl(\ket{v_{j\ell}}\bra{v_{j\ell}}\bigr)_{D_j}\otimes\id
     \end{align}
     is the orthogonal projection onto that sum. Since $v$ lies in its range,
