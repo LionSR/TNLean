@@ -163,6 +163,61 @@ theorem HasPairChange.reorder {Ω : EuclideanSpace ℂ (ι → Fin q)} {F₁ F�
   rw [← heval]
   exact hc.comp_right e he0 (hE _) hM
 
+open Classical in
+/-- **The holes after an exchange of two guide frames.** Let `f₁, f₂` both be `C` on an open set
+containing the boundary of `Y'`, and keep the holes of the frame of `f₁` centered outside `Y'` and
+those of the frame of `f₂` centered inside `Y'`. These are, up to order, the holes of the frame of
+the labelling equal to `f₂` on `Y'` and to `f₁` elsewhere, at its true vertices.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 389–398 and 415–419; the frames after an
+exchange, `05-frames.tex`, lines 462–464. -/
+theorem guideFrame_exchange_holes_perm {κ : Type*} {C : κ} {f₁ f₂ : ℝ × ℝ → κ}
+    {Y' U' : Set (ℝ × ℝ)} (hU' : IsOpen U') (hYU' : frontier Y' ⊆ U')
+    (h₁U : ∀ p ∈ U', f₁ p = C) (h₂U : ∀ p ∈ U', f₂ p = C) {own : κ → Party} {ph : κ}
+    {rank : κ → ℕ} {V₁ V₂ W : Finset (ℝ × ℝ)} (hV₁ : ∀ z, z ∈ V₁ ↔ IsTrueVertex f₁ z)
+    (hV₂ : ∀ z, z ∈ V₂ ↔ IsTrueVertex f₂ z)
+    (hW : ∀ z, z ∈ W ↔ IsTrueVertex (fun p => if p ∈ Y' then f₂ p else f₁ p) z)
+    {hole : ℝ × ℝ → SquarePatch pos q}
+    {hd₁ : (V₁ : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (hole z).outer (hole z').outer}
+    {hd₂ : (V₂ : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (hole z).outer (hole z').outer}
+    {hdW : (W : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (hole z).outer (hole z').outer}
+    (out : Hole pos q Party → Bool) (hout : ∀ z o, out ⟨hole z, o⟩ = decide (z ∉ Y')) :
+    ((guideFrame pos q f₁ own ph rank V₁ hole hd₁).holes.filter out ++
+      (guideFrame pos q f₂ own ph rank V₂ hole hd₂).holes.filter fun h => !out h).Perm
+      (guideFrame pos q (fun p => if p ∈ Y' then f₂ p else f₁ p) own ph rank W hole hdW).holes := by
+  have key := isTrueVertex_piecewise_iff hU' hYU' h₁U h₂U
+  have e₁ : (guideFrame pos q f₁ own ph rank V₁ hole hd₁).holes.filter out =
+      (V₁.toList.filter fun z => decide (z ∉ Y')).map
+        fun z => (⟨hole z, own (tagHolder rank (fun p => if p ∈ Y' then f₂ p else f₁ p) ph z)⟩ : Hole pos q Party) := by
+    simp only [guideFrame, List.filter_map]
+    rw [List.filter_congr (q := fun z => decide (z ∉ Y')) fun z _ => by simp [hout]]
+    refine List.map_congr_left fun z hz => ?_
+    obtain ⟨hz, hzY⟩ := List.mem_filter.1 hz
+    have hzY' : z ∉ Y' := by simpa using hzY
+    have hv := (hV₁ z).1 (Finset.mem_toList.1 hz)
+    rw [tagHolder_congr ((key z).2.2 hzY' hv)]
+  have e₂ : (guideFrame pos q f₂ own ph rank V₂ hole hd₂).holes.filter (fun h => !out h) =
+      (V₂.toList.filter fun z => decide (z ∈ Y')).map
+        fun z => (⟨hole z, own (tagHolder rank (fun p => if p ∈ Y' then f₂ p else f₁ p) ph z)⟩ : Hole pos q Party) := by
+    simp only [guideFrame, List.filter_map]
+    rw [List.filter_congr (q := fun z => decide (z ∈ Y')) fun z _ => by simp [hout]]
+    refine List.map_congr_left fun z hz => ?_
+    obtain ⟨hz, hzY⟩ := List.mem_filter.1 hz
+    have hzY' : z ∈ Y' := by simpa using hzY
+    have hv := (hV₂ z).1 (Finset.mem_toList.1 hz)
+    rw [tagHolder_congr ((key z).2.1 hzY' hv)]
+  rw [e₁, e₂, ← List.map_append]
+  refine List.Perm.map _ ((List.perm_ext_iff_of_nodup ?_ W.nodup_toList).2 fun z => ?_)
+  · refine List.Nodup.append (V₁.nodup_toList.filter _) (V₂.nodup_toList.filter _) ?_
+    intro z hz₁ hz₂
+    have h1 := (List.mem_filter.1 hz₁).2
+    have h2 := (List.mem_filter.1 hz₂).2
+    simp only [decide_eq_true_eq] at h1 h2
+    exact h1 h2
+  · simp only [List.mem_append, List.mem_filter, Finset.mem_toList, decide_eq_true_eq, hV₁, hV₂,
+      hW, (key z).1]
+    tauto
+
 end PairChanges
 
 end TNLean.PEPS.Approximation
