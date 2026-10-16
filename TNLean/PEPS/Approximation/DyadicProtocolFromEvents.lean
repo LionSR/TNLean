@@ -145,7 +145,7 @@ Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol`, `06-geometry.tex`, 
 its proof, lines 82–241, 507–541 and 572–681. -/
 theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0 < ε₀)
     (hε₀ : ε₀ ≤ 1 / 16) :
-    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {K₀ a D B₀ : ℝ},
+    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
       IsProtocolConstants K₀ ε₀ ν a D B₀ → IsDirectRepaintingRatio K₀ ε₀ ν →
       ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q} {C c : ℝ}
         (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (hL : 2 ≤ L)
@@ -175,8 +175,8 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
       ∃ D' : DyadicProtocol L q (ProtocolParty k),
         D'.IsDistributionProtocol Ω C₁ (64 * 189) kK (2 * protocolPatchBound ε₀ ν) ∧
           ∀ t < D'.changes, (D'.step t).IsSourceBounded (2 * protocolPatchBound ε₀ ν) := by
-  obtain ⟨ν', hν', Hres⟩ := exists_resize_hasSourceBoundedChange (k := k) hε hε₀
-  refine ⟨ν', hν', fun ν hν hνν' {K₀ a D B₀} hc hm {L q} _ {Ω C c} P hL hkL hk2 hΩ rank R₀ ht hB
+  obtain ⟨ν', hν', Hres⟩ := exists_resize_hasSourceBoundedChange hε hε₀
+  refine ⟨ν', hν', fun ν hν hνν' {k K₀ a D B₀} hc hm {L q} _ {Ω C c} P hL hkL hk2 hΩ rank R₀ ht hB
     frozen auxOwner {C' c' kK C₁} hC hC' hcc hlarge hfε hfh hC₁ hK hεC => ?_⟩
   classical
   have hk : 1 ≤ k := by
@@ -236,7 +236,7 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
           ← eventMain_inl_succ P rank R₀ hε ht hB hk hi he]
         simp only [eventMain]
         exact directRepainting_hasSourceBoundedChange hc hm hL hkL hΩ P rank R₀ ⟨S, hS⟩
-          hKS _ _ hC hC' hcc _
+          hKS _ hC hC' hcc _
     · have hJ0 : 0 < (J.1 : ℕ) := by
         have := isScheduled_getElem hi; rw [he] at this; exact this
       rw [← he]
@@ -247,7 +247,7 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
       rw [haux, mainState_of_lt _ _ _ _ _ _ hi, he,
         ← eventMain_inr_succ P rank R₀ hε ht hB hk hi he]
       simp only [eventMain]
-      exact Hres ν hν hνν' hc hL hkL hΩ P rank R₀ J hJ0 _ _ _ hC hC' hcc _
+      exact Hres ν hν hνν' hc hL hkL hΩ P rank R₀ J hJ0 _ hC hC' hcc _
   -- the trajectory
   choose seg hseg0 hsegm hsegs using hseg
   obtain ⟨tr, htr0, htrm, htrs⟩ := exists_frames_of_segments (Ω := Ω) (ℓ := []) (ξ := (1 : ℂ))
