@@ -155,7 +155,7 @@ def check(work: Path) -> None:
     assert "Fin chi_{a^vee}" in bodies[0] and "Fin chi_a" in bodies[1]
     tex = work / "normal-adjoint-boundary.tex"
     tex.write_text(
-        "\\documentclass{article}\n\\usepackage{amsmath,amssymb,tenkz}\n"
+        "\\documentclass{article}\n\\usepackage{amsmath,amssymb,tikz-tensor-networks}\n"
         "\\pagestyle{empty}\n\\begin{document}\n"
         + "\n".join(bodies) + "\n\\end{document}\n", encoding="utf-8",
     )
@@ -196,7 +196,7 @@ def check(work: Path) -> None:
     # Check that its standalone panel sizing also keeps every tensor name inside.
     wrapper = work / "rendered-wrapper.tex"
     wrapper.write_text(
-        "\\documentclass{article}\n\\usepackage{amsmath,amssymb,tenkz}\n"
+        "\\documentclass{article}\n\\usepackage{amsmath,amssymb,tikz-tensor-networks}\n"
         "\\newenvironment{tenkzequation}{\\center}{\\endcenter}\n"
         "\\pagestyle{empty}\n\\begin{document}\n"
         + "\n".join(rendered_bodies) + "\n\\end{document}\n", encoding="utf-8",

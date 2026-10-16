@@ -220,8 +220,10 @@
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form, def:mpdo_bnt_algebra_tensor_clause, def:is_rfp_via_ts}
     Let $M$ be an MPDO whose doubled-index tensor is in CPSV
-    canonical form.  If $M$ has a tensor-attached basis-of-normal-tensors algebra clause, then
-    there are trace-preserving completely positive maps
+    canonical form.  As in implication (ii)$\Rightarrow$(i) of
+    \cite[Theorem~4.14, lines~972--993]{Cirac2016MPDO_arXiv}, if $M$ has a
+    tensor-attached basis-of-normal-tensors algebra clause, then there are
+    trace-preserving completely positive maps
     \begin{align}
         \mathcal T\colon\MN d    & \longrightarrow\MN{d^2},
                                  &
@@ -236,9 +238,7 @@
         \label{eq:mpdo_bnt_algebra_tensor_rfp_maps}
     \end{align}
     Thus $M$ is a renormalization fixed point in the sense of
-    Definition~\ref{def:is_rfp_via_ts}.  This is implication
-    (ii)$\Rightarrow$(i) of
-    \cite[Theorem~4.14, lines~972--993]{Cirac2016MPDO_arXiv}.
+    Definition~\ref{def:is_rfp_via_ts}.
 
     Here the common marked comparison needed to normalize the exact sector
     gauges comes from
@@ -251,10 +251,10 @@
 \begin{proof}\leanok
     \uses{thm:mpdo_bnt_algebra_tensor_clause_spectrum, thm:mpdo_bnt_mixed_prefix_unitary_sector_conjugacy, thm:mpdo_bnt_conditional_physical_channels}
     The tensor-attached algebra clause determines the two-site vertical
-    decomposition, the sector relabelling, and exact invertible gauges.
+    decomposition, the sector relabelling, and exact invertible gauges, and
     Theorem~\ref{thm:mpdo_bnt_mixed_prefix_unitary_sector_conjugacy}
-    normalizes these gauges simultaneously to unitaries.  Apply
-    Theorem~\ref{thm:mpdo_bnt_conditional_physical_channels} to obtain the two
+    normalizes these gauges simultaneously to unitaries, so
+    Theorem~\ref{thm:mpdo_bnt_conditional_physical_channels} yields the two
     trace-preserving completely positive maps and
     (\ref{eq:mpdo_bnt_algebra_tensor_rfp_maps}).
 \end{proof}

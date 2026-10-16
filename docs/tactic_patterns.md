@@ -24,6 +24,15 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Labels introduced by the edge operations — promoted (2026-10-16)
+
+- **Pattern:** the case analysis showing that one of the seven births and deaths of an
+  edge construction introduces a single label.
+- **Seen:** the aggregate `edgeOperations_insertsOne` and the per-operation chains of
+  `DyadicEdgeOperationChains.lean`.
+- **Abstraction:** the seven lemmas `auxBirthB_insertsOne`, …, `mainDeathB_insertsOne` in
+  `Approximation/DyadicTrueVertices.lean`; the aggregate is derived from them.
+
 ### Sites separated from guide holes — promoted (2026-10-16)
 
 - **Pattern:** recover the patch of a guide hole, turn membership in its outer sample

@@ -55,7 +55,7 @@ def main() -> int:
             tex = work / f"{name}.tex"
             tex.write_text(
                 r"\documentclass[border=6pt]{standalone}" "\n"
-                r"\usepackage{amsmath,amssymb,tenkz}" "\n"
+                r"\usepackage{amsmath,amssymb,tikz-tensor-networks}" "\n"
                 r"\begin{document}\tenkzkernel" "\n"
                 + equation + "\n" + r"\end{document}" "\n",
                 encoding="utf-8",

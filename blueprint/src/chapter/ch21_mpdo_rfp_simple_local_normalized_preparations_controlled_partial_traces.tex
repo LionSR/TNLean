@@ -17,22 +17,22 @@ volume~\cite[``Controlled dependent partial trace'', ``Diagonal blocks of the co
     \lean{MPOTensor.PhysicalSectorFactorization.t0RegroupEquiv}
     \leanok
     \uses{def:mpdo_eta_structure, def:mpdo_physical_sector_factorization}
-    In sector-adapted coordinates, regroup two sites by
+    Following the reorderings in
+    \cite[Appendix~C.2, lines~1521--1522 and~1555--1559]
+    {Cirac2016MPDO_arXiv}, regroup two sites in sector-adapted coordinates by
     \begin{align}
         ((l_k,r_k),(l_h,r_h))
-         & \longmapsto ((l_k,r_h),(r_k,l_h)). \notag
+         & \longmapsto ((l_k,r_h),(r_k,l_h)), \notag
     \end{align}
-    Globally this gives the dependent-sum equivalence
+    which globally gives the dependent-sum equivalence
     \begin{align}
         \left(\bigoplus_k L_k\otimes R_k\right)^{\!\otimes2}
          & \simeq
         \bigoplus_{k,h}(L_k\otimes R_h)\otimes(R_k\otimes L_h). \notag
     \end{align}
     The forward equivalence prepares the neighboring factors
-    $R_k\otimes L_h$ for the partial trace in $\mathcal T_0$; its inverse is
-    the shift $\mathcal S_2$. These are the reorderings in
-    \cite[Appendix~C.2, lines~1521--1522 and~1555--1559]
-    {Cirac2016MPDO_arXiv}.
+    $R_k\otimes L_h$ for the partial trace in $\mathcal T_0$, while its inverse
+    is the shift $\mathcal S_2$.
 \end{definition}
 
 \begin{definition}[The two-site partial-trace map $\mathcal T_0$]
@@ -116,13 +116,14 @@ volume~\cite[``Controlled dependent partial trace'', ``Diagonal blocks of the co
         MPOTensor.PhysicalSectorFactorization.t2ShiftEquiv}
     \leanok
     \uses{def:mpdo_two_site_subspin_regrouping, def:mpdo_eta_omega, def:mpdo_physical_sector_factorization}
-    Regroup three sites by
+    Following \cite[Appendix~C.2, lines~1535--1540 and~1547]
+    {Cirac2016MPDO_arXiv}, regroup three sites by
     \begin{align}
         ((l_k,r_k),((l_l,r_l),(l_h,r_h)))
          & \longmapsto
-        ((l_k,r_h),((r_k,l_l),(r_l,l_h))). \notag
+        ((l_k,r_h),((r_k,l_l),(r_l,l_h))), \notag
     \end{align}
-    Equivalently,
+    or equivalently
     \begin{align}
         \left(\bigoplus_k L_k\otimes R_k\right)^{\!\otimes3}
          & \simeq
@@ -131,9 +132,7 @@ volume~\cite[``Controlled dependent partial trace'', ``Diagonal blocks of the co
             (R_k\otimes L_l)\otimes(R_l\otimes L_h)\right]. \notag
     \end{align}
     The forward equivalence prepares the four middle subspins for
-    $\mathcal S_0$; its inverse is the shift $\mathcal T_2$ in
-    \cite[Appendix~C.2, lines~1535--1540 and~1547]
-    {Cirac2016MPDO_arXiv}.
+    $\mathcal S_0$, while its inverse is the shift $\mathcal T_2$.
 \end{definition}
 
 \begin{definition}[The three-site partial-trace map $\mathcal S_0$]

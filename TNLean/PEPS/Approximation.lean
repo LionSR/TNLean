@@ -118,6 +118,7 @@ import TNLean.PEPS.Approximation.DyadicAnchors
 import TNLean.PEPS.Approximation.DyadicBandStepChanges
 import TNLean.PEPS.Approximation.DyadicBlockFootprints
 import TNLean.PEPS.Approximation.DyadicBulkFrames
+import TNLean.PEPS.Approximation.DyadicBulkOperationChains
 import TNLean.PEPS.Approximation.DyadicBulkSeparation
 import TNLean.PEPS.Approximation.DyadicBulkStepFloors
 import TNLean.PEPS.Approximation.DyadicBulkSteps
@@ -128,6 +129,8 @@ import TNLean.PEPS.Approximation.DyadicDirectRepaintingConstants
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingRewrite
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingStep
 import TNLean.PEPS.Approximation.DyadicEdgeBands
+import TNLean.PEPS.Approximation.DyadicEdgeConstructionChain
+import TNLean.PEPS.Approximation.DyadicEdgeOperationChains
 import TNLean.PEPS.Approximation.DyadicEventScheduleOrder
 import TNLean.PEPS.Approximation.DyadicExchangeChange
 import TNLean.PEPS.Approximation.DyadicFootprintScaling
@@ -176,6 +179,7 @@ import TNLean.PEPS.Approximation.DyadicRimPatterns
 import TNLean.PEPS.Approximation.DyadicRouting
 import TNLean.PEPS.Approximation.DyadicRoutingPEPS
 import TNLean.PEPS.Approximation.DyadicSampledGuides
+import TNLean.PEPS.Approximation.DyadicSheetOperationChains
 import TNLean.PEPS.Approximation.DyadicSmallPatchCovers
 import TNLean.PEPS.Approximation.DyadicSuppliedPatchSteps
 import TNLean.PEPS.Approximation.DyadicTreatedFrameBoundary
@@ -270,6 +274,7 @@ import TNLean.PEPS.Approximation.MessageGateExpansion
 import TNLean.PEPS.Approximation.MessageGateLists
 import TNLean.PEPS.Approximation.MessageMonomial
 import TNLean.PEPS.Approximation.MonomialFixesOutside
+import TNLean.PEPS.Approximation.NestedPatchEnergy
 import TNLean.PEPS.Approximation.NetworkScalarAbsorption
 import TNLean.PEPS.Approximation.NoneResidualGate
 import TNLean.PEPS.Approximation.NoneResidualOperations
@@ -286,6 +291,7 @@ import TNLean.PEPS.Approximation.OriginalCircuitSequence
 import TNLean.PEPS.Approximation.OriginalCircuitSourceBound
 import TNLean.PEPS.Approximation.OriginalCoefficientMajorant
 import TNLean.PEPS.Approximation.OriginalGateSamplePhysicalSum
+import TNLean.PEPS.Approximation.OriginalNestedPatchEntropy
 import TNLean.PEPS.Approximation.OriginalProducerResources
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates
 import TNLean.PEPS.Approximation.OwnerMemoryTransport
@@ -480,6 +486,7 @@ import TNLean.PEPS.Approximation.SquareHamiltonianHermitianTerms
 import TNLean.PEPS.Approximation.SquareInteractionSupport
 import TNLean.PEPS.Approximation.SquareInteractionTerms
 import TNLean.PEPS.Approximation.SquareLatticeConnectivity
+import TNLean.PEPS.Approximation.SquarePatchRelabel
 import TNLean.PEPS.Approximation.SquareZeroFloorOptimizer
 import TNLean.PEPS.Approximation.SupportedPhysicalBufferGaussian
 import TNLean.PEPS.Approximation.SupportedPolarUnitary

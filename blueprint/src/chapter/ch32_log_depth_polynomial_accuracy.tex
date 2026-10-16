@@ -15,17 +15,17 @@
         \varepsilon(\widetilde\phi_N,\phi_N)\leq C_\gamma N^{-\eta}.
         \label{eq:ldp_polynomial_prescribed_rate}
     \end{align}
-    This is a polynomial-accuracy corollary of the exponential approximation
-    estimate of~\cite{Malz2024Preparation}. The uniform-blocking and
-    positive-correlation-length scope is recorded
-    in~\cite{gap:mswc24_polynomial_accuracy_uniform_blocks}.
+    Under the uniform-blocking and positive-correlation-length scope recorded
+    in~\cite{gap:mswc24_polynomial_accuracy_uniform_blocks}, this is a
+    polynomial-accuracy corollary of the exponential approximation estimate
+    of~\cite{Malz2024Preparation}.
     The coefficient $2\xi$ printed after Lemma~1 of~\cite{Malz2024Preparation}
     is the case $\gamma=1/2$; every coefficient larger than $\xi/2$ is
     admissible.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_approximation_error_normal}
-    Since $\gamma/2<1$, apply the second-order estimate at rate $\gamma/2$ to obtain
+    Since $\gamma/2<1$, the second-order estimate at rate $\gamma/2$ gives
     $\varepsilon\leq C_\gamma M e^{-\gamma q/\xi}$.
     The ceiling condition gives $\gamma q\geq\xi(1+\eta)\log N$.
     Since $q\geq1$ and $M\leq N$,
@@ -54,15 +54,15 @@
         \label{eq:ldp_polynomial_uniform_accuracy}
     \end{align}
     The constant is independent of $\eta,q,M$.
-    This is the uniform-blocking, positive-correlation-length case of
-    the paragraph following Lemma~1 of~\cite{Malz2024Preparation};
-    the other chain lengths and zero correlation length are discussed
-    in~\cite{gap:mswc24_polynomial_accuracy_uniform_blocks}.
+    As discussed in~\cite{gap:mswc24_polynomial_accuracy_uniform_blocks}
+    (which also treats other chain lengths and zero correlation length),
+    this establishes the uniform-blocking, positive-correlation-length case of
+    the paragraph following Lemma~1 of~\cite{Malz2024Preparation}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_approximation_error_normal}
-    Apply the second-order approximation estimate at the fixed rate
-    $\gamma=1/4$, obtaining $\varepsilon\leq C M e^{-q/(2\xi)}$.
+    The second-order approximation estimate at the fixed rate
+    $\gamma=1/4$ gives $\varepsilon\leq C M e^{-q/(2\xi)}$.
     Formula~(\ref{eq:ldp_polynomial_block_length}) gives
     $q\geq2\xi(1+\eta)\log N$. Since $N=Mq\geq2$, one has
     $q\geq1$ and $M\leq N$. Thus

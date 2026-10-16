@@ -382,19 +382,19 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
         \varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}.
         \label{eq:ldp_approximation_error_overlapping_corrected}
     \end{align}
-    This is \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for blocks of multiplicity one
-    and weight one, with $\xi_{\mathrm{diag}}$ replaced by
-    $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$ and for $0<\gamma<1$ in
-    place of $0<\gamma<1/2$. The states of distinct
-    blocks need not be orthogonal, and no condition $q=o(N)$ is needed. With
-    $\xi_{\mathrm{diag}}$ alone the bound is false
-    (Theorem~\ref{thm:ldp_approximation_error_overlapping_blocks})
-    \cite{gap:mswc24_block_form_mixed_overlap}.
+    Relative to \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for blocks of multiplicity one
+    and weight one, this replaces $\xi_{\mathrm{diag}}$ by
+    $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$ and extends the range
+    $0<\gamma<1/2$ to $0<\gamma<1$. The states of distinct
+    blocks need not be orthogonal, and no condition $q=o(N)$ is needed. As recorded
+    in \cite{gap:mswc24_block_form_mixed_overlap}
+    (Theorem~\ref{thm:ldp_approximation_error_overlapping_blocks}), with
+    $\xi_{\mathrm{diag}}$ alone the bound is false.
 \end{theorem}
 \begin{proof}
     \leanok
-    This is the case $\mu_j=1$ of
-    Theorem~\ref{thm:ldp_approximation_error_complex_weights}, where $\beta_j=1$.
+    Specializing Theorem~\ref{thm:ldp_approximation_error_complex_weights} to
+    $\mu_j=1$, where $\beta_j=1$, yields the bound.
 \end{proof}
 
 % **Local fix (rate of the overlapping blocks):** as above, for multiplicity one with real
@@ -421,18 +421,17 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
         \varepsilon(\widetilde\phi_N,\phi_N)\leq C'y
         \qquad\text{and}\qquad
         \varepsilon(\widetilde\phi_N,\phi_N)\leq Cy\,e^{Cy}.
-    \end{align*} This is
+    \end{align*}
+    As recorded in \cite{gap:mswc24_block_form_mixed_overlap}, relative to
     \cite[Lemma~1$'$(ii)]{Malz2024Preparation} for blocks of multiplicity one with weights
-    of possibly different moduli and with phases absorbed into the blocks, with
-    $\xi_{\mathrm{diag}}$ replaced by
-    $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$, for $0<\gamma<1$ in place of
-    $0<\gamma<1/2$, with constants that do not depend on the weights, and without the
-    normalization of the source that the largest weight is one
-    \cite{gap:mswc24_block_form_mixed_overlap}.
+    of possibly different moduli and with phases absorbed into the blocks, this replaces
+    $\xi_{\mathrm{diag}}$ by
+    $\max(\xi_{\mathrm{diag}},\xi_{\mathrm{off\text{-}diag}})$, extends $0<\gamma<1/2$ to
+    $0<\gamma<1$ with constants that do not depend on the weights, and drops the
+    normalization of the source that the largest weight is one.
 \end{theorem}
 \begin{proof}
     \leanok
-    This is the case $\mu_j=w_j$ of
-    Theorem~\ref{thm:ldp_approximation_error_complex_weights}, where
-    $\lvert\mu_j\rvert^N=w_j^N$.
+    Specializing Theorem~\ref{thm:ldp_approximation_error_complex_weights} to
+    $\mu_j=w_j$, where $\lvert\mu_j\rvert^N=w_j^N$, yields the bound.
 \end{proof}

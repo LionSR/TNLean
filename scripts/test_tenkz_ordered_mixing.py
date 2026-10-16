@@ -131,7 +131,7 @@ def main() -> int:
         bodies.append(body)
     source = (
         "\\documentclass{article}\n\\usepackage{amsmath,amssymb}\n"
-        "\\usepackage{tenkz}\n\\pagestyle{empty}\n\\begin{document}\n"
+        "\\usepackage{tikz-tensor-networks}\n\\pagestyle{empty}\n\\begin{document}\n"
         + "\n".join(bodies) + "\n\\end{document}\n"
     )
     with tempfile.TemporaryDirectory(prefix="tenkz_ordered_mixing_") as tmp:

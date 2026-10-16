@@ -104,10 +104,11 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 \end{lemma}
 \begin{proof}
     \leanok
-    These are entrywise computations. For the third item, $\ket v$ has $\ket0$
-    on $Z$ exactly when the diagonal projection onto the configurations
-    vanishing on $Z$ fixes $\ket v$, and that projection commutes with an
-    operator acting outside $Z$.
+    Entrywise evaluation verifies the first two items and the layer product.
+    For the third item, $\ket v$ has $\ket0$ on $Z$ precisely when the
+    diagonal projection onto the configurations vanishing on $Z$ fixes
+    $\ket v$, and that projection commutes with every operator acting outside
+    $Z$.
 \end{proof}
 
 \begin{lemma}[One teleportation hop]
@@ -140,20 +141,19 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
         \bigl(X^{z_e}Z^{z_c}\bigr)_{f}P_{(c\,f)}\ket v,
     \end{align*}
     where $s_z\ket q=\ket{q+z}$ and $(c\,f)$ is the transposition of the
-    sites $c$ and $f$. So the content of $c$ is found at $f$, up to the
-    unitary $X^{z_e}Z^{z_c}$, and $c$ and $e$ carry the outcomes. The operator
-    acts on the sites $c,e,f$.
+    sites $c$ and $f$. Thus the operator acts on the sites $c,e,f$, leaving the
+    outcomes at $c$ and $e$ and placing the content of $c$ at $f$ up to the
+    unitary $X^{z_e}Z^{z_c}$.
 \end{lemma}
 \begin{proof}
     \leanok
-    On a vector with $\ket0$ at $e$ and $f$, the Fourier matrix at $e$ gives
-    the amplitude $d^{-1/2}$ to every value $x_e$, and the shift copies it to
-    $f$: this prepares $d^{-1/2}\sum_j\ket{j}_e\ket j_f$. The second gate and
-    the projections compute, configuration by configuration, the amplitude
-    $d^{-1/2}F_{z_c,\,x_f-z_e}$ for the content $x_f-z_e$ moved from $c$ to
-    $f$, which is $d^{-1}\zeta^{z_c(x_f-z_e)}$, the amplitude of the right-hand
-    side. Configurations with $x_c\neq z_c$ or $x_e\neq z_e$ vanish on both
-    sides.
+    On a vector with $\ket0$ at $e$ and $f$, the Fourier matrix at $e$ assigns
+    amplitude $d^{-1/2}$ to every value $x_e$, and the shift copies it to $f$,
+    preparing $d^{-1/2}\sum_j\ket{j}_e\ket j_f$. The second gate and the
+    projections then give, configuration by configuration, the amplitude
+    $d^{-1/2}F_{z_c,\,x_f-z_e}=d^{-1}\zeta^{z_c(x_f-z_e)}$ for the content
+    $x_f-z_e$ moved from $c$ to $f$, matching the right-hand side while
+    configurations with $x_c\neq z_c$ or $x_e\neq z_e$ vanish on both sides.
 \end{proof}
 
 \begin{theorem}[Teleportation along chains of hops in one round]
@@ -207,18 +207,18 @@ $N$, and the local labels are $\mathbb Z_d=\{0,\dots,d-1\}$ with $d\ge1$.
 \end{theorem}
 \begin{proof}
     \leanok
-    The first gates act on pairwise disjoint pairs $\{e,f\}$, and the second
+    The first gates act on pairwise disjoint pairs $\{e,f\}$ and the second
     gates on pairwise disjoint pairs $\{c,e\}$, so they form two layers. By
     induction over the list, the projections and the two layers factor into
     the hops one after the other: the first gate of the head $h$ of the list
     commutes with the second gates of the other hops because its sites $e,f$
     are not theirs, and the projections at the sites of the other hops commute
-    with the operator of $h$. Lemma~\ref{lem:qc_teleport_hop} for $h$ applies
-    because the other hops leave $\ket0$ at $e$ and $f$. A single-site unitary
-    at the site $c$ of $h$, left by another hop whose site $f$ is $c$,
-    reappears at the site $f$ of $h$ after the transposition; so the hops leave
-    a product of single-site unitaries, depending on the outcomes, after
-    $d^{-H}P_{h_1}\cdots P_{h_H}$. The correction is its inverse.
+    with the operator of $h$. Since the other hops leave $\ket0$ at $e$ and
+    $f$, Lemma~\ref{lem:qc_teleport_hop} applies to $h$. A single-site unitary
+    left at the site $c$ of $h$ by an earlier hop whose site $f$ is $c$
+    reappears at the site $f$ of $h$ after the transposition, so the hops
+    leave an outcome-dependent product of single-site unitaries after
+    $d^{-H}P_{h_1}\cdots P_{h_H}$ that the inverse correction cancels.
 \end{proof}
 
 \begin{lemma}[Chains between distant sites]

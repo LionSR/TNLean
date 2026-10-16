@@ -53,7 +53,7 @@ def main():
     picture = source[source.index(r'\begin{tenkzequation}'):
                      source.index(r'\end{tenkzequation}') + len(r'\end{tenkzequation}')]
     fixture = (r'\documentclass[varwidth,border=3pt]{standalone}' '\n'
-               r'\usepackage{amsmath,amssymb,amsthm,mathtools,tenkz}' '\n'
+               r'\usepackage{amsmath,amssymb,amsthm,mathtools,tikz-tensor-networks}' '\n'
                r'\newcounter{chapter}\input{macros/common}\input{macros/diagrams}' '\n'
                r'\newenvironment{tenkzequation}{\center}{\endcenter}' '\n'
                r'\begin{document}' '\n' + picture + r'\end{document}')
