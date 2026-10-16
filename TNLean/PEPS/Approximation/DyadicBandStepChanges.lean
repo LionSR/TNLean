@@ -242,9 +242,9 @@ theorem bandBirth_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
   have hε2 : 2 * ε₀ ≤ angularConstant / 2 := by
     have := hc.ε₀_small; have := hc.ε₀_pos; nlinarith [angularConstant_pos]
   obtain ⟨hfb, hmb, hdb, hFb⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done hgb
-    (e.endpointBlocks R.1.index) op.label hr
+    (e.endpointBlocks R.1.index) op.label
   obtain ⟨hfa, hma, hda, hFa⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done hga
-    (e.endpointBlocks R.1.index) op.label hr
+    (e.endpointBlocks R.1.index) op.label
   rw [homogenize_endpointBlocks] at hfb hfa
   set fb := treatedGuide R.1.1 R.1.index t (e.endpointBlocks R.1.index) op.label
     (bandUpdate n e op.before g₀)
@@ -360,9 +360,9 @@ theorem bandDeath_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
   have hε2 : 2 * ε₀ ≤ angularConstant / 2 := by
     have := hc.ε₀_small; have := hc.ε₀_pos; nlinarith [angularConstant_pos]
   obtain ⟨hfb, hmb, hdb, hFb⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done hgb
-    (e.endpointBlocks R.1.index) op.label hr
+    (e.endpointBlocks R.1.index) op.label
   obtain ⟨hfa, hma, hda, hFa⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done hga
-    (e.endpointBlocks R.1.index) op.label hr
+    (e.endpointBlocks R.1.index) op.label
   rw [homogenize_endpointBlocks] at hfb hfa
   set fb := treatedGuide R.1.1 R.1.index t (e.endpointBlocks R.1.index) op.label
     (bandUpdate n e op.before g₀)
