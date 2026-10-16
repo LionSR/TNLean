@@ -326,6 +326,7 @@ import TNLean.PEPS.Approximation.PatchRewriteCircuit
 import TNLean.PEPS.Approximation.PatchRewriteExpansion
 import TNLean.PEPS.Approximation.PatchRewriteMonomials
 import TNLean.PEPS.Approximation.PatchRewriteTruncation
+import TNLean.PEPS.Approximation.PhaseMinimizer
 import TNLean.PEPS.Approximation.PhysicalBufferCoordinates
 import TNLean.PEPS.Approximation.PhysicalDensityPureInput
 import TNLean.PEPS.Approximation.PhysicalFirstExchange
