@@ -34,7 +34,8 @@ abstracted — record why, so it is not re-proposed).
   `DyadicProtocolCompression.lean` under `TNLean/PEPS/Approximation/`.
 - **Abstraction:** `TNLean.PEPS.Approximation.mul_pow_le_max_zero_mul_pow` in
   `UniformApproximateSampledNetwork.lean`.
-- **Notes:** The sign of `max C 0` is `le_max_right`.
+- **Notes:** The sign of `max C 0` is `le_max_right`. Net Lean line delta: +9 across the three
+  changed modules (the lemma and its docstring add eleven lines; the call sites shrink by two).
 
 ### Patch net covers in the plane conditions — promoted (2026-10-15)
 
