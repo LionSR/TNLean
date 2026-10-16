@@ -358,7 +358,7 @@
       el("div", { class: "links" }, ...n.prs.map(p => prRef(n.repo, p.number)), noteLink(n, n.path.split("/").pop()))));
     if (!list.children.length) list.append(el("p", { class: "muted", text: resolvedCount ? "No open paper gaps." : "No paper-gap notes yet." }));
     if (resolvedCount) list.after(el("details", { class: "fold resolved" },
-      el("summary", {}, el("h3", { text: `Resolved (${resolvedCount})` }), el("span", { class: "muted", text: " Lean proves what the paper states (in some cases in a pull request awaiting merge), or the gap was a degenerate case now excluded by the definitions." })),
+      el("summary", {}, el("h3", { text: `Resolved (${resolvedCount})` }), el("span", { class: "muted", text: " Lean proves what the paper states (in some cases in a pull request awaiting merge),, the gap was a degenerate case now excluded by the definitions, or Lean proves it with a locally corrected constant or step." })),
       resolvedList));
 
     const box = $("gapchecked");
