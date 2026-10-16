@@ -842,6 +842,11 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.eventMain,
         TNLean.PEPS.Approximation.finalMain,
         TNLean.PEPS.Approximation.mainState,
+        TNLean.PEPS.Approximation.mainState_of_lt,
+        TNLean.PEPS.Approximation.mainState_of_le,
+        TNLean.PEPS.Approximation.take_succ_eventSchedule,
+        TNLean.PEPS.Approximation.isScheduled_getElem,
+        TNLean.PEPS.Approximation.levelGuide_eq_of_mem_open,
         TNLean.PEPS.Approximation.eventMain_inr_succ,
         TNLean.PEPS.Approximation.eventMain_inl_succ,
         TNLean.PEPS.Approximation.mainState_zero,
@@ -849,7 +854,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.finalMain_holes}
     \leanok
     \uses{def:peps_protocol_level_frame, def:peps_dyadic_protocol_schedule}
-    Let $k\ge1$. Every rank from $2$ to $2k+1$ is the rank of an event, consecutive events
+    Let $k\ge1$ and $L\le2^k$. Every rank from $2$ to $2k+1$ is the rank of an event, consecutive events
     have equal or consecutive ranks, and the events before a given one are those of
     smaller rank and some of its own. Before each event let the main frame be: for a
     resize at a junction of scale $j$, the frame of the guide uniform on the
@@ -872,7 +877,8 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_dyadic_temporary_holes, lem:peps_dyadic_active_labels,
         thm:peps_protocol_level_events, thm:peps_protocol_party_map_switch,
         thm:peps_dyadic_protocol_parties, thm:peps_dyadic_protocol_final_step,
-        thm:peps_guide_frame_norm, thm:peps_guide_frame_supplied_gates}
+        thm:peps_guide_frame_norm, thm:peps_guide_frame_supplied_gates,
+        lem:peps_dyadic_sampled_guides}
     The schedule contains exactly the prescribed events in rank order
     (Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts}). The ranks cover the
     range, so no rank is skipped. When the next event has a larger rank, every event
@@ -908,9 +914,12 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_largeRepaintings}
     \leanok
     \uses{def:peps_dyadic_protocol, def:peps_adaptive_patch_constraint,
-        thm:peps_protocol_constants, thm:peps_dyadic_direct_repainting_constants}
-    Fix $k\in\N$ and $0<\epsilon_0\le1/16$. There is a mesh threshold $\nu'>0$
-    such that for every $0<\nu\le\nu'$, constants of the protocol with an
+        thm:peps_protocol_constants, thm:peps_dyadic_direct_repainting_constants,
+        thm:peps_protocol_main_frame_schedule, def:peps_dyadic_protocol_schedule,
+        thm:peps_protocol_event_segments, def:peps_circuit_source_bound,
+        def:peps_dyadic_protocol_parties, def:peps_frame, thm:peps_protocol_level_events}
+    Fix $0<\epsilon_0\le1/16$. There is a mesh threshold $\nu'>0$ such that for
+    every $0<\nu\le\nu'$, every $k\in\N$, constants of the protocol with an
     admissible direct-repainting ratio, $q\ge1$, $L\ge2$ with $L\le2^k<2L$,
     $\lVert\Omega\rVert=1$ and patches supplied by the adaptive patch constraint
     with constants $B_0,C,c$ at accuracy $L^{-60}$, the following holds. Put
@@ -942,7 +951,8 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{proof}\leanok
     \uses{thm:peps_protocol_main_frame_schedule, thm:peps_protocol_level_events,
-        thm:peps_protocol_event_segments}
+        thm:peps_protocol_event_segments, thm:peps_dyadic_protocol_schedule_counts,
+        def:peps_dyadic_protocol_schedule, def:peps_frame}
     Resizes and direct repaintings change only the main frame, by one small-patch
     rewrite, and freeze no auxiliary sheet. The changes of the events are joined along
     the schedule, starting from the raw copies and ending with the frame of the unit
