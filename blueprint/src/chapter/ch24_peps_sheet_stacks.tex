@@ -1315,8 +1315,7 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.treatedFrame_edgeStart,
         TNLean.PEPS.Approximation.treatedFrame_auxStart_eq_raw}
     \leanok
-    \uses{def:peps_protocol_treated_frame, def:peps_protocol_level_frame,
-        thm:peps_protocol_party_map_switch, thm:peps_protocol_main_frame_schedule}
+    \uses{def:peps_protocol_treated_frame, def:peps_protocol_level_frame}
     At the constants of the protocol, let $R$ be a square of side $n=2^j>K_0t$,
     $t=D\log L$, at a stage of its level. Without marks, the frame of a treated sheet
     depends only on its guide, not on the homogenizing label. The main frame of the
@@ -1331,6 +1330,8 @@ no holes, this is the normalization of $\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_protocol_party_map_switch, thm:peps_protocol_level_frame_facts,
+        lem:peps_dyadic_schedule_guides, lem:peps_dyadic_active_labels}
     Without marks the treated guide is the reading of the guide placed on $R$. The
     starting guide placed on $R$ is the block guide of the level. The completed guide
     agrees with the block guide of the level with $R$ repainted off the boundary of
