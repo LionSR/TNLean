@@ -16,7 +16,10 @@ import TNLean.PEPS.AreaLaw.Geometry.BeltFanColors
 import TNLean.PEPS.AreaLaw.Geometry.BeltMarks
 import TNLean.PEPS.AreaLaw.Geometry.BeltRunInterfaces
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationAngular
+import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationAtoms
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationFan
+import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationInitial
+import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationNormalization
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationRepair
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationReplacement
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationStar
@@ -91,6 +94,7 @@ import TNLean.PEPS.AreaLaw.Geometry.MixedDyadicSquares
 import TNLean.PEPS.AreaLaw.Geometry.NearMarkGeometry
 import TNLean.PEPS.AreaLaw.Geometry.NestedPatches
 import TNLean.PEPS.AreaLaw.Geometry.NonbeltPrimaries
+import TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartitionComap
 import TNLean.PEPS.AreaLaw.Geometry.PolynomialBudget
 import TNLean.PEPS.AreaLaw.Geometry.PowerScaleDepth
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryCounting
@@ -102,6 +106,7 @@ import TNLean.PEPS.AreaLaw.Geometry.RectangleMixedSquares
 import TNLean.PEPS.AreaLaw.Geometry.RectangleShellCounts
 import TNLean.PEPS.AreaLaw.Geometry.RectangleShellWeightedCover
 import TNLean.PEPS.AreaLaw.Geometry.RepairBirthRank
+import TNLean.PEPS.AreaLaw.Geometry.RepairCharacteristicLength
 import TNLean.PEPS.AreaLaw.Geometry.RepairChildCones
 import TNLean.PEPS.AreaLaw.Geometry.RepairChildStarStep
 import TNLean.PEPS.AreaLaw.Geometry.RepairChildStars
@@ -112,6 +117,7 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairFanCones
 import TNLean.PEPS.AreaLaw.Geometry.RepairInduction
 import TNLean.PEPS.AreaLaw.Geometry.RepairInductionMetric
 import TNLean.PEPS.AreaLaw.Geometry.RepairInductionStatement
+import TNLean.PEPS.AreaLaw.Geometry.RepairRegionDisjointness
 import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementRegions
 import TNLean.PEPS.AreaLaw.Geometry.RepairStage
 import TNLean.PEPS.AreaLaw.Geometry.RepairStageSites

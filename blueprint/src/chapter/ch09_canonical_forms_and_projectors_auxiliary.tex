@@ -8,7 +8,7 @@
     $(A_k)_{k=1}^r$ of positive bond dimensions and positive real weights
     $(a_k)_{k=1}^r$. Each block is unital, has only scalar
     transfer-map fixed points, and has a diagonal positive-definite fixed point
-    $\Lambda_k$ for the adjoint transfer map. Moreover,
+    $\Lambda_k$ for the adjoint transfer map. In addition,
     \begin{align}
         V^{(N)}(A)_\sigma
          & =
@@ -146,7 +146,7 @@
     Choose the blocks and weights from
     Theorem~\ref{thm:pgvwc07_positive_length_witness}. The assumed nonzero
     coefficient makes its block family nonempty, so
-    Theorem~\ref{thm:pgvwc07_positive_length_weight_normalization} supplies
+    Theorem~\ref{thm:pgvwc07_positive_length_weight_normalization} gives
     $s>0$ and the normalized positive weights. Equation
     (\ref{eq:canonical_pgvwc_weight_normalization}) and homogeneity give
     \begin{align}
@@ -211,7 +211,7 @@
         \label{eq:canonical_pgvwc_block_conditions}
     \end{align}
     Here $\Lambda_k$ is diagonal, positive, and full-rank, and each block has
-    positive bond dimension. Moreover, the only fixed points of
+    positive bond dimension. The only fixed points of
     $\E_{A_k}(X)=\sum_i A_k^iX(A_k^i)^\dagger$ are the scalar multiples of
     $\Id$: for every $X$, the identity $\E_{A_k}(X)=X$ implies that there
     exists $c\in\C$ such that $X=c\Id$.
@@ -228,7 +228,7 @@
     positive-length coefficient vanishes, take $s=1$ and the empty retained
     family; the block conditions and bond-dimension bound are vacuous, and the
     MPV identity is the zero identity. In the nonzero branch, use the nonempty
-    normalized family supplied by the second alternative.
+    normalized family given by the second alternative.
 \end{proof}
 
 \begin{remark}[CPSV blocked canonical form (source statement)]%
@@ -349,7 +349,7 @@ retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
     For the normal-tensor assertion, the transfer map of $\overline A$ is the
     anti-linear conjugate $\sigma\circ\E_A\circ\sigma$
     by~(\ref{eq:cpsv_map_star_transfer_operator}). By
-    the corresponding theorem in the companion quantum-channel volume~\cite[``Entrywise conjugation transports peripheral eigenvalues'']{QICLean2026Blueprint} this conjugation
+    the corresponding theorem in the companion quantum-channel volume~\cite[``Entrywise conjugation preserves peripheral eigenvalues'']{QICLean2026Blueprint} this conjugation
     preserves the spectral radius and primitivity, and by
     Theorem~\ref{thm:cpsv_map_star_irreducible} entrywise conjugation
     preserves irreducibility. Hence both clauses of
@@ -436,7 +436,7 @@ retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
          & =U^\dagger\!\left(\bigoplus_{k=1}^r\mu_kA_k^i\right)U.
         \tag{CF}\label{eq:cpsv_canonical_form}
     \end{align}
-    Thus the complement of the retained direct sum consists literally of zero
+    Thus the complement of the retained direct sum consists of zero
     bond-space coordinates. In particular, $r=0$ is possible only when $A=0$.
 
     The convention in line~246 of \cite{Cirac2016MPDO_arXiv} is a separate
@@ -588,7 +588,7 @@ retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
     algebra and hence preserves the peripheral spectrum.
 \end{proof}
 
-\begin{theorem}[Gauge transport of CPSV normality]
+\begin{theorem}[Gauge invariance of CPSV normality]
     \label{thm:cpsv_normal_tensor_gauge_transport}
     \lean{MPSTensor.IsNormalTensor.of_gaugeEquiv}
     \leanok
@@ -619,8 +619,8 @@ retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
     Formula~(\ref{eq:cpsv_transfer_similarity}) makes this support projection
     invariant for the other transfer map.  Irreducibility forces its support
     to be zero or full, and invertibility of $X$ then forces $Q=0$ or
-    $Q=\Id$.  Thus both conditions in Definition~\ref{def:nt_cpsv} are
-    transported across the gauge.
+    $Q=\Id$.  Thus both conditions in Definition~\ref{def:nt_cpsv} carry over
+    across the gauge.
 \end{proof}
 
 \begin{theorem}[Positive blocking preserves CPSV normal tensors]
@@ -643,12 +643,12 @@ retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
     \end{align}
     The trace-preserving primitive and irreducible structure of $B$ is
     preserved by positive blocking, so Theorem~\ref{thm:is_normal_tensor_of_is_normal_left_canonical}
-    makes $B^{[L]}$ CPSV normal. Gauge transport
+    makes $B^{[L]}$ CPSV normal. Gauge invariance
     (Theorem~\ref{thm:cpsv_normal_tensor_gauge_transport}) then gives CPSV
     normality of $A^{[L]}$.
 \end{proof}
 
-\begin{theorem}[Literal CPSV canonical form is preserved by positive blocking]
+\begin{theorem}[CPSV canonical form is preserved by positive blocking]
     \label{thm:cpsv_literal_canonical_form_positive_blocking}
     \lean{MPSTensor.evalWord_eq_coisometry_reconstruction_of_ne_nil}
     \lean{MPSTensor.blockTensor_toTensorFromBlocks_apply}
@@ -812,12 +812,12 @@ retained and compared by the sector coefficients in Chapter~\ref{ch:bnt}.
     Each displayed conjugacy also requires the two bond dimensions to agree,
     and every scalar $e^{i\phi}$ has modulus one. This is
     \cite[Proposition~2.7 and Appendix~A]{Cirac2016MPDO_arXiv}, specialized to
-    the literal canonical-form data.
+    the canonical-form data.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:cpsv_canonical_form, thm:cpsv_bnt_characterization}
-    The canonical-form data supply normality of every $A_k$ and the
+    The canonical-form data give normality of every $A_k$ and the
     positive-length identity
     $\ket{V^{(N)}(A)}=\sum_k\mu_k^N\ket{V^{(N)}(A_k)}$.
     Substitution of these two facts into
@@ -977,7 +977,7 @@ yields Definition~\ref{def:cpsv_canonical_form}.
         \mc{V}^+\!\left(\bigoplus_{k=1}^r\mu_kA_k\right).
         \label{eq:canonical_projector_decomp}
     \end{align}
-    Moreover, there are isometries $V_k:\C^{D_k}\to\C^D$ with pairwise
+    In addition, there are isometries $V_k:\C^{D_k}\to\C^D$ with pairwise
     orthogonal ranges such that
     \begin{align}
         A^iV_k

@@ -4,69 +4,163 @@
 \usepackage[hidelinks]{hyperref}
 \input{command}
 
-\title{Angular Annular Geometry in the Multiscale Information Induction}
+\title{Angular Information from the Global Spectral Gap}
 \author{}
-\date{2026-10-14}
+\date{2026-10-15}
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source proposition}
 
-Proposition~3.4 of the September~24, 2026 polynomial-PEPS
-manuscript~\cite{OpenAI2026PolynomialPEPS}
-(\texttt{02-information.tex}, lines 662--744, at revision
-\texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}) establishes a multiscale
-mutual-information bound for a planar region $X\subset\mathbb R^2$ of
-$\ell_\infty$-diameter $\operatorname{diam}_{\infty}(X)\le A_0n$ at scale $n>0$
-relative to a set $\mathcal V\subset\mathbb R^2$ of at most $m_0$ marked
-points, with angular clearance parameter $a'>0$. Using the $\ell_\infty$-metric
-on $\mathbb R^2$, the proof decomposes $X$ across dyadic scales according to
-the capped distance $\min\{n,d_{\mathcal V}(y)\}$ to $\mathcal V$, covers each
-scale by translated grid cells of side length $d$ times the dyadic scale, and
-maintains a mutual-information invariant by alternating single-cell additions
-(Lemma~3.2) with physical information resets across buffers of relative width
-$c_*=a'/3$ (Lemma~3.3).
+Proposition~3.4 of the polynomial-PEPS manuscript~\cite{OpenAI2026PolynomialPEPS}
+concerns the original normalized ground state $\Omega$ on the open square
+$\Lambda_L$. The source is \path{02-information.tex}, lines 635--785, at
+revision \nolinkurl{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
+Fix the model parameters, $a>0$, $A_0\ge1$, $m_0\in\mathbb N$, and $p>0$.
+The proposition chooses $D$ and $L_0$ before the Hamiltonian, the marked
+points, and the physical regions. For $L\ge L_0$, let $\mathcal V$ contain
+at most $m_0$ marked points and let $X,E\subseteq\Lambda_L$ be disjoint.
+Suppose $D\log L\le n\le A_0L$, $\operatorname{diam}_\infty X\le A_0n$, and, for every $x\in X$,
+\begin{align}
+    \operatorname{dist}_\infty(x,E)
+     & \ge a\max\{D\log L,\min(n,d_{\mathcal V}(x))\}
+    ,
+    \notag
+\end{align}
+where $d_{\varnothing}=+\infty$. Then $I_\Omega(X:E)\le L^{-p}$.
 
-\section{What is proved}
+The proof chooses $a'<\min(a/100,1/100)$ and $0<d<a'/4$.
+It processes dyadic scales $s_j=2^{-j}n$ and combines the conditional
+information estimate of Lemma~3.2 with the physical reset of Lemma~3.3.
+All distances and enlargements use the ambient $\ell_\infty$ metric
+before the regions are intersected with the physical lattice.
 
-Only the geometric and numerical parts of Proposition~3.4 are formalized so
-far. The formalization defines the dyadic scales, the outer, intermediate, and
-final annular layers at each scale, their cumulative $\ell_\infty$-separation,
-the covering by translated grid cells, the containment of the previous scale's
-group, and the physical core buffers. Every neighborhood enlargement is taken
-in the ambient plane $\mathbb R^2$ before intersecting with the physical
-lattice domain. When $\mathcal V=\emptyset$, the capped distance
-$\min\{n,d_{\mathcal V}(y)\}$ is set equal to $n$, so at depth zero the sole
-layer is all of $X$.
+\section{Established geometric and information estimates}
 
-From the diameter bound $\operatorname{diam}_{\infty}(X)\le A_0n$ and the
-marked-point bound $|\mathcal V|\le m_0$, with $R=\max\{A_0,2\}$, the number of
-grid cells newly adjoined at a dyadic scale is bounded above by
-\begin{align*}
- (m_0+1)\left(2\left\lceil\frac{R+3a'/2}{d}\right\rceil_{+}+3\right)^2.
-\end{align*}
-This bound is uniform in the marked-point locations, the grid origin, the
-dyadic scale, the shapes of the layers, and the physical lattice domain, and
-requires no separate bound on the cardinality of the previous scale's group.
-The uniform numerical reset-width estimate is also proved at $c_*=a'/3$.
+The dyadic layers, their cumulative separation, the containment of the
+previous scale's selected group, and the physical core buffers are proved.
+The first and sole layers are included. When the marked set is empty, the
+capped distance is $n$, in agreement with the source convention.
+Writing $R=\max\{A_0,2\}$, the number of newly selected grid cells at any
+scale is at most
+\begin{align}
+    (m_0+1)\left(2\left\lceil\frac{R+3a'/2}{d}\right\rceil_{+}+3\right)^2.
+    \notag
+\end{align}
+This estimate is uniform in the grid origin, scale, marked points,
+physical domain, and shapes of the layers. It requires no bound on the
+number of cells in the previous group.
 
-\section{Effect on the paper and what remains}
+The physical reset in Lemma~3.3 is proved using only the original
+full-system spectral gap. For fixed model parameters and $p>0$, it gives
+constants $C_p>0$ and $L_0$. If $I_\Omega(R:C)\le b$, with $b\ge0$ and
+$R,C$ disjoint, then cores $R_0\subseteq R$, $C_0\subseteq C$ satisfy
+$I_\Omega(R_0:C_0)\le L^{-p}$ when each core is at distance greater than
+$C_p(1+b+\log L)$ from the corresponding physical complement.
+The uniform numerical comparison with an available buffer $a's/3$ is
+also proved.
 
-The formalized geometric decomposition matches the paper's construction
-without extra hypotheses, but it establishes only the geometric and counting
-steps of Proposition~3.4. The quantum information steps remain open:
-\begin{itemize}
-\item Conditional mutual information of one cell, Lemma 3.2, tracked by
-  \href{https://github.com/LionSR/TNLean/issues/9340}{issue 9340}.
-\item The physical information reset, Lemma 3.3, tracked by
-  \href{https://github.com/LionSR/TNLean/issues/9341}{issue 9341}.
-\item Combining these analytic inputs with the cell additions and the
-  reset at each scale to obtain the mutual-information invariant and
-  Proposition 3.4, tracked by
-  \href{https://github.com/LionSR/TNLean/issues/8766}{issue 8766}.
-\end{itemize}
+There is also a finite entropy identity for adding cells. If the
+conditional information contributed by cell $G_i$ is at most $c_i$ for
+every possible group of preceding cells, then
+\begin{align}
+    I_\Omega\left(B\cup\bigcup_{i\in S}G_i:C\right)
+     & \le I_\Omega(B:C)+\sum_{i\in S}c_i.
+    \notag
+\end{align}
+It follows by induction from the entropy chain identity and remains valid
+for overlapping regions and unnormalized vectors.
+
+\section{The conditional cell estimate}
+
+The intermediate cell estimate assumes the sublinear collar bound of the
+area-law manuscript, Proposition~9.6~\cite{OpenAI2026AreaLaw}.
+For a fixed positive clearance ratio $c$, it gives constants $C_1>0$ and
+$K\ge0$ such that
+\begin{align}
+    I_\Omega(G:E\mid B) & \le C_1(1+\log s)^K
+    \notag
+\end{align}
+for every cell of side $s\ge1$. Here $G$ is the physical sample of that
+cell, $B$ is the physical sample of an arbitrary union of other cells,
+$E\subseteq(G\cup B)^c$, and the distance from the full closed ambient
+cell to $E$ is at least $cs$. The constants precede the cell, grid origin,
+conditioning cells, finite domain, Hamiltonian, and ground vector.
+The proof uses the two ordered families of tiles, restricts their
+partition to the physical sites without changing the order, and bounds
+the residual entropy by its cardinality times $\log q$.
+
+The collar bound is an explicit hypothesis of this intermediate result.
+Consequently, the conditional estimates are stated separately from
+Lemma~3.2 and Proposition~3.4 under their original model and spectral-gap
+hypotheses. The removal of this premise is described below.
+
+\section{Completion of the source statement}
+
+The conditional cell estimate has also been transferred to the original
+square-grid coordinates. Relabeling sites and translating the grid origin
+by $-(1,1)$ preserve the same ground vector, full-system gap, physical
+regions, and closed-cell separation.
+
+The conditional deduction uses a uniform reset at a single scale.
+Fix the geometric ratios $a',d$, a cell-count bound $N$, and $p>0$.
+The cell estimate and the original-gap reset determine constants
+$C_1,K,C_p$ before the system size, state, regions, and scale.
+The scalar estimate then chooses $D\ge1$ and $L_0\ge e$ so that, for
+all $L\ge L_0$ and $s\ge D\log L$,
+\begin{align}
+    C_p\bigl(1+L^{-p}+NC_1(1+\log(ds))^K+\log L\bigr)
+     & < a's/3.
+    \notag
+\end{align}
+The ambient clearance $(a/2-3a'-d)s$ is positive. It gives disjointness
+of the selected region and the enlarged exterior, while both cores have
+the required buffer. The information of the old group and every new-cell
+estimate concern the same original vector and the same enlarged exterior.
+This yields the next core estimate with error $L^{-p}$, including zero
+new cells and empty physical regions.
+
+In the finite annular induction, the first old group is empty, and the
+previous selected group and enlarged exterior lie in the preceding cores.
+Thus the error is restored to $L^{-p}$ at every scale. The exact count
+above is the only count of new cells; no factor depending on the number
+of scales is introduced. At the last scale, the cumulative set equals
+$X$, and monotonicity removes both paddings. The empty marked set and
+one-layer case are included.
+
+The resulting conditional theorem fixes $q\ge1$, $J\ge0$, $\Delta>0$
+and the collar hypothesis, and retains all the geometric and uniformity
+quantifiers of Proposition~3.4. The original unit ground vector and its
+full-system gap are unchanged throughout the deduction. It is a separate
+conditional theorem.
+
+The physical sublinear collar theorem now derives the collar bound from
+the original Hamiltonian and full-system gap assumptions for every
+$q\ge1$, $J\ge0$, $\Delta>0$, real clearance $D_0>2R+10$ and
+$C_{\rm tpl}\ge24$. Taking $R=1$, $D_0=13$ and $C_{\rm tpl}=24$ therefore
+supplies the exact premise of both conditional estimates. These constants
+are fixed before every scale, grid, Hamiltonian, ground vector and region.
+Thus the deduction introduces neither an area-law hypothesis nor an
+independent information bound.
+
+The resulting theorems establish Lemma~3.2 and Proposition~3.4 under
+exactly their original model and spectral-gap hypotheses. Their formal
+statements are
+\leanid{TNLean.PEPS.Approximation.exists_cell_conditionalMutualInformation_le_square}
+and \leanid{TNLean.PEPS.Approximation.angularInformationBound}.
+The state, conditioning cells, exterior region and marked points remain
+arbitrary as in the source. The cases $q=1$, $J=0$ and empty physical
+regions are included.
+
+The cell estimate is tracked by
+\href{https://github.com/LionSR/TNLean/issues/9340}{issue 9340};
+the complete angular estimate is tracked by
+\href{https://github.com/LionSR/TNLean/issues/8766}{issue 8766}.
+This resolves the collar restriction in the two information estimates.
+The finite-domain area law and the construction of the dyadic preparation
+protocol remain separate results.
 
 \bibliographystyle{alpha}
 \bibliography{references}

@@ -451,6 +451,32 @@ no holes, this is the normalization of $\Omega$.
     $\epsilon_0\le1/20004$.
 \end{proof}
 
+\begin{lemma}[The parties of a junction resize]
+    \label{lem:peps_protocol_junction_resize_parties}
+    \lean{TNLean.PEPS.Approximation.DyadicJunction.index,
+        TNLean.PEPS.Approximation.eventUses_labelParty_protocolLevelLabels_junction,
+        TNLean.PEPS.Approximation.coe_subset_eventUses_of_junctionWindow,
+        TNLean.PEPS.Approximation.coe_subset_eventUses_of_junctionWindow_placeholder}
+    \leanok
+    \uses{def:peps_dyadic_protocol_parties, def:peps_dyadic_used_parties}
+    Consider the resize at a grid corner $(2^ju,2^jv)$, at the end of the pass to
+    level $2^j$, when every block of side $2^j$ of the root square carries its new
+    label, and read the labels as parties through the party map of any repainting
+    $R$. The label of a block of the root square among the nine blocks whose indices
+    differ by at most one from $(u-1,v-1)$ in each coordinate is held by a block party
+    that the resize uses. Hence a set of parties of such labels, as produced by the
+    step theorem of the resize once the blocks outside the root square are discarded,
+    consists of parties used by the resize; without discarding them, the only further
+    party is the placeholder party of $R$, which holds the label of every block
+    outside the root square (\texttt{06-geometry.tex}, lines 91--100, 127--131,
+    529--541 and 594).
+\end{lemma}
+
+\begin{proof}\leanok
+    A block of the root square carries the new label of its own block party, of
+    scale $j$, and its indices lie between $u-2$ and $u$, and between $v-2$ and $v$.
+\end{proof}
+
 \begin{theorem}[Bounded changes along the schedule]
     \label{thm:peps_protocol_bounded_trajectory}
     \lean{TNLean.PEPS.EncodedFrame.exists_steps_of_hasBoundedChange,
