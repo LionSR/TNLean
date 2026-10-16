@@ -247,7 +247,8 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
 \begin{definition}[Inclusions between generations]
     \label{def:area_law_repair_inclusions}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairNextOldInclusion,
-        TNLean.PEPS.AreaLaw.Geometry.repairStageOldInclusion}
+        TNLean.PEPS.AreaLaw.Geometry.repairStageOldInclusion,
+        TNLean.PEPS.AreaLaw.Geometry.repairRegionLift_eq_oldInclusion}
     \leanok
     \uses{def:area_law_repair_stage}
     Let $I_j$ be the identifier family at generation $j$ of the actual
@@ -261,6 +262,54 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
         \label{eq:area_law_repair_inclusions}
     \end{align}
 \end{definition}
+
+% Source: 10-geometry.tex, replacement instructions, lines 398--409;
+% comparisons with later actual regions, lines 584--591.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Decrease of retained current regions]
+    \label{thm:area_law_repair_current_inclusion_subset}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_current_oldInclusion_subset}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions}
+    Let $R_i^{(j)}$ be the current regions of the actual repair family.
+    For all $j,n\ge0$ and $i\in I_j$,
+    \begin{align}
+        R_{\iota_{j,j+n}(i)}^{(j+n)} & \subseteq R_i^{(j)}.\notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:area_law_repair_successor_regions,def:area_law_repair_inclusions}
+    Induct on $n$. At $n=0$ the inclusion is the identity. At each
+    successor step, the retained current region loses the removal union,
+    and is therefore contained in the current region at the preceding
+    generation. The induction hypothesis completes the proof.
+\end{proof}
+
+% Source: 10-geometry.tex, replacement instructions, lines 398--409;
+% current regions, lines 558--561.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Current regions under successive inclusions]
+    \label{thm:area_law_repair_current_inclusion_add}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_current_oldInclusion_add}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions}
+    Let $R_i^{(j)}$ be the current regions of the actual repair family.
+    For all $j,n,m\ge0$ and $i\in I_j$,
+    \begin{align}
+        R_{\iota_{j,j+(n+m)}(i)}^{(j+(n+m))}
+         & =R_{\iota_{j+n,(j+n)+m}(\iota_{j,j+n}(i))}^{((j+n)+m)}.\notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:area_law_repair_successor_regions,def:area_law_repair_inclusions}
+    Induct on $m$. The case $m=0$ follows from the identity inclusion.
+    At the next step, each retained region loses the removal union at
+    its current generation. The induction hypothesis identifies the two
+    current regions, and $j+(n+m)=(j+n)+m$ identifies the removal unions.
+    Subtracting these equal unions gives the claimed equality.
+\end{proof}
 
 % Source: 10-geometry.tex, replacement instructions, lines 398--409;
 % termination, lines 538--541; current regions, lines 558--561.
