@@ -255,3 +255,40 @@ without asserting uniqueness or smooth dependence of a minimizer on $R$.
     logarithm on the positive real numbers gives
     $\log N\le\log F(x)$, with equality at $x_*$.
 \end{proof}
+
+\begin{theorem}[Cylinder approximation from ordered inverse filters]
+    \label{thm:peps_patch_inverse_cylinder}
+    \lean{TNLean.PEPS.exists_mem_iSup_dependentRegionCylinder_norm_sub_le}
+    \leanok
+    \uses{def:peps_regularized_patch_objective,def:peps_regional_cylinder}
+    Let $X_0\subseteq\cdots\subseteq X_{m-1}$, let $a_j\ge0$ and $b>0$, put
+    $A=\sum_ja_j$, and let $\Omega$ be a unit vector. For every
+    $x\in\mathcal D$ there are subspaces $S_j\subseteq\mathcal H_{X_j}$ with
+    $\dim S_j\le1/b$ and a vector
+    $v\in\sum_j\mathcal C_{X_j}(S_j)$ such that
+    \begin{align}
+        \|\Omega-v\| & \le F(x)\,(2b)^{A/2}.
+        \label{eq:peps_patch_inverse_cylinder}
+    \end{align}
+    The tuple $x$ need not be a minimizer. Repeated regions, zero weights,
+    singular densities and $m=0$ are admitted. This is the first-head
+    expansion in the
+    \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L484-L532}{proof of Proposition 4.1}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_regional_extension_algebra,
+        thm:peps_regional_extension_norm,thm:peps_cylinder_projector}
+    Split $(x_j+bI)^{a_j/2}=H_j+T_j$ into the spectral part on eigenvalues
+    of $x_j$ at least $b$ and the remaining part. Since $x_j$ has trace one,
+    $\operatorname{rank}H_j\le1/b$, and $\|T_j\|\le(2b)^{a_j/2}$. The
+    product $(x_0+bI)^{a_0/2}\cdots(x_{m-1}+bI)^{a_{m-1}/2}$ inverts the
+    filter product $M(x)$, so $\Omega$ is this product applied to
+    $\Psi(x)$. Expand it according to the first index $j$ at which a head
+    $H_j$ occurs. The preceding tails act inside $X_j$ because the regions
+    are nested, so the $j$th term lies in the cylinder over the range
+    $S_j$ of $T_0\cdots T_{j-1}H_j$ on $X_j$, whose dimension is at most
+    $\operatorname{rank}H_j$. The remaining term contains only tails and
+    has norm at most $(2b)^{A/2}\|\Psi(x)\|$, which gives
+    (\ref{eq:peps_patch_inverse_cylinder}).
+\end{proof}
