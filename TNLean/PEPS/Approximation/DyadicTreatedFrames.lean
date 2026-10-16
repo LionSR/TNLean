@@ -132,7 +132,7 @@ change whose participants the repainting uses, with the bounds of the small-patc
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 328–339, 481–505, 559–570 and 572–596. -/
 theorem exists_pointTreatment_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε₀)
     (hε₀ : ε₀ ≤ 1 / 16) :
-    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {K₀ a D B₀ : ℝ},
+    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
       IsProtocolConstants K₀ ε₀ ν a D B₀ → ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q} {C c : ℝ},
       2 ≤ L → ‖Ω‖ = 1 →
       ∀ (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
@@ -152,7 +152,7 @@ theorem exists_pointTreatment_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε
         (2 * protocolPatchBound ε₀ ν) (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L)
         (2 * protocolPatchBound ε₀ ν) ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹) := by
   obtain ⟨ν', hν', H⟩ := exists_pointTreatment_step_supplied hε hε₀
-  refine ⟨ν', hν', fun ν hν hνν' {K₀ a D B₀} hc {L q} _ {Ω C c} hL hΩ P rank R hlarge done g hg
+  refine ⟨ν', hν', fun ν hν hνν' {k K₀ a D B₀} hc {L q} _ {Ω C c} hL hΩ P rank R hlarge done g hg
     {M M'} Q₀ hQ₀ hM L₀ hL₀ hr {C' c'} hC hC' hcc => ?_⟩
   classical
   set n : ℝ := (2 : ℝ) ^ (R.1.1 : ℕ) with hn_def

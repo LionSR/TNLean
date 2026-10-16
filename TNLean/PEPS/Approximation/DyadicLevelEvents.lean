@@ -229,7 +229,7 @@ change is the identity.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 102–133, 529–541, 559–570 and 572–596. -/
 theorem exists_resize_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε₀ ≤ 1 / 16) :
-    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {K₀ a D B₀ : ℝ},
+    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
       IsProtocolConstants K₀ ε₀ ν a D B₀ → ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q} {C c : ℝ},
       2 ≤ L → L ≤ 2 ^ k → ‖Ω‖ = 1 →
       ∀ (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
@@ -249,7 +249,7 @@ theorem exists_resize_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε₀) (h�
         (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L) (2 * protocolPatchBound ε₀ ν)
         ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹) := by
   obtain ⟨ν', hν', H⟩ := exists_resize_step_supplied hε hε₀
-  refine ⟨ν', hν', fun ν hν hνν' {K₀ a D B₀} hc {L q} _ {Ω C c} hL hkL hΩ P rank R₀ J hJ A hρ
+  refine ⟨ν', hν', fun ν hν hνν' {k K₀ a D B₀} hc {L q} _ {Ω C c} hL hkL hΩ P rank R₀ J hJ A hρ
     hρ' {C' c'} hC hC' hcc Fs => ?_⟩
   set n : ℝ := (2 : ℝ) ^ ((J.1 : ℕ) - 1) with hn_def
   set t := D * Real.log L with ht_def
