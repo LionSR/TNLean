@@ -162,7 +162,7 @@ theorem length_holes_protocolFrozen_le {K₀ ν a D : ℝ} (hc : IsProtocolConst
       simpa [largeSquare] using hlS
     obtain ⟨hf, hmem, hd, hF⟩ := treatedFrame_spec (q := q) P rank R hc hL hl done
       (Or.inr (Or.inr (Or.inr (Or.inr ⟨e, _, Or.inr (Or.inr (Or.inr (Or.inr rfl))), rfl⟩))))
-      ∅ ((repaintBaseline R done).nbrLabel e) hr
+      ∅ ((repaintBaseline R done).nbrLabel e)
     rw [hF, length_holes_guideFrame]
     set G := shiftGuide (blockCorner ((2 : ℝ) ^ (R.1.1 : ℕ)) R.1.index)
       ((repaintBaseline R done).auxGuide e (auxWordExchanged (repaintBaseline R done).oldLabel

@@ -134,7 +134,7 @@ memory from its state before the event to its state after it.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 82–100, 142–221, 572–583 and 653–667. -/
 theorem exists_largeRepainting_segment (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀')
-    (hLL : L₀' ≤ L) (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hΩ1 : ‖Ω‖ ≤ 1) (hm₀ : 4 ≤ m₀)
+    (hLL : L₀' ≤ L) (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 4 ≤ m₀)
     (hA₀ : 1 ≤ A₀) (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hkL : L ≤ 2 ^ k)
     (hk2 : 2 ^ k < 2 * L) (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L)
     (rank : GuideLabel → ℕ) (R₀ : RepaintedSquare k) (ht : 0 < D * Real.log L)
@@ -186,7 +186,7 @@ theorem exists_largeRepainting_segment (hD : IsAngularScale q J Δ a A₀ m₀ 6
     unfold auxState
     rw [ite_eq_right hnotin]
     exact congrArg Frame.raw (funext fun _ => howner hS e)
-  obtain ⟨seg, h0, h1, hseg⟩ := isStepChain_largeRepainting hD hLL hΩ hΩ1 hm₀ hA₀ hc hL hk2 P
+  obtain ⟨seg, h0, h1, hseg⟩ := isStepChain_largeRepainting hD hLL hΩ hm₀ hA₀ hc hL hk2 P
     rank R hl done hr hb hK (hpt hS) (nodup_auxIndices large) xs hxs hinj hA
     (repaintBaseline R done).oldLabel (repaintBaseline R done).oldLabel
   refine ⟨seg, ?_, ?_, hseg⟩
@@ -194,13 +194,13 @@ theorem exists_largeRepainting_segment (hD : IsAngularScale q J Δ a A₀ m₀ 6
     simp only [protocolState]
     refine congrArg₂ (· :: ·) ?_ rfl
     rw [mainState_of_lt _ _ _ _ _ _ hi, he]
-    exact (levelFrame_eq_treatedFrame_guide P rank R hc hL hkL hl R₀ done hr hρ _).symm
+    exact (levelFrame_eq_treatedFrame_guide P rank R hc hL hkL hl R₀ done _).symm
   · rw [h1]
     simp only [protocolState]
     refine congrArg₂ (· :: ·) ?_ ?_
     · rw [← eventMain_inl_succ P rank R₀ hc.ε₀_pos ht hB hk hi he]
       exact treatedFrame_completedGuide_eq_levelFrame P rank R hc hL hkL hl R₀ done
-        (fun e => by cases e <;> simp) hr hρ _
+        (fun e => by cases e <;> simp) _
     · refine List.map_congr_left fun y hy => ?_
       have hsucc : ∀ y : ProtocolEvent k × RepaintOp,
           y.1 ∈ (eventSchedule k).take (i + 1) ↔ y.1 ∈ (eventSchedule k).take i ∨ y.1 = .inl S :=

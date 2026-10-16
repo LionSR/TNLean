@@ -151,7 +151,7 @@ theorem largeSizeDyadicProtocolConsequences_of_angularInformationBound
     intro i hi S he hl
     have hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (S.1 : ℕ) := by
       simpa [largeSquare] using hl
-    exact exists_largeRepainting_segment hD hLL hΩ hΩ1.le le_rfl le_rfl hc hL hkL hk2 P rank R₀ ht
+    exact exists_largeRepainting_segment hD hLL hΩ le_rfl le_rfl hc hL hkL hk2 P rank R₀ ht
       hB (protocolFrozen P rank hr) protocolAuxOwner hi he hl (by omega) hK1
       (fun hS => by
         intro g hg M M' Q₀ hQ hM L₀ hL₀

@@ -57,7 +57,7 @@ auxiliary words.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 142–221, 328–339 and 572–583. -/
 theorem isStepChain_largeRepainting (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀')
-    (hLL : L₀' ≤ L) (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hΩ1 : ‖Ω‖ ≤ 1) (hm₀ : 4 ≤ m₀)
+    (hLL : L₀' ≤ L) (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 4 ≤ m₀)
     (hA₀ : 1 ≤ A₀) (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hk2 : 2 ^ k < 2 * L)
     (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
     (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
@@ -79,6 +79,7 @@ theorem isStepChain_largeRepainting (hD : IsAngularScale q J Δ a A₀ m₀ 60 D
           (xs .bottom) (auxFinal P rank R hr done .bottom)) (xs .right)
             (auxFinal P rank R hr done .right)) (xs .top) (auxFinal P rank R hr done .top))
               (xs .left) (auxFinal P rank R hr done .left))) := by
+  have hΩ1 : ‖Ω‖ ≤ 1 := hΩ.1.le
   set Bl := repaintBaseline R done
   have hne : ∀ {e e' : SquareEdge}, e ≠ e' → xs e ≠ xs e' := fun h h' => h (hinj h')
   have c₀ := isStepChain_main l A hΩ1 (isStepChain_centralBirth hD hLL hΩ hm₀ hA₀ hc hL hk2 P
@@ -87,7 +88,7 @@ theorem isStepChain_largeRepainting (hD : IsAngularScale q J Δ a A₀ m₀ 60 D
   have edge := fun {E : List SquareEdge} {e : SquareEdge} (he : e ∉ E)
       {A' : X → Frame (cellCenterPos L) q (ProtocolParty k)}
       (hA' : A' (xs e) = Frame.raw fun _ => labelParty R (Bl.nbrLabel e)) (L₁ L₂ : GuideLabel) =>
-    isStepChain_edgeConstruction hD hLL hΩ hΩ1 (by omega) hA₀ hc hL hk2 P rank R hlarge done he
+    isStepChain_edgeConstruction hD hLL hΩ (by omega) hA₀ hc hL hk2 P rank R hlarge done he
       hr hb hK hpt hl (hxs e) hA' L₁ L₂
   have c₁ := edge (E := []) (e := .bottom) (by simp) (hA .bottom) Bl.oldLabel Bl.oldLabel
   have c₂ := edge (E := [.bottom]) (e := .right) (by simp) (A' := Function.update A (xs .bottom)
