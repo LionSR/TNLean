@@ -147,7 +147,7 @@ def native_check(output: Path) -> dict[str, object]:
             body = body.replace(r"\end{tenkzequation}", r"\end{tenkzeq}")
             body = body.replace(F_COEFFICIENT, "=").replace("$=$", "=")
         source = ("\\documentclass{article}\n\\usepackage{amsmath,amssymb}\n"
-                  "\\usepackage{tenkz}\n\\pagestyle{empty}\n" + wrapper.group(0)
+                  "\\usepackage{tikz-tensor-networks}\n\\pagestyle{empty}\n" + wrapper.group(0)
                   + "\n\\begin{document}\n" + body + "\n\\end{document}\n")
         tex = output / f"mixed-symbols-{mode}.tex"
         tex.write_text(source, encoding="utf-8")
