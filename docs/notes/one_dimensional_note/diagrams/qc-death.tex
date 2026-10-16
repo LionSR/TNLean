@@ -1,0 +1,11 @@
+% alt: Four wires T, B_T, U, E; the isometry V on U creates the wire B_T, the shared covector <s| contracts T and B_T, the private vector |s> re-creates them, and V^dagger on U and B_T removes B_T again; T is owned by Q_circ on the left and by P_circ on the right.
+% Section 9, Lemma lem:birth (death; part2b_mps_protocol.tex, proof, last sentence): B = \mathcal V^\dagger \Pi \mathcal V with \mathcal V = id_{TE} (x) V and \Pi = |s><s|_{T B_T} (x) id_{E B_E}, the death being the same operator B as the birth with reversed ownership of T.
+% Ink-to-index: the top wire is T (owned by Q_circ before, by P_circ after), the second wire is B_T (exists only between V and V^dagger, always at P_circ), the third wire is U (at P_circ), the fourth wire is E (the sites not owned by P_circ; B_E is absorbed in U); V is the two-wire gate on U creating B_T, <s| the shared two-wire covector on T B_T (T held by Q_circ, B_T by P_circ), |s> the private two-wire vector on T B_T wholly at P_circ, V^dagger the two-wire gate on B_T, U. Read left to right: V acts first, then <s|, then |s>, then V^dagger; all four wires are open (B is an operator applied to the reference vector Omega).
+\[
+  \begin{quantikz}[column sep=0.45cm]
+    \lstick{$T\ (Q_\circ)$} & & & \gate[2]{\langle s|}\gategroup[2,steps=1,style={draw=none,inner sep=0pt},label style={label position=above,anchor=south,yshift=0.05cm}]{\scriptsize shared $Q_\circ,P_\circ$} & \gate[2]{|s\rangle}\gategroup[2,steps=1,style={draw=none,inner sep=0pt},label style={label position=above,anchor=south,yshift=0.05cm}]{\scriptsize private $P_\circ$}\setwiretype{n} & \setwiretype{q} & & & \rstick{$T\ (P_\circ)$} \\
+    \setwiretype{n} & & \gate[2]{V} & \setwiretype{q} & \setwiretype{n} & \setwiretype{q}\gate[style={draw=none,inner sep=0pt,minimum width=0pt,minimum height=0pt,label={[label distance=1pt]above:$\scriptstyle\mathcal B_T$}}]{} & \gate[2]{V^{\dagger}} & \setwiretype{n} & \\
+    \lstick{$U\ (P_\circ)$} & & & & & & & & \rstick{$U\ (P_\circ)$} \\
+    \lstick{$E$} & & & & & & & & \rstick{$E$}
+  \end{quantikz}
+\]

@@ -102,6 +102,9 @@ def main() -> None:
             continue
         text = (HERE / part).read_text()
         if f"\\label{{fig:{name}}}" in text:
+            # already placed: refresh the figure copy from the (possibly revised) source
+            (HERE / "diagrams" / "fig").mkdir(exist_ok=True)
+            (HERE / f"diagrams/fig/{name}.tex").write_text(body_for_figure(src, inline) + "\n")
             continue
         key = f"diagrams/{name}.svg"
         caption = override or CAPTIONS.get(key, "")

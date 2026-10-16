@@ -78,13 +78,31 @@ $T\cB_T$ held by $Q_\circ,P_\circ$, reinsert $s$ wholly at $P_\circ$, and
 apply $V^\dagger$: the same operator $B$ with reversed ownership.
 \end{proof}
 
+\begin{figure*}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/qc-birth.tex}
+\end{adjustbox}
+\caption{The birth circuit, read left to right: $V$ splits the buffer, $\langle s|$ closes $T$ and its purifier, a fresh pair $s$ re-emits them with $T$ held by the new owner, and $V^\dagger$ recombines.}\label{fig:qc-birth}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/qc-death.tex}
+\end{adjustbox}
+\caption{The death circuit: the same operator with the ownership reversed, using the shared covector $\langle s|$ across the two owners and a private re-insertion of $s$.}\label{fig:qc-death}
+\end{figure*}
+
 \begin{lemma}[Two-sheet exchange]\label{lem:exchange}
 Consider two sheets and an interval $Y\subseteq\Lam$. Inside $Y$ exchange
 the two ownership assignments (sheet 1 at $x\in Y$ gets the owner sheet 2
 had, and conversely); outside $Y$ keep both. Let $P_\circ$ be a party,
 \[
- Z=\{x:\text{the two owners of }x\text{ are not both }P_\circ\},\qquad
- T=Z\cap Y,\quad E=Z\setminus Y,\quad U=\Lam\setminus Z .
+\begin{split}
+ &Z=\{x:\text{the two owners of }x\text{ are not both }P_\circ\},\\
+ &T=Z\cap Y,\quad E=Z\setminus Y,\quad U=\Lam\setminus Z .
+\end{split}
 \]
 If $I_\Om(T:E)\le L^{-2p}$, the exchange is implemented by renaming of
 registers (no register changes party) and private contractions at
@@ -112,12 +130,22 @@ $\norm{(\mathcal V\Om)^{\otimes2}-\zeta^{\otimes2}}\le2\delta$, $\zeta^{\otimes2
 is fixed by $F_{T\cB_T}$ (it swaps two identical factors $s$), and
 $(\mathcal V^{\otimes2})^\dagger\mathcal V^{\otimes2}=\id$, so
 \[
- \bigl\|(\mathcal V^{\otimes2})^\dagger F_{T\cB_T}\mathcal V^{\otimes2}\Om^{\otimes2}-\Om^{\otimes2}\bigr\|
- \le\norm{(F_{T\cB_T}-\id)\bigl((\mathcal V\Om)^{\otimes2}-\zeta^{\otimes2}\bigr)}\le4\delta .
+\begin{split}
+ &\bigl\|(\mathcal V^{\otimes2})^\dagger F_{T\cB_T}\mathcal V^{\otimes2}\Om^{\otimes2}-\Om^{\otimes2}\bigr\|\\
+ &\qquad\le\norm{(F_{T\cB_T}-\id)\bigl((\mathcal V\Om)^{\otimes2}-\zeta^{\otimes2}\bigr)}\le4\delta .
+\end{split}
 \]
 In canonical coordinates both the old and the new reference vector are
 $\Om\otimes\Om$ (the sheets are relabeled, not moved), which is the claim.
 \end{proof}
+
+\begin{figure*}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/qc-exchange.tex}
+\end{adjustbox}
+\caption{The exchange correction on the two sheets: after renaming the registers inside $Y$, the common owner applies $V$ to both buffers, swaps the two purifying factors, and applies the adjoints, which realizes the partial swap on $T$ up to $4L^{-p}$.}\label{fig:qc-exchange}
+\end{figure*}
 
 \begin{remark}
 In the two-dimensional source these lemmas carry encoded holes and tags at
@@ -193,8 +221,10 @@ most two apart, and a bounded number of links cross each bond.
 Fix $p=12$. Let $D_{24}$ be the constant of Lemma~\ref{lem:logsep} with
 exponent $2p=24$ and $k_0=1$, and put
 \begin{equation}\label{eq:blocks}
- w=\lceil D_{24}\log L\rceil,\qquad t=20w,\qquad
- k_*=\max\{k\ge0:\ L-kt\ge 3t\},
+\begin{split}
+ &w=\lceil D_{24}\log L\rceil,\qquad t=20w,\\
+ &k_*=\max\{k\ge0:\ L-kt\ge 3t\},
+\end{split}
 \end{equation}
 with the blocks $B_i=[(i-1)t+1,\,it]$ for $1\le i\le k_*$ and the last block
 $B_{k_*+1}=[k_*t+1,L]$, of length in $[3t,4t)$. We assume $L$ large enough

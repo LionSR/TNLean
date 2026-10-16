@@ -1,0 +1,13 @@
+% alt: Two sheets, each with wires T and U; V acts on U of each sheet and creates the wire B_T; the T wires of the two sheets are swapped, then the two B_T wires are swapped; V dagger on B_T and U of each sheet restores U.
+% Section 9 (part2b_mps_protocol.tex, Lemma lem:exchange, two-sheet exchange inside the interval window Y with T = Z cap Y): the net action D_U F_A F_Y = D_U F_T = (V^{(x)2})^dagger F_{T B_T} V^{(x)2} on the two copies, with V = id_{TE} (x) V from Lemma lem:splitting for (T,U,E) and D_U = (V^{(x)2})^dagger F_{B_T} V^{(x)2} the private contraction at P_circ.
+% Ink-to-index: wires 1 and 4 are T on sheets 1 and 2 (T^{(1)}, T^{(2)}), wires 3 and 6 are U on sheets 1 and 2 (U^{(1)}, U^{(2)}), wires 2 and 5 are B_T on sheets 1 and 2 and exist only between V and V^dagger. Read left to right: the swap of T^{(1)} with T^{(2)} is F_T (the renaming R followed by F_A), V acts on U of both sheets, the swap of the two B_T wires is F_{B_T}, then V^dagger on B_T U of both sheets; all of T and U are at P_circ throughout, E is a spectator and is not drawn; every drawn wire is open at both ends (the composite is an operator on two copies of T U).
+\[
+  \begin{quantikz}
+    \lstick{$T^{(1)}$} & & \swap{3} & & & \rstick{$T^{(1)}$} \\
+    \setwiretype{n} & \gate[2][1.5cm]{V}\gateoutput{$\mathcal B_T$} & \setwiretype{q} & \swap{3} & \gate[2][1.5cm]{V^{\dagger}}\gateinput{$\mathcal B_T$} & \setwiretype{n} \\
+    \lstick{$U^{(1)}$} & & & & & \rstick{$U^{(1)}$} \\
+    \lstick{$T^{(2)}$} & & \targX{} & & & \rstick{$T^{(2)}$} \\
+    \setwiretype{n} & \gate[2][1.5cm]{V}\gateoutput{$\mathcal B_T$} & \setwiretype{q} & \targX{} & \gate[2][1.5cm]{V^{\dagger}}\gateinput{$\mathcal B_T$} & \setwiretype{n} \\
+    \lstick{$U^{(2)}$} & & & & & \rstick{$U^{(2)}$}
+  \end{quantikz}
+\]

@@ -27,10 +27,11 @@ contained in $R+1$ consecutive integers and contains a point on each
 side of one of the two cut edges of $X$, it lies in one of the two windows
 of $2R$ consecutive sites centered at a cut edge. Hence
 \begin{equation}\label{eq:count}
- \#\{Y:\ Y\text{ split by }X\}\le 2\cdot 2^{2R}=:N_R,
- \qquad
- \dim\cH_Y\le q^{R+1},\qquad
+\begin{split}
+ &\#\{Y:\ Y\text{ split by }X\}\le 2\cdot 2^{2R}=:N_R,\\
+ &\dim\cH_Y\le q^{R+1},\qquad
  \ell_R:=\log(\e q^{R+1}),
+\end{split}
 \end{equation}
 and a term $h_Y$ split by $X$ can be expanded by matrix units on
 $Y\cap X$ as
@@ -45,6 +46,14 @@ norm at most $\norm{h_Y}$.) Put
 \begin{equation}\label{eq:BR}
  \cB_R:=1+N_R\,\ell_R^2 .
 \end{equation}
+
+\begin{figure*}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/chain-cuts.tex}
+\end{adjustbox}
+\caption{An interval $X$ of the chain, the two windows of $2R$ sites around its cut edges, and one interaction support $Y$ split by $X$. Every split support lies in a window, which is why their number is bounded by $N_R$.}\label{fig:chain-cuts}
+\end{figure*}
 
 \begin{lemma}[Reductions]\label{lem:reductions}
 It suffices to prove Theorem~\ref{thm:A} for $\Lam$ an interval and $A$
@@ -200,21 +209,41 @@ The gap \eqref{eq:gap} now gives
 $1-\abs{\langle\Om,\Theta\rangle}^2\le 128\,\e\,\vartheta\,\cB_Ru^2\le\frac12$,
 and $\langle\Om,\Theta\rangle=M(u/2)/\sqrt{M(u)}$, so
 \[
- \frac{M(u/2)^2}{M(u)}\ge 1-128\,\e\,\vartheta\,\cB_R u^2,
- \qquad\text{i.e.}\qquad
- L(u)\le 2L(u/2)+256\,\e\,\vartheta\,\cB_Ru^2,
+\begin{split}
+ &\frac{M(u/2)^2}{M(u)}\ge 1-128\,\e\,\vartheta\,\cB_R u^2,
+ \qquad\text{i.e.}\\
+ &L(u)\le 2L(u/2)+256\,\e\,\vartheta\,\cB_Ru^2,
+\end{split}
 \]
 using $-\log(1-v)\le2v$ for $0\le v\le\frac12$. Every halving $u/2^j$
 stays in the admissible interval, so by induction
 \[
- L(u)\le 2^jL(u/2^j)+256\,\e\,\vartheta\,\cB_Ru^2\sum_{i<j}2^{-i}
- \xrightarrow[j\to\infty]{} uS(X)+512\,\e\,\vartheta\,\cB_Ru^2 ,
+\begin{split}
+ &L(u)\le 2^jL(u/2^j)+256\,\e\,\vartheta\,\cB_Ru^2\sum_{i<j}2^{-i}\\
+ &\qquad\xrightarrow[j\to\infty]{} uS(X)+512\,\e\,\vartheta\,\cB_Ru^2 ,
+\end{split}
 \]
 which is \eqref{eq:mgf}. For \eqref{eq:tail}, apply Markov's inequality
 to $\e^{\pm u_0(K-S)}$: the quadratic term at $u=\pm u_0$ equals
 $512\e\vartheta\cB_R/(1024(1+\vartheta)\cB_R)\le\e/2$, so each one-sided
 tail is at most $\e^{\e/2}\e^{-u_0w}$.
 \end{proof}
+
+\begin{figure}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/tilt.tex}
+\end{adjustbox}
+\caption{The tilt as a tensor diagram. Multiplying $\Omega$ on the interval $X$ by $F=\rho_X^{-u/2}$ and tracing out the rest of the chain gives $\sigma=\rho_X^{1-u}/M(u)$. Only interactions crossing the cuts of $X$ fail to commute with $F$, so the tilted state has excitation energy of order $u^2$.}\label{fig:tilt}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/tail-sketch.tex}
+\end{adjustbox}
+\caption{Schematic law of the surprisal. The tails decay exponentially at rate $u_0$; the mass beyond $S(X)+w$ is at most $2e^{e/2}e^{-u_0w}$, and at most $e^{S(X)+w}$ eigenvalues lie to the left of that line. Both facts are reused for the sequential truncation in Part II.}\label{fig:tail-sketch}
+\end{figure}
 
 \begin{remark}[Rényi entropies near one]\label{rem:renyi}
 For $0<u\le u_0$ and $\alpha=1-u$, \eqref{eq:mgf} reads
@@ -281,21 +310,35 @@ invoked.
 Fix $D=R$ (recall $R\ge1$) and an integer $m\ge4$. For an interval $X\subseteq\Lam$
 put
 \[
- X_0=X,\qquad X_j=X^{+jD}\ (1\le j\le m),\qquad T_j=X_j\setminus X,
+\begin{split}
+ &X_0=X,\qquad X_j=X^{+jD}\ (1\le j\le m),\\
+ &T_j=X_j\setminus X,
  \qquad a_j=\frac2m .
+\end{split}
 \]
 Then $T_1\subseteq\cdots\subseteq T_m$, each $T_j$ consists of at most two
 intervals of length at most $jD$, and $\sum_ja_j=2$. Define the constants
 \begin{equation}\label{eq:CE}
- C_E:=8\,N_R\,J\,q^{2(R+1)},\qquad
- m:=\Bigl\lceil\max\Bigl\{4,\ \frac{4C_E}{\Delta},\ 128\sqrt{(1+\vartheta)\cB_R},\
+\begin{split}
+ &C_E:=8\,N_R\,J\,q^{2(R+1)},\\
+ &m:=\Bigl\lceil\max\Bigl\{4,\ \frac{4C_E}{\Delta},\ 128\sqrt{(1+\vartheta)\cB_R},\\
+ &\qquad\qquad\qquad
  4096\,\e\,(1+\vartheta)\,\cB_R\Bigr\}\Bigr\rceil .
+\end{split}
 \end{equation}
 Every entry is at most a constant depending on $q,R$ times $(1+J/\Delta)$,
 so
 \begin{equation}\label{eq:mbound}
  m\le C_1(q,R)\,(1+\vartheta).
 \end{equation}
+
+\begin{figure*}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/chain-shells.tex}
+\end{adjustbox}
+\caption{The interval $X$ and the nested shells $X_1\subset X_2$ of the chain, each $D=R$ sites wider on both sides; the flanks $T_j=X_j\setminus X$ carry the buffer.}\label{fig:chain-shells}
+\end{figure*}
 
 \begin{lemma}[Single splitting]\label{lem:singlesplit}
 A support $Y$ with $\diam_{d_\Lam}Y\le R$ is split by at most one of the
@@ -335,6 +378,14 @@ with $L_j\ge\epsilon\id$ and $\Tr_{\cH_{X_j}}L_j^{2/a_j}=1$. The feasible
 sets are nonempty and compact, every feasible product is invertible, so a
 maximum $N>0$ exists. At an optimum put $K=L_m\cdots L_1$, $\phi=K\Om/N$,
 and $\rho_j=\Tr_{\Lam\setminus X_j}\ket\phi\bra\phi$.
+
+\begin{figure*}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/filter-product.tex}
+\end{adjustbox}
+\caption{The optimized norm. Three positive filters $L_1,L_2,L_3$ act on the nested intervals $X_1\subset X_2\subset X_3$ of the ground vector; each is normalized by $\mathrm{Tr}\,L_j^{2/a_j}=1$.}\label{fig:filter-product}
+\end{figure*}
 
 \paragraph{Stationarity.}
 We claim $[L_j,\rho_j]=0$ for all $j$, by descending induction on $j$. The
@@ -388,8 +439,10 @@ $X_j$, with the $e_i$ chosen in the common eigenbasis of $\rho_j$ and $L_j$
 commute), and $h_{ik}=\langle e_i\otimes f_i,h_Y(e_k\otimes f_k)\rangle$.
 Pairing $(i,k)$ with $(k,i)$ and using $h_{ki}=\overline{h_{ik}}$,
 \[
- \Re\langle\phi,L_jh_YL_j^{-1}\phi\rangle-\langle\phi,h_Y\phi\rangle
- =\sum_{i,k:\,p_ip_k>0}\sqrt{p_ip_k}\,\bigl(\cosh(\log(l_i/l_k))-1\bigr)\Re h_{ik}.
+\begin{split}
+ &\Re\langle\phi,L_jh_YL_j^{-1}\phi\rangle-\langle\phi,h_Y\phi\rangle\\
+ &\qquad=\sum_{i,k:\,p_ip_k>0}\sqrt{p_ip_k}\,\bigl(\cosh(\log(l_i/l_k))-1\bigr)\Re h_{ik}.
+\end{split}
 \]
 Put $z=\frac12\log(p_i/p_k)$. By \eqref{eq:clip} and $a_j\le\frac12$,
 $\cosh(\log(l_i/l_k))-1\le\cosh(a_jz)-1\le\frac12a_j^2z^2\cosh(a_jz)\le\frac12a_j^2z^2\cosh(z/2)$,
@@ -403,8 +456,10 @@ $a_j^2(p_i+p_k)$. Expanding $h_Y$ by \eqref{eq:matrixunits} and using
 \]
 Summing over the at most $N_R$ terms split by each $X_j$,
 \begin{equation}\label{eq:energy}
- 0\le\langle\phi,(H-E_0)\phi\rangle\le\sum_{j=1}^m N_R\cdot 2a_j^2q^{2(R+1)}J
- =\frac{8N_RJq^{2(R+1)}}{m}=\frac{C_E}{m}.
+\begin{split}
+ &0\le\langle\phi,(H-E_0)\phi\rangle\le\sum_{j=1}^m N_R\cdot 2a_j^2q^{2(R+1)}J\\
+ &\qquad=\frac{8N_RJq^{2(R+1)}}{m}=\frac{C_E}{m}.
+\end{split}
 \end{equation}
 By \eqref{eq:gap} and \eqref{eq:CE},
 \begin{equation}\label{eq:overlap}
@@ -417,14 +472,24 @@ $X_k$ with $k>j$ is disjoint from all $X_i$, $i\le j$, so it contributes
 nothing; the prefix energy is bounded by the sum in \eqref{eq:energy}
 restricted to $i\le j$.
 
+\begin{figure*}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/qc-single-split.tex}
+\end{adjustbox}
+\caption{Why the energy is small. An interaction split by $X_j$ is conjugated by exactly one filter: the outer ones are stripped by the trace identity at the optimum, the inner ones commute with it because they live on disjoint sites.}\label{fig:qc-single-split}
+\end{figure*}
+
 \paragraph{Upper bound on the optimum.}
 Let $N_j$ be the optimum for the prefix $1,\dots,j$ at the same floor,
 $N_0=1$, and let $L_j\cdots L_1$ be an optimizer for prefix $j$ with
 $K_{<j}=L_{j-1}\cdots L_1$. By \eqref{eq:overlap} for that prefix and
 Cauchy--Schwarz,
 \[
- \sqrt{1-C_E/(m\Delta)}\;N_j\le\abs{\langle\Om,L_jK_{<j}\Om\rangle}
- =\abs{\langle L_j\Om,K_{<j}\Om\rangle}\le\norm{L_j\Om}\,N_{j-1}.
+\begin{split}
+ &\sqrt{1-C_E/(m\Delta)}\;N_j\le\abs{\langle\Om,L_jK_{<j}\Om\rangle}\\
+ &\qquad=\abs{\langle L_j\Om,K_{<j}\Om\rangle}\le\norm{L_j\Om}\,N_{j-1}.
+\end{split}
 \]
 For any feasible $L_j$, Schatten--Hölder with exponents $\frac1{1-a_j}$ and
 $\frac1{a_j}$ and the constraint $\Tr L_j^{2/a_j}=1$ give
@@ -440,8 +505,10 @@ Using $(1-a_j)u^2\le 2a_j^2$,
 Multiplying the recursion over $j$ and using $-\frac12\log(1-v)\le v$ for
 $v\le\frac12$,
 \[
- \log N\le-\frac12\sum_ja_jS(X_j)+512\,\e\,\vartheta\,\cB_R\sum_ja_j^2+\frac{mC_E}{m\Delta}
- \le -\frac12\sum_ja_jS(X_j)+\frac12+\frac{C_E}{\Delta},
+\begin{split}
+ &\log N\le-\frac12\sum_ja_jS(X_j)+512\,\e\,\vartheta\,\cB_R\sum_ja_j^2+\frac{mC_E}{m\Delta}\\
+ &\qquad\le -\frac12\sum_ja_jS(X_j)+\frac12+\frac{C_E}{\Delta},
+\end{split}
 \]
 because $\sum_ja_j^2=4/m\le 1/(1024\e\vartheta\cB_R)$ by \eqref{eq:CE}. That is,
 \begin{equation}\label{eq:lowerN}
@@ -457,7 +524,10 @@ strictly positive feasible ones), and \eqref{eq:lowerN} persists. Write
 $\Om=\sum_i\sqrt{p_i}\,u_i\otimes w_i$ with $p_i>0$ for the Schmidt
 decomposition across $X$. For fixed $i$ use the trial filters
 \[
- L_j=\ket{u_i}\bra{u_i}\otimes M_j,\qquad M_j\ge0\text{ on }\cH_{T_j},\qquad\Tr M_j^{2/a_j}=1,
+\begin{split}
+ &L_j=\ket{u_i}\bra{u_i}\otimes M_j,\qquad M_j\ge0\text{ on }\cH_{T_j},\\
+ &\Tr M_j^{2/a_j}=1,
+\end{split}
 \]
 which are feasible (as $\Tr_{X_j}L_j^{2/a_j}=\Tr M_j^{2/a_j}=1$) and give
 $N\ge\sqrt{p_i}\,N_i$, where $N_i=\sup\norm{M_m\cdots M_1w_i}$ over such $M_j$.
@@ -470,7 +540,10 @@ $0\le\Re z\le1$, bounded and analytic. On $\Re z=0$ the factors are
 unitary and $\norm{F_i(iy)}=1$. On $\Re z=1$ put $U_j=M_j^{iy}$,
 $V_j=U_j\cdots U_1$, $V_0=\id$; moving the unitaries left,
 \[
- M_m^{1+iy}\cdots M_1^{1+iy}=(U_m\cdots U_1)\,(V_{m-1}^*M_mV_{m-1})\cdots(V_0^*M_1V_0).
+\begin{split}
+ &M_m^{1+iy}\cdots M_1^{1+iy}\\
+ &\qquad=(U_m\cdots U_1)\,(V_{m-1}^*M_mV_{m-1})\cdots(V_0^*M_1V_0).
+\end{split}
 \]
 Each conjugated factor is positive, supported in $T_j$ (the conjugating
 unitaries live on the smaller nested flanks), and has the same
@@ -487,6 +560,14 @@ $\rho_{w_i,T_j}$ is $\rho_{T_j}$):
 \begin{equation}\label{eq:upperN}
  -2\log N\le S(X)+\sum_{j=1}^ma_jS(T_j).
 \end{equation}
+
+\begin{figure*}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/pinning.tex}
+\end{adjustbox}
+\caption{Schmidt pinning. Pinning the Schmidt vector $u_i$ of $X$ turns the filtered vector into $\sqrt{p_i}\,u_i$ tensored with the flank filters applied to the partner $w_i$, which lower-bounds the optimum by $-S(X)-\sum_ja_jS(T_j)$ in the exponent after averaging.}\label{fig:pinning}
+\end{figure*}
 
 \paragraph{Conclusion.}
 Subtract \eqref{eq:upperN} from \eqref{eq:lowerN}:
@@ -529,6 +610,14 @@ By \eqref{eq:mbound} and \eqref{eq:CE}, $C_{\mathrm{int}}\le C_0(q,R)(1+J/\Delta
 with, for instance,
 $C_0(q,R)=8C_1(q,R)\,R\log q+1+16N_Rq^{2(R+1)}$.
 \end{proof}
+
+\begin{figure*}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/closing.tex}
+\end{adjustbox}
+\caption{The closing step. The interval $X$ with its constant-width buffers $T$; the discount bounds $S(X|T)$ from above, Araki–Lieb from below, and $|T|=2mD$ is a constant.}\label{fig:closing}
+\end{figure*}
 
 \begin{remark}[What the constant depends on]
 The gap enters only through $\vartheta=J/\Delta$, linearly. The dependence
@@ -611,10 +700,36 @@ and in every case it is at most $S(X_i)$; the probability of the event is
 only bounded below, so its positive error is charged in full. Taking the
 expectation of the chain rule,
 \[
- F(Mr)\le\Bigl[(1-\tfrac{p_0}2)M+\tfrac{p_0}2B\Bigr]F(r)+MC_{\mathrm{buf}}
- \le\bigl(1-\tfrac{p_0}4\bigr)M\,F(r)+C M ,
+\begin{split}
+ &F(Mr)\le\Bigl[(1-\tfrac{p_0}2)M+\tfrac{p_0}2B\Bigr]F(r)+MC_{\mathrm{buf}}\\
+ &\qquad\le\bigl(1-\tfrac{p_0}4\bigr)M\,F(r)+C M ,
+\end{split}
 \]
 using $B\le M/2$. With $\lambda=(1-p_0/4)M\in(1,M)$ for $r\ge w_0$, iterating
 at $r=w_0,Mw_0,M^2w_0,\dots$ gives $F(M^jw_0)\le C\lambda^j$ and hence
 $F(r)\le Cr^{e_0}$ with $e_0=\log_M\lambda<1$.
+
+\begin{figure}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/recursion.tex}
+\end{adjustbox}
+\caption{Entropy bounds for an interval of length $r$ on log–log axes: the volume bound has slope one, the long route gives slope $e_0<1$, and the area law is the constant line reached directly in the previous stage.}\label{fig:recursion}
+\end{figure}
+
+\begin{figure*}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/chain-amplify.tex}
+\end{adjustbox}
+\caption{Amplification on the chain: the interval $X$, its graph neighbourhood $N_{2r}(X)$ on which the restoring unitary acts, and the far set $J$ it never touches, so that $I(X:J)\le n^{-M}$.}\label{fig:chain-amplify}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/chain-families.tex}
+\end{adjustbox}
+\caption{Two families on a half-line: beyond the cut and the removed sites $D$, dyadic intervals $X_1,X_2,X_3,\dots$ with alternating labels. Each is separated from $B$ and from earlier same-family intervals by the previous interval.}\label{fig:chain-families}
+\end{figure*}
 

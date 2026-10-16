@@ -22,6 +22,14 @@ dimensions and which uses none of this sequential truncation.
 \end{inwords}
 
 \precisely
+\begin{figure*}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/mps-chain.tex}
+\end{adjustbox}
+\caption{A matrix product state with open boundary conditions: one tensor per site, bonds of dimension $D$ between neighbours, one physical leg per site.}\label{fig:mps-chain}
+\end{figure*}
+
 \begin{proposition}[Sequential truncation]\label{prop:VC}
 Let $\Om$ be a unit vector on $\cH_\Lam$, $\Lam=\{1,\dots,L\}$. For
 $1\le k\le L-1$ let $\Pi_k$ be the projection of $\cH_{[1,k]}$ onto the
@@ -45,6 +53,14 @@ on $[1,k-1]$ and do not increase that rank. A vector with Schmidt rank at
 most $D$ across every cut is a matrix product state of bond dimension at
 most $D$.
 \end{proof}
+
+\begin{figure*}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/truncation-sequence.tex}
+\end{adjustbox}
+\caption{Sequential truncation. The projector onto the top $D$ Schmidt vectors of the prefix $[1,k]$ is applied for $k=L-1$ first and $k=1$ last; across every cut the result has Schmidt rank at most $D$.}\label{fig:truncation-sequence}
+\end{figure*}
 
 \begin{theorem}[Theorem~\ref{thm:B}, two-line route]\label{thm:Bshort}
 Under the hypotheses of Theorem~\ref{thm:B}, for every $L\ge2$ there is
@@ -169,6 +185,14 @@ overlap at least $\e^{-b/2}$ with $s\otimes s'$, with real positive phase.
 Two unit vectors with overlap $F$ are at distance $\sqrt{2(1-F)}$.
 \end{proof}
 
+\begin{figure}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/split.tex}
+\end{adjustbox}
+\caption{The splitting lemma as a diagram: the isometry $V$ on the buffer $U$ turns $\Om$ into nearly a product of a purification $s$ of $\rho_T$ and a purification $s'$ of $\rho_E$.}\label{fig:split}
+\end{figure}
+
 \subsection{The information reset}\label{sec:reset}
 
 \begin{inwords}
@@ -248,14 +272,24 @@ at most $2\abs S$ sites at each distance $d>\ell$ from $S$, so the sum is at mos
 $4C\abs S^2\norm A\e^{vt}\sum_{d>\ell}\e^{-\mu d}$.
 \end{proof}
 
+\begin{figure*}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/chain-reset.tex}
+\end{adjustbox}
+\caption{The reset geometry on the chain: the cores $R_0\subset R$ and $C_0\subset C$, the buffer $Q$ between $R$ and $C$, the margins of width $w$, and the support $S$ of the unitary, which stays clear of both cores.}\label{fig:chain-reset}
+\end{figure*}
+
 \begin{lemma}[Information reset]\label{lem:reset}
 For every $p>0$ there is $C_p<\infty$, depending only on $p,q,R,J,\Delta$,
 with the following property for all sufficiently large $L$. Let
 $R,C\subseteq\Lam$ be disjoint, $R_0\subseteq R$, $C_0\subseteq C$, and
 suppose $I_\Om(R:C)\le b$. If
 \[
- \dist(R_0,\Lam\setminus R)>w,\qquad \dist(C_0,\Lam\setminus C)>w,
- \qquad w=C_p(1+b+\log L),
+\begin{split}
+ &\dist(R_0,\Lam\setminus R)>w,\qquad \dist(C_0,\Lam\setminus C)>w,\\
+ &w=C_p(1+b+\log L),
+\end{split}
 \]
 then $I_\Om(R_0:C_0)\le L^{-p}$.
 \end{lemma}
@@ -276,8 +310,10 @@ $W=(V^\dagger\otimes V^\dagger)F_{\cB_R}(V\otimes V)$, where $F_{\cB_R}$ swaps
 the two copies of $\cB_R$. Since $V$ acts outside $R$, the swap identity
 $\langle\xi^{\otimes2},F_{A}\xi^{\otimes2}\rangle=\Tr\rho_{\xi,A}^2$ gives
 \begin{equation}\label{eq:zoverlap}
- z:=\langle\Phi,W\Psi\rangle=\langle\widetilde\Om^{\otimes2},F_RF_{\cB_R}\widetilde\Om^{\otimes2}\rangle
- =\Tr\rho_{\widetilde\Om,R\cB_R}^2\ \ge\ \e^{-2b}.
+\begin{split}
+ &z:=\langle\Phi,W\Psi\rangle=\langle\widetilde\Om^{\otimes2},F_RF_{\cB_R}\widetilde\Om^{\otimes2}\rangle\\
+ &\qquad=\Tr\rho_{\widetilde\Om,R\cB_R}^2\ \ge\ \e^{-2b}.
+\end{split}
 \end{equation}
 
 \emph{Two-sided Gaussian filtering.} Let $\mathbb H=H\otimes\id+\id\otimes H$
@@ -291,8 +327,10 @@ two identical replica copies); let $Z_R$ be the union of their supports, a
 set within distance $R$ of the cut edges of $R$. Put
 $B_*=1+b+\log L$, $r_*=2p+10$, $h=AB_*$ with $A\Delta^2/2\ge r_*+30$, and
 \[
- g_h(t)=(2\pi h)^{-1/2}\e^{-t^2/(2h)},\qquad
- M=\int_{\R}g_h(t)\,\e^{it\mathbb H'}W\e^{-it\mathbb H}\,dt .
+\begin{split}
+ &g_h(t)=(2\pi h)^{-1/2}\e^{-t^2/(2h)},\\
+ &M=\int_{\R}g_h(t)\,\e^{it\mathbb H'}W\e^{-it\mathbb H}\,dt .
+\end{split}
 \]
 $M$ is a contraction, and by the spectral theorem
 $M\Psi=\e^{-h(\mathbb H'-\mathcal E)^2/2}W\Psi$, $M^\dagger\Phi=\e^{-h(\mathbb H-\mathcal E)^2/2}W^\dagger\Phi$,
@@ -361,6 +399,22 @@ $I(R_0:C_0)=S(R_0)-S(R_0|C_0)$ with $\log\dim\cH_{R_0}\le L\log q$, gives
 $I_\Om(R_0:C_0)\le CL^{1-r_*/2}=CL^{-p-4}\le L^{-p}$ for large $L$.
 \end{proof}
 
+\begin{figure*}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/replica-swap.tex}
+\end{adjustbox}
+\caption{The swap $F_R$ exchanges the two copies of $\Omega$ on $R$ only. In $\Phi=F_R\Psi$ the core $R_0$ of the first copy comes from the second copy, so its marginal with $C_0$ is a product.}\label{fig:replica-swap}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/qc-gaussian-filter.tex}
+\end{adjustbox}
+\caption{The two-sided Gaussian filter: evolve with the doubled Hamiltonian, apply $W$ on the two copies of the buffer, evolve back with the swapped Hamiltonian, and average against a Gaussian in time. It sends $W\Psi$ to a multiple of $\Phi$ and $W^\dagger\Phi$ to a multiple of $\Psi$, up to $e^{-h\Delta^2/2}$.}\label{fig:qc-gaussian-filter}
+\end{figure*}
+
 \subsection{The one-dimensional separation lemma}\label{sec:logsep2}
 
 \begin{inwords}
@@ -393,6 +447,14 @@ $I(R:C)\le 2S(R)\le 2k_0C_{\mathrm{int}}\le b$ by Theorem~\ref{thm:A}
 $I(R:C)=S(R)+S(C)-S(RC)\le 2S(R)$ by the Araki--Lieb inequality).
 Lemma~\ref{lem:reset} gives the claim.
 \end{proof}
+
+\begin{figure*}[t]
+\centering
+\begin{adjustbox}{max width=\linewidth}
+\input{diagrams/fig/chain-logsep.tex}
+\end{adjustbox}
+\caption{The separation lemma: an interval $T$, its enlargement $R$, the far region $C$ and the set $E\subseteq C$ at distance $D_p\log L$ from $T$. The area law bounds $I(R:C)$ by a constant and the reset makes $I(T:E)\le L^{-p}$.}\label{fig:chain-logsep}
+\end{figure*}
 
 \begin{remark}[A route without Lieb--Robinson bounds]\label{rem:LRfree}
 The reset lemma is the only place in Part~\ref{part:mps} where a
