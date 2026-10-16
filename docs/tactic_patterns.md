@@ -8251,3 +8251,25 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Seen:** `TNLean/PEPS/AreaLaw/Geometry/RepairRankZeroAncestry.lean:78`, `:87`, and `:98`, in `repairStage_birth_oldInclusion`, `repairStage_color_oldInclusion`, and `repairStageCharacteristicLength_oldInclusion` respectively. The source-text scan finds exactly these three occurrences.
 - **Abstraction:** The existing natural-number recursor already expresses the shared induction in one line. No further helper or tactic is proposed.
 - **Notes:** These are three occurrences in one file. They do not meet the promotion threshold of three occurrences across at least two files; the alternative threshold for longer repeated blocks also does not apply.
+
+### Counting fresh replacement identifiers — candidate (2026-10-16)
+
+- **Pattern:** Bound the cardinality of the actual replacement identifier family
+  by eight times the parent mark count. Remove the unique generation tag,
+  sum the connected-run counts over nonterminal parents, apply the bound of
+  eight runs per parent, and bound the parent subtype by the whole mark family.
+- **Seen:** The same sixteen-line block occurs in
+  `PEPS/AreaLaw/Geometry/RepairRetainedPrefixCount.lean:80–95` and
+  `PEPS/AreaLaw/Geometry/RepairNonprimaryRetainedCount.lean:100–115`.
+  Both occurrences count the existing generation–parent–run identifiers;
+  they do not identify coincident parent locations or require disjoint regions.
+- **Abstraction:** A later third use would justify a lemma for the cardinality
+  of `RepairReplacementIndex` under finiteness of the parent marks.
+  No new helper, tactic or promotion is introduced here. Only two occurrences
+  are presently identified, and no further use is being assumed.
+- **Detection:** The existing pattern scanner, run with `--min-count 2` on
+  private copies of these two modules and `InitialBeltCount`, reports one
+  repeated five-line tactic sequence within this block. Direct source
+  comparison confirms equality of all sixteen lines. The initial-belt proof
+  uses the same fan-run bound in a different layer-and-cell sum and does not
+  supply a third occurrence of this generation–parent–run block.

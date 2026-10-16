@@ -1223,3 +1223,136 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     overlapping later regions or coincident parent locations do not
     affect the estimate.
 \end{proof}
+
+% Source: 10-geometry.tex, birth classes, lines 565--568;
+% geometry:total-repairs, lines 685--692; nonprimary errors, lines 796--798.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Counting identifiers of positive birth rank]
+    \label{thm:area_law_repair_positive_rank_prefix_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_positive_rank_prefix_bound}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:area_law_repair_birth_rank}
+    There is $B>0$ with the following property. Fix any origin
+    $o\in\mathbb R^2$, finite domain $\Lambda\subset\mathbb Z^2$,
+    cut $A\subseteq\Lambda$, integers $C_0\ge2$ and
+    $k_0\ge50{,}000{,}000$, stopping scale $S_*\in\mathbb R$, and
+    generation $N\in\mathbb N$. Write $r_N$ for the actual birth rank,
+    $K_j$ for the actual marks at generation $j$, and
+    $I_N^+=\{i\in I_N:r_N(i)>0\}$. Then $I_N^+$ is finite and,
+    with $b=|\partial_\Lambda A|$,
+    \begin{align}
+        |I_N^+| & \le B(2C_0+1)^2b+8\sum_{0\le j<N}|K_j|.\notag
+    \end{align}
+    The coefficient $B$ precedes all of these choices. The set $I_N^+$
+    includes identifiers whose current regions are empty; it excludes
+    primaries and the dummy.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_initial_belt_count,
+        def:area_law_repair_birth_rank,
+        def:area_law_repair_successor_regions,
+        thm:area_law_repair_finite_marks,thm:area_law_cell_fan_run_count}
+    At generation zero, the positive-rank identifiers are exactly the
+    initial belt identifiers, with the same jointly chosen residues.
+    The initial-belt theorem makes this set finite and bounds its
+    cardinality by $B(2C_0+1)^2b$ with uniform $B>0$.
+    At step $j$, old identifiers retain their ranks, and each fresh
+    replacement has rank $j+2$. The fresh identifiers record a
+    nonterminal parent mark and a connected run. There are at most
+    eight runs per parent, and the actual mark family is finite.
+    Hence the next positive-rank set is finite and
+    \begin{align}
+        |I_{j+1}^+| & \le |I_j^+|+8|K_j|.\notag
+    \end{align}
+    Induction gives the stated estimate without counting the primary
+    identifiers or using disjointness of current regions.
+\end{proof}
+
+\begin{theorem}[A uniform count of retained positive-rank identifiers]
+    \label{thm:area_law_repair_retained_positive_rank_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_retained_positive_rank_bound}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:area_law_repair_birth_rank,
+        def:area_law_repair_region_sites,
+        lem:area_law_repair_metric_invariants}
+    For every $S_*>1$, there is $L>0$ with the following property.
+    For every origin $o\in\mathbb R^2$, finite domain
+    $\Lambda\subset\mathbb Z^2$, cut $A\subseteq\Lambda$, integers
+    $C_0\ge2$ and $k_0\ge50{,}000{,}000$, and isolation constant $a_0$
+    satisfying Lemma~\ref{lem:area_law_repair_metric_invariants},
+    the set
+    $I_{A,N}^+=\{i\in I_A^{(N)}:r_N(i)>0\}$ is finite for every
+    $N\in\mathbb N$, and
+    \begin{align}
+        |I_{A,N}^+| & \le L(2C_0+1)^2|\partial_\Lambda A|.\notag
+    \end{align}
+    Here $I_A^{(N)}$ consists of the non-dummy identifiers whose
+    current regions meet $A$. The coefficient $L$ is chosen before
+    $o$, $\Lambda$, $A$, $C_0$, $k_0$, $a_0$, and $N$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_positive_rank_prefix_count,
+        thm:area_law_repair_total_mark_prefix_count}
+    Choose $B>0$ from the positive-rank prefix bound and $M>0$ from
+    the uniform mark-prefix bound at the fixed stopping scale.
+    Put $L=B+8M$. The inclusion $I_{A,N}^+\subseteq I_N^+$ proves
+    finiteness and bounds the retained count by the ambient count.
+    Applying the two prefix estimates gives, with
+    $b=|\partial_\Lambda A|$,
+    \begin{align}
+        |I_{A,N}^+|
+         & \le B(2C_0+1)^2b+8\sum_{0\le j<N}|K_j|\notag \\
+         & \le (B+8M)(2C_0+1)^2b.\notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[The nonprimary error sum at a finite generation]
+    \label{thm:area_law_repair_retained_nonprimary_error_sum}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_repairStage_retained_positive_rank_error_sum_bound}
+    \leanok
+    \uses{def:area_law_hamiltonian,def:area_law_repair_characteristic_length,
+        def:area_law_repair_region_sites,def:area_law_repair_birth_rank,
+        lem:area_law_repair_metric_invariants}
+    Fix $S_*>1$. There is $L>0$ with the following property, chosen
+    before the scanner coefficient and all geometric data.
+    Let $C_B>0$, and fix an origin $o\in\mathbb R^2$, a finite domain
+    $\Lambda\subset\mathbb Z^2$, a cut $A\subseteq\Lambda$, integers
+    $C_0\ge2$ and $k_0\ge50{,}000{,}000$, and a number $a_0$.
+    Assume $0<a_0\le1$, that $d(S)\le a_0S/1000$ for every $S\ge S_*$,
+    and that every initial mark has scale at least $S_*$.
+    Assume also that distinct initial marks $(v,S)$ and $(w,T)$ satisfy
+    $\lVert v-w\rVert_\infty\ge a_0\max\{S,T\}$.
+    For every $N\in\mathbb N$, put
+    \begin{align}
+        I_{A,+}^{(N)}
+            & =\{i\in I_A^{(N)}:0<\operatorname{rk}_N(i)\},\notag \\
+        n_i & =\left\lceil C_B\tau_N(i)\right\rceil
+        \qquad(i\in I_{A,+}^{(N)}).\notag
+    \end{align}
+    Then
+    \begin{align}
+        \sum_{i\in I_{A,+}^{(N)}}(n_i^{100})^{-1}
+         & \le L(2C_0+1)^2|\partial_\Lambda A|.\notag
+    \end{align}
+    Here $L$ may depend on $S_*$ but is independent of $C_B$, the
+    geometric data, $a_0$, and $N$. The ceiling uses the remembered
+    length $u=\tau_N(i)$ for both belts and replacements, including
+    replacements whose primitive square side is $2u$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_characteristic_length_positive,
+        thm:area_law_repair_retained_positive_rank_count}
+    Choose $L$ from the uniform retained positive-rank count.
+    That result makes $I_{A,+}^{(N)}$ finite and bounds its cardinality
+    by the displayed right-hand side. Every retained identifier is
+    non-dummy, so its characteristic length is positive. Consequently
+    $C_B\tau_N(i)>0$ and its natural ceiling satisfies $n_i\ge1$.
+    Each summand is therefore at most one. Summing over the finite
+    retained family proves the estimate with the same $L$.
+\end{proof}
