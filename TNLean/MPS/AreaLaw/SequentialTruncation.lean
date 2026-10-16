@@ -20,6 +20,14 @@ rank at most `exp (S_k + w)` across every cut, and its distance to the original 
 at most the sum over the cuts of the square roots of the two-sided surprisal tails of the
 regional spectra.
 
+**Scope restriction (threshold truncation):** Proposition 7.1 of the note projects every
+cut onto the `D` largest eigenvalues of its regional state, for an arbitrary bond dimension
+`D`, with error `∑_k √ε_k(D)`. This module formalizes only the threshold form that
+Theorem B uses: the projectors onto the eigenvalues at least `exp (-(S_k + w))` at a common
+slack `w`, with cut ranks at most `max 1 (exp (S_k + w))` and error `∑_k √tail_k(w)`. The
+form with an arbitrary `D` is not formalized. Documented in
+`docs/paper-gaps/tnlean_one_dimensional_threshold_truncation.tex`.
+
 ## Main results
 
 * `cutMatrix_localLift`: a lifted operator on the left block acts on the cut matrix by

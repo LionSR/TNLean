@@ -22,6 +22,17 @@ chain: the nested shells `X_j = X^{+(j+1)R}`, which are intervals, the single-sp
 property of shells `R` apart, the constant crossing count `N_R` and cut budget `B_R` of
 `TNLean.MPS.AreaLaw.Counting`, and the uniform weights `a_j = 2/m` of total mass two.
 
+**Local fix (discount constants):** Lemma 4.2 of the note (`lem:buffer`, with the
+constants of `eq:CE`) bounds the energy of the filtered vector by `C_E/m ≤ Δ/4` with
+`C_E = 8 N_R J q^{2(R+1)}`, takes `m` with the fourth entry `4096 e (1 + ϑ) B_R`, and
+concludes `2 S(X | T) ≤ S(X) + 1 + 2 C_E/Δ`. The finite-dimensional lemma bounds the energy
+by `2 C_E/m ≤ Δ/2` (twice the note's estimate, at the note's own shell threshold
+`4 C_E/Δ`), keeps the overlap losses as `m log 2` in place of the note's `2 C_E/Δ`, and
+keeps the tail term `4096 e ϑ B_R / m` explicit instead of absorbing it into `1` by the
+fourth entry, which is therefore omitted from `m`. The deviations are changes of absolute
+constants and propagate to `C_int` and `C₀` in `TNLean.MPS.AreaLaw.AreaLaw`. Documented in
+`docs/paper-gaps/tnlean_one_dimensional_discount_constants.tex`.
+
 ## Main results
 
 * `chainShellCount`: the number of shells `m`.
@@ -32,8 +43,7 @@ property of shells `R` apart, the constant crossing count `N_R` and cut budget `
 
 * TNLean note, *A one-dimensional area law and matrix product state approximation from a
   global gap* (`docs/notes/one_dimensional_note`), Section 4, Lemma 4.2 (`lem:buffer`),
-  with the energy threshold `Δ/2` of the formal finite-dimensional lemma in place of the
-  note's `Δ/4`.
+  with the constants of the local fix above.
 -/
 
 open Matrix

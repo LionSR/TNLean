@@ -21,7 +21,7 @@ graph and reduces it to connected domains, on which the Hamiltonian is a sum ove
 components and the ground vector is a product. **Scope restriction (connected
 domains):** this module formalizes the connected case, the chain of `L` sites; the
 component reduction is not formalized. Documented in
-`docs/paper-gaps/one_dimensional_note_connected_domain_scope.tex`.
+`docs/paper-gaps/tnlean_one_dimensional_connected_domain_scope.tex`.
 
 ## Main results
 

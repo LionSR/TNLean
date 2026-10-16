@@ -356,28 +356,41 @@ for an arbitrary finite set of sites and are instantiated here directly.
     }
     \leanok
     \uses{def:chain_open_mps}
-    Let $\psi$ be a unit vector on $L$ sites and $w\ge0$. For each cut $k$ let
-    $S_k$ be the entropy of the first $k$ sites and $P_k$ the spectral
-    projector of their reduced state onto the eigenvalues at least
-    $e^{-(S_k+w)}$, extended by the identity. Then $P_k$ has rank at most
-    $e^{S_k+w}$, the mass it discards is at most the surprisal tail of the
-    reduced state beyond $w$, and the vector $\Phi=P_1P_2\cdots P_{L-1}\psi$
-    has cut rank at most $\max\{1,e^{S_k+w}\}$ at every cut and satisfies
+    Let $\psi$ be a unit vector on $L$ sites and $w\ge0$. For each cut $k$,
+    $1\le k\le L-1$, let $S_k$ be the entropy of the first $k$ sites, let
+    $\Pi_k$ be the spectral projector of their reduced state onto the
+    eigenvalues at least $e^{-(S_k+w)}$, an operator on the first $k$ sites,
+    and let $P_k=\Pi_k\otimes1$ be its extension by the identity on the
+    remaining sites. Then the regional projector $\Pi_k$ has rank at most
+    $e^{S_k+w}$, the mass $\|(1-P_k)\psi\|^2$ discarded by $P_k$ is at most
+    the surprisal tail of the reduced state beyond $w$, and the vector
+    $\Phi=P_1P_2\cdots P_{L-1}\psi$ has cut rank at most the rank of $\Pi_k$,
+    hence at most $e^{S_k+w}$, across every cut $k$, and cut rank at most one
+    across the trivial cuts at the ends of the chain; it satisfies
     \begin{equation}
         \|\psi-\Phi\|\le\sum_{k=1}^{L-1}\sqrt{\text{tail}_k(w)} .
     \end{equation}
+    This is the threshold form of the sequential truncation, Proposition~7.1
+    of \cite{TNLean2026OneDimensional}: the note projects every cut onto the
+    $D$ largest eigenvalues for an arbitrary bond dimension $D$, with the
+    error $\sum_k\sqrt{\epsilon_k(D)}$; that form is not formalized, and
+    Theorem~B uses only the threshold form.
 \end{lemma}
 \begin{proof}
     \leanok
     \uses{def:chain_open_mps}
-    The lift of a matrix on the first $k$ sites acts on the cut matrix at $k$
-    by left multiplication, so the cut rank of $M\psi$ is at most the rank of
-    $M$; the projector on the smallest block is applied last, and the product
-    of the projectors on blocks of size at most $k$ is one lift on the first
-    $k$ sites ending in $P_k$. The distance follows by induction from
+    The extension $\Pi\otimes1$ of an operator $\Pi$ on the first $k$ sites
+    acts on the cut matrix at $k$ by left multiplication, so the cut rank of
+    $(\Pi\otimes1)\psi$ is at most the rank of $\Pi$; the rank of the extended
+    operator itself, which is the rank of $\Pi$ times the dimension of the
+    remaining sites, plays no role. The projector on the smallest block is
+    applied last, and the product of the projectors on blocks of size at most
+    $k$ is one extension of an operator on the first $k$ sites ending in
+    $\Pi_k$. The distance follows by induction from
     $\psi-P_k\Phi'=(1-P_k)\psi+P_k(\psi-\Phi')$ and the contraction property
-    of a projector, and $\|(1-P_k)\psi\|^2$ is the trace of the discarded part
-    of the reduced state, which is at most the surprisal tail.
+    of a projector, and $\|(1-P_k)\psi\|^2$ is the trace of $1-\Pi_k$ against
+    the reduced state, the mass of the eigenvalues below the threshold, which
+    is at most the surprisal tail.
 \end{proof}
 
 \begin{theorem}[Theorem B: polynomial matrix product state approximation]
