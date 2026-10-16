@@ -619,14 +619,85 @@ $C_0(q,R)=8C_1(q,R)\,R\log q+1+16N_Rq^{2(R+1)}$.
 \caption{The closing step. The interval $X$ with its constant-width buffers $T$; the discount bounds $S(X|T)$ from above, Araki–Lieb from below, and $T$ has at most $2mD$ sites.}\label{fig:closing}
 \end{figure*}
 
-\begin{remark}[What the constant depends on]
+\begin{remark}[What the constant depends on]\label{rem:constants}
 The gap enters only through $\vartheta=J/\Delta$, linearly. The dependence
 on the local dimension and range is through $N_R\,q^{2(R+1)}$, which for
-nearest-neighbor interactions ($R=1$) is of order $q^4$; no attempt has
-been made to optimize it. By comparison, the bound of
-Arad--Kitaev--Landau--Vazirani is $\tilde O(\log^3(q)/\Delta)$ for $R=1$, so
-the present argument matches the linear dependence on the inverse gap
-and is worse in $q$.
+nearest-neighbor interactions ($R=1$) is of order $q^4$. The constants
+were carried over from the two-dimensional source without optimization;
+Remark~\ref{rem:sharper} shows that the polynomial dependence on $q$ is an
+artifact of one crude estimate. By comparison, the bound of
+Arad--Kitaev--Landau--Vazirani \cite{AKLV} is $\tilde O(\log^3(q)/\Delta)$
+for $R=1$.
+\end{remark}
+
+\begin{remark}[Sharper constants, and what is intrinsic]\label{rem:sharper}
+Three of the constants are not intrinsic to the argument.
+
+\emph{The count $N_R$.} The bound $2\cdot2^{2R}$ allows one interaction for
+every subset of a window. When the Hamiltonian has one term for each window
+of $R+1$ consecutive sites, a cut edge splits at most $R$ of them, and
+$N_R$ may be replaced by $2R$.
+
+\emph{The factor $q^{2(R+1)}$ in $C_E$.} It enters in \eqref{eq:energy}
+through the matrix-unit expansion \eqref{eq:matrixunits} bounded term by
+term. The proof of Lemma~\ref{lem:tail} met the same quantity and turned
+the dimension into a logarithm with the three-lines theorem; the same
+device works here. For a split term $h=h_Y$ and the optimal filter
+$L=L_j$ put $g(z)=\langle\phi,L^zhL^{-z}\phi\rangle$. It is entire,
+$g(0)=\langle\phi,h\phi\rangle$, $g(1)=\langle\phi,LhL^{-1}\phi\rangle$,
+$\abs{g(iy)}\le J$ because $L^{iy}$ is unitary, and
+$g(-\bar z)=\overline{g(z)}$. In the common eigenbasis,
+$g(z)=\sum_{i,k}\sqrt{p_ip_k}\,(l_i/l_k)^zh_{ik}$, and \eqref{eq:clip} with
+the weighted arithmetic--geometric mean inequality gives
+$\sqrt{p_ip_k}\,\abs{(l_i/l_k)^z}\le p_i+p_k$ for $\abs{\Re z}\le1/a_j$;
+hence $\abs{g(z)}\le 2Jq^{2(R+1)}$ there by \eqref{eq:rowcolumn}. Since
+$\log(2q^{2(R+1)})\le2\ell_R$, the three-lines theorem gives
+$\abs{g(z)}\le\e J$ for $\abs{\Re z}\le 1/(2a_j\ell_R)$, and Cauchy's
+estimate as in \eqref{eq:quadratic} gives, because $a_j\le1/(4\ell_R)$,
+\[
+ \abs{\Re\bigl(g(1)-g(0)\bigr)}\le 8\,\e\,J\,\ell_R^2\,a_j^2 .
+\]
+So \eqref{eq:energy} holds with $2a_j^2q^{2(R+1)}J$ replaced by
+$8\e J\ell_R^2a_j^2$, that is, with
+\[
+ C_E'=32\,\e\,N_R\,J\,\ell_R^2\le 32\,\e\,J\,\cB_R
+\]
+in place of $C_E$. The entry $4C_E'/\Delta$ of \eqref{eq:CE} is then
+dominated by $4096\e(1+\vartheta)\cB_R$, and \eqref{eq:final} becomes
+\[
+ S(X)\ \le\ C\,(1+J/\Delta)\,\cB_R\,R\log q,
+\]
+where now $\cB_R\le 1+2R\bigl(1+(R+1)\log q\bigr)^2$ and $C$ is an absolute
+constant.
+For nearest-neighbor chains this is
+$O\bigl((1+J/\Delta)\log^3q\bigr)$, the order of the
+Arad--Kitaev--Landau--Vazirani bound \cite{AKLV}, obtained without a
+Lieb--Robinson bound or an approximate ground-state projector. For range
+$R$ it is $O\bigl((1+J/\Delta)R\log^3(q^R)\bigr)$, one factor $R$ above the
+blocked nearest-neighbor bound.
+
+\emph{What is intrinsic.} Two features of the constants cannot be removed
+by sharper estimates within this route. First, the linear dependence on
+$J/\Delta$: the Schmidt-pinning bound \eqref{eq:upperN} carries $S(X)$ with
+coefficient one, so the closing step needs total weight $\sum_ja_j>1$, and a
+total weight of order one spread over $m$ shells costs the filtered vector
+an energy of order $J\cB_R/m$ by \eqref{eq:energy}; the overlap step
+\eqref{eq:overlap} requires that energy to lie below the gap, hence
+$m\gtrsim J\cB_R/\Delta$, and the buffer entropy $S(T)\le2mR\log q$ is
+linear in $J/\Delta$. Second, the width $u_0\sim(\vartheta\cB_R)^{-1/2}$
+of the tail window in Lemma~\ref{lem:tail}: the tilted vector of
+\eqref{eq:energyquad} has energy $O(J\cB_Ru^2)$ for all
+$u\le1/(16\ell_R)$, but the gap is used only through the variational
+inequality \eqref{eq:gap}, which is vacuous once that energy exceeds
+$\Delta$. The window width sets the rate of the Schmidt tail
+\eqref{eq:tail} and therefore the exponent of $L$ in the bond dimension of
+Theorem~\ref{thm:B} (Section~\ref{sec:shortcut}), which is of order
+$\sqrt{(1+J/\Delta)\cB_R}$. In the approximate-ground-state-projector route of
+\cite{AKLV} the gap-dependent quantities sit in a prefactor and the
+exponent of the chain length is universal. Moving $\sqrt{J/\Delta}$ out
+of that exponent within the present route would require using the gap in
+an amplified form, which is exactly what an approximate ground-state
+projector supplies.
 \end{remark}
 
 \begin{remark}[What was used]

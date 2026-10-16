@@ -3,7 +3,10 @@
   "eyebrow": "TNLean notes · one dimension",
   "heading": "A one-dimensional area law and a matrix product state approximation from a global spectral gap",
   "lede": "The two September 2026 manuscripts prove an entanglement area law and a polynomial PEPS approximation for gapped spin systems on the square lattice, assuming only that the full Hamiltonian has a spectral gap. This page runs their arguments on a chain. The area law collapses to one short section of the first manuscript; the tensor-network theorem survives as a left-to-right sweep instead of a dyadic hierarchy. Every stage is told twice: in words, then precisely.",
-  "stamp": ["Companion to <span class=\"mono\">docs/notes/one_dimensional_note/one_dimensional_area_law_and_mps.pdf</span>", "Diagrams drawn with tenkz and quantikz, as on the campaign board"],
+  "stamp": [
+    "Companion to <span class=\"mono\">docs/notes/one_dimensional_note/one_dimensional_area_law_and_mps.pdf</span>",
+    "Diagrams drawn with tenkz and quantikz, as on the campaign board"
+  ],
   "description": "The 2D area-law and PEPS-approximation proofs of the September 2026 manuscripts specialized to one dimension, with tensor-network diagrams.",
   "theorems": [
     {
@@ -26,18 +29,54 @@
     }
   ],
   "map": [
-    ["Marginal tail bound (area-law manuscript, Lemma 2.1)", "Kept verbatim; the cut parameter becomes a constant."],
-    ["Buffered conditional-entropy discount (Lemma 2.2)", "Kept; the buffer has constant width and the error is a constant."],
-    ["Sub-volume recursion, exponent below volume", "Unnecessary: the Araki–Lieb inequality closes the argument. Sketched for comparison."],
-    ["Positive quasi-local constraints, truncation, replicas, transport, comparators, scanner", "Unnecessary."],
-    ["Amplification by random constraint products; two families of regions", "Unnecessary; both become trivial on a line and are sketched for comparison."],
-    ["Coarse collar, cell conditional information, angular induction (PEPS manuscript, Section 3)", "Replaced by a one-line consequence of the area law plus the information reset."],
-    ["Information reset by a Gaussian filter (Lemma 3.3)", "Kept, with one-dimensional locality."],
-    ["Adaptive patch constraints and encoded holes (Sections 4, 6.1)", "Unnecessary: no three owners meet on a line, and logarithmic blocks are polynomial-dimensional registers."],
-    ["Births, deaths, exchanges (Lemmas 6.6–6.8)", "Kept verbatim."],
-    ["Dyadic hierarchy with edge bands and point treatments (Section 7)", "Replaced by a linear sweep; the edge-band word sequence is kept."],
-    ["Density compression, column extraction (Sections 5, 8)", "Kept verbatim."],
-    ["Row–column routing with constant congestion", "Replaced by placement on the line."]
+    [
+      "Marginal tail bound (area-law manuscript, Lemma 2.1)",
+      "Kept verbatim; the cut parameter becomes a constant."
+    ],
+    [
+      "Buffered conditional-entropy discount (Lemma 2.2)",
+      "Kept; the buffer has constant width and the error is a constant."
+    ],
+    [
+      "Sub-volume recursion, exponent below volume",
+      "Unnecessary: the Araki–Lieb inequality closes the argument. Sketched for comparison."
+    ],
+    [
+      "Positive quasi-local constraints, truncation, replicas, transport, comparators, scanner",
+      "Unnecessary."
+    ],
+    [
+      "Amplification by random constraint products; two families of regions",
+      "Unnecessary; both become trivial on a line and are sketched for comparison."
+    ],
+    [
+      "Coarse collar, cell conditional information, angular induction (PEPS manuscript, Section 3)",
+      "Replaced by a one-line consequence of the area law plus the information reset."
+    ],
+    [
+      "Information reset by a Gaussian filter (Lemma 3.3)",
+      "Kept, with one-dimensional locality."
+    ],
+    [
+      "Adaptive patch constraints and encoded holes (Sections 4, 6.1)",
+      "Unnecessary: no three owners meet on a line, and logarithmic blocks are polynomial-dimensional registers."
+    ],
+    [
+      "Births, deaths, exchanges (Lemmas 6.6–6.8)",
+      "Kept verbatim."
+    ],
+    [
+      "Dyadic hierarchy with edge bands and point treatments (Section 7)",
+      "Replaced by a linear sweep; the edge-band word sequence is kept."
+    ],
+    [
+      "Density compression, column extraction (Sections 5, 8)",
+      "Kept verbatim."
+    ],
+    [
+      "Row–column routing with constant congestion",
+      "Replaced by placement on the line."
+    ]
   ],
   "routes": [
     {
@@ -51,31 +90,96 @@
           "secs": "§2",
           "physics": "An interval has two cut edges. An interaction of diameter at most \\(R\\) that meets both the interval and its complement must lie in one of the two windows of \\(2R\\) sites centred on those edges. So at most \\(N_R=2\\cdot 2^{2R}\\) interactions are split by any interval, each acting on at most \\(R+1\\) sites, and each can be expanded by matrix units on its inside part into at most \\(q^{2(R+1)}\\) products of an inside and an outside operator with norm product at most \\(J\\). These three numbers are the whole geometric input of Part I. Two reductions make the rest clean: a disconnected chain has a product ground vector, and a subset of an interval is a union of maximal subintervals each with at least one boundary edge, so it suffices to bound the entropy of one interval.",
           "delivers": "A constant \\(\\mathcal B_R=1+N_R\\log^2(eq^{R+1})\\), independent of the chain and of the interval, that plays the part of the boundary-proportional cut parameter of the two-dimensional proof.",
-          "symbols": [["\\(N_R\\)", "bound on the number of interactions split by an interval"], ["\\(\\mathcal B_R\\)", "the cut parameter of the tail bound"]],
-          "diagrams": [{"src": "diagrams/chain-cuts.svg", "caption": "An interval \\(X\\) of the chain (drawn for \\(R=2\\)), the two windows of \\(2R\\) sites centred on its cut edges, and two interaction supports \\(Y'\\) and \\(Y\\) split by \\(X\\), one in each window. Every split support lies in a window, which is why their number is bounded by \\(N_R\\)."}]
+          "symbols": [
+            [
+              "\\(N_R\\)",
+              "bound on the number of interactions split by an interval"
+            ],
+            [
+              "\\(\\mathcal B_R\\)",
+              "the cut parameter of the tail bound"
+            ]
+          ],
+          "diagrams": [
+            {
+              "src": "diagrams/chain-cuts.svg",
+              "caption": "An interval \\(X\\) of the chain (drawn for \\(R=2\\)), the two windows of \\(2R\\) sites centred on its cut edges, and two interaction supports \\(Y'\\) and \\(Y\\) split by \\(X\\), one in each window. Every split support lies in a window, which is why their number is bounded by \\(N_R\\)."
+            }
+          ]
         },
         {
           "title": "The entanglement spectrum of an interval is concentrated",
           "secs": "§3",
-          "physics": ["Write \\(\\Omega=\\sum_j\\sqrt{p_j}\\,u_j\\otimes w_j\\) for the Schmidt decomposition across an interval \\(X\\). The surprisal \\(K=-\\log p_j\\), drawn with probability \\(p_j\\), has mean \\(S(X)\\). The lemma says that \\(K\\) has exponential tails around its mean with a rate \\(u_0\\) depending only on \\(q\\), \\(R\\) and \\(J/\\Delta\\): the spectrum is concentrated, whatever its entropy is.", "The mechanism is a tilt. Multiply \\(\\Omega\\) on \\(X\\) by \\(\\rho_X^{-u/2}\\) and renormalize; this reweights the Schmidt probabilities to \\(p_j^{1-u}/M(u)\\) with \\(M(u)=\\sum_jp_j^{1-u}\\) the moment generating function of \\(K\\). The tilted vector is an exact eigenvector of the conjugated Hamiltonian, interactions inside \\(X\\) or inside its complement do not see the conjugation in expectation, and for each of the boundedly many split interactions the conjugated expectation is an entire function of the tilt which is bounded on a strip and satisfies \\(f(-\\bar z)=\\overline{f(z)}\\). That symmetry kills the linear term of the real part, so the excitation energy is quadratic in \\(u\\); the gap converts it into the overlap \\(M(u/2)^2/M(u)\\ge 1-Cu^2\\). Iterating the halving relation gives \\(\\log M(u)\\le uS(X)+Cu^2\\) and exponential Markov gives the tail."],
+          "physics": [
+            "Write \\(\\Omega=\\sum_j\\sqrt{p_j}\\,u_j\\otimes w_j\\) for the Schmidt decomposition across an interval \\(X\\). The surprisal \\(K=-\\log p_j\\), drawn with probability \\(p_j\\), has mean \\(S(X)\\). The lemma says that \\(K\\) has exponential tails around its mean with a rate \\(u_0\\) depending only on \\(q\\), \\(R\\) and \\(J/\\Delta\\): the spectrum is concentrated, whatever its entropy is.",
+            "The mechanism is a tilt. Multiply \\(\\Omega\\) on \\(X\\) by \\(\\rho_X^{-u/2}\\) and renormalize; this reweights the Schmidt probabilities to \\(p_j^{1-u}/M(u)\\) with \\(M(u)=\\sum_jp_j^{1-u}\\) the moment generating function of \\(K\\). The tilted vector is an exact eigenvector of the conjugated Hamiltonian, interactions inside \\(X\\) or inside its complement do not see the conjugation in expectation, and for each of the boundedly many split interactions the conjugated expectation is an entire function of the tilt which is bounded on a strip and satisfies \\(f(-\\bar z)=\\overline{f(z)}\\). That symmetry kills the linear term of the real part, so the excitation energy is quadratic in \\(u\\); the gap converts it into the overlap \\(M(u/2)^2/M(u)\\ge 1-Cu^2\\). Iterating the halving relation gives \\(\\log M(u)\\le uS(X)+Cu^2\\) and exponential Markov gives the tail."
+          ],
           "delivers": "For every interval, \\(\\Pr\\{|K-S(X)|>w\\}\\le 2e^{e/2}e^{-u_0w}\\) with \\(u_0=1/(32\\sqrt{(1+J/\\Delta)\\mathcal B_R})\\). Also: all Rényi entropies of order within \\(u_0\\) of one lie within a constant of the von Neumann entropy.",
-          "symbols": [["\\(K\\)", "surprisal of the marginal on \\(X\\)"], ["\\(M(u)\\)", "its moment generating function, \\(\\mathrm{Tr}\\,\\rho_X^{1-u}\\)"], ["\\(u_0\\)", "the tail rate"]],
+          "symbols": [
+            [
+              "\\(K\\)",
+              "surprisal of the marginal on \\(X\\)"
+            ],
+            [
+              "\\(M(u)\\)",
+              "its moment generating function, \\(\\mathrm{Tr}\\,\\rho_X^{1-u}\\)"
+            ],
+            [
+              "\\(u_0\\)",
+              "the tail rate"
+            ]
+          ],
           "diagrams": [
-            {"src": "diagrams/tilt.svg", "caption": "The tilt as a tensor diagram. Multiplying \\(\\Omega\\) on the interval \\(X\\) by \\(F=\\rho_X^{-u/2}\\) and tracing out the rest of the chain gives \\(\\sigma=\\rho_X^{1-u}/M(u)\\). Only interactions crossing the cuts of \\(X\\) fail to commute with \\(F\\), so the tilted state has excitation energy of order \\(u^2\\)."},
-            {"src": "diagrams/tail-sketch.svg", "caption": "Schematic law of the surprisal. The tails decay exponentially at rate \\(u_0\\); the mass beyond \\(S(X)+w\\) is at most \\(2e^{e/2}e^{-u_0w}\\), and at most \\(e^{S(X)+w}\\) eigenvalues lie to the left of that line. Both facts are reused for the sequential truncation in Part II."}
+            {
+              "src": "diagrams/tilt.svg",
+              "caption": "The tilt as a tensor diagram. Multiplying \\(\\Omega\\) on the interval \\(X\\) by \\(F=\\rho_X^{-u/2}\\) and tracing out the rest of the chain gives \\(\\sigma=\\rho_X^{1-u}/M(u)\\). Only interactions crossing the cuts of \\(X\\) fail to commute with \\(F\\), so the tilted state has excitation energy of order \\(u^2\\)."
+            },
+            {
+              "src": "diagrams/tail-sketch.svg",
+              "caption": "Schematic law of the surprisal. The tails decay exponentially at rate \\(u_0\\); the mass beyond \\(S(X)+w\\) is at most \\(2e^{e/2}e^{-u_0w}\\), and at most \\(e^{S(X)+w}\\) eigenvalues lie to the left of that line. Both facts are reused for the sequential truncation in Part II."
+            }
           ]
         },
         {
           "title": "Nested filters discount the conditional entropy",
           "secs": "§4",
-          "physics": ["Surround an interval \\(X\\) by \\(m\\) nested shells \\(X_j=X^{+jD}\\), each one step of width \\(D=R\\) thicker than the previous, with flanks \\(T_j=X_j\\setminus X\\). The number \\(m\\) is a constant of order \\(1+J/\\Delta\\), so the whole buffer \\(T=T_m\\) is a constant number of sites. Apply to \\(\\Omega\\) a product \\(K=L_m\\cdots L_1\\) of positive operators, \\(L_j\\) on \\(X_j\\), each normalized by \\(\\mathrm{Tr}\\,L_j^{2/a_j}=1\\) with \\(a_j=2/m\\), and maximize the norm \\(N=\\|K\\Omega\\|\\).", "The optimum is small. At the optimum each filter commutes with the marginal of the filtered vector on its own region, which strips the outer filters from any expectation of an operator living inside them. An interaction is split by at most one shell, and conjugating a split term by one filter changes its expectation only quadratically in \\(a_j\\), by the same row-and-column Cauchy–Schwarz estimate as in the tail bound. So the energy of the filtered vector is at most \\(C_E/m\\), the gap makes it overlap \\(\\Omega\\), and peeling the filters off one at a time with Hölder and the tail bound gives \\(-2\\log N\\ge\\sum_ja_jS(X_j)-C\\).", "The optimum is large. Pin a Schmidt vector \\(u_i\\) of \\(X\\): the trial filters \\(|u_i\\rangle\\langle u_i|\\otimes M_j\\) act on the flanks only, and a three-lines interpolation shows the flank filters can be chosen so that the norm is at least \\(\\exp(-\\sum_ja_jS_{w_i}(T_j)/2)\\). Averaging over \\(i\\), \\(-2\\log N\\le S(X)+\\sum_ja_jS(T_j)\\). Subtracting, and using that \\(S(X|T_j)\\) decreases as the flank grows while the weights sum to two, conditioning \\(X\\) on its constant-width buffer halves its entropy up to a constant."],
+          "physics": [
+            "Surround an interval \\(X\\) by \\(m\\) nested shells \\(X_j=X^{+jD}\\), each one step of width \\(D=R\\) thicker than the previous, with flanks \\(T_j=X_j\\setminus X\\). The number \\(m\\) is a constant of order \\(1+J/\\Delta\\), so the whole buffer \\(T=T_m\\) is a constant number of sites. Apply to \\(\\Omega\\) a product \\(K=L_m\\cdots L_1\\) of positive operators, \\(L_j\\) on \\(X_j\\), each normalized by \\(\\mathrm{Tr}\\,L_j^{2/a_j}=1\\) with \\(a_j=2/m\\), and maximize the norm \\(N=\\|K\\Omega\\|\\).",
+            "The optimum is small. At the optimum each filter commutes with the marginal of the filtered vector on its own region, which strips the outer filters from any expectation of an operator living inside them. An interaction is split by at most one shell, and conjugating a split term by one filter changes its expectation only quadratically in \\(a_j\\), by the same row-and-column Cauchy–Schwarz estimate as in the tail bound. So the energy of the filtered vector is at most \\(C_E/m\\), the gap makes it overlap \\(\\Omega\\), and peeling the filters off one at a time with Hölder and the tail bound gives \\(-2\\log N\\ge\\sum_ja_jS(X_j)-C\\).",
+            "The optimum is large. Pin a Schmidt vector \\(u_i\\) of \\(X\\): the trial filters \\(|u_i\\rangle\\langle u_i|\\otimes M_j\\) act on the flanks only, and a three-lines interpolation shows the flank filters can be chosen so that the norm is at least \\(\\exp(-\\sum_ja_jS_{w_i}(T_j)/2)\\). Averaging over \\(i\\), \\(-2\\log N\\le S(X)+\\sum_ja_jS(T_j)\\). Subtracting, and using that \\(S(X|T_j)\\) decreases as the flank grows while the weights sum to two, conditioning \\(X\\) on its constant-width buffer halves its entropy up to a constant."
+          ],
           "delivers": "\\(S(X\\,|\\,T)\\le\\tfrac12S(X)+\\tfrac12+C_E/\\Delta\\) for every interval \\(X\\), where \\(T\\) consists of the \\(mD\\) sites on each side of \\(X\\). Nothing about the state on the flanks was used beyond their being a constant number of sites.",
-          "symbols": [["\\(X_j, T_j\\)", "the \\(j\\)-th shell and its flanks"], ["\\(L_j\\)", "positive filter on \\(X_j\\), weight \\(a_j=2/m\\)"], ["\\(C_E\\)", "\\(8N_RJq^{2(R+1)}\\), the energy constant"]],
+          "symbols": [
+            [
+              "\\(X_j, T_j\\)",
+              "the \\(j\\)-th shell and its flanks"
+            ],
+            [
+              "\\(L_j\\)",
+              "positive filter on \\(X_j\\), weight \\(a_j=2/m\\)"
+            ],
+            [
+              "\\(C_E\\)",
+              "\\(8N_RJq^{2(R+1)}\\), the energy constant"
+            ]
+          ],
           "diagrams": [
-            {"src": "diagrams/chain-shells.svg", "caption": "The interval \\(X\\) and the nested shells \\(X_1=X^{+D}\\subset X_2=X^{+2D}\\), drawn with \\(D=R=2\\); the braces mark the flanks \\(T_j=X_j\\setminus X\\), each a union of at most two intervals of length at most \\(jD\\), which carry the buffer."},
-            {"src": "diagrams/filter-product.svg", "caption": "The optimized norm. Three positive filters \\(L_1,L_2,L_3\\) act on the nested intervals \\(X_1\\subset X_2\\subset X_3\\) of the ground vector; each is normalized by \\(\\mathrm{Tr}\\,L_j^{2/a_j}=1\\)."},
-            {"src": "diagrams/qc-single-split.svg", "caption": "Why the energy is small. An interaction \\(h_Y\\) split by \\(X_j\\) is conjugated by exactly one filter: the outer filters, whose regions contain \\(Y\\), are stripped by the stripping identity at the optimum, and the inner ones commute with \\(h_Y\\) because they live on disjoint sites."},
-            {"src": "diagrams/pinning.svg", "caption": "Schmidt pinning. With the trial filters \\(|u_i\\rangle\\langle u_i|\\otimes M_j\\) (the projector is drawn once, by idempotence; the flanks are grouped into one leg each), the filtered vector becomes \\(\\sqrt{p_i}\\,u_i\\) tensored with the flank filters applied to the partner \\(w_i\\), which lower-bounds the optimum by \\(-S(X)-\\sum_ja_jS(T_j)\\) in the exponent after averaging over \\(i\\)."}
+            {
+              "src": "diagrams/chain-shells.svg",
+              "caption": "The interval \\(X\\) and the nested shells \\(X_1=X^{+D}\\subset X_2=X^{+2D}\\), drawn with \\(D=R=2\\); the braces mark the flanks \\(T_j=X_j\\setminus X\\), each a union of at most two intervals of length at most \\(jD\\), which carry the buffer."
+            },
+            {
+              "src": "diagrams/filter-product.svg",
+              "caption": "The optimized norm. Three positive filters \\(L_1,L_2,L_3\\) act on the nested intervals \\(X_1\\subset X_2\\subset X_3\\) of the ground vector; each is normalized by \\(\\mathrm{Tr}\\,L_j^{2/a_j}=1\\)."
+            },
+            {
+              "src": "diagrams/qc-single-split.svg",
+              "caption": "Why the energy is small. An interaction \\(h_Y\\) split by \\(X_j\\) is conjugated by exactly one filter: the outer filters, whose regions contain \\(Y\\), are stripped by the stripping identity at the optimum, and the inner ones commute with \\(h_Y\\) because they live on disjoint sites."
+            },
+            {
+              "src": "diagrams/pinning.svg",
+              "caption": "Schmidt pinning. With the trial filters \\(|u_i\\rangle\\langle u_i|\\otimes M_j\\) (the projector is drawn once, by idempotence; the flanks are grouped into one leg each), the filtered vector becomes \\(\\sqrt{p_i}\\,u_i\\) tensored with the flank filters applied to the partner \\(w_i\\), which lower-bounds the optimum by \\(-S(X)-\\sum_ja_jS(T_j)\\) in the exponent after averaging over \\(i\\)."
+            }
           ]
         },
         {
@@ -83,17 +187,34 @@
           "secs": "§5",
           "physics": "A conditional entropy cannot be very negative: by the Araki–Lieb triangle inequality \\(S(XT)\\ge S(X)-S(T)\\), so \\(S(X|T)\\ge S(X)-2S(T)\\). Together with the discount, \\(S(X)-2S(T)\\le\\frac12S(X)+C\\), hence \\(S(X)\\le4S(T)+2C\\), and \\(S(T)\\) is at most the number of sites of \\(T\\) times \\(\\log q\\). That is the area law, with a constant linear in \\(J/\\Delta\\). In two dimensions the same two inequalities give \\(S(X)\\le4S(T)+Cr\\) for a box of side \\(r\\) with a buffer of width proportional to \\(r\\); the buffer is an annulus of area \\(r^2\\) whose entropy is as unknown as that of \\(X\\), and the inequality is useless. That is the precise point at which the two-dimensional proof needs everything else.",
           "delivers": "\\(S(X)\\le 8mR\\log q+1+2C_E/\\Delta\\le C_0(q,R)(1+J/\\Delta)\\) for every interval; by the reductions, \\(S(A)\\le C_{\\mathrm{AL}}|\\partial A|\\) for every subset of any finite chain. The gap was used exactly twice: in the tail bound at the cuts of the shells, and to convert the energy of the filtered vector into an overlap.",
-          "diagrams": [{"src": "diagrams/closing.svg", "caption": "The closing step. The interval \\(X\\) with its constant-width buffers \\(T\\); the discount bounds \\(S(X|T)\\) from above, Araki–Lieb from below, and \\(T\\) has at most \\(2mD\\) sites."}]
+          "diagrams": [
+            {
+              "src": "diagrams/closing.svg",
+              "caption": "The closing step. The interval \\(X\\) with its constant-width buffers \\(T\\); the discount bounds \\(S(X|T)\\) from above, Araki–Lieb from below, and \\(T\\) has at most \\(2mD\\) sites."
+            }
+          ]
         },
         {
           "title": "What the two-dimensional machinery would have done",
           "secs": "§6",
-          "physics": ["If one refused the triangle-inequality shortcut, the two-dimensional proof would still work on a line, with the replica scanner replaced by a trivial inequality. Split an interval of length \\(Mr\\) into \\(M\\) children of length \\(r\\) and add them up in a random order; a child whose constant-width buffer has already been added gets the discount, with a fixed probability. This gives the recursion \\(F(Mr)\\le(1-p_0/4)M\\,F(r)+CM\\) for the maximal interval entropy, hence a sub-volume bound \\(F(r)\\le Cr^{e_0}\\) with \\(e_0<1\\). In two dimensions the analogous bound \\(r^{1+e_0}\\) lies above the boundary \\(r\\); here \\(r^{e_0}\\) is already below the diameter, which is all the next step needs.", "The amplification proposition of the manuscript converts an information bound \\(I(X:\\text{far})\\le n^{1-\\varepsilon}\\) into \\(I(X:J)\\le n^{-M}\\) beyond a graph distance of order \\(n^{(1-\\varepsilon)/\\alpha}\\), with \\(\\alpha<1\\) as close to one as desired, using positive quasi-local constraints, a random product of the associated contractions and a polar decomposition. The trivial bound \\(I(X:\\text{anything})\\le2S(X)\\le Cn^{e_0}\\) is already such an input, with no collar at all. Finally, cut the half-line beyond the cut into dyadic intervals with alternating family labels: each is separated from the other side of the cut and from all earlier same-family intervals by the previous interval, and the two-family cancellation lemma gives the area law with summable errors."],
+          "physics": [
+            "If one refused the triangle-inequality shortcut, the two-dimensional proof would still work on a line, with the replica scanner replaced by a trivial inequality. Split an interval of length \\(Mr\\) into \\(M\\) children of length \\(r\\) and add them up in a random order; a child whose constant-width buffer has already been added gets the discount, with a fixed probability. This gives the recursion \\(F(Mr)\\le(1-p_0/4)M\\,F(r)+CM\\) for the maximal interval entropy, hence a sub-volume bound \\(F(r)\\le Cr^{e_0}\\) with \\(e_0<1\\). In two dimensions the analogous bound \\(r^{1+e_0}\\) lies above the boundary \\(r\\); here \\(r^{e_0}\\) is already below the diameter, which is all the next step needs.",
+            "The amplification proposition of the manuscript converts an information bound \\(I(X:\\text{far})\\le n^{1-\\varepsilon}\\) into \\(I(X:J)\\le n^{-M}\\) beyond a graph distance of order \\(n^{(1-\\varepsilon)/\\alpha}\\), with \\(\\alpha<1\\) as close to one as desired, using positive quasi-local constraints, a random product of the associated contractions and a polar decomposition. The trivial bound \\(I(X:\\text{anything})\\le2S(X)\\le Cn^{e_0}\\) is already such an input, with no collar at all. Finally, cut the half-line beyond the cut into dyadic intervals with alternating family labels: each is separated from the other side of the cut and from all earlier same-family intervals by the previous interval, and the two-family cancellation lemma gives the area law with summable errors."
+          ],
           "delivers": "A second, longer proof of Theorem A that uses each piece of the two-dimensional proof once, except the scanner. It is not pursued: the direct proof is shorter and has better constants.",
           "diagrams": [
-            {"src": "diagrams/recursion.svg", "caption": "Entropy bounds for an interval of length \\(r\\) on log–log axes (drawn with \\(M=4\\)): the volume bound \\(r\\log q\\), parallel to the diameter \\(r\\), has slope one; the long route gives slope \\(e_0<1\\); the area law is the constant line reached directly in the previous stage."},
-            {"src": "diagrams/chain-amplify.svg", "caption": "Amplification on the chain: the interval \\(X\\) of length \\(n\\), its graph neighbourhood \\(N_{2r}(X)\\) with \\(r=O(n^{e_0/\\alpha})=o(n)\\), on which the local unitary of the amplification argument acts, and the far set \\(J\\) it never touches, so that \\(I(X:J)\\le n^{-M}\\)."},
-            {"src": "diagrams/chain-families.svg", "caption": "Two families on a half-line: beyond the cut and the removed sites \\(D\\), the dyadic intervals \\(X_i=[2^i,2^{i+1})\\) of lengths \\(2,4,8,\\dots\\) with alternating family labels, continuing to the end of the chain. Each is separated from \\(B\\) and from all earlier same-family intervals by the previous interval, of half its length."}
+            {
+              "src": "diagrams/recursion.svg",
+              "caption": "Entropy bounds for an interval of length \\(r\\) on log–log axes (drawn with \\(M=4\\)): the volume bound \\(r\\log q\\), parallel to the diameter \\(r\\), has slope one; the long route gives slope \\(e_0<1\\); the area law is the constant line reached directly in the previous stage."
+            },
+            {
+              "src": "diagrams/chain-amplify.svg",
+              "caption": "Amplification on the chain: the interval \\(X\\) of length \\(n\\), its graph neighbourhood \\(N_{2r}(X)\\) with \\(r=O(n^{e_0/\\alpha})=o(n)\\), on which the local unitary of the amplification argument acts, and the far set \\(J\\) it never touches, so that \\(I(X:J)\\le n^{-M}\\)."
+            },
+            {
+              "src": "diagrams/chain-families.svg",
+              "caption": "Two families on a half-line: beyond the cut and the removed sites \\(D\\), the dyadic intervals \\(X_i=[2^i,2^{i+1})\\) of lengths \\(2,4,8,\\dots\\) with alternating family labels, continuing to the end of the chain. Each is separated from \\(B\\) and from all earlier same-family intervals by the previous interval, of half its length."
+            }
           ]
         }
       ]
@@ -110,51 +231,136 @@
           "physics": "If the Schmidt spectrum at every cut has a fast-decaying tail, truncating the cuts one after another produces a matrix product state whose error is the sum of the tail masses (Verstraete–Cirac). Apply the projectors onto the top \\(D\\) Schmidt vectors of the prefixes \\([1,k]\\), the longest prefix first; the Schmidt rank across cut \\(k\\) of the result is at most \\(D\\), and the error is at most the sum of \\(\\sqrt{\\epsilon_k}\\). The tail bound of Part I says the discarded mass is at most \\(2e^{e/2}e^{-u_0w}\\) once \\(D\\ge e^{S(X)+w}\\), and the area law bounds \\(S(X)\\). Choosing \\(w\\) logarithmic in \\(L\\) gives bond dimension \\(CL^{4/u_0}\\) and error \\(L^{-1}\\).",
           "delivers": "Theorem B, with an explicit exponent of order \\(\\sqrt{(1+J/\\Delta)\\mathcal B_R}\\). The rest of Part II is the protocol proof, which uses none of this.",
           "diagrams": [
-            {"src": "diagrams/mps-chain.svg", "caption": "A matrix product state with open boundary conditions: one tensor per site, bonds of dimension \\(D\\) between neighbours, one physical leg per site."},
-            {"src": "diagrams/truncation-sequence.svg", "caption": "Sequential truncation, drawn for \\(L=5\\). The projector \\(P_k=\\Pi_k\\otimes 1\\) onto the top \\(D\\) Schmidt vectors of the prefix \\([1,k]\\) is applied for \\(k=L-1\\) first and \\(k=1\\) last; the output of \\(P_k\\) lies in \\(\\mathrm{ran}\\,\\Pi_k\\otimes\\mathcal H_{[k+1,L]}\\), so across every cut the result has Schmidt rank at most \\(D\\)."}
+            {
+              "src": "diagrams/mps-chain.svg",
+              "caption": "A matrix product state with open boundary conditions: one tensor per site, bonds of dimension \\(D\\) between neighbours, one physical leg per site."
+            },
+            {
+              "src": "diagrams/truncation-sequence.svg",
+              "caption": "Sequential truncation, drawn for \\(L=5\\). The projector \\(P_k=\\Pi_k\\otimes 1\\) onto the top \\(D\\) Schmidt vectors of the prefix \\([1,k]\\) is applied for \\(k=L-1\\) first and \\(k=1\\) last; the output of \\(P_k\\) lies in \\(\\mathrm{ran}\\,\\Pi_k\\otimes\\mathcal H_{[k+1,L]}\\), so across every cut the result has Schmidt rank at most \\(D\\)."
+            }
           ]
         },
         {
           "title": "Independence at logarithmic separation",
           "secs": "§8",
-          "physics": ["Small mutual information \\(I(T:E)\\) means the joint state of \\(T\\) and \\(E\\) is close in relative entropy to the product of its marginals; relative entropy controls fidelity, and fidelity is the largest overlap of purifications (Uhlmann). So if a third system \\(U\\) purifies \\(TE\\), an isometry on \\(U\\) alone turns the global vector into nearly a product {{tn:split}} and whoever holds \\(U\\) can do this privately. This is the single mechanism behind the moves of the next stage.", "The area law gives \\(I(R:C)=O(1)\\) between an interval \\(R\\) and anything else, never \\(o(1)\\). The information reset turns a constant into an arbitrary inverse power of \\(L\\) by shrinking both regions inward by a margin of order \\(\\log L\\). Take two copies of the ground vector, \\(\\Psi=\\Omega\\otimes\\Omega\\), and swap the copies on \\(R\\) to get \\(\\Phi\\): in \\(\\Phi\\) the cores \\(R_0\\subset R\\) and \\(C_0\\subset C\\) of one copy come from different original copies and are exactly independent. A unitary acting only on the buffer between the cores and sending \\(\\Psi\\) to \\(\\Phi\\) up to \\(L^{-p}\\) therefore shows that the original marginal on \\(R_0C_0\\) is nearly a product. The unitary is built in three steps: the splitting lemma gives an operator \\(W\\) on the buffer with \\(\\langle\\Phi,W\\Psi\\rangle\\ge e^{-2b}\\); a Gaussian spectral filter applied in both directions projects \\(W\\Psi\\) onto \\(\\Phi\\) and \\(W^\\dagger\\Phi\\) onto \\(\\Psi\\), because both are unique gapped ground vectors of the two doubled Hamiltonians; a Lieb–Robinson bound localizes the filtered operator to within \\(O(1+b+\\log L)\\) of the buffer and of the edges crossing \\(R\\), where the two Hamiltonians differ. The localized operator is almost isometric on \\(\\Psi\\), and its polar unitary does the job.", "Feeding the constant \\(b=O(1)\\) of the area law into the reset: any interval \\(T\\) and any set \\(E\\) at distance \\(D_p\\log L\\) from it are independent up to \\(L^{-p}\\). This one lemma replaces the coarse collar bound, the cell conditional-information lemma and the angular induction of the PEPS manuscript."],
+          "physics": [
+            "Small mutual information \\(I(T:E)\\) means the joint state of \\(T\\) and \\(E\\) is close in relative entropy to the product of its marginals; relative entropy controls fidelity, and fidelity is the largest overlap of purifications (Uhlmann). So if a third system \\(U\\) purifies \\(TE\\), an isometry on \\(U\\) alone turns the global vector into nearly a product {{tn:split}} and whoever holds \\(U\\) can do this privately. This is the single mechanism behind the moves of the next stage.",
+            "The area law gives \\(I(R:C)=O(1)\\) between an interval \\(R\\) and anything else, never \\(o(1)\\). The information reset turns a constant into an arbitrary inverse power of \\(L\\) by shrinking both regions inward by a margin of order \\(\\log L\\). Take two copies of the ground vector, \\(\\Psi=\\Omega\\otimes\\Omega\\), and swap the copies on \\(R\\) to get \\(\\Phi\\): in \\(\\Phi\\) the cores \\(R_0\\subset R\\) and \\(C_0\\subset C\\) of one copy come from different original copies and are exactly independent. A unitary acting only on the buffer between the cores and sending \\(\\Psi\\) to \\(\\Phi\\) up to \\(L^{-p}\\) therefore shows that the original marginal on \\(R_0C_0\\) is nearly a product. The unitary is built in three steps: the splitting lemma gives an operator \\(W\\) on the buffer with \\(\\langle\\Phi,W\\Psi\\rangle\\ge e^{-2b}\\); a Gaussian spectral filter applied in both directions projects \\(W\\Psi\\) onto \\(\\Phi\\) and \\(W^\\dagger\\Phi\\) onto \\(\\Psi\\), because both are unique gapped ground vectors of the two doubled Hamiltonians; a Lieb–Robinson bound localizes the filtered operator to within \\(O(1+b+\\log L)\\) of the buffer and of the edges crossing \\(R\\), where the two Hamiltonians differ. The localized operator is almost isometric on \\(\\Psi\\), and its polar unitary does the job.",
+            "Feeding the constant \\(b=O(1)\\) of the area law into the reset: any interval \\(T\\) and any set \\(E\\) at distance \\(D_p\\log L\\) from it are independent up to \\(L^{-p}\\). This one lemma replaces the coarse collar bound, the cell conditional-information lemma and the angular induction of the PEPS manuscript."
+          ],
           "delivers": "\\(I_\\Omega(T:E)\\le L^{-p}\\) whenever \\(T\\) is a union of boundedly many intervals and \\(\\mathrm{dist}(T,E)\\ge D_p\\log L\\). This is the only place in Part II where a Lieb–Robinson bound is used; the amplification argument of the area-law manuscript would give the same with separation \\((\\log L)^{1/\\alpha}\\), hence a quasi-polynomial bond dimension.",
-          "symbols": [["\\(\\Psi,\\Phi\\)", "two copies of \\(\\Omega\\), before and after the swap on \\(R\\)"], ["\\(R_0, C_0\\)", "the cores, inset by the margin \\(w\\)"], ["\\(\\mathbb H,\\mathbb H'\\)", "the doubled Hamiltonian and its swapped conjugate"]],
+          "symbols": [
+            [
+              "\\(\\Psi,\\Phi\\)",
+              "two copies of \\(\\Omega\\), before and after the swap on \\(R\\)"
+            ],
+            [
+              "\\(R_0, C_0\\)",
+              "the cores, inset by the margin \\(w\\)"
+            ],
+            [
+              "\\(\\mathbb H,\\mathbb H'\\)",
+              "the doubled Hamiltonian and its swapped conjugate"
+            ]
+          ],
           "diagrams": [
-            {"src": "diagrams/chain-reset.svg", "caption": "The reset geometry, drawn in one replica of \\(\\Psi=\\Omega\\otimes\\Omega\\): the cores \\(R_0\\subset R\\) and \\(C_0\\subset C\\), the buffer \\(Q=\\Lambda\\setminus(R\\cup C)\\), the margins of width \\(w\\), the set \\(Z_R\\) near the cut edges of \\(R\\), and the support \\(S=N_\\ell(Q\\cup Z_R)\\) of the unitary, which stays clear of both cores."},
-            {"src": "diagrams/replica-swap.svg", "caption": "The swap \\(F_R\\) exchanges the two copies of \\(\\Omega\\) on \\(R\\) only (the first copy is drawn mirrored so that the two \\(R\\) legs are adjacent). In \\(\\Phi=F_R\\Psi\\) the core \\(R_0\\) of the first copy comes from the second copy while \\(C_0\\) does not, so the first copy's marginal on \\(R_0C_0\\) is \\(\\rho_{R_0}\\otimes\\rho_{C_0}\\)."},
-            {"src": "diagrams/qc-gaussian-filter.svg", "caption": "The two-sided Gaussian filter: evolve with the doubled Hamiltonian, apply \\(W\\) on the two copies of the buffer, evolve back with the swapped Hamiltonian, and average against a Gaussian in time. It sends \\(W\\Psi\\) to a multiple of \\(\\Phi\\) and \\(W^\\dagger\\Phi\\) to a multiple of \\(\\Psi\\), up to \\(e^{-h\\Delta^2/2}\\)."},
-            {"src": "diagrams/chain-logsep.svg", "caption": "The separation lemma: an interval \\(T\\), its enlargement \\(R\\), the far region \\(C\\) and the set \\(E\\subseteq C\\) at distance \\(D_p\\log L\\) from \\(T\\). The area law bounds \\(I(R:C)\\) by a constant and the reset makes \\(I(T:E)\\le L^{-p}\\)."}
+            {
+              "src": "diagrams/chain-reset.svg",
+              "caption": "The reset geometry, drawn in one replica of \\(\\Psi=\\Omega\\otimes\\Omega\\): the cores \\(R_0\\subset R\\) and \\(C_0\\subset C\\), the buffer \\(Q=\\Lambda\\setminus(R\\cup C)\\), the margins of width \\(w\\), the set \\(Z_R\\) near the cut edges of \\(R\\), and the support \\(S=N_\\ell(Q\\cup Z_R)\\) of the unitary, which stays clear of both cores."
+            },
+            {
+              "src": "diagrams/replica-swap.svg",
+              "caption": "The swap \\(F_R\\) exchanges the two copies of \\(\\Omega\\) on \\(R\\) only (the first copy is drawn mirrored so that the two \\(R\\) legs are adjacent). In \\(\\Phi=F_R\\Psi\\) the core \\(R_0\\) of the first copy comes from the second copy while \\(C_0\\) does not, so the first copy's marginal on \\(R_0C_0\\) is \\(\\rho_{R_0}\\otimes\\rho_{C_0}\\)."
+            },
+            {
+              "src": "diagrams/qc-gaussian-filter.svg",
+              "caption": "The two-sided Gaussian filter: evolve with the doubled Hamiltonian, apply \\(W\\) on the two copies of the buffer, evolve back with the swapped Hamiltonian, and average against a Gaussian in time. It sends \\(W\\Psi\\) to a multiple of \\(\\Phi\\) and \\(W^\\dagger\\Phi\\) to a multiple of \\(\\Psi\\), up to \\(e^{-h\\Delta^2/2}\\)."
+            },
+            {
+              "src": "diagrams/chain-logsep.svg",
+              "caption": "The separation lemma: an interval \\(T\\), its enlargement \\(R\\), the far region \\(C\\) and the set \\(E\\subseteq C\\) at distance \\(D_p\\log L\\) from \\(T\\). The area law bounds \\(I(R:C)\\) by a constant and the reset makes \\(I(T:E)\\le L^{-p}\\)."
+            }
           ]
         },
         {
           "title": "Three moves change who holds what",
           "secs": "§9",
-          "physics": ["Think of a bookkeeping game. Parties own registers, possibly whole private copies of the ground vector. A gate is a linear contraction on the registers of a few parties; private gates are free; a non-private gate is charged only through how many parties it involves and how many such gates each party ever joins, and it must have a polynomial expansion into private maps, normalized vectors shared by two parties, normalized covectors shared by two parties and polynomial-dimensional transfers. The dimensions of the shared vectors are unrestricted. A sheet is a full set of site registers with owners; its reference vector is a copy of \\(\\Omega\\) on those registers.", "A birth gives an interior interval \\(T\\) held by \\(P_\\circ\\) to a new owner \\(Q_\\circ\\): \\(P_\\circ\\) splits its buffer \\(U\\) by the isometry \\(V\\), contracts \\(T\\) and its purifier with \\(\\langle s|\\), re-emits the pair \\(s\\) with \\(T\\) now held by \\(Q_\\circ\\), and applies \\(V^\\dagger\\); the error is \\(\\sqrt{I(T:E)}\\) where \\(E\\) is everything not held by \\(P_\\circ\\). A death is the reverse, with a shared covector instead of a shared vector. An exchange swaps the ownership assignments of two sheets inside a window \\(Y\\) by renaming registers, which moves nothing, and corrects the apparent partial swap privately on the common owner's buffer. On a line no three owners ever meet at a point, so the encoded holes and tags of the two-dimensional moves are not needed."],
+          "physics": [
+            "Think of a bookkeeping game. Parties own registers, possibly whole private copies of the ground vector. A gate is a linear contraction on the registers of a few parties; private gates are free; a non-private gate is charged only through how many parties it involves and how many such gates each party ever joins, and it must have a polynomial expansion into private maps, normalized vectors shared by two parties, normalized covectors shared by two parties and polynomial-dimensional transfers. The dimensions of the shared vectors are unrestricted. A sheet is a full set of site registers with owners; its reference vector is a copy of \\(\\Omega\\) on those registers.",
+            "A birth gives an interior interval \\(T\\) held by \\(P_\\circ\\) to a new owner \\(Q_\\circ\\): \\(P_\\circ\\) splits its buffer \\(U\\) by the isometry \\(V\\), contracts \\(T\\) and its purifier with \\(\\langle s|\\), re-emits the pair \\(s\\) with \\(T\\) now held by \\(Q_\\circ\\), and applies \\(V^\\dagger\\); the error is \\(\\sqrt{I(T:E)}\\) where \\(E\\) is everything not held by \\(P_\\circ\\). A death is the reverse, with a shared covector instead of a shared vector. An exchange swaps the ownership assignments of two sheets inside a window \\(Y\\) by renaming registers, which moves nothing, and corrects the apparent partial swap privately on the common owner's buffer. On a line no three owners ever meet at a point, so the encoded holes and tags of the two-dimensional moves are not needed."
+          ],
           "delivers": "Births, deaths and exchanges with reference-vector error \\(L^{-p}\\) (exchanges \\(4L^{-p}\\)) whenever the moved region is at distance \\(D_{2p}\\log L\\) from every other owner, each a bounded change on two or three parties.",
-          "symbols": [["\\(P_\\circ, Q_\\circ\\)", "old and new owner of the moved region"], ["\\(s, V\\)", "the pair vector and the splitting isometry"]],
+          "symbols": [
+            [
+              "\\(P_\\circ, Q_\\circ\\)",
+              "old and new owner of the moved region"
+            ],
+            [
+              "\\(s, V\\)",
+              "the pair vector and the splitting isometry"
+            ]
+          ],
           "diagrams": [
-            {"src": "diagrams/qc-birth.svg", "caption": "The birth circuit, read left to right: \\(V\\) splits the buffer, \\(\\langle s|\\) closes \\(T\\) and its purifier, a fresh pair \\(s\\) re-emits them with \\(T\\) held by the new owner, and \\(V^\\dagger\\) recombines."},
-            {"src": "diagrams/qc-death.svg", "caption": "The death circuit: the same operator with the ownership reversed, using the shared covector \\(\\langle s|\\) across the two owners and a private re-insertion of \\(s\\)."},
-            {"src": "diagrams/qc-exchange.svg", "caption": "The exchange correction on the two sheets: after renaming the registers inside \\(Y\\), the common owner applies \\(V\\) to both buffers, swaps the two purifying factors, and applies the adjoints, which realizes the partial swap on \\(T\\) up to \\(4L^{-p}\\)."}
+            {
+              "src": "diagrams/qc-birth.svg",
+              "caption": "The birth circuit, read left to right: \\(V\\) splits the buffer, \\(\\langle s|\\) closes \\(T\\) and its purifier, a fresh pair \\(s\\) re-emits them with \\(T\\) held by the new owner, and \\(V^\\dagger\\) recombines."
+            },
+            {
+              "src": "diagrams/qc-death.svg",
+              "caption": "The death circuit: the same operator with the ownership reversed, using the shared covector \\(\\langle s|\\) across the two owners and a private re-insertion of \\(s\\)."
+            },
+            {
+              "src": "diagrams/qc-exchange.svg",
+              "caption": "The exchange correction on the two sheets: after renaming the registers inside \\(Y\\), the common owner applies \\(V\\) to both buffers, swaps the two purifying factors, and applies the adjoints, which realizes the partial swap on \\(T\\) up to \\(4L^{-p}\\)."
+            }
           ]
         },
         {
           "title": "Sweep the chain with a moving remainder",
           "secs": "§10",
-          "physics": ["Divide the chain into blocks of \\(t=20w\\) sites, \\(w\\) the logarithmic separation. At step \\(k\\) the word is \\(P_1|\\cdots|P_k|R_k\\): block owners, then one remainder party holding the rest. Two births, each leaving a margin \\(w\\) to every other owner, create the next remainder \\(R_{k+1}\\) beyond block \\(k+1\\) and the next block owner \\(P_{k+1}\\) on the interior of block \\(k+1\\). What is left of \\(R_k\\) are two bands of width \\(w\\), one wedged between \\(P_k\\) and \\(P_{k+1}\\), one between \\(P_{k+1}\\) and \\(R_{k+1}\\).", "A band \\(A\\) wedged between two different owners \\(C\\) and \\(B\\) cannot simply die into \\(B\\), because it touches \\(C\\). The two-dimensional paper dissolves such a band along every edge of every square by a fixed word sequence with an auxiliary copy of the ground vector, and the sequence transplants verbatim: on the auxiliary sheet, all of it held by \\(C\\), birth \\(B\\), then \\(A\\), then \\(C\\) in nested bands to the left of the interface; exchange the two sheets inside a window whose ends lie where both sheets are held by \\(C\\); then on the main sheet the \\(C\\) band is flanked by \\(A\\) and dies, the \\(A\\) band is flanked by \\(B\\) and dies, and a final birth and death put the interface back where it was. Eight moves on three parties, each with the required margin.", "Why a sweep and not the dyadic hierarchy of the manuscript? Because the network must end up on the chain, and every link crossing a bond multiplies that bond's dimension. A binary tree of intervals drawn on a line has cutwidth \\(\\log L\\), which would make the bond dimension polynomial to the power \\(\\log L\\). In the sweep every link joins parties attached to blocks at most two apart."],
+          "physics": [
+            "Divide the chain into blocks of \\(t=20w\\) sites, \\(w\\) the logarithmic separation. At step \\(k\\) the word is \\(P_1|\\cdots|P_k|R_k\\): block owners, then one remainder party holding the rest. Two births, each leaving a margin \\(w\\) to every other owner, create the next remainder \\(R_{k+1}\\) beyond block \\(k+1\\) and the next block owner \\(P_{k+1}\\) on the interior of block \\(k+1\\). What is left of \\(R_k\\) are two bands of width \\(w\\), one wedged between \\(P_k\\) and \\(P_{k+1}\\), one between \\(P_{k+1}\\) and \\(R_{k+1}\\).",
+            "A band \\(A\\) wedged between two different owners \\(C\\) and \\(B\\) cannot simply die into \\(B\\), because it touches \\(C\\). The two-dimensional paper dissolves such a band along every edge of every square by a fixed word sequence with an auxiliary copy of the ground vector, and the sequence transplants verbatim: on the auxiliary sheet, all of it held by \\(C\\), birth \\(B\\), then \\(A\\), then \\(C\\) in nested bands to the left of the interface; exchange the two sheets inside a window whose ends lie where both sheets are held by \\(C\\); then on the main sheet the \\(C\\) band is flanked by \\(A\\) and dies, the \\(A\\) band is flanked by \\(B\\) and dies, and a final birth and death put the interface back where it was. Eight moves on three parties, each with the required margin.",
+            "Why a sweep and not the dyadic hierarchy of the manuscript? Because the network must end up on the chain, and every link crossing a bond multiplies that bond's dimension. A binary tree of intervals drawn on a line has cutwidth \\(\\log L\\), which would make the bond dimension polynomial to the power \\(\\log L\\). In the sweep every link joins parties attached to blocks at most two apart."
+          ],
           "delivers": "A distributed construction with at most \\(2L\\) parties and \\(2L\\) non-private gates, each on at most three parties, each party joining at most 40 such gates, whose final vector is within \\(26L^{-11}\\) of \\(\\Omega\\) tensored with the retired auxiliary copies, with every block owner holding exactly the \\(O(\\log L)\\) raw registers of its block.",
-          "symbols": [["\\(P_k\\)", "owner of block \\(k\\)"], ["\\(R_k\\)", "remainder party at step \\(k\\)"], ["\\(w, t\\)", "band width and block length, \\(t=20w\\)"]],
+          "symbols": [
+            [
+              "\\(P_k\\)",
+              "owner of block \\(k\\)"
+            ],
+            [
+              "\\(R_k\\)",
+              "remainder party at step \\(k\\)"
+            ],
+            [
+              "\\(w, t\\)",
+              "band width and block length, \\(t=20w\\)"
+            ]
+          ],
           "diagrams": [
-            {"src": "diagrams/sweep-step.svg", "caption": "One step of the sweep (for \\(k\\ge1\\)): the word before the step, after the birth of \\(R_{k+1}\\), after the birth of \\(P_{k+1}\\), and after the two bands of \\(R_k\\) have been dissolved."},
-            {"src": "diagrams/band-words.svg", "caption": "The band dissolution in units of the band width: the auxiliary word after its three births (the heavier outline marks their union), the exchange window \\(Y\\), and the sequence of deaths and births that leaves the band to \\(B\\) with the interface back at zero."},
-            {"src": "diagrams/party-graph.svg", "caption": "Left: the party graph of the sweep placed on the chain; a bounded number of links cross any bond. Right: a dyadic hierarchy drawn on a line, where every scale contributes a link across the middle bond."}
+            {
+              "src": "diagrams/sweep-step.svg",
+              "caption": "One step of the sweep (for \\(k\\ge1\\)): the word before the step, after the birth of \\(R_{k+1}\\), after the birth of \\(P_{k+1}\\), and after the two bands of \\(R_k\\) have been dissolved."
+            },
+            {
+              "src": "diagrams/band-words.svg",
+              "caption": "The band dissolution in units of the band width: the auxiliary word after its three births (the heavier outline marks their union), the exchange window \\(Y\\), and the sequence of deaths and births that leaves the band to \\(B\\) with the interface back at zero."
+            },
+            {
+              "src": "diagrams/party-graph.svg",
+              "caption": "Left: the party graph of the sweep placed on the chain; a bounded number of links cross any bond. Right: a dyadic hierarchy drawn on a line, where every scale contributes a link across the middle bond."
+            }
           ]
         },
         {
           "title": "Compress the shared resources and extract a column",
           "secs": "§11",
-          "physics": ["The sweep is a pure linear calculation ending in a partial trace over everything but the block registers, and its gates use shared vectors of enormous dimension. The compression theorem replaces, in the density calculation, every shared vector by an average of \\(k\\) random product operators built from its Schmidt data and Gaussian coefficients {{tn:source-sampling}} and shows that for polynomial \\(k\\) the physical density changes by at most \\(L^{-p}\\) in trace norm. The error is expanded by the positions that use a centered correction; each such position involves two endpoint parties, bounded participation means only boundedly many gates must be opened per corrected position, and a Gaussian second-moment computation with trace-one weights bounds the expected trace norm of a term with \\(s\\) corrections by \\(k^{-s/2}\\) times a fixed polynomial per correction. Nothing depends on private dimensions or Schmidt ranks.", "The output is an operator network with one node per party and polynomial links between parties that shared a gate. Fixing one product-basis column of its input legs gives a ket network with the same links {{tn:column}} which, after normalization, is within twice the trace-norm error of the ground vector."],
+          "physics": [
+            "The sweep is a pure linear calculation ending in a partial trace over everything but the block registers, and its gates use shared vectors of enormous dimension. The compression theorem replaces, in the density calculation, every shared vector by an average of \\(k\\) random product operators built from its Schmidt data and Gaussian coefficients {{tn:source-sampling}} and shows that for polynomial \\(k\\) the physical density changes by at most \\(L^{-p}\\) in trace norm. The error is expanded by the positions that use a centered correction; each such position involves two endpoint parties, bounded participation means only boundedly many gates must be opened per corrected position, and a Gaussian second-moment computation with trace-one weights bounds the expected trace norm of a term with \\(s\\) corrections by \\(k^{-s/2}\\) times a fixed polynomial per correction. Nothing depends on private dimensions or Schmidt ranks.",
+            "The output is an operator network with one node per party and polynomial links between parties that shared a gate. Fixing one product-basis column of its input legs gives a ket network with the same links {{tn:column}} which, after normalization, is within twice the trace-norm error of the ground vector."
+          ],
           "delivers": "A ket network on the party graph with polynomial link dimensions and normalized error \\(4L^{-5}\\), with links only between parties that shared a gate.",
           "diagrams": []
         },
@@ -163,7 +369,12 @@
           "secs": "§12",
           "physics": "Attach the block owner \\(P_i\\) to block \\(i\\) and the remainder \\(R_k\\) to block \\(k+1\\). Every link joins parties attached to blocks at most two apart, so a bond between two blocks is crossed only by links among the boundedly many parties attached to the four nearest blocks: constant congestion, and the dimension of a block-to-block bond is a bounded product of polynomial link dimensions. Each block node, whose physical register has the polynomial dimension \\(q^{O(\\log L)}\\), is split into one tensor per site by successive singular value decompositions; the internal bonds are at most \\(q^{2t}\\) times the crossing dimension, still polynomial. Chains shorter than a fixed threshold have an exact representation of bounded bond dimension.",
           "delivers": "Theorem B through the protocol route, with bond dimension \\(CL^{c}\\), \\(c=40D_{24}\\log q+r\\chi\\), where \\(r\\) is the link exponent of the compression theorem and \\(\\chi=1600\\) a numerical congestion bound.",
-          "diagrams": [{"src": "diagrams/block-to-sites.svg", "caption": "A block tensor with its two block bonds and \\(t\\) physical legs is split into \\(t\\) site tensors by successive singular value decompositions; the new bonds are at most \\(q^{2t}\\) times the block-bond dimension."}]
+          "diagrams": [
+            {
+              "src": "diagrams/block-to-sites.svg",
+              "caption": "A block tensor with its two block bonds and \\(t\\) physical legs is split into \\(t\\) site tensors by successive singular value decompositions; the new bonds are at most \\(q^{2t}\\) times the block-bond dimension."
+            }
+          ]
         }
       ]
     },
@@ -176,27 +387,85 @@
         {
           "title": "What one dimension buys, and what does not transfer back",
           "secs": "§13",
-          "physics": ["Three things, each used once. A shell around an interval is crossed by \\(O(1)\\) interactions, so the buffered discount costs a constant and needs a constant-width buffer. No three owners ever meet at a point of a line, so no encodings are needed when ownership changes. And a chain can be swept, so the party graph has bounded cutwidth. Everything else in the manuscripts is either unchanged or disappears.", "The Araki–Lieb closure fails in two dimensions because the buffer is an annulus of unknown entropy; the sweep fails because a region being repainted has a one-dimensional boundary along which a third owner is adjacent, which the edge bands and point treatments of the manuscript are designed to handle; and the two-line route fails because sequential truncation across nested cuts does not produce a network on the lattice. The two-dimensional papers are not inefficient versions of this note; they solve problems that do not exist on a line."],
+          "physics": [
+            "Three things, each used once. A shell around an interval is crossed by \\(O(1)\\) interactions, so the buffered discount costs a constant and needs a constant-width buffer. No three owners ever meet at a point of a line, so no encodings are needed when ownership changes. And a chain can be swept, so the party graph has bounded cutwidth. Everything else in the manuscripts is either unchanged or disappears.",
+            "The Araki–Lieb closure fails in two dimensions because the buffer is an annulus of unknown entropy; the sweep fails because a region being repainted has a one-dimensional boundary along which a third owner is adjacent, which the edge bands and point treatments of the manuscript are designed to handle; and the two-line route fails because sequential truncation across nested cuts does not produce a network on the lattice. The two-dimensional papers are not inefficient versions of this note; they solve problems that do not exist on a line."
+          ],
           "delivers": "The matrix product state theorem has two one-dimensional proofs here, one free of dynamics and one that uses a Lieb–Robinson bound in a single lemma in a way with no analogue in Hastings' construction.",
+          "diagrams": []
+        },
+        {
+          "title": "Where the constants can be sharpened, and where they cannot",
+          "secs": "§6, Remark 6.3",
+          "physics": [
+            "Two of the constants are artifacts. The count of split interactions, \\(2\\cdot4^R\\), allows one term per subset of a window; with one term per window of \\(R+1\\) sites it is \\(2R\\). The factor \\(q^{2(R+1)}\\) in the energy of the filtered vector comes from bounding a matrix-unit expansion term by term; the tail bound met the same quantity and turned the dimension into a logarithm with the three-lines theorem, and the same device works for the filters, because the clipping inequality bounds the ratio of filter eigenvalues by a power of the ratio of Schmidt weights. With both repairs the area law reads \\(S(X)\\le C\\,(1+J/\\Delta)\\,\\mathcal B_R\\,R\\log q\\), which for nearest neighbours is \\(O((1+J/\\Delta)\\log^3 q)\\): the order of the Arad–Kitaev–Landau–Vazirani bound, reached without a Lieb–Robinson bound or an approximate ground-state projector.",
+            "Two features are intrinsic to the route. The gap appears linearly because the Schmidt pinning carries \\(S(X)\\) with coefficient one, so the total tilt must exceed one, and a tilt of order one spread over \\(m\\) shells costs energy of order \\(J\\mathcal B_R/m\\), which must stay below \\(\\Delta\\). And the tail window has width \\(u_0\\sim(\\vartheta\\mathcal B_R)^{-1/2}\\) because the tilted vector is compared with the ground state only through the variational inequality, which says nothing once its energy exceeds the gap. That width is the rate of the Schmidt tail, hence the exponent of \\(L\\) in the bond dimension; in the approximate-ground-state-projector route the gap sits in a prefactor and the exponent of \\(L\\) is universal. Removing \\(\\sqrt{J/\\Delta}\\) from the exponent would need the gap in amplified form, which is what a projector supplies."
+          ],
+          "delivers": "The one-dimensional area law matches the best known gap and local-dimension scaling once one crude estimate is replaced; the square root of the inverse gap in the bond-dimension exponent is the price of using the gap once.",
           "diagrams": []
         }
       ]
     }
   ],
   "glossary": [
-    ["Entanglement entropy", "\\(S(A)=-\\mathrm{Tr}\\,\\rho_A\\log\\rho_A\\) for the reduced density matrix of a set of sites \\(A\\)."],
-    ["Mutual information", "\\(I(B:C)=S(B)+S(C)-S(BC)\\); small \\(I(B:C)\\) means \\(\\rho_{BC}\\) is close to \\(\\rho_B\\otimes\\rho_C\\)."],
-    ["Conditional entropy", "\\(S(X|T)=S(XT)-S(T)\\); it lies between \\(-S(X)\\) and \\(S(X)\\), and the Araki–Lieb inequality gives \\(S(X|T)\\ge S(X)-2S(T)\\)."],
-    ["Global gap", "The spectral gap \\(\\Delta\\) of the full Hamiltonian above its unique ground state; no gap is assumed for any restricted Hamiltonian."],
-    ["Matrix product state and bond dimension", "A chain of tensors contracted along the bonds between neighbours; the bond dimension is the dimension of a contracted index."],
-    ["Party, sheet, move", "A party owns registers; a sheet is a full set of site registers with owners and a copy of \\(\\Omega\\) as reference; births, deaths and exchanges change owners while keeping the vector near the reference."]
+    [
+      "Entanglement entropy",
+      "\\(S(A)=-\\mathrm{Tr}\\,\\rho_A\\log\\rho_A\\) for the reduced density matrix of a set of sites \\(A\\)."
+    ],
+    [
+      "Mutual information",
+      "\\(I(B:C)=S(B)+S(C)-S(BC)\\); small \\(I(B:C)\\) means \\(\\rho_{BC}\\) is close to \\(\\rho_B\\otimes\\rho_C\\)."
+    ],
+    [
+      "Conditional entropy",
+      "\\(S(X|T)=S(XT)-S(T)\\); it lies between \\(-S(X)\\) and \\(S(X)\\), and the Araki–Lieb inequality gives \\(S(X|T)\\ge S(X)-2S(T)\\)."
+    ],
+    [
+      "Global gap",
+      "The spectral gap \\(\\Delta\\) of the full Hamiltonian above its unique ground state; no gap is assumed for any restricted Hamiltonian."
+    ],
+    [
+      "Matrix product state and bond dimension",
+      "A chain of tensors contracted along the bonds between neighbours; the bond dimension is the dimension of a contracted index."
+    ],
+    [
+      "Party, sheet, move",
+      "A party owns registers; a sheet is a full set of site registers with owners and a copy of \\(\\Omega\\) as reference; births, deaths and exchanges change owners while keeping the vector near the reference."
+    ]
   ],
   "references": {
-    "AL": {"authors": "OpenAI", "title": "A two-dimensional area law from a global spectral gap", "year": 2026, "url": "https://github.com/openai/math/tree/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints"},
-    "PP": {"authors": "OpenAI", "title": "Polynomial PEPS approximation of gapped square-grid ground states", "year": 2026, "url": "https://github.com/openai/math/tree/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints"},
-    "Hastings2007": {"authors": "M. B. Hastings", "title": "An area law for one-dimensional quantum systems", "year": 2007, "venue": "J. Stat. Mech. P08024", "url": "https://arxiv.org/abs/0705.2024"},
-    "AKLV2013": {"authors": "I. Arad, A. Kitaev, Z. Landau, U. Vazirani", "title": "An area law and sub-exponential algorithm for 1D systems", "year": 2013, "url": "https://arxiv.org/abs/1301.1162"},
-    "VC2006": {"authors": "F. Verstraete, J. I. Cirac", "title": "Matrix product states represent ground states faithfully", "year": 2006, "venue": "Phys. Rev. B 73, 094423", "url": "https://arxiv.org/abs/cond-mat/0505140"}
+    "AL": {
+      "authors": "OpenAI",
+      "title": "A two-dimensional area law from a global spectral gap",
+      "year": 2026,
+      "url": "https://github.com/openai/math/tree/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints"
+    },
+    "PP": {
+      "authors": "OpenAI",
+      "title": "Polynomial PEPS approximation of gapped square-grid ground states",
+      "year": 2026,
+      "url": "https://github.com/openai/math/tree/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints"
+    },
+    "Hastings2007": {
+      "authors": "M. B. Hastings",
+      "title": "An area law for one-dimensional quantum systems",
+      "year": 2007,
+      "venue": "J. Stat. Mech. P08024",
+      "url": "https://arxiv.org/abs/0705.2024"
+    },
+    "AKLV2013": {
+      "authors": "I. Arad, A. Kitaev, Z. Landau, U. Vazirani",
+      "title": "An area law and sub-exponential algorithm for 1D systems",
+      "year": 2013,
+      "url": "https://arxiv.org/abs/1301.1162"
+    },
+    "VC2006": {
+      "authors": "F. Verstraete, J. I. Cirac",
+      "title": "Matrix product states represent ground states faithfully",
+      "year": 2006,
+      "venue": "Phys. Rev. B 73, 094423",
+      "url": "https://arxiv.org/abs/cond-mat/0505140"
+    }
   },
   "footer": "Sources: the area-law manuscript {{cite:AL}} and the PEPS manuscript {{cite:PP}}; Hastings {{cite:Hastings2007}}; Arad–Kitaev–Landau–Vazirani {{cite:AKLV2013}}; Verstraete–Cirac {{cite:VC2006}}. The full statements and proofs are in the PDF next to this page."
 }
