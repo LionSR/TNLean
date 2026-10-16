@@ -60,8 +60,9 @@ region is $(Q_{jg}\cup Y_{jg})^c$.
 \begin{proof}
     \leanok
     \uses{thm:al_augmented_root_compression,thm:al_scan_actual_round_global_energy}
-    The actual terminal regions satisfy disjointness and nesting in the
-    band index. Compress to the simultaneous symmetric subspace and use
+    The actual near and middle regions are disjoint and satisfy
+    $Q_{jg}\cup Y_{jg}\subseteq Q_{j'h}$ for every $g<h$.
+    Compress to the simultaneous symmetric subspace and use
     the replica metric with parameter $t=a/2$. For the resulting ordered
     band product $M_k$ and symmetry isometry $Z$, the actual coordinates are
     \begin{align}
@@ -82,6 +83,8 @@ region is $(Q_{jg}\cup Y_{jg})^c$.
     total prefactor is $aK/4=W/4$. Positivity of the squared norm and
     normalization follow in the same comparison, and
     (\ref{eq:actual_rough_weight_gap}) gives $\delta_k\geq0$.
+    The actual history tree and its conditional choices are unchanged
+    when placed in the common terminal family.
 \end{proof}
 
 \begin{theorem}[Vanishing remainder at a fixed band weight]
@@ -230,6 +233,7 @@ $W=4$. Their hypothesis $K\geq8$ gives $0<a\leq1/2$.
 \end{theorem}
 \begin{proof}
     \leanok
+    \uses{def:actual_rough_lower_remainder}
     Use $kS'-\log\dim\ell_k\leq|\log\dim\ell_k-kS'|$.
 \end{proof}
 

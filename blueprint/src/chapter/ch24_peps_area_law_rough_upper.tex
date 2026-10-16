@@ -76,9 +76,16 @@
 \begin{theorem}[Sharp upper rate for the actual fill and charge roots]
     \label{thm:al_actual_sharp_upper}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.eventually_actualScan_suppliedPrevector_sharp_upper}
-    \uses{thm:al_global_schmidt_bell_prevector}
-    Fix a finite physical domain, its target region $X$, a unit vector
-    $\Omega_t$, and an actual scanner with $K$ ordered bands. Fix a
+    \leanok
+    \uses{thm:al_global_schmidt_bell_prevector,def:al_scan_actual_histories,
+        def:al_scan_status_marginals}
+    Fix finite sets $\Lambda,T\subseteq\mathbb Z^2$ with $T\ne\varnothing$,
+    a positive local dimension $q$, and a unit vector $\Omega_t$ on $\Lambda$.
+    Let the collar scanner have $K$ ordered bands, initial near region
+    $A\subseteq\Lambda$, offset scale $m>0$, and charge capacity $M>0$.
+    Its depth is the ambient distance
+    $d_T(x)=\min_{t\in T}\|x-t\|_\infty$, and its target is $X=A\cap T$.
+    Fix an integer $L$ with $8Km\leq L$ and use the horizon $nm$. Fix a
     positive-mass spectral set $E$ of the reduced density on $X$, with
     $d=|E|$ and mass $z>0$. Let $\lambda_k$ be one supplied label sequence
     whose selected Schmidt vector satisfies the eventual mass bound
@@ -125,6 +132,10 @@
     parameter is projected onto $[0,1]$, as in the actual scanner.
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{thm:al_scan_band_nesting,thm:al_scan_receiving_regions,
+        thm:al_augmented_root_compression,thm:al_scan_nested_band_metrics,
+        thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible}
     Use one finite family containing every completed and pre-charge
     partition up to the horizon. The actual terminal maps preserve the
     physical partitions and the weights of both kinds of mean tree.
@@ -141,6 +152,7 @@
 \begin{theorem}[One physical label sequence with the sharp upper rate]
     \label{thm:al_actual_sharp_prevector}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_schmidtBellPrevector_sharp_upper}
+    \leanok
     \uses{thm:al_global_schmidt_bell_prevector,thm:al_actual_sharp_upper}
     In Theorem~\ref{thm:al_actual_sharp_upper}, suppose additionally that
     $\Omega_t$ is an exact eigenvector of a supplied physical Hamiltonian
@@ -154,6 +166,8 @@
     (\ref{eq:al_actual_sharp_rate}) at every actual fill and charge root.
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{thm:al_global_schmidt_bell_prevector,thm:al_actual_sharp_upper}
     Choose the labels once using the selected Schmidt vector and retain
     all conclusions of Theorem~\ref{thm:al_global_schmidt_bell_prevector}.
     Apply Theorem~\ref{thm:al_actual_sharp_upper} to that same sequence.
@@ -162,19 +176,45 @@
 \begin{theorem}[The truncated target instance with an explicit power margin]
     \label{thm:al_source_target_actual_sharp_upper}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_actualSharpUpper}
+    \leanok
     \uses{thm:al_actual_sharp_upper}
-    Fix the local dimension, interaction parameters, target-size
-    coefficient. The truncation, target-budget and common-status-budget
-    coefficients can be chosen before the exponent family and physical
-    instance. Fix a bootstrap exponent family with the explicit margin
+    Fix $q\geq1$, an interaction range $R\in\mathbb N$, a term norm bound
+    $J\geq0$, a gap $\Delta>0$, and a target-size coefficient $C_T\geq0$.
+    There are positive truncation, target-budget and common-status-budget
+    coefficients $C_{\mathrm{tr}},C_{\mathrm{target}},C_B$, chosen before
+    the exponent family and physical instance. Fix exponents
+    $0<\ell<1$, $0<\kappa<\mu<1-\ell$, $\nu>0$, and $0<e<1$ with
+    $\kappa\leq e$, and a real $\omega$ satisfying the explicit margin
     \begin{align}
         \omega+\frac{1+\kappa}{2} & <1-\ell-\mu.
         \label{eq:al_source_target_sharp_margin}
     \end{align}
-    For sufficiently large boundary size $n$, use the literal rounded source scales and
-    the source row and clearance hypotheses. One truncated unit ground
-    vector $\Omega_t$ satisfies the energy, phase, trace-distance,
-    all-cut tail and target-window estimates. The same vector has the
+    There is $N\geq2$, depending on this exponent family and margin,
+    such that the following holds for $n\geq N$.
+    Let $\Lambda\subseteq\mathbb Z^2$ be finite, let $T\subseteq\mathbb Z^2$
+    be finite and nonempty, and let $H=\sum_i h_i$ have interaction range
+    $R$ and term norm bound $J$ on $\Lambda$.
+    Suppose $\|\Omega\|=1$, $H\Omega=E_0\Omega$, and
+    $H-E_0I\succeq\Delta(I-|\Omega\rangle\langle\Omega|)$.
+    Use a collar scanner with the induced lattice graph, anchors in their
+    labelled interaction supports, $M>0$, depth
+    $d_T(x)=\min_{t\in T}\|x-t\|_\infty$, and target $X=A\cap T$.
+    The scales are
+    \begin{align}
+        L   & =\lfloor n^{1-\ell}\rfloor,              &
+        m   & =\lfloor n^\mu\rfloor,                   &
+        D   & =\lceil n^\kappa\rceil,                    \\
+        K   & =\lfloor L/(8m)\rfloor,                  &
+        r_0 & =\lceil C_{\mathrm{tr}}(\log n)^2\rceil.
+    \end{align}
+    Assume $|T|\leq C_Tn^2$, each ambient dilation layer
+    $T_d\setminus T_{d-1}$ has at most $n$ sites for $1\leq d\leq L$,
+    and every endpoint of a cut edge of $A$ has ambient distance greater
+    than $2L+10r_0$ from every point of $T$.
+    One truncated unit ground vector $\Omega_t$ satisfies the energy,
+    phase, trace-distance, all-cut tail and target-window estimates of
+    Theorem~\ref{thm:al_scan_target_typical_window}.
+    In particular $m,K\geq1$. The same vector has the
     common status budget and moment constants
     \begin{align}
         B   & =C_B nD(\log n)^{12},      & 1 & \leq B,\nonumber \\
@@ -198,6 +238,10 @@
     \cite{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{thm:al_scan_target_typical_window,thm:al_scan_common_status_budget,
+        thm:al_scan_status_scale_separation,thm:al_moment_weight_smallness,
+        thm:al_scan_common_moment_interval,thm:al_actual_sharp_upper}
     Choose the truncated target vector and window once. Evaluate every
     completed and pre-charge status budget on that same vector.
     The strict power margin dominates the common factor

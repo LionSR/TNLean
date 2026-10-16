@@ -3,9 +3,9 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.Algebra.CeilScaling
 import TNLean.PEPS.AreaLaw.Scan.Budgets
 import TNLean.PEPS.AreaLaw.Scan.BootstrapParameters
-import Mathlib.Algebra.Order.Floor.Semiring
 
 /-!
 # Rounded collar clearance
@@ -52,11 +52,9 @@ theorem exists_two_mul_floor_rpow_ceil_mul_le {C₂ η : ℝ}
   have hs₁ : 1 ≤ s := (le_max_right N 1).trans hs
   have hsN : N ≤ s := (le_max_left N 1).trans hs
   have hlargeS := hN s hsN
-  have hceil : (Nat.ceil (C₂ * (s : ℝ)) : ℝ) ≤ (C₂ + 1) * (s : ℝ) := by
-    have hceilLt : (Nat.ceil (C₂ * (s : ℝ)) : ℝ) < C₂ * (s : ℝ) + 1 :=
-      Nat.ceil_lt_add_one (by positivity)
-    have hs₁R : (1 : ℝ) ≤ s := by exact_mod_cast hs₁
-    nlinarith
+  have hceil : (Nat.ceil (C₂ * (s : ℝ)) : ℝ) ≤ (C₂ + 1) * (s : ℝ) :=
+    Nat.ceil_le_add_one_mul_of_le_mul (mul_nonneg hC₂.le (Nat.cast_nonneg s))
+      le_rfl (by exact_mod_cast hs₁)
   have hfloor : (Nat.floor ((Nat.ceil (C₂ * (s : ℝ)) : ℝ) ^ η) : ℝ) ≤
       (C₂ + 1) ^ η * (s : ℝ) ^ η := by
     calc

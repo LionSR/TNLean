@@ -11,9 +11,10 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
 \texttt{08-scanner.tex}, lines 868--877, 900--911 and 936--941, at revision
 \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
 
-\begin{lemma}[The actual collar partition]
-    \label{lem:actual-terminal-collar-geometry}
+\begin{theorem}[The actual collar partition]
+    \label{thm:actual-terminal-collar-geometry}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.terminalPartition_collar_geometry}
+    \leanok
     Let the scanner depth be the ambient depth of the nonempty target template
     $T$, and let $8Km\leq L$.  At every actual completed or pre-charge terminal
     and every original band, put
@@ -24,9 +25,12 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     These four regions are pairwise disjoint and cover the physical sites.
     The actual near region is $X\cup U$, the positive near-middle region is
     $U\cup Y$, and the complement of the same truncation set is contained in $V$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{thm:al_scan_receiving_regions,
+        thm:al_scan_nonfar_compact}
     Use the accepted receiving-region identities and positive-depth invariant
     for the actual status evaluator.  Its far-complement containment in the
     truncation set yields the claimed outside containment by taking complements.
@@ -34,10 +38,11 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     premise.
 \end{proof}
 
-\begin{lemma}[The exact terminal identity and weighted information bound]
-    \label{lem:actual-terminal-information}
+\begin{theorem}[The exact terminal identity and weighted information bound]
+    \label{thm:actual-terminal-information}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.terminalPartition_collar_entropy_identity,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.two_mutualInformation_le_actualTerminal_average}
+    \leanok
     Write, for the same physical vector,
     \[
         g_{\rm pre}=S(XU)+S(V)-S(Y),\qquad
@@ -54,9 +59,12 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
         G_\bullet=\frac1K\sum_g\sum_jw_jg_\bullet(j,g),
     \]
     where $S_0$ is the same truncation set.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{thm:actual-terminal-collar-geometry,
+        thm:area_law_collar_leaf_identity}
     Apply the accepted pure-state collar identity, then its weighted
     mutual-information monotonicity theorem using $S_0^c\subseteq V$ at every
     terminal.  Sum over the original bands and divide by $K>0$.
@@ -65,9 +73,10 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     identity and monotonicity APIs.
 \end{proof}
 
-\begin{lemma}[The same selected spectrum and original vector]
-    \label{lem:actual-selected-collar-information}
+\begin{theorem}[The same selected spectrum and original vector]
+    \label{thm:actual-selected-collar-information}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_two_mutualInformation_le_selectedSharpExpression}
+    \leanok
     Under the preceding collar hypotheses, with $m,M,K>0$, let $\Omega_t$
     be unit, and retain its supplied positive-mass spectral
     window $E$, of width $w$, with mass $z>0$.  Let $S'$ be the actual selected
@@ -84,9 +93,13 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
         16\sqrt{d_{\rm tr}(\Omega_t,\Omega)}\,
         \log\bigl(e\dim\mathcal H_X\bigr).
     \]
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{thm:actual-terminal-information,
+        thm:area_law_selected_schmidt_entropy_bounds,
+        thm:area_law_collar_transfer}
     The accepted selected-spectrum estimate gives
     $|S'-S_{\Omega_t}(X)|\leq w-\log z$.  Its lower side costs
     exactly $2(w-\log z)$.  The accepted mutual-information continuity
@@ -94,11 +107,12 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     Only the target dimension occurs, regardless of the far-region size.
 \end{proof}
 
-\begin{lemma}[Actual terminal pre-entropy bounds]
-    \label{lem:actual-terminal-pre-entropy}
+\begin{theorem}[Actual terminal pre-entropy bounds]
+    \label{thm:actual-terminal-pre-entropy}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.terminalPartition_positiveEntropy_le,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.terminalPartition_preEntropy_bounds,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.terminalPartition_preEntropy_max_average_bounds}
+    \leanok
     Assume the induced domain graph, ambient target depth, $n>0$,
     $r_0\leq D$, $1\leq D$, $4D\leq m$, $8Km\leq L$, and the actual
     layer-cardinality bound $n$ through depth $L$.  Suppose the same unit vector
@@ -115,9 +129,13 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     For $K>0$, every supplied terminal-tree average satisfies
     $0\leq G_{\rm pre}\leq B$, and the literal maximum over all terminal/band
     pairs, with zero inserted, satisfies $0\leq g_{\max}\leq\max(0,B)$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{thm:al_scan_physical_prefix_approximation,
+        thm:actual-terminal-collar-geometry,
+        thm:area_law_regional_state_identities}
     The accepted actual-history prefix approximation supplies nested matched
     prefixes with at most $3nD$ changed sites.  The accepted disjoint-union
     entropy cost and regional dimension bound yield the two entropy estimates.
@@ -127,9 +145,10 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     division by $K>0$ preserve the bound exactly.
 \end{proof}
 
-\begin{lemma}[The original source prefix input]
-    \label{lem:source-actual-terminal-pre-entropy}
+\begin{theorem}[The original source prefix input]
+    \label{thm:source-actual-terminal-pre-entropy}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.eventually_source_actualTerminal_preEntropy_bounds}
+    \leanok
     Fix $q\geq1$, a positive gap parameter $g$, and a compact volume
     coefficient $C_{\rm vol}$.  At sufficiently large $n$, uniformly before
     choosing the scanner, vectors, source entropy coefficient $C_e$, or
@@ -145,9 +164,12 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
         d_{\rm tr}(\Omega_t,\Omega)
         \leq\sqrt{2\min(n^{-1000},g/4)/g}.
     \]
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{thm:al_positive_prefix_entropy_transfer,
+        thm:actual-terminal-pre-entropy}
     Apply the accepted uniform positive-prefix entropy continuity theorem to
     the supplied vectors and every fixed prefix, then the actual terminal
     entropy bounds.  No vector or terminal point is selected again.

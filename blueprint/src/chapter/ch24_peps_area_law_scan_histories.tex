@@ -3258,7 +3258,6 @@ The finite-leaf estimates below follow the charge-energy argument in
     bands contributes one probability average to the choice-averaged entropy.
 \end{proof}
 
-% Completion marks await verification in the combined scanner context.
 % Source: 08-scanner.tex, lines 21--59 and 399--414; Lemmas 2.1 and 3.1.
 \begin{theorem}[The truncation inputs of the scanner for one physical system]
     \label{thm:al_scan_truncation_inputs}
@@ -3269,7 +3268,7 @@ The finite-leaf estimates below follow the charge-energy argument in
         TNLean.PEPS.AreaLaw.Scan.abs_log_card_sub_le_of_window,
         TNLean.PEPS.AreaLaw.Scan.sqrt_truncationError_le,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_scanTruncation}
-
+    \leanok
     \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_target_typical_window,
         thm:al_lattice_crossing_budget,thm:al_scan_common_status_budget,
         thm:al_scan_status_scale_separation,thm:area_law_regional_entropy_continuity}
@@ -3313,7 +3312,7 @@ The finite-leaf estimates below follow the charge-energy argument in
     supplied by Proposition~4.5 and Lemmas~2.1 and~3.1, for the same truncated
     ground vector.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_target_typical_window,
         thm:al_lattice_crossing_budget,thm:al_scan_common_status_budget,
         thm:al_scan_status_scale_separation,thm:area_law_regional_entropy_continuity}

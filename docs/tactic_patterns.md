@@ -3480,6 +3480,49 @@ three-plaquette output measurement, and the routed reunion measurement.
   `OrthogonalBlockError.lean` were later deleted, when the orthogonal-block bound
   became a corollary of the repeated-overlapping bound.
 
+### Homogeneous ceiling bound — promoted (2026-10-13)
+
+- **Pattern:** for `0 ≤ x ≤ A * s` and `1 ≤ s`, absorb rounding into the
+  coefficient by `(Nat.ceil x : ℝ) ≤ (A + 1) * s`, before taking any
+  nonnegative real powers of the scale.
+- **Seen:** three elementary ceiling estimates in
+  `PEPS/AreaLaw/Scan/BootstrapRoundedClearance.lean`,
+  `PEPS/AreaLaw/Scan/RoundedScalePower.lean`, and
+  `PEPS/Approximation/UniformMessageGateCompression.lean`.
+- **Abstraction:** `Nat.ceil_le_add_one_mul_of_le_mul` in
+  `TNLean/Algebra/CeilScaling.lean`, proved from Mathlib's
+  `Nat.ceil_lt_add_one`, monotonicity of addition, and distributivity.
+- **Refactor:** the three estimates apply the shared lemma; the existing
+  scale-power and clearance statements are unchanged. Their proof bodies
+  lose eight lines in total; including the new message-module import, the
+  three callers are seven lines shorter.
+- **Notes:** no separate nonnegativity hypothesis on `A` is needed. The
+  estimate includes `x = 0` and `s = 1`, applies to a quantity only bounded
+  by `A * s`, and imposes no geometric or private-dimension condition.
+  Mathlib's multiplicative ceiling bound uses a reciprocal-ceiling threshold
+  and is not the homogeneous estimate used here. No custom tactic is added.
+
+### Final comparison after restricted simplification — promoted (2026-10-14)
+
+- **Pattern:** simplify a supplied equality with a fixed list of lemmas, then
+  compare its result with the goal when ordinary definition unfolding is
+  needed to identify coordinate aliases or an equivalence's forward function.
+- **Seen:** four final comparisons in
+  `PEPS/Approximation/IncidentSampledPhysicalFactor.lean`,
+  `PEPS/Approximation/IncidentPureSampledPhysicalSum.lean`,
+  `PEPS/Approximation/SourceNetworkDimensions.lean`, and
+  `PEPS/Approximation/OriginalGateSamplePhysicalSum.lean`.
+- **Abstraction:** reuse Lean's existing `simpa only [...] using! h`. Its
+  simplification is identical to `simpa only [...] using h`; only the final
+  comparison uses default transparency. The pinned implementation is
+  `Lean/Elab/Tactic/Simpa.lean`, lines 50–54 and 168–177.
+- **Refactor:** all four occurrences use the existing command directly. No
+  helper lemma, simp set, macro, option increase, or compatibility alias is
+  introduced.
+- **Notes:** the supplied equality and the goal must already describe the
+  same mathematical objects after the stated rewrites. This command does not
+  repair incompatible index data or prove an additional hypothesis.
+
 ## Completed refactors
 
 ### Literal one- and two-bond assignment specialization — resolved (2026-10-02)
@@ -7261,6 +7304,10 @@ spectral split → block extraction → MPV calculation → strict bounds
   `List.ofFn_injective` for its region and exponent lists. These two projection
   comparisons occur in the same argument. The existing list lemmas and the
   objective-norm identity suffice; no additional tactic is introduced.
+  The clipped-spectrum application uses `List.mem_reverse` and
+  `List.forall_mem_ofFn_iff` twice to transfer positivity of exponents and
+  feasibility of densities to that same factor list. Both occurrences are
+  in `RegularizedPatchMinimizerClipping.lean`; the existing list lemmas suffice.
 
 
 ### Monotonicity of a regional-entropy supremum — candidate (2026-10-09)
@@ -7563,17 +7610,6 @@ spectral split → block extraction → MPV calculation → strict bounds
   declarations move to this module; that extraction is coordinated with
   the template development. No sign condition on C or e is needed for
   the entropy summation itself.
-### Homogeneous bound for a rounded sublinear scale — candidate (2026-10-09)
-- **Pattern:** bound `ceil(C₂*s)` by `(C₂+1)*s` for `s>=1`, then use
-  monotonicity of nonnegative real powers and `Real.mul_rpow`.
-- **Seen:** `Scan/BootstrapRoundedClearance.lean` and
-  `Scan/RoundedScalePower.lean`.
-- **Abstraction:** `floor_rpow_ceil_mul_rpow_le` exposes the complete
-  homogeneous bound, including a further nonnegative power of the scale.
-- **Notes:** the clearance argument and physical entropy argument use
-  different final comparisons. There are two copies of the elementary
-  ceiling estimate; a third use should share that estimate rather than
-  copy it again. No custom tactic is needed.
 ### Fixed rounded-collar threshold — promoted (2026-10-09)
 - **Pattern:** obtain the fixed collar exponent bounds, choose one threshold
   for the rounded half-side estimate, enlarge it to at least one, and derive

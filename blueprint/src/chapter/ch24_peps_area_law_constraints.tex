@@ -757,6 +757,7 @@ integrability on the closed interval.
         TNLean.PEPS.AreaLaw.Scan.ScanData.energySum_le,
         TNLean.PEPS.AreaLaw.Scan.exists_defectEnergy_le,
         TNLean.PEPS.AreaLaw.Scan.scanner_estimate}
+    \leanok
 
     There are constants, independent of $W$ and depending only on the exponents and on the constants of
     the inputs, such that for all sufficiently large $n$ and every scan at scale
@@ -788,7 +789,7 @@ integrability on the closed interval.
         \widetilde S_Q(j) & \le C_e(nL^e+n)+n^{-247}.
     \end{align}
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:al_scanner_scale_facts,lem:al_continuity_fixed_coefficient}
     Write $C_{\rm in}\ge1$ for the fixed distance and continuity coefficient
     of the input data and $t$ for their trace distance. Apply
@@ -835,13 +836,12 @@ integrability on the closed interval.
     parameter.
 \end{proof}
 
-% Completion marks await verification in the combined scanner context.
 \begin{theorem}[Scanner estimate for the actual scan from the transport and comparator inputs]
     \label{thm:al_scanner_actual_scan}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScanInputs,
         TNLean.PEPS.AreaLaw.Scan.HistoryFacts.mono,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.scanner_estimate_actualScan}
-
+    \leanok
     \uses{thm:al_scanner_from_inputs,thm:al_scan_actual_history_facts,
         thm:al_scan_truncation_inputs}
     Fix scanner exponents, an interaction range $R$, a bound $J\ge0$, a gap
@@ -870,7 +870,7 @@ integrability on the closed interval.
     for the actual rounds as its only hypothesis beyond the source's; it is not
     the source proposition.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:al_scanner_from_inputs,thm:al_scan_actual_history_facts,
         thm:al_scan_truncation_inputs}
     Theorem~\ref{thm:al_scan_truncation_inputs} supplies $\widetilde\Omega$ and

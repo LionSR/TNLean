@@ -4,6 +4,7 @@
 \begin{theorem}[Target entropy transfer]
     \label{thm:arealaw-target-entropy-transfer}
     \lean{TNLean.PEPS.AreaLaw.Scan.eventually_abs_regionalEntropy_sub_le_of_truncation}
+    \leanok
     Fix a local dimension $q\geq1$, a normalized gap $g>0$ and a
     volume coefficient $C_{\rm vol}$.  For all sufficiently large $n$,
     uniformly over the finite lattice, two unit vectors $\Omega$ and
@@ -22,6 +23,8 @@
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{thm:area_law_regional_entropy_continuity}
     The actual trace distance is at most $\sqrt{2/g}\,n^{-500}$.
     Regional entropy continuity contributes at most
     $4\sqrt t(1+|X|\log q)$ at trace distance $t$.
@@ -29,9 +32,10 @@
     remaining one-power margin between $n^{-250}n^2$ and $n^{-247}$.
 \end{proof}
 
-\begin{lemma}[The rough budget has the source entropy power]
-    \label{lem:arealaw-source-rough-budget-power}
+\begin{theorem}[The rough budget has the source entropy power]
+    \label{thm:arealaw-source-rough-budget-power}
     \lean{TNLean.PEPS.AreaLaw.Scan.roughBudget_le_source_power}
+    \leanok
     Let $n\geq2$, $q\geq1$, $L\leq n$, $D\geq1$,
     $e,C_e\geq0$, $W\geq1$, and $D\leq2n^e$.
     Suppose the actual positive selected mass and target estimates satisfy
@@ -48,17 +52,19 @@
          & \leq(6C_e+13+6\log q)Wn^{1+e}.
         \label{eq:arealaw-source-rough-budget-power}
     \end{align}
-\end{lemma}
+\end{theorem}
 \begin{proof}
+    \leanok
     The mass estimate gives $z\geq1/2$ and $-\log z\leq1$.
     Write $N=n^{1+e}$.  The target term is at most $(2C_e+7)N$,
     the shell term is at most $4(C_e+1)N$, and the mismatch term is at
     most $2(1+3\log q)N$.  Use $W\geq1$ on the target term and add.
 \end{proof}
 
-\begin{lemma}[Principal terms of the selected-density budget]
-    \label{lem:arealaw-selected-density-principal}
+\begin{theorem}[Principal terms of the selected-density budget]
+    \label{thm:arealaw-selected-density-principal}
     \lean{TNLean.PEPS.AreaLaw.Scan.selectedDensity_budget_le_principal}
+    \leanok
     Let $n,m$ be positive integers, $W,\varepsilon,C_1>0$,
     $a,C_r,C_t\geq0$, and let $e,C_l,B,G,R$ be real.
     If $B\leq C_rWn^{1+e}$ and $G\leq C_t(\log n)^{C_l}$, then
@@ -71,8 +77,9 @@
         \label{eq:arealaw-selected-density-principal}
     \end{align}
     No sign restriction on $B,G,R$ is required.
-\end{lemma}
+\end{theorem}
 \begin{proof}
+    \leanok
     Multiply the two upper bounds by their nonnegative coefficients and
     cancel the positive factors $W$ and $n$.  The two principal terms
     are nonnegative, so their separate coefficients are dominated by
@@ -158,6 +165,7 @@
 \begin{theorem}[Ordered-limit closure at the selected point]
     \label{thm:arealaw-selected-density-power}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_final_selectedDensity_le}
+    \leanok
     Fix $q\geq1$, $C_e,C_t\geq0$, $C_1>0$ and a real logarithmic
     exponent $C_l$.  There is a size threshold $N\geq2$ before all
     physical scalar inputs, remainders and selected points.  For $n\geq N$
@@ -183,6 +191,10 @@
     $d_k(x,p)\leq\varepsilon$ and $\mathcal P_k(x,p)$.
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{thm:arealaw-source-rough-budget-power,
+        thm:arealaw-selected-density-principal,
+        thm:arealaw-source-density-final}
     The literal scales give $K\geq1$, $m>0$, $L\leq n$ and
     $D\leq2n^e$.  Apply the two preceding scalar bounds and the separate
     numerical strict-margin theorem at coefficient $2C$; this reserves

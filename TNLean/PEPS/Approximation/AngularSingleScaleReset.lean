@@ -13,6 +13,11 @@ import TNLean.PEPS.Approximation.AngularInformationReset
 A fixed bound on the number of new cells gives one logarithmic lower scale
 for the information reset. The old region and every new cell are compared
 against the same physical sample of the enlarged ambient exterior.
+
+Source: polynomial-PEPS manuscript, Proposition 3.4, `02-information.tex`,
+lines 692–778, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+
+Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
 namespace TNLean.PEPS.Approximation
