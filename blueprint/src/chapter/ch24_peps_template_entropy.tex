@@ -177,48 +177,64 @@
     and the cap bounds $2^K\le L<2^{K+1}$, and factor out $n$.
 \end{proof}
 
-\section{Entropy from a uniform safe-box estimate}
+\section{Entropy from a box estimate at one exponent}
 
-\begin{theorem}[Conditional template and shell entropy bounds]
+The clearance parameter in the following estimate is real.
+\begin{theorem}[Template entropy from a box estimate at one exponent]
     \label{thm:area_template_safe_box_entropy}
-    \lean{TNLean.PEPS.AreaLaw.Geometry.Template.regionalEntropy_core_le_of_safe_box,
-        TNLean.PEPS.AreaLaw.Geometry.Template.regionalEntropy_shell_le_of_safe_box,
-        TNLean.PEPS.AreaLaw.Geometry.Template.regionalEntropy_prefix_le_of_safe_box,
-        TNLean.PEPS.AreaLaw.Geometry.exists_template_entropy_bounds_of_arbitrary_safe_box}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.template_entropy_bounds_of_real_safe_box}
     \leanok
-    \uses{def:area_law_template,def:area_law_safe_rectangle,def:area_law_ground_entropy}
-    Fix a finite physical domain, a cut $A$, a normalized vector $\Omega$,
-    local dimension $q\ge1$, and a native safety parameter $D_0\ge1$.
-    Assume that for every $\varepsilon\in(0,1)$ there is
-    $C_\varepsilon\ge0$ such that every safe native rectangle satisfies
+    \uses{def:area_law_template,def:area_law_ground_entropy,def:area_law_cell_counts}
+    Fix a finite physical domain $\Lambda$, a cut $A\subseteq\Lambda$,
+    a unit vector $\Omega$, and a local dimension $q\ge1$. Let $Z$ be the
+    endpoints of the edges crossing the cut. Fix real numbers $D_0\ge1$,
+    $e>0$ and $C$. Suppose every integer rectangle $Q$ with
+    $\operatorname{dist}_\infty(Q,Z)>D_0\operatorname{size}(Q)$ satisfies
     \begin{align}
-        S_\Omega(A\cap Q)\le C_\varepsilon
-        \operatorname{size}(Q)^{1+\varepsilon}.
+        S_\Omega(A\cap Q)\le C\operatorname{size}(Q)^{1+e}.
     \end{align}
-    Fix $e\in(0,1)$. The same constant $C_e$, independent of the template,
-    works for all separated templates with $C_{\rm tpl}\ge24$.
-    For every $1\le L\le s_0$ and $0\le j\le L$, one has
-    \begin{align*}
+    Set $C_+=\max(C,0)$. For every template $T$ with $C_{\rm tpl}\ge24$
+    and $\operatorname{dist}_\infty(T,Z)>4D_0s_0$, the core satisfies
+    \begin{align}
         S_\Omega(A\cap T)
-         & \le C_e\left(18+\frac{4}{2^e-1}\right)ns_0^e, \\
+        \le C_+\left(18+\frac{4}{2^e-1}\right)ns_0^e.
+    \end{align}
+    For all integers $1\le L\le s_0$ and $0\le j\le L$,
+    \begin{align}
         S_\Omega(A\cap(T_j\setminus T))
-         & \le C_e\left(2+\frac{14}{2^e-1}\right)nL^e.
-    \end{align*}
-    If $1\le j\le L$ and $Y\subseteq T_j\setminus T_{j-1}$ is arbitrary,
-    the entropy of $A\cap((T_{j-1}\setminus T)\cup Y)$ is at most the
-    displayed shell bound plus $n\log q$.
+        \le C_+\left(2+\frac{14}{2^e-1}\right)nL^e.
+    \end{align}
+    If $1\le j\le L$ and $Y\subseteq T_j\setminus T_{j-1}$, then
+    \begin{align}
+        S_\Omega\bigl(A\cap((T_{j-1}\setminus T)\cup Y)\bigr)
+        \le C_+\left(2+\frac{14}{2^e-1}\right)nL^e+n\log q.
+    \end{align}
+    The coefficients depend only on $C,e$, and on $q$ in the last-row term.
+    Only the box bound at the chosen exponent is assumed. These are the
+    three conditional entropy estimates of
+    \cite[Lemma~9.4]{OpenAI2026AreaLaw}, with the stronger range $e>0$.
 \end{theorem}
 \begin{proof}\leanok
-    \uses{thm:area_template_physical_dyadic_entropy,thm:area_template_safe_rectangles,
+    \lean{TNLean.PEPS.AreaLaw.cast_supDist}
+    \uses{thm:area_template_physical_dyadic_entropy,
+        lem:area_law_template_dyadic_clearance,
         thm:area_law_template_weighted_core_cover,thm:area_template_weighted_shell,
         thm:area_template_partial_row}
-    Every selected square is safe by separation and the scale bounds.
-    Apply the safe-box estimate to its physical rectangle region, sum by
-    subadditivity, and use the weighted core and shell estimates.
-    For a prefix, first use the shell estimate at depth $j-1$, then add
-    the partial-row cost $n\log q$.
-    The uniform constant is chosen from the safe-box hypothesis before any
-    template or scale is selected, with caps
-    $\lfloor\log_2 s_0\rfloor$ and $\lfloor\log_2 L\rfloor$.
-    This is the conditional entropy step of \cite[Lemma~9.4]{OpenAI2026AreaLaw}.
+    The lattice sup-norm distance, viewed as a real number, is the maximum
+    of the absolute coordinate differences. Increasing $C$ to $C_+$
+    preserves every box bound. Partition the core
+    into maximal contained dyadic squares, capped at the largest power of
+    two not exceeding $s_0$. For a shell, cap at the largest power of two
+    not exceeding $L$. Every selected square has side $u\le s_0$ and lies
+    in $T_j$ with $j\le s_0$. Separation gives
+    \begin{align}
+        \operatorname{dist}_\infty(T_j,Z)
+        >4D_0s_0-j>D_0s_0\ge D_0u.
+    \end{align}
+    Thus the box bound applies at the same real clearance and exponent.
+    Subadditivity over the physical intersections and the weighted core
+    and shell estimates give the first two inequalities. Their factors
+    are nonnegative because $C_+\ge0$ and $2^e-1>0$.
+    For a prefix, use the shell estimate at depth $j-1$ and then the
+    partial-row bound $n\log q$ for the arbitrary subset $Y$.
 \end{proof}

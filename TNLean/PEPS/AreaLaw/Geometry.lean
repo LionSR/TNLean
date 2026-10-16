@@ -164,6 +164,7 @@ import TNLean.PEPS.AreaLaw.Geometry.SimultaneousRepair
 import TNLean.PEPS.AreaLaw.Geometry.SparseBelts
 import TNLean.PEPS.AreaLaw.Geometry.TemplateBoundary
 import TNLean.PEPS.AreaLaw.Geometry.TemplateBoxEntropy
+import TNLean.PEPS.AreaLaw.Geometry.TemplateBoxEntropyReal
 import TNLean.PEPS.AreaLaw.Geometry.TemplateClearance
 import TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCounts
 import TNLean.PEPS.AreaLaw.Geometry.TemplateCoreCover
