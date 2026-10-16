@@ -709,9 +709,8 @@ original open square. We state the two models separately, following
     \label{thm:square_nearest_neighbor_terms}
     \lean{TNLean.PEPS.Approximation.SquareHamiltonian.exists_nearestNeighbor_terms}
     \leanok
-    \uses{thm:square_interaction_support_relabel,
-        thm:square_area_law_hamiltonian_operator,thm:square_hermitian_term_properties,
-        thm:square_hermitian_term_supported_algebra,thm:square_hermitian_term_sum}
+    \uses{def:polynomial_peps_model,def:square_area_law_hamiltonian,
+        def:area_law_nearest_neighbor_support}
     Let $H$ be an original square Hamiltonian with interaction bound $J\ge0$.
     Index the sites and unordered nearest-neighbor edges of $\Lambda$ by
     $\mathcal I$, and let $D_j$ be the singleton or endpoint pair of $j$.
@@ -725,6 +724,12 @@ original open square. We state the two models separately, following
     every choice of order on the rectangle sites.
 \end{theorem}
 \begin{proof}\leanok
+    \uses{thm:square_interaction_support_relabel,
+        thm:square_area_law_hamiltonian_operator,thm:square_hermitian_term_properties,
+        thm:square_hermitian_term_supported_algebra,thm:square_hermitian_term_sum,
+        thm:area_law_supported_identity,def:square_area_law_support,
+        thm:area_law_domain_identifications,def:peps_square_edge_correspondence,
+        def:square_hermitian_term}
     Let $e$ be the site and edge correspondence, and put
     $T_{e(i)}=U A_i^{\mathrm h}U^*$. The support identity gives $D_{e(i)}=X_i$.
     The Hermitian part preserves the original support and norm bound, and
