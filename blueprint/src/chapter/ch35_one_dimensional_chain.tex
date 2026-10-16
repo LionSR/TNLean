@@ -389,11 +389,17 @@ for an arbitrary finite set of sites and are instantiated here directly.
 \begin{proof}
     \leanok
     \uses{def:chain_open_mps}
-    The extension $\Pi\otimes1$ of an operator $\Pi$ on the first $k$ sites
-    acts on the cut matrix at $k$ by left multiplication, so the cut rank of
-    $(\Pi\otimes1)\psi$ is at most the rank of $\Pi$; the rank of the extended
-    operator itself, which is the rank of $\Pi$ times the dimension of the
-    remaining sites, plays no role. The projector on the smallest block is
+    Write $M_k(\psi)$ for the cut matrix of $\psi$ at $k$, with the
+    configurations of the first $k$ sites as rows. For an operator $\Pi$ on
+    the first $k$ sites, the extension $\Pi\otimes1$ acts on it by left
+    multiplication,
+    \begin{align}
+        M_k\bigl((\Pi\otimes1)\psi\bigr)=\Pi\,M_k(\psi),
+    \end{align}
+    so the cut rank of $(\Pi\otimes1)\psi$ is at most the rank of $\Pi$; the
+    rank of the extended operator itself, which is the rank of $\Pi$ times the
+    dimension of the remaining sites, plays no role. The projector on the
+    smallest block is
     applied last, and the product of the projectors on blocks of size at most
     $k$ is one extension of an operator on the first $k$ sites ending in
     $\Pi_k$. The distance follows by induction from
