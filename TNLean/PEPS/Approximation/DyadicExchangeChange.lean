@@ -270,7 +270,7 @@ theorem edgeExchange_hasPairChange_of (hD : IsAngularScale q J Δ a A₀ m₀ 60
     (hda' : (Wa : Set (ℝ × ℝ)).Pairwise fun z z' =>
       Disjoint (suppliedPatch P _ hr z).outer (suppliedPatch P _ hr z').outer)
     (own : GuideLabel → ProtocolParty k) (rank : GuideLabel → ℕ) {S : Set (ProtocolParty k)}
-    (hCS : own (Bl.nbrLabel e) ∈ S) {r K rs : ℕ} (hK : 1 ≤ K) :
+    (hCS : own (Bl.nbrLabel e) ∈ S) {r K rs : ℕ} :
     HasPairChange Ω
       (guideFrame (cellCenterPos L) q fm own guidePlaceholder rank Vm (suppliedPatch P _ hr) hdm)
       (guideFrame (cellCenterPos L) q fa own guidePlaceholder rank Va (suppliedPatch P _ hr) hda)
@@ -381,8 +381,15 @@ theorem edgeExchange_hasPairChange_of (hD : IsAngularScale q J Δ a A₀ m₀ 60
   have h0 : (w.toOriginalCircuit hw).nonprivateCount = 0 :=
     (w.nonprivateCount_toOriginalCircuit hw).trans hs
   have hpair : HasPairChange Ω Gm Ga _ _ S r K rs (4 * (L : ℝ) ^ (-30 : ℤ)) :=
-    ⟨w.toOriginalCircuit hw, (Word.isBoundedChange_toOriginalCircuit hw hu (by omega) hK
-      herr).mono (by rintro x rfl; exact hCS) le_rfl le_rfl le_rfl,
+    ⟨w.toOriginalCircuit hw,
+      { nonprivateCount_le := h0.le.trans zero_le_one
+        participants_subset := fun g => (w.participants_toOriginalCircuit_subset hw hu g).trans
+          (by rintro x rfl; exact hCS)
+        isExpansionBounded := Word.isExpansionBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
+          hs r K
+        isMonomialBounded := Word.isMonomialBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
+          hs K
+        norm_eval_sub_le := by rwa [w.eval_toOriginalCircuit] },
       OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero h0 rs⟩
   have hout' : ∀ z o, out ⟨suppliedPatch P _ hr z, o⟩ = decide (z ∉ Y') := fun z o => by
     simp [out, Y']
@@ -421,22 +428,26 @@ theorem edgeExchange_hasPairChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D 
     (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
     (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
     (done : Set (ℤ × ℤ)) (E : List SquareEdge) (e : SquareEdge)
-    (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧ ε₀ * (D * Real.log L) ≤ B₀ * Real.log L)
     {S : Set (ProtocolParty k)}
     (hCS : labelParty R (protocolLevelLabels k R.1.1 done (e.nbrBlock R.1.index)) ∈ S)
-    {r K rs : ℕ} (hK : 1 ≤ K) :
+    {r K rs : ℕ} :
     let Bl := blockBaseline (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
       (protocolLevelLabels k R.1.1 done) R.1.index (newParty Sum.inl R.1.1 R.1.index)
     HasPairChange Ω
-      (treatedFrame (q := q) P rank R hr (e.endpointBlocks R.1.index) (Bl.nbrLabel e)
+      (treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL)
+        (e.endpointBlocks R.1.index) (Bl.nbrLabel e)
         (Bl.mainGuide E e (edgeStartWord Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e))))
-      (treatedFrame (q := q) P rank R hr (e.endpointBlocks R.1.index) (Bl.nbrLabel e)
+      (treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL)
+        (e.endpointBlocks R.1.index) (Bl.nbrLabel e)
         (Bl.auxGuide e (auxWord Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e))))
-      (treatedFrame (q := q) P rank R hr (e.endpointBlocks R.1.index) (Bl.nbrLabel e)
+      (treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL)
+        (e.endpointBlocks R.1.index) (Bl.nbrLabel e)
         (Bl.mainGuide E e (mainWordOne Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e))))
-      (treatedFrame (q := q) P rank R hr (e.endpointBlocks R.1.index) (Bl.nbrLabel e)
+      (treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL)
+        (e.endpointBlocks R.1.index) (Bl.nbrLabel e)
         (Bl.auxGuide e (auxWordExchanged Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e))))
       S r K rs (4 * (L : ℝ) ^ (-30 : ℤ)) := by
+  have hr := hc.treatedRadius_bounds hL
   intro Bl
   have hℓ : 0 < Real.log L := Real.log_pos (by exact_mod_cast hL)
   have ht : 0 < D * Real.log L := mul_pos hc.D_pos hℓ
@@ -466,7 +477,7 @@ theorem edgeExchange_hasPairChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D 
       have h2 : (2 : ℝ) ^ k < 2 * L := by exact_mod_cast hk2
       change (2 : ℝ) ^ (R.1.1 : ℕ) ≤ (L : ℝ)
       linarith)) hc.ε₀_small hfm hfa hgm hga hmm hma hmm' hma' P hr hdm hda hdm' hda' _ rank
-    hCS hK
+    hCS
 
 end Exchange
 

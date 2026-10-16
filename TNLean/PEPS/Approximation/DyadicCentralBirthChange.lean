@@ -205,22 +205,22 @@ theorem centralBirth_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D
     (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
     (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
     (done : Set (ℤ × ℤ))
-    (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧ ε₀ * (D * Real.log L) ≤ B₀ * Real.log L)
     {S : Set (ProtocolParty k)}
     (hPS : labelParty R (protocolLevelLabels k R.1.1 done R.1.index) ∈ S)
     (hQS : labelParty R (newParty Sum.inl R.1.1 R.1.index) ∈ S)
     {r K rs : ℕ} (hK : 1 ≤ K) (hrs : 1 ≤ rs) :
     HasFrameChange Ω
-      (treatedFrame (q := q) P rank R hr (cornerBlocks R.1.index)
+      (treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL) (cornerBlocks R.1.index)
         (protocolLevelLabels k R.1.1 done R.1.index)
         (blockBaseline (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
           (protocolLevelLabels k R.1.1 done) R.1.index (newParty Sum.inl R.1.1 R.1.index)).guide)
-      (treatedFrame (q := q) P rank R hr (cornerBlocks R.1.index)
+      (treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL) (cornerBlocks R.1.index)
         (protocolLevelLabels k R.1.1 done R.1.index)
         (blockBaseline (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
           (protocolLevelLabels k R.1.1 done) R.1.index
           (newParty Sum.inl R.1.1 R.1.index)).centralGuide) S r K rs
       ((L : ℝ) ^ (-30 : ℤ)) := by
+  have hr := hc.treatedRadius_bounds hL
   have hn : (0 : ℝ) < 2 ^ (R.1.1 : ℕ) := by positivity
   have hℓ : 0 < Real.log L := Real.log_pos (by exact_mod_cast hL)
   have ht : 0 < D * Real.log L := mul_pos hc.D_pos hℓ
