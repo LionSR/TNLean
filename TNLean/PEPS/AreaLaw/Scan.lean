@@ -130,6 +130,7 @@ import TNLean.PEPS.AreaLaw.Scan.PhysicalBoxBootstrap
 import TNLean.PEPS.AreaLaw.Scan.PhysicalChargeAncestry
 import TNLean.PEPS.AreaLaw.Scan.PhysicalInformationDimension
 import TNLean.PEPS.AreaLaw.Scan.PhysicalPartition
+import TNLean.PEPS.AreaLaw.Scan.PhysicalScanner
 import TNLean.PEPS.AreaLaw.Scan.PhysicalTemplateInformation
 import TNLean.PEPS.AreaLaw.Scan.PositivePrefixEntropyTransfer
 import TNLean.PEPS.AreaLaw.Scan.PrefixApproximation
@@ -147,6 +148,7 @@ import TNLean.PEPS.AreaLaw.Scan.RoughSelectionBudget
 import TNLean.PEPS.AreaLaw.Scan.RoundedClearance
 import TNLean.PEPS.AreaLaw.Scan.RoundedScalePower
 import TNLean.PEPS.AreaLaw.Scan.ScanHistories
+import TNLean.PEPS.AreaLaw.Scan.ScanTruncationInputs
 import TNLean.PEPS.AreaLaw.Scan.Scanner
 import TNLean.PEPS.AreaLaw.Scan.ScannerRoundedAdmissibility
 import TNLean.PEPS.AreaLaw.Scan.SelectedChainProbability
@@ -169,7 +171,9 @@ import TNLean.PEPS.AreaLaw.Scan.SourceFinalInformation
 import TNLean.PEPS.AreaLaw.Scan.SourceRoughBudgetPower
 import TNLean.PEPS.AreaLaw.Scan.SourceRoughSelection
 import TNLean.PEPS.AreaLaw.Scan.SourceRoundedInformation
+import TNLean.PEPS.AreaLaw.Scan.SourceScanner
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedDensity
+import TNLean.PEPS.AreaLaw.Scan.SourceSelectedEnergy
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedEnergyPower
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpComparison
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpDensity
@@ -191,6 +195,7 @@ import TNLean.PEPS.AreaLaw.Scan.StrongSelectedDensityPower
 import TNLean.PEPS.AreaLaw.Scan.SubsystemDimension
 import TNLean.PEPS.AreaLaw.Scan.SubsystemDimensionScale
 import TNLean.PEPS.AreaLaw.Scan.SubsystemSize
+import TNLean.PEPS.AreaLaw.Scan.SuppliedTargetNormAttachment
 import TNLean.PEPS.AreaLaw.Scan.SuppliedTargetStatusMoments
 import TNLean.PEPS.AreaLaw.Scan.SupportClassification
 import TNLean.PEPS.AreaLaw.Scan.SupportCompatibility

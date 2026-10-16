@@ -32,7 +32,8 @@ any fixed interpolation interval contained in $(0,1)$.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:al_augmented_prevector_symmetry,thm:al_scan_global_replica_energy}
+    \uses{thm:al_augmented_prevector_symmetry,thm:al_scan_global_replica_energy,
+        thm:al_augmented_prevector_norm}
     The coordinate bijection preserves nonvanishing. The augmented
     prevector is fixed by the simultaneous symmetry projection, so it
     lies in its range. The coordinate identity
@@ -78,13 +79,16 @@ any fixed interpolation interval contained in $(0,1)$.
     \leanok
     \uses{def:area_law_hamiltonian,def:al_scan_actual_histories,
         def:al_scan_actual_energy_terms}
-    Fix an integer $q\geq1$, an interaction range $R\in\mathbb N$, $J\geq0$,
-    $\Delta>0$, $C_T\geq0$, $C_1>0$, an integer anchor-multiplicity
-    bound $m_*\geq0$ with $3m_*\leq C_1$, and a real exponent $P$.
-    There are $C_{\rm tr},C_{\rm target},c_t>0$ and real
-    $C_{\rm ent},e_{\rm ent}$ with the following property. For every
-    scanner exponent tuple, there are $C\geq1$, $C_l\geq0$ and
-    $N\geq2$ before all the physical data and entropy inputs below.
+    Fix an interaction range $R\in\mathbb N$, $J\geq0$, $\Delta>0$ and
+    $C_T\geq0$. There is $C_{\rm tr}>0$ such that, for every integer
+    $q\geq1$, every $C_1>0$, every integer anchor-multiplicity bound
+    $m_*\geq0$ with $3m_*\leq C_1$, and every real exponent $P$, there
+    are $C_{\rm target},c_t>0$ and real $C_{\rm ent},e_{\rm ent}$ with the
+    following property. For every scanner exponent tuple, there are
+    $C\geq1$, $C_l\geq0$ and $N\geq2$ before all the physical data and
+    entropy inputs below. Thus $C_{\rm tr}$ is independent of $q$,
+    $C_1$, $m_*$ and $P$. Its choice is the truncation choice in
+    \cite[Proposition~4.5 and Section~9, lines~49--59]{OpenAI2026AreaLaw}.
 
     Let $\Lambda,T\subset\mathbb Z^2$ be finite, with $T\ne\varnothing$,
     and let $H$ be a range-$R$ Hamiltonian of interaction
@@ -217,8 +221,10 @@ any fixed interpolation interval contained in $(0,1)$.
         lem:arealaw-generic-charge-energy,lem:arealaw-generic-selected-energy,
         lem:al_scanner_scale_facts,thm:area_law_band_count_growth,
         lem:arealaw-rough-endpoint-remainder-limit}
-    Choose the truncation constants, then the energy coefficient and size
-    threshold for the given exponents. The target-window theorem gives
+    Choose $C_{\rm tr}$ from truncation before fixing $q$. After $q$,
+    $C_1$, $m_*$ and $P$ are fixed, choose the target-budget constant,
+    then the energy coefficient and size threshold for the given exponents.
+    The target-window theorem gives
     $\widetilde\Omega,E,z$; the common-label theorem gives
     $\lambda_k$, its projected mass and its dimension asymptotic.
     Entropy continuity transfers every original prefix bound to the same
@@ -263,12 +269,15 @@ any fixed interpolation interval contained in $(0,1)$.
         TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_source_density}
     \leanok
     \uses{thm:arealaw-source-charge-selection}
-    Fix integers $q\geq1$, $R\geq0$, and real $J\geq0$, $\Delta>0$, $C_T\geq0$,
-    $C_1>0$, an anchor-multiplicity bound $m_*\in\mathbb N$ with $3m_*\leq C_1$,
-    and a real exponent $P$. There are positive truncation constants
-    and $0<c\leq1/2$, chosen before the scanner exponents and entropy
-    coefficient. For every admissible exponent tuple
-    $(\ell,\mu,\kappa,\nu,e_{\rm in})$, there are $C\geq1$ and $C_l\geq0$.
+    Fix $R\in\mathbb N$, $J\geq0$, $\Delta>0$ and $C_T\geq0$. There is
+    $C_{\rm tr}>0$ such that, for every integer $q\geq1$, every $C_1>0$,
+    every anchor-multiplicity bound $m_*\in\mathbb N$ with $3m_*\leq C_1$,
+    and every real exponent $P$, there are $C_{\rm target}>0$ and
+    $0<c\leq1/2$, chosen before the scanner exponents and entropy
+    coefficient. The truncation constant is the one chosen independently
+    of $q$ in Theorem~\ref{thm:arealaw-source-charge-selection}.
+    For every admissible exponent tuple $(\ell,\mu,\kappa,\nu,e_{\rm in})$,
+    there are $C\geq1$ and $C_l\geq0$.
     For every $C_e\geq0$, there are $C_\delta>0$, $C_{l,\delta}\geq0$
     and $N\geq2$, all chosen before the finite physical instance and $W$.
 
@@ -321,7 +330,8 @@ any fixed interpolation interval contained in $(0,1)$.
         thm:al_scan_radius_dimension_smallness,thm:al_scan_transport_coefficients_log,
         thm:arealaw-target-entropy-transfer,lem:arealaw-source-rough-budget-power,
         thm:arealaw-selected-density-delta}
-    Enlarge the size threshold so that the rounded scales are admissible,
+    Keep the same $C_{\rm tr}$ chosen before $q$, and enlarge the size
+    threshold so that the rounded scales are admissible,
     $r_0\geq1$, $\log n\geq1$, and truncation changes each relevant entropy
     by at most $n^{-247}$. The radius bound gives the transport smallness
     required for the common state and label sequence. Since $\kappa\leq e_{\rm in}$,
@@ -344,4 +354,211 @@ any fixed interpolation interval contained in $(0,1)$.
     is $\gamma R_k^{\rm end}\leq\rho_k$. The coefficient $\gamma$ is fixed
     before $k\to\infty$, so $\rho_k\to0$. The energy and norm conclusions
     at that point are unchanged.
+\end{proof}
+
+% Auxiliary density-to-energy consequence for Proposition 9.2.
+\begin{theorem}[Physical selected energy for arbitrary scanner exponents]
+    \label{thm:arealaw-source-selected-energy}
+    \lean{
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_source_density_energy}
+    \leanok
+    \uses{thm:arealaw-source-selected-density}
+    Fix $R\in\mathbb N$, $J\geq0$, $\Delta>0$ and $C_T\geq0$. There is
+    $C_{\rm tr}>0$, chosen before the integer $q\geq1$, the charge constant
+    $C_1>0$ and the anchor-multiplicity bound $m_*$. With this same
+    truncation constant, under the hypotheses of
+    Theorem~\ref{thm:arealaw-source-selected-density} and with the error
+    exponent fixed at $P=100$, there are common coefficients
+    $C_\delta>0$ and $C_{l,\delta}\geq0$ for the density and energy bounds.
+    They and the size threshold are chosen after the scanner exponents and
+    $C_e\geq0$, but before the finite physical system and the total weight.
+    The constants $C\geq1$ and $C_l\geq0$ in the original energy bound are
+    retained separately.
+
+    The same truncated state $\widetilde\Omega$, typical set, selected mass,
+    label sequence and physical prevector sequence satisfy all conclusions
+    of that theorem before $W$ is chosen. For $W\geq1$, let $a=W/K$ and
+    assume $ar_0^2\leq c$. Put $\varepsilon=n^{-\nu}$ and
+    \begin{align}
+        \delta_n
+         & :=C_\delta\varepsilon^{-1}
+        \left(n^{e_{\rm in}-\mu}+a^{1/4}(\log n)^{C_{l,\delta}}\right).\notag
+    \end{align}
+    If $e$ is the truncated ground energy and $g/2$ its guaranteed gap, then
+    \begin{align}
+        \frac{e}{g/2} & \leq C_\delta n^{-1000}.\notag
+    \end{align}
+    There are nonnegative sequences $\rho_k,\rho_{E,k}\to0$ such that, for
+    every sufficiently large $k$, one charge round and one common parameter
+    $p_k\in[\varepsilon/2,\varepsilon]$ satisfy
+    \begin{align}
+        \frac{\mathcal Q_k}{KnD}
+         & \leq\delta_n+\rho_k,\notag                         \\
+        E_{{\rm def},k}
+         & \leq C_\delta W^2n^\ell D^2(\log n)^{C_{l,\delta}}
+        \left(\delta_n^{1/8}+\varepsilon+n^{-100}\right)
+        +C_\delta n^{-1000}+\rho_{E,k}.
+        \label{eq:arealaw-source-energy}
+    \end{align}
+    Here the defect is the actual normalized mean energy minus $e$, divided
+    by $g/2$. At the same point, the original density bound, original energy
+    bound, positive filtered norm and rough upper norm estimate remain valid.
+    Every replica remainder is uniform in the selected round and parameter
+    with the finite instance and $W$ fixed. The coefficient $C_\delta$ may
+    be positive when $C_e=0$.
+    This is the density-to-energy consequence used in
+    \cite[Proposition~9.2, lines~368--381 and 492--533]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:arealaw-source-selected-density,thm:arealaw-selected-energy-density,
+        thm:arealaw-selected-energy-vanishing-remainder}
+    Keep the truncation constant supplied by
+    Theorem~\ref{thm:arealaw-source-selected-density}, before fixing $q$.
+    Write $C_{\delta,0},C_{l,\delta,0}$ for the density coefficients and
+    $g_*=g/2$. Choose
+    \begin{align}
+        C_\delta     & =\max\{C_{\delta,0},(C+1)/g_*\},\notag \\
+        C_{l,\delta} & =\max\{C_{l,\delta,0},C_l\}.\notag
+    \end{align}
+    Increase the size threshold so that $\log n\geq1$. These enlargements
+    preserve the density estimate. Since $0\leq e\leq n^{-1000}$ and
+    $C_\delta\geq1/g_*$, they also give the displayed ground-energy bound.
+
+    With the finite physical system and $W$ fixed, put
+    \begin{align}
+        A          & =CW^2n^\ell D^2(\log n)^{C_l},\notag    \\
+        \rho_{E,k} & =\frac{A|\rho_k|^{1/8}+r_k}{g_*},\notag
+    \end{align}
+    where $r_k\geq0$ is the original additive energy remainder. Thus
+    $\rho_{E,k}\geq0$ and $\rho_{E,k}\to0$. At the previously selected
+    point, the scalar energy estimate gives
+    \begin{align}
+        E_{{\rm def},k}
+         & \leq\frac A{g_*}
+        \left(\delta_n^{1/8}+\varepsilon+n^{-100}\right)
+        +\frac e{g_*}+\rho_{E,k}.\notag
+    \end{align}
+    Enlarge $A/g_*$ using the common coefficient and logarithmic power,
+    and apply the ground-energy bound to obtain
+    (\ref{eq:arealaw-source-energy}). Neither the selected point nor any
+    physical state or label is changed.
+\end{proof}
+
+\begin{theorem}[Uniform comparisons for a prescribed physical charge state]
+    \label{thm:arealaw-supplied-target-norm-bounds}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_suppliedTarget_actualCharge_norm_bounds}
+    \leanok
+    \uses{thm:al_scan_common_status_budget,def:actual_sharp_lower_remainder}
+    Fix $q\geq1$, an interaction range $R\in\mathbb N$, and $C_r>0$.
+    There exists $C_B>0$, depending only on these parameters, with the
+    following property. Assume the geometric hypotheses of
+    Theorem~\ref{thm:al_scan_common_status_budget}, with $K,m,M>0$ and
+    $r_0=\lceil C_r(\log n)^2\rceil$. Put
+    $\mathcal B=C_BnD(\log n)^{12}$; then $\mathcal B\geq1$.
+    Let $H$ be a local Hamiltonian of range $R$, let $\Omega$ be a unit
+    vector, and let $\Delta>0$. For the associated truncated Hamiltonian,
+    prescribe a ground vector $\widetilde\Omega$
+    of energy $e_t$ and projector gap $g/2$, where $g$ is the normalized
+    gap used in the truncation. Set
+    \begin{align}
+        C_0 & =512\mathrm e\,(2/g),\notag      \\
+        c_0 & =\frac{1}{32\sqrt{1+2/g}}.\notag
+    \end{align}
+
+    At $X=A\cap T$, prescribe a spectral set $E$ of cardinality $d>0$
+    and mass $z>0$. Let $\psi$ be its normalized Schmidt truncation,
+    with the retained factor relabelled by $\mathbb C^d$, and let $S'$
+    be the entropy of that factor. Prescribe labels $\lambda_k$ and
+    $\mathrm{pre}_k=\pi_R^{\lambda_k}
+        (\widetilde\Omega\otimes\mathrm{Bell}_{CR})^{\otimes k}$.
+    Assume $\mathrm{pre}_k\ne0$ and $\|\mathrm{pre}_k\|\leq1$ for $k>0$,
+    the eventual projected-mass bound
+    $\|(I\otimes\pi_R^{\lambda_k})\psi^{\otimes k}\|^2
+        \geq[2(k+1)^{d^2}]^{-1}$, and
+    $\log\dim\lambda_k-kS'=o(k)$.
+
+    Fix $W\geq1$, put $a=W/K$, and assume $ar_0^2\leq1/2$.
+    At each charge round $s<nm$ and real parameter $p$, let $\mathcal M_k$
+    be its actual metric with band exponent $a/2$, using $p$ projected
+    onto $[0,1]$. Write
+    \begin{align}
+        N_k^2 & =\|\mathcal M_k^{-1/4}\mathrm{pre}_k\|^2,\notag \\
+        v_k   & =\mathcal M_k^{-1/4}\mathrm{pre}_k/N_k,\notag   \\
+        D_k   & =\frac{\operatorname{Re}\langle v_k,
+            \overline{\widetilde H}_k v_k\rangle-e_t}{g/2}.\notag
+    \end{align}
+    The mean physical Hamiltonian is extended by the identity on the
+    auxiliary factors. There are $c_R,C_{f,R}\geq0$, fixed before $k,s,p$,
+    such that the remainder $R_k^{(a)}$ in
+    (\ref{eq:actual_rough_weight_label_remainder}) tends to zero and,
+    for every $k>0$, one has $N_k^2>0$, $\|v_k\|=1$ and $D_k\geq0$.
+    For every $0<\tau\leq1/2$,
+    \begin{align}
+        \frac W4\left[4S'
+            -6\left(\tau\log d+\frac{h(\tau)}a\right)
+            -3\frac{D_k}{\tau}\max\{0,2S'\}\right]-R_k^{(a)}
+         & \leq-\frac{\log N_k^2}{k}.
+        \label{eq:arealaw-supplied-rough-lower}
+    \end{align}
+    Here $h$ is binary entropy.
+
+    Suppose in addition that $a\sqrt{\mathcal B}\leq\min\{c_0,1\}/10$.
+    For each terminal $j$ of the fixed family, including terminals of weight
+    zero, and each band $b$, let $Q_{jb}$ be its physical
+    receiving region, $Y_{jb}$ its middle region, and $U_{jb}$ its
+    positive-depth near region. Define
+    \begin{align}
+        G^-_{jb} & =S_{\widetilde\Omega}(Q_{jb})
+        +S_{\widetilde\Omega}((Q_{jb}\cup Y_{jb})^c)
+        -S_{\widetilde\Omega}(Y_{jb}),\notag                         \\
+        G^+_{jb} & =S_{\widetilde\Omega}(U_{jb})
+        +S_{\widetilde\Omega}(U_{jb}\cup Y_{jb})
+        -S_{\widetilde\Omega}(Y_{jb}),\notag                         \\
+        G_*      & =\max\bigl(\{0\}\cup\{G^-_{jb}:j,b\}\bigr).\notag
+    \end{align}
+    Let $w_j$ be the weights of the actual charge tree at $(s,p)$.
+    There are $c_U,c_L,C_{f,L}\geq0$, fixed before $k,s,p,\tau$, such that
+    $R_k^+=[\log4+(d^2+c_UK)\log(k+2)]/k\to0$ and the remainder
+    $R_k^-$ of Definition~\ref{def:actual_sharp_lower_remainder}, with
+    coefficients $c_L,C_{f,L}$, tends to zero. For all sufficiently large
+    $k$, simultaneously for every $s<nm$, every real $p$ and every
+    $0<\tau\leq1/2$, set
+    \begin{align}
+        L_b & =2S'+(1-\tau)\sum_jw_jG^-_{jb}
+        -2\tau\log d-(3+1/a)h(\tau)-25C_0\mathcal B a.\notag
+    \end{align}
+    Then
+    \begin{align}
+        -\frac{\log N_k^2}{k}
+         & \leq2\log d-\log z+\frac a2\sum_b\sum_jw_jG^+_{jb}
+        +6KC_0\mathcal B a^2-\frac K2\log z+R_k^+,\notag      \\
+        \frac a2\sum_b\left[L_b
+            -\frac{D_k}{\tau}\max\{0,2S'+G_*\}-R_k^-\right]
+         & \leq-\frac{\log N_k^2}{k}.
+        \label{eq:arealaw-supplied-sharp-bounds}
+    \end{align}
+    The supplied state, spectral set and labels are unchanged in all three
+    estimates. This is the uniform comparison step used in
+    \cite[Proposition~9.2, lines~386--395]{OpenAI2026AreaLaw}.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_scan_supplied_status_moments,thm:actual_supplied_rough_lower_weight,
+        thm:arealaw-sharp-smallness,thm:al_actual_sharp_upper,
+        thm:actual_scan_supplied_prevector_sharp_lower}
+    Choose $C_B$ from the common moment estimate for the prescribed
+    truncated ground vector. Since $C_r>0$ and $n\geq2$, one has $r_0\geq1$;
+    hence $ar_0^2\leq1/2$ implies $0<a\leq1/2$.
+    Apply the rough lower comparison to the supplied label sequence.
+    Its coordinate isometries preserve the same prevector and physical energy.
+
+    Under the additional sharp smallness condition,
+    Theorem~\ref{thm:arealaw-sharp-smallness} gives
+    $10a\leq c_0/\sqrt{\mathcal B}$ and $10a\leq1$.
+    The common moment estimate therefore supplies both sharp comparisons
+    with quadratic coefficient $C_0\mathcal B$. Apply them to the same
+    spectral set and labels, and intersect their eventual replica bounds.
+    Their constants and remainders are independent of the charge round
+    and interpolation parameter.
 \end{proof}

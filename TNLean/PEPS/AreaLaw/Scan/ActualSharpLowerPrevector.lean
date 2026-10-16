@@ -156,20 +156,10 @@ private theorem sharpLower_suppliedPrevector_properties
       globalReplicaCopiesEquiv β (Fin d) (Fin d) k := by
     simp only [pre, augmentedSumReplicaCopiesEquiv, Equiv.coe_trans,
       Function.comp_assoc, e, Equiv.symm_comp_self, Function.comp_id, β]
-  have hprenonzero : pre ≠ 0 := by
-    intro hz
-    apply hpre.1
-    change WithLp.toLp 2 (replicaPrevector Ωt d k ell ∘
-      globalReplicaCopiesEquiv β (Fin d) (Fin d) k) = 0
-    rw [← hpreEq, hz]
-    rfl
-  have hprenorm : ‖WithLp.toLp 2 pre‖ ≤ 1 := by
-    have hn := (LinearIsometryEquiv.piLpCongrLeft 2 ℂ ℂ e.symm).norm_map
-      (WithLp.toLp 2 pre)
-    have hno : ‖WithLp.toLp 2 (pre ∘ e)‖ ≤ 1 := by
-      rw [hpreEq]
-      exact hpre.2
-    exact hn.symm.trans_le hno
+  have hprenonzero : pre ≠ 0 :=
+    (augmentedReplicaPrevector_ne_zero_iff_global q d k Ωt ell).mpr hpre.1
+  have hprenorm : ‖WithLp.toLp 2 pre‖ ≤ 1 :=
+    (norm_augmentedReplicaPrevector_eq_global q d k Ωt ell).trans_le hpre.2
   have hsym : symProj (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre = pre :=
     symProj_mulVec_augmentedReplicaPrevector q d k Ωt ell
   have haux := labelProj_globalReplicaCopiesEquiv_auxiliary β (Fin d) (Fin d)

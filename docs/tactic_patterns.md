@@ -24,6 +24,28 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Euclidean norm and nonvanishing in augmented replica coordinates — promoted (2026-10-16)
+
+- **Pattern:** Reindex a replica prevector from the physical and two auxiliary
+  site coordinates to the scanner coordinates, preserve its Euclidean norm,
+  and transfer nonvanishing or a norm upper bound.
+- **Seen:** Three nonvanishing arguments and three norm arguments across
+  `AugmentedReplicaPrevectorProperties.lean`, `ActualRoughLowerPrevector.lean`,
+  `ActualSharpLowerPrevector.lean`, and `ActualEndpointRoughBudget.lean`, under
+  `PEPS/AreaLaw/Scan/`.
+- **Abstraction:** `norm_augmentedReplicaPrevector_eq_global` and
+  `augmentedReplicaPrevector_ne_zero_iff_global` in
+  `AugmentedReplicaPrevectorProperties.lean`, using Mathlib's
+  `LinearIsometryEquiv.piLpCongrLeft` and the characterization of zero by its
+  norm. The existing larger coordinate theorem and all three comparison
+  consumers use these declarations.
+- **Notes:** Both statements are unconditional in the dimensions and replica
+  count. No ground-state or eigen-equation premise is added. The six existing
+  arguments lose 31 lines; coordinate identities still used by the auxiliary
+  label and eigen-equations are retained. Existing theorem statements are
+  unchanged. The same coordinate isometry preserves the norm for every
+  replica count, so downstream estimates share one mathematical identity.
+
 ### Scanner prevector coordinates and selected density — promoted (2026-10-15)
 
 - **Pattern:** Transfer nonvanishing, copy symmetry and a mean-energy
