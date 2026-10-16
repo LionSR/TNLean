@@ -1,0 +1,62 @@
+\begin{theorem}[Approximation by cylinders from ordered inverse filters]
+    \label{thm:peps_inverse_filter_cylinders}
+    \leanok
+    \lean{TNLean.PEPS.exists_mem_iSup_dependentRegionCylinder_norm_sub_le}
+    \uses{def:peps_regularized_patch_objective,def:peps_regional_cylinder}
+    Let $X_0\subseteq\cdots\subseteq X_{m-1}\subseteq V$ be nested regions
+    of a finite coordinate tensor product, and let $\Omega\in\mathcal H_V$
+    be a unit vector. Let $a_j\ge0$, let $b>0$, and let $x_j$ be a positive
+    semidefinite matrix of trace one on $\mathcal H_{X_j}$. Put
+    \begin{align}
+        L_j  & =\widehat{(x_j+bI_{X_j})^{-a_j/2}}_{X_j}, \notag \\
+        \Psi & =L_{m-1}\cdots L_0\Omega. \notag
+    \end{align}
+    There are subspaces $S_j\subseteq\mathcal H_{X_j}$ and a vector
+    $v\in\sum_j\mathcal C_{X_j}(S_j)$ such that
+    \begin{align}
+        \dim S_j     & \le b^{-1}, \notag                           \\
+        \|\Omega-v\| & \le \|\Psi\|(2b)^{\frac12\sum_j a_j}. \notag
+    \end{align}
+    Repeated regions, zero weights and the empty family are allowed.
+    This is the ordered expansion used in the proof of Proposition~4.1
+    of \cite{OpenAI2026PolynomialPEPS}, before choosing a minimizing tuple
+    or a regulator value.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_cylinder_projector,thm:peps_regional_extension_algebra,thm:peps_regional_extension_norm}
+    On $\mathcal H_{X_j}$, set $F_j=(x_j+bI_{X_j})^{a_j/2}$, and let
+    $\Pi_j$ be the spectral projection of $x_j$ onto $[b,\infty)$.
+    Write $H_j=F_j\Pi_j$ and $T_j=F_j(I_{X_j}-\Pi_j)$. Spectral calculus
+    and the trace-one condition give
+    \begin{align}
+        F_j                    & =H_j+T_j,                &
+        \operatorname{rank}H_j & \le b^{-1},              &
+        \|T_j\|                & \le (2b)^{a_j/2}. \notag
+    \end{align}
+    In this proof, hats denote extension to $\mathcal H_V$ by the
+    complementary identity. Cancelling adjacent inverse factors gives
+    $\Omega=\widehat F_0\cdots\widehat F_{m-1}\Psi$. Distributivity,
+    or induction on the number of factors, gives the ordered identity
+    \begin{align}
+        \widehat F_0\cdots\widehat F_{m-1}
+         & =\sum_{j=0}^{m-1}
+        \widehat T_0\cdots\widehat T_{j-1}\widehat H_j
+        \widehat F_{j+1}\cdots\widehat F_{m-1}
+        +\widehat T_0\cdots\widehat T_{m-1}.
+        \label{eq:peps_first_head_expansion}
+    \end{align}
+    Let $P_j$ be the ordered product of the preceding tails, extended
+    only to $\mathcal H_{X_j}$, and put $S_j=\operatorname{ran}(P_jH_j)$.
+    Nesting makes these extensions well defined. The cylinder range
+    identity shows that the $j$th summand in
+    (\ref{eq:peps_first_head_expansion}), applied to $\Psi$, belongs to
+    $\mathcal C_{X_j}(S_j)$. Also,
+    $\dim S_j\le\operatorname{rank}H_j\le b^{-1}$.
+    Taking $v$ to be the sum of these vectors leaves exactly the all-tail
+    term. Applying the regional operator norm bound successively yields
+    \begin{align}
+        \|\Omega-v\|
+         & \le \|\Psi\|\prod_j\|T_j\|
+        \le \|\Psi\|(2b)^{\frac12\sum_j a_j}. \notag
+    \end{align}
+\end{proof}

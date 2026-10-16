@@ -37,6 +37,7 @@ import TNLean.PEPS.Approximation.ActualSourceLifetimeBound
 import TNLean.PEPS.Approximation.ActualSourcePolynomial
 import TNLean.PEPS.Approximation.ActualSourceRegisters
 import TNLean.PEPS.Approximation.ActualSourceSampling
+import TNLean.PEPS.Approximation.AdaptivePatchConstraintFromAreaLaw
 import TNLean.PEPS.Approximation.AdaptivePatchSupply
 import TNLean.PEPS.Approximation.AffectedOwners
 import TNLean.PEPS.Approximation.AffectedPhysicalDimension
@@ -74,6 +75,7 @@ import TNLean.PEPS.Approximation.ApproximateSourceSampling
 import TNLean.PEPS.Approximation.AuxiliaryRegisterFiniteness
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.BasisMatrixOperator
+import TNLean.PEPS.Approximation.BoundedRadiusSquarePatch
 import TNLean.PEPS.Approximation.CanonicalPartyFactorization
 import TNLean.PEPS.Approximation.CellChambers
 import TNLean.PEPS.Approximation.CellColouredGeneration
@@ -266,6 +268,10 @@ import TNLean.PEPS.Approximation.MessageGateExpansion
 import TNLean.PEPS.Approximation.MessageGateLists
 import TNLean.PEPS.Approximation.MessageMonomial
 import TNLean.PEPS.Approximation.MonomialFixesOutside
+import TNLean.PEPS.Approximation.NestedCylinderSquarePatch
+import TNLean.PEPS.Approximation.NestedPatchApproximation
+import TNLean.PEPS.Approximation.NestedPatchEnergy
+import TNLean.PEPS.Approximation.NestedPatchMarginalCloseness
 import TNLean.PEPS.Approximation.NetworkScalarAbsorption
 import TNLean.PEPS.Approximation.NoneResidualGate
 import TNLean.PEPS.Approximation.NoneResidualOperations
@@ -282,6 +288,7 @@ import TNLean.PEPS.Approximation.OriginalCircuitSequence
 import TNLean.PEPS.Approximation.OriginalCircuitSourceBound
 import TNLean.PEPS.Approximation.OriginalCoefficientMajorant
 import TNLean.PEPS.Approximation.OriginalGateSamplePhysicalSum
+import TNLean.PEPS.Approximation.OriginalNestedPatchEntropy
 import TNLean.PEPS.Approximation.OriginalProducerResources
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates
 import TNLean.PEPS.Approximation.OwnerMemoryTransport
@@ -476,6 +483,8 @@ import TNLean.PEPS.Approximation.SquareHamiltonianHermitianTerms
 import TNLean.PEPS.Approximation.SquareInteractionSupport
 import TNLean.PEPS.Approximation.SquareInteractionTerms
 import TNLean.PEPS.Approximation.SquareLatticeConnectivity
+import TNLean.PEPS.Approximation.SquarePatchIntegerCoordinates
+import TNLean.PEPS.Approximation.SquarePatchRelabel
 import TNLean.PEPS.Approximation.SupportedPhysicalBufferGaussian
 import TNLean.PEPS.Approximation.SupportedPolarUnitary
 import TNLean.PEPS.Approximation.SwappedSquareHamiltonianBoundary
