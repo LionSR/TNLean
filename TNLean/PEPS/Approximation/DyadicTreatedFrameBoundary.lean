@@ -69,6 +69,60 @@ theorem eventually_mem_openSquare_or_notMem_closedSquare (n : ℝ) (p : ℝ × �
       lt_of_le_of_ne hc.2.1 (Ne.symm h3), lt_of_le_of_ne hc.2.2 h4⟩
   · exact Or.inr hc
 
+/-- An affine function of nonzero slope avoids any given value for small positive arguments. -/
+theorem eventually_affine_ne (a m c : ℝ) (hm : m ≠ 0) : ∀ᶠ ε in 𝓝[>] (0 : ℝ), a + m * ε ≠ c := by
+  rcases le_or_gt ((c - a) / m) 0 with h | h
+  · filter_upwards [self_mem_nhdsWithin] with ε hε
+    have : (0 : ℝ) < ε := hε
+    intro he
+    have : ε = (c - a) / m := by field_simp; linarith
+    linarith
+  · filter_upwards [nhdsWithin_le_nhds (Iio_mem_nhds h)] with ε hε
+    have : ε < (c - a) / m := hε
+    intro he
+    have : ε = (c - a) / m := by field_simp; linarith
+    linarith
+
+/-- Along the diagonal the normal coordinate of an edge avoids zero and the band width. -/
+private theorem eventually_nor_ne (n a b σ : ℝ) (hσ : σ = 1 ∨ σ = -1) :
+    ∀ᶠ ε in 𝓝[>] (0 : ℝ), a + σ * ε ≠ 0 ∧ a + σ * ε ≠ bandWidth n (b + ε) := by
+  have h0 : σ ≠ 0 := by rcases hσ with rfl | rfl <;> norm_num
+  have h1 : σ - 1 / 1000 ≠ 0 := by rcases hσ with rfl | rfl <;> norm_num
+  have h2 : σ + 1 / 1000 ≠ 0 := by rcases hσ with rfl | rfl <;> norm_num
+  filter_upwards [eventually_affine_ne a σ 0 h0, eventually_affine_ne (a - b / 1000) _ 0 h1,
+    eventually_affine_ne (a - (n - b) / 1000) _ 0 h2] with ε e0 e1 e2
+  refine ⟨e0, fun he => ?_⟩
+  rcases min_choice (b + ε) (n - (b + ε)) with hm | hm <;> rw [bandWidth, hm] at he
+  · exact e1 (by linarith)
+  · exact e2 (by linarith)
+
+/-- **The diagonal displacement leaves the interface curves.** Every point moved by a small
+positive multiple of `(1, 1)` lies off the curves `x = 0` and `x = 1` of the band of an edge.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 69–80 and 161–168. -/
+theorem RepaintingBaseline.eventually_notMem_edgeInterface {ι : Type*}
+    (R : RepaintingBaseline ι) (e : SquareEdge) (p : ℝ × ℝ) :
+    ∀ᶠ ε in 𝓝[>] (0 : ℝ), p + ε • ((1 : ℝ), (1 : ℝ)) ∉ R.edgeInterface e := by
+  have key : ∀ᶠ ε in 𝓝[>] (0 : ℝ), e.nor R.n (p + ε • ((1 : ℝ), (1 : ℝ))) ≠ 0 ∧
+      e.nor R.n (p + ε • ((1 : ℝ), (1 : ℝ))) ≠
+        bandWidth R.n (e.par (p + ε • ((1 : ℝ), (1 : ℝ)))) := by
+    cases e
+    · simpa [SquareEdge.nor, SquareEdge.par] using eventually_nor_ne R.n p.2 p.1 1 (Or.inl rfl)
+    · simpa [SquareEdge.nor, SquareEdge.par, sub_add_eq_sub_sub, ← sub_eq_add_neg] using
+        eventually_nor_ne R.n (R.n - p.1) p.2 (-1) (Or.inr rfl)
+    · simpa [SquareEdge.nor, SquareEdge.par, sub_add_eq_sub_sub, ← sub_eq_add_neg] using
+        eventually_nor_ne R.n (R.n - p.2) p.1 (-1) (Or.inr rfl)
+    · simpa [SquareEdge.nor, SquareEdge.par] using eventually_nor_ne R.n p.1 p.2 1 (Or.inl rfl)
+  filter_upwards [key] with ε ⟨h0, h1⟩
+  rintro ⟨hb, hx⟩
+  obtain ⟨s1, s2, -, -⟩ := mem_edgeBand_iff_bandCoord.1 hb
+  have hw := bandWidth_pos s1 s2
+  rcases hx with hx | hx
+  · rw [bandCoord, div_eq_zero_iff] at hx
+    exact hx.elim h0 hw.ne'
+  · rw [bandCoord, div_eq_one_iff_eq hw.ne'] at hx
+    exact h1 hx
+
 /-- A reading of a labelling reads every labelling that agrees with it eventually along the
 displacement. -/
 theorem IsDisplacedReading.congr_eventually {X κ : Type*} [AddCommGroup X] [Module ℝ X]
@@ -272,6 +326,33 @@ theorem treatedFrame_completedGuide_eq_levelFrame {K₀ ε₀ ν a D : ℝ}
         guideFrame_congr_guide hg hV fun z _ => hpatch z
     _ = _ := guideFrame_levelLabels_labelParty_eq hkL R.2 (isDisplacedReading_levelGuide _ _) R
         R₀ rank (fun z hz => mem_levelVertices.1 hz) _ hd'
+
+/-- **The start of an edge construction.** At the constants of the protocol, the frame of the
+guide left by the central birth and the edges of `E`, treated at no mark, is the frame of the main
+guide with the starting word `C_e | A | B` on the band of `e ∉ E`: the two guides agree off the
+interface curves of the band, which the displacement leaves at once, so their readings agree.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 62–80 and 160–168. -/
+theorem treatedFrame_edgeStart {K₀ ε₀ ν a D : ℝ} (hc : IsProtocolConstants K₀ ε₀ ν a D B₀)
+    (hL : 2 ≤ L) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
+    (done : Set (ℤ × ℤ)) {E : List SquareEdge} {e : SquareEdge} (he : e ∉ E)
+    (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧ ε₀ * (D * Real.log L) ≤ B₀ * Real.log L)
+    (L₀ L₀' : GuideLabel) :
+    treatedFrame (q := q) P rank R hr ∅ L₀ ((repaintBaseline R done).completedGuide E) =
+      treatedFrame P rank R hr ∅ L₀' ((repaintBaseline R done).mainGuide E e
+        (edgeStartWord (repaintBaseline R done).oldLabel (repaintBaseline R done).finalLabel
+          ((repaintBaseline R done).nbrLabel e))) := by
+  classical
+  set d := blockCorner ((2 : ℝ) ^ (R.1.1 : ℕ)) R.1.index
+  obtain ⟨hf, -⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done
+    (Or.inr (Or.inr (Or.inl ⟨E, rfl⟩))) ∅ L₀ hr
+  refine treatedFrame_congr P rank R ((hf.congr_eventually fun p => ?_).eq_sampleGuide)
+  filter_upwards [(repaintBaseline R done).eventually_notMem_edgeInterface e (p - d)] with ε hε
+  have hx : p - d + ε • ((1 : ℝ), (1 : ℝ)) = p + ε • ((1 : ℝ), (1 : ℝ)) - d := by abel
+  rw [hx] at hε
+  simp only [homogenize, Finset.notMem_empty, Set.iUnion_of_empty, Set.iUnion_empty,
+    Set.mem_empty_iff_false, ite_false, shiftGuide]
+  exact (repaintBaseline R done).completedGuide_eq_mainGuide_start he hε
 
 /-! ### The fresh auxiliary sheet -/
 
