@@ -127,6 +127,33 @@
     forms. Their extrema over the finite vertex set are attained.
 \end{proof}
 
+% Auxiliary to Definition 9.3 (scanner:template), 08-scanner.tex, lines 546--569.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Finite integer points in allowed polygons]
+    \label{thm:area_law_polygon_integer_points_finite}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon.finite_integerPoints}
+    \leanok
+    \uses{def:area_law_template}
+    Let $P\subseteq\mathbb R^2$ be a closed nondegenerate triangle or
+    rectangle whose sides have slopes in $\{0,\infty,1,-1\}$.
+    Then $P\cap\mathbb Z^2$ is finite.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_polygon_strips}
+    By Theorem~\ref{thm:area_law_polygon_strips}, there are
+    $l_x,u_x,l_y,u_y\in\mathbb R$ such that
+    $P\subseteq[l_x,u_x]\times[l_y,u_y]$. Consequently,
+    \begin{align}
+        P\cap\mathbb Z^2 & \subseteq
+        ([\lceil l_x\rceil,\lfloor u_x\rfloor]\cap\mathbb Z)
+        \times([\lceil l_y\rceil,\lfloor u_y\rfloor]\cap\mathbb Z).\notag
+    \end{align}
+    Each integer interval is finite, so their product and its subset
+    $P\cap\mathbb Z^2$ are finite.
+\end{proof}
+
 \begin{theorem}[Rounded affine row profiles]
     \label{thm:area_law_affine_row_profiles}
     \leanok
