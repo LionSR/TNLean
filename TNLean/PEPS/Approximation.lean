@@ -274,6 +274,7 @@ import TNLean.PEPS.Approximation.MessageGateExpansion
 import TNLean.PEPS.Approximation.MessageGateLists
 import TNLean.PEPS.Approximation.MessageMonomial
 import TNLean.PEPS.Approximation.MonomialFixesOutside
+import TNLean.PEPS.Approximation.NestedPatchApproximation
 import TNLean.PEPS.Approximation.NestedPatchEnergy
 import TNLean.PEPS.Approximation.NestedPatchMarginalCloseness
 import TNLean.PEPS.Approximation.NetworkScalarAbsorption
