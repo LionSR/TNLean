@@ -36,11 +36,11 @@ as the party of a block of the root square next to the junction, which the resiz
 
 noncomputable section
 
-open Set Metric Filter Topology
+open Set
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame
 
 variable {k : ℕ}
 
@@ -198,10 +198,12 @@ theorem IsProtocolConstants.resizeRadius_bounds {K₀ ε₀ ν a D : ℝ}
 def DyadicJunction.rootNbr (J : DyadicJunction k) : ℤ × ℤ :=
   (if (J.2.1 : ℕ) = 0 then 1 else 0, if (J.2.2 : ℕ) = 0 then 1 else 0)
 
+/-- The chosen offset is one of the nine neighboring-block offsets around the junction. -/
 theorem DyadicJunction.rootNbr_mem (J : DyadicJunction k) : J.rootNbr ∈ blockWindow 1 := by
   simp only [DyadicJunction.rootNbr, blockWindow, Finset.mem_product, Finset.mem_Icc]
   constructor <;> split_ifs <;> norm_num
 
+/-- Translating the chosen offset to the junction selects a block inside the root square. -/
 theorem DyadicJunction.inRoot_rootNbr (J : DyadicJunction k) :
     InRoot ((2 : ℤ) ^ (k - (J.1 : ℕ))) (J.rootNbr + (J.index.1 - 1, J.index.2 - 1)) := by
   have h1 := J.2.1.isLt

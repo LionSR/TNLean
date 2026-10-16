@@ -87,6 +87,8 @@ theorem hasSourceBoundedChange_main {M M' : Frame pos q Party} (Fs : List (Frame
     HasSourceBoundedChange Ω (M :: Fs) (M' :: Fs) ξ S r K rs ε :=
   hasSourceBoundedChange_liftOne [] Fs hc hs hΩ hξ
 
+/-- Updating the auxiliary value at a selected index in a duplicate-free list lets that value
+move before the main value, leaving the other auxiliary values in their original order. -/
 theorem perm_map_update_cons {Y : Type*} (M : Y) {l : List X} (hl : l.Nodup) {x : X} (hx : x ∈ l)
     (A : X → Y) (F : Y) :
     (M :: l.map (Function.update A x F)).Perm (F :: M :: (l.erase x).map A) := by
@@ -98,6 +100,8 @@ theorem perm_map_update_cons {Y : Type*} (M : Y) {l : List X} (hl : l.Nodup) {x 
   rw [he] at hp
   exact (hp.cons M).trans (List.Perm.swap _ _ _)
 
+/-- A selected auxiliary value may move before the main value, leaving the values of the index
+list with the selected index erased once. -/
 theorem perm_map_cons {Y : Type*} (M : Y) {l : List X} {x : X} (hx : x ∈ l) (A : X → Y) :
     (M :: l.map A).Perm (A x :: M :: (l.erase x).map A) := by
   have hp := (List.perm_cons_erase hx).map A
