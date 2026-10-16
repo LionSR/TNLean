@@ -6,50 +6,50 @@ pair sources, and normalized pair effects without message operations; the
 reduction of polynomial-dimensional messages follows in the next chapter.
 
 \begin{definition}[Original input and output data]
-	\label{def:peps_original_construction_data}
-	\lean{TNLean.PEPS.PairEffect.DistributedConstructionData}
-	\leanok
-	Fix a finite nonempty party set, a finite-dimensional original memory and
-	normalized vector at each party, one intended physical output register at
-	each party in a fixed order, and finite-dimensional private output
-	registers to be discarded (with no numerical bound on private dimensions
-	and no expansion or approximation hypothesis). Assuming a nonempty party
-	set allows one local tensor to absorb the exterior scalar; the scalar
-	boundary case is recorded in \cite{gap:polypeps_nonempty_parties}.
+    \label{def:peps_original_construction_data}
+    \lean{TNLean.PEPS.PairEffect.DistributedConstructionData}
+    \leanok
+    Fix a finite nonempty party set, a finite-dimensional original memory and
+    normalized vector at each party, one intended physical output register at
+    each party in a fixed order, and finite-dimensional private output
+    registers to be discarded (with no numerical bound on private dimensions
+    and no expansion or approximation hypothesis). Assuming a nonempty party
+    set allows one local tensor to absorb the exterior scalar; the scalar
+    boundary case is recorded in \cite{gap:polypeps_nonempty_parties}.
 \end{definition}
 
 \begin{definition}[Original construction with prescribed gate operators]
-	\label{def:peps_original_gate_construction}
-	\lean{TNLean.PEPS.PairEffect.GateMapConstruction}
-	\leanok
-	\uses{def:peps_original_construction_data,def:peps_approximate_original_operators}
-	An original gate construction equips the original input and output data
-	with a fixed chronology (including the private maps, participant
-	embeddings, and spectator registers) and an original operator at each
-	nonprivate gate occurrence, while leaving the reference monomial lists
-	unrestricted.
+    \label{def:peps_original_gate_construction}
+    \lean{TNLean.PEPS.PairEffect.GateMapConstruction}
+    \leanok
+    \uses{def:peps_original_construction_data,def:peps_approximate_original_operators}
+    An original gate construction equips the original input and output data
+    with a fixed chronology (including the private maps, participant
+    embeddings, and spectator registers) and an original operator at each
+    nonprivate gate occurrence, while leaving the reference monomial lists
+    unrestricted.
 \end{definition}
 
 \begin{definition}[Product input of an original gate construction]
-	\label{def:peps_original_gate_construction_input}
-	\lean{TNLean.PEPS.PairEffect.GateMapConstruction.input}
-	\leanok
-	\uses{def:peps_original_gate_construction}
-	The original input of a gate construction is the tensor product of its
-	recorded normalized party vectors.
+    \label{def:peps_original_gate_construction_input}
+    \lean{TNLean.PEPS.PairEffect.GateMapConstruction.input}
+    \leanok
+    \uses{def:peps_original_gate_construction}
+    The original input of a gate construction is the tensor product of its
+    recorded normalized party vectors.
 \end{definition}
 
 \begin{definition}[Physical density of the prescribed original gates]
-	\label{def:peps_original_gate_construction_density}
-	\lean{TNLean.PEPS.PairEffect.GateMapConstruction.physicalDensity}
-	\leanok
-	\uses{def:peps_original_gate_construction_input,def:peps_original_gate_density}
-	When $U$ evaluates the prescribed original gate operators on the fixed
-	chronology and $\psi$ is the product input, the unnormalized original
-	physical density is
-	\begin{align}
-		\rho=\operatorname{Tr}_{\mathrm{priv}}\lvert U\psi\rangle\langle U\psi\rvert.
-	\end{align}
+    \label{def:peps_original_gate_construction_density}
+    \lean{TNLean.PEPS.PairEffect.GateMapConstruction.physicalDensity}
+    \leanok
+    \uses{def:peps_original_gate_construction_input,def:peps_original_gate_density}
+    When $U$ evaluates the prescribed original gate operators on the fixed
+    chronology and $\psi$ is the product input, the unnormalized original
+    physical density is
+    \begin{align}
+        \rho=\operatorname{Tr}_{\mathrm{priv}}\lvert U\psi\rangle\langle U\psi\rvert.
+    \end{align}
 \end{definition}
 
 \section{Monomial expansions on a fixed chronology}
@@ -61,237 +61,237 @@ participant embeddings, and spectator registers fixed while allowing the
 monomial lists at the gate occurrences to vary independently.
 
 \begin{definition}[Monomial lists on a fixed chronology]
-	\label{def:peps_fixed_chronology_lists}
-	\lean{TNLean.PEPS.PairEffect.EffectCircuit.GateLists}
-	\leanok
-	\uses{def:peps_approximate_original_operators}
-	An expansion family assigns a finite monomial list $\mathcal L_g$ on the
-	original local input and output spaces to each nonprivate gate occurrence
-	$g$, giving repeated occurrences separate lists and representing a
-	chronological composition by the ordered pair of expansion families.
+    \label{def:peps_fixed_chronology_lists}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.GateLists}
+    \leanok
+    \uses{def:peps_approximate_original_operators}
+    An expansion family assigns a finite monomial list $\mathcal L_g$ on the
+    original local input and output spaces to each nonprivate gate occurrence
+    $g$, giving repeated occurrences separate lists and representing a
+    chronological composition by the ordered pair of expansion families.
 \end{definition}
 
 \begin{definition}[Reexpansion of a fixed chronology]
-	\label{def:peps_fixed_chronology_reexpansion}
-	\lean{TNLean.PEPS.PairEffect.EffectCircuit.reexpand}
-	\leanok
-	\uses{def:peps_fixed_chronology_lists}
-	Given an expansion family $\mathcal L$, the reexpanded circuit
-	$\mathcal C[\mathcal L]$ replaces the list at each nonprivate occurrence
-	$g$ by $\mathcal L_g$ while preserving all input and output spaces,
-	private maps, participant embeddings, spectator registers, swaps, and
-	chronological compositions.
+    \label{def:peps_fixed_chronology_reexpansion}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.reexpand}
+    \leanok
+    \uses{def:peps_fixed_chronology_lists}
+    Given an expansion family $\mathcal L$, the reexpanded circuit
+    $\mathcal C[\mathcal L]$ replaces the list at each nonprivate occurrence
+    $g$ by $\mathcal L_g$ while preserving all input and output spaces,
+    private maps, participant embeddings, spectator registers, swaps, and
+    chronological compositions.
 \end{definition}
 
 \begin{definition}[Original operators after reexpansion]
-	\label{def:peps_fixed_chronology_original_operators}
-	\lean{TNLean.PEPS.PairEffect.EffectCircuit.reexpandGateMaps}
-	\leanok
-	\uses{def:peps_fixed_chronology_reexpansion,def:peps_approximate_original_operators}
-	Reexpansion assigns to each occurrence in $\mathcal C[\mathcal L]$ the
-	same original gate operator $G_g$ as the corresponding occurrence $g$ in
-	$\mathcal C$.
+    \label{def:peps_fixed_chronology_original_operators}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.reexpandGateMaps}
+    \leanok
+    \uses{def:peps_fixed_chronology_reexpansion,def:peps_approximate_original_operators}
+    Reexpansion assigns to each occurrence in $\mathcal C[\mathcal L]$ the
+    same original gate operator $G_g$ as the corresponding occurrence $g$ in
+    $\mathcal C$.
 \end{definition}
 
 \begin{theorem}[Original-operator evaluation is unchanged]
-	\label{thm:peps_fixed_chronology_evaluation}
-	\lean{TNLean.PEPS.PairEffect.EffectCircuit.evalWithGateMaps_reexpand}
-	\leanok
-	\uses{def:peps_fixed_chronology_original_operators}
-	Let $U_{\mathcal C,G}$ denote circuit evaluation using the assigned
-	original operators $G_g$ rather than the monomial sums. Then
-	\begin{align}
-		U_{\mathcal C[\mathcal L],G}=U_{\mathcal C,G}.
-	\end{align}
+    \label{thm:peps_fixed_chronology_evaluation}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.evalWithGateMaps_reexpand}
+    \leanok
+    \uses{def:peps_fixed_chronology_original_operators}
+    Let $U_{\mathcal C,G}$ denote circuit evaluation using the assigned
+    original operators $G_g$ rather than the monomial sums. Then
+    \begin{align}
+        U_{\mathcal C[\mathcal L],G}=U_{\mathcal C,G}.
+    \end{align}
 \end{theorem}
 \begin{proof}
-	\leanok
-	By induction on chronological composition, each nonprivate gate applies the
-	same operator $G_g$ on its original local spaces, and all private
-	operations, swaps, and spectator tensor factors agree on both sides.
+    \leanok
+    By induction on chronological composition, each nonprivate gate applies the
+    same operator $G_g$ on its original local spaces, and all private
+    operations, swaps, and spectator tensor factors agree on both sides.
 \end{proof}
 
 \begin{definition}[Correspondence of original occurrences]
-	\label{def:peps_fixed_chronology_occurrences}
-	\lean{TNLean.PEPS.PairEffect.EffectCircuit.reexpandLocationsEquiv}
-	\leanok
-	\uses{def:peps_fixed_chronology_reexpansion}
-	The occurrence bijection $E_{\mathcal L}$ from the nonprivate gate
-	occurrences of $\mathcal C[\mathcal L]$ to those of $\mathcal C$ acts as
-	the identity at a single gate and as the disjoint union of the two
-	component bijections at a chronological composition.
+    \label{def:peps_fixed_chronology_occurrences}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.reexpandLocationsEquiv}
+    \leanok
+    \uses{def:peps_fixed_chronology_reexpansion}
+    The occurrence bijection $E_{\mathcal L}$ from the nonprivate gate
+    occurrences of $\mathcal C[\mathcal L]$ to those of $\mathcal C$ acts as
+    the identity at a single gate and as the disjoint union of the two
+    component bijections at a chronological composition.
 \end{definition}
 
 \begin{theorem}[The prescribed participant sets are unchanged]
-	\label{thm:peps_fixed_chronology_participants}
-	\lean{TNLean.PEPS.PairEffect.EffectCircuit.participants_reexpand}
-	\leanok
-	\uses{def:peps_fixed_chronology_occurrences}
-	If $\mathcal P_g$ is the prescribed participating set of an original gate
-	$g$, then the participating set at any occurrence $g'$ of
-	$\mathcal C[\mathcal L]$ is $\mathcal P_{E_{\mathcal L}(g')}$.
+    \label{thm:peps_fixed_chronology_participants}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.participants_reexpand}
+    \leanok
+    \uses{def:peps_fixed_chronology_occurrences}
+    If $\mathcal P_g$ is the prescribed participating set of an original gate
+    $g$, then the participating set at any occurrence $g'$ of
+    $\mathcal C[\mathcal L]$ is $\mathcal P_{E_{\mathcal L}(g')}$.
 \end{theorem}
 \begin{proof}
-	\leanok
-	Because reexpansion retains the owner embedding at each gate, induction
-	over chronological compositions and spectator tensor factors preserves the
-	participating set.
+    \leanok
+    Because reexpansion retains the owner embedding at each gate, induction
+    over chronological compositions and spectator tensor factors preserves the
+    participating set.
 \end{proof}
 
 \begin{theorem}[The original gate count is unchanged]
-	\label{thm:peps_fixed_chronology_gate_count}
-	\lean{TNLean.PEPS.PairEffect.EffectCircuit.expandedGateCount_reexpand}
-	\leanok
-	\uses{def:peps_fixed_chronology_occurrences}
-	Reexpansion preserves the number of nonprivate gate occurrences, including
-	occurrences whose monomial list is empty.
+    \label{thm:peps_fixed_chronology_gate_count}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.expandedGateCount_reexpand}
+    \leanok
+    \uses{def:peps_fixed_chronology_occurrences}
+    Reexpansion preserves the number of nonprivate gate occurrences, including
+    occurrences whose monomial list is empty.
 \end{theorem}
 \begin{proof}
-	\leanok
-	Each nonprivate gate contributes one occurrence, each private operation
-	contributes zero, and the total count adds across chronological
-	compositions.
+    \leanok
+    Each nonprivate gate contributes one occurrence, each private operation
+    contributes zero, and the total count adds across chronological
+    compositions.
 \end{proof}
 
 \begin{theorem}[Whole-lifetime participation is unchanged]
-	\label{thm:peps_fixed_chronology_lifetime}
-	\lean{TNLean.PEPS.PairEffect.EffectCircuit.participationCount_reexpand}
-	\leanok
-	\uses{thm:peps_fixed_chronology_participants,def:compression_lifetime_gates}
-	For every party $p$, the number of nonprivate gates in which $p$
-	participates is the same in $\mathcal C[\mathcal L]$ and in $\mathcal C$.
+    \label{thm:peps_fixed_chronology_lifetime}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.participationCount_reexpand}
+    \leanok
+    \uses{thm:peps_fixed_chronology_participants,def:compression_lifetime_gates}
+    For every party $p$, the number of nonprivate gates in which $p$
+    participates is the same in $\mathcal C[\mathcal L]$ and in $\mathcal C$.
 \end{theorem}
 \begin{proof}
-	\leanok
-	Since $E_{\mathcal L}$ preserves participating sets, restricting
-	$E_{\mathcal L}$ to the occurrences containing $p$ gives a bijection
-	between the two participation sets.
+    \leanok
+    Since $E_{\mathcal L}$ preserves participating sets, restricting
+    $E_{\mathcal L}$ to the occurrences containing $p$ gives a bijection
+    between the two participation sets.
 \end{proof}
 
 \begin{theorem}[Uniform sampled bounds at one prescribed precision]
-	\label{thm:peps_uniform_prescribed_expansion_bounds}
-	\lean{TNLean.PEPS.PairEffect.EffectCircuit.exists_uniform_sampled_approximate_network_bounds}
-	\leanok
-	\uses{thm:peps_fixed_power_gate_budget,thm:peps_approximate_sampled_distributed_error,thm:peps_actual_physicalFirst_density_polynomial,thm:peps_actual_physicalFirst_density_incidence,thm:peps_actual_physicalFirst_density_locality}
-	Fix the arity and lifetime bound $b$, the monomial effect bound
-	$r$, and original resource constants $C_N\ge1$, $C_D$, $n$, and $d$.
-	At integer precision $q$, let $C_K(q),C_B(q)\ge0$ and $u(q),s(q)$ be the
-	polynomial constants and degrees for monomial counts and absolute
-	coefficient sums. For $p>0$, set
-	\begin{align}
-		t=\lceil p\rceil,
-		\qquad q=n+t+\lceil16C_N\rceil.
-	\end{align}
-	Then there exist $C_p\ge0$ and an integer $\alpha_p>0$, chosen before the
-	size or a particular construction, with the following property.
-	Let $L\ge2$, and suppose the original normalized product input, finite
-	private registers, original gate operators, and expansion lists satisfy
-	\begin{align}
-		N\le C_NL^n,\qquad
-		K\le C_K(q)L^{u(q)},\qquad
-		1\le B\le C_B(q)L^{s(q)},\qquad
-		1\le D\le C_DL^d,
-	\end{align}
-	where $N$ counts original gate occurrences, $K$ bounds the monomials per
-	list, $B$ bounds each list's absolute coefficient sum, and $D$ bounds each
-	intended physical dimension. If every local list approximates its original
-	contraction to operator error at most $L^{-q}$, each monomial contains at
-	most $r$ pair effects, and each gate and party have arity and
-	whole-lifetime participation at most $b$, then the sampled
-	nonempty-occurrence contraction $\Sigma$ and the unnormalized original
-	physical density $\rho$ satisfy
-	\begin{align}
-		\bigl\lVert |\gamma|^2\Sigma-\rho\bigr\rVert_1\le L^{-p},
-		\qquad \dim\mathcal V_e\le C_pL^{\alpha_p}.
-	\end{align}
-	Here a single source circuit and sample array define $\Sigma$ and all of
-	its virtual alphabets, each party has at most $2b(b-1)$ incident links,
-	every link joins participants of one original gate, and no numerical bound
-	is required on private dimensions or source Schmidt ranks.
+    \label{thm:peps_uniform_prescribed_expansion_bounds}
+    \lean{TNLean.PEPS.PairEffect.EffectCircuit.exists_uniform_sampled_approximate_network_bounds}
+    \leanok
+    \uses{thm:peps_fixed_power_gate_budget,thm:peps_approximate_sampled_distributed_error,thm:peps_actual_physicalFirst_density_polynomial,thm:peps_actual_physicalFirst_density_incidence,thm:peps_actual_physicalFirst_density_locality}
+    Fix the arity and lifetime bound $b$, the monomial effect bound
+    $r$, and original resource constants $C_N\ge1$, $C_D$, $n$, and $d$.
+    At integer precision $q$, let $C_K(q),C_B(q)\ge0$ and $u(q),s(q)$ be the
+    polynomial constants and degrees for monomial counts and absolute
+    coefficient sums. For $p>0$, set
+    \begin{align}
+        t=\lceil p\rceil,
+        \qquad q=n+t+\lceil16C_N\rceil.
+    \end{align}
+    Then there exist $C_p\ge0$ and an integer $\alpha_p>0$, chosen before the
+    size or a particular construction, with the following property.
+    Let $L\ge2$, and suppose the original normalized product input, finite
+    private registers, original gate operators, and expansion lists satisfy
+    \begin{align}
+        N\le C_NL^n,\qquad
+        K\le C_K(q)L^{u(q)},\qquad
+        1\le B\le C_B(q)L^{s(q)},\qquad
+        1\le D\le C_DL^d,
+    \end{align}
+    where $N$ counts original gate occurrences, $K$ bounds the monomials per
+    list, $B$ bounds each list's absolute coefficient sum, and $D$ bounds each
+    intended physical dimension. If every local list approximates its original
+    contraction to operator error at most $L^{-q}$, each monomial contains at
+    most $r$ pair effects, and each gate and party have arity and
+    whole-lifetime participation at most $b$, then the sampled
+    nonempty-occurrence contraction $\Sigma$ and the unnormalized original
+    physical density $\rho$ satisfy
+    \begin{align}
+        \bigl\lVert |\gamma|^2\Sigma-\rho\bigr\rVert_1\le L^{-p},
+        \qquad \dim\mathcal V_e\le C_pL^{\alpha_p}.
+    \end{align}
+    Here a single source circuit and sample array define $\Sigma$ and all of
+    its virtual alphabets, each party has at most $2b(b-1)$ incident links,
+    every link joins participants of one original gate, and no numerical bound
+    is required on private dimensions or source Schmidt ranks.
 
-	Concretely, one may take
-	\begin{align}
-		C_S=\max\{1,C_N\tbinom b2\},\qquad
-		C_X=C_K(q)\bigl(64C_N^2(rC_B(q))^2+2\bigr)^r,
-	\end{align}
-	\begin{align}
-		C_k=64C_S^2\bigl(C_B(q)^{4b}C_D^4\bigr)^2+2,
-		\qquad C_p=C_X^2+C_k,
-	\end{align}
-	\begin{align}
-		\alpha_p=
-		\max\{2(u(q)+2r(n+s(q)+t)),\,
-		2(n+4bs(q)+4d+t)\}+t.
-	\end{align}
+    Concretely, one may take
+    \begin{align}
+        C_S=\max\{1,C_N\tbinom b2\},\qquad
+        C_X=C_K(q)\bigl(64C_N^2(rC_B(q))^2+2\bigr)^r,
+    \end{align}
+    \begin{align}
+        C_k=64C_S^2\bigl(C_B(q)^{4b}C_D^4\bigr)^2+2,
+        \qquad C_p=C_X^2+C_k,
+    \end{align}
+    \begin{align}
+        \alpha_p=
+        \max\{2(u(q)+2r(n+s(q)+t)),\,
+        2(n+4bs(q)+4d+t)\}+t.
+    \end{align}
 \end{theorem}
 \begin{proof}
-	\leanok
-	Choosing $q=n+t+\lceil16C_N\rceil$ ensures that local gate errors of at
-	most $L^{-q}$ meet the threshold for target sampling error
-	$\epsilon=L^{-t}\le L^{-p}$. Applying the exact contraction identity on the
-	shared source circuit and sample count together with the branch and sample
-	dimension bounds yields $\dim\mathcal V_e\le C_pL^{\alpha_p}$ (where adding
-	$t\ge1$ makes $\alpha_p>0$), while the occurrence bijection preserves link
-	incidence, original-gate locality, and the exterior scalar $|\gamma|^2$.
+    \leanok
+    Choosing $q=n+t+\lceil16C_N\rceil$ ensures that local gate errors of at
+    most $L^{-q}$ meet the threshold for target sampling error
+    $\epsilon=L^{-t}\le L^{-p}$. Applying the exact contraction identity on the
+    shared source circuit and sample count together with the branch and sample
+    dimension bounds yields $\dim\mathcal V_e\le C_pL^{\alpha_p}$ (where adding
+    $t\ge1$ makes $\alpha_p>0$), while the occurrence bijection preserves link
+    incidence, original-gate locality, and the exterior scalar $|\gamma|^2$.
 \end{proof}
 
 \begin{theorem}[Uniform operator networks from approximate original gate expansions]
-	\label{thm:peps_uniform_approximate_operator_network}
-	\lean{TNLean.PEPS.PairEffect.GateMapConstruction.exists_uniform_approximate_sampled_network}
-	\leanok
-	\uses{thm:peps_uniform_prescribed_expansion_bounds,thm:peps_fixed_chronology_evaluation,thm:peps_fixed_chronology_participants,thm:peps_fixed_chronology_gate_count,thm:peps_fixed_chronology_lifetime,def:peps_original_gate_construction,thm:peps_effect_coefficient_majorant,thm:peps_distributed_operator_scalar_absorption}
-	Let $(\mathcal C_i)_{i\in I}$ be a family of original distributed
-	constructions indexed by an arbitrary set $I$, where each index carries a
-	size $L=L_i\ge2$ (possibly shared across multiple indices), finite-dimensional
-	party memories, a product input of normalized party vectors, and original
-	contractions, physical output orders, and discarded registers fixed before
-	any precision is chosen. Suppose that every nonprivate gate has participant
-	set of size in $[2,b]$ (single-party maps being private), each party
-	participates in at most $b$ nonprivate gates over its lifetime, and the
-	gate counts and physical dimensions obey the polynomial bounds
-	\begin{align}
-		N_L\le C_NL^n,\qquad d_{L,j}\le C_DL^d.
-	\end{align}
-	Suppose further that at every fixed integer precision $q$ there exist
-	$r_q$, real constants $C_K(q),C_C(q)$, and degrees $u(q),v(q)$, chosen
-	before $L$, such that every family member admits allowed monomial lists at
-	its original gate occurrences with at most $C_K(q)L^{u(q)}$ monomials per
-	list, individual coefficients of norm at most $C_C(q)L^{v(q)}$, at most
-	$r_q$ pair effects per monomial, and local operator error at most $L^{-q}$.
+    \label{thm:peps_uniform_approximate_operator_network}
+    \lean{TNLean.PEPS.PairEffect.GateMapConstruction.exists_uniform_approximate_sampled_network}
+    \leanok
+    \uses{thm:peps_uniform_prescribed_expansion_bounds,thm:peps_fixed_chronology_evaluation,thm:peps_fixed_chronology_participants,thm:peps_fixed_chronology_gate_count,thm:peps_fixed_chronology_lifetime,def:peps_original_gate_construction,thm:peps_effect_coefficient_majorant,thm:peps_distributed_operator_scalar_absorption}
+    Let $(\mathcal C_i)_{i\in I}$ be a family of original distributed
+    constructions indexed by an arbitrary set $I$, where each index carries a
+    size $L=L_i\ge2$ (possibly shared across multiple indices), finite-dimensional
+    party memories, a product input of normalized party vectors, and original
+    contractions, physical output orders, and discarded registers fixed before
+    any precision is chosen. Suppose that every nonprivate gate has participant
+    set of size in $[2,b]$ (single-party maps being private), each party
+    participates in at most $b$ nonprivate gates over its lifetime, and the
+    gate counts and physical dimensions obey the polynomial bounds
+    \begin{align}
+        N_L\le C_NL^n,\qquad d_{L,j}\le C_DL^d.
+    \end{align}
+    Suppose further that at every fixed integer precision $q$ there exist
+    $r_q$, real constants $C_K(q),C_C(q)$, and degrees $u(q),v(q)$, chosen
+    before $L$, such that every family member admits allowed monomial lists at
+    its original gate occurrences with at most $C_K(q)L^{u(q)}$ monomials per
+    list, individual coefficients of norm at most $C_C(q)L^{v(q)}$, at most
+    $r_q$ pair effects per monomial, and local operator error at most $L^{-q}$.
 
-	Then for every $p>0$ there exist $r_p$, $C_p\ge0$, and an integer
-	$\alpha_p>0$, chosen before the family member, such that every member of
-	size $L\ge2$ admits an operator tensor network $\sigma_L$ with one node per
-	original party, physical ket and bra legs of dimensions $d_{L,j}$, at most
-	$2b(b-1)$ incident virtual links per node (each joining participants of a
-	common original gate), and
-	\begin{align}
-		\lVert\sigma_L-\rho_L\rVert_1\le L^{-p},
-		\qquad \dim\mathcal V_e\le C_pL^{\alpha_p},
-	\end{align}
-	where $\rho_L$ is the unnormalized original physical density with private
-	registers traced out and no numerical bound is imposed on finite private
-	dimensions. This establishes the message-free case of
-	\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, from which the next chapter
-	derives the full theorem by expanding every message in an orthonormal basis.
-	% Source: 04-compression.tex, lines 137--175 and 590--600.
+    Then for every $p>0$ there exist $r_p$, $C_p\ge0$, and an integer
+    $\alpha_p>0$, chosen before the family member, such that every member of
+    size $L\ge2$ admits an operator tensor network $\sigma_L$ with one node per
+    original party, physical ket and bra legs of dimensions $d_{L,j}$, at most
+    $2b(b-1)$ incident virtual links per node (each joining participants of a
+    common original gate), and
+    \begin{align}
+        \lVert\sigma_L-\rho_L\rVert_1\le L^{-p},
+        \qquad \dim\mathcal V_e\le C_pL^{\alpha_p},
+    \end{align}
+    where $\rho_L$ is the unnormalized original physical density with private
+    registers traced out and no numerical bound is imposed on finite private
+    dimensions. This establishes the message-free case of
+    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}, from which the next chapter
+    derives the full theorem by expanding every message in an orthonormal basis.
+    % Source: 04-compression.tex, lines 137--175 and 590--600.
 \end{theorem}
 \begin{proof}
-	\leanok
-	Writing $C_+=\max\{C,0\}$, we may replace any polynomial bound constant
-	$C$ by $C_+$ since $L^k\ge0$. Enlarging the gate-count constant to
-	$1+(C_N)_+$, we set
-	\begin{align}
-		t=\lceil p\rceil,
-		\qquad q=n+t+\lceil16(1+(C_N)_+)\rceil
-	\end{align}
-	before choosing $L$, which fixes $r_p=r_q$ and nonnegative constants
-	$(C_K(q))_+,(C_C(q))_+$. Bounding the absolute coefficient sum by the
-	majorant $(1+C_K(q)C_C(q))L^{u(q)+v(q)}\ge1$ and the physical dimensions by
-	$(1+(C_D)_+)L^d\ge1$, we reexpand the circuit at precision $q$ while
-	preserving original operators and occurrence data, apply the
-	prescribed-precision sampling estimate to the shared
-	source circuit and sample count, and absorb the exterior scalar $|\gamma|^2$
-	into one party's local tensor via the nonempty-party convention without
-	altering virtual alphabets, incidences, or gate endpoints.
+    \leanok
+    Writing $C_+=\max\{C,0\}$, we may replace any polynomial bound constant
+    $C$ by $C_+$ since $L^k\ge0$. Enlarging the gate-count constant to
+    $1+(C_N)_+$, we set
+    \begin{align}
+        t=\lceil p\rceil,
+        \qquad q=n+t+\lceil16(1+(C_N)_+)\rceil
+    \end{align}
+    before choosing $L$, which fixes $r_p=r_q$ and nonnegative constants
+    $(C_K(q))_+,(C_C(q))_+$. Bounding the absolute coefficient sum by the
+    majorant $(1+C_K(q)C_C(q))L^{u(q)+v(q)}\ge1$ and the physical dimensions by
+    $(1+(C_D)_+)L^d\ge1$, we reexpand the circuit at precision $q$ while
+    preserving original operators and occurrence data, apply the
+    prescribed-precision sampling estimate to the shared
+    source circuit and sample count, and absorb the exterior scalar $|\gamma|^2$
+    into one party's local tensor via the nonempty-party convention without
+    altering virtual alphabets, incidences, or gate endpoints.
 \end{proof}
