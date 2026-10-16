@@ -142,7 +142,7 @@ theorem centralBirth_hasFrameChange_of (hD : IsAngularScale q J Δ a A₀ m₀ 6
   have hTdiam : ∀ p p', fb p ≠ fa p → fb p' ≠ fa p' → dist p p' ≤ Bl.n := fun p p' hp hp' => by
     have hsub : ∀ x, fb x ≠ fa x → x - d ∈ closedSquare Bl.n := fun x hx =>
       closure_minimal (Bl.central_treated_ne_subset t) (isClosed_Icc.prod isClosed_Icc)
-        (hfb.sub_mem_closure_ne hfa hx)
+        (sub_mem_closure_ne_of_reading_ne hfb hfa hx)
     obtain ⟨⟨a1, a2⟩, a3, a4⟩ := hsub p hp
     obtain ⟨⟨b1, b2⟩, b3, b4⟩ := hsub p' hp'
     rw [← dist_sub_right p p' d, Prod.dist_eq, Real.dist_eq, Real.dist_eq]

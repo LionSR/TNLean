@@ -109,104 +109,6 @@ theorem DyadicSquare.inRoot_index (S : DyadicSquare k) :
   simp only [InRoot, DyadicSquare.index]
   omega
 
-/-- A large-scale patch bound exceeds `53` when `ν < 1/3`. -/
-theorem fiftyThree_le_protocolPatchBound {ε₀ ν : ℝ} (hε : 0 ≤ ε₀) (hν : 0 < ν)
-    (hν3 : ν < 1 / 3) : 53 ≤ protocolPatchBound ε₀ ν := by
-  have h4 : (12 : ℝ) < (4 + 8 * ε₀ + 2 * ν) / ν := by
-    rw [lt_div_iff₀ hν]; nlinarith
-  have hsq : (53 : ℝ) ≤ ((4 + 8 * ε₀ + 2 * ν) / ν + 1) ^ 2 := by nlinarith
-  have := (Nat.le_ceil (((4 + 8 * ε₀ + 2 * ν) / ν + 1) ^ 2))
-  have h : (53 : ℝ) ≤ (⌈((4 + 8 * ε₀ + 2 * ν) / ν + 1) ^ 2⌉₊ : ℝ) := hsq.trans this
-  have h' : 53 ≤ ⌈((4 + 8 * ε₀ + 2 * ν) / ν + 1) ^ 2⌉₊ := by exact_mod_cast h
-  exact h'.trans (le_max_right _ _)
-
-/-- **A point treatment as a change of a sheet.** Fix `0 < ε₀ ≤ 1/16`. There is a threshold
-`ν' > 0` such that for every mesh ratio `0 < ν ≤ ν'` and constants of the protocol the following
-holds. In the repainting of the square `R` of side `n = 2 ^ j > K₀ t`, `t = D log L`, let `g` be
-an unmodified guide of the repainting, `L₀` the final label or a label of a block next to `R`,
-and `M`, `M'` sets of grid corners that differ at most at one corner `Q₀` of `R`. Then passing
-from the frame of the treated sheet with the marks `M` to that with the marks `M'` is a bounded
-change whose participants the repainting uses, with the bounds of the small-patch rewrites with
-`b = protocolPatchBound ε₀ ν` patches.
-
-Polynomial-PEPS manuscript, `06-geometry.tex`, lines 328–339, 481–505, 559–570 and 572–596. -/
-theorem exists_pointTreatment_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε₀)
-    (hε₀ : ε₀ ≤ 1 / 16) :
-    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
-      IsProtocolConstants K₀ ε₀ ν a D B₀ → ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q} {C c : ℝ},
-      2 ≤ L → ‖Ω‖ = 1 →
-      ∀ (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
-        (R : RepaintedSquare k), K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ) →
-      ∀ (done : Set (ℤ × ℤ)) {g : ℝ × ℝ → GuideLabel},
-        (blockBaseline (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
-          (protocolLevelLabels k R.1.1 done) R.1.index
-          (newParty Sum.inl R.1.1 R.1.index)).IsUnmodifiedGuide g →
-      ∀ {M M' : Finset (ℤ × ℤ)} (Q₀ : ℤ × ℤ), IsBlockCornerOf R.1.index Q₀ →
-        (∀ Q, Q ≠ Q₀ → (Q ∈ M ↔ Q ∈ M')) → ∀ L₀ : GuideLabel,
-        (L₀ = newParty Sum.inl R.1.1 R.1.index ∨
-          ∃ R' ∈ blockWindow 1, L₀ = protocolLevelLabels k R.1.1 done (R' + R.1.index)) →
-      ∀ (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧
-          ε₀ * (D * Real.log L) ≤ B₀ * Real.log L) {C' c' : ℕ}, C ≤ C' → 1 ≤ C' → c ≤ c' →
-      HasFrameChange Ω (treatedFrame (q := q) P rank R hr M L₀ g)
-        (treatedFrame (q := q) P rank R hr M' L₀ g) {p | EventUses (.inl R.1) p}
-        (2 * protocolPatchBound ε₀ ν) (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L)
-        (2 * protocolPatchBound ε₀ ν) ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹) := by
-  obtain ⟨ν', hν', H⟩ := exists_pointTreatment_step_supplied hε hε₀
-  refine ⟨ν', hν', fun ν hν hνν' {k K₀ a D B₀} hc {L q} _ {Ω C c} hL hΩ P rank R hlarge done g hg
-    {M M'} Q₀ hQ₀ hM L₀ hL₀ hr {C' c'} hC hC' hcc => ?_⟩
-  classical
-  set n : ℝ := (2 : ℝ) ^ (R.1.1 : ℕ) with hn_def
-  set t := D * Real.log L with ht_def
-  have hn : 0 < n := by positivity
-  have hℓ : 0 < Real.log L := Real.log_pos (by exact_mod_cast hL)
-  have ht : 0 < t := mul_pos hc.D_pos hℓ
-  have htn : 20 * t < n := by nlinarith [hc.twenty_le_K₀]
-  have hε4 := hc.lt_one_div_four_thousand
-  have hgr : IsRayConstant (shiftGuide (blockCorner n R.1.index) g) :=
-    (hg.isRayConstant _ (by
-      change IsRayConstant fun p => blockGuide n (protocolLevelLabels k R.1.1 done)
-        (p + blockCorner n R.1.index)
-      exact (isRayConstant_blockGuide _ _).comp_add _)).shiftGuide _
-  have hf : ∀ M₀ : Finset (ℤ × ℤ), IsDisplacedReading (treatedGuide R.1.1 R.1.index t M₀ L₀ g)
-      (homogenize (⋃ Q ∈ M₀, ball (blockCorner n Q) t) L₀ (shiftGuide (blockCorner n R.1.index) g))
-      ((1 : ℝ), (1 : ℝ)) := fun M₀ => (hgr.homogenize M₀ n t L₀).isDisplacedReading_sampleGuide
-  have hout : ∀ Q, ¬InRoot ((2 : ℤ) ^ (k - (R.1.1 : ℕ))) Q →
-      protocolLevelLabels k R.1.1 done Q = guidePlaceholder := fun Q hQ => by
-    simp only [protocolLevelLabels, levelLabels, hQ, ite_false]
-  have hmem : ∀ M₀ : Finset (ℤ × ℤ), ∀ z, z ∈ treatedVertices k R.1.1 t M₀
-      (treatedGuide R.1.1 R.1.index t M₀ L₀ g) ↔
-      IsTrueVertex (treatedGuide R.1.1 R.1.index t M₀ L₀ g) z := fun M₀ z =>
-    mem_treatedTrueVertices hn (by linarith) hout R.1.inRoot_index hg M₀ L₀ (hf M₀)
-  have hdisj : ∀ M₀ : Finset (ℤ × ℤ), ((treatedVertices k R.1.1 t M₀
-      (treatedGuide R.1.1 R.1.index t M₀ L₀ g) : Finset (ℝ × ℝ)) : Set (ℝ × ℝ)).Pairwise
-      fun z z' => Disjoint (suppliedPatch P _ hr z).outer (suppliedPatch P _ hr z').outer := by
-    intro M₀ z hz z' hz' hne
-    have h := (homogenize_reading_outerHoles_disjoint hn ht htn hε4 hg M₀ L₀
-      ((1 : ℝ), (1 : ℝ))).2 _ (hf M₀) z z' ((hmem M₀ z).1 hz) ((hmem M₀ z').1 hz') hne
-    refine disjoint_outer_of_disjoint_closedBall ?_
-    simp only [suppliedPatch_center, suppliedPatch_scale]
-    rwa [← mul_assoc]
-  rw [treatedFrame_eq P rank R (hdisj M), treatedFrame_eq P rank R (hdisj M')]
-  have hu : ∀ _ : ℝ × ℝ, 0 < ν * t / 2 ∧ ν * t / 2 ≤ B₀ * Real.log L := by
-    have hD : D ≤ B₀ := by nlinarith [hc.B₀_ge, hc.twenty_le_K₀, hc.D_pos]
-    have hν1 := hc.ν_lt_one
-    refine fun _ => ⟨by positivity, ?_⟩
-    have : t ≤ B₀ * Real.log L := mul_le_mul_of_nonneg_right hD hℓ.le
-    nlinarith
-  have hb : (2 * (2 + 4 * ε₀ + ν) / ν + 1) ^ 2 ≤ (protocolPatchBound ε₀ ν : ℝ) :=
-    sq_le_protocolPatchBound (by positivity) (le_of_eq (by ring_nf))
-  have hb53 := fiftyThree_le_protocolPatchBound hε.le hν (by linarith [hc.ν_small, hc.ε₀_pos])
-  obtain ⟨w, h₁, h₂, h₃, h₄, h₅, h₆⟩ := H ν hν hνν' isGenericDisplacement_one_one hn ht
-    (by linarith) hg Q₀ hQ₀ hM L₀ hL₀ (hf M) (hf M') (labelParty R) guidePlaceholder rank
-    (fun z hz => (hmem M z).1 hz) (fun z hz => (hmem M' z).1 hz)
-    (fun z _ hz => (hmem M z).2 hz) (fun z _ hz => (hmem M' z).2 hz)
-    (fun z hz => by
-      rw [hmem M, hmem M']
-      exact isTrueVertex_reading_homogenize_iff hM L₀ _ (hf M) (hf M') (by linarith))
-    P hΩ hL hr hu (hdisj M) (hdisj M') hC hC' hcc hb hb53
-  exact ⟨w, ⟨h₁, fun γ => (h₂ γ).trans (coe_blockParties_subset_eventUses R done), h₃, h₄, h₅⟩,
-    h₆⟩
-
 /-- **The treated frame is the frame of its sampled guide.** At the constants of the protocol, for
 a square `R` of side `n = 2 ^ j > K₀ t` and an unmodified guide `g` of its repainting, the treated
 guide is a reading of the homogenized guide, its true vertices are the points of
@@ -260,5 +162,80 @@ theorem treatedFrame_spec {K₀ ε₀ ν a D : ℝ} (hc : IsProtocolConstants K�
   refine disjoint_outer_of_disjoint_closedBall ?_
   simp only [suppliedPatch_center, suppliedPatch_scale]
   rwa [← mul_assoc]
+
+/-- A large-scale patch bound exceeds `53` when `ν < 1/3`. -/
+theorem fiftyThree_le_protocolPatchBound {ε₀ ν : ℝ} (hε : 0 ≤ ε₀) (hν : 0 < ν)
+    (hν3 : ν < 1 / 3) : 53 ≤ protocolPatchBound ε₀ ν := by
+  have h8 : (8 : ℝ) ≤ (4 + 8 * ε₀ + 2 * ν) / ν + 1 := by
+    have : (7 : ℝ) ≤ (4 + 8 * ε₀ + 2 * ν) / ν := by rw [le_div_iff₀ hν]; nlinarith
+    linarith
+  have h := sq_le_protocolPatchBound (by norm_num : (0 : ℝ) ≤ 8) h8
+  have h' : (53 : ℝ) ≤ protocolPatchBound ε₀ ν := by linarith
+  exact_mod_cast h'
+
+/-- **A point treatment as a change of a sheet.** Fix `0 < ε₀ ≤ 1/16`. There is a threshold
+`ν' > 0` such that for every mesh ratio `0 < ν ≤ ν'` and constants of the protocol the following
+holds. In the repainting of the square `R` of side `n = 2 ^ j > K₀ t`, `t = D log L`, let `g` be
+an unmodified guide of the repainting, `L₀` the final label or a label of a block next to `R`,
+and `M`, `M'` sets of grid corners that differ at most at one corner `Q₀` of `R`. Then passing
+from the frame of the treated sheet with the marks `M` to that with the marks `M'` is a bounded
+change whose participants the repainting uses, with the bounds of the small-patch rewrites with
+`b = protocolPatchBound ε₀ ν` patches.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 328–339, 481–505, 559–570 and 572–596. -/
+theorem exists_pointTreatment_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε₀)
+    (hε₀ : ε₀ ≤ 1 / 16) :
+    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
+      IsProtocolConstants K₀ ε₀ ν a D B₀ → ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q} {C c : ℝ},
+      2 ≤ L → ‖Ω‖ = 1 →
+      ∀ (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
+        (R : RepaintedSquare k), K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ) →
+      ∀ (done : Set (ℤ × ℤ)) {g : ℝ × ℝ → GuideLabel},
+        (blockBaseline (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
+          (protocolLevelLabels k R.1.1 done) R.1.index
+          (newParty Sum.inl R.1.1 R.1.index)).IsUnmodifiedGuide g →
+      ∀ {M M' : Finset (ℤ × ℤ)} (Q₀ : ℤ × ℤ), IsBlockCornerOf R.1.index Q₀ →
+        (∀ Q, Q ≠ Q₀ → (Q ∈ M ↔ Q ∈ M')) → ∀ L₀ : GuideLabel,
+        (L₀ = newParty Sum.inl R.1.1 R.1.index ∨
+          ∃ R' ∈ blockWindow 1, L₀ = protocolLevelLabels k R.1.1 done (R' + R.1.index)) →
+      ∀ (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧
+          ε₀ * (D * Real.log L) ≤ B₀ * Real.log L) {C' c' : ℕ}, C ≤ C' → 1 ≤ C' → c ≤ c' →
+      HasFrameChange Ω (treatedFrame (q := q) P rank R hr M L₀ g)
+        (treatedFrame (q := q) P rank R hr M' L₀ g) {p | EventUses (.inl R.1) p}
+        (2 * protocolPatchBound ε₀ ν) (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L)
+        (2 * protocolPatchBound ε₀ ν) ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹) := by
+  obtain ⟨ν', hν', H⟩ := exists_pointTreatment_step_supplied hε hε₀
+  refine ⟨ν', hν', fun ν hν hνν' {k K₀ a D B₀} hc {L q} _ {Ω C c} hL hΩ P rank R hlarge done g hg
+    {M M'} Q₀ hQ₀ hM L₀ hL₀ hr {C' c'} hC hC' hcc => ?_⟩
+  classical
+  obtain ⟨hfM, hmemM, hdM, hFM⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done hg M L₀ hr
+  obtain ⟨hfM', hmemM', hdM', hFM'⟩ :=
+    treatedFrame_spec (q := q) P rank R hc hL hlarge done hg M' L₀ hr
+  set n : ℝ := (2 : ℝ) ^ (R.1.1 : ℕ) with hn_def
+  set t := D * Real.log L with ht_def
+  have hn : 0 < n := by positivity
+  have hℓ : 0 < Real.log L := Real.log_pos (by exact_mod_cast hL)
+  have ht : 0 < t := mul_pos hc.D_pos hℓ
+  have htn : 20 * t < n := by nlinarith [hc.twenty_le_K₀]
+  rw [hFM, hFM']
+  have hu : ∀ _ : ℝ × ℝ, 0 < ν * t / 2 ∧ ν * t / 2 ≤ B₀ * Real.log L := by
+    have hD : D ≤ B₀ := by nlinarith [hc.B₀_ge, hc.twenty_le_K₀, hc.D_pos]
+    have hν1 := hc.ν_lt_one
+    refine fun _ => ⟨by positivity, ?_⟩
+    have : t ≤ B₀ * Real.log L := mul_le_mul_of_nonneg_right hD hℓ.le
+    nlinarith
+  have hb : (2 * (2 + 4 * ε₀ + ν) / ν + 1) ^ 2 ≤ (protocolPatchBound ε₀ ν : ℝ) :=
+    sq_le_protocolPatchBound (by positivity) (le_of_eq (by ring_nf))
+  have hb53 := fiftyThree_le_protocolPatchBound hε.le hν (by linarith [hc.ν_small, hc.ε₀_pos])
+  obtain ⟨w, h₁, h₂, h₃, h₄, h₅, h₆⟩ := H ν hν hνν' isGenericDisplacement_one_one hn ht
+    (by linarith) hg Q₀ hQ₀ hM L₀ hL₀ hfM hfM' (labelParty R) guidePlaceholder rank
+    (fun z hz => (hmemM z).1 hz) (fun z hz => (hmemM' z).1 hz)
+    (fun z _ hz => (hmemM z).2 hz) (fun z _ hz => (hmemM' z).2 hz)
+    (fun z hz => by
+      rw [hmemM, hmemM']
+      exact isTrueVertex_reading_homogenize_iff hM L₀ _ hfM hfM' (by linarith))
+    P hΩ hL hr hu hdM hdM' hC hC' hcc hb hb53
+  exact ⟨w, ⟨h₁, fun γ => (h₂ γ).trans (coe_blockParties_subset_eventUses R done), h₃, h₄, h₅⟩,
+    h₆⟩
 
 end TNLean.PEPS.Approximation
