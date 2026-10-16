@@ -36,14 +36,6 @@ namespace TNLean.PEPS.Approximation
 
 open EncodedFrame PairEffect
 
-/-- A point where the readings of two moved labellings differ lies, moved back, in the closure of
-the set where the labellings differ. -/
-theorem IsDisplacedReading.sub_mem_closure_ne {κ : Type*} {Hb Ha fb fa : ℝ × ℝ → κ}
-    {d v : ℝ × ℝ} (hfb : IsDisplacedReading fb (shiftGuide d Hb) v)
-    (hfa : IsDisplacedReading fa (shiftGuide d Ha) v) {p : ℝ × ℝ} (hp : fb p ≠ fa p) :
-    p - d ∈ closure {x | Hb x ≠ Ha x} :=
-  sub_mem_closure (hfb.ne_subset_closure hfa hp)
-
 /-- **Values of readings near a change.** If on the open `δ`-neighborhood of the set where two
 labellings differ the first is `A` and the second takes only `A` and `B`, then at every point where
 their readings, moved by `d`, differ, the first reading is `A` and the second `B`. -/
@@ -229,14 +221,16 @@ theorem bandBirth_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
       (protocolLevelLabels k R.1.1 done) R.1.index
       (newParty Sum.inl R.1.1 R.1.index)).IsUnmodifiedGuide
         (bandUpdate ((2 : ℝ) ^ (R.1.1 : ℕ)) e op.after g₀))
-    (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧ ε₀ * (D * Real.log L) ≤ B₀ * Real.log L)
     {S : Set (ProtocolParty k)} (hPS : labelParty R op.label ∈ S) (hQS : labelParty R Q ∈ S)
     {r K rs : ℕ} (hK : 1 ≤ K) (hrs : 1 ≤ rs) :
     HasFrameChange Ω
-      (treatedFrame (q := q) P rank R hr (e.endpointBlocks R.1.index) op.label
+      (treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL)
+        (e.endpointBlocks R.1.index) op.label
         (bandUpdate ((2 : ℝ) ^ (R.1.1 : ℕ)) e op.before g₀))
-      (treatedFrame (q := q) P rank R hr (e.endpointBlocks R.1.index) op.label
+      (treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL)
+        (e.endpointBlocks R.1.index) op.label
         (bandUpdate ((2 : ℝ) ^ (R.1.1 : ℕ)) e op.after g₀)) S r K rs ((L : ℝ) ^ (-30 : ℤ)) := by
+  have hr := hc.treatedRadius_bounds hL
   classical
   set n : ℝ := (2 : ℝ) ^ (R.1.1 : ℕ) with hn_def
   set t := D * Real.log L with ht_def
@@ -338,14 +332,16 @@ theorem bandDeath_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
       (protocolLevelLabels k R.1.1 done) R.1.index
       (newParty Sum.inl R.1.1 R.1.index)).IsUnmodifiedGuide
         (bandUpdate ((2 : ℝ) ^ (R.1.1 : ℕ)) e op.after g₀))
-    (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧ ε₀ * (D * Real.log L) ≤ B₀ * Real.log L)
     {S : Set (ProtocolParty k)} (hPS : labelParty R op.label ∈ S) (hQS : labelParty R Q ∈ S)
     {r K rs : ℕ} (hr1 : 1 ≤ r) (hK : 1 ≤ K) (hrs : 1 ≤ rs) :
     HasFrameChange Ω
-      (treatedFrame (q := q) P rank R hr (e.endpointBlocks R.1.index) op.label
+      (treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL)
+        (e.endpointBlocks R.1.index) op.label
         (bandUpdate ((2 : ℝ) ^ (R.1.1 : ℕ)) e op.before g₀))
-      (treatedFrame (q := q) P rank R hr (e.endpointBlocks R.1.index) op.label
+      (treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL)
+        (e.endpointBlocks R.1.index) op.label
         (bandUpdate ((2 : ℝ) ^ (R.1.1 : ℕ)) e op.after g₀)) S r K rs ((L : ℝ) ^ (-30 : ℤ)) := by
+  have hr := hc.treatedRadius_bounds hL
   classical
   set n : ℝ := (2 : ℝ) ^ (R.1.1 : ℕ) with hn_def
   set t := D * Real.log L with ht_def

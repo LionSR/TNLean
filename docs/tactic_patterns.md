@@ -4507,6 +4507,17 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Treated birth and death preamble — candidate (2026-10-16)
+
+- **Pattern:** the common setup of a treated birth or death: the scales `n`, `t`, the block
+  corner, two `treatedFrame_spec` extractions, `homogenize_endpointBlocks`, the readings and
+  true-vertex sets, and `BandOperation.treated_frame_facts`.
+- **Seen:** `bandBirth_hasFrameChange` and `bandDeath_hasFrameChange`
+  (`Approximation/DyadicBandStepChanges.lean`); the owner change is already shared through
+  `guideFrame_eq_changeOwner_of_ne`.
+- **Abstraction:** a lemma returning the readings, vertex sets and facts for the surrounding
+  guide, if a third occurrence appears.
+
 
 
 ### Logarithmic norm derivatives from squared norms — candidate (2026-10-15)

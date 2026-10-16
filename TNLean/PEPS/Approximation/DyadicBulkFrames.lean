@@ -39,9 +39,8 @@ open EncodedFrame PairEffect
 
 /-- The sites of the square sit at the lattice positions translated by `(-1/2, -1/2)`. -/
 theorem cellCenterPos_eq_sitePosition_add {L : ℕ} (v : SquareLatticeVertex L L) :
-    cellCenterPos L v = sitePosition L v + (-(1 / 2 : ℝ), -(1 / 2 : ℝ)) := by
-  simp only [cellCenterPos, sitePosition, Prod.mk_add_mk]
-  congr 1 <;> ring
+    cellCenterPos L v = sitePosition L v + (-(1 / 2 : ℝ), -(1 / 2 : ℝ)) :=
+  (congrFun (latticePos_add_eq_cellCenterPos L) v).symm
 
 section Readings
 
