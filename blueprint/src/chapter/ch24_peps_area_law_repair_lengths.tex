@@ -49,3 +49,94 @@ The dummy is omitted from the retained family, so its assigned
 length will not be used. Birth order places primaries
 first, initial belt regions second, and replacements by generation,
 with arbitrary ties within each class.
+
+% Source: 10-geometry.tex, lines 212--218, 398--409, 497--504,
+% 558--571, 709--721 and 732--740.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+
+\begin{lemma}[Preservation under retention]
+    \label{lem:area_law_repair_retention_identities}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStageOldInclusion_injective,
+        TNLean.PEPS.AreaLaw.Geometry.repairStageOldInclusion_dummy,
+        TNLean.PEPS.AreaLaw.Geometry.repairStage_birth_oldInclusion,
+        TNLean.PEPS.AreaLaw.Geometry.repairStage_color_oldInclusion,
+        TNLean.PEPS.AreaLaw.Geometry.repairStageCharacteristicLength_oldInclusion}
+    \leanok
+    \uses{def:area_law_repair_inclusions,def:area_law_repair_characteristic_length}
+    Fix an origin $o\in\mathbb R^2$, a finite domain
+    $\Lambda\subset\mathbb Z^2$, a cut $A\subseteq\Lambda$, integers
+    $C_0\ge2$ and $k_0\ge50{,}000{,}000$, and any $S_*\in\mathbb R$.
+    Consider the actual repair family $\mathcal D_j$, with its jointly
+    chosen initial residues. For every $j,n\in\mathbb N$, the retention
+    map $\iota_{j,j+n}:I_j\to I_{j+n}$ is injective and satisfies
+    $\iota_{j,j+n}(*_j)=*_{j+n}$. For every $i\in I_j$,
+    \begin{align}
+        B^{(j+n)}_{\iota_{j,j+n}(i)}   & =B^{(j)}_i,\notag   \\
+        \xi^{(j+n)}_{\iota_{j,j+n}(i)} & =\xi^{(j)}_i,\notag \\
+        \tau_{j+n}(\iota_{j,j+n}(i))   & =\tau_j(i).\notag
+    \end{align}
+    Thus retention preserves the remembered birth, its binary label,
+    and its characteristic length, as in the repair construction of
+    \cite[Section~11]{OpenAI2026AreaLaw}.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:area_law_repair_inclusions,def:area_law_repair_stage,
+        def:area_law_repair_successor_regions,
+        def:area_law_repair_characteristic_length}
+    Induct on $n$. For $n=0$ the retention map is the identity.
+    Each subsequent step includes the old identifier family into a
+    disjoint union, retains its dummy, and leaves all three recorded
+    quantities unchanged. Composition preserves injectivity and the
+    displayed identities.
+\end{proof}
+
+\begin{lemma}[Rank-zero ancestors at an earlier generation]
+    \label{lem:area_law_repair_rank_zero_ancestry}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_repairStageOldInclusion_of_repairStageBirthRank_eq_zero}
+    \leanok
+    \uses{def:area_law_repair_inclusions,def:area_law_repair_birth_rank}
+    For the same actual repair family, let $j,n\in\mathbb N$ and
+    $x\in I_{j+n}$ satisfy $\operatorname{rk}_{j+n}(x)=0$.
+    There is $y\in I_j$ such that
+    $\operatorname{rk}_j(y)=0$ and $\iota_{j,j+n}(y)=x$.
+    The assertion includes the dummy identifier.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{def:area_law_repair_inclusions,def:area_law_repair_birth_rank}
+    Induct on $n$. The case $n=0$ follows by taking $y=x$.
+    At generation $j+n+1$, a fresh identifier has rank $j+n+2>0$.
+    A rank-zero identifier is therefore old, and the induction
+    hypothesis gives its ancestor at generation $j$.
+\end{proof}
+
+\begin{lemma}[The unique original primary of a rank-zero identifier]
+    \label{lem:area_law_repair_rank_zero_primary_ancestor}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.existsUnique_initialPrimary_of_repairStageBirthRank_eq_zero}
+    \leanok
+    \uses{def:area_law_repair_inclusions,def:area_law_repair_birth_rank,
+        def:area_law_initial_region_indices,def:area_law_primary_pitch_indices}
+    Use the same jointly chosen residues as the actual initial stage,
+    and let $G_k$ be its primary pitch index set at layer $k$.
+    For every $n\in\mathbb N$ and every $x\in I_n$ with
+    $\operatorname{rk}_n(x)=0$ and $x\ne *_n$, there is exactly one
+    pair $(k,J)$ with $k\ge k_0$ and $J\in G_k$ such that
+    $\iota_{0,n}((k,J))=x$.
+    Here $(k,J)$ is the original primary identifier in $I_0$.
+    No finiteness of the family over all layers is assumed.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:area_law_repair_rank_zero_ancestry,
+        lem:area_law_repair_retention_identities,
+        def:area_law_initial_region_indices,def:area_law_repair_birth_rank}
+    Take a rank-zero ancestor in $I_0$. It cannot be the dummy,
+    since retention maps the dummy to $*_n$, and it cannot be an
+    initial belt identifier, whose rank is one. It is therefore
+    an original primary $(k,J)$. Injectivity of retention and of
+    the primary summand gives uniqueness of this pair.
+\end{proof}
