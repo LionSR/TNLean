@@ -228,7 +228,7 @@
     $e(k)$ in the second, so reindexing by $e$ proves the equality.
 \end{proof}
 
-\begin{theorem}[Invariant vertical projections in literal CPSV canonical form]
+\begin{theorem}[Invariant vertical projections in CPSV canonical form]
     \label{thm:mpdo_vertical_projector_closure_literal_cpsv}
     \lean{MPSTensor.CPSVCanonicalFormData.BNTRefinement.%
         hasInvariantProjectorClosure_verticalTensor}
@@ -236,7 +236,7 @@
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo, def:invariant_projector_closure, thm:representative_one_sub_mp_zero, thm:cpsv_original_coordinate_marked_lemma_l}
     Let $M$ generate matrix product density operators, and suppose that its
-    doubled-index MPS tensor is in literal CPSV canonical form. If an
+    doubled-index MPS tensor is in CPSV canonical form. If an
     orthogonal projection $P$ satisfies
     $P\widetilde M_v=P\widetilde M_vP$ for every vertical letter $v$, then
     \begin{align}
@@ -414,14 +414,14 @@
     is a zero sector.
 \end{proof}
 
-\begin{theorem}[Normal vertical corners in literal CPSV canonical form]
+\begin{theorem}[Normal vertical corners in CPSV canonical form]
     \label{thm:mpdo_literal_normal_vertical_corners}
     \lean{MPSTensor.IsCPSVCanonicalForm.%
         exists_normal_verticalBlockDecomp_with_isometry}
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo, def:normal}
     Let $M$ generate matrix product density operators, and suppose that its
-    doubled-index MPS tensor is in literal CPSV canonical form. Then there are
+    doubled-index MPS tensor is in CPSV canonical form. Then there are
     positive integers $d_k$, positive scalars $\nu_k$, normal tensors $B_k$ of
     bond dimension $d_k$, and isometries
     $V_k:\C^{d_k}\to\C^d$ with pairwise orthogonal ranges. For every sector
@@ -540,7 +540,7 @@
     $\nu_{\alpha,q}\zeta_{\alpha,q}$ is positive. With the physical isometries
     from Theorem~\ref{thm:mpdo_vertical_normal_sectors_with_isometries}
     retained unchanged, one has both reducing identities, exact compression,
-    and the literal reconstruction
+    and the exact reconstruction
     \begin{align}
         \widetilde M_v
          & =\sum_\alpha\sum_q
@@ -573,12 +573,12 @@
     (\ref{eq:mpdo_vertical_normal_reconstruction}) proves all remaining
     algebraic assertions without altering any physical isometry. Cyclicity of
     trace gives the sector-loop identities. The nonzero-corner separation
-    theorem supplies a nonzero compression for every sector, and the sector
+    theorem gives a nonzero compression for every sector, and the sector
     trace identity and MPDO positivity then make every grouped coefficient
     positive.
 \end{proof}
 
-\begin{theorem}[Literal vertical normal sectors grouped into BNT representatives]
+\begin{theorem}[Vertical normal sectors grouped into BNT representatives in CPSV canonical form]
     \label{thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
     \lean{MPSTensor.IsCPSVCanonicalForm.%
         exists_verticalBNTGrouping_with_isometry}
@@ -602,7 +602,7 @@
     $\nu_{\alpha,q}\zeta_{\alpha,q}$ is positive. With the physical isometries
     from Theorem~\ref{thm:mpdo_literal_normal_vertical_corners}
     retained unchanged, one has both reducing identities, exact compression,
-    and the literal reconstruction
+    and the exact reconstruction
     \begin{align}
         \widetilde M_v
          & =\sum_\alpha\sum_q
@@ -635,7 +635,7 @@
     (\ref{eq:mpdo_literal_normal_vertical_reconstruction}) proves all remaining
     algebraic assertions without altering any physical isometry. Cyclicity of
     trace gives the sector-loop identities. The nonzero-corner separation
-    theorem supplies a nonzero compression for every sector, and the sector
+    theorem gives a nonzero compression for every sector, and the sector
     trace identity and MPDO positivity then make every grouped coefficient
     positive.
 \end{proof}
@@ -675,7 +675,7 @@
         UT_vU^\dagger & =\bigoplus_kB_k^v.
         \label{eq:mpdo_u_conj_direct_sum}
     \end{align}
-    If the letters also satisfy the literal sector decomposition
+    If the letters also satisfy the exact sector decomposition
     \begin{align}
         T_v & =\sum_kW_kB_k^vW_k^\dagger,
         \label{eq:mpdo_sector_literal_decomposition}
@@ -757,7 +757,7 @@
     Identifying the dependent pairs $(\alpha,q)$ and their bond indices with
     the standard coordinates of the two finite direct sums gives the required
     matrix dimensions. Positivity of the multiplicities and weights, together
-    with the BNT hypothesis, supplies the remaining conditions of vertical
+    with the BNT hypothesis, gives the remaining conditions of vertical
     canonical form.
 \end{proof}
 
@@ -774,7 +774,7 @@
 
 \begin{proof}
     \leanok
-    The unit-modulus weight witness in the normalized BNT-refined horizontal
+    The copy of unit-modulus weight in the normalized BNT-refined horizontal
     form, together with left canonicity of its representative, makes the doubled-index tensor
     nonzero. Hence its vertical reshaping $\widetilde M$ is nonzero. If the
     retained decomposition had no sector,
@@ -854,17 +854,17 @@
     Thus $T$ and $A_{\mathrm{ret}}$ have the same matrix product vectors at
     every positive length. The spectral BNT hypothesis gives an algebraic BNT
     for $A_{\mathrm{ret}}$ by Theorem~\ref{thm:cpsv_bnt_is_bnt}; in particular,
-    it supplies the required positive bond dimensions.
+    it gives the required positive bond dimensions.
     Lemma~\ref{lem:bnt_of_same_mpv2_pos} then gives the same algebraic BNT for
     $T$.
 \end{proof}
 
-\begin{theorem}[Pairwise Figure~8 identity under literal canonical form]
+\begin{theorem}[Pairwise Figure~8 identity under CPSV canonical form]
     \label{thm:cpsv_literal_pairwise_vertical_gram_conjugation}
     \lean{MPSTensor.IsCPSVCanonicalForm.gramDressing_eq_of_two_grouped_corners}
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo}
-    Let $M$ be an MPO tensor whose doubled-index MPS tensor is in the literal
+    Let $M$ be an MPO tensor whose doubled-index MPS tensor is in
     CPSV canonical form, and suppose that $M$ generates positive semidefinite
     operators on every nonempty chain. Let $A$ be a tensor, let $X$ and $Y$ be
     invertible matrices, and suppose that two vertical corners satisfy
@@ -902,16 +902,16 @@
     horizontal slice of $(Z^\dagger Z)A^v(Z^\dagger Z)^{-1}$.
     Self-adjointness of the two corner compressions identifies both closed
     marked chains with the same reflected chain. The original-coordinate
-    marked Lemma~L for literal canonical form therefore gives equality of the
+    marked Lemma~L for CPSV canonical form therefore gives equality of the
     two marks, hence (\ref{eq:cpsv_literal_pairwise_gram_conj}).
 \end{proof}
 
-\begin{theorem}[Positive relative Gram scalar under literal canonical form]
+\begin{theorem}[Positive relative Gram scalar under CPSV canonical form]
     \label{thm:cpsv_literal_positive_relative_gram_scalar}
     \lean{MPSTensor.IsCPSVCanonicalForm.gram_eq_pos_smul_gram_of_two_grouped_corners}
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_tensor_mpdo, def:normal}
-    Let $M$ be an MPO tensor whose doubled-index MPS tensor is in the literal
+    Let $M$ be an MPO tensor whose doubled-index MPS tensor is in
     CPSV canonical form, and suppose that $M$ generates positive semidefinite
     operators on every nonempty chain. Let $A$ be normal, let $X$ and $Y$ be
     invertible matrices, and suppose that
@@ -979,7 +979,7 @@
     \lean{MPOTensor.verticalCF_of_cpsvCanonicalForm}
     \leanok
     \uses{def:mpdo, def:cpsv_canonical_form, def:vertical_cf_mpdo}
-    Let $M$ be an MPO tensor whose doubled-index MPS tensor is in the literal
+    Let $M$ be an MPO tensor whose doubled-index MPS tensor is in
     CPSV canonical form. If $M$ generates matrix product density operators,
     then $M$ is in canonical form in the vertical direction. More precisely,
     there is a basis of normal tensors $\{M_\alpha\}_\alpha$ for the vertically
@@ -1004,7 +1004,7 @@
     orientation, $U$ maps the physical space onto the retained sector space and
     satisfies (\ref{eq:cpsv_prop_4_13_coisometry}), making $U$ a coisometry and
     $U^\dagger$ an isometric embedding. The reverse identity
-    (\ref{eq:cpsv_prop_4_13_reconstruction}) supplies the exact reconstruction
+    (\ref{eq:cpsv_prop_4_13_reconstruction}) gives the exact reconstruction
     on the physical space.
 \end{theorem}
 
@@ -1012,8 +1012,8 @@
     \leanok
     \uses{thm:vertical_cf_of_grouping_and_gram_dressing, thm:cpsv_literal_vertical_bnt_grouping_with_isometries, thm:cpsv_literal_pairwise_vertical_gram_conjugation}
     Theorem~\ref{thm:cpsv_literal_vertical_bnt_grouping_with_isometries}
-    supplies the grouped vertical BNT decomposition with physical isometries.
-    The literal pairwise Figure~8 theorem supplies the grouped-corner
+    gives the grouped vertical BNT decomposition with physical isometries.
+    The pairwise Figure~8 theorem for CPSV canonical form gives the grouped-corner
     Gram-dressing property. Apply
     Theorem~\ref{thm:vertical_cf_of_grouping_and_gram_dressing}.
 \end{proof}
@@ -1043,15 +1043,15 @@
     \end{align}
     This establishes vertical canonical form under the normalized BNT-refined
     horizontal hypothesis of Definition~\ref{def:horizontal_cf_mpdo},
-    complementing the literal CPSV formulation of
+    complementing the CPSV canonical-form formulation of
     Theorem~\ref{thm:vertical_cf_of_cpsv_canonical_form}.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:vertical_cf_of_grouping_and_gram_dressing, thm:mpdo_vertical_bnt_grouping_with_isometries, thm:mpdo_pairwise_vertical_gram_conjugation}
-    Theorem~\ref{thm:mpdo_vertical_bnt_grouping_with_isometries} supplies the
-    grouped vertical decomposition. The pairwise Figure~8 theorem supplies
+    Theorem~\ref{thm:mpdo_vertical_bnt_grouping_with_isometries} gives the
+    grouped vertical decomposition. The pairwise Figure~8 theorem gives
     its grouped-corner Gram-dressing property. Apply
     Theorem~\ref{thm:vertical_cf_of_grouping_and_gram_dressing}.
 \end{proof}

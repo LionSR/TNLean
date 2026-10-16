@@ -2,14 +2,14 @@
 \label{sec:ldp_window_mixing}
 
 We retain a fixed square bond space of dimension $D$. The transfer maps
-are those of the actual site tensors, and their ordered product acts
+are those of the site tensors, and their ordered product acts
 right to left. Write $R_\rho(X)=\operatorname{Tr}(X)\rho$ and use the
 output-first normalized Choi matrix $J(E)$. The local criterion below
 is a quantitative sufficient condition for the inhomogeneous discussion
 of~\cite{Malz2024Preparation}, not a consequence of qualitative finite
 correlation~\cite{gap:mswc24_inhomogeneous_scope}.
 
-\begin{definition}[Actual nonwrapping interval]
+\begin{definition}[Nonwrapping interval]
     \label{def:ldp_actual_interval}
     \lean{MPSChainTensor.interval}
     \leanok
@@ -28,14 +28,14 @@ correlation~\cite{gap:mswc24_inhomogeneous_scope}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_chain_transfer_product}
-    Expand the actual restricted family and its ordered transfer product.
+    Expand the restricted family and its ordered transfer product.
 \end{proof}
 
-\begin{theorem}[Residual product relative to a transported density]
+\begin{theorem}[Residual product relative to a propagated density]
     \label{thm:ldp_transported_choi_residual}
     \lean{MPSPreparation.norm_gram_blockTensor_sub_transport_le_of_choi_domination}
     \leanok
-    Partition an actual chain into blocks with trace-preserving transfer
+    Partition a chain into blocks with trace-preserving transfer
     maps $F_j$. Let $\tau_j$ have trace one, let $\delta_j\in\mathbb R$,
     and suppose
     \begin{align}
@@ -59,7 +59,7 @@ correlation~\cite{gap:mswc24_inhomogeneous_scope}.
     \end{align}
     Both positive Choi matrices on the right have trace
     $\prod_j(1-\delta_j)$, so the triangle inequality gives the factor
-    two. The actual Gram--Choi identity supplies the factor $D$.
+    two. The Gram--Choi identity gives the factor $D$.
 \end{proof}
 
 \begin{theorem}[Compatible cyclic density references]
@@ -67,7 +67,7 @@ correlation~\cite{gap:mswc24_inhomogeneous_scope}.
     \lean{MPSPreparation.exists_compatible_density_family}
     \leanok
     \uses{def:ldp_actual_interval}
-    Every trace-preserving actual tensor chain with $D>0$ admits density
+    Every trace-preserving tensor chain with $D>0$ admits density
     matrices $\sigma_a$ with $\sigma_N=\sigma_0$ such that
     \begin{align}
         E_{[a,a+n)}(\sigma_{a+n})=\sigma_a
@@ -81,14 +81,14 @@ correlation~\cite{gap:mswc24_inhomogeneous_scope}.
     set $\sigma_a=(E_a\circ\cdots\circ E_{N-1})(\theta)$. Complete
     positivity and trace preservation retain the density conditions.
     The fixed-point equation closes the cut, and the ordered suffix
-    identity proves every displayed transport equation.
+    identity proves every displayed propagation equation.
 \end{proof}
 
 The diagram shows two consecutive windows of length $s$, with $a+2s\le N$
 and $F_a=E_{[a,a+s)}$. The right-hand
 density is acted on by the right window first. The sole open index $x$
 on each side is a matrix-entry index of dimension $D^2$, not a physical
-spin index. The reference at the left is derived by transport; it is
+spin index. The reference at the left is obtained by applying the suffix channels; it is
 not identified with either window's Choi minorizer.
 % TENKZ-WINDOW-MIXING-TRANSPORT-BEGIN
 \begin{center}
@@ -120,11 +120,11 @@ not identified with either window's Choi minorizer.
     \leanok
     \uses{def:ldp_actual_interval}
     Fix $D>0$ and $s\ge1$, and suppose every site map preserves trace. Assume each
-    actual nonwrapping window of length $s$ admits a density matrix
+    nonwrapping window of length $s$ admits a density matrix
     $\tau_a$, possibly singular and depending on the window, with
     $J(E_{[a,a+s)})\ge(\eta/D)(\tau_a\otimes I)$.
     There is $K_D>0$, chosen before the chain, $s$, and $\eta$. Each
-    such chain admits compatible references as above, and every actual interval satisfies
+    such chain admits compatible references as above, and every interval satisfies
     \begin{align}
         \|T_{E_{[a,a+n)}}-T_{R_{\sigma_a}}\|
         \le K_D(1-\eta)^{\lfloor n/s\rfloor}.
@@ -138,7 +138,7 @@ not identified with either window's Choi minorizer.
     Partition the interval into complete $s$-windows and one shorter
     remainder. Assign minorization strength zero to the remainder; its
     map is still completely positive and trace preserving. Apply the
-    residual product bound to input $\sigma_{a+n}$ and use transport.
+    residual product bound to input $\sigma_{a+n}$ and use $E_{[a,a+n)}(\sigma_{a+n})=\sigma_a$.
 \end{proof}
 
 \begin{theorem}[Physical preparation from the local window criterion]
@@ -146,7 +146,7 @@ not identified with either window's Choi minorizer.
     \lean{MPSPreparation.exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_window_domination}
     \leanok
     Let $d>0$ and fix $D$, $s\ge1$, and $\eta>0$. Suppose a family of
-    actual chains has trace-preserving site maps and satisfies the
+    chains has trace-preserving site maps and satisfies the
     preceding local Choi condition at every available $s$-window, with
     the same $s,\eta$ for every ring. Then there are $N_0\ge s$ and $C$,
     chosen before $N,\varepsilon$, such that for every $N\ge N_0$ and
@@ -158,7 +158,7 @@ not identified with either window's Choi minorizer.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_window_mixing_rate,thm:ldp_varying_reference_preparation}
-    The actual window at ring length $s$ forces $\eta\le1$. Weaken
+    The window at ring length $s$ forces $\eta\le1$. Weaken
     domination to $\eta/2$, so $\rho=1-\eta/2\in[1/2,1)$, including
     the original endpoint $\eta=1$. The floor bound gives
     $\rho^{\lfloor n/s\rfloor}\le2e^{-rn}$ with

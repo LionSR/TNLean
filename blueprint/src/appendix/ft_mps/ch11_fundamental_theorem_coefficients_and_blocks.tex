@@ -104,7 +104,7 @@ coefficient identification from the linear independence of the BNT basis.
 \end{proof}
 
 
-\section{The scalar-threaded proportional identity}
+\section{The scalar-weighted proportional identity}
 \label{sec:app_ft_proportional_scalar}
 
 For proportional total MPVs, coefficient extraction retains the single scalar
@@ -113,7 +113,7 @@ it does not imply the scalar-free identity needed to recover copy weights; the
 counterexample in Remark~\ref{rem:proportional_length_scalar_gap} shows that no
 such implication is possible.
 
-\begin{lemma}[Proportional matched-phase coefficient identity, scalar-threaded]%
+\begin{lemma}[Proportional matched-phase coefficient identity, scalar-weighted]%
     \label{lem:sector_bnt_coeff_identity_via_matched_mpv_phase_proportional}
     \lean{MPSTensor.coeff_identity_via_matched_mpv_phase_proportional}
     \leanok
@@ -156,7 +156,7 @@ such implication is possible.
 \section{Direct-sum conjugation}
 \label{sec:app_ft_direct_sum_conjugation}
 
-Block-diagonal gauge conjugations assemble into a global similarity
+Block-diagonal gauge conjugations combine into a global similarity
 transformation on the direct-sum tensor (Section~\ref{sec:ft_equal_global_gauge}).
 
 \begin{definition}[Invertible matrix associated to a unitary]
@@ -201,7 +201,7 @@ transformation on the direct-sum tensor (Section~\ref{sec:ft_equal_global_gauge}
         \notag
     \end{align}
     where $X$ is the flattened block-diagonal gauge from
-    Definition~\ref{def:global_gauge_of_blocks}. Hence the two assembled
+    Definition~\ref{def:global_gauge_of_blocks}. Hence the two combined
     tensors are gauge equivalent.
 \end{lemma}
 
@@ -229,7 +229,7 @@ transformation on the direct-sum tensor (Section~\ref{sec:ft_equal_global_gauge}
 \end{theorem}
 
 \begin{proof}\leanok
-    The copy-weight matching supplies
+    The copy-weight matching gives
     $\nu_{k,q}=\zeta_k^{-1}\mu_{\beta(k),\tau_k(q)}$. Together with
     $Q_k^i=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}$, these are exactly the two
     hypotheses (\ref{eq:ft_matched_weights_hypotheses}) of
@@ -254,7 +254,7 @@ Remark~\ref{rem:proportional_length_scalar_gap}.
     eventually nonzero proportional MPV families.
     Then the proportional sector-matching theorem gives $\beta$, the
     bond-dimension equalities, the unit phases $\zeta_k$, and the block gauges
-    $X_k$. If one additionally assumes a copy-weight matching for these same phases, then the flattened
+    $X_k$. If one further assumes a copy-weight matching for these same phases, then the flattened
     $Q$-tensor is obtained from the matched-coordinate $P$-tensor by the
     direct-sum gauge $X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k)$.
     % Per-sector unit-modulus restriction eliminated by the exact matcher;
@@ -263,7 +263,7 @@ Remark~\ref{rem:proportional_length_scalar_gap}.
 \end{theorem}
 
 \begin{proof}\leanok
-    The proportional sector-matching theorem supplies $\beta$, $X_k$, and
+    The proportional sector-matching theorem gives $\beta$, $X_k$, and
     unit phases $\zeta_k$ satisfying
     $Q_k^i=\zeta_kX_kP_{\beta(k)}^iX_k^{-1}$. Since $|\zeta_k|=1$, each
     $\zeta_k$ is nonzero. A copy-weight matching gives
@@ -282,7 +282,7 @@ Remark~\ref{rem:proportional_length_scalar_gap}.
     Then there are a bijection $\beta:J(Q)\simeq J(P)$, bond-dimension
     equalities, unit-modulus phases $\zeta_k$, and block gauges $X_k$ such that
     $Q_k^i=\zeta_k X_kP_{\beta(k)}^iX_k^{-1}$ for every sector $k$ and physical
-    index $i$. If one additionally assumes that these same phases satisfy the matched-sector coefficient
+    index $i$. If one further assumes that these same phases satisfy the matched-sector coefficient
     identities $c_N^{(\beta(k))}(P)=\zeta_k^N\,c_N^{(k)}(Q)$ for all
     sufficiently large $N$, then they determine a copy-weight matching and
     hence the flattened $Q$-tensor is obtained from the matched-coordinate

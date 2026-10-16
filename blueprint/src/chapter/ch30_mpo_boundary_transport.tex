@@ -3,7 +3,7 @@
 % The reverse existence and uniqueness of biorthogonal decompositions remains
 % separate from the sufficient local criteria below.
 
-\section{Arbitrary boundary transport}
+\section{Arbitrary boundary maps}
 \label{sec:mpo_boundary_transport}
 
 For $N\geq1$, an operator tensor $T$ and a state tensor $A$ define
@@ -112,7 +112,7 @@ For the diagram, write $R=PQ$ and $C=X\otimes Y$.
     $E_{ji}\otimes E_{lk}=E_{(j,l),(i,k)}$.
 \end{proof}
 
-\begin{theorem}[Linear boundary transport]
+\begin{theorem}[Linear boundary maps]
     \label{thm:glm_boundary_linear}
     \lean{MPOTensor.isBoundaryClosed_iff_exists_linearMap,
         MPOTensor.isBoundaryCompatible_iff_exists_linearMap}
@@ -157,7 +157,7 @@ For the diagram, write $R=PQ$ and $C=X\otimes Y$.
     \cite[Section~2]{GarreRubio2023MPOSym}.
 \end{definition}
 
-\begin{theorem}[Transport by an exact decomposition]
+\begin{theorem}[Boundary evaluation under an exact decomposition]
     \label{thm:glm_boundary_decomposition}
     \lean{MPSTensor.IsBiorthogonalDecomposition.sum_mul_sum,
         MPSTensor.IsBiorthogonalDecomposition.evalWord,

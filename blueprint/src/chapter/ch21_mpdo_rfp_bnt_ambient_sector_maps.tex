@@ -146,7 +146,7 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_vertical_sector_partial_trace_kraus}
-    Each raw retraction is the composition of compression by $W_i$, a unitary
+    Each retraction $R_i$ is the composition of compression by $W_i$, a unitary
     relabelling of coordinates, sectorwise partial trace, and block-diagonal
     inclusion.  Each normalized embedding is the composition of diagonal-block
     extraction, preparation of the positive matrix
@@ -236,8 +236,8 @@
     normalized multiplicity matrix has trace one, and
     $W_i W_i^\dagger=I$ gives
     $\tr(W_i^\dagger BW_i)=\tr(B)$.  This proves
-    (\ref{eq:mpdo_bnt_ambient_sector_embedding_trace}); complete positivity is
-    supplied by Theorem~\ref{thm:mpdo_bnt_ambient_sector_complete_positivity}.
+    (\ref{eq:mpdo_bnt_ambient_sector_embedding_trace}); complete positivity
+    follows from Theorem~\ref{thm:mpdo_bnt_ambient_sector_complete_positivity}.
 \end{proof}
 
 \begin{theorem}[Retraction identities for the ambient sector maps]
@@ -249,7 +249,7 @@
     \lean{MPOTensor.verticalSectorAmbientRetraction_comp_normalizedRestoration}
     \leanok
     \uses{def:mpdo_bnt_ambient_sector_maps}
-    The raw retractions are left inverses of their normalized embeddings:
+    The retractions $R_1$ and $R_2$ are left inverses of their normalized embeddings:
     \begin{align}
         R_1\widetilde R_1
          & =\id_{\mathcal A_1},

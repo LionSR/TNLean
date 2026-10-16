@@ -25,10 +25,12 @@ collar plus the doubled amplification radius stays below `u^β` with `β = β₀
 neighborhood of the collar lies in the ambient enlargement of `T` by the same width,
 so every remote set `E` avoids it.
 
-The sublinear collar bound is not yet proved in this library, so it is a hypothesis
-of `coarse_mutualInformation_le_of_sublinearCollarBound`. The theorems here are
-therefore reductions of Proposition 3.1 to area-law Proposition 9.6; they are not
-proofs of Proposition 3.1.
+The auxiliary theorem `coarse_mutualInformation_le_of_sublinearCollarBound` retains the
+sublinear collar bound as an explicit premise. The physical collar estimate is proved in
+`TNLean.PEPS.AreaLaw.PhysicalCollarInformation`, so this premise can be discharged for the
+original Hamiltonian and gap parameters. The reductions here are used by
+`CellConditionalInformationFromGap` for Lemma 3.2 and by `AngularInformationFromGap` for
+Proposition 3.4 of the polynomial-PEPS manuscript.
 
 ## Main statements
 

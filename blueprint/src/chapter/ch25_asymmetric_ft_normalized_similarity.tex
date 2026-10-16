@@ -1,7 +1,7 @@
 \section{Normalized split compressions}%
 \label{sec:asym_normalized_similarity}
 
-\begin{definition}[Assembled compression matrices]
+\begin{definition}[Combined compression matrices]
     \label{def:asym_assembled_compression}
     \lean{MPSTensor.MultiBlockCompression.assembledLeft,
         MPSTensor.MultiBlockCompression.assembledRight}
@@ -27,7 +27,7 @@
     \uses{thm:asym_multiblock, def:asym_assembled_compression}
     Suppose that a multi-block compression has zero remainder and that
     $\sum_i(B^i)^\dagger B^i=\id$. Then
-    $\sum_sV_sW_s=\id$, the assembled matrices satisfy $LR=\id$ and
+    $\sum_sV_sW_s=\id$, the maps $L$ and $R$ satisfy $LR=\id$ and
     $RL=\id$, and $LB^iR=\bigoplus_sC_s^i$ for every physical index $i$.
     In particular, $D_B=\sum_sD_s$ and there are no unmatched zero slots.
 \end{theorem}
@@ -66,7 +66,7 @@
 \begin{proof}
     \leanok
     \uses{thm:asym_stationary_splitting, thm:asym_normalized_split_similarity}
-    Faithful stationary splitting supplies a compression with zero
-    remainder. The normalized split-compression theorem then supplies
+    Faithful stationary splitting gives a compression with zero
+    remainder. The normalized split-compression theorem then yields
     the inverse maps, dimension equality, and simultaneous similarity.
 \end{proof}
