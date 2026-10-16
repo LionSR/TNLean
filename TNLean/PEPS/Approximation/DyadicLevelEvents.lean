@@ -58,6 +58,22 @@ abbrev rewriteGateBound (C' c' b L : ℕ) : ℕ :=
 
 variable {L q : ℕ} [NeZero q] {Ω : StateSpace L q} {B₀ C c : ℝ}
 
+/-- **The hole radii are admissible.** At the constants of the protocol and `L ≥ 2`, every hole
+radius `h_n = ε₀ min(n, t)`, `t = D log L`, is positive and at most `B₀ log L`: the constant `B₀`
+is chosen so (`06-geometry.tex`, lines 564–567). -/
+theorem IsProtocolConstants.holeRadius_bounds {K₀ ε₀ ν a D : ℝ}
+    (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) {n : ℝ} (hn : 0 < n) :
+    ∀ _ : ℝ × ℝ, 0 < holeRadius ε₀ n (D * Real.log L) ∧
+      holeRadius ε₀ n (D * Real.log L) ≤ B₀ * Real.log L := fun _ => by
+  have hℓ : 0 < Real.log L := Real.log_pos (by exact_mod_cast hL)
+  have ht : 0 < D * Real.log L := mul_pos hc.D_pos hℓ
+  refine ⟨holeRadius_pos hc.ε₀_pos hn ht, (holeRadius_le_mul_right hc.ε₀_pos.le).trans ?_⟩
+  have h1 : ε₀ * D ≤ K₀ * D :=
+    mul_le_mul_of_nonneg_right (by linarith [hc.ε₀_lt, hc.twenty_le_K₀]) hc.D_pos.le
+  have h2 : ε₀ * D ≤ B₀ := h1.trans hc.B₀_ge
+  rw [← mul_assoc]
+  exact mul_le_mul_of_nonneg_right h2 hℓ.le
+
 /-- **A direct repainting as a change of the protocol.** At the constants of the protocol, let a
 square `R` of side `n = 2 ^ j ≤ K₀ t` be repainted directly, from the main frame of its level
 with the blocks of `done` repainted to the frame with `R` repainted as well, all holes of radius
@@ -72,19 +88,19 @@ theorem directRepainting_hasSourceBoundedChange {K₀ ε₀ ν a D : ℝ}
     (hL : 2 ≤ L) (hkL : L ≤ 2 ^ k) (hΩ : ‖Ω‖ = 1)
     (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
     (R₀ R : RepaintedSquare k) (hK : (2 : ℝ) ^ (R.1.1 : ℕ) ≤ K₀ * (D * Real.log L))
-    (done : Set (ℤ × ℤ))
-    (hρ : ∀ _ : ℝ × ℝ, 0 < holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) (D * Real.log L) ∧
-      holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) (D * Real.log L) ≤ B₀ * Real.log L)
-    {C' c' : ℕ} (hC : C ≤ C') (hC' : 1 ≤ C') (hcc : c ≤ c')
+    (done : Set (ℤ × ℤ)) {C' c' : ℕ} (hC : C ≤ C') (hC' : 1 ≤ C') (hcc : c ≤ c')
     (Fs : List (Frame (cellCenterPos L) q (ProtocolParty k))) :
     HasSourceBoundedChange Ω
       (levelFrame P rank R₀ R.1.1 done
-        (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) (D * Real.log L)) hρ :: Fs)
+        (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) (D * Real.log L))
+        (hc.holeRadius_bounds hL (by positivity)) :: Fs)
       (levelFrame P rank R₀ R.1.1 (insert R.1.index done)
-        (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) (D * Real.log L)) hρ :: Fs)
+        (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) (D * Real.log L))
+        (hc.holeRadius_bounds hL (by positivity)) :: Fs)
       (ℓ := []) (1 : ℂ) {p | EventUses (.inl R.1) p} (2 * protocolPatchBound ε₀ ν)
       (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L) (2 * protocolPatchBound ε₀ ν)
       ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹) := by
+  have hρ := hc.holeRadius_bounds hL (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
   set n : ℝ := (2 : ℝ) ^ (R.1.1 : ℕ) with hn_def
   set t := D * Real.log L with ht_def
   have hℓ : 0 < Real.log L := Real.log_pos (by exact_mod_cast hL)
@@ -164,6 +180,20 @@ Polynomial-PEPS manuscript, `06-geometry.tex`, lines 127–131 and 529–541. -/
 noncomputable def resizeRadius (ε₀ t n : ℝ) (A : Set (ℝ × ℝ)) (z : ℝ × ℝ) : ℝ :=
   open Classical in if z ∈ A then holeRadius ε₀ n t else holeRadius ε₀ (2 * n) t
 
+/-- **The radii of a resize are admissible.** At the constants of the protocol and `L ≥ 2`, every
+radius of a resize at scale `n > 0` is positive and at most `B₀ log L`
+(`06-geometry.tex`, lines 529–541 and 564–567). -/
+theorem IsProtocolConstants.resizeRadius_bounds {K₀ ε₀ ν a D : ℝ}
+    (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) {n : ℝ} (hn : 0 < n)
+    (A : Set (ℝ × ℝ)) :
+    ∀ z, 0 < resizeRadius ε₀ (D * Real.log L) n A z ∧
+      resizeRadius ε₀ (D * Real.log L) n A z ≤ B₀ * Real.log L := fun z => by
+  classical
+  unfold resizeRadius
+  split_ifs
+  · exact hc.holeRadius_bounds hL hn z
+  · exact hc.holeRadius_bounds hL (by positivity) z
+
 /-- A block of the root square among the nine blocks about the junction `J`. -/
 def DyadicJunction.rootNbr (J : DyadicJunction k) : ℤ × ℤ :=
   (if (J.2.1 : ℕ) = 0 then 1 else 0, if (J.2.2 : ℕ) = 0 then 1 else 0)
@@ -229,28 +259,29 @@ change is the identity.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 102–133, 529–541, 559–570 and 572–596. -/
 theorem exists_resize_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε₀) (hε₀ : ε₀ ≤ 1 / 16) :
-    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {K₀ a D B₀ : ℝ},
-      IsProtocolConstants K₀ ε₀ ν a D B₀ → ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q} {C c : ℝ},
-      2 ≤ L → L ≤ 2 ^ k → ‖Ω‖ = 1 →
+    ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
+      ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q}
+      {C c : ℝ}, ∀ hL : 2 ≤ L, L ≤ 2 ^ k → ‖Ω‖ = 1 →
       ∀ (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
         (R₀ : RepaintedSquare k) (J : DyadicJunction k), 0 < (J.1 : ℕ) →
       ∀ (A : Set (ℝ × ℝ))
-        (hρ : ∀ z, 0 < resizeRadius ε₀ (D * Real.log L) ((2 : ℝ) ^ ((J.1 : ℕ) - 1)) A z ∧
-          resizeRadius ε₀ (D * Real.log L) ((2 : ℝ) ^ ((J.1 : ℕ) - 1)) A z ≤ B₀ * Real.log L)
-        (hρ' : ∀ z, 0 < resizeRadius ε₀ (D * Real.log L) ((2 : ℝ) ^ ((J.1 : ℕ) - 1))
-            (insert (blockCorner ((2 : ℝ) ^ (J.1 : ℕ)) J.index) A) z ∧
-          resizeRadius ε₀ (D * Real.log L) ((2 : ℝ) ^ ((J.1 : ℕ) - 1))
-            (insert (blockCorner ((2 : ℝ) ^ (J.1 : ℕ)) J.index) A) z ≤ B₀ * Real.log L)
         {C' c' : ℕ}, C ≤ C' → 1 ≤ C' → c ≤ c' →
       ∀ Fs : List (Frame (cellCenterPos L) q (ProtocolParty k)),
       HasSourceBoundedChange Ω
-        (levelFrame P rank R₀ J.1 univ _ hρ :: Fs) (levelFrame P rank R₀ J.1 univ _ hρ' :: Fs)
+        (levelFrame P rank R₀ J.1 univ _
+          (hc.resizeRadius_bounds hL (n := (2 : ℝ) ^ ((J.1 : ℕ) - 1)) (by positivity) A) :: Fs)
+        (levelFrame P rank R₀ J.1 univ _
+          (hc.resizeRadius_bounds hL (n := (2 : ℝ) ^ ((J.1 : ℕ) - 1)) (by positivity)
+            (insert (blockCorner ((2 : ℝ) ^ (J.1 : ℕ)) J.index) A)) :: Fs)
         (ℓ := []) (1 : ℂ) {p | EventUses (.inr J) p} (2 * protocolPatchBound ε₀ ν)
         (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L) (2 * protocolPatchBound ε₀ ν)
         ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹) := by
   obtain ⟨ν', hν', H⟩ := exists_resize_step_supplied hε hε₀
-  refine ⟨ν', hν', fun ν hν hνν' {K₀ a D B₀} hc {L q} _ {Ω C c} hL hkL hΩ P rank R₀ J hJ A hρ
-    hρ' {C' c'} hC hC' hcc Fs => ?_⟩
+  refine ⟨ν', hν', fun ν hν hνν' {k K₀ a D B₀} hc {L q} _ {Ω C c} hL hkL hΩ P rank R₀ J hJ A
+    {C' c'} hC hC' hcc Fs => ?_⟩
+  have hρ := hc.resizeRadius_bounds hL (n := (2 : ℝ) ^ ((J.1 : ℕ) - 1)) (by positivity) A
+  have hρ' := hc.resizeRadius_bounds hL (n := (2 : ℝ) ^ ((J.1 : ℕ) - 1)) (by positivity)
+    (insert (blockCorner ((2 : ℝ) ^ (J.1 : ℕ)) J.index) A)
   set n : ℝ := (2 : ℝ) ^ ((J.1 : ℕ) - 1) with hn_def
   set t := D * Real.log L with ht_def
   have hn : 0 < n := by positivity
