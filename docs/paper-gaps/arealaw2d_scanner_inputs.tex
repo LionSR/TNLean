@@ -97,7 +97,8 @@ The transferred whole-prefix entropy bound is
 \begin{align}
     B_{\rm sh}
      & \le C_*(nL^e+n)+n^{-247}
-    \le (C_*+1)(nL^e+n).\notag
+    \le (C_*+1)(nL^e+n).
+    \label{eq:arealaw2d_scanner_inputs_shell_bound}
 \end{align}
 The last inequality holds for $n\ge2$ and retains the entropy-continuity
 error by enlarging the coefficient. The mismatch bound is
@@ -105,13 +106,15 @@ $B_{\rm exc}=1+3nD\log q\le(1+3\log q)nD$ when $D\ge1$.
 A common output coefficient may therefore be chosen to dominate
 $C_*+1$, $1+3\log q$ and both marginal-budget coefficients.
 
-The density coefficient is likewise chosen after $C_e^{\rm in}$, but
-before the finite physical system and total weight. It is a positive
-constant $C_\delta$, giving
+The density constants are likewise chosen after $C_e^{\rm in}$, but
+before the finite physical system and total weight. Choose a positive
+coefficient $C_\delta$ and a nonnegative logarithmic exponent
+$C_{l,\delta}$, giving
 \begin{align}
     \delta_n
      & =C_\delta\epsilon^{-1}
-    \left(n^{e-\mu}+a^{1/4}(\log n)^{C_{l,\delta}}\right).\notag
+    \left(n^{e-\mu}+a^{1/4}(\log n)^{C_{l,\delta}}\right).
+    \label{eq:arealaw2d_scanner_inputs_density_bound}
 \end{align}
 For example, the rough budget has coefficient
 $C_{\rm rough}=6C_*+13+6\log q$, and the density conversion permits

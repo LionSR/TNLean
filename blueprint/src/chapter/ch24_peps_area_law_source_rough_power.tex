@@ -114,8 +114,8 @@
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{lem:al_scanner_scale_facts,lem:arealaw-selected-density-principal}
-    Apply Lemma~\ref{lem:arealaw-selected-density-principal} with
+    \uses{lem:al_scanner_scale_facts,thm:arealaw-selected-density-principal}
+    Apply Theorem~\ref{thm:arealaw-selected-density-principal} with
     interpolation length $\epsilon/2$. Use $n^e/m\leq C_sn^{e-\mu}$
     on the first principal term. The second is nonnegative, so it is
     at most $C_s$ times itself. The coefficient of $R$ is unchanged.
@@ -149,17 +149,21 @@
     \label{thm:arealaw-selected-energy-vanishing-remainder}
     \lean{TNLean.PEPS.AreaLaw.Scan.tendsto_selectedEnergy_remainder}
     \leanok
-    Fix $A\in\mathbb R$ and $g>0$. If $\rho_k\to0$ and $r_k\to0$, then
+    Fix $A,g\in\mathbb R$, with division by zero assigned the value zero
+    for this scalar extension. If $\rho_k\to0$ and $r_k\to0$ along any
+    fixed filter on their index set, then
     \begin{align}
         \frac{A|\rho_k|^{1/8}+r_k}{g} & \longrightarrow0.
     \end{align}
-    The coefficients are fixed before this limit is taken.
+    The coefficients are fixed before this limit is taken. In the physical
+    application $g>0$, so this is the ordinary quotient by the spectral gap.
 \end{theorem}
 \begin{proof}
     \leanok
     Absolute value and the eighth root are continuous at zero.
-    Multiplication by $A$, addition and division by the fixed $g$
-    preserve the limit.
+    Multiplication by $A$ and addition preserve the limit. For $g\ne0$,
+    multiply by the fixed reciprocal $1/g$; for $g=0$, the extended
+    quotient is identically zero.
 \end{proof}
 
 \begin{theorem}[Ordered-limit closure at the selected point]

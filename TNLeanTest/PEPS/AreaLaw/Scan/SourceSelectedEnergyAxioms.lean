@@ -13,8 +13,8 @@ The named theorem may depend only on the three standard logical axioms.
 -/
 
 run_cmd do
-  let decl := Lean.Name.str `TNLean.PEPS.AreaLaw.Scan.CollarScan
-    "exists_sourceTarget_selected_actualCharge_source_density_energy"
+  let decl :=
+    ``TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_source_density_energy
   let env ← Lean.getEnv
   unless env.contains decl do
     throwError "The intended source-energy theorem is absent."
