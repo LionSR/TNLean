@@ -142,7 +142,7 @@ tree, its terminal probabilities and the symmetric vector.
     \label{thm:al_comparators_source}
     \lean{TNLean.PEPS.AreaLaw.Scan.Comparators.comparatorsStatement}
     \leanok
-    \uses{def:al_comparators_source_statement,thm:al_global_schmidt_bell_prevector}
+    \uses{def:al_comparators_source_statement}
     The statement of the norm comparisons holds, with $a_0=1/10$, $C=4$,
     $C'=4+25C_0$ and $c=c_0/10$. This is
     \cite[Proposition~8.1]{OpenAI2026AreaLaw}; the label sequence is chosen
@@ -154,10 +154,8 @@ tree, its terminal probabilities and the symmetric vector.
 
 \begin{proof}
     \leanok
-    \uses{thm:al_global_schmidt_bell_prevector}
-    The normalized typical Schmidt vector chooses the labels, exactly as in
-    Theorem~\ref{thm:al_global_schmidt_bell_prevector} for arbitrary local
-    dimensions, and its auxiliary marginal has entropy $S'$. The label
+    The normalized typical Schmidt vector chooses the labels, by the construction of the common auxiliary label in physical
+    coordinates, carried out for arbitrary local dimensions, and its auxiliary marginal has entropy $S'$. The label
     dimensions therefore satisfy $\log\dim\lambda_k=kS'+o(k)$, and the
     label mass is at least inverse polynomial in $k$. Each $A_{j,g}$
     preserves $\mathcal S_k$ and, after compression, the bands commute, so
@@ -184,7 +182,7 @@ tree, its terminal probabilities and the symmetric vector.
     $(E_{\rm def}/\tau)(2S'+g_{\max})\le C'(E_{\rm def}/\tau)(S'+g_{\max})$,
     $6KC_0\mathcal Ba^2\le2sWC'a\mathcal B$ and
     $-(K/2)\log z\le2sWC'|\log z|/a$. The identity
-    \eqref{eq:al_comparators_source_identity} follows from purity of
+    (\ref{eq:al_comparators_source_identity}) follows from purity of
     $\widetilde\Omega$, and $g^{\rm pre}_{j,g}=I(XU_{j,g}:V_{j,g})\ge0$ by
     subadditivity.
 \end{proof}
