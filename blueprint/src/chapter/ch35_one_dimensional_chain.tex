@@ -71,11 +71,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
     let $A$ be any set of sites. Let $K$ be the surprisal $-\log p$ of the
     eigenvalue $p$ of the reduced state on $A$ drawn with probability $p$, so
     that $\mathbb E K=S(A)$. For every real $w$,
-    \begin{equation}
+    \begin{align}
         \Pr\{|K-S(A)|>w\}\le
         \min\Bigl\{1,\ 2e^{e/2}\exp\Bigl(-\frac{w}{32\sqrt{(1+J/\Delta)\,
                 \mathcal B_A}}\Bigr)\Bigr\}.
-    \end{equation}
+    \end{align}
 \end{lemma}
 \begin{proof}
     \leanok
@@ -105,15 +105,15 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Let $X=[a,b)$ be an interval of the chain. A support of range $R$ that
     meets both $X$ and its complement lies in the window $[a-R,a+R)$ or in the
     window $[b-R,b+R)$, each of at most $2R$ sites. Hence at most
-    \begin{equation}
+    \begin{align}
         N_R=2\cdot2^{2R}
-    \end{equation}
+    \end{align}
     supports are split by $X$, and the cut budget of $X$ is at most
-    \begin{equation}
+    \begin{align}
         B_R=1+N_R\log^2\bigl(e\,q^{R+1}\bigr).
-    \end{equation}
-    Both bounds are independent of the interval. Moreover no support of range
-    $R$ is split by two of the shells $[l-(j+1)R,\,r+(j+1)R)$, $j\ge0$, of an
+    \end{align}
+    Both bounds are independent of the interval, and no support of range $R$
+    is split by two of the shells $[l-(j+1)R,\,r+(j+1)R)$, $j\ge0$, of an
     interval $[l,r)$.
 \end{lemma}
 \begin{proof}
@@ -150,16 +150,16 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
     finite-range Hamiltonian with term norms at most $J\ge0$ on the chain with
     local dimension $q\ge1$. Put $\vartheta=J/\Delta$ and
-    \begin{equation}
+    \begin{align}
         m=\Bigl\lceil\max\bigl\{4,\ 32N_Rq^{2(R+1)}\vartheta,\
         128\sqrt{(1+\vartheta)B_R}\bigr\}\Bigr\rceil .
-    \end{equation}
+    \end{align}
     For an interval $X=[l,r)$ let $T=X^{+mR}\setminus X$ be the buffer,
     which has at most $2mR$ sites. Then
-    \begin{equation}
+    \begin{align}
         2\bigl(S(X\cup T)-S(T)\bigr)\le S(X)+
         \frac{4096\,e\,\vartheta B_R}{m}+m\log2 .
-    \end{equation}
+    \end{align}
     The energy threshold $\Delta/2$, the overlap losses $m\log2$ and the
     explicit tail term, with the three-entry $m$, replace the printed
     constants of Lemma~4.2 of \cite{TNLean2026OneDimensional}, which runs at
@@ -247,11 +247,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
     Let $\Omega$ be a gapped ground vector, with gap $\Delta>0$, of a
     finite-range Hamiltonian with term norms at most $J\ge0$ on the chain of
     $L$ sites with local dimension $q\ge1$. Every interval $X$ satisfies
-    \begin{equation}
+    \begin{align}
         S(X)\le C_{\mathrm{int}}(q,R,J,\Delta)
         =8mR\log q+\frac{4096\,e\,\vartheta B_R}{m}+m\log2
         \le C_0(q,R)\,(1+J/\Delta),
-    \end{equation}
+    \end{align}
     with
     $C_0(q,R)=\bigl(8R\log q+\log2\bigr)\bigl(5+32N_Rq^{2(R+1)}+128B_R\bigr)
         +1024\,e\,B_R$, and every subset $A$ of the chain satisfies
@@ -295,9 +295,9 @@ for an arbitrary finite set of sites and are instantiated here directly.
     \emph{open-boundary matrix product state of bond dimension at most $D$}
     when there are matrices $A_i(s)\in\mathbb C^{D\times D}$ for each site $i$
     and value $s$ and vectors $v_L,v_R\in\mathbb C^D$ with
-    \begin{equation}
+    \begin{align}
         \psi(x_1,\ldots,x_L)=v_L^{\mathsf T}A_1(x_1)\cdots A_L(x_L)\,v_R .
-    \end{equation}
+    \end{align}
     Scaling such a vector scales $v_R$. The \emph{left block} of $k$ sites is
     the interval $[0,k)$, and the \emph{cut matrix} at $k$ has the
     configurations of the left block as rows and those of the remaining sites
@@ -363,7 +363,8 @@ for an arbitrary finite set of sites and are instantiated here directly.
     }
     \leanok
     \uses{def:chain_open_mps}
-    Let $\psi$ be a unit vector on $L$ sites and $w\ge0$. For each cut $k$,
+    Let $\psi$ be a unit vector on $L$ sites and let $w$ be a real number. For
+    each cut $k$,
     $1\le k\le L-1$, let $S_k$ be the entropy of the first $k$ sites, let
     $\Pi_k$ be the spectral projector of their reduced state onto the
     eigenvalues at least $e^{-(S_k+w)}$, an operator on the first $k$ sites,
@@ -374,9 +375,9 @@ for an arbitrary finite set of sites and are instantiated here directly.
     $\Phi=P_1P_2\cdots P_{L-1}\psi$ has cut rank at most the rank of $\Pi_k$,
     hence at most $e^{S_k+w}$, across every cut $k$, and cut rank at most one
     across the trivial cuts at the ends of the chain; it satisfies
-    \begin{equation}
+    \begin{align}
         \|\psi-\Phi\|\le\sum_{k=1}^{L-1}\sqrt{\text{tail}_k(w)} .
-    \end{equation}
+    \end{align}
     This is the threshold form of the sequential truncation, Proposition~7.1
     of \cite{TNLean2026OneDimensional}: the note projects every cut onto its
     $D$ largest eigenvalues, or onto all of them when the cut has fewer than
@@ -422,11 +423,11 @@ for an arbitrary finite set of sites and are instantiated here directly.
     finite-range Hamiltonian with term norms at most $J\ge0$ on the chain of
     $L\ge1$ sites with local dimension $q\ge1$. Put
     $s=\sqrt{(1+J/\Delta)B_R}$, $c_0=\sqrt{2e^{e/2}}$ and
-    \begin{equation}
+    \begin{align}
         w(L)=64\,s\log\bigl(2L^2c_0\bigr),\qquad
         D(L)=\bigl\lfloor\exp\bigl(C_{\mathrm{int}}+w(L)\bigr)\bigr\rfloor
         \le e^{C_{\mathrm{int}}}(2c_0)^{64s}\,L^{128s}.
-    \end{equation}
+    \end{align}
     There is a normalized open-boundary matrix product state $\Phi$ of bond
     dimension at most $D(L)$ with $\|\Phi-\Omega\|\le1/L$.
 \end{theorem}
