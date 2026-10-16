@@ -55,6 +55,7 @@ def squareOfIndex {j : ℕ} (hj : j < k) {Q : ℤ × ℤ} (hQ : InRoot ((2 : ℤ
     have : ((2 ^ (k - j) : ℕ) : ℤ) = (2 : ℤ) ^ (k - j) := by push_cast; rfl
     omega⟩⟩
 
+/-- The square constructed from admissible block indices has those same indices. -/
 theorem squareOfIndex_index {j : ℕ} (hj : j < k) {Q : ℤ × ℤ}
     (hQ : InRoot ((2 : ℤ) ^ (k - j)) Q) : (squareOfIndex hj hQ).index = Q := by
   obtain ⟨h1, -, h3, -⟩ := hQ
@@ -72,6 +73,7 @@ def junctionOfIndex {j : ℕ} (hj : j ≤ k) {Q : ℤ × ℤ} (h1 : 0 ≤ Q.1) (
     have : ((2 ^ (k - j) : ℕ) : ℤ) = (2 : ℤ) ^ (k - j) := by push_cast; rfl
     omega⟩⟩
 
+/-- The junction constructed from admissible grid-corner indices has those same indices. -/
 theorem junctionOfIndex_index {j : ℕ} (hj : j ≤ k) {Q : ℤ × ℤ} (h1 : 0 ≤ Q.1)
     (h2 : Q.1 ≤ 2 ^ (k - j)) (h3 : 0 ≤ Q.2) (h4 : Q.2 ≤ 2 ^ (k - j)) :
     (junctionOfIndex hj h1 h2 h3 h4).index = Q := by

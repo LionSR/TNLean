@@ -914,14 +914,59 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.eventMain_inl_succ,
         TNLean.PEPS.Approximation.mainState_zero,
         TNLean.PEPS.Approximation.finalMain_owner,
-        TNLean.PEPS.Approximation.finalMain_holes}
+        TNLean.PEPS.Approximation.finalMain_holes,
+        TNLean.PEPS.Approximation.ProtocolEvent.rank_inl,
+        TNLean.PEPS.Approximation.ProtocolEvent.rank_inr,
+        TNLean.PEPS.Approximation.rank_getElem_le_of_le,
+        TNLean.PEPS.Approximation.resizedCorners_succ_inr,
+        TNLean.PEPS.Approximation.repaintedBlocks_succ_inl,
+        TNLean.PEPS.Approximation.holeRadius_mem,
+        TNLean.PEPS.Approximation.resizeRadius_mem,
+        TNLean.PEPS.Approximation.squareOfIndex,
+        TNLean.PEPS.Approximation.squareOfIndex_index,
+        TNLean.PEPS.Approximation.junctionOfIndex,
+        TNLean.PEPS.Approximation.junctionOfIndex_index,
+        TNLean.PEPS.Approximation.getElem_notMem_take,
+        TNLean.PEPS.Approximation.notMem_take_succ_of_rank,
+        TNLean.PEPS.Approximation.rank_getElem_last,
+        TNLean.PEPS.Approximation.rank_getElem_zero,
+        TNLean.PEPS.Approximation.length_eventSchedule_pos,
+        TNLean.PEPS.Approximation.inRoot_subset_repaintedBlocks,
+        TNLean.PEPS.Approximation.frame_eq_of_owner_holes,
+        TNLean.PEPS.Approximation.finalMain_pairwise}
     \leanok
     \uses{def:peps_protocol_level_frame, def:peps_dyadic_protocol_schedule,
-        def:peps_adaptive_patch_constraint, def:peps_frame}
+        def:peps_adaptive_patch_constraint, def:peps_frame,
+        def:peps_dyadic_hierarchy, lem:peps_dyadic_floor}
+    For a hierarchy of depth $k\ge0$, a square of level $j$ has repainting rank
+    $2(k-j)+1$, and a junction of scale $j$ has resize rank
+    $2(k-\max\{j-1,0\})$, for $0\le j\le k$. The schedule has no repeated event
+    and its ranks are nondecreasing. An event at an in-range index $i$ is absent from the
+    prefix of length $i$. If index $i+1$ exists, an event of strictly larger rank
+    than the event at $i$ is absent from the prefix of length $i+1$.
+    For $k\ge1$ the schedule is nonempty, its first rank is $2$ and its last
+    rank is $2k+1$.
+
+    For $0\le j<k$, an integer block index $Q$ with $0\le Q_a<2^{k-j}$ in each
+    coordinate determines a square of level $j$ with exactly that index. For
+    $0\le j\le k$, an integer corner index with $0\le Q_a\le2^{k-j}$ determines
+    a junction of scale $j$ with exactly that index. After a resize, its corner is inserted in the set of
+    resized corners of that scale; after a repainting, its block index is inserted
+    in the set of repainted blocks of that level. After a repainting, if the next
+    event has larger rank or there is no next event, every block of the root square
+    at that level has been repainted. For any fixed finite physical-site data,
+    local dimension and party type, two frames with equal owner maps and equal
+    hole lists are equal.
+
     Let $k\ge1$, $L\le2^k$ and $q\ge1$. Fix an adaptive supplied-patch family for
     $\Omega$ with parameters $B_0,C,c$, test exponent $60$ and system size $L$,
     a label rank and a reference repainting party map. Let $\epsilon_0,t>0$ with
     $\epsilon_0t\le B_0\log L$, and put $h_n=\epsilon_0\min(n,t)$.
+    For every $n>0$, $0<h_n\le B_0\log L$. For any set $A\subseteq\mathbb R^2$, assigning
+    radius $h_n$ on $A$ and $h_{2n}$ elsewhere gives the same strict positivity
+    and upper bound at every point. When $4\epsilon_0<1$, the supplied outer
+    physical samples at the true vertices of the final unit-level guide are
+    pairwise disjoint.
     Every event in the schedule is scheduled, and passing from a prefix of length
     $i$ to one of length $i+1$ appends the event at index $i$, when that index is
     in range. Every rank from $2$ to $2k+1$ is the rank of an event, consecutive events
@@ -956,10 +1001,21 @@ no holes, this is the normalization of $\Omega$.
         def:peps_protocol_level_frame, def:peps_dyadic_block_guide,
         thm:peps_dyadic_repainting_valid_labels, def:peps_guide_frame,
         def:peps_dyadic_protocol_schedule, def:peps_dyadic_used_parties,
-        lem:peps_adaptive_patch_supply, lem:peps_level_true_vertices}
+        lem:peps_adaptive_patch_supply, lem:peps_level_true_vertices,
+        thm:peps_protocol_bounded_changes, lem:peps_protocol_junction_resize_parties,
+        def:peps_frame}
     The schedule contains exactly the prescribed events in rank order
     (Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts}). The ranks cover the
-    range, so no rank is skipped. When the next event has a larger rank, every event
+    range, so no rank is skipped. The first and last ranks follow from this
+    coverage and monotonicity. The distinctness of the schedule excludes an event
+    from its own preceding prefix. The integer-index constructions preserve the
+    indices, and splitting off the last event of a prefix gives the two insertion
+    identities. Two frames with equal owners and hole lists have identical data.
+    Positivity of $\epsilon_0,n,t$ and $\min(n,t)\le t$ give the radius bounds;
+    the two cases of the resized radius satisfy the same estimate. The disjointness
+    result of Theorem~\ref{thm:peps_protocol_level_frame_facts} applies to the
+    final grid because its hole radii are at most $\epsilon_0$.
+    When the next event has a larger rank, every event
     of the current rank is done. The completed block guide is the starting guide of
     the next level by Lemma~\ref{lem:peps_dyadic_active_labels}.
 

@@ -25,6 +25,11 @@ contains its literal density and the fixed truncation error. This intermediate
 result does not assert the final eighth-root energy estimate or the remaining
 rough and sharp comparator attachments of Proposition 9.2.
 
+**Local fix (output constants):** The positive density coefficient is chosen after the
+input entropy coefficient is fixed. It need not vanish when the input coefficient is zero.
+The estimate with numerically identical input and output coefficients is not established
+here. See `docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
+
 Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
 `08-scanner.tex`, Proposition 9.2, lines 349–397, and the selected-density argument,
 lines 475–490, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
@@ -46,15 +51,16 @@ selected charge and interpolation parameter for every admissible total weight.
 The target entropy coefficient precedes the density constants and size threshold;
 all these choices precede the finite system and the weight. The same projected
 mass, label asymptotics, actual energy and rough upper comparison are retained.
+The truncation coefficient is chosen before the local dimension; the remaining
+constants may depend on that dimension.
 Source: Proposition 9.2, `scanner:entropy-input`, `scanner:density-output`, and
 `scanner:selected-density` in `08-scanner.tex`, lines 349–397 and 475–490. -/
 theorem exists_sourceTarget_selected_actualCharge_source_density
-    {q : ℕ} [NeZero q] (hq : 1 ≤ q) (R : ℕ)
-    {J Δ C_T C₁ : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ)
-    (hC_T : 0 ≤ C_T) (hC₁ : 0 < C₁) (multiplicity : ℕ)
-    (hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁) (P : ℝ) :
-    ∃ Ctr Ctarget c Cent eent _Cen _een : ℝ,
-      0 < Ctr ∧ 0 < Ctarget ∧ 0 < c ∧ c ≤ 1 / 2 ∧
+    (R : ℕ) {J Δ C_T : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC_T : 0 ≤ C_T) :
+    ∃ Ctr : ℝ, 0 < Ctr ∧
+      ∀ (q : ℕ) [NeZero q] (_hq : 1 ≤ q) (C₁ : ℝ) (_hC₁ : 0 < C₁)
+        (multiplicity : ℕ) (_hmultiplicity : 3 * (multiplicity : ℝ) ≤ C₁) (P : ℝ),
+      ∃ Ctarget c Cent eent _Cen _een : ℝ, 0 < Ctarget ∧ 0 < c ∧ c ≤ 1 / 2 ∧
       ∀ F : ScannerExponents, ∃ C Cl : ℝ, 1 ≤ C ∧ 0 ≤ Cl ∧
         ∀ Ce : ℝ, 0 ≤ Ce →
         ∃ Cδ Clδ : ℝ, 0 < Cδ ∧ 0 ≤ Clδ ∧ ∃ N : ℕ, 2 ≤ N ∧
@@ -183,11 +189,13 @@ theorem exists_sourceTarget_selected_actualCharge_source_density
                       0 < normSq ∧
                       -Real.log normSq / (k : ℝ) ≤
                         Brough + Real.bellOverlapRemainder d cU S.K k := by
-  obtain ⟨Ctr, Ctarget, ct, Cent, eent, Cen, een, hCtr, hCtarget, hct, hcore⟩ :=
-    exists_sourceTarget_selected_actualCharge_density_energy hq R hJ hΔ hC_T
-      hC₁ multiplicity hmultiplicity P
+  obtain ⟨Ctr, hCtr, hcore⟩ :=
+    exists_sourceTarget_selected_actualCharge_density_energy R hJ hΔ hC_T
+  refine ⟨Ctr, hCtr, fun q _ hq C₁ hC₁ multiplicity hmultiplicity P ↦ ?_⟩
+  obtain ⟨Ctarget, ct, Cent, eent, Cen, een, hCtarget, hct, hcore⟩ :=
+    hcore q hq C₁ hC₁ multiplicity hmultiplicity P
   obtain ⟨c, hc, hsmall⟩ := exists_pos_radius_smallness_threshold hq hct
-  refine ⟨Ctr, Ctarget, min c (1 / 2), Cent, eent, Cen, een, hCtr, hCtarget,
+  refine ⟨Ctarget, min c (1 / 2), Cent, eent, Cen, een, hCtarget,
     lt_min hc (by norm_num), min_le_right _ _, fun F ↦ ?_⟩
   obtain ⟨C, Cl, hC, hCl, Nb, hNb, hsource⟩ := hcore F
   refine ⟨C, Cl, hC, hCl, fun Ce hCe ↦ ?_⟩
