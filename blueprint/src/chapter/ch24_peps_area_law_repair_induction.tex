@@ -403,8 +403,8 @@ by the strict inequalities.
 
 % Source: 10-geometry.tex, child marks, lines 404--409 and 506--514;
 % geometry:descendant-count, lines 670--681.
-\begin{lemma}[A child is determined by its parent and offset]
-    \label{lem:area_law_repair_parent_offset}
+\begin{theorem}[A child is determined by its parent and offset]
+    \label{thm:area_law_repair_parent_offset}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairMarkOffset,
         TNLean.PEPS.AreaLaw.Geometry.repairMarkParent_repairMarkOffset_injective}
     \leanok
@@ -412,12 +412,12 @@ by the strict inequalities.
     For a child occurrence $q$ at generation $j+1$, let
     $e_j(q)\in\{0,1,2\}^2$ index its centered offset
     $e_j(q)-(1,1)$. The map
-    \begin{equation}
+    \begin{align}
         q\longmapsto\bigl(\pi_j(q),e_j(q)\bigr)
         \label{eq:area_law_repair_parent_offset}
-    \end{equation}
+    \end{align}
     is injective.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     At generation $j+1$, a child occurrence is indexed by a nonterminal
     parent and one of the nine centered offsets. Equality of the parent
@@ -426,47 +426,47 @@ by the strict inequalities.
 
 % Source: 10-geometry.tex, initial marks, lines 325--363, and child marks,
 % lines 404--409 and 506--514.
-\begin{lemma}[Finitely many marks at each generation]
-    \label{lem:area_law_repair_finite_marks}
+\begin{theorem}[Finitely many marks at each generation]
+    \label{thm:area_law_repair_finite_marks}
     \lean{TNLean.PEPS.AreaLaw.Geometry.finite_repairStage_markIndex}
     \leanok
-    \uses{def:area_law_repair_stage,lem:area_law_repair_parent_offset}
+    \uses{def:area_law_repair_stage,thm:area_law_repair_parent_offset}
     For every generation $j\ge0$, the mark family $K_j$ is finite.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
-    \uses{lem:area_law_repair_parent_offset}
+    \uses{thm:area_law_repair_parent_offset}
     The initial mark family is the selected finite set $M$. If $K_j$ is
     finite, the parent and offset map of
-    Lemma~\ref{lem:area_law_repair_parent_offset} injects $K_{j+1}$ into
+    Theorem~\ref{thm:area_law_repair_parent_offset} injects $K_{j+1}$ into
     the finite set $K_j\times\{0,1,2\}^2$. Induction proves the claim.
 \end{proof}
 
 % Source: 10-geometry.tex, geometry:descendant-count, lines 670--681;
 % child marks, lines 404--409 and 506--514.
-\begin{lemma}[The number of descendant marks]
-    \label{lem:area_law_repair_descendant_marks}
+\begin{theorem}[The number of descendant marks]
+    \label{thm:area_law_repair_descendant_marks}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairMarkAncestor_parent_offset_injective,
         TNLean.PEPS.AreaLaw.Geometry.card_repairMarkAncestor_fiber_succ_le,
         TNLean.PEPS.AreaLaw.Geometry.card_repairMarkAncestor_fiber_le}
     \leanok
-    \uses{def:area_law_repair_ancestors,lem:area_law_repair_parent_offset,
-        lem:area_law_repair_finite_marks}
+    \uses{def:area_law_repair_ancestors,thm:area_law_repair_parent_offset,
+        thm:area_law_repair_finite_marks}
     Fix a mark $p\in K_i$. For $n\ge0$, let
-    \begin{equation}
+    \begin{align}
         F_n(p)=\{q\in K_{i+n}:\alpha_{i,n}(q)=p\}.
         \label{eq:area_law_repair_descendant_marks}
-    \end{equation}
+    \end{align}
     These sets are finite. The parent and offset map restricts to an
     injection $F_{n+1}(p)\longrightarrow F_n(p)\times\{0,1,2\}^2$.
     Consequently,
-    \begin{equation}
+    \begin{align}
         |F_{n+1}(p)|\le9|F_n(p)|,
         \qquad |F_n(p)|\le9^n.
         \label{eq:area_law_repair_descendant_count}
-    \end{equation}
-\end{lemma}
+    \end{align}
+\end{theorem}
 \begin{proof}\leanok
-    \uses{lem:area_law_repair_parent_offset,lem:area_law_repair_finite_marks}
+    \uses{thm:area_law_repair_parent_offset,thm:area_law_repair_finite_marks}
     Each $F_n(p)$ is a subset of the finite mark family $K_{i+n}$.
     The parent of a descendant in $F_{n+1}(p)$ belongs to $F_n(p)$ by the
     defining recursion for the ancestor map. Its parent and offset
@@ -476,30 +476,30 @@ by the strict inequalities.
 
 % Source: 10-geometry.tex, initial marks, lines 325--363, and
 % geometry:repair-induction, termination argument, lines 538--541.
-\begin{lemma}[A common empty generation]
-    \label{lem:area_law_repair_common_empty_generation}
+\begin{theorem}[A common empty generation]
+    \label{thm:area_law_repair_common_empty_generation}
     \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.exists_isEmpty_markIndex}
     \leanok
     \uses{lem:area_law_repair_metric_invariants,
-        lem:area_law_repair_finite_marks}
+        thm:area_law_repair_finite_marks}
     Under the hypotheses of
     Lemma~\ref{lem:area_law_repair_metric_invariants}, there is a
     generation $N\ge0$ for which $K_N=\varnothing$. The generation $N$
     may depend on the initial family.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
     \uses{lem:area_law_repair_metric_invariants,
-        lem:area_law_repair_finite_marks}
+        thm:area_law_repair_finite_marks}
     Write $S_j(q)$ for the scale of a mark $q\in K_j$. The initial family
     $K_0$ is finite, so choose $M\in\mathbb R$ with $S_0(p)\le M$ for
     every $p\in K_0$. This also applies when $K_0$ is empty. Since
     $S_*>0$, choose $N$ with $M<S_*2^N$. If $q\in K_N$, the lower scale
     bound and the repeated halving estimate give
-    \begin{equation}
+    \begin{align}
         S_*2^N\le S_N(q)2^N
         \le S_0\bigl(\alpha_{0,N}(q)\bigr)\le M,
         \label{eq:area_law_repair_common_empty_contradiction}
-    \end{equation}
+    \end{align}
     a contradiction.
 \end{proof}
 

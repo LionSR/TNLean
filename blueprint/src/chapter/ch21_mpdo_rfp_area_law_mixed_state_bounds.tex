@@ -84,7 +84,7 @@
 \end{lemma}
 \begin{proof}\leanok
     \uses{def:is_sal, lem:finite_interval_constancy}
-    The defining condition supplies $I_m=I_{m+1}$ throughout the interval
+    The defining condition gives $I_m=I_{m+1}$ throughout the interval
     $1\le m<\lfloor N/2\rfloor$. Apply
     Lemma~\ref{lem:finite_interval_constancy}.
 \end{proof}
@@ -430,7 +430,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     \uses{def:is_rfp_via_ts}
     Let $M$ be in normalized BNT-refined horizontal form, generate positive
     semidefinite ring operators, and satisfy the local renormalization
-    fixed-point equations. This horizontal hypothesis is stronger than literal
+    fixed-point equations. This horizontal hypothesis is stronger than
     CPSV canonical form.
     Then $\tr\rho^{(N)}(M)\neq0$ for every $N\geq1$.
 \end{lemma}
@@ -481,7 +481,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
     Theorem~\ref{thm:mpdo_rfp_implies_sal}.
 \end{proof}
 
-\begin{theorem}[Trace-normalized renormalization fixed points have literal ZCL and SAL]
+\begin{theorem}[Trace-normalized renormalization fixed points have ZCL and SAL]
     \label{thm:mpdo_rfp_implies_zcl_and_sal}
     \lean{MPOTensor.physTraceTransfer_sq_of_isRFPViaTS}
     \leanok
@@ -499,11 +499,11 @@ The corresponding generic result is proved in the companion quantum-channel volu
     $\mathcal T_M^2=\mathcal T_M$ for the physical-trace transfer. If
     $\mathcal T_M=0$, then
     $\tr[\rho^{(1)}(M)]=\tr(\mathcal T_M)=0$, contradicting nonvanishing at
-    length one. Thus the literal idempotence is nontrivial, and
+    length one. Thus the idempotence is nontrivial, and
     Theorem~\ref{thm:mpdo_rfp_implies_sal} gives saturation of the area law.
 \end{proof}
 
-\begin{corollary}[Horizontal renormalization fixed points have literal ZCL and SAL]
+\begin{corollary}[Horizontal renormalization fixed points have ZCL and SAL]
     \label{cor:mpdo_horizontal_rfp_implies_zcl_and_sal}
     \leanok
     \uses{lem:mpdo_rfp_positive_length_trace_nonzero, thm:mpdo_rfp_implies_zcl_and_sal, cor:mpdo_horizontal_rfp_implies_sal}
@@ -836,7 +836,7 @@ The corresponding generic result is proved in the companion quantum-channel volu
 
     Consequently, if $M$ is an LPDO, $N\geq1$, and
     $\tr\rho^{(N)}(M)\neq0$, then its local-purification representation
-    supplies a bond dimension $D'$ satisfying this estimate. The quantity
+    gives a bond dimension $D'$ satisfying this estimate. The quantity
     $D'$ is the bond dimension of the purifying MPS, not the MPO bond
     dimension $D$.
 \end{theorem}

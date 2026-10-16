@@ -15,10 +15,10 @@
 \begin{proof}
     \leanok
     The one-site map $U$ is an isometry. The preceding range identity
-    therefore identifies the physical projector with the isometric transport
+    therefore identifies the physical projector with the isometric image
     of the virtual bond projector:
     $P_2 =U^{\otimes2}P_\varphi (U^*)^{\otimes2}$.
-    On three sites, multiplication of the two adjacent transports cancels the
+    On three sites, multiplication of the two adjacent conjugates cancels the
     middle factors by $U^*U=1$. Consequently their products are
     \begin{align}
          & U^{\otimes3}P_{01}P_{12}(U^*)^{\otimes3},
@@ -56,14 +56,14 @@
             \tn[physical=none, label pos=s]{\varphi_{12}} &
             \tn[skin=box]{U_2}
             \tndeclare{species}{support}{hue=source:red}
-            \tndeclare{species}{transported}{hue=source:blue}
+            \tndeclare{species}{lifted}{hue=source:blue}
             \tnmark[form=enclosure, species=support, tint, label pos=s]
             {(1,2)}{$\supp(P_{01})$}
             \tnmark[form=enclosure, species=support, tint, label pos=s]
             {(1,4)}{$\supp(P_{12})$}
-            \tnmark[form=enclosure, species=transported, label pos=nw]
+            \tnmark[form=enclosure, species=lifted, label pos=nw]
             {(1,1) .. (1,3)}{$\supp((P_2)_{01})$}
-            \tnmark[form=enclosure, species=transported, label pos=ne]
+            \tnmark[form=enclosure, species=lifted, label pos=ne]
             {(1,3) .. (1,5)}{$\supp((P_2)_{12})$}
         \end{tenkz}
     \end{center}
@@ -264,14 +264,14 @@
     Idempotency and commutation are
     Theorem~\ref{thm:appendixB_overlapping_two_site_commutation}. The two
     coefficient representatives are $q_2(A)$, and
-    Theorem~\ref{thm:three_site_ground_space_adjacent_parent_kernels} supplies
+    Theorem~\ref{thm:three_site_ground_space_adjacent_parent_kernels} gives
     the remaining kernel equation.
     % Source-scope note: this Appendix D corollary is not the argument printed
     % for RFP => NNCPH.  The proof at source lines 1305--1307 instead refers
     % directly to the structural characterization.
 \end{proof}
 
-\begin{theorem}[Transport of the three-site commutator]
+\begin{theorem}[Chain embedding of the three-site commutator]
     \label{thm:three_site_commutator_chain_transport}
     \lean{MPSTensor.cyclicRestrictₗ_three_localTerm_left}
     \lean{MPSTensor.cyclicRestrictₗ_three_localTerm_right}
@@ -309,7 +309,7 @@
     % elaborations.  The old ring schematic added unsupported source ink.
     Thus the same local $A\!X\!B$ calculation is placed at every cyclic
     translate through the two restriction identities above.
-    The hypothesis $N>2$ is essential to this transport: at $N=2$ the two
+    The hypothesis $N>2$ is essential to this translation: at $N=2$ the two
     cyclic windows contain the same sites in opposite orders. This case
     is not part of \cite[Theorem~3.10]{Cirac2016MPDO_arXiv}.
 \end{theorem}
@@ -361,7 +361,7 @@
 
 \begin{proof}
     \leanok
-    The Appendix~B structural theorem supplies a datum whose adjacent
+    The Appendix~B structural theorem gives a datum whose adjacent
     translated parent interactions commute by
     Theorem~\ref{thm:appendixB_adjacent_chain_commutation}.
     Lemma~\ref{lem:nncph_from_adjacent_two_site_commutation} gives pairwise
@@ -389,7 +389,7 @@
 
 \begin{proof}
     \leanok
-    The idempotency clauses are supplied by
+    The idempotency clauses follow from
     Lemma~\ref{lem:appendixB_qax_qxb_idempotent}. The only remaining clause
     in Definition~\ref{def:overlapping_two_site_supports} is exactly the
     displayed lifted commutator.
@@ -401,9 +401,9 @@
     \lean{MPSTensor.AppendixBStructuralData.localTerm_two_three_zero_one_commute_of_appendixD2_identified_projectors}
     \leanok
     \uses{def:overlapping_two_site_supports, def:appendixB_qax, lem:appendixB_overlapping_condition_parent_terms}
-    Let $Q_{AX}$ and $Q_{XB}$ be the two-site coefficient-space transports of
+    Let $Q_{AX}$ and $Q_{XB}$ be the two-site coefficient-space images of
     source projectors satisfying the Definition~D.2 local condition on
-    $A X B$. If these transported projectors agree with the Appendix~B
+    $A X B$. If these transferred projectors agree with the Appendix~B
     coefficient representatives,
     \begin{align}
         Q_{AX}
@@ -503,7 +503,7 @@
     then the corresponding first two translated length-two local terms on the
     three-site window commute:
     $h_0^{(3)}(A,2)h_1^{(3)}(A,2) = h_1^{(3)}(A,2)h_0^{(3)}(A,2)$.
-    The same conclusion holds if one supplies a Definition~D.2-shaped local
+    The same conclusion holds given a Definition~D.2-shaped local
     condition whose two operators are these coefficient-space representatives,
     rather than the source projectors themselves.
 \end{lemma}
@@ -511,7 +511,7 @@
 \begin{proof}
     \leanok
     The lifted commutator, together with the Appendix~B idempotency already
-    recorded above, gives the overlapping two-site commutation datum. A supplied
+    recorded above, gives the overlapping two-site commutation datum. A given
     Definition~D.2-shaped local condition on the coefficient representatives
     implies the same conclusion by retaining its commutation clause and not using
     the kernel-intersection condition
