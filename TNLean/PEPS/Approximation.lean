@@ -123,6 +123,7 @@ import TNLean.PEPS.Approximation.DyadicBulkStepFloors
 import TNLean.PEPS.Approximation.DyadicBulkSteps
 import TNLean.PEPS.Approximation.DyadicCentralBirthChange
 import TNLean.PEPS.Approximation.DyadicChamberSampling
+import TNLean.PEPS.Approximation.DyadicChangeChains
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingConstants
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingRewrite
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingStep
@@ -177,6 +178,7 @@ import TNLean.PEPS.Approximation.DyadicRoutingPEPS
 import TNLean.PEPS.Approximation.DyadicSampledGuides
 import TNLean.PEPS.Approximation.DyadicSmallPatchCovers
 import TNLean.PEPS.Approximation.DyadicSuppliedPatchSteps
+import TNLean.PEPS.Approximation.DyadicTreatedFrameBoundary
 import TNLean.PEPS.Approximation.DyadicTreatedFrameDescriptions
 import TNLean.PEPS.Approximation.DyadicTreatedFrames
 import TNLean.PEPS.Approximation.DyadicTreatedTrueVertices
