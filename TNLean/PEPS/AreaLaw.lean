@@ -47,6 +47,7 @@ import TNLean.PEPS.AreaLaw.GraphNeighborhoodCutClearance
 import TNLean.PEPS.AreaLaw.GraphPropagation
 import TNLean.PEPS.AreaLaw.InitialBoxEstimate
 import TNLean.PEPS.AreaLaw.InitialBuffer
+import TNLean.PEPS.AreaLaw.InitialBufferReal
 import TNLean.PEPS.AreaLaw.InitialRoundedCollarEntropy
 import TNLean.PEPS.AreaLaw.InitialSafeRectangleEntropy
 import TNLean.PEPS.AreaLaw.InitialWeakRectangleShellEntropy

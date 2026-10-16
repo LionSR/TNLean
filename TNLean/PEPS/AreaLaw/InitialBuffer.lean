@@ -11,8 +11,9 @@ import QICLean.Analysis.HarmonicWeights
 /-!
 # Conditional entropy in a buffered rectangle
 
-Lemma 3.2 of the area-law manuscript: for a gapped ground vector of a finite-range lattice
-Hamiltonian, a cut `A`, a safe rectangle `Q` and a rectangle `Q₀` of size at most `r` whose
+The integer-clearance specialization of Lemma 3.2 of the area-law manuscript: for a gapped
+ground vector of a finite-range lattice Hamiltonian, a cut `A`, a safe rectangle `Q` and a
+rectangle `Q₀` of size at most `r` whose
 padding `Q₀^{+C_pad r}` lies in `Q`, the region `X = A ∩ Q₀` and its buffer
 `T = (A ∩ Q₀^{+C_pad r}) \ X` satisfy `S(X | T) ≤ S(X)/2 + C_buf r`, with `C_pad` and `C_buf`
 depending only on `q, R, J, Δ`.
@@ -24,9 +25,13 @@ This module supplies its lattice hypotheses: the nested contours
 budgets `≤ C (r + d_j)`, the harmonic weights `a_j = 2/(Z_r (r + d_j))` of total mass two, and
 the choice of `C_pad` making `Z_r` large uniformly in `r`.
 
+The full statement for real clearance is proved by
+`exists_condEntropy_le_initialBuffer_real` in `InitialBufferReal`.
+
 ## Main results
 
-* `exists_condEntropy_le_initialBuffer`: Lemma 3.2 (`lem:initial-buffer`).
+* `exists_condEntropy_le_initialBuffer`: the integer-clearance specialization of
+  Lemma 3.2 (`lem:initial-buffer`).
 
 ## References
 
@@ -413,12 +418,13 @@ theorem condEntropy_le_initialBuffer_of_constants {q R : ℕ} (hq : 1 ≤ q) {J 
   have := add_le_add herr hlog
   linarith
 
-/-- **Lemma 3.2: conditional entropy in a buffered rectangle** (area-law manuscript,
+/-- **Integer-clearance specialization of Lemma 3.2: conditional entropy in a buffered
+rectangle** (area-law manuscript,
 `lem:initial-buffer`, `02-initial.tex`, lines 240–256). For local dimension `q ≥ 1`, range
 `R`, term norm bound `J ≥ 0` and gap `Δ > 0` there are an integer `C_pad ≥ 1` and a constant
-`C_buf ≥ 0` with the following property, for every safety parameter `D₀ > 2R + 10`. Let `Ω` be a
-gapped ground vector of a finite-range Hamiltonian on a finite domain, `A` a cut, `Q` a safe
-rectangle, `r ≥ 1`, and `Q₀` a rectangle of size at most `r` with `Q₀^{+C_pad r} ⊆ Q`. Then for
+`C_buf ≥ 0` with the following property, for every natural safety parameter `D₀ > 2R + 10`.
+Let `Ω` be a gapped ground vector of a finite-range Hamiltonian on a finite domain, `A` a cut,
+`Q` a safe rectangle, `r ≥ 1`, and `Q₀` a rectangle of size at most `r` with `Q₀^{+C_pad r} ⊆ Q`. Then for
 `X = A ∩ Q₀` and `T = (A ∩ Q₀^{+C_pad r}) \ X`,
 `S(X | T) = S(X ∪ T) - S(T) ≤ S(X)/2 + C_buf r`. -/
 theorem exists_condEntropy_le_initialBuffer (q R : ℕ) (hq : 1 ≤ q) {J Δ : ℝ} (hJ : 0 ≤ J)

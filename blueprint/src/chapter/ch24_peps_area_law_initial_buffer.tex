@@ -1,12 +1,12 @@
 \section{Conditional entropy in a buffered rectangle}
 \label{sec:area_law_initial_buffer}
 
-We establish~\cite[Lemma~3.2]{OpenAI2026AreaLaw} on the finite domains of
-Definition~\ref{def:area_law_hamiltonian}. An integer rectangle is a product
+The buffered-rectangle estimate of~\cite[Lemma~3.2]{OpenAI2026AreaLaw} concerns
+the finite domains of Definition~\ref{def:area_law_hamiltonian}. An integer rectangle is a product
 of two finite nonempty integer intervals; its size is the maximum of its side
 lengths, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
 
-\begin{definition}[Safe rectangles]
+\begin{definition}[Safe rectangles with integer clearance]
     \label{def:area_law_safe_rectangle}
     \lean{TNLean.PEPS.AreaLaw.IntRect,
         TNLean.PEPS.AreaLaw.IntRect.size,
@@ -30,8 +30,9 @@ lengths, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
     \leanok
     \uses{def:area_law_hamiltonian}
     Let $A\subseteq\Lambda$ and let $Z$ be the set of endpoints of the edges
-    crossing $A$. For $D_0>2R+10$, a rectangle $Q$ is safe if its sup-norm
-    distance to $Z$ exceeds $D_0\operatorname{size}(Q)$. The physical region of
+    crossing $A$. For an integer $D_0\ge0$, a rectangle $Q$ is safe if its sup-norm
+    distance to $Z$ exceeds $D_0\operatorname{size}(Q)$, with distance to the empty
+    set taken to be infinite. The physical region of
     an ambient rectangle $Q$ is $A\cap Q$.
 \end{definition}
 
@@ -42,7 +43,8 @@ lengths, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
         TNLean.PEPS.AreaLaw.card_crossingTerms_rectRegion_le}
     \leanok
     \uses{def:area_law_safe_rectangle}
-    Let $Q$ be safe and let $Q_0^{+d'}\subseteq Q$. An admissible support with
+    Let $D_0>R$ be an integer, let $Q$ be safe with parameter $D_0$,
+    and let $Q_0^{+d'}\subseteq Q$. An admissible support with
     a site of $A$ in $Q$ lies in $A$. If $d+R\le d'$, no admissible support is
     split by both $A\cap Q_0^{+d}$ and $A\cap Q_0^{+d'}$. If $R+1\le d'$, at most
     $8(R+1)\mu_R(\operatorname{size}(Q_0)+d')$ admissible supports are split by
@@ -73,14 +75,17 @@ lengths, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
 
 \begin{theorem}[Conditional entropy in a buffered rectangle]
     \label{thm:area_law_initial_buffer}
-    \lean{TNLean.PEPS.AreaLaw.exists_condEntropy_le_initialBuffer}
+    \lean{TNLean.PEPS.AreaLaw.exists_condEntropy_le_initialBuffer_real}
     \leanok
     \uses{def:area_law_safe_rectangle,def:area_law_ground_entropy}
     For $q\ge1$, $R$, $J\ge0$ and $\Delta>0$ there are an integer
-    $C_{\mathrm{pad}}\ge1$ and a constant $C_{\mathrm{buf}}$ with the following
-    property. Let $\Omega$ be a unit vector satisfying
-    (\ref{eq:area_law_ground_vector}) and (\ref{eq:area_law_projector_gap}), let
-    $Q$ be safe, let $r\ge1$, and let $Q_0$ be a rectangle of size at most $r$
+    $C_{\mathrm{pad}}\ge1$ and a constant $C_{\mathrm{buf}}\ge0$ with the following
+    property, uniformly over every real $D_0>2R+10$.
+    Let $\Omega$ be a unit vector satisfying
+    (\ref{eq:area_law_ground_vector}) and (\ref{eq:area_law_projector_gap}).
+    For a cut $A\subseteq\Lambda$, let $Z$ be the set of endpoints of its crossing edges.
+    Let $Q$ satisfy $\operatorname{dist}_\infty(Q,Z)>D_0\operatorname{size}(Q)$,
+    let $r\ge1$ be an integer, and let $Q_0$ be a rectangle of size at most $r$
     with $Q_0^{+C_{\mathrm{pad}}r}\subseteq Q$. For $X=A\cap Q_0$ and
     $T=(A\cap Q_0^{+C_{\mathrm{pad}}r})\setminus X$,
     \begin{align}
@@ -102,7 +107,9 @@ lengths, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
         TNLean.PEPS.AreaLaw.harmonic_weight_le_half,
         TNLean.PEPS.AreaLaw.harmonic_weight_ratio_le,
         TNLean.PEPS.AreaLaw.le_tailRadius_of_le}
-    Put $D=R+1$, $m=\lfloor(C_{\mathrm{pad}}-1)r/D\rfloor$ and
+    Set $D=R+1$. Since $D<D_0$, the given clearance implies integer
+    clearance at $D$, so the contour estimates apply.
+    Put $m=\lfloor(C_{\mathrm{pad}}-1)r/D\rfloor$ and
     $X_j=A\cap Q_0^{+d_j}$ with $d_j=r+jD$, $1\le j\le m$. By
     Theorem~\ref{thm:area_law_buffer_contours} every admissible support splits
     at most one $X_j$, and the number of split supports and the parameter

@@ -8235,3 +8235,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   concerns the literal belt summand, and supplies no count of all initial
   primary identifiers. These are two occurrences across two files; no third
   occurrence has yet been recorded.
+
+### Uniform padding constants for buffered rectangles — candidate
+
+- **Pattern:** Choose a real threshold as the maximum of the normalization,
+  energy, and tail thresholds. Choose the padding constant by taking the
+  natural ceiling of an exponential expression, then obtain the entropy
+  constant from the same choices before introducing the clearance parameter
+  and the physical data.
+- **Occurrences:** `exists_condEntropy_le_initialBuffer` in
+  `TNLean/PEPS/AreaLaw/InitialBuffer.lean` and
+  `exists_condEntropy_le_initialBuffer_real` in
+  `TNLean/PEPS/AreaLaw/InitialBufferReal.lean`.
+- **Possible next abstraction:** If a third proof needs the same choices,
+  first consider an existence lemma for the numerical padding and entropy
+  constants and their inequalities. The constants must remain uniform in
+  the clearance and physical data. These are two occurrences across two
+  files; no promotion or proof refactor is proposed.
