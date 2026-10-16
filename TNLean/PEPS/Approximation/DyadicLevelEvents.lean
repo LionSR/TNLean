@@ -127,7 +127,7 @@ theorem directRepainting_hasSourceBoundedChange {K₀ ε₀ ν a D : ℝ}
 /-- **No true vertex at the root level.** The guide of the root level carries one label inside
 the root square and the placeholder outside, so it has no true vertex.
 
-Polynomial-PEPS manuscript, `06-geometry.tex`, lines 109–111 and 658–661: "At the beginning the
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 109–111 and 661–662: "At the beginning the
 main guide has only the root label and the exterior placeholder, so it has no true vertex". -/
 theorem levelVertices_self (done : Set (ℤ × ℤ)) : levelVertices k k done = ∅ := by
   ext z
