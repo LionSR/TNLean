@@ -30,7 +30,7 @@
     \leanok
     \uses{def:peps_two_by_two_graph_site}
     Identify $G\times G$ with $G\times G^{\{*\}}$ by
-    $(a,b)\mapsto(a,(*\mapsto b))$. Express the actual paired coarse tensor
+    $(a,b)\mapsto(a,(*\mapsto b))$. Express the paired coarse tensor
     in these incident bundle coordinates, without changing its coefficients
     or physical alphabet $P^4$. Reading the four incident edges and the two
     labels on each edge identifies this boundary with all eight separate
@@ -48,7 +48,7 @@
     \uses{def:peps_two_by_two_bundle_coordinates,
         thm:peps_two_by_two_graph_contraction}
     Suppose both coarse periods are at least three. The fine state after
-    physical grouping is exactly the actual bundled graph state.
+    physical grouping is the bundled graph state.
     The eight-label boundary bijection intertwines simultaneous left
     translation and leaves the physical block map unchanged. Thus the
     bundled incident representation is precisely the eight-leg regular
@@ -87,24 +87,24 @@
     entries $\delta_{a,gb}$ as the incoming matrix. The four-leg incident
     bijection therefore intertwines both representations and preserves
     their coordinate inner products. Apply the canonical support
-    equivalence to the transported original tensor.
+    equivalence to the incident-coordinate original tensor.
 \end{proof}
 
-\begin{theorem}[G-isometry of actual bundled coarse sites]%
+\begin{theorem}[G-isometry of bundled coarse sites]%
     \label{thm:peps_two_by_two_bundled_isometry}
     \lean{TNLean.PEPS.isGIsometric_twoByTwoBundledGraphSite}
     \leanok
     \uses{thm:peps_two_by_two_isometry,
         thm:peps_two_by_two_bundle_coordinates,
         thm:peps_g_isometry_coordinate_equiv}
-    If every fine site is regular $G$-isometric, then every actual bundled
+    If every fine site is regular $G$-isometric, then every bundled
     coarse site is $G$-isometric for its bundled incident representation.
     There is no independent hypothesis about the blocked Gram matrix.
 \end{theorem}
 
 \begin{proof}\leanok
     The explicit four-site Gram calculation gives G-isometry on all eight
-    separate boundary labels. Transport it through the actual boundary
+    separate boundary labels. Transfer it across the boundary
     coordinate equivalence.
 \end{proof}
 
@@ -120,13 +120,13 @@
         def:peps_two_by_two_bundle_coordinates}
     Let $\Psi_a$ be the original fine bond-indexed torus state. Let $W$
     be its full physical regrouping unitary, and let $T_B=\bigotimes_vB_v$
-    be the product map of the actual bundled coarse tensors. Define
+    be the product map of the bundled coarse tensors. Define
     $S_a=W^{-1}(\operatorname{ran}T_B)$. Restricting $W$ gives an isometric
     equivalence $S_a\cong\operatorname{ran}T_B$. All physical coordinates
     remain in their original ambient spaces.
 \end{definition}
 
-\begin{theorem}[Derived support membership of the actual fine state]%
+\begin{theorem}[Derived support membership of the fine state]%
     \label{thm:peps_two_by_two_fine_support}
     \lean{TNLean.PEPS.twoByTwoPhysicalRegroupingIsometry_fineState,
         TNLean.PEPS.twoByTwoFineState_mem_physicalSupport}
@@ -134,9 +134,9 @@
     \uses{def:peps_two_by_two_fine_support,
         thm:peps_two_by_two_bundle_coordinates,
         thm:peps_graph_physical_support_transport}
-    The physical regrouping satisfies $W\Psi_a=\Psi_B$, and the actual
+    The physical regrouping satisfies $W\Psi_a=\Psi_B$, and the
     fine state belongs to $S_a$. These statements require no symmetry or
-    supplied support hypothesis.
+    additional support hypothesis.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -163,7 +163,7 @@
         (\sqrt{|G|})^{|E|}\,\Psi_0\otimes\Omega,
         \qquad \|\Omega\|^2=1.
     \end{align}
-    Here $\Psi_0$ is the actual canonical regular PEPS on the coarse
+    Here $\Psi_0$ is the canonical regular PEPS on the coarse
     graph, and $\Omega$ is one normalized maximally entangled group-label
     pair on each coarse edge. Explicitly,
     $I=U(\bigotimes_vc_v^{-1/2}B_v^*)W$ on $S_a$, where $U$ takes the
@@ -178,9 +178,9 @@
 
 \begin{proof}\leanok
     Apply physical support accessibility and regular bundle separation to
-    the actual coarse graph tensors, whose G-isometry has been derived
+    the coarse graph tensors, whose G-isometry has been derived
     from the fine tensors. Compose its support isometry with the restricted
-    physical regrouping $W$. The exact state equality supplies the required
+    physical regrouping $W$. The state equality provides the required
     state argument, and its support membership was derived separately.
     Each unnormalized surplus equality vector is $\sqrt{|G|}$ times its
     normalized Bell vector, producing the displayed factor on all edges.

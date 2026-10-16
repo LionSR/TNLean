@@ -2,13 +2,13 @@
 % Region-transport covariance and torus translation covariance
 %======================================================================
 
-\begin{theorem}[Transport of the complement-side blocked weight]%
+\begin{theorem}[Relabelling of the complement-side blocked weight]%
     \label{thm:peps_regionComplementWeight_transport}
     \lean{TNLean.PEPS.regionComplementWeight_transport}
     \leanok
     \uses{def:peps_tensor_transport, def:peps_regionComplementTwoBlock}
     Let $\phi:G\simeq G'$ be a graph isomorphism. The blocked weight of the
-    transported tensor $A^\phi$ over the complement of the image region, read at
+    relabelled tensor $A^\phi$ over the complement of the image region, read at
     the image complement boundary configuration and the image complement physical
     configuration, equals the blocked weight of $A$ over $V\setminus R$:
     \begin{align}
@@ -19,11 +19,11 @@
 \end{theorem}
 \begin{proof}\leanok
     The image of the complement of $R$ is the complement of the image of $R$, and
-    after this identification the blocked weight transports along $\phi$ by the
+    after this identification the blocked weight transforms along $\phi$ by the
     change of summation variables on virtual configurations.
 \end{proof}
 
-\begin{theorem}[Transport preserves agreement away from a bond]%
+\begin{theorem}[Boundary relabelling preserves agreement away from a bond]%
     \label{thm:peps_sameAwayFromBond_regionBoundaryConfigMap}
     \lean{TNLean.PEPS.sameAwayFromBond_regionBoundaryConfigMap}
     \leanok
@@ -46,7 +46,7 @@
     \leanok
     \uses{def:peps_regionInsertedCoeff, def:peps_tensor_transport, thm:peps_regionComplementWeight_transport, thm:peps_sameAwayFromBond_regionBoundaryConfigMap}
     Let $\phi:G\simeq G'$ be a graph isomorphism and let $f$ be a crossing edge
-    of $R$. The region insertion coefficient of the transported tensor $A^\phi$
+    of $R$. The region insertion coefficient of the relabelled tensor $A^\phi$
     over the image region, with $M$ inserted on the image of $f$ and the physical
     configurations relabelled by $\phi$, equals the region insertion coefficient
     of $A$ over $R$, with $M$ carried back to the bond of $A$ at $f$:
@@ -62,7 +62,7 @@
     The two crossing-label sums reindex by the boundary action of $\phi$, the
     agreement-away-from-$f$ constraint is preserved by
     Theorem~\ref{thm:peps_sameAwayFromBond_regionBoundaryConfigMap}, the region
-    weight transports along $\phi$, and the complement weight transports by
+    weight transforms along $\phi$, and the complement weight transforms by
     Theorem~\ref{thm:peps_regionComplementWeight_transport}. The inserted matrix
     entry is read at the two boundary values, which the bond-dimension
     identification carries to the corresponding entry of $\phi^{*}M$.
@@ -84,7 +84,7 @@
         \notag
     \end{align}
     This applies to any tensor equality $A_1=A_2$, including the equality between
-    a translation-invariant tensor and its transported copy.
+    a translation-invariant tensor and its translated copy.
 \end{theorem}
 \begin{proof}\leanok
     Substituting the equality of tensors identifies the two coefficients, and the
@@ -104,7 +104,7 @@
 \end{theorem}
 \begin{proof}\leanok
     Translation carries the reference edge to its image, and translation
-    invariance fixes the tensor under transport, so the bond dimension is
+    invariance fixes the tensor under translation, so the bond dimension is
     unchanged.
 \end{proof}
 
@@ -133,12 +133,12 @@
     carries the result back to the translated bond.
 \end{theorem}
 \begin{proof}\leanok
-    Translation invariance identifies the transported tensor with the original,
+    Translation invariance identifies the translated tensor with the original,
     so Theorem~\ref{thm:peps_regionInsertedCoeff_transport} carries the reference
     coefficient of $A$ to the translated edge with no change of tensor;
-    Theorem~\ref{thm:peps_regionInsertedCoeff_congrTensor} mediates the literal
-    and transported tensors. Applying the reference identity for $g$ and
-    transporting back for $B$ in the same way gives
+    Theorem~\ref{thm:peps_regionInsertedCoeff_congrTensor} relates the original
+    and translated tensors. Applying the reference identity for $g$ and
+    pulling back for $B$ in the same way gives
     (\ref{eq:peps_translate_coeff}), the inserted matrix being carried across
     the equal bond dimensions of
     Theorem~\ref{thm:peps_bondDim_boundaryEdgeMap_translate}.
@@ -354,7 +354,7 @@
             \tn[label pos=s]{\widetilde B_R} & \tn[label pos=s]{\widetilde B}
         \end{tenkz}.
     \end{center}
-    Applying the left inverse supplied by injectivity of the block
+    Applying the left inverse given by injectivity of the block
     $A_R=\lambda_R\widetilde B_R$ gives
     $A_v=(\lambda_S/\lambda_R)\widetilde B_v$.
 \end{remark}
@@ -389,7 +389,7 @@
     action of the incident matrices.
 \end{theorem}
 \begin{proof}\leanok
-    Gauge consistency supplies the edge gauges directly, which combine with the
+    Gauge consistency yields the edge gauges directly, which combine with the
     identified bond dimensions to yield the gauge equivalence.
 \end{proof}
 

@@ -1,4 +1,4 @@
-\begin{definition}[Equivariant permutations of actual cycle coordinates]%
+\begin{definition}[Equivariant permutations of cycle coordinates]%
     \label{def:peps_regular_cycle_permutation}
     \lean{TNLean.PEPS.regularRegionCyclePermutation,
         TNLean.PEPS.regularRegionCyclePhysicalPermutation}
@@ -6,14 +6,14 @@
     \uses{def:peps_regular_region_coordinates}
     Let $G$ be finite, let $R$ be a finite graph region, and choose a spanning
     tree $T$ and root $o$. Write $J$ for the internal bonds outside $T$ and
-    $E$ for the actual coordinate bijection from half-edge configurations to
+    $E$ for the coordinate bijection from half-edge configurations to
     $(y,a,r,z)$, with $z\in G^J$. For a permutation $\phi$ of $G^J$, define
     $C_\phi(y,a,r,z)=(y,a,r,\phi z)$ and
     $P_\phi=E^{-1}C_\phi E$. Let $Q_\phi$ be the permutation matrix which
     sends $|\alpha\rangle$ to $|P_\phi\alpha\rangle$.
 \end{definition}
 
-\begin{theorem}[Permutation of actual inserted-cycle columns]%
+\begin{theorem}[Permutation of inserted-cycle columns]%
     \label{thm:peps_regular_cycle_permutation_columns}
     \lean{TNLean.PEPS.regularProjectorTwistedRegionMatrix_cyclePermutation,
         TNLean.PEPS.regularProjectorTwistedRegionMatrix_cyclePhysicalPermutation}
@@ -23,7 +23,7 @@
     $\phi(xzx^{-1})=x\phi(z)x^{-1}$ for every $z\in G^J$ and $x\in G$.
     Let $u_\omega$ insert $\omega_e$ on each bond $e\in J$ and the identity
     on all other bonds. For every coordinate tuple $c$, residual assignment
-    $\omega$ and boundary configuration $\theta$, the actual canonical
+    $\omega$ and boundary configuration $\theta$, the canonical
     contractions satisfy
     \begin{align}
         M_R(u_{\phi\omega})_{E^{-1}C_\phi c,\theta}
@@ -33,7 +33,7 @@
     \end{align}
 \end{theorem}
 \begin{proof}\leanok
-    In actual tree coordinates the coefficient is
+    In tree coordinates the coefficient is
     $|G|^{-|R|}\sum_x\mathbf 1_{y=x\theta,\ z=x\omega x^{-1}}$.
     Equivariance and injectivity of $\phi$ preserve each indicator.
     The permutation matrix acts on coefficient functions by
@@ -41,7 +41,7 @@
     stated direction.
 \end{proof}
 
-\begin{theorem}[Cycle permutations preserve the actual invariant support]%
+\begin{theorem}[Cycle permutations preserve the invariant support]%
     \label{thm:peps_regular_cycle_permutation_support}
     \lean{TNLean.PEPS.regularRegionCyclePermutation_coordinateTranslation,
         TNLean.PEPS.regularRegionCyclePhysicalPermutation_commute_vertexTranslation,
@@ -49,7 +49,7 @@
     \leanok
     \uses{def:peps_regular_cycle_permutation,
         thm:peps_cycle_controlled_local_support,lem:peps_regular_projector_commutation}
-    Under the same equivariance hypothesis, $C_\phi$ commutes with the actual
+    Under the same equivariance hypothesis, $C_\phi$ commutes with the
     independent vertex translations in tree coordinates. Consequently
     $Q_\phi$ commutes with every physical vertex translation and with the
     product of local regular invariant projectors.
@@ -57,7 +57,7 @@
 \begin{proof}\leanok
     A vertex translation acts on every cycle by conjugation at the root.
     Its action on $y,a,r$ is independent of the cycle labels, so equivariance
-    gives commutation in coordinates. Transport through $E$ gives commutation
+    gives commutation in coordinates. Conjugation by $E$ gives commutation
     on the original half-edge labels. Averaging the vertex translations gives
     the product projector.
 \end{proof}
@@ -78,7 +78,7 @@
         W_\phi\Psi_R(u_\omega,\theta)
         =\Psi_R(u_{\phi\omega},\theta).
     \end{align}
-    These are actual open contractions. This is an auxiliary consequence of the
+    These are open contractions. This is an auxiliary consequence of the
     accessible-coordinate argument in \cite[Sections 6.2--6.3]{Schuch2010PEPS}; it
     does not identify $\phi$ with a prescribed string deformation or braid.
 \end{theorem}
@@ -87,5 +87,5 @@
     $c>0$ and the genuine product projector $P$. The permutation matrix is
     unitary and commutes with $P$, so $A$ and $AQ_\phi$ have equal Gram
     matrices. Their physical unitary extension gives $W_\phi A=AQ_\phi$.
-    Apply this identity to each actual canonical column.
+    Apply this identity to each canonical column.
 \end{proof}

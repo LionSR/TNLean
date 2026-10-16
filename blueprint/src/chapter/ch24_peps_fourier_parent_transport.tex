@@ -77,7 +77,7 @@ Every open contraction retains its full virtual boundary coefficient.
         TNLean.PEPS.graphRegionCoordinateMatrix_open_superposition}
     \leanok
     \uses{def:peps_fourier_regional_matrix}
-    Let $a_R^U(\theta)$ and $a_R^L(\eta)$ be the actual unweighted
+    Let $a_R^U(\theta)$ and $a_R^L(\eta)$ be the unweighted
     open averaging contractions in regional bond coordinates.
     If $Q^\dagger Q=I$ and $L(g)=QU(g)Q^\dagger$, then
     \begin{align}
@@ -125,12 +125,12 @@ Every open contraction retains its full virtual boundary coefficient.
     generator into the target span. Apply it also to $Q^\dagger$,
     using Theorem~\ref{thm:peps_fourier_reverse_coordinates}, to send
     every target range vector back into the source range.
-    The identity $Q_R(Q^\dagger)_R=I$ then supplies its preimage.
+    The identity $Q_R(Q^\dagger)_R=I$ then gives its preimage.
 \end{proof}
 
 \subsection{Exterior blocks and complete kernels}
 
-\begin{theorem}[The actual global Fourier blocks preserve local ranges]%
+\begin{theorem}[Global Fourier blocks preserve local ranges]%
     \label{thm:peps_fourier_exterior_blocks}
     \lean{TNLean.PEPS.regionOperatorBlock_graphNumberedBondMatrix_coordinates_maps,
         TNLean.PEPS.graphNumberedBondMatrix_coordinates_maps_regionParentGroundSpace}
@@ -162,7 +162,7 @@ Every open contraction retains its full virtual boundary coefficient.
         TNLean.PEPS.map_ker_regionParentHamiltonian_coordinates_eq}
     \leanok
     Suppose $Q^\dagger Q=I$ and $L(g)=QU(g)Q^\dagger$.
-    For supplied incident enumerations and any family of regions,
+    For given incident enumerations and any family of regions,
     \begin{align}
         \mathcal Q\mathcal P_{\mathcal R}(U) & =\mathcal P_{\mathcal R}(L),
                                              & \mathcal Q:\mathcal P_{\mathcal R}(U) & \xrightarrow{\ \cong\ }

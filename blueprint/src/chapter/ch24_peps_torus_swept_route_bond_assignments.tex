@@ -1,4 +1,4 @@
-\begin{definition}[Successive literal bond assignments on the endpoint route]%
+\begin{definition}[Successive bond assignments on the endpoint route]%
     \label{def:peps_torus_swept_route_bond_assignments}
     \lean{TNLean.PEPS.sweptPhysicalBRouteDirection,
         TNLean.PEPS.torusVacatingPlaquetteMove,
@@ -17,9 +17,9 @@
         \end{aligned}
     \]
     At a source plaquette write $B,V,T,L$ for its bottom rightward,
-    right upward, top rightward and left upward transports.
-    A right, upward, left or downward step respectively replaces its
-    shared transport by
+    right upward, top rightward, and left upward bond values.
+    A right, upward, left, or downward step respectively replaces its
+    shared bond value by
     \begin{align}
         TL B^{-1},\qquad VB L^{-1},\qquad T^{-1}VB,\qquad V^{-1}TL.
     \end{align}
@@ -40,7 +40,7 @@
         thm:peps_torus_directed_bond_update,thm:peps_torus_plaquette_holonomy}
     Each of the four elementary coefficient updates makes its source
     clockwise plaquette holonomy equal to the identity. For the specified
-    twelve-step assignment, the target plaquette is vacant in the actual
+    twelve-step assignment, the target plaquette is vacant in the
     preceding assignment at every step.
     The moving based flux equals $h$ at stages zero and one,
     $ghg^{-1}$ at stages two through eight, and
@@ -49,16 +49,16 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Clockwise plaquette transport is $B^{-1}V^{-1}TL$.
+    Clockwise plaquette holonomy is $B^{-1}V^{-1}TL$.
     Substitution of each displayed update gives the first assertion.
-    Starting from the literal initial string assignment, evaluate the
-    selected transport recursively at each stage. The target holonomies
+    Starting from the initial string assignment, evaluate the
+    selected bond values recursively at each stage. The target holonomies
     reduce to the identity, and the source holonomies reduce to the three
     displayed words. Injectivity of the translated finite coordinate
     envelope justifies these evaluations even at periodic seams.
 \end{proof}
 
-\begin{definition}[Actual final endpoint and partner-comparison walks]%
+\begin{definition}[Final endpoint and partner-comparison walks]%
     \label{def:peps_torus_swept_route_partner_walks}
     \lean{TNLean.PEPS.torusSweptPhysicalRouteFinalEndpoint,
         TNLean.PEPS.torusSweptPhysicalRouteAJointLoop,
@@ -72,15 +72,15 @@
     \[
         (-1,1),\quad(3,1),\quad(0,-2),\quad(1,-2).
     \]
-    Retain the actual original connector from $A_2$ to $A_1$.
+    Retain the original connector from $A_2$ to $A_1$.
     Compare the final neighbouring B partners along the rightward edge
     from $(0,-2)$ to $(1,-2)$.
     In each joint loop, traverse the partner loop along the connector
     first and then the loop at the chosen base. Consequently its
-    holonomy is the first based flux times the transported partner flux.
+    holonomy is the first based flux times the conjugated partner flux.
 \end{definition}
 
-\begin{theorem}[Actual reunion holonomies of the literal route]%
+\begin{theorem}[Reunion holonomies of the endpoint route]%
     \label{thm:peps_torus_swept_route_reunion_holonomy}
     \lean{TNLean.PEPS.regularWalkHolonomy_torusSweptPhysicalRoute_finalEndpoints,
         TNLean.PEPS.regularWalkHolonomy_torusSweptPhysicalRoute_finalConnectorA,
@@ -98,24 +98,24 @@
     \begin{align}
         (g^{-1},\ g,\ hghg^{-1}h^{-1},\ h^{-1}).
     \end{align}
-    The actual A connector has transport $h^{-1}g^{-1}$; hence the A1 loop
-    transported to A2 has flux $ghgh^{-1}g^{-1}$, and their joint loop has
+    The A connector has holonomy $h^{-1}g^{-1}$; hence the A1 loop
+    conjugated along the connector to A2 has flux $ghgh^{-1}g^{-1}$, and their joint loop has
     flux $hgh^{-1}g^{-1}$. The final B reunion connector has identity
-    transport and its partner-first joint loop has flux
+    holonomy and its partner-first joint loop has flux
     \begin{align}
         h(ghg^{-1}h^{-1})h^{-1}.
     \end{align}
     Its conjugacy class is that of the commutator, and its joint flux is
     trivial precisely when $g$ and $h$ commute.
     These assertions concern the recursively derived coefficient
-    assignment and actual comparison walks. Physical implementation of
+    assignment and comparison walks. Physical implementation of
     every step of the route remains a separate assertion.
 \end{theorem}
 
 \begin{proof}\leanok
-    Evaluate the four actual plaquette loops and both connectors from
-    the derived final transports. Along a connector $p$, partner-loop
-    transport is $H(p)^{-1}H(\ell)H(p)$. Concatenation reverses the
+    Evaluate the four plaquette loops and both connectors from
+    the derived final bond values. Along a connector $p$, the conjugated partner-loop
+    holonomy is $H(p)^{-1}H(\ell)H(p)$. Concatenation reverses the
     multiplication order, giving the stated joint products. Conjugation
     preserves the conjugacy class, and a group commutator is the identity
     exactly when its two arguments commute.
