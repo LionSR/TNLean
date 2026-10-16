@@ -1345,10 +1345,23 @@ no holes, this is the normalization of $\Omega$.
     vertex.
 \end{proof}
 
+\begin{definition}[A chain of a prescribed number of steps]
+    \label{def:peps_protocol_step_chain}
+    \lean{TNLean.PEPS.Approximation.IsStepChain}
+    \leanok
+    Let $\mathcal R$ be a binary relation on a set $X$, let $n\in\mathbb N$, and let
+    $a,b\in X$. A chain of $n$ steps from $a$ to $b$ is the assertion that there
+    exists a sequence $s\colon\mathbb N\to X$ such that
+    \begin{align}
+        s_0 & = a,\qquad s_n=b,\qquad
+        \forall j<n,\quad \mathcal R(s_j,s_{j+1}). \notag
+    \end{align}
+    No condition is imposed on the sequence after its $n$th term.
+\end{definition}
+
 \begin{lemma}[Chains of changes]
     \label{lem:peps_protocol_change_chains}
-    \lean{TNLean.PEPS.Approximation.IsStepChain,
-        TNLean.PEPS.Approximation.IsStepChain.refl,
+    \lean{TNLean.PEPS.Approximation.IsStepChain.refl,
         TNLean.PEPS.Approximation.IsStepChain.single,
         TNLean.PEPS.Approximation.IsStepChain.trans,
         TNLean.PEPS.Approximation.IsStepChain.map,
@@ -1361,17 +1374,42 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.isStepChain_aux,
         TNLean.PEPS.Approximation.hasSourceBoundedChange_of_hasPairChange}
     \leanok
-    \uses{thm:peps_protocol_level_frame_facts, thm:peps_protocol_lens_exchange_change}
-    Chains of $m$ and $n$ steps compose to a chain of $m+n$ steps. If adding one mark
-    of a list to any set of marks is a step, there is a chain of as many steps as marks
-    from no mark to all of them, and likewise for removing the marks. With a bulk step
-    between, these give a chain of $2m+1$ steps. A chain of bounded changes of the main
-    sheet, or of one auxiliary sheet, is a chain of bounded changes of the memory, and
-    so is a bounded change of the main and one auxiliary sheet
+    \uses{def:peps_protocol_step_chain, def:peps_protocol_treated_frame,
+        thm:peps_protocol_event_segments, thm:peps_protocol_lens_exchange_change}
+    For any binary relation, every state has a chain of zero steps to itself, and
+    every related pair has a chain of one step. Chains of $m$ and $n$ steps with a
+    common endpoint compose to a chain of $m+n$ steps. A map preserving the step
+    relation sends a chain to a chain of the same length, and replacing a length
+    by an equal natural number preserves the assertion.
+
+    Let a state $T(M)$ be assigned to each finite set of marks, and let a list of
+    marks have length $m$; repetitions are allowed. If adding any mark of the list
+    to any finite set is a step, there is a chain of $m$ steps from $T(\varnothing)$
+    to $T(M_*)$, where $M_*$ is the set of marks in the list. The analogous
+    removal hypothesis gives a chain from $T(M_*)$ to $T(\varnothing)$. If a second
+    family $T'(M)$ satisfies the removal hypothesis and there is a step from
+    $T(M_*)$ to $T'(M_*)$, the addition chain, that step, and the removal chain give
+    $2m+1$ steps from $T(\varnothing)$ to $T'(\varnothing)$.
+
+    For finite physical sites, local dimension $q\ge1$ and
+    $\lVert\Omega\rVert\le1$, fix a participant set $S$, natural bounds $r,K,r_s$
+    and a real error bound $\varepsilon$. A chain of bounded changes of the main
+    sheet lifts to a chain of the same length in the memory with any fixed list
+    of auxiliary sheets. For a duplicate-free list of auxiliary indices and an
+    index in that list, a change or chain of changes of that auxiliary sheet
+    lifts with the main sheet and all other auxiliary sheets fixed. A change of
+    the main sheet together with that auxiliary sheet likewise lifts to the
+    memory. Each lift preserves $S,r,K,r_s,\varepsilon$; the memory has no
+    additional registers and its additional scalar is $1$
     (\texttt{06-geometry.tex}, lines 328--339 and 572--583).
 \end{lemma}
 
 \begin{proof}\leanok
-    Concatenate the sequences of states. The memory changes are the lifts of one or
-    two sheets of the sheet stack, after a reordering of the sheets.
+    \uses{def:peps_protocol_step_chain, thm:peps_protocol_level_frame_facts}
+    Constant sequences give zero steps, a two-valued sequence gives one step,
+    and concatenation gives the sum of the lengths. Apply a relation-preserving
+    map to each term for the image chain. Induction on the list of marks adds or
+    removes one mark at a time; concatenate the two chains with the bulk step
+    to obtain $m+1+m=2m+1$ steps. For the memory, apply the one-sheet or two-sheet
+    lift to each change, using the norm bound on $\Omega$ and the scalar $1$.
 \end{proof}
