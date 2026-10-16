@@ -12,6 +12,7 @@ at revision \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
 \begin{theorem}[One uniform coefficient for actual template entropy inputs]
     \label{thm:template-source-entropy}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_template_source_entropy_bounds}
+    \leanok
     Fix $q\geq1$, an exponent $e>0$ and a safe-box coefficient $C_{\rm box}\geq0$.
     There is $C_e\geq0$, chosen before every finite domain, unit vector,
     cut, safety parameter, template and collar scale, with the following
@@ -31,6 +32,7 @@ at revision \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     The actual template scale and nonempty piece family imply $s_0\leq n$.
     The accepted safe dyadic coverings give core and shell coefficients
     \[
@@ -48,6 +50,7 @@ at revision \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
 \begin{theorem}[Physical entropy inputs conditional on the improved safe-box bound]
     \label{thm:template-final-source-entropy}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_template_final_source_entropy_bounds_of_boxEntropy}
+    \leanok
     Fix $q\geq1$, $D_0\geq1$ and $C_{\rm box}\geq0$.  Suppose the literal
     uniform safe-box function at fixed $q,R,J,\Delta,D_0$ satisfies
     $F_{\rm box}(r)\leq C_{\rm box}r^{1+e_*}$ for all $r\geq1$,
@@ -60,6 +63,8 @@ at revision \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
 \end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{thm:template-source-entropy}
     Each actual safe-rectangle entropy is bounded by the supremum defining
     $F_{\rm box}$ at its actual maximal side length.  Apply the preceding
     theorem at $e=e_*$ and use the exact depth identification.  There is no

@@ -117,21 +117,21 @@ theorem exists_selected_density (X : ScannerExponents) (κ : ScanConstants) (C�
   have hMpos : 0 < M := by positivity
   set R : ℝ := ((X.rounds n : ℕ) : ℝ) with hR
   have hR2 : R = 2 * n * X.m n := by simp [hR, ScannerExponents.rounds]
-  refine ⟨fun k ↦ (S.rem k + (1 + R) * S.β k / k) / M, fun k ↦ ?_, ?_, ?_⟩
-  · have := S.rem_nonneg k; have := S.β_nonneg k; positivity
-  · have hβ : Tendsto (fun k : ℕ ↦ S.β k / k) atTop (𝓝 0) := by
-      have hlim := (tendsto_log_div_nat.const_mul S.Cβ)
+  refine ⟨fun k ↦ (S.inputs.rem k + (1 + R) * S.inputs.β k / k) / M, fun k ↦ ?_, ?_, ?_⟩
+  · have := S.inputs.rem_nonneg k; have := S.inputs.β_nonneg k; positivity
+  · have hβ : Tendsto (fun k : ℕ ↦ S.inputs.β k / k) atTop (𝓝 0) := by
+      have hlim := (tendsto_log_div_nat.const_mul S.inputs.Cβ)
       rw [mul_zero] at hlim
-      refine squeeze_zero (fun k ↦ div_nonneg (S.β_nonneg k) k.cast_nonneg) (fun k ↦ ?_) hlim
+      refine squeeze_zero (fun k ↦ div_nonneg (S.inputs.β_nonneg k) k.cast_nonneg) (fun k ↦ ?_) hlim
       rw [← mul_div_assoc]
-      exact div_le_div_of_nonneg_right (S.β_le k) k.cast_nonneg
-    have := ((S.tendsto_rem.add (hβ.const_mul (1 + R))).div_const M)
+      exact div_le_div_of_nonneg_right (S.inputs.β_le k) k.cast_nonneg
+    have := ((S.inputs.tendsto_rem.add (hβ.const_mul (1 + R))).div_const M)
     simp only [add_zero, mul_zero, zero_div] at this
     simpa only [mul_div_assoc] using this
   intro k hk hI
   have hk' : (1 : ℝ) ≤ k := by exact_mod_cast hk
   set δ := X.delta S.W (2 * |C_T| * |C₁| / κ.c + 4 * κ.C / κ.c) κ.Cl n with hδ
-  set ρk := (S.rem k + (1 + R) * S.β k / k) / M with hρk
+  set ρk := (S.inputs.rem k + (1 + R) * S.inputs.β k / k) / M with hρk
   have hKnD : 0 < (X.K n : ℝ) * n * X.D n := by positivity
   have hcard := card_chargeRounds X n
   have hne : (X.chargeRounds n).Nonempty := by
@@ -168,9 +168,9 @@ theorem exists_selected_density (X : ScannerExponents) (κ : ScanConstants) (C�
     rw [hδ, hM, ScannerExponents.delta]
     field_simp
     ring
-  have hkey : S.β k + k * (S.terminalBound + S.rem k) +
-      R * (κ.C * k * X.a S.W n * X.K n * A4 * Lg + S.β k) ≤ k * M * (δ + ρk) := by
-    have hρ : k * M * ρk = k * S.rem k + (1 + R) * S.β k := by
+  have hkey : S.inputs.β k + k * (S.terminalBound + S.inputs.rem k) +
+      R * (κ.C * k * X.a S.W n * X.K n * A4 * Lg + S.inputs.β k) ≤ k * M * (δ + ρk) := by
+    have hρ : k * M * ρk = k * S.inputs.rem k + (1 + R) * S.inputs.β k := by
       rw [hρk]; field_simp
     have hC := κ.one_le_C
     have hcross : 0 ≤ S.W * n * X.m n * (|C_T| * |C₁| * A4 * Lg + 2 * κ.C * P) := by

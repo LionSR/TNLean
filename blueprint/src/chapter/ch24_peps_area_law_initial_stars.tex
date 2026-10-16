@@ -79,3 +79,70 @@ $\{-1,0,1\}$, that is, the axis and diagonal directions.
     $u'=\rho u/\rho'\in[0,1]$. The five properties restrict to the
     smaller square by this identity.
 \end{proof}
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 332--370.
+\begin{theorem}[Isolated star at an actual fine-cell mark]
+    \label{thm:area_law_initial_mark_isolated_star}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialRegion_isIsolatedStar}
+    \leanok
+    \uses{def:area_law_isolated_star,thm:area_law_actual_sector_assignment,
+        thm:area_law_initial_active_ray_closed,
+        thm:area_law_initial_sector_colors,
+        thm:area_law_initial_sector_no_active,
+        thm:area_law_concentric_fan_restriction,
+        thm:area_law_initial_birth_regularity}
+    Fix an origin, a finite endpoint set $Z$, a width $C_0\ge2$, a lower
+    layer $k_0\ge50{,}000{,}000$ and arbitrary valid residues at every
+    layer. Let $k\ge k_0$, let $z$ index an actual fine cell of layer $k$,
+    and let $v$ be one of its nine marks. Then $Q_{t_k/128}(v)$ is an
+    isolated star of the actual initial open regions with their colors.
+\end{theorem}
+\begin{proof}\leanok
+    Put $r=t_k/64$, so that $t_k/128=r/2$. Take $\sigma$ to be the
+    actual sector assignment. Each scaled triangle $W_s(v,r/2)$ lies in
+    the working triangle of half-side $2r$, which lies in its assigned
+    open region. Each birth region is the closure of its open region and
+    meets $Q_r(v)$ in its assigned triangles $W_s(v,r)$, hence meets
+    $Q_{r/2}(v)$ in the triangles $W_s(v,r/2)$. Birth and open regions
+    have the same frontier. In the closed square $Q_{r/2}(v)$ these
+    frontiers are exactly the directed rays at changes of identifier.
+    Neighboring sectors have equal colors exactly when their identifiers
+    agree. Without a change, the whole square $Q_r(v)$ lies in one open
+    region.
+\end{proof}
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 325--349, with
+% the proof in lines 351--370.
+\begin{theorem}[Isolated stars of the initial mesh]
+    \label{thm:area_law_initial_stars}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialMarks_isolatedStars,
+        TNLean.PEPS.AreaLaw.Geometry.initialRepairStage_hasIsolatedStars,
+        TNLean.PEPS.AreaLaw.Geometry.initialIsolatedStarsStatement_holds}
+    \leanok
+    \uses{def:area_law_repair_stage}
+    Put $a_0=1/128$. Fix an origin, a finite endpoint set, a width
+    $C_0\ge2$, a lower layer $k_0\ge50{,}000{,}000$ and arbitrary valid
+    residues at every layer. Let $M$ be any set of marks of selected
+    belt cells in the layers $k\ge k_0$, and give each $v\in M$ a
+    positive scale $S_v$ equal to the side of some selected belt cell
+    that marks $v$; for instance, $M$ may be the set of all such marks,
+    each with the smallest such side. Then:
+    \begin{enumerate}
+        \item distinct marks $v,w$ satisfy
+              $\operatorname{dist}(v,w)\ge a_0\max(S_v,S_w)$;
+        \item every square $Q_{a_0S_v}(v)$ is an isolated star of the
+              actual initial regions.
+    \end{enumerate}
+    In particular, for every finite domain and cut, the initial stage
+    of the recursive family has isolated stars with constant $a_0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_initial_mark_isolated_star,
+        thm:area_law_fine_layer_mark_separation,
+        thm:area_law_uniform_separated_initial_marks}
+    Let $S_v=t_k$ be realized by a selected belt cell of layer $k$. The
+    star is the preceding theorem applied to that cell, since
+    $a_0S_v=t_k/128$. For the separation, distinct marks of actual fine
+    cells satisfy $\operatorname{dist}(v,w)\ge\max(S_v,S_w)/4$, which
+    exceeds $a_0\max(S_v,S_w)$.
+\end{proof}

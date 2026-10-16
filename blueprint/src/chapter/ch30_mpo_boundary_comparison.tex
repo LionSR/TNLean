@@ -138,11 +138,13 @@
         MPOTensor.sequentialActionAnalysis,MPOTensor.sequentialActionSynthesis}
     \leanok
     \uses{def:glm_boundary_decomposition}
-    Use the source's fusion analysis and synthesis $W,\widehat W$, and
-    action analysis and synthesis $V,\widehat V$. The first paths are
-    $(c,\mu;y,k)$ with $\mu<N_{ab}^c$ and $k<M_{cx}^y$; the second are
+    Write $W,\widehat W$ for the fusion analysis and synthesis maps, and
+    $V,\widehat V$ for the action analysis and synthesis maps. The
+    fusion-then-action paths are
+    $(c,\mu;y,k)$ with $\mu<N_{ab}^c$ and $k<M_{cx}^y$; the
+    sequential-action paths are
     $(z,j;y,i)$ with $j<M_{bx}^z$ and $i<M_{az}^y$.
-    Let $\alpha$ identify the incoming right bracketing with the left.
+    Let $\alpha$ identify the right-bracketed incoming space with the left-bracketed one.
     The tree maps are
     \begin{align}
         H_{\rm fus}^{c\mu;yk} & =V_{cx}^{y,k}(W_{ab}^{c,\mu}\otimes I),                      \\
@@ -186,7 +188,7 @@
         def:glm_boundary_full_coordinates}
     Retaining the final bond coordinate, set
     $C=H_{\rm seq}S_{\rm fus}$ and $D=H_{\rm fus}S_{\rm seq}$.
-    The source's printed L orientation is that of $C$.
+    The printed $L$-symbol orientation is that of $C$.
 \end{definition}
 
 \begin{theorem}[Inverse full action comparisons]
@@ -215,7 +217,7 @@
     $H_{\rm seq}S_{\rm seq}=I$.
 \end{proof}
 
-\begin{definition}[Actual multiplicity L matrices]
+\begin{definition}[Multiplicity L matrices]
     \leanok
     \label{def:glm_boundary_action_l_matrix}
     \lean{MPOTensor.FusionActionMultiplicity,MPOTensor.SequentialActionMultiplicity,
@@ -287,7 +289,7 @@
     black legs have dimensions $D_x,D_y,D_z$. The node indices are
     multiplicity labels, with row order $(z,i,j)$ and column order $(c,k,\mu)$.
     Both sides map $\C^{\chi_a}\otimes\C^{\chi_b}\otimes\C^{D_x}$ to
-    $\C^{D_y}$, using the canonical identification of bracketings.
+    $\C^{D_y}$ under the standard identification of bracketings.
     \begin{align}
         H_{\rm seq}^{zj;yi}
          & =\sum_{c,k,\mu}(L_{abx}^{y})_{c,k\mu}^{z,ij}

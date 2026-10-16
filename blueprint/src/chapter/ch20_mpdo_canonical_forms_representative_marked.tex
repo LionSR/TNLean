@@ -210,7 +210,7 @@
     Reindex the finite sum over listed coordinates by the
     class-copy pairs $(j,q)$ and use the bond-dimension identifications to
     replace each block by its unit-phase representative. The marked
-    block supplies one factor $\lambda_{j,q}$ and the word supplies
+    block contributes one factor $\lambda_{j,q}$ and the word contributes
     $|w|$ further factors. Summing first over $q$ gives
     (\ref{eq:cpsv_full_coordinate_marked_trace_identity}).
 \end{proof}
@@ -275,7 +275,7 @@
     \lean{MPSTensor.IsCPSVCanonicalForm.linearMarkedTensor_eq_of_trace_agree}
     \leanok
     \uses{thm:cpsv_canonical_form_bnt_refinement, thm:cpsv_full_coordinate_marked_trace_identity, thm:cpsv_retained_representative_grouped_lemma_l}
-    Let $A$ be in literal CPSV canonical form. For canonical-form data and
+    Let $A$ be in CPSV canonical form. For canonical-form data and
     its BNT refinement, write
     \begin{align}
         A^i        & =V^\dagger B^iV,

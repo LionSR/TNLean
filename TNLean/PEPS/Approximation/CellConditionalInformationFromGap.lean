@@ -16,6 +16,8 @@ the square-grid cell estimate. The state, exterior region and conditioning cells
 
 Source: polynomial-PEPS manuscript, Lemma 3.2, `02-information.tex`, lines 163–222
 and 304–311, revision `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+
+Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
 namespace TNLean.PEPS.Approximation

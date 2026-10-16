@@ -507,3 +507,35 @@ outer sample.
     net patches is then bounded by a constant depending only on $\epsilon_0$
     and the ratio.
 \end{proof}
+
+\begin{theorem}[Resizes and point treatments with supplied patches]
+    \label{thm:peps_guide_frame_supplied_gates}
+    \lean{TNLean.PEPS.EncodedFrame.suppliedPatch,
+        TNLean.PEPS.EncodedFrame.suppliedPatch_center,
+        TNLean.PEPS.EncodedFrame.suppliedPatch_scale,
+        TNLean.PEPS.EncodedFrame.isSuppliedPatch_suppliedPatch,
+        TNLean.PEPS.EncodedFrame.suppliedPatch_congr,
+        TNLean.PEPS.EncodedFrame.suppliedPatch_data,
+        TNLean.PEPS.Approximation.exists_resize_step_supplied,
+        TNLean.PEPS.Approximation.exists_pointTreatment_step_supplied}
+    \leanok
+    \uses{thm:peps_guide_frame_reading_gates, lem:peps_guide_frame_patch_data}
+    Assume the conclusion of Proposition~4.1 at test exponent $60$ on the sheet,
+    and choose every hole patch and every net patch as the patch it supplies at
+    its center and its radius, which must lie in $(0,B_0\log L]$. Let
+    $\lVert\Omega\rVert=1$, $L\ge2$, and let $C'\ge\max(1,C)$ and $c'\ge c$ be
+    natural numbers. Then the two statements of
+    Theorem~\ref{thm:peps_guide_frame_reading_gates} hold, with the same
+    thresholds, with constants $C'$ and $c'$ and without the hypotheses on the
+    tags and the errors of the patches. For the resize, the old and the new hole
+    radii are chosen among $\epsilon_0\min(n,t)$ and $\epsilon_0\min(2n,t)$ and
+    agree away from the resized corner (\texttt{06-geometry.tex}, lines 109--133,
+    481--505 and 529--541).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_guide_frame_patch_data}
+    The supplied patch at a center depends only on the center and the radius, so
+    the old and new holes agree where their radii do. A supplied patch has at most
+    $C'L^{c'}$ tags, error at most $L^{-60}$ on $\Omega$, and a tag.
+\end{proof}

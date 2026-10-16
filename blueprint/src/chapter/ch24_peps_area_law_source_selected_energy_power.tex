@@ -11,6 +11,7 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
 \begin{definition}[Final-scale charge energy bound]
     \label{def:arealaw-final-selected-energy-cap}
     \lean{TNLean.PEPS.AreaLaw.Scan.finalSelectedEnergyCap}
+    \leanok
     For $C,C_\ell,P,W,x,p\in\mathbb R$ and an integer $n\geq1$, set
     $D=\lceil n^\kappa\rceil$ and
     \begin{align}
@@ -25,6 +26,7 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
 \begin{theorem}[Exact energy exponents]
     \label{thm:arealaw-selected-energy-margins}
     \lean{TNLean.PEPS.AreaLaw.Scan.final_selectedEnergy_margins}
+    \leanok
     At the final scanner exponents,
     \begin{align}
         2\omega+\ell+2\kappa     & =\frac{14}{125000},   &
@@ -36,12 +38,14 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     Substitute the displayed rational values and simplify.
 \end{proof}
 
 \begin{theorem}[Pointwise charge energy bound]
     \label{thm:arealaw-selected-energy-pointwise}
     \lean{TNLean.PEPS.AreaLaw.Scan.finalSelectedEnergyCap_le}
+    \leanok
     Fix $C\geq0$, $C_\ell\in\mathbb R$ and $P\geq\nu$.
     For every integer $n\geq1$, every $1\leq W\leq n^\omega$,
     every $0\leq x\leq n^{-8\nu}$ and every
@@ -54,6 +58,8 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
 \end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{def:arealaw-final-selected-energy-cap}
     The density bound gives $x^{1/8}\leq n^{-\nu}$, and
     $P\geq\nu$ gives $n^{-P}\leq n^{-\nu}$. Since $p\geq0$,
     multiplication by $1-p$ cannot increase either nonnegative term.
@@ -71,6 +77,7 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
 \begin{theorem}[Uniform normalized energy decay]
     \label{thm:arealaw-selected-energy-decay}
     \lean{TNLean.PEPS.AreaLaw.Scan.eventually_final_selectedEnergy_le_rpow,TNLean.PEPS.AreaLaw.Scan.exists_final_selectedEnergy_le_rpow}
+    \leanok
     Fix $C\geq0$, $C_\ell\in\mathbb R$, $g>0$ and $P\geq\nu$.
     There exists an integer $N\geq2$ such that, for every $n\geq N$,
     every $1\leq W\leq n^\omega$, every $0\leq x\leq n^{-8\nu}$,
@@ -83,6 +90,7 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:arealaw-selected-energy-pointwise}
     The strict gap $97/250000>0$ in
     (\ref{eq:selected_energy_margins}) absorbs every fixed coefficient
@@ -101,6 +109,7 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
 \begin{theorem}[Separate replica remainder]
     \label{thm:arealaw-selected-energy-remainder}
     \lean{TNLean.PEPS.AreaLaw.Scan.selectedEnergy_add_remainder_le,TNLean.PEPS.AreaLaw.Scan.exists_final_selectedEnergy_add_remainder_le_rpow}
+    \leanok
     Under the hypotheses of Theorem~\ref{thm:arealaw-selected-energy-decay},
     the same threshold works for every additional real remainder $r$:
     \begin{align}
@@ -111,6 +120,7 @@ at rate $8\nu$ suffices to put that term at rate $\nu$.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:arealaw-selected-energy-decay}
     Expand the quotient of the sum and add $r/(g/2)$ to
     (\ref{eq:selected_energy_decay}).

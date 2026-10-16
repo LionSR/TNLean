@@ -22,6 +22,7 @@ entropy of the actual selected auxiliary marginal.
 \begin{theorem}[Quarter-power subtraction]
     \label{thm:arealaw-sharp-comparison-subtraction}
     \lean{TNLean.PEPS.AreaLaw.Scan.sharp_comparison_subtraction}
+    \leanok
     Let $a,W,\tau>0$. Suppose the same scalar rate $R$ satisfies
     \begin{align}
         \frac W2\left[2S'+(1-\tau)G_{\rm pre}-2\tau D
@@ -41,6 +42,7 @@ entropy of the actual selected auxiliary marginal.
     \end{align}
 \end{theorem}
 \begin{proof}
+    \leanok
     Subtract the two rates and divide by $W/2>0$. The upper quadratic
     contribution becomes $12K_{\rm mom}a$, giving $25+12=37$.
 \end{proof}
@@ -48,6 +50,7 @@ entropy of the actual selected auxiliary marginal.
 \begin{theorem}[Uniform same-prevector actual charge comparison]
     \label{thm:arealaw-actual-sharp-comparison}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.eventually_actualCharge_suppliedPrevector_sharp_comparison}
+    \leanok
     Fix a unit physical truncated ground vector with energy $e$ and
     positive gap $\gamma$, the original reference state defining its
     truncated terms, and a target set $E$ of positive spectral mass $z$.
@@ -76,6 +79,10 @@ entropy of the actual selected auxiliary marginal.
     data and weight. The same exact terminal tree appears on both sides.
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{thm:al_actual_sharp_upper,
+        thm:actual_scan_supplied_prevector_sharp_lower,
+        thm:arealaw-sharp-comparison-subtraction}
     The factor-ten assumptions imply the upper factor-six assumptions.
     Apply the actual upper and lower theorems to the same prevector.
     Sum over the $K$ bands, use $W=aK$, and apply
@@ -86,11 +93,12 @@ entropy of the actual selected auxiliary marginal.
 \begin{theorem}[Energy at the selected actual charge]
     \label{thm:arealaw-actual-selected-energy}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_selection_energy_domainGraph}
+    \leanok
     Under the actual selector's physical graph, anchor, layer,
     multiplicity, clearance, separation and transport-smallness
     hypotheses, one common error sequence $r_k\ge0$, $r_k\to0$, works
     before all supplied symmetric nonzero initial vectors and all
-    intervals $[p_0,p_1]\subset(0,1)$. If the same initial vector is an
+    intervals $[p_0,p_1]$ with $0<p_0<p_1<1$. If the same initial vector is an
     eigenvector of the augmented truncated copy mean with energy $e$,
     the literal selected point also satisfies
     \begin{align}
@@ -103,6 +111,9 @@ entropy of the actual selected auxiliary marginal.
     Its selected charge-defect bound is unchanged.
 \end{theorem}
 \begin{proof}
+    \leanok
+    \uses{thm:al_scan_actual_charge_sum_selection,
+        thm:al_scan_actual_round_transport}
     The same charge is the odd round $2s+1$ in the finite-family
     transport theorem. Its energy clause gives $\mu_k\le2e+$error.
     Subtract one copy of $e$ and divide by the positive gap $g/2$.
@@ -112,6 +123,7 @@ entropy of the actual selected auxiliary marginal.
     \label{thm:arealaw-selected-sharp-composition}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_defect_le_of_density_energy_bound}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.eventually_exists_selected_actualCharge_sharp_comparison}
+    \leanok
     Suppose the selector--energy conclusion, the accepted coefficient
     conclusion and the uniform sharp comparison are supplied for the
     same physical data. Define
@@ -128,6 +140,7 @@ entropy of the actual selected auxiliary marginal.
     (\ref{eq:arealaw-actual-sharp-comparison}).
 \end{theorem}
 \begin{proof}
+    \leanok
     The actual energy error is nonnegative, so replacing $C_{\rm en}$
     by $|C_{\rm en}|$ only increases its contribution. Apply the
     coefficient bound at the unchanged point. Finally $M/\tau\ge0$.

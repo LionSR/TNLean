@@ -115,8 +115,9 @@ bounding the nilpotency length of the residual algebra.
     MPV coefficients and $\widetilde A$ is injective.  This equality hypothesis
     is the $\lambda=1$ specialization of the proportional premise printed in
     Proposition~20; the unrestricted unscaled conclusion is false
-    \cite{gap:mgsc18_reduction_proportionality_scalar}.  Equality transports
-    the trace of every nonempty word.  For every $n>0$,
+    \cite{gap:mgsc18_reduction_proportionality_scalar}.  Equality of the
+    periodic vectors equates the traces of every nonempty word.  For every
+    $n>0$,
     \begin{align}
         \tr K(\widetilde B,C)^n
          & =D_A^n.
@@ -316,9 +317,9 @@ bounding the nilpotency length of the residual algebra.
     \end{align}
     Since $D_A>0$, cancel the nonzero scalar and conclude
     $VB^wW=A^w$ for every word $w$.  The empty word gives $VW=1_{D_A}$.
-    For normal $A$, choose the positive injective blocking supplied by
-    normality and repeat the same padded argument; the lower tail remains the
-    unblocked word $w$, so the conclusion is already at the original physical
+    For normal $A$, choose a positive blocking length at which $A$ is injective
+    and repeat the same padded argument; the lower tail remains the
+    unblocked word $w$, so the conclusion holds at the original physical
     scale.
 \end{proof}
 
@@ -638,8 +639,8 @@ bounding the nilpotency length of the residual algebra.
     \uses{thm:mps_reduction_residual_sandwich,
         thm:mps_rectangular_reduction_identities}
     Induct on the word and split the first letter as $B^i=N^i+WA^iV$.
-    The induction hypothesis supplies the recursive windows in the remaining
-    word.  By (\ref{eq:mps_reduction_residual_sandwich}),
+    The induction hypothesis gives the recursive window decomposition on the
+    remaining word.  By (\ref{eq:mps_reduction_residual_sandwich}),
     $VN^{\mathbf u}W=0$ for every nonempty $\mathbf u$, so prefixing by $V$
     collapses $\mathcal W(\mathbf w)$ to $\mathcal I(\mathbf w)$; adjacent
     selected blocks combine by $VW=1$.
@@ -937,8 +938,8 @@ bounding the nilpotency length of the residual algebra.
          & =B^{\mathbf p\mathbf c\mathbf q}.
         \label{eq:mps_reduction_exterior_buffer}
     \end{align}
-    No closed-chain equality is assumed: only the reduction and the supplied
-    residual bound enter this identity.  It follows from the corrected
+    No closed-chain equality is assumed: only the reduction and the residual
+    bound $L$ enter this identity.  It follows from the corrected
     residual expansion by eliminating every term with a sufficiently long
     residual buffer.
 \end{theorem}
@@ -1252,7 +1253,7 @@ bounding the nilpotency length of the residual algebra.
     (\ref{eq:mps_reduction_boundary_dressed_right}).
 
     For the least-length corollary, positive-length closed-chain equality makes
-    each least residual nilpotency length an actual bound.  Prefix
-    factorization propagates vanishing from that least length to $N_0$, so the
-    direct-bound theorem applies.
+    each least residual nilpotency length a residual-word nilpotency bound.
+    Prefix factorization propagates vanishing from that least length to $N_0$,
+    so the direct-bound theorem applies.
 \end{proof}

@@ -10,10 +10,11 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
 \texttt{08-scanner.tex}, lines 868--911 and 936--941, at revision
 \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
 
-\begin{lemma}[The scalar information expression]
-    \label{lem:sharp-information-scalar}
+\begin{theorem}[The scalar information expression]
+    \label{thm:sharp-information-scalar}
     \lean{TNLean.PEPS.AreaLaw.Scan.sharpInformationBound,
         TNLean.PEPS.AreaLaw.Scan.two_information_le_sharpInformationBound}
+    \leanok
     For scalar data define
     \[
         F(S,c,B_{\rm pre},\log z,W,\tau,\delta,A,C)
@@ -35,9 +36,10 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     \]
     and the actual information bridge gives
     $2I\leq2S'+G_{\rm pre}-G_{\rm post}+2c+C$, then $2I\leq F+r$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
+    \leanok
     Monotonicity gives
     $\max(0,2S'+g_{\max})\leq2(S+c)+B_{\rm pre}$.
     Substitute the displayed estimates into the first, smoothing and defect
@@ -46,9 +48,10 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     Add the unchanged information correction.
 \end{proof}
 
-\begin{lemma}[The fixed-instance replica limit]
-    \label{lem:sharp-information-replica-limit}
+\begin{theorem}[The fixed-instance replica limit]
+    \label{thm:sharp-information-replica-limit}
     \lean{TNLean.PEPS.AreaLaw.Scan.information_le_of_eventually_sharpInformationBound}
+    \leanok
     Keep all the physical and scalar data fixed.  If
     $r_k,u_k,l_k\to0$ and eventually
     \[
@@ -57,9 +60,11 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
         +\frac{2u_k}{W}+l_k,
     \]
     then $2I\leq F(S,c,B_{\rm pre},\log z,W,\tau,\delta,A,C)$.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{thm:sharp-information-scalar}
     The right-hand side converges by continuity of addition, multiplication
     and division by the fixed scalars.  Pass the eventual real inequality to
     the limit.  No convergence of selected stages or parameters is needed,
@@ -70,6 +75,7 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
 \begin{theorem}[Original-state information from one source-selected witness]
     \label{thm:source-actual-information}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_actual_mutualInformation_bound}
+    \leanok
     Under the complete hypotheses of the stronger source-selected sharp
     energy theorem, enlarge its size threshold to include the uniform
     positive-prefix continuity threshold.  Retain its same truncated vector
@@ -98,6 +104,13 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
 \end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{thm:arealaw-source-selected-sharp-energy,
+        thm:source-actual-terminal-pre-entropy,
+        thm:actual-selected-collar-information,
+        thm:sharp-information-scalar,
+        thm:sharp-information-replica-limit,
+        thm:area_law_selected_schmidt_entropy_bounds}
     Invoke the stronger source energy theorem once.  Transfer the original
     positive-prefix entropy input to its same vector.  The actual geometry
     gives $0\leq G_{\rm pre}\leq B_{\rm pre}$ and

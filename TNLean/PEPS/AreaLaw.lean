@@ -29,6 +29,7 @@ import TNLean.PEPS.AreaLaw.FiniteDomain
 import TNLean.PEPS.AreaLaw.FiniteSetTruncation
 import TNLean.PEPS.AreaLaw.FiniteSetTruncationGap
 import TNLean.PEPS.AreaLaw.FiniteSetTruncationSchmidtBellPrevector
+import TNLean.PEPS.AreaLaw.GapMarginalCloseness
 import TNLean.PEPS.AreaLaw.Geometry
 import TNLean.PEPS.AreaLaw.GlobalSchmidtBellPrevector
 import TNLean.PEPS.AreaLaw.GlobalSchmidtBellRoughLower
@@ -73,10 +74,13 @@ import TNLean.PEPS.AreaLaw.RegularizedPatchDiagonalVariation
 import TNLean.PEPS.AreaLaw.RegularizedPatchInsertionTrace
 import TNLean.PEPS.AreaLaw.RegularizedPatchListCoordinates
 import TNLean.PEPS.AreaLaw.RegularizedPatchLogMinimum
+import TNLean.PEPS.AreaLaw.RegularizedPatchLogMinimumRegularity
 import TNLean.PEPS.AreaLaw.RegularizedPatchMarginal
+import TNLean.PEPS.AreaLaw.RegularizedPatchMinimizerClipping
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimizerStationarity
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimumContinuity
+import TNLean.PEPS.AreaLaw.RegularizedPatchRadiusChoice
 import TNLean.PEPS.AreaLaw.RegularizedPatchRadiusDerivative
 import TNLean.PEPS.AreaLaw.RegularizedPatchStationarity
 import TNLean.PEPS.AreaLaw.RotatedChainRule

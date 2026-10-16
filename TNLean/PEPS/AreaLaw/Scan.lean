@@ -130,6 +130,7 @@ import TNLean.PEPS.AreaLaw.Scan.PhysicalBoxBootstrap
 import TNLean.PEPS.AreaLaw.Scan.PhysicalChargeAncestry
 import TNLean.PEPS.AreaLaw.Scan.PhysicalInformationDimension
 import TNLean.PEPS.AreaLaw.Scan.PhysicalPartition
+import TNLean.PEPS.AreaLaw.Scan.PhysicalScanner
 import TNLean.PEPS.AreaLaw.Scan.PhysicalTemplateInformation
 import TNLean.PEPS.AreaLaw.Scan.PositivePrefixEntropyTransfer
 import TNLean.PEPS.AreaLaw.Scan.PrefixApproximation
@@ -147,6 +148,7 @@ import TNLean.PEPS.AreaLaw.Scan.RoughSelectionBudget
 import TNLean.PEPS.AreaLaw.Scan.RoundedClearance
 import TNLean.PEPS.AreaLaw.Scan.RoundedScalePower
 import TNLean.PEPS.AreaLaw.Scan.ScanHistories
+import TNLean.PEPS.AreaLaw.Scan.ScanTruncationInputs
 import TNLean.PEPS.AreaLaw.Scan.Scanner
 import TNLean.PEPS.AreaLaw.Scan.ScannerRoundedAdmissibility
 import TNLean.PEPS.AreaLaw.Scan.SelectedChainProbability
