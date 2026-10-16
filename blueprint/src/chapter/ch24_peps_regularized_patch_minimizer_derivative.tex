@@ -23,6 +23,7 @@ The derivative is the fixed-tuple identity in the
 \begin{theorem}[Radius derivative of a minimizing branch]
     \label{thm:peps_actual_patch_minimum_log_derivative}
     \lean{TNLean.PEPS.hasDerivAt_log_regularizedPatchObjective_exp_neg_of_isMinOn}
+    \leanok
     \uses{def:peps_regularized_patch_objective,def:peps_patch_canonical_marginal}
     Fix a real radius $R$ and a feasible tuple $x$ minimizing $F_x(R)$.
     Keep this tuple fixed as the radius varies. Then $\log F_x$ is
@@ -36,7 +37,7 @@ The derivative is the fixed-tuple identity in the
     Repeated regions retain independent density matrices. The formula includes
     the empty product.
 \end{theorem}
-\begin{proof}
+\begin{proof}\leanok
     \uses{thm:peps_actual_patch_minimum_stationarity,thm:peps_patch_log_radius_derivative_of_outer_commute}
     Stationarity at the same minimum gives
     $[K_k(R,x),\rho_k(R,x)]=0$ for every $k$.
