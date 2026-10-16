@@ -145,7 +145,8 @@ chosen before the total weight, and one charge round and interpolation parameter
 for the selected-density, defect-energy and four norm comparisons. The sharp
 comparisons retain their marginal smallness condition. The truncation coefficient
 precedes the local dimension; the output entropy coefficients may be enlarged as
-specified in the module's local-fix note.
+specified in the module's local-fix note. The same typical window has mass
+`0 < 1 - n⁻¹⁰⁰ ≤ z ≤ 1`, as in `08-scanner.tex`, lines 411–414.
 
 Source: Proposition 9.2 (`prop:scanner`), `08-scanner.tex`, lines 349–397 and
 399–533, with Proposition 8.1 (`prop:comparators`), `07-comparators.tex`,
@@ -168,6 +169,8 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
         0 ≤ e ∧ e ≤ (n : ℝ) ^ (-1000 : ℝ) ∧
         let E := S.typicalWindow q Ωt T n
         let z := (reducedState_isHermitian Λ q Ωt (S.target T)).spectralRestrictionMass E
+        0 < 1 - (n : ℝ) ^ (-100 : ℝ) ∧
+        1 - (n : ℝ) ^ (-100 : ℝ) ≤ z ∧ 0 < z ∧ z ≤ 1 ∧
         ∃ (hm : 0 < S.m) (hM : 0 < S.M) (hd : 0 < E.card),
         haveI : NeZero E.card := ⟨hd.ne'⟩
         let d := E.card
@@ -331,7 +334,7 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
   refine ⟨e, Ωt, htrgs, he0, he.trans (min_le_left _ _), ?_⟩
   intro E z
   obtain ⟨hwindow, hd, hpdata⟩ := hwindowData
-  refine ⟨hm, hM, hd, ?_⟩
+  refine ⟨hwindow.1, hwindow.2.1, hwindow.2.2.1, hwindow.2.2.2.1, hm, hM, hd, ?_⟩
   have : NeZero E.card := NeZero.of_pos hd
   intro d β ΩX ψ Sent
   obtain ⟨ell, hpre, hmass, hdim, hweights⟩ := hpdata
