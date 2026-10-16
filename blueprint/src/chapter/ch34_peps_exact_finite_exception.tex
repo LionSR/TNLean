@@ -196,6 +196,7 @@ conditional form of Theorem~\ref{thm:openai_polynomial_peps}.
     \label{lem:peps_protocol_compressed_party_network}
     \lean{TNLean.PEPS.Approximation.DyadicProtocol.exists_partyNetwork_of_contractedOperator,
         TNLean.PEPS.Approximation.DyadicProtocol.toDistributedConstruction,
+        TNLean.PEPS.Approximation.DyadicProtocol.toDistributedConstruction_circuit_induction,
         TNLean.PEPS.Approximation.DyadicProtocol.physicalDensity_toDistributedConstruction,
         TNLean.PEPS.Approximation.DyadicProtocol.physicalOut_foldVertex}
     \leanok
@@ -237,7 +238,8 @@ conditional form of Theorem~\ref{thm:openai_polynomial_peps}.
 
 \begin{theorem}[Compressed dyadic operator networks from the protocol assertion]
     \label{thm:peps_large_size_network_from_protocol}
-    \lean{TNLean.PEPS.Approximation.largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences}
+    \lean{TNLean.PEPS.Approximation.largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences,
+        TNLean.PEPS.PairEffect.OriginalCircuit.IsExpansionBounded.isTermwiseBounded}
     \leanok
     \uses{def:peps_dyadic_protocol, def:peps_large_size_dyadic_operator_network}
     If the assembly assertion of Definition~\ref{def:peps_dyadic_protocol} holds,
@@ -246,7 +248,7 @@ conditional form of Theorem~\ref{thm:openai_polynomial_peps}.
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_uniform_approximate_operator_network, lem:peps_protocol_compressed_party_network}
+    \uses{thm:peps_distributed_construction_compression, lem:peps_protocol_compressed_party_network}
     Fix $q,J,\Delta$ and take the constants $C,b,k,r,L_0$ of the assertion. The
     protocols of all sides $L\ge\max\{2,L_0\}$, Hamiltonians and ground vectors
     form one family of distributed constructions indexed by their size. In this
@@ -254,8 +256,8 @@ conditional form of Theorem~\ref{thm:openai_polynomial_peps}.
     at most $b$ parties, each party participates in at most $b$ gates, every
     physical dimension is at most $q$, and every gate is exactly the sum of its
     recorded expansion, with at most $CL^k$ monomials, coefficients of modulus at
-    most $CL^k$, and at most $r$ pair effects per monomial. These expansions serve
-    at every accuracy. Theorem~\ref{thm:peps_uniform_approximate_operator_network}
+    most $CL^k$, since their absolute values sum to at most $CL^k$, and at most $r$
+    pair effects per monomial. Theorem~\ref{thm:peps_distributed_construction_compression}
     with $p=5$ then gives constants $C_p,\alpha$, chosen before the family member,
     and for each protocol a distributed operator contraction within $L^{-5}$ of its
     physical density, with link alphabets of size at most $C_pL^\alpha$, at most
