@@ -453,18 +453,18 @@ theorem edgeExchange_hasPairChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D 
   have ht : 0 < D * Real.log L := mul_pos hc.D_pos hℓ
   obtain ⟨hfm, hmm, hdm, hFm⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done
     (Or.inr (Or.inr (Or.inr (Or.inl ⟨E, e, _, Or.inl rfl, rfl⟩))))
-    (e.endpointBlocks R.1.index) (Bl.nbrLabel e) hr
+    (e.endpointBlocks R.1.index) (Bl.nbrLabel e)
   obtain ⟨hfa, hma, hda, hFa⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done
     (Or.inr (Or.inr (Or.inr (Or.inr ⟨e, _, Or.inr (Or.inr (Or.inr (Or.inl rfl))), rfl⟩))))
-    (e.endpointBlocks R.1.index) (Bl.nbrLabel e) hr
+    (e.endpointBlocks R.1.index) (Bl.nbrLabel e)
   obtain ⟨hgm, hmm', hdm', hFm'⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done
     (Or.inr (Or.inr (Or.inr (Or.inl ⟨E, e, _, Or.inr (Or.inl rfl), rfl⟩))))
     (e.endpointBlocks R.1.index) (Bl.nbrLabel e) (g := Bl.mainGuide E e
-      (mainWordOne Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e))) hr
+      (mainWordOne Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e)))
   obtain ⟨hga, hma', hda', hFa'⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done
     (Or.inr (Or.inr (Or.inr (Or.inr ⟨e, _, Or.inr (Or.inr (Or.inr (Or.inr rfl))), rfl⟩))))
     (e.endpointBlocks R.1.index) (Bl.nbrLabel e) (g := Bl.auxGuide e
-      (auxWordExchanged Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e))) hr
+      (auxWordExchanged Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e)))
   rw [homogenize_endpointBlocks] at hfm hfa hgm hga
   rw [hFm, hFa, hFm', hFa']
   exact edgeExchange_hasPairChange_of hD hLL hΩ hm₀ hA₀ hc.a_le Bl E e
