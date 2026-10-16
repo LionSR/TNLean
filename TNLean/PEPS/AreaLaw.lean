@@ -21,6 +21,7 @@ import TNLean.PEPS.AreaLaw.BoundaryTheoremFromTwoFamilies
 import TNLean.PEPS.AreaLaw.BufferedRectangles
 import TNLean.PEPS.AreaLaw.CollarInformation
 import TNLean.PEPS.AreaLaw.ConditionalEstimates
+import TNLean.PEPS.AreaLaw.Corollaries
 import TNLean.PEPS.AreaLaw.CrossingBudget
 import TNLean.PEPS.AreaLaw.Cylinder
 import TNLean.PEPS.AreaLaw.EdgeBoundaryCalculus
