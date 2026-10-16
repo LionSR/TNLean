@@ -107,8 +107,13 @@ lengths, and $Q^{+d}=Q+([-d,d]^2\cap\mathbb Z^2)$.
         TNLean.PEPS.AreaLaw.harmonic_weight_le_half,
         TNLean.PEPS.AreaLaw.harmonic_weight_ratio_le,
         TNLean.PEPS.AreaLaw.le_tailRadius_of_le}
-    Set $D=R+1$. Since $D<D_0$, the given clearance implies integer
-    clearance at $D$, so the contour estimates apply.
+    Set $D=R+1$. Since $D<D_0$ and $\operatorname{size}(Q)\ge1$,
+    \begin{align}
+        D\operatorname{size}(Q)<D_0\operatorname{size}(Q)
+        <\operatorname{dist}_\infty(Q,Z).
+    \end{align}
+    Thus $Q$ is safe with integer parameter $D$, and
+    Theorem~\ref{thm:area_law_buffer_contours} applies.
     Put $m=\lfloor(C_{\mathrm{pad}}-1)r/D\rfloor$ and
     $X_j=A\cap Q_0^{+d_j}$ with $d_j=r+jD$, $1\le j\le m$. By
     Theorem~\ref{thm:area_law_buffer_contours} every admissible support splits
