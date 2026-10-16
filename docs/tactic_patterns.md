@@ -24,6 +24,21 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Sites separated from guide holes — promoted (2026-10-16)
+
+- **Pattern:** recover the patch of a guide hole, turn membership in its outer sample
+  into a weak distance bound, and contradict strict separation of the changed sites.
+- **Seen:** three copies in `centralBirth_hasFrameChange_of`,
+  `bandBirth_hasFrameChange`, and `bandDeath_hasFrameChange`.
+- **Abstraction:** `TNLean.PEPS.Approximation.disjoint_outerHoles_guideFrame` in
+  `DyadicGuideFrames.lean`, reusing `disjoint_footprint_of_forall`; all three callers
+  now supply their separation estimate to this lemma.
+- **Notes:** the lemma permits any site set, guide, owners and finite patch family
+  with pairwise-disjoint outer samples. It uses each patch's own center and scale.
+  The marked-set and true-vertex adapters stay at the callers, including the
+  after-reading to before-reading conversion for band death. No Hamiltonian,
+  supplied-patch or positive local-dimension assumption is added to the lemma.
+
 ### Non-root dyadic side bound — promoted (2026-10-16)
 
 - **Pattern:** for `R : RepaintedSquare k` and `hk2 : 2 ^ k < 2 * L`, derive

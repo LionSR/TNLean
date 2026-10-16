@@ -162,6 +162,33 @@ outer sample.
     the identity.
 \end{proof}
 
+\begin{lemma}[Sites separated from the holes of a guide]
+    \label{lem:peps_guide_frame_outer_holes_disjoint}
+    \lean{TNLean.PEPS.Approximation.disjoint_outerHoles_guideFrame}
+    \leanok
+    \uses{def:peps_frame_square_patch, def:peps_frame_rewrite_data,
+        def:peps_guide_frame}
+    Let $I$ be a finite set of sites with positions $p_x\in\mathbb R^2$, and
+    let $q$ be any natural local dimension. Fix any guide, owner map,
+    placeholder label and ranking of the labels. Let $V$ be a finite indexing
+    set of plane points, and assign a square patch $P_z$ to each $z\in V$,
+    with pairwise-disjoint outer samples. Write $c_z$ and $r_z$ for the center
+    and scale of $P_z$; the center $c_z$ need not equal its index $z$.
+    For any set $T\subseteq I$, if
+    $2r_z<\operatorname{dist}(c_z,p_x)$ for every $z\in V$ and $x\in T$,
+    then $T$ is disjoint from the union of the outer samples of all holes
+    of the guide frame.
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:peps_frame_square_patch, def:peps_frame_rewrite_data,
+        thm:peps_guide_frame_norm}
+    Every hole is the patch assigned to some $z\in V$. A site in its outer
+    sample satisfies $\operatorname{dist}(p_x,c_z)\le2r_z$, contradicting
+    the strict separation when $x\in T$. Thus each outer sample is disjoint
+    from $T$, and taking their union proves the claim.
+\end{proof}
+
 \begin{theorem}[Small-patch rewrites between frames of guides]
     \label{thm:peps_guide_frame_rewrite}
     \lean{TNLean.PEPS.Approximation.GuideFrameRewrite,

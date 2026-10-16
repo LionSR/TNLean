@@ -290,16 +290,11 @@ theorem bandBirth_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
     (fun x hx => by
       have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
       rw [(hkey _ hx').1])
-    (Set.disjoint_left.2 fun x hx hxo => by
+    (disjoint_outerHoles_guideFrame (g := fb) (V := Vb) (hV := hdb)
+      (T := (T : Set _)) fun z hz x hx => by
       have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
-      obtain ⟨p, hp, hxp⟩ := hxo
-      obtain ⟨hl, hhl, rfl⟩ := List.mem_map.1 hp
-      obtain ⟨z, hz, rfl⟩ := mem_holes_guideFrame.1 hhl
-      have hd : dist (cellCenterPos L x) z ≤ 2 * (ε₀ * t) := by
-        simpa [SquarePatch.outer, squareSample] using hxp
-      have := hTfar z ((hmb z).1 hz) _ hx'
-      rw [dist_comm] at this
-      linarith)
+      simpa only [suppliedPatch_center, suppliedPatch_scale, mul_assoc] using
+        hTfar z ((hmb z).1 hz) _ hx')
     (fun x hx y hy => by
       have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
       have hy' : fb (cellCenterPos L y) ≠ fa (cellCenterPos L y) := by simpa [T] using hy
@@ -406,16 +401,11 @@ theorem bandDeath_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
     (fun x hx => by
       have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
       rw [(hkey _ hx').1])
-    (Set.disjoint_left.2 fun x hx hxo => by
+    (disjoint_outerHoles_guideFrame (g := fa) (V := Va) (hV := hda)
+      (T := (T : Set _)) fun z hz x hx => by
       have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
-      obtain ⟨p, hp, hxp⟩ := hxo
-      obtain ⟨hl, hhl, rfl⟩ := List.mem_map.1 hp
-      obtain ⟨z, hz, rfl⟩ := mem_holes_guideFrame.1 hhl
-      have hd : dist (cellCenterPos L x) z ≤ 2 * (ε₀ * t) := by
-        simpa [SquarePatch.outer, squareSample] using hxp
-      have := hTfar z ((hV z).2 ((hma z).1 hz)) _ hx'
-      rw [dist_comm] at this
-      linarith)
+      simpa only [suppliedPatch_center, suppliedPatch_scale, mul_assoc] using
+        hTfar z ((hV z).2 ((hma z).1 hz)) _ hx')
     (fun x hx y hy => by
       have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
       have hy' : fb (cellCenterPos L y) ≠ fa (cellCenterPos L y) := by simpa [T] using hy
