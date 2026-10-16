@@ -57,7 +57,7 @@ $\C$.
     orthonormal basis $(b_x)_{x\in I_W}$ of $\mathcal H_{R_W}$, where
     $I_W=\prod_{e\in\mathcal E_W}
         (\{0,\ldots,u_e-1\}\times\{0,\ldots,v_e-1\})$.
-    Transporting this basis through the standard identification
+    Mapping this basis through the standard identification
     $\mathcal H_{R_W}\simeq\mathcal H_{R_W\,\varnothing}$ gives
     $(b_x^+)_{x\in I_W}$ on the input of the private preparation.
     These bases depend only on the source positions and spaces of $W$, as in
@@ -417,7 +417,7 @@ $\C$.
     Fix global monomial choices $\xi,\zeta$ and a sample
     assignment $j$ on the source occurrences. At each source $e$, form
     the endpoint word from the branch pair $(\xi_e,\zeta_e)$ and the two endpoint
-    matrices for sample $j(e)$. Transport this word to the input of the
+    matrices for sample $j(e)$. Transfer this word to the input of the
     private preparation, including the terminal scalar memory,
     and denote it by $U_{\xi,\zeta,j}$.
 \end{definition}
@@ -428,14 +428,14 @@ $\C$.
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sources_sampledEndpointInputWord}
     \leanok
     \uses{def:peps_actual_sampled_endpoint_word}
-    The sampled endpoint word and its transport $U_{\xi,\zeta,j}$ to the
+    The sampled endpoint word and the induced word $U_{\xi,\zeta,j}$ on the
     source input contain no source preparation.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{def:peps_actual_sampled_endpoint_word,def:peps_source_register_operator_word}
     An endpoint word is a composition of local endpoint operators and register exchanges,
-    none of which prepares a source, and transporting it to the
+    none of which prepares a source, and transferring it to the
     preparation input adds no source preparation.
 \end{proof}
 
@@ -548,7 +548,7 @@ $\C$.
 \begin{proof}\leanok
     \uses{def:peps_global_source_replacement,thm:peps_actual_pure_source_contraction}
     Expand the source-replaced operator as a sum over independent
-    choices $\xi,\zeta$. Transporting the input basis and the input vector
+    choices $\xi,\zeta$. Mapping the input basis and the input vector
     through the same owner isometry preserves their coordinates. Applying
     Theorem~\ref{thm:peps_actual_pure_source_contraction} to each term gives
     the stated sum.

@@ -1,4 +1,4 @@
-\begin{theorem}[Ordered edges and transported subgraphs]%
+\begin{theorem}[Ordered edges and pushforward subgraphs]%
     \label{thm:peps_edge_map_subgraph}
     \lean{TNLean.PEPS.Edge.comap_adj_map_iff}
     \leanok
@@ -6,9 +6,9 @@
     linearly ordered vertex sets, and let $T$ be a graph on the vertices
     of $\Gamma$. For an ordered edge $e=(v,w)$ of $\Gamma$, sort the
     mapped endpoints to obtain $\varphi e$. Its endpoints are adjacent
-    in the transported graph $T\circ\varphi^{-1}$ if and only if $v,w$
+    in the image graph $T\circ\varphi^{-1}$ if and only if $v,w$
     are adjacent in $T$. In particular, a non-tree bond remains outside
-    the transported tree. This elementary assertion is used in the finite
+    the image tree. This elementary assertion is used in the finite
     blocking and flux geometries of \cite{Schuch2010PEPS}.
 \end{theorem}
 
@@ -18,7 +18,7 @@
     of graph adjacency gives the same equivalence in the second case.
 \end{proof}
 
-\begin{definition}[The actual translated three-plaquette strip]%
+\begin{definition}[The translated three-plaquette strip]%
     \label{def:peps_three_plaquette_geometry}
     \lean{TNLean.PEPS.translatedThreePlaquetteVertex,
         TNLean.PEPS.translatedThreePlaquetteRegion,
@@ -35,7 +35,7 @@
     upper row from right to left. The corresponding path $T_v$ contains
     the six horizontal bonds and the rightmost vertical bond.
     Let $e_0,e_1,e_2$ be the remaining ordered vertical bonds from left to
-    right. These are actual non-tree internal bonds of $R_v$.
+    right. These are non-tree internal bonds of $R_v$.
     This eight-site geometry is auxiliary to the adjacent-flux construction
     in \cite[braiding passage]{Schuch2010PEPS}.
 \end{definition}
@@ -52,7 +52,7 @@
         TNLean.PEPS.translatedThreePlaquetteRegion_eq_arcRectangle}
     \leanok
     \uses{def:peps_three_plaquette_geometry}
-    The set $R_v$ is the actual cyclic $4\times2$ rectangle. Its induced
+    The set $R_v$ is the cyclic $4\times2$ rectangle. Its induced
     graph has eight vertices and ten internal bonds, and $T_v$ is a spanning
     tree. The three selected non-tree bonds are distinct and are exactly
     the native ordered upward steps at $x$, $x+1$, and $x+2$ in row $y$.
