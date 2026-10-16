@@ -245,11 +245,12 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
 \begin{lemma}[Closed removal sets]
     \label{lem:area_law_repair_removal_closed}
     \lean{TNLean.PEPS.AreaLaw.Geometry.isClosed_repairRemovalSet}
+    \leanok
     \uses{def:area_law_repair_square,def:area_law_simultaneous_remnants}
     For a finite family $K$ of mark occurrences, the removal set
     $Q_K=\bigcup_{p\in K}Q(v_p,S_p)$ is closed.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Each removal square is closed, and the union is finite.
 \end{proof}
 
@@ -258,6 +259,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
 \begin{lemma}[Current regions remain inside their births]
     \label{lem:area_law_repair_current_birth_containment}
     \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_current_subset_birth}
+    \leanok
     \uses{def:area_law_repair_stage,def:area_law_repair_successor_regions}
     At every generation $j\ge0$, each current region is contained in its
     remembered birth:
@@ -266,7 +268,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
         \label{eq:area_law_repair_current_birth_containment}
     \end{equation}
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     Initially the current region is the interior of its birth. An old
     current region only decreases when removal squares are cut out, and
     its birth is retained. A fresh current region is again the interior
