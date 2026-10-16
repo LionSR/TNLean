@@ -516,11 +516,12 @@ by the strict inequalities.
 \begin{lemma}[Emptiness persists after termination]
     \label{lem:area_law_repair_empty_persistence}
     \lean{TNLean.PEPS.AreaLaw.Geometry.isEmpty_repairStage_markIndex_add}
+    \leanok
     \uses{def:area_law_repair_ancestors}
     If $K_j=\varnothing$, then $K_{j+n}=\varnothing$ for every $n\ge0$.
     This assertion needs no metric hypothesis.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     The ancestor map sends every mark of $K_{j+n}$ to a mark of $K_j$.
     A map into the empty set has empty domain.
 \end{proof}
@@ -531,6 +532,7 @@ by the strict inequalities.
 \begin{lemma}[Thresholds for a common empty generation]
     \label{lem:area_law_repair_uniform_empty_thresholds}
     \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_isEmpty_repairStage_markIndex}
+    \leanok
     \uses{lem:area_law_repair_metric_choice,
         lem:area_law_repair_common_empty_generation}
     Fix $0<a_0\le1/4$. There is $T$ such that for every $S_*\ge T$ and
@@ -540,7 +542,7 @@ by the strict inequalities.
     The thresholds $T$ and $K$ precede the choice of domain and cut;
     the generation $N$ may depend on them.
 \end{lemma}
-\begin{proof}
+\begin{proof}\leanok
     \uses{lem:area_law_repair_metric_choice,
         lem:area_law_repair_common_empty_generation}
     Choose $T$ and then $K$ by
