@@ -246,6 +246,92 @@ no holes, this is the normalization of $\Omega$.
     $\pi$. The norm bound is Theorem~\ref{thm:peps_sheet_stack_norm}.
 \end{proof}
 
+\begin{theorem}[The initial step of the dyadic protocol]
+    \label{thm:peps_dyadic_protocol_initial_step}
+    \lean{TNLean.PEPS.Approximation.DyadicProtocol.exists_originalCircuit_initial,
+        TNLean.PEPS.Approximation.rootSquare,
+        TNLean.PEPS.Approximation.initialFrames,
+        TNLean.PEPS.Approximation.length_initialFrames_le,
+        TNLean.PEPS.Approximation.rawHolder,
+        TNLean.PEPS.Approximation.mem_initialFrames,
+        TNLean.PEPS.Approximation.DyadicProtocol.exists_originalCircuit_initialFrames}
+    \leanok
+    \uses{def:peps_sheet_stack, def:peps_dyadic_protocol,
+        def:peps_dyadic_protocol_parties, def:peps_dyadic_protocol_schedule}
+    Let $L\ge1$ and $\lVert\Omega\rVert=1$. The initial sheets are the main copy of $\Omega$,
+    a frame without holes held entirely by the party of the root square, and one
+    copy for each change of the schedule that initializes an auxiliary sheet,
+    a frame without holes held entirely by the future owner of that copy; there
+    are at most $1+4(\#\text{squares}+\#\text{junctions})$ of them. Suppose that
+    the whole initial private memory of each party of a protocol is the memory
+    of the initial sheets it holds, and that its initial vector is the product of
+    their reference vectors. Then one private map per party followed by a
+    reordering of the sheets, with no nonprivate gate, carries the initial
+    reference vector of the protocol exactly to the reference vector of the
+    initial sheets. The future owners of the auxiliary copies are arbitrary
+    (\texttt{06-geometry.tex}, lines 21--23, 576, 649--652 and 658--667).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_sheet_raw_initialization, thm:peps_dyadic_protocol_schedule_counts}
+    Every initial sheet has no hole and is held by one party, so
+    Theorem~\ref{thm:peps_sheet_raw_initialization} applies; the initial layout of
+    the protocol is the layout of whole party memories, identified with the
+    memory of the frames of each party. The number of auxiliary copies is the
+    number of changes of the schedule that initialize an auxiliary sheet, at most
+    four for each square and junction.
+\end{proof}
+
+\begin{theorem}[The final step of the dyadic protocol]
+    \label{thm:peps_dyadic_protocol_final_step}
+    \lean{TNLean.PEPS.Approximation.DyadicProtocol.physicalDimension_eq_of_site_eq,
+        TNLean.PEPS.Approximation.DyadicProtocol.physicalDimension_eq_one_of_site_eq,
+        TNLean.PEPS.Approximation.DyadicProtocol.exists_reference_changes_of_readoutCircuit,
+        TNLean.PEPS.Approximation.unitSquare,
+        TNLean.PEPS.Approximation.toTriple_unitSquare,
+        TNLean.PEPS.Approximation.unitSquare_injective,
+        TNLean.PEPS.Approximation.isCellCenter_cellCenterPos,
+        TNLean.PEPS.Approximation.blockIndex_one_cellCenterPos,
+        TNLean.PEPS.Approximation.unitLevelFrame,
+        TNLean.PEPS.Approximation.unitLevelFrame_owner,
+        TNLean.PEPS.Approximation.unitLevelFrame_owner_injective,
+        TNLean.PEPS.Approximation.DyadicProtocol.exists_reference_changes_unitLevel}
+    \leanok
+    \uses{def:peps_final_regrouping, def:peps_guide_frame,
+        def:peps_dyadic_protocol_parties, def:peps_dyadic_protocol_schedule,
+        def:peps_dyadic_protocol}
+    Let $L\le 2^k<2L$ and $\lVert\Omega\rVert=1$. At the end of the last level
+    $n=1$ every unit block of the root square carries its own label, so the raw
+    owner of a site, at the cell center $(i+\frac12,j+\frac12)$, is the party of
+    its own unit square, and distinct sites have distinct owners. Let the holes of
+    the main frame sit at grid corners with patches of outer radius below
+    $\frac12$. Let the other sheets be frozen auxiliary frames, one for each
+    change of the schedule that initializes an auxiliary sheet, each with at most
+    as many holes as its final guide has true vertices and with patches supplied
+    by the adaptive patch constraint at accuracy $L^{-60}$, followed by idle registers with a
+    vector of norm one. If the unit-square party of every site of a protocol is
+    the party of its unit square, and its final layout and final reference vector
+    are those of the final regrouping of these sheets, then the readout of the
+    final reference vector is $\Omega\otimes\Xi$ with
+    $1-214\,L^{-57}\le\lVert\Xi\rVert\le1$. The frozen auxiliary frames and the
+    idle registers are otherwise arbitrary (\texttt{06-geometry.tex}, lines
+    43--51, 653--656 and 669--681).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_final_reference, thm:peps_guide_frame_norm,
+        lem:peps_guide_frame_patch_data, lem:peps_dyadic_frozen_hole_count,
+        thm:peps_dyadic_repainting_valid_labels}
+    A site at $(i+\frac12,j+\frac12)$ lies in the unit block $(i,j)$, which lies in
+    the root square and has been repainted to its own label; that label is held
+    by the party of the unit square $(i,j)$. By Theorem~\ref{thm:peps_guide_frame_norm}
+    every hole of the main frame has empty physical outer sample. Supplied patches
+    have projector error at most $L^{-60}$, and by
+    Lemma~\ref{lem:peps_dyadic_frozen_hole_count} the frozen auxiliary frames carry
+    at most $214\,L^3$ holes in total. Theorem~\ref{thm:peps_final_reference} gives
+    the readout.
+\end{proof}
+
 \begin{definition}[Bounded changes of the sheets]
     \label{def:peps_bounded_change}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isExpansionBounded_mono,
@@ -365,6 +451,32 @@ no holes, this is the normalization of $\Omega$.
     $\epsilon_0\le1/20004$.
 \end{proof}
 
+\begin{lemma}[The parties of a junction resize]
+    \label{lem:peps_protocol_junction_resize_parties}
+    \lean{TNLean.PEPS.Approximation.DyadicJunction.index,
+        TNLean.PEPS.Approximation.eventUses_labelParty_protocolLevelLabels_junction,
+        TNLean.PEPS.Approximation.coe_subset_eventUses_of_junctionWindow,
+        TNLean.PEPS.Approximation.coe_subset_eventUses_of_junctionWindow_placeholder}
+    \leanok
+    \uses{def:peps_dyadic_protocol_parties, def:peps_dyadic_used_parties}
+    Consider the resize at a grid corner $(2^ju,2^jv)$, at the end of the pass to
+    level $2^j$, when every block of side $2^j$ of the root square carries its new
+    label, and read the labels as parties through the party map of any repainting
+    $R$. The label of a block of the root square among the nine blocks whose indices
+    differ by at most one from $(u-1,v-1)$ in each coordinate is held by a block party
+    that the resize uses. Hence a set of parties of such labels, as produced by the
+    step theorem of the resize once the blocks outside the root square are discarded,
+    consists of parties used by the resize; without discarding them, the only further
+    party is the placeholder party of $R$, which holds the label of every block
+    outside the root square (\texttt{06-geometry.tex}, lines 91--100, 127--131,
+    529--541 and 594).
+\end{lemma}
+
+\begin{proof}\leanok
+    A block of the root square carries the new label of its own block party, of
+    scale $j$, and its indices lie between $u-2$ and $u$, and between $v-2$ and $v$.
+\end{proof}
+
 \begin{theorem}[Bounded changes along the schedule]
     \label{thm:peps_protocol_bounded_trajectory}
     \lean{TNLean.PEPS.EncodedFrame.exists_steps_of_hasBoundedChange,
@@ -390,4 +502,62 @@ no holes, this is the normalization of $\Omega$.
     most $5040L^3$ changes. Each change of the schedule carries at most one gate, so
     each event carries at most $189$ gates, and the lifetime bound of the parties
     applies.
+\end{proof}
+
+\begin{theorem}[A protocol from a bounded trajectory of sheets]
+    \label{thm:peps_protocol_from_bounded_trajectory}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.chainLayout,
+        TNLean.PEPS.PairEffect.OriginalCircuit.chainStep,
+        TNLean.PEPS.PairEffect.OriginalCircuit.chainVec,
+        TNLean.PEPS.PairEffect.OriginalCircuit.chainStep_induction,
+        TNLean.PEPS.PairEffect.OriginalCircuit.norm_chainStep_eval_sub_le,
+        TNLean.PEPS.Approximation.card_eventUses_le,
+        TNLean.PEPS.Approximation.pow_le_paddedSide,
+        TNLean.PEPS.Approximation.finiteDimensional_of_mem_stackRegs,
+        TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_frames}
+    \leanok
+    \uses{def:peps_dyadic_protocol, thm:peps_dyadic_protocol_initial_step,
+        thm:peps_dyadic_protocol_final_step, thm:peps_protocol_bounded_trajectory,
+        thm:peps_dyadic_protocol_locality, thm:peps_dyadic_protocol_parties}
+    An event of the hierarchy uses at most $19$ parties. Let $L\ge2$,
+    $L\le2^k<2L$ and $\lVert\Omega\rVert=1$, and let lists of encoded frames on
+    the parties of the hierarchy of $[0,2^k]^2$, read at the cell centers, be given
+    at every stage, such that the following hold.
+    \begin{enumerate}
+        \item The initial frames have no holes, and each is held entirely by one
+              party.
+        \item Each change of the schedule is a bounded change from the reference
+              vector of its stage to that of the next stage, with participants
+              used by the event of the change, at most $r$ pair effects and at most
+              $r_s$ pair sources in each monomial, at most $K\le CL^{k'}$ monomials
+              and coefficient sum, and error at most $CL^{-20}$.
+        \item At the end of the schedule the main frame is read by the unit-square
+              parties and has trivial holes, every hole of the other sheets
+              satisfies the frame constraint at accuracy $L^{-60}$, and the other
+              sheets carry at most $CL^3$ holes.
+    \end{enumerate}
+    If $C\ge5042$, the private initialization, the changes of the schedule and the
+    final regrouping form a protocol with the assembly bounds of
+    Definition~\ref{def:peps_dyadic_protocol} for the constants $C$,
+    $b=64\cdot189$, $k'$ and $r$, all of whose changes have at most $r_s$ pair
+    sources in each monomial (\texttt{06-geometry.tex}, lines 12--53 and
+    572--681). This is not
+    Proposition~\ref{prop:peps_dyadic_protocol}: the frames along the schedule are
+    assumed here.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_sheet_raw_initialization, thm:peps_dyadic_protocol_lifetime,
+        thm:peps_dyadic_protocol_schedule_counts}
+    The repainting of a square uses the parties of the blocks next to it at its
+    level and at the level above, at most $18$, and its placeholder; a junction
+    resize uses at most nine block parties. The protocol starts with the private
+    initialization of the raw copies, which is exact and has no nonprivate gate,
+    performs the changes of the schedule, and ends with the final regrouping, again
+    exact and without nonprivate gate. There are at most $5040L^3+2$ changes and at
+    most $32L^2/3$ parties. Each change carries at most one nonprivate gate whose
+    parties are used by its event, which gives the bounds on gates, on the scales
+    and addresses of the parties of a gate, and the lifetime bound $64\cdot189$.
+    The reference vectors are those of the sheets, so the errors are those of the
+    changes, and the final reference vector is that of the final regrouping.
 \end{proof}

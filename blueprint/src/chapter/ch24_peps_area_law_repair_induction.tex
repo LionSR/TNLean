@@ -153,6 +153,50 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     $a_0\max(S_a,S_t)\le2d(S_a)+d(S_t)\le(3a_0/1000)\max(S_a,S_t)$.
 \end{proof}
 
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% prop:two-families, lines 154--177, 212--218 and 299--323;
+% replacement instructions, lines 393--417; geometry:repair-induction,
+% lines 478 and 486--514.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Auxiliary consequence under the stated metric hypotheses; no coverage assertion.
+\begin{theorem}[Disjoint current regions at every generation]
+    \label{thm:area_law_repair_current_disjoint}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.current_pairwise_disjoint}
+    \leanok
+    \uses{def:area_law_repair_stage,lem:area_law_repair_metric_invariants}
+    Let $\mathcal D_j$ be the actual repair family of
+    \cite[Section~11]{OpenAI2026AreaLaw}, with current
+    regions $R_i^{(j)}$ and marks $p\in K_j$ of locations $v_p^{(j)}$
+    and scales $S_p^{(j)}$. Assume the metric hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants}: $0<a_0\le1$,
+    $S_*>0$, $d(S)\le(a_0/1000)S$ for every $S\ge S_*$, and
+    $S_p^{(0)}\ge S_*$ for every $p\in K_0$. Suppose also that
+    distinct initial marks $p,q\in K_0$ satisfy
+    \begin{align}
+        \lVert v_p^{(0)}-v_q^{(0)}\rVert
+         & \ge a_0\max\bigl(S_p^{(0)},S_q^{(0)}\bigr).\notag
+    \end{align}
+    Then, for every generation $j\ge0$ and all distinct $i,k\in I_j$,
+    $R_i^{(j)}\cap R_k^{(j)}=\varnothing$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:area_law_initial_open_disjoint,
+        lem:area_law_repair_metric_invariants,def:area_law_repair_birth,
+        thm:area_law_repair_next_disjoint}
+    Induct on $j$. At $j=0$, apply
+    Theorem~\ref{thm:area_law_initial_open_disjoint} to the same
+    jointly chosen belt residues that define $\mathcal D_0$.
+    Suppose the current regions at generation $j$ are pairwise
+    disjoint. By Lemma~\ref{lem:area_law_repair_metric_invariants},
+    distinct parent removal squares at this generation are disjoint.
+    Each fresh current region satisfies
+    $U(v_p^{(j)},S_p^{(j)},H)\subseteq
+        B(v_p^{(j)},S_p^{(j)},H)\subseteq Q(v_p^{(j)},S_p^{(j)})$.
+    Theorem~\ref{thm:area_law_repair_next_disjoint} now gives pairwise
+    disjointness at generation $j+1$.
+\end{proof}
+
 % Source: 10-geometry.tex, geometry:trim-margins, lines 380--394, and
 % geometry:initial-stars, lines 336--339.
 \begin{lemma}[Choice of the stopping scale]
@@ -178,12 +222,303 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     by a quarter of the larger scale.
 \end{proof}
 
-% Source: 10-geometry.tex, geometry:repair-induction, lines 471--485.
-\begin{lemma}[Uniform repair induction]
-    \label{lem:area_law_uniform_repair_induction}
+% Source: 10-geometry.tex, initial marks, lines 325--330;
+% integral recursion and supporting lines, lines 545--558.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Actual marks on the translated integer mesh]
+    \label{thm:area_law_repair_marks_integer_mesh}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.repairStage_location_mem_affineMesh}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_affine_mesh,
+        lem:area_law_repair_metric_invariants}
+    Assume the hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants}, and suppose
+    $S_*\ge1$. Every mark $p\in K_j$ of every generation $j\ge0$
+    then has location $v_p^{(j)}\in o+\mathbb Z^2$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_uniform_separated_initial_marks,
+        thm:area_law_adjacent_fine_meshes,thm:area_law_belt_marks_quarter_mesh,
+        lem:area_law_repair_metric_invariants,
+        thm:area_law_repair_halfside_integral,def:area_law_repair_children}
+    Each actual initial mark belongs to a selected belt cell in a layer
+    $k\ge k_0\ge50{,}000{,}000$. Its fine exponent satisfies
+    $\ell_k=\lfloor\zeta k\rfloor\ge1$, so the belt-mark mesh inclusion
+    with spacing $2^2/4=1$ places it in $o+\mathbb Z^2$.
+    Induct on the generation. Every parent scale is at least
+    $S_*\ge1$, hence its removal half-side is an integer by
+    Theorem~\ref{thm:area_law_repair_halfside_integral}. A child location
+    is the parent location plus that half-side times a vector in
+    $\{-1,0,1\}^2$, and therefore remains in $o+\mathbb Z^2$.
+\end{proof}
+
+% Source: 10-geometry.tex, positive boundary and its endpoints, lines 102--105;
+% simultaneous repair, lines 393--417; lattice coverage, lines 545--561.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Current regions and earlier terminal interiors cover the lattice]
+    \label{thm:area_law_repair_lattice_cover_before}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.lattice_mem_current_or_terminal_before}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_dyadic_origin,
+        def:area_law_repair_terminal_children,lem:area_law_repair_metric_invariants}
+    Take the actual repair family at $o=(\sqrt2,\sqrt3)$.
+    Assume the hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants},
+    and suppose $S_*\ge1$ and $b=|\partial_\Lambda A|>0$.
+    For every generation $j\in\mathbb N$,
+    \begin{align}
+        \mathbb Z^2
+         & \subseteq\Bigl(\bigcup_{i\in I_j}R_i^{(j)}\Bigr)
+        \cup\Bigl(\bigcup_{0\le t<j}E_{\mathrm{term}}(\mathcal D_t)\Bigr).\notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:area_law_repair_stage,thm:area_law_initial_lattice_partition,
+        thm:area_law_repair_marks_integer_mesh,lem:area_law_repair_metric_invariants,
+        thm:area_law_repair_next_lattice_cover}
+    Since $b>0$, the endpoint set $Z$ is nonempty.
+    Theorem~\ref{thm:area_law_initial_lattice_partition} applies to the
+    residues already used in $\mathcal D_0$, so every integer lattice
+    point belongs to an initial current region. This proves the case
+    $j=0$, when there are no earlier terminal interiors.
+
+    Induct on $j$. By Lemma~\ref{lem:area_law_repair_metric_invariants},
+    every parent scale is at least $S_*\ge1$, and
+    Theorem~\ref{thm:area_law_repair_marks_integer_mesh} places every
+    parent on $o+\mathbb Z^2$. A point in a current region of
+    $\mathcal D_j$ therefore belongs to a current region of
+    $\mathcal D_{j+1}$ or to $E_{\mathrm{term}}(\mathcal D_j)$ by
+    Theorem~\ref{thm:area_law_repair_next_lattice_cover}.
+    A point already in $E_{\mathrm{term}}(\mathcal D_t)$ with $t<j$
+    still has $t<j+1$, while the new terminal contribution has index
+    $j<j+1$. These alternatives complete the induction.
+\end{proof}
+
+\subsection{The induction step}
+\label{sec:area_law_repair_induction_step}
+
+Index the eight elementary triangles of $[-1,1]^2$ cyclically, and let the
+triangle $s$ have initial direction $a_s$ and final direction $b_s$, so
+that $b_s=a_{s+1}$. With $a\times b=a_1b_2-a_2b_1$ we have
+$a_s\times b_s=1$. The closed cone of $s$ is
+$K_s=\{y:a_s\times y\ge0,\ y\times b_s\ge0\}$, and its open cone is given
+by the strict inequalities.
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 340--348, and
+% geometry:repair-induction, lines 506--514.
+\begin{lemma}[Cones of the normalized fan]
+    \label{lem:area_law_repair_fan_cones}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairFanCone,
+        TNLean.PEPS.AreaLaw.Geometry.repairFanOpenCone,
+        TNLean.PEPS.AreaLaw.Geometry.exists_mem_repairFanCone,
+        TNLean.PEPS.AreaLaw.Geometry.eq_zero_of_mem_repairFanCone,
+        TNLean.PEPS.AreaLaw.Geometry.mem_repairFanCone_inter_next_iff,
+        TNLean.PEPS.AreaLaw.Geometry.norm_eq_of_mem_repairFanCone,
+        TNLean.PEPS.AreaLaw.Geometry.mem_repairCurrentFanTriangle_iff,
+        TNLean.PEPS.AreaLaw.Geometry.interior_repairCurrentFanTriangle,
+        TNLean.PEPS.AreaLaw.Geometry.mem_closure_openCone_inter}
+    \leanok
+    \uses{def:area_law_repair_fan}
+    Every vector lies in some closed cone. Two cones $K_s,K_u$ with
+    $s\ne u$ and $u\ne s\pm1$ meet only at the origin, and
+    $K_s\cap K_{s+1}$ is the ray of $b_s$. On $K_s$ the sup norm equals
+    $y\times b_s+a_s\times y$. Hence the closed triangle of half-side
+    $r>0$ about $c$ is $\{x:x-c\in K_s,\ \lVert x-c\rVert\le r\}$, its
+    interior is given by the open cone and $\lVert x-c\rVert<r$, and every
+    point of a translated closed cone in an open set $N$ is a limit of
+    points of the translated open cone in $N$.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    The cone conditions are two linear inequalities with integer
+    coefficients, and the assertions reduce to finitely many linear
+    comparisons. A point $y$ with $y\times b=0$ equals $(a\times y)\,b$
+    when $a\times b=1$. The triangle is the convex hull of $0,a_s,b_s$, whose
+    barycentric coordinates are $y\times b_s$ and $a_s\times y$. For the
+    approximation move from $x$ in the direction $a_s+b_s$.
+\end{proof}
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 340--349.
+\begin{lemma}[Isolated stars and local radial models]
+    \label{lem:area_law_star_local_model}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairSectorSet,
+        TNLean.PEPS.AreaLaw.Geometry.repairActiveRaySet,
+        TNLean.PEPS.AreaLaw.Geometry.isOpen_repairSectorSet_diff,
+        TNLean.PEPS.AreaLaw.Geometry.mem_repairActiveRaySet_of_mem_two,
+        TNLean.PEPS.AreaLaw.Geometry.isIsolatedStar_of_model,
+        TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar.exists_model}
+    \leanok
+    \uses{lem:area_law_repair_fan_cones,def:area_law_isolated_star}
+    Let $\tau$ assign identifiers to the eight wedges about $c$. The closed
+    sector of $i$ is the union of the translated cones $c+K_s$ with
+    $\tau(s)=i$, and the active rays are the rays from $c$ in the
+    directions $b_s$ with $\tau(s)\ne\tau(s+1)$. Suppose that in the open
+    square of radius $\rho'>\rho>0$ about $c$ the closure of every region
+    is its closed sector, every region contains its closed sector with the
+    active rays removed, and consecutive wedges have equal labels exactly
+    when they have equal identifiers. Then the closed square of radius
+    $\rho$ about $c$ is an isolated star. Conversely, an isolated star of
+    radius $\rho$ has this description in the open square of radius
+    $\rho$, with the region interiors in place of the regions.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    \uses{lem:area_law_repair_fan_cones}
+    A closed sector minus the active rays is open: near such a point only
+    cones containing it occur, and these carry one identifier, since a
+    common point of two cones with different identifiers lies on an active
+    ray. A point on an active ray between $s$ and $s+1$ lies in the closure
+    of the region of $\tau(s)$; were it interior to that region, nearby
+    points of the open cone of $s+1$ would lie in that region, against the
+    closure description. The remaining assertions follow from the cone
+    descriptions of the triangles.
+\end{proof}
+
+% Source: 10-geometry.tex, geometry:repair-induction, lines 497--514.
+\begin{lemma}[Wedges about a child]
+    \label{lem:area_law_repair_child_cones}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.IsRepairChildConeCompatible,
+        TNLean.PEPS.AreaLaw.Geometry.isRepairChildConeCompatible_holds,
+        TNLean.PEPS.AreaLaw.Geometry.repairChildParentCode_succ_of_inside_eq,
+        TNLean.PEPS.AreaLaw.Geometry.repairChildParentCode_succ_of_inside_ne,
+        TNLean.PEPS.AreaLaw.Geometry.exists_outer_child_cone,
+        TNLean.PEPS.AreaLaw.Geometry.exists_inner_child_cone}
+    \leanok
+    \uses{lem:area_law_repair_fan_cones,def:area_law_repair_children}
+    Let $d>0$, $e\in\{-1,0,1\}^2$ and $c=v+de$. For a noncentral child let
+    $k$ be the wedge whose final direction is $e$, and for a child wedge
+    $t$ put $r=t-k\bmod 8$. Its parent wedge is $k+1$ if $1\le r\le4$ and
+    $k$ otherwise; it lies inside the removal square if $3\le r\le6$ at a
+    side midpoint and if $4\le r\le5$ at a corner. At the center every
+    child wedge is inside, with the parent wedge of the same index. In the
+    open square of half-side $d/2$ about $c$ every child cone lies in its
+    parent cone, inner child cones lie in $v+[-d,d]^2$, outer ones avoid
+    its interior, and the corresponding strict statements hold for open
+    cones. Consecutive child wedges of the same kind have equal or adjacent
+    parent wedges, and of different kinds equal parent wedges.
+\end{lemma}
+
+\begin{proof}
+    \leanok
+    In the open square of half-side $d/2$ about a noncentral child the
+    only parent ray is the one through the child. Each assertion is a
+    finite family of linear inequalities in the coordinates of $x-v$ and
+    $d$, checked wedge by wedge.
+\end{proof}
+
+% Source: 10-geometry.tex, lines 393--417, and geometry:repair-induction,
+% lines 497--514.
+\begin{theorem}[Isolated stars at the children of one repair]
+    \label{thm:area_law_repair_child_stars}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairChildAssignment,
+        TNLean.PEPS.AreaLaw.Geometry.isIsolatedStar_repairChild}
+    \leanok
+    \uses{lem:area_law_star_local_model,lem:area_law_repair_child_cones,
+        def:area_law_repair_birth}
+    Let a parent $(v,S)$ with $d=d(S)$ have a local radial model with
+    wedge assignment $\sigma$ in the open square of radius $r\ge3d/2$
+    about $v$. Let a labelled family agree, in the open square of
+    half-side $d/2$ about a child $c=v+de$, with the old regions minus
+    $v+[-d,d]^2$, keeping their labels, and with the interiors of the
+    transported replacement runs of $\sigma$, with the opposite labels.
+    Then $c$ has an isolated star of every radius $\rho<d/2$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{lem:area_law_star_local_model,lem:area_law_repair_child_cones}
+    Give each outer child wedge the old identifier of its parent wedge and
+    each inner one the replacement run of its parent wedge. A point of an
+    open outer child cone lies in the open parent cone, off the parent rays
+    and outside the removal square, so in the remnant; a point of an open
+    inner child cone lies in the interior of the replacement triangle.
+    Conversely, approximating by points of open parent cones places every
+    point of a remnant or replacement in a child cone of the right kind.
+    A parent ray between wedges of different identifiers, and a side of the
+    removal square, lie on child rays between child wedges of different
+    identifiers. Labels: across a parent ray they are the parent's labels or
+    their reversals, and across a side they are opposite by construction.
+    Lemma~\ref{lem:area_law_star_local_model} concludes.
+\end{proof}
+
+% Source: 10-geometry.tex, geometry:repair-induction, lines 479--514.
+\begin{theorem}[One generation of the repair]
+    \label{thm:area_law_repair_generation_step}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairCurrentSectorAssignment_eq,
+        TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.isIsolatedStar_succ,
+        TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.contact_subset_marks}
+    \leanok
+    \uses{thm:area_law_repair_child_stars,lem:area_law_repair_metric_invariants,
+        def:area_law_repair_current_assignment,def:area_law_repair_stage}
+    Under the hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants} with $a_0\le1/4$,
+    suppose every mark of $\mathcal D_j$ has an isolated star of radius
+    $a_0$ times its scale. Then the assignment read from the current
+    regions in the working square of half-side $6d(S)$ is the wedge
+    assignment of the star, every mark of $\mathcal D_{j+1}$ has an
+    isolated star of radius $a_0$ times its scale, and a replacement meets
+    a distinct identifier of the same label only at marks of
+    $\mathcal D_{j+1}$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_child_stars,lem:area_law_repair_metric_invariants}
+    The working square lies in the parent star, so the chosen identifier
+    of each working wedge contains an open wedge point and is the star's.
+    Removal squares of other marks avoid the open square of half-side
+    $2d(S)$ about a parent, so near each child the next family is the one
+    of Theorem~\ref{thm:area_law_repair_child_stars}, with radius
+    $a_0d(S)<d(S)/2$. For the contacts, a replacement lies in its removal
+    square; it meets an old remnant only on the boundary of that square, a
+    peer replacement only along the parent fan, and replacements of other
+    parents not at all. Two different cones meet at the center or on a
+    common ray, and the labels exclude the common rays except at the
+    center, corners and side midpoints.
+\end{proof}
+
+% Source: 10-geometry.tex, geometry:initial-stars, lines 332--349, and
+% geometry:repair-induction, lines 471--543.
+\begin{theorem}[Uniform repair induction from the initial isolated stars]
+    \label{thm:area_law_uniform_repair_induction_conditional}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.uniformRepairInductionStatement_of_initialIsolatedStars}
+    \leanok
     \uses{def:area_law_uniform_repair_conclusion,
+        thm:area_law_repair_generation_step,
+        lem:area_law_repair_metric_invariants,
+        lem:area_law_repair_metric_choice,lem:area_law_isolated_star_mono}
+    Suppose there is $a_1>0$ such that for every width $C_0$ and every
+    sufficiently large $k_0$ the initial stage has isolated stars with
+    constant $a_1$, as asserted by the initial isolated-star lemma. Then
+    the statement of the uniform repair induction holds.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_generation_step,
         lem:area_law_repair_metric_invariants,
         lem:area_law_repair_metric_choice}
+    Put $a_0=\min(a_1,1/4)$ and take $S_*$ and $k_0$ as in
+    Lemma~\ref{lem:area_law_repair_metric_choice}. The initial isolated
+    stars persist for the smaller constant. By induction,
+    Theorem~\ref{thm:area_law_repair_generation_step} gives isolated stars
+    with constant $a_0$ at every generation, and the contact assertion.
+    The other assertions are
+    Lemma~\ref{lem:area_law_repair_metric_invariants}.
+\end{proof}
+
+% Source: 10-geometry.tex, geometry:repair-induction, lines 471--485.
+\begin{theorem}[Uniform repair induction]
+    \label{thm:area_law_uniform_repair_induction}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.uniformRepairInductionStatement_holds}
+    \leanok
+    \uses{def:area_law_uniform_repair_conclusion,
+        thm:area_law_initial_stars}
     For a sufficiently small fixed choice of $a_0$ and the corresponding
     threshold $S_*$, every active mark $(v,S)$ at every generation has a
     terminal-square-free isolated star $v+[-a_0S,a_0S]^2$ with the
@@ -196,19 +531,156 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     descendant birth region of a mark $(v,S)$ lies within sup distance
     $2d(S)$ of $v$. Each branch terminates after finitely many
     generations.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{thm:area_law_uniform_repair_induction_conditional,
+        thm:area_law_initial_stars}
+    Theorem~\ref{thm:area_law_initial_stars} supplies the initial isolated
+    stars, and
+    Theorem~\ref{thm:area_law_uniform_repair_induction_conditional} turns
+    them into the assertions at every generation.
+\end{proof}
+
+% Source: 10-geometry.tex, child marks, lines 404--409 and 506--514;
+% geometry:descendant-count, lines 670--681.
+\begin{theorem}[A child is determined by its parent and offset]
+    \label{thm:area_law_repair_parent_offset}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairMarkOffset,
+        TNLean.PEPS.AreaLaw.Geometry.repairMarkParent_repairMarkOffset_injective}
+    \leanok
+    \uses{def:area_law_repair_ancestors,def:area_law_repair_terminal_children}
+    For a child occurrence $q$ at generation $j+1$, let
+    $e_j(q)\in\{0,1,2\}^2$ index its centered offset
+    $e_j(q)-(1,1)$. The map
+    \begin{align}
+        q\longmapsto\bigl(\pi_j(q),e_j(q)\bigr)
+        \label{eq:area_law_repair_parent_offset}
+    \end{align}
+    is injective.
+\end{theorem}
+\begin{proof}\leanok
+    At generation $j+1$, a child occurrence is indexed by a nonterminal
+    parent and one of the nine centered offsets. Equality of the parent
+    and offset therefore gives equality of the child occurrences.
+\end{proof}
+
+% Source: 10-geometry.tex, initial marks, lines 325--363, and child marks,
+% lines 404--409 and 506--514.
+\begin{theorem}[Finitely many marks at each generation]
+    \label{thm:area_law_repair_finite_marks}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.finite_repairStage_markIndex}
+    \leanok
+    \uses{def:area_law_repair_stage,thm:area_law_repair_parent_offset}
+    For every generation $j\ge0$, the mark family $K_j$ is finite.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_repair_parent_offset}
+    The initial mark family is the selected finite set $M$. If $K_j$ is
+    finite, the parent and offset map of
+    Theorem~\ref{thm:area_law_repair_parent_offset} injects $K_{j+1}$ into
+    the finite set $K_j\times\{0,1,2\}^2$. Induction proves the claim.
+\end{proof}
+
+% Source: 10-geometry.tex, geometry:descendant-count, lines 670--681;
+% child marks, lines 404--409 and 506--514.
+\begin{theorem}[The number of descendant marks]
+    \label{thm:area_law_repair_descendant_marks}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairMarkAncestor_parent_offset_injective,
+        TNLean.PEPS.AreaLaw.Geometry.card_repairMarkAncestor_fiber_succ_le,
+        TNLean.PEPS.AreaLaw.Geometry.card_repairMarkAncestor_fiber_le}
+    \leanok
+    \uses{def:area_law_repair_ancestors,thm:area_law_repair_parent_offset,
+        thm:area_law_repair_finite_marks}
+    Fix a mark $p\in K_i$. For $n\ge0$, let
+    \begin{align}
+        F_n(p)=\{q\in K_{i+n}:\alpha_{i,n}(q)=p\}.
+        \label{eq:area_law_repair_descendant_marks}
+    \end{align}
+    These sets are finite. The parent and offset map restricts to an
+    injection $F_{n+1}(p)\longrightarrow F_n(p)\times\{0,1,2\}^2$.
+    Consequently,
+    \begin{align}
+        |F_{n+1}(p)|\le9|F_n(p)|,
+        \qquad |F_n(p)|\le9^n.
+        \label{eq:area_law_repair_descendant_count}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_repair_parent_offset,thm:area_law_repair_finite_marks}
+    Each $F_n(p)$ is a subset of the finite mark family $K_{i+n}$.
+    The parent of a descendant in $F_{n+1}(p)$ belongs to $F_n(p)$ by the
+    defining recursion for the ancestor map. Its parent and offset
+    determine the child, which proves the stated injection and the
+    first inequality. Since $F_0(p)=\{p\}$, induction gives the second.
+\end{proof}
+
+% Source: 10-geometry.tex, initial marks, lines 325--363, and
+% geometry:repair-induction, termination argument, lines 538--541.
+\begin{theorem}[A common empty generation]
+    \label{thm:area_law_repair_common_empty_generation}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.exists_isEmpty_markIndex}
+    \leanok
     \uses{lem:area_law_repair_metric_invariants,
-        lem:area_law_repair_metric_choice}
-    The metric assertions are
-    Lemma~\ref{lem:area_law_repair_metric_invariants}. The squares of
-    radius $6d(S)$ about a parent lie in its star and avoid all other
-    removal squares, so each modification sees only its parent's radial
-    boundaries. After normalizing the removal square to $[-1,1]^2$, the
-    new boundaries lie on the eight radial rays and the four supporting
-    lines of the square, and the possible new marks are the nine points of
-    $\{-1,0,1\}^2$. This finite configuration gives the isolated stars of
-    the children with the same constant, and the label reversal gives the
-    contact assertion.
+        thm:area_law_repair_finite_marks}
+    Under the hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants}, there is a
+    generation $N\ge0$ for which $K_N=\varnothing$. The generation $N$
+    may depend on the initial family.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:area_law_repair_metric_invariants,
+        thm:area_law_repair_finite_marks}
+    Write $S_j(q)$ for the scale of a mark $q\in K_j$. The initial family
+    $K_0$ is finite, so choose $M\in\mathbb R$ with $S_0(p)\le M$ for
+    every $p\in K_0$. This also applies when $K_0$ is empty. Since
+    $S_*>0$, choose $N$ with $M<S_*2^N$. If $q\in K_N$, the lower scale
+    bound and the repeated halving estimate give
+    \begin{align}
+        S_*2^N\le S_N(q)2^N
+        \le S_0\bigl(\alpha_{0,N}(q)\bigr)\le M,
+        \label{eq:area_law_repair_common_empty_contradiction}
+    \end{align}
+    a contradiction.
+\end{proof}
+
+% Source: 10-geometry.tex, child marks, lines 404--409, and
+% geometry:repair-induction, termination argument, lines 538--541.
+\begin{theorem}[Emptiness persists after termination]
+    \label{thm:area_law_repair_empty_persistence}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.isEmpty_repairStage_markIndex_add}
+    \leanok
+    \uses{def:area_law_repair_ancestors}
+    If $K_j=\varnothing$, then $K_{j+n}=\varnothing$ for every $n\ge0$.
+    This assertion needs no metric hypothesis.
+\end{theorem}
+\begin{proof}\leanok
+    The ancestor map sends every mark of $K_{j+n}$ to a mark of $K_j$.
+    A map into the empty set has empty domain.
+\end{proof}
+
+% Source: 10-geometry.tex, initial marks, lines 325--363,
+% geometry:trim-margins, lines 380--394, and geometry:repair-induction,
+% termination argument, lines 538--541.
+\begin{theorem}[Thresholds for a common empty generation]
+    \label{thm:area_law_repair_uniform_empty_thresholds}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_isEmpty_repairStage_markIndex}
+    \leanok
+    \uses{lem:area_law_repair_metric_choice,
+        thm:area_law_repair_common_empty_generation}
+    Fix $0<a_0\le1/4$. There is $T$ such that for every $S_*\ge T$ and
+    every width $C_0$ there is $K$ with the following property. For every
+    finite domain and cut, and every admissible lower layer index
+    $k_0\ge K$, some generation $N\ge0$ satisfies $K_N=\varnothing$.
+    The thresholds $T$ and $K$ precede the choice of domain and cut;
+    the generation $N$ may depend on them.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:area_law_repair_metric_choice,
+        thm:area_law_repair_common_empty_generation}
+    Choose $T$ and then $K$ by
+    Lemma~\ref{lem:area_law_repair_metric_choice}. For each resulting
+    repair, Theorem~\ref{thm:area_law_repair_common_empty_generation}
+    gives a common empty generation.
 \end{proof}

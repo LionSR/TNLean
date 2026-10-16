@@ -1,0 +1,138 @@
+\section{One source witness for the selected sharp comparison}
+\label{sec:arealaw-source-selected-sharp-comparison}
+
+The source consumer now joins the moment, prevector, endpoint, selector,
+energy and comparison constructions without another physical-state or
+label choice. It retains an explicit selected-density expression rather
+than a final negative power of the system size.
+
+\begin{theorem}[The same physical witness at the selected charge]
+    \label{thm:arealaw-source-selected-sharp-comparison}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_sharp_comparison}
+    \leanok
+    Fix the local dimension $q\ge1$, range, interaction bound $J\ge0$,
+    physical gap $\Delta>0$, target-size coefficient $C_T\ge0$, anchor
+    multiplicity $\mathfrak m$, charge coefficient
+    $C_1>0$ with $3\mathfrak m\le C_1$, and a real decay parameter $P$.
+    There are positive $C_{\rm tr},C_{\rm target},C_B,c_t$, real transport
+    coefficients and exponents, coefficient constants $C\ge1$, $C_\ell\ge0$,
+    and a threshold $N\ge2$ preceding
+    every finite physical instance, as follows.
+
+    Let $\Omega$ be an original gapped ground vector on the finite domain.
+    The scanner uses the induced domain graph, its depth is the ambient
+    depth of a nonempty target $T$, and its anchors lie in their original
+    supports with multiplicity at most $\mathfrak m$. Assume $n\ge N$,
+    $|T|\le C_Tn^2$, and retain the literal scales
+    \begin{align}
+        L     & =\lfloor n^{1-1/100000}\rfloor,       &
+        m     & =\lfloor n^{1/4}\rfloor,              &
+        D     & =\lceil n^{1/1000000}\rceil,\nonumber   \\
+        K     & =L\mathbin{\mathrm{div}}(8m),         &
+        r_0   & =\lceil C_{\rm tr}\log^2n\rceil,      &
+        S.C_1 & =C_1.
+        \label{eq:arealaw-source-selected-scales}
+    \end{align}
+    The target's ambient layers through $L$ have size at most $n$,
+    and its clearance exceeds $2L+10r_0$. Assume explicitly that
+    $2r_0\le D$, $1\le D$ and $4D\le m$.
+    For real $C_e,\eta$, suppose every original-state positive-depth
+    prefix through $L$ has entropy at most $C_e(nL^\eta+n)$.
+
+    Put
+    \begin{align}
+        g           & =\Delta/\operatorname{positiveNormalization}(1,\Delta/2,J), &
+        \varepsilon & =\min\{n^{-1000},g/4\},\nonumber                                                                     \\
+        B           & =C_BnD(\log n)^{12},                                        &
+        C_0         & =512\exp(1)(2/g),\nonumber                                                                           \\
+        w           & =n^{3/5},                                                   & B_{\rm sh} & =C_e(nL^\eta+n)+n^{-247}.
+        \label{eq:arealaw-source-selected-budgets}
+    \end{align}
+    One unit truncated ground vector $\Omega_t$, with energy
+    $0\le e\le\varepsilon$ and gap $g/2$, has the stated quantitative
+    trace distance from $\Omega$. Its literal target typical set $E$
+    has mass $0<1-n^{-100}\le z\le1$ and the complete eigenvalue window
+    $[\exp(-S_X-w),\exp(-S_X+w)]$. Its target cut budget is at most
+    $C_{\rm target}n(\log n)^{12}$. In particular $d=|E|>0$.
+
+    One label sequence $\lambda_k$ for this same physical vector is
+    chosen before $W$. Its initial vectors are nonzero and have norm at
+    most one for positive replica counts, and
+    $\log\dim\lambda_k-kS'=o(k)$ for the entropy $S'$ of the actual
+    compressed typical auxiliary state. For every
+    $0<W\le n^{1/20000}$, set $a=W/K$ and let
+    $\ell_{\dim}$ be the physical transport logarithmic dimension
+    bound. Assume explicitly $a\ell_{\dim}\le c_t$.
+
+    Replica-remainder constants and nonnegative sequences can then be
+    chosen before every $[p_0,p_1]$ with $0<p_0<p_1<1$ and every selected charge
+    point. Eventually in $k$, there are a literal charge stage $s_k$ and
+    $p_k\in[p_0,p_1]$ such that
+    \begin{align}
+        \frac{\mathcal Q_k}{KnD}
+         & \le\frac{2(C_1+1)}{Wnm(p_1-p_0)}
+        \left[B_{\rm rough}
+            +2nm\,C_{\rm ent}aK a^{1/4}\ell_{\dim}^{e_{\rm ent}}
+        +R_{\rm end}(k)\right],\nonumber                                          \\
+        B_{\rm rough}
+         & =2\log d-\log z+W\left(\frac{B_{\rm sh}}z+1+3nD\log q\right),\nonumber \\
+        R_{\rm end}(k)
+         & =R_{\rm Bell}(k)+(C_i+2nmC_b)\frac{\log(k+2)}k
+        \longrightarrow0.
+        \label{eq:arealaw-source-selected-density}
+    \end{align}
+    At this same point,
+    \begin{align}
+        0\le\delta_k=\frac{\mu_k-e}{g/2}
+         & \le\frac{e+\operatorname{cap}_k+r_k}{g/2}, & r_k & \longrightarrow0,
+        \label{eq:arealaw-source-selected-energy}
+    \end{align}
+    with the actual density cap from
+    (\ref{eq:arealaw-selected-sharp-density-cap}). For every
+    $0<\tau\le1/2$, the exact terminal-weight comparison
+    (\ref{eq:arealaw-actual-sharp-comparison}) holds with
+    $K_{\rm mom}=C_0B$ and $\delta$ replaced by the right side of
+    (\ref{eq:arealaw-source-selected-energy}). All replica
+    remainder limits fix the physical system and weight first.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:arealaw-target-sharp-moments,
+        thm:al_global_schmidt_bell_prevector,
+        thm:arealaw-actual-selected-energy,
+        thm:arealaw-source-endpoint-loss,
+        thm:arealaw-rough-selection-numerator,
+        thm:arealaw-selected-density-normalization,
+        thm:al_scan_actual_charge_energy_coefficients,
+        thm:arealaw-actual-sharp-comparison,
+        thm:arealaw-selected-sharp-composition}
+    Choose source and coefficient constants and combine their size
+    thresholds with the continuity threshold for volume coefficient
+    $C_T+1$. This choice precedes the physical data and $C_e,\eta$.
+    Invoke the common target-window moment construction once, then the
+    physical Schmidt--Bell selection once. The same vector satisfies
+    both factor-ten smallness bounds, hence also the factor-six bounds.
+
+    Transport its exact eigen-equation through the accepted augmented
+    copy-mean coordinate identity. Apply the actual selector and
+    finite-family transport theorem to that same initial vector.
+    Transfer the source prefix entropy to the same truncated vector,
+    apply the actual rough endpoint comparison using its unchanged
+    selected-state projection mass, accumulate the $2nm$ logarithmic
+    transport costs, and normalize the selector's numerator.
+    This gives (\ref{eq:arealaw-source-selected-density}).
+
+    Apply the accepted coefficient theorem and the uniform actual
+    sharp comparison at the unchanged stage and parameter. The actual
+    energy error and $M/\tau$ are nonnegative, so the same cap can be
+    substituted. The lower and upper replica errors retain their
+    factors $R_-$ and $2R_+/W$.
+\end{proof}
+
+No selected-point, endpoint, coefficient or sharp-comparison conclusion is
+assumed by this theorem. It still retains the explicit separation and
+transport smallness premises, the source entropy input, the finite-size
+density expression and the actual pre-gap and maximum. A final prescribed
+density power, safe-box entropy bounds and the six-error absorption are
+further obligations.

@@ -3,8 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.FiniteInputMemory
-import TNLean.PEPS.Approximation.FamilyPhysicalReadout
+import TNLean.PEPS.Approximation.DistributedConstructionData
 
 /-!
 # Original data of a distributed construction
@@ -43,40 +42,8 @@ namespace TNLean.PEPS.PairEffect
 set. The fields describe the source's input, circuit and retained outputs;
 they do not assume a compressed representation or an error estimate.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 17–30 and 137–151. -/
-structure DistributedConstruction (P : Type) [Fintype P] where
-  /-- An existing party at which scalar factors can be absorbed.
-  Source: `04-compression.tex`, lines 565–578; see the module convention. -/
-  nonemptyParties : Nonempty P
-  /-- Each party's whole original private memory.
-  Source: `04-compression.tex`, lines 23–30 and 137–139. -/
-  initialSpace : P → HSpace
-  /-- Private dimensions are finite but need not satisfy a numerical bound.
-  Source: `04-compression.tex`, lines 17–19. -/
-  finite_initialSpace : ∀ p, FiniteDimensional ℂ (initialSpace p)
-  /-- The original vector at each party.
-  Source: `04-compression.tex`, lines 137–139. -/
-  initialVector : ∀ p, initialSpace p
-  /-- The original input is a product of normalized party vectors.
-  Source: `04-compression.tex`, lines 137–139. -/
-  norm_initialVector : ∀ p, ‖initialVector p‖ = 1
-  /-- The intended physical dimension at each party.
-  Source: `04-compression.tex`, lines 148–151. -/
-  physicalDimension : P → ℕ
-  /-- The order of the physical registers in the circuit output.
-  Source: `04-compression.tex`, lines 23–30 and 148–151. -/
-  physicalOrder : List P
-  /-- Each party has exactly one intended physical register.
-  Source: `04-compression.tex`, lines 148–151. -/
-  physicalOrder_nodup : physicalOrder.Nodup
-  /-- The physical output includes every original party.
-  Source: `04-compression.tex`, lines 148–151. -/
-  mem_physicalOrder : ∀ p, p ∈ physicalOrder
-  /-- The actual private registers retained until the final trace.
-  Source: `04-compression.tex`, lines 27–30 and 150–151. -/
-  privateOutput : Layout P
-  /-- Each discarded register is finite-dimensional, without a size bound.
-  Source: `04-compression.tex`, lines 17–19 and 150–151. -/
-  finite_privateOutput : ∀ r ∈ privateOutput, FiniteDimensional ℂ r.space
+structure DistributedConstruction (P : Type) [Fintype P]
+    extends DistributedConstructionData P where
   /-- The original contraction circuit, with its actual gate expansions.
   Source: `04-compression.tex`, lines 23–43 and 137–151. -/
   circuit : OriginalCircuit (ProductInput.wholePartyLayout initialSpace)

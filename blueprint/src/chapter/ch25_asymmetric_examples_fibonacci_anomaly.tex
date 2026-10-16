@@ -28,7 +28,7 @@ Here the two blocks are concrete state tensors on the two-label
 physical space of this section: the all-$\tau$ product tensor and a
 bond-two tensor generating its image under $O_\tau$. The explicit
 tensors are defined on the two-label physical alphabet rather than the
-three-index alphabet of the source. Their raw periodic
+three-index alphabet of the source. Their unnormalized periodic
 vectors carry the regular action. The operator $O_1$ is the
 admissibility projector introduced earlier in this section, not the
 identity on the ambient physical space. Its action as the identity on
@@ -156,8 +156,8 @@ invariant families with several blocks.
     \uses{thm:asymex_fib_fusion}
     The case $a=b=1$ is the admissibility projector composed with itself.
     The cases $\{a,b\}=\{1,\tau\}$ are the two unit laws, obtained by
-    block-triangular compression over $\Z[\sigma]$ and transport to
-    complex matrices as in Theorem~\ref{thm:asymex_golden_ring}.
+    block-triangular compression over $\Z[\sigma]$ and embedding into the
+    complex matrices by Theorem~\ref{thm:asymex_golden_ring}.
     The case $a=b=\tau$ is Theorem~\ref{thm:asymex_fib_fusion}.
     These four identities give the coefficients of
     Eq.~\ref{eq:asymex_fib_anomaly_fusion_algebra}.
@@ -193,7 +193,7 @@ matrices.
     length span their full bond matrix algebra. For $A$ length one
     suffices, and for $C$ length three suffices.
 
-    Use their raw periodic vectors
+    Define their unnormalized periodic vectors
     \begin{align}
         \Psi_1(N)    & =\ket{V^{(N)}(A)}
         =\ket{1,\ldots,1}, \nonumber     \\
@@ -265,7 +265,7 @@ matrices.
 \begin{proof}
     \leanok
     \uses{thm:asymex_fib_fusion_tensors}
-    The witnesses are precisely $A$ and $C$ in
+    The state tensors are $A$ and $C$ in
     Eq.~\ref{eq:asymex_fib_anomaly_states}. The nonzero letter of $A$
     spans its one-dimensional matrix algebra. For $C$, the four words
     $010$, $011$, $101$, and $110$ span $\MN{2}$: each matrix unit is
@@ -303,14 +303,10 @@ matrices.
     Eq.~\ref{eq:asymex_fib_anomaly_action_blocks}.
 \end{proof}
 
-The admissibility projector and the chain amplitudes are derived
-earlier in this section. The action here uses that same two-label
-physical space and the same unnormalized contractions. Categorical
-fusion data alone would not establish these operator and state
-identities or identify them with a construction on a different
-physical alphabet. As noted after
-Theorem~\ref{thm:asymex_fib_state_action}, the identities do not
-extend to length zero.
+The action above uses the admissibility projector and chain amplitudes on the
+two-label physical space from earlier in this section, with unnormalized
+periodic contractions; as noted after Theorem~\ref{thm:asymex_fib_state_action},
+the identities do not extend to length zero.
 
 The no-go rests on the integrality of a length-independent scalar action
 on a normal tensor, Theorem~\ref{thm:asymex_fib_anomaly_integral_action}
@@ -397,7 +393,7 @@ of Chapter~\ref{ch:mpo_symmetry_basics}.
     Corollary~\ref{cor:mpo_symmetric_no_go} therefore excludes $A$.
 \end{proof}
 
-The scalar hypothesis concerns the raw periodic vectors of one fixed
-tensor at every positive length. The result does not rule out
-eigenvectors at an individual length, length-dependent eigenvalues,
-or state tensors that are not word-normal.
+The scalar hypothesis applies to the unnormalized periodic vectors of a single
+word-normal tensor across all positive lengths; it does not exclude
+eigenvectors at a fixed chain length, length-dependent eigenvalues, or
+non-normal state tensors.

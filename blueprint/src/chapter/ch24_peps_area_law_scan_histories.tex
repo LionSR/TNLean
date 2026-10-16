@@ -2619,6 +2619,43 @@ The finite-leaf estimates below follow the charge-energy argument in
     quadratic term on the right-hand side of the moment bound.
 \end{proof}
 
+\begin{theorem}[Common moments for a prescribed truncated ground state]
+    \label{thm:al_scan_supplied_status_moments}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_suppliedTarget_statusMarginal_moment_bounds}
+    \leanok
+    \uses{thm:al_scan_common_status_budget}
+    Fix an integer $q\ge1$, the interaction range $R$, and $C_r\ge0$.
+    There exists $C_B>0$, independent of the finite domain, scanner,
+    and Hamiltonian, with the following property. Suppose the geometric
+    hypotheses of Theorem~\ref{thm:al_scan_common_status_budget} hold,
+    and set $\mathcal B=C_BnD(\log n)^{12}$. Then $\mathcal B\ge1$.
+    Let $\Omega$ be normalized, let $\Delta>0$, and let
+    $\widetilde\Omega$ be any ground state of the associated truncated
+    Hamiltonian with projector gap $g/2$, where $g>0$ is the normalized
+    value of $\Delta$ used to construct that Hamiltonian. Set
+    \begin{align}
+        C_0 & =512\mathrm e\,(2/g), \notag      \\
+        c_0 & =\frac{1}{32\sqrt{1+2/g}}. \notag
+    \end{align}
+    These constants are positive. For every completed status with
+    $s\le nm$, every pre-charge status with $s+1\le nm$, and each of
+    the five marginal regions $Q$ at that status, the eigenvalues $p_j$
+    of the reduced state of this same $\widetilde\Omega$ satisfy, for
+    every real $u$ with $|u|\le c_0/\sqrt{\mathcal B}$,
+    \begin{align}
+        \log\sum_{p_j>0}p_j^{1-u}
+         & \le uS_{\widetilde\Omega}(Q)+C_0\mathcal B u^2. \notag
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_scan_common_status_budget,thm:al_scan_common_moment_interval}
+    Choose $C_B$ by Theorem~\ref{thm:al_scan_common_status_budget}.
+    Every indicated marginal has cut budget at most $\mathcal B$.
+    Apply Theorem~\ref{thm:al_scan_common_moment_interval} to each such
+    cut and the prescribed truncated ground state.
+\end{proof}
+
 \begin{theorem}[One truncated vector for all physical marginal inputs]
     \label{thm:al_scan_common_status_moments}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_statusMarginal_moment_bounds}
@@ -3177,6 +3214,79 @@ The finite-leaf estimates below follow the charge-energy argument in
     every entropy is at most $2(1+(2r_0+1)^2\log q)\le
         2(1+(2C_r+3)^2\log q)(\log n)^4$ once $\log n\ge1$, and each of the $K$
     bands contributes one probability average to the choice-averaged entropy.
+\end{proof}
+
+% Source: 08-scanner.tex, lines 21--59 and 399--414; Lemmas 2.1 and 3.1.
+\begin{theorem}[The truncation inputs of the scanner for one physical system]
+    \label{thm:al_scan_truncation_inputs}
+    \lean{TNLean.PEPS.AreaLaw.Scan.ScanTruncation,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.target,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.shell,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.shell_subset_truncationSet,
+        TNLean.PEPS.AreaLaw.Scan.abs_log_card_sub_le_of_window,
+        TNLean.PEPS.AreaLaw.Scan.sqrt_truncationError_le,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_scanTruncation}
+    \leanok
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_target_typical_window,
+        thm:al_lattice_crossing_budget,thm:al_scan_common_status_budget,
+        thm:al_scan_status_scale_separation,thm:area_law_regional_entropy_continuity}
+    Fix scanner exponents, an interaction range $R$, an interaction bound
+    $J\ge0$, a gap $\Delta>0$ and a target-size coefficient $C_T\ge0$, and put
+    $g=\Delta/\max\{1,J(\|f_{1,\Delta/2}\|_1+1)\}$. There is a truncation
+    coefficient $C_r>0$, and for every local dimension $q$ a constant $C_0$,
+    such that the following holds for every choice of the scanner constants
+    with dimension $q$, gap $g$ and common constant $C\ge C_0$, and every
+    sufficiently large $n$. Let $\Omega$ be a gapped ground vector, with gap
+    $\Delta$, of a Hamiltonian on $\Lambda$ with range $R$ and bound $J$, and
+    take a collar scan at the scales of \cite[Section~9]{OpenAI2026AreaLaw}
+    with $r_0=\lceil C_r(\log n)^2\rceil$ and every label anchored in its
+    support, under the test geometry of \cite[Section~9]{OpenAI2026AreaLaw}:
+    $|T|\le C_Tn^2$, at most $n$ sites in every ambient layer
+    $T_d\setminus T_{d-1}$ with $1\le d\le L$, and ambient distance greater
+    than $2L+10r_0$ from $T$ to every endpoint of a boundary edge of $A$; and
+    under the entropy inputs
+    \begin{align}
+        S_\Omega(X)   & \le C_en^{1+e},                    &
+        S_\Omega(Q_j) & \le C_e(nL^e+n)\quad(0\le j\le L),
+    \end{align}
+    where $X=A\cap T$ and $Q_j=A\cap(T_j\setminus T)$. Then one unit ground
+    vector $\widetilde\Omega$ of the truncated Hamiltonian, with energy
+    $0\le e\le n^{-1000}$ and gap $g/2$, has the following properties:
+    \begin{enumerate}
+        \item its trace distance $t$ from $\Omega$ is at most $Cn^{-500}$;
+        \item $|S_{\widetilde\Omega}(Y)-S_\Omega(Y)|\le
+                  C\sqrt t\,(1+Cn^2\log q)$ for $Y=X$ and for every $Q_j$
+              with $j\le L$;
+        \item the typical set $E$ of the target marginal at width
+              $w=n^{3/5}$ is nonempty, its mass $z$ satisfies
+              $1-n^{-100}\le z\le1$, and
+              $|\log|E|-S_{\widetilde\Omega}(X)|\le w+|\log z|$;
+        \item the marginal moment bound of \cite[Lemma~3.1]{OpenAI2026AreaLaw}
+              holds at every region, with its cut parameter, and a number
+              $\mathcal B\le CnD(\log n)^{12}$ bounds the cut parameter of
+              every completed and pre-charge status region of the scan.
+    \end{enumerate}
+    These are the inputs of the proof of \cite[Proposition~9.2]{OpenAI2026AreaLaw}
+    supplied by Proposition~4.5 and Lemmas~2.1 and~3.1, for the same truncated
+    ground vector.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_target_typical_window,
+        thm:al_lattice_crossing_budget,thm:al_scan_common_status_budget,
+        thm:al_scan_status_scale_separation,thm:area_law_regional_entropy_continuity}
+    Take the truncated ground vector of Proposition~4.5 for the compact
+    collar, which satisfies the moment and tail bounds of Lemma~3.1 at every
+    region. Its trace distance is at most
+    $\sqrt{2\min(n^{-1000},g/4)/g}\le\sqrt{2/g}\,n^{-500}$. The target and
+    every shell of depth at most $L$ lie in the compact collar, which has at
+    most $(C_T+1)n^2$ sites, so Lemma~2.1 gives the entropy transfer. The
+    target boundary has at most $4n$ edges, so its cut parameter is at most a
+    constant times $n(\log n)^{12}$, and the tail bound at width $n^{3/5}$ is
+    at most $n^{-100}$ for large $n$. Every typical eigenvalue lies in
+    $[\mathrm e^{-S-w},\mathrm e^{-S+w}]$, so
+    $|E|\mathrm e^{-S-w}\le z\le|E|\mathrm e^{-S+w}$, which gives the
+    estimate for $\log|E|$. The status budgets are those of
+    Theorem~\ref{thm:al_scan_common_status_budget}.
 \end{proof}
 
 \begin{theorem}[Uniform charge energy at the rounded scales]

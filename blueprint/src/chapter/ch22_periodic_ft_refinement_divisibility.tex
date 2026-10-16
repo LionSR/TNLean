@@ -196,7 +196,7 @@
          & =\{z\in\C:z^q=1\}.
         \label{eq:periodic_blocking_roots}
     \end{align}
-    Moreover, if $V^\dagger V=\Id_n$, $VV^\dagger$ commutes with every
+    If $V^\dagger V=\Id_n$, $VV^\dagger$ commutes with every
     letter of $A^{[p]}$, and $C^I=V^\dagger(A^{[p]})^IV$, every peripheral
     eigenvalue of $\E_C$ satisfies $z^q=1$.
     This is the ambient spectral calculation in
@@ -289,7 +289,7 @@
     \uses{def:periodic_tensor}
     Let $A$ be periodic of period $m$, let $p>0$, and write
     $F=\E_A^\dagger$ and $r=\gcd(m,p)$. If $F^p(X)=X$, then $F^m(X)=X$.
-    Moreover, $F^p(X)=X$ if and only if $F^r(X)=X$.
+    Further, $F^p(X)=X$ if and only if $F^r(X)=X$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -338,7 +338,7 @@
     Fix $\alpha<\gcd(m,p)$ and an isometry $V$ with
     $VV^\dagger=Q_\alpha$. The compressed tensor
     $C^I=V^\dagger(A^{[p]})^IV$ is irreducible.
-    This supplies the irreducibility assertion in
+    This proves the irreducibility assertion in
     \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
 \end{theorem}
 
@@ -468,7 +468,7 @@
     (\ref{eq:periodic_orbit_phase_tensor}).
 \end{proof}
 
-\begin{theorem}[The tensor $C$ associated to a refinement witness]
+\begin{theorem}[The tensor $C$ associated to a $p$-refinement]
     \label{thm:p_refinement_pullback_irreducible_form}
     \lean{MPSTensor.pRefinementCanonicalization_pullback_of_irreducibleForm}
     \leanok
@@ -485,13 +485,13 @@
 \begin{proof}\leanok
     Choose $(A,W)$ from the refinement data. The definition of $C$ gives
     $\E_C = \E_B$ and equality of MPV families between $C$
-    and $A^{[p]}$. To see that $C$ is still in irreducible form~II, transport
+    and $A^{[p]}$. To see that $C$ is still in irreducible form~II, push
     each periodic block $B_j$ of $B$ through the same physical isometry $W$.
     The left-canonical normalization is preserved because
     $W^\dagger W = \Id$,
     while irreducibility and the peripheral spectrum are preserved because the
-    transfer map of each transported block agrees with that of $B_j$.
-    Combining these transported blocks with the same weights gives an
+    transfer map of each resulting block agrees with that of $B_j$.
+    Combining these blocks with the same weights gives an
     irreducible-form decomposition of $C$.
 \end{proof}
 
@@ -534,7 +534,7 @@
     $\E_C = \E_{\widetilde A^{[p]}}$.
     This channel-level condition is a strictly weaker consequence of the
     construction in \cite[lines~765--810]{DeLasCuevas2017Irreducible}, which
-    additionally supplies block scalars, intermediate matrices, and the full
+    also produces block scalars, intermediate matrices, and the full
     blocked-tensor identity $\widetilde A^{[p]} = C$.
 \end{definition}
 
@@ -562,8 +562,8 @@
 
 \begin{proof}\leanok
     Apply the $Z$-gauge extraction hypothesis to obtain a blocked
-    $\Z_m$-gauge witness between $C$ and $A^{[p]}$, and then apply the
-    construction of $\widetilde A$ to that witness.
+    $\Z_m$-gauge equivalence between $C$ and $A^{[p]}$, and then apply the
+    construction of $\widetilde A$ to that equivalence.
 \end{proof}
 
 \begin{theorem}[Reduction to the blocked equal-case construction]
@@ -578,8 +578,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Apply Theorem~\ref{thm:p_refinement_pullback_irreducible_form} to the
-    refinement witness of $B$. This produces a blocked tensor $C$ in
+    Apply Theorem~\ref{thm:p_refinement_pullback_irreducible_form} to
+    $B$. This produces a blocked tensor $C$ in
     irreducible form~II with $\E_C = \E_B$ and the same MPV
     family as $A^{[p]}$. The blocked equal-case construction then
     gives a left-canonical tensor $\widetilde A$ with
@@ -600,7 +600,7 @@
 
 \begin{proof}\leanok
     Combine Theorem~\ref{thm:p_refinement_forward_equalcase_reduction} with the
-    witness-level forward implication: once $\E_B$ is identified with
+    single-pair forward implication: once $\E_B$ is identified with
     $\E_{\widetilde A^{[p]}}$ for a left-canonical $\widetilde A$, the
     blocking identity gives $\E_B = (\E_{\widetilde A})^p$.
 \end{proof}
@@ -644,7 +644,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \leanok
     \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
     Let $B$ be an MPS tensor in irreducible form~II. Assume that every
-    refinement witness gives a tensor $\widetilde A$ with
+    refinement pair $(A,W)$ gives a tensor $\widetilde A$ with
     $\sum_i (\widetilde A^i)^\dagger \widetilde A^i = \Id$ and
     $\E_B = \E_{\widetilde A^{[p]}}$. Then
     $p$-refinability of $B$ implies $p$-divisibility of $\E_B$.
@@ -656,7 +656,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
 % docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex.
 
 \begin{proof}\leanok
-    The construction supplies $\widetilde A$ with
+    The construction gives $\widetilde A$ with
     $\sum_i (\widetilde A^i)^\dagger \widetilde A^i = \Id$ and
     $\E_B = \E_{\widetilde A^{[p]}}$. The left-canonical
     property makes $\E_{\widetilde A}$ a CPTP channel, and the
@@ -671,7 +671,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel, def:peripheral_equalcase_root_from_zgauge, def:peripheral_equalcase_periodicFT_sameMPV, def:peripheral_equalcase_root_channel_from_zgauge}
     In \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}, $p$-divisibility presupposes
     trace preservation of $\E_B$, which is explicit in the hypotheses here.
-    Without trace preservation, let $p \ge 1$, let $B_0$ be $p$-refinable with witness $(A_0, W)$ and in
+    Without trace preservation, let $p \ge 1$, let $B_0$ be $p$-refinable via $(A_0, W)$ and in
     irreducible form~II with every multiplicity equal to one, and let
     $\lambda > 1$. Set
     \begin{align}
@@ -682,7 +682,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
         \notag
     \end{align}
     Then $B$ is in irreducible form~II with the blocks of $B_0$ and the
-    multiplicities $\lambda$, and it is $p$-refinable with witness $(A, W)$:
+    multiplicities $\lambda$, and it is $p$-refinable via $(A, W)$:
     \begin{align}
         \ket{V^{(pN)}(A)}
          & = \lambda^{N}\ket{V^{(pN)}(A_0)}
@@ -706,7 +706,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     Definitions~\ref{def:peripheral_equalcase_root_from_zgauge},
     \ref{def:peripheral_equalcase_periodicFT_sameMPV},
     and~\ref{def:peripheral_equalcase_root_channel_from_zgauge} fail as well.
-    The corrected statement takes $B$ literally in the block form of
+    The corrected statement takes $B$ in the block form of
     irreducible form~II from \cite{DeLasCuevas2017Irreducible}, as the source
     does, and adds trace preservation of $\E_B$; for such a block form this is
     equivalent to every multiplicity being one, since
@@ -726,7 +726,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     \leanok
     \uses{def:irreducible_form, def:p_refinable, def:p_divisible_channel}
     Let the physical and bond dimensions both be one, and take $B=(4)$.
-    The tensor $B$ is literally the period-one normalized block $(1)$
+    The tensor $B$ is the period-one normalized block $(1)$
     with positive weight $4$. It is $2$-refinable with root $A=(2)$,
     but its transfer map $\E_B(x)=16x$ is not $2$-divisible as a channel.
     This contradicts the forward implication of the printed
@@ -752,7 +752,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     Fix $(d,D,p)$. This sharpened reconstruction hypothesis asks for a CPTP map
     $\E'$ such that $\E_C = (\E')^p$ and the Choi/Kraus rank of
     $\E'$ is at most $d$, whenever $C$ is related to $A^{[p]}$ by a
-    blocked $\Z_m$-gauge witness.
+    blocked $\Z_m$-gauge equivalence.
 \end{definition}
 
 \begin{theorem}[Channel-root criterion for blocked-to-root reconstruction]
@@ -810,7 +810,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     families of the same completely positive map: the blocked family $A^{[p]}$
     with $d^p$ operators and the original family $B$ with $d$ operators.
     The cardinality comparison $d \le d^p$ holds whenever $p \ge 1$, so
-    \cite[Theorem~2.1(4)]{Wolf2012Quantum} supplies an isometry
+    \cite[Theorem~2.1(4)]{Wolf2012Quantum} gives an isometry
     $V \in M_{d^p \times d}(\C)$ with $V^\dagger V = \Id$ and
     $(A^{[p]})^\alpha = \sum_j V_{\alpha,j}B^j$. Expanding the
     coefficient of $A^{[p]}$ at the word~$\tau$ by linearity of matrix
@@ -831,7 +831,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     $A^{(p)}$ is irreducible, then $A$ is irreducible. In particular,
     this holds if $\mathcal E_A^p=\mathcal E_B$ for an irreducible
     tensor $B$, even when $A$ and $B$ have different physical dimensions.
-    If moreover $A$ is periodic of period $m$, then $\gcd(m,p)=1$.
+    If in addition $A$ is periodic of period $m$, then $\gcd(m,p)=1$.
     These are necessary conditions for the converse construction in
     \cite[Theorem~4.1]{DeLasCuevas2017Irreducible}.
 \end{theorem}
@@ -846,7 +846,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     to be the identity. Orthogonality then permits only one orbit.
 \end{proof}
 
-\begin{theorem}[A supplied channel root of larger Kraus rank]
+\begin{theorem}[A channel root of larger Kraus rank]
     \label{thm:periodic_supplied_root_rank_obstruction}
     \lean{MPSTensor.CyclicResetCounterexample.root,
         MPSTensor.CyclicResetCounterexample.square,
@@ -870,7 +870,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     Their Kraus ranks are ten and nine, respectively. A minimal nine-letter tensor
     $B$ for $\mathcal F^2$ is trace preserving and periodic, and is
     a one-block irreducible form with weight one. Thus $\mathcal E_B$
-    is $2$-divisible, but the supplied root $\mathcal F$ has no Kraus
+    is $2$-divisible, but the root $\mathcal F$ has no Kraus
     representation on $B$'s nine-letter physical alphabet.
 \end{theorem}
 
@@ -886,13 +886,13 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     sector. The two-step matrix units propagate a nonzero invariant
     subspace through all five sectors, so $B$ is irreducible.
     Trace preservation gives spectral radius one, and the peripheral
-    structure theorem supplies its positive period.
+    structure theorem gives its positive period.
 \end{proof}
 
 \begin{remark}
     The theorem bounds no alternative root of $\mathcal E_B$.
     It rules out obtaining the required physical dimension merely by
-    changing the Kraus representation of an arbitrary supplied root;
+    changing the Kraus representation of an arbitrary root;
     selecting a different root remains possible. See
     \cite{gap:dccsp17_root_kraus_rank_thm41}.
 \end{remark}
@@ -1199,7 +1199,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
     orthogonal resolution have orthogonal ranges, $P_uP_v=0$ for $u\ne v$.
 \end{proof}
 
-\begin{theorem}[Unitary assembly of a resolution]
+\begin{theorem}[Unitary direct sum from a resolution]
     \label{thm:periodic_unitary_resolution}
     \lean{MPSTensor.exists_unitary_toTensorFromBlocks_of_resolution}
     \leanok
@@ -1413,7 +1413,7 @@ Theorem~\ref{thm:thm_4_1_p_refinement_reverse}.
 \begin{proof}
     \leanok
     \uses{thm:periodic_trace_preserving_root}
-    Let $(A,W)$ be a refinement witness and $C_k^\tau=\sum_iW^{\tau,i}B_k^i$.
+    Choose $(A,W)$ from the $p$-refinement of $B$ and set $C_k^\tau=\sum_iW^{\tau,i}B_k^i$.
     Each $C_k$ is left-canonical periodic with the period of $B_k$, since
     $\E_{C_k}=\E_{B_k}$, and $\sum_iW^{\tau,i}B^i=\bigoplus_k\mu_kC_k^\tau$.
     The refinement identity says that $A^{[p]}$ and $\bigoplus_k\mu_kC_k$

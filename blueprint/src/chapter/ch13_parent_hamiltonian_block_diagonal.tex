@@ -441,7 +441,7 @@ gives the bound of \cite[Theorem~IV.16]{Cirac2021Matrix} directly.
     Since $N\ge L\ge3(g-1)(L_0+1)+1$,
     Theorem~\ref{thm:pgvwc_block_space_independence_source_length} shows that
     the spaces $G_N(A_j)$ form an internal sum. Lemma~\ref{lem:block_diagonal_boundary_of_open_boundary_sum}
-    then supplies matrices $X_j$ such that
+    then yields matrices $X_j$ such that
     $\Gamma_N^{A_j}(\mu_j^NX_j)\in G_N(A_j)$ for every $j$ and
     \begin{align}
         \psi
@@ -504,7 +504,7 @@ gives the bound of \cite[Theorem~IV.16]{Cirac2021Matrix} directly.
     \end{align}
     At the stated length, the block-space independence theorem makes this sum
     internal. Lemma~\ref{lem:block_diagonal_boundary_of_open_boundary_sum}
-    then supplies the matrices $X_j$.
+    then yields the matrices $X_j$.
 \end{proof}
 
 The theorem gives $\Gamma_N^{A_j}(\mu_j^NX_j)\in G_N(A_j)$. This is not enough for
@@ -820,7 +820,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
         \notag
     \end{align}
     for every $a$ (Lemma~\ref{lem:gauge_phase_equiv_transport_left_right}
-    transports the gauges, and
+    combines the gauges, and
     Theorem~\ref{thm:gauge_phase_equiv_of_nonzero_rescalings} removes the
     nonzero rescalings), contrary to the hypothesis.
 \end{proof}
@@ -833,7 +833,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \uses{def:parent_hamiltonian_es}
     Let $A^j$ and $B^j$ have the same respective bond dimensions, and let
     all coefficients $\mu_j,\nu_j$ be nonzero. If $G_L(A^j)=G_L(B^j)$ for
-    every $j$, then the assembled tensors $A=\bigoplus_j\mu_jA^j$ and
+    every $j$, then the direct-sum tensors $A=\bigoplus_j\mu_jA^j$ and
     $B=\bigoplus_j\nu_jB^j$ satisfy $G_L(A)=G_L(B)$.
     Their canonical periodic parent Hamiltonians of range $L$ coincide at
     every volume: $H^{\mathrm{ES}}_{N,L}(A)=H^{\mathrm{ES}}_{N,L}(B)$.
@@ -841,7 +841,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
 \begin{proof}
     \leanok
     \uses{thm:block_sum_local_ground_space}
-    The assembled local ground spaces are the sums of the respective block
+    The direct-sum local ground spaces are the sums of the respective block
     spaces. Equality of these spaces gives equality of their orthogonal
     complement projections and hence of every translated parent interaction.
 \end{proof}
@@ -864,7 +864,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \uses{thm:normal_blocks_primitive_representatives,
         thm:ph_block_replacement_parent_equality}
     Normalize each block while retaining its local ground spaces and the
-    inequivalence of distinct blocks. The assembled parent Hamiltonians
+    inequivalence of distinct blocks. The direct-sum parent Hamiltonians
     therefore coincide at each interaction range and volume.
 \end{proof}
 
@@ -924,7 +924,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     dimensions, are trace-preserving and primitive with positive definite
     invariant matrices, and are pairwise inequivalent under conjugation
     and multiplication by a nonzero scalar.
-    Suppose that each block is block injective at the supplied common length
+    Suppose that each block is block injective at the given common length
     $L_0>0$. Then for
     \begin{align}
         3(r-1)(L_0+1)+1\le R\le N,
@@ -1145,7 +1145,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     Since $\zeta_j^{\,N}\neq0$, each block spans the same line for $A^j$ and
     $B^j$, and the two spans, being the sums of these lines
     (Lemma~\ref{lem:bnt_span_eq_sum_mpv_submodules}), agree. Taking sums of the
-    component ground spaces proves equality of the assembled parent
+    component ground spaces proves equality of the direct-sum parent
     Hamiltonians.
 \end{proof}
 
@@ -1220,7 +1220,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     \uses{thm:cpsv_bnt_sharp_span_ambient_cap,
         thm:ph_canonical_block_closure}
     The representative bond dimensions sum to at most $D$. The simultaneous
-    span estimate supplies $S>0$ with $S+1\leq3D^5$. Take $R=S+1$ and apply
+    span estimate yields $S>0$ with $S+1\leq3D^5$. Take $R=S+1$ and apply
     periodic closure for canonical tensors at every $R\leq L\leq N$.
 \end{proof}
 
@@ -1281,7 +1281,7 @@ $\Gamma_N^{A_j}(\mu_j^NX_j)\in\mathcal G_{N,L}(A_j)$.
     Replace the original canonical tensor by the direct sum containing
     one copy of each normal representative. Their local spaces, hence
     their periodic local constraints, coincide. Apply the simultaneous
-    block-injectivity closure theorem at the same supplied length $S$.
+    block-injectivity closure theorem at the same given length $S$.
     For positive operators $H_i$,
     \begin{align}
         \ker\Bigl(\sum_i H_i\Bigr) & =\bigcap_i\ker H_i.
