@@ -399,6 +399,70 @@ theorem edgeExchange_hasPairChange_of (hD : IsAngularScale q J Δ a A₀ m₀ 60
   · rw [hga'']
     exact guideFrame_exchange_holes_perm hU'o hYU' hfaU hfmU hVa hVm (hga'' ▸ hWa) out hout'
 
+/-- **The lens exchange as a change of the two treated sheets, conditional on Proposition 3.4.**
+At the constants of the protocol, in the repainting of a square `R` of side `n = 2 ^ j > K₀ t`,
+`t = D log L`, along an edge `e` of `R` with the label `C_e` across it, passing from the frames of
+the main sheet with the starting word and of the auxiliary sheet with the auxiliary word, both
+treated with `C_e` about the endpoints of `e`, to the frames of the main sheet with the first main
+word and of the auxiliary sheet with the exchanged auxiliary word, treated in the same way, is a
+bounded change of the two sheets with participants in any set containing the party of `C_e`,
+without pair sources and with error `4 L⁻³⁰`.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 183–221, 328–339, 389–430 and 440–445;
+Lemma 6.6 `lem:exchange`, `05-frames.tex`. -/
+theorem edgeExchange_hasPairChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀') (hLL : L₀' ≤ L)
+    (hΩ : h.IsGappedGroundState E₀ Ω Δ) (hm₀ : 2 ≤ m₀) (hA₀ : 1 ≤ A₀) {K₀ ν : ℝ}
+    (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hk2 : 2 ^ k < 2 * L)
+    (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
+    (R : RepaintedSquare k) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
+    (done : Set (ℤ × ℤ)) (E : List SquareEdge) (e : SquareEdge)
+    (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧ ε₀ * (D * Real.log L) ≤ B₀ * Real.log L)
+    {S : Set (ProtocolParty k)}
+    (hCS : labelParty R (protocolLevelLabels k R.1.1 done (e.nbrBlock R.1.index)) ∈ S)
+    {r K rs : ℕ} (hK : 1 ≤ K) :
+    let Bl := blockBaseline (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
+      (protocolLevelLabels k R.1.1 done) R.1.index (newParty Sum.inl R.1.1 R.1.index)
+    HasPairChange Ω
+      (treatedFrame (q := q) P rank R hr (e.endpointBlocks R.1.index) (Bl.nbrLabel e)
+        (Bl.mainGuide E e (edgeStartWord Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e))))
+      (treatedFrame (q := q) P rank R hr (e.endpointBlocks R.1.index) (Bl.nbrLabel e)
+        (Bl.auxGuide e (auxWord Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e))))
+      (treatedFrame (q := q) P rank R hr (e.endpointBlocks R.1.index) (Bl.nbrLabel e)
+        (Bl.mainGuide E e (mainWordOne Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e))))
+      (treatedFrame (q := q) P rank R hr (e.endpointBlocks R.1.index) (Bl.nbrLabel e)
+        (Bl.auxGuide e (auxWordExchanged Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e))))
+      S r K rs (4 * (L : ℝ) ^ (-30 : ℤ)) := by
+  intro Bl
+  have hℓ : 0 < Real.log L := Real.log_pos (by exact_mod_cast hL)
+  have ht : 0 < D * Real.log L := mul_pos hc.D_pos hℓ
+  obtain ⟨hfm, hmm, hdm, hFm⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done
+    (Or.inr (Or.inr (Or.inr (Or.inl ⟨E, e, _, Or.inl rfl, rfl⟩))))
+    (e.endpointBlocks R.1.index) (Bl.nbrLabel e) hr
+  obtain ⟨hfa, hma, hda, hFa⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done
+    (Or.inr (Or.inr (Or.inr (Or.inr ⟨e, _, Or.inr (Or.inr (Or.inr (Or.inl rfl))), rfl⟩))))
+    (e.endpointBlocks R.1.index) (Bl.nbrLabel e) hr
+  obtain ⟨hgm, hmm', hdm', hFm'⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done
+    (Or.inr (Or.inr (Or.inr (Or.inl ⟨E, e, _, Or.inr (Or.inl rfl), rfl⟩))))
+    (e.endpointBlocks R.1.index) (Bl.nbrLabel e) (g := Bl.mainGuide E e
+      (mainWordOne Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e))) hr
+  obtain ⟨hga, hma', hda', hFa'⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done
+    (Or.inr (Or.inr (Or.inr (Or.inr ⟨e, _, Or.inr (Or.inr (Or.inr (Or.inr rfl))), rfl⟩))))
+    (e.endpointBlocks R.1.index) (Bl.nbrLabel e) (g := Bl.auxGuide e
+      (auxWordExchanged Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e))) hr
+  rw [homogenize_endpointBlocks] at hfm hfa hgm hga
+  rw [hFm, hFa, hFm', hFa']
+  exact edgeExchange_hasPairChange_of hD hLL hΩ hm₀ hA₀ hc.a_le Bl E e
+    (blockCorner ((2 : ℝ) ^ (R.1.1 : ℕ)) R.1.index) ht
+    (by change D * Real.log L ≤ (2 : ℝ) ^ (R.1.1 : ℕ); nlinarith [hc.twenty_le_K₀, hlarge, ht])
+    (le_mul_of_one_le_left (by positivity) hA₀ |>.trans' (by
+      have hk : (R.1.1 : ℕ) + 1 ≤ k := R.2
+      have h1 : (2 : ℝ) ^ (R.1.1 : ℕ) * 2 ≤ 2 ^ k := by
+        rw [← pow_succ]; exact pow_le_pow_right₀ (by norm_num) hk
+      have h2 : (2 : ℝ) ^ k < 2 * L := by exact_mod_cast hk2
+      change (2 : ℝ) ^ (R.1.1 : ℕ) ≤ (L : ℝ)
+      linarith)) hc.ε₀_small hfm hfa hgm hga hmm hma hmm' hma' P hr hdm hda hdm' hda' _ rank
+    hCS hK
+
 end Exchange
 
 end TNLean.PEPS.Approximation
