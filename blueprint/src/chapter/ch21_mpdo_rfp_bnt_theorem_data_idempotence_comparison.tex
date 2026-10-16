@@ -76,8 +76,11 @@
     \uses{def:mpdo_bnt_algebra_clause, def:mpdo_bnt_multiplicity_spectrum_comparison, lem:mpdo_bnt_idempotent_coefficient_form_of_chi}
     Suppose that the BNT algebra conditions hold and that the one-site and
     two-site vertical multiplicity spectra satisfy the multiset comparison
-    just defined. Then every two-site multiplicity matrix has trace
-    $m_\gamma$:
+    just defined. As used to normalize the preparation matrix
+    $\nu_\gamma/m_\gamma$ in the implication from the algebra condition to
+    the renormalization fixed point property in
+    \cite[Appendix~C.4, lines~2058--2064]{Cirac2016MPDO_arXiv}, every
+    two-site multiplicity matrix has trace $m_\gamma$:
     \begin{align}
         \tr(\nu_\gamma)
          & =\sum_{\alpha,\beta,i,j,k}
@@ -88,13 +91,9 @@
         =m_\gamma.
         \label{eq:rfp_trace_normalization}
     \end{align}
-    This is the normalization used for the preparation matrix
-    $\nu_\gamma/m_\gamma$ in the implication from the algebra condition to
-    the renormalization fixed point property in
-    \cite[Appendix~C.4, lines~2058--2064]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
-    Sum the multiset equality of the two spectra. For each
+    Summing the multiset equality of the two spectra shows that, for each
     $\alpha,\beta,\gamma$, the resulting product sum satisfies
     \begin{align}
         \sum_{i,j,k}
@@ -295,9 +294,10 @@
     powers.
 \end{theorem}
 \begin{proof}\leanok
-    Apply the construction of positive diagonal matrices for blocked
+    Applying the construction of positive diagonal matrices for blocked
     coefficients to the comparison maps and the positive diagonal matrices
-    $\chi_{\alpha,\beta,\gamma}$ representing the BNT structure coefficients.
+    $\chi_{\alpha,\beta,\gamma}$ representing the BNT structure coefficients
+    yields the pulled-back family.
 \end{proof}
 
 \begin{corollary}[Blocked coefficient trace-power formulas]%
