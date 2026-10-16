@@ -31,8 +31,6 @@ from these changes and from the changes of the large-scale repaintings, which ar
 
 noncomputable section
 
-open Set
-
 namespace TNLean.PEPS.Approximation
 
 open EncodedFrame PairEffect
@@ -130,6 +128,21 @@ end State
 
 /-! ### The protocol -/
 
+/-- The information scale `t = D log L` is positive at the constants of the protocol, `L ≥ 2`. -/
+theorem IsProtocolConstants.t_pos {K₀ ε₀ ν a D B₀ : ℝ} (hc : IsProtocolConstants K₀ ε₀ ν a D B₀)
+    {L : ℕ} (hL : 2 ≤ L) : 0 < D * Real.log L :=
+  mul_pos hc.D_pos (Real.log_pos (by exact_mod_cast hL))
+
+/-- The hole radius `ε₀ t` is at most `B₀ log L` at the constants of the protocol, `L ≥ 2`
+(`06-geometry.tex`, lines 564–567). -/
+theorem IsProtocolConstants.hole_le {K₀ ε₀ ν a D B₀ : ℝ} (hc : IsProtocolConstants K₀ ε₀ ν a D B₀)
+    {L : ℕ} (hL : 2 ≤ L) : ε₀ * (D * Real.log L) ≤ B₀ * Real.log L := by
+  have hℓ : 0 < Real.log L := Real.log_pos (by exact_mod_cast hL)
+  have h1 : ε₀ * D ≤ K₀ * D :=
+    mul_le_mul_of_nonneg_right (by linarith [hc.ε₀_lt, hc.twenty_le_K₀]) hc.D_pos.le
+  rw [← mul_assoc]
+  exact mul_le_mul_of_nonneg_right (h1.trans hc.B₀_ge) hℓ.le
+
 /-- **The dyadic protocol from its large-scale repaintings.** Fix `0 < ε₀ ≤ 1/16`. There is a
 threshold `ν' > 0` such that for every mesh ratio `0 < ν ≤ ν'`, constants of the protocol with an
 admissible direct-repainting ratio, `L ≥ 2` with `L ≤ 2 ^ k < 2 L`, `‖Ω‖ = 1`, patches supplied
@@ -146,21 +159,22 @@ its proof, lines 82–241, 507–541 and 572–681. -/
 theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0 < ε₀)
     (hε₀ : ε₀ ≤ 1 / 16) :
     ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
-      IsProtocolConstants K₀ ε₀ ν a D B₀ → IsDirectRepaintingRatio K₀ ε₀ ν →
+      ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, IsDirectRepaintingRatio K₀ ε₀ ν →
       ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q} {C c : ℝ}
         (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (hL : 2 ≤ L)
         (hkL : L ≤ 2 ^ k) (hk2 : 2 ^ k < 2 * L) (hΩ : ‖Ω‖ = 1) (rank : GuideLabel → ℕ)
-        (R₀ : RepaintedSquare k) (ht : 0 < D * Real.log L)
-        (hB : ε₀ * (D * Real.log L) ≤ B₀ * Real.log L)
+        (R₀ : RepaintedSquare k)
         (frozen : ProtocolEvent k × RepaintOp → Frame (cellCenterPos L) q (ProtocolParty k))
         (auxOwner : ProtocolEvent k × RepaintOp → ProtocolParty k) {C' c' kK : ℕ} {C₁ : ℝ},
       C ≤ C' → 1 ≤ C' → c ≤ c' →
       (∀ i (hi : i < (eventSchedule k).length) (S : DyadicSquare k),
         (eventSchedule k)[i] = .inl S → largeSquare K₀ (D * Real.log L) S = true →
         ∃ seg : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)),
-          seg 0 = protocolState P rank R₀ hε ht hB (largeSquare K₀ (D * Real.log L)) frozen
+          seg 0 = protocolState P rank R₀ hε (hc.t_pos hL) (hc.hole_le hL)
+            (largeSquare K₀ (D * Real.log L)) frozen
             auxOwner i ∧
-          seg 189 = protocolState P rank R₀ hε ht hB (largeSquare K₀ (D * Real.log L)) frozen
+          seg 189 = protocolState P rank R₀ hε (hc.t_pos hL) (hc.hole_le hL)
+            (largeSquare K₀ (D * Real.log L)) frozen
             auxOwner (i + 1) ∧
           ∀ j < 189, HasSourceBoundedChange Ω (seg j) (seg (j + 1)) (ℓ := []) (1 : ℂ)
             {p | EventUses (.inl S) p} (2 * protocolPatchBound ε₀ ν)
@@ -176,9 +190,11 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
         D'.IsDistributionProtocol Ω C₁ (64 * 189) kK (2 * protocolPatchBound ε₀ ν) ∧
           ∀ t < D'.changes, (D'.step t).IsSourceBounded (2 * protocolPatchBound ε₀ ν) := by
   obtain ⟨ν', hν', Hres⟩ := exists_resize_hasSourceBoundedChange hε hε₀
-  refine ⟨ν', hν', fun ν hν hνν' {k K₀ a D B₀} hc hm {L q} _ {Ω C c} P hL hkL hk2 hΩ rank R₀ ht hB
+  refine ⟨ν', hν', fun ν hν hνν' {k K₀ a D B₀} hc hm {L q} _ {Ω C c} P hL hkL hk2 hΩ rank R₀
     frozen auxOwner {C' c' kK C₁} hC hC' hcc hlarge hfε hfh hC₁ hK hεC => ?_⟩
   classical
+  have ht := hc.t_pos hL
+  have hB := hc.hole_le hL
   have hk : 1 ≤ k := by
     by_contra h
     have : k = 0 := by omega
@@ -191,7 +207,6 @@ theorem exists_isDistributionProtocol_of_largeRepaintings {ε₀ : ℝ} (hε : 0
   set st := protocolState P rank R₀ hε ht hB large frozen auxOwner with hst_def
   set idle : ProtocolEvent k × RepaintOp → Frame (cellCenterPos L) q (ProtocolParty k) :=
     fun x => Frame.raw fun _ => auxOwner x
-  have hε0 : (0 : ℝ) ≤ (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by positivity
   -- the changes of each event
   have hseg : ∀ i (hi : i < (eventSchedule k).length),
       ∃ seg : ℕ → List (Frame (cellCenterPos L) q (ProtocolParty k)), seg 0 = st i ∧
