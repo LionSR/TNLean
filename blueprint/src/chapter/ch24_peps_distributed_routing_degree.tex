@@ -6,16 +6,17 @@ labels. Thus distinct links between the same parties are counted separately.
 The following comparisons give the degree bound used in
 \cite[Section~8.1]{OpenAI2026PolynomialPEPS}.
 
-\begin{lemma}[Degree and distributed incidence]
-    \label{lem:peps_distributed_degree_incidence}
+\begin{theorem}[Degree and distributed incidence]
+    \label{thm:peps_distributed_degree_incidence}
     \leanok
     \uses{def:compression_distributed_links, def:compression_distributed_link_parties}
     \lean{TNLean.PEPS.Approximation.DistributedOperatorContraction.degreeBounded_of_card_incidentDistributedLinks_le}
     Let $I(p)$ be the set of constructed links incident to a party $p$.
     If $|I(p)|\le d$ for every party, the constructed network has degree at
     most $d$, counting parallel links separately.
-\end{lemma}
+\end{theorem}
 \begin{proof}\leanok
+    \uses{def:compression_operator_endpoints}
     The endpoints of each oriented link give precisely its participating
     set. The links whose source or target is $p$ therefore correspond
     bijectively to $I(p)$, with every gate and kind label retained.
@@ -33,7 +34,7 @@ The following comparisons give the degree bound used in
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:compression_distributed_incidence_bound,
-        lem:peps_distributed_degree_incidence}
+        thm:peps_distributed_degree_incidence}
     The distributed incidence bound gives $|I(p)|\le2b(b-1)$ for every
     party. Apply the degree comparison.
 \end{proof}
