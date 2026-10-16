@@ -41,21 +41,27 @@ bounds is the lifetime count used in the compression argument of
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_original_chronology_composition}
-    The number of nonprivate occurrences is the sum of the corresponding
-    counts over the $T$ stages. Each summand is at most $b$.
+    Writing $N(X)$ for the number of nonprivate occurrences in a circuit $X$,
+    we have
+    \begin{align}
+        N(W) & =\sum_{t<T}N(W_t)\leq\sum_{t<T}b=bT. \notag
+    \end{align}
 \end{proof}
 
-\begin{lemma}[Participating sets under equal layouts]
+\begin{lemma}[Circuit properties under equal layouts]
     \label{lem:peps_circuit_layout_participants}
     \leanok
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.castLayouts_rec}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.forall_participants_castLayouts}
-    Let $Q$ be a property of finite sets of parties. Suppose $Q(S_g)$ holds
-    for the participating set $S_g$ at every nonprivate occurrence of a
-    circuit. Identifying its initial and final register layouts with equal
-    layouts preserves this property at every occurrence.
+    Identifying the initial and final register layouts of a circuit with equal
+    layouts preserves every property of the circuit. In particular, let $Q$
+    be a property of finite sets of parties, and suppose $Q(S_g)$ holds for
+    the participating set $S_g$ at every nonprivate occurrence. The same
+    assertion holds after the endpoint layouts have been identified.
 \end{lemma}
 \begin{proof}\leanok
-    The identification changes no participating set.
+    Substitute the equal endpoint layouts. The circuit and its participating
+    sets are unchanged.
 \end{proof}
 
 \begin{lemma}[A common stage for the participating set]
