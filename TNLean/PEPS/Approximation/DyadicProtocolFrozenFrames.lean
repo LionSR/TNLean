@@ -20,7 +20,7 @@ holes of the frozen frames satisfy the frame constraint, and together they numbe
 * `protocolFrozen`, `protocolAuxOwner` : the frozen frame and the idle owner of each auxiliary
   sheet;
 * `norm_act_proj_sub_le_of_mem_holes_protocolFrozen` : the frame constraint of the frozen holes;
-* `sum_length_holes_protocolFrozen_le` : at most `10080 L ^ 3` frozen holes.
+* `length_holes_protocolFrozen_le` : at most two holes on each frozen frame.
 
 ## References
 

@@ -155,7 +155,7 @@ theorem largeSizeDyadicProtocolConsequences_of_angularInformationBound
       hB (protocolFrozen P rank hr) protocolAuxOwner hi he hl (by omega) hK1
       (fun hS => by
         intro g hg M M' Q₀ hQ hM L₀ hL₀
-        exact H₂ ν hν hνν₂ hc hL hΩ1 P rank ⟨S, hS⟩ hlarge _ hg Q₀ hQ hM L₀ hL₀ _ (Nat.le_ceil C)
+        exact H₂ ν hν hνν₂ hc hL hΩ1 P rank ⟨S, hS⟩ hlarge _ hg Q₀ hQ hM L₀ hL₀ (Nat.le_ceil C)
           hC' (Nat.le_ceil c))
       (fun hS e => protocolFrozen_auxInit P rank hr hi he hS e)
       (fun hS e => protocolAuxOwner_auxInit hi he hS e)
@@ -177,7 +177,7 @@ theorem largeSizeDyadicProtocolConsequences_of_angularInformationBound
     have hC₁ : (10080 : ℝ) ≤ C₁ := le_max_left _ _
     have hL3 : (0 : ℝ) ≤ (L : ℝ) ^ 3 := by positivity
     nlinarith
-  obtain ⟨D', hD', -⟩ := H₁ ν hν hνν₁ hc (H₃ ν hν hνν₃) P hL hkL hk2 hΩ1 rank R₀ ht hB
+  obtain ⟨D', hD', -⟩ := H₁ ν hν hνν₁ hc (H₃ ν hν hνν₃) P hL hkL hk2 hΩ1 rank R₀
     (protocolFrozen P rank hr) protocolAuxOwner (C' := C') (c' := c') (kK := kK) (C₁ := C₁)
     (Nat.le_ceil C) hC' (Nat.le_ceil c) hseg
     (fun x _ _ hh => norm_act_proj_sub_le_of_mem_holes_protocolFrozen P rank hr (by omega) x hh)
