@@ -77,12 +77,14 @@ theorem exists_isScheduled_rank {r : ℕ} (h2 : 2 ≤ r) (hr : r ≤ 2 * k + 1) 
     · change k - m < k; omega
     · rw [ProtocolEvent.rank_inl]; simp only; omega
 
+/-- Event ranks are nondecreasing along the schedule. -/
 theorem rank_getElem_le_of_le {i j : ℕ} (hij : i ≤ j) (hj : j < (eventSchedule k).length) :
     ((eventSchedule k)[i]'(hij.trans_lt hj)).rank ≤ ((eventSchedule k)[j]).rank := by
   rcases hij.lt_or_eq with h | rfl
   · exact List.pairwise_iff_getElem.1 (pairwise_rank_eventSchedule k) i j _ hj h
   · exact le_rfl
 
+/-- Every entry of the event schedule is a scheduled event. -/
 theorem isScheduled_getElem {i : ℕ} (hi : i < (eventSchedule k).length) :
     ((eventSchedule k)[i]).IsScheduled :=
   mem_eventSchedule.1 (List.getElem_mem hi)

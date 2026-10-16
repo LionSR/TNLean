@@ -96,10 +96,13 @@ def repaintedBlocks (k i j : ℕ) : Set (ℤ × ℤ) :=
   {Q | ∃ S : DyadicSquare k, (Sum.inl S : ProtocolEvent k) ∈ (eventSchedule k).take i ∧
     (S.1 : ℕ) = j ∧ Q = S.index}
 
+/-- Splitting off event `i` from the first `i + 1` events of the schedule. -/
 theorem take_succ_eventSchedule {i : ℕ} (hi : i < (eventSchedule k).length) :
     (eventSchedule k).take (i + 1) = (eventSchedule k).take i ++ [(eventSchedule k)[i]] := by
   exact (List.take_concat_get' _ _ hi).symm
 
+/-- When event `i` resizes junction `J`, its corner is inserted among the resized corners
+of that scale. -/
 theorem resizedCorners_succ_inr {i : ℕ} (hi : i < (eventSchedule k).length) {J : DyadicJunction k}
     (he : (eventSchedule k)[i] = .inr J) :
     resizedCorners k (i + 1) J.1 =
@@ -116,6 +119,8 @@ theorem resizedCorners_succ_inr {i : ℕ} (hi : i < (eventSchedule k).length) {J
     · exact ⟨J, Or.inr rfl, rfl, rfl⟩
     · exact ⟨J', Or.inl h, hJ, rfl⟩
 
+/-- When event `i` repaints square `S`, its block is inserted among the repainted blocks
+of that level. -/
 theorem repaintedBlocks_succ_inl {i : ℕ} (hi : i < (eventSchedule k).length) {S : DyadicSquare k}
     (he : (eventSchedule k)[i] = .inl S) :
     repaintedBlocks k (i + 1) S.1 = insert S.index (repaintedBlocks k i S.1) := by
@@ -171,11 +176,13 @@ section States
 variable {ε₀ t : ℝ} (hε : 0 < ε₀) (ht : 0 < t) (hB : ε₀ * t ≤ B₀ * Real.log L)
 
 include hε ht hB in
+/-- Under the stated positivity and size bounds, the hole radius lies in its admissible interval. -/
 theorem holeRadius_mem {n : ℝ} (hn : 0 < n) :
     0 < holeRadius ε₀ n t ∧ holeRadius ε₀ n t ≤ B₀ * Real.log L :=
   ⟨holeRadius_pos hε hn ht, (holeRadius_le_mul_right hε.le).trans hB⟩
 
 include hε ht hB in
+/-- Both resized and unresized hole radii lie in the same admissible interval. -/
 theorem resizeRadius_mem {n : ℝ} (hn : 0 < n) (A : Set (ℝ × ℝ)) (z : ℝ × ℝ) :
     0 < resizeRadius ε₀ t n A z ∧ resizeRadius ε₀ t n A z ≤ B₀ * Real.log L := by
   classical
@@ -216,10 +223,12 @@ def mainState (i : ℕ) : Frame (cellCenterPos L) q (ProtocolParty k) :=
     eventMain P rank R₀ hε ht hB i ((eventSchedule k)[i])
   else finalMain P rank R₀ hε ht hB
 
+/-- Before the end of the schedule, the main state is the frame for the current event. -/
 theorem mainState_of_lt {i : ℕ} (hi : i < (eventSchedule k).length) :
     mainState P rank R₀ hε ht hB i = eventMain P rank R₀ hε ht hB i ((eventSchedule k)[i]) :=
   dite_eq_left hi
 
+/-- At or after the end of the schedule, the main state is the final frame. -/
 theorem mainState_of_le {i : ℕ} (hi : (eventSchedule k).length ≤ i) :
     mainState (q := q) P rank R₀ hε ht hB i = finalMain P rank R₀ hε ht hB :=
   dite_eq_right (not_lt.2 hi)
