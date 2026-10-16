@@ -274,16 +274,9 @@ theorem bandBirth_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
   have hafter : guideFrame (cellCenterPos L) q fa (labelParty R) guidePlaceholder rank Va
       (suppliedPatch P _ hr) hda =
       (guideFrame (cellCenterPos L) q fb (labelParty R) guidePlaceholder rank Vb
-        (suppliedPatch P _ hr) hdb).changeOwner T (labelParty R Q) := by
-    rw [guideFrame_congr_guide (g' := fa) (hV' := by rw [← hVV]; exact hda) rfl hVV
-      (fun _ _ => rfl)]
-    refine guideFrame_eq_changeOwner (fun x => ?_) (fun z hz => ?_)
-    · by_cases hx : fb (cellCenterPos L x) = fa (cellCenterPos L x)
-      · have : x ∉ T := by simp [T, hx]
-        rw [ite_eq_right this, hx]
-      · have : x ∈ T := by simp [T, hx]
-        rw [ite_eq_left this, (hkey _ hx).2]
-    · exact (tagHolder_congr (hinc z ((hmb z).1 hz))).symm
+        (suppliedPatch P _ hr) hdb).changeOwner T (labelParty R Q) :=
+    guideFrame_eq_changeOwner_of_ne (fun x => by simp [T]) hVV (fun x hx => (hkey _ hx).2)
+      fun z hz => (hinc z ((hmb z).1 hz)).symm
   rw [hFb, hFa, hafter]
   obtain ⟨w, hw, hu, hs, herr⟩ := bandBirth_step_guideFrame (L := L) (hole := suppliedPatch P _ hr)
     (V := Vb) (hV := hdb) (own := labelParty R) (ph := guidePlaceholder) (rank := rank)
@@ -390,16 +383,9 @@ theorem bandDeath_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
   have hbefore : guideFrame (cellCenterPos L) q fb (labelParty R) guidePlaceholder rank Vb
       (suppliedPatch P _ hr) hdb =
       (guideFrame (cellCenterPos L) q fa (labelParty R) guidePlaceholder rank Va
-        (suppliedPatch P _ hr) hda).changeOwner T (labelParty R Q) := by
-    rw [guideFrame_congr_guide (g' := fb) (hV' := by rw [← hVV]; exact hdb) rfl hVV
-      (fun _ _ => rfl)]
-    refine guideFrame_eq_changeOwner (fun x => ?_) (fun z hz => ?_)
-    · by_cases hx : fb (cellCenterPos L x) = fa (cellCenterPos L x)
-      · have : x ∉ T := by simp [T, hx]
-        rw [ite_eq_right this, hx]
-      · have : x ∈ T := by simp [T, hx]
-        rw [ite_eq_left this, (hkey _ hx).2]
-    · exact tagHolder_congr (hinc z ((hV z).2 ((hma z).1 hz)))
+        (suppliedPatch P _ hr) hda).changeOwner T (labelParty R Q) :=
+    guideFrame_eq_changeOwner_of_ne (fun x => by simp [T, ne_comm]) hVV
+      (fun x hx => (hkey _ (Ne.symm hx)).2) fun z hz => hinc z ((hV z).2 ((hma z).1 hz))
   rw [hFb, hFa, hbefore]
   obtain ⟨M, hM, hu, hs, hf, herr⟩ := bandDeath_step_guideFrame (L := L)
     (hole := suppliedPatch P _ hr)

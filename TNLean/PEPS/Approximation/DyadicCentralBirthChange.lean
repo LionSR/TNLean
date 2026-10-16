@@ -154,16 +154,9 @@ theorem centralBirth_hasFrameChange_of (hD : IsAngularScale q J Δ a A₀ m₀ 6
   have hafter : guideFrame (cellCenterPos L) q fa own guidePlaceholder rank Va
       (suppliedPatch P _ hr) hda =
       (guideFrame (cellCenterPos L) q fb own guidePlaceholder rank Vb
-        (suppliedPatch P _ hr) hdb).changeOwner T (own Bl.finalLabel) := by
-    rw [guideFrame_congr_guide (g' := fa) (hV' := by rw [← hVV]; exact hda) rfl hVV
-      (fun _ _ => rfl)]
-    refine guideFrame_eq_changeOwner (fun x => ?_) (fun z hz => ?_)
-    · by_cases hx : fb (cellCenterPos L x) = fa (cellCenterPos L x)
-      · have : x ∉ T := by simp [T, hx]
-        rw [ite_eq_right this, hx]
-      · have : x ∈ T := by simp [T, hx]
-        rw [ite_eq_left this, (hkey _ hx).2]
-    · exact (tagHolder_congr (hinc z ((hmb z).1 hz))).symm
+        (suppliedPatch P _ hr) hdb).changeOwner T (own Bl.finalLabel) :=
+    guideFrame_eq_changeOwner_of_ne (fun x => by simp [T]) hVV (fun x hx => (hkey _ hx).2)
+      fun z hz => (hinc z ((hmb z).1 hz)).symm
   rw [hafter]
   subst htD
   obtain ⟨w, hw, hu, hs, herr⟩ := centralBirth_step_guideFrame (L := L)
