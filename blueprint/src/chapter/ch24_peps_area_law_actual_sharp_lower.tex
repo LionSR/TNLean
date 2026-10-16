@@ -11,10 +11,17 @@ The actual history tree and its conditional choices are retained.
 \begin{theorem}[Actual-root sharp lower estimate]
     \label{thm:actual_scan_sharp_lower_norm}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_sharp_lower_norm}
-    Fix positive physical and auxiliary dimensions $q,d$ and $a>0$.
+    \leanok
+    \uses{def:al_scan_actual_histories,def:al_scan_actual_energy_terms,
+        thm:al_scan_literal_scalars}
+    Fix a finite lattice domain $\Lambda$, interaction range $R$, term
+    norm bound $J$, positive physical and auxiliary dimensions $q,d$,
+    and $a>0$.
     There are $c,C_f\geq0$, chosen before the scanner, finite horizon,
     physical states, moment parameters, copy number, labels and
     interpolation parameter, with the following property.
+    Let the scanner be indexed by the ordered admissible interaction
+    supports at range $R$, with offset scale $m>0$ and charge capacity $M>0$.
     Let $\widetilde H$ be the sum of the actual truncated energy terms,
     formed from a fixed reference state, and suppose that a unit vector
     $\widetilde\Omega$ satisfies
@@ -78,6 +85,10 @@ The actual history tree and its conditional choices are retained.
 \end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{thm:al_scan_band_nesting,thm:al_augmented_root_compression,
+        thm:al_scan_actual_round_global_energy,thm:al_scan_nested_band_metrics,
+        thm:al_scan_actual_fill_admission,thm:al_scan_actual_charge_admissible}
     Apply the original-coordinate regional sharp lower norm theorem at
     metric parameter $t=a/2$ and inverse exponent $s=1/4$.
     The physical terminal partitions give disjoint near and middle
@@ -108,7 +119,10 @@ The actual history tree and its conditional choices are retained.
 \begin{definition}[Lower label defect and replica remainder]
     \label{def:actual_sharp_lower_remainder}
     \lean{TNLean.PEPS.AreaLaw.Scan.sharpLowerLabelDefect,TNLean.PEPS.AreaLaw.Scan.sharpLowerRemainder}
-    For one supplied label sequence $\ell_k$ and an entropy $S'$, put
+    \leanok
+    For one supplied label sequence $\ell_k$ and a real entropy parameter
+    $S'$, define $\varepsilon_k$ for every $k\in\mathbb N$.
+    For fixed $a>0$ and $c,C_f\in\mathbb R$, define $R_k^-$ for $k>0$ by
     \begin{align}
         \varepsilon_k
               & =2\bigl|\log\dim\ell_k-kS'\bigr|, \\
@@ -122,6 +136,8 @@ The actual history tree and its conditional choices are retained.
 \begin{theorem}[The same sequence supplies its lower label defect]
     \label{thm:actual_sharp_lower_label_defect}
     \lean{TNLean.PEPS.AreaLaw.Scan.sharpLowerLabelDefect_label_bound}
+    \leanok
+    \uses{def:actual_sharp_lower_remainder}
     For every supplied label sequence and every $k$,
     $\varepsilon_k\geq0$ and
     \begin{align}
@@ -130,6 +146,8 @@ The actual history tree and its conditional choices are retained.
 \end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{def:actual_sharp_lower_remainder}
     Apply $kS'-\log\dim\ell_k\leq
         |\log\dim\ell_k-kS'|$ and multiply by two.
 \end{proof}
@@ -137,14 +155,19 @@ The actual history tree and its conditional choices are retained.
 \begin{theorem}[Vanishing lower remainder for the supplied labels]
     \label{thm:actual_sharp_lower_remainder_limit}
     \lean{TNLean.PEPS.AreaLaw.Scan.tendsto_sharpLowerRemainder_of_label_dimension}
+    \leanok
+    \uses{def:actual_sharp_lower_remainder}
+    Fix $a>0$ and $c,C_f\in\mathbb R$.
     If the supplied sequence satisfies
-    $\log\dim\ell_k-kS'=o(k)$, then $R_k^-\to0$ for fixed
-    $a,c,C_f$.
+    $\log\dim\ell_k-kS'=o(k)$, then $R_k^-\to0$ as $k\to\infty$
+    through positive integers.
     In the physical application, this is the label-dimension conclusion
     of the same Schmidt--Bell prevector selection.
 \end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{def:actual_sharp_lower_remainder}
     The label premise gives $\varepsilon_k/k\to0$.
     Both $\log(k+1)/k$ and $\log(k+2)/k$ tend to zero, and
     $\log(\tfrac12(k+2)^{-C_f})=-C_f\log(k+2)-\log2$.
@@ -156,9 +179,17 @@ The actual history tree and its conditional choices are retained.
 \begin{theorem}[Actual sharp lower rate for the supplied prevector]
     \label{thm:actual_scan_supplied_prevector_sharp_lower}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_suppliedPrevector_sharp_lower}
-    Under the gap and moment conditions of
-    Theorem~\ref{thm:actual_scan_sharp_lower_norm}, take the literal
-    augmented replica prevector of a supplied sequence $\ell_k$.
+    \leanok
+    \uses{thm:actual_scan_sharp_lower_norm,def:actual_sharp_lower_remainder,
+        def:al_scan_status_marginals,def:al_scan_auxiliary_coordinates}
+    Under the scanner and gap conditions of
+    Theorem~\ref{thm:actual_scan_sharp_lower_norm}, use the horizon $nm$,
+    fix $K_{\rm mom}\geq0$, $a>0$, $10a\leq r_{\rm mom}$ and $10a\leq1$,
+    and take the literal augmented replica prevector of a supplied
+    sequence $\ell_k$.
+    Assume the marginal moment estimate of that theorem for all five
+    regions of Definition~\ref{def:al_scan_status_marginals} at every
+    completed status through $nm$ and every pre-charge status before $nm$.
     Suppose its original-coordinate vectors are nonzero and have norm at
     most one for every $k>0$, and
     $\log\dim\ell_k-kS'=o(k)$.
@@ -181,6 +212,10 @@ The actual history tree and its conditional choices are retained.
 \end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{thm:actual_scan_sharp_lower_norm,thm:actual_sharp_lower_label_defect,
+        thm:actual_sharp_lower_remainder_limit,thm:al_augmented_prevector_symmetry,
+        def:al_scan_auxiliary_coordinates}
     The fixed augmented coordinate equivalence preserves nonvanishing and
     norm. The literal replica prevector has simultaneous symmetry and
     the supplied label on both auxiliary factors; the auxiliary

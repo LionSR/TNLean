@@ -1,4 +1,4 @@
-\subsection{The actual canonical block pairs}
+\subsection{Canonical block pairs}
 
 \begin{definition}[Normalized faithful block fixed points]
     \label{def:ldp_canonical_block_fixed_points}
@@ -51,7 +51,7 @@
     \leanok
     \uses{def:ldp_canonical_block_fixed_points, thm:ldp_local_orthogonality,
         thm:ldp_ghz_form}
-    The actual block pairs satisfy $\langle\omega_j|\omega_{j'}\rangle
+    The block pairs satisfy $\langle\omega_j|\omega_{j'}\rangle
         =\delta_{jj'}$. Consequently $W\ket{j}=\ket{\omega_j}$ is an isometry.
 \end{theorem}
 \begin{proof}
@@ -70,7 +70,7 @@
     \uses{def:ldp_sector_fixed_point_state, def:ldp_repeated_block_sum}
     Let $\iota_{j,k}$ include the virtual coordinates of copy $k$ of block $j$
     in the flattened canonical direct sum. Their ranges are disjoint for distinct
-    pairs $(j,k)$, and the assembled tensor satisfies
+    pairs $(j,k)$, and the canonical tensor satisfies
     \begin{align}
         A^i & =\sum_j\sum_k\mu_{j,k}\iota_{j,k}A_j^i\iota_{j,k}^{\dagger}.
     \end{align}
@@ -183,7 +183,7 @@
     \leanok
     \uses{def:ldp_corrected_canonical_one_copy, thm:ldp_canonical_copy_coordinates,
         lem:ldp_one_copy_state}
-    Let $q\geq1$, let $V$ be the polar factor of the actual $q$-site blocked
+    Let $q\geq1$, let $V$ be the polar factor of the $q$-site blocked
     canonical tensor, and let $L_j$ be its copy isometries. Write
     $\ket{\Omega_j}$ for the product of the unembedded pairs of $\sigma_j$ and
     $K_{j,k_j}$ for the pair embedding on the chosen copy. Then

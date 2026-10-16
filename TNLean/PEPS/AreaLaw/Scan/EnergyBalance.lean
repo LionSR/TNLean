@@ -336,10 +336,10 @@ lemma goodOld_le (r : Fin (X.rounds n)) (k : ℕ) (p : ℝ) (hp : p ∈ Ioo (0 :
         (if (S.round r).splitOld i h then
           ∫ θ, (S.round r).etaOld i h θ ^ (1 / 8 : ℝ) ∂((S.round r).μOld k p h) else 0)
       else 0) ≤ N * ((S.round r).chargeDefect k p / N) ^ (1 / 8 : ℝ) := by
-  have := S.isFiniteMeasure_μOld r k p
+  have := S.inputs.isFiniteMeasure_μOld r k p
   calc _ ≤ N ^ (7 / 8 : ℝ) * (S.round r).chargeDefect k p ^ (1 / 8 : ℝ) :=
         (S.round r).goodOld_le_capacity k p (S.histories.w_nonneg r) (S.histories.sum_w r)
-          (S.μOld_real_univ r k p hp) (S.histories.measurable_etaOld r)
+          (S.inputs.μOld_real_univ r k p hp) (S.histories.measurable_etaOld r)
               (S.histories.etaOld_nonneg r)
           (S.histories.etaOld_le r) hN.le hcard
     _ = _ := rpow_seven_eighths_mul_rpow_eq hN (S.chargeDefect_nonneg r k p)
@@ -368,11 +368,12 @@ theorem energySum_le {C₁ : ℝ} (hn : ScaleFacts X n C₁) (r : Fin (X.rounds 
   have hE8 : 0 ≤ E ^ (1 / 8 : ℝ) := Real.rpow_nonneg hE0 _
   have hm : (0 : ℝ) < X.m n := by exact_mod_cast hn.one_le_m
   have hW0 : 0 ≤ κ.C * X.D n / X.m n := by positivity
-  have := S.isFiniteMeasure_μOld r k p
-  have := S.isFiniteMeasure_μNew r k p
+  have := S.inputs.isFiniteMeasure_μOld r k p
+  have := S.inputs.isFiniteMeasure_μNew r k p
   have hleaf := R.energySum_le_of_leaf_bounds k (Ioo_subset_Icc_self hp) (S.histories.w_nonneg r)
-    (S.histories.sum_w r) (S.histories.q_nonneg r) (S.histories.sum_q r) (S.μOld_real_univ r k p hp)
-    (S.μNew_real_univ r k p hp) (S.histories.measurable_etaOld r) (S.histories.etaOld_nonneg r)
+    (S.histories.sum_w r) (S.histories.q_nonneg r) (S.histories.sum_q r)
+    (S.inputs.μOld_real_univ r k p hp) (S.inputs.μNew_real_univ r k p hp)
+    (S.histories.measurable_etaOld r) (S.histories.etaOld_nonneg r)
     (S.histories.etaNew_nonneg r) hE0 hN.le hW0 (S.histories.etaOld_le r) (S.histories.etaNew_le r)
     (S.histories.card_splitOld_le r) (S.histories.card_splitNew_le r)
         (S.histories.splitWeight_le r p hp)
@@ -410,7 +411,7 @@ theorem exists_defectEnergy_le (X : ScannerExponents) (κ : ScanConstants) (C₁
         S.defectEnergy r k p ≤
           C * (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2 * S.W ^ 2 * Real.log n ^ Cl *
               (X.delta S.W Cδ κ.Cl n ^ (1 / 8 : ℝ) + X.eps n + (n : ℝ) ^ (-100 : ℝ)) +
-            C * (n : ℝ) ^ (-1000 : ℝ) + Λ * (S.rem k + ρ ^ (1 / 8 : ℝ)) := by
+            C * (n : ℝ) ^ (-1000 : ℝ) + Λ * (S.inputs.rem k + ρ ^ (1 / 8 : ℝ)) := by
   refine ⟨2 / κ.g * (κ.C ^ 4 * C₁ + 1), κ.Cl + κ.Cl / 8, ?_⟩
   filter_upwards [Filter.eventually_ge_atTop 3] with n hn3 hS S
   have hC : (1 : ℝ) ≤ κ.C := κ.one_le_C
@@ -445,7 +446,7 @@ theorem exists_defectEnergy_le (X : ScannerExponents) (κ : ScanConstants) (C₁
   intro r k p ρ hp hρ hQ
   have hp' : p ∈ Ioo (0 : ℝ) 1 := ⟨by linarith [hp.1], by linarith [hp.2]⟩
   have hsum := S.energySum_le hS r k hp'
-  have hen := S.energy r k p hp'
+  have hen := S.inputs.energy r k p hp'
   set δ := X.delta S.W Cδ κ.Cl n with hδdef
   set Q := (S.round r).chargeDefect k p with hQdef
   have hQ0 : 0 ≤ Q := S.chargeDefect_nonneg r k p
@@ -467,7 +468,7 @@ theorem exists_defectEnergy_le (X : ScannerExponents) (κ : ScanConstants) (C₁
   have hM0 : 0 ≤ M := add_nonneg hδ8 (mul_nonneg hE8 (add_nonneg hn200 hp'.1.le))
   -- The energy estimate at the selected point.
   have hkey : (S.round r).meanEnergy k p - S.E0 ≤
-      S.E0 + coef * M + (coef * ρ ^ (1 / 8 : ℝ) + S.rem k) := by
+      S.E0 + coef * M + (coef * ρ ^ (1 / 8 : ℝ) + S.inputs.rem k) := by
     have h1 : κ.C * X.a S.W n ^ 2 * L0 * (S.round r).energySum k p ≤
         κ.C * X.a S.W n ^ 2 * L0 * (κ.C * X.D n / X.m n * N * (M + ρ ^ (1 / 8 : ℝ))) := by
       refine mul_le_mul_of_nonneg_left (hsum.trans ?_) (by positivity)
@@ -534,9 +535,9 @@ theorem exists_defectEnergy_le (X : ScannerExponents) (κ : ScanConstants) (C₁
   unfold ScanData.defectEnergy
   rw [div_le_iff₀ hgap0]
   have hE0 := S.E0_le
-  have hrem := S.rem_nonneg k
-  have hΛ : (coef + 1) / S.gap * (S.rem k + ρ ^ (1 / 8 : ℝ)) * S.gap =
-      (coef + 1) * (S.rem k + ρ ^ (1 / 8 : ℝ)) := by field_simp
+  have hrem := S.inputs.rem_nonneg k
+  have hΛ : (coef + 1) / S.gap * (S.inputs.rem k + ρ ^ (1 / 8 : ℝ)) * S.gap =
+      (coef + 1) * (S.inputs.rem k + ρ ^ (1 / 8 : ℝ)) := by field_simp
   have hn1000 : 0 ≤ (n : ℝ) ^ (-1000 : ℝ) := Real.rpow_nonneg (by linarith) _
   have e1 : 2 / κ.g * (κ.C ^ 4 * C₁ + 1) * (n : ℝ) ^ X.ell * (X.D n : ℝ) ^ 2 * S.W ^ 2 * Lc * T
       = 2 / κ.g * (κ.C ^ 4 * C₁ + 1) * (P * Lc * T) := by rw [hPdef]; ring

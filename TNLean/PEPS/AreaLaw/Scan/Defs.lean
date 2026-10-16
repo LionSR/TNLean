@@ -31,6 +31,10 @@ restriction; a physical construction must supply the fields for the same origina
 truncated ground vectors. Documented in
 `docs/paper-gaps/arealaw2d_scanner_inputs.tex`.
 
+The conclusions of Lemma 9.1 form the sub-record `HistoryFacts`, and those of Proposition 4.5
+and Lemmas 2.1 and 3.1 form the parent structure `ScanTruncation`, so that a physical
+construction can supply them separately.
+
 ## Abstraction of the transported states
 
 For a terminal leaf `j` the source integrates a function of `θ` against
@@ -291,27 +295,12 @@ structure HistoryFacts (X : ScannerExponents) (n : ℕ) (C Cl c : ℝ) {ι Θ : 
   `C (log n)^{C_l}` (lines 434–440), so it is at most `C K (log n)^{C_l}`. -/
   choiceGain_le : ∀ r h θ, (round r).choiceGain h θ ≤ C * X.K n * Real.log n ^ Cl
 
-open Classical in
-/-- The finite data of the collar scan at scale `n`, for all replica counts `k`, together with
-the conclusions of the results that Proposition 9.2 uses (`08-scanner.tex`, lines 399–533).
-
-The complete finite system, the scan, and all auxiliary dimensions are fixed before `k → ∞`
-(lines 393–395): every field except the `k`-indexed families is independent of `k`. -/
-structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
-  /-- The labelled terms of the truncated Hamiltonian. -/
-  ι : Type
-  [instFintypeι : Fintype ι]
-  /-- The unit sphere of the one-copy space. -/
-  Θ : Type
-  [instMeasΘ : MeasurableSpace Θ]
-  /-- The rounds of the scan. -/
-  round : Fin (X.rounds n) → ScanRound ι Θ
-  /-- The total scalar metric weight `W = aK ≥ 1` of the scan (`scanner:scales`, lines 38–41).
-  It is part of the scan at scale `n`, not a fixed exponent: the source later takes `W = n^ω`
-  (`scanner:final-parameters`, line 843), so no constant may depend on it. -/
-  W : ℝ
-  /-- `W ≥ 1` (`scanner:scales`, line 41). -/
-  one_le_W : 1 ≤ W
+/-- The truncated ground state of the collar scan at scale `n` and the inputs it supplies:
+its ground energy and gap (Proposition 4.5 as used in `08-scanner.tex`, lines 49–59), the
+entropy inputs `scanner:entropy-input` and their transfer to the truncated state (Lemma 2.1,
+lines 400–404), the target typical window of width `n^{3/5}` (Lemma 3.1, lines 411–414) and a
+marginal-tail parameter for the status cuts (lines 405–409). -/
+structure ScanTruncation (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   /- Truncated Hamiltonian (Proposition 4.5 as used in lines 49–59). -/
   /-- Ground energy `\widetilde E_0`. -/
   E0 : ℝ
@@ -346,7 +335,7 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   /-- Lemma 2.1 on the shell sets `Q_j`. -/
   continuity_Q : ∀ j ≤ X.L n,
     |SQt j - SQ j| ≤ κ.C * √traceDist * (1 + κ.C * n ^ 2 * Real.log κ.q)
-  /- Comparator data (Proposition 8.1, `07-comparators.tex`, lines 36–70). -/
+  /- The target typical window (`07-comparators.tex`, lines 37–53, with Lemma 3.1). -/
   /-- `d_* = |E|`. -/
   dstar : ℝ
   /-- `z = ∑_{i ∈ E} p_i`. -/
@@ -361,27 +350,33 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   one_sub_le_z : 1 - (n : ℝ) ^ (-100 : ℝ) ≤ z
   /-- `comparator:typical-entropies`. -/
   log_dstar_le : |Real.log dstar - SXt| ≤ width + |Real.log z|
+  /-- A common marginal-tail parameter `𝓑` of Lemma 3.1 (`lem:tail`) for the status cuts of
+  the scan. -/
+  Bmarg : ℝ
+  /-- Status cuts have `O(nD)` edges, each crossing anchor lies within `r₀ = O(log² n)` of one,
+  and a crossing support has `log`-dimension `O(r₀²)`, so `𝓑 = O(nD (log n)^{12})`
+  (`08-scanner.tex`, lines 405–409). -/
+  Bmarg_le : Bmarg ≤ κ.C * n * X.D n * Real.log n ^ 12
+
+open Classical in
+/-- The conclusions of Propositions 7.4 and 8.1 for a family of rounds with total metric weight
+`W`, measured against the truncated ground state `T`: the comparator budgets of
+`comparator:prefix-data`, the replica remainders, the transported leaf measures, the entropy and
+energy estimates of the transport, and the schedule with its initial and terminal norm
+comparisons (`06-transport.tex`, lines 377–433; `07-comparators.tex`, lines 36–70;
+`08-scanner.tex`, lines 399–479). -/
+structure ScanInputs (X : ScannerExponents) (κ : ScanConstants) (n : ℕ)
+    (T : ScanTruncation X κ n) {ι Θ : Type} [Fintype ι] [MeasurableSpace Θ]
+    (round : Fin (X.rounds n) → ScanRound ι Θ) (W : ℝ) where
   /-- The shell entropy bound `B_sh` of `comparator:prefix-data`. -/
   Bsh : ℝ
   /-- The matched prefixes are shell sets `Q_j` up to a partial last depth row
   (Lemma 9.1(2), lines 403–404). -/
-  Bsh_le : ∃ j ≤ X.L n, Bsh ≤ SQt j + n * Real.log κ.q
+  Bsh_le : ∃ j ≤ X.L n, Bsh ≤ T.SQt j + n * Real.log κ.q
   /-- The mismatch bound `B_exc` of `comparator:prefix-data`. -/
   Bexc : ℝ
   /-- Matched prefixes differ by at most `C n D` sites (Lemma 9.1(2), line 206). -/
   Bexc_le : Bexc ≤ 1 + κ.C * n * X.D n * Real.log κ.q
-  /-- Graph radius `r₀` of every splitting support, `r₀ = ⌈C log² n⌉` (line 49). -/
-  r0 : ℕ
-  r0_le : (r0 : ℝ) ≤ κ.C * Real.log n ^ 2 + 1
-  /-- Number of crossing supports at a status cut. -/
-  crossCount : ℕ
-  /-- Status cuts have `O(nD)` edges, each crossing anchor lies within `r₀` of one
-  (lines 405–408). -/
-  crossCount_le : (crossCount : ℝ) ≤ κ.C * n * X.D n * (r0 + 1) ^ 2
-  /-- The marginal-tail parameter `𝓑` of Lemma 3.1 (`lem:tail`). -/
-  Bmarg : ℝ
-  /-- `𝓑 = 1 + ∑ log²(e dᵢ)` with `dᵢ ≤ q^{C(1+r₀)²}` (lines 406–409). -/
-  Bmarg_le : Bmarg ≤ 1 + crossCount * (1 + κ.C * (r0 + 1) ^ 2 * Real.log κ.q) ^ 2
   /- Replica remainders (Proposition 7.4, lines 421–433 of `06-transport.tex`). -/
   /-- The `o_k(1)` remainder, uniform in rounds, parameters, and replica states. -/
   rem : ℕ → ℝ
@@ -392,9 +387,6 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   Cβ : ℝ
   β_nonneg : ∀ k, 0 ≤ β k
   β_le : ∀ k, β k ≤ Cβ * Real.log (k + 2)
-  /-- Lemma 9.1 (`scanner:histories`, lines 195–221) and the move-entropy bounds of
-  lines 434–440 for the rounds of this scan. -/
-  histories : HistoryFacts X n κ.C κ.Cl κ.c round
   /- Leaf measures: for `0 < p < 1`, `m_s(u) du dμ_σ` has mass `2s = 1/2`
   (`06-transport.tex`, lines 393–400; `08-scanner.tex`, line 440). -/
   isFiniteMeasure_μOld : ∀ r k p h, IsFiniteMeasure ((round r).μOld k p h)
@@ -423,7 +415,7 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   `\widetilde E_0` (`comparator:prevector`). -/
   energy : ∀ r k, ∀ p ∈ Set.Ioo (0 : ℝ) 1,
     (round r).meanEnergy k p ≤
-      2 * E0 + κ.C * X.a W n ^ 2 * Real.log n ^ κ.Cl * (round r).energySum k p + rem k
+      2 * T.E0 + κ.C * X.a W n ^ 2 * Real.log n ^ κ.Cl * (round r).energySum k p + rem k
   /- Schedule (lines 145–154, 457–461) and the rough upper comparison at the end
   (`comparator:rough-upper`, lines 462–467). -/
   /-- Adjacent endpoint metrics agree. -/
@@ -434,7 +426,36 @@ structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ) where
   /-- `comparator:rough-upper` at the last endpoint, `s = 1/4`. -/
   logNormSq_final : ∀ (r : Fin (X.rounds n)), r.val + 1 = X.rounds n → ∀ k, 1 ≤ k →
     -(round r).logNormSq k 1 / k ≤
-      2 * Real.log dstar - Real.log z + 2 * (1 / 4) * W * (2 * Bsh / z + 2 * Bexc) + rem k
+      2 * Real.log T.dstar - Real.log T.z + 2 * (1 / 4) * W * (2 * Bsh / T.z + 2 * Bexc) + rem k
+
+open Classical in
+/-- The finite data of the collar scan at scale `n`, for all replica counts `k`, together with
+the conclusions of the results that Proposition 9.2 uses (`08-scanner.tex`, lines 399–533).
+
+The complete finite system, the scan, and all auxiliary dimensions are fixed before `k → ∞`
+(lines 393–395): every field except the `k`-indexed families is independent of `k`. -/
+structure ScanData (X : ScannerExponents) (κ : ScanConstants) (n : ℕ)
+    extends ScanTruncation X κ n where
+  /-- The labelled terms of the truncated Hamiltonian. -/
+  ι : Type
+  [instFintypeι : Fintype ι]
+  /-- The unit sphere of the one-copy space. -/
+  Θ : Type
+  [instMeasΘ : MeasurableSpace Θ]
+  /-- The rounds of the scan. -/
+  round : Fin (X.rounds n) → ScanRound ι Θ
+  /-- The total scalar metric weight `W = aK ≥ 1` of the scan (`scanner:scales`, lines 38–41).
+  It is part of the scan at scale `n`, not a fixed exponent: the source later takes `W = n^ω`
+  (`scanner:final-parameters`, line 843), so no constant may depend on it. -/
+  W : ℝ
+  /-- `W ≥ 1` (`scanner:scales`, line 41). -/
+  one_le_W : 1 ≤ W
+  /-- Lemma 9.1 (`scanner:histories`, lines 195–221) and the move-entropy bounds of
+  lines 434–440 for the rounds of this scan. -/
+  histories : HistoryFacts X n κ.C κ.Cl κ.c round
+  /-- Propositions 7.4 and 8.1 for the rounds of this scan, with the same truncated ground
+  state. -/
+  inputs : ScanInputs X κ n toScanTruncation round W
 
 attribute [instance] ScanData.instFintypeι ScanData.instMeasΘ
 
@@ -444,7 +465,8 @@ variable {X : ScannerExponents} {κ : ScanConstants} {n : ℕ} (S : ScanData X �
 
 /-- The right side of `comparator:rough-upper` without its remainder. -/
 noncomputable def terminalBound : ℝ :=
-  2 * Real.log S.dstar - Real.log S.z + 2 * (1 / 4) * S.W * (2 * S.Bsh / S.z + 2 * S.Bexc)
+  2 * Real.log S.dstar - Real.log S.z +
+    2 * (1 / 4) * S.W * (2 * S.inputs.Bsh / S.z + 2 * S.inputs.Bexc)
 
 /-- The defect energy `E_def = (⟨v, \bar{\widetilde H} v⟩ - \widetilde E_0) / \widetilde g`
 (lines 366–369). -/
@@ -458,9 +480,9 @@ comparison (lines 457–475), before normalization. -/
 def IntegratedChargeBound (k : ℕ) : Prop :=
   k * X.a S.W n * (κ.c / (n * X.D n)) *
       ∑ r ∈ X.chargeRounds n, ∫ p in (X.eps n / 2)..(X.eps n), (S.round r).chargeDefect k p ≤
-    S.β k + k * (S.terminalBound + S.rem k) +
+    S.inputs.β k + k * (S.terminalBound + S.inputs.rem k) +
       X.rounds n *
-        (κ.C * k * X.a S.W n * X.K n * X.a S.W n ^ (1 / 4 : ℝ) * Real.log n ^ κ.Cl + S.β k)
+        (κ.C * k * X.a S.W n * X.K n * X.a S.W n ^ (1 / 4 : ℝ) * Real.log n ^ κ.Cl + S.inputs.β k)
 
 end ScanData
 

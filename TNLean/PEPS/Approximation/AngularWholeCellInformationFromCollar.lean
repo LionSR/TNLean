@@ -21,6 +21,8 @@ polynomial-PEPS Proposition 3.4; it does not derive the collar estimate. See
 Source: polynomial-PEPS manuscript, Lemma 3.2 and Proposition 3.4,
 `02-information.tex`, lines 163–311 and 692–732, revision
 `adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+
+Independently formalized from the manuscript; no upstream Lean proof text is reused.
 -/
 
 namespace TNLean.PEPS.Approximation

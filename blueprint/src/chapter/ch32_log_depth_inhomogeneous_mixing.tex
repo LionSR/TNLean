@@ -5,12 +5,12 @@ Fix a faithful density matrix $\sigma$ on the common bond space
 $\mathbb C^D$, and write $P_\infty=(\sqrt\sigma)^\mathsf T\otimes I$.
 Let $T_\sigma$ be the transfer matrix of the map
 $X\mapsto\operatorname{Tr}(X)\sigma$. Every matrix norm in this section
-is the $L^2$ operator norm. A quantitative bound on actual ordered
+is the $L^2$ operator norm. A quantitative bound on ordered
 transfer products is an additional sufficient condition for the
 inhomogeneous preparation of~\cite{Malz2024Preparation}; separate
 sitewise spectral gaps do not imply that bound.
 
-For an actual two-site interval, the first equality below contracts the
+For a two-site interval, the first equality below contracts the
 intermediate bond, and the second is the polar decomposition of its
 physical matrix. The physical indices remain $i_0,i_1$ on all three
 panels; the internal index $u$ has dimension $D^2$.
@@ -151,7 +151,7 @@ $(\hbox{lower bond},\hbox{upper bond})$.
         MPSPreparation.exists_one_sub_norm_inner_chainPosState_le}
     \leanok
     There is $C_1>0$, depending only on $D,\sigma$, such that the following
-    holds. Partition an inhomogeneous ring into $M\ge1$ actual contiguous
+    holds. Partition an inhomogeneous ring into $M\ge1$ contiguous
     blocks. Suppose the transfer matrices of each block and of the whole
     ring differ from $T_\sigma$ by at most $\delta\ge0$. With
     $\Omega=\bigotimes_j\omega_\sigma$ and
@@ -166,7 +166,7 @@ $(\hbox{lower bond},\hbox{upper bond})$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:ldp_inhomogeneous_mixed_overlap,thm:ldp_normalization_triangle,thm:ldp_chain_block_iso_inner,lem:ldp_block_isometry_state_overlap}
-    The actual whole-ring transfer matrix satisfies
+    The whole-ring transfer matrix satisfies
     $c_N^2=\operatorname{Tr}(T_{B_{\mathrm{whole}}})$, hence
     $|c_N^2-1|\le K_D\delta$. The preceding theorem bounds
     $|z_M-1|$, where $z_M=\langle\Omega,\phi_{\mathrm{pos}}\rangle$.
@@ -185,7 +185,7 @@ $(\omega_\sigma)_{r,l}=(\sqrt\sigma)_{r,l}$.
 The open index $I_j$ is the physical word of block $j$.
 Replacing each $P_\infty$ by $P_j$ gives the unnormalized target, so
 normalization divides that target by $c_N$, not the pair product.
-The condition $D^2\le d^{3D}$ supplies space for the isometric extensions
+The condition $D^2\le d^{3D}$ provides space for the isometric extensions
 even when the Gram matrices are rank deficient. Smaller rings use exact
 preparation, and $d\le1$ is prepared directly in depth zero.
 % TENKZ-ORDERED-MIXING-PREPARATION-BEGIN
@@ -275,7 +275,7 @@ preparation, and $d\le1$ is prepared directly in depth zero.
     \uses{thm:ldp_inhomogeneous,thm:ldp_inhomogeneous_exact,lem:ldp_log_threshold_error}
     For $N\ge2$, choose $q=\lceil a\log(N/\varepsilon)+b\rceil$ with
     $a=\max(k,1)/r$ and $b=\max(\log K,0)/r+3D+1$. Then $q\ge3D$ and
-    $KN^ke^{-rq}\le\varepsilon$. When $q\le N$, the supplied partition
+    $KN^ke^{-rq}\le\varepsilon$. When $q\le N$, the given partition
     gives depth $O(q)$; when $q>N$, exact preparation gives depth $O(N)$.
     Both are $O(\log(N/\varepsilon))$, and the one-site case has depth zero.
     The argument invokes the rate hypothesis only at the current ring
@@ -328,9 +328,9 @@ preparation, and $d\le1$ is prepared directly in depth zero.
     nonnegative supertrace, $\|\phi_N\|^2=\operatorname{Tr}(QS)+\eta\ge\eta$.
     The inverse Gram reshuffling is a bounded linear permutation of matrix
     entries. Apply Theorem~\ref{thm:ldp_chain_positive_part_rate} to the
-    actual sites, regarded as blocks of length one. This gives
+    individual sites, regarded as blocks of length one. This gives
     $\|T_{B_I}-T_\sigma\|\le K(1-\eta)^{|I|}$, uniformly in every
-    actual interval. To keep a finite positive logarithmic decay parameter
+    interval. To keep a finite positive logarithmic decay parameter
     also at $\eta=1$, weaken domination to $\eta/2$ and set
     $r=-\log(1-\eta/2)>0$. The preceding theorem applies.
     The transfer bound itself includes both $\eta=0$ and $\eta=1$;

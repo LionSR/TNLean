@@ -821,3 +821,114 @@ norm of matrices, rectangular ones included.
     identity on the other registers, and the sum of the monomials, restricted
     to the registers of the specified parties, is one gate of these parties.
 \end{proof}
+
+\subsection{Pair sources of the rewrite gates}
+
+The third assumption of \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS}
+bounds, by one constant $r$, the numbers of pair sources, pair effects and
+messages in every monomial of every gate expansion
+(\texttt{04-compression.tex}, lines 143--147). The rewrite gates above
+already carry the bound on pair effects; this subsection adds the bound on
+pair sources with the same constant.
+
+\begin{definition}[Pair-source bound of an original circuit]
+    \label{def:peps_circuit_source_bound}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.IsSourceBounded}
+    \leanok
+    \uses{def:peps_original_circuit}
+    An original circuit satisfies the pair-source bound with constant $r$
+    when every monomial $M_{j,\xi}$ in the expansion of every nonprivate
+    operation contains at most $r$ normalized pair sources.
+\end{definition}
+
+\begin{lemma}[Pair sources of monomials read as circuits]
+    \label{lem:peps_circuit_source_bound_monomials}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.IsSourceBounded.mono,
+        TNLean.PEPS.PairEffect.OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero,
+        TNLean.PEPS.PairEffect.OriginalCircuit.isSourceBounded_castLayouts,
+        TNLean.PEPS.PairEffect.OriginalCircuit.isSourceBounded_frameList,
+        TNLean.PEPS.PairEffect.OriginalCircuit.isSourceBounded_appendTail,
+        TNLean.PEPS.PairEffect.Word.isSourceBounded_toOriginalCircuit,
+        TNLean.PEPS.PairEffect.PartyChain.isSourceBounded_toOriginalCircuit,
+        TNLean.PEPS.PairEffect.Word.isSourceBounded_toOriginalCircuit_of_one_le,
+        TNLean.PEPS.PairEffect.PartyChain.isSourceBounded_toOriginalCircuit_of_one_le}
+    \leanok
+    \uses{def:peps_circuit_source_bound}
+    The pair-source bound with constant $r$ implies the bound with every
+    larger constant. It is preserved by composition and by placing a circuit
+    beside untouched registers, and a circuit without nonprivate operations
+    satisfies it with every constant. An allowed monomial read operation by
+    operation, each local contraction a private map and each normalized pair
+    source or pair effect a two-party gate, satisfies it with every constant
+    $r\ge1$.
+\end{lemma}
+
+\begin{proof}\leanok
+    Every gate of the monomial read operation by operation is a single
+    pair source or a single pair effect, with coefficient one.
+\end{proof}
+
+\begin{lemma}[A sum of monomials as one gate keeps its pair sources]
+    \label{lem:peps_party_gate_source_bound}
+    \lean{TNLean.PEPS.PairEffect.Word.sourceCount_selectedPart,
+        TNLean.PEPS.PairEffect.PartyChain.sourceCount_selectedPart,
+        TNLean.PEPS.PairEffect.Word.sourceCount_mapOwner_le,
+        TNLean.PEPS.PairEffect.PartyChain.sourceCount_mapOwner_le,
+        TNLean.PEPS.PairEffect.isSourceBounded_gateCircuit,
+        TNLean.PEPS.PairEffect.PartyGate.exists_originalCircuit_isSourceBounded}
+    \leanok
+    \uses{lem:peps_circuit_source_bound_monomials}
+    Let $\sum_\xi c_\xi M_\xi$ be a contraction expanded into allowed
+    monomials that use only the parties of a nonempty finite set $S$ and act
+    as the identity on the other registers. Then the sum is the operator of a
+    circuit with at most one gate, whose parties lie in $S$, as in the proof
+    of Theorem~\ref{thm:peps_frame_small_rewrite_gate}, such that the
+    circuit satisfies the pair-source bound with constant $r$ whenever every
+    $M_\xi$ has at most $r$ pair sources.
+\end{lemma}
+
+\begin{proof}\leanok
+    The monomials of the gate are the parts of the $M_\xi$ on the
+    registers of $S$, with owners relabelled by the parties of $S$. A
+    monomial that uses only parties of $S$ has all of its pair sources
+    between parties of $S$, so its part on these registers keeps every pair
+    source, and relabelling owners turns a pair source into a local
+    preparation at most. The exchanges of tensor factors that bring the
+    registers of $S$ to the front and back contain no gate.
+\end{proof}
+
+\begin{theorem}[Pair sources of the small-patch rewrite gates]
+    \label{thm:peps_frame_small_rewrite_gate_sources}
+    \lean{TNLean.PEPS.EncodedFrame.SmallPatchRewrite.exists_originalCircuit_refVec_isSourceBounded,
+        TNLean.PEPS.Approximation.GuideFrameRewrite.PlaneConditions.exists_originalCircuit_isSourceBounded,
+        TNLean.PEPS.Approximation.directRepainting_step_isSourceBounded,
+        TNLean.PEPS.Approximation.resize_step_isSourceBounded,
+        TNLean.PEPS.Approximation.pointTreatment_step_isSourceBounded,
+        TNLean.PEPS.Approximation.exists_resize_step_reading_isSourceBounded,
+        TNLean.PEPS.Approximation.exists_pointTreatment_step_reading_isSourceBounded}
+    \leanok
+    \uses{thm:peps_frame_small_rewrite_gate, lem:peps_party_gate_source_bound,
+        thm:peps_guide_frame_rewrite_events,
+        thm:peps_guide_frame_resize_treatment_gates,
+        thm:peps_guide_frame_reading_gates}
+    In the setting of Theorem~\ref{thm:peps_frame_small_rewrite_gate}, the
+    circuit can be chosen to satisfy, besides the conclusions of that
+    theorem, the pair-source bound with constant $2b$. The same holds for the
+    rewrites between frames of guides and, in the dyadic protocol of
+    \cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}, for the direct
+    repainting of a block, the resize of a hole and the point treatment of a
+    mark, including their forms with one footprint ratio
+    (Theorems~\ref{thm:peps_guide_frame_resize_treatment_gates}
+    and~\ref{thm:peps_guide_frame_reading_gates}). Hence every monomial of
+    these gates has at most $2b$ pair sources and at most $2b$ pair effects.
+\end{theorem}
+
+\begin{proof}\leanok
+    Each monomial of the expansion of
+    Theorem~\ref{thm:peps_frame_small_rewrite_polynomial} has at most
+    $2m\le 2b$ normalized pair sources, one for each patch vertex with open
+    output legs. Lemma~\ref{lem:peps_party_gate_source_bound} keeps this bound on
+    the gate. The rewrites between frames of guides compose this gate with
+    exchanges of tag registers, which contain no gate. The direct repainting,
+    the resizes and the point treatments are such rewrites.
+\end{proof}

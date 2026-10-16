@@ -58,7 +58,7 @@ span after blocking.
     \end{align}
     Both directions hold for general invertible gauges without unitarity
     constraints, allowing span certificates in left-canonical form to be
-    transported to unital gauges.
+    carried over to unital gauges.
 \end{theorem}
 
 \begin{proof}
@@ -131,7 +131,7 @@ span after blocking.
          & = \prod_{j=1}^g \MN{D_j}.
         \notag
     \end{align}
-    Moreover, there is $L_0$ such that, for every $L\geq L_0$, the
+    In addition, there is $L_0$ such that, for every $L\geq L_0$, the
     unblocked word tuples have the simultaneous span
     \begin{align}
         \spn_{\C}\{(A_1^\omega,\ldots,A_g^\omega):|\omega|=L\}
@@ -155,7 +155,7 @@ span after blocking.
     $g\mathbin{\dot-}1=\max\{g-1,0\}$. Multiplying one separator for each of
     the other blocks gives a selector of length $(g\mathbin{\dot-}1)S$ for
     every block.
-    Transport these selectors back from the Perron gauges. Gauge invariance
+    Carry these selectors back from the Perron gauges. Gauge invariance
     also gives block injectivity of every original block at length $p$.
     Concatenating the injective prefix with the selectors yields the full
     product-algebra span at
@@ -223,7 +223,7 @@ span after blocking.
     \lean{MPSTensor.CPSVCanonicalFormData.sum_representative_dim_le}
     \leanok
     \uses{def:cpsv_canonical_form, thm:cpsv_canonical_form_bnt_refinement}
-    Let literal canonical-form data of ambient bond dimension $D$ have
+    Let canonical-form data of ambient bond dimension $D$ have
     phase classes $j$ and chosen representatives of dimensions $D_j$. Then
     \begin{align}
         \sum_jD_j & \leq D.
@@ -242,13 +242,13 @@ span after blocking.
 \end{proof}
 
 % Source anchor: CPSV16 Proposition propblockinj, lines 342--345.
-\begin{theorem}[Sharp block-injective form for literal CPSV canonical form]
+\begin{theorem}[Sharp block-injective form for CPSV canonical form]
     \label{thm:cpsv_literal_propblockinj}
     \lean{MPSTensor.IsCPSVCanonicalForm.%
         exists_bnt_biCF_after_blocking_le_three_bondDim_pow_five}
     \leanok
     \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:blocked_tensor, def:blockwise_product_word_span}
-    Let $A$ be in literal CPSV canonical form with positive ambient bond
+    Let $A$ be in CPSV canonical form with positive ambient bond
     dimension $D$. There is a basis of normal tensors
     $(A_j)_{j=1}^{g}$ and a positive integer $L\leq3D^5$ such that
     \begin{align}

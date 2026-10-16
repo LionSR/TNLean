@@ -35,7 +35,7 @@
     maps are unchanged, so the expressions agree entry by entry.
 \end{proof}
 
-\begin{theorem}[Coupled pentagon of the actual coefficients]
+\begin{theorem}[Coupled pentagon of the normalized-trace coefficients]
     \leanok
     \label{thm:glm_actual_mixed_pentagon}
     \lean{MPOTensor.triangular_actionLMatrix_mixed_pentagon}
@@ -80,11 +80,11 @@
     $EDQ=CB$, to the auxiliary input
     $(a,b,c,x)$ and final label $y$. Auxiliary state-left channels are
     empty, so the remaining intermediate fusion label is an operator.
-    Replace each forward comparison by its actual action matrix, using
+    Replace each forward comparison by its action matrix, using
     row $(z,j,i)$ and column $(d,\eta,n)$ in the auxiliary coordinates
     for source row $(z,i,j)$ and column $(d,n,\eta)$. Replace the inverse
     operator comparison by $F$ using
-    (\ref{eq:glm_auxiliary_fusion_comparison}). This gives exactly
+    (\ref{eq:glm_auxiliary_fusion_comparison}). This gives
     (\ref{eq:glm_actual_mixed_pentagon}).
 \end{proof}
 
@@ -107,7 +107,7 @@
     Pad the physical letters in the upper-left corner and upper-right
     column. Their disjoint supports give cross-kind scalar-gauge
     separation, and retained letters preserve individual injectivity.
-    The derived common positive blocking supplies a simultaneous inverse.
+    The derived common positive blocking gives a simultaneous inverse.
     Exact pairwise reconstruction survives this blocking with the same
     rectangular maps, so it gives a complete zipper family. Apply
     Theorem~\ref{thm:glm_actual_mixed_pentagon}. All coefficient contractions are virtual and thus
@@ -122,7 +122,7 @@
     \uses{def:glm_boundary_closedness,def:glm_boundary_decomposition,
         def:glm_boundary_action_l_matrix,def:glm_boundary_fusion_f_matrix}
     Let $T=\bigoplus_aO_a$ and $B=\bigoplus_xA_x$ be the unweighted
-    assembled operator and state tensors. Suppose every pair of operator
+    direct-sum operator and state tensors. Suppose every pair of operator
     boundaries $X,Y$ admits a single boundary $Z$ such that
     $O^n_{T,X}O^n_{T,Y}=O^n_{T,Z}$ for every $n>0$. Suppose also that
     every operator boundary $X$ and state boundary $Y$ admits a single

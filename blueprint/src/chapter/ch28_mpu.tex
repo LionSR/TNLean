@@ -64,7 +64,7 @@ establish the blocking lengths required for structural reduction.
 
 \begin{proof}\leanok
     \uses{thm:mpu_nil_matrix}
-    Transport the matrix algebra to the endomorphisms of the coordinate space
+    Transfer the matrix algebra to the endomorphisms of the coordinate space
     through the standard algebra equivalence.  Nilpotency, membership, and the
     ordered product are preserved, so the finite-dimensional nil-matrix
     theorem applies; injectivity of the equivalence returns the zero matrix.
@@ -986,7 +986,7 @@ closing a chain of $N$ copies of $\mathcal U$.
          &  & (\Phi|\rho)=1.
     \end{align}
     Then blocking $\mathcal V$ by exactly $D^2$ sites produces a simple tensor
-    with witnesses $a=\Phi$ and $b=\rho$.
+    with boundary vectors $a=\Phi$ and $b=\rho$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1143,7 +1143,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \uses{thm:mpu_double_layer_trace_character, thm:mpu_nil_matrices, thm:mpu_ordered_second_block_expansion, thm:mpu_three_form_contractions, thm:mpu_all_later_simple_blockings}
     Every MPU of positive physical and bond dimensions becomes simple after
     blocking exactly $D^2$ sites, and hence after blocking any $k\geq D^2$
-    sites.  The witnesses at length $D^2$ are the normalized fixed vectors
+    sites.  The boundary vectors at length $D^2$ are the normalized fixed vectors
     $\Phi$ and $\rho$ of the transfer matrix.  Simplicity is preserved under
     every further iterated blocking by a positive factor and under a
     bijective relabeling of the physical basis.
@@ -1164,7 +1164,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     a subalgebra, and $\tr(n^m)=\tr(n)^m=0$ for every $n\in\mathcal N$ and
     $m>0$.  Every element of $\mathcal N$ is therefore nilpotent, and by the
     nil-matrix theorem every product of $D^2$ elements of $\mathcal N$
-    vanishes.  Moreover $p\in\mathcal A$ and $\tr p=1$, so
+    vanishes.  Since $p\in\mathcal A$ and $\tr p=1$,
     \begin{align}
         W^{ij} & =\delta_{ij}p+n_{ij},
                & n_{ij}                & \in\mathcal N, \\
@@ -1180,7 +1180,7 @@ closing a chain of $N$ copies of $\mathcal U$.
         W^{IJ}W^{KL} & =W^{IJ}\,|\rho)(\Phi|\,W^{KL}.
     \end{align}
     MPU unitarity then gives the one-letter contraction with the same
-    witnesses, and simplicity persists at every later blocking.
+    boundary vectors, and simplicity persists at every later blocking.
 \end{proof}
 
 \begin{theorem}[Matching contractions at the direct stabilized block]
@@ -1195,7 +1195,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \end{align}
     Put $K=JD^2$. After the standard product reindexing of the physical
     coordinates, the direct length-$K$ block satisfies the contractions
-    (\ref{eq:mpu_simple1}) and (\ref{eq:mpu_simple2}) with the specific witnesses
+    (\ref{eq:mpu_simple1}) and (\ref{eq:mpu_simple2}) with the boundary vectors
     $\rho$ and $\Id$ from this transfer-power identity.
 \end{theorem}
 
@@ -1204,10 +1204,10 @@ closing a chain of $N$ copies of $\mathcal U$.
     First block $J$ sites.  The normalized diagonal of this block is the
     reindexed rank-one matrix $|\rho)(\Id|$, and the trace-one condition is
     exactly $(\Id|\rho)=1$.  The exact second-block contraction theorem then
-    supplies both identities after a further $D^2$ sites.  The canonical
+    gives both identities after a further $D^2$ sites.  The canonical
     equivalence between iterated blocking and direct length-$JD^2$ blocking
-    transports each double-layer coefficient without changing either virtual
-    witness.
+    carries over each double-layer coefficient without changing either boundary
+    vector.
 \end{proof}
 
 \begin{theorem}[Rank-one transfer power after the second blocking]
@@ -1313,7 +1313,7 @@ closing a chain of $N$ copies of $\mathcal U$.
          & =W^{i_0j_0}\bigl(W^{I_+,J_+}W^{K_-,L_-}\bigr)W^{k_k\ell_k} \\
          & =W^{I,J}|b)(a|W^{K,L}.
     \end{align}
-    Thus the length-$(k+1)$ block has the same insertion witnesses, and the
+    Thus the length-$(k+1)$ block has the same insertion vectors, and the
     two- and three-site argument gives their one-letter contraction.  Induction
     on $k'-k$ proves the claim.
 \end{proof}
@@ -1374,7 +1374,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     path proves the path statement.
 \end{proof}
 
-\begin{theorem}[Supplied-projector simple2 contraction]
+\begin{theorem}[Projector simple2 contraction]
     \label{thm:mpu_supplied_projector_simple2}
     \lean{MPOTensor.IsMPUSimple.simple2_of_normalizedDiagonal_pow_eq_vecMulVec}
     \leanok
@@ -1385,8 +1385,8 @@ closing a chain of $N$ copies of $\mathcal U$.
     \begin{align}
         E^J & =|\rho)(\Phi|.
     \end{align}
-    Then the simple insertion identity holds with these same supplied
-    witnesses:
+    Then the simple insertion identity holds with these same boundary
+    vectors:
     \begin{align}
         W^{ij}W^{k\ell}
          & =W^{ij}|\rho)(\Phi|W^{k\ell}.
@@ -1395,7 +1395,7 @@ closing a chain of $N$ copies of $\mathcal U$.
 
 \begin{proof}\leanok
     \uses{def:mpu_simple}
-    Choose the witnesses $a,b$ from simplicity and put $R=|b)(a|$.  Expanding
+    Choose the vectors $a,b$ from simplicity and put $R=|b)(a|$.  Expanding
     the normalized diagonal as the average of the diagonal letters, the two
     defining simple contractions give
     \begin{align}
@@ -1408,7 +1408,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \begin{align}
         W^{ij}E^J W^{k\ell} & =W^{ij}W^{k\ell}.
     \end{align}
-    Substituting the supplied equality $E^J=|\rho)(\Phi|$ proves the claim.
+    Substituting the given equality $E^J=|\rho)(\Phi|$ proves the claim.
     No uniqueness of rank-one factorizations is used.
 \end{proof}
 
@@ -1474,7 +1474,7 @@ closing a chain of $N$ copies of $\mathcal U$.
     \uses{def:mpu_double_layer, thm:mpu_rank_one_insertion_diagonal_tail}
     In the setting of Theorem~\ref{thm:mpu_rank_one_insertion_diagonal_tail},
     suppose in addition that the
-    same fixed pair satisfies the supplied two-letter contraction
+    same fixed pair satisfies the two-letter contraction
     \begin{align}
         W^{ij}W^{k\ell}
          & =W^{ij}\lvert\rho)(\Phi\rvert W^{k\ell}
@@ -1486,14 +1486,14 @@ closing a chain of $N$ copies of $\mathcal U$.
         W^{ij}W^{\tau_0\tau_0}\cdots
         W^{\tau_{J-1}\tau_{J-1}}W^{k\ell}.
     \end{align}
-    Thus the supplied insertion and its stabilized transfer power occur in
+    Thus the rank-one insertion and its stabilized transfer power occur in
     one aligned network, as required in the calculation of
     \cite[Theorem~III.8, Section~III.B, equations~(31)--(32)]{Cirac2017MPU}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:mpu_rank_one_insertion_diagonal_tail}
-    Apply the supplied two-letter contraction and then replace its rank-one
+    Apply the given two-letter contraction and then replace its rank-one
     insertion by the normalized diagonal-word tail.
 \end{proof}
 
@@ -1651,7 +1651,7 @@ the nonzero spectrum as a set.
         \mu^2 & =\mu^3=1,
               & \mu       & =1.
     \end{align}
-    Conversely, spectral mapping from $1\in\sigma(A^2)$ supplies a nonzero
+    Conversely, spectral mapping from $1\in\sigma(A^2)$ gives a nonzero
     spectral value of $A$, which must be $1$.
 \end{proof}
 
@@ -1831,7 +1831,7 @@ the nonzero spectrum as a set.
     Let $A$ be an $n\times n$ complex matrix such that $\tr(A^k)=0$ for every
     $k>1$, and let $m>1$. Then $\tr((A^m)^r)=0$ for every $r\geq1$.
     This auxiliary result supports the generalization below to a weaker
-    hypothesis; the source itself supplies vanishing for every positive exponent.
+    hypothesis; the source itself assumes vanishing for every positive exponent.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -1929,7 +1929,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         (M_1)_{(i,\beta),(\alpha,j)}
          & = \mathcal U^i_{j,\alpha,\beta}.
     \end{align}
-    Transporting the row and column indices along the standard product
+    Reindexing the row and column indices along the standard product
     enumerations gives a matrix $\widetilde M_1$ indexed by
     $\{0,\ldots,dD-1\}\times\{0,\ldots,Dd-1\}$. Its entries are obtained by
     applying $M_1$ to the inverse images of the enumerated indices, and
@@ -1954,7 +1954,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         (M_2)_{(\alpha,i),(j,\beta)}
          & = \mathcal U^i_{j,\alpha,\beta}.
     \end{align}
-    Transporting the row and column indices along the standard product
+    Reindexing the row and column indices along the standard product
     enumerations gives a matrix $\widetilde M_2$ indexed by
     $\{0,\ldots,Dd-1\}\times\{0,\ldots,dD-1\}$. Its entries are obtained by
     applying $M_2$ to the inverse images of the enumerated indices, and
@@ -2253,7 +2253,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         (A^i\otimes B^k)(X\otimes Y)
          & =(A^iX)\otimes(B^kY),
     \end{align}
-    after transporting multiplication through the same coordinate bijection.
+    after transferring multiplication through the same coordinate bijection.
 \end{proof}
 
 \begin{theorem}[Homogeneous word spans of an independent tensor product]
@@ -2585,9 +2585,9 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \leanok
     \uses{def:mpu_simple, def:mpu_independent_tensor_product}
     If $\mathcal U$ and $\mathcal V$ are simple, then
-    $\mathcal U\boxtimes\mathcal V$ is simple. If $a,b$ are witnesses for
-    $\mathcal U$ and $a',b'$ are witnesses for $\mathcal V$, then
-    $a\otimes a'$ and $b\otimes b'$ are witnesses for the product. This is
+    $\mathcal U\boxtimes\mathcal V$ is simple. If $a,b$ are boundary vectors for
+    $\mathcal U$ and $a',b'$ are boundary vectors for $\mathcal V$, then
+    $a\otimes a'$ and $b\otimes b'$ are boundary vectors for the product. This is
     the step behind the sentence ``The case of tensoring is trivial'' in the
     proof of \cite[Theorem~IV.6(ii)]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 363--374 and 837.
@@ -2693,7 +2693,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         MPOTensor.leftRank_blockTensor_eq_pow_mul_of_products}
     \leanok
     Let $d>0$ and $L_0\leq L$. Suppose the endpoint source-cut ranks satisfy
-    the supplied product identities
+    the product identities
     \begin{align}
         r_{L_0}\ell_{L_0} & =d^{2L_0}, &
         r_L\ell_L         & =d^{2L}.
@@ -2925,7 +2925,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     related give equal operators on every ring of even length. The two-site
     operator is $v$ times the swapped $u$ for the factors of any decomposition,
     and the factor relations under a bond unitary hold for any decompositions
-    of the two tensors. Standard-form data transport along gate gauges: from data with gates $u,v$ and unitaries
+    of the two tensors. Standard-form data transform along gate gauges: from data with gates $u,v$ and unitaries
     $x$, $y$ one obtains data with gates $(x\otimes y)u$, $v(y^\dagger\otimes x^\dagger)$.
     % Source: the source never fixes a decomposition (line 479); these are its
     % gate statements, lines 545--622 and 624--648, for every choice.
@@ -2936,7 +2936,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \uses{thm:mpu_source_factors_change_of_svd}
     The gates of any choice are those of the fixed choice multiplied by the
     unitaries $x_2\otimes x_1$ and $x_1^\dagger\otimes x_2^\dagger$; isometry and
-    unitarity are preserved, the standard-form data transport along the gauge,
+    unitarity are preserved, the standard-form data transform along the gauge,
     and the gate relation of the fundamental theorem composes with the
     change-of-decomposition unitaries of each tensor.
 \end{proof}
@@ -2995,7 +2995,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \begin{proof}
     \leanok
     \uses{def:mpu_weighted_source_factors, def:mpu_source_svd_data}
-    The source-factor construction supplies $M_1=X_1Y_1$. The second
+    The source-factor construction gives $M_1=X_1Y_1$. The second
     compact singular-value decomposition gives $M_2=X_2Y_2$ directly.
 \end{proof}
 
@@ -3048,7 +3048,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \begin{proof}
     \leanok
     \uses{def:mpu_weighted_source_factors, def:mpu_source_svd_data}
-    The source-factor construction supplies
+    The source-factor construction gives
     $X_1^\dagger W_\rho X_1=\Id_r$; evaluating at $(r,r')$ gives the displayed
     weighted sum. Since $X_2=V_2^\dagger$, the
     coisometry identity $V_2V_2^\dagger=\Id_\ell$ gives
@@ -3124,7 +3124,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \begin{proof}
     \leanok
     \uses{def:mpu_weighted_source_factors, def:mpu_source_svd_data}
-    The source-factor construction supplies $Y_1Z_1=\Id_r$. For the
+    The source-factor construction gives $Y_1Z_1=\Id_r$. For the
     second cut,
     \begin{align}
         Y_2Z_2
@@ -3157,7 +3157,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
     Thus $u:\C^{d^2}\to\C^{\ell r}$ has source order $\ell\times r$,
     while $v:\C^{r\ell}\to\C^{d^2}$ has source order $r\times\ell$.
-    These are the literal triangle contractions in
+    These are the triangle contractions in
     \cite[Section~III, equations~\texttt{uuvv}--\texttt{vdagger}]{Cirac2017MPU}.
 \end{definition}
 
@@ -3443,7 +3443,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         \bigl(v(Y_1\otimes Y_2)\bigr)_{z,((a_1,p_1),(p_2,a_2))}
         =\sum_\gamma U^{z_1p_1}_{a_1\gamma}U^{z_2p_2}_{\gamma a_2}.
     \end{align}
-    This is the local open-leg identity for the literal gate
+    This is the local open-leg identity for the gate
     $v=X_1\mathbin{-}X_2$.
 \end{theorem}
 
@@ -3668,12 +3668,12 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     \end{align}
     Thus every nonzero transfer eigenvalue of $B_k$ is a nonzero eigenvalue of
     $E_{A_0}$ and hence equals one by
-    (\ref{eq:mpu_reduced_trace}). Perron--Frobenius theory supplies
+    (\ref{eq:mpu_reduced_trace}). Perron--Frobenius theory gives
     $\rho_k>0$ and $s_k>0$ with
     $\E_{B_k}(\rho_k)=s_k\rho_k$. Therefore $s_k=1$, and every peripheral
     eigenvalue of $B_k$ is also one. Each $B_k$ is consequently normal.
 
-    The direct sum now has literal canonical-form data with full support.
+    The direct sum now has canonical-form data with full support.
     Apply the nonsingular blockwise canonical-form-II gauge. It preserves the
     block dimensions and all periodic vectors, so the resulting tensor $A_1$
     still satisfies
@@ -3720,7 +3720,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         (\Phi J_1)^\dagger\left(\bigoplus_{k=1}^{r}\mu_kB_k^i\right)(\Phi J_1)
          & =J_1^\dagger A_1^iJ_1=A_{\mathrm{red}}^i.
     \end{align}
-    The fixed matrix transports along the same conjugation:
+    The fixed matrix transforms along the same conjugation:
     \begin{align}
         \E_{A_1}(J_1\rho J_1^\dagger)
          & =J_1\E_{\mu_1B_1}(\Lambda)J_1^\dagger=J_1\rho J_1^\dagger, \\
@@ -3730,7 +3730,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     and $\rho$ is positive definite, diagonal, and of trace one because
     $\Lambda$ is. This is (\ref{eq:mpu_reduced_ambient_rho}).
 
-    It remains to see that the conjugated tensor is normal. Transport the
+    It remains to see that the conjugated tensor is normal. Transfer the
     trace identity to it: for every integer $N>1$,
     \begin{align}
         \tr(E_{A_{\mathrm{red}}}^{\,N})
@@ -3787,7 +3787,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
     the right side is unitary, so $U_{\mathrm{red}}$ is an MPU. Its normalized
     doubled-index tensor is $A_{\mathrm{red}}$, so the canonical-form-II data,
     the full-support identity, and the diagonal positive trace-one ambient
-    right fixed matrix supplied by
+    right fixed matrix given by
     Theorem~\ref{thm:mpu_reduced_normalized_flattening_cfii} assemble into a
     canonical-form-II presentation of $U_{\mathrm{red}}$.
 \end{proof}
@@ -3807,7 +3807,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 
 \begin{proof}\leanok
     \uses{def:mpu_full_support, thm:cpsv_literal_canonical_form_positive_blocking}
-    Positive blocking supplies canonical-form data with the same block
+    Positive blocking gives canonical-form data with the same block
     dimensions, so the full-support sum is unchanged.
 \end{proof}
 
@@ -3848,7 +3848,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
         A^i = U^*\bigl(\mu_k B^i\bigr)U,
     \end{align}
     where $B$ is the reindexed normal block and $\mu_k\ne0$.  Thus
-    Theorem~\ref{thm:irreducible_tensor_smul_conj} transports irreducibility of
+    Theorem~\ref{thm:irreducible_tensor_smul_conj} carries irreducibility of
     $B$ through the nonzero rescaling and unitary conjugation.
 \end{proof}
 
@@ -3885,7 +3885,7 @@ physical indices and $\alpha,\beta$ are auxiliary indices.
 \begin{proof}\leanok
     \uses{thm:mpu_unique_full_support_irreducible}
     Combine Theorem~\ref{thm:mpu_unique_full_support_irreducible} with the
-    supplied spectral-radius and primitivity properties.
+    given spectral-radius and primitivity properties.
 \end{proof}
 
 \section{Transfer-matrix identities}
@@ -4096,7 +4096,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     data with canonical-form-II data for
     $\widetilde{\mathcal U\boxtimes\mathcal V}$.
 
-    Full support is a supplied reduced-representative restriction. If the two
+    Full support is an explicit reduced-representative restriction. If the two
     chosen input data satisfy
     \begin{align}
         \sum_a D_a & =D,
@@ -4114,10 +4114,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Identifying canonical-form-II data along an equality of ambient tensors
     leaves this retained-dimension sum unchanged. This full-support assertion
     is not stated by the tensoring sentence in
-    \cite[Theorem~IV.6(ii)]{Cirac2017MPU}; it is the supplied restriction
+    \cite[Theorem~IV.6(ii)]{Cirac2017MPU}; it is the explicit restriction
     documented in \cite{gap:mpu_canonical_form_full_support}.
 
-    For the independent tensor product, the raw source ranks satisfy
+    For the independent tensor product, the source ranks satisfy
     $r(\mathcal U\boxtimes\mathcal V)=r(\mathcal U)r(\mathcal V)$ and
     $\ell(\mathcal U\boxtimes\mathcal V)=\ell(\mathcal U)\ell(\mathcal V)$ by
     Theorem~\ref{thm:mpu_tensor_product_source_ranks}.
@@ -4162,7 +4162,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     Taking $X=\Lambda_a$ and $Y=\Gamma_b$ proves the fixed-point equation;
     Kronecker products and bijective reindexing preserve positive definiteness
-    and diagonality. The finite double-sum identity proves the supplied
+    and diagonality. The finite double-sum identity proves the stated
     full-support conclusion. Finally apply the normalized-flattening identity
     and physical relabeling to obtain the MPO statement.
 \end{proof}
@@ -4217,7 +4217,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         W^{ik} & =\sum_{j=0}^{d-1}U^{ij}\otimes V^{jk}
     \end{align}
-    be their composition tensor. Under the canonical identification of its
+    be their composition tensor. Under the standard identification of its
     auxiliary space with $\C^{D_U}\otimes\C^{D_V}$, the normalized
     flattenings satisfy
     \begin{align}
@@ -4225,7 +4225,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
          & =\sqrt d\sum_{j=0}^{d-1}
         \widetilde U^{ij}\otimes\widetilde V^{jk}.
     \end{align}
-    This identity combines the raw composition tensor used in the proof of
+    This identity combines the unnormalized composition tensor used in the proof of
     \cite[Theorem~IV.6(ii)]{Cirac2017MPU} with the normalization in
     \cite[Section~III, equation~(13)]{Cirac2017MPU}; it is not a separately
     stated result of that proof.
@@ -4499,7 +4499,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{proof}\leanok
     \uses{lem:matrix_sigma_block_inclusion}
     Reindex the canonical dependent-summand inclusion along the equivalence
-    between dependent pairs and flattened coordinates.  Transporting its
+    between dependent pairs and flattened coordinates.  Transferring its
     isometry, cross-block orthogonality, and block-diagonal intertwining
     identities gives the three displayed formulas.
 \end{proof}
@@ -4612,7 +4612,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPSTensor.CPSVCanonicalFormData.r_eq_one_of_shifted_transfer_trace}
     \leanok
     \uses{def:cpsv_canonical_form}
-    Let $A$ have literal CPSV canonical-form data with $r$ blocks.  If its
+    Let $A$ have CPSV canonical-form data with $r$ blocks.  If its
     transfer matrix $E$ satisfies
     $\tr(E^N)=1$ for every integer $N>1$, then
     \begin{align}
@@ -4626,7 +4626,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{lem:transfer_map_corner_intertwine, thm:mpu_dependent_block_inclusion_identities, thm:mpu_shifted_trace_power_moments, thm:mpu_shifted_trace_power_spectrum, thm:mpu_trace_power_all, thm:mpu_transfer_matrix_eigenvalues}
     Each normal block $A_k$ has a nonzero transfer fixed vector $X_k$.
     Let $U$ be the reconstruction coisometry and let $J_k$ be the flattened
-    inclusion of the $k$th block.  Define the ambient inclusion and transported
+    inclusion of the $k$th block.  Define the ambient inclusion and conjugated
     matrix by
     \begin{align}
         V_k & =U^\dagger J_k,
@@ -4822,7 +4822,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 269--280 and 397--405.
     The diagonal matrix is the block matrix $\Lambda_k$ in the canonical-form-II
     fixed-point equations in
-    \cite[equations~(6a)--(6b)]{Cirac2017MPU}; its ambient transport
+    \cite[equations~(6a)--(6b)]{Cirac2017MPU}; its ambient image
     $\rho$ need not be diagonal, corresponding to the reduced representative in
     \cite[proof of Proposition~III.2(ii)]{Cirac2017MPU}.
 \end{theorem}
@@ -4836,7 +4836,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \quad\Longrightarrow\quad
         r=1.
     \end{align}
-    Let $k$ be this block. Canonical form II supplies a diagonal
+    Let $k$ be this block. Canonical form II gives a diagonal
     $\Lambda_0>0$ fixed by the unweighted block transfer map. Normalize it by
     \begin{align}
         \Lambda & =\tr(\Lambda_0)^{-1}\Lambda_0,
@@ -4856,14 +4856,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     Hence $\rho=V\Lambda V^\dagger$ is positive definite with trace one, and
     the intertwining equations $A_iV=V\widetilde B_k(i)$ give the fixedness
-    transport
+    identity
     \begin{align}
         E(V\Lambda V^\dagger)
          & =V E_k(\Lambda)V^\dagger
         =V\Lambda V^\dagger
         =\rho.
     \end{align}
-    The blockwise left-canonical identity transports similarly:
+    The blockwise left-canonical identity transfers similarly:
     \begin{align}
         \sum_i \widetilde B_k(i)^\dagger\widetilde B_k(i)=I
         \quad\Longrightarrow\quad
@@ -4936,7 +4936,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Let $\mathcal U$ be an MPO tensor, and write
     $\widetilde{\mathcal U}=d^{-1/2}\mathcal U$ and
     $E=\mathcal E_{\widetilde{\mathcal U}}$. A canonical-form-II presentation
-    of $\mathcal U$ consists of the MPU condition, a literal CPSV
+    of $\mathcal U$ consists of the MPU condition, a CPSV
     canonical-form-II representation
     \begin{align}
         \widetilde{\mathcal U}^{a}
@@ -4957,7 +4957,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         E(\rho)   & =\rho.
         \label{eq:mpu_ambient_cfii_fixed_pair}
     \end{align}
-    Thus the retained blocks have literal full support, and $\rho$ is a
+    Thus the retained blocks have full support, and $\rho$ is a
     positive diagonal trace-one right fixed point in the ambient bond
     coordinates. This is the standing convention of
     \cite[lines~269--281, 344--356, and 488--502]{Cirac2017MPU}.
@@ -5008,7 +5008,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     quantum-channel volume~\cite[Trace-preserving gauge from an adjoint
         fixed point, Kraus form]{QICLean2026Blueprint}.
     Normality is preserved by similarity. Theorem~\ref{thm:CFII_data}
-    therefore supplies a unitary $V$ and a positive diagonal fixed matrix
+    therefore gives a unitary $V$ and a positive diagonal fixed matrix
     $\Lambda$ after conjugating $\widetilde{\mathcal G}$ by $V$.
     Replace $\Lambda$ by $\rho=\Lambda/\tr(\Lambda)$.
     Positivity gives $\tr(\Lambda)>0$, and linearity preserves the
@@ -5310,7 +5310,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         E^J & =\lvert\rho)(\Phi\rvert.
     \end{align}
-    The one-dimensional case is supplied directly: if $D=1$, take $J=1$
+    The one-dimensional case is immediate: if $D=1$, take $J=1$
     and $\rho=\Id_1$ using
     Theorem~\ref{thm:mpu_normalized_transfer_fin_one}. If $D>1$, chosen
     canonical-form-II data with full support give a positive trace-one ambient
@@ -5325,7 +5325,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     one-dimensional specialization. When $\mathcal U$ is an MPU,
     Theorem~\ref{thm:mpu_canonical_form_ii_stabilization_converse} gives a
     canonical-form-II presentation of this same tensor whose ambient fixed
-    matrix is the supplied $\rho$; it makes no assertion about continuous
+    matrix is the given $\rho$; it makes no assertion about continuous
     choices along a path.
     % Source lines: paper_v2.tex 269--280 and 397--405.
 \end{definition}
@@ -5335,7 +5335,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.SourceFactors.sourceU_gram_eq_staggered_four_u}
     \leanok
     \uses{def:mpu_source_uv, def:mpu_weighted_source_factors}
-    Let $M_i=X_iY_i$ be supplied source factorizations for $\mathcal U$ and
+    Let $M_i=X_iY_i$ be given source factorizations for $\mathcal U$ and
     the weight $\rho$. For retained physical pairs $p=(p_1,p_2)$ and
     $q=(q_1,q_2)$, one has
     \begin{align}
@@ -5387,7 +5387,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \discussion{7632}
     \uses{def:mpu_source_uv, def:mpu_weighted_source_factors, def:mpu_double_layer}
     Let $\mathcal U$ be an MPO tensor, let $\rho$ be a bond matrix, and let
-    $M_i=X_iY_i$ be supplied source factorizations for $\mathcal U$ and $\rho$.
+    $M_i=X_iY_i$ be given source factorizations for $\mathcal U$ and $\rho$.
     Construct the source tensor $u=Y_2\mathbin{-}Y_1$. For retained physical
     pairs $p=(p_1,p_2)$ and $q=(q_1,q_2)$, let $W^{ij}$ denote the $(i,j)$
     double-layer letter, let $\lvert\rho^{\mathsf T})$ be the column-stacking
@@ -5438,7 +5438,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \begin{align}
         E^K & =\lvert\rho)(\Phi\rvert.
     \end{align}
-    For supplied source factors built from the same weight $\rho$, the paper
+    For source factors built from the same weight $\rho$, the paper
     gate $u=Y_2\mathbin{-}Y_1$ satisfies
     \begin{align}
         \sum_{l,r}u_{(l,r),q}\overline{u_{(l,r),p}}
@@ -5455,7 +5455,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     Thus only the $K$-site interior is blocked; the two endpoint letters remain
     one-site tensors. The $p$ entries are conjugated and the $q$ entries are
-    not. This is the supplied-fixed-pair contraction in
+    not. This is the fixed-pair contraction in
     \cite[Lemma~III.7]{Cirac2017MPU}.
     % Source locator: paper_v2.tex, lines 269--280 and 545--557.
     % Orientation: docs/paper-gaps/mpu_source_cut_orientation.tex.
@@ -5494,7 +5494,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         U^{(K+2)}_{\eta,(q,\tau)}.
     \end{align}
     Here $\tau$ ranges over input words of length $K$, and $\eta$ ranges over
-    output words of length $K+2$. This is the supplied-fixed-pair form of the
+    output words of length $K+2$. This is the fixed-pair form of the
     complete-network equality in \cite[Lemma~III.7]{Cirac2017MPU}.
     % Source locator: paper_v2.tex, lines 545--557.
 \end{theorem}
@@ -5502,7 +5502,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{proof}\leanok
     \uses{thm:mpu_source_u_retained_interior,
         thm:mpu_blocked_transfer_power_rank_one}
-    Set $K=JD^2$. Trace normalization makes the supplied rank-one transfer
+    Set $K=JD^2$. Trace normalization makes the given rank-one transfer
     matrix idempotent, and the normalized blocked-transfer identity therefore
     gives
     \begin{align}
@@ -5643,7 +5643,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{def:mpu, def:mpu_simple, def:mpu_source_uv}
     Let $\mathcal U$ be an MPU tensor, let $\rho>0$, and let $v$ be its
     source operator built from $\rho$. If $v^\dagger v=\Id_{r\ell}$, then
-    $\mathcal U$ is simple, with witnesses $(\Phi\rvert$ and
+    $\mathcal U$ is simple, with boundary vectors $(\Phi\rvert$ and
     $\lvert\rho^{\mathsf T})$. This is the implication $4\to1$ in
     \cite[proof of Theorem~III.8]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 596--600.
@@ -5655,8 +5655,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     gives the dressed Gram equation, and
     Theorem~\ref{thm:mpu_source_v_complete_contraction} turns it into
     $W^{ij}W^{k\ell}=W^{ij}\lvert\rho^{\mathsf T})(\Phi\rvert W^{k\ell}$.
-    The same-witness implication in
-    Theorem~\ref{thm:mpu_all_later_simple_blockings} supplies
+    The boundary-vector implication in
+    Theorem~\ref{thm:mpu_all_later_simple_blockings} gives
     $(\Phi\rvert W^{ij}\lvert\rho^{\mathsf T})=\delta_{ij}$ from unitarity,
     so both simple contractions hold.
 \end{proof}
@@ -5689,7 +5689,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $u^\dagger u=\Id$ and $d^2\le r\ell$.
 \end{proof}
 
-\begin{lemma}[Supplied-fixed-pair source-$u$ isometry]
+\begin{lemma}[Fixed-pair source-$u$ isometry]
     \label{lem:mpu_admissible_source_u_isometry}
     \lean{MPOTensor.SourceFactors.sourceU_isIsometry_of_isMPU,
         MPOTensor.SourceFactors.mul_self_le_rightRank_mul_leftRank_of_isMPU}
@@ -5716,7 +5716,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         d^2         & \leq r\ell.
     \end{align}
     Thus the compact-SVD paper gate is an isometry. This is the
-    supplied-fixed-pair version of \cite[Lemma~III.7]{Cirac2017MPU}.
+    fixed-pair version of \cite[Lemma~III.7]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 269--280 and 545--557.
 \end{lemma}
 
@@ -5804,13 +5804,13 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 603--622.
 \end{definition}
 
-\begin{definition}[Two-site standard form with supplied gates]
+\begin{definition}[Two-site standard form with given gates]
     \label{def:mpu_supplied_two_site_standard_form}
     \lean{MPOTensor.TwoSiteStandardFormData}
     \leanok
     Let $d,D,\ell,r$ be positive integers and let
     $W$ be a two-site tensor of physical dimension $d^2$ and bond dimension
-    $D$. A standard form with supplied gates consists of unitary maps
+    $D$. A standard form with given gates consists of unitary maps
     \begin{align}
         u & \colon \mathbb C^d\otimes\mathbb C^d
         \longrightarrow \mathbb C^\ell\otimes\mathbb C^r, \\
@@ -5869,7 +5869,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{tenkz}
 \end{center}
 
-\begin{definition}[The two layers of a supplied standard form]
+\begin{definition}[The two layers of a given standard form]
     \label{def:mpu_two_site_circuit_layers}
     \lean{MPOTensor.twoSiteUnshiftedLayer,
         MPOTensor.twoSiteShiftedLayer,
@@ -5903,7 +5903,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.twoSiteShiftedLayer_isUnitaryBetween}
     \leanok
     \uses{def:mpu_two_site_circuit_layers}
-    If the supplied gates $u$ and $v$ are unitary between their stated
+    If the given gates $u$ and $v$ are unitary between their stated
     coordinate spaces, then for every $N>0$ both $C_{u,N}$ and $C_{v,N}$
     are unitary between their corresponding configuration spaces.
 \end{theorem}
@@ -5922,14 +5922,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     preserves both Gram identities.
 \end{proof}
 
-\begin{theorem}[Periodic circuit of a supplied two-site standard form]
+\begin{theorem}[Periodic circuit of a given two-site standard form]
     \label{thm:mpu_supplied_two_site_periodic_circuit}
     \lean{MPOTensor.TwoSiteStandardFormData.mpo_apply_eq_shifted_mul_unshifted,
         MPOTensor.TwoSiteStandardFormData.mpo_eq_shifted_mul_unshifted}
     \leanok
     \uses{def:mpu_supplied_two_site_standard_form,
         def:mpu_two_site_circuit_layers}
-    Let $W$ have supplied two-site standard-form data $(u,v,X_1,X_2)$.
+    Let $W$ have given two-site standard-form data $(u,v,X_1,X_2)$.
     For every $N>0$ and pair configurations $i,j$,
     \begin{align}
         U^{(N)}(W)_{i,j}
@@ -5941,7 +5941,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     Thus, after the stated identification of pair configurations with the
     two-site alphabet, $U^{(N)}(W)=C_{v,N}C_{u,N}$. This includes $N=1$.
-    The formula is the positive-length closed contraction of the supplied
+    The formula is the positive-length closed contraction of the given
     open form in \cite[Equations~\texttt{uuvv} and
         \texttt{StandardForm}]{Cirac2017MPU}.
 \end{theorem}
@@ -5950,7 +5950,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{def:mpu_supplied_two_site_standard_form,
         def:mpu_two_site_circuit_layers}
     Expand the periodic trace as a sum over closed bond configurations.
-    Insert the supplied $X_2$--$u$--$X_1$ expression at each site. For
+    Insert the given $X_2$--$u$--$X_1$ expression at each site. For
     each $x$, the bond label between sites $x$ and $x+1$ contracts
     $(X_1)_{(i_{x,2},\beta),h_{x,2}}$ with
     $(X_2)_{(\beta,i_{x+1,1}),h_{x+1,1}}$; their sum is precisely
@@ -5958,14 +5958,14 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     form $C_{u,N}$, giving the displayed matrix product in its stated order.
 \end{proof}
 
-\begin{theorem}[Positive-length unitarity of the supplied standard form]
+\begin{theorem}[Positive-length unitarity of a given standard form]
     \label{thm:mpu_supplied_two_site_periodic_unitary}
     \lean{MPOTensor.TwoSiteStandardFormData.mpo_mem_unitaryGroup,
         MPOTensor.TwoSiteStandardFormData.isMPU}
     \leanok
     \uses{thm:mpu_supplied_two_site_periodic_circuit,
         thm:mpu_two_site_circuit_layers_unitary}
-    If $W$ has supplied two-site standard-form data, then
+    If $W$ has given two-site standard-form data, then
     \begin{align}
         U^{(N)}(W)^{\dagger}U^{(N)}(W)
          & =U^{(N)}(W)U^{(N)}(W)^{\dagger}=\Id
@@ -5994,7 +5994,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.twoSite_trace_open_gate_with_endpoints}
     \leanok
     \uses{def:mpu_supplied_two_site_standard_form, def:mpo_eval_word}
-    For a two-site tensor $W$ with supplied standard-form data, write
+    For a two-site tensor $W$ with given standard-form data, write
     $L(i)_{\alpha t}=X_2(\alpha,i_1)_t$,
     $R(i)_{s\gamma}=X_1(i_2,\gamma)_s$,
     $u(j)_{ts}=u_{(t,s),j}$, and
@@ -6072,7 +6072,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.twoSiteBufferedTrace}
     \leanok
     \uses{def:mpu_supplied_two_site_standard_form, def:mpo_eval_word}
-    Let $W$ have supplied two-site standard-form data. Fix virtual indices
+    Let $W$ have given two-site standard-form data. Fix virtual indices
     $\alpha,\gamma$, exterior output half-sites $e_-,e_+$, and exterior
     input pairs $j_0,j_2$. For two neighboring output pairs
     $a=(a_0,a_1)$, $b=(b_0,b_1)$ and a middle input pair $j$, set
@@ -6112,7 +6112,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.twoSite_threeBlock_open_intertwiner}
     \leanok
     \uses{def:mpu_two_site_open_three_block}
-    For every supplied two-site standard form and every observable $A$ on
+    For every given two-site standard form and every observable $A$ on
     the middle input pair,
     \begin{align}
         F_{\alpha,\gamma}A & =B(A)F_{\alpha,\gamma}
@@ -6259,7 +6259,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         def:mpu_source_uv}
     Let $\mathcal U$ be simple and have a reduced full-support
     canonical-form-II presentation with positive diagonal fixed matrix $\rho$.
-    The two-site tensor $\mathcal U_2$ has the supplied standard form with
+    The two-site tensor $\mathcal U_2$ has a two-site standard form with
     the source gates $u,v$ and the source half factors $X_1,X_2$. In
     particular,
     \begin{align}
@@ -6320,7 +6320,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         thm:mpu_supplied_two_site_periodic_circuit,
         thm:mpdo_block_two_as_positive_blocking,
         thm:mpdo_closed_chain_physical_blocking}
-    Apply the supplied circuit identity to the two-site block of $\mathcal U$.
+    Apply the periodic circuit identity to the two-site block of $\mathcal U$.
     The two physical-blocking identities identify its length-$N$ periodic
     operator with $U^{(2N)}(\mathcal U)$ under $\Phi_N$. For $N=2$, the two
     shifted pairs are $(2,3)$ and $(4,1)$.
@@ -6403,7 +6403,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     \uses{def:mpdo_physical_blocking, def:mpu_two_site_open_three_block,
         def:mpo_family}
-    Suppose $W=(U^{[k]})_2$ has supplied two-site standard-form data.
+    Suppose $W=(U^{[k]})_2$ has given two-site standard-form data.
     Let three consecutive blocks of length $2k$ lie between an arbitrary
     original-site prefix of length $p$ and suffix of length $s$. Under the
     two-site relabeling, suppose their output labels are
@@ -6435,7 +6435,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     \uses{def:mpdo_physical_blocking, def:mpu_two_site_open_three_block,
         def:mpo_family}
-    Suppose $W=(U^{[k]})_2$ has supplied two-site standard-form data.
+    Suppose $W=(U^{[k]})_2$ has given two-site standard-form data.
     Let $i^-,j^-$ be original-site words of length $p$ and $i^+,j^+$
     original-site words of length $s$. Let
     $(\sigma^{L},\tau^{L})$ and $(\sigma^{R},\tau^{R})$ be complete-block
@@ -6486,7 +6486,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \lean{MPOTensor.twoSite_threeBlock_originalSite_residual_intertwiner}
     \leanok
     \uses{def:mpu_two_site_open_three_block, def:mpo_eval_word}
-    Let $W=(U^{[k]})_2$ have supplied two-site standard-form data. For
+    Let $W=(U^{[k]})_2$ have given two-site standard-form data. For
     arbitrary original-site prefix and suffix word pairs, put
     $P=U^{i^-,j^-}$ and $Q=U^{i^+,j^+}$. The three-block coefficient
     contracted against these end matrices satisfies
@@ -6581,7 +6581,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{thm:mpu_fundamental_letters,
         thm:mpu_source_gates_virtual_unitary_gauge}
     Theorem~\ref{thm:mpu_fundamental_letters} gives $z$; the selected source
-    gates of a unitary virtual conjugate are related to the transported gates
+    gates of a unitary virtual conjugate are related to the reindexed gates
     by unitaries on the two rank spaces.
 \end{proof}
 
@@ -6610,7 +6610,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     the circuit of $\mathcal V$ the unitary placed on the internal leg of
     each site by the layer of $u$ meets its adjoint placed there by the layer
     of $v$, so the circuits coincide. The relabelling of the rank spaces is
-    transported through the standard-form data.
+    carried through the standard-form data.
 \end{proof}
 
 \begin{theorem}[Scalar invariance of the double layer]
@@ -7020,7 +7020,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         thm:mpu_cfii_index_physical_adjoint,
         thm:mpdo_closed_chain_physical_blocking, def:mpdo_physical_adjoint}
     Choose a reduced canonical-form-II representative $U_{\mathrm{red}}$.
-    Under the canonical identification of blocked configurations with
+    Under the standard identification of blocked configurations with
     concatenated configurations, the periodic operators satisfy
     \begin{align}
         (U_p)^{(N)}      & = U^{(Np)},          &
@@ -7471,7 +7471,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     the nonzero scalar $\sqrt d$ preserves normality, so its unnormalized
     flattening is normal as well. Equality of the periodic operators gives
     equality of all positive-length word traces. The equality-case
-    rectangular reduction theorem now supplies $A$ and $B$.
+    rectangular reduction theorem now gives $A$ and $B$.
 \end{proof}
 
 \begin{theorem}[Saturation of the composition rank bounds]
@@ -7575,7 +7575,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     Only the canonical-form requirement is relaxed along the path
     \cite[lines~708--714]{Cirac2017MPU}. When $D_a=D_b=D$, a path of MPU
-    tensors of bond dimension $D$ from $\mathcal U$ to $\mathcal V$ witnesses
+    tensors of bond dimension $D$ from $\mathcal U$ to $\mathcal V$ establishes
     strict equivalence with $D'=D$.
     % **Local fix:** the source does not say in which bond space the path runs
     % when $D_a\neq D_b$; its canonical form admits the adjoined directions and
@@ -7651,12 +7651,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{def:strictly-equivalent-tensors, def:equivalent-tensors, def:mpu_reduced_full_support_source_datum}
     An admissible strict-equivalence datum for a path
     $[0,1]\ni p\mapsto\mathcal W(p)$ consists of a common positive blocking
-    length $m$ such that the actual blocked path tensor $\mathcal W(p)_m$ is
+    length $m$ such that the blocked path tensor $\mathcal W(p)_m$ itself is
     simple and carries a reduced full-support source datum for every $p$. The
     blocked tensors and their source data vary continuously with $p$, after
     fixed identifications of the finite-dimensional spaces involved. No
     equivalent or reduced representative may replace $\mathcal W(p)_m$. In
-    particular, the actual blocked endpoint tensors carry their own source data.
+    particular, the blocked endpoint tensors themselves carry their own source data.
 
     When the path is used under a specified symmetry $\mathcal S$, the datum also
     includes continuously varying reduced full-support source data for the fixed
@@ -7672,7 +7672,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     conjugation, physical adjoint, transposition, or $\mathcal S$ is assumed.
 
     Two tensors are admissibly strictly equivalent if their strict equivalence
-    is witnessed by such a path. They are admissibly equivalent if the blocked,
+    is realized by such a path. They are admissibly equivalent if the blocked,
     ancilla-enlarged endpoints in Definition~\ref{def:equivalent-tensors} are
     joined by an admissible strict-equivalence path. The source arguments
     motivating these additional path hypotheses are Proposition~IV.5,
@@ -8134,7 +8134,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     then annihilate $Vx$, contrary to the hypothesis.
 \end{proof}
 
-\begin{theorem}[Reduced representative under a supplied positive fixed pair]
+\begin{theorem}[Reduced representative under a given positive fixed pair]
     \label{thm:mpu_reduced_representative}
     \lean{MPOTensor.mpo_virtualSandwich_reducedProjection_eq,
         MPOTensor.transferMap_virtualSandwich_reducedProjection,
@@ -8236,9 +8236,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\mathcal B=\overline B\otimes B$, in the doubled bond coordinates.
     The double-layer letters $F^{ij}$ of $W$ transform to
     $\mathcal A F^{ij}\mathcal B$, and $\mathcal B\mathcal A=I$.
-    If $(a|,|b)$ are simplicity witnesses for $W$, then
-    $(a|\mathcal B,\mathcal A|b)$ are witnesses for the included tensor.
-    Conversely, witnesses $(a|,|b)$ for the included tensor give
+    If $(a|,|b)$ are simplicity boundary vectors for $W$, then
+    $(a|\mathcal B,\mathcal A|b)$ are boundary vectors for the included tensor.
+    Conversely, boundary vectors $(a|,|b)$ for the included tensor give
     $(a|\mathcal A,\mathcal B|b)$ for $W$. Substitution in
     (\ref{eq:mpu_simple1}) and (\ref{eq:mpu_simple2}) proves both claims.
     For the assertion about support coordinates, use
@@ -8271,17 +8271,17 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \label{eq:mpu_simple_support_insertion}
     \end{align}
     whenever $X,Y$ are double-layer letters or $E$.
-    The supplied-projector identity is $F^{ij}F^{k\ell}=F^{ij}EF^{k\ell}$.
+    The projector identity is $F^{ij}F^{k\ell}=F^{ij}EF^{k\ell}$.
     Using (\ref{eq:mpu_simple_support_insertion}) and $H^2=H$ therefore yields
     \begin{align}
         (HF^{ij}H)(HF^{k\ell}H)
          & =(HF^{ij}H)(HEH)(HF^{k\ell}H).
     \end{align}
     These are the double-layer letters of the compressed tensor, and
-    $HEH=|H\rho)(\Phi H|$ supplies its two simplicity witnesses.
+    $HEH=|H\rho)(\Phi H|$ gives its two simplicity boundary vectors.
     Support compression preserves the periodic operators, so the compressed
     tensor still generates an MPU. Its two-letter insertion identity then
-    implies the first simplicity contraction with the same witnesses.
+    implies the first simplicity contraction with the same boundary vectors.
 \end{proof}
 
 \begin{theorem}[Invertible factor for a reduced projection]
@@ -8377,8 +8377,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     by invertibility of $X$ and $ZY$ together with the relation $X\widehat W(ZY)=\widetilde W$
     from~(\ref{eq:mpu_reduced_hat_chain_pwqy})--(\ref{eq:mpu_reduced_hat_chain_tilde}), yielding~(\ref{eq:mpu_reduced_hat_right_rank}) and
     (\ref{eq:mpu_reduced_hat_left_rank}). For positive semidefinite $L$ and
-    $R$, their ambient support-inverse extensions supply $X$ and $Z$; the
-    invertible right-factor identity for $\widetilde P Q$ supplies $Y$.
+    $R$, their ambient support-inverse extensions give $X$ and $Z$; the
+    invertible right-factor identity for $\widetilde P Q$ gives $Y$.
 \end{proof}
 
 \begin{theorem}[Lower semicontinuity of finite matrix rank]
@@ -8601,7 +8601,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.sourceCutM₂_virtualSandwich}
     \leanok
     \uses{def:mpu_virtual_sandwich, def:mpu_source_matrix_one, def:mpu_source_matrix_two}
-    The two raw source cuts satisfy the literal formulas
+    The two source cuts satisfy the explicit formulas
     \begin{align}
         M_1(\widehat{\mathcal U})
          & =(I_d\otimes B^{\mathsf T})M_1(\mathcal U)
@@ -8642,7 +8642,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         r[\widehat{\mathcal U}]    & =r[\mathcal U],    &
         \ell[\widehat{\mathcal U}] & =\ell[\mathcal U].
     \end{align}
-    This assertion concerns the raw source ranks only.
+    This assertion concerns the source-cut ranks only.
     % Source lines: paper_v2.tex 786--804.
 \end{theorem}
 
@@ -8723,15 +8723,15 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     The two cut identities of
     Theorem~\ref{thm:mpu_virtual_sandwich_source_cuts}, applied to the
     selected factorizations of Theorem~\ref{thm:mpu_source_factorizations},
-    give transported factorizations with the four exterior matrices
+    give transformed factorizations with the four exterior matrices
     displayed in the statement. The right exterior matrices are unitary, so
-    the transported right factors retain the right inverses of
+    the transformed right factors retain the right inverses of
     Theorem~\ref{thm:mpu_source_factor_right_inverses}. The left exterior
-    matrix of the second cut is unitary, so its transported left factor
+    matrix of the second cut is unitary, so its transformed left factor
     remains an isometry. The contraction defining $u$ is unchanged: its
     interior virtual product is $z^\dagger z=I_D$. Rank preservation,
     Theorem~\ref{thm:mpu_virtual_sandwich_source_ranks}, identifies the
-    transported factors with the selected source-rank spaces. Simplicity and
+    transformed factors with the selected source-rank spaces. Simplicity and
     the source-gate equivalence of Theorem~\ref{ThmFund1} give unitarity of
     both $u$ contractions. The selected factors have left inverses from their
     weighted first-cut and ordinary second-cut normalizations in
@@ -8857,7 +8857,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 
     In the notation of Proposition~IV.5 of \cite{Cirac2017MPU}, let $L$ and
     $R$ be the positive semidefinite outer factors with support projections
-    $P$ and $Q$, respectively. The required witnesses are
+    $P$ and $Q$, respectively. The required matrices are
     \begin{align}
         X & =X_L=L^++(\Id-P), \\
         Z & =X_R=R^++(\Id-Q).
@@ -8925,7 +8925,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Let $[0,1]\ni x\mapsto\mathcal W(x)$ be a continuous path of tensors
     generating MPUs, without requiring the path to be in canonical form.
     Suppose that the path carries an admissible equivalence datum with blocking
-    length $m$. Then the ranks $r(x)$ and $\ell(x)$ of the actual blocked path
+    length $m$. Then the ranks $r(x)$ and $\ell(x)$ of the blocked path
     tensors $\mathcal W(x)_m$ are constant on $[0,1]$.
     % Source lines: paper_v2.tex 733--818.
 \end{proposition}
@@ -9045,7 +9045,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \item It is constant under continuous deformations through MPU tensors.
         \item Admissibly equivalent MPU tensors have the same index. Conversely,
               tensors with the same index are admissibly equivalent whenever the
-              standard-form interpolation is supplied with an admissible path datum.
+              standard-form interpolation is equipped with an admissible path datum.
     \end{enumerate}
     These are the conclusions of \cite[Theorem~IV.6]{Cirac2017MPU}, restricted
     to the explicit admissibility hypotheses above.
@@ -9075,7 +9075,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{prop:mpu_admissible_continuity_index, thm:mpu_admissible_index, SF, ThmFund1, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
     Let $k_0$ be the common blocking length in an admissible equivalence
     datum for a continuous path $\mathcal U(p)$ of MPU tensors, and suppose that
-    this supplied length satisfies $k_0\leq D^4$. Then there are continuous
+    this given length satisfies $k_0\leq D^4$. Then there are continuous
     paths of unitaries $u(p)$ and $v(p)$ such that the MPU
     $U^{(2k_0N)}(p)$ has standard form given by $u(p)$ and $v(p)$ for every
     $p\in[0,1]$. This is the reduced-source version of
@@ -9283,7 +9283,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \sum_{\mu\in\sigma(x)}P_\mu     & =\Id,                  \\
         \sum_{\mu\in\sigma(x)}\mu P_\mu & =x.
     \end{align}
-    If moreover $x^T=-x$, then
+    If in addition $x^T=-x$, then
     \begin{align}
         P_\mu^T & =P_{-\mu}.
     \end{align}
@@ -9477,7 +9477,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % reduced full-support source datum. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{prop:mpu_admissible_conjugation_symmetry, lemma:conjclass-normalform-continuous, FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
-    Let an MPU in the standard form determined by its supplied source datum
+    Let an MPU in the standard form determined by its given source datum
     be invariant under complex
     conjugation, and
     suppose every standard-form tensor compared below carries reduced
@@ -9618,9 +9618,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % No preservation under blocking is asserted. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{FundamentalMPU, prop:mpu_admissible_index_well_defined, def:mpu_admissible_index, SF, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
-    Let an MPU be in the standard form determined by its supplied source datum.
+    Let an MPU be in the standard form determined by its given source datum.
     Suppose its one-site tensor
-    $\mathcal U$, its actual two-site block $\mathcal U_2$, and the
+    $\mathcal U$, its two-site block $\mathcal U_2$, and the
     physical-adjoint comparison tensor $\mathcal U_2^\sharp$ are simple and each
     carries its own reduced full-support source datum. Write the one-site
     physical space as $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. Time-reversal
@@ -9638,7 +9638,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{proof}
     \uses{FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, prop:mpu_admissible_index_well_defined, def:mpu_admissible_index}
     Under time reversal, $\mathcal U_2$ and $\mathcal U_2^\sharp$ generate the
-    same MPU. Apply the same-tensor converse to each supplied pair; the
+    same MPU. Apply the same-tensor converse to each given pair; the
     resulting presentations record the original fixed matrices. Theorem~\ref{FundamentalMPU}
     then identifies their source spaces,
     so their corresponding source-cut ranks agree. Physical adjunction exchanges
@@ -9712,9 +9712,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % No preservation under blocking is asserted. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{FundamentalMPU, prop:mpu_admissible_index_well_defined, def:mpu_admissible_index, SF, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_reduced_full_support_source_datum}
-    Let an MPU be in the standard form determined by its supplied source datum.
+    Let an MPU be in the standard form determined by its given source datum.
     Suppose its one-site tensor
-    $\mathcal U$, its actual two-site block $\mathcal U_2$, and the transposed
+    $\mathcal U$, its two-site block $\mathcal U_2$, and the transposed
     comparison tensor $\mathcal U_2^{\mathsf T}$ are simple and each carries its
     own reduced full-support source datum. Write the one-site physical space as
     $\mathbb C^{d_0}\otimes\mathbb C^{d_0}$. Transposition symmetry then forces
@@ -9732,7 +9732,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{proof}
     \uses{FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, prop:mpu_admissible_index_well_defined, def:mpu_admissible_index}
     Under transposition, $\mathcal U_2$ and $\mathcal U_2^{\mathsf T}$ generate
-    the same MPU. Apply the same-tensor converse to each supplied pair; the
+    the same MPU. Apply the same-tensor converse to each given pair; the
     resulting presentations record the original fixed matrices. Theorem~\ref{FundamentalMPU}
     then identifies their source spaces, so their corresponding source-cut
     ranks agree. Transposition
@@ -9782,7 +9782,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.FiniteChainOperatorSymmetryFamily.at}
     \leanok
     \uses{def:mpu_finite_chain_operator_symmetry, def:equivalent-tensors}
-    A coherent symmetry family supplies an action $\mathcal S_{d,N}$ for every
+    A coherent symmetry family specifies an action $\mathcal S_{d,N}$ for every
     physical dimension $d$, with one common set $A$ of applicable lengths. For
     an ancilla dimension $x$, let
     \begin{align}
@@ -9795,12 +9795,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \iota_x\bigl(\mathcal S_{d,N}(X)\bigr)
          & = \mathcal S_{dx,N}\bigl(\iota_x(X)\bigr).
     \end{align}
-    Thus the action on the full enlarged operator algebra is supplied data; it
+    Thus the action on the full enlarged operator algebra is part of the given data; it
     is not obtained by extending its values on operators $X\otimes I$.
     % Source lines: paper_v2.tex 1356--1364.
 \end{definition}
 
-\begin{theorem}[Identity-ancilla transport of symmetry invariance]
+\begin{theorem}[Identity-ancilla invariance under a symmetry family]
     \label{thm:mpu_symmetry_identity_ancilla_invariant}
     \lean{MPOTensor.IsInvariantUnderSymmetry.tensorPhysicalId}
     \leanok
@@ -9831,12 +9831,12 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         A_k & = \{N\mid Nk\in A\}.
     \end{align}
     Its action is obtained by conjugating $\mathcal S_{d,Nk}$ along the
-    canonical identification
+    standard identification
     $(\mathbb C^{d^k})^{\otimes N}\cong(\mathbb C^d)^{\otimes Nk}$.
     % Source line: paper_v2.tex 1366.
 \end{definition}
 
-\begin{theorem}[Blocking transport of symmetry invariance]
+\begin{theorem}[Preservation of symmetry invariance under blocking]
     \label{thm:mpu_symmetry_blocking_invariant}
     \lean{MPOTensor.IsInvariantUnderSymmetry.blockTensor}
     \leanok
@@ -9846,7 +9846,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Let $R_{d,N,k}$ be the canonical identification from blocked length-$N$
+    Let $R_{d,N,k}$ be the standard identification from blocked length-$N$
     configurations to unblocked length-$Nk$ configurations. For $N\in A_k$,
     one has $Nk\in A$ and
     \begin{align}
@@ -9886,7 +9886,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     for every $p\in[0,1]$ and every applicable chain length $N$. When
     $\mathcal U$ and $\mathcal V$ have one bond dimension $D$, such a path of
-    bond dimension $D$ from $\mathcal U$ to $\mathcal V$ witnesses the relation
+    bond dimension $D$ from $\mathcal U$ to $\mathcal V$ realizes the relation
     with $D'=D$.
     % Source lines: paper_v2.tex 1340--1354.
 \end{definition}
@@ -9918,7 +9918,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     for every $p\in[0,1]$ and every chain length $N$ under consideration. The
     path need not be in canonical form. The equivalence is admissible if its
-    witnessing path carries an admissible equivalence datum for the actual
+    connecting path carries an admissible equivalence datum for the
     blocked path tensor and the fixed conjugate, physical-adjoint, transposed,
     and $\mathcal S$-image comparison paths, and if the common blocking length
     $m$ of that datum satisfies $m\leq D^4$.
@@ -9956,7 +9956,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     dimensions $p_a,p_b$ with $p_ad_a=p_bd_b$ such that
     $(\mathcal U^{(p_a)})_k$ and
     $(\mathcal V^{(p_b)})_k$ are strictly equivalent under the $k$-site
-    blocking of the supplied enlarged-dimension symmetry. The family obeys the
+    blocking of the given enlarged-dimension symmetry. The family obeys the
     identity-ancilla semiconjugacy law, and its applicable blocked lengths are
     precisely the lengths $N$ for which $Nk\in A$. The ancillas are attached
     before the common blocking.
@@ -9976,7 +9976,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
 \begin{proof}\leanok
     Retain the MPU hypotheses, positive coprime ancilla dimensions, common
     positive blocking length, and physical-dimension equality from the
-    symmetry-preserving witness. Forgetting invariance from its final strict
+    symmetry-preserving equivalence data. Forgetting invariance from its final strict
     path gives the required ordinary stabilized equivalence.
 \end{proof}
 
@@ -9991,8 +9991,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $p_a,p_b$ with $p_ad_a=p_bd_b$ such that $(\mathcal U^{(p_a)})_k$ and
     $(\mathcal V^{(p_b)})_k$ are strictly equivalent under $\mathcal S$. Thus
     the ancillas are attached before the common blocking. The equivalence is
-    admissible if this strict-equivalence witness carries an admissible
-    equivalence datum for the actual blocked path and the fixed conjugate,
+    admissible if this strict-equivalence path carries an admissible
+    equivalence datum for the blocked path itself and the fixed conjugate,
     physical-adjoint, transposed, and $\mathcal S$-image comparison paths, with
     common blocking length at most $D^4$.
     % Source lines: paper_v2.tex 1356--1364.
@@ -10019,7 +10019,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Definition~\ref{def:mpu_admissible_equivalence_datum}. Documented in
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{def:mpu_admissible_strict_symmetry_equivalence, cor:mpu_admissible_continuous_standard_form, FundamentalMPU, thm:mpu_canonical_form_ii_stabilization_converse, def:mpu_admissible_equivalence_datum}
-    Fix a positive integer $m\leq D^4$. The actual $m$-site blocked endpoint
+    Fix a positive integer $m\leq D^4$. The $m$-site blocked endpoint
     MPUs $U_1^{(mN)}$ and $U_2^{(mN)}$ are admissibly strictly equivalent under
     $\mathcal S$ if and only if there are continuous families of unitaries
     $\widetilde u(p)$ and $\widetilde v(p)$ whose endpoints generate
@@ -10027,9 +10027,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\mathcal S$ for every $p\in[0,1]$, and whose tensor path and fixed
     conjugate, physical-adjoint, transposed, and $\mathcal S$-image comparison
     paths carry continuously varying reduced full-support source data. These
-    families arise from the actual blocked path $\mathcal W(p)_m$ in an
+    families arise from the blocked path $\mathcal W(p)_m$ in an
     admissible equivalence datum of common length $m$; the blocked path itself is
-    the length-one admissible witness for the displayed endpoint families,
+    the length-one admissible path for the displayed endpoint families,
     corresponding to
     \cite[Lemma following the symmetry-equivalence definitions]{Cirac2017MPU}.
     % Source lines: paper_v2.tex 1366--1380.
@@ -10092,7 +10092,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{prop:mpu_admissible_conjugation_standard_forms, cor:mpu_admissible_equiv_under_conjugation, def:mpu_admissible_symmetry_equivalence, def:mpu_admissible_equivalence_datum, def:mpu_reduced_full_support_source_datum}
     For $i=1,2$, suppose the endpoint tensor $\mathcal U_i$, its conjugate
-    comparison $\overline{\mathcal U_i}$, the actual two-site block
+    comparison $\overline{\mathcal U_i}$, the two-site block
     $\mathcal U_{i,2}$, and its conjugate comparison
     $\overline{\mathcal U_{i,2}}$ are simple and each carries reduced
     full-support source data. Suppose that either $r$ or $\ell$ is odd and that
@@ -10184,7 +10184,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{prop:mpu_admissible_conjugation_standard_forms, cor:mpu_admissible_symplectic_to_orthogonal, lem:mpu_admissible_symmetry_path_criterion, lemma:conjclass-normalform-continuous, def:mpu_admissible_equivalence_datum}
     Suppose that $r$ and $\ell$ are both even and that the standard-form
     interpolation determined below carries an admissible path datum of blocking
-    length one. Choose standard forms from the supplied source data of two
+    length one. Choose standard forms from the given source data of two
     conjugation-invariant
     MPUs as in
     Proposition~\ref{prop:mpu_admissible_conjugation_standard_forms}. They are admissibly strictly equivalent under
@@ -10219,7 +10219,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{thm:mpu_admissible_conjugation_odd_rank, thm:mpu_admissible_conjugation_even_rank, prop:mpu_admissible_conjugation_standard_forms, prop:mpu_admissible_index_well_defined, def:mpu_admissible_symmetry_equivalence, def:mpu_admissible_equivalence_datum, def:mpu_reduced_full_support_source_datum}
     For $i=1,2$, suppose the original one-site endpoint tensor
     $\mathcal U_i$, its conjugate comparison $\overline{\mathcal U_i}$, the
-    actual two-site block $\mathcal U_{i,2}$, and its conjugate comparison
+    two-site block $\mathcal U_{i,2}$, and its conjugate comparison
     $\overline{\mathcal U_{i,2}}$ are simple and each carries reduced
     full-support source data. Suppose also that the resulting standard-form
     interpolation carries an admissible path datum of blocking length one. Then
@@ -10234,7 +10234,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     Suppose first that either $r$ or $\ell$ is odd. Then both original
     endpoints lie in Case I. After one blocking, write $r^{(2)}$ and
     $\ell^{(2)}$ for the blocked source ranks. Admissible blocking independence,
-    applied to the supplied one-site and two-site endpoint data, gives
+    applied to the given one-site and two-site endpoint data, gives
     \begin{align}
         r^{(2)} & =dr,
     \end{align}
@@ -10387,8 +10387,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{prop:mpu_admissible_local_time_reversal, def:mpu_reduced_full_support_source_datum}
     For a time-reversal-invariant MPU in the standard form determined by its
-    supplied source datum, suppose its
-    one-site tensor $\mathcal U$, its actual two-site block $\mathcal U_2$, and
+    given source datum, suppose its
+    one-site tensor $\mathcal U$, its two-site block $\mathcal U_2$, and
     the physical-adjoint comparison tensor $\mathcal U_2^\sharp$ are simple and
     each carries its own reduced full-support source datum. Then the sign
     $\sigma$ in
@@ -10495,7 +10495,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{lem:mpu_admissible_sigma_gauge_invariant, lem:mpu_admissible_symmetry_path_criterion, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
     Suppose a time-reversal-preserving path carries an admissible equivalence
     datum of blocking length one. At every path point, require the one-site
-    tensor, its actual two-site block, and the physical-adjoint comparison of
+    tensor, its two-site block, and the physical-adjoint comparison of
     that two-site block to be simple and to carry continuously varying reduced
     full-support source data. Then the sign
     $\sigma=\pm1$ is independent of the admissible standard-form gauge and is
@@ -10583,7 +10583,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{lem:mpu_admissible_sigma_gauge_invariant, prop:mpu_admissible_local_time_reversal, lem:mpu_blocking, def:mpu_reduced_full_support_source_datum}
     For every blocking length $k$ under consideration, suppose the endpoint
-    tensor $\mathcal U_k$, its actual two-site block $\mathcal U_{2k}$, and the
+    tensor $\mathcal U_k$, its two-site block $\mathcal U_{2k}$, and the
     physical-adjoint comparison tensor $\mathcal U_{2k}^\sharp$ are simple and
     each carries its own reduced full-support source datum. Let $\sigma^{(k)}$
     be the sign of the resulting standard form. Then
@@ -10631,7 +10631,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source lines: paper_v2.tex 1735--1743.
 \end{corollary}
 
-\begin{corollary}[Admissible time-reversal invariants of supplied witnesses]
+\begin{corollary}[Admissible time-reversal invariants of equivalent paths]
     \label{cor:mpu_admissible_sigma_equivalence_necessary}
     \notready
     \discussion{5714}
@@ -10651,11 +10651,11 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\sigma^{(2)}$.
 
     For admissible equivalence after adjoining ancillas and applying the source
-    blocking, let $p\mapsto\mathcal W_{\mathrm{anc}}(p)$ be the actual
-    ancilla-enlarged blocked witness path, not a reduced or equivalent
+    blocking, let $p\mapsto\mathcal W_{\mathrm{anc}}(p)$ be the
+    ancilla-enlarged blocked connecting path itself, not a reduced or equivalent
     representative, and regard it as a length-one admissible path. Require
     continuous reduced full-support source data along
-    $\mathcal W_{\mathrm{anc}}(p)$, its actual two- and four-site blocks, and
+    $\mathcal W_{\mathrm{anc}}(p)$, its two- and four-site blocks, and
     the physical-adjoint comparisons of those two blocks. The conclusion is
     only
     \begin{align}
@@ -10690,7 +10690,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{prop:mpu_admissible_conjugation_standard_forms, cor:mpu_admissible_equiv_under_conjugation, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
     Let $\mathcal U$ be conjugation invariant. Suppose $\mathcal U$ and its
     conjugate comparison tensor are simple and carry their own reduced
-    full-support source data. Let $p\mapsto\mathcal W(p)$ be the actual
+    full-support source data. Let $p\mapsto\mathcal W(p)$ be the explicit
     standard-form interpolation from $\mathcal U$ to its Case I or Case II
     representative. Suppose this interpolation carries an admissible
     conjugation-symmetry path datum of blocking length one: the path
@@ -10722,7 +10722,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % used to define both $\sigma^{(1)}$ and $\sigma^{(2)}$ carry their own data.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{prop:mpu_admissible_local_time_reversal, prop:mpu_admissible_sigma_blocking_parity, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
-    Let an MPU in the standard form determined by its supplied source datum
+    Let an MPU in the standard form determined by its given source datum
     be invariant under time reversal.
     Suppose $\mathcal U$, $\mathcal U_2$, and $\mathcal U_4$, together with the
     physical-adjoint comparison tensors $\mathcal U_2^\sharp$ and
@@ -10831,10 +10831,10 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \notready
     \discussion{5715}
     \uses{prop:sigma1-and-sigma2-equal, prop:dagger-mps-class-and-mpu-class-equal, thm:czx_printed_normalization_obstruction}
-    The literal normalized tensor printed below is not an MPU, by
+    The normalized tensor printed below is not an MPU, by
     Theorem~\ref{thm:czx_printed_normalization_obstruction}.
     The following is the source classification claim, not an assertion
-    of unitarity for that literal tensor; its normalization and comparison
+    of unitarity for that printed tensor; its normalization and comparison
     with the Z-decorated tensor are discussed in
     \cite{gap:mpu_czx_tensor_normalization}.
     The CZX MPU of Chen, Liu and Wen~\cite{ChenLiuWen2011CZX} (see also
@@ -10863,9 +10863,9 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % tensors used to define the two signs carry reduced full-support source data.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{prop:mpu_admissible_sigma_blocking_parity, prop:mpu_admissible_mps_time_reversal_class, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum, thm:czx_printed_normalization_obstruction}
-    The literal normalized tensor printed below is not an MPU, by
+    The normalized tensor printed below is not an MPU, by
     Theorem~\ref{thm:czx_printed_normalization_obstruction}.
-    The classification below evaluates the supplied tensor data under
+    The classification below evaluates the given tensor data under
     \cite{gap:mpu_czx_tensor_normalization}.
     Suppose the CZX tensors $\mathcal U$, $\mathcal U_2$, and $\mathcal U_4$,
     together with the physical-adjoint comparison tensors
@@ -10991,7 +10991,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     \uses{def:mpu_shift_tensors, def:mpu_source_matrix_one, def:mpu_source_matrix_two, def:mpu_right_rank, def:mpu_left_rank}
     Let $A$ be the right-shift tensor and let
-    $z_{(\alpha,i)}=\delta_{\alpha i}$ be the vectorized identity. Its raw
+    $z_{(\alpha,i)}=\delta_{\alpha i}$ be the vectorized identity. Its
     source cuts are
     \begin{align}
         M_1(A) & =\Id,            \\
@@ -11012,7 +11012,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         \ell(A)     & =1, \\
         r(A^\sharp) & =1.
     \end{align}
-    These are the raw source-cut quantities from
+    These are the source-cut quantities from
     \cite[Section~III]{Cirac2017MPU}; no choice of source factors is involved.
 \end{theorem}
 
@@ -11128,7 +11128,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \cite[equation labelled~\texttt{Y1Y1X1X1}]{Cirac2017MPU}. No transfer-map
     fixed-point equation is asserted here.
 
-    The supplied source-factor witnesses below instead use
+    The explicit source factorizations below instead use
     $\rho_{\mathrm{aux}}=\Id_d$ for each constituent shift and
     $\rho_{\mathrm{aux}}=\Id_{d^2}$ after tensoring. The paper gates computed
     from them carry reciprocal factors $d$ and $d^{-1}$ because these identity
@@ -11181,7 +11181,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
              & Y_1'           & =d^{-1/2}Y_1,
              & Z_1'           & =\sqrt d\,Z_1,
     \end{align}
-    and leave $X_2,Y_2,Z_2$ unchanged. Then these are supplied source factors
+    and leave $X_2,Y_2,Z_2$ unchanged. Then these are source factors
     for the trace-normalized scalar weight $\rho_d=d^{-1}\Id_d$ prescribed by
     CFII. In particular,
     \begin{align}
@@ -11499,7 +11499,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     blockings, which is the simplicity requirement of Definition~\ref{def:index}.
     The canonical-form construction and representative invariance in
     Theorem~\ref{thm:mpu_shift_public_index_values} identify these values with
-    the public indices and transport them to any positive-dimensional MPU
+    the public indices and carry them over to any positive-dimensional MPU
     generating the same periodic operators. Unequal ranks do not by
     themselves exclude a circuit: after blocking, every matrix product unitary,
     the shift included, is a depth-two circuit of nearest-neighbour unitaries
@@ -11542,7 +11542,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     For $d>1$ the powers $d^{k+2}$ and $d^k$ differ.
 \end{proof}
 
-\begin{definition}[Supplied source factors for the three shift MPUs]
+\begin{definition}[Explicit source factors for the three shift MPUs]
     \label{def:threeMPU_supplied_source_factors}
     \lean{MPOTensor.identitySourceFactors,
         MPOTensor.rightShiftSourceFactors,
@@ -11566,8 +11566,8 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     identity source factorizations.  Equip $U_2$ with the tensor product of the
     left-shift and right-shift source factorizations, in that order, and equip
     $U_3$ with the tensor product in the reverse order.  In all three cases the
-    virtual weight is the identity.  These are explicit supplied source-factor
-    witnesses; no identification with an arbitrary compact singular-value
+    virtual weight is the identity.  These are explicit source
+    factorizations; no identification with an arbitrary compact singular-value
     decomposition is asserted.
 \end{definition}
 
@@ -11598,7 +11598,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     gives the two ordered products.
 \end{proof}
 
-\begin{theorem}[Supplied paper gates for $U_1$]
+\begin{theorem}[Explicit paper gates for $U_1$]
     \label{thm:threeMPU_supplied_source_gates_one}
     \lean{MPOTensor.shiftExampleU₁SourceURowEquiv,
         MPOTensor.shiftExampleU₁SourceVColumnEquiv,
@@ -11606,7 +11606,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         MPOTensor.shiftExampleU₁_sourceV_fourSpin_apply}
     \leanok
     \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv}
-    In the four-spin coordinates of the supplied source factorization,
+    In the four-spin coordinates of the explicit source factorization,
     \begin{align}
         u_1 & =\Id\otimes\Id,
             & v_1             & =\Id\otimes\Id.
@@ -11631,7 +11631,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
         thm:mpu_source_v_open_two_site, thm:mpu_source_u_open_two_site}
-    Assume $d>0$. In the four-spin coordinates of the paper, the supplied
+    Assume $d>0$. In the four-spin coordinates of the paper, the explicit
     source gates satisfy
     \begin{align}
         u_2^{(2)}    & =d\,(\Id\otimes\mathbb S\otimes\Id), \\
@@ -11640,7 +11640,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     The blocked tensor factors through $X_2,u_2^{(2)},X_1$ and, equivalently,
     through $v_2^{(2)},Y_1,Y_2$. The scalar factors record the normalization of
-    the supplied source-factor witnesses.
+    the explicit source factorizations.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -11664,7 +11664,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \leanok
     \uses{def:threeMPU_supplied_source_factors, def:mpu_source_uv,
         thm:mpu_source_v_open_two_site, thm:mpu_source_u_open_two_site}
-    Assume $d>0$. In the four-spin coordinates of the paper, the supplied
+    Assume $d>0$. In the four-spin coordinates of the paper, the explicit
     source gates satisfy
     \begin{align}
         u_3^{(2)}    & =d\,(\Id\otimes\mathbb S\otimes\Id)
@@ -11673,7 +11673,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \end{align}
     The blocked tensor factors through $X_2,u_3^{(2)},X_1$ and, equivalently,
     through $v_3^{(2)},Y_1,Y_2$. The scalar factors record the normalization of
-    the supplied source-factor witnesses.
+    the explicit source factorizations.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -11738,7 +11738,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{threeMPU, def:mpu_supplied_two_site_standard_form,
         def:mpu_shift_trace_weight}
     Assume $d>0$. The three shift families have two-site decompositions
-    with supplied gates whose unitary gates satisfy
+    with given gates whose unitary gates satisfy
     \begin{align}
         u_1                          & =\Id\otimes\Id,                  & v_1 & =\Id\otimes\Id, \\
         u_3                          & =\mathbb S,                      & v_3 & =\mathbb S,     \\
@@ -11917,7 +11917,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{threeMPU2, def:mpu_supplied_two_site_standard_form,
         def:mpu_shift_trace_weight}
     For $d>0$, the first two transformed families have two-site
-    decompositions with supplied gates and normalized half factors, with gates
+    decompositions with given gates and normalized half factors, with gates
     \begin{align}
         \widetilde u_1 & =\mathbb S,     &
         \widetilde v_1 & =\Id\otimes\Id,   \\
@@ -11994,7 +11994,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{threeMPU, threeMPU2, def:mpu_admissible_strict_symmetry_equivalence, def:mpu_admissible_symmetry_equivalence, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
     Fix one of the three symmetry comparisons and let
-    $p\mapsto\mathcal W(p)$ be the actual source-constructed interpolation used
+    $p\mapsto\mathcal W(p)$ be the source-constructed interpolation used
     in that comparison. Suppose it carries an admissible symmetry-path datum of
     blocking length one. Thus the path $\mathcal W(p)$ and the four fixed
     comparison paths $\overline{\mathcal W(p)}$, $\mathcal W(p)^\sharp$,
@@ -12031,7 +12031,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{threeMPU, thm:mpu_admissible_conjugation_odd_rank, thm:mpu_admissible_conjugation_even_rank, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum, def:mpu_admissible_symmetry_equivalence}
     Suppose the two-site blocked tensors carry reduced full-support source data
     and the standard-form comparison paths carry admissible path data of
-    blocking length one. Then the actual two-site blocked tensors of $U_2$ and
+    blocking length one. Then the two-site blocked tensors of $U_2$ and
     $U_3$ are both in the trivial admissible strict phase under conjugation.
     Consequently $U_2$ and $U_3$ lie in the same admissible equivalence class.
     % Source lines: paper_v2.tex 2110--2134.
@@ -12120,7 +12120,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Documented in docs/paper-gaps/mpu_canonical_form_full_support.tex.
     \uses{threeMPU2, lem:mpu_admissible_swap_symmetry_equivalence, def:mpu_admissible_strict_symmetry_equivalence, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
     For each of time reversal and transposition, let
-    $p\mapsto\mathcal W_{\mathcal S}(p)$ be the actual source-constructed
+    $p\mapsto\mathcal W_{\mathcal S}(p)$ be the source-constructed
     interpolation from $\widetilde U_2$ to $\widetilde U_3$. Suppose it carries
     an admissible symmetry-path datum of blocking length one. Thus the path
     $\mathcal W_{\mathcal S}(p)$ and its fixed conjugate, physical-adjoint,
@@ -12155,17 +12155,17 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     \uses{threeMPU2, lem:mpu_admissible_swap_symmetry_equivalence, thm:mpu_admissible_conjugation_odd_rank, thm:mpu_admissible_conjugation_even_rank, cor:mpu_admissible_equiv_under_conjugation, def:mpu_reduced_full_support_source_datum, def:mpu_admissible_equivalence_datum}
     For each endpoint tensor $\mathcal A$ among
     $U_1$, $U_2$, $\widetilde U_1$, and $\widetilde U_2$, suppose that
-    $\mathcal A$, its conjugate comparison $\overline{\mathcal A}$, its actual
+    $\mathcal A$, its conjugate comparison $\overline{\mathcal A}$, its
     two-site block $\mathcal A_2$, and the conjugate comparison
     $\overline{\mathcal A_2}$ are simple and carry their own reduced
     full-support source data. For every strict comparison used below, let
-    $p\mapsto\mathcal W(p)$ be the actual
+    $p\mapsto\mathcal W(p)$ be the
     source-constructed interpolation between the corresponding endpoint
     tensors. Suppose it carries an admissible conjugation-symmetry path datum of
     blocking length one: the path and its fixed conjugate, physical-adjoint,
     transposed, and conjugation-image comparison paths are simple and carry
     continuously varying source data. Require a length-one admissible path datum
-    also for the actual blocked interpolation used in the final equivalence
+    also for the blocked interpolation used in the final equivalence
     claim. Under these hypotheses,
     $U_1^{(N)}$ and $U_2^{(N)}$ are in different admissible strict phases under
     conjugation exactly when $k$ is a nonnegative integer and
@@ -12231,7 +12231,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source: paper_v2.tex 2217--2229 and Figure fig:TR-ancilla.
 \end{definition}
 
-\begin{definition}[Literal three-swap circuit]
+\begin{definition}[Explicit three-swap circuit]
     \label{def:mpu_shift_ancilla_three_swap}
     \lean{MPOTensor.shiftAncillaThreeSwap}
     \leanok
@@ -12258,7 +12258,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     % Source: paper_v2.tex 2217--2229 and Figure fig:TR-ancilla.
 \end{definition}
 
-\begin{theorem}[Literal three-swap permutation identity]
+\begin{theorem}[Three-swap permutation identity]
     \label{thm:mpu_shift_ancilla_three_swap_endpoint}
     \lean{MPOTensor.shiftAncillaThreeSwap_conj_swap₁₂,
         MPOTensor.shiftAncillaThreeSwap_conj_swap₁₂_apply,
@@ -12270,7 +12270,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         def:mpu_shift_ancilla_swap_12,
         def:mpu_shift_ancilla_three_swap,
         def:mpu_shift_ancilla_counter_shift}
-    The literal three-swap circuit satisfies
+    The three-swap circuit satisfies
     \begin{align}
         C^{-1}S^{1,2}C & =K.
     \end{align}
@@ -12282,7 +12282,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
     $\widetilde U_3$, whereas $\widetilde U_2$ has configuration map
     $((\sigma_1,\sigma_2),a)\mapsto
         ((R^{-1}\sigma_2,R\sigma_1),a)$.
-    The literal source labels produce a discrepancy at the $\widetilde U_2$
+    The printed source labels produce a discrepancy at the $\widetilde U_2$
     boundary on a nondegenerate periodic chain; see
     \cite[Figure~16]{Cirac2017MPU}.
     % Source: paper_v2.tex 2217--2229 and Figure fig:TR-ancilla.
@@ -12330,7 +12330,7 @@ coefficient of its length-$N$ periodic vector at the configuration $\sigma$.
         def:mpu_reduced_full_support_source_datum,
         def:mpu_admissible_equivalence_datum}
     After adding one ancilla of dimension $d$ per site and performing the source
-    blocking, denote the actual enlarged blocked endpoints by
+    blocking, denote the enlarged blocked endpoints by
     $\widehat{\mathcal U}_1$ and $\widehat{\mathcal U}_2$. For either time
     reversal or transposition, let $p\mapsto\mathcal W_{\mathcal S}(p)$ be the
     source-constructed interpolation from $\widehat{\mathcal U}_1$ to
@@ -12857,7 +12857,7 @@ see \cite{gap:gnvw12_support_algebra_full_matrix_scope}.
     \lean{Matrix.le_support_kroneckerSubmodule}
     \leanok
     \uses{def:qca_left_support_algebra, def:qca_right_support_algebra, def:qca_kronecker_submodule}
-    Every bipartite star-subalgebra satisfies the literal two-sided containment
+    Every bipartite star-subalgebra satisfies the two-sided containment
     \begin{align}
         \mathcal A
          & \subseteq
@@ -12869,7 +12869,7 @@ see \cite{gap:gnvw12_support_algebra_full_matrix_scope}.
     support-algebra containment in Schumacher--Werner Section~4.3 and of
     Gross--Nesme--Vogts--Werner equation~(22).  The latter follows after
     applying Lemma~7 to both tensor factors.  The displayed assertion is an
-    inclusion in an actual tensor-product span, not merely the conjunction of
+    inclusion in the tensor-product span itself, not merely the conjunction of
     the two one-sided inclusions.  The MPU appendix applies this construction
     to $\mathcal R_{2x}$ in
     \cite[lines~2320--2334]{Cirac2017MPU}.
@@ -13628,7 +13628,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
         lem:mpu_two_site_open_three_block_locality,
         thm:mpu_anchored_residual_mpo_entry,
         def:mpu_finite_chain_conjugation}
-    Suppose the two-site blocking of $U$ at length $k$ is supplied with
+    Suppose the two-site blocking of $U$ at length $k$ is equipped with
     standard-form factors $u,v$. For every observable $A$ on the central
     input block, let $B(A)$ be the corresponding observable on the two
     neighboring output links. Then
@@ -13645,7 +13645,7 @@ that $ab=ba$ for every $a\in\mathcal A$ and $b\in\mathcal B$.
         \label{eq:mpu_finite_chain_conjugation}
     \end{align}
     Thus the conjugated operator is the identity on every exterior
-    output coordinate. This statement assumes the displayed supplied
+    output coordinate. This statement assumes the displayed given
     standard form and does not yet identify the right-hand side with
     a site-indexed local inclusion or prove independence of the
     enclosing interval.
@@ -14747,7 +14747,7 @@ This is the forward propagation condition of
     \end{align}
     Thus condition~\textup{(c)} is precisely the range-inclusion formula from
     line~2298 of \cite{Cirac2017MPU}, expressed inside the quasi-local algebra,
-    and condition~\textup{(d)} is its finite-region witness form.
+    and condition~\textup{(d)} is its finite-region approximation form.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -14849,7 +14849,7 @@ This is the forward propagation condition of
         \omega     & \text{ propagates within }[-R,R]\cap\mathbb Z.
     \end{align}
     Consequently, finite forward propagation admits a symmetric-interval
-    witness:
+    bound:
     \begin{align}
         \exists R\in\mathbb N,\qquad
         \omega & \text{ propagates within }[-R,R]\cap\mathbb Z.
@@ -15105,7 +15105,7 @@ This is the forward propagation condition of
     This is the finite-region equivalence underlying the algebraic-local
     blocking construction below.  No quasi-local completion, compatibility
     with translations, propagation statement, circuit representation, or
-    transport of quantum cellular automata is asserted here.
+    conjugation of quantum cellular automata is asserted here.
 \end{definition}
 
 \begin{theorem}[Finite local-algebra blocking formulas]
@@ -15114,7 +15114,7 @@ This is the forward propagation condition of
         SpinChain.localBlocking_isometry}
     \leanok
     \uses{def:qca_local_blocking}
-    Matrix entries are transported by applying the inverse configuration
+    Matrix entries are reindexed by applying the inverse configuration
     equivalence to both indices.  The blocking equivalence preserves the
     operator norm and is an isometry.
 \end{theorem}
@@ -15163,7 +15163,7 @@ This is the forward propagation condition of
     \uses{def:qca_block_hull, thm:qca_expanded_region_coordinates}
     The quotient coordinate of each $z\in\Delta$ belongs to the image defining
     the hull, which proves containment after expansion.  Monotonicity follows
-    by retaining the same witness $z$ in the larger region.  Finally, every
+    by retaining the same point $z$ in the larger region.  Finally, every
     expanded site has quotient in $\Lambda$, while for each $x\in\Lambda$ the
     site $Lx$ belongs to $\widehat\Lambda_L$ and has quotient $x$.  Hence
     $\operatorname{Hull}_L(\widehat\Lambda_L)=\Lambda$.
@@ -15443,7 +15443,7 @@ This is the forward propagation condition of
     Because a star-algebra equivalence of C-star algebras preserves the norm, (\ref{eq:qca_blocking_norm}) holds, and applying it to $X-Y$ gives~(\ref{eq:qca_blocking_dist}).
 \end{proof}
 
-\begin{lemma}[Support transport under site blocking]
+\begin{lemma}[Support transformation under site blocking]
     \label{lem:qca_quasi_local_blocking_support}
     \lean{SpinChain.quasiLocalBlocking_supportedIn,
         SpinChain.quasiLocalBlocking_symm_supportedIn,
@@ -15454,7 +15454,7 @@ This is the forward propagation condition of
     $\Lambda$, then $\overline{\mathcal B}_L(X)$ is supported in
     $\widehat\Lambda_L$.  If an original-chain observable $Y$ is supported in
     $\Delta$, then $\overline{\mathcal B}_L^{-1}(Y)$ is supported in
-    $\operatorname{Hull}_L(\Delta)$.  In particular, support transport is exact
+    $\operatorname{Hull}_L(\Delta)$.  In particular, support preservation is exact
     on expanded regions:
     \begin{align}
         \overline{\mathcal B}_L(X)
@@ -15791,7 +15791,7 @@ a QCA, providing the blocked grouping used in the representation theorem of
     Theorem~\ref{thm:qca_blocked_translation_covariant_iff}.
 \end{proof}
 
-\begin{lemma}[QCA transport through site blocking]
+\begin{lemma}[Blocked quantum cellular automaton]
     \label{lem:qca_blocked}
     \lean{SpinChain.IsQCA.blocked}
     \leanok
@@ -15834,7 +15834,7 @@ $[-1,1]\cap\mathbb Z$, setting up the depth-two circuit representation in
     \uses{lem:qca_blocked_neighborhood_membership}
     If $\mathcal N=\varnothing$, membership in
     $\mathcal C_L(\mathcal N)$ is impossible.  In general, a point
-    $b\in\mathcal C_L(\mathcal N)$ supplies residues $0\leq r,s<L$ and
+    $b\in\mathcal C_L(\mathcal N)$ yields residues $0\leq r,s<L$ and
     $n\in\mathcal N$ such that
     \begin{align}
         r+n & =bL+s.
@@ -15861,7 +15861,7 @@ $[-1,1]\cap\mathbb Z$, setting up the depth-two circuit representation in
 \begin{proof}\leanok
     \uses{lem:qca_blocked_neighborhood_subset_nearest_neighbor}
     Every $|n|$ is bounded above by the finite supremum, so the strict
-    supremum bound supplies the pointwise hypothesis.  When
+    supremum bound gives the pointwise hypothesis.  When
     $\mathcal N=\varnothing$, the supremum is $0$ and the conclusion is
     vacuous.
 \end{proof}
@@ -16234,7 +16234,7 @@ adjacent-pair ordering convention of \cite{Gross2012IndexTheory}.
     \cite[lines~1261--1266]{Gross2012IndexTheory}.  Cirac et al. use the
     homogeneous even factor in
     \cite[lines~2322--2328]{Cirac2017MPU}; the odd factor and unified family
-    are supplied by the GNVW construction.
+    are given by the GNVW construction.
 
     While GNVW allow the cell size $d(y)$ to depend on $y$, the present
     definition treats a homogeneous chain with fixed size $d$; see
@@ -16801,7 +16801,7 @@ adjacent-pair ordering convention of \cite{Gross2012IndexTheory}.
         lem:qca_quasi_local_observable}
     In the bipartite coordinates the inclusion of $\mathcal A_\Gamma$ is
     $X\mapsto X\otimes\mathbf 1$ and the inclusion of $\mathcal A_\Delta$ is
-    $Y\mapsto\mathbf 1\otimes Y$.  Transport
+    $Y\mapsto\mathbf 1\otimes Y$.  Transfer
     (\ref{eq:qca_left_coefficient_compression}) and
     (\ref{eq:qca_right_coefficient_compression}) through the inverse of the
     bipartite coordinate equivalence, then apply the canonical map of
@@ -16964,7 +16964,7 @@ completion from compatible forward and inverse finite-local actions.
 
 \begin{proof}\leanok
     \uses{thm:qca_algebraic_local_algebra_universal}
-    These are the evaluation identities supplied by the universal property.
+    These are the evaluation identities given by the universal property.
 \end{proof}
 
 \begin{definition}[Induced algebraic-local equivalence]
@@ -17243,7 +17243,7 @@ completion from compatible forward and inverse finite-local actions.
     identity extends from the canonical dense subalgebra to the completion.
 \end{proof}
 
-\begin{theorem}[QCA assembled from compatible finite-local actions]
+\begin{theorem}[QCA induced by compatible finite-local actions]
     \label{thm:qca_compatible_local_automorphism}
     \lean{SpinChain.CompatibleLocalAutomorphism.isQCA_quasiLocalEquiv}
     \leanok
@@ -17256,8 +17256,8 @@ completion from compatible forward and inverse finite-local actions.
 
 \begin{proof}\leanok
     \uses{thm:qca_compatible_local_propagation, thm:qca_compatible_translation_covariant}
-    The support hypothesis supplies a finite forward propagation neighborhood,
-    while the unit-translation formula supplies translation covariance.  These
+    The support hypothesis gives a finite forward propagation neighborhood,
+    while the unit-translation formula gives translation covariance.  These
     are exactly the two defining properties of a one-dimensional QCA.
 \end{proof}
 
@@ -17306,7 +17306,7 @@ completion from compatible forward and inverse finite-local actions.
         SpinChain.quasiLocalIntervalObservable_apply,
         SpinChain.norm_quasiLocalIntervalObservable}
     \leanok
-    For $d>0$ and $a\in\mathbb Z$, coordinate transport and the finite-region
+    For $d>0$ and $a\in\mathbb Z$, coordinate reindexing and the finite-region
     inclusion give a star-algebra inclusion
     $j_{a,k}:M_{d^k}(\mathbb C)\to\mathcal A$, including $k=0$.
     It preserves the matrix operator norm: $\|j_{a,k}(X)\|=\|X\|$.
@@ -17590,7 +17590,7 @@ completion from compatible forward and inverse finite-local actions.
     Evaluate the completed blocking equivalence on the finite interval
     representative, then apply the finite coordinate identity.
 \end{proof}
-\begin{definition}[Transport of functionals by a star-algebra equivalence]
+\begin{definition}[Pushforward of functionals by a star-algebra equivalence]
     \label{def:qca_functional_star_equivalence}
     \lean{SpinChain.quasiLocalFunctionalCongr,
         SpinChain.quasiLocalFunctionalCongr_apply}
@@ -17610,7 +17610,7 @@ completion from compatible forward and inverse finite-local actions.
         SpinChain.isPureQuasiLocalState_quasiLocalFunctionalCongr_iff}
     \leanok
     Under the preceding hypotheses, $\|T_e\omega\|=\|\omega\|$.
-    Moreover, $T_e$ maps the entire state space of $\mathcal A_{d_1}$ onto
+    In addition, $T_e$ maps the entire state space of $\mathcal A_{d_1}$ onto
     the entire state space of $\mathcal A_{d_2}$, and $T_e\omega$ is pure
     if and only if $\omega$ is pure. No translation invariance is assumed.
     Purity has the meaning used in
@@ -17636,7 +17636,7 @@ completion from compatible forward and inverse finite-local actions.
     isomorphism. A continuous functional $\omega$ on the blocked chain
     defines the original-lattice functional
     $T_L\omega=\omega\circ\mathcal B_L^{-1}$.
-    This is the state transport associated with the regrouping of sites in
+    This is the state transformation associated with the regrouping of sites in
     \cite[lines~825--836]{Nachtergaele1996Spectral}.
     \uses{def:qca_functional_star_equivalence,def:qca_quasi_local_blocking}
 \end{definition}

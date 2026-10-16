@@ -1,0 +1,58 @@
+\section{Regularity of the logarithmic patch minimum}
+\label{sec:peps_patch_log_minimum_regularity}
+
+Let $V$ be a finite ordered set with arbitrary finite local configuration
+sets $A_v$, and put $\mathcal H_X=\ell^2(\prod_{v\in X}A_v;\C)$.
+Fix arbitrary regions $X_0,\ldots,X_{m-1}$, nonnegative weights $a_j$,
+and a unit vector $\Omega\in\mathcal H_V$.
+For the feasible independent density tuples $x\in\mathcal D$ of
+Definition~\ref{def:peps_regularized_patch_objective}, write
+\begin{align*}
+    F_x(r) & =\left\|
+    \widehat{(x_{m-1}+e^{-r}I)^{-a_{m-1}/2}}\cdots
+    \widehat{(x_0+e^{-r}I)^{-a_0/2}}\Omega\right\|, \\
+    N(r)   & =\min_{x\in\mathcal D}F_x(r),
+    \qquad \kappa=\sum_{j=0}^{m-1}a_j.
+\end{align*}
+The minimum is positive and attained. No nesting or commutation is required.
+The \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/Polynomial-PEPS-approximation-of-gapped-square-grid-ground-states-September-24-2026/build/sections/03-patches.tex\#L433-L451}{common Lipschitz estimate}
+applies before taking the minimum.
+
+\begin{theorem}[A common Lipschitz constant for the logarithmic minimum]
+    \label{thm:peps_patch_log_minimum_lipschitz}
+    \lean{TNLean.PEPS.lipschitzOnWith_log_regularizedPatchMinimum_exp_neg}
+    \leanok
+    \uses{def:peps_regularized_patch_minimum}
+    Let $T\ge0$ and put
+    $K=\frac{\kappa}{2}\,2^{\kappa/2}e^{\kappa T/2}$.
+    Then $K\ge0$ and $\log N$ is $K$-Lipschitz on $[0,T]$.
+    In particular, for $s,t\in[0,T]$,
+    \begin{align*}
+        |\log N(s)-\log N(t)|\le K|s-t|.
+    \end{align*}
+    Zero weights, repeated regions and the empty product are included.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_patch_uniform_log_radius_derivative,thm:peps_regularized_patch_log_minimum}
+    For every feasible $x$, the derivative of $\log F_x$ exists throughout
+    $[0,T]$ and has absolute value at most $K$.
+    The mean value theorem makes every such branch $K$-Lipschitz.
+    The logarithmic minimum is attained. Choosing a minimizing tuple at $t$
+    gives $\log N(s)-\log N(t)\le K|s-t|$; interchanging $s$ and $t$
+    gives the reverse inequality. No regularity of the minimizing tuples
+    is needed.
+\end{proof}
+
+\begin{theorem}[Absolute continuity of the logarithmic minimum]
+    \label{thm:peps_patch_log_minimum_absolutely_continuous}
+    \lean{TNLean.PEPS.absolutelyContinuousOnInterval_log_regularizedPatchMinimum_exp_neg}
+    \leanok
+    \uses{def:peps_regularized_patch_minimum}
+    Under the same hypotheses, $\log N$ is absolutely continuous on $[0,T]$.
+    This includes $T=0$ and $\kappa=0$.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_patch_log_minimum_lipschitz}
+    A Lipschitz function on a compact real interval is absolutely continuous.
+    Since $T\ge0$, the interval with endpoints $0$ and $T$ is $[0,T]$.
+\end{proof}

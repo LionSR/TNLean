@@ -29,7 +29,7 @@
     product over the resulting disjoint union.
 \end{proof}
 
-\begin{theorem}[Three-site anticommutator transport to cyclic adjacent pairs]
+\begin{theorem}[Three-site anticommutator embedding into cyclic adjacent pairs]
     \label{thm:three_site_anticommutator_cyclic_transport}
     \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_forward_ge_of_threeSite}
     \lean{MPSTensor.re_inner_localTermES_adjacent_twoSite_backward_ge_of_threeSite}
@@ -147,7 +147,7 @@
 \begin{proof}
     \leanok
     \uses{lem:transported_es_local_projections, lem:ordered_projection_rowsum_reduction}
-    Lemma~\ref{lem:transported_es_local_projections} supplies the symmetric-projection
+    Lemma~\ref{lem:transported_es_local_projections} gives the symmetric-projection
     hypothesis for the family $P_i=h_{i,\mathrm{ES}}$. Apply
     Lemma~\ref{lem:ordered_projection_rowsum_reduction} to this family and use
     $H_{N,L}^{\mathrm{ES}}=\sum_i h_{i,\mathrm{ES}}$.
@@ -168,7 +168,7 @@
 \begin{proof}
     \leanok
     \uses{lem:parent_hamiltonian_ordered_rowsum_quadratic, lem:parent_hamiltonian_es_quadratic_reduction}
-    The fixed-chain row-sum reduction supplies the quadratic-form estimate with
+    The fixed-chain row-sum reduction gives the quadratic-form estimate with
     $\gamma=1/(4L)$ for every admissible $N$. The positivity and kernel
     identification of the Hilbert-space Hamiltonian then allow
     Lemma~\ref{lem:parent_hamiltonian_es_quadratic_reduction} to convert this
@@ -202,7 +202,7 @@
 
 \begin{proof}
     \leanok
-    The fixed-chain anticommutator row-sum reduction supplies the quadratic-form
+    The fixed-chain anticommutator row-sum reduction gives the quadratic-form
     estimate with $\gamma=1/(4L)$ for every admissible $N$. The positivity and
     kernel identification of the Hilbert-space Hamiltonian then convert this
     quadratic-form estimate into the norm lower bound on the orthogonal complement
@@ -403,7 +403,7 @@
     Lemma~\ref{lem:cyclic_window_overlap_cardinality} gives the row-cardinality
     bound $m=2(L-1)$ for the overlap relation among length-$L$ local windows,
     and
-    Lemma~\ref{lem:transported_es_local_projections} supplies the symmetric
+    Lemma~\ref{lem:transported_es_local_projections} gives the symmetric
     projection structure of each Hilbert-space local term. If two cyclic supports
     do not meet, the corresponding windows are site-disjoint, so
     Lemma~\ref{lem:cyclic_window_nonoverlap_positive} gives the required
