@@ -81,7 +81,7 @@ of the September 24, 2026 polynomial-PEPS manuscript.
             \otimes I_{V\setminus R_j}\right].
         \label{eq:peps_hole_encoder}
     \end{align}
-    In particular, the output retains one raw register at every site.
+    In particular, the output retains one site register at every site.
     For input and output configurations $y,x\in\prod_{v\in V}A_v$,
     its matrix coefficient is
     \begin{align}
@@ -233,7 +233,7 @@ of the September 24, 2026 polynomial-PEPS manuscript.
 \end{theorem}
 \begin{proof}
     \leanok
-    The sum over the singleton tag has one term, and the raw matrix is $I$.
+    The sum over the singleton tag has one term, and the site matrix is $I$.
     Thus the Gram matrix is $I^\dagger I=I$.
     Equality of Gram matrices gives equality of the vector norms.
 \end{proof}
@@ -265,5 +265,5 @@ of the September 24, 2026 polynomial-PEPS manuscript.
     and $\mathcal H_{R_j}=\C$; the reset condition is automatic and the
     complement is all of $V$.
     The separate choice $K_{\mathrm{id}}$ has one tag and retains every
-    raw configuration.
+    site configuration.
 \end{remark}

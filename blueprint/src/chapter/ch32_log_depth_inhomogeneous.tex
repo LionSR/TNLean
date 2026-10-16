@@ -272,7 +272,7 @@ into a single constant.
     On a ring of $N\ge1$ sites the padded chain has the state $\ket{\phi_N}$ of
     the chain. If all bonds already have dimension $D$, zero padding leaves
     every matrix unchanged. If every block has at least one site, the blocked tensor $B_k$
-    of the padded chain vanishes outside $R_k$; if moreover the blocked tensors
+    of the padded chain vanishes outside $R_k$; if the blocked tensors
     are injective, $B_k$ is injective on $R_k$. Padding preserves inner
     products of pairs, so padded unit pairs are unit vectors, and the product
     $\ket\Omega$ of padded pairs vanishes at every bond configuration $c$ with
@@ -515,7 +515,7 @@ into a single constant.
     vector of Definition~\ref{def:ldp_chain_pos_state}. If every $W_k$ is an
     isometry, $\bigotimes_kW_k$ preserves inner products and norms. If
     $W_k\Pi_k=V_k$ for every $k$, then
-    $\ket{\phi_N}=(\bigotimes_kW_k)\ket{\phi_{\mathrm{pos}}}$, and if moreover
+    $\ket{\phi_N}=(\bigotimes_kW_k)\ket{\phi_{\mathrm{pos}}}$, and if
     every $W_k$ is an isometry, then for all vectors $\omega^k$
     \begin{align}
         \Bigl\langle\Bigl(\bigotimes_kW_k\Bigr)\Omega,
@@ -639,7 +639,7 @@ into a single constant.
     \leanok
     \uses{thm:ldp_chain_depth, thm:ldp_chain_block_iso_inner, thm:ldp_zero_pad}
     There is $C$, depending only on $d$ and $D$, such that in the setting of
-    Theorem~\ref{thm:ldp_inhomogeneous}, for any $d$, if moreover every blocked
+    Theorem~\ref{thm:ldp_inhomogeneous}, for any $d$, if every blocked
     tensor is injective in the sense of
     Definition~\ref{def:ldp_varying_bond_chain}, the vector
     $(\bigotimes_kV_k)\ket\Omega$ is a unit vector prepared in depth at most
@@ -685,7 +685,7 @@ into a single constant.
 
     The positive lower bound on block lengths is an additional hypothesis:
     the source's upper bound $q_N=O(\log N)$ alone does not imply it.
-    Convergence of the errors supplies no accuracy-dependent rate, so this
+    Convergence of the errors gives no accuracy-dependent rate, so this
     statement does not establish $O(\log(N/\varepsilon))$ for arbitrary
     requested accuracy~\cite{gap:mswc24_inhomogeneous_scope}.
 \end{theorem}
@@ -756,7 +756,7 @@ into a single constant.
     $a=\max(k,1)/r$ and $b=\max(\log K,0)/r+3D+1$. Then $q\ge3D$ and
     $rq\ge\log K+k\log N-\log\varepsilon$, so Lemma~\ref{lem:ldp_log_threshold_error}
     gives $KN^k e^{-rq}\le\varepsilon$.
-    If $q\le N$, choose the partition supplied by the approximation hypothesis.
+    If $q\le N$, choose the partition given by the approximation hypothesis.
     Its block lengths are at most $2q$, so Theorem~\ref{thm:ldp_inhomogeneous}
     gives depth at most $2C_0q$. If $q>N$, apply
     Theorem~\ref{thm:ldp_inhomogeneous_exact} to obtain exact preparation in

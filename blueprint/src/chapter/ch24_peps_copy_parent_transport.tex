@@ -24,7 +24,7 @@ Irreducibility of $D_i$ is not required.
     $W_m=\bigoplus_i m_i^{1/4}I_{d_i}$.
     Taking $m_i=d_i$ gives dimension multiplicity restoration and the
     fourth-root dimension weight.
-    Let $A_m$ be the actual averaging tensor for $D$ with virtual
+    Let $A_m$ be the averaging tensor for $D$ with virtual
     weight $W_m$, and let $B_m$ be the unweighted averaging tensor
     for $D^{[m]}$. Their site averages use the same factor $|G|^{-1}$.
 \end{definition}
@@ -76,7 +76,7 @@ Irreducibility of $D_i$ is not required.
     The dimension-multiplicity versions are obtained by setting $m=d$.
 \end{definition}
 
-\begin{theorem}[Transport of internal and crossing factors]%
+\begin{theorem}[Action on internal and crossing factors]%
     \label{thm:peps_copy_open_factors}
     \lean{TNLean.PEPS.graphOpenInternalFactor_copy,
         TNLean.PEPS.graphOpenInternalFactor_copy_adjoint,
@@ -113,7 +113,7 @@ Irreducibility of $D_i$ is not required.
         thm:peps_parent_support_boundary_factors,
         thm:peps_parent_support_boundary_adjoints}
     The internal factor is $W_m^2D(q_hq_t^{-1})$.
-    Equation~(\ref{eq:peps_copy_weight_products}) supplies
+    Equation~(\ref{eq:peps_copy_weight_products}) gives
     $\sqrt{m_i}$ in each block, canceled by the normalized copy map.
     Its adjoint sums $m_i$ equal-copy terms with coefficient
     $m_i^{-1/2}$, recovering the same factor.
@@ -126,7 +126,7 @@ Irreducibility of $D_i$ is not required.
     nonzero $w_y$ gives~(\ref{eq:peps_copy_boundary_adjoint}).
 \end{proof}
 
-\begin{theorem}[Every virtual boundary coefficient is transported]%
+\begin{theorem}[Action on virtual boundary coefficients]%
     \label{thm:peps_copy_open_generators}
     \lean{TNLean.PEPS.graphRegionCopyMatrix_open,
         TNLean.PEPS.graphRegionCopyMatrix_adjoint_open,
@@ -150,7 +150,7 @@ Irreducibility of $D_i$ is not required.
         a_R(\pi\eta).
         \label{eq:peps_copy_open_adjoint}
     \end{align}
-    Linear extension therefore transports arbitrary, possibly
+    Linear extension therefore maps arbitrary, possibly
     entangled, virtual boundary coefficients. These identities also
     give the dimension-multiplicity formulas when $m=d$.
 \end{theorem}
@@ -184,7 +184,7 @@ Irreducibility of $D_i$ is not required.
         \label{eq:peps_copy_local_ranges}
     \end{align}
     The statements hold both in bond coordinates and after the
-    supplied enumerations of the site physical spaces, including $m=d$.
+    chosen enumerations of the site physical spaces, including $m=d$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_copy_open_generators,thm:peps_parent_support_open_coordinates}
@@ -204,8 +204,8 @@ Irreducibility of $D_i$ is not required.
         TNLean.PEPS.graphNumberedMultiplicityMatrix_maps_parent,
         TNLean.PEPS.graphNumberedMultiplicityMatrix_adjoint_maps_parent}
     \leanok
-    Suppose $m_i>0$ and let $M_m$ be the actual product
-    $\bigotimes_{f\in E}F_m$ in the supplied numbered site coordinates.
+    Suppose $m_i>0$ and let $M_m$ be the product
+    $\bigotimes_{f\in E}F_m$ in the chosen numbered site coordinates.
     For any family $\mathcal R=(R_i)_i$,
     \begin{align}
         M_m\mathcal P_{\mathcal R}(A_m) & \subseteq\mathcal P_{\mathcal R}(B_m),
@@ -268,7 +268,7 @@ Irreducibility of $D_i$ is not required.
         TNLean.PEPS.map_ker_regionParentHamiltonian_multiplicity_eq}
     \leanok
     If $m_i>0$ and every edge is internal to some parent region,
-    restriction of the actual product map gives
+    restriction of the product map gives
     \begin{align}
         M_m:\mathcal P_{\mathcal R}(A_m)
          & \xrightarrow{\ \cong\ }\mathcal P_{\mathcal R}(B_m),
@@ -361,7 +361,7 @@ Irreducibility of $D_i$ is not required.
         TNLean.PEPS.map_ker_regionParentHamiltonian_positiveMultiplicity_eq}
     \leanok
     \uses{def:peps_copy_positive_parent_map}
-    For arbitrary representations $D_i$, positive $m_i$, supplied common
+    For arbitrary representations $D_i$, positive $m_i$, chosen common
     incident enumerations, and internal coverage of every edge,
     \begin{align}
         T_m\mathcal P_{\mathcal R}(A_0) & =\mathcal P_{\mathcal R}(B_m),

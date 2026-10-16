@@ -1,0 +1,122 @@
+\subsection{Fixed bootstrap scales and smallness of the step weight}
+\label{sec:bootstrap_scanner_numerics}
+
+The bootstrap in \cite{OpenAI2026AreaLaw} fixes its geometric exponents
+once, before improving the current entropy exponent.
+The total metric weight is four.
+All collars, windows, separations and band counts below retain their
+original floor, ceiling and integer-division operations.
+
+\begin{definition}[The fixed bootstrap scanner exponents]
+    \label{def:bootstrap_scanner_exponents}
+    \lean{TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.scannerExponents}
+    \leanok
+    Fix $0<e_0<1$ and put
+    \begin{align}
+        g_0  & =\frac{1-e_0}{2},
+             & \mu               & =1-g_0,
+             & \nu               & =\frac{g_0}{1000},\nonumber \\
+        \ell & =\frac{\nu}{100},
+             & \kappa            & =\min\{\ell,e_*/4\},
+             & W                 & =4.
+        \label{eq:bootstrap_scanner_exponents}
+    \end{align}
+    These are scanner exponents:
+    $0<\ell<1$, $0<\kappa<\mu<1-\ell$, and $\nu>0$.
+    The auxiliary entropy exponent in this numerical datum is $\mu$;
+    the changing entropy exponent of the bootstrap is kept separate.
+\end{definition}
+\begin{proof}
+    \leanok
+    Since $0<g_0<1/2$ and
+    $0<\kappa\leq\ell=g_0/100000<g_0$, one has
+    $0<\kappa<\mu=1-g_0<1-\ell<1$.
+    Positivity of $\nu$ is immediate.
+    Thus $\mu$ also satisfies the auxiliary entropy-exponent conditions.
+\end{proof}
+
+For any scanner exponent tuple, write
+\begin{align}
+    L_n & =\lfloor n^{1-\ell}\rfloor,
+        & m_n                                         & =\lfloor n^\mu\rfloor,
+        & D_n                                         & =\lceil n^\kappa\rceil,\nonumber \\
+    K_n & =\left\lfloor\frac{L_n}{8m_n}\right\rfloor,
+        & a_n                                         & =\frac4{K_n},
+        & r_n                                         & =\lceil C_r\log^2 n\rceil.
+    \label{eq:bootstrap_scanner_rounded_scales}
+\end{align}
+The integer quotient defining $K_n$ is used even at small sizes;
+the conclusions below only concern the sufficiently large regime where
+its denominator is positive.
+Let $\ell_q(r)$ be the physical logarithmic-dimension bound.
+
+\begin{theorem}[Fixed weight satisfies the smallness condition]
+    \label{thm:fixed_weight_four_transport_smallness}
+    \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_fixedWeightFour_transport_smallness}
+    \leanok
+    Fix any scanner exponent tuple, an integer $q\geq1$, a coefficient
+    $C_r\geq0$ and a threshold $c_t>0$.
+    There is $N\geq2$, chosen before the system size or any finite
+    physical data, such that every $n\geq N$ satisfies
+    $K_n\geq8$, $a_n>0$ and
+    \begin{align}
+        a_n\ell_q(r_n) & \leq c_t.
+        \label{eq:fixed_weight_four_transport_smallness}
+    \end{align}
+    No sharp-comparison exponent margin is assumed.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_scan_dimension_cap_log_four,
+        thm:al_moment_band_power,
+        thm:area_law_band_count_growth}
+    The scanner inequalities give $\alpha=1-\ell-\mu>0$.
+    The rounded band count and physical dimension estimates yield fixed
+    $C_K,C_d>0$ with
+    $n^\alpha\leq C_KK_n$ and
+    $\ell_q(r_n)\leq C_d\log^4n$ for large $n$.
+    Therefore
+    \begin{align}
+        a_n\ell_q(r_n)
+         & \leq4C_KC_d\frac{\log^4n}{n^\alpha}
+        \longrightarrow0.
+        \label{eq:fixed_weight_four_transport_decay}
+    \end{align}
+    The band count tends beyond every fixed integer, so one common
+    threshold also ensures $K_n\geq8$.
+    Apply convergence with the given positive $c_t$.
+\end{proof}
+
+\begin{theorem}[Generic rounded scanner admissibility]
+    \label{thm:scanner_rounded_admissibility}
+    \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_rounded_admissibility}
+    \leanok
+    Fix any scanner exponent tuple and $C_r\geq0$.
+    There is $N\geq2$, before all finite physical data, such that every
+    $n\geq N$ satisfies
+    \begin{align}
+        2r_n & \leq D_n,
+             & 1         & \leq D_n,
+             & 4D_n      & \leq m_n,\nonumber \\
+        8    & \leq K_n,
+             & 8K_nm_n   & \leq L_n.
+        \label{eq:scanner_rounded_admissibility}
+    \end{align}
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_scan_status_scale_separation,
+        thm:area_law_band_count_growth}
+    The rounded logarithmic radius obeys $2r_n=o(n^\kappa)$.
+    Since $0<\kappa<\mu$, the rounded power scales eventually satisfy
+    $1\leq D_n$ and $4D_n\leq m_n$.
+    Since $\mu<1-\ell$, the rounded band count eventually exceeds seven.
+    Finally, integer division gives $8K_nm_n\leq L_n$ at every size.
+    Take a common threshold for these estimates.
+\end{proof}
+
+Specializing these two theorems to
+(\ref{eq:bootstrap_scanner_exponents}) yields the rough bootstrap's
+numerical scale and scanner prerequisites.
+The physical state, entropy comparison, terminal-point selection and final
+bootstrap entropy absorption remain separate mathematical inputs.

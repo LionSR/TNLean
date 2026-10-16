@@ -14,7 +14,7 @@ $r_{\rm old}$, $r_{\rm new}$ and the specified list of parties are bounded,
 as shown in
 Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}.
 
-Throughout, $\Lambda$ is a finite set of sites, each with a raw register
+Throughout, $\Lambda$ is a finite set of sites, each with a site register
 $\C^q$, and operators on $\mathcal H_\Lambda$ are written in the
 coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
 
@@ -132,7 +132,7 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
     \leanok
     \uses{lem:peps_rank_one_chain,def:peps_rank_one_block,
         lem:peps_grouped_monomial_placement}
-    Let $b$ be a rank-one block with unit vectors $v,w$, let the raw registers
+    Let $b$ be a rank-one block with unit vectors $v,w$, let the site registers
     of $T$ be held by $p_A$ before and by $p_A'$ after, those of $U$ by $p_B$
     and $p_B'$, and those of $E$ by the same party before and after. Then
     $\id_{\rm tags}\otimes\mathrm{op}(b)$ is the operator of an allowed
@@ -140,7 +140,7 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
     those after, using only $p_A,p_B,p_A',p_B'$, with at most one pair source
     and at most one pair effect. Consequently:
     \begin{enumerate}
-        \item if a nonempty set $O$ of sites has raw owners in a set of at
+        \item if a nonempty set $O$ of sites has site owners in a set of at
               most two parties of $S$, then for unit vectors $v,w$ on $[q]^O$
               the operator $\ket v\bra w$ on $O$, tensored with the identity,
               is such a monomial using only parties of $S$, with the same
@@ -242,9 +242,9 @@ coordinates of Lemma~\ref{lem:peps_frame_registers_coordinates}.
     holes with $\bra b$ and preparing those of the affected new holes in
     $\ket a$, each at its tag owner, is an allowed monomial using only the
     affected tag owners and no pair resource. In these coordinates it acts
-    as $\ket a\bra b\otimes\id$ on the affected tags and the raw registers,
+    as $\ket a\bra b\otimes\id$ on the affected tags and the site registers,
     extended by the identity on the untouched tags, and placing a matrix $Y$ on
-    the raw registers in this tag block equals this operator after
+    the site registers in this tag block equals this operator after
     $\id\otimes Y$.
 \end{lemma}
 

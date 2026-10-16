@@ -1,7 +1,7 @@
 \subsection{Uniform coherent conversion of the canonical sector encodings}
 \label{sec:ldp_coherent_groundspace_conversion}
 
-The endpoints below are the fixed polar encoders of the actual periodic
+The endpoints below are the fixed polar encoders of the periodic
 sector columns. A single physical circuit acts on the whole logical
 space, including inputs entangled with an external reference. This is a
 precise enhancement of the discussion and outlook of
@@ -110,7 +110,7 @@ precise enhancement of the discussion and outlook of
     Use the simultaneous genuine-unitary block construction for the
     orthonormal embedded fixed-point pairs. Supported injectivity gives
     independent endpoint columns. The common transfer bound with
-    $\gamma=1/2$ supplies the two defects in the preceding estimate.
+    $\gamma=1/2$ bounds the two defects in the preceding estimate.
     The exact assertion is the fixed-width whole-encoder construction.
     Increase the constants to cover both depth bounds.
 \end{proof}
@@ -187,9 +187,9 @@ precise enhancement of the discussion and outlook of
     \lean{MPSTensor.CPSVCanonicalFormData.range_sectorEncoder_eq_ker_parentHamiltonian}
     \leanok
     \uses{def:ldp_sector_encoder}
-    Let canonical data for a tensor of physical and bond dimensions
-    $d,D\ge1$ supply its retained normal representatives. For
-    $3D^5\le L\le N$, the range of the polar encoder of those actual
+    Given canonical data for a tensor of physical and bond dimensions
+    $d,D\ge1$ with retained normal representatives, for
+    $3D^5\le L\le N$, the range of the polar encoder of those
     representatives equals the kernel of the range-$L$ parent Hamiltonian.
     No further gauge or column rescaling is identified implicitly.
 \end{theorem}

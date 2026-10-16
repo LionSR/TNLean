@@ -149,7 +149,7 @@ single family.
     \leanok
     \uses{def:cpsv_canonical_form, def:bnt_cpsv}
     % Maintainer source anchors: CPSV16 prop:char-BNT, lines 271--280 and 1137--1146.
-    Every tensor with literal CPSV canonical-form data admits a finite basis of
+    Every tensor with CPSV canonical-form data admits a finite basis of
     normal tensors $(B_j)_{j=1}^{g}$, each of positive bond dimension. The
     family is obtained by choosing one representative from each
     matrix-product-vector phase class of the blocks $A_1,\ldots,A_r$.
@@ -199,7 +199,7 @@ single family.
         UU^\dagger & =\Id.
         \label{eq:cpsv_active_refinement_coisometry}
     \end{align}
-    be literal CPSV canonical-form data. There are phase classes $j$, copy
+    be CPSV canonical-form data. There are phase classes $j$, copy
     multiplicities $r_j$, and an equivalence
     \begin{align}
         \mathcal G
@@ -512,7 +512,7 @@ single family.
     \uses{thm:single_sector_decomposition_bnt, thm:cpsv_normal_tp_gauge, thm:peripheral_primitive_irreducible_overlap_one, thm:gauge_invariance, lem:paper_decomp_formula}
     Choose the pure trace-preserving Perron gauge. Its tensor is irreducible
     and left-canonical, and primitivity gives self-overlap converging to one.
-    The preceding theorem supplies the BNT canonical form. If $P$ denotes
+    The preceding theorem gives the BNT canonical form. If $P$ denotes
     the total tensor of its single-sector decomposition, then gauge invariance
     and the sector-decomposition formula give, for every $N>0$ and word
     $\sigma$,
@@ -585,7 +585,7 @@ single family.
     \uses{thm:sector_decomposition_block_tensor_mpv, thm:bnt_primitivity_normality_from_self_overlap}
     For each representative $A_j$, normalized self-overlap gives peripheral
     period one, hence a primitive transfer map. Positive blocking therefore
-    preserves irreducibility and left-canonical normalization. Moreover,
+    preserves irreducibility and left-canonical normalization. In addition,
     $O_{A_j^{[p]}A_j^{[p]}}(N)=O_{A_jA_j}(Np)\longrightarrow1$.
     Let $F_N$ be the linear isomorphism induced by concatenating blocked words,
     from the blocked configuration space at length $N$ to the original one at
@@ -698,10 +698,10 @@ single family.
 \end{proof}
 
 The matching arguments below read off three facts from a BNT canonical form: the
-raw coefficient identity, the cross-overlap decay between distinct basis blocks,
+sector coefficient identity, the cross-overlap decay between distinct basis blocks,
 and the combined-family linear independence.
 
-\begin{lemma}[Raw two-layer sector coefficient identity]%
+\begin{lemma}[Two-layer sector coefficient identity]%
     \label{lem:sector_bnt_coeff_eq_sum_weight_pow}
     \lean{MPSTensor.SectorDecomposition.coeff_eq_sum_weight_pow}
     \leanok
@@ -768,8 +768,8 @@ and the combined-family linear independence.
     \leanok
     \uses{def:sector_weight_data}
     For any tensor $C$, this construction forms a single-sector, two-copy
-    decomposition with basis tensor $C$ and raw weights $(1,1/2)$. Thus the
-    sector data themselves allow unequal-modulus copies. If $C$ additionally
+    decomposition with basis tensor $C$ and weights $(1,1/2)$. Thus the
+    sector data themselves allow unequal-modulus copies. If $C$ also
     has positive bond dimension, is irreducible and left-canonical, has
     normalized nonzero self-overlap, and satisfies the BNT independence clause,
     these data satisfy Definition~\ref{def:sector_bnt_cf}; those hypotheses are
@@ -810,7 +810,7 @@ Definition~\ref{def:sector_bnt_cf}.
     giving a positive blocking length and a nonzero weighted family of
     trace-preserving primitive irreducible blocks with the positive-length MPV
     identity. Theorem~\ref{thm:common_injective_blocking_tp_primitive_irreducible_family}
-    supplies one common further blocking making every block one-site injective
+    gives one common further blocking making every block one-site injective
     while preserving the other hypotheses; finally identify the iterated blocked
     alphabet with the direct one.
 \end{proof}
@@ -838,7 +838,7 @@ form by quotienting gauge-phase-equivalent blocks into sectors.
     The chosen representatives inherit irreducibility and trace preservation,
     while primitivity gives normalized self-overlap. Distinct phase classes
     give gauge-phase-distinct representatives. The collapsed phase-class
-    construction supplies the eventual linear independence and retains every
+    construction gives the eventual linear independence and retains every
     original block as one copy. Its phase multipliers have unit modulus, so the
     adjusted weights still have modulus at most one, and at least one has
     modulus one. Thus Definition~\ref{def:sector_bnt_cf} holds.
@@ -1049,14 +1049,14 @@ give $O_{YX}(N)\to 0$, a contradiction.
     Partition the prepared blocks into matrix-product-vector phase classes. For
     the copy $q$ in class $j$, retain the precise class scalar $\zeta_{j,q}$
     chosen in the weight $\zeta_{j,q}\mu_{j,q}$. The normal-tensor phase
-    theorem supplies an invertible $G_{j,q}$ with
+    theorem gives an invertible $G_{j,q}$ with
     \begin{align}
         B_{j,q}^i & =\zeta_{j,q}G_{j,q}C_j^iG_{j,q}^{-1}.
         \label{eq:prepared_exact_copy_gauge}
     \end{align}
     Thus the original weighted block equals the corresponding sector copy after
     conjugation, since its sector weight is
-    $\zeta_{j,q}\mu_{j,q}$. Assemble the $G_{j,q}$ into a block-diagonal
+    $\zeta_{j,q}\mu_{j,q}$. Combine the $G_{j,q}$ into a block-diagonal
     matrix $X$ and apply
     Theorem~\ref{thm:heterogeneous_block_sum_reindex}. This gives
     (\ref{eq:prepared_exact_reconstruction}); summing the matched copy
@@ -1203,7 +1203,7 @@ give $O_{YX}(N)\to 0$, a contradiction.
     The result applies to tensors sharing the ambient bond dimension $D$.
 \end{theorem}
 
-The cited sources supply the retained canonical-form comparison. The passage back
+The cited sources give the retained canonical-form comparison. The passage back
 from the retained tensors to the ambient tensors is the coisometric lifting of
 Theorem~\ref{thm:coisometry_reconstruction_gauge_equiv}.
 
@@ -1269,7 +1269,7 @@ statement.
     to $(A^w)^p$ and the zero matrix would show that $(A^w)^p$, and hence
     $A^w$, is nilpotent, contradicting $\tr(A^w)\neq0$. Repeating $w$ exactly
     $pq$ times gives a nonzero coefficient of the $p$-blocked tensor. Thus the
-    prepared family at the blocking length supplied by
+    prepared family at the blocking length given by
     Theorem~\ref{thm:prepared_bnt_blocks_after_blocking} is nonempty.
 
     Normalize its weights by their maximal modulus $m$

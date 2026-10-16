@@ -1,4 +1,4 @@
-\begin{theorem}[Literal first rightward endpoint step]
+\begin{theorem}[First rightward endpoint step]
     \label{thm:peps_initial_string_right_step}
     \lean{
         TNLean.PEPS.regularWalkHolonomy_torusSweptStringRightStep,
@@ -8,11 +8,11 @@
     }
     \leanok
     On a torus with horizontal period at least eight and vertical period at least
-    seven, retain the two-string presentation with upward transport $g$ at four
-    consecutive columns and rightward transport $h^{-1}$ along its three-bond
-    partner string. Change only the middle upward transport at relative position
+    seven, retain the two-string presentation with upward bond label $g$ at four
+    consecutive columns and rightward bond label $h^{-1}$ along its three-bond
+    partner string. Change only the middle upward bond label at relative position
     $(2,1)$ from $g$ to $gh$, with the inverse ordered coefficient at a periodic
-    seam. All rightward transports and all other upward transports stay literal.
+    seam. All rightward bond labels and all other upward bond labels remain unchanged.
     The clockwise holonomies at relative bases $(1,1)$ and $(2,1)$ change from
     $(h,1)$ to $(1,h)$.
 
@@ -36,12 +36,12 @@
     }
     \leanok
     Under the preceding period bounds, suppose the original site tensor is
-    $G$-isometric for the regular virtual action. One unitary on the six actual
+    $G$-isometric for the regular virtual action. One unitary on the six
     spins in the horizontal two-plaquette block sends the initial internal
     presentation to the preceding rightward-step presentation, for every $g,h$,
-    every virtual boundary configuration, and every common literal exterior and
+    every virtual boundary configuration, and every common prescribed exterior and
     crossing assignment. The unitary is chosen before all these parameters.
-    Its identity extension gives the corresponding equality of actual closed
+    Its identity extension gives the corresponding equality of closed
     contractions.
 
     The continuing partner string is retained. This is a finite-torus elementary
@@ -52,9 +52,9 @@
 \begin{proof}\leanok
     On the lower row, assign vertex labels $h$ at the left vertex and the identity
     at the other two vertices; assign $g$ throughout the upper row. The seven
-    actual internal bonds then reconstruct the initial presentation from a
+    internal bonds then reconstruct the initial presentation from a
     single canonical $h$ insertion. Extending that insertion to the middle chord
     changes precisely $g$ to $gh$ there. The common-background unitary acts on
     all original-spin boundary columns. The shared exterior operators and the
-    actual cut expansion give the closed-contraction identity.
+    cut expansion give the closed-contraction identity.
 \end{proof}

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Run the real PR workflow blocks against small Git histories, without Lean."""
 
+import json
 import os
 from pathlib import Path
 import shlex
@@ -8,6 +9,7 @@ import shutil
 import subprocess
 import tempfile
 import unittest
+from unittest import mock
 
 import yaml
 
@@ -44,6 +46,11 @@ class ImmutableBaseTests(unittest.TestCase):
         self.bin = Path(self.tmp.name) / "bin"
         self.bin.mkdir()
         self.git("init", "-q")
+        # Maintenance must finish before TemporaryDirectory removes this repo.
+        # Detached Git children can otherwise race with fixture cleanup.
+        self.git("config", "--local", "maintenance.autoDetach", "false")
+        # Older Git keeps maintenance foreground but can detach its nested gc.
+        self.git("config", "--local", "gc.autoDetach", "false")
         self.git("config", "user.name", "CI regression")
         self.git("config", "user.email", "ci@example.invalid")
         self.git("config", "commit.gpgsign", "false")
@@ -122,6 +129,56 @@ class ImmutableBaseTests(unittest.TestCase):
         self.git("checkout", "-q", "moving-base")
         self.git("merge", "--no-ff", "-m", "base advances independently", left)
         self.git("checkout", "-q", "left")
+
+    def assert_git_processes_finished(self, events):
+        starts = [event for event in events if event.get("event") == "start"]
+        self.assertTrue(starts, "trace must record the exercised Git commands")
+        for start in starts:
+            exits = [event for event in events
+                     if event.get("event") == "exit" and event["sid"] == start["sid"]]
+            self.assertEqual(len(exits), 1, f"unfinished or forked Git command: {start}")
+            # daemonize exits from setup.c before the child finishes. A normal
+            # builtin returns through git.c on both older and newer Git.
+            self.assertEqual(Path(exits[0]["file"]).name, "git.c", start)
+            self.assertEqual(exits[0]["code"], 0, start)
+            self.assertTrue(any(event.get("event") == "atexit"
+                                and event["sid"] == start["sid"] for event in events), start)
+
+    def test_fixture_maintenance_runs_in_foreground(self):
+        # Exercise both the fixture helper and Git called by a real workflow step.
+        self.git("config", "--local", "maintenance.auto", "true")
+        trace = self.runtime / "git-trace.jsonl"
+        with mock.patch.dict(os.environ, {"GIT_TRACE2_EVENT": str(trace)}):
+            self.write("maintenance.txt", "fixture maintenance\n")
+            self.commit("exercise foreground maintenance")
+            self.run_step(FETCH)
+        events = [json.loads(line) for line in trace.read_text().splitlines()]
+        children = [event["argv"] for event in events
+                    if event.get("event") == "child_start"
+                    and event.get("argv", [])[1:4] == ["maintenance", "run", "--auto"]]
+        self.assertGreaterEqual(len(children), 2, "commit and fetch must exercise maintenance")
+        self.assert_git_processes_finished(events)
+
+    def test_fixture_nested_gc_runs_in_foreground(self):
+        # Force the older Git maintenance backend to do real work. Two packs
+        # exceed the configured limit even in a tiny disposable repository.
+        self.git("repack", "-d")
+        self.write("gc.txt", "new loose objects\n")
+        self.commit("exercise nested gc")
+        self.git("repack", "-d")
+        packs = self.root / ".git/objects/pack"
+        self.assertGreaterEqual(len(list(packs.glob("*.pack"))), 2)
+        self.git("config", "--local", "gc.auto", "1")
+        self.git("config", "--local", "gc.autoPackLimit", "1")
+        trace = self.runtime / "gc-trace.jsonl"
+        with mock.patch.dict(os.environ, {"GIT_TRACE2_EVENT": str(trace)}):
+            self.git("gc", "--auto")
+        events = [json.loads(line) for line in trace.read_text().splitlines()]
+        self.assertTrue(any(event.get("event") == "child_start"
+                            and event.get("argv", [])[1:2] == ["repack"] for event in events),
+                        "gc must actually repack before its caller continues")
+        self.assert_git_processes_finished(events)
+        self.assertEqual(len(list(packs.glob("*.pack"))), 1)
 
     def test_event_snapshot_survives_multiple_merge_bases_and_keeps_coverage(self):
         self.make_criss_cross()

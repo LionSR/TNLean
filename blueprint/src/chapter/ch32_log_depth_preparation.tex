@@ -620,7 +620,7 @@ remaining eigenvalues have modulus strictly less than $1$.
     factorization (\ref{eq:ldp_tree_factorization}) is
     \cite[eq.~(16)]{Malz2024Preparation}, where the tree is said to act ``to the
     same effect'' as blocking directly; the identification with the polar
-    decomposition of the blocked map is left implicit there and is supplied
+    decomposition of the blocked map is left implicit there and is proved
     here.
 \end{theorem}
 
@@ -1496,7 +1496,7 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
     tensor $\mathcal B_q$ injective by
     Theorem~\ref{thm:wordspan_blk_inj_succ} and
     Lemma~\ref{lem:isNBlkInjective_iff_blockTensor_isInjective}, and $q\ge3D$.
-    Moreover $q/a\ge\log(N/\varepsilon)+\log K\ge\log(N/(q\varepsilon))+\log K$,
+    Also $q/a\ge\log(N/\varepsilon)+\log K\ge\log(N/(q\varepsilon))+\log K$,
     so $K(N/q)e^{-q/a}\le\varepsilon$. The approximating state is a unit vector
     by Lemma~\ref{lem:ldp_approximating_state_unit_norm}, is prepared in depth at
     most $Cq$ by Theorem~\ref{thm:ldp_approximating_state_depth}, and has the
@@ -1548,7 +1548,7 @@ case of Theorem~\ref{thm:ldp_depth_upper_bound}
     dividing $N$ with
     $q\ge a\log(N/\varepsilon)+b$, a unit vector $\ket\psi$ with
     $\varepsilon(\psi,\phi_N)\le\varepsilon$ is prepared in depth at most $Cq$.
-    If moreover $N\ge2$ and $q\le2(a\log(N/\varepsilon)+b)$, for instance
+    If $N\ge2$ and $q\le2(a\log(N/\varepsilon)+b)$, for instance
     $q=\lceil a\log(N/\varepsilon)+b\rceil$ when it divides $N$, the depth is at most
     $c\log(N/\varepsilon)$ with $c$ depending only on $A$.
 \end{theorem}
@@ -1644,7 +1644,7 @@ $A$ along $w$.
     linear map $\Phi$ on $\MN{D}$ equals $\E_X$ for some operator $X$ on
     $(\C^d)^{\otimes L}$. For $L=1$ and injective $A$, this corresponds to the
     choice of transfer matrices in the proof of
-    \cite[Lemma~2]{Malz2024Preparation}. If moreover
+    \cite[Lemma~2]{Malz2024Preparation}. If
     $\Phi(Z^\dagger)=\Phi(Z)^\dagger$ for every $Z$, then $X$ can be chosen
     Hermitian.
 \end{lemma}
@@ -2571,7 +2571,7 @@ $A$ along $w$.
     of the copies $k_j$ the embedded pairs satisfy
     $\braket{\omega_j}{\omega_{j'}}=\delta_{jj'}$. The chosen coordinates of
     block $j$ carry the block $\mu_{j,k_j}A_j$ of $A$, and embedding the pair
-    embeds its product state. Moreover, for $M\geq1$, in the bond space
+    embeds its product state. For $M\geq1$, in the bond space
     $\C^{D_j}\otimes\C^{D_j}$ of block $j$ alone, the tensor
     $\bigoplus_k\mu_{j,k}^qP_{j,\infty}$ generates on $M$ sites the state
     $\bigl(\sum_k\mu_{j,k}^{qM}\bigr)\ket{\Omega_j}=\beta_j\ket{\Omega_j}$ with
@@ -2615,7 +2615,7 @@ $A$ along $w$.
     Definition~\ref{def:ldp_sector_fixed_point_state}, where each $\sigma_j$ is
     positive semidefinite of unit trace, $W$ and $W^{\otimes M}$ are isometries
     and $\ket{\Omega'}=W^{\otimes M}\ket{\chi_M}$, up to the regrouping of the
-    legs $R_kL_{k+1}$. If moreover $M\geq1$ and $(\beta_1,\dots,\beta_b)\neq0$,
+    legs $R_kL_{k+1}$. If $M\geq1$ and $(\beta_1,\dots,\beta_b)\neq0$,
     then $\braket{\Omega'}{\Omega'}=1$. This is the preparation of
     \cite[eq.~(19)]{Malz2024Preparation}. The same holds for the state of
     Definition~\ref{def:ldp_pair_family_fixed_point} with $\alpha=\alpha^{(N)}$

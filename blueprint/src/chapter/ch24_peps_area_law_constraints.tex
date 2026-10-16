@@ -744,6 +744,12 @@ integrability on the closed interval.
     \lean{TNLean.PEPS.AreaLaw.Scan.ScanData,
         TNLean.PEPS.AreaLaw.Scan.ScanData.SXt_le,
         TNLean.PEPS.AreaLaw.Scan.ScanData.SQt_le,
+        TNLean.PEPS.AreaLaw.Scan.ScanData.terminalBound,
+        TNLean.PEPS.AreaLaw.Scan.ScanData.terminalBound_le_of,
+        TNLean.PEPS.AreaLaw.Scan.ScanData.IntegratedChargeBound,
+        TNLean.PEPS.AreaLaw.Scan.ScanData.chargeDefect_le_choiceGainSum,
+        TNLean.PEPS.AreaLaw.Scan.ScanData.chargeDefect_le,
+        TNLean.PEPS.AreaLaw.Scan.ScanData.goodOld_le,
         TNLean.PEPS.AreaLaw.Scan.exists_budgets,
         TNLean.PEPS.AreaLaw.Scan.ScanData.intervalIntegrable_chargeDefect,
         TNLean.PEPS.AreaLaw.Scan.ScanData.integratedChargeBound,
@@ -752,10 +758,11 @@ integrability on the closed interval.
         TNLean.PEPS.AreaLaw.Scan.exists_defectEnergy_le,
         TNLean.PEPS.AreaLaw.Scan.scanner_estimate}
     \leanok
+
     There are constants, independent of $W$ and depending only on the exponents and on the constants of
     the inputs, such that for all sufficiently large $n$ and every scan at scale
     $n$ satisfying the conclusions of Lemmas~9.1, 2.1, 3.1 and
-    Propositions~7.4, 8.1, the comparator bounds
+    Propositions~7.4, 8.1 with the replica counts specified below, the comparator bounds
     $B_{\mathrm{sh}}\le C(nL^e+n)$, $B_{\mathrm{exc}}\le CnD$ and
     $\mathcal B\le CnD(\log n)^{C}$ hold, and there is a remainder $\rho_k\to0$, uniform over the selected
     round and parameter, such that for every $k\ge1$ some charge round and
@@ -766,6 +773,12 @@ integrability on the closed interval.
         \bigl(\delta_n^{1/8}+\epsilon+n^{-100}\bigr)+Cn^{-1000}+\rho_k.
         \label{eq:al_scanner_energy}
     \end{align}
+    The mass identities of the leaf measures, measurability of the charge
+    defect, continuity and differentiability of the logarithmic norm,
+    transport inequalities and initial norm bound are required for every
+    $k\ge0$; the normalized final comparison is required for $k\ge1$.
+    The leaf measures are finite and adjacent endpoint norms agree for every
+    $k\ge0$.
     Let $C_e$ be the original entropy-input constant, and write
     $\widetilde S_X$ and $\widetilde S_Q(j)$ for the target and shell
     entropy values of the truncated state recorded in the same input data.
@@ -786,7 +799,7 @@ integrability on the closed interval.
     therefore at most $n^{-247}$. Adding the original target and shell
     entropy bounds gives the two entropy estimates, uniformly in the scan
     and shell index.
-    Integrate the logarithmic norm derivative over $[0,1]$ in every round,
+    Fix $k\ge1$. Integrate the logarithmic norm derivative over $[0,1]$ in every round,
     retaining the nonnegative charge contribution on
     $[\epsilon/2,\epsilon]$. Interior almost-everywhere measurability
     and the nonnegative upper bound make the charge defect integrable; the
@@ -819,8 +832,54 @@ integrability on the closed interval.
     bad leaves contribute at most $\epsilon$ and $n^{-200}$ times the total
     weight, and the gap of the copied Hamiltonian converts the energy into the
     defect energy. The comparator bounds follow from these entropy estimates and
-    the crossing count, which gives the logarithmic
-    power $12$ for the marginal parameter.
+    the recorded bound $\mathcal B\le CnD(\log n)^{12}$ for the marginal
+    parameter.
+\end{proof}
+
+\begin{theorem}[Scanner estimate for the actual scan from the transport and comparator inputs]
+    \label{thm:al_scanner_actual_scan}
+    \lean{TNLean.PEPS.AreaLaw.Scan.ScanInputs,
+        TNLean.PEPS.AreaLaw.Scan.HistoryFacts.mono,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.scanner_estimate_actualScan}
+    \leanok
+    \uses{thm:al_scanner_from_inputs,thm:al_scan_actual_history_facts,
+        thm:al_scan_truncation_inputs}
+    Fix scanner exponents, an interaction range $R$, a bound $J\ge0$, a gap
+    $\Delta>0$ and a target-size coefficient $C_T\ge0$. There are a truncation
+    coefficient $C_r$ and, for every local dimension $q$, constants $C_0>0$,
+    $c_0>0$ and $C_1>0$ such that for all scanner constants with dimension $q$,
+    normalized gap $g$, common constant at least $C_0$, logarithmic power at
+    least $4$ and sampling constant at most $c_0$, there are constants for which
+    the following holds for all sufficiently large $n$. Let $\Omega$ be a gapped
+    ground vector of a Hamiltonian on $\Lambda$, and take a collar scan at the
+    scales of \cite[Section~9]{OpenAI2026AreaLaw} with
+    $r_0=\lceil C_r(\log n)^2\rceil$ and charge-list constant $C_1$, under the
+    test geometry and the entropy inputs of \cite[Proposition~9.2]{OpenAI2026AreaLaw}.
+    Then there is one ground vector $\widetilde\Omega$ of the truncated
+    Hamiltonian, with gap $g/2$ and the properties listed in
+    Theorem~\ref{thm:al_scan_truncation_inputs}, such that for all auxiliary dimensions, every
+    total weight $W\ge1$ and all replica vectors: if the actual rounds of the
+    scan, with per-band weight $a=W/K$, satisfy the conclusions of
+    Propositions~7.4 and~8.1 for $W$ and $\widetilde\Omega$, with the replica
+    counts specified in Theorem~\ref{thm:al_scanner_from_inputs}, finite leaf
+    measures and matching adjacent endpoint norms, then the
+    conclusions of Theorem~\ref{thm:al_scanner_from_inputs} hold for these
+    rounds.
+
+    This is Proposition~9.2 with the conclusions of Propositions~7.4 and~8.1
+    for the actual rounds as its only hypothesis beyond the source's; it is not
+    the source proposition.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:al_scanner_from_inputs,thm:al_scan_actual_history_facts,
+        thm:al_scan_truncation_inputs}
+    Theorem~\ref{thm:al_scan_truncation_inputs} supplies $\widetilde\Omega$ and
+    the truncation inputs, and Theorem~\ref{thm:al_scan_actual_history_facts}
+    the history inputs for the actual rounds. The history conclusions persist
+    for a larger common constant, a larger logarithmic power once $\log n\ge1$,
+    and a smaller sampling constant. Together with the assumed conclusions of
+    Propositions~7.4 and~8.1 they form the input data of
+    Theorem~\ref{thm:al_scanner_from_inputs}, which gives the conclusions.
 \end{proof}
 
 \input{chapter/ch24_peps_sharp_moment_scale}

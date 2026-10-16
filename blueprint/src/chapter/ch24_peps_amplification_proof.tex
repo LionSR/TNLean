@@ -37,7 +37,7 @@ comparison treats the two copies as additional sites.
     $\Omega$ because $k_i\Omega=0$.
 \end{proof}
 
-\begin{definition}[The transport to the ancillas as spectators]
+\begin{definition}[Coordinate change placing the ancillas as spectators]
     \label{def:al_amp_ancilla_transport}
     \lean{TNLean.PEPS.AreaLaw.ancillaRotation, TNLean.PEPS.AreaLaw.ancillaTransport,
         TNLean.PEPS.AreaLaw.ancillaPhysical, TNLean.PEPS.AreaLaw.restoringEigenbasis,
@@ -45,7 +45,7 @@ comparison treats the two copies as additional sites.
     \leanok
     \uses{def:al_amp_restoring_coordinates}
     Let $U$ be the unitary whose columns are a full eigenbasis $\{|x\rangle\}$
-    of $\rho_X$. The transport $\mathcal W$ maps the coordinates
+    of $\rho_X$. The unitary $\mathcal W$ maps the coordinates
     $((s',e'),(X,Y)),Z'$ of the restoring operator to the coordinates
     $\Lambda\times(s',e')$: it reorders the factors, undoes the basis change on
     the physical target, and applies the same basis change on $e'$. An operator
@@ -53,7 +53,7 @@ comparison treats the two copies as additional sites.
     $((U\otimes I)M(U\otimes I)^\dagger)\otimes I_{Z'}$.
 \end{definition}
 
-\begin{theorem}[The transport of the restoring data]
+\begin{theorem}[Restoring data under $\mathcal W$]
     \label{thm:al_amp_ancilla_transport}
     \lean{TNLean.PEPS.AreaLaw.ancillaTransport_mul_conjTranspose,
         TNLean.PEPS.AreaLaw.conjTranspose_mul_ancillaTransport,
@@ -68,7 +68,7 @@ comparison treats the two copies as additional sites.
         TNLean.PEPS.AreaLaw.ancillaTransport_conj_restoringColumnGlobal}
     \leanok
     \uses{def:al_amp_ancilla_transport}
-    The transport $\mathcal W$ is unitary. It maps a physical operator written in
+    The map $\mathcal W$ is unitary. It maps a physical operator written in
     the eigenbasis of the target to the operator $L\otimes I$ on the original
     physical coordinates, and $(A\otimes M)\otimes I_{Z'}$ to the physical operator
     obtained from $M$ tensored with $A$ rotated on $e'$. The restored vector
@@ -85,7 +85,7 @@ comparison treats the two copies as additional sites.
 \end{theorem}
 \begin{proof}
     \leanok
-    The transport is a reindexing followed by a Kronecker product of unitaries.
+    The map $\mathcal W$ is a reindexing followed by a Kronecker product of unitaries.
     Each image follows from the mixed-product rule for Kronecker products, the
     identity $UU^\dagger=I$, and direct substitution in the copied vector.
 \end{proof}
@@ -112,7 +112,7 @@ comparison treats the two copies as additional sites.
     probability at most $\delta$. In the coordinates $\Lambda\times(s',e')$ the
     vectors $\varphi$ and $\eta$ are unit vectors,
     $\|R_0\|,\|B_0\|\le M_0=e^{(\mathcal I+3w)/2}$, the column identity
-    $R_0\varphi=B_0(\Omega\otimes\xi)$ holds for the transported blank pair $\xi$,
+    $R_0\varphi=B_0(\Omega\otimes\xi)$ holds for the image $\xi$ of the blank pair,
     the physical ground component of $R_0\varphi$ has norm at most one, and
     \begin{align*}
         \|((L'\otimes I)R_0)^\dagger\eta-\varphi\| & \le3\sqrt\delta+
@@ -124,8 +124,8 @@ comparison treats the two copies as additional sites.
 \begin{proof}
     \leanok
     \uses{thm:al_amp_ancilla_transport}
-    Transport the estimates of Theorem~\ref{thm:al_amp_restoring_estimates}. A
-    unitary transport preserves norms of vectors and of operators. An operator
+    Transfer the estimates of Theorem~\ref{thm:al_amp_restoring_estimates} along
+    $\mathcal W$. Unitary equivalence preserves norms of vectors and of operators. An operator
     on $X\otimes Y$ in the eigenbasis tensored with $I_{Z'}$ acts on $X\cup Y$ in
     the original coordinates, since the basis change acts on $X$ alone.
 \end{proof}

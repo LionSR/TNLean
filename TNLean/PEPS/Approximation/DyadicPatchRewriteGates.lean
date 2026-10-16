@@ -186,8 +186,8 @@ section Parties
 variable {ι : Type*} {party : ℕ × ℕ × ℕ → ι} {ph : ι}
 
 /-- **Raw owners near a junction.** At the end of the pass to level `2 ^ j`, a block party that
-owns a point within sup distance `2 ^ j` of the grid corner `(2 ^ j u, 2 ^ j v)` is one of the
-four block parties at the corner, used by the resize of the hole there.
+owns a point within sup distance `2 ^ j` of the grid corner `(2 ^ j u, 2 ^ j v)` is the party of
+one of the four blocks at the corner, and so is used by the resize of the hole there.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), “Resizing uses the current block labels near
 its junction”, `06-geometry.tex:127–131, 529–541, 594`. -/
@@ -259,7 +259,8 @@ def IsDirectRepainting (party : ℕ × ℕ × ℕ → ι) (ph : ι) (M : ℤ) (j
       dist p y < 2 ^ j'
 
 /-- **Parties of a junction resize.** Every block party of the resize of the hole at the grid
-corner `(2 ^ j u, 2 ^ j v)` is one of the four block parties at the corner.
+corner `(2 ^ j u, 2 ^ j v)` is the party of one of the four blocks at the corner, and so is used
+by the resize.
 
 Source: Polynomial-PEPS manuscript (Sept 24 2026), “Resizing uses the current block labels near
 its junction”, `06-geometry.tex:594`, with Lemma `lem:small-rewrite`, `05-frames.tex:203–216`. -/

@@ -53,11 +53,9 @@ Source: polynomial-PEPS manuscript, Proposition 7.1, item 2,
 theorem isExpansionBounded_sequence (r : ℕ) (S : ℝ) (t : ℕ)
     (h : ∀ s < t, (step s).IsExpansionBounded r S) :
     (sequence a step t).IsExpansionBounded r S := by
-  exact Nat.recOn (motive := fun t ↦
-    (∀ s < t, (step s).IsExpansionBounded r S) →
-      (sequence a step t).IsExpansionBounded r S) t
-    (fun _ ↦ True.intro)
-    (fun t ih h ↦ ⟨ih (fun s hs ↦ h s (Nat.lt_succ_of_lt hs)), h t (Nat.lt_succ_self t)⟩) h
+  induction t with
+  | zero => trivial
+  | succ t ih => exact ⟨ih fun s hs ↦ h s (by omega), h t (by omega)⟩
 
 /-- Concatenating stages retains every nonprivate occurrence, including repeated
 uses of the same local operator.
@@ -66,9 +64,9 @@ Source: polynomial-PEPS manuscript, Proposition 7.1, item 2,
 theorem nonprivateCount_sequence (t : ℕ) :
     (sequence a step t).nonprivateCount =
       ∑ s ∈ Finset.range t, (step s).nonprivateCount := by
-  exact Nat.recOn t rfl (fun t ih ↦
-    (congrArg (fun n ↦ n + (step t).nonprivateCount) ih).trans
-      (Finset.sum_range_succ (fun s ↦ (step s).nonprivateCount) t).symm)
+  induction t with
+  | zero => rfl
+  | succ t ih => rw [Finset.sum_range_succ, ← ih]; rfl
 
 /-- A property of the participating set at every original occurrence is
 preserved by concatenating the chronological stages.
@@ -77,13 +75,12 @@ Source: polynomial-PEPS manuscript, Proposition 7.1, items 2 and 3,
 theorem forall_participants_sequence (Q : Finset P → Prop) (t : ℕ)
     (h : ∀ s < t, ∀ g, Q ((step s).participants g)) :
     ∀ g, Q ((sequence a step t).participants g) := by
-  exact Nat.recOn (motive := fun t ↦
-    (∀ s < t, ∀ g, Q ((step s).participants g)) →
-      ∀ g, Q ((sequence a step t).participants g)) t
-    (fun _ g ↦ Empty.elim g)
-    (fun t ih h ↦ fun
-      | .inl g => ih (fun s hs ↦ h s (Nat.lt_succ_of_lt hs)) g
-      | .inr g => h t (Nat.lt_succ_self t) g) h
+  induction t with
+  | zero => exact fun g ↦ Empty.elim g
+  | succ t ih =>
+      rintro (g | g)
+      · exact ih (fun s hs ↦ h s (by omega)) g
+      · exact h t (by omega) g
 
 /-- A uniform monomial-count bound at every used stage also bounds the actual
 chronological composite.
@@ -92,11 +89,9 @@ Source: polynomial-PEPS manuscript, Proposition 7.1, item 2,
 theorem isMonomialBounded_sequence (K t : ℕ)
     (h : ∀ s < t, (step s).IsMonomialBounded K) :
     (sequence a step t).IsMonomialBounded K := by
-  exact Nat.recOn (motive := fun t ↦
-    (∀ s < t, (step s).IsMonomialBounded K) →
-      (sequence a step t).IsMonomialBounded K) t
-    (fun _ ↦ True.intro)
-    (fun t ih h ↦ ⟨ih (fun s hs ↦ h s (Nat.lt_succ_of_lt hs)), h t (Nat.lt_succ_self t)⟩) h
+  induction t with
+  | zero => trivial
+  | succ t ih => exact ⟨ih fun s hs ↦ h s (by omega), h t (by omega)⟩
 
 /-- Every occurrence involving a fixed party belongs to exactly one of the two
 successive original circuits.
@@ -116,9 +111,10 @@ Source: polynomial-PEPS manuscript, Proposition 7.1, item 2,
 theorem participationCount_sequence (t : ℕ) (p : P) :
     (sequence a step t).participationCount p =
       ∑ s ∈ Finset.range t, (step s).participationCount p := by
-  exact Nat.recOn t (Nat.card_eq_zero.mpr (Or.inl ⟨fun g ↦ Empty.elim g.1⟩))
-    (fun t ih ↦ (participationCount_comp (sequence a step t) (step t) p).trans
-      ((congrArg (fun n ↦ n + (step t).participationCount p) ih).trans
-        (Finset.sum_range_succ (fun s ↦ (step s).participationCount p) t).symm))
+  induction t with
+  | zero => exact Nat.card_eq_zero.mpr (Or.inl ⟨fun g ↦ Empty.elim g.1⟩)
+  | succ t ih =>
+      rw [Finset.sum_range_succ, ← ih]
+      exact participationCount_comp (sequence a step t) (step t) p
 
 end TNLean.PEPS.PairEffect.OriginalCircuit
