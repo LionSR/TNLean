@@ -1,0 +1,149 @@
+\section{Finite-range interactions and general domains}
+\label{sec:peps_exact_finite_range}
+
+% Generalizations made in this library. The manuscript states only the
+% nearest-neighbor case on the open square; nothing below asserts either
+% uniform approximation target.
+
+The finite-size argument of Section~\ref{sec:peps_exact_finite_exception}
+uses only the unit norm of the ground vector, and the spanning-tree
+construction of Section~\ref{sec:peps_exact_tree} uses only connectivity.
+Both therefore extend from the nearest-neighbor square model to the
+interaction classes and domains of the area-law
+model~\cite[Section~1]{OpenAI2026AreaLaw}. The
+manuscript~\cite{OpenAI2026PolynomialPEPS} states only the nearest-neighbor
+case; the finite-range target below is a generalization made here, and
+neither target is proved.
+
+\begin{theorem}[Exact PEPS on connected lattice domains]
+    \label{thm:peps_exact_domain}
+    \lean{TNLean.PEPS.AreaLaw.exists_exact_domain_tensor,
+        TNLean.PEPS.AreaLaw.domainGraph_rectangularDomain_connected}
+    \leanok
+    \uses{def:area_law_domain}
+    Let $\Lambda\subseteq\mathbb Z^2$ be a finite domain whose induced
+    nearest-neighbor graph is connected, and let $q\ge1$. Every
+    $\psi\colon\{0,\ldots,q-1\}^{\Lambda}\to\mathbb C$ is the exact
+    contraction of a PEPS on the induced graph with bond dimensions
+    $1\le D_e\le q^{|\Lambda|}$ on every edge. The domain of a $w\times h$
+    rectangle with $w,h>0$ is connected.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_exact_degenerate,thm:peps_square_connected,thm:area_law_domain_identifications}
+    Theorem~\ref{thm:peps_exact_degenerate} applies to the induced graph,
+    whose vertex set has $|\Lambda|$ elements. The rectangular domain is
+    isomorphic to the open rectangular grid
+    (Theorem~\ref{thm:area_law_domain_identifications}), which is connected
+    by Theorem~\ref{thm:peps_square_connected}, and connectivity is
+    preserved by graph isomorphisms.
+\end{proof}
+
+For $R\in\mathbb N$, real $J,\Delta$ and $L\in\mathbb N$, let
+$\Lambda_L=\{0,\ldots,L-1\}^2$ be the integer domain of the open $L\times L$
+square and let $U$ identify the configuration basis of the square with that
+of $\Lambda_L$ (Theorem~\ref{thm:area_law_domain_identifications}). Write
+$\mathcal G^{R}_{q,J,\Delta}(L)$ for the triples $(H,E_0,\Omega)$ in which
+$H$ is an interaction family on $\Lambda_L$ as in
+Definition~\ref{def:area_law_hamiltonian}, of range $R$ and term bound $J$,
+and $\Omega$ is a vector on the open square such that $U\Omega$ is a unit
+vector with
+\begin{align}
+    HU\Omega & =E_0U\Omega,
+             & H-E_0I       & \ge\Delta\bigl(I-|U\Omega\rangle\langle U\Omega|\bigr).
+    \label{eq:peps_finite_range_ground}
+\end{align}
+By Theorem~\ref{thm:rectangular_domain_hamiltonian}, for $J\ge0$ every
+$(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$ yields a member of
+$\mathcal G^{1}_{q,J,\Delta}(L)$ with the same $E_0$ and $\Omega$.
+
+\begin{theorem}[A uniform prefactor for finite-range interactions]
+    \label{thm:peps_remove_finite_exceptions_finite_range}
+    \lean{TNLean.PEPS.AreaLaw.exists_uniform_finiteRange_approximation_of_sufficiently_large}
+    \leanok
+    \uses{def:area_law_hamiltonian,thm:rectangular_domain_hamiltonian}
+    Fix integers $q\ge1$, $R\ge0$ and $L_0\ge0$, real $J,\Delta,C$, and
+    $c\ge0$. Suppose $\mathcal A_{C,c}(L,\Omega)$ holds for every integer
+    $L\ge\max\{2,L_0\}$ and every
+    $(H,E_0,\Omega)\in\mathcal G^{R}_{q,J,\Delta}(L)$. There is one $C'>0$
+    with $C'\ge C$ such that $\mathcal A_{C',c}(L,\Omega)$ holds for every
+    integer $L\ge2$ and every $(H,E_0,\Omega)\in\mathcal G^{R}_{q,J,\Delta}(L)$.
+    The exponent $c$ is unchanged, and $C'$ is independent of
+    $L,H,E_0,\Omega$.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_remove_finite_exceptions_unit}
+    Apply Theorem~\ref{thm:peps_remove_finite_exceptions_unit} to the sets
+    $\mathcal P(L)$ of vectors $\Omega$ occurring in
+    $\mathcal G^{R}_{q,J,\Delta}(L)$. Their members are unit vectors because
+    $U$ preserves the norm.
+\end{proof}
+
+\begin{definition}[Finite-range uniform polynomial approximation]
+    \label{def:peps_finite_range_uniform_target}
+    \lean{TNLean.PEPS.AreaLaw.FiniteRangePolynomialPEPSApproximation}
+    \leanok
+    \uses{def:area_law_hamiltonian,thm:rectangular_domain_hamiltonian,def:polynomial_peps_model}
+    The finite-range uniform polynomial approximation assertion is
+    \begin{align}
+         & \forall q\ge2\;\forall R\in\mathbb N\;\forall J,\Delta>0\;
+        \exists C,c>0\;\label{eq:peps_finite_range_uniform}           \\
+         & \quad\forall L\ge2\;
+        \forall(H,E_0,\Omega)\in\mathcal G^{R}_{q,J,\Delta}(L),\;
+        \mathcal A_{C,c}(L,\Omega).\notag
+    \end{align}
+    The constants $C,c$ depend only on $q,R,J,\Delta$. This generalizes
+    assertion~(\ref{eq:peps_finite_uniform}) beyond the nearest-neighbor
+    interactions of~\cite[Theorem~1.1]{OpenAI2026PolynomialPEPS}; it is not
+    asserted here.
+\end{definition}
+
+\begin{theorem}[Equivalence with the sufficiently large size statement]
+    \label{thm:peps_finite_range_approximation_iff_large}
+    \lean{TNLean.PEPS.AreaLaw.finiteRangePolynomialPEPSApproximation_iff_sufficiently_large}
+    \leanok
+    \uses{def:peps_finite_range_uniform_target}
+    Assertion~(\ref{eq:peps_finite_range_uniform}) is equivalent to
+    \begin{align}
+         & \forall q\ge2\;\forall R\in\mathbb N\;\forall J,\Delta>0\;
+        \exists C,c>0\;\exists L_0\in\mathbb N\;
+        \label{eq:peps_finite_range_large}                            \\
+         & \quad\forall L\ge\max\{2,L_0\}\;
+        \forall(H,E_0,\Omega)\in\mathcal G^{R}_{q,J,\Delta}(L),\;
+        \mathcal A_{C,c}(L,\Omega).\notag
+    \end{align}
+    In both assertions the constants are independent of the size,
+    interaction family, ground energy, and ground vector.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_remove_finite_exceptions_finite_range}
+    As for Theorem~\ref{thm:peps_approximation_iff_large}:
+    assertion~(\ref{eq:peps_finite_range_uniform}) gives
+    (\ref{eq:peps_finite_range_large}) with $L_0=0$, and conversely
+    Theorem~\ref{thm:peps_remove_finite_exceptions_finite_range} produces one
+    positive $C'\ge C$ for every $L\ge2$ with the same exponent.
+\end{proof}
+
+\begin{theorem}[Specialization to nearest-neighbor interactions]
+    \label{thm:peps_finite_range_implies_nearest_neighbor}
+    \lean{TNLean.PEPS.AreaLaw.FiniteRangePolynomialPEPSApproximation.polynomialPEPSApproximation}
+    \leanok
+    \uses{def:peps_finite_range_uniform_target,def:polynomial_peps_model}
+    Assertion~(\ref{eq:peps_finite_range_uniform}) implies the
+    nearest-neighbor assertion~(\ref{eq:peps_finite_uniform}).
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:rectangular_domain_hamiltonian,thm:rectangular_equal_side_entropy}
+    Fix $q\ge2$ and $J,\Delta>0$, and take the constants $C,c$
+    of~(\ref{eq:peps_finite_range_uniform}) at $R=1$. For
+    $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$, the square Hamiltonian is
+    the equal-side case of the rectangular model, and
+    Theorem~\ref{thm:rectangular_domain_hamiltonian} converts it into a
+    range-one family $H'$ on $\Lambda_L$ with ground vector $U\Omega$, energy
+    $E_0$ and gap $\Delta$. Thus
+    $(H',E_0,\Omega)\in\mathcal G^{1}_{q,J,\Delta}(L)$, and
+    $\mathcal A_{C,c}(L,\Omega)$ follows.
+\end{proof}

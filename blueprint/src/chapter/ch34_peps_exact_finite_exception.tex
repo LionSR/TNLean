@@ -38,6 +38,29 @@ Hermitian; individual terms need not be. The remaining conditions are
     because $L^c\ge0$. The normalized vector and its error are unchanged.
 \end{proof}
 
+\begin{theorem}[Finite-size enlargement for a class of unit vectors]
+    \label{thm:peps_remove_finite_exceptions_unit}
+    \lean{TNLean.PEPS.Approximation.exists_uniform_approximation_of_sufficiently_large_of_norm_eq_one}
+    \leanok
+    Fix integers $q\ge1$ and $L_0\ge0$, real $C$ and $c\ge0$, and for every
+    $L\in\mathbb N$ a set $\mathcal P(L)$ of unit vectors on the open
+    $L\times L$ square. Suppose $\mathcal A_{C,c}(L,\Omega)$ holds for every
+    integer $L\ge\max\{2,L_0\}$ and every $\Omega\in\mathcal P(L)$. There is
+    one $C'>0$ with $C'\ge C$ such that $\mathcal A_{C',c}(L,\Omega)$ holds for
+    every integer $L\ge2$ and every $\Omega\in\mathcal P(L)$. Only the unit
+    norm of the members of $\mathcal P(L)$ enters; the sets may consist of the
+    gapped ground vectors of any class of Hamiltonians.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:peps_uniform_small_size_approximation,thm:peps_prefactor_monotone}
+    Theorem~\ref{thm:peps_uniform_small_size_approximation} gives a positive
+    $C'\ge C$ covering all $2\le L<L_0$ and all unit vectors. Its choice is
+    $C'=\max\{C,q^{L_0^2}\}$. For $L<L_0$, apply that theorem to
+    $\Omega\in\mathcal P(L)$. For $L\ge L_0$, apply the assumed approximation
+    and Theorem~\ref{thm:peps_prefactor_monotone}. Both cases use the same $C'$.
+\end{proof}
+
 \begin{theorem}[A uniform prefactor for every size]
     \label{thm:peps_remove_finite_exceptions}
     \lean{TNLean.PEPS.Approximation.exists_uniform_approximation_of_sufficiently_large}
@@ -56,13 +79,12 @@ Hermitian; individual terms need not be. The remaining conditions are
 \end{theorem}
 \begin{proof}
     \leanok
-    \uses{thm:peps_uniform_small_size_approximation,thm:peps_prefactor_monotone}
-    Theorem~\ref{thm:peps_uniform_small_size_approximation} gives a positive
-    $C'\ge C$ covering all $2\le L<L_0$ and all unit vectors. Its choice is
-    $C'=\max\{C,q^{L_0^2}\}$. For $L<L_0$, apply that theorem using
-    $\|\Omega\|=1$ from~(\ref{eq:peps_finite_ground}). For $L\ge L_0$,
-    apply the assumed approximation and
-    Theorem~\ref{thm:peps_prefactor_monotone}. Both cases use the same $C'$.
+    \uses{thm:peps_remove_finite_exceptions_unit}
+    Apply Theorem~\ref{thm:peps_remove_finite_exceptions_unit} with
+    $\mathcal P(L)$ the set of ground vectors $\Omega$ of the triples in
+    $\mathcal G_{q,J,\Delta}(L)$; these are unit vectors
+    by~(\ref{eq:peps_finite_ground}). The constant is
+    $C'=\max\{C,q^{L_0^2}\}$.
 \end{proof}
 
 \begin{theorem}[Equivalence with the sufficiently large size statement]

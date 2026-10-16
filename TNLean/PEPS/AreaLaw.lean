@@ -26,7 +26,9 @@ import TNLean.PEPS.AreaLaw.Cylinder
 import TNLean.PEPS.AreaLaw.EdgeBoundaryCalculus
 import TNLean.PEPS.AreaLaw.EdgeCrossingBudget
 import TNLean.PEPS.AreaLaw.EntropyDimension
+import TNLean.PEPS.AreaLaw.ExactDomainRepresentation
 import TNLean.PEPS.AreaLaw.FiniteDomain
+import TNLean.PEPS.AreaLaw.FiniteRangePEPSApproximation
 import TNLean.PEPS.AreaLaw.FiniteSetTruncation
 import TNLean.PEPS.AreaLaw.FiniteSetTruncationGap
 import TNLean.PEPS.AreaLaw.FiniteSetTruncationSchmidtBellPrevector

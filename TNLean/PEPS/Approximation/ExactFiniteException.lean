@@ -36,6 +36,27 @@ theorem HasPEPSApproximation.mono_prefactor {C C' c : ℝ} {L q : ℕ}
   exact (hbound e).trans
     (mul_le_mul_of_nonneg_right hC (Real.rpow_nonneg (Nat.cast_nonneg L) c))
 
+/-- The finite-size enlargement for an arbitrary class of unit vectors, one class
+for each side length. Only the unit norm of an admissible vector enters, so the
+class may consist of the gapped ground vectors of any family of Hamiltonians,
+such as the finite-range interactions of the area-law model. Source: manuscript,
+assembly, lines 203–214, whose small-size step uses the unit norm of the ground
+vector alone. -/
+theorem exists_uniform_approximation_of_sufficiently_large_of_norm_eq_one {q L₀ : ℕ}
+    {C c : ℝ} (P : (L : ℕ) → StateSpace L q → Prop) (hq : 0 < q) (hc : 0 ≤ c)
+    (hunit : ∀ L : ℕ, ∀ Ω : StateSpace L q, P L Ω → ‖Ω‖ = 1)
+    (hlarge : ∀ L : ℕ, 2 ≤ L → L₀ ≤ L → ∀ Ω : StateSpace L q, P L Ω →
+      HasPEPSApproximation C c L q Ω) :
+    ∃ C' : ℝ, 0 < C' ∧ C ≤ C' ∧
+      ∀ L : ℕ, 2 ≤ L → ∀ Ω : StateSpace L q, P L Ω → HasPEPSApproximation C' c L q Ω := by
+  obtain ⟨C', hC', hCC', hsmall⟩ :=
+    exists_uniform_small_size_approximation (L₀ := L₀) hq C c hc
+  refine ⟨C', hC', hCC', ?_⟩
+  intro L hL Ω hΩ
+  by_cases hsize : L < L₀
+  · exact hsmall L hL hsize Ω (hunit L Ω hΩ)
+  · exact (hlarge L hL (Nat.le_of_not_gt hsize) Ω hΩ).mono_prefactor hCC'
+
 /-- A uniform approximation above a fixed threshold extends to every square
 of side length at least two, with the same exponent and a single positive
 enlarged prefactor. Source: manuscript, assembly, lines 203–214. -/
@@ -48,13 +69,17 @@ theorem exists_uniform_approximation_of_sufficiently_large {q L₀ : ℕ}
       ∀ L : ℕ, 2 ≤ L → ∀ h : SquareHamiltonian L q J,
         ∀ E₀ : ℝ, ∀ Ω : StateSpace L q,
           h.IsGappedGroundState E₀ Ω Δ → HasPEPSApproximation C' c L q Ω := by
-  obtain ⟨C', hC', hCC', hsmall⟩ :=
-    exists_uniform_small_size_approximation (L₀ := L₀) hq C c hc
-  refine ⟨C', hC', hCC', ?_⟩
-  intro L hL h E₀ Ω hΩ
-  by_cases hsize : L < L₀
-  · exact hsmall L hL hsize Ω hΩ.1
-  · exact (hlarge L hL (Nat.le_of_not_gt hsize) h E₀ Ω hΩ).mono_prefactor hCC'
+  obtain ⟨C', hC', hCC', hall⟩ :=
+    exists_uniform_approximation_of_sufficiently_large_of_norm_eq_one
+      (fun L Ω ↦ ∃ h : SquareHamiltonian L q J, ∃ E₀ : ℝ, h.IsGappedGroundState E₀ Ω Δ)
+      hq hc
+      (by
+        rintro _ _ ⟨_, _, hΩ⟩
+        exact hΩ.1)
+      (by
+        rintro L hL hL₀ Ω ⟨h, E₀, hΩ⟩
+        exact hlarge L hL hL₀ h E₀ Ω hΩ)
+  exact ⟨C', hC', hCC', fun L hL h E₀ Ω hΩ ↦ hall L hL Ω ⟨h, E₀, hΩ⟩⟩
 
 /-- The uniform polynomial approximation statement is equivalent to the same
 statement for all sufficiently large squares. Both constants and the threshold

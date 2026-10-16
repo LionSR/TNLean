@@ -187,6 +187,7 @@ filter, and rank arguments remain separate obligations.
 | PEPS `prop:area-law` | Proved assuming `UniformAreaLaw` (`UniformAreaLaw.squareEntropyAreaLaw`), through the Hermitian-part reduction | The uniform area law. |
 | PEPS `app:companion` | Each listed companion statement compared with its formal statement; see below | As in the rows for the area-law labels. |
 | PEPS `thm:main` | Target proposition defined | Faithful tensor construction and error bounds, #8773 and its prerequisites. |
+| PEPS `thm:main`, finite-range generalization (not in the manuscript) | Target proposition `FiniteRangePolynomialPEPSApproximation` defined for range-`R` interactions of area-law `eq:hamiltonian` on the square domain; the Hamiltonian-free finite-size enlargement, the removal of finitely many sizes, the sufficiently-large-size equivalence, and the range-one specialization to `thm:main` proved; exact spanning-tree PEPS proved on every connected finite domain | The large-size construction for finite range. |
 
 ### Appendix A companion statements
 
