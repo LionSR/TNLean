@@ -140,7 +140,9 @@ import TNLean.PEPS.Approximation.DyadicGuideFrames
 import TNLean.PEPS.Approximation.DyadicGuideOwners
 import TNLean.PEPS.Approximation.DyadicGuideReadings
 import TNLean.PEPS.Approximation.DyadicHierarchyCounts
+import TNLean.PEPS.Approximation.DyadicLargeRepaintingChain
 import TNLean.PEPS.Approximation.DyadicLargeRepaintingGates
+import TNLean.PEPS.Approximation.DyadicLargeRepaintingSegment
 import TNLean.PEPS.Approximation.DyadicLevelEvents
 import TNLean.PEPS.Approximation.DyadicLevelFrames
 import TNLean.PEPS.Approximation.DyadicLevelSchedule
@@ -157,9 +159,11 @@ import TNLean.PEPS.Approximation.DyadicProtocolAssembly
 import TNLean.PEPS.Approximation.DyadicProtocolBoundaryStates
 import TNLean.PEPS.Approximation.DyadicProtocolChanges
 import TNLean.PEPS.Approximation.DyadicProtocolCompression
+import TNLean.PEPS.Approximation.DyadicProtocolConsequences
 import TNLean.PEPS.Approximation.DyadicProtocolConstants
 import TNLean.PEPS.Approximation.DyadicProtocolFinalReadout
 import TNLean.PEPS.Approximation.DyadicProtocolFromEvents
+import TNLean.PEPS.Approximation.DyadicProtocolFrozenFrames
 import TNLean.PEPS.Approximation.DyadicProtocolInitialStep
 import TNLean.PEPS.Approximation.DyadicProtocolOwners
 import TNLean.PEPS.Approximation.DyadicProtocolParties
