@@ -32,20 +32,18 @@ local notation "𝔇" => repairStage o Λ A C k₀ hC h₀ Sstar
 map applied to its recorded ancestor's scale.
 Source: area-law Section 11, lines 404–409 and `geometry:descendant-count`,
 lines 670–681. -/
-theorem repairStage_scale_eq_iterate (i n : ℕ) (q : (𝔇 (i + n)).markIndex) :
-    (𝔇 (i + n)).scale q = (repairHalfSide^[n])
-      ((𝔇 i).scale (repairMarkAncestor o Λ A C k₀ hC h₀ Sstar i n q)) := by
-  exact Nat.rec
-    (motive := fun n ↦ ∀ q : (𝔇 (i + n)).markIndex,
+theorem repairStage_scale_eq_iterate (i : ℕ) :
+    ∀ (n : ℕ) (q : (𝔇 (i + n)).markIndex),
       (𝔇 (i + n)).scale q = (repairHalfSide^[n])
-        ((𝔇 i).scale (repairMarkAncestor o Λ A C k₀ hC h₀ Sstar i n q)))
-    (fun _ ↦ rfl)
-    (fun n ih q ↦
-      (repairStage_scale_succ o Λ A C k₀ hC h₀ Sstar (i + n) q).trans
-        ((congrArg repairHalfSide
-          (ih (repairMarkParent o Λ A C k₀ hC h₀ Sstar (i + n) q))).trans
-          (Function.iterate_succ_apply' repairHalfSide n
-            ((𝔇 i).scale (repairMarkAncestor o Λ A C k₀ hC h₀ Sstar i n
-              (repairMarkParent o Λ A C k₀ hC h₀ Sstar (i + n) q)))).symm)) n q
+        ((𝔇 i).scale (repairMarkAncestor o Λ A C k₀ hC h₀ Sstar i n q))
+  | 0, q => rfl
+  | n + 1, q => by
+    have ih := repairStage_scale_eq_iterate i n
+      (repairMarkParent o Λ A C k₀ hC h₀ Sstar (i + n) q)
+    exact (repairStage_scale_succ o Λ A C k₀ hC h₀ Sstar (i + n) q).trans
+      ((congrArg repairHalfSide ih).trans
+        (Function.iterate_succ_apply' repairHalfSide n
+          ((𝔇 i).scale (repairMarkAncestor o Λ A C k₀ hC h₀ Sstar i n
+            (repairMarkParent o Λ A C k₀ hC h₀ Sstar (i + n) q)))).symm)
 
 end TNLean.PEPS.AreaLaw.Geometry
