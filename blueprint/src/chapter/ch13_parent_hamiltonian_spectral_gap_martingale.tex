@@ -391,7 +391,7 @@
     $m\in[n-l,n]$.
 \end{proof}
 
-\begin{theorem}[Kernel and gap transport under an isometric conjugacy]
+\begin{theorem}[Kernel and gap preservation under an isometric conjugacy]
     \label{thm:martingale_isometric_conjugation_gap}
     \lean{LinearIsometryEquiv.map_apply_eq_of_conj,
         LinearIsometryEquiv.mem_ker_iff_of_conj,
@@ -503,7 +503,7 @@
     \lean{MPSTensor.localTermES_conj_rightSpectatorConfigLinearIsometryEquiv}
     \leanok
     \uses{lem:right-spectator-extension}
-    Let $i+L\leq n$.  Under the canonical identification
+    Let $i+L\leq n$.  Under the standard identification
     \begin{align}
         \ell^2([d]^{n+r}) & \simeq
         \ell^2([d]^n\times[d]^r),
@@ -529,7 +529,7 @@
         MPSTensor.openSuffixParentHamiltonianES_conj_rightSpectatorConfigLinearIsometryEquiv}
     \leanok
     \uses{thm:local-term-right-spectator-conjugacy}
-    Let $L>0$ and $p\leq n$.  Under the canonical identification
+    Let $L>0$ and $p\leq n$.  Under the standard identification
     \begin{align}
         \ell^2([d]^{n+r}) & \simeq
         \ell^2([d]^n\times[d]^r),
@@ -912,11 +912,11 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     $\tau$ after $\sigma$, matching the $\Fin.\!snoc$ pattern of $R^{\mathrm{last}}$.
 \end{proof}
 
-\begin{theorem}[Tail boundary map range: Euclidean-space transport]\label{thm:tail_boundary_map_range_es_transport}
+\begin{theorem}[Tail boundary map range: Euclidean-space image]\label{thm:tail_boundary_map_range_es_transport}
     \lean{MPSTensor.tailBoundaryMap_range_map_symm_eq_openChainTailGroundSpaceES}
     \leanok
     \uses{thm:tail_boundary_map_range_eq, def:open_chain_ground_subspaces_es}
-    For every $K,L\in\N$, transport of the tail boundary map range by the
+    For every $K,L\in\N$, the image of the tail boundary map range by the
     inverse canonical $\ell^2$ isomorphism
     identifies it with the open-chain tail ground submodule:
     \begin{align}
@@ -933,18 +933,18 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     \uses{thm:tail_boundary_map_range_eq}
     By Theorem~\ref{thm:tail_boundary_map_range_eq}, the range equals the
     intersection over prefixes $u$ of the ground-space comaps
-    $(R^{\mathrm{tail}}_u)^{-1}(G_L(A))$.  Transporting this intersection
+    $(R^{\mathrm{tail}}_u)^{-1}(G_L(A))$.  Mapping this intersection
     through the canonical $\ell^2$ identification and unfolding the definition
     of $\mathcal V_{K,L}(A)$ (Definition~\ref{def:open_chain_ground_subspaces_es})
     gives the stated equality.
 \end{proof}
 
-\begin{theorem}[Left boundary map range: Euclidean-space transport ($L=1$)]%
+\begin{theorem}[Left boundary map range: Euclidean-space image ($L=1$)]%
     \label{thm:left_boundary_map_range_es_transport}
     \lean{MPSTensor.leftBoundaryMap_range_map_symm_eq_openChainLeftGroundSpaceES}
     \leanok
     \uses{thm:left_boundary_map_range_eq, def:open_chain_ground_subspaces_es}
-    At $L=1$, transport of the left boundary map range by the inverse canonical
+    At $L=1$, the image of the left boundary map range by the inverse canonical
     $\ell^2$ isomorphism identifies
     it with the open-chain left ground submodule:
     \begin{align}
@@ -965,7 +965,7 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     $P_\tau^{-1}(G_K(A))$.  For $L=1$, each suffix $\tau$ is determined by a
     single index $j\in\Fin d$, and Lemma~\ref{lem:prefix_restrict_one_eq_restrict_last}
     identifies $P_\tau$ with $R^{\mathrm{last}}(\cdot,j)$, the last-site restriction of
-    Definition~\ref{def:restrict_last}.  Transporting the
+    Definition~\ref{def:restrict_last}.  Mapping the
     resulting intersection $\bigcap_{j\in\Fin d}(R^{\mathrm{last}}(\cdot,j))^{-1}(G_K(A))$
     through the canonical $\ell^2$ identification and
     unfolding Definition~\ref{def:open_chain_ground_subspaces_es} gives
@@ -977,7 +977,7 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     \lean{MPSTensor.tailBoundaryMapES, MPSTensor.leftBoundaryMapES}
     \leanok
     \uses{def:tail_boundary_map, def:left_boundary_map}
-    Transport the tail and left boundary maps through the canonical Euclidean
+    Map the tail and left boundary maps through the canonical Euclidean
     identifications on their virtual matrix families and physical coefficient
     spaces.  Denote the resulting continuous maps by
     $\Gamma^{\mathrm{tail}}_{K,L}$ and
@@ -1006,7 +1006,7 @@ linear maps on the same ambient space to compare their orthogonal projectors.
 \begin{proof}
     \leanok
     \uses{def:spectator_boundary_maps_es, thm:tail_boundary_map_range_es_transport, thm:left_boundary_map_range_es_transport, thm:tail_boundary_map_factorization, thm:left_boundary_map_factorization}
-    Transport the algebraic range descriptions through the Euclidean
+    Map the algebraic range descriptions through the Euclidean
     identification.  The two factorization identities follow by evaluating a
     virtual matrix \(X\) fiberwise and applying the corresponding algebraic
     tail or left factorization.
@@ -1101,7 +1101,7 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     \uses{def:tail_boundary_map, def:left_boundary_map, def:ground_space_gram}
     Let $q\in\mathbb N$, let $X=(X_u)_{u\in\Fin d^K}$, and let
     $Z=(Z_j)_{j\in\Fin d^q}$ be virtual boundary-matrix families.  After the
-    canonical identification of $K+(l+q)$ with $(K+l)+q$, the mixed Gram for
+    standard identification of $K+(l+q)$ with $(K+l)+q$, the mixed Gram for
     the tail window of length $l+q$ and the left window with a $q$-site
     increment is
     \begin{align}
@@ -1297,7 +1297,7 @@ linear maps on the same ambient space to compare their orthogonal projectors.
     The adjoint left virtual map sends a family $W=(W_j)_j$ to
     $U(\sum_j(A^j)^\dagger W_j)$.  For
     $W_j=(\tr\rho)^{-1}Z_j\rho$, the right multiplication by $\rho$ and
-    the factor $(\tr\rho)^{-1}$ supplied by the left limiting spectator
+    the factor $(\tr\rho)^{-1}$ given by the left limiting spectator
     metric cancel exactly through $S_\infty$.  Applying the tail virtual map and the
     tail limiting spectator metric leaves, in the fiber indexed by $u$,
     \begin{align}
@@ -1426,7 +1426,7 @@ linear maps on the same ambient space to compare their orthogonal projectors.
          & \leq\re\langle H_nx,x\rangle,
         \label{eq:nachtergaele_c2_threshold_form}
     \end{align}
-    and the literal condition C3 for $n_0\leq n<N$,
+    and condition C3 for $n_0\leq n<N$,
     \begin{align}
         \lVert Q_nE_n\rVert
          & \leq\epsilon_l,
@@ -1691,7 +1691,7 @@ linear maps on the same ambient space to compare their orthogonal projectors.
          & \leq\re\langle H_nx,x\rangle,
         \label{eq:nachtergaele_c2_form}
     \end{align}
-    and the literal condition C3,
+    and condition C3,
     \begin{align}
         \lVert Q_nE_n\rVert
          & \leq\epsilon_l,
@@ -1976,7 +1976,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \end{align}
     Thus $\gamma_{l+1}=1$ at the full-window volume $N=L=l+1$ in
     \cite[Theorem~2.1(i)]{Nachtergaele1996Spectral}. This neither asserts that
-    the excited subspace is nonzero nor supplies a gap for any $N>L$.
+    the excited subspace is nonzero nor gives a gap for any $N>L$.
 \end{theorem}
 
 \begin{proof}
@@ -2033,7 +2033,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \end{definition}
 
 % Source: References/cond-mat_9410110/main.tex, condition C1,
-% lines 1030--1041.  The vanishing terms supply the indices below the
+% lines 1030--1041.  The vanishing terms give the indices below the
 % source lower endpoint when L=l+1.
 \begin{theorem}[Vanishing suffix before a complete window]
     \label{thm:open_suffix_parent_hamiltonian_zero_before_window}
@@ -3184,7 +3184,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
         \lVert\mathcal K_l-\mathcal K_\infty\rVert
         \lVert J^{\mathrm{tail}}_K\rVert.
     \end{align}
-    If, in addition, $A$ is primitive with fixed-point witness $\rho$, then
+    If, in addition, $A$ is primitive with fixed-point matrix $\rho$, then
     there are constants $C>0$ and $0<r<1$ such that, for every $K\in\N$ and
     every $l\geq1$,
     \begin{align}
@@ -3419,7 +3419,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 % These raw bounds are reconstructed from the inverse-Gram projector formulas.
 % They do not assert the rational coefficient in Nachtergaele's equation (6.1).
-\begin{theorem}[Raw norm bounds for the C3 corrections]
+\begin{theorem}[Preliminary norm bounds for the C3 corrections]
     \label{thm:c3_correction_bounds}
     \lean{MPSTensor.c3TailFiniteGramCorrectionES_norm_le}
     \lean{MPSTensor.c3FullInverseGramCorrectionES_norm_le}
@@ -3513,7 +3513,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \leanok
     \uses{thm:primitive_whole_increment_defect_decay, thm:normal_from_primitive_posdef,
         thm:wordspan_blk_inj_succ}
-    Primitivity supplies a positive injective length. Choose $p$ above it
+    Primitivity gives a positive injective length. Choose $p$ above it
     and large enough for the uniform decay estimate with tolerance $7/16$.
     Block injectivity propagates to $p$. Set the suffix length equal to $p$
     in that estimate, leaving the prefix length unrestricted.
@@ -3576,7 +3576,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 \end{proof}
 
 % Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094.
-\begin{theorem}[Literal open-chain martingale condition C3]
+\begin{theorem}[Open-chain martingale condition C3]
     \label{thm:literal_open_chain_martingale_c3}
     \lean{MPSTensor.IsPrimitiveMPS.exists_openChain_martingaleDifference_norm_lt_c3_threshold}
     \leanok
@@ -3620,7 +3620,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 % Source: References/cond-mat_9410110/main.tex, condition C3, lines 1083--1094;
 % proof of Theorem 2.1(i), lines 1178--1259.
-\begin{theorem}[Literal fixed-final-volume martingale condition C3]
+\begin{theorem}[Fixed-final-volume martingale condition C3]
     \label{thm:literal_fixed_volume_martingale_c3}
     \lean{MPSTensor.fixedAmbient_martingaleDifference_conj_rightSpectatorConfigLinearIsometryEquiv,
         MPSTensor.openIntervalGroundProjectionES_comp_martingaleDifference_conj_rightSpectator,
@@ -3711,7 +3711,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     $d_{l+1}=\gamma_{l+1}=1$ and retains the coefficient of Theorem~2.1(i) in
     \cite{Nachtergaele1996Spectral}. It is not a formulation of the
     unrestricted source theorem.
-    Theorem~\ref{thm:primitive_open_parent_hamiltonian_gap} supplies the
+    Theorem~\ref{thm:primitive_open_parent_hamiltonian_gap} gives the
     full-range C3 hypothesis from the physical open-chain estimates.
 \end{theorem}
 
@@ -3772,7 +3772,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \leanok
     \uses{thm:literal_fixed_volume_martingale_c3,
         thm:open_parent_hamiltonian_fixed_c3_gap}
-    Theorem~\ref{thm:literal_fixed_volume_martingale_c3} supplies $l>1$,
+    Theorem~\ref{thm:literal_fixed_volume_martingale_c3} gives $l>1$,
     $\epsilon_l$, $l$-block injectivity, and the C3 estimate for every final
     volume $N$ and every $n<N$.  Apply
     Theorem~\ref{thm:open_parent_hamiltonian_fixed_c3_gap} for each
@@ -3785,7 +3785,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
     \end{align}
 \end{proof}
 
-\begin{lemma}[Blocked three-site projector and adjacent-pair transport]
+\begin{lemma}[Blocked three-site projector and adjacent-pair reindexing]
     \label{lem:blocked_to_cyclic_ground_projector_comparison}
     \lean{MPSTensor.blockTensor_threeSite_openChain_defect_norm_eq}
     \leanok
@@ -4963,7 +4963,7 @@ Definition~\ref{def:ground_space_es}.
     \uses{thm:ph_extended_boundary_overlap, thm:ph_joint_projector_comparison,
         thm:spectator_boundary_hilbert_factorization, thm:range_ground_space_map_es}
     The boundary-map factorization gives $W_i\subseteq U_i$.
-    The extended-boundary overlap estimate supplies all three bounds for
+    The extended-boundary overlap estimate gives all three bounds for
     $U_i\times U_j$, $V_i\times V_j$, and $U_i\times V_j$ with the same
     matrix $B$. Apply the joint-projector comparison.
 \end{proof}
@@ -5366,7 +5366,7 @@ tensors.
         lem:parent_spanning_of_local_space_eq}
     Theorem~\ref{thm:normal_irreducible_tensor} makes $A$ an irreducible
     tensor, with no normalization imposed on $A$, and
-    Theorem~\ref{thm:normal_tensor_nonzero_matrix} supplies the nonzero matrix
+    Theorem~\ref{thm:normal_tensor_nonzero_matrix} gives the nonzero matrix
     that the Perron--Frobenius eigenvector requires.
     Theorem~\ref{thm:tp_data_irreducible} therefore returns a
     positive definite $\sigma$ and an eigenvalue $r>0$ of the adjoint transfer
@@ -5613,7 +5613,7 @@ tensors.
     \leanok
     \uses{thm:parent_hamiltonian_fixed_length_gap}
     Take the minimum of $\delta$ and the finitely many positive constants
-    $\delta_N$ supplied by Theorem~\ref{thm:parent_hamiltonian_fixed_length_gap}
+    $\delta_N$ given by Theorem~\ref{thm:parent_hamiltonian_fixed_length_gap}
     for $N<M$. Equivalently, induct on $M$, replacing $\delta$ by
     $\min\{\delta,\delta_{M-1}\}$ at each step.
 \end{proof}
@@ -5640,7 +5640,7 @@ tensors.
     \uses{thm:normal_parent_hamiltonian_finite_range_knabe_gap,
         thm:parent_hamiltonian_eventual_gap}
     Theorem~\ref{thm:normal_parent_hamiltonian_finite_range_knabe_gap}
-    supplies $l>1$, $m\geq l+1$, and $\delta>0$ with the required norm
+    gives $l>1$, $m\geq l+1$, and $\delta>0$ with the required norm
     inequality for $N\geq2m$.
     Apply Theorem~\ref{thm:parent_hamiltonian_eventual_gap} with
     $L=l+1$ and $M=2m$.
@@ -5787,8 +5787,8 @@ tensors.
     with constant one. The nonzero local window terms are distinct summands
     of $H_N$, so Theorem~\ref{thm:grouped_open_parent_c1} gives condition C1
     with constant one. Lemma~\ref{lem:open_parent_hamiltonian_es_positive}
-    supplies positivity of $H_N$. The locality lemma supplies the
-    commutation condition. The assumed norm bound supplies C3, and the terminal
+    gives positivity of $H_N$. The locality lemma gives the
+    commutation condition. The assumed norm bound gives C3, and the terminal
     projection is the projection onto $\ker H_N$.
 \end{proof}
 
@@ -5889,7 +5889,7 @@ tensors.
     A parent interaction is the orthogonal projection onto the complement
     of the local boundary-condition space, acting trivially on the other
     sites. Its kernel on the last $L+Q$ sites is therefore
-    $(\C^d)^{\otimes K}\otimes G_{L+Q}(A)$, and the display transports this
+    $(\C^d)^{\otimes K}\otimes G_{L+Q}(A)$, and the display carries this
     description to the common coordinates.
 \end{proof}
 
@@ -7010,7 +7010,7 @@ tensors.
     No normalization or inequivalence assumption on the original blocks
     is required. This is the finite-interval conclusion of
     \cite[Theorem~1.2 and Section~6]{Nachtergaele1996Spectral} at the
-    sufficient interaction ranges supplied by block injectivity.
+    sufficient interaction ranges given by block injectivity.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:block_word_span_primitive_normalization,
@@ -7078,7 +7078,7 @@ tensors.
     \end{align}
     for every $N\geq R$ and every $v\perp G_N(A)$.
     If the bond dimension $D$ is positive, the conclusion holds at every
-    $R\geq3D^5$ without a supplied injectivity length.
+    $R\geq3D^5$ without a given injectivity length.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:block_open_gap_all_lengths_simultaneous_injectivity,
@@ -7088,7 +7088,7 @@ tensors.
     ground space. This identifies the open parent Hamiltonians and their
     boundary-condition spaces with those of the distinct representatives.
     Apply the block open-chain gap and kernel theorems. For the dimension
-    bound, the blocking estimate supplies $S>0$ with $S+1\leq3D^5$.
+    bound, the blocking estimate gives $S>0$ with $S+1\leq3D^5$.
 \end{proof}
 
 \begin{definition}[Open sums of a local interaction]
@@ -7168,18 +7168,18 @@ tensors.
     $N\geq N_0$, then the interaction sums $H^{\mathrm{open}}_N(h_x)$
     also have one positive gap for those parameters and lengths.
 
-    For a fixed canonical tensor $A$, this conclusion requires no supplied
+    For a fixed canonical tensor $A$, this conclusion requires no given
     canonical gap: simultaneous injectivity at $S>0$ and $R\geq S+1$
     give one gap uniform over $x\in K$ and every $N\geq R$.
     When its bond dimension $D$ is positive, $R\geq3D^5$ suffices without
-    a supplied injectivity length.
+    a given injectivity length.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:open_positive_parent_gap,thm:canonical_open_gap_all_lengths}
     Compactness and continuity give a single $\kappa>0$ with
     $\kappa h_R(A_x)\leq h_x$ for every $x\in K$. Each interaction also
     has a finite positive upper comparison constant. The preceding proof
-    transfers the supplied gap with the common lower constant; the upper
+    transfers the given gap with the common lower constant; the upper
     constants identify the kernels and do not affect the resulting gap.
     For a fixed canonical tensor, apply its all-length open gap theorem.
 \end{proof}
@@ -7212,7 +7212,7 @@ tensors.
     At each fixed $N\geq R$, simultaneous injectivity gives continuous
     local ground projections at lengths $R$ and $N$. The open Hamiltonian
     depends continuously on the first projection, and its kernel is $G_N$.
-    The compact finite-dimensional norm-gap theorem supplies one positive
+    The compact finite-dimensional norm-gap theorem gives one positive
     bound at this $N$. Taking the minimum over $R\leq N\leq M$ gives the
     claim. Nonzero weights preserve every local ground space.
 \end{proof}
@@ -7471,7 +7471,7 @@ tensors.
     comparison gives $\kappa h_{2p}\leq H^{\mathrm{open}}_{2p,R}$ with
     $\kappa>0$. Open-range comparison transfers the gap to
     $\delta=\kappa\gamma/(2p-R+1)>0$ at range $R$. Equality of all local
-    spaces transports this bound to the original block sum.
+    spaces carries this bound to the original block sum.
 \end{proof}
 
 \begin{theorem}[Strict Knabe intervals at a simultaneous injectivity range]
@@ -7507,7 +7507,7 @@ tensors.
     \lean{MPSTensor.exists_parentHamiltonianES_toTensorFromBlocks_uniform_gap_of_wordTupleSpanTop}
     \leanok
     Let $A^0,\ldots,A^{r-1}$ have positive physical and bond dimensions.
-    Suppose their word tuples of a supplied positive length $S$ span the full
+    Suppose their word tuples of a given positive length $S$ span the full
     product matrix algebra. Let $B=\bigoplus_{j=0}^{r-1}\mu_jA^j$, where every
     $\mu_j$ is nonzero. For each interaction range $R\geq S+1$, there is a
     constant $\gamma_R>0$ such that
@@ -7592,7 +7592,7 @@ tensors.
     constant works for $A$, without changing the range or the chain length.
 \end{proof}
 
-\begin{theorem}[Canonical gap at a supplied simultaneous injectivity length]
+\begin{theorem}[Canonical gap at a given simultaneous injectivity length]
     \label{thm:canonical-gap-simultaneous-injectivity}
     \lean{MPSTensor.IsCPSVCanonicalForm.exists_bnt_uniform_gap_of_wordTupleSpanTop}
     \leanok
@@ -7643,7 +7643,7 @@ tensors.
     \leanok
     \uses{thm:canonical_bounded_range_ground_space,
         thm:canonical-decomposition-gap-simultaneous-injectivity}
-    Choose a canonical decomposition. The dimension estimate supplies a
+    Choose a canonical decomposition. The dimension estimate gives a
     simultaneous injectivity length $S>0$ for its distinct normal
     representatives, with $S+1\leq3D^5\leq R$. The canonical gap at that
     simultaneous injectivity length gives the assertion.
@@ -7920,9 +7920,9 @@ shorter interaction range.
         thm:open-hamiltonian-right-spectator-conjugacy,
         thm:cyclic_active_block_local_conjugacy}
     For the finite-interval operator $T$ and its ground projection $P$,
-    the supplied gap gives $\kappa(I-P)\leq T$. Extension by free sites
+    the given gap gives $\kappa(I-P)\leq T$. Extension by free sites
     preserves this inequality. The kernel projection extends to
-    $P\otimes I$, and the physical coordinate isometry transports both
+    $P\otimes I$, and the physical coordinate isometry carries both
     the Hamiltonian and this projection to the chosen interval.
     Thus the extended operator dominates $\kappa$ times its excitation
     projection. On the kernel complement, the quadratic-form bound and
@@ -8465,7 +8465,7 @@ shorter interaction range.
     \uses{thm:primitive_block_open_prescribed_gap,
         thm:normal_blocks_primitive_representatives}
     Independent primitive normalization preserves all block ground spaces
-    and therefore every assembled canonical open Hamiltonian. It also
+    and therefore every combined canonical open Hamiltonian. It also
     preserves inequivalence. Apply the primitive block theorem to the
     normalized representatives and transfer its bound through the exact
     equality of open Hamiltonians.
@@ -8914,7 +8914,7 @@ shorter interaction range.
     Primitivity and positive definiteness imply normality.
     The dimension bound gives injectivity at $D^4$ and hence at $R-1$.
     The open-chain kernel is therefore the MPS ground space, and the normal
-    open-chain gap theorem supplies one positive constant independent of
+    open-chain gap theorem gives one positive constant independent of
     length. Choose eventually normalized boundary vectors and apply the
     preceding inequality.
 \end{proof}
@@ -9174,7 +9174,7 @@ shorter interaction range.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mps_quasi_local_expectation_state, thm:quasi_local_interval_observable}
-    Apply interval evaluation after transporting the matrix observable to
+    Apply interval evaluation after mapping the matrix observable to
     the interval algebra. The inverse coordinate maps cancel.
 \end{proof}
 
@@ -9304,7 +9304,7 @@ shorter interaction range.
     $\delta=\|B\|/(1-\|B\|)$. This bound tends to zero.
 \end{proof}
 
-\begin{theorem}[Assembly of vanishing sector compressions]
+\begin{theorem}[Combining vanishing sector compressions]
     \label{thm:sector_compression_assembly}
     \lean{Submodule.tendsto_norm_iSup_starProjection_comp_zero_of_sector_compressions}
     \leanok
@@ -9342,7 +9342,7 @@ shorter interaction range.
         \bigl\|P_n(I_{\ell_n}\otimes X\otimes I_{r_n})P_{\alpha,n}\bigr\|
          & \longrightarrow0.
     \end{align}
-    This supplies the full finite-ground-space projection term in
+    This gives the full finite-ground-space projection term in
     \cite[Section~6]{Nachtergaele1996Spectral}. No finite-chain uniqueness
     or purity of a completed state is inferred.
 \end{theorem}
@@ -9354,7 +9354,7 @@ shorter interaction range.
     primitivity. The diagonal compression tends to zero because the
     observable is centered in sector $\alpha$. Every off-diagonal
     compression tends to zero by prefix locality. Interior placement is
-    contractive, so the finite-sector assembly theorem applies.
+    contractive, so the finite-sector combination theorem applies.
 \end{proof}
 
 \begin{theorem}[Exact local support of the MPS state]
@@ -9464,7 +9464,7 @@ shorter interaction range.
     \uses{thm:multiblock_commutator_gap_reduction,thm:primitive_local_commutator_energy_limit}
     Finite-range locality places the commutator energy on the fixed
     interval of length $t+k+t$. Primitive expectation convergence determines
-    its limit, so the preceding reduction applies without a supplied
+    its limit, so the preceding reduction applies without a given
     energy limit.
 \end{proof}
 
@@ -9497,7 +9497,7 @@ shorter interaction range.
     \uses{thm:multiblock_local_open_interaction_commutator_gap,thm:block_open_gap_all_lengths_simultaneous_injectivity,thm:block-word-span-separation,thm:block_open_kernel_simultaneous_injectivity,thm:open_positive_parent_gap,thm:open_parent_interaction_kernel_equal,thm:primitive_unit_boundary_approximants}
     Simultaneous injectivity implies sector inequivalence and identifies
     the open-chain kernel with the sum of the sector spaces at this range.
-    The open-chain theorem supplies a uniform canonical gap; positivity
+    The open-chain theorem gives a uniform canonical gap; positivity
     and the prescribed local kernel transfer it to $h$.
     Choose eventual unit boundary vectors independently in each sector
     and apply the preceding local inequality. The same gap constant works
@@ -9556,7 +9556,7 @@ shorter interaction range.
     \leanok
     The coefficient of $\Gamma_{A,k}^*X\Gamma_{B,k}$ between boundary units
     $(b,a)$ and $(e,c)$ is $E_{B,A;X}(|c\rangle\langle a|)_{eb}$.
-    Moreover,
+    Also,
     \begin{align}
         E_{B,A;1_k}=E_{B,A}^{\,k},\qquad
         E_{B,A;X\otimes Z}=E_{B,A;X}E_{B,A;Z},
@@ -9630,13 +9630,13 @@ shorter interaction range.
     states satisfy the preceding common commutator inequality for the
     original interaction $h$, with one positive constant for all sectors,
     interval positions, and centered local observables.
-    No normalized representatives or invariant matrices are supplied.
+    No normalized representatives or invariant matrices are given.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:block_word_span_primitive_normalization,
         thm:multiblock_quasi_local_parent_commutator_gap}
     Primitive normalization preserves each block support and simultaneous
-    injectivity. Hence it also preserves the assembled local support and
+    injectivity. Hence it also preserves the combined local support and
     the parent-interaction kernel. Apply the common bound to the normalized
     family with the original positive interaction.
 \end{proof}
@@ -9693,7 +9693,7 @@ shorter interaction range.
     adjoints.
 \end{proof}
 
-\begin{theorem}[Literal finite-volume commutator limit]
+\begin{theorem}[Finite-volume commutator limit]
     \label{thm:quasi_local_commutator_energy_limit}
     \lean{SpinChain.eventually_quasiLocalIntervalObservable_bulkObservable_commutator_eq, SpinChain.tendsto_quasiLocalIntervalObservable_bulkObservable_commutator, SpinChain.tendsto_apply_quasiLocalIntervalObservable_bulkObservable_commutator, SpinChain.tendsto_apply_quasiLocalIntervalObservable_commutator}
     \leanok
@@ -9727,7 +9727,7 @@ shorter interaction range.
     \uses{def:ground_space_es, thm:quasi_local_interval_observable}
 \end{definition}
 \begin{proof}\leanok
-    Coordinate transport and the interval inclusion preserve products
+    Coordinate identification and the interval inclusion preserve products
     and adjoints, hence preserve orthogonal projections.
 \end{proof}
 
@@ -9899,7 +9899,7 @@ shorter interaction range.
     constructed state.
 \end{proof}
 
-\begin{theorem}[Literal infinite-volume commutator gap in the primitive sectors]
+\begin{theorem}[Infinite-volume commutator gap in the primitive sectors]
     \label{thm:multiblock_quasi_local_commutator_limit_gap}
     \lean{MPSTensor.exists_pos_multiblock_quasiLocalCommutator_limit_gap}
     \leanok
@@ -10150,7 +10150,7 @@ shorter interaction range.
     this same subsequence. Uniqueness of limits gives the asserted identity.
 \end{proof}
 
-\begin{theorem}[Pure sector states and the literal gap from the original blocks]
+\begin{theorem}[Pure sector states and the commutator gap from the original blocks]
     \label{thm:original_blocks_pure_sector_commutator_limit_gap}
     \lean{MPSTensor.%
         exists_pure_primitiveFamily_quasiLocalCommutator_limit_gap_of_wordTupleSpanTop}
@@ -10160,7 +10160,7 @@ shorter interaction range.
     weighted tensor at range $R\geq S+1$, there are trace-preserving primitive
     representatives, with faithful invariant matrices, preserving every
     block ground space at every length. Their completed sector states are
-    pure among all quasi-local states and have a common positive literal
+    pure among all quasi-local states and have a common positive
     infinite-volume commutator gap for the original interaction.
     The original blocks need not be normalized, and the invariant matrices
     and purity are conclusions. The two free margins may tend to infinity
@@ -10427,7 +10427,7 @@ shorter interaction range.
     Reverse the order of summation and use positivity of each term.
 \end{proof}
 
-\begin{lemma}[Transport of a finite-window comparison]
+\begin{lemma}[Transfer of a finite-window comparison]
     \label{lem:open_interaction_suffix_comparison}
     \lean{MPSTensor.openSuffixInteractionHamiltonianES_conj_cyclicActiveBlock,
         MPSTensor.openSuffixInteractionHamiltonianES_comparison_of_local}
@@ -10441,7 +10441,7 @@ shorter interaction range.
     holds after embedding both sides on the suffix $[n-W,n)$.
     Here $p_W(A)$ is the canonical complementary ground-space projection;
     no sign condition on $\kappa$ or positivity condition on $h$ is needed
-    for this transport of order.
+    for this transfer of order.
 \end{lemma}
 \begin{proof}\leanok
     \uses{lem:open_interaction_subwindow_coordinates}
@@ -10643,7 +10643,7 @@ shorter interaction range.
     Evaluation on consecutive intervals is the insertion expectation.
 \end{proof}
 
-\begin{theorem}[A common finite-chain and literal infinite-volume sector gap]
+\begin{theorem}[A common finite-chain and infinite-volume sector gap]
     \label{thm:eventual_kernel_sector_literal_gap}
     \lean{MPSTensor.exists_pos_multiblock_quasiLocalCommutator_limit_gap_of_eventual_kernel}
     \leanok
@@ -10651,7 +10651,7 @@ shorter interaction range.
     Theorem~\ref{thm:eventual_kernel_sector_local_gap}, choose the same
     $\gamma>0$ for the finite-chain bound. Let $\ell,r$ tend to infinity
     along any filter. For every constructed sector state and centered local
-    $X$ on $k>0$ sites, the literal energies
+    $X$ on $k>0$ sites, the finite-volume energies
     \begin{align}
         \omega_\alpha\bigl(X^*[H_{[a-\ell,\,a+k+r)}(h),X]\bigr)
         \notag
@@ -10666,7 +10666,7 @@ shorter interaction range.
     \uses{thm:eventual_kernel_sector_local_gap,thm:eventual_kernel_sector_commutator_positive,thm:quasi_local_commutator_locality}
     Once both margins exceed $R-1$, locality makes the commutator observable
     equal to its fixed patch. Its expectation is real and nonnegative by
-    eventual support. Combine this literal limit with the local bound using
+    eventual support. Combine this finite-volume limit with the local bound using
     the same finite-chain constant.
 \end{proof}
 
@@ -10742,7 +10742,7 @@ shorter interaction range.
         \notag
     \end{align}
     and, for every pure $\eta\in\mathcal F_h$ and every local observable
-    $X$ with $\eta(X)=0$, the literal limit exists and satisfies
+    $X$ with $\eta(X)=0$, the finite-volume limit exists and satisfies
     \begin{align}
         \lim_{M\to-\infty,\,N\to+\infty}
         \eta\bigl(X^*[H_{[M,N]}(h),X]\bigr)
@@ -10757,9 +10757,9 @@ shorter interaction range.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:eventual_kernel_sector_literal_gap,thm:primitive_multiblock_pure_ground_state_classification}
-    The sector gap theorem supplies one constant for both conclusions.
+    The sector gap theorem gives one constant for both conclusions.
     The pure-state classification identifies each pure zero-energy state
-    with a constructed sector, to which the same literal limit and bound apply.
+    with a constructed sector, to which the same finite-volume limit and bound apply.
 \end{proof}
 
 \begin{theorem}[The pure ground-state gap from an original spanning family]
@@ -10795,7 +10795,7 @@ shorter interaction range.
         \ker H_N^{\mathrm{open}}(h)=G_N(T).
         \notag
     \end{align}
-    Neither $R$ nor a simultaneous injectivity length is supplied.
+    Neither $R$ nor a simultaneous injectivity length is given.
     The inequality $N\geq R$ is stronger than the inclusive-interval bound
     $N\geq R+1$ in
     \cite[Theorem~1.1]{Nachtergaele1996Spectral}.
@@ -10874,7 +10874,7 @@ shorter interaction range.
         MPSTensor.quasiLocalBlockingFunctional_symm_groundSpaceProjectionMatrix}
     \leanok
     Let $d,L>0$ and let $T_L\omega=\omega\circ\overline{\mathcal B}_L^{-1}$
-    be functional transport from the blocked chain to the original chain.
+    be functional pullback from the blocked chain to the original chain.
     For every continuous complex-linear functional $\omega$ on the blocked
     algebra,
     \begin{align}
@@ -11076,7 +11076,7 @@ shorter interaction range.
         thm:sector_state_joint_mps_support,
         thm:finite_pure_state_decomposition, thm:primitive_quasi_local_purity}
     Full interval support implies support on every centered interval, so
-    the centered-interval argument supplies the convex coefficients.
+    the centered-interval argument gives the convex coefficients.
     Conversely, every sector state has joint support, and linearity
     preserves this property under convex combinations. A pure state in a
     finite convex combination equals a constituent, and every constituent
@@ -11112,7 +11112,7 @@ shorter interaction range.
         lem:periodic_scale_of_irreducible, def:primitive_mps}
     The compressed sectors have period $m/\gcd(m,p)=1$, hence are
     irreducible, trace preserving, and peripheral primitive.
-    Finite-dimensional Perron--Frobenius theory supplies their primitive
+    Finite-dimensional Perron--Frobenius theory gives their primitive
     fixed-point data, and irreducibility makes each invariant matrix positive
     definite. Retain the compressed tensors themselves, so the exact
     direct-sum support identity is unchanged at every length.
@@ -11145,7 +11145,7 @@ shorter interaction range.
     differ by powers of one nonzero scalar have identical open-boundary
     spaces at every length, even when their bond dimensions are initially
     allowed to differ. The latter assertion uses the dimension equality and
-    invertible gauge supplied by the fundamental theorem
+    invertible gauge given by the fundamental theorem
     \cite[Proposition~2.7, Theorem~2.10]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 \begin{proof}\leanok
@@ -11161,13 +11161,13 @@ shorter interaction range.
         MPSTensor.exists_primitive_sector_representatives}
     \leanok
     Let $(A_j)_{j=0}^{r-1}$ be a finite family of normalized primitive tensors
-    of positive bond dimensions, with faithful fixed-point witnesses
+    of positive bond dimensions, with faithful fixed-point matrices
     $\rho_j$. Let $\mu_j\neq0$. There is an injective selection of original
     indices $s:\{0,\ldots,g-1\}\to\{0,\ldots,r-1\}$ such that the tensors
-    $B_k=A_{s(k)}$ retain the supplied primitive and faithful witnesses,
+    $B_k=A_{s(k)}$ retain the given primitive and faithful fixed points,
     and distinct $B_k$ are not gauge-phase equivalent after any equality
     of their bond dimensions. Every $A_j$ is gauge-phase equivalent to
-    one $B_k$, with the required bond-dimension equality supplied.
+    one $B_k$, with the required bond-dimension equality given.
     For every $N\geq0$,
     \begin{align}
         \mathcal G_{\bigoplus_j\mu_jA_j}(N)
@@ -11187,7 +11187,7 @@ shorter interaction range.
     same local MPS spaces as its selected representative. The local space
     of a weighted direct sum with nonzero weights is the sum of the block
     spaces. Replacing repeated summands by their representatives therefore
-    preserves that sum at every length. The witnesses are inherited because
+    preserves that sum at every length. These fixed points are inherited because
     the representatives are selected original tensors.
 \end{proof}
 
@@ -11216,8 +11216,8 @@ shorter interaction range.
     \uses{thm:periodic_primitive_ground_space,
         thm:primitive_sector_representatives_exact_support}
     Obtain primitive compressed sectors with their exact joint local space.
-    Select one representative of each gauge-phase class. The supplied
-    primitive and faithful witnesses are inherited, and the joint support
+    Select one representative of each gauge-phase class. The given
+    primitive and faithful fixed points are inherited, and the joint support
     is preserved at every length. Since the original period is positive,
     the compressed family is nonempty; the gauge cover therefore contains
     at least one selected representative.
@@ -11300,7 +11300,7 @@ shorter interaction range.
     \lean{MPSTensor.groundSpace_support_blockTensor_iff}
     \leanok
     Let $d,L>0$, let $A$ be a tensor, and let $\varphi$ be a normalized
-    positive state on the original chain. Write $T_L$ for transport of
+    positive state on the original chain. Write $T_L$ for the pullback of
     states from the blocked chain. Then
     \begin{align}
         \bigl(\forall\,a\in\mathbb Z,\ N>0:\ \varphi(P_{G_A([a,a+N-1])})=1\bigr)
@@ -11318,7 +11318,7 @@ shorter interaction range.
     \uses{thm:blocked_aligned_mps_support_iff,
         thm:blocked_ground_projection_support, def:qca_blocking_functional}
     Support on all intervals is equivalent to support on the aligned
-    intervals. The blocked projection identity transports the latter
+    intervals. The blocked projection identity carries the latter
     conditions to all intervals of the blocked chain.
 \end{proof}
 
@@ -11367,8 +11367,8 @@ shorter interaction range.
         thm:primitive_joint_mps_supported_state_classification,
         thm:qca_blocking_state_purity}
     Apply the primitive-family classification to $T_L^{-1}\varphi$.
-    State transport preserves finite real convex combinations and purity,
-    so transport the resulting identities back to the original chain.
+    State pullback preserves finite real convex combinations and purity,
+    so carry the resulting identities back to the original chain.
 \end{proof}
 
 \begin{theorem}[Nonwrapping windows commute with physical blocking]
@@ -11407,7 +11407,7 @@ shorter interaction range.
         W_{NL,bL}\bigl(\mathcal R_{K,L}(h)\bigr).
     \end{align}
     The sum is zero when $N<K$. This is the open interaction convention
-    of \cite[equation~(3.12)]{Nachtergaele1996Spectral} transported under blocking.
+    of \cite[equation~(3.12)]{Nachtergaele1996Spectral} pulled back under blocking.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:blocked_interaction_window, def:finite_open_interaction_matrix}
@@ -11447,7 +11447,7 @@ shorter interaction range.
     primitive tensors $B_j$, with positive bond dimensions and faithful
     invariant matrices $\rho_j$, such that $G_N(A^{[m]})=
         G_N(\bigoplus_j B_j)$ at every length $N\geq0$.
-    Let $\omega_j$ denote the primitive state of $(B_j,\rho_j)$ transported
+    Let $\omega_j$ denote the primitive state of $(B_j,\rho_j)$ pulled back
     to the original lattice by grouping $m$ consecutive sites. For every
     continuous complex-linear functional $\varphi$,
     \begin{align}
@@ -11474,7 +11474,7 @@ shorter interaction range.
     with faithful invariant matrices and exact joint support at every
     length. The eventual kernel identity makes membership in
     $\mathcal F_h$ equivalent to full expectation on every nonempty
-    interval support projection. Transporting this condition to the blocked
+    interval support projection. Carrying this condition to the blocked
     lattice identifies the supported states with the convex hull of the
     primitive sector states. The blocking equivalence preserves purity
     among all states, giving (\ref{eq:ph_periodic_pure_face}).
@@ -11558,7 +11558,7 @@ shorter interaction range.
     The joint boundary-space identity identifies their sum with the
     blocked original space. Selecting one representative from each
     gauge-phase class preserves this sum at every length and inherits
-    the primitive and faithful witnesses.
+    the primitive and faithful fixed points.
 \end{proof}
 
 \begin{theorem}[Existence of a primitive presentation after blocking]
@@ -11657,7 +11657,7 @@ shorter interaction range.
     For each fixed $j$, the starts $iL+j$ are distinct and nonwrapping,
     so their sum is bounded by $H_h(NL)$. Sum this bound over the
     $KL-R+1$ internal offsets. Two-sided positive comparison gives kernel
-    equality, and the configuration isometry transports that kernel.
+    equality, and the configuration isometry carries that kernel.
 \end{proof}
 
 \begin{theorem}[Eventual MPS kernels persist under grouping]
@@ -11673,13 +11673,13 @@ shorter interaction range.
     \end{align}
     After decoding, this is the equality with the isometric image of
     $\mathcal G_N(A^{[L]})$. No normality or primitivity hypothesis is needed.
-    This transports the eventual kernel hypothesis of
+    This carries the eventual kernel hypothesis of
     \cite[Theorem~1.2]{Nachtergaele1996Spectral} through its regrouping convention.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:blocked_interaction_comparison, thm:blocked_local_ground_space_transport}
     Since $L>0$, the original volumes $NL$ tend to infinity. Apply the
-    original eventual kernel equality and the exact isometric transport
+    original eventual kernel equality and the exact isometric image
     $\mathcal G_N(A^{[L]})\mapsto\mathcal G_{NL}(A)$.
     Injectivity of the configuration isometry gives the equality in
     grouped coordinates.
@@ -11786,7 +11786,7 @@ shorter interaction range.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:blocked_interaction_comparison,thm:configuration_reindex_kernel_gap,lem:positive-comparison-kernel-gap}
-    Transport the blocked norm estimate to original coordinates.
+    Carry the blocked norm estimate to original coordinates.
     The two positive order comparisons give coincident kernels and
     transfer the gap with the stated divisor.
 \end{proof}
@@ -11813,7 +11813,7 @@ shorter interaction range.
     The coarse interaction is positive and has eventual joint primitive
     kernel. Apply the primitive-family uniform gap theorem and transfer
     its estimate for $N\geq K$. Take a positive minimum with the finitely
-    many smaller volumes, using their actual kernels.
+    many smaller volumes, using their kernels.
 \end{proof}
 
 \begin{theorem}[A periodic tensor has uniform gaps at period-divisible volumes]
@@ -11848,7 +11848,7 @@ shorter interaction range.
     dimensions with faithful invariant matrices, such that
     $\mathcal G_{T^{[L]}}(N)=\mathcal G_{\bigoplus_kB_k}(N)$ for every
     $N\geq0$. Let $\widetilde\omega_k$ be the corresponding primitive
-    sector states transported from the blocked lattice to the original
+    sector states pulled back from the blocked lattice to the original
     lattice. For every continuous complex linear functional $\varphi$,
     \begin{align}
         \varphi\in\mathcal F_h
@@ -11863,7 +11863,7 @@ shorter interaction range.
     Here $\mathcal F_h$ is the zero-energy face of all normalized positive
     states, and purity is extremality among all states. The original
     family may be empty and no inequivalence is imposed on it.
-    No translation invariance of $\varphi$, supplied invariant matrices,
+    No translation invariance of $\varphi$, given invariant matrices,
     or injectivity bound on $R$ is assumed.
 
     This is the explicit periodic-tensor-family case of
@@ -11879,7 +11879,7 @@ shorter interaction range.
     Blocking by a common period multiple and selecting primitive
     representatives gives the exact boundary-space equality at every
     length. The eventual kernel identity identifies zero local energy
-    with support on every original MPS interval. Transporting support
+    with support on every original MPS interval. Carrying support
     through blocking identifies these states with convex combinations
     of the primitive sector states. Conversely, such a combination is
     a normalized positive state with all interval supports, hence has
@@ -11897,9 +11897,9 @@ shorter interaction range.
     Let $L>0$, and let $B$ be a tensor on the blocked physical alphabet of
     $L$ sites with
     $\sum_i(B^i)^*B^i=I$, and let $\rho\geq0$ be a fixed point of its
-    transfer map with $\operatorname{tr}\rho\neq0$. Transport the
+    transfer map with $\operatorname{tr}\rho\neq0$. Carry the
     quasi-local state of $B$ and $\rho$ to the original chain through the
-    blocking isomorphism. The transported state is invariant under
+    blocking isomorphism. The pulled-back state is invariant under
     translations by integer multiples of $L$. On an aligned interval of
     $NL$ sites it is the insertion expectation of $B$ after reindexing the
     configurations into blocks, and an observable on $k\geq1$ sites placed
@@ -11930,7 +11930,7 @@ shorter interaction range.
 \begin{proof}\leanok
     \uses{thm:periodic_block_family_ground_states,
         thm:blocked_stationary_expectation}
-    Every pure zero-energy state is one of the transported primitive sector
+    Every pure zero-energy state is one of the pulled-back primitive sector
     states of a common blocking by $L$, and each such state is invariant
     under translations by multiples of $L$.
 \end{proof}
@@ -11965,7 +11965,7 @@ shorter interaction range.
     \leanok
     Let $(A_j)$ be a finite family of pairwise gauge-phase inequivalent
     tensors, of bond dimensions $D_j$. If $i\neq j$ and $D_j=D_i$, then
-    the tensor $A_j$, transported by this bond-space identification, is
+    the tensor $A_j$, carried by this bond-space identification, is
     not gauge-phase equivalent to $A_i$. No normalization, positive
     dimension, or nonempty-family assumption is required. This is the
     separation condition of
@@ -11975,7 +11975,7 @@ shorter interaction range.
 \end{theorem}
 \begin{proof}\leanok
     Apply the separation condition to the ordered pair $(j,i)$ and the
-    supplied dimension equality. The two descriptions of the bond-space
+    given dimension equality. The two descriptions of the bond-space
     identification are identical.
 \end{proof}
 
@@ -12019,7 +12019,7 @@ shorter interaction range.
         \mathcal F_{A,B,V}^{N,r}(Y)
         =\Gamma_{NL+r}^A(YV^\dagger).
     \end{align}
-    This is the literal boundary-vector identity from compressed words,
+    This is the direct boundary-vector identity from compressed words,
     including empty prefixes and tails.
 \end{theorem}
 \begin{proof}\leanok
@@ -12055,7 +12055,7 @@ shorter interaction range.
     $\Gamma^A_{NL+r}(X)=\sum_a\mathcal F_{A,B_a,V_a}^{N,r}(XV_a)$.
     Conversely, each residual vector is the original boundary vector
     $\Gamma^A_{NL+r}(YV_a^\dagger)$. The Euclidean identifications
-    transport ranges and their finite sum.
+    image ranges and their finite sum.
 \end{proof}
 
 \begin{theorem}[Periodic residual support decomposition]
@@ -12104,9 +12104,9 @@ shorter interaction range.
     \begin{align}
         \gamma\lVert v\rVert\leq\lVert H_h(NL)v\rVert.
     \end{align}
-    This includes short volumes with their actual kernels. The original
+    This includes short volumes with their kernels. The original
     family may be empty; its sectors need not be inequivalent and no
-    faithful invariant matrices are supplied. This is the explicit
+    faithful invariant matrices are given. This is the explicit
     periodic-family, block-divisible finite-chain consequence of
     \cite[Theorem~1.2, Section~3, equations (3.12)--(3.14)]{Nachtergaele1996Spectral}
     and \cite[Lemma~6]{DeLasCuevas2017Irreducible}.
@@ -12134,8 +12134,8 @@ shorter interaction range.
     and eventual original kernel hypotheses of
     Theorem~\ref{thm:periodic_block_family_aligned_gap_of_dvd}, there exist
     $L>0$ and $\gamma>0$ such that the same norm gap holds at every
-    original length $NL$, on the orthogonal complement of its actual
-    kernel. No common blocking length is supplied, and the original
+    original length $NL$, on the orthogonal complement of its
+    kernel. No common blocking length is given, and the original
     family may be empty. These are the aligned finite-chain lengths
     associated with the regrouping in
     \cite[lines 825--836, Theorem~1.2]{Nachtergaele1996Spectral}.
@@ -12203,7 +12203,7 @@ shorter interaction range.
     Locality identifies their stabilized representatives.
 \end{proof}
 
-\begin{theorem}[Infinite-volume gap transport under site grouping]
+\begin{theorem}[Infinite-volume gap transfer under site grouping]
     \label{thm:blocked_quasi_local_gap_transport}
     \lean{MPSTensor.quasiLocalCommutator_gap_of_blocking,
         MPSTensor.quasiLocalCommutator_limit_gap_of_blocking}
@@ -12217,10 +12217,10 @@ shorter interaction range.
         \leq\varphi\bigl(X^*[H,X]\bigr).
         \notag
     \end{align}
-    The original commutator energy is also the limit of the literal finite-volume
+    The original commutator energy is also the limit of the finite-volume
     commutator energy as both boundary distances tend to infinity, along any
     filter. In particular, a positive grouped gap yields a positive original gap.
-    This is a conditional transport statement; it does not assert the existence
+    This is a conditional transfer statement; it does not assert the existence
     of a gap for an arbitrary interaction. The argument is the site-grouping
     reduction used in \cite[Section~6]{Nachtergaele1996Spectral}.
 \end{theorem}
@@ -12230,7 +12230,7 @@ shorter interaction range.
     Apply the grouped gap and the energy comparison to this representation.
     The variance is preserved by the star-algebra isomorphism, and the local
     energy is independent of its interval representation. Divide by $M>0$.
-    Locality makes the literal finite-volume energy eventually equal to the fixed
+    Locality makes the finite-volume energy eventually equal to the fixed
     representative; positivity makes both sides of the inequality real.
 \end{proof}
 
@@ -12274,9 +12274,9 @@ shorter interaction range.
 
     The primitive-sector theorem gives one positive coarse gap. The classification
     of pure zero-energy states identifies every original pure state with a
-    transported primitive sector state. Gap transport gives the original constant
+    pulled-back primitive sector state. Gap transfer gives the original constant
     $\gamma_B/(KL+1-R)>0$, uniformly over these sectors and all original local
-    observables. Locality identifies the literal finite-volume energy limit.
+    observables. Locality identifies the finite-volume energy limit.
 \end{proof}
 
 \begin{theorem}[Correlated residual overlap]
@@ -12305,7 +12305,7 @@ shorter interaction range.
     For two inequivalent normalized primitive blocked-prefix tensors of
     positive bond dimensions with faithful invariant matrices, their correlated residual ranges become
     uniformly orthogonal as $N\to\infty$. The estimate is uniform in the
-    original tail length $r$; the original tensors supplying the tails need
+    original tail length $r$; the original tensors giveing the tails need
     no normalization assumption.
 \end{theorem}
 \begin{proof}\leanok
@@ -12378,13 +12378,13 @@ shorter interaction range.
         thm:blocked_primitive_supported_state_classification,
         thm:blocked_quasi_local_gap_transport}
     Take $K=R+L$ and group the original Hamiltonian on $KL$ sites.
-    Coverage gives $R+L\leq KL+1$, so its eventual kernel is the supplied
+    Coverage gives $R+L\leq KL+1$, so its eventual kernel is the given
     joint primitive space. Obtain one positive coarse gap for all sectors.
     The eventual original kernel identifies every pure zero-energy state
-    with a transported sector. Positive comparison transfers the coarse
+    with a pulled-back sector. Positive comparison transfers the coarse
     inequality with divisor $KL+1-R>0$. The coarse constant is chosen
     before any state, observable, or exhaustion. Finite-range locality
-    gives the literal limit and positivity gives its reality.
+    gives the finite-volume limit and positivity gives its reality.
 \end{proof}
 
 \begin{theorem}[Original-chain commutator gaps for a finite periodic family]
@@ -12606,8 +12606,8 @@ shorter interaction range.
     Both boundaries belong to $V_n$, hence $A_jY_i=Z_jA_i$.
     The left-canonical identity reconstructs the enlarged boundary as
     $\sum_jA_j^*Z_j$.
-    Under the stated spanning condition, cyclic compression supplies
-    the representatives, and the adjoint-span criterion supplies injectivity.
+    Under the stated spanning condition, cyclic compression gives
+    the representatives, and the adjoint-span criterion gives injectivity.
 \end{proof}
 
 \begin{definition}[Cyclic matrix degrees]
@@ -12652,7 +12652,7 @@ shorter interaction range.
     $P_uA_i=A_iP_{u+1}$, and $\sum_iA_i^*A_i=I$.
     If the words of length $q$ span $W_q$, then the words of
     length $N$ span $W_N$ for every $N\ge q$.
-    This algebraic implication supplies the later lengths in the
+    This algebraic implication gives the later lengths in the
     intersection argument of
     \cite[equations (3.10)--(3.11)]{Nachtergaele1996Spectral};
     the initial spanning equality is assumed here.
@@ -12734,7 +12734,7 @@ shorter interaction range.
         =\{X:\ P_uX=XP_{u+qm}\text{ for every }u\}.
         \notag
     \end{align}
-    This supplies the initial graded spanning step for the intersection
+    This gives the initial graded spanning step for the intersection
     construction in \cite[equations (3.10)--(3.11) and Section~6]
     {Nachtergaele1996Spectral}.
 \end{theorem}
@@ -12746,7 +12746,7 @@ shorter interaction range.
     length-$q$ blocked word span with the original length-$qm$ span.
 \end{proof}
 
-\begin{theorem}[Faithful primitive witness at period one]
+\begin{theorem}[Faithful primitive fixed point at period one]
     \label{thm:period_one_primitive_witness}
     \lean{MPSTensor.exists_isPrimitiveMPS_of_isPeriodic_one}
     \leanok
@@ -12760,7 +12760,7 @@ shorter interaction range.
 \begin{proof}\leanok
     Period one gives a primitive trace-preserving transfer map and
     irreducibility of its Kraus family. The primitive Perron--Frobenius
-    theorem supplies an invariant matrix $\rho$; irreducibility makes it
+    theorem gives an invariant matrix $\rho$; irreducibility makes it
     positive definite.
 \end{proof}
 
@@ -12785,7 +12785,7 @@ shorter interaction range.
     For a family along any filter, assume this factorization eventually
     holds, the product $\|T\|\|H_T\|\|H_L\|\|L\|$ is eventually
     bounded, and $\|R\|\to0$. Then $\|P_TP_L-P_C\|\to0$.
-    The spaces may vary with the index. This implication supplies the
+    The spaces may vary with the index. This implication gives the
     norm comparison in \cite[Lemma commutation (ii)]{Nachtergaele1996Spectral};
     the factorization, inverse bounds, and residual decay are explicit
     hypotheses here.
@@ -12856,7 +12856,7 @@ shorter interaction range.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:correlated_residual_gram_metric}
-    Transport $P_a$ through each word, then use
+    Carry $P_a$ through each word, then use
     $\sum_\tau A^{\tau\dagger}A^\tau=I$. The complement $I-Q_r$ is
     positive, so $\tr(Y^\dagger Q_rY)\leq\|Y\|_{\rm HS}^2$.
     The limiting action follows from the exact pullback metric.
@@ -12957,7 +12957,7 @@ shorter interaction range.
     With the coordinates of Definition~\ref{def:residual_window_coordinates},
     put $(J_2Y)_\tau=V^*A^\tau Y$. Then $TJ_1=C=L_1J_2$.
     $C$ is the residual boundary map at prefix length $K+M$ and tail
-    length $r$, transported by the physical configuration bijection.
+    length $r$, carried by the physical configuration bijection.
     No injectivity, normalization, or intertwining hypothesis is required.
     \uses{def:residual_window_coordinates,def:blocked_residual_boundary_map}
 \end{theorem}
@@ -13057,7 +13057,7 @@ shorter interaction range.
     kernel exactly $G_N(A)$. In particular, there exists a positive interaction
     $h$ of some range $R>0$ with this kernel identity at every $N\ge R$.
     No faithful invariant matrix, cyclic resolution, or short-range intersection
-    is supplied as a hypothesis.
+    is given as a hypothesis.
     This concerns the explicit normalized periodic tensor presentation; it does
     not assert a presentation theorem for arbitrary GVBS states.
     It implements the finite-support interaction construction of
@@ -13420,7 +13420,7 @@ shorter interaction range.
         MPSTensor.openParentHamiltonianES_gap_all_large_of_residue_gaps}
     \leanok
     For fixed $R,W$ and $m>0$, the finitely many canonical open Hamiltonians
-    at lengths $W+r$, $0\le r<m$, have a common positive gap on their actual
+    at lengths $W+r$, $0\le r<m$, have a common positive gap on their
     kernel complements. A gap valid at all lengths
     $Km+Mm+r$ with $K\ge K_0$ and $r<m$ is valid at every
     $N\ge(K_0+M)m$.
@@ -13789,7 +13789,7 @@ shorter interaction range.
         -P_{\sum_j\operatorname{ran}T_j}\right\|.
     \end{align}
     Empty spectator sets and empty sector families are included. These
-    finite-dimensional identities supply the spectator projection transport
+    finite-dimensional identities give the spectator projection conjugation
     used in \cite[Lemma~commutation(i)]{Nachtergaele1996Spectral}.
 \end{theorem}
 \begin{proof}\leanok
@@ -13831,7 +13831,7 @@ shorter interaction range.
     Apply the selection uniformization to the parameter $(K,r)$ and tolerance
     $1/2$. Choose one $M\geq R$ for which all these defects are at most
     $1/2$. Since $m\geq1$, the overlap $Mm$ contains every interaction window.
-    The residue cover criterion with prefix threshold zero supplies a common
+    The residue cover criterion with prefix threshold zero gives a common
     positive gap for every $N\geq Mm$. Take $N_0=Mm$.
 \end{proof}
 
@@ -13906,7 +13906,7 @@ shorter interaction range.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:residual_window_left_fiberwise_coordinates,thm:euclidean_fiberwise_projection,thm:sector_projection_sum_error_decay,thm:inequivalent_block_ground_space_overlap_decay}
-    A unitary permutation transports orthogonal projections and preserves
+    A unitary permutation conjugates orthogonal projections and preserves
     the operator norm. The finite-family projection identity then bounds
     the spectator projection-sum error by the ordinary prefix error.
     Primitive inequivalence makes that prefix error arbitrarily small at
@@ -13997,7 +13997,7 @@ shorter interaction range.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:residual_window_factorizations,thm:blocked_residual_ground_space_resolution}
-    Transport the exact residual-sector ground-space decomposition by $U$.
+    Carry the exact residual-sector ground-space decomposition by $U$.
     A linear map preserves sums of subspaces, and the range of a composite
     is the image of the original range.
 \end{proof}
@@ -14195,7 +14195,7 @@ shorter interaction range.
     Each tail configuration contributes an independent copy of the prefix
     space. The joint span of these finite families is therefore obtained by
     applying the joint prefix-space projection independently on each tail
-    fiber. The isometric virtual resolution supplies the stated prefix
+    fiber. The isometric virtual resolution gives the stated prefix
     presentation by trace cyclicity.
 \end{proof}
 
@@ -14212,12 +14212,12 @@ shorter interaction range.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:residual_window_full_joint_range,def:residual_cover_coordinates}
-    Apply the exact full-window joint-range identity and transport it through
+    Apply the exact full-window joint-range identity and carry it through
     $(K+M)L+r=KL+ML+r$. The cover configuration bijection is precisely the
     full-window bijection followed by this arithmetic identification.
 \end{proof}
 
-\begin{theorem}[Isometric transport of a projection defect]
+\begin{theorem}[Isometric conjugation of a projection defect]
     \label{thm:isometric_projection_defect_transport}
     \lean{Submodule.norm_map_starProjection_comp_sub_eq}
     \leanok
@@ -14249,13 +14249,13 @@ shorter interaction range.
     \end{align}
     All lengths may be zero. This is the same physical coordinate isometry
     used for the right and full windows; no additional tensor hypothesis
-    is imposed. The equality supplies the aligned prefix space in
+    is imposed. The equality gives the aligned prefix space in
     \cite[Lemma~commutation(ii)]{Nachtergaele1996Spectral}.
     \uses{def:residual_cover_coordinates}
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:residual_window_left_original_ground_space}
-    Transport the previous left-window equality along the arithmetic
+    Carry the previous left-window equality along the arithmetic
     identification $(K+M)L=KL+ML$. By its definition, the cover bijection is
     exactly the previous configuration bijection followed by this identification.
 \end{proof}
@@ -14311,7 +14311,7 @@ shorter interaction range.
         thm:residual_window_mixed_gram_decay,
         thm:residual_supported_inverse_uniform_tail,
         thm:supported_gram_projector_norm}
-    The primitive supported-inverse estimates supply the inverse identities
+    The primitive supported-inverse estimates give the inverse identities
     and uniform bounds at lengths $M$ and $K+M$. The ordinary primitive Gram
     inverse is uniformly bounded at length $K+M$. The window maps are uniformly
     bounded by their boundary-map norms. Apply the norm estimate for the
@@ -14369,7 +14369,7 @@ shorter interaction range.
     The spaces are the joint residual window ranges in the triple configuration
     coordinates. This establishes their projection comparison from periodicity
     alone; identifying them with original physical interval spaces is a separate
-    isometric transport. The estimate is the residual-coordinate form of
+    isometric conjugation. The estimate is the residual-coordinate form of
     commutation (ii) in~\cite{Nachtergaele1996Spectral}.
     \uses{def:residual_window_coordinates}
 \end{theorem}
@@ -14442,7 +14442,7 @@ shorter interaction range.
     cover length and a positive gap at every sufficiently large volume.
     The original cyclic intersection gives the exact kernels at the same
     interaction range. Each of the remaining finitely many volumes has a
-    positive finite-dimensional norm gap on its actual kernel complement;
+    positive finite-dimensional norm gap on its kernel complement;
     taking a finite minimum completes the uniform bound.
 \end{proof}
 
@@ -14458,7 +14458,7 @@ shorter interaction range.
         \forall\,N\ge R:\ \ker H_N=\mathcal G_A(N),\qquad
         \forall\,N\in\mathbb N,\ v\perp\ker H_N:\ \delta\|v\|\le\|H_Nv\|.
     \end{align}
-    No local interaction, invariant density, or sector separation is supplied.
+    No local interaction, invariant density, or sector separation is given.
     The scope is the explicit normalized periodic tensor setting of
     \cite[Theorem 1.2, Lemma existenceinteraction, and Section 6]{Nachtergaele1996Spectral}.
 \end{theorem}
@@ -14561,7 +14561,7 @@ shorter interaction range.
     $|\braket{V^{(N)}(A)}{V^{(N)}(B)}|^2
         =\braket{V^{(N)}(A)}{V^{(N)}(A)}\braket{V^{(N)}(B)}{V^{(N)}(B)}$.
     Thus the mixed overlap cannot tend to zero. The periodic overlap
-    dichotomy supplies the gauge relation. Gauge transformations and nonzero
+    dichotomy gives the gauge relation. Gauge transformations and nonzero
     scalar rescaling preserve all open-boundary spaces.
 \end{proof}
 
@@ -14635,7 +14635,7 @@ shorter interaction range.
         =G_{\bigoplus_jB_j}(N).
         \label{eq:faithful_periodic_support_presentation}
     \end{align}
-    This is a consequence for supplied normalized faithful generating data
+    This is a consequence for given normalized faithful generating data
     in \cite[Section~3]{Nachtergaele1996Spectral}. It does not construct
     such data from a general GVBS boundary limit or impose minimality;
     that passage remains separate
@@ -14673,7 +14673,7 @@ shorter interaction range.
     \end{align}
     The trace representation holds for every observable $X$ on $k$ sites.
     No transfer invariance of $\rho$, injectivity, or primitivity is assumed.
-    These finite densities identify the supports for supplied faithful
+    These finite densities identify the supports for given faithful
     generating data as in
     \cite[Section~3 and the overlap proof in Section~4]{Nachtergaele1996Spectral}.
     The construction of faithful minimal data from a general GVBS presentation
@@ -14861,7 +14861,7 @@ shorter interaction range.
     \end{align}
     Thus the same density describes every translated interval of length
     $k$, and its support is exactly the tensor boundary space.
-    The generating data are supplied, as in
+    The generating data are given, as in
     \cite[Section~3 and the overlap proof in Section~4]{Nachtergaele1996Spectral};
     their construction from a general GVBS presentation remains separate
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
@@ -14899,7 +14899,7 @@ shorter interaction range.
     zero-energy state $\varphi$, every observable $X$ supported on a
     positive-length interval $[a,a+k)$ with $\varphi(X)=0$, and every filter
     along which $\ell_n,r_n\to\infty$, put
-    $\Lambda_n=[a-\ell_n,a+k+r_n)$. Then the literal finite-volume limit
+    $\Lambda_n=[a-\ell_n,a+k+r_n)$. Then the finite-volume limit
     exists and satisfies
     \begin{align}
         \lim_n\varphi\!\left(X^*[H_{h,\Lambda_n},X]\right)
@@ -14907,7 +14907,7 @@ shorter interaction range.
         \label{eq:faithful_generators_literal_gap}
     \end{align}
     Neither irreducibility nor periodicity of $A$, nor translation
-    invariance of $\varphi$, is assumed. This is a consequence for supplied
+    invariance of $\varphi$, is assumed. This is a consequence for given
     faithful normalized generating data in the setting of
     \cite[Theorem~1.2 and Sections~3,~6]{Nachtergaele1996Spectral}.
     Constructing such data from an arbitrary GVBS boundary limit remains
@@ -14959,16 +14959,16 @@ shorter interaction range.
     definite fixed points such that the blocked tensor of $A$ and the
     unit-weight direct sum of the $B_j$ have the same boundary spaces at
     every length. The zero-energy states of $h$ are exactly the convex
-    combinations of the states generated by the $B_j$, transported back
+    combinations of the states generated by the $B_j$, pulled back
     through the blocking, and the pure zero-energy states are exactly these
-    transported states \cite[Theorems~1.1--1.2]{Nachtergaele1996Spectral}.
+    pulled-back states \cite[Theorems~1.1--1.2]{Nachtergaele1996Spectral}.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:stationary_state_zero_local_energy,thm:faithful_periodic_ground_space_presentation,thm:periodic_block_family_ground_states}
     The faithful fixed point gives a periodic presentation of the boundary
     spaces; blocking by a common multiple of the periods yields primitive
     sectors with faithful fixed points. The classification of the
-    zero-energy face for primitive sectors, transported through the
+    zero-energy face for primitive sectors, carried through the
     blocking isomorphism of quasi-local algebras, gives both assertions.
 \end{proof}
 
@@ -14988,7 +14988,7 @@ shorter interaction range.
     \begin{align}
         Tu=x,\qquad \|u\|\leq2\Bigl(\sum_iC_i\Bigr)\|x\|.
     \end{align}
-    This is a consequence of the supplied lower Gram bound, of the form
+    This is a consequence of the given lower Gram bound, of the form
     used in the overlap estimate in
     \cite[Section~4]{Nachtergaele1996Spectral}.
 \end{theorem}
@@ -15041,7 +15041,7 @@ shorter interaction range.
         \cap(\mathbb C^d\otimes\mathcal G(n+1))
         =\mathcal G(n+2).
     \end{align}
-    The family may be empty. The primitive assertion concerns the supplied
+    The family may be empty. The primitive assertion concerns the given
     generating tensors, rather than an arbitrary GVBS presentation.
 \end{theorem}
 \begin{proof}\leanok
@@ -15051,7 +15051,7 @@ shorter interaction range.
     Finiteness gives one eventual set on which all individual identities
     hold. Apply the middle-independence criterion on its intersection with
     the eventual independence set. For primitive tensors, overlap decay
-    supplies that independence, and period-one periodicity supplies the
+    gives that independence, and period-one periodicity gives the
     individual intersections.
 \end{proof}
 
@@ -15069,7 +15069,7 @@ shorter interaction range.
     \end{align}
     In particular, the canonical local projection of range $R_0$ is a
     positive parent interaction with this exact kernel at every $N\ge R_0$.
-    No simultaneous word span is supplied in this assertion or used in the
+    No simultaneous word span is given in this assertion or used in the
     family intersection argument.
 \end{theorem}
 \begin{proof}\leanok
@@ -15127,7 +15127,7 @@ shorter interaction range.
     on every finite interval, including length zero.
     All conclusions except $\sum_iB_i^*B_i=I$ hold without the
     normalization of $A$.
-    This is a restriction of supplied stationary generating data to their
+    This is a restriction of given stationary generating data to their
     support, as in \cite{Wolf2012Quantum}, restriction to full-rank fixed
     points, and the normalized generating representation of
     \cite[Section~3]{Nachtergaele1996Spectral}. Constructing generating
@@ -15191,7 +15191,7 @@ shorter interaction range.
         G_A^P(k)\subseteq\ker X.
         \label{eq:stationary_local_support}
     \end{align}
-    If moreover $\sum_iA_i^*A_i=I$, there is a density matrix $\sigma_k$
+    If in addition $\sum_iA_i^*A_i=I$, there is a density matrix $\sigma_k$
     with $\eta_{A,\rho}(X)=\operatorname{tr}(\sigma_kX)$ for every $X$ and
     $\operatorname{ran}\sigma_k=G_A^P(k)$.
     This describes the local support spaces of normalized stationary
@@ -15345,7 +15345,7 @@ shorter interaction range.
     and one constant $\gamma>0$ as follows.
     For every pure normalized zero-energy state $\varphi$ of $h$ and every
     centered local observable $X$ on a positive-length interval beginning
-    at $a$, the literal finite-volume commutator energies converge along
+    at $a$, the finite-volume commutator energies converge along
     every interval exhaustion whose left and right margins diverge:
     \begin{align}
         \lim \varphi\bigl(X^*[H_{[a-\ell,a+k+r)},X]\bigr)=e,
@@ -15380,7 +15380,7 @@ shorter interaction range.
         \qquad(N\geq0,
         \ v\perp\ker H_R^{\mathrm{open}}(N)).
     \end{align}
-    All three estimates are supplied hypotheses of this criterion.
+    All three estimates are given hypotheses of this criterion.
     This is the covering argument of
     \cite[Section~6]{Nachtergaele1996Spectral}.
 \end{theorem}
@@ -15391,7 +15391,7 @@ shorter interaction range.
     Increase that overlap length to lie beyond the aligned-gap threshold
     and the interaction range. The two-interval comparison gives a common
     gap at every sufficiently large original length. A positive finite
-    minimum includes the remaining lengths, with their actual kernels.
+    minimum includes the remaining lengths, with their kernels.
 \end{proof}
 
 \begin{lemma}[Canonical interactions depend only on local support]
@@ -15483,7 +15483,7 @@ shorter interaction range.
     \end{align}
     The physical dimension is derived from the compressed normalization.
     No faithfulness of $\rho$ or primitivity of the generating tensor is
-    required. This concerns supplied stationary generating data in
+    required. This concerns given stationary generating data in
     \cite[Section~3]{Nachtergaele1996Spectral} and its finite support
     identification in Section~4; constructing such data from an arbitrary
     GVBS boundary limit remains separate
@@ -15534,7 +15534,7 @@ shorter interaction range.
     \end{align}
     In particular, the canonical local projection of range $R_0$ defines
     a positive interaction with exact open kernels at every $N\ge R_0$.
-    No inequivalence or independence of the supplied sectors is assumed.
+    No inequivalence or independence of the given sectors is assumed.
     The finite family may be empty. This is the finite periodic-tensor
     presentation of the interaction construction in Section~4 of
     \cite{Nachtergaele1996Spectral}; the passage from general GVBS data to such a
@@ -15545,7 +15545,7 @@ shorter interaction range.
     Select inequivalent periodic representatives without changing any
     finite joint ground space. Their middle ground spaces are eventually
     independent, so the joint-intersection criterion constructs exact
-    canonical kernels. Equality of the local support spaces transports
+    canonical kernels. Equality of the local support spaces carries
     the canonical interaction back to the original weighted family.
 \end{proof}
 
@@ -15563,7 +15563,7 @@ shorter interaction range.
     \end{align}
     The limit holds along every interval exhaustion with both margins
     diverging. The constant precedes the state, observable, filter, and
-    margins. Neither translation invariance nor supplied interaction,
+    margins. Neither translation invariance nor given interaction,
     kernel, separation, or independence data are required.
     The statement concerns the finite periodic-tensor presentation;
     the general GVBS presentation step remains separate.
@@ -15590,7 +15590,7 @@ shorter interaction range.
     In particular, the canonical local projection of range $R_0$ defines
     a positive parent interaction with these exact kernels.
     The tensor need not be irreducible or periodic, and no interaction or
-    kernel identity is supplied. This concerns the normalized generating
+    kernel identity is given. This concerns the normalized generating
     data in \cite[Section~3]{Nachtergaele1996Spectral}; their construction
     from an arbitrary GVBS boundary limit remains separate.
 \end{theorem}
@@ -15618,7 +15618,7 @@ shorter interaction range.
         \varphi\bigl(X^*[H_{h,\Lambda},X]\bigr)
         \geq\gamma\varphi(X^*X).
     \end{align}
-    The literal limit holds along every interval exhaustion with both
+    The finite-volume limit holds along every interval exhaustion with both
     margins diverging. The interaction and constant precede the state,
     observable, filter, and margins. No translation invariance is imposed
     on the competing pure states.
@@ -15629,11 +15629,11 @@ shorter interaction range.
         thm:faithful_generators_quasi_local_gap}
     Choose the canonical interaction given by the preceding theorem.
     Its local projection annihilates the generated state support, so that
-    state has zero energy. Its exact kernels supply the eventual kernel
+    state has zero energy. Its exact kernels give the eventual kernel
     identity in the faithful-generator commutator theorem.
 \end{proof}
 
-\begin{theorem}[Preservation of a primitive stationary witness]
+\begin{theorem}[Preservation of a primitive stationary fixed point]
     \label{thm:primitive_stationary_witness_transport}
     \lean{MPSTensor.IsPrimitiveMPS.blockTensor,
         MPSTensor.IsPrimitiveMPS.reindexPhysical}
@@ -15642,14 +15642,14 @@ shorter interaction range.
     stationary matrix $\rho$. If $\rho$ is positive definite, then blocking by any positive length
     retains primitivity with the same stationary matrix $\rho$.
     A bijective relabelling of the physical letters also preserves the
-    primitive witness with the same $\rho$; this second assertion requires
+    primitive fixed point with the same $\rho$; this second assertion requires
     only the original primitive fixed-point data.
 \end{theorem}
 \begin{proof}\leanok
     Positive blocking preserves trace preservation, irreducibility, and
     peripheral primitivity. The same $\rho$ is stationary for every
     positive power of the transfer map. The complementary fixed-point
-    spectral gap therefore holds at this supplied stationary matrix.
+    spectral gap therefore holds at this given stationary matrix.
     Under a bijective physical relabelling, both the normalization sum
     and the transfer map are unchanged.
 \end{proof}
@@ -15692,9 +15692,9 @@ shorter interaction range.
         E_B(\sigma)             & =\sigma,                      &
         \operatorname{Tr}\sigma & =\operatorname{Tr}\rho.\notag
     \end{align}
-    The physical dimension is positive, and the actual continuous
+    The physical dimension is positive, and the continuous
     functionals agree: $\omega_{A,\rho}=\omega_{B,\sigma}$.
-    No purity or minimality is assumed. This is a consequence for supplied
+    No purity or minimality is assumed. This is a consequence for given
     stationary generating data in \cite[Section~3]{Nachtergaele1996Spectral}.
     Their construction from arbitrary GVBS boundary limits remains separate
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
@@ -15738,7 +15738,7 @@ shorter interaction range.
         \|P_N-P_{\mathrm L}P_{\mathrm R}\|\longrightarrow0.
     \end{align}
     No periodicity assumption on $A$ is imposed. All sector-resolution
-    and tail-Gram hypotheses are supplied explicitly.
+    and tail-Gram hypotheses are given explicitly.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:residual_window_joint_projection_decay,
@@ -15767,13 +15767,13 @@ shorter interaction range.
         \delta\|v\|\le\|H_{R,N}^{\mathrm{open}}(A)v\|.
     \end{align}
     Exact kernels and the aligned gap remain explicit assumptions of
-    this criterion. The conclusion uses the actual kernel also at
+    this criterion. The conclusion uses the kernel also at
     volumes shorter than the interaction range.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:physical_residual_cover_limit_primitive_resolution,
         thm:aligned_residue_cover_gap_limit}
-    The first theorem supplies the residual-cover limit uniformly along
+    The first theorem gives the residual-cover limit uniformly along
     all prefix and tail selections. The aligned-cover criterion gives
     an eventual original-length gap. A positive minimum over the
     remaining finite set of volumes gives one bound at every length.
@@ -15795,7 +15795,7 @@ shorter interaction range.
 \begin{proof}\leanok
     The unflattened coordinate inclusions resolve the identity of the dependent
     direct sum and intertwine every block diagonal matrix with its selected
-    block. Transport these identities through the common coordinate equivalence.
+    block. Carry these identities through the common coordinate equivalence.
 \end{proof}
 
 \begin{theorem}[Constructed parent interaction for stationary MPS states]
@@ -15832,7 +15832,7 @@ shorter interaction range.
     states is required. The finite kernels are $G_B(N)$; equality with
     $G_A(N)$ is not asserted.
 
-    This is a consequence for supplied stationary generating data in
+    This is a consequence for given stationary generating data in
     \cite[Section~3]{Nachtergaele1996Spectral}. Their construction from
     arbitrary GVBS boundary limits remains separate, as documented in
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
@@ -15864,7 +15864,7 @@ shorter interaction range.
     Replace the label $j$ by $-j$ and apply the forward cyclic word identity.
 \end{proof}
 
-\begin{theorem}[Literal cyclic sectors at a common blocking length]
+\begin{theorem}[Cyclic sectors at a common blocking length]
     \label{thm:powered_cyclic_primitive_resolution}
     \lean{MPSTensor.IsPeriodic.exists_powered_cyclic_primitive_sector_resolution}
     \leanok
@@ -15881,7 +15881,7 @@ shorter interaction range.
         V_j^*A^{[L]}_i=(B_j)_iV_j^*.
     \end{align}
     The tensors $B_j$ are pairwise inequivalent up to similarity and phase.
-    For every tail length $r$, their literal support projections satisfy
+    For every tail length $r$, their support projections satisfy
     $\sum_{|\tau|=r}A_\tau^*V_jV_j^*A_\tau=P_{j-r}$.
 \end{theorem}
 \begin{proof}\leanok
@@ -15911,7 +15911,7 @@ shorter interaction range.
     each local term, and linearity identifies their sums.
 \end{proof}
 
-\begin{theorem}[Literal primitive resolution of a periodic family]
+\begin{theorem}[Primitive resolution of a periodic family]
     \label{thm:periodic_family_literal_primitive_resolution}
     \lean{MPSTensor.exists_commonBlock_primitive_sector_resolution_of_isPeriodic}
     \leanok
@@ -15936,7 +15936,7 @@ shorter interaction range.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:powered_cyclic_primitive_resolution,thm:distinct_periodic_corner_separation,thm:block_inclusion_coordinate_resolution}
-    Choose the literal powered cyclic resolution of each original tensor and
+    Choose the powered cyclic resolution of each original tensor and
     compose its isometries with the coordinate inclusions of the direct sum.
     The inclusions resolve the identity and preserve both intertwiners.
     Within one original tensor, separation is part of the powered resolution;
@@ -15954,7 +15954,7 @@ shorter interaction range.
     Hamiltonian has kernel $\mathcal G_A(N)$ for every $N\ge R$.
     Then the range-$R$ canonical orthogonal-complement projection is a
     positive interaction $h$, and the open interaction generated by $h$
-    has those same exact kernels. The interaction is literally the
+    has those same exact kernels. The interaction is the
     configuration-basis matrix of that canonical projection.
 \end{lemma}
 \begin{proof}\leanok
@@ -15970,7 +15970,7 @@ shorter interaction range.
     \leanok
     Let $A$ be a tensor. Suppose that, for every sufficiently large range $W$,
     its canonical open Hamiltonians have kernels $\mathcal G_A(N)$ for $N\ge W$
-    and a positive uniform norm gap above their actual kernels at all volumes.
+    and a positive uniform norm gap above their kernels at all volumes.
     Let $h\ge0$ have positive range $R$, and suppose
     $\ker H_h(N)=\mathcal G_A(N)$ for all sufficiently large $N$.
     Then there exists $\gamma>0$ such that, for every $N\ge0$ and
@@ -15989,10 +15989,10 @@ shorter interaction range.
     $W-R+1$, so the canonical gap $\delta_W$ gives the positive bound
     $\kappa\delta_W/(W-R+1)$ on all $N\ge W$.
     Take its minimum with the finitely many positive gaps at $N<W$, each
-    measured above the actual kernel.
+    measured above the kernel.
 \end{proof}
 
-\begin{definition}[Physical matrix slices of a supplied map]
+\begin{definition}[Physical matrix slices of a given map]
     \label{def:supplied_physical_isometry_tensor}
     \lean{MPSTensor.tensorOfPhysicalIsometry}
     \leanok
@@ -16002,7 +16002,7 @@ shorter interaction range.
     \begin{align}
         (A_i)_{ab} & =V_{(i,a),b}.
     \end{align}
-    This is the coordinate convention for the supplied representation in
+    This is the coordinate convention for the given representation in
     \cite[equation~(3.6)]{Nachtergaele1996Spectral}.
 \end{definition}
 
@@ -16020,7 +16020,7 @@ shorter interaction range.
         \quad(X\in M_d(\mathbb C),\ B\in M_D(\mathbb C)).
     \end{align}
     Thus an isometry gives trace-preserving normalized tensor matrices.
-    The insertion identity holds for any supplied $V$, without an isometry
+    The insertion identity holds for any given $V$, without an isometry
     assumption. No dimension, stationarity, or faithfulness assumption is
     needed. This identifies the one-site coordinates of
     \cite[equation~(3.6)]{Nachtergaele1996Spectral}.
@@ -16049,7 +16049,7 @@ shorter interaction range.
          & =\operatorname{Tr}\bigl(B E_X(\rho)\bigr).
     \end{align}
     The matrices $X,B,\rho$ are arbitrary. These identities neither
-    construct a supplied isometry from arbitrary GVBS data nor identify
+    construct a given isometry from arbitrary GVBS data nor identify
     multi-site expectations with a particular ordering of source sites.
 \end{theorem}
 \begin{proof}\leanok
@@ -16076,7 +16076,7 @@ shorter interaction range.
         \forall\,N\geq0,\ v\perp\ker H_{R,N}:\ \delta_R\|v\|\leq\|H_{R,N}v\|.
     \end{align}
     The constant is independent of the original chain length, including its
-    residue modulo every blocking length. This is the supplied generating-data
+    residue modulo every blocking length. This is the given generating-data
     case of \cite{Nachtergaele1996Spectral}, Theorems~1.1--1.2.
 \end{theorem}
 \begin{proof}\leanok
@@ -16085,7 +16085,7 @@ shorter interaction range.
     with equality of the boundary spaces at every length. The uniform family
     gap gives a common range threshold. Equality of the local support spaces
     identifies the canonical interactions and all their open Hamiltonians.
-    Transport the exact kernels and the norm gap through these identities.
+    Carry the exact kernels and the norm gap through these identities.
 \end{proof}
 
 \begin{theorem}[One faithful parent interaction with both gaps]
@@ -16109,7 +16109,7 @@ shorter interaction range.
     The limit holds along every interval exhaustion for which both margins
     around the support of $X$ diverge. The choices of $R,h,\delta,\gamma$
     precede the state, observable, and exhaustion. No purity of the generated
-    stationary state is assumed. This is the supplied generating-data case of
+    stationary state is assumed. This is the given generating-data case of
     \cite{Nachtergaele1996Spectral}, Theorems~1.1--1.2 and Section~6.
 \end{theorem}
 \begin{proof}\leanok
@@ -16117,7 +16117,7 @@ shorter interaction range.
     Choose the canonical interaction at the uniform threshold. The first theorem
     gives its exact kernels and finite-volume gap. The generated state has zero
     energy for this canonical interaction. Its eventual exact kernel identity
-    also gives the common literal commutator gap in every pure zero-energy state.
+    also gives the common commutator gap in every pure zero-energy state.
 \end{proof}
 
 \begin{theorem}[Uniform original-length open gaps for periodic families]
@@ -16137,8 +16137,8 @@ shorter interaction range.
         \delta_R\|v\|\le\|H_{R,N}^{\mathrm{open}}(T)v\|.
     \end{align}
     The finite family may be empty. No inequivalence, invariant matrix,
-    primitive presentation, interaction, or kernel identity is supplied.
-    The norm bound uses the actual kernel also when $N<R$.
+    primitive presentation, interaction, or kernel identity is given.
+    The norm bound uses the kernel also when $N<R$.
     This is the finite periodic-tensor presentation of the gap theorem;
     the passage from general GVBS data to such a presentation remains
     separate.
@@ -16152,11 +16152,11 @@ shorter interaction range.
         lem:canonical_interaction_support_transport}
     Select inequivalent representatives without changing any finite
     ground space. If the selected family is nonempty, a common period
-    multiple gives a literal primitive isometric resolution and exact
+    multiple gives a primitive isometric resolution and exact
     orthogonal tail Gram projections. The aligned finite gap and the
     residual-cover limit extend the gap to every original length.
     For an empty selected family, the aligned theorem applies with
-    blocking length one. Equality of local supports transports the
+    blocking length one. Equality of local supports carries the
     canonical gap to the original weighted family.
 \end{proof}
 
@@ -16167,7 +16167,7 @@ shorter interaction range.
     Under the preceding hypotheses, one can choose $R>0$ and the
     canonical positive interaction $h$ of range $R$ so that its open
     kernels are $\mathcal G_T(N)$ for every $N\ge R$.
-    There exists $\delta>0$ giving a norm gap above the actual open
+    There exists $\delta>0$ giving a norm gap above the open
     kernel at every original volume, including $N<R$.
     For the same interaction there exists $\gamma>0$ such that every
     pure normalized zero-energy state $\varphi$ and every centered
@@ -16188,7 +16188,7 @@ shorter interaction range.
     Choose any range at the canonical threshold and use its canonical
     local projection matrix. The all-length canonical norm gap transfers
     to the matrix interaction sum, including short volumes. The exact
-    kernels supply the eventual-kernel hypothesis of the original-chain
+    kernels give the eventual-kernel hypothesis of the original-chain
     periodic-family commutator theorem.
 \end{proof}
 
@@ -16236,7 +16236,7 @@ shorter interaction range.
     states is required. The finite kernels are $G_B(N)$; equality with
     $G_A(N)$ is not asserted.
 
-    This is a consequence for supplied stationary generating data in
+    This is a consequence for given stationary generating data in
     \cite[Section~3]{Nachtergaele1996Spectral}. Their construction from
     arbitrary GVBS boundary limits remains separate, as documented in
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
@@ -16252,7 +16252,7 @@ shorter interaction range.
     its uniform finite-volume gap, and its common commutator gap are retained.
 \end{proof}
 
-\begin{theorem}[Parent gaps from a supplied physical isometry]
+\begin{theorem}[Parent gaps from a given physical isometry]
     \label{thm:supplied_isometry_parent_gap}
     \lean{MPSTensor.exists_stationary_density_tensorOfPhysicalIsometry,
         MPSTensor.exists_positive_parent_finite_and_quasiLocal_gap_of_physical_isometry}
@@ -16269,7 +16269,7 @@ shorter interaction range.
     every pure zero-energy state, for every centered observable on an
     interval of positive length and every interval exhaustion whose left
     and right margins both diverge \cite[equation~(3.6), Theorems~1.1--1.2,
-        and Section~6]{Nachtergaele1996Spectral}. The isometry is supplied; its
+        and Section~6]{Nachtergaele1996Spectral}. The isometry is given; its
     construction from a general presentation is not asserted
     \cite{gap:nachtergaele96_infinite_volume_ground_projection}.
 \end{theorem}
@@ -16278,7 +16278,7 @@ shorter interaction range.
     The isometry condition is the trace-preserving normalization, so the
     transfer channel has a fixed density matrix. Compressing to its support
     gives faithful generators of the same state, and the stationary
-    faithful-generator theorem supplies the interaction and both gaps.
+    faithful-generator theorem gives the interaction and both gaps.
 \end{proof}
 
 \begin{theorem}[Finite gaps for a given faithful parent interaction]
@@ -16294,7 +16294,7 @@ shorter interaction range.
     \end{align}
     The local kernel $\ker h$ need not equal $G_A(R)$.
     This is the finite-volume conclusion of \cite{Nachtergaele1996Spectral},
-    Theorem~1.2, in the supplied faithful generating-data setting.
+    Theorem~1.2, in the given faithful generating-data setting.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:faithful_generators_uniform_open_gap,thm:canonical_gap_to_eventual_kernel_interaction}
@@ -16304,7 +16304,7 @@ shorter interaction range.
     Summing these windows counts each original term at most $W-R+1$ times.
     This transfers the canonical gap to all sufficiently long chains. The
     finitely many remaining volumes are included by a positive finite minimum
-    above their actual kernels.
+    above their kernels.
 \end{proof}
 
 \begin{theorem}[Both gaps for the same given faithful parent interaction]
@@ -16313,12 +16313,12 @@ shorter interaction range.
     \leanok
     Under the preceding hypotheses, the same given interaction $h$ has a
     uniform finite-volume gap at every original chain length and one common
-    literal infinite-volume commutator gap in every pure zero-energy state.
+    infinite-volume commutator gap in every pure zero-energy state.
     The infinite-volume limit holds along every interval exhaustion with both
     margins around the local observable diverging. Both positive constants
     precede the state, observable, and exhaustion.
     This is the given-interaction conclusion of \cite{Nachtergaele1996Spectral},
-    Theorem~1.2, in the supplied faithful generating-data setting.
+    Theorem~1.2, in the given faithful generating-data setting.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:faithful_generators_given_interaction_uniform_gap,thm:faithful_generators_quasi_local_gap}
@@ -16344,7 +16344,7 @@ shorter interaction range.
     \label{thm:source_ordered_heisenberg_trace_reversal}
     \lean{MPSTensor.sourceOrderedHeisenberg_trace_eq_reversedProduct_transfer}
     \leanok
-    Let $V:\mathbb C^D\to\mathbb C^d\otimes\mathbb C^D$ be a supplied
+    Let $V:\mathbb C^D\to\mathbb C^d\otimes\mathbb C^D$ be a given
     map, let $(A_i)_{ab}=V_{(i,a),b}$, and set
     $F_X(B)=V^*(X\otimes B)V$. For every matrix $\rho$ and every finite
     list $(X_1,\ldots,X_n)$,
@@ -16357,7 +16357,7 @@ shorter interaction range.
     The equality includes $n=0$. It holds in particular for an isometry,
     whose slices satisfy $\sum_iA_i^*A_i=I$; neither normalization,
     positivity, nor stationarity is needed for the trace identity itself.
-    This is the explicit order relation for the supplied representation in
+    This is the explicit order relation for the given representation in
     \cite[equations~(3.5)--(3.6)]{Nachtergaele1996Spectral}, and makes no
     assertion that arbitrary GVBS boundary data have this representation.
 \end{theorem}
@@ -16381,7 +16381,7 @@ shorter interaction range.
     \leanok
     Let $d\ge1$, let $(A_j)$ be a finite family of normalized periodic
     tensors, let $\mu_j\ne0$, and write $T=\bigoplus_j\mu_jA_j$.
-    Let $h\ge0$ be a supplied interaction of range $R>0$ whose open
+    Let $h\ge0$ be a given interaction of range $R>0$ whose open
     Hamiltonians satisfy $\ker H_N(h)=\mathcal G_T(N)$ for every
     sufficiently large $N$.
     Then there exists $\delta>0$ such that every original volume $N$
@@ -16389,9 +16389,9 @@ shorter interaction range.
     \begin{align}
         \delta\|v\| & \le\|H_N(h)v\|.
     \end{align}
-    The actual kernel is used also on short intervals. No local-kernel
+    The kernel is used also on short intervals. No local-kernel
     identity at range $R$, lower bound on $R$ beyond positivity, sector
-    separation, stationary matrix, or finite gap is supplied.
+    separation, stationary matrix, or finite gap is given.
     The finite family may be empty. The statement concerns finite
     periodic-tensor presentations; the general GVBS presentation step
     remains separate. This is the given-interaction conclusion of
@@ -16402,18 +16402,18 @@ shorter interaction range.
         thm:canonical_gap_to_eventual_kernel_interaction}
     The canonical interactions have exact kernels and uniform gaps at
     every sufficiently large range. Choose one long interval on which
-    both the canonical and supplied interaction kernels equal the MPS
+    both the canonical and given interaction kernels equal the MPS
     space. Finite-dimensional positivity bounds the excitation projection
-    below the supplied Hamiltonian. The window comparison transfers the
+    below the given Hamiltonian. The window comparison transfers the
     canonical gap, and a positive minimum includes the remaining short
-    volumes above their actual kernels.
+    volumes above their kernels.
 \end{proof}
 
-\begin{theorem}[Finite and infinite gaps for a supplied periodic-family interaction]
+\begin{theorem}[Finite and infinite gaps for a given periodic-family interaction]
     \label{thm:periodic_family_given_interaction_finite_quasi_local_gap}
     \lean{MPSTensor.exists_finite_quasiLocal_gap_of_periodic_family_of_eventual_kernel}
     \leanok
-    Under the preceding hypotheses, the same supplied interaction $h$
+    Under the preceding hypotheses, the same given interaction $h$
     has an all-length finite norm gap with a constant $\delta>0$ and
     a constant $\gamma>0$ such that every pure normalized zero-energy
     state $\varphi$ and every centered local observable $X$ on a
@@ -16432,5 +16432,5 @@ shorter interaction range.
         thm:periodic_block_family_quasi_local_gap}
     Combine the given-interaction finite gap with the original-chain
     periodic-family commutator theorem, applied to exactly the same
-    supplied interaction and eventual kernel identity.
+    given interaction and eventual kernel identity.
 \end{proof}

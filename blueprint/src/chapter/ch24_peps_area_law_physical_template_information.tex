@@ -10,6 +10,7 @@ integration, and the existing cut and compact-volume packaging is unchanged.
 \begin{theorem}[Physical original-template information]
     \label{thm:physical-template-information}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_template_final_mutualInformation}
+    \leanok
     Fix $q,R,D_0\in\mathbb N$ and $J,\Delta,C_{\rm tpl}\in\mathbb R$ with
     \[
         q\geq1,\qquad J\geq0,\qquad\Delta>0,\qquad
@@ -38,6 +39,9 @@ integration, and the existing cut and compact-volume packaging is unchanged.
 \end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{thm:arealaw-physical-box-fixed-exponent,
+        thm:template-final-information}
     The physical safe-box theorem supplies $C_{\rm box}>0$, depending only
     on $q,R,J,\Delta$, before every integer $D_0>2R+10$ and every
     integer $r\geq1$, with

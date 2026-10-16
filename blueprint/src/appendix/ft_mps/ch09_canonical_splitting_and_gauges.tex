@@ -54,7 +54,7 @@ Similarity invariance and strict dimension decrease justify the induction used i
         V^{(N)}\!\left(\bigoplus_{k=1}^r B_k\right)_\sigma.
         \label{eq:canonical_nonzero_decomp}
     \end{align}
-    Moreover, $\sum_{k=1}^rD_k\le D$.
+    In addition, $\sum_{k=1}^rD_k\le D$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -109,7 +109,7 @@ Theorems~\ref{thm:projector_closure_irreducible_corners} and
     \leanok
     \uses{thm:invariant_projector_closure_commutes}
     Apply Theorem~\ref{thm:invariant_projector_closure_commutes} to the
-    projection supplied by Definition~\ref{def:has_inv_proj}.
+    projection given by Definition~\ref{def:has_inv_proj}.
 \end{proof}
 
 \begin{lemma}[Support isometry of an orthogonal projection]
@@ -192,7 +192,7 @@ companion quantum-channel volume~\cite[``Rectangular Gram equality gives a unita
          & =V\E_B(X)V^\dagger.
         \label{eq:canonical_corner_transfer}
     \end{align}
-    If moreover $V^\dagger V=\Id$, then every eigenvalue of $\E_B$ is an
+    If also $V^\dagger V=\Id$, then every eigenvalue of $\E_B$ is an
     eigenvalue of $\E_A$.
 \end{lemma}
 
@@ -387,7 +387,7 @@ gauge transformations of irreducible blocks.
     \leanok
 
     The support projection $\pi$ of a positive semidefinite matrix $\rho$
-    factors as $\pi=\rho W$ for a spectral pseudo-inverse $W$, witnessing
+    factors as $\pi=\rho W$ for a spectral pseudo-inverse $W$, showing
     that the range of $\pi$ is the range of $\rho$. For a rectangular
     matrix $Y$, the support projection $\pi$ of $YY^\dagger$ fixes $Y$,
     $\pi Y=Y$; and whenever $AY=YG$ for some matrix $G$---that is, $A$
@@ -439,7 +439,7 @@ gauge transformations of irreducible blocks.
     nontrivial invariant orthogonal projection of $B$ by
     Lemma~\ref{lem:support_proj_range_factorization}: it is nonzero
     because $Y\ne0$, and it is not the identity because any nonzero
-    vector in the kernel of $P$ transports through $(X^\dagger)^{-1}$ to
+    vector in the kernel of $P$ maps through $(X^\dagger)^{-1}$ to
     the kernel of $YY^\dagger$. This contradicts irreducibility of $B$.
 \end{proof}
 
@@ -469,7 +469,7 @@ gauge transformations of irreducible blocks.
     a positive definite one.
 \end{proof}
 
-\begin{lemma}[Eigenvalue transport to the unital gauge]
+\begin{lemma}[Eigenvalue transfer to the unital gauge]
     \label{lem:eigenvalue_transport_unital_gauge}
     \lean{MPSTensor.hasEigenvalue_transferMap_spectralUnitalGauge}
     \leanok

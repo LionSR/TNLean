@@ -2,7 +2,7 @@
 \label{sec:sector_bnt_full_basis_global_gauge}
 
 Let $P$ and $Q$ be BNT canonical forms. Their basis sectors are normalized,
-left-canonical, and aperiodic, and their raw copy weights satisfy the global
+left-canonical, and aperiodic, and their copy weights satisfy the global
 normalization of Definition~\ref{def:sector_bnt_cf}.
 
 The proportional theorem below allows nonzero projective proportionality for
@@ -238,7 +238,7 @@ special case.
 
 For equal MPV families, the sector phases occur twice: in the matched tensor
 relation and with the inverse power in the matched copy weights. They therefore
-cancel before the block gauges are assembled.
+cancel before the block gauges are combined.
 
 \begin{definition}[Flattened block-diagonal gauge]%
     \label{def:global_gauge_of_blocks}
@@ -248,7 +248,7 @@ cancel before the block gauges are assembled.
     Given per-block gauges $X_k \in \GL_{D_k}(\C)$, form the block-diagonal
     element $\bigoplus_k X_k$ and then reindex the dependent block-coordinate
     space with the standard bond index
-    $\{0,\ldots,\sum_k D_k-1\}$ of the assembled tensor. The result is an
+    $\{0,\ldots,\sum_k D_k-1\}$ of the combined tensor. The result is an
     element of $\GL_{\sum_k D_k}(\C)$.
 \end{definition}
 
@@ -280,7 +280,7 @@ cancel before the block gauges are assembled.
     \end{align}
     This is the direct-sum gauge construction of
     \cite[Appendix MPV proof, lines~1189--1192]{Cirac2016MPDO_arXiv}, separated from
-    the coefficient-comparison step that supplies the weight identities.
+    the coefficient-comparison step that gives the weight identities.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -298,7 +298,7 @@ cancel before the block gauges are assembled.
     $X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k)$.
 \end{proof}
 
-\begin{lemma}[Equal-MPV matched copy-weight witnesses]%
+\begin{lemma}[Equal-MPV matched copy-weight data]%
     \label{lem:sector_bnt_equal_matched_copy_weight_witnesses}
     \lean{MPSTensor.ft_sector_bnt_equal_matched_copy_weight_witnesses}
     \leanok
@@ -358,7 +358,7 @@ cancel before the block gauges are assembled.
          & = \zeta_k^{-1} \mu_{\beta(k),\tau_k(q)}.
         \notag
     \end{align}
-    Moreover, if $X=\bigoplus_k (\mathbf{1}_{r_k}\otimes X_k)$ is the flattened
+    If $X=\bigoplus_k (\mathbf{1}_{r_k}\otimes X_k)$ is the flattened
     block-diagonal gauge, then, for every physical index~$i$, the flattened
     $Q$-coordinates satisfy
     \begin{align}
@@ -381,7 +381,7 @@ cancel before the block gauges are assembled.
     $X=\bigoplus_k(\mathbf{1}_{r_k}\otimes X_k)$.
 \end{proof}
 
-\begin{theorem}[Literal equal-MPV gauge after sector-coordinate permutation]%
+\begin{theorem}[Equal-MPV gauge after sector-coordinate permutation]%
     \label{thm:sector_bnt_equal_mps_gaugeEquiv_literal}
     \lean{MPSTensor.ft_sector_bnt_equal_mps_gaugeEquiv_literal}
     \leanok
@@ -414,7 +414,7 @@ cancel before the block gauges are assembled.
     bijection between basis blocks of $P$ and $Q$. The sector-coordinate
     permutation $\rho$, induced by this bijection, the copy permutations, and
     the bond-dimension equalities, identifies the reindexed $P$-side direct sum
-    with the total tensor $P_{\mathrm{tot}}$, transported along the total
+    with the total tensor $P_{\mathrm{tot}}$, carried along the total
     bond-dimension equality. Composing the permutation gauge for $\rho$ with
     the sector-permuted gauge gives the single matrix $Y$ of
     (\ref{eq:ft_literal_gauge_Y}).

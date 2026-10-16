@@ -11,6 +11,7 @@ at the final scanner exponents.
 \begin{theorem}[Uniform decay of the rounded principal density]
     \label{thm:arealaw-source-density-scale}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.eventually_principalDensity_le_rpow,TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_principalDensity_le_rpow}
+    \leanok
     Fix scanner exponents satisfying
     $0<\ell<1$, $0<\kappa<\mu<1-\ell$, $\nu>0$,
     $0<e<1$ and $\kappa\leq e$.
@@ -41,6 +42,9 @@ at the final scanner exponents.
 \end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{lem:al_scanner_scale_facts,
+        thm:al_moment_band_power}
     The rounded scale estimates give fixed constants $C_m,C_K\geq1$
     such that, for all sufficiently large $n$,
     \begin{align}
@@ -65,6 +69,7 @@ at the final scanner exponents.
 \begin{theorem}[Exact final density margins]
     \label{thm:arealaw-source-density-margins}
     \lean{TNLean.PEPS.AreaLaw.Scan.final_principalDensity_margins}
+    \leanok
     For the source's final parameters
     $e=2/1000000$, $\mu=1/4$, $\nu=1/1000$,
     $\ell=1/100000$ and $\omega=1/20000$, the two gaps at $r=\nu$ are
@@ -77,12 +82,14 @@ at the final scanner exponents.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     Substitute the displayed rational values and simplify.
 \end{proof}
 
 \begin{theorem}[Final rounded principal density]
     \label{thm:arealaw-source-density-final}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_final_principalDensity_le_rpow}
+    \leanok
     Fix $C\geq0$ and $C_\ell\in\mathbb R$. At the final scanner
     parameters there is an integer threshold $N\geq2$ such that,
     for every $n\geq N$ and every $1\leq W\leq n^{1/20000}$,
@@ -98,6 +105,7 @@ at the final scanner exponents.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:arealaw-source-density-scale}
     Exact rational arithmetic verifies (\ref{eq:density_scale_margins})
     with $r=\nu$, as quantified in (\ref{eq:density_scale_final_gaps}).

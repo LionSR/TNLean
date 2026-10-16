@@ -18,6 +18,7 @@ construct the preceding safe-box estimate.
 \begin{theorem}[Literal rounded scales and scalar losses]
     \label{thm:arealaw-final-sharp-scales}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.eventually_bandCount_le_rpow,TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_scale_bounds,TNLean.PEPS.AreaLaw.Scan.finalSharp_neg_log_mass_le,TNLean.PEPS.AreaLaw.Scan.finalSharp_binEntropy_le,TNLean.PEPS.AreaLaw.Scan.finalSharp_binary_cost_le}
+    \leanok
     Retain the actual scales
     \begin{align}
         L    & =\lfloor n^{1-\ell}\rfloor,             &
@@ -49,6 +50,7 @@ construct the preceding safe-box estimate.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     The existing lower bound for the rounded band count gives the
     first inequality in (\ref{eq:final_scalar_a}). For the second,
     $n^\mu/2\leq m$ and $8Km\leq L\leq n^{1-\ell}$ give
@@ -61,6 +63,7 @@ construct the preceding safe-box estimate.
 \begin{definition}[Complete post-replica scalar error]
     \label{def:arealaw-final-sharp-error}
     \lean{TNLean.PEPS.AreaLaw.Scan.finalSharpError,TNLean.PEPS.AreaLaw.Scan.finalSharpPowerEnvelope}
+    \leanok
     Set $D=\lceil n^\kappa\rceil$, $w=n^{3/5}$,
     $c=w-\log z$, and
     \begin{align}
@@ -84,6 +87,7 @@ construct the preceding safe-box estimate.
 \begin{theorem}[Pointwise source envelope]
     \label{thm:arealaw-final-sharp-envelope}
     \lean{TNLean.PEPS.AreaLaw.Scan.finalSharp_source_entropy_bounds,TNLean.PEPS.AreaLaw.Scan.finalSharpError_le_powerEnvelope}
+    \leanok
     Fix nonnegative $C_e,C_0,C_B,C_a,C_{\rm tr},C_{\dim}$
     and $\log q$. In addition to (\ref{eq:final_scalar_a}) and
     the selected-mass bounds, assume
@@ -111,6 +115,7 @@ construct the preceding safe-box estimate.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:arealaw-final-sharp-scales,def:arealaw-final-sharp-error}
     The source entropy inputs give
     $S_t\leq(C_e+1)n^{1+e_*}$ and
@@ -127,6 +132,7 @@ construct the preceding safe-box estimate.
 \begin{theorem}[Uniform final power absorption]
     \label{thm:arealaw-final-sharp-power}
     \lean{TNLean.PEPS.AreaLaw.Scan.finalSharp_error_exponents,TNLean.PEPS.AreaLaw.Scan.eventually_finalSharp_log_cost_le,TNLean.PEPS.AreaLaw.Scan.eventually_finalSharp_powerEnvelope_le,TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_error_le}
+    \leanok
     For the fixed coefficients in (\ref{eq:final_scalar_inputs}),
     one threshold works for every remaining scalar datum at the
     literal rounded scales. With
@@ -146,6 +152,7 @@ construct the preceding safe-box estimate.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:arealaw-final-sharp-envelope}
     The binary logarithmic term and the marginal logarithmic term
     each become at most $n^{62497/62500}$ after fixing their
@@ -157,6 +164,7 @@ construct the preceding safe-box estimate.
 \begin{theorem}[Exact trace budget and transport smallness]
     \label{thm:arealaw-final-sharp-source}
     \lean{TNLean.PEPS.AreaLaw.Scan.finalSharp_traceDistance_power,TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_source_error_le,TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_transport_smallness}
+    \leanok
     For fixed $q\geq1$, $g>0$ and $C_{\rm vol}\geq0$, the source estimate
     \begin{align}
         t & \leq\sqrt{2\min(n^{-1000},g/4)/g}
@@ -175,6 +183,7 @@ construct the preceding safe-box estimate.
 \end{theorem}
 
 \begin{proof}
+    \leanok
     \uses{thm:arealaw-final-sharp-scales,thm:arealaw-final-sharp-power}
     The first estimate follows by the monotonicity and product
     rules for the square root. The accepted transport estimate is

@@ -10,6 +10,7 @@ safe-box estimate itself remains a genuine analytic hypothesis.
 \begin{definition}[The literal final template scanner]
     \label{def:final-template-scanner}
     \lean{TNLean.PEPS.AreaLaw.Scan.finalTemplateScanner}
+    \leanok
     For a finite domain $\Lambda$, a cut $A$, a nonempty ambient target $T$,
     and fixed coefficients $C_r,C_1$, use the accepted actual-history
     scanner with graph equal to the induced domain graph, depth equal to
@@ -26,18 +27,22 @@ safe-box estimate itself remains a genuine analytic hypothesis.
     geometric estimate is included as a field of this construction.
 \end{definition}
 
-\begin{lemma}[The original template collar is the truncation set]
-    \label{lem:final-template-scanner-truncation}
+\begin{theorem}[The original template collar is the truncation set]
+    \label{thm:final-template-scanner-truncation}
     \lean{TNLean.PEPS.AreaLaw.Scan.finalTemplateScanner_truncationSet}
+    \leanok
     For every nonnegative integer $L$, the actual truncation set of the
     constructed scanner is exactly
     \[
         S_0=A\cap T_L.
     \]
     This identity requires no separation, scale or entropy estimate.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{def:final-template-scanner,
+        thm:al_scan_ambient_rows}
     The actual truncation set contains the sites of $A$ at ambient depth
     at most $L$.  The accepted ambient-depth sublevel theorem identifies
     these sites with the radius-$L$ dilation of $T$.
@@ -46,6 +51,7 @@ safe-box estimate itself remains a genuine analytic hypothesis.
 \begin{theorem}[Conditional final information for actual templates]
     \label{thm:template-final-information}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_template_final_mutualInformation_of_boxEntropy}
+    \leanok
     Fix the physical parameters $q\geq1$, $R$, $J\geq0$, $\Delta>0$,
     an integer safe-box clearance $D_0\geq1$, and $C_{\rm tpl}\geq24$.
     Suppose one fixed $C_{\rm box}\geq0$ satisfies the genuine uniform
@@ -70,6 +76,12 @@ safe-box estimate itself remains a genuine analytic hypothesis.
 \end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{thm:final-scanner-admissibility,
+        thm:source-rounded-information,
+        thm:final-template-scanner-truncation,
+        thm:template-final-source-entropy,
+        thm:al_lattice_counts}
     Fix the original interaction multiplicity
     $\mu_R=2^{(1+2R(R+1))-1}$ and $C_1=3\mu_R$, independently of all
     entropy coefficients and physical instances.  The accepted anchor-fiber

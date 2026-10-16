@@ -9,18 +9,20 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
 \texttt{08-scanner.tex}, lines 353--357, 399--533 and 839--941, at revision
 \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
 
-\begin{lemma}[The actual target dimension]
-    \label{lem:physical-information-dimension}
+\begin{theorem}[The actual target dimension]
+    \label{thm:physical-information-dimension}
     \lean{TNLean.PEPS.AreaLaw.Scan.log_exp_configuration_card_le_of_card}
+    \leanok
     For a finite physical region $X$ with local dimension $q\geq1$, if
     $|X|\leq C_{\rm vol}n^2$, then
     \[
         \log(e\dim\mathcal H_X)
         \leq 1+(C_{\rm vol}\log q)n^2.
     \]
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
+    \leanok
     The actual configuration dimension is $q^{|X|}$.  Take its logarithm,
     use $\log q\geq0$ and substitute the cardinality estimate.  No dimension
     of the far region enters the estimate.
@@ -29,16 +31,20 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
 \begin{theorem}[The concrete source's final-scale conditional information]
     \label{thm:source-final-information}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_finalScale_mutualInformation}
-    Fix the local dimension, interaction radius and norm bound, positive
-    spectral gap, quadratic template-volume coefficient, positive scanner
-    coefficient $C_1$, anchor-multiplicity bound and a tail power $P\geq\nu$.
+    \leanok
+    Fix $q\geq1$, an interaction radius $R$, a norm bound $J\geq0$,
+    a spectral gap $\Delta>0$, a nonnegative quadratic target-volume
+    coefficient $C_T$, a positive scanner coefficient $C_1$, an
+    anchor-multiplicity bound $m_{\rm anc}$ with $3m_{\rm anc}\leq C_1$,
+    and a tail power $P\geq\nu$.
     There is a positive radius coefficient $C_{\rm tr}$ such that, for every
     fixed nonnegative source entropy coefficient $C_e$, there are constants
     $C>0$ and $N\geq2$, chosen before the finite physical system, with the
     following property.
 
     Let the original vector $\Omega$ be a gapped ground state and let the
-    supplied physical scanner obey all the source graph, support-anchor,
+    supplied physical scanner have a nonempty ambient target and obey
+    all the source graph, support-anchor,
     template-volume, ambient-depth, layer-cardinality, anchor-multiplicity
     and boundary-clearance hypotheses.  Retain the literal scales
     \[
@@ -65,6 +71,12 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
 \end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{thm:source-actual-information,
+        thm:physical-information-dimension,
+        thm:arealaw-target-entropy-transfer,
+        thm:arealaw-final-sharp-source,
+        def:arealaw-final-sharp-error}
     Invoke the frozen same-source information theorem once.  Its concrete
     witness supplies $X\subseteq S_0$, $|S_0|\leq(C_T+1)n^2$ and the actual
     trace-distance budget.  Therefore the preceding dimension lemma applies

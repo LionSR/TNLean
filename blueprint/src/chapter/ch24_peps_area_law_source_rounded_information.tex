@@ -6,9 +6,10 @@ three numerical separation hypotheses.  The literal rounded definitions
 imply those inequalities uniformly at large size.  This specialization
 retains every source geometry and target/prefix entropy hypothesis.
 
-\begin{lemma}[The final scanner scales are admissible]
-    \label{lem:final-scanner-admissibility}
+\begin{theorem}[The final scanner scales are admissible]
+    \label{thm:final-scanner-admissibility}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_finalScanner_admissibility}
+    \leanok
     Fix $C_r\geq0$ and the final exponents
     $\mu=1/4$, $\kappa=1/1000000$ and $\ell=1/100000$.
     There is one $N\geq2$ such that every integer $n\geq N$, with
@@ -24,9 +25,12 @@ retains every source geometry and target/prefix entropy hypothesis.
         1\leq K,\qquad 8Km\leq L.
     \]
     The division defining $K$ is natural-number division.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{thm:al_scan_status_scale_separation,
+        thm:al_scan_positive_source_bands}
     The accepted logarithmic-radius estimate gives
     $2r_0\leq n^\kappa$ eventually.  Applying the ceiling bound yields
     $2r_0\leq D$.  The accepted rounded-scale separation and positive
@@ -37,6 +41,7 @@ retains every source geometry and target/prefix entropy hypothesis.
 \begin{theorem}[Conditional information from literal rounded scales]
     \label{thm:source-rounded-information}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales}
+    \leanok
     The conditional final-scale physical information theorem holds without
     separately assuming $2r_0\leq D$, $1\leq D$ or $4D\leq m$.
     Retain its original gapped ground state, literal floor and ceiling
@@ -53,6 +58,9 @@ retains every source geometry and target/prefix entropy hypothesis.
 \end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{thm:source-final-information,
+        thm:final-scanner-admissibility}
     Keep the same radius coefficient and information constant as the
     conditional final-scale theorem.  Increase its size threshold to the
     maximum with the preceding numerical threshold.  Substitute the exact
