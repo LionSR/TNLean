@@ -93,6 +93,8 @@ import TNLean.PEPS.AreaLaw.Scan.ChargeEntropyCost
 import TNLean.PEPS.AreaLaw.Scan.ChargePathCounting
 import TNLean.PEPS.AreaLaw.Scan.ChargeSlots
 import TNLean.PEPS.AreaLaw.Scan.CompactCollarCounting
+import TNLean.PEPS.AreaLaw.Scan.ComparatorBounds
+import TNLean.PEPS.AreaLaw.Scan.ComparatorData
 import TNLean.PEPS.AreaLaw.Scan.Defs
 import TNLean.PEPS.AreaLaw.Scan.DesignatedDilution
 import TNLean.PEPS.AreaLaw.Scan.DesignatedMoveCost
