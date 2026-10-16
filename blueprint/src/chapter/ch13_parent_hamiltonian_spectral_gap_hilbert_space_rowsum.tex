@@ -14,7 +14,7 @@
     \leanok
     \uses{def:parent_hamiltonian, def:nsite_space_parent}
     Denote by $H_{N,L}^{\mathrm{ES}}(A)$ the conjugate of $H_N(A,L)$ by the
-    canonical identification between the coefficient space and
+    coordinate identification between the coefficient space and
     $\ell^2(\{0,\ldots,d-1\}^N)$.
 \end{definition}
 
@@ -146,7 +146,7 @@
     $P_L^{\mathrm{ES}}(A)$ applied to the corresponding restriction of $v$;
     applying $h_{i,\mathrm{ES}}$ a second time therefore applies
     $(P_L^{\mathrm{ES}}(A))^2=P_L^{\mathrm{ES}}(A)$ on that window.
-    Lemma~\ref{lem:transported_es_positive} supplies symmetry, and the case
+    Lemma~\ref{lem:transported_es_positive} gives symmetry, and the case
     $L>N$ is the zero projection by definition.
 \end{proof}
 
@@ -195,7 +195,7 @@
         MPSTensor.restrictFirst_eq_cyclicRestrictES_one}
     \leanok
     \uses{def:restrict_last, def:restrict_first, def:tail_restrict_parent, rem:euclidean_local_projector_ingredients}
-    Let $\iota_L$ denote the canonical identification of the $L$-site state
+    Let $\iota_L$ denote the coordinate identification of the $L$-site state
     space with its Hilbert-space realization, and let
     $R^{\mathrm{cyc}}_{i,\tau}$ denote cyclic restriction to the length-$L$
     window beginning at $i$, with background configuration $\tau$. For every
@@ -295,7 +295,7 @@
     Lemma~\ref{lem:local_term_es_kernel_restrictions} identifies these equations
     with the conditions
     $R_{i,\tau}(e_N^{-1}\psi)\in G_L^{\mathrm{ES}}(A)$ for all $i$ and $\tau$.
-    Transporting these conditions back through $e_N$ gives
+    Pulling these conditions back through $e_N$ gives
     $R_{i,\tau}\psi\in G_L(A)$ for all $i$ and $\tau$, which are exactly the
     cyclic-window defining equations of $G_L^{(N)}(A)$.
 \end{proof}
@@ -321,7 +321,7 @@
     \lean{MPSTensor.chainGroundSpaceES}
     \leanok
     \uses{def:chain_ground_space}
-    The Hilbert-space cyclic constraint space is the transport of
+    The Hilbert-space cyclic constraint space is the image of
     $G_L^{(N)}(A)$ by the canonical $\ell^2$ identification:
     $G_{L,\mathrm{ES}}^{(N)}(A)=e_N^{-1}G_L^{(N)}(A)$.
 \end{definition}
@@ -347,7 +347,7 @@
     the converse, a vector in $G_L^{(N)}(A)$ satisfies all local equations
     $h_i(A,L)\psi=0$. Therefore
     $H_N(A,L)\psi=\sum_i h_i(A,L)\psi=0$.
-    The Hilbert-space statement is the same equality transported by $e_N^{-1}$.
+    The Hilbert-space statement is the same equality under $e_N^{-1}$.
 \end{proof}
 
 \begin{theorem}[Intersection property for two adjacent local kernels]
@@ -467,7 +467,7 @@
     $v\in(\mathcal G_{N,L}^{\mathrm{ES}}(A))^\perp$. In particular, with
     $L>1$ and $\gamma=1/(4L)$, the explicit gap-bound conclusion follows once
     this same quadratic-form estimate (\ref{eq:ph_uniform_quadratic_form}) is
-    supplied.
+    given.
 \end{lemma}
 
 \begin{proof}
@@ -716,7 +716,7 @@
     \leanok
     Choose $c_{ij}=1/m$ on interacting pairs and $c_{ij}=0$ otherwise. The row
     and column cardinality bounds give the corresponding coefficient sums, and
-    the noninteracting anticommutator non-negativity supplies the
+    the noninteracting anticommutator non-negativity yields the
     zero-coefficient estimates. Apply
     Lemma~\ref{lem:anticommutator_projection_rowsum_reduction}.
 \end{proof}
@@ -742,7 +742,7 @@
     \leanok
     Choose $c_{ij}=1/m$ on interacting pairs and $c_{ij}=0$ otherwise. The row
     cardinality bound gives $\sum_{j\ne i}c_{ij}\le1$; noninteracting
-    nonnegativity supplies the zero-coefficient cross-term estimates. Apply
+    nonnegativity yields the zero-coefficient cross-term estimates. Apply
     Lemma~\ref{lem:ordered_projection_rowsum_reduction}.
 \end{proof}
 

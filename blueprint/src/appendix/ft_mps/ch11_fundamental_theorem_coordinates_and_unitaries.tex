@@ -66,7 +66,7 @@ identification. The block gauge repeats $X_k$ on every copy $q$.
     flattened bond-coordinate equivalence.
 \end{proof}
 
-\begin{theorem}[Equal-MPV gauge with all matched witnesses]
+\begin{theorem}[Equal-MPV gauge with all matched data]
     \label{thm:sector_bnt_equal_mps_gaugeEquiv_witnesses}
     \lean{MPSTensor.ft_sector_bnt_equal_mps_gaugeEquiv_witnesses}
     \leanok
@@ -80,17 +80,17 @@ identification. The block gauge repeats $X_k$ on every copy $q$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Theorem~\ref{thm:sector_bnt_equal_global_gauge} supplies all witnesses
+    Theorem~\ref{thm:sector_bnt_equal_global_gauge} gives all data
     except the displayed equality of total dimensions. Apply
     Lemma~\ref{lem:ft_total_dim_eq_of_match} to its sector and copy bijections.
     The resulting equality identifies the total bond spaces, while the global
     conjugation equation is unchanged.
 \end{proof}
 
-\section{Permutation gauges and literal coordinates}
+\section{Permutation gauges and original coordinates}
 \label{sec:app_ft_permutation_gauges}
 
-A permutation matrix relates the matched-coordinate ordering to the literal
+A permutation matrix relates the matched-coordinate ordering to the original
 block ordering of $P$ in Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}.
 
 \begin{definition}[Invertible permutation gauge]
@@ -162,10 +162,10 @@ The coordinate equivalence of Definition~\ref{def:ft_sector_flat_equiv} induces
 the permutation $\rho$ on the total bond space. Applying
 (\ref{eq:app_ft_perm_conjugation}) to $P_{\mathrm{tot}}^i$ produces the
 matched-coordinate tensor, and composing $G_\rho$ with the block-diagonal gauge
-yields the literal gauge transformation of
+yields the direct gauge transformation of
 Theorem~\ref{thm:sector_bnt_equal_mps_gaugeEquiv_literal}.
 
-\section{Unitary witness refinements}
+\section{Unitary gauge refinements}
 \label{sec:app_ft_unitary_witnesses}
 
 Between left-canonical irreducible sectors, any gauge-phase equivalence can be
