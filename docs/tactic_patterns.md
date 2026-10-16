@@ -8273,3 +8273,20 @@ spectral split → block extraction → MPV calculation → strict bounds
   comparison confirms equality of all sixteen lines. The initial-belt proof
   uses the same fan-run bound in a different layer-and-cell sum and does not
   supply a third occurrence of this generation–parent–run block.
+
+### Uniform padding constants for buffered rectangles — candidate
+
+- **Pattern:** Choose a real threshold as the maximum of the normalization,
+  energy, and tail thresholds. Choose the padding constant by taking the
+  natural ceiling of an exponential expression, then obtain the entropy
+  constant from the same choices before introducing the clearance parameter
+  and the physical data.
+- **Occurrences:** `exists_condEntropy_le_initialBuffer` in
+  `TNLean/PEPS/AreaLaw/InitialBuffer.lean` and
+  `exists_condEntropy_le_initialBuffer_real` in
+  `TNLean/PEPS/AreaLaw/InitialBufferReal.lean`.
+- **Possible next abstraction:** If a third proof needs the same choices,
+  first consider an existence lemma for the numerical padding and entropy
+  constants and their inequalities. The constants must remain uniform in
+  the clearance and physical data. These are two occurrences across two
+  files; no promotion or proof refactor is proposed.
