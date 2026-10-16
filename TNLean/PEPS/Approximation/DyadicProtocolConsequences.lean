@@ -65,7 +65,8 @@ theorem le_two_pow_clog_lt {L : ℕ} (hL : 2 ≤ L) :
 
 /-- **Proposition 7.1 in the form used in §8, from Proposition 4.1.** Assume the adaptive patch
 constraint of Proposition 4.1; the angular information bound of Proposition 3.4 is
-`angularInformationBound`. Then for every `q ≥ 2` and `J, Δ > 0` there are constants `C`, `b`, `k`, `r`
+`angularInformationBound`. Then for every `q ≥ 2` and `J, Δ > 0` there are constants
+`C`, `b`, `k`, `r`
 and a threshold `L₀` such that every gapped ground vector of a square Hamiltonian of side
 `L ≥ max 2 L₀` has a dyadic distribution protocol with the bounds of
 `DyadicProtocol.IsDistributionProtocol`.
@@ -95,8 +96,9 @@ theorem largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint
   have hν6 : ν ≤ 1 / 6 := (min_le_right _ _).trans (min_le_right _ _)
   set a : ℝ := angularConstant / 2 with ha_def
   have ha : 0 < a := by rw [ha_def, ha₀]; norm_num
-  obtain ⟨D₁, L₁, hD₁⟩ := (angularInformationBound (q := q) (J := J) (by omega) hJ.le hΔ).exists_isAngularScale ha le_rfl 4
-    (p := 60) (by norm_num)
+  obtain ⟨D₁, L₁, hD₁⟩ :=
+    (angularInformationBound (q := q) (J := J) (by omega) hJ.le hΔ).exists_isAngularScale
+      ha le_rfl 4 (p := 60) (by norm_num)
   set D : ℝ := max D₁ 1 with hD_def
   have hD := hD₁.mono ha.le (le_max_left D₁ 1)
   set B₀ : ℝ := K₀ * D with hB₀_def
