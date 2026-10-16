@@ -10,7 +10,7 @@
     Let $G$ be finite and let the native four-leg tensor be $G$-isometric
     for the regular action. On a torus of horizontal period at least five
     and vertical period at least three, fix any translated eight-site strip
-    $R_v$. For directed transports $t$, write
+    $R_v$. For directed bond values $t$, write
     \begin{align}
         (a,b,c) & =(t_0^{-1}t_1,t_1^{-1}t_2,t_2^{-1}), \\
         k(t)    & =aba^{-1}c.
@@ -23,16 +23,16 @@
     \begin{align}
         Q_CQ_D & =\delta_{C,D}Q_C, & \sum_C Q_C & =I.
     \end{align}
-    On the actual output transports
+    On the output bond values
     $t'=(t_0,t_2t_0^{-1}t_1t_2^{-1}t_0,t_2)$, this family satisfies
     \begin{align}
         Q_C\Psi_{R_v}(t',u,\theta)
                    & =\mathbf1_{C=[k(t)]}\Psi_{R_v}(t',u,\theta), \\
         Q_CM(t',u) & =\mathbf1_{C=[k(t)]}M(t',u),
     \end{align}
-    where $M$ is the actual global physical cut matrix.
+    where $M$ is the global physical cut matrix.
     The unused outcome $\bot$ annihilates every such column and cut.
-    All positions and both seams are included, with no supplied tree,
+    All positions and both seams are included, with no auxiliary tree,
     holonomy, Gram or state hypothesis.
     This is the joint-measurement step for the constructed auxiliary
     double exchange in \cite[braiding passage]{Schuch2010PEPS}, using
@@ -42,12 +42,12 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    The actual outer walk surrounding the middle and right plaquettes lies
+    The outer walk surrounding the middle and right plaquettes lies
     in $R_v$, whose induced graph is connected. Induce this closed walk
     in the region and apply the common closed-walk measurement theorem.
     Internal restriction removes every common exterior and crossing
-    operator from its holonomy. The literal output formula gives $k(t)$.
-    The uniform boundary-column action passes to the actual cut by its
+    operator from its holonomy. The output formula gives $k(t)$.
+    The uniform boundary-column action passes to the global cut by its
     open-region contraction identity.
 \end{proof}
 
@@ -58,8 +58,8 @@
     \uses{thm:peps_torus_three_plaquette_output_measurement,
         thm:peps_torus_three_plaquette_double_exchange_physical}
     Under the preceding hypotheses, the measurement $Q$ can be chosen
-    together with one unitary $W$ implementing the literal double exchange.
-    Both witnesses precede every $t,u,\theta$. The same $W$ satisfies
+    together with one unitary $W$ implementing the double exchange.
+    Both operators are chosen before every $t,u,\theta$. The same $W$ satisfies
     \begin{align}
         W\Psi_{R_v}(t,\theta)         & =\Psi_{R_v}(t',\theta),                    \\
         (W\otimes I_{R_v^c})\Psi(t,u) & =\Psi(t',u),                               \\
@@ -75,10 +75,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Choose $W$ from the literal double-exchange theorem and $Q$ from the
+    Choose $W$ from the double-exchange theorem and $Q$ from the
     output measurement theorem. Their uniform quantifiers allow both
-    choices before the transports and boundary data. Substitute the local
+    choices before the bond values and boundary data. Substitute the local
     column identity into the measurement action. Evaluate the global
-    identity on every assembled cut configuration to obtain
+    identity on every combined cut configuration to obtain
     $WM(t,u)=M(t',u)$, then substitute it into the output cut measurement.
 \end{proof}

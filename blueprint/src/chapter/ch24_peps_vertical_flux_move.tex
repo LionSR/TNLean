@@ -27,7 +27,7 @@
 
 \begin{proof}\leanok
     \uses{def:peps_torus_coordinate_swap}
-    Coordinate exchange is a graph isomorphism between the two tori. Transport
+    Coordinate exchange is a graph isomorphism between the two tori. Carry
     the established horizontal induced region, path tree and chords along this
     isomorphism, and evaluate the six vertex coordinates.
 \end{proof}
@@ -46,9 +46,9 @@
         thm:peps_regular_cycle_global_permutation}
     Retain the preceding period bounds, and let the original torus site tensor
     be $G$-isometric for the regular action of a finite group $G$. Define $u_0(g)$
-    to have directed rightward transport $g$ on the lower chord, and define
-    $u_1(g)$ to have transport $g$ on both chords. All other bonds are trivial.
-    The ordered bond operator is $g^{-1}$ at the horizontal seam. The actual
+    to have directed rightward weight $g$ on the lower chord, and define
+    $u_1(g)$ to have weight $g$ on both chords. All other bonds are trivial.
+    The ordered bond operator is $g^{-1}$ at the horizontal seam. The
     counterclockwise plaquette holonomies, ordered from lower to upper, are
     \begin{align}
         (g,1)\quad\longrightarrow\quad(1,g).
@@ -63,17 +63,17 @@
         (W^*\otimes I)\Psi(u_1(g),u) & =\Psi(u_0(g),u).
     \end{align}
     Thus the adjoint gives downward movement. The global identities concern the
-    actual contracted coefficients with internal operators overridden by
-    $u_b(g)$; the displayed holonomies concern the literal identity-background
+    contracted coefficients with internal operators overridden by
+    $u_b(g)$; the displayed holonomies concern the identity-background
     assignments. This finite-torus realization of
     \cite[Theorem~6.16]{Schuch2010PEPS} has the stated regular-action and period
     restrictions; see \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Directed transport cancels the sorting inversion. The four native directed
-    steps give the two plaquette holonomies. Recover each literal insertion as
+    The directed step evaluation cancels the sorting inversion. The four native directed
+    steps give the two plaquette holonomies. Recover each insertion as
     the derived cycle assignment, and apply the uniform two-cycle operation to
-    the actual open and closed contractions. Its global extension is unitary.
+    the open and closed contractions. Its global extension is unitary.
     Multiplication by the adjoint gives both reverse identities.
 \end{proof}

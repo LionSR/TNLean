@@ -135,7 +135,7 @@ constant.
     \leanok
     \uses{def:GaugeEquivModEdgeScalars}
     Every edge-gauge family is equivalent to itself modulo balanced edge
-    scalars, witnessed by $c_e=1$ for every edge $e$.
+    scalars, with $c_e=1$ for every edge $e$.
     % This is the same algebraic endpoint convention as
     % Definition~\ref{def:edgeGaugeAt}, not a separate tensor-network identity.
 \end{theorem}
@@ -167,9 +167,9 @@ constant.
     \lean{TNLean.PEPS.GaugeEquivModEdgeScalars.trans}
     \leanok
     \uses{def:GaugeEquivModEdgeScalars, thm:IsVertexBalanced_mul, thm:edgeScalarAt_mul}
-    If $c$ and $d$ witness the equivalences of $X$ with $Y$ and of $Y$ with $Z$
+    If $c$ and $d$ give the equivalences of $X$ with $Y$ and of $Y$ with $Z$
     modulo balanced edge scalars, then their pointwise product scalar family
-    $(cd)_e = c_e d_e$ witnesses that $X$ is equivalent to $Z$ modulo balanced
+    $(cd)_e = c_e d_e$ gives the equivalence of $X$ with $Z$ modulo balanced
     edge scalars.
 \end{theorem}
 
@@ -189,7 +189,7 @@ constant.
 \end{theorem}
 
 \begin{proof}\leanok
-    Reflexivity is witnessed by $1$, symmetry by $c^{-1}$, and transitivity
+    Reflexivity is given by $1$, symmetry by $c^{-1}$, and transitivity
     by $cd$.
 \end{proof}
 
@@ -280,7 +280,7 @@ constant.
     type; the many-leg scalar extraction then yields, at each vertex, nonzero
     proportionality constants between the two families whose product is $1$.
     Reading the lower-endpoint constant of each edge defines a single edge
-    scalar $c_e$; the inverse relation transports it to the upper endpoint, and
+    scalar $c_e$; the inverse relation carries it to the upper endpoint, and
     invertibility makes the proportionality constant unique, so the vertex
     products of the per-vertex constants identify with the oriented products of
     $c_e$. These are all $1$, so $c$ is vertex-balanced.

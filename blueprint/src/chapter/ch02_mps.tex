@@ -336,7 +336,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Positive-definite transport by a coisometry]
+\begin{theorem}[Preservation of positive definiteness by a coisometry]
     \label{thm:matrix_posdef_coisometric_transport}
     \lean{Matrix.PosDef.mul_mul_conjTranspose_of_mul_conjTranspose_eq_one}
     \leanok
@@ -352,7 +352,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
     \begin{align}
         x(VAV^\dagger)x^\dagger & =(xV)A(xV)^\dagger.
     \end{align}
-    Moreover, $xV=0$ implies
+    In addition, $xV=0$ implies
     \begin{align}
         x & =x(VV^\dagger)=0.
     \end{align}
@@ -490,7 +490,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
     A rectangular reduction satisfies the retraction identity
     (\ref{eq:mps_rectangular_reduction_retraction}) and the word identity
     (\ref{eq:mps_rectangular_reduction_word}).  Conversely, the all-word
-    identity alone implies $VW=1_{D_A}$ by taking the empty word.  Moreover,
+    identity alone implies $VW=1_{D_A}$ by taking the empty word.  In addition,
     the target bond dimension cannot exceed the source bond dimension:
     $D_A\leq D_B$.
 \end{theorem}
@@ -659,7 +659,7 @@ volume~\cite[``Positive map'' and ``Quantum channel'']{QICLean2026Blueprint}.
     \leanok
     \uses{def:gauge_phase_equiv}
     Gauge-phase equivalence is symmetric after identifying equal bond
-    dimensions. Moreover, suppose that $A$, $B$, and $C$ have identified bond
+    dimensions. In addition, suppose that $A$, $B$, and $C$ have identified bond
     dimensions, that $X_1$ and $X_2$ are invertible, that
     $\zeta_1,\zeta_2\ne0$, and that, for every physical index $i$,
     \begin{align}
@@ -831,7 +831,7 @@ $A^{-1}A=\Id$. This is the identity used in
     implies fullness of the second.
 \end{proof}
 
-\begin{theorem}[Gauge transport of normality]
+\begin{theorem}[Gauge invariance of normality]
     \label{thm:gauge_invariance_normal}
     \lean{MPSTensor.isNormal_of_gaugeEquiv}
     \leanok

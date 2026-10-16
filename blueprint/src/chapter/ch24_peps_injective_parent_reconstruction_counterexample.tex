@@ -1,7 +1,7 @@
-\section{A counterexample to bare inverse-adjoint parent transport}%
+\section{A counterexample to bare inverse-adjoint parent pullbacks}%
 \label{sec:peps_injective_parent_reconstruction_counterexample}
 
-The exact-kernel assertion following the displayed parent-transport formula in
+The exact-kernel assertion following the displayed parent-Hamiltonian formula in
 \cite[Section~IV.C.1]{Cirac2021Matrix}, local source lines 2031--2037,
 fails for rectangular injective site maps. The correction and its
 relation to genuine parent uniqueness are recorded in
@@ -43,7 +43,7 @@ relation to genuine parent uniqueness are recorded in
     vector is nonzero, so its span is the whole virtual space.
 \end{proof}
 
-\begin{theorem}[The bare transport has additional physical zero modes]%
+\begin{theorem}[The bare pullback has additional physical zero modes]%
     \label{thm:peps_injective_parent_counterexample_kernel}
     \lean{TNLean.PEPS.InjectiveParentReconstructionCounterexample.barePhysicalInteraction,
         TNLean.PEPS.InjectiveParentReconstructionCounterexample.unusedPhysicalVector,
@@ -57,7 +57,7 @@ relation to genuine parent uniqueness are recorded in
         TNLean.PEPS.InjectiveParentReconstructionCounterexample.finrank_bareKernel}
     \leanok
     \uses{thm:peps_injective_parent_counterexample_maps}
-    Bare inverse-adjoint transport gives $L^\dagger HL=0$ on
+    Bare inverse-adjoint conjugation gives $L^\dagger HL=0$ on
     $\mathbb C^2\otimes\mathbb C^2$.
     The vector $e_1\otimes e_0$ belongs to its kernel, but lies
     outside $\operatorname{ran}F$. The bare kernel has dimension four,
@@ -71,7 +71,7 @@ relation to genuine parent uniqueness are recorded in
 \end{theorem}
 
 \begin{proof}\leanok
-    The transported interaction is zero because $H=0$.
+    The conjugated interaction is zero because $H=0$.
     Every vector in $\operatorname{ran}(A\otimes A)$ has zero
     coefficient at $(1,0)$, whereas $e_1\otimes e_0$ has coefficient
     one there. Thus it is an additional physical kernel vector.

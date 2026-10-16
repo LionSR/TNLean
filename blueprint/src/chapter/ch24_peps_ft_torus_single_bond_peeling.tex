@@ -1,4 +1,4 @@
-\subsection{Single-bond peeling and the window witness}
+\subsection{Single-bond peeling and the window coefficient identity}
 \label{subsec:peps_torus_single_bond_peeling_window_witness}
 
 \begin{definition}[Reference edge of the horizontal staircase]
@@ -86,7 +86,7 @@
         \ \text{and}\ f\ne e.
         \notag
     \end{align}
-    Moreover each edge in $\partial S$ lies on exactly one of the two window
+    In addition, each edge in $\partial S$ lies on exactly one of the two window
     boundaries.
 \end{theorem}
 \begin{proof}
@@ -524,7 +524,7 @@
 \input{chapter/ch24_peps_ft_torus_window_independence}
 \input{chapter/ch24_peps_ft_torus_virtual_operation_family}
 
-\begin{definition}[Window-region coefficient-identity witness]
+\begin{definition}[Window-region coefficient-identity datum]
     \label{def:peps_window_edge_coeff_identity_witness}
     \lean{TNLean.PEPS.windowEdgeCoeffIdentityWitness}
     \leanok
@@ -551,11 +551,11 @@
         C_B(W,e,Z\,\iota_e(M)\,Z^{-1};\sigma,\tau),
         \notag
     \end{align}
-    then these objects form the coefficient-identity witness at $e$ with
-    witness region $W$ and with both gauge entries equal to $Z$.
+    then these objects form the coefficient-identity datum at $e$ on the
+    region $W$ with both gauge entries equal to $Z$.
 \end{definition}
 
-\begin{definition}[Window-region witness from window injectivity]
+\begin{definition}[Window-region coefficient-identity datum from window injectivity]
     \label{def:peps_window_edge_coeff_identity_witness_of_hypotheses}
     \lean{TNLean.PEPS.windowEdgeCoeffIdentityWitness_of_hypotheses}
     \leanok
@@ -583,9 +583,9 @@
         C_B(W,e,Z\,\iota_e(M)\,Z^{-1};\sigma,\tau)
         \notag
     \end{align}
-    holds for every $M,\sigma,\tau$, then the coefficient-identity witness of
+    holds for every $M,\sigma,\tau$, then the coefficient-identity datum of
     Definition~\ref{def:peps_window_edge_coeff_identity_witness} is obtained
-    for the region $W$. The hypotheses supply the injectivity of both $W$ and
+    for the region $W$. The hypotheses establish the injectivity of both $W$ and
     its complement at the minimal torus size.
 \end{definition}
 

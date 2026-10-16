@@ -15,12 +15,12 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     a positive squared-logarithmic radius
     coefficient, a positive charge constant, a nonnegative target-volume
     coefficient, an anchor-multiplicity bound, a polynomial tail exponent,
-    and the two transport-energy coefficients.
+    and the two round-energy coefficients.
     There are $C\geq1$, $C_l\geq0$ and $N$ before every finite physical
     system, auxiliary dimension, replica vector, round and interpolation.
-    Under the literal rounded scales and actual domain, row, anchor and
-    clearance hypotheses, for $W\geq0$ and a nonzero symmetric supplied
-    replica vector, the actual energy-error term is bounded by
+    Under the rounded scales and the domain, row, anchor and
+    clearance hypotheses, for $W\geq0$ and a nonzero symmetric
+    replica vector, the energy-error term is bounded by
     \begin{align}
         C W^2 n^\ell D^2(\log n)^{C_l}
         \left((1-p)\left(\frac{Q}{KnD}\right)^{1/8}
@@ -28,9 +28,9 @@ changing the physical size.  No sharp marginal-moment estimate is used.
         \qquad 0<p<1.
         \label{eq:arealaw-generic-charge-cap}
     \end{align}
-    The bound uses the absolute value of the supplied transport
+    The bound uses the absolute value of the given round-energy
     coefficient.  The existing all-time and old-prefix history estimates
-    supply the physical energy bound at these generic exponents.
+    give the physical energy bound at these generic exponents.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -38,31 +38,31 @@ changing the physical size.  No sharp marginal-moment estimate is used.
         thm:al_scan_transport_coefficients_log}
     The physical history estimate bounds the energy error by a sum of
     a density term and a tail term. The logarithmic dimension estimate
-    bounds both transport coefficients by $C_d(\log n)^{C_l}$.
+    bounds both round-energy coefficients by $C_d(\log n)^{C_l}$.
     The rounded-scale bound $nD^2/(mK)\leq C_s n^\ell D^2$ and
     $a=W/K$ then give (\ref{eq:arealaw-generic-charge-cap}) with
     $C=C_sC_d$. All factors used in these comparisons are nonnegative.
 \end{proof}
 
 
-\begin{theorem}[The same selected actual energy]
+\begin{theorem}[The same selected charge energy]
     \label{thm:arealaw-generic-selected-energy}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharge_defect_le_of_density_energy_bound_at_exponent}
     \leanok
     For positive physical and auxiliary dimensions, $\Delta>0$ and
-    total weight $W\geq0$, at any selected actual charge point the transport energy conclusion
+    total weight $W\geq0$, at any selected charge point the round-energy conclusion
     and the preceding coefficient cap imply
     $E_{\rm def}\leq(e+\mathrm{cap}+r_k)/(g/2)$.
     The truncated eigenvalue $e$, physical prevector, selected point and
-    actual mean energy are unchanged.  Nonnegativity of the actual
+    mean energy are unchanged.  Nonnegativity of the
     energy-error integral justifies replacing its signed coefficient by
     its absolute value.
 \end{theorem}
 \begin{proof}
     \leanok
-    The actual energy-error integral is nonnegative, so replacing the
-    transport coefficient by its absolute value can only increase the
-    numerator. Substitute its supplied coefficient cap and divide by
+    The energy-error integral is nonnegative, so replacing the
+    round-energy coefficient by its absolute value can only increase the
+    numerator. Substitute the given coefficient cap and divide by
     the positive normalized gap $g/2$. The point and its prevector
     remain fixed.
 \end{proof}
@@ -74,22 +74,22 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \leanok
     Fix $q\geq1$, range $R$, $J\geq0$, $\Delta>0$, the nonnegative
     target-volume coefficient and positive charge constant with its
-    anchor-multiplicity budget, and a real tail exponent.
-    The truncation and transport constants are chosen before a scanner
+    anchor-multiplicity bound, and a real tail exponent.
+    The truncation and round-energy constants are chosen before a scanner
     exponent tuple; the physical energy coefficients and size threshold
     are then chosen before every finite instance and current entropy input.
-    Assume a nonempty ambient target and the literal graph, depth,
+    Assume a nonempty ambient target and the graph, depth,
     rounded scales, rows, anchors and
     weak scanner clearance, and the original-state positive-prefix bound
     $C_e(nL^\eta+n)$.  The numerical radius and separation conditions are
-    explicit here.  For total weight four, $K\geq8$, and the actual
-    transport-smallness condition, one truncated vector, typical spectral
-    set and Schmidt--Bell label sequence yield an actual selected point
+    explicit here.  For total weight four, $K\geq8$, and the
+    round-step smallness condition, one truncated vector, typical spectral
+    set and Schmidt--Bell label sequence yield a selected point
     in every fixed interval $0<p_0<p_1<1$ for all large replica counts.
-    That same point satisfies the literal endpoint density bound, the
-    actual normalized-energy cap, and both rough norm comparisons.
+    That same point satisfies the endpoint density bound, the
+    normalized-energy cap, and both rough norm comparisons.
     The upper, lower, endpoint and energy remainders vanish for the fixed
-    physical instance.  No improved entropy or low-energy point is supplied.
+    physical instance.  No improved entropy or low-energy point is claimed here.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -106,10 +106,10 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     window once, then choose one global Schmidt--Bell label sequence.
     Transfer the original positive-prefix entropy bounds to this vector.
     Its rough upper estimate, endpoint estimate and rough lower estimate
-    hold with remainders tending to zero. Apply the actual charge
+    hold with remainders tending to zero. Apply the charge
     selection theorem on $[p_0,p_1]$ and use the endpoint estimate to
     bound its density. At this same selected point, combine the generic
-    coefficient bound with the transport-energy inequality. Restrict the
+    coefficient bound with the round-energy inequality. Restrict the
     two rough comparisons to this point without choosing a second
     vector, label sequence or interpolation parameter.
 \end{proof}
@@ -123,7 +123,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     logarithmic exponent.  One $C_\delta>0$ and threshold precede every
     current $e\geq\kappa$ and finite scalar instance.
     The current target, shell, selected-dimension and mass bounds, together
-    with the literal rough endpoint numerator and logarithmic transport
+    with the rough endpoint numerator and logarithmic round-energy
     cap, give eventually
     \begin{align}
         \frac{Q}{KnD} & \leq\delta,
@@ -140,12 +140,12 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \uses{thm:arealaw-source-rough-budget-power,
         thm:arealaw-selected-density-principal,
         lem:al_scanner_scale_facts}
-    The source rough-budget bound and $D\leq2n^e$ bound the selected
+    The source rough-estimate bound and $D\leq2n^e$ bound the selected
     numerator by a constant times $n^{1+e}$ plus its logarithmic term.
     Since $m\geq n^\mu/2$, the non-remainder contribution is at most
     $\delta/2$ after choosing $C_\delta$. At the fixed physical
     instance, the remaining coefficient times the replica error tends
-    to zero and is eventually at most $\delta/2$. Keep the supplied
+    to zero and is eventually at most $\delta/2$. Keep the given
     selected point and all its other conclusions.
 \end{proof}
 
@@ -157,7 +157,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     Fix $0<e_0<1$, nonnegative cap and density coefficients, real logarithmic
     exponents and a positive physical gap $\gamma$.
     One threshold works for all $e\leq e_0$.
-    At the literal bootstrap scales, if $0\leq\rho\leq\delta$,
+    At the bootstrap scales, if $0\leq\rho\leq\delta$,
     $p\in[\epsilon,2\epsilon]$, $p\leq1$, and the truncated eigenvalue
     is at most $n^{-1000}$, then the normalized selected cap is at most
     $(1+\gamma^{-1})n^{-\nu/2}$.
@@ -176,17 +176,17 @@ changing the physical size.  No sharp marginal-moment estimate is used.
 \end{proof}
 
 
-\begin{theorem}[Restored additive entropy budget]
+\begin{theorem}[Restored additive entropy bound]
     \label{thm:arealaw-bootstrap-restored-budget}
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_bootstrap_restored_entropy_budget}
     \leanok
     For $e_*<e_0<1$, $q\geq1$ and $C_e\geq0$, one positive coefficient
     and size threshold work for every $e_*<e\leq e_0$.
     They bound the exact typical-mass, whole-prefix, mismatch,
-    binary-entropy and original-state continuity budget by
+    binary-entropy and original-state continuity error by
     $C n^{1+(1-\ell)e}$.
     The hypotheses include $z>0$, $z\geq1-n^{-100}$ and
-    $0\leq\tau\leq1$; the displayed budget keeps
+    $0\leq\tau\leq1$; the displayed sum keeps
     $7(w-\log z)-\log z$ and the additional $n^{-247}$ continuity error.
 \end{theorem}
 \begin{proof}
@@ -194,9 +194,9 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \uses{thm:area_law_bootstrap_comparison_budget}
     For $n\geq2$, the mass estimate gives $z\geq1/2$,
     $z^{-1}\leq2$ and $-\log z\leq1$. The continuity errors are at
-    most one. With $C_b=8C_e+12\log q+30$, the complete budget is at
+    most one. With $C_b=8C_e+12\log q+30$, the complete sum is at
     most $C_b(nL^e+nD+n^{3/5}+h(\tau)/a+1)$.
-    The bootstrap comparison-budget estimate bounds this sum by
+    The bootstrap comparison-sum estimate bounds this sum by
     $(5+\log2/4)n^{1+(1-\ell)e}$ uniformly over the current exponent.
 \end{proof}
 
@@ -208,7 +208,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     Fix $e_*<e_0<1$, $C_e\geq0$ and the physical and geometric constants
     of the rough source theorem.  There are positive $C_r,C_{\rm out}$
     and $N\geq2$ before every current $e_*<e\leq e_0$ and finite system.
-    Use the fixed bootstrap exponents, literal rounded scales and actual
+    Use the fixed bootstrap exponents, the rounded scales and the
     graph, target, depth, anchors, rows and clearance.
     If the original target entropy is at most $C_e n^{1+e}$ and every
     original positive-depth prefix entropy is at most $C_e(nL^e+n)$,
@@ -229,7 +229,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
         thm:arealaw-target-entropy-transfer,
         thm:area_law_selected_schmidt_entropy_bounds,
         thm:area_law_rough_typical_entropy_absorption}
-    Derive the transport and rounded admissibility conditions and use
+    Derive the round-step and rounded admissibility conditions and use
     the physical rough source once.  The principal-density and energy
     estimates hold at its unchanged selected points.
     At fixed $n$, put $\tau=n^{-\nu/4}$ and apply the two rough comparisons
@@ -237,7 +237,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     $6(\tau+E_{\rm def}/\tau)$; the three replica remainders vanish.
     Substitute the typical auxiliary entropy only after this limit,
     then use continuity in the reverse direction to restore $\Omega$.
-    The restored additive budget gives the stated improved power.
+    The restored additive bound gives the stated improved power.
 \end{proof}
 
 \begin{theorem}[Weak-rectangle source entropy]
@@ -249,10 +249,10 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     rectangle, row scale $n\geq s$, collar $1\leq L\leq s$, and current
     exponent $e\geq b$.
     If $(D_0+1)L\leq D_0s$ and the same unit vector obeys the pointwise
-    safe-box bound at this one exponent, then its literal target and all
+    safe-box bound at this one exponent, then its target and all
     positive-depth prefixes obey the source bounds above.
     One may take $C_e=C_{\rm box}(25+64/(2^b-1))$.
-    This uses the actual weak-rectangle dyadic shell cover, including
+    This uses the weak-rectangle dyadic shell cover, including
     thin rectangles; it does not invoke template separation.
 \end{theorem}
 \begin{proof}
@@ -271,7 +271,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \lean{TNLean.PEPS.AreaLaw.regionalEntropy_le_of_boxEntropy_power}
     \leanok
     For $q\geq1$, a positive-scale uniform box bound at exponent
-    $1+e>0$ supplies the
+    $1+e>0$ gives the
     corresponding entropy estimate for every original physical safe
     rectangle, including a possible zero-size case by its cardinal bound.
 \end{theorem}
@@ -289,7 +289,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \leanok
     Let $q\geq1$, $C,p\geq0$ and $N\in\mathbb N$.
     If every safe original physical rectangle of size $s\geq N$ has
-    entropy at most $Cs^p$, then for every $r\geq1$ the literal box
+    entropy at most $Cs^p$, then for every $r\geq1$ the box
     supremum is at most $(C+N^2\log q+1)r^p$.
 \end{theorem}
 \begin{proof}
@@ -342,7 +342,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \end{align}
     Apply Theorem~\ref{thm:arealaw-box-supremum-small-sizes} with
     coefficient $4C$, exponent $p$, and cutoff $N=2$. The volume
-    estimate supplies the correction $N^2\log q=4\log q$ for smaller
+    estimate gives the correction $N^2\log q=4\log q$ for smaller
     sizes. Taking the supremum over the same physical family gives
     the asserted coefficient $4C+4\log q+1$ at every positive integer
     scale.
@@ -370,15 +370,15 @@ changing the physical size.  No sharp marginal-moment estimate is used.
         thm:arealaw-box-supremum-powers,
         thm:arealaw-box-supremum-small-sizes,
         thm:rectangle_bootstrap_scanner_geometry}
-    Apply the source improvement to the literal rectangle scanner with
+    Apply the source improvement to the rectangle scanner with
     $n=\lceil24s\rceil=24s$, target-volume coefficient one and the derived
-    anchor multiplicity.  Rounded sublinear growth supplies the weak
-    clearance $2L+10r_0\leq D_0s$ and the shell safety budget.
+    anchor multiplicity.  Rounded sublinear growth gives the weak
+    clearance $2L+10r_0\leq D_0s$ and the shell safety bound.
     The preceding shell coefficient is fixed using $b=e_*$.
     Since the improved exponent is between zero and two, conversion from
     $n$ to $s$ costs at most $24^2$ uniformly in the current exponent.
     Extend over bounded sizes by the volume entropy estimate and take
-    the literal supremum only after obtaining the original-state bound.
+    the supremum only after obtaining the original-state bound.
 \end{proof}
 
 \begin{theorem}[Physical safe-box bound at the fixed exponent]
@@ -453,7 +453,7 @@ real safety parameters.
     \uses{thm:arealaw-physical-box-fixed-exponent,
         thm:arealaw-box-clearance-comparison,
         thm:arealaw-box-supremum-powers}
-    Put $d=2R+10$. The integer safe-box estimate supplies $C_b>0$,
+    Put $d=2R+10$. The integer safe-box estimate gives $C_b>0$,
     depending only on $q,R,J,\Delta$, such that
     $F_{\mathrm{box},d+1}(r)\leq C_b r^{1+e_*}$ for every integer
     $r\geq1$. Since $d\geq3$, the safety comparison gives

@@ -286,13 +286,13 @@ physical configuration on $V$ with
     sums in the displayed formula for $C_A(R,f,M;\sigma,\tau)$.
 \end{proof}
 
-\begin{theorem}[Region insertion under bond-dimension transport]%
+\begin{theorem}[Region insertion under bond-dimension identification]%
     \label{thm:peps_regionInsertedCoeff_reindexTensor}
     \lean{TNLean.PEPS.regionInsertedCoeff_reindexTensor}
     \leanok
     \uses{def:peps_regionInsertedCoeff}
-    If a tensor $B$ is transported along an equality of bond dimensions, then
-    the region insertion coefficient is transported by the induced
+    If a tensor $B$ is reindexed along an equality of bond dimensions, then
+    the region insertion coefficient transforms by the induced
     matrix-algebra identification on the inserted bond:
     $C_{B^h}(R,f,N;\sigma,\tau)
         =C_B(R,f,\phi_f(N);\sigma,\tau)$.
@@ -301,7 +301,7 @@ physical configuration on $V$ with
     Reindex both boundary-configuration sums by the bond-dimension
     equivalences. The constraint away from $f$ and the two blocked-region
     weights are preserved, while the inserted matrix entry becomes the
-    transported entry $\phi_f(N)$.
+    reindexed entry $\phi_f(N)$.
 \end{proof}
 
 \begin{theorem}[Same two-block insertions from region insertions]%
@@ -310,18 +310,18 @@ physical configuration on $V$ with
     \leanok
     \uses{thm:peps_twoBlockInsertedCoeff_eq_regionInsertedCoeff, thm:peps_regionInsertedCoeff_reindexTensor}
     Suppose $A$ and $B$ have identified bond dimensions. Write $B^h$ for the
-    transported tensor, and write $\phi_f$ for the induced transport on the
+    reindexed tensor, and write $\phi_f$ for the induced isomorphism on the
     boundary bond $f$. If
     $C_A(R,f,N;\sigma,\tau)=C_B(R,f,\phi_f(N);\sigma,\tau)$
     for every boundary edge $f$, matrix $N$, and physical configurations
     $\sigma,\tau$, then the two pairs
     $(B_{A,R},B_{A,R^c})$ and $(B_{B^h,R},B_{B^h,R^c})$
     have the same one-bond insertion coefficients after the same
-    bond-dimension transport.
+    bond-dimension identification.
 \end{theorem}
 \begin{proof}\leanok
     Rewrite the two abstract insertion coefficients as region insertion
-    coefficients and use the bond-dimension transport formula:
+    coefficients and use the bond-dimension reindexing formula:
     \begin{align}
         C_{B_{A,R},B_{A,R^c}}(f,N;*,*,\sigma,\tau)
          & =C_A(R,f,N;\sigma,\tau)
@@ -460,7 +460,7 @@ physical configuration on $V$ with
         C_A(V\setminus R,f',X^T;\tau,\sigma^{cc}),
         \notag
     \end{align}
-    where $\sigma^{cc}$ is $\sigma$ transported across
+    where $\sigma^{cc}$ is $\sigma$ reindexed across
     $V\setminus(V\setminus R)=R$. Consequently the same coefficient is realized
     through the endpoint of $f$ lying outside $R$.
 \end{theorem}

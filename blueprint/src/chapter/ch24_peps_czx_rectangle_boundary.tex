@@ -4,7 +4,7 @@
 Let $R=\lbrack x_0,x_0+w)\times\lbrack y_0,y_0+h)$ be a coordinate rectangle in a
 $W\times H$ torus. Assume $W,H\geq3$, $w,h>0$, $w<W$, $h<H$, and
 $x_0+w\leq W$, $y_0+h\leq H$. Write $P=2w+2h$.
-The following construction uses the actual open-region map $A_R$, summing
+The following construction uses the open-region map $A_R$, summing
 only internal bonds and leaving crossing bonds free. It identifies the
 plaquette spins in the boundary discussion of \cite{ChenLiuWen2011CZX},
 source lines 330--345, with the image of this physical region map.
@@ -43,7 +43,7 @@ source lines 330--345, with the image of this physical region map.
         TNLean.PEPS.torusRectanglePerimeterCorner_injective}
     \leanok
     \uses{def:czx_rectangle_perimeter}
-    This numbering is a bijection from $\{0,\ldots,P-1\}$ to the actual
+    This numbering is a bijection from $\{0,\ldots,P-1\}$ to the
     crossing bonds. Its cyclic successor is ordinary addition in
     $\mathbb Z/P\mathbb Z$. Every bond has the specified endpoint in $R$,
     the perimeter corners are distinct in the torus, and $P$ is even.
@@ -78,7 +78,7 @@ source lines 330--345, with the image of this physical region map.
     nonzero summand, whose value is one.
 \end{proof}
 
-\begin{definition}[Actual crossing-bond symmetry]%
+\begin{definition}[Crossing-bond symmetry]%
     \label{def:czx_region_boundary_symmetry}
     \lean{TNLean.PEPS.czxRegionBoundaryFlip,
         TNLean.PEPS.czxRegionBoundaryPhase}
@@ -102,7 +102,7 @@ source lines 330--345, with the image of this physical region map.
     \[
         U_RA_R|\mu\rangle=\phi_R(\mu)A_R|f_R\mu\rangle.
     \]
-    This identity holds for the actual open contraction of every finite
+    This identity holds for the open contraction of every finite
     region. Reversal of a native bond pair preserves its phase and commutes
     with its simultaneous bit flip.
 \end{theorem}
@@ -147,7 +147,7 @@ source lines 330--345, with the image of this physical region map.
     the cyclic adjacent-pair constraint, including the final wraparound.
 \end{proof}
 
-\begin{definition}[Plaquette-bit witnesses]%
+\begin{definition}[Plaquette-bit configurations]%
     \label{def:czx_plaquette_witness}
     \lean{TNLean.PEPS.czxPlaquettePhysical,TNLean.PEPS.czxPlaquetteBondConfig}
     \leanok
@@ -157,7 +157,7 @@ source lines 330--345, with the image of this physical region map.
     the corresponding adjacent pair.
 \end{definition}
 
-\begin{theorem}[Exact witnesses and a faithful effective boundary]%
+\begin{theorem}[Plaquette-bit configurations and a faithful effective boundary]%
     \label{thm:czx_rectangle_boundary_faithful}
     \lean{TNLean.PEPS.czxPlaquetteBondConfig_right,
         TNLean.PEPS.czxPlaquetteBondConfig_up,
@@ -170,7 +170,7 @@ source lines 330--345, with the image of this physical region map.
         TNLean.PEPS.czxRectangleBoundaryMatrix_mulVec_injective}
     \leanok
     \uses{def:czx_rectangle_boundary_labels,def:czx_plaquette_witness}
-    Each local tensor and each actual region witness coefficient equals
+    Each local tensor and each region configuration coefficient equals
     one. For every $c$ there is a physical configuration $\sigma_c$ with
     $F_R(\sigma_c,c')=\delta_{c,c'}$. In particular, $F_R$ is injective.
 \end{theorem}
@@ -188,7 +188,7 @@ source lines 330--345, with the image of this physical region map.
         TNLean.PEPS.finrank_range_openRegionMap_czxRectangle}
     \leanok
     \uses{def:czx_rectangle_boundary_labels}
-    The image of the actual region map is exactly the span of the columns
+    The image of the region map is exactly the span of the columns
     of $F_R$, and its dimension is $2^P$.
 \end{theorem}
 \begin{proof}\leanok
@@ -223,7 +223,7 @@ source lines 330--345, with the image of this physical region map.
     \leanok
     \uses{def:czx_rectangle_boundary_labels,def:asymex_czx_review_tensor}
     The review's printed CZX matrix product operator $O(A)$ satisfies
-    $U_RF_R=F_RO(A)$ on the actual rectangle image.
+    $U_RF_R=F_RO(A)$ on the rectangle image.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:czx_rectangle_effective_symmetry,thm:czx_rectangle_perimeter,
@@ -233,7 +233,7 @@ source lines 330--345, with the image of this physical region map.
     bra-ket display is not substituted for those printed matrices.
 \end{proof}
 
-\begin{theorem}[Actual closed-state slices and reduced-density support]%
+\begin{theorem}[Closed-state slices and reduced-density support]%
     \label{thm:czx_rectangle_density_support}
     \lean{TNLean.PEPS.openRegionWeight_czxPlaquetteComplement,
         TNLean.PEPS.stateCoeff_czxPlaquetteComplement,
@@ -244,7 +244,7 @@ source lines 330--345, with the image of this physical region map.
         def:peps_region_reduced_density}
     For every effective boundary column there is a physical configuration
     on the complement whose closed-state slice is exactly that column.
-    Consequently the actual unnormalized reduced density satisfies
+    Consequently the unnormalized reduced density satisfies
     \[
         \operatorname{ran}\rho_R=\operatorname{im}F_R
         =\operatorname{ran}\Gamma_R,\qquad
@@ -258,7 +258,7 @@ source lines 330--345, with the image of this physical region map.
     Extend the chosen perimeter bits to global plaquette bits. On the
     complement, the copied physical configuration has coefficient one for
     its native crossing labels and zero for all others by disjointness.
-    The actual cut contraction therefore reduces to a single boundary
+    The cut contraction therefore reduces to a single boundary
     term. Its coefficient-matrix range is the reduced-density range, while
     the generic support inclusion gives the reverse inclusion.
 \end{proof}

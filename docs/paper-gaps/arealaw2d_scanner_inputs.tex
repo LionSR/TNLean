@@ -11,15 +11,15 @@
 \providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
 \providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
 
-\title{The Scanner Estimate from the Conclusions of Its Inputs}
+\title{Input and Output Coefficients in the Scanner Estimate}
 \author{}
-\date{2026-10-11}
+\date{2026-10-16}
 
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{local-correction}{resolved}
 
-\section{The source proposition and the formal restriction}
+\section{The source proposition and the coefficient convention}
 
 Proposition~9.2 of the September~24, 2026 two-dimensional area-law
 manuscript~\cite{OpenAI2026AreaLaw} (\path{08-scanner.tex}, lines~349--397)
@@ -58,76 +58,86 @@ Proposition~8.1); and
 round and parameter $p_k$ with $\mathcal Q(p_k)/(KnD)\le\delta_n+\rho_k$ and
 applying H\"older's inequality to bound $E_{\mathrm{def},k}$.
 
-\paragraph{What is proved and under which hypothesis.}
-The top-level scanner theorem\footnote{Main scanner deduction:
-    \leanid{TNLean.PEPS.AreaLaw.Scan.scanner_estimate}.}
-formalizes Step~(5) in full, taking the conclusions of Steps~(1)--(4) at scale
-$n$ as the fields of a single hypothesis record. First, instead of continuity
-of the scalar charge defect $\mathcal Q(p)$, the record assumes only
-almost-everywhere measurability on $[0,1]$, which suffices for Lebesgue
-integration and for selecting $p_k\in[\epsilon/2,\epsilon]$, and requires the
-leaf-measure mass identity only on the open interval $0<p<1$. Second, the
-continuity bound on shell entropies $C\sqrt{Cn^{-500}}(1+Cn^2\log q)$ is
-$O(n^{-248})$ and is bounded by $n^{-247}$ for large $n$ (rather than
-$n^{-248}$ with coefficient $1$), and the logarithmic factor in $\mathcal B$ is
-tracked with the explicit exponent $12$ (from $(\log n)^4$ crossings times
-$(\log n)^8$ squared log-dimension) in place of an unspecified constant $C$.
-Substantial parts of Steps~(1)--(4), and the charge-round estimates entering
-Step~(5), are also proved separately for the concrete collar scan, as detailed
-in the sections below: the trace-distance and continuity arithmetic (Step~1);
-the classical scan-history process, splitting sampling, dilution, $n^{-200}$
-bad-history tail, band nesting, and cut-edge bounds (Step~2); the history mean
-trees, cross-band metric commutation, Fourier--coherent leaf measures,
-parameter integrability, and $2nm$-round entropy telescope (Step~3); the
-truncated ground state $(e,\widetilde\Omega)$, status marginal moment bounds,
-and target typical window (Step~4); and the H\"older charge-energy bound for a
-given symmetric replica prevector (Step~5).
-For the actual rounds of a physical collar scan, the conclusions of Lemma~9.1
-in the form in which the deduction uses them (history and choice
-probabilities, the $CD/m$ dilution and $CKnD$ count of split terms, the
-$n^{-200}$ bad-history tail, sampling on good histories, and the move-entropy
-bounds of lines~431--444) are derived from the scan geometry at the source
-scales for all sufficiently large $n$, with constants chosen before the
-domain, Hamiltonian, scan and replica vectors.\footnote{Lemma~9.1 for the
-    actual rounds:
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_historyFacts_actualScanRound}.}
-These conclusions form a separate sub-record of the hypothesis record, which
-this result supplies whenever the rounds of the record are the actual rounds.
-Similarly, the fields supplied by Proposition~4.5 and Lemmas~2.1 and~3.1 (the
-truncated ground energy and gap, the entropy inputs and their transfer to
-$\widetilde\Omega$, the target typical window, and the marginal-tail parameter
-$\mathcal B\le CnD(\log n)^{12}$ of the status cuts) form a second
-sub-record. For one physical system at the source scales, under the test
-geometry and the entropy inputs, a single truncated ground vector supplies all
-of them for all sufficiently large $n$, and also satisfies the marginal moment
-bound of Lemma~3.1 at every region.\footnote{Truncation inputs:
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_scanTruncation}.}
+\paragraph{The scanner conclusion for the original physical system.}
+The scanner theorem\footnote{The scanner conclusion:
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.scannerStatement}.}
+constructs a truncated ground vector, a target typical set and a common
+Schmidt--Bell label sequence from the original gapped Hamiltonian, the
+scanner geometry and the entropy hypotheses. The truncation coefficient
+is chosen before the local dimension and the entropy coefficient. The
+other uniform constants and the size threshold precede the finite
+physical system and the total weight; the state and labels precede the
+replica limit.
 
-Combining the two sub-records, Proposition~9.2 holds for the actual scan of
-one physical system at the source scales, under the test geometry and the
-entropy inputs, whenever the actual rounds satisfy the conclusions of
-Propositions~7.4 and~8.1 for the same truncated ground vector; these
-conclusions are the only remaining hypothesis.\footnote{Scanner estimate for
-    the actual scan:
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.scanner_estimate_actualScan}.}
+For every sufficiently large replica count, one charge round and one
+parameter in $[\epsilon/2,\epsilon]$ satisfy the selected-density and
+defect-energy estimates and both rough norm comparisons. Under the
+additional sharp smallness condition, both sharp comparisons hold at
+that same point. The marginal moment estimate applies to every region of
+the same truncated vector, and one common marginal parameter controls
+all status cuts. The final-round rough upper estimate has its own
+vanishing replica remainder.
 
-\paragraph{What remains.}
-To obtain Proposition~9.2 unconditionally, it remains to supply that last
-hypothesis for the actual rounds: the conclusions of Proposition~7.4 for the
-physical prevector (the transport estimates are proved for any nonzero
-symmetric supplied vector, see Step~3, and must be matched to the record's
-form and constants), the construction of the initial Schmidt--Bell replica
-prevector from the target typical window, and the initial and terminal
-comparator norm bounds and comparator budgets of Proposition~8.1 for that
-prevector and the same truncated ground state $\widetilde\Omega$.
+The conclusion does not assume a record of transport or norm-comparison
+estimates. Those estimates are derived for the same physical data. The
+abstract scanner deduction remains a separate result, while the direct
+physical theorem uses the actual charge selection, the supplied-state
+norm comparisons and the common status-cut bounds. The mathematical
+adjustment recorded in this note concerns the output coefficients.
+
+\paragraph{The entropy input constant and the enlarged output constants.}
+The symbol $C_e$ is reused in the density and shell bounds of
+\path{08-scanner.tex}, lines~379--389, after fixed factors and additive
+errors are absorbed at lines~462--490. The proposition permits its
+constants to depend on $C_e$ at line~396. To distinguish the two roles,
+retain $C_e^{\rm in}$ in the original entropy hypotheses and put
+$C_* = \max\{C_e^{\rm in},1\}$. This enlargement preserves those
+hypotheses and introduces no assumption that $C_e^{\rm in}$ is positive.
+The transferred whole-prefix entropy bound is
+\begin{align}
+    B_{\rm sh}
+     & \le C_*(nL^e+n)+n^{-247}
+    \le (C_*+1)(nL^e+n).
+    \label{eq:arealaw2d_scanner_inputs_shell_bound}
+\end{align}
+The last inequality holds for $n\ge2$ and retains the entropy-continuity
+error by enlarging the coefficient. The mismatch bound is
+$B_{\rm exc}=1+3nD\log q\le(1+3\log q)nD$ when $D\ge1$.
+A common output coefficient may therefore be chosen to dominate
+$C_*+1$, $1+3\log q$ and both marginal-budget coefficients.
+
+The density constants are likewise chosen after $C_e^{\rm in}$, but
+before the finite physical system and total weight. Choose a positive
+coefficient $C_\delta$ and a nonnegative logarithmic exponent
+$C_{l,\delta}$, giving
+\begin{align}
+    \delta_n
+     & =C_\delta\epsilon^{-1}
+    \left(n^{e-\mu}+a^{1/4}(\log n)^{C_{l,\delta}}\right).
+    \label{eq:arealaw2d_scanner_inputs_density_bound}
+\end{align}
+For example, the rough budget has coefficient
+$C_{\rm rough}=6C_*+13+6\log q$, and the density conversion permits
+$C_{\delta,0}=4(C_1+1)(C_{\rm rough}+2C_t)C_s$, where $C_t\ge1$
+bounds the transport coefficient and $C_s\ge1$ bounds the rounded
+scales. A subsequent enlargement serves both the density and energy
+estimates. These constants absorb the interval length, typical-width,
+mismatch and transport terms.
+
+For $C_e^{\rm in}=0$, the output coefficient $C_\delta$ may remain
+positive and the transferred shell entropy is not asserted to vanish.
+The statement with each output coefficient numerically identical to
+$C_e^{\rm in}$ is stronger than the coefficient convention used here;
+this proof does not establish it. The original entropy hypotheses remain
+unchanged.
 
 \section{Step 1: Truncation trace distance and entropy continuity}
 
 The paper states that the trace distance $t=\frac12\||\widetilde\Omega\rangle
-\langle\widetilde\Omega|-|\Omega\rangle\langle\Omega|\|_1$ between the original
+    \langle\widetilde\Omega|-|\Omega\rangle\langle\Omega|\|_1$ between the original
 and truncated ground states satisfies $t=O(n^{-500})$~\cite{OpenAI2026AreaLaw}
-(\path{08-scanner.tex}, lines~400--403). The scanner hypothesis record retains
-an explicit constant $C\ge1$ in $t\le Cn^{-500}$ chosen before the scale,
+(\path{08-scanner.tex}, lines~400--403). The truncation estimates supply
+a constant $C\ge1$ in $t\le Cn^{-500}$ chosen before the scale,
 domain, and scan. By the spectral perturbation bound of~\cite[Proposition~4.5]{OpenAI2026AreaLaw},
 a truncated ground-state energy $0\le\varepsilon\le n^{-1000}$ and pre-truncation
 normalized spectral gap $g>0$ (where $g=\Delta/c_s$ when the physical
@@ -138,7 +148,8 @@ Hamiltonian has gap $\Delta$ and positive-constraint normalization $c_s$) give
     \label{eq:arealaw2d_scanner_inputs_perturbation_bound}
 \end{align}
 and (\ref{eq:arealaw2d_scanner_inputs_perturbation_bound}) implies
-$t\le\sqrt{2/g}\,n^{-500}$, so choosing $C\ge\sqrt{2/g}$ satisfies the field.
+$t\le\sqrt{2/g}\,n^{-500}$, so choosing $C\ge\max\{1,\sqrt{2/g}\}$
+gives the required trace-distance bound.
 For any fixed $A,C\ge0$ and local dimension $q\ge1$, every $t\le An^{-500}$
 satisfies, for all sufficiently large $n$,
 \begin{align}
@@ -259,9 +270,7 @@ integrable on $[0,1]$.\footnote{Charge-defect regularity:
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_actualFillScanRound_chargeDefect},
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.intervalIntegrable_actualFillScanRound_chargeDefect},
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.aestronglyMeasurable_actualChargeScanRound_chargeDefect}, and
-    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.intervalIntegrable_actualChargeScanRound_chargeDefect}.
-    The remaining prevector/comparator task is tracked in issue 8753, and the
-    lattice ground-state task in issue 8979.}
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.intervalIntegrable_actualChargeScanRound_chargeDefect}.}
 
 Setting $\alpha=[2(C_1+1)nD]^{-1}$ and $\ell=1+(2r_0+1)^2\log q$, the
 pointwise bound $\alpha\mathcal Q(p)\le\mathcal G(p)$ combines with
@@ -270,7 +279,7 @@ transported norm $N(p)$, $a>0$ with $a\ell\le c_0$, replica count $r\ge0$, and
 $0\le p_0\le p_1\le1$,
 \begin{align}
     ra\alpha\int_{p_0}^{p_1}\mathcal Q(p)\,dp
-    & \le \log N^2(p_0)-\log N^2(p_1)
+     & \le \log N^2(p_0)-\log N^2(p_1)
     +(p_1-p_0)\bigl(C_{\mathrm{ent}}raKa^{1/4}\ell^{e_{\mathrm{ent}}}+\beta_r\bigr).
     \label{eq:arealaw2d_scanner_inputs_charge_integral}
 \end{align}
@@ -283,7 +292,7 @@ $N^{\mathrm{fill}}_{s,k,\mathrm{pre}}$ for the filtered norm after $s$ charges,
     ka\alpha\sum_{s=0}^{nm-1}\int_{p_0}^{p_1}
     \mathcal Q_{s,k,\mathrm{pre}}(p)\,dp
      & \le \log (N^{\mathrm{fill}}_{0,k,\mathrm{pre}})^2
-    -\log (N^{\mathrm{fill}}_{nm,k,\mathrm{pre}})^2 \\
+    -\log (N^{\mathrm{fill}}_{nm,k,\mathrm{pre}})^2                      \\
      & \quad +2nm\bigl(C_{\mathrm{ent}}kaKa^{1/4}\ell^{e_{\mathrm{ent}}}
     +\beta_k\bigr).
     \label{eq:arealaw2d_scanner_inputs_charge_sum}
@@ -301,9 +310,10 @@ leaf states are normalized density matrices for interior parameters $0<p<1$, so
 their combined Fourier--coherent measures have total mass $1/2$ on $(0,1)$,
 whereas at $p=1$ (for old leaves, where $(1-p)w_h=0$) and $p=0$ (for new leaves,
 where $pw_hq_{c\mid h}=0$) the leaf weights and transported measures vanish.
-Accordingly, the scanner hypothesis record requires the mass-$1/2$ identity only
-for $0<p<1$; because $\{0,1\}$ has Lebesgue measure zero, interior bounds and
-almost-everywhere measurability suffice for integrating over $[0,1]$.
+The mass-$1/2$ identity is used only for $0<p<1$ and is derived from these
+normalized transported states. Since $\{0,1\}$ has Lebesgue measure zero,
+interior bounds and almost-everywhere measurability suffice for integrating
+over $[0,1]$.
 
 Parameter integrability of the old-state Fourier--coherent integral is proved
 from the transported expectation formula. For a continuous real coherent symbol
@@ -430,7 +440,7 @@ $\ell=1+(2r_0+1)^2\log q$, and let $b=\sum_{h\text{ not good}}w_h$ be the
 bad-old-history probability. For any nonzero symmetric replica vector $\psi_k$
 and $0<p<1$, H\"older's inequality and the $10D/m$ dilution bound yield
 \begin{align}
-    \mathcal E_k(p)&\le\frac{10D}{m}
+    \mathcal E_k(p) & \le\frac{10D}{m}
     \left((1-p)A^{7/8}\mathcal Q_k(p)^{1/8}
     +\frac{A(2\ell)^{1/8}}2\bigl((1-p)b+p\bigr)\right).
     \label{eq:arealaw2d_scanner_inputs_charge_energy}
@@ -446,7 +456,7 @@ Absorbing the transport prefactors $|C_{\mathrm{en}}|a^2\ell^{e_{\mathrm{en}}}$
 with $a=W/K$ into a power of $\log n$ then gives, for all $n\ge N$,
 \begin{align}
     |C_{\mathrm{en}}|a^2\ell^{e_{\mathrm{en}}}\mathcal E_k(p)
-    &\le C W^2 n^{\ell_{\mathrm{sc}}}D^2(\log n)^{C_l}
+     & \le C W^2 n^{\ell_{\mathrm{sc}}}D^2(\log n)^{C_l}
     \left((1-p)\left(\frac{\mathcal Q_k(p)}{KnD}\right)^{1/8}
     +(1-p)n^{-P}+p\right),
     \label{eq:arealaw2d_scanner_inputs_charge_coefficients}
@@ -456,17 +466,22 @@ selection.\footnote{Defect nonnegativity and normalized energy coefficients:
     \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualChargeEntropyDefect_nonneg} and
     \leanid{TNLean.PEPS.AreaLaw.Scan.exists_actualCharge_energy_coefficients}.}
 
-\section{Effect on the paper and what remains}
+\section{Effect on the source statement}
 
-The deduction of Proposition~9.2 from the five input components is complete, and
-the geometric, probabilistic, replica-transport, and marginal-tail steps are
-formalized as shown above. For the actual scan of one physical system the
-inputs of Lemmas~9.1, 2.1 and~3.1 and Proposition~4.5 are derived, so the
-remaining hypothesis consists of the conclusions of Propositions~7.4 and~8.1.
-The scope restriction will be removed once the initial Schmidt--Bell replica
-prevector and the initial and terminal comparator norm bounds of
-Proposition~8.1 are formalized and connected, with the transport estimates,
-to supply that hypothesis.
+All four comparisons refer to the same selected charge and interpolation
+parameter, with the same truncated vector, typical set and label sequence.
+The sharp comparisons retain precisely their marginal smallness
+antecedent. No transport or comparison certificate is an additional
+hypothesis of the physical scanner theorem.
+
+The retained local adjustment distinguishes the input entropy coefficient
+from output coefficients enlarged after it is fixed. It does not change
+the powers of $n$, the rounded scales, the admissible exponents, the total
+weight condition or the order of the physical and replica quantifiers.
+The identical-coefficient reading of the printed symbol $C_e$ is not
+claimed. The explicit marginal logarithmic exponent $12$ and the
+continuity bound $n^{-247}$ are quantitative choices used to absorb the
+errors into the allowed output constants.
 
 \bibliographystyle{alpha}
 \bibliography{references}

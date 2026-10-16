@@ -18,7 +18,7 @@ All coordinate bases in this section are finite orthonormal bases.
     discarded register list, and partition each list into affected and exterior
     party registers. Choose orthonormal bases $(a_x)$ and $(e_y)$ of the
     affected and exterior physical memories, and $(d_i)$ and $(f_j)$ of the
-    affected and exterior discarded memories. Transporting their tensor
+    affected and exterior discarded memories. Mapping their tensor
     products by the corresponding register permutations gives an orthonormal
     basis indexed by $((x,y),(i,j))$ in physical/discarded order and an
     orthonormal basis indexed by $((x,i),(y,j))$ in affected/exterior order.
@@ -61,7 +61,7 @@ All coordinate bases in this section are finite orthonormal bases.
     \uses{thm:peps_partition_output_coordinates,
         thm:peps_basis_owner_coordinates}
     Under any owner relabelling (or composition of two owner relabellings),
-    transporting the physical and discarded bases by the induced memory
+    mapping the physical and discarded bases by the induced memory
     isometries preserves every physical/discarded coordinate of an output
     vector. Partitioning into affected and exterior registers after the two
     relabellings therefore gives the coordinates $((x,i),(y,j))$ described
@@ -72,7 +72,7 @@ All coordinate bases in this section are finite orthonormal bases.
     \uses{thm:peps_partition_output_coordinates}
     Owner relabelling leaves the underlying register spaces unchanged and
     commutes with list concatenation, so its memory isometry preserves inner
-    products with the transported basis vectors. Applying this twice and then
+    products with the mapped basis vectors. Applying this twice and then
     applying the partition coordinate identity gives the claim.
 \end{proof}
 
@@ -99,7 +99,7 @@ All coordinate bases in this section are finite orthonormal bases.
     \end{align}
     where $C_{x,V}$ and $C_{y,W}$ are the physical-coordinate projections of
     $V$ and $W$. The same formula holds before either of the two owner
-    relabellings in the transported bases.
+    relabellings in the corresponding bases.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -109,7 +109,7 @@ All coordinate bases in this section are finite orthonormal bases.
     product on tensor products, the $((x,i),(y,j))$ coordinate of each summand
     is the product of its $(x,i)$ and $(y,j)$ coordinates, which equal
     $\langle d_i,C_{x,V}F e_{(k,t)}\rangle$ and
-    $\langle f_j,C_{y,W}G e_t\rangle$. Transporting the bases across the two
+    $\langle f_j,C_{y,W}G e_t\rangle$. Mapping the bases across the two
     owner relabellings gives the final claim.
 \end{proof}
 
@@ -134,7 +134,7 @@ All coordinate bases in this section are finite orthonormal bases.
 \begin{proof}\leanok
     \uses{thm:peps_family_regional_dimensions}
     Filtering registers by side after the composite owner relabelling selects
-    precisely the physical registers of parties $p\in A$. Transporting the
+    precisely the physical registers of parties $p\in A$. Mapping the
     regional tensor-product basis through these isometries gives the basis and
     dimension $\prod_{p\in A}d_p$.
 \end{proof}
