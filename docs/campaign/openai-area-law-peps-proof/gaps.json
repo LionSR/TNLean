@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-10-16T17:00:00Z",
+  "reviewedAt": "2026-10-16T20:00:00Z",
   "entries": [
     {
       "id": "docs/paper-gaps/oai26_peps_patch_stationarity_gap.tex",
@@ -421,6 +421,27 @@
       "found": "Two premises are not printed in the passage. First, the region contains a lattice point: Definition 9.3 requires a template to be nonempty, and the paper uses these templates only for regions that meet the cut <i>A</i>. Second, for replacements, the stopping scale <i>S</i><sub>*</sub> is at least one, so every nonterminal removal half-side is a power of two and <i>s</i><sub>0</sub> = 2<i>u</i> is a positive integer. The paper chooses <i>S</i><sub>*</sub> sufficiently large, which implies this.",
       "impact": "No. The final assembly applies these templates only to retained regions, which meet <i>A</i>, and with a stopping scale at least one.",
       "plan": "None beyond merging pull request #9536; the final assembly of Proposition 11.2 uses the templates within these premises."
+    },
+    {
+      "id": "docs/paper-gaps/oai26_zero_floor_energy_scope.tex",
+      "repo": "QICLean",
+      "kind": "narrower",
+      "status": "open",
+      "paper": "peps",
+      "result": "Companion Lean source, energy of the norm-maximizing nested filters",
+      "issue": 8741,
+      "prs": {
+        "QICLean": [
+          844
+        ]
+      },
+      "title": "Energy of the norm-maximizing nested filters at zero floor",
+      "summary": "The sharp energy bound of the companion source is proved for one chosen norm maximizer on arbitrary finite sites. Its identification with the source's filters and the physical grid specialization remain open.",
+      "context": "The patch construction filters the ground state by a nested product of positive operators chosen to maximize the output norm. The energy of the normalized output then exceeds the ground energy by at most a weighted count of the interactions that cross the filtering regions.",
+      "claims": "For weights 0 &lt; <i>a<sub>j</sub></i> ≤ 1 and nested regions <i>D<sub>j</sub></i> crossed by <i>b<sub>j</sub></i> edges, the selected normalized output φ satisfies |⟨φ, <i>H</i>φ⟩ − <i>E</i><sub>0</sub>| ≤ <i>q</i><sup>2</sup><i>J</i> Σ<sub><i>j</i></sub> <i>b<sub>j</sub></i><i>a<sub>j</sub></i><sup>2</sup> and Δ(1 − |⟨Ω, φ⟩|<sup>2</sup>) ≤ <i>q</i><sup>2</sup><i>J</i> Σ<sub><i>j</i></sub> <i>b<sub>j</sub></i><i>a<sub>j</sub></i><sup>2</sup>. The source takes a compact limit of regularized maximizing families and shows the limiting output is nonzero.",
+      "found": "QICLean proves, on arbitrary finite sites and for each supported Hermitian Hamiltonian with an eigenvector, that one zero-floor norm maximizer has nonzero output and absolute energy error at most <i>B</i><sub>in</sub> = Σ<sub><i>j</i></sub> <i>a<sub>j</sub></i><sup>2</sup> Σ<sub><i>i</i></sub> <i>d<sub>ij</sub></i><sup>2</sup><i>c</i><sub>0</sub>, summed over the terms split by <i>D<sub>j</sub></i>, where <i>d<sub>ij</sub></i> is the dimension of the part of the support inside <i>D<sub>j</sub></i>. No gap or ground-state hypothesis is needed. For nearest-neighbor interactions <i>d<sub>ij</sub></i> = <i>q</i>, so <i>B</i><sub>in</sub> equals the source's bound. The bound is proved for one chosen maximizer, not for every one. Still open: identifying the source's positive filters and ordered lifted products with the floor-zero feasible filters, and the specialization to the physical grid with its full-system gap.",
+      "impact": "No. The note records a difference of representation, not an error in the source.",
+      "plan": "Identify the source's filters and maximizing products with the formal ones and specialize to the square grid (issue #8741)."
     }
   ],
   "checked": [
