@@ -74,7 +74,8 @@ theorem isStepChain_centralBirth (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
         (repaintBaseline R done).centralGuide) := by
   have hb := centralBirth_hasFrameChange hD hLL hΩ hm₀ hA₀ hc hL hk2 P rank R hlarge done hr
     (S := {p | EventUses (.inl R.1) p}) (IsLocalLabel.eventUses (isHomogenizing_oldLabel R done))
-    (IsLocalLabel.eventUses (isHomogenizing_finalLabel R done)) (r := 2 * b) (rs := 2 * b) hK (by omega)
+    (IsLocalLabel.eventUses (isHomogenizing_finalLabel R done)) (r := 2 * b) (rs := 2 * b) hK
+    (by omega)
   rw [← toFinset_cornerList] at hb
   exact isStepChain_sheetOperation P rank R hpt (Or.inl rfl) (Or.inr (Or.inl rfl))
     (isHomogenizing_oldLabel R done) (cornerList R.1.index)
