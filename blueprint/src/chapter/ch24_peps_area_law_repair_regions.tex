@@ -377,6 +377,54 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     current regions before simultaneous removal.
 \end{definition}
 
+% Source: 10-geometry.tex, geometry:belt-count and geometry:initial-stars,
+% lines 212--233 and 325--363.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Properties of the chosen initial repair marks]
+    \label{thm:area_law_initial_repair_mark_facts}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.initialRepairStage_mark_spec}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_belt_cell_marks,
+        def:area_law_fine_belt_scales}
+    Fix a finite domain $\Lambda\subset\mathbb Z^2$, a cut
+    $A\subseteq\Lambda$, an origin $o\in\mathbb R^2$, and integers
+    $C_0\ge2$ and $k_0\ge50{,}000{,}000$. Let $F_k$ be the selected
+    belt-cell indices for the residues used in the initial repair stage,
+    and write $t_k=2^{\ell_k}$. Let $K_0$ be its mark set, with
+    locations $v_p^{(0)}$ and scales $S_p^{(0)}$. The choices in
+    Definition~\ref{def:area_law_repair_stage} have the following properties,
+    as in the belt and initial-mark construction of
+    \cite[Section~11]{OpenAI2026AreaLaw}.
+    \begin{enumerate}
+        \item For every $k\ge0$,
+              \begin{align}
+                  |F_k| & \le64(2C_0+1)^2|\partial_\Lambda A|
+                  \,2^{-\delta_0 k/2}.\notag
+              \end{align}
+        \item The set $\{k\ge0:F_k\ne\varnothing\}$ is finite.
+        \item For every $p\in K_0$, the scale $S_p^{(0)}$ is positive,
+              and there are $k\ge k_0$ and $z\in F_k$ such that
+              $v_p^{(0)}\in M_{\ell_k,z}$ and $S_p^{(0)}=t_k$.
+        \item For every $p\in K_0$, $k\ge k_0$ and $z\in F_k$,
+              the inclusion $v_p^{(0)}\in M_{\ell_k,z}$ implies
+              $S_p^{(0)}\le t_k$.
+        \item For distinct $p,q\in K_0$,
+              \begin{align}
+                  \operatorname{dist}_\infty(v_p^{(0)},v_q^{(0)})
+                   & \ge\frac14\max(S_p^{(0)},S_q^{(0)}).\notag
+              \end{align}
+        \item The location map $p\mapsto v_p^{(0)}$ is injective.
+    \end{enumerate}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:area_law_uniform_separated_initial_marks,
+        def:area_law_repair_stage}
+    The joint choice defining the initial stage supplies the first five
+    assertions. Its mark set is the selected finite set of points, and
+    the location map is its inclusion into $\mathbb R^2$, which is
+    injective.
+\end{proof}
 % Source: 10-geometry.tex, retained identifiers, lines 398--409;
 % comparisons with later actual regions, lines 584--591.
 \begin{definition}[Inclusions between generations]
@@ -683,6 +731,38 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     Theorem~\ref{thm:peps_closed_square_card} at radius $S_*$.
 \end{proof}
 
+% Source: 10-geometry.tex, geometry:bad-sites, lines 694--707.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Terminal sites in finitely many generations]
+    \label{thm:area_law_repair_terminal_prefix_sites}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.card_repairTerminalInteriorSites_prefix_le}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_terminal_interiors}
+    Fix the actual repair family with arbitrary origin $o\in\mathbb R^2$
+    and stopping scale $S_*\in\mathbb R$, with $C_0\ge2$ and
+    $k_0\ge50000000$. Let $\Lambda\subset\mathbb Z^2$ be finite and
+    $A\subseteq\Lambda$. Write $K_j$ for the mark occurrences at
+    generation $j$, and $E_{\mathrm{term}}(\mathcal D_j)$ for the union
+    of the terminal-square interiors at that generation. For every
+    $N\in\mathbb N$,
+    \begin{align}
+        \left|A\cap\bigcup_{0\le j<N}E_{\mathrm{term}}(\mathcal D_j)\right|
+         & \le (2S_*+1)^2\sum_{0\le j<N}|K_j|.\notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_finite_marks,
+        thm:area_law_repair_terminal_square_sites}
+    Each $K_j$ is finite. A site in a terminal-square interior also
+    belongs to its closed square, which contains at most $(2S_*+1)^2$
+    lattice sites. The cardinality of the union is at most the sum of
+    these individual cardinalities. At generation $j$, the number of
+    terminal marks is at most $|K_j|$; summing over $j<N$ gives the
+    bound. Restriction to $A$ can only decrease the count. For $N=0$,
+    both sides vanish.
+\end{proof}
 % Source: 10-geometry.tex, termination, lines 538--541;
 % final regions, lines 558--561; exceptional sites, lines 694--707.
 % Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
@@ -707,6 +787,86 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     terminal-interior contribution is an empty union. Removing these
     contributions from the defining union gives the identity. When
     $N=0$, both sides are empty.
+\end{proof}
+
+% Source: 10-geometry.tex, replacement instructions, lines 398--417;
+% geometry:repair-induction, lines 474--478 and 526--541;
+% final regions, lines 558--561.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Current regions avoid accumulated terminal interiors]
+    \label{thm:area_law_repair_current_terminal_empty}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.current_disjoint_terminalInteriors_of_isEmpty}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_terminal_interiors,
+        lem:area_law_repair_metric_invariants}
+    Take the actual repair family at any origin $o\in\mathbb R^2$,
+    under the metric hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants}.
+    If $N\in\mathbb N$ and $K_N=\varnothing$, then every $i\in I_N$
+    satisfies $R_i^{(N)}\cap\mathcal E_{\mathrm{term}}=\varnothing$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_terminal_interiors_before_empty,
+        def:area_law_repair_terminal_children,def:area_law_repair_ancestors,
+        thm:area_law_repair_current_terminal_disjoint}
+    By Theorem~\ref{thm:area_law_repair_terminal_interiors_before_empty},
+    only generations $t<N$ contribute to $\mathcal E_{\mathrm{term}}$.
+    Each terminal-square interior lies in its closed terminal square,
+    so $\mathcal E_{\mathrm{term}}\subseteq\mathcal E_N$.
+    Theorem~\ref{thm:area_law_repair_current_terminal_disjoint} makes
+    every $R_i^{(N)}$ disjoint from $\mathcal E_N$ and hence from
+    $\mathcal E_{\mathrm{term}}$.
+\end{proof}
+
+% Source: 10-geometry.tex, positive boundary, lines 102--105;
+% replacement instructions, lines 398--417; lattice partition, lines 545--561.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Unique final-region membership outside terminal interiors]
+    \label{thm:area_law_repair_final_lattice_partition_empty}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.lattice_mem_terminal_or_unique_final_of_isEmpty}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions,
+        def:area_law_dyadic_origin,def:area_law_repair_terminal_interiors,
+        lem:area_law_repair_metric_invariants}
+    Take the actual repair family at $o=(\sqrt2,\sqrt3)$.
+    Assume the metric hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants}, and suppose
+    $S_*\ge1$ and $b=|\partial_\Lambda A|>0$.
+    Let $N\in\mathbb N$ satisfy $K_N=\varnothing$.
+    For $i\in I_N$, write $R_i^{(\infty,N)}$ for the intersection of its
+    retained current regions over all later generations.
+    For each $z\in\mathbb Z^2$, exactly one of the following holds:
+    \begin{enumerate}
+        \item $z\in\mathcal E_{\mathrm{term}}$, and
+              $z\notin R_i^{(\infty,N)}$ for every $i\in I_N$;
+        \item $z\notin\mathcal E_{\mathrm{term}}$, and there is a unique
+              $i\in I_N$ such that $z\in R_i^{(\infty,N)}$.
+    \end{enumerate}
+    The identifiers range over all of $I_N$, including the dummy.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_current_terminal_empty,
+        thm:area_law_repair_final_current_empty,
+        thm:area_law_repair_current_disjoint,
+        thm:area_law_repair_lattice_cover_before,
+        def:area_law_repair_terminal_interiors}
+    By Theorem~\ref{thm:area_law_repair_final_current_empty}, each
+    final region equals its current region at generation $N$.
+    If $z\in\mathcal E_{\mathrm{term}}$,
+    Theorem~\ref{thm:area_law_repair_current_terminal_empty} therefore
+    excludes $z$ from every final region.
+    Otherwise Theorem~\ref{thm:area_law_repair_lattice_cover_before}
+    puts $z$ in a current region, since every earlier terminal
+    contribution lies in $\mathcal E_{\mathrm{term}}$.
+    This gives a final-region witness. Two distinct witnesses would
+    contradict Theorem~\ref{thm:area_law_repair_current_disjoint} after
+    the same final-current identification, proving uniqueness.
+    The two alternatives are mutually exclusive by their opposite
+    assertions of terminal-interior membership.
 \end{proof}
 
 % Source: 10-geometry.tex, geometry:trim-radius, lines 393--399.
