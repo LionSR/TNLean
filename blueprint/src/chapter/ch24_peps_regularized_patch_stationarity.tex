@@ -726,7 +726,7 @@ Its marginals are those of the same final normalized vector defined in
     real number with $H\Omega=E_0\Omega$ and
     $H-E_0I\ge\Delta(I-|\Omega\rangle\langle\Omega|)$. Fix an order on the
     sites of the integer domain, a centre $c$, and reals $u\ge4$,
-    $0<\kappa\le1$ and $b>0$. Use the nested patches $K_0,\ldots,K_{m-1}$
+    $0<\kappa\le1$ and $b>0$. Use the nested patches $X_j=K(c,r_j)$, $0\le j<m$,
     with the equal weights $a_j=\kappa/m$ and the input vector $U\Omega$.
     If $x\in\mathcal D$ minimizes $F$ on $\mathcal D$ and
     $\phi=\widehat\Psi(x)$, then
@@ -744,8 +744,10 @@ Its marginals are those of the same final normalized vector defined in
     \uses{thm:peps_regularized_patch_minimum,thm:peps_nested_patch_sizes,
         thm:peps_patch_minimum_filter_log_ratio,
         thm:peps_ordered_patch_normalized_coordinates,
+        thm:peps_patch_factor_chain_list,
         thm:square_nearest_neighbor_terms,thm:square_area_law_ground_gap,
         thm:peps_nested_patch_crossing,thm:area_law_nearest_neighbor_budget,
+        thm:area_law_crossing_support_count,
         thm:peps_nested_patch_quadratic_sum}
     The weights are positive, so $\phi$ is a unit vector, and they are at
     most one. Write $H_{\mathrm{int}}$ as a sum of Hermitian site and edge
@@ -754,19 +756,19 @@ Its marginals are those of the same final normalized vector defined in
     $\phi$ is the normalized image of the gapped ground vector $U\Omega$
     under the ordered filter product. Each site term crosses no patch, and
     each edge crosses at most one selected patch. For a term $T_i$ crossing
-    $K_j$, let $d_{ij}=q^{|D_i\cap K_j|}$ be the dimension of its support
-    inside $K_j$. The logarithmic ratio estimate of
+    $X_j$, let $d_{ij}=q^{|D_i\cap X_j|}$ be the dimension of its support
+    inside $X_j$. The logarithmic ratio estimate of
     Theorem~\ref{thm:peps_patch_minimum_filter_log_ratio} at that single
     index, together with $a_j\le1$, gives
     \begin{align}
         \operatorname{Re}\langle\phi,H_{\mathrm{int}}\phi\rangle-E_0
          & \le\sum_{j=0}^{m-1}a_j^2
-        \sum_{T_i\text{ crossing }K_j}d_{ij}^2J.
+        \sum_{T_i\text{ crossing }X_j}d_{ij}^2J.
         \label{eq:peps_nested_patch_single_crossing_energy}
     \end{align}
-    A crossing edge has exactly one endpoint in $K_j$, so $d_{ij}=q$ and the
-    inner sum equals $q^2J|\partial_\Lambda K_j|$. Hence the right side of
+    A crossing edge has exactly one endpoint in $X_j$, so $d_{ij}=q$ and the
+    inner sum equals $q^2J|\partial_\Lambda X_j|$. Hence the right side of
     (\ref{eq:peps_nested_patch_single_crossing_energy}) equals
-    $q^2J\sum_ja_j^2|\partial_\Lambda K_j|$, and the quadratic boundary sum
+    $q^2J\sum_ja_j^2|\partial_\Lambda X_j|$, and the quadratic boundary sum
     bounds this by $36q^2J\kappa^2$.
 \end{proof}
