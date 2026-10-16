@@ -97,4 +97,72 @@ theorem IsDisplacedReading.eq_of_mem_open {H f : ℝ × ℝ → κ} (hU : IsOpen
 
 end Readings
 
+section PairChanges
+
+variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
+  {Party : Type}
+
+/-- **A bounded change of two frames with bounded pair sources.** An original circuit from the
+registers of `F₁, F₂` to those of `F₁', F₂'` that is a bounded change from the product of their
+reference vectors, with at most `rs` pair sources in each monomial.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 39–41, 389–430 and 572–583. -/
+def HasPairChange (Ω : EuclideanSpace ℂ (ι → Fin q)) (F₁ F₂ F₁' F₂' : Frame pos q Party)
+    (S : Set Party) (r K rs : ℕ) (ε : ℝ) : Prop :=
+  ∃ w : OriginalCircuit (F₁.regs ++ F₂.regs) (F₁'.regs ++ F₂'.regs),
+    w.IsBoundedChange S r K ε (pairRef F₁ F₂ Ω) (pairRef F₁' F₂' Ω) ∧ w.IsSourceBounded rs
+
+/-- **Reordering the holes after a change of two frames.** The holes of an encoded frame are
+listed in a fixed order of their tags; frames with the same ownership assignment and the same
+holes in another order are related by a reordering of tensor factors. So a change into `N₁, N₂`
+is such a change into frames with the owners of `N₁, N₂` and their holes reordered.
+
+Polynomial-PEPS manuscript, `05-frames.tex` (the order of the tags) and `06-geometry.tex`,
+lines 662–667. -/
+theorem HasPairChange.reorder {Ω : EuclideanSpace ℂ (ι → Fin q)} {F₁ F₂ N₁ N₂ G₁ G₂ : Frame pos q Party}
+    {S : Set Party} {r K rs : ℕ} {ε : ℝ} (h : HasPairChange Ω F₁ F₂ N₁ N₂ S r K rs ε)
+    (ho₁ : N₁.owner = G₁.owner) (hp₁ : N₁.holes.Perm G₁.holes) (ho₂ : N₂.owner = G₂.owner)
+    (hp₂ : N₂.holes.Perm G₂.holes) : HasPairChange Ω F₁ F₂ G₁ G₂ S r K rs ε := by
+  obtain ⟨c, hc, hs⟩ := h
+  obtain ⟨w₁, hw₁, -, he₁⟩ := Frame.exists_permWord N₁ G₁ ho₁ hp₁
+  obtain ⟨w₂, hw₂, -, he₂⟩ := Frame.exists_permWord N₂ G₂ ho₂ hp₂
+  set c₁ := w₁.toOriginalCircuit hw₁.isAllowed
+  set c₂ := w₂.toOriginalCircuit hw₂.isAllowed
+  have h₁ := Word.nonprivateCount_toOriginalCircuit_of_isReordering hw₁
+  have h₂ := Word.nonprivateCount_toOriginalCircuit_of_isReordering hw₂
+  set e : OriginalCircuit (N₁.regs ++ N₂.regs) (G₁.regs ++ G₂.regs) :=
+    .comp (c₁.appendTail N₂.regs) (OriginalCircuit.frameList G₁.regs c₂)
+  have he0 : e.nonprivateCount = 0 := by
+    change (c₁.appendTail N₂.regs).nonprivateCount +
+      (OriginalCircuit.frameList G₁.regs c₂).nonprivateCount = 0
+    rw [OriginalCircuit.nonprivateCount_appendTail, OriginalCircuit.nonprivateCount_frameList,
+      h₁, h₂]
+  have heval : e.eval (pairRef N₁ N₂ Ω) = pairRef G₁ G₂ Ω := by
+    change (OriginalCircuit.frameList G₁.regs c₂).eval ((c₁.appendTail N₂.regs).eval
+      ((appendIso N₁.regs N₂.regs).symm (N₁.regRef Ω ⊗ₜ N₂.regRef Ω))) =
+      (appendIso G₁.regs G₂.regs).symm (G₁.regRef Ω ⊗ₜ G₂.regRef Ω)
+    rw [OriginalCircuit.eval_appendTail_appendIso_symm,
+      OriginalCircuit.eval_frameList_appendIso_symm, Word.eval_toOriginalCircuit,
+      Word.eval_toOriginalCircuit]
+    exact congrArg₂ (fun x y => (appendIso G₁.regs G₂.regs).symm (x ⊗ₜ y)) (he₁ Ω) (he₂ Ω)
+  have hE : ∀ (s : ℝ), e.IsExpansionBounded r s := fun s =>
+    ⟨OriginalCircuit.isExpansionBounded_appendTail _ _
+        (Word.isExpansionBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
+          hw₁.sourceCount_eq r s),
+      OriginalCircuit.isExpansionBounded_frameList _
+        (Word.isExpansionBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
+          hw₂.sourceCount_eq r s) _⟩
+  have hM : e.IsMonomialBounded K :=
+    ⟨OriginalCircuit.isMonomialBounded_appendTail _ _
+        (Word.isMonomialBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
+          hw₁.sourceCount_eq K),
+      OriginalCircuit.isMonomialBounded_frameList _
+        (Word.isMonomialBounded_toOriginalCircuit_of_sourceCount_eq_zero _ _
+          hw₂.sourceCount_eq K) _⟩
+  refine ⟨c.comp e, ?_, hs, OriginalCircuit.isSourceBounded_of_nonprivateCount_eq_zero he0 rs⟩
+  rw [← heval]
+  exact hc.comp_right e he0 (hE _) hM
+
+end PairChanges
+
 end TNLean.PEPS.Approximation
