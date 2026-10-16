@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-10-16T20:00:00Z",
+  "reviewedAt": "2026-10-16T21:00:00Z",
   "entries": [
     {
       "id": "docs/paper-gaps/oai26_peps_patch_stationarity_gap.tex",
@@ -405,7 +405,7 @@
       "id": "docs/paper-gaps/arealaw2d_belt_replacement_template_scope.tex",
       "repo": "TNLean",
       "kind": "convention",
-      "status": "resolved-pending",
+      "status": "open",
       "paper": "area",
       "result": "Proposition 11.2, templates for belt tiles and replacements",
       "issue": 8758,
@@ -415,12 +415,12 @@
         ]
       },
       "title": "Lattice points and the stopping scale in belt and replacement templates",
-      "summary": "The templates of belt tiles and replacements are built as the paper describes. They are stated for regions that contain a lattice point, and with a stopping scale at least one.",
+      "summary": "The templates of belt tiles and replacements are built as the paper describes, for regions that contain a lattice point and with a stopping scale at least one. The final assembly of Proposition 11.2, which will discharge both premises, is not yet formalized.",
       "context": "The two-family construction of Proposition 11.2 attaches a template to each region it produces, so that the scanner estimates apply to it. A belt tile of side <i>u</i> = <i>t<sub>k</sub></i> gets <i>s</i><sub>0</sub> = <i>u</i>, and a replacement with removal half-side <i>u</i> gets <i>s</i><sub>0</sub> = 2<i>u</i>; both get <i>n</i> = ⌈<i>C<sub>B</sub></i><i>u</i>⌉.",
       "claims": "Each region is a union of at most eight closed triangles, and <i>C<sub>B</sub></i> can be chosen so that every such template satisfies <i>n</i> ≥ <i>C</i><sub>tpl</sub><i>N</i><sub>0</sub>(<i>s</i><sub>0</sub> + 1) and diam<sub>∞</sub> <i>T</i> ≤ <i>n</i>.",
       "found": "Two premises are not printed in the passage. First, the region contains a lattice point: Definition 9.3 requires a template to be nonempty, and the paper uses these templates only for regions that meet the cut <i>A</i>. Second, for replacements, the stopping scale <i>S</i><sub>*</sub> is at least one, so every nonterminal removal half-side is a power of two and <i>s</i><sub>0</sub> = 2<i>u</i> is a positive integer. The paper chooses <i>S</i><sub>*</sub> sufficiently large, which implies this.",
-      "impact": "No. The final assembly applies these templates only to retained regions, which meet <i>A</i>, and with a stopping scale at least one.",
-      "plan": "None beyond merging pull request #9536; the final assembly of Proposition 11.2 uses the templates within these premises."
+      "impact": "No. The final assembly will apply these templates only to retained regions, which meet <i>A</i>, and with a stopping scale at least one.",
+      "plan": "Formalize the final assembly of Proposition 11.2, which discharges both premises (issue #8758)."
     },
     {
       "id": "docs/paper-gaps/oai26_zero_floor_energy_scope.tex",
@@ -442,6 +442,27 @@
       "found": "QICLean proves, on arbitrary finite sites and for each supported Hermitian Hamiltonian with an eigenvector, that one zero-floor norm maximizer has nonzero output and absolute energy error at most <i>B</i><sub>in</sub> = Σ<sub><i>j</i></sub> <i>a<sub>j</sub></i><sup>2</sup> Σ<sub><i>i</i></sub> <i>d<sub>ij</sub></i><sup>2</sup><i>c</i><sub>0</sub>, summed over the terms split by <i>D<sub>j</sub></i>, where <i>d<sub>ij</sub></i> is the dimension of the part of the support inside <i>D<sub>j</sub></i>. No gap or ground-state hypothesis is needed. For nearest-neighbor interactions <i>d<sub>ij</sub></i> = <i>q</i>, so <i>B</i><sub>in</sub> equals the source's bound. The bound is proved for one chosen maximizer, not for every one. Still open: identifying the source's positive filters and ordered lifted products with the floor-zero feasible filters, and the specialization to the physical grid with its full-system gap.",
       "impact": "No. The note records a difference of representation, not an error in the source.",
       "plan": "Identify the source's filters and maximizing products with the formal ones and specialize to the square grid (issue #8741)."
+    },
+    {
+      "id": "docs/paper-gaps/polypeps_square_zero_floor_optimizer_scope.tex",
+      "repo": "TNLean",
+      "kind": "narrower",
+      "status": "open",
+      "paper": "peps",
+      "result": "Companion Lean source, the zero-floor filter optimizer on the square grid",
+      "issue": 8741,
+      "prs": {
+        "TNLean": [
+          9560
+        ]
+      },
+      "title": "The zero-floor filter optimizer for the original square-grid Hamiltonian",
+      "summary": "The energy and fidelity bounds of the companion source hold for the original square-grid Hamiltonian and its gapped ground vector, assuming a nonnegative interaction bound <i>J</i>.",
+      "context": "The companion source selects positive filters on nested regions of the square grid that maximize the filtered output norm, and bounds the energy and the ground-state fidelity of the normalized output by the weighted boundary lengths of the regions.",
+      "claims": "For nested regions <i>D</i><sub>0</sub> ⊆ ⋯ ⊆ <i>D</i><sub><i>m</i>−1</sub>, each edge crossing at most one region, and weights 0 &lt; <i>a<sub>j</sub></i> ≤ 1, one norm-maximizing family has nonzero output, and its normalization φ satisfies |Re⟨φ, <i>H</i>φ⟩ − <i>E</i><sub>0</sub>| ≤ <i>q</i><sup>2</sup><i>J</i> Σ<sub><i>j</i></sub> <i>a<sub>j</sub></i><sup>2</sup>|∂<i>D<sub>j</sub></i>| and Δ(1 − |⟨Ω, φ⟩|<sup>2</sup>) ≤ <i>q</i><sup>2</sup><i>J</i> Σ<sub><i>j</i></sub> <i>a<sub>j</sub></i><sup>2</sup>|∂<i>D<sub>j</sub></i>|. The source allows a real <i>J</i>, which can be negative only when there are no interaction terms.",
+      "found": "TNLean proves both bounds at once for one family of spectrally specified filters, for the original Hamiltonian transported to the integer square and its original full-system gap, with no regional gap. It assumes <i>J</i> ≥ 0, which the conversion to a finite-domain Hamiltonian requires; this only excludes the empty grid with a negative vacuous bound, since a nonempty grid already forces <i>J</i> ≥ 0. The nested regions, the single-crossing condition and the weights are still inputs. Matching the source's filter coordinates and ordered products is recorded in the QICLean zero-floor note.",
+      "impact": "No. The restriction concerns only the empty grid; the estimates are unchanged.",
+      "plan": "Remove the sign restriction by a direct reindexed interaction sum or a separate empty-grid argument, and construct the regions and weights geometrically (issue #8741)."
     }
   ],
   "checked": [
