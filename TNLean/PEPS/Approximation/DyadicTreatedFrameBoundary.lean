@@ -43,7 +43,7 @@ theorem eventually_add_ne (x c : ℝ) : ∀ᶠ ε in 𝓝[>] (0 : ℝ), x + ε �
   by_cases h : c - x = 0
   · filter_upwards [self_mem_nhdsWithin] with ε (hε : (0 : ℝ) < ε) he
     linarith
-  · filter_upwards [eventually_ne_nhdsWithin h.symm] with ε hε he
+  · filter_upwards [eventually_ne_nhdsWithin (Ne.symm h)] with ε hε he
     apply hε
     linarith
 
