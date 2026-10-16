@@ -44,33 +44,6 @@ open EncodedFrame PairEffect
 
 variable {k : ℕ}
 
-/-! ### Reading the placeholder as another party -/
-
-/-- **Owners that agree off the placeholder.** Let a guide take only valid labels, carry no
-placeholder at the sites, and have a true vertex at every hole center. Then its encoded frame is
-the same for any two party maps that agree on the valid labels other than the placeholder.
-
-Polynomial-PEPS manuscript, `06-geometry.tex`, lines 91–100 and 119–125. -/
-theorem guideFrame_eq_of_owner_eq {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ}
-    {pos : ι → ℝ × ℝ} {own own' : GuideLabel → ProtocolParty k}
-    (hown : ∀ l ∈ validLabels k, l ≠ guidePlaceholder → own l = own' l) {g : ℝ × ℝ → GuideLabel}
-    (hg : ∀ p, g p ∈ validLabels k) (hsite : ∀ x, g (pos x) ≠ guidePlaceholder)
-    (rank : GuideLabel → ℕ) {V : Finset (ℝ × ℝ)} (hV : ∀ z ∈ V, IsTrueVertex g z)
-    (patch : ℝ × ℝ → SquarePatch pos q)
-    (hpV : (V : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (patch z).outer (patch z').outer) :
-    guideFrame pos q g own guidePlaceholder rank V patch hpV =
-      guideFrame pos q g own' guidePlaceholder rank V patch hpV := by
-  have ho : (fun x => own (g (pos x))) = fun x => own' (g (pos x)) :=
-    funext fun x => hown _ (hg _) (hsite x)
-  have hh : (V.toList.map fun z =>
-        (⟨patch z, own (tagHolder rank g guidePlaceholder z)⟩ : Hole pos q (ProtocolParty k))) =
-      V.toList.map fun z => ⟨patch z, own' (tagHolder rank g guidePlaceholder z)⟩ := by
-    refine List.map_congr_left fun z hz => ?_
-    have ht := isTagHolder_tagHolder (rank := rank) (ph := guidePlaceholder)
-      (hV z (Finset.mem_toList.1 hz))
-    rw [hown _ (ht.mem_of_forall fun p => Set.mem_insert_of_mem _ (hg p)) ht.2]
-  simp only [guideFrame, ho, hh]
-
 /-! ### Direct repaintings -/
 
 /-- The bound on the number of monomials and on the coefficient sum of the gate of a small-patch
