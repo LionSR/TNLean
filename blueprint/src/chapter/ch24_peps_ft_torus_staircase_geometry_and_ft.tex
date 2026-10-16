@@ -135,7 +135,7 @@
     horizontal reference edge $e_h$ is the right edge leaving
     $(x_0+1,y_0+2)$, and the vertical reference edge $e_v$ is the up edge
     leaving $(x_0+2,y_0+1)$. Around each reference edge the rectangular
-    injectivity hypotheses and union closure supply the one-edge blocking
+    injectivity hypotheses and union closure give the one-edge blocking
     datum: the red block, the blue block, and the complement are injective,
     and the reference edge is the only edge crossing between the red and
     blue blocks,
@@ -272,7 +272,7 @@
     sizes $n,m\geq 7$, with the horizontal and vertical gauges $X$, $Y$
     described by translation covariance: the stored orientation of a
     wraparound edge is reversed, so on the seam the family carries the
-    transposed inverse of the class matrix, and a family that is literally one
+    transposed inverse of the class matrix, and a family consisting of a single unmodified
     matrix per orientation class cannot realize the absorbed equality there.
     The translation covariance of the family, with the scalar $\lambda$ kept
     separate rather than absorbed, realizes the remark of
@@ -303,7 +303,7 @@
         bands on every torus with $n,m\geq 7$. The
         coherent blocking frames at every edge produce per-edge gauges, whose
         absorption into $B$ gives the absorbed inserted-coefficient equality at
-        every edge; the absorbing family is built by transporting one reference
+        every edge; the absorbing family is built by translating one reference
         gauge per orientation class, so it commutes with the torus
         translations. A gauge preserves blocked-region linear independence, so
         the region comparison applies to the gauge-absorbed tensor: comparing
@@ -330,14 +330,14 @@
     Let $A$ and $B$ be PEPS tensors on the discrete $n\times m$ torus with $n,m>1$,
     with equal bond dimensions and positive bond dimensions, generating the same
     state, and let $X$ be a family of invertible matrices, one on each edge. Suppose
-    that at every site $v$ a region $R_v$ not containing $v$ is supplied together with
+    that at every site $v$ there is a region $R_v$ not containing $v$ together with
     the two two-block scalar proportionalities of the blocked weights of $A$ and of
     the gauge-absorbed second tensor over $R_v$ and over $R_v\cup\{v\}$, with ratios
     $c_R(v)$ and $c_S(v)$ satisfying $c_R(v)\ne 0$ and whose quotient
     $c_S(v)/c_R(v)$ is a single scalar $\lambda$ independent of $v$, and with the
     gauge-absorbed region block linearly independent. If, in addition, a single
     comparison region whose block and complement block are both blocked-tensor
-    injective is supplied, then $\lambda$ raised to the number of torus sites is one:
+    injective is given, then $\lambda$ raised to the number of torus sites is one:
     $\lambda^{nm}=1$.
 \end{corollary}
 \begin{proof}\leanok
@@ -425,7 +425,7 @@
     Let $A$, $B$, $X$, $X'$ be as in
     Theorem~\ref{thm:torusAbsorbedGauge_unique_scalar}, with both families
     realizing the absorbed inserted-coefficient equality at every edge, and
-    suppose moreover that both families are translation covariant: the matrix
+    suppose in addition that both families are translation covariant: the matrix
     at any translate of an edge is the matrix at the edge, transposed-inverted
     exactly when the translation swaps the stored endpoint order. Then there
     are nonzero scalars $c_h$ and $c_v$ such that on every horizontal edge

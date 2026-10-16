@@ -1,4 +1,4 @@
-\begin{definition}[Joining labels of two actual open regions]
+\begin{definition}[Joining labels of two open regions]
     \label{def:peps_open_region_joining_labels}
     \lean{TNLean.PEPS.RegionJoiningEdge,
         TNLean.PEPS.regionJoiningEdge_ofAdj,
@@ -11,7 +11,7 @@
     labels $\theta$, let $\beta_L(\mu,\theta)$ and $\beta_S(\mu,\theta)$
     read the original crossing labels of the two parts: they equal $\mu$
     on joining bonds and $\theta$ on the exterior boundary.
-    These are the actual labels in the two-column blocking of
+    These are the labels in the two-column blocking of
     \cite{Schuch2010PEPS}, lines 2489--2507.
 \end{definition}
 
@@ -61,7 +61,7 @@
     original sites, one original-spin unitary $W_\tau$ satisfies
     \[
         W_\tau\Psi_R(\theta)=\Psi_R(\theta\circ\tau)
-        \qquad\text{for every actual boundary configuration }\theta.
+        \qquad\text{for every boundary configuration }\theta.
     \]
     The spanning tree is chosen internally, and $W_\tau$ is chosen before
     $\theta$. Its preservation of the full Gram form is derived from the
@@ -71,11 +71,11 @@
     Boundary permutations commute with independent vertex translations
     in accessible coordinates. They therefore commute with the product
     averaging projector. The derived local Gram identity lifts each
-    permutation to the original spins; the actual open columns have the
+    permutation to the original spins; the open columns have the
     corresponding permuted boundary labels.
 \end{proof}
 
-\begin{theorem}[Literal diagonal weights on a joining bond]
+\begin{theorem}[Diagonal weights on a joining bond]
     \label{thm:peps_regular_boundary_charge_contraction}
     \lean{TNLean.PEPS.graphOpenRegionNetwork_regularEdgeCharacterSite_boundary,
         TNLean.PEPS.graphOpenRegionNetwork_regularEdgeCharacterSite_union}
@@ -91,7 +91,7 @@
         \Psi_L(\beta_L(\mu,\theta))\otimes
         \Psi_S(\beta_S(\mu,\theta)).
     \]
-    This is the literal charge insertion of \cite{Schuch2010PEPS},
+    This is the explicit charge insertion of \cite{Schuch2010PEPS},
     Section~6.6, source lines 2432--2453.
 \end{theorem}
 \begin{proof}\leanok
@@ -104,7 +104,7 @@
     \label{def:peps_joining_boundary_edge}
     \lean{TNLean.PEPS.regionJoiningBoundaryEdge}
     \leanok
-    Every actual joining bond is a crossing bond of each of the two
+    Every joining bond is a crossing bond of each of the two
     disjoint regions, with the same underlying native edge.
 \end{definition}
 
@@ -135,7 +135,7 @@
     with $\chi,p$ and every external label retained.
 \end{proof}
 
-\begin{definition}[The actual two-column torus square]
+\begin{definition}[The two-column torus square]
     \label{def:peps_torus_two_column_charge_geometry}
     \lean{TNLean.PEPS.torusChargeMotionColumn,
         TNLean.PEPS.torusColumnChargeMotionBond,
@@ -158,13 +158,13 @@
     \uses{def:peps_torus_two_column_charge_geometry,
         def:peps_torus_plaquette_flux_geometry}
     On a finite torus with both periods at least three, each column contains
-    exactly two sites and its actual induced graph is connected. The
+    exactly two sites and its induced graph is connected. The
     columns are disjoint and their union is the original plaquette region.
 \end{theorem}
 \begin{proof}\leanok
-    The native vertical edge supplies the two-site connecting walk.
+    The native vertical edge forms the two-site connecting walk.
     Distinct adjacent horizontal and vertical coordinates give the
-    cardinalities and disjointness. The actual plaquette walk has precisely
+    cardinalities and disjointness. The plaquette walk has precisely
     these four sites in its support.
 \end{proof}
 
@@ -177,9 +177,9 @@
     Suppose the original four-leg tensor is $G$-isometric for the regular
     action. On every translated square of a finite torus with periods at
     least three, independent two-spin unitaries on its left and right
-    columns move the literal diagonal charge from the upper horizontal
+    columns move the explicit diagonal charge from the upper horizontal
     bond to the lower bond. They are chosen before its character, internal
-    parameter and every actual outer boundary label, and retain these data.
+    parameter, and every outer boundary label, and retain these data.
 
     This proves the displayed two-column operation of
     \cite[Section~6.6]{Schuch2010PEPS}, source lines 2489--2507, in the stated finite-torus geometry, including both

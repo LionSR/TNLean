@@ -170,7 +170,7 @@ $\{\ket z\}$, and $\sigma$ is an arbitrary operator on that space.
     selected column.
 \end{proof}
 
-The assembly of \cite[\S8]{OpenAI2026PolynomialPEPS} (\texttt{07-assembly.tex},
+The final construction of \cite[\S8]{OpenAI2026PolynomialPEPS} (\texttt{07-assembly.tex},
 lines 9--99) applies the column lemma to an operator network and then
 realizes the resulting ket network as a PEPS on the open $L\times L$ square
 in the sense of \cite[\S1.1]{OpenAI2026PolynomialPEPS}
@@ -218,9 +218,9 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
     \leanok
     \uses{def:peps_ket_column_square_fix_input,thm:peps_square_grid_contraction,
         def:peps_ket_column_tensor_fix_input}
-    Fixing the inputs commutes with the transport of square-grid tensors to
+    Fixing the inputs commutes with the conversion of square-grid tensors to
     tensors on the open square graph, and the operator of a square-grid
-    operator network equals the operator of its transported graph tensor.
+    operator network equals the operator of the corresponding graph tensor.
 \end{lemma}
 
 \begin{proof}\leanok
@@ -346,7 +346,7 @@ the small-patch rewrite lemma, and the compression theorem.
         -|\Omega\rangle\langle\Omega|\big\rVert_1
                                           & \leq(2C_{\rm ch}C_{\rm step}+2C_{\rm hole})L^{-10}.
     \end{align}
-    If moreover
+    If in addition
     $\lVert\sigma-\Tr_{\rm private}|\Psi\rangle\langle\Psi|\rVert_1
         \leq C_{\rm comp}L^{-5}$, then
     \begin{align}
@@ -376,7 +376,7 @@ the small-patch rewrite lemma, and the compression theorem.
         \varepsilon & = C_{\rm ch}C_{\rm step}L^{-17}, &
         \delta      & = C_{\rm hole}L^{-57},
     \end{align}
-    and let $\Psi$ be the actual final vector in physical and private
+    and let $\Psi$ be the final vector in physical and private
     coordinates. Its physical density
     $\rho=\Tr_{\rm private}|\Psi\rangle\langle\Psi|$ satisfies
     \begin{align}

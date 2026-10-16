@@ -1,4 +1,4 @@
-\paragraph{Window witness from bond locality.}
+\paragraph{Window coefficient identity from bond locality.}
 
 \begin{theorem}[Forward window coefficient transfer from bond locality]
     \label{thm:peps_windowCoeffTransferAB_of_bondLocal}
@@ -36,7 +36,7 @@
         T_{B,W_{\mathrm L}}^{\mu}(\sigma)
         T_{B,V\setminus W_{\mathrm L}}^{\nu}(\tau). \notag
     \end{align}
-    The bond-local incident form supplies a matrix $N$ such that
+    The bond-local incident form gives a matrix $N$ such that
     \begin{align}
         K_M(\mu,\nu)
          & =
@@ -90,7 +90,7 @@
         =C_A(W_{\mathrm L},e,M;\sigma,\tau)$.
 \end{proof}
 
-\begin{theorem}[Window witness from bond locality and multiplicativity]
+\begin{theorem}[Window coefficient identity from bond locality and multiplicativity]
     \label{thm:peps_windowEdgeCoeffIdentityWitness_of_bondLocal}
     \lean{TNLean.PEPS.exists_windowEdgeCoeffIdentityWitness_of_bondLocal}
     \leanok
@@ -103,8 +103,8 @@
     the forward theorem. If $T_e(MM')=T_e(M)T_e(M')$ for all
     $M,M'\in\MN{D_A(e)}$, then there exist
     $Z,Z_{\mathrm{ref}}\in\GL(D_B(e))$ and a bond-dimension identification
-    $\iota_e:\MN{D_A(e)}\simeq\MN{D_B(e)}$ such that a coefficient-identity
-    witness at $e$ is nonempty. Thus the witness contains a region $R$ with
+    $\iota_e:\MN{D_A(e)}\simeq\MN{D_B(e)}$ such that the coefficient-identity
+    datum at $e$ is nonempty. Thus the datum contains a region $R$ with
     $e\in\partial R$, and for every $M\in\MN{D_A(e)}$ and every physical
     configuration $\sigma$ on $R$ and $\tau$ on $V\setminus R$, the
     coefficient identity has the form
@@ -123,6 +123,6 @@
     multiplicativity,
     Theorem~\ref{thm:peps_region_edge_gauge_of_coeff_transfer} gives a
     conjugating gauge $Z$ for the forward transfer. The window and complement
-    injectivity hypotheses then yield a nonempty coefficient-identity witness
+    injectivity hypotheses then yield a nonempty coefficient-identity datum
     with $Z_{\mathrm{ref}}=Z$.
 \end{proof}

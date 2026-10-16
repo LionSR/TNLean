@@ -10,7 +10,7 @@ dimension $D$. For the Applications-section translational-invariance
 corollary, the cycle-graph formulation instead retains one dimension $D_e$ per
 bond, derives their equality from the injective Fundamental Theorem, and then
 identifies the virtual spaces to construct the repeated tensor in the source's
-standing regime of at least three sites. The literal two-site reading of the
+standing regime of at least three sites. The two-site case of the
 printed corollary is false; this is recorded by
 Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
 \cite{gap:peps_cyclic_mps_two_site_bond_uniformity}.
@@ -132,7 +132,7 @@ Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
     spanning factors makes $X$ unique.
 \end{proof}
 
-\begin{lemma}[Arc transport between same-state chains]%
+\begin{lemma}[Arc transfer between same-state chains]%
     \label{lem:exists_arcTransport}
     \lean{MPSChainTensor.exists_arcTransport}
     \leanok
@@ -182,10 +182,10 @@ Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
     A virtual insertion $X$ on the bond is realized on each of the
     $L+1$ overlapping windows around it by deformed window tensors
     placing $X$ after the first $L-j$ letters of the window starting at
-    site $r+j$. Each deformation is transported to the second chain by
-    the arc transport at its own starting site
+    site $r+j$. Each deformation is transferred to the second chain by
+    the arc map at its own starting site
     (Lemma~\ref{lem:exists_arcTransport}); the same-state hypothesis
-    makes the transported deformations generate one common state, and the
+    makes the transferred deformations generate one common state, and the
     bond-operator extraction
     (Lemma~\ref{lem:chain_overlapWindow_exists_bondOperator}) produces
     $\Phi(X)$. Uniqueness of the bond operator makes $\Phi$ linear,
@@ -327,7 +327,7 @@ Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
     \uses{def:peps_tensor, def:peps_same_state}
     On the cycle graph with $n\ge3$ sites, let $r(v)=v+1$ be the one-site
     rotation. The cyclic shift of a site-dependent tensor family
-    $A_0,\ldots,A_{n-1}$ is the transport along $r^{-1}$, so its tensor at
+    $A_0,\ldots,A_{n-1}$ is the pullback along $r$, so its tensor at
     site $v$ is $A_{v+1}$. Thus the shifted family is
     $A_1,\ldots,A_{n-1},A_0$, exactly as in
     \cite[lines~1807--1827]{Molnar2018NormalPEPS}. The generated state is
@@ -359,7 +359,7 @@ Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
     virtual space is nonzero.
 \end{corollary}
 \begin{proof}\leanok
-    Transport along the inverse rotation preserves injectivity and replaces
+    Pulling back along the rotation preserves injectivity and replaces
     the bond-dimension function $D_e$ by $D_{r(e)}$. Apply the injective
     Fundamental Theorem to the original and shifted families. Equality of
     their bond-dimension functions gives $D_e=D_{r(e)}$; rotation sends the
@@ -390,7 +390,7 @@ Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
 \begin{proof}\leanok
     Let $e_0,e_1$ be the standard basis of $\mathbb C^2$ and take
     $A_1^i=e_i^{\mathsf T}$ and $A_2^i=e_i$. Each local tensor map sends a
-    virtual basis to $e_0,e_1$, hence is injective. Moreover
+    virtual basis to $e_0,e_1$, hence is injective. In addition,
     \begin{align}
         \tr(A_1^iA_2^j)=\delta_{ij}=\tr(A_2^iA_1^j).
         \label{eq:peps_cycle_two_site_shift_invariance}
@@ -542,13 +542,13 @@ Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
 \begin{proof}\leanok
     By Corollary~\ref{cor:peps_cycle_shift_bond_uniform}, every bond has the
     dimension $D$ of a fixed reference bond. Write $e_v$ for the bond from
-    $v$ to $v+1$, transport every bond index to $\{0,\ldots,D-1\}$, and let
+    $v$ to $v+1$, reindex every bond to $\{0,\ldots,D-1\}$, and let
     \begin{align}
         \iota_v(\xi) & =\bigl(\xi(e_{v-1}),\xi(e_v)\bigr),
                      & C_v^i(a,b)                          & =A_v^{\prime\,i}\!\left(\iota_v^{-1}(a,b)\right),
         \notag
     \end{align}
-    where $A'_v$ is the transported local tensor. If $g(v)=\eta(e_v)$, the
+    where $A'_v$ is the reindexed local tensor. If $g(v)=\eta(e_v)$, the
     two corresponding changes of finite summation variables give
     \begin{align}
         \Coeff_A(\sigma)
@@ -609,7 +609,7 @@ Theorem~\ref{thm:peps_cycle_two_site_bond_uniformity_counterexample} and
         thm:peps_injective_sameState_bondDim_eq,
         thm:peps_torusUniformBondDim_of_translationInvariant}
     State translation invariance identifies $A$ with
-    $A^{\tau_{a,b}}$ at every translation. Transport preserves injectivity,
+    $A^{\tau_{a,b}}$ at every translation. Translation preserves injectivity,
     so
     Theorem~\ref{thm:peps_injective_sameState_bondDim_eq} gives
     \begin{align}
@@ -701,7 +701,7 @@ dimensions; this uniform-dimension restriction is the only narrowing.
 \end{theorem}
 \begin{proof}\leanok
     Injectivity, same state, and connectivity are exactly the hypotheses of the injective Fundamental Theorem, which
-    supplies the local gauge.
+    gives the local gauge.
 \end{proof}
 
 \begin{definition}[Oriented endpoint scalar]%

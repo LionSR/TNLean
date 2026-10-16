@@ -55,6 +55,7 @@ import TNLean.PEPS.AreaLaw.LatticeCounts
 import TNLean.PEPS.AreaLaw.LocalHamiltonian
 import TNLean.PEPS.AreaLaw.MarginalTails
 import TNLean.PEPS.AreaLaw.NestedCylinderOrthogonalization
+import TNLean.PEPS.AreaLaw.PatchEnergySmallnessScale
 import TNLean.PEPS.AreaLaw.PhysicalCollarInformation
 import TNLean.PEPS.AreaLaw.PhysicalSafeBox
 import TNLean.PEPS.AreaLaw.PositiveConstraints
@@ -82,6 +83,7 @@ import TNLean.PEPS.AreaLaw.RegularizedPatchMinimizerDerivative
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimizerStationarity
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimum
 import TNLean.PEPS.AreaLaw.RegularizedPatchMinimumContinuity
+import TNLean.PEPS.AreaLaw.RegularizedPatchMinimumGrowth
 import TNLean.PEPS.AreaLaw.RegularizedPatchRadiusChoice
 import TNLean.PEPS.AreaLaw.RegularizedPatchRadiusDerivative
 import TNLean.PEPS.AreaLaw.RegularizedPatchStationarity

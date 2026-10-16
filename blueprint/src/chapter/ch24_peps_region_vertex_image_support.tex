@@ -7,7 +7,7 @@
     the regional vector.
 \end{definition}
 
-\begin{theorem}[Regional support supplies the site-image conditions]%
+\begin{theorem}[Site-image conditions from regional support]%
     \label{thm:peps_region_vertex_image_support}
     \lean{TNLean.PEPS.regionIncidentWeight_update,
         TNLean.PEPS.regionVertexPhysicalSlice_mem_localTensorMap_range,
@@ -17,14 +17,14 @@
         def:peps_vertex_image_ground_space}
     Every one-site slice at $v\in R$ of a vector in $\mathcal G_R$
     lies in the image of the site map $A_v$. Consequently a collection
-    of parent regions covering every vertex supplies all one-site
+    of parent regions covering every vertex enforces all one-site
     image conditions. No injectivity or positive-bond hypothesis is
     needed. This is a consequence of the finite contractions in
     \cite[Section IV.C.1]{Cirac2021Matrix}.
 \end{theorem}
 
 \begin{proof}\leanok
-    Expand a regional vector as a sum over actual incident-edge
+    Expand a regional vector as a sum over incident-edge
     assignments, with a coefficient depending on the crossing labels.
     For each assignment the selected site's coefficient vector is a
     column of $A_v$ multiplied by the product of all other site
@@ -49,7 +49,7 @@
 \begin{proof}\leanok
     The regional conditions imply the site-image conditions by the
     preceding theorem. The product site inverse therefore reconstructs
-    each physical vector and sends its actual regional conditions to
+    each physical vector and sends its regional conditions to
     the genuine virtual conditions. The product site map sends the
     virtual conditions back to the physical conditions. Positivity
     identifies the kernel of the parent sum with the common local space.
