@@ -20,9 +20,33 @@
 \begin{proof}
     \leanok
     \uses{def:peps_frame_square_patch, def:peps_adaptive_patch_constraint}
-    The bijection identifies the sample of each square on $V$ with the sample
-    of the same square on $W$, and the induced configuration bijection is
-    unitary. The cylinder description is independent of how the sites are
-    labelled (\cite{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex}, lines
+    Since the site $w$ has the position of $e^{-1}(w)$, the sample of every
+    square on $W$ is the image $e(D)$ of the sample $D$ of the same square on
+    $V$. For a finite set $D\subseteq V$ let $U_D$ be the unitary that carries a
+    configuration $\sigma\colon D\to[q]$ to $\sigma\circ e^{-1}$ on $e(D)$, so
+    that
+    \begin{align}
+        U_V=U_{D}\otimes U_{V\setminus D}.
+    \end{align}
+    Give the transported data the radii $r_j$, the samples $e(D_j)$ and the
+    vectors $v'_{j\ell}=U_{D_j}v_{j\ell}$, which are unit vectors. Then
+    \begin{align}
+        U_V\Bigl(\bigl(\ket{v_{j\ell}}\bra{v_{j\ell}}\bigr)_{D_j}\otimes\id\Bigr)
+        U_V^{*}
+        =\bigl(\ket{v'_{j\ell}}\bra{v'_{j\ell}}\bigr)_{e(D_j)}\otimes\id,
+    \end{align}
+    so the transported cylinder projectors still have mutually orthogonal
+    ranges, and their sum is
+    \begin{align}
+        \Pi'=U_V\,\Pi\,U_V^{*}.
+    \end{align}
+    Because $U_V$ is unitary,
+    \begin{align}
+        \bigl\lVert(\id-\Pi')U_V\Omega\bigr\rVert
+        =\bigl\lVert U_V(\id-\Pi)\Omega\bigr\rVert
+        =\bigl\lVert(\id-\Pi)\Omega\bigr\rVert,
+    \end{align}
+    while the radii and the dimensions $d_j$ are unchanged. This gives both
+    assertions (\cite{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex}, lines
     24--49 and 563--603).
 \end{proof}
