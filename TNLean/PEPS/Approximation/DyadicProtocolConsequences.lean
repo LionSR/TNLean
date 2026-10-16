@@ -9,14 +9,35 @@ import TNLean.PEPS.Approximation.DyadicProtocolFrozenFrames
 /-!
 # The dyadic distribution protocol from Proposition 4.1
 
-This file assembles the protocol of Proposition 7.1 of the polynomial-PEPS manuscript at every
-large size. The angular information bound of Proposition 3.4 is the theorem
+This file assembles the Section 8 consequences of Proposition 7.1 of the polynomial-PEPS
+manuscript at every large size. The angular information bound of Proposition 3.4 is the theorem
 `angularInformationBound`; the adaptive patch constraint of Proposition 4.1 is taken as a
 hypothesis in the form in which the manuscript states it (`06-geometry.tex`, lines 12–53 and
 559–681). The constants are fixed in the order of
 the source: `K₀ = 20`, a small `ε₀`, a small mesh ratio `ν`, the clearance `a = a₀ / 2`, the
 information scale `D` of Proposition 3.4 at that clearance, and `B₀ = K₀ D`; then Proposition 4.1
 supplies the patch constants.
+
+**Scope restriction (consequences of Proposition 7.1):**
+`largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` proves the weaker
+`LargeSizeDyadicProtocolConsequences` interface used in Section 8, not full Proposition 7.1.
+The interface omits the following clauses of the proposition:
+
+* at least one party on every hierarchy square, including the root;
+* a designated party holding the main copy of `Ω` and private initialization of each auxiliary
+  copy at its designated party, rather than arbitrary normalized product initialization;
+* factorization of every intermediate reference vector into main and auxiliary encoded frames,
+  with every factor of norm at most one;
+* the repainting-event scale and grid address for each additional party;
+* pre-expansion pair-source and message bounds for each monomial, beyond pair-effect counts;
+* accuracy at every prescribed inverse power of `L`, rather than one contraction per change
+  with error `C L⁻²⁰`.
+
+These omissions and the retained Section 8 consequences are recorded in
+`docs/paper-gaps/polypeps_prop71_consequences_interface.tex`. To eliminate this restriction,
+construct a certificate carrying all omitted clauses, prove full Proposition 7.1 for it, and
+project to the present interface. The angular-scale and dyadic-padding lemmas in this module
+are not part of this restriction.
 
 * `IsAngularScale.mono` : a larger information scale and threshold are again admissible;
 * `largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` : the consequences of
