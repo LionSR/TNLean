@@ -1246,11 +1246,16 @@ no holes, this is the normalization of $\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
-    As for a birth along an edge: the two treated guides have the same true
-    vertices with the same incident labels, and the readings differ only at sites
-    labelled $A$ before and $B$ after, far from every true vertex and inside the
-    square, so the frame after is the frame before with these sites handed to the
-    party of $B$.
+    As for a birth along an edge, the two treated guides have the same true
+    vertices with the same incident labels. Their separation from the closure of
+    the changed region gives the same true vertices and incident labels for the
+    two readings. Let $T$ be the positions where the readings differ. They carry
+    $A$ before and $B$ after, and satisfy $d_\infty(p,z)>2\epsilon_0t$ for every
+    $p\in T$ and every true vertex $z$ of either reading, and
+    $d_\infty(p,p')\le n$ for all $p,p'\in T$. Thus the changed sites avoid all
+    outer holes and have diameter at most $n$. The frame after is the frame before
+    with these sites handed to the party of $B$, so the bulk birth of
+    Theorem~\ref{thm:peps_bulk_steps_treated_frames} gives the claimed change.
 \end{proof}
 
 \begin{theorem}[The lens exchange as a change of two treated sheets]
@@ -1285,11 +1290,18 @@ no holes, this is the normalization of $\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Both treated sheets are $C_e$ on a neighbourhood of the boundary of the lens
-    $Y$. The guides after the exchange are therefore the treated guides pieced
-    along $\partial Y$, and so are their readings, with $Y$ moved to the square. Every
-    outer hole square lies on one side of $\partial Y$, so the exchange of the two
-    frames on the sites of the translated lens is the bulk exchange of
+    Let $Y$ be the lens in the local coordinates of the repainting baseline and
+    $d$ the translation to the square. Both treated guides are $C_e$ on the open
+    neighbourhood of radius $a_0t$ of $\partial Y$. The guides after the exchange
+    are the treated guides pieced along $Y$, and their readings are pieced along
+    $Y'=d+Y$, with the same label $C_e$ on the translated neighbourhood.
+    For each true vertex $z$ of either reading before the exchange, the closed
+    sup square $\overline B_\infty(z-d,2\epsilon_0t)$ is contained in $Y$ or in
+    $Y^c$. The positions of the outer sites of its hole lie in
+    $\overline B_\infty(z,2\epsilon_0t)$, so the entire outer hole lies in $Y'$ or
+    in $(Y')^c$. The positions of the physical exchange target lie in $Y'$ and
+    satisfy $d_\infty(p,p')\le n$, by the diameter bound for the lens. Hence the
+    exchange of the two frames on the sites of $Y'$ is the bulk exchange of
     Theorem~\ref{thm:peps_bulk_steps_treated_frames}. The frames it produces
     have the owners of the pieced readings. Their holes are, up to order, those
     at the true vertices of the pieced readings, with the same tag holders,
