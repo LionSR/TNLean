@@ -227,9 +227,9 @@ theorem centralBirth_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D
   have hε2 : 2 * ε₀ ≤ angularConstant / 2 := by
     have := hc.ε₀_small; have := hc.ε₀_pos; nlinarith [angularConstant_pos]
   obtain ⟨hfb, hmb, hdb, hFb⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done
-    (Or.inl rfl) (cornerBlocks R.1.index) (protocolLevelLabels k R.1.1 done R.1.index) hr
+    (Or.inl rfl) (cornerBlocks R.1.index) (protocolLevelLabels k R.1.1 done R.1.index)
   obtain ⟨hfa, hma, hda, hFa⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done
-    (Or.inr (Or.inl rfl)) (cornerBlocks R.1.index) (protocolLevelLabels k R.1.1 done R.1.index) hr
+    (Or.inr (Or.inl rfl)) (cornerBlocks R.1.index) (protocolLevelLabels k R.1.1 done R.1.index)
   rw [homogenize_cornerBlocks] at hfb hfa
   rw [hFb, hFa]
   exact centralBirth_hasFrameChange_of hD hLL hΩ hm₀ hA₀ hc.a_le
