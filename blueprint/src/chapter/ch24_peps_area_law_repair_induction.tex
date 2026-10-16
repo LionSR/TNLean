@@ -130,6 +130,50 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     $a_0\max(S_a,S_t)\le2d(S_a)+d(S_t)\le(3a_0/1000)\max(S_a,S_t)$.
 \end{proof}
 
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% prop:two-families, lines 154--177, 212--218 and 299--323;
+% replacement instructions, lines 393--417; geometry:repair-induction,
+% lines 478 and 486--514.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+% Auxiliary consequence under the stated metric hypotheses; no coverage assertion.
+\begin{theorem}[Disjoint current regions at every generation]
+    \label{thm:area_law_repair_current_disjoint}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.current_pairwise_disjoint}
+    \leanok
+    \uses{def:area_law_repair_stage,lem:area_law_repair_metric_invariants}
+    Let $\mathcal D_j$ be the actual repair family of
+    \cite[Section~11]{OpenAI2026AreaLaw}, with current
+    regions $R_i^{(j)}$ and marks $p\in K_j$ of locations $v_p^{(j)}$
+    and scales $S_p^{(j)}$. Assume the metric hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants}: $0<a_0\le1$,
+    $S_*>0$, $d(S)\le(a_0/1000)S$ for every $S\ge S_*$, and
+    $S_p^{(0)}\ge S_*$ for every $p\in K_0$. Suppose also that
+    distinct initial marks $p,q\in K_0$ satisfy
+    \begin{align}
+        \lVert v_p^{(0)}-v_q^{(0)}\rVert
+         & \ge a_0\max\bigl(S_p^{(0)},S_q^{(0)}\bigr).\notag
+    \end{align}
+    Then, for every generation $j\ge0$ and all distinct $i,k\in I_j$,
+    $R_i^{(j)}\cap R_k^{(j)}=\varnothing$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:area_law_initial_open_disjoint,
+        lem:area_law_repair_metric_invariants,def:area_law_repair_birth,
+        thm:area_law_repair_next_disjoint}
+    Induct on $j$. At $j=0$, apply
+    Theorem~\ref{thm:area_law_initial_open_disjoint} to the same
+    jointly chosen belt residues that define $\mathcal D_0$.
+    Suppose the current regions at generation $j$ are pairwise
+    disjoint. By Lemma~\ref{lem:area_law_repair_metric_invariants},
+    distinct parent removal squares at this generation are disjoint.
+    Each fresh current region satisfies
+    $U(v_p^{(j)},S_p^{(j)},H)\subseteq
+        B(v_p^{(j)},S_p^{(j)},H)\subseteq Q(v_p^{(j)},S_p^{(j)})$.
+    Theorem~\ref{thm:area_law_repair_next_disjoint} now gives pairwise
+    disjointness at generation $j+1$.
+\end{proof}
+
 % Source: 10-geometry.tex, geometry:trim-margins, lines 380--394, and
 % geometry:initial-stars, lines 336--339.
 \begin{lemma}[Choice of the stopping scale]
@@ -153,6 +197,81 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     $2^{\lfloor\zeta k\rfloor}$ of cells of layers $k\ge k_0$, hence at
     least $S_*$ for $k_0$ large, and distinct initial marks are separated
     by a quarter of the larger scale.
+\end{proof}
+
+% Source: 10-geometry.tex, initial marks, lines 325--330;
+% integral recursion and supporting lines, lines 545--558.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Actual marks on the translated integer mesh]
+    \label{thm:area_law_repair_marks_integer_mesh}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.repairStage_location_mem_affineMesh}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_affine_mesh,
+        lem:area_law_repair_metric_invariants}
+    Assume the hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants}, and suppose
+    $S_*\ge1$. Every mark $p\in K_j$ of every generation $j\ge0$
+    then has location $v_p^{(j)}\in o+\mathbb Z^2$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_uniform_separated_initial_marks,
+        thm:area_law_adjacent_fine_meshes,thm:area_law_belt_marks_quarter_mesh,
+        lem:area_law_repair_metric_invariants,
+        thm:area_law_repair_halfside_integral,def:area_law_repair_children}
+    Each actual initial mark belongs to a selected belt cell in a layer
+    $k\ge k_0\ge50{,}000{,}000$. Its fine exponent satisfies
+    $\ell_k=\lfloor\zeta k\rfloor\ge1$, so the belt-mark mesh inclusion
+    with spacing $2^2/4=1$ places it in $o+\mathbb Z^2$.
+    Induct on the generation. Every parent scale is at least
+    $S_*\ge1$, hence its removal half-side is an integer by
+    Theorem~\ref{thm:area_law_repair_halfside_integral}. A child location
+    is the parent location plus that half-side times a vector in
+    $\{-1,0,1\}^2$, and therefore remains in $o+\mathbb Z^2$.
+\end{proof}
+
+% Source: 10-geometry.tex, positive boundary and its endpoints, lines 102--105;
+% simultaneous repair, lines 393--417; lattice coverage, lines 545--561.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Current regions and earlier terminal interiors cover the lattice]
+    \label{thm:area_law_repair_lattice_cover_before}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.lattice_mem_current_or_terminal_before}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_dyadic_origin,
+        def:area_law_repair_terminal_children,lem:area_law_repair_metric_invariants}
+    Take the actual repair family at $o=(\sqrt2,\sqrt3)$.
+    Assume the hypotheses of Lemma~\ref{lem:area_law_repair_metric_invariants},
+    and suppose $S_*\ge1$ and $b=|\partial_\Lambda A|>0$.
+    For every generation $j\in\mathbb N$,
+    \begin{align}
+        \mathbb Z^2
+         & \subseteq\Bigl(\bigcup_{i\in I_j}R_i^{(j)}\Bigr)
+        \cup\Bigl(\bigcup_{0\le t<j}E_{\mathrm{term}}(\mathcal D_t)\Bigr).\notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:area_law_repair_stage,thm:area_law_initial_lattice_partition,
+        thm:area_law_repair_marks_integer_mesh,lem:area_law_repair_metric_invariants,
+        thm:area_law_repair_next_lattice_cover}
+    Since $b>0$, the endpoint set $Z$ is nonempty.
+    Theorem~\ref{thm:area_law_initial_lattice_partition} applies to the
+    residues already used in $\mathcal D_0$, so every integer lattice
+    point belongs to an initial current region. This proves the case
+    $j=0$, when there are no earlier terminal interiors.
+
+    Induct on $j$. By Lemma~\ref{lem:area_law_repair_metric_invariants},
+    every parent scale is at least $S_*\ge1$, and
+    Theorem~\ref{thm:area_law_repair_marks_integer_mesh} places every
+    parent on $o+\mathbb Z^2$. A point in a current region of
+    $\mathcal D_j$ therefore belongs to a current region of
+    $\mathcal D_{j+1}$ or to $E_{\mathrm{term}}(\mathcal D_j)$ by
+    Theorem~\ref{thm:area_law_repair_next_lattice_cover}.
+    A point already in $E_{\mathrm{term}}(\mathcal D_t)$ with $t<j$
+    still has $t<j+1$, while the new terminal contribution has index
+    $j<j+1$. These alternatives complete the induction.
 \end{proof}
 
 \subsection{The induction step}
@@ -399,4 +518,146 @@ by the strict inequalities.
     stars, and
     Theorem~\ref{thm:area_law_uniform_repair_induction_conditional} turns
     them into the assertions at every generation.
+\end{proof}
+
+% Source: 10-geometry.tex, child marks, lines 404--409 and 506--514;
+% geometry:descendant-count, lines 670--681.
+\begin{theorem}[A child is determined by its parent and offset]
+    \label{thm:area_law_repair_parent_offset}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairMarkOffset,
+        TNLean.PEPS.AreaLaw.Geometry.repairMarkParent_repairMarkOffset_injective}
+    \leanok
+    \uses{def:area_law_repair_ancestors,def:area_law_repair_terminal_children}
+    For a child occurrence $q$ at generation $j+1$, let
+    $e_j(q)\in\{0,1,2\}^2$ index its centered offset
+    $e_j(q)-(1,1)$. The map
+    \begin{align}
+        q\longmapsto\bigl(\pi_j(q),e_j(q)\bigr)
+        \label{eq:area_law_repair_parent_offset}
+    \end{align}
+    is injective.
+\end{theorem}
+\begin{proof}\leanok
+    At generation $j+1$, a child occurrence is indexed by a nonterminal
+    parent and one of the nine centered offsets. Equality of the parent
+    and offset therefore gives equality of the child occurrences.
+\end{proof}
+
+% Source: 10-geometry.tex, initial marks, lines 325--363, and child marks,
+% lines 404--409 and 506--514.
+\begin{theorem}[Finitely many marks at each generation]
+    \label{thm:area_law_repair_finite_marks}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.finite_repairStage_markIndex}
+    \leanok
+    \uses{def:area_law_repair_stage,thm:area_law_repair_parent_offset}
+    For every generation $j\ge0$, the mark family $K_j$ is finite.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_repair_parent_offset}
+    The initial mark family is the selected finite set $M$. If $K_j$ is
+    finite, the parent and offset map of
+    Theorem~\ref{thm:area_law_repair_parent_offset} injects $K_{j+1}$ into
+    the finite set $K_j\times\{0,1,2\}^2$. Induction proves the claim.
+\end{proof}
+
+% Source: 10-geometry.tex, geometry:descendant-count, lines 670--681;
+% child marks, lines 404--409 and 506--514.
+\begin{theorem}[The number of descendant marks]
+    \label{thm:area_law_repair_descendant_marks}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairMarkAncestor_parent_offset_injective,
+        TNLean.PEPS.AreaLaw.Geometry.card_repairMarkAncestor_fiber_succ_le,
+        TNLean.PEPS.AreaLaw.Geometry.card_repairMarkAncestor_fiber_le}
+    \leanok
+    \uses{def:area_law_repair_ancestors,thm:area_law_repair_parent_offset,
+        thm:area_law_repair_finite_marks}
+    Fix a mark $p\in K_i$. For $n\ge0$, let
+    \begin{align}
+        F_n(p)=\{q\in K_{i+n}:\alpha_{i,n}(q)=p\}.
+        \label{eq:area_law_repair_descendant_marks}
+    \end{align}
+    These sets are finite. The parent and offset map restricts to an
+    injection $F_{n+1}(p)\longrightarrow F_n(p)\times\{0,1,2\}^2$.
+    Consequently,
+    \begin{align}
+        |F_{n+1}(p)|\le9|F_n(p)|,
+        \qquad |F_n(p)|\le9^n.
+        \label{eq:area_law_repair_descendant_count}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:area_law_repair_parent_offset,thm:area_law_repair_finite_marks}
+    Each $F_n(p)$ is a subset of the finite mark family $K_{i+n}$.
+    The parent of a descendant in $F_{n+1}(p)$ belongs to $F_n(p)$ by the
+    defining recursion for the ancestor map. Its parent and offset
+    determine the child, which proves the stated injection and the
+    first inequality. Since $F_0(p)=\{p\}$, induction gives the second.
+\end{proof}
+
+% Source: 10-geometry.tex, initial marks, lines 325--363, and
+% geometry:repair-induction, termination argument, lines 538--541.
+\begin{theorem}[A common empty generation]
+    \label{thm:area_law_repair_common_empty_generation}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.exists_isEmpty_markIndex}
+    \leanok
+    \uses{lem:area_law_repair_metric_invariants,
+        thm:area_law_repair_finite_marks}
+    Under the hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants}, there is a
+    generation $N\ge0$ for which $K_N=\varnothing$. The generation $N$
+    may depend on the initial family.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:area_law_repair_metric_invariants,
+        thm:area_law_repair_finite_marks}
+    Write $S_j(q)$ for the scale of a mark $q\in K_j$. The initial family
+    $K_0$ is finite, so choose $M\in\mathbb R$ with $S_0(p)\le M$ for
+    every $p\in K_0$. This also applies when $K_0$ is empty. Since
+    $S_*>0$, choose $N$ with $M<S_*2^N$. If $q\in K_N$, the lower scale
+    bound and the repeated halving estimate give
+    \begin{align}
+        S_*2^N\le S_N(q)2^N
+        \le S_0\bigl(\alpha_{0,N}(q)\bigr)\le M,
+        \label{eq:area_law_repair_common_empty_contradiction}
+    \end{align}
+    a contradiction.
+\end{proof}
+
+% Source: 10-geometry.tex, child marks, lines 404--409, and
+% geometry:repair-induction, termination argument, lines 538--541.
+\begin{theorem}[Emptiness persists after termination]
+    \label{thm:area_law_repair_empty_persistence}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.isEmpty_repairStage_markIndex_add}
+    \leanok
+    \uses{def:area_law_repair_ancestors}
+    If $K_j=\varnothing$, then $K_{j+n}=\varnothing$ for every $n\ge0$.
+    This assertion needs no metric hypothesis.
+\end{theorem}
+\begin{proof}\leanok
+    The ancestor map sends every mark of $K_{j+n}$ to a mark of $K_j$.
+    A map into the empty set has empty domain.
+\end{proof}
+
+% Source: 10-geometry.tex, initial marks, lines 325--363,
+% geometry:trim-margins, lines 380--394, and geometry:repair-induction,
+% termination argument, lines 538--541.
+\begin{theorem}[Thresholds for a common empty generation]
+    \label{thm:area_law_repair_uniform_empty_thresholds}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_isEmpty_repairStage_markIndex}
+    \leanok
+    \uses{lem:area_law_repair_metric_choice,
+        thm:area_law_repair_common_empty_generation}
+    Fix $0<a_0\le1/4$. There is $T$ such that for every $S_*\ge T$ and
+    every width $C_0$ there is $K$ with the following property. For every
+    finite domain and cut, and every admissible lower layer index
+    $k_0\ge K$, some generation $N\ge0$ satisfies $K_N=\varnothing$.
+    The thresholds $T$ and $K$ precede the choice of domain and cut;
+    the generation $N$ may depend on them.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{lem:area_law_repair_metric_choice,
+        thm:area_law_repair_common_empty_generation}
+    Choose $T$ and then $K$ by
+    Lemma~\ref{lem:area_law_repair_metric_choice}. For each resulting
+    repair, Theorem~\ref{thm:area_law_repair_common_empty_generation}
+    gives a common empty generation.
 \end{proof}

@@ -7957,3 +7957,25 @@ spectral split → block extraction → MPV calculation → strict bounds
   selected-point estimates. No additional tactic is proposed.
 - **Notes:** No multiplication by `1 - p` is allowed before its sign is known.
   The scalar implication instead uses `1 - p ≤ 1` on nonnegative terms.
+
+### Facts about the jointly chosen initial marks — candidate
+
+- **Pattern:** Recover the same two residue choices and finite mark set used by
+  the initial repair stage, then project a geometric property from their
+  existence theorem.
+- **Seen:** Two proof occurrences:
+  `TNLean/PEPS/AreaLaw/Geometry/RepairInductionMetric.lean`,
+  `initialRepairStage_scale_separated`, and
+  `TNLean/PEPS/AreaLaw/Geometry/RepairMarkMesh.lean`,
+  `RepairMetricHypotheses.repairStage_location_mem_affineMesh`.
+  The definitions in `RepairStage` and `RepairBirthRank` also refer to these
+  same choices; they are not additional proofs of a geometric property.
+- **Abstraction:** If another proof needs this extraction, prefer a lemma
+  giving the incidence and scale facts of the actual chosen initial family.
+  It must retain the residue choices used by the actual regions; an
+  independently chosen family cannot replace them.
+- **Notes:** The present two proofs use different projections: incidence and
+  scale separation in the first, membership in the selected belts in the
+  second. The mesh argument reuses `fineScaleIndex_mono` and
+  `beltMarks_subset_affineMesh`, and adds no copied floor estimate or new
+  mesh definition.
