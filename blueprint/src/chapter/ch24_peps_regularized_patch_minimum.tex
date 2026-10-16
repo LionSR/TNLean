@@ -284,8 +284,15 @@ without asserting uniqueness or smooth dependence of a minimizer on $R$.
     $\operatorname{rank}H_j\le1/b$, and $\|T_j\|\le(2b)^{a_j/2}$. The
     product $(x_0+bI)^{a_0/2}\cdots(x_{m-1}+bI)^{a_{m-1}/2}$ inverts the
     filter product $M(x)$, so $\Omega$ is this product applied to
-    $\Psi(x)$. Expand it according to the first index $j$ at which a head
-    $H_j$ occurs. The preceding tails act inside $X_j$ because the regions
+    $\Psi(x)$. Write $G_j=H_j+T_j$ and expand according to the first index
+    $j$ at which a head occurs:
+    \begin{align}
+        G_0G_1\cdots G_{m-1}
+         & =\sum_{j=0}^{m-1}T_0\cdots T_{j-1}\,H_j\,G_{j+1}\cdots G_{m-1}
+        +T_0\cdots T_{m-1}.
+        \label{eq:peps_patch_first_head_expansion}
+    \end{align}
+    The preceding tails act inside $X_j$ because the regions
     are nested, so the $j$th term lies in the cylinder over the range
     $S_j$ of $T_0\cdots T_{j-1}H_j$ on $X_j$, whose dimension is at most
     $\operatorname{rank}H_j$. The remaining term contains only tails and
