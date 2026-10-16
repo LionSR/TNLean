@@ -70,27 +70,30 @@ states reduce to finite matrix computations.
     the tensor with letters $d_x R_f^{x'x}$.
 \end{definition}
 
-The printed $G$-symbol tensor, including its quantum-dimension factors,
-is given in Definition~\ref{def:asymex_fib_gsymbol_tensor}. Its restriction
-to edge label $\tau$ is related to the two-label blocks by the diagonal
-bond similarity of Theorem~\ref{thm:asymex_fib_gsymbol_similarity}.
-The review uses a different physical normalization; its relation to these
-blocks is the congruence of Theorem~\ref{thm:asymex_fib_review_congruence}.
+In Definition~\ref{def:asymex_fib_gsymbol_tensor}, the printed
+$G$-symbol tensor includes its quantum-dimension factors;
+Theorem~\ref{thm:asymex_fib_gsymbol_similarity} conjugates its
+restriction at edge label $\tau$ by a diagonal bond similarity onto the
+two-label blocks, while Theorem~\ref{thm:asymex_fib_review_congruence}
+relates the review's physical normalization to those blocks by a
+diagonal congruence.
 
-For every $N>0$, close the bond indices by the ordinary, unnormalized
-trace of the ordered product of local matrices. The first physical
-index is the output and the second is the input.
+For every $N>0$, the periodic operator closes the bond indices by the
+ordinary, unnormalized trace of the ordered product of local matrices,
+with the first physical index as the output and the second as the input.
 
-The word-span certificates are in Theorem~\ref{thm:asymex_fib_normal}.
-The admissibility projector and its action as the fusion unit are
-identified in Lemma~\ref{lem:asymex_fib_vacuum} and
-Theorem~\ref{thm:asymex_fib_unit}. The fusion relation is proved for the
-two-label blocks in Theorem~\ref{thm:asymex_fib_fusion} and for the
-source's blocks on both edge labels in
-Theorem~\ref{thm:asymex_fib_stringnet_fusion}. Commutation with the
-golden-chain Hamiltonian is established for $N\geq2$ in
-Theorem~\ref{thm:asymex_fib_golden_chain}; the regular action on the two
-explicit state tensors is in Theorem~\ref{thm:asymex_fib_state_action}.
+Theorem~\ref{thm:asymex_fib_normal} establishes normality of the two
+Fibonacci blocks via explicit length-three word-span certificates, and
+Lemma~\ref{lem:asymex_fib_vacuum} together with
+Theorem~\ref{thm:asymex_fib_unit} identifies the vacuum operator with
+the orthogonal projection onto admissible configurations acting as the
+fusion unit. Theorem~\ref{thm:asymex_fib_fusion} and
+Theorem~\ref{thm:asymex_fib_stringnet_fusion} then prove the Fibonacci
+fusion relation for the two-label blocks and for the source's blocks on
+both edge labels, after which Theorem~\ref{thm:asymex_fib_golden_chain}
+establishes commutation with the golden-chain Hamiltonian for $N\geq2$
+and Theorem~\ref{thm:asymex_fib_state_action} computes the regular
+action on two explicit periodic state tensors.
 
 The physical space at each site is $\C^2$, with computational labels
 $0$ for the vacuum and $1$ for $\tau$. At system size $N\geq1$, write
@@ -323,11 +326,10 @@ that tensor on both edge labels.
          \end{pmatrix}.
         \label{eq:asymex_fib_ftau}
     \end{align}
-    The $G$-symbols are
-    $G^{abc}_{def}=v_e^{-1}v_f^{-1}[F^{abc}_d]_e^f$. All these
-    quantities are taken in $\Z[\sigma]$. This is the data
-    of~\cite[Appendix~A, ``The MPO for the Fibonacci model'']{Cirac2021Matrix}
-    and~\cite[Appendix~D.1]{Bultinck2017Anyons}.
+    Following~\cite[Appendix~A, ``The MPO for the Fibonacci model'']{Cirac2021Matrix}
+    and~\cite[Appendix~D.1]{Bultinck2017Anyons}, the $G$-symbols are
+    $G^{abc}_{def}=v_e^{-1}v_f^{-1}[F^{abc}_d]_e^f$, with all these
+    quantities taken in $\Z[\sigma]$.
 \end{definition}
 
 \begin{theorem}[Values of the Fibonacci fusion data]
@@ -492,12 +494,13 @@ that tensor on both edge labels.
     label) by keeping $B_f^{x'x}$ at edge label $\tau$, putting the diagonal
     matrix unit $E_{pp}$ at the bond letter $p=(x',x)$ at edge label $1$
     (zero when $(x',x)$ is not a bond letter of the block $f$), and zero when
-    the edge label changes. Then $h\,S_f^{ij}\,h^{-1}=B_f^{ij}$ for both labels
-    $f$ and all physical letters $i,j$, and the periodic operators of the
-    source's blocks $S_1$, $S_\tau$ on $(\C^4)^{\otimes N}$ satisfy the
-    Fibonacci fusion rules $O_1^2=O_1$, $O_1O_\tau=O_\tau O_1=O_\tau$ and
-    $O_\tau^2=O_1+O_\tau$ at every positive length. This is the fusion
-    statement of~\cite[Appendix~D.1]{Bultinck2017Anyons}.
+    the edge label changes. Then $h\,S_f^{ij}\,h^{-1}=B_f^{ij}$ for both
+    labels $f$ and all physical letters $i,j$, and as stated
+    in~\cite[Appendix~D.1]{Bultinck2017Anyons}, the periodic operators of
+    the source's blocks $S_1$, $S_\tau$ on $(\C^4)^{\otimes N}$ satisfy
+    the Fibonacci fusion rules $O_1^2=O_1$,
+    $O_1O_\tau=O_\tau O_1=O_\tau$, and $O_\tau^2=O_1+O_\tau$ at every
+    positive length.
 \end{theorem}
 
 \begin{proof}
@@ -564,10 +567,10 @@ that tensor on both edge labels.
 While the review states $O_aO_b=\sum_cN_{ab}^cO_c$ for the prefactored
 review tensor $R_f$~\cite[Section~3]{Cirac2021Matrix}, that operator already
 contains the prefactor $1/\sqrt{d_{x'}d_{q''}}$ and fails the fusion rules
-in the orthonormal plaquette basis.
-Theorem~\ref{thm:asymex_fib_review_congruence} shows that the fusion rules
-hold after composing it with $W$;
-see~\cite{gap:bmwshv17_fibonacci_block_entries_provenance}.
+in the orthonormal plaquette basis; as recorded
+in~\cite{gap:bmwshv17_fibonacci_block_entries_provenance},
+Theorem~\ref{thm:asymex_fib_review_congruence} restores the fusion rules
+upon composing $O_N(R_f)$ with the diagonal weight matrix $W$.
 
 \begin{theorem}[Normality of the two Fibonacci blocks]
     \label{thm:asymex_fib_normal}
@@ -731,14 +734,14 @@ $w_\tau=\varphi/(1+\varphi^2)$.
     dimensions divided by the square of the total quantum dimension.
     The bond-dimension-five tensor is the direct sum $B_1\oplus B_\tau$,
     and its boundary matrix is
-    $\Delta=w_1\Id_2\oplus w_\tau\Id_3$. At every system size $N$, the
-    weighted projector is
+    $\Delta=w_1\Id_2\oplus w_\tau\Id_3$. At every system size $N$,
+    following~\cite[Sections~3.1 and~3.2 and Appendix~D.1]{Bultinck2017Anyons},
+    the weighted projector is
     \begin{align}
         \Pi_N & =w_1O_N(B_1)+w_\tau O_N(B_\tau)
-        =\frac{O_N(B_1)+\varphi\,O_N(B_\tau)}{1+\varphi^2},
+        =\frac{O_N(B_1)+\varphi\,O_N(B_\tau)}{1+\varphi^2}.
         \label{eq:asymex_fib_projector}
     \end{align}
-    following~\cite[Sections~3.1 and~3.2 and Appendix~D.1]{Bultinck2017Anyons}.
 \end{definition}
 
 \begin{theorem}[The weight relation]
@@ -783,8 +786,9 @@ $w_\tau=\varphi/(1+\varphi^2)$.
     Lemma~\ref{lem:mpo_direct_sum_eval_word}. Multiplication by the
     block-diagonal matrix $\Delta$ scales the two blocks by $w_1$ and
     $w_\tau$, and the trace of a block-diagonal matrix is the sum of the
-    traces of its blocks. The second statement is
-    Theorem~\ref{thm:mpo_direct_sum_additive}.
+    traces of its blocks. Without the boundary matrix,
+    Theorem~\ref{thm:mpo_direct_sum_additive} gives
+    $O_N(B)=O_N(B_1)+O_N(B_\tau)$.
 \end{proof}
 
 \begin{theorem}[The weighted Fibonacci projector is idempotent]
@@ -808,12 +812,12 @@ $w_\tau=\varphi/(1+\varphi^2)$.
     coefficients with $w_1$ and $w_\tau$.
 \end{proof}
 
-At $N=0$ the empty traces give $O_0(B_1)=2$ and $O_0(B_\tau)=3$, so
-$\Pi_0=(2+3\varphi)/(1+\varphi^2)$, a scalar different from $0$ and
-$1$, hence $\Pi_0^2\neq\Pi_0$;
-\cite[Section~3.2]{Bultinck2017Anyons} asks for idempotence at every
-length, and the empty chain is excluded as a degenerate reading;
-see~\cite{gap:bmwshv17_fibonacci_projector_positive_length}.
+Although~\cite[Section~3.2]{Bultinck2017Anyons} states idempotence
+without a length restriction (so that the empty chain is excluded as a
+degenerate reading~\cite{gap:bmwshv17_fibonacci_projector_positive_length}),
+at $N=0$ the empty traces give $O_0(B_1)=2$ and $O_0(B_\tau)=3$, making
+$\Pi_0=(2+3\varphi)/(1+\varphi^2)\notin\{0,1\}$ and hence
+$\Pi_0^2\neq\Pi_0$.
 
 \subsection{The golden chain}
 
@@ -949,10 +953,10 @@ operators~\cite{Cirac2021Matrix}.
     checked on the sixty-four choices of the six outer and inner labels in
     exact golden arithmetic. The same identity holds for the kernel of
     $O_N(B_1)$. Summing over $i$ gives the first two statements, and the
-    third follows since $\Pi_N=w_1O_N(B_1)+w_\tau O_N(B_\tau)$. On edge label
-    $\tau$ the periodic operator of $S_f$ equals $O_N(B_f)$ by
-    Theorem~\ref{thm:asymex_fib_gsymbol_similarity}, which gives the last
-    statement.
+    third follows since $\Pi_N=w_1O_N(B_1)+w_\tau O_N(B_\tau)$. Finally,
+    because Theorem~\ref{thm:asymex_fib_gsymbol_similarity} equates the
+    periodic operator of $S_f$ on edge label $\tau$ with $O_N(B_f)$, the
+    golden chain $H_N$ commutes with that operator as well.
 \end{proof}
 
 \subsection{Two periodic states and the Fibonacci action}
@@ -1264,12 +1268,12 @@ exact computation in the ring of golden integers.
     multiplication of~(\ref{eq:asymex_fib_split_letters}) along a word
     gives~(\ref{eq:asymex_fib_reduction}).
     Block diagonality gives block triangularity, the target diagonal
-    blocks, and the vanishing remainder. The generic nilpotency
-    bound of clause (vi) of Theorem~\ref{thm:asym_multiblock} is
-    $|S|+z=6$, where $S$ is the two-element set of target blocks;
-    the dimension count is clause (vii).
-    The four zero directions are virtual bond directions, not
-    physical configurations of the chain.
+    blocks, and the vanishing remainder. With $S$ denoting the
+    two-element set of target blocks, clauses~(vi) and~(vii) of
+    Theorem~\ref{thm:asym_multiblock} give the generic nilpotency bound
+    $|S|+z=6$ and the dimension count $9=2+3+4$, where the four zero
+    directions lie in the virtual bond space rather than the physical
+    configuration space of the chain.
 \end{proof}
 
 \begin{theorem}[The fusion rule]
@@ -1294,9 +1298,9 @@ exact computation in the ring of golden integers.
 \begin{proof}
     \leanok
     \uses{thm:asymex_fib_compression, prop:asym_compression_trace}
-    Apply Proposition~\ref{prop:asym_compression_trace} to
-    Theorem~\ref{thm:asymex_fib_compression}. This gives
-    (\ref{eq:asymex_fib_trace}).
+    Applying Proposition~\ref{prop:asym_compression_trace} to
+    Theorem~\ref{thm:asymex_fib_compression}
+    yields~(\ref{eq:asymex_fib_trace}).
     For output and input words $y,x$, the periodic product contracts
     as
     \begin{align}
@@ -1316,13 +1320,14 @@ At length zero, the traces of the stacked tensor and the two targets
 are $9$, $2$, and $3$, respectively. The omitted four-dimensional
 zero block has empty trace four, although all its positive-length
 traces vanish. This explains the positive-length restriction in the
-fusion rule without changing the trace convention. The source asks for
-the fusion rules at every length. At the empty chain the periodic
-operators are the scalars $O_0(B_1)=2$ and $O_0(B_\tau)=3$, so
-$O_0(B_1)^2=4\neq2$ and $O_0(B_1)O_0(B_\tau)=O_0(B_\tau)O_0(B_1)=6\neq3$:
-the unit laws of Theorem~\ref{thm:asymex_fib_unit} fail there as well, and
-the empty chain is excluded as a degenerate reading;
-see~\cite{gap:bmwshv17_fibonacci_projector_positive_length}.
+fusion rule without changing the trace convention. Although the source
+states the fusion rules without a length restriction (so that the empty
+chain is excluded as a degenerate
+reading~\cite{gap:bmwshv17_fibonacci_projector_positive_length}), at
+$N=0$ the periodic operators reduce to the scalars $O_0(B_1)=2$ and
+$O_0(B_\tau)=3$, where $O_0(B_1)^2=4\neq2$ and
+$O_0(B_1)O_0(B_\tau)=O_0(B_\tau)O_0(B_1)=6\neq3$, so the unit laws of
+Theorem~\ref{thm:asymex_fib_unit} fail at length zero as well.
 
 \begin{theorem}[The fusion tensors]
     \label{thm:asymex_fib_fusion_tensors}

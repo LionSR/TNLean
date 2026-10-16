@@ -34,9 +34,10 @@ where $U_k$ is the $k$-fold tensor power of the unnormalized maximally entangled
 \end{theorem}
 \begin{proof}
     \leanok
-    The site identification is a bijection, so reindexing the sum of
-    squared absolute values preserves the Euclidean norm. A vector is
-    zero if and only if its norm is zero.
+    Because the site identification is a bijection, reindexing the sum of
+    squared absolute values gives $\|\xi_{k,\lambda}\|_2=\|\zeta_{k,\lambda}\|_2$,
+    which in turn implies that $\xi_{k,\lambda}\ne0$ if and only if
+    $\zeta_{k,\lambda}\ne0$.
 \end{proof}
 
 
@@ -77,11 +78,12 @@ where $U_k$ is the $k$-fold tensor power of the unnormalized maximally entangled
     \leanok
     \uses{thm:al_augmented_subsystem_action}
     Put $w=(I_C\otimes\Pi_\lambda)U_k$.
-    Because each pair in $U_k$ is symmetric between $C$ and $R$, the central
-    projections $\Pi_\lambda\otimes I_R$ and $I_C\otimes\Pi_\lambda$ agree on $U_k$.
-    Since they commute and are idempotent, each fixes $w$.
-    Tensoring with $\Omega^{\otimes k}$ shows that both projections fix $v_{k,\lambda}$.
-    The bijection $E_k$
-    identifies the two auxiliary copy actions with the single-site actions at
-    $\mathrm{false}$ and $\mathrm{true}$, transporting both fixed-vector identities to $\xi_{k,\lambda}$.
+    Because each pair in $U_k$ is symmetric between $C$ and $R$, the commuting
+    idempotent projections $\Pi_\lambda\otimes I_R$ and $I_C\otimes\Pi_\lambda$
+    agree on $U_k$, so both fix $w$ and hence fix
+    $v_{k,\lambda}=\Omega^{\otimes k}\otimes w$.
+    Since the bijection $E_k$ intertwines the copy actions on $C$ and $R$ with
+    the single-site actions at $\mathrm{false}$ and $\mathrm{true}$,
+    $\Pi_{\{b\},\lambda}\xi_{k,\lambda}=\xi_{k,\lambda}$ for each
+    $b\in\{\mathrm{false},\mathrm{true}\}$.
 \end{proof}

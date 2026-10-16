@@ -28,11 +28,11 @@ Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}.
 \begin{proof}
     \leanok
     \uses{lem:blocking_preserves_injectivity, thm:ft_single}
-    Choose one site of $\mathbf{A}$; its injectivity implies injectivity of
+    Injectivity at a chosen site of $\mathbf{A}$ implies injectivity of
     the combined tensor by Lemma~\ref{lem:blocking_preserves_injectivity}.
-    Apply the single-block Fundamental Theorem
-    (Theorem~\ref{thm:ft_single}) to the two combined tensors.
-    This yields one invertible matrix $X$ such that every combined matrix of
+    Applying the single-block Fundamental Theorem
+    (Theorem~\ref{thm:ft_single}) to the two combined tensors
+    yields one invertible matrix $X$ such that every combined matrix of
     $\mathbf{B}$ equals the corresponding combined matrix of
     $\mathbf{A}$ conjugated by $X$.
     Reading this identity back at each site gives
@@ -86,11 +86,10 @@ Corollary~\ref{cor:fundamentalTheorem_injectiveMPSChain_of_sameState}.
     \leanok
     \uses{lem:chainCombinedTensor_smul_chain, thm:gauge_invariance, thm:fundamentalTheorem_injective_chain}
     If the combined tensor of $\mathbf{B}$ differs from that of $\mathbf{A}$
-    by a gauge and a nonzero scalar $\zeta$, rescale each site of
-    $\mathbf{B}$ by $\zeta^{-1}$. Lemma~\ref{lem:chainCombinedTensor_smul_chain}
-    removes this common scalar from the combined tensor, so
-    Theorem~\ref{thm:fundamentalTheorem_injective_chain} applies to the
-    rescaled chain. Multiplying the resulting sitewise relations by $\zeta$
+    by a gauge and a nonzero scalar $\zeta$, rescaling each site of
+    $\mathbf{B}$ by $\zeta^{-1}$ removes this common scalar from the combined tensor by Lemma~\ref{lem:chainCombinedTensor_smul_chain}.
+    Theorem~\ref{thm:fundamentalTheorem_injective_chain} then applies to the
+    rescaled chain, and multiplying the resulting sitewise relations by $\zeta$
     gives (\ref{eq:aft_chain_gaugePhase_conj}).
 \end{proof}
 
@@ -140,19 +139,18 @@ agreement from any threshold $N_0$ onward already implies full agreement.
 \begin{proof}
     \leanok
     \uses{def:same_mpv_from, def:injective}
-    Write $1 = \sum_i c_i A^i$ (by injectivity) and set
+    By injectivity of $A$, we can write $1 = \sum_i c_i A^i$ and set
     $S = \sum_i c_i B^i$.
     \begin{enumerate}
-        \item Show that the length-$N_0$ word span of $B$ is all of
-              $\MN{D}$ via the linear relation between the
+        \item The linear relation between the
               length-$N_0$ word-evaluation maps of $A$ and $B$
               induced by trace agreement at length $N_0 + 1$,
-              together with a finrank transfer argument.
-        \item Derive $S = 1$ by trace nondegeneracy: for every
-              $M \in \MN{D}$, $\tr(M(S - 1)) = 0$.
-        \item Downward induction on $k = N_0 - |w|$: decompose
+              together with a finrank transfer argument, shows that the length-$N_0$ word span of $B$ is all of
+              $\MN{D}$.
+        \item For every $M \in \MN{D}$, trace agreement yields $\tr(M(S - 1)) = 0$, so trace nondegeneracy implies $S = 1$.
+        \item Downward induction on $k = N_0 - |w|$ decomposes
               $\tr(w_A)$ and $\tr(w_B)$ using $1 = \sum c_i A^i$
-              and $S = 1$ respectively, then apply the inductive
+              and $S = 1$ respectively, reducing each step to the inductive
               hypothesis at length $|w| + 1$.
     \end{enumerate}
 \end{proof}
@@ -171,9 +169,9 @@ agreement from any threshold $N_0$ onward already implies full agreement.
 \begin{proof}
     \leanok
     \uses{thm:sameMPV_of_sameMPVFrom, thm:ft_single}
-    Apply Theorem~\ref{thm:sameMPV_of_sameMPVFrom} to obtain
-    equality of the MPV families for all system sizes, then invoke the
-    single-block Fundamental Theorem (Theorem~\ref{thm:ft_single}).
+    Theorem~\ref{thm:sameMPV_of_sameMPVFrom} upgrades the hypothesis to
+    equality of the MPV families for all system sizes, and the
+    single-block Fundamental Theorem (Theorem~\ref{thm:ft_single}) then yields gauge equivalence.
 \end{proof}
 
 %% ---------------------------------------------------------
@@ -204,10 +202,10 @@ translation-invariant, and constant chains of blocked tensors.
 \begin{proof}
     \leanok
     \uses{lem:blocking_preserves_injectivity, thm:ft_single}
-    Bundle the constant chains into one tensor.
-    Injectivity of $A$ implies injectivity of the combined tensor by
+    When the constant chains are bundled into a single combined tensor,
+    injectivity of $A$ implies injectivity of the combined tensor by
     Lemma~\ref{lem:blocking_preserves_injectivity}, and the combined-tensor MPV
-    equality is exactly the hypothesis needed for the single-block
+    equality provides the hypothesis of the single-block
     Fundamental Theorem.
     The resulting gauge matrix is independent of the site because every site
     carries the same local tensor.
@@ -235,11 +233,10 @@ translation-invariant, and constant chains of blocked tensors.
 \begin{proof}
     \leanok
     \uses{thm:ti_tensors_single_gauge}
-    Apply Theorem~\ref{thm:ti_tensors_single_gauge} to obtain
+    Theorem~\ref{thm:ti_tensors_single_gauge} provides an invertible matrix $X$ satisfying
     $B^i = X A^i X^{-1}$.
-    Set $Z = X^{-1}$ and $\lambda = 1$.
-    Then $\lambda^n = 1$, and (\ref{eq:aft_ti_collapse_conj}) is exactly the
-    same gauge relation rewritten in the form used by the corollary.
+    Setting $Z = X^{-1}$ and $\lambda = 1$ gives
+    $\lambda^n = 1$ and rewrites this gauge relation in the form (\ref{eq:aft_ti_collapse_conj}).
 \end{proof}
 
 \noindent Symmetry-theoretic consequences of the Fundamental Theorem,
@@ -292,9 +289,9 @@ Chapter~\ref{ch:symmetry}.
     \leanok
     \uses{lem:blocked_chain_isInjective, thm:fundamentalTheorem_injective_chain}
     By Lemma~\ref{lem:blocked_chain_isInjective}, the blocked chain built from
-    $A^{[L]}$ is injective.
-    Apply Theorem~\ref{thm:fundamentalTheorem_injective_chain} to the two
-    constant blocked chains.
+    $A^{[L]}$ is injective, so
+    Theorem~\ref{thm:fundamentalTheorem_injective_chain} applied to the two
+    constant blocked chains yields gauge equivalence.
 \end{proof}
 
 \begin{remark}[Relation to normal-MPS corollary]
@@ -385,7 +382,8 @@ $k$-th coordinate, as in Definition~\cite[``Block ideal'']{QICLean2026Blueprint}
 \begin{proof}
     \leanok
     \uses{thm:ring_perm}
-    Theorem~\ref{thm:ring_perm} gives the permutation $\pi$.
+    As a standard decomposition for semisimple algebras (used in~\cite[Section~IV.A]{Cirac2021Matrix} in the MPS context),
+    Theorem~\ref{thm:ring_perm} gives the permutation $\pi$, and
     Theorem~\cite[``Summand matching and dimension preservation'']{QICLean2026Blueprint} identifies the matrix sizes
     $D_{\pi(k)} = D_k$.
     For each $k$, Theorem~\cite[``Paired component maps are bijections'']{QICLean2026Blueprint} gives a bijective
@@ -394,9 +392,6 @@ $k$-th coordinate, as in Definition~\cite[``Block ideal'']{QICLean2026Blueprint}
     this is a $\C$-algebra automorphism of $\MN{D_k}$.
     Skolem--Noether (Theorem~\cite[``Skolem--Noether'']{QICLean2026Blueprint}) makes each such
     automorphism inner.
-
-    This is a standard result in the theory of semisimple algebras;
-    see~\cite[Section~IV.A]{Cirac2021Matrix} for the MPS context.
 \end{proof}
 
 \begin{remark}[Ring level versus algebra level]\label{rem:ring_vs_alg}
@@ -530,10 +525,9 @@ applies.
 \end{theorem}
 
 \begin{proof}\leanok\uses{def:piAlgEquiv, thm:pi_auto_decomp}
-    Apply Theorem~\ref{thm:pi_auto_decomp} to the product-algebra
-    automorphism of Definition~\ref{def:piAlgEquiv}. The theorem writes the
-    nonzero input block as $\pi(k)$ in output component~$k$; for the statement
-    above we set $\sigma := \pi^{-1}$, so an element supported in block~$k$
+    Applying Theorem~\ref{thm:pi_auto_decomp} to the product-algebra
+    automorphism of Definition~\ref{def:piAlgEquiv} writes the
+    nonzero input block as $\pi(k)$ in output component~$k$; setting $\sigma := \pi^{-1}$ ensures that an element supported in block~$k$
     lands in block~$\sigma(k)$.
 \end{proof}
 
@@ -549,12 +543,12 @@ applies.
 \end{lemma}
 
 \begin{proof}\leanok
-    Choose $N$ supported on a single block~$k$ (all other components
-    zero).
-    The hypothesis reduces to $\tr(M_k N_k) = 0$ for all $N_k$, so
+    Evaluating the hypothesis on a tuple $N$ supported on a single block~$k$ (with all other components
+    zero)
+    reduces the sum to $\tr(M_k N_k) = 0$ for all $N_k$, so
     $M_k = 0$ by nondegeneracy of the matrix trace pairing on
     $\MN{D_k}$.
-    Since $k$ was arbitrary, $M = 0$.
+    Since $k$ is arbitrary, $M = 0$.
 \end{proof}
 
 \begin{lemma}[Injectivity of the product Gram map]%
@@ -569,10 +563,10 @@ applies.
 \end{lemma}
 
 \begin{proof}\leanok\uses{def:injective}
-    Reduces to per-block injectivity of the Gram map
+    The statement reduces to per-block injectivity of the Gram map
     $M_k \mapsto (i \mapsto \tr(M_k \cdot A_k^i))$, which holds by
-    injectivity of $A_k$ (the matrices $\{A_k^i\}$ span $\MN{D_k}$,
-    so the trace pairing against them separates points).
+    injectivity of $A_k$: the matrices $\{A_k^i\}$ span $\MN{D_k}$,
+    so the trace pairing against them separates points.
 \end{proof}
 
 %% ---------------------------------------------------------

@@ -89,10 +89,10 @@ lower layer index $k_0$ is increased after them.
         thm:area_law_belt_marks_closed_cell,
         thm:area_law_fine_cell_containment,
         thm:area_law_dyadic_layer_distance}
-    The initial mark facts supply the layer $k$ and the belt cell whose
-    mark is $v$ and whose fine side is $S_v$. The mark lies in the closed
-    belt cell, which lies in $\overline{D_k}$. The layer distance estimate
-    gives the bound.
+    The initial mark properties give the layer $k$ and the belt cell of
+    fine side $S_v$ marked by $v$. Because $v$ lies in this closed belt
+    cell and the cell is contained in $\overline{D_k}$, the layer distance
+    estimate yields $\operatorname{dist}_\infty(v,Z)\ge C_0r$.
 \end{proof}
 
 \begin{theorem}[Descendant birth regions are far from the cut]
@@ -115,13 +115,14 @@ lower layer index $k_0$ is increased after them.
     \uses{thm:area_law_initial_mark_endpoint_distance,
         def:area_law_uniform_repair_conclusion,
         thm:area_law_repair_descendant_scales,thm:area_law_repair_margins}
-    The scale $S_m$ is the $j$-th iterate of $d$ at $t_k$. For $S\ge1$ we
-    have $1\le d(S)\le S^{\rho_0}\le S$, so $d(S_m)\le t_k$. The birth
-    region lies within $2d(t_k)$ of the ancestor mark, and the triangle
-    inequality with
+    The parent scale $S_m$ is the $j$-th iterate of $d$ at $t_k$, and
+    $1\le d(S)\le S^{\rho_0}\le S$ for all $S\ge1$ implies $d(S_m)\le t_k$.
+    Every point $y$ of the birth region lies within $2d(t_k)$ of the
+    initial ancestor mark, so combining the triangle inequality with
     Theorem~\ref{thm:area_law_initial_mark_endpoint_distance} gives the
-    bound. No layer of the birth region is used, so this also covers
-    replacements extending into the dummy region.
+    distance bound. Because this argument uses no layer of the birth region
+    itself, the same bound holds when the replacement extends into the
+    dummy region.
 \end{proof}
 
 \begin{theorem}[Cut clearance of belt birth templates]
@@ -150,11 +151,11 @@ lower layer index $k_0$ is increased after them.
         thm:area_law_descendant_clearance_scales,
         thm:area_law_template_clearance_of_endpoint_distance}
     The birth region of a belt tile is one of the runs covering its closed
-    belt cell, which lies in $\overline{D_k}$; the layer distance estimate
-    gives $C_0r\ge(C_0-1)r$. Take the threshold of
-    Theorem~\ref{thm:area_law_descendant_clearance_scales} and apply
-    Theorem~\ref{thm:area_law_template_clearance_of_endpoint_distance}
-    with $u=t_k$.
+    belt cell, which lies in $\overline{D_k}$, so the layer distance
+    estimate gives endpoint distance at least $C_0r\ge(C_0-1)r$. Above the
+    threshold of Theorem~\ref{thm:area_law_descendant_clearance_scales},
+    applying Theorem~\ref{thm:area_law_template_clearance_of_endpoint_distance}
+    with $u=t_k$ yields both clearance inequalities.
 \end{proof}
 
 \begin{theorem}[Cut clearance of descendant birth templates]
@@ -188,10 +189,11 @@ lower layer index $k_0$ is increased after them.
         thm:area_law_descendant_birth_endpoint_distance,
         thm:area_law_repair_margins,
         thm:area_law_template_clearance_of_endpoint_distance}
-    Take the thresholds of the uniform repair induction for $S_*$ and of
-    Theorem~\ref{thm:area_law_descendant_clearance_scales} for $k_0$. By
-    Theorem~\ref{thm:area_law_descendant_birth_endpoint_distance} and
-    $2d(t_k)\le2t_k^{\rho_0}\le r$, the birth region has endpoint distance
-    at least $C_0r-r=(C_0-1)r$. Then apply
-    Theorem~\ref{thm:area_law_template_clearance_of_endpoint_distance}.
+    For $S_*$ above the uniform repair-induction threshold and $k_0$ above
+    the threshold of Theorem~\ref{thm:area_law_descendant_clearance_scales},
+    combining Theorem~\ref{thm:area_law_descendant_birth_endpoint_distance}
+    with $2d(t_k)\le2t_k^{\rho_0}\le r$ shows that the birth region has
+    endpoint distance at least $C_0r-r=(C_0-1)r$.
+    Theorem~\ref{thm:area_law_template_clearance_of_endpoint_distance} then
+    gives both template clearance bounds.
 \end{proof}

@@ -41,7 +41,7 @@ occurrence and preserves the operator of that list exactly.
     \leanok
     Fix one original operator at every nonprivate gate occurrence. A
     prescribed message-containing expansion is a local approximation with
-    budget $\delta$ if the original gate and each private operation are
+    tolerance $\delta$ if the original gate and each private operation are
     contractions, its monomials are allowed, and its operator differs from
     the original gate by at most $\delta$ in operator norm. Each nonprivate
     participating set has cardinality different from one. These are local
@@ -56,7 +56,7 @@ occurrence and preserves the operator of that list exactly.
     contains at most $K$ monomials, and each monomial contains at most $r$
     pair effects and at most $m$ messages, has scalar coefficient of modulus
     at most $C$, and has every message dimension at most $D$. The dimensions
-    and counts refer to the actual original message occurrences, including
+    and counts refer to the original message occurrences, including
     their multiplicities. No coefficient-sum bound is assumed.
 \end{definition}
 
@@ -67,7 +67,7 @@ occurrence and preserves the operator of that list exactly.
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageResourceBounded.mono_coefficient}
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsTermwiseBounded.mono_coefficient}
     \leanok
-    Increasing the local approximation budget, the message-dimension
+    Increasing the local approximation tolerance, the message-dimension
     bound, or the coefficient bound preserves the corresponding conditions on the same original
     lists and operators. Likewise, increasing an individual coefficient
     bound preserves its monomial pair-effect bound.
@@ -83,8 +83,8 @@ occurrence and preserves the operator of that list exactly.
     \lean{TNLean.PEPS.PairEffect.EffectCircuit.isGateApproximation_expandMessageGateLists}
     \leanok
     \uses{def:peps_message_gate_lists,def:peps_message_gate_approximation}
-    A prescribed local approximation with budget $\delta$ remains a local
-    approximation with the same budget after every message is expanded.
+    A prescribed local approximation with tolerance $\delta$ remains a local
+    approximation with the same tolerance after every message is expanded.
     The expanded monomials are allowed. Each original operator and each
     original participating set is retained at the same occurrence.
 \end{theorem}
@@ -168,7 +168,7 @@ occurrence and preserves the operator of that list exactly.
     against the prescribed original gate is at most $L^{-q}$.
 
     For every $p>0$, there exist $r_p$, $C_p\ge0$, and an integer
-    $\alpha_p>0$, all chosen before $L$, such that every size admits a literal
+    $\alpha_p>0$, all chosen before $L$, such that every size admits an
     operator tensor network $\sigma_L$ satisfying
     \begin{align}
         \lVert\sigma_L-\rho_L\rVert_1\le L^{-p},
@@ -179,7 +179,7 @@ occurrence and preserves the operator of that list exactly.
     $2b(b-1)$ incident virtual links, and both endpoints of every link occur
     in a common original nonprivate gate. The comparison density $\rho_L$
     is the full original physical output, with its private registers traced
-    out and without normalization. The same actual source circuit and sample
+    out and without normalization. The same source circuit and sample
     count define the contraction and all its virtual alphabets.
     This is the uniform compression of
     \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} together with its
@@ -195,7 +195,7 @@ occurrence and preserves the operator of that list exactly.
     All expansion constants at this precision are then fixed. Since
     $L^k\ge0$, every polynomial bound with constant $C$ also holds with $C_+$,
     so replace $C_K(q)$, $C_C(q)$ and $C_M(q)$ by their positive parts.
-    Expand each bounded message in a finite orthonormal basis of its actual
+    Expand each bounded message in a finite orthonormal basis of its
     transferred register. This preserves its original operator exactly, and
     changes only the monomial list at the same gate occurrence.
 
@@ -242,14 +242,14 @@ occurrence and preserves the operator of that list exactly.
     gate has an exact allowed message-containing expansion on its original
     local input and output spaces. Each list contains at most $C_KL^u$
     monomials, each individual coefficient has norm at most $C_CL^v$, and each
-    monomial contains at most $r$ pair effects and $m$ messages. Every actual
+    monomial contains at most $r$ pair effects and $m$ messages. Every
     transferred register has dimension at most $C_ML^z$. The original gates
     and private maps are contractions, and every nonprivate gate occurrence
     has a participant set of size other than one.
 
     For every $p>0$, there exist $r_p$, $C_p\ge0$, and an integer
     $\alpha_p>0$, all chosen before the family member, such that every
-    index, of size $L\ge2$, admits a literal operator tensor network
+    index, of size $L\ge2$, admits an operator tensor network
     $\sigma_L$ with
     \begin{align}
         \lVert\sigma_L-\rho_L\rVert_1\le L^{-p},
@@ -260,7 +260,7 @@ occurrence and preserves the operator of that list exactly.
     incident virtual links, and the two endpoints of every link participate
     in a common original nonprivate gate. The comparison density $\rho_L$
     is the original physical output, with its retained private registers
-    traced out and without normalization. The same actual source circuit and
+    traced out and without normalization. The same source circuit and
     sample count define the contraction and its virtual alphabets. No numerical
     private-dimension or source Schmidt-rank bound is required.
     This is \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} for exact

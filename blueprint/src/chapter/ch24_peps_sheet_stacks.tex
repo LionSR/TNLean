@@ -477,6 +477,7 @@ no holes, this is the normalization of $\Omega$.
 \begin{theorem}[The operations of the protocol as bounded changes]
     \label{thm:peps_protocol_bounded_changes}
     \lean{TNLean.PEPS.Approximation.DyadicSquare.index,
+        TNLean.PEPS.Approximation.DyadicSquare.inRoot_index,
         TNLean.PEPS.Approximation.eventUses_labelParty_protocolLevelLabels,
         TNLean.PEPS.Approximation.eventUses_labelParty_newParty,
         TNLean.PEPS.Approximation.eventUses_labelParty_guidePlaceholder,
@@ -490,8 +491,13 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.isBoundedChange_of_death,
         TNLean.PEPS.Approximation.isBoundedChange_of_exchange}
     \leanok
-    \uses{thm:peps_bounded_change_closure, def:peps_dyadic_protocol_parties,
-        thm:peps_dyadic_direct_repainting_constants}
+    \uses{thm:peps_bounded_change_closure,
+        def:peps_dyadic_protocol_parties,
+        thm:peps_dyadic_direct_repainting_constants,
+        def:peps_dyadic_block_guide,
+        def:peps_dyadic_hierarchy}
+    Every square of the hierarchy, including the root, has its index in the
+    root square of its level.
     Read the labels of the guides of the repainting of a square $R$ as parties: a
     block label by its block party and the placeholder label by the fresh placeholder
     party of $R$. Then the labels of the nine blocks around $R$, at any stage of the
@@ -522,7 +528,10 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_bounded_change_closure,
         thm:peps_protocol_constants,
         def:peps_bounded_change,
-        def:peps_sheet_stack}
+        def:peps_sheet_stack,
+        def:peps_dyadic_block_guide}
+    The root-index inclusion follows from the two coordinate bounds of a
+    hierarchical square and its index formula.
     The labels are those of the active-label invariant: a label of a block next to
     $R$ is the placeholder or the label of a square whose block is next to $R$ or
     contains such a block. The reference vector of two sheets in the coordinates of the
@@ -733,6 +742,8 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.isDisplacedReading_levelGuide,
         TNLean.PEPS.Approximation.mem_levelVertices,
         TNLean.PEPS.Approximation.levelFrame_eq,
+        TNLean.PEPS.Approximation.guideFrame_congr_guide,
+        TNLean.PEPS.Approximation.levelFrame_eq_of_levelGuide_eq,
         TNLean.PEPS.Approximation.levelFrame_congr,
         TNLean.PEPS.Approximation.pairwise_disjoint_levelHoles,
         TNLean.PEPS.Approximation.isTrueVertex_levelGuide_insert_iff}
@@ -763,9 +774,15 @@ no holes, this is the normalization of $\Omega$.
     bounds.
 
     The finite vertex set in Definition~\ref{def:peps_protocol_level_frame}
-    is exactly the set of true vertices of the level guide. Two globally admissible
-    radius functions give the same level frame whenever they agree at all true
-    vertices.
+    is exactly the set of true vertices of the level guide. For arbitrary finite physical
+    sites, two guide frames with the same site positions, local dimension, owners,
+    placeholder and label rank are equal if their guides and finite sets of hole
+    centers are equal, their patches agree at those centers, and each family has
+    disjoint outer physical samples. At possibly different levels and with different
+    sets of already repainted blocks, equal sampled guides give equal level frames
+    whenever the two globally admissible radius functions agree at all true vertices.
+    In particular, for a fixed level and guide the frame depends on the radii only
+    at its true vertices.
     If, moreover, $\rho(z)\le r$ for every point and $4r<2^j$, the outer physical
     samples of the holes are pairwise disjoint. Repainting one block changes the
     true vertices only at its four corners (\texttt{06-geometry.tex}, lines 69--125
@@ -788,11 +805,11 @@ no holes, this is the normalization of $\Omega$.
     permutations place the selected auxiliary sheet next to the main sheet.
 
     The true vertices are the finite grid-corner set of
-    Lemma~\ref{lem:peps_level_true_vertices}.
-    Theorem~\ref{thm:peps_guide_frame_patch_congruence}
-    identifies frames with equal patches at their centers. Equal radii give equal
-    supplied patches and preserve the disjointness condition, including the
-    raw-frame case. Distinct grid corners are
+    Lemma~\ref{lem:peps_level_true_vertices}. Equal guides have the same true-vertex
+    set. After identifying the equal guides and hole-center sets,
+    Theorem~\ref{thm:peps_guide_frame_patch_congruence} identifies the guide frames
+    with equal patches there. Equal radii give equal supplied patches and preserve
+    the disjointness condition, including the raw-frame case. Distinct grid corners are
     at distance at least $2^j$, whereas each outer sample lies within distance $2r$
     of its center, so $4r<2^j$ gives disjointness. Away from the four corners of a
     repainted block, a true vertex inside the block would contradict the grid-corner
@@ -896,4 +913,1487 @@ no holes, this is the normalization of $\Omega$.
     Theorem~\ref{thm:peps_guide_frame_supplied_gates}, then the same main-sheet lift.
     If the corner is absent or the radii agree, frame congruence gives an unchanged
     frame and the identity change of Theorem~\ref{thm:peps_protocol_event_segments}.
+\end{proof}
+
+\begin{theorem}[The main frame along the schedule]
+    \label{thm:peps_protocol_main_frame_schedule}
+    \lean{TNLean.PEPS.Approximation.ProtocolEvent.two_le_rank,
+        TNLean.PEPS.Approximation.ProtocolEvent.rank_le,
+        TNLean.PEPS.Approximation.exists_isScheduled_rank,
+        TNLean.PEPS.Approximation.isScheduled_getElem,
+        TNLean.PEPS.Approximation.take_succ_eventSchedule,
+        TNLean.PEPS.Approximation.mem_take_of_rank_lt,
+        TNLean.PEPS.Approximation.rank_le_of_mem_take,
+        TNLean.PEPS.Approximation.rank_getElem_succ_le,
+        TNLean.PEPS.Approximation.exists_index_of_isTrueVertex_levelGuide,
+        TNLean.PEPS.Approximation.resizedCorners,
+        TNLean.PEPS.Approximation.repaintedBlocks,
+        TNLean.PEPS.Approximation.levelGuide_eq_univ,
+        TNLean.PEPS.Approximation.levelGuide_succ_univ,
+        TNLean.PEPS.Approximation.eventMain,
+        TNLean.PEPS.Approximation.finalMain,
+        TNLean.PEPS.Approximation.mainState,
+        TNLean.PEPS.Approximation.mainState_of_lt,
+        TNLean.PEPS.Approximation.mainState_of_le,
+        TNLean.PEPS.Approximation.levelGuide_eq_of_mem_open,
+        TNLean.PEPS.Approximation.eventMain_inr_succ,
+        TNLean.PEPS.Approximation.eventMain_inl_succ,
+        TNLean.PEPS.Approximation.mainState_zero,
+        TNLean.PEPS.Approximation.finalMain_owner,
+        TNLean.PEPS.Approximation.finalMain_holes,
+        TNLean.PEPS.Approximation.ProtocolEvent.rank_inl,
+        TNLean.PEPS.Approximation.ProtocolEvent.rank_inr,
+        TNLean.PEPS.Approximation.rank_getElem_le_of_le,
+        TNLean.PEPS.Approximation.resizedCorners_succ_inr,
+        TNLean.PEPS.Approximation.repaintedBlocks_succ_inl,
+        TNLean.PEPS.Approximation.holeRadius_mem,
+        TNLean.PEPS.Approximation.resizeRadius_mem,
+        TNLean.PEPS.Approximation.squareOfIndex,
+        TNLean.PEPS.Approximation.squareOfIndex_index,
+        TNLean.PEPS.Approximation.junctionOfIndex,
+        TNLean.PEPS.Approximation.junctionOfIndex_index,
+        TNLean.PEPS.Approximation.getElem_notMem_take,
+        TNLean.PEPS.Approximation.notMem_take_succ_of_rank,
+        TNLean.PEPS.Approximation.rank_getElem_last,
+        TNLean.PEPS.Approximation.rank_getElem_zero,
+        TNLean.PEPS.Approximation.length_eventSchedule_pos,
+        TNLean.PEPS.Approximation.inRoot_subset_repaintedBlocks,
+        TNLean.PEPS.Approximation.frame_eq_of_owner_holes,
+        TNLean.PEPS.Approximation.finalMain_pairwise}
+    \leanok
+    \uses{def:peps_protocol_level_frame, def:peps_dyadic_protocol_schedule,
+        def:peps_adaptive_patch_constraint, def:peps_frame,
+        def:peps_dyadic_hierarchy, lem:peps_dyadic_floor}
+    For a hierarchy of depth $k\ge0$, a square of level $j$ has repainting rank
+    $2(k-j)+1$, and a junction of scale $j$ has resize rank
+    $2(k-\max\{j-1,0\})$, for $0\le j\le k$. The schedule has no repeated event
+    and its ranks are nondecreasing. An event at an in-range index $i$ is absent from the
+    prefix of length $i$. If index $i+1$ exists, an event of strictly larger rank
+    than the event at $i$ is absent from the prefix of length $i+1$.
+    For $k\ge1$ the schedule is nonempty, its first rank is $2$ and its last
+    rank is $2k+1$.
+
+    For $0\le j<k$, an integer block index $Q$ with $0\le Q_a<2^{k-j}$ in each
+    coordinate determines a square of level $j$ with exactly that index. For
+    $0\le j\le k$, an integer corner index with $0\le Q_a\le2^{k-j}$ determines
+    a junction of scale $j$ with exactly that index. After a resize, its corner is inserted in the set of
+    resized corners of that scale; after a repainting, its block index is inserted
+    in the set of repainted blocks of that level. After a repainting, if the next
+    event has larger rank or there is no next event, every block of the root square
+    at that level has been repainted. For any fixed finite physical-site data,
+    local dimension and party type, two frames with equal owner maps and equal
+    hole lists are equal.
+
+    Let $k\ge1$, $L\le2^k$ and $q\ge1$. Fix an adaptive supplied-patch family for
+    $\Omega$ with parameters $B_0,C,c$, test exponent $60$ and system size $L$,
+    a label rank and a reference repainting party map. Let $\epsilon_0,t>0$ with
+    $\epsilon_0t\le B_0\log L$, and put $h_n=\epsilon_0\min(n,t)$.
+    For every $n>0$, $0<h_n\le B_0\log L$. For any set $A\subseteq\mathbb R^2$, assigning
+    radius $h_n$ on $A$ and $h_{2n}$ elsewhere gives the same strict positivity
+    and upper bound at every point. When $4\epsilon_0<1$, the supplied outer
+    physical samples at the true vertices of the final unit-level guide are
+    pairwise disjoint.
+    Every event in the schedule is scheduled, and passing from a prefix of length
+    $i$ to one of length $i+1$ appends the event at index $i$, when that index is
+    in range. Every rank from $2$ to $2k+1$ is the rank of an event, consecutive events
+    have equal or consecutive ranks, and the events before a given one are those of
+    smaller rank and some of its own. Before each event let the main frame be: for a
+    resize at a junction of scale $j$, the frame of the guide uniform on the
+    $2^j$-blocks, whose holes at the corners already resized at that scale have radius
+    $h_{2^{j-1}}$ and the others radius $h_{2^j}$; for a repainting of a square of level
+    $j$ and side $2^j$, the frame of the guide of that level with the squares already
+    repainted at that level, all holes of radius $h_{2^j}$; after the last event, the frame of the
+    unit squares. Thus before the end of the schedule the main frame is the frame
+    of its current event, and at every index at or beyond the end it is the final
+    frame. If a block guide has a constant label on an open neighborhood of a point,
+    its sampled guide has that label at the point. The true vertices of these guides
+    are grid corners of the closed root square. Then a resize leaves the frame
+    before the next event with its own corner
+    resized, a repainting leaves the frame before the next event with its own square
+    repainted, the first frame is the raw copy at the root party, and in the last frame
+    every site is held by its unit-square party and every hole has an empty outer
+    square when $4\epsilon_0<1$ (\texttt{06-geometry.tex}, lines 21--23, 82--133 and
+    658--673).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_dyadic_protocol_schedule_counts,
+        lem:peps_dyadic_direct_repainting, lem:peps_dyadic_unmodified_vertices,
+        thm:peps_dyadic_temporary_holes, lem:peps_dyadic_active_labels,
+        thm:peps_protocol_level_events, thm:peps_protocol_party_map_switch,
+        thm:peps_dyadic_protocol_parties, thm:peps_dyadic_protocol_final_step,
+        thm:peps_guide_frame_norm, thm:peps_guide_frame_supplied_gates,
+        lem:peps_dyadic_sampled_guides, thm:peps_protocol_level_frame_facts,
+        def:peps_protocol_level_frame, def:peps_dyadic_block_guide,
+        thm:peps_dyadic_repainting_valid_labels, def:peps_guide_frame,
+        def:peps_dyadic_protocol_schedule, def:peps_dyadic_used_parties,
+        lem:peps_adaptive_patch_supply, lem:peps_level_true_vertices,
+        thm:peps_protocol_bounded_changes, lem:peps_protocol_junction_resize_parties,
+        def:peps_frame}
+    The schedule contains exactly the prescribed events in rank order
+    (Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts}). The ranks cover the
+    range, so no rank is skipped. The first and last ranks follow from this
+    coverage and monotonicity. The distinctness of the schedule excludes an event
+    from its own preceding prefix. The integer-index constructions preserve the
+    indices, and splitting off the last event of a prefix gives the two insertion
+    identities. Two frames with equal owners and hole lists have identical data.
+    Positivity of $\epsilon_0,n,t$ and $\min(n,t)\le t$ give the radius bounds;
+    the two cases of the resized radius satisfy the same estimate. The disjointness
+    result of Theorem~\ref{thm:peps_protocol_level_frame_facts} applies to the
+    final grid because its hole radii are at most $\epsilon_0$.
+    When the next event has a larger rank, every event
+    of the current rank is done. The completed block guide is the starting guide of
+    the next level by Lemma~\ref{lem:peps_dyadic_active_labels}.
+
+    The true-vertex statements for readings and block guides, and the criterion for
+    a locally constant guide, locate the corners
+    (Theorem~\ref{thm:peps_dyadic_temporary_holes} and
+    Lemmas~\ref{lem:peps_dyadic_direct_repainting}
+    and~\ref{lem:peps_dyadic_unmodified_vertices}). A sufficiently small positive
+    displacement stays in an open neighborhood by
+    Lemma~\ref{lem:peps_dyadic_sampled_guides}, so reading a locally constant guide
+    preserves its label. The equal-frame result of
+    Theorem~\ref{thm:peps_protocol_level_frame_facts} identifies frames of equal
+    sampled guides whose radii agree at the true vertices.
+
+    The root guide has no true vertex by
+    Theorem~\ref{thm:peps_protocol_level_events}. Cell centers lie in the open root
+    square by Theorem~\ref{thm:peps_protocol_party_map_switch}, giving the initial
+    raw frame. The party-label identities of
+    Theorems~\ref{thm:peps_dyadic_protocol_parties}
+    and~\ref{thm:peps_dyadic_protocol_final_step} give the final owners.
+    At the unit level, $2h_1\le2\epsilon_0<\tfrac12$, so the unit-frame conclusion of
+    Theorem~\ref{thm:peps_guide_frame_norm} gives empty physical outer squares.
+\end{proof}
+
+\begin{theorem}[The dyadic protocol from its large-scale repaintings]
+    \label{thm:peps_protocol_from_large_repaintings}
+    \lean{TNLean.PEPS.Approximation.auxIndices,
+        TNLean.PEPS.Approximation.exists_large_of_mem_auxIndices,
+        TNLean.PEPS.Approximation.mem_eventSchedule_of_mem_auxIndices,
+        TNLean.PEPS.Approximation.auxState,
+        TNLean.PEPS.Approximation.auxState_succ,
+        TNLean.PEPS.Approximation.largeSquare,
+        TNLean.PEPS.Approximation.protocolState,
+        TNLean.PEPS.Approximation.IsProtocolConstants.t_pos,
+        TNLean.PEPS.Approximation.IsProtocolConstants.hole_le,
+        TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_largeRepaintings}
+    \leanok
+    \uses{def:peps_dyadic_protocol, def:peps_adaptive_patch_constraint,
+        thm:peps_protocol_constants, thm:peps_dyadic_direct_repainting_constants,
+        thm:peps_protocol_main_frame_schedule, def:peps_dyadic_protocol_schedule,
+        thm:peps_protocol_event_segments, def:peps_circuit_source_bound,
+        def:peps_dyadic_protocol_parties, def:peps_frame, thm:peps_protocol_level_events}
+    Fix $0<\epsilon_0\le1/16$. There is a mesh threshold $\nu'>0$ such that for
+    every $0<\nu\le\nu'$, every $k\in\N$, constants of the protocol with an
+    admissible direct-repainting ratio, $q\ge1$, $L\ge2$ with $L\le2^k<2L$,
+    $\lVert\Omega\rVert=1$ and patches supplied by the adaptive patch constraint
+    with constants $B_0,C,c$ at accuracy $L^{-60}$, the following holds. Put
+    $t=D\log L$ and let $b$ be the patch bound of
+    Theorem~\ref{thm:peps_protocol_constants}. The protocol constants and $L\ge2$
+    give $t>0$ and $\epsilon_0t\le B_0\log L$. Let $C',c',k'\in\N$ with
+    $C\le C'$, $1\le C'$ and $c\le c'$, and set
+    \begin{align}
+        K & =(C'+1)^{3b}\bigl(16b^2(C'+1)^{6b}+1\bigr)^{2b}
+        L^{3bc'+4b(3bc'+30)}.
+        \label{eq:peps_protocol_rewrite_bound}
+    \end{align}
+    Let the memory before each event be the main frame followed by one frame for
+    each auxiliary sheet of the schedule, frozen if its repainting is done and
+    an idle raw copy held by its future owner otherwise. Each auxiliary index
+    belongs to a scheduled large-scale repainting, and an event other than a
+    large-scale repainting freezes no auxiliary sheet. Suppose that each
+    repainting of a square of side larger than $K_0t$ passes the memory from its
+    state before to its state after through $189$ bounded changes, each with at
+    most $2b$ pair effects and $2b$ pair sources in each monomial, at most $K$
+    monomials and coefficient sum, error at most $(2b+1)L^{-20}$, and
+    participants used by the repainting. Suppose also that the frozen frames
+    satisfy the frame constraint at accuracy $L^{-60}$ and together carry at
+    most $C_1L^3$ holes. If $5042\le C_1$, $K\le C_1L^{k'}$ and $2b+1\le C_1$,
+    there is a protocol with the assembly bounds of
+    Definition~\ref{def:peps_dyadic_protocol} for the constants $C_1$,
+    $64\cdot189$, $k'$ and $2b$, all of whose changes have at most $2b$ pair
+    sources in each monomial. This is not
+    Proposition~\ref{prop:peps_dyadic_protocol}: the large-scale repaintings are
+    assumed here, together with the frozen-frame bounds
+    (\texttt{06-geometry.tex}, lines 82--241, 507--541 and 572--681).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_protocol_main_frame_schedule, thm:peps_protocol_level_events,
+        thm:peps_protocol_event_segments, thm:peps_dyadic_protocol_schedule_counts,
+        def:peps_dyadic_protocol_schedule, def:peps_frame, thm:peps_protocol_constants}
+    The positivity of $D$ and $\log L$ gives $t>0$, while
+    $\epsilon_0D\le K_0D\le B_0$ gives the radius bound.
+    The schedule identifies the auxiliary initializations and the events containing
+    them. By Theorem~\ref{thm:peps_protocol_main_frame_schedule}, its indexed events
+    are scheduled and its main frames have the stated transitions and endpoints.
+    Resizes and direct repaintings change only the main frame, by one small-patch
+    rewrite from Theorem~\ref{thm:peps_protocol_level_events}, and freeze no auxiliary
+    sheet. A large-scale repainting has $189$ changes by
+    Theorem~\ref{thm:peps_dyadic_protocol_schedule_counts}, so its supplied segment
+    has the required length. The changes are joined by
+    Theorem~\ref{thm:peps_protocol_event_segments}, starting from the raw copies and
+    ending with the frame of the unit squares and the frozen frames.
+\end{proof}
+
+\begin{theorem}[The side of a non-root dyadic square]
+    \label{thm:peps_repainted_square_side_bound}
+    \lean{TNLean.PEPS.Approximation.RepaintedSquare.side_le}
+    \leanok
+    \uses{def:peps_dyadic_protocol_parties}
+    Let $k,L$ be natural numbers with $2^k<2L$. Every non-root square
+    of level $j<k$ in the level-$k$ dyadic hierarchy has side $2^j\le L$.
+\end{theorem}
+
+\begin{proof}\leanok
+    Since $j+1\le k$, we have $2\cdot2^j=2^{j+1}\le2^k<2L$.
+    Dividing by $2$ gives the bound.
+\end{proof}
+
+\begin{definition}[The frame of a treated sheet]
+    \label{def:peps_protocol_treated_frame}
+    \lean{TNLean.PEPS.Approximation.treatedGuide,
+        TNLean.PEPS.Approximation.treatedVertices,
+        TNLean.PEPS.Approximation.treatedFrame,
+        TNLean.PEPS.Approximation.treatedFrame_eq}
+    \leanok
+    \uses{def:peps_adaptive_patch_constraint,
+        def:peps_dyadic_block_guide,
+        def:peps_dyadic_protocol_parties,
+        def:peps_frame,
+        def:peps_frame_square_patch,
+        def:peps_guide_frame,
+        def:peps_protocol_level_frame,
+        def:polynomial_peps_model,
+        lem:peps_adaptive_patch_supply,
+        lem:peps_dyadic_floor,
+        lem:peps_treated_true_vertices,
+        thm:peps_guide_frame_supplied_gates,
+        thm:peps_protocol_bounded_changes}
+    For any natural level $j$, integer square index $S$, real $t$, finite set $M$ of grid
+    corners, label $L_0$ and plane guide $g$, place $g$ on the square of index $S$ and side
+    $n=2^j$, homogenize it to $L_0$ on the open sup squares of radius $t$ about the corners in
+    $M$, and apply the sampling convention of Definition~\ref{def:peps_protocol_level_frame}:
+    at each point take the eventual value along $(1,1)$ when it exists, and otherwise the
+    value of the homogenized guide at that point. This total construction is the treated
+    guide. For natural $k,j$, put $N=2^{k-j}$, with subtraction truncated at zero. The treated
+    vertex set of any guide is its true vertices among the grid corners with integer indices
+    in $[0,N+1]^2$ and the finite rim patterns of radius $t$ about $M$.
+
+    Let $L,q$ be natural numbers, $\Omega$ any vector on the $L\times L$ system, and $P$ an
+    adaptive supplied-patch family for $\Omega$ with parameters $B_0,C,c$, test exponent $60$
+    and size $L$. Fix a label rank and a repaintable square $R$ at level $j<k$. For arbitrary
+    real $\epsilon_0,t$ satisfying $0<\epsilon_0t\le B_0\log L$, form the supplied patches of
+    radius $\epsilon_0t$ at the treated vertex set of the guide placed on $R$. If their outer
+    sets of physical sites are pairwise disjoint, the treated frame is the encoded frame with
+    these patches, with each site owned by the party of its read label and each tag held by
+    the party of its canonical tag holder. If these outer sets are not disjoint, define the
+    treated frame to be the raw frame owned by the square party of $R$. In particular, the
+    explicit disjointness hypothesis gives equality with the encoded guide frame for arbitrary
+    such data.
+\end{definition}
+
+\begin{proof}\leanok
+    The explicit disjointness hypothesis selects the encoded-frame branch of the definition.
+\end{proof}
+
+\begin{definition}[A bounded change of one frame]
+    \label{def:peps_frame_change}
+    \lean{TNLean.PEPS.Approximation.HasFrameChange}
+    \leanok
+    \uses{def:peps_bounded_change,
+        def:peps_circuit_source_bound,
+        def:peps_frame,
+        def:peps_frame_registers,
+        def:peps_original_circuit,
+        def:peps_sheet_stack}
+    For any finite decidable site set, arbitrary plane positions, any party type and natural
+    $q\ge1$, a bounded change of frames $F,F'$ with pair-source bound $r_s$ means an original
+    circuit from their registers that is a bounded change in the sense of
+    Definition~\ref{def:peps_bounded_change} of their reference vectors for the chosen
+    participant set, pair-effect bound $r$, monomial bound $K$ and error $\eta$, and in each
+    nonprivate expansion every monomial has at most $r_s$ pair sources. Here $r,K,r_s$ are
+    natural, $\eta$ is real, and the reference vector $\Omega$ is arbitrary.
+\end{definition}
+
+\begin{theorem}[The treated hole radius]
+    \label{thm:peps_treated_radius_bounds}
+    \lean{TNLean.PEPS.Approximation.IsProtocolConstants.treatedRadius_bounds}
+    \leanok
+    \uses{thm:peps_protocol_constants}
+    For any natural $L\ge2$ and protocol constants $K_0,\epsilon_0,\nu,a,D,B_0$, the radius
+    bound $0<\epsilon_0D\log L\le B_0\log L$ holds, independently of any state or patch supply
+    (\texttt{06-geometry.tex}, lines 564--567).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_protocol_from_large_repaintings}
+    The protocol scales give $\epsilon_0>0$ and $D\log L>0$, and their hole bound gives the
+    upper inequality.
+\end{proof}
+
+\begin{theorem}[The frame of the sampled treated guide]
+    \label{thm:peps_treated_frame_spec}
+    \lean{TNLean.PEPS.Approximation.treatedFrame_spec}
+    \leanok
+    \uses{def:peps_adaptive_patch_constraint,
+        def:peps_dyadic_block_guide,
+        def:peps_dyadic_protocol_parties,
+        def:peps_dyadic_used_parties,
+        def:peps_guide_frame,
+        def:peps_protocol_treated_frame,
+        def:polynomial_peps_model,
+        lem:peps_adaptive_patch_supply,
+        lem:peps_dyadic_birth_enlargement,
+        lem:peps_dyadic_floor,
+        lem:peps_dyadic_sampled_guides,
+        lem:peps_dyadic_unmodified_vertices,
+        thm:peps_dyadic_repainting_valid_labels,
+        thm:peps_guide_frame_supplied_gates,
+        thm:peps_protocol_bounded_changes,
+        thm:peps_protocol_constants,
+        thm:peps_treated_radius_bounds}
+    Let $L,q,k$ be natural, $\Omega$ any vector on the $L\times L$ system, and $P$ an adaptive
+    supplied-patch family for $\Omega$ with parameters $B_0,C,c$, test exponent $60$ and size
+    $L$. Fix any natural-valued label rank and a repaintable square $R$ at level $j<k$. Choose
+    protocol constants, assume $L\ge2$, and put $t=D\log L$ with $2^j>K_0t$. Take any set of
+    already repainted blocks, any unmodified guide of the corresponding repainting baseline of
+    $R$, any finite mark set $M$ and any label $L_0$. The treated guide of
+    Definition~\ref{def:peps_protocol_treated_frame} is a $(1,1)$ reading of the homogenized
+    guide placed on $R$. Its true vertices are exactly the treated vertex set, the supplied
+    outer sets are pairwise disjoint, and its treated frame is the encoded guide frame. This
+    imposes no positivity condition on $q$ or normalization condition on $\Omega$
+    (\texttt{06-geometry.tex}, lines 69--80, 102--125 and 328--355).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_dyadic_block_guide,
+        def:peps_protocol_treated_frame,
+        lem:peps_dyadic_chamber_sampling,
+        lem:peps_dyadic_readings_exist,
+        lem:peps_treated_true_vertices,
+        thm:peps_dyadic_repainting_valid_labels,
+        thm:peps_dyadic_temporary_holes,
+        thm:peps_guide_frame_norm,
+        thm:peps_guide_frame_supplied_gates,
+        thm:peps_protocol_bounded_changes,
+        thm:peps_protocol_level_frame_facts,
+        thm:peps_treated_radius_bounds}
+    Ray constancy gives the displaced reading. The root-index inclusion and the finite
+    grid-and-rim description identify all true vertices. Separation of their outer squares
+    gives disjoint physical samples. The disjointness branch of
+    Definition~\ref{def:peps_protocol_treated_frame} is therefore the encoded guide frame.
+\end{proof}
+
+\begin{theorem}[A lower bound for the protocol patch count]
+    \label{thm:peps_protocol_patch_bound_lower}
+    \lean{TNLean.PEPS.Approximation.fiftyThree_le_protocolPatchBound}
+    \leanok
+    \uses{thm:peps_protocol_constants}
+    For real $\epsilon_0\ge0$ and $0<\nu<1/3$, the protocol patch bound $b$ satisfies
+    $b\ge53$, without protocol hypotheses.
+\end{theorem}
+
+\begin{proof}\leanok
+    The assumptions give $8\le(4+8\epsilon_0+2\nu)/\nu+1$. The square-net bound yields $8^2\le
+        b$, hence $53\le b$.
+\end{proof}
+
+\begin{theorem}[A point treatment as a change of a treated sheet]
+    \label{thm:peps_protocol_point_treatment_change}
+    \lean{TNLean.PEPS.Approximation.exists_pointTreatment_hasSourceBoundedChange}
+    \leanok
+    \uses{def:peps_adaptive_patch_constraint,
+        def:peps_dyadic_block_guide,
+        def:peps_dyadic_protocol_parties,
+        def:peps_dyadic_used_parties,
+        def:peps_frame_change,
+        def:peps_protocol_treated_frame,
+        def:polynomial_peps_model,
+        lem:peps_adaptive_patch_supply,
+        lem:peps_dyadic_direct_repainting,
+        lem:peps_dyadic_unmodified_vertices,
+        thm:peps_dyadic_block_ratio,
+        thm:peps_dyadic_repainting_valid_labels,
+        thm:peps_protocol_bounded_changes,
+        thm:peps_protocol_constants,
+        thm:peps_protocol_level_events,
+        thm:peps_treated_radius_bounds}
+    Fix $0<\epsilon_0\le1/16$. There is a threshold $\nu'>0$, depending only on $\epsilon_0$,
+    such that the following holds for every $0<\nu\le\nu'$. Choose protocol constants, natural
+    $L\ge2$ and $q\ge1$, a unit vector $\Omega$, an adaptive supplied-patch family $P$ for
+    $\Omega$ with parameters $B_0,C,c$, test exponent $60$ and size $L$, and any label rank.
+    Let $R$ be a repaintable square of a hierarchy of any natural depth $k$, at level $j<k$,
+    with integer index $s$, side $n=2^j>K_0t$ and $t=D\log L$. Choose any set of already
+    repainted blocks and an unmodified guide $g$ of its repainting baseline. Let $L_0$ be the
+    new label of $R$ or the current label of one of the nine blocks with indices $s+u$,
+    $u\in\{-1,0,1\}^2$. Let $M,M'$ be finite sets of grid corners with identical membership
+    away from one corner $Q_0$ of $R$; equality of the two sets is allowed.
+
+    For natural $C',c'$ satisfying $C\le C'$, $1\le C'$ and $c\le c'$, put $b$ equal to the
+    protocol patch bound and use the bound $K_{\mathrm{rw}}$
+    of~(\ref{eq:peps_protocol_level_rewrite_bound}) for these $C',c',b,L$. Passing from the
+    treated frame with marks $M$ to that with marks $M'$ is a bounded change with participants
+    used by the repainting of $R$, pair-effect and pair-source bounds $2b$, monomial bound
+    $K_{\mathrm{rw}}$, and error $(2b+1)L^{-20}$ (\texttt{06-geometry.tex}, lines 328--339,
+    481--505 and 572--596).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_dyadic_chamber_sampling,
+        lem:peps_treated_true_vertices,
+        thm:peps_guide_frame_supplied_gates,
+        thm:peps_protocol_bounded_changes,
+        thm:peps_protocol_patch_bound_lower,
+        thm:peps_treated_frame_spec,
+        thm:peps_treated_radius_bounds}
+    The two homogenized guides agree outside the open radius-$t$ square about $Q_0$; after
+    reading along $(1,1)$, their possible difference is contained in the closed radius-$t$
+    square. Apply Theorem~\ref{thm:peps_treated_frame_spec} to both mark sets. The supplied
+    patches of radius $\epsilon_0t$ at their true vertices are rewritten by the
+    point-treatment small-patch rewrite, using auxiliary patches of radius $u=\nu t/2\le
+        B_0\log L$. Its footprint ratio is $(4+8\epsilon_0+2\nu)/\nu$, and
+    $((4+8\epsilon_0+2\nu)/\nu+1)^2\le b$ bounds the square net. Also $b\ge53$ since the
+    protocol constants give $\nu<1/3$. The resulting circuit has pair-effect and pair-source
+    bounds $2b$, monomial bound $K_{\mathrm{rw}}$ and error $(2b+1)L^{-20}$. Its block parties
+    are participants used by the repainting of $R$.
+\end{proof}
+
+\begin{theorem}[Readings separated from a change]
+    \label{thm:peps_readings_far_change}
+    \lean{TNLean.PEPS.Approximation.readings_isTrueVertex_iff_of_far}
+    \leanok
+    \uses{def:peps_dyadic_incident_labels,
+        lem:peps_dyadic_birth_enlargement,
+        lem:peps_dyadic_sampled_guides}
+    Let $G_b,G_a$ be plane labellings by any set, with the same true vertices, and let
+    $f_b,f_a$ be their readings along any common displacement. If $\delta>0$ and every such
+    guide vertex is at distance at least $\delta$ from the closure of $\{G_b\ne G_a\}$, then
+    $f_b,f_a$ have the same true vertices and the same incident labels at them.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_dyadic_incident_labels,
+        lem:peps_dyadic_incident_change,
+        lem:peps_dyadic_sampled_guides,
+        thm:peps_dyadic_temporary_holes}
+    A difference of readings lies in the closure of the guide difference. The distance bound
+    therefore makes the readings equal in a neighborhood of every guide vertex. Their incident
+    labels agree there. Every reading vertex is a guide vertex, and the characterization by
+    incident labels then proves both directions of the true-vertex equivalence.
+\end{proof}
+
+\begin{theorem}[Changing the owners of a guide frame]
+    \label{thm:peps_guide_frame_change_owner}
+    \lean{TNLean.PEPS.Approximation.guideFrame_eq_changeOwner,
+        TNLean.PEPS.Approximation.guideFrame_eq_changeOwner_of_ne}
+    \leanok
+    \uses{def:peps_dyadic_incident_labels,
+        def:peps_frame_birth_partition,
+        def:peps_frame_square_patch,
+        def:peps_guide_frame}
+    For arbitrary finite decidable sites, positions, natural $q$, labels and parties, fix two
+    guides, a common finite center set, a patch family with disjoint outer samples, an owner
+    map, placeholder and natural-valued rank. If the second guide assigns owner $Q$ on a site
+    set $T$ and the first guide's owners off $T$, and their tag holders agree at every chosen
+    center, then its guide frame is the first guide frame with $T$ handed to $Q$. Denote this
+    owner change by $F[T\mapsto Q]$.
+
+    In particular, take equal finite center sets $V'=V$, a common patch family,
+    and separately pairwise-disjoint outer samples for the two lists. Let $T$ be
+    exactly the sites where $g$ and $g'$ differ. For any label $B$, if $g'$ has label $B$ at every
+    changed site and the incident label sets of $g,g'$ agree at every center in
+    $V$, then the guide frame of $g'$ equals that of $g$ with $T$ handed to the
+    party owning $B$. This requires no true-vertex enumeration hypothesis.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_guide_frame,
+        lem:peps_guide_frame_tags,
+        thm:peps_protocol_main_frame_schedule}
+    The owner assignments agree with the prescribed change at every site. Unfolding the
+    guide-frame holes gives the same ordered patches with the same tag holders, so equality of
+    owners and holes proves the frame identity.
+    For the changed-site corollary, identify the equal center sets. Away from
+    $T$ the labels agree, and on $T$ the new label is $B$. Equal incident label
+    sets give equal tag holders, so the preceding owner-change identity applies.
+\end{proof}
+
+\begin{theorem}[Values where two readings differ]
+    \label{thm:peps_reading_changed_values}
+    \lean{TNLean.PEPS.Approximation.IsDisplacedReading.values_of_ne}
+    \leanok
+    \uses{def:peps_dyadic_block_guide,
+        lem:peps_dyadic_sampled_guides}
+    Let $H_b,H_a$ be labellings by any set, $d$ any translation and $\delta>0$. Suppose that
+    throughout the open $\delta$-neighbourhood of $\{H_b\ne H_a\}$, $H_b=A$ and
+    $H_a\in\{A,B\}$. For readings $f_b,f_a$ of their translates along $(1,1)$, every point
+    where $f_b\ne f_a$ has $f_b=A$ and $f_a=B$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_dyadic_sampled_guides,
+        lem:peps_dyadic_translation}
+    A changed reading point, translated back by $d$, lies in the closure of the original
+    changed set and hence in its open $\delta$-neighborhood. Choose a sufficiently small
+    positive diagonal displacement where both readings and the two-label hypothesis hold. Then
+    $f_b=A$ and $f_a\in\{A,B\}$; their inequality excludes $f_a=A$.
+\end{proof}
+
+\begin{theorem}[Support of a treated band change]
+    \label{thm:peps_treated_band_support}
+    \lean{TNLean.PEPS.Approximation.BandOperation.treated_ne_subset}
+    \leanok
+    \uses{def:peps_dyadic_edge_band,
+        def:peps_dyadic_normal_words,
+        def:peps_dyadic_schedule,
+        lem:peps_dyadic_floor}
+    For any edge band operation, label set, real $n,t$, edge and background guide, the
+    difference of its endpoint-treated guides is contained in the open band $\{-8<x<2\}$ of
+    that edge.
+\end{theorem}
+
+\begin{proof}\leanok
+    The two homogenized guides agree on the endpoint-treatment set. Outside the edge band both
+    band updates equal the background guide; hence any point where the treated guides differ
+    belongs to the band.
+\end{proof}
+
+\begin{theorem}[Values near a treated band change]
+    \label{thm:peps_treated_band_values}
+    \lean{TNLean.PEPS.Approximation.BandOperation.treated_mem}
+    \leanok
+    \uses{def:peps_dyadic_edge_band,
+        def:peps_dyadic_normal_words,
+        def:peps_dyadic_schedule,
+        lem:peps_dyadic_floor,
+        thm:peps_dyadic_no_changed_vertex}
+    For an edge band operation on any label set, let $n,t$ be real, choose any edge and
+    background guide, and suppose that the operation inserts the single label $Q$ and $t\le
+        n$. On the open $a_0t$-neighborhood of the difference of its endpoint-treated guides, both
+    treated values belong to $\{P_\circ,Q\}$ and the treated surrounding guide is $P_\circ$,
+    where $P_\circ$ is the surrounding label and $a_0$ is the angular constant. The assertion
+    is vacuous when $t\le0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_dyadic_no_changed_vertex}
+    The treated surrounding-guide theorem gives the value $P_\circ$. At a changed point,
+    treatment is inactive and the point lies in the band, so the one-label insertion property
+    gives both values in $\{P_\circ,Q\}$. At an unchanged point, either choice of surrounding
+    guide makes both values equal to $P_\circ$.
+\end{proof}
+
+\begin{theorem}[Values of the treated band readings]
+    \label{thm:peps_treated_band_readings}
+    \lean{TNLean.PEPS.Approximation.BandOperation.readings_of_ne}
+    \leanok
+    \uses{def:peps_dyadic_block_guide,
+        def:peps_dyadic_edge_band,
+        def:peps_dyadic_normal_words,
+        def:peps_dyadic_protocol_parties,
+        def:peps_dyadic_schedule,
+        lem:peps_dyadic_floor,
+        lem:peps_dyadic_sampled_guides,
+        thm:peps_dyadic_no_changed_vertex}
+    For an elementary edge operation on protocol labels inserting $Q$, let $0<t\le n$ and take
+    any background guide, translation and $(1,1)$-readings of its treated before, after and
+    surrounding guides. Wherever the before and after readings differ, the surrounding reading
+    is $P_\circ$, and both other readings lie in $\{P_\circ,Q\}$. Here $P_\circ$ is its
+    surrounding label, and the treatment homogenizes all three local guides to $P_\circ$ on
+    the radius-$t$ squares about the two endpoints before translation.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_dyadic_sampled_guides,
+        lem:peps_dyadic_translation,
+        thm:peps_treated_band_values}
+    Translate the changed reading point into the closure of the local guide difference. Since
+    $a_0t>0$, a neighborhood lies in its $a_0t$-thickening. Choose one sufficiently small
+    positive diagonal displacement for all three readings and apply
+    Theorem~\ref{thm:peps_treated_band_values}.
+\end{proof}
+
+\begin{theorem}[Geometry of the treated band readings]
+    \label{thm:peps_treated_band_frame_facts}
+    \lean{TNLean.PEPS.Approximation.BandOperation.treated_frame_facts}
+    \leanok
+    \uses{def:peps_dyadic_block_guide,
+        def:peps_dyadic_edge_band,
+        def:peps_dyadic_incident_labels,
+        def:peps_dyadic_normal_words,
+        def:peps_dyadic_protocol_parties,
+        def:peps_dyadic_schedule,
+        lem:peps_dyadic_birth_enlargement,
+        lem:peps_dyadic_floor,
+        lem:peps_dyadic_sampled_guides,
+        thm:peps_dyadic_no_changed_vertex}
+    For an elementary edge operation on protocol labels inserting a single label $Q$, $0<t\le
+        n$, any background guide and translation, take just the two $(1,1)$-readings of the
+    treated before and after guides. For any real $\epsilon_0$ with $2\epsilon_0<a_0$, these
+    two readings have the same true vertices and incident labels; every changed position $p$
+    satisfies $d_\infty(p,z)>2\epsilon_0t$ for every such vertex $z$, and any two changed
+    positions satisfy $d_\infty(p,p')\le n$. Here $a_0$ is the angular constant. The local
+    guides are homogenized to the surrounding label on the radius-$t$ squares about the two
+    endpoints before translation.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_dyadic_band_disjoint,
+        lem:peps_dyadic_sampled_guides,
+        lem:peps_dyadic_translation,
+        thm:peps_bulk_steps_treated_frames,
+        thm:peps_dyadic_no_changed_vertex,
+        thm:peps_dyadic_temporary_holes,
+        thm:peps_readings_far_change,
+        thm:peps_treated_band_support}
+    The treated guides have the same true vertices, separated by at least $a_0t$ from the
+    closure of their difference. Translation preserves this distance, so
+    Theorem~\ref{thm:peps_readings_far_change} gives equality of reading vertices and incident
+    labels. A changed reading point lies in that closed difference, so $2\epsilon_0t<a_0t$
+    gives strict clearance. By Theorem~\ref{thm:peps_treated_band_support}, its
+    translated-back position lies in the closed edge band. The closed-band diameter bound
+    gives $d_\infty(p,p')\le n$.
+\end{proof}
+
+\begin{theorem}[A birth along an edge as a change of a treated sheet]
+    \label{thm:peps_protocol_band_step_changes}
+    \lean{TNLean.PEPS.Approximation.bandBirth_hasFrameChange}
+    \leanok
+    \uses{def:peps_adaptive_patch_constraint,
+        def:peps_angular_scale,
+        def:peps_dyadic_block_guide,
+        def:peps_dyadic_edge_band,
+        def:peps_dyadic_normal_words,
+        def:peps_dyadic_protocol_parties,
+        def:peps_dyadic_schedule,
+        def:peps_dyadic_used_parties,
+        def:peps_frame_change,
+        def:peps_protocol_treated_frame,
+        def:polynomial_peps_model,
+        lem:peps_adaptive_patch_supply,
+        lem:peps_dyadic_unmodified_vertices,
+        thm:peps_bulk_steps_treated_frames,
+        thm:peps_dyadic_no_changed_vertex,
+        thm:peps_dyadic_repainting_valid_labels,
+        thm:peps_protocol_bounded_changes,
+        thm:peps_protocol_constants,
+        thm:peps_treated_radius_bounds}
+    Let $q\ge1$ and let $\Omega$ be a $\Delta$-gapped ground state, at energy $E_0$, of the
+    square Hamiltonian with local norm bound $J$. Assume that $D$ is an angular scale as in
+    Definition~\ref{def:peps_angular_scale} with parameters $q,J,\Delta,a,A_0,m_0$, test
+    exponent $60$ and threshold $L_0'$, where $m_0\ge2$ and $A_0\ge1$. Choose protocol
+    constants and natural $L\ge\max(2,L_0')$ and $k$ with $2^k<2L$. Fix an adaptive
+    supplied-patch family $P$ for $\Omega$ with parameters $B_0,C,c$, test exponent $60$ and
+    size $L$, and any label rank.
+
+    Let $R$ be a repaintable square at level $j<k$, with $n=2^j>K_0t$ and $t=D\log L$, and
+    choose any set of already repainted blocks. An elementary edge birth involving a single
+    label $Q$ changes one unmodified guide of this repainting baseline into another. Its
+    surrounding guide is the guide before. Treat both guides with the surrounding label about
+    exactly the endpoints of the edge. If the parties of the surrounding label and of $Q$ lie
+    in a participant set $S$, passing from the treated frame before to that after is a bounded
+    change with participants in $S$, at most one pair source and error $L^{-30}$. This holds
+    for all natural monomial and pair-source bounds $K,r_s\ge1$; the natural pair-effect bound
+    $r$ is arbitrary (\texttt{06-geometry.tex}, lines 183--221, 328--387 and 440--445).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_frame_change,
+        lem:peps_guide_frame_outer_holes_disjoint,
+        lem:peps_adaptive_patch_supply,
+        lem:peps_circuit_source_bound_monomials,
+        thm:peps_bounded_change_closure,
+        thm:peps_bulk_steps_treated_frames,
+        thm:peps_guide_frame_change_owner,
+        thm:peps_guide_frame_supplied_gates,
+        thm:peps_repainted_square_side_bound,
+        thm:peps_treated_band_frame_facts,
+        thm:peps_treated_band_readings,
+        thm:peps_treated_frame_spec,
+        thm:peps_treated_radius_bounds}
+    The treated-frame specification and the geometric facts of
+    Theorem~\ref{thm:peps_treated_band_frame_facts} give equal true vertices and incident
+    labels for the two readings. Their changed positions have strict clearance
+    $d_\infty(p,z)>2\epsilon_0t$ and diameter at most $n$, so the changed sites avoid every
+    outer hole. Write $F_b,F_a$ for the frames before and after, $T$ for the changed sites,
+    and $Q_\circ$ for the party of $Q$. The changed labels go from $P_\circ$ to $Q$, so
+    Theorem~\ref{thm:peps_guide_frame_change_owner} gives $F_a=F_b[T\mapsto Q_\circ]$. Apply
+    the bulk birth of Theorem~\ref{thm:peps_bulk_steps_treated_frames}. The circuit conversion
+    preserves the participant and monomial bounds, error $L^{-30}$ and at most one pair
+    source.
+\end{proof}
+
+\begin{theorem}[A death along an edge as a change of a treated sheet]
+    \label{thm:peps_protocol_band_death_change}
+    \lean{TNLean.PEPS.Approximation.bandDeath_hasFrameChange}
+    \leanok
+    \uses{def:peps_adaptive_patch_constraint,
+        def:peps_angular_scale,
+        def:peps_dyadic_block_guide,
+        def:peps_dyadic_edge_band,
+        def:peps_dyadic_normal_words,
+        def:peps_dyadic_protocol_parties,
+        def:peps_dyadic_schedule,
+        def:peps_dyadic_used_parties,
+        def:peps_frame_change,
+        def:peps_protocol_treated_frame,
+        def:polynomial_peps_model,
+        lem:peps_adaptive_patch_supply,
+        lem:peps_dyadic_unmodified_vertices,
+        thm:peps_bulk_steps_treated_frames,
+        thm:peps_dyadic_no_changed_vertex,
+        thm:peps_dyadic_repainting_valid_labels,
+        thm:peps_protocol_bounded_changes,
+        thm:peps_protocol_constants,
+        thm:peps_treated_radius_bounds}
+    Let $q\ge1$ and let $\Omega$ be a $\Delta$-gapped ground state, at energy $E_0$, of the
+    square Hamiltonian with local norm bound $J$. Assume that $D$ is an angular scale as in
+    Definition~\ref{def:peps_angular_scale} with parameters $q,J,\Delta,a,A_0,m_0$, test
+    exponent $60$ and threshold $L_0'$, where $m_0\ge2$ and $A_0\ge1$. Choose protocol
+    constants and natural $L\ge\max(2,L_0')$ and $k$ with $2^k<2L$. Fix an adaptive
+    supplied-patch family $P$ for $\Omega$ with parameters $B_0,C,c$, test exponent $60$ and
+    size $L$, and any label rank.
+
+    Let $R$ be a repaintable square at level $j<k$, with $n=2^j>K_0t$ and $t=D\log L$, and
+    choose any set of already repainted blocks. An elementary edge death involving a single
+    label $Q$ changes one unmodified guide of this repainting baseline into another. Its
+    surrounding guide is the guide after. Treat both guides with the surrounding label about
+    exactly the endpoints of the edge. If the parties of the surrounding label and of $Q$ lie
+    in a participant set $S$, passing from the treated frame before to that after is a bounded
+    change with participants in $S$, at most one pair source and error $L^{-30}$. This holds
+    for all natural monomial and pair-source bounds $K,r_s\ge1$; the natural pair-effect bound
+    $r$ must satisfy $r\ge1$ (\texttt{06-geometry.tex}, lines 183--221, 328--387 and
+    440--445).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_frame_change,
+        lem:peps_guide_frame_outer_holes_disjoint,
+        lem:peps_adaptive_patch_supply,
+        lem:peps_circuit_source_bound_monomials,
+        thm:peps_bounded_change_closure,
+        thm:peps_bulk_steps_treated_frames,
+        thm:peps_guide_frame_change_owner,
+        thm:peps_guide_frame_supplied_gates,
+        thm:peps_repainted_square_side_bound,
+        thm:peps_treated_band_frame_facts,
+        thm:peps_treated_band_readings,
+        thm:peps_treated_frame_spec,
+        thm:peps_treated_radius_bounds}
+    The treated-frame specification and the geometric facts of
+    Theorem~\ref{thm:peps_treated_band_frame_facts} give equal true vertices and incident
+    labels for the two readings. Their changed positions have strict clearance
+    $d_\infty(p,z)>2\epsilon_0t$ and diameter at most $n$, so the changed sites avoid every
+    outer hole. Write $F_b,F_a$ for the frames before and after, $T$ for the changed sites,
+    and $Q_\circ$ for the party of $Q$. The changed labels go from $Q$ to $P_\circ$, so
+    Theorem~\ref{thm:peps_guide_frame_change_owner} gives $F_b=F_a[T\mapsto Q_\circ]$. Apply
+    the bulk death of Theorem~\ref{thm:peps_bulk_steps_treated_frames}. The circuit conversion
+    preserves the participant and monomial bounds, error $L^{-30}$ and at most one pair
+    source. The death uses one pair effect, which requires $r\ge1$.
+\end{proof}
+
+\begin{theorem}[The support of a treated central birth]
+    \label{thm:peps_central_treated_support}
+    \lean{TNLean.PEPS.Approximation.RepaintingBaseline.central_treated_ne_subset}
+    \leanok
+    \uses{def:peps_dyadic_schedule,
+        lem:peps_dyadic_floor}
+    For a repainting baseline on any label type and any real $t$, homogenize
+    its starting and central guides to its old label on the open sup squares
+    of radius $t$ about the four corners. The two resulting guides differ
+    only in the closed square of side $n$ of the baseline.
+\end{theorem}
+
+\begin{proof}\leanok
+
+    Treatment makes the two guides equal on the corner squares. Outside the
+    central region the central guide equals the starting guide, and that region
+    is contained in the closed square.
+\end{proof}
+
+\begin{theorem}[The central birth as a change of the main sheet]
+    \label{thm:peps_protocol_central_birth_change}
+    \lean{TNLean.PEPS.Approximation.centralBirth_hasFrameChange_of,
+        TNLean.PEPS.Approximation.centralBirth_hasFrameChange}
+    \leanok
+    \uses{def:peps_adaptive_patch_constraint,
+        def:peps_angular_scale,
+        def:peps_dyadic_block_guide,
+        def:peps_dyadic_protocol_parties,
+        def:peps_dyadic_schedule,
+        def:peps_dyadic_used_parties,
+        def:peps_frame_change,
+        def:peps_frame_square_patch,
+        def:peps_guide_frame,
+        def:peps_protocol_treated_frame,
+        def:polynomial_peps_model,
+        lem:peps_adaptive_patch_supply,
+        lem:peps_dyadic_birth_enlargement,
+        lem:peps_dyadic_floor,
+        lem:peps_dyadic_sampled_guides,
+        thm:peps_bulk_steps_treated_frames,
+        thm:peps_dyadic_repainting_valid_labels,
+        thm:peps_guide_frame_supplied_gates,
+        thm:peps_protocol_bounded_changes,
+        thm:peps_protocol_constants,
+        thm:peps_treated_radius_bounds}
+    For the sampled-guide change, let $k,L,q$ be natural numbers with $q\ge1$,
+    let $h$ be a square Hamiltonian on the $L\times L$ system with interaction
+    bound $J$, and assume that $\Omega$ is a gapped ground state of energy
+    $E_0$ and gap $\Delta$. Assume the exponent-$60$ angular-scale condition
+    with parameters $q,J,\Delta,a,A_0,m_0,D,L'_0$, with natural $m_0$, where
+    $L'_0\le L$, $m_0\ge4$, $A_0\ge1$ and $a\le a_0/2$.
+    Here $a_0$ is the angular constant. Take any repainting baseline on the
+    protocol guide labels, any translation $d$, and real $t,\epsilon_0$ with
+    $0<t=D\log L\le n\le A_0L$ and $2\epsilon_0\le a_0/2$.
+    Let $f_b,f_a$ be the $(1,1)$ readings of the translates by $d$ of the
+    starting and central guides after homogenizing them to the old label on
+    the four local corner squares of radius $t$. Let $V_b,V_a$ be finite sets
+    consisting exactly of their true vertices. Take an adaptive patch supply at the cell centers for
+    $\Omega$, with parameters $B_0,C,c$, test exponent $60$ and size $L$,
+    and suppose $0<\epsilon_0t\le B_0\log L$. Within each of $V_b,V_a$,
+    require the supplied patches of radius $\epsilon_0t$ to have
+    pairwise-disjoint outer physical samples. Fix any owner map from guide
+    labels to the level-$k$ protocol parties and any natural-valued label rank.
+    The supplied guide frames of $f_b,f_a$, with the protocol placeholder,
+    then admit a bounded change with error $L^{-30}$ and participants in
+    any set containing the owners of the old and final labels, for every
+    natural pair-effect bound $r$ and all natural $K,r_s\ge1$. The bounded-change
+    condition bounds both the number of monomials and the sum of absolute
+    coefficients by $K$; at most one pair source is needed.
+
+    For the protocol specialization, assume the same square-Hamiltonian,
+    gapped-state and exponent-$60$ angular-scale data with $q\ge1$,
+    $L'_0\le L$, $m_0\ge4$ and $A_0\ge1$. Assume the protocol constants
+    $K_0,\epsilon_0,\nu,a,D,B_0$, $L\ge2$ and $2^k<2L$, and take the
+    exponent-$60$ adaptive supply and any label rank as above. Let $R$ be
+    any repaintable square of level $j<k$, index $S_0$ and side
+    $n=2^j>K_0t$, where $t=D\log L$. For any set $\mathcal D$ of block
+    indices, form the block baseline at $S_0$ from the level-$j$ protocol
+    labels at $\mathcal D$, with final label the new square party of $R$.
+    Passing from its starting treated frame to its central treated frame,
+    both homogenized to its old label at the four corners of $R$, has the
+    same bounds for all natural $r,K,r_s$ with $K,r_s\ge1$, with participants
+    in any set containing the parties of its old and final labels. No condition
+    $S_0\notin\mathcal D$ is required
+    (\texttt{06-geometry.tex}, lines 155--160, 328--387 and 440--445).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_frame_change,
+        lem:peps_guide_frame_outer_holes_disjoint,
+        lem:peps_adaptive_patch_supply,
+        lem:peps_circuit_source_bound_monomials,
+        lem:peps_dyadic_sampled_guides,
+        lem:peps_dyadic_translation,
+        thm:peps_bounded_change_closure,
+        thm:peps_bulk_steps_treated_frames,
+        thm:peps_central_treated_support,
+        thm:peps_dyadic_no_changed_vertex,
+        thm:peps_dyadic_temporary_holes,
+        thm:peps_guide_frame_change_owner,
+        thm:peps_guide_frame_supplied_gates,
+        thm:peps_reading_changed_values,
+        thm:peps_readings_far_change,
+        thm:peps_repainted_square_side_bound,
+        thm:peps_treated_frame_spec,
+        thm:peps_treated_radius_bounds}
+    Write $A,B$ for the old and final labels.
+    As for a birth along an edge, the two treated guides have the same true
+    vertices with the same incident labels. Their separation from the closure of
+    the changed region gives the same true vertices and incident labels for the
+    two readings. Let $T$ be the positions where the readings differ. They carry
+    $A$ before and $B$ after, and satisfy $d_\infty(p,z)>2\epsilon_0t$ for every
+    $p\in T$ and every true vertex $z$ of either reading, and
+    $d_\infty(p,p')\le n$ for all $p,p'\in T$. Thus the changed sites avoid all
+    outer holes and have diameter at most $n$. The frame after is the frame before
+    with these sites handed to the party of $B$, so the bulk birth of
+    Theorem~\ref{thm:peps_bulk_steps_treated_frames} gives the claimed change.
+\end{proof}
+
+\begin{theorem}[Reading a guide pieced across an open region]
+    \label{thm:peps_reading_piecewise}
+    \lean{TNLean.PEPS.Approximation.IsDisplacedReading.eq_piecewise}
+    \leanok
+    \uses{def:peps_dyadic_block_guide,
+        lem:peps_dyadic_sampled_guides}
+    For any label type, translation $d$, open sets $Y,U$ with $\partial Y\subseteq U$,
+    and guides $H_1,H_2$ both equal to a label $C$ on $U$, let $f_1,f_2$ be
+    the $(1,1)$ readings of their translates. If $g$ is the reading of the
+    translate of the guide equal to $H_2$ on $Y$ and to $H_1$ elsewhere, then for every plane point $p$,
+    $g(p)=f_2(p)$ when $p-d\in Y$ and $g(p)=f_1(p)$ otherwise.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_dyadic_block_guide,
+        lem:peps_dyadic_sampled_guides}
+    Write $H$ for the pieced guide and $u_\eta=p+\eta(1,1)-d$.
+    For each fixed $p$, the reading identities hold for all sufficiently small
+    $\eta>0$. If $p-d\in Y$, openness keeps $u_\eta$ in $Y$, and
+    \begin{align}
+        g(p) & = H(u_\eta)=H_2(u_\eta)=f_2(p). \notag
+    \end{align}
+    If $p-d\notin Y$ but $p-d\in U$, openness keeps $u_\eta$ in $U$,
+    where both guides have the common label $C$. Thus
+    \begin{align}
+        g(p) & = H(u_\eta)=C=H_1(u_\eta)=f_1(p). \notag
+    \end{align}
+    Since $\overline{Y}\setminus Y=\partial Y\subseteq U$, the remaining
+    case $p-d\notin Y\cup U$ gives $p-d\notin\overline{Y}$. The open
+    complement of $\overline{Y}$ keeps $u_\eta$ outside $Y$, so
+    \begin{align}
+        g(p) & = H(u_\eta)=H_1(u_\eta)=f_1(p). \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Reading a guide constant on an open region]
+    \label{thm:peps_reading_constant_open}
+    \lean{TNLean.PEPS.Approximation.IsDisplacedReading.eq_of_mem_open}
+    \leanok
+    \uses{def:peps_dyadic_block_guide,
+        lem:peps_dyadic_sampled_guides}
+    For any label type, translation $d$, label $C$, open set $U$ and guide
+    $H$ equal to $C$ on $U$, let $f$ be a $(1,1)$ reading of the translate
+    of $H$ by $d$. Then $f(p)=C$ for every $p$ with $p-d\in U$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_dyadic_sampled_guides}
+    For sufficiently small positive $\eta$, the point $p+\eta(1,1)-d$
+    stays in $U$ and the reading identity holds. Hence
+    \begin{align}
+        f(p) & = H(p+\eta(1,1)-d)=C. \notag
+    \end{align}
+\end{proof}
+
+\begin{theorem}[Hole lists of a pieced guide]
+    \label{thm:peps_exchange_holes_perm}
+    \lean{TNLean.PEPS.Approximation.guideFrame_exchange_holes_perm}
+    \leanok
+    \uses{def:peps_frame,
+        def:peps_frame_square_patch,
+        def:peps_guide_frame,
+        lem:peps_dyadic_birth_enlargement}
+    For arbitrary finite decidable sites, positions, natural $q$ (including zero),
+    labels and parties, let $Y'$ be any set and let $U'$ be open with
+    $\partial Y'\subseteq U'$. Suppose guides $f_1,f_2$ both equal $C$ on
+    $U'$. Choose exact finite true-vertex sets $V_1,V_2,W$ for $f_1,f_2$
+    and the guide equal to $f_2$ on $Y'$ and to $f_1$ elsewhere. Use the
+    same arbitrary patch family, owner map, placeholder and natural-valued rank, with
+    pairwise-disjoint outer samples within each of the three vertex sets.
+    If a Boolean selector selects the hole formed from the patch indexed by
+    $z$ and tag owner $o$, for every plane point $z$ and every $o$, exactly
+    when $z\notin Y'$, then the selected outside holes of
+    the first guide frame followed by the complementary inside holes of
+    the second are a permutation of the piecewise guide frame's holes,
+    including their tag owners. This identity does not require $Y'$ to be
+    open or require whole-hole sidedness.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_guide_frame,
+        lem:peps_dyadic_incident_change,
+        lem:peps_guide_frame_tags}
+    The true vertices of the pieced guide are the outside vertices of the
+    first guide and the inside vertices of the second. Their incident labels
+    and hence tag holders agree with those of the corresponding original
+    guides. Filtering the two finite vertex lists and then concatenating them
+    gives a permutation of the piecewise list, and mapping each vertex to its
+    tagged hole gives the stated permutation.
+\end{proof}
+
+\begin{definition}[A bounded change of two frames]
+    \label{def:peps_protocol_pair_change}
+    \lean{TNLean.PEPS.Approximation.HasPairChange}
+    \leanok
+    \uses{def:peps_bounded_change,
+        def:peps_circuit_source_bound,
+        def:peps_frame,
+        def:peps_frame_registers,
+        def:peps_original_circuit}
+    Let the sites be any finite decidable set, with arbitrary plane positions,
+    let the parties be any type, let $q\ge1$ be natural, and let $\Omega$ be
+    any vector of the physical system. Fix four frames $F_1,F_2,F'_1,F'_2$, a participant
+    set $S$, natural bounds $r,K,r_s$, and a real error $\eta$. A bounded
+    change of the pair with these bounds is an original circuit from the
+    concatenated registers of $F_1,F_2$ to those of $F'_1,F'_2$ that is a
+    bounded change in the sense of Definition~\ref{def:peps_bounded_change}
+    between the corresponding tensor products of reference vectors, expressed
+    in those concatenated-register coordinates, and is source-bounded by $r_s$.
+    Thus it has at most one nonprivate gate, with participants in $S$;
+    each nonprivate expansion has at most $K$ monomials, sum of absolute
+    coefficients at most $K$, and at most $r$ pair effects and $r_s$ pair
+    sources per monomial. Its vector error is at most $\eta$.
+    The definition permits zero natural bounds and arbitrary $\Omega$ and
+    $\eta$; it imposes no ground-state, normalization or geometric hypotheses.
+\end{definition}
+
+\begin{theorem}[Reordering the targets of a bounded pair change]
+    \label{thm:peps_pair_change_reorder}
+    \lean{TNLean.PEPS.Approximation.HasPairChange.reorder}
+    \leanok
+    \uses{def:peps_frame,
+        def:peps_protocol_pair_change}
+    On the domain of Definition~\ref{def:peps_protocol_pair_change}, any
+    bounded pair change into $N_1,N_2$ is also a change into $G_1,G_2$
+    whenever corresponding owners agree and corresponding hole lists are
+    permutations. The input frames and all bounds $S,r,K,r_s,\eta$ are
+    unchanged.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_protocol_pair_change,
+        lem:peps_circuit_source_bound_monomials,
+        lem:peps_register_reorderings,
+        thm:peps_bounded_change_closure,
+        thm:peps_guide_frame_rewrite}
+    Equal owners and permuted hole lists give tensor-factor reorderings.
+    Combine them, placing each beside the unchanged registers of the other
+    frame, into a circuit $U$. Writing $v_{N_1,N_2}$ and $v_{G_1,G_2}$ for
+    the pair reference vectors in concatenated-register coordinates gives
+    \begin{align}
+        Uv_{N_1,N_2} & = v_{G_1,G_2}. \notag
+    \end{align}
+    Appending $U$ adds no nonprivate gate and preserves the reference-vector
+    error, so all participant, expansion, monomial and source bounds remain.
+\end{proof}
+
+\begin{theorem}[The lens exchange as a change of two treated sheets]
+    \label{thm:peps_protocol_lens_exchange_change}
+    \lean{TNLean.PEPS.Approximation.edgeExchange_hasPairChange_of,
+        TNLean.PEPS.Approximation.edgeExchange_hasPairChange}
+    \leanok
+    \uses{def:peps_adaptive_patch_constraint,
+        def:peps_angular_scale,
+        def:peps_dyadic_block_guide,
+        def:peps_dyadic_edge_band,
+        def:peps_dyadic_normal_words,
+        def:peps_dyadic_protocol_parties,
+        def:peps_dyadic_schedule,
+        def:peps_dyadic_used_parties,
+        def:peps_frame_square_patch,
+        def:peps_guide_frame,
+        def:peps_protocol_pair_change,
+        def:peps_protocol_treated_frame,
+        def:polynomial_peps_model,
+        lem:peps_adaptive_patch_supply,
+        lem:peps_dyadic_birth_enlargement,
+        lem:peps_dyadic_floor,
+        lem:peps_dyadic_sampled_guides,
+        lem:peps_dyadic_unmodified_vertices,
+        thm:peps_bulk_steps_treated_frames,
+        thm:peps_dyadic_no_changed_vertex,
+        thm:peps_dyadic_repainting_valid_labels,
+        thm:peps_guide_frame_supplied_gates,
+        thm:peps_protocol_bounded_changes,
+        thm:peps_protocol_constants,
+        thm:peps_treated_radius_bounds}
+    For the sampled-guide exchange, let $k,L,q$ be natural with $q\ge1$,
+    let $h$ be a square Hamiltonian on the $L\times L$ system with bound
+    $J$, and suppose $\Omega$ is a gapped ground state of energy $E_0$ and
+    gap $\Delta$. Assume the exponent-$60$ angular-scale condition with
+    parameters $q,J,\Delta,a,A_0,m_0,D,L'_0$, with natural $m_0$, where
+    $L'_0\le L$, $m_0\ge2$, $A_0\ge1$ and $a\le a_0/2$, with $a_0$ the angular
+    constant. Take any repainting baseline on protocol guide labels, any
+    edge list $E$, edge $e$ and translation $d$. Require
+    $0<t=D\log L\le n\le A_0L$ and
+    $2\epsilon_0(a_0+1)\le a_0/2$.
+    Let $C_e$ be the neighboring label along $e$. Take the four $(1,1)$
+    readings of the translates by $d$ of the guides after treating them
+    with $C_e$ on the radius-$t$ squares about the local endpoints of $e$:
+    the main guide with the starting word and the auxiliary guide with the auxiliary word before, and the main guide
+    with the first main word and the auxiliary guide with the exchanged
+    auxiliary word after. Take their exact finite true-vertex sets and
+    an adaptive patch supply at cell centers for $\Omega$, with parameters
+    $B_0,C,c$, test exponent $60$ and size $L$. Suppose
+    the supplied patches have radius $\epsilon_0t$, with
+    $0<\epsilon_0t\le B_0\log L$, and require pairwise-disjoint outer
+    physical samples within each of the four vertex sets. Choose
+    any owner map to the level-$k$ protocol parties and any natural-valued
+    rank. The corresponding supplied guide frames with the protocol
+    placeholder have a bounded pair change with error $4L^{-30}$ and
+    participants in any set containing the owner of $C_e$, for every
+    natural $r,K,r_s$, including zero.
+
+    For the protocol specialization, assume the square-Hamiltonian,
+    gapped-state and exponent-$60$ angular-scale data just stated, with
+    $q\ge1$, $L'_0\le L$, $m_0\ge2$ and $A_0\ge1$. Assume the protocol
+    constants $K_0,\epsilon_0,\nu,a,D,B_0$, $L\ge2$, $2^k<2L$, the
+    exponent-$60$ adaptive supply, and any label rank. Let $R$ be any
+    repaintable square of level $j<k$, index $S_0$ and side
+    $n=2^j>K_0t$, where $t=D\log L$. For any set $\mathcal D$ of block
+    indices, form the block baseline at $S_0$ from the level-$j$ protocol
+    labels at $\mathcal D$, with final label the new square party of $R$.
+    For any edge list $E$ and edge $e$, use its neighboring label $C_e$
+    to treat all four guides above at the two endpoints of $e$. Their
+    treated frames have the same pair-change conclusion for every natural
+    $r,K,r_s$, with participants in any set containing the party of $C_e$. The list
+    $E$ may repeat edges and may contain $e$; no condition
+    $S_0\notin\mathcal D$ is required
+    (\texttt{06-geometry.tex}, lines 183--221, 389--430 and 440--445).
+
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_frame_exchange_data,
+        def:peps_protocol_pair_change,
+        lem:peps_adaptive_patch_supply,
+        lem:peps_circuit_source_bound_monomials,
+        lem:peps_dyadic_floor,
+        lem:peps_dyadic_frozen_hole_count,
+        lem:peps_dyadic_lens_sides,
+        lem:peps_dyadic_schedule_guides,
+        thm:peps_bounded_change_closure,
+        thm:peps_bulk_steps_treated_frames,
+        thm:peps_dyadic_angular_separation,
+        thm:peps_dyadic_no_changed_vertex,
+        thm:peps_exchange_holes_perm,
+        thm:peps_guide_frame_norm,
+        thm:peps_guide_frame_supplied_gates,
+        thm:peps_pair_change_reorder,
+        thm:peps_reading_constant_open,
+        thm:peps_reading_piecewise,
+        thm:peps_repainted_square_side_bound,
+        thm:peps_treated_frame_spec,
+        thm:peps_treated_radius_bounds}
+    Let $Y$ be the lens in the local coordinates of the repainting baseline and
+    $d$ the translation to the square. Both treated guides are $C_e$ on the open
+    neighbourhood of radius $a_0t$ of $\partial Y$. The guides after the exchange
+    are the treated guides pieced along $Y$, and their readings are pieced along
+    $Y'=d+Y$, with the same label $C_e$ on the translated neighbourhood.
+    For each true vertex $z$ of either reading before the exchange, the closed
+    sup square $\overline B_\infty(z-d,2\epsilon_0t)$ is contained in $Y$ or in
+    $Y^c$. The positions of the outer sites of its hole lie in
+    $\overline B_\infty(z,2\epsilon_0t)$, so the entire outer hole lies in $Y'$ or
+    in $(Y')^c$. The positions of the physical exchange target lie in $Y'$ and
+    satisfy $d_\infty(p,p')\le n$, by the diameter bound for the lens. Hence the
+    exchange of the two frames on the sites of $Y'$ is the bulk exchange of
+    Theorem~\ref{thm:peps_bulk_steps_treated_frames}. The frames it produces
+    have the owners of the pieced readings. Their holes are, up to order, those
+    at the true vertices of the pieced readings, with the same tag holders,
+    since the incident labels there are those of the sheet the vertex comes from.
+    A reordering of the tensor factors without adding a nonprivate gate then gives
+    the frames of the treated
+    guides after the exchange.
+\end{proof}
+
+\begin{theorem}[Avoiding a value by a small perturbation]
+    \label{thm:peps_protocol_affine_avoidance}
+    \lean{TNLean.PEPS.Approximation.eventually_add_ne,
+        TNLean.PEPS.Approximation.eventually_affine_ne}
+    \leanok
+    For real $x,c$, one has $x+\eta\ne c$ for all sufficiently small
+    $\eta>0$. For real $a,m,c$, one likewise has $a+m\eta\ne c$ for all
+    sufficiently small $\eta>0$ whenever $m\ne0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    If $c=x$, positivity of $\eta$ gives $x+\eta\ne c$. Otherwise a
+    neighborhood of $0$ avoids $c-x$. The affine assertion follows by applying
+    the additive assertion with $x=0$ and target $(c-a)/m$, since
+    $a+m\eta=c$ would imply $\eta=(c-a)/m$.
+\end{proof}
+
+\begin{theorem}[Diagonal avoidance of square boundaries]
+    \label{thm:peps_protocol_square_boundary_avoidance}
+    \lean{TNLean.PEPS.Approximation.eventually_mem_openSquare_or_notMem_closedSquare}
+    \leanok
+    \uses{def:peps_dyadic_schedule}
+    For any real $n$ and point $p\in\mathbb R^2$, the displaced point
+    $p+\eta(1,1)$ is in $(0,n)^2$ or outside $[0,n]^2$ for all sufficiently
+    small $\eta>0$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_protocol_affine_avoidance, def:peps_dyadic_schedule}
+    Each coordinate of $p+\eta(1,1)$ eventually avoids $0$ and $n$ by
+    Theorem~\ref{thm:peps_protocol_affine_avoidance}. If the displaced point
+    belongs to $[0,n]^2$, its four non-strict coordinate bounds are therefore
+    strict.
+\end{proof}
+
+\begin{theorem}[Diagonal avoidance of band interfaces]
+    \label{thm:peps_protocol_band_interface_avoidance}
+    \lean{TNLean.PEPS.Approximation.RepaintingBaseline.eventually_notMem_edgeInterface}
+    \leanok
+    \uses{def:peps_dyadic_schedule, def:peps_dyadic_edge_band}
+    For any repainting baseline, edge and point $p\in\mathbb R^2$, the
+    displaced point $p+\eta(1,1)$ is off that edge's interface for all
+    sufficiently small $\eta>0$
+    (\texttt{06-geometry.tex}, lines 69--80 and 161--168).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_protocol_affine_avoidance, def:peps_dyadic_edge_band,
+        def:peps_dyadic_schedule}
+    Write the normal and tangential coordinates along the diagonal as
+    $a+\sigma\eta$ and $b+\eta$, where $\sigma\in\{-1,1\}$. The differences
+    from $0$, $(b+\eta)/1000$ and $(n-b-\eta)/1000$ have the respective
+    nonzero slopes $\sigma$, $\sigma-1/1000$ and $\sigma+1/1000$.
+    Theorem~\ref{thm:peps_protocol_affine_avoidance} gives, for all sufficiently
+    small $\eta>0$,
+    \begin{align}
+        a+\sigma\eta & \ne 0, \notag                                  \\
+        a+\sigma\eta & \ne \frac{\min(b+\eta,n-b-\eta)}{1000}. \notag
+    \end{align}
+    On the band its width is positive, so these inequalities exclude the
+    interface coordinates $0$ and $1$.
+\end{proof}
+
+\begin{theorem}[Reading guides that agree along a displacement]
+    \label{thm:peps_protocol_reading_congruence}
+    \lean{TNLean.PEPS.Approximation.IsDisplacedReading.congr_eventually}
+    \leanok
+    \uses{lem:peps_dyadic_sampled_guides}
+    In any real module, let $g$ read a labelling $G$ along a displacement $v$.
+    If for every $p$ the equality $G(p+\eta v)=G'(p+\eta v)$ holds for all
+    sufficiently small $\eta>0$, then $g$ also reads $G'$ along $v$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_dyadic_sampled_guides}
+    Intersect the two eventual conditions to obtain
+    $g(p)=G(p+\eta v)=G'(p+\eta v)$ for all sufficiently small $\eta>0$.
+\end{proof}
+
+\begin{theorem}[Coordinates within the indexed block]
+    \label{thm:peps_protocol_block_coordinates}
+    \lean{TNLean.PEPS.Approximation.sub_blockCorner_mem_closedSquare}
+    \leanok
+    \uses{def:peps_dyadic_block_guide, def:peps_dyadic_schedule}
+    If $n>0$ and $x\in\mathbb R^2$ has block index $S\in\mathbb Z^2$ at
+    scale $n$, then $x-nS\in[0,n]^2$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_dyadic_block_guide, def:peps_dyadic_schedule}
+    In each coordinate, $S_i=\lfloor x_i/n\rfloor$ gives
+    $nS_i\le x_i<n(S_i+1)$, hence $0\le x_i-nS_i\le n$.
+\end{proof}
+
+\begin{definition}[The baseline of a protocol repainting]
+    \label{def:peps_protocol_repaint_baseline}
+    \lean{TNLean.PEPS.Approximation.repaintBaseline}
+    \leanok
+    \uses{def:peps_dyadic_protocol_parties, def:peps_dyadic_block_guide,
+        def:peps_dyadic_schedule, thm:peps_dyadic_repainting_valid_labels,
+        def:peps_dyadic_used_parties}
+    Let $R$ be a non-root repaintable square of level $j$ in a hierarchy of
+    depth $k$, with index $S$ and side $n=2^j$. For any stage
+    $\mathcal D\subseteq\mathbb Z^2$, its repainting baseline is the block
+    baseline at $S$ with the level labels at $\mathcal D$ and the fresh label
+    of $R$. Its starting guide at $x$ is the level block guide evaluated at
+    $x+nS$ (\texttt{06-geometry.tex}, lines 82--125 and 142--160).
+\end{definition}
+
+\begin{theorem}[The guides of an unmarked repainting]
+    \label{thm:peps_protocol_unmarked_guides}
+    \lean{TNLean.PEPS.Approximation.treatedGuide_completedGuide,
+        TNLean.PEPS.Approximation.treatedGuide_empty}
+    \leanok
+    \uses{def:peps_protocol_repaint_baseline, def:peps_protocol_treated_frame,
+        def:peps_protocol_level_frame, def:peps_dyadic_block_guide,
+        def:peps_dyadic_schedule}
+    For any natural $i$, index $T\in\mathbb Z^2$, real $t$, homogenizing
+    label and guide, treating at no mark gives the sampled translate of the
+    guide to the block with corner $2^iT$. Sampling has the fallback specified
+    in Definition~\ref{def:peps_protocol_level_frame}.
+    For the baseline of $R$ at $\mathcal D$, every real $t$ and homogenizing
+    label, and any list $E$ containing every edge, the completed guide placed
+    on $R$ and treated at no mark is the level guide at
+    $\mathcal D\cup\{S\}$. The list may have repetitions and need not have
+    a prescribed order. No protocol-constant assumption is required
+    (\texttt{06-geometry.tex}, lines 69--80 and 215--221).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_protocol_treated_frame, def:peps_protocol_level_frame,
+        def:peps_protocol_repaint_baseline, def:peps_dyadic_block_guide,
+        lem:peps_dyadic_floor, thm:peps_protocol_reading_congruence,
+        thm:peps_protocol_square_boundary_avoidance,
+        thm:peps_protocol_block_coordinates, lem:peps_dyadic_schedule_guides,
+        lem:peps_dyadic_active_labels, thm:peps_dyadic_repainting_valid_labels,
+        thm:peps_protocol_level_frame_facts,
+        thm:peps_protocol_bounded_changes}
+    With no marks the homogenized region is empty, giving the first identity.
+    After all edges are completed, the guide carries the fresh label inside
+    the open square and its original label outside the closed square.
+    Theorem~\ref{thm:peps_protocol_square_boundary_avoidance} places each
+    displaced point in one of these two regions. In the first case its block
+    index is $S$. In the second, Theorem~\ref{thm:peps_protocol_block_coordinates}
+    excludes index $S$, and inserting $S$ leaves the block label unchanged.
+    Thus the displaced readings agree with the level guide at
+    $\mathcal D\cup\{S\}$.
+\end{proof}
+
+\begin{theorem}[Treated frames of equal treated guides]
+    \label{thm:peps_protocol_treated_frame_congruence}
+    \lean{TNLean.PEPS.Approximation.treatedFrame_congr,
+        TNLean.PEPS.Approximation.treatedFrame_empty_congr}
+    \leanok
+    \uses{def:peps_protocol_treated_frame, def:peps_adaptive_patch_constraint,
+        def:peps_dyadic_protocol_parties}
+    Fix an adaptive patch supply, a label rank and a non-root square $R$ as
+    in Definition~\ref{def:peps_protocol_treated_frame}. For any real
+    $\epsilon_0,t$ with $0<\epsilon_0t\le B_0\log L$, equal treated guides
+    with the same finite set of marks give equal treated frames, even when
+    their original guides and homogenizing labels differ. In particular,
+    without marks the frame is independent of the homogenizing label.
+    No protocol-constant assumption is required.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_protocol_treated_frame, thm:peps_protocol_unmarked_guides}
+    The frame construction depends on the original guide and homogenizing
+    label only through the treated guide. With no marks, that guide is the
+    sampled translate by Theorem~\ref{thm:peps_protocol_unmarked_guides},
+    independent of the homogenizing label.
+\end{proof}
+
+\begin{theorem}[The treated frames at the ends of a large repainting]
+    \label{thm:peps_protocol_treated_frame_ends}
+    \lean{TNLean.PEPS.Approximation.levelFrame_eq_treatedFrame_guide,
+        TNLean.PEPS.Approximation.treatedFrame_completedGuide_eq_levelFrame,
+        TNLean.PEPS.Approximation.treatedFrame_edgeStart,
+        TNLean.PEPS.Approximation.treatedFrame_auxStart_eq_raw}
+    \leanok
+    \uses{def:peps_protocol_repaint_baseline, def:peps_protocol_treated_frame,
+        def:peps_protocol_level_frame, def:peps_adaptive_patch_constraint,
+        def:peps_dyadic_protocol_parties, def:peps_dyadic_schedule,
+        def:peps_dyadic_edge_band, thm:peps_protocol_constants, def:peps_frame,
+        def:peps_dyadic_normal_words,
+        thm:peps_treated_radius_bounds}
+    Fix an adaptive patch supply and a label rank as in
+    Definition~\ref{def:peps_protocol_treated_frame}. Let $R$ be a non-root
+    repaintable square of level $j$ in a hierarchy of depth $k$, with index
+    $S$, side $n=2^j$ and baseline at any stage
+    $\mathcal D\subseteq\mathbb Z^2$.
+
+    For any real $\epsilon_0,t$ with $0<\epsilon_0t\le B_0\log L$ and any
+    edge $e$, let $C_e$ be the neighboring label of the baseline. The uniform
+    auxiliary guide at $C_e$, treated at no mark with any homogenizing label,
+    has no hole and every site owned by the party of $C_e$, so its frame is
+    that party's raw copy. This identity requires no protocol-constant
+    assumptions.
+
+    Now assume the protocol constants, $2\le L$, $t=D\log L$ and
+    $n>K_0t$. For any edge list $E$ and edge $e\notin E$, the unmarked frame
+    of the guide left by the central birth and $E$ equals the unmarked frame
+    of the main guide with the starting word along $e$; the two frames may use
+    different homogenizing labels. For the following two level-frame
+    identifications assume in addition $L\le2^k$. For every non-root reference
+    square $R_0$ in the same hierarchy, the main frame of level $j$ at
+    $\mathcal D$, computed using the party map of $R_0$ and holes of radius
+    $h_n=\epsilon_0t$, is the unmarked frame of the starting guide of $R$.
+    For any list $F$ containing every edge, the unmarked frame of its completed
+    guide is the main frame at $\mathcal D\cup\{S\}$ with the same radius
+    and party map. No condition $S\notin\mathcal D$ is required
+    (\texttt{06-geometry.tex}, lines 62--125, 142--221 and 328--339).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_protocol_unmarked_guides, def:peps_protocol_repaint_baseline,
+        thm:peps_protocol_treated_frame_congruence,
+        thm:peps_protocol_reading_congruence,
+        thm:peps_protocol_band_interface_avoidance,
+        thm:peps_protocol_party_map_switch, thm:peps_protocol_level_frame_facts,
+        lem:peps_dyadic_schedule_guides, thm:peps_guide_frame_supplied_gates,
+        lem:peps_dyadic_floor, lem:peps_dyadic_sampled_guides,
+        lem:peps_dyadic_incident_change, def:peps_protocol_treated_frame,
+        thm:peps_protocol_level_events, thm:peps_protocol_constants,
+        def:peps_dyadic_block_guide, def:peps_dyadic_edge_band,
+        def:peps_dyadic_schedule, def:peps_dyadic_normal_words,
+        def:peps_guide_frame, def:peps_frame, def:peps_protocol_level_frame,
+        thm:peps_treated_radius_bounds, thm:peps_treated_frame_spec}
+    By Theorem~\ref{thm:peps_protocol_unmarked_guides}, the unmarked starting
+    guide is the sample of the translated baseline.
+    Definition~\ref{def:peps_protocol_repaint_baseline}
+    identifies that translation with the level block guide, whose sample is
+    the level guide. The completed-guide equality is
+    Theorem~\ref{thm:peps_protocol_unmarked_guides}. The true vertices therefore
+    agree. Since $t\le n$, their hole radii agree by
+    $\epsilon_0\min(n,t)=\epsilon_0t$; thus their supplied patches and outer
+    disjointness agree as well. The frames agree after changing the reference
+    party map by Theorem~\ref{thm:peps_protocol_party_map_switch}.
+
+    The completed guide and the main guide with the starting word agree off
+    the two interface curves of the edge band.
+    Theorem~\ref{thm:peps_protocol_band_interface_avoidance} and
+    Theorem~\ref{thm:peps_protocol_reading_congruence} identify their sampled
+    readings, and Theorem~\ref{thm:peps_protocol_treated_frame_congruence}
+    identifies their frames. The uniform auxiliary guide has no true vertex;
+    its guide frame is consequently the raw frame owned by the party of $C_e$.
+\end{proof}
+
+\begin{definition}[A chain of a prescribed number of steps]
+    \label{def:peps_protocol_step_chain}
+    \lean{TNLean.PEPS.Approximation.IsStepChain}
+    \leanok
+    Let $\mathcal R$ be a binary relation on a set $X$, let $n\in\mathbb N$, and let
+    $a,b\in X$. A chain of $n$ steps from $a$ to $b$ is the assertion that there
+    exists a sequence $s\colon\mathbb N\to X$ such that
+    \begin{align}
+        s_0 & = a,\qquad s_n=b,\qquad
+        \forall j<n,\quad \mathcal R(s_j,s_{j+1}). \notag
+    \end{align}
+    No condition is imposed on the sequence after its $n$th term.
+\end{definition}
+
+\begin{lemma}[Chains of changes]
+    \label{lem:peps_protocol_change_chains}
+    \lean{TNLean.PEPS.Approximation.IsStepChain.refl,
+        TNLean.PEPS.Approximation.IsStepChain.single,
+        TNLean.PEPS.Approximation.IsStepChain.trans,
+        TNLean.PEPS.Approximation.IsStepChain.map,
+        TNLean.PEPS.Approximation.IsStepChain.cast_length,
+        TNLean.PEPS.Approximation.IsStepChain.treat,
+        TNLean.PEPS.Approximation.IsStepChain.untreat,
+        TNLean.PEPS.Approximation.IsStepChain.treat_operate,
+        TNLean.PEPS.Approximation.IsStepChain.treatOperate,
+        TNLean.PEPS.Approximation.isStepChain_main,
+        TNLean.PEPS.Approximation.hasSourceBoundedChange_aux_of_eq,
+        TNLean.PEPS.Approximation.isStepChain_aux,
+        TNLean.PEPS.Approximation.hasSourceBoundedChange_of_hasPairChange}
+    \leanok
+    \uses{def:peps_protocol_step_chain, def:peps_frame_change,
+        thm:peps_protocol_event_segments, def:peps_protocol_pair_change}
+    For any binary relation, every state has a chain of zero steps to itself, and
+    every related pair has a chain of one step. Chains of $m$ and $n$ steps with a
+    common endpoint compose to a chain of $m+n$ steps. A map preserving the step
+    relation sends a chain to a chain of the same length, and replacing a length
+    by an equal natural number preserves the assertion.
+
+    Let a state $T(M)$ be assigned to each finite set of marks, and let a list of
+    marks have length $m$; repetitions are allowed. If adding any mark of the list
+    to any finite set is a step, there is a chain of $m$ steps from $T(\varnothing)$
+    to $T(M_*)$, where $M_*$ is the set of marks in the list. The analogous
+    removal hypothesis gives a chain from $T(M_*)$ to $T(\varnothing)$. If a second
+    family $T'(M)$ satisfies the removal hypothesis and there is a step from
+    $T(M_*)$ to $T'(M_*)$, the addition chain, that step, and the removal chain give
+    $2m+1$ steps from $T(\varnothing)$ to $T'(\varnothing)$.
+
+    For finite physical sites, local dimension $q\ge1$ and
+    $\lVert\Omega\rVert\le1$, fix a participant set $S$, natural bounds $r,K,r_s$
+    and a real error bound $\varepsilon$. A chain of bounded changes of the main
+    sheet lifts to a chain of the same length in the memory with any fixed list
+    of auxiliary sheets. For a duplicate-free list of auxiliary indices and an
+    index in that list, a change or chain of changes of that auxiliary sheet
+    lifts with the main sheet and all other auxiliary sheets fixed. A change of
+    the main sheet together with that auxiliary sheet likewise lifts to the
+    memory. Each lift preserves $S,r,K,r_s,\varepsilon$; the memory has no
+    additional registers and its additional scalar is $1$
+    (\texttt{06-geometry.tex}, lines 328--339 and 572--583).
+\end{lemma}
+
+\begin{proof}\leanok
+    \uses{def:peps_protocol_step_chain, thm:peps_protocol_level_frame_facts,
+        def:peps_frame_change, def:peps_protocol_pair_change}
+    Constant sequences give zero steps, a two-valued sequence gives one step,
+    and concatenation gives the sum of the lengths. Apply a relation-preserving
+    map to each term for the image chain. Induction on the list of marks adds or
+    removes one mark at a time; concatenate the two chains with the bulk step
+    to obtain $m+1+m=2m+1$ steps. For the memory, apply the one-sheet or two-sheet
+    lift to each change, using the norm bound on $\Omega$ and the scalar $1$.
 \end{proof}

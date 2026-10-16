@@ -24,13 +24,12 @@ The hypotheses on their action are exactly
 \end{align}
 Here $(T\cdot A)^x=\sum_y T^{xy}\otimes A^y$, with the
 operator bond first. The maps are biorthogonal analysis and synthesis;
-no adjoint relation between them is assumed. The mixed tensor is
-$A^{rs}(\gamma)=A^{rs}H_\gamma$, where
+no adjoint relation between them is assumed. As in
+Definition~\ref{def:mpo_mixed_endpoint_tensor} (without an injectivity
+assumption), the mixed tensor is $A^{rs}(\gamma)=A^{rs}H_\gamma$, where
 $H_\gamma=(1-\gamma)\Id_{E_0}\oplus\gamma\Id_{E_1}$ and $A^{rs}$ is
 the diagonal embedding of $A_p^{rs}$ when $r,s\in E_p$, and the matrix
-unit $|r\rangle\langle s|$ when their sectors differ. Thus this is the
-same interpolation as Definition~\ref{def:mpo_mixed_endpoint_tensor},
-without an injectivity assumption.
+unit $|r\rangle\langle s|$ when their sectors differ.
 
 \begin{definition}[Mixed analysis and synthesis]
     \label{def:mpo_mixed_action_maps}
@@ -73,9 +72,9 @@ without an injectivity assumption.
         \label{eq:mpo_mix_action_cross}
     \end{align}
     Every entry with unmatched physical or operator-bond sectors is
-    zero. This is the mixed operator construction of
-    \cite[Section~5]{GarreRubio2023MPOSym}, with every multiplicity
-    contraction displayed explicitly.
+    zero; following the mixed operator construction of
+    \cite[Section~5]{GarreRubio2023MPOSym}, every multiplicity
+    contraction is displayed explicitly.
 \end{definition}
 
 For $p\ne q$, the single internal wire in the right-hand diagram sums
@@ -135,14 +134,15 @@ $V_{q,\mu}$ has row $s$ and column $(\beta,l)$.
 \end{theorem}
 \begin{proof}
     \leanok
-    Expand each product over the four spaces $K_p\otimes E_q$.
-    Only the matching spaces $p=q$ contribute, giving the two diagonal
+    Expanding each product over the four spaces $K_p\otimes E_q$ leaves
+    only the matching spaces $p=q$, giving the two diagonal
     products. On the support of $V_\mu$, its row and state-bond column
     belong to the same sector, so both sides of
     (\ref{eq:mpo_mix_action_weight}) multiply its entry by the same
-    scalar, either $1-\gamma$ or $\gamma$. Finally distribute the
-    physical-index sum and use
-    $(T^{xy}\otimes B^y)(\Id\otimes H)=T^{xy}\otimes(B^yH)$.
+    scalar, either $1-\gamma$ or $\gamma$. Distributing the
+    physical-index sum and using
+    $(T^{xy}\otimes B^y)(\Id\otimes H)=T^{xy}\otimes(B^yH)$ gives the
+    general bond-weight identity.
 \end{proof}
 
 \begin{theorem}[Exact mixed action for every real parameter]
@@ -170,17 +170,17 @@ $V_{q,\mu}$ has row $s$ and column $(\beta,l)$.
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_action_weight}
-    First omit the weight $H_\gamma$ and expand one coefficient of the
-    action as $\sum_{k,l}(T_{\mathrm{mix}}^{(r,s),(k,l)})_{\alpha\beta}
-        A^{kl}_{ij}$. If all physical indices lie in one sector, use
-    (\ref{eq:mpo_mix_action_input}). If $r,s$ lie in different sectors,
+    With the weight $H_\gamma$ omitted, one coefficient of the
+    action expands as $\sum_{k,l}(T_{\mathrm{mix}}^{(r,s),(k,l)})_{\alpha\beta}
+        A^{kl}_{ij}$. When all physical indices lie in one sector,
+    (\ref{eq:mpo_mix_action_input}) applies; when $r,s$ lie in different sectors,
     $A^{kl}_{ij}=\delta_{ki}\delta_{lj}$, and
     (\ref{eq:mpo_mix_action_cross}) gives
     $\sum_\mu(W_\mu)_{(\alpha,i),r}(V_\mu)_{s,(\beta,j)}$.
-    All unmatched cases vanish on both sides. Thus
+    All unmatched cases vanish on both sides, so
     $(T_{\mathrm{mix}}\cdot A)^{rs}=\sum_\mu W_\mu A^{rs}V_\mu$.
-    Multiply on the right by $\Id_K\otimes H_\gamma$ and apply
-    (\ref{eq:mpo_mix_action_weight}):
+    Multiplying on the right by $\Id_K\otimes H_\gamma$ and applying
+    (\ref{eq:mpo_mix_action_weight}) gives
     \begin{align}
         (T_{\mathrm{mix}}\cdot A(\gamma))^{rs}
          & =\sum_\mu W_\mu A^{rs}V_\mu(\Id_K\otimes H_\gamma)
@@ -250,9 +250,9 @@ multiplicity. There is no scalar normalization in the local identity.
     unequal multiplicities. Hence
     $(T_{\mathrm{mix}}\cdot A(\gamma))^w
         =\sum_\mu W_\mu A(\gamma)^wV_\mu$ for $|w|>0$.
-    Move $V_\mu$ through the trace with boundary $X\otimes Y$,
-    and combine the resulting terms by linearity in the state boundary.
-    This gives (\ref{eq:mpo_mix_action_boundary}).
+    Moving $V_\mu$ through the trace with boundary $X\otimes Y$
+    and combining the resulting terms by linearity in the state boundary
+    gives (\ref{eq:mpo_mix_action_boundary}).
 \end{proof}
 
 \begin{theorem}[Periodic action with the common multiplicity]
@@ -274,9 +274,9 @@ multiplicity. There is no scalar normalization in the local identity.
 \begin{proof}
     \leanok
     \uses{thm:mpo_mixed_action_exact,thm:glm_boundary_decomposition}
-    Apply the boundary trace identity to a nonempty word with identity boundary.
-    Each resulting boundary is $V_\mu W_\mu=\Id_E$, so the $m$
-    summands have the same trace. This gives the coefficient of
+    Applying the boundary trace identity to a nonempty word with identity
+    boundary makes each resulting boundary $V_\mu W_\mu=\Id_E$, so the $m$
+    summands have the same trace, giving the coefficient of
     (\ref{eq:mpo_mix_action_periodic}) for every physical configuration.
 \end{proof}
 

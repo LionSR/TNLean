@@ -35,11 +35,12 @@ intertwiner is already visible in elementary block matrix multiplication.
     For two block upper-triangular matrices $X,Y$,
     $(XY)_{kk}=\sum_l X_{kl}Y_{lk}$; the terms with $l<k$ vanish because
     $X_{kl}=0$, and those with $l>k$ vanish because $Y_{lk}=0$, leaving
-    $(XY)_{kk}=X_{kk}Y_{kk}$. Induction on the word length gives
-    (\ref{eq:asym_triangular_word}) and the persistence of block
-    triangularity. The identity $Q_kMP_k=M_{kk}$ and
-    (\ref{eq:asym_block_biorthogonality}) are direct computations from the
-    coordinate description of $P_k$ and $Q_k=P_k^{\mathsf T}$.
+    $(XY)_{kk}=X_{kk}Y_{kk}$. Inducting on the word length preserves block
+    triangularity and extends this diagonal-block factorization to
+    (\ref{eq:asym_triangular_word}). Since $P_k$ embeds the $k$-th coordinate
+    block and $Q_k=P_k^{\mathsf T}$ projects onto it, direct coordinate
+    multiplication gives $Q_kMP_k=M_{kk}$ and
+    (\ref{eq:asym_block_biorthogonality}).
 \end{proof}
 
 \begin{remark}[Periodic equality does not imply a sitewise intertwiner]
@@ -66,10 +67,10 @@ intertwiner is already visible in elementary block matrix multiplication.
     $B^2v=2v$, forcing $v=0$. Symmetrically, no nonzero left intertwiner
     $uB^1=u$, $uB^2=2u$ exists: $uB^1=u$ gives $u_1=u_3=0$ while
     the third coordinate of $uB^2=2u$ gives $u_2=2u_3=0$. Periodic equality
-    can therefore force a multiplicative subquotient while admitting neither
-    one-sided sitewise intertwiner, so it cannot imply a biorthogonal zipper
-    pair. This is why the theorem below is stated as a compression
-    $W_sB^wV_s=C_s^w$ rather than as an eigenvector relation.
+    can therefore force a multiplicative subquotient without admitting either
+    one-sided sitewise intertwiner or a biorthogonal zipper pair; the theorem
+    below accordingly states the comparison as a word-level compression
+    $W_sB^wV_s=C_s^w$ rather than a sitewise eigenvector relation.
 \end{remark}
 
 \section{The word algebra and normal tensors as simple modules}%
@@ -141,8 +142,8 @@ intertwiner is already visible in elementary block matrix multiplication.
     nonzero. Normality gives a length $L$ for which the span of the
     length-$L$ word evaluations is all of $\MN{D}$; since $K$ is invariant
     under every such word and hence under their span, $Xu\in K$ for every
-    $X\in\MN{D}$. Every vector is $Xu$ for a suitable $X$ because $u\neq0$,
-    so $K=\C^D$.
+    $X\in\MN{D}$. Since $u\neq0$, the matrices $X\in\MN{D}$ carry $u$ to
+    every vector of $\C^D$, forcing $K=\C^D$.
 \end{proof}
 
 Multiplying every matrix of a tensor by a nonzero scalar does not change its
@@ -192,9 +193,9 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     \lean{WordAlgebra.finrank_eq_one_of_isSimpleModule_of_forall_smul_eq_zero}
     \leanok
     \uses{def:asym_word_algebra}
-    A finite-dimensional simple $F$-module on which every generator acts as
-    zero is one-dimensional. It is the module $\mathbf0$ of
-    Lemma~\ref{lem:asym_character}.
+    As in Lemma~\ref{lem:asym_character}, any finite-dimensional simple
+    $F$-module on which every generator acts as zero has dimension one and
+    coincides with the trivial module $\mathbf0$.
 \end{lemma}
 
 \begin{proof}
@@ -268,8 +269,9 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 
 \begin{proof}
     \leanok
-    This is the additivity of the ordinary trace of an endomorphism over an
-    invariant subspace, applied to the action of each word on $M$.
+    Each word $w$ acts on $M$ as a linear endomorphism preserving $K$, and the
+    ordinary trace of an endomorphism is additive over an invariant subspace
+    and its quotient.
 \end{proof}
 
 \begin{theorem}[Nilpotency from vanishing trace powers]
@@ -396,22 +398,21 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     \leanok
     \uses{lem:asym_flag_base_case, lem:asym_zero_module,
         thm:asym_identification, lem:asym_trace_additivity}
-    Induction on $\dim M$. If $M=0$, Lemma~\ref{lem:asym_flag_base_case}
+    We induct on $\dim M$. If $M=0$, Lemma~\ref{lem:asym_flag_base_case}
     forces $S=\emptyset$, and the empty chain is the required flag. If
-    $M\neq0$, choose a maximal proper invariant submodule $K\leq M$ (a
-    coatom of the invariant-submodule lattice, which exists because $M$ is
-    finite-dimensional), so $M/K$ is simple. If some generator acts
-    nontrivially on $M/K$, Theorem~\ref{thm:asym_identification} identifies
-    $M/K$ with some block $C_{s_0}$; Lemma~\ref{lem:asym_trace_additivity}
-    shows the word trace of $K$ agrees with the sum over the remaining
-    blocks $S\setminus\{s_0\}$, and the induction hypothesis (applied to
-    $K$, of strictly smaller dimension) gives a flag of $K$, extended by
-    the matched final step $K\subset M$ labelled $s_0$. If instead every
-    generator acts as zero on $M/K$, Lemma~\ref{lem:asym_zero_module} shows
-    $M/K$ is one-dimensional; Lemma~\ref{lem:asym_trace_additivity} shows
-    the word trace of $K$ already agrees with the sum over all of $S$, and
-    the induction hypothesis gives a flag of $K$, extended by the
-    unmatched final step $K\subset M$.
+    $M\neq0$, its finite-dimensional invariant-submodule lattice has a
+    maximal proper submodule $K\leq M$, so the quotient $M/K$ is simple. If
+    some generator acts nontrivially on $M/K$,
+    Theorem~\ref{thm:asym_identification} identifies $M/K$ with some block
+    $C_{s_0}$; Lemma~\ref{lem:asym_trace_additivity} then shows that the word
+    trace of $K$ agrees with the sum over the remaining blocks
+    $S\setminus\{s_0\}$, and the induction hypothesis on $K$ gives a flag
+    that extends by the matched final step $K\subset M$ labelled $s_0$. If
+    instead every generator acts as zero on $M/K$,
+    Lemma~\ref{lem:asym_zero_module} shows that $M/K$ is one-dimensional;
+    Lemma~\ref{lem:asym_trace_additivity} then equates the word trace of $K$
+    with the sum over all of $S$, and the induction hypothesis on $K$ gives a
+    flag that extends by the unmatched final step $K\subset M$.
 \end{proof}
 
 \section{The multi-block asymmetric compression theorem}%
@@ -546,8 +547,9 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
     Let $A=\bigoplus_{k=1}^g\bigoplus_{q=1}^{n_k}\mu_kA_{(k)}$ be a
     canonical target with each $A_{(k)}$ normal of bond dimension $D_k$
     and $\mu_k\in\C^\times$, and suppose
-    $\ket{V^{(N)}(B)}=\ket{V^{(N)}(A)}$ for every $N>0$. For every block
-    label $k$ and copy $q\in\{1,\ldots,n_k\}$, there are maps
+    $\ket{V^{(N)}(B)}=\ket{V^{(N)}(A)}$ for every $N>0$. Then by
+    Theorem~\ref{thm:asym_multiblock}, for every block label $k$ and copy
+    $q\in\{1,\ldots,n_k\}$, there are maps
     $V_{k,q}:\C^{D_k}\to\C^{D_B}$ and $W_{k,q}:\C^{D_B}\to\C^{D_k}$,
     mutually biorthogonal, with
     \begin{align}
@@ -561,11 +563,12 @@ tensor $A_{(k)}$ and $\mu_k\in\C^\times$ remains a simple $F$-module.
 \begin{proof}
     \leanok
     \uses{thm:asym_multiblock}
-    Apply Theorem~\ref{thm:asym_multiblock} to the slots
-    $C_{k,q}=\mu_kA_{(k)}$: for a word of length $N$,
+    Each weighted copy $C_{k,q}=\mu_kA_{(k)}$ is a normal tensor whose
+    length-$N$ word evaluation is
     $C_{k,q}^{i_1}\cdots C_{k,q}^{i_N}=\mu_k^NA_{(k)}^{i_1}\cdots
         A_{(k)}^{i_N}$, so clause (v) of Theorem~\ref{thm:asym_multiblock}
-    gives (\ref{eq:asym_weighted_compression}).
+    for the family $(C_{k,q})$ yields
+    (\ref{eq:asym_weighted_compression}).
 \end{proof}
 
 % The Lean formalization of Theorem~\ref{thm:asym_multiblock} takes the
