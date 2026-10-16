@@ -123,13 +123,7 @@ theorem hasSourceBoundedChange_liftOne {F F' : Frame pos q Party}
     (hc : c.IsBoundedChange S r K ε (F.regRef Ω) (F'.regRef Ω)) (hs : c.IsSourceBounded rs)
     (hΩ : ‖Ω‖ ≤ 1) (hξ : ‖ξ‖ ≤ 1) :
     HasSourceBoundedChange Ω (pre ++ F :: post) (pre ++ F' :: post) ξ S r K rs ε :=
-  ⟨liftOne post ℓ c pre,
-    { nonprivateCount_le := (nonprivateCount_liftOne post ℓ c pre).trans_le hc.nonprivateCount_le
-      participants_subset := participants_liftOne_subset post ℓ c hc.participants_subset pre
-      isExpansionBounded := isExpansionBounded_liftOne post ℓ c hc.isExpansionBounded pre
-      isMonomialBounded := isMonomialBounded_liftOne post ℓ c hc.isMonomialBounded pre
-      norm_eval_sub_le := (norm_eval_liftOne_stackVec_sub_le post c hΩ hξ pre).trans
-        hc.norm_eval_sub_le },
+  ⟨liftOne post ℓ c pre, isBoundedChange_liftOne pre post hc hΩ hξ,
     isSourceBounded_liftOne post ℓ c hs pre⟩
 
 /-- **A change of two adjacent sheets, on the whole stack.** A bounded change of the frames
@@ -143,13 +137,7 @@ theorem hasSourceBoundedChange_liftTwo {F₁ F₂ F₁' F₂' : Frame pos q Part
     (hc : c.IsBoundedChange S r K ε (pairRef F₁ F₂ Ω) (pairRef F₁' F₂' Ω))
     (hs : c.IsSourceBounded rs) (hΩ : ‖Ω‖ ≤ 1) (hξ : ‖ξ‖ ≤ 1) :
     HasSourceBoundedChange Ω (pre ++ F₁ :: F₂ :: post) (pre ++ F₁' :: F₂' :: post) ξ S r K rs ε :=
-  ⟨liftTwo post ℓ c pre,
-    { nonprivateCount_le := (nonprivateCount_liftTwo post ℓ c pre).trans_le hc.nonprivateCount_le
-      participants_subset := participants_liftTwo_subset post ℓ c hc.participants_subset pre
-      isExpansionBounded := isExpansionBounded_liftTwo post ℓ c hc.isExpansionBounded pre
-      isMonomialBounded := isMonomialBounded_liftTwo post ℓ c hc.isMonomialBounded pre
-      norm_eval_sub_le := (norm_eval_liftTwo_stackVec_sub_le post c hΩ hξ pre).trans
-        hc.norm_eval_sub_le },
+  ⟨liftTwo post ℓ c pre, isBoundedChange_liftTwo pre post hc hΩ hξ,
     isSourceBounded_liftTwo post ℓ c hs pre⟩
 
 /-- **Activating an auxiliary sheet.** If the frames `Fs` are a reordering of
