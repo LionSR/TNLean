@@ -147,7 +147,8 @@ theorem isHomogenizing_finalLabel (done : Set (ℤ × ℤ)) :
 theorem isHomogenizing_nbrLabel (done : Set (ℤ × ℤ)) (e : SquareEdge) :
     (repaintBaseline R done).nbrLabel e = newParty Sum.inl R.1.1 R.1.index ∨
       ∃ R' ∈ blockWindow 1,
-        (repaintBaseline R done).nbrLabel e = protocolLevelLabels k R.1.1 done (R' + R.1.index) := by
+        (repaintBaseline R done).nbrLabel e =
+          protocolLevelLabels k R.1.1 done (R' + R.1.index) := by
   refine Or.inr ⟨e.nbrBlock (0, 0), nbrBlock_zero_mem_blockWindow e, ?_⟩
   change protocolLevelLabels k R.1.1 done (e.nbrBlock R.1.index) = _
   congr 1
