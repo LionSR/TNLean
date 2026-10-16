@@ -484,6 +484,55 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     nonnegativity of the individual weights.
 \end{proof}
 
+% Source: 10-geometry.tex, geometry:belt-count, lines 220--233;
+% initial fan runs, lines 299--318; geometry:total-repairs, lines 685--692.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Uniform count of the initial belt regions]
+    \label{thm:area_law_initial_belt_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_uniform_initial_belt_card_bound}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_initial_region_indices}
+    There is a constant $B>0$ with the following property.
+    For every origin $o\in\mathbb R^2$, finite domain
+    $\Lambda\subseteq\mathbb Z^2$, cut $A\subseteq\Lambda$, and integers
+    $C_0\ge2$ and $k_0\ge50{,}000{,}000$, use the joint residue choices
+    of the actual initial repair stage. Let $F_k$ be its selected belt-cell
+    indices and $\mathcal R_{k,z}$ the connected runs of the prescribed
+    colored fan at $z\in F_k$. The belt summand
+    $\mathcal I_{\mathrm{belt}}=\coprod_{k\ge k_0}\coprod_{z\in F_k}
+        \mathcal R_{k,z}$ of the initial identifier family is finite, and
+    \begin{align}
+        |\mathcal I_{\mathrm{belt}}|
+         & \le B(2C_0+1)^2|\partial_\Lambda A|.\notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_initial_repair_mark_facts,def:area_law_fan_runs,
+        thm:area_law_cell_fan_run_count,thm:area_law_polynomial_finite_sums}
+    Choose $B_0>0$ from
+    Theorem~\ref{thm:area_law_polynomial_finite_sums} at exponent zero,
+    and set $B=512B_0>0$ before choosing the geometric data.
+    Theorem~\ref{thm:area_law_initial_repair_mark_facts} makes
+    $J=\{k\ge k_0:F_k\ne\varnothing\}$ finite.
+    Each $F_k$ is finite. Each run set is a quotient of the finite set
+    of fan triangles, so it is finite; it has at most eight elements by
+    Theorem~\ref{thm:area_law_cell_fan_run_count}.
+    Thus the displayed belt summand is finite.
+
+    Put $b=|\partial_\Lambda A|$. The same initial-mark facts give the
+    sparse-cell estimate for these residue choices. Therefore
+    \begin{align}
+        |\mathcal I_{\mathrm{belt}}|
+         & =\sum_{k\in J}\sum_{z\in F_k}|\mathcal R_{k,z}|\notag  \\
+         & \le8\sum_{k\in J}|F_k|\notag                           \\
+         & \le512(2C_0+1)^2b\sum_{k\in J}2^{-\delta_0 k/2}.\notag
+    \end{align}
+    The chosen budget bounds the last scale sum by $B_0$, which gives
+    the required estimate with $B=512B_0$.
+\end{proof}
+
 % Source: 10-geometry.tex, retained identifiers, lines 398--409;
 % comparisons with later actual regions, lines 584--591.
 \begin{definition}[Inclusions between generations]

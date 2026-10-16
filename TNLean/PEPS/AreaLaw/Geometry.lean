@@ -70,6 +70,7 @@ import TNLean.PEPS.AreaLaw.Geometry.FineCellPartition
 import TNLean.PEPS.AreaLaw.Geometry.FineMarkSeparation
 import TNLean.PEPS.AreaLaw.Geometry.InitialActiveRayCount
 import TNLean.PEPS.AreaLaw.Geometry.InitialActiveRays
+import TNLean.PEPS.AreaLaw.Geometry.InitialBeltCount
 import TNLean.PEPS.AreaLaw.Geometry.InitialComponentRegions
 import TNLean.PEPS.AreaLaw.Geometry.InitialLatticePartition
 import TNLean.PEPS.AreaLaw.Geometry.InitialMarkFamily

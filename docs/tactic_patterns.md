@@ -7998,3 +7998,39 @@ spectral split → block extraction → MPV calculation → strict bounds
   check. This third use is separate from the two refactored consumers in the
   line comparison above. No new tactic, simp attribute, or proof limit is
   introduced.
+
+- **Initial belt count:** `exists_uniform_initial_belt_card_bound` in
+  `TNLean/PEPS/AreaLaw/Geometry/InitialBeltCount.lean` also uses the sparse
+  cell counts and finite layer support from the shared specification. The
+  original selected cells and their actual run identifiers are retained.
+  This is a fourth direct use, with strict, ordinary, and exact-name imported
+  standard-three verification complete. The finite-prefix mark-count proof
+  calls the weighted estimate; it is not another direct extraction of the
+  chosen-family facts.
+
+### Summing sparse selected layers with a uniform dyadic budget — candidate
+
+- **Pattern:** Choose the polynomial dyadic budget before the geometric data,
+  bound each summand by a nonnegative geometric coefficient times the fixed
+  polynomial-decay term, sum over the actual finite supported layers, factor
+  the coefficient, and apply the numerical budget.
+- **Occurrences:**
+  `exists_uniform_initialRepairStage_weighted_sum_bound` in
+  `TNLean/PEPS/AreaLaw/Geometry/RepairInitialWeightedCount.lean` and
+  `exists_uniform_initial_belt_card_bound` in
+  `TNLean/PEPS/AreaLaw/Geometry/InitialBeltCount.lean`.
+- **Existing abstraction:** `exists_uniform_polynomial_dyadic_sum_bound`
+  already supplies the numerical estimate. Both applications retain the
+  same jointly chosen initial cells; their finite layer sets come from actual
+  carriers or selected-cell support.
+- **Possible next abstraction:** If a third proof repeats the summation step,
+  first consider a lemma in `PolynomialBudget` for a finite sum with a
+  pointwise polynomial-dyadic upper bound and a nonnegative common
+  coefficient. Its budget must still precede the coefficient and all
+  geometric data. No new tactic is needed.
+- **Notes:** The initial-mark application permits signed weights and handles
+  their layer partition before this summation step. Finiteness must be proved
+  before using either finite-support sums or `Nat.card`. The belt count
+  concerns the literal belt summand, and supplies no count of all initial
+  primary identifiers. These are two occurrences across two files; no third
+  occurrence has yet been recorded.
