@@ -7,27 +7,18 @@ import TNLean.PEPS.AreaLaw.Scan.ActualTerminalPartitions
 import TNLean.PEPS.AreaLaw.Scan.ActualGlobalReplicaEnergy
 import TNLean.PEPS.AreaLaw.Scan.AugmentedRootCompression
 import QICLean.Algebra.ProjectionRangeIsometry
-import QICLean.Analysis.RegionalRoughLowerThree
+import QICLean.Analysis.RegionalRoughLowerNorm
+import QICLean.Analysis.RoughLowerCoefficient
 
 /-!
-# Rough lower bounds for the literal actual fill and charge roots
+# The actual rough lower comparison at an arbitrary fixed band weight
 
-The total band weight is four. The comparison uses the original physical
-unit state and gap, the same supplied prevector and the same auxiliary
-label on C and R. The defect is the actual mean energy of its normalized
-filtered vector. No marginal-moment premise or sharp smallness is used.
+The same supplied prevector and physical mean energy obey the rough lower
+comparison for every positive per-band weight at most one half. The replica
+remainder is uniform over the actual fill and charge points.
 
-The polynomial constants precede the scanner, horizon, physical state,
-copy number, label and interpolation parameter. The band count is fixed
-before the constants; the scanner is required to have that band count.
-
-Source: OpenAI, *A two-dimensional area law from a global spectral gap*,
-`07-comparators.tex`, lines 153--169 and 585--651, and `08-scanner.tex`,
-lines 371--384, 416--451 and 755--769, revision
-`adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
-The QIC comparison is the accepted
-`Matrix.exists_replicaMetric_symProj_bandProduct_rough_lower_norm_three`,
-QICLean revision `e44381d9054ba5c42c720624cb690b251ad21533`.
+Source: the area-law manuscript, 07-comparators.tex, lines 97--169 and
+585--651, and 08-scanner.tex, Proposition 9.2, lines 349--397.
 -/
 
 noncomputable section
@@ -40,14 +31,14 @@ namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 open ActualTerminals
 
 open Classical in
-/-- The finite-copy rough lower estimate at total band weight four for the
-literal actual fill and charge roots and their actual normalized energies.
-The same supplied physical state, prevector and auxiliary label are retained.
-Source: `07-comparators.tex`, lines 153--169 and 585--651;
-`08-scanner.tex`, lines 371--384, 416--451 and 755--769, adc7f124. -/
-theorem exists_actualScan_rough_lower_norm
+/-- The actual finite-copy rough lower comparison at total weight W = a K.
+The positive part retains arbitrary entropy parameter Sent.
+Source: area-law manuscript, 07-comparators.tex, lines 97--169 and 585--651;
+08-scanner.tex, Proposition 9.2, lines 349--397. -/
+theorem exists_actualScan_rough_lower_norm_of_weight
     {Λ : Finset (ℤ × ℤ)} {q d R : ℕ} {J : ℝ} [NeZero q] [NeZero d]
-    [LinearOrder (AdmissibleSupport Λ R)] (Kband : ℕ) (hKband : 8 ≤ Kband) :
+    [LinearOrder (AdmissibleSupport Λ R)] (Kband : ℕ)
+    (a : ℝ) (ha : 0 < a) (haSmall : a ≤ 1 / 2) :
     ∃ c Cf : ℝ, 0 ≤ c ∧ 0 ≤ Cf ∧
       ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)), S.K = Kband →
       ∀ (hm : 0 < S.m) (hM : 0 < S.M) (Horizon : ℕ)
@@ -57,7 +48,7 @@ theorem exists_actualScan_rough_lower_norm
       ((∑ i, S.truncatedEnergyTerm h Ω Δ L i) - (e₀ : ℂ) • 1 -
         (gap : ℂ) • (1 - vecMulVec Ωt.ofLp (star Ωt.ofLp))).PosSemidef →
       0 < gap →
-      let a := 4 / (Kband : ℝ)
+      let W := a * (Kband : ℝ)
       let n := augmentedDimensions (V := Site Λ) q (fun _ => d)
       ∀ (pre : (k : ℕ) → Config k (fun v => Fin (n v)) → ℂ)
         (k : ℕ), 0 < k → pre k ≠ 0 → ‖WithLp.toLp 2 (pre k)‖ ≤ 1 →
@@ -75,8 +66,9 @@ theorem exists_actualScan_rough_lower_norm
       let lower := fun (Nsq μ : ℝ) =>
         0 < Nsq ∧ 0 ≤ (μ - e₀) / gap ∧
           ∀ τ : ℝ, 0 < τ → τ ≤ 1 / 2 →
-            4 * Sent - 6 * (τ * Real.log (d : ℝ) + Real.binEntropy τ / a) -
-              3 * (((μ - e₀) / gap) / τ) * max 0 (2 * Sent) - remainder ≤
+            (W / 4) *
+                (4 * Sent - 6 * (τ * Real.log (d : ℝ) + Real.binEntropy τ / a) -
+                  3 * (((μ - e₀) / gap) / τ) * max 0 (2 * Sent)) - remainder ≤
                 -Real.log Nsq / (k : ℝ)
       ∀ (s : Fin Horizon) (p : ℝ),
         let Dfill := S.actualFillData hm hM s.val
@@ -93,17 +85,15 @@ theorem exists_actualScan_rough_lower_norm
               (S.actualEnergyTerms h Ω Δ L (fun _ => d)) a pre).meanEnergy k p)) := by
   classical
   obtain ⟨c, Cf, hc, hCf, hlower⟩ :=
-    exists_replicaMetric_symProj_bandProduct_rough_lower_norm_three
-      (fun _ : Site Λ => Fin q) d Kband hKband
+    exists_replicaMetric_symProj_bandProduct_rough_lower_norm
+      (fun _ : Site Λ => Fin q) (Fin d) (Fin d)
+      (div_pos ha zero_lt_two) (by linarith only [haSmall])
   refine ⟨c, Cf, hc, hCf, ?_⟩
-  intro S hSK hm hM Horizon h Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos a n
+  intro S hSK hm hM Horizon h Ω Δ L Ωt e₀ gap hΩt hgap hgap_pos W n
     pre k hk hpre hprenorm hsym ell Sent ε β ι₀ e hC hR hlabel r remainder lower
     s p Dfill Dcharge
   subst Kband
   let : DecidableEq (Config k ι₀) := Fintype.decidablePiFintype
-  have hKpos : (0 : ℝ) < S.K := by exact_mod_cast (lt_of_lt_of_le (by decide : 0 < 8) hKband)
-  have ha : 0 < a := div_pos (by norm_num) hKpos
-  have htEq : 2 / (S.K : ℝ) = a / 2 := by dsimp only [a]; ring
   let σ := terminalPartition S Horizon
   let Q := fun j g => receiving (σ j g) false
   let Y := fun j g => middle (σ j g)
@@ -164,11 +154,76 @@ theorem exists_actualScan_rough_lower_norm
     simpa only [hSymm, Matrix.submatrix_mulVec_equiv, Function.comp_assoc,
       Equiv.self_comp_symm, Function.comp_id] using
       congrArg (fun v : Config k (fun x => Fin (n x)) → ℂ => v ∘ e) hsym
-  have hestimate (T : MeanTree (terminalFamily S.K S.m S.M Horizon)) :=
-    hlower k N hk (∑ i, S.truncatedEnergyTerm h Ω Δ L i) Ωt.ofLp e₀ gap
-      hgap hΩt hgap_pos ZO hZO hZOZO
-      (terminalFamily S.K S.m S.M Horizon) Q Y hdisj hnest
-      T ell Sent ε hlabel ξ hξ hξnorm hsymO hC hR
+  have hestimate (T : MeanTree (terminalFamily S.K S.m S.M Horizon)) :
+      let metric := replicaMetric ι₀ (a / 2) k
+      let leftRegion := fun j g => insert (some none) ((Q j g).image fun x => some (some x))
+      let F := fun j g => insert none
+        (((Q j g ∪ Y j g)ᶜ).image fun x => some (some x))
+      let E := fun j g => (Y j g).image fun x => some (some x)
+      let A := fun j g =>
+        ((metric (leftRegion j g))⁻¹ * (metric (F j g))⁻¹ * metric (E j g)) ^ 2
+      let B := fun j g => ZOᴴ * A j g * ZO
+      let M := (List.ofFn fun g : Fin S.K => T.eval (B · g)).prod
+      let w := toEuclideanLin (M ^ (-(1 / 4 : ℝ))) (toEuclideanLin ZOᴴ ξ)
+      let φ := (‖w‖⁻¹ : ℂ) • w
+      let v := toEuclideanLin ZO φ
+      let δ := ((star v ⬝ᵥ (globalReplicaMeanHamiltonian β (Fin d) (Fin d)
+        (∑ i, S.truncatedEnergyTerm h Ω Δ L i) k *ᵥ v)).re - e₀) / gap
+      w ≠ 0 ∧ ‖v‖ = 1 ∧ 0 ≤ δ ∧
+        ∀ τ : ℝ, 0 < τ → τ ≤ 1 / 2 →
+          (W / 4) *
+              (4 * Sent - 6 * (τ * Real.log (d : ℝ) + Real.binEntropy τ / a) -
+                3 * (δ / τ) * max 0 (2 * Sent)) - remainder ≤
+            -Real.log (‖w‖ ^ 2) / (k : ℝ) := by
+    intro metric leftRegion F E A B M w φ v δ
+    have hraw :=
+      hlower k N hk (∑ i, S.truncatedEnergyTerm h Ω Δ L i) Ωt.ofLp e₀ gap
+        hgap hΩt hgap_pos ZO hZO hZOZO
+        (terminalFamily S.K S.m S.M Horizon) S.K Q Y hdisj hnest
+        T ell ell Sent ε (1 / 4 : ℝ) hlabel (by norm_num)
+        ξ hξ hξnorm hsymO hC hR
+    refine ⟨hraw.1, hraw.2.1, hraw.2.2.1, fun τ hτ hτhalf ↦ ?_⟩
+    have hfloor : |Real.log (((k : ℝ) + 2) ^ (-Cf) / 2)| =
+        Cf * Real.log ((k : ℝ) + 2) + Real.log 2 := by
+      rw [Real.log_div
+          (Real.rpow_pos_of_pos
+            (add_pos_of_nonneg_of_pos (Nat.cast_nonneg k) zero_lt_two) (-Cf)).ne'
+          two_ne_zero,
+        Real.log_rpow (add_pos_of_nonneg_of_pos (Nat.cast_nonneg k) zero_lt_two),
+        neg_mul, sub_eq_add_neg, ← neg_add, abs_neg,
+        abs_of_nonneg (add_nonneg
+          (mul_nonneg hCf (Real.log_nonneg
+            (one_le_two.trans (le_add_of_nonneg_left (Nat.cast_nonneg k)))))
+          (Real.log_nonneg one_le_two))]
+    have hcoefficient := mul_le_mul_of_nonneg_left
+      (Real.rough_lower_coefficient_three Sent (Real.log (d : ℝ))
+        (Real.binEntropy τ) δ τ a (Real.log_natCast_nonneg d)
+        (Real.binEntropy_nonneg hτ.le (hτhalf.trans (by norm_num)))
+        hraw.2.2.1 hτ ha haSmall)
+      (show 0 ≤ W / 4 from div_nonneg
+        (mul_nonneg ha.le (Nat.cast_nonneg S.K)) (by norm_num))
+    have hdiv :
+        (2 * (1 / 4 : ℝ) * (S.K : ℝ) *
+          (a * (k : ℝ) *
+            (2 * Sent - τ * (Real.log (d : ℝ) + Real.log (d : ℝ)) -
+              (3 + 1 / a) * Real.binEntropy τ - δ / τ * max 0 (2 * Sent)) -
+            (2 * |r| + (Cf * Real.log ((k : ℝ) + 2) + Real.log 2) +
+              Real.log 2 + Real.log (3 / 2)))) / (k : ℝ) ≤
+            -Real.log (‖w‖ ^ 2) / (k : ℝ) := by
+      simpa only [Fintype.card_fin, mul_div_cancel₀ a (two_ne_zero : (2 : ℝ) ≠ 0), hfloor, r] using
+        div_le_div_of_nonneg_right (hraw.2.2.2 τ hτ hτhalf) (Nat.cast_nonneg (α := ℝ) k)
+    have hnormalize (u : ℝ) :
+        (2 * (1 / 4 : ℝ) * (S.K : ℝ) *
+          (a * (k : ℝ) * u -
+            (2 * |r| + (Cf * Real.log ((k : ℝ) + 2) + Real.log 2) +
+              Real.log 2 + Real.log (3 / 2)))) / (k : ℝ) =
+          W / 4 * (2 * u) - remainder := by
+      dsimp only [W, remainder]
+      field_simp [show (k : ℝ) ≠ 0 by exact_mod_cast (Nat.ne_of_gt hk)]
+      ring
+    rw [hnormalize] at hdiv
+    simpa only [show (2 : ℝ) * 3 = 6 by norm_num] using
+      (sub_le_sub_right hcoefficient remainder).trans hdiv
   have hbound {Hist : Type} [DecidableEq Hist] {Choice : Hist → Type}
       [∀ hist, DecidableEq (Choice hist)]
       (D : TransportData (Site Λ ⊕ Bool) S.K Hist Choice)
@@ -197,7 +252,7 @@ theorem exists_actualScan_rough_lower_norm
     let w := toEuclideanLin (M ^ (-(1 / 4) : ℝ)) (toEuclideanLin ZOᴴ ξ)
     let vO := toEuclideanLin ZO ((‖w‖⁻¹ : ℂ) • w)
     have he := hestimate (T.map f)
-    simp only [MeanTree.eval_map, htEq] at he
+    simp only [MeanTree.eval_map] at he
     have hP (j : Σ hist, Option (Choice hist)) (g : Fin S.K) :
         (D.leafPart j g).P.image augmentedSiteEquiv.symm =
           insert (some none) ((Q (f j) g).image fun x => some (some x)) := by
@@ -253,7 +308,7 @@ theorem exists_actualScan_rough_lower_norm
     · rw [henergyO]
       exact he.2.2.1
     · intro τ hτ hτhalf
-      simpa only [hroot.1, henergyO, r, remainder, lower, a, T] using!
+      simpa only [hroot.1, henergyO, r, remainder, lower, T] using!
         he.2.2.2 τ hτ hτhalf
   exact
     ⟨hbound Dfill (S.actualFillData_isAdmissible hm hM s.val)
@@ -271,5 +326,68 @@ theorem exists_actualScan_rough_lower_norm
       (fun j g => actualChargeData_leafPart_terminalPartition S hm hM Horizon s j g)
       _ (S.actualChargeScanRound_meanEnergy_eq_globalReplicaMeanHamiltonian
         hm hM s.val h Ω Δ L a pre k p)⟩
+
+open Classical in
+/-- The finite-copy rough lower estimate at total band weight four for the
+literal actual fill and charge roots and their actual normalized energies.
+The same supplied physical state, prevector and auxiliary label are retained.
+Source: `07-comparators.tex`, lines 153--169 and 585--651;
+`08-scanner.tex`, lines 371--384, 416--451 and 755--769, adc7f124. -/
+theorem exists_actualScan_rough_lower_norm
+    {Λ : Finset (ℤ × ℤ)} {q d R : ℕ} {J : ℝ} [NeZero q] [NeZero d]
+    [LinearOrder (AdmissibleSupport Λ R)] (Kband : ℕ) (hKband : 8 ≤ Kband) :
+    ∃ c Cf : ℝ, 0 ≤ c ∧ 0 ≤ Cf ∧
+      ∀ (S : CollarScan (Site Λ) (AdmissibleSupport Λ R)), S.K = Kband →
+      ∀ (hm : 0 < S.m) (hM : 0 < S.M) (Horizon : ℕ)
+        (h : LocalHamiltonian Λ q R J) (Ω : StateSpace Λ q) (Δ : ℝ) (L : ℕ)
+        (Ωt : StateSpace Λ q) (e₀ gap : ℝ),
+      ‖Ωt‖ = 1 →
+      ((∑ i, S.truncatedEnergyTerm h Ω Δ L i) - (e₀ : ℂ) • 1 -
+        (gap : ℂ) • (1 - vecMulVec Ωt.ofLp (star Ωt.ofLp))).PosSemidef →
+      0 < gap →
+      let a := 4 / (Kband : ℝ)
+      let n := augmentedDimensions (V := Site Λ) q (fun _ => d)
+      ∀ (pre : (k : ℕ) → Config k (fun v => Fin (n v)) → ℂ)
+        (k : ℕ), 0 < k → pre k ≠ 0 → ‖WithLp.toLp 2 (pre k)‖ ≤ 1 →
+      symProj (copyPerm ((v : Site Λ ⊕ Bool) → Fin (n v)) k) *ᵥ pre k = pre k →
+      ∀ (ell : IrrepLabel (Equiv.Perm (Fin k))) (Sent ε : ℝ),
+      let β := fun _ : Site Λ => Fin q
+      let ι₀ := addedSiteSpace (addedSiteSpace β (Fin d)) (Fin d)
+      let e := augmentedReplicaConfigurationEquiv (V := Site Λ) q d k
+      labelProj (subsystemPerm k ι₀ {some none}) ell *ᵥ (pre k ∘ e) = pre k ∘ e →
+      labelProj (subsystemPerm k ι₀ {none}) ell *ᵥ (pre k ∘ e) = pre k ∘ e →
+      2 * (k : ℝ) * Sent - ε ≤ Real.log ell.dim + Real.log ell.dim →
+      let r := Real.log ((k : ℝ) + 1) + c * Real.log ((k : ℝ) + 2) + a * ε
+      let remainder := ((Kband : ℝ) / 2 * (2 * |r| + Cf * Real.log ((k : ℝ) + 2) +
+        2 * Real.log 2 + Real.log (3 / 2))) / (k : ℝ)
+      let lower := fun (Nsq μ : ℝ) =>
+        0 < Nsq ∧ 0 ≤ (μ - e₀) / gap ∧
+          ∀ τ : ℝ, 0 < τ → τ ≤ 1 / 2 →
+            4 * Sent - 6 * (τ * Real.log (d : ℝ) + Real.binEntropy τ / a) -
+              3 * (((μ - e₀) / gap) / τ) * max 0 (2 * Sent) - remainder ≤
+                -Real.log Nsq / (k : ℝ)
+      ∀ (s : Fin Horizon) (p : ℝ),
+        let Dfill := S.actualFillData hm hM s.val
+        let Dcharge := S.actualChargeData hm hM s.val
+        (‖WithLp.toLp 2
+            (Transport.filteredVector (Dfill.rootPath n (a / 2) k p) (pre k))‖ = 1 ∧
+          lower (Transport.filteredNormSq (Dfill.rootPath n (a / 2) k p) (pre k))
+            ((S.actualFillScanRound hm hM s.val n
+              (S.actualEnergyTerms h Ω Δ L (fun _ => d)) a pre).meanEnergy k p)) ∧
+        (‖WithLp.toLp 2
+            (Transport.filteredVector (Dcharge.rootPath n (a / 2) k p) (pre k))‖ = 1 ∧
+          lower (Transport.filteredNormSq (Dcharge.rootPath n (a / 2) k p) (pre k))
+            ((S.actualChargeScanRound hm hM s.val n
+              (S.actualEnergyTerms h Ω Δ L (fun _ => d)) a pre).meanEnergy k p)) := by
+  have hKpos : (0 : ℝ) < Kband := by
+    exact_mod_cast (lt_of_lt_of_le (by decide : 0 < 8) hKband)
+  have ha : 0 < (4 : ℝ) / Kband := div_pos (by norm_num) hKpos
+  have haSmall : (4 : ℝ) / Kband ≤ 1 / 2 := (div_le_iff₀ hKpos).2 (by
+    have hK8 : (8 : ℝ) ≤ Kband := by exact_mod_cast hKband
+    linarith)
+  simpa only [div_mul_cancel₀ (4 : ℝ) (ne_of_gt hKpos),
+    div_self (by norm_num : (4 : ℝ) ≠ 0), _root_.one_mul] using
+    exists_actualScan_rough_lower_norm_of_weight (Λ := Λ) (q := q) (d := d)
+      (R := R) (J := J) Kband (4 / (Kband : ℝ)) ha haSmall
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan
