@@ -7905,3 +7905,17 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Abstraction:** Two occurrences in two modules. A third use should promote
   the cast identity to a geometric lemma; the translation cancellation already
   uses Mathlib's standard identity.
+
+### Eighth-root separation of a vanishing density remainder — candidate (2026-10-15)
+
+- **Pattern:** Apply `Real.rpow_le_rpow` to a nonnegative density bounded by
+  `δ + ρ`, then use `Real.rpow_add_le_add_rpow` at exponent `1 / 8` to separate
+  the principal term from the replica remainder.
+- **Seen:** Two occurrences, in `PEPS/AreaLaw/Scan/EnergyBalance.lean` and
+  `PEPS/AreaLaw/Scan/SelectedEnergyDelta.lean`.
+- **Abstraction:** The existing Mathlib inequalities provide the two-step
+  argument. The latter module also supplies the complete scalar energy
+  implication, `selectedEnergy_le_of_density_le_add`, for use by physical
+  selected-point estimates. No additional tactic is proposed.
+- **Notes:** No multiplication by `1 - p` is allowed before its sign is known.
+  The scalar implication instead uses `1 - p ≤ 1` on nonnegative terms.

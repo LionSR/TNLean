@@ -152,7 +152,9 @@ import TNLean.PEPS.AreaLaw.Scan.ScanTruncationInputs
 import TNLean.PEPS.AreaLaw.Scan.Scanner
 import TNLean.PEPS.AreaLaw.Scan.ScannerRoundedAdmissibility
 import TNLean.PEPS.AreaLaw.Scan.SelectedChainProbability
+import TNLean.PEPS.AreaLaw.Scan.SelectedDensityDelta
 import TNLean.PEPS.AreaLaw.Scan.SelectedDensityPower
+import TNLean.PEPS.AreaLaw.Scan.SelectedEnergyDelta
 import TNLean.PEPS.AreaLaw.Scan.Selection
 import TNLean.PEPS.AreaLaw.Scan.SharpComparisonSubtraction
 import TNLean.PEPS.AreaLaw.Scan.SharpInformationScalar
