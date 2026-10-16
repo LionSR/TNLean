@@ -155,6 +155,59 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     replacement regions.
 \end{definition}
 
+% Source: OpenAI2026AreaLaw, Section 11, 10-geometry.tex,
+% replacement instructions, lines 393--417; geometry:repair-induction,
+% lines 478 and 486--514; open current regions, lines 558--561.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Disjointness after simultaneous repair]
+    \label{thm:area_law_repair_next_disjoint}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairNextCurrentRegion_pairwise_disjoint}
+    \leanok
+    \uses{def:area_law_repair_successor_regions}
+    Use the notation of
+    Definition~\ref{def:area_law_repair_successor_regions} for one
+    simultaneous repair, as in \cite[Section~11]{OpenAI2026AreaLaw}.
+    Suppose that the following hold:
+    \begin{enumerate}
+        \item The old current regions are pairwise disjoint:
+              $R_i\cap R_k=\varnothing$ for distinct $i,k\in I$.
+        \item The closed removal squares are pairwise disjoint:
+              $Q(v_p,S_p)\cap Q(v_q,S_q)=\varnothing$ for distinct
+              $p,q\in K$.
+        \item For every $p\in K_+$ and every
+              $H\in\mathcal R(\xi,\sigma_p)$,
+              $U(v_p,S_p,H)\subseteq Q(v_p,S_p)$.
+    \end{enumerate}
+    Then the next current regions $(R'_x)_{x\in I'}$ are pairwise
+    disjoint: $R'_x\cap R'_y=\varnothing$ whenever $x\ne y$.
+    Distinct runs of the same color and reflex runs are included.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:area_law_repair_successor_regions,
+        thm:area_law_repair_replacement_disjoint}
+    Two distinct old identifiers $i,k\in I$ satisfy
+    $R'_i\subseteq R_i$ and $R'_k\subseteq R_k$, so their next
+    current regions are disjoint by the first assumption.
+
+    For an old identifier $i$ and a fresh identifier
+    $x=(j+1,p,H)$, the third assumption gives
+    $R'_x=U(v_p,S_p,H)\subseteq Q(v_p,S_p)\subseteq Q_K$.
+    Since $R'_i=R_i\setminus Q_K$, these two regions are disjoint.
+    Here $Q_K$ includes every parent square, including terminal squares.
+
+    Two fresh identifiers with distinct parents $p\ne q$ have current
+    regions contained in $Q(v_p,S_p)$ and $Q(v_q,S_q)$, respectively.
+    The second and third assumptions therefore give disjointness.
+
+    Finally, two distinct fresh identifiers with the same parent have
+    distinct runs, since both have generation $j+1$.
+    Theorem~\ref{thm:area_law_repair_replacement_disjoint} gives
+    disjointness of their current regions, including equal-colored or
+    reflex runs. These cases exhaust all pairs of distinct identifiers
+    in $I'$.
+\end{proof}
+
 % Source: 10-geometry.tex, terminal cuts and child marks, lines 398--409;
 % geometry:repair-induction, lines 506--514.
 \begin{definition}[Terminal interiors and next-generation marks]
@@ -497,6 +550,31 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     current region only decreases when removal squares are cut out, and
     its birth is retained. A fresh current region is again the interior
     of its own birth. Induction on the generation proves the claim.
+\end{proof}
+
+% Source: 10-geometry.tex, initial regions, lines 172--177,
+% 212--218 and 313--316; replacement instructions, lines 393--417;
+% open actual regions, lines 558--561.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Openness of current regions]
+    \label{thm:area_law_repair_current_open}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.isOpen_repairStage_current}
+    \leanok
+    \uses{def:area_law_repair_stage}
+    In the actual repair family, the current region $R_i^{(j)}$ is open
+    for every generation $j\ge0$ and every identifier $i\in I_j$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:area_law_initial_open_regions,
+        def:area_law_repair_successor_regions,lem:area_law_repair_finite_marks,
+        lem:area_law_repair_removal_closed}
+    Induct on $j$. Initial current regions are interiors. By
+    Lemma~\ref{lem:area_law_repair_finite_marks}, the mark family at each
+    generation is finite, so Lemma~\ref{lem:area_law_repair_removal_closed}
+    makes its removal union closed. Subtracting this union from an old
+    open current region leaves an open set. Every fresh current region
+    is the interior of its birth region and is therefore open.
 \end{proof}
 
 % Source: 10-geometry.tex, actual regions and dummy exclusion, lines 558--568;

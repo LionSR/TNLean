@@ -122,6 +122,7 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairInclusionComposition
 import TNLean.PEPS.AreaLaw.Geometry.RepairInduction
 import TNLean.PEPS.AreaLaw.Geometry.RepairInductionMetric
 import TNLean.PEPS.AreaLaw.Geometry.RepairInductionStatement
+import TNLean.PEPS.AreaLaw.Geometry.RepairNextRegionDisjointness
 import TNLean.PEPS.AreaLaw.Geometry.RepairRegionDisjointness
 import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementRegions
 import TNLean.PEPS.AreaLaw.Geometry.RepairStabilization
