@@ -3,21 +3,23 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.Approximation.AngularInformationFromGap
 import TNLean.PEPS.Approximation.DyadicProtocolFrozenFrames
 
 /-!
-# The dyadic distribution protocol from Propositions 3.4 and 4.1
+# The dyadic distribution protocol from Proposition 4.1
 
 This file assembles the protocol of Proposition 7.1 of the polynomial-PEPS manuscript at every
-large size, from the angular information bound of Proposition 3.4 and the adaptive patch
-constraint of Proposition 4.1, both taken as hypotheses in the form in which the manuscript
-states them (`06-geometry.tex`, lines 12–53 and 559–681). The constants are fixed in the order of
+large size. The angular information bound of Proposition 3.4 is the theorem
+`angularInformationBound`; the adaptive patch constraint of Proposition 4.1 is taken as a
+hypothesis in the form in which the manuscript states it (`06-geometry.tex`, lines 12–53 and
+559–681). The constants are fixed in the order of
 the source: `K₀ = 20`, a small `ε₀`, a small mesh ratio `ν`, the clearance `a = a₀ / 2`, the
 information scale `D` of Proposition 3.4 at that clearance, and `B₀ = K₀ D`; then Proposition 4.1
 supplies the patch constants.
 
 * `IsAngularScale.mono` : a larger information scale and threshold are again admissible;
-* `largeSizeDyadicProtocolConsequences_of_angularInformationBound` : the consequences of
+* `largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint` : the consequences of
   Proposition 7.1 used in §8.
 
 ## References
@@ -61,9 +63,9 @@ theorem le_two_pow_clog_lt {L : ℕ} (hL : 2 ≤ L) :
     rw [← pow_succ']; congr 1; omega
   omega
 
-/-- **Proposition 7.1 in the form used in §8, from Propositions 3.4 and 4.1.** Assume the
-angular information bound of Proposition 3.4 and the adaptive patch constraint of
-Proposition 4.1. Then for every `q ≥ 2` and `J, Δ > 0` there are constants `C`, `b`, `k`, `r`
+/-- **Proposition 7.1 in the form used in §8, from Proposition 4.1.** Assume the adaptive patch
+constraint of Proposition 4.1; the angular information bound of Proposition 3.4 is
+`angularInformationBound`. Then for every `q ≥ 2` and `J, Δ > 0` there are constants `C`, `b`, `k`, `r`
 and a threshold `L₀` such that every gapped ground vector of a square Hamiltonian of side
 `L ≥ max 2 L₀` has a dyadic distribution protocol with the bounds of
 `DyadicProtocol.IsDistributionProtocol`.
@@ -71,8 +73,7 @@ and a threshold `L₀` such that every gapped ground vector of a square Hamilton
 Polynomial-PEPS manuscript, Proposition 7.1 `prop:protocol` and its proof, `06-geometry.tex`,
 lines 12–53 and 559–681, with Proposition 3.4 (`02-information.tex`, lines 635–658) and
 Proposition 4.1 (`03-patches.tex`, lines 26–49) at the power `60` (`07-assembly.tex`, line 11). -/
-theorem largeSizeDyadicProtocolConsequences_of_angularInformationBound
-    (hang : ∀ q : ℕ, 2 ≤ q → ∀ J Δ : ℝ, 0 < J → 0 < Δ → AngularInformationBound q J Δ)
+theorem largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint
     (hpatch : AdaptivePatchConstraint) : LargeSizeDyadicProtocolConsequences := by
   classical
   intro q hq J Δ hJ hΔ
@@ -94,7 +95,7 @@ theorem largeSizeDyadicProtocolConsequences_of_angularInformationBound
   have hν6 : ν ≤ 1 / 6 := (min_le_right _ _).trans (min_le_right _ _)
   set a : ℝ := angularConstant / 2 with ha_def
   have ha : 0 < a := by rw [ha_def, ha₀]; norm_num
-  obtain ⟨D₁, L₁, hD₁⟩ := (hang q hq J Δ hJ hΔ).exists_isAngularScale ha le_rfl 4
+  obtain ⟨D₁, L₁, hD₁⟩ := (angularInformationBound (q := q) (J := J) (by omega) hJ.le hΔ).exists_isAngularScale ha le_rfl 4
     (p := 60) (by norm_num)
   set D : ℝ := max D₁ 1 with hD_def
   have hD := hD₁.mono ha.le (le_max_left D₁ 1)
