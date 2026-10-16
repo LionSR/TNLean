@@ -9,18 +9,17 @@
     Let a finite group $G$ act on a virtual space $\mathcal V$.
     Suppose $T,S:\mathcal V\to\mathcal P$ are $G$-injective for
     that same representation and their physical ranges are
-    finite-dimensional. Then an invertible physical map
+    finite-dimensional. Then, as a local consequence of
+    \cite[Definition~5.1]{Schuch2010PEPS}, an invertible physical map
     $F:\mathcal P\to\mathcal P$ satisfies $FT=S$.
-    This is a local consequence of
-    \cite[Definition~5.1]{Schuch2010PEPS}.
 \end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_physical_range_equivalence}
     The physical range isomorphism sends $Tx$ to $Sx$ for every
-    virtual vector $x$. Extend this isomorphism of finite-dimensional
+    virtual vector $x$. Extending this isomorphism of finite-dimensional
     subspaces to an automorphism of $\mathcal P$ by choosing
-    complementary subspaces. Its restriction has the required identity.
+    complementary subspaces yields a map whose restriction satisfies $FT=S$.
 \end{proof}
 
 \begin{theorem}[Comparison between physical spaces of equal dimension]%
@@ -39,8 +38,8 @@
 \begin{proof}\leanok
     \uses{thm:peps_g_injective_ambient_physical_comparison,
         thm:peps_g_injective_physical_map}
-    Choose a linear isomorphism $E:\mathcal P\to\mathcal Q$.
-    The map $E^{-1}S$ is $G$-injective. Apply the ambient comparison
-    to $T$ and $E^{-1}S$ to obtain an automorphism $L$ of
-    $\mathcal P$ with $LT=E^{-1}S$. Then $F=EL$ satisfies $FT=S$.
+    For any linear isomorphism $E:\mathcal P\to\mathcal Q$,
+    the composite $E^{-1}S$ is $G$-injective; applying the ambient comparison
+    to $T$ and $E^{-1}S$ gives an automorphism $L$ of
+    $\mathcal P$ with $LT=E^{-1}S$, so $F=EL$ satisfies $FT=S$.
 \end{proof}

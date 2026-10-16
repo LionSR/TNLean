@@ -45,10 +45,10 @@
     inverse otherwise. Denote this ordered assignment by $u^{(0)}$,
     and put $u^{(j)}=(u^{(0)})^{S_j,g}$ for $j=1,2$.
     The second string continues below the displayed patch to retain
-    its distant partner. A displayed rightward or downward matrix
-    labelled $s$ has bond value $s^{-1}$ in the corresponding direction.
-    This is a finite realization of the virtual figure in
-    \cite[Section~6.6]{Schuch2010PEPS}, lines 2361--2386.
+    its distant partner, and in this finite realization of the virtual figure in
+    \cite[Section~6.6]{Schuch2010PEPS}, lines 2361--2386, a displayed
+    rightward or downward matrix labelled $s$ has bond value $s^{-1}$ in the
+    corresponding direction.
 \end{definition}
 
 \begin{theorem}[Native directed bond tables, including both seams]%
@@ -77,12 +77,12 @@
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_swept_patch_transport}
-    Every native edge is uniquely a right or up edge. Its ordered
+    Every native edge is uniquely a right or up edge, and its ordered
     orientation agrees with the forward direction precisely when the
-    stated comparison of representatives holds. The two inverse
+    stated comparison of representatives holds, so the two inverse
     corrections cancel in its initial directed bond value.
-    Apply the four directed gauge cases, then invert again when
-    recovering the ordered edge coefficient.
+    Applying the four directed gauge cases and inverting again when
+    recovering the ordered edge coefficient gives the stated formulas.
 \end{proof}
 
 \begin{theorem}[The second sweep acts only on the newly added vertices]%
@@ -118,6 +118,7 @@
 
 \begin{proof}\leanok
     \uses{thm:peps_regular_swept_patch_state}
-    Apply the closed swept-patch identity separately to $S_1$ and $S_2$.
-    Their equalities with the initial vector also equate the two swept vectors.
+    Applying the closed swept-patch identity separately to $S_1$ and $S_2$
+    equates each swept vector with the initial vector, and hence also equates
+    the two swept vectors.
 \end{proof}

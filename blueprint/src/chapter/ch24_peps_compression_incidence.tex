@@ -71,7 +71,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{proof}\leanok
     \uses{def:compression_touching_gates}
-    Use $|\Gamma(A)|\le\sum_{p\in A}|G(p)|\le b|A|$.
+    The union bound gives $|\Gamma(A)|\le\sum_{p\in A}|G(p)|\le b|A|$.
 \end{proof}
 
 \begin{theorem}[Affected-gate count for corrected positions]
@@ -212,7 +212,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{proof}\leanok
     \uses{def:compression_gate_labels,thm:compression_pair_label_count}
-    Add the cardinalities of the disjoint star and sample summands. The two cardinality terms are monotone in $n$.
+    Adding the cardinalities of the disjoint star and sample summands gives $n-1+\binom n2$, which is monotone in $n$.
 \end{proof}
 
 \begin{theorem}[Gate-local incidence bound]
@@ -286,7 +286,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{proof}\leanok
     \uses{thm:compression_gate_two_endpoints,def:compression_distributed_links}
-    Apply the gate-local count to the label certified by membership in $\mathcal L$.
+    Membership in $\mathcal L$ places the link label in $T(P_g,r_g)$, where the gate-local count gives $|V(\ell)|=2$.
 \end{proof}
 
 \begin{theorem}[Lifetime containment of incident links]
@@ -329,7 +329,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{proof}\leanok
     \uses{def:compression_coefficient_cost}
-    Expand the product of the two finite sums.
+    Distributing the product of the two finite sums yields the double sum.
 \end{proof}
 
 \begin{definition}[Affected-position choice cost]
@@ -348,7 +348,7 @@ The finite counting statements below are those used in the proof of
 
 \begin{proof}\leanok
     \uses{def:compression_position_choice_cost,thm:compression_affected_gate_count,thm:compression_corrected_party_count}
-    The coefficient product is at most $B^{2|\Gamma(A_S)|}\le B^{4b|S|}$, and the physical-entry product is at most $d^{2|A_S|}\le d^{4|S|}$. Multiply the bounds and collect the common exponent $|S|$.
+    The coefficient product is at most $B^{2|\Gamma(A_S)|}\le B^{4b|S|}$, and the physical-entry product is at most $d^{2|A_S|}\le d^{4|S|}$, so multiplying the two bounds and collecting the common exponent $|S|$ gives $(B^{4b}d^4)^{|S|}$.
 \end{proof}
 
 \begin{theorem}[Explicit monomial enclosure of the choice base]
@@ -359,5 +359,5 @@ The finite counting statements below are those used in the proof of
 \end{theorem}
 
 \begin{proof}\leanok
-    Raise each monomial bound to its nonnegative integer power and multiply; the powers of $L$ add.
+    Raising each monomial bound to its nonnegative integer power and multiplying adds the exponents of $L$.
 \end{proof}
