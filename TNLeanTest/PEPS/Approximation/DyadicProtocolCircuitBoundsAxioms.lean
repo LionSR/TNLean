@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.Approximation.DyadicProtocolCircuitBounds
+import TNLean.PEPS.Approximation.OriginalCircuitSourceBound
 import Lean.Util.CollectAxioms
 
 /-! Checks of logical dependencies for bounds of the actual supplied circuit. -/
@@ -15,7 +16,10 @@ open TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol
 run_cmd do
   let env ← Lean.getEnv
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
-  for decl in #[``participationCount_castLayouts, ``forall_participants_castLayouts,
+  for decl in #[``castLayouts_rec, ``nonprivateCount_castLayouts,
+      ``participants_castLayouts_subset, ``isExpansionBounded_castLayouts,
+      ``isMonomialBounded_castLayouts, ``isSourceBounded_castLayouts,
+      ``participationCount_castLayouts, ``forall_participants_castLayouts,
       ``participationCount_originalCircuit_le, ``nonprivateCount_originalCircuit_le,
       ``exists_stage_participants_originalCircuit,
       ``isExpansionBounded_originalCircuit, ``isMonomialBounded_originalCircuit] do

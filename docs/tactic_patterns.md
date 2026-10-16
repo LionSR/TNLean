@@ -7268,20 +7268,24 @@ spectral split → block extraction → MPV calculation → strict bounds
   common occurrence-wise description before adding another structural induction.
 
 
-- **Further use (2026-10-15):**
-  `OriginalCircuit.participationCount_castLayouts` in
-  `OriginalCircuitLayoutResources.lean` uses the same ordinary equality
-  elimination. The complete protocol's lifetime bound reuses
-  `OriginalCircuit.participationCount_sequence`; no new chronological
-  induction or custom tactic is introduced. The focused approximation scan finds
-  nine occurrences of the three-line equality-elimination proof, including
-  this helper; these continue the existing congruence decision rather than
-  introducing an additional structural induction. The generic
-  `forall_participants_castLayouts` also preserves arbitrary participating-set
-  properties; the complete protocol derives one common-stage witness by applying
-  the existing `forall_participants_sequence`, rather than repeating its induction. The
-  complete protocol's uniform monomial and expansion bounds likewise apply the
-  existing layout and sequence lemmas; no new structural induction is needed.
+### Original-circuit properties under equal layouts — promoted (2026-10-16)
+
+- **Pattern:** Preserve a circuit property after identifying its input and output
+  register layouts with equal layouts.
+- **Seen:** Seven properties across `OriginalCircuitLift.lean`,
+  `OriginalCircuitLayoutResources.lean`, and `OriginalCircuitSourceBound.lean`:
+  the total and per-party occurrence counts, participating-set containment,
+  arbitrary properties of all participating sets, and the expansion, monomial,
+  and pair-source bounds.
+- **Abstraction:** `OriginalCircuit.castLayouts_rec` in
+  `PEPS/Approximation/OriginalCircuitLift.lean` eliminates the two layout
+  equalities once. Its proposition may depend on both endpoint layouts and
+  the circuit. Each of the seven properties is an application of this lemma.
+- **Notes:** Transport a statement about all occurrences before applying it
+  to a particular occurrence. The evaluation identity also names the memory
+  identifications and remains a separate argument. Word and source-circuit
+  identities concern different dependent types. Complete-protocol bounds
+  continue to reuse the existing sequence lemmas.
 
 ### Evaluation under equal register lists — promoted (2026-10-08)
 

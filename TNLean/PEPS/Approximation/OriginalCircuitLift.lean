@@ -105,6 +105,19 @@ def castLayouts {a b a' b' : Layout P} (c : OriginalCircuit a b) (ha : a = a') (
     OriginalCircuit a' b' :=
   ha ▸ hb ▸ c
 
+/-- Every layout-dependent circuit proposition is preserved by identifying
+its input and output layouts with equal layouts. This is the elimination
+principle for `castLayouts`.
+
+Source: polynomial-PEPS manuscript, original circuits, `04-compression.tex`,
+lines 21–43 and 199–208. -/
+theorem castLayouts_rec {a b a' b' : Layout P}
+    (c : OriginalCircuit a b) (ha : a = a') (hb : b = b')
+    {motive : {x y : Layout P} → OriginalCircuit x y → Prop}
+    (h : motive c) : motive (c.castLayouts ha hb) :=
+  match ha, hb with
+  | rfl, rfl => h
+
 theorem eval_castLayouts {a b a' b' : Layout P} (c : OriginalCircuit a b) (ha : a = a')
     (hb : b = b') :
     (c.castLayouts ha hb).eval =
@@ -114,32 +127,25 @@ theorem eval_castLayouts {a b a' b' : Layout P} (c : OriginalCircuit a b) (ha : 
   rfl
 
 @[simp] theorem nonprivateCount_castLayouts {a b a' b' : Layout P} (c : OriginalCircuit a b)
-    (ha : a = a') (hb : b = b') : (c.castLayouts ha hb).nonprivateCount = c.nonprivateCount := by
-  cases ha
-  cases hb
-  rfl
+    (ha : a = a') (hb : b = b') : (c.castLayouts ha hb).nonprivateCount = c.nonprivateCount :=
+  castLayouts_rec c ha hb (motive := fun w ↦ w.nonprivateCount = c.nonprivateCount) rfl
 
 theorem participants_castLayouts_subset {S : Set P} {a b a' b' : Layout P}
     (c : OriginalCircuit a b) (ha : a = a') (hb : b = b')
     (hc : ∀ g, (↑(c.participants g) : Set P) ⊆ S) (g : (c.castLayouts ha hb).nonprivateLocations) :
-    (↑((c.castLayouts ha hb).participants g) : Set P) ⊆ S := by
-  cases ha
-  cases hb
-  exact hc g
+    (↑((c.castLayouts ha hb).participants g) : Set P) ⊆ S :=
+  (castLayouts_rec c ha hb
+    (motive := fun w ↦ ∀ g, (↑(w.participants g) : Set P) ⊆ S) hc) g
 
 theorem isExpansionBounded_castLayouts {a b a' b' : Layout P} (c : OriginalCircuit a b)
     (ha : a = a') (hb : b = b') {r : ℕ} {s : ℝ} (hc : c.IsExpansionBounded r s) :
-    (c.castLayouts ha hb).IsExpansionBounded r s := by
-  cases ha
-  cases hb
-  exact hc
+    (c.castLayouts ha hb).IsExpansionBounded r s :=
+  castLayouts_rec c ha hb (motive := fun w ↦ w.IsExpansionBounded r s) hc
 
 theorem isMonomialBounded_castLayouts {a b a' b' : Layout P} (c : OriginalCircuit a b)
     (ha : a = a') (hb : b = b') {K : ℕ} (hc : c.IsMonomialBounded K) :
-    (c.castLayouts ha hb).IsMonomialBounded K := by
-  cases ha
-  cases hb
-  exact hc
+    (c.castLayouts ha hb).IsMonomialBounded K :=
+  castLayouts_rec c ha hb (motive := fun w ↦ w.IsMonomialBounded K) hc
 
 /-! ### Spectators in front -/
 

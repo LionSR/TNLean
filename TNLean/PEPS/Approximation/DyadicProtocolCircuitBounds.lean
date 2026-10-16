@@ -54,8 +54,7 @@ theorem IsDistributionProtocol.nonprivateCount_originalCircuit_le
 /-- Every occurrence of the complete protocol has one original stage with
 exactly the same participating set. Source: polynomial-PEPS manuscript,
 Proposition 7.1, 06-geometry.tex, lines 25–37. -/
-theorem exists_stage_participants_originalCircuit
-    {L q : ℕ} {P : Type} [Fintype P] (D : DyadicProtocol L q P) :
+theorem exists_stage_participants_originalCircuit :
     ∀ g : D.originalCircuit.nonprivateLocations,
       ∃ t < D.changes, ∃ γ : (D.step t).nonprivateLocations,
         D.originalCircuit.participants g = (D.step t).participants γ := by
