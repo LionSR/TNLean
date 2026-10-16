@@ -46,7 +46,7 @@
     as described in \cite{gap:rmp_peps_quantum_double_g_isometry}.
 \end{definition}
 
-\begin{theorem}[Actual open weighted averaging contraction]%
+\begin{theorem}[Open weighted averaging contraction]%
     \label{thm:peps_graph_open_averaging_bond_state}
     \lean{TNLean.PEPS.graphOpenRegionNetwork_dressedAveragingSite_coherent,
         TNLean.PEPS.graphOpenBondRegrouping_dressedAveragingSite,
@@ -59,7 +59,7 @@
         def:peps_graph_open_averaging_bond_state,
         lem:peps_region_half_edge_label_endpoints,
         thm:peps_monoid_hom_commuting_weight}
-    Suppose $W$ commutes with every $U(g)$. The actual open contraction of
+    Suppose $W$ commutes with every $U(g)$. The open contraction of
     the averaging sites dressed by $W$, evaluated at a physical incidence
     configuration $\alpha$, equals $H_R(\theta,\beta)$, where $\beta$ is
     the incidence regrouping of $\alpha$. Thus regrouping by the coordinate
@@ -78,6 +78,6 @@
     Each internal label is summed once, giving
     $(U(q_h)W)(WU(q_t^{-1}))=W^2U(q_hq_t^{-1})$.
     Crossing labels are fixed, so their single endpoint factors remain.
-    The incidence bijection reads the physical endpoint labels literally.
+    The incidence bijection reads the physical endpoint labels directly.
     Finally, finite enumerations reindex the same coefficient sum.
 \end{proof}

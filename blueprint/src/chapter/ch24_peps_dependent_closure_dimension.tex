@@ -1,7 +1,7 @@
 \subsection{Independent four-block closure classes}
 \label{sec:peps_dependent_closure_dimension}
 
-Retain the four blocks, eight separately represented bonds, and actual cut
+Retain the four blocks, eight separately represented bonds, and cut
 spaces of Definition~\ref{def:peps_full_four_cut_space}. Write
 $p^{g,h}$ for the standard seam labels and $A^0$ for the four incident
 averaging tensors. Let $K$ be the number of simultaneous conjugacy classes
@@ -53,7 +53,7 @@ kernel is a separate geometric assertion.
     \uses{def:peps_dependent_bond_coefficient, def:peps_full_four_cut_canonical,
         def:peps_pair_conjugacy, def:peps_semiregular}
     Suppose $G$ is finite and every $U_e$ is semi-regular. Let
-    $E_{a,b}=c_{p^{a,b}}$ be the product of the actual eight bond
+    $E_{a,b}=c_{p^{a,b}}$ be the product of the eight bond
     trace-dual functionals. Then
     \begin{align}
         E_{a,b}\bigl(\zeta_{A^0}(g,h)\bigr)
@@ -87,7 +87,7 @@ kernel is a separate geometric assertion.
     so (\ref{eq:peps_dependent_closure_diagonal}) is nonzero.
 \end{proof}
 
-\begin{theorem}[Conjugacy invariance of the actual closures]%
+\begin{theorem}[Conjugacy invariance of the closures]%
     \label{thm:peps_dependent_closure_invariant}
     \lean{TNLean.PEPS.DependentTorus.closure_conjugate,
         TNLean.PEPS.DependentTorus.closure_eq_of_pairConjugacyClass_eq}
@@ -105,7 +105,7 @@ kernel is a separate geometric assertion.
     simultaneous conjugation and leaves the canonical network unchanged.
     Writing $T_v$ for the original site maps, local invariance gives
     $T_vP_v=T_v$. Hence $\zeta_A(g,h)=(\bigotimes_vT_v)\zeta_{A^0}(g,h)$,
-    which transports the equality to the original physical tensors.
+    which carries the equality to the original physical tensors.
 \end{proof}
 
 \begin{definition}[Class-labelled four-block closures]%
@@ -129,7 +129,7 @@ kernel is a separate geometric assertion.
     \leanok
     \uses{def:peps_dependent_closure_class, def:peps_g_injective,
         def:peps_semiregular}
-    Suppose each of the eight actual bond representations is semi-regular
+    Suppose each of the eight bond representations is semi-regular
     and every physical tensor is $G$-injective for its own incident action.
     Then the vectors $\zeta_A(C)$ are linearly independent as $C$ ranges
     over all pair-conjugacy classes. In particular, the commuting classes
@@ -144,7 +144,7 @@ kernel is a separate geometric assertion.
         \zeta_{A^0}(C')=0$. The off-class coefficients vanish, and the remaining
     equation is $\lambda_C|G|^{-4}|C_G(g,h)|=0$.
     Thus every $\lambda_C=0$.
-    For the actual tensors, choose their genuine local inverses with
+    For the physical tensors, choose their genuine local inverses with
     $L_vT_v=P_v$. Physical contraction gives
     $(\bigotimes_vL_v)\zeta_A(C)=\zeta_{A^0}(C)$ for every class $C$.
     Applying this same linear map to a relation proves the result for $A$.

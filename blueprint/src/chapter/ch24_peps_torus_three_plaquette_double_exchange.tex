@@ -1,26 +1,26 @@
-\begin{definition}[Literal directed transports after a double exchange]%
+\begin{definition}[Directed bond values after a double exchange]%
     \label{def:peps_torus_three_plaquette_double_exchange_transports}
     \lean{TNLean.PEPS.torusThreePlaquetteDoubleExchangeTransports}
     \leanok
     \uses{def:peps_torus_three_plaquette_flux_assignment,
         def:peps_regular_three_plaquette_double_exchange}
-    For directed transports $t=(t_0,t_1,t_2)$, define
+    For directed bond values $t=(t_0,t_1,t_2)$, define
     \begin{align}
         t'=(t_0,\ t_2t_0^{-1}t_1t_2^{-1}t_0,\ t_2).
     \end{align}
     If $C(t)=(a,b,c)$ denotes the three plaquette holonomies, then
     $t'=C^{-1}H^2C(t)$, with $H(a,b)=(aba^{-1},a)$ acting on the first
     two plaquettes. The same ordered-bond orientation correction applies
-    to both literal assignments.
+    to both bond assignments.
 \end{definition}
 
-\begin{theorem}[Actual holonomies of the literal double-exchange output]%
+\begin{theorem}[Holonomies of the double-exchange output]%
     \label{thm:peps_torus_three_plaquette_double_exchange_holonomy}
     \lean{TNLean.PEPS.regularWalkHolonomy_torusThreePlaquetteDoubleExchange}
     \leanok
     \uses{def:peps_torus_three_plaquette_double_exchange_transports,
         thm:peps_torus_three_plaquette_flux_holonomy}
-    At every translated position, the literal output has plaquette
+    At every translated position, the output assignment has plaquette
     holonomies
     \begin{align}
         (a',b',c')=((ab)a(ab)^{-1},\ aba^{-1},\ c).
@@ -33,7 +33,7 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Substitute $t'$ into the actual directed-walk formulas.
+    Substitute $t'$ into the directed-walk formulas.
     Group cancellation gives the displayed plaquette and outer holonomies.
 \end{proof}
 
@@ -47,14 +47,14 @@
     Let $G$ be finite, and suppose the native four-leg tensor is
     $G$-isometric for the regular torus-leg representation.
     For every position $v$, there is one unitary $W$ on the eight original
-    spins of $R_v$, chosen before every directed transport triple $t$,
+    spins of $R_v$, chosen before every directed bond triple $t$,
     boundary configuration $\theta$, and common exterior and crossing
     assignment $u$, such that
     \begin{align}
         W\Psi_{R_v}(t,\theta)         & =\Psi_{R_v}(t',\theta), \\
         (W\otimes I_{R_v^c})\Psi(t,u) & =\Psi(t',u).
     \end{align}
-    Both are actual original-spin contractions with the literal assignments
+    Both are original-spin contractions with the bond assignments
     just defined; the identity extension is unitary.
     The region, spanning tree, root, three chords and their orientation are
     derived from the translated strip geometry.
@@ -68,8 +68,8 @@
     The native four-leg hypothesis implies incident-edge $G$-isometry.
     Apply the common physical double-exchange theorem to the derived tree,
     root and three chords, using the common seam-orientation flag.
-    The actual literal-to-tree-cycle identity identifies the input columns.
-    The sparse residual calculation identifies the output with the literal
-    transport triple $t'$. Both the local and global identities therefore
-    use the same supplied unitary.
+    The tree-cycle identification identifies the input columns.
+    The sparse residual calculation identifies the output with the
+    bond triple $t'$. Both the local and global identities therefore
+    use the same unitary.
 \end{proof}

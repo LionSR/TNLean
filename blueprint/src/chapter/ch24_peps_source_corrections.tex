@@ -126,7 +126,7 @@ no bound on private dimensions is imposed.
 \begin{proof}
     \leanok
     \uses{thm:peps_source_preparation,thm:peps_partial_original_source_vector}
-    Transport the source-preparation identity along the equality of
+    Rewrite the source-preparation identity along the equality of
     ordered register lists. The inventory at index $i$ is the original
     vector selected by $\xi_{g_i}$, which gives
     (\ref{eq:peps_canonical_recovery}).
@@ -242,8 +242,8 @@ no bound on private dimensions is imposed.
     \leanok
     \uses{def:peps_original_corrected_term,def:peps_partial_source_choices}
     Let $M_{\mathcal A,\xi;S,u}$ be the matrix of the corresponding
-    substituted partial branch, transported back to the original
-    input and output coordinates by $J_a,J_b$.
+    substituted partial branch, expressed in the original
+    input and output coordinates via $J_a,J_b$.
     A coordinate choice $a$ on $S$ specifies only the endpoint basis
     indices. Write $K_{\mathcal A,\xi;S,a}$ for the same partial matrix
     with these basis tensors at selected positions, without imposing
@@ -542,7 +542,7 @@ index sets.
     Suppose the final ordered register list is the physical list
     followed by the discarded list. Choose finite orthonormal bases
     of both memories and their tensor-product basis on the full
-    output, transported through the append isometry.
+    output, mapped through the append isometry.
     Define
     \begin{align}
         \rho_{\mathrm{phys}}            & :=\operatorname{Tr}_{\mathrm{disc}}(M\rho M^\dagger), \\

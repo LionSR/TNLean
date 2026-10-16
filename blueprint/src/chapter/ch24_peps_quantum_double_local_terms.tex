@@ -76,7 +76,7 @@ clockwise convention.
     The product is ordered as displayed; $G$ need not be abelian.
 \end{definition}
 
-\begin{theorem}[The actual local tensor image]
+\begin{theorem}[Local tensor image]
     \label{thm:peps_quantum_double_local_image}
     \lean{TNLean.PEPS.quantumDoubleKSpins_range,
         TNLean.PEPS.quantumDoubleKHolonomy_spins,
@@ -111,7 +111,7 @@ clockwise convention.
 
 \paragraph{One shared bond.}
 The east color of a left tensor and the west color of a right tensor are
-one summed index $x$. With six exterior colors fixed, the actual open
+one summed index $x$. With six exterior colors fixed, the open
 contraction is
 \begin{align}
     \Psi_{p,r,s;t,v,w}
@@ -208,7 +208,7 @@ by $|G|$ to obtain the projector complement that annihilates the state.
 % Local correction and remaining scope are recorded in
 % docs/paper-gaps/scp10_quantum_double_local_hamiltonian.tex.
 
-\begin{theorem}[The actual two-block tensor image]
+\begin{theorem}[Two-block tensor image]
     \label{thm:peps_quantum_double_bond_image}
     \lean{TNLean.PEPS.quantumDoubleKPairLocalProjector,
         TNLean.PEPS.quantumDoubleKHolonomy_bondLeft,
@@ -235,7 +235,7 @@ by $|G|$ to obtain the projector complement that annihilates the state.
         \operatorname{ran}\mathsf C & =\operatorname{ran}Q_e.
         \label{eq:peps_qd_bond_image}
     \end{align}
-    Equivalently, a physical vector $v$ belongs to this actual contraction
+    Equivalently, a physical vector $v$ belongs to this contraction
     image exactly when $P_{00}v=v$ and $V_uv=v$ for every $u\in G$.
 \end{theorem}
 \begin{proof}\leanok
@@ -322,7 +322,7 @@ The tensor factors are ordered northwest, northeast, southeast, southwest.
     Both operators act on the full sixteen-spin space.
 \end{definition}
 
-\begin{theorem}[Plaquette flatness of the actual four-block contraction]
+\begin{theorem}[Plaquette flatness of the four-block contraction]
     \label{thm:peps_quantum_double_hole_fixed}
     \lean{TNLean.PEPS.quantumDoubleKPlaquetteHolonomy_spins,
         TNLean.PEPS.quantumDoubleKPlaquetteProjector_isStarProjection,

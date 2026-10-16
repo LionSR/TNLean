@@ -52,7 +52,7 @@ so the two incident tensors use the same representation on their shared bond.
         def:peps_dependent_incident_action, def:peps_semiregular}
     Let $G$ be finite. Assign a semi-regular representation $U_e$ to each
     of the eight bonds, and let the four tensors $A_v$ be $G$-injective
-    for their actual incident representations. Then
+    for their incident representations. Then
     \begin{align}
         \bigcap_{c,r\in\mathbb Z/2\mathbb Z}
         \{\mathcal C_{A,C_{c,r}}(M):M\in\C^{\mathcal X_{\partial C_{c,r}}}\}
@@ -76,16 +76,16 @@ so the two incident tensors use the same representation on their shared bond.
     gives $\mathcal I_A=\mathcal T(\mathcal I_{A^0})$; the same physical
     map gives $\mathcal T(\mathcal Z_{A^0})=\mathcal Z_A$.
     For the canonical tensors, every commuting seam can be moved to any
-    of the four cuts, giving explicit boundary witnesses. Conversely,
+    of the four cuts, giving explicit boundary tensors. Conversely,
     uncut-bond slices give a coherent expansion of every
     $\psi\in\mathcal I_{A^0}$. Trace-dual extraction forces each nonzero
     coefficient to satisfy every plaquette equation. A vertex gauge sends
     every such flat assignment to commuting seams, and the product
-    invariant projection turns each bare bond product into its actual
+    invariant projection turns each bare bond product into its
     closure. Hence $\mathcal I_{A^0}=\mathcal Z_{A^0}$, proving the result.
 \end{proof}
 
-\begin{theorem}[Common physical transport of cuts and closures]%
+\begin{theorem}[Common physical image of cuts and closures]%
     \label{thm:peps_full_four_cut_transport}
     \lean{TNLean.PEPS.DependentTorus.physicalMap_closure,
         TNLean.PEPS.DependentTorus.map_commutingClosureSpan,
@@ -143,7 +143,7 @@ so the two incident tensors use the same representation on their shared bond.
     its image with $\zeta_{A^0}(g,h)$. Take spans and intersect the four ranges.
 \end{proof}
 
-\begin{theorem}[Projected flat products are actual commuting closures]%
+\begin{theorem}[Projected flat products are commuting closures]%
     \label{thm:peps_full_four_cut_flat_projection}
     \lean{TNLean.PEPS.DependentTorus.canonicalProjector_bondProduct,
         TNLean.PEPS.DependentTorus.exists_canonicalProjector_bondProduct_eq_closure,
@@ -178,7 +178,7 @@ so the two incident tensors use the same representation on their shared bond.
 \begin{proof}\leanok
     \uses{thm:peps_dependent_uncut_coefficients, thm:peps_labelled_uncut_flat}
     Choose a plaquette where flatness fails, and use the corresponding cut.
-    If $c_p(\psi)\ne0$, (\ref{eq:peps_dependent_uncut_coefficients}) supplies
+    If $c_p(\psi)\ne0$, (\ref{eq:peps_dependent_uncut_coefficients}) gives
     one vertex assignment realizing all four uncut labels simultaneously.
     Its relative labels satisfy that plaquette equation, a contradiction.
 \end{proof}

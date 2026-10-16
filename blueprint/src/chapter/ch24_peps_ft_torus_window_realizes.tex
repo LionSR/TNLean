@@ -1,4 +1,4 @@
-\paragraph{Window realization and witness read-off.}
+\paragraph{Window realization and coefficient-identity read-off.}
 
 \begin{lemma}[Window-level edge-insertion injectivity]%
     \label{lem:peps_windowRegionInsertedCoeff_injective}
@@ -41,7 +41,7 @@
     region $W_{\mathrm L}$ gives $M=M'$.
 \end{proof}
 
-\begin{theorem}[Window witness from a region insertion transfer]%
+\begin{theorem}[Window coefficient identity from a region insertion transfer]%
     \label{thm:peps_windowEdgeCoeffIdentityWitness_of_transfer}
     \lean{TNLean.PEPS.exists_windowEdgeCoeffIdentityWitness_of_transfer}
     \leanok
@@ -57,7 +57,7 @@
     on $W_{\mathrm L}$ at $e$, then there exist
     $Z,Z_{\mathrm{ref}}\in\GL(D_B(e))$ and a bond-dimension identification
     $\iota_e:\MN{D_A(e)}\simeq\MN{D_B(e)}$ such that the coefficient-identity
-    witness at $e$ is nonempty. The coefficient identity has the form
+    datum at $e$ is nonempty. The coefficient identity has the form
     \begin{align}
         C_A(W_{\mathrm L},e,M;\sigma,\tau)
          & =
@@ -72,10 +72,10 @@
     gives (\ref{eq:peps_window_transfer_coeff}). The window and complement
     injectivity hypotheses are those required by
     Definition~\ref{def:peps_window_edge_coeff_identity_witness_of_hypotheses},
-    which yields the witness with $Z_{\mathrm{ref}}=Z$.
+    which yields the coefficient-identity datum with $Z_{\mathrm{ref}}=Z$.
 \end{proof}
 
-\begin{theorem}[Window witness from single-vertex realization]%
+\begin{theorem}[Window coefficient identity from single-vertex realization]%
     \label{thm:peps_windowEdgeCoeffIdentityWitness_of_realizes}
     \lean{TNLean.PEPS.exists_windowEdgeCoeffIdentityWitness_of_realizes}
     \leanok
@@ -93,7 +93,7 @@
     matrix transfer is realized on $W_{\mathrm L}$ in both directions. Then
     there exist $Z,Z_{\mathrm{ref}}\in\GL(D_B(e))$ and a bond-dimension
     identification $\iota_e:\MN{D_A(e)}\simeq\MN{D_B(e)}$ such that the
-    coefficient-identity witness at $e$ is nonempty.
+    coefficient-identity datum at $e$ is nonempty.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -107,5 +107,5 @@
         \notag
     \end{align}
     Theorem~\ref{thm:peps_windowEdgeCoeffIdentityWitness_of_transfer} then
-    gives the two gauges and the nonempty coefficient-identity witness.
+    gives the two gauges and the nonempty coefficient-identity datum.
 \end{proof}

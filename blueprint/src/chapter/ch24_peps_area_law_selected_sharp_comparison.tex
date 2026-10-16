@@ -1,8 +1,8 @@
-\section{Sharp subtraction at the actual selected charge}
+\section{Sharp subtraction at the selected charge}
 \label{sec:arealaw-selected-sharp-comparison}
 
-All terminal sums in this section retain the weights of the actual mapped
-charge mean tree. Fix its physical state, spectral set and supplied common
+All terminal sums in this section retain the weights of the mapped
+charge mean tree. Fix its physical state, spectral set and common
 auxiliary label sequence. For the near and middle regions $Q_{jg},Y_{jg}$
 of a terminal partition, write $U_{jg}$ for the positive-depth part of
 $Q_{jg}$ and put
@@ -17,7 +17,7 @@ $Q_{jg}$ and put
 \end{align}
 The maximum $g_{\max}$ is over zero and every pre-gap in the full finite
 terminal family. Set $M=\max\{0,2S'+g_{\max}\}$, where $S'$ is the
-entropy of the actual selected auxiliary marginal.
+entropy of the selected auxiliary marginal.
 
 \begin{theorem}[Quarter-power subtraction]
     \label{thm:arealaw-sharp-comparison-subtraction}
@@ -47,24 +47,24 @@ entropy of the actual selected auxiliary marginal.
     contribution becomes $12K_{\rm mom}a$, giving $25+12=37$.
 \end{proof}
 
-\begin{theorem}[Uniform same-prevector actual charge comparison]
+\begin{theorem}[Uniform same-prevector charge comparison]
     \label{thm:arealaw-actual-sharp-comparison}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.eventually_actualCharge_suppliedPrevector_sharp_comparison}
     \leanok
     Fix a unit physical truncated ground vector with energy $e$ and
     positive gap $\gamma$, the original reference state defining its
     truncated terms, and a target set $E$ of positive spectral mass $z$.
-    Let $d=|E|>0$, $K>0$, $W=aK$ and $a>0$. Suppose the literal scanner
+    Let $d=|E|>0$, $K>0$, $W=aK$ and $a>0$. Suppose the collar scanner
     has the target depth, positive window and charge-slot counts, and
     $8Km\le L$. Every completed and pre-charge status marginal of this
     same vector satisfies the common moment estimate with parameters
     $K_{\rm mom}\ge0,r$, and $10a\le r,1$.
 
-    The supplied physical label sequence has nonzero initial vectors of
+    The given physical label sequence has nonzero initial vectors of
     norm at most one, the polynomial selected-state projection mass,
     and $\log\dim\lambda_k-kS'=o(k)$. Then nonnegative constants for
     the upper and lower replica remainders can be chosen before all
-    charge stages and parameters. Eventually in $k$, at every actual
+    charge stages and parameters. Eventually in $k$, at every
     charge stage and every real interpolation parameter, the filtered
     norm is positive, $\delta=(\mu-e)/\gamma\ge0$, and for every
     $0<\tau\le1/2$,
@@ -84,23 +84,23 @@ entropy of the actual selected auxiliary marginal.
         thm:actual_scan_supplied_prevector_sharp_lower,
         thm:arealaw-sharp-comparison-subtraction}
     The factor-ten assumptions imply the upper factor-six assumptions.
-    Apply the actual upper and lower theorems to the same prevector.
+    Apply the upper and lower theorems to the same prevector.
     Sum over the $K$ bands, use $W=aK$, and apply
     Theorem~\ref{thm:arealaw-sharp-comparison-subtraction} with
     $r_+=R_+(k)$ and $r_-=WR_-(k)/2$.
 \end{proof}
 
-\begin{theorem}[Energy at the selected actual charge]
+\begin{theorem}[Energy at the selected charge]
     \label{thm:arealaw-actual-selected-energy}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.actualCharges_selection_energy_domainGraph}
     \leanok
-    Under the actual selector's physical graph, anchor, layer,
-    multiplicity, clearance, separation and transport-smallness
+    Under the selector's physical graph, anchor, layer,
+    multiplicity, clearance, separation and round-step smallness
     hypotheses, one common error sequence $r_k\ge0$, $r_k\to0$, works
-    before all supplied symmetric nonzero initial vectors and all
+    before all symmetric nonzero initial vectors and all
     intervals $[p_0,p_1]$ with $0<p_0<p_1<1$. If the same initial vector is an
     eigenvector of the augmented truncated copy mean with energy $e$,
-    the literal selected point also satisfies
+    the selected point also satisfies
     \begin{align}
         \delta_k=\frac{\mu_k-e}{g/2}
                                           & \le\frac{e+C_{\rm en}a^2\ell_{\dim}^{e_{\rm en}}
@@ -115,7 +115,7 @@ entropy of the actual selected auxiliary marginal.
     \uses{thm:al_scan_actual_charge_sum_selection,
         thm:al_scan_actual_round_transport}
     The same charge is the odd round $2s+1$ in the finite-family
-    transport theorem. Its energy clause gives $\mu_k\le2e+$error.
+    round-step theorem. Its energy clause gives $\mu_k\le2e+$error.
     Subtract one copy of $e$ and divide by the positive gap $g/2$.
 \end{proof}
 
@@ -125,7 +125,7 @@ entropy of the actual selected auxiliary marginal.
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.eventually_exists_selected_actualCharge_sharp_comparison}
     \leanok
     Suppose the selector--energy conclusion, the accepted coefficient
-    conclusion and the uniform sharp comparison are supplied for the
+    conclusion and the uniform sharp comparison hold for the
     same physical data. Define
     \begin{align}
         \operatorname{cap}_k
@@ -141,11 +141,11 @@ entropy of the actual selected auxiliary marginal.
 \end{theorem}
 \begin{proof}
     \leanok
-    The actual energy error is nonnegative, so replacing $C_{\rm en}$
+    The energy error is nonnegative, so replacing $C_{\rm en}$
     by $|C_{\rm en}|$ only increases its contribution. Apply the
     coefficient bound at the unchanged point. Finally $M/\tau\ge0$.
 \end{proof}
 
 The last theorem is a conditional composition. The following source
-consumer instantiates all three inputs from one physical witness.
+consumer instantiates all three inputs from one physical configuration.
 The final-scale entropy and power estimates remain explicit obligations.

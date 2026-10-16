@@ -193,13 +193,13 @@ of bonds incident to $s=(x+1,y+1)$.
     \uses{def:peps_dual_flux_path}
     Let $G$ be a group, $g\in G$, and $U:G\to\operatorname{GL}(V)$
     a representation on a finite-dimensional virtual space with a fixed
-    basis. Assign $u_h^p(v)=g^{n_h(p)(v)}$ and
+    basis.    Assign $u_h^p(v)=g^{n_h(p)(v)}$ and
     $u_v^p(v)=g^{n_v(p)(v)}$ to the two native bond families, and put
-    the actual matrices $U_{u_h^p(v)}$, $U_{u_v^p(v)}$ on those bonds.
+    the matrices $U_{u_h^p(v)}$, $U_{u_v^p(v)}$ on those bonds.
     For a swept set $R$, one may instead retain these matrices only
     on bonds incident to $R$ and prescribe arbitrary fixed matrices
     $E_e$ on every bond whose two endpoints lie outside $R$.
-    Denote the actual closed PEPS coefficient, with site tensors
+    Denote the closed PEPS coefficient, with site tensors
     $(A_v)$ and physical configuration $\sigma$, by $\Psi_p^E(\sigma)$.
 \end{definition}
 
@@ -265,7 +265,7 @@ of bonds incident to $s=(x+1,y+1)$.
     Only powers of the single element $g$ are combined, so group
     commutativity is unnecessary. Since $k=1$ outside $R$, arbitrary
     exterior matrices satisfy (\ref{eq:peps_dual_matrix_gauge}) as well.
-    Apply Theorem~\ref{thm:peps_dual_flux_gauge_absorption} to the actual
+    Apply Theorem~\ref{thm:peps_dual_flux_gauge_absorption} to the
     closed contraction.
 \end{proof}
 
@@ -333,15 +333,15 @@ of bonds incident to $s=(x+1,y+1)$.
     \leanok
     \uses{def:peps_dual_flux_curl,thm:peps_dual_flux_endpoints}
     Suppose $w,h\geq3$. Passing from native bonds to the ordered edges
-    of the torus graph gives rightward transport $u_h(v)$ and upward
-    transport $u_v(v)^{-1}$, including on both seams. Hence the
+    of the torus graph gives rightward bond element $u_h(v)$ and upward
+    bond element $u_v(v)^{-1}$, including on both seams. Hence the
     counterclockwise plaquette walk has holonomy $H_u(z)^{-1}$ and
     its reverse has holonomy $H_u(z)$. For a dual path, the
     counterclockwise exponent is $\delta_b(z)-\delta_a(z)$.
 \end{theorem}
 \begin{proof}\leanok
     Compare each ordered edge with its native direction. When the
-    directions disagree, taking the inverse in the directed transport
+    directions disagree, taking the inverse in the directed bond element
     cancels the inverse in the edge label. The four-step products
     then give (\ref{eq:peps_dual_native_holonomy}) and its inverse.
 \end{proof}
@@ -355,7 +355,7 @@ of bonds incident to $s=(x+1,y+1)$.
     \uses{def:peps_dual_flux_matrices}
     For finite $G$, $w,h\geq3$, and a homogeneous tensor $A$, use
     the left-regular matrices $U_g=L_g$. For a physical region $S$,
-    let $M_{u,S}(\sigma_S,\sigma_{S^c})$ be the actual native
+    let $M_{u,S}(\sigma_S,\sigma_{S^c})$ be the native
     contraction with these physical indices fixed. It agrees entrywise
     with the cut matrix of the ordered-edge regular tensor network.
     Write $S_z$ for the four original physical sites of plaquette $z$.
@@ -364,7 +364,7 @@ of bonds incident to $s=(x+1,y+1)$.
     Reindex the native bond-end sum by the ordered graph edges.
     The regular matrix on each edge imposes precisely the translated
     equality of its two labels, leaving the regular twisted graph
-    contraction. Apply this coefficient identity to the assembled
+    contraction. Apply this coefficient identity to the combined
     physical configuration on $S$ and its complement.
 \end{proof}
 
@@ -374,7 +374,7 @@ of bonds incident to $s=(x+1,y+1)$.
         TNLean.PEPS.IsGIsometric.torusDualFlux_cutMatrix_ne_zero}
     \leanok
     \uses{def:peps_dual_flux_cut}
-    If $A$ is regular $G$-isometric, every actual native dual-string
+    If $A$ is regular $G$-isometric, every native dual-string
     state $\Psi_p$ is nonzero. Its coefficient matrix $M_{u^p,S}$
     across every physical cut $S$ is also nonzero.
 \end{theorem}
@@ -465,7 +465,7 @@ of bonds incident to $s=(x+1,y+1)$.
     $k(x+1,y)=u_h(z)^{-1}$, $k(x,y+1)=u_v(z)$ and
     $k(x+1,y+1)=u_v(z)u_h(x,y+1)^{-1}$, and set $k=1$ elsewhere.
     The condition $H_u(z)=1$ makes all four internal transformed
-    bonds identities. Gauge absorption preserves the actual state.
+    bonds identities. Gauge absorption preserves the state.
     The remaining crossing and exterior contractions provide a
     boundary vector, so each complementary slice belongs to
     $\mathcal G_{S_z}$. Apply the defining kernel property of $P_z$.
@@ -481,13 +481,13 @@ of bonds incident to $s=(x+1,y+1)$.
     \uses{thm:peps_dual_flux_endpoints,thm:peps_dual_flux_local_parent}
     Under the hypotheses of Theorem~\ref{thm:peps_dual_flux_local_parent},
     let $p:a\to b$ be any finite dual path. Every positive parent
-    interaction at a plaquette $z\notin\{a,b\}$ annihilates the actual
+    interaction at a plaquette $z\notin\{a,b\}$ annihilates the
     inserted state $\Psi_p$, including the canonical parent projector.
     If $a=b$, every canonical plaquette parent term annihilates $\Psi_p$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_dual_flux_endpoints,thm:peps_dual_flux_local_parent}
-    Formula~(\ref{eq:peps_dual_endpoint_flux}) supplies identity holonomy
+    Formula~(\ref{eq:peps_dual_endpoint_flux}) gives identity holonomy
     at each indicated plaquette. Apply
     Theorem~\ref{thm:peps_dual_flux_local_parent}.
 \end{proof}
