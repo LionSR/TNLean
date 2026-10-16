@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.ApproximateGateEvaluation
+import TNLean.PEPS.Approximation.DistributedGateMapConstruction
 
 /-!
 # Exact local operators of an original distributed circuit
@@ -24,33 +24,20 @@ namespace TNLean.PEPS.PairEffect.OriginalCircuit
 
 variable {P : Type}
 
-/-- The exact gate sums of the original chronology at the same occurrences.
+/-- The exact gate sums of the original chronology at the same occurrences: at every
+nonprivate occurrence, the sum of its recorded monomial list.
 Source: polynomial-PEPS Theorem 5.2, 04-compression.tex, lines 21–43 and 137–151. -/
-def canonicalGateMaps : {a b : Layout P} → (w : OriginalCircuit a b) →
-    w.produce.GateMaps
-  | _, _, .id _ => PUnit.unit
-  | _, _, .comp w v => (w.canonicalGateMaps, v.canonicalGateMaps)
-  | _, _, .privateMap .. => PUnit.unit
-  | _, _, @OriginalCircuit.nonprivateGate _ _ _ _ _ _ _ L _ _ _ => gate (toGate L)
-  | _, _, .swap .. => PUnit.unit
-  | _, _, .frame _ w => w.canonicalGateMaps
+def canonicalGateMaps {a b : Layout P} (w : OriginalCircuit a b) : w.produce.GateMaps :=
+  w.produce.expansionGateMaps
 
 /-- Canonical maps retain the original full operator, including private maps.
 Source: polynomial-PEPS Theorem 5.2, 04-compression.tex, lines 21–43. -/
 theorem evalWithGateMaps_canonicalGateMaps {a b : Layout P} (w : OriginalCircuit a b) :
-    w.produce.evalWithGateMaps w.canonicalGateMaps = w.eval := by
-  induction w with
-  | id => rfl
-  | comp w v ihw ihv =>
-      simp only [produce, canonicalGateMaps, EffectCircuit.evalWithGateMaps, eval, ihw, ihv]
-  | privateMap => rfl
-  | nonprivateGate => rfl
-  | swap => rfl
-  | frame r w ih =>
-      simp only [produce, canonicalGateMaps, EffectCircuit.evalWithGateMaps, eval, ih]
+    w.produce.evalWithGateMaps w.canonicalGateMaps = w.eval :=
+  w.produce.evalWithGateMaps_expansionGateMaps.trans w.eval_produce
 
 /-- Every prescribed gate is its exact sum, with zero local approximation error.
-All contraction and monomial allowedness hypotheses are original constructor data.
+The contraction and monomial allowedness conditions are those of the original gate.
 Source: polynomial-PEPS Theorem 5.2, 04-compression.tex, lines 28–43 and 137–151. -/
 theorem isGateApproximation_zero_canonicalGateMaps {a b : Layout P}
     (w : OriginalCircuit a b) :
@@ -60,7 +47,8 @@ theorem isGateApproximation_zero_canonicalGateMaps {a b : Layout P}
   | comp w v ihw ihv => exact ⟨ihw, ihv⟩
   | privateMap p ha hb A hA tail => exact hA
   | nonprivateGate owner hC L hL hG tail =>
-      dsimp only [produce, canonicalGateMaps, EffectCircuit.IsGateApproximation]
+      dsimp only [produce, canonicalGateMaps, EffectCircuit.expansionGateMaps,
+        EffectCircuit.IsGateApproximation]
       exact ⟨hC, hL, hG, by simp only [sub_self, norm_zero, le_refl]⟩
   | swap => trivial
   | frame r w ih => exact ih

@@ -22,7 +22,7 @@
     Its four physical spins are ordered clockwise from the upper-right site.
 \end{definition}
 
-\begin{definition}[The actual four-site checkerboard contraction]%
+\begin{definition}[The four-site checkerboard contraction]%
     \label{def:peps_kitaev_checkerboard_block}
     \lean{TNLean.PEPS.kitaevCheckerboardBlock, TNLean.PEPS.kitaevBoundaryCNOT}
     \leanok
@@ -109,7 +109,7 @@
          & =\delta_{a_N,0}\delta_{a_E,0}\delta_{a_S,0}\delta_{a_W,0}
         \delta_{\sigma,F(p,q,r,s)}.
     \end{align}
-    Thus the actual contraction gives the color-difference tensor
+    Thus the contraction gives the color-difference tensor
     $K$ of \cite[Section~7, ``Kitaev's code state'']{Schuch2010PEPS}
     and four boundary registers fixed at zero. This is a coefficient
     identity for the open block; it does not assert a physical
@@ -130,7 +130,7 @@
         TNLean.PEPS.kitaevBlockColorMatrix, TNLean.PEPS.kitaevBoundaryZeroEmbedding}
     \leanok
     \uses{def:peps_kitaev_checkerboard_block}
-    Let $\mathsf B$ be the matrix of the actual four-site contraction, with
+    Let $\mathsf B$ be the matrix of the four-site contraction, with
     physical rows and eight-bit boundary columns. Let $\mathsf K$ have
     entries $\mathsf K_{\sigma,p}=\delta_{\sigma,F(p)}$.
     Define the inclusion $E$ by fixing the four second boundary registers
@@ -140,7 +140,7 @@
     \end{align}
 \end{definition}
 
-\begin{theorem}[The actual tensor-map identity after the boundary unitary]%
+\begin{theorem}[The tensor-map identity after the boundary unitary]%
     \label{thm:peps_kitaev_checkerboard_map_identity}
     \lean{TNLean.PEPS.kitaevBoundaryZeroEmbedding_apply,
         TNLean.PEPS.kitaevBoundaryCNOT_permMatrix_mem_unitaryGroup,
@@ -151,7 +151,7 @@
     \uses{def:peps_kitaev_checkerboard_maps,
         thm:peps_kitaev_checkerboard_blocking, def:peps_quantum_double_dual}
     The boundary CNOT matrix $\mathsf C$ is unitary, the inclusion satisfies
-    $E^\dagger E=1$, and the actual blocked tensor map obeys
+    $E^\dagger E=1$, and the blocked tensor map obeys
     \begin{align}
         \mathsf B\mathsf C=\mathsf K E^\dagger.
     \end{align}

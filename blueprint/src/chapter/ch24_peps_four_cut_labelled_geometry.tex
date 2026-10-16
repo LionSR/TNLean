@@ -83,7 +83,7 @@
     a period equals one.
 \end{definition}
 
-\subsection{Flat group labels on the actual bonds}
+\subsection{Flat group labels on the bonds}
 
 \begin{definition}[Horizontal and vertical bond labels]%
     \label{def:peps_labelled_pair}
@@ -142,13 +142,13 @@
     on each side. Apply the same calculation with $q^{-1}$ for the converse.
 \end{proof}
 
-\begin{theorem}[Comparison with upward parallel transport]%
+\begin{theorem}[Comparison with upward bond labels]%
     \label{thm:peps_bond_flat_transport}
     \lean{TNLean.PEPS.isTorusBondFlat_iff_isTorusFlat}
     \leanok
     \uses{def:peps_bond_flat,lem:peps_torus_parallel_section}
     Bond flatness of $(a,b)$ is equivalent to flatness of the rightward
-    and upward transports $(a,b^{-1})$:
+    and upward bond labels $(a,b^{-1})$:
     $b_{x+1,y}^{-1}a_{x,y}=a_{x,y+1}b_{x,y}^{-1}$.
 \end{theorem}
 \begin{proof}\leanok
@@ -198,7 +198,7 @@
     assignment is flat and vertex gauges preserve flatness.
 \end{definition}
 
-\begin{definition}[Inverse rooted transport]%
+\begin{definition}[Inverse rooted path products]%
     \label{def:peps_bond_tree_gauge}
     \lean{TNLean.PEPS.torusBondTreeGauge}
     \leanok
@@ -214,12 +214,12 @@
     \lean{TNLean.PEPS.IsTorusBondFlat.torusBondGauge_tree}
     \leanok
     \uses{def:peps_bond_tree_gauge,def:peps_bond_flat,def:peps_bond_closure}
-    If $p$ is flat, then the inverse rooted transport satisfies
+    If $p$ is flat, then the inverse rooted path product satisfies
     $q\cdot p=\kappa(B_{0,\ell}^{-1},A_w)$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_bond_flat_transport,thm:peps_torus_flat_connection_gauge}
-    Apply the two rooted-transport identities of
+    Apply the two rooted-path identities of
     Theorem~\ref{thm:peps_torus_flat_connection_gauge} to $(a,b^{-1})$.
     The horizontal identity is the claimed horizontal component.
     Invert the vertical identity to obtain the downward component.
@@ -301,7 +301,7 @@
     \end{align}
     In the first two lines, a one-coordinate function denotes its pullback
     to $\Lambda$. The first line needs only $w>0$ and the second only
-    $\ell>0$. The last line in particular supplies a vertex gauge taking
+    $\ell>0$. The last line in particular gives a vertex gauge taking
     the standard closure to any chosen pair of seams. It is the
     group-valued form of the string movement in
     \cite[Section~5]{Schuch2010PEPS}.

@@ -3311,6 +3311,7 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.boxEntropy` | The supremum `F_box(r)` of `S_Ω(A ∩ Q)` over all domains, admissible Hamiltonians with gapped ground vectors, cuts, and safe rectangles of size at most `r`, at fixed `q, R, J, Δ, D₀` | Area-law Proposition 3.3 (`prop:initial-box`), `02-initial.tex`, lines 590–594; a real supremum, bounded above by `r² log q` for `q ≥ 1` and estimated in `exists_boxEntropy_le_rpow`. |
 | `TNLean.PEPS.AreaLaw.skewSymbol` | The scalar `f(t) = ⟨θ, ρ_P^{[t]} ρ_Y^{[-t]} h ρ_P^{[-t]} ρ_Y^{[t]} θ⟩` for regions `P, Y` of a finite domain, with `ρ^{[s]}` the real power of a regional state taken as zero on its kernel | Area-law Lemma 5.3 (`lem:skew`), `04-conditional.tex`, lines 495–500; equal to QICLean's marked scalar symbol by `skewSymbol_eq_markedScalarSymbol`, with the lemma itself in `skewSymbol_skew_le`. |
 | `TNLean.PEPS.AreaLaw.Scan.ScanData` | The finite data of the collar scan at one scale for all replica counts, with the conclusions of Lemma 9.1, Propositions 7.4 and 8.1, and Lemmas 2.1 and 3.1 for that scan as fields | Area-law Proposition 9.2 (`prop:scanner`), `08-scanner.tex`, lines 399–533; the inputs are hypotheses and are not derived from the scan geometry, so results over `ScanData` are Proposition 9.2 restricted to them, as recorded in `docs/paper-gaps/arealaw2d_scanner_inputs.tex`. |
+| `TNLean.PEPS.AreaLaw.Scan.ScanTransportInputs`, `TNLean.PEPS.AreaLaw.Scan.ScanTransportInputs.toScanInputs`, `TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_scanTransportInputs_actualScan` | The Proposition 7.4 fields of `ScanInputs` (replica remainders, leaf masses `1/2`, defect measurability, continuity and differentiability of `log N(p)²`, entropy gain and energy with constants `κ.C` and `κ.C_l`, endpoint agreement), their completion by the Proposition 8.1 fields with the remainders and logarithmic errors added, and their proof for the actual rounds of a physical collar scan at the source scales for every sufficiently large `n` | Area-law Proposition 7.4 (`prop:transport`), `06-transport.tex`, lines 377–433, as used in `08-scanner.tex`, lines 416–461; hypotheses are the source ones, at positive replica counts only: nonzero symmetric replica vectors, smallness `aℓ ≤ c₀`, and the replica-mean eigenvector equation with the truncated ground energy. The conclusion is for the family `withZeroCopyUnit pre`, which carries the unit vector at zero copies; consumed by the conditional `scanner_estimate_actualScan` through `toScanInputs`. `κ.C` and `κ.C_l` must exceed thresholds depending on `q` and `C_tr`. |
 | `TNLean.PEPS.AreaLaw.Scan.CollarScan.HistoryProperties`, `TNLean.PEPS.AreaLaw.Scan.eventually_historyProperties` | The four assertions of Lemma 9.1 for an actual collar scan, with explicit constants: splitting designated supports are graph `r₀`-balls inside `A` that terminally split one band on one side, distinct-band metrics commute on the symmetric replica space, assigned leads are at most `j + D + r₀`, prefix comparisons differ by `3nD` sites, status cuts have at most `40nD` edges, at most `10bKnD` terms split, split probabilities are at most `10D/m`, bad histories have probability at most `n^(-p)`, and good-history sampling has probability at least `1/(2(C₁+1)nD)`. The theorem proves them at the source scales for all sufficiently large `n`. | Area-law Lemma 9.1 (`scanner:histories`), `08-scanner.tex`, lines 195–347; hypotheses are `scanner:scales`, `scanner:test-geometry`, a bound `b` on labels per anchor and the padding condition `3b ≤ C₁`. The threshold is chosen before the domain, cut, target, labels and scanner; all probabilities are classical history weights. |
 | `TNLean.PEPS.Approximation.SquareHamiltonian` | Bounded supported site and edge terms on the original open square, with Hermitian total sum | Polynomial-PEPS `eq:model`; individual Hermiticity is not assumed. |
 | `TNLean.PEPS.Approximation.HasPEPSApproximation` | Nonzero native PEPS, positive polynomially bounded bonds, and normalized global error at most the inverse side length, up to phase | Polynomial-PEPS Theorem 1.1; a predicate defining the desired approximation. |
@@ -3329,12 +3330,19 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
 | `TNLean.PEPS.AreaLaw.Geometry.template_cut_boundary_card_le` | Physical unordered crossing edges of `A ∩ T_j` number at most `4n`; the core and shell have bounds `4n` and `8n` | Lemma 9.4; avoidance is derived from actual separation for `D₀ ≥ 1`, `Ctpl ≥ 24`, and `j ≤ s₀`. [Validation status](formalization/template-cut-boundary.md). |
 | `TNLean.PEPS.AreaLaw.Geometry.IsIsolatedStar` | An assignment of the eight elementary triangles of the closed square of half-side ρ about v to region identifiers. Each open triangle lies in its region, and each region closure meets the square in exactly its triangles. The frontiers in the square are exactly the directed axis and diagonal rays at changes of identifier. Successive triangles have equal labels exactly when their identifiers agree, and without a change the square lies in one region | Area-law `geometry:initial-stars`, lines 340–349; definition only. Shrinking the half-side preserves it (`IsIsolatedStar.mono`). |
 | `TNLean.PEPS.AreaLaw.Geometry.RepairStage.HasIsolatedStars` | Mark occurrences of a repair stage separated by `a₀` times the larger scale, each with an isolated star of half-side `a₀ S` in the current regions | Area-law `geometry:initial-stars` and `geometry:repair-induction`, lines 332–349 and 471–485; definition only, with shrinking of `a₀` for positive scales. Holding it at every generation is Lemma 11.4. |
-| `TNLean.PEPS.AreaLaw.Geometry.InitialIsolatedStarsStatement` | One positive `a₀` such that the jointly chosen initial repair stage has isolated stars with constant `a₀` for all large `k₀` | The specialization of Lemma 11.3 (`geometry:initial-stars`) to the residues chosen in `initialRepairStage`, which Lemma 11.4 consumes. It is a statement here, not a theorem; the source lemma itself quantifies over all admissible belt residues. |
-| `TNLean.PEPS.AreaLaw.Geometry.IsUniformRepairInduction`, `UniformRepairInductionStatement` | For the actual repair stages, one constant `a₀` giving at every generation isolated stars and separated marks, star squares avoiding earlier closed terminal squares, disjoint removal squares, same-label contacts of replacements only at next-generation marks, descendants within `2 d(S)`, and finite termination of each branch; the statement asks for this for small `a₀`, large `S_*` and large `k₀` | Area-law Lemma 11.4 (`geometry:repair-induction`), lines 471–485. The metric items are proved by `RepairMetricHypotheses`; all items follow from the conclusion of Lemma 11.3 by `uniformRepairInductionStatement_of_initialIsolatedStars`, so only the initial isolated stars remain to be supplied. |
+| `TNLean.PEPS.AreaLaw.Geometry.InitialIsolatedStarsStatement` | One positive `a₀` such that the jointly chosen initial repair stage has isolated stars with constant `a₀` for all large `k₀` | The specialization of Lemma 11.3 (`geometry:initial-stars`) to the residues chosen in `initialRepairStage`, which Lemma 11.4 consumes. Proved with `a₀ = 1/128` by `initialIsolatedStarsStatement_holds`, as a corollary of the shift-uniform theorem below. |
+| `TNLean.PEPS.AreaLaw.Geometry.initialMarks_isolatedStars` | For arbitrary belt residues, the deduplicated marks of selected belt cells, each with a positive scale realized by an incident selected cell, are separated by `a₀` times the larger scale, with `a₀ = 1/128`. Each mark of scale `S` has an isolated star of half-side `a₀ S` in the actual initial regions | Area-law Lemma 11.3 (`geometry:initial-stars`, lines 325–370); proved with the source's hypotheses, for every endpoint set and every `k₀ ≥ 50000000`. |
+| `TNLean.PEPS.AreaLaw.Geometry.IsUniformRepairInduction`, `UniformRepairInductionStatement` | For the actual repair stages, one constant `a₀` giving at every generation isolated stars and separated marks, star squares avoiding earlier closed terminal squares, disjoint removal squares, same-label contacts of replacements only at next-generation marks, descendants within `2 d(S)`, and finite termination of each branch; the statement asks for this for small `a₀`, large `S_*` and large `k₀` | Area-law Lemma 11.4 (`geometry:repair-induction`), lines 471–485. The metric items are proved by `RepairMetricHypotheses`; all items follow from the conclusion of Lemma 11.3 by `uniformRepairInductionStatement_of_initialIsolatedStars`, and `uniformRepairInductionStatement_holds` proves the statement with the source's hypotheses. |
 | `TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses` | The scale margin `d(S) ≤ (a₀/1000) S` above `S_*`, initial scales at least `S_*`, and initial separation with constant `0 < a₀ ≤ 1` | Area-law `geometry:trim-margins` and the first item of Lemma 11.3; discharged by `exists_repairMetricHypotheses` for `a₀ ≤ 1/4`, large `S_*` and large `k₀`. |
+| `TNLean.PEPS.AreaLaw.Geometry.beltAtom`, `IsBeltArrangementPoint` | In coordinates where a belt cell is `[0, 4]²`, the elementary triangles of the squares of side two centred at points with odd coordinates, and the points of the lines `x₁ = m`, `x₂ = m`, `x₁ ± x₂ = 2m` that bound them | Area-law `geometry:birth-separation`, lines 597–604, the belt case of the finite local patterns; auxiliary. Each closed convex set bounded by these lines contains with each point an atom through it, and `exists_beltAtom_dichotomy` gives the compactness constant. |
+| `TNLean.PEPS.AreaLaw.Geometry.IsInitialBirthSeparated`, `exists_isInitialBirthSeparated` | The closed birth of every initial belt tile of side `u = t_k` is at distance at least `c₁ u^ρ₀` from the final actual region of every primary and every other initial belt tile of its label, with one `c₁ > 0` chosen before all data | Area-law Lemma 11.5 (`geometry:birth-separation`), lines 573–659, initial-belt half; proved without premises. The replacement half is `IsRepairBirthSeparated`, from the conclusion of Lemma 11.4. |
+| `TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_uniformRepairInductionStatement` | One `c₁ > 0` for both halves of the birth-separation lemma, given the uniform repair induction | Area-law Lemma 11.5 from Lemma 11.4; conditional on `UniformRepairInductionStatement`, so not the source lemma itself. `exists_birthSeparation_of_initialIsolatedStars` derives it from `InitialIsolatedStarsStatement`. |
+| `TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation` | One `c₁ > 0` and a threshold `T` such that, for every stopping scale `S_* ≥ T`, every width `C₀ ≥ 2` and every large lower layer index, the births of the initial belt tiles and of the replacements are at distance at least `c₁ u^ρ₀` from the final actual regions of earlier and peer identifiers of the same label | Area-law Lemma 11.5 (`geometry:birth-separation`, lines 573–582), without premise: Lemma 11.3 is supplied by `initialIsolatedStarsStatement_holds`. The thresholds are the source's standing choices of large `S_*` and `k₀` (lines 380–393). |
 | `TNLean.PEPS.AreaLaw.Geometry.repairSectorSet`, `repairActiveRaySet`, `isIsolatedStar_of_model` | The closed sector of an identifier under a wedge assignment about a point and the active rays between wedges of different identifiers; a local radial model in a larger open square gives an isolated star | Area-law Lemma 11.3, lines 340–349; conversely `IsIsolatedStar.exists_model` reads the model off a star. |
 | `TNLean.PEPS.AreaLaw.Geometry.IsRepairChildConeCompatible` | For a child `v + d e` of a removal square, each child wedge in the open square of half-side `d/2` lies in its tabulated parent wedge and inside or outside the removal square according to its kind | Area-law Lemma 11.4 proof, lines 497–514; proved for all nine children by `isRepairChildConeCompatible_holds`. |
-| `TNLean.PEPS.AreaLaw.Geometry.uniformRepairInductionStatement_of_initialIsolatedStars` | The statement of the initial isolated-star lemma implies the statement of the uniform repair induction | Area-law Lemmas 11.3 and 11.4, lines 332–349 and 471–543; the hypothesis is the conclusion of Lemma 11.3. |
+| `TNLean.PEPS.AreaLaw.Geometry.uniformRepairInductionStatement_of_initialIsolatedStars` | The statement of the initial isolated-star lemma implies the statement of the uniform repair induction | Area-law Lemmas 11.3 and 11.4, lines 332–349 and 471–543; with `initialIsolatedStarsStatement_holds` it gives `uniformRepairInductionStatement_holds`. |
+| `TNLean.PEPS.AreaLaw.Scan.Comparators.ComparatorsStatement` | The upper and lower norm comparisons from an auxiliary pair for a positive Hamiltonian with unit ground vector, ground energy `E₀` and gap `g > 0` on a finite product of local spaces, a target `X` and a typical Schmidt set (`IsTypicalSchmidtSet`): one label sequence whose vectors `pre_k = π_R^{λ_k}(Ω ⊗ Bell_{CR})^{⊗k}` are nonzero, symmetric, of norm at most one, exact mean-energy eigenvectors and carry `λ_k` on both auxiliary systems; the entropy identity for every partition; and, for every nested status family (`IsStatusFamily`), `g^pre ≥ 0` and, for every `0 < a ≤ a₀` and mean tree with leaves `A_j = ∏_g A_{j,g}` (`meanRoot`), the rough upper bound under prefix data (`IsPrefixData`), the rough lower bound, and under moment data (`IsMarginalMomentData`) with `a ≤ c/√𝓑` the sharp upper and lower bounds. Each `o_k(1)` is one sequence uniform in the tree, its terminal probabilities and the symmetric coordinates; the lower bounds hold for every symmetric vector of norm at most one with label `λ_k` on both auxiliary systems. | Area-law Proposition 8.1 (`prop:comparators`), `07-comparators.tex` lines 125–214; proved by `comparatorsStatement` with `a₀ = 1/10`, rough constant `4`, sharp constant `4 + 25 C₀` and `c = c₀/10`. The hypotheses are those of the source; the labels are chosen before the statuses and the weight. |
+| `TNLean.PEPS.AreaLaw.Scan.CollarScan.ScannerStatement` | The physical scanner conclusion: one truncated ground vector with its trace-distance bound to the original vector, typical Schmidt set of mass `0 < 1 - n⁻¹⁰⁰ ≤ z ≤ 1` and one label sequence whose positive-copy prevectors are nonzero with Euclidean norm at most one; the comparator budgets and terminal rough upper bound; and, for every sufficiently large copy count, one charge round and interpolation parameter giving the selected-density and defect-energy bounds and all four norm comparisons. The sharp comparisons retain their marginal smallness condition. | Area-law Proposition 9.2 (`prop:scanner`), `08-scanner.tex` lines 349–397; proved by `scannerStatement` from the Hamiltonian, geometric and entropy hypotheses, with the truncation coefficient chosen before the local dimension. The output coefficients may be enlarged after the input entropy coefficient is fixed, as recorded in `docs/paper-gaps/arealaw2d_scanner_inputs.tex`; this is a local fix. No supplied transport or norm-comparison hypothesis remains. |
 
 ## Distributed PEPS compression: finite incidence and choice costs
 
@@ -3444,6 +3452,73 @@ recorded in [the finite-domain and PEPS statement audit](formalization/openai-ar
   circuit expansion, local tensor evaluation, virtual dimension estimates,
   approximate-expansion case and composition with the quantum/sampling results
   remain open in [#8769](https://github.com/LionSR/TNLean/issues/8769).
+
+### Individual coefficients and pair-effect counts
+
+- **Declaration:** `TNLean.PEPS.PairEffect.EffectCircuit.IsTermwiseBounded r C`.
+- **Defined in:** `TNLean/PEPS/Approximation/EffectCircuitTermwiseCoefficientBounds.lean`.
+- **Meaning:** Every monomial in each prescribed nonprivate gate expansion has
+  at most $r$ pair effects and scalar coefficient of norm at most $C$.
+  Composition combines these conditions on the two chronological subcircuits;
+  adjoining a spectator register preserves them.
+- **Source:** Polynomial-PEPS Theorem 5.2, assumption 3 and the approximate
+  expansion clause, `04-compression.tex:143–149,199–208,590–600`, revision
+  `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+- **Sanctioned bridge:** `isExpansionBounded_of_isTermwiseBounded` derives the
+  bound $\sum_t |c_t|\le K C$ when each gate has at most $K$ monomials and
+  $C\ge0$. `exists_one_le_isExpansionBounded_of_termwise_power_bounds` derives
+  a polynomial coefficient-sum bound from polynomial bounds on counts and
+  individual coefficients.
+- **Caveat:** Local allowedness, contraction of the original operators, and
+  approximation error are separate conditions. This predicate contains no
+  coefficient-sum assumption or global density comparison.
+
+### Message-containing approximation of the original gates
+
+- **Declaration:**
+  `TNLean.PEPS.PairEffect.EffectCircuit.IsMessageGateApproximation δ lists G`.
+- **Defined in:** `TNLean/PEPS/Approximation/MessageGateLists.lean`.
+- **Meaning:** Each original private map and each prescribed original gate is
+  a contraction. At a nonprivate gate occurrence the participant index has
+  cardinality different from one, every listed message monomial is allowed,
+  and the literal sum of the listed terms differs from that original gate
+  by at most $\delta$ in operator norm. The conditions are imposed separately
+  at each occurrence of the same chronology.
+- **Source:** Polynomial-PEPS Theorem 5.2, `04-compression.tex:32–43,137–149,590–600`,
+  revision `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+- **Sanctioned bridges:** `IsMessageGateApproximation.mono` enlarges the local
+  error budget. `isGateApproximation_expandMessageGateLists` exactly expands
+  the messages and retains the comparison with the prescribed original
+  operators, under the occurrence-preserving gate assignment.
+- **Caveat:** The predicate states local errors. It assumes no whole-circuit
+  norm estimate or comparison between physical densities. A zero budget
+  expresses exact local equality.
+
+### Counts and dimensions before expanding messages
+
+- **Declaration:**
+  `TNLean.PEPS.PairEffect.EffectCircuit.IsMessageResourceBounded r m K D C lists`.
+- **Defined in:** `TNLean/PEPS/Approximation/MessageGateLists.lean`.
+- **Meaning:** Each original nonprivate gate list has at most $K$ monomials.
+  Each term has at most $r$ pair effects, a scalar coefficient of norm at
+  most $C$, and at most $m$ message occurrences, each transferring an actual
+  register of dimension at most $D$. Repeated occurrences are counted
+  separately; empty lists and zero-dimensional messages are permitted.
+- **Source:** Polynomial-PEPS Theorem 5.2, `04-compression.tex:32–43,137–149,199–208`,
+  revision `openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a`.
+- **Sanctioned bridges:** With $D\ge1$, `monomialCount_expandMessageGateLists_le`
+  bounds the expanded count by $\lceil K D^m\rceil$.
+  With D ≥ 1, C ≥ 0, and `IsMessageGateApproximation` supplying allowedness,
+  `isTermwiseBounded_expandMessageGateLists` bounds each expanded coefficient
+  by K C D^m and retains the original pair-effect bound.
+  `IsMessageResourceBounded.mono_dimension` enlarges the dimension bound on
+  the same original message lists.
+  `IsTermwiseBounded.mono_coefficient` enlarges the coefficient majorant of
+  a termwise bound on the same circuit, preserving its pair-effect bound.
+- **Caveat:** This predicate does not impose allowedness or contraction; these
+  belong to `IsMessageGateApproximation`. It bounds individual coefficients,
+  rather than assuming a bound on their sum. It has no private-memory or
+  source-Schmidt-rank dimension bound.
 
 ## Nested regional cylinders
 

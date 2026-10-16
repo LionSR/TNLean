@@ -1,0 +1,122 @@
+\section{One target window for the two sharp moment conditions}
+\label{sec:arealaw-target-sharp-moments}
+
+The upper and lower comparisons require two fixed multiples of the same
+per-band weight to lie in the same physical marginal-moment interval.
+The larger multiple suffices for both.  This assertion uses a positive
+exponent margin beyond the ordinary scanner inequalities; the threshold
+may depend on that margin, while the geometric constants do not.
+
+\begin{theorem}[Common moments at the target scales]
+    \label{thm:arealaw-target-sharp-moments}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_sharp_moments}
+    \leanok
+    Fix a local dimension $q\geq1$, an interaction radius $R\in\mathbb N$,
+    an interaction bound $J\geq0$, a gap $\Delta>0$ and a coefficient
+    $C_T\geq0$ for the target-size bound.  There are positive constants
+    $C_{\rm tr},C_{\rm target},C_B$ with the following property.
+    For fixed scanner exponents and a real weight exponent $\omega$ satisfying
+    \begin{align}
+        \omega+\frac{1+\kappa}{2} & <1-\ell-\mu,
+        \label{eq:arealaw-target-sharp-moment-margin}
+    \end{align}
+    there is an integer threshold $N\geq2$ before every physical instance.
+    Let $\Omega$ be an original unit ground state, of energy $E_0$ and
+    gap $\Delta>0$, for the finite-domain local Hamiltonian.  The scanner
+    graph is the induced domain graph, its depth is the target's ambient
+    depth, and each anchor belongs to its original admissible support.
+    Suppose $n\geq N$, the target is nonempty with size at most $C_Tn^2$, its ambient
+    layers have size at most $n$, and the target clearance is greater than
+    $2L+10r_0$.  Retain the explicit scales
+    \begin{align}
+        L   & =\lfloor n^{1-\ell}\rfloor,             &
+        m   & =\lfloor n^\mu\rfloor,                  &
+        D   & =\lceil n^\kappa\rceil,\nonumber          \\
+        K   & =\left\lfloor\frac{L}{8m}\right\rfloor, &
+        r_0 & =\lceil C_{\rm tr}(\log n)^2\rceil,     &
+        B   & =C_BnD(\log n)^{12}.
+        \label{eq:arealaw-target-sharp-moment-scales}
+    \end{align}
+    Then $K\geq1$, $m>0$, $8Km\leq L$ and $B\geq1$.
+
+    Put $g=\Delta/\nu$, where $\nu$ is the positive physical normalization,
+    and $\varepsilon=\min\{n^{-1000},g/4\}$.  One unit truncated ground
+    state $\widetilde\Omega$ has energy $e$ and gap $g/2$, with
+    \begin{align}
+        0 & \leq e\leq\varepsilon,                                            &
+        \|\widetilde\Omega-e^{i\theta}\Omega\|
+          & \leq2\sqrt{\varepsilon/g}\quad\text{for some }\theta\in\mathbb R,
+        \nonumber                                                               \\
+        \operatorname{dist}_{\rm tr}
+        (|\widetilde\Omega\rangle\langle\widetilde\Omega|,
+        |\Omega\rangle\langle\Omega|)
+          & \leq\sqrt{2\varepsilon/g}.
+        \label{eq:arealaw-target-sharp-truncation}
+    \end{align}
+    This same state has a target
+    typical set of width $w=n^{3/5}$ and mass $z$ satisfying
+    \begin{align}
+        0 & <1-n^{-100}\leq z\leq1.
+        \label{eq:arealaw-target-sharp-moment-mass}
+    \end{align}
+    The target cut weight is at most $C_{\rm target}n(\log n)^{12}$, and every
+    eigenvalue in this set lies between
+    $\exp(-S(\widetilde\Omega_X)-w)$ and
+    $\exp(-S(\widetilde\Omega_X)+w)$.
+    Put
+    \begin{align}
+        C_0         & =512\exp(1)\frac2g,      &
+        c_0         & =\frac1{32\sqrt{1+2/g}}, &
+        r_{\rm mom} & =\frac{c_0}{\sqrt B},    &
+        K_{\rm mom} & =C_0B.
+        \label{eq:arealaw-target-sharp-common-moments}
+    \end{align}
+    For every completed or pre-charge history within the physical horizon
+    and every one of its five marginal regions $Q$, the same state satisfies
+    \begin{align}
+        \log\operatorname{tr}(\widetilde\rho_Q^{\,1-u})
+         & \leq uS(\widetilde\rho_Q)+K_{\rm mom}u^2
+         &                                          & \text{for }|u|\leq r_{\rm mom}.
+        \label{eq:arealaw-target-sharp-common-moment-bound}
+    \end{align}
+    Finally, for every $0<W\leq n^\omega$, with $a=W/K$,
+    \begin{align}
+        0 & <a, & 10a               & \leq r_{\rm mom}, & 10a    & \leq1,
+          & 6a  & \leq r_{\rm mom}, & 6a                & \leq1.
+        \label{eq:arealaw-target-sharp-smallness}
+    \end{align}
+    The physical state and target set are chosen before $W$ and before
+    any auxiliary label sequence.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:al_scan_target_typical_window,
+        thm:al_scan_common_status_budget,
+        thm:al_scan_status_scale_separation,
+        thm:al_moment_weight_smallness,
+        thm:al_scan_common_moment_interval}
+    Choose the truncation and target-cut constants from the quantitative
+    target window, then the common status-cut constant.  The rounded
+    scale separation and the positive margin in
+    (\ref{eq:arealaw-target-sharp-moment-margin}) give a common threshold
+    with
+    \begin{align}
+        10a\sqrt B & \leq\min\{c_0,1\}.
+        \label{eq:arealaw-target-sharp-product-smallness}
+    \end{align}
+    Since $B\geq1$, division by $\sqrt B$ gives both factor-ten bounds;
+    positivity of $a$ gives the factor-six bounds.
+    Apply the target-window construction once.  Each of the five physical
+    status cuts has geometric cut weight at most $B$, so the marginal-moment
+    estimate for this same truncated state applies on
+    $|u|\leq c_0/\sqrt B$.  The target mass, eigenvalue window and
+    quantitative truncation estimates are unchanged.
+\end{proof}
+
+The conclusion provides common physical data for a single given label
+sequence in both sharp comparisons.  It does not choose that sequence,
+select a charge point, estimate its defect, or perform the entropy
+telescope and final absorption.  The stronger margin is recorded explicitly;
+at the source's final parameter choice its positive value is
+$499879/2000000$.

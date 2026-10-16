@@ -147,7 +147,7 @@ in `id` and its repository in `repo` (default: the primary repository):
 
 | Field | Meaning |
 |-------|---------|
-| `kind` | `error` when a printed claim fails as stated; `missing-step` when the argument omits something nontrivial; `narrower` when Lean proves a restricted version for now; `convention` for the intended reading of a degenerate case |
+| `kind` | `error` when a printed claim fails as stated; `missing-step` when the argument omits something nontrivial; `narrower` when Lean proves a restricted version for now; `local-correction` when a constant, a typo, or a small step is adjusted and the paper's argument stands; `convention` for the intended reading of a degenerate case |
 | `status` | `open`, `resolved-pending` (resolved in an unmerged pull request) or `resolved` |
 | `paper`, `result`, `title`, `issue` | Where the gap sits |
 | `prs` | Pull requests by repository name |

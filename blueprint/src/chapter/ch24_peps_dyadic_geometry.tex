@@ -745,9 +745,9 @@ source's sampled guides with these readings and state Lemma~7.2 for them.
     vertex is closer to it than any point of the closed change.
 \end{proof}
 
-The source's further conclusions at lines 383--387, that the raw target of the
+The source's further conclusions at lines 383--387, that the physical target of the
 bulk change lies outside all holes, satisfies the tapering hypothesis and leaves a
-single-owner raw buffer, so that the birth lemma implements it, belong to the
+single-owner physical buffer, so that the birth lemma implements it, belong to the
 protocol and are not formalized here.
 
 \begin{lemma}[Tags and active labels]
@@ -847,7 +847,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     compact. Three of them with distinct labels have no common point, since a common
     point $y$ would be a true vertex with $r_0\le r\le|y-h|<r_0$ for some $h$. Apply
     the parametric form of Lemma~\ref{lem:peps_dyadic_footprint}, take the minimum
-    over the finitely many templates, and transport by the similarity, which
+    over the finitely many templates, and push forward by the similarity, which
     multiplies all sup distances by $s$.
 \end{proof}
 
@@ -1192,15 +1192,23 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     displacement of two guides uniform on the $n$-blocks that differ only on one block,
     the two-owner conditions for footprints of radius $2u=\nu n$ assumed in
     Theorem~\ref{thm:peps_guide_frame_rewrite_events} hold, and the direct repainting of
-    the block is one gate as there, with this $b$ and no further geometric condition
-    (lines 507--527 and 574--583).
+    the block is one gate as there, with this $b$ and at most $2b$ pair sources in
+    each monomial. The remaining hypotheses of that theorem on the input vector,
+    true-vertex sets, disjoint holes and patch data are retained; no further geometric
+    condition is imposed (lines 507--527 and 574--583).
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_dyadic_sampled_ratio,
+        lem:peps_dyadic_footprint_uniform,
+        thm:peps_protocol_constants,
+        thm:peps_frame_small_rewrite_gate_sources}
     Take $\nu'$ the ratio of Theorem~\ref{thm:peps_dyadic_sampled_ratio} for the direct
     repaintings; the two-owner condition survives shrinking the footprint. The
     separation $3u+4r<n$, the patch count and $18\le b$ are those of
     Theorem~\ref{thm:peps_protocol_constants}.
+    The source-bounded rewrite gives the same circuit with at most $2b$ pair sources
+    in each monomial.
 \end{proof}
 
 \begin{lemma}[Trivial holes at the last level]
@@ -1333,8 +1341,9 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     parent; these are its new and its old label. The repainting of the square of
     scale $j'$ with indices $(r',s')$ uses the owners of the blocks whose indices
     differ from $(r',s')$ by at most one in each coordinate. The resize at the grid
-    corner $(2^ju,2^jv)$ uses the parties of the four blocks of side $2^j$ at the
-    corner.
+    corner $(2^ju,2^jv)$ uses the parties of the nine blocks of side $2^j$ whose
+    indices differ from $(u-1,v-1)$ by at most one in each coordinate; these contain
+    the four blocks at the corner and every block whose label the resize reads.
 \end{definition}
 
 \begin{theorem}[Active labels in party form]
@@ -1373,12 +1382,13 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
 
 \begin{theorem}[Lifetime participation of block parties]
     \label{thm:peps_dyadic_lifetime_parties}
-    \lean{TNLean.PEPS.Approximation.RepaintingUses.near, TNLean.PEPS.Approximation.JunctionUses.near, TNLean.PEPS.Approximation.card_gates_le_of_uses}
+    \lean{TNLean.PEPS.Approximation.RepaintingUses.near, TNLean.PEPS.Approximation.JunctionUses.near, TNLean.PEPS.Approximation.card_dyadicJunction_uses_le, TNLean.PEPS.Approximation.card_gates_le_of_uses}
     \leanok
     \uses{def:peps_dyadic_used_parties, def:peps_dyadic_near_block}
     A block party used by a repainting or by a junction resize has the scale of the
-    event or the next larger one, and the event is near its block with constant
-    $c=0$. Consequently, if every repainting and every junction resize consists of at
+    event or the next larger one, and the event is near its block, with constant
+    $c=0$ for a repainting and $c=1$ for a junction resize. A block party is used by
+    at most nine junction resizes. Consequently, if every repainting and every junction resize consists of at
     most $G$ gates and each gate involves only parties its event uses, every block
     party participates in at most $64G$ gates. This is the bounded lifetime
     participation for block parties in~\cite[Proposition~7.1,
@@ -1392,9 +1402,13 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     within one of the square's in each coordinate, so the closed intervals touch.
     For a square of scale $j-1$, a block adjacent to it has a parent with index
     $\lfloor q/2\rfloor$, and $2\lfloor q/2\rfloor\le q\le 2\lfloor q/2\rfloor+1$
-    gives touching intervals again. A corner of a block lies in its closed interval.
-    Theorem~\ref{thm:peps_dyadic_lifetime_incidence} with $c=0$ bounds the number of
-    gates by $4G\cdot4^2=64G$.
+    gives touching intervals again. A junction resize using the party $(j,r,s)$ has
+    scale $j$ and indices $u,v$ with $r\le u\le r+2$ and $s\le v\le s+2$, so the
+    corner is within $2^j$ of the closed interval of the block, and there are at most
+    nine such junctions. By the proof of
+    Theorem~\ref{thm:peps_dyadic_lifetime_incidence} with $c=0$, at most $2\cdot4^2=32$
+    repaintings use the party, so its gates are distributed over at most $41$ events,
+    at most $G$ to each, and number at most $64G$.
 \end{proof}
 
 \begin{definition}[Events and changes of the protocol schedule]
@@ -1580,7 +1594,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     homogenized on any set to such a label, take only such labels, and so does
     every reading of such a guide after a small displacement. For a guide with
     such labels, two sites of its encoded frame, with labels read as the parties
-    of a repainting, have the same raw owner exactly when they carry the same
+    of a repainting, have the same site owner exactly when they carry the same
     label (\texttt{06-geometry.tex}, lines 82--100, 328--339 and 507--527).
 \end{theorem}
 
@@ -1625,7 +1639,7 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     radius covering each of them. Its footprint is the union of the outer patch
     squares, of radius $2u$, and of the outer squares of the affected holes. Its
     parties are the labels of the old and of the new guide on the footprint, and the
-    tag holders of both guides at the affected holes; these are the raw owners and
+    tag holders of both guides at the affected holes; these are the site owners and
     the affected tag owners named in condition~4 of the small-patch rewrite lemma
     in~\cite[Section~6]{OpenAI2026PolynomialPEPS}. Conditions~1--3 of that lemma,
     the two-owner tests outside the old and new inner holes and the avoidance of the
@@ -1921,19 +1935,19 @@ registers of the protocol of Proposition~7.1 and are not formalized here.
     most $189$ changes for each event.
 \end{proof}
 
-\subsection{The consequences of Proposition 7.1 used in the assembly}
+\subsection{The consequences of Proposition 7.1 used in Section 8}
 \label{sec:peps_dyadic_protocol}
 
 The following definition records the consequences
 of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} (\texttt{06-geometry.tex},
-lines 12--53) that the assembly of Section~8 uses, as a statement about
+lines 12--53) that Section~8 uses, as a statement about
 distributed constructions in the sense of
 Definition~\ref{def:peps_distributed_construction} whose chronology is cut into
 changes. It is weaker than the proposition, whose omitted clauses are listed
 below and in~\cite{gap:polypeps_prop71_consequences_interface}. The statement
 is not proved here.
 
-\begin{definition}[Dyadic distribution protocols and the bounds used in the assembly]
+\begin{definition}[Dyadic distribution protocols and the Section 8 bounds]
     \label{def:peps_dyadic_protocol}
     \lean{TNLean.PEPS.Approximation.DyadicProtocol,
         TNLean.PEPS.Approximation.DyadicProtocol.input,
@@ -1959,11 +1973,11 @@ is not proved here.
     registers to be discarded. Each genuine site $v$ has its own party, attached
     to the unit square with address $v$, with $d_p=q$; every other party has
     $d_p=1$. Finally there is a reference vector $r_t\in M_t$ at each stage, with
-    $r_0=\bigotimes_px_p$. The actual vector is $\Psi_0=r_0$ and
+    $r_0=\bigotimes_px_p$. The circuit vector is $\Psi_0=r_0$ and
     $\Psi_{t+1}=W_t\Psi_t$.
 
     For constants $C$, $b$, $k$, $r$ and a unit vector $\Omega$, the protocol
-    satisfies the assembly bounds if the following hold.
+    satisfies the Section~8 bounds if the following hold.
     \begin{enumerate}
         \item Every party is attached to a square of the padded hierarchy,
               there are at most $CL^2$ parties, and at most $b$ of them are
@@ -1981,7 +1995,7 @@ is not proved here.
               the physical and private coordinates of the last memory
               $r_n=\Omega\otimes\Xi$ with $1-CL^{-57}\le\lVert\Xi\rVert\le1$.
     \end{enumerate}
-    The assembly assertion is that for every $q\ge2$ and $J,\Delta>0$ there are
+    The existence assertion is that for every $q\ge2$ and $J,\Delta>0$ there are
     constants $C$, $b$, $k$, $r$ and $L_0$, chosen before the size, the
     Hamiltonian and the ground vector, such that for every $L\ge\max\{2,L_0\}$
     and every $(H,E_0,\Omega)\in\mathcal G_{q,J,\Delta}(L)$ there is a protocol
@@ -2013,11 +2027,11 @@ is not proved here.
     distributes $\Omega$ through the padded dyadic hierarchy with all four items
     of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS}, applied with patch and
     information power $60$ (\texttt{07-assembly.tex}, line 11). In particular,
-    the assembly assertion of Definition~\ref{def:peps_dyadic_protocol} holds;
+    the existence assertion of Definition~\ref{def:peps_dyadic_protocol} holds;
     the proposition also carries the clauses listed there as omitted.
 \end{proposition}
 
-\begin{theorem}[Consequences of the assembly bounds]
+\begin{theorem}[Consequences of the Section 8 protocol bounds]
     \label{thm:peps_dyadic_protocol_consequences}
     \lean{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.rectangularTraceNorm_physicalDensity_sub_le,
         TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.separationBounded,
@@ -2025,7 +2039,7 @@ is not proved here.
         TNLean.PEPS.Approximation.DyadicProtocol.participation_le_of_uses}
     \leanok
     \uses{def:peps_dyadic_protocol, def:peps_dyadic_used_parties}
-    Let a protocol satisfy the assembly bounds of
+    Let a protocol satisfy the Section~8 bounds of
     Definition~\ref{def:peps_dyadic_protocol} with $C\ge0$, on a square of side
     $L\ge1$, for a unit vector $\Omega$. These bounds omit the clauses
     of~\cite[Proposition~7.1]{OpenAI2026PolynomialPEPS} listed there: a party
@@ -2034,14 +2048,14 @@ is not proved here.
     parties, the pair-source and message counts, and the expansions of every
     fixed accuracy; none of them is used below. Then:
     \begin{enumerate}
-        \item the physical density of the actual final vector satisfies
+        \item the physical density of the final circuit vector satisfies
               $\lVert\Tr_{\rm private}|\Psi_n\rangle\langle\Psi_n|
                   -|\Omega\rangle\langle\Omega|\rVert_1\le(2C^2+2C)L^{-10}$;
         \item every party network whose links join two parties of a common
               nonprivate gate has link anchors differing in each coordinate by
               at most $b$ times the side of either endpoint square.
     \end{enumerate}
-    Moreover, for every protocol, let the nonprivate gates belong to the
+    In addition, for every protocol, let the nonprivate gates belong to the
     repaintings and junction resizes of the hierarchy, at most $G$ to each. If a
     party represents a block party that participates only in gates of events using
     it, in the sense of Definition~\ref{def:peps_dyadic_used_parties}, it
@@ -2050,7 +2064,7 @@ is not proved here.
 
 \begin{proof}\leanok
     \uses{thm:peps_protocol_density, thm:peps_dyadic_lifetime_parties}
-    The changes are contractions, $\lVert r_0\rVert=1$, and the actual and
+    The changes are contractions, $\lVert r_0\rVert=1$, and the circuit and
     reference vectors agree at the first stage, so the first item is
     Theorem~\ref{thm:peps_protocol_density} with
     $C_{\rm ch}=C_{\rm step}=C_{\rm hole}=C$. The second is the address bound of
@@ -2059,14 +2073,14 @@ is not proved here.
     participates, and Theorem~\ref{thm:peps_dyadic_lifetime_parties} bounds it.
 \end{proof}
 
-\begin{theorem}[Retained norm of a protocol with the assembly bounds]
+\begin{theorem}[Retained norm of a protocol with the Section 8 bounds]
     \label{thm:peps_dyadic_protocol_retained_norm}
     \lean{TNLean.PEPS.Approximation.DyadicProtocol.IsDistributionProtocol.retained_norm_and_trace_le}
     \leanok
     \uses{def:peps_dyadic_protocol}
-    Let a protocol satisfy the assembly bounds of
+    Let a protocol satisfy the Section~8 bounds of
     Definition~\ref{def:peps_dyadic_protocol} with $C\ge0$, on a square of side
-    $L\ge1$, for a unit vector $\Omega$. Then the actual final vector $\Psi_n$
+    $L\ge1$, for a unit vector $\Omega$. Then the final circuit vector $\Psi_n$
     and its physical density
     $\rho=\Tr_{\rm private}|\Psi_n\rangle\langle\Psi_n|$ satisfy
     \begin{align}

@@ -30,6 +30,9 @@ comparisons used in Proposition~7.1 and in the assembly argument of
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.participationCount_sequence}
     Let $W_t:\mathcal H_{A_t}\to\mathcal H_{A_{t+1}}$, $0\le t<T$,
     be original distributed circuits.
+    The composite acts by the ordered product: for
+    $v\in\mathcal H_{A_0}$, $W^{[0]}v=v$ and
+    $W^{[t+1]}v=W_t\bigl(W^{[t]}v\bigr)$.
     Write $N(W)$ for the number of nonprivate occurrences in $W$, and
     $n_p(W)$ for the number involving a fixed party $p$. Then
     \begin{align}
@@ -43,8 +46,8 @@ comparisons used in Proposition~7.1 and in the assembly argument of
     Occurrences are retained separately even when their local operators agree.
 \end{theorem}
 \begin{proof}\leanok
-    Induct on the number of stages. Appending the last circuit forms the
-    ordered operator product. Its occurrences are the disjoint union of the
+    Induct on the number of stages. Appending the last circuit applies
+    $W_t$ after $W^{[t]}$, which is the evaluation identity. Its occurrences are the disjoint union of the
     preceding occurrences and those of the last stage, with the same
     participating sets and monomial lists. Both counting identities and the
     stated bounds follow.
@@ -54,8 +57,10 @@ comparisons used in Proposition~7.1 and in the assembly argument of
     \label{def:peps_original_recorded_gate_maps}
     \leanok
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.canonicalGateMaps}
-    At every nonprivate occurrence of an original distributed circuit,
-    prescribe its recorded monomial sum as the local operator.
+    At every nonprivate occurrence of an original distributed circuit $W$,
+    prescribe its recorded monomial sum as the local operator. Write
+    $\widehat W$ for the operator obtained by evaluating the chronology of $W$
+    with these prescribed local operators.
 \end{definition}
 
 \begin{theorem}[Exact local operator sums]
@@ -64,15 +69,19 @@ comparisons used in Proposition~7.1 and in the assembly argument of
     \uses{def:peps_original_recorded_gate_maps}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.evalWithGateMaps_canonicalGateMaps}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.isGateApproximation_zero_canonicalGateMaps}
-    Evaluation of the recorded local operators gives the original full operator, including
-    the private operations. Every local approximation error is zero; the
+    For every original distributed circuit $W$, $\widehat W=W$, including the
+    private operations. Every local approximation error is zero; the
     original contraction and pair-effect conditions are retained.
 \end{theorem}
 \begin{proof}\leanok
-    Each prescribed operator equals its monomial sum. Composition, private
-    operations, exchanges of registers, and tensoring with spectator identities
-    preserve this equality. Induction over the circuit proves the full operator
-    identity and the zero local error assertion.
+    At a nonprivate occurrence with monomial list $L$, the prescribed operator
+    is $\sum_{m\in L}m$, which is the original gate, so $\widehat W=W$ for a
+    single gate and its local error $\bigl\|\sum_{m\in L}m-\sum_{m\in L}m\bigr\|$
+    vanishes. If $\widehat U=U$ and $\widehat V=V$, then
+    $\widehat{VU}=\widehat V\,\widehat U=VU$ and
+    $\widehat{1\otimes U}=1\otimes\widehat U=1\otimes U$; private operations
+    and exchanges of registers are evaluated unchanged. Induction over the
+    circuit gives $\widehat W=W$ and the zero local error assertion.
 \end{proof}
 
 \begin{theorem}[Original monomial and expansion bounds]

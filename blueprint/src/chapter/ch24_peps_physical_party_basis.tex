@@ -29,7 +29,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
     \lean{TNLean.PEPS.PairEffect.partyGroupedBasis}
     \leanok
     \uses{def:peps_party_tensor_basis}
-    Transport the ordered party basis by $G_a^{-1}$. Its column on the
+    Pull back the ordered party basis by $G_a^{-1}$. Its column on the
     original register memory is
     \begin{align}
         B^a_x=G_a^{-1}
@@ -119,7 +119,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
     Let $p$ occur in an ordered physical list with no repetitions.
     On its physical memory $H_p\otimes\C$, take the orthonormal basis
     with columns $b_p(j)=e_{p,j}\otimes1$.
-    This is the standard basis transported by the inverse of the
+    This is the image of the standard basis under the inverse of the
     right scalar-unit isometry.
 \end{definition}
 
@@ -219,8 +219,8 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
     Theorem~\ref{thm:peps_selected_head_partition} separates its basis
     vector as $e_{p,j}\otimes1$, leaving the ordered physical basis
     vector on the tail. Apply the induction hypothesis to that tail.
-    When the list exhausts $P$, transporting the resulting equality
-    by $G_a^{-1}$ gives equality of the two bases.
+    When the list exhausts $P$, applying $G_a^{-1}$ to the resulting equality
+    gives equality of the two bases.
 \end{proof}
 
 \begin{definition}[Joint physical and private basis of one party]
@@ -242,7 +242,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
     \leanok
     With the joint local bases just defined, let $B^{a+c}$ denote
     their party basis on $M(a\mathbin{+\!+}c)$, and let $B^a,B^c$
-    be the separately transported party bases. Then for all
+    be the separately grouped party bases. Then for all
     assignments $x_p\in X_p$ and $y_p\in F_p$,
     \begin{align}
         B^{a+c}_{(x,y)}=J_{a,c}^{-1}(B^a_x\otimes B^c_y).
@@ -260,7 +260,7 @@ $M(a_{p_1})\otimes\cdots\otimes M(a_{p_m})\otimes\C$.
     joining the two selected memories and the two complementary
     memories. The selected vector is the stated joint local column.
     Apply the induction hypothesis to the two complementary lists,
-    and transport by $G_{a+c}^{-1}$. For the empty list all memories
+    and apply $G_{a+c}^{-1}$. For the empty list all memories
     are scalar and the assertion reduces to multiplication in $\C$.
 \end{proof}
 
@@ -303,7 +303,7 @@ These coordinate identities apply to the local contractions in
     and let $\mathbf p$ list every original party exactly once. Set
     $X_*=\{\bullet\}$ and $X_{\iota(p)}=\{0,\ldots,d(p)-1\}$.
     On the physical memory at $*$, take the scalar basis with column $1$.
-    At $\iota(p)$, transport the original singleton physical basis
+    At $\iota(p)$, map the original singleton physical basis
     $b_p$ along the owner isometry and the register-list equality
     of Theorem~\ref{thm:peps_selected_physical_party_layouts}.
     Denote the resulting basis by $b^{\mathrm{sel}}_{\iota(p)}$.
@@ -329,7 +329,7 @@ These coordinate identities apply to the local contractions in
     The scalar singleton basis has column $1$. Equality identifications of
     register lists preserve vectors. The owner isometry also
     preserves each vector under the equality of the underlying memory spaces,
-    so the transported original columns have the stated values.
+    so the mapped original columns have the stated values.
 \end{proof}
 
 
@@ -446,7 +446,7 @@ These coordinate identities apply to the local contractions in
     ordered physical factors. At each listed owner the selected local column
     is the original singleton column, so the grouped vector is their
     ordered tensor product. Prepending $*$ contributes only $1$,
-    since it owns no register. Transport back to the register memory to
+    since it owns no register. Map back to the register memory to
     obtain~(\ref{eq:peps_selected_physical_basis_grouped}).
 \end{proof}
 
@@ -478,7 +478,7 @@ These coordinate identities apply to the local contractions in
 \begin{proof}\leanok
     \uses{thm:peps_party_grouped_basis_append,thm:peps_basis_memory_equalities}
     Apply the concatenation identity to the separately relabelled register
-    lists. Transport each local column and the grouped column by the
+    lists. Map each local column and the grouped column by the
     displayed equality of output lists. Equality identifications preserve
     these columns, yielding~(\ref{eq:peps_selected_physical_private_basis_grouped}).
 \end{proof}

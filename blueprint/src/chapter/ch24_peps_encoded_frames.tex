@@ -11,7 +11,7 @@ its polynomial count is
 Theorem~\ref{thm:peps_frame_small_rewrite_polynomial}.
 
 Throughout, $\Lambda$ is a finite set of sites with positions in the plane,
-each site carries a raw register $\C^q$ with $q\ge1$, and
+each site carries a site register $\C^q$ with $q\ge1$, and
 $\mathcal H_\Lambda=\bigotimes_{x\in\Lambda}\C^q$. For $D\subseteq\Lambda$ and
 an operator $X$ on $\mathcal H_D$, write $X_D\otimes\id$ for the operator
 acting as $X$ on the sites of $D$ and as the identity elsewhere. Operators
@@ -71,13 +71,13 @@ norm of matrices, rectangular ones included.
             \otimes\id\bigr]
         \colon\mathcal H_\Lambda\to\mathcal J_{c,h}\otimes\mathcal H_\Lambda .
     \]
-    It keeps a raw register at every site, inside the hole as well. If the
+    It keeps a site register at every site, inside the hole as well. If the
     outer sample is empty, the tag register is one-dimensional and $K_{c,h}$
     is the identity encoding, as in \texttt{05-frames.tex}, lines 67--69.
     On a square grid of unit spacing with $c$ a site and $h=3/2$, the inner
     sample, one sample $D_j$ of radius $r_j=2$, and the outer sample are
-    nested squares of sites, and the encoder maps the raw registers to a tag
-    together with the raw registers.
+    nested squares of sites, and the encoder maps the site registers to a tag
+    together with the site registers.
     \input{figures/peps_frame_hole_encoder_a}
     \input{figures/peps_frame_hole_encoder_b}
 \end{definition}
@@ -121,13 +121,13 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.Frame.refVec}
     \leanok
     \uses{def:peps_frame_hole_encoder}
-    An encoded frame $\mathcal F$ consists of a raw ownership assignment on
+    An encoded frame $\mathcal F$ consists of a site ownership assignment on
     one sheet, a list of holes $(c,h)$ with square cylinder data and pairwise
     disjoint outer samples, and a specified party holding each hole's tag.
     The order of the list is the fixed ordering of the appended tags. The
     encoding $K_{\mathcal F}$ is the product of the hole encoders, with the
     tags appended in that order, and the reference vector is
-    $\Omega_{\mathcal F}=K_{\mathcal F}\Omega$. A frame without holes is a raw
+    $\Omega_{\mathcal F}=K_{\mathcal F}\Omega$. A frame without holes is an unencoded
     sheet. This is \cite[Definition~6.1]{OpenAI2026PolynomialPEPS},
     \texttt{05-frames.tex}, lines 71--82. The source requires the outer
     squares to be disjoint in the plane; only the disjointness of their
@@ -141,17 +141,17 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.EncodedFrame.tagAppendEquiv}
     \leanok
     \uses{def:peps_frame}
-    For two lists of holes with disjoint outer footprints, the raw parts of
+    For two lists of holes with disjoint outer footprints, the site parts of
     their encodings commute on every pair of tag configurations. The tags of
     a concatenated list are the pairs of tags of the two parts, and on such a
-    pair the raw part of the encoding of the concatenation is the product of
-    the raw parts of the two encodings. Hence the encodings commute after
-    the canonical identification of tag orderings
+    pair the site part of the encoding of the concatenation is the product of
+    the site parts of the two encodings. Hence the encodings commute after
+    the natural identification of tag orderings
     (\texttt{05-frames.tex}, lines 84--85).
 \end{lemma}
 
 \begin{proof}\leanok
-    The raw part on a tag configuration is a product of operators supported
+    The site part on a tag configuration is a product of operators supported
     in the outer footprints of the holes of the list, so the two products
     are supported on disjoint sets of sites. The factorization follows by
     induction on the first list.
@@ -171,7 +171,7 @@ norm of matrices, rectangular ones included.
 \end{lemma}
 
 \begin{proof}\leanok
-    By induction on the list. Write the raw part on the tags $(s,t)$ as
+    By induction on the list. Write the site part on the tags $(s,t)$ as
     $B_sR_t$, with $B_s$ from the first hole. Summing $R_t^\dagger
         B_s^\dagger B_sR_t$ over $s$ gives $R_t^\dagger P_1R_t$, and $P_1$
     commutes with $R_t^\dagger$ by disjointness of supports; the sum over $t$
@@ -240,15 +240,15 @@ norm of matrices, rectangular ones included.
     \uses{def:peps_frame,def:peps_party_layout}
     The registers of a frame $\mathcal F$ are one register $\C^{\mathcal
             J_a}$ for each hole $a$, held by the party holding its tag, listed in
-    the order of the holes, followed by one raw register $\C^q$ for each site
-    $x\in\Lambda$, held by the raw owner of $x$, listed in a fixed order of
+    the order of the holes, followed by one site register $\C^q$ for each site
+    $x\in\Lambda$, held by the site owner of $x$, listed in a fixed order of
     the sites. This list contains every site exactly once, so taking the
     site at a position gives a bijection from its positions to $\Lambda$.
-    More generally, if all sites in any list have raw owner $p$, every raw
+    More generally, if all sites in any list have site owner $p$, every site
     register of that list is owned by $p$. The tensor product of the frame's
     registers is its memory in the
     sense of Theorem~5.2 of \cite{OpenAI2026PolynomialPEPS}. This is the
-    sheet of \texttt{05-frames.tex}, lines 13--20, with one raw register at
+    sheet of \texttt{05-frames.tex}, lines 13--20, with one site register at
     each site and a specified owner for each register, together with the tags
     of Definition~6.1, lines 71--82.
 \end{definition}
@@ -275,7 +275,7 @@ norm of matrices, rectangular ones included.
     unitary, with $\C^{\mathcal J\times[q]^\Lambda}$, the space of the tags
     and the sheet on which the encoding $K_{\mathcal F}$ and its operators
     act: the product basis vector $\ket\tau\otimes\bigotimes_x\ket{c(x)}$ is
-    sent to $\ket{\tau,c}$. More generally, the raw registers of a list of
+    sent to $\ket{\tau,c}$. More generally, the site registers of a list of
     distinct sites enumerating a set $A$ are identified with $\C^{[q]^A}$ in
     the same way. These are the canonical site and sheet coordinates of
     \texttt{05-frames.tex}, lines 94--96, in which vectors are compared while
@@ -320,13 +320,13 @@ norm of matrices, rectangular ones included.
         \item every patch's outer square, and every affected old or new hole,
               avoids the physical outer footprints of the untouched holes;
         \item the union of the patch inner squares contains every site whose
-              raw owner changes and the entire outer footprint of every
+              site owner changes and the entire outer footprint of every
               affected old or new hole;
         \item in each patch's outer square, the sites outside
               $H^-(\mathcal F_{\rm old})$ have at most two old owners, and the
               sites outside $H^-(\mathcal F_{\rm new})$ have at most two new
               owners;
-        \item all old and new raw owners on the patch footprints and the
+        \item all old and new site owners on the patch footprints and the
               affected-hole footprints, and all affected tag owners, belong to
               the specified list.
     \end{enumerate}
@@ -402,7 +402,7 @@ norm of matrices, rectangular ones included.
 
 \begin{proof}\leanok
     On untouched tags $u$, affected old tags $b$ and affected new tags $a$,
-    write $U_u$, $A_b$ and $B_a$ for the raw parts of the encodings. By
+    write $U_u$, $A_b$ and $B_a$ for the site parts of the encodings. By
     condition (1) and disjointness of the old frame, $U_u$ commutes with
     $A_b^\dagger$, with every patch projector, with $B_a$ and with the
     affected old projectors. Summing over $b$,
@@ -442,7 +442,7 @@ norm of matrices, rectangular ones included.
         =K_{\mathcal F_{\rm new}}(P_m\cdots P_1Q_1\cdots Q_{r_{\rm old}}-\id)\Omega$.
     The encoding is a contraction, and the telescoping lemma bounds the
     remaining vector by $(m+r_{\rm old})\varepsilon$. For another ordering of
-    the tags, the raw parts of the encodings of holes with disjoint outer
+    the tags, the site parts of the encodings of holes with disjoint outer
     footprints commute, so moving every tag to the new position of its hole
     is a relabelling of the tag basis that carries one encoding to the other.
     Relabelling the coordinates of $M$ along it keeps $M$ a contraction and
@@ -573,7 +573,7 @@ norm of matrices, rectangular ones included.
         TNLean.PEPS.SiteChain.chainOp_apply}
     \leanok
     Let $L_0,\dots,L_{n-1}$ be operators
-    $L_j=\ket{k_j}\bra{b_j}_{S_j}\otimes\id$ on the raw registers, where each
+    $L_j=\ket{k_j}\bra{b_j}_{S_j}\otimes\id$ on the site registers, where each
     $k_j$ and $b_j$ is a vector on the configurations of the finite set $S_j$
     or the product zero vector. Form the network whose vertices are the bras
     $\bra{b_j}$ and the kets $\ket{k_j}$, kept distinct, and whose internal
@@ -644,7 +644,7 @@ norm of matrices, rectangular ones included.
     \leanok
     \uses{lem:peps_frame_branches,lem:peps_frame_wires,
         lem:peps_frame_chain_network}
-    Assume the four conditions and fix a branch $(a,s,b)$. Its raw operator
+    Assume the four conditions and fix a branch $(a,s,b)$. Its site operator
     $B_aC_sA_b^\dagger$ is the ordered product of the factors
     $\ket0\bra{u'_r}$ of the affected new holes, $\ket{w_i}\bra{w_i}$ of the
     patch terms, and $\ket{u_t}\bra0$ of the affected old holes. In its
@@ -700,7 +700,7 @@ norm of matrices, rectangular ones included.
 
 \begin{proof}\leanok
     Apply the truncation of a chain to the network of each branch with the
-    patch vertices as groups, and assemble with the rescaling lemma, using
+    patch vertices as groups, and combine with the rescaling lemma, using
     $N\cdot 2m/\sqrt k\le\tfrac12\delta$.
 \end{proof}
 
@@ -767,9 +767,9 @@ norm of matrices, rectangular ones included.
     within $g/\sqrt k$ by at most $k^g$ product
     terms with coefficients of modulus at most one, each an allowed
     monomial, and the Hilbert-space error bounds the operator error of the
-    branch. The rescaling lemma assembles $M_a$, and the reference estimate
+    branch. The rescaling lemma forms $M_a$, and the reference estimate
     with $a=30$ gives the final assertion. The branch network, its truncation
-    and the assembly are formalized in the approximation by product terms
+    and the rescaled sum are formalized in the approximation by product terms
     (Theorem~\ref{thm:peps_frame_small_rewrite_product_terms}), and the
     reading of each product term as an allowed monomial on the registers of
     the frames, with at most $Nk^{2m}$ monomials, in
@@ -813,7 +813,7 @@ norm of matrices, rectangular ones included.
 \begin{proof}\leanok
     The registers held by parties outside the specified list are the same in
     the two frames: every affected tag is held by a specified party, and a
-    raw register whose owner changes lies in a patch footprint, where both
+    site register whose owner changes lies in a patch footprint, where both
     owners are specified. Each monomial of the expansion uses only specified
     parties, and every exchange of tensor factors in it moves a register of a
     specified party, because the registers are moved only to bring the
@@ -924,6 +924,15 @@ pair sources with the same constant.
 \end{theorem}
 
 \begin{proof}\leanok
+    \uses{thm:peps_guide_frame_patch_congruence,
+        thm:peps_frame_small_rewrite_polynomial, lem:peps_party_gate_source_bound,
+        thm:peps_original_finite_expansion_bound, def:peps_party_monomial,
+        thm:peps_guide_frame_rewrite, lem:peps_register_reorderings,
+        lem:peps_circuit_source_bound_monomials, def:peps_original_circuit,
+        thm:peps_guide_frame_rewrite_events, lem:peps_treated_true_vertices,
+        thm:peps_guide_frame_resize_treatment_gates,
+        thm:peps_dyadic_sampled_ratio, lem:peps_dyadic_floor,
+        thm:peps_guide_frame_reading_gates, def:peps_dyadic_block_guide}
     Each monomial of the expansion of
     Theorem~\ref{thm:peps_frame_small_rewrite_polynomial} has at most
     $2m\le 2b$ normalized pair sources, one for each patch vertex with open

@@ -1,6 +1,6 @@
 % Auxiliary finite-leg form of the charge detection calculation in SCP10,
 % local source lines 2464--2486. Checked auxiliary statements.
-\begin{definition}[Shared-leg coordinates and literal charged columns]
+\begin{definition}[Shared-leg coordinates and charged columns]
     \label{def:peps_regular_two_site_charge_coordinates}
     Let $I,J$ be finite incident-leg sets, with distinguished shared legs $i_0,j_0$.
     Write $I_0=I\setminus\{i_0\}$ and $J_0=J\setminus\{j_0\}$. Splitting the
@@ -8,7 +8,7 @@
     \[
         G^I\times G^J\simeq(G\times G)\times(G^{I_0}\times G^{J_0}).
     \]
-    If $\iota_I(k,\theta_I)$ inserts $k$ at the shared leg, the actual canonical
+    If $\iota_I(k,\theta_I)$ inserts $k$ at the shared leg, the canonical
     charged column is
     \[
         C_{\chi,p,\theta}(\alpha,\beta)=\sum_{k\in G}\chi(pk)
@@ -20,11 +20,11 @@
     \leanok
 \end{definition}
 
-\begin{theorem}[Actual two-site charge expansion]
+\begin{theorem}[Two-site charge expansion]
     \label{thm:peps_regular_two_site_charge_expansion}
     Put $N=|G|$ and
     $A_{\chi,p;x,y}(r,s)=\mathbf1_{s=yx^{-1}r}\chi(px^{-1}r)$.
-    The literal contraction satisfies
+    The contraction satisfies
     \[
         C_{\chi,p,\theta}(\alpha,\beta)=N^{-2}\sum_{x,y\in G}
         A_{\chi,p;x,y}(\alpha_{i_0},\beta_{j_0})
@@ -46,7 +46,7 @@
     \label{def:peps_regular_two_site_charge_detector}
     Let $D_\chi$ be the orthogonal projector onto the span of all translated charge
     matrices $A_{\chi,p;x,y}$. In the shared-leg coordinates define
-    $\widehat D_\chi=D_\chi\otimes I$ on the remaining labels, and transport it
+    $\widehat D_\chi=D_\chi\otimes I$ on the remaining labels, and pull it
     back by the preceding bijection.
     \lean{TNLean.PEPS.regularTwoSiteChargeDetector}
     \uses{def:peps_regular_two_site_charge_coordinates}
@@ -72,7 +72,7 @@
     The shared-pair projector commutes with independent endpoint translations.
     Tensoring with the identity preserves this commutation and the projection
     properties. Averaging gives commutation with the local projectors, and the
-    literal expansion gives the two eigenvalue formulas.
+    expansion gives the two eigenvalue formulas.
 \end{proof}
 
 \begin{definition}[Original physical charged column]
@@ -82,7 +82,7 @@
         F_{\chi,p,\theta}(s,t)=\sum_{k\in G}\chi(pk)
         a(\iota_I(k,\theta_I),s)b(\iota_J(k,\theta_J),t).
     \]
-    This is the actual contraction of the two original physical tensors along the
+    This is the contraction of the two original physical tensors along the
     character-weighted shared bond.
     \lean{TNLean.PEPS.regularTwoSitePhysicalChargeColumn}
     \uses{def:peps_regular_two_site_charge_coordinates}
@@ -111,14 +111,14 @@
 \begin{proof}\leanok
     Derive $T^\dagger T=c(P_I\otimes P_J)$ with $c>0$ from the two local Gram
     identities. Then $Q_\chi=c^{-1}T\widehat D_\chi T^\dagger$ is the required
-    projection. Its complement supplies the second outcome, including unused
+    projection. Its complement provides the second outcome, including unused
     physical directions.
 \end{proof}
 
 These are auxiliary finite-leg identities for the charge detection argument in
 SCP10, lines 2464--2486. No nonvanishing assertion is made when a site has no
 remaining boundary leg. A source charge detector on a prescribed lattice block
-still requires its actual geometry and nondegenerate contraction comparison;
+still requires its lattice geometry and nondegenerate contraction comparison;
 no six-spin creation or parent-Hamiltonian assertion is included here.
 
 
@@ -130,11 +130,11 @@ no six-spin creation or parent-Hamiltonian assertion is included here.
         =|G|^{-2}\chi(pk).
     \]
     Thus $\chi(1)\ne0$ implies that every canonical charged column is nonzero.
-    For regular $G$-injective original physical site maps, the actual physical
+    For regular $G$-injective original physical site maps, the physical
     charged columns are also nonzero for every internal and boundary label.
-    For every actual regular irreducible charge label, the condition
+    For every regular irreducible charge label, the condition
     $\chi(1)\ne0$ follows from the positive dimension of its irreducible
-    representative and need not be supplied separately.
+    representative and need not be assumed separately.
     \lean{TNLean.PEPS.regularTwoSiteChargeColumn_diagonal,TNLean.PEPS.regularTwoSiteChargeColumn_ne_zero,TNLean.PEPS.regularTwoSitePhysicalChargeColumn_ne_zero,
         TNLean.PEPS.regularTwoSitePhysicalChargeColumn_ne_zero_of_mem_regularChargeLabels}
     \uses{thm:peps_regular_two_site_charge_expansion,def:peps_regular_two_site_physical_charge_column,thm:peps_regular_charge_labels}
@@ -143,6 +143,6 @@ no six-spin creation or parent-Hamiltonian assertion is included here.
 \begin{proof}
     \leanok
     The remaining legs force both translations to be the identity. Choose
-    $k=p^{-1}$, then apply the derived local $G$-injective inverses to the actual
+    $k=p^{-1}$, then apply the derived local $G$-injective inverses to the
     physical contraction.
 \end{proof}

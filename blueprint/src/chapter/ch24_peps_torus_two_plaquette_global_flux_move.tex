@@ -1,4 +1,4 @@
-\begin{theorem}[The six-spin flux operation in the actual torus contraction]%
+\begin{theorem}[The six-spin flux operation in the torus contraction]%
     \label{thm:peps_torus_two_plaquette_global_flux_move}
     \lean{TNLean.PEPS.IsGIsometric.exists_unitary_torusTwoPlaquetteGlobalFluxMove}
     \leanok
@@ -18,7 +18,7 @@
         \widehat W\,\Psi(u_g;u)=\Psi(u'_g;u)
     \end{align}
     for every $g\in G$ and every common assignment $u$ on exterior and crossing
-    bonds. Both vectors are actual globally contracted torus states, with
+    bonds. Both vectors are globally contracted torus states, with
     the stated internal insertions and the same remaining bond operators.
     The unitary is chosen before $g$ and $u$.
     This is the regular-representation six-site specialization of the local
@@ -28,10 +28,10 @@
 
 \begin{proof}\leanok
     Express the four-leg tensor in incident-edge coordinates; its
-    $G$-isometry is preserved. The fixed spanning path of the actual rectangle
+    $G$-isometry is preserved. The fixed spanning path of the six-site rectangle
     leaves exactly the leftmost and middle upward bonds as the chosen cycle
     bonds. Apply the global physical two-cycle operation with this fixed tree,
-    root, and pair of bonds. The literal insertion assignments equal its
+    root, and pair of bonds. The bond insertion assignments equal its
     tree-cycle assignments. Substitution yields the asserted global state
     identity for every common exterior and crossing assignment. Extension by
     the identity preserves unitarity.

@@ -28,6 +28,11 @@ of a repainting is read as the fresh placeholder party of that repainting
   `Approximation.eventUses_labelParty_guidePlaceholder` : the labels that a repainting reads,
   those of the nine blocks around the repainted block, its new label and the placeholder, are held
   by parties the repainting uses.
+* `Approximation.eventUses_labelParty_protocolLevelLabels_junction`,
+  `Approximation.coe_subset_eventUses_of_junctionWindow`,
+  `Approximation.coe_subset_eventUses_of_junctionWindow_placeholder` : the labels of the blocks
+  of the root square among the nine blocks that a resize reads are held by parties the resize
+  uses; a block outside the root square carries the placeholder label.
 * `Approximation.isBoundedChange_of_step` : the small-patch rewrites (direct repaintings, resizes
   and point treatments) as bounded changes.
 * `Approximation.isBoundedChange_of_birth`, `Approximation.isBoundedChange_of_death`,
@@ -140,6 +145,81 @@ theorem coe_blockParties_subset_eventUses (R : RepaintedSquare k) (done : Set (�
   · exact eventUses_labelParty_newParty R
   · exact eventUses_labelParty_protocolLevelLabels R done (abs_sub_le_one_of_mem_blockWindow hR')
 
+/-! ### The parties used by a junction resize -/
+
+/-- The indices of a grid corner of the hierarchy, as a corner of its level. -/
+def DyadicJunction.index {k : ℕ} (J : DyadicJunction k) : ℤ × ℤ :=
+  (((J.2.1 : ℕ) : ℤ), ((J.2.2 : ℕ) : ℤ))
+
+/-- **Block labels of a junction resize.** At the end of the pass to level `2 ^ j`, when every
+block of the root square carries its new label, the label of a block of the root square among
+the nine blocks around the block below and to the left of the junction `J` of scale `j` is held
+by a block party that the resize at `J` uses, whatever the repainting `R` whose party map reads
+the labels.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 127–131 and 594: “Resizing uses the
+current block labels near its junction”. -/
+theorem eventUses_labelParty_protocolLevelLabels_junction (R : RepaintedSquare k)
+    (J : DyadicJunction k) {done : Set (ℤ × ℤ)}
+    (hd : {Q | InRoot ((2 : ℤ) ^ (k - (J.1 : ℕ))) Q} ⊆ done) {R' : ℤ × ℤ}
+    (hR' : R' ∈ blockWindow 1)
+    (hin : InRoot ((2 : ℤ) ^ (k - (J.1 : ℕ))) (R' + (J.index.1 - 1, J.index.2 - 1))) :
+    EventUses (.inr J)
+      (labelParty R (protocolLevelLabels k J.1 done (R' + (J.index.1 - 1, J.index.2 - 1)))) := by
+  set Q := R' + (J.index.1 - 1, J.index.2 - 1) with hQ
+  have hM : (2 : ℤ) ^ (k - (J.1 : ℕ)) = ((2 ^ (k - (J.1 : ℕ)) : ℕ) : ℤ) := by push_cast; rfl
+  obtain ⟨h1, h2, h3, h4⟩ := hin
+  rw [hM] at h2 h4
+  let S : DyadicSquare k := ⟨J.1, ⟨Q.1.toNat, by omega⟩, ⟨Q.2.toNat, by omega⟩⟩
+  have hl : protocolLevelLabels k J.1 done Q = .inl S.toTriple := by
+    have hin' : InRoot ((2 : ℤ) ^ (k - (J.1 : ℕ))) Q := ⟨h1, hM ▸ h2, h3, hM ▸ h4⟩
+    simp only [protocolLevelLabels, levelLabels, hin', hd hin', ↓reduceIte, newParty,
+      DyadicSquare.toTriple, S]
+  rw [hl, labelParty_toTriple]
+  simp only [blockWindow, Finset.mem_product, Finset.mem_Icc, Nat.cast_one] at hR'
+  simp only [hQ, DyadicJunction.index, Prod.fst_add, Prod.snd_add] at h1 h3 ⊢
+  refine ⟨rfl, ?_, ?_, ?_, ?_⟩ <;> simp only [DyadicSquare.toTriple, S, hQ,
+    DyadicJunction.index, Prod.fst_add, Prod.snd_add] <;> omega
+
+/-- **Parties of a junction resize, in-root labels.** If every party of a set `P` is the party,
+under the party map of a repainting `R`, of the label of a block of the root square among the nine
+blocks around the block below and to the left of the junction `J`, at the end of the pass to the
+level of `J`, then every party of `P` is used by the resize at `J`. This is the form of the
+parties of `resize_step` once the blocks outside the root square are discarded.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 127–131, 529–541 and 594. -/
+theorem coe_subset_eventUses_of_junctionWindow (R : RepaintedSquare k) (J : DyadicJunction k)
+    {done : Set (ℤ × ℤ)} (hd : {Q | InRoot ((2 : ℤ) ^ (k - (J.1 : ℕ))) Q} ⊆ done)
+    {P : Finset (ProtocolParty k)}
+    (hP : ∀ x ∈ P, ∃ R' ∈ blockWindow 1,
+      InRoot ((2 : ℤ) ^ (k - (J.1 : ℕ))) (R' + (J.index.1 - 1, J.index.2 - 1)) ∧
+        x = labelParty R (protocolLevelLabels k J.1 done (R' + (J.index.1 - 1, J.index.2 - 1)))) :
+    (↑P : Set (ProtocolParty k)) ⊆ {p | EventUses (.inr J) p} := by
+  intro x hx
+  obtain ⟨R', hR', hin, rfl⟩ := hP x hx
+  exact eventUses_labelParty_protocolLevelLabels_junction R J hd hR' hin
+
+/-- **Parties of a junction resize.** The parties of `resize_step` at the junction `J`, read
+through the party map of a repainting `R` at the end of the pass to the level of `J`, are used
+by the resize at `J`, except possibly the placeholder party of `R`, which holds the label of the
+blocks outside the root square.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 91–100, 127–131, 529–541 and 594. -/
+theorem coe_subset_eventUses_of_junctionWindow_placeholder (R : RepaintedSquare k)
+    (J : DyadicJunction k) {done : Set (ℤ × ℤ)}
+    (hd : {Q | InRoot ((2 : ℤ) ^ (k - (J.1 : ℕ))) Q} ⊆ done) {P : Finset (ProtocolParty k)}
+    (hP : ∀ x ∈ P, ∃ R' ∈ blockWindow 1,
+      x = labelParty R (protocolLevelLabels k J.1 done (R' + (J.index.1 - 1, J.index.2 - 1)))) :
+    (↑P : Set (ProtocolParty k)) ⊆
+      {p | EventUses (.inr J) p ∨ p = labelParty R guidePlaceholder} := by
+  classical
+  intro x hx
+  obtain ⟨R', hR', rfl⟩ := hP x hx
+  by_cases hin : InRoot ((2 : ℤ) ^ (k - (J.1 : ℕ))) (R' + (J.index.1 - 1, J.index.2 - 1))
+  · exact Or.inl (eventUses_labelParty_protocolLevelLabels_junction R J hd hR' hin)
+  · right
+    simp only [protocolLevelLabels, levelLabels, hin, ↓reduceIte]
+
 /-! ### The operations as bounded changes -/
 
 /-- **The hole ratio of the protocol is below `1/4000`.** The smallness of `ε₀` in the constants
@@ -180,8 +260,8 @@ theorem isBoundedChange_of_step {F F' : Frame pos q Party} {P : Finset Party} (h
 the direct repainting of a square `R` of level `n ≤ K₀ t`, from the reading of the level labels
 with the blocks of `done` repainted to the reading with `R` repainted as well, with raw owners
 read through the party map of `R` and the fresh placeholder party of `R`, is a bounded change whose
-participants are used by the repainting, with error `(2 b + 1) L⁻²⁰` for
-`b = protocolPatchBound ε₀ ν`.
+participants are used by the repainting, with error `(2 b + 1) L⁻²⁰` and at most `2 b` pair
+sources in each monomial for `b = protocolPatchBound ε₀ ν`.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 91–100, 507–527, 559–570 and 572–596;
 Lemma 6.3 `lem:small-rewrite`, `05-frames.tex`, lines 188–218. -/
@@ -219,12 +299,14 @@ theorem directRepainting_isBoundedChange {K₀ ε₀ ν a D B₀ : ℝ}
             4 * protocolPatchBound ε₀ ν * (3 * protocolPatchBound ε₀ ν * c + 30)))
         ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹)
         ((guideFrame pos q g (labelParty R) guidePlaceholder rank V hole hpV).regRef Ω)
-        ((guideFrame pos q g' (labelParty R) guidePlaceholder rank V' hole hpV').regRef Ω) := by
-  obtain ⟨P, -, hP, h⟩ := hc.directRepainting_step hm hL hn hK hv
+        ((guideFrame pos q g' (labelParty R) guidePlaceholder rank V' hole hpV').regRef Ω) ∧
+      w.IsSourceBounded (2 * protocolPatchBound ε₀ ν) := by
+  obtain ⟨P, -, hP, w, h₁, h₂, h₃, h₄, h₅, h₆⟩ := hc.directRepainting_step hm hL hn hK hv
     (fun Q hQ => levelLabels_insert_of_ne _ _ _ _ hQ) hg hg' (labelParty R) guidePlaceholder
     rank hV hV' hVc hVc' hVV' hole patch hhole hpatch hpV hpV' hcardHole hcardPatch hΩ hεpatch
     hεhole htag
-  exact isBoundedChange_of_step (coe_subset_eventUses_of_window R done _ hP) (by exact_mod_cast h)
+  exact ⟨w, ⟨h₁, fun γ => (h₂ γ).trans (coe_subset_eventUses_of_window R done _ hP),
+    by exact_mod_cast h₃, h₄, h₅⟩, h₆⟩
 
 /-- **A birth as a bounded change.** The conclusion of the step theorems of the bulk births
 (`bandBirth_step`, `centralBirth_step`): an allowed word using only the old and the new owner

@@ -10,8 +10,9 @@ import TNLean.PEPS.Approximation.ApproximateCircuitResources
 
 Every produced occurrence keeps the original monomial count. Increasing the
 pair-effect and coefficient-sum majorants preserves the original expansion
-condition. These elementary comparisons supply the expansion bounds used
-in distributed compression.
+condition; this comparison enlarges the expansion bounds of the sheet-stack
+changes and of the dyadic protocol. The monomial-count comparison is the form,
+for produced occurrences, of the monomial bound in Theorem 5.2.
 
 Source: polynomial-PEPS manuscript, Theorem 5.2, `04-compression.tex`,
 lines 143–149 and 199–208, revision
