@@ -1,0 +1,55 @@
+\begin{theorem}[Uniform approximation in nested cylinders]
+    \label{thm:peps_uniform_nested_cylinder_approximation}
+    \leanok
+    \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLaw.exists_uniform_nestedPatch_cylinders}
+    \uses{def:square_entropy_area_law,def:peps_nested_patches,def:peps_regional_cylinder}
+    Assume the square-grid entropy area law. Fix an integer $q\ge2$ and
+    real numbers $J,\Delta,B_0,p>0$. There is an exponent $R_0>0$ such that
+    the following holds for every $L\ge2$, every Hamiltonian of the
+    original square-grid model with interaction bound $J$, and every unit
+    ground vector $\Omega$ with full-system gap at least $\Delta$.
+    For every centre $z\in\mathbb R^2$ and every $4\le u\le B_0\log L$,
+    put $m=\lfloor u/2\rfloor+1$ and $X_j=K(z,u+2j)$ for $0\le j<m$.
+    Let $\widetilde\Omega$ be the same vector in the full-region coordinates
+    of the integer domain. There are subspaces $S_j\subseteq\mathcal H_{X_j}$
+    and a vector $v\in\sum_j\mathcal C_{X_j}(S_j)$ such that
+    \begin{align}
+        \dim S_j               & \le L^{R_0}, \notag \\
+        \|\widetilde\Omega-v\| & \le L^{-p}. \notag
+    \end{align}
+    The exponent is chosen before the lattice, Hamiltonian, ground vector,
+    centre and radius. Empty or repeated sampled squares are permitted.
+    This is the large-radius cylinder estimate in the proof of
+    Proposition~4.1 of \cite{OpenAI2026PolynomialPEPS}, under the stated
+    entropy area-law premise.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_uniform_nested_patch_marginal_closeness,thm:peps_original_nested_entropy,thm:peps_patch_minimum_growth_entropy_distance,thm:peps_patch_radius_bounds,thm:peps_regularized_patch_minimum,thm:peps_inverse_filter_cylinders}
+    Choose the uniform weight budget $\kappa>0$ supplied by the marginal
+    estimate and the original-state entropy constant $C_S\ge1$. Set
+    \begin{align}
+        C_0 & =16C_S+\log8, \notag                            \\
+        R_0 & =\frac43\left[C_0\left(B_0+\frac1{\log2}\right)
+            +1+\frac{2p}{\kappa}\right]. \notag
+    \end{align}
+    For the given lattice and radius, take $R=R_0\log L$, $b=e^{-R}$
+    and $a_j=\kappa/m$. Write $N(R)$ for the minimum of the actual ordered
+    filter norm. The original entropy estimate and uniform marginal
+    estimate give
+    \begin{align}
+        \log N(R) & \le \frac\kappa2\left(C_0(1+u)+\frac R4\right). \notag
+    \end{align}
+    Choose a minimizing tuple. The ordered inverse-filter expansion
+    provides $S_j$ and $v$ with
+    $\dim S_j\le b^{-1}=e^R=L^{R_0}$ and
+    $\|\widetilde\Omega-v\|\le N(R)(2e^{-R})^{\kappa/2}$.
+    The chosen exponent satisfies
+    $C_0(1+u)+\log2-3R/4\le-(2p/\kappa)\log L$.
+    Since $N(R)>0$, taking the logarithm of this positive upper bound gives
+    \begin{align}
+        \log\!\left(N(R)(2e^{-R})^{\kappa/2}\right)
+         & \le \frac\kappa2\left(C_0(1+u)+\log2-\frac{3R}4\right)
+        \le-p\log L. \notag
+    \end{align}
+    Exponentiating proves the error bound.
+\end{proof}

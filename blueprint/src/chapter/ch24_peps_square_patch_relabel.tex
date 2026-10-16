@@ -1,0 +1,78 @@
+% Source: OpenAI2026PolynomialPEPS, Proposition 4.1, 03-patches.tex,
+% lines 24--49 and 563--603; eq:patch-cylinder-projection.
+% Revision adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Relabelling square cylinder data]
+    \label{thm:peps_square_patch_relabel}
+    \leanok
+    \lean{TNLean.PEPS.EncodedFrame.SquarePatch.exists_relabel}
+    \uses{def:peps_frame_square_patch,def:peps_adaptive_patch_constraint}
+    Let $V,W$ be finite site sets, let $q\in\N$, and let $e:V\to W$ be a
+    bijection. For positions $\pi:V\to\R^2$, put
+    $\pi'(w)=\pi(e^{-1}w)$. The induced unitary $U$ on configuration
+    spaces is given by $(U\psi)(\tau)=\psi(\tau\circ e)$.
+    Let $P$ be square cylinder data at center $z$ and scale $u$, with
+    radii $r_j$, samples $D_j$ and inside dimensions $d_j$ for $0\leq j<m$.
+    Write
+    \begin{align}
+        \Pi_P & =\sum_{j=0}^{m-1}\sum_{\ell=0}^{d_j-1}
+        |v_{j\ell}\rangle\langle v_{j\ell}|_{D_j}
+        \otimes I_{V\setminus D_j}. \notag
+    \end{align}
+    There are square cylinder data $P'$ for the positions $\pi'$ with
+    the same center, scale, number of radii, radii and inside dimensions,
+    whose cylinder sum satisfies $\Pi_{P'}=U\Pi_PU^*$.
+    This holds also for empty site sets and empty samples; repeated
+    radii retain their separate lists of inside vectors. The sum $\Pi_P$
+    is the literal cylinder sum in
+    \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:peps_frame_square_patch,def:peps_adaptive_patch_constraint}
+    The bijection restricts to $e_j:D_j\to D'_j$, since
+    $\pi'(e(v))=\pi(v)$. Transport each $v_{j\ell}$ by the induced
+    configuration unitary $U_j$. Its norm is unchanged, and extension
+    by the identity commutes with this relabelling:
+    \begin{align}
+        |U_jv_{j\ell}\rangle\langle U_jv_{j\ell}|_{D'_j}
+        \otimes I_{W\setminus D'_j}
+         & =U\bigl(|v_{j\ell}\rangle\langle v_{j\ell}|_{D_j}
+        \otimes I_{V\setminus D_j}\bigr)U^*. \notag
+    \end{align}
+    Conjugation preserves products, so distinct cylinder projectors
+    remain orthogonal. Summing over $j,\ell$ gives
+    $\Pi_{P'}=U\Pi_PU^*$; the radii and dimensions were unchanged.
+\end{proof}
+
+\begin{theorem}[Relabelling an adaptive patch approximation]
+    \label{thm:peps_adaptive_patch_relabel}
+    \leanok
+    \lean{TNLean.PEPS.EncodedFrame.HasAdaptivePatch.relabel}
+    \uses{thm:peps_square_patch_relabel,def:peps_adaptive_patch_constraint}
+    With the site sets, positions and unitary of
+    Theorem~\ref{thm:peps_square_patch_relabel}, let
+    $\Omega\in\ell^2([q]^V;\C)$, $C,c,p\in\R$, $L\in\N$,
+    $z\in\R^2$ and $u\in\R$. At $L=0$, real powers are interpreted
+    by $0^0=1$ and $0^a=0$ for $a\ne0$. Suppose that square cylinder
+    data $P$ at $(z,u)$ satisfy
+    \begin{align}
+        \sum_jd_j           & \leq CL^c, \notag   \\
+        \|(I-\Pi_P)\Omega\| & \leq L^{-p}. \notag
+    \end{align}
+    Then there are square cylinder data $P'$ for the positions $\pi'$
+    at the same center and scale, with
+    \begin{align}
+        \sum_jd'_j              & \leq CL^c, \notag   \\
+        \|(I-\Pi_{P'})U\Omega\| & \leq L^{-p}. \notag
+    \end{align}
+    Thus the adaptive patch conclusion of
+    \cite[Proposition~4.1]{OpenAI2026PolynomialPEPS} is preserved with
+    the same constants and the same transported input vector.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{thm:peps_square_patch_relabel}
+    Take the relabelled data from
+    Theorem~\ref{thm:peps_square_patch_relabel}. Their total inside
+    dimension is unchanged. Since $U$ is unitary,
+    $\|(I-\Pi_{P'})U\Omega\|=\|U(I-\Pi_P)\Omega\|
+        =\|(I-\Pi_P)\Omega\|$, which gives the asserted error bound.
+\end{proof}

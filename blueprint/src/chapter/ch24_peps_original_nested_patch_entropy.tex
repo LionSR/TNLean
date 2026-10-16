@@ -1,0 +1,36 @@
+\begin{theorem}[Original-state entropy on the nested squares]
+    \label{thm:peps_original_nested_entropy}
+    \leanok
+    \lean{TNLean.PEPS.Approximation.SquareEntropyAreaLaw.exists_nestedPatch_entropy_le}
+    \uses{def:square_entropy_area_law,def:peps_nested_patches}
+    Assume the square-grid entropy area law. For every integer $q\ge2$ and
+    all reals $J,\Delta>0$, there is a constant $C_S\ge1$ with the following
+    property. For every $L$, every Hamiltonian of the original square-grid
+    model with interaction bound $J$, and every unit ground vector $\Omega$
+    with ground energy $E_0$ and full-system gap at least $\Delta$, let
+    $\widetilde\Omega$ denote the same vector in integer-domain coordinates.
+    For every centre $z\in\mathbb R^2$, every $u\ge0$, and every selected
+    nested square $K_j=K(z,u+2j)$, where $0\le j<\lfloor u/2\rfloor+1$,
+    \begin{align}
+        S_{\widetilde\Omega}(K_j) & \le C_S(1+u). \notag
+    \end{align}
+    The constant is chosen before $L$, the Hamiltonian, $E_0$, $\Omega$,
+    $z$ and $u$. If $C_A\ge0$ is the area-law constant, one may take
+    $C_S=\max\{1,16C_A\}$. This is the original-state entropy estimate used
+    in the proof of Proposition~4.1 of \cite{OpenAI2026PolynomialPEPS}.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:square_entropy_area_law,thm:finite_product_entropy_relabel,thm:square_edge_boundary_card,thm:peps_nested_patch_sizes}
+    Relabel the cut $K_j$ as a subset of the original grid. This preserves
+    both its regional entropy and the number of crossing edges. The area
+    law and the boundary estimate therefore give
+    \begin{align}
+        S_{\widetilde\Omega}(K_j)
+         & \le C_A|\partial_\Lambda K_j|
+        \le C_A(16u+4)
+        \le 16C_A(1+u)
+        \le C_S(1+u). \notag
+    \end{align}
+    These inequalities also apply to empty or repeated sampled squares
+    and to $u=0$.
+\end{proof}
