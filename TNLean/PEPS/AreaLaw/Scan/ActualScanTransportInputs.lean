@@ -22,12 +22,15 @@ Proposition 8.1.
 For the actual rounds of one physical collar scan these fields are proved from the
 transport estimates of the actual rounds. The rounds are interleaved fills and charges; each
 is the literal round of the corresponding transport datum. The hypotheses are those of
-Proposition 7.4: the supplied vector is a nonzero element of the symmetric subspace at every
-replica count, the product `aℓ` of the per-band weight and the logarithmic support cap is
-small, and for the energy estimate the supplied vector is an eigenvector of the replica mean
-of the truncated Hamiltonian with the truncated ground energy. At zero replicas that mean is
-zero, so the eigenvector equation is required only for positive replica counts; at zero
-replicas the energy estimate uses the eigenvalue zero.
+Proposition 7.4, at the positive replica counts where the source applies it
+(`06-transport.tex`, line 384; `08-scanner.tex`, line 373): the supplied vector is a nonzero
+element of the symmetric subspace, the product `aℓ` of the per-band weight and the logarithmic
+support cap is small, and for the energy estimate the supplied vector is an eigenvector of the
+replica mean of the truncated Hamiltonian with the truncated ground energy. Since
+`ScanInputs` quantifies over every replica count, the one-point zero-copy space carries the
+unit vector (`withZeroCopyUnit`); there the replica mean vanishes and the energy estimate uses
+the eigenvalue zero. The consumer is the conditional scanner estimate
+`scanner_estimate_actualScan`, through `ScanTransportInputs.toScanInputs`.
 
 The source's transport constants are universal, and the support dimensions enter them only
 through `ℓ = 1 + (2r₀ + 1)² log q`. With `r₀ = ⌈C_tr log² n⌉`, `ℓ` is at most a fixed multiple
@@ -198,6 +201,53 @@ theorem hasDerivAt_of_hasDerivAt_neg {g : ℝ → ℝ} {d p : ℝ}
   have h2 := hg.neg
   rwa [show (-fun x ↦ -g x) = g from funext fun x ↦ by simp] at h2
 
+section ZeroCopy
+
+variable {F : Type} [Fintype F] [DecidableEq F] {ι : F → Type} [∀ f, Fintype (ι f)]
+  [∀ f, DecidableEq (ι f)]
+
+/-- A family of replica vectors with the one-point zero-copy space carrying the unit vector.
+Proposition 7.4 is applied only at positive replica counts (`06-transport.tex`, line 384;
+`08-scanner.tex`, line 373); at zero copies this choice makes the leaf measures of
+`ScanInputs` have their interior mass `1/2`. -/
+noncomputable def withZeroCopyUnit (pre : (k : ℕ) → TensorPower.Config k ι → ℂ) :
+    (k : ℕ) → TensorPower.Config k ι → ℂ :=
+  fun k ↦ if k = 0 then fun _ ↦ 1 else pre k
+
+omit [Fintype F] [DecidableEq F] [∀ f, Fintype (ι f)] [∀ f, DecidableEq (ι f)] in
+/-- At a positive replica count the family is the supplied one. -/
+theorem withZeroCopyUnit_of_pos (pre : (k : ℕ) → TensorPower.Config k ι → ℂ) {k : ℕ}
+    (hk : 1 ≤ k) : withZeroCopyUnit pre k = pre k := by
+  unfold withZeroCopyUnit
+  split_ifs with h
+  · omega
+  · rfl
+
+/-- Symmetry at positive replica counts gives symmetry at every replica count; at zero copies
+the copy permutation group is trivial. -/
+theorem withZeroCopyUnit_mem_symmetricSubspace
+    {pre : (k : ℕ) → TensorPower.Config k ι → ℂ}
+    (hpre : ∀ k, 1 ≤ k → pre k ∈ TensorPower.symmetricSubspace k ι) (k : ℕ) :
+    withZeroCopyUnit pre k ∈ TensorPower.symmetricSubspace k ι := by
+  rcases Nat.eq_zero_or_pos k with rfl | hk
+  · refine (PermutationRepresentation.mem_invariantSubspace _).mpr fun g ↦ ?_
+    rw [Subsingleton.elim g 1, map_one, Matrix.one_mulVec]
+  · rw [withZeroCopyUnit_of_pos pre hk]
+    exact hpre k hk
+
+omit [Fintype F] [DecidableEq F] [∀ f, Fintype (ι f)] [∀ f, DecidableEq (ι f)] in
+/-- Nonvanishing at positive replica counts gives nonvanishing at every replica count. -/
+theorem withZeroCopyUnit_ne_zero {pre : (k : ℕ) → TensorPower.Config k ι → ℂ}
+    (hpre : ∀ k, 1 ≤ k → pre k ≠ 0) (k : ℕ) : withZeroCopyUnit pre k ≠ 0 := by
+  rcases Nat.eq_zero_or_pos k with rfl | hk
+  · intro h0
+    have := congrFun h0 (fun i ↦ i.elim0)
+    simp [withZeroCopyUnit] at this
+  · rw [withZeroCopyUnit_of_pos pre hk]
+    exact hpre k hk
+
+end ZeroCopy
+
 namespace CollarScan
 
 section Bridge
@@ -282,11 +332,16 @@ threshold `c₀ > 0` and thresholds `C₀`, `C_{l,0}` such that for every scanne
 physical collar scan at the source scales (`scanner:scales`) with `r₀ = ⌈C_tr log² N⌉` satisfy
 the source test geometry (`scanner:test-geometry`), let `Ω` be a unit vector, `Δ > 0`, and let
 `W ≥ 1` be a total weight whose per-band weight `a = W/K` satisfies the smallness `aℓ ≤ c₀`
-for the support cap `ℓ = 1 + (2r₀ + 1)² log q`. Let the supplied replica vectors be nonzero
-and symmetric at every replica count, and at every positive replica count eigenvectors of the
-replica mean of the augmented truncated Hamiltonian with eigenvalue `\widetilde E_0` of a
-truncated ground state `T`. Then the actual rounds satisfy the conclusions of
-Proposition 7.4 in the form `ScanTransportInputs` for `W` and `T`.
+for the support cap `ℓ = 1 + (2r₀ + 1)² log q`. Let the supplied replica vectors be nonzero,
+symmetric, and eigenvectors of the replica mean of the augmented truncated Hamiltonian with
+eigenvalue `\widetilde E_0` of a truncated ground state `T`, at every positive replica count,
+where the source applies Proposition 7.4. Then the actual rounds of the family that agrees
+with the supplied one at positive replica counts and carries the unit vector at zero copies
+(`withZeroCopyUnit`) satisfy the conclusions of Proposition 7.4 in the form
+`ScanTransportInputs` for `W` and `T`. These are the Proposition 7.4 inputs of the
+conditional scanner estimate `scanner_estimate_actualScan`, via
+`ScanTransportInputs.toScanInputs`; its conclusions at positive replica counts concern only
+the supplied vectors.
 
 Source: `06-transport.tex`, Proposition 7.4, lines 377–433; `08-scanner.tex`, lines 32–59,
 83–154 and 416–461. -/
@@ -310,15 +365,16 @@ theorem exists_scanTransportInputs_actualScan (X : ScannerExponents) {q : ℕ} [
         X.a W N * transportLogDimBound q S.r₀ ≤ c₀ →
         ∀ pre : (k : ℕ) →
           Config k (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q aux v)) → ℂ,
-        (∀ k, pre k ∈
+        (∀ k, 1 ≤ k → pre k ∈
           symmetricSubspace k (fun v ↦ Fin (augmentedDimensions (V := Site Λ) q aux v))) →
-        (∀ k, pre k ≠ 0) →
+        (∀ k, 1 ≤ k → pre k ≠ 0) →
         (∀ k, 1 ≤ k → copyMean (augmentedDimensions (V := Site Λ) q aux) k
             (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω Δ (X.L N) i)) *ᵥ pre k =
           (Tr.E0 : ℂ) • pre k) →
         Nonempty (ScanTransportInputs X κ N Tr
           (fun r ↦ S.actualScanRound hm hM (augmentedDimensions (V := Site Λ) q aux)
-            (S.actualEnergyTerms h Ω Δ (X.L N) aux) (X.a W N) pre r.val) W) := by
+            (S.actualEnergyTerms h Ω Δ (X.L N) aux) (X.a W N) (withZeroCopyUnit pre) r.val)
+          W) := by
   classical
   obtain ⟨c₀, Cent, eent, Cen, een, hc₀, htransport⟩ := actualRounds_transport_domainGraph
   have hq : 1 ≤ q := NeZero.pos q
@@ -332,7 +388,16 @@ theorem exists_scanTransportInputs_actualScan (X : ScannerExponents) {q : ℕ} [
     (Real.tendsto_log_atTop.comp tendsto_natCast_atTop_atTop).eventually_ge_atTop 1]
     with N hsf hsep hN3 hlog
   intro Λ T R J Δ _ hT h Ω S hm hM aux _ hgraph hdepth hanchor hΔ hΩ hSn hSm hSK hSD hSr hC
-    hrows hclear Tr W hW haℓ pre hsym hpre heig
+    hrows hclear Tr W hW haℓ pre₁ hsym₁ hpre₁ heig₁
+  have hsym := withZeroCopyUnit_mem_symmetricSubspace hsym₁
+  have hpre := withZeroCopyUnit_ne_zero hpre₁
+  have heig : ∀ k, 1 ≤ k → copyMean (augmentedDimensions (V := Site Λ) q aux) k
+      (augmentOperator q aux (∑ i, S.truncatedEnergyTerm h Ω Δ (X.L N) i)) *ᵥ
+        withZeroCopyUnit pre₁ k = (Tr.E0 : ℂ) • withZeroCopyUnit pre₁ k := fun k hk ↦ by
+    rw [withZeroCopyUnit_of_pos pre₁ hk]
+    exact heig₁ k hk
+  clear hsym₁ hpre₁ heig₁
+  generalize withZeroCopyUnit pre₁ = pre at hsym hpre heig ⊢
   dsimp only [roundedLogRadius] at hsep
   obtain ⟨-, hr, hDpos, hmargin, -⟩ := hsep
   have hn : 0 < S.n := by omega

@@ -3222,6 +3222,10 @@ The finite-leaf estimates below follow the charge-energy argument in
     \lean{TNLean.PEPS.AreaLaw.Scan.ScanTransportInputs,
         TNLean.PEPS.AreaLaw.Scan.ScanTransportInputs.toScanInputs,
         TNLean.PEPS.AreaLaw.Scan.mul_rpow_le_of_le_mul_rpow_four,
+        TNLean.PEPS.AreaLaw.Scan.withZeroCopyUnit,
+        TNLean.PEPS.AreaLaw.Scan.withZeroCopyUnit_of_pos,
+        TNLean.PEPS.AreaLaw.Scan.withZeroCopyUnit_mem_symmetricSubspace,
+        TNLean.PEPS.AreaLaw.Scan.withZeroCopyUnit_ne_zero,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualScanRound_eq_transportScanRound,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_energyError_nonneg,
         TNLean.PEPS.AreaLaw.Scan.CollarScan.continuous_log_filteredNormSq_actualRoundData,
@@ -3241,11 +3245,13 @@ The finite-leaf estimates below follow the charge-energy argument in
     auxiliary dimensions be positive, and let $\widetilde E_0\ge0$ be the
     ground energy recorded by a truncation of the scanner. Let $W\ge1$ and
     $a=W/K$ satisfy $a\ell\le c_0$ for
-    $\ell=1+(2r_0+1)^2\log q$. Let the replica vectors
-    $\mathrm{pre}_k$ be nonzero and symmetric for every $k\ge0$, with
-    $\overline H_k\mathrm{pre}_k=\widetilde E_0\mathrm{pre}_k$ for every
-    $k\ge1$, where $\overline H_k$ is the replica mean of the augmented
-    truncated Hamiltonian. Then the $2nm$ actual rounds, with
+    $\ell=1+(2r_0+1)^2\log q$. For every $k\ge1$ let the replica vector
+    $\mathrm{pre}_k$ be nonzero and symmetric, with
+    $\overline H_k\mathrm{pre}_k=\widetilde E_0\mathrm{pre}_k$, where
+    $\overline H_k$ is the replica mean of the augmented truncated
+    Hamiltonian; nothing is assumed at $k=0$. Extend the family to $k=0$ by
+    the unit vector of the one-point zero-copy space. Then the $2nm$ actual
+    rounds of the extended family, with
     interpolation parameter $a/2$ in every band metric, satisfy the following
     for every round and replica count $k$, with sequences
     $0\le\beta_k\le C_\beta\log(k+2)$ and $\varepsilon_k\ge0$,
@@ -3270,8 +3276,12 @@ The finite-leaf estimates below follow the charge-energy argument in
     \end{enumerate}
     Together with the comparator budgets, the initial floor and the terminal
     rough upper comparison of \cite[Proposition~8.1]{OpenAI2026AreaLaw},
-    these are the inputs of Proposition~9.2 there; the two remainders and
-    the two logarithmic errors are added.
+    these are the transport and comparator inputs taken as hypotheses by the
+    conditional scanner estimate of
+    Theorem~\ref{thm:al_scanner_actual_scan}; the two remainders and the two
+    logarithmic errors are added. That theorem quantifies over every replica
+    family, so it applies to the extended family, and its conclusions at
+    $k\ge1$ concern only the given vectors.
 \end{theorem}
 \begin{proof}\leanok
     \uses{def:al_scan_actual_round_family,thm:al_scan_actual_round_transport,
@@ -3289,8 +3299,9 @@ The finite-leaf estimates below follow the charge-energy argument in
     $A=1+(2C_r+3)^2\log q$ once $\log n\ge1$, every coefficient
     $C'\ell^{e'}$ is at most $|C'|A^{\max(e',0)}(\log n)^{4\max(e',0)}$,
     which is at most $C(\log n)^{C_l}$ for the stated thresholds; the energy
-    sum is nonnegative. At $k=0$ the replica mean vanishes, so the energy
-    estimate holds with eigenvalue $0\le\widetilde E_0$. The endpoint
+    sum is nonnegative. At $k=0$ the extended vector is nonzero and, the copy
+    permutation group being trivial, symmetric; the replica mean vanishes, so
+    the energy estimate holds with eigenvalue $0\le\widetilde E_0$. The endpoint
     agreement is the root identity of
     Theorem~\ref{thm:al_scan_actual_round_telescope}.
 \end{proof}
