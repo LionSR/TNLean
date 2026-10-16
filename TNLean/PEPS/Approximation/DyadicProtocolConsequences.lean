@@ -56,6 +56,7 @@ theorem le_two_pow_clog_lt {L : ℕ} (hL : 2 ≤ L) :
   have h1 := Nat.clog_pos (b := 2) (by norm_num) (by omega : 1 < L)
   refine ⟨h1, Nat.le_pow_clog (by norm_num) L, ?_⟩
   have h2 := Nat.pow_pred_clog_lt_self (b := 2) (by norm_num) (by omega : 1 < L)
+  rw [Nat.pred_eq_sub_one] at h2
   have : 2 ^ Nat.clog 2 L = 2 * 2 ^ (Nat.clog 2 L - 1) := by
     rw [← pow_succ']; congr 1; omega
   omega
@@ -75,7 +76,7 @@ theorem largeSizeDyadicProtocolConsequences_of_angularInformationBound
     (hpatch : AdaptivePatchConstraint) : LargeSizeDyadicProtocolConsequences := by
   classical
   intro q hq J Δ hJ hΔ
-  haveI : NeZero q := ⟨by omega⟩
+  have : NeZero q := ⟨by omega⟩
   have ha₀ : angularConstant = 1 / 5000 := rfl
   -- the constants of the protocol, in the order of the source
   set ε₀ : ℝ := 1 / 30000 with hε₀_def
@@ -102,16 +103,16 @@ theorem largeSizeDyadicProtocolConsequences_of_angularInformationBound
   have hc : IsProtocolConstants K₀ ε₀ ν a D B₀ :=
     { twenty_le_K₀ := le_rfl
       ε₀_pos := hε
-      ε₀_small := by rw [ha₀]; norm_num
+      ε₀_small := by rw [hε₀_def, ha₀]; norm_num
       ν_pos := hν
-      ν_small := by linarith
+      ν_small := by rw [hε₀_def]; linarith [hν6]
       a_pos := ha
       a_le := le_rfl
       D_pos := hDpos
       B₀_ge := le_rfl }
   -- the patch constants of Proposition 4.1
   obtain ⟨C, c, hC, hcpos, hsupply⟩ := hpatch.supply_cellCenterPos hq hJ hΔ (B₀ := B₀)
-    (p := 60) (by positivity) (by norm_num)
+    (p := 60) (mul_pos (by norm_num) hDpos) (by norm_num)
   set b := protocolPatchBound ε₀ ν with hb_def
   have hb : 18 ≤ b := eighteen_le_protocolPatchBound ε₀ ν
   set C' := ⌈C⌉₊ with hC'_def
@@ -152,11 +153,13 @@ theorem largeSizeDyadicProtocolConsequences_of_angularInformationBound
       simpa [largeSquare] using hl
     exact exists_largeRepainting_segment hD hLL hΩ hΩ1.le le_rfl le_rfl hc hL hkL hk2 P rank R₀ ht
       hB (protocolFrozen P rank hr) protocolAuxOwner hi he hl (by omega) hK1
-      (fun hS {g} hg {M M'} Q₀ hQ hM L₀ hL₀ => H₂ ν hν hνν₂ hc hL hΩ1 P rank ⟨S, hS⟩ hlarge _ hg Q₀
-        hQ hM L₀ hL₀ _ (Nat.le_ceil C) hC' (Nat.le_ceil c))
+      (fun hS => by
+        intro g hg M M' Q₀ hQ hM L₀ hL₀
+        exact H₂ ν hν hνν₂ hc hL hΩ1 P rank ⟨S, hS⟩ hlarge _ hg Q₀ hQ hM L₀ hL₀ _ (Nat.le_ceil C)
+          hC' (Nat.le_ceil c))
       (fun hS e => protocolFrozen_auxInit P rank hr hi he hS e)
       (fun hS e => protocolAuxOwner_auxInit hi he hS e)
-  have hholes : (((auxIndices k (largeSquare K₀ (D * Real.log L))).map fun x =>
+  have hholes : ((auxIndices k (largeSquare K₀ (D * Real.log L))).map fun x =>
       ((protocolFrozen (q := q) P rank hr x).holes.length : ℝ)).sum ≤ C₁ * (L : ℝ) ^ 3 := by
     have h2 : ∀ y ∈ (auxIndices k (largeSquare K₀ (D * Real.log L))).map fun x =>
         ((protocolFrozen (q := q) P rank hr x).holes.length : ℝ), y ≤ 2 := by
@@ -169,12 +172,12 @@ theorem largeSizeDyadicProtocolConsequences_of_angularInformationBound
         ((auxIndices k (largeSquare K₀ (D * Real.log L))).length : ℝ) ≤
           (protocolSchedule k (largeSquare K₀ (D * Real.log L))).length).trans
         (length_protocolSchedule_le_cube hk2 _)
-    have hsum := List.sum_le_card_nsmul _ 2 h2
+    have hsum := List.sum_le_length_nsmul _ 2 h2
     rw [List.length_map, nsmul_eq_mul] at hsum
     have hC₁ : (10080 : ℝ) ≤ C₁ := le_max_left _ _
     have hL3 : (0 : ℝ) ≤ (L : ℝ) ^ 3 := by positivity
     nlinarith
-  obtain ⟨D', hD', -⟩ := H₁ ν hν hνν₁ (k := k) hc (H₃ ν hν hνν₃) P hL hkL hk2 hΩ1 rank R₀ ht hB
+  obtain ⟨D', hD', -⟩ := H₁ ν hν hνν₁ hc (H₃ ν hν hνν₃) P hL hkL hk2 hΩ1 rank R₀ ht hB
     (protocolFrozen P rank hr) protocolAuxOwner (C' := C') (c' := c') (kK := kK) (C₁ := C₁)
     (Nat.le_ceil C) hC' (Nat.le_ceil c) hseg
     (fun x _ _ hh => norm_act_proj_sub_le_of_mem_holes_protocolFrozen P rank hr (by omega) x hh)
@@ -182,11 +185,11 @@ theorem largeSizeDyadicProtocolConsequences_of_angularInformationBound
     (by
       have hpow : (0 : ℝ) ≤ (L : ℝ) ^ kK := by positivity
       have hGC : (G : ℝ) ≤ C₁ := (le_max_left _ _).trans (le_max_right _ _)
-      simp only [rewriteGateBound, Nat.cast_mul, Nat.cast_pow]
-      have : ((G : ℕ) : ℝ) = ((C' : ℝ) + 1) ^ (3 * b) *
-          (16 * (b : ℝ) ^ 2 * ((C' : ℝ) + 1) ^ (6 * b) + 1) ^ (2 * b) := by
-        simp [hG_def]
-      rw [← this]
+      have hRG : (rewriteGateBound C' c' b L : ℝ) = (G : ℝ) * (L : ℝ) ^ kK := by
+        rw [show rewriteGateBound C' c' b L = G * L ^ kK from rfl]
+        push_cast
+        ring
+      rw [hRG]
       exact mul_le_mul_of_nonneg_right hGC hpow)
     ((le_max_right _ _).trans (le_max_right _ _))
   exact ⟨ProtocolParty k, inferInstance, D', hD'⟩

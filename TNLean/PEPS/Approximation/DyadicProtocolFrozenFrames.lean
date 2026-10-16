@@ -55,7 +55,8 @@ at the stage of the level of `S` at which `S` is repainted. Other indices carry 
 the root party; they do not occur.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 198–214 and 620–624. -/
-def protocolFrozen (x : ProtocolEvent k × RepaintOp) : Frame (cellCenterPos L) q (ProtocolParty k) :=
+def protocolFrozen (x : ProtocolEvent k × RepaintOp) :
+    Frame (cellCenterPos L) q (ProtocolParty k) :=
   match x with
   | (.inl S, .auxInit e) =>
     if hS : (S.1 : ℕ) < k then
@@ -113,7 +114,8 @@ theorem norm_act_proj_sub_le_of_mem_holes_protocolFrozen (hL : 1 ≤ L)
     (hh : h ∈ (protocolFrozen (q := q) P rank hr x).holes) :
     ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹ := by
   have hpow : (L : ℝ) ^ (-(60 : ℝ)) = ((L : ℝ) ^ 60)⁻¹ := by
-    rw [Real.rpow_neg (by positivity), Real.rpow_natCast]
+    rw [Real.rpow_neg (by positivity)]
+    norm_cast
   have key : ∀ {R : RepaintedSquare k} {M : Finset (ℤ × ℤ)} {L₀ : GuideLabel}
       {g : ℝ × ℝ → GuideLabel}, h ∈ (treatedFrame (q := q) P rank R hr M L₀ g).holes →
       ‖act h.patch.proj Ω - Ω‖ ≤ ((L : ℝ) ^ 60)⁻¹ := fun {R M L₀ g} hh => by
@@ -126,7 +128,7 @@ theorem norm_act_proj_sub_le_of_mem_holes_protocolFrozen (hL : 1 ≤ L)
   rcases x with ⟨S | J, o⟩
   · cases o with
     | auxInit e =>
-      unfold protocolFrozen at hh
+      dsimp only [protocolFrozen] at hh
       split_ifs at hh
       · exact key hh
       · simp [Frame.raw] at hh
@@ -146,7 +148,7 @@ theorem length_holes_protocolFrozen_le {K₀ ν a D : ℝ} (hc : IsProtocolConst
   classical
   obtain ⟨S, hxS, hlS⟩ := exists_large_of_mem_auxIndices hx
   obtain ⟨e, rfl⟩ := eq_auxInit_of_mem_auxIndices hx hxS
-  unfold protocolFrozen
+  dsimp only [protocolFrozen]
   split_ifs with hS
   · set R : RepaintedSquare k := ⟨S, hS⟩
     set done := repaintedBlocks k (scheduleIndex (.inl S)) S.1
@@ -179,8 +181,9 @@ theorem length_holes_protocolFrozen_le {K₀ ν a D : ℝ} (hc : IsProtocolConst
           (repaintBaseline R done).finalLabel ((repaintBaseline R done).nbrLabel e))
         (by simp [auxWords]) h1
       rcases h2 with h2 | h2
-      · exact Finset.mem_insert.2 (Or.inl (by rw [← h2, sub_add_cancel]))
-      · exact Finset.mem_insert.2 (Or.inr (Finset.mem_singleton.2 (by rw [← h2, sub_add_cancel])))
+      · exact Finset.mem_insert.2 (Or.inl (by rw [← sub_add_cancel z d, h2]))
+      · exact Finset.mem_insert.2 (Or.inr (Finset.mem_singleton.2
+          (by rw [← sub_add_cancel z d, h2])))
     exact (Finset.card_le_card hsub).trans Finset.card_le_two
   · simp [Frame.raw]
 

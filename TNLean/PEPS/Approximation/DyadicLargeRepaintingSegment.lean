@@ -90,7 +90,8 @@ theorem nodup_auxIndices (large : DyadicSquare k → Bool) : (auxIndices k large
 
 theorem mem_auxIndices {large : DyadicSquare k → Bool} {S : DyadicSquare k}
     (hS : (Sum.inl S : ProtocolEvent k) ∈ eventSchedule k) (hl : large S = true)
-    (e : SquareEdge) : ((Sum.inl S : ProtocolEvent k), RepaintOp.auxInit e) ∈ auxIndices k large := by
+    (e : SquareEdge) :
+    ((Sum.inl S : ProtocolEvent k), RepaintOp.auxInit e) ∈ auxIndices k large := by
   rw [auxIndices_eq]
   refine List.mem_flatMap.2 ⟨_, hS, ?_⟩
   simp only [eventAuxIndices, hl, ite_true, List.mem_map]
