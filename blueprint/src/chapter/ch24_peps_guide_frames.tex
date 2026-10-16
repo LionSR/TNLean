@@ -99,6 +99,28 @@ outer sample.
     lines 69--80 and 109--125.
 \end{definition}
 
+\begin{theorem}[Guide frames with equal patches at their centers]
+    \label{thm:peps_guide_frame_patch_congruence}
+    \lean{TNLean.PEPS.Approximation.guideFrame_congr_patch,
+        TNLean.PEPS.Approximation.guideFrame_congr}
+    \leanok
+    \uses{def:peps_guide_frame}
+    Fix finite physical sites, their positions and local dimension, a guide,
+    an assignment of owners to labels, a placeholder and a label ranking.
+    Two patch families on the same finite set $V$ of hole centers give equal
+    guide frames if they agree at every point of $V$ and each family has
+    pairwise disjoint outer physical samples. In particular, equal sets of
+    centers and equal patch functions give equal guide frames, with the same
+    remaining data, regardless of the chosen disjointness witnesses.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:peps_guide_frame}
+    The raw owners agree. The lists of holes agree term by term, since every
+    center receives the same patch and canonical tag holder. Equality of
+    center sets and patch functions gives the second conclusion by the first.
+\end{proof}
+
 \begin{lemma}[Canonical tag holders]
     \label{lem:peps_guide_frame_tags}
     \lean{TNLean.PEPS.Approximation.isTagHolder_tagHolder,
@@ -535,8 +557,12 @@ outer sample.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{lem:peps_guide_frame_patch_data}
+    \uses{lem:peps_guide_frame_patch_data, lem:peps_adaptive_patch_supply,
+        thm:peps_frame_small_rewrite_gate_sources}
     The supplied patch at a center depends only on the center and the radius, so
     the old and new holes agree where their radii do. A supplied patch has at most
-    $C'L^{c'}$ tags, error at most $L^{-60}$ on $\Omega$, and a tag.
+    $C'L^{c'}$ tags, error at most $L^{-60}$ on $\Omega$, and a tag. These data
+    discharge the patch hypotheses of the source-bounded reading-step results in
+    Theorem~\ref{thm:peps_frame_small_rewrite_gate_sources}. The same gates retain
+    at most $2b$ pair sources in every monomial.
 \end{proof}
