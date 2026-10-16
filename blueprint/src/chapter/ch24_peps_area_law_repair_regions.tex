@@ -1075,6 +1075,45 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     performed.
 \end{definition}
 
+% Source: openai/math@adc7f1241b42e322a6451854ab7e4b4c146bf78a,
+% Section 11, geometry:bad-sites, lines 694--707.
+\begin{theorem}[Exceptional sites at an empty generation]
+    \label{thm:area_law_repair_exceptional_sites_prefix_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.card_repairStageExceptionalSites_le_prefix}
+    \leanok
+    \uses{def:area_law_repair_exceptional_sites,def:area_law_hamiltonian}
+    Fix the origin, finite domain and cut, integers $C_0\ge2$ and
+    $k_0\ge50{,}000{,}000$, and a real stopping scale $S_*$. Suppose that
+    the mark family $K_N$ at generation $N$ is empty. Put
+    $C_{\mathrm{dum}}=2\bigl(2(C_0+1)2^{k_0}+1\bigr)^2$ and
+    $b=|\partial_\Lambda A|$. Then
+    \begin{align}
+        |D_N(A)|
+         & \le C_{\mathrm{dum}}b+(2S_*+1)^2\sum_{0\le j<N}|K_j|.\notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_terminal_interiors_before_empty,
+        thm:area_law_repair_dummy_sites_count,
+        thm:area_law_repair_terminal_prefix_sites}
+    Since $K_N=\varnothing$,
+    Theorem~\ref{thm:area_law_repair_terminal_interiors_before_empty}
+    identifies the terminal union with its contributions before $N$.
+    Thus
+    \begin{align}
+        D_N(A)
+         & =X_{*_N}(A)\cup
+        \left(A\cap\bigcup_{0\le j<N}E_{\mathrm{term}}(\mathcal D_j)\right).
+        \notag
+    \end{align}
+    The cardinality of a union is at most the sum of the two cardinalities.
+    Theorems~\ref{thm:area_law_repair_dummy_sites_count} and
+    \ref{thm:area_law_repair_terminal_prefix_sites} bound these terms by
+    $C_{\mathrm{dum}}b$ and $(2S_*+1)^2\sum_{0\le j<N}|K_j|$, respectively.
+\end{proof}
+
 % Source: 10-geometry.tex, finiteness after restriction to the cut,
 % lines 777--780.
 \begin{lemma}[Finiteness of the retained identifiers]
