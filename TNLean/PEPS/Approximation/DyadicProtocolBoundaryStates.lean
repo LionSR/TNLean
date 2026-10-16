@@ -10,9 +10,8 @@ import TNLean.PEPS.Approximation.DyadicLevelEvents
 # The memory of the dyadic protocol between events
 
 Before each event of the schedule of Proposition 7.1 of the polynomial-PEPS manuscript the main
-guide is a block guide of a level, and the auxiliary sheets are idle initial copies or frozen
-frames (`06-geometry.tex`, lines 82–133 and 653–667). This file fixes these memories along the
-schedule:
+guide is a block guide of a level (`06-geometry.tex`, lines 82–133 and 653–667). This file fixes
+the main frame along the schedule:
 
 * `resizedCorners i j`, `repaintedBlocks i j` : the grid corners of scale `j` whose holes have been
   resized, and the blocks of level `j` that have been repainted, by the first `i` events;
@@ -20,9 +19,9 @@ schedule:
   event: the guide uniform on the blocks of the scale of a resize, with the holes of the corners
   already resized of radius `h_n` and the others of radius `h_{2n}`, or the guide of the level of a
   repainting with the blocks already repainted, with holes of radius `h_n`; after the last event,
-  the guide of the unit squares;
-* `auxState`, `protocolState` : the auxiliary frames, frozen once their event is done and idle
-  before, and the whole memory.
+  the guide of the unit squares.
+
+The auxiliary frames and whole memory are defined in `DyadicProtocolFromEvents`.
 
 The holes of a block guide sit at grid corners of the closed root square
 (`exists_index_of_isTrueVertex_levelGuide`).
@@ -36,11 +35,11 @@ The holes of a block guide sit at grid corners of the closed root square
 
 noncomputable section
 
-open Set Metric Filter Topology
+open Set Metric
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame
 
 variable {k : ℕ}
 
