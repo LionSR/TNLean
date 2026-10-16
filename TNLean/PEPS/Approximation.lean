@@ -84,6 +84,7 @@ import TNLean.PEPS.Approximation.CellConditionalInformationFromGap
 import TNLean.PEPS.Approximation.CellPartitionCount
 import TNLean.PEPS.Approximation.CellTwoFamilyPartition
 import TNLean.PEPS.Approximation.CoarseInformation
+import TNLean.PEPS.Approximation.CoarseInformationFromGap
 import TNLean.PEPS.Approximation.CoarseRectangleTemplates
 import TNLean.PEPS.Approximation.ColumnSelection
 import TNLean.PEPS.Approximation.CommonPairSources

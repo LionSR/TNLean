@@ -7892,6 +7892,34 @@ spectral split → block extraction → MPV calculation → strict bounds
 - **Caveat:** The state and all regions must use the same site equivalence.
   No normalization assumption is required for the entropy identity itself.
 
+### Integer lattice distances in the real plane — candidate (2026-10-15)
+
+- **Pattern:** Express the real coercion of the integer sup distance as the
+  product metric between the corresponding real coordinate pairs, using
+  `Prod.dist_eq`, `Real.dist_eq` and integer cast lemmas. A common real
+  translation cancels by `dist_add_right`.
+- **Seen:** The local distance identities in
+  `PEPS/Approximation/CellConditionalInformation.lean` and
+  `coarse_mutualInformation_le_translated_square` in
+  `PEPS/Approximation/CoarseInformationFromGap.lean`.
+- **Abstraction:** Two occurrences in two modules. A third use should promote
+  the cast identity to a geometric lemma; the translation cancellation already
+  uses Mathlib's standard identity.
+
+### Eighth-root separation of a vanishing density remainder — candidate (2026-10-15)
+
+- **Pattern:** Apply `Real.rpow_le_rpow` to a nonnegative density bounded by
+  `δ + ρ`, then use `Real.rpow_add_le_add_rpow` at exponent `1 / 8` to separate
+  the principal term from the replica remainder.
+- **Seen:** Two occurrences, in `PEPS/AreaLaw/Scan/EnergyBalance.lean` and
+  `PEPS/AreaLaw/Scan/SelectedEnergyDelta.lean`.
+- **Abstraction:** The existing Mathlib inequalities provide the two-step
+  argument. The latter module also supplies the complete scalar energy
+  implication, `selectedEnergy_le_of_density_le_add`, for use by physical
+  selected-point estimates. No additional tactic is proposed.
+- **Notes:** No multiplication by `1 - p` is allowed before its sign is known.
+  The scalar implication instead uses `1 - p ≤ 1` on nonnegative terms.
+
 ### Facts about the jointly chosen initial marks — candidate
 
 - **Pattern:** Recover the same two residue choices and finite mark set used by
