@@ -6,275 +6,275 @@ throughout. Expanding a message changes the monomial list at its original gate
 occurrence and preserves the operator of that list exactly.
 
 \begin{theorem}[Homogeneous ceiling bound]
-    \label{thm:homogeneous_ceiling_bound}
-    \lean{Nat.ceil_le_add_one_mul_of_le_mul}
-    \leanok
-    Let $x,A,s$ be real numbers with $0\le x$, $x\le As$, and $s\ge1$. Then
-    \begin{align}
-        \lceil x\rceil\le(A+1)s.
-    \end{align}
+	\label{thm:homogeneous_ceiling_bound}
+	\lean{Nat.ceil_le_add_one_mul_of_le_mul}
+	\leanok
+	Let $x,A,s$ be real numbers with $0\le x$, $x\le As$, and $s\ge1$. Then
+	\begin{align}
+		\lceil x\rceil\le(A+1)s.
+	\end{align}
 \end{theorem}
 \begin{proof}
-    \leanok
-    The ceiling estimate gives
-    \begin{align}
-        \lceil x\rceil\le x+1\le As+1\le As+s=(A+1)s.
-    \end{align}
+	\leanok
+	The ceiling estimate gives
+	\begin{align}
+		\lceil x\rceil\le x+1\le As+1\le As+s=(A+1)s.
+	\end{align}
 \end{proof}
 
 \begin{definition}[Message expansions at the original gate occurrences]
-    \label{def:peps_message_gate_lists}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.MessageGateLists}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.expandMessageGateLists}
-    \leanok
-    At each original nonprivate gate occurrence, prescribe a finite ordered
-    sum of monomials containing finite-dimensional messages. Replace each
-    message by its orthonormal-basis expansion and compose these expansions
-    within the original monomial. The resulting gate lists have the same
-    local input and output spaces. The chronological composition, private
-    operations, participating parties and spectator registers are retained.
+	\label{def:peps_message_gate_lists}
+	\lean{TNLean.PEPS.PairEffect.EffectCircuit.MessageGateLists}
+	\lean{TNLean.PEPS.PairEffect.EffectCircuit.expandMessageGateLists}
+	\leanok
+	At each original nonprivate gate occurrence, prescribe a finite ordered
+	sum of monomials containing finite-dimensional messages. Replace each
+	message by its orthonormal-basis expansion and compose these expansions
+	within the original monomial. The resulting gate lists have the same
+	local input and output spaces. The chronological composition, private
+	operations, participating parties and spectator registers are retained.
 \end{definition}
 
 \begin{definition}[Local approximation by message-containing monomials]
-    \label{def:peps_message_gate_approximation}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageGateApproximation}
-    \leanok
-    Fix one original operator at every nonprivate gate occurrence. A
-    prescribed message-containing expansion is a local approximation with
-    budget $\delta$ if the original gate and each private operation are
-    contractions, its monomials are allowed, and its operator differs from
-    the original gate by at most $\delta$ in operator norm. Each nonprivate
-    participating set has cardinality different from one. These are local
-    conditions; no comparison of the complete circuits is assumed.
+	\label{def:peps_message_gate_approximation}
+	\lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageGateApproximation}
+	\leanok
+	Fix one original operator at every nonprivate gate occurrence. A
+	prescribed message-containing expansion is a local approximation with
+	tolerance $\delta$ if the original gate and each private operation are
+	contractions, its monomials are allowed, and its operator differs from
+	the original gate by at most $\delta$ in operator norm. Each nonprivate
+	participating set has cardinality different from one. These are local
+	conditions; no comparison of the complete circuits is assumed.
 \end{definition}
 
 \begin{definition}[Original monomial and message bounds]
-    \label{def:peps_message_gate_resources}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageResourceBounded}
-    \leanok
-    Bounds $(r,m,K,D,C)$ mean that every prescribed original gate expansion
-    contains at most $K$ monomials, and each monomial contains at most $r$
-    pair effects and at most $m$ messages, has scalar coefficient of modulus
-    at most $C$, and has every message dimension at most $D$. The dimensions
-    and counts refer to the actual original message occurrences, including
-    their multiplicities. No coefficient-sum bound is assumed.
+	\label{def:peps_message_gate_resources}
+	\lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageResourceBounded}
+	\leanok
+	Bounds $(r,m,K,D,C)$ mean that every prescribed original gate expansion
+	contains at most $K$ monomials, and each monomial contains at most $r$
+	pair effects and at most $m$ messages, has scalar coefficient of modulus
+	at most $C$, and has every message dimension at most $D$. The dimensions
+	and counts refer to the original message occurrences, including
+	their multiplicities. No coefficient-sum bound is assumed.
 \end{definition}
 
 \begin{theorem}[Enlarging local bounds]
-    \label{thm:peps_message_gate_bounds_mono}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageGateApproximation.mono}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageResourceBounded.mono_dimension}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageResourceBounded.mono_coefficient}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.IsTermwiseBounded.mono_coefficient}
-    \leanok
-    Increasing the local approximation budget, the message-dimension
-    bound, or the coefficient bound preserves the corresponding conditions on the same original
-    lists and operators. Likewise, increasing an individual coefficient
-    bound preserves its monomial pair-effect bound.
+	\label{thm:peps_message_gate_bounds_mono}
+	\lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageGateApproximation.mono}
+	\lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageResourceBounded.mono_dimension}
+	\lean{TNLean.PEPS.PairEffect.EffectCircuit.IsMessageResourceBounded.mono_coefficient}
+	\lean{TNLean.PEPS.PairEffect.EffectCircuit.IsTermwiseBounded.mono_coefficient}
+	\leanok
+	Increasing the local approximation tolerance, the message-dimension
+	bound, or the coefficient bound preserves the corresponding conditions on the same original
+	lists and operators. Likewise, increasing an individual coefficient
+	bound preserves its monomial pair-effect bound.
 \end{theorem}
 \begin{proof}
-    \leanok
-    Each local inequality remains valid by transitivity. Apply this fact
-    separately at every original gate occurrence.
+	\leanok
+	Each local inequality remains valid by transitivity. Apply this fact
+	separately at every original gate occurrence.
 \end{proof}
 
 \begin{theorem}[Message expansion preserves each local approximation]
-    \label{thm:peps_message_expand_gate_approximation}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.isGateApproximation_expandMessageGateLists}
-    \leanok
-    \uses{def:peps_message_gate_lists,def:peps_message_gate_approximation}
-    A prescribed local approximation with budget $\delta$ remains a local
-    approximation with the same budget after every message is expanded.
-    The expanded monomials are allowed. Each original operator and each
-    original participating set is retained at the same occurrence.
+	\label{thm:peps_message_expand_gate_approximation}
+	\lean{TNLean.PEPS.PairEffect.EffectCircuit.isGateApproximation_expandMessageGateLists}
+	\leanok
+	\uses{def:peps_message_gate_lists,def:peps_message_gate_approximation}
+	A prescribed local approximation with tolerance $\delta$ remains a local
+	approximation with the same tolerance after every message is expanded.
+	The expanded monomials are allowed. Each original operator and each
+	original participating set is retained at the same occurrence.
 \end{theorem}
 \begin{proof}
-    \leanok
-    \uses{thm:peps_message_gate_eval}
-    Each message expansion evaluates exactly to the original transfer and
-    preserves allowedness. Thus the local operator sum and its error against
-    the prescribed original operator are unchanged. Private operations and
-    the chronological composition retain the same local conditions.
+	\leanok
+	\uses{thm:peps_message_gate_eval}
+	Each message expansion evaluates exactly to the original transfer and
+	preserves allowedness. Thus the local operator sum and its error against
+	the prescribed original operator are unchanged. Private operations and
+	the chronological composition retain the same local conditions.
 \end{proof}
 
 \begin{theorem}[Term counts after bounded message expansion]
-    \label{thm:peps_message_expand_monomial_count}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.monomialCount_expandMessageGateLists_le}
-    \leanok
-    \uses{def:peps_message_gate_resources}
-    Suppose the original bounds are $(r,m,K,D,C)$ and $D\geq1$. After
-    expanding messages, each same original nonprivate gate occurrence
-    contains at most $\lceil KD^m\rceil$ terms. This includes empty gate
-    expansions and zero-dimensional messages.
+	\label{thm:peps_message_expand_monomial_count}
+	\lean{TNLean.PEPS.PairEffect.EffectCircuit.monomialCount_expandMessageGateLists_le}
+	\leanok
+	\uses{def:peps_message_gate_resources}
+	Suppose the original bounds are $(r,m,K,D,C)$ and $D\geq1$. After
+	expanding messages, each same original nonprivate gate occurrence
+	contains at most $\lceil KD^m\rceil$ terms. This includes empty gate
+	expansions and zero-dimensional messages.
 \end{theorem}
 \begin{proof}
-    \leanok
-    \uses{thm:peps_message_gate_size}
-    A monomial with at most $m$ messages contributes at most $D^m$ terms.
-    Sum this estimate over its at most $K$ original monomials and round
-    upward to obtain the integer bound. Chronological composition and
-    spectator registers do not create another nonprivate occurrence.
+	\leanok
+	\uses{thm:peps_message_gate_size}
+	A monomial with at most $m$ messages contributes at most $D^m$ terms.
+	Sum this estimate over its at most $K$ original monomials and round
+	upward to obtain the integer bound. Chronological composition and
+	spectator registers do not create another nonprivate occurrence.
 \end{proof}
 
 \begin{theorem}[Individual coefficient bounds after message expansion]
-    \label{thm:peps_message_expand_termwise_bound}
-    \lean{TNLean.PEPS.PairEffect.EffectCircuit.isTermwiseBounded_expandMessageGateLists}
-    \leanok
-    \uses{def:peps_message_gate_resources,def:peps_message_gate_approximation}
-    Suppose the original bounds are $(r,m,K,D,C)$ with $D\geq1$ and
-    $C\geq0$, and the monomials satisfy the local approximation conditions.
-    After expanding messages, each monomial still has at most $r$ pair
-    effects and each individual scalar coefficient has modulus at most
-    $KCD^m$. This is a consequence of the original individual bounds;
-    no bound on the original coefficient sum is an additional hypothesis.
+	\label{thm:peps_message_expand_termwise_bound}
+	\lean{TNLean.PEPS.PairEffect.EffectCircuit.isTermwiseBounded_expandMessageGateLists}
+	\leanok
+	\uses{def:peps_message_gate_resources,def:peps_message_gate_approximation}
+	Suppose the original bounds are $(r,m,K,D,C)$ with $D\geq1$ and
+	$C\geq0$, and the monomials satisfy the local approximation conditions.
+	After expanding messages, each monomial still has at most $r$ pair
+	effects and each individual scalar coefficient has modulus at most
+	$KCD^m$. This is a consequence of the original individual bounds;
+	no bound on the original coefficient sum is an additional hypothesis.
 \end{theorem}
 \begin{proof}
-    \leanok
-    \uses{thm:peps_message_gate_eval,thm:peps_message_gate_size}
-    The absolute coefficient sum of an expanded gate is at most $KCD^m$,
-    by summing the original individual bounds and the message-dimension
-    factors. Each individual modulus is bounded by that nonnegative sum.
-    Message expansion preserves the original pair-effect count.
+	\leanok
+	\uses{thm:peps_message_gate_eval,thm:peps_message_gate_size}
+	The absolute coefficient sum of an expanded gate is at most $KCD^m$,
+	by summing the original individual bounds and the message-dimension
+	factors. Each individual modulus is bounded by that nonnegative sum.
+	Message expansion preserves the original pair-effect count.
 \end{proof}
 
 \begin{theorem}[Uniform compression of original message-containing gates]
-    \label{thm:peps_uniform_original_message_compression}
-    \lean{TNLean.PEPS.PairEffect.GateMapConstruction.exists_uniform_message_sampled_network}
-    \leanok
-    \uses{def:peps_original_gate_construction,def:peps_message_gate_lists,def:peps_message_gate_approximation,def:peps_message_gate_resources}
-    Fix a family of original distributed constructions on finite nonempty
-    party sets, indexed by an arbitrary set, each index carrying a size
-    $L\ge2$; several indices may share one size.
-    The original gate operators, private maps, participant embeddings, register
-    layouts, and normalized product inputs are fixed before any precision is
-    chosen. Every original gate and private operation is a contraction, and
-    every nonprivate gate occurrence has a participant set of size other than
-    one; a map acting on one party is a private operation. Initial and discarded private spaces are finite-dimensional,
-    without a numerical dimension bound. Suppose that the original gate count
-    and intended physical dimensions satisfy
-    \begin{align}
-        N_L\le C_NL^n,\qquad d_{L,j}\le C_DL^d,
-    \end{align}
-    and that gate arity and whole-lifetime participation are at most $b$.
+	\label{thm:peps_uniform_original_message_compression}
+	\lean{TNLean.PEPS.PairEffect.GateMapConstruction.exists_uniform_message_sampled_network}
+	\leanok
+	\uses{def:peps_original_gate_construction,def:peps_message_gate_lists,def:peps_message_gate_approximation,def:peps_message_gate_resources}
+	Fix a family of original distributed constructions on finite nonempty
+	party sets, indexed by an arbitrary set, each index carrying a size
+	$L\ge2$; several indices may share one size.
+	The original gate operators, private maps, participant embeddings, register
+	layouts, and normalized product inputs are fixed before any precision is
+	chosen. Every original gate and private operation is a contraction, and
+	every nonprivate gate occurrence has a participant set of size other than
+	one; a map acting on one party is a private operation. Initial and discarded private spaces are finite-dimensional,
+	without a numerical dimension bound. Suppose that the original gate count
+	and intended physical dimensions satisfy
+	\begin{align}
+		N_L\le C_NL^n,\qquad d_{L,j}\le C_DL^d,
+	\end{align}
+	and that gate arity and whole-lifetime participation are at most $b$.
 
-    At every fixed integer precision $q$, suppose that there exist
-    constants $r_q,m_q$, real constants $C_K(q),C_C(q),C_M(q)$, and degrees
-    $u(q),v(q),z(q)$, chosen before $L$, such that every original gate admits
-    an allowed message-containing expansion on its original local spaces.
-    Each list has at most $C_K(q)L^{u(q)}$ original monomials. Each monomial
-    has at most $r_q$ pair effects and $m_q$ messages, every original scalar
-    coefficient has norm at most $C_C(q)L^{v(q)}$, and every transferred
-    register has dimension at most $C_M(q)L^{z(q)}$. The local operator error
-    against the prescribed original gate is at most $L^{-q}$.
+	At every fixed integer precision $q$, suppose that there exist
+	constants $r_q,m_q$, real constants $C_K(q),C_C(q),C_M(q)$, and degrees
+	$u(q),v(q),z(q)$, chosen before $L$, such that every original gate admits
+	an allowed message-containing expansion on its original local spaces.
+	Each list has at most $C_K(q)L^{u(q)}$ original monomials. Each monomial
+	has at most $r_q$ pair effects and $m_q$ messages, every original scalar
+	coefficient has norm at most $C_C(q)L^{v(q)}$, and every transferred
+	register has dimension at most $C_M(q)L^{z(q)}$. The local operator error
+	against the prescribed original gate is at most $L^{-q}$.
 
-    For every $p>0$, there exist $r_p$, $C_p\ge0$, and an integer
-    $\alpha_p>0$, all chosen before $L$, such that every size admits a literal
-    operator tensor network $\sigma_L$ satisfying
-    \begin{align}
-        \lVert\sigma_L-\rho_L\rVert_1\le L^{-p},
-        \qquad \dim\mathcal V_e\le C_pL^{\alpha_p}.
-    \end{align}
-    The network has one node for each original party and the ket and bra legs
-    of that party's intended physical output. Every node has at most
-    $2b(b-1)$ incident virtual links, and both endpoints of every link occur
-    in a common original nonprivate gate. The comparison density $\rho_L$
-    is the full original physical output, with its private registers traced
-    out and without normalization. The same actual source circuit and sample
-    count define the contraction and all its virtual alphabets.
-    This is the uniform compression of
-    \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} together with its
-    approximate-expansion clause, for families with at least one party at
-    each index.
-    % Source: 04-compression.tex, lines 132--175 and 590--600.
+	For every $p>0$, there exist $r_p$, $C_p\ge0$, and an integer
+	$\alpha_p>0$, all chosen before $L$, such that every size admits an
+	operator tensor network $\sigma_L$ satisfying
+	\begin{align}
+		\lVert\sigma_L-\rho_L\rVert_1\le L^{-p},
+		\qquad \dim\mathcal V_e\le C_pL^{\alpha_p}.
+	\end{align}
+	The network has one node for each original party and the ket and bra legs
+	of that party's intended physical output. Every node has at most
+	$2b(b-1)$ incident virtual links, and both endpoints of every link occur
+	in a common original nonprivate gate. The comparison density $\rho_L$
+	is the full original physical output, with its private registers traced
+	out and without normalization. The same source circuit and sample
+	count define the contraction and all its virtual alphabets.
+	This is the uniform compression of
+	\cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} together with its
+	approximate-expansion clause, for families with at least one party at
+	each index.
+	% Source: 04-compression.tex, lines 132--175 and 590--600.
 \end{theorem}
 \begin{proof}
-    \leanok
-    \uses{thm:peps_uniform_approximate_operator_network,thm:peps_message_expand_gate_approximation,thm:peps_message_expand_monomial_count,thm:peps_message_expand_termwise_bound,thm:peps_message_gate_bounds_mono,thm:homogeneous_ceiling_bound}
-    Write $C_+=\max\{C,0\}$ for a real constant $C$. Fix $p$ and choose
-    $q=n+\lceil p\rceil+\lceil16(1+(C_N)_+)\rceil$ before choosing a size.
-    All expansion constants at this precision are then fixed. Since
-    $L^k\ge0$, every polynomial bound with constant $C$ also holds with $C_+$,
-    so replace $C_K(q)$, $C_C(q)$ and $C_M(q)$ by their positive parts.
-    Expand each bounded message in a finite orthonormal basis of its actual
-    transferred register. This preserves its original operator exactly, and
-    changes only the monomial list at the same gate occurrence.
+	\leanok
+	\uses{thm:peps_uniform_approximate_operator_network,thm:peps_message_expand_gate_approximation,thm:peps_message_expand_monomial_count,thm:peps_message_expand_termwise_bound,thm:peps_message_gate_bounds_mono,thm:homogeneous_ceiling_bound}
+	Write $C_+=\max\{C,0\}$ for a real constant $C$. Fix $p$ and choose
+	$q=n+\lceil p\rceil+\lceil16(1+(C_N)_+)\rceil$ before choosing a size.
+	All expansion constants at this precision are then fixed. Since
+	$L^k\ge0$, every polynomial bound with constant $C$ also holds with $C_+$,
+	so replace $C_K(q)$, $C_C(q)$ and $C_M(q)$ by their positive parts.
+	Expand each bounded message in a finite orthonormal basis of its
+	transferred register. This preserves its original operator exactly, and
+	changes only the monomial list at the same gate occurrence.
 
-    Put $D_M=(1+C_M(q))L^{z(q)}\ge1$. If $K$ is the original monomial cap,
-    the expanded count is at most $KD_M^{m_q}$. An integer cap and a uniform
-    polynomial bound are
-    \begin{align}
-        K'=\left\lceil KD_M^{m_q}\right\rceil,
-        \qquad
-        K'\le\bigl(1+C_K(q)(1+C_M(q))^{m_q}\bigr)
-        L^{u(q)+z(q)m_q}.
-    \end{align}
-    The expanded absolute coefficient sum is at most
-    $KC_C(q)L^{v(q)}D_M^{m_q}$. Each individual expanded coefficient is bounded
-    by this nonnegative sum, hence by
-    \begin{align}
-        C_K(q)C_C(q)(1+C_M(q))^{m_q}
-        L^{u(q)+v(q)+z(q)m_q}.
-    \end{align}
-    These are derived bounds; the pair-effect count is unchanged. Apply the
-    uniform operator-network theorem to the resulting lists. Exact preservation
-    of the original operators and occurrences ensures that its physical error
-    and endpoint locality concern the original construction. Its scalar
-    absorption leaves every virtual alphabet and incidence unchanged.
+	Put $D_M=(1+C_M(q))L^{z(q)}\ge1$. If $K$ is the original monomial cap,
+	the expanded count is at most $KD_M^{m_q}$. An integer cap and a uniform
+	polynomial bound are
+	\begin{align}
+		K'=\left\lceil KD_M^{m_q}\right\rceil,
+		\qquad
+		K'\le\bigl(1+C_K(q)(1+C_M(q))^{m_q}\bigr)
+		L^{u(q)+z(q)m_q}.
+	\end{align}
+	The expanded absolute coefficient sum is at most
+	$KC_C(q)L^{v(q)}D_M^{m_q}$. Each individual expanded coefficient is bounded
+	by this nonnegative sum, hence by
+	\begin{align}
+		C_K(q)C_C(q)(1+C_M(q))^{m_q}
+		L^{u(q)+v(q)+z(q)m_q}.
+	\end{align}
+	These are derived bounds; the pair-effect count is unchanged. Apply the
+	uniform operator-network theorem to the resulting lists. Exact preservation
+	of the original operators and occurrences ensures that its physical error
+	and endpoint locality concern the original construction. Its scalar
+	absorption leaves every virtual alphabet and incidence unchanged.
 \end{proof}
 
 \begin{theorem}[Uniform compression of exact original message expansions]
-    \label{thm:peps_uniform_exact_original_message_compression}
-    \lean{TNLean.PEPS.PairEffect.GateMapConstruction.exists_uniform_exact_message_sampled_network}
-    \leanok
-    \uses{def:peps_original_gate_construction,def:peps_message_gate_lists,def:peps_message_gate_approximation,def:peps_message_gate_resources}
-    Fix a family of original distributed constructions on finite nonempty
-    party sets, indexed by an arbitrary set with a size $L\ge2$ at each index,
-    with normalized product inputs and finite-dimensional original and
-    discarded private memories. The original operators, private maps,
-    participant embeddings, and chronological occurrences are fixed.
-    Suppose that gate arity and whole-lifetime participation are at most $b$,
-    and that the original gate counts and intended physical dimensions satisfy
-    \begin{align}
-        N_L\le C_NL^n,\qquad d_{L,j}\le C_DL^d.
-    \end{align}
-    Let $r,m$, real constants $C_K,C_C,C_M$, and degrees $u,v,z$ be fixed independently
-    of size and requested accuracy. At every size, suppose that each original
-    gate has an exact allowed message-containing expansion on its original
-    local input and output spaces. Each list contains at most $C_KL^u$
-    monomials, each individual coefficient has norm at most $C_CL^v$, and each
-    monomial contains at most $r$ pair effects and $m$ messages. Every actual
-    transferred register has dimension at most $C_ML^z$. The original gates
-    and private maps are contractions, and every nonprivate gate occurrence
-    has a participant set of size other than one.
+	\label{thm:peps_uniform_exact_original_message_compression}
+	\lean{TNLean.PEPS.PairEffect.GateMapConstruction.exists_uniform_exact_message_sampled_network}
+	\leanok
+	\uses{def:peps_original_gate_construction,def:peps_message_gate_lists,def:peps_message_gate_approximation,def:peps_message_gate_resources}
+	Fix a family of original distributed constructions on finite nonempty
+	party sets, indexed by an arbitrary set with a size $L\ge2$ at each index,
+	with normalized product inputs and finite-dimensional original and
+	discarded private memories. The original operators, private maps,
+	participant embeddings, and chronological occurrences are fixed.
+	Suppose that gate arity and whole-lifetime participation are at most $b$,
+	and that the original gate counts and intended physical dimensions satisfy
+	\begin{align}
+		N_L\le C_NL^n,\qquad d_{L,j}\le C_DL^d.
+	\end{align}
+	Let $r,m$, real constants $C_K,C_C,C_M$, and degrees $u,v,z$ be fixed independently
+	of size and requested accuracy. At every size, suppose that each original
+	gate has an exact allowed message-containing expansion on its original
+	local input and output spaces. Each list contains at most $C_KL^u$
+	monomials, each individual coefficient has norm at most $C_CL^v$, and each
+	monomial contains at most $r$ pair effects and $m$ messages. Every
+	transferred register has dimension at most $C_ML^z$. The original gates
+	and private maps are contractions, and every nonprivate gate occurrence
+	has a participant set of size other than one.
 
-    For every $p>0$, there exist $r_p$, $C_p\ge0$, and an integer
-    $\alpha_p>0$, all chosen before the family member, such that every
-    index, of size $L\ge2$, admits a literal operator tensor network
-    $\sigma_L$ with
-    \begin{align}
-        \lVert\sigma_L-\rho_L\rVert_1\le L^{-p},
-        \qquad \dim\mathcal V_e\le C_pL^{\alpha_p}.
-    \end{align}
-    The network has one node per original party and the ket and bra legs of
-    that party's intended physical output. Every node has at most $2b(b-1)$
-    incident virtual links, and the two endpoints of every link participate
-    in a common original nonprivate gate. The comparison density $\rho_L$
-    is the original physical output, with its retained private registers
-    traced out and without normalization. The same actual source circuit and
-    sample count define the contraction and its virtual alphabets. No numerical
-    private-dimension or source Schmidt-rank bound is required.
-    This is \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} for exact
-    message-containing expansions, for families with at least one party at
-    each index.
-    % Source: 04-compression.tex, lines 132--175.
+	For every $p>0$, there exist $r_p$, $C_p\ge0$, and an integer
+	$\alpha_p>0$, all chosen before the family member, such that every
+	index, of size $L\ge2$, admits an operator tensor network
+	$\sigma_L$ with
+	\begin{align}
+		\lVert\sigma_L-\rho_L\rVert_1\le L^{-p},
+		\qquad \dim\mathcal V_e\le C_pL^{\alpha_p}.
+	\end{align}
+	The network has one node per original party and the ket and bra legs of
+	that party's intended physical output. Every node has at most $2b(b-1)$
+	incident virtual links, and the two endpoints of every link participate
+	in a common original nonprivate gate. The comparison density $\rho_L$
+	is the original physical output, with its retained private registers
+	traced out and without normalization. The same source circuit and
+	sample count define the contraction and its virtual alphabets. No numerical
+	private-dimension or source Schmidt-rank bound is required.
+	This is \cite[Theorem~5.2]{OpenAI2026PolynomialPEPS} for exact
+	message-containing expansions, for families with at least one party at
+	each index.
+	% Source: 04-compression.tex, lines 132--175.
 \end{theorem}
 \begin{proof}
-    \leanok
-    \uses{thm:peps_uniform_original_message_compression,thm:peps_message_gate_bounds_mono}
-    For every fixed integer precision $q$, each exact expansion has local
-    error zero, hence error at most $L^{-q}$. The same lists, bounded effect
-    and message counts, and polynomial resource constants therefore satisfy
-    expansion availability at every fixed precision. Apply the uniform
-    message-containing compression theorem. Its original operator, occurrence,
-    sample, scalar-absorption, and locality identities are unchanged.
+	\leanok
+	\uses{thm:peps_uniform_original_message_compression,thm:peps_message_gate_bounds_mono}
+	For every fixed integer precision $q$, each exact expansion has local
+	error zero, hence error at most $L^{-q}$. The same lists, bounded effect
+	and message counts, and polynomial resource constants therefore satisfy
+	expansion availability at every fixed precision. Apply the uniform
+	message-containing compression theorem. Its original operator, occurrence,
+	sample, scalar-absorption, and locality identities are unchanged.
 \end{proof}

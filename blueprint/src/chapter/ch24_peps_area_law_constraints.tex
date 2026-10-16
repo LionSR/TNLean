@@ -269,7 +269,8 @@ $\mu$ labels.
     \end{align}
     Applying~(\ref{eq:al_schmidt_bell_transport}) to the four equations
     for $u_k$ gives the energy, symmetry and two auxiliary equations for
-    $\xi_k$; the transported symmetrizer of all copies is $P_{\mathrm{sym}}$.
+    $\xi_k$, since $U$ conjugates the copy symmetrizer on the replica
+    space into $P_{\mathrm{sym}}$.
 \end{proof}
 
 \begin{theorem}[One physical label sequence for the rough lower comparison]
@@ -387,11 +388,12 @@ $\mathcal B_X=1+\sum_{i\in\mathcal C_X}\log^2(ed_i)$.
     Each truncated term $\widetilde h_i$ acts on its designated support
     $\widetilde X_i$. Every support in $\mathcal C_X$ is a ball of radius $r_0$,
     $|\mathcal C_X|\le2\mu K_b(r_0+1)^2b_X$, $\log d_i\le K_b(r_0+1)^2\log q$
-    for $i\in\mathcal C_X$, and $\mathcal B_X\le C(1+b_X)(r_0+1)^6$. If moreover
-    $r_0=\lceil C_1(\log n)^2\rceil$, $n\ge2$, $D\ge1$ and $b_X\le C_2nD$, then
-    $\mathcal B_X\le C'nD(\log n)^{12}$. If $S_0$ is empty every constraint is
-    retained and no label crosses a cut contained in $S_0$; constraints whose
-    anchors cannot reach $S_0$ are always retained without truncation.
+    for $i\in\mathcal C_X$, and $\mathcal B_X\le C(1+b_X)(r_0+1)^6$. When
+    $r_0=\lceil C_1(\log n)^2\rceil$, $n\ge2$, $D\ge1$ and $b_X\le C_2nD$, we
+    also have $\mathcal B_X\le C'nD(\log n)^{12}$. If $S_0$ is empty every
+    constraint is retained and no label crosses a cut contained in $S_0$;
+    constraints whose anchors cannot reach $S_0$ are always retained without
+    truncation.
 \end{theorem}
 \begin{proof}\leanok
     A support meeting $X\subseteq S_0$ has an anchor at finite distance; if
@@ -609,24 +611,23 @@ only on the parameters named below.
 
 Section~9 of the manuscript scans the collar of a finite target in rounds and
 selects one charge round and one interpolation parameter at which the
-transported, symmetrized vector has small defect energy (Proposition~9.2). Fix
+symmetrized filtered vector has small defect energy (Proposition~9.2). Fix
 exponents $0<\ell<1$, $0<\kappa<\mu<1-\ell$, $0<e<1$ with $\kappa\le e$,
 $\nu>0$, let the total metric weight $W\ge1$ of the scan be arbitrary, possibly
 depending on $n$, and put $L=\lfloor n^{1-\ell}\rfloor$,
 $D=\lceil n^\kappa\rceil$, $m=\lfloor n^\mu\rfloor$, $\epsilon=n^{-\nu}$ and
 $\delta_n=C\epsilon^{-1}(n^{e-\mu}+a^{1/4}(\log n)^{C})$. The statement below
 takes as hypotheses, for one scan at scale $n$, the conclusions of the scan
-histories (Lemma~9.1), of transport (Proposition~7.4), of the comparators
-(Proposition~8.1), of continuity (Lemma~2.1) and of tails (Lemma~3.1); it is
-therefore Proposition~9.2 restricted to those conclusions, not the source
-proposition itself, which remains open until the scan data are constructed.
-The finite transported measures are required to have mass $1/2$ only for
-$0<p<1$, where the source's terminal weights are positive. The logarithmic norm is
-continuous on $[0,1]$, and its values at $0$ and $1$ retain their matching
-and comparison properties. No mass equality is required at an inactive
-terminal leaf. The charge defect is assumed almost everywhere
-measurable in the interior; its existing nonnegative upper bound then gives
-integrability on the closed interval.
+histories (Lemma~9.1), the log-norm evolution (Proposition~7.4), the comparators
+(Proposition~8.1), entropy continuity (Lemma~2.1) and the marginal tails
+(Lemma~3.1); it is therefore Proposition~9.2 restricted to those conclusions,
+not the unconditional source proposition. In these hypotheses, the finite leaf
+measures are required to have mass $1/2$ only for $0<p<1$, where the source's
+terminal weights are positive, with no mass equality required at an inactive
+terminal leaf; the logarithmic norm is continuous on $[0,1]$ with matching
+values at $0$ and $1$, and the charge defect is assumed almost everywhere
+measurable on the interior, which together with its nonnegative upper bound
+gives integrability on $[0,1]$.
 
 % Source: OpenAI2026AreaLaw, sections/08-scanner.tex, lines 32--41 (the scales);
 % the three comparison bounds are the estimates used at lines 469, 480, 519--520.
@@ -775,7 +776,7 @@ integrability on the closed interval.
     \end{align}
     The mass identities of the leaf measures, measurability of the charge
     defect, continuity and differentiability of the logarithmic norm,
-    transport inequalities and initial norm bound are required for every
+    log-norm derivative inequalities and initial norm bound are required for every
     $k\ge0$; the normalized final comparison is required for $k\ge1$.
     The leaf measures are finite and adjacent endpoint norms agree for every
     $k\ge0$.
@@ -799,14 +800,14 @@ integrability on the closed interval.
     therefore at most $n^{-247}$. Adding the original target and shell
     entropy bounds gives the two entropy estimates, uniformly in the scan
     and shell index.
-    Fix $k\ge1$. Integrate the logarithmic norm derivative over $[0,1]$ in every round,
-    retaining the nonnegative charge contribution on
-    $[\epsilon/2,\epsilon]$. Interior almost-everywhere measurability
-    and the nonnegative upper bound make the charge defect integrable; the
-    two endpoint values do not change the integral. The integral comparison
-    retains continuity of the logarithmic norm on $[0,1]$, its derivative
-    at every interior point, and the pointwise gain inequality. Matching
-    successive endpoint values give the telescoped entropy bound.
+    Fix $k\ge1$. Because almost-everywhere measurability on $(0,1)$ and the
+    nonnegative upper bound make the charge defect integrable on $[0,1]$
+    (with the two endpoint values not affecting the integral), integrating
+    the derivative of the continuous logarithmic norm over $[0,1]$ in each
+    round, using its interior differentiability and the pointwise gain
+    inequality while retaining the nonnegative charge contribution on
+    $[\epsilon/2,\epsilon]$, and telescoping across matching adjacent
+    endpoint values yields the integrated charge bound.
     Write $T$ for the charge rounds, so $|T|=nm$, and let
     $\mathcal Q_{r,k}(p)$ be the defect in round $r$. With
     $c_k=KnD(\delta_n+\rho_k)$, the normalized entropy bound gives
@@ -836,7 +837,7 @@ integrability on the closed interval.
     parameter.
 \end{proof}
 
-\begin{theorem}[Scanner estimate for the actual scan from the transport and comparator inputs]
+\begin{theorem}[Scanner estimate for the collar scan from the evolution and comparator inputs]
     \label{thm:al_scanner_actual_scan}
     \lean{TNLean.PEPS.AreaLaw.Scan.ScanInputs,
         TNLean.PEPS.AreaLaw.Scan.HistoryFacts.mono,
@@ -858,7 +859,7 @@ integrability on the closed interval.
     Then there is one ground vector $\widetilde\Omega$ of the truncated
     Hamiltonian, with gap $g/2$ and the properties listed in
     Theorem~\ref{thm:al_scan_truncation_inputs}, such that for all auxiliary dimensions, every
-    total weight $W\ge1$ and all replica vectors: if the actual rounds of the
+    total weight $W\ge1$ and all replica vectors: if the rounds of the
     scan, with per-band weight $a=W/K$, satisfy the conclusions of
     Propositions~7.4 and~8.1 for $W$ and $\widetilde\Omega$, with the replica
     counts specified in Theorem~\ref{thm:al_scanner_from_inputs}, finite leaf
@@ -867,19 +868,20 @@ integrability on the closed interval.
     rounds.
 
     This is Proposition~9.2 with the conclusions of Propositions~7.4 and~8.1
-    for the actual rounds as its only hypothesis beyond the source's; it is not
+    for the scan rounds as its only hypothesis beyond the source's; it is not
     the source proposition.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:al_scanner_from_inputs,thm:al_scan_actual_history_facts,
         thm:al_scan_truncation_inputs}
-    Theorem~\ref{thm:al_scan_truncation_inputs} supplies $\widetilde\Omega$ and
-    the truncation inputs, and Theorem~\ref{thm:al_scan_actual_history_facts}
-    the history inputs for the actual rounds. The history conclusions persist
-    for a larger common constant, a larger logarithmic power once $\log n\ge1$,
-    and a smaller sampling constant. Together with the assumed conclusions of
-    Propositions~7.4 and~8.1 they form the input data of
-    Theorem~\ref{thm:al_scanner_from_inputs}, which gives the conclusions.
+    Theorem~\ref{thm:al_scan_truncation_inputs} gives the truncated ground
+    state $\widetilde\Omega$ and the truncation inputs, while
+    Theorem~\ref{thm:al_scan_actual_history_facts} gives the history inputs
+    for the scan rounds, which persist when the common constant and
+    logarithmic power are increased (once $\log n\ge1$) and the sampling
+    constant is decreased. Combining these inputs with the assumed
+    conclusions of Propositions~7.4 and~8.1 satisfies the hypotheses of
+    Theorem~\ref{thm:al_scanner_from_inputs}.
 \end{proof}
 
 \input{chapter/ch24_peps_sharp_moment_scale}
