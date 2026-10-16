@@ -2057,6 +2057,55 @@ The following finite construction follows
     condition gives the two-sided eigenvalue bounds.
 \end{proof}
 
+\begin{theorem}[A truncation coefficient uniform in the local dimension]
+    \label{thm:al_scan_target_typical_window_uniform_dimension}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_typical_window_uniform_in_q}
+    \leanok
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_target_typical_window}
+    Fix $R\in\mathbb N$, $J\ge0$, $\Delta>0$, and $C_T\ge0$.
+    There is $C_{\mathrm{tr}}>0$ such that, for every local dimension
+    $q\ge1$, there are $C_B>0$ and an integer $N\ge2$ with the following
+    property. Every instance satisfying the geometric hypotheses of
+    Theorem~\ref{thm:al_scan_target_typical_window}, with $n\ge N$ and
+    $r_0=\lceil C_{\mathrm{tr}}(\log n)^2\rceil$, has all the conclusions
+    of that theorem with these constants. The constants $C_B,N$ are
+    independent of the finite domain, Hamiltonian, ground vector, target,
+    scanner, and source exponents. In particular, the truncation
+    coefficient is chosen before the local dimension.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_prefix_boundary,
+        thm:al_scan_compact_collar_card,thm:al_lattice_crossing_budget,
+        thm:al_exact_cut_budget,lem:al_scan_fixed_ancestry_cutoff}
+    Choose $C_{\mathrm{tr}}$ from
+    Theorem~\ref{thm:al_scan_exists_marginal_tails} with compact-volume
+    coefficient $C_T+1$. This choice depends only on $R,J,\Delta,C_T$.
+    It strengthens the dependence permitted by the printed truncation
+    proposition, whose coefficient may depend on $q$
+    \cite[Proposition~4.5]{OpenAI2026AreaLaw}
+    (\texttt{03-quasilocal.tex}, lines~406--410).
+    The scanner uses this radius in \texttt{08-scanner.tex}, lines~49--59,
+    without asserting dimension uniformity there. The stronger uniform
+    choice here follows from Theorem~\ref{thm:al_scan_exists_marginal_tails}.
+    Now fix $q$. The lattice crossing estimate with boundary factor $4$
+    gives a coefficient $C$, and put $C_B=\max\{1,C\}$. Choose $N\ge2$
+    so that the tail bound with budget $C_Bn(\log n)^{12}$ at width
+    $n^{3/5}$ is at most $n^{-100}$ for every $n\ge N$; this is possible
+    because its exponential rate is a positive constant times
+    $n^{1/10}/(\log n)^6$.
+
+    In any such instance, summing the ambient layers gives
+    $|S_0|\le(C_T+1)n^2$, and the zero-depth prefix bound gives
+    $|\partial_\Lambda X|\le4n$. Apply the truncation theorem with the
+    previously chosen $C_{\mathrm{tr}}$. Its vector $\widetilde\Omega$
+    has all-cut moment and tail bounds, while the lattice estimate gives
+    $1\le\mathcal B_X\le C_Bn(\log n)^{12}$. Hence the target typical
+    set has mass $z\ge1-n^{-100}>0$ and satisfies the stated eigenvalue
+    bounds. Neither $C_B$ nor $N$ depends on this finite instance or on
+    the source exponents.
+\end{proof}
+
 % Revision 7224037.
 \begin{theorem}[Entropy and energy transport in a scan round]
     \label{thm:al_scan_actual_transport_estimates}
@@ -3334,10 +3383,10 @@ The finite-leaf estimates below follow the charge-energy argument in
     $|T|\le C_Tn^2$, at most $n$ sites in every ambient layer
     $T_d\setminus T_{d-1}$ with $1\le d\le L$, and ambient distance greater
     than $2L+10r_0$ from $T$ to every endpoint of a boundary edge of $A$; and
-    under the entropy inputs
+    under the following entropy inputs for every integer $0\le j\le L$:
     \begin{align}
-        S_\Omega(X)   & \le C_en^{1+e},                    &
-        S_\Omega(Q_j) & \le C_e(nL^e+n)\quad(0\le j\le L),
+        S_\Omega(X)   & \le C_en^{1+e},  &
+        S_\Omega(Q_j) & \le C_e(nL^e+n),
     \end{align}
     where $X=A\cap T$ and $Q_j=A\cap(T_j\setminus T)$. Then one unit ground
     vector $\widetilde\Omega$ of the truncated Hamiltonian, with energy
