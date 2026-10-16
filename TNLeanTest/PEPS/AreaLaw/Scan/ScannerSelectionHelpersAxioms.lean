@@ -8,7 +8,7 @@ import TNLean.PEPS.AreaLaw.Scan.RoughSelectionBudget
 import Lean.Util.CollectAxioms
 
 /-!
-# Standard-axiom checks for the scanner selection lemmas
+# Logical dependencies of the scanner selection lemmas
 
 The two declarations preserve the supplied prevector and the selected charge point.
 -/
