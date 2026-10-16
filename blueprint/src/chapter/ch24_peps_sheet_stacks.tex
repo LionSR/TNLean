@@ -369,6 +369,8 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.EncodedFrame.hasBoundedChange_refl,
         TNLean.PEPS.EncodedFrame.HasBoundedChange.perm_left,
         TNLean.PEPS.EncodedFrame.HasBoundedChange.perm_right,
+        TNLean.PEPS.EncodedFrame.isBoundedChange_liftOne,
+        TNLean.PEPS.EncodedFrame.isBoundedChange_liftTwo,
         TNLean.PEPS.EncodedFrame.hasBoundedChange_liftOne,
         TNLean.PEPS.EncodedFrame.hasBoundedChange_liftTwo,
         TNLean.PEPS.EncodedFrame.hasBoundedChange_activate,
@@ -598,4 +600,56 @@ no holes, this is the normalization of $\Omega$.
     and addresses of the parties of a gate, and the lifetime bound $64\cdot189$.
     The reference vectors are those of the sheets, so the errors are those of the
     changes, and the final reference vector is that of the final regrouping.
+\end{proof}
+
+\begin{theorem}[Joining the changes of the events]
+    \label{thm:peps_protocol_event_segments}
+    \lean{TNLean.PEPS.EncodedFrame.HasSourceBoundedChange,
+        TNLean.PEPS.EncodedFrame.HasSourceBoundedChange.hasBoundedChange,
+        TNLean.PEPS.EncodedFrame.HasSourceBoundedChange.mono,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_of_perm,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_refl,
+        TNLean.PEPS.EncodedFrame.HasSourceBoundedChange.perm_left,
+        TNLean.PEPS.EncodedFrame.HasSourceBoundedChange.perm_right,
+        TNLean.PEPS.EncodedFrame.isSourceBounded_liftOne,
+        TNLean.PEPS.EncodedFrame.isSourceBounded_liftTwo,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_liftOne,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_liftTwo,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_activate,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_perm_liftOne,
+        TNLean.PEPS.Approximation.exists_frames_of_segments,
+        TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_hasSourceBoundedChange}
+    \leanok
+    \uses{def:peps_bounded_change, def:peps_circuit_source_bound,
+        thm:peps_protocol_from_bounded_trajectory}
+    A bounded change of the sheets whose monomials have at most $r_s$ pair sources is
+    in particular a bounded change. Both properties persist after enlarging the participant
+    set or any of the bounds $r$, $K$, $r_s$ and $\varepsilon$. Identity changes and
+    reorderings of the sheets satisfy every such bound with $\varepsilon\ge0$;
+    a reordering before or after a change preserves its bounds. The pair-source bound
+    of a circuit is preserved when it is placed on one sheet, or on two adjacent
+    sheets, in a larger stack. If $\lVert\Omega\rVert\le1$ and
+    $\lVert\xi\rVert\le1$, the same lifting preserves all bounded-change data,
+    including after a reordering of the sheets.
+
+    Let a list of events each carry a list of changes, and let the sheets pass,
+    during each event, from its starting stack to the
+    starting stack of the next event through as many such changes as the event has, with
+    participants used by the event. Then one sequence of stacks runs along the whole
+    schedule, each change with participants used by its event. If, moreover, the
+    remaining hypotheses of Theorem~\ref{thm:peps_protocol_from_bounded_trajectory} hold,
+    its conclusion follows (\texttt{06-geometry.tex}, lines 82--100, 127--131 and
+    572--681; \texttt{04-compression.tex}, lines 143--147).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_bounded_change_closure, thm:peps_sheet_reordering,
+        lem:peps_circuit_source_bound_monomials, thm:peps_protocol_from_bounded_trajectory}
+    Forget the source bound on the witnessing circuit, or enlarge its bounds.
+    Reorderings and identity changes have no nonprivate operation. Placing a circuit
+    beside untouched registers adds no pair source; the spectator reference vectors
+    have norm at most one, so the error does not increase. The stacks of consecutive
+    events are concatenated by induction on the list of events. After the last change
+    the stack is kept constant, by identity changes, and the bounded-trajectory
+    theorem applies.
 \end{proof}

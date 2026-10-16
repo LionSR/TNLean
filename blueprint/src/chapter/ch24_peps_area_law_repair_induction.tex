@@ -198,6 +198,46 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     disjointness at generation $j+1$.
 \end{proof}
 
+% Source: 10-geometry.tex, replacement instructions, lines 393--417;
+% geometry:repair-induction, lines 474--478 and 526--536;
+% current actual regions, lines 558--561.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Current regions avoid earlier terminal squares]
+    \label{thm:area_law_repair_current_terminal_disjoint}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.current_disjoint_earlierTerminalSquares}
+    \leanok
+    \uses{def:area_law_repair_ancestors,lem:area_law_repair_metric_invariants}
+    Take the actual repair family at any origin $o\in\mathbb R^2$,
+    under the metric hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants}.
+    For every generation $j\ge0$ and every identifier $i\in I_j$,
+    the current region avoids the union $\mathcal E_j$ of all closed
+    terminal squares from generations strictly before $j$:
+    $R_i^{(j)}\cap\mathcal E_j=\varnothing$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:area_law_repair_ancestors,
+        def:area_law_repair_successor_regions,def:area_law_repair_birth,
+        lem:area_law_repair_metric_invariants}
+    Induct on $j$. At generation zero, $\mathcal E_0=\varnothing$.
+    An old current region at generation $j+1$ avoids $\mathcal E_j$
+    by induction. Every closed removal square of generation $j$ is
+    subtracted from it, including every terminal square of that generation.
+
+    A fresh current region lies in its nonterminal parent's removal
+    square $Q(v_p,S_p)$. By the metric margin,
+    $d(S_p)\le(a_0/1000)S_p\le a_0S_p$, so this square lies in the
+    parent's closed star square. Lemma~\ref{lem:area_law_repair_metric_invariants}
+    makes that star square disjoint from $\mathcal E_j$.
+    The parent $p$ differs from every terminal parent of generation $j$,
+    since $d(S_p)\ge S_*$ whereas a terminal halfside is less than $S_*$.
+    The same lemma makes their closed removal squares disjoint.
+    Thus the fresh region also avoids every contribution to
+    $\mathcal E_{j+1}$, completing the induction.
+\end{proof}
+
 % Source: 10-geometry.tex, geometry:trim-margins, lines 380--394, and
 % geometry:initial-stars, lines 336--339.
 \begin{lemma}[Choice of the stopping scale]
@@ -216,7 +256,7 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
 \begin{proof}
     \leanok
     \uses{thm:area_law_repair_margins,
-        thm:area_law_uniform_separated_initial_marks}
+        thm:area_law_initial_repair_mark_facts}
     The margin holds for all large $S$. Initial scales are sides
     $2^{\lfloor\zeta k\rfloor}$ of cells of layers $k\ge k_0$, hence at
     least $S_*$ for $k_0$ large, and distinct initial marks are separated
@@ -240,7 +280,7 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_uniform_separated_initial_marks,
+    \uses{thm:area_law_initial_repair_mark_facts,
         thm:area_law_adjacent_fine_meshes,thm:area_law_belt_marks_quarter_mesh,
         lem:area_law_repair_metric_invariants,
         thm:area_law_repair_halfside_integral,def:area_law_repair_children}
