@@ -29,9 +29,10 @@ abstracted — record why, so it is not re-proposed).
 - **Pattern:** Transfer nonvanishing, copy symmetry and a mean-energy
   eigen-equation from global replica coordinates to augmented site coordinates;
   then bound the selected normalized density using the rough endpoint estimate.
-- **Seen:** Three identical copies of each proof in `SourceChargeSelection.lean`,
+- **Seen:** Two identical private copies of each proof in
   `SourceRoughSelection.lean` and `SourceSelectedSharpComparison.lean`, under
-  `PEPS/AreaLaw/Scan/`.
+  `PEPS/AreaLaw/Scan/`, plus the new consumer `SourceChargeSelection.lean`.
+  The two copies were extracted; the new consumer uses the shared declarations.
 - **Abstraction:** `augmented_prevector_properties_of_global` in
   `AugmentedReplicaPrevectorProperties.lean` and
   `selected_density_of_rough_endpoint` in `RoughSelectionBudget.lean`.
