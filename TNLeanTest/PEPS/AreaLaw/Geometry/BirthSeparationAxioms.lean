@@ -4,8 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationRepair
+import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationInitial
 
-/-! Standard-axiom audit for birth separation of replacements. -/
+/-! Standard-axiom audit for both cases of birth-template separation. -/
 
 set_option linter.mathlibStandardSet true
 set_option linter.style.longLine false
@@ -67,3 +68,66 @@ info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashC
 -/
 #guard_msgs (whitespace := lax) in
 #print axioms TNLean.PEPS.AreaLaw.Geometry.exists_isRepairBirthSeparated_of_uniformRepairInductionStatement
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.exists_pos_common_contact_dichotomy'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.exists_pos_common_contact_dichotomy
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_dichotomy'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.exists_beltAtom_dichotomy
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.exists_initialBeltRun_birth_separation'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.exists_initialBeltRun_birth_separation
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.exists_isInitialBirthSeparated'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.exists_isInitialBirthSeparated
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_uniformRepairInductionStatement'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_uniformRepairInductionStatement
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_initialIsolatedStars'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_initialIsolatedStars
+
+/--
+info: 'TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation'
+depends on axioms: [propext, Classical.choice, Quot.sound]
+---
+info: `#`-commands, such as '#print', are not allowed in 'Mathlib' [linter.hashCommand]
+-/
+#guard_msgs (whitespace := lax) in
+#print axioms TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation

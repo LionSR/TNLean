@@ -1,4 +1,4 @@
-\section{Transport under physical blocking}\label{sec:blocking_transport}
+\section{Transfer under physical blocking}\label{sec:blocking_transport}
 
 For a tensor $A=(A^i)_{i=0}^{d-1}$ and a block length $p$, write
 $A^{[p]}$ for the tensor whose physical matrices are the consecutive products
@@ -22,7 +22,7 @@ the number $Np$ of original sites.
     reindexings by the blocked-configuration equivalence and its inverse.
 \end{definition}
 
-\begin{lemma}[Boundary-map transport under blocking]
+\begin{lemma}[Boundary-map transfer under blocking]
     \label{lem:blocked_boundary_map_transport}
     \lean{MPSTensor.groundSpaceMap_blockTensor_blockedConfigEquiv}
     \lean{MPSTensor.blockedConfigLinearIsometryEquiv_groundSpaceMapES}
@@ -51,7 +51,7 @@ the number $Np$ of original sites.
         =\Gamma_{Np}^{A}(X)(\sigma).
         \label{eq:blocked_boundary_map_transport_coefficients}
     \end{align}
-    Applying the Frobenius transport formula to the coefficient identity yields
+    Applying the Frobenius correspondence formula to the coefficient identity yields
     (\ref{eq:blocked_boundary_map_transport}).
 \end{proof}
 
@@ -71,14 +71,14 @@ the number $Np$ of original sites.
         \label{eq:coisometric_reconstruction_local_space}
     \end{align}
     In particular, if $(A_j)_{j=1}^g$ are the distinct BNT representatives
-    selected from literal canonical-form data for $A$, then, for $p,L\geq1$,
+    selected from explicit canonical-form data for $A$, then, for $p,L\geq1$,
     \begin{align}
         G_L\!\left(A^{[p]}\right)
          & =\bigvee_{j=1}^{g}G_L\!\left(A_j^{[p]}\right).
         \label{eq:cpsv_blocked_representative_local_space}
     \end{align}
     Identity~(\ref{eq:coisometric_reconstruction_local_space}) is a derived trace identity for an exact coisometric
-    reconstruction. It is not the literal direct-sum canonical-form equation
+    reconstruction. It is not the direct-sum canonical-form equation
     of CPSV16.
 \end{lemma}
 
@@ -96,7 +96,7 @@ the number $Np$ of original sites.
         \label{eq:gamma_lc_from_u_adj}
     \end{align}
     where (\ref{eq:gamma_lc_from_u_adj}) uses $UU^\dagger=I_n$. This proves
-    (\ref{eq:coisometric_reconstruction_local_space}). For literal
+    (\ref{eq:coisometric_reconstruction_local_space}). For explicit
     canonical-form data, apply this equality to the retained direct sum.
     Theorem~\ref{thm:block_sum_local_ground_space} gives the sum over all
     displayed normal blocks. Blocks in one BNT phase class differ by a
@@ -151,7 +151,7 @@ the number $Np$ of original sites.
     \leanok
     \uses{lem:block_diagonal_chain_space_comparison_parent_spanning,
         thm:chain_ground_space_eq_mpv_blk}
-    Equation~(\ref{eq:block_diagonal_one_site_span}) supplies common
+    Equation~(\ref{eq:block_diagonal_one_site_span}) gives common
     coefficients $c_i$ satisfying $\sum_i c_iA_j^i=I_{D_j}$ for every $j$.
     In the restriction-intersection argument of the proof of
     \cite[Theorem~12]{PerezGarcia2007Matrix}, these coefficients replace the
@@ -212,7 +212,7 @@ the number $Np$ of original sites.
     \leanok
     \uses{def:cpsv_canonical_form, def:bnt_cpsv,
         def:parent_hamiltonian_ground_space_spanning}
-    Let $A$ be in literal CPSV canonical form with positive ambient bond
+    Let $A$ be in CPSV canonical form with positive ambient bond
     dimension $D$, and suppose that the physical dimension satisfies $1<d$.
     There are a basis of normal tensors $(A_j)_{j=1}^{g}$ and a positive
     integer $L$ such that
@@ -324,7 +324,7 @@ the number $Np$ of original sites.
     \leanok
     \uses{def:cpsv_canonical_form, def:bnt_cpsv, def:blocked_tensor,
         def:parent_hamiltonian_ground_space_spanning}
-    Let $A$ be in literal CPSV canonical form with positive ambient bond
+    Let $A$ be in CPSV canonical form with positive ambient bond
     dimension $D$. There are a basis of normal tensors
     $(A_j)_{j=1}^{g}$ and an integer $p$ satisfying
     $1\leq p\leq 3D^5$ such that $(A_j^{[p]})_{j=1}^{g}$ is a basis of
@@ -335,10 +335,10 @@ the number $Np$ of original sites.
         1\leq j\leq g\right\}.
         \label{eq:cpsv_blocked_nearest_neighbor_parent_hamiltonian}
     \end{align}
-    Thus the actual blocked tensor has a nearest-neighbor parent Hamiltonian
+    Thus the blocked tensor has a nearest-neighbor parent Hamiltonian
     on the blocked lattice. This is distinct from
     Theorem~\ref{thm:cpsv_original_lattice_parent_hamiltonian_range}, which
-    supplies a nonzero bounded-range interaction and the parent-Hamiltonian
+    gives a nonzero bounded-range interaction and the parent-Hamiltonian
     spanning identity on every sufficiently long original chain. The two
     conclusions and the argument closing the short-ring window are recorded in
     \cite{gap:cpsv16_parent_hamiltonian_range_short_ring}.
@@ -378,7 +378,7 @@ the number $Np$ of original sites.
     (\ref{eq:cpsv_blocked_nearest_neighbor_parent_hamiltonian}).
 \end{proof}
 
-\begin{theorem}[Local ground-space transport under blocking]
+\begin{theorem}[Local ground-space transfer under blocking]
     \label{thm:blocked_local_ground_space_transport}
     \lean{MPSTensor.groundSpaceES_blockTensor_map}
     \lean{MPSTensor.starProjection_groundSpaceES_blockTensor_map_apply}

@@ -5,9 +5,9 @@ Let $1\le D_i\le D$, with $D_N=D_0$, and let
 $E_i:M_{D_{i+1}}\to M_{D_i}$ be the completely positive, trace-preserving
 map of the original site tensor. Write $F_{a,b}=E_a\circ\cdots\circ E_{b-1}$.
 The norm below is the operator norm induced by the Hilbert--Schmidt norms
-on these actual matrix spaces, represented in their matrix-unit bases.
+on these bond matrix spaces, represented in their matrix-unit bases.
 
-\begin{definition}[Actual rectangular cut and block channels]
+\begin{definition}[Rectangular cut and block channels]
     \label{def:ldp_rectangular_cut_channels}
     \lean{VaryingBondChain.bondDimAt,VaryingBondChain.siteTensorAt,
         VaryingBondChain.siteTransferAt,
@@ -16,7 +16,7 @@ on these actual matrix spaces, represented in their matrix-unit bases.
         VaryingBondChain.rectangularTransfer_block_eq_channelInterval,
         VaryingBondChain.rectangularKrausMap_blockTensor_cast_eq_channelInterval}
     \leanok
-    Natural-number cuts carry the actual cyclic bond dimensions. The rectangular
+    Natural-number cuts carry the cyclic bond dimensions. The rectangular
     channel of a partition block is $F_{a,b}$, after equality-based identification
     of its final bond. Its physical indices are those of the original site tensors.
 \end{definition}
@@ -41,8 +41,8 @@ on these actual matrix spaces, represented in their matrix-unit bases.
     Neither compatible references nor an interval convergence rate are hypotheses.
 \end{theorem}
 \begin{proof}\leanok
-    A fixed density of the actual full-cycle channel, transported along suffixes,
-    supplies the references. Subtract the trace-prepare minorizer from each complete
+    A fixed density of the full-cycle channel, propagated along suffixes,
+    gives the references. Subtract the trace-prepare minorizer from each complete
     window. The residual is completely positive and scales trace by $1-\eta$.
     Peeling complete windows from the right leaves one shorter interval on the left.
     Their residual product $Q$ agrees with $F_{a,b}$ on traceless inputs and scales

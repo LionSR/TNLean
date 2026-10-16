@@ -5,12 +5,12 @@
 \input{command}
 \providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
 \providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
-\title{Birth-Template Separation for Replacements Only}
+\title{Birth-Template Separation and the Uniform Repair Induction}
 \author{}
 \date{October 15, 2026}
 \begin{document}
 \maketitle
-\gapnote{scope-restriction}{open}
+\gapnote{scope-restriction}{resolved}
 
 \section{The source statement}
 
@@ -27,27 +27,48 @@ comparable with $u^{\rho_0}$ about every contact mark.
 
 \section{The formal statement}
 
-The formalization proves the replacement half of the lemma, for the actual
-repair stages. Its only premise beyond the choice of the stopping scale is the
-conclusion of the uniform repair induction, Lemma~11.4 (lines~471--485), stated
-as a separate proposition.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.IsRepairBirthSeparated},
+The formalization proves both halves of the lemma for the actual repair
+stages, with one constant $c_1$ fixed before all data.
+
+\emph{Initial belt tiles.} The closed birth of every initial belt tile of side
+$u=t_k$ has distance at least $c_1u^{\rho_0}$ from the final actual region of
+every primary and of every other initial belt tile with the same label, for
+every domain, cut, origin, layer width $C_0\ge2$, lower layer index
+$k_0\ge50{,}000{,}000$ and stopping scale; these are the standing restrictions
+of the initial construction.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.IsInitialBirthSeparated},
+\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_isInitialBirthSeparated}.} No premise
+is used: near the reference cell the primary and belt closures are finite
+unions of elementary triangles of one fixed line arrangement, so the finitely
+many local patterns of the source become finitely many pairs of such
+triangles, and the contacts are marks of the cell by the belt construction.
+
+\emph{Replacements.} Its only premise beyond the choice of the stopping scale is
+the conclusion of the uniform repair induction, Lemma~11.4
+(lines~471--485), stated as a separate
+proposition.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.IsRepairBirthSeparated},
 \leanid{TNLean.PEPS.AreaLaw.Geometry.exists_isRepairBirthSeparated_of_uniformRepairInductionStatement}.}
-The constant $c_1$ is fixed before the repair data. The separation is proved
-against every other identifier of the same generation with the same label,
-which contains the earlier and peer identifiers of the source.
+The separation is proved against every other identifier of the same
+generation with the same label, which contains the earlier and peer
+identifiers of the source.
 
-The births of initial belt tiles are not covered. For them the comparison is
-with the primary and belt closures at the initial stage; it requires the local
-classification of the initial belt arrangement around a reference cell rather
-than the fixed replacement fan used here.
+Given that premise, one constant serves both
+halves.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_uniformRepairInductionStatement}.}
+The conclusion of Lemma~11.4 is in turn derived from the conclusion of the
+initial isolated-star lemma, Lemma~11.3 (lines~332--349), for the jointly
+chosen initial stage, so the combined statement also follows from
+that.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation_of_initialIsolatedStars}.}
 
-\section{What remains}
+\section{Resolution}
 
-The initial-belt half of Lemma~11.5 remains to be formalized. The normalized
-compactness and angular estimates already proved apply unchanged once the
-initial belt closures near a reference cell are written as finite unions of
-integer half-plane polygons, with the canonical sector assignment at the
-reference cell marks supplying the contacts.
+The conclusion of Lemma~11.3 for the jointly chosen initial stage is now
+proved, with $a_0=1/128$.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.initialIsolatedStarsStatement_holds}.}
+The combined statement therefore holds without premise: one constant $c_1>0$
+and a threshold $T$ serve both halves for every stopping scale $S_*\ge T$,
+every layer width $C_0\ge2$ and every sufficiently large lower layer index
+$k_0\ge50{,}000{,}000$. These are the
+standing choices of large $S_*$ and $k_0$ under which Lemma~11.4 and Lemma~11.5
+are stated in the source.\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.exists_birthSeparation}.}
+This is Lemma~11.5 with the source's hypotheses, and the gap is resolved.
 
 \bibliographystyle{alpha}
 \bibliography{references}

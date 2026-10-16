@@ -163,12 +163,12 @@
     the projector and proves its loop identity.
 \end{definition}
 
-\begin{theorem}[Literal sector-compression separation]
+\begin{theorem}[Sector-compression separation in CPSV canonical form]
     \label{thm:cpsv_literal_sector_compression_nonzero}
     \lean{MPSTensor.IsCPSVCanonicalForm.exists_sectorCompression_ne_zero_of_corner}
     \leanok
     \uses{def:cpsv_canonical_form, def:vertical_tensor_mpdo, def:mpdo_vertical_loops}
-    Let $M$ be an MPO tensor whose doubled-index MPS tensor is in literal CPSV
+    Let $M$ be an MPO tensor whose doubled-index MPS tensor is in CPSV
     canonical form, and let $P\in\MN{d}$. If one vertical letter has a nonzero
     two-sided corner, then some finite-chain first-site compression is nonzero:
     \begin{align}
@@ -190,7 +190,7 @@
     Suppose that $P_1H^{(N+1)}P_1=0$ for every $N\geq0$. By the coefficient
     formula for the doubled-index first-site contraction, the two-sided action
     $Y_C(P)$ and the zero action agree on every positive-length matrix product
-    vector of the doubled-index tensor. Literal Lemma~L therefore identifies
+    vector of the doubled-index tensor. Lemma~L for CPSV canonical form therefore identifies
     their inserted tensors. For every vertical letter $v$, the insertion
     identity then gives
     \begin{align}
@@ -228,7 +228,7 @@
 
 \begin{proof}\leanok
     \uses{thm:cpsv_normal_nonzero_letter}
-    Normality supplies a letter $v$ for which $A_v\ne 0$. Since $\omega$ is
+    Normality gives a letter $v$ for which $A_v\ne 0$. Since $\omega$ is
     nonzero and $X$ is invertible, the left-hand side of
     (\ref{eq:mpdo_gauge_corner}) is nonzero. If
     (\ref{eq:mpdo_range_projector_corner}) vanished, multiplying it by
@@ -249,7 +249,7 @@
     \cite[Proposition~4.13, line 1898]{Cirac2016MPDO_arXiv}.
 
     The normalized BNT-refined horizontal hypothesis provides the grouped
-    vertical sectors used here; the corresponding literal separation statement is
+    vertical sectors used here; the corresponding separation statement for CPSV canonical form is
     Theorem~\ref{thm:cpsv_literal_sector_compression_nonzero}.
 \end{theorem}
 
@@ -479,7 +479,7 @@
     \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}.
 
     \textbf{Scope restriction (BNT-refined horizontal form):}
-    The normalized BNT-refined horizontal hypothesis is stronger than the literal
+    The normalized BNT-refined horizontal hypothesis is stronger than the
     CPSV canonical-form hypothesis; documented in
     \cite{gap:cpgsv17_vertical_cf_grouping}.
 \end{theorem}
@@ -594,7 +594,7 @@
 
 \begin{proof}\leanok
     \uses{def:grouped_corner_gram_dressing, thm:distinguished_grouped_reference_corner}
-    Theorem~\ref{thm:distinguished_grouped_reference_corner} transports the
+    Theorem~\ref{thm:distinguished_grouped_reference_corner} carries the
     distinguished identity-gauge corner to the bond space of copy $q$. The
     grouped-corner Gram-dressing property gives
     \begin{align}
@@ -713,7 +713,7 @@
     Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} gives the
     Figure~8 comparison in
     \cite[Proposition~4.13, lines 1909--1921]{Cirac2016MPDO_arXiv}. This
-    comparison supplies precisely the relative hypothesis for a sector and
+    comparison gives precisely the relative hypothesis for a sector and
     the distinguished sector. In the normalization $Y=\Id$, the resulting
     unitary is $\omega^{-1/2}X$. The common-target declarations attached to
     this entry are conditional algebraic corollaries, not the reflected
@@ -752,8 +752,8 @@
     \end{align}
     Consequently $U_{\alpha,q}=\omega_{\alpha,q}^{-1/2}X_{\alpha,q}$ is
     unitary. This is the gauge normalization of
-    \cite[Proposition~4.13, lines~1903--1921]{Cirac2016MPDO_arXiv}. Literal
-    CPSV canonical form and normalized BNT-refined horizontal form each supply
+    \cite[Proposition~4.13, lines~1903--1921]{Cirac2016MPDO_arXiv}. Both
+    CPSV canonical form and normalized BNT-refined horizontal form give
     the Gram-dressing hypothesis on their own.
 \end{theorem}
 
@@ -912,15 +912,15 @@
         \label{eq:normalized_grouped_sector_maps_of_dressing}
     \end{align}
     These are the normalized sector identities in
-    \cite[Proposition~4.13, lines~1895--1921]{Cirac2016MPDO_arXiv}. Literal
-    CPSV canonical form and normalized BNT-refined horizontal form each supply
+    \cite[Proposition~4.13, lines~1895--1921]{Cirac2016MPDO_arXiv}. Both
+    CPSV canonical form and normalized BNT-refined horizontal form give
     the Gram-dressing hypothesis on their own.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:normalized_grouped_sector_maps_of_gram, thm:grouped_sector_gram_scalar_of_dressing}
-    Theorem~\ref{thm:grouped_sector_gram_scalar_of_dressing} supplies the
+    Theorem~\ref{thm:grouped_sector_gram_scalar_of_dressing} gives the
     positive Gram scalars. Apply
     Theorem~\ref{thm:normalized_grouped_sector_maps_of_gram} to the phase-class
     grouping. Its corner identity preserves the grouped reconstruction and
