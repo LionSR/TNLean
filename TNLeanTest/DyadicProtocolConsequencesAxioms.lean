@@ -12,7 +12,7 @@ set_option linter.hashCommand false
 
 open TNLean.PEPS.Approximation in
 /-- info:
-'TNLean.PEPS.Approximation.largeSizeDyadicProtocolConsequences_of_angularInformationBound'
+'TNLean.PEPS.Approximation.largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint'
 depends on axioms: [propext, Classical.choice, Quot.sound] -/
 #guard_msgs (whitespace := lax) in
-#print axioms largeSizeDyadicProtocolConsequences_of_angularInformationBound
+#print axioms largeSizeDyadicProtocolConsequences_of_adaptivePatchConstraint
