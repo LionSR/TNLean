@@ -29,27 +29,27 @@ Auxiliary to area-law Definition 9.3 (`scanner:template`) and Section 11,
 will supply the nonempty sample in the later geometric construction. -/
 theorem CellFanRun.exists_template (Ctpl C_B : ℝ)
     (hCtpl : 1 ≤ Ctpl) (hCB : 16 * Ctpl ≤ C_B)
-    (o : ℝ × ℝ) (ell : ℕ) (z : ℤ × ℤ)
+    (o : ℝ × ℝ) (â : ℕ) (z : ℤ × ℤ)
     (split : Fin 4 → Bool) (family : CellFanSlot split → Fin 2)
-    (R : CellFanRun o ell z split family) (w : ℤ × ℤ)
-    (hw : integerPoint w ∈ cellFanRunRegion o ell z split family R) :
-    ∃ T : Template Ctpl ⌈C_B * (2 : ℝ) ^ ell⌉₊ (2 ^ ell),
+    (R : CellFanRun o â z split family) (w : ℤ × ℤ)
+    (hw : integerPoint w ∈ cellFanRunRegion o â z split family R) :
+    ∃ T : Template Ctpl ⌈C_B * (2 : ℝ) ^ â⌉₊ (2 ^ â),
       T.pieceCount ≤ 8 ∧
         ∀ x : ℤ × ℤ,
           x ∈ T.points ↔
-            integerPoint x ∈ cellFanRunRegion o ell z split family R := by
+            integerPoint x ∈ cellFanRunRegion o â z split family R := by
   classical
   let ι : Type := {t : CellFanSlot split // t ∈ R.supp}
   let e := Fintype.equivFin ι
   let polygon (i : Fin (Fintype.card ι)) :=
-    cellFanPolygon o ell z split (e.symm i).val
+    cellFanPolygon o â z split (e.symm i).val
   let sample (i : Fin (Fintype.card ι)) := (polygon i).finite_integerPoints.toFinset
   let points := Finset.univ.biUnion sample
   have hsample (i : Fin (Fintype.card ι)) (x : ℤ × ℤ) :
       x ∈ sample i ↔ integerPoint x ∈ (polygon i).region :=
     (polygon i).finite_integerPoints.mem_toFinset
   have hpoints (x : ℤ × ℤ) :
-      x ∈ points ↔ integerPoint x ∈ cellFanRunRegion o ell z split family R := by
+      x ∈ points ↔ integerPoint x ∈ cellFanRunRegion o â z split family R := by
     simp only [points, Finset.mem_biUnion, Finset.mem_univ, true_and, hsample,
       cellFanRunRegion, Set.mem_iUnion]
     refine ⟨(fun ⟨i, hix⟩ ↦ ⟨(e.symm i).val, (e.symm i).property, hix⟩), ?_⟩
@@ -63,38 +63,38 @@ theorem CellFanRun.exists_template (Ctpl C_B : ℝ)
   obtain ⟨i, _, _⟩ := Finset.mem_biUnion.mp ((hpoints w).mpr hw)
   have hmpos : 0 < Fintype.card ι := lt_of_le_of_lt (Nat.zero_le i.val) i.is_lt
   have hcell (i : Fin (Fintype.card ι)) (x : ℝ × ℝ) (hx : x ∈ (polygon i).region) :
-      x ∈ closure (dyadicCell o ell z) :=
-    (cellFanPolygons_cover o ell z split).le
+      x ∈ closure (dyadicCell o â z) :=
+    (cellFanPolygons_cover o â z split).le
       (Set.mem_iUnion.mpr ⟨(e.symm i).val, hx⟩)
-  have hdiam (x y : ℝ × ℝ) (hx : x ∈ closure (dyadicCell o ell z))
-      (hy : y ∈ closure (dyadicCell o ell z)) :
-      max |x.1 - y.1| |x.2 - y.2| ≤ (2 : ℝ) ^ ell := by
+  have hdiam (x y : ℝ × ℝ) (hx : x ∈ closure (dyadicCell o â z))
+      (hy : y ∈ closure (dyadicCell o â z)) :
+      max |x.1 - y.1| |x.2 - y.2| ≤ (2 : ℝ) ^ â := by
     simpa only [Nat.cast_zero, zero_add, one_mul, Prod.dist_eq, Real.dist_eq] using
-      dyadicCell_dist_le o ell z z 0 x y hx hy (by simp)
+      dyadicCell_dist_le o â z z 0 x y hx hy (by simp)
   have hpointcell (x : ℤ × ℤ) (hx : x ∈ points) :
-      integerPoint x ∈ closure (dyadicCell o ell z) :=
-    (cellFanRunRegions_cover o ell z split family).le
+      integerPoint x ∈ closure (dyadicCell o â z) :=
+    (cellFanRunRegions_cover o â z split family).le
       (Set.mem_iUnion.mpr ⟨R, (hpoints x).mp hx⟩)
-  have hu : (1 : ℝ) ≤ (2 : ℝ) ^ ell := one_le_pow₀ (by norm_num)
+  have hu : (1 : ℝ) ≤ (2 : ℝ) ^ â := one_le_pow₀ (by norm_num)
   have hCBone : (1 : ℝ) ≤ C_B := by linarith only [hCtpl, hCB]
-  have hn : (2 : ℝ) ^ ell ≤ (⌈C_B * (2 : ℝ) ^ ell⌉₊ : ℝ) := by
+  have hn : (2 : ℝ) ^ â ≤ (⌈C_B * (2 : ℝ) ^ â⌉₊ : ℝ) := by
     nlinarith only [mul_le_mul_of_nonneg_right hCBone (le_trans zero_le_one hu),
-      Nat.le_ceil (C_B * (2 : ℝ) ^ ell)]
-  have hnpos : 0 < ⌈C_B * (2 : ℝ) ^ ell⌉₊ := by
+      Nat.le_ceil (C_B * (2 : ℝ) ^ â)]
+  have hnpos : 0 < ⌈C_B * (2 : ℝ) ^ â⌉₊ := by
     exact_mod_cast (lt_of_lt_of_le zero_lt_one (hu.trans hn))
   have hmR : (Fintype.card ι : ℝ) ≤ 8 := by exact_mod_cast hm
   have hfactor : Ctpl * (Fintype.card ι : ℝ) ≤ Ctpl * 8 :=
     mul_le_mul_of_nonneg_left hmR (le_trans zero_le_one hCtpl)
-  have hplus : (2 : ℝ) ^ ell + 1 ≤ 2 * (2 : ℝ) ^ ell := by linarith only [hu]
-  have hscale0 : Ctpl * (Fintype.card ι : ℝ) * ((2 : ℝ) ^ ell + 1) ≤
-      16 * Ctpl * (2 : ℝ) ^ ell := by
+  have hplus : (2 : ℝ) ^ â + 1 ≤ 2 * (2 : ℝ) ^ â := by linarith only [hu]
+  have hscale0 : Ctpl * (Fintype.card ι : ℝ) * ((2 : ℝ) ^ â + 1) ≤
+      16 * Ctpl * (2 : ℝ) ^ â := by
     nlinarith only [mul_le_mul hfactor hplus (by positivity)
       (mul_nonneg (le_trans zero_le_one hCtpl) (by norm_num))]
-  have hscale : Ctpl * (Fintype.card ι : ℝ) * ((2 : ℝ) ^ ell + 1) ≤
-      (⌈C_B * (2 : ℝ) ^ ell⌉₊ : ℝ) :=
+  have hscale : Ctpl * (Fintype.card ι : ℝ) * ((2 : ℝ) ^ â + 1) ≤
+      (⌈C_B * (2 : ℝ) ^ â⌉₊ : ℝ) :=
     hscale0.trans
       ((mul_le_mul_of_nonneg_right hCB (le_trans zero_le_one hu)).trans
-        (Nat.le_ceil (C_B * (2 : ℝ) ^ ell)))
+        (Nat.le_ceil (C_B * (2 : ℝ) ^ â)))
   refine ⟨{
     n_pos := hnpos
     s₀_pos := by positivity

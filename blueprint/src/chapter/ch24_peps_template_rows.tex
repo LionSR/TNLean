@@ -161,7 +161,8 @@
     \label{thm:area_law_fan_run_template}
     \lean{TNLean.PEPS.AreaLaw.Geometry.CellFanRun.exists_template}
     \leanok
-    \uses{def:area_law_template,def:area_law_cell_fan,def:area_law_fan_runs}
+    \uses{def:area_law_template,def:area_law_dyadic_cells,def:area_law_cell_fan,
+        def:area_law_fan_runs}
     Let $C_{\mathrm{tpl}},C_B\in\mathbb R$ satisfy
     $C_{\mathrm{tpl}}\ge1$ and $C_B\ge16C_{\mathrm{tpl}}$.
     Fix any origin $o\in\mathbb R^2$, scale $\ell\in\mathbb N$, and
@@ -178,6 +179,7 @@
     \leanok
     \uses{def:area_law_template,def:area_law_fan_runs,
         thm:area_law_cell_fan_count,thm:area_law_cell_fan_cover,
+        thm:area_law_fan_run_cover,
         thm:area_law_polygon_integer_points_finite,
         thm:area_law_dyadic_cell_distance}
     Take precisely the triangles $P_e$ whose indices belong to $R$,
