@@ -3,22 +3,28 @@
 \section{Statement, and the two-line route}\label{sec:shortcut}
 
 \begin{inwords}
-Theorem~\ref{thm:B} asks for one global vector, not for a bound on each
-cut. In two dimensions this is a serious gap between hypothesis and
-conclusion, and the source closes it with a distributed protocol. In one
-dimension there is a classical bridge: if the Schmidt spectrum at every
-cut has a fast-decaying tail, then truncating the cuts one after another
-produces a matrix product state whose error is the sum of the tail
-masses (Verstraete--Cirac). The marginal tail bound of Section~\ref{sec:tail}
-gives exactly such a tail, with an exponential rate $u_0$ that depends
-only on $q,R,J/\Delta$, and the area law fixes the location of the
-spectrum. So Theorem~\ref{thm:B} follows in a few lines, with bond
-dimension $CL^{4/u_0}$.
+Theorem~\ref{thm:B} asks for a single global matrix product state approximating
+the ground vector, rather than an entropy bound on each cut individually.
+An entropy bound alone does not yield a rank truncation because von Neumann
+entropy controls only the mean of the entanglement spectrum, not the weight
+of the small Schmidt eigenvalues discarded when truncating a cut; in two
+dimensions, moreover, truncations across different cuts do not assemble into
+a consistent tensor network, and a distributed protocol is needed to bridge
+the gap. In one dimension there is a classical shortcut: if the Schmidt
+spectrum across every prefix cut has a rapidly decaying tail, then
+truncating the cuts sequentially from one end of the chain to the other
+produces a matrix product state whose global vector error is bounded by the
+sum of the square roots of the discarded tail weights (Verstraete--Cirac).
+The marginal tail bound of Section~\ref{sec:tail} provides precisely such an
+exponential tail at a rate $u_0$ depending only on $q,R,J/\Delta$, while the
+area law fixes the mean of the spectrum. Combining the two yields
+Theorem~\ref{thm:B} in a few lines, with bond dimension $CL^{4/u_0}$.
 
-We record this first because it is true and short. The rest of
-Part~\ref{part:mps} then presents the one-dimensional version of the
-\emph{protocol} proof, which is the construction that generalizes to two
-dimensions and which uses none of this sequential truncation.
+We record this sequential-truncation proof first because it is direct and
+elementary. The remainder of Part~\ref{part:mps} then develops the
+one-dimensional \emph{protocol} proof, which avoids sequential cut
+truncations altogether and is the construction that generalises to two
+dimensions.
 \end{inwords}
 
 \precisely
@@ -43,15 +49,17 @@ Then $\Phi$ is a matrix product state with open boundary conditions and
 bond dimension at most $D$, and $\norm{\Phi-\Om}\le\sum_k\sqrt{\epsilon_k}$.
 \end{proposition}
 \begin{proof}
-Write $P_k=\Pi_k\otimes\id$. Telescoping,
-$\Phi-\Om=\sum_{k=1}^{L-1}P_1\cdots P_{k-1}(P_k-\id)\Om$ and each prefix is
-a contraction, which gives the error bound. For the bond dimension fix a
-cut $k$. The vector $P_kP_{k+1}\cdots P_{L-1}\Om$ lies in
-$\operatorname{ran}\Pi_k\otimes\cH_{[k+1,L]}$, so it has Schmidt rank at most
-$D$ across the cut $k$, and the remaining factors $P_1,\dots,P_{k-1}$ act
-on $[1,k-1]$ and do not increase that rank. A vector with Schmidt rank at
-most $D$ across every cut is a matrix product state of bond dimension at
-most $D$.
+Write $P_k=\Pi_k\otimes\id$. Telescoping gives
+$\Phi-\Om=\sum_{k=1}^{L-1}P_1\cdots P_{k-1}(P_k-\id)\Om$, and since each
+prefix $P_1\cdots P_{k-1}$ is a contraction, the triangle inequality gives
+$\norm{\Phi-\Om}\le\sum_k\norm{(P_k-\id)\Om}=\sum_k\sqrt{\epsilon_k}$. To
+bound the bond dimension, fix a cut $k$. The intermediate vector
+$P_kP_{k+1}\cdots P_{L-1}\Om$ lies in
+$\operatorname{ran}\Pi_k\otimes\cH_{[k+1,L]}$ and therefore has Schmidt rank
+at most $D$ across cut $k$; the remaining factors $P_1,\dots,P_{k-1}$ act
+solely on $[1,k-1]$ to the left of cut $k$ and cannot increase that Schmidt
+rank. A vector with Schmidt rank at most $D$ across every cut is a matrix
+product state of bond dimension at most $D$.
 \end{proof}
 
 \begin{figure*}[t]
@@ -70,58 +78,65 @@ $\min_\theta\norm{\Phi/\norm\Phi-\e^{i\theta}\Om}\le L^{-1}$, where $u_0$ is
 \eqref{eq:theta} and $C_{\mathrm{int}}$ is \eqref{eq:final}.
 \end{theorem}
 \begin{proof}
-Fix a cut $k$ and $X=[1,k]$. By Lemma~\ref{lem:tail}, the eigenvalues
+Fix a cut $k$ and put $X=[1,k]$. By Lemma~\ref{lem:tail}, the eigenvalues
 $p$ of $\rho_X$ with $-\log p>S(X)+w$ have total mass at most
-$2\e^{\e/2}\e^{-u_0w}$; the eigenvalues with $-\log p\le S(X)+w$ number at
-most $\e^{S(X)+w}$. Choose $w$ with $2\e^{\e/2}\e^{-u_0w}=(16L^4)^{-1}$ and
-$D=\lceil\e^{C_{\mathrm{int}}+w}\rceil\ge\e^{S(X)+w}$ (Theorem~\ref{thm:A}).
-Then $\epsilon_k\le(16L^4)^{-1}$ for every $k$, Proposition~\ref{prop:VC}
-gives $\norm{\Phi-\Om}\le(L-1)/(4L^2)\le1/(4L)$, hence $\Phi\ne0$ and
-$\norm{\Phi/\norm\Phi-\Om}\le2\norm{\Phi-\Om}\le L^{-1}$. The bond
-dimension is $D\le2\e^{C_{\mathrm{int}}+w}$ with $\e^{w}=(32\e^{\e/2}L^4)^{1/u_0}$.
+$2\e^{\e/2}\e^{-u_0w}$, while the eigenvalues with $-\log p\le S(X)+w$ each
+satisfy $p\ge\e^{-S(X)-w}$ and therefore number at most $\e^{S(X)+w}$.
+Choose $w$ so that $2\e^{\e/2}\e^{-u_0w}=(16L^4)^{-1}$ and set
+$D=\lceil\e^{C_{\mathrm{int}}+w}\rceil\ge\e^{S(X)+w}$ by Theorem~\ref{thm:A}.
+Then $\epsilon_k\le(16L^4)^{-1}$ for every $k$, and Proposition~\ref{prop:VC}
+gives $\norm{\Phi-\Om}\le(L-1)/(4L^2)\le1/(4L)$. In particular $\Phi\ne0$
+and $\norm{\Phi/\norm\Phi-\Om}\le2\norm{\Phi-\Om}\le L^{-1}$. The bond
+dimension satisfies $D\le2\e^{C_{\mathrm{int}}+w}$ with
+$\e^{w}=(32\e^{\e/2}L^4)^{1/u_0}$.
 \end{proof}
 
 \begin{remark}
-The exponent $4/u_0$ is of order $\sqrt{(1+J/\Delta)\cB_R}$. Hastings'
-original construction gives a polynomial bond dimension with an exponent
-that is exponential in $J/\Delta$; here the exponent is a square root.
-This is a byproduct of the tail bound, not of the protocol below.
+The exponent $4/u_0$ is of order $\sqrt{(1+J/\Delta)\cB_R}$. Whereas
+Hastings' original construction yields a polynomial bond dimension whose
+exponent is exponential in $J/\Delta$, the marginal tail bound gives a
+square-root dependence on $J/\Delta$. This exponent is a feature of the
+direct sequential-truncation route rather than of the protocol below.
 \end{remark}
 
 \subsection*{Plan of the protocol route}
 
 \begin{inwords}
-The protocol proof has four layers, and we keep all four.
+The distributed protocol proof has four layers:
 \begin{enumerate}[leftmargin=2em]
 \item \emph{Information at logarithmic separation.} Two regions of the
 chain separated by $D\log L$ sites share at most $L^{-p}$ nats of mutual
-information. This is where the gap is used. In two dimensions it took the
-coarse collar bound, the cell conditional-information lemma and the
-``angular'' induction; here it takes the area law plus one lemma, the
-information reset (Section~\ref{sec:logsep}).
-\item \emph{Moves.} Three elementary operations change who holds which
-registers while keeping the global vector close to a reference: a birth
-(give an interior interval to a new owner), its reverse, a death, and an
-exchange of assignments between two copies of the ground state inside a
-window. Each is a contraction built from private maps and one normalized
-bipartite vector or covector, and each costs $O(L^{-p/2})$ when the moved
-region is informationally independent of the other owners
-(Section~\ref{sec:moves}).
-\item \emph{The schedule.} A left-to-right sweep with a moving remainder
-party creates the block owners one by one. The only difficulty is a band
-owned by the remainder that is wedged between two different owners; it is
-dissolved by a fixed sequence of nine moves using an auxiliary copy of the
-ground state, copied from the edge construction of the two-dimensional
-paper. Every party takes part in a bounded number of moves
-(Section~\ref{sec:sweep}).
-\item \emph{Compression and assembly.} The distributed construction is a
-pure linear calculation with unbounded private dimensions. Replacing each
-bipartite resource by an average of polynomially many random product
-operators approximates the physical density in trace norm, and the error
-analysis is dimension-free because each party participates in boundedly
-many operations. One column of the resulting operator network is a ket
-network; placing its nodes on the chain gives the matrix product state
-(Sections~\ref{sec:compression}, \ref{sec:routing}).
+information. This is where the protocol route uses the
+spectral gap. In two dimensions, establishing logarithmic
+separation requires a coarse collar bound, a cell conditional-information
+lemma, and an angular induction; in one dimension, it follows directly from
+the area law and a single two-replica information-reset lemma
+(Section~\ref{sec:logsep}).
+\item \emph{Ownership moves.} Three elementary operations redistribute site
+registers among parties while keeping the global state close to a reference
+state: a \emph{birth} (handing an interior interval to a new owner), its
+reverse, a \emph{death}, and an \emph{exchange} of ownership assignments
+between two copies of the ground state inside a window. Each move is a
+contraction built from private maps and at most one normalised shared
+bipartite vector or covector, and each incurs $O(L^{-p/2})$ vector error
+whenever the moved region has mutual information at most $L^{-p}$ with all
+third-party registers (Section~\ref{sec:moves}).
+\item \emph{The sweep schedule.} A left-to-right sweep with a moving
+remainder party creates the logarithmic block owners one by one. The only
+obstruction is dissolving a narrow remainder band wedged between two
+distinct neighbouring owners; this is accomplished by a fixed sequence of
+moves using an auxiliary copy of the ground state, copied from the edge
+construction of the two-dimensional paper \cite{PP}, so that every party
+participates in a bounded number of moves (Section~\ref{sec:sweep}).
+\item \emph{Compression and assembly.} The sweep is a linear calculation
+whose intermediate private registers have arbitrarily large dimension.
+Replacing each shared bipartite resource in the density calculation by an
+empirical average of polynomially many random product operators approximates
+the output physical density in trace norm; the error bound is independent
+of the private dimensions because each party participates in boundedly many
+gates. Extracting a single computational-basis column of the resulting
+operator network and placing its nodes along the chain yields the matrix
+product state (Sections~\ref{sec:compression}, \ref{sec:routing}).
 \end{enumerate}
 \end{inwords}
 
@@ -130,40 +145,45 @@ network; placing its nodes on the chain gives the matrix product state
 \subsection{Purifications, fidelity, and splitting}
 
 \begin{inwords}
-Small mutual information $I(T:E)$ means the joint state of $T$ and $E$
-is close, in relative entropy, to the product of its marginals. Relative
-entropy controls fidelity, and fidelity between two mixed states is the
-largest overlap between their purifications (Uhlmann). So if the third
-system $U$ purifies $TE$, there is an isometry on $U$ alone that turns the
-global vector into nearly a product of a purification of $T$ and a
-purification of $E$. Whoever holds $U$ can do this privately. This is
-the single mechanism behind births and exchanges.
+To change the ownership of a region $T$ without disturbing the global state,
+we must decouple $T$ from the registers $E$ held by third parties using an
+operation supported entirely on the separating buffer $U=\Lam\setminus(T\cup E)$.
+Small mutual information $I(T:E)$ means that the reduced state $\rho_{TE}$
+is close in relative entropy to the product state $\rho_T\otimes\rho_E$.
+Relative entropy controls Uhlmann fidelity, which equals the maximum overlap
+between purifications. Since $U$ purifies $TE$ in the pure ground state
+$\Om$, Uhlmann's theorem guarantees an isometry $V$ acting on the buffer
+$U$ alone that maps $\Om$ into nearly a tensor product $s\otimes s'$ of a
+purification of $\rho_T$ and a purification of $\rho_E$. Any party holding
+$U$ can execute this decoupling privately; this single mechanism underlies
+all births, deaths, and exchanges.
 \end{inwords}
 
 \precisely
 For density operators $\rho,\sigma$ put $F(\rho,\sigma)=\norm{\sqrt\rho\sqrt\sigma}_1$
-and $D(\rho\|\sigma)=\Tr\rho(\log\rho-\log\sigma)$, infinite when the
-support of $\rho$ is not contained in that of $\sigma$.
+and $D(\rho\|\sigma)=\Tr\rho(\log\rho-\log\sigma)$, taken to be infinite
+when the support of $\rho$ is not contained in that of $\sigma$.
 
 \begin{lemma}[Fidelity, information, Uhlmann]\label{lem:fidelity}
-For normalized finite-dimensional states, $F(\rho,\sigma)\ge\e^{-D(\rho\|\sigma)/2}$,
+For normalised finite-dimensional states, $F(\rho,\sigma)\ge\e^{-D(\rho\|\sigma)/2}$,
 and $D(\rho_{AC}\|\rho_A\otimes\rho_C)=I(A:C)$. If $\xi$ purifies $\rho$ on
 $\cH\otimes\cK$ and $\eta$ purifies $\sigma$ on $\cH\otimes\cK'$, then after
 enlarging $\cK'$ if necessary there is an isometry $V:\cK\to\cK'$ with
 $\abs{\langle\eta,(\id\otimes V)\xi\rangle}=F(\rho,\sigma)$.
 \end{lemma}
 \begin{proof}
-Let $(p_i,\ket i)$, $(q_j,\ket{j'})$ be eigenpairs of $\rho,\sigma$. If
-$D(\rho\|\sigma)<\infty$, $w_{ij}=p_i\abs{\langle i|j'\rangle}^2$ is a
-probability on the pairs with $p_iq_j>0$ and
-$D(\rho\|\sigma)=\sum w_{ij}\log(p_i/q_j)$. By convexity of the exponential,
+Let $(p_i,\ket i)$ and $(q_j,\ket{j'})$ be eigenpairs of $\rho$ and $\sigma$.
+If $D(\rho\|\sigma)<\infty$, then $w_{ij}=p_i\abs{\langle i|j'\rangle}^2$ defines
+a probability distribution on the pairs with $p_iq_j>0$, and
+$D(\rho\|\sigma)=\sum_{ij}w_{ij}\log(p_i/q_j)$. By convexity of the exponential,
 $\Tr\sqrt\rho\sqrt\sigma=\sum_{ij}w_{ij}\exp(-\tfrac12\log(p_i/q_j))\ge\e^{-D(\rho\|\sigma)/2}$,
-and the trace norm dominates the trace. The identity for $I(A:C)$ is the
-expansion of $\log(\rho_A\otimes\rho_C)$. The purification statement is
-Uhlmann's theorem: the overlaps $\Tr(\sqrt\rho\sqrt\sigma U)$ over unitaries
-$U$ on a common large purifying space have maximum modulus
-$\norm{\sqrt\rho\sqrt\sigma}_1$ by polar decomposition, and any purification
-is obtained from the canonical one by an isometry on the purifying factor.
+and the trace norm dominates the trace. The identity
+$D(\rho_{AC}\|\rho_A\otimes\rho_C)=I(A:C)$ follows from expanding
+$\log(\rho_A\otimes\rho_C)$. The purification statement is Uhlmann's
+theorem: the overlaps $\Tr(\sqrt\rho\sqrt\sigma U)$ over unitaries $U$ on a
+common purifying space have maximum modulus $\norm{\sqrt\rho\sqrt\sigma}_1$
+by polar decomposition, and any two purifications of the same state are
+related by an isometry on the purifying factor.
 \end{proof}
 
 \begin{lemma}[Splitting]\label{lem:splitting}
@@ -175,14 +195,16 @@ $s\in\cH_T\otimes\cB_T$, $s'\in\cH_E\otimes\cB_E$ with
 \]
 \end{lemma}
 \begin{proof}
-$\rho_{TE}$ is supported in $\supp\rho_T\otimes\supp\rho_E$ (the projector onto
-the kernel of a marginal, tensored with the identity, has zero expectation
-in the positive joint state), so $D(\rho_{TE}\|\rho_T\otimes\rho_E)=b$ is
-finite. Purify $\rho_T$ by $s$ and $\rho_E$ by $s'$, enlarge the purifying
-factors so that $\cB_T\otimes\cB_E$ contains an isometric copy of $\cH_U$,
-and apply Lemma~\ref{lem:fidelity}: an isometry $V$ on $\cH_U$ attains
-overlap at least $\e^{-b/2}$ with $s\otimes s'$, with real positive phase.
-Two unit vectors with overlap $F$ are at distance $\sqrt{2(1-F)}$.
+Because $\rho_{TE}$ is supported in $\supp\rho_T\otimes\supp\rho_E$ (the
+projector onto the kernel of a marginal, tensored with the identity, has
+zero expectation in the positive joint state), the relative entropy
+$D(\rho_{TE}\|\rho_T\otimes\rho_E)=b$ is finite. Choose purifications $s$
+of $\rho_T$ and $s'$ of $\rho_E$, enlarge their purifying spaces so that
+$\cB_T\otimes\cB_E$ contains an isometric copy of $\cH_U$, and apply
+Lemma~\ref{lem:fidelity}: there is an isometry $V$ on $\cH_U$ such that
+$(\id_{TE}\otimes V)\Om$ has real overlap at least $\e^{-b/2}$ with
+$s\otimes s'$. Two unit vectors with real overlap $F$ have Euclidean
+distance $\sqrt{2(1-F)}$.
 \end{proof}
 
 \begin{figure}[t]
@@ -196,79 +218,93 @@ Two unit vectors with overlap $F$ are at distance $\sqrt{2(1-F)}$.
 \subsection{The information reset}\label{sec:reset}
 
 \begin{inwords}
-The area law gives $I(R:C)=O(1)$ between an interval $R$ and anything
-else, never $o(1)$. The reset lemma turns a constant into an arbitrary
-inverse power of $L$ by shrinking the two regions inward by a margin of
-order $\log L$. The idea is a two-replica swap. Take two copies of the
-ground vector, $\Psi=\Om\otimes\Om$, and swap the two copies on $R$ to get
-$\Phi=F_R\Psi$. In $\Phi$, the core $R_0\subseteq R$ of one copy and the
-core $C_0\subseteq C$ of the same copy come from different original copies,
-so they are exactly independent. If we can find a unitary $U$ acting only
-on the buffer between the cores and sending $\Psi$ to $\Phi$ up to
-$L^{-p}$, then the joint marginal of the cores in $\Psi$ equals the
-product marginal up to $L^{-p}$, which is the claim.
+The area law gives $I(R:C)=O(1)$ between an interval $R$ and any disjoint
+region $C$, never $o(1)$. To assemble a global tensor network from local
+operations across the chain, however, errors must be suppressed to an
+arbitrary inverse power $L^{-p}$ so that they remain small when summed over
+$O(L)$ steps. The information-reset lemma bridges this gap by shrinking $R$
+and $C$ inward to cores $R_0\subseteq R$ and $C_0\subseteq C$ separated from
+their outer boundaries by a margin of width $w=O(\log L)$.
 
-The unitary is built in three steps. First, $I(R:C)\le b$ and the
-splitting lemma give an operator $W$ on the buffer $Q$ of both copies
-with $\langle\Phi,W\Psi\rangle\ge\e^{-2b}$. Second, a Gaussian spectral
-filter applied in both directions, $M=\int g_h(t)\e^{it\mathbb H'}W\e^{-it\mathbb H}dt$,
-projects $W\Psi$ onto $\Phi$ and $W^\dagger\Phi$ onto $\Psi$ with error
-$\e^{-h\Delta^2/2}$, because $\Psi,\Phi$ are the unique gapped ground
-vectors of the two doubled Hamiltonians $\mathbb H$, $\mathbb H'=F_R\mathbb HF_R$.
-Third, a Lieb--Robinson bound localizes $M$ to within $\ell=O(1+b+\log L)$
-of the buffer and of the edges crossing $R$, where $\mathbb H$ and
-$\mathbb H'$ differ. The localized operator is almost isometric on
-$\Psi$, and its polar unitary does the job. The lemma is proved exactly as
-in the source; we only insert the one-dimensional locality bound.
+The physical mechanism is a two-replica swap. Take two identical copies of
+the ground vector, $\Psi=\Om\otimes\Om$, and swap the two copies on $R$ to
+obtain $\Phi=F_R\Psi$. In the first replica of $\Phi$, the core $R_0\subseteq R$
+has been swapped in from the second copy of $\Om$ while $C_0\subseteq C$
+remains from the first, so the two cores originate from independent copies and
+have the exact product marginal $\rho_{R_0}\otimes\rho_{C_0}$. If a unitary $U$
+supported entirely in the buffer region between $R_0$ and $C_0$ maps $\Psi$
+to $\Phi$ up to error $O(L^{-r_*})$, then the joint marginal of the cores in
+$\Psi$ agrees with $\rho_{R_0}\otimes\rho_{C_0}$ up to $O(L^{-r_*})$, which
+implies $I_\Om(R_0:C_0)\le L^{-p}$.
+
+The unitary $U$ is constructed in three steps. First, the bound $I(R:C)\le b$
+and the splitting lemma produce a Hermitian contraction $W$ on the buffer
+$Q=\Lam\setminus(R\cup C)$ of both copies with macroscopic overlap
+$z=\langle\Phi,W\Psi\rangle\ge\e^{-2b}$. Because $W\Psi$ still carries excited
+components, $W$ is not yet close to a unitary mapping $\Psi$ to $\Phi$.
+Second, a two-sided Gaussian spectral filter,
+$M=\int g_h(t)\e^{it\mathbb H'}W\e^{-it\mathbb H}dt$, damps out excited states
+in both directions, projecting $W\Psi$ onto $z\Phi$ and $W^\dagger\Phi$ onto
+$z\Psi$ with error $\e^{-h\Delta^2/2}$, because $\Psi$ and $\Phi$ are the unique
+gapped ground vectors of the doubled Hamiltonians $\mathbb H$ and
+$\mathbb H'=F_R\mathbb HF_R$. Third, because time evolution spreads operator
+supports, a Lieb--Robinson bound localises $M$ to within distance
+$\ell=O(1+b+\log L)$ of the buffer $Q$ and of the boundary zone $Z_R$ where
+$\mathbb H$ and $\mathbb H'$ differ. Rescaling the localised operator makes it
+almost isometric on $\Psi$, and its polar unitary $U$ remains supported strictly
+outside both cores. The lemma is proved exactly as in the two-dimensional
+source; we only insert the one-dimensional locality bound.
 \end{inwords}
 
 \precisely
-We need the propagation estimate for a doubled chain. Let
+To control the spatial spread of the Gaussian filter, we first record the standard
+Lieb--Robinson propagation estimate on the doubled chain. Let
 $\mathbb H$ be a Hamiltonian on $\bigotimes_{x\in\Lam}(\C^q\otimes\C^q)$
-which is a sum of terms $k_Z$ supported on sets $Z$ of diameter at most
-$R$ with $\sum_{Z\ni x}\norm{k_Z}\le b_0$ for every $x$, and
+written as a sum of terms $k_Z$ supported on sets $Z$ of diameter at most
+$R$ with $\sum_{Z\ni x}\norm{k_Z}\le b_0$ for every $x$, and let
 $\tau_t(A)=\e^{it\mathbb H}A\e^{-it\mathbb H}$.
 
 \begin{lemma}[Lieb--Robinson bound on a chain]\label{lem:LR}
 There are $C,v,\mu>0$ depending only on $R$ and $b_0$ such that for every
-operator $A$ supported in $S\subseteq\Lam$, every site $y$ and every
+operator $A$ supported in $S\subseteq\Lam$, every site $y$, and every
 operator $B_y$ supported at $y$,
 \[
  \norm{[\tau_t(A),B_y]}\le C\abs S\,\norm A\,\norm{B_y}\,\e^{v\abs t-\mu\,\dist(S,y)} .
 \]
 Consequently, if $\mathcal P_D$ denotes the conditional expectation onto
 operators supported in $D$ (the average over independent Haar unitaries at
-the sites outside $D$), then for every $\ell\ge0$
+the sites outside $D$), then for every $\ell\ge0$,
 \[
  \norm{\tau_t(A)-\mathcal P_{N_\ell(S)}\tau_t(A)}\le C'\abs S^2\,\norm A\,\e^{v\abs t-\mu\ell}.
 \]
 \end{lemma}
 \begin{proof}
 For $t\ge0$ put $c_y(S,t)=\sup\{\norm{[\tau_t(A),B_y]}:\supp A\subseteq S,\norm A\le1\}$.
-Differentiating and using the Jacobi identity, the derivative of
-$[\tau_t(A),B_y]$ equals $i[\sum_{Z\cap S\ne\varnothing}\tau_t(k_Z),[\tau_t(A),B_y]]$
-plus a sum over $Z\cap S\ne\varnothing$ of $-i[\tau_t(A),[\tau_t(k_Z),B_y]]$; the
-first part is removed by a unitary change of frame, so
+Differentiating and using the Jacobi identity shows that $\frac{d}{dt}[\tau_t(A),B_y]$
+equals $i[\sum_{Z\cap S\ne\varnothing}\tau_t(k_Z),[\tau_t(A),B_y]]$
+plus a sum over $Z\cap S\ne\varnothing$ of $-i[\tau_t(A),[\tau_t(k_Z),B_y]]$. The
+first term is removed by a unitary change of frame, yielding the integral inequality
 $c_y(S,t)\le c_y(S,0)+2\sum_{Z\cap S\ne\varnothing}\norm{k_Z}\int_0^tc_y(Z,u)\,du$.
-Iterating, and using $c_y(Z,u)\le2\norm{B_y}$ to see that the remainder
-after $m$ iterations tends to zero, gives
+Iterating this inequality, and using the trivial bound $c_y(Z,u)\le2\norm{B_y}$ to see
+that the remainder after $m$ iterations vanishes as $m\to\infty$, gives
 \[
  c_y(S,t)\le 2\norm{B_y}\sum_{m\ge0}\frac{(2t)^m}{m!}
  \sum_{\substack{Z_1\cap S\ne\varnothing,\ Z_{i+1}\cap Z_i\ne\varnothing\\ y\in Z_m}}
  \prod_{i=1}^m\norm{k_{Z_i}},
 \]
-with the $m=0$ term equal to $\mathbf 1_{\{y\in S\}}$. Summing the norms of
-the terms meeting a set of $n$ sites gives at most $nb_0$, so the inner
+with the $m=0$ term equal to $\mathbf 1_{\{y\in S\}}$. Since the norms of
+the interaction terms meeting any set of $n$ sites sum to at most $nb_0$, the inner
 sum is at most $\abs S\,b_0\,((R+1)b_0)^{m-1}\le\abs S\kappa^m$ with
-$\kappa=(R+1)b_0$; and a chain reaching $y$ needs $mR\ge\dist(S,y)$. Hence
+$\kappa=(R+1)b_0$. Moreover, a chain of $m$ supports of diameter at most $R$
+connecting $S$ to $y$ requires $mR\ge\dist(S,y)$. Hence,
 for every $\mu>0$,
 $c_y(S,t)\le 2\abs S\norm{B_y}\e^{-\mu\dist(S,y)}\sum_m(2\kappa\e^{\mu R}t)^m/m!$,
-which is the first bound with $v=2\kappa\e^{\mu R}$. Negative times are
+which gives the first bound with $v=2\kappa\e^{\mu R}$; negative times are
 identical. For the second
-bound, $\mathcal P_D$ is a product of commuting single-site twirls
-$T_y$, telescoping gives
-$\norm{B-\mathcal P_DB}\le\sum_{y\notin D}\sup_{U_y}\norm{[B,U_y]}$, and there are
-at most $2\abs S$ sites at each distance $d>\ell$ from $S$, so the sum is at most
+bound, expressing $\mathcal P_D$ as a product of commuting single-site Haar twirls
+$T_y$ and telescoping gives
+$\norm{B-\mathcal P_DB}\le\sum_{y\notin D}\sup_{U_y}\norm{[B,U_y]}$. Because at most
+$2\abs S$ sites lie at each distance $d>\ell$ from $S$, the sum is bounded by
 $4C\abs S^2\norm A\e^{vt}\sum_{d>\ell}\e^{-\mu d}$.
 \end{proof}
 
@@ -294,20 +330,20 @@ suppose $I_\Om(R:C)\le b$. If
 then $I_\Om(R_0:C_0)\le L^{-p}$.
 \end{lemma}
 \begin{proof}
-If a core is empty there is nothing to prove. Let $\Psi=\Om\otimes\Om$ on
-two replicas, $F_R$ the unitary exchanging the two replicas at the sites
+If either core is empty there is nothing to prove. Let $\Psi=\Om\otimes\Om$ on
+two replicas, $F_R$ be the unitary exchanging the two replicas at the sites
 of $R$, $\Phi=F_R\Psi$, and $Q=\Lam\setminus(R\cup C)$.
 
-\emph{Overlap.} Apply Lemma~\ref{lem:splitting} to $(T,U,E)=(R,Q,C)$: an
+\emph{Overlap.} Apply Lemma~\ref{lem:splitting} to $(T,U,E)=(R,Q,C)$ to obtain an
 isometry $V:\cH_Q\to\cB_R\otimes\cB_C$ and unit vectors $a\in\cH_R\otimes\cB_R$,
-$a'\in\cH_C\otimes\cB_C$ with
-$\abs{\langle a\otimes a',\widetilde\Om\rangle}\ge\e^{-b/2}$,
-$\widetilde\Om=(\id\otimes V)\Om$. The largest Schmidt probability (eigenvalue of the marginal) of
-$\widetilde\Om$ across $R\cB_R\,|\,C\cB_C$ is therefore at least $\e^{-b}$,
-so $\Tr\rho_{\widetilde\Om,R\cB_R}^2\ge\e^{-2b}$. Define on the two
-replicas of $Q$ the Hermitian contraction
+$a'\in\cH_C\otimes\cB_C$ satisfying
+$\abs{\langle a\otimes a',\widetilde\Om\rangle}\ge\e^{-b/2}$, where
+$\widetilde\Om=(\id\otimes V)\Om$. The largest Schmidt probability (marginal eigenvalue) of
+$\widetilde\Om$ across the bipartition $R\cB_R\,|\,C\cB_C$ is therefore at least $\e^{-b}$,
+so $\Tr\rho_{\widetilde\Om,R\cB_R}^2\ge\e^{-2b}$. On the two
+replicas of $Q$, define the Hermitian contraction
 $W=(V^\dagger\otimes V^\dagger)F_{\cB_R}(V\otimes V)$, where $F_{\cB_R}$ swaps
-the two copies of $\cB_R$. Since $V$ acts outside $R$, the swap identity
+the two copies of $\cB_R$. Since $V$ acts outside $R$, the replica-swap identity
 $\langle\xi^{\otimes2},F_{A}\xi^{\otimes2}\rangle=\Tr\rho_{\xi,A}^2$ gives
 \begin{equation}\label{eq:zoverlap}
 \begin{split}
@@ -318,85 +354,85 @@ $\langle\xi^{\otimes2},F_{A}\xi^{\otimes2}\rangle=\Tr\rho_{\xi,A}^2$ gives
 
 \emph{Two-sided Gaussian filtering.} Let $\mathbb H=H\otimes\id+\id\otimes H$
 and $\mathbb H'=F_R\mathbb HF_R$. Both are range-$R$ Hamiltonians on the
-doubled chain with uniformly bounded interaction sums, with unique ground
-vectors $\Psi$, $\Phi$, common ground energy $\mathcal E=2E_0$, and gap at
+doubled chain with uniformly bounded interaction sums, unique ground
+vectors $\Psi$ and $\Phi$, common ground energy $\mathcal E=2E_0$, and spectral gap at
 least $\Delta$. Their difference $\mathbb H'-\mathbb H$ is a sum of at most $N_R\abs{\partial R}$
-terms of norm at most $2J$, those of $\mathbb H$ whose support meets both $R$
-and $\Lam\setminus R$ (interior terms of $R$ are merely exchanged between the
-two identical replica copies); let $Z_R$ be the union of their supports, a
-set within distance $R$ of the cut edges of $R$. Put
-$B_*=1+b+\log L$, $r_*=2p+10$, $h=AB_*$ with $A\Delta^2/2\ge r_*+30$, and
+terms of norm at most $2J$, namely those terms of $\mathbb H$ whose support meets both $R$
+and $\Lam\setminus R$ (terms supported entirely inside $R$ are merely exchanged between the
+two identical replicas); let $Z_R$ be the union of their supports, which lies
+within distance $R$ of the cut edges of $R$. Put
+$B_*=1+b+\log L$, $r_*=2p+10$, and $h=AB_*$ with $A\Delta^2/2\ge r_*+30$, and define
 \[
 \begin{split}
  &g_h(t)=(2\pi h)^{-1/2}\e^{-t^2/(2h)},\\
  &M=\int_{\R}g_h(t)\,\e^{it\mathbb H'}W\e^{-it\mathbb H}\,dt .
 \end{split}
 \]
-$M$ is a contraction, and by the spectral theorem
-$M\Psi=\e^{-h(\mathbb H'-\mathcal E)^2/2}W\Psi$, $M^\dagger\Phi=\e^{-h(\mathbb H-\mathcal E)^2/2}W^\dagger\Phi$,
-so by the gaps
+The operator $M$ is a contraction, and by the spectral theorem
+$M\Psi=\e^{-h(\mathbb H'-\mathcal E)^2/2}W\Psi$ and $M^\dagger\Phi=\e^{-h(\mathbb H-\mathcal E)^2/2}W^\dagger\Phi$.
+Because $\mathbb H'$ and $\mathbb H$ have gap at least $\Delta$ above $\mathcal E$,
 \begin{equation}\label{eq:twosided}
  \norm{M\Psi-z\Phi},\ \norm{M^\dagger\Phi-z\Psi}\le\e^{-h\Delta^2/2}\le\e^{-10b}L^{-r_*}.
 \end{equation}
-Truncating the integral to $\abs t\le T=T_0B_*$ costs at most
-$2\e^{-T_0^2B_*/(2A)}$, which is also at most $\e^{-10b}L^{-r_*}$ once
+Truncating the time integral to $\abs t\le T=T_0B_*$ incurs an error of at most
+$2\e^{-T_0^2B_*/(2A)}$, which is likewise at most $\e^{-10b}L^{-r_*}$ once
 $T_0^2/(2A)\ge r_*+30$.
 
-\emph{Localization.} Write
+\emph{Localisation.} Factor the integrand as
 $\e^{it\mathbb H'}W\e^{-it\mathbb H}=(\e^{it\mathbb H'}W\e^{-it\mathbb H'})\,V(t)$
 with $V(t)=\e^{it\mathbb H'}\e^{-it\mathbb H}$, whose left generator
 $G(t)=\e^{it\mathbb H'}(\mathbb H'-\mathbb H)\e^{-it\mathbb H'}$ is a sum of
-the boundedly many terms supported in $Z_R$. Lemma~\ref{lem:LR} applied to $W$ (support $Q$, norm one)
-and to the terms of $G(t)$ gives Hermitian localized approximants
+the boundedly many terms supported in $Z_R$. Applying Lemma~\ref{lem:LR} to $W$ (supported in $Q$, of norm at most $1$)
+and to each term of $G(t)$ yields Hermitian localised approximants
 $W_\ell(t)=\mathcal P_{N_\ell(Q)}\bigl(\e^{it\mathbb H'}W\e^{-it\mathbb H'}\bigr)$
-and $G_\ell(t)=\mathcal P_{N_\ell(Z_R)}G(t)$ with
+and $G_\ell(t)=\mathcal P_{N_\ell(Z_R)}G(t)$ satisfying
 \[
  \norm{\e^{it\mathbb H'}W\e^{-it\mathbb H'}-W_\ell(t)}+\norm{G(t)-G_\ell(t)}\le CL^2\,\e^{v\abs t-\mu\ell},
 \]
 where the factor $L^2$ bounds $\abs Q^2$ and $\abs{\partial R}$. Let
-$V_\ell(t)$ be the unitary evolution generated by $G_\ell(t)$, supported in
+$V_\ell(t)$ be the unitary evolution generated by $G_\ell(t)$, which is supported in
 $N_\ell(Z_R)$; Duhamel's formula gives $\norm{V(t)-V_\ell(t)}\le CL^2\abs t\e^{v\abs t-\mu\ell}$.
-Hence $W_\ell(t)V_\ell(t)$ is a contraction supported in
-$S:=N_\ell(Q\cup Z_R)$ which approximates the integrand uniformly for
-$\abs t\le T$ with error $CL^2(1+T)\e^{vT-\mu\ell}$. Take
+Consequently, $W_\ell(t)V_\ell(t)$ is a contraction supported in
+$S:=N_\ell(Q\cup Z_R)$ that approximates the integrand uniformly for
+$\abs t\le T$ with error at most $CL^2(1+T)\e^{vT-\mu\ell}$. Choose
 $\ell=\lceil K_{\mathrm{loc}}B_*\rceil$ with $K_{\mathrm{loc}}$ fixed large
 enough (after $T_0$) that this error is at most $\e^{-10b}L^{-r_*}$,
-using $\log L\le B_*$ and $\log(1+T)\le C+B_*$. Averaging the localized
-integrands against the truncated Gaussian gives a contraction
+using $\log L\le B_*$ and $\log(1+T)\le C+B_*$. Averaging the localised
+integrands against the truncated Gaussian yields a contraction
 $M_{\mathrm{loc}}$ supported in $S$ with
 \begin{equation}\label{eq:loctwosided}
  \norm{M_{\mathrm{loc}}\Psi-z\Phi},\ \norm{M_{\mathrm{loc}}^\dagger\Phi-z\Psi}\le C\e^{-10b}L^{-r_*}.
 \end{equation}
 
-\emph{Polar decomposition.} Put $D=M_{\mathrm{loc}}/z$. Then $\norm D\le\e^{2b}$,
-$\norm{D\Psi-\Phi},\norm{D^\dagger\Phi-\Psi}\le C\e^{-8b}L^{-r_*}$, and writing
-$(D^\dagger D-\id)\Psi=D^\dagger(D\Psi-\Phi)+(D^\dagger\Phi-\Psi)$,
-$\norm{(D^\dagger D-\id)\Psi}\le C\e^{-6b}L^{-r_*}$. The polar partial
-isometry of the square operator $D$ on $\cH_S$ extends to a unitary $U$ on
-$\cH_S$ (its two support spaces have equal dimension), tensored with the
-identity elsewhere. Since $(\sqrt x-1)^2\le(x-1)^2$ for $x\ge0$,
-$\norm{(U-D)\Psi}=\norm{(\id-\abs D)\Psi}\le\norm{(\id-D^\dagger D)\Psi}$, so
+\emph{Polar decomposition.} Rescale by setting $D=M_{\mathrm{loc}}/z$. Since $z\ge\e^{-2b}$, we have $\norm D\le\e^{2b}$ and
+$\norm{D\Psi-\Phi},\norm{D^\dagger\Phi-\Psi}\le C\e^{-8b}L^{-r_*}$. Writing
+$(D^\dagger D-\id)\Psi=D^\dagger(D\Psi-\Phi)+(D^\dagger\Phi-\Psi)$ then gives
+$\norm{(D^\dagger D-\id)\Psi}\le C\e^{-6b}L^{-r_*}$. Because $D$ acts on the finite-dimensional space $\cH_S$, its polar partial
+isometry extends to a unitary $U$ on
+$\cH_S$ tensored with the
+identity outside $S$. Using the scalar inequality $(\sqrt x-1)^2\le(x-1)^2$ for $x\ge0$, we obtain
+$\norm{(U-D)\Psi}=\norm{(\id-\abs D)\Psi}\le\norm{(\id-D^\dagger D)\Psi}$, and therefore
 \begin{equation}\label{eq:Uerror}
  \norm{U\Psi-\Phi}\le C\e^{-6b}L^{-r_*}\le CL^{-r_*}.
 \end{equation}
 
-\emph{Support and conclusion.} Every site of $Q$ is more than $w$ from
-$R_0$ and from $C_0$. A term whose support meets both $R$ and $\Lam\setminus R$
-has a site $y\notin R$, which is more than $w$ from $R_0$, and a site
-$x\in R\subseteq\Lam\setminus C$, which is more than $w$ from $C_0$; its support
-has diameter at most $R$, so every site of $Z_R$ is more than $w-R$ from
-both cores. Choosing $C_p>K_{\mathrm{loc}}+R+3$ makes $S=N_\ell(Q\cup Z_R)$
-disjoint from both cores in both replicas. Thus $U$ does not change the
-joint two-replica marginal on $R_0C_0$. In $\Phi=F_R\Psi$, the marginal on
-$R_0$ and $C_0$ of the \emph{first} replica is $\rho_{R_0}\otimes\rho_{C_0}$,
-because $R_0$ was swapped in from the second replica and $C_0$ was not. By
-\eqref{eq:Uerror} and contractivity of the partial trace, the original
-marginal $\rho_{R_0C_0}$ is within trace distance $CL^{-r_*}$ of
-$\rho_{R_0}\otimes\rho_{C_0}$. The continuity bound
-$\abs{S(A|B)_\rho-S(A|B)_\sigma}\le C\sqrt\delta\log(\e\dim\cH_A)$ for
-$\delta=\frac12\norm{\rho-\sigma}_1$ \cite{Winter2016}, applied to
-$I(R_0:C_0)=S(R_0)-S(R_0|C_0)$ with $\log\dim\cH_{R_0}\le L\log q$, gives
-$I_\Om(R_0:C_0)\le CL^{1-r_*/2}=CL^{-p-4}\le L^{-p}$ for large $L$.
+\emph{Support and conclusion.} By hypothesis, every site of $Q$ lies at distance greater than $w$ from
+both $R_0$ and $C_0$. Any interaction term whose support meets both $R$ and $\Lam\setminus R$
+contains a site $y\notin R$ (at distance greater than $w$ from $R_0$) and a site
+$x\in R\subseteq\Lam\setminus C$ (at distance greater than $w$ from $C_0$); since its support
+has diameter at most $R$, every site of $Z_R$ lies at distance greater than $w-R$ from
+both cores. Choosing $C_p>K_{\mathrm{loc}}+R+3$ ensures that $S=N_\ell(Q\cup Z_R)$ is
+disjoint from $R_0\cup C_0$ in both replicas. Thus $U$ leaves the
+two-replica marginal on $R_0C_0$ unchanged. In $\Phi=F_R\Psi$, the marginal on
+$R_0C_0$ of the \emph{first} replica is $\rho_{R_0}\otimes\rho_{C_0}$,
+because $R_0$ is swapped in from the second replica whereas $C_0$ remains in the first. By
+\eqref{eq:Uerror} and the contractivity of the partial trace, the ground-state
+marginal $\rho_{R_0C_0}$ lies within trace distance $CL^{-r_*}$ of
+$\rho_{R_0}\otimes\rho_{C_0}$. Applying the Alicki--Fannes--Winter continuity bound
+$\abs{S(A|B)_\rho-S(A|B)_\sigma}\le C\sqrt\delta\log(\e\dim\cH_A)$ with
+$\delta=\frac12\norm{\rho-\sigma}_1$ \cite{Winter2016} to
+$I(R_0:C_0)=S(R_0)-S(R_0|C_0)$, and using $\log\dim\cH_{R_0}\le L\log q$, gives
+$I_\Om(R_0:C_0)\le CL^{1-r_*/2}=CL^{-p-4}\le L^{-p}$ for all sufficiently large $L$.
 \end{proof}
 
 \begin{figure*}[t]
@@ -418,14 +454,18 @@ $I_\Om(R_0:C_0)\le CL^{1-r_*/2}=CL^{-p-4}\le L^{-p}$ for large $L$.
 \subsection{The one-dimensional separation lemma}\label{sec:logsep2}
 
 \begin{inwords}
-Combine the two previous facts. An interval $R$ has entropy at most
-$C_{\mathrm{int}}$, so its mutual information with anything is at most
-$2C_{\mathrm{int}}$. Feed this constant into the reset lemma: any
-interval $T$ and any set $E$ at distance of order $\log L$ from $T$ are
-independent up to $L^{-p}$. This replaces the entire Section~3 of the
-two-dimensional paper (coarse collar, cell conditional information,
-angular induction), and it holds for intervals of every length, from a
-few sites to the whole chain.
+Combining the one-dimensional area law with the information reset yields
+polynomial decoupling at logarithmic separation. By Theorem~\ref{thm:A}, any
+interval $R$ (or union of $k_0$ intervals) has entanglement entropy at most
+$k_0C_{\mathrm{int}}$, so its mutual information with any disjoint region $C$
+is bounded by the constant $2k_0C_{\mathrm{int}}$. Feeding this uniform bound
+into Lemma~\ref{lem:reset} shows that any union $T$ of at most $k_0$ intervals
+and any set $E$ separated from $T$ by a distance of order $\log L$ satisfy
+$I_\Om(T:E)\le L^{-p}$. Because the one-dimensional area law bounds interval
+entropies uniformly at every scale, this single step establishes logarithmic
+decoupling for intervals of arbitrary length, from a few sites up to the
+entire chain. This replaces the entire Section~3 of the two-dimensional
+paper (coarse collar, cell conditional information, angular induction).
 \end{inwords}
 
 \precisely
@@ -438,14 +478,14 @@ $k_0$ intervals, and every $E\subseteq\Lam$ with $\dist(T,E)\ge D_p\log L$,
 \]
 \end{lemma}
 \begin{proof}
-Let $b=4k_0C_{\mathrm{int}}$, $w=C_p(1+b+\log L)$ from Lemma~\ref{lem:reset},
-and $D_p\log L\ge 3w+3$. Put $R=T^{+(w+1)}$, a union of at most $k_0$
-intervals, $C=\Lam\setminus T^{+(2w+2)}$, $R_0=T$, $C_0=E$. Then
-$\dist(R_0,\Lam\setminus R)\ge w+1$, $\dist(C_0,\Lam\setminus C)\ge w+1$, and
-$I(R:C)\le 2S(R)\le 2k_0C_{\mathrm{int}}\le b$ by Theorem~\ref{thm:A}
-(subadditivity over the at most $k_0$ intervals of $R$, and
-$I(R:C)=S(R)+S(C)-S(RC)\le 2S(R)$ by the Araki--Lieb inequality).
-Lemma~\ref{lem:reset} gives the claim.
+Let $b=4k_0C_{\mathrm{int}}$, let $w=C_p(1+b+\log L)$ be the margin width from Lemma~\ref{lem:reset},
+and choose $D_p$ so that $D_p\log L\ge 3w+3$. Put $R=T^{+(w+1)}$ (a union of at most $k_0$
+intervals), $C=\Lam\setminus T^{+(2w+2)}$, $R_0=T$, and $C_0=E$. Then
+$\dist(R_0,\Lam\setminus R)\ge w+1$ and $\dist(C_0,\Lam\setminus C)\ge w+1$. Moreover,
+$I(R:C)\le 2S(R)\le 2k_0C_{\mathrm{int}}\le b$ by Theorem~\ref{thm:A},
+using subadditivity across the at most $k_0$ intervals of $R$ together with
+$I(R:C)=S(R)+S(C)-S(RC)\le 2S(R)$ from the Araki--Lieb inequality.
+Applying Lemma~\ref{lem:reset} gives $I_\Om(T:E)\le L^{-p}$.
 \end{proof}
 
 \begin{figure*}[t]
@@ -457,17 +497,17 @@ Lemma~\ref{lem:reset} gives the claim.
 \end{figure*}
 
 \begin{remark}[A route without Lieb--Robinson bounds]\label{rem:LRfree}
-The reset lemma is the only place in Part~\ref{part:mps} where a
-Lieb--Robinson bound is used. It can be replaced by the amplification
+The information-reset lemma is the only place in Part~\ref{part:mps} where a
+Lieb--Robinson bound is invoked. It can be replaced by the algebraic amplification
 argument of \cite[Section~10]{AL}, which uses exact positive quasi-local
-constraints with stretched-exponential tails $\e^{-cl^\alpha}$,
-$\alpha=p/(p+1)$, random products of the associated contractions, and a
-polar decomposition, and needs no propagation bound for the unitary
-dynamics. With the area law as input, that argument gives
-$I(T:E)\le L^{-M}$ for $E$ beyond distance $C(\log L)^{1/\alpha}$ of an
-interval $T$. Running the protocol below with blocks of that size yields
-a matrix product state with bond dimension $\exp(O((\log L)^{1/\alpha}))$,
-quasi-polynomial for every fixed $p$, and polynomial only in the limit.
-Exactly polynomial bond dimension through the protocol requires the
-logarithmic separation of Lemma~\ref{lem:logsep}.
+constraints with stretched-exponential tails $\e^{-cl^\alpha}$
+($\alpha=p/(p+1)$), random products of the associated contractions, and a
+polar decomposition, without requiring a propagation bound for the unitary
+dynamics. With the area law as input, that argument yields
+$I(T:E)\le L^{-M}$ whenever $E$ lies beyond distance $C(\log L)^{1/\alpha}$ of an
+interval $T$. Running the protocol below on blocks of that width produces
+a matrix product state of bond dimension $\exp(O((\log L)^{1/\alpha}))$, which is
+quasi-polynomial for every fixed $p$ and approaches polynomial only in the large-$p$ limit.
+Achieving strictly polynomial bond dimension through the protocol route relies on the
+logarithmic separation provided by Lemma~\ref{lem:logsep}.
 \end{remark}
