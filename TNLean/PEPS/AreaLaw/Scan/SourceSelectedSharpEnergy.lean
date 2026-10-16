@@ -39,8 +39,6 @@ namespace TNLean.PEPS.AreaLaw.Scan.CollarScan
 
 open SpectralFilter ActualTerminals
 
-set_option maxHeartbeats 400000 in
--- Final kernel typechecking of the large nested `let`-telescope needs slightly above 200k heartbeats
 open Classical in
 /-- The concrete source scanner has density at most `n^(-8*nu)` and
 normalized energy defect at most `n^(-1/2000)` plus its fixed-instance
@@ -247,7 +245,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy
   intro E z
   obtain ⟨hwindow, hd, hpdata⟩ := hwdata
   refine ⟨hwindow, hd, ?_⟩
-  let : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
+  have : NeZero E.card := NeZero.of_pos hd
   intro d ΩX ψ Sent dims energy σ near middleRegion gpre gpost gaps gmax tree Gpre Gpost
   have hΩt : ‖Ωt‖ = 1 := (Matrix.isGappedGroundState_iff.mp htrgs).1
   have hXcard : (X.card : ℝ) ≤ (C_T + 1) * (S.n : ℝ) ^ 2 :=
@@ -280,7 +278,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy
     have hid : εp * (S.n : ℝ) ^ (Exponents.scannerNu : ℝ) = 1 := by
       dsimp only [εp]
       rw [← Real.rpow_add hnpos, neg_add_cancel, Real.rpow_zero]
-    nlinarith [mul_le_mul_of_nonneg_left hpow hεp.le]
+    linarith only [hid, mul_le_mul_of_nonneg_left hpow hεp.le]
   have hℓ1 : 1 ≤ ℓ := by
     have hlq : 0 ≤ Real.log (q : ℝ) := Real.log_nonneg (by exact_mod_cast hq)
     dsimp only [ℓ, transportLogDimBound]
@@ -293,79 +291,64 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_energy
   let density := fun (k : ℕ) (s : Fin (S.n * S.m)) (p : ℝ) ↦
     S.actualChargeEntropyDefect hm hM s.val dims energy (a / 2) k (pre k) p /
       (S.K * S.n * S.D : ℝ)
+  let defect := fun (k : ℕ) (s : Fin (S.n * S.m)) (p : ℝ) ↦
+    ((S.actualChargeScanRound hm hM s.val dims energy a pre).meanEnergy k p - e) / (g / 2)
   let cap := fun (k : ℕ) (s : Fin (S.n * S.m)) (p : ℝ) ↦
     C * W ^ 2 * (S.n : ℝ) ^ (Exponents.scannerEll : ℝ) *
       (S.D : ℝ) ^ 2 * (Real.log S.n) ^ Cl *
         ((1 - p) * (density k s p) ^ (1 / 8 : ℝ) + (1 - p) * (S.n : ℝ) ^ (-P) + p)
-  let budget := fun k : ℕ ↦
-    (2 * (C₁ + 1) / (W * ((S.n * S.m : ℕ) : ℝ) * εp)) *
-      ((2 * Real.log (d : ℝ) - Real.log z + W *
-        (Bsh / z + (1 + 3 * (S.n : ℝ) * (S.D : ℝ) * Real.log (q : ℝ)))) +
-        ((2 * S.n * S.m : ℕ) : ℝ) * (Cent * ℓ ^ eent) * W * a ^ (1 / 4 : ℝ) +
-          roughEndpointRemainder d cR S.K (Ci + (2 * S.n * S.m : ℕ) * Cb) k)
-  have hbudgetSmall : ∀ᶠ k : ℕ in atTop,
-      budget k ≤ (S.n : ℝ) ^ (-(8 * (Exponents.scannerNu : ℝ))) := by
+  let keep := fun (k : ℕ) (s : Fin (S.n * S.m)) (p : ℝ) ↦
+    0 ≤ defect k s p ∧ defect k s p ≤ (e + cap k s p + rem k) / (g / 2) ∧
+      ∀ τ : ℝ, 0 < τ → τ ≤ 1 / 2 →
+        2 * Sent + Gpre s p - Gpost s p ≤
+          2 * (2 * Real.log (d : ℝ) - Real.log z) / W +
+            τ * Gpre s p + 2 * τ * Real.log (d : ℝ) +
+            (3 + 1 / a) * Real.binEntropy τ + 37 * (C₀ * B) * a -
+            Real.log z / a + ((e + cap k s p + rem k) / (g / 2)) / τ *
+              max 0 (2 * Sent + gmax) +
+            2 * Real.bellOverlapRemainder d cU S.K k / W +
+              sharpLowerRemainder a cL Cf ell Sent k
+  have hstrong : ∀ᶠ k : ℕ in atTop,
+      ∃ s : Fin (S.n * S.m), ∃ p ∈ Set.Icc εp (2 * εp),
+        density k s p ≤ (S.n : ℝ) ^ (-(8 * (Exponents.scannerNu : ℝ))) ∧
+          keep k s p := by
     have hclosure := hdensity S.n hnD
     simp only [← hmScale, ← hDScale, ← hKScale] at hclosure
-    have hunit := hclosure W hW hWupper (regionalEntropy Λ q Ωt X) (Real.log (d : ℝ)) z Bsh
+    apply hclosure W hW hWupper (regionalEntropy Λ q Ωt X) (Real.log (d : ℝ)) z Bsh
       (Cent * ℓ ^ eent) hwindow.2.2.1 hwindow.2.1 hSt hlogd le_rfl hG
       (roughEndpointRemainder d cR S.K (Ci + (2 * S.n * S.m : ℕ) * Cb)) hlimR
-      (α := Unit) (fun k _ _ ↦ budget k) (fun _ _ _ ↦ True) 0 0
-      (Eventually.of_forall fun _ ↦ ⟨(), 0, ⟨le_rfl, le_rfl⟩, le_rfl, trivial⟩)
-    exact hunit.mono fun _ ⟨_, _, _, hle, _⟩ ↦ hle
-  have hKr : (0 : ℝ) < S.K := by exact_mod_cast (show 0 < S.K by omega)
-  have hWa : a * (S.K : ℝ) = W := div_mul_cancel₀ W hKr.ne'
-  have hrate : Cent * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent =
-      (Cent * ℓ ^ eent) * W * a ^ (1 / 4 : ℝ) := by
-    calc
-      _ = (Cent * ℓ ^ eent) * (a * S.K) * a ^ (1 / 4 : ℝ) := by ring
-      _ = _ := by rw [hWa]
-  have ha : 0 ≤ a := div_nonneg hWpos.le (Nat.cast_nonneg S.K)
-  have heBound : e ≤ (S.n : ℝ) ^ (-1000 : ℝ) := he.trans (min_le_left _ _)
-  filter_upwards [hpoints εp (2 * εp) hεp (by linarith) hεp2, hbudgetSmall] with k hk hbudgetK
+    have hselected := hpoints εp (2 * εp) hεp (by linarith) hεp2
+    filter_upwards [hselected] with k hk
+    obtain ⟨s, p, hp, hQ, hkeep⟩ := hk
+    refine ⟨s, p, hp, ?_, hkeep⟩
+    have hKr : (0 : ℝ) < S.K := by exact_mod_cast (show 0 < S.K by omega)
+    have hWa : a * (S.K : ℝ) = W := div_mul_cancel₀ W hKr.ne'
+    have hrate : Cent * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent =
+        (Cent * ℓ ^ eent) * W * a ^ (1 / 4 : ℝ) := by
+      calc
+        _ = (Cent * ℓ ^ eent) * (a * S.K) * a ^ (1 / 4 : ℝ) := by ring
+        _ = _ := by rw [hWa]
+    simp only [a, ℓ] at hrate
+    rw [hrate] at hQ
+    simpa only [density, hCeq, show 2 * εp - εp = εp by ring,
+      _root_.mul_assoc] using hQ
+  filter_upwards [hstrong] with k hk
   obtain ⟨s, p, hp, hQ, hδ0, hδcap, hsharp⟩ := hk
-  have hQ' : density k s p ≤
-    (2 * (S.C₁ + 1) / (W * ((S.n * S.m : ℕ) : ℝ) * (2 * εp - εp))) *
-      ((2 * Real.log (d : ℝ) - Real.log z + W *
-        (Bsh / z + (1 + 3 * (S.n : ℝ) * (S.D : ℝ) * Real.log (q : ℝ)))) +
-        (2 * S.n * S.m : ℕ) * (Cent * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent) +
-          roughEndpointRemainder d cR S.K (Ci + (2 * S.n * S.m : ℕ) * Cb) k) := hQ
-  have hQbudget : density k s p ≤ budget k := by
-    refine hQ'.trans_eq ?_
-    dsimp only [budget]
-    rw [hCeq, hrate, show 2 * εp - εp = εp by ring]
-    ring
-  have hQbound : density k s p ≤ (S.n : ℝ) ^ (-(8 * (Exponents.scannerNu : ℝ))) :=
-    hQbudget.trans hbudgetK
-  have hQ0 : 0 ≤ density k s p :=
-    div_nonneg (S.actualChargeEntropyDefect_nonneg hm hM s.val dims energy ha k pre p)
-      (mul_nonneg (mul_nonneg (Nat.cast_nonneg S.K) (Nat.cast_nonneg S.n)) (Nat.cast_nonneg S.D))
-  have henergyN := henergy S.n hnE W (density k s p) p e hW hWupper hQ0 hQbound hp heBound
+  have ha : 0 ≤ a := by dsimp only [a]; positivity
+  have hQ0 : 0 ≤ density k s p := div_nonneg
+    (S.actualChargeEntropyDefect_nonneg hm hM s.val dims energy ha k pre p) (by positivity)
+  have heBound : e ≤ (S.n : ℝ) ^ (-1000 : ℝ) := he.trans (min_le_left _ _)
+  have henergyN := henergy S.n hnE W (density k s p) p e hW hWupper hQ0 hQ hp heBound
   simp only [finalSelectedEnergyCap, ← hDScale] at henergyN
   have hcaprem : (e + cap k s p + rem k) / (g / 2) ≤
       (S.n : ℝ) ^ (-(1 / 2000 : ℝ)) + rem k / (g / 2) := by
     rw [add_div]
     exact _root_.add_le_add henergyN le_rfl
-  have hδcap' :
-      ((S.actualChargeScanRound hm hM s.val dims energy a pre).meanEnergy k p - e) / (g / 2) ≤
-        (e + cap k s p + rem k) / (g / 2) := hδcap
-  refine ⟨s, p, hp, hQ0, hQbound, hδ0, hδcap', hδcap'.trans hcaprem, ?_⟩
+  refine ⟨s, p, hp, hQ0, hQ, hδ0, hδcap, hδcap.trans hcaprem, ?_⟩
   intro τ hτ hτhalf
-  have hterm :
-      ((e + cap k s p + rem k) / (g / 2)) / τ * max 0 (2 * Sent + gmax) ≤
-      ((S.n : ℝ) ^ (-(1 / 2000 : ℝ)) + rem k / (g / 2)) / τ * max 0 (2 * Sent + gmax) :=
-    mul_le_mul_of_nonneg_right
-      (div_le_div_of_nonneg_right hcaprem hτ.le) (le_max_left 0 (2 * Sent + gmax))
-  have hcomparison :
-      2 * Sent + Gpre s p - Gpost s p ≤
-        2 * (2 * Real.log (d : ℝ) - Real.log z) / W +
-          τ * Gpre s p + 2 * τ * Real.log (d : ℝ) +
-          (3 + 1 / a) * Real.binEntropy τ + 37 * (C₀ * B) * a -
-          Real.log z / a + ((e + cap k s p + rem k) / (g / 2)) / τ *
-            max 0 (2 * Sent + gmax) +
-          2 * Real.bellOverlapRemainder d cU S.K k / W +
-            sharpLowerRemainder a cL Cf ell Sent k :=
-    hsharp τ hτ hτhalf
-  linarith only [hcomparison, hterm]
+  have hterm := mul_le_mul_of_nonneg_right
+    (div_le_div_of_nonneg_right hcaprem hτ.le) (le_max_left 0 (2 * Sent + gmax))
+  have hcomparison := hsharp τ hτ hτhalf
+  linarith
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

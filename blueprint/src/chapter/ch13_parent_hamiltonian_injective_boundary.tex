@@ -312,7 +312,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
         i_0+r       & =M+1-L_0+r, \notag           \\
         i_0+r+L_0+1 & \equiv r+1\pmod{M+1}. \notag
     \end{align}
-    Substituting these two words in the iterated transport identity gives the
+    Substituting these two words in the iterated shift identity gives the
     displayed product equation.
 \end{proof}
 
@@ -356,7 +356,7 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
     equality by $R$.
 \end{proof}
 
-\begin{lemma}[Transport followed by the one-sided boundary equation]
+\begin{lemma}[Window shift followed by the one-sided boundary equation]
     \label{lem:boundary_transport_wrapped_product_ground_space_map}
     \lean{MPSTensor.closure_property_boundary_condition_transport_wrapped_product_of_groundSpaceMap}
     \leanok
@@ -370,10 +370,10 @@ compatibilities $C^+_\tau A^j X=Y_\tau A^j$ and $X A^j C^-_\tau=A^jY_\tau$.
         A^{\rho_{M+1-L_0}}\cdots A^{\rho_{M-1}}A^j =A^{\rho_1}\cdots A^{\rho_{L_0-1}}
         A^{\rho_{L_0}}\cdots A^{\rho_{M-1}}A^jX. \notag
     \end{align}
-    For $\rho=\tau^-_\eta(\mu)$, this is the transport identity supplied by the
+    For $\rho=\tau^-_\eta(\mu)$, this is the shift identity given by the
     adjacent-window argument, with the single factor $A^j$ following
     $Y_{M+1-L_0}(\tau^-_\eta(\mu))$. The padded identity, whose corresponding
-    factor is $A^jA^\sigma$, is supplied separately.
+    factor is $A^jA^\sigma$, is given separately.
 \end{lemma}
 
 \begin{proof}

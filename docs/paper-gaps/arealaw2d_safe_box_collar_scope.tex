@@ -1,0 +1,417 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this author document compilable when it is built outside its
+% source directory and a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\doclink}[1]{%
+    \href{https://sirui-lu.com/TNLean/docs/#1.html}{\path{#1}}}
+\providecommand{\gapnote}[2]{%
+    \par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{Safe-Box Entropy and the Sublinear Collar Bound}
+\author{}
+\date{2026-10-15}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{resolved}
+
+\section{The source propositions}
+
+Propositions~9.5 and~9.6 of the two-dimensional area-law manuscript of
+September~24, 2026~\cite{OpenAI2026AreaLaw} (\path{08-scanner.tex},
+lines~681--944, at revision \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a})
+establish the small-exponent entropy bound on safe rectangles and deduce from
+it the sublinear mutual-information bound across the collar of a separated
+template.
+
+Fix a local Hilbert-space dimension $q \ge 1$, a finite interaction range
+$R \in \mathbb N$, an interaction norm bound $J \ge 0$, and a spectral gap
+$\Delta > 0$. Consider a finite lattice domain $\Lambda \subset \mathbb Z^2$, a
+local Hamiltonian on $\Lambda$ with those parameters and ground energy $e_0$,
+a unit ground vector $\Omega$, and a subset $A \subseteq \Lambda$ with cut
+boundary $\partial A$ in the induced graph on $\Lambda$. Write $Z$ for
+the set of endpoints of these cut edges, and interpret distance to the cut
+as distance to $Z$, with distance to the empty set equal to infinity. For any region
+$Y \subseteq \Lambda$, write $S_\Omega(Y)$ for the von Neumann entropy of the
+reduced density matrix of $\Omega$ on $Y$.
+
+Fix a safety parameter $D_0 > 2R + 10$. A lattice rectangle
+$Q \subset \mathbb Z^2$ with nonempty coordinate intervals has size
+$s = \operatorname{size}(Q)$ equal to the larger of its two side lengths in
+lattice sites. The rectangle $Q$ is $D_0$-safe for the cut $A$ if the
+$\ell_\infty$ distance $\operatorname{dist}_\infty(Q, \partial A)$ exceeds
+$D_0 s$. For each integer scale $r \ge 1$, let $F_{\mathrm{box}}(r)$ denote the
+supremum of $S_\Omega(A \cap Q)$ over all finite domains $\Lambda$, gapped
+ground vectors $\Omega$, cuts $A \subseteq \Lambda$, and $D_0$-safe rectangles
+$Q$ of size at most $r$. Proposition~9.5 of Ref.~\cite{OpenAI2026AreaLaw}
+(\path{08-scanner.tex}, lines~681--805) states that for the target exponent
+$e_* = 2 \times 10^{-6}$, there exists a constant $C_{\mathrm{box}} > 0$,
+depending only on $q$, $R$, $J$, and $\Delta$, such that for every
+$D_0 > 2R + 10$ and every integer $r \ge 1$,
+\begin{align}
+    F_{\mathrm{box}}(r)
+     & \le C_{\mathrm{box}} r^{1 + e_*}.
+    \label{eq:safe_box_collar_prop95}
+\end{align}
+The paper proves (\ref{eq:safe_box_collar_prop95}) from an initial safe-box
+exponent $0 < e_0 < 1$ by iterating the one-step exponent map
+$e \mapsto (1 - \ell_0)e$, where $\ell_0 = (1 - e_0)/200000$, finitely many
+times until the exponent is at most $e_*$.
+
+Proposition~9.6 of Ref.~\cite{OpenAI2026AreaLaw} (\path{08-scanner.tex},
+lines~808--944) applies (\ref{eq:safe_box_collar_prop95}) to a template
+$T \subset \mathbb Z^2$ at scanner scale $n \ge 2$ and template scale $s_0$.
+With the collar exponent $\ell = 10^{-5}$ and collar depth
+$L = \lfloor n^{1 - \ell}\rfloor$, let $T_L$ denote the $\ell_\infty$
+neighborhood of $T$ of radius $L$, and define the core region $X = A \cap T$
+and the collar truncation set $S_0 = A \cap T_L$. For a template $T$ satisfying
+$\operatorname{dist}_\infty(T, \partial A) > 4 D_0 s_0$ and $L \le s_0$,
+Proposition~9.6 bounds the mutual information $I_\Omega(X : \Lambda \setminus S_0)$
+between $X$ and $\Lambda \setminus S_0$ by
+\begin{align}
+    2 I_\Omega(X : \Lambda \setminus S_0)
+     & \le C n^{1 - 1/100000},
+    \label{eq:safe_box_collar_prop96}
+\end{align}
+for a constant $C > 0$ and scale threshold $N \ge 2$ chosen after the fixed
+system and template parameters and before the finite domain $\Lambda$,
+Hamiltonian, ground vector $\Omega$, cut $A$, and template $T$.
+
+\section{The formal statement and hypothesis reduction}
+
+The conditional template mutual-information theorem derives
+(\ref{eq:safe_box_collar_prop96}) from the analytic estimate
+(\ref{eq:safe_box_collar_prop95}). The latter is now proved independently,
+so it is not an additional hypothesis of the physical collar theorem.
+For the conditional argument, fix $q \ge 1$, $R \in \mathbb N$,
+$J \ge 0$, $\Delta > 0$, $D_0\in\mathbb N$ with $D_0 \ge 1$,
+and a template constant
+$C_{\mathrm{tpl}} \ge 24$. Assuming (\ref{eq:safe_box_collar_prop95}) at
+$e_* = 2 \times 10^{-6}$, there exist $C > 0$ and $N \ge 2$ such that every
+finite instance with $n \ge N$,
+$\operatorname{dist}_\infty(T, \partial A) > 4 D_0 s_0$, and
+$L = \lfloor n^{1 - 1/100000}\rfloor \le s_0$ satisfies
+\begin{align}
+    2 I_\Omega(X : \Lambda \setminus S_0)
+     & \le C n^{62497/62500}
+    \le C n^{1 - 1/100000}.
+    \label{eq:safe_box_collar_conditional_template}
+\end{align}
+All intermediate hypotheses of the scanner chain are eliminated in five steps
+leading to (\ref{eq:safe_box_collar_conditional_template}).\footnote{The
+    conditional template mutual-information theorem is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_template_final_mutualInformation_of_boxEntropy},
+    tracked in \href{https://github.com/LionSR/TNLean/issues/8756}{issue~8756}
+    and \href{https://github.com/LionSR/TNLean/issues/9334}{issue~9334}.}
+
+\paragraph{1. Post-replica collar mutual information from the sharp comparison.}
+Fix the final scanner exponents $\mu = 1/4$, $\ell = 10^{-5}$,
+$\omega = 1/20000$, $\kappa = 10^{-6}$, and $\nu = 1/1000$, and define the
+integer scales
+\begin{align}
+    L   & = \lfloor n^{1 - \ell}\rfloor,             &
+    m   & = \lfloor n^\mu\rfloor,                    &
+    D   & = \lceil n^\kappa\rceil, \nonumber           \\
+    K   & = L \mathbin{\mathrm{div}} (8m),           &
+    r_0 & = \lceil C_{\mathrm{tr}} (\log n)^2\rceil, &
+    a   & = \frac{W}{K},
+    \label{eq:safe_box_collar_scales}
+\end{align}
+where $m$ is the band spacing, $D$ is the separation scale, $K$ is the band
+count, $r_0$ is the truncation radius with coefficient $C_{\mathrm{tr}} > 0$,
+$W \in [1, n^\omega]$ is the total band weight, and $a$ is the per-band weight
+(\path{08-scanner.tex}, lines~32--58 and~839--865). Let $\Omega_t$ be the unit
+ground vector of the Hamiltonian truncated to $S_0$, with ground energy
+$e_{\mathrm{tr}} \le \min(n^{-1000}, g/4)$, normalized gap $g/2$ where
+$g = \Delta / \max\{1, J(\|f_{1,\Delta/2}\|_1 + 1)\}$, and trace distance
+$d_{\mathrm{tr}}(\Omega_t, \Omega) \le \sqrt{2\min(n^{-1000}, g/4)/g}$. Let
+$E$ be a typical spectral window of the reduced state of $\Omega_t$ on $X$ with
+dimension $d = |E|$, spectral mass $z > 0$, and auxiliary Schmidt entropy $S'$
+satisfying $|S' - S_{\Omega_t}(X)| \le c$ for $c = n^{3/5} - \log z$.
+
+Assume the target and positive-depth prefix entropy bounds on the original
+ground vector $\Omega$ at exponent $e_{\mathrm{box}} = e_*$:
+\begin{align}
+    S_\Omega(X)
+     & \le C_e n^{1 + e_*},               &
+    S_\Omega(Q_j)
+     & \le C_e \bigl(n L^{e_*} + n\bigr),
+    \label{eq:safe_box_collar_entropy_inputs}
+\end{align}
+for every positive-depth prefix $Q_j$ and a constant $C_e \ge 0$. Regional
+continuity transfers (\ref{eq:safe_box_collar_entropy_inputs}) to $\Omega_t$
+with shell bound $B_{\mathrm{sh}} = C_e(n L^{e_*} + n) + n^{-247}$. At replica
+count $k$, averaging over the $n m$ charge rounds and the parameter interval
+$[n^{-\nu}, 2n^{-\nu}]$ selects a charge round $s_k$ and parameter
+$p_k \in [n^{-\nu}, 2n^{-\nu}]$ (a rescaling by two of the paper's interval
+$[n^{-\nu}/2, n^{-\nu}]$ in \path{08-scanner.tex}, lines~380--384 and~880--883).
+Because $e_* - \mu + \nu < -8\nu$ (with margin $120499/500000$) and
+$(\omega - (1 - \ell - \mu))/4 + \nu < -8\nu$ (with margin $35697/200000$), the
+normalized charge entropy defect $\mathcal Q_k(s_k, p_k)/(K n D)$ at the
+selected point is at most $n^{-8\nu} = n^{-1/125}$ for large $k$. (An
+intermediate formal lemma recorded the weaker bound $n^{-\nu}$, which is too
+weak after taking the eighth root in the energy estimate; the paper's bound
+$\delta_n \le n^{-0.18}$ in \path{08-scanner.tex}, lines~880--883, is stronger
+than $n^{-8\nu}$ and needs no modification.) Substituting
+$(\mathcal Q_k/(K n D))^{1/8} \le n^{-\nu}$ and $p_k \le 2n^{-\nu}$ into the
+selected-point energy cap with exponent
+$2\omega + \ell + 2\kappa - \nu = -111/125000 < -1/2000$ gives the normalized
+energy defect bound
+\begin{align}
+    0 \le \delta_k
+     & \le n^{-1/2000} + \frac{\mathrm{rem}_k}{g/2},
+    \label{eq:safe_box_collar_energy_defect}
+\end{align}
+where $\mathrm{rem}_k \to 0$ as $k \to \infty$ (\path{08-scanner.tex},
+lines~457--533 and~839--911).\footnote{The moment-margin declarations are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_actualSharpUpper}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpUpper} and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_sharp_moments}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/SourceTargetSharpMoments}; the
+    endpoint budget and entropy-transfer declarations carrying
+    (\ref{eq:safe_box_collar_entropy_inputs}) are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.eventually_actualScan_suppliedPrevector_endpoint_budget}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/ActualEndpointRoughBudget},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_source_actualScan_suppliedPrevector_endpoint_budget}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/SourceEndpointRoughBudget},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.eventually_abs_regionalEntropy_sub_le_of_truncation}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/TargetEntropyTransfer},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.roughBudget_le_source_power} and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.selectedDensity_budget_le_principal}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/SourceRoughBudgetPower}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_final_selectedDensity_le}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/SelectedDensityPower}; the density and
+    energy exponent-margin declarations are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.eventually_principalDensity_le_rpow},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_principalDensity_le_rpow},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.final_principalDensity_margins},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_final_principalDensity_le_rpow},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.final_eightNuDensity_margins},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_final_principalDensity_le_eightNu},
+    and \leanid{TNLean.PEPS.AreaLaw.Scan.exists_final_selectedDensity_le_eightNu}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/StrongSelectedDensityPower}, together
+    with \leanid{TNLean.PEPS.AreaLaw.Scan.finalSelectedEnergyCap_le},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.final_selectedEnergy_margins},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.eventually_final_selectedEnergy_le_rpow},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_final_selectedEnergy_le_rpow}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_final_selectedEnergy_add_remainder_le_rpow};
+    the composed selected-point comparison, density, and energy bounds are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_sharp_comparison},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_sharp_density}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpDensity}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_sharp_energy}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/SourceSelectedSharpEnergy}.}
+
+Subtracting the sharp upper and lower norm rates at $(s_k, p_k)$, substituting
+(\ref{eq:safe_box_collar_energy_defect}), bounding the terminal pre-charge
+entropies on $\Omega_t$ by $2 S_{\Omega_t}(X) + 2 B_{\mathrm{sh}} + 6 n D \log q$,
+transferring mutual information from $\Omega_t$ to $\Omega$ with the continuity
+term $C_{\mathrm{MI}} = 16 \sqrt{d_{\mathrm{tr}}(\Omega_t, \Omega)} \log(e \dim \mathcal H_X)$,
+and taking $k \to \infty$ at fixed $n$, $W \in [1, n^\omega]$, and smoothing
+parameter $\tau \in (0, 1/2]$ yields
+\begin{align}
+    2 I_\Omega(X : \Lambda \setminus S_0)
+     & \le \frac{4 S_{\Omega_t}(X) + 4c - 2\log z}{W} \nonumber                     \\
+     & \quad + \left(\tau + \frac{n^{-1/2000}}{\tau}\right)
+    \bigl(4 S_{\Omega_t}(X) + 2c + 2 B_{\mathrm{sh}} + 6 n D \log q\bigr) \nonumber \\
+     & \quad + \left(3 + \frac{1}{a}\right) h(\tau)
+    + 37 C_0 B a - \frac{\log z}{a} + 2c + C_{\mathrm{MI}},
+    \label{eq:safe_box_collar_post_replica}
+\end{align}
+where $h(\tau)$ is the binary entropy and $C_0 B$ is the quadratic marginal
+moment coefficient with $B = C_B n D (\log n)^{12}$ (\path{08-scanner.tex},
+lines~868--911 and~936--941).\footnote{The mutual-information comparison and
+    replica limit declarations are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.two_information_le_sharpInformationBound}
+    and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.information_le_of_eventually_sharpInformationBound}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/SharpInformationScalar}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_actual_mutualInformation_bound}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/SourceActualInformation}.}
+
+\paragraph{2. Final-scale error absorption and transport smallness.}
+Specializing (\ref{eq:safe_box_collar_post_replica}) to $W = n^{1/20000}$ and
+$\tau = n^{-1/4000}$, the transport smallness condition
+$a \ell_q(r_0) \le c_t$, where $\ell_q(r_0) = 1 + (2r_0 + 1)^2 \log q$, holds
+for all sufficiently large $n$ because $\ell_q(r_0) = O((\log n)^4)$ and
+$a \le C_a n^{-0.74994}$. From $X \subseteq S_0$ and $|S_0| \le (C_T + 1)n^2$,
+the target dimension factor obeys
+$\log(e \dim \mathcal H_X) \le 1 + ((C_T + 1)\log q)n^2$, so
+$C_{\mathrm{MI}} = O(n^{-248})$. Under (\ref{eq:safe_box_collar_entropy_inputs}),
+the seven error terms in (\ref{eq:safe_box_collar_post_replica}) have exponents
+\begin{align}
+     & 0.999952,\quad 0.999752,\quad 0.74969,\quad 0.250061, \nonumber \\
+     & {-99.25006},\quad 0.6,\quad {-248},
+    \label{eq:safe_box_collar_error_exponents}
+\end{align}
+whose maximum in (\ref{eq:safe_box_collar_error_exponents}) is
+$62497/62500 = 0.999952 = 1 - 1/100000 - 19/500000$
+(\path{08-scanner.tex}, lines~839--942). Absorbing the logarithmic factors into
+that margin yields (\ref{eq:safe_box_collar_conditional_template}) conditionally
+on (\ref{eq:safe_box_collar_entropy_inputs}), the scale inequalities
+$2r_0 \le D$, $1 \le D$, and $4D \le m$, and the scanner geometry.\footnote{The
+    final-scale scalar absorption and transport smallness declarations are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.finalSharpError},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_source_error_le}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_finalSharp_transport_smallness};
+    the target dimension bound is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.log_exp_configuration_card_le_of_card}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/PhysicalInformationDimension}; the
+    conditional final-scale mutual-information theorem is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_finalScale_mutualInformation}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/SourceFinalInformation}.}
+
+\paragraph{3. Numerical admissibility of the rounded scales.}
+At the rounded definitions (\ref{eq:safe_box_collar_scales}), the inequalities
+$2r_0 \le D$, $1 \le D$, and $4D \le m$ hold for all sufficiently large $n$
+because $r_0 = O((\log n)^2)$, $D = \lceil n^{10^{-6}}\rceil$, and
+$m = \lfloor n^{1/4}\rfloor$. This removes the three numerical scale premises,
+leaving only the scanner geometry and the entropy bounds
+(\ref{eq:safe_box_collar_entropy_inputs}).\footnote{The rounded-scale
+    mutual-information theorem is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_finalScale_mutualInformation_of_rounded_scales}.}
+
+\paragraph{4. Target and prefix entropies from the safe-box bound.}
+For any separated template $T$ with
+$\operatorname{dist}_\infty(T, \partial A) > 4 D_0 s_0$ and $L \le s_0 \le n$,
+the dyadic safe-box partitions of $T$ and of each positive-depth shell cover
+$X = A \cap T$ and every prefix $Q_j$ by $D_0$-safe rectangles
+(\path{08-scanner.tex}, lines~574--590, 641--667, and~828--844). Subadditivity
+of entropy then derives both bounds in (\ref{eq:safe_box_collar_entropy_inputs})
+from the single safe-box bound (\ref{eq:safe_box_collar_prop95}) at
+$e_* = 2 \times 10^{-6}$.\footnote{The template entropy reductions are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_template_source_entropy_bounds}
+    and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_template_final_source_entropy_bounds_of_boxEntropy}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/TemplateSourceEntropy}.}
+
+\paragraph{5. Template scanner geometry.}
+Constructing the scanner on the separated template $T$ with $C_{\mathrm{tpl}} \ge 24$
+and $D_0 \ge 1$ supplies the induced domain graph, support anchors, quadratic
+volume bound $|S_0| \le (C_T + 1)n^2$, layer cardinalities, anchor
+multiplicity, and boundary clearance, reducing all hypotheses of
+(\ref{eq:safe_box_collar_conditional_template}) to
+(\ref{eq:safe_box_collar_prop95}).
+
+\section{The physical safe-box bootstrap}
+
+The physical safe-box estimate is proved first for integer clearance.
+For fixed $q,R,J,\Delta$, a single $C_b>0$ works for every integer
+$d>2R+10$ and every positive integer scale.\footnote{The theorem is
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_boxEntropy_le_boxError}.}
+Its composition with the conditional template theorem gives the original-state
+information bound at integer clearance, without assuming an entropy estimate.
+
+In the bootstrap argument (\path{08-scanner.tex}, lines~681--805), given an
+initial safe-box exponent $0 < e_0 < 1$, the bootstrap fixes
+$g_0 = (1 - e_0)/2$, $\mu = 1 - g_0$, $\nu = g_0/1000$, $\ell = \nu/100$,
+$\kappa = \min\{\ell, e_*/4\}$, and total band weight $W = 4$, with $a = 4/K$
+and $K$ of order $n^{g_0 - \ell}$. The sharp comparator cannot be used at these
+scales because its marginal-moment condition $a \sqrt{B} \le c_0$ with $B$ of
+order $n^{1+\kappa}$ would require a negative exponent in
+\begin{align}
+    \frac{1 + \kappa}{2} - g_0 + \ell
+     & = \frac{e_0}{2} + \frac{\kappa}{2} + \ell > 0.
+    \label{eq:safe_box_collar_bootstrap_obstruction}
+\end{align}
+Because the exponent in (\ref{eq:safe_box_collar_bootstrap_obstruction}) is
+strictly positive, the bootstrap instead uses the rough lower norm comparison at
+$W = 4$, $K \ge 8$, and $a = 4/K$, which requires no marginal-moment bound and
+gives, for every $0 < \tau \le 1/2$,
+\begin{align}
+    4S' - 6\left(\tau \log d + \frac{h(\tau)}{a}\right)
+    - 3\frac{\delta_k}{\tau}\max\{0, 2S'\} - R_k
+     & \le -\frac{1}{k}\log \mathcal N_k,
+    \label{eq:safe_box_collar_rough_lower}
+\end{align}
+where $\mathcal N_k$ is the squared filtered norm and $R_k \to 0$ as
+$k \to \infty$ (\path{07-comparators.tex}, lines~585--651;
+\path{08-scanner.tex}, lines~755--769). On each $D_0$-safe rectangle $Q$ of
+size $s$, the scanner is specialized to $T = Q \cap \mathbb Z^2$ and $n = 24s$,
+where the weak clearance $\operatorname{dist}_\infty(Q, \partial A) > D_0 s$
+implies $2L + 10r_0 \le D_0 s$ and $(D_0 + 1)L \le D_0 s$ for large $s$
+(\path{08-scanner.tex}, lines~693--755).\footnote{The bootstrap scale numerics,
+    weak-rectangle scanner geometry, and rough lower comparison are
+    \leanid{TNLean.PEPS.AreaLaw.Scan.BootstrapParameters.scannerExponents}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/BootstrapScannerExponents},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_fixedWeightFour_transport_smallness}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/FixedWeightTransportSmallness},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_rounded_admissibility}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/ScannerRoundedAdmissibility},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.ScannerExponents.exists_rounded_clearance_threshold}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/RoundedClearance},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.rectangleBootstrapScanner} and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.exists_rectangleBootstrapScanner_geometry}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/RectangleBootstrapGeometry},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_rough_lower_norm}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/ActualRoughLower},
+    \leanid{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_actualScan_suppliedPrevector_rough_lower}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/ActualRoughLowerPrevector}, and
+    \leanid{TNLean.PEPS.AreaLaw.Scan.tendsto_roughLowerRemainder_of_label_dimension}
+    in \doclink{TNLean/PEPS/AreaLaw/Scan/ActualRoughLowerRemainder}.} Combining
+(\ref{eq:safe_box_collar_rough_lower}) with the rough upper bound at $W = 4$
+establishes the one-step improvement $e \mapsto (1 - \ell_0)e$ for
+$e_* < e \le e_0$, and finite iteration yields the integer-clearance safe-box estimate.
+
+\section{Arbitrary real clearance}
+
+The source allows every real $D_0>2R+10$, whereas the safe-box bootstrap
+uses integer clearance. Put $d=2R+10$. The integer estimate at $d+1$
+can be transferred to $d$ without changing the domain, Hamiltonian, or
+ground vector. Indeed, partition a $d$-safe rectangle of size $s\geq2$
+into at most four rectangles of size at most $\lceil s/2\rceil$.
+Since $d\geq10$, one has
+$(d+1)\lceil s/2\rceil\leq ds$, so each child is $(d+1)$-safe.
+Subadditivity and the volume bound for the remaining small sizes give
+\begin{align}
+    F_{\mathrm{box},d}(r)
+     & \leq C_w r^{1+e_*},
+       & C_w & =4C_b+4\log q+1.
+    \label{eq:safe_box_collar_clearance}
+\end{align}
+Here $C_b$ is the physical coefficient at clearance $d+1$; neither it nor
+$C_w$ depends on the subsequently chosen real $D_0$.
+
+Every rectangle satisfying the source's strict distance inequality at
+$D_0>d$ is $d$-safe. Thus (\ref{eq:safe_box_collar_clearance}) gives
+$S_\Omega(A\cap Q)\leq C_w\operatorname{size}(Q)^{1+e_*}$ for every
+such rectangle. This pointwise statement is equivalent to
+(\ref{eq:safe_box_collar_prop95}): for rectangles of size at most $r$,
+monotonicity of the positive power bounds every entropy by $C_wr^{1+e_*}$;
+conversely, take $r=\operatorname{size}(Q)\geq1$. The formal theorem
+states the pointwise bound and introduces neither a second notion of safety
+nor another entropy supremum.\footnote{The clearance comparison is
+    \leanid{TNLean.PEPS.AreaLaw.boxEntropy_power_le_of_succ_clearance};
+    the real-clearance conclusion is
+    \leanid{TNLean.PEPS.AreaLaw.exists_regionalEntropy_safe_rect_le_boxError}.}
+
+For Proposition~9.6, apply the conditional template information theorem
+at the integer clearance $d$ with (\ref{eq:safe_box_collar_clearance}).
+It supplies $C_m>0$ and a common threshold before every finite physical
+instance. A template separated at $4D_0s_0$ is also separated at $4ds_0$.
+Consequently the information bound applies to the same original vector
+and the unchanged regions $X=A\cap T$ and $S_0=A\cap T_L$.
+Dividing its coefficient by two gives
+$I_\Omega(X:\Lambda\setminus S_0)\leq(C_m/2)n^{1-1/100000}$.
+The cut and volume bounds then supply all clauses of the sublinear
+collar bound with the single coefficient $\max(C_m/2,10)$.\footnote{The
+    theorem is \leanid{TNLean.PEPS.AreaLaw.sublinearCollarBound_real}.}
+This holds for every real $D_0>2R+10$ and $C_{\mathrm{tpl}}\geq24$,
+with no assumed safe-box estimate or mutual-information inequality.
+
+This resolves the safe-box and collar restrictions described here.
+The two-family repair construction of Proposition~11.2 and its use in
+Theorem~1.1 remain separate mathematical requirements.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
