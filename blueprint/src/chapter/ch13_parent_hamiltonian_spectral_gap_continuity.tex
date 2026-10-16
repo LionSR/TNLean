@@ -129,14 +129,14 @@ is recorded in
     \leanok
     \uses{thm:kernel_gap_perturbation,
         thm:continuous_finite_window_parent_hamiltonian}
-    Let $x\mapsto A_x$ be continuous, $R\leq N$, and suppose every $A_x$ is
+    As in the continuity step of \cite[lines~2575--2578]{Schuch2011Phases},
+    let $x\mapsto A_x$ be continuous, $R\leq N$, and suppose every $A_x$ is
     $R$-block and $N$-block injective. If
     $\delta\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,R}(A_{x_0})v\rVert$ for
     all $v\perp G_N^{\mathrm{ES}}(A_{x_0})$, with $\delta>0$, then for every
     $\delta'<\delta$ and every $x$ near $x_0$,
     $\delta'\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,R}(A_x)v\rVert$ for
-    all $v\perp G_N^{\mathrm{ES}}(A_x)$. This is the continuity step of
-    \cite[lines~2575--2578]{Schuch2011Phases}.
+    all $v\perp G_N^{\mathrm{ES}}(A_x)$.
 \end{theorem}
 
 \begin{proof}
@@ -174,10 +174,10 @@ is recorded in
     \uses{thm:open_parent_hamiltonian_es_c1,
         thm:open_parent_hamiltonian_kernel_ground_space,
         lem:positive_gap_transfer_loewner}
-    Translate the local comparison to every window of $W$ consecutive sites and
-    sum; each range-$R$ term lies in at most $W-R+1$ windows. Both open
-    Hamiltonians have kernel $G_N^{\mathrm{ES}}$, so the operator inequality
-    transfers the gap.
+    Translating the local comparison to every window of $W$ consecutive sites
+    and summing shows that each range-$R$ term lies in at most $W-R+1$ windows.
+    Because both open Hamiltonians have kernel $G_N^{\mathrm{ES}}$, the
+    operator inequality transfers the gap.
 \end{proof}
 
 \begin{theorem}[Strict Knabe windows for injective tensors]
@@ -204,8 +204,8 @@ is recorded in
         lem:parent-finite-interval-comparison,
         lem:open_parent_range_comparison,
         thm:open_parent_hamiltonian_kernel_ground_space}
-    Gauge $A$ to a primitive tensor with a positive-definite fixed point, which
-    has the same local ground spaces, and take its open-chain gap
+    Gauging $A$ to a primitive tensor with a positive-definite fixed point
+    preserves the local ground spaces and provides an open-chain gap
     $\gamma_W\lVert v\rVert\leq\lVert H^{\mathrm{open}}_{N,W}(A)v\rVert$ at some
     range $W\geq2$ for all $N\geq W$. The finite-interval comparison gives
     $\kappa>0$ with $\kappa\,h_W\leq H^{\mathrm{open}}_{W,2}(A)$, and
@@ -216,9 +216,9 @@ is recorded in
          & \leq\lVert H^{\mathrm{open}}_{N,2}(A)v\rVert.
         \label{eq:injective_two_site_open_gap}
     \end{align}
-    Writing $\delta=\kappa\gamma_W/(W-1)$, choose $n$ with $n\delta>1$ and put
-    $m=n+W$; then $m\delta>1$ and (\ref{eq:injective_two_site_open_gap}) holds
-    at $N=m+1$.
+    For $\delta=\kappa\gamma_W/(W-1)$, choosing $n$ with $n\delta>1$ and
+    setting $m=n+W$ gives $m\delta>1$, and
+    (\ref{eq:injective_two_site_open_gap}) holds at $N=m+1$.
 \end{proof}
 
 \begin{theorem}[Gap in a parameter neighborhood]
@@ -242,10 +242,10 @@ is recorded in
     \uses{thm:open_parent_gap_continuity,
         thm:parent_hamiltonian_gap_from_open_knabe_block,
         thm:open_parent_hamiltonian_kernel_ground_space}
-    Choose $1/m<\gamma'<\gamma$. The strict window persists with $\gamma'$
-    near $x_0$, and Knabe's nearest-neighbor criterion turns it into a periodic
-    gap for every $N\geq2m$ with a constant depending only on $m$ and
-    $\gamma'$.
+    For any $\gamma'$ with $1/m<\gamma'<\gamma$, the strict window persists
+    with $\gamma'$ near $x_0$, and Knabe's nearest-neighbor criterion turns it
+    into a periodic gap for every $N\geq2m$ with a constant depending only on
+    $m$ and $\gamma'$.
 \end{proof}
 
 \begin{theorem}[Spectral gap along an ordered interpolation]
@@ -292,8 +292,9 @@ is recorded in
 
 \begin{proof}
     \leanok
-    Take a finite subcover of the neighborhoods, the minimum of the finitely
-    many constants and the maximum of the finitely many thresholds.
+    Choosing a finite subcover of the neighborhoods, taking the minimum of the
+    finitely many constants and the maximum of the finitely many thresholds
+    gives the uniform pair.
 \end{proof}
 
 \begin{theorem}[Uniform finite-dimensional kernel gap]
@@ -349,19 +350,19 @@ is recorded in
     \leanok
     \uses{thm:knabe_gap_neighborhood, thm:injective_strict_knabe_window,
         thm:periodic_short_gap_continuity, lem:compact_uniform_pos_nat_bounds}
-    Let $x\mapsto A_x$ be a continuous family of one-site injective tensors of
-    nonzero bond dimension, and let $S$ be a compact parameter set. Then there
-    is $\delta>0$ such that, for every $x\in S$, every $N\geq2$ and every
+    For the one-site injective, two-site parent-interaction case of the
+    uniform-gap conclusion in
+    \cite[Appendix~A, lines~2575--2580]{Schuch2011Phases} (the non-injective
+    normal-form extension is recorded in
+    \cite{gap:spc11_uniform_gap_injective_scope}), let $x\mapsto A_x$ be a
+    continuous family of one-site injective tensors of nonzero bond dimension,
+    and let $S$ be a compact parameter set. Then there is $\delta>0$ such
+    that, for every $x\in S$, every $N\geq2$ and every
     $v\perp\ker H_{N,2}(A_x)$,
     \begin{align}
         \delta\lVert v\rVert & \leq\lVert H_{N,2}(A_x)v\rVert.
         \label{eq:compact_parent_gap}
     \end{align}
-    This is the uniform-gap conclusion of
-    \cite[Appendix~A, lines~2575--2580]{Schuch2011Phases} for one-site
-    injective tensors and the two-site parent interaction; the source also
-    treats non-injective normal forms
-    \cite{gap:spc11_uniform_gap_injective_scope}.
 \end{theorem}
 
 \begin{proof}
@@ -500,13 +501,12 @@ is recorded in
         \delta\lVert v\rVert\leq\lVert H_{N,R}(x)v\rVert
         \qquad(N\geq R,\ v\perp\ker H_{N,R}(x)).
     \]
-    In particular, for pairwise inequivalent normalized normal blocks of
-    dimensions $D_j>0$, one may choose any
-    $R\geq3\max(\sum_jD_j,1)^5$. The simultaneous spanning length
-    is then derived from the dimensions.
-    This includes the two-site interaction of the initially blocked path
-    in \cite[Appendix~A]{Schuch2011Phases}; see
-    \cite{gap:spc11_uniform_gap_injective_scope}.
+    In particular, as for the two-site interaction of the initially blocked
+    path in \cite[Appendix~A]{Schuch2011Phases} (see
+    \cite{gap:spc11_uniform_gap_injective_scope}), for pairwise inequivalent
+    normalized normal blocks of dimensions $D_j>0$, one may choose any
+    $R\geq3\max(\sum_jD_j,1)^5$, with the simultaneous spanning length
+    derived from the dimensions.
 \end{theorem}
 
 \begin{proof}
@@ -598,8 +598,10 @@ is recorded in
     \leanok
     \uses{thm:physical_action_joint_span_compact_gap,
         thm:compact_positive_parent_interaction_gap}
-    On the retained physical space let $Q>0$ and let $(A^j)_j$ be
-    simultaneously one-site injective. Set
+    Following the deformation in
+    \cite[lines~589--594 and~610--625, Appendix~A]{Schuch2011Phases}, on the
+    retained physical space let $Q>0$ and let $(A^j)_j$ be simultaneously
+    one-site injective. Set
     $Q_\gamma=\gamma Q+(1-\gamma)I$ for $0\leq\gamma\leq1$.
     Both the canonical two-site parent Hamiltonians of $(Q_\gamma A^j)_j$
     and the periodic Hamiltonians obtained from
@@ -607,11 +609,9 @@ is recorded in
         h_\gamma=(Q_\gamma^{-1})^{\otimes2}
         h_0 (Q_\gamma^{-1})^{\otimes2},
     \]
-    where $h_0$ is the initial canonical parent projection, have a
-    positive gap uniform in $\gamma$ and every $N\geq2$.
-    The positive factor is given on the retained physical space.
-    This is the deformation in
-    \cite[lines~589--594 and~610--625, Appendix~A]{Schuch2011Phases}.
+    where $h_0$ is the initial canonical parent projection and the positive
+    factor is given on the retained physical space, have a positive gap
+    uniform in $\gamma$ and every $N\geq2$.
 \end{theorem}
 
 \begin{proof}
@@ -622,7 +622,7 @@ is recorded in
     Its endpoints are $I$ and $Q$. Joint one-site injectivity persists,
     so the preceding theorem gives the canonical gap. Inversion and
     tensor powers are continuous. The conjugated interactions are
-    positive and have exactly the transformed local ground spaces as
+    positive and have the transformed local ground spaces as
     kernels. Compact positive-interaction comparison then transfers
     the canonical gap to the displayed interactions.
 \end{proof}
@@ -636,25 +636,24 @@ is recorded in
         Matrix.range_leftPolarIso_finalProjection}
     \leanok
     \uses{thm:ldpolar_decomposition, thm:ldp_polar_uniqueness}
-    Let $P:\C^k\to\C^d$ be a linear map, let $E$ be the orthogonal
-    projection onto $\operatorname{ran}P$, and set
+    Following the polar decomposition on the retained physical space in
+    \cite[lines~579--584]{Schuch2011Phases}, extended by the identity on the
+    orthogonal complement, let $P:\C^k\to\C^d$ be a linear map, let $E$ be
+    the orthogonal projection onto $\operatorname{ran}P$, and set
     $Q=(PP^\dagger)^{1/2}+I-E$. There is a partial isometry $W$ such
     that $Q>0$, $P=QW$, and $WW^\dagger=E$.
-    On the retained physical space this is the polar decomposition of
-    \cite[lines~579--584]{Schuch2011Phases}; the identity extension acts
-    only on the orthogonal complement.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:ldpolar_decomposition, thm:ldp_polar_uniqueness}
-    Write $P^\dagger=VS$ in polar form, with $V^\dagger V=E$,
-    $ES=S$, and $\operatorname{ran}E=\operatorname{ran}S$.
-    The matrix $S+I-E$ is positive semidefinite. If it annihilates $x$,
+    Writing $P^\dagger=VS$ in polar form, with $V^\dagger V=E$,
+    $ES=S$, and $\operatorname{ran}E=\operatorname{ran}S$,
+    the matrix $S+I-E$ is positive semidefinite. If it annihilates $x$,
     multiplying by $E$ gives $Sx=0$. Since $E$ factors through $S$
     and both are Hermitian, $Ex=0$, and the original equation gives
     $x=0$. Thus $Q=S+I-E$ is positive definite.
-    Set $W=V^\dagger$. The identities $VE=V$ and $VS=P^\dagger$
+    For $W=V^\dagger$, the identities $VE=V$ and $VS=P^\dagger$
     give $QW=SV^\dagger=P$. Finally, $EP=P$ gives
     $\operatorname{ran}P\subseteq\operatorname{ran}E$, while
     $PV=S$ and $E=SR$ for some $R$ give the reverse inclusion.
@@ -664,13 +663,14 @@ is recorded in
     \label{thm:normal_block_injective_blocking}
     \lean{MPSTensor.exists_positive_blockTensor_wordTupleSpanTop_one_of_isNormalTensor}
     \leanok
-    Let $(A^j)_j$ be pairwise gauge-phase inequivalent normalized normal
-    blocks, with bond dimensions $D_j$. There is a positive integer $L$
-    satisfying $L+1\leq3\max(\sum_jD_j,1)^5$ such that blocking $L$
-    physical sites gives a simultaneous one-site span of the direct sum
-    of the block matrix algebras. This is the bounded form of the initial
-    blocking in \cite[lines~575--597, Appendix~A]{Schuch2011Phases}, using
-    the bound in \cite[lines~317--345]{Cirac2016MPDO_arXiv}.
+    Combining the initial blocking in
+    \cite[lines~575--597, Appendix~A]{Schuch2011Phases} with the simultaneous
+    span bound of \cite[lines~317--345]{Cirac2016MPDO_arXiv}, let $(A^j)_j$ be
+    pairwise gauge-phase inequivalent normalized normal blocks, with bond
+    dimensions $D_j$. There is a positive integer $L$ satisfying
+    $L+1\leq3\max(\sum_jD_j,1)^5$ such that blocking $L$ physical sites gives
+    a simultaneous one-site span of the direct sum of the block matrix
+    algebras.
 \end{theorem}
 
 \begin{proof}
@@ -678,7 +678,7 @@ is recorded in
     \leanok
     The simultaneous word-span bound yields $L$ and spans the direct
     sum by length-$L$ words. The one-site matrices of the blocked blocks
-    are precisely those length-$L$ word evaluations.
+    are those length-$L$ word evaluations.
 \end{proof}
 
 \begin{theorem}[Constructed isometric deformation and its uniform gap]
@@ -721,15 +721,13 @@ is recorded in
         h_0(Q_\gamma^{-1})^{\otimes2}$ have a positive periodic gap uniform
     in $\gamma\in[0,1]$ and all $N\geq2$. Here $h_0$ is the canonical
     two-site parent projection of the unweighted block sum of $(W^j)_j$.
-    The interactions are continuous and have exactly the deformed local
+    The interactions are continuous and have the deformed local
     ground spaces as their kernels.
 
-    For pairwise inequivalent normal blocks, there is a positive initial
-    blocking length $L$ satisfying
-    $L+1\leq3\max(\sum_jD_j,1)^5$, after which the constructed path
-    has the canonical uniform gap just stated. The path construction
-    and gap assertion are those of
-    \cite[lines~575--625, Appendix~A]{Schuch2011Phases}.
+    As in \cite[lines~575--625, Appendix~A]{Schuch2011Phases}, for pairwise
+    inequivalent normal blocks there is a positive initial blocking length $L$
+    satisfying $L+1\leq3\max(\sum_jD_j,1)^5$, after which the constructed path
+    has the canonical uniform gap just stated.
 \end{theorem}
 
 \begin{proof}
@@ -762,11 +760,10 @@ is recorded in
     write $P=QW$ with $Q=(PP^\dagger)^{1/2}+I-E$ as in
     Theorem~\ref{thm:parent_left_polar_support}. Then $U$ commutes with
     $PP^\dagger$, $E$, and $Q$, and $UW=WX$.
-    In particular, this applies to the joint physical map of a block
-    family. Physical rotation by a matrix $L$ replaces that map by $LP$.
-    These assertions establish the polar step in
-    \cite[lines~645--676]{Schuch2011Phases}, with the virtual unitary
-    $X$ given as a hypothesis.
+    For the polar step of \cite[lines~645--676]{Schuch2011Phases} with the
+    virtual unitary $X$ given as a hypothesis, this applies in particular to
+    the joint physical map of a block family, where physical rotation by a
+    matrix $L$ replaces that map by $LP$.
 \end{theorem}
 
 \begin{proof}
@@ -788,11 +785,10 @@ is recorded in
     \leanok
     If $U$ commutes with a physical matrix $Q$, then it commutes with
     $Q_\gamma=\gamma Q+(1-\gamma)I$ for every $\gamma\in[0,1]$.
-    In the setting of Theorem~\ref{thm:parent_polar_unitary_covariance},
+    In the setting of Theorem~\ref{thm:parent_polar_unitary_covariance}, as in
+    the covariance implication of \cite[lines~672--676]{Schuch2011Phases},
     the constructed physical map $P_\gamma=Q_\gamma W$ therefore obeys
-    $UP_\gamma=P_\gamma X$ throughout the path.
-    This is the covariance implication of
-    \cite[lines~672--676]{Schuch2011Phases}; it does not assert the
+    $UP_\gamma=P_\gamma X$ throughout the path, without asserting the
     existence of a virtual unitary from an arbitrary state symmetry.
 \end{theorem}
 
@@ -1125,14 +1121,14 @@ is recorded in
         MPSTensor.IsOnSiteSymmetric.isOnSiteSymmetricUpToPhase}
     \leanok
     \uses{def:twisted_tensor, def:mpv}
-    Let $g\mapsto U_g$ be a linear representation of a monoid on the physical
+    Following \cite[lines~655--657, 2590--2593]{Schuch2011Phases}, let
+    $g\mapsto U_g$ be a linear representation of a monoid on the physical
     space. A tensor $A$ is on-site symmetric up to a phase if for every $g$
     and every chain length $N$ there is a scalar $\lambda_{g,N}$ with
     $U_g^{\otimes N}\ket{\psi_N}=\lambda_{g,N}\ket{\psi_N}$, where
     $\ket{\psi_N}$ is the matrix product vector of $A$ of length $N$. The
-    scalars may depend on both $g$ and $N$. Exact on-site symmetry is the
-    case $\lambda_{g,N}=1$. This is the symmetry of the state in
-    \cite[lines~655--657, 2590--2593]{Schuch2011Phases}.
+    scalars may depend on both $g$ and $N$, and exact on-site symmetry is the
+    case $\lambda_{g,N}=1$.
 \end{definition}
 
 \begin{lemma}[Phases of a symmetry up to a phase]
@@ -1156,9 +1152,9 @@ is recorded in
     there is $c$ with $|c|=1$ such that
     $\sum_k\tr B^k_w=c^{|w|}\sum_k\tr A^k_w$ for every word $w$, where
     $B^k_i=\sum_l(U_g)_{il}A^k_l$. Exact symmetry is the case
-    $\lambda_{g,N}=1$.
-    A symmetry of the state holds only up to such a phase
-    \cite[lines~1313--1314, 2590--2593]{Schuch2011Phases}.
+    $\lambda_{g,N}=1$, whereas in general a symmetry of the state in
+    \cite[lines~1313--1314, 2590--2593]{Schuch2011Phases} holds only up to
+    such a phase.
 \end{lemma}
 
 \begin{proof}
@@ -1177,9 +1173,9 @@ is recorded in
     gives $y_w\,L(1)=c_1^{|w|}L(x_w)$, and applying $\phi$ proves the first
     claim.
 
-    For the blocks take $\phi(M)=\sum_k\tr M_k$, $x_i=(A^k_i)_k$ and
-    $y_i=(B^k_i)_k$; the latter span because $U_g$ is invertible, and the
-    trace pairing on $\bigoplus_k\MN{D_k}$ is nondegenerate with
+    For the blocks, setting $\phi(M)=\sum_k\tr M_k$, $x_i=(A^k_i)_k$ and
+    $y_i=(B^k_i)_k$, the tuples $y_i$ span because $U_g$ is invertible, and
+    the trace pairing on $\bigoplus_k\MN{D_k}$ is nondegenerate with
     $\phi(1)=\sum_kD_k\neq0$ (if $r=0$ there is nothing to prove). The
     hypothesis at lengths one, two and three gives the three relations, so
     $c=\lambda_{g,1}$ works. At length one the nonzero vector
@@ -1203,12 +1199,11 @@ is recorded in
     \begin{align*}
         \sum_l(U_g)_{il}A^{\sigma(k)}_l=c\,X_kA^k_iX_k^{-1}
     \end{align*}
-    for every block $k$ and letter $i$. If in addition every block
-    satisfies $\sum_iA^{k\dagger}_iA^k_i=I$, the matrices $X_k$ may be
-    taken unitary.
-    The joint one-site span is the standard form of
-    \cite[lines~325--352]{Schuch2011Phases}. This is the several-block
-    form of the virtual action in \cite[lines~652--660]{Schuch2011Phases}.
+    for every block $k$ and letter $i$. In the joint one-site spanning
+    standard form of \cite[lines~325--352]{Schuch2011Phases} and the
+    several-block virtual action of \cite[lines~652--660]{Schuch2011Phases},
+    if in addition every block satisfies $\sum_iA^{k\dagger}_iA^k_i=I$, the
+    matrices $X_k$ may be taken unitary.
 \end{theorem}
 
 \begin{proof}
@@ -1245,7 +1240,7 @@ is recorded in
     $U_g$ commutes with the identity-extended positive polar factor $Q$,
     and the same $X_g$ satisfies $U_gP_\gamma=P_\gamma X_g$ along the
     constructed deformation $P_\gamma=Q_\gamma W$.
-    The block-diagonal normalization is exactly
+    The block-diagonal normalization is
     $\operatorname{tr}_{\mathrm{left}}(P^\dagger P)=I$ of
     \cite[line~653]{Schuch2011Phases}, and the conclusion is the
     covariance $U_gP=PX_g$ of \cite[lines~652--660]{Schuch2011Phases}
@@ -1258,15 +1253,15 @@ is recorded in
     \leanok
     Let $c$, $\sigma$ and the unitaries $V_k$ be as in
     Theorem~\ref{thm:block_isometric_deformation_symmetry_permutation}.
-    Define $X'_g$ by sending the matrix coordinates of block $k$ through
+    Sending the matrix coordinates of block $k$ through
     $V_k^T\otimes V_k^\dagger$ and then to the coordinates of block
-    $\sigma(k)$. It is the product of a block-diagonal unitary and a
-    permutation of coordinates, hence unitary. Column $(\sigma(k),a,b)$
-    of $\bar cU_gP$ is the $(a,b)$ entry of block $\sigma(k)$ twisted by
-    $\bar cU_g$, which equals $(V_kA^k_iV_k^\dagger)(a,b)$; this is the
-    corresponding column of $PX'_g$. Hence $X_g=cX'_g$ is unitary and
-    satisfies $U_gP=PX_g$. The polar and affine covariance theorems give the
-    remaining conclusions.
+    $\sigma(k)$ defines an operator $X'_g$ that is the product of a
+    block-diagonal unitary and a permutation of coordinates, hence unitary.
+    Column $(\sigma(k),a,b)$ of $\bar cU_gP$ is the $(a,b)$ entry of block
+    $\sigma(k)$ twisted by $\bar cU_g$, which equals
+    $(V_kA^k_iV_k^\dagger)(a,b)$; this is the corresponding column of $PX'_g$.
+    Hence $X_g=cX'_g$ is unitary and satisfies $U_gP=PX_g$. The polar and
+    affine covariance theorems give the remaining conclusions.
 \end{proof}
 
 \begin{theorem}[Derived parent symmetry for several normal blocks]
@@ -1282,18 +1277,18 @@ is recorded in
     In the setting of
     Theorem~\ref{thm:block_isometric_deformation_symmetry_permutation},
     $U_g^{\otimes L}G_L(\bigoplus_kA^k)=G_L(\bigoplus_kA^k)$ for every
-    $L$. If every block satisfies $\sum_iA^{k\dagger}_iA^k_i=I$, then
-    along the constructed deformation $P_\gamma=Q_\gamma W$ both the
-    canonical two-site parent projection and the positive interaction
+    $L$. As in the parent-symmetry conclusion of
+    \cite[lines~672--676]{Schuch2011Phases} for several blocks in the printed
+    standard form under symmetry of the matrix product vectors up to a phase,
+    if every block satisfies $\sum_iA^{k\dagger}_iA^k_i=I$, then along the
+    constructed deformation $P_\gamma=Q_\gamma W$ both the canonical two-site
+    parent projection and the positive interaction
     \begin{align*}
         h_\gamma=(Q_\gamma^{-1})^{\otimes2}
         h_2(W)(Q_\gamma^{-1})^{\otimes2}
     \end{align*}
     commute with $U_g^{\otimes2}$, and their open and periodic sums
-    commute with $U_g^{\otimes N}$ for every $N\geq2$. This is the
-    parent-symmetry conclusion of \cite[lines~672--676]{Schuch2011Phases}
-    for several blocks in the printed standard form, for symmetry of the
-    matrix product vectors up to a phase.
+    commute with $U_g^{\otimes N}$ for every $N\geq2$.
 \end{theorem}
 
 \begin{proof}
@@ -1326,9 +1321,10 @@ is recorded in
     with interaction
     $h_\gamma=(Q_\gamma^{-1})^{\otimes2}h_0(Q_\gamma^{-1})^{\otimes2}$,
     where $h_0$ is the initial canonical parent projection.
-    In both assertions the gap is on the orthogonal complement of the
-    open Hamiltonian's kernel. This is the open-chain consequence of the
-    deformation in \cite[lines~589--594 and~610--625, Appendix~A]{Schuch2011Phases}.
+    As the open-chain consequence of the deformation in
+    \cite[lines~589--594 and~610--625, Appendix~A]{Schuch2011Phases}, in both
+    assertions the gap holds on the orthogonal complement of the open
+    Hamiltonian's kernel.
 \end{theorem}
 
 \begin{proof}
@@ -1337,7 +1333,7 @@ is recorded in
     The path $Q_\gamma$ is continuous and invertible, so joint one-site
     spanning persists. The compact open-chain theorem at range two gives
     the canonical gap. The displayed positive interaction varies
-    continuously and has exactly the transformed two-site ground space
+    continuously and has the transformed two-site ground space
     as its kernel. The compact positive-interaction theorem gives its
     uniform open gap.
 \end{proof}
@@ -1358,20 +1354,20 @@ is recorded in
     $\gamma\in[0,1]$ and every $N\geq2$; here $h_0$ is the canonical
     two-site parent projection of the unweighted sum of the polar blocks.
 
-    For pairwise inequivalent normalized normal blocks, each gap assertion
-    applies after finite initial blocking at a positive length $L$ with
-    $L+1\leq3\max(\sum_jD_j,1)^5$. The chain length then counts blocked
-    sites. The path is that of
-    \cite[lines~575--625, Appendix~A]{Schuch2011Phases}.
+    Along the path of \cite[lines~575--625, Appendix~A]{Schuch2011Phases}, for
+    pairwise inequivalent normalized normal blocks each gap assertion applies
+    after finite initial blocking at a positive length $L$ with
+    $L+1\leq3\max(\sum_jD_j,1)^5$, where the chain length counts blocked
+    sites.
 \end{theorem}
 
 \begin{proof}
     \uses{thm:constructed_isometric_deformation_gap,thm:positive_affine_physical_deformation_open_gap,thm:normal_block_injective_blocking}
     \leanok
     Invertibility of $Q$ transfers the joint one-site span from $A^j$ to
-    $W^j$. Apply Theorem~\ref{thm:positive_affine_physical_deformation_open_gap}
-    to these polar blocks and the constructed positive factor. For normal
-    blocks, the simultaneous spanning bound yields $L$; length-$L$
+    $W^j$, so Theorem~\ref{thm:positive_affine_physical_deformation_open_gap}
+    applies to these polar blocks and the constructed positive factor. For
+    normal blocks, the simultaneous spanning bound yields $L$; length-$L$
     words become one-letter matrices after blocking.
 \end{proof}
 
@@ -1379,7 +1375,9 @@ is recorded in
     \label{thm:compact_norm_lower_bound_tail}
     \lean{IsCompact.exists_uniform_norm_lower_bound_on_tail}
     \leanok
-    Let $S$ be a compact subset of a topological parameter space. For each
+    In the norm-bound form of the compactness argument in
+    \cite[Appendix~A]{Schuch2011Phases}, let $S$ be a compact subset of a
+    topological parameter space. For each
     $N\in\mathbb N$, let $E_N,F_N$ be seminormed additive groups, and let
     $H_N(x):E_N\to F_N$ and $V_N(x)\subseteq E_N$ be families of maps and
     admissible vectors. Suppose that every $x\in S$ has a neighborhood
@@ -1388,11 +1386,9 @@ is recorded in
     and $v\in V_N(y)$. Then there are $\delta>0$ and $N_0$ such that
     $\delta\|v\|\leq\|H_N(x)v\|$ for every $x\in S$, $N\geq N_0$,
     and $v\in V_N(x)$. Linearity of the maps is unnecessary.
-    This is the norm-bound form of the compactness argument in
-    \cite[Appendix~A]{Schuch2011Phases}.
 \end{theorem}
 \begin{proof}\leanok
-    Choose a finite subcover of the neighborhoods $U_x$. Let $\delta$ be
+    For a finite subcover of the neighborhoods $U_x$, let $\delta$ be
     the minimum of the corresponding positive constants and $N_0$ the
     maximum of their thresholds. Decreasing the constant preserves the
     inequality because $\|v\|\geq0$, and increasing the threshold restricts
@@ -1417,9 +1413,9 @@ is recorded in
          & =\sum_j\tr\bigl(A^{j,\sigma_1}\cdots A^{j,\sigma_L}X_j\bigr).
         \label{eq:block_ground_space_map}
     \end{align}
-    Equip the domain with the direct sum of the Hilbert--Schmidt inner
-    products and the codomain with the usual configuration inner product.
-    Its range is $\sum_jG_L(A^j)$.
+    When the domain is equipped with the direct sum of the Hilbert--Schmidt
+    inner products and the codomain with the usual configuration inner
+    product, its range is $\sum_jG_L(A^j)$.
 \end{definition}
 
 \begin{theorem}[Trace duality for a finite family of matrices]
@@ -1436,10 +1432,10 @@ is recorded in
 \end{theorem}
 \begin{proof}
     \leanok
-    The matrix trace pairing is nondegenerate. Apply its isomorphism with
-    the dual space to the restriction of the functional to each summand.
-    A proper subspace has a nonzero linear functional vanishing on it,
-    so the asserted separation condition excludes every proper subspace.
+    Because the matrix trace pairing is nondegenerate, its isomorphism with
+    the dual space applies to the restriction of the functional to each
+    summand. A proper subspace has a nonzero linear functional vanishing on
+    it, so the asserted separation condition excludes every proper subspace.
 \end{proof}
 
 \begin{theorem}[Simultaneous injectivity of the joint boundary map]
@@ -1478,11 +1474,10 @@ is recorded in
     map at length $L$ is injective for every parameter $x$. For arbitrary nowhere-zero weights $\mu_j(x)$, set
     $B_x=\bigoplus_j\mu_j(x)A_x^j$. Then the projector onto $G_L(B_x)$
     and the canonical interaction $h_L(B_x)$ depend continuously on $x$.
-    At every fixed volume $N\geq L$, the corresponding open and periodic
-    parent Hamiltonians are continuous as well. Continuity of the weights
-    is unnecessary.
-    These are the finite-window continuity inputs in
-    \cite[Appendix~A, lines~2575--2578]{Schuch2011Phases}.
+    As required by the finite-window continuity inputs in
+    \cite[Appendix~A, lines~2575--2578]{Schuch2011Phases}, at every fixed
+    volume $N\geq L$ the corresponding open and periodic parent Hamiltonians
+    are continuous as well, without requiring continuity of the weights.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -1523,7 +1518,8 @@ is recorded in
     $\Gamma_L^{\oplus}((A^{j,i}X_j)_j)=0$ for every letter $i$.
     Injectivity at $L$ gives $A^{j,i}X_j=0$. Every nonempty word therefore
     annihilates $X_j$, so $\Gamma_L^{\oplus}((X_j)_j)=0$ because $L>0$.
-    Injectivity gives $X_j=0$. Iterate this argument.
+    Injectivity gives $X_j=0$, and iterating this step extends injectivity to
+    every $n\geq L$.
 \end{proof}
 
 \begin{theorem}[Common positive spanning length on a compact parameter set]
@@ -1546,8 +1542,8 @@ is recorded in
     Spanning at $L_x$ persists in a neighborhood of $x$ by openness and
     at all larger lengths by positive-length propagation. A finite
     subcover of $S$ gives a common positive length by taking the maximum
-    of its finitely many thresholds. If $S$ is empty, any positive length
-    suffices. This provides the common finite-window choice used in
+    of its finitely many thresholds; if $S$ is empty, any positive length
+    suffices, providing the common finite-window choice used in
     \cite[Appendix~A, lines~2499--2503 and~2575--2578]{Schuch2011Phases}.
 \end{proof}
 
@@ -1575,8 +1571,8 @@ is recorded in
         thm:block_ground_space_map_injective,
         thm:ph_primitive_blocks_word_span}
     Trace preservation extends simultaneous spanning by one letter,
-    including when the initial length is zero. Apply the preceding
-    theorem to these positive lengths, and use trace duality to obtain
+    including when the initial length is zero; applying the preceding
+    theorem to these positive lengths and using trace duality yields
     joint-boundary injectivity. For primitive blocks, simultaneous spanning
     follows from inequivalence of the blocks.
 \end{proof}
@@ -1596,8 +1592,9 @@ is recorded in
 \end{theorem}
 \begin{proof}
     \leanok
-    Subtract the local projection from the identity. Its fixed embeddings
-    into the chain are continuous, and so are their finite sums.
+    Subtracting the local projection from the identity gives the complementary
+    interaction, whose fixed embeddings into the chain and their finite sums
+    remain continuous.
 \end{proof}
 
 \begin{theorem}[Continuity of fixed-window block overlaps]
