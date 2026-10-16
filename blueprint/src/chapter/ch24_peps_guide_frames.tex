@@ -55,10 +55,14 @@ outer sample.
         TNLean.PEPS.EncodedFrame.norm_act_proj_patchAt_sub_le,
         TNLean.PEPS.EncodedFrame.card_tag_patchAt_le,
         TNLean.PEPS.Approximation.cellCenterPos,
+        TNLean.PEPS.Approximation.cellCenterPos_eq_sitePosition_add,
         TNLean.PEPS.Approximation.AdaptivePatchSupply.cellCenterPos,
         TNLean.PEPS.Approximation.AdaptivePatchConstraint.supply_cellCenterPos}
     \leanok
-    \uses{def:peps_adaptive_patch_constraint, def:peps_frame_hole_encoder}
+    \uses{def:peps_adaptive_patch_constraint,
+        def:peps_frame_hole_encoder,
+        def:peps_angular_information_bound,
+        def:peps_squareLatticeCoordinateRegions}
     If the outer sample of square cylinder data is nonempty, its projector
     $P_{c,h}$ is $\Pi$; in all cases
     $\lVert(\id-P_{c,h})\Omega\rVert\le\lVert(\id-\Pi)\Omega\rVert$ and the
@@ -73,12 +77,16 @@ outer sample.
     tags. The patch depends only on the center and the scale, so a given center
     and radius receive the same patch on every sheet, as required at
     \texttt{06-geometry.tex}, lines 114--118.
+    For every natural $L$ and every site of the $L\times L$ lattice,
+    its cell-center position is its integer site position minus $(1/2,1/2)$.
 \end{lemma}
 
 \begin{proof}\leanok
     With a nonempty outer sample the tags are the pairs $(j,\ell)$; with an
     empty one the projector is the identity. A translation preserves sup-norm
     distances.
+    The coordinate identity is the pointwise form of the translation between
+    integer lattice positions and cell centers.
 \end{proof}
 
 \begin{definition}[Canonical tag holder and the frame of a guide]
