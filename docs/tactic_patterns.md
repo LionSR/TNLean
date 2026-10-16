@@ -8047,7 +8047,7 @@ spectral split → block extraction → MPV calculation → strict bounds
   if a subsequent mathematical theorem needs that interface independently;
   it is not part of the present proof completion.
 
-### Facts about the jointly chosen initial marks — candidate
+### Facts about the jointly chosen initial marks — promoted (2026-10-16)
 
 - **Pattern:** Recover the same two residue choices and finite mark set used by
   the initial repair stage, then project a geometric property from their
@@ -8059,12 +8059,31 @@ spectral split → block extraction → MPV calculation → strict bounds
   `RepairMetricHypotheses.repairStage_location_mem_affineMesh`.
   The definitions in `RepairStage` and `RepairBirthRank` also refer to these
   same choices; they are not additional proofs of a geometric property.
-- **Abstraction:** If another proof needs this extraction, prefer a lemma
-  giving the incidence and scale facts of the actual chosen initial family.
-  It must retain the residue choices used by the actual regions; an
-  independently chosen family cannot replace them.
-- **Notes:** The present two proofs use different projections: incidence and
-  scale separation in the first, membership in the selected belts in the
-  second. The mesh argument reuses `fineScaleIndex_mono` and
-  `beltMarks_subset_affineMesh`, and adds no copied floor estimate or new
-  mesh definition.
+- **Abstraction:** The lemma
+  `TNLean.PEPS.AreaLaw.Geometry.initialRepairStage_mark_spec` in
+  `TNLean/PEPS/AreaLaw/Geometry/RepairInitialMarkFacts.lean` records sparse cell
+  counts, finite layer support, incidence, scale minimality, separation, and
+  injectivity for the actual chosen initial family. It retains the residue
+  choices used by the actual regions and introduces no new mark family.
+- **Refactor:** The metric proof uses incidence and separation directly. The
+  mesh proof reconstructs membership in a selected belt from the incident
+  cell supplied by the lemma, then retains the existing mesh argument and
+  induction step. Both theorem statements remain unchanged.
+- **Line comparison:** The metric proof decreases from 9 to 4 nonblank proof
+  lines, and the mesh proof from 24 to 23. The shared lemma has 5 proof lines:
+  the two consumers and the common proof therefore use 32 lines rather than
+  33. These counts exclude statements, documentation, imports, and the other
+  declarations in the modules.
+- **Verification:** The shared lemma and both rewritten consumers have
+  passed ordinary builds and imported named axiom checks with only the
+  three standard axioms. Both rewritten consumers also passed strict
+  source checks and named source checks.
+- **Further use:** The uniform weighted initial-mark estimate
+  `exists_uniform_initialRepairStage_weighted_sum_bound` also uses the same
+  chosen-family facts. Its finite layer partition uses incidence, and its
+  summation estimate uses the sparse cell counts. The roots and residue
+  choices remain those of the actual initial family. The estimate has passed
+  strict checking, ordinary compilation, and its exact named imported axiom
+  check. This third use is separate from the two refactored consumers in the
+  line comparison above. No new tactic, simp attribute, or proof limit is
+  introduced.
