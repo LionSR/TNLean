@@ -1,7 +1,7 @@
 \section{Regional supports of ordinary injective tensors}%
 \label{sec:peps_injective_region_support}
 
-\begin{lemma}[Exterior multiplicities and the actual region map]%
+\begin{lemma}[Exterior multiplicities and the open-region map]%
     \label{lem:peps_injective_region_actual_map}
     \lean{TNLean.PEPS.regionBlockedTensorMap_eq_exterior_smul_openRegionMap,
         TNLean.PEPS.openRegionMap_injective_of_regionBlockedTensorInjective,
@@ -9,7 +9,7 @@
     \leanok
     \uses{def:peps_region_ground_space}
     The region map obtained by summing all graph-edge labels is the
-    actual open-region map multiplied by the number of assignments to
+    open-region map multiplied by the number of assignments to
     edges wholly outside the region. Injectivity of the former implies
     injectivity of the latter. If every virtual bond is nonzero
     dimensional, the two maps have the same range.
@@ -18,7 +18,7 @@
 \begin{proof}\leanok
     Split the edge labels into those incident to the region and those
     wholly outside it. The exterior labels do not enter any site tensor,
-    so they contribute their cardinality. An equality of actual images
+    so they contribute their cardinality. An equality of open-region images
     implies an equality of globally summed images. A nonzero scalar
     factor preserves a linear range.
 \end{proof}
@@ -28,7 +28,7 @@
     \lean{TNLean.PEPS.range_regionReducedDensity_eq_regionGroundSpace_of_injective_complement}
     \leanok
     \uses{def:peps_region_ground_space,thm:peps_region_reduced_density_support}
-    If the actual open-region map of $R^c$ is injective, then the
+    If the open-region map of $R^c$ is injective, then the
     unnormalized reduced density of the closed PEPS has support
     exactly equal to $\mathcal G_R$. Neither injectivity of $R$
     nor connectedness of either side is needed.
@@ -48,7 +48,7 @@
         TNLean.PEPS.SameState.regionGroundSpace_eq_of_injective_complements}
     \leanok
     \uses{thm:peps_injective_complement_region_support}
-    If the actual open maps of $R$ and $R^c$ are injective, then
+    If the open maps of $R$ and $R^c$ are injective, then
     $\operatorname{rank}\rho_R=\prod_{e\in\partial R}D_e$.
     If two coefficient vectors coincide and their complementary open maps
     are injective, their regional ground spaces on $R$ coincide.

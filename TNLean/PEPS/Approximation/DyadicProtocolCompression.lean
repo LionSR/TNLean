@@ -602,8 +602,7 @@ theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences
     refine (this.trans ?_).trans_le (i.isDistributionProtocol.participation_le j)
     rw [DyadicProtocol.participationCount_chain]
     rfl
-  have hExpansion : ∀ q' : ℕ, ∃ (r' : ℕ) (C_K C_C : ℝ) (u v : ℕ),
-      0 ≤ C_K ∧ 0 ≤ C_C ∧ ∀ i,
+  have hExpansion : ∀ q' : ℕ, ∃ (r' : ℕ) (C_K C_C : ℝ) (u v : ℕ), ∀ i,
         ∃ (lists : (C₀ i).circuit.GateLists) (K : ℕ),
           ((C₀ i).circuit.reexpand lists).IsTermwiseBounded r' (C_C * (size i) ^ v) ∧
           (∀ g, ((C₀ i).circuit.reexpand lists).monomialCount g ≤ K) ∧
@@ -611,10 +610,10 @@ theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences
           ((C₀ i).circuit.reexpand lists).IsGateApproximation ((size i) ^ q')⁻¹
             ((C₀ i).circuit.reexpandGateMaps lists (C₀ i).gateMaps) := by
     intro q'
-    refine ⟨r, max C 0, max C 0, k, k, le_max_right _ _, le_max_right _ _, fun i ↦ ?_⟩
+    refine ⟨r, max C 0, max C 0, k, k, fun i ↦ ?_⟩
     have hD := i.isDistributionProtocol
     have hpow : C * (size i) ^ k ≤ max C 0 * (size i) ^ k :=
-      mul_le_mul_of_nonneg_right (le_max_left _ _) (pow_nonneg (by linarith [hsize i]) _)
+      mul_pow_le_max_zero_mul_pow C (by linarith [hsize i]) k
     refine ⟨(C₀ i).circuit.selfLists, ⌊C * (size i) ^ k⌋₊, ?_, ?_, ?_, ?_⟩
     · exact OriginalCircuit.isTermwiseBounded_castLayouts_produce _ _ _
         (i.protocol.isExpansionBounded_chain _ hD.expansionBounded) hpow
@@ -627,7 +626,6 @@ theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences
   obtain ⟨r', C_p, α, hCp, hα, hfam⟩ :=
     GateMapConstruction.exists_uniform_approximate_sampled_network size hsize
       (fun i ↦ i.Party) C₀ b 3 0 (max C 0 * b) q
-      (mul_nonneg (le_max_right _ _) (Nat.cast_nonneg _)) (Nat.cast_nonneg _)
       hN₀ hphysical₀ harity₀ hlifetime₀ hExpansion 5 (by norm_num)
   refine ⟨1 + (2 * (C * C) + 2 * C), C_p, α, b, 2 * b * (b - 1), b, L₀, ?_⟩
   intro L hL hL₀ H E₀ Ω hΩ

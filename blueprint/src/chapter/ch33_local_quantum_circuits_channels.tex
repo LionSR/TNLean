@@ -197,7 +197,7 @@ change the local dimension act on single sites.
         QuantumCircuit.rectangularKrausMap_rectKronecker_rectKronecker}
     \leanok
     Let $\Phi$ be an onsite channel. If $Z$ acts on a set of sites $X$, then
-    $\Phi^\dagger(Z)$ acts on $X$. If moreover $Z'$ acts on a set of sites
+    $\Phi^\dagger(Z)$ acts on $X$. If in addition $Z'$ acts on a set of sites
     disjoint from $X$, then $\Phi^\dagger(ZZ')=\Phi^\dagger(Z)\Phi^\dagger(Z')$.
     The dual maps $\bigotimes_im_i$ to $\bigotimes_i\Phi_i^\dagger(m_i)$: for
     any operators $K_{ij}\colon\C^d\to\C^e$, the map
@@ -378,7 +378,7 @@ change the local dimension act on single sites.
     depth $0$.
 \end{definition}
 
-\begin{lemma}[Blocking is a channel that transports supports]
+\begin{lemma}[Blocking is a channel that preserves supports]
     \label{lem:qc_blocking_supports}
     \uses{def:qc_blocked_local_channel_conversion}
     \lean{QuantumCircuit.blockSites_isKrausCPTP,

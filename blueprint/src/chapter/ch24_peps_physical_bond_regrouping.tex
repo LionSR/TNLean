@@ -26,7 +26,7 @@
         b_v & =\beta^2_{v-\mathrm{north},\mathrm v}, &
         l_v & =\beta^1_{v-\mathrm{east},\mathrm h}.
     \end{align}
-    Thus regrouping is a bijection of the actual physical basis
+    Thus regrouping is a bijection of the physical basis
     configurations. Its induced coefficient map is
     $(\mathcal R\psi)(\beta)=\psi(\sigma(\beta))$, and is a linear
     isometric equivalence of the finite-dimensional physical Hilbert spaces.
@@ -51,7 +51,7 @@
         \langle\mathcal R\psi,\mathcal R\phi\rangle
          & =\langle\psi,\phi\rangle.
     \end{align}
-    For any complex bond factors $F_e$, the literal product identity is
+    For any complex bond factors $F_e$, the product identity is
     \begin{align}
         \prod_{v\in X}F_{v,\mathrm h}F_{v,\mathrm v}
          & =\prod_{e\in\mathcal B}F_e.
@@ -63,7 +63,7 @@
     commutativity of the scalar factors.
 \end{proof}
 
-\begin{theorem}[Actual torus bond coefficients after physical regrouping]%
+\begin{theorem}[Torus bond coefficients after physical regrouping]%
     \label{thm:peps_torus_regrouped_averaging_bonds}
     \lean{TNLean.PEPS.torusBondRegrouping_averagingSite,
         TNLean.PEPS.torusBondRegrouping_dressedAveragingSite,
@@ -74,7 +74,7 @@
         thm:peps_torus_projector_expansion,
         thm:peps_theta_weighted_torus_bonds}
     Let $U$ be a finite-group representation on the virtual space, and
-    let $W$ commute with every $U(g)$. Denote by $\Psi_{U,W}$ the actual
+    let $W$ commute with every $U(g)$. Denote by $\Psi_{U,W}$ the
     torus state of the normalized averaging site with $W$ on each virtual
     leg. Put $N=|X|$, and let $h(e),t(e)$ be the head and tail of a bond
     in the orientations of (\ref{eq:peps_physical_bond_regrouping}). Then
@@ -85,7 +85,7 @@
         {\beta_e^1,\beta_e^2}.
         \label{eq:peps_actual_regrouped_weighted_bonds}
     \end{align}
-    In particular, $W=\Theta$ gives the actual square-root-weighted
+    In particular, $W=\Theta$ gives the square-root-weighted
     bond vectors in \cite[Section~7]{Schuch2010PEPS}.
     For ordinary averaging sites with inserted bond matrices $O_e$, the
     regrouped coefficients instead contain
@@ -96,7 +96,7 @@
 \begin{proof}\leanok
     Apply the averaging-site expansion to the recovered site
     configuration. The inverse coordinate formulas identify each matrix
-    row and column with its actual physical bond endpoint. For dressed
+    row and column with its physical bond endpoint. For dressed
     sites, the two endpoint weights combine to $W^2$, which commutes
     through the relative group action. The product identity then groups
     the horizontal and vertical factors into the product over all bonds.

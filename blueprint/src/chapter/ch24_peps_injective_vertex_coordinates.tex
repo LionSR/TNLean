@@ -13,7 +13,7 @@
     For injective sites let $L_R$ be the product of their left inverses.
     Let $B_R$ denote the virtual region map that pairs the two endpoint
     labels of every internal edge and leaves the crossing labels open.
-    Its coefficients are sums of basis vectors indexed by the actual
+    Its coefficients are sums of basis vectors indexed by the
     incident-edge assignments, with the boundary labels fixed.
 \end{definition}
 
@@ -29,7 +29,7 @@
         TNLean.PEPS.comap_regionGroundSpace_regionVertexTensorMap}
     \leanok
     \uses{def:peps_injective_vertex_coordinates,def:peps_region_ground_space}
-    For arbitrary site tensors the actual open-region map satisfies
+    For arbitrary site tensors the open-region map satisfies
     $T_R=F_RB_R$, and $\mathcal G_R=F_R(\operatorname{ran}B_R)$.
     If all site maps are injective, then
     \[
@@ -44,7 +44,7 @@
 \begin{proof}\leanok
     The product site map takes a virtual basis vector to the product of
     its site tensor coefficients. Summing over compatible internal edge
-    labels with the crossing labels fixed gives the actual open-region
+    labels with the crossing labels fixed gives the open-region
     contraction, so $T_R=F_RB_R$. Tensoring the site left inverses gives
     $L_RF_R=I$, hence injectivity of $F_R$ and $L_RT_R=B_R$.
     The range and inverse-image formulas follow.

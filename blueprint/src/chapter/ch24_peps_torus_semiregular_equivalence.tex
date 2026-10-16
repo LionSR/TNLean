@@ -40,7 +40,7 @@
     matching-sector support.
 \end{proof}
 
-\begin{theorem}[The actual weighted torus state under a chosen Fourier intertwiner]%
+\begin{theorem}[The weighted torus state under a chosen Fourier intertwiner]%
     \label{thm:peps_torus_semiregular_chosen_fourier_state}
     \lean{TNLean.PEPS.torusSemiRegularBondMap_blockFourthRootWeight}
     \leanok
@@ -53,9 +53,9 @@
     $L=\bigoplus_i D_i\otimes I_{d_i}$.
     Suppose the chosen matrix $Q:V'\to\mathbb C^G$ satisfies
     $U_{\mathrm{reg}}(g)=QL(g)Q^\dagger$ for every $g\in G$.
-    Let $\Psi_{U,W}$ be the actual torus state of the normalized
+    Let $\Psi_{U,W}$ be the torus state of the normalized
     averaging site dressed by $W$ on its four virtual legs, and let
-    $\Psi_{\mathrm{reg}}$ be the actual regular averaging-site torus state.
+    $\Psi_{\mathrm{reg}}$ be the regular averaging-site torus state.
     After the original physical coordinates are regrouped by bonds,
     \begin{align}
         \mathcal R\Psi_{U,W}
@@ -68,9 +68,9 @@
     in \cite[Section~7]{Schuch2010PEPS}.
 \end{theorem}
 \begin{proof}\leanok
-    The actual weighted contraction has matching-sector support, and
-    the product of $F$ sends it to the actual averaging-site state of $L$.
-    The product of $C_Q$ sends that state to the actual regular state
+    The weighted contraction has matching-sector support, and
+    the product of $F$ sends it to the averaging-site state of $L$.
+    The product of $C_Q$ sends that state to the regular state
     by the matrix intertwining identity. Compose the two equalities.
 \end{proof}
 
@@ -97,7 +97,7 @@
 \begin{proof}\leanok
     Extend $F$ to an isometry $T$ satisfying $TE_V=FE_V$.
     Product matrices respect multiplication, so their products agree on
-    $\operatorname{ran}\bigotimes_e E_V$. The actual weighted state lies
+    $\operatorname{ran}\bigotimes_e E_V$. The weighted state lies
     in this range, and hence retains the chosen Fourier state equality.
     Both physical product maps in $\mathcal U$ are isometries.
 \end{proof}
@@ -130,7 +130,7 @@
     are conclusions rather than additional hypotheses.
 \end{theorem}
 \begin{proof}\leanok
-    Construct the orthonormal Fourier basis of the actual regular
+    Construct the orthonormal Fourier basis of the regular
     representation, with each irreducible repeated by its dimension.
     The associated single-copy block representation is unitary and
     semi-regular, with character multiplicity one in every sector.

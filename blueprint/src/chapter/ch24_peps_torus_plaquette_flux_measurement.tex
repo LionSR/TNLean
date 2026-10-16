@@ -26,11 +26,11 @@
     \leanok
     \uses{def:peps_torus_plaquette_flux_geometry,
         thm:peps_regular_walk_holonomy}
-    For $g\in G$, put directed transport $g$ on the first side of $p_v$
-    and identity transport on every other bond. In the ordered-edge
+    For $g\in G$, assign the directed bond value $g$ to the first side of $p_v$
+    and the identity to every other bond. In the ordered-edge
     convention, the distinguished bond therefore carries $g$ when
     its orientation agrees with the walk and $g^{-1}$ otherwise.
-    Denote this actual assignment by $u^{v,g}$. Its plaquette holonomy is
+    Denote this bond assignment by $u^{v,g}$. Its plaquette holonomy is
     \begin{align}
         \operatorname{Hol}_{u^{v,g}}(p_v) & =g.
         \label{eq:peps_plaquette_flux_holonomy}
@@ -42,8 +42,8 @@
     The three other sides of the plaquette have at least one endpoint
     with vertical coordinate $y+1$, whereas both endpoints of the
     distinguished side have coordinate $y$. Hence their ordered edges
-    are different. Their transports are the identity, and the
-    orientation convention gives transport $g$ on the first step.
+    are different. Their directed bond values are the identity, and the
+    orientation convention gives the factor $g$ on the first step.
     The reverse-ordered product along the four steps is therefore $g$.
 \end{proof}
 
@@ -64,7 +64,7 @@
     the four original physical spins in $R_v$.
     Every operator is Hermitian and positive semidefinite, the operators
     satisfy $Q_iQ_j=\delta_{ij}Q_i$, and their sum is the identity.
-    For every actual inserted bond assignment $u$ and every crossing
+    For every inserted bond assignment $u$ and every crossing
     configuration $\theta$, its twisted open-block column satisfies
     \begin{align}
         Q_C\psi_{u,\theta}
@@ -72,7 +72,7 @@
         Q_\perp\psi_{u,\theta} & =0.
         \label{eq:peps_plaquette_holonomy_measurement}
     \end{align}
-    The same operators act on the actual globally contracted coefficient
+    The same operators act on the globally contracted coefficient
     matrix $M_u$ across $R_v$ by
     \begin{align}
         Q_CM_u      & =\mathbf1_{\{[\operatorname{Hol}_u(p_v)]=C\}}M_u, &
@@ -84,7 +84,7 @@
     \cite{gap:rmp_peps_quantum_double_g_isometry} for its scope.
 \end{theorem}
 \begin{proof}\leanok
-    The induced graph on the support of an actual walk is connected.
+    The induced graph on the support of the walk $p_v$ is connected.
     Apply Theorem~\ref{thm:peps_closed_walk_class_physical_measurement}
     to $p_v$ in this induced graph. Inclusion of the induced walk in
     the ambient torus recovers $p_v$ and preserves its holonomy.
@@ -108,7 +108,7 @@
     Theorem~\ref{thm:peps_torus_plaquette_holonomy_measurement}, one
     fixed complete projective measurement on the four spins of $R_v$
     detects the class $[g]$ of every one-bond flux string $u^{v,g}$.
-    Its extra outcome annihilates every such actual open-block column.
+    Its extra outcome annihilates every such open-block column.
     If $M_{v,g}$ is the physical coefficient matrix of the globally
     contracted inserted torus PEPS across the cut $R_v$, then
     \begin{align}
@@ -123,7 +123,7 @@
 \end{theorem}
 \begin{proof}\leanok
     Substitute (\ref{eq:peps_plaquette_flux_holonomy}) into
-    (\ref{eq:peps_plaquette_holonomy_measurement}). Factor the actual
+    (\ref{eq:peps_plaquette_holonomy_measurement}). Factor the
     global coefficient matrix across the cut into its open block and
     complementary open block. Each column of the former has the same
     measured class $[g]$, so left multiplication by $Q_C$ multiplies
@@ -139,8 +139,8 @@
     \uses{def:peps_torus_plaquette_flux_geometry,
         thm:peps_regular_walk_holonomy}
     Enumerate the oriented sides of $p_v$ by $i=0,1,2,3$ in traversal
-    order. For $g\in G$, let $u^{v,i,g}$ put directed transport $g$
-    on side $i$ and identity transport on all other bonds. The ordered
+    order. For $g\in G$, let $u^{v,i,g}$ assign the directed bond value $g$
+    to side $i$ and the identity to all other bonds. The ordered
     bond receives $g$ or $g^{-1}$ according to its orientation. Then
     \begin{align}
         \operatorname{Hol}_{u^{v,i,g}}(p_v) & =g.
@@ -153,7 +153,7 @@
     Opposite horizontal sides have distinct vertical coordinates, and
     opposite vertical sides have distinct horizontal coordinates.
     Adjacent sides also have distinct ordered endpoint pairs. Hence
-    all four bonds are different. Exactly one factor in the actual
+    all four bonds are different. Exactly one factor in the
     four-step holonomy is $g$, and the other three are the identity.
 \end{proof}
 
@@ -167,7 +167,7 @@
     complete positive projective measurement on the four spins in $R_v$
     detects the class of every explicitly constructed string
     $u^{v,i,g}$, for all four attachment sides and all $g\in G$.
-    Writing $M_{v,i,g}$ for its actual globally contracted coefficient
+    Writing $M_{v,i,g}$ for its globally contracted coefficient
     matrix, one has
     \begin{align}
         Q_CM_{v,i,g}      & =\mathbf1_{\{[g]=C\}}M_{v,i,g}, &
@@ -191,7 +191,7 @@
     \uses{thm:peps_torus_plaquette_holonomy_measurement}
     Under the regular native torus hypotheses of
     Theorem~\ref{thm:peps_torus_plaquette_holonomy_measurement}, let
-    $u,w$ be two actual bond assignments. If their holonomies around
+    $u,w$ be two bond assignments. If their holonomies around
     $p_v$ have distinct conjugacy classes, then their globally contracted
     coefficient matrices satisfy
     \begin{align}
