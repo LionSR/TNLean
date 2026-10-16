@@ -384,8 +384,8 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     \label{thm:area_law_initial_repair_mark_facts}
     \lean{TNLean.PEPS.AreaLaw.Geometry.initialRepairStage_mark_spec}
     \leanok
-    \uses{def:area_law_repair_stage,def:area_law_belt_cell_marks,
-        def:area_law_fine_belt_scales}
+    \uses{def:area_law_repair_stage,def:area_law_belt_cells,
+        def:area_law_belt_cell_marks,def:area_law_fine_belt_scales}
     Fix a finite domain $\Lambda\subset\mathbb Z^2$, a cut
     $A\subseteq\Lambda$, an origin $o\in\mathbb R^2$, and integers
     $C_0\ge2$ and $k_0\ge50{,}000{,}000$. Let $F_k$ be the selected
@@ -796,7 +796,7 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     \label{thm:area_law_repair_terminal_prefix_sites}
     \lean{TNLean.PEPS.AreaLaw.Geometry.card_repairTerminalInteriorSites_prefix_le}
     \leanok
-    \uses{def:area_law_repair_stage,def:area_law_repair_terminal_interiors}
+    \uses{def:area_law_repair_stage,def:area_law_repair_terminal_children}
     Fix the actual repair family with arbitrary origin $o\in\mathbb R^2$
     and stopping scale $S_*\in\mathbb R$, with $C_0\ge2$ and
     $k_0\ge50000000$. Let $\Lambda\subset\mathbb Z^2$ be finite and
