@@ -2081,6 +2081,13 @@ The following finite construction follows
     Choose $C_{\mathrm{tr}}$ from
     Theorem~\ref{thm:al_scan_exists_marginal_tails} with compact-volume
     coefficient $C_T+1$. This choice depends only on $R,J,\Delta,C_T$.
+    It strengthens the dependence permitted by the printed truncation
+    proposition, whose coefficient may depend on $q$
+    \cite[Proposition~4.5]{OpenAI2026AreaLaw}
+    (\texttt{03-quasilocal.tex}, lines~406--410).
+    The scanner uses this radius in \texttt{08-scanner.tex}, lines~49--59,
+    without asserting dimension uniformity there. The stronger uniform
+    choice here follows from Theorem~\ref{thm:al_scan_exists_marginal_tails}.
     Now fix $q$. The lattice crossing estimate with boundary factor $4$
     gives a coefficient $C$, and put $C_B=\max\{1,C\}$. Choose $N\ge2$
     so that the tail bound with budget $C_Bn(\log n)^{12}$ at width

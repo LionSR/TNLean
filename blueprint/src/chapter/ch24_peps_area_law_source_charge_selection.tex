@@ -78,7 +78,7 @@ any fixed interpolation interval contained in $(0,1)$.
         TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_density_energy}
     \leanok
     \uses{def:area_law_hamiltonian,def:al_scan_actual_histories,
-        def:al_scan_actual_energy_terms}
+        def:al_scan_actual_energy_terms,thm:al_scan_target_typical_window_uniform_dimension}
     Fix an interaction range $R\in\mathbb N$, $J\geq0$, $\Delta>0$ and
     $C_T\geq0$. There is $C_{\rm tr}>0$ such that, for every integer
     $q\geq1$, every $C_1>0$, every integer anchor-multiplicity bound
@@ -87,7 +87,11 @@ any fixed interpolation interval contained in $(0,1)$.
     following property. For every scanner exponent tuple, there are
     $C\geq1$, $C_l\geq0$ and $N\geq2$ before all the physical data and
     entropy inputs below. Thus $C_{\rm tr}$ is independent of $q$,
-    $C_1$, $m_*$ and $P$. Its choice is the truncation choice in
+    $C_1$, $m_*$ and $P$. This is the stronger uniform choice of
+    Theorem~\ref{thm:al_scan_target_typical_window_uniform_dimension},
+    derived from the uniform marginal-tail theorem. The printed
+    truncation proposition permits dependence on $q$; the scanner uses
+    its radius without asserting dimension uniformity
     \cite[Proposition~4.5 and Section~9, lines~49--59]{OpenAI2026AreaLaw}.
 
     Let $\Lambda,T\subset\mathbb Z^2$ be finite, with $T\ne\varnothing$,

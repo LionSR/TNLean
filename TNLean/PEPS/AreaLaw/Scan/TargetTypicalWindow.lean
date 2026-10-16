@@ -78,10 +78,15 @@ Only the target's `4n` boundary permits setting the lattice-budget factor to one
 no growing scanner parameter is absorbed into a constant.
 
 The truncation coefficient is uniform in the local dimension; the target-budget
-coefficient and threshold may depend on it. Source: `08-scanner.tex`, lines 400–414,
-and `07-comparators.tex`, lines 37–53. The floor scale is used literally; neither collar
-volume, target boundary,
-cut budget nor target tail is assumed. -/
+coefficient and threshold may depend on it. This is a proved strengthening of the
+printed truncation proposition: `03-quasilocal.tex`, lines 406–410, permits its
+coefficient to depend on `q`. The scanner uses that radius in `08-scanner.tex`,
+lines 49–59, without asserting uniformity in `q`. Here
+`exists_truncated_reducedState_moment_tail_bounds` supplies `Ctr` before `q`.
+For the target window, see `08-scanner.tex`, lines 400–414, and
+`07-comparators.tex`, lines 37–53, at the revision pinned above. The floor scale
+is used literally; neither collar volume, target boundary, cut budget nor target
+tail is assumed. -/
 theorem exists_truncated_target_typical_window_uniform_in_q (R : ℕ)
     {J Δ C_T : ℝ} (hJ : 0 ≤ J) (hΔ : 0 < Δ) (hC_T : 0 ≤ C_T) :
     ∃ Ctr : ℝ, 0 < Ctr ∧ ∀ (q : ℕ) [NeZero q], 1 ≤ q →
