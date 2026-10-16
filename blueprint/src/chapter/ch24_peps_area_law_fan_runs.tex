@@ -28,6 +28,27 @@ see \cite[Section~11]{OpenAI2026AreaLaw}.
     their colors agree.
 \end{definition}
 
+% Source: 10-geometry.tex, fan runs, lines 299--318;
+% replacement sectors, lines 398--417.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[At most eight runs in a cell fan]
+    \label{thm:area_law_cell_fan_run_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.card_cellFanRun_le_eight}
+    \leanok
+    \uses{def:area_law_cell_fan,def:area_law_fan_runs}
+    For every dyadic cell, every choice of midpoint subdivisions of its
+    four sides, and every assignment of the two colors to its fan
+    triangles, the number of runs is at most eight.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_cell_fan_count,def:area_law_fan_runs}
+    The map sending a triangle to its connected run is surjective.
+    There are therefore no more runs than triangles. Each of the four
+    sides contributes one or two triangles, so there are at most eight.
+\end{proof}
+
 \begin{theorem}[Color constancy on a run]
     \label{thm:area_law_fan_run_color}
     \lean{TNLean.PEPS.AreaLaw.Geometry.cellFanRun_color_eq}

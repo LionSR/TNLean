@@ -55,66 +55,6 @@ private def sourceSharpExponents : ScannerExponents :=
     e_lt_one := by norm_num [Exponents.boxError]
     kappa_le_e := by norm_num [Exponents.scannerKappa, Exponents.boxError] }
 
-private theorem augmented_prevector_properties_of_global
-    {V : Type} [Fintype V] [DecidableEq V] (q d k : ℕ)
-    (Ω : (V → Fin q) → ℂ) (ell : IrrepLabel (Equiv.Perm (Fin k)))
-    (H : Matrix (V → Fin q) (V → Fin q) ℂ) (e : ℝ)
-    (hne : WithLp.toLp 2 (replicaPrevector Ω d k ell ∘
-      globalReplicaCopiesEquiv (fun _ : V ↦ Fin q) (Fin d) (Fin d) k) ≠ 0)
-    (heigen : Matrix.globalReplicaMeanHamiltonian (fun _ : V ↦ Fin q) (Fin d) (Fin d) H k *ᵥ
-        (replicaPrevector Ω d k ell ∘
-          globalReplicaCopiesEquiv (fun _ : V ↦ Fin q) (Fin d) (Fin d) k) =
-      (e : ℂ) • (replicaPrevector Ω d k ell ∘
-        globalReplicaCopiesEquiv (fun _ : V ↦ Fin q) (Fin d) (Fin d) k)) :
-    let dims := augmentedDimensions (V := V) q (fun _ ↦ d)
-    let pre := replicaPrevector Ω d k ell ∘ augmentedSumReplicaCopiesEquiv q d k
-    pre ≠ 0 ∧ pre ∈ symmetricSubspace k (fun v ↦ Fin (dims v)) ∧
-      copyMean dims k (augmentOperator q (fun _ ↦ d) H) *ᵥ pre = (e : ℂ) • pre := by
-  classical
-  intro dims pre
-  let ecoord := augmentedReplicaConfigurationEquiv (V := V) q d k
-  have hpreEq : pre ∘ ecoord = replicaPrevector Ω d k ell ∘
-      globalReplicaCopiesEquiv (fun _ : V ↦ Fin q) (Fin d) (Fin d) k := by
-    simp only [pre, augmentedSumReplicaCopiesEquiv, Equiv.coe_trans,
-      Function.comp_assoc, ecoord, Equiv.symm_comp_self, Function.comp_id]
-  refine ⟨?_, ?_, ?_⟩
-  · intro hz
-    apply hne
-    rw [← hpreEq, hz]
-    rfl
-  · have hfixed : symProj (copyPerm ((v : V ⊕ Bool) → Fin (dims v)) k) *ᵥ pre = pre :=
-      symProj_mulVec_augmentedReplicaPrevector q d k Ω ell
-    rw [← hfixed]
-    exact symProj_mulVec_mem _ _
-  · have hglobal : Matrix.globalReplicaMeanHamiltonian (fun _ : V ↦ Fin q)
-        (Fin d) (Fin d) H k *ᵥ (pre ∘ ecoord) = (e : ℂ) • (pre ∘ ecoord) := by
-      rw [hpreEq]
-      exact heigen
-    rw [copyMean_augmentOperator_eq_globalReplicaMeanHamiltonian]
-    ext x
-    simpa only [Matrix.submatrix_mulVec_equiv, Equiv.symm_symm,
-      Function.comp_apply, ecoord, Equiv.apply_symm_apply, Pi.smul_apply] using
-      congrFun hglobal (ecoord.symm x)
-
-private theorem selected_density_of_rough_endpoint
-    {k n m D K d : ℕ} {a W C₁ width Q endpoint Brough rate b : ℝ}
-    (hk : 0 < k) (hn : 0 < n) (hm : 0 < m) (hD : 0 < D) (hK : 0 < K)
-    (ha : 0 < a) (hC : 0 < C₁) (hwidth : 0 < width) (hW : a * (K : ℝ) = W)
-    (c Ci Cb : ℝ)
-    (hendpoint : endpoint / (k : ℝ) ≤ Brough + roughEndpointRemainder d c K Ci k)
-    (hb : b ≤ Cb * Real.log ((k : ℝ) + 2))
-    (hselection : Q ≤ (endpoint + (2 * n * m : ℕ) * ((k : ℝ) * rate + b)) /
-      (((k : ℝ) * a * ((1 / (2 * (C₁ + 1))) / ((n : ℝ) * D))) *
-        ((n * m : ℕ) : ℝ) * width)) :
-    Q / (K * n * D : ℝ) ≤ (2 * (C₁ + 1) / (W * ((n * m : ℕ) : ℝ) * width)) *
-      (Brough + (2 * n * m : ℕ) * rate +
-        roughEndpointRemainder d c K (Ci + (2 * n * m : ℕ) * Cb) k) := by
-  have hbudget := roughSelectionBudget_le_of_endpoint_budget (H := n * m)
-    hk c Ci Cb endpoint Brough rate b hendpoint hb
-  have hdensity := selected_density_le_of_normalized_budget hk hn hm hD hK ha hC hwidth
-    hbudget (by simpa only [Nat.mul_assoc] using hselection)
-  simpa only [hW, Nat.mul_assoc] using hdensity
-
 open Classical in
 /-- A single truncated target window and a single physical label sequence
 produce an actual selected charge comparison at the literal final scales.
@@ -323,7 +263,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_comparison
   intro E z
   have hd : 0 < E.card := Finset.card_pos.mpr hwindow.2.2.2.2.1
   refine ⟨hwindow, hd, ?_⟩
-  let : NeZero E.card := ⟨Nat.ne_of_gt hd⟩
+  have : NeZero E.card := NeZero.of_pos hd
   intro d ΩX ψ Sent dims energy σ near middleRegion gpre gpost gaps gmax tree Gpre Gpost
   have hρ : reducedState Λ q Ωt X =
       Matrix.partialTraceRight (Matrix.vecMulVec ΩX (star ΩX)) :=
@@ -331,7 +271,7 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_comparison
       (FiniteProduct.reducedPure_eq_partialTrace β Ωt X)
   have hzEq :
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian.spectralRestrictionMass E =
-        z := by simp only [z, ← hρ]
+        z := by simp only [← hρ, z]
   have hz : 0 <
       (posSemidef_vecMulVec_self_star ΩX).partialTraceRight.isHermitian.spectralRestrictionMass E :=
     hzEq.symm ▸ hwindow.2.2.1
@@ -378,8 +318,8 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_comparison
     hselect pre k hk hsym hnonzero e heigen p₀ p₁ hp₀ hp₀₁ hp₁
   have hrate : Cent * (k : ℝ) * a * S.K * a ^ (1 / 4 : ℝ) * ℓ ^ eent =
       (k : ℝ) * rate := by dsimp only [rate]; ring
-  dsimp only [a, ℓ] at hrate
-  have hdensity := selected_density_of_rough_endpoint hk
+  simp only [a, ℓ] at hrate
+  have hdensity := selected_density_of_rough_endpoint (rate := rate) hk
     (show 0 < S.n by omega) hm (show 0 < S.D by omega) (show 0 < S.K by omega)
     ha hCp (sub_pos.mpr hp₀₁) hWa cR Ci Cb hendK.2 (hb k) (by
       simpa only [hrate] using hQ)
@@ -391,28 +331,10 @@ theorem exists_sourceTarget_selected_actualCharge_sharp_comparison
     hΔ W Cen een C Cl P (rem k) e hW.le pre k p henergy hcoeff
   refine ⟨s, p, hp, hdensity, (hsharpK s p).2.1, hcap, ?_⟩
   intro τ hτ hτhalf
-  have hmassLoss :
-      ((S.actualChargeScanRound hm hM s.val dims energy a pre).meanEnergy k p - e) /
-        (g / 2) / τ * max 0 (2 * Sent + gmax) ≤
-      ((e + (C * W ^ 2 * (S.n : ℝ) ^ (Exponents.scannerEll : ℝ) *
-        (S.D : ℝ) ^ 2 * (Real.log S.n) ^ Cl *
-          ((1 - p) * (S.actualChargeEntropyDefect hm hM s.val dims energy
-            (a / 2) k (pre k) p / (S.K * S.n * S.D : ℝ)) ^ (1 / 8 : ℝ) +
-            (1 - p) * (S.n : ℝ) ^ (-P) + p)) + rem k) / (g / 2)) / τ *
-        max 0 (2 * Sent + gmax) :=
-    mul_le_mul_of_nonneg_right
-      (div_le_div_of_nonneg_right hcap hτ.le) (le_max_left (0 : ℝ) (2 * Sent + gmax))
-  have hcomparison :
-      2 * Sent + Gpre s p - Gpost s p ≤
-        2 * (2 * Real.log (d : ℝ) - Real.log z) / W +
-          τ * Gpre s p + 2 * τ * Real.log (d : ℝ) +
-          (3 + 1 / a) * Real.binEntropy τ + 37 * (C₀ * B) * a -
-          Real.log z / a +
-          ((S.actualChargeScanRound hm hM s.val dims energy a pre).meanEnergy k p - e) /
-            (g / 2) / τ * max 0 (2 * Sent + gmax) +
-          2 * Real.bellOverlapRemainder d cU S.K k / W +
-          sharpLowerRemainder a cL Cf ell Sent k :=
-    (hsharpK s p).2.2 τ hτ hτhalf
-  linarith only [hcomparison, hmassLoss]
+  have hmassLoss := mul_le_mul_of_nonneg_right
+    (div_le_div_of_nonneg_right hcap hτ.le) (le_max_left (0 : ℝ) (2 * Sent + gmax))
+  have hcomparison := (hsharpK s p).2.2 τ hτ hτhalf
+  exact hcomparison.trans
+    (_root_.add_le_add (_root_.add_le_add (_root_.add_le_add le_rfl hmassLoss) le_rfl) le_rfl)
 
 end TNLean.PEPS.AreaLaw.Scan.CollarScan

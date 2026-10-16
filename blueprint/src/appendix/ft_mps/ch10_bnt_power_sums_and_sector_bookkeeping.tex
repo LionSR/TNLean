@@ -131,7 +131,7 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
     \end{align}
 \end{proof}
 
-\begin{theorem}[Blocked sector coefficients and assembled tensor]%
+\begin{theorem}[Blocked sector coefficients and combined tensor]%
     \label{thm:sector_decomposition_block_tensor_mpv}
     \lean{MPSTensor.SectorDecomposition.coeff_blockTensor}
     \lean{MPSTensor.SectorDecomposition.sameMPV₂_blockTensor_toTensor}
@@ -144,8 +144,8 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
         =c_{P,j}^{(Np)}.
         \label{eq:bnt_sector_block_coeff}
     \end{align}
-    Moreover, blocking the tensor assembled from $P$ gives the same MPV family
-    as the tensor assembled from the blocked sector decomposition.
+    In addition, blocking the tensor formed from $P$ gives the same MPV family
+    as the tensor formed from the blocked sector decomposition.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -166,7 +166,7 @@ bond dimension $D_{\mathrm{tot}}=\sum_j r_jD_j$.
 
 \begin{proof}\leanok
     Choose one original block index. Its occurrence in the phase-class
-    enumeration supplies a phase class containing it.
+    enumeration gives a phase class containing it.
 \end{proof}
 
 \begin{lemma}[Regrouping a matrix sum by MPV phase classes]
@@ -261,7 +261,7 @@ between the sector sets.
     all such $P$-sectors from the remaining ones. For each remaining sector,
     choose a $Q$-sector with non-decaying overlap. Both blocks are normal by the
     canonical-form hypotheses. Theorem~\ref{thm:cpsv_normal_overlap_dichotomy}
-    rules out its decay alternative and supplies equal bond dimensions and a
+    rules out its decay alternative and gives equal bond dimensions and a
     gauge-phase relation with a unit phase. Gauge-phase covariance therefore
     expresses that $P$-sector MPV as a geometric scalar multiple of the chosen
     $Q$-sector MPV.
@@ -289,7 +289,7 @@ between the sector sets.
 \begin{proof}\leanok
     Reverse the eventual proportionality and apply
     Theorem~\ref{thm:sector_bnt_proportional_exact_match} to each sector of
-    $Q$; symmetry of the overlap converts the resulting witness to the stated
+    $Q$; symmetry of the overlap converts the resulting partner to the stated
     orientation.
 \end{proof}
 

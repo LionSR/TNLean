@@ -79,6 +79,42 @@ def is_generated(path: Path, source_root: Path) -> bool:
     return provenance is not None and provenance.group(1) == expected_module
 
 
+def malformed_generated_aggregators(repository_root: Path) -> list[str]:
+    """Reject malformed files claiming the generated module at their own path.
+
+    Keep ``is_generated`` strict: a file containing declarations must never be
+    silently overwritten as an import aggregator.
+    """
+    source_root = repository_root / "TNLean"
+    problems: list[str] = []
+    paths = [repository_root / "TNLean.lean", *source_root.rglob("*.lean")]
+    for path in sorted(paths):
+        expected_module = aggregator_module_at_path(path, source_root)
+        if expected_module is None or not path.exists():
+            continue
+        content = path.read_text(encoding="utf-8")
+        prefix = content[:1024]
+        provenance = GENERATED_PROVENANCE_RE.search(prefix)
+        if (
+            GENERATED_MARKER_RE.search(prefix) is None
+            or provenance is None
+            or provenance.group(1) != expected_module
+        ):
+            continue
+        # An empty repository has a canonical root aggregator with no imports.
+        if (
+            path == repository_root / "TNLean.lean"
+            and content == f"{generated_notice(expected_module)}\n"
+        ):
+            continue
+        _, error = pure_import_modules(content)
+        if error is not None:
+            problems.append(
+                f"malformed generated aggregator: {path.relative_to(repository_root)}: {error}"
+            )
+    return problems
+
+
 def module_name(path: Path, repository_root: Path) -> str:
     """Convert a repository-relative Lean source path to its module name."""
     return ".".join(path.relative_to(repository_root).with_suffix("").parts)
@@ -215,6 +251,11 @@ def check_manifest_coverage(
 
 def update(repository_root: Path, check: bool) -> int:
     """Write expected aggregators, or check that the working tree has them exactly."""
+    malformed = malformed_generated_aggregators(repository_root)
+    if malformed:
+        for problem in malformed:
+            print(problem)
+        return 1
     expected, sources = build_expected_files(repository_root)
     source_root = repository_root / "TNLean"
     root_aggregator = repository_root / "TNLean.lean"

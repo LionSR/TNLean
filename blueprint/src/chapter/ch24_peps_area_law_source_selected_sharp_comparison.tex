@@ -9,6 +9,7 @@ than a final negative power of the system size.
 \begin{theorem}[The same physical witness at the selected charge]
     \label{thm:arealaw-source-selected-sharp-comparison}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_selected_actualCharge_sharp_comparison}
+    \leanok
     Fix the local dimension $q\ge1$, range, interaction bound $J\ge0$,
     physical gap $\Delta>0$, target-size coefficient $C_T\ge0$, anchor
     multiplicity $\mathfrak m$, charge coefficient
@@ -64,7 +65,7 @@ than a final negative power of the system size.
     bound. Assume explicitly $a\ell_{\dim}\le c_t$.
 
     Replica-remainder constants and nonnegative sequences can then be
-    chosen before every $[p_0,p_1]\subset(0,1)$ and every selected charge
+    chosen before every $[p_0,p_1]$ with $0<p_0<p_1<1$ and every selected charge
     point. Eventually in $k$, there are a literal charge stage $s_k$ and
     $p_k\in[p_0,p_1]$ such that
     \begin{align}
@@ -96,6 +97,16 @@ than a final negative power of the system size.
 \end{theorem}
 
 \begin{proof}
+    \leanok
+    \uses{thm:arealaw-target-sharp-moments,
+        thm:al_global_schmidt_bell_prevector,
+        thm:arealaw-actual-selected-energy,
+        thm:arealaw-source-endpoint-loss,
+        thm:arealaw-rough-selection-numerator,
+        thm:arealaw-selected-density-normalization,
+        thm:al_scan_actual_charge_energy_coefficients,
+        thm:arealaw-actual-sharp-comparison,
+        thm:arealaw-selected-sharp-composition}
     Choose source and coefficient constants and combine their size
     thresholds with the continuity threshold for volume coefficient
     $C_T+1$. This choice precedes the physical data and $C_e,\eta$.
