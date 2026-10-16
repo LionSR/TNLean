@@ -17,6 +17,7 @@ import TNLean.PEPS.AreaLaw.BirthTargetNeighborhoodInformation
 import TNLean.PEPS.AreaLaw.BoundaryConventions
 import TNLean.PEPS.AreaLaw.BoundaryEntropyAssembly
 import TNLean.PEPS.AreaLaw.BoundaryTheorem
+import TNLean.PEPS.AreaLaw.BoundaryTheoremFromTwoFamilies
 import TNLean.PEPS.AreaLaw.BufferedRectangles
 import TNLean.PEPS.AreaLaw.CollarInformation
 import TNLean.PEPS.AreaLaw.ConditionalEstimates
