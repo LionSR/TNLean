@@ -383,6 +383,36 @@ end BandOperations
 
 /-! ### The central birth after the point treatment -/
 
+/-- **Values near the central change.** Near the closure of the remaining changed region of the
+treated central birth, the treated starting guide is the old label and the treated central guide
+takes only the old and the final label.
+
+Polynomial-PEPS manuscript, `06-geometry.tex`, lines 155–160, 357–367 and 375–382. -/
+theorem RepaintingBaseline.central_treated_mem {ι : Type*} (R : RepaintingBaseline ι) {t : ℝ}
+    (htn : t ≤ R.n) {p : ℝ × ℝ}
+    (hp : p ∈ thickening (angularConstant * t)
+      {p | homogenize (cornerTreated R.n t) R.oldLabel R.guide p ≠
+        homogenize (cornerTreated R.n t) R.oldLabel R.centralGuide p}) :
+    homogenize (cornerTreated R.n t) R.oldLabel R.guide p = R.oldLabel ∧
+      homogenize (cornerTreated R.n t) R.oldLabel R.centralGuide p ∈
+        ({R.oldLabel, R.finalLabel} : Set ι) := by
+  have hfb : homogenize (cornerTreated R.n t) R.oldLabel R.guide p = R.oldLabel := by
+    obtain ⟨y, hy, hpy⟩ := mem_thickening_iff.1 hp
+    by_contra hne
+    have h := R.floor_central htn (subset_closure hy) hne
+    rw [dist_comm] at h
+    linarith [angularConstant_mul_le_mul_max t (min R.n (cornerMarkDist R.n y))]
+  refine ⟨hfb, ?_⟩
+  by_cases hpS : homogenize (cornerTreated R.n t) R.oldLabel R.guide p ≠
+      homogenize (cornerTreated R.n t) R.oldLabel R.centralGuide p
+  · have hpU : p ∉ cornerTreated R.n t := fun h => hpS (by simp only [homogenize_of_mem h])
+    have hc : p ∈ centralRegion R.n := by
+      by_contra hc
+      exact hpS (by simp only [homogenize_of_notMem hpU, R.centralGuide_of_notMem hc])
+    simp only [homogenize_of_notMem hpU, R.centralGuide_of_mem hc]
+    exact Or.inr rfl
+  · exact Or.inl ((not_not.1 hpS).symm.trans hfb)
+
 namespace RepaintingBaseline
 
 variable {ι : Type*} (R : RepaintingBaseline ι)
@@ -409,27 +439,11 @@ theorem isTrueVertex_central_treated {t : ℝ} (ht : 0 < t) (htn : t ≤ R.n) (c
   set S := {p | fb p ≠ fa p}
   set U := thickening (angularConstant * t) S
   have hδ : 0 < angularConstant * t := mul_pos angularConstant_pos ht
-  have hfb : ∀ p ∈ U, fb p = R.oldLabel := by
-    intro p hp
-    obtain ⟨y, hy, hpy⟩ := mem_thickening_iff.1 hp
-    by_contra hne
-    have h := R.floor_central htn (subset_closure hy) hne
-    rw [dist_comm] at h
-    linarith [angularConstant_mul_le_mul_max t (min R.n (cornerMarkDist R.n y))]
   have hmem : ∀ p ∈ U, fb p ∈ ({R.oldLabel, R.finalLabel} : Set ι) ∧
       fa p ∈ ({R.oldLabel, R.finalLabel} : Set ι) := by
     intro p hp
-    refine ⟨Or.inl (hfb p hp), ?_⟩
-    by_cases hpS : p ∈ S
-    · have hpU : p ∉ Ut := fun h => hpS (show fb p = fa p by
-        simp only [fb, fa, homogenize_of_mem h])
-      have hc : p ∈ centralRegion R.n := by
-        by_contra hc
-        exact hpS (show fb p = fa p by
-          simp only [fb, fa, homogenize_of_notMem hpU, R.centralGuide_of_notMem hc])
-      simp only [fa, homogenize_of_notMem hpU, R.centralGuide_of_mem hc]
-      exact Or.inr rfl
-    · exact Or.inl ((not_not.1 hpS).symm.trans (hfb p hp))
+    obtain ⟨hfb, hfa⟩ := R.central_treated_mem htn hp
+    exact ⟨Or.inl hfb, hfa⟩
   obtain ⟨hiff, hinc⟩ := isTrueVertex_iff_of_two_labels isOpen_thickening
     (closure_subset_thickening hδ S) (fun p hp => (hmem p hp).1) (fun p hp => (hmem p hp).2) c
   refine ⟨hiff, fun hv => ⟨(hinc hv).2, fun y hy => ?_⟩⟩

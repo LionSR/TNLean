@@ -36,6 +36,8 @@ every sheet.
   canonical tag holder there.
 * `Approximation.disjoint_outer_of_disjoint_closedBall`: patches whose closed outer squares are
   disjoint in the plane have disjoint outer samples.
+* `Approximation.disjoint_outerHoles_guideFrame`: a set separated from every outer hole square
+  misses the outer holes of the guide frame.
 * `Approximation.one_sub_mul_le_norm_refVec_guideFrame`: `1 - |V| ε ≤ ‖Ω_F‖ ≤ 1`.
 * `Approximation.outer_eq_empty_of_isCellCenter`, `Approximation.guideFrame_unitLevel`: at the
   last level `n = 1`, holes at block corners with outer radius below `1/2` have empty physical
@@ -175,6 +177,25 @@ theorem mem_holes_guideFrame {h : Hole pos q Party} :
       ∃ z ∈ V, h = ⟨patch z, own (tagHolder rank g ph z)⟩ := by
   simp only [guideFrame, List.mem_map, Finset.mem_toList]
   exact ⟨fun ⟨z, hz, he⟩ => ⟨z, hz, he.symm⟩, fun ⟨z, hz, he⟩ => ⟨z, hz, he.symm⟩⟩
+
+/-- A site set farther than twice each patch's scale from that patch's center is disjoint from
+the outer holes of the guide frame. The outer patch samples are assumed pairwise disjoint on
+the finite center set; the guide and owners are arbitrary. No true-vertex, supplied-patch or
+positive local-dimension assumption is required. -/
+lemma disjoint_outerHoles_guideFrame {T : Set ι}
+    (hfar : ∀ z ∈ V, ∀ x ∈ T, 2 * (patch z).scale < dist (patch z).center (pos x)) :
+    Disjoint T (guideFrame pos q g own ph rank V patch hV).outerHoles := by
+  apply Disjoint.symm
+  apply disjoint_footprint_of_forall
+  intro p hp
+  obtain ⟨h, hh, rfl⟩ := List.mem_map.1 hp
+  obtain ⟨z, hz, rfl⟩ := mem_holes_guideFrame.1 hh
+  refine Set.disjoint_left.2 fun x hxp hx => ?_
+  have hd : dist (pos x) (patch z).center ≤ 2 * (patch z).scale := by
+    simpa [SquarePatch.outer, squareSample] using hxp
+  have := hfar z hz x hx
+  rw [dist_comm] at this
+  exact (not_lt_of_ge hd) this
 
 @[simp] theorem length_holes_guideFrame :
     (guideFrame pos q g own ph rank V patch hV).holes.length = V.card := by

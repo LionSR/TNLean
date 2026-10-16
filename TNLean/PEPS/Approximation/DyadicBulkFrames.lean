@@ -97,10 +97,12 @@ theorem guideFrame_eq_changeOwner {ι κ Party : Type*} [Fintype ι] [DecidableE
   · simp only [guideFrame]
     exact List.map_congr_left fun z hz => by rw [htag z (Finset.mem_toList.1 hz)]
 
-/-- **The frame after a change of the sampled guide on a set of sites.** Let the readings `g`
-and `g'` have the same true vertices `V`, with the same incident labels there, and let `g'` take
-the label `Q` at every site where the two differ. Then the encoded frame of `g'` is the encoded
-frame of `g` with the owners of those sites changed to the party of `Q`.
+/-- **The frame after a change of a guide on a set of sites.** Take arbitrary guides `g, g'` and
+finite center sets `V' = V`, using the same patches with pairwise-disjoint outer samples at
+those centers, and the same owners, placeholder and rank. Let `T` be
+exactly the sites where the guides differ. If `g'` takes the label `Q` at each such site and the
+incident labels agree at every chosen center, its guide frame is that of `g` with the sites of
+`T` handed to the owner of `Q`. Readings and exact true-vertex sets are not required.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 375–387. -/
 theorem guideFrame_eq_changeOwner_of_ne {ι κ Party : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}

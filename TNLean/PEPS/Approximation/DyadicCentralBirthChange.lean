@@ -37,34 +37,6 @@ open EncodedFrame PairEffect
 
 /-! ### The central birth -/
 
-/-- **Values near the central change.** Near the closure of the remaining changed region of the
-treated central birth, the treated starting guide is the old label and the treated central guide
-takes only the old and the final label. -/
-theorem RepaintingBaseline.central_treated_mem {ι : Type*} (R : RepaintingBaseline ι) {t : ℝ}
-    (htn : t ≤ R.n) {p : ℝ × ℝ}
-    (hp : p ∈ thickening (angularConstant * t)
-      {p | homogenize (cornerTreated R.n t) R.oldLabel R.guide p ≠
-        homogenize (cornerTreated R.n t) R.oldLabel R.centralGuide p}) :
-    homogenize (cornerTreated R.n t) R.oldLabel R.guide p = R.oldLabel ∧
-      homogenize (cornerTreated R.n t) R.oldLabel R.centralGuide p ∈
-        ({R.oldLabel, R.finalLabel} : Set ι) := by
-  have hfb : homogenize (cornerTreated R.n t) R.oldLabel R.guide p = R.oldLabel := by
-    obtain ⟨y, hy, hpy⟩ := mem_thickening_iff.1 hp
-    by_contra hne
-    have h := R.floor_central htn (subset_closure hy) hne
-    rw [dist_comm] at h
-    linarith [angularConstant_mul_le_mul_max t (min R.n (cornerMarkDist R.n y))]
-  refine ⟨hfb, ?_⟩
-  by_cases hpS : homogenize (cornerTreated R.n t) R.oldLabel R.guide p ≠
-      homogenize (cornerTreated R.n t) R.oldLabel R.centralGuide p
-  · have hpU : p ∉ cornerTreated R.n t := fun h => hpS (by simp only [homogenize_of_mem h])
-    have hc : p ∈ centralRegion R.n := by
-      by_contra hc
-      exact hpS (by simp only [homogenize_of_notMem hpU, R.centralGuide_of_notMem hc])
-    simp only [homogenize_of_notMem hpU, R.centralGuide_of_mem hc]
-    exact Or.inr rfl
-  · exact Or.inl ((not_not.1 hpS).symm.trans hfb)
-
 /-- The changed region of the treated central birth lies in the closed square. -/
 theorem RepaintingBaseline.central_treated_ne_subset {ι : Type*} (R : RepaintingBaseline ι)
     (t : ℝ) :
@@ -82,13 +54,17 @@ section Changes
 variable {k q : ℕ} [NeZero q] {J Δ a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
   {h : SquareHamiltonian L q J} {E₀ : ℝ} {Ω : StateSpace L q} {K₀ ε₀ ν B₀ C c : ℝ}
 
-/-- **The central birth for the frames of sampled guides.** For a repainting baseline `Bl`, let
-`fb` and `fa` be the readings of the starting guide and of the guide after the central birth,
-homogenized to the old label about the four corners and moved by `d`, and let the frames carry
-holes at their true vertices with the supplied patches of radius `ε₀ t`. Then, conditional on
-Proposition 3.4, passing from the frame of `fb` to the frame of `fa` is a bounded change with
-participants in any set containing the parties of the old and the final label, with at most one
-pair source and error `L⁻³⁰`.
+/-- **The central birth for the frames of sampled guides.** Assume `q ≥ 1`, a gapped ground state,
+and the exponent-`60` angular-scale condition with `L₀' ≤ L`, `m₀ ≥ 4`, `A₀ ≥ 1` and
+`a ≤ angularConstant / 2`. Take any guide-label repainting baseline `Bl`, translation `d`,
+`0 < t = D log L ≤ Bl.n ≤ A₀ * L`, and `2 * ε₀ ≤ angularConstant / 2`. Let `fb, fa` read the
+translated starting and central guides, homogenized to the old label on the four corner squares.
+Use their exact finite true-vertex sets, an exponent-`60` adaptive patch supply, and radius
+`0 < ε₀ * t ≤ B₀ * log L`, with pairwise-disjoint outer samples within each set. For any owner
+map and rank, the supplied frames admit a bounded change with participants in any set containing
+the old and final owners, error `L⁻³⁰`, arbitrary natural pair-effect bound `r`, and any
+`K, rs ≥ 1`.
+Both the monomial count and absolute coefficient sum are bounded by `K`; one pair source suffices.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 155–160, 328–387 and 440–445. -/
 theorem centralBirth_hasFrameChange_of (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L₀')
@@ -169,16 +145,11 @@ theorem centralBirth_hasFrameChange_of (hD : IsAngularScale q J Δ a A₀ m₀ 6
     (fun x hx => by
       have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
       rw [(hkey _ hx').1])
-    (Set.disjoint_left.2 fun x hx hxo => by
+    (disjoint_outerHoles_guideFrame (g := fb) (V := Vb) (hV := hdb)
+      (T := (T : Set _)) fun z hz x hx => by
       have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
-      obtain ⟨p, hp, hxp⟩ := hxo
-      obtain ⟨hl, hhl, rfl⟩ := List.mem_map.1 hp
-      obtain ⟨z, hz, rfl⟩ := mem_holes_guideFrame.1 hhl
-      have hd : dist (cellCenterPos L x) z ≤ 2 * (ε₀ * (D * Real.log L)) := by
-        simpa [SquarePatch.outer, squareSample] using hxp
-      have := hTfar z ((hmb z).1 hz) _ hx'
-      rw [dist_comm] at this
-      linarith)
+      simpa only [suppliedPatch_center, suppliedPatch_scale, mul_assoc] using
+        hTfar z ((hmb z).1 hz) _ hx')
     (fun x hx y hy => by
       have hx' : fb (cellCenterPos L x) ≠ fa (cellCenterPos L x) := by simpa [T] using hx
       have hy' : fb (cellCenterPos L y) ≠ fa (cellCenterPos L y) := by simpa [T] using hy
@@ -190,12 +161,16 @@ theorem centralBirth_hasFrameChange_of (hD : IsAngularScale q J Δ a A₀ m₀ 6
   rintro x (rfl | rfl)
   exacts [hPS, hQS]
 
-/-- **The central birth as a change of the main sheet, conditional on Proposition 3.4.** At the
-constants of the protocol, in the repainting of a square `R` of side `n = 2 ^ j > K₀ t`,
-`t = D log L`, passing from the frame of the starting guide to that of the guide after the central
-birth, both treated about the four corners of `R` with the old label, is a bounded change with
-participants in any set containing the parties of the old and the final label, with at most one
-pair source and error `L⁻³⁰`.
+/-- **The central birth as a change of the main sheet, conditional on Proposition 3.4.** Assume
+`q ≥ 1`, a gapped ground state, and the exponent-`60` angular-scale condition with `L₀' ≤ L`,
+`m₀ ≥ 4` and `A₀ ≥ 1`. At the protocol constants, take `L ≥ 2`, `2 ^ k < 2 * L`, an
+exponent-`60` adaptive patch supply, any rank and any already-repainted set. For a repaintable
+square `R` of side `n = 2 ^ j > K₀ t`, where `t = D log L`, pass from its starting frame to its
+central frame, both treated with the old label about the four corners. This has participants
+in any set containing the old and final parties, error `L⁻³⁰`, arbitrary natural pair-effect
+bound `r`, and any `K, rs ≥ 1`. Both the monomial count and absolute coefficient sum are
+bounded by `K`; one pair source suffices. There is no premise that `R` is absent from the
+already-repainted set.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 155–160, 328–387 and 440–445; Lemma 6.5
 `lem:birth`, `05-frames.tex`. -/
@@ -237,13 +212,8 @@ theorem centralBirth_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D
       (protocolLevelLabels k R.1.1 done) R.1.index (newParty Sum.inl R.1.1 R.1.index))
     (blockCorner ((2 : ℝ) ^ (R.1.1 : ℕ)) R.1.index) ht rfl
     (by change D * Real.log L ≤ (2 : ℝ) ^ (R.1.1 : ℕ); nlinarith [hc.twenty_le_K₀, hlarge, ht])
-    (le_mul_of_one_le_left (by positivity) hA₀ |>.trans' (by
-      have hk : (R.1.1 : ℕ) + 1 ≤ k := R.2
-      have h1 : (2 : ℝ) ^ (R.1.1 : ℕ) * 2 ≤ 2 ^ k := by
-        rw [← pow_succ]; exact pow_le_pow_right₀ (by norm_num) hk
-      have h2 : (2 : ℝ) ^ k < 2 * L := by exact_mod_cast hk2
-      change (2 : ℝ) ^ (R.1.1 : ℕ) ≤ (L : ℝ)
-      linarith)) hε2 hfb hfa hmb hma P hr hdb hda _ rank hPS hQS hK hrs
+    (le_mul_of_one_le_left (by positivity) hA₀ |>.trans' (R.side_le hk2))
+    hε2 hfb hfa hmb hma P hr hdb hda _ rank hPS hQS hK hrs
 
 end Changes
 
