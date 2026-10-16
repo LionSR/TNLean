@@ -5,6 +5,8 @@ Authors: TNLean contributors
 -/
 import TNLean.PEPS.AreaLaw.Geometry.TemplatePolygonFiniteIntegerPoints
 
+/-! Logical dependencies of finite ambient sampling for allowed polygons. -/
+
 run_cmd do
   let ns := `TNLean.PEPS.AreaLaw.Geometry.TemplatePolygon
   let decl := Lean.Name.str ns "finite_integerPoints"
