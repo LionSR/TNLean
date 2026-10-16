@@ -6,6 +6,12 @@ Authors: TNLean contributors
 import TNLean.PEPS.AreaLaw.Scan.SuppliedTargetNormAttachment
 import Lean.Util.CollectAxioms
 
+/-!
+# Logical dependencies of the supplied-state norm comparisons
+
+The named norm comparisons use only the three standard logical axioms.
+-/
+
 run_cmd do
   let decl :=
     ``TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_suppliedTarget_actualCharge_norm_bounds
