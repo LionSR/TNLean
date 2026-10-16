@@ -7989,7 +7989,12 @@ spectral split → block extraction → MPV calculation → strict bounds
   passed ordinary builds and imported named axiom checks with only the
   three standard axioms. Both rewritten consumers also passed strict
   source checks and named source checks.
-- **Further use:** The weighted descendant count is expected to use the same
-  chosen-family facts. That use is not complete and is not counted among the
-  two refactored occurrences. No new tactic, simp attribute, or proof limit
-  is introduced.
+- **Further use:** The uniform weighted initial-mark estimate
+  `exists_uniform_initialRepairStage_weighted_sum_bound` also uses the same
+  chosen-family facts. Its finite layer partition uses incidence, and its
+  summation estimate uses the sparse cell counts. The roots and residue
+  choices remain those of the actual initial family. The estimate has passed
+  strict checking, ordinary compilation, and its exact named imported axiom
+  check. This third use is separate from the two refactored consumers in the
+  line comparison above. No new tactic, simp attribute, or proof limit is
+  introduced.
