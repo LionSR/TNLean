@@ -24,6 +24,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Positive part of a polynomial constant — promoted (2026-10-16)
+
+- **Pattern:** Replace a constant `C` of a polynomial bound `x ≤ C * L ^ k` by `max C 0`, so that
+  a theorem needs no sign hypothesis on `C`, and transport the given bound along
+  `C * L ^ k ≤ max C 0 * L ^ k` for `0 ≤ L`.
+- **Seen:** the compression theorems and the dyadic protocol, in
+  `UniformApproximateSampledNetwork.lean`, `UniformMessageGateCompression.lean` and
+  `DyadicProtocolCompression.lean` under `TNLean/PEPS/Approximation/`.
+- **Abstraction:** `TNLean.PEPS.Approximation.mul_pow_le_max_zero_mul_pow` in
+  `UniformApproximateSampledNetwork.lean`.
+- **Notes:** The sign of `max C 0` is `le_max_right`. Net Lean line delta: +9 (20 added, 11
+  removed) across the three changed modules, since the new lemma and its docstring outweigh the
+  shortened call sites.
+
 ### Scanner prevector coordinates and selected density — promoted (2026-10-15)
 
 - **Pattern:** Transfer nonvanishing, copy symmetry and a mean-energy
@@ -7974,3 +7988,25 @@ spectral split → block extraction → MPV calculation → strict bounds
   selected-point estimates. No additional tactic is proposed.
 - **Notes:** No multiplication by `1 - p` is allowed before its sign is known.
   The scalar implication instead uses `1 - p ≤ 1` on nonnegative terms.
+
+### Facts about the jointly chosen initial marks — candidate
+
+- **Pattern:** Recover the same two residue choices and finite mark set used by
+  the initial repair stage, then project a geometric property from their
+  existence theorem.
+- **Seen:** Two proof occurrences:
+  `TNLean/PEPS/AreaLaw/Geometry/RepairInductionMetric.lean`,
+  `initialRepairStage_scale_separated`, and
+  `TNLean/PEPS/AreaLaw/Geometry/RepairMarkMesh.lean`,
+  `RepairMetricHypotheses.repairStage_location_mem_affineMesh`.
+  The definitions in `RepairStage` and `RepairBirthRank` also refer to these
+  same choices; they are not additional proofs of a geometric property.
+- **Abstraction:** If another proof needs this extraction, prefer a lemma
+  giving the incidence and scale facts of the actual chosen initial family.
+  It must retain the residue choices used by the actual regions; an
+  independently chosen family cannot replace them.
+- **Notes:** The present two proofs use different projections: incidence and
+  scale separation in the first, membership in the selected belts in the
+  second. The mesh argument reuses `fineScaleIndex_mono` and
+  `beltMarks_subset_affineMesh`, and adds no copied floor estimate or new
+  mesh definition.
