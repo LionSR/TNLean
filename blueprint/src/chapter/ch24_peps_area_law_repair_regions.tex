@@ -262,6 +262,66 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     \end{align}
 \end{definition}
 
+% Source: 10-geometry.tex, replacement instructions, lines 398--409;
+% termination, lines 538--541; current regions, lines 558--561.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Removal by an empty mark family]
+    \label{thm:area_law_repair_removal_empty}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairRemovalSet_eq_empty}
+    \leanok
+    \uses{def:area_law_simultaneous_remnants}
+    Let $K=\varnothing$ be a mark index set, with locations $v_p$ and
+    scales $S_p$. Then $\bigcup_{p\in K}Q(v_p,S_p)=\varnothing$.
+\end{theorem}
+
+\begin{proof}\leanok
+    The union has no members.
+\end{proof}
+
+\begin{theorem}[Current regions after an empty generation]
+    \label{thm:area_law_repair_current_empty_step}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_current_oldInclusion_one_of_isEmpty}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions}
+    Let $\mathcal D_j$ be the actual repair family of
+    Definition~\ref{def:area_law_repair_stage}, with current regions
+    $R_i^{(j)}$ and mark index set $K_j$. If $K_j=\varnothing$, then
+    every $i\in I_j$ satisfies
+    \begin{align}
+        R_{\iota_{j,j+1}(i)}^{(j+1)} & =R_i^{(j)}.\notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:area_law_simultaneous_remnants,thm:area_law_repair_removal_empty}
+    The retained current region is
+    $R_i^{(j)}\setminus\bigcup_{p\in K_j}Q(v_p^{(j)},S_p^{(j)})$.
+    The removal union is empty by
+    Theorem~\ref{thm:area_law_repair_removal_empty}.
+\end{proof}
+
+\begin{theorem}[Stability after an empty generation]
+    \label{thm:area_law_repair_current_empty_later}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_current_oldInclusion_of_isEmpty}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions}
+    With the same repair family, suppose $K_j=\varnothing$. For every
+    $n\ge0$ and every $i\in I_j$,
+    \begin{align}
+        R_{\iota_{j,j+n}(i)}^{(j+n)} & =R_i^{(j)}.\notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:area_law_repair_ancestors,thm:area_law_repair_current_empty_step}
+    A mark at generation $j+n$ would have an ancestor in $K_j$;
+    hence every later mark family is empty. Induct on $n$. At $n=0$,
+    the inclusion is the identity. For the successor step, apply
+    Theorem~\ref{thm:area_law_repair_current_empty_step} at generation
+    $j+n$ to $\iota_{j,j+n}(i)$ and use
+    $\iota_{j,j+n+1}=\iota_{j+n,j+n+1}\circ\iota_{j,j+n}$.
+\end{proof}
+
 % Source: 10-geometry.tex, ordering before geometry:birth-separation,
 % lines 565--571. The dummy is excluded from the physical order.
 \begin{definition}[Birth rank]
