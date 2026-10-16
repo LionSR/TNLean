@@ -4484,6 +4484,30 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Fixed-circuit bounded-change lifts beside spectator sheets — candidate (2026-10-16)
+
+- **Pattern:** Assemble the five `OriginalCircuit.IsBoundedChange` fields for
+  `liftOne` or `liftTwo`: transport the nonprivate count, participants, expansion
+  bound, monomial bound and error estimate through untouched spectator sheets.
+- **Seen:** Two occurrences of the one-sheet variant, in
+  `hasBoundedChange_liftOne` (`SheetStackChange.lean:293–299`) and
+  `hasSourceBoundedChange_liftOne` (`SheetStackSourceBoundedChange.lean:126–133`);
+  two occurrences of the two-sheet variant, in `hasBoundedChange_liftTwo`
+  (`SheetStackChange.lean:312–318`) and `hasSourceBoundedChange_liftTwo`
+  (`SheetStackSourceBoundedChange.lean:146–153`). All files are under
+  `TNLean/PEPS/Approximation/`. These are two typed variants with two copies each,
+  not four copies of either individual variant.
+- **Abstraction:** Candidate fixed-witness lemmas
+  `OriginalCircuit.IsBoundedChange.liftOne` and `.liftTwo` in
+  `SheetStackChange.lean`, retaining both norm-at-most-one hypotheses. The
+  existential bounded-change and source-bounded-change results could then share
+  those lemmas, with the latter adding its existing source-bound proof.
+- **Notes:** Recorded as a candidate; no helper has been extracted and no call
+  site has been refactored. The current existential `HasBoundedChange` result
+  hides the circuit witness, so it cannot supply the bounded-change proof for
+  the particular lifted circuit used by the source-bounded result. No further
+  occurrences or future consumers are asserted.
+
 ### Logarithmic norm derivatives from squared norms — candidate (2026-10-15)
 
 - **Pattern:** Differentiate the squared norm, compose with the real logarithm,
