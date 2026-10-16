@@ -40,7 +40,7 @@ theorem exists_uniform_exact_message_sampled_network
     {ι : Type*} (size : ι → ℝ) (hsize : ∀ i, 2 ≤ size i)
     (P : ι → Type) [∀ L, Fintype (P L)]
     (C₀ : ∀ L, GateMapConstruction (P L))
-    (b n d : ℕ) (C_N C_D : ℝ) (hCN : 0 ≤ C_N) (hCD : 0 ≤ C_D)
+    (b n d : ℕ) (C_N C_D : ℝ)
     (hN₀ : ∀ L, ((C₀ L).circuit.expandedGateCount : ℝ) ≤ C_N * (size L) ^ n)
     (hphysical₀ : ∀ L j, ((C₀ L).physicalDimension j : ℝ) ≤ C_D * (size L) ^ d)
     (harity₀ : ∀ L g, ((C₀ L).circuit.participants g).card ≤ b)
@@ -48,7 +48,6 @@ theorem exists_uniform_exact_message_sampled_network
       Nat.card {g : (C₀ L).circuit.gateLocations //
         j ∈ (C₀ L).circuit.participants g} ≤ b)
     (r₀ m₀ : ℕ) (C_K C_C C_M : ℝ) (u v z : ℕ)
-    (hCK : 0 ≤ C_K) (hCC : 0 ≤ C_C) (hCM : 0 ≤ C_M)
     (hExactMessageExpansion : ∀ L,
       ∃ (lists : (C₀ L).circuit.MessageGateLists) (K : ℕ),
         (C₀ L).circuit.IsMessageResourceBounded r₀ m₀ K
@@ -56,7 +55,7 @@ theorem exists_uniform_exact_message_sampled_network
         (K : ℝ) ≤ C_K * (size L) ^ u ∧
         (C₀ L).circuit.IsMessageGateApproximation 0 lists (C₀ L).gateMaps)
     (p : ℝ) (hp : 0 < p) :
-    let countC := 1 + C_N
+    let countC := 1 + max C_N 0
     let t := ⌈p⌉₊
     let q := n + t + ⌈16 * countC⌉₊
     ∃ (r : ℕ) (C_p : ℝ) (α : ℕ), 0 ≤ C_p ∧ 0 < α ∧ ∀ L,
@@ -70,14 +69,14 @@ theorem exists_uniform_exact_message_sampled_network
       let ref := C.circuit
       let Goriginal := C.gateMaps
       let hL : 2 ≤ (size L) := hsize L
-      let D : ℝ≥0 := ⟨(1 + C_D) * (size L) ^ d, by positivity⟩
+      let D : ℝ≥0 := ⟨(1 + max C_D 0) * (size L) ^ d, by positivity⟩
       ∃ lists : ref.GateLists,
         let w := ref.reexpand lists
         let G := ref.reexpandGateMaps lists Goriginal
         let hNre : (w.expandedGateCount : ℝ) ≤ countC * (size L) ^ n := by
           rw [ref.expandedGateCount_reexpand lists]
           exact (hN₀ L).trans (mul_le_mul_of_nonneg_right
-            (le_add_of_nonneg_left zero_le_one) (by positivity))
+            ((le_max_left _ _).trans (le_add_of_nonneg_left zero_le_one)) (by positivity))
         ∃ (B : ℝ≥0) (_ : 1 ≤ B)
           (hb : w.IsExpansionBounded r (B : ℝ))
           (happrox : w.IsGateApproximation ((size L) ^ q)⁻¹ G),
@@ -91,7 +90,8 @@ theorem exists_uniform_exact_message_sampled_network
           simpa only [Real.rpow_neg (by linarith [hsize L] : 0 ≤ (size L)),
             Real.rpow_natCast] using
             w.isGateApproximation_budget_of_power_bound G (size L) countC (t : ℝ)
-              w.expandedGateCount n (hsize L) (by dsimp [countC]; linarith) hNre hprecision
+              w.expandedGateCount n (hsize L) (by dsimp [countC]; linarith [le_max_right C_N 0])
+              hNre hprecision
         let W := w.rescaledOriginal (sourceGateBudget_pos (half_pos hε) _).le G hbudget
         let hbW := w.isExpansionBounded_rescaledOriginal
           (sourceGateBudget_pos (half_pos hε) _).le G hbudget hb
@@ -140,8 +140,7 @@ theorem exists_uniform_exact_message_sampled_network
               ∃ g : ref.gateLocations, j ∈ ref.participants g ∧ l ∈ ref.participants g) := by
   classical
   have hAvailability : ∀ q : ℕ,
-      ∃ (r m : ℕ) (C_K C_C C_M : ℝ) (u v z : ℕ),
-        0 ≤ C_K ∧ 0 ≤ C_C ∧ 0 ≤ C_M ∧ ∀ L,
+      ∃ (r m : ℕ) (C_K C_C C_M : ℝ) (u v z : ℕ), ∀ L,
           ∃ (lists : (C₀ L).circuit.MessageGateLists) (K : ℕ),
             (C₀ L).circuit.IsMessageResourceBounded r m K
               (C_M * (size L) ^ z) (C_C * (size L) ^ v) lists ∧
@@ -149,13 +148,13 @@ theorem exists_uniform_exact_message_sampled_network
             (C₀ L).circuit.IsMessageGateApproximation ((size L) ^ q)⁻¹
               lists (C₀ L).gateMaps := by
     intro q
-    refine ⟨r₀, m₀, C_K, C_C, C_M, u, v, z, hCK, hCC, hCM, ?_⟩
+    refine ⟨r₀, m₀, C_K, C_C, C_M, u, v, z, ?_⟩
     intro L
     obtain ⟨lists, K, hresources, hK, hExact⟩ := hExactMessageExpansion L
     have hL0 : 0 ≤ (size L) := (by norm_num : (0 : ℝ) ≤ 2).trans (hsize L)
     exact ⟨lists, K, hresources, hK,
       hExact.mono (inv_nonneg.mpr (pow_nonneg hL0 q))⟩
-  exact exists_uniform_message_sampled_network size hsize P C₀ b n d C_N C_D hCN hCD
+  exact exists_uniform_message_sampled_network size hsize P C₀ b n d C_N C_D
     hN₀ hphysical₀ harity₀ hlifetime₀ hAvailability p hp
 
 end TNLean.PEPS.PairEffect.GateMapConstruction
