@@ -657,6 +657,46 @@ by the strict inequalities.
     first inequality. Since $F_0(p)=\{p\}$, induction gives the second.
 \end{proof}
 
+% Source: 10-geometry.tex, geometry:descendant-count, lines 670--686.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Descendants of one initial mark through finitely many generations]
+    \label{thm:area_law_repair_root_prefix_count}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_repairMarkAncestor_prefix_layer_bound}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_ancestors,
+        lem:area_law_repair_metric_invariants}
+    For every $S_*>1$, there is a constant $K>0$, depending only on
+    $S_*$, with the following property. Consider any actual repair family
+    satisfying the hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants}, and let $p\in K_0$.
+    For each generation $j\ge0$, put
+    $F_j(p)=\{q\in K_j:\alpha_{0,j}(q)=p\}$.
+    For every integer $k\ge0$ such that $S_p^{(0)}\le2^k$ and every
+    integer $N\ge0$,
+    \begin{align}
+        \sum_{0\le j<N}|F_j(p)|
+         & \le K(k+1)^K.\notag
+    \end{align}
+    The constant is chosen before the domain, origin, repair parameters,
+    initial mark, integer $k$, and number of generations $N$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_repair_descendant_count,
+        thm:area_law_repair_descendant_marks,
+        thm:area_law_repair_descendant_scales,
+        lem:area_law_repair_metric_invariants,def:area_law_repair_ancestors}
+    Choose the constant in
+    Theorem~\ref{thm:area_law_repair_descendant_count} with $M=1$.
+    Induct on $N$. The empty sum is zero. At a successor step, an empty
+    final descendant family contributes nothing. Otherwise, a descendant
+    at generation $N$ has scale $d^{N}(S_p^{(0)})\ge S_*$, by the
+    recursion for its scale and the metric lower bound. Since
+    $|F_j(p)|\le9^j$, the scalar estimate bounds the sum through
+    generation $N$ by $K(k+1)^K$.
+\end{proof}
+
 % Source: 10-geometry.tex, initial marks, lines 325--363, and
 % geometry:repair-induction, termination argument, lines 538--541.
 \begin{theorem}[A common empty generation]

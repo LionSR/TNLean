@@ -143,6 +143,7 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairRegionDisjointness
 import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementLatticeCoverage
 import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementRegions
 import TNLean.PEPS.AreaLaw.Geometry.RepairRetainedPrefixCount
+import TNLean.PEPS.AreaLaw.Geometry.RepairRootPrefixCount
 import TNLean.PEPS.AreaLaw.Geometry.RepairStabilization
 import TNLean.PEPS.AreaLaw.Geometry.RepairStage
 import TNLean.PEPS.AreaLaw.Geometry.RepairStageSites
