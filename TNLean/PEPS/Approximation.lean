@@ -127,6 +127,7 @@ import TNLean.PEPS.Approximation.DyadicDirectRepaintingRewrite
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingStep
 import TNLean.PEPS.Approximation.DyadicEdgeBands
 import TNLean.PEPS.Approximation.DyadicEventScheduleOrder
+import TNLean.PEPS.Approximation.DyadicExchangeChange
 import TNLean.PEPS.Approximation.DyadicFootprintScaling
 import TNLean.PEPS.Approximation.DyadicFootprintTemplates
 import TNLean.PEPS.Approximation.DyadicFrozenHoleCount

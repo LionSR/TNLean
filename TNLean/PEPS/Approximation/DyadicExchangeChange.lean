@@ -119,7 +119,8 @@ is such a change into frames with the owners of `N₁, N₂` and their holes reo
 
 Polynomial-PEPS manuscript, `05-frames.tex` (the order of the tags) and `06-geometry.tex`,
 lines 662–667. -/
-theorem HasPairChange.reorder {Ω : EuclideanSpace ℂ (ι → Fin q)} {F₁ F₂ N₁ N₂ G₁ G₂ : Frame pos q Party}
+theorem HasPairChange.reorder {Ω : EuclideanSpace ℂ (ι → Fin q)}
+    {F₁ F₂ N₁ N₂ G₁ G₂ : Frame pos q Party}
     {S : Set Party} {r K rs : ℕ} {ε : ℝ} (h : HasPairChange Ω F₁ F₂ N₁ N₂ S r K rs ε)
     (ho₁ : N₁.owner = G₁.owner) (hp₁ : N₁.holes.Perm G₁.holes) (ho₂ : N₂.owner = G₂.owner)
     (hp₂ : N₂.holes.Perm G₂.holes) : HasPairChange Ω F₁ F₂ G₁ G₂ S r K rs ε := by
@@ -189,7 +190,8 @@ theorem guideFrame_exchange_holes_perm {κ : Type*} {C : κ} {f₁ f₂ : ℝ ×
   have key := isTrueVertex_piecewise_iff hU' hYU' h₁U h₂U
   have e₁ : (guideFrame pos q f₁ own ph rank V₁ hole hd₁).holes.filter out =
       (V₁.toList.filter fun z => decide (z ∉ Y')).map
-        fun z => (⟨hole z, own (tagHolder rank (fun p => if p ∈ Y' then f₂ p else f₁ p) ph z)⟩ : Hole pos q Party) := by
+        fun z => (⟨hole z, own (tagHolder rank (fun p => if p ∈ Y' then f₂ p else f₁ p) ph z)⟩ :
+          Hole pos q Party) := by
     simp only [guideFrame, List.filter_map]
     rw [List.filter_congr (q := fun z => decide (z ∉ Y')) fun z _ => by simp [hout]]
     refine List.map_congr_left fun z hz => ?_
@@ -199,7 +201,8 @@ theorem guideFrame_exchange_holes_perm {κ : Type*} {C : κ} {f₁ f₂ : ℝ ×
     rw [tagHolder_congr ((key z).2.2 hzY' hv)]
   have e₂ : (guideFrame pos q f₂ own ph rank V₂ hole hd₂).holes.filter (fun h => !out h) =
       (V₂.toList.filter fun z => decide (z ∈ Y')).map
-        fun z => (⟨hole z, own (tagHolder rank (fun p => if p ∈ Y' then f₂ p else f₁ p) ph z)⟩ : Hole pos q Party) := by
+        fun z => (⟨hole z, own (tagHolder rank (fun p => if p ∈ Y' then f₂ p else f₁ p) ph z)⟩ :
+          Hole pos q Party) := by
     simp only [guideFrame, List.filter_map]
     rw [List.filter_congr (q := fun z => decide (z ∈ Y')) fun z _ => by simp [hout]]
     refine List.map_congr_left fun z hz => ?_
@@ -387,15 +390,17 @@ theorem edgeExchange_hasPairChange_of (hD : IsAngularScale q J Δ a A₀ m₀ 60
   · funext x
     rw [guideFrame_owner, hgm'']
     simp only [TwoSheetExchange.ofFrames, mem_lensSample, guideFrame_owner]
-    by_cases hx : cellCenterPos L x - d ∈ Y <;> simp [hx, Y'] <;> intro h' <;>
-      first | exact absurd hx h' | exact absurd h' hx
+    simp only [hY_def] at hY'_def
+    by_cases hx : cellCenterPos L x - d ∈ edgeLens Bl.n e <;>
+      simp only [hx, hY'_def, Set.mem_preimage, Homeomorph.subRight_apply, ↓reduceIte]
   · rw [hgm'']
     exact guideFrame_exchange_holes_perm hU'o hYU' hfmU hfaU hVm hVa (hgm'' ▸ hWm) out hout'
   · funext x
     rw [guideFrame_owner, hga'']
     simp only [TwoSheetExchange.ofFrames, mem_lensSample, guideFrame_owner]
-    by_cases hx : cellCenterPos L x - d ∈ Y <;> simp [hx, Y'] <;> intro h' <;>
-      first | exact absurd hx h' | exact absurd h' hx
+    simp only [hY_def] at hY'_def
+    by_cases hx : cellCenterPos L x - d ∈ edgeLens Bl.n e <;>
+      simp only [hx, hY'_def, Set.mem_preimage, Homeomorph.subRight_apply, ↓reduceIte]
   · rw [hga'']
     exact guideFrame_exchange_holes_perm hU'o hYU' hfaU hfmU hVa hVm (hga'' ▸ hWa) out hout'
 

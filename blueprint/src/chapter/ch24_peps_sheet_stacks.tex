@@ -899,3 +899,71 @@ no holes, this is the normalization of $\Omega$.
     is the setting of the bulk birth and death of
     Theorem~\ref{thm:peps_bulk_steps_treated_frames}.
 \end{proof}
+
+\begin{theorem}[The central birth as a change of the main sheet]
+    \label{thm:peps_protocol_central_birth_change}
+    \lean{TNLean.PEPS.Approximation.RepaintingBaseline.central_treated_mem,
+        TNLean.PEPS.Approximation.RepaintingBaseline.central_treated_ne_subset,
+        TNLean.PEPS.Approximation.centralBirth_hasFrameChange_of,
+        TNLean.PEPS.Approximation.centralBirth_hasFrameChange}
+    \leanok
+    \uses{thm:peps_protocol_band_step_changes, thm:peps_bulk_steps_treated_frames,
+        thm:peps_dyadic_no_changed_vertex}
+    Assume the angular information bound at the scale $t=D\log L$, as provided by
+    Proposition~3.4. At the constants of the protocol, in the repainting of a
+    square of side $n=2^j>K_0t$ with old label $A$ and final label $B$, passing
+    from the frame of the starting guide to that of the guide after the central
+    birth of $B$, both treated with $A$ about the four corners of the square, is a
+    bounded change with participants in any set containing the parties of $A$ and
+    $B$, at most one pair source and error $L^{-30}$
+    (\texttt{06-geometry.tex}, lines 155--160, 328--387 and 440--445).
+\end{theorem}
+
+\begin{proof}\leanok
+    As for a birth along an edge: the two treated guides have the same true
+    vertices with the same incident labels, and the readings differ only at sites
+    labelled $A$ before and $B$ after, far from every true vertex and inside the
+    square, so the frame after is the frame before with these sites handed to the
+    party of $B$.
+\end{proof}
+
+\begin{theorem}[The lens exchange as a change of two treated sheets]
+    \label{thm:peps_protocol_lens_exchange_change}
+    \lean{TNLean.PEPS.Approximation.IsDisplacedReading.eq_piecewise,
+        TNLean.PEPS.Approximation.IsDisplacedReading.eq_of_mem_open,
+        TNLean.PEPS.Approximation.HasPairChange,
+        TNLean.PEPS.Approximation.HasPairChange.reorder,
+        TNLean.PEPS.Approximation.guideFrame_exchange_holes_perm,
+        TNLean.PEPS.Approximation.edgeExchange_hasPairChange_of,
+        TNLean.PEPS.Approximation.edgeExchange_hasPairChange}
+    \leanok
+    \uses{def:peps_protocol_treated_frame, thm:peps_bulk_steps_treated_frames,
+        thm:peps_dyadic_no_changed_vertex, lem:peps_dyadic_lens_sides,
+        lem:peps_dyadic_incident_change, lem:peps_dyadic_schedule_guides,
+        lem:peps_dyadic_frozen_hole_count, lem:peps_guide_frame_tags,
+        thm:peps_guide_frame_rewrite, thm:peps_protocol_bounded_changes}
+    Assume the angular information bound at the scale $t=D\log L$, as provided by
+    Proposition~3.4. At the constants of the protocol, in the repainting of a
+    square of side $n=2^j>K_0t$, let $e$ be an edge with the label $C_e$ across
+    it. Treat both sheets with $C_e$ about the endpoints of $e$. Then passing from
+    the frames of the main sheet with the starting word and of the auxiliary sheet
+    with the auxiliary word to the frames of the main sheet with the first main
+    word and of the auxiliary sheet with the exchanged auxiliary word is a bounded
+    change of the two sheets. Its participants lie in any set containing the
+    party of $C_e$; it has no pair source and error $4L^{-30}$
+    (\texttt{06-geometry.tex}, lines 183--221, 389--430 and 440--445).
+\end{theorem}
+
+\begin{proof}\leanok
+    Both treated sheets are $C_e$ on a neighbourhood of the boundary of the lens
+    $Y$. The guides after the exchange are therefore the treated guides pieced
+    along $\partial Y$, and so are their readings, with $Y$ moved to the square. Every
+    outer hole square lies on one side of $\partial Y$, so the exchange of the two
+    frames on the sites of the translated lens is the bulk exchange of
+    Theorem~\ref{thm:peps_bulk_steps_treated_frames}. The frames it produces
+    have the owners of the pieced readings. Their holes are, up to order, those
+    at the true vertices of the pieced readings, with the same tag holders,
+    since the incident labels there are those of the sheet the vertex comes from.
+    A reordering of the tags without gates then gives the frames of the treated
+    guides after the exchange.
+\end{proof}
