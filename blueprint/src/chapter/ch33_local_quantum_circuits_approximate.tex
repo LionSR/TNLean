@@ -2,13 +2,13 @@
 
 The trace-norm criterion of~\cite[paragraph ``Phases of matter'']{Piroli2021LOCC}
 motivates the following relation for the local channels of
-Definition~\ref{def:qc_local_channel_conversion}. Onsite channels may enlarge
+Definition~\ref{def:qc_local_channel_conversion}: onsite channels may enlarge
 the local dimension, and each two-site layer on the enlarged sites costs one
-unit of depth. No uniform bound on intermediate dimensions is imposed.
-The source instead lets intersite gates act only on the physical qudits and
-also permits classical feedforward. No uniform depth simulation or inclusion
-in the source relation is asserted; see
-\cite{gap:psc21_local_channel_phase_scope}.
+unit of depth without imposing a uniform bound on intermediate dimensions.
+Whereas the source lets intersite gates act only on the physical qudits and
+also permits classical feedforward, no uniform depth simulation or inclusion
+in the source relation is asserted here
+(see~\cite{gap:psc21_local_channel_phase_scope}).
 
 \begin{definition}[Approximate local channel conversion]
     \label{def:qc_approx_local_channel_conversion}
@@ -19,8 +19,8 @@ in the source relation is asserted; see
     A chain operator $\rho$ is approximately converted into $\sigma$ in
     depth $T$ with error $\varepsilon$ if there is a local channel protocol
     $\Psi$ of depth at most $T$ with
-    $\lVert\Psi(\rho)-\sigma\rVert_1\le\varepsilon$.
-    Here $\lVert A\rVert_1$ is the sum of the singular values of $A$.
+    $\lVert\Psi(\rho)-\sigma\rVert_1\le\varepsilon$, where
+    $\lVert A\rVert_1$ denotes the sum of the singular values of $A$.
 \end{definition}
 
 \begin{theorem}[Trace norm of chain operators]
@@ -38,9 +38,9 @@ in the source relation is asserted; see
 \end{theorem}
 \begin{proof}
     \leanok
-    Enumerate the configurations and apply the corresponding properties of
-    the matrix trace norm. Reindexing is a linear equivalence and preserves
-    zero and addition.
+    Enumerating the configurations reduces each claim to the corresponding
+    property of the matrix trace norm, since reindexing is a linear
+    equivalence that preserves zero and addition.
 \end{proof}
 
 \begin{theorem}[Zero error and monotonicity]
@@ -59,8 +59,9 @@ in the source relation is asserted; see
 \begin{proof}
     \uses{thm:qc_chain_trace_norm}
     \leanok
-    Use the identity channel, enlarge the bounds, and use
-    $\lVert A\rVert_1=0$ if and only if $A=0$, respectively.
+    The identity channel gives reflexivity at zero depth and error, enlarging
+    the bounds gives monotonicity, and the equivalence at zero error follows
+    from $\lVert A\rVert_1=0$ if and only if $A=0$.
 \end{proof}
 
 \begin{theorem}[Composition of approximate conversions]
@@ -78,9 +79,10 @@ in the source relation is asserted; see
 \begin{proof}
     \uses{lem:qc_local_channel_conversion_trans, thm:qc_chain_trace_norm}
     \leanok
-    The composition $\Psi_2\circ\Psi_1$ has the sum of the two depths.
-    The error $\Psi_1(\rho)-\sigma$ is Hermitian. Trace-norm contractivity of
-    trace-preserving positive maps and the triangle inequality give
+    The composition $\Psi_2\circ\Psi_1$ has depth at most $T_1+T_2$, and
+    because the error $\Psi_1(\rho)-\sigma$ is Hermitian, trace-norm
+    contractivity of trace-preserving positive maps together with the
+    triangle inequality gives
     \begin{align}
         \lVert\Psi_2(\Psi_1(\rho))-\tau\rVert_1
          & \le \lVert\Psi_2(\Psi_1(\rho)-\sigma)\rVert_1
@@ -123,13 +125,13 @@ in the source relation is asserted; see
 \begin{proof}
     \uses{thm:qc_approx_conversion_trans}
     \leanok
-    Identity channels give reflexivity; the definition gives symmetry.
-    For transitivity, compose the approximate conversions in each direction.
-    The sum of the errors tends to zero. For $b_N=1+\log(N+1)\ge1$, the
-    depth satisfies
+    Identity channels give reflexivity and the definition is symmetric.
+    For transitivity, composing the approximate conversions in each direction
+    produces errors whose sum tends to zero, while for
+    $b_N=1+\log(N+1)\ge1$ the combined depth satisfies
     \begin{align}
         C_1b_N^{p_1}+C_2b_N^{p_2}
-         & \le(C_1+C_2)b_N^{\max(p_1,p_2)}. \notag
+         & \le(C_1+C_2)b_N^{\max(p_1,p_2)}, \notag
     \end{align}
-    Thus the depth remains polylogarithmic.
+    so the depth remains polylogarithmic.
 \end{proof}

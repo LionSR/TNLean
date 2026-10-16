@@ -5,17 +5,16 @@
     \lean{MPOTensor.doubledPhysTraceTransfer}
     \leanok
     \uses{def:mpo_tensor}
-    For a doubled-index tensor $B$ with physical dimension $d^{2}$, the
-    physical-trace transfer is the bond matrix obtained by closing the ket
-    leg against the bra leg of one tensor:
+    As the transfer object of the zero-correlation-length condition of
+    \cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv} applied to
+    one element of a basis of normal tensors, for a doubled-index tensor $B$
+    with physical dimension $d^{2}$, the physical-trace transfer is the bond
+    matrix obtained by closing the ket leg against the bra leg of one tensor:
     \begin{align}
         \mathcal T_{B}
          & =\sum_{i} B^{\,ii}.
         \label{eq:rfp_phys_trace}
     \end{align}
-    This is the transfer object of the zero-correlation-length condition of
-    \cite[Definition~4.2, lines~735--739]{Cirac2016MPDO_arXiv}, applied to
-    one element of a basis of normal tensors.
 \end{definition}
 
 \begin{lemma}[Identification with the tensor-level transfer]
@@ -98,10 +97,10 @@
 
 \begin{proof}\leanok
     \uses{thm:cpsv_bnt_presentation_uniqueness, thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase}
-    Match the representatives by
-    Theorem~\ref{thm:cpsv_bnt_presentation_uniqueness}, then apply
+    Matching the representatives by
+    Theorem~\ref{thm:cpsv_bnt_presentation_uniqueness} and applying
     Theorem~\ref{thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase} to each
-    matched pair.
+    matched pair proves the equivalence.
 \end{proof}
 
 \begin{definition}[Simple tensor]
@@ -137,7 +136,7 @@
 
 \begin{proof}\leanok
     \uses{def:cpsv_bnt_sector_presentation, lem:mpdo_three_first_site_contraction_coefficients, thm:mpdo_closed_chain_physical_blocking}
-    Choose a representative and one of its copies. Every copy weight over that
+    For any representative and one of its copies, every copy weight over that
     representative is nonzero, so its power-sum coefficient cannot vanish at
     every sufficiently large length. At a large length where this coefficient
     is nonzero, eventual
@@ -161,8 +160,8 @@
 
 \begin{proof}\leanok
     \uses{def:mpo_eval_word}
-    Induct on the common word length and collect one factor of $c$ from each
-    tensor letter.
+    Inducting on the common word length and collecting one factor of $c$ from
+    each tensor letter yields $(cM)^{u,v}=c^{|u|}M^{u,v}$.
 \end{proof}
 
 \begin{theorem}[Scaling a BNT presentation]
@@ -232,9 +231,9 @@
 
 \begin{proof}\leanok
     \uses{def:mpo_family, lem:mpdo_eval_word_scalar_scaling}
-    Apply Lemma~\ref{lem:mpdo_eval_word_scalar_scaling} to the two length-$N$
-    physical words, unfold the closed MPO family, and use linearity of the
-    virtual trace.
+    Applying Lemma~\ref{lem:mpdo_eval_word_scalar_scaling} to the two length-$N$
+    physical words, unfolding the closed MPO family, and using linearity of the
+    virtual trace gives $\rho^{(N)}(cM)=c^N\rho^{(N)}(M)$.
 \end{proof}
 
 \begin{theorem}[Normalization is invariant under nonzero rescaling]
@@ -296,9 +295,10 @@
 
 \begin{proof}\leanok
     \uses{def:mpdo_physical_blocking, lem:mpdo_eval_word_scalar_scaling, lem:mpdo_length_word_of_block}
-    Unfold physical blocking and apply
-    Lemma~\ref{lem:mpdo_eval_word_scalar_scaling} to the two encoded words;
-    Lemma~\ref{lem:mpdo_length_word_of_block} gives their length $L$.
+    Unfolding physical blocking and applying
+    Lemma~\ref{lem:mpdo_eval_word_scalar_scaling} to the two encoded words of
+    length $L$ from Lemma~\ref{lem:mpdo_length_word_of_block} gives
+    $(cM)^{[L]}=c^L M^{[L]}$.
 \end{proof}
 
 \begin{theorem}[Nonnegative rescaling preserves the MPDO condition]
@@ -327,8 +327,8 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_nonnegative_rescaling}
-    Apply Theorem~\ref{thm:mpdo_nonnegative_rescaling} first with $r$ and then
-    with $r^{-1}$.
+    Applying Theorem~\ref{thm:mpdo_nonnegative_rescaling} first with $r$ and
+    then with $r^{-1}$ proves both directions.
 \end{proof}
 
 \begin{theorem}[Positive rescaling preserves simplicity]
@@ -342,10 +342,10 @@
 \begin{proof}\leanok
     \uses{thm:mpdo_nonnegative_rescaling, thm:mpdo_block_tensor_scalar_scaling, thm:mpdo_cpsv_bnt_scalar_scaling}
     Positive rescaling preserves the MPDO condition. For a blocking length
-    $L$, it multiplies the blocked tensor by the nonzero scalar $r^L$.
-    Multiply every copy weight by $r^L$ and apply
-    Theorem~\ref{thm:mpdo_cpsv_bnt_scalar_scaling}; the representatives and
-    their non-nilpotent physical-trace transfers are unchanged.
+    $L$, it multiplies the blocked tensor by the nonzero scalar $r^L$;
+    multiplying every copy weight by $r^L$ and applying
+    Theorem~\ref{thm:mpdo_cpsv_bnt_scalar_scaling} leaves the representatives
+    and their non-nilpotent physical-trace transfers unchanged.
 \end{proof}
 
 \begin{theorem}[Positive rescaling invariance of simplicity]
@@ -359,7 +359,8 @@
 
 \begin{proof}\leanok
     \uses{thm:mpdo_simple_positive_rescaling}
-    Apply the preceding implication first with $r$ and then with $r^{-1}$.
+    Applying the preceding implication first with $r$ and then with $r^{-1}$
+    proves the equivalence.
 \end{proof}
 \begin{definition}[Normalized simplicity in blocked canonical form]
     \label{def:mpdo_simple_cf_tensor}
@@ -411,7 +412,7 @@
         def:global_gauge_of_blocks, thm:gauge_invariance,
         thm:is_normal_tensor_of_is_normal_left_canonical,
         thm:sector_bnt_cf_reindex_physical}
-    Take the blocking length to be one. The canonical bijection between the
+    At blocking length one, the canonical bijection between the
     one-site blocked ket--bra alphabet and the original doubled alphabet
     relabels the displayed sector decomposition into a BNT presentation of the
     blocked tensor. Normality and eventual linear independence are preserved

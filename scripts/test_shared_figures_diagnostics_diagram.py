@@ -42,7 +42,7 @@ class ContractDiagnosticsTest(unittest.TestCase):
             kwargs["stdout"].flush()
             self.assertEqual((work / "tex.stdout.log").read_text(), "partial TeX output\n")
             (work / "contract.pdf").write_bytes(b"mock PDF")
-            (work / "contract.log").write_text("(/mock/tenkz.sty)\n")
+            (work / "contract.log").write_text("(/mock/tikz-tensor-networks.sty)\n")
         else:
             self.assertEqual(command, ["/mock/pdftotext", "contract.pdf", "-"])
             self.assertEqual(status["stage"], "pdftotext-start")

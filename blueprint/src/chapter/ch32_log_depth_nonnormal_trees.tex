@@ -91,14 +91,14 @@ already proves the all-length statement in this form.
 \end{theorem}
 \begin{proof}
     \leanok
-    Take $q=\lceil a\log(N/\varepsilon)+b\rceil$, where $a=1/r$ and
-    $b\ge\max(\log K,0)/r+4s+1$. If $q\le N$, use $M=\lfloor N/q\rfloor$
-    blocks, the last of length $q+N\bmod q$ and all others of length $q$.
-    Choose $h$ with $2^{h+2}s\le q<2^{h+1}(4s)$. All block lengths satisfy
+    With $q=\lceil a\log(N/\varepsilon)+b\rceil$, where $a=1/r$ and
+    $b\ge\max(\log K,0)/r+4s+1$, when $q\le N$, partitioning into $M=\lfloor N/q\rfloor$
+    blocks, the last of length $q+N\bmod q$ and all others of length $q$, and
+    selecting $h$ with $2^{h+2}s\le q<2^{h+1}(4s)$ ensures that all block lengths satisfy
     the previous theorem, and $KM e^{-rq}\le KN e^{-rq}\le\varepsilon$.
 
-    If $4s\le N<q$, use a whole-ring supported tree, with $h$ chosen from
-    $N$ rather than from $q$. Its root pair gives the target exactly.
+    If $4s\le N<q$, a whole-ring supported tree with $h$ chosen from
+    $N$ rather than from $q$ has a root pair that gives the target exactly.
     In both branches $2^h\le q\le a\log(N/\varepsilon)+b+1$, so the
     depth $C(h+1)$ has the required bound. For $N<4s$, exact synthesis
     on finitely many possible lengths is absorbed into the constant,
@@ -163,15 +163,15 @@ already proves the all-length statement in this form.
 \end{theorem}
 \begin{proof}
     \leanok
-    Work with the unweighted direct sum $B=\bigoplus_jA_j$ and its
-    diagonal sector-pair support. The mixed gap gives eventual support
-    injectivity and the amplitude-uniform overlap estimate. Set
-    $\alpha_j=\beta_j/(\sum_l|\beta_l|^2)^{1/2}$; nonvanishing of the
+    For the unweighted direct sum $B=\bigoplus_jA_j$ and its
+    diagonal sector-pair support, the mixed gap gives eventual support
+    injectivity and the amplitude-uniform overlap estimate. With
+    $\alpha_j=\beta_j/(\sum_l|\beta_l|^2)^{1/2}$, nonvanishing of the
     target implies that the coefficient vector is nonzero, without
     requiring each coefficient to be nonzero. The embedded fixed-point
-    pairs are orthonormal and their cyclic products have the required
-    support. The exact one-block pair gives the short accuracy branch.
-    Apply Theorem~\ref{thm:ldp_supported_loglog_compilation}.
+    pairs are orthonormal, their cyclic products have the required
+    support, and the exact one-block pair gives the short accuracy branch,
+    so Theorem~\ref{thm:ldp_supported_loglog_compilation} applies.
 
     The intermediate theorem accepts any identity
     $\phi_N(A)=\sum_j\beta_j(N)\phi_N(A_j)$, so the coefficients need not

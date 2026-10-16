@@ -43,18 +43,17 @@ of the virtual projective representation.
         MPSTensor.polarDeformation}
     \leanok
     \uses{def:ldpolar_physical_matrix, thm:ldpolar_decomposition}
-    Let $M:\C^{D^2}\to\C^d$ be the physical map of a tensor $A$, and
-    write $M=VP$ for its right polar decomposition. Define $W$ by its
-    physical map $V$, and define $A_\gamma$ by
+    For the physical map $M:\C^{D^2}\to\C^d$ of a tensor $A$ with right
+    polar decomposition $M=VP$, let $W$ be the tensor with physical map
+    $V$, and let $A_\gamma$ have physical map
     \begin{align}
         M_\gamma & =V\bigl((1-\gamma)I+\gamma P\bigr),
         \qquad 0\leq\gamma\leq1.
         \notag
     \end{align}
-    This is the polar interpolation of
-    \cite[Section~II.C]{Schuch2011Phases},
-    expressed in right polar factors. It stays in the original physical
-    space; the map $M$ may be rectangular.
+    As in \cite[Section~II.C]{Schuch2011Phases}, this right-polar
+    interpolation remains in the original physical space even when $M$ is
+    rectangular.
 \end{definition}
 
 \begin{theorem}[Physical-matrix covariance from the tensor letters]
@@ -74,9 +73,11 @@ of the virtual projective representation.
 
 \begin{proof}\leanok
     \uses{lem:ldpolar_physical_matrix_rotate}
-    Expand the two virtual indices in each letter product and collect
-    them in the tensor product. Physical rotation is multiplication
-    of $M$ on its left. Finally use $X^{-1}=X^\dagger$ for unitary $X$.
+    Expanding the two virtual indices in each letter product and collecting
+    them in the tensor product expresses the letter transformation as right
+    multiplication by $X^T\otimes Y$, while physical rotation multiplies $M$
+    on the left; for unitary $X$, $X^{-1}=X^\dagger$ gives the stated bond
+    action.
 \end{proof}
 
 \begin{theorem}[Injectivity and symmetry along the polar deformation]
@@ -97,9 +98,9 @@ of the virtual projective representation.
     is positive definite, $A_\gamma$ is injective, and the path is continuous,
     with $A_0=W$ and $A_1=A$. If unitaries $U$ and $K$ satisfy $UM=MK$,
     then $P$ commutes with $K$, $UV=VK$, and $UM_\gamma=M_\gamma K$.
-    In particular, if $U$ acts on $A$ by conjugation with a unitary bond
-    matrix $X$, it acts on every $A_\gamma$ by the same conjugation
-    \cite[Section~II.C, isometric form and symmetries]{Schuch2011Phases}.
+    In particular, as in \cite[Section~II.C, isometric form and symmetries]{Schuch2011Phases},
+    if $U$ acts on $A$ by conjugation with a unitary bond
+    matrix $X$, it acts on every $A_\gamma$ by the same conjugation.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -131,10 +132,11 @@ of the virtual projective representation.
     \end{align}
     Under the unitary bond-conjugation covariance of the preceding theorem,
     each canonical range-$L$ parent interaction commutes with $U^{\otimes L}$.
-    This is the one-site injective case of the polar-deformation argument
-    in \cite[Section~II.C and Appendix~A]{Schuch2011Phases}; the source
-    also treats normal forms with several blocks
-    \cite{gap:spc11_uniform_gap_injective_scope}.
+    In the polar-deformation argument of
+    \cite[Section~II.C and Appendix~A]{Schuch2011Phases}, this establishes
+    the one-site injective case; as documented in
+    \cite{gap:spc11_uniform_gap_injective_scope}, the source also treats
+    normal forms with several blocks.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -161,11 +163,11 @@ of the virtual projective representation.
     every $g\in G$, physical rotation of $A_\gamma$ by $U_g$ is a virtual
     gauge change. Then the canonical two-site parent interactions give a
     symmetric gapped interaction path between the endpoint interactions.
-    Their norms are at most one, their ground energy is zero, and one
-    positive spectral gap works for every parameter and every ring length
-    $N\geq2$ \cite[Section~II.C and Appendix~A]{Schuch2011Phases}.
-    The one-site injective restriction is documented in
-    \cite{gap:spc11_uniform_gap_injective_scope}.
+    As in \cite[Section~II.C and Appendix~A]{Schuch2011Phases} (with the
+    one-site injective restriction documented in
+    \cite{gap:spc11_uniform_gap_injective_scope}), their norms are at most
+    one, their ground energy is zero, and one positive spectral gap holds
+    for every parameter and every ring length $N\geq2$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -189,19 +191,20 @@ of the virtual projective representation.
     \uses{def:spt_common_space_gapped_path}
     Let $A$ be one-site injective with $D>0$, let $U$ be a unitary on-site
     representation, and suppose the tensor covariance is expressed by
-    unitary bond conjugation. The canonical two-site parent interactions
-    of $A$ and of its isometric form $W$ are joined by a symmetric gapped
-    interaction path on the original physical space, with the same
-    representation $U$ throughout
-    \cite[Section~II.C, isometric form and symmetries]{Schuch2011Phases}.
-    No equality between the physical dimension and $D^2$ is required.
+    unitary bond conjugation. As in
+    \cite[Section~II.C, isometric form and symmetries]{Schuch2011Phases},
+    the canonical two-site parent interactions of $A$ and of its isometric
+    form $W$ are joined by a symmetric gapped interaction path on the
+    original physical space with the same representation $U$ throughout,
+    without requiring equality between the physical dimension and $D^2$.
 \end{definition}
 
 \begin{proof}\leanok
     \uses{thm:spt_canonical_injective_gapped_path, thm:spt_polar_deformation}
-    Apply the preceding construction to the injective polar path. The
-    endpoint identities give the canonical parents of $W$ and $A$; unitary
-    bond-conjugation covariance is preserved by the entire interpolation.
+    Applying the preceding construction to the injective polar path yields
+    the interaction path, whose endpoint identities give the canonical
+    parents of $W$ and $A$ while unitary bond-conjugation covariance is
+    preserved throughout the interpolation.
 \end{proof}
 
 \begin{theorem}[Physical embedding of virtual covariance]
@@ -214,9 +217,8 @@ of the virtual projective representation.
     The map $A\mapsto EA$ on tensors is continuous.
     Suppose physical operators $U$ and $V$ obey $VE=EU$, and an
     invertible bond matrix $X$ satisfies $(UA)^i=XA^iX^{-1}$.
-    Then $(V(EA))^i=X(EA)^iX^{-1}$.
-    This carries the covariance into the common physical space of
-    \cite[Section~II.F.2]{Schuch2011Phases}.
+    As in \cite[Section~II.F.2]{Schuch2011Phases}, the embedded tensor then
+    satisfies $(V(EA))^i=X(EA)^iX^{-1}$ in the common physical space.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -243,13 +245,12 @@ of the virtual projective representation.
     Applying the canonical injective-path construction to $EA_\gamma$
     gives a symmetric gapped interaction path from $h_2(EA_0)$ to
     $h_2(EA_1)$ under the prescribed action $V$.
-    In particular, when the covariance of $A$ is implemented by unitary
-    bond matrices, its polar deformation gives a path from $h_2(EW)$
-    to $h_2(EA)$, where $W$ is the polar isometric form of $A$.
-    These are the physically embedded endpoint deformations used in
-    \cite[Sections~II.C and II.F.2]{Schuch2011Phases}.
-    The one-site injective restriction is documented in
-    \cite{gap:spc11_uniform_gap_injective_scope}.
+    In particular, as in \cite[Sections~II.C and II.F.2]{Schuch2011Phases}
+    (with the one-site injective restriction documented in
+    \cite{gap:spc11_uniform_gap_injective_scope}), when the covariance of
+    $A$ is implemented by unitary bond matrices, its polar deformation gives
+    an embedded endpoint path from $h_2(EW)$ to $h_2(EA)$, where $W$ is the
+    polar isometric form of $A$.
 \end{definition}
 
 \begin{proof}\leanok
@@ -262,8 +263,8 @@ of the virtual projective representation.
     carries over virtual covariance. The canonical injective-path theorem
     then gives continuity of the parent projections, norm at most one,
     and a positive gap uniform in the parameter and every ring length
-    $N\ge2$. Apply this construction to the polar family and use its
-    endpoint identities to obtain the second path.
+    $N\ge2$. Applying this construction to the polar family and using its
+    endpoint identities yields the second path.
 \end{proof}
 
 \begin{definition}[Physical embedding replacing an occupied frame]
@@ -273,16 +274,15 @@ of the virtual projective representation.
         MPSTensor.polarFrameEmbedding}
     \leanok
     Let $F:S\to H$ and $J:S\to K$ be linear isometries between finite-dimensional
-    complex Hilbert spaces. Define $E:H\to K\oplus H$ by
+    complex Hilbert spaces, and let $E:H\to K\oplus H$ be given by
     \begin{align}
         \label{eq:spt_frame_embedding}
         Ev=(JF^\dagger v,(I-FF^\dagger)v).
     \end{align}
-    For an injective tensor $A$, choose $F$ to be its isometric polar factor.
-    The first summand then carries the prescribed target frame, while the
-    second retains the original orthogonal complement. This is an auxiliary
-    construction for the common physical representation in
-    \cite[Section~II.F.2]{Schuch2011Phases}.
+    For an injective tensor $A$ with isometric polar factor $F$, the first
+    summand in the common physical representation of
+    \cite[Section~II.F.2]{Schuch2011Phases} carries the prescribed target
+    frame, while the second retains the original orthogonal complement.
 \end{definition}
 
 \begin{theorem}[Isometry and covariance of the frame embedding]
@@ -311,14 +311,13 @@ of the virtual projective representation.
 
 \begin{proof}\leanok
     \uses{def:spt_frame_embedding, thm:spt_polar_deformation}
-    Put $P=FF^\dagger$. Then $P^2=P=P^\dagger$ and
-    $E^\dagger E=FJ^\dagger JF^\dagger+(I-P)^2=P+I-P=I$.
-    Also $EF=(J,0)$. Taking adjoints of $U_gF=FS_g$ and multiplying by
-    the unitary actions gives $F^\dagger U_g=S_gF^\dagger$.
-    Thus $U_gP=PU_g$ and $V_gJF^\dagger=JF^\dagger U_g$, which give
-    the two components of the intertwining identity.
-    Apply these identities to the polar factor; reading its entries as
-    tensor letters gives the claimed endpoint.
+    With $P=FF^\dagger$, idempotence and self-adjointness $P^2=P=P^\dagger$
+    give $E^\dagger E=FJ^\dagger JF^\dagger+(I-P)^2=P+I-P=I$ and $EF=(J,0)$.
+    Taking adjoints of $U_gF=FS_g$ and multiplying by the unitary actions
+    gives $F^\dagger U_g=S_gF^\dagger$. Thus $U_gP=PU_g$ and
+    $V_gJF^\dagger=JF^\dagger U_g$, establishing the two components of the
+    intertwining identity. Applying these identities to the polar factor and
+    reading its entries as tensor letters gives the claimed endpoint.
 \end{proof}
 
 \begin{definition}[Gapped parent path for a prescribed target frame]
@@ -330,16 +329,16 @@ of the virtual projective representation.
     covariance $(U_g A)^i=X_gA^iX_g^\dagger$.
     Let $J:\C^{D^2}\to K$ be an isometry satisfying
     $V_gJ=J(X_g^T\otimes X_g^\dagger)$ for a unitary on-site
-    representation $V$. Choose the embedding $E$ in~(\ref{eq:spt_frame_embedding})
-    using the polar isometric factor $F$ of $A$.
-    Embedding the polar deformation gives a symmetric gapped path under
+    representation $V$. For the embedding $E$ in~(\ref{eq:spt_frame_embedding})
+    formed from the polar isometric factor $F$ of $A$,
+    embedding the polar deformation gives a symmetric gapped path under
     $V\oplus U$ from the canonical two-site parent of the tensor with frame
     $(J,0)$ to the canonical two-site parent of $EA$.
-    The gap is positive uniformly in the path parameter and every ring
-    length $N\ge2$. This is the prescribed-frame version of the embedded
-    polar construction in \cite[Sections~II.C and II.F.2]{Schuch2011Phases}.
-    The one-site injective restriction is documented in
-    \cite{gap:spc11_uniform_gap_injective_scope}.
+    As in the embedded polar construction of
+    \cite[Sections~II.C and II.F.2]{Schuch2011Phases} (with the one-site
+    injective restriction documented in
+    \cite{gap:spc11_uniform_gap_injective_scope}), the gap is positive
+    uniformly in the path parameter and every ring length $N\ge2$.
 \end{definition}
 
 \begin{proof}\leanok
@@ -349,8 +348,8 @@ of the virtual projective representation.
     isometric factor $F$ has the same intertwining identity.
     The frame-embedding theorem gives $E^\dagger E=I$ and
     $(V_g\oplus U_g)E=EU_g$.
-    Apply the embedded polar-path construction and use $EF=(J,0)$
-    to identify the initial tensor.
+    Applying the embedded polar-path construction and using $EF=(J,0)$
+    identifies the initial tensor.
 \end{proof}
 
 \begin{definition}[Three-sector coordinates for the common physical space]
@@ -363,10 +362,9 @@ of the virtual projective representation.
     The space $\C^{K^2}\oplus\C^{d_0}\oplus\C^{d_1}$ has three
     sectors with left dimensions $(K,d_0,d_1)$ and right dimensions
     $(K,1,1)$. Within the first sector, the pair $(r,l)$ is enumerated
-    in physical order $(l,r)$. The other two sectors occupy the
-    middle and final summands. These are auxiliary coordinates for
-    the enlarged physical space in
-    \cite[Section~II.F.2]{Schuch2011Phases}.
+    in physical order $(l,r)$; in the enlarged physical space of
+    \cite[Section~II.F.2]{Schuch2011Phases}, the other two sectors occupy
+    the middle and final summands.
 \end{definition}
 
 \begin{definition}[Sector-decomposed neighboring interactions]
@@ -376,17 +374,15 @@ of the virtual projective representation.
         MPSTensor.physicalSpectatorBondInteraction}
     \leanok
     \uses{def:spt_physical_spectator_coordinates}
-    In a decomposition $H=\bigoplus_q(H_{q,r}\otimes H_{q,l})$,
-    prescribe a neighboring matrix $\eta_{q,h}$ on
-    $H_{q,r}\otimes H_{h,l}$. The two-site interaction is the direct
-    sum of $I_{q,l}\otimes\eta_{q,h}\otimes I_{h,r}$, expressed in
-    the original physical coordinates.
-    For the three-sector common physical space, choose
-    $\eta_{0,0}=B$ and $\eta_{q,h}=I$ for every other pair.
-    The active pair then carries the independent virtual bond, while
-    a neighboring pair meeting either additional physical sector
-    carries the identity penalty. These are auxiliary interactions
-    for \cite[Sections~II.D.2 and II.F.2]{Schuch2011Phases}.
+    In a decomposition $H=\bigoplus_q(H_{q,r}\otimes H_{q,l})$ with a
+    neighboring matrix $\eta_{q,h}$ on $H_{q,r}\otimes H_{h,l}$, the
+    two-site interaction is the direct sum of
+    $I_{q,l}\otimes\eta_{q,h}\otimes I_{h,r}$, expressed in the original
+    physical coordinates. In the three-sector common physical space of
+    \cite[Sections~II.D.2 and II.F.2]{Schuch2011Phases}, setting
+    $\eta_{0,0}=B$ and $\eta_{q,h}=I$ for every other pair assigns the
+    independent virtual bond to the active pair and the identity penalty to
+    any neighboring pair meeting either additional physical sector.
 \end{definition}
 
 \begin{theorem}[Projections, commutation, and spectral separation of sector bonds]
@@ -431,16 +427,16 @@ of the virtual projective representation.
     \label{def:spt_isometric_interaction_extension}
     \lean{MPSTensor.isometricInteractionExtension}
     \leanok
-    Let $E:H\to H'$ be a one-site isometry and put $T=E\otimes E$.
+    Let $E:H\to H'$ be a one-site isometry and let $T=E\otimes E$.
     For a two-site interaction $h$, define
     \begin{align}
         h'=I-T(I-h)T^\dagger
         =ThT^\dagger+I-TT^\dagger.
         \notag
     \end{align}
-    This gives energy one on the orthogonal complement of the included
-    two-site space, as in the physical embedding construction of
-    \cite[Section~II.F.2]{Schuch2011Phases}.
+    As in the physical embedding construction of
+    \cite[Section~II.F.2]{Schuch2011Phases}, this extension assigns energy
+    one to the orthogonal complement of the included two-site space.
 \end{definition}
 
 \begin{theorem}[Local symmetry of the normalized bond interaction]
@@ -475,14 +471,14 @@ of the virtual projective representation.
     neighboring virtual pair, the three-sector interaction equals
     $I-(Q\otimes Q)(I-h_B)(Q\otimes Q)^\dagger$, where
     $h_B$ is the independent-bond interaction on the active physical space.
-    No positivity or projection assumption on $B$ is required.
-    This identifies the coordinates of the unused-state penalty
-    in \cite[Section~II.F.2]{Schuch2011Phases}.
+    As in \cite[Section~II.F.2]{Schuch2011Phases}, this expression
+    identifies the coordinates of the unused-state penalty without
+    requiring positivity or projection assumptions on $B$.
 \end{theorem}
 
 \begin{proof}\leanok
-    Regroup the two physical sites by their sector pair. The included
-    complement $I-h_B$ occupies only the active pair. Every other sector
+    Regrouping the two physical sites by their sector pair places the
+    included complement $I-h_B$ on the active pair alone. Every other sector
     has zero complement and hence identity interaction. Changing back
     to the original physical coordinates gives the stated equality.
 \end{proof}
@@ -574,21 +570,21 @@ of the virtual projective representation.
     \leanok
     \uses{def:spt_fixed_point_tensor}
     Let $D>0$, $c=D^{-1/2}$, and $J:\C^{D^2}\to H$ be linear.
-    The normalized matrix-unit tensor embedded by $J$ has physical
-    matrix $cJ$. If its physical covariance is induced by virtual
-    multiplication $B^i\mapsto XB^iY$, then
+    In the fixed-point basis of \cite[Section~II.F.2]{Schuch2011Phases},
+    the normalized matrix-unit tensor embedded by $J$ has physical
+    matrix $cJ$, and physical covariance induced by virtual
+    multiplication $B^i\mapsto XB^iY$ gives
     \begin{align}
         UJ=J(X^T\otimes Y).
         \notag
     \end{align}
-    This identifies the convenient fixed-point basis in
-    \cite[Section~II.F.2]{Schuch2011Phases}.
 \end{theorem}
 
 \begin{proof}\leanok
     Each letter is $c\sum_{a,b}J_{i,(a,b)}|a\rangle\langle b|$,
     so its physical matrix is $cJ$. Physical covariance therefore
-    gives $U(cJ)=(cJ)(X^T\otimes Y)$. Cancel $c\ne0$.
+    gives $U(cJ)=(cJ)(X^T\otimes Y)$, and cancelling $c\ne0$ yields the
+    intertwining identity.
 \end{proof}
 
 \begin{theorem}[Canonical parent at the embedded polar endpoint]
@@ -601,10 +597,11 @@ of the virtual projective representation.
     let $E$ be its frame embedding with target $J$.
     Multiplying the embedded isometric polar tensor by $D^{-1/2}$
     gives the normalized matrix-unit tensor in the frame $(J,0)$.
-    Hence the two tensors have the same canonical parent interaction
-    at every length. This is the injective single-block identification
-    in \cite[Sections~II.C and II.F.2]{Schuch2011Phases}; the
-    restriction is documented in \cite{gap:spc11_uniform_gap_injective_scope}.
+    As in the single-block identification of
+    \cite[Sections~II.C and II.F.2]{Schuch2011Phases} (with the injective
+    restriction documented in \cite{gap:spc11_uniform_gap_injective_scope}),
+    the two tensors have the same canonical parent interaction at every
+    length.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -622,14 +619,14 @@ of the virtual projective representation.
     \leanok
     \uses{def:spt_projective_direct_sum}
     Let $V^0,V^1$ be projective representations with the same factor
-    system on spaces of positive dimensions $D_0,D_1$, and put
-    $V=V^0\oplus V^1$. The coordinate inclusions $J_0,J_1$ of their
-    virtual-pair spaces into $\C^{(D_0+D_1)^2}$ intertwine the
-    corresponding pair actions with the common fixed-point physical
-    action induced by $V$. The scalar character is taken to be trivial,
-    as recorded in \cite{gap:rmp_spt_fixed_point_trivial_character}.
-    This is the coordinate form of the joint symmetry in
-    \cite[Section~II.F.2]{Schuch2011Phases}.
+    system on spaces of positive dimensions $D_0,D_1$, and let
+    $V=V^0\oplus V^1$. In the coordinate form of the joint symmetry in
+    \cite[Section~II.F.2]{Schuch2011Phases} (with the scalar character taken
+    to be trivial as recorded in
+    \cite{gap:rmp_spt_fixed_point_trivial_character}), the coordinate
+    inclusions $J_0,J_1$ of their virtual-pair spaces into
+    $\C^{(D_0+D_1)^2}$ intertwine the corresponding pair actions with the
+    common fixed-point physical action induced by $V$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -649,25 +646,25 @@ of the virtual projective representation.
         MPSTensor.commonFixedPointInclusion}
     \leanok
     \uses{def:spt_frame_embedding, def:spt_projective_direct_sum}
-    Put $K=D_0+D_1$ and let $J_j:\C^{D_j^2}\to\C^{K^2}$ be the
-    two coordinate inclusions. On
-    $H=\C^{K^2}\oplus\C^{d_0}\oplus\C^{d_1}$, take the action
+    With $K=D_0+D_1$ and $J_j:\C^{D_j^2}\to\C^{K^2}$ denoting the
+    two coordinate inclusions, let
+    $H=\C^{K^2}\oplus\C^{d_0}\oplus\C^{d_1}$ carry the action
     $(V\oplus U_0)\oplus U_1$, where $V$ is the fixed-point pair
-    action of the virtual direct sum, with trivial scalar character.
-    Write $P_{m,d}:\C^m\to\C^m\oplus\C^d$ for the first-summand
-    inclusion; thus $P_{m,d}W=(W,0)$.
-    If $F_j$ is the isometric polar factor of a one-site injective
-    tensor $A_j$, define
+    action of the virtual direct sum with trivial scalar character, and let
+    $P_{m,d}:\C^m\to\C^m\oplus\C^d$ denote the first-summand
+    inclusion $P_{m,d}W=(W,0)$.
+    In the common-space construction of
+    \cite[Section~II.F.2]{Schuch2011Phases} (with the injective and
+    character restrictions recorded in
+    \cite{gap:spc11_uniform_gap_injective_scope} and
+    \cite{gap:rmp_spt_fixed_point_trivial_character}), if $F_j$ is the
+    isometric polar factor of a one-site injective tensor $A_j$, the
+    embeddings retaining the original physical complements are
     \begin{align}
         E_0v & =(J_0F_0^\dagger v,(I-F_0F_0^\dagger)v,0),       &
         E_1v & =(J_1F_1^\dagger v,0,(I-F_1F_1^\dagger)v),\notag   \\
         Qw   & =(w,0,0).\notag
     \end{align}
-    These retain the original physical complements in the common-space
-    construction of \cite[Section~II.F.2]{Schuch2011Phases}.
-    The injective and character restrictions are recorded in
-    \cite{gap:spc11_uniform_gap_injective_scope} and
-    \cite{gap:rmp_spt_fixed_point_trivial_character}.
 \end{definition}
 
 \begin{theorem}[Isometry and symmetry of the common embeddings]
@@ -693,9 +690,10 @@ of the virtual projective representation.
     \uses{thm:spt_frame_embedding,
         thm:spt_fixed_point_coordinate_frames}
     First-summand inclusion is isometric and intertwines a unitary
-    action with its direct sum. Apply the frame-embedding theorem to
-    each $F_j,J_j$ and retain the additional zero summand.
-    The coordinate-frame identities give the required target covariance.
+    action with its direct sum. Applying the frame-embedding theorem to
+    each $F_j,J_j$ while retaining the additional zero summand, together
+    with the coordinate-frame identities, gives the required target
+    covariance.
     A unitary virtual matrix has its adjoint as its general linear
     inverse, so both descriptions of the pair action agree.
 \end{proof}
@@ -719,10 +717,11 @@ of the virtual projective representation.
 \begin{proof}\leanok
     \uses{thm:spt_frame_embedding,
         thm:spt_polar_fixed_point_parent}
-    The complement term vanishes on $F_j$. The remaining component
-    is $J_j$, followed by the zero physical summands.
-    Use the normalized fixed-point frame identity and invariance of
-    boundary spaces under nonzero scalar multiplication.
+    The complement term vanishes on $F_j$, leaving $J_j$ followed by the
+    zero physical summands.
+    The normalized fixed-point frame identity and invariance of
+    boundary spaces under nonzero scalar multiplication then give the
+    equality of canonical parent interactions.
 \end{proof}
 
 \begin{definition}[The two common-space polar parent paths]
@@ -743,8 +742,8 @@ of the virtual projective representation.
 \begin{proof}\leanok
     \uses{thm:spt_common_physical_endpoints,
         thm:spt_common_physical_polar_endpoints, def:spt_embedded_injective_path}
-    Embed each polar deformation by its fixed physical isometry.
-    Its intertwining identity carries over symmetry, and the exact polar
+    Embedding each polar deformation by its fixed physical isometry carries
+    over symmetry via its intertwining identity, and the exact polar
     endpoint identifies the normalized fixed-point canonical parent.
 \end{proof}
 
@@ -759,10 +758,10 @@ of the virtual projective representation.
     There is a positive definite matrix $\Lambda$ with
     $\E_A^\dagger(\Lambda)=\Lambda$. If a unitary physical rotation of $A$
     is a virtual gauge change, the same rotation is implemented by a
-    unitary bond matrix. In particular, for a fixed unitary on-site
-    representation preserving every periodic MPS vector, unitary virtual
-    covariance can be chosen for every group element
-    \cite[Section~II.C, isometric form and symmetries]{Schuch2011Phases}.
+    unitary bond matrix. In particular, as in
+    \cite[Section~II.C, isometric form and symmetries]{Schuch2011Phases},
+    for a fixed unitary on-site representation preserving every periodic MPS
+    vector, unitary virtual covariance can be chosen for every group element.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -794,13 +793,13 @@ of the virtual projective representation.
     There are an injective unital tensor $B$, a nonzero scalar $c$, and
     a virtual gauge relating $B$ to $cA$, such that every canonical
     parent interaction of $B$ equals the corresponding interaction of $A$.
-    The canonical two-site parent of the isometric form of $B$ and the
+    As in \cite[Section~II.C]{Schuch2011Phases} (with the one-site injective
+    restriction documented in \cite{gap:spc11_uniform_gap_injective_scope}),
+    the canonical two-site parent of the isometric form of $B$ and the
     canonical two-site parent of $A$ are joined by a symmetric gapped
-    interaction path on the original physical space, with representation
-    $U$ throughout \cite[Section~II.C]{Schuch2011Phases}.
-    Neither normalization of $A$ nor unitary virtual matrices are assumed.
-    The one-site injective restriction is documented in
-    \cite{gap:spc11_uniform_gap_injective_scope}.
+    interaction path on the original physical space with representation $U$
+    throughout, without assuming normalization of $A$ or unitarity of its
+    virtual matrices.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -814,8 +813,9 @@ of the virtual projective representation.
     Both operations preserve the local MPS spaces, hence all canonical
     parent interactions; they also preserve on-site symmetry and
     injectivity. The preceding theorem gives unitary virtual covariance
-    for $B$. Apply the symmetric polar-path construction and replace its
-    final interaction by the equal canonical interaction of $A$.
+    for $B$, so applying the symmetric polar-path construction and replacing
+    its final interaction by the equal canonical interaction of $A$ yields
+    the path.
 \end{proof}
 
 \begin{theorem}[Virtual class under gauge preparation]
@@ -828,17 +828,17 @@ of the virtual projective representation.
     A virtual change of basis $Y$ replaces a projective representation
     $\rho(g)$ by $Y\rho(g)Y^{-1}$ and retains its factor system. If
     $B_i=Y(cA_i)Y^{-1}$, this representation implements the symmetry of
-    $B$ whenever $\rho$ implements the symmetry of $A$. For $D>0$ and
+    $B$ whenever $\rho$ implements the symmetry of $A$. As in
+    \cite[Sections~II.C and II.F.2]{Schuch2011Phases}, for $D>0$ and
     injective $B$, every virtual representation chosen for $B$ has factor
-    system cohomologous to that of $\rho$
-    \cite[Sections~II.C and II.F.2]{Schuch2011Phases}.
+    system cohomologous to that of $\rho$.
 \end{theorem}
 
 \begin{proof}\leanok
     Conjugation preserves the projective multiplication law and commutes
-    with physical twisting. Scalar rescaling also commutes with twisting.
-    Apply gauge independence on $B$ to compare the conjugated
-    representation with any other choice.
+    with physical twisting. Scalar rescaling also commutes with twisting,
+    and gauge independence on $B$ compares the conjugated representation
+    with any other choice.
 \end{proof}
 
 \begin{theorem}[Virtual class along the prepared polar path]
@@ -849,17 +849,17 @@ of the virtual projective representation.
     \leanok
 
     Let $A$ be one-site injective with $D>0$, with exact on-site symmetry
-    under a fixed unitary representation $U$. Choose any virtual
-    projective representation for $A$, with factor system $\omega_A$.
+    under a fixed unitary representation $U$, and let $\omega_A$ be the
+    factor system of any virtual projective representation for $A$.
     The unital representative $B$ and symmetric gapped path of the
     preparation theorem can be chosen together with a unitary projective
     representation $\rho$ of factor system $\omega\sim\omega_A$ which
     implements virtual symmetry at every point of the polar deformation.
-    Consequently, any virtual representations chosen at the endpoints
-    of the polar path have cohomologous factor systems
-    \cite[Sections~II.C and II.F.2]{Schuch2011Phases}.
-    The one-site injective restriction is documented in
-    \cite{gap:spc11_uniform_gap_injective_scope}.
+    Consequently, as in \cite[Sections~II.C and II.F.2]{Schuch2011Phases}
+    (with the one-site injective restriction documented in
+    \cite{gap:spc11_uniform_gap_injective_scope}), any virtual
+    representations chosen at the endpoints of the polar path have
+    cohomologous factor systems.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -867,11 +867,10 @@ of the virtual projective representation.
         thm:spt_virtual_class_gauge_preparation,
         thm:spt_prepared_polar_gapped_path,
         thm:cocycle_gauge_independence}
-    Choose unitary virtual covariance for $B$ and assemble these same
-    matrices into a projective representation. Polar covariance preserves
-    the matrices throughout the deformation, hence also their factor
-    system. Gauge preparation identifies this class with $[\omega_A]$;
-    gauge independence compares it with any endpoint choices.
+    Unitary virtual covariance for $B$ forms a projective representation
+    whose matrices and factor system are preserved throughout the polar
+    deformation. Gauge preparation identifies this class with $[\omega_A]$,
+    and gauge independence compares it with any endpoint choices.
 \end{proof}
 
 \begin{theorem}[Classification along symmetric MPS parent-Hamiltonian paths]

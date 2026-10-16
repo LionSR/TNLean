@@ -216,14 +216,14 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
 \begin{proof}\leanok
     \uses{thm:mpdo_topological_projector_recursion, thm:mpdo_topological_density_decomposition, cor:mpdo_topological_density_factor_commutator}
     Positivity of the one-site density operator passes to every fixed BNT
-    block; division by its strictly positive multiplicity weight shows that
-    each $K_\gamma$ is positive semidefinite. Apply the finite-dimensional
-    spectral theorem to obtain the non-negative eigenvalues and rank-one
-    orthogonal projections. Length independence makes every retained diagonal
-    entry of $\chi_{\alpha,\beta,\gamma}$ equal to one, so the recursive
-    direct sum preserves idempotence and pairwise orthogonality. Write
+    block, and division by its strictly positive multiplicity weight shows that
+    each $K_\gamma$ is positive semidefinite. The finite-dimensional
+    spectral theorem then yields the non-negative eigenvalues and rank-one
+    orthogonal projections. Because length independence makes every retained
+    diagonal entry of $\chi_{\alpha,\beta,\gamma}$ equal to one, the recursive
+    direct sum preserves idempotence and pairwise orthogonality. Writing
     $Q_{N,c,s}$ for the recursive spectral block in copy
-    configuration~$c$. The coisometry identity
+    configuration~$c$, the coisometry identity
     $W_{N,c}W_{N,c}^\dagger=\Id$ gives
     \begin{align}
         (W_{N,c}^\dagger Q_{N,c,s}W_{N,c})^\dagger
@@ -234,7 +234,7 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
         \notag
     \end{align}
     Thus conjugation by the adjoint sequential coisometry preserves the
-    projector identities. Linearity gives
+    projector identities, and linearity gives
     (\ref{eq:rfp_terminal_spectral_sum}). Finally, $A_N$ is scalar on every
     copy-configuration block, hence it commutes with each $P_s^{(N)}$ and
     gives (\ref{eq:rfp_density_spectral_sum}).
@@ -360,17 +360,18 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \uses{thm:mpdo_fusion_clause_topological_density_decomposition, cor:mpdo_fusion_clause_topological_density_factor_commutator, thm:mpdo_fusion_clause_terminal_spectral_projector_refinement}
     Each diagonal entry of $\mu$ is strictly positive, so its negative
     logarithm is real. The translated terms are diagonal, and each site
-    contributes once to their sum. Exponentiating gives
+    contributes once to their sum; exponentiating gives
     (\ref{eq:rfp_gibbs_factor}).
 
     Positivity of the multiplicities embeds one terminal mode for every
-    terminal spectral index into the retained coordinates. The rank of the
-    coisometry restricted to the retained rows is at most $d$, so the terminal
-    family has at most $d$ members. Extend the eigenvalues and spectral
-    projectors by zero along an injection into $\{0,\ldots,d-1\}$. The added
-    zero projectors preserve self-adjointness, idempotence, commutation, and
-    the spectral sum. Combine that sum with (\ref{eq:rfp_gibbs_factor}) and
-    the exact adjoint reconstruction of the retained density operator.
+    terminal spectral index into the retained coordinates. Because the rank of
+    the coisometry restricted to the retained rows is at most $d$, the
+    terminal family has at most $d$ members. Extending the eigenvalues and
+    spectral projectors by zero along an injection into $\{0,\ldots,d-1\}$,
+    the added zero projectors preserve self-adjointness, idempotence,
+    commutation, and the spectral sum, which combines with
+    (\ref{eq:rfp_gibbs_factor}) and the exact adjoint reconstruction of the
+    retained density operator.
 \end{proof}
 
 \begin{theorem}[Commuting Gibbs decomposition on the retained vertical space
@@ -396,10 +397,10 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \cite{gap:cpsv16_topological_gibbs_length_one} regarding length one).
 \end{theorem}
 \begin{proof}\leanok
-    Select the fusion decomposition on the nonzero product sectors given
-    by the RFP condition and apply
-    Theorem~\ref{thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
-    with the assumed length independence of its structure coefficients.
+    Applying Theorem~\ref{thm:mpdo_fusion_clause_topological_gibbs_at_least_two}
+    to the fusion decomposition on the nonzero product sectors given by the
+    RFP condition, together with the assumed length independence of its
+    structure coefficients, yields the decomposition.
 \end{proof}
 
 \begin{theorem}[Fusion decomposition gives a physical commuting Gibbs
@@ -512,10 +513,11 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \cite{gap:cpsv16_topological_gibbs_length_one} regarding length one).
 \end{theorem}
 \begin{proof}\leanok
-    Select the fusion decomposition on the nonzero product sectors given
-    by the RFP condition and apply
+    Applying
     Theorem~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
-    with the assumed length independence of its structure coefficients.
+    to the fusion decomposition on the nonzero product sectors given by the
+    RFP condition, together with the assumed length independence of its
+    structure coefficients, yields the physical commuting Gibbs decomposition.
 \end{proof}
 
 \begin{definition}[Fusion decomposition for an RFP tensor in CPSV canonical
@@ -616,10 +618,12 @@ spectral indices $s=(\gamma,k)$ with first entry $\gamma$.
     \cite{gap:cpsv16_topological_gibbs_length_one}.
 \end{theorem}
 \begin{proof}\leanok
-    Choose the fusion decomposition on the nonzero product sectors given by
-    Theorem~\ref{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}. Its
-    structure coefficients are length independent by hypothesis. Apply
-    Theorem~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}.
+    Applying
+    Theorem~\ref{thm:mpdo_fusion_clause_physical_coordinate_gibbs_at_least_two}
+    to the fusion decomposition on the nonzero product sectors given by
+    Theorem~\ref{thm:mpdo_literal_cpsv_rfp_to_bnt_fusion_tensor}, whose
+    structure coefficients are length independent by hypothesis, yields the
+    claim.
 \end{proof}
 
 \begin{remark}[Length-one boundary of the two-site construction]%
