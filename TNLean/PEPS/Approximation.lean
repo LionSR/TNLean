@@ -120,6 +120,7 @@ import TNLean.PEPS.Approximation.DyadicBulkFrames
 import TNLean.PEPS.Approximation.DyadicBulkSeparation
 import TNLean.PEPS.Approximation.DyadicBulkStepFloors
 import TNLean.PEPS.Approximation.DyadicBulkSteps
+import TNLean.PEPS.Approximation.DyadicCentralBirthChange
 import TNLean.PEPS.Approximation.DyadicChamberSampling
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingConstants
 import TNLean.PEPS.Approximation.DyadicDirectRepaintingRewrite
