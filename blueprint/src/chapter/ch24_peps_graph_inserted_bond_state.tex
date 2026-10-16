@@ -1,4 +1,4 @@
-\begin{definition}[Actual closed contractions with inserted bond matrices]%
+\begin{definition}[Closed contractions with inserted bond matrices]%
     \label{def:peps_graph_inserted_bond_state}
     \lean{TNLean.PEPS.graphInsertedBondNetwork}
     \leanok
@@ -12,13 +12,13 @@
         \left(\prod_e(K_e)_{\zeta_{h,e},\zeta_{t,e}}\right)
         \prod_v A_v(\zeta|_v,\sigma_v).
     \end{align}
-    Here $\zeta|_v$ reads the head or tail label at the actual incidence.
+    Here $\zeta|_v$ reads the head or tail label at the corresponding incidence.
     Thus each bond matrix has row at the head and column at the tail.
     This is an auxiliary inserted-bond extension of the closed contraction
     calculation in \cite[Section~7]{Schuch2010PEPS}.
 \end{definition}
 
-\begin{theorem}[Identity and regular insertions in the actual contraction]%
+\begin{theorem}[Identity and regular insertions in the closed contraction]%
     \label{thm:peps_graph_inserted_bond_recovery}
     \lean{TNLean.PEPS.graphInsertedBondNetwork_one,
         TNLean.PEPS.graphInsertedBondNetwork_leftRegular_eq_labels,

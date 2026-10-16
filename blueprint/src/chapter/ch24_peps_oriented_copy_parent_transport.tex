@@ -1,4 +1,4 @@
-\section{Oriented multiplicity and physical transport}
+\section{Oriented multiplicity and physical maps}
 \label{sec:peps_oriented_copy_parent_transport}
 
 Let $D=\bigoplus_iD_i$ and
@@ -41,7 +41,7 @@ pairs. These are the copy maps of
     and $(M_i\otimes1_{m_i})^T=M_i^T\otimes1_{m_i}$.
 \end{proof}
 
-\begin{theorem}[Oriented copy transport of open contractions]%
+\begin{theorem}[Oriented copy action on open contractions]%
     \label{thm:peps_oriented_copy_open}
     \lean{TNLean.PEPS.graphOrientedOpenInternalFactor_copy_adjoint,
         TNLean.PEPS.graphOrientedOpenBoundaryFactor_copy_adjoint,
@@ -117,7 +117,7 @@ pairs. These are the copy maps of
     $F_{m,R}(\gamma)^\dagger\mathcal S_R(D^{(m)},1,o)
         \subseteq\mathcal S_R(D,W_m,o)$.
     The corresponding numbered matrices give the same inclusions
-    between the actual regional contraction ranges of $A_m$ and $B_m$.
+    between the regional contraction ranges of $A_m$ and $B_m$.
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:peps_oriented_copy_open,thm:peps_oriented_open_range}
@@ -238,7 +238,7 @@ pairs. These are the copy maps of
     can therefore be moved to the physical index at either end of an
     incidence, regardless of $o_e$. Factor the product of these
     scalars out of the group average. Positive multiplicities make
-    every diagonal entry nonzero. Invertible physical transport gives
+    every diagonal entry nonzero. Applying the invertible physical maps gives
     (\ref{eq:peps_oriented_filter_parent}).
 \end{proof}
 
@@ -288,12 +288,12 @@ pairs. These are the copy maps of
         def:peps_oriented_coordinate_parent_equivalence,
         def:peps_oriented_positive_multiplicity_equivalence,
         thm:peps_region_parent_common_kernel}
-    The decomposition theorem supplies inequivalent irreducibles $D_i$,
-    dimensions $d_i>0$, actual multiplicities $m_i>0$, and coordinates
+    The decomposition theorem yields inequivalent irreducibles $D_i$,
+    dimensions $d_i>0$, multiplicities $m_i>0$, and coordinates
     $Q$ such that $U_g=QD^{(m)}_gQ^\dagger$, $Q^\dagger Q=1$.
-    Semi-regularity supplies every irreducible sector, so normalized
+    Semi-regularity includes every irreducible sector, so normalized
     Fourier coordinates give $L_g=FD^{(d)}_gF^\dagger$ with
-    $F^\dagger F=1$. Constant degree supplies physical numberings
+    $F^\dagger F=1$. Constant degree provides physical numberings
     of all intermediate incidence alphabets. The equivalence is the
     composition
     \begin{align}

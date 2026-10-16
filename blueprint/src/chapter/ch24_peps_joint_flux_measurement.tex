@@ -1,15 +1,15 @@
-\begin{theorem}[A uniform boundary-column action passes to the actual cut]%
+\begin{theorem}[A uniform boundary-column action passes to the physical cut]%
     \label{thm:peps_physical_cut_column_action}
     \lean{TNLean.PEPS.mul_regularPhysicalCutMatrix_eq_smul_of_openRegion_eigen,
         TNLean.PEPS.mul_regularPhysicalCutMatrix_eq_ite_of_openRegion_eigen}
     \leanok
     \uses{thm:peps_regular_open_region_projector}
-    Let $B_R$ be the actual open-region coefficient matrix of a finite regular
+    Let $B_R$ be the open-region coefficient matrix of a finite regular
     tensor network, and let $K_R=B_R B_{R^c}^{\mathsf T}$ be its physical cut
     matrix. If a physical matrix $Q$ satisfies
     $Q\Psi_R(\theta)=z\Psi_R(\theta)$ for every crossing configuration $\theta$,
     then $QK_R=zK_R$. In particular, if one condition $P$ selects every
-    actual group-labelled column or annihilates every such column, the same
+    group-labelled column or annihilates every such column, the same
     condition selects $K_R$ or annihilates it.
     This is the contraction step used in the local measurements of
     \cite[Theorem~6.15]{Schuch2010PEPS}.
@@ -37,15 +37,15 @@
     are exactly $R_v$.
 
     For $a,b\in G$, define the routed assignment $u_{a,b}$ by giving upward
-    transport $(ab)^{-1}$ to the left vertical bond and $b^{-1}$ to the middle
-    vertical bond. Every other transport is the identity. Each ordered bond
+    bond label $(ab)^{-1}$ to the left vertical bond and $b^{-1}$ to the middle
+    vertical bond. Every other bond label is the identity. Each ordered bond
     receives the specified element when its ordering agrees with the upward
     direction, and its inverse otherwise. Thus this definition also applies
     at the vertical seam. This is the routed geometry of the joint flux
     measurement in \cite[braiding passage]{Schuch2010PEPS}.
 \end{definition}
 
-\begin{theorem}[The actual individual and joint holonomies]%
+\begin{theorem}[Individual and joint holonomies]%
     \label{thm:peps_torus_joint_flux_holonomy}
     \lean{TNLean.PEPS.regularWalkHolonomy_torusJointFluxAssignment}
     \leanok
@@ -59,7 +59,7 @@
 \begin{proof}\leanok
     In the reverse-ordered holonomy convention the left loop gives
     $(ab)b^{-1}=a$, the right loop gives $b$, and the outer loop gives $ab$.
-    All horizontal transports and the rightmost vertical transport are the
+    All horizontal bond labels and the rightmost vertical bond label are the
     identity. The ordered-edge inversion preserves these directed values
     at the seams.
 \end{proof}
@@ -81,7 +81,7 @@
 
     This one measurement is chosen before $a,b$, every crossing configuration
     $\theta$, and every common exterior and crossing assignment $u$. For the
-    actual routed open column and actual global cut matrix, it satisfies
+    routed open column and global cut matrix, it satisfies
     \begin{align}
         Q_C\Psi_{R_v}(u_{a,b};u,\theta)
          & =\mathbf 1_{C=C[ab]}\Psi_{R_v}(u_{a,b};u,\theta), \\
@@ -97,10 +97,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    The outer walk induces a closed walk in the actual connected six-site
+    The outer walk induces a closed walk in the connected six-site
     block. Native four-leg $G$-isometry gives incident-edge $G$-isometry at each
     of its sites. Apply the closed-walk class measurement to this walk.
     The proved outer holonomy is $ab$, independently of all exterior and
-    crossing assignments. The column identity then passes to the actual
+    crossing assignments. The column identity then passes to the
     cut matrix by the uniform boundary-column theorem.
 \end{proof}

@@ -77,7 +77,7 @@ over the non-boundary edges of $R$.
     gives $P_A(Q(s_j;L,K))=P_A(Q(s_{j'};L,K))$.
 \end{proof}
 
-\begin{theorem}[Uniform horizontal per-step bond transport]%
+\begin{theorem}[Uniform horizontal per-step bond relation]%
     \label{thm:peps_horizontal_staircase_consecutive_window_bond_transport_uniform}
     \lean{TNLean.PEPS.horizontalStaircaseConsecutiveWindow_bondTransport_extend_eq_uniform}
     \leanok
@@ -102,7 +102,7 @@ over the non-boundary edges of $R$.
 \end{theorem}
 \begin{proof}
     \leanok
-    The consecutive-window transport gives the cross-rescaled equality
+    The consecutive-window relation gives the cross-rescaled equality
     \begin{align}
         \Ext_{W_j\subseteq U_j}
         (P_B(W_{j+1})\,I_{B,W_j,g,M_1})
@@ -117,7 +117,7 @@ over the non-boundary edges of $R$.
     gives (\ref{eq:peps_horizontal_uniform}).
 \end{proof}
 
-\begin{theorem}[Uniform vertical per-step bond transport]%
+\begin{theorem}[Uniform vertical per-step bond relation]%
     \label{thm:peps_vertical_staircase_consecutive_window_bond_transport_uniform}
     \lean{TNLean.PEPS.verticalStaircaseConsecutiveWindow_bondTransport_extend_eq_uniform}
     \leanok
@@ -142,7 +142,7 @@ over the non-boundary edges of $R$.
 \end{theorem}
 \begin{proof}
     \leanok
-    The descending-arm transport gives the same cross-rescaled equality as in
+    The descending-arm relation gives the same cross-rescaled equality as in
     the horizontal case, with $U_j$ now the $L\times(K+1)$ union:
     \begin{align}
         \Ext_{W_j\subseteq U_j}

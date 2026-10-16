@@ -3,7 +3,7 @@
     \lean{TNLean.PEPS.regularChargeVector,TNLean.PEPS.regularChargeSubspace}
     \leanok
     \uses{def:peps_regular_charge_coordinates}
-    Regard the actual matrix $A_\chi(p;x,y)$ as a vector in
+    Regard the matrix $A_\chi(p;x,y)$ as a vector in
     $\ell^2(G\times G)$, with its ordinary Hilbert--Schmidt inner product.
     For a coefficient function $\chi:G\to\mathbb C$, define
     \[
@@ -26,7 +26,7 @@
     Let $P_\chi$ be the orthogonal projection onto $\mathcal H_\chi$.
 \end{definition}
 
-\begin{theorem}[The actual vectors and their Hilbert-space pairing]
+\begin{theorem}[Vectors and their Hilbert-space pairing]
     \label{thm:peps_regular_charge_subspace_vectors}
     \lean{TNLean.PEPS.regularChargeVector_mem_subspace,
         TNLean.PEPS.regularChargeVector_inner}
@@ -58,7 +58,7 @@
     \]
 \end{theorem}
 \begin{proof}\leanok
-    Apply the actual row and column covariance formula. The inverse
+    Apply the row and column covariance formula. The inverse
     translations give the reverse inclusion of the subspaces.
 \end{proof}
 
@@ -104,6 +104,6 @@
 \end{theorem}
 \begin{proof}\leanok
     Every generator of one span is orthogonal to every generator of the
-    other by the actual charge-matrix pairing. Extend by linearity and
+    other by the charge-matrix pairing. Extend by linearity and
     apply orthogonal projection onto the first span.
 \end{proof}
