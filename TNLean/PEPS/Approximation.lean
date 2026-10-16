@@ -266,6 +266,7 @@ import TNLean.PEPS.Approximation.MatrixAction
 import TNLean.PEPS.Approximation.MessageGateCircuit
 import TNLean.PEPS.Approximation.MessageGateExpansion
 import TNLean.PEPS.Approximation.MessageGateLists
+import TNLean.PEPS.Approximation.MessageGateSegmentExpansion
 import TNLean.PEPS.Approximation.MessageMonomial
 import TNLean.PEPS.Approximation.MonomialFixesOutside
 import TNLean.PEPS.Approximation.NetworkScalarAbsorption
