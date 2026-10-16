@@ -13,14 +13,15 @@ In the protocol of Proposition 7.1 of the polynomial-PEPS manuscript every auxil
 to one edge of one large-scale repainting. Before that repainting it is an idle raw copy held by
 the party of the label across its edge, and after it the sheet is retired with the frame left by
 the lens exchange (`06-geometry.tex`, lines 183–187, 620–624 and 653–667). This file defines these
-frames and owners for the whole schedule and proves the two properties the assembly needs: the
-holes of the frozen frames satisfy the frame constraint, and together they number `O(L ^ 3)`.
+frames and owners for the whole schedule and proves that their holes satisfy the frame
+constraint, with at most two holes per frozen frame. The total bound `10080 L ^ 3` is obtained
+when the protocol is assembled in `DyadicProtocolConsequences`.
 
 * `scheduleIndex` : the position of an event in the schedule;
 * `protocolFrozen`, `protocolAuxOwner` : the frozen frame and the idle owner of each auxiliary
   sheet;
 * `norm_act_proj_sub_le_of_mem_holes_protocolFrozen` : the frame constraint of the frozen holes;
-* `length_holes_protocolFrozen_le` : at most two holes on each frozen frame.
+* `length_holes_protocolFrozen_le` : at most two holes per frozen frame.
 
 ## References
 
@@ -41,6 +42,7 @@ variable {k : ℕ}
 /-- The position of an event in the schedule. -/
 def scheduleIndex (e : ProtocolEvent k) : ℕ := (eventSchedule k).idxOf e
 
+/-- The position of the event at index `i` in the schedule is `i`. -/
 theorem scheduleIndex_getElem {i : ℕ} (hi : i < (eventSchedule k).length) :
     scheduleIndex (eventSchedule k)[i] = i :=
   (nodup_eventSchedule k).idxOf_getElem i hi
@@ -85,6 +87,8 @@ def protocolAuxOwner (x : ProtocolEvent k × RepaintOp) : ProtocolParty k :=
     else .inl (rootSquare k)
   | _ => .inl (rootSquare k)
 
+/-- At a scheduled repainting, an edge's frozen frame is its exchanged auxiliary guide
+treated at no mark at that stage. -/
 theorem protocolFrozen_auxInit {i : ℕ} (hi : i < (eventSchedule k).length) {S : DyadicSquare k}
     (he : (eventSchedule k)[i] = .inl S) (hS : (S.1 : ℕ) < k) (e : SquareEdge) :
     protocolFrozen (q := q) P rank hr (.inl S, .auxInit e) =
@@ -97,6 +101,8 @@ theorem protocolFrozen_auxInit {i : ℕ} (hi : i < (eventSchedule k).length) {S 
   have hidx : scheduleIndex (k := k) (.inl S) = i := by rw [← he, scheduleIndex_getElem hi]
   simp only [protocolFrozen, hS, dite_true, hidx]
 
+/-- At a scheduled repainting, the idle copy of an edge is held by the party of the
+label across that edge. -/
 theorem protocolAuxOwner_auxInit {i : ℕ} (hi : i < (eventSchedule k).length)
     {S : DyadicSquare k} (he : (eventSchedule k)[i] = .inl S) (hS : (S.1 : ℕ) < k)
     (e : SquareEdge) :

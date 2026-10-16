@@ -45,11 +45,14 @@ def eventAuxIndices (large : DyadicSquare k → Bool) : ProtocolEvent k →
   | .inl S => if large S then SquareEdge.list.map fun e => (.inl S, .auxInit e) else []
   | .inr _ => []
 
+/-- Filtering the operations of a large repainting for auxiliary initialization gives
+the four edge initializations in edge order. -/
 theorem filter_largeRepaintingOps :
     largeRepaintingOps.filter (fun o => o.IsAuxInit) = SquareEdge.list.map RepaintOp.auxInit := by
   simp [largeRepaintingOps, edgeOps, BulkOp.ops, SquareEdge.list, RepaintOp.IsAuxInit,
     List.filter_append, List.filter_map, Function.comp_def, List.filter_false]
 
+/-- The auxiliary indices concatenate the auxiliary indices of each scheduled event. -/
 theorem auxIndices_eq (large : DyadicSquare k → Bool) :
     auxIndices k large = (eventSchedule k).flatMap (eventAuxIndices large) := by
   simp only [auxIndices, protocolSchedule, List.filter_flatMap]
@@ -65,6 +68,7 @@ theorem auxIndices_eq (large : DyadicSquare k → Bool) :
     · simp [eventOps, eventAuxIndices, hS, RepaintOp.IsAuxInit]
   · simp [eventOps, eventAuxIndices, RepaintOp.IsAuxInit]
 
+/-- An auxiliary index assigned to an event has that event as its first component. -/
 theorem fst_of_mem_eventAuxIndices {large : DyadicSquare k → Bool} {e : ProtocolEvent k}
     {x : ProtocolEvent k × RepaintOp} (hx : x ∈ eventAuxIndices large e) : x.1 = e := by
   rcases e with S | J
@@ -75,6 +79,7 @@ theorem fst_of_mem_eventAuxIndices {large : DyadicSquare k → Bool} {e : Protoc
     · simp at hx
   · simp [eventAuxIndices] at hx
 
+/-- The list of auxiliary indices has no repetitions. -/
 theorem nodup_auxIndices (large : DyadicSquare k → Bool) : (auxIndices k large).Nodup := by
   rw [auxIndices_eq, List.nodup_flatMap]
   refine ⟨fun e _ => ?_, (nodup_eventSchedule k).imp fun {e e'} hne => ?_⟩
@@ -88,6 +93,8 @@ theorem nodup_auxIndices (large : DyadicSquare k → Bool) : (auxIndices k large
     intro x hx hx'
     exact hne ((fst_of_mem_eventAuxIndices hx).symm.trans (fst_of_mem_eventAuxIndices hx'))
 
+/-- Each edge initialization of a scheduled repainting designated large belongs to
+the auxiliary indices. -/
 theorem mem_auxIndices {large : DyadicSquare k → Bool} {S : DyadicSquare k}
     (hS : (Sum.inl S : ProtocolEvent k) ∈ eventSchedule k) (hl : large S = true)
     (e : SquareEdge) :
@@ -97,6 +104,8 @@ theorem mem_auxIndices {large : DyadicSquare k → Bool} {S : DyadicSquare k}
   simp only [eventAuxIndices, hl, ite_true, List.mem_map]
   exact ⟨e, by cases e <;> simp [SquareEdge.list], rfl⟩
 
+/-- An auxiliary index whose event repaints a square is an edge initialization of
+that square. -/
 theorem eq_auxInit_of_mem_auxIndices {large : DyadicSquare k → Bool}
     {x : ProtocolEvent k × RepaintOp} (hx : x ∈ auxIndices k large) {S : DyadicSquare k}
     (h : x.1 = .inl S) : ∃ e, x = ((Sum.inl S : ProtocolEvent k), RepaintOp.auxInit e) := by
