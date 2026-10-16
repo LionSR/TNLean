@@ -71,7 +71,7 @@ This gives the contractions used in
         =K_T(a)_{kj}.
         \label{eq:peps_free_source_matrix}
     \end{align}
-    Here $K_T(a)$ is the actual prepared matrix of
+    Here $K_T(a)$ is the prepared matrix of
     Definition~\ref{def:peps_prepared_density_coefficient}.
 \end{definition}
 
@@ -178,7 +178,7 @@ This gives the contractions used in
         def:peps_product_source_matrix}
     In the source bases of Definition~\ref{def:peps_source_slot_basis},
     take $K_e=I_e\times J_e$ and let $X_e$ be arbitrary complex
-    matrices on $K_e$. For the actual prepared coefficients
+    matrices on $K_e$. For the prepared coefficients
     $H(\alpha,\beta)=K_T(\alpha)|\psi\rangle\langle\psi|
         K_{T'}(\beta)^\dagger$, one has
     \begin{align}
@@ -401,7 +401,7 @@ This gives the contractions used in
     (\ref{eq:peps_free_source_overlap}).
 \end{proof}
 
-\begin{definition}[Pair labels of the actual slots]
+\begin{definition}[Pair labels of the source slots]
     \label{def:peps_source_pair_index}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.pairIndexEquiv}
     \lean{TNLean.PEPS.PairEffect.SourceInventory.pairIndexEquiv_apply}
@@ -409,7 +409,7 @@ This gives the contractions used in
     \uses{def:peps_source_inventory}
     Let $R$ be a source list whose unordered pair labels are distinct
     and contain every unordered pair of distinct parties exactly once.
-    Sending a slot to the unordered pair of its actual source is a
+    Sending a slot to the unordered pair of its source is a
     bijection from its slot indices to
     $\{\{p,q\}:p,q\in P,\ p\ne q\}$.
     This identification depends only on the parties of each source.
@@ -534,7 +534,7 @@ This gives the contractions used in
     \end{align*}
 \end{proof}
 
-\begin{theorem}[Contraction through the actual source columns]
+\begin{theorem}[Contraction through the source columns]
     \label{thm:peps_actual_pure_source_contraction}
     \leanok
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.sourceContraction_preparedDensityCoefficient_pure_eq_mul}
@@ -548,13 +548,13 @@ This gives the contractions used in
     operations $V_\xi,V_\zeta$ and elementary source vectors $b_x,b_y$.
     For arbitrary complex matrices $X_e$ on the endpoint-coordinate pairs,
     put $\mathcal X_{x,y}=\prod_e(X_e)_{x_e,y_e}$.
-    The literal column matrices satisfy
+    The column matrices satisfy
     \begin{align}
         \sum_{x,y\in I_W}\mathcal X_{x,y}C_{\xi,\zeta}(x,y)
          & =M_\xi\mathcal X M_\zeta^\dagger.
         \label{eq:peps_actual_pure_source_contraction}
     \end{align}
-    This is the actual-source specialization of the coordinate contraction
+    This is the circuit-source specialization of the coordinate contraction
     in \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \texttt{04-compression.tex}, lines 137--139, 279--355 and 409--434.
 \end{theorem}

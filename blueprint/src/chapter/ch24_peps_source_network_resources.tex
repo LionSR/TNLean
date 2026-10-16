@@ -91,7 +91,7 @@ nonemptiness of $P$ is assumed.
     with these derived root memberships.
 \end{proof}
 
-\section{Incidence of the actual density links}
+\section{Incidence of the density links}
 \label{sec:peps_source_density_link_incidence}
 
 Let $\mathcal W:a\to c$ be a chronological source circuit on a party set
@@ -121,7 +121,7 @@ pair-sample links. Parallel links are retained as distinct links.
     occurrence, and hence preserve the count.
 \end{proof}
 
-\begin{theorem}[Constant incidence of the actual density links]
+\begin{theorem}[Constant incidence of the density links]
     \label{thm:peps_actual_density_link_incidence}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_incidentSourceDensityLinks_le}
     \leanok
@@ -147,7 +147,7 @@ pair-sample links. Parallel links are retained as distinct links.
     gives the result. An empty gate family is included.
 \end{proof}
 
-\section{Finite coordinates for the actual local memories}
+\section{Finite coordinates for the local memories}
 
 The coordinate spaces in this section are the memories of the original
 ordered registers. The assertions are auxiliary consequences of finite
@@ -177,7 +177,7 @@ They require no numerical bound on a private register dimension.
     hypothesis applies to all remaining registers.
 \end{proof}
 
-\begin{theorem}[Finite registers in the actual all-party source layout]
+\begin{theorem}[Finite registers in the all-party source layout]
     \label{thm:peps_finite_all_party_source_registers}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.finiteDimensional_allResidualSource_registers}
     \leanok
@@ -191,7 +191,7 @@ They require no numerical bound on a private register dimension.
 \begin{proof}
     \leanok
     \uses{def:peps_all_party_source_registers,thm:peps_finite_source_slot_registers}
-    Each actual endpoint space is an original Euclidean space
+    Each endpoint space is an original Euclidean space
     $\C^{u_e}$ or $\C^{v_e}$. Apply the preceding theorem to these spaces,
     in the original order of source occurrences.
 \end{proof}
@@ -209,7 +209,7 @@ They require no numerical bound on a private register dimension.
     \begin{align}
         (b_{q,i})_{0\le i<\dim_{\C}H_q}
     \end{align}
-    of $H_q$. This is a finite basis of the actual selected memory.
+    of $H_q$. This is a finite basis of the selected memory.
 \end{definition}
 
 \begin{definition}[Finite orthonormal coordinates of a local discarded memory]
@@ -262,7 +262,7 @@ on the private memory dimensions.
     \begin{align}
         \delta_a=\frac{\varepsilon}{16\max\{1,M\}}.
     \end{align}
-    Suppose the actual monomial list at each gate is supplied at this
+    Suppose the monomial list at each gate is given at this
     accuracy: its monomials are allowed, each contains at most $r$ pair
     effects, their absolute coefficient sum is at most $B$, and their
     sum differs from $G_g$ in operator norm by at most $\delta_a$.
@@ -279,8 +279,8 @@ on the private memory dimensions.
         \qquad
         m=\left\lceil\left(\frac{rB}{\delta_e}\right)^2\right\rceil+1,
     \end{align}
-    and form its actual physical-first source replacement $R$ with stack
-    length $m$. If $N_R$ is the number of actual source occurrences in
+    and form its physical-first source replacement $R$ with stack
+    length $m$. If $N_R$ is the number of source occurrences in
     $R$, set
     \begin{align}
         Q=B^{4\ell}D^4,
@@ -292,12 +292,12 @@ on the private memory dimensions.
     Choose the local source and discarded-memory orthonormal bases of
     Definitions~\ref{def:peps_all_party_local_source_basis} and
     \ref{def:peps_all_party_local_discard_basis}. The discarded list is
-    the actual auxiliary list of $W$ followed by the original private
+    the auxiliary list of $W$ followed by the original private
     list; its register-wise finite dimensionality follows from the
     original construction and the given assumptions.
 
     There exist normalized Schmidt coefficients and two isometric
-    endpoint frames for every actual source occurrence and branch of
+    endpoint frames for every source occurrence and branch of
     $R$, representing its original source vector in its original
     endpoint dimensions. There is one Gaussian sample array $\omega$,
     with $k$ samples per source occurrence, such that the following
@@ -324,7 +324,7 @@ on the private memory dimensions.
     operators $G_g$ and expressed in the original party-labelled
     physical coordinates. The scalar remains multiplicative even when
     it vanishes. The original private dimensions have no numerical
-    bound. This auxiliary statement concerns the supplied local lists
+    bound. This auxiliary statement concerns the given local lists
     at the prescribed accuracy in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
     \texttt{04-compression.tex}, lines 17--19, 137--175, 199--229,
@@ -337,11 +337,11 @@ on the private memory dimensions.
         thm:peps_actual_sampled_distributed_contraction,
         thm:peps_finite_whole_party_input,thm:peps_auxiliary_register_finiteness,
         def:peps_all_party_local_source_basis,def:peps_all_party_local_discard_basis}
-    Finite dimensionality of the whole initial party memories supplies
+    Finite dimensionality of the whole initial party memories yields
     finite orthonormal input coordinates. Apply
     Theorem~\ref{thm:peps_approximate_source_sample} with the recorded
-    local approximations. It supplies the normalized Schmidt data and
-    the sample array for which the actual sampled physical operator
+    local approximations. It gives the normalized Schmidt data and
+    the sample array for which the sampled physical operator
     differs from $\rho_G$ in trace norm by at most $\varepsilon$.
     Choose the stated finite local bases. The exact contraction identity
     in Theorem~\ref{thm:peps_actual_sampled_distributed_contraction}
@@ -350,7 +350,7 @@ on the private memory dimensions.
     existing physical error estimate.
 \end{proof}
 
-\section{Original resources of the actual sampled contraction}
+\section{Original resources of the sampled contraction}
 
 The network in this section is the same network used in the sampled
 physical-density identity: its gates are the original nonempty occurrences,
@@ -358,7 +358,7 @@ its roots are chosen from their recorded participant sets, and its links
 retain their original occurrence and kind. No root on an empty participant
 set is required.
 
-\begin{theorem}[Real power bounds for the actual density alphabets]
+\begin{theorem}[Real power bounds for the density alphabets]
     \label{thm:peps_actual_density_alphabet_power}
     \lean{TNLean.PEPS.PairEffect.SourceCircuit.card_alphabet_source_density_le_of_power_bounds}
     \leanok
@@ -368,7 +368,7 @@ set is required.
     $g$, and use the recorded roots and pair-sample links. Suppose
     $L\geq1$, $C_M,C_k\geq0$, $u,v\in\N$, and $k\in\N$ satisfy
     $|\Xi_g|\leq C_M L^u$ for every such $g$ and $k\leq C_k L^v$.
-    Every alphabet $D_e$ of this actual density network satisfies
+    Every alphabet $D_e$ of this density network satisfies
     $|D_e|\leq(C_M^2+C_k)L^{\max\{2u,v\}}$.
     Empty branch alphabets, $k=0$, and an empty gate family are included.
     This auxiliary estimate is used in
@@ -385,7 +385,7 @@ set is required.
     $(C_M^2+C_k)L^{\max\{2u,v\}}$.
 \end{proof}
 
-\begin{theorem}[Original polynomial bounds for the actual contraction alphabets]
+\begin{theorem}[Original polynomial bounds for the contraction alphabets]
     \label{thm:peps_actual_physicalFirst_density_polynomial}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_physicalFirstDensityAlphabet_le_power}
     \leanok
@@ -402,7 +402,7 @@ set is required.
     $K\leq C_KL^u$, $N\leq C_NL^n$, $B\leq C_BL^s$ and
     $D\leq C_DL^d$, where $u,n,s,d,p\in\N$.
     Put $\delta=(L^p)^{-1}/(8\max\{1,N\})$ and suppose $\delta>0$.
-    Form the actual physical-first replacement $R$ at this budget.
+    Form the physical-first replacement $R$ at tolerance $\delta$.
     For any natural parameter $\ell$, use the sample count prescribed
     by $Q=B^{4\ell}D^4$ and accuracy $(L^p)^{-1}$.
     Define
@@ -413,7 +413,7 @@ set is required.
         E   & =\max\{2(u+2r(n+s+p)),2(n+4\ell s+4d+p)\}.
         \label{eq:peps_actual_density_power_constants}
     \end{align}
-    Every alphabet of the actual density network on the nonempty
+    Every alphabet of the density network on the nonempty
     occurrences of $R$ satisfies $|D_e|\leq(C_b^2+C_k)L^E$.
     There is no numerical bound on a private dimension or a source
     Schmidt rank. This auxiliary resource estimate is used in
@@ -434,7 +434,7 @@ set is required.
     The preceding theorem gives the stated bound.
 \end{proof}
 
-\begin{theorem}[Original incidence bound for the actual contraction]
+\begin{theorem}[Original incidence bound for the contraction]
     \label{thm:peps_actual_physicalFirst_density_incidence}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.card_incidentPhysicalFirstDensityLinks_le}
     \leanok
@@ -442,11 +442,11 @@ set is required.
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality,
         thm:peps_physical_first_occurrences,thm:peps_source_only_resources}
     Let $W$ be an original chronological circuit with expansion bound
-    $(r,S)$ and let $\delta>0$. Form its actual physical-first source
-    replacement $R$ at budget $\delta$. Suppose every original gate has
+    $(r,S)$ and let $\delta>0$. Form its physical-first source
+    replacement $R$ at tolerance $\delta$. Suppose every original gate has
     at most $b$ participants and every party's original whole-lifetime
     participation count is at most $b$. At most $2b(b-1)$ links of the
-    actual density network of $R$ are incident to any party.
+    density network of $R$ are incident to any party.
     The party set may be infinite or empty. This is an auxiliary
     consequence of the original incidence bound in
     \cite[proof of Theorem~5.2]{OpenAI2026PolynomialPEPS},
@@ -462,18 +462,18 @@ set is required.
     so it preserves the arity bound. The physical-first output exchange
     preserves participation counts, and the source replacement inherits
     the original participation bound. Apply the incidence estimate for
-    the actual nonempty-occurrence network, whose roots are already
+    the nonempty-occurrence network, whose roots are already
     members of their recorded participant sets.
 \end{proof}
 
-\begin{theorem}[A common original gate for the actual contraction endpoints]
+\begin{theorem}[A common original gate for the contraction endpoints]
     \label{thm:peps_actual_physicalFirst_density_locality}
     \lean{TNLean.PEPS.PairEffect.OriginalCircuit.exists_original_gate_of_physicalFirst_density_link}
     \leanok
     \uses{thm:peps_source_density_link_locality,
         def:peps_physical_first_original_locality,thm:peps_physical_first_original_locality}
     With $W,R,\delta$ and the expansion bound as above, take any link of
-    the actual density network of $R$ and two parties incident to it.
+    the density network of $R$ and two parties incident to it.
     Some original nonprivate occurrence of $W$ contains both parties
     in its participant set. No finiteness or nonemptiness of the party
     set is required. This auxiliary locality statement is used in
@@ -536,11 +536,11 @@ set is required.
     \leanok
     \uses{thm:compression_operator_matrix_sum,thm:peps_party_product_scalar}
     Let $P$ be a finite party set and let $\mathcal C(T)$ be the
-    distributed star-and-sample contraction with a supplied finite
+    distributed star-and-sample contraction with a given finite
     gate collection, participant sets, participating roots, finite
     gate alphabets, and sample size $k\in\N$. Let the local rectangular
     matrices $T_v(\xi,j)$ have arbitrary fixed row and column index sets.
-    For a supplied party $v_0\in P$ and $\mu\in\C$, put
+    For a given party $v_0\in P$ and $\mu\in\C$, put
     $T'_v(\xi,j)=\mu T_v(\xi,j)$ when $v=v_0$ and
     $T'_v(\xi,j)=T_v(\xi,j)$ otherwise.
     Then $\mathcal C(T')=\mu\mathcal C(T)$.
