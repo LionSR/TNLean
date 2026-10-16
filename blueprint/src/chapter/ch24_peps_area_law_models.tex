@@ -1014,6 +1014,28 @@ original open square. We state the two models separately, following
     assumed in this definition.
 \end{definition}
 
+\begin{theorem}[Inverse images of ordered two-family partitions]
+    \label{thm:peps_two_family_partition_inverse_image}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.earlierSameFamily_comap,
+        TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.card_residual_comap_le,
+        TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartition.comap}
+    \leanok
+    \uses{def:area_law_two_family_partition}
+    Let $A\subseteq V$ be finite, with an ordered two-family partition
+    whose residual is $D$ and pieces $P_i$. If $W$ is finite and $f:W\to V$, then $f^{-1}(A)$ has
+    the partition with residual $f^{-1}(D)$ and pieces $f^{-1}(P_i)$,
+    retaining the same labels, families and order. Inverse images commute
+    with the union of all earlier pieces in a given family. If $f$ is
+    injective, the residual cardinality does not increase.
+\end{theorem}
+\begin{proof}
+    \leanok
+    Inverse images preserve disjointness and unions. The family and order
+    conditions concern only the retained labels, so they are unchanged.
+    The final cardinality bound follows by restricting the injection $f$
+    to the residual set. Empty inverse-image pieces retain their labels.
+\end{proof}
+
 \begin{theorem}[Exact exponent gaps]
     \label{thm:area_law_exponent_gaps}
     \lean{
@@ -1466,7 +1488,7 @@ state.
 \begin{remark}[The adaptation to a cell]
     \label{rem:peps_companion_cell}
     \uses{thm:peps_labelled_conditional_entropy,
-        thm:peps_cell_two_family_partition}
+        thm:peps_cell_two_family_partition,thm:peps_cell_conditional_information_from_gap}
     The appendix states that \cite[Lemma~3.2]{OpenAI2026PolynomialPEPS}
     adapts the ordering of Lemma~11.1 of \cite{OpenAI2026AreaLaw} to a cell
     with arbitrary exterior conditioning, and that this adaptation is proved in
@@ -1475,8 +1497,8 @@ state.
     partition of a cell is Theorem~\ref{thm:peps_cell_two_family_partition}.
     Neither obtains a conditional information bound by conditioning a
     mutual-information inequality.
-    % Status: both ingredients are proved; their combination into the full
-    % statement of the lemma is not yet stated.
+    Together these give the cell estimate of
+    Theorem~\ref{thm:peps_cell_conditional_information_from_gap}.
 \end{remark}
 
 \begin{theorem}[Sublinear information across a template collar]

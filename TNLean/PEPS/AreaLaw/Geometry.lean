@@ -94,6 +94,7 @@ import TNLean.PEPS.AreaLaw.Geometry.MixedDyadicSquares
 import TNLean.PEPS.AreaLaw.Geometry.NearMarkGeometry
 import TNLean.PEPS.AreaLaw.Geometry.NestedPatches
 import TNLean.PEPS.AreaLaw.Geometry.NonbeltPrimaries
+import TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartitionComap
 import TNLean.PEPS.AreaLaw.Geometry.PolynomialBudget
 import TNLean.PEPS.AreaLaw.Geometry.PowerScaleDepth
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryCounting
