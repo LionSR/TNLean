@@ -24,6 +24,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Non-root dyadic side bound — promoted (2026-10-16)
+
+- **Pattern:** for `R : RepaintedSquare k` and `hk2 : 2 ^ k < 2 * L`, derive
+  `(2 : ℝ) ^ (R.1.1 : ℕ) ≤ (L : ℝ)` from the non-root level bound.
+- **Promoted helper:** `RepaintedSquare.side_le` in
+  `TNLean/PEPS/Approximation/DyadicProtocolParties.lean`.
+- **Consumers:** `centralBirth_hasFrameChange`, `edgeExchange_hasPairChange`,
+  `bandBirth_hasFrameChange`, and `bandDeath_hasFrameChange`.
+- **Notes:** keep the caller-specific factor `A₀ ≥ 1` outside the helper. The helper
+  needs only the non-root square and the root-size inequality; no protocol constants,
+  Hamiltonian or lower bound on `L` are added.
+
 ### The two labels near a treated central birth — promoted (2026-10-16)
 
 - **Pattern:** use the central separation floor to show that the surrounding
@@ -48,6 +60,11 @@ abstracted — record why, so it is not re-proposed).
   central birth of `DyadicCentralBirthChange.lean`.
 - **Abstraction:** `TNLean.PEPS.Approximation.guideFrame_eq_changeOwner_of_ne`
   (`Approximation/DyadicBulkFrames.lean`); the three call sites use it.
+- **Notes:** the helper itself is generic in the guides and chosen finite centers;
+  it requires equal center sets and incident labels, the exact differing-site set,
+  and one target label there. Its three protocol uses have readings and exact
+  true-vertex sets, but those are not extra hypotheses of the abstraction. The
+  documentation correction changes no proof or call site.
 
 ### Fixed-circuit bounded-change lifts beside spectator sheets — promoted (2026-10-16)
 
@@ -4563,8 +4580,9 @@ three-plaquette output measurement, and the routed reunion measurement.
   corner, two `treatedFrame_spec` extractions, `homogenize_endpointBlocks`, the readings and
   true-vertex sets, and `BandOperation.treated_frame_facts`.
 - **Seen:** `bandBirth_hasFrameChange` and `bandDeath_hasFrameChange`
-  (`Approximation/DyadicBandStepChanges.lean`); the owner change is already shared through
-  `guideFrame_eq_changeOwner_of_ne`.
+  (`Approximation/DyadicBandStepChanges.lean`). In parent PR #9505 both proofs use
+  `guideFrame_eq_changeOwner`, with separate owner case splits; this PR (#9507)
+  consolidates those splits through `guideFrame_eq_changeOwner_of_ne`.
 - **Abstraction:** a lemma returning the readings, vertex sets and facts for the surrounding
   guide, if a third occurrence appears.
 

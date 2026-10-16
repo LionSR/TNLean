@@ -102,9 +102,13 @@ section PairChanges
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q] {pos : ι → ℝ × ℝ}
   {Party : Type}
 
-/-- **A bounded change of two frames with bounded pair sources.** An original circuit from the
-registers of `F₁, F₂` to those of `F₁', F₂'` that is a bounded change from the product of their
-reference vectors, with at most `rs` pair sources in each monomial.
+/-- **A bounded change of two frames with bounded pair sources.** For arbitrary finite sites,
+positions, parties, `q ≥ 1` and vector `Ω`, an original circuit between the concatenated frame
+registers satisfies `IsBoundedChange` on the pair reference vectors and `IsSourceBounded rs`.
+At each nonprivate expansion, the former bounds both monomial count and absolute coefficient
+sum by `K`, with at most `r` pair effects per monomial; the latter bounds pair sources per
+monomial by `rs`. The natural
+bounds may be zero, the error is any real number, and `Ω` need not be normalized.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 39–41, 389–430 and 572–583. -/
 def HasPairChange (Ω : EuclideanSpace ℂ (ι → Fin q)) (F₁ F₂ F₁' F₂' : Frame pos q Party)
@@ -229,14 +233,18 @@ section Exchange
 variable {k q : ℕ} [NeZero q] {J Δ a A₀ D L₀' : ℝ} {m₀ : ℕ} {L : ℕ}
   {h : SquareHamiltonian L q J} {E₀ : ℝ} {Ω : StateSpace L q} {ε₀ B₀ C c : ℝ}
 
-/-- **The lens exchange for the frames of sampled guides, conditional on Proposition 3.4.** For a
-repainting baseline `Bl` and an edge `e`, let `fm` and `fa` read, moved by `d`, the starting main
-guide and the auxiliary guide, both homogenized to `C_e` about the endpoints of `e`, and `gm`,
-`ga` the main guide with the first main word and the auxiliary guide with the exchanged auxiliary
-word, homogenized in the same way. Let the four frames carry holes at their true vertices with the
-supplied patches of radius `ε₀ t`. Then passing from the frames of `fm, fa` to those of `gm, ga`
-is a bounded change of the two sheets with participants in any set containing the party of `C_e`,
-without pair sources and with error `4 L⁻³⁰`.
+/-- **The lens exchange for sampled guides, conditional on Proposition 3.4.** Assume `q ≥ 1`, a
+gapped ground state, and the exponent-`60` angular-scale condition with `L₀' ≤ L`, `m₀ ≥ 2`,
+`A₀ ≥ 1` and `a ≤ angularConstant / 2`. Take any guide-label repainting baseline, edge list,
+edge and translation, with `0 < t = D log L ≤ n ≤ A₀ * L` and
+`2 * ε₀ * (angularConstant + 1) ≤ angularConstant / 2`. Read the four translated endpoint-treated
+guides: starting main and auxiliary before, first main and exchanged auxiliary after. Use their
+exact finite true-vertex sets, an exponent-`60` adaptive supply and radius
+`0 < ε₀ * t ≤ B₀ * log L`, with pairwise-disjoint outer samples within each set. For any owner
+map and rank, the supplied frames admit a pair change with participants in any set containing
+the neighbor owner and error `4 L⁻³⁰`, for all natural `r, K, rs`, including zero. No pair
+source or nonprivate gate is needed. The edge list may repeat edges and may contain the edge
+being exchanged.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 183–221, 389–430 and 440–445; Lemma 6.6
 `lem:exchange`, `05-frames.tex`. -/
@@ -411,14 +419,16 @@ theorem edgeExchange_hasPairChange_of (hD : IsAngularScale q J Δ a A₀ m₀ 60
   · rw [hga'']
     exact guideFrame_exchange_holes_perm hU'o hYU' hfaU hfmU hVa hVm (hga'' ▸ hWa) out hout'
 
-/-- **The lens exchange as a change of the two treated sheets, conditional on Proposition 3.4.**
-At the constants of the protocol, in the repainting of a square `R` of side `n = 2 ^ j > K₀ t`,
-`t = D log L`, along an edge `e` of `R` with the label `C_e` across it, passing from the frames of
-the main sheet with the starting word and of the auxiliary sheet with the auxiliary word, both
-treated with `C_e` about the endpoints of `e`, to the frames of the main sheet with the first main
-word and of the auxiliary sheet with the exchanged auxiliary word, treated in the same way, is a
-bounded change of the two sheets with participants in any set containing the party of `C_e`,
-without pair sources and with error `4 L⁻³⁰`.
+/-- **The lens exchange as a change of two treated sheets, conditional on Proposition 3.4.** Assume
+`q ≥ 1`, a gapped ground state, and the exponent-`60` angular-scale condition with `L₀' ≤ L`,
+`m₀ ≥ 2` and `A₀ ≥ 1`. At the protocol constants, take `L ≥ 2`, `2 ^ k < 2 * L`, an
+exponent-`60` adaptive patch supply, any rank, any already-repainted set and a repaintable square
+`R` of side `n = 2 ^ j > K₀ t`, where `t = D log L`. For any edge list and edge `e`, treat all
+four guides with the neighboring label about the endpoints of `e`: starting main and auxiliary
+before, first main and exchanged auxiliary after. Their frames admit a pair change with
+participants in any set containing the neighboring party and error `4 L⁻³⁰`, for all natural
+`r, K, rs`, including zero. No pair source or nonprivate gate is needed. The list may repeat
+or contain `e`, and there is no premise that `R` is absent from the already-repainted set.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 183–221, 328–339, 389–430 and 440–445;
 Lemma 6.6 `lem:exchange`, `05-frames.tex`. -/
@@ -470,14 +480,8 @@ theorem edgeExchange_hasPairChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D 
   exact edgeExchange_hasPairChange_of hD hLL hΩ hm₀ hA₀ hc.a_le Bl E e
     (blockCorner ((2 : ℝ) ^ (R.1.1 : ℕ)) R.1.index) ht
     (by change D * Real.log L ≤ (2 : ℝ) ^ (R.1.1 : ℕ); nlinarith [hc.twenty_le_K₀, hlarge, ht])
-    (le_mul_of_one_le_left (by positivity) hA₀ |>.trans' (by
-      have hk : (R.1.1 : ℕ) + 1 ≤ k := R.2
-      have h1 : (2 : ℝ) ^ (R.1.1 : ℕ) * 2 ≤ 2 ^ k := by
-        rw [← pow_succ]; exact pow_le_pow_right₀ (by norm_num) hk
-      have h2 : (2 : ℝ) ^ k < 2 * L := by exact_mod_cast hk2
-      change (2 : ℝ) ^ (R.1.1 : ℕ) ≤ (L : ℝ)
-      linarith)) hc.ε₀_small hfm hfa hgm hga hmm hma hmm' hma' P hr hdm hda hdm' hda' _ rank
-    hCS
+    (le_mul_of_one_le_left (by positivity) hA₀ |>.trans' (R.side_le hk2))
+    hc.ε₀_small hfm hfa hgm hga hmm hma hmm' hma' P hr hdm hda hdm' hda' _ rank hCS
 
 end Exchange
 
