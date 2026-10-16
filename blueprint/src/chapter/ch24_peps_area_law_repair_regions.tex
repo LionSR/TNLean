@@ -371,6 +371,31 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     $\iota_{j,j+n+1}=\iota_{j+n,j+n+1}\circ\iota_{j,j+n}$.
 \end{proof}
 
+% Source: 10-geometry.tex, replacement instructions, lines 398--409;
+% current and final regions, lines 558--561 and 584--591.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Final regions at an empty generation]
+    \label{thm:area_law_repair_final_current_empty}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairFinalRegion_eq_current_of_isEmpty}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_repair_inclusions}
+    Let $\mathcal D_j$ be the actual repair family, with identifier set
+    $I_j$, mark set $K_j$, and current regions $R_i^{(j)}$.
+    For $i\in I_j$, let $R_i^{(\infty,j)}$ be the intersection of its
+    retained current regions over all generations $j+n$, $n\ge0$.
+    If $K_j=\varnothing$, then $R_i^{(\infty,j)}=R_i^{(j)}$ for every
+    $i\in I_j$.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:area_law_repair_inclusions,thm:area_law_repair_current_empty_later}
+    The retained identifiers in the defining intersection agree with the
+    canonical inclusions. By
+    Theorem~\ref{thm:area_law_repair_current_empty_later}, every set in
+    this intersection is $R_i^{(j)}$. The intersection therefore equals
+    $R_i^{(j)}$.
+\end{proof}
+
 % Source: 10-geometry.tex, ordering before geometry:birth-separation,
 % lines 565--571. The dummy is excluded from the physical order.
 \begin{definition}[Birth rank]
@@ -413,6 +438,32 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
         \label{eq:area_law_repair_terminal_interiors}
     \end{align}
 \end{definition}
+
+% Source: 10-geometry.tex, termination, lines 538--541;
+% final regions, lines 558--561; exceptional sites, lines 694--707.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Terminal interiors before an empty generation]
+    \label{thm:area_law_repair_terminal_interiors_before_empty}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairTerminalInteriors_eq_iUnion_lt_of_isEmpty}
+    \leanok
+    \uses{def:area_law_repair_terminal_interiors}
+    Let $K_j$ be the mark set at generation $j$ of the actual repair
+    family, and let $E_{\mathrm{term}}(\mathcal D_j)$ be its contribution
+    of terminal-square interiors. If $N\in\mathbb N$ and $K_N=\varnothing$, then
+    \begin{align}
+        \mathcal E_{\mathrm{term}}
+         & =\bigcup_{0\le j<N}E_{\mathrm{term}}(\mathcal D_j).\notag
+    \end{align}
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{def:area_law_repair_terminal_children,lem:area_law_repair_empty_persistence}
+    By Lemma~\ref{lem:area_law_repair_empty_persistence}, every mark set
+    from generation $N$ onward is empty, so each corresponding
+    terminal-interior contribution is an empty union. Removing these
+    contributions from the defining union gives the identity. When
+    $N=0$, both sides are empty.
+\end{proof}
 
 % Source: 10-geometry.tex, geometry:trim-radius, lines 393--399.
 \begin{lemma}[Closed removal sets]
