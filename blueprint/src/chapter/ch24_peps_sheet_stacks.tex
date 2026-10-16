@@ -1245,8 +1245,8 @@ no holes, this is the normalization of $\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_protocol_point_treatment_change, thm:peps_protocol_band_step_changes,
-        thm:peps_protocol_central_birth_change, lem:peps_protocol_change_chains}
+    \uses{thm:peps_protocol_band_step_changes, thm:peps_protocol_central_birth_change,
+        lem:peps_protocol_change_chains}
     Add the marks one at a time, operate, and remove the marks. Adding or removing one
     mark is a point treatment, and the bulk step is a birth or death of
     Theorem~\ref{thm:peps_protocol_band_step_changes} or the central birth, whose
@@ -1255,14 +1255,7 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{theorem}[The edge construction as changes of the memory]
     \label{thm:peps_protocol_edge_construction_chain}
-    \lean{TNLean.PEPS.Approximation.auxBirthB_insertsOne,
-        TNLean.PEPS.Approximation.auxBirthA_insertsOne,
-        TNLean.PEPS.Approximation.auxBirthC_insertsOne,
-        TNLean.PEPS.Approximation.mainDeathC_insertsOne,
-        TNLean.PEPS.Approximation.mainDeathA_insertsOne,
-        TNLean.PEPS.Approximation.mainBirthC_insertsOne,
-        TNLean.PEPS.Approximation.mainDeathB_insertsOne,
-        TNLean.PEPS.Approximation.isStepChain_auxBirths,
+    \lean{TNLean.PEPS.Approximation.isStepChain_auxBirths,
         TNLean.PEPS.Approximation.isStepChain_mainSteps,
         TNLean.PEPS.Approximation.isStepChain_lensExchange,
         TNLean.PEPS.Approximation.isStepChain_edgeConstruction}
@@ -1283,7 +1276,8 @@ no holes, this is the normalization of $\Omega$.
 
 \begin{proof}\leanok
     \uses{thm:peps_protocol_sheet_operation_chains, thm:peps_protocol_lens_exchange_change,
-        thm:peps_protocol_treated_frame_ends, lem:peps_protocol_change_chains}
+        thm:peps_protocol_treated_frame_ends, lem:peps_protocol_change_chains,
+        thm:peps_dyadic_no_changed_vertex, thm:peps_protocol_event_segments}
     The initialization is the identity change, since the fresh auxiliary sheet is the
     raw copy. The three auxiliary births are $15$ changes of the auxiliary sheet. The
     main sheet passes to the starting word without change. The lens exchange, with the
