@@ -122,7 +122,6 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairDescendantScales
 import TNLean.PEPS.AreaLaw.Geometry.RepairDescendants
 import TNLean.PEPS.AreaLaw.Geometry.RepairDummySites
 import TNLean.PEPS.AreaLaw.Geometry.RepairFanCones
-import TNLean.PEPS.AreaLaw.Geometry.RepairFinalLatticeCoverage
 import TNLean.PEPS.AreaLaw.Geometry.RepairFinalLatticePartition
 import TNLean.PEPS.AreaLaw.Geometry.RepairFinalRegion
 import TNLean.PEPS.AreaLaw.Geometry.RepairFinalRegionStabilization
