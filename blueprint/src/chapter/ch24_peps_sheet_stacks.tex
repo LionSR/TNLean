@@ -1829,10 +1829,23 @@ no holes, this is the normalization of $\Omega$.
 \begin{proof}\leanok
     \uses{def:peps_dyadic_block_guide,
         lem:peps_dyadic_sampled_guides}
-    Inside $Y$, an open neighborhood keeps the displaced point in $Y$, so
-    the reading is the second one. Outside $Y$, either the point lies in the
-    common open corridor $U$, where both readings are $C$, or it lies outside
-    the closure of $Y$, where a neighborhood selects the first guide.
+    Write $H$ for the pieced guide and $u_\eta=p+\eta(1,1)-d$.
+    For each fixed $p$, the reading identities hold for all sufficiently small
+    $\eta>0$. If $p-d\in Y$, openness keeps $u_\eta$ in $Y$, and
+    \begin{align}
+        g(p) & = H(u_\eta)=H_2(u_\eta)=f_2(p). \notag
+    \end{align}
+    If $p-d\notin Y$ but $p-d\in U$, openness keeps $u_\eta$ in $U$,
+    where both guides have the common label $C$. Thus
+    \begin{align}
+        g(p) & = H(u_\eta)=C=H_1(u_\eta)=f_1(p). \notag
+    \end{align}
+    Since $\overline{Y}\setminus Y=\partial Y\subseteq U$, the remaining
+    case $p-d\notin Y\cup U$ gives $p-d\notin\overline{Y}$. The open
+    complement of $\overline{Y}$ keeps $u_\eta$ outside $Y$, so
+    \begin{align}
+        g(p) & = H(u_\eta)=H_1(u_\eta)=f_1(p). \notag
+    \end{align}
 \end{proof}
 
 \begin{theorem}[Reading a guide constant on an open region]
