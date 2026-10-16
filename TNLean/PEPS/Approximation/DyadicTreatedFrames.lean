@@ -3,7 +3,7 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
-import TNLean.PEPS.Approximation.DyadicLevelEvents
+import TNLean.PEPS.Approximation.DyadicProtocolFromEvents
 
 /-!
 # The frames of a large-scale repainting and its point treatments
@@ -66,6 +66,14 @@ def HasFrameChange {ι : Type} [Fintype ι] [DecidableEq ι] {q : ℕ} [NeZero q
     w.IsBoundedChange S r K ε (F.regRef Ω) (F'.regRef Ω) ∧ w.IsSourceBounded rs
 
 variable {L q : ℕ} {Ω : StateSpace L q} {B₀ C c : ℝ}
+
+/-- **The treated hole radius is admissible.** At the constants of the protocol and `L ≥ 2`, the
+radius `ε₀ t`, `t = D log L`, is positive and at most `B₀ log L` (`06-geometry.tex`,
+lines 564–567). -/
+theorem IsProtocolConstants.treatedRadius_bounds {K₀ ε₀ ν a D : ℝ}
+    (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) :
+    ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧ ε₀ * (D * Real.log L) ≤ B₀ * Real.log L :=
+  fun _ => ⟨mul_pos hc.ε₀_pos (hc.t_pos hL), hc.hole_le hL⟩
 
 open Classical in
 /-- **The frame of a treated sheet.** The encoded frame of the treated guide, read through the
@@ -186,8 +194,8 @@ Polynomial-PEPS manuscript, `06-geometry.tex`, lines 328–339, 481–505, 559�
 theorem exists_pointTreatment_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε₀)
     (hε₀ : ε₀ ≤ 1 / 16) :
     ∃ ν' > 0, ∀ ν : ℝ, 0 < ν → ν ≤ ν' → ∀ {k : ℕ} {K₀ a D B₀ : ℝ},
-      IsProtocolConstants K₀ ε₀ ν a D B₀ → ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q} {C c : ℝ},
-      2 ≤ L → ‖Ω‖ = 1 →
+      ∀ hc : IsProtocolConstants K₀ ε₀ ν a D B₀, ∀ {L q : ℕ} [NeZero q] {Ω : StateSpace L q}
+      {C c : ℝ}, ∀ hL : 2 ≤ L, ‖Ω‖ = 1 →
       ∀ (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
         (R : RepaintedSquare k), K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ) →
       ∀ (done : Set (ℤ × ℤ)) {g : ℝ × ℝ → GuideLabel},
@@ -198,16 +206,17 @@ theorem exists_pointTreatment_hasSourceBoundedChange {ε₀ : ℝ} (hε : 0 < ε
         (∀ Q, Q ≠ Q₀ → (Q ∈ M ↔ Q ∈ M')) → ∀ L₀ : GuideLabel,
         (L₀ = newParty Sum.inl R.1.1 R.1.index ∨
           ∃ R' ∈ blockWindow 1, L₀ = protocolLevelLabels k R.1.1 done (R' + R.1.index)) →
-      ∀ (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧
-          ε₀ * (D * Real.log L) ≤ B₀ * Real.log L) {C' c' : ℕ}, C ≤ C' → 1 ≤ C' → c ≤ c' →
-      HasFrameChange Ω (treatedFrame (q := q) P rank R hr M L₀ g)
-        (treatedFrame (q := q) P rank R hr M' L₀ g) {p | EventUses (.inl R.1) p}
+      ∀ {C' c' : ℕ}, C ≤ C' → 1 ≤ C' → c ≤ c' →
+      HasFrameChange Ω (treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL) M L₀ g)
+        (treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL)
+          M' L₀ g) {p | EventUses (.inl R.1) p}
         (2 * protocolPatchBound ε₀ ν) (rewriteGateBound C' c' (protocolPatchBound ε₀ ν) L)
         (2 * protocolPatchBound ε₀ ν) ((2 * protocolPatchBound ε₀ ν + 1) * ((L : ℝ) ^ 20)⁻¹) := by
   obtain ⟨ν', hν', H⟩ := exists_pointTreatment_step_supplied hε hε₀
   refine ⟨ν', hν', fun ν hν hνν' {k K₀ a D B₀} hc {L q} _ {Ω C c} hL hΩ P rank R hlarge done g hg
-    {M M'} Q₀ hQ₀ hM L₀ hL₀ hr {C' c'} hC hC' hcc => ?_⟩
+    {M M'} Q₀ hQ₀ hM L₀ hL₀ {C' c'} hC hC' hcc => ?_⟩
   classical
+  have hr := hc.treatedRadius_bounds hL
   obtain ⟨hfM, hmemM, hdM, hFM⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done hg M L₀ hr
   obtain ⟨hfM', hmemM', hdM', hFM'⟩ :=
     treatedFrame_spec (q := q) P rank R hc hL hlarge done hg M' L₀ hr
