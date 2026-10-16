@@ -120,8 +120,8 @@ theorem SquareHamiltonian.exists_zero_floor_maximizer_energy_fidelity
             (D j) (AreaLaw.nearestNeighborSupport i)) : ℝ) ^ 2 * J) =
         (q : ℝ) ^ 2 * J * ∑ j : Fin m,
           a j ^ 2 * (AreaLaw.edgeBoundary (AreaLaw.rectangularDomain L L) (D j)).card := by
-    simpa only [Entropy.card_innerConfig, Finset.prod_const,
-      Fintype.card_fun, Fintype.card_fin, Fintype.card_coe] using
+    simp_rw [Entropy.card_innerConfig]
+    simpa only [Finset.prod_const, Fintype.card_fun, Fintype.card_fin, Fintype.card_coe] using
       AreaLaw.nearestNeighbor_crossing_budget q J (fun j : Fin m ↦ D j) a
   rw [hsum, hbudget] at henergy
   refine ⟨K, hK, hmax, hpos, hunit, henergy, ?_⟩
