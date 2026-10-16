@@ -33,11 +33,10 @@ Similarity invariance and strict dimension decrease justify the induction used i
 \begin{proof}
     \leanok
     \uses{thm:lowerzero_two_block}
-    Apply Theorem~\ref{thm:lowerzero_two_block}.
-    In the diagonal form of $P$, the $1$-eigenspace is nonempty because
-    $P\neq0$, and the $0$-eigenspace is nonempty because $P\neq\Id$.
-    Hence both block sizes are positive.
-    Since $n+m=D$, this implies $n<D$ and $m<D$.
+    Theorem~\ref{thm:lowerzero_two_block} provides the two-block decomposition
+    in the diagonal basis of $P$, where the $1$-eigenspace is nonempty because
+    $P\neq0$ and the $0$-eigenspace is nonempty because $P\neq\Id$. Both block
+    sizes are therefore positive, and $n+m=D$ then implies $n<D$ and $m<D$.
 \end{proof}
 
 \begin{theorem}[Nonzero irreducible block decomposition]%
@@ -59,13 +58,12 @@ Similarity invariance and strict dimension decrease justify the induction used i
 
 \begin{proof}\leanok
     \uses{thm:irred_decomp}
-    Apply the irreducible block decomposition
-    (Theorem~\ref{thm:irred_decomp}) and retain the blocks having a nonzero
-    Kraus operator. For every all-zero irreducible block $C_j$ and every
-    $N\ge1$, $V^{(N)}(C_j)_\sigma=0$, so
-    (\ref{eq:canonical_nonzero_decomp}) holds.
-    The dimension inequality follows by restricting the structural identity
-    $\sum_jD_j=D$ to the retained subset.
+    Retaining the blocks with at least one nonzero Kraus operator in the
+    irreducible block decomposition of Theorem~\ref{thm:irred_decomp} removes
+    only all-zero irreducible blocks $C_j$, which satisfy
+    $V^{(N)}(C_j)_\sigma=0$ for every $N\ge1$; this establishes
+    (\ref{eq:canonical_nonzero_decomp}), and restricting the structural identity
+    $\sum_jD_j=D$ to the retained subset gives the dimension inequality.
 \end{proof}
 
 \section{Projector closure and isometric corner decompositions}
@@ -108,8 +106,9 @@ Theorems~\ref{thm:projector_closure_irreducible_corners} and
 \begin{proof}
     \leanok
     \uses{thm:invariant_projector_closure_commutes}
-    Apply Theorem~\ref{thm:invariant_projector_closure_commutes} to the
-    projection given by Definition~\ref{def:has_inv_proj}.
+    Theorem~\ref{thm:invariant_projector_closure_commutes} shows that the
+    nontrivial invariant projection of Definition~\ref{def:has_inv_proj}
+    commutes with every $A^i$.
 \end{proof}
 
 \begin{lemma}[Support isometry of an orthogonal projection]
@@ -289,10 +288,10 @@ companion quantum-channel volume~\cite[``Rectangular Gram equality gives a unita
 \end{lemma}
 
 \begin{proof}\leanok
-    Conjugate the canonical inclusion of the $k$-th summand back to the original
-    bond coordinates of $A$. This is an isometry which intertwines $B_k$ with
-    $A$ on both sides, and its range projection commutes with every letter of
-    $A$. Projector closure therefore descends by exact compression. A
+    Conjugating the canonical inclusion of the $k$-th summand back to the
+    original bond coordinates of $A$ yields an isometry that intertwines $B_k$
+    with $A$ on both sides and whose range projection commutes with every letter
+    of $A$. Projector closure therefore descends by exact compression, and any
     periodic vector of $B_k$ would embed through the same isometry as a
     periodic vector of $A$.
 \end{proof}
@@ -316,11 +315,11 @@ companion quantum-channel volume~\cite[``Rectangular Gram equality gives a unita
 \end{lemma}
 
 \begin{proof}\leanok
-    Expand the first letter by the reconstruction formula in
-    (\ref{eq:canonical_exact_reconstruction}). In each summand, move the
-    remaining word through $V_k^\dagger$ using the intertwining relation.
-    Cyclicity of the trace places $V_k^\dagger V_k=\Id$ next to the weighted
-    block word, leaving precisely its closed-chain trace.
+    Expanding the first letter by the reconstruction formula in
+    (\ref{eq:canonical_exact_reconstruction}) and moving the remaining word
+    through $V_k^\dagger$ via the intertwining relation in each summand allow
+    cyclicity of the trace to place $V_k^\dagger V_k=\Id$ next to the weighted
+    block word, leaving its closed-chain trace.
 \end{proof}
 
 
@@ -390,18 +389,17 @@ gauge transformations of irreducible blocks.
     factors as $\pi=\rho W$ for a spectral pseudo-inverse $W$, showing
     that the range of $\pi$ is the range of $\rho$. For a rectangular
     matrix $Y$, the support projection $\pi$ of $YY^\dagger$ fixes $Y$,
-    $\pi Y=Y$; and whenever $AY=YG$ for some matrix $G$---that is, $A$
-    maps the range of $Y$ into itself---the one-sided invariance
+    $\pi Y=Y$; and whenever $AY=YG$ for some matrix $G$ (that is, whenever $A$
+    maps the range of $Y$ into itself), the one-sided invariance
     $(\Id-\pi)A\pi=0$ holds.
 \end{lemma}
 
 \begin{proof}
     \leanok
 
-    In the spectral decomposition
-    $\rho=U\diag(\lambda)U^\dagger$, take
-    $W=U\diag(\lambda^{+})U^\dagger$, where $\lambda^{+}$ inverts the
-    positive eigenvalues and vanishes on the kernel. Then
+    In the spectral decomposition $\rho=U\diag(\lambda)U^\dagger$, the matrix
+    $W=U\diag(\lambda^{+})U^\dagger$, where $\lambda^{+}$ inverts the positive
+    eigenvalues and vanishes on the kernel, satisfies
     $\rho W=U\diag(\mathbf{1}_{\lambda>0})U^\dagger=\pi$.
     From $\pi(YY^\dagger)=YY^\dagger$, the matrix
     $((\Id-\pi)Y)((\Id-\pi)Y)^\dagger$ vanishes, hence $\pi Y=Y$.
@@ -422,11 +420,10 @@ gauge transformations of irreducible blocks.
     \uses{def:irreducible_tensor, lem:support_proj_range_factorization}
     Let $B$ be an irreducible tensor, let $X$ be invertible, and let
     $c\ne0$. Then the rescaled conjugated tensor with letters
-    $cX^{-1}B^vX$ is irreducible. In particular, the rescaled unital
-    gauge of an irreducible tensor is irreducible; this is the
+    $cX^{-1}B^vX$ is irreducible. In particular, the rescaled unital-gauge
     % Source anchor: Cirac2016MPDO_arXiv, lines 224--225.
     normalization of \cite[Section~2.3]{Cirac2016MPDO_arXiv} applied to an
-    irreducible corner.
+    irreducible corner preserves irreducibility.
 \end{theorem}
 
 \begin{proof}
@@ -451,18 +448,18 @@ gauge transformations of irreducible blocks.
     Let $B$ be an irreducible tensor with a positive definite transfer
     eigenvector, $\E_B(\rho)=r\rho$, where $\rho>0$ and $r>0$. Then the
     rescaled unital gauge
-    $K^v=r^{-1/2}\rho^{-1/2}B^v\rho^{1/2}$ is a unital Kraus family, is an
-    irreducible tensor with an irreducible transfer map, and its adjoint map
-    has a positive definite fixed point. These are the hypotheses of the
-    cyclic decomposition of the peripheral spectrum,
-    \cite[Theorem~6.6]{Wolf2012Quantum}.
+    $K^v=r^{-1/2}\rho^{-1/2}B^v\rho^{1/2}$ satisfies the hypotheses of the
+    cyclic peripheral-spectrum decomposition of
+    \cite[Theorem~6.6]{Wolf2012Quantum}: it is a unital Kraus family and an
+    irreducible tensor with an irreducible transfer map whose adjoint map has a
+    positive definite fixed point.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:unital_gauge_of_pd_fixed_point, thm:irreducible_tensor_smul_conj, thm:transfer_psd_fp_pd_irred}
-    Unitality is Theorem~\ref{thm:unital_gauge_of_pd_fixed_point};
-    irreducibility is Theorem~\ref{thm:irreducible_tensor_smul_conj}. The
+    Unitality follows from Theorem~\ref{thm:unital_gauge_of_pd_fixed_point} and
+    irreducibility from Theorem~\ref{thm:irreducible_tensor_smul_conj}. The
     adjoint of a unital family is trace-preserving, so its transfer map is
     a channel and has a positive semidefinite fixed point by the Ces\`aro
     argument; irreducibility of the adjoint map upgrades the fixed point to
