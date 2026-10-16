@@ -132,8 +132,9 @@
     invertibility of the multiplicity matrix for a fixed final label.
 \end{theorem}
 \begin{proof}\leanok
-    Apply the right range identity and
-    Theorem~\ref{thm:mpdo_right_fusion_selector_completeness}.
+    Combining the right range identity with
+    Theorem~\ref{thm:mpdo_right_fusion_selector_completeness} gives
+    $C_{\alpha,\beta,\gamma}^{\dagger}C_{\alpha,\beta,\gamma}=1$.
 \end{proof}
 
 \begin{theorem}[Vanishing between distinct final sectors]%
@@ -156,14 +157,13 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpdo_triple_fusion_comparison_intertwines}
-    Fix one left multiplicity index and one right multiplicity index. Taking
+    For any fixed left multiplicity index and right multiplicity index, taking
     the corresponding bond-space block of the full letterwise identity gives
-    $M_\varepsilon^{ij}X=X M_{\varepsilon'}^{ij}$.
-    Induction on the word $w$ gives
-    $M_\varepsilon^w X = X M_{\varepsilon'}^w$. Multiply these identities by
-    $c_\varepsilon(w)$ and sum over all words of length $S$. The two selector
-    identities give $X=0$. Since the multiplicity indices were arbitrary,
-    the whole off-diagonal final-sector block vanishes.
+    $M_\varepsilon^{ij}X=X M_{\varepsilon'}^{ij}$, and induction on the word
+    $w$ gives $M_\varepsilon^w X = X M_{\varepsilon'}^w$. Multiplying these
+    identities by $c_\varepsilon(w)$ and summing over all words of length $S$
+    yields $X=0$ by the two selector identities. Since the multiplicity
+    indices were arbitrary, the whole off-diagonal final-sector block vanishes.
 \end{proof}
 
 \begin{definition}[Multiplicity spaces for a fixed final label]%
@@ -227,12 +227,12 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{thm:mpdo_bnt_label_coeff_associativity, thm:mpdo_bnt_label_length_independent_natural}
-    Choose a positive length beyond the linear-independence threshold.
-    Associativity of the product of the operators $O_L(M_\alpha)$ gives
-    equality of the two sums of products of structure coefficients.
+    At a positive length beyond the linear-independence threshold,
+    associativity of the product of the operators $O_L(M_\alpha)$ equates
+    the two sums of products of structure coefficients.
     Length independence and positivity identify every coefficient with the
-    size of its corresponding diagonal $\chi$-matrix. The two sums are
-    precisely the dimensions of the two multiplicity spaces.
+    size of its corresponding diagonal $\chi$-matrix, which coincides with the
+    dimensions of the two multiplicity spaces.
 \end{proof}
 
 \begin{definition}[Triple-fusion maps with fixed final label]%
@@ -270,10 +270,10 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:matrix_block_conjugation_restriction}
-    Restrict Theorem~\ref{thm:mpdo_left_fusion_apply} to the rows and columns
-    whose final label is $\varepsilon$. Reindexing the conjugating matrix
-    commutes with conjugation, and the outer block-diagonal matrix retains
-    precisely the summands with final label $\varepsilon$.
+    Restricting Theorem~\ref{thm:mpdo_left_fusion_apply} to the rows and
+    columns whose final label is $\varepsilon$, reindexing the conjugating
+    matrix commutes with conjugation and the outer block-diagonal matrix
+    retains precisely the summands with final label $\varepsilon$.
 \end{proof}
 
 \begin{theorem}[Right triple fusion at a fixed final label]%
@@ -296,10 +296,10 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:matrix_block_conjugation_restriction}
-    Restrict Theorem~\ref{thm:mpdo_right_fusion_apply} to the rows and columns
-    whose final label is $\varepsilon$. Reindexing the conjugating matrix
-    commutes with conjugation, and the outer block-diagonal matrix retains
-    precisely the summands with final label $\varepsilon$.
+    Restricting Theorem~\ref{thm:mpdo_right_fusion_apply} to the rows and
+    columns whose final label is $\varepsilon$, reindexing the conjugating
+    matrix commutes with conjugation and the outer block-diagonal matrix
+    retains precisely the summands with final label $\varepsilon$.
 \end{proof}
 
 \begin{theorem}[Intertwiners at an injective final sector]%
@@ -330,10 +330,9 @@
 \end{theorem}
 \begin{proof}\leanok
     \uses{lem:amplified_center_scalar}
-    Apply Lemma~\ref{lem:amplified_center_scalar} to the family
-    $\{M_\varepsilon^{ij}\}_{i,j}$. This family spans the full matrix algebra
-    by injectivity, and the assumed relation is precisely the amplified
-    intertwining identity of that lemma.
+    By injectivity, the family $\{M_\varepsilon^{ij}\}_{i,j}$ spans the full
+    matrix algebra, and the assumed relation is the amplified intertwining
+    identity of Lemma~\ref{lem:amplified_center_scalar}.
 \end{proof}
 
 In the diagrams below the upper strand carries the multiplicity space and
@@ -541,17 +540,16 @@ left forces the factorization on the right.
     \label{def:mpdo_block_left_inverse}
     \lean{MPSTensor.IsMPOBlockLeftInverse}
     \leanok
-    Let $M_c^{il}\in \MN{D_c}$ be a finite family of MPO tensors.
-    A simultaneous block left inverse consists of coefficients
-    $C_{(c,x,y),(i,l)}$ such that
+    Following the common block-inverse condition of
+    \cite[Appendix~C.2, lines~1666--1676]{Cirac2016MPDO_arXiv} and
+    \cite[lines~269--277]{Bultinck2017Anyons}, for a finite family of MPO
+    tensors $M_c^{il}\in \MN{D_c}$, a simultaneous block left inverse
+    consists of coefficients $C_{(c,x,y),(i,l)}$ such that
     \begin{align}
         \sum_{i,l}C_{(c,x,y),(i,l)}(M_d^{il})_{x'y'}
          & =\delta_{cd}\delta_{xx'}\delta_{yy'}.
         \notag
     \end{align}
-    This is the common block inverse used in
-    \cite[Appendix~C.2, lines~1666--1676]{Cirac2016MPDO_arXiv} and
-    \cite[lines~269--277]{Bultinck2017Anyons}.
 \end{definition}
 
 \begin{theorem}[Simultaneous inverse from a one-letter product-algebra span]%

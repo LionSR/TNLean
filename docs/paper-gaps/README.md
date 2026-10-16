@@ -1171,6 +1171,16 @@ Lemmas 2.1 and 2.3 for one scan, taken as the fields of one data package; the
 construction of that package from the scan geometry and the transported states
 remains open.
 
+### Two-dimensional area law: belt and replacement templates
+
+[arealaw2d_belt_replacement_template_scope.tex](arealaw2d_belt_replacement_template_scope.tex)
+records the two premises of the belt and replacement templates of Section 11
+of the September 24, 2026 two-dimensional area-law manuscript (lines 731–740)
+that are absent from the printed passage. The region must contain a lattice
+point, because Definition 9.3 requires a nonempty template, and the stopping
+scale must satisfy `S_* ≥ 1`. The source uses these templates only for regions
+meeting the cut and chooses `S_*` large.
+
 ### Two-dimensional area law: nondegenerate template pieces
 
 [arealaw2d_nondegenerate_templates.tex](arealaw2d_nondegenerate_templates.tex)

@@ -216,14 +216,13 @@
          & =V^\dagger\widetilde M_vV.
         \label{eq:mpdo_gauge_corner}
     \end{align}
-    Then the range projector $VV^\dagger$ has a nonzero vertical corner:
+    As in the algebraic nonvanishing step of
+    \cite[Proposition~4.13, line 1898]{Cirac2016MPDO_arXiv}, the range projector
+    $VV^\dagger$ then has a nonzero vertical corner for some $v$:
     \begin{align}
-        (VV^\dagger)\widetilde M_v(VV^\dagger) & \ne 0
+        (VV^\dagger)\widetilde M_v(VV^\dagger) & \ne 0.
         \label{eq:mpdo_range_projector_corner}
     \end{align}
-    for some $v$.
-    This is the algebraic nonvanishing step used in
-    \cite[Proposition~4.13, line 1898]{Cirac2016MPDO_arXiv}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -241,16 +240,13 @@
     \lean{MPOTensor.IsHorizontalCF.exists_sectorCompression_ne_zero_of_corner}
     \leanok
     \uses{def:horizontal_cf_mpdo, def:mpdo_vertical_loops, def:vertical_tensor_mpdo, thm:representative_one_sub_mp_zero, thm:cpsv_normal_mpv_phase_gauge}
-    Let $M$ be in normalized BNT-refined horizontal form and let $P$ be a
-    matrix for which
+    In the separation step of
+    \cite[Proposition~4.13, line 1898]{Cirac2016MPDO_arXiv} under normalized
+    BNT-refined horizontal form (with the CPSV canonical-form counterpart given
+    in Theorem~\ref{thm:cpsv_literal_sector_compression_nonzero}), let $M$ be in
+    normalized BNT-refined horizontal form and let $P$ be a matrix for which
     $P\widetilde M_vP$ is nonzero for some vertical letter $v$. Then the
     first-site compression $P_1H^{(N+1)}P_1$ is nonzero for some $N$.
-    This is the separation step used in
-    \cite[Proposition~4.13, line 1898]{Cirac2016MPDO_arXiv}.
-
-    The normalized BNT-refined horizontal hypothesis provides the grouped
-    vertical sectors used here; the corresponding separation statement for CPSV canonical form is
-    Theorem~\ref{thm:cpsv_literal_sector_compression_nonzero}.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -337,7 +333,8 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    Divide the Gram identity by $\omega$.
+    Dividing the Gram identity by $\omega$ gives
+    $(\omega^{-1/2}X)^\dagger(\omega^{-1/2}X)=\Id$.
 \end{proof}
 
 \begin{theorem}[Gram rigidity of normal tensors]
@@ -402,12 +399,12 @@
 
 \begin{proof}
     \leanok
-    Compress the first site of the positive operator by $V$. The resulting
-    matrix is Hermitian. Expanding one matrix entry gives the marked chain on
-    the left and the complex conjugate of the entry with $r,s$ and the
-    ket--bra words exchanged. Taking the conjugate transpose reverses the tail
-    product, cyclicity of trace returns the marked factor to the first
-    position, and positivity of $c$ permits cancellation without a phase.
+    Compressing the first site of the positive operator by $V$ yields a
+    Hermitian matrix whose entries equate the marked chain on the left with
+    the complex conjugate of the entry with $r,s$ and the ket--bra words
+    exchanged. Taking the conjugate transpose reverses the tail product,
+    cyclicity of trace returns the marked factor to the first position, and
+    positivity of $c$ permits cancellation without a phase.
 \end{proof}
 
 \begin{theorem}[Gram-dressed reflected marked-chain identity]
@@ -425,21 +422,21 @@
                                  & c                & >0.
         \notag
     \end{align}
-    Then the marked-chain coefficient of the Gram-dressed tensor
-    $(X^\dagger X)A^v(X^\dagger X)^{-1}$ equals the reflected-adjoint
+    As in the single-corner, open-index conjugation step from Figures~7--8 of
+    \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}, the
+    marked-chain coefficient of the Gram-dressed tensor
+    $(X^\dagger X)A^v(X^\dagger X)^{-1}$ then equals the reflected-adjoint
     marked-chain coefficient of $A$ in the adjoint tensor, with the two tail
-    words reversed. This is the single-corner, open-index conjugation step
-    from Figures~7--8 of
-    \cite[Proposition~4.13, lines~1909--1919]{Cirac2016MPDO_arXiv}.
+    words reversed.
 \end{theorem}
 
 \begin{proof}
     \leanok
     \uses{thm:mpdo_reflected_marked_chain}
-    Apply the reflected marked-chain identity to the similar tensor
-    $XA^vX^{-1}$. Conjugate its two open virtual indices by $X^\dagger$ and
-    $(X^{-1})^\dagger$. On the original side this gives the Gram dressing of
-    $A$; on the reflected side the gauge factors cancel, leaving the
+    Applying the reflected marked-chain identity to the similar tensor
+    $XA^vX^{-1}$ and conjugating its two open virtual indices by $X^\dagger$
+    and $(X^{-1})^\dagger$ produces the Gram dressing of $A$ on the original
+    side, while the gauge factors cancel on the reflected side to leave the
     reflected adjoint of $A$.
 \end{proof}
 
@@ -487,8 +484,8 @@
 \begin{proof}
     \leanok
     \uses{thm:mpdo_gram_dressed_reflected_marked_chain, cor:horizontal_cf_linear_marked_separation}
-    Conjugate the open indices in the reflected marked-chain identity for
-    the first corner by $X^\dagger$. Its left side becomes the marked chain
+    Conjugating the open indices in the reflected marked-chain identity for
+    the first corner by $X^\dagger$ turns the left side into the marked chain
     of $(X^\dagger X)A^v(X^\dagger X)^{-1}$, while the gauge factors on the
     reflected side cancel and leave the marked chain of $A^\sharp$. The
     same calculation with $Y$ gives the identical reflected chain. Thus the
@@ -557,9 +554,9 @@
 
 \begin{proof}\leanok
     \uses{def:mpv_phase_class_data}
-    Identify the distinguished bond space with that of copy $q$ and set
-    $W_{\alpha,q}=V_{\alpha,0}$.
-    Since the distinguished gauge is the identity, its corner equation reduces to
+    Identifying the distinguished bond space with that of copy $q$ and setting
+    $W_{\alpha,q}=V_{\alpha,0}$ reduces the distinguished identity-gauge corner
+    equation to
     \begin{align}
         W_{\alpha,q}^\dagger\widetilde M^vW_{\alpha,q}
          & =c_{\alpha,0}A_{\alpha,q}^v,
@@ -641,11 +638,11 @@
 
 \begin{proof}
     \leanok
-    Multiply the dressed-target identity by $X^\dagger$ on the left and by
-    $(X^{-1})^\dagger$ on the right. The left side becomes
-    $(X^\dagger X)B(X^\dagger X)^{-1}$ and the right side collapses to
+    Multiplying the dressed-target identity by $X^\dagger$ on the left and by
+    $(X^{-1})^\dagger$ on the right turns the left side into
+    $(X^\dagger X)B(X^\dagger X)^{-1}$ and collapses the right side to
     $C$. Eliminating the common target for two gauges and multiplying by the
-    inverse Gram matrix gives the relative commutation relation.
+    inverse Gram matrix then gives the relative commutation relation.
 \end{proof}
 
 \begin{figure}[ht]
@@ -678,16 +675,16 @@
         \end{tenkz}
     \end{center}
     \caption{Equality of the Gram conjugations for two copies of the same
-        vertical normal tensor:
+        vertical normal tensor in
+        \cite[Proposition~4.13, lines~1915--1921]{Cirac2016MPDO_arXiv}:
         $(X_{\alpha,k}^{\dagger}X_{\alpha,k})M_\alpha
             (X_{\alpha,k}^{\dagger}X_{\alpha,k})^{-1}
             =(X_{\alpha,0}^{\dagger}X_{\alpha,0})M_\alpha
             (X_{\alpha,0}^{\dagger}X_{\alpha,0})^{-1}$.
         Theorem~\ref{thm:mpdo_pairwise_vertical_gram_conjugation} gives this
         equality from self-adjointness of the corresponding sector compressions
-        and horizontal marked separation. Normality is used only in the
-        subsequent proportionality argument. This is
-        \cite[Proposition~4.13, lines~1915--1921]{Cirac2016MPDO_arXiv}.}
+        and horizontal marked separation; normality enters only in the
+        subsequent proportionality argument.}
     \label{fig:mpdo_vertical_gauge_gram_comparison}
 \end{figure}
 
@@ -761,12 +758,11 @@
     \uses{thm:grouped_sector_gram_conj_of_dressing, thm:eq3_of_dressed_adjoint}
     Theorem~\ref{thm:grouped_sector_gram_conj_of_dressing} shows that
     conjugation by $X_{\alpha,q}^\dagger X_{\alpha,q}$ fixes every letter of
-    the normal representative. Apply the identity-gauge specialization of
-    Theorem~\ref{thm:eq3_of_dressed_adjoint}; it gives a real number
+    the normal representative. Applying the identity-gauge specialization of
+    Theorem~\ref{thm:eq3_of_dressed_adjoint} then yields a real number
     $\omega_{\alpha,q}>0$ with
-    $X_{\alpha,q}^\dagger X_{\alpha,q}=\omega_{\alpha,q}\Id$. Dividing each
-    gauge by the positive square root of its Gram scalar gives the unitary
-    normalization.
+    $X_{\alpha,q}^\dagger X_{\alpha,q}=\omega_{\alpha,q}\Id$, and dividing
+    each gauge by $\sqrt{\omega_{\alpha,q}}$ gives the unitary normalization.
 \end{proof}
 
 \begin{definition}[Normalized grouped-sector map]
@@ -920,9 +916,9 @@
 \begin{proof}
     \leanok
     \uses{thm:normalized_grouped_sector_maps_of_gram, thm:grouped_sector_gram_scalar_of_dressing}
-    Theorem~\ref{thm:grouped_sector_gram_scalar_of_dressing} gives the
-    positive Gram scalars. Apply
-    Theorem~\ref{thm:normalized_grouped_sector_maps_of_gram} to the phase-class
-    grouping. Its corner identity preserves the grouped reconstruction and
-    gives (\ref{eq:normalized_grouped_sector_maps_of_dressing}).
+    Applying Theorem~\ref{thm:normalized_grouped_sector_maps_of_gram} to the
+    phase-class grouping with the positive Gram scalars from
+    Theorem~\ref{thm:grouped_sector_gram_scalar_of_dressing} preserves the
+    grouped reconstruction through its corner identity and gives
+    (\ref{eq:normalized_grouped_sector_maps_of_dressing}).
 \end{proof}

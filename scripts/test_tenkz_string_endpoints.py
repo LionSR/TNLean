@@ -40,7 +40,7 @@ def check(work: Path) -> None:
     assert r"{u^{[q]}}" not in body and r"{u^{\otimes q}}" not in body
     source = (
         "\\documentclass{article}\n\\usepackage{amsmath,amssymb}\n"
-        "\\usepackage{tenkz}\n\\pagestyle{empty}\n\\begin{document}\n"
+        "\\usepackage{tikz-tensor-networks}\n\\pagestyle{empty}\n\\begin{document}\n"
         + body + "\n\\end{document}\n"
     )
     tex = work / "string-endpoints.tex"
