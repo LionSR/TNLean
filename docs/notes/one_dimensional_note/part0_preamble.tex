@@ -1,19 +1,15 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[aps,prx,reprint,superscriptaddress,floatfix,nofootinbib,longbibliography,amsmath,amssymb]{revtex4-2}
 \usepackage[T1]{fontenc}
 \IfFileExists{lmodern.sty}{\usepackage{lmodern}}{}
-\usepackage[margin=1.05in]{geometry}
-\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{amsthm,mathtools}
 \usepackage{enumitem}
 \usepackage{booktabs,array}
 \usepackage{xcolor}
 \usepackage{tenkz}
 \usetikzlibrary{quantikz2}
 \usetikzlibrary{arrows.meta,calc,patterns,positioning,decorations.pathreplacing}
-\usepackage{graphicx}
-\usepackage{caption}
-\captionsetup{font=small,labelfont=bf,width=0.92\textwidth}
+\usepackage{graphicx,adjustbox}
 \usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
-\setlength{\parskip}{0.25em}
 
 % ---------- notation ----------
 \newcommand{\C}{\mathbb C}
@@ -56,25 +52,30 @@
 \newtheorem{remark}[theorem]{Remark}
 \newtheorem{construction}[theorem]{Construction}
 
+% ---------- parts (REVTeX has no \part) ----------
+\newcounter{notepart}
+\renewcommand{\thenotepart}{\Roman{notepart}}
+\newcommand{\notepart}[2]{\refstepcounter{notepart}\label{#2}%
+  \par\medskip\noindent{\centering\large\bfseries Part~\thenotepart\\[2pt]#1\par}\medskip}
+
 % ---------- the "written twice" device ----------
 % Every mathematical unit of this note appears twice: first in words
 % (what it says, why it is true, what it is for), then precisely.
 \newenvironment{inwords}{%
   \par\medskip\noindent
-  \begin{list}{}{\leftmargin=1.2em\rightmargin=1.2em}
+  \begin{list}{}{\leftmargin=0.8em\rightmargin=0.8em}
   \item\relax
   \noindent{\sffamily\bfseries\color{blue!40!black}In words.}\ \sffamily\small}{%
   \end{list}\par\medskip}
 \newcommand{\precisely}{\par\noindent{\bfseries Precisely.}\ }
 
-\title{A one-dimensional area law and a matrix product state
-approximation from a global spectral gap:\\
-the collar-free route}
-\author{Prepared for Sirui Lu (MPQ)}
-\date{October 16, 2026}
-
 \begin{document}
-\maketitle
+
+\title{A one-dimensional area law and a matrix product state
+approximation from a global spectral gap: the collar-free route}
+\author{Prepared for Sirui Lu}
+\affiliation{Max Planck Institute of Quantum Optics, Garching}
+\date{October 16, 2026}
 
 \begin{abstract}
 \noindent
@@ -106,8 +107,9 @@ of Arad--Kitaev--Landau--Vazirani; the tensor-network proof uses a
 Lieb--Robinson bound in exactly one lemma, and we indicate how to avoid
 it at the price of a quasi-polynomial bond dimension.
 \end{abstract}
+\maketitle
 
-\tableofcontents
+
 
 \section{Overview}
 
@@ -149,9 +151,9 @@ note. The reader who wants only the one-dimensional area law can read
 Sections~\ref{sec:setting}--\ref{sec:closing}; this is about four pages.
 \end{inwords}
 
-\begin{table}[h]
+\begin{table*}[t]
 \centering\small
-\begin{tabular}{@{}p{0.34\textwidth}p{0.62\textwidth}@{}}
+\begin{tabular}{@{}p{0.33\textwidth}p{0.63\textwidth}@{}}
 \toprule
 Two-dimensional ingredient & Fate in one dimension\\
 \midrule
@@ -174,7 +176,7 @@ Row--column routing with constant congestion & Replaced by placement on the line
 \end{tabular}
 \caption{What survives, what simplifies, what disappears.}
 \label{tab:map}
-\end{table}
+\end{table*}
 
 \precisely
 Throughout, $q\ge 2$ and $R\ge 1$ are integers and $J,\Delta>0$. A finite

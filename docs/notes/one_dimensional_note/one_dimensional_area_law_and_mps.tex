@@ -1,19 +1,15 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[aps,prx,reprint,superscriptaddress,floatfix,nofootinbib,longbibliography,amsmath,amssymb]{revtex4-2}
 \usepackage[T1]{fontenc}
 \IfFileExists{lmodern.sty}{\usepackage{lmodern}}{}
-\usepackage[margin=1.05in]{geometry}
-\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{amsthm,mathtools}
 \usepackage{enumitem}
 \usepackage{booktabs,array}
 \usepackage{xcolor}
 \usepackage{tenkz}
 \usetikzlibrary{quantikz2}
 \usetikzlibrary{arrows.meta,calc,patterns,positioning,decorations.pathreplacing}
-\usepackage{graphicx}
-\usepackage{caption}
-\captionsetup{font=small,labelfont=bf,width=0.92\textwidth}
+\usepackage{graphicx,adjustbox}
 \usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
-\setlength{\parskip}{0.25em}
 
 % ---------- notation ----------
 \newcommand{\C}{\mathbb C}
@@ -56,25 +52,30 @@
 \newtheorem{remark}[theorem]{Remark}
 \newtheorem{construction}[theorem]{Construction}
 
+% ---------- parts (REVTeX has no \part) ----------
+\newcounter{notepart}
+\renewcommand{\thenotepart}{\Roman{notepart}}
+\newcommand{\notepart}[2]{\refstepcounter{notepart}\label{#2}%
+  \par\medskip\noindent{\centering\large\bfseries Part~\thenotepart\\[2pt]#1\par}\medskip}
+
 % ---------- the "written twice" device ----------
 % Every mathematical unit of this note appears twice: first in words
 % (what it says, why it is true, what it is for), then precisely.
 \newenvironment{inwords}{%
   \par\medskip\noindent
-  \begin{list}{}{\leftmargin=1.2em\rightmargin=1.2em}
+  \begin{list}{}{\leftmargin=0.8em\rightmargin=0.8em}
   \item\relax
   \noindent{\sffamily\bfseries\color{blue!40!black}In words.}\ \sffamily\small}{%
   \end{list}\par\medskip}
 \newcommand{\precisely}{\par\noindent{\bfseries Precisely.}\ }
 
-\title{A one-dimensional area law and a matrix product state
-approximation from a global spectral gap:\\
-the collar-free route}
-\author{Prepared for Sirui Lu (MPQ)}
-\date{October 16, 2026}
-
 \begin{document}
-\maketitle
+
+\title{A one-dimensional area law and a matrix product state
+approximation from a global spectral gap: the collar-free route}
+\author{Prepared for Sirui Lu}
+\affiliation{Max Planck Institute of Quantum Optics, Garching}
+\date{October 16, 2026}
 
 \begin{abstract}
 \noindent
@@ -106,8 +107,9 @@ of Arad--Kitaev--Landau--Vazirani; the tensor-network proof uses a
 Lieb--Robinson bound in exactly one lemma, and we indicate how to avoid
 it at the price of a quasi-polynomial bond dimension.
 \end{abstract}
+\maketitle
 
-\tableofcontents
+
 
 \section{Overview}
 
@@ -149,9 +151,9 @@ note. The reader who wants only the one-dimensional area law can read
 Sections~\ref{sec:setting}--\ref{sec:closing}; this is about four pages.
 \end{inwords}
 
-\begin{table}[h]
+\begin{table*}[t]
 \centering\small
-\begin{tabular}{@{}p{0.34\textwidth}p{0.62\textwidth}@{}}
+\begin{tabular}{@{}p{0.33\textwidth}p{0.63\textwidth}@{}}
 \toprule
 Two-dimensional ingredient & Fate in one dimension\\
 \midrule
@@ -174,7 +176,7 @@ Row--column routing with constant congestion & Replaced by placement on the line
 \end{tabular}
 \caption{What survives, what simplifies, what disappears.}
 \label{tab:map}
-\end{table}
+\end{table*}
 
 \precisely
 Throughout, $q\ge 2$ and $R\ge 1$ are integers and $J,\Delta>0$. A finite
@@ -227,7 +229,7 @@ dimension at most $CL^{c}$ such that
 The constants never depend on $\Lam$, on $A$, or on the particular
 Hamiltonian. No gap for a restricted Hamiltonian, no frustration
 freeness, no translation invariance is assumed.
-\part{The one-dimensional area law}\label{part:arealaw}
+\notepart{The one-dimensional area law}{part:arealaw}
 
 \section{Setting, reductions, and counting}\label{sec:setting}
 
@@ -847,7 +849,7 @@ using $B\le M/2$. With $\lambda=(1-p_0/4)M\in(1,M)$ for $r\ge w_0$, iterating
 at $r=w_0,Mw_0,M^2w_0,\dots$ gives $F(M^jw_0)\le C\lambda^j$ and hence
 $F(r)\le Cr^{e_0}$ with $e_0=\log_M\lambda<1$.
 
-\part{The one-dimensional matrix product state approximation}\label{part:mps}
+\notepart{The one-dimensional matrix product state approximation}{part:mps}
 
 \section{Statement, and the two-line route}\label{sec:shortcut}
 
@@ -881,25 +883,24 @@ mass, and put
  \Phi=(\Pi_1\otimes\id)(\Pi_2\otimes\id)\cdots(\Pi_{L-1}\otimes\id)\,\Om .
 \]
 Then $\Phi$ is a matrix product state with open boundary conditions and
-bond dimension at most $qD$, and $\norm{\Phi-\Om}\le\sum_k\sqrt{\epsilon_k}$.
+bond dimension at most $D$, and $\norm{\Phi-\Om}\le\sum_k\sqrt{\epsilon_k}$.
 \end{proposition}
 \begin{proof}
 Write $P_k=\Pi_k\otimes\id$. Telescoping,
 $\Phi-\Om=\sum_{k=1}^{L-1}P_1\cdots P_{k-1}(P_k-\id)\Om$ and each prefix is
 a contraction, which gives the error bound. For the bond dimension fix a
-cut $k$. The vector $\Xi=P_{k+1}\cdots P_{L-1}\Om$ is in the range of
-$P_{k+1}$, so $\Xi=\sum_{b=1}^D\ket b_{[1,k+1]}\otimes\xi_b$; expanding
-$\ket b=\sum_{s=1}^q\beta_{b,s}\otimes\ket s_{k+1}$ shows that $\Xi$ has
-Schmidt rank at most $qD$ across the cut $k$. The remaining factors
-$P_1,\dots,P_k$ act on $[1,k]$ and do not increase that rank. A vector
-with Schmidt rank at most $qD$ across every cut is a matrix product
-state of bond dimension at most $qD$.
+cut $k$. The vector $P_kP_{k+1}\cdots P_{L-1}\Om$ lies in
+$\operatorname{ran}\Pi_k\otimes\cH_{[k+1,L]}$, so it has Schmidt rank at most
+$D$ across the cut $k$, and the remaining factors $P_1,\dots,P_{k-1}$ act
+on $[1,k-1]$ and do not increase that rank. A vector with Schmidt rank at
+most $D$ across every cut is a matrix product state of bond dimension at
+most $D$.
 \end{proof}
 
 \begin{theorem}[Theorem~\ref{thm:B}, two-line route]\label{thm:Bshort}
 Under the hypotheses of Theorem~\ref{thm:B}, for every $L\ge2$ there is
 a matrix product state $\Phi$ with bond dimension at most
-$q\,\e^{C_{\mathrm{int}}}\,(32\e^{\e/2}L^4)^{1/u_0}$ and
+$2\,\e^{C_{\mathrm{int}}}\,(32\e^{\e/2}L^4)^{1/u_0}$ and
 $\min_\theta\norm{\Phi/\norm\Phi-\e^{i\theta}\Om}\le L^{-1}$, where $u_0$ is
 \eqref{eq:theta} and $C_{\mathrm{int}}$ is \eqref{eq:final}.
 \end{theorem}
@@ -912,7 +913,7 @@ $D=\lceil\e^{C_{\mathrm{int}}+w}\rceil\ge\e^{S(X)+w}$ (Theorem~\ref{thm:A}).
 Then $\epsilon_k\le(16L^4)^{-1}$ for every $k$, Proposition~\ref{prop:VC}
 gives $\norm{\Phi-\Om}\le(L-1)/(4L^2)\le1/(4L)$, hence $\Phi\ne0$ and
 $\norm{\Phi/\norm\Phi-\Om}\le2\norm{\Phi-\Om}\le L^{-1}$. The bond
-dimension is $qD$ with $\e^{w}=(32\e^{\e/2}L^4)^{1/u_0}$.
+dimension is $D\le2\e^{C_{\mathrm{int}}+w}$ with $\e^{w}=(32\e^{\e/2}L^4)^{1/u_0}$.
 \end{proof}
 
 \begin{remark}
@@ -1066,7 +1067,7 @@ Consequently, if $\mathcal P_D$ denotes the conditional expectation onto
 operators supported in $D$ (the average over independent Haar unitaries at
 the sites outside $D$), then for every $\ell\ge0$
 \[
- \norm{\tau_t(A)-\mathcal P_{N_\ell(S)}\tau_t(A)}\le C'\abs S\,\norm A\,\e^{v\abs t-\mu\ell}.
+ \norm{\tau_t(A)-\mathcal P_{N_\ell(S)}\tau_t(A)}\le C'\abs S^2\,\norm A\,\e^{v\abs t-\mu\ell}.
 \]
 \end{lemma}
 \begin{proof}
@@ -1094,8 +1095,8 @@ identical. For the second
 bound, $\mathcal P_D$ is a product of commuting single-site twirls
 $T_y$, telescoping gives
 $\norm{B-\mathcal P_DB}\le\sum_{y\notin D}\sup_{U_y}\norm{[B,U_y]}$, and there are
-at most two sites at each distance $d>\ell$ from $S$, so the sum is at most
-$2C\abs S\norm A\e^{vt}\sum_{d>\ell}\e^{-\mu d}$.
+at most $2\abs S$ sites at each distance $d>\ell$ from $S$, so the sum is at most
+$4C\abs S^2\norm A\e^{vt}\sum_{d>\ell}\e^{-\mu d}$.
 \end{proof}
 
 \begin{lemma}[Information reset]\label{lem:reset}
@@ -1118,7 +1119,7 @@ of $R$, $\Phi=F_R\Psi$, and $Q=\Lam\setminus(R\cup C)$.
 isometry $V:\cH_Q\to\cB_R\otimes\cB_C$ and unit vectors $a\in\cH_R\otimes\cB_R$,
 $a'\in\cH_C\otimes\cB_C$ with
 $\abs{\langle a\otimes a',\widetilde\Om\rangle}\ge\e^{-b/2}$,
-$\widetilde\Om=(\id\otimes V)\Om$. The largest Schmidt coefficient of
+$\widetilde\Om=(\id\otimes V)\Om$. The largest Schmidt probability (eigenvalue of the marginal) of
 $\widetilde\Om$ across $R\cB_R\,|\,C\cB_C$ is therefore at least $\e^{-b}$,
 so $\Tr\rho_{\widetilde\Om,R\cB_R}^2\ge\e^{-2b}$. Define on the two
 replicas of $Q$ the Hermitian contraction
@@ -1134,9 +1135,11 @@ $\langle\xi^{\otimes2},F_{A}\xi^{\otimes2}\rangle=\Tr\rho_{\xi,A}^2$ gives
 and $\mathbb H'=F_R\mathbb HF_R$. Both are range-$R$ Hamiltonians on the
 doubled chain with uniformly bounded interaction sums, with unique ground
 vectors $\Psi$, $\Phi$, common ground energy $\mathcal E=2E_0$, and gap at
-least $\Delta$. Their difference $\mathbb H'-\mathbb H$ is supported on the
-endpoints $Z_R$ of the edges crossing $R$ (interior terms of $R$ are merely
-exchanged between the two identical replica copies). Put
+least $\Delta$. Their difference $\mathbb H'-\mathbb H$ is a sum of at most $N_R\abs{\partial R}$
+terms of norm at most $2J$, those of $\mathbb H$ whose support meets both $R$
+and $\Lam\setminus R$ (interior terms of $R$ are merely exchanged between the
+two identical replica copies); let $Z_R$ be the union of their supports, a
+set within distance $R$ of the cut edges of $R$. Put
 $B_*=1+b+\log L$, $r_*=2p+10$, $h=AB_*$ with $A\Delta^2/2\ge r_*+30$, and
 \[
  g_h(t)=(2\pi h)^{-1/2}\e^{-t^2/(2h)},\qquad
@@ -1156,20 +1159,19 @@ $T_0^2/(2A)\ge r_*+30$.
 $\e^{it\mathbb H'}W\e^{-it\mathbb H}=(\e^{it\mathbb H'}W\e^{-it\mathbb H'})\,V(t)$
 with $V(t)=\e^{it\mathbb H'}\e^{-it\mathbb H}$, whose left generator
 $G(t)=\e^{it\mathbb H'}(\mathbb H'-\mathbb H)\e^{-it\mathbb H'}$ is a sum of
-at most $N_R\abs{\partial R}$ terms of norm at most $2J$, each supported
-within distance $R$ of a cut edge of $R$. Lemma~\ref{lem:LR} applied to $W$ (support $Q$, norm one)
+the boundedly many terms supported in $Z_R$. Lemma~\ref{lem:LR} applied to $W$ (support $Q$, norm one)
 and to the terms of $G(t)$ gives Hermitian localized approximants
 $W_\ell(t)=\mathcal P_{N_\ell(Q)}\bigl(\e^{it\mathbb H'}W\e^{-it\mathbb H'}\bigr)$
 and $G_\ell(t)=\mathcal P_{N_\ell(Z_R)}G(t)$ with
 \[
- \norm{\e^{it\mathbb H'}W\e^{-it\mathbb H'}-W_\ell(t)}+\norm{G(t)-G_\ell(t)}\le CL\,\e^{v\abs t-\mu\ell},
+ \norm{\e^{it\mathbb H'}W\e^{-it\mathbb H'}-W_\ell(t)}+\norm{G(t)-G_\ell(t)}\le CL^2\,\e^{v\abs t-\mu\ell},
 \]
-where the single factor $L$ bounds $\abs Q$ and $\abs{\partial R}$. Let
+where the factor $L^2$ bounds $\abs Q^2$ and $\abs{\partial R}$. Let
 $V_\ell(t)$ be the unitary evolution generated by $G_\ell(t)$, supported in
-$N_\ell(Z_R)$; Duhamel's formula gives $\norm{V(t)-V_\ell(t)}\le CL\abs t\e^{v\abs t-\mu\ell}$.
+$N_\ell(Z_R)$; Duhamel's formula gives $\norm{V(t)-V_\ell(t)}\le CL^2\abs t\e^{v\abs t-\mu\ell}$.
 Hence $W_\ell(t)V_\ell(t)$ is a contraction supported in
 $S:=N_\ell(Q\cup Z_R)$ which approximates the integrand uniformly for
-$\abs t\le T$ with error $CL(1+T)\e^{vT-\mu\ell}$. Take
+$\abs t\le T$ with error $CL^2(1+T)\e^{vT-\mu\ell}$. Take
 $\ell=\lceil K_{\mathrm{loc}}B_*\rceil$ with $K_{\mathrm{loc}}$ fixed large
 enough (after $T_0$) that this error is at most $\e^{-10b}L^{-r_*}$,
 using $\log L\le B_*$ and $\log(1+T)\le C+B_*$. Averaging the localized
@@ -1192,10 +1194,11 @@ $\norm{(U-D)\Psi}=\norm{(\id-\abs D)\Psi}\le\norm{(\id-D^\dagger D)\Psi}$, so
 \end{equation}
 
 \emph{Support and conclusion.} Every site of $Q$ is more than $w$ from
-$R_0$ and from $C_0$. If $\{x,y\}$ crosses $R$ with $x\in R$, $y\notin R$,
-then $y$ is more than $w$ from $R_0$ so $x$ is more than $w-1$ from
-$R_0$; and $x\notin C$ is more than $w$ from $C_0$, so $y$ is more than $w-1$
-from $C_0$. Choosing $C_p>K_{\mathrm{loc}}+3$ makes $S=N_\ell(Q\cup Z_R)$
+$R_0$ and from $C_0$. A term whose support meets both $R$ and $\Lam\setminus R$
+has a site $y\notin R$, which is more than $w$ from $R_0$, and a site
+$x\in R\subseteq\Lam\setminus C$, which is more than $w$ from $C_0$; its support
+has diameter at most $R$, so every site of $Z_R$ is more than $w-R$ from
+both cores. Choosing $C_p>K_{\mathrm{loc}}+R+3$ makes $S=N_\ell(Q\cup Z_R)$
 disjoint from both cores in both replicas. Thus $U$ does not change the
 joint two-replica marginal on $R_0C_0$. In $\Phi=F_R\Psi$, the marginal on
 $R_0$ and $C_0$ of the \emph{first} replica is $\rho_{R_0}\otimes\rho_{C_0}$,
@@ -1393,7 +1396,7 @@ not needed in one dimension.
 Here is the schedule. Divide the chain into consecutive blocks of $t$
 sites, where $t=20w$ and $w$ is the logarithmic separation of
 Lemma~\ref{lem:logsep}; the last block is whatever is left over, of length
-less than $3t$. At the start, a single party $R_0$ holds everything. At
+between $3t$ and $4t$. At the start, a single party $R_0$ holds everything. At
 step $k$ the picture is
 \[
  P_1\,|\,P_2\,|\cdots|\,P_k\,|\,R_k ,
@@ -1482,8 +1485,8 @@ the whole construction by a single death of the band into $B$.
 \end{construction}
 
 \begin{lemma}[The band dissolution is a bounded change]\label{lem:band}
-For all sufficiently large $L$, each of the nine moves in
-Construction~\ref{con:band} satisfies the information hypothesis of
+For all sufficiently large $L$, each of the eight moves (seven births or
+deaths and one exchange) in Construction~\ref{con:band} satisfies the information hypothesis of
 Lemma~\ref{lem:birth} or Lemma~\ref{lem:exchange} with exponent $2p=24$,
 so that the construction is a bounded change on the parties $A,B,C$ with
 total reference-vector error at most $12L^{-12}$. Afterwards the main
@@ -1500,7 +1503,8 @@ third has changed region $(-4,-3)$ inside $(-5,-2)$, distance $1$. The
 auxiliary word is now $C|B|A|C|A|B|C$ at $-6,-5,-4,-3,-2,-1$.
 (ii) The main sheet is $C$ on $x<0$ and the auxiliary sheet is $C$ on
 $x<-6$, $(-4,-3)$ and $x>-1$. Hence $Z\cap Y=(-6,-4)$ (auxiliary $B$ and
-$A$) and $Z\setminus Y=(-3,-1)\cup[0,\infty)$, at distance $1$ from $T$.
+$A$) and $Z\setminus Y=(-3,-1)\cup[0,\infty)$, together with $x\le-8$ if $C$
+owns nothing beyond $x=-8$, at distance at least $1$ from $T$.
 After the exchange the main sheet inside $Y$ carries the auxiliary
 assignment, giving $C|B|A|C|A|B$ at $-6,-5,-4,0,1$; the auxiliary sheet
 inside $Y$ is $C$.
@@ -1510,7 +1514,8 @@ distance $1$. The $A$ band $(-5,1)$ is surrounded by $B$ on
 $(-6,-5)\cup(1,2)$; non-$B$ sites after the death are $x\le-6$ and $x\ge2$,
 distance $1$. The birth of $C$ on $(-3,0)$ inside $B$ has non-$B$ sites
 at distance $\ge2$. The death of $(-6,-3)$ into $C$ has non-$C$ sites
-$x\ge0$ at distance $3$. The counts of moves and parties are as stated;
+$x\ge0$ at distance $3$ and, if $C$ owns nothing beyond $x=-8$, sites
+$x\le-8$ at distance $2$. The counts of moves and parties are as stated;
 each birth or death costs at most $L^{-12}$ and the exchange at most
 $4L^{-12}$.
 \end{proof}
@@ -1534,7 +1539,7 @@ At the end set $P_{k_*+1}=R_{k_*}$, which owns exactly the last block.
 For all sufficiently large $L$, Construction~\ref{con:sweep} is a
 distributed construction with the following properties.
 \begin{enumerate}[leftmargin=2em]
-\item There are $2k_*+2\le 2L$ parties. The initial vector is a product by
+\item There are $2k_*+1\le 2L$ parties. The initial vector is a product by
 party: $R_0$ holds $\Om$, and every auxiliary copy of $\Om$ is initialized
 privately at the party $C$ of its band dissolution.
 \item There are at most $20k_*\le 2L$ non-private gates. Each involves at
@@ -1563,14 +1568,14 @@ $t-w$). For (4), $C=P_{k+1}$ owns $[a+w,a+t-1]$ of length $19w\ge8w$ and
 $B=R_{k+1}$ owns $[a+t+w,L]$ of length at least $3t-w\ge2w$. After (4)
 the word is $P_1|\cdots|P_{k+1}|R_{k+1}$. The parties are $R_0,\dots,R_{k_*}$
 and $P_1,\dots,P_{k_*}$, with $P_{k_*+1}=R_{k_*}$. The number of moves per
-step is at most $2+2\cdot9=20$, so at most $20k_*$ in total, and the last
+step is at most $2+2\cdot8=18\le20$, so at most $20k_*$ in total, and the last
 block has length in $[3t,4t)$.
 
 Participation: $R_k$ takes part in steps $k-1$ (as the born party in (1)
 and as $B$ in (4)) and $k$ (as $P_\circ$ in (1), (2) and as $A$ in (3),
 (4)); $P_k$ takes part in step $k-1$ (born in (2), $B$ in (3), $C$ in (4))
-and step $k$ ($C$ in (3)). Each band dissolution has nine moves and an
-exchange that is private; so no party exceeds $2\cdot(2+2\cdot9)=40$ gates.
+and step $k$ ($C$ in (3)). Each band dissolution has seven births or deaths and one
+exchange, which is private; so no party exceeds $2\cdot(2+2\cdot8)=36\le40$ gates.
 Every birth or death is a single gate on two parties with one shared
 vector or covector, and every exchange consists of private gates only.
 
@@ -1746,10 +1751,12 @@ bounded degree, and link dimensions at most $C_1L^{r}$. By
 Lemma~\ref{lem:column} some column is a nonzero ket network $v$ with the
 same links and $\min_\theta\norm{v/\norm v-\e^{i\theta}\Om}\le4L^{-5}\le L^{-1}$.
 
-Placement. Attach $P_i$ to block $B_i$ and $R_k$ to block $B_{k+1}$. Two
-parties sharing a gate are, by the proof of Proposition~\ref{prop:sweep},
-among $\{P_k,P_{k+1},R_k,R_{k+1}\}$ for some $k$, hence attached to blocks
-at most two apart. A bond between blocks $i$ and $i+1$ is therefore
+Placement. Attach $P_i$ to block $B_i$ and $R_k$ to block $B_{k+1}$, and
+contract the two nodes attached to a block into one node (their mutual
+links cross no block bond). Two parties sharing a gate are, by the proof of
+Proposition~\ref{prop:sweep}, among $\{P_k,P_{k+1},R_k,R_{k+1}\}$ for some
+$k$, hence attached to the same or adjacent blocks; the bound below allows
+blocks up to two apart. A bond between blocks $i$ and $i+1$ is therefore
 crossed only by links incident to parties attached to blocks
 $i-1,\dots,i+2$; there are at most $8$ such parties, each of degree at most
 $5\cdot40$ (at most two star links and three sample links per three-party

@@ -63,11 +63,34 @@ PLAN = [
 ]
 
 
+WIDE = {"chain-cuts", "chain-shells", "filter-product", "pinning", "qc-single-split", "closing",
+        "chain-families", "chain-amplify", "truncation-sequence", "chain-reset", "replica-swap",
+        "qc-gaussian-filter", "chain-logsep", "qc-birth", "qc-death", "qc-exchange", "sweep-step",
+        "band-words", "party-graph", "block-to-sites", "mps-chain"}
+
+
+def body_for_figure(src: pathlib.Path, inline: bool) -> str:
+    """The picture as inline-math-safe material for an adjustbox (display math becomes
+    inline displaystyle math; an inline equation is wrapped in math delimiters)."""
+    text = src.read_text()
+    lines = [ln for ln in text.splitlines() if not ln.lstrip().startswith("%")]
+    text = "\n".join(lines).strip()
+    if inline:
+        return "\\(" + text + "\\)"
+    if text.startswith("\\[") and text.endswith("\\]"):
+        return "\\(\\displaystyle " + text[2:-2].strip() + "\\)"
+    return text
+
+
 def figure(name: str, inline: bool, caption: str) -> str:
-    rel = f"diagrams/inline/{name}.tex" if inline else f"diagrams/{name}.tex"
-    body = (f"\\[\n\\input{{{rel}}}\n\\]" if inline else f"\\input{{{rel}}}")
-    return (f"\\begin{{figure}}[htbp]\n\\centering\n{body}\n"
-            f"\\caption{{{caption}}}\\label{{fig:{name}}}\n\\end{{figure}}\n\n")
+    src = HERE / ("diagrams/inline" if inline else "diagrams") / f"{name}.tex"
+    rel = f"diagrams/fig/{name}.tex"
+    (HERE / "diagrams" / "fig").mkdir(exist_ok=True)
+    (HERE / rel).write_text(body_for_figure(src, inline) + "\n")
+    env = "figure*" if name in WIDE else "figure"
+    return (f"\\begin{{{env}}}[t]\n\\centering\n"
+            f"\\begin{{adjustbox}}{{max width=\\linewidth}}\n\\input{{{rel}}}\n\\end{{adjustbox}}\n"
+            f"\\caption{{{caption}}}\\label{{fig:{name}}}\n\\end{{{env}}}\n\n")
 
 
 def main() -> None:

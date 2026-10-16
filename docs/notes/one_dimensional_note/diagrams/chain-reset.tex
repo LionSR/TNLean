@@ -1,0 +1,16 @@
+% alt: a chain of twenty sites with a region R of seven sites holding a core R_0 of three sites in its middle, a buffer Q of three sites to its right (and two more at the left end of the chain), a region C of eight sites holding a core C_0 of six sites at the right end, braces of width w between each core and the edge of its region, and two shaded bands marking the support S of the resetting unitary, which covers the buffer and the cut edges of R but neither core.
+% Section 8.2 (Information reset), Lemma lem:reset: disjoint regions R and C with cores R_0 and C_0 at distance more than w = C_p(1+b+log L) from the complements of their regions, and Q = Lambda \ (R cup C) the rest of the chain; the dots are the sites and the upward legs the physical indices C^q, every leg is open (nothing is contracted); the red enclosures are the cores R_0 and C_0, the blue enclosure is R, the purple ones are the two pieces of Q, the dashed enclosure is C; the braces under the chain mark the margin w between R_0 and Lambda \ R (one on each side of R_0) and between C_0 and Lambda \ C; the two shaded enclosures mark S = N_l(Q cup Z_R), the support of the unitary U, where Z_R lies within distance R of the two cut edges of R, so S meets neither core and U leaves the joint marginal on R_0 C_0 unchanged.
+\begin{tenkz}[lattice={1x20}, frame=plane, physical=up, bonds=none]
+  \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
+  \tnmark[form=enclosure, species=selected, label pos=s]{(1,5) .. (1,7)}{$R_0$}
+  \tnmark[form=enclosure, species=secondary, label pos=n]{(1,3) .. (1,9)}{$R$}
+  \tnmark[form=enclosure, species=collar, label pos=s]{(1,1) .. (1,2)}{$Q$}
+  \tnmark[form=enclosure, species=collar, label pos=s]{(1,10) .. (1,12)}{$Q$}
+  \tnmark[form=enclosure, species=complement, label pos=n]{(1,13) .. (1,20)}{$C$}
+  \tnmark[form=enclosure, species=selected, label pos=s]{(1,15) .. (1,20)}{$C_0$}
+  \tnmark[form=bracket, species=secondary, label pos=s]{(1,3) .. (1,4)}{$w$}
+  \tnmark[form=bracket, species=secondary, label pos=s]{(1,8) .. (1,9)}{$w$}
+  \tnmark[form=bracket, species=complement, label pos=s]{(1,13) .. (1,14)}{$w$}
+  \tnmark[form=enclosure, species=neutral, tint, label pos=n]{(1,1) .. (1,3)}{$S$}
+  \tnmark[form=enclosure, species=neutral, tint, label pos=n]{(1,9) .. (1,14)}{$S=N_\ell(Q\cup Z_R)$}
+\end{tenkz}
