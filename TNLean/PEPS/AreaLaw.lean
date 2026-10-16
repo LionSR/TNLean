@@ -102,6 +102,7 @@ import TNLean.PEPS.AreaLaw.TheoremStatements
 import TNLean.PEPS.AreaLaw.TruncationRadius
 import TNLean.PEPS.AreaLaw.TruncationSeries
 import TNLean.PEPS.AreaLaw.TwoFamilies
+import TNLean.PEPS.AreaLaw.UniformAreaLaw
 import TNLean.PEPS.AreaLaw.VertexBoundaryCorollaries
 import TNLean.PEPS.AreaLaw.WeakRectanglePartialRowEntropy
 import TNLean.PEPS.AreaLaw.WeakRectangleShellEntropy
