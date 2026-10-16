@@ -1315,18 +1315,64 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.treatedFrame_edgeStart,
         TNLean.PEPS.Approximation.treatedFrame_auxStart_eq_raw}
     \leanok
-    \uses{def:peps_protocol_treated_frame, def:peps_protocol_level_frame}
-    At the constants of the protocol, let $R$ be a square of side $n=2^j>K_0t$,
-    $t=D\log L$, at a stage of its level. Without marks, the frame of a treated sheet
-    depends only on its guide, not on the homogenizing label. The main frame of the
-    level, with holes of radius $h_n=\epsilon_0t$, is the frame of the starting guide of
-    the repainting of $R$, and the frame of the guide with all four edges completed is
-    the main frame of the level with $R$ repainted as well. The frame of the guide left
-    by the central birth and some edges is the frame of the main guide with the
-    starting word along the next edge. Finally, the fresh auxiliary sheet of an edge
-    $e$ has no hole and every site owned by the party of $C_e$, so it is the raw copy
-    held by that party (\texttt{06-geometry.tex}, lines 62--125, 142--221 and
-    328--339).
+    \uses{def:peps_protocol_treated_frame, def:peps_protocol_level_frame,
+        def:peps_adaptive_patch_constraint, def:peps_dyadic_protocol_parties,
+        def:peps_dyadic_block_guide, def:peps_dyadic_schedule,
+        def:peps_dyadic_edge_band, lem:peps_dyadic_sampled_guides,
+        thm:peps_dyadic_repainting_valid_labels, def:peps_dyadic_used_parties,
+        thm:peps_protocol_constants, def:peps_frame}
+    For the frame identities, fix an adaptive patch supply and a label rank as in
+    Definition~\ref{def:peps_protocol_treated_frame}. Let $R$ be a non-root
+    repaintable square of level $j$ in a hierarchy of depth $k$, with index $S$
+    and side $n=2^j$.
+    A stage $\mathcal D$ is any subset of $\mathbb Z^2$. The baseline of $R$ at
+    $\mathcal D$ is the block baseline of the level labels at $\mathcal D$, at index $S$,
+    with the fresh label of $R$.
+
+    The following guide identities require no protocol-constant assumptions.
+    For any natural $i$, index $T\in\mathbb Z^2$, real $t$, homogenizing label and
+    guide, treating at no mark gives the sampled translate of the guide to the block
+    with corner $2^iT$. For every real $t$ and homogenizing label, and any list $E$
+    containing every edge,
+    the completed guide of $R$, placed on $R$ and treated at no mark, is the
+    level guide at $\mathcal D\cup\{S\}$. The list may have repetitions and
+    need not have a prescribed order.
+
+    For any real $\epsilon_0,t$ with $0<\epsilon_0t\le B_0\log L$, equal
+    treated guides with the same finite set of marks give equal treated frames,
+    even when their original guides and homogenizing labels differ. In
+    particular, without marks the frame is independent of the homogenizing
+    label. With the same radius condition, for any edge $e$ let $C_e$ be the
+    neighboring label of the baseline of $R$ at $\mathcal D$. The uniform
+    auxiliary guide at $C_e$, treated at no mark, has no hole and every site
+    owned by the party of $C_e$, so its frame is that party's raw copy. These
+    frame identities also require no protocol-constant assumptions.
+
+    Now assume the protocol constants, $2\le L$, $t=D\log L$ and
+    $n>K_0t$. For any edge list $E$ and edge $e\notin E$, the unmarked frame
+    of the guide left by the central birth and $E$ equals the unmarked frame
+    of the main guide with the starting word along $e$; the two frames may use
+    different homogenizing labels. For the following two level-frame
+    identifications assume in addition $L\le2^k$. For every non-root reference
+    square $R_0$ in the same hierarchy, the main frame of level $j$ at $\mathcal D$,
+    computed using the party map of $R_0$ and holes of radius
+    $h_n=\epsilon_0t$, is the unmarked frame of the starting guide of $R$.
+    For any list $F$ containing every edge, the unmarked frame of its completed guide is
+    the main frame at $\mathcal D\cup\{S\}$ with the same radius and party
+    map. No condition $S\notin\mathcal D$ is required
+    (\texttt{06-geometry.tex}, lines 62--125, 142--221 and 328--339).
+
+    The auxiliary boundary and reading statements have their own unrestricted
+    domains. For real $x,c$, one has $x+\eta\ne c$ for all sufficiently small
+    $\eta>0$; for real $a,m,c$ the same holds for $a+m\eta\ne c$ if $m\ne0$.
+    For any real $n$ and point $p$, the displaced point
+    $p+\eta(1,1)$ is eventually in $(0,n)^2$ or outside $[0,n]^2$.
+    For any repainting baseline and edge, it is eventually off that edge's
+    interface. If $n>0$ and a point has block index $S$ at scale $n$, then
+    subtracting the block corner $nS$ puts it in $[0,n]^2$.
+    Finally, in any real module, a reading $g$ of $G$ along a displacement $v$
+    is also a reading of $G'$ when, for every $p$, the equality
+    $G(p+\eta v)=G'(p+\eta v)$ holds for all sufficiently small $\eta>0$.
 \end{theorem}
 
 \begin{proof}\leanok
