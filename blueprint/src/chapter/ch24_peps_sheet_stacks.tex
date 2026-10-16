@@ -704,8 +704,8 @@ no holes, this is the normalization of $\Omega$.
     frame owned by the root party (\texttt{06-geometry.tex}, lines 69--125).
 \end{definition}
 
-\begin{lemma}[Properties of the main frame between repaintings]
-    \label{lem:peps_protocol_level_frame_facts}
+\begin{theorem}[Properties of the main frame between repaintings]
+    \label{thm:peps_protocol_level_frame_facts}
     \lean{TNLean.PEPS.Approximation.IsDisplacedReading.eq_sampleGuide,
         TNLean.PEPS.Approximation.IsRayConstant.isDisplacedReading_sampleGuide,
         TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_main,
@@ -732,7 +732,7 @@ no holes, this is the normalization of $\Omega$.
     $4r<2^j$, the outer physical samples of the holes are pairwise disjoint.
     Repainting one block changes the true vertices only at its four corners
     (\texttt{06-geometry.tex}, lines 69--125 and 507--511).
-\end{lemma}
+\end{theorem}
 
 \begin{proof}\leanok
     \uses{thm:peps_protocol_event_segments, lem:peps_level_true_vertices,
@@ -813,7 +813,7 @@ no holes, this is the normalization of $\Omega$.
         thm:peps_dyadic_direct_repainting_constants, lem:peps_protocol_junction_resize_parties,
         thm:peps_protocol_event_segments, thm:peps_protocol_constants,
         thm:peps_dyadic_guide_owners, def:peps_dyadic_chamber_sampling,
-        lem:peps_dyadic_incident_change, lem:peps_protocol_level_frame_facts}
+        lem:peps_dyadic_incident_change, thm:peps_protocol_level_frame_facts}
     The hole radii are positive, and at most $\epsilon_0D\log L\le K_0D\log L\le B_0\log L$
     since $\epsilon_0<1\le K_0$ and $K_0D\le B_0$. Between repaintings no site and no tag
     carries the placeholder, so the frame may be read through any party map that agrees
