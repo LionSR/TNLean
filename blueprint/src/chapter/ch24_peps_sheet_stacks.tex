@@ -804,3 +804,98 @@ no holes, this is the normalization of $\Omega$.
     the schedule, starting from the raw copies and ending with the frame of the unit
     squares and the frozen frames.
 \end{proof}
+
+\begin{definition}[The frame of a treated sheet]
+    \label{def:peps_protocol_treated_frame}
+    \lean{TNLean.PEPS.Approximation.treatedGuide,
+        TNLean.PEPS.Approximation.treatedVertices,
+        TNLean.PEPS.Approximation.HasFrameChange,
+        TNLean.PEPS.Approximation.treatedFrame,
+        TNLean.PEPS.Approximation.treatedFrame_eq,
+        TNLean.PEPS.Approximation.DyadicSquare.inRoot_index,
+        TNLean.PEPS.Approximation.treatedFrame_spec}
+    \leanok
+    \uses{def:peps_protocol_level_frame, lem:peps_treated_true_vertices,
+        lem:peps_dyadic_readings_exist}
+    In the repainting of a square $S$ of side $n=2^j$ of the protocol, let $g$ be
+    an unmodified guide of the repainting, $L_0$ a label and $M$ a finite set of
+    grid corners. The treated guide is $g$ placed on $S$, homogenized to $L_0$ on
+    the open squares of radius $t=D\log L$ about the corners of $M$, and read
+    after the displacement $(1,1)$. The frame of the treated sheet is the encoded
+    frame of this guide: the owner of a site is the party of the label read there,
+    and at every true vertex of the treated guide there is a hole with the patch
+    supplied at radius $\epsilon_0t$, whose tag is held by the party of the
+    canonical tag holder. A bounded change of one frame with bounded pair sources
+    is a change of its registers that is a bounded change of the reference
+    vectors whose monomials carry at most a prescribed number of pair sources.
+    When $n>K_0t$ and the constants are those of the protocol, the treated guide
+    is a reading of the homogenized guide moved to $S$, its true vertices are the
+    centers of the holes, and these holes have disjoint outer squares
+    (\texttt{06-geometry.tex}, lines 69--80, 102--125 and 328--339).
+\end{definition}
+
+\begin{theorem}[A point treatment as a change of a treated sheet]
+    \label{thm:peps_protocol_point_treatment_change}
+    \lean{TNLean.PEPS.Approximation.fiftyThree_le_protocolPatchBound,
+        TNLean.PEPS.Approximation.exists_pointTreatment_hasSourceBoundedChange}
+    \leanok
+    \uses{def:peps_protocol_treated_frame, thm:peps_guide_frame_supplied_gates,
+        thm:peps_protocol_level_events}
+    Fix $0<\epsilon_0\le1/16$. There is a mesh threshold $\nu'>0$ such that for
+    every $0<\nu\le\nu'$ and constants of the protocol the following holds. In the
+    repainting of a square $S$ of side $n>K_0t$, let $g$ be an unmodified guide,
+    $L_0$ the final label or a label of a block next to $S$, and $M,M'$ sets of
+    grid corners that differ at most at one corner of $S$. Then passing from the
+    frame of the treated sheet with the marks $M$ to that with the marks $M'$ is a
+    bounded change whose participants the repainting uses, with $2b$ pair effects
+    and pair sources, the gate bound of the small-patch rewrites and error
+    $(2b+1)L^{-20}$, where $b$ is the patch bound of the protocol
+    (\texttt{06-geometry.tex}, lines 328--339, 481--505 and 572--596).
+\end{theorem}
+
+\begin{proof}\leanok
+    Adding or removing one mark changes the treated guide only on the open square
+    of radius $t$ about that corner. The supplied patches of the true vertices
+    there are rewritten by one small-patch rewrite, whose gates are local to the
+    parties of the repainting.
+\end{proof}
+
+\begin{theorem}[Births and deaths along an edge as changes of a treated sheet]
+    \label{thm:peps_protocol_band_step_changes}
+    \lean{TNLean.PEPS.Approximation.cellCenterPos_eq_sitePosition_add,
+        TNLean.PEPS.Approximation.readings_isTrueVertex_iff_of_far,
+        TNLean.PEPS.Approximation.guideFrame_eq_changeOwner,
+        TNLean.PEPS.Approximation.IsDisplacedReading.sub_mem_closure_ne,
+        TNLean.PEPS.Approximation.IsDisplacedReading.values_of_ne,
+        TNLean.PEPS.Approximation.BandOperation.treated_mem,
+        TNLean.PEPS.Approximation.BandOperation.treated_ne_subset,
+        TNLean.PEPS.Approximation.BandOperation.readings_of_ne,
+        TNLean.PEPS.Approximation.BandOperation.treated_frame_facts,
+        TNLean.PEPS.Approximation.bandBirth_hasFrameChange,
+        TNLean.PEPS.Approximation.bandDeath_hasFrameChange}
+    \leanok
+    \uses{def:peps_protocol_treated_frame, thm:peps_bulk_steps_treated_frames,
+        thm:peps_dyadic_no_changed_vertex, lem:peps_guide_frame_tags}
+    Assume the angular information bound at the scale $t=D\log L$, as provided by
+    Proposition~3.4. At the constants of the protocol, in the repainting of a
+    square of side $n=2^j>K_0t$, let an elementary birth or death along an edge
+    $e$, inserting or removing the label $Q$, change one unmodified guide of the
+    repainting into another, with the surrounding guide the guide before for a
+    birth and the guide after for a death. If the parties of the surrounding
+    label and of $Q$ lie in $S$, then passing from the frame of the guide before,
+    treated about the endpoints of $e$ with the surrounding label, to that of the
+    guide after is a bounded change with participants in $S$, at most one pair
+    source and error $L^{-30}$ (\texttt{06-geometry.tex}, lines 183--221, 328--387
+    and 440--445).
+\end{theorem}
+
+\begin{proof}\leanok
+    The two treated guides have the same true vertices, with the same incident
+    labels, so the two frames have the same holes and differ only by the owners of
+    the sites where the readings differ. These sites carry the surrounding label
+    before and $Q$ after a birth, lie at distance more than $2\epsilon_0t$ from
+    every true vertex, and lie in a band of diameter at most $n$. The frame after is
+    therefore the frame before with these sites handed to the party of $Q$, which
+    is the setting of the bulk birth and death of
+    Theorem~\ref{thm:peps_bulk_steps_treated_frames}.
+\end{proof}
