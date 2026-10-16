@@ -1,4 +1,4 @@
-\subsection{Both edge directions and reference witnesses}
+\subsection{Both edge directions and reference edge data}
 \label{subsec:peps_arc_window_gauge}
 
 \begin{definition}[Exchange of torus coordinates]%
@@ -32,10 +32,10 @@
     \leanok
     \uses{def:peps_torus_coordinate_swap, thm:peps_graph_transport_composition,
         thm:peps_region_injective_identification}
-    Membership in the two coordinate arcs is exchanged. Graph
-    transport preserves regional injectivity. The identity
-    $S\circ t_{a,b}=t_{b,a}\circ S$ and composition of graph transports
-    give translation invariance of the transported tensor.
+    Membership in the two coordinate arcs is exchanged, and relabelling
+    along a graph isomorphism preserves regional injectivity. The identity
+    $S\circ t_{a,b}=t_{b,a}\circ S$ and functoriality of graph relabelling
+    give translation invariance of the relabelled tensor.
 \end{proof}
 
 \begin{theorem}[Equality of all bond dimensions from normal arc windows]%
@@ -64,7 +64,7 @@
     assumed.
 \end{proof}
 
-\begin{theorem}[A covariant absorbed gauge family from two witnesses]%
+\begin{theorem}[A covariant absorbed gauge family from two reference edges]%
     \label{thm:peps_absorbed_family_reference_witnesses}
     \lean{TNLean.PEPS.exists_torusCovariantAbsorbedGaugeFamily_of_edgeReferenceWitnesses}
     \leanok
@@ -72,14 +72,14 @@
     $w,h>2$, matched bond dimensions, and positive bond dimensions
     for $A$. Let $e_{\mathrm h}$ and $e_{\mathrm v}$ be distinguished
     horizontal and vertical edges. Suppose that at each of these
-    edges there is a coefficient-identity witness: its region and
-    complement are injective for $B$, all bond dimensions of $B$ are
-    positive, and its two invertible matrices $Z,Z_{\mathrm{ref}}$ satisfy
+    edges there are reference coefficient-identity data: a region $R$ such that
+    $R$ and its complement are injective for $B$, all bond dimensions of $B$ are
+    positive, and two invertible matrices $Z,Z_{\mathrm{ref}}$ satisfy
     $C_A(R,e,M;\sigma,\tau)=C_B(R,e,Z M Z^{-1};\sigma,\tau)$
     for both choices $Z$ and $Z_{\mathrm{ref}}$, all matrices, and all
     physical configurations, after identifying
     the matched matrix sizes. Require that the first stored endpoint
-    of each distinguished edge belongs to its witnessing region.
+    of each distinguished edge belongs to its region $R$.
     Then there is a translation-covariant family of invertible edge
     matrices $X_e$ such that, for every edge $e$, global physical
     configuration $\sigma$, and matrix $M$,
@@ -88,15 +88,15 @@
     \end{align}
     Here $X\cdot B$ denotes the tensor obtained by the edge gauges,
     and the matrix on the right is identified by the matched bond
-    dimensions. The witnessing regions need not be rectangles.
+    dimensions. The regions $R$ need not be rectangles.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:peps_absorbedBoundaryGauge,
         thm:peps_regionInsertedCoeff_translate_coeffIdentity}
-    Translate the horizontal witness to each horizontal edge and
-    the vertical witness to each vertical edge. Absorb the gauge on
-    each witnessing boundary into the tensor $B$.
+    Translate the horizontal reference data to each horizontal edge and
+    the vertical reference data to each vertical edge. Absorb the gauge on
+    each translated boundary into the tensor $B$.
     The translation reaching an edge is unique when $w,h>2$;
     composition of translations therefore gives covariance of the
     resulting family. If the stored endpoint order is reversed, the
