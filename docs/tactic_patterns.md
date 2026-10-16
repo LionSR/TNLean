@@ -4598,6 +4598,18 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Dyadic padding bounds — candidate (2026-10-16)
+
+- **Pattern:** Combine the lower and strict upper bounds for
+  `2 ^ Nat.clog 2 L`, then add positivity of the ceiling logarithm.
+- **Seen:** The bounds in `DyadicAnchors.lean` and their former rederivation
+  in `le_two_pow_clog_lt` in `DyadicProtocolConsequences.lean`.
+- **Abstraction:** Reuse the existing `le_paddedSide` and
+  `paddedSide_lt_two_mul`; the public wrapper packages them with `Nat.clog_pos`.
+- **Notes:** The duplicate proof is removed by existing-lemma reuse. These
+  two locations are below the promotion threshold of three occurrences
+  across two files; no new helper, tactic or global attribute is introduced.
+
 ### Treated-to-level frame equality — candidate (2026-10-16)
 
 - **Pattern:** Identify true vertices from a guide equality, replace the constant

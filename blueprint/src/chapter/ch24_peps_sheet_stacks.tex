@@ -3186,7 +3186,7 @@ no holes, this is the normalization of $\Omega$.
          & =\bigl(2b,K,2b,(2b+1)(L^{20})^{-1}\bigr).
         \label{eq:peps_large_repainting_change_bounds}
     \end{align}
-    Let $X$ be any type with decidable equality, let $l$ be a list in $X$
+    Let $X$ be an arbitrary set, let $l$ be a list in $X$
     without repetitions, and let $e\mapsto x_e$ inject the four edges into
     members of $l$. Let $A$ assign a frame to every element of $X$, with
     $A(x_e)$ the raw frame held by the party of the label across $e$.
@@ -3251,12 +3251,12 @@ no holes, this is the normalization of $\Omega$.
 
     Let $i$ be less than the event-schedule length, and suppose its $i$th
     event repaints $S$ with side $2^j>K_0t$. Let $b,K\in\mathbb N$ satisfy
-    $b\ge2$, $K\ge1$. For every witness $j<k$, assume bounded point
+    $b\ge2$, $K\ge1$. Whenever $j<k$, assume bounded point
     treatments of $S$ at stage $\mathit{repaintedBlocks}(k,i,j)$, with
     participants used by this event and bounds
     (\ref{eq:peps_large_repainting_change_bounds}). Fix arbitrary frozen
-    frames and idle owners for all event-operation pairs. For every such
-    witness and every edge of $S$, require its frozen frame to equal
+    frames and idle owners for all event-operation pairs. Under the same
+    condition $j<k$, require, for every edge of $S$, its frozen frame to equal
     Definition~\ref{def:peps_protocol_auxiliary_final_frame} at that stage,
     and its idle owner to be the party of the label across the edge.
     Then there is a sequence of memory lists indexed by $\mathbb N$ whose
@@ -3434,8 +3434,9 @@ no holes, this is the normalization of $\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
-    The defining ceiling-logarithm inequalities give $L\le2^d$ and
-    $2^{d-1}<L$. Since $L\ge2$, one has $d\ge1$ and hence $2^d<2L$.
+    \uses{lem:peps_dyadic_padded_side}
+    Since $L\ge2$, positivity of the ceiling logarithm gives $d\ge1$.
+    The padded-side bounds give $L\le2^d<2L$.
 \end{proof}
 
 \begin{theorem}[The dyadic distribution protocol from the patch bound]

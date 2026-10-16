@@ -75,12 +75,7 @@ theorem IsAngularScale.mono {q : ℕ} {J Δ a A₀ : ℝ} {m₀ p : ℕ} {D L₀
 theorem le_two_pow_clog_lt {L : ℕ} (hL : 2 ≤ L) :
     1 ≤ Nat.clog 2 L ∧ L ≤ 2 ^ Nat.clog 2 L ∧ 2 ^ Nat.clog 2 L < 2 * L := by
   have h1 := Nat.clog_pos (b := 2) (by norm_num) (by omega : 1 < L)
-  refine ⟨h1, Nat.le_pow_clog (by norm_num) L, ?_⟩
-  have h2 := Nat.pow_pred_clog_lt_self (b := 2) (by norm_num) (by omega : 1 < L)
-  rw [Nat.pred_eq_sub_one] at h2
-  have : 2 ^ Nat.clog 2 L = 2 * 2 ^ (Nat.clog 2 L - 1) := by
-    rw [← pow_succ']; congr 1; omega
-  omega
+  exact ⟨h1, le_paddedSide L, paddedSide_lt_two_mul (by omega)⟩
 
 /-- **Proposition 7.1 in the form used in §8, from Proposition 4.1.** Assume the adaptive patch
 constraint of Proposition 4.1; the angular information bound of Proposition 3.4 is
