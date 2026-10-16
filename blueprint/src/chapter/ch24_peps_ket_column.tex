@@ -1,7 +1,7 @@
 \section{Extracting one ket column from an operator network}
 \label{sec:peps_ket_column}
 We establish \cite[Lemma~8.1]{OpenAI2026PolynomialPEPS},
-September 24, 2026, Section~8, lines 67--94 (statement
+September 24, 2026, \texttt{07-assembly.tex}, lines 67--94 (statement
 lines 67--78, proof lines 79--94). Throughout, $\Omega$ is a unit vector in a
 finite-dimensional space with a distinguished orthonormal basis
 $\{\ket z\}$, and $\sigma$ is an arbitrary operator on that space.
@@ -170,8 +170,8 @@ $\{\ket z\}$, and $\sigma$ is an arbitrary operator on that space.
     selected column.
 \end{proof}
 
-The final construction of \cite[\S8]{OpenAI2026PolynomialPEPS} (lines 9--99)
-applies the column lemma to an operator network and then
+The final construction of \cite[\S8]{OpenAI2026PolynomialPEPS} (\texttt{07-assembly.tex},
+lines 9--99) applies the column lemma to an operator network and then
 realizes the resulting ket network as a PEPS on the open $L\times L$ square
 in the sense of \cite[\S1.1]{OpenAI2026PolynomialPEPS}
 (\texttt{00-introduction.tex}, lines 20--34). The statements below
@@ -274,13 +274,13 @@ index read as an output-input pair in $\{0,\dots,q-1\}^2$.
     \cite[Theorem~1.1]{OpenAI2026PolynomialPEPS}
     (\texttt{00-introduction.tex}, lines 36--57) for one lattice size.
     The source applies the column lemma on the party graph and then routes
-    the ket network onto the grid (Section~8, lines
+    the ket network onto the grid (\texttt{07-assembly.tex}, lines
     96--177). To use the corollary instead, the routing is applied to
     the operator network before the column is fixed; the two steps commute
     because fixing the inputs acts site by site on physical indices while
-    routing leaves physical coordinates unchanged (Section~8,
+    routing leaves physical coordinates unchanged (\texttt{07-assembly.tex},
     lines 125--126 and 159--160). Sizes $L<L_0$ are treated separately in
-    the source by an exact spanning-tree PEPS (Section~8,
+    the source by an exact spanning-tree PEPS (\texttt{07-assembly.tex},
     lines 205--212).
 \end{corollary}
 
