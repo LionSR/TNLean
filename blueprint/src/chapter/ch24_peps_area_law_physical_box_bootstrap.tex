@@ -245,7 +245,8 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \lean{TNLean.PEPS.AreaLaw.Scan.exists_weakRectangle_source_entropy_bounds}
     \leanok
     Fix $b>0$ and $C_{\rm box}\geq0$.
-    One nonnegative $C_e$ precedes every finite state, weakly safe
+    One nonnegative $C_e$ precedes every integer safety parameter $D_0\geq0$,
+    finite state, weakly safe
     rectangle, row scale $n\geq s$, collar $1\leq L\leq s$, and current
     exponent $e\geq b$.
     If $(D_0+1)L\leq D_0s$ and the same unit vector obeys the pointwise
@@ -354,7 +355,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
     \leanok
     Fix $q\geq1$, $R$, $J\geq0$, $\Delta>0$, $e_*<e_0<1$ and
     $C_{\rm box}\geq0$.  There is $C>0$ before every
-    $e_*<e\leq e_0$ and every $D_0\geq1$ such that
+    $e_*<e\leq e_0$ and every integer $D_0\geq1$ such that
     \begin{align}
         F_{\rm box}(r) & \leq C_{\rm box}r^{1+e}\quad(r\geq1)
         \quad\Longrightarrow\quad
@@ -400,7 +401,7 @@ changing the physical size.  No sharp marginal-moment estimate is used.
         thm:arealaw-physical-box-step}
     Obtain the genuine initial exponent $0<e_0<1$ uniformly in the safety
     parameter.  Apply the established finite exponent iteration to the
-    family indexed by $D_0>2R+10$, using the quadratic volume estimate
+    family indexed by integers $D_0>2R+10$, using the quadratic volume estimate
     and the preceding physical one-step theorem.  The latter is invoked
     only when a current exponent above $e_*$ occurs.  No fixed-exponent
     box estimate is an input of this argument.
@@ -484,6 +485,12 @@ uniformly in $D_0$. Conversely, the supremum estimate at
 $r=\operatorname{size}(Q)\geq1$ bounds each admissible rectangle
 entropy and gives (\ref{eq:arealaw-physical-real-box}). Thus the two
 formulations have exactly the same uniformity and hypotheses.
+
+Since $e_*=2\cdot10^{-6}\in(0,1)$, the same bound also proves
+\cite[Proposition~3.3]{OpenAI2026AreaLaw} with $e_0=e_*$.
+Its constant is chosen before every real $D_0>2R+10$ and every finite
+physical instance. This recovers the full real-clearance conclusion of
+that proposition, without extending the integer-clearance recurrence.
 
 The immutable source is
 \href{https://github.com/openai/math/blob/adc7f1241b42e322a6451854ab7e4b4c146bf78a/preprints/A-two-dimensional-area-law-from-a-global-spectral-gap-September-24-2026/build/sections/08-scanner.tex#L681-L805}{Proposition 9.5 and its proof, lines 681--805}.
