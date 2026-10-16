@@ -86,3 +86,37 @@ square cylinder data at the same radii.
     \end{align}
     (\texttt{03-patches.tex}, lines 563--603).
 \end{proof}
+
+\begin{theorem}[Exact square patches at bounded radius]
+    \label{thm:peps_bounded_radius_square_patch}
+    \lean{TNLean.PEPS.Approximation.exists_squarePatch_integerCoordinates_of_radius_le_four}
+    \leanok
+    \uses{def:peps_frame_square_patch}
+    Let $\Lambda\subseteq\Z^2$ be finite with its sites at their integer
+    positions, let $q\ge1$, $z\in\R^2$ and $0<u\le4$. For every vector $\Omega$
+    there are square cylinder data at $(z,u)$ with
+    \begin{align}
+        \sum_jd_j\le q^{81},
+        \qquad
+        (\id-\Pi)\Omega=0 .
+    \end{align}
+    The domain and the sample may be empty.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_square_patch_of_nested_cylinders,
+        thm:peps_square_sample_integer_coordinates,
+        thm:peps_closed_square_card,
+        def:peps_regional_cylinder}
+    Apply Theorem~\ref{thm:peps_square_patch_of_nested_cylinders} with one
+    radius $r_0=u$, the whole space $S_0=\mathcal H_{D_0}$ and $v=\Omega$, which
+    lies in the cylinder space $S_0\otimes\mathcal H_{D_0^c}$. The error is
+    then at most $\lVert\Omega-\Omega\rVert=0$, and
+    \begin{align}
+        \sum_jd_j\le\dim\mathcal H_{D_0}=q^{\lvert D_0\rvert}\le q^{81},
+    \end{align}
+    since a closed square of radius at most four contains at most $81$ integer
+    points (\cite{OpenAI2026PolynomialPEPS}, \texttt{03-patches.tex}, lines
+    53--54).
+\end{proof}

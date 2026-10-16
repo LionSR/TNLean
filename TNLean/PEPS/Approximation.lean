@@ -74,6 +74,7 @@ import TNLean.PEPS.Approximation.ApproximateSourceSampling
 import TNLean.PEPS.Approximation.AuxiliaryRegisterFiniteness
 import TNLean.PEPS.Approximation.Basic
 import TNLean.PEPS.Approximation.BasisMatrixOperator
+import TNLean.PEPS.Approximation.BoundedRadiusSquarePatch
 import TNLean.PEPS.Approximation.CanonicalPartyFactorization
 import TNLean.PEPS.Approximation.CellChambers
 import TNLean.PEPS.Approximation.CellColouredGeneration
