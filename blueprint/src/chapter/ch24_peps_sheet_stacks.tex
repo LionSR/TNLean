@@ -503,3 +503,61 @@ no holes, this is the normalization of $\Omega$.
     each event carries at most $189$ gates, and the lifetime bound of the parties
     applies.
 \end{proof}
+
+\begin{theorem}[A protocol from a bounded trajectory of sheets]
+    \label{thm:peps_protocol_from_bounded_trajectory}
+    \lean{TNLean.PEPS.PairEffect.OriginalCircuit.chainLayout,
+        TNLean.PEPS.PairEffect.OriginalCircuit.chainStep,
+        TNLean.PEPS.PairEffect.OriginalCircuit.chainVec,
+        TNLean.PEPS.PairEffect.OriginalCircuit.chainStep_induction,
+        TNLean.PEPS.PairEffect.OriginalCircuit.norm_chainStep_eval_sub_le,
+        TNLean.PEPS.Approximation.card_eventUses_le,
+        TNLean.PEPS.Approximation.pow_le_paddedSide,
+        TNLean.PEPS.Approximation.finiteDimensional_of_mem_stackRegs,
+        TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_frames}
+    \leanok
+    \uses{def:peps_dyadic_protocol, thm:peps_dyadic_protocol_initial_step,
+        thm:peps_dyadic_protocol_final_step, thm:peps_protocol_bounded_trajectory,
+        thm:peps_dyadic_protocol_locality, thm:peps_dyadic_protocol_parties}
+    An event of the hierarchy uses at most $19$ parties. Let $L\ge2$,
+    $L\le2^k<2L$ and $\lVert\Omega\rVert=1$, and let lists of encoded frames on
+    the parties of the hierarchy of $[0,2^k]^2$, read at the cell centers, be given
+    at every stage, such that the following hold.
+    \begin{enumerate}
+        \item The initial frames have no holes, and each is held entirely by one
+              party.
+        \item Each change of the schedule is a bounded change from the reference
+              vector of its stage to that of the next stage, with participants
+              used by the event of the change, at most $r$ pair effects and at most
+              $r_s$ pair sources in each monomial, at most $K\le CL^{k'}$ monomials
+              and coefficient sum, and error at most $CL^{-20}$.
+        \item At the end of the schedule the main frame is read by the unit-square
+              parties and has trivial holes, every hole of the other sheets
+              satisfies the frame constraint at accuracy $L^{-60}$, and the other
+              sheets carry at most $CL^3$ holes.
+    \end{enumerate}
+    If $C\ge5042$, the private initialization, the changes of the schedule and the
+    final regrouping form a protocol with the assembly bounds of
+    Definition~\ref{def:peps_dyadic_protocol} for the constants $C$,
+    $b=64\cdot189$, $k'$ and $r$, all of whose changes have at most $r_s$ pair
+    sources in each monomial (\texttt{06-geometry.tex}, lines 12--53 and
+    572--681). This is not
+    Proposition~\ref{prop:peps_dyadic_protocol}: the frames along the schedule are
+    assumed here.
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_sheet_raw_initialization, thm:peps_dyadic_protocol_lifetime,
+        thm:peps_dyadic_protocol_schedule_counts}
+    The repainting of a square uses the parties of the blocks next to it at its
+    level and at the level above, at most $18$, and its placeholder; a junction
+    resize uses at most nine block parties. The protocol starts with the private
+    initialization of the raw copies, which is exact and has no nonprivate gate,
+    performs the changes of the schedule, and ends with the final regrouping, again
+    exact and without nonprivate gate. There are at most $5040L^3+2$ changes and at
+    most $32L^2/3$ parties. Each change carries at most one nonprivate gate whose
+    parties are used by its event, which gives the bounds on gates, on the scales
+    and addresses of the parties of a gate, and the lifetime bound $64\cdot189$.
+    The reference vectors are those of the sheets, so the errors are those of the
+    changes, and the final reference vector is that of the final regrouping.
+\end{proof}
