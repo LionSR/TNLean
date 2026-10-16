@@ -29,6 +29,13 @@ image is the region of a run of the actual fan of the cell of side `2 u`
 centered at `v`; `cellFanRunRegion_centered_image` records this, and the
 existing fan-run template then applies.
 
+**Scope restriction (lattice point and stopping scale):** `initialBelt_exists_template`,
+`repairReplacement_exists_template` and `exists_belt_replacement_templates` assume that
+the region contains a lattice point, which Definition 9.3 needs for a nonempty template,
+and the replacement statements assume `S_* ≥ 1`. The source applies these templates only
+to regions meeting the cut and chooses `S_*` large. Documented in
+`docs/paper-gaps/arealaw2d_belt_replacement_template_scope.tex`.
+
 ## Main statements
 
 * `cellFanRunRegion_centered_image`: a transported normalized fan run is an

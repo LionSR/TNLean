@@ -1,0 +1,65 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\setlength{\emergencystretch}{2em}
+
+\input{command}
+
+% Fallbacks keep this note compilable when a different command.tex is found first.
+\providecommand{\leanid}[1]{\textsf{\detokenize{#1}}}
+\providecommand{\gapnote}[2]{\par\noindent\textbf{Verdict:} #1 (#2).\par}
+
+\title{Lattice Points and the Stopping Scale in Belt and Replacement Templates}
+\author{}
+\date{2026-10-16}
+
+\begin{document}
+\maketitle
+\gapnote{scope-restriction}{resolved by the final assembly}
+
+\section{The source passage}
+
+Section~11 of the September~24, 2026 two-dimensional area-law
+manuscript~\cite{OpenAI2026AreaLaw} (\path{10-geometry.tex}, lines~731--740)
+assigns to a belt tile of side scale $u=t_k$ the parameters $s_0=u$ and
+$n=\lceil C_Bu\rceil$, and to a replacement with removal half-side $u$ the
+parameters $s_0=2u$ and $n=\lceil C_Bu\rceil$. Each region is a union of at
+most eight closed triangles, and $C_B$ is chosen large enough for every such
+template to satisfy $n\ge C_{\rm tpl}N_0(s_0+1)$ and
+$\operatorname{diam}_\infty T\le n$.
+
+\section{The formal statements}
+
+The formal results\footnote{\leanid{TNLean.PEPS.AreaLaw.Geometry.initialBelt_exists_template},
+\leanid{TNLean.PEPS.AreaLaw.Geometry.repairReplacement_exists_template}.}
+carry two premises that the passage does not print.
+\begin{enumerate}
+  \item The region contains a lattice point. Definition~9.3
+        (\path{08-scanner.tex}, lines~546--564) requires a template to be a
+        nonempty set, so a region with no lattice point has no template. The
+        source uses these templates only for identifiers whose final regions
+        meet the cut $A$ (\path{10-geometry.tex}, lines~776--779). Such a
+        region contains a lattice point.
+  \item For replacements, the stopping scale satisfies $S_*\ge1$. Then every
+        nonterminal removal half-side is a natural power of two, so $s_0=2u$
+        is a positive integer. The source chooses $S_*$ sufficiently large
+        (lines~380--394), and requires a terminal half-side produced from
+        $S\ge S_*$ to be at least two (lines~549--552). That choice implies
+        $S_*\ge1$.
+\end{enumerate}
+
+\section{Elimination}
+
+Neither premise restricts the use of these results in the proof of the
+two-family proposition. The final assembly applies the theorems only to
+retained regions, which meet $A$, and with a stopping scale chosen at least
+one. No unrestricted statement is needed there. The unrestricted reading of
+the first premise is empty, because Definition~9.3 has no empty template.
+Nothing else remains open.
+
+\bibliographystyle{alpha}
+\bibliography{references}
+
+\end{document}
