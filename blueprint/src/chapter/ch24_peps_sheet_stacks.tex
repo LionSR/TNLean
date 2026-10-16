@@ -1139,51 +1139,130 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.treatedFrame_spec,
         TNLean.PEPS.Approximation.IsProtocolConstants.treatedRadius_bounds}
     \leanok
-    \uses{def:peps_protocol_level_frame, lem:peps_treated_true_vertices,
-        lem:peps_dyadic_readings_exist}
-    In the repainting of a square $S$ of side $n=2^j$ of the protocol, let $g$ be
-    an unmodified guide of the repainting, $L_0$ a label and $M$ a finite set of
-    grid corners. The treated guide is $g$ placed on $S$, homogenized to $L_0$ on
-    the open squares of radius $t=D\log L$ about the corners of $M$, and read
-    after the displacement $(1,1)$. The frame of the treated sheet is the encoded
-    frame of this guide: the owner of a site is the party of the label read there,
-    and at every true vertex of the treated guide there is a hole with the patch
-    supplied at radius $\epsilon_0t$, whose tag is held by the party of the
-    canonical tag holder. A bounded change of one frame with bounded pair sources
-    is a change of its registers that is a bounded change of the reference
-    vectors whose monomials carry at most a prescribed number of pair sources.
-    When $n>K_0t$ and the constants are those of the protocol, the treated guide
-    is a reading of the homogenized guide moved to $S$, its true vertices are the
-    centers of the holes, and these holes have disjoint outer squares
-    (\texttt{06-geometry.tex}, lines 69--80, 102--125 and 328--339).
+    \uses{def:peps_protocol_level_frame,
+        lem:peps_treated_true_vertices,
+        def:peps_bounded_change,
+        def:peps_circuit_source_bound,
+        thm:peps_protocol_constants,
+        thm:peps_protocol_bounded_changes,
+        def:polynomial_peps_model}
+    For any natural level $j$, integer square index $S$, real $t$, finite set $M$
+    of grid corners, label $L_0$ and plane guide $g$, place $g$ on the square of
+    index $S$ and side $n=2^j$, homogenize it to $L_0$ on the open sup squares
+    of radius $t$ about the corners in $M$, and apply the sampling convention of
+    Definition~\ref{def:peps_protocol_level_frame}: at each point take the eventual
+    value along $(1,1)$ when it exists, and otherwise the value of the homogenized
+    guide at that point. This total construction is the treated guide. For natural
+    $k,j$, put $N=2^{k-j}$, with subtraction truncated
+    at zero. The treated vertex set of any guide is its true vertices among the
+    grid corners with integer indices in $[0,N+1]^2$ and the finite rim
+    patterns of radius $t$ about $M$. Every square of the hierarchy, including
+    the root, has its index in the root square of its level.
+
+    Let $L,q$ be natural numbers, $\Omega$ any vector on the $L\times L$ system,
+    and $P$ an adaptive supplied-patch family for $\Omega$ with parameters
+    $B_0,C,c$, test exponent $60$ and size $L$. Fix a label rank and a repaintable
+    square $R$ at level $j<k$. For arbitrary real $\epsilon_0,t$ satisfying
+    $0<\epsilon_0t\le B_0\log L$, form the supplied patches of radius
+    $\epsilon_0t$ at the treated vertex set of the guide placed on $R$. If their
+    outer sets of physical
+    sites are pairwise disjoint, the treated frame is the encoded frame with
+    these patches, with each site owned by the party of its read label and each
+    tag held by the party of its canonical tag holder. If these outer sets are
+    not disjoint, define the treated frame to be the raw frame owned by the
+    square party of $R$. In particular, the explicit disjointness hypothesis
+    gives equality with the encoded guide frame for arbitrary such data.
+
+    At the constants of the protocol and $L\ge2$, the radius bound
+    $0<\epsilon_0D\log L\le B_0\log L$ holds without state or patch assumptions.
+    For the frame specification, set $t=D\log L$ and assume $2^j>K_0t$. Take
+    any set of already repainted blocks and any unmodified guide of the
+    corresponding repainting baseline of $R$, any finite $M$ and any $L_0$.
+    The treated guide is a reading of the homogenized guide placed on $R$;
+    its true vertices are exactly the treated vertex set, the supplied outer
+    sets are pairwise disjoint, and its treated frame is the encoded guide
+    frame. This specification imposes no normalization condition on $\Omega$
+    (\texttt{06-geometry.tex}, lines 69--80, 102--125 and 328--355).
+
+    More generally, for any finite site set, positions, party set and $q\ge1$,
+    a bounded change of frames $F,F'$ with pair-source bound $r_s$ means an
+    original circuit from their registers that is a bounded change in the sense
+    of Definition~\ref{def:peps_bounded_change} of their reference vectors for
+    the chosen participant set, pair-effect bound $r$, monomial bound $K$ and
+    error $\eta$, and whose monomials have at most $r_s$
+    pair sources. Here $r,K,r_s$ are natural, $\eta$ is real, and the reference
+    vector $\Omega$ is arbitrary.
 \end{definition}
+
+\begin{proof}\leanok
+    \uses{def:peps_dyadic_block_guide,
+        lem:peps_dyadic_chamber_sampling,
+        lem:peps_dyadic_readings_exist,
+        lem:peps_treated_true_vertices,
+        thm:peps_dyadic_repainting_valid_labels,
+        thm:peps_dyadic_temporary_holes,
+        thm:peps_guide_frame_norm,
+        thm:peps_guide_frame_supplied_gates,
+        thm:peps_protocol_bounded_changes,
+        thm:peps_protocol_from_large_repaintings,
+        thm:peps_protocol_level_frame_facts}
+    The radius estimate follows from the positive protocol scales and their
+    hole bound. Ray constancy gives the displaced reading. The finite
+    grid-and-rim description gives all its true vertices, and the separation
+    of their outer squares gives disjoint physical samples. The disjointness
+    branch of the definition is then the encoded guide frame. The root-index
+    inclusion follows from the two coordinate bounds of a hierarchical square.
+\end{proof}
 
 \begin{theorem}[A point treatment as a change of a treated sheet]
     \label{thm:peps_protocol_point_treatment_change}
     \lean{TNLean.PEPS.Approximation.fiftyThree_le_protocolPatchBound,
         TNLean.PEPS.Approximation.exists_pointTreatment_hasSourceBoundedChange}
     \leanok
-    \uses{def:peps_protocol_treated_frame, thm:peps_guide_frame_supplied_gates,
+    \uses{def:peps_protocol_treated_frame,
         thm:peps_protocol_level_events}
-    Fix $0<\epsilon_0\le1/16$. There is a mesh threshold $\nu'>0$ such that for
-    every $0<\nu\le\nu'$ and constants of the protocol the following holds. In the
-    repainting of a square $S$ of side $n>K_0t$, let $g$ be an unmodified guide,
-    $L_0$ the final label or a label of a block next to $S$, and $M,M'$ sets of
-    grid corners that differ at most at one corner of $S$. Then passing from the
-    frame of the treated sheet with the marks $M$ to that with the marks $M'$ is a
-    bounded change whose participants the repainting uses, with $2b$ pair effects
-    and pair sources, the gate bound of the small-patch rewrites and error
-    $(2b+1)L^{-20}$, where $b$ is the patch bound of the protocol
-    (\texttt{06-geometry.tex}, lines 328--339, 481--505 and 572--596).
+    Fix $0<\epsilon_0\le1/16$. There is a threshold $\nu'>0$, depending only on
+    $\epsilon_0$, such that the following holds for every $0<\nu\le\nu'$.
+    Choose protocol constants, natural $L\ge2$ and $q\ge1$, a unit vector
+    $\Omega$, an adaptive supplied-patch family $P$ for $\Omega$ with parameters
+    $B_0,C,c$, test exponent $60$ and size $L$, and any label rank. Let $R$ be a
+    repaintable square of a hierarchy of any natural depth $k$, at level $j<k$,
+    with integer index $s$, side $n=2^j>K_0t$ and $t=D\log L$.
+    Choose any set of already repainted blocks and an unmodified guide $g$ of
+    its repainting baseline. Let $L_0$ be the new label of $R$ or the current
+    label of one of the nine blocks with indices $s+u$, $u\in\{-1,0,1\}^2$.
+    Let $M,M'$ be finite sets of grid corners with identical membership away
+    from one corner $Q_0$ of $R$; equality of the two sets is allowed.
+
+    For natural $C',c'$ satisfying $C\le C'$, $1\le C'$ and $c\le c'$, put
+    $b$ equal to the protocol patch bound and use the bound $K_{\mathrm{rw}}$
+    of~(\ref{eq:peps_protocol_level_rewrite_bound}) for these $C',c',b,L$.
+    Passing from the treated frame with marks $M$ to that with marks $M'$ is a
+    bounded change with participants used by the repainting of $R$, pair-effect
+    and pair-source bounds $2b$, monomial bound $K_{\mathrm{rw}}$, and error
+    $(2b+1)L^{-20}$ (\texttt{06-geometry.tex}, lines 328--339, 481--505 and
+    572--596). The elementary estimate $b\ge53$ holds more generally for all
+    real $\epsilon_0\ge0$ and $0<\nu<1/3$, without protocol hypotheses.
 \end{theorem}
 
 \begin{proof}\leanok
-    Adding or removing one mark changes the treated guide only on the open square
-    of radius $t$ about that corner. The supplied patches of radius $\epsilon_0t$ at
-    the true vertices there are rewritten by one small-patch rewrite through patches
-    of radius $\nu t/2\le B_0\log L$; the footprint ratio of these patches is at most
-    $(4+8\epsilon_0+2\nu)/\nu$, so the rewrite uses at most $b$ patches, and $b\ge53$ once
-    $\nu<1/3$. Its gates are local to the parties of the repainting.
+    \uses{def:peps_dyadic_chamber_sampling,
+        def:peps_protocol_treated_frame,
+        lem:peps_treated_true_vertices,
+        thm:peps_guide_frame_supplied_gates,
+        thm:peps_protocol_bounded_changes}
+    The two homogenized guides agree outside the open radius-$t$ square about
+    $Q_0$; after reading along $(1,1)$, their possible difference is contained in
+    the closed radius-$t$ square. Apply the treated-frame specification to both
+    mark sets. The supplied patches of radius $\epsilon_0t$ at their true
+    vertices are rewritten by the point-treatment small-patch rewrite, using
+    auxiliary patches of radius $u=\nu t/2\le B_0\log L$. Its footprint ratio
+    is $(4+8\epsilon_0+2\nu)/\nu$, and
+    $((4+8\epsilon_0+2\nu)/\nu+1)^2\le b$ bounds the square net. Also $b\ge53$
+    since the protocol constants give $\nu<1/3$. The resulting circuit has
+    pair-effect and pair-source bounds $2b$, monomial bound $K_{\mathrm{rw}}$
+    and error $(2b+1)L^{-20}$. Its block parties are participants used by the
+    repainting of $R$.
 \end{proof}
 
 \begin{theorem}[Births and deaths along an edge as changes of a treated sheet]
@@ -1199,28 +1278,121 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.Approximation.bandBirth_hasFrameChange,
         TNLean.PEPS.Approximation.bandDeath_hasFrameChange}
     \leanok
-    \uses{def:peps_protocol_treated_frame, thm:peps_bulk_steps_treated_frames,
-        thm:peps_dyadic_no_changed_vertex, lem:peps_guide_frame_tags}
-    Assume the angular information bound at the scale $t=D\log L$, as provided by
-    Proposition~3.4. At the constants of the protocol, in the repainting of a
-    square of side $n=2^j>K_0t$, let an elementary birth or death along an edge
-    $e$, inserting or removing the label $Q$, change one unmodified guide of the
-    repainting into another, with the surrounding guide the guide before for a
-    birth and the guide after for a death. If the parties of the surrounding
-    label and of $Q$ lie in $S$, then passing from the frame of the guide before,
-    treated about the endpoints of $e$ with the surrounding label, to that of the
-    guide after is a bounded change with participants in $S$, at most one pair
-    source and error $L^{-30}$, for any monomial bound $K\ge1$ and pair-source bound at least one; for a death the bound on pair effects must also be at least one, since a death uses one pair effect (\texttt{06-geometry.tex}, lines 183--221, 328--387
-    and 440--445).
+    \uses{def:peps_protocol_treated_frame,
+        thm:peps_bulk_steps_treated_frames,
+        thm:peps_dyadic_no_changed_vertex,
+        def:peps_angular_scale,
+        def:peps_squareLatticeCoordinateRegions}
+    Let $q\ge1$ and let $\Omega$ be a $\Delta$-gapped ground state, at energy
+    $E_0$, of the square Hamiltonian with local norm bound $J$. Assume that $D$
+    is an angular scale as in Definition~\ref{def:peps_angular_scale} with
+    parameters $q,J,\Delta,a,A_0,m_0$, test exponent $60$ and threshold $L_0'$,
+    where $m_0\ge2$ and $A_0\ge1$. Choose protocol constants and natural
+    $L\ge\max(2,L_0')$ and $k$ with $2^k<2L$. Fix an adaptive supplied-patch
+    family $P$ for $\Omega$ with parameters $B_0,C,c$, test exponent $60$ and
+    size $L$, and any label rank.
+
+    Let $R$ be a repaintable square at level $j<k$, with $n=2^j>K_0t$ and
+    $t=D\log L$, and choose any set of already repainted blocks. An elementary
+    edge operation inserting or removing a label $Q$ changes one unmodified
+    guide of this repainting baseline into another. Its surrounding guide is
+    the guide before for a birth and the guide after for a death. Treat both
+    guides with the surrounding label about exactly the endpoints of the edge.
+    If the parties of the surrounding label and of $Q$ lie in a participant set
+    $S$, passing from the treated frame before to that after is a bounded
+    change with participants in $S$, at most one pair source and error
+    $L^{-30}$. This holds for all natural monomial and pair-source bounds
+    $K,r_s\ge1$; the pair-effect bound $r$ is arbitrary for a birth and must
+    satisfy $r\ge1$ for a death (\texttt{06-geometry.tex}, lines 183--221,
+    328--387 and 440--445).
+
+    The supporting identities have the following separate domains.
+    \begin{enumerate}
+        \item For every natural $L$ and every site of the $L\times L$ lattice,
+              its cell-center position is its integer site position minus
+              $(1/2,1/2)$.
+        \item Let $G_b,G_a$ be plane labellings by any set, with the same true
+              vertices, and let $f_b,f_a$ be their readings along any common
+              displacement. If $\delta>0$ and every such guide vertex is at
+              distance at least $\delta$ from the closure of $\{G_b\ne G_a\}$,
+              then $f_b,f_a$ have the same true vertices and the same incident
+              labels at them.
+        \item For arbitrary finite sites, positions, natural $q$, labels and
+              parties, fix two guides, a common finite center set, a patch
+              family with disjoint outer samples, an owner map, placeholder
+              and rank. If the second guide assigns owner $Q$ on a site set
+              $T$ and the first guide's owners off $T$, and their tag holders
+              agree at every chosen center, then its guide frame is the first
+              guide frame with $T$ handed to $Q$. Denote this owner change by
+              $F[T\mapsto Q]$.
+        \item Let $H_b,H_a$ be labellings by any set, $d$ any translation and
+              $\delta>0$. Suppose that throughout the open $\delta$-neighbourhood
+              of $\{H_b\ne H_a\}$, $H_b=A$ and $H_a\in\{A,B\}$. For readings
+              $f_b,f_a$ of their translates along $(1,1)$, every point where
+              $f_b\ne f_a$ has $f_b=A$ and $f_a=B$.
+        \item For any edge band operation, label set, real $n,t$, edge and
+              background guide, the difference of its endpoint-treated guides
+              is contained in the open band $\{-8<x<2\}$ of that edge. If the
+              operation inserts the single label $Q$ and $t\le n$, then on
+              the open $a_0t$-neighbourhood of this difference both treated
+              values belong to $\{P_\circ,Q\}$ and the treated surrounding
+              guide is $P_\circ$, where $P_\circ$ is the surrounding label.
+              This last assertion is vacuous when $t\le0$.
+        \item For an operation on protocol labels inserting $Q$, let
+              $0<t\le n$ and take any background guide, translation and
+              $(1,1)$-readings of its treated before, after and surrounding
+              guides. Wherever the before and after readings differ, the
+              surrounding reading is $P_\circ$, and both other readings lie
+              in $\{P_\circ,Q\}$.
+        \item For such an operation on protocol labels, $0<t\le n$, any
+              background guide and translation, take just the two $(1,1)$-readings
+              of the treated before and after guides. For any real $\epsilon_0$
+              with $2\epsilon_0<a_0$, these two readings have the same
+              true vertices and incident labels; every changed position $p$
+              satisfies $d_\infty(p,z)>2\epsilon_0t$ for every such vertex $z$,
+              and any two changed positions satisfy $d_\infty(p,p')\le n$.
+    \end{enumerate}
 \end{theorem}
 
 \begin{proof}\leanok
-    The two treated guides have the same true vertices, with the same incident
-    labels, so the two frames have the same holes and differ only by the owners of
-    the sites where the readings differ. These sites carry the surrounding label
-    before and $Q$ after a birth, lie at distance more than $2\epsilon_0t$ from
-    every true vertex, and lie in a band of diameter at most $n$. The frame after is
-    therefore the frame before with these sites handed to the party of $Q$, which
-    is the setting of the bulk birth and death of
-    Theorem~\ref{thm:peps_bulk_steps_treated_frames}.
+    \uses{def:peps_dyadic_incident_labels,
+        def:peps_frame_square_patch,
+        def:peps_guide_frame,
+        def:peps_protocol_treated_frame,
+        lem:peps_circuit_source_bound_monomials,
+        lem:peps_dyadic_band_disjoint,
+        lem:peps_dyadic_incident_change,
+        lem:peps_dyadic_sampled_guides,
+        lem:peps_dyadic_translation,
+        lem:peps_guide_frame_tags,
+        thm:peps_bounded_change_closure,
+        thm:peps_bulk_steps_treated_frames,
+        thm:peps_dyadic_no_changed_vertex,
+        thm:peps_dyadic_temporary_holes,
+        thm:peps_guide_frame_norm,
+        thm:peps_guide_frame_supplied_gates,
+        thm:peps_protocol_level_frame_facts,
+        thm:peps_protocol_main_frame_schedule}
+    For the auxiliary reading identities, a difference of readings lies in the
+    closure of the original difference. Separation gives equality near each
+    true vertex, hence equality of incident labels; the same closure argument
+    transfers the two-label condition to the readings. For the band operation,
+    the unchanged surrounding guide near the difference gives these labels.
+    Its treated guide vertices are at distance at least $a_0t$ from the closed
+    change. The changed reading positions lie in the translated closed band,
+    whose diameter is at most $n$. The owner-change identity follows by
+    matching owners and the ordered holes with their tag holders.
+
+    In the protocol setting, the treated-frame specification and these facts
+    give equal true vertices and incident labels for the two readings. Their
+    changed positions satisfy $d_\infty(p,z)>2\epsilon_0t$ and
+    $d_\infty(p,p')\le n$, so the changed sites avoid every outer hole. Write
+    $F_b,F_a$ for the frames before and after, $T$ for the changed sites and
+    $Q_\circ$ for the party of $Q$. For a birth the changed labels go from
+    $P_\circ$ to $Q$, and $F_a=F_b[T\mapsto Q_\circ]$; for a death they go from
+    $Q$ to $P_\circ$, and $F_b=F_a[T\mapsto Q_\circ]$. Apply respectively the
+    bulk birth or bulk death of Theorem~\ref{thm:peps_bulk_steps_treated_frames}.
+    Their circuit conversions give the stated participant and monomial bounds,
+    error $L^{-30}$ and at most one pair source. The death uses one pair effect,
+    which is why its bound requires $r\ge1$.
 \end{proof}

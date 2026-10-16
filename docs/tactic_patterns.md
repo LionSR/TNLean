@@ -4538,8 +4538,9 @@ three-plaquette output measurement, and the routed reunion measurement.
   corner, two `treatedFrame_spec` extractions, `homogenize_endpointBlocks`, the readings and
   true-vertex sets, and `BandOperation.treated_frame_facts`.
 - **Seen:** `bandBirth_hasFrameChange` and `bandDeath_hasFrameChange`
-  (`Approximation/DyadicBandStepChanges.lean`); the owner change is already shared through
-  `guideFrame_eq_changeOwner_of_ne`.
+  (`Approximation/DyadicBandStepChanges.lean`). At this stage both proofs use
+  `guideFrame_eq_changeOwner`, with separate owner case splits; dependent PR #9507
+  consolidates those splits through `guideFrame_eq_changeOwner_of_ne`.
 - **Abstraction:** a lemma returning the readings, vertex sets and facts for the surrounding
   guide, if a third occurrence appears.
 

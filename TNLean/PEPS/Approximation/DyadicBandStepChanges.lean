@@ -155,10 +155,11 @@ theorem BandOperation.readings_of_ne {op : BandOperation GuideLabel} {Q : GuideL
   · rw [e1]; exact m1
   · rw [e2]; exact m2
 
-/-- **The facts shared by a birth and a death.** In the setting of `bandBirth_hasFrameChange`, the
-readings of the treated guides before and after have the same true vertices with the same incident
-labels, their sites of change lie outside every outer hole and within distance `n` of each other,
-and at those sites the surrounding guide reads `P∘` and the other guide `Q`. -/
+/-- **The facts shared by a birth and a death.** For `0 < t ≤ n` and `2 * ε₀ < angularConstant`,
+the two readings of the treated guides of an operation inserting one label have the same true
+vertices and incident labels. Every changed position is at distance strictly greater than
+`2 * ε₀ * t` from every true vertex, and two changed positions are at distance at most `n`.
+No protocol constants, supplied patches or unmodified-guide hypothesis are needed. -/
 theorem BandOperation.treated_frame_facts {op : BandOperation GuideLabel} {Q : GuideLabel}
     (hop : op.InsertsOne Q) {n t ε₀ : ℝ} (ht : 0 < t) (htn : t ≤ n)
     (hε : 2 * ε₀ < angularConstant) (e : SquareEdge) (g₀ : ℝ × ℝ → GuideLabel) (d : ℝ × ℝ)
@@ -195,14 +196,21 @@ theorem BandOperation.treated_frame_facts {op : BandOperation GuideLabel} {Q : G
     have := dist_le_of_mem_closedEdgeBand (by norm_num) (by norm_num) (hsub p hp) (hsub p' hp')
     rwa [dist_sub_right] at this
 
-/-- **A birth along an edge as a change of a treated sheet, conditional on Proposition 3.4.** At
-the constants of the protocol, in the repainting of a square `R` of side `n = 2 ^ j > K₀ t`,
+/-- **A birth along an edge as a change of a treated sheet, conditional on Proposition 3.4.** Assume
+`q ≥ 1` and the ground-state and angular-scale hypotheses with `m₀ ≥ 2`, `A₀ ≥ 1`,
+`L ≥ max 2 L₀′` and `2 ^ k < 2 * L`. Fix an adaptive patch supply of exponent `60`, size `L`
+and parameters `B₀, C, c`, and any label rank. At the constants of the protocol, in the
+repainting of a square `R`
+of side `n = 2 ^ j > K₀ t`,
 `t = D log L`, let an elementary birth inserting the label `Q` change the guide
 `bandUpdate n e op.before g₀` of a sheet into `bandUpdate n e op.after g₀`, both unmodified guides
 of the repainting, with the surrounding guide the guide before. If the parties of the surrounding
 label and of `Q` lie in `S`, then passing from the frame of the guide before, treated about the
 endpoints of `e`, to that of the guide after is a bounded change with participants in `S`, with
 at most one pair source and error `L⁻³⁰`.
+
+The monomial and pair-source bounds may be any `K, rs ≥ 1`; the pair-effect bound is
+arbitrary for this birth.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 183–221, 328–387 and 440–445; Lemma 6.5
 `lem:birth`, `05-frames.tex`. -/
@@ -313,14 +321,21 @@ theorem bandBirth_hasFrameChange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
   rintro x (rfl | rfl)
   exacts [hPS, hQS]
 
-/-- **A death along an edge as a change of a treated sheet, conditional on Proposition 3.4.** At
-the constants of the protocol, in the repainting of a square `R` of side `n = 2 ^ j > K₀ t`,
+/-- **A death along an edge as a change of a treated sheet, conditional on Proposition 3.4.** Assume
+`q ≥ 1` and the ground-state and angular-scale hypotheses with `m₀ ≥ 2`, `A₀ ≥ 1`,
+`L ≥ max 2 L₀′` and `2 ^ k < 2 * L`. Fix an adaptive patch supply of exponent `60`, size `L`
+and parameters `B₀, C, c`, and any label rank. At the constants of the protocol, in the
+repainting of a square `R`
+of side `n = 2 ^ j > K₀ t`,
 `t = D log L`, let an elementary death removing the label `Q` change the guide
 `bandUpdate n e op.before g₀` of a sheet into `bandUpdate n e op.after g₀`, both unmodified guides
 of the repainting, with the surrounding guide the guide after. If the parties of the surrounding
 label and of `Q` lie in `S`, then passing from the frame of the guide before, treated about the
 endpoints of `e`, to that of the guide after is a bounded change with participants in `S`, with
 at most one pair source and error `L⁻³⁰`.
+
+The monomial and pair-source bounds may be any `K, rs ≥ 1`; the pair-effect bound is
+required to satisfy `r ≥ 1` for this death.
 
 Polynomial-PEPS manuscript, `06-geometry.tex`, lines 183–221, 328–387 and 440–445; Lemma 6.5
 `lem:birth`, `05-frames.tex`. -/
