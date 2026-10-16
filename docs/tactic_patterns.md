@@ -24,6 +24,20 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Positive part of a polynomial constant — promoted (2026-10-16)
+
+- **Pattern:** Replace a constant `C` of a polynomial bound `x ≤ C * L ^ k` by `max C 0`, so that
+  a theorem needs no sign hypothesis on `C`, and transport the given bound along
+  `C * L ^ k ≤ max C 0 * L ^ k` for `0 ≤ L`.
+- **Seen:** the compression theorems and the dyadic protocol, in
+  `UniformApproximateSampledNetwork.lean`, `UniformMessageGateCompression.lean` and
+  `DyadicProtocolCompression.lean` under `TNLean/PEPS/Approximation/`.
+- **Abstraction:** `TNLean.PEPS.Approximation.mul_pow_le_max_zero_mul_pow` in
+  `UniformApproximateSampledNetwork.lean`.
+- **Notes:** The sign of `max C 0` is `le_max_right`. Net Lean line delta: +9 (20 added, 11
+  removed) across the three changed modules, since the new lemma and its docstring outweigh the
+  shortened call sites.
+
 ### Euclidean norm and nonvanishing in augmented replica coordinates — promoted (2026-10-16)
 
 - **Pattern:** Reindex a replica prevector from the physical and two auxiliary
