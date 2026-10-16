@@ -68,7 +68,6 @@ theorem isStepChain_lensExchange (hD : IsAngularScale q J Δ a A₀ m₀ 60 D L�
           (Bl.auxGuide e (auxWordExchanged Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e)))))) := by
   have hΩ1 : ‖Ω‖ ≤ 1 := hΩ.1.le
   intro Bl
-  have hΩ1 : ‖Ω‖ ≤ 1 := hΩ.1.le
   classical
   set Ce := Bl.nbrLabel e
   have hC : IsLocalLabel R done Ce := isHomogenizing_nbrLabel R done e
@@ -153,7 +152,6 @@ theorem isStepChain_edgeConstruction (hD : IsAngularScale q J Δ a A₀ m₀ 60 
           (Bl.auxGuide e (auxWordExchanged Bl.oldLabel Bl.finalLabel (Bl.nbrLabel e)))))) := by
   have hΩ1 : ‖Ω‖ ≤ 1 := hΩ.1.le
   intro Bl
-  have hΩ1 : ‖Ω‖ ≤ 1 := hΩ.1.le
   set Ce := Bl.nbrLabel e
   have hε0 : (0 : ℝ) ≤ (2 * b + 1) * ((L : ℝ) ^ 20)⁻¹ := by positivity
   have haux0 : treatedFrame (q := q) P rank R hr ∅ Ce (Bl.auxGuide e (bandWord Ce [])) = A x :=
