@@ -30,8 +30,6 @@ this order used to follow the main guide along the schedule, for `k ≥ 1`:
 
 namespace TNLean.PEPS.Approximation
 
-open Finset
-
 variable {k : ℕ}
 
 namespace ProtocolEvent
