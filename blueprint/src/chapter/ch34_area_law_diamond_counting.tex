@@ -21,32 +21,33 @@
         TNLean.PEPS.AreaLaw.card_le_diamond_of_walks,
         TNLean.PEPS.AreaLaw.card_le_diamond_of_edist_le}
     \leanok
-    The diamond $D_R(a)$ has cardinality $v_R=1+2R(R+1)$.
+    As the local counting bound of \cite[Section~2]{OpenAI2026AreaLaw},
+    the diamond $D_R(a)$ has cardinality $v_R=1+2R(R+1)$.
     Let $\iota:V\to\Z^2$ be injective. A finite set $S\subseteq V$
     with $\ell(\iota(a),\iota(x))\le R$ for each $x\in S$ has at most
     $v_R$ elements. If every graph edge has displacement at most one,
     the same bound holds when every $x\in S$ is reached from $a$ by a
     graph walk of length at most $R$, or when $d_G(a,x)\le R$.
-    This is the local counting bound of \cite[Section~2]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{def:area_lattice_diamond,thm:area_walk_displacement}
-    Translate and reflect the diamond so that its anchor is zero.
-    For $x\in[-R,R]\cap\Z$, its vertical fiber has
-    $2(R-|x|)+1$ sites, and distinct fibers are disjoint. Thus
+    Translating and reflecting the diamond moves its anchor to zero.
+    For $x\in[-R,R]\cap\Z$, the vertical fiber has
+    $2(R-|x|)+1$ sites, and distinct fibers are disjoint, so
     \begin{align}
         |D_R(0)| & =\sum_{x=-R}^R\bigl(2(R-|x|)+1\bigr)
         =1+2R(R+1).
         \label{eq:area_diamond_rows}
     \end{align}
-    For the last equality, induct on $R$. The initial sum is one.
-    Increasing $R$ by one adds two sites to each of the $2R+1$ old
-    fibers and two one-site endpoint fibers. The resulting increment
-    is $4R+4$, which agrees with the difference of the right side of
-    (\ref{eq:area_diamond_rows}). An injective coordinate map places
-    $S$ inside the diamond. The walk displacement bound and a shortest
-    walk give the two graph-distance consequences.
+    The second equality follows by induction on $R$: the initial sum is
+    one, and increasing $R$ by one adds two sites to each of the $2R+1$
+    existing fibers together with two one-site endpoint fibers, for a
+    total increment of $4R+4$ matching the difference of the right-hand
+    side of (\ref{eq:area_diamond_rows}). Finally, any injective
+    coordinate map embeds $S$ into the diamond, and the
+    walk-displacement bound applied to a shortest walk yields the two
+    graph-distance consequences.
 \end{proof}
 
 \begin{theorem}[Exact lattice interaction weight bounds]
@@ -59,8 +60,9 @@
         TNLean.PEPS.AreaLaw.interactionChainWeightSum_le_diamond_pow,
         TNLean.PEPS.AreaLaw.interactionChainWeightSum_norm_le_diamond_pow}
     \leanok
-    Let $V$ be a finite graph embedded injectively in $\Z^2$, with edge
-    displacement at most one. Let $\mathcal F$ be a finite family of
+    Following \cite[Sections~2 and~4]{OpenAI2026AreaLaw}, let $V$ be a
+    finite graph embedded injectively in $\Z^2$, with edge displacement
+    at most one. Let $\mathcal F$ be a finite family of
     distinct finite supports such that any two sites in a support admit
     a walk in $V$ of length at most the nonnegative integer $R$.
     Set $v_R=1+2R(R+1)$ and $\mu_R=2^{v_R-1}$. Each support in $\mathcal F$ has
@@ -76,10 +78,9 @@
         \label{eq:area_diamond_chain}
     \end{align}
     for every $X\in\mathcal F$ (allowing repeated supports in the chain). Both
-    bounds apply to $w_X=\lVert h_X\rVert$ for elements $h_X$ of any
-    seminormed additive group with $\lVert h_X\rVert\le J$. These are the
-    interaction weight bounds used in
-    \cite[Sections~2 and~4]{OpenAI2026AreaLaw}.
+    bounds apply in particular to the operator-norm weights
+    $w_X=\lVert h_X\rVert$ for elements $h_X$ of any seminormed additive
+    group with $\lVert h_X\rVert\le J$.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -87,8 +88,8 @@
         thm:area_chain_growth}
     A nonempty support $X\in\mathcal F$ lies in the graph ball of radius $R$
     around any of its sites, and such a ball has at most $v_R$ sites; the empty
-    support has no sites. Hence every support has at most $v_R$ sites. Now fix
-    a site $a$. Every support containing $a$ lies in the ball of radius $R$
+    support has no sites. Hence every support has at most $v_R$ sites. For any
+    fixed site $a$, every support containing $a$ lies in the ball of radius $R$
     around $a$, so deleting $a$ injects the family of supports containing $a$
     into the subsets of the remaining at most $v_R-1$ sites,
     giving at most $\mu_R$ supports. Bounding each term by $J$
@@ -155,13 +156,13 @@ single support, and $G$ need not be finite or connected.
 \begin{proof}
     \leanok
     \uses{def:area_target_chain}
-    We induct on $n$. For $n=0$, if $y\in X$, then $a$ and $y$ are connected by
-    a walk of length at most $R$. For the inductive step, if $Y\in\mathcal F$
-    meets $X$ at a site $z$, any walk from $z$ to $y$ of length at most
-    $(n+1)R$ concatenates with a walk from $a$ to $z$ of length at most $R$ to
-    give a walk from $a$ to $y$ of length at most $(n+2)R$. By the induction
-    hypothesis, $T_n^y(Y)=0$ for every $Y$ meeting $X$, so every term
-    in~(\ref{eq:area_target_step}) vanishes.
+    Proceeding by induction on $n$, the base case $n=0$ holds because any
+    $y\in X$ is connected to $a$ by a walk of length at most $R$. For the
+    inductive step, if $Y\in\mathcal F$ meets $X$ at a site $z$, any walk from
+    $z$ to $y$ of length at most $(n+1)R$ concatenates with a walk from $a$ to
+    $z$ of length at most $R$ to give a walk from $a$ to $y$ of length at most
+    $(n+2)R$. By the induction hypothesis, $T_n^y(Y)=0$ for every $Y$ meeting
+    $X$, so every term in~(\ref{eq:area_target_step}) vanishes.
 \end{proof}
 
 \begin{theorem}[Graph-distance indicator bound]
@@ -232,14 +233,14 @@ single support, and $G$ need not be finite or connected.
     \lean{TNLean.PEPS.AreaLaw.interactionChainPropagationSeries_summable_and_le}
     \leanok
     Under the hypotheses of Theorem~\ref{thm:area_chain_exponential},
-    the series in~(\ref{eq:area_chain_series}) converges and satisfies
+    the scalar interaction-chain series in~(\ref{eq:area_chain_series})
+    from the proof of \cite[Lemma~4.1]{OpenAI2026AreaLaw} converges and
+    satisfies
     \begin{align}
         S_t^y(X) & \le e^{\mu R-\mu D}
         \exp\!\bigl(2|t|\,vb\,e^{\mu R}\bigr).
         \label{eq:area_chain_series_bound}
     \end{align}
-    This bounds the scalar interaction-chain series in the proof of
-    \cite[Lemma~4.1]{OpenAI2026AreaLaw}.
 \end{theorem}
 \begin{proof}
     \leanok

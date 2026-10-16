@@ -55,8 +55,9 @@ the normalized partial trace of Definition~\ref{def:qc_site_expectation}.
     \uses{def:area_law_hamiltonian,lem:area_domain_graph_counts,
         thm:qc_graph_lieb_robinson,thm:qc_graph_lieb_robinson_zero,
         thm:qc_graph_ball_localization,def:qc_site_expectation}
-    Let $q\ge1$. There are positive constants $C,v,c$, depending only on
-    $q,R,J$, with the following property. For every domain $\Lambda$, every
+    Following \cite[Lemma~4.1]{OpenAI2026AreaLaw}, let $q\ge1$. There are
+    positive constants $C,v,c$, depending only on $q,R,J$, with the
+    following property. For every domain $\Lambda$, every
     Hamiltonian $H$ as above, every original support $X$ with anchor
     $a\in X$, every operator $A$ supported in $X$, every site $y$, every
     on-site operator $B_y$ at $y$, and every real $t$,
@@ -71,8 +72,8 @@ the normalized partial trace of Definition~\ref{def:qc_site_expectation}.
         \|A\|\min\{2,Ce^{v|t|-cl}\}.
         \label{eq:area_quasilocal_lr_ce}
     \end{align}
-    This is \cite[Lemma~4.1]{OpenAI2026AreaLaw}. Explicitly, for every
-    $\mu\ge0$ and every integer $n\le d_\Lambda(a,y)$,
+    Explicitly, for every $\mu\ge0$ and every integer
+    $n\le d_\Lambda(a,y)$,
     $\|[\tau_t(A),B_y]\|\le2e^{\mu R}\|A\|\|B_y\|
         \exp(2v_R\mu_RJe^{2\mu R}|t|-\mu n)$.
 \end{lemma}
@@ -80,13 +81,16 @@ the normalized partial trace of Definition~\ref{def:qc_site_expectation}.
     \leanok
     \uses{lem:area_domain_graph_counts,thm:qc_graph_lieb_robinson,
         thm:qc_graph_lieb_robinson_zero,thm:qc_graph_ball_localization}
-    Apply Theorem~\ref{thm:qc_graph_lieb_robinson} and
+    Instantiating Theorem~\ref{thm:qc_graph_lieb_robinson} and
     Lemma~\ref{thm:qc_graph_lieb_robinson_zero} on the induced graph of
-    $\Lambda$, with an anchor family taking the value $a$ at $X$, support
-    diameter $R$, support size $v_R$ and site-norm bound $b_0=\mu_RJ$ from
-    Lemma~\ref{lem:area_domain_graph_counts}. Apply
-    Theorem~\ref{thm:qc_graph_ball_localization} with sphere growth
-    $2(d+1)^2$. Both estimates have constants determined by $R$ and $J$.
-    Take the larger of the two prefactors and of the two velocities, and the
-    smaller of the two decay rates.
+    $\Lambda$ with an anchor family assigning $a$ to $X$, together with
+    the support diameter $R$, support size $v_R$, and site-norm bound
+    $b_0=\mu_RJ$ from Lemma~\ref{lem:area_domain_graph_counts},
+    establishes the commutator bounds and the explicit exponential
+    estimate. Combining these with
+    Theorem~\ref{thm:qc_graph_ball_localization} for the sphere-growth
+    bound $2(d+1)^2$ yields the localization estimate, where both sets of
+    constants depend only on $R$ and $J$; taking the larger of the two
+    prefactors and of the two velocities, together with the smaller of
+    the two decay rates, produces a common triple $(C,v,c)$.
 \end{proof}

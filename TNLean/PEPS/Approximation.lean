@@ -275,6 +275,7 @@ import TNLean.PEPS.Approximation.MessageGateLists
 import TNLean.PEPS.Approximation.MessageMonomial
 import TNLean.PEPS.Approximation.MonomialFixesOutside
 import TNLean.PEPS.Approximation.NestedCylinderSquarePatch
+import TNLean.PEPS.Approximation.NestedPatchEnergy
 import TNLean.PEPS.Approximation.NetworkScalarAbsorption
 import TNLean.PEPS.Approximation.NoneResidualGate
 import TNLean.PEPS.Approximation.NoneResidualOperations
@@ -291,6 +292,7 @@ import TNLean.PEPS.Approximation.OriginalCircuitSequence
 import TNLean.PEPS.Approximation.OriginalCircuitSourceBound
 import TNLean.PEPS.Approximation.OriginalCoefficientMajorant
 import TNLean.PEPS.Approximation.OriginalGateSamplePhysicalSum
+import TNLean.PEPS.Approximation.OriginalNestedPatchEntropy
 import TNLean.PEPS.Approximation.OriginalProducerResources
 import TNLean.PEPS.Approximation.OutputPartitionCoordinates
 import TNLean.PEPS.Approximation.OwnerMemoryTransport
