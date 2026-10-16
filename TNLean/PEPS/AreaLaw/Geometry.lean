@@ -121,12 +121,15 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairFanCones
 import TNLean.PEPS.AreaLaw.Geometry.RepairFinalRegion
 import TNLean.PEPS.AreaLaw.Geometry.RepairFinalRegionStabilization
 import TNLean.PEPS.AreaLaw.Geometry.RepairFinalRegionTransport
+import TNLean.PEPS.AreaLaw.Geometry.RepairHalfSideArithmetic
 import TNLean.PEPS.AreaLaw.Geometry.RepairInclusionComposition
 import TNLean.PEPS.AreaLaw.Geometry.RepairInduction
 import TNLean.PEPS.AreaLaw.Geometry.RepairInductionMetric
 import TNLean.PEPS.AreaLaw.Geometry.RepairInductionStatement
+import TNLean.PEPS.AreaLaw.Geometry.RepairMarkMesh
 import TNLean.PEPS.AreaLaw.Geometry.RepairNextRegionDisjointness
 import TNLean.PEPS.AreaLaw.Geometry.RepairRegionDisjointness
+import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementLatticeCoverage
 import TNLean.PEPS.AreaLaw.Geometry.RepairReplacementRegions
 import TNLean.PEPS.AreaLaw.Geometry.RepairStabilization
 import TNLean.PEPS.AreaLaw.Geometry.RepairStage
@@ -134,6 +137,7 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairStageSites
 import TNLean.PEPS.AreaLaw.Geometry.RepairStageStars
 import TNLean.PEPS.AreaLaw.Geometry.RepairStarModel
 import TNLean.PEPS.AreaLaw.Geometry.RepairTerminalInteriors
+import TNLean.PEPS.AreaLaw.Geometry.RepairTerminalSquareCount
 import TNLean.PEPS.AreaLaw.Geometry.RepairTermination
 import TNLean.PEPS.AreaLaw.Geometry.ScaleSeparation
 import TNLean.PEPS.AreaLaw.Geometry.SegmentBallClipping

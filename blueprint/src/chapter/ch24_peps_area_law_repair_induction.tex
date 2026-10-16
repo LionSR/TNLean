@@ -199,6 +199,38 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     by a quarter of the larger scale.
 \end{proof}
 
+% Source: 10-geometry.tex, initial marks, lines 325--330;
+% integral recursion and supporting lines, lines 545--558.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Actual marks on the translated integer mesh]
+    \label{thm:area_law_repair_marks_integer_mesh}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.RepairMetricHypotheses.repairStage_location_mem_affineMesh}
+    \leanok
+    \uses{def:area_law_repair_stage,def:area_law_affine_mesh,
+        lem:area_law_repair_metric_invariants}
+    Assume the hypotheses of
+    Lemma~\ref{lem:area_law_repair_metric_invariants}, and suppose
+    $S_*\ge1$. Every mark $p\in K_j$ of every generation $j\ge0$
+    then has location $v_p^{(j)}\in o+\mathbb Z^2$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:area_law_uniform_separated_initial_marks,
+        thm:area_law_adjacent_fine_meshes,thm:area_law_belt_marks_quarter_mesh,
+        lem:area_law_repair_metric_invariants,
+        thm:area_law_repair_halfside_integral,def:area_law_repair_children}
+    Each actual initial mark belongs to a selected belt cell in a layer
+    $k\ge k_0\ge50{,}000{,}000$. Its fine exponent satisfies
+    $\ell_k=\lfloor\zeta k\rfloor\ge1$, so the belt-mark mesh inclusion
+    with spacing $2^2/4=1$ places it in $o+\mathbb Z^2$.
+    Induct on the generation. Every parent scale is at least
+    $S_*\ge1$, hence its removal half-side is an integer by
+    Theorem~\ref{thm:area_law_repair_halfside_integral}. A child location
+    is the parent location plus that half-side times a vector in
+    $\{-1,0,1\}^2$, and therefore remains in $o+\mathbb Z^2$.
+\end{proof}
+
 \subsection{The induction step}
 \label{sec:area_law_repair_induction_step}
 

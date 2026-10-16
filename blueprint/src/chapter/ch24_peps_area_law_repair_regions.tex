@@ -86,6 +86,48 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
     interiors in Theorem~\ref{thm:area_law_fan_run_disjoint_interiors}.
 \end{proof}
 
+% Source: 10-geometry.tex, replacement sectors and their triangle unions,
+% lines 404--417; translated supporting lines and lattice sites, lines 545--561.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Lattice points in a replacement square]
+    \label{thm:area_law_repair_replacement_lattice_cover}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.exists_mem_repairReplacementOpenRegion_of_mem_repairSquare}
+    \leanok
+    \uses{def:area_law_dyadic_origin,def:area_law_affine_mesh,
+        def:area_law_repair_birth}
+    Set $o=(\sqrt2,\sqrt3)$. Let $v\in\mathcal M(o,1)=o+\mathbb Z^2$
+    and $S\ge1$. For an arbitrary identifier set $I$, binary labels
+    $\xi:I\to\{0,1\}$ and assignment $\sigma:J\to I$, every integer
+    lattice point of $Q(v,S)$ lies in the current region of a run:
+    \begin{align}
+        Q(v,S)\cap\mathbb Z^2
+         & \subseteq\bigcup_{H\in\mathcal R(\xi,\sigma)}U(v,S,H).\notag
+    \end{align}
+    Lattice points are identified with their points in $\mathbb R^2$.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:area_law_repair_square,thm:area_law_repair_halfside_integral,
+        thm:area_law_dyadic_origin_lines,lem:area_law_repair_fan_cones,
+        def:area_law_repair_birth}
+    Write $v=o+m$ with $m\in\mathbb Z^2$, and put $d=d(S)$.
+    By Theorem~\ref{thm:area_law_repair_halfside_integral}, $d$ is a positive integer.
+    Let $z\in Q(v,S)\cap\mathbb Z^2$. The four sides of $Q(v,S)$
+    and all its fan rays lie on integer translates of the four
+    supporting-line families in
+    Theorem~\ref{thm:area_law_dyadic_origin_lines}. They contain no
+    lattice point. Consequently $\|z-v\|_\infty<d$, and $z-v$
+    lies on none of the fan rays.
+
+    By Lemma~\ref{lem:area_law_repair_fan_cones}, $z-v$ lies in a
+    closed fan cone. Since it lies on neither boundary ray, it is in
+    the corresponding open cone. Together with $\|z-v\|_\infty<d$,
+    this places $z$ in $\operatorname{int}(v+dT_s)$ for some $s\in J$.
+    If $H$ is the run containing $s$, then $v+dT_s\subseteq B(v,S,H)$.
+    Monotonicity of the interior gives $z\in U(v,S,H)$.
+\end{proof}
+
 % Source: 10-geometry.tex, lines 404--407; geometry:repair-induction,
 % working square and current exterior sectors, lines 486--504.
 % Existence and uniqueness of a containing current region remain to be proved
@@ -537,6 +579,31 @@ maximum-norm distances, and colors are represented by $0$ and $1$.
         \label{eq:area_law_repair_terminal_interiors}
     \end{align}
 \end{definition}
+
+% Source: 10-geometry.tex, geometry:bad-sites, lines 694--707.
+% Revision: adc7f1241b42e322a6451854ab7e4b4c146bf78a.
+\begin{theorem}[Sites in one terminal square]
+    \label{thm:area_law_repair_terminal_square_sites}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.card_closedSquareSample_repairHalfSide_le}
+    \leanok
+    \uses{def:area_law_repair_square,def:peps_closed_square_sample}
+    Let $\Lambda\subset\mathbb Z^2$ be finite, let $v\in\mathbb R^2$, and
+    let $S>0$ and $S_*\in\mathbb R$. If $d(S)<S_*$, then
+    \begin{align}
+        |K(v,d(S))| & \le(2S_*+1)^2,\notag
+    \end{align}
+    where $K(v,r)$ is the closed square sample of
+    Definition~\ref{def:peps_closed_square_sample}.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:peps_closed_square_card}
+    Since $d(S)>0$, terminality gives $S_*>0$.
+    The radius inequality yields $K(v,d(S))\subseteq K(v,S_*)$.
+    The bound follows from
+    Theorem~\ref{thm:peps_closed_square_card} at radius $S_*$.
+\end{proof}
 
 % Source: 10-geometry.tex, termination, lines 538--541;
 % final regions, lines 558--561; exceptional sites, lines 694--707.
