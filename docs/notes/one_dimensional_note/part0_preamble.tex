@@ -1,0 +1,224 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\IfFileExists{lmodern.sty}{\usepackage{lmodern}}{}
+\usepackage[margin=1.05in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{enumitem}
+\usepackage{booktabs,array}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
+\setlength{\parskip}{0.25em}
+
+% ---------- notation ----------
+\newcommand{\C}{\mathbb C}
+\newcommand{\R}{\mathbb R}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\E}{\mathbb E}
+\newcommand{\id}{\mathrm{I}}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\diam}{\operatorname{diam}}
+\newcommand{\norm}[1]{\lVert #1\rVert}
+\newcommand{\abs}[1]{\lvert #1\rvert}
+\newcommand{\ket}[1]{|#1\rangle}
+\newcommand{\bra}[1]{\langle #1|}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cR}{\mathcal R}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\Om}{\Omega}
+\newcommand{\Lam}{\Lambda}
+\newcommand{\e}{\mathrm e}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{construction}[theorem]{Construction}
+
+% ---------- the "written twice" device ----------
+% Every mathematical unit of this note appears twice: first in words
+% (what it says, why it is true, what it is for), then precisely.
+\newenvironment{inwords}{%
+  \par\medskip\noindent
+  \begin{list}{}{\leftmargin=1.2em\rightmargin=1.2em}
+  \item\relax
+  \noindent{\sffamily\bfseries\color{blue!40!black}In words.}\ \sffamily\small}{%
+  \end{list}\par\medskip}
+\newcommand{\precisely}{\par\noindent{\bfseries Precisely.}\ }
+
+\title{A one-dimensional area law and a matrix product state
+approximation from a global spectral gap:\\
+the collar-free route}
+\author{Prepared for Sirui Lu (MPQ)}
+\date{October 16, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+We take the two September 2026 manuscripts \emph{A two-dimensional area
+law from a global spectral gap} \cite{AL} and \emph{Polynomial PEPS
+approximation of gapped square-grid ground states} \cite{PP} and run
+their arguments in one dimension. Two things happen. First, the area-law
+proof collapses: the marginal tail bound and the buffered conditional-entropy
+discount of \cite[Section~2]{AL}, together with the Araki--Lieb inequality,
+already prove $S(X)\le C(q,R)\,(1+J/\Delta)$ for every interval $X$. The
+sub-volume recursion, the positive quasi-local constraints, the replica
+scanner, the amplification and the two-family geometry of \cite{AL} are
+not needed. The reason is geometric: a shell around an interval has a
+bounded number of crossing interactions, so the discount costs a constant
+instead of a boundary-sized error, and the buffer whose entropy must be
+controlled is a constant number of sites. Second, the tensor-network
+theorem survives as a linear \emph{sweep} instead of a dyadic hierarchy.
+The encoded holes, adaptive patches, angular information estimates and
+row-column routing of \cite{PP} disappear; what remains are the
+Uhlmann-type birth and exchange moves, the information reset by a
+Gaussian filter, the dimension-free density compression and the
+column-extraction lemma. The result is a matrix product state of bond
+dimension $CL^{c}$ with vector error $L^{-1}$. We also record that in one
+dimension the tail bound makes the matrix product state theorem a
+two-line corollary of the area law by sequential Schmidt truncation.
+Every statement in this note is written twice: once in words, once
+precisely. The area-law proof uses none of the techniques of Hastings or
+of Arad--Kitaev--Landau--Vazirani; the tensor-network proof uses a
+Lieb--Robinson bound in exactly one lemma, and we indicate how to avoid
+it at the price of a quasi-polynomial bond dimension.
+\end{abstract}
+
+\tableofcontents
+
+\section{Overview}
+
+\begin{inwords}
+Both source papers are long because two dimensions is hard. The
+entanglement of a region is produced along its boundary, and in two
+dimensions the boundary of a region of linear size $r$ has $r$ sites: every
+estimate that costs ``a boundary'' costs $r$, and every buffer that one
+puts around a region to isolate it is itself a region whose entanglement
+must be controlled. The whole replica, scanner and amplification apparatus
+exists to break this circularity. In one dimension the boundary of an
+interval is two points. An estimate that costs a boundary costs a
+constant, and a buffer of constant width has, trivially, constant
+entropy. So the circularity never arises, and one short section of the
+two-dimensional paper proves the whole area law. This is the content of
+Part~\ref{part:arealaw}.
+
+The tensor-network theorem is a different story. It does not follow from
+entropy bounds alone (the papers explain why: an entropy bound on each cut
+does not give a global vector approximation). Its two-dimensional proof
+distributes the ground vector among ``parties'' attached to dyadic
+squares, by local changes of ownership whose errors are controlled by
+information estimates, then compresses the resulting distributed density
+into a tensor network. In one dimension a dyadic hierarchy is the wrong
+geometry: a binary tree drawn on a line has cutwidth $\log L$, which turns
+polynomial bond dimension into quasi-polynomial. The right geometry is a
+sweep from left to right with a moving ``remainder'' party. All the
+genuinely one-dimensional difficulties (what to do at the ends of a band
+when a third owner is adjacent) are solved by exactly the seven-move word
+trick that the two-dimensional paper uses along an edge. This is
+Part~\ref{part:mps}. We also show that, in one dimension, the tail bound
+of Part~\ref{part:arealaw} makes the tensor-network theorem a corollary
+of the area law by the classical sequential-truncation argument; the
+sweep protocol is the faithful one-dimensional analogue of the
+two-dimensional construction, and it is what generalizes.
+
+Table~\ref{tab:map} is a map from the two-dimensional proofs to this
+note. The reader who wants only the one-dimensional area law can read
+Sections~\ref{sec:setting}--\ref{sec:closing}; this is about four pages.
+\end{inwords}
+
+\begin{table}[h]
+\centering\small
+\begin{tabular}{@{}p{0.34\textwidth}p{0.62\textwidth}@{}}
+\toprule
+Two-dimensional ingredient & Fate in one dimension\\
+\midrule
+Marginal tail bound (\cite{AL}, Lemma 2.1) & Kept verbatim; the cut parameter $\mathcal B$ is a constant (Section~\ref{sec:tail}).\\
+Buffered conditional-entropy discount (\cite{AL}, Lemma 2.2) & Kept; the buffer has \emph{constant} width and the error is a constant (Section~\ref{sec:buffer}).\\
+Sub-volume recursion, exponent $e_0<1$ & Unnecessary: Araki--Lieb closes the argument directly (Section~\ref{sec:closing}). Sketched as a ``long route'' in Section~\ref{sec:longroute}.\\
+Positive quasi-local constraints, truncation & Unnecessary for the area law; not used for the MPS either (replaced by the Gaussian reset).\\
+Conditional estimates, replicas, transport, comparators, scanner & Unnecessary.\\
+Amplification by random constraint products & Unnecessary; Section~\ref{sec:longroute} explains how it would be used.\\
+Two families of regions & Trivial on a line; Section~\ref{sec:longroute}.\\
+\midrule
+Coarse collar and angular information (\cite{PP}, Section 3) & Replaced by a one-line consequence of the area law (Lemma~\ref{lem:logsep}).\\
+Information reset by Gaussian filter (\cite{PP}, Lemma 3.3) & Kept; one-dimensional locality (Section~\ref{sec:reset}).\\
+Adaptive patch constraints, encoded holes (\cite{PP}, Sections 4, 6.1) & Unnecessary: no three owners meet on a line; logarithmic blocks are polynomial-dimensional registers.\\
+Births, deaths, exchanges (\cite{PP}, Lemmas 6.6--6.8) & Kept verbatim (Section~\ref{sec:moves}).\\
+Dyadic hierarchy with edge bands and point treatments (\cite{PP}, Section 7) & Replaced by a linear sweep (Section~\ref{sec:sweep}).\\
+Density compression, column extraction (\cite{PP}, Sections 5, 8) & Kept verbatim (Section~\ref{sec:compression}).\\
+Row--column routing with constant congestion & Replaced by placement on the line (Section~\ref{sec:routing}).\\
+\bottomrule
+\end{tabular}
+\caption{What survives, what simplifies, what disappears.}
+\label{tab:map}
+\end{table}
+
+\precisely
+Throughout, $q\ge 2$ and $R\ge 1$ are integers and $J,\Delta>0$. A finite
+set $\Lam\subset\Z$ carries the induced path graph (edges between
+consecutive integers both in $\Lam$) and graph distance $d_\Lam$.
+Each site carries $\C^q$ and $\cH_\Lam=\bigotimes_{x\in\Lam}\C^q$.
+An admissible Hamiltonian is
+\begin{equation}\label{eq:ham}
+ H=\sum_{\substack{\varnothing\ne X\subseteq\Lam\\ \diam_{d_\Lam}X\le R}}h_X,
+ \qquad h_X=h_X^*,\qquad \norm{h_X}\le J,
+\end{equation}
+one summand per support, zero summands allowed. The standing spectral
+hypothesis is that $H$ has a unique normalized ground vector $\Om$ (up to
+phase), ground energy $E_0$, and
+\begin{equation}\label{eq:gap}
+ H-E_0\id\ \ge\ \Delta\bigl(\id-\ket\Om\bra\Om\bigr).
+\end{equation}
+For $A\subseteq\Lam$, $\rho_A=\Tr_{\Lam\setminus A}\ket\Om\bra\Om$,
+$S(A)=S_\Om(A)=-\Tr\rho_A\log\rho_A$ with natural logarithms and
+$0\log 0=0$, $S(A|B)=S(AB)-S(B)$ and $I(A:B)=S(A)+S(B)-S(AB)$ for disjoint
+$A,B$. The edge boundary is
+$\partial_\Lam A=\{\{x,x+1\}\subseteq\Lam:\ \text{exactly one of }x,x+1\text{ lies in }A\}$.
+Constants $C,c$ depend only on $q,R,J,\Delta$ unless stated otherwise and
+may change from line to line; where a dependence is tracked it is said so.
+The two theorems of the note are the following.
+
+\begin{theorem}[One-dimensional area law]\label{thm:A}
+There is $C_{\mathrm{AL}}=C_{\mathrm{AL}}(q,R,J,\Delta)$, with
+\[
+ C_{\mathrm{AL}}\le C_0(q,R)\,\Bigl(1+\frac J\Delta\Bigr),
+\]
+such that for every finite $\Lam\subset\Z$, every admissible Hamiltonian
+satisfying \eqref{eq:gap}, and every $A\subseteq\Lam$,
+\[
+ S_\Om(A)\le C_{\mathrm{AL}}\,\abs{\partial_\Lam A}.
+\]
+\end{theorem}
+
+\begin{theorem}[One-dimensional matrix product state approximation]\label{thm:B}
+Fix $q,R,J,\Delta$. There are $C,c>0$ depending only on these parameters
+such that for every $L\ge2$, every admissible Hamiltonian on
+$\Lam=\{1,\dots,L\}$ satisfying \eqref{eq:gap}, there is a nonzero matrix
+product state $\Phi$ on $\Lam$ with open boundary conditions and bond
+dimension at most $CL^{c}$ such that
+\[
+ \min_{\theta\in\R}\Bigl\|\frac{\Phi}{\norm\Phi}-\e^{i\theta}\Om\Bigr\|\le L^{-1}.
+\]
+\end{theorem}
+
+The constants never depend on $\Lam$, on $A$, or on the particular
+Hamiltonian. No gap for a restricted Hamiltonian, no frustration
+freeness, no translation invariance is assumed.

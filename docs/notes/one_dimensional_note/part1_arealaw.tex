@@ -1,0 +1,615 @@
+\part{The one-dimensional area law}\label{part:arealaw}
+
+\section{Setting, reductions, and counting}\label{sec:setting}
+
+\begin{inwords}
+Three small reductions make the rest clean. If the domain $\Lam$ has
+several components, the Hamiltonian is a sum over components (every
+support has finite graph diameter, so it lies in one component), the
+unique ground vector is a product over components, and entropy and edge
+boundary both add over components. So we may take $\Lam$ to be an
+interval. A subset $A$ of an interval is a union of maximal subintervals,
+each of which contributes at least one boundary edge, and subadditivity
+reduces the theorem to intervals. Finally, the only two counting facts
+we need are these: an interval is cut at two points at most, and an
+interaction of diameter at most $R$ that crosses a cut lives in a window
+of $2R$ sites around that cut. So the number of interactions crossing
+the boundary of an interval, and the logarithm of their joint dimension,
+are bounded by constants depending only on $R$ and $q$. This is the
+entire ``area'' input of the one-dimensional proof.
+\end{inwords}
+
+\precisely
+For an interval $X\subseteq\Lam$ and a support $Y$ with
+$\diam_{d_\Lam}Y\le R$, say that $Y$ is \emph{split} by $X$ if
+$Y\cap X\ne\varnothing$ and $Y\setminus X\ne\varnothing$. Since $Y$ is
+contained in $R+1$ consecutive integers and contains a point on each
+side of one of the two cut edges of $X$, it lies in one of the two windows
+of $2R$ consecutive sites centered at a cut edge. Hence
+\begin{equation}\label{eq:count}
+ \#\{Y:\ Y\text{ split by }X\}\le 2\cdot 2^{2R}=:N_R,
+ \qquad
+ \dim\cH_Y\le q^{R+1},\qquad
+ \ell_R:=\log(\e q^{R+1}),
+\end{equation}
+and a term $h_Y$ split by $X$ can be expanded by matrix units on
+$Y\cap X$ as
+\begin{equation}\label{eq:matrixunits}
+ h_Y=\sum_{\alpha=1}^{N_Y}c_\alpha\otimes d_\alpha,\qquad
+ N_Y\le q^{2(R+1)},\qquad \norm{c_\alpha}\,\norm{d_\alpha}\le J,
+\end{equation}
+with $c_\alpha$ supported in $X$ and $d_\alpha$ in $\Lam\setminus X$.
+(Each matrix unit $E_{ab}$ on $\cH_{Y\cap X}$ has norm one, and the
+coefficient operator $d_\alpha=\Tr_{Y\cap X}[(E_{ba}\otimes\id)h_Y]$ has
+norm at most $\norm{h_Y}$.) Put
+\begin{equation}\label{eq:BR}
+ \cB_R:=1+N_R\,\ell_R^2 .
+\end{equation}
+
+\begin{lemma}[Reductions]\label{lem:reductions}
+It suffices to prove Theorem~\ref{thm:A} for $\Lam$ an interval and $A$
+an interval with $\partial_\Lam A\ne\varnothing$, with a constant
+$C_{\mathrm{int}}$ bounding $S_\Om(A)$; then Theorem~\ref{thm:A} holds
+with $C_{\mathrm{AL}}=C_{\mathrm{int}}$.
+\end{lemma}
+\begin{proof}
+Let $\Lam_1,\dots,\Lam_k$ be the components of $\Lam$ (maximal intervals).
+Every support of finite graph diameter lies in one component, so
+$H=\sum_iH_i$ with $H_i$ acting on $\cH_{\Lam_i}$. The ground eigenspace
+of $H$ is the tensor product of the ground eigenspaces of the $H_i$; if
+the former is one-dimensional so is each latter, hence
+$\Om=\bigotimes_i\Om_i$ and $S_\Om(A)=\sum_iS_{\Om_i}(A\cap\Lam_i)$,
+while $\partial_\Lam A=\bigsqcup_i\partial_{\Lam_i}(A\cap\Lam_i)$. Each
+$H_i$ inherits \eqref{eq:gap} with the same $\Delta$ (restrict the
+inequality to vectors of the form $\xi\otimes\bigotimes_{j\ne i}\Om_j$).
+So assume $\Lam$ is an interval. Write $A=\bigsqcup_{a=1}^mA_a$ as a union
+of maximal subintervals. If some $A_a=\Lam$ then $A=\Lam$ and $S(A)=0$.
+Otherwise each $A_a$ has at least one boundary edge, and distinct $A_a$
+have distinct boundary edges (two maximal subintervals are separated by at
+least one site, so their outer cut edges differ). Thus $m\le\abs{\partial_\Lam A}$
+and subadditivity gives $S(A)\le\sum_aS(A_a)\le C_{\mathrm{int}}\abs{\partial_\Lam A}$.
+\end{proof}
+
+From now on $\Lam=\{1,\dots,N\}$ and $X\subseteq\Lam$ is an interval. For
+an integer $j\ge0$ write $X^{+j}=\{x\in\Lam:\dist(x,X)\le j\}$, again an
+interval.
+
+\section{The marginal tail bound}\label{sec:tail}
+
+\begin{inwords}
+Fix an interval $X$ and write $\Om=\sum_j\sqrt{p_j}\,u_j\otimes w_j$ for its
+Schmidt decomposition across $X$ and the rest. The entanglement spectrum
+is the probability law of the \emph{surprisal} $K=-\log p_j$ drawn with
+probability $p_j$; its mean is $S(X)$. The lemma says that, because of
+the global gap, $K$ has exponential tails around its mean with a width
+that depends only on $q,R,J/\Delta$: the spectrum of an interval is
+\emph{concentrated}, whatever its entropy is.
+
+The mechanism is a tilt. Multiply $\Om$ by $\rho_X^{-u/2}$ (acting on
+$X$) and renormalize: this reweights the Schmidt probabilities to
+$p_j^{1-u}/M(u)$, with $M(u)=\sum_jp_j^{1-u}$ the moment generating
+function of $K$. The tilted vector $\Theta$ is an exact eigenvector of the
+conjugated Hamiltonian $FHF^{-1}$. Interactions inside $X$ or inside its
+complement do not see the conjugation in expectation (they commute with
+the marginal, or with $F$). Only the boundedly many interactions crossing
+a cut of $X$ do, and for each of them the conjugated expectation
+$f(z)=\langle\Theta,\sigma^{z}h\sigma^{-z}\Theta\rangle$ is an entire
+function of the tilt parameter which is bounded on a strip and satisfies
+$f(-\bar z)=\overline{f(z)}$. That symmetry kills the linear term of the
+\emph{real part}, so the excitation energy of $\Theta$ is quadratic in
+$u$. The gap converts a quadratic energy into a quadratic loss of overlap
+with $\Om$; that overlap is the ratio $M(u/2)^2/M(u)$. Iterating the
+resulting inequality $\log M(u)\le 2\log M(u/2)+Cu^2$ down to $u\to0$,
+where $\log M$ is linear with slope $S(X)$, gives
+$\log M(u)\le uS(X)+Cu^2$: a sub-Gaussian moment bound. Exponential
+Markov turns it into the tail bound.
+
+In two dimensions the width of the tail grows like the square root of the
+boundary. In one dimension it is a constant. This constant is what makes
+both halves of this note work.
+\end{inwords}
+
+\precisely
+Let $X\subseteq\Lam$ be an interval, $\rho=\rho_X$ with positive
+eigenvalues $p_j$, let $K$ be the random variable taking the value
+$-\log p_j$ with probability $p_j$, so that $\E K=S(X)$, and put
+\begin{equation}\label{eq:theta}
+ \vartheta=\frac J\Delta,\qquad
+ u_0=\frac{1}{32\sqrt{(1+\vartheta)\cB_R}}.
+\end{equation}
+
+\begin{lemma}[Marginal tail bound]\label{lem:tail}
+For every interval $X\subseteq\Lam$ and every real $u$ with $\abs u\le u_0$,
+\begin{equation}\label{eq:mgf}
+ \log\Tr\rho_X^{\,1-u}=\log\E\,\e^{uK}\le u\,S(X)+512\,\e\,\vartheta\,\cB_R\,u^2 ,
+\end{equation}
+where $\rho_X^{1-u}$ is zero on the kernel of $\rho_X$. Consequently, for
+every $w\ge0$,
+\begin{equation}\label{eq:tail}
+ \Pr\{\abs{K-S(X)}>w\}\le 2\e^{\e/2}\exp(-u_0w).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Put $M(u)=\sum_jp_j^{1-u}$, $L(u)=\log M(u)$; note $L(0)=0$ and
+$L'(0)=S(X)$. Let $P$ be the support projection of $\rho$, let
+$F=\rho^{-u/2}$ on $P\cH_X$ and $F=\id$ on the kernel, and define
+\[
+ \Theta=\frac{F\Om}{\sqrt{M(u)}},\qquad
+ \sigma=\Tr_{\Lam\setminus X}\ket\Theta\bra\Theta=\frac{\rho^{1-u}}{M(u)} .
+\]
+$F$ is invertible on $\cH_\Lam$, so $FHF^{-1}\Theta=E_0\Theta$ and
+\begin{equation}\label{eq:tiltenergy}
+ \langle\Theta,(H-E_0)\Theta\rangle
+ =\sum_Y\bigl(\langle\Theta,h_Y\Theta\rangle-\langle\Theta,Fh_YF^{-1}\Theta\rangle\bigr).
+\end{equation}
+A term supported in $\Lam\setminus X$ commutes with $F$ and contributes
+zero. A term supported in $X$ contributes zero because
+$\Tr\sigma Fh_YF^{-1}=\Tr\sigma h_Y$ by $[F,\sigma]=0$ and cyclicity. So only
+terms split by $X$ remain, and there are at most $N_R$ of them by
+\eqref{eq:count}.
+
+Fix such a term $h=h_Y$. For complex $z$ let
+$\sigma^z=P\exp(z\log(\sigma|_{P\cH_X}))P$ and
+$f(z)=\langle\Theta,\sigma^zh\sigma^{-z}\Theta\rangle$, an entire function
+with $f(0)=\langle\Theta,h\Theta\rangle$ (because $\Theta$ lies in the
+support of $\sigma$). At $z_u=-u/(2(1-u))$ one has, on the support,
+$\sigma^{z_u}=M(u)^{-z_u}F$ and $\sigma^{-z_u}=M(u)^{z_u}F^{-1}$, so
+$f(z_u)=\langle\Theta,Fh F^{-1}\Theta\rangle$. On the imaginary axis the
+powers are unitary on the support and $\abs{f(iy)}\le J$. For
+$\abs{\Re z}\le\tfrac14$ expand $h$ as in \eqref{eq:matrixunits} and let
+$\Theta=\sum_j\sqrt{s_j}\,e_j\otimes f_j$ be its Schmidt decomposition
+across $X$. Then
+\[
+ f(z)=\sum_\alpha\sum_{j,k}s_j^{1/2+z}s_k^{1/2-z}\,
+ \langle e_j,c_\alpha e_k\rangle\langle f_j,d_\alpha f_k\rangle .
+\]
+For $\abs{\Re z}\le\frac14$, $\abs{s_j^{1/2+z}s_k^{1/2-z}}\le s_j+s_k$ by the
+weighted arithmetic--geometric mean inequality, and for any operators
+$c,d$ the row and column Cauchy--Schwarz inequalities give
+\begin{equation}\label{eq:rowcolumn}
+ \sum_{j,k}(s_j+s_k)\,\abs{c_{jk}}\,\abs{d_{jk}}\le 2\norm c\,\norm d ,
+\end{equation}
+because $\sum_k\abs{c_{jk}}\abs{d_{jk}}\le\norm c\norm d$ for each row $j$ and
+likewise for each column. Hence $\abs{f(z)}\le 2Jq^{2(R+1)}$ on
+$\abs{\Re z}\le\frac14$. Hadamard's three-lines theorem on each of the
+strips $0\le\pm\Re z\le\frac14$ gives
+$\log\abs{f(x+iy)}\le\log J+4\abs x\log(2q^{2(R+1)})\le \log J+8\abs x\,\ell_R$,
+so that
+\begin{equation}\label{eq:narrow}
+ \abs{f(z)}\le \e J\qquad\text{for }\abs{\Re z}\le\delta_R:=\frac1{8\ell_R}.
+\end{equation}
+Since $h=h^*$ and $(\sigma^z)^*=\sigma^{\bar z}$, one has
+$f(-\bar z)=\overline{f(z)}$. Writing $f(z)=\sum_nc_nz^n$, this says
+$c_n$ is real for even $n$ and purely imaginary for odd $n$; so for real
+$x$, $\Re(f(x)-f(0))=\sum_{n\ge2\text{ even}}c_nx^n$, and Cauchy's estimate
+$\abs{c_n}\le\e J\delta_R^{-n}$ from \eqref{eq:narrow} gives, for
+$\abs x\le\delta_R/2$,
+\begin{equation}\label{eq:quadratic}
+ \abs{\Re(f(x)-f(0))}\le 2\e J\,x^2\delta_R^{-2}=128\,\e J\,\ell_R^2\,x^2 .
+\end{equation}
+For $\abs u\le u_0$ we have $\abs u\le\frac1{32}$, $\abs{z_u}\le\abs u$ and
+$\ell_R\le\sqrt{\cB_R}$, so $\abs{z_u}\le\delta_R/2$. Since
+\eqref{eq:tiltenergy} is real, applying \eqref{eq:quadratic} to each of the
+at most $N_R$ split terms yields
+\begin{equation}\label{eq:energyquad}
+ 0\le\langle\Theta,(H-E_0)\Theta\rangle\le 128\,\e J\,N_R\ell_R^2\,u^2
+ \le 128\,\e J\,\cB_R\,u^2 .
+\end{equation}
+The gap \eqref{eq:gap} now gives
+$1-\abs{\langle\Om,\Theta\rangle}^2\le 128\,\e\,\vartheta\,\cB_Ru^2\le\frac12$,
+and $\langle\Om,\Theta\rangle=M(u/2)/\sqrt{M(u)}$, so
+\[
+ \frac{M(u/2)^2}{M(u)}\ge 1-128\,\e\,\vartheta\,\cB_R u^2,
+ \qquad\text{i.e.}\qquad
+ L(u)\le 2L(u/2)+256\,\e\,\vartheta\,\cB_Ru^2,
+\]
+using $-\log(1-v)\le2v$ for $0\le v\le\frac12$. Every halving $u/2^j$
+stays in the admissible interval, so by induction
+\[
+ L(u)\le 2^jL(u/2^j)+256\,\e\,\vartheta\,\cB_Ru^2\sum_{i<j}2^{-i}
+ \xrightarrow[j\to\infty]{} uS(X)+512\,\e\,\vartheta\,\cB_Ru^2 ,
+\]
+which is \eqref{eq:mgf}. For \eqref{eq:tail}, apply Markov's inequality
+to $\e^{\pm u_0(K-S)}$: the quadratic term at $u=\pm u_0$ equals
+$512\e\vartheta\cB_R/(1024(1+\vartheta)\cB_R)\le\e/2$, so each one-sided
+tail is at most $\e^{\e/2}\e^{-u_0w}$.
+\end{proof}
+
+\begin{remark}[Rényi entropies near one]\label{rem:renyi}
+For $0<u\le u_0$ and $\alpha=1-u$, \eqref{eq:mgf} reads
+$S_\alpha(X)=\frac{1}{u}\log\Tr\rho_X^{\alpha}\le S(X)+512\e\vartheta\cB_R(1-\alpha)$.
+Since $S_\alpha\ge S$ for $\alpha<1$, all Rényi entropies of order
+$\alpha\in[1-u_0,1]$ of an interval lie within $16\e\sqrt{(1+\vartheta)\cB_R}$ of its von
+Neumann entropy. This is used in Section~\ref{sec:shortcut}.
+\end{remark}
+
+\section{The buffered discount with a constant-width buffer}\label{sec:buffer}
+
+\begin{inwords}
+Here is the one lemma that does the work. Take an interval $X$ and
+surround it by $m$ nested shells: $X_j=X^{+jD}$ for $j=1,\dots,m$, each
+one step of width $D=\max(R,1)$ thicker than the previous one, and let
+$T_j=X_j\setminus X$ be the two flanks. The number $m$ will be a large
+constant (of order $1+J/\Delta$), so the total buffer $T=T_m$ has
+\emph{constant} width $mD$ on each side of $X$. The claim is
+\[
+ S(X\,|\,T)\ \le\ \tfrac12\,S(X)+C .
+\]
+Conditioning $X$ on a constant number of neighboring sites halves its
+entropy, up to a constant.
+
+Why should that be? Apply to $\Om$ a product $K=L_m\cdots L_1$ of positive
+operators, $L_j$ acting on $X_j$, each normalized by
+$\Tr L_j^{2/a_j}=1$ with $a_j=2/m$ (so the weights sum to $2$), and
+maximize the norm $N=\norm{K\Om}$. Two estimates bound the optimum from
+opposite sides.
+
+\emph{The optimum is small.} At the optimum, each filter commutes with the
+marginal of the filtered vector on its own region (a stationarity
+computation), which lets one strip the outer filters from any expectation
+of an operator living inside them. Then the energy of the normalized
+filtered vector is at most a constant times $\sum_ja_j^2\times(\text{number of
+interactions split by }X_j)$: an interaction is split by at most one shell
+because consecutive shells are $D\ge R$ apart, and the conjugation of a
+split term by one filter changes its expectation only quadratically in
+$a_j$, by the same kind of row--column Cauchy--Schwarz estimate as in the
+tail bound. In one dimension the number of split terms is bounded, so the
+energy is at most $C/m$. The gap then says the filtered vector overlaps
+$\Om$ to $1-C/(m\Delta)$. Using that overlap, one peels the filters off one
+at a time, and each peeled filter $L_j$ can shrink the norm by at most
+$\norm{L_j\Om}\le\exp(-a_jS(X_j)/2+Ca_j^2)$ by Hölder and the tail bound. So
+$-2\log N\ge\sum_ja_jS(X_j)-C$.
+
+\emph{The optimum is large.} Pin a Schmidt vector $u_i$ of $X$, that is,
+use the trial filters $L_j=\ket{u_i}\bra{u_i}\otimes M_j$ with $M_j$ a
+filter on the flank $T_j$ only. The output is $\sqrt{p_i}$ times a filtered
+version of the partner vector $w_i$, and an interpolation argument shows
+the flank filters can be chosen so that the norm is at least
+$\exp(-\sum_ja_jS_{w_i}(T_j)/2)$. Averaging over $i$ and using concavity
+of entropy, $-2\log N\le S(X)+\sum_ja_jS(T_j)$.
+
+Subtracting, $\sum_ja_j\,[S(X_j)-S(T_j)]\le S(X)+C$, and $S(X_j)-S(T_j)$ is
+the conditional entropy $S(X|T_j)$, which decreases as the flank grows.
+With $\sum_ja_j=2$ this is the discount. Notice what did not happen: no
+property of the state on the flanks was used beyond their being a
+constant number of sites, and no gap of any restricted Hamiltonian was
+invoked.
+\end{inwords}
+
+\precisely
+Fix $D=\max(R,1)$ and an integer $m\ge4$. For an interval $X\subseteq\Lam$
+put
+\[
+ X_0=X,\qquad X_j=X^{+jD}\ (1\le j\le m),\qquad T_j=X_j\setminus X,
+ \qquad a_j=\frac2m .
+\]
+Then $T_1\subseteq\cdots\subseteq T_m$, each $T_j$ consists of at most two
+intervals of length at most $jD$, and $\sum_ja_j=2$. Define the constants
+\begin{equation}\label{eq:CE}
+ C_E:=8\,N_R\,J\,q^{2(R+1)},\qquad
+ m:=\Bigl\lceil\max\Bigl\{4,\ \frac{4C_E}{\Delta},\ 128\sqrt{(1+\vartheta)\cB_R},\
+ 4096\,\e\,(1+\vartheta)\,\cB_R\Bigr\}\Bigr\rceil .
+\end{equation}
+Every entry is at most a constant depending on $q,R$ times $(1+J/\Delta)$,
+so
+\begin{equation}\label{eq:mbound}
+ m\le C_1(q,R)\,(1+\vartheta).
+\end{equation}
+
+\begin{lemma}[Single splitting]\label{lem:singlesplit}
+A support $Y$ with $\diam_{d_\Lam}Y\le R$ is split by at most one of the
+intervals $X_1,\dots,X_m$. If it is split by $X_j$, it is contained in
+$X_i$ for every $i>j$ and disjoint from $X_i$ for every $i<j$. The same
+holds for the family $X_0,\dots,X_m$ with the convention that $X_0$ may
+also be split.
+\end{lemma}
+\begin{proof}
+Suppose $Y$ is split by $X_j$. It contains a point $y\notin X_j$ and a point
+$x\in X_j$, and all its points are within graph distance $R\le D$ of $x$
+and of $y$. Points within distance $D$ of $X_j$ lie in $X_{j+1}$, so
+$Y\subseteq X_{j+1}\subseteq X_i$ for $i>j$. Points of $X_{j-1}$ are at
+distance more than $D$ from every point outside $X_j$ (because
+$X_j=X_{j-1}^{+D}$), so $Y\cap X_{j-1}=\varnothing$, and likewise for
+$i<j$. A set contained in $X_i$ or disjoint from $X_i$ is not split by
+$X_i$.
+\end{proof}
+
+\begin{lemma}[Buffered discount]\label{lem:buffer}
+With $m$ as in \eqref{eq:CE}, every interval $X\subseteq\Lam$ satisfies
+\begin{equation}\label{eq:discount}
+ S(X\,|\,T_m)\ \le\ \frac12\,S(X)+\frac12+\frac{C_E}{\Delta}.
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+If $X=\varnothing$ both sides vanish. Assume $X\ne\varnothing$.
+
+\paragraph{The optimization.}
+Fix $\epsilon>0$ so small that $(\dim\cH_{X_j})\epsilon^{2/a_j}<1$ for all
+$j$, and maximize
+\[
+ N=\norm{L_m\cdots L_1\Om}
+\]
+over positive operators $L_j$ on $\cH_{X_j}$ (extended by the identity)
+with $L_j\ge\epsilon\id$ and $\Tr_{\cH_{X_j}}L_j^{2/a_j}=1$. The feasible
+sets are nonempty and compact, every feasible product is invertible, so a
+maximum $N>0$ exists. At an optimum put $K=L_m\cdots L_1$, $\phi=K\Om/N$,
+and $\rho_j=\Tr_{\Lam\setminus X_j}\ket\phi\bra\phi$.
+
+\paragraph{Stationarity.}
+We claim $[L_j,\rho_j]=0$ for all $j$, by descending induction on $j$. The
+tool is the stripping identity: if $[L_k,\rho_k]=0$ and $T$ is supported
+in $X_k$, then
+\begin{equation}\label{eq:strip}
+ \langle\phi,L_kTL_k^{-1}\phi\rangle=\Tr(L_k^{-1}\rho_kL_kT)=\Tr(\rho_kT)=\langle\phi,T\phi\rangle .
+\end{equation}
+Assume the claim for $k>j$ and let $B$ be anti-Hermitian on $\cH_{X_j}$.
+Replacing $L_j$ by $\e^{tB}L_j\e^{-tB}$ preserves both constraints, so the
+derivative of $\log\norm{K\Om}$ at $t=0$ vanishes. That derivative equals
+$\Re\langle\phi,K_{>j}(B-L_jBL_j^{-1})K_{>j}^{-1}\phi\rangle$ with
+$K_{>j}=L_m\cdots L_{j+1}$. The operator inside is supported in $X_j$,
+hence in $X_m$; strip $L_m$ by \eqref{eq:strip}, then $L_{m-1}$, and so on
+down to $L_{j+1}$. Since $\Tr(\rho_jB)$ is purely imaginary, stationarity
+gives $\Re\Tr(L_j^{-1}\rho_jL_jB)=0$ for all anti-Hermitian $B$, so
+$L_j^{-1}\rho_jL_j$ is Hermitian, i.e.\ equals $L_j\rho_jL_j^{-1}$, so
+$\rho_j$ commutes with $L_j^2$ and hence with $L_j\ge0$. No commutation
+between distinct filters is claimed or used.
+
+In a common eigenbasis let $l_i$, $p_i$ be the eigenvalues of $L_j$,
+$\rho_j$, and $x_i=l_i^{2/a_j}$, so $\sum_ix_i=1$, $x_i\ge\epsilon^{2/a_j}$.
+A diagonal variation and the same stripping give
+$d\log N=\frac{a_j}2\sum_ip_i\,dx_i/x_i$. The Kuhn--Tucker conditions on the
+simplex with the floor say that $p_i/x_i$ is a common value $\lambda>0$ on
+coordinates above the floor and at most $\lambda$ on floored coordinates
+(there is a free coordinate by the dimensional slack, and $\lambda>0$
+because moving mass from a zero-probability free coordinate to a
+positive-probability floored one would increase $N$). Hence
+$x_i=\max\{\epsilon^{2/a_j},p_i/\lambda\}$ and, since taking a maximum with
+a common floor contracts differences of logarithms,
+\begin{equation}\label{eq:clip}
+ \Bigl|\log\frac{l_i}{l_k}\Bigr|\le\frac{a_j}{2}\Bigl|\log\frac{p_i}{p_k}\Bigr|
+ \qquad(p_i,p_k>0).
+\end{equation}
+
+\paragraph{Energy of the optimized vector.}
+Since $KHK^{-1}\phi=E_0\phi$,
+\[
+ \langle\phi,(H-E_0)\phi\rangle=\sum_Y\Re\bigl(\langle\phi,h_Y\phi\rangle-\langle\phi,Kh_YK^{-1}\phi\rangle\bigr).
+\]
+If $Y$ is split by no $X_j$ ($1\le j\le m$), then by Lemma~\ref{lem:singlesplit}
+each $X_j$ either contains $Y$ or is disjoint from it; strip the
+containing filters by \eqref{eq:strip} from the outside in, and commute
+the disjoint ones through $h_Y$: the term vanishes. If $Y$ is split by
+$X_j$, the same procedure leaves exactly
+$\langle\phi,h_Y\phi\rangle-\langle\phi,L_jh_YL_j^{-1}\phi\rangle$. Let
+$\phi=\sum_i\sqrt{p_i}\,e_i\otimes f_i$ be the Schmidt decomposition across
+$X_j$ with $e_i$ in the common eigenbasis, and $h_{ik}=\langle e_i\otimes f_i,h_Y(e_k\otimes f_k)\rangle$.
+Pairing $(i,k)$ with $(k,i)$ and using $h_{ki}=\overline{h_{ik}}$,
+\[
+ \Re\langle\phi,L_jh_YL_j^{-1}\phi\rangle-\langle\phi,h_Y\phi\rangle
+ =\sum_{i,k:\,p_ip_k>0}\sqrt{p_ip_k}\,\bigl(\cosh(\log(l_i/l_k))-1\bigr)\Re h_{ik}.
+\]
+Put $z=\frac12\log(p_i/p_k)$. By \eqref{eq:clip} and $a_j\le\frac12$,
+$\cosh(\log(l_i/l_k))-1\le\cosh(a_jz)-1\le\frac12a_j^2z^2\cosh(a_jz)\le\frac12a_j^2z^2\cosh(z/2)$,
+while $\sqrt{p_ip_k}=(p_i+p_k)/(2\cosh z)$. Since
+$\sup_z z^2\cosh(z/2)/(4\cosh z)\le1$, the coefficient is at most
+$a_j^2(p_i+p_k)$. Expanding $h_Y$ by \eqref{eq:matrixunits} and using
+\eqref{eq:rowcolumn} for each product term gives
+\[
+ \bigl|\Re\langle\phi,L_jh_YL_j^{-1}\phi\rangle-\langle\phi,h_Y\phi\rangle\bigr|
+ \le 2a_j^2\,q^{2(R+1)}J .
+\]
+Summing over the at most $N_R$ terms split by each $X_j$,
+\begin{equation}\label{eq:energy}
+ 0\le\langle\phi,(H-E_0)\phi\rangle\le\sum_{j=1}^m N_R\cdot 2a_j^2q^{2(R+1)}J
+ =\frac{8N_RJq^{2(R+1)}}{m}=\frac{C_E}{m}.
+\end{equation}
+By \eqref{eq:gap} and \eqref{eq:CE},
+\begin{equation}\label{eq:overlap}
+ 1-\abs{\langle\Om,\phi\rangle}^2\le\frac{C_E}{m\Delta}\le\frac14 .
+\end{equation}
+The same bound holds for the optimizer of every prefix $L_j\cdots L_1$,
+$1\le j\le m$, since its energy is bounded by the same sum restricted to
+$i\le j$.
+
+\paragraph{Upper bound on the optimum.}
+Let $N_j$ be the optimum for the prefix $1,\dots,j$ at the same floor,
+$N_0=1$, and let $L_j\cdots L_1$ be an optimizer for prefix $j$ with
+$K_{<j}=L_{j-1}\cdots L_1$. By \eqref{eq:overlap} for that prefix and
+Cauchy--Schwarz,
+\[
+ \sqrt{1-C_E/(m\Delta)}\;N_j\le\abs{\langle\Om,L_jK_{<j}\Om\rangle}
+ =\abs{\langle L_j\Om,K_{<j}\Om\rangle}\le\norm{L_j\Om}\,N_{j-1}.
+\]
+For any feasible $L_j$, Schatten--Hölder with exponents $\frac1{1-a_j}$ and
+$\frac1{a_j}$ and the constraint $\Tr L_j^{2/a_j}=1$ give
+\[
+ \norm{L_j\Om}^2=\Tr\rho_{X_j}L_j^2\le\bigl(\Tr\rho_{X_j}^{1/(1-a_j)}\bigr)^{1-a_j}.
+\]
+Apply Lemma~\ref{lem:tail} to the interval $X_j$ with $u=-a_j/(1-a_j)$,
+which is admissible because $\abs u\le 2a_j=4/m\le u_0$ by \eqref{eq:CE}.
+Using $(1-a_j)u^2\le 2a_j^2$,
+\[
+ \log\norm{L_j\Om}^2\le -a_jS(X_j)+1024\,\e\,\vartheta\,\cB_R\,a_j^2 .
+\]
+Multiplying the recursion over $j$ and using $-\frac12\log(1-v)\le v$ for
+$v\le\frac12$,
+\[
+ \log N\le-\frac12\sum_ja_jS(X_j)+512\,\e\,\vartheta\,\cB_R\sum_ja_j^2+\frac{mC_E}{m\Delta}
+ \le -\frac12\sum_ja_jS(X_j)+\frac12+\frac{C_E}{\Delta},
+\]
+because $\sum_ja_j^2=4/m\le 1/(1024\e\vartheta\cB_R)$ by \eqref{eq:CE}. That is,
+\begin{equation}\label{eq:lowerN}
+ -2\log N\ \ge\ \sum_{j=1}^ma_jS(X_j)-1-\frac{2C_E}{\Delta}.
+\end{equation}
+The constants in \eqref{eq:lowerN} do not depend on the floor $\epsilon$.
+
+\paragraph{Lower bound on the optimum by Schmidt pinning.}
+Let $\epsilon\downarrow0$. The optima converge to the optimum $N$ over
+nonnegative filters with the same trace constraints (the feasible sets
+are compact and every nonnegative feasible operator is a limit of
+strictly positive feasible ones), and \eqref{eq:lowerN} persists. Write
+$\Om=\sum_i\sqrt{p_i}\,u_i\otimes w_i$ with $p_i>0$ for the Schmidt
+decomposition across $X$. For fixed $i$ use the trial filters
+\[
+ L_j=\ket{u_i}\bra{u_i}\otimes M_j,\qquad M_j\ge0\text{ on }\cH_{T_j},\qquad\Tr M_j^{2/a_j}=1,
+\]
+which are feasible (as $\Tr_{X_j}L_j^{2/a_j}=\Tr M_j^{2/a_j}=1$) and give
+$N\ge\sqrt{p_i}\,N_i$, where $N_i=\sup\norm{M_m\cdots M_1w_i}$ over such $M_j$.
+We claim
+\begin{equation}\label{eq:trial}
+ \log N_i\ge-\frac12\sum_ja_jS_{w_i}(T_j).
+\end{equation}
+Fix invertible feasible $M_j$ and consider $F_i(z)=M_m^z\cdots M_1^zw_i$ on
+$0\le\Re z\le1$, bounded and analytic. On $\Re z=0$ the factors are
+unitary and $\norm{F_i(iy)}=1$. On $\Re z=1$ put $U_j=M_j^{iy}$,
+$V_j=U_j\cdots U_1$, $V_0=\id$; moving the unitaries left,
+\[
+ M_m^{1+iy}\cdots M_1^{1+iy}=(U_m\cdots U_1)\,(V_{m-1}^*M_mV_{m-1})\cdots(V_0^*M_1V_0).
+\]
+Each conjugated factor is positive, supported in $T_j$ (the conjugating
+unitaries live on the smaller nested flanks), and has the same
+trace-power normalization, so $\norm{F_i(1+iy)}\le N_i$. Testing against
+unit vectors and applying the scalar three-lines theorem gives
+$\log\norm{F_i(x)}\le x\log N_i$ for $0\le x\le1$; differentiating at
+$x=0^+$ yields $\sum_j\langle w_i,\log M_j\,w_i\rangle\le\log N_i$. Taking
+$M_j=\bigl((1-\delta)\rho_{w_i,T_j}+\delta\id/\dim\cH_{T_j}\bigr)^{a_j/2}$ and
+letting $\delta\downarrow0$, the left side tends to
+$-\frac12\sum_ja_jS_{w_i}(T_j)$, proving \eqref{eq:trial}. Hence
+$-2\log N\le-\log p_i+\sum_ja_jS_{w_i}(T_j)$ for every $i$; average with
+weights $p_i$ and use concavity of the entropy (the $p_i$-average of
+$\rho_{w_i,T_j}$ is $\rho_{T_j}$):
+\begin{equation}\label{eq:upperN}
+ -2\log N\le S(X)+\sum_{j=1}^ma_jS(T_j).
+\end{equation}
+
+\paragraph{Conclusion.}
+Subtract \eqref{eq:upperN} from \eqref{eq:lowerN}:
+$\sum_ja_j\bigl(S(X_j)-S(T_j)\bigr)\le S(X)+1+2C_E/\Delta$. Here
+$S(X_j)-S(T_j)=S(XT_j)-S(T_j)=S(X|T_j)$, and $S(X|T_j)\ge S(X|T_m)$ for
+$j\le m$ by strong subadditivity (conditioning on the larger flank
+$T_m\supseteq T_j$ decreases conditional entropy). With $\sum_ja_j=2$ this
+gives $2S(X|T_m)\le S(X)+1+2C_E/\Delta$.
+\end{proof}
+
+\section{Closing the argument}\label{sec:closing}
+
+\begin{inwords}
+The discount says that $S(X|T)\le\frac12S(X)+C$ where $T$ is a buffer of a
+constant number of sites. But a conditional entropy cannot be very
+negative: by the Araki--Lieb triangle inequality $S(XT)\ge S(X)-S(T)$, so
+$S(X|T)\ge S(X)-2S(T)$. Putting the two together,
+$S(X)-2S(T)\le\frac12S(X)+C$, hence $S(X)\le 4S(T)+2C$, and $S(T)$ is at
+most the number of sites of $T$ times $\log q$. That is the area law.
+
+Nothing else is needed. In two dimensions the same two inequalities give
+$S(X)\le 4S(T)+Cr$ for a box $X$ of side $r$ with a buffer $T$ of width
+proportional to $r$; the buffer is an annulus of area $\sim r^2$ whose
+entropy is as unknown as that of $X$, and the inequality is useless.
+That is the precise point at which the two-dimensional proof must bring
+in everything else.
+\end{inwords}
+
+\precisely
+\begin{proof}[Proof of Theorem~\ref{thm:A}]
+By Lemma~\ref{lem:reductions} it suffices to bound $S(X)$ for an interval
+$X$ in an interval domain. Let $T=T_m$ be the buffer of
+Lemma~\ref{lem:buffer}; it has at most $2mD$ sites. The Araki--Lieb
+inequality $S(XT)\ge S(X)-S(T)$ gives $S(X|T)\ge S(X)-2S(T)$, and
+\eqref{eq:discount} gives $S(X|T)\le\frac12S(X)+\frac12+C_E/\Delta$. Hence
+\begin{equation}\label{eq:final}
+ S(X)\le 4S(T)+1+\frac{2C_E}{\Delta}\le 8mD\log q+1+\frac{2C_E}{\Delta}=:C_{\mathrm{int}}.
+\end{equation}
+By \eqref{eq:mbound} and \eqref{eq:CE}, $C_{\mathrm{int}}\le C_0(q,R)(1+J/\Delta)$
+with, for instance,
+$C_0(q,R)=8C_1(q,R)\max(R,1)\log q+1+16N_Rq^{2(R+1)}$.
+\end{proof}
+
+\begin{remark}[What the constant depends on]
+The gap enters only through $\vartheta=J/\Delta$, linearly. The dependence
+on the local dimension and range is through $N_R\,q^{2(R+1)}$, which for
+nearest-neighbor interactions ($R=1$) is of order $q^4$; no attempt has
+been made to optimize it. By comparison, the bound of
+Arad--Kitaev--Landau--Vazirani is $\tilde O(\log^3(q)/\Delta)$ for $R=1$, so
+the present argument matches the linear dependence on the inverse gap
+and is worse in $q$.
+\end{remark}
+
+\begin{remark}[What was used]
+The proof used the global gap in exactly two places: in
+Lemma~\ref{lem:tail} applied at the cuts of the shells $X_j$, and to
+convert the energy bound \eqref{eq:energy} into the overlap bound
+\eqref{eq:overlap}. No Lieb--Robinson bound, no spectral filter, no
+approximate ground-state projector, no Chebyshev polynomial, no
+bootstrapping of a Schmidt-rank bound appears. The entropy itself enters
+only through operator norms of filtered vectors.
+\end{remark}
+
+\section{The long route, for comparison}\label{sec:longroute}
+
+\begin{inwords}
+It is instructive to see what the two-dimensional proof would do in one
+dimension if one refused to use the Araki--Lieb shortcut, because this
+is where each piece of the big machine would be used, and because the
+amplification and two-family steps reappear, in spirit, in
+Part~\ref{part:mps}.
+
+\emph{Sub-volume exponent.} Split an interval of length $Mr$ into $M$
+children of length $r$ and add them up in a random order. A child whose
+constant-width buffer has already been added gets the discount, which
+happens with a fixed probability $p_0$. This gives
+$F(Mr)\le(1-p_0/4)M\,F(r)+C M$ for the maximal interval entropy $F$, hence
+$F(r)\le Cr^{e_0}$ with $e_0<1$. In two dimensions the analogous recursion
+gives $r^{1+e_0}$, which is \emph{above} the boundary $r$; in one
+dimension $r^{e_0}$ is already below the diameter $r$, which is all the
+next step needs.
+
+\emph{Amplification.} The amplification proposition of the source
+converts an information bound $I(X:\text{far})\le n^{1-\varepsilon}$ into
+$I(X:J)\le n^{-M}$ for all $J$ beyond a graph distance $2r$ with
+$r=O((n^{1-\varepsilon}+\log n)^{1/\alpha})$, $\alpha<1$ as close to one
+as desired, using positive quasi-local constraints built from Kitaev's
+spectral filter, a random product of the corresponding contractions, and
+a polar decomposition. In one dimension the trivial bound
+$I(X:\text{anything})\le2S(X)\le Cn^{e_0}$ for an interval $X$ of length
+$n$ already is such an input, with no collar at all; one gets
+$I(X:J)\le n^{-M}$ beyond distance $Cn^{e_0/\alpha}=o(n)$ once
+$\alpha>e_0$.
+
+\emph{Two families.} Cut the half-line to the right of the cut into
+dyadic intervals $X_i=[2^i,2^{i+1})$ and alternate their family labels.
+Each $X_i$ is separated from all earlier same-family intervals and from
+the other side of the cut by the gap $X_{i-1}$, of length $2^{i-1}\gg
+2^{ie_0/\alpha}$. The two-family cancellation lemma then gives
+$S(A)\le|D|\log q+\frac12\sum_i2^{-iM}$ with $|D|=O(1)$.
+
+So the long route also works, with the entire replica scanner replaced by
+the trivial inequality $I\le 2S$. We do not pursue it; the direct proof is
+shorter and gives better constants.
+\end{inwords}
+
+\precisely
+We only record the recursion, since the other two steps are literally
+the source propositions with the stated inputs. Let $F(r)$ be the supremum
+of $S(X)$ over intervals $X\subseteq\Lam$ of length at most $r$ (over all
+admissible instances), and let $w_0=mD$ be the buffer width of
+Lemma~\ref{lem:buffer} with discount constant $C_{\mathrm{buf}}=\frac12+C_E/\Delta$.
+Let $M\ge 8(2w_0/r+2)$ and let $X$ be an interval of length at most $Mr$.
+Cut $X$ into at most $M$ consecutive children of length at most $r$ and
+order them by a uniformly random permutation. Call a child interior if
+its buffer of width $w_0$ on each side lies in $X$; at most
+$B:=2\lceil w_0/r\rceil+2$ children are not interior. For an interior
+child, the event that all children meeting its buffer precede it has
+probability at least $p_0=(2\lceil w_0/r\rceil+3)^{-1}$; on that event the
+chain-rule term is at most $S(X_i|T_i)\le\frac12S(X_i)+C_{\mathrm{buf}}$,
+and in every case it is at most $S(X_i)$. Taking the expectation of the
+chain rule,
+\[
+ F(Mr)\le\Bigl[(1-\tfrac{p_0}2)M+\tfrac{p_0}2B\Bigr]F(r)+p_0MC_{\mathrm{buf}}
+ \le\bigl(1-\tfrac{p_0}4\bigr)M\,F(r)+C M ,
+\]
+using $B\le M/2$. With $\lambda=(1-p_0/4)M\in(1,M)$ for $r\ge w_0$, iterating
+at $r=w_0,Mw_0,M^2w_0,\dots$ gives $F(M^jw_0)\le C\lambda^j$ and hence
+$F(r)\le Cr^{e_0}$ with $e_0=\log_M\lambda<1$.
+

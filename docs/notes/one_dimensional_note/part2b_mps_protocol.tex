@@ -1,0 +1,565 @@
+\section{Distributed constructions and the three moves}\label{sec:moves}
+
+\begin{inwords}
+Think of a bookkeeping game. There are \emph{parties}; each owns a set
+of registers (tensor factors), which may include whole copies of the
+ground vector held privately. A \emph{gate} is a linear contraction
+applied to the registers of a few parties. A gate is \emph{private} if it
+touches one party only; private gates are free. A non-private gate is
+charged only through two numbers: how many parties it involves, and how
+many such gates each party ever takes part in. In addition every
+non-private gate must have a \emph{polynomial expansion}: it must be a
+sum of polynomially many terms, each a composition of private maps,
+preparations of normalized vectors shared by two parties, contractions
+by normalized covectors shared by two parties, and transfers of
+polynomial-dimensional registers. The dimensions of the shared vectors
+are unrestricted.
+
+The point of the game is that its final physical density admits a tensor
+network with polynomial links on the party graph (Section~\ref{sec:compression}),
+whatever the private dimensions were. So we are free to prepare the
+ground vector exactly at one party and to use arbitrarily entangled
+bipartite resources; the price is only paid in participation counts.
+
+A \emph{sheet} is a full set of site registers with an assignment of
+owners; its reference vector is a copy of the ground vector placed on
+those registers in canonical site coordinates (ownership does not permute
+sites). The three moves change the ownership of a sheet or of two sheets
+while keeping the actual vector within $O(L^{-p/2})$ of the product of the
+reference vectors.
+\end{inwords}
+
+\precisely
+A \emph{distributed construction} of size parameter $L$ consists of a
+finite set of parties, each with an initial finite-dimensional register
+space in a normalized product initial vector, and a sequence of gates,
+each a linear contraction between specified input and output register
+spaces of the participating parties, the other registers being
+spectators. Registers to be discarded are retained until a final partial
+trace. An \emph{allowed monomial} is a composition of private
+contractions, preparations of normalized vectors shared between two
+participating parties, contractions by normalized covectors shared
+between two participating parties, and identity transfers of registers of
+uniformly polynomial dimension. A non-private gate is \emph{admissible} if
+it is a sum of uniformly polynomially many allowed monomials with
+uniformly polynomially bounded scalar coefficients, each monomial
+containing a bounded number of shared vectors, shared covectors and
+transfers; a contraction within $L^{-a}$ of such a sum, for a fixed $a>0$,
+is also admissible after rescaling by $1+L^{-a}$. A \emph{bounded change}
+is a sequence of a bounded number of admissible gates on a bounded number
+of parties.
+
+A sheet is $\cH_\Lam=\bigotimes_{x\in\Lam}\C^q$ with an owner assigned to
+each site; its reference vector is $\Om$ in these registers.
+
+\begin{lemma}[Birth and death]\label{lem:birth}
+In a sheet, let $T$ be a set of sites owned by $P_\circ$, and let
+$E=\{x:\text{the owner of }x\text{ is not }P_\circ\}$,
+$U=\Lam\setminus(T\cup E)$. If $I_\Om(T:E)\le L^{-2p}$, then the change of
+owner of $T$ from $P_\circ$ to any party $Q_\circ$ (a \emph{birth}) is a bounded
+change involving $P_\circ,Q_\circ$ only, consisting of private maps and one
+shared normalized vector, with reference-vector error at most $L^{-p}$.
+The reverse change (a \emph{death}: $T$ returns from $Q_\circ$ to
+$P_\circ$) is a bounded change with the same error whenever the
+ownership and information conditions hold in the sheet \emph{after} the
+death; it uses one shared normalized covector instead.
+\end{lemma}
+\begin{proof}
+Let $V,s,s'$ be given by Lemma~\ref{lem:splitting} for $(T,U,E)$, put
+$\mathcal V=\id_{TE}\otimes V$ and $\Pi=\ket s\bra s_{T\cB_T}\otimes\id_{E\cB_E}$.
+All of $T,U$ belong to $P_\circ$. At $P_\circ$ apply $V$ on $U$; contract
+$T\cB_T$ with $\bra s$ (private, both at $P_\circ$); supply the shared
+vector $s$ on $T\cB_T$ with $T$ now owned by $Q_\circ$ and $\cB_T$ by
+$P_\circ$; apply $V^\dagger$ at $P_\circ$. The composite is the Hermitian
+contraction $B=\mathcal V^\dagger\Pi\mathcal V$ and
+$\norm{(B-\id)\Om}\le\norm{(\Pi-\id)\mathcal V\Om}=\norm{(\Pi-\id)(\mathcal V\Om-s\otimes s')}\le L^{-p}$.
+For the death, apply $V$ at $P_\circ$, use the shared covector $\bra s$ on
+$T\cB_T$ held by $Q_\circ,P_\circ$, reinsert $s$ wholly at $P_\circ$, and
+apply $V^\dagger$: the same operator $B$ with reversed ownership.
+\end{proof}
+
+\begin{lemma}[Two-sheet exchange]\label{lem:exchange}
+Consider two sheets and an interval $Y\subseteq\Lam$. Inside $Y$ exchange
+the two ownership assignments (sheet 1 at $x\in Y$ gets the owner sheet 2
+had, and conversely); outside $Y$ keep both. Let $P_\circ$ be a party,
+\[
+ Z=\{x:\text{the two owners of }x\text{ are not both }P_\circ\},\qquad
+ T=Z\cap Y,\quad E=Z\setminus Y,\quad U=\Lam\setminus Z .
+\]
+If $I_\Om(T:E)\le L^{-2p}$, the exchange is implemented by renaming of
+registers (no register changes party) and private contractions at
+$P_\circ$, with error at most $4L^{-p}$ between the products of the old and
+of the new reference vectors.
+\end{lemma}
+\begin{proof}
+Let $\mathcal R$ rename the two sheets inside $Y$: a private identification
+of tensor factors, since the new owner of sheet 1 at $x\in Y$ is the old
+owner of sheet 2 there. In canonical coordinates $\mathcal R$ acts as the
+swap $F_{Y}$ of the two sheets on $Y$. All registers of $U$ on both sheets
+are held by $P_\circ$ before and after. Let $V,s,s'$ be given by
+Lemma~\ref{lem:splitting} for $(T,U,E)$, $\mathcal V=\id_{TE}\otimes V$, and
+let $D_U=(V^{\otimes2})^\dagger F_{\cB_T}V^{\otimes2}$ on the two copies of
+$U$, a private contraction at $P_\circ$ (apply $V$ to both copies, swap the
+two $\cB_T$ factors, apply the adjoints). With $A=Y\cap U$, after
+$\mathcal R$ apply the private swap $F_A$ and then $D_U$. Since
+$Y=T\sqcup A$, the net action on the two copies is
+\[
+ D_UF_AF_Y=D_UF_T=(\mathcal V^{\otimes2})^\dagger F_{T\cB_T}\mathcal V^{\otimes2},
+\]
+using that $F_T$ acts outside $U$ and commutes through $V^{\otimes2}$. Put
+$\zeta=s\otimes s'$ and $\delta=\norm{\mathcal V\Om-\zeta}\le L^{-p}$. Then
+$\norm{(\mathcal V\Om)^{\otimes2}-\zeta^{\otimes2}}\le2\delta$, $\zeta^{\otimes2}$
+is fixed by $F_{T\cB_T}$ (it swaps two identical factors $s$), and
+$(\mathcal V^{\otimes2})^\dagger\mathcal V^{\otimes2}=\id$, so
+\[
+ \bigl\|(\mathcal V^{\otimes2})^\dagger F_{T\cB_T}\mathcal V^{\otimes2}\Om^{\otimes2}-\Om^{\otimes2}\bigr\|
+ \le\norm{(F_{T\cB_T}-\id)\bigl((\mathcal V\Om)^{\otimes2}-\zeta^{\otimes2}\bigr)}\le4\delta .
+\]
+In canonical coordinates both the old and the new reference vector are
+$\Om\otimes\Om$ (the sheets are relabeled, not moved), which is the claim.
+\end{proof}
+
+\begin{remark}
+In the two-dimensional source these lemmas carry encoded holes and tags at
+the points where three owners meet. On a line, the closure of two
+intervals with different owners meets at most two owners at any point, so
+there are no such points and no encodings. This is the first of the two
+reasons why the adaptive patch constraints of \cite[Section~4]{PP} are
+not needed in one dimension.
+\end{remark}
+
+\section{The sweep protocol}\label{sec:sweep}
+
+\begin{inwords}
+Here is the schedule. Divide the chain into consecutive blocks of $t$
+sites, where $t=20w$ and $w$ is the logarithmic separation of
+Lemma~\ref{lem:logsep}; the last block is whatever is left over, of length
+less than $3t$. At the start, a single party $R_0$ holds everything. At
+step $k$ the picture is
+\[
+ P_1\,|\,P_2\,|\cdots|\,P_k\,|\,R_k ,
+\]
+with $P_i$ owning block $i$ and the \emph{remainder} party $R_k$ owning the
+rest of the chain. Two births, both allowed because they leave a margin
+of $w$ to any other owner, create the next remainder $R_{k+1}$ on
+everything beyond block $k+1$ plus a margin, and the next block owner
+$P_{k+1}$ on the interior of block $k+1$. What remains of $R_k$ are two
+bands of width $w$: one wedged between $P_k$ and $P_{k+1}$, one between
+$P_{k+1}$ and $R_{k+1}$. Each band must be dissolved, and this is the only
+nontrivial step.
+
+A band $A$ wedged between two different owners $C$ (left) and $B$ (right)
+cannot simply die into $B$: the band touches $C$, so it is not
+informationally independent of the non-$B$ owners. The two-dimensional
+paper solves this along every edge of every square with a fixed sequence
+of moves using an auxiliary copy of the ground vector, and the sequence
+transplants verbatim. In units of the band width, with the band at
+$0<x<1$, $C$ to the left and $B$ to the right:
+\begin{enumerate}[leftmargin=2em,itemsep=0pt]
+\item Create a fresh copy of the ground vector, all of it owned by $C$.
+On it, birth $B$ on $(-6,-1)$, then $A$ on $(-5,-2)$, then $C$ on $(-4,-3)$.
+The auxiliary word is $C\,|\,B\,|\,A\,|\,C\,|\,A\,|\,B\,|\,C$.
+\item Exchange the two sheets inside the window $(-7,-\tfrac72)$. Both
+ends of the window are in places where both sheets are owned by $C$, and
+the only non-$C$ material inside the window is separated from the
+non-$C$ material outside it by a margin $w$. The main sheet now reads
+$C\,|\,B\,|\,A\,|\,C\,|\,A\,|\,B$ with interfaces at $-6,-5,-4,0,1$, and the
+auxiliary sheet is retired.
+\item On the main sheet: the $C$ band $(-4,0)$ is flanked by $A$ on both
+sides, so it dies into $A$; the $A$ band $(-5,1)$ is then flanked by $B$ on
+both sides and dies into $B$. The word is $C\,|\,B$ with the interface
+at $-6$. Finally birth $C$ on $(-3,0)$ inside $B$ and let the $B$ band
+$(-6,-3)$ die into $C$: the interface is back at $0$ and the band belongs
+to $B$.
+\end{enumerate}
+Each move in this list has its changed region at distance at least $w$
+from every other owner, so Lemma~\ref{lem:logsep} supplies the information
+hypothesis of Lemma~\ref{lem:birth} or~\ref{lem:exchange}. Only three
+parties take part. Since a party is born once, dissolves the bands on its
+two sides once, and is otherwise a spectator, every party participates in
+a bounded number of moves.
+
+Why a sweep rather than the dyadic hierarchy of the source? Because the
+final network must be placed on the chain. A link of the party network
+joins two parties, and every link crossing a given bond of the chain
+contributes a factor to that bond's dimension. In a dyadic hierarchy,
+every scale has a link crossing every bond (the tree of intervals has
+cutwidth $\log L$), so the bond dimension would be polynomial to the power
+$\log L$. In the sweep every link joins parties attached to blocks at
+most two apart, and a bounded number of links cross each bond.
+\end{inwords}
+
+\precisely
+Fix $p=12$. Let $D_{24}$ be the constant of Lemma~\ref{lem:logsep} with
+exponent $2p=24$ and $k_0=1$, and put
+\begin{equation}\label{eq:blocks}
+ w=\lceil D_{24}\log L\rceil,\qquad t=20w,\qquad
+ k_*=\max\{k\ge0:\ L-kt\ge 3t\},
+\end{equation}
+with the blocks $B_i=[(i-1)t+1,\,it]$ for $1\le i\le k_*$ and the last block
+$B_{k_*+1}=[k_*t+1,L]$, of length in $[3t,4t)$. We assume $L$ large enough
+that $t\ge 20$ and $k_*\ge0$ (small $L$ are handled in Section~\ref{sec:routing}).
+For a band $[a,a+w)$ with $C$ owning $[a-8w,a)$ and $B$ owning
+$[a+w,a+2w)$ (and possibly more), write $x=(\cdot-a)/w$ for the scaled
+coordinate.
+
+\begin{construction}[Band dissolution]\label{con:band}
+Let the main sheet read $C\,|\,A\,|\,B$ near $a$: $C$ on $x<0$ down to at
+least $x=-8$, $A$ on $0<x<1$, $B$ on $x>1$ up to at least $x=2$, where
+$A,B,C$ are three distinct parties. Perform:
+\begin{enumerate}[leftmargin=2em]
+\item[(i)] Prepare an auxiliary sheet, a fresh copy of $\Om$ held entirely
+by $C$ (a private initialization). Birth $B$ on $(-6,-1)$; birth $A$ on
+$(-5,-2)$; birth $C$ on $(-4,-3)$.
+\item[(ii)] Exchange the two sheets inside $Y=(-7,-\tfrac72)$ with
+$P_\circ=C$. Retire the auxiliary sheet (its registers stay idle at their
+owners).
+\item[(iii)] On the main sheet: death of the $C$ band $(-4,0)$ into $A$;
+death of the $A$ band $(-5,1)$ into $B$; birth of $C$ on $(-3,0)$ inside
+$B$; death of the $B$ band $(-6,-3)$ into $C$.
+\end{enumerate}
+If there is no left owner $C$ (the band starts at site $1$), replace
+the whole construction by a single death of the band into $B$.
+\end{construction}
+
+\begin{lemma}[The band dissolution is a bounded change]\label{lem:band}
+For all sufficiently large $L$, each of the nine moves in
+Construction~\ref{con:band} satisfies the information hypothesis of
+Lemma~\ref{lem:birth} or Lemma~\ref{lem:exchange} with exponent $2p=24$,
+so that the construction is a bounded change on the parties $A,B,C$ with
+total reference-vector error at most $12L^{-12}$. Afterwards the main
+sheet reads $C\,|\,B$ with the interface at $x=0$, and all other ownership
+is unchanged.
+\end{lemma}
+\begin{proof}
+We check each move; distances are in units of $w\ge D_{24}\log L$, and
+every changed region is an interval, so Lemma~\ref{lem:logsep} applies.
+(i) The first auxiliary birth has $E=\varnothing$ and needs no
+information bound. The second has changed region $(-5,-2)$ inside the
+$B$ band $(-6,-1)$, and $E$, the non-$B$ sites, is at distance $1$. The
+third has changed region $(-4,-3)$ inside $(-5,-2)$, distance $1$. The
+auxiliary word is now $C|B|A|C|A|B|C$ at $-6,-5,-4,-3,-2,-1$.
+(ii) The main sheet is $C$ on $x<0$ and the auxiliary sheet is $C$ on
+$x<-6$, $(-4,-3)$ and $x>-1$. Hence $Z\cap Y=(-6,-4)$ (auxiliary $B$ and
+$A$) and $Z\setminus Y=(-3,-1)\cup[0,\infty)$, at distance $1$ from $T$.
+After the exchange the main sheet inside $Y$ carries the auxiliary
+assignment, giving $C|B|A|C|A|B$ at $-6,-5,-4,0,1$; the auxiliary sheet
+inside $Y$ is $C$.
+(iii) The $C$ band $(-4,0)$ is surrounded by $A$ on $(-5,-4)\cup(0,1)$,
+and the non-$A$ sites after the death are $x\le-5$ and $x\ge1$, at
+distance $1$. The $A$ band $(-5,1)$ is surrounded by $B$ on
+$(-6,-5)\cup(1,2)$; non-$B$ sites after the death are $x\le-6$ and $x\ge2$,
+distance $1$. The birth of $C$ on $(-3,0)$ inside $B$ has non-$B$ sites
+at distance $\ge2$. The death of $(-6,-3)$ into $C$ has non-$C$ sites
+$x\ge0$ at distance $3$. The counts of moves and parties are as stated;
+each birth or death costs at most $L^{-12}$ and the exchange at most
+$4L^{-12}$.
+\end{proof}
+
+\begin{construction}[The sweep]\label{con:sweep}
+Initially one party $R_0$ holds the sheet. For $k=0,1,\dots,k_*-1$, with
+$a=kt+1$ the first site of block $k+1$ and the word $P_1|\cdots|P_k|R_k$:
+\begin{enumerate}[leftmargin=2em]
+\item[(1)] Birth $R_{k+1}$ on $[a+t+w,L]$ inside $R_k$.
+\item[(2)] Birth $P_{k+1}$ on $[a+w,a+t-1]$ inside $R_k$.
+\item[(3)] Dissolve the band $[a,a+w-1]$ (owner $R_k$) between $C=P_k$
+and $B=P_{k+1}$ by Construction~\ref{con:band}; if $k=0$ let the band die
+into $P_1$.
+\item[(4)] Dissolve the band $[a+t,a+t+w-1]$ (owner $R_k$) between
+$C=P_{k+1}$ and $B=R_{k+1}$ by Construction~\ref{con:band}.
+\end{enumerate}
+At the end set $P_{k_*+1}=R_{k_*}$, which owns exactly the last block.
+\end{construction}
+
+\begin{proposition}[Properties of the sweep]\label{prop:sweep}
+For all sufficiently large $L$, Construction~\ref{con:sweep} is a
+distributed construction with the following properties.
+\begin{enumerate}[leftmargin=2em]
+\item There are $2k_*+2\le 2L$ parties. The initial vector is a product by
+party: $R_0$ holds $\Om$, and every auxiliary copy of $\Om$ is initialized
+privately at the party $C$ of its band dissolution.
+\item There are at most $20k_*\le 2L$ non-private gates. Each involves at
+most three parties and is admissible with one shared vector or covector
+per monomial. Each party participates in at most $40$ non-private gates
+over its lifetime.
+\item The final vector $\Psi$ satisfies $\norm\Psi\le1$ and
+$\norm{\Psi-\Om\otimes\Xi}\le 26\,L^{-11}$, where $\Xi$ is the tensor
+product of the retired auxiliary copies of $\Om$ in their final registers
+and $\norm\Xi=1$. At the end, party $P_i$ owns exactly the raw registers
+of block $B_i$, of dimension $q^{\abs{B_i}}\le q^{4t}=L^{O(1)}$, and no other
+party owns a raw register.
+\end{enumerate}
+\end{proposition}
+\begin{proof}
+At step $k$ the word is $P_1|\cdots|P_k|R_k$ with $R_k$ owning
+$[a,L]$, $a=kt+1$. Move (1) has changed region $[a+t+w,L]$ and
+$E=[1,a-1]$ at distance $t+w$; move (2) has changed region $[a+w,a+t-1]$
+and $E=[1,a-1]\cup[a+t+w,L]$ at distance $w$. Both are births by
+Lemma~\ref{lem:birth} with Lemma~\ref{lem:logsep}. After them $R_k$ owns
+the two bands $[a,a+w-1]$ and $[a+t,a+t+w-1]$. For (3), $C=P_k$ owns
+block $k$, of length $t=20w\ge8w$ to the left of $a$, and $B=P_{k+1}$ owns
+$[a+w,a+t-1]$, of length $19w\ge2w$, so Lemma~\ref{lem:band} applies
+(for $k=0$, the death of $[1,w]$ into $P_1$ has $E=[t+1,L]$ at distance
+$t-w$). For (4), $C=P_{k+1}$ owns $[a+w,a+t-1]$ of length $19w\ge8w$ and
+$B=R_{k+1}$ owns $[a+t+w,L]$ of length at least $3t-w\ge2w$. After (4)
+the word is $P_1|\cdots|P_{k+1}|R_{k+1}$. The parties are $R_0,\dots,R_{k_*}$
+and $P_1,\dots,P_{k_*}$, with $P_{k_*+1}=R_{k_*}$. The number of moves per
+step is at most $2+2\cdot9=20$, so at most $20k_*$ in total, and the last
+block has length in $[3t,4t)$.
+
+Participation: $R_k$ takes part in steps $k-1$ (as the born party in (1)
+and as $B$ in (4)) and $k$ (as $P_\circ$ in (1), (2) and as $A$ in (3),
+(4)); $P_k$ takes part in step $k-1$ (born in (2), $B$ in (3), $C$ in (4))
+and step $k$ ($C$ in (3)). Each band dissolution has nine moves and an
+exchange that is private; so no party exceeds $2\cdot(2+2\cdot9)=40$ gates.
+Every birth or death is a single gate on two parties with one shared
+vector or covector, and every exchange consists of private gates only.
+
+Errors: every move takes the current actual vector within the stated
+error of the next reference vector, which is the tensor product of $\Om$
+on the main sheet and $\Om$ on each auxiliary sheet in canonical
+coordinates (Lemmas~\ref{lem:birth}, \ref{lem:exchange}; retired sheets
+are spectators of norm one). Telescoping a product of contractions bounds
+the accumulated error by the sum of the per-move errors: two births and
+two dissolutions per step cost at most $(2+2\cdot12)L^{-12}$, so the total
+is at most $26k_*L^{-12}\le 26L^{-11}$. The initial vector has norm one and every gate is a
+contraction, so $\norm\Psi\le1$.
+\end{proof}
+
+\begin{remark}[Why no patches]
+In the source, squares of size below $K_0\log L$ are repainted by
+``small-patch rewrites'' that use finite-rank cylinder projections of
+polynomial rank. Here the final owners hold blocks of $O(\log L)$ sites,
+whose register dimension $q^{O(\log L)}$ is polynomial, and the compression
+theorem below accepts polynomial-dimensional physical outputs. Converting
+a block tensor into single-site tensors is then linear algebra
+(Section~\ref{sec:routing}). This is the second reason the adaptive patch
+constraint is not needed.
+\end{remark}
+
+\section{Compression and column extraction}\label{sec:compression}
+
+\begin{inwords}
+The sweep is a pure linear calculation ending in a partial trace over
+everything but the block registers. Its gates involve shared vectors of
+enormous dimension (purifications of half-chain marginals). The
+compression theorem says that if we replace, in the \emph{density}
+calculation $\rho=\Tr_{\mathrm{private}}\ket\Psi\bra\Psi$, each shared
+vector $\ket\eta\bra{\tilde\eta}$ by an average of $k$ independent random
+product operators $U_j\otimes V_j$ built from its Schmidt data and
+Gaussian coefficients, then for polynomial $k$ the physical density
+changes by at most $L^{-p}$ in trace norm. Expanding the error by which
+positions use a centered correction, each correction position involves
+only the two endpoint parties, and by bounded participation only
+boundedly many gates have to be opened for each corrected position; a
+Gaussian second-moment computation then shows that the expected trace
+norm of a term with $s$ corrections is $k^{-s/2}$ times a fixed
+polynomial per correction. Nothing in this argument depends on the
+private dimensions or on the Schmidt ranks of the shared vectors, which
+is the whole point. The output is an operator tensor network with one
+node per party and polynomial links between parties that shared a gate.
+A column of it is a ket network with the same links, close to the ground
+vector after normalization.
+
+The theorem and its proof are not geometric and we do not change a word
+of them; we restate the theorem in the form used here and sketch the
+estimate.
+\end{inwords}
+
+\precisely
+\begin{theorem}[Density compression, {\cite[Theorem~5.2]{PP}}]\label{thm:compression}
+Consider a family of distributed constructions indexed by $L\ge2$ such
+that: the numbers of parties and gates are uniformly polynomial; the
+initial vector is a product of normalized private vectors; every gate is
+a contraction; each non-private gate involves at most $b$ parties and each
+party participates in at most $b$ non-private gates; each non-private gate
+is admissible with uniformly polynomial bounds; and the intended physical
+output of each party has uniformly polynomial dimension, everything else
+being traced out. Let $\rho$ be the physical output density (positive,
+trace at most one). For every fixed $p>0$ there is an operator tensor
+network $\sigma$ with one node per party, a bounded number of links at
+each node, each link joining two parties that participate in a common
+non-private gate, uniformly polynomial link dimensions, and
+\[
+ \norm{\sigma-\rho}_1\le L^{-p}.
+\]
+The constants depend only on $p$, $b$ and the uniform polynomial bounds,
+not on private dimensions or on the Schmidt ranks of shared vectors.
+\end{theorem}
+\begin{proof}[Sketch]
+First eliminate shared covectors: a covector $\bra\eta$ on a pair of
+registers is replaced by appending $m-1$ copies of $\eta$ and averaging the
+$m$ cyclic permutations of the $m$ pair registers, a contraction $T_m$ with
+$\norm{T_m-\ket\eta^{\otimes m}\bra\eta}=m^{-1/2}$; with a common fixed
+garbage vector in every branch, a gate with $K$ monomials, each with at
+most $r$ covectors, is approximated in operator norm within
+$rm^{-1/2}\sum\abs{c_\xi}$ by a gate with $Km^r$ monomials using only
+shared vectors. Choosing $m$ polynomial makes this error at most
+$\epsilon/(8M)$ per gate, $M$ the number of non-private gates.
+
+Next, in the density calculation each source operator $X=\ket\eta\bra{\tilde\eta}$,
+with Schmidt data $(\lambda_a,u_a,v_a)$ and $(\mu_c,\tilde u_c,\tilde v_c)$,
+is replaced by $\widehat X=\frac1k\sum_{j=1}^kU_j\otimes V_j$ with
+$U_j=\sum_{a,c}(\lambda_a\mu_c)^{1/4}g^{(j)}_{ac}\ket{u_a}\bra{\tilde u_c}$,
+$V_j=\sum_{b,d}(\lambda_b\mu_d)^{1/4}\overline{g^{(j)}_{bd}}\ket{v_b}\bra{\tilde v_d}$
+and independent standard complex Gaussians $g^{(j)}_{ac}$. Then
+$\E\widehat X=X$, and the centered coefficients of $\Delta=\widehat X-X$ have
+diagonal covariance $k^{-1}\sqrt{\lambda_a\lambda_b\mu_c\mu_d}$ by the
+Gaussian pairing formula. Expanding the product over all $N$ slot
+positions, $\widehat\rho-\rho'=\sum_{\varnothing\ne S}F_S$ where $S$ lists
+the positions using a correction. For $\abs S=s$, the endpoint parties
+number at most $2s$ and participate in at most $2bs$ gates; expand only
+those gates into monomials and fix the physical basis entries at those
+parties, at total weighted cost $Q(L)^s$ with $Q$ a fixed polynomial.
+For a fixed choice, the calculation separates into an affected side,
+holding the corrected endpoints as free inputs, and an exterior, joined
+only by the exact shared vectors crossing between them, with Schmidt
+probability matrices $\tau,\tilde\tau$. The affected contractions give a
+block operator $O$ of norm at most one, the corrected coefficients $z_{il}$
+have covariance $k^{-s}\sqrt{p_i\tilde p_l}\,\delta\delta$, and the exterior
+input operator is $Z=\sum_{il}z_{il}\tau^{1/2}O_{li}^{\mathsf T}\tilde\tau^{1/2}$.
+Schatten--Hölder with exponents $4,2,4$ and trace-one weights gives
+$\norm Z_1\le\norm{\sum_{il}z_{il}\tilde\tau^{1/4}O_{li}\tau^{1/4}}_2$, whose expected
+square is $k^{-s}\norm{\widetilde R^{1/4}OR^{1/4}}_2^2\le k^{-s}$ with
+$R=\mathrm{diag}(p_i)\otimes\tau$, $\widetilde R=\mathrm{diag}(\tilde p_l)\otimes\tilde\tau$.
+The exterior maps and the physical matrix unit do not increase the trace
+norm. Hence $\E\norm{F_S}_1\le Q(L)^sk^{-s/2}$ and
+$\E\norm{\widehat\rho-\rho'}_1\le(1+Q(L)k^{-1/2})^N-1\le\epsilon/4$ for a
+polynomial $k$. Fix a realization. The link structure: the common monomial
+label of a gate is shared along a star between its participants, and each
+slot's sample index $j$ is shared between its two endpoints; all private
+maps, private source preparations and final private traces are
+contracted inside each party's node.
+\end{proof}
+
+\begin{lemma}[Column extraction, {\cite[Lemma~8.1]{PP}}]\label{lem:column}
+Let $\Om$ be a unit vector on a finite tensor product and $\sigma$ an
+operator with $\norm{\sigma-\ket\Om\bra\Om}_1\le\eta<1$. Then some
+product-basis column $v=\sigma\ket z$ is nonzero and satisfies
+$\min_\theta\norm{v/\norm v-\e^{i\theta}\Om}\le2\eta$. Fixing a column in an
+operator tensor network leaves all virtual dimensions unchanged.
+\end{lemma}
+\begin{proof}
+Let $E=\sigma-\ket\Om\bra\Om$ and $a_z=\langle\Om|z\rangle$. Then
+$\sum_z\norm{E\ket z}^2=\norm E_2^2\le\eta^2$ and $\sum_z\abs{a_z}^2=1$, so
+some $z$ with $a_z\ne0$ has $\norm{E\ket z}\le\eta\abs{a_z}$. For it,
+$w=v/a_z$ satisfies $\norm{w-\Om}\le\eta$, hence $w\ne0$ and
+$\norm{w/\norm w-\Om}\le2\eta$. Fixing the input index at every node is a
+contraction of physical legs only.
+\end{proof}
+
+\section{Assembly on the chain}\label{sec:routing}
+
+\begin{inwords}
+Apply the compression theorem to the sweep. Its parties are the block
+owners $P_i$, with physical output the $q^{\abs{B_i}}$-dimensional block
+register, and the remainders $R_k$, with no physical output. Every link
+joins two parties that shared a gate, and by construction those are
+attached to blocks at most two apart. Put the node of $R_k$ next to block
+$k+1$. Then a bond of the chain between two blocks is crossed only by
+links among the boundedly many parties attached to the four nearest
+blocks: constant congestion, and the dimension of a block-to-block bond
+is a bounded product of polynomial link dimensions. Finally, split each
+block node into one tensor per site by sequential singular value
+decompositions; the internal bonds are at most $q^{\abs{B_i}}$ times the
+crossing dimension, still polynomial. The column-extraction lemma turns
+the operator network into a ket network first. Small chains are handled
+by the trivial exact representation.
+\end{inwords}
+
+\precisely
+\begin{proof}[Proof of Theorem~\ref{thm:B}]
+Let $L_0$ be large enough for Proposition~\ref{prop:sweep} and for the
+inequalities below; for $2\le L<L_0$ every vector on $\Lam$ is an exact
+matrix product state of bond dimension at most $q^{\lfloor L/2\rfloor}\le
+q^{L_0/2}$, which is absorbed into $C$. Let $L\ge L_0$.
+
+By Proposition~\ref{prop:sweep}(3) and
+$\norm{\ket u\bra u-\ket v\bra v}_1\le2\norm{u-v}$ for vectors of norm at
+most one, the physical output density
+$\rho=\Tr_{\mathrm{private}}\ket\Psi\bra\Psi$ satisfies
+$\norm{\rho-\ket\Om\bra\Om}_1\le 52L^{-11}$. The construction satisfies the
+hypotheses of Theorem~\ref{thm:compression} with $b=40$ and physical
+output dimensions at most $q^{4t}\le L^{80D_{24}\log q+1}$, so with
+accuracy $L^{-5}$ there is an operator network $\sigma$ on the party
+graph with $\norm{\sigma-\ket\Om\bra\Om}_1\le L^{-5}+52L^{-11}\le2L^{-5}$,
+bounded degree, and link dimensions at most $C_1L^{r}$. By
+Lemma~\ref{lem:column} some column is a nonzero ket network $v$ with the
+same links and $\min_\theta\norm{v/\norm v-\e^{i\theta}\Om}\le4L^{-5}\le L^{-1}$.
+
+Placement. Attach $P_i$ to block $B_i$ and $R_k$ to block $B_{k+1}$. Two
+parties sharing a gate are, by the proof of Proposition~\ref{prop:sweep},
+among $\{P_k,P_{k+1},R_k,R_{k+1}\}$ for some $k$, hence attached to blocks
+at most two apart. A bond between blocks $i$ and $i+1$ is therefore
+crossed only by links incident to parties attached to blocks
+$i-1,\dots,i+2$; there are at most $8$ such parties, each of degree at most
+$5\cdot40$ (at most two star links and three sample links per three-party
+gate), so at most $\chi:=1600$ links cross any block bond. Route each link along the chain
+between its two blocks; group the indices crossing a block bond into one
+index of dimension at most $(C_1L^r)^{\chi}$. The tensor at block $i$ is
+now a map from its left and right block-bond indices to the block's
+physical register $\cH_{B_i}$, of dimension at most $q^{4t}$. Writing
+$B_i=\{x_1<\dots<x_n\}$, perform singular value decompositions
+successively across $x_1|x_2\cdots x_n$, $x_1x_2|x_3\cdots x_n$, \dots,
+treating the two block-bond indices as additional legs attached to the
+first and last site; the resulting single-site tensors have internal
+bond dimensions at most $\min\{q^{j}(C_1L^r)^\chi,\ q^{n-j}(C_1L^r)^\chi\}\le
+q^{2t}(C_1L^r)^{\chi}$ and the block bonds are unchanged. Thus $v$ is a
+matrix product state on $\Lam$ with open boundary conditions and bond
+dimension at most $q^{2t}(C_1L^r)^\chi\le CL^{c}$, with
+$c=40D_{24}\log q+r\chi$.
+\end{proof}
+
+\begin{remark}[Order of constants]
+Fix $q,R,J,\Delta$. Theorem~\ref{thm:A} gives $C_{\mathrm{int}}$;
+Lemma~\ref{lem:reset} at $p=24$ gives $C_{24}$, hence $D_{24}$ and the
+block scale $t$; the number of parties, gates and the participation bound
+$b=40$ are then fixed; Theorem~\ref{thm:compression} at accuracy $L^{-5}$
+fixes the covector stack length $m$, the Gaussian sample count $k$, and
+the link exponent $r$; the congestion $\chi$ is a numerical constant.
+None of these depends on the Hamiltonian or on $L$. The protocol uses
+$O(L/\log L)$ auxiliary copies of $\Om$, all private.
+\end{remark}
+
+\section{Discussion}\label{sec:discussion}
+
+\begin{inwords}
+\emph{What is different from Hastings.} Hastings' area law proves that
+the half-chain marginal has an entanglement spectrum whose tail is
+exponentially small beyond rank $\exp(O(1))$, by combining a
+Lieb--Robinson bound, a spectral filter that approximately projects onto
+the ground state, and a clever bound on the approximate factorization of
+the filtered state. Arad--Kitaev--Landau--Vazirani replace the filter by
+an approximate ground-state projector built from Chebyshev polynomials
+with controlled Schmidt rank, and bootstrap. The present proof of
+Theorem~\ref{thm:A} has no dynamics in it at all: the gap is used only to
+bound the overlap of a variationally tilted or filtered vector with the
+ground vector, and the entropy is read off from operator norms by Hölder,
+a three-lines interpolation and the Araki--Lieb inequality. Its
+dependence on the gap is linear. The matrix product state theorem has two
+one-dimensional proofs here: the two-line route, which is a direct
+consequence of the tail bound and the area law and therefore equally free
+of dynamics, and the protocol route, which uses a Lieb--Robinson bound in
+one lemma (the reset) but in a way that has no analogue in Hastings'
+construction (a two-replica swap undone by a local unitary), and which
+otherwise consists of Uhlmann-type ownership changes, random Gaussian
+compression and column extraction.
+
+\emph{What one dimension buys.} Three things, each used once.
+A shell around an interval is crossed by $O(1)$ interactions, so the
+buffered discount costs a constant and needs a constant-width buffer.
+No three owners ever meet at a point of a line, so no encodings are
+needed when ownership changes. And a chain can be swept, so the party
+graph has bounded cutwidth. Everything else in the source is either
+unchanged or disappears.
+
+\emph{What does not transfer back.} The Araki--Lieb closure fails in two
+dimensions because the buffer is an annulus of unknown entropy; the
+sweep fails in two dimensions because a region being repainted has a
+one-dimensional boundary along which a third owner is adjacent, which
+the edge bands and point treatments of the source are designed to handle;
+and the two-line route fails because sequential truncation across
+nested cuts does not produce a network on the lattice. So the
+two-dimensional papers are not inefficient versions of this note; they
+solve problems that do not exist on a line.
+\end{inwords}
