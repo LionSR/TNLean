@@ -17,7 +17,9 @@ The scanner estimate constructs one truncated ground vector, one target typical 
 and one sequence of Schmidt--Bell labels before the total weight is chosen. For each
 sufficiently large replica count, one charge round and one interpolation parameter
 satisfy the selected-density and defect-energy bounds and all four norm comparisons.
-The sharp comparisons retain their marginal smallness condition.
+The sharp comparisons retain their marginal smallness condition. The same truncated
+vector retains its trace-distance estimate to the original vector, and every
+positive-copy prevector retains its Euclidean norm bound by one.
 
 The hypotheses are the admissible scanner exponents, the original gapped local
 Hamiltonian, the rounded scan scales, the target geometry and the entropy bounds of
@@ -147,6 +149,9 @@ comparisons retain their marginal smallness condition. The truncation coefficien
 precedes the local dimension; the output entropy coefficients may be enlarged as
 specified in the module's local-fix note. The same typical window has mass
 `0 < 1 - n⁻¹⁰⁰ ≤ z ≤ 1`, as in `08-scanner.tex`, lines 411–414.
+The truncated vector retains the trace-distance bound used in lines 400–403,
+and the same positive-copy prevectors have Euclidean norm at most one
+(`07-comparators.tex`, lines 130–140).
 
 Source: Proposition 9.2 (`prop:scanner`), `08-scanner.tex`, lines 349–397 and
 399–533, with Proposition 8.1 (`prop:comparators`), `07-comparators.tex`,
@@ -167,6 +172,10 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
       ∃ (e : ℝ) (Ωt : StateSpace Λ q),
         IsGappedGroundState Λ q (∑ i, S.truncatedEnergyTerm h Ω Δ (X.L n) i) e Ωt (g / 2) ∧
         0 ≤ e ∧ e ≤ (n : ℝ) ^ (-1000 : ℝ) ∧
+        Matrix.traceDistance
+            (Matrix.vecMulVec Ωt.ofLp (star Ωt.ofLp))
+            (Matrix.vecMulVec Ω.ofLp (star Ω.ofLp)) ≤
+          Real.sqrt (2 * min ((n : ℝ) ^ (-1000 : ℝ)) (g / 4) / g) ∧
         let E := S.typicalWindow q Ωt T n
         let z := (reducedState_isHermitian Λ q Ωt (S.target T)).spectralRestrictionMass E
         0 < 1 - (n : ℝ) ^ (-100 : ℝ) ∧
@@ -182,7 +191,8 @@ def ScannerStatement (X : ScannerExponents) (R : ℕ) (J Δ CT : ℝ) : Prop :=
         let Sent := _root_.vonNeumannEntropy (Matrix.partialTraceLeft (Matrix.vecMulVec ψ (star ψ)))
           (Matrix.posSemidef_vecMulVec_self_star ψ).partialTraceLeft.isHermitian
         ∃ ell : (k : ℕ) → IrrepLabel (Equiv.Perm (Fin k)),
-          (∀ k, 0 < k → scanPrevector q d Ωt ell k ≠ 0) ∧
+          (∀ k, 0 < k → scanPrevector q d Ωt ell k ≠ 0 ∧
+            ‖WithLp.toLp 2 (scanPrevector q d Ωt ell k)‖ ≤ 1) ∧
           let dims := augmentedDimensions (V := Site Λ) q (fun _ ↦ d)
           let energy := S.actualEnergyTerms h Ω Δ (X.L n) (fun _ ↦ d)
           let pre := scanPrevector q d Ωt ell
@@ -331,7 +341,7 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
       (fun x ↦ card_anchor_fiber_le S.anchor hyp.anchor_mem x) hyp.clearance htarget hsource
   obtain ⟨hK, hKL, hcard, hX, e, Ωt, htrgs, he0, he, htrace, hBX, htail,
       hwindowData⟩ := hphysical
-  refine ⟨e, Ωt, htrgs, he0, he.trans (min_le_left _ _), ?_⟩
+  refine ⟨e, Ωt, htrgs, he0, he.trans (min_le_left _ _), htrace, ?_⟩
   intro E z
   obtain ⟨hwindow, hd, hpdata⟩ := hwindowData
   refine ⟨hwindow.1, hwindow.2.1, hwindow.2.2.1, hwindow.2.2.2.1, hm, hM, hd, ?_⟩
@@ -339,7 +349,9 @@ theorem scannerStatement (X : ScannerExponents) (R : ℕ) {J Δ CT : ℝ}
   intro d β ΩX ψ Sent
   obtain ⟨ell, hpre, hmass, hdim, hweights⟩ := hpdata
   refine ⟨ell, fun k hk ↦
-    (augmentedReplicaPrevector_ne_zero_iff_global q d k Ωt (ell k)).2 (hpre k hk).1, ?_⟩
+    ⟨(augmentedReplicaPrevector_ne_zero_iff_global q d k Ωt (ell k)).2 (hpre k hk).1,
+      (norm_augmentedReplicaPrevector_eq_global q d k Ωt (ell k)).trans_le
+        (hpre k hk).2⟩, ?_⟩
   intro dims energy pre σ Qpre Y gpre gpost gaps gmax W hW hasmall a round
   have ha_eq : a = W / (S.K : ℝ) := by
     simp only [a, ScannerExponents.a, ← hyp.K_eq]

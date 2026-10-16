@@ -54,14 +54,22 @@ coefficient is fixed, as recorded in~\cite{gap:arealaw2d_scanner_inputs}.
     and a size threshold with the following property. For every larger $n$ and every
     finite physical system satisfying the source hypotheses, the truncated
     Hamiltonian has a unit ground vector $\widetilde\Omega$ of energy
-    $0\le e_t\le n^{-1000}$ and gap $g/2$. Its target typical set $E$ at
+    $0\le e_t\le n^{-1000}$ and gap $g/2$. For this same vector,
+    \begin{align}
+        D_{\rm tr}(\widetilde\Omega\widetilde\Omega^*,\Omega\Omega^*)
+        & \le\sqrt{2\min\{n^{-1000},g/4\}/g}.
+        \label{eq:al_scanner_source_trace_distance}
+    \end{align}
+    where $D_{\rm tr}(\rho,\sigma)=\frac12\|\rho-\sigma\|_1$.
+    Its target typical set $E$ at
     width $n^{3/5}$ is nonempty. Write $d_*=|E|$ and let $z$ be its mass;
     then $0<1-n^{-100}\le z\le1$, in particular $z>0$, for this same
     $\widetilde\Omega$ and $E$.
     There is one label sequence $\lambda_k$ such that
     $\mathrm{pre}_k=\pi_R^{\lambda_k}
         (\widetilde\Omega\otimes\mathrm{Bell}_{CR})^{\otimes k}$
-    is nonzero for $k>0$, with both auxiliary dimensions equal to $d_*$.
+    is nonzero and has Euclidean norm at most one for $k>0$, with both
+    auxiliary dimensions equal to $d_*$.
     These choices precede the total weight $W$.
 
     For every $W\ge1$ with $ar_0^2\le c_a$, there are comparator parameters
@@ -148,7 +156,12 @@ coefficient is fixed, as recorded in~\cite{gap:arealaw2d_scanner_inputs}.
     Apply that theorem with entropy coefficient $\max\{C_e,1\}$.
     It supplies one truncated vector, typical set and label sequence and,
     for each admissible $W$, one selected charge and parameter with the
-    density, energy and rough upper bounds.
+    density, energy and rough upper bounds. Retain its trace-distance
+    estimate between this same truncated vector and the original vector;
+    this is the estimate used in \texttt{08-scanner.tex}, lines~400--403.
+    The existing augmented-to-global norm identity transfers the bound
+    $\|\mathrm{pre}_k\|\le1$ for the same labels and every $k>0$, as in
+    \texttt{07-comparators.tex}, lines~130--140.
     Retain its typical-window estimate $0<1-n^{-100}\le z\le1$ for
     that same vector and set, as in \texttt{08-scanner.tex}, lines~411--414.
 
