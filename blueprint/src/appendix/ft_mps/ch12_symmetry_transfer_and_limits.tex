@@ -1,8 +1,8 @@
 \section{Stationary-boundary twist support}
 \label{sec:app_symmetry_stationary_twists}
 
-Fix an MPS tensor $A=(A^i)_{i=0}^{d-1}$, a physical matrix $u$, and a
-stationary boundary matrix $\Lambda\in\MN{D}$. The twisted transfer map
+Let $A=(A^i)_{i=0}^{d-1}$ be an MPS tensor, $u$ a physical matrix, and
+$\Lambda\in\MN{D}$ a stationary boundary matrix. The twisted transfer map
 $\E_u$ (Definition~\ref{def:twisted_transfer_map}) acts on virtual-boundary
 functionals, complementing the physical endpoint correlators of
 Definition~\ref{def:physical_string_order_param}.
@@ -35,7 +35,8 @@ Definition~\ref{def:physical_string_order_param}.
 
 \begin{proof}
     \leanok
-    Expand both definitions and rearrange the double sum.
+    Expanding both definitions and rearranging the double sum equate the two
+    operators term by term.
 \end{proof}
 
 
@@ -54,15 +55,15 @@ Definition~\ref{def:physical_string_order_param}.
 
 \begin{proof}\leanok
     The corresponding theorem in the companion quantum-channel volume~\cite[``Unitary freedom in Kraus operators'']{QICLean2026Blueprint} applies to the
-    unitary combination defining $B_u$. Equivalently, expand
-    $B_u^n=\sum_{n'}\overline{u_{n'n}}A^{n'}$. The coefficient of
+    unitary combination defining $B_u$. Equivalently, expanding
+    $B_u^n=\sum_{n'}\overline{u_{n'n}}A^{n'}$ shows that the coefficient of
     $A^jX(A^k)^\dagger$ in $\E_{B_u}(X)$ is
     \begin{align}
         \sum_n\overline{u_{jn}}u_{kn}
-         & =(uu^\dagger)_{kj}=\delta_{kj}.
+         & =(uu^\dagger)_{kj}=\delta_{kj},
         \notag
     \end{align}
-    All off-diagonal terms vanish and the diagonal terms sum to $\E_A(X)$.
+    so all off-diagonal terms vanish and the diagonal terms sum to $\E_A(X)$.
 \end{proof}
 
 \begin{definition}[Virtual-boundary twist functional]%
@@ -131,9 +132,8 @@ common trace-preserving gauge.
 
 \begin{proof}
     \leanok
-    This is exactly the usual invariance of a Kraus decomposition under a
-    unitary change of Kraus operators; see
-    the corresponding theorem in the companion quantum-channel volume~\cite[``Unitary freedom in Kraus operators'']{QICLean2026Blueprint}.
+    By the corresponding theorem in the companion quantum-channel volume~\cite[``Unitary freedom in Kraus operators'']{QICLean2026Blueprint}, a Kraus
+    decomposition is invariant under any unitary change of Kraus operators.
 \end{proof}
 
 
@@ -176,19 +176,19 @@ common trace-preserving gauge.
     \lean{MPSTensor.twistedTPGaugeSetup}
     \leanok
     \uses{def:twisted_tp_gauge_setup, lem:transfer_map_twisted_companion, thm:psd_fp_unique}
-    Let $D>0$. If $A$ is injective, $uu^\dagger=\Id_d$, and
-    $\E_A(\Id)=\Id$, define the common trace-preserving gauge setup for
-    $(A,u)$ by choosing the unique positive definite stationary state of the
-    adjoint channel and using the data in
-    Definition~\ref{def:twisted_tp_gauge_setup}.
+    Let $D>0$. When $A$ is injective, $uu^\dagger=\Id_d$, and
+    $\E_A(\Id)=\Id$, the unique positive definite stationary state of the
+    adjoint channel provides the data of
+    Definition~\ref{def:twisted_tp_gauge_setup}, defining the common
+    trace-preserving gauge setup for $(A,u)$.
 \end{definition}
 
 \begin{proof}\leanok
-    Injectivity makes $\E_A$ irreducible.  The adjoint channel therefore has a
-    positive definite stationary state $\sigma$.  By
+    Injectivity makes $\E_A$ irreducible, so the adjoint channel has a positive
+    definite stationary state $\sigma$. By
     Lemma~\ref{lem:transfer_map_twisted_companion}, $A$ and $B_u$ have the same
-    transfer map, hence the same adjoint fixed point.  Put $S=\sigma^{1/2}$.
-    Positivity makes $S$ invertible, and direct substitution gives
+    transfer map and hence the same adjoint fixed point. For $S=\sigma^{1/2}$,
+    positivity makes $S$ invertible, and direct substitution gives
     \begin{align}
         \sum_i(SA^iS^{-1})^\dagger(SA^iS^{-1})     & =\Id, \\
         \sum_i(SB_u^iS^{-1})^\dagger(SB_u^iS^{-1}) & =\Id.

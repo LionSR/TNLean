@@ -65,10 +65,10 @@ it does not require real representation matrices.
     $T_R^o(Q)T_R^o(Q^\dagger)=1$ for every region and orientation.
 \end{theorem}
 \begin{proof}\leanok
-    Take entrywise conjugates of the finite sums defining $AB$.
-    Apply the resulting identity to each $Q_e$, its conjugate on a
-    retained tail, and the two factors of every internal pair.
-    Multiplication of the independent boundary and internal tensor
+    Taking entrywise conjugates of the finite sums defining $AB$ gives $\overline A\,\overline B=1$.
+    Applying this identity to each $Q_e$, its conjugate on a
+    retained tail, and the two factors of every internal pair, and
+    multiplying the independent boundary and internal tensor
     factors proves the regional assertion.
 \end{proof}
 
@@ -110,14 +110,14 @@ it does not require real representation matrices.
 \begin{proof}\leanok
     \uses{thm:peps_oriented_coordinate_swap,
         thm:peps_oriented_coordinate_inverse}
-    At a native head, use $L_gQ=QU_g$; at a native tail use
+    At a native head, $L_gQ=QU_g$, and at a native tail,
     $Q^\dagger L_g=U_gQ^\dagger$, with conjugates as specified by
-    $B_{e,R}(Q)$. This gives~(\ref{eq:peps_oriented_boundary_coordinate}).
+    $B_{e,R}(Q)$, which gives~(\ref{eq:peps_oriented_boundary_coordinate}).
     Internal factors follow by conjugating the relative representation
     matrix, using~(\ref{eq:peps_oriented_transposed_coordinate}) on
-    reversed edges. Apply these identities inside
-    (\ref{eq:peps_oriented_open}) and factor the independent boundary
-    sums to obtain~(\ref{eq:peps_oriented_open_coordinate}).
+    reversed edges. Applying these identities inside
+    (\ref{eq:peps_oriented_open}) and factoring the independent boundary
+    sums yields~(\ref{eq:peps_oriented_open_coordinate}).
     Linearity gives~(\ref{eq:peps_oriented_boundary_superposition}) and
     the forward range inclusion. At $g=1$, the representation identity
     gives $1=L_1=QQ^\dagger$. The reverse coordinate change $Q^\dagger$
@@ -168,8 +168,8 @@ it does not require real representation matrices.
         thm:peps_oriented_coordinate_open,thm:peps_oriented_open_range,
         thm:peps_parent_support_block_criterion}
     A crossing coefficient of $Q_e\otimes\overline{Q_e}$ factors
-    into its fixed exterior entry and its retained endpoint entry.
-    Taking their product gives~(\ref{eq:peps_oriented_coordinate_exterior}).
+    into its fixed exterior entry and its retained endpoint entry, and
+    taking their product gives~(\ref{eq:peps_oriented_coordinate_exterior}).
     By~(\ref{eq:peps_oriented_family_block}), each global block is
     $c_Rb_RJ_{Y,R}^{-1}T_R^o(Q)J_{X,R}$.
     Equations~(\ref{eq:peps_oriented_range}) and
@@ -192,8 +192,8 @@ it does not require real representation matrices.
 \begin{proof}\leanok
     \uses{thm:peps_oriented_coordinate_inverse,
         thm:peps_oriented_bond_family_algebra}
-    Each edge factor and its inverse cancel. The conjugated factors
-    on reversed edges cancel as well. Their global product
+    Each edge factor and its inverse cancel, as do the conjugated factors
+    on reversed edges, so their global product
     cancels by Theorem~\ref{thm:peps_oriented_bond_family_algebra}.
     Applying the same identity to $Q^\dagger$ yields a left inverse
     under $Q^\dagger Q=1$ and hence injectivity.
@@ -224,8 +224,8 @@ it does not require real representation matrices.
         thm:peps_oriented_global_coordinate_inverse,
         thm:peps_region_parent_common_kernel}
     Evaluating the intertwining identity at $1$ gives $QQ^\dagger=1$.
-    Apply the block inclusion in both directions and cancel the global
-    coordinate matrices. The restriction of $M_o(Q)$ is then bijective,
+    Applying the block inclusion in both directions and cancelling the global
+    coordinate matrices shows that the restriction of $M_o(Q)$ is bijective,
     which gives equal dimension. Positivity identifies each Hamiltonian
     kernel with the intersection of its regional parent conditions,
     giving the kernel assertion.
