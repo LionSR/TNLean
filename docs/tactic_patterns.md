@@ -4498,6 +4498,23 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ## Candidates
 
+### Supported terms in rectangle coordinates — candidate (2026-10-15)
+
+- **Pattern:** Transport membership in a supported-operator algebra through the
+  site bijection, replace the resulting embedding by matrix reindexing, and
+  identify the image support.
+- **Seen:** 2 occurrences: `SquareHamiltonian.toAreaLawHamiltonian` in
+  `PEPS/Approximation/SquareAreaLawHamiltonian.lean` and
+  `SquareHamiltonian.exists_nearestNeighbor_terms` in
+  `PEPS/Approximation/SquareInteractionTerms.lean`.
+- **Abstraction:** The existing `embedOp_mem_supportedOperators_image` and
+  `embedOp_rectangle_eq_reindex` perform the two transports. At a third
+  occurrence, consider a lemma giving the reindexed Hermitian term's
+  supported-operator membership directly.
+- **Notes:** The second occurrence also relabels sites and edges. The support
+  identity already handles the arbitrary order on the rectangle sites;
+  no order-preserving assumption should enter a shared lemma.
+
 ### Logarithmic norm derivatives from squared norms — candidate (2026-10-15)
 
 - **Pattern:** Differentiate the squared norm, compose with the real logarithm,
