@@ -234,8 +234,12 @@ When blueprint sources change, `scripts/run_diagram_tests.py` runs every
 `scripts/check_*_blueprint.py` declaration-inventory check, reports all
 failures, and fails the step if any test fails. Tests that declare an
 `--output-dir` option render into `$RUNNER_TEMP/diagram-tests/<test>`; the whole
-directory is uploaded as the `diagram-tests-<sha>` artifact for review. Each test
-runs in its own process group, and a timeout kills the group, so a hung renderer
+directory is uploaded as the `diagram-tests-<sha>` artifact for review after
+both successful and failed diagram-test runs. The shared-figure note-contract
+test keeps each chunk's source, stage/elapsed-time record and TeX output there,
+so the outer timeout leaves diagnostics even when it kills the test process.
+This captures evidence; it does not increase any timeout or reduce figure coverage.
+Each test runs in its own process group, and a timeout kills the group, so a hung renderer
 does not outlive its test. The path filters use the same
 glob patterns. A new diagram test therefore needs no workflow edit: do not add a
 step or a path entry for it. `test_tenkz_equation_web.py` and

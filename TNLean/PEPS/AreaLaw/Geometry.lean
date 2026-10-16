@@ -16,7 +16,10 @@ import TNLean.PEPS.AreaLaw.Geometry.BeltFanColors
 import TNLean.PEPS.AreaLaw.Geometry.BeltMarks
 import TNLean.PEPS.AreaLaw.Geometry.BeltRunInterfaces
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationAngular
+import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationAtoms
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationFan
+import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationInitial
+import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationNormalization
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationRepair
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationReplacement
 import TNLean.PEPS.AreaLaw.Geometry.BirthSeparationStar
@@ -91,6 +94,7 @@ import TNLean.PEPS.AreaLaw.Geometry.MixedDyadicSquares
 import TNLean.PEPS.AreaLaw.Geometry.NearMarkGeometry
 import TNLean.PEPS.AreaLaw.Geometry.NestedPatches
 import TNLean.PEPS.AreaLaw.Geometry.NonbeltPrimaries
+import TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartitionComap
 import TNLean.PEPS.AreaLaw.Geometry.PolynomialBudget
 import TNLean.PEPS.AreaLaw.Geometry.PowerScaleDepth
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryCounting

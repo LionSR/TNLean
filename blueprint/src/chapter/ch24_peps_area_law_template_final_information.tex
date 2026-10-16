@@ -1,0 +1,119 @@
+\section{Original-template information from a uniform safe-box bound}
+\label{sec:template-final-information}
+
+The physical scanner can now be constructed directly from the actual
+finite domain, cut and separated template.  All scanner geometry and
+entropy antecedents are derived from accepted geometric results and one
+uniform safe-box estimate at the fixed improved exponent.  The improved
+safe-box estimate itself remains a genuine analytic hypothesis.
+
+\begin{definition}[The literal final template scanner]
+    \label{def:final-template-scanner}
+    \lean{TNLean.PEPS.AreaLaw.Scan.finalTemplateScanner}
+    \leanok
+    For a finite domain $\Lambda$, a cut $A$, a nonempty ambient target $T$,
+    and fixed coefficients $C_r,C_1$, use the accepted actual-history
+    scanner with graph equal to the induced domain graph, depth equal to
+    ambient sup-norm distance from $T$, and each original interaction
+    anchored at a chosen member of its nonempty admissible support.
+    At size $n$, use
+    \[
+        r_0=\lceil C_r(\log n)^2\rceil,\quad
+        m=\lfloor n^{1/4}\rfloor,\quad
+        D=\lceil n^{1/1000000}\rceil,\quad
+        L=\lfloor n^{1-1/100000}\rfloor,\quad K=L/(8m),
+    \]
+    with natural-number division in $K$.  No entropy, probability or
+    geometric estimate is included as a field of this construction.
+\end{definition}
+
+\begin{theorem}[The original template collar is the truncation set]
+    \label{thm:final-template-scanner-truncation}
+    \lean{TNLean.PEPS.AreaLaw.Scan.finalTemplateScanner_truncationSet}
+    \leanok
+    For every nonnegative integer $L$, the actual truncation set of the
+    constructed scanner is exactly
+    \[
+        S_0=A\cap T_L.
+    \]
+    This identity requires no separation, scale or entropy estimate.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{def:final-template-scanner,
+        thm:al_scan_ambient_rows}
+    The actual truncation set contains the sites of $A$ at ambient depth
+    at most $L$.  The accepted ambient-depth sublevel theorem identifies
+    these sites with the radius-$L$ dilation of $T$.
+\end{proof}
+
+\begin{theorem}[Conditional final information for actual templates]
+    \label{thm:template-final-information}
+    \lean{TNLean.PEPS.AreaLaw.Scan.exists_template_final_mutualInformation_of_boxEntropy}
+    \leanok
+    Fix the physical parameters $q\geq1$, $R$, $J\geq0$, $\Delta>0$,
+    an integer safe-box clearance $D_0\geq1$, and $C_{\rm tpl}\geq24$.
+    Suppose one fixed $C_{\rm box}\geq0$ satisfies the genuine uniform
+    original-state safe-box estimate
+    \[
+        F_{\rm box}(r)\leq C_{\rm box}r^{1+e_*}
+        \quad(r\geq1),\qquad e_*=2\cdot10^{-6}.
+    \]
+    Then there are $C>0$ and $N\geq2$, preceding every physical instance,
+    such that the following holds.  Let $\Omega$ be an original gapped
+    ground state on any finite induced domain $\Lambda$, let $A$ be any
+    cut, and let $T$ be a separated template with parameters $(n,s_0)$,
+    $n\geq N$ and $L=\lfloor n^{1-1/100000}\rfloor\leq s_0$.
+    For the literal regions $X=A\cap T$ and $S_0=A\cap T_L$,
+    \[
+        2I_\Omega(X:S_0^c)\leq Cn^{62497/62500},\qquad
+        2I_\Omega(X:S_0^c)\leq Cn^{1-1/100000}.
+    \]
+    No scanner, support-anchor choice, row count, multiplicity estimate,
+    target/prefix entropy bound or auxiliary replica datum is assumed
+    in this theorem.
+\end{theorem}
+
+\begin{proof}
+    \leanok
+    \uses{thm:final-scanner-admissibility,
+        thm:source-rounded-information,
+        thm:final-template-scanner-truncation,
+        thm:template-final-source-entropy,
+        thm:al_lattice_counts}
+    Fix the original interaction multiplicity
+    $\mu_R=2^{(1+2R(R+1))-1}$ and $C_1=3\mu_R$, independently of all
+    entropy coefficients and physical instances.  The accepted anchor-fiber
+    bound applies to the support-member anchors of the constructed scanner.
+    Choose the radius coefficient from the physical source theorem.  The
+    uniform safe-box-to-template entropy theorem supplies a single $C_e$
+    before the domain, Hamiltonian, ground vector, cut, target and collar.
+
+    The template scale inequality gives $s_0\leq n$, and its accepted
+    cardinality bound gives $|T|\leq9ns_0\leq9n^2$.  The accepted
+    template layer bound gives at most $n$ sites in every positive layer
+    through $L$.  The final rounded-scale theorem gives
+    $2r_0\leq D$, $4D\leq m$, $K\geq1$ and $8Km\leq L$.
+    Therefore $8m\leq L$ and $5r_0\leq L$, so
+    \[
+        2L+10r_0\leq4L\leq4s_0\leq4D_0s_0.
+    \]
+    The strict template separation consequently supplies the scanner's
+    strict cut-clearance condition.  One maximum threshold precedes all
+    physical instances.
+
+    Apply the conditional physical information theorem to this actual
+    scanner and the two entropy estimates already derived from the single
+    safe-box input.  Its state and all intermediate witnesses are retained.
+    The exact region identity above converts the conclusion to the original
+    template collar.  The fixed-instance replica limit was taken in the
+    preceding physical theorem; no new limit is introduced or exchanged.
+\end{proof}
+
+The source is \emph{A two-dimensional area law from a global spectral gap},
+\texttt{08-scanner.tex}, lines 32--58, 571--590 and 808--944, at revision
+\texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
+The accepted cut and compact-volume packaging is unchanged.  Proving the
+small safe-box exponent from the original physical hypotheses is still
+required before this can yield the unconditional source proposition.

@@ -8,13 +8,15 @@ import TNLean.PEPS.Approximation.AngularSeparationBridges
 import TNLean.PEPS.Approximation.Basic
 
 /-!
-# Information under angular separation, as a hypothesis
+# Information under angular separation
 
 Proposition 3.4 (`prop:angular`) of the polynomial-PEPS manuscript bounds the mutual information
 `I_Ω(X : E)` of a gapped ground vector by `L^{-p}` when `X` is separated from `E` by
-`a max{D log L, min(n, d_V)}`. Its proof is not yet formalized. This file states it as the
-proposition `AngularInformationBound`, in the source's form, so that the bulk births, deaths and
-exchanges of Section 7 can be proved conditionally on it.
+`a max{D log L, min(n, d_V)}`. This module records that assertion as the proposition
+`AngularInformationBound`, in the source's form. `AngularInformationFromGap` proves it from
+the original Hamiltonian and full-system gap, using the cell estimate established in
+`CellConditionalInformationFromGap`. The bulk births, deaths and exchanges of Section 7 may
+use the proposition as a premise independently of its proof.
 
 ## Main definitions
 
@@ -61,7 +63,7 @@ The constants `D` and `L₀` are chosen before the marked points, the sets and t
 as in the source. The separation is stated pointwise (`AngularSeparation`), which handles an
 empty `E` with the source's convention that distances to the empty set are infinite;
 `cappedMarkDistance` implements `min(n, d_V)` with `d_∅ = +∞`. The diameter bound is stated
-pairwise. This proposition is a statement, not a proof of it.
+pairwise. Its proof is given in `TNLean.PEPS.Approximation.AngularInformationFromGap`.
 
 Source: polynomial-PEPS Proposition 3.4 `prop:angular`, `02-information.tex`, lines 635–658,
 with the conventions of lines 4–13, under `eq:model` and `eq:global-gap`
