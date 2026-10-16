@@ -234,9 +234,13 @@ freeness, no translation invariance is assumed.
 Theorems~\ref{thm:A} and~\ref{thm:B}, with explicit constants, are
 formalized in Lean~4 in the TNLean modules \texttt{TNLean/MPS/AreaLaw/}
 (blueprint chapter ``The one-dimensional area law and matrix product state
-approximation''). The formal constants differ from those printed here in the
-count of split interactions and in the shell width, as recorded in
-\texttt{docs/formalization/one-dimensional-chain.md}; Theorem~\ref{thm:B} is
-formalized by the two-line route of Section~\ref{sec:shortcut} only, and the
-protocol route of Part~\ref{part:mps} is not formalized.
+approximation''), stated directly on the chain of $L$ sites. The formal
+constants are those printed here, except that the shell count omits the last
+entry of \eqref{eq:CE} and the discount is run at the energy threshold
+$\Delta/2$ in place of $\Delta/4$, as recorded in
+\texttt{docs/formalization/one-dimensional-chain.md}. Theorem~\ref{thm:A} is
+formalized for connected domains, the chains, without the component reduction
+of Section~\ref{sec:setting}; Theorem~\ref{thm:B} is formalized by the two-line
+route of Section~\ref{sec:shortcut} only, and the protocol route of
+Part~\ref{part:mps} is not formalized.
 

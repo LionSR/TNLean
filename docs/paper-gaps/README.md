@@ -1178,3 +1178,12 @@ records that the closed convex rectangles and triangles of Definition 9.3 of
 the September 24, 2026 two-dimensional area-law manuscript are read in the
 ordinary nondegenerate sense, with noncollinear triangle vertices and nonzero
 orthogonal rectangle sides, as a convention built into the permitted polygons.
+
+### One-dimensional area law: connected domains
+
+[one_dimensional_note_connected_domain_scope.tex](one_dimensional_note_connected_domain_scope.tex)
+records that Theorem A of the repository's one-dimensional note is formalized
+on the chain of `L` consecutive sites, the connected case to which the note
+reduces the theorem in a sentence; the component reduction for a disconnected
+finite subset of the integers (the ground vector of a sum over components is a
+product, and entropy and edge boundary add over components) is not formalized.
