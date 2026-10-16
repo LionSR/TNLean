@@ -24,6 +24,18 @@ abstracted — record why, so it is not re-proposed).
 
 ## Promoted
 
+### Fixed-circuit bounded-change lifts beside spectator sheets — promoted (2026-10-16)
+
+- **Pattern:** Assemble the five `OriginalCircuit.IsBoundedChange` fields for
+  `liftOne` or `liftTwo`: transport the nonprivate count, participants, expansion
+  bound, monomial bound and error estimate through untouched spectator sheets.
+- **Seen:** `hasBoundedChange_liftOne`, `hasBoundedChange_liftTwo`
+  (`SheetStackChange.lean`) and their source-bounded forms
+  (`SheetStackSourceBoundedChange.lean`).
+- **Abstraction:** `TNLean.PEPS.EncodedFrame.isBoundedChange_liftOne` and
+  `isBoundedChange_liftTwo` in `SheetStackChange.lean`, stated for the fixed lifted
+  circuit; all four results now use them.
+
 ### Positive part of a polynomial constant — promoted (2026-10-16)
 
 - **Pattern:** Replace a constant `C` of a polynomial bound `x ≤ C * L ^ k` by `max C 0`, so that
@@ -4519,6 +4531,8 @@ three-plaquette output measurement, and the routed reunion measurement.
   `isReordering_comp_iff`; apply `IsReordering.comp` as a term instead.
 
 ## Candidates
+
+
 
 ### Supported terms in rectangle coordinates — candidate (2026-10-15)
 
