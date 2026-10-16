@@ -1,0 +1,12 @@
+% alt: a chain of fourteen sites with a central interval X of three sites inside two nested wider intervals X_1 and X_2, each two sites wider than the previous one on both sides, and the flanks T_1 and T_2 that the wider intervals add around X.
+% Section 4 (The buffered discount with a constant-width buffer), before Lemma lem:singlesplit: the nested shells X_0 = X, X_j = X^{+jD} and the flanks T_j = X_j \ X (drawn for D = 2 and m = 2); the sites are the dots, the upward legs are the physical indices C^q, every leg is open (no contraction is drawn); the blue enclosure is X, the next enclosure is X_1 = X^{+D}, the outer one is X_2 = X^{+2D}, and the two-component enclosures below are the flanks T_1 = X_1 \ X and T_2 = X_2 \ X, so T_1 is contained in T_2.
+\begin{tenkz}[lattice={1x14}, frame=plane, physical=up, bonds=none]
+  \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{} & \tn{}
+  \tnmark[form=enclosure, species=selected, label pos=s]{(1,6) .. (1,8)}{$X$}
+  \tnmark[form=enclosure, species=secondary, label pos=n]{(1,4) .. (1,10)}{$X_1=X^{+D}$}
+  \tnmark[form=enclosure, species=collar, label pos=165]{(1,2) .. (1,12)}{$X_2=X^{+2D}$}
+  \tnmark[form=bracket, species=secondary, label pos=s]{(1,4) .. (1,5)}{$T_1$}
+  \tnmark[form=bracket, species=secondary, label pos=s]{(1,9) .. (1,10)}{$T_1$}
+  \tnmark[form=bracket, species=collar, label pos=s]{(1,2) .. (1,5)}{$T_2$}
+  \tnmark[form=bracket, species=collar, label pos=s]{(1,9) .. (1,12)}{$T_2$}
+\end{tenkz}

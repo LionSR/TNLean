@@ -229,7 +229,7 @@ Neumann entropy. This is used in Section~\ref{sec:shortcut}.
 \begin{inwords}
 Here is the one lemma that does the work. Take an interval $X$ and
 surround it by $m$ nested shells: $X_j=X^{+jD}$ for $j=1,\dots,m$, each
-one step of width $D=\max(R,1)$ thicker than the previous one, and let
+one step of width $D=R$ thicker than the previous one, and let
 $T_j=X_j\setminus X$ be the two flanks. The number $m$ will be a large
 constant (of order $1+J/\Delta$), so the total buffer $T=T_m$ has
 \emph{constant} width $mD$ on each side of $X$. The claim is
@@ -278,7 +278,7 @@ invoked.
 \end{inwords}
 
 \precisely
-Fix $D=\max(R,1)$ and an integer $m\ge4$. For an interval $X\subseteq\Lam$
+Fix $D=R$ (recall $R\ge1$) and an integer $m\ge4$. For an interval $X\subseteq\Lam$
 put
 \[
  X_0=X,\qquad X_j=X^{+jD}\ (1\le j\le m),\qquad T_j=X_j\setminus X,
@@ -301,8 +301,7 @@ so
 A support $Y$ with $\diam_{d_\Lam}Y\le R$ is split by at most one of the
 intervals $X_1,\dots,X_m$. If it is split by $X_j$, it is contained in
 $X_i$ for every $i>j$ and disjoint from $X_i$ for every $i<j$. The same
-holds for the family $X_0,\dots,X_m$ with the convention that $X_0$ may
-also be split.
+holds verbatim for the family $X_0,\dots,X_m$.
 \end{lemma}
 \begin{proof}
 Suppose $Y$ is split by $X_j$. It contains a point $y\notin X_j$ and a point
@@ -384,7 +383,9 @@ the disjoint ones through $h_Y$: the term vanishes. If $Y$ is split by
 $X_j$, the same procedure leaves exactly
 $\langle\phi,h_Y\phi\rangle-\langle\phi,L_jh_YL_j^{-1}\phi\rangle$. Let
 $\phi=\sum_i\sqrt{p_i}\,e_i\otimes f_i$ be the Schmidt decomposition across
-$X_j$ with $e_i$ in the common eigenbasis, and $h_{ik}=\langle e_i\otimes f_i,h_Y(e_k\otimes f_k)\rangle$.
+$X_j$, with the $e_i$ chosen in the common eigenbasis of $\rho_j$ and $L_j$
+(within each eigenspace of $\rho_j$ one may diagonalize $L_j$, since they
+commute), and $h_{ik}=\langle e_i\otimes f_i,h_Y(e_k\otimes f_k)\rangle$.
 Pairing $(i,k)$ with $(k,i)$ and using $h_{ki}=\overline{h_{ik}}$,
 \[
  \Re\langle\phi,L_jh_YL_j^{-1}\phi\rangle-\langle\phi,h_Y\phi\rangle
@@ -410,8 +411,11 @@ By \eqref{eq:gap} and \eqref{eq:CE},
  1-\abs{\langle\Om,\phi\rangle}^2\le\frac{C_E}{m\Delta}\le\frac14 .
 \end{equation}
 The same bound holds for the optimizer of every prefix $L_j\cdots L_1$,
-$1\le j\le m$, since its energy is bounded by the same sum restricted to
-$i\le j$.
+$1\le j\le m$: the stationarity and energy arguments apply verbatim to the
+prefix problem with the same weights and floor, and a term split by some
+$X_k$ with $k>j$ is disjoint from all $X_i$, $i\le j$, so it contributes
+nothing; the prefix energy is bounded by the sum in \eqref{eq:energy}
+restricted to $i\le j$.
 
 \paragraph{Upper bound on the optimum.}
 Let $N_j$ be the optimum for the prefix $1,\dots,j$ at the same floor,
@@ -523,7 +527,7 @@ inequality $S(XT)\ge S(X)-S(T)$ gives $S(X|T)\ge S(X)-2S(T)$, and
 \end{equation}
 By \eqref{eq:mbound} and \eqref{eq:CE}, $C_{\mathrm{int}}\le C_0(q,R)(1+J/\Delta)$
 with, for instance,
-$C_0(q,R)=8C_1(q,R)\max(R,1)\log q+1+16N_Rq^{2(R+1)}$.
+$C_0(q,R)=8C_1(q,R)\,R\log q+1+16N_Rq^{2(R+1)}$.
 \end{proof}
 
 \begin{remark}[What the constant depends on]
@@ -603,10 +607,11 @@ $B:=2\lceil w_0/r\rceil+2$ children are not interior. For an interior
 child, the event that all children meeting its buffer precede it has
 probability at least $p_0=(2\lceil w_0/r\rceil+3)^{-1}$; on that event the
 chain-rule term is at most $S(X_i|T_i)\le\frac12S(X_i)+C_{\mathrm{buf}}$,
-and in every case it is at most $S(X_i)$. Taking the expectation of the
-chain rule,
+and in every case it is at most $S(X_i)$; the probability of the event is
+only bounded below, so its positive error is charged in full. Taking the
+expectation of the chain rule,
 \[
- F(Mr)\le\Bigl[(1-\tfrac{p_0}2)M+\tfrac{p_0}2B\Bigr]F(r)+p_0MC_{\mathrm{buf}}
+ F(Mr)\le\Bigl[(1-\tfrac{p_0}2)M+\tfrac{p_0}2B\Bigr]F(r)+MC_{\mathrm{buf}}
  \le\bigl(1-\tfrac{p_0}4\bigr)M\,F(r)+C M ,
 \]
 using $B\le M/2$. With $\lambda=(1-p_0/4)M\in(1,M)$ for $r\ge w_0$, iterating

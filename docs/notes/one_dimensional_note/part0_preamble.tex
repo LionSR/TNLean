@@ -1,12 +1,17 @@
 \documentclass[11pt,a4paper]{article}
 \usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
 \IfFileExists{lmodern.sty}{\usepackage{lmodern}}{}
 \usepackage[margin=1.05in]{geometry}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{enumitem}
 \usepackage{booktabs,array}
 \usepackage{xcolor}
+\usepackage{tenkz}
+\usetikzlibrary{quantikz2}
+\usetikzlibrary{arrows.meta,calc,patterns,positioning,decorations.pathreplacing}
+\usepackage{graphicx}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf,width=0.92\textwidth}
 \usepackage[colorlinks=true,linkcolor=blue!50!black,citecolor=blue!50!black,urlcolor=blue!50!black]{hyperref}
 \setlength{\parskip}{0.25em}
 
@@ -23,8 +28,8 @@
 \newcommand{\diam}{\operatorname{diam}}
 \newcommand{\norm}[1]{\lVert #1\rVert}
 \newcommand{\abs}[1]{\lvert #1\rvert}
-\newcommand{\ket}[1]{|#1\rangle}
-\newcommand{\bra}[1]{\langle #1|}
+\providecommand{\ket}[1]{|#1\rangle}\renewcommand{\ket}[1]{|#1\rangle}
+\providecommand{\bra}[1]{\langle #1|}\renewcommand{\bra}[1]{\langle #1|}
 \newcommand{\cH}{\mathcal H}
 \newcommand{\cB}{\mathcal B}
 \newcommand{\cE}{\mathcal E}
