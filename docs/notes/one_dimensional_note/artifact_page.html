@@ -1,0 +1,2829 @@
+<title>One-Dimensional Collar-Free Route</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<script>
+window.MathJax = {tex: {inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']], tags: 'none'},
+  options: {skipHtmlTags: ['script','noscript','style','textarea','pre','code']}};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml-full.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: a single reading column; "In words" blocks set off by a left rule, "Precisely" blocks plain. */
+:root{
+  --bg:#fbfaf7; --fg:#1d1f24; --muted:#5a5f6b; --rule:#d9d5cc; --accent:#1f4e79; --words-bg:#f1f3f7; --words-rule:#1f4e79; --code-bg:#f0ede6;
+  --serif:"Source Serif 4", Georgia, "Times New Roman", serif; --sans:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --bg:#15171b; --fg:#e6e4df; --muted:#a7aab3; --rule:#363a42; --accent:#8fb6dc; --words-bg:#1d2330; --words-rule:#8fb6dc; --code-bg:#20232a; color-scheme:dark } }
+:root[data-theme="dark"]{ --bg:#15171b; --fg:#e6e4df; --muted:#a7aab3; --rule:#363a42; --accent:#8fb6dc; --words-bg:#1d2330; --words-rule:#8fb6dc; --code-bg:#20232a; color-scheme:dark }
+body{background:var(--bg); color:var(--fg); font-family:var(--serif); font-size:17px; line-height:1.55; margin:0;
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); padding-block:24px 64px}
+main{max-width:46rem; margin:0 auto}
+h1,h2,h3{font-family:var(--sans); text-wrap:balance; line-height:1.2; color:var(--fg)}
+h1{font-size:1.9rem; font-weight:600; margin:0 0 .3rem}
+h2{font-size:1.35rem; font-weight:600; margin:2.2rem 0 .6rem; padding-top:.6rem; border-top:1px solid var(--rule)}
+h3{font-size:1.1rem; font-weight:600; margin:1.6rem 0 .4rem}
+.byline{font-family:var(--sans); color:var(--muted); font-size:.95rem; margin:0 0 1.2rem}
+.note{font-family:var(--sans); font-size:.9rem; color:var(--muted); border:1px solid var(--rule); padding:.6rem .9rem; border-radius:4px; margin:0 0 1.5rem}
+nav#TOC{font-family:var(--sans); font-size:.92rem; border:1px solid var(--rule); padding:.6rem 1rem; margin:0 0 1.5rem}
+nav#TOC ul{padding-left:1.1rem; margin:.2rem 0}
+blockquote{margin:1.2rem 0; padding:.6rem 1rem; background:var(--words-bg); border-left:3px solid var(--words-rule); font-family:var(--sans); font-size:.95rem; line-height:1.5}
+blockquote p{margin:.4rem 0}
+.theorem,.lemma,.proposition,.corollary,.definition,.remark,.construction{margin:1rem 0}
+.proof{margin:.8rem 0}
+a{color:var(--accent)}
+table{border-collapse:collapse; font-family:var(--sans); font-size:.88rem; margin:1rem 0}
+th,td{border-bottom:1px solid var(--rule); padding:.4rem .6rem; vertical-align:top; text-align:left}
+.tablewrap{overflow-x:auto; max-width:100%}
+mjx-container[display="true"]{overflow-x:auto; overflow-y:hidden; max-width:100%}
+code{font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:.9em; background:var(--code-bg); padding:0 .2em; border-radius:3px}
+p{margin:.6rem 0}
+@media (max-width:480px){ body{font-size:16px} h1{font-size:1.5rem} }
+</style>
+<main>
+<h1>A one-dimensional area law and a matrix product state approximation from a global spectral gap</h1>
+<p class="byline">The collar-free route &middot; prepared for Sirui Lu (MPQ) &middot; October 16, 2026</p>
+<div class="note">Web rendering of the LaTeX note <code>docs/notes/one_dimensional_note/one_dimensional_area_law_and_mps.tex</code> (24 pages as PDF). Theorem and equation numbers match the PDF. Every mathematical unit appears twice: first <em>in words</em> (shaded blocks), then <em>precisely</em>.</div>
+
+
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#overview" id="toc-overview">Overview</a></li>
+<li><a href="#part:arealaw" id="toc-part:arealaw">The one-dimensional
+area law</a>
+<ul>
+<li><a href="#sec:setting" id="toc-sec:setting">Setting, reductions, and
+counting</a></li>
+<li><a href="#sec:tail" id="toc-sec:tail">The marginal tail
+bound</a></li>
+<li><a href="#sec:buffer" id="toc-sec:buffer">The buffered discount with
+a constant-width buffer</a></li>
+<li><a href="#sec:closing" id="toc-sec:closing">Closing the
+argument</a></li>
+<li><a href="#sec:longroute" id="toc-sec:longroute">The long route, for
+comparison</a></li>
+</ul></li>
+<li><a href="#part:mps" id="toc-part:mps">The one-dimensional matrix
+product state approximation</a>
+<ul>
+<li><a href="#sec:shortcut" id="toc-sec:shortcut">Statement, and the
+two-line route</a></li>
+<li><a href="#sec:logsep" id="toc-sec:logsep">Information at logarithmic
+separation</a></li>
+<li><a href="#sec:moves" id="toc-sec:moves">Distributed constructions
+and the three moves</a></li>
+<li><a href="#sec:sweep" id="toc-sec:sweep">The sweep protocol</a></li>
+<li><a href="#sec:compression" id="toc-sec:compression">Compression and
+column extraction</a></li>
+<li><a href="#sec:routing" id="toc-sec:routing">Assembly on the
+chain</a></li>
+<li><a href="#sec:discussion"
+id="toc-sec:discussion">Discussion</a></li>
+</ul></li>
+</ul>
+</nav>
+<h3 id="overview">Overview</h3>
+<blockquote>
+<p><strong>In words.</strong> Both source papers are long because two
+dimensions is hard. The entanglement of a region is produced along its
+boundary, and in two dimensions the boundary of a region of linear size
+<span class="math inline">\(r\)</span> has <span
+class="math inline">\(r\)</span> sites: every estimate that costs “a
+boundary” costs <span class="math inline">\(r\)</span>, and every buffer
+that one puts around a region to isolate it is itself a region whose
+entanglement must be controlled. The whole replica, scanner and
+amplification apparatus exists to break this circularity. In one
+dimension the boundary of an interval is two points. An estimate that
+costs a boundary costs a constant, and a buffer of constant width has,
+trivially, constant entropy. So the circularity never arises, and one
+short section of the two-dimensional paper proves the whole area law.
+This is the content of Part <a href="#part:arealaw"
+data-reference-type="ref" data-reference="part:arealaw"></a>.</p>
+<p>The tensor-network theorem is a different story. It does not follow
+from entropy bounds alone (the papers explain why: an entropy bound on
+each cut does not give a global vector approximation). Its
+two-dimensional proof distributes the ground vector among “parties”
+attached to dyadic squares, by local changes of ownership whose errors
+are controlled by information estimates, then compresses the resulting
+distributed density into a tensor network. In one dimension a dyadic
+hierarchy is the wrong geometry: a binary tree drawn on a line has
+cutwidth <span class="math inline">\(\log L\)</span>, which turns
+polynomial bond dimension into quasi-polynomial. The right geometry is a
+sweep from left to right with a moving “remainder” party. All the
+genuinely one-dimensional difficulties (what to do at the ends of a band
+when a third owner is adjacent) are solved by exactly the seven-move
+word trick that the two-dimensional paper uses along an edge. This is
+Part <a href="#part:mps" data-reference-type="ref"
+data-reference="part:mps"></a>. We also show that, in one dimension, the
+tail bound of Part <a href="#part:arealaw" data-reference-type="ref"
+data-reference="part:arealaw"></a> makes the tensor-network theorem a
+corollary of the area law by the classical sequential-truncation
+argument; the sweep protocol is the faithful one-dimensional analogue of
+the two-dimensional construction, and it is what generalizes.</p>
+<p>Table <a href="#tab:map" data-reference-type="ref" data-reference="tab:map">1</a> is a map from the two-dimensional proofs
+to this note. The reader who wants only the one-dimensional area law can
+read Sections <a href="#sec:setting" data-reference-type="ref" data-reference="sec:setting">2</a>–<a href="#sec:closing"
+data-reference-type="ref" data-reference="sec:closing">4</a>; this is
+about four pages.</p>
+</blockquote>
+<div id="tab:map">
+<div class="tablewrap"><table>
+<caption>What survives, what simplifies, what disappears.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Two-dimensional ingredient</th>
+<th style="text-align: left;">Fate in one dimension</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Marginal tail bound (<span
+class="citation" data-cites="AL"></span>, Lemma 2.1)</td>
+<td style="text-align: left;">Kept verbatim; the cut parameter <span
+class="math inline">\(\mathcal B\)</span> is a constant (Section <a
+href="#sec:tail" data-reference-type="ref"
+data-reference="sec:tail">2</a>).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Buffered conditional-entropy discount
+(<span class="citation" data-cites="AL"></span>, Lemma 2.2)</td>
+<td style="text-align: left;">Kept; the buffer has <em>constant</em>
+width and the error is a constant (Section <a href="#sec:buffer"
+data-reference-type="ref" data-reference="sec:buffer">3</a>).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sub-volume recursion, exponent <span
+class="math inline">\(e_0&lt;1\)</span></td>
+<td style="text-align: left;">Unnecessary: Araki–Lieb closes the
+argument directly (Section <a href="#sec:closing"
+data-reference-type="ref" data-reference="sec:closing">4</a>). Sketched
+as a “long route” in Section <a href="#sec:longroute"
+data-reference-type="ref" data-reference="sec:longroute">5</a>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Positive quasi-local constraints,
+truncation</td>
+<td style="text-align: left;">Unnecessary for the area law; not used for
+the MPS either (replaced by the Gaussian reset).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Conditional estimates, replicas,
+transport, comparators, scanner</td>
+<td style="text-align: left;">Unnecessary.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Amplification by random constraint
+products</td>
+<td style="text-align: left;">Unnecessary; Section <a
+href="#sec:longroute" data-reference-type="ref"
+data-reference="sec:longroute">5</a> explains how it would be used.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Two families of regions</td>
+<td style="text-align: left;">Trivial on a line; Section <a
+href="#sec:longroute" data-reference-type="ref"
+data-reference="sec:longroute">5</a>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Coarse collar and angular information
+(<span class="citation" data-cites="PP"></span>, Section 3)</td>
+<td style="text-align: left;">Replaced by a one-line consequence of the
+area law (Lemma <a href="#lem:logsep" data-reference-type="ref" data-reference="lem:logsep">8.5</a>).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Information reset by Gaussian filter
+(<span class="citation" data-cites="PP"></span>, Lemma 3.3)</td>
+<td style="text-align: left;">Kept; one-dimensional locality (Section <a
+href="#sec:reset" data-reference-type="ref"
+data-reference="sec:reset">2.2</a>).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Adaptive patch constraints, encoded holes
+(<span class="citation" data-cites="PP"></span>, Sections 4, 6.1)</td>
+<td style="text-align: left;">Unnecessary: no three owners meet on a
+line; logarithmic blocks are polynomial-dimensional registers.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Births, deaths, exchanges (<span
+class="citation" data-cites="PP"></span>, Lemmas 6.6–6.8)</td>
+<td style="text-align: left;">Kept verbatim (Section <a
+href="#sec:moves" data-reference-type="ref"
+data-reference="sec:moves">3</a>).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Dyadic hierarchy with edge bands and point
+treatments (<span class="citation" data-cites="PP"></span>, Section
+7)</td>
+<td style="text-align: left;">Replaced by a linear sweep (Section <a
+href="#sec:sweep" data-reference-type="ref"
+data-reference="sec:sweep">4</a>).</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Density compression, column extraction
+(<span class="citation" data-cites="PP"></span>, Sections 5, 8)</td>
+<td style="text-align: left;">Kept verbatim (Section <a
+href="#sec:compression" data-reference-type="ref"
+data-reference="sec:compression">5</a>).</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Row–column routing with constant
+congestion</td>
+<td style="text-align: left;">Replaced by placement on the line
+(Section <a href="#sec:routing" data-reference-type="ref" data-reference="sec:routing">12</a>).</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+<p><strong>Precisely.</strong> Throughout, <span
+class="math inline">\(q\ge 2\)</span> and <span
+class="math inline">\(R\ge 1\)</span> are integers and <span
+class="math inline">\(J,\Delta&gt;0\)</span>. A finite set <span
+class="math inline">\(\Lambda\subset\mathbb Z\)</span> carries the
+induced path graph (edges between consecutive integers both in <span
+class="math inline">\(\Lambda\)</span>) and graph distance <span
+class="math inline">\(d_\Lambda\)</span>. Each site carries <span
+class="math inline">\(\mathbb C^q\)</span> and <span
+class="math inline">\(\mathcal H_\Lambda=\bigotimes_{x\in\Lambda}\mathbb
+C^q\)</span>. An admissible Hamiltonian is <span
+class="math display">\[\tag{1}
+H=\sum_{\substack{\varnothing\ne X\subseteq\Lambda\\
+\operatorname{diam}_{d_\Lambda}X\le R}}h_X,
+\qquad h_X=h_X^*,\qquad \lVert h_X\rVert\le J,\]</span> one summand per
+support, zero summands allowed. The standing spectral hypothesis is that
+<span class="math inline">\(H\)</span> has a unique normalized ground
+vector <span class="math inline">\(\Omega\)</span> (up to phase), ground
+energy <span class="math inline">\(E_0\)</span>, and <span
+class="math display">\[\tag{2}
+H-E_0\mathrm{I}\ \ge\ \Delta\bigl(\mathrm{I}-|\Omega\rangle\langle
+\Omega|\bigr).\]</span> For <span
+class="math inline">\(A\subseteq\Lambda\)</span>, <span
+class="math inline">\(\rho_A=\operatorname{Tr}_{\Lambda\setminus
+A}|\Omega\rangle\langle \Omega|\)</span>, <span
+class="math inline">\(S(A)=S_\Omega(A)=-\operatorname{Tr}\rho_A\log\rho_A\)</span>
+with natural logarithms and <span class="math inline">\(0\log
+0=0\)</span>, <span class="math inline">\(S(A|B)=S(AB)-S(B)\)</span> and
+<span class="math inline">\(I(A:B)=S(A)+S(B)-S(AB)\)</span> for disjoint
+<span class="math inline">\(A,B\)</span>. The edge boundary is <span
+class="math inline">\(\partial_\Lambda A=\{\{x,x+1\}\subseteq\Lambda:\
+\text{exactly one of }x,x+1\text{ lies in }A\}\)</span>. Constants <span
+class="math inline">\(C,c\)</span> depend only on <span
+class="math inline">\(q,R,J,\Delta\)</span> unless stated otherwise and
+may change from line to line; where a dependence is tracked it is said
+so. The two theorems of the note are the following.</p>
+<div id="thm:A" class="theorem">
+<p><strong>Theorem 1.1</strong> (One-dimensional area law). <em>There is
+<span
+class="math inline">\(C_{\mathrm{AL}}=C_{\mathrm{AL}}(q,R,J,\Delta)\)</span>,
+with <span class="math display">\[C_{\mathrm{AL}}\le
+C_0(q,R)\,\Bigl(1+\frac J\Delta\Bigr),\]</span> such that for every
+finite <span class="math inline">\(\Lambda\subset\mathbb Z\)</span>,
+every admissible Hamiltonian satisfying (2), and
+every <span class="math inline">\(A\subseteq\Lambda\)</span>, <span
+class="math display">\[S_\Omega(A)\le C_{\mathrm{AL}}\,\lvert
+\partial_\Lambda A\rvert.\]</span></em></p>
+</div>
+<div id="thm:B" class="theorem">
+<p><strong>Theorem 1.2</strong> (One-dimensional matrix product state
+approximation). <em>Fix <span
+class="math inline">\(q,R,J,\Delta\)</span>. There are <span
+class="math inline">\(C,c&gt;0\)</span> depending only on these
+parameters such that for every <span
+class="math inline">\(L\ge2\)</span>, every admissible Hamiltonian on
+<span class="math inline">\(\Lambda=\{1,\dots,L\}\)</span> satisfying (2), there is a nonzero matrix product
+state <span class="math inline">\(\Phi\)</span> on <span
+class="math inline">\(\Lambda\)</span> with open boundary conditions and
+bond dimension at most <span class="math inline">\(CL^{c}\)</span> such
+that <span class="math display">\[\min_{\theta\in\mathbb
+R}\Bigl\|\frac{\Phi}{\lVert \Phi\rVert}-\mathrm
+e^{i\theta}\Omega\Bigr\|\le L^{-1}.\]</span></em></p>
+</div>
+<p>The constants never depend on <span
+class="math inline">\(\Lambda\)</span>, on <span
+class="math inline">\(A\)</span>, or on the particular Hamiltonian. No
+gap for a restricted Hamiltonian, no frustration freeness, no
+translation invariance is assumed.</p>
+<h1 id="part:arealaw">The one-dimensional area law</h1>
+<h3 id="sec:setting">Setting, reductions, and counting</h3>
+<blockquote>
+<p><strong>In words.</strong> Three small reductions make the rest
+clean. If the domain <span class="math inline">\(\Lambda\)</span> has
+several components, the Hamiltonian is a sum over components (every
+support has finite graph diameter, so it lies in one component), the
+unique ground vector is a product over components, and entropy and edge
+boundary both add over components. So we may take <span
+class="math inline">\(\Lambda\)</span> to be an interval. A subset <span
+class="math inline">\(A\)</span> of an interval is a union of maximal
+subintervals, each of which contributes at least one boundary edge, and
+subadditivity reduces the theorem to intervals. Finally, the only two
+counting facts we need are these: an interval is cut at two points at
+most, and an interaction of diameter at most <span
+class="math inline">\(R\)</span> that crosses a cut lives in a window of
+<span class="math inline">\(2R\)</span> sites around that cut. So the
+number of interactions crossing the boundary of an interval, and the
+logarithm of their joint dimension, are bounded by constants depending
+only on <span class="math inline">\(R\)</span> and <span
+class="math inline">\(q\)</span>. This is the entire “area” input of the
+one-dimensional proof.</p>
+</blockquote>
+<p><strong>Precisely.</strong> For an interval <span
+class="math inline">\(X\subseteq\Lambda\)</span> and a support <span
+class="math inline">\(Y\)</span> with <span
+class="math inline">\(\operatorname{diam}_{d_\Lambda}Y\le R\)</span>,
+say that <span class="math inline">\(Y\)</span> is <em>split</em> by
+<span class="math inline">\(X\)</span> if <span
+class="math inline">\(Y\cap X\ne\varnothing\)</span> and <span
+class="math inline">\(Y\setminus X\ne\varnothing\)</span>. Since <span
+class="math inline">\(Y\)</span> is contained in <span
+class="math inline">\(R+1\)</span> consecutive integers and contains a
+point on each side of one of the two cut edges of <span
+class="math inline">\(X\)</span>, it lies in one of the two windows of
+<span class="math inline">\(2R\)</span> consecutive sites centered at a
+cut edge. Hence <span class="math display">\[\tag{3}
+\#\{Y:\ Y\text{ split by }X\}\le 2\cdot 2^{2R}=:N_R,
+\qquad
+\dim\mathcal H_Y\le q^{R+1},\qquad
+\ell_R:=\log(\mathrm eq^{R+1}),\]</span> and a term <span
+class="math inline">\(h_Y\)</span> split by <span
+class="math inline">\(X\)</span> can be expanded by matrix units on
+<span class="math inline">\(Y\cap X\)</span> as <span
+class="math display">\[\tag{4}
+h_Y=\sum_{\alpha=1}^{N_Y}c_\alpha\otimes d_\alpha,\qquad
+N_Y\le q^{2(R+1)},\qquad \lVert c_\alpha\rVert\,\lVert d_\alpha\rVert\le
+J,\]</span> with <span class="math inline">\(c_\alpha\)</span> supported
+in <span class="math inline">\(X\)</span> and <span
+class="math inline">\(d_\alpha\)</span> in <span
+class="math inline">\(\Lambda\setminus X\)</span>. (Each matrix unit
+<span class="math inline">\(E_{ab}\)</span> on <span
+class="math inline">\(\mathcal H_{Y\cap X}\)</span> has norm one, and
+the coefficient operator <span
+class="math inline">\(d_\alpha=\operatorname{Tr}_{Y\cap
+X}[(E_{ba}\otimes\mathrm{I})h_Y]\)</span> has norm at most <span
+class="math inline">\(\lVert h_Y\rVert\)</span>.) Put <span
+class="math display">\[\tag{5}
+\mathcal B_R:=1+N_R\,\ell_R^2 .\]</span></p>
+<div id="lem:reductions" class="lemma">
+<p><strong>Lemma 2.1</strong> (Reductions). <em>It suffices to prove
+Theorem <a href="#thm:A" data-reference-type="ref" data-reference="thm:A">1.1</a> for <span
+class="math inline">\(\Lambda\)</span> an interval and <span
+class="math inline">\(A\)</span> an interval with <span
+class="math inline">\(\partial_\Lambda A\ne\varnothing\)</span>, with a
+constant <span class="math inline">\(C_{\mathrm{int}}\)</span> bounding
+<span class="math inline">\(S_\Omega(A)\)</span>; then Theorem <a
+href="#thm:A" data-reference-type="ref" data-reference="thm:A">1</a>
+holds with <span
+class="math inline">\(C_{\mathrm{AL}}=C_{\mathrm{int}}\)</span>.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let <span
+class="math inline">\(\Lambda_1,\dots,\Lambda_k\)</span> be the
+components of <span class="math inline">\(\Lambda\)</span> (maximal
+intervals). Every support of finite graph diameter lies in one
+component, so <span class="math inline">\(H=\sum_iH_i\)</span> with
+<span class="math inline">\(H_i\)</span> acting on <span
+class="math inline">\(\mathcal H_{\Lambda_i}\)</span>. The ground
+eigenspace of <span class="math inline">\(H\)</span> is the tensor
+product of the ground eigenspaces of the <span
+class="math inline">\(H_i\)</span>; if the former is one-dimensional so
+is each latter, hence <span
+class="math inline">\(\Omega=\bigotimes_i\Omega_i\)</span> and <span
+class="math inline">\(S_\Omega(A)=\sum_iS_{\Omega_i}(A\cap\Lambda_i)\)</span>,
+while <span class="math inline">\(\partial_\Lambda
+A=\bigsqcup_i\partial_{\Lambda_i}(A\cap\Lambda_i)\)</span>. Each <span
+class="math inline">\(H_i\)</span> inherits (2) with
+the same <span class="math inline">\(\Delta\)</span> (restrict the
+inequality to vectors of the form <span
+class="math inline">\(\xi\otimes\bigotimes_{j\ne i}\Omega_j\)</span>).
+So assume <span class="math inline">\(\Lambda\)</span> is an interval.
+Write <span class="math inline">\(A=\bigsqcup_{a=1}^mA_a\)</span> as a
+union of maximal subintervals. If some <span
+class="math inline">\(A_a=\Lambda\)</span> then <span
+class="math inline">\(A=\Lambda\)</span> and <span
+class="math inline">\(S(A)=0\)</span>. Otherwise each <span
+class="math inline">\(A_a\)</span> has at least one boundary edge, and
+distinct <span class="math inline">\(A_a\)</span> have distinct boundary
+edges (two maximal subintervals are separated by at least one site, so
+their outer cut edges differ). Thus <span
+class="math inline">\(m\le\lvert \partial_\Lambda A\rvert\)</span> and
+subadditivity gives <span class="math inline">\(S(A)\le\sum_aS(A_a)\le
+C_{\mathrm{int}}\lvert \partial_\Lambda A\rvert\)</span>. ◻</p>
+</div>
+<p>From now on <span
+class="math inline">\(\Lambda=\{1,\dots,N\}\)</span> and <span
+class="math inline">\(X\subseteq\Lambda\)</span> is an interval. For an
+integer <span class="math inline">\(j\ge0\)</span> write <span
+class="math inline">\(X^{+j}=\{x\in\Lambda:\operatorname{dist}(x,X)\le
+j\}\)</span>, again an interval.</p>
+<h3 id="sec:tail">The marginal tail bound</h3>
+<blockquote>
+<p><strong>In words.</strong> Fix an interval <span
+class="math inline">\(X\)</span> and write <span
+class="math inline">\(\Omega=\sum_j\sqrt{p_j}\,u_j\otimes w_j\)</span>
+for its Schmidt decomposition across <span
+class="math inline">\(X\)</span> and the rest. The entanglement spectrum
+is the probability law of the <em>surprisal</em> <span
+class="math inline">\(K=-\log p_j\)</span> drawn with probability <span
+class="math inline">\(p_j\)</span>; its mean is <span
+class="math inline">\(S(X)\)</span>. The lemma says that, because of the
+global gap, <span class="math inline">\(K\)</span> has exponential tails
+around its mean with a width that depends only on <span
+class="math inline">\(q,R,J/\Delta\)</span>: the spectrum of an interval
+is <em>concentrated</em>, whatever its entropy is.</p>
+<p>The mechanism is a tilt. Multiply <span
+class="math inline">\(\Omega\)</span> by <span
+class="math inline">\(\rho_X^{-u/2}\)</span> (acting on <span
+class="math inline">\(X\)</span>) and renormalize: this reweights the
+Schmidt probabilities to <span
+class="math inline">\(p_j^{1-u}/M(u)\)</span>, with <span
+class="math inline">\(M(u)=\sum_jp_j^{1-u}\)</span> the moment
+generating function of <span class="math inline">\(K\)</span>. The
+tilted vector <span class="math inline">\(\Theta\)</span> is an exact
+eigenvector of the conjugated Hamiltonian <span
+class="math inline">\(FHF^{-1}\)</span>. Interactions inside <span
+class="math inline">\(X\)</span> or inside its complement do not see the
+conjugation in expectation (they commute with the marginal, or with
+<span class="math inline">\(F\)</span>). Only the boundedly many
+interactions crossing a cut of <span class="math inline">\(X\)</span>
+do, and for each of them the conjugated expectation <span
+class="math inline">\(f(z)=\langle\Theta,\sigma^{z}h\sigma^{-z}\Theta\rangle\)</span>
+is an entire function of the tilt parameter which is bounded on a strip
+and satisfies <span class="math inline">\(f(-\bar
+z)=\overline{f(z)}\)</span>. That symmetry kills the linear term of the
+<em>real part</em>, so the excitation energy of <span
+class="math inline">\(\Theta\)</span> is quadratic in <span
+class="math inline">\(u\)</span>. The gap converts a quadratic energy
+into a quadratic loss of overlap with <span
+class="math inline">\(\Omega\)</span>; that overlap is the ratio <span
+class="math inline">\(M(u/2)^2/M(u)\)</span>. Iterating the resulting
+inequality <span class="math inline">\(\log M(u)\le 2\log
+M(u/2)+Cu^2\)</span> down to <span class="math inline">\(u\to0\)</span>,
+where <span class="math inline">\(\log M\)</span> is linear with slope
+<span class="math inline">\(S(X)\)</span>, gives <span
+class="math inline">\(\log M(u)\le uS(X)+Cu^2\)</span>: a sub-Gaussian
+moment bound. Exponential Markov turns it into the tail bound.</p>
+<p>In two dimensions the width of the tail grows like the square root of
+the boundary. In one dimension it is a constant. This constant is what
+makes both halves of this note work.</p>
+</blockquote>
+<p><strong>Precisely.</strong> Let <span
+class="math inline">\(X\subseteq\Lambda\)</span> be an interval, <span
+class="math inline">\(\rho=\rho_X\)</span> with positive eigenvalues
+<span class="math inline">\(p_j\)</span>, let <span
+class="math inline">\(K\)</span> be the random variable taking the value
+<span class="math inline">\(-\log p_j\)</span> with probability <span
+class="math inline">\(p_j\)</span>, so that <span
+class="math inline">\(\mathbb EK=S(X)\)</span>, and put <span
+class="math display">\[\tag{6}
+\vartheta=\frac J\Delta,\qquad
+u_0=\frac{1}{32\sqrt{(1+\vartheta)\mathcal B_R}}.\]</span></p>
+<div id="lem:tail" class="lemma">
+<p><strong>Lemma 3.1</strong> (Marginal tail bound). <em>For every
+interval <span class="math inline">\(X\subseteq\Lambda\)</span> and
+every real <span class="math inline">\(u\)</span> with <span
+class="math inline">\(\lvert u\rvert\le u_0\)</span>, <span
+class="math display">\[\tag{7}
+\log\operatorname{Tr}\rho_X^{\,1-u}=\log\mathbb E\,\mathrm e^{uK}\le
+u\,S(X)+512\,\mathrm e\,\vartheta\,\mathcal B_R\,u^2 ,\]</span> where
+<span class="math inline">\(\rho_X^{1-u}\)</span> is zero on the kernel
+of <span class="math inline">\(\rho_X\)</span>. Consequently, for every
+<span class="math inline">\(w\ge0\)</span>, <span
+class="math display">\[\tag{8}
+\Pr\{\lvert K-S(X)\rvert&gt;w\}\le 2\mathrm e^{\mathrm
+e/2}\exp(-u_0w).\]</span></em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Put <span
+class="math inline">\(M(u)=\sum_jp_j^{1-u}\)</span>, <span
+class="math inline">\(L(u)=\log M(u)\)</span>; note <span
+class="math inline">\(L(0)=0\)</span> and <span
+class="math inline">\(L&#39;(0)=S(X)\)</span>. Let <span
+class="math inline">\(P\)</span> be the support projection of <span
+class="math inline">\(\rho\)</span>, let <span
+class="math inline">\(F=\rho^{-u/2}\)</span> on <span
+class="math inline">\(P\mathcal H_X\)</span> and <span
+class="math inline">\(F=\mathrm{I}\)</span> on the kernel, and define
+<span class="math display">\[\Theta=\frac{F\Omega}{\sqrt{M(u)}},\qquad
+\sigma=\operatorname{Tr}_{\Lambda\setminus X}|\Theta\rangle\langle
+\Theta|=\frac{\rho^{1-u}}{M(u)} .\]</span> <span
+class="math inline">\(F\)</span> is invertible on <span
+class="math inline">\(\mathcal H_\Lambda\)</span>, so <span
+class="math inline">\(FHF^{-1}\Theta=E_0\Theta\)</span> and <span
+class="math display">\[\tag{9}
+\langle\Theta,(H-E_0)\Theta\rangle
+=\sum_Y\bigl(\langle\Theta,h_Y\Theta\rangle-\langle\Theta,Fh_YF^{-1}\Theta\rangle\bigr).\]</span>
+A term supported in <span class="math inline">\(\Lambda\setminus
+X\)</span> commutes with <span class="math inline">\(F\)</span> and
+contributes zero. A term supported in <span
+class="math inline">\(X\)</span> contributes zero because <span
+class="math inline">\(\operatorname{Tr}\sigma
+Fh_YF^{-1}=\operatorname{Tr}\sigma h_Y\)</span> by <span
+class="math inline">\([F,\sigma]=0\)</span> and cyclicity. So only terms
+split by <span class="math inline">\(X\)</span> remain, and there are at
+most <span class="math inline">\(N_R\)</span> of them by (3).</p>
+<p>Fix such a term <span class="math inline">\(h=h_Y\)</span>. For
+complex <span class="math inline">\(z\)</span> let <span
+class="math inline">\(\sigma^z=P\exp(z\log(\sigma|_{P\mathcal
+H_X}))P\)</span> and <span
+class="math inline">\(f(z)=\langle\Theta,\sigma^zh\sigma^{-z}\Theta\rangle\)</span>,
+an entire function with <span
+class="math inline">\(f(0)=\langle\Theta,h\Theta\rangle\)</span>
+(because <span class="math inline">\(\Theta\)</span> lies in the support
+of <span class="math inline">\(\sigma\)</span>). At <span
+class="math inline">\(z_u=-u/(2(1-u))\)</span> one has, on the support,
+<span class="math inline">\(\sigma^{z_u}=M(u)^{-z_u}F\)</span> and <span
+class="math inline">\(\sigma^{-z_u}=M(u)^{z_u}F^{-1}\)</span>, so <span
+class="math inline">\(f(z_u)=\langle\Theta,Fh
+F^{-1}\Theta\rangle\)</span>. On the imaginary axis the powers are
+unitary on the support and <span class="math inline">\(\lvert
+f(iy)\rvert\le J\)</span>. For <span class="math inline">\(\lvert \Re
+z\rvert\le\tfrac14\)</span> expand <span
+class="math inline">\(h\)</span> as in (4) and let <span
+class="math inline">\(\Theta=\sum_j\sqrt{s_j}\,e_j\otimes f_j\)</span>
+be its Schmidt decomposition across <span
+class="math inline">\(X\)</span>. Then <span
+class="math display">\[f(z)=\sum_\alpha\sum_{j,k}s_j^{1/2+z}s_k^{1/2-z}\,
+\langle e_j,c_\alpha e_k\rangle\langle f_j,d_\alpha f_k\rangle
+.\]</span> For <span class="math inline">\(\lvert \Re
+z\rvert\le\frac14\)</span>, <span class="math inline">\(\lvert
+s_j^{1/2+z}s_k^{1/2-z}\rvert\le s_j+s_k\)</span> by the weighted
+arithmetic–geometric mean inequality, and for any operators <span
+class="math inline">\(c,d\)</span> the row and column Cauchy–Schwarz
+inequalities give <span class="math display">\[\tag{10}
+\sum_{j,k}(s_j+s_k)\,\lvert c_{jk}\rvert\,\lvert d_{jk}\rvert\le 2\lVert
+c\rVert\,\lVert d\rVert ,\]</span> because <span
+class="math inline">\(\sum_k\lvert c_{jk}\rvert\lvert
+d_{jk}\rvert\le\lVert c\rVert\lVert d\rVert\)</span> for each row <span
+class="math inline">\(j\)</span> and likewise for each column. Hence
+<span class="math inline">\(\lvert f(z)\rvert\le 2Jq^{2(R+1)}\)</span>
+on <span class="math inline">\(\lvert \Re z\rvert\le\frac14\)</span>.
+Hadamard’s three-lines theorem on each of the strips <span
+class="math inline">\(0\le\pm\Re z\le\frac14\)</span> gives <span
+class="math inline">\(\log\lvert f(x+iy)\rvert\le\log J+4\lvert
+x\rvert\log(2q^{2(R+1)})\le \log J+8\lvert x\rvert\,\ell_R\)</span>, so
+that <span class="math display">\[\tag{11}
+\lvert f(z)\rvert\le \mathrm eJ\qquad\text{for }\lvert \Re
+z\rvert\le\delta_R:=\frac1{8\ell_R}.\]</span> Since <span
+class="math inline">\(h=h^*\)</span> and <span
+class="math inline">\((\sigma^z)^*=\sigma^{\bar z}\)</span>, one has
+<span class="math inline">\(f(-\bar z)=\overline{f(z)}\)</span>. Writing
+<span class="math inline">\(f(z)=\sum_nc_nz^n\)</span>, this says <span
+class="math inline">\(c_n\)</span> is real for even <span
+class="math inline">\(n\)</span> and purely imaginary for odd <span
+class="math inline">\(n\)</span>; so for real <span
+class="math inline">\(x\)</span>, <span
+class="math inline">\(\Re(f(x)-f(0))=\sum_{n\ge2\text{
+even}}c_nx^n\)</span>, and Cauchy’s estimate <span
+class="math inline">\(\lvert c_n\rvert\le\mathrm
+eJ\delta_R^{-n}\)</span> from (11)
+gives, for <span class="math inline">\(\lvert
+x\rvert\le\delta_R/2\)</span>, <span
+class="math display">\[\tag{12}
+\lvert \Re(f(x)-f(0))\rvert\le 2\mathrm
+eJ\,x^2\delta_R^{-2}=128\,\mathrm eJ\,\ell_R^2\,x^2 .\]</span> For <span
+class="math inline">\(\lvert u\rvert\le u_0\)</span> we have <span
+class="math inline">\(\lvert u\rvert\le\frac1{32}\)</span>, <span
+class="math inline">\(\lvert z_u\rvert\le\lvert u\rvert\)</span> and
+<span class="math inline">\(\ell_R\le\sqrt{\mathcal B_R}\)</span>, so
+<span class="math inline">\(\lvert z_u\rvert\le\delta_R/2\)</span>.
+Since (9) is real, applying (12) to each of the at most
+<span class="math inline">\(N_R\)</span> split terms yields <span
+class="math display">\[\tag{13}
+0\le\langle\Theta,(H-E_0)\Theta\rangle\le 128\,\mathrm
+eJ\,N_R\ell_R^2\,u^2
+\le 128\,\mathrm eJ\,\mathcal B_R\,u^2 .\]</span> The gap (2) now gives <span
+class="math inline">\(1-\lvert \langle\Omega,\Theta\rangle\rvert^2\le
+128\,\mathrm e\,\vartheta\,\mathcal B_Ru^2\le\frac12\)</span>, and <span
+class="math inline">\(\langle\Omega,\Theta\rangle=M(u/2)/\sqrt{M(u)}\)</span>,
+so <span class="math display">\[\frac{M(u/2)^2}{M(u)}\ge 1-128\,\mathrm
+e\,\vartheta\,\mathcal B_R u^2,
+\qquad\text{i.e.}\qquad
+L(u)\le 2L(u/2)+256\,\mathrm e\,\vartheta\,\mathcal B_Ru^2,\]</span>
+using <span class="math inline">\(-\log(1-v)\le2v\)</span> for <span
+class="math inline">\(0\le v\le\frac12\)</span>. Every halving <span
+class="math inline">\(u/2^j\)</span> stays in the admissible interval,
+so by induction <span class="math display">\[L(u)\le
+2^jL(u/2^j)+256\,\mathrm e\,\vartheta\,\mathcal
+B_Ru^2\sum_{i&lt;j}2^{-i}
+\xrightarrow[j\to\infty]{} uS(X)+512\,\mathrm e\,\vartheta\,\mathcal
+B_Ru^2 ,\]</span> which is (7). For (8),
+apply Markov’s inequality to <span class="math inline">\(\mathrm e^{\pm
+u_0(K-S)}\)</span>: the quadratic term at <span
+class="math inline">\(u=\pm u_0\)</span> equals <span
+class="math inline">\(512\mathrm e\vartheta\mathcal
+B_R/(1024(1+\vartheta)\mathcal B_R)\le\mathrm e/2\)</span>, so each
+one-sided tail is at most <span class="math inline">\(\mathrm e^{\mathrm
+e/2}\mathrm e^{-u_0w}\)</span>. ◻</p>
+</div>
+<div id="rem:renyi" class="remark">
+<p><strong>Remark 3.2</strong> (Rényi entropies near one). For <span
+class="math inline">\(0&lt;u\le u_0\)</span> and <span
+class="math inline">\(\alpha=1-u\)</span>, (7) reads
+<span
+class="math inline">\(S_\alpha(X)=\frac{1}{u}\log\operatorname{Tr}\rho_X^{\alpha}\le
+S(X)+512\mathrm e\vartheta\mathcal B_R(1-\alpha)\)</span>. Since <span
+class="math inline">\(S_\alpha\ge S\)</span> for <span
+class="math inline">\(\alpha&lt;1\)</span>, all Rényi entropies of order
+<span class="math inline">\(\alpha\in[1-u_0,1]\)</span> of an interval
+lie within <span class="math inline">\(16\mathrm
+e\sqrt{(1+\vartheta)\mathcal B_R}\)</span> of its von Neumann entropy.
+This is used in Section <a href="#sec:shortcut"
+data-reference-type="ref" data-reference="sec:shortcut">1</a>.</p>
+</div>
+<h3 id="sec:buffer">The buffered discount with a constant-width
+buffer</h3>
+<blockquote>
+<p><strong>In words.</strong> Here is the one lemma that does the work.
+Take an interval <span class="math inline">\(X\)</span> and surround it
+by <span class="math inline">\(m\)</span> nested shells: <span
+class="math inline">\(X_j=X^{+jD}\)</span> for <span
+class="math inline">\(j=1,\dots,m\)</span>, each one step of width <span
+class="math inline">\(D=\max(R,1)\)</span> thicker than the previous
+one, and let <span class="math inline">\(T_j=X_j\setminus X\)</span> be
+the two flanks. The number <span class="math inline">\(m\)</span> will
+be a large constant (of order <span
+class="math inline">\(1+J/\Delta\)</span>), so the total buffer <span
+class="math inline">\(T=T_m\)</span> has <em>constant</em> width <span
+class="math inline">\(mD\)</span> on each side of <span
+class="math inline">\(X\)</span>. The claim is <span
+class="math display">\[S(X\,|\,T)\ \le\ \tfrac12\,S(X)+C .\]</span>
+Conditioning <span class="math inline">\(X\)</span> on a constant number
+of neighboring sites halves its entropy, up to a constant.</p>
+<p>Why should that be? Apply to <span
+class="math inline">\(\Omega\)</span> a product <span
+class="math inline">\(K=L_m\cdots L_1\)</span> of positive operators,
+<span class="math inline">\(L_j\)</span> acting on <span
+class="math inline">\(X_j\)</span>, each normalized by <span
+class="math inline">\(\operatorname{Tr}L_j^{2/a_j}=1\)</span> with <span
+class="math inline">\(a_j=2/m\)</span> (so the weights sum to <span
+class="math inline">\(2\)</span>), and maximize the norm <span
+class="math inline">\(N=\lVert K\Omega\rVert\)</span>. Two estimates
+bound the optimum from opposite sides.</p>
+<p><em>The optimum is small.</em> At the optimum, each filter commutes
+with the marginal of the filtered vector on its own region (a
+stationarity computation), which lets one strip the outer filters from
+any expectation of an operator living inside them. Then the energy of
+the normalized filtered vector is at most a constant times <span
+class="math inline">\(\sum_ja_j^2\times(\text{number of
+interactions split by }X_j)\)</span>: an interaction is split by at most
+one shell because consecutive shells are <span
+class="math inline">\(D\ge R\)</span> apart, and the conjugation of a
+split term by one filter changes its expectation only quadratically in
+<span class="math inline">\(a_j\)</span>, by the same kind of row–column
+Cauchy–Schwarz estimate as in the tail bound. In one dimension the
+number of split terms is bounded, so the energy is at most <span
+class="math inline">\(C/m\)</span>. The gap then says the filtered
+vector overlaps <span class="math inline">\(\Omega\)</span> to <span
+class="math inline">\(1-C/(m\Delta)\)</span>. Using that overlap, one
+peels the filters off one at a time, and each peeled filter <span
+class="math inline">\(L_j\)</span> can shrink the norm by at most <span
+class="math inline">\(\lVert
+L_j\Omega\rVert\le\exp(-a_jS(X_j)/2+Ca_j^2)\)</span> by Hölder and the
+tail bound. So <span class="math inline">\(-2\log
+N\ge\sum_ja_jS(X_j)-C\)</span>.</p>
+<p><em>The optimum is large.</em> Pin a Schmidt vector <span
+class="math inline">\(u_i\)</span> of <span
+class="math inline">\(X\)</span>, that is, use the trial filters <span
+class="math inline">\(L_j=|u_i\rangle\langle u_i|\otimes M_j\)</span>
+with <span class="math inline">\(M_j\)</span> a filter on the flank
+<span class="math inline">\(T_j\)</span> only. The output is <span
+class="math inline">\(\sqrt{p_i}\)</span> times a filtered version of
+the partner vector <span class="math inline">\(w_i\)</span>, and an
+interpolation argument shows the flank filters can be chosen so that the
+norm is at least <span
+class="math inline">\(\exp(-\sum_ja_jS_{w_i}(T_j)/2)\)</span>. Averaging
+over <span class="math inline">\(i\)</span> and using concavity of
+entropy, <span class="math inline">\(-2\log N\le
+S(X)+\sum_ja_jS(T_j)\)</span>.</p>
+<p>Subtracting, <span
+class="math inline">\(\sum_ja_j\,[S(X_j)-S(T_j)]\le S(X)+C\)</span>, and
+<span class="math inline">\(S(X_j)-S(T_j)\)</span> is the conditional
+entropy <span class="math inline">\(S(X|T_j)\)</span>, which decreases
+as the flank grows. With <span
+class="math inline">\(\sum_ja_j=2\)</span> this is the discount. Notice
+what did not happen: no property of the state on the flanks was used
+beyond their being a constant number of sites, and no gap of any
+restricted Hamiltonian was invoked.</p>
+</blockquote>
+<p><strong>Precisely.</strong> Fix <span
+class="math inline">\(D=\max(R,1)\)</span> and an integer <span
+class="math inline">\(m\ge4\)</span>. For an interval <span
+class="math inline">\(X\subseteq\Lambda\)</span> put <span
+class="math display">\[X_0=X,\qquad X_j=X^{+jD}\ (1\le j\le m),\qquad
+T_j=X_j\setminus X,
+\qquad a_j=\frac2m .\]</span> Then <span
+class="math inline">\(T_1\subseteq\cdots\subseteq T_m\)</span>, each
+<span class="math inline">\(T_j\)</span> consists of at most two
+intervals of length at most <span class="math inline">\(jD\)</span>, and
+<span class="math inline">\(\sum_ja_j=2\)</span>. Define the constants
+<span class="math display">\[\tag{14}
+C_E:=8\,N_R\,J\,q^{2(R+1)},\qquad
+m:=\Bigl\lceil\max\Bigl\{4,\ \frac{4C_E}{\Delta},\
+128\sqrt{(1+\vartheta)\mathcal B_R},\
+4096\,\mathrm e\,(1+\vartheta)\,\mathcal B_R\Bigr\}\Bigr\rceil
+.\]</span> Every entry is at most a constant depending on <span
+class="math inline">\(q,R\)</span> times <span
+class="math inline">\((1+J/\Delta)\)</span>, so <span
+class="math display">\[\tag{15}
+m\le C_1(q,R)\,(1+\vartheta).\]</span></p>
+<div id="lem:singlesplit" class="lemma">
+<p><strong>Lemma 4.1</strong> (Single splitting). <em>A support <span
+class="math inline">\(Y\)</span> with <span
+class="math inline">\(\operatorname{diam}_{d_\Lambda}Y\le R\)</span> is
+split by at most one of the intervals <span
+class="math inline">\(X_1,\dots,X_m\)</span>. If it is split by <span
+class="math inline">\(X_j\)</span>, it is contained in <span
+class="math inline">\(X_i\)</span> for every <span
+class="math inline">\(i&gt;j\)</span> and disjoint from <span
+class="math inline">\(X_i\)</span> for every <span
+class="math inline">\(i&lt;j\)</span>. The same holds for the family
+<span class="math inline">\(X_0,\dots,X_m\)</span> with the convention
+that <span class="math inline">\(X_0\)</span> may also be
+split.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Suppose <span class="math inline">\(Y\)</span> is
+split by <span class="math inline">\(X_j\)</span>. It contains a point
+<span class="math inline">\(y\notin X_j\)</span> and a point <span
+class="math inline">\(x\in X_j\)</span>, and all its points are within
+graph distance <span class="math inline">\(R\le D\)</span> of <span
+class="math inline">\(x\)</span> and of <span
+class="math inline">\(y\)</span>. Points within distance <span
+class="math inline">\(D\)</span> of <span
+class="math inline">\(X_j\)</span> lie in <span
+class="math inline">\(X_{j+1}\)</span>, so <span
+class="math inline">\(Y\subseteq X_{j+1}\subseteq X_i\)</span> for <span
+class="math inline">\(i&gt;j\)</span>. Points of <span
+class="math inline">\(X_{j-1}\)</span> are at distance more than <span
+class="math inline">\(D\)</span> from every point outside <span
+class="math inline">\(X_j\)</span> (because <span
+class="math inline">\(X_j=X_{j-1}^{+D}\)</span>), so <span
+class="math inline">\(Y\cap X_{j-1}=\varnothing\)</span>, and likewise
+for <span class="math inline">\(i&lt;j\)</span>. A set contained in
+<span class="math inline">\(X_i\)</span> or disjoint from <span
+class="math inline">\(X_i\)</span> is not split by <span
+class="math inline">\(X_i\)</span>. ◻</p>
+</div>
+<div id="lem:buffer" class="lemma">
+<p><strong>Lemma 4.2</strong> (Buffered discount). <em>With <span
+class="math inline">\(m\)</span> as in (14), every
+interval <span class="math inline">\(X\subseteq\Lambda\)</span>
+satisfies <span class="math display">\[\tag{16}
+S(X\,|\,T_m)\ \le\
+\frac12\,S(X)+\frac12+\frac{C_E}{\Delta}.\]</span></em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> If <span class="math inline">\(X=\varnothing\)</span>
+both sides vanish. Assume <span
+class="math inline">\(X\ne\varnothing\)</span>.</p>
+<h6 id="the-optimization.">The optimization.</h6>
+<p>Fix <span class="math inline">\(\epsilon&gt;0\)</span> so small that
+<span class="math inline">\((\dim\mathcal
+H_{X_j})\epsilon^{2/a_j}&lt;1\)</span> for all <span
+class="math inline">\(j\)</span>, and maximize <span
+class="math display">\[N=\lVert L_m\cdots L_1\Omega\rVert\]</span> over
+positive operators <span class="math inline">\(L_j\)</span> on <span
+class="math inline">\(\mathcal H_{X_j}\)</span> (extended by the
+identity) with <span
+class="math inline">\(L_j\ge\epsilon\mathrm{I}\)</span> and <span
+class="math inline">\(\operatorname{Tr}_{\mathcal
+H_{X_j}}L_j^{2/a_j}=1\)</span>. The feasible sets are nonempty and
+compact, every feasible product is invertible, so a maximum <span
+class="math inline">\(N&gt;0\)</span> exists. At an optimum put <span
+class="math inline">\(K=L_m\cdots L_1\)</span>, <span
+class="math inline">\(\phi=K\Omega/N\)</span>, and <span
+class="math inline">\(\rho_j=\operatorname{Tr}_{\Lambda\setminus
+X_j}|\phi\rangle\langle \phi|\)</span>.</p>
+<h6 id="stationarity.">Stationarity.</h6>
+<p>We claim <span class="math inline">\([L_j,\rho_j]=0\)</span> for all
+<span class="math inline">\(j\)</span>, by descending induction on <span
+class="math inline">\(j\)</span>. The tool is the stripping identity: if
+<span class="math inline">\([L_k,\rho_k]=0\)</span> and <span
+class="math inline">\(T\)</span> is supported in <span
+class="math inline">\(X_k\)</span>, then <span
+class="math display">\[\tag{17}
+\langle\phi,L_kTL_k^{-1}\phi\rangle=\operatorname{Tr}(L_k^{-1}\rho_kL_kT)=\operatorname{Tr}(\rho_kT)=\langle\phi,T\phi\rangle
+.\]</span> Assume the claim for <span
+class="math inline">\(k&gt;j\)</span> and let <span
+class="math inline">\(B\)</span> be anti-Hermitian on <span
+class="math inline">\(\mathcal H_{X_j}\)</span>. Replacing <span
+class="math inline">\(L_j\)</span> by <span
+class="math inline">\(\mathrm e^{tB}L_j\mathrm e^{-tB}\)</span>
+preserves both constraints, so the derivative of <span
+class="math inline">\(\log\lVert K\Omega\rVert\)</span> at <span
+class="math inline">\(t=0\)</span> vanishes. That derivative equals
+<span
+class="math inline">\(\Re\langle\phi,K_{&gt;j}(B-L_jBL_j^{-1})K_{&gt;j}^{-1}\phi\rangle\)</span>
+with <span class="math inline">\(K_{&gt;j}=L_m\cdots L_{j+1}\)</span>.
+The operator inside is supported in <span
+class="math inline">\(X_j\)</span>, hence in <span
+class="math inline">\(X_m\)</span>; strip <span
+class="math inline">\(L_m\)</span> by (17),
+then <span class="math inline">\(L_{m-1}\)</span>, and so on down to
+<span class="math inline">\(L_{j+1}\)</span>. Since <span
+class="math inline">\(\operatorname{Tr}(\rho_jB)\)</span> is purely
+imaginary, stationarity gives <span
+class="math inline">\(\Re\operatorname{Tr}(L_j^{-1}\rho_jL_jB)=0\)</span>
+for all anti-Hermitian <span class="math inline">\(B\)</span>, so <span
+class="math inline">\(L_j^{-1}\rho_jL_j\)</span> is Hermitian,
+i.e. equals <span class="math inline">\(L_j\rho_jL_j^{-1}\)</span>, so
+<span class="math inline">\(\rho_j\)</span> commutes with <span
+class="math inline">\(L_j^2\)</span> and hence with <span
+class="math inline">\(L_j\ge0\)</span>. No commutation between distinct
+filters is claimed or used.</p>
+<p>In a common eigenbasis let <span class="math inline">\(l_i\)</span>,
+<span class="math inline">\(p_i\)</span> be the eigenvalues of <span
+class="math inline">\(L_j\)</span>, <span
+class="math inline">\(\rho_j\)</span>, and <span
+class="math inline">\(x_i=l_i^{2/a_j}\)</span>, so <span
+class="math inline">\(\sum_ix_i=1\)</span>, <span
+class="math inline">\(x_i\ge\epsilon^{2/a_j}\)</span>. A diagonal
+variation and the same stripping give <span class="math inline">\(d\log
+N=\frac{a_j}2\sum_ip_i\,dx_i/x_i\)</span>. The Kuhn–Tucker conditions on
+the simplex with the floor say that <span
+class="math inline">\(p_i/x_i\)</span> is a common value <span
+class="math inline">\(\lambda&gt;0\)</span> on coordinates above the
+floor and at most <span class="math inline">\(\lambda\)</span> on
+floored coordinates (there is a free coordinate by the dimensional
+slack, and <span class="math inline">\(\lambda&gt;0\)</span> because
+moving mass from a zero-probability free coordinate to a
+positive-probability floored one would increase <span
+class="math inline">\(N\)</span>). Hence <span
+class="math inline">\(x_i=\max\{\epsilon^{2/a_j},p_i/\lambda\}\)</span>
+and, since taking a maximum with a common floor contracts differences of
+logarithms, <span class="math display">\[\tag{18}
+\Bigl|\log\frac{l_i}{l_k}\Bigr|\le\frac{a_j}{2}\Bigl|\log\frac{p_i}{p_k}\Bigr|
+\qquad(p_i,p_k&gt;0).\]</span></p>
+<h6 id="energy-of-the-optimized-vector.">Energy of the optimized
+vector.</h6>
+<p>Since <span class="math inline">\(KHK^{-1}\phi=E_0\phi\)</span>,
+<span
+class="math display">\[\langle\phi,(H-E_0)\phi\rangle=\sum_Y\Re\bigl(\langle\phi,h_Y\phi\rangle-\langle\phi,Kh_YK^{-1}\phi\rangle\bigr).\]</span>
+If <span class="math inline">\(Y\)</span> is split by no <span
+class="math inline">\(X_j\)</span> (<span class="math inline">\(1\le
+j\le m\)</span>), then by Lemma <a href="#lem:singlesplit"
+data-reference-type="ref" data-reference="lem:singlesplit">6</a> each
+<span class="math inline">\(X_j\)</span> either contains <span
+class="math inline">\(Y\)</span> or is disjoint from it; strip the
+containing filters by (17) from the outside in, and
+commute the disjoint ones through <span
+class="math inline">\(h_Y\)</span>: the term vanishes. If <span
+class="math inline">\(Y\)</span> is split by <span
+class="math inline">\(X_j\)</span>, the same procedure leaves exactly
+<span
+class="math inline">\(\langle\phi,h_Y\phi\rangle-\langle\phi,L_jh_YL_j^{-1}\phi\rangle\)</span>.
+Let <span class="math inline">\(\phi=\sum_i\sqrt{p_i}\,e_i\otimes
+f_i\)</span> be the Schmidt decomposition across <span
+class="math inline">\(X_j\)</span> with <span
+class="math inline">\(e_i\)</span> in the common eigenbasis, and <span
+class="math inline">\(h_{ik}=\langle e_i\otimes f_i,h_Y(e_k\otimes
+f_k)\rangle\)</span>. Pairing <span class="math inline">\((i,k)\)</span>
+with <span class="math inline">\((k,i)\)</span> and using <span
+class="math inline">\(h_{ki}=\overline{h_{ik}}\)</span>, <span
+class="math display">\[\Re\langle\phi,L_jh_YL_j^{-1}\phi\rangle-\langle\phi,h_Y\phi\rangle
+=\sum_{i,k:\,p_ip_k&gt;0}\sqrt{p_ip_k}\,\bigl(\cosh(\log(l_i/l_k))-1\bigr)\Re
+h_{ik}.\]</span> Put <span
+class="math inline">\(z=\frac12\log(p_i/p_k)\)</span>. By (18) and <span
+class="math inline">\(a_j\le\frac12\)</span>, <span
+class="math inline">\(\cosh(\log(l_i/l_k))-1\le\cosh(a_jz)-1\le\frac12a_j^2z^2\cosh(a_jz)\le\frac12a_j^2z^2\cosh(z/2)\)</span>,
+while <span class="math inline">\(\sqrt{p_ip_k}=(p_i+p_k)/(2\cosh
+z)\)</span>. Since <span class="math inline">\(\sup_z
+z^2\cosh(z/2)/(4\cosh z)\le1\)</span>, the coefficient is at most <span
+class="math inline">\(a_j^2(p_i+p_k)\)</span>. Expanding <span
+class="math inline">\(h_Y\)</span> by (4) and using (10) for each product term
+gives <span
+class="math display">\[\bigl|\Re\langle\phi,L_jh_YL_j^{-1}\phi\rangle-\langle\phi,h_Y\phi\rangle\bigr|
+\le 2a_j^2\,q^{2(R+1)}J .\]</span> Summing over the at most <span
+class="math inline">\(N_R\)</span> terms split by each <span
+class="math inline">\(X_j\)</span>, <span
+class="math display">\[\tag{19}
+0\le\langle\phi,(H-E_0)\phi\rangle\le\sum_{j=1}^m N_R\cdot
+2a_j^2q^{2(R+1)}J
+=\frac{8N_RJq^{2(R+1)}}{m}=\frac{C_E}{m}.\]</span> By (2) and (14), <span
+class="math display">\[\tag{20}
+1-\lvert
+\langle\Omega,\phi\rangle\rvert^2\le\frac{C_E}{m\Delta}\le\frac14
+.\]</span> The same bound holds for the optimizer of every prefix <span
+class="math inline">\(L_j\cdots L_1\)</span>, <span
+class="math inline">\(1\le j\le m\)</span>, since its energy is bounded
+by the same sum restricted to <span class="math inline">\(i\le
+j\)</span>.</p>
+<h6 id="upper-bound-on-the-optimum.">Upper bound on the optimum.</h6>
+<p>Let <span class="math inline">\(N_j\)</span> be the optimum for the
+prefix <span class="math inline">\(1,\dots,j\)</span> at the same floor,
+<span class="math inline">\(N_0=1\)</span>, and let <span
+class="math inline">\(L_j\cdots L_1\)</span> be an optimizer for prefix
+<span class="math inline">\(j\)</span> with <span
+class="math inline">\(K_{&lt;j}=L_{j-1}\cdots L_1\)</span>. By (20) for that prefix and
+Cauchy–Schwarz, <span
+class="math display">\[\sqrt{1-C_E/(m\Delta)}\;N_j\le\lvert
+\langle\Omega,L_jK_{&lt;j}\Omega\rangle\rvert
+=\lvert \langle L_j\Omega,K_{&lt;j}\Omega\rangle\rvert\le\lVert
+L_j\Omega\rVert\,N_{j-1}.\]</span> For any feasible <span
+class="math inline">\(L_j\)</span>, Schatten–Hölder with exponents <span
+class="math inline">\(\frac1{1-a_j}\)</span> and <span
+class="math inline">\(\frac1{a_j}\)</span> and the constraint <span
+class="math inline">\(\operatorname{Tr}L_j^{2/a_j}=1\)</span> give <span
+class="math display">\[\lVert
+L_j\Omega\rVert^2=\operatorname{Tr}\rho_{X_j}L_j^2\le\bigl(\operatorname{Tr}\rho_{X_j}^{1/(1-a_j)}\bigr)^{1-a_j}.\]</span>
+Apply Lemma <a href="#lem:tail" data-reference-type="ref" data-reference="lem:tail">3.1</a> to the interval <span
+class="math inline">\(X_j\)</span> with <span
+class="math inline">\(u=-a_j/(1-a_j)\)</span>, which is admissible
+because <span class="math inline">\(\lvert u\rvert\le 2a_j=4/m\le
+u_0\)</span> by (14). Using <span
+class="math inline">\((1-a_j)u^2\le 2a_j^2\)</span>, <span
+class="math display">\[\log\lVert L_j\Omega\rVert^2\le
+-a_jS(X_j)+1024\,\mathrm e\,\vartheta\,\mathcal B_R\,a_j^2 .\]</span>
+Multiplying the recursion over <span class="math inline">\(j\)</span>
+and using <span class="math inline">\(-\frac12\log(1-v)\le v\)</span>
+for <span class="math inline">\(v\le\frac12\)</span>, <span
+class="math display">\[\log N\le-\frac12\sum_ja_jS(X_j)+512\,\mathrm
+e\,\vartheta\,\mathcal B_R\sum_ja_j^2+\frac{mC_E}{m\Delta}
+\le -\frac12\sum_ja_jS(X_j)+\frac12+\frac{C_E}{\Delta},\]</span> because
+<span class="math inline">\(\sum_ja_j^2=4/m\le 1/(1024\mathrm
+e\vartheta\mathcal B_R)\)</span> by (14). That is,
+<span class="math display">\[\tag{21}
+-2\log N\ \ge\ \sum_{j=1}^ma_jS(X_j)-1-\frac{2C_E}{\Delta}.\]</span> The
+constants in (21) do not depend on the floor
+<span class="math inline">\(\epsilon\)</span>.</p>
+<h6 id="lower-bound-on-the-optimum-by-schmidt-pinning.">Lower bound on
+the optimum by Schmidt pinning.</h6>
+<p>Let <span class="math inline">\(\epsilon\downarrow0\)</span>. The
+optima converge to the optimum <span class="math inline">\(N\)</span>
+over nonnegative filters with the same trace constraints (the feasible
+sets are compact and every nonnegative feasible operator is a limit of
+strictly positive feasible ones), and (21)
+persists. Write <span
+class="math inline">\(\Omega=\sum_i\sqrt{p_i}\,u_i\otimes w_i\)</span>
+with <span class="math inline">\(p_i&gt;0\)</span> for the Schmidt
+decomposition across <span class="math inline">\(X\)</span>. For fixed
+<span class="math inline">\(i\)</span> use the trial filters <span
+class="math display">\[L_j=|u_i\rangle\langle u_i|\otimes M_j,\qquad
+M_j\ge0\text{ on }\mathcal
+H_{T_j},\qquad\operatorname{Tr}M_j^{2/a_j}=1,\]</span> which are
+feasible (as <span
+class="math inline">\(\operatorname{Tr}_{X_j}L_j^{2/a_j}=\operatorname{Tr}M_j^{2/a_j}=1\)</span>)
+and give <span class="math inline">\(N\ge\sqrt{p_i}\,N_i\)</span>, where
+<span class="math inline">\(N_i=\sup\lVert M_m\cdots
+M_1w_i\rVert\)</span> over such <span
+class="math inline">\(M_j\)</span>. We claim <span
+class="math display">\[\tag{22}
+\log N_i\ge-\frac12\sum_ja_jS_{w_i}(T_j).\]</span> Fix invertible
+feasible <span class="math inline">\(M_j\)</span> and consider <span
+class="math inline">\(F_i(z)=M_m^z\cdots M_1^zw_i\)</span> on <span
+class="math inline">\(0\le\Re z\le1\)</span>, bounded and analytic. On
+<span class="math inline">\(\Re z=0\)</span> the factors are unitary and
+<span class="math inline">\(\lVert F_i(iy)\rVert=1\)</span>. On <span
+class="math inline">\(\Re z=1\)</span> put <span
+class="math inline">\(U_j=M_j^{iy}\)</span>, <span
+class="math inline">\(V_j=U_j\cdots U_1\)</span>, <span
+class="math inline">\(V_0=\mathrm{I}\)</span>; moving the unitaries
+left, <span class="math display">\[M_m^{1+iy}\cdots
+M_1^{1+iy}=(U_m\cdots
+U_1)\,(V_{m-1}^*M_mV_{m-1})\cdots(V_0^*M_1V_0).\]</span> Each conjugated
+factor is positive, supported in <span
+class="math inline">\(T_j\)</span> (the conjugating unitaries live on
+the smaller nested flanks), and has the same trace-power normalization,
+so <span class="math inline">\(\lVert F_i(1+iy)\rVert\le N_i\)</span>.
+Testing against unit vectors and applying the scalar three-lines theorem
+gives <span class="math inline">\(\log\lVert F_i(x)\rVert\le x\log
+N_i\)</span> for <span class="math inline">\(0\le x\le1\)</span>;
+differentiating at <span class="math inline">\(x=0^+\)</span> yields
+<span class="math inline">\(\sum_j\langle w_i,\log
+M_j\,w_i\rangle\le\log N_i\)</span>. Taking <span
+class="math inline">\(M_j=\bigl((1-\delta)\rho_{w_i,T_j}+\delta\mathrm{I}/\dim\mathcal
+H_{T_j}\bigr)^{a_j/2}\)</span> and letting <span
+class="math inline">\(\delta\downarrow0\)</span>, the left side tends to
+<span class="math inline">\(-\frac12\sum_ja_jS_{w_i}(T_j)\)</span>,
+proving (22). Hence <span
+class="math inline">\(-2\log N\le-\log
+p_i+\sum_ja_jS_{w_i}(T_j)\)</span> for every <span
+class="math inline">\(i\)</span>; average with weights <span
+class="math inline">\(p_i\)</span> and use concavity of the entropy (the
+<span class="math inline">\(p_i\)</span>-average of <span
+class="math inline">\(\rho_{w_i,T_j}\)</span> is <span
+class="math inline">\(\rho_{T_j}\)</span>): <span
+class="math display">\[\tag{23}
+-2\log N\le S(X)+\sum_{j=1}^ma_jS(T_j).\]</span></p>
+<h6 id="conclusion.">Conclusion.</h6>
+<p>Subtract (23) from (21):
+<span class="math inline">\(\sum_ja_j\bigl(S(X_j)-S(T_j)\bigr)\le
+S(X)+1+2C_E/\Delta\)</span>. Here <span
+class="math inline">\(S(X_j)-S(T_j)=S(XT_j)-S(T_j)=S(X|T_j)\)</span>,
+and <span class="math inline">\(S(X|T_j)\ge S(X|T_m)\)</span> for <span
+class="math inline">\(j\le m\)</span> by strong subadditivity
+(conditioning on the larger flank <span
+class="math inline">\(T_m\supseteq T_j\)</span> decreases conditional
+entropy). With <span class="math inline">\(\sum_ja_j=2\)</span> this
+gives <span class="math inline">\(2S(X|T_m)\le
+S(X)+1+2C_E/\Delta\)</span>. ◻</p>
+</div>
+<h3 id="sec:closing">Closing the argument</h3>
+<blockquote>
+<p><strong>In words.</strong> The discount says that <span
+class="math inline">\(S(X|T)\le\frac12S(X)+C\)</span> where <span
+class="math inline">\(T\)</span> is a buffer of a constant number of
+sites. But a conditional entropy cannot be very negative: by the
+Araki–Lieb triangle inequality <span class="math inline">\(S(XT)\ge
+S(X)-S(T)\)</span>, so <span class="math inline">\(S(X|T)\ge
+S(X)-2S(T)\)</span>. Putting the two together, <span
+class="math inline">\(S(X)-2S(T)\le\frac12S(X)+C\)</span>, hence <span
+class="math inline">\(S(X)\le 4S(T)+2C\)</span>, and <span
+class="math inline">\(S(T)\)</span> is at most the number of sites of
+<span class="math inline">\(T\)</span> times <span
+class="math inline">\(\log q\)</span>. That is the area law.</p>
+<p>Nothing else is needed. In two dimensions the same two inequalities
+give <span class="math inline">\(S(X)\le 4S(T)+Cr\)</span> for a box
+<span class="math inline">\(X\)</span> of side <span
+class="math inline">\(r\)</span> with a buffer <span
+class="math inline">\(T\)</span> of width proportional to <span
+class="math inline">\(r\)</span>; the buffer is an annulus of area <span
+class="math inline">\(\sim r^2\)</span> whose entropy is as unknown as
+that of <span class="math inline">\(X\)</span>, and the inequality is
+useless. That is the precise point at which the two-dimensional proof
+must bring in everything else.</p>
+</blockquote>
+<p><strong>Precisely.</strong></p>
+<div class="proof">
+<p><em>Proof of Theorem <a href="#thm:A" data-reference-type="ref" data-reference="thm:A">1.1</a>.</em> By Lemma <a href="#lem:reductions"
+data-reference-type="ref" data-reference="lem:reductions">3</a> it
+suffices to bound <span class="math inline">\(S(X)\)</span> for an
+interval <span class="math inline">\(X\)</span> in an interval domain.
+Let <span class="math inline">\(T=T_m\)</span> be the buffer of Lemma <a
+href="#lem:buffer" data-reference-type="ref"
+data-reference="lem:buffer">7</a>; it has at most <span
+class="math inline">\(2mD\)</span> sites. The Araki–Lieb inequality
+<span class="math inline">\(S(XT)\ge S(X)-S(T)\)</span> gives <span
+class="math inline">\(S(X|T)\ge S(X)-2S(T)\)</span>, and (16) gives <span
+class="math inline">\(S(X|T)\le\frac12S(X)+\frac12+C_E/\Delta\)</span>.
+Hence <span class="math display">\[\tag{24}
+S(X)\le 4S(T)+1+\frac{2C_E}{\Delta}\le 8mD\log
+q+1+\frac{2C_E}{\Delta}=:C_{\mathrm{int}}.\]</span> By (15) and (14), <span
+class="math inline">\(C_{\mathrm{int}}\le C_0(q,R)(1+J/\Delta)\)</span>
+with, for instance, <span
+class="math inline">\(C_0(q,R)=8C_1(q,R)\max(R,1)\log
+q+1+16N_Rq^{2(R+1)}\)</span>. ◻</p>
+</div>
+<div class="remark">
+<p><strong>Remark 8</strong> (What the constant depends on). The gap
+enters only through <span
+class="math inline">\(\vartheta=J/\Delta\)</span>, linearly. The
+dependence on the local dimension and range is through <span
+class="math inline">\(N_R\,q^{2(R+1)}\)</span>, which for
+nearest-neighbor interactions (<span class="math inline">\(R=1\)</span>)
+is of order <span class="math inline">\(q^4\)</span>; no attempt has
+been made to optimize it. By comparison, the bound of
+Arad–Kitaev–Landau–Vazirani is <span class="math inline">\(\tilde
+O(\log^3(q)/\Delta)\)</span> for <span
+class="math inline">\(R=1\)</span>, so the present argument matches the
+linear dependence on the inverse gap and is worse in <span
+class="math inline">\(q\)</span>.</p>
+</div>
+<div class="remark">
+<p><strong>Remark 9</strong> (What was used). The proof used the global
+gap in exactly two places: in Lemma <a href="#lem:tail"
+data-reference-type="ref" data-reference="lem:tail">4</a> applied at the
+cuts of the shells <span class="math inline">\(X_j\)</span>, and to
+convert the energy bound (19)
+into the overlap bound (20). No Lieb–Robinson bound, no
+spectral filter, no approximate ground-state projector, no Chebyshev
+polynomial, no bootstrapping of a Schmidt-rank bound appears. The
+entropy itself enters only through operator norms of filtered
+vectors.</p>
+</div>
+<h3 id="sec:longroute">The long route, for comparison</h3>
+<blockquote>
+<p><strong>In words.</strong> It is instructive to see what the
+two-dimensional proof would do in one dimension if one refused to use
+the Araki–Lieb shortcut, because this is where each piece of the big
+machine would be used, and because the amplification and two-family
+steps reappear, in spirit, in Part <a href="#part:mps"
+data-reference-type="ref" data-reference="part:mps"></a>.</p>
+<p><em>Sub-volume exponent.</em> Split an interval of length <span
+class="math inline">\(Mr\)</span> into <span
+class="math inline">\(M\)</span> children of length <span
+class="math inline">\(r\)</span> and add them up in a random order. A
+child whose constant-width buffer has already been added gets the
+discount, which happens with a fixed probability <span
+class="math inline">\(p_0\)</span>. This gives <span
+class="math inline">\(F(Mr)\le(1-p_0/4)M\,F(r)+C M\)</span> for the
+maximal interval entropy <span class="math inline">\(F\)</span>, hence
+<span class="math inline">\(F(r)\le Cr^{e_0}\)</span> with <span
+class="math inline">\(e_0&lt;1\)</span>. In two dimensions the analogous
+recursion gives <span class="math inline">\(r^{1+e_0}\)</span>, which is
+<em>above</em> the boundary <span class="math inline">\(r\)</span>; in
+one dimension <span class="math inline">\(r^{e_0}\)</span> is already
+below the diameter <span class="math inline">\(r\)</span>, which is all
+the next step needs.</p>
+<p><em>Amplification.</em> The amplification proposition of the source
+converts an information bound <span
+class="math inline">\(I(X:\text{far})\le n^{1-\varepsilon}\)</span> into
+<span class="math inline">\(I(X:J)\le n^{-M}\)</span> for all <span
+class="math inline">\(J\)</span> beyond a graph distance <span
+class="math inline">\(2r\)</span> with <span
+class="math inline">\(r=O((n^{1-\varepsilon}+\log
+n)^{1/\alpha})\)</span>, <span
+class="math inline">\(\alpha&lt;1\)</span> as close to one as desired,
+using positive quasi-local constraints built from Kitaev’s spectral
+filter, a random product of the corresponding contractions, and a polar
+decomposition. In one dimension the trivial bound <span
+class="math inline">\(I(X:\text{anything})\le2S(X)\le Cn^{e_0}\)</span>
+for an interval <span class="math inline">\(X\)</span> of length <span
+class="math inline">\(n\)</span> already is such an input, with no
+collar at all; one gets <span class="math inline">\(I(X:J)\le
+n^{-M}\)</span> beyond distance <span
+class="math inline">\(Cn^{e_0/\alpha}=o(n)\)</span> once <span
+class="math inline">\(\alpha&gt;e_0\)</span>.</p>
+<p><em>Two families.</em> Cut the half-line to the right of the cut into
+dyadic intervals <span class="math inline">\(X_i=[2^i,2^{i+1})\)</span>
+and alternate their family labels. Each <span
+class="math inline">\(X_i\)</span> is separated from all earlier
+same-family intervals and from the other side of the cut by the gap
+<span class="math inline">\(X_{i-1}\)</span>, of length <span
+class="math inline">\(2^{i-1}\gg
+2^{ie_0/\alpha}\)</span>. The two-family cancellation lemma then gives
+<span class="math inline">\(S(A)\le|D|\log
+q+\frac12\sum_i2^{-iM}\)</span> with <span
+class="math inline">\(|D|=O(1)\)</span>.</p>
+<p>So the long route also works, with the entire replica scanner
+replaced by the trivial inequality <span class="math inline">\(I\le
+2S\)</span>. We do not pursue it; the direct proof is shorter and gives
+better constants.</p>
+</blockquote>
+<p><strong>Precisely.</strong> We only record the recursion, since the
+other two steps are literally the source propositions with the stated
+inputs. Let <span class="math inline">\(F(r)\)</span> be the supremum of
+<span class="math inline">\(S(X)\)</span> over intervals <span
+class="math inline">\(X\subseteq\Lambda\)</span> of length at most <span
+class="math inline">\(r\)</span> (over all admissible instances), and
+let <span class="math inline">\(w_0=mD\)</span> be the buffer width of
+Lemma <a href="#lem:buffer" data-reference-type="ref" data-reference="lem:buffer">4.2</a> with discount constant <span
+class="math inline">\(C_{\mathrm{buf}}=\frac12+C_E/\Delta\)</span>. Let
+<span class="math inline">\(M\ge 8(2w_0/r+2)\)</span> and let <span
+class="math inline">\(X\)</span> be an interval of length at most <span
+class="math inline">\(Mr\)</span>. Cut <span
+class="math inline">\(X\)</span> into at most <span
+class="math inline">\(M\)</span> consecutive children of length at most
+<span class="math inline">\(r\)</span> and order them by a uniformly
+random permutation. Call a child interior if its buffer of width <span
+class="math inline">\(w_0\)</span> on each side lies in <span
+class="math inline">\(X\)</span>; at most <span
+class="math inline">\(B:=2\lceil w_0/r\rceil+2\)</span> children are not
+interior. For an interior child, the event that all children meeting its
+buffer precede it has probability at least <span
+class="math inline">\(p_0=(2\lceil w_0/r\rceil+3)^{-1}\)</span>; on that
+event the chain-rule term is at most <span
+class="math inline">\(S(X_i|T_i)\le\frac12S(X_i)+C_{\mathrm{buf}}\)</span>,
+and in every case it is at most <span
+class="math inline">\(S(X_i)\)</span>. Taking the expectation of the
+chain rule, <span
+class="math display">\[F(Mr)\le\Bigl[(1-\tfrac{p_0}2)M+\tfrac{p_0}2B\Bigr]F(r)+p_0MC_{\mathrm{buf}}
+\le\bigl(1-\tfrac{p_0}4\bigr)M\,F(r)+C M ,\]</span> using <span
+class="math inline">\(B\le M/2\)</span>. With <span
+class="math inline">\(\lambda=(1-p_0/4)M\in(1,M)\)</span> for <span
+class="math inline">\(r\ge w_0\)</span>, iterating at <span
+class="math inline">\(r=w_0,Mw_0,M^2w_0,\dots\)</span> gives <span
+class="math inline">\(F(M^jw_0)\le C\lambda^j\)</span> and hence <span
+class="math inline">\(F(r)\le Cr^{e_0}\)</span> with <span
+class="math inline">\(e_0=\log_M\lambda&lt;1\)</span>.</p>
+<h1 id="part:mps">The one-dimensional matrix product state
+approximation</h1>
+<h3 id="sec:shortcut">Statement, and the two-line route</h3>
+<blockquote>
+<p><strong>In words.</strong> Theorem <a href="#thm:B"
+data-reference-type="ref" data-reference="thm:B">2</a> asks for one
+global vector, not for a bound on each cut. In two dimensions this is a
+serious gap between hypothesis and conclusion, and the source closes it
+with a distributed protocol. In one dimension there is a classical
+bridge: if the Schmidt spectrum at every cut has a fast-decaying tail,
+then truncating the cuts one after another produces a matrix product
+state whose error is the sum of the tail masses (Verstraete–Cirac). The
+marginal tail bound of Section <a href="#sec:tail"
+data-reference-type="ref" data-reference="sec:tail">2</a> gives exactly
+such a tail, with an exponential rate <span
+class="math inline">\(u_0\)</span> that depends only on <span
+class="math inline">\(q,R,J/\Delta\)</span>, and the area law fixes the
+location of the spectrum. So Theorem <a href="#thm:B"
+data-reference-type="ref" data-reference="thm:B">2</a> follows in a few
+lines, with bond dimension <span
+class="math inline">\(CL^{4/u_0}\)</span>.</p>
+<p>We record this first because it is true and short. The rest of
+Part <a href="#part:mps" data-reference-type="ref"
+data-reference="part:mps"></a> then presents the one-dimensional version
+of the <em>protocol</em> proof, which is the construction that
+generalizes to two dimensions and which uses none of this sequential
+truncation.</p>
+</blockquote>
+<p><strong>Precisely.</strong></p>
+<div id="prop:VC" class="proposition">
+<p><strong>Proposition 7.1</strong> (Sequential truncation). <em>Let
+<span class="math inline">\(\Omega\)</span> be a unit vector on <span
+class="math inline">\(\mathcal H_\Lambda\)</span>, <span
+class="math inline">\(\Lambda=\{1,\dots,L\}\)</span>. For <span
+class="math inline">\(1\le k\le L-1\)</span> let <span
+class="math inline">\(\Pi_k\)</span> be the projection of <span
+class="math inline">\(\mathcal H_{[1,k]}\)</span> onto the span of the
+<span class="math inline">\(D\)</span> eigenvectors of <span
+class="math inline">\(\rho_{[1,k]}\)</span> with largest eigenvalues,
+let <span
+class="math inline">\(\epsilon_k=\langle\Omega,(\mathrm{I}-\Pi_k\otimes\mathrm{I})\Omega\rangle\)</span>
+be the discarded mass, and put <span
+class="math display">\[\Phi=(\Pi_1\otimes\mathrm{I})(\Pi_2\otimes\mathrm{I})\cdots(\Pi_{L-1}\otimes\mathrm{I})\,\Omega.\]</span>
+Then <span class="math inline">\(\Phi\)</span> is a matrix product state
+with open boundary conditions and bond dimension at most <span
+class="math inline">\(qD\)</span>, and <span
+class="math inline">\(\lVert
+\Phi-\Omega\rVert\le\sum_k\sqrt{\epsilon_k}\)</span>.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Write <span
+class="math inline">\(P_k=\Pi_k\otimes\mathrm{I}\)</span>. Telescoping,
+<span class="math inline">\(\Phi-\Omega=\sum_{k=1}^{L-1}P_1\cdots
+P_{k-1}(P_k-\mathrm{I})\Omega\)</span> and each prefix is a contraction,
+which gives the error bound. For the bond dimension fix a cut <span
+class="math inline">\(k\)</span>. The vector <span
+class="math inline">\(\Xi=P_{k+1}\cdots P_{L-1}\Omega\)</span> is in the
+range of <span class="math inline">\(P_{k+1}\)</span>, so <span
+class="math inline">\(\Xi=\sum_{b=1}^D|b\rangle_{[1,k+1]}\otimes\xi_b\)</span>;
+expanding <span
+class="math inline">\(|b\rangle=\sum_{s=1}^q\beta_{b,s}\otimes|s\rangle_{k+1}\)</span>
+shows that <span class="math inline">\(\Xi\)</span> has Schmidt rank at
+most <span class="math inline">\(qD\)</span> across the cut <span
+class="math inline">\(k\)</span>. The remaining factors <span
+class="math inline">\(P_1,\dots,P_k\)</span> act on <span
+class="math inline">\([1,k]\)</span> and do not increase that rank. A
+vector with Schmidt rank at most <span class="math inline">\(qD\)</span>
+across every cut is a matrix product state of bond dimension at most
+<span class="math inline">\(qD\)</span>. ◻</p>
+</div>
+<div id="thm:Bshort" class="theorem">
+<p><strong>Theorem 7.2</strong> (Theorem <a href="#thm:B"
+data-reference-type="ref" data-reference="thm:B">2</a>, two-line route).
+<em>Under the hypotheses of Theorem <a href="#thm:B"
+data-reference-type="ref" data-reference="thm:B">2</a>, for every <span
+class="math inline">\(L\ge2\)</span> there is a matrix product state
+<span class="math inline">\(\Phi\)</span> with bond dimension at most
+<span class="math inline">\(q\,\mathrm e^{C_{\mathrm{int}}}\,(32\mathrm
+e^{\mathrm e/2}L^4)^{1/u_0}\)</span> and <span
+class="math inline">\(\min_\theta\lVert \Phi/\lVert \Phi\rVert-\mathrm
+e^{i\theta}\Omega\rVert\le L^{-1}\)</span>, where <span
+class="math inline">\(u_0\)</span> is (6) and
+<span class="math inline">\(C_{\mathrm{int}}\)</span> is (24).</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Fix a cut <span class="math inline">\(k\)</span> and
+<span class="math inline">\(X=[1,k]\)</span>. By Lemma <a
+href="#lem:tail" data-reference-type="ref"
+data-reference="lem:tail">4</a>, the eigenvalues <span
+class="math inline">\(p\)</span> of <span
+class="math inline">\(\rho_X\)</span> with <span
+class="math inline">\(-\log p&gt;S(X)+w\)</span> have total mass at most
+<span class="math inline">\(2\mathrm e^{\mathrm e/2}\mathrm
+e^{-u_0w}\)</span>; the eigenvalues with <span
+class="math inline">\(-\log p\le S(X)+w\)</span> number at most <span
+class="math inline">\(\mathrm e^{S(X)+w}\)</span>. Choose <span
+class="math inline">\(w\)</span> with <span
+class="math inline">\(2\mathrm e^{\mathrm e/2}\mathrm
+e^{-u_0w}=(16L^4)^{-1}\)</span> and <span
+class="math inline">\(D=\lceil\mathrm
+e^{C_{\mathrm{int}}+w}\rceil\ge\mathrm e^{S(X)+w}\)</span> (Theorem <a
+href="#thm:A" data-reference-type="ref" data-reference="thm:A">1</a>).
+Then <span class="math inline">\(\epsilon_k\le(16L^4)^{-1}\)</span> for
+every <span class="math inline">\(k\)</span>, Proposition <a
+href="#prop:VC" data-reference-type="ref"
+data-reference="prop:VC">10</a> gives <span class="math inline">\(\lVert
+\Phi-\Omega\rVert\le(L-1)/(4L^2)\le1/(4L)\)</span>, hence <span
+class="math inline">\(\Phi\ne0\)</span> and <span
+class="math inline">\(\lVert \Phi/\lVert
+\Phi\rVert-\Omega\rVert\le2\lVert \Phi-\Omega\rVert\le L^{-1}\)</span>.
+The bond dimension is <span class="math inline">\(qD\)</span> with <span
+class="math inline">\(\mathrm e^{w}=(32\mathrm e^{\mathrm
+e/2}L^4)^{1/u_0}\)</span>. ◻</p>
+</div>
+<div class="remark">
+<p><strong>Remark 12</strong>. The exponent <span
+class="math inline">\(4/u_0\)</span> is of order <span
+class="math inline">\(\sqrt{(1+J/\Delta)\mathcal B_R}\)</span>.
+Hastings’ original construction gives a polynomial bond dimension with
+an exponent that is exponential in <span
+class="math inline">\(J/\Delta\)</span>; here the exponent is a square
+root. This is a byproduct of the tail bound, not of the protocol
+below.</p>
+</div>
+<h4 class="unnumbered" id="plan-of-the-protocol-route">Plan of the
+protocol route</h4>
+<blockquote>
+<p><strong>In words.</strong> The protocol proof has four layers, and we
+keep all four.</p>
+<ol>
+<li><p><em>Information at logarithmic separation.</em> Two regions of
+the chain separated by <span class="math inline">\(D\log L\)</span>
+sites share at most <span class="math inline">\(L^{-p}\)</span> nats of
+mutual information. This is where the gap is used. In two dimensions it
+took the coarse collar bound, the cell conditional-information lemma and
+the “angular” induction; here it takes the area law plus one lemma, the
+information reset (Section <a href="#sec:logsep"
+data-reference-type="ref" data-reference="sec:logsep">2</a>).</p></li>
+<li><p><em>Moves.</em> Three elementary operations change who holds
+which registers while keeping the global vector close to a reference: a
+birth (give an interior interval to a new owner), its reverse, a death,
+and an exchange of assignments between two copies of the ground state
+inside a window. Each is a contraction built from private maps and one
+normalized bipartite vector or covector, and each costs <span
+class="math inline">\(O(L^{-p/2})\)</span> when the moved region is
+informationally independent of the other owners (Section <a
+href="#sec:moves" data-reference-type="ref"
+data-reference="sec:moves">3</a>).</p></li>
+<li><p><em>The schedule.</em> A left-to-right sweep with a moving
+remainder party creates the block owners one by one. The only difficulty
+is a band owned by the remainder that is wedged between two different
+owners; it is dissolved by a fixed sequence of nine moves using an
+auxiliary copy of the ground state, copied from the edge construction of
+the two-dimensional paper. Every party takes part in a bounded number of
+moves (Section <a href="#sec:sweep" data-reference-type="ref" data-reference="sec:sweep">10</a>).</p></li>
+<li><p><em>Compression and assembly.</em> The distributed construction
+is a pure linear calculation with unbounded private dimensions.
+Replacing each bipartite resource by an average of polynomially many
+random product operators approximates the physical density in trace
+norm, and the error analysis is dimension-free because each party
+participates in boundedly many operations. One column of the resulting
+operator network is a ket network; placing its nodes on the chain gives
+the matrix product state (Sections <a href="#sec:compression"
+data-reference-type="ref" data-reference="sec:compression">5</a>, <a
+href="#sec:routing" data-reference-type="ref"
+data-reference="sec:routing">6</a>).</p></li>
+</ol>
+</blockquote>
+<h3 id="sec:logsep">Information at logarithmic separation</h3>
+<h4 id="purifications-fidelity-and-splitting">Purifications, fidelity,
+and splitting</h4>
+<blockquote>
+<p><strong>In words.</strong> Small mutual information <span
+class="math inline">\(I(T:E)\)</span> means the joint state of <span
+class="math inline">\(T\)</span> and <span
+class="math inline">\(E\)</span> is close, in relative entropy, to the
+product of its marginals. Relative entropy controls fidelity, and
+fidelity between two mixed states is the largest overlap between their
+purifications (Uhlmann). So if the third system <span
+class="math inline">\(U\)</span> purifies <span
+class="math inline">\(TE\)</span>, there is an isometry on <span
+class="math inline">\(U\)</span> alone that turns the global vector into
+nearly a product of a purification of <span
+class="math inline">\(T\)</span> and a purification of <span
+class="math inline">\(E\)</span>. Whoever holds <span
+class="math inline">\(U\)</span> can do this privately. This is the
+single mechanism behind births and exchanges.</p>
+</blockquote>
+<p><strong>Precisely.</strong> For density operators <span
+class="math inline">\(\rho,\sigma\)</span> put <span
+class="math inline">\(F(\rho,\sigma)=\lVert
+\sqrt\rho\sqrt\sigma\rVert_1\)</span> and <span
+class="math inline">\(D(\rho\|\sigma)=\operatorname{Tr}\rho(\log\rho-\log\sigma)\)</span>,
+infinite when the support of <span class="math inline">\(\rho\)</span>
+is not contained in that of <span
+class="math inline">\(\sigma\)</span>.</p>
+<div id="lem:fidelity" class="lemma">
+<p><strong>Lemma 8.1</strong> (Fidelity, information, Uhlmann). <em>For
+normalized finite-dimensional states, <span
+class="math inline">\(F(\rho,\sigma)\ge\mathrm
+e^{-D(\rho\|\sigma)/2}\)</span>, and <span
+class="math inline">\(D(\rho_{AC}\|\rho_A\otimes\rho_C)=I(A:C)\)</span>.
+If <span class="math inline">\(\xi\)</span> purifies <span
+class="math inline">\(\rho\)</span> on <span
+class="math inline">\(\mathcal H\otimes\mathcal K\)</span> and <span
+class="math inline">\(\eta\)</span> purifies <span
+class="math inline">\(\sigma\)</span> on <span
+class="math inline">\(\mathcal H\otimes\mathcal K&#39;\)</span>, then
+after enlarging <span class="math inline">\(\mathcal K&#39;\)</span> if
+necessary there is an isometry <span class="math inline">\(V:\mathcal
+K\to\mathcal K&#39;\)</span> with <span class="math inline">\(\lvert
+\langle\eta,(\mathrm{I}\otimes
+V)\xi\rangle\rvert=F(\rho,\sigma)\)</span>.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let <span
+class="math inline">\((p_i,|i\rangle)\)</span>, <span
+class="math inline">\((q_j,|j&#39;\rangle)\)</span> be eigenpairs of
+<span class="math inline">\(\rho,\sigma\)</span>. If <span
+class="math inline">\(D(\rho\|\sigma)&lt;\infty\)</span>, <span
+class="math inline">\(w_{ij}=p_i\lvert \langle
+i|j&#39;\rangle\rvert^2\)</span> is a probability on the pairs with
+<span class="math inline">\(p_iq_j&gt;0\)</span> and <span
+class="math inline">\(D(\rho\|\sigma)=\sum w_{ij}\log(p_i/q_j)\)</span>.
+By convexity of the exponential, <span
+class="math inline">\(\operatorname{Tr}\sqrt\rho\sqrt\sigma=\sum_{ij}w_{ij}\exp(-\tfrac12\log(p_i/q_j))\ge\mathrm
+e^{-D(\rho\|\sigma)/2}\)</span>, and the trace norm dominates the trace.
+The identity for <span class="math inline">\(I(A:C)\)</span> is the
+expansion of <span
+class="math inline">\(\log(\rho_A\otimes\rho_C)\)</span>. The
+purification statement is Uhlmann’s theorem: the overlaps <span
+class="math inline">\(\operatorname{Tr}(\sqrt\rho\sqrt\sigma U)\)</span>
+over unitaries <span class="math inline">\(U\)</span> on a common large
+purifying space have maximum modulus <span class="math inline">\(\lVert
+\sqrt\rho\sqrt\sigma\rVert_1\)</span> by polar decomposition, and any
+purification is obtained from the canonical one by an isometry on the
+purifying factor. ◻</p>
+</div>
+<div id="lem:splitting" class="lemma">
+<p><strong>Lemma 8.2</strong> (Splitting). <em>Let <span
+class="math inline">\(T,U,E\)</span> partition <span
+class="math inline">\(\Lambda\)</span> and <span
+class="math inline">\(b=I_\Omega(T:E)\)</span>. There are
+finite-dimensional spaces <span class="math inline">\(\mathcal
+B_T,\mathcal B_E\)</span>, an isometry <span
+class="math inline">\(V:\mathcal H_U\to\mathcal B_T\otimes\mathcal
+B_E\)</span> and unit vectors <span class="math inline">\(s\in\mathcal
+H_T\otimes\mathcal B_T\)</span>, <span
+class="math inline">\(s&#39;\in\mathcal H_E\otimes\mathcal B_E\)</span>
+with <span class="math display">\[\lVert (\mathrm{I}_{TE}\otimes
+V)\Omega-s\otimes s&#39;\rVert\le\sqrt{2(1-\mathrm e^{-b/2})}\le\sqrt b
+.\]</span></em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> <span class="math inline">\(\rho_{TE}\)</span> is
+supported in <span
+class="math inline">\(\operatorname{supp}\rho_T\otimes\operatorname{supp}\rho_E\)</span>
+(the projector onto the kernel of a marginal, tensored with the
+identity, has zero expectation in the positive joint state), so <span
+class="math inline">\(D(\rho_{TE}\|\rho_T\otimes\rho_E)=b\)</span> is
+finite. Purify <span class="math inline">\(\rho_T\)</span> by <span
+class="math inline">\(s\)</span> and <span
+class="math inline">\(\rho_E\)</span> by <span
+class="math inline">\(s&#39;\)</span>, enlarge the purifying factors so
+that <span class="math inline">\(\mathcal B_T\otimes\mathcal
+B_E\)</span> contains an isometric copy of <span
+class="math inline">\(\mathcal H_U\)</span>, and apply Lemma <a
+href="#lem:fidelity" data-reference-type="ref"
+data-reference="lem:fidelity">13</a>: an isometry <span
+class="math inline">\(V\)</span> on <span class="math inline">\(\mathcal
+H_U\)</span> attains overlap at least <span
+class="math inline">\(\mathrm e^{-b/2}\)</span> with <span
+class="math inline">\(s\otimes s&#39;\)</span>, with real positive
+phase. Two unit vectors with overlap <span
+class="math inline">\(F\)</span> are at distance <span
+class="math inline">\(\sqrt{2(1-F)}\)</span>. ◻</p>
+</div>
+<h4 id="sec:reset">The information reset</h4>
+<blockquote>
+<p><strong>In words.</strong> The area law gives <span
+class="math inline">\(I(R:C)=O(1)\)</span> between an interval <span
+class="math inline">\(R\)</span> and anything else, never <span
+class="math inline">\(o(1)\)</span>. The reset lemma turns a constant
+into an arbitrary inverse power of <span
+class="math inline">\(L\)</span> by shrinking the two regions inward by
+a margin of order <span class="math inline">\(\log L\)</span>. The idea
+is a two-replica swap. Take two copies of the ground vector, <span
+class="math inline">\(\Psi=\Omega\otimes\Omega\)</span>, and swap the
+two copies on <span class="math inline">\(R\)</span> to get <span
+class="math inline">\(\Phi=F_R\Psi\)</span>. In <span
+class="math inline">\(\Phi\)</span>, the core <span
+class="math inline">\(R_0\subseteq R\)</span> of one copy and the core
+<span class="math inline">\(C_0\subseteq C\)</span> of the same copy
+come from different original copies, so they are exactly independent. If
+we can find a unitary <span class="math inline">\(U\)</span> acting only
+on the buffer between the cores and sending <span
+class="math inline">\(\Psi\)</span> to <span
+class="math inline">\(\Phi\)</span> up to <span
+class="math inline">\(L^{-p}\)</span>, then the joint marginal of the
+cores in <span class="math inline">\(\Psi\)</span> equals the product
+marginal up to <span class="math inline">\(L^{-p}\)</span>, which is the
+claim.</p>
+<p>The unitary is built in three steps. First, <span
+class="math inline">\(I(R:C)\le b\)</span> and the splitting lemma give
+an operator <span class="math inline">\(W\)</span> on the buffer <span
+class="math inline">\(Q\)</span> of both copies with <span
+class="math inline">\(\langle\Phi,W\Psi\rangle\ge\mathrm
+e^{-2b}\)</span>. Second, a Gaussian spectral filter applied in both
+directions, <span class="math inline">\(M=\int g_h(t)\mathrm
+e^{it\mathbb H&#39;}W\mathrm e^{-it\mathbb H}dt\)</span>, projects <span
+class="math inline">\(W\Psi\)</span> onto <span
+class="math inline">\(\Phi\)</span> and <span
+class="math inline">\(W^\dagger\Phi\)</span> onto <span
+class="math inline">\(\Psi\)</span> with error <span
+class="math inline">\(\mathrm e^{-h\Delta^2/2}\)</span>, because <span
+class="math inline">\(\Psi,\Phi\)</span> are the unique gapped ground
+vectors of the two doubled Hamiltonians <span
+class="math inline">\(\mathbb H\)</span>, <span
+class="math inline">\(\mathbb H&#39;=F_R\mathbb HF_R\)</span>. Third, a
+Lieb–Robinson bound localizes <span class="math inline">\(M\)</span> to
+within <span class="math inline">\(\ell=O(1+b+\log L)\)</span> of the
+buffer and of the edges crossing <span class="math inline">\(R\)</span>,
+where <span class="math inline">\(\mathbb H\)</span> and <span
+class="math inline">\(\mathbb H&#39;\)</span> differ. The localized
+operator is almost isometric on <span
+class="math inline">\(\Psi\)</span>, and its polar unitary does the job.
+The lemma is proved exactly as in the source; we only insert the
+one-dimensional locality bound.</p>
+</blockquote>
+<p><strong>Precisely.</strong> We need the propagation estimate for a
+doubled chain. Let <span class="math inline">\(\mathbb H\)</span> be a
+Hamiltonian on <span
+class="math inline">\(\bigotimes_{x\in\Lambda}(\mathbb C^q\otimes\mathbb
+C^q)\)</span> which is a sum of terms <span
+class="math inline">\(k_Z\)</span> supported on sets <span
+class="math inline">\(Z\)</span> of diameter at most <span
+class="math inline">\(R\)</span> with <span
+class="math inline">\(\sum_{Z\ni x}\lVert k_Z\rVert\le b_0\)</span> for
+every <span class="math inline">\(x\)</span>, and <span
+class="math inline">\(\tau_t(A)=\mathrm e^{it\mathbb H}A\mathrm
+e^{-it\mathbb H}\)</span>.</p>
+<div id="lem:LR" class="lemma">
+<p><strong>Lemma 8.3</strong> (Lieb–Robinson bound on a chain). <em>There
+are <span class="math inline">\(C,v,\mu&gt;0\)</span> depending only on
+<span class="math inline">\(R\)</span> and <span
+class="math inline">\(b_0\)</span> such that for every operator <span
+class="math inline">\(A\)</span> supported in <span
+class="math inline">\(S\subseteq\Lambda\)</span>, every site <span
+class="math inline">\(y\)</span> and every operator <span
+class="math inline">\(B_y\)</span> supported at <span
+class="math inline">\(y\)</span>, <span class="math display">\[\lVert
+[\tau_t(A),B_y]\rVert\le C\lvert S\rvert\,\lVert A\rVert\,\lVert
+B_y\rVert\,\mathrm e^{v\lvert t\rvert-\mu\,\operatorname{dist}(S,y)}
+.\]</span> Consequently, if <span class="math inline">\(\mathcal
+P_D\)</span> denotes the conditional expectation onto operators
+supported in <span class="math inline">\(D\)</span> (the average over
+independent Haar unitaries at the sites outside <span
+class="math inline">\(D\)</span>), then for every <span
+class="math inline">\(\ell\ge0\)</span> <span
+class="math display">\[\lVert \tau_t(A)-\mathcal
+P_{N_\ell(S)}\tau_t(A)\rVert\le C&#39;\lvert S\rvert\,\lVert
+A\rVert\,\mathrm e^{v\lvert t\rvert-\mu\ell}.\]</span></em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> For <span class="math inline">\(t\ge0\)</span> put
+<span class="math inline">\(c_y(S,t)=\sup\{\lVert
+[\tau_t(A),B_y]\rVert:\operatorname{supp}A\subseteq S,\lVert
+A\rVert\le1\}\)</span>. Differentiating and using the Jacobi identity,
+the derivative of <span class="math inline">\([\tau_t(A),B_y]\)</span>
+equals <span class="math inline">\(i[\sum_{Z\cap
+S\ne\varnothing}\tau_t(k_Z),[\tau_t(A),B_y]]\)</span> plus a sum over
+<span class="math inline">\(Z\cap S\ne\varnothing\)</span> of <span
+class="math inline">\(-i[\tau_t(A),[\tau_t(k_Z),B_y]]\)</span>; the
+first part is removed by a unitary change of frame, so <span
+class="math inline">\(c_y(S,t)\le c_y(S,0)+2\sum_{Z\cap
+S\ne\varnothing}\lVert k_Z\rVert\int_0^tc_y(Z,u)\,du\)</span>.
+Iterating, and using <span class="math inline">\(c_y(Z,u)\le2\lVert
+B_y\rVert\)</span> to see that the remainder after <span
+class="math inline">\(m\)</span> iterations tends to zero, gives <span
+class="math display">\[c_y(S,t)\le 2\lVert
+B_y\rVert\sum_{m\ge0}\frac{(2t)^m}{m!}
+\sum_{\substack{Z_1\cap S\ne\varnothing,\ Z_{i+1}\cap
+Z_i\ne\varnothing\\ y\in Z_m}}
+\prod_{i=1}^m\lVert k_{Z_i}\rVert,\]</span> with the <span
+class="math inline">\(m=0\)</span> term equal to <span
+class="math inline">\(\mathbf 1_{\{y\in S\}}\)</span>. Summing the norms
+of the terms meeting a set of <span class="math inline">\(n\)</span>
+sites gives at most <span class="math inline">\(nb_0\)</span>, so the
+inner sum is at most <span class="math inline">\(\lvert
+S\rvert\,b_0\,((R+1)b_0)^{m-1}\le\lvert S\rvert\kappa^m\)</span> with
+<span class="math inline">\(\kappa=(R+1)b_0\)</span>; and a chain
+reaching <span class="math inline">\(y\)</span> needs <span
+class="math inline">\(mR\ge\operatorname{dist}(S,y)\)</span>. Hence for
+every <span class="math inline">\(\mu&gt;0\)</span>, <span
+class="math inline">\(c_y(S,t)\le 2\lvert S\rvert\lVert B_y\rVert\mathrm
+e^{-\mu\operatorname{dist}(S,y)}\sum_m(2\kappa\mathrm e^{\mu
+R}t)^m/m!\)</span>, which is the first bound with <span
+class="math inline">\(v=2\kappa\mathrm e^{\mu R}\)</span>. Negative
+times are identical. For the second bound, <span
+class="math inline">\(\mathcal P_D\)</span> is a product of commuting
+single-site twirls <span class="math inline">\(T_y\)</span>, telescoping
+gives <span class="math inline">\(\lVert B-\mathcal
+P_DB\rVert\le\sum_{y\notin D}\sup_{U_y}\lVert [B,U_y]\rVert\)</span>,
+and there are at most two sites at each distance <span
+class="math inline">\(d&gt;\ell\)</span> from <span
+class="math inline">\(S\)</span>, so the sum is at most <span
+class="math inline">\(2C\lvert S\rvert\lVert A\rVert\mathrm
+e^{vt}\sum_{d&gt;\ell}\mathrm e^{-\mu d}\)</span>. ◻</p>
+</div>
+<div id="lem:reset" class="lemma">
+<p><strong>Lemma 8.4</strong> (Information reset). <em>For every <span
+class="math inline">\(p&gt;0\)</span> there is <span
+class="math inline">\(C_p&lt;\infty\)</span>, depending only on <span
+class="math inline">\(p,q,R,J,\Delta\)</span>, with the following
+property for all sufficiently large <span
+class="math inline">\(L\)</span>. Let <span
+class="math inline">\(R,C\subseteq\Lambda\)</span> be disjoint, <span
+class="math inline">\(R_0\subseteq R\)</span>, <span
+class="math inline">\(C_0\subseteq C\)</span>, and suppose <span
+class="math inline">\(I_\Omega(R:C)\le b\)</span>. If <span
+class="math display">\[\operatorname{dist}(R_0,\Lambda\setminus
+R)&gt;w,\qquad \operatorname{dist}(C_0,\Lambda\setminus C)&gt;w,
+\qquad w=C_p(1+b+\log L),\]</span> then <span
+class="math inline">\(I_\Omega(R_0:C_0)\le L^{-p}\)</span>.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> If a core is empty there is nothing to prove. Let
+<span class="math inline">\(\Psi=\Omega\otimes\Omega\)</span> on two
+replicas, <span class="math inline">\(F_R\)</span> the unitary
+exchanging the two replicas at the sites of <span
+class="math inline">\(R\)</span>, <span
+class="math inline">\(\Phi=F_R\Psi\)</span>, and <span
+class="math inline">\(Q=\Lambda\setminus(R\cup C)\)</span>.</p>
+<p><em>Overlap.</em> Apply Lemma <a href="#lem:splitting"
+data-reference-type="ref" data-reference="lem:splitting">14</a> to <span
+class="math inline">\((T,U,E)=(R,Q,C)\)</span>: an isometry <span
+class="math inline">\(V:\mathcal H_Q\to\mathcal B_R\otimes\mathcal
+B_C\)</span> and unit vectors <span class="math inline">\(a\in\mathcal
+H_R\otimes\mathcal B_R\)</span>, <span
+class="math inline">\(a&#39;\in\mathcal H_C\otimes\mathcal B_C\)</span>
+with <span class="math inline">\(\lvert \langle a\otimes
+a&#39;,\widetilde\Omega\rangle\rvert\ge\mathrm e^{-b/2}\)</span>, <span
+class="math inline">\(\widetilde\Omega=(\mathrm{I}\otimes
+V)\Omega\)</span>. The largest Schmidt coefficient of <span
+class="math inline">\(\widetilde\Omega\)</span> across <span
+class="math inline">\(R\mathcal B_R\,|\,C\mathcal B_C\)</span> is
+therefore at least <span class="math inline">\(\mathrm e^{-b}\)</span>,
+so <span
+class="math inline">\(\operatorname{Tr}\rho_{\widetilde\Omega,R\mathcal
+B_R}^2\ge\mathrm e^{-2b}\)</span>. Define on the two replicas of <span
+class="math inline">\(Q\)</span> the Hermitian contraction <span
+class="math inline">\(W=(V^\dagger\otimes V^\dagger)F_{\mathcal
+B_R}(V\otimes V)\)</span>, where <span class="math inline">\(F_{\mathcal
+B_R}\)</span> swaps the two copies of <span
+class="math inline">\(\mathcal B_R\)</span>. Since <span
+class="math inline">\(V\)</span> acts outside <span
+class="math inline">\(R\)</span>, the swap identity <span
+class="math inline">\(\langle\xi^{\otimes2},F_{A}\xi^{\otimes2}\rangle=\operatorname{Tr}\rho_{\xi,A}^2\)</span>
+gives <span class="math display">\[\tag{25}
+z:=\langle\Phi,W\Psi\rangle=\langle\widetilde\Omega^{\otimes2},F_RF_{\mathcal
+B_R}\widetilde\Omega^{\otimes2}\rangle
+=\operatorname{Tr}\rho_{\widetilde\Omega,R\mathcal B_R}^2\ \ge\ \mathrm
+e^{-2b}.\]</span></p>
+<p><em>Two-sided Gaussian filtering.</em> Let <span
+class="math inline">\(\mathbb H=H\otimes\mathrm{I}+\mathrm{I}\otimes
+H\)</span> and <span class="math inline">\(\mathbb H&#39;=F_R\mathbb
+HF_R\)</span>. Both are range-<span class="math inline">\(R\)</span>
+Hamiltonians on the doubled chain with uniformly bounded interaction
+sums, with unique ground vectors <span
+class="math inline">\(\Psi\)</span>, <span
+class="math inline">\(\Phi\)</span>, common ground energy <span
+class="math inline">\(\mathcal E=2E_0\)</span>, and gap at least <span
+class="math inline">\(\Delta\)</span>. Their difference <span
+class="math inline">\(\mathbb H&#39;-\mathbb H\)</span> is supported on
+the endpoints <span class="math inline">\(Z_R\)</span> of the edges
+crossing <span class="math inline">\(R\)</span> (interior terms of <span
+class="math inline">\(R\)</span> are merely exchanged between the two
+identical replica copies). Put <span class="math inline">\(B_*=1+b+\log
+L\)</span>, <span class="math inline">\(r_*=2p+10\)</span>, <span
+class="math inline">\(h=AB_*\)</span> with <span
+class="math inline">\(A\Delta^2/2\ge r_*+30\)</span>, and <span
+class="math display">\[g_h(t)=(2\pi h)^{-1/2}\mathrm
+e^{-t^2/(2h)},\qquad
+M=\int_{\mathbb R}g_h(t)\,\mathrm e^{it\mathbb H&#39;}W\mathrm
+e^{-it\mathbb H}\,dt .\]</span> <span class="math inline">\(M\)</span>
+is a contraction, and by the spectral theorem <span
+class="math inline">\(M\Psi=\mathrm e^{-h(\mathbb H&#39;-\mathcal
+E)^2/2}W\Psi\)</span>, <span class="math inline">\(M^\dagger\Phi=\mathrm
+e^{-h(\mathbb H-\mathcal E)^2/2}W^\dagger\Phi\)</span>, so by the gaps
+<span class="math display">\[\tag{26}
+\lVert M\Psi-z\Phi\rVert,\ \lVert M^\dagger\Phi-z\Psi\rVert\le\mathrm
+e^{-h\Delta^2/2}\le\mathrm e^{-10b}L^{-r_*}.\]</span> Truncating the
+integral to <span class="math inline">\(\lvert t\rvert\le
+T=T_0B_*\)</span> costs at most <span class="math inline">\(2\mathrm
+e^{-T_0^2B_*/(2A)}\)</span>, which is also at most <span
+class="math inline">\(\mathrm e^{-10b}L^{-r_*}\)</span> once <span
+class="math inline">\(T_0^2/(2A)\ge r_*+30\)</span>.</p>
+<p><em>Localization.</em> Write <span class="math inline">\(\mathrm
+e^{it\mathbb H&#39;}W\mathrm e^{-it\mathbb H}=(\mathrm e^{it\mathbb
+H&#39;}W\mathrm e^{-it\mathbb H&#39;})\,V(t)\)</span> with <span
+class="math inline">\(V(t)=\mathrm e^{it\mathbb H&#39;}\mathrm
+e^{-it\mathbb H}\)</span>, whose left generator <span
+class="math inline">\(G(t)=\mathrm e^{it\mathbb H&#39;}(\mathbb
+H&#39;-\mathbb H)\mathrm e^{-it\mathbb H&#39;}\)</span> is a sum of at
+most <span class="math inline">\(N_R\lvert \partial R\rvert\)</span>
+terms of norm at most <span class="math inline">\(2J\)</span>, each
+supported within distance <span class="math inline">\(R\)</span> of a
+cut edge of <span class="math inline">\(R\)</span>. Lemma <a
+href="#lem:LR" data-reference-type="ref" data-reference="lem:LR">15</a>
+applied to <span class="math inline">\(W\)</span> (support <span
+class="math inline">\(Q\)</span>, norm one) and to the terms of <span
+class="math inline">\(G(t)\)</span> gives Hermitian localized
+approximants <span class="math inline">\(W_\ell(t)=\mathcal
+P_{N_\ell(Q)}\bigl(\mathrm e^{it\mathbb H&#39;}W\mathrm e^{-it\mathbb
+H&#39;}\bigr)\)</span> and <span
+class="math inline">\(G_\ell(t)=\mathcal P_{N_\ell(Z_R)}G(t)\)</span>
+with <span class="math display">\[\lVert \mathrm e^{it\mathbb
+H&#39;}W\mathrm e^{-it\mathbb H&#39;}-W_\ell(t)\rVert+\lVert
+G(t)-G_\ell(t)\rVert\le CL\,\mathrm e^{v\lvert
+t\rvert-\mu\ell},\]</span> where the single factor <span
+class="math inline">\(L\)</span> bounds <span
+class="math inline">\(\lvert Q\rvert\)</span> and <span
+class="math inline">\(\lvert \partial R\rvert\)</span>. Let <span
+class="math inline">\(V_\ell(t)\)</span> be the unitary evolution
+generated by <span class="math inline">\(G_\ell(t)\)</span>, supported
+in <span class="math inline">\(N_\ell(Z_R)\)</span>; Duhamel’s formula
+gives <span class="math inline">\(\lVert V(t)-V_\ell(t)\rVert\le
+CL\lvert t\rvert\mathrm e^{v\lvert t\rvert-\mu\ell}\)</span>. Hence
+<span class="math inline">\(W_\ell(t)V_\ell(t)\)</span> is a contraction
+supported in <span class="math inline">\(S:=N_\ell(Q\cup Z_R)\)</span>
+which approximates the integrand uniformly for <span
+class="math inline">\(\lvert t\rvert\le T\)</span> with error <span
+class="math inline">\(CL(1+T)\mathrm e^{vT-\mu\ell}\)</span>. Take <span
+class="math inline">\(\ell=\lceil K_{\mathrm{loc}}B_*\rceil\)</span>
+with <span class="math inline">\(K_{\mathrm{loc}}\)</span> fixed large
+enough (after <span class="math inline">\(T_0\)</span>) that this error
+is at most <span class="math inline">\(\mathrm
+e^{-10b}L^{-r_*}\)</span>, using <span class="math inline">\(\log L\le
+B_*\)</span> and <span class="math inline">\(\log(1+T)\le
+C+B_*\)</span>. Averaging the localized integrands against the truncated
+Gaussian gives a contraction <span
+class="math inline">\(M_{\mathrm{loc}}\)</span> supported in <span
+class="math inline">\(S\)</span> with <span
+class="math display">\[\tag{27}
+\lVert M_{\mathrm{loc}}\Psi-z\Phi\rVert,\ \lVert
+M_{\mathrm{loc}}^\dagger\Phi-z\Psi\rVert\le C\mathrm
+e^{-10b}L^{-r_*}.\]</span></p>
+<p><em>Polar decomposition.</em> Put <span
+class="math inline">\(D=M_{\mathrm{loc}}/z\)</span>. Then <span
+class="math inline">\(\lVert D\rVert\le\mathrm e^{2b}\)</span>, <span
+class="math inline">\(\lVert D\Psi-\Phi\rVert,\lVert
+D^\dagger\Phi-\Psi\rVert\le C\mathrm e^{-8b}L^{-r_*}\)</span>, and
+writing <span class="math inline">\((D^\dagger
+D-\mathrm{I})\Psi=D^\dagger(D\Psi-\Phi)+(D^\dagger\Phi-\Psi)\)</span>,
+<span class="math inline">\(\lVert (D^\dagger D-\mathrm{I})\Psi\rVert\le
+C\mathrm e^{-6b}L^{-r_*}\)</span>. The polar partial isometry of the
+square operator <span class="math inline">\(D\)</span> on <span
+class="math inline">\(\mathcal H_S\)</span> extends to a unitary <span
+class="math inline">\(U\)</span> on <span class="math inline">\(\mathcal
+H_S\)</span> (its two support spaces have equal dimension), tensored
+with the identity elsewhere. Since <span class="math inline">\((\sqrt
+x-1)^2\le(x-1)^2\)</span> for <span
+class="math inline">\(x\ge0\)</span>, <span class="math inline">\(\lVert
+(U-D)\Psi\rVert=\lVert (\mathrm{I}-\lvert D\rvert)\Psi\rVert\le\lVert
+(\mathrm{I}-D^\dagger D)\Psi\rVert\)</span>, so <span
+class="math display">\[\tag{28}
+\lVert U\Psi-\Phi\rVert\le C\mathrm e^{-6b}L^{-r_*}\le
+CL^{-r_*}.\]</span></p>
+<p><em>Support and conclusion.</em> Every site of <span
+class="math inline">\(Q\)</span> is more than <span
+class="math inline">\(w\)</span> from <span
+class="math inline">\(R_0\)</span> and from <span
+class="math inline">\(C_0\)</span>. If <span
+class="math inline">\(\{x,y\}\)</span> crosses <span
+class="math inline">\(R\)</span> with <span class="math inline">\(x\in
+R\)</span>, <span class="math inline">\(y\notin R\)</span>, then <span
+class="math inline">\(y\)</span> is more than <span
+class="math inline">\(w\)</span> from <span
+class="math inline">\(R_0\)</span> so <span
+class="math inline">\(x\)</span> is more than <span
+class="math inline">\(w-1\)</span> from <span
+class="math inline">\(R_0\)</span>; and <span
+class="math inline">\(x\notin C\)</span> is more than <span
+class="math inline">\(w\)</span> from <span
+class="math inline">\(C_0\)</span>, so <span
+class="math inline">\(y\)</span> is more than <span
+class="math inline">\(w-1\)</span> from <span
+class="math inline">\(C_0\)</span>. Choosing <span
+class="math inline">\(C_p&gt;K_{\mathrm{loc}}+3\)</span> makes <span
+class="math inline">\(S=N_\ell(Q\cup Z_R)\)</span> disjoint from both
+cores in both replicas. Thus <span class="math inline">\(U\)</span> does
+not change the joint two-replica marginal on <span
+class="math inline">\(R_0C_0\)</span>. In <span
+class="math inline">\(\Phi=F_R\Psi\)</span>, the marginal on <span
+class="math inline">\(R_0\)</span> and <span
+class="math inline">\(C_0\)</span> of the <em>first</em> replica is
+<span class="math inline">\(\rho_{R_0}\otimes\rho_{C_0}\)</span>,
+because <span class="math inline">\(R_0\)</span> was swapped in from the
+second replica and <span class="math inline">\(C_0\)</span> was not. By
+(28) and contractivity of the
+partial trace, the original marginal <span
+class="math inline">\(\rho_{R_0C_0}\)</span> is within trace distance
+<span class="math inline">\(CL^{-r_*}\)</span> of <span
+class="math inline">\(\rho_{R_0}\otimes\rho_{C_0}\)</span>. The
+continuity bound <span class="math inline">\(\lvert
+S(A|B)_\rho-S(A|B)_\sigma\rvert\le C\sqrt\delta\log(\mathrm
+e\dim\mathcal H_A)\)</span> for <span
+class="math inline">\(\delta=\frac12\lVert \rho-\sigma\rVert_1\)</span>
+<span class="citation" data-cites="Winter2016"></span>, applied to <span
+class="math inline">\(I(R_0:C_0)=S(R_0)-S(R_0|C_0)\)</span> with <span
+class="math inline">\(\log\dim\mathcal H_{R_0}\le L\log q\)</span>,
+gives <span class="math inline">\(I_\Omega(R_0:C_0)\le
+CL^{1-r_*/2}=CL^{-p-4}\le L^{-p}\)</span> for large <span
+class="math inline">\(L\)</span>. ◻</p>
+</div>
+<h4 id="sec:logsep2">The one-dimensional separation lemma</h4>
+<blockquote>
+<p><strong>In words.</strong> Combine the two previous facts. An
+interval <span class="math inline">\(R\)</span> has entropy at most
+<span class="math inline">\(C_{\mathrm{int}}\)</span>, so its mutual
+information with anything is at most <span
+class="math inline">\(2C_{\mathrm{int}}\)</span>. Feed this constant
+into the reset lemma: any interval <span
+class="math inline">\(T\)</span> and any set <span
+class="math inline">\(E\)</span> at distance of order <span
+class="math inline">\(\log L\)</span> from <span
+class="math inline">\(T\)</span> are independent up to <span
+class="math inline">\(L^{-p}\)</span>. This replaces the entire
+Section 3 of the two-dimensional paper (coarse collar, cell conditional
+information, angular induction), and it holds for intervals of every
+length, from a few sites to the whole chain.</p>
+</blockquote>
+<p><strong>Precisely.</strong></p>
+<div id="lem:logsep" class="lemma">
+<p><strong>Lemma 8.5</strong> (Information at logarithmic separation).
+<em>For every <span class="math inline">\(p&gt;0\)</span> and <span
+class="math inline">\(k_0\ge1\)</span> there is <span
+class="math inline">\(D_p=D_p(q,R,J,\Delta,k_0)\)</span> such that for
+all sufficiently large <span class="math inline">\(L\)</span>, every
+<span class="math inline">\(T\subseteq\Lambda\)</span> that is a union
+of at most <span class="math inline">\(k_0\)</span> intervals, and every
+<span class="math inline">\(E\subseteq\Lambda\)</span> with <span
+class="math inline">\(\operatorname{dist}(T,E)\ge D_p\log L\)</span>,
+<span class="math display">\[I_\Omega(T:E)\le L^{-p}.\]</span></em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let <span
+class="math inline">\(b=4k_0C_{\mathrm{int}}\)</span>, <span
+class="math inline">\(w=C_p(1+b+\log L)\)</span> from Lemma <a
+href="#lem:reset" data-reference-type="ref"
+data-reference="lem:reset">16</a>, and <span
+class="math inline">\(D_p\log L\ge 3w+3\)</span>. Put <span
+class="math inline">\(R=T^{+(w+1)}\)</span>, a union of at most <span
+class="math inline">\(k_0\)</span> intervals, <span
+class="math inline">\(C=\Lambda\setminus T^{+(2w+2)}\)</span>, <span
+class="math inline">\(R_0=T\)</span>, <span
+class="math inline">\(C_0=E\)</span>. Then <span
+class="math inline">\(\operatorname{dist}(R_0,\Lambda\setminus R)\ge
+w+1\)</span>, <span
+class="math inline">\(\operatorname{dist}(C_0,\Lambda\setminus C)\ge
+w+1\)</span>, and <span class="math inline">\(I(R:C)\le 2S(R)\le
+2k_0C_{\mathrm{int}}\le b\)</span> by Theorem <a href="#thm:A"
+data-reference-type="ref" data-reference="thm:A">1</a> (subadditivity
+over the at most <span class="math inline">\(k_0\)</span> intervals of
+<span class="math inline">\(R\)</span>, and <span
+class="math inline">\(I(R:C)=S(R)+S(C)-S(RC)\le 2S(R)\)</span> by the
+Araki–Lieb inequality). Lemma <a href="#lem:reset"
+data-reference-type="ref" data-reference="lem:reset">16</a> gives the
+claim. ◻</p>
+</div>
+<div id="rem:LRfree" class="remark">
+<p><strong>Remark 8.6</strong> (A route without Lieb–Robinson bounds).
+The reset lemma is the only place in Part <a href="#part:mps"
+data-reference-type="ref" data-reference="part:mps"></a> where a
+Lieb–Robinson bound is used. It can be replaced by the amplification
+argument of <span class="citation" data-cites="AL"></span>, which uses
+exact positive quasi-local constraints with stretched-exponential tails
+<span class="math inline">\(\mathrm e^{-cl^\alpha}\)</span>, <span
+class="math inline">\(\alpha=p/(p+1)\)</span>, random products of the
+associated contractions, and a polar decomposition, and needs no
+propagation bound for the unitary dynamics. With the area law as input,
+that argument gives <span class="math inline">\(I(T:E)\le
+L^{-M}\)</span> for <span class="math inline">\(E\)</span> beyond
+distance <span class="math inline">\(C(\log L)^{1/\alpha}\)</span> of an
+interval <span class="math inline">\(T\)</span>. Running the protocol
+below with blocks of that size yields a matrix product state with bond
+dimension <span class="math inline">\(\exp(O((\log
+L)^{1/\alpha}))\)</span>, quasi-polynomial for every fixed <span
+class="math inline">\(p\)</span>, and polynomial only in the limit.
+Exactly polynomial bond dimension through the protocol requires the
+logarithmic separation of Lemma <a href="#lem:logsep"
+data-reference-type="ref" data-reference="lem:logsep">17</a>.</p>
+</div>
+<h3 id="sec:moves">Distributed constructions and the three moves</h3>
+<blockquote>
+<p><strong>In words.</strong> Think of a bookkeeping game. There are
+<em>parties</em>; each owns a set of registers (tensor factors), which
+may include whole copies of the ground vector held privately. A
+<em>gate</em> is a linear contraction applied to the registers of a few
+parties. A gate is <em>private</em> if it touches one party only;
+private gates are free. A non-private gate is charged only through two
+numbers: how many parties it involves, and how many such gates each
+party ever takes part in. In addition every non-private gate must have a
+<em>polynomial expansion</em>: it must be a sum of polynomially many
+terms, each a composition of private maps, preparations of normalized
+vectors shared by two parties, contractions by normalized covectors
+shared by two parties, and transfers of polynomial-dimensional
+registers. The dimensions of the shared vectors are unrestricted.</p>
+<p>The point of the game is that its final physical density admits a
+tensor network with polynomial links on the party graph (Section <a
+href="#sec:compression" data-reference-type="ref"
+data-reference="sec:compression">5</a>), whatever the private dimensions
+were. So we are free to prepare the ground vector exactly at one party
+and to use arbitrarily entangled bipartite resources; the price is only
+paid in participation counts.</p>
+<p>A <em>sheet</em> is a full set of site registers with an assignment
+of owners; its reference vector is a copy of the ground vector placed on
+those registers in canonical site coordinates (ownership does not
+permute sites). The three moves change the ownership of a sheet or of
+two sheets while keeping the actual vector within <span
+class="math inline">\(O(L^{-p/2})\)</span> of the product of the
+reference vectors.</p>
+</blockquote>
+<p><strong>Precisely.</strong> A <em>distributed construction</em> of
+size parameter <span class="math inline">\(L\)</span> consists of a
+finite set of parties, each with an initial finite-dimensional register
+space in a normalized product initial vector, and a sequence of gates,
+each a linear contraction between specified input and output register
+spaces of the participating parties, the other registers being
+spectators. Registers to be discarded are retained until a final partial
+trace. An <em>allowed monomial</em> is a composition of private
+contractions, preparations of normalized vectors shared between two
+participating parties, contractions by normalized covectors shared
+between two participating parties, and identity transfers of registers
+of uniformly polynomial dimension. A non-private gate is
+<em>admissible</em> if it is a sum of uniformly polynomially many
+allowed monomials with uniformly polynomially bounded scalar
+coefficients, each monomial containing a bounded number of shared
+vectors, shared covectors and transfers; a contraction within <span
+class="math inline">\(L^{-a}\)</span> of such a sum, for a fixed <span
+class="math inline">\(a&gt;0\)</span>, is also admissible after
+rescaling by <span class="math inline">\(1+L^{-a}\)</span>. A
+<em>bounded change</em> is a sequence of a bounded number of admissible
+gates on a bounded number of parties.</p>
+<p>A sheet is <span class="math inline">\(\mathcal
+H_\Lambda=\bigotimes_{x\in\Lambda}\mathbb C^q\)</span> with an owner
+assigned to each site; its reference vector is <span
+class="math inline">\(\Omega\)</span> in these registers.</p>
+<div id="lem:birth" class="lemma">
+<p><strong>Lemma 9.1</strong> (Birth and death). <em>In a sheet, let
+<span class="math inline">\(T\)</span> be a set of sites owned by <span
+class="math inline">\(P_\circ\)</span>, and let <span
+class="math inline">\(E=\{x:\text{the owner of }x\text{ is not
+}P_\circ\}\)</span>, <span
+class="math inline">\(U=\Lambda\setminus(T\cup E)\)</span>. If <span
+class="math inline">\(I_\Omega(T:E)\le L^{-2p}\)</span>, then the change
+of owner of <span class="math inline">\(T\)</span> from <span
+class="math inline">\(P_\circ\)</span> to any party <span
+class="math inline">\(Q_\circ\)</span> (a <em>birth</em>) is a bounded
+change involving <span class="math inline">\(P_\circ,Q_\circ\)</span>
+only, consisting of private maps and one shared normalized vector, with
+reference-vector error at most <span
+class="math inline">\(L^{-p}\)</span>. The reverse change (a
+<em>death</em>: <span class="math inline">\(T\)</span> returns from
+<span class="math inline">\(Q_\circ\)</span> to <span
+class="math inline">\(P_\circ\)</span>) is a bounded change with the
+same error whenever the ownership and information conditions hold in the
+sheet <em>after</em> the death; it uses one shared normalized covector
+instead.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let <span class="math inline">\(V,s,s&#39;\)</span>
+be given by Lemma <a href="#lem:splitting" data-reference-type="ref" data-reference="lem:splitting">8.2</a> for <span
+class="math inline">\((T,U,E)\)</span>, put <span
+class="math inline">\(\mathcal V=\mathrm{I}_{TE}\otimes V\)</span> and
+<span class="math inline">\(\Pi=|s\rangle\langle s|_{T\mathcal
+B_T}\otimes\mathrm{I}_{E\mathcal B_E}\)</span>. All of <span
+class="math inline">\(T,U\)</span> belong to <span
+class="math inline">\(P_\circ\)</span>. At <span
+class="math inline">\(P_\circ\)</span> apply <span
+class="math inline">\(V\)</span> on <span
+class="math inline">\(U\)</span>; contract <span
+class="math inline">\(T\mathcal B_T\)</span> with <span
+class="math inline">\(\langle s|\)</span> (private, both at <span
+class="math inline">\(P_\circ\)</span>); supply the shared vector <span
+class="math inline">\(s\)</span> on <span
+class="math inline">\(T\mathcal B_T\)</span> with <span
+class="math inline">\(T\)</span> now owned by <span
+class="math inline">\(Q_\circ\)</span> and <span
+class="math inline">\(\mathcal B_T\)</span> by <span
+class="math inline">\(P_\circ\)</span>; apply <span
+class="math inline">\(V^\dagger\)</span> at <span
+class="math inline">\(P_\circ\)</span>. The composite is the Hermitian
+contraction <span class="math inline">\(B=\mathcal V^\dagger\Pi\mathcal
+V\)</span> and <span class="math inline">\(\lVert
+(B-\mathrm{I})\Omega\rVert\le\lVert (\Pi-\mathrm{I})\mathcal
+V\Omega\rVert=\lVert (\Pi-\mathrm{I})(\mathcal V\Omega-s\otimes
+s&#39;)\rVert\le L^{-p}\)</span>. For the death, apply <span
+class="math inline">\(V\)</span> at <span
+class="math inline">\(P_\circ\)</span>, use the shared covector <span
+class="math inline">\(\langle s|\)</span> on <span
+class="math inline">\(T\mathcal B_T\)</span> held by <span
+class="math inline">\(Q_\circ,P_\circ\)</span>, reinsert <span
+class="math inline">\(s\)</span> wholly at <span
+class="math inline">\(P_\circ\)</span>, and apply <span
+class="math inline">\(V^\dagger\)</span>: the same operator <span
+class="math inline">\(B\)</span> with reversed ownership. ◻</p>
+</div>
+<div id="lem:exchange" class="lemma">
+<p><strong>Lemma 9.2</strong> (Two-sheet exchange). <em>Consider two
+sheets and an interval <span
+class="math inline">\(Y\subseteq\Lambda\)</span>. Inside <span
+class="math inline">\(Y\)</span> exchange the two ownership assignments
+(sheet 1 at <span class="math inline">\(x\in Y\)</span> gets the owner
+sheet 2 had, and conversely); outside <span
+class="math inline">\(Y\)</span> keep both. Let <span
+class="math inline">\(P_\circ\)</span> be a party, <span
+class="math display">\[Z=\{x:\text{the two owners of }x\text{ are not
+both }P_\circ\},\qquad
+T=Z\cap Y,\quad E=Z\setminus Y,\quad U=\Lambda\setminus Z .\]</span> If
+<span class="math inline">\(I_\Omega(T:E)\le L^{-2p}\)</span>, the
+exchange is implemented by renaming of registers (no register changes
+party) and private contractions at <span
+class="math inline">\(P_\circ\)</span>, with error at most <span
+class="math inline">\(4L^{-p}\)</span> between the products of the old
+and of the new reference vectors.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let <span class="math inline">\(\mathcal R\)</span>
+rename the two sheets inside <span class="math inline">\(Y\)</span>: a
+private identification of tensor factors, since the new owner of sheet 1
+at <span class="math inline">\(x\in Y\)</span> is the old owner of sheet
+2 there. In canonical coordinates <span class="math inline">\(\mathcal
+R\)</span> acts as the swap <span class="math inline">\(F_{Y}\)</span>
+of the two sheets on <span class="math inline">\(Y\)</span>. All
+registers of <span class="math inline">\(U\)</span> on both sheets are
+held by <span class="math inline">\(P_\circ\)</span> before and after.
+Let <span class="math inline">\(V,s,s&#39;\)</span> be given by Lemma <a
+href="#lem:splitting" data-reference-type="ref"
+data-reference="lem:splitting">14</a> for <span
+class="math inline">\((T,U,E)\)</span>, <span
+class="math inline">\(\mathcal V=\mathrm{I}_{TE}\otimes V\)</span>, and
+let <span class="math inline">\(D_U=(V^{\otimes2})^\dagger F_{\mathcal
+B_T}V^{\otimes2}\)</span> on the two copies of <span
+class="math inline">\(U\)</span>, a private contraction at <span
+class="math inline">\(P_\circ\)</span> (apply <span
+class="math inline">\(V\)</span> to both copies, swap the two <span
+class="math inline">\(\mathcal B_T\)</span> factors, apply the
+adjoints). With <span class="math inline">\(A=Y\cap U\)</span>, after
+<span class="math inline">\(\mathcal R\)</span> apply the private swap
+<span class="math inline">\(F_A\)</span> and then <span
+class="math inline">\(D_U\)</span>. Since <span
+class="math inline">\(Y=T\sqcup A\)</span>, the net action on the two
+copies is <span class="math display">\[D_UF_AF_Y=D_UF_T=(\mathcal
+V^{\otimes2})^\dagger F_{T\mathcal B_T}\mathcal V^{\otimes2},\]</span>
+using that <span class="math inline">\(F_T\)</span> acts outside <span
+class="math inline">\(U\)</span> and commutes through <span
+class="math inline">\(V^{\otimes2}\)</span>. Put <span
+class="math inline">\(\zeta=s\otimes s&#39;\)</span> and <span
+class="math inline">\(\delta=\lVert \mathcal V\Omega-\zeta\rVert\le
+L^{-p}\)</span>. Then <span class="math inline">\(\lVert (\mathcal
+V\Omega)^{\otimes 2}-\zeta^{\otimes 2}\rVert\le2\delta\)</span>, <span
+class="math inline">\(\zeta^{\otimes2}\)</span> is fixed by <span
+class="math inline">\(F_{T\mathcal B_T}\)</span> (it swaps two identical
+factors <span class="math inline">\(s\)</span>), and <span
+class="math inline">\((\mathcal V^{\otimes2})^\dagger\mathcal
+V^{\otimes2}=\mathrm{I}\)</span>, so <span
+class="math display">\[\bigl\|(\mathcal V^{\otimes2})^\dagger
+F_{T\mathcal B_T}\mathcal
+V^{\otimes2}\Omega^{\otimes2}-\Omega^{\otimes2}\bigr\|
+\le\lVert (F_{T\mathcal B_T}-\mathrm{I})\bigl((\mathcal
+V\Omega)^{\otimes 2}-\zeta^{\otimes 2}\bigr)\rVert\le4\delta .\]</span>
+In canonical coordinates both the old and the new reference vector are
+<span class="math inline">\(\Omega\otimes\Omega\)</span> (the sheets are
+relabeled, not moved), which is the claim. ◻</p>
+</div>
+<div class="remark">
+<p><strong>Remark 21</strong>. In the two-dimensional source these
+lemmas carry encoded holes and tags at the points where three owners
+meet. On a line, the closure of two intervals with different owners
+meets at most two owners at any point, so there are no such points and
+no encodings. This is the first of the two reasons why the adaptive
+patch constraints of <span class="citation" data-cites="PP"></span> are
+not needed in one dimension.</p>
+</div>
+<h3 id="sec:sweep">The sweep protocol</h3>
+<blockquote>
+<p><strong>In words.</strong> Here is the schedule. Divide the chain
+into consecutive blocks of <span class="math inline">\(t\)</span> sites,
+where <span class="math inline">\(t=20w\)</span> and <span
+class="math inline">\(w\)</span> is the logarithmic separation of
+Lemma <a href="#lem:logsep" data-reference-type="ref" data-reference="lem:logsep">8.5</a>; the last block is whatever is left
+over, of length less than <span class="math inline">\(3t\)</span>. At
+the start, a single party <span class="math inline">\(R_0\)</span> holds
+everything. At step <span class="math inline">\(k\)</span> the picture
+is <span class="math display">\[P_1\,|\,P_2\,|\cdots|\,P_k\,|\,R_k
+,\]</span> with <span class="math inline">\(P_i\)</span> owning block
+<span class="math inline">\(i\)</span> and the <em>remainder</em> party
+<span class="math inline">\(R_k\)</span> owning the rest of the chain.
+Two births, both allowed because they leave a margin of <span
+class="math inline">\(w\)</span> to any other owner, create the next
+remainder <span class="math inline">\(R_{k+1}\)</span> on everything
+beyond block <span class="math inline">\(k+1\)</span> plus a margin, and
+the next block owner <span class="math inline">\(P_{k+1}\)</span> on the
+interior of block <span class="math inline">\(k+1\)</span>. What remains
+of <span class="math inline">\(R_k\)</span> are two bands of width <span
+class="math inline">\(w\)</span>: one wedged between <span
+class="math inline">\(P_k\)</span> and <span
+class="math inline">\(P_{k+1}\)</span>, one between <span
+class="math inline">\(P_{k+1}\)</span> and <span
+class="math inline">\(R_{k+1}\)</span>. Each band must be dissolved, and
+this is the only nontrivial step.</p>
+<p>A band <span class="math inline">\(A\)</span> wedged between two
+different owners <span class="math inline">\(C\)</span> (left) and <span
+class="math inline">\(B\)</span> (right) cannot simply die into <span
+class="math inline">\(B\)</span>: the band touches <span
+class="math inline">\(C\)</span>, so it is not informationally
+independent of the non-<span class="math inline">\(B\)</span> owners.
+The two-dimensional paper solves this along every edge of every square
+with a fixed sequence of moves using an auxiliary copy of the ground
+vector, and the sequence transplants verbatim. In units of the band
+width, with the band at <span
+class="math inline">\(0&lt;x&lt;1\)</span>, <span
+class="math inline">\(C\)</span> to the left and <span
+class="math inline">\(B\)</span> to the right:</p>
+<ol>
+<li><p>Create a fresh copy of the ground vector, all of it owned by
+<span class="math inline">\(C\)</span>. On it, birth <span
+class="math inline">\(B\)</span> on <span
+class="math inline">\((-6,-1)\)</span>, then <span
+class="math inline">\(A\)</span> on <span
+class="math inline">\((-5,-2)\)</span>, then <span
+class="math inline">\(C\)</span> on <span
+class="math inline">\((-4,-3)\)</span>. The auxiliary word is <span
+class="math inline">\(C\,|\,B\,|\,A\,|\,C\,|\,A\,|\,B\,|\,C\)</span>.</p></li>
+<li><p>Exchange the two sheets inside the window <span
+class="math inline">\((-7,-\tfrac72)\)</span>. Both ends of the window
+are in places where both sheets are owned by <span
+class="math inline">\(C\)</span>, and the only non-<span
+class="math inline">\(C\)</span> material inside the window is separated
+from the non-<span class="math inline">\(C\)</span> material outside it
+by a margin <span class="math inline">\(w\)</span>. The main sheet now
+reads <span
+class="math inline">\(C\,|\,B\,|\,A\,|\,C\,|\,A\,|\,B\)</span> with
+interfaces at <span class="math inline">\(-6,-5,-4,0,1\)</span>, and the
+auxiliary sheet is retired.</p></li>
+<li><p>On the main sheet: the <span class="math inline">\(C\)</span>
+band <span class="math inline">\((-4,0)\)</span> is flanked by <span
+class="math inline">\(A\)</span> on both sides, so it dies into <span
+class="math inline">\(A\)</span>; the <span
+class="math inline">\(A\)</span> band <span
+class="math inline">\((-5,1)\)</span> is then flanked by <span
+class="math inline">\(B\)</span> on both sides and dies into <span
+class="math inline">\(B\)</span>. The word is <span
+class="math inline">\(C\,|\,B\)</span> with the interface at <span
+class="math inline">\(-6\)</span>. Finally birth <span
+class="math inline">\(C\)</span> on <span
+class="math inline">\((-3,0)\)</span> inside <span
+class="math inline">\(B\)</span> and let the <span
+class="math inline">\(B\)</span> band <span
+class="math inline">\((-6,-3)\)</span> die into <span
+class="math inline">\(C\)</span>: the interface is back at <span
+class="math inline">\(0\)</span> and the band belongs to <span
+class="math inline">\(B\)</span>.</p></li>
+</ol>
+<p>Each move in this list has its changed region at distance at least
+<span class="math inline">\(w\)</span> from every other owner, so
+Lemma <a href="#lem:logsep" data-reference-type="ref" data-reference="lem:logsep">8.5</a> supplies the information hypothesis
+of Lemma <a href="#lem:birth" data-reference-type="ref" data-reference="lem:birth">9.1</a> or <a href="#lem:exchange"
+data-reference-type="ref" data-reference="lem:exchange">20</a>. Only
+three parties take part. Since a party is born once, dissolves the bands
+on its two sides once, and is otherwise a spectator, every party
+participates in a bounded number of moves.</p>
+<p>Why a sweep rather than the dyadic hierarchy of the source? Because
+the final network must be placed on the chain. A link of the party
+network joins two parties, and every link crossing a given bond of the
+chain contributes a factor to that bond’s dimension. In a dyadic
+hierarchy, every scale has a link crossing every bond (the tree of
+intervals has cutwidth <span class="math inline">\(\log L\)</span>), so
+the bond dimension would be polynomial to the power <span
+class="math inline">\(\log L\)</span>. In the sweep every link joins
+parties attached to blocks at most two apart, and a bounded number of
+links cross each bond.</p>
+</blockquote>
+<p><strong>Precisely.</strong> Fix <span
+class="math inline">\(p=12\)</span>. Let <span
+class="math inline">\(D_{24}\)</span> be the constant of Lemma <a
+href="#lem:logsep" data-reference-type="ref"
+data-reference="lem:logsep">17</a> with exponent <span
+class="math inline">\(2p=24\)</span> and <span
+class="math inline">\(k_0=1\)</span>, and put <span
+class="math display">\[\tag{29}
+w=\lceil D_{24}\log L\rceil,\qquad t=20w,\qquad
+k_*=\max\{k\ge0:\ L-kt\ge 3t\},\]</span> with the blocks <span
+class="math inline">\(B_i=[(i-1)t+1,\,it]\)</span> for <span
+class="math inline">\(1\le i\le k_*\)</span> and the last block <span
+class="math inline">\(B_{k_*+1}=[k_*t+1,L]\)</span>, of length in <span
+class="math inline">\([3t,4t)\)</span>. We assume <span
+class="math inline">\(L\)</span> large enough that <span
+class="math inline">\(t\ge 20\)</span> and <span
+class="math inline">\(k_*\ge0\)</span> (small <span
+class="math inline">\(L\)</span> are handled in Section <a
+href="#sec:routing" data-reference-type="ref"
+data-reference="sec:routing">6</a>). For a band <span
+class="math inline">\([a,a+w)\)</span> with <span
+class="math inline">\(C\)</span> owning <span
+class="math inline">\([a-8w,a)\)</span> and <span
+class="math inline">\(B\)</span> owning <span
+class="math inline">\([a+w,a+2w)\)</span> (and possibly more), write
+<span class="math inline">\(x=(\cdot-a)/w\)</span> for the scaled
+coordinate.</p>
+<div id="con:band" class="construction">
+<p><strong>Construction 10.1</strong> (Band dissolution). Let the main
+sheet read <span class="math inline">\(C\,|\,A\,|\,B\)</span> near <span
+class="math inline">\(a\)</span>: <span class="math inline">\(C\)</span>
+on <span class="math inline">\(x&lt;0\)</span> down to at least <span
+class="math inline">\(x=-8\)</span>, <span
+class="math inline">\(A\)</span> on <span
+class="math inline">\(0&lt;x&lt;1\)</span>, <span
+class="math inline">\(B\)</span> on <span
+class="math inline">\(x&gt;1\)</span> up to at least <span
+class="math inline">\(x=2\)</span>, where <span
+class="math inline">\(A,B,C\)</span> are three distinct parties.
+Perform:</p>
+<ol>
+<li><p>Prepare an auxiliary sheet, a fresh copy of <span
+class="math inline">\(\Omega\)</span> held entirely by <span
+class="math inline">\(C\)</span> (a private initialization). Birth <span
+class="math inline">\(B\)</span> on <span
+class="math inline">\((-6,-1)\)</span>; birth <span
+class="math inline">\(A\)</span> on <span
+class="math inline">\((-5,-2)\)</span>; birth <span
+class="math inline">\(C\)</span> on <span
+class="math inline">\((-4,-3)\)</span>.</p></li>
+<li><p>Exchange the two sheets inside <span
+class="math inline">\(Y=(-7,-\tfrac72)\)</span> with <span
+class="math inline">\(P_\circ=C\)</span>. Retire the auxiliary sheet
+(its registers stay idle at their owners).</p></li>
+<li><p>On the main sheet: death of the <span
+class="math inline">\(C\)</span> band <span
+class="math inline">\((-4,0)\)</span> into <span
+class="math inline">\(A\)</span>; death of the <span
+class="math inline">\(A\)</span> band <span
+class="math inline">\((-5,1)\)</span> into <span
+class="math inline">\(B\)</span>; birth of <span
+class="math inline">\(C\)</span> on <span
+class="math inline">\((-3,0)\)</span> inside <span
+class="math inline">\(B\)</span>; death of the <span
+class="math inline">\(B\)</span> band <span
+class="math inline">\((-6,-3)\)</span> into <span
+class="math inline">\(C\)</span>.</p></li>
+</ol>
+<p>If there is no left owner <span class="math inline">\(C\)</span> (the
+band starts at site <span class="math inline">\(1\)</span>), replace the
+whole construction by a single death of the band into <span
+class="math inline">\(B\)</span>.</p>
+</div>
+<div id="lem:band" class="lemma">
+<p><strong>Lemma 10.2</strong> (The band dissolution is a bounded change).
+<em>For all sufficiently large <span class="math inline">\(L\)</span>,
+each of the nine moves in Construction <a href="#con:band"
+data-reference-type="ref" data-reference="con:band">22</a> satisfies the
+information hypothesis of Lemma <a href="#lem:birth"
+data-reference-type="ref" data-reference="lem:birth">19</a> or Lemma <a
+href="#lem:exchange" data-reference-type="ref"
+data-reference="lem:exchange">20</a> with exponent <span
+class="math inline">\(2p=24\)</span>, so that the construction is a
+bounded change on the parties <span class="math inline">\(A,B,C\)</span>
+with total reference-vector error at most <span
+class="math inline">\(12L^{-12}\)</span>. Afterwards the main sheet
+reads <span class="math inline">\(C\,|\,B\)</span> with the interface at
+<span class="math inline">\(x=0\)</span>, and all other ownership is
+unchanged.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> We check each move; distances are in units of <span
+class="math inline">\(w\ge D_{24}\log L\)</span>, and every changed
+region is an interval, so Lemma <a href="#lem:logsep"
+data-reference-type="ref" data-reference="lem:logsep">17</a> applies.
+(i) The first auxiliary birth has <span
+class="math inline">\(E=\varnothing\)</span> and needs no information
+bound. The second has changed region <span
+class="math inline">\((-5,-2)\)</span> inside the <span
+class="math inline">\(B\)</span> band <span
+class="math inline">\((-6,-1)\)</span>, and <span
+class="math inline">\(E\)</span>, the non-<span
+class="math inline">\(B\)</span> sites, is at distance <span
+class="math inline">\(1\)</span>. The third has changed region <span
+class="math inline">\((-4,-3)\)</span> inside <span
+class="math inline">\((-5,-2)\)</span>, distance <span
+class="math inline">\(1\)</span>. The auxiliary word is now <span
+class="math inline">\(C|B|A|C|A|B|C\)</span> at <span
+class="math inline">\(-6,-5,-4,-3,-2,-1\)</span>. (ii) The main sheet is
+<span class="math inline">\(C\)</span> on <span
+class="math inline">\(x&lt;0\)</span> and the auxiliary sheet is <span
+class="math inline">\(C\)</span> on <span
+class="math inline">\(x&lt;-6\)</span>, <span
+class="math inline">\((-4,-3)\)</span> and <span
+class="math inline">\(x&gt;-1\)</span>. Hence <span
+class="math inline">\(Z\cap Y=(-6,-4)\)</span> (auxiliary <span
+class="math inline">\(B\)</span> and <span
+class="math inline">\(A\)</span>) and <span
+class="math inline">\(Z\setminus Y=(-3,-1)\cup[0,\infty)\)</span>, at
+distance <span class="math inline">\(1\)</span> from <span
+class="math inline">\(T\)</span>. After the exchange the main sheet
+inside <span class="math inline">\(Y\)</span> carries the auxiliary
+assignment, giving <span class="math inline">\(C|B|A|C|A|B\)</span> at
+<span class="math inline">\(-6,-5,-4,0,1\)</span>; the auxiliary sheet
+inside <span class="math inline">\(Y\)</span> is <span
+class="math inline">\(C\)</span>. (iii) The <span
+class="math inline">\(C\)</span> band <span
+class="math inline">\((-4,0)\)</span> is surrounded by <span
+class="math inline">\(A\)</span> on <span
+class="math inline">\((-5,-4)\cup(0,1)\)</span>, and the non-<span
+class="math inline">\(A\)</span> sites after the death are <span
+class="math inline">\(x\le-5\)</span> and <span
+class="math inline">\(x\ge1\)</span>, at distance <span
+class="math inline">\(1\)</span>. The <span
+class="math inline">\(A\)</span> band <span
+class="math inline">\((-5,1)\)</span> is surrounded by <span
+class="math inline">\(B\)</span> on <span
+class="math inline">\((-6,-5)\cup(1,2)\)</span>; non-<span
+class="math inline">\(B\)</span> sites after the death are <span
+class="math inline">\(x\le-6\)</span> and <span
+class="math inline">\(x\ge2\)</span>, distance <span
+class="math inline">\(1\)</span>. The birth of <span
+class="math inline">\(C\)</span> on <span
+class="math inline">\((-3,0)\)</span> inside <span
+class="math inline">\(B\)</span> has non-<span
+class="math inline">\(B\)</span> sites at distance <span
+class="math inline">\(\ge2\)</span>. The death of <span
+class="math inline">\((-6,-3)\)</span> into <span
+class="math inline">\(C\)</span> has non-<span
+class="math inline">\(C\)</span> sites <span
+class="math inline">\(x\ge0\)</span> at distance <span
+class="math inline">\(3\)</span>. The counts of moves and parties are as
+stated; each birth or death costs at most <span
+class="math inline">\(L^{-12}\)</span> and the exchange at most <span
+class="math inline">\(4L^{-12}\)</span>. ◻</p>
+</div>
+<div id="con:sweep" class="construction">
+<p><strong>Construction 10.3</strong> (The sweep). Initially one party
+<span class="math inline">\(R_0\)</span> holds the sheet. For <span
+class="math inline">\(k=0,1,\dots,k_*-1\)</span>, with <span
+class="math inline">\(a=kt+1\)</span> the first site of block <span
+class="math inline">\(k+1\)</span> and the word <span
+class="math inline">\(P_1|\cdots|P_k|R_k\)</span>:</p>
+<ol>
+<li><p>Birth <span class="math inline">\(R_{k+1}\)</span> on <span
+class="math inline">\([a+t+w,L]\)</span> inside <span
+class="math inline">\(R_k\)</span>.</p></li>
+<li><p>Birth <span class="math inline">\(P_{k+1}\)</span> on <span
+class="math inline">\([a+w,a+t-1]\)</span> inside <span
+class="math inline">\(R_k\)</span>.</p></li>
+<li><p>Dissolve the band <span class="math inline">\([a,a+w-1]\)</span>
+(owner <span class="math inline">\(R_k\)</span>) between <span
+class="math inline">\(C=P_k\)</span> and <span
+class="math inline">\(B=P_{k+1}\)</span> by Construction <a
+href="#con:band" data-reference-type="ref"
+data-reference="con:band">22</a>; if <span
+class="math inline">\(k=0\)</span> let the band die into <span
+class="math inline">\(P_1\)</span>.</p></li>
+<li><p>Dissolve the band <span
+class="math inline">\([a+t,a+t+w-1]\)</span> (owner <span
+class="math inline">\(R_k\)</span>) between <span
+class="math inline">\(C=P_{k+1}\)</span> and <span
+class="math inline">\(B=R_{k+1}\)</span> by Construction <a
+href="#con:band" data-reference-type="ref"
+data-reference="con:band">22</a>.</p></li>
+</ol>
+<p>At the end set <span
+class="math inline">\(P_{k_*+1}=R_{k_*}\)</span>, which owns exactly the
+last block.</p>
+</div>
+<div id="prop:sweep" class="proposition">
+<p><strong>Proposition 10.4</strong> (Properties of the sweep). <em>For
+all sufficiently large <span class="math inline">\(L\)</span>,
+Construction <a href="#con:sweep" data-reference-type="ref" data-reference="con:sweep">10.3</a> is a distributed construction with the
+following properties.</em></p>
+<ol>
+<li><p><em>There are <span class="math inline">\(2k_*+2\le 2L\)</span>
+parties. The initial vector is a product by party: <span
+class="math inline">\(R_0\)</span> holds <span
+class="math inline">\(\Omega\)</span>, and every auxiliary copy of <span
+class="math inline">\(\Omega\)</span> is initialized privately at the
+party <span class="math inline">\(C\)</span> of its band
+dissolution.</em></p></li>
+<li><p><em>There are at most <span class="math inline">\(20k_*\le
+2L\)</span> non-private gates. Each involves at most three parties and
+is admissible with one shared vector or covector per monomial. Each
+party participates in at most <span class="math inline">\(40\)</span>
+non-private gates over its lifetime.</em></p></li>
+<li><p><em>The final vector <span class="math inline">\(\Psi\)</span>
+satisfies <span class="math inline">\(\lVert \Psi\rVert\le1\)</span> and
+<span class="math inline">\(\lVert \Psi-\Omega\otimes\Xi\rVert\le
+26\,L^{-11}\)</span>, where <span class="math inline">\(\Xi\)</span> is
+the tensor product of the retired auxiliary copies of <span
+class="math inline">\(\Omega\)</span> in their final registers and <span
+class="math inline">\(\lVert \Xi\rVert=1\)</span>. At the end, party
+<span class="math inline">\(P_i\)</span> owns exactly the raw registers
+of block <span class="math inline">\(B_i\)</span>, of dimension <span
+class="math inline">\(q^{\lvert B_i\rvert}\le q^{4t}=L^{O(1)}\)</span>,
+and no other party owns a raw register.</em></p></li>
+</ol>
+</div>
+<div class="proof">
+<p><em>Proof.</em> At step <span class="math inline">\(k\)</span> the
+word is <span class="math inline">\(P_1|\cdots|P_k|R_k\)</span> with
+<span class="math inline">\(R_k\)</span> owning <span
+class="math inline">\([a,L]\)</span>, <span
+class="math inline">\(a=kt+1\)</span>. Move (1) has changed region <span
+class="math inline">\([a+t+w,L]\)</span> and <span
+class="math inline">\(E=[1,a-1]\)</span> at distance <span
+class="math inline">\(t+w\)</span>; move (2) has changed region <span
+class="math inline">\([a+w,a+t-1]\)</span> and <span
+class="math inline">\(E=[1,a-1]\cup[a+t+w,L]\)</span> at distance <span
+class="math inline">\(w\)</span>. Both are births by Lemma <a
+href="#lem:birth" data-reference-type="ref"
+data-reference="lem:birth">19</a> with Lemma <a href="#lem:logsep"
+data-reference-type="ref" data-reference="lem:logsep">17</a>. After them
+<span class="math inline">\(R_k\)</span> owns the two bands <span
+class="math inline">\([a,a+w-1]\)</span> and <span
+class="math inline">\([a+t,a+t+w-1]\)</span>. For (3), <span
+class="math inline">\(C=P_k\)</span> owns block <span
+class="math inline">\(k\)</span>, of length <span
+class="math inline">\(t=20w\ge8w\)</span> to the left of <span
+class="math inline">\(a\)</span>, and <span
+class="math inline">\(B=P_{k+1}\)</span> owns <span
+class="math inline">\([a+w,a+t-1]\)</span>, of length <span
+class="math inline">\(19w\ge2w\)</span>, so Lemma <a href="#lem:band"
+data-reference-type="ref" data-reference="lem:band">23</a> applies (for
+<span class="math inline">\(k=0\)</span>, the death of <span
+class="math inline">\([1,w]\)</span> into <span
+class="math inline">\(P_1\)</span> has <span
+class="math inline">\(E=[t+1,L]\)</span> at distance <span
+class="math inline">\(t-w\)</span>). For (4), <span
+class="math inline">\(C=P_{k+1}\)</span> owns <span
+class="math inline">\([a+w,a+t-1]\)</span> of length <span
+class="math inline">\(19w\ge8w\)</span> and <span
+class="math inline">\(B=R_{k+1}\)</span> owns <span
+class="math inline">\([a+t+w,L]\)</span> of length at least <span
+class="math inline">\(3t-w\ge2w\)</span>. After (4) the word is <span
+class="math inline">\(P_1|\cdots|P_{k+1}|R_{k+1}\)</span>. The parties
+are <span class="math inline">\(R_0,\dots,R_{k_*}\)</span> and <span
+class="math inline">\(P_1,\dots,P_{k_*}\)</span>, with <span
+class="math inline">\(P_{k_*+1}=R_{k_*}\)</span>. The number of moves
+per step is at most <span class="math inline">\(2+2\cdot9=20\)</span>,
+so at most <span class="math inline">\(20k_*\)</span> in total, and the
+last block has length in <span
+class="math inline">\([3t,4t)\)</span>.</p>
+<p>Participation: <span class="math inline">\(R_k\)</span> takes part in
+steps <span class="math inline">\(k-1\)</span> (as the born party in (1)
+and as <span class="math inline">\(B\)</span> in (4)) and <span
+class="math inline">\(k\)</span> (as <span
+class="math inline">\(P_\circ\)</span> in (1), (2) and as <span
+class="math inline">\(A\)</span> in (3), (4)); <span
+class="math inline">\(P_k\)</span> takes part in step <span
+class="math inline">\(k-1\)</span> (born in (2), <span
+class="math inline">\(B\)</span> in (3), <span
+class="math inline">\(C\)</span> in (4)) and step <span
+class="math inline">\(k\)</span> (<span class="math inline">\(C\)</span>
+in (3)). Each band dissolution has nine moves and an exchange that is
+private; so no party exceeds <span
+class="math inline">\(2\cdot(2+2\cdot9)=40\)</span> gates. Every birth
+or death is a single gate on two parties with one shared vector or
+covector, and every exchange consists of private gates only.</p>
+<p>Errors: every move takes the current actual vector within the stated
+error of the next reference vector, which is the tensor product of <span
+class="math inline">\(\Omega\)</span> on the main sheet and <span
+class="math inline">\(\Omega\)</span> on each auxiliary sheet in
+canonical coordinates (Lemmas <a href="#lem:birth"
+data-reference-type="ref" data-reference="lem:birth">19</a>, <a
+href="#lem:exchange" data-reference-type="ref"
+data-reference="lem:exchange">20</a>; retired sheets are spectators of
+norm one). Telescoping a product of contractions bounds the accumulated
+error by the sum of the per-move errors: two births and two dissolutions
+per step cost at most <span
+class="math inline">\((2+2\cdot12)L^{-12}\)</span>, so the total is at
+most <span class="math inline">\(26k_*L^{-12}\le 26L^{-11}\)</span>. The
+initial vector has norm one and every gate is a contraction, so <span
+class="math inline">\(\lVert \Psi\rVert\le1\)</span>. ◻</p>
+</div>
+<div class="remark">
+<p><strong>Remark 26</strong> (Why no patches). In the source, squares
+of size below <span class="math inline">\(K_0\log L\)</span> are
+repainted by “small-patch rewrites” that use finite-rank cylinder
+projections of polynomial rank. Here the final owners hold blocks of
+<span class="math inline">\(O(\log L)\)</span> sites, whose register
+dimension <span class="math inline">\(q^{O(\log L)}\)</span> is
+polynomial, and the compression theorem below accepts
+polynomial-dimensional physical outputs. Converting a block tensor into
+single-site tensors is then linear algebra (Section <a
+href="#sec:routing" data-reference-type="ref"
+data-reference="sec:routing">6</a>). This is the second reason the
+adaptive patch constraint is not needed.</p>
+</div>
+<h3 id="sec:compression">Compression and column extraction</h3>
+<blockquote>
+<p><strong>In words.</strong> The sweep is a pure linear calculation
+ending in a partial trace over everything but the block registers. Its
+gates involve shared vectors of enormous dimension (purifications of
+half-chain marginals). The compression theorem says that if we replace,
+in the <em>density</em> calculation <span
+class="math inline">\(\rho=\operatorname{Tr}_{\mathrm{private}}|\Psi\rangle\langle
+\Psi|\)</span>, each shared vector <span
+class="math inline">\(|\eta\rangle\langle \tilde\eta|\)</span> by an
+average of <span class="math inline">\(k\)</span> independent random
+product operators <span class="math inline">\(U_j\otimes V_j\)</span>
+built from its Schmidt data and Gaussian coefficients, then for
+polynomial <span class="math inline">\(k\)</span> the physical density
+changes by at most <span class="math inline">\(L^{-p}\)</span> in trace
+norm. Expanding the error by which positions use a centered correction,
+each correction position involves only the two endpoint parties, and by
+bounded participation only boundedly many gates have to be opened for
+each corrected position; a Gaussian second-moment computation then shows
+that the expected trace norm of a term with <span
+class="math inline">\(s\)</span> corrections is <span
+class="math inline">\(k^{-s/2}\)</span> times a fixed polynomial per
+correction. Nothing in this argument depends on the private dimensions
+or on the Schmidt ranks of the shared vectors, which is the whole point.
+The output is an operator tensor network with one node per party and
+polynomial links between parties that shared a gate. A column of it is a
+ket network with the same links, close to the ground vector after
+normalization.</p>
+<p>The theorem and its proof are not geometric and we do not change a
+word of them; we restate the theorem in the form used here and sketch
+the estimate.</p>
+</blockquote>
+<p><strong>Precisely.</strong></p>
+<div id="thm:compression" class="theorem">
+<p><strong>Theorem 11.1</strong> (Density compression, <span><span
+class="citation" data-cites="PP"></span></span>). <em>Consider a family
+of distributed constructions indexed by <span
+class="math inline">\(L\ge2\)</span> such that: the numbers of parties
+and gates are uniformly polynomial; the initial vector is a product of
+normalized private vectors; every gate is a contraction; each
+non-private gate involves at most <span class="math inline">\(b\)</span>
+parties and each party participates in at most <span
+class="math inline">\(b\)</span> non-private gates; each non-private
+gate is admissible with uniformly polynomial bounds; and the intended
+physical output of each party has uniformly polynomial dimension,
+everything else being traced out. Let <span
+class="math inline">\(\rho\)</span> be the physical output density
+(positive, trace at most one). For every fixed <span
+class="math inline">\(p&gt;0\)</span> there is an operator tensor
+network <span class="math inline">\(\sigma\)</span> with one node per
+party, a bounded number of links at each node, each link joining two
+parties that participate in a common non-private gate, uniformly
+polynomial link dimensions, and <span class="math display">\[\lVert
+\sigma-\rho\rVert_1\le L^{-p}.\]</span> The constants depend only on
+<span class="math inline">\(p\)</span>, <span
+class="math inline">\(b\)</span> and the uniform polynomial bounds, not
+on private dimensions or on the Schmidt ranks of shared
+vectors.</em></p>
+</div>
+<div class="proof">
+<p><em>Sketch.</em> First eliminate shared covectors: a covector <span
+class="math inline">\(\langle \eta|\)</span> on a pair of registers is
+replaced by appending <span class="math inline">\(m-1\)</span> copies of
+<span class="math inline">\(\eta\)</span> and averaging the <span
+class="math inline">\(m\)</span> cyclic permutations of the <span
+class="math inline">\(m\)</span> pair registers, a contraction <span
+class="math inline">\(T_m\)</span> with <span
+class="math inline">\(\lVert T_m-|\eta\rangle^{\otimes m}\langle
+\eta|\rVert=m^{-1/2}\)</span>; with a common fixed garbage vector in
+every branch, a gate with <span class="math inline">\(K\)</span>
+monomials, each with at most <span class="math inline">\(r\)</span>
+covectors, is approximated in operator norm within <span
+class="math inline">\(rm^{-1/2}\sum\lvert c_\xi\rvert\)</span> by a gate
+with <span class="math inline">\(Km^r\)</span> monomials using only
+shared vectors. Choosing <span class="math inline">\(m\)</span>
+polynomial makes this error at most <span
+class="math inline">\(\epsilon/(8M)\)</span> per gate, <span
+class="math inline">\(M\)</span> the number of non-private gates.</p>
+<p>Next, in the density calculation each source operator <span
+class="math inline">\(X=|\eta\rangle\langle \tilde\eta|\)</span>, with
+Schmidt data <span class="math inline">\((\lambda_a,u_a,v_a)\)</span>
+and <span class="math inline">\((\mu_c,\tilde u_c,\tilde v_c)\)</span>,
+is replaced by <span class="math inline">\(\widehat
+X=\frac1k\sum_{j=1}^kU_j\otimes V_j\)</span> with <span
+class="math inline">\(U_j=\sum_{a,c}(\lambda_a\mu_c)^{1/4}g^{(j)}_{ac}|u_a\rangle\langle
+\tilde u_c|\)</span>, <span
+class="math inline">\(V_j=\sum_{b,d}(\lambda_b\mu_d)^{1/4}\overline{g^{(j)}_{bd}}|v_b\rangle\langle
+\tilde v_d|\)</span> and independent standard complex Gaussians <span
+class="math inline">\(g^{(j)}_{ac}\)</span>. Then <span
+class="math inline">\(\mathbb E\widehat X=X\)</span>, and the centered
+coefficients of <span class="math inline">\(\Delta=\widehat X-X\)</span>
+have diagonal covariance <span
+class="math inline">\(k^{-1}\sqrt{\lambda_a\lambda_b\mu_c\mu_d}\)</span>
+by the Gaussian pairing formula. Expanding the product over all <span
+class="math inline">\(N\)</span> slot positions, <span
+class="math inline">\(\widehat\rho-\rho&#39;=\sum_{\varnothing\ne
+S}F_S\)</span> where <span class="math inline">\(S\)</span> lists the
+positions using a correction. For <span class="math inline">\(\lvert
+S\rvert=s\)</span>, the endpoint parties number at most <span
+class="math inline">\(2s\)</span> and participate in at most <span
+class="math inline">\(2bs\)</span> gates; expand only those gates into
+monomials and fix the physical basis entries at those parties, at total
+weighted cost <span class="math inline">\(Q(L)^s\)</span> with <span
+class="math inline">\(Q\)</span> a fixed polynomial. For a fixed choice,
+the calculation separates into an affected side, holding the corrected
+endpoints as free inputs, and an exterior, joined only by the exact
+shared vectors crossing between them, with Schmidt probability matrices
+<span class="math inline">\(\tau,\tilde\tau\)</span>. The affected
+contractions give a block operator <span
+class="math inline">\(O\)</span> of norm at most one, the corrected
+coefficients <span class="math inline">\(z_{il}\)</span> have covariance
+<span class="math inline">\(k^{-s}\sqrt{p_i\tilde
+p_l}\,\delta\delta\)</span>, and the exterior input operator is <span
+class="math inline">\(Z=\sum_{il}z_{il}\tau^{1/2}O_{li}^{\mathsf
+T}\tilde\tau^{1/2}\)</span>. Schatten–Hölder with exponents <span
+class="math inline">\(4,2,4\)</span> and trace-one weights gives <span
+class="math inline">\(\lVert Z\rVert_1\le\lVert
+\sum_{il}z_{il}\tilde\tau^{1/4}O_{li}\tau^{1/4}\rVert_2\)</span>, whose
+expected square is <span class="math inline">\(k^{-s}\lVert \widetilde
+R^{1/4}OR^{1/4}\rVert_2^2\le k^{-s}\)</span> with <span
+class="math inline">\(R=\mathrm{diag}(p_i)\otimes\tau\)</span>, <span
+class="math inline">\(\widetilde R=\mathrm{diag}(\tilde
+p_l)\otimes\tilde\tau\)</span>. The exterior maps and the physical
+matrix unit do not increase the trace norm. Hence <span
+class="math inline">\(\mathbb E\lVert F_S\rVert_1\le
+Q(L)^sk^{-s/2}\)</span> and <span class="math inline">\(\mathbb E\lVert
+\widehat\rho-\rho&#39;\rVert_1\le(1+Q(L)k^{-1/2})^N-1\le\epsilon/4\)</span>
+for a polynomial <span class="math inline">\(k\)</span>. Fix a
+realization. The link structure: the common monomial label of a gate is
+shared along a star between its participants, and each slot’s sample
+index <span class="math inline">\(j\)</span> is shared between its two
+endpoints; all private maps, private source preparations and final
+private traces are contracted inside each party’s node. ◻</p>
+</div>
+<div id="lem:column" class="lemma">
+<p><strong>Lemma 11.2</strong> (Column extraction, <span><span
+class="citation" data-cites="PP"></span></span>). <em>Let <span
+class="math inline">\(\Omega\)</span> be a unit vector on a finite
+tensor product and <span class="math inline">\(\sigma\)</span> an
+operator with <span class="math inline">\(\lVert
+\sigma-|\Omega\rangle\langle \Omega|\rVert_1\le\eta&lt;1\)</span>. Then
+some product-basis column <span
+class="math inline">\(v=\sigma|z\rangle\)</span> is nonzero and
+satisfies <span class="math inline">\(\min_\theta\lVert v/\lVert
+v\rVert-\mathrm e^{i\theta}\Omega\rVert\le2\eta\)</span>. Fixing a
+column in an operator tensor network leaves all virtual dimensions
+unchanged.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Let <span
+class="math inline">\(E=\sigma-|\Omega\rangle\langle \Omega|\)</span>
+and <span class="math inline">\(a_z=\langle\Omega|z\rangle\)</span>.
+Then <span class="math inline">\(\sum_z\lVert E|z\rangle\rVert^2=\lVert
+E\rVert_2^2\le\eta^2\)</span> and <span
+class="math inline">\(\sum_z\lvert a_z\rvert^2=1\)</span>, so some <span
+class="math inline">\(z\)</span> with <span
+class="math inline">\(a_z\ne0\)</span> has <span
+class="math inline">\(\lVert E|z\rangle\rVert\le\eta\lvert
+a_z\rvert\)</span>. For it, <span class="math inline">\(w=v/a_z\)</span>
+satisfies <span class="math inline">\(\lVert
+w-\Omega\rVert\le\eta\)</span>, hence <span
+class="math inline">\(w\ne0\)</span> and <span
+class="math inline">\(\lVert w/\lVert
+w\rVert-\Omega\rVert\le2\eta\)</span>. Fixing the input index at every
+node is a contraction of physical legs only. ◻</p>
+</div>
+<h3 id="sec:routing">Assembly on the chain</h3>
+<blockquote>
+<p><strong>In words.</strong> Apply the compression theorem to the
+sweep. Its parties are the block owners <span
+class="math inline">\(P_i\)</span>, with physical output the <span
+class="math inline">\(q^{\lvert B_i\rvert}\)</span>-dimensional block
+register, and the remainders <span class="math inline">\(R_k\)</span>,
+with no physical output. Every link joins two parties that shared a
+gate, and by construction those are attached to blocks at most two
+apart. Put the node of <span class="math inline">\(R_k\)</span> next to
+block <span class="math inline">\(k+1\)</span>. Then a bond of the chain
+between two blocks is crossed only by links among the boundedly many
+parties attached to the four nearest blocks: constant congestion, and
+the dimension of a block-to-block bond is a bounded product of
+polynomial link dimensions. Finally, split each block node into one
+tensor per site by sequential singular value decompositions; the
+internal bonds are at most <span class="math inline">\(q^{\lvert
+B_i\rvert}\)</span> times the crossing dimension, still polynomial. The
+column-extraction lemma turns the operator network into a ket network
+first. Small chains are handled by the trivial exact representation.</p>
+</blockquote>
+<p><strong>Precisely.</strong></p>
+<div class="proof">
+<p><em>Proof of Theorem <a href="#thm:B" data-reference-type="ref" data-reference="thm:B">1.2</a>.</em> Let <span
+class="math inline">\(L_0\)</span> be large enough for Proposition <a
+href="#prop:sweep" data-reference-type="ref"
+data-reference="prop:sweep">25</a> and for the inequalities below; for
+<span class="math inline">\(2\le L&lt;L_0\)</span> every vector on <span
+class="math inline">\(\Lambda\)</span> is an exact matrix product state
+of bond dimension at most <span class="math inline">\(q^{\lfloor
+L/2\rfloor}\le
+q^{L_0/2}\)</span>, which is absorbed into <span
+class="math inline">\(C\)</span>. Let <span class="math inline">\(L\ge
+L_0\)</span>.</p>
+<p>By Proposition <a href="#prop:sweep" data-reference-type="ref" data-reference="prop:sweep">10.4</a>(3) and <span
+class="math inline">\(\lVert |u\rangle\langle u|-|v\rangle\langle
+v|\rVert_1\le2\lVert u-v\rVert\)</span> for vectors of norm at most one,
+the physical output density <span
+class="math inline">\(\rho=\operatorname{Tr}_{\mathrm{private}}|\Psi\rangle\langle
+\Psi|\)</span> satisfies <span class="math inline">\(\lVert
+\rho-|\Omega\rangle\langle \Omega|\rVert_1\le 52L^{-11}\)</span>. The
+construction satisfies the hypotheses of Theorem <a
+href="#thm:compression" data-reference-type="ref"
+data-reference="thm:compression">27</a> with <span
+class="math inline">\(b=40\)</span> and physical output dimensions at
+most <span class="math inline">\(q^{4t}\le L^{80D_{24}\log
+q+1}\)</span>, so with accuracy <span
+class="math inline">\(L^{-5}\)</span> there is an operator network <span
+class="math inline">\(\sigma\)</span> on the party graph with <span
+class="math inline">\(\lVert \sigma-|\Omega\rangle\langle
+\Omega|\rVert_1\le L^{-5}+52L^{-11}\le2L^{-5}\)</span>, bounded degree,
+and link dimensions at most <span
+class="math inline">\(C_1L^{r}\)</span>. By Lemma <a href="#lem:column"
+data-reference-type="ref" data-reference="lem:column">28</a> some column
+is a nonzero ket network <span class="math inline">\(v\)</span> with the
+same links and <span class="math inline">\(\min_\theta\lVert v/\lVert
+v\rVert-\mathrm e^{i\theta}\Omega\rVert\le4L^{-5}\le
+L^{-1}\)</span>.</p>
+<p>Placement. Attach <span class="math inline">\(P_i\)</span> to block
+<span class="math inline">\(B_i\)</span> and <span
+class="math inline">\(R_k\)</span> to block <span
+class="math inline">\(B_{k+1}\)</span>. Two parties sharing a gate are,
+by the proof of Proposition <a href="#prop:sweep"
+data-reference-type="ref" data-reference="prop:sweep">25</a>, among
+<span class="math inline">\(\{P_k,P_{k+1},R_k,R_{k+1}\}\)</span> for
+some <span class="math inline">\(k\)</span>, hence attached to blocks at
+most two apart. A bond between blocks <span
+class="math inline">\(i\)</span> and <span
+class="math inline">\(i+1\)</span> is therefore crossed only by links
+incident to parties attached to blocks <span
+class="math inline">\(i-1,\dots,i+2\)</span>; there are at most <span
+class="math inline">\(8\)</span> such parties, each of degree at most
+<span class="math inline">\(5\cdot40\)</span> (at most two star links
+and three sample links per three-party gate), so at most <span
+class="math inline">\(\chi:=1600\)</span> links cross any block bond.
+Route each link along the chain between its two blocks; group the
+indices crossing a block bond into one index of dimension at most <span
+class="math inline">\((C_1L^r)^{\chi}\)</span>. The tensor at block
+<span class="math inline">\(i\)</span> is now a map from its left and
+right block-bond indices to the block’s physical register <span
+class="math inline">\(\mathcal H_{B_i}\)</span>, of dimension at most
+<span class="math inline">\(q^{4t}\)</span>. Writing <span
+class="math inline">\(B_i=\{x_1&lt;\dots&lt;x_n\}\)</span>, perform
+singular value decompositions successively across <span
+class="math inline">\(x_1|x_2\cdots x_n\)</span>, <span
+class="math inline">\(x_1x_2|x_3\cdots x_n\)</span>, …, treating the two
+block-bond indices as additional legs attached to the first and last
+site; the resulting single-site tensors have internal bond dimensions at
+most <span class="math inline">\(\min\{q^{j}(C_1L^r)^\chi,\
+q^{n-j}(C_1L^r)^\chi\}\le
+q^{2t}(C_1L^r)^{\chi}\)</span> and the block bonds are unchanged. Thus
+<span class="math inline">\(v\)</span> is a matrix product state on
+<span class="math inline">\(\Lambda\)</span> with open boundary
+conditions and bond dimension at most <span
+class="math inline">\(q^{2t}(C_1L^r)^\chi\le CL^{c}\)</span>, with <span
+class="math inline">\(c=40D_{24}\log q+r\chi\)</span>. ◻</p>
+</div>
+<div class="remark">
+<p><strong>Remark 29</strong> (Order of constants). Fix <span
+class="math inline">\(q,R,J,\Delta\)</span>. Theorem <a href="#thm:A"
+data-reference-type="ref" data-reference="thm:A">1</a> gives <span
+class="math inline">\(C_{\mathrm{int}}\)</span>; Lemma <a
+href="#lem:reset" data-reference-type="ref"
+data-reference="lem:reset">16</a> at <span
+class="math inline">\(p=24\)</span> gives <span
+class="math inline">\(C_{24}\)</span>, hence <span
+class="math inline">\(D_{24}\)</span> and the block scale <span
+class="math inline">\(t\)</span>; the number of parties, gates and the
+participation bound <span class="math inline">\(b=40\)</span> are then
+fixed; Theorem <a href="#thm:compression" data-reference-type="ref" data-reference="thm:compression">11.1</a> at accuracy <span
+class="math inline">\(L^{-5}\)</span> fixes the covector stack length
+<span class="math inline">\(m\)</span>, the Gaussian sample count <span
+class="math inline">\(k\)</span>, and the link exponent <span
+class="math inline">\(r\)</span>; the congestion <span
+class="math inline">\(\chi\)</span> is a numerical constant. None of
+these depends on the Hamiltonian or on <span
+class="math inline">\(L\)</span>. The protocol uses <span
+class="math inline">\(O(L/\log L)\)</span> auxiliary copies of <span
+class="math inline">\(\Omega\)</span>, all private.</p>
+</div>
+<h3 id="sec:discussion">Discussion</h3>
+<blockquote>
+<p><strong>In words.</strong> <em>What is different from Hastings.</em>
+Hastings’ area law proves that the half-chain marginal has an
+entanglement spectrum whose tail is exponentially small beyond rank
+<span class="math inline">\(\exp(O(1))\)</span>, by combining a
+Lieb–Robinson bound, a spectral filter that approximately projects onto
+the ground state, and a clever bound on the approximate factorization of
+the filtered state. Arad–Kitaev–Landau–Vazirani replace the filter by an
+approximate ground-state projector built from Chebyshev polynomials with
+controlled Schmidt rank, and bootstrap. The present proof of Theorem <a
+href="#thm:A" data-reference-type="ref" data-reference="thm:A">1</a> has
+no dynamics in it at all: the gap is used only to bound the overlap of a
+variationally tilted or filtered vector with the ground vector, and the
+entropy is read off from operator norms by Hölder, a three-lines
+interpolation and the Araki–Lieb inequality. Its dependence on the gap
+is linear. The matrix product state theorem has two one-dimensional
+proofs here: the two-line route, which is a direct consequence of the
+tail bound and the area law and therefore equally free of dynamics, and
+the protocol route, which uses a Lieb–Robinson bound in one lemma (the
+reset) but in a way that has no analogue in Hastings’ construction (a
+two-replica swap undone by a local unitary), and which otherwise
+consists of Uhlmann-type ownership changes, random Gaussian compression
+and column extraction.</p>
+<p><em>What one dimension buys.</em> Three things, each used once. A
+shell around an interval is crossed by <span
+class="math inline">\(O(1)\)</span> interactions, so the buffered
+discount costs a constant and needs a constant-width buffer. No three
+owners ever meet at a point of a line, so no encodings are needed when
+ownership changes. And a chain can be swept, so the party graph has
+bounded cutwidth. Everything else in the source is either unchanged or
+disappears.</p>
+<p><em>What does not transfer back.</em> The Araki–Lieb closure fails in
+two dimensions because the buffer is an annulus of unknown entropy; the
+sweep fails in two dimensions because a region being repainted has a
+one-dimensional boundary along which a third owner is adjacent, which
+the edge bands and point treatments of the source are designed to
+handle; and the two-line route fails because sequential truncation
+across nested cuts does not produce a network on the lattice. So the
+two-dimensional papers are not inefficient versions of this note; they
+solve problems that do not exist on a line.</p>
+</blockquote>
+<div class="thebibliography">
+<p><span>9</span> OpenAI, <em>A two-dimensional area law from a global
+spectral gap</em>, manuscript of September 24, 2026,
+<code>openai/math</code> revision <code>adc7f12</code>. OpenAI,
+<em>Polynomial PEPS approximation of gapped square-grid ground
+states</em>, manuscript of September 24, 2026, <code>openai/math</code>
+revision <code>adc7f12</code>. M. B. Hastings, An area law for
+one-dimensional quantum systems, J. Stat. Mech. (2007) P08024. I. Arad,
+A. Kitaev, Z. Landau, U. Vazirani, An area law and sub-exponential
+algorithm for 1D systems, arXiv:1301.1162. F. Verstraete, J. I. Cirac,
+Matrix product states represent ground states faithfully, Phys. Rev. B
+73, 094423 (2006). A. Winter, Tight uniform continuity bounds for
+quantum entropies, Comm. Math. Phys. 347 (2016) 291–313.
+B. Nachtergaele, Y. Ogata, R. Sims, Propagation of correlations in
+quantum lattice systems, J. Stat. Phys. 124 (2006) 1–13. A. Uhlmann, The
+“transition probability” in the state space of a <span
+class="math inline">\(*\)</span>-algebra, Rep. Math. Phys. 9 (1976)
+273–279.</p>
+</div>
+
+</main>
