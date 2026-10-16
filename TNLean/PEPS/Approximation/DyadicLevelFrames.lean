@@ -127,17 +127,36 @@ theorem guideFrame_congr_patch {ι κ Party : Type*} [Fintype ι] [DecidableEq �
   unfold guideFrame
   congr 1
 
-/-- **The frame depends on the radii only at the true vertices.** -/
-theorem levelFrame_congr {j : ℕ} {done : Set (ℤ × ℤ)} {ρ ρ' : ℝ × ℝ → ℝ}
-    (hρ : ∀ z, 0 < ρ z ∧ ρ z ≤ B₀ * Real.log L) (hρ' : ∀ z, 0 < ρ' z ∧ ρ' z ≤ B₀ * Real.log L)
+/-- Encoded frames of equal guides with equal centers and the same patches at the centers are
+equal. -/
+theorem guideFrame_congr_guide {ι κ Party : Type*} [Fintype ι] [DecidableEq ι] {q : ℕ}
+    {pos : ι → ℝ × ℝ} {g g' : ℝ × ℝ → κ} {own : κ → Party} {ph : κ} {rank : κ → ℕ}
+    {V V' : Finset (ℝ × ℝ)} {patch patch' : ℝ × ℝ → SquarePatch pos q}
+    {hV : (V : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (patch z).outer (patch z').outer}
+    {hV' : (V' : Set (ℝ × ℝ)).Pairwise fun z z' => Disjoint (patch' z).outer (patch' z').outer}
+    (hg : g = g') (hVV : V = V') (h : ∀ z ∈ V, patch z = patch' z) :
+    guideFrame pos q g own ph rank V patch hV = guideFrame pos q g' own ph rank V' patch' hV' := by
+  subst hg hVV
+  exact guideFrame_congr_patch h
+
+/-- **Frames of equal guides.** Two main frames whose sampled guides are equal and whose radii
+agree at the true vertices are equal, whatever the levels and repainted blocks that describe
+them. -/
+theorem levelFrame_eq_of_levelGuide_eq {j j' : ℕ} {done done' : Set (ℤ × ℤ)}
+    {ρ ρ' : ℝ × ℝ → ℝ} (hρ : ∀ z, 0 < ρ z ∧ ρ z ≤ B₀ * Real.log L)
+    (hρ' : ∀ z, 0 < ρ' z ∧ ρ' z ≤ B₀ * Real.log L)
+    (hg : levelGuide k j done = levelGuide k j' done')
     (h : ∀ z ∈ levelVertices k j done, ρ z = ρ' z) :
-    levelFrame (q := q) P rank R₀ j done ρ hρ = levelFrame P rank R₀ j done ρ' hρ' := by
+    levelFrame (q := q) P rank R₀ j done ρ hρ = levelFrame P rank R₀ j' done' ρ' hρ' := by
+  have hV : levelVertices k j done = levelVertices k j' done' :=
+    Finset.ext fun z => by rw [mem_levelVertices, mem_levelVertices, hg]
   have hp : ∀ z ∈ levelVertices k j done, suppliedPatch P ρ hρ z = suppliedPatch P ρ' hρ' z :=
     fun z hz => suppliedPatch_congr P hρ hρ' (h z hz)
   have hiff : (((levelVertices k j done : Finset (ℝ × ℝ)) : Set (ℝ × ℝ)).Pairwise fun z z' =>
       Disjoint (suppliedPatch P ρ hρ z).outer (suppliedPatch P ρ hρ z').outer) ↔
-      (((levelVertices k j done : Finset (ℝ × ℝ)) : Set (ℝ × ℝ)).Pairwise fun z z' =>
+      (((levelVertices k j' done' : Finset (ℝ × ℝ)) : Set (ℝ × ℝ)).Pairwise fun z z' =>
         Disjoint (suppliedPatch P ρ' hρ' z).outer (suppliedPatch P ρ' hρ' z').outer) := by
+    rw [← hV]
     refine ⟨fun H z hz z' hz' hne => ?_, fun H z hz z' hz' hne => ?_⟩
     · change Disjoint (suppliedPatch P ρ' hρ' z).outer (suppliedPatch P ρ' hρ' z').outer
       rw [← hp z hz, ← hp z' hz']; exact H hz hz' hne
@@ -146,9 +165,16 @@ theorem levelFrame_congr {j : ℕ} {done : Set (ℤ × ℤ)} {ρ ρ' : ℝ × �
   by_cases hd : ((levelVertices k j done : Finset (ℝ × ℝ)) : Set (ℝ × ℝ)).Pairwise fun z z' =>
       Disjoint (suppliedPatch P ρ hρ z).outer (suppliedPatch P ρ hρ z').outer
   · rw [levelFrame_eq P rank R₀ hd, levelFrame_eq P rank R₀ (hiff.1 hd)]
-    exact guideFrame_congr_patch hp
+    exact guideFrame_congr_guide hg hV hp
   · unfold levelFrame
     rw [dite_eq_right hd, dite_eq_right (fun h => hd (hiff.2 h))]
+
+/-- **The frame depends on the radii only at the true vertices.** -/
+theorem levelFrame_congr {j : ℕ} {done : Set (ℤ × ℤ)} {ρ ρ' : ℝ × ℝ → ℝ}
+    (hρ : ∀ z, 0 < ρ z ∧ ρ z ≤ B₀ * Real.log L) (hρ' : ∀ z, 0 < ρ' z ∧ ρ' z ≤ B₀ * Real.log L)
+    (h : ∀ z ∈ levelVertices k j done, ρ z = ρ' z) :
+    levelFrame (q := q) P rank R₀ j done ρ hρ = levelFrame P rank R₀ j done ρ' hρ' :=
+  levelFrame_eq_of_levelGuide_eq P rank R₀ hρ hρ' rfl h
 
 /-- **Disjoint outer squares at the grid corners.** If every radius is at most `r` with
 `4 r < 2 ^ j`, the outer squares of the supplied patches at distinct grid corners of the level
