@@ -1367,8 +1367,9 @@ no holes, this is the normalization of $\Omega$.
     $\eta>0$; for real $a,m,c$ the same holds for $a+m\eta\ne c$ if $m\ne0$.
     For any real $n$ and point $p$, the displaced point
     $p+\eta(1,1)$ is eventually in $(0,n)^2$ or outside $[0,n]^2$.
-    For any repainting baseline and edge, it is eventually off that edge's
-    interface. If $n>0$ and a point has block index $S$ at scale $n$, then
+    For any repainting baseline, edge and point $p$, the displaced point
+    $p+\eta(1,1)$ is eventually off that edge's interface. If $n>0$ and a point
+    has block index $S$ at scale $n$, then
     subtracting the block corner $nS$ puts it in $[0,n]^2$.
     Finally, in any real module, a reading $g$ of $G$ along a displacement $v$
     is also a reading of $G'$ when, for every $p$, the equality
@@ -1391,9 +1392,18 @@ no holes, this is the normalization of $\Omega$.
     agrees with the block guide of the level with $R$ repainted off the boundary of
     $R$, and the main guide with the starting word agrees with the completed guide off
     the two interface curves of the band of the edge. A point moved by a small positive
-    multiple of $(1,1)$ leaves the boundary of a square and the interface curves at
-    once: the normal coordinate and the band width move along the diagonal at
-    different rates. So the readings agree, and with them the true vertices, the
+    multiple of $(1,1)$ leaves the boundary of a square. For an edge, write its
+    normal and tangential coordinates as $a+\sigma\eta$ and $b+\eta$, where
+    $\sigma\in\{-1,1\}$. The differences from $0$, $(b+\eta)/1000$ and
+    $(n-b-\eta)/1000$ have the respective nonzero slopes $\sigma$,
+    $\sigma-1/1000$ and $\sigma+1/1000$. The affine avoidance statement gives,
+    for all sufficiently small $\eta>0$,
+    \begin{align}
+        a+\sigma\eta & \ne 0,\qquad
+        a+\sigma\eta\ne\frac{\min(b+\eta,n-b-\eta)}{1000}. \notag
+    \end{align}
+    Thus the displaced point leaves the interface curves. So the readings agree,
+    and with them the true vertices, the
     owners and the tags. The party map may be read through any repainting, since the
     readings carry no placeholder at the sites. The uniform auxiliary guide has no true
     vertex.
