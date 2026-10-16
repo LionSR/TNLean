@@ -77,7 +77,7 @@ The entropy identity `comparator:entropy-identity` holds for every physical part
 (lines 198–202). For every finite status family obeying `comparator:nesting`,
 `g^pre_{j,g} ≥ 0` (line 181), and for every `0 < a ≤ a₀`, with `t = a/2`, `s = 1/4` and
 `W = aK` (lines 99–100), every mean tree with metrics `comparator:metrics`, `N = ‖𝓜^{-s} ξ‖`
-and `E_def = (⟨v, H̄ v⟩ - E₀)/g` for `v = 𝓜^{-s} ξ / N` (lines 143–153):
+and `E_def = (⟨v, Hbar v⟩ - E₀)/g` for `v = 𝓜^{-s} ξ / N` (lines 143–153):
 
 * the rough upper bound `comparator:rough-upper` for `ξ = pre_k` holds under the prefix
   data (lines 154–161);
