@@ -498,8 +498,11 @@ no holes, this is the normalization of $\Omega$.
     party of $R$. Then the labels of the nine blocks around $R$, at any stage of the
     pass to its level, its new label and the placeholder are held by parties that the
     repainting of $R$ uses. Consequently, at the constants of the protocol, the direct
-    repainting of $R$ is a bounded change of its frame whose participants are used by
-    the repainting, with error $(2b+1)L^{-20}$; and a point treatment, its removal, a
+    repainting of $R$, under the hypotheses of
+    Theorem~\ref{thm:peps_dyadic_direct_repainting_constants}, is a bounded change of
+    its frame whose participants are used by the repainting, with error
+    $(2b+1)L^{-20}$ and at most $2b$ pair sources in each monomial, where $b$ is the
+    protocol patch bound. A point treatment, its removal, a
     resize, a bulk birth or death, or a lens exchange, given in the form produced by
     its step theorem, is a bounded change with participants among the parties of that
     step theorem. A lens exchange has no nonprivate gate. Moreover the constants of the
@@ -508,13 +511,27 @@ no holes, this is the normalization of $\Omega$.
 \end{theorem}
 
 \begin{proof}\leanok
-    \uses{thm:peps_dyadic_direct_repainting_constants}
+    \uses{thm:peps_dyadic_direct_repainting_constants,
+        thm:peps_dyadic_protocol_parties,
+        thm:peps_dyadic_repainting_valid_labels,
+        thm:peps_dyadic_active_label_parties,
+        def:peps_dyadic_used_parties,
+        def:peps_dyadic_protocol_parties,
+        thm:peps_dyadic_block_ratio,
+        thm:peps_guide_frame_resize_treatment_gates,
+        lem:peps_dyadic_active_labels,
+        thm:peps_bounded_change_closure,
+        thm:peps_protocol_constants,
+        def:peps_bounded_change,
+        def:peps_sheet_stack}
     The labels are those of the active-label invariant: a label of a block next to
     $R$ is the placeholder or the label of a square whose block is next to $R$ or
     contains such a block. The reference vector of two sheets in the coordinates of the
     exchange is the product of their reference vectors. For the constants,
     $2\epsilon_0(a_0+1)\le a_0/2$ with $a_0=1/5000$ gives
     $\epsilon_0\le1/20004$.
+    The bounded-change conversion keeps the direct repainting circuit, so its
+    monomials retain the bound of $2b$ pair sources.
 \end{proof}
 
 \begin{lemma}[The parties of a junction resize]

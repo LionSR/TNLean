@@ -28,8 +28,8 @@ on the change being made.
 * `levelFrame_eq` : when the outer squares of the holes are disjoint, the frame is the encoded
   frame of the sampled guide.
 * `levelFrame_congr` : the frame depends on the hole radii only at the true vertices.
-* `pairwise_disjoint_levelHoles` : outer squares of radius at most `r` at distinct grid corners
-  of the level are disjoint when `4 r < 2 ^ j`.
+* `pairwise_disjoint_levelHoles` : outer squares of patches of radius at most `r` at distinct
+  grid corners of the level are disjoint when `4 r < 2 ^ j`.
 * `isTrueVertex_levelGuide_insert_iff` : repainting one block of a level changes the true vertices
   of the sampled guide only at the four corners of that block.
 
@@ -46,7 +46,7 @@ open Set Metric Filter Topology
 
 namespace TNLean.PEPS.Approximation
 
-open EncodedFrame PairEffect
+open EncodedFrame
 
 variable {k : ℕ}
 
@@ -59,6 +59,7 @@ Polynomial-PEPS manuscript, `06-geometry.tex`, lines 69–100. -/
 abbrev levelGuide (k j : ℕ) (done : Set (ℤ × ℤ)) : ℝ × ℝ → GuideLabel :=
   sampleGuide (blockGuide ((2 : ℝ) ^ j) (protocolLevelLabels k j done))
 
+/-- The sampled guide reads the block labels after the same generic displacement `(1, 1)`. -/
 theorem isDisplacedReading_levelGuide (j : ℕ) (done : Set (ℤ × ℤ)) :
     IsDisplacedReading (levelGuide k j done)
       (blockGuide ((2 : ℝ) ^ j) (protocolLevelLabels k j done)) ((1 : ℝ), (1 : ℝ)) :=
@@ -71,6 +72,7 @@ Polynomial-PEPS manuscript, `06-geometry.tex`, lines 109–118. -/
 abbrev levelVertices (k j : ℕ) (done : Set (ℤ × ℤ)) : Finset (ℝ × ℝ) :=
   levelTrueVertices ((2 : ℝ) ^ j) ((2 : ℤ) ^ (k - j)) (levelGuide k j done)
 
+/-- The finite set of level vertices consists exactly of the true vertices of the sampled guide. -/
 theorem mem_levelVertices {j : ℕ} {done : Set (ℤ × ℤ)} {c : ℝ × ℝ} :
     c ∈ levelVertices k j done ↔ IsTrueVertex (levelGuide k j done) c := by
   classical
@@ -103,6 +105,7 @@ def levelFrame (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L)
 variable (P : AdaptivePatchSupply (cellCenterPos L) Ω B₀ C c 60 L) (rank : GuideLabel → ℕ)
   (R₀ : RepaintedSquare k)
 
+/-- With pairwise disjoint outer patches, the level frame is the encoded frame of its guide. -/
 theorem levelFrame_eq {j : ℕ} {done : Set (ℤ × ℤ)} {ρ : ℝ × ℝ → ℝ}
     {hρ : ∀ z, 0 < ρ z ∧ ρ z ≤ B₀ * Real.log L}
     (h : ((levelVertices k j done : Finset (ℝ × ℝ)) : Set (ℝ × ℝ)).Pairwise fun z z' =>
@@ -176,7 +179,7 @@ theorem levelFrame_congr {j : ℕ} {done : Set (ℤ × ℤ)} {ρ ρ' : ℝ × �
     levelFrame (q := q) P rank R₀ j done ρ hρ = levelFrame P rank R₀ j done ρ' hρ' :=
   levelFrame_eq_of_levelGuide_eq P rank R₀ hρ hρ' rfl h
 
-/-- **Disjoint outer squares at the grid corners.** If every radius is at most `r` with
+/-- **Disjoint outer squares at the grid corners.** If every patch radius is at most `r` with
 `4 r < 2 ^ j`, the outer squares of the supplied patches at distinct grid corners of the level
 are disjoint.
 
