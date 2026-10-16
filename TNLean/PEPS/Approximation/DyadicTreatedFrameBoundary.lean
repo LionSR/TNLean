@@ -201,14 +201,13 @@ Polynomial-PEPS manuscript, `06-geometry.tex`, lines 82–125 and 142–160. -/
 theorem levelFrame_eq_treatedFrame_guide {K₀ ε₀ ν a D : ℝ}
     (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hkL : L ≤ 2 ^ k)
     (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ)) (R₀ : RepaintedSquare k)
-    (done : Set (ℤ × ℤ))
-    (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧ ε₀ * (D * Real.log L) ≤ B₀ * Real.log L)
-    (hρ : ∀ _ : ℝ × ℝ, 0 < holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) (D * Real.log L) ∧
-      holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) (D * Real.log L) ≤ B₀ * Real.log L)
-    (L₀ : GuideLabel) :
+    (done : Set (ℤ × ℤ)) (L₀ : GuideLabel) :
     levelFrame (q := q) P rank R₀ R.1.1 done
-        (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) (D * Real.log L)) hρ =
-      treatedFrame P rank R hr ∅ L₀ (repaintBaseline R done).guide := by
+        (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) (D * Real.log L))
+        (hc.holeRadius_bounds hL (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)) =
+      treatedFrame P rank R (hc.treatedRadius_bounds hL) ∅ L₀ (repaintBaseline R done).guide := by
+  have hr := hc.treatedRadius_bounds hL
+  have hρ := hc.holeRadius_bounds hL (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
   set t := D * Real.log L with ht_def
   have hℓ : 0 < Real.log L := Real.log_pos (by exact_mod_cast hL)
   have ht : 0 < t := mul_pos hc.D_pos hℓ
@@ -223,7 +222,7 @@ theorem levelFrame_eq_treatedFrame_guide {K₀ ε₀ ν a D : ℝ}
       fun _ => rfl
     rw [shiftGuide, hguide, sub_add_cancel]
   obtain ⟨-, hmem, hd, hF⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done (Or.inl rfl)
-    ∅ L₀ hr
+    ∅ L₀
   have hV : treatedVertices k R.1.1 t ∅ (treatedGuide R.1.1 R.1.index t ∅ L₀
       (repaintBaseline R done).guide) = levelVertices k R.1.1 done :=
     Finset.ext fun z => by rw [hmem, mem_levelVertices, hg]
@@ -292,20 +291,21 @@ theorem treatedFrame_completedGuide_eq_levelFrame {K₀ ε₀ ν a D : ℝ}
     (hc : IsProtocolConstants K₀ ε₀ ν a D B₀) (hL : 2 ≤ L) (hkL : L ≤ 2 ^ k)
     (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ)) (R₀ : RepaintedSquare k)
     (done : Set (ℤ × ℤ)) {E : List SquareEdge} (hE : ∀ e, e ∈ E)
-    (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧ ε₀ * (D * Real.log L) ≤ B₀ * Real.log L)
-    (hρ : ∀ _ : ℝ × ℝ, 0 < holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) (D * Real.log L) ∧
-      holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) (D * Real.log L) ≤ B₀ * Real.log L)
     (L₀ : GuideLabel) :
-    treatedFrame (q := q) P rank R hr ∅ L₀ ((repaintBaseline R done).completedGuide E) =
+    treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL) ∅ L₀
+        ((repaintBaseline R done).completedGuide E) =
       levelFrame P rank R₀ R.1.1 (insert R.1.index done)
-        (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) (D * Real.log L)) hρ := by
+        (fun _ => holeRadius ε₀ ((2 : ℝ) ^ (R.1.1 : ℕ)) (D * Real.log L))
+        (hc.holeRadius_bounds hL (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)) := by
+  have hr := hc.treatedRadius_bounds hL
+  have hρ := hc.holeRadius_bounds hL (n := (2 : ℝ) ^ (R.1.1 : ℕ)) (by positivity)
   set t := D * Real.log L with ht_def
   have hℓ : 0 < Real.log L := Real.log_pos (by exact_mod_cast hL)
   have ht : 0 < t := mul_pos hc.D_pos hℓ
   have htn : t ≤ (2 : ℝ) ^ (R.1.1 : ℕ) := by nlinarith [hc.twenty_le_K₀]
   have hg := treatedGuide_completedGuide R done hE t L₀
   obtain ⟨-, hmem, hd, hF⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done
-    (Or.inr (Or.inr (Or.inl ⟨E, rfl⟩))) ∅ L₀ hr
+    (Or.inr (Or.inr (Or.inl ⟨E, rfl⟩))) ∅ L₀
   have hV : treatedVertices k R.1.1 t ∅ (treatedGuide R.1.1 R.1.index t ∅ L₀
       ((repaintBaseline R done).completedGuide E)) =
         levelVertices k R.1.1 (insert R.1.index done) :=
@@ -337,16 +337,17 @@ Polynomial-PEPS manuscript, `06-geometry.tex`, lines 62–80 and 160–168. -/
 theorem treatedFrame_edgeStart {K₀ ε₀ ν a D : ℝ} (hc : IsProtocolConstants K₀ ε₀ ν a D B₀)
     (hL : 2 ≤ L) (hlarge : K₀ * (D * Real.log L) < (2 : ℝ) ^ (R.1.1 : ℕ))
     (done : Set (ℤ × ℤ)) {E : List SquareEdge} {e : SquareEdge} (he : e ∉ E)
-    (hr : ∀ _ : ℝ × ℝ, 0 < ε₀ * (D * Real.log L) ∧ ε₀ * (D * Real.log L) ≤ B₀ * Real.log L)
     (L₀ L₀' : GuideLabel) :
-    treatedFrame (q := q) P rank R hr ∅ L₀ ((repaintBaseline R done).completedGuide E) =
-      treatedFrame P rank R hr ∅ L₀' ((repaintBaseline R done).mainGuide E e
-        (edgeStartWord (repaintBaseline R done).oldLabel (repaintBaseline R done).finalLabel
+    treatedFrame (q := q) P rank R (hc.treatedRadius_bounds hL) ∅ L₀
+        ((repaintBaseline R done).completedGuide E) =
+      treatedFrame P rank R (hc.treatedRadius_bounds hL) ∅ L₀'
+        ((repaintBaseline R done).mainGuide E e (edgeStartWord (repaintBaseline R done).oldLabel (repaintBaseline R done).finalLabel
           ((repaintBaseline R done).nbrLabel e))) := by
+  have hr := hc.treatedRadius_bounds hL
   classical
   set d := blockCorner ((2 : ℝ) ^ (R.1.1 : ℕ)) R.1.index
   obtain ⟨hf, -⟩ := treatedFrame_spec (q := q) P rank R hc hL hlarge done
-    (Or.inr (Or.inr (Or.inl ⟨E, rfl⟩))) ∅ L₀ hr
+    (Or.inr (Or.inr (Or.inl ⟨E, rfl⟩))) ∅ L₀
   refine treatedFrame_congr P rank R ((hf.congr_eventually fun p => ?_).eq_sampleGuide)
   filter_upwards [(repaintBaseline R done).eventually_notMem_edgeInterface e (p - d)] with ε hε
   have hx : p - d + ε • ((1 : ℝ), (1 : ℝ)) = p + ε • ((1 : ℝ), (1 : ℝ)) - d := by abel
