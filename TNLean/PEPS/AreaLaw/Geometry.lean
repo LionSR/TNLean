@@ -100,6 +100,7 @@ import TNLean.PEPS.AreaLaw.Geometry.NonbeltPrimaries
 import TNLean.PEPS.AreaLaw.Geometry.OrderedTwoFamilyPartitionComap
 import TNLean.PEPS.AreaLaw.Geometry.PolynomialBudget
 import TNLean.PEPS.AreaLaw.Geometry.PowerScaleDepth
+import TNLean.PEPS.AreaLaw.Geometry.PrimaryBirthTemplates
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryCounting
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryFineCellCover
 import TNLean.PEPS.AreaLaw.Geometry.PrimaryFragments
@@ -120,6 +121,7 @@ import TNLean.PEPS.AreaLaw.Geometry.RepairCurrentRetention
 import TNLean.PEPS.AreaLaw.Geometry.RepairCurrentTerminalDisjointness
 import TNLean.PEPS.AreaLaw.Geometry.RepairDepth
 import TNLean.PEPS.AreaLaw.Geometry.RepairDescendantCounts
+import TNLean.PEPS.AreaLaw.Geometry.RepairDescendantScales
 import TNLean.PEPS.AreaLaw.Geometry.RepairDescendants
 import TNLean.PEPS.AreaLaw.Geometry.RepairDummySites
 import TNLean.PEPS.AreaLaw.Geometry.RepairFanCones

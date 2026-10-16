@@ -1,7 +1,7 @@
 % SCP10, Observation 6.6, source lines 1888--1909.
 % Original-tensor normalized corollary for untwisted coarse periods at least three.
 
-\begin{theorem}[Transport between physical realizations of one symmetry]%
+\begin{theorem}[Isometric transfer between physical realizations of one symmetry]%
     \label{thm:peps_g_isometric_physical_transport}
     \lean{TNLean.PEPS.IsGIsometric.exists_physicalSupportTransport,
         TNLean.PEPS.exists_graphGIsometricPhysicalSupportTransport}
@@ -13,11 +13,11 @@
     physical map $F$ such that $FA=\sqrt{c_A/c_B}\,B$, and $F$ preserves
     inner products on $\operatorname{ran}A$. For finite graph tensors with
     this property at every vertex, the product of the local maps restricts
-    to an isometry $I$ on the actual product physical range, with
+    to an isometry $I$ on the product physical range, with
     \begin{align}
         I\Psi_A=\left(\prod_v\sqrt{c_{A,v}/c_{B,v}}\right)\Psi_B.
     \end{align}
-    The graph states are their actual bond contractions. All local physical
+    The graph states are their bond contractions. All local physical
     alphabets may vary with the vertex.
 \end{theorem}
 
@@ -25,7 +25,7 @@
     Let $J_A=c_A^{-1/2}A^*$ be the normalized adjoint and set
     $F=c_B^{-1/2}BJ_A$. On the range of $A$, the vector $J_Ax$ is invariant,
     so G-isometry of $B$ and isometry of $J_A$ imply
-    $\langle Fx,Fy\rangle=\langle x,y\rangle$. Moreover,
+    $\langle Fx,Fy\rangle=\langle x,y\rangle$, and
     $FA=\sqrt{c_A/c_B}\,BP_\rho=\sqrt{c_A/c_B}\,B$.
     The local column Gram equalities imply the same inner-product equality
     for the product physical map on the product range. Expanding its action
@@ -110,7 +110,7 @@
     Let $A$ be a regular G-isometric four-leg tensor for any finite group
     and any finite physical alphabet. Suppose the two coarse periods are
     at least three and every torus bond is untwisted. Let $\Psi_f$ be its
-    actual state on the doubled fine torus and $\Psi_c$ its actual state
+    state on the doubled fine torus and $\Psi_c$ its state
     with the same original tensor on the coarse torus. Both states are
     nonzero. There are positive block and target site factors, local
     physical maps $F_v$, and an isometry $I$ on the derived fine physical
@@ -128,10 +128,10 @@
 \end{theorem}
 
 \begin{proof}\leanok
-    The actual four-site block tensors are G-isometric from fine-site
+    The four-site block tensors are G-isometric from fine-site
     isometry. The target is the original tensor with its surplus identity
     registers, which is G-isometric for the same bundled representation.
-    Physical support transport gives the first equality, with one ratio
+    The physical-support isometry gives the first equality, with one ratio
     of local positive factors per block. The target graph contraction
     factors into the original coarse contraction and surplus equality
     vectors. Normalizing the latter contributes the Bell factor in $R$.

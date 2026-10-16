@@ -370,6 +370,8 @@ no holes, this is the normalization of $\Omega$.
         TNLean.PEPS.EncodedFrame.hasBoundedChange_refl,
         TNLean.PEPS.EncodedFrame.HasBoundedChange.perm_left,
         TNLean.PEPS.EncodedFrame.HasBoundedChange.perm_right,
+        TNLean.PEPS.EncodedFrame.isBoundedChange_liftOne,
+        TNLean.PEPS.EncodedFrame.isBoundedChange_liftTwo,
         TNLean.PEPS.EncodedFrame.hasBoundedChange_liftOne,
         TNLean.PEPS.EncodedFrame.hasBoundedChange_liftTwo,
         TNLean.PEPS.EncodedFrame.hasBoundedChange_activate,
@@ -407,6 +409,45 @@ no holes, this is the normalization of $\Omega$.
     reference vectors of norm at most one. A word becomes an original circuit with
     one two-party gate for each pair source, and a chain one more gate for each pair
     effect, each with a single monomial of coefficient one.
+\end{proof}
+
+\begin{theorem}[Switching the party map between repaintings]
+    \label{thm:peps_protocol_party_map_switch}
+    \lean{TNLean.PEPS.Approximation.labelParty_eq_of_ne_guidePlaceholder,
+        TNLean.PEPS.Approximation.guideFrame_labelParty_eq,
+        TNLean.PEPS.Approximation.exists_isBoundedChange_labelParty_switch,
+        TNLean.PEPS.Approximation.openRoot,
+        TNLean.PEPS.Approximation.blockGuide_protocolLevelLabels_ne_guidePlaceholder,
+        TNLean.PEPS.Approximation.IsDisplacedReading.ne_guidePlaceholder,
+        TNLean.PEPS.Approximation.cellCenterPos_mem_openRoot,
+        TNLean.PEPS.Approximation.guideFrame_levelLabels_labelParty_eq,
+        TNLean.PEPS.Approximation.exists_isBoundedChange_levelLabels_labelParty_switch}
+    \leanok
+    \uses{def:peps_dyadic_protocol_parties}
+    Read the labels of a guide as parties through the party map of a repainting: a
+    block label by its block party and the placeholder label by the fresh placeholder
+    party of that repainting. Suppose the guide takes only the placeholder and the
+    labels of squares of the hierarchy, no site carries the placeholder, and every
+    hole is centered at a true vertex. Then the encoded frame of the guide is the same
+    for the party maps of any two repaintings, and passing from one to the other is
+    the identity change, a bounded change for every set of participants and all
+    bounds. At the start and at the end of each repainting of a level $2^{j'}$ with
+    $j'<k$, every reading of the block guide of the level carries a block label at
+    every point of the open root square $(0,2^k)^2$, which contains the sites
+    $(i+1/2,j+1/2)$, $0\le i,j<L$, when $L\le2^k$. So at these transition times the
+    party map may be switched, and the fresh placeholder party of a repainting owns no
+    site and no tag of the frame before and after that repainting
+    (\texttt{06-geometry.tex}, lines 82--100, 119--125 and 627--630).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{lem:peps_guide_frame_tags, lem:peps_dyadic_tags, thm:peps_dyadic_guide_owners,
+        lem:peps_dyadic_sampled_guides, thm:peps_bounded_change_closure}
+    A label of a square of the hierarchy is held by its block party for every
+    repainting. The tag holder at a true vertex is an incident label other than the
+    placeholder. A point of the root square lies in a block of the root square at
+    every level, and a reading at a point of the open root square is the label of the
+    guide at a nearby point of the open root square.
 \end{proof}
 
 \begin{theorem}[The operations of the protocol as bounded changes]
@@ -560,4 +601,56 @@ no holes, this is the normalization of $\Omega$.
     and addresses of the parties of a gate, and the lifetime bound $64\cdot189$.
     The reference vectors are those of the sheets, so the errors are those of the
     changes, and the final reference vector is that of the final regrouping.
+\end{proof}
+
+\begin{theorem}[Joining the changes of the events]
+    \label{thm:peps_protocol_event_segments}
+    \lean{TNLean.PEPS.EncodedFrame.HasSourceBoundedChange,
+        TNLean.PEPS.EncodedFrame.HasSourceBoundedChange.hasBoundedChange,
+        TNLean.PEPS.EncodedFrame.HasSourceBoundedChange.mono,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_of_perm,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_refl,
+        TNLean.PEPS.EncodedFrame.HasSourceBoundedChange.perm_left,
+        TNLean.PEPS.EncodedFrame.HasSourceBoundedChange.perm_right,
+        TNLean.PEPS.EncodedFrame.isSourceBounded_liftOne,
+        TNLean.PEPS.EncodedFrame.isSourceBounded_liftTwo,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_liftOne,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_liftTwo,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_activate,
+        TNLean.PEPS.EncodedFrame.hasSourceBoundedChange_perm_liftOne,
+        TNLean.PEPS.Approximation.exists_frames_of_segments,
+        TNLean.PEPS.Approximation.exists_isDistributionProtocol_of_hasSourceBoundedChange}
+    \leanok
+    \uses{def:peps_bounded_change, def:peps_circuit_source_bound,
+        thm:peps_protocol_from_bounded_trajectory}
+    A bounded change of the sheets whose monomials have at most $r_s$ pair sources is
+    in particular a bounded change. Both properties persist after enlarging the participant
+    set or any of the bounds $r$, $K$, $r_s$ and $\varepsilon$. Identity changes and
+    reorderings of the sheets satisfy every such bound with $\varepsilon\ge0$;
+    a reordering before or after a change preserves its bounds. The pair-source bound
+    of a circuit is preserved when it is placed on one sheet, or on two adjacent
+    sheets, in a larger stack. If $\lVert\Omega\rVert\le1$ and
+    $\lVert\xi\rVert\le1$, the same lifting preserves all bounded-change data,
+    including after a reordering of the sheets.
+
+    Let a list of events each carry a list of changes, and let the sheets pass,
+    during each event, from its starting stack to the
+    starting stack of the next event through as many such changes as the event has, with
+    participants used by the event. Then one sequence of stacks runs along the whole
+    schedule, each change with participants used by its event. If, moreover, the
+    remaining hypotheses of Theorem~\ref{thm:peps_protocol_from_bounded_trajectory} hold,
+    its conclusion follows (\texttt{06-geometry.tex}, lines 82--100, 127--131 and
+    572--681; \texttt{04-compression.tex}, lines 143--147).
+\end{theorem}
+
+\begin{proof}\leanok
+    \uses{thm:peps_bounded_change_closure, thm:peps_sheet_reordering,
+        lem:peps_circuit_source_bound_monomials, thm:peps_protocol_from_bounded_trajectory}
+    Forget the source bound on the witnessing circuit, or enlarge its bounds.
+    Reorderings and identity changes have no nonprivate operation. Placing a circuit
+    beside untouched registers adds no pair source; the spectator reference vectors
+    have norm at most one, so the error does not increase. The stacks of consecutive
+    events are concatenated by induction on the list of events. After the last change
+    the stack is kept constant, by identity changes, and the bounded-trajectory
+    theorem applies.
 \end{proof}

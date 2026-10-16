@@ -21,5 +21,5 @@ run_cmd do
   let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
   let axioms ← Lean.collectAxioms decl
   unless axioms.all (allowed.contains ·) do
-    throwError "The source-density theorem uses an unsanctioned axiom: {axioms}"
+    throwError "Unexpected logical dependencies: {axioms}"
   Lean.logInfo m!"{decl}: {axioms}"

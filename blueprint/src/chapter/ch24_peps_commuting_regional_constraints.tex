@@ -71,7 +71,7 @@ Associativity gives $L_kT_r=T_rL_k$ for arbitrary $G$.
 \begin{proof}\leanok
     Associativity proves $(k_v\alpha_{v,e})r_e=k_v(\alpha_{v,e}r_e)$.
     Right cancellation preserves each flatness equality under $T_r$.
-    If $q$ witnesses flatness of $\alpha$, then $kq$ witnesses flatness
+    If $q$ gives flatness of $\alpha$, then $kq$ gives flatness
     of $L_k\alpha$; apply the inverse translation for the converse.
     A diagonal indicator commutes with a permutation preserving its support.
     Averaging gives the assertions involving $P_R$ and $B_{R,e}$.
@@ -183,7 +183,7 @@ Associativity gives $L_kT_r=T_rL_k$ for arbitrary $G$.
     $\Gamma_R[u]\ket\theta=\Gamma_R[u^k]\ket{\tau_{k,u}\theta}$.
     If all internal residuals $k_w^{-1}u_ek_v$ are $1$, this is an untwisted
     column $\Gamma_R\ket{\tau_{k,u}\theta}$.
-    In particular, flatness of $b(u,\theta)$ supplies such a $k$ for $\bar u$.
+    In particular, flatness of $b(u,\theta)$ provides such a $k$ for $\bar u$.
 \end{theorem}
 
 \begin{proof}\leanok
@@ -198,7 +198,7 @@ Associativity gives $L_kT_r=T_rL_k$ for arbitrary $G$.
     $k_v^{-1}=k_w^{-1}u_e$, which give $k_w^{-1}u_ek_v=1$.
 \end{proof}
 
-\begin{theorem}[The actual regional range in regular coordinates]%
+\begin{theorem}[The regional range in regular coordinates]%
     \label{thm:peps_regional_range_invariant_flat}
     \lean{TNLean.PEPS.mem_regularProjectorOpenRegionRange_iff,
         TNLean.PEPS.mem_regularProjectorOpenRegionRange_of_invariant_flat,
@@ -206,7 +206,7 @@ Associativity gives $L_kT_r=T_rL_k$ for arbitrary $G$.
         TNLean.PEPS.regularProjectorOpenRegionMatrix_gauge}
     \leanok
     \uses{def:peps_regional_half_edge_flat}
-    Let $\Gamma_R$ be the actual open-region contraction of the local regular
+    Let $\Gamma_R$ be the open-region contraction of the local regular
     averaging projectors, with its original independent boundary labels. A
     function $f$ on the half-edge configurations belongs to
     $\operatorname{range}\Gamma_R$ exactly when
@@ -221,17 +221,17 @@ Associativity gives $L_kT_r=T_rL_k$ for arbitrary $G$.
 \begin{proof}\leanok
     \uses{thm:peps_regional_invariant_expansion,thm:peps_regional_flat_column_transport}
     Apply the expansion (\ref{eq:peps_regional_supported_orbit_expansion}).
-    If a coefficient is nonzero, flat support supplies a vertex gauge
+    If a coefficient is nonzero, flat support provides a vertex gauge
     removing its internal insertions. By
     Theorem~\ref{thm:peps_regional_flat_column_transport}, its column is
-    $\Gamma_R\ket{\theta'}$ for a transported boundary label $\theta'$.
+    $\Gamma_R\ket{\theta'}$ for a transformed boundary label $\theta'$.
     Every summand therefore lies in $\operatorname{range}\Gamma_R$.
 
     Conversely, each original column is left invariant by the local regular
     average and right invariant by a change of its shared internal bond
     variables. Its coefficient can be nonzero only if
     $\alpha_{v,e}=k_v\eta_e$ for some vertex and shared-edge labels. Those
-    labels witness flatness. Linear combinations preserve all three conditions.
+    labels establish flatness. Linear combinations preserve all three conditions.
 \end{proof}
 
 \begin{definition}[Ambient regional constraints]%
@@ -332,8 +332,8 @@ Associativity gives $L_kT_r=T_rL_k$ for arbitrary $G$.
 
     Flatness on $R$ is preserved by arbitrary shared right translations:
     both sides of each internal equality acquire the same right factor.
-    It is also preserved by arbitrary vertex translations, by changing its
-    witnessing gauge. Thus $D_R$ commutes with every $A_v$ and every $B_e$,
+    It is also preserved by arbitrary vertex translations, by translating its
+    vertex gauge. Thus $D_R$ commutes with every $A_v$ and every $B_e$,
     including those outside $R$. Two flatness projectors commute because
     they are diagonal. Every factor in $Q_R$ therefore commutes with every
     factor in $Q_S$.

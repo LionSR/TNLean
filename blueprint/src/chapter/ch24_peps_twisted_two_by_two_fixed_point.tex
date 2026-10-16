@@ -1,7 +1,7 @@
 % SCP10, Definition 5.6, Theorem 5.9 and Observation 6.6.
 % Native periodic closures and coherent sums; physical periods at least three.
 
-\begin{theorem}[Physical transport uniform in inserted bonds]%
+\begin{theorem}[Physical support isometry uniform in inserted bonds]%
     \label{thm:peps_inserted_physical_support_transport}
     \lean{TNLean.PEPS.graphPhysicalProductMap_graphInsertedBondNetwork,
         TNLean.PEPS.graphInsertedBondNetwork_mem_range_productSiteMap,
@@ -58,8 +58,8 @@
         TNLean.PEPS.pairedLeftRegularMatrix_eq_kronecker,
         TNLean.PEPS.torusGClosure_leftRegular_eq_twoByTwoBlocked}
     \leanok
-    For every pair of positive coarse periods $w,h$, the actual fine
-    contraction with the crossing permutations above equals the actual
+    For every pair of positive coarse periods $w,h$, the fine
+    contraction with the crossing permutations above equals the
     coarse contraction of the four-site tensors with paired permutations.
     In particular, a native closure $(g_0,h_0)$ becomes precisely the same
     closure $(g_0,h_0)$ for the paired representation. No scalar occurs.
@@ -103,7 +103,7 @@
     contractions, with arbitrary site-dependent physical alphabets.
     Bijective relabeling of both endpoints preserves every coefficient.
     Hence the native fine closure equals the inserted coarse contraction
-    of its actual four-site tensors, with two regular labels on each bond.
+    of its four-site tensors, with two regular labels on each bond.
     The same ordered labels describe a single regular bond and a bundle
     of regular bonds: matrix transposition under reversal is exactly group
     inversion in both cases.
@@ -131,7 +131,7 @@
     on the distinguished coordinate. Thus the inserted contraction of the
     original tensor with surplus identity registers equals its original
     inserted contraction times the untwisted surplus equality vectors.
-    A single physical-support isometry transports every bundled inserted
+    A single physical-support isometry maps every bundled inserted
     state to this form, with the same local normalization factors and the
     same normalized Bell product.
 \end{theorem}
@@ -141,8 +141,8 @@
     At a twisted head the relative label remains unchanged because
     $(ua)^{-1}(ub_k)=a^{-1}b_k$. The sum over distinguished labels gives
     the original inserted contraction, and the independent relative sums
-    give the surplus equality vectors. Apply uniform physical support
-    transport and retain their inverse-square-root normalizations.
+    give the surplus equality vectors. Apply the uniform physical-support
+    isometry and retain the inverse-square-root normalizations.
 \end{proof}
 
 \begin{theorem}[Nonzero native closures in one fine physical support]%
@@ -152,7 +152,7 @@
         TNLean.PEPS.twoByTwoFineClosure_mem_physicalSupport,
         TNLean.PEPS.twoByTwoSupportedClosure}
     \leanok
-    Let $A$ be a regular G-isometric four-leg tensor. Every actual native
+    Let $A$ be a regular G-isometric four-leg tensor. Every native
     closure is nonzero. On a doubled torus with coarse periods at least
     three, all fine closure vectors belong to the same product block
     physical support, pulled back by the full physical grouping unitary.
@@ -176,7 +176,7 @@
     \leanok
     Let $A$ be a homogeneous regular G-isometric tensor and let both coarse
     periods be at least three. Write $\Psi_f(g,h)$ and $\Psi_c(g,h)$ for its
-    actual fine and coarse native closure vectors. There is one isometry
+    fine and coarse native closure vectors. There is one isometry
     $I$ on the full fine block physical support, acting by physical grouping
     and fixed local physical maps, such that simultaneously for every $g,h$,
     \begin{align}
@@ -184,7 +184,7 @@
                      & I\widehat{\Psi_f(g,h)}        & =\widehat{\Psi_c(g,h)}\otimes\Omega,
     \end{align}
     where $R>0$ retains all block and Bell factors and $\|\Omega\|=1$.
-    The coarse tensor is literally $A$. For arbitrary complex
+    The coarse tensor is $A$ itself. For arbitrary complex
     coefficients $z_{g,h}$, put $x=\sum_{g,h}z_{g,h}\Psi_f(g,h)$ and
     $y=\sum_{g,h}z_{g,h}\Psi_c(g,h)$. Then
     \begin{align}
@@ -201,7 +201,7 @@
         thm:peps_inserted_regular_surplus,
         thm:peps_two_by_two_original_scale,
         thm:peps_physical_state_normalization}
-    Apply the uniform inserted support isometry between the actual
+    Apply the uniform inserted support isometry between the
     four-site block tensor and the original tensor with surplus registers.
     Exact native seam coordinates identify its input and output. Their
     positive norm relation gives the normalized equalities. Linearity

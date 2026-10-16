@@ -34,6 +34,30 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
     closed terminal squares of the generations $i<j$.
 \end{definition}
 
+% Source: 10-geometry.tex, child scales, lines 404--409;
+% geometry:descendant-count, lines 670--681.
+\begin{theorem}[Scales of descendants]
+    \label{thm:area_law_repair_descendant_scales}
+    \lean{TNLean.PEPS.AreaLaw.Geometry.repairStage_scale_eq_iterate}
+    \leanok
+    \uses{def:area_law_repair_ancestors,def:area_law_repair_terminal_children}
+    Write $S_j$ for the scale function on the marks of $\mathcal D_j$,
+    and let $d^{[n]}$ denote the $n$-fold iterate of the removal
+    half-side map. For $i,n\ge0$ and every mark $q$ of
+    $\mathcal D_{i+n}$,
+    \begin{align}
+        S_{i+n}(q) & =d^{[n]}\bigl(S_i(\alpha_{i,n}(q))\bigr).
+        \label{eq:area_law_repair_descendant_scales}
+    \end{align}
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:area_law_repair_ancestors,def:area_law_repair_terminal_children}
+    The case $n=0$ is the identity. For a mark $q$ of
+    $\mathcal D_{i+n+1}$, put $p=\pi_{i+n}(q)$. Its scale is
+    $d(S_{i+n}(p))$. Apply the induction hypothesis to $p$ and use
+    $\alpha_{i,n+1}(q)=\alpha_{i,n}(p)$.
+\end{proof}
+
 % Source: 10-geometry.tex, geometry:initial-stars, lines 332--349, and
 % geometry:repair-induction, lines 471--485.
 \begin{definition}[Conclusion of the uniform repair induction]
@@ -232,7 +256,7 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
 \begin{proof}
     \leanok
     \uses{thm:area_law_repair_margins,
-        thm:area_law_uniform_separated_initial_marks}
+        thm:area_law_initial_repair_mark_facts}
     The margin holds for all large $S$. Initial scales are sides
     $2^{\lfloor\zeta k\rfloor}$ of cells of layers $k\ge k_0$, hence at
     least $S_*$ for $k_0$ large, and distinct initial marks are separated
@@ -256,7 +280,7 @@ $v+[-r,r]^2$ is the closed ball of radius $r$ about $v$.
 
 \begin{proof}
     \leanok
-    \uses{thm:area_law_uniform_separated_initial_marks,
+    \uses{thm:area_law_initial_repair_mark_facts,
         thm:area_law_adjacent_fine_meshes,thm:area_law_belt_marks_quarter_mesh,
         lem:area_law_repair_metric_invariants,
         thm:area_law_repair_halfside_integral,def:area_law_repair_children}

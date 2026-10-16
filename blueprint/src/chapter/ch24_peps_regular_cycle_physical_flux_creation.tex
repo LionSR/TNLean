@@ -18,9 +18,9 @@
     \leanok
     \uses{def:peps_regular_region_coordinates,def:peps_regular_flux_creation_matrix}
     Let $R$ be a nonempty finite region with a spanning tree $T$, root $o$,
-    and an internal bond $e$ outside $T$. In the actual coordinates $(y,a,r,z)$,
+    and an internal bond $e$ outside $T$. In the coordinates $(y,a,r,z)$,
     apply the class creation unitary $U_g$ to $z_e$ and the identity to every
-    other coordinate. Transport this operator through the coordinate
+    other coordinate. Conjugate this operator by the coordinate
     bijection and denote the resulting half-edge operator by $Q_{g,e}$.
 \end{definition}
 
@@ -43,7 +43,7 @@
     The commutation criterion gives the projector assertion.
 \end{proof}
 
-\begin{theorem}[Normalized creation in actual canonical boundary columns]%
+\begin{theorem}[Normalized creation in canonical boundary columns]%
     \label{thm:peps_regular_canonical_flux_creation}
     \lean{TNLean.PEPS.regularProjectorTwistedRegionMatrix_fluxCreation}
     \leanok
@@ -92,7 +92,7 @@
     The product physical map has a positive scalar-projector Gram matrix,
     derived from the local $G$-isometry. The canonical unitary commutes with
     this projector, so equal Gram matrices give a physical unitary intertwining
-    the two operators. Apply it to the canonical column identity. The actual
+    the two operators. Apply it to the canonical column identity. The
     original and canonical contractions are related by the product physical
     map, which distributes over the coherent finite sum.
 \end{proof}

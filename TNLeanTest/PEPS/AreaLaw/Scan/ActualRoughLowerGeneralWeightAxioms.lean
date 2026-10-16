@@ -20,5 +20,5 @@ run_cmd do
       throwError "Missing declaration {decl}"
     let axioms ← Lean.collectAxioms decl
     unless axioms.all (expected.contains ·) && expected.all (axioms.contains ·) do
-      throwError "Unexpected axiom set for {decl}: {axioms}"
+      throwError "Unexpected dependencies for {decl}: {axioms}"
     Lean.logInfo m!"{decl}: {axioms}"

@@ -3,10 +3,11 @@ Copyright (c) 2026 TNLean contributors. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
+import TNLean.PEPS.Approximation.DistributedGateMapConstruction
 import TNLean.PEPS.Approximation.DistributedPartyNetwork
 import TNLean.PEPS.Approximation.DyadicProtocol
 import TNLean.PEPS.Approximation.GroundStateApproximation
-import TNLean.PEPS.Approximation.UniformApproximateSampledNetwork
+import TNLean.PEPS.Approximation.OriginalCircuitChain
 
 /-!
 # Compression of the dyadic distribution protocol
@@ -18,8 +19,8 @@ polynomial link dimensions and `‖σ - |Ω⟩⟨Ω|‖₁ ≤ C L⁻⁵` (`eq:c
 `LargeSizeDyadicProtocolConsequences`.
 
 The changes of a protocol are composed into one chronology, and the protocol is read as a
-distributed construction of Theorem 5.2 whose gate operators are the sums of their recorded
-monomial expansions. Its physical density is the physical density of the actual final vector.
+distributed construction of Theorem 5.2 with the recorded monomial expansions of its gates. Its
+physical density is the physical density of the actual final vector.
 All protocols, over all sizes, Hamiltonians, and ground vectors, form one family with uniform
 polynomial bounds, so the constants of Theorem 5.2 are chosen before the family member, as in
 the order of constants of `07-assembly.tex:179–203`. The resulting distributed operator
@@ -64,81 +65,15 @@ noncomputable section
 
 open scoped Matrix
 
-namespace TNLean.PEPS.PairEffect
+namespace TNLean.PEPS.PairEffect.OriginalCircuit
 
-variable {P : Type}
+variable {P : Type} {a b : Layout P}
 
-namespace EffectCircuit
-
-/-- The exact operator of every recorded gate occurrence: the sum of its own monomial list.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–43. -/
-def exactGateMaps : {a b : Layout P} → (w : EffectCircuit a b) → w.GateMaps
-  | _, _, .id _ => PUnit.unit
-  | _, _, .comp w v => (exactGateMaps w, exactGateMaps v)
-  | _, _, .localMap .. => PUnit.unit
-  | _, _, @EffectCircuit.gate _ _ _ _ _ _ L _ => PairEffect.gate (toGate L)
-  | _, _, .swap .. => PUnit.unit
-  | _, _, .frame _ w => exactGateMaps w
-
-/-- The monomial lists already recorded at every gate occurrence.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–43 and
-590–600. -/
-def selfLists : {a b : Layout P} → (w : EffectCircuit a b) → w.GateLists
-  | _, _, .id _ => PUnit.unit
-  | _, _, .comp w v => (selfLists w, selfLists v)
-  | _, _, .localMap .. => PUnit.unit
-  | _, _, @EffectCircuit.gate _ _ _ _ _ _ L _ => L
-  | _, _, .swap .. => PUnit.unit
-  | _, _, .frame _ w => selfLists w
-
-/-- Evaluating with the exact gate operators is the evaluation of the circuit.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–36. -/
-theorem evalWithGateMaps_exactGateMaps {a b : Layout P} (w : EffectCircuit a b) :
-    w.evalWithGateMaps w.exactGateMaps = w.eval := by
-  induction w with
-  | id => rfl
-  | comp w v ihw ihv =>
-      exact congrArg₂ ContinuousLinearMap.comp ihv ihw
-  | localMap => rfl
-  | gate => rfl
-  | swap => rfl
-  | frame r w ih => exact congrArg (fun A ↦ A.lTensor r.space) ih
-
-/-- Transport a circuit along equalities of its input and output layouts.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–36. -/
-def castLayouts {a a' b b' : Layout P} (ha : a = a') (hb : b = b') (w : EffectCircuit a b) :
-    EffectCircuit a' b' :=
-  ha ▸ hb ▸ w
-
-end EffectCircuit
-
-namespace OriginalCircuit
-
-variable {a b : Layout P}
-
-/-- Each original gate is approximated, with any nonnegative error, by its own recorded
-expansion: its operator is the sum of that expansion.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–43 and 590–600. -/
-theorem isGateApproximation_produce (w : OriginalCircuit a b) {δ : ℝ} (hδ : 0 ≤ δ) :
-    (w.produce.reexpand w.produce.selfLists).IsGateApproximation δ
-      (w.produce.reexpandGateMaps w.produce.selfLists w.produce.exactGateMaps) := by
-  induction w with
-  | id => trivial
-  | comp w v ihw ihv => exact ⟨ihw, ihv⟩
-  | privateMap p ha hb A hA tail => exact hA
-  | nonprivateGate owner hC L hL hG tail =>
-      refine ⟨hC, hL, hG, ?_⟩
-      change ‖PairEffect.gate (toGate L) - PairEffect.gate (toGate L)‖ ≤ δ
-      simpa only [sub_self, norm_zero] using hδ
-  | swap => trivial
-  | frame r w ih => exact ih
-
-/-- An absolute coefficient sum at most `S` bounds every individual coefficient by `S`, and the
-pair-effect count of every monomial is unchanged.
+/-- An absolute coefficient sum at most `S` bounds every individual coefficient by any `S' ≥ S`,
+and the pair-effect count of every monomial is unchanged.
 Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 143–149. -/
-theorem isTermwiseBounded_produce (w : OriginalCircuit a b) {r : ℕ} {S S' : ℝ}
-    (h : w.IsExpansionBounded r S) (hS : S ≤ S') :
-    (w.produce.reexpand w.produce.selfLists).IsTermwiseBounded r S' := by
+theorem IsExpansionBounded.isTermwiseBounded {w : OriginalCircuit a b} {r : ℕ} {S S' : ℝ}
+    (h : w.IsExpansionBounded r S) (hS : S ≤ S') : w.IsTermwiseBounded r S' := by
   induction w with
   | id => trivial
   | comp w v ihw ihv => exact ⟨ihw h.1, ihv h.2⟩
@@ -151,101 +86,7 @@ theorem isTermwiseBounded_produce (w : OriginalCircuit a b) {r : ℕ} {S S' : �
   | swap => trivial
   | frame r w ih => exact ih h
 
-/-- The recorded expansions keep their monomial counts.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 143–149. -/
-theorem monomialCount_produce_le (w : OriginalCircuit a b) {K : ℕ}
-    (h : w.IsMonomialBounded K) :
-    ∀ g, (w.produce.reexpand w.produce.selfLists).monomialCount g ≤ K := by
-  induction w with
-  | id => intro g; exact nomatch g
-  | comp w v ihw ihv =>
-      rintro (g | g)
-      · exact ihw h.1 g
-      · exact ihv h.2 g
-  | privateMap => intro g; exact nomatch g
-  | nonprivateGate => intro _; exact h
-  | swap => intro g; exact nomatch g
-  | frame r w ih => exact ih h
-
-variable {a' b' : Layout P}
-
-/-- Transport along layout equalities keeps the number of nonprivate gates.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 137–142. -/
-theorem expandedGateCount_castLayouts_produce (ha : a = a') (hb : b = b')
-    (w : OriginalCircuit a b) :
-    (EffectCircuit.castLayouts ha hb w.produce).expandedGateCount = w.nonprivateCount := by
-  subst ha hb
-  exact w.expandedGateCount_produce
-
-/-- Every gate of the transported circuit has the participants of an original nonprivate gate.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 25–27 and 140–142. -/
-theorem exists_participants_castLayouts_produce (ha : a = a') (hb : b = b')
-    (w : OriginalCircuit a b)
-    (g : (EffectCircuit.castLayouts ha hb w.produce).gateLocations) :
-    ∃ g' : w.nonprivateLocations,
-      (EffectCircuit.castLayouts ha hb w.produce).participants g = w.participants g' := by
-  subst ha hb
-  change w.produce.gateLocations at g
-  change ∃ g' : w.nonprivateLocations, w.produce.participants g = w.participants g'
-  exact ⟨w.produceLocationsEquiv.symm g, by
-    rw [← w.participants_produce, Equiv.apply_symm_apply]⟩
-
-/-- Transport along layout equalities keeps the lifetime participation of every party.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 140–142. -/
-theorem participationCount_castLayouts_produce (ha : a = a') (hb : b = b')
-    (w : OriginalCircuit a b) (p : P) :
-    Nat.card {g : (EffectCircuit.castLayouts ha hb w.produce).gateLocations //
-      p ∈ (EffectCircuit.castLayouts ha hb w.produce).participants g} =
-      w.participationCount p := by
-  subst ha hb
-  change Nat.card {g : w.produce.gateLocations // p ∈ w.produce.participants g} = _
-  exact Nat.card_congr (w.produceLocationsEquiv.subtypeEquiv fun g ↦ by
-    rw [w.participants_produce]).symm
-
-/-- The transported circuit is approximated by its own recorded expansions with any nonnegative
-error. Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 143–149 and 590–600. -/
-theorem isGateApproximation_castLayouts_produce (ha : a = a') (hb : b = b')
-    (w : OriginalCircuit a b) {δ : ℝ} (hδ : 0 ≤ δ) :
-    let W := EffectCircuit.castLayouts ha hb w.produce
-    (W.reexpand W.selfLists).IsGateApproximation δ
-      (W.reexpandGateMaps W.selfLists W.exactGateMaps) := by
-  subst ha hb
-  exact w.isGateApproximation_produce hδ
-
-/-- The transported recorded expansions have individual coefficients at most any bound on the
-original absolute coefficient sums.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 143–149. -/
-theorem isTermwiseBounded_castLayouts_produce (ha : a = a') (hb : b = b')
-    (w : OriginalCircuit a b) {r : ℕ} {S S' : ℝ} (h : w.IsExpansionBounded r S) (hS : S ≤ S') :
-    let W := EffectCircuit.castLayouts ha hb w.produce
-    (W.reexpand W.selfLists).IsTermwiseBounded r S' := by
-  subst ha hb
-  exact w.isTermwiseBounded_produce h hS
-
-/-- The transported recorded expansions keep the original monomial bound.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 143–149. -/
-theorem monomialCount_castLayouts_produce_le (ha : a = a') (hb : b = b')
-    (w : OriginalCircuit a b) {K : ℕ} (h : w.IsMonomialBounded K) :
-    let W := EffectCircuit.castLayouts ha hb w.produce
-    ∀ g, (W.reexpand W.selfLists).monomialCount g ≤ K := by
-  subst ha hb
-  exact w.monomialCount_produce_le h
-
-/-- The transported circuit, evaluated with its exact gate operators, is the original circuit
-read through the layout identifications.
-Source: polynomial-PEPS Theorem 5.2, `04-compression.tex`, lines 21–36. -/
-theorem evalWithGateMaps_castLayouts_produce (ha : a = a') (hb : b = b')
-    (w : OriginalCircuit a b) (x : Mem a') :
-    let W := EffectCircuit.castLayouts ha hb w.produce
-    W.evalWithGateMaps W.exactGateMaps x =
-      Layout.memCongr hb (w.eval (Layout.memCongr ha.symm x)) := by
-  subst ha hb
-  change w.produce.evalWithGateMaps w.produce.exactGateMaps x = w.eval x
-  rw [EffectCircuit.evalWithGateMaps_exactGateMaps, eval_produce]
-
-end OriginalCircuit
-
-end TNLean.PEPS.PairEffect
+end TNLean.PEPS.PairEffect.OriginalCircuit
 
 namespace TNLean.PEPS.Approximation.DyadicProtocol
 
@@ -321,11 +162,11 @@ theorem isMonomialBounded_chain {K : ℕ} (n : ℕ)
   | zero => trivial
   | succ n ih => exact ⟨ih fun t ht ↦ h t (by omega), h n (by omega)⟩
 
-/-- The protocol, read as one distributed construction of Theorem 5.2 whose gate operators are
-the sums of their recorded monomial expansions.
+/-- The protocol, read as one distributed construction of Theorem 5.2: its composed changes, with
+their recorded monomial expansions, between the input and output layouts of the protocol.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:45–49`, and Theorem 5.2,
 `04-compression.tex:137–151`. -/
-def toGateMapConstruction (hL : 0 < L) : GateMapConstruction P where
+def toDistributedConstruction (hL : 0 < L) : DistributedConstruction P where
   nonemptyParties := ⟨D.site (⟨0, hL⟩, ⟨0, hL⟩)⟩
   initialSpace := D.initialSpace
   finite_initialSpace := D.finite_initialSpace
@@ -337,8 +178,15 @@ def toGateMapConstruction (hL : 0 < L) : GateMapConstruction P where
   mem_physicalOrder := D.mem_physicalOrder
   privateOutput := D.privateOutput
   finite_privateOutput := D.finite_privateOutput
-  circuit := EffectCircuit.castLayouts D.layout_zero D.layout_changes (D.chain D.changes).produce
-  gateMaps := EffectCircuit.exactGateMaps _
+  circuit := (D.chain D.changes).castLayouts D.layout_zero D.layout_changes
+
+/-- Every property of the composed changes holds for the circuit of the protocol read as a
+distributed construction, which only identifies its layouts.
+Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:45–49`. -/
+theorem toDistributedConstruction_circuit_induction (hL : 0 < L)
+    (Q : ∀ a b : Layout P, OriginalCircuit a b → Prop) (h : Q _ _ (D.chain D.changes)) :
+    Q _ _ (D.toDistributedConstruction hL).circuit :=
+  OriginalCircuit.castLayouts_induction Q _ _ h
 
 /-- The configuration of the square read from the physical outputs of the parties: the site `v`
 carries the physical output of its unit-square party.
@@ -353,8 +201,8 @@ density of its actual final vector, with the party configurations identified wit
 configurations of the square.
 Source: Polynomial-PEPS manuscript (Sept 24 2026), `07-assembly.tex:36–49`, and Theorem 5.2,
 `04-compression.tex:150–153`. -/
-theorem physicalDensity_toGateMapConstruction (hL : 0 < L) :
-    (D.toGateMapConstruction hL).physicalDensity =
+theorem physicalDensity_toDistributedConstruction (hL : 0 < L) :
+    (D.toDistributedConstruction hL).physicalDensity =
       D.physicalDensity.submatrix D.physicalConfigEquiv D.physicalConfigEquiv := by
   classical
   let := Layout.finiteDimensional_mem_of_registers D.privateOutput D.finite_privateOutput
@@ -362,22 +210,25 @@ theorem physicalDensity_toGateMapConstruction (hL : 0 < L) :
   set J := familyLabelledPhysicalReadout D.physicalDimension D.physicalOrder
     D.physicalOrder_nodup D.mem_physicalOrder D.privateOutput
   set w := J (Layout.memCongr D.layout_changes (D.trajectory D.changes))
-  have hC : (D.toGateMapConstruction hL).physicalDensity =
+  have hC : (D.toDistributedConstruction hL).physicalDensity =
       Matrix.partialTraceRight (Matrix.euclideanOuterProduct w w) := by
-    have h := OriginalCircuit.evalWithGateMaps_castLayouts_produce D.layout_zero
-      D.layout_changes (D.chain D.changes) (D.toGateMapConstruction hL).input.vector
-    simp only at h
-    change Matrix.partialTraceRight (Matrix.euclideanOuterProduct
-      (J ((D.toGateMapConstruction hL).circuit.evalWithGateMaps
-        (D.toGateMapConstruction hL).gateMaps (D.toGateMapConstruction hL).input.vector))
-      (J ((D.toGateMapConstruction hL).circuit.evalWithGateMaps
-        (D.toGateMapConstruction hL).gateMaps (D.toGateMapConstruction hL).input.vector))) = _
-    have h' : (D.toGateMapConstruction hL).circuit.evalWithGateMaps
-        (D.toGateMapConstruction hL).gateMaps (D.toGateMapConstruction hL).input.vector =
+    have h : (D.toDistributedConstruction hL).circuit.eval
+        (D.toDistributedConstruction hL).input.vector =
         Layout.memCongr D.layout_changes (D.trajectory D.changes) := by
-      rw [← D.eval_chain_trajectory]
-      exact h
-    rw [h']
+      have hx : (D.toDistributedConstruction hL).input.vector =
+          Layout.memCongr D.layout_zero (D.trajectory 0) := by
+        change D.input.vector =
+          Layout.memCongr D.layout_zero (Layout.memCongr D.layout_zero.symm D.input.vector)
+        rw [Layout.memCongr_symm D.layout_zero, LinearIsometryEquiv.apply_symm_apply]
+      rw [hx]
+      exact (OriginalCircuit.eval_castLayouts_memCongr _ _ _ _).trans
+        (congrArg _ (D.eval_chain_trajectory _))
+    change Matrix.partialTraceRight (Matrix.euclideanOuterProduct
+      (J ((D.toDistributedConstruction hL).circuit.eval
+        (D.toDistributedConstruction hL).input.vector))
+      (J ((D.toDistributedConstruction hL).circuit.eval
+        (D.toDistributedConstruction hL).input.vector))) = _
+    rw [h]
   have hD : D.physicalDensity = Matrix.partialTraceRight
       ((Matrix.euclideanOuterProduct w w).submatrix (e.prodCongr (Equiv.refl _)).symm
         (e.prodCongr (Equiv.refl _)).symm) := by
@@ -557,14 +408,14 @@ theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences
   have hsize : ∀ i, 2 ≤ size i := fun i ↦ by
     change (2 : ℝ) ≤ (i.size : ℝ)
     exact_mod_cast i.two_le
-  let C₀ : ∀ i : ProtocolInstance q C b k r, GateMapConstruction i.Party := fun i ↦
-    i.protocol.toGateMapConstruction (by have := i.two_le; omega)
-  have hN₀ : ∀ i, ((C₀ i).circuit.expandedGateCount : ℝ) ≤ (max C 0 * b) * size i ^ 3 := by
+  let C₀ : ∀ i : ProtocolInstance q C b k r, DistributedConstruction i.Party := fun i ↦
+    i.protocol.toDistributedConstruction (by have := i.two_le; omega)
+  have hN₀ : ∀ i, ((C₀ i).circuit.nonprivateCount : ℝ) ≤ (max C 0 * b) * size i ^ 3 := by
     intro i
     have hD := i.isDistributionProtocol
-    have hcount : (C₀ i).circuit.expandedGateCount =
+    have hcount : (C₀ i).circuit.nonprivateCount =
         (i.protocol.chain i.protocol.changes).nonprivateCount :=
-      OriginalCircuit.expandedGateCount_castLayouts_produce _ _ _
+      OriginalCircuit.nonprivateCount_castLayouts _ _ _
     rw [hcount, DyadicProtocol.nonprivateCount_chain]
     have hsum : ∑ t ∈ range i.protocol.changes, (i.protocol.step t).nonprivateCount ≤
         i.protocol.changes * b := by
@@ -585,55 +436,40 @@ theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences
       rw [i.protocol.physicalDimension_site]
     · rw [i.protocol.physicalDimension_eq_one j hj]
       exact_mod_cast (show 1 ≤ q by omega)
-  have harity₀ : ∀ i g, ((C₀ i).circuit.participants g).card ≤ b := by
-    intro i g
-    obtain ⟨g', hg'⟩ : ∃ g' : (i.protocol.chain i.protocol.changes).nonprivateLocations,
-        (C₀ i).circuit.participants g = _ :=
-      OriginalCircuit.exists_participants_castLayouts_produce _ _ _ g
-    obtain ⟨t, ht, g'', hg''⟩ := i.protocol.exists_participants_chain _ g'
-    rw [hg', hg'']
-    exact i.isDistributionProtocol.card_participants_le t ht g''
-  have hlifetime₀ : ∀ i j, Nat.card {g : (C₀ i).circuit.gateLocations //
-      j ∈ (C₀ i).circuit.participants g} ≤ b := by
-    intro i j
-    have : Nat.card {g : (C₀ i).circuit.gateLocations // j ∈ (C₀ i).circuit.participants g} =
-        (i.protocol.chain i.protocol.changes).participationCount j :=
-      OriginalCircuit.participationCount_castLayouts_produce _ _ _ j
-    refine (this.trans ?_).trans_le (i.isDistributionProtocol.participation_le j)
-    rw [DyadicProtocol.participationCount_chain]
-    rfl
-  have hExpansion : ∀ q' : ℕ, ∃ (r' : ℕ) (C_K C_C : ℝ) (u v : ℕ),
-      0 ≤ C_K ∧ 0 ≤ C_C ∧ ∀ i,
-        ∃ (lists : (C₀ i).circuit.GateLists) (K : ℕ),
-          ((C₀ i).circuit.reexpand lists).IsTermwiseBounded r' (C_C * (size i) ^ v) ∧
-          (∀ g, ((C₀ i).circuit.reexpand lists).monomialCount g ≤ K) ∧
-          (K : ℝ) ≤ C_K * (size i) ^ u ∧
-          ((C₀ i).circuit.reexpand lists).IsGateApproximation ((size i) ^ q')⁻¹
-            ((C₀ i).circuit.reexpandGateMaps lists (C₀ i).gateMaps) := by
-    intro q'
-    refine ⟨r, max C 0, max C 0, k, k, le_max_right _ _, le_max_right _ _, fun i ↦ ?_⟩
-    have hD := i.isDistributionProtocol
-    have hpow : C * (size i) ^ k ≤ max C 0 * (size i) ^ k :=
-      mul_le_mul_of_nonneg_right (le_max_left _ _) (pow_nonneg (by linarith [hsize i]) _)
-    refine ⟨(C₀ i).circuit.selfLists, ⌊C * (size i) ^ k⌋₊, ?_, ?_, ?_, ?_⟩
-    · exact OriginalCircuit.isTermwiseBounded_castLayouts_produce _ _ _
-        (i.protocol.isExpansionBounded_chain _ hD.expansionBounded) hpow
-    · exact OriginalCircuit.monomialCount_castLayouts_produce_le _ _ _
-        (i.protocol.isMonomialBounded_chain _ hD.monomialBounded)
-    · refine (natCast_floor_le_max _).trans (max_le hpow ?_)
-      exact mul_nonneg (le_max_right _ _) (pow_nonneg (by linarith [hsize i]) _)
-    · exact OriginalCircuit.isGateApproximation_castLayouts_produce _ _ _
-        (inv_nonneg.mpr (pow_nonneg (by linarith [hsize i]) _))
-  obtain ⟨r', C_p, α, hCp, hα, hfam⟩ :=
-    GateMapConstruction.exists_uniform_approximate_sampled_network size hsize
-      (fun i ↦ i.Party) C₀ b 3 0 (max C 0 * b) q
-      (mul_nonneg (le_max_right _ _) (Nat.cast_nonneg _)) (Nat.cast_nonneg _)
-      hN₀ hphysical₀ harity₀ hlifetime₀ hExpansion 5 (by norm_num)
+  have harity₀ : ∀ i g, ((C₀ i).circuit.participants g).card ≤ b := fun i ↦
+    i.protocol.toDistributedConstruction_circuit_induction _
+      (fun _ _ w ↦ ∀ g, (w.participants g).card ≤ b) fun g ↦ by
+        obtain ⟨t, ht, g', hg'⟩ := i.protocol.exists_participants_chain _ g
+        rw [hg']
+        exact i.isDistributionProtocol.card_participants_le t ht g'
+  have hlifetime₀ : ∀ i j, (C₀ i).circuit.participationCount j ≤ b := fun i j ↦
+    i.protocol.toDistributedConstruction_circuit_induction _
+      (fun _ _ w ↦ w.participationCount j ≤ b) <| by
+        rw [DyadicProtocol.participationCount_chain]
+        exact i.isDistributionProtocol.participation_le j
+  have hpow : ∀ i, C * size i ^ k ≤ max C 0 * size i ^ k := fun i ↦
+    mul_pow_le_max_zero_mul_pow C (by linarith [hsize i]) k
+  have hmonomial₀ : ∀ i, ∃ K : ℕ, (C₀ i).circuit.IsMonomialBounded K ∧
+      (K : ℝ) ≤ max C 0 * size i ^ k := fun i ↦
+    ⟨⌊C * size i ^ k⌋₊, i.protocol.toDistributedConstruction_circuit_induction _
+      (fun _ _ w ↦ w.IsMonomialBounded _)
+      (i.protocol.isMonomialBounded_chain _ i.isDistributionProtocol.monomialBounded),
+      (natCast_floor_le_max _).trans (max_le (hpow i)
+        (mul_nonneg (le_max_right _ _) (pow_nonneg (by linarith [hsize i]) _)))⟩
+  have htermwise₀ : ∀ i, (C₀ i).circuit.IsTermwiseBounded r (max C 0 * size i ^ k) := fun i ↦
+    i.protocol.toDistributedConstruction_circuit_induction _
+      (fun _ _ w ↦ w.IsTermwiseBounded r _)
+      ((i.protocol.isExpansionBounded_chain _
+        i.isDistributionProtocol.expansionBounded).isTermwiseBounded (hpow i))
+  obtain ⟨C_p, α, hCp, hα, hfam⟩ :=
+    DistributedConstruction.exists_uniform_sampled_network size hsize (fun i ↦ i.Party) C₀
+      b 3 0 r k k (max C 0 * b) q (max C 0) (max C 0)
+      hN₀ hphysical₀ harity₀ hlifetime₀ hmonomial₀ htermwise₀ 5 (by norm_num)
   refine ⟨1 + (2 * (C * C) + 2 * C), C_p, α, b, 2 * b * (b - 1), b, L₀, ?_⟩
   intro L hL hL₀ H E₀ Ω hΩ
   obtain ⟨P, hP, D, hD⟩ := hall L hL hL₀ H E₀ Ω hΩ
   let i : ProtocolInstance q C b k r := ⟨L, hL, P, D, Ω, hΩ.1, hD⟩
-  obtain ⟨lists, B, hB, hb, happrox, T, herr, hdim, hinc, hloc⟩ := hfam i
+  obtain ⟨_, _, _, _, _, _, _, _, _, _, T, herr, hdim, hinc, hloc⟩ := hfam i
   have hL0 : 0 < L := by omega
   have hC : 0 ≤ C := by
     have h1 : (1 : ℝ) ≤ Fintype.card P := by
@@ -644,16 +480,14 @@ theorem largeSizeDyadicOperatorNetwork_of_largeSizeDyadicProtocolConsequences
   classical
   obtain ⟨Λ, _, _, N, hdeg, hsep, hdimN, hnorm⟩ :=
     D.exists_partyNetwork_of_contractedOperator hL0 hD hC hΩ.1 _ _ _ _ _ _ _ T
-      (D.physicalDensity_toGateMapConstruction hL0) herr hdim hinc (by
-        intro e j l hj hl
+      (D.physicalDensity_toDistributedConstruction hL0) herr hdim hinc fun e j l hj hl ↦ by
         obtain ⟨g, hjg, hlg⟩ := hloc e j l hj hl
-        obtain ⟨g', hg'⟩ : ∃ g' : (D.chain D.changes).nonprivateLocations,
-            (C₀ i).circuit.participants g = _ :=
-          OriginalCircuit.exists_participants_castLayouts_produce _ _ _ g
-        obtain ⟨t, ht, g'', hg''⟩ := D.exists_participants_chain _ g'
-        refine ⟨t, ht, g'', ?_, ?_⟩
-        · rw [← hg'', ← hg']; exact hjg
-        · rw [← hg'', ← hg']; exact hlg)
+        refine D.toDistributedConstruction_circuit_induction hL0
+          (fun _ _ w ↦ ∀ g, j ∈ w.participants g → l ∈ w.participants g →
+            ∃ t < D.changes, ∃ g', j ∈ (D.step t).participants g' ∧
+              l ∈ (D.step t).participants g') (fun g hjg hlg ↦ ?_) g hjg hlg
+        obtain ⟨t, ht, g', hg'⟩ := D.exists_participants_chain _ g
+        exact ⟨t, ht, g', hg' ▸ hjg, hg' ▸ hlg⟩
   refine ⟨P, Λ, hP, inferInstance, inferInstance, inferInstance, N, D.placement, hD.inGrid,
     hD.blockBounded, hdeg, hsep, fun ℓ ↦ (hdimN ℓ).trans_eq (by rw [Real.rpow_natCast]), ?_⟩
   have hx : (2 : ℝ) ≤ L := by exact_mod_cast hL

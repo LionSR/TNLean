@@ -261,17 +261,14 @@ theorem exists_uniform_sampled_network
               ∃ g : (C₀ L).circuit.nonprivateLocations,
                 j ∈ (C₀ L).circuit.participants g ∧ l ∈ (C₀ L).circuit.participants g) := by
   have hsize0 : ∀ L, 0 ≤ size L := fun L ↦ (by norm_num : (0 : ℝ) ≤ 2).trans (hsize L)
-  have hmax : ∀ (C : ℝ) (L : ι) (m : ℕ), C * size L ^ m ≤ max C 0 * size L ^ m :=
-    fun C L m ↦ mul_le_mul_of_nonneg_right (le_max_left _ _) (pow_nonneg (hsize0 L) _)
   obtain ⟨r', C_p, α, hC, hα, hfamily⟩ :=
     GateMapConstruction.exists_uniform_approximate_sampled_network size hsize P
-      (fun L ↦ (C₀ L).toGateMapConstruction) b n d (max C_N 0) (max C_D 0)
-      (le_max_right _ _) (le_max_right _ _)
+      (fun L ↦ (C₀ L).toGateMapConstruction) b n d C_N C_D
       (fun L ↦ by
         change ((C₀ L).circuit.produce.expandedGateCount : ℝ) ≤ _
         rw [OriginalCircuit.expandedGateCount_produce]
-        exact (hN₀ L).trans (hmax _ _ _))
-      (fun L j ↦ (hphysical₀ L j).trans (hmax _ _ _))
+        exact hN₀ L)
+      hphysical₀
       (fun L g ↦ by
         change ((C₀ L).circuit.produce.participants g).card ≤ b
         rw [← (C₀ L).circuit.produceLocationsEquiv.apply_symm_apply g,
@@ -282,13 +279,11 @@ theorem exists_uniform_sampled_network
           j ∈ (C₀ L).circuit.produce.participants g} ≤ b
         rw [OriginalCircuit.natCard_participation_produce]
         exact hlifetime₀ L j)
-      (fun _ ↦ ⟨r, max C_K 0, max C_C 0, u, v, le_max_right _ _, le_max_right _ _, fun L ↦ by
+      (fun _ ↦ ⟨r, C_K, C_C, u, v, fun L ↦ by
         obtain ⟨K, hK, hKb⟩ := hmonomial₀ L
         exact ⟨(C₀ L).circuit.produce.expansionGateLists, K,
-          (C₀ L).circuit.isTermwiseBounded_reexpand_expansionGateLists
-            ((htermwise₀ L).mono (hmax _ _ _)),
-          (C₀ L).circuit.monomialCount_reexpand_expansionGateLists_le hK,
-          hKb.trans (hmax _ _ _),
+          (C₀ L).circuit.isTermwiseBounded_reexpand_expansionGateLists (htermwise₀ L),
+          (C₀ L).circuit.monomialCount_reexpand_expansionGateLists_le hK, hKb,
           (C₀ L).circuit.isGateApproximation_reexpand_expansionGateLists
             (inv_nonneg.mpr (pow_nonneg (hsize0 L) _))⟩⟩)
       p hp

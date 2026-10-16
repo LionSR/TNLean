@@ -36,6 +36,7 @@ import TNLean.PEPS.AreaLaw.Scan.ActualRoundParameterIntegral
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundSplits
 import TNLean.PEPS.AreaLaw.Scan.ActualRoundTransport
 import TNLean.PEPS.AreaLaw.Scan.ActualScanMeasures
+import TNLean.PEPS.AreaLaw.Scan.ActualScanTransportInputs
 import TNLean.PEPS.AreaLaw.Scan.ActualSelectedChargeDensityEnergy
 import TNLean.PEPS.AreaLaw.Scan.ActualSelectedChargeEnergy
 import TNLean.PEPS.AreaLaw.Scan.ActualSelectedCollarInformation
@@ -92,6 +93,8 @@ import TNLean.PEPS.AreaLaw.Scan.ChargeEntropyCost
 import TNLean.PEPS.AreaLaw.Scan.ChargePathCounting
 import TNLean.PEPS.AreaLaw.Scan.ChargeSlots
 import TNLean.PEPS.AreaLaw.Scan.CompactCollarCounting
+import TNLean.PEPS.AreaLaw.Scan.ComparatorBounds
+import TNLean.PEPS.AreaLaw.Scan.ComparatorData
 import TNLean.PEPS.AreaLaw.Scan.Defs
 import TNLean.PEPS.AreaLaw.Scan.DesignatedDilution
 import TNLean.PEPS.AreaLaw.Scan.DesignatedMoveCost
@@ -165,13 +168,16 @@ import TNLean.PEPS.AreaLaw.Scan.SourceActualInformation
 import TNLean.PEPS.AreaLaw.Scan.SourceActualTerminalEntropy
 import TNLean.PEPS.AreaLaw.Scan.SourceBootstrapEntropy
 import TNLean.PEPS.AreaLaw.Scan.SourceChargeSelection
+import TNLean.PEPS.AreaLaw.Scan.SourceComparators
 import TNLean.PEPS.AreaLaw.Scan.SourceDensityScale
 import TNLean.PEPS.AreaLaw.Scan.SourceEndpointRoughBudget
 import TNLean.PEPS.AreaLaw.Scan.SourceFinalInformation
 import TNLean.PEPS.AreaLaw.Scan.SourceRoughBudgetPower
 import TNLean.PEPS.AreaLaw.Scan.SourceRoughSelection
 import TNLean.PEPS.AreaLaw.Scan.SourceRoundedInformation
+import TNLean.PEPS.AreaLaw.Scan.SourceScanner
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedDensity
+import TNLean.PEPS.AreaLaw.Scan.SourceSelectedEnergy
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedEnergyPower
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpComparison
 import TNLean.PEPS.AreaLaw.Scan.SourceSelectedSharpDensity

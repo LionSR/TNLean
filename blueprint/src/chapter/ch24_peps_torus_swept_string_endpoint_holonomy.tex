@@ -1,4 +1,4 @@
-\begin{theorem}[Four partner fluxes in the actual swept presentations]%
+\begin{theorem}[Four partner fluxes in the swept presentations]%
     \label{thm:peps_torus_swept_string_endpoint_holonomy}
     \lean{TNLean.PEPS.regularWalkHolonomy_torusSweptStringInitial,
         TNLean.PEPS.torusSweptPatchEndpoint_mem_sweptStringVertices,
@@ -9,15 +9,15 @@
         def:peps_torus_swept_patch_endpoint_walks,
         thm:peps_regular_walk_holonomy}
     Let $w\geq7$ and $H\geq6$. Complete the displayed patch by the
-    four actual clockwise plaquette loops based at
+    four clockwise plaquette loops based at
     \begin{align}
         A_2 & =(x-1,y+1), & A_1 & =(x+3,y+1), \\
         B_1 & =(x+1,y+1), & B_2 & =(x+1,y-2).
     \end{align}
-    For the literal initial assignment their holonomies, in this order,
+    For the initial assignment their holonomies, in this order,
     are $(g^{-1},g,h,h^{-1})$.
     Among these four base vertices, precisely $B_1$ lies in either
-    swept set $S_1$ or $S_2$. For either swept assignment the actual
+    swept set $S_1$ or $S_2$. For either swept assignment the
     clockwise holonomies are
     $(g^{-1},g,ghg^{-1},h^{-1})$.
     These are auxiliary finite-torus identities for the virtual
@@ -34,7 +34,7 @@
         def:peps_torus_swept_patch_endpoint_walks,
         thm:peps_torus_plaquette_holonomy,thm:peps_regular_walk_holonomy}
     For a clockwise plaquette loop, multiply its four directed
-    transports in reverse traversal order. Substituting the actual
+    bond values in reverse traversal order. Substituting the
     right and up tables yields the four initial values.
     The period bounds distinguish every required integer offset,
     proving that only $B_1$ belongs to either sweep.

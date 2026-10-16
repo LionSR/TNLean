@@ -2057,6 +2057,55 @@ The following finite construction follows
     condition gives the two-sided eigenvalue bounds.
 \end{proof}
 
+\begin{theorem}[A truncation coefficient uniform in the local dimension]
+    \label{thm:al_scan_target_typical_window_uniform_dimension}
+    \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_truncated_target_typical_window_uniform_in_q}
+    \leanok
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_target_typical_window}
+    Fix $R\in\mathbb N$, $J\ge0$, $\Delta>0$, and $C_T\ge0$.
+    There is $C_{\mathrm{tr}}>0$ such that, for every local dimension
+    $q\ge1$, there are $C_B>0$ and an integer $N\ge2$ with the following
+    property. Every instance satisfying the geometric hypotheses of
+    Theorem~\ref{thm:al_scan_target_typical_window}, with $n\ge N$ and
+    $r_0=\lceil C_{\mathrm{tr}}(\log n)^2\rceil$, has all the conclusions
+    of that theorem with these constants. The constants $C_B,N$ are
+    independent of the finite domain, Hamiltonian, ground vector, target,
+    scanner, and source exponents. In particular, the truncation
+    coefficient is chosen before the local dimension.
+\end{theorem}
+\begin{proof}
+    \leanok
+    \uses{thm:al_scan_exists_marginal_tails,thm:al_scan_prefix_boundary,
+        thm:al_scan_compact_collar_card,thm:al_lattice_crossing_budget,
+        thm:al_exact_cut_budget,lem:al_scan_fixed_ancestry_cutoff}
+    Choose $C_{\mathrm{tr}}$ from
+    Theorem~\ref{thm:al_scan_exists_marginal_tails} with compact-volume
+    coefficient $C_T+1$. This choice depends only on $R,J,\Delta,C_T$.
+    It strengthens the dependence permitted by the printed truncation
+    proposition, whose coefficient may depend on $q$
+    \cite[Proposition~4.5]{OpenAI2026AreaLaw}
+    (\texttt{03-quasilocal.tex}, lines~406--410).
+    The scanner uses this radius in \texttt{08-scanner.tex}, lines~49--59,
+    without asserting dimension uniformity there. The stronger uniform
+    choice here follows from Theorem~\ref{thm:al_scan_exists_marginal_tails}.
+    Now fix $q$. The lattice crossing estimate with boundary factor $4$
+    gives a coefficient $C$, and put $C_B=\max\{1,C\}$. Choose $N\ge2$
+    so that the tail bound with budget $C_Bn(\log n)^{12}$ at width
+    $n^{3/5}$ is at most $n^{-100}$ for every $n\ge N$; this is possible
+    because its exponential rate is a positive constant times
+    $n^{1/10}/(\log n)^6$.
+
+    In any such instance, summing the ambient layers gives
+    $|S_0|\le(C_T+1)n^2$, and the zero-depth prefix bound gives
+    $|\partial_\Lambda X|\le4n$. Apply the truncation theorem with the
+    previously chosen $C_{\mathrm{tr}}$. Its vector $\widetilde\Omega$
+    has all-cut moment and tail bounds, while the lattice estimate gives
+    $1\le\mathcal B_X\le C_Bn(\log n)^{12}$. Hence the target typical
+    set has mass $z\ge1-n^{-100}>0$ and satisfies the stated eigenvalue
+    bounds. Neither $C_B$ nor $N$ depends on this finite instance or on
+    the source exponents.
+\end{proof}
+
 % Revision 7224037.
 \begin{theorem}[Entropy and energy transport in a scan round]
     \label{thm:al_scan_actual_transport_estimates}
@@ -3216,6 +3265,96 @@ The finite-leaf estimates below follow the charge-energy argument in
     bands contributes one probability average to the choice-averaged entropy.
 \end{proof}
 
+% Source: 06-transport.tex, lines 377--433; 08-scanner.tex, lines 32--59, 83--154 and 416--461.
+\begin{theorem}[The transport estimates of Proposition 7.4 for the actual rounds]
+    \label{thm:al_scan_actual_transport_inputs}
+    \lean{TNLean.PEPS.AreaLaw.Scan.ScanTransportInputs,
+        TNLean.PEPS.AreaLaw.Scan.ScanTransportInputs.toScanInputs,
+        TNLean.PEPS.AreaLaw.Scan.mul_rpow_le_of_le_mul_rpow_four,
+        TNLean.PEPS.AreaLaw.Scan.withZeroCopyUnit,
+        TNLean.PEPS.AreaLaw.Scan.withZeroCopyUnit_of_pos,
+        TNLean.PEPS.AreaLaw.Scan.withZeroCopyUnit_mem_symmetricSubspace,
+        TNLean.PEPS.AreaLaw.Scan.withZeroCopyUnit_ne_zero,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualScanRound_eq_transportScanRound,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.actualRoundData_energyError_nonneg,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.continuous_log_filteredNormSq_actualRoundData,
+        TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_scanTransportInputs_actualScan}
+    \leanok
+    \uses{def:al_scan_actual_round_family,def:al_scan_actual_energy_terms,
+        def:al_scan_physical_dimension_cap}
+    Fix scanner exponents, a local dimension $q\ge1$ and a coefficient
+    $C_r\ge0$. There are $c_0>0$ and thresholds $C_0$ and $C_{l,0}$ such that
+    for all scanner constants $C\ge C_0$ and $C_l\ge C_{l,0}$ and all
+    sufficiently large $n$ the following holds. Take a physical collar scan
+    at the scales \eqref{eq:al_scan_uniform_tail_scales} of
+    \cite[Section~9]{OpenAI2026AreaLaw}, with $r_0=\lceil C_r(\log n)^2\rceil$,
+    a positive charge-list constant, every label anchored in its support,
+    ambient rows of at most $n$ sites through depth $L$, and cut clearance
+    greater than $2L+10r_0$. Let $\|\Omega\|=1$, $\Delta>0$, let the
+    auxiliary dimensions be positive, and let $\widetilde E_0\ge0$ be the
+    ground energy recorded by a truncation of the scanner. Let $W\ge1$ and
+    $a=W/K$ satisfy $a\ell\le c_0$ for
+    $\ell=1+(2r_0+1)^2\log q$. For every $k\ge1$ let the replica vector
+    $\mathrm{pre}_k$ be nonzero and symmetric, with
+    $\overline H_k\mathrm{pre}_k=\widetilde E_0\mathrm{pre}_k$, where
+    $\overline H_k$ is the replica mean of the augmented truncated
+    Hamiltonian; nothing is assumed at $k=0$. Extend the family to $k=0$ by
+    the unit vector of the one-point zero-copy space. Then the $2nm$ actual
+    rounds of the extended family, with
+    interpolation parameter $a/2$ in every band metric, satisfy the following
+    for every round and replica count $k$, with sequences
+    $0\le\beta_k\le C_\beta\log(k+2)$ and $\varepsilon_k\ge0$,
+    $\varepsilon_k\to0$:
+    \begin{enumerate}
+        \item every old and new leaf measure is finite, and has mass $1/2$
+              for $0<p<1$;
+        \item the charge defect is almost everywhere strongly measurable on
+              $(0,1)$;
+        \item $p\mapsto\log N(p)^2$ is continuous on $[0,1]$ and
+              differentiable on $(0,1)$;
+        \item for $0<p<1$,
+              $-\partial_p\log N(p)^2\ge ka\,\mathcal G(p)
+                  -CkaKa^{1/4}(\log n)^{C_l}-\beta_k$,
+              where $\mathcal G$ is the choice-averaged entropy gain;
+        \item for $0<p<1$,
+              $\langle v,\overline H_kv\rangle\le2\widetilde E_0
+                  +Ca^2(\log n)^{C_l}\mathcal E(p)+\varepsilon_k$,
+              where $\mathcal E$ is the energy sum of
+              \cite[Proposition~7.4]{OpenAI2026AreaLaw};
+        \item the end root of each round is the start root of the next.
+    \end{enumerate}
+    Together with the comparator budgets, the initial floor and the terminal
+    rough upper comparison of \cite[Proposition~8.1]{OpenAI2026AreaLaw},
+    these are the transport and comparator inputs taken as hypotheses by the
+    conditional scanner estimate of
+    Theorem~\ref{thm:al_scanner_actual_scan}; the two remainders and the two
+    logarithmic errors are added. That theorem quantifies over every replica
+    family, so it applies to the extended family, and its conclusions at
+    $k\ge1$ concern only the given vectors.
+\end{theorem}
+\begin{proof}\leanok
+    \uses{def:al_scan_actual_round_family,thm:al_scan_actual_round_transport,
+        thm:al_scan_actual_round_telescope,thm:al_scan_literal_integrals,
+        thm:al_scan_literal_scalars,thm:al_scan_literal_parameter_integral,
+        thm:al_scan_actual_history_facts}
+    Each actual round is the literal round of its transport datum, so the
+    leaf masses, the measurability of the defect and the identification of
+    the entropy gain and the energy sum come from the literal round. At the
+    source scales, $r_0\le D$, $1\le D$, $4D\le m$, $8Km\le L$ and $K\ge1$
+    for large $n$, so Theorem~\ref{thm:al_scan_actual_round_transport}
+    applies with $a=W/K>0$. The norm $N(p)^2$ is a positive continuous
+    function of the interpolating root, and the derivative of
+    $-\log N(p)^2$ exists on $(0,1)$. Since $1\le\ell\le A(\log n)^4$ with
+    $A=1+(2C_r+3)^2\log q$ once $\log n\ge1$, every coefficient
+    $C'\ell^{e'}$ is at most $|C'|A^{\max(e',0)}(\log n)^{4\max(e',0)}$,
+    which is at most $C(\log n)^{C_l}$ for the stated thresholds; the energy
+    sum is nonnegative. At $k=0$ the extended vector is nonzero and, the copy
+    permutation group being trivial, symmetric; the replica mean vanishes, so
+    the energy estimate holds with eigenvalue $0\le\widetilde E_0$. The endpoint
+    agreement is the root identity of
+    Theorem~\ref{thm:al_scan_actual_round_telescope}.
+\end{proof}
+
 % Source: 08-scanner.tex, lines 21--59 and 399--414; Lemmas 2.1 and 3.1.
 \begin{theorem}[The truncation inputs of the scanner for one physical system]
     \label{thm:al_scan_truncation_inputs}
@@ -3244,10 +3383,10 @@ The finite-leaf estimates below follow the charge-energy argument in
     $|T|\le C_Tn^2$, at most $n$ sites in every ambient layer
     $T_d\setminus T_{d-1}$ with $1\le d\le L$, and ambient distance greater
     than $2L+10r_0$ from $T$ to every endpoint of a boundary edge of $A$; and
-    under the entropy inputs
+    under the following entropy inputs for every integer $0\le j\le L$:
     \begin{align}
-        S_\Omega(X)   & \le C_en^{1+e},                    &
-        S_\Omega(Q_j) & \le C_e(nL^e+n)\quad(0\le j\le L),
+        S_\Omega(X)   & \le C_en^{1+e},  &
+        S_\Omega(Q_j) & \le C_e(nL^e+n),
     \end{align}
     where $X=A\cap T$ and $Q_j=A\cap(T_j\setminus T)$. Then one unit ground
     vector $\widetilde\Omega$ of the truncated Hamiltonian, with energy

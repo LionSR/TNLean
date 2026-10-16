@@ -1,11 +1,11 @@
-\section{The same source witness gives physical collar information}
+\section{Physical collar information from the selected source point}
 \label{sec:source-actual-information}
 
 The preceding source-selected comparison now bounds physical mutual
-information for the original state.  The actual terminal entropy estimates
+information for the original state.  The terminal entropy estimates
 eliminate its selected-point-dependent terms before taking the replica
-limit.  The source target and positive-prefix entropy hypotheses, actual
-scanner geometry and transport smallness remain explicit.
+limit.  The source target and positive-prefix entropy hypotheses,
+scanner geometry and round-step smallness remain explicit.
 The source is \emph{A two-dimensional area law from a global spectral gap},
 \texttt{08-scanner.tex}, lines 868--911 and 936--941, at revision
 \texttt{adc7f1241b42e322a6451854ab7e4b4c146bf78a}.
@@ -27,14 +27,14 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
         \log d,S'\leq S+c,\qquad
         G_{\rm pre},g_{\max}\leq B_{\rm pre}.
     \]
-    If the literal sharp comparison is
+    If the sharp comparison is
     \[
         2S'+G_{\rm pre}-G_{\rm post}
         \leq\frac{2(2\log d-\log z)}{W}
         +\tau G_{\rm pre}+2\tau\log d+A
         +\frac{\delta}{\tau}\max(0,2S'+g_{\max})+r
     \]
-    and the actual information bridge gives
+    and the information bridge gives
     $2I\leq2S'+G_{\rm pre}-G_{\rm post}+2c+C$, then $2I\leq F+r$.
 \end{theorem}
 
@@ -72,7 +72,7 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     the replica limit, with the physical size and weight already fixed.
 \end{proof}
 
-\begin{theorem}[Original-state information from one source-selected witness]
+\begin{theorem}[Original-state information from one source-selected point]
     \label{thm:source-actual-information}
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_sourceTarget_actual_mutualInformation_bound}
     \leanok
@@ -88,17 +88,17 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
         C_{\rm MI}  & =16\sqrt{d_{\rm tr}(\Omega_t,\Omega)}
         \log(e\dim\mathcal H_X).
     \end{align*}
-    For every $1\leq W\leq n^\omega$ satisfying the original transport
+    For every $1\leq W\leq n^\omega$ satisfying the original round-step
     smallness with $a=W/K$, and every $0<\tau\leq1/2$, define
     \[
         A=(3+1/a)h(\tau)+37(C_0B)a-\frac{\log z}{a}.
     \]
-    Then the actual original-state collar information satisfies
+    Then the original-state collar information satisfies
     \[
         2I_\Omega(X:S_0^c)
         \leq F(S_t,c,B_{\rm pre},\log z,W,\tau,n^{-1/2000},A,C_{\rm MI}).
     \]
-    The fixed physical and transport constants precede $C_e$; $C_e$ precedes
+    The fixed physical and round-step constants precede $C_e$; $C_e$ precedes
     the size threshold and the finite physical system.  The state, spectral
     set and labels precede $W$.
 \end{theorem}
@@ -112,7 +112,7 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
         thm:sharp-information-replica-limit,
         thm:area_law_selected_schmidt_entropy_bounds}
     Invoke the stronger source energy theorem once.  Transfer the original
-    positive-prefix entropy input to its same vector.  The actual geometry
+    positive-prefix entropy input to its same vector.  The scanner geometry
     gives $0\leq G_{\rm pre}\leq B_{\rm pre}$ and
     $g_{\max}\leq B_{\rm pre}$, using $B_{\rm pre}\geq0$.
     The same selected spectrum gives
@@ -122,7 +122,7 @@ The source is \emph{A two-dimensional area law from a global spectral gap},
     stage and parameter that satisfy the sharp and stronger energy bounds.
     The parameter stays in the source consumer's interval
     $[n^{-\nu},2n^{-\nu}]$; it is never selected again.
-    Apply the actual information bridge and the scalar substitution with
+    Apply the information bridge and the scalar substitution with
     defect bound $n^{-1/2000}+r_k/(g/2)$.  The remaining errors are precisely
     the same upper and lower sharp remainders.  With the physical system,
     $W$ and $\tau$ fixed, send all three remainders to zero.

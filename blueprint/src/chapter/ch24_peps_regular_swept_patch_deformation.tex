@@ -24,7 +24,7 @@
     % Source label: eq:anyons:fluxon-braiding-lazy.
 \end{definition}
 
-\begin{theorem}[Ordered and traversed swept-bond transports]%
+\begin{theorem}[Ordered and traversed swept-bond operators]%
     \label{thm:peps_regular_swept_patch_transport}
     \lean{TNLean.PEPS.regularSweptPatchOperators_eq_vertexGauge,
         TNLean.PEPS.regularDirectedTransport_regularSweptPatchOperators}
@@ -32,7 +32,7 @@
     \uses{def:peps_regular_swept_patch,thm:peps_regular_walk_holonomy}
     The assignment in (\ref{eq:peps_swept_patch_cases}) is exactly
     $u_e^{R,g}=k_t^{-1}u_ek_s$.
-    For any adjacent vertices $v,w$, its directed transport is
+    For any adjacent vertices $v,w$, its directed operator is
     \begin{align}
         D_{u^{R,g}}(v,w)=
         \begin{cases}
@@ -53,7 +53,7 @@
     $D_{u^{R,g}}(v,w)=k_w^{-1}D_u(v,w)k_v$ and hence the four cases.
 \end{proof}
 
-\begin{theorem}[Equality of the actual closed swept contractions]%
+\begin{theorem}[Equality of the closed swept contractions]%
     \label{thm:peps_regular_swept_patch_state}
     \lean{TNLean.PEPS.stateCoeff_regularSweptPatchOperators}
     \leanok
@@ -61,7 +61,7 @@
     Suppose the graph and $G$ are finite and each site coefficient
     satisfies $a_v(x\eta,s)=a_v(\eta,s)$ under simultaneous left
     multiplication of its incident group labels.
-    Let $\Psi_a(u)$ be the actual closed regular PEPS coefficient vector
+    Let $\Psi_a(u)$ be the closed regular PEPS coefficient vector
     with ordered bond insertion $u$.
     Then $\Psi_a(u)=\Psi_a(u^{R,g})$ for every $R,g,u$.
     No isometry or connectedness is required, and crossing bonds are
@@ -72,5 +72,5 @@
     \uses{thm:peps_regular_swept_patch_transport,thm:peps_regular_closed_gauge}
     The swept assignment is the vertex gauge $k_t^{-1}u_ek_s$.
     The closed vertex-gauge identity therefore equates every physical
-    coefficient of the two actual contractions.
+    coefficient of the two contractions.
 \end{proof}

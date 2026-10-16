@@ -1,5 +1,5 @@
 {
-  "reviewedAt": "2026-10-16T04:15:00Z",
+  "reviewedAt": "2026-10-16T09:00:00Z",
   "entries": [
     {
       "id": "docs/paper-gaps/oai26_peps_patch_stationarity_gap.tex",
@@ -166,8 +166,8 @@
     {
       "id": "docs/paper-gaps/arealaw2d_scanner_inputs.tex",
       "repo": "TNLean",
-      "kind": "narrower",
-      "status": "open",
+      "kind": "local-correction",
+      "status": "resolved",
       "paper": "area",
       "result": "Proposition 9.2, the scanner estimate",
       "issue": 8755,
@@ -185,16 +185,17 @@
           9129,
           9259,
           9260,
-          9261
+          9261,
+          9481
         ]
       },
       "title": "The low-energy sweep from its five inputs",
-      "summary": "The deduction of Proposition 9.2 from five preceding estimates is proved; instantiating all five estimates on a single physical ground state and its truncation remains open.",
+      "summary": "Proposition 9.2 is proved for the original physical system, with the five inputs derived from one ground state and its truncation. Only the output constants differ: they are chosen after the entropy input constant rather than equal to it.",
       "context": "The proof sweeps a partition across a collar around a target region in small random steps while filtering <i>k</i> copies of the ground state by positive operators attached to the partition; an interpolation parameter moves the filter continuously as a small cell crosses between parts. Proposition 9.2 finds a step and an interpolation parameter at which the filtered state has small excess energy, where the replica entropy bounds apply.",
       "claims": "There exist a sweep step and an interpolation parameter making the excess energy <i>E</i><sub>def</sub> = (⟨<i>v</i>, <i class=\"ov\">H</i><i>v</i>⟩ − <i>E</i><sub>0</sub>)/<i>g</i> small for every sufficiently large replica number <i>k</i>, where <i>v</i> is the normalized filtered state of the <i>k</i> copies, <i class=\"ov\">H</i> is the Hamiltonian averaged over the copies, <i>E</i><sub>0</sub> is the ground energy, and <i>g</i> is the gap. The proof combines the sweep geometry, entropy and energy transport (Proposition 7.4), replica norm comparisons (Proposition 8.1), conditional entropy continuity, and spectral tail bounds.",
-      "found": "The formalization proves Proposition 9.2 from the conclusions of those five results, with each conclusion entered as a hypothesis matching a displayed estimate in the paper. Proposition 7.4 (entropy and energy transport) is proved independently, and its entropy bound is summed over all rounds of the sweep. The formalization constructs the random sweep and the leaf measures of each round from the transported states (each leaf measure has total mass 1/2 at interior interpolation parameters and zero when inactive), proves the required probability bounds, and bounds the integrated charge defect both per round and summed over all rounds. It derives the charge energy error from that defect under the scale margin 4(<i>D</i> + 2<i>r</i><sub>0</sub>) ≤ <i>m</i>, which is verified at the paper's rounded scales, bounds the reduced spectra of the truncated ground state on the five regions of each step with a common constant, and extracts the typical spectral subspace of the target region carrying mass at least 1 − <i>n</i><sup>−100</sup>. Where the paper states that the charge defect varies continuously with the interpolation parameter, the formalization proves measurability, which suffices for both integral estimates. Still assumed: a joint construction of all five inputs from a single ground state and its truncated ground state.",
-      "impact": "No. Proposition 9.2 holds once its five inputs are instantiated on the physical states.",
-      "plan": "Instantiate the five input estimates on the sweep built from a single pair of original and truncated ground states."
+      "found": "The formalization proves Proposition 9.2 from the conclusions of those five results, with each conclusion entered as a hypothesis matching a displayed estimate in the paper. Proposition 7.4 (entropy and energy transport) is proved independently, and its entropy bound is summed over all rounds of the sweep. The formalization constructs the random sweep and the leaf measures of each round from the transported states (each leaf measure has total mass 1/2 at interior interpolation parameters and zero when inactive), proves the required probability bounds, and bounds the integrated charge defect both per round and summed over all rounds. It derives the charge energy error from that defect under the scale margin 4(<i>D</i> + 2<i>r</i><sub>0</sub>) ≤ <i>m</i>, which is verified at the paper's rounded scales, bounds the reduced spectra of the truncated ground state on the five regions of each step with a common constant, and extracts the typical spectral subspace of the target region carrying mass at least 1 − <i>n</i><sup>−100</sup>. Where the paper states that the charge defect varies continuously with the interpolation parameter, the formalization proves measurability, which suffices for both integral estimates. The scanner theorem now builds the truncated ground vector, the typical set of the target region and one common label sequence from the original gapped Hamiltonian, and derives the transport and norm-comparison estimates for that same data, so no input is assumed. The paper reuses the symbol <i>C</i><sub>e</sub> for the entropy hypotheses and for the output bounds after absorbing fixed factors. Lean keeps the input constant in the hypotheses and lets the output constants dominate max{<i>C</i><sub>e</sub>, 1} + 1 and the mismatch and density coefficients. It does not prove the stronger reading in which each output constant equals the input constant.",
+      "impact": "No. The paper permits its constants to depend on <i>C</i><sub>e</sub>; the convention only separates the two roles of the symbol.",
+      "plan": "None for this proposition. It feeds the collar scan and the low-energy point (issue #8755, closed)."
     },
     {
       "id": "docs/paper-gaps/polypeps_routing_network_bounds.tex",
