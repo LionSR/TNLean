@@ -61,9 +61,8 @@ physical letter; no selection of matrix entries is required.
 
 \begin{proof}\leanok
     \uses{def:asymex_matrix_unit_register_reassociation}
-    Evaluate the left-hand side at
-    $(((v,(a,i)),c'),((w,(b,j)),d'))$. The intermediate matrix unit
-    leaves precisely
+    At the entry $(((v,(a,i)),c'),((w,(b,j)),d'))$ of the left-hand side,
+    the intermediate matrix unit leaves precisely
     \begin{align}
         \sum_{h\in H}X_h(v,w)Z_h((a,i),(b,j))E_{cd}(c',d'),
         \notag
@@ -71,7 +70,7 @@ physical letter; no selection of matrix entries is required.
     which is the corresponding entry of the right-hand side.
 \end{proof}
 
-Taking $|V|=|K|=16$ and $|I|=4$ gives stacked bond dimension
-$4096$, while the matrix remaining after this contraction has dimension
-$1024$ and is tensored with a $4$-dimensional matrix unit. A fusion
-decomposition of that remaining matrix is a separate assertion.
+For $|V|=|K|=16$ and $|I|=4$, the stacked bond has dimension $4096$,
+whereas after this contraction the remaining matrix has dimension $1024$
+and is tensored with a $4$-dimensional matrix unit; its fusion
+decomposition is a separate step.

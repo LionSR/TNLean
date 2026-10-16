@@ -216,7 +216,7 @@ virtual-boundary nondecay and virtual local covariance.
         thm:irreducible_twisted_spectral_radius,
         thm:twisted_peripheral_eigendirection_unique,
         lem:physical_eigenbasis_intertwining}
-    This is Lemma~1 of~\cite{PerezGarcia2008StringOrder}.  Let $A$ represent
+    Following Lemma~1 of~\cite{PerezGarcia2008StringOrder}, let $A$ represent
     a pure finitely correlated state in the canonical gauge
     $\E_A(\Id)=\Id$, $\E_A^*(\Lambda)=\Lambda$, with $\Lambda>0$ and
     $\tr(\Lambda)=1$.  For every physical unitary $u$,
@@ -371,8 +371,8 @@ virtual-boundary nondecay and virtual local covariance.
     \lean{MPSTensor.stationaryBlockDensity_invariant_iff_spectralRadius_eq_one}
     \leanok
     \uses{def:stationary_physical_block_density}
-    This is Theorem~2 of~\cite{PerezGarcia2008StringOrder} for a fixed
-    physical unitary $u$. Suppose $\Lambda>0$, $\tr\Lambda=1$,
+    Following Theorem~2 of~\cite{PerezGarcia2008StringOrder} for a fixed
+    physical unitary $u$, suppose $\Lambda>0$, $\tr\Lambda=1$,
     $\E_A(\Id)=\Id$, and $\E_A^*(\Lambda)=\Lambda$. Assume that
     $\E_A(X)=\lambda X$, $X\ne0$, and $|\lambda|=1$ imply
     $\lambda=1$ and $X\in\C\Id$. Then
@@ -801,9 +801,10 @@ virtual-boundary nondecay and virtual local covariance.
 
 \begin{proof}
     \leanok
-    Expand $\E_u(V)$ using (\ref{eq:symmetry_twisted_transfer}), insert the
-    intertwining relation into each local term, and use
-    $V^\dagger V = \Id$ together with $\E_A(\Id)=\Id$.
+    Expanding $\E_u(V)$ via (\ref{eq:symmetry_twisted_transfer}), inserting the
+    intertwining relation into each local term, and using
+    $V^\dagger V = \Id$ together with $\E_A(\Id)=\Id$ yields the eigenvalue
+    relation.
 \end{proof}
 
 \begin{theorem}[Boundary-state invariance of the virtual unitary]%

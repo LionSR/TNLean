@@ -94,9 +94,10 @@
 
 \begin{proof}\leanok
     \uses{thm:direct_sum_transfer_reindex}
-    Reindex the total bond space by its block labels. By
-    Theorem~\ref{thm:direct_sum_transfer_reindex}, the direct-sum transfer map
-    becomes $\mathcal S_B$. Conjugating the assumed equation by this
+    Reindexing the total bond space by its block labels transforms the
+    direct-sum transfer map into $\mathcal S_B$
+    (Theorem~\ref{thm:direct_sum_transfer_reindex}), and conjugating the
+    assumed relation $\E_{\oplus_k B_k}^2 = c\E_{\oplus_k B_k}$ by this
     isomorphism gives the displayed identity.
 \end{proof}
 
@@ -121,10 +122,10 @@
 
 \begin{proof}\leanok
     \uses{thm:block_transfer_sum_quasi_idempotent_of_direct_sum, lem:block_diagonal_transfer_sum_to_block}
-    Let $Z$ be an arbitrary rectangular matrix and realize it as the $(j,j')$
-    block of a matrix $Y$ on the total bond space. By
-    Lemma~\ref{lem:block_diagonal_transfer_sum_to_block},
-    $[\mathcal S_B(Y)]_{j,j'}=\E_{j,j'}(Z)$.
+    Realizing an arbitrary rectangular matrix $Z$ as the $(j,j')$ block of a
+    matrix $Y$ on the total bond space gives
+    $[\mathcal S_B(Y)]_{j,j'}=\E_{j,j'}(Z)$ by
+    Lemma~\ref{lem:block_diagonal_transfer_sum_to_block}.
     Theorem~\ref{thm:block_transfer_sum_quasi_idempotent_of_direct_sum} gives
     $\mathcal S_B^2=c\mathcal S_B$, and hence
     \begin{align}
@@ -274,9 +275,9 @@
         \E_{j,j'}=\sum_i A_j^i\otimes\overline{A_{j'}^i}=0.
         \notag
     \end{align}
-    This establishes the cross-block ($\delta_{j,j'}$) orthogonality of
-    \cite[Theorem~3.11 and Corollary~3.12]{Cirac2016MPDO_arXiv}.
-    The passage to the residual tensors $U_j$ is given by
+    This cross-block orthogonality
+    (\cite[Theorem~3.11 and Corollary~3.12]{Cirac2016MPDO_arXiv}) passes to
+    the residual isometry tensors $U_j$ in
     Theorem~\ref{thm:residual_isometry_of_rfp_direct_sum}.
 \end{theorem}
 \begin{proof}\leanok
@@ -339,9 +340,9 @@
             \tn[skin=none]{} \\ \tn[skin=none]{}
         \end{tenkz}
     \end{tenkzequation}
-    Each block satisfies unit pair-index orthonormality ($j=j'$), and the
-    cross-block sums between distinct blocks vanish ($j\ne j'$), as in
-    \cite[Theorem~3.11]{Cirac2016MPDO_arXiv}.
+    As in \cite[Theorem~3.11]{Cirac2016MPDO_arXiv}, each block satisfies unit
+    pair-index orthonormality ($j=j'$), while the cross-block sums between
+    distinct blocks vanish ($j\ne j'$).
 \end{definition}
 
 \begin{theorem}[One-letter Gram matrix under the joint isometry condition]%
@@ -357,7 +358,7 @@
 
 \begin{proof}\leanok
     If $x$ and $y$ belong to the same sector, the assertion is the
-    within-sector part of the joint isometry condition. If they belong to
+    within-sector part of the joint isometry condition; if they belong to
     distinct sectors, it is the cross-sector vanishing condition.
 \end{proof}
 
@@ -377,9 +378,9 @@
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    Substitute the two decompositions into
-    $\E_{A,B}(Y)=\sum_iA^iY(B^i)^\dagger$ and collect the outer factors,
-    which are independent of the summation index, outside the sum.
+    Substituting the two decompositions into
+    $\E_{A,B}(Y)=\sum_iA^iY(B^i)^\dagger$ and collecting the index-independent
+    outer factors outside the sum gives the displayed identity.
 \end{proof}
 
 \begin{lemma}[Vanishing after removing the diagonal factors]%
@@ -412,8 +413,8 @@
     \end{align}
 \end{lemma}
 \begin{proof}\leanok
-    Apply $\E_{U,V}=0$ to the matrix unit supported at $(\beta,\beta')$ and read
-    the $(\alpha,\alpha')$ entry.
+    Applying $\E_{U,V}=0$ to the matrix unit supported at $(\beta,\beta')$ and
+    reading the $(\alpha,\alpha')$ entry gives the vanishing sum.
 \end{proof}
 
 \begin{lemma}[Each block of a direct-sum fixed point is a fixed point]%
@@ -428,7 +429,7 @@
 \begin{proof}\leanok
     \uses{lem:block_diagonal_transfer_sum_to_block}
     The diagonal mixed transfer operator $\E_{j,j}$ is the transfer map of
-    $B_j$, and whole-tensor idempotence makes it idempotent, which is exactly the
+    $B_j$, and whole-tensor idempotence makes it idempotent, which is the
     renormalization fixed-point condition for $B_j$.
 \end{proof}
 
@@ -466,10 +467,10 @@
             \tn[skin=ring]{X_j^{-1}}
         \end{tenkz}
     \end{tenkzequation}
-    such that $(U_j)_j$ satisfies the joint isometry condition
-    (Definition~\ref{def:is_residual_isometry_family}). This formalizes the
-    isometry equations of \cite[Corollary~3.12]{Cirac2016MPDO_arXiv} for
-    distinct normal blocks.
+    such that $(U_j)_j$ satisfies the joint isometry condition of
+    \cite[Corollary~3.12]{Cirac2016MPDO_arXiv}
+    (Definition~\ref{def:is_residual_isometry_family}) across the distinct
+    normal blocks.
     % Scope restriction: the Lean theorem takes the per-block normality,
     % irreducibility, left-canonical condition, and gauge-phase distinctness as
     % explicit hypotheses; extracting these from a single canonical-form RFP
@@ -479,7 +480,7 @@
 \begin{proof}\leanok
     \uses{thm:bnt_locally_orthogonal_of_rfp_direct_sum, thm:isometry_canonical_form_of_rfp_nt, lem:mixed_transfer_conj_apply, lem:isrfp_block_of_rfp_direct_sum, lem:mixed_transfer_eq_zero_of_conj, lem:residual_isometry_entry}
     Whole-tensor idempotence makes the diagonal mixed transfer operator of each
-    block its own transfer map, hence each block is a renormalization fixed
+    block its own transfer map, so each block is a renormalization fixed
     point; the square-root fixed-point form
     (Theorem~\ref{thm:isometry_canonical_form_of_rfp_nt}) gives the
     decomposition $A_j^i=X_j\sqrt{\rho_j}U_j^iX_j^{-1}$ with the within-block
@@ -500,10 +501,9 @@
     \uses{def:is_isometry_canonical_form, def:mps_transfer_idempotence, def:mixed_transfer_rect}
     Let $(B_k)_k$ be a family of tensors in square-root fixed-point form whose
     cross-block mixed transfer operators vanish ($\E_{j,j'}=0$ for all
-    $j\ne j'$). Then the direct sum $\bigoplus_k B_k$ is a renormalization
-    fixed point. This establishes the converse direction of the pure-state
-    fixed-point characterization \cite[Section~3]{Cirac2016MPDO_arXiv} for
-    distinct blocks.
+    $j\ne j'$). As in the converse direction of
+    \cite[Section~3]{Cirac2016MPDO_arXiv} for distinct blocks, the direct sum
+    $\bigoplus_k B_k$ is then a renormalization fixed point.
     % Scope restriction (multiplicity-one): the source canonical form allows each
     % normal tensor to repeat with a multiplicity and a phase; this is the
     % single-copy case (docs/paper-gaps/cpsv16_rfp_isometry_scope.tex).
@@ -535,10 +535,12 @@
     \leanok
     \uses{def:mps_transfer_idempotence, def:is_isometry_canonical_form, def:mixed_transfer_rect, def:normal, def:irreducible_tensor, def:gauge_phase_equiv}
     Let $(B_k)_k$ be a family of normal, irreducible, left-canonical blocks with
-    $D_k\ge1$ for all $k$, no two of which are gauge-phase equivalent. Then
-    the direct sum $\bigoplus_k B_k$ is a renormalization fixed point if and only
-    if each block has the square-root fixed-point form and all cross-block mixed
-    transfer operators vanish:
+    $D_k\ge1$ for all $k$, no two of which are gauge-phase equivalent. As in
+    the distinct-block characterization of
+    \cite[Theorem~3.11]{Cirac2016MPDO_arXiv}, the direct sum $\bigoplus_k B_k$
+    is a renormalization fixed point if and only if each block has the
+    square-root fixed-point form and all cross-block mixed transfer operators
+    vanish:
     \begin{align}
         \left(\bigoplus_k B_k\text{ is an RFP}\right)
          & \iff
@@ -547,8 +549,6 @@
         \left(\forall j\ne j',\ \E_{j,j'}=0\right).
         \notag
     \end{align}
-    This is the distinct-block characterization of pure-state renormalization
-    fixed points \cite[Theorem~3.11]{Cirac2016MPDO_arXiv}.
     % Scope restriction (multiplicity-one): the source canonical form
     % A^i = \oplus_j \oplus_q mu_{j,q} X_{j,q} Lambda_j U^i_j X_{j,q}^{-1} allows
     % each normal tensor to repeat with multiplicity r_j and a unit-modulus phase

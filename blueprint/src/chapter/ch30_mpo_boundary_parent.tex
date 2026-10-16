@@ -22,10 +22,9 @@ The coefficient convention is
 where the empty product is the virtual identity.
 For a state tensor $A$ of bond dimension $D$, let $P_L$ be the
 orthogonal projection onto $\mathcal S_A^L$ and put $h_L=I-P_L$.
-The periodic parent Hamiltonian is $H_{L,N}=\sum_{i=0}^{N-1}h_L^{(i)}$,
-where each local term acts on a cyclic window of length $L\leq N$.
-These are the canonical parent terms considered in
-\cite[Section~5 and Appendix~B]{GarreRubio2023MPOSym}.
+Following \cite[Section~5 and Appendix~B]{GarreRubio2023MPOSym}, the
+periodic parent Hamiltonian is $H_{L,N}=\sum_{i=0}^{N-1}h_L^{(i)}$, where
+each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
 
 \begin{theorem}[Finite boundary cuts]
     \label{thm:glm_boundary_cut}
@@ -170,9 +169,10 @@ These are the canonical parent terms considered in
     Then $Q_n\psi^n_{A,X}=\psi^n_{A,X}$ for every $X\in\MN{D}$,
     $Q_nv=v$ for every $v\in\mathcal S_A^n$, and $Q_nP_n=P_n$.
     In particular, one-site injectivity and $O^1_{T,U}=I$ suffice.
-    There is no comparison between $n$ and $L_0$, and no adjoint-closure
-    assumption is needed. This is a sufficient unit-support criterion for
-    the normalization used in \cite[Appendix~B]{GarreRubio2023MPOSym}.
+    For the unit-support normalization of
+    \cite[Appendix~B]{GarreRubio2023MPOSym}, this condition requires neither
+    a comparison between $n$ and $L_0$ nor adjoint closure of the boundary
+    range.
 \end{theorem}
 \begin{proof}
     \leanok
@@ -212,8 +212,9 @@ These are the canonical parent terms considered in
          & =(O^L_{T,E_{ba}X}\otimes O^{N-L}_{T,E_{ab}})(B\otimes I).
         \notag
     \end{align}
-    Sum over the two virtual indices and return to the chain coordinates.
-    No commutation condition is required of the local boundaries $E_{ba}X$.
+    Summing over the two virtual indices and returning to the chain
+    coordinates gives $[B^{(i)},O^N_{T,X}]=0$ without requiring any
+    commutation condition on the local boundaries $E_{ba}X$.
 \end{proof}
 
 \begin{theorem}[Periodic commutation]
@@ -233,11 +234,11 @@ These are the canonical parent terms considered in
     \leanok
     \uses{thm:glm_boundary_parent_local, thm:glm_boundary_embed_commutation,
         lem:local_term_es_average, def:parent_hamiltonian}
-    Theorem~\ref{thm:glm_boundary_parent_local} gives
-    $[h_L,O^L_{T,Y}]=0$ for every $Y$. Apply
-    Theorem~\ref{thm:glm_boundary_embed_commutation} with $B=h_L$ to
-    each cyclic placement. Finally,
-    $[H_{L,N},O^N_{T,X}]=\sum_{i=0}^{N-1}[h_L^{(i)},O^N_{T,X}]=0$.
+    Since Theorem~\ref{thm:glm_boundary_parent_local} gives
+    $[h_L,O^L_{T,Y}]=0$ for every $Y$,
+    Theorem~\ref{thm:glm_boundary_embed_commutation} with $B=h_L$ yields
+    $[h_L^{(i)},O^N_{T,X}]=0$ at each cyclic placement, and summing over $i$
+    gives $[H_{L,N},O^N_{T,X}]=\sum_{i=0}^{N-1}[h_L^{(i)},O^N_{T,X}]=0$.
 \end{proof}
 
 \begin{definition}[Direct sums and summand boundary projections]
@@ -297,9 +298,10 @@ These are the canonical parent terms considered in
 \begin{proof}
     \leanok
     \uses{thm:glm_boundary_block_selector, thm:glm_boundary_parent_periodic}
-    By Theorem~\ref{thm:glm_boundary_block_selector},
-    $Q_a\in\mathcal C(T)$ and $O^N_{T,Q_a}=O^N_{T_a,I}$.
-    Apply Theorem~\ref{thm:glm_boundary_parent_periodic} with $X=Q_a$.
+    Since Theorem~\ref{thm:glm_boundary_block_selector} gives
+    $Q_a\in\mathcal C(T)$ and $O^N_{T,Q_a}=O^N_{T_a,I}$,
+    Theorem~\ref{thm:glm_boundary_parent_periodic} applied to $X=Q_a$ yields
+    $[H_{L,N},O^N_{T_a,I}]=0$.
 \end{proof}
 
 \begin{theorem}[Nonzero canonical interaction]
@@ -325,10 +327,10 @@ These are the canonical parent terms considered in
     Lemma~\ref{lem:ground_space_ne_top}. If $h_L=0$, its kernel
     would be the entire physical space, contradicting
     $\ker h_L=\mathcal S_A^L$ from
-    Lemma~\ref{lem:parent_interaction_es_kernel}. This nonvanishing
-    is preserved by the unitary identification of the two coordinate
-    spaces. The commutation assertion is
-    Theorem~\ref{thm:glm_boundary_parent_periodic}.
+    Lemma~\ref{lem:parent_interaction_es_kernel}. The unitary identification
+    of the two coordinate spaces preserves this nonvanishing, while
+    Theorem~\ref{thm:glm_boundary_parent_periodic} shows that the resulting
+    periodic parent commutes with every $O^N_{T,X}$ for $X\in\mathcal C(T)$.
 \end{proof}
 
 \begin{theorem}[Normalized boundary averages of the support]
@@ -355,11 +357,10 @@ These are the canonical parent terms considered in
         E_n(h_n)   & =Q_n-P_n, \label{eq:glm_boundary_parent_average} \\
         I-E_n(P_n) & =h_n. \label{eq:glm_boundary_ambient_complement}
     \end{align}
-    The set $J$ may be empty, and the physical and virtual dimensions
-    may be zero, when the stated hypotheses hold. No identity $Q_n=I$ or relation
-    $O^n_{T,Y_j}=(O^n_{T,X_j})^*$ is required.
-    These identities follow from the product normalization in
-    \cite[Appendix~B]{GarreRubio2023MPOSym} for boundary operators.
+    For the boundary-operator product normalization of
+    \cite[Appendix~B]{GarreRubio2023MPOSym}, these identities hold even when
+    $J$ is empty or the physical and virtual dimensions vanish, and require
+    neither $Q_n=I$ nor $O^n_{T,Y_j}=(O^n_{T,X_j})^*$.
 \end{theorem}
 \begin{proof}
     \leanok

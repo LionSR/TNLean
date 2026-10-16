@@ -189,8 +189,8 @@ reproduces the operator of~(\ref{eq:asymex_z2z2_action}).
 
 \begin{proof}
     \leanok
-    Expand the trace in~(\ref{eq:asymex_z2z2_trace_boundary})
-    over bond indices $b_n\in\{0,\ldots,D_g-1\}$, with $b_L=b_0$:
+    Expanding the trace in~(\ref{eq:asymex_z2z2_trace_boundary})
+    over bond indices $b_n\in\{0,\ldots,D_g-1\}$, with $b_L=b_0$, gives
     \begin{align}
         \rho^{(L)}(M_g)_{s,t}
          & =\sum_{b_0,\ldots,b_{L-1}}
@@ -349,8 +349,9 @@ Definition~\ref{def:mpo_direct_sum}, with bond dimension six.
 \begin{proof}
     \leanok
     \uses{thm:mpo_direct_sum_additive}
-    Apply the additivity of
-    Theorem~\ref{thm:mpo_direct_sum_additive} three times.
+    Applying the additivity of
+    Theorem~\ref{thm:mpo_direct_sum_additive} three times yields the sum
+    of the four periodic operators.
 \end{proof}
 
 The multiplication law~(\ref{eq:asymex_z2z2_basis_product}) of the
@@ -518,8 +519,8 @@ ring of $L$ sites.
 \begin{proof}
     \leanok
     \uses{thm:asymex_z2z2_fusion}
-    Expand the square using Theorem~\ref{thm:asymex_z2z2_fusion}.
-    For each $k\in G$, the four pairs satisfying $gh=k$ contribute
+    In the expansion of the square by Theorem~\ref{thm:asymex_z2z2_fusion},
+    the four pairs satisfying $gh=k$ for each $k\in G$ contribute
     three weights $+1$ and one weight $(-1)^L$. Hence
     \begin{align}
         A_L^2
@@ -736,10 +737,9 @@ bond directions.
     $(xy,xy)$, are $M_e$, $-M_y$, $M_y$, $-M_e$.
     Each block has bond dimension four and admits a compression onto
     its one-dimensional target $\lambda(g,h)M_{gh}$ with $z=3$ zero
-    diagonal entries, an explicit unimodular integer gauge, and a
+    diagonal entries, an explicit unimodular integer gauge, and, matching
+    the bound $1+z=4$ of Theorem~\ref{thm:asym_multiblock}, a
     remainder that vanishes on every word of length at least four.
-    This is the bound $1+z=4$ of
-    Theorem~\ref{thm:asym_multiblock}.
     For the block $(x,x)$, write
     $\delta^{ij}=\delta_{i,j}$ for the scalar entries of $M_e$.
     Its compression pair is
@@ -768,11 +768,11 @@ bond directions.
     from this gauge. Subtracting $VC^{ij}W$ removes the only
     potentially nonzero diagonal entry. The remaining matrices are
     strictly upper triangular in a common four-dimensional basis,
-    so every product of four remainders is zero.
-    Equivalently, this is the nilpotency clause of
-    Theorem~\ref{thm:asym_multiblock}, with $|S|+z=4$.
-    The absence of a splitting follows from the intertwiner
-    calculation in Theorem~\ref{thm:asymex_z2z2_no_intertwiner}.
+    so every product of four remainders is zero, as given by the
+    nilpotency clause of Theorem~\ref{thm:asym_multiblock} with
+    $|S|+z=4$. The intertwiner calculation in
+    Theorem~\ref{thm:asymex_z2z2_no_intertwiner} then excludes any
+    splitting.
 \end{proof}
 
 \begin{theorem}[Both sitewise intertwiner spaces vanish for the four
@@ -857,11 +857,11 @@ the full stacked tensor.
 \begin{proof}
     \leanok
     \uses{thm:asym_multiblock}
-    Decode $w$ as a pair of physical configurations of length $|w|$.
-    The periodic operator of $B$ is the square of the sum in
-    (\ref{eq:asymex_z2z2_defect_sum}). Expanding it and applying
-    Theorem~\ref{thm:asymex_z2z2_fusion} gives the sum of the
-    corresponding matrix entries of
+    Decoding $w$ as a pair of physical configurations of length $|w|$
+    identifies the corresponding entry of the periodic operator of $B$
+    with that of the square of the sum in~(\ref{eq:asymex_z2z2_defect_sum}).
+    Expanding it and applying Theorem~\ref{thm:asymex_z2z2_fusion} gives
+    the sum of the corresponding matrix entries of
     $\lambda(g,h)^{|w|}\rho^{(|w|)}(M_{gh})$.
     Lemma~\ref{lem:asym_mpo_trace_eq} identifies these entries with
     word traces. Since
@@ -1066,13 +1066,13 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     Theorem~\ref{thm:mpug_family_restriction_omega}. On $\{e,y\}$ all bond
     dimensions are one. The fusion tensors can be taken to be the identity,
     since $M'_y=M_y$ and the blocks with factors in $\{e,y\}$ are split, so
-    every value of $\omega$ is one. On $\{e,x\}$ and $\{e,xy\}$ choose the
-    identity whenever a factor is $e$, and for the generator the compression
-    pair $(V,W)$ of the block $(x,x)$, respectively $(xy,xy)$, of
-    Theorem~\ref{thm:asymex_z2z2_nonsplit}. This pair is a reduction onto
-    $M_e$ because the stacked square of $M'_x$ equals that of $M_x$, and the
-    stacked square of $M'_{xy}$ is minus that of $M_{xy}$, which cancels the
-    weight $-1$ of the target of that block. With these choices
+    every value of $\omega$ is one. On $\{e,x\}$ and $\{e,xy\}$, taking the
+    identity whenever a factor is $e$ and taking the compression pair
+    $(V,W)$ of the block $(x,x)$, respectively $(xy,xy)$, of
+    Theorem~\ref{thm:asymex_z2z2_nonsplit} for the generator gives a
+    reduction onto $M_e$: the stacked square of $M'_x$ equals that of $M_x$,
+    and the stacked square of $M'_{xy}$ is minus that of $M_{xy}$, which
+    cancels the weight $-1$ of the target of that block. With these choices
     $\omega(g,e,g)=1$, since both fusion trees equal $V$. Let $R$ be the
     triple product of the generator tensor. The trees $X=V\otimes\Id$ and
     $X=\Id\otimes V$ both intertwine two letters with the generator tensor,
@@ -1080,8 +1080,8 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     $(V\otimes\Id)R^a=\pm(\Id\otimes V)R^a$, with the sign $+$ for $x$ and
     $-$ for $xy$. These are integer identities over the few distinct
     letters, and induction on the word gives $\omega(g,g,g)=+1$ for $x$
-    and $-1$ for $xy$. The value $-1$ at $xy$ shows that the class is
-    nontrivial, by Theorem~\ref{thm:mpug_cyclic_invariant_gauge}.
+    and $-1$ for $xy$. By Theorem~\ref{thm:mpug_cyclic_invariant_gauge}, the
+    value $-1$ at $xy$ shows that the class is nontrivial, and
     Theorem~\ref{thm:asymex_klein_complete_classification} identifies its
     class from these three products.
 \end{proof}
@@ -1148,11 +1148,11 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \leanok
     \uses{def:asymex_klein_cocycle_family,thm:asymex_klein_cocycle_restrictions,
         def:mpug_cohomologous_to,def:mpug_trivial_gauge_class,def:mpug_cochain_restriction}
-    The representatives $\omega_{pqr}$ and $\omega_{p'q'r'}$ are cohomologous
-    if and only if $(p,q,r)=(p',q',r')$. For every subgroup $H\leq\Z_2^2$,
-    the class of $\omega_{111}|_H$ is trivial if and only if $H=\{0\}$.
-    These are the distinction of the eight representatives and the last-row
-    subgroup assertion in~\cite[Section~6]{GarreRubio2023MPOSym}.
+    As in the classification and last-row subgroup analysis
+    of~\cite[Section~6]{GarreRubio2023MPOSym}, the representatives
+    $\omega_{pqr}$ and $\omega_{p'q'r'}$ are cohomologous if and only if
+    $(p,q,r)=(p',q',r')$, and for every subgroup $H\leq\Z_2^2$ the class of
+    $\omega_{111}|_H$ is trivial if and only if $H=\{0\}$.
 \end{theorem}
 
 \begin{proof}
@@ -1181,9 +1181,9 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \uses{def:mpug_l_symbols,def:asymex_klein_cocycle_family}
     Let $G=\Z_2^2$ act on a set $X$, and let $L$ be compatible with
     $\omega_{111}$. For each $x\in X$, the stabilizer $G_x$ is trivial
-    and $|Gx|=4$. In particular, if $X$ is nonempty and the action is
-    transitive, then $|X|=4$. This gives the block count for the last
-    class in~\cite[Section~6]{GarreRubio2023MPOSym}.
+    and $|Gx|=4$. In particular, as in the block count for the last class
+    in~\cite[Section~6]{GarreRubio2023MPOSym}, if $X$ is nonempty and the
+    action is transitive, then $|X|=4$.
 \end{theorem}
 
 \begin{proof}
@@ -1205,11 +1205,11 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     Let $G$ act freely and transitively on a nonempty set $X$.
     Any two L-symbols $L_1,L_2$ compatible with the same three-cochain
     $\omega$ are related by an action-tensor gauge, with the fusion gauge
-    fixed to one. If $\omega$ is a three-cocycle, the regular action of $G$
-    on itself admits the compatible solution $L^x_{g,h}=\omega(g,h,x)^{-1}$.
-    This is the trivial-stabilizer case of
-    \cite[Section~4.1]{GarreRubio2023MPOSym}, in the compatibility
-    convention of Definition~\ref{def:mpug_l_symbols}.
+    fixed to one. In the compatibility convention of
+    Definition~\ref{def:mpug_l_symbols} for the trivial-stabilizer case of
+    \cite[Section~4.1]{GarreRubio2023MPOSym}, if $\omega$ is a three-cocycle
+    then the regular action of $G$ on itself admits the compatible solution
+    $L^x_{g,h}=\omega(g,h,x)^{-1}$.
 \end{theorem}
 
 \begin{proof}
@@ -1240,10 +1240,10 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     be compatible with $\omega_{111}$.
     There is an equivariant bijection $e:G\to X$ under which $L$ is
     action-gauge equivalent to $L_0^k(g,h)=\omega_{111}(g,h,k)$.
-    Thus there is exactly one compatible L-symbol class, up to equivariant
+    As in the L-symbol uniqueness assertion of
+    \cite[Section~6]{GarreRubio2023MPOSym} for the $(1,1,1)$ class, there is
+    therefore exactly one compatible L-symbol class up to equivariant
     relabeling and action-tensor gauge, and it has four blocks.
-    This is the L-symbol uniqueness assertion of
-    \cite[Section~6]{GarreRubio2023MPOSym} for the $(1,1,1)$ class.
 \end{theorem}
 
 \begin{proof}
@@ -1251,10 +1251,10 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \uses{thm:asymex_klein_four_blocks,thm:asymex_free_action_l_symbols,
         thm:asymex_klein_cocycle_restrictions}
     All stabilizers are trivial, so $e(k)=k\cdot x_0$ is an equivariant
-    bijection. Pull back $L$ along $e$ and apply
-    Theorem~\ref{thm:asymex_free_action_l_symbols}.
-    Every value of $\omega_{111}$ is $\pm1$, so its inverse equals itself.
-    The regular solution also proves existence.
+    bijection. Pulling back $L$ along $e$ and applying
+    Theorem~\ref{thm:asymex_free_action_l_symbols} reduces $L$ to the regular
+    action. Every value of $\omega_{111}$ is $\pm1$, so its inverse equals
+    itself, and the regular solution also proves existence.
 \end{proof}
 
 \begin{theorem}[Normalization and involution signs]
@@ -1266,12 +1266,11 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     Let $L$ be compatible with a normalized three-cochain $\omega$ for an
     action of $G$ on $X$. The action-tensor gauge
     $\gamma_{g,x}=L^x_{e,e}$, with fusion gauge equal to one, makes $L$
-    normalized. For every three-cochain $\omega$, every normalized $L$
-    compatible with $\omega$, every $x\in X$, and every $g\in G$ with
-    $g^2=e$, one has
+    normalized. As in the normalization and sign relations used in
+    \cite[Section~6]{GarreRubio2023MPOSym}, for every three-cochain $\omega$,
+    every normalized $L$ compatible with $\omega$, every $x\in X$, and every
+    $g\in G$ with $g^2=e$, one has
     $L^x_{g,g}=\omega(g,g,g)L^{g\cdot x}_{g,g}$.
-    These are the normalization and sign relations used in
-    \cite[Section~6]{GarreRubio2023MPOSym}.
 \end{theorem}
 
 \begin{proof}
@@ -1307,10 +1306,10 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
 \begin{proof}
     \leanok
     \uses{thm:asymex_l_symbol_normalization,def:asymex_klein_cocycle_family}
-    Every element of $\Z_2^2$ squares to the identity. Substitute
+    Every element of $\Z_2^2$ squares to the identity, so substituting
     $\omega_{pqr}(g,g,g)=(-1)^{pu+qv+ruv}$ into
-    Theorem~\ref{thm:asymex_l_symbol_normalization}, using $u^2=u$ and
-    $v^2=v$ in $\Z_2$.
+    Theorem~\ref{thm:asymex_l_symbol_normalization} and using $u^2=u$ and
+    $v^2=v$ in $\Z_2$ yields the sign relation.
 \end{proof}
 
 \begin{theorem}[Trivial restrictions of all Klein-four representatives]
@@ -1492,10 +1491,10 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \lean{TNLean.Algebra.ScalarThreeCochain.isTrivialGaugeClass_of_klein_diagonal_eq_one}
     \leanok
     \uses{def:mpug_three_cocycle,def:mpug_scalar_cochains,def:mpug_trivial_gauge_class}
-    A normalized three-cocycle on $G=\{e,a,b,c=ab\}\cong\Z_2^2$ whose
-    diagonal values $\omega(g,g,g)$ are all one is a coboundary.
-    This is the trivial-class case of the classification in
-    \cite[Section~6]{GarreRubio2023MPOSym}.
+    In the trivial-class case of the classification in
+    \cite[Section~6]{GarreRubio2023MPOSym}, a normalized three-cocycle on
+    $G=\{e,a,b,c=ab\}\cong\Z_2^2$ whose diagonal values $\omega(g,g,g)$ are
+    all one is a coboundary.
 \end{theorem}
 
 \begin{proof}
@@ -1557,8 +1556,8 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \uses{thm:asymex_three_cocycle_normalization,
         thm:asymex_klein_trivial_diagonal,thm:asymex_klein_distinct_classes,
         thm:mpug_cyclic_invariant_gauge,thm:mpug_h3_group_cohomology}
-    Normalize both cocycles. Their quotient has trivial diagonal precisely
-    when their three signs agree, so
+    After normalizing both cocycles, their quotient has trivial diagonal
+    precisely when their three signs agree, so
     Theorem~\ref{thm:asymex_klein_trivial_diagonal} proves sufficiency of
     (\ref{eq:asymex_klein_complete_detectors}). Necessity follows from
     invariance of the cyclic products under coboundaries.
@@ -1691,13 +1690,13 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     identity fusion tensors make both fusion trees equal, so the anomaly is
     one. On $\{e,a\}$ the letters of $A$ are $A^{00}=u_0e_0^{\mathsf T}$ and
     $A^{11}=u_1e_1^{\mathsf T}$ with $u_0=(1,1)$ and $u_1=(-1,1)$, the other
-    letters vanishing. Take the fusion tensors of $(a,a)$ to be
+    letters vanishing. Taking the fusion tensors of $(a,a)$ to be
     $\langle 00|$ and $|00\rangle+|11\rangle$, and the identity whenever a
-    factor is $e$. Every nonzero letter of the stacked square of $A$ is
+    factor is $e$, reduces the stacked square to the identity tensor: every
+    nonzero letter of the stacked square of $A$ is
     $(u_i\otimes u_i)(e_i\otimes e_i)^{\mathsf T}$, and
-    $\langle 00|u_i\otimes u_i\rangle=(e_i\otimes e_i)^{\mathsf T}(|00\rangle+|11\rangle)=1$,
-    so these fusion tensors reduce the stacked square to the identity tensor,
-    and the two fusion trees $\langle 00|\otimes 1$ and $1\otimes\langle 00|$
+    $\langle 00|u_i\otimes u_i\rangle=(e_i\otimes e_i)^{\mathsf T}(|00\rangle+|11\rangle)=1$.
+    The two fusion trees $\langle 00|\otimes 1$ and $1\otimes\langle 00|$
     agree on every letter $u_i\otimes u_i\otimes u_i$ of the triple product.
     Hence $\omega(a,e,a)\,\omega(a,a,a)=1$; reading the cyclic product off
     the two fusion trees of an order-two family with a bond-two generator is
@@ -1737,6 +1736,6 @@ in~\cite{gap:glm23_z2z2_anomaly_detector_scope}.
     \uses{thm:asymex_klein_printed_anomaly_class,thm:asymex_l_symbol_normalization}
     Each nonidentity element is an involution, so
     Theorem~\ref{thm:asymex_l_symbol_normalization} gives
-    $L^x_{g,g}=\nu(g,g,g)L^{g\cdot x}_{g,g}$. Substitute the diagonal values
-    (\ref{eq:asymex_klein_printed_diagonal}).
+    $L^x_{g,g}=\nu(g,g,g)L^{g\cdot x}_{g,g}$, and substituting the diagonal
+    values (\ref{eq:asymex_klein_printed_diagonal}) yields the three relations.
 \end{proof}

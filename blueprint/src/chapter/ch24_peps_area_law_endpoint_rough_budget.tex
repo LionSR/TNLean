@@ -1,12 +1,11 @@
-\section{The actual endpoint budget and selected density}
+\section{Endpoint norm loss and selected density}
 \label{sec:arealaw-actual-endpoint-budget}
 
 Write $H=nm$ for the physical scan horizon, $a>0$ for its per-band weight
-and $W=aK$.  Fix one unit truncated physical vector, one positive-mass
-target spectral set of cardinality $d$ and mass $z$, and one supplied
-Schmidt--Bell label sequence.  The original replica prevectors have norm
-at most one and the selected label has the physical polynomial mass bound.
-Every root and filtered norm below uses this same sequence.
+and $W=aK$. Fix a unit truncated physical vector, a target spectral set of
+cardinality $d$ and positive mass $z$, and a Schmidt--Bell label sequence
+whose replica prevectors have norm at most one and satisfy the polynomial
+mass lower bound; all root and filtered norms below use this sequence.
 
 \begin{definition}[The endpoint replica remainder]
     \label{def:arealaw-rough-endpoint-remainder}
@@ -30,7 +29,7 @@ Every root and filtered norm below uses this same sequence.
 \begin{proof}
     \leanok
     \uses{def:arealaw-rough-endpoint-remainder}
-    The Bell remainder tends to zero and $\log(k+2)/k\to0$.
+    Both $R_k^{\rm Bell}(d,c,K)$ and $\log(k+2)/k$ tend to zero as $k\to\infty$.
 \end{proof}
 
 \begin{theorem}[Initial-to-final physical endpoint loss]
@@ -42,7 +41,7 @@ Every root and filtered norm below uses this same sequence.
     $n,m,M>0$, $r_0\leq D$, $D\geq1$,
     $4D\leq m$ and $8Km\leq L$.  Assume every ambient target layer up
     to $L$ has size at most $n$ and every whole-row positive-depth prefix
-    of the supplied truncated state has entropy at most $B_{\rm sh}$.
+    of the truncated state has entropy at most $B_{\rm sh}$.
     There are nonnegative constants $c,C_i$, before the replica count,
     such that eventually the final squared filtered norm is positive and
     \begin{align}
@@ -53,19 +52,21 @@ Every root and filtered norm below uses this same sequence.
         W\left(\frac{B_{\rm sh}}z+1+3nD\log q\right).
         \label{eq:arealaw-physical-endpoint-loss}
     \end{align}
-    The initial and final roots are the actual fills at $(0,0)$ and $(H,0)$.
+    Here $N_k^{\rm initial}$ and $N_k^{\rm final}$ are the squared filtered
+    norms at the fill endpoints $(0,0)$ and $(H,0)$.
 \end{theorem}
 \begin{proof}
     \leanok
     \uses{thm:al_augmented_prevector_norm,thm:al_scan_actual_initial_log_norm,
         thm:al_scan_actual_rough_upper,
         thm:arealaw-rough-endpoint-remainder-limit}
-    The coordinate isometry preserves the supplied prevector's norm.
-    The initial root floor gives
-    $\log N_k^{\rm initial}\leq C_i\log(k+2)$ for the same norm-bounded
-    prevector.  The final fill root equals the last charge root at
-    $(H-1,1)$.  Since $H>0$, this charge lies in the stated horizon of the
-    rough upper estimate.  Apply that estimate and add the initial bound.
+    Because the coordinate isometry preserves the norm of the replica
+    prevector, the initial log-norm floor bounds $\log N_k^{\rm initial}$
+    by $C_i\log(k+2)$.
+    Since $H>0$, the final fill root at $(H,0)$ coincides with the last
+    charge root at $(H-1,1)$, which lies within the horizon of the rough
+    upper estimate; combining that upper estimate with the initial
+    log-norm bound gives the endpoint loss inequality.
 \end{proof}
 
 \begin{theorem}[The original-state entropy input]
@@ -73,11 +74,11 @@ Every root and filtered norm below uses this same sequence.
     \lean{TNLean.PEPS.AreaLaw.Scan.CollarScan.exists_source_actualScan_suppliedPrevector_endpoint_budget}
     \leanok
     Fix $q\geq1$, a positive normalized gap $g$ and a volume coefficient
-    $C_{\rm vol}$.  One threshold precedes the finite system and the
-    entropy coefficient and exponent.  Suppose the original and supplied
+    $C_{\rm vol}$. For all sufficiently large $n$ (above a threshold
+    depending only on $q$, $g$ and $C_{\rm vol}$), suppose the original and
     truncated vectors are unit, the compact collar has at most
-    $C_{\rm vol}n^2$ sites, and their trace distance is at most
-    $\sqrt{2\min\{n^{-1000},g/4\}/g}$.  If every original-state
+    $C_{\rm vol}n^2$ sites, and the trace distance between the two states is
+    at most $\sqrt{2\min\{n^{-1000},g/4\}/g}$. If every original-state
     positive-depth prefix up to $L$ has entropy at most
     $C_e(nL^e+n)$, then the endpoint bound
     (\ref{eq:arealaw-physical-endpoint-loss}) holds with
@@ -92,9 +93,10 @@ Every root and filtered norm below uses this same sequence.
     \leanok
     \uses{thm:al_positive_prefix_entropy_transfer,
         thm:arealaw-physical-endpoint-loss}
-    Apply entropy continuity to the same supplied truncated vector on
-    every positive-depth prefix, then use the preceding theorem.
-    No state, target set or auxiliary label is reselected.
+    Entropy continuity bounds the entropy of the truncated state on every
+    positive-depth prefix up to $L$ by $B_{\rm sh}$, and the preceding
+    theorem applied to the same truncated state, target spectral set and
+    label sequence then yields the endpoint loss bound.
 \end{proof}
 
 \begin{theorem}[The accumulated selection numerator]
@@ -110,7 +112,7 @@ Every root and filtered norm below uses this same sequence.
         R_k^{\rm end}(d,c,K,C_i+2HC_\beta).
         \label{eq:arealaw-rough-selection-numerator}
     \end{align}
-    For actual entropy transport,
+    In the scanner entropy bound,
     $T=C_{\rm ent}aK\,a^{1/4}\ell^{e_{\rm ent}}$.
 \end{theorem}
 \begin{proof}
@@ -125,8 +127,8 @@ Every root and filtered norm below uses this same sequence.
     \leanok
     Let $k,n,m,D,K$ be positive integers and $a,C_1,b$ positive real
     numbers, set $H=nm$ and
-    $\rho=ka/(2(C_1+1)nD)$.  If the selector has supplied a point with
-    $Q\leq B/(\rho H b)$ and $B/k\leq R$, then at that same point
+    $\rho=ka/(2(C_1+1)nD)$. If a selected point satisfies
+    $Q\leq B/(\rho H b)$ and $B/k\leq R$, then at that point
     \begin{align}
         \frac{Q}{KnD} & \leq\frac{2(C_1+1)}{aKHb}R.
         \label{eq:arealaw-selected-density-normalization}
@@ -135,13 +137,13 @@ Every root and filtered norm below uses this same sequence.
 \end{theorem}
 \begin{proof}
     \leanok
-    Divide by the positive density factor, cancel the literal $\rho$,
-    then multiply $B/k\leq R$ by the positive remaining coefficient.
-    No sign assumption on $B$ and no second selection is needed.
+    Dividing $Q\leq B/(\rho H b)$ by $KnD>0$ and substituting
+    $\rho=ka/(2(C_1+1)nD)$ gives
+    $Q/(KnD)\leq\frac{2(C_1+1)}{aKHb}(B/k)$, which combines with
+    $B/k\leq R$ (without any sign assumption on $B$) to yield the stated
+    density bound.
 \end{proof}
 
-These estimates retain the physical spectral mass, target dimension,
-original entropy input and every replica remainder.  Converting the
-displayed density bound to a decaying source-scale power, and combining
-it with the selected-point energy bound, sharp comparison and final
-absorption, remain separate steps.
+Together, these estimates bound the normalized charge density $Q/(KnD)$
+in terms of the spectral mass $z$, target dimension $d$, prefix entropy
+bound $B_{\rm sh}$ and replica remainder $R_k^{\rm end}$.

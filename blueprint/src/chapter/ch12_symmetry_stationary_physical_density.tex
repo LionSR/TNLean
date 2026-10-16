@@ -80,9 +80,9 @@
 
 \begin{proof}
     \leanok
-    Expand $\tr(\varrho_NO)=\sum_{s,t}(\varrho_N)_{s,t}O_{t,s}$ and
-    substitute (\ref{eq:stationary_density_entries}). Linearity of the trace
-    gives (\ref{eq:stationary_density_observable}).
+    Expanding $\tr(\varrho_NO)=\sum_{s,t}(\varrho_N)_{s,t}O_{t,s}$ and
+    substituting (\ref{eq:stationary_density_entries}) yields
+    (\ref{eq:stationary_density_observable}) by linearity of the trace.
 \end{proof}
 
 \begin{theorem}[Normalization and consistency of stationary densities]
@@ -125,13 +125,12 @@
         MPSTensor.inv_sq_le_purity_stationaryBlockDensity}
     \leanok
     \uses{thm:stationary_density_consistency}
-    If $\Lambda\geq0$, $\tr\Lambda=1$, and $\E_A(\Id)=\Id$, then
+    In the proof of \cite[Theorem~2, lines~316--320]{PerezGarcia2008StringOrder},
+    if $\Lambda\geq0$, $\tr\Lambda=1$, and $\E_A(\Id)=\Id$, then
     \begin{align}
         D^{-2} & \leq\tr(\varrho_N(A,\Lambda)^2).
         \label{eq:stationary_density_purity}
     \end{align}
-    This is the lower bound in the proof of
-    \cite[Theorem~2, lines~316--320]{PerezGarcia2008StringOrder}.
 \end{theorem}
 
 \begin{proof}
